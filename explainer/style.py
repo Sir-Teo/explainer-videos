@@ -13,14 +13,19 @@ from types import SimpleNamespace
 
 from manim import (
     BLUE,
+    GOLD,
+    GOLD_A,
     GREEN,
+    GREEN_A,
     GREY_A,
     GREY_B,
     GREY_D,
     MAROON,
     ORANGE,
+    LIGHT_BROWN,
     PINK,
     PURPLE,
+    PURPLE_A,
     PURPLE_B,
     RED,
     TEAL,
@@ -61,6 +66,19 @@ C = SimpleNamespace(
     PROB=GREEN,  # logits, probabilities, predictions
     LOSS=MAROON,  # training loss, -log p
     NORM=GREY_B,  # layer norm
+    # Markets and macro (videos/opposing_forces)
+    EARNINGS=GREEN,  # E, earnings per share, profit growth, margins
+    MULTIPLE=ORANGE,  # P/E, earnings yield, valuation
+    PRICE=BLUE,  # index level P = E x P/E; the cap-weighted S&P 500
+    EQUAL_WEIGHT=GOLD_A,  # the equal-weighted S&P 500, "the average stock", breadth
+    RATE=RED,  # nominal Treasury yields, the discount rate r, the cost of capital
+    REAL_RATE=PINK,  # real (TIPS) yields
+    INFLATION=GREY_B,  # breakeven inflation
+    TERM_PREMIUM=PURPLE_A,  # extra yield for lending long
+    POLICY=TEAL,  # the Fed's policy rate and its expected path
+    DEBT=LIGHT_BROWN,  # government debt, deficits, interest costs
+    GROWTH=GREEN_A,  # GDP growth g, potential growth
+    MORTGAGE=GOLD,  # mortgage rates, MBS
     # UI
     TEXT=WHITE,
     DIM=GREY_B,

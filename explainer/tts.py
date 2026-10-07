@@ -62,6 +62,10 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Pp]retraining\b", r"[\g<0>](/pɹˌitɹˈAnɪŋ/)"),  # "pree-training", not "pr'training"
     (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
     (r"\bjetliner's\b", "[jetliner's](/ʤˈɛtlˌInəɹz/)"),  # dictionary entry drops the r
+    # Markets (videos/opposing_forces)
+    (r"\bP/E\b", "[P/E](/pˌiˈi/)"),  # "pee-ee", not "pee slash ee"
+    (r"\bS&P\b", "S and P"),
+    (r"\bBernanke\b", "[Bernanke](/bəɹnˈæŋki/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
