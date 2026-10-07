@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Manim output and caches (all regenerable)
+media/
+**/media/
+
+# Generated narration audio + simulation data (regenerable, can be large)
+.cache/
+
+# Final renders (large binaries; share via releases, not git)
+renders/
+*.egg-info/
