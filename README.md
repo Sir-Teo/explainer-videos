@@ -7,7 +7,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | Video | Length | Folder |
 |---|---|---|
 | **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`videos/navier_stokes`](videos/navier_stokes) |
-| **How Large Language Models Work: The Transformer, Visualized** | 36 min | [`videos/llm`](videos/llm) |
+| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`videos/llm`](videos/llm) |
 
 ## Quick start
 
