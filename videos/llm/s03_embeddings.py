@@ -97,7 +97,6 @@ class Embeddings(VoiceoverScene):
         labels = VGroup()
         for name, title in GROUP_NAMES.items():
             idx = [i for i, lab in enumerate(g["labels"]) if lab == name]
-            c = np.mean([P(xy[i]) for i in idx], axis=0)
             members = VGroup(*[dots[i] for i in idx])
             lab = label(title, font_size=32, color=WHITE)
             lab.add_background_rectangle(opacity=0.7, buff=0.05)
