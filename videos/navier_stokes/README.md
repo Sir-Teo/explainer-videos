@@ -1,6 +1,6 @@
 # The Navier–Stokes Equations, Derived and Visualized
 
-A ~25 minute, 14-chapter explainer that builds the incompressible Navier–Stokes
+A 28-minute, 14-chapter explainer that builds the incompressible Navier–Stokes
 equations from Newton's second law, deriving every term on screen. It then
 shows what the equations do, using real simulations, and covers the open
 mathematics: the Millennium Prize problem and the 2026 claimed forced blow-up.

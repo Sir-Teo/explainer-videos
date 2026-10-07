@@ -6,7 +6,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 
 | Video | Length | Folder |
 |---|---|---|
-| **The Navier–Stokes Equations, Derived and Visualized** | ~25 min | [`videos/navier_stokes`](videos/navier_stokes) |
+| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`videos/navier_stokes`](videos/navier_stokes) |
 
 ## Quick start
 
@@ -60,6 +60,7 @@ tools/
   build.py                 parallel render -> normalize audio -> concat -> subtitles + chapters
   export_script.py         extracts the narration script from the scene code
   contact_sheet.py         tiles frames of a render into one image for layout QA
+  check_narration.py       Whisper "listen test": diffs what the TTS said against the script
 ```
 
 ## How a video is made (the workflow these tools encode)
@@ -82,8 +83,11 @@ tools/
    `explainer/fluids`, precomputed once and played back with `FieldMovie`.
    Schematics are labeled as schematics.
 6. **QA every render.** `--dry_run` catches exceptions in seconds;
-   `tools/contact_sheet.py` catches overlaps and off-screen text; the generated
-   `SCRIPT.md` is what gets fact-checked.
+   `tools/contact_sheet.py` catches overlaps and off-screen text;
+   `tools/check_narration.py` catches mispronunciations (e.g. "dy" read as
+   "die"), fixed via the lexicon in `explainer/tts.py`; the generated
+   `SCRIPT.md` is what gets fact-checked. Claims about recent events get
+   sources in the video's README.
 7. **Ship with accessibility.** The build emits subtitles (soft-muxed and as
    `.srt`) and YouTube-style chapters automatically.
 

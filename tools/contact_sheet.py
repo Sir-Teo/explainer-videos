@@ -38,6 +38,7 @@ def main():
 
     total = duration(args.video)
     times = args.times or [total * (i + 0.5) / args.n for i in range(args.n)]
+    times = [min(max(t, 0.0), total - 0.1) for t in times]
     tiles = []
     with tempfile.TemporaryDirectory() as tmp:
         for i, t in enumerate(times):

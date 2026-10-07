@@ -209,7 +209,7 @@ Everything cancels except a single parameter: one over the Reynolds number, sitt
 
 Two flows with the same geometry and the same Reynolds number are the same flow, just rescaled. That's why engineers can test a small model in a wind tunnel and trust the results, as long as the Reynolds number matches.
 
-The range in nature is staggering. A swimming bacterium lives at a Reynolds number around one ten-thousandth. For it, water is so syrupy that the moment it stops swimming, it stops dead. Blood in your aorta flows at Re in the thousands. A person swimming, around a million. The air flowing over a jetliner's wing, tens of millions.
+The range in nature is staggering. A swimming bacterium lives at a Reynolds number around one ten-thousandth. For it, water is so syrupy that the moment it stops swimming, it stops dead. Blood in your aorta flows at Reynolds numbers in the thousands. A person swimming, around a million. The air flowing over a jetliner's wing, tens of millions.
 
 ## Instability and turbulence
 
@@ -295,4 +295,4 @@ Thanks for watching.
 
 ---
 
-4047 words (~26 min at 155 wpm).
+4048 words (~26 min at 155 wpm).
