@@ -57,7 +57,7 @@ class AttentionIdea(VoiceoverScene):
         xcopy = strip(5, C.EMBED, n=8, cell=0.2)
         eq = MathTex("=", font_size=52)
         q = strip(21, C.QUERY, n=5, cell=0.2)
-        VGroup(wq, xcopy, eq, q).arrange(RIGHT, buff=0.3).move_to(RIGHT * PX + UP * 0.3)
+        VGroup(wq, xcopy, eq, q).arrange(RIGHT, buff=0.3).move_to(RIGHT * (PX - 0.45) + UP * 0.3)
         q_l = MathTex(r"\vec q", font_size=44, color=C.QUERY).next_to(q, UP, buff=0.15)
         dims = label(r"$64 \times 768$", font_size=28, color=GREY_B).next_to(wq, DOWN, buff=0.15)
         qdim = label(r"64 numbers", font_size=28, color=GREY_B).next_to(q, DOWN, buff=0.15)
@@ -217,9 +217,9 @@ class AttentionIdea(VoiceoverScene):
             "back over the text, and each row adds up to one. <bookmark mark='b'/> The bottom row is bank, with river "
             "lit up."
         ) as vo:
+            self.play(FadeIn(title), FadeIn(grid.row_labels), FadeIn(grid.col_labels))
             vo.wait_until("g")
-            self.play(FadeIn(title), FadeIn(grid.row_labels), FadeIn(grid.col_labels),
-                      LaggedStart(*[FadeIn(c) for c in grid.cells], lag_ratio=0.01), run_time=2)
+            self.play(LaggedStart(*[FadeIn(c) for c in grid.cells], lag_ratio=0.01), run_time=2)
             vo.wait_until("r")
             self.play(FadeIn(rows_l), FadeIn(sums))
             vo.wait_until("b")
