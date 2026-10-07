@@ -41,12 +41,27 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bRe\b", "[Re](/ˌɑɹˈi/)"),  # "R-E"
     (r"\bdy\b", "[dy](/dˌiwˈI/)"),  # "dee-why", not "die"
     (r"\bdz\b", "[dz](/dˌizˈi/)"),
+    (r"\bm a\b", "[m](/ˈɛm/) [a](/ˈA/)"),  # "F equals m a": letters, not "Emma"
     (r"\bmu\b", "[mu](/mjˈu/)"),
     (r"\bnu\b", "[nu](/nˈu/)"),
     (r"\brho\b", "[rho](/ɹˈO/)"),
     (r"\bCórdoba\b", "[Córdoba](/kˈɔɹdəbə/)"),
     (r"\bMartínez-Zoroa\b", "[Martínez](/mɑɹtˈinɛz/) [Zoroa](/zəɹˈOə/)"),
     (r"\bAlpöge\b", "[Alpöge](/ˈɑlpəɡə/)"),
+    (r"\bGELU\b", "[GELU](/ʤˈilu/)"),
+    # Technical terms outside the G2P dictionary (would otherwise go to the espeak fallback).
+    (r"\b[Ss]oftmax\b", r"[\g<0>](/sˈɔftmæks/)"),
+    (r"\b[Ll]ogits\b", r"[\g<0>](/lˈOʤɪts/)"),
+    (r"\b[Ll]ogit\b", r"[\g<0>](/lˈOʤɪt/)"),
+    (r"\bEiffel\b", "[Eiffel](/ˈIfᵊl/)"),
+    (r"\b[Bb]ackpropagation\b", r"[\g<0>](/bˌækpɹˌɑpəɡˈAʃən/)"),
+    (r"\b[Tt]okenizer\b", r"[\g<0>](/tˈOkənˌIzəɹ/)"),
+    (r"\b[Cc]ompleter\b", r"[\g<0>](/kəmplˈiTəɹ/)"),
+    (r"\b[Ss]ubword\b", r"[\g<0>](/sˈʌbwˌɜɹd/)"),
+    (r"\b[Ss]uperposition\b", r"[\g<0>](/sˌupəɹpəzˈɪʃən/)"),  # the G2P dictionary drops the "p"
+    (r"\b[Pp]retraining\b", r"[\g<0>](/pɹˌitɹˈAnɪŋ/)"),  # "pree-training", not "pr'training"
+    (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
+    (r"\bjetliner's\b", "[jetliner's](/ʤˈɛtlˌInəɹz/)"),  # dictionary entry drops the r
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
