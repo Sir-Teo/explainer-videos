@@ -227,6 +227,8 @@ class Training(VoiceoverScene):
         marker = Dot(pl.c2p(0, t["val_loss"][0][1]), radius=0.11, color=YELLOW)
         step_lab = label(r"step 0", font_size=30, color=YELLOW).next_to(frame, UP, buff=0.12).align_to(frame, LEFT)
         current = sample_block(t["samples"]["0"]).move_to(box_pos)
+        if current.width > 6.8:
+            current.scale_to_fit_width(6.8)
         vl = {int(st): v for st, v in t["val_loss"]}
         state = {"current": current}
 
