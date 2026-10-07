@@ -1,6 +1,6 @@
 # Opposing Forces: Booming Earnings vs. the Rising Cost of Money
 
-A 15-chapter explainer of Jurrien Timmer's weekly market note
+A 37-minute, 15-chapter explainer of Jurrien Timmer's weekly market note
 [*Opposing Forces*](https://www.linkedin.com/pulse/opposing-forces-week-10526-jurrien-timmer-anaac/)
 (Fidelity Investments, week of October 5, 2026). The note argues that stock
 prices have gone sideways because two forces cancel out: an earnings boom
@@ -15,6 +15,26 @@ to Timmer on screen.
 *An explanation of one strategist's view, not investment advice.*
 
 **Watch:** [`published/opposing_forces.mp4`](../../published/opposing_forces.mp4) (1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters</summary>
+
+- `0:00` A boom that goes nowhere
+- `2:07` Price = earnings x multiple
+- `5:04` What sets the multiple?
+- `8:57` Slowly, then all at once
+- `12:32` Force 1: the cost of the debt
+- `15:11` Force 2: who's left to buy?
+- `16:59` Force 3: from savings glut to savings shortage
+- `19:00` Force 4: the mortgage market
+- `21:23` Is the economy running hot?
+- `23:37` The Fed's dilemma
+- `24:58` A stealth correction
+- `26:55` The other side of the rope: earnings
+- `30:16` Is this a bubble?
+- `32:37` Where are we on the clock?
+- `35:54` Recap
+
+</details>
 
 ```bash
 python -m videos.opposing_forces.fetch            # optional: re-download sources (~10 min) and rebuild data.json
