@@ -41,6 +41,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bRe\b", "[Re](/ˌɑɹˈi/)"),  # "R-E"
     (r"\bdy\b", "[dy](/dˌiwˈI/)"),  # "dee-why", not "die"
     (r"\bdz\b", "[dz](/dˌizˈi/)"),
+    (r"\bm a\b", "[m](/ˈɛm/) [a](/ˈA/)"),  # "F equals m a": letters, not "Emma"
     (r"\bmu\b", "[mu](/mjˈu/)"),
     (r"\bnu\b", "[nu](/nˈu/)"),
     (r"\brho\b", "[rho](/ɹˈO/)"),
