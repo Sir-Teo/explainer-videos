@@ -46,9 +46,9 @@ class Assistant(VoiceoverScene):
             "<bookmark mark='a'/> Ask the largest GPT-2 to write a short poem about the ocean, <bookmark mark='b'/> and it "
             "continues the document the way such documents often continue: by repeating the instruction. Again, and again."
         ) as vo:
-            self.play(FadeIn(title))
+            self.play(FadeIn(title), Create(d1[0]))
             vo.wait_until("a")
-            self.play(Create(d1[0]), FadeIn(d1[1][0]))
+            self.play(FadeIn(d1[1][0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(ln, shift=UP * 0.1) for ln in d1[1][1]], lag_ratio=0.5), run_time=2.5)
 
@@ -148,18 +148,19 @@ class Assistant(VoiceoverScene):
             self.play(GrowArrow(arrows[1]), FadeIn(cols[2], shift=UP * 0.2))
 
         fact = VGroup(
-            label(r"InstructGPT (OpenAI, 2022): people preferred the outputs of a", font_size=28),
-            label(r"1.3-billion-parameter model trained this way over the 175-billion-parameter GPT-3", font_size=28),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.5)
-        fact[1].set_color(YELLOW)
+            label(r"InstructGPT (OpenAI, 2022): people preferred the outputs of", font_size=28),
+            label(r"a 1.3-billion-parameter model trained this way", font_size=28, color=YELLOW),
+            label(r"over the 175-billion-parameter GPT-3", font_size=28, color=YELLOW),
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.4)
+        fact[1:].set_color(YELLOW)
         with self.voiceover(
             "This matters more than you might think. In OpenAI's 2022 InstructGPT paper, people preferred the answers of a "
             "1.3 billion parameter model trained this way <bookmark mark='y'/> over those of the original GPT-3, which is "
             "more than a hundred times larger."
         ) as vo:
-            self.play(FadeIn(fact[0]))
+            self.play(FadeIn(fact[0:2]))
             vo.wait_until("y")
-            self.play(FadeIn(fact[1]))
+            self.play(FadeIn(fact[2]))
         self.clear_scene()
 
     # ------------------------------------------------------------------
