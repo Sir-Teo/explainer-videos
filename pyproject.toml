@@ -1,0 +1,23 @@
+[project]
+name = "explainer-videos"
+version = "0.1.0"
+description = "3Blue1Brown-style math & physics explainer videos built with Manim"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "manim>=0.19",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "numba>=0.59",
+    "pillow>=10",
+    # Narration (neural TTS).  Optional: set EXPLAINER_TTS=silent to skip.
+    "kokoro>=0.9.4",
+    "soundfile>=0.12",
+    "transformers>=4.45",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["explainer*", "videos*"]
