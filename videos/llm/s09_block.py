@@ -135,7 +135,7 @@ class TransformerBlock(VoiceoverScene):
                     label(r"processes information\\\emph{within} each position", font_size=30)).arrange(RIGHT, buff=0.35)
         for r in (r1, r2):
             r[1].align_to(r[0].get_right() + RIGHT * 0.35, LEFT)
-        roles = VGroup(r1, r2).arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to(RIGHT * 3.7 + DOWN * 1.5)
+        VGroup(r1, r2).arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to(RIGHT * 3.7 + DOWN * 1.5)
         with self.voiceover(
             "A useful summary of the two halves: <bookmark mark='a'/> attention moves information between positions. "
             "<bookmark mark='m'/> The MLP processes the information sitting at each position."
@@ -159,7 +159,7 @@ class TransformerBlock(VoiceoverScene):
         emb = block("embed", C.EMBED, width=1.7, height=0.42, font_size=24).next_to(blocks, DOWN, buff=0.18)
         unemb = block("predict", C.PROB, width=1.7, height=0.42, font_size=24).next_to(blocks, UP, buff=0.18)
         stream = Line(emb.get_top(), unemb.get_bottom(), color=C.EMBED, stroke_width=3).next_to(blocks, LEFT, buff=0.12)
-        stack = VGroup(stream, blocks, emb, unemb).move_to(LEFT * 5.2)
+        VGroup(stream, blocks, emb, unemb).move_to(LEFT * 5.2)
         brace = Brace(blocks, RIGHT, buff=0.15, color=GREY_B)
         bl = label(r"12 blocks\\in GPT-2 small", font_size=28)
         bl.next_to(brace, RIGHT, buff=0.15)
