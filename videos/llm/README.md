@@ -1,6 +1,6 @@
 # How Large Language Models Work: The Transformer, Visualized
 
-A ~36-minute, 14-chapter explainer of how a large language model produces text,
+A 37-minute, 14-chapter explainer of how a large language model produces text,
 following one sentence, *"The Eiffel Tower is located in the city of"*, through
 every stage of a real model. **Every number on screen comes from GPT-2 small**
 (OpenAI, 2019, 124M parameters): its real tokenizer, embeddings, attention
