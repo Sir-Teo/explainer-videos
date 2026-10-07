@@ -58,23 +58,33 @@ def main():
     video_bits = float(probe(src, "stream=bit_rate", "v:0")) * duration
     audio_bits = AUDIO_KBPS * 1000 * duration
     usable = budget * 8 * (1 - CONTAINER_OVERHEAD)
-    common_in = ["-i", str(src)]
-    maps = ["-map", "0:v:0", "-map", "0:a:0", "-map", "0:s?", "-map_metadata", "0", "-map_chapters", "0"]
     audio = ["-c:a", "aac", "-b:a", f"{AUDIO_KBPS}k", "-ac", "1", "-ar", "48000"]
-    tail = ["-c:s", "mov_text", "-movflags", "+faststart", str(dst)]
 
-    if video_bits + audio_bits <= usable and not args.force_reencode:
-        print(f"video stream fits ({video_bits / 8e6:.1f} MB): copying it unchanged")
-        run(["ffmpeg", "-y", "-v", "error", *common_in, *maps, "-c:v", "copy", *audio, *tail])
-    else:
-        kbps = int((usable - audio_bits) / duration / 1000)
-        print(f"re-encoding video at {kbps} kb/s (two-pass x264) to fit {args.max_mb:.0f} MB")
-        with tempfile.TemporaryDirectory() as tmp:
+    with tempfile.TemporaryDirectory() as tmp:
+        av = str(Path(tmp) / "av.mp4")
+        # Step 1: picture + sound only.
+        if video_bits + audio_bits <= usable and not args.force_reencode:
+            print(f"video stream fits ({video_bits / 8e6:.1f} MB): copying it unchanged")
+            run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-map", "0:v:0", "-map", "0:a:0",
+                 "-c:v", "copy", *audio, av])
+        else:
+            kbps = int((usable - audio_bits) / duration / 1000)
+            print(f"re-encoding video at {kbps} kb/s (two-pass x264) to fit {args.max_mb:.0f} MB")
             log = str(Path(tmp) / "x264")
-            x264 = ["-c:v", "libx264", "-preset", "slow", "-tune", "animation", "-b:v", f"{kbps}k",
-                    "-pix_fmt", "yuv420p", "-g", "300", "-passlogfile", log]
-            run(["ffmpeg", "-y", "-v", "error", *common_in, "-map", "0:v:0", *x264, "-pass", "1", "-an", "-f", "null", "-"])
-            run(["ffmpeg", "-y", "-v", "error", *common_in, *maps, *x264, "-pass", "2", *audio, *tail])
+            # Both passes must see the same frames: the concatenated master is
+            # very slightly variable-rate, and left alone the null muxer of pass 1
+            # passes frames through while the mp4 of pass 2 duplicates a few, which
+            # overruns the pass-1 stats and crashes x264.
+            fps = probe(src, "stream=r_frame_rate", "v:0")
+            x264 = ["-fps_mode", "cfr", "-r", fps, "-c:v", "libx264", "-preset", "slow", "-tune", "animation",
+                    "-b:v", f"{kbps}k", "-pix_fmt", "yuv420p", "-g", "300", "-passlogfile", log]
+            run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-map", "0:v:0", *x264, "-pass", "1",
+                 "-an", "-f", "null", "-"])
+            run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-map", "0:v:0", "-map", "0:a:0", *x264,
+                 "-pass", "2", *audio, av])
+        # Step 2: stream-copy remux that adds the soft subtitles, chapters and metadata.
+        run(["ffmpeg", "-y", "-v", "error", "-i", av, "-i", str(src), "-map", "0:v", "-map", "0:a", "-map", "1:s?",
+             "-map_metadata", "1", "-map_chapters", "1", "-c", "copy", "-movflags", "+faststart", str(dst)])
 
     size = dst.stat().st_size
     if size >= GITHUB_HARD_LIMIT:
