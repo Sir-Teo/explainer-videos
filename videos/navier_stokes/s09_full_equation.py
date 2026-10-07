@@ -113,7 +113,8 @@ class FullEquation(VoiceoverScene):
             self.play(FadeIn(rf, shift=UP * 0.1))
             vo.wait_until("d")
             self.play(FadeIn(div_l, shift=LEFT * 0.2), Indicate(div))
-        self.play(FadeOut(VGroup(lhs, rp, rv, rf, div_l)), VGroup(eq2, div).animate.scale(0.8).to_edge(UP, buff=0.5))
+        self.play(FadeOut(VGroup(lhs, rp, rv, rf, div_l)), div.animate.next_to(eq2, DOWN, buff=0.5))
+        self.play(VGroup(eq2, div).animate.scale(0.8).to_edge(UP, buff=0.5))
 
         # Initial + boundary conditions ---------------------------------------
         count = label(r"4 equations, 4 unknowns", font_size=40, color=YELLOW).next_to(VGroup(eq2, div), DOWN, buff=0.5)

@@ -50,8 +50,8 @@ class MillenniumProblem(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def question(self):
-        ax = Axes(x_range=[0, 5, 1], y_range=[0, 5, 1], x_length=7.5, y_length=4.4,
-                  axis_config={"include_ticks": False, "stroke_color": GREY_B}).move_to(LEFT * 2.2 + DOWN * 0.6)
+        ax = Axes(x_range=[0, 5, 1], y_range=[0, 5, 1], x_length=6.6, y_length=4.4,
+                  axis_config={"include_ticks": False, "stroke_color": GREY_B}).move_to(LEFT * 3.0 + DOWN * 0.6)
         xl = MathTex("t", font_size=36).next_to(ax.x_axis.get_end(), RIGHT, buff=0.1)
         yl = MathTex(r"\max_{\vx} |\vu|", font_size=34).next_to(ax.y_axis.get_end(), UP, buff=0.1)
         smooth = ax.plot(lambda t: 1.4 + 0.6 * np.exp(-0.3 * t) * np.sin(2.4 * t) + 0.2 * np.sin(5 * t) * np.exp(-0.5 * t),
@@ -85,7 +85,7 @@ class MillenniumProblem(VoiceoverScene):
         prize = VGroup(
             MathTex(r"\$1{,}000{,}000", font_size=72, color=YELLOW),
             label(r"Clay Mathematics Institute\\Millennium Prize Problem (2000)", font_size=30),
-        ).arrange(DOWN, buff=0.25).move_to(RIGHT * 4.3 + UP * 0.6)
+        ).arrange(DOWN, buff=0.25).move_to(RIGHT * 4.75 + UP * 1.1)
         prize_bg = BackgroundRectangle(prize, fill_opacity=0.9, buff=0.3).set_stroke(YELLOW, 2, opacity=1)
         with self.voiceover(
             "For decades, nobody knew. <bookmark mark='c'/> In 2000, the Clay Mathematics Institute made this one of its seven "
@@ -179,8 +179,14 @@ class MillenniumProblem(VoiceoverScene):
         tube = VortexTube(length=3.2, radius=0.85)
         tube.move_to(DOWN * 0.4)
         tube.add_updater(lambda m, dt: m.tick(dt))
-        pull_l = Arrow(LEFT * 2.0, LEFT * 3.2, buff=0, color=WHITE, stroke_width=5).shift(DOWN * 0.4)
-        pull_r = Arrow(RIGHT * 2.0, RIGHT * 3.2, buff=0, color=WHITE, stroke_width=5).shift(DOWN * 0.4)
+        def pull(sign):
+            def make():
+                half = tube.L0 * tube.s.get_value() / 2
+                start = np.array([sign * (half + 0.2), -0.4, 0])
+                return Arrow(start, start + sign * RIGHT * 1.2, buff=0, color=WHITE, stroke_width=5)
+            return always_redraw(make)
+
+        pull_l, pull_r = pull(-1), pull(1)
         omega_axis = Arrow(LEFT * 0.4, RIGHT * 0.9, buff=0, color=C.VORTICITY, stroke_width=6).shift(UP * 1.4)
         omega_l = MathTex(r"\boldsymbol{\omega}", font_size=40, color=C.VORTICITY).next_to(omega_axis, RIGHT, buff=0.1)
 
@@ -206,11 +212,9 @@ class MillenniumProblem(VoiceoverScene):
             self.play(FadeIn(tube), GrowArrow(omega_axis), FadeIn(omega_l), FadeIn(readout))
             vo.wait_until("s")
             self.play(GrowArrow(pull_l), GrowArrow(pull_r))
-            self.play(tube.s.animate.set_value(2.6), pull_l.animate.shift(LEFT * 1.6), pull_r.animate.shift(RIGHT * 1.6),
-                      FadeIn(skater), run_time=4)
+            self.play(tube.s.animate.set_value(2.3), FadeIn(skater), run_time=4)
             vo.wait_until("f")
-            self.play(tube.s.animate.set_value(3.6), pull_l.animate.shift(LEFT * 0.8), pull_r.animate.shift(RIGHT * 0.8),
-                      run_time=vo.remaining())
+            self.play(tube.s.animate.set_value(3.0), run_time=vo.remaining())
         self.wait(1)
         self.clear_scene(self.result)
 

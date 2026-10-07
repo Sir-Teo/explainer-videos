@@ -50,7 +50,7 @@ class Incompressibility(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def box_derivation(self):
-        box = Square(2.6, color=WHITE, stroke_width=3, fill_color=C.VELOCITY, fill_opacity=0.15).move_to(LEFT * 4.6 + DOWN * 0.1)
+        box = Square(2.6, color=WHITE, stroke_width=3, fill_color=C.VELOCITY, fill_opacity=0.15).move_to(LEFT * 4.15 + DOWN * 0.1)
         c = box.get_center()
         s = 1.3
         in_l = Arrow(c + LEFT * (s + 1.3), c + LEFT * (s + 0.05), buff=0, color=C.VELOCITY, stroke_width=7)
