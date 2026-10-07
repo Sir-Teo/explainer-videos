@@ -17,8 +17,11 @@ from manim import (
     GREY_A,
     GREY_B,
     GREY_D,
+    MAROON,
     ORANGE,
+    PINK,
     PURPLE,
+    PURPLE_B,
     RED,
     TEAL,
     WHITE,
@@ -46,6 +49,18 @@ C = SimpleNamespace(
     DIVERGENCE=ORANGE,  # div u, incompressibility
     VORTICITY=ORANGE,  # omega (shares the "spin" family color)
     REYNOLDS=YELLOW,
+    # Language models (videos/llm)
+    TOKEN=GREY_A,  # token boxes, raw text
+    EMBED=BLUE,  # token vectors, the residual stream
+    POSITION=PINK,  # positional information
+    QUERY=YELLOW,  # q = W_Q x, "what am I looking for?"
+    KEY=TEAL,  # k = W_K x, "what do I contain?"
+    VALUE=RED,  # v = W_V x, the information that gets moved
+    ATTN=ORANGE,  # attention scores, weights, patterns
+    MLP=PURPLE_B,  # feed-forward layers, neurons
+    PROB=GREEN,  # logits, probabilities, predictions
+    LOSS=MAROON,  # training loss, -log p
+    NORM=GREY_B,  # layer norm
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
@@ -70,6 +85,7 @@ TEX_TEMPLATE.add_to_preamble(
 \newcommand{\vx}{\mathbf{x}}
 \newcommand{\vf}{\mathbf{f}}
 \newcommand{\dd}{\partial}
+\DeclareMathOperator{\softmax}{softmax}
 """
 )
 MathTex.set_default(tex_template=TEX_TEMPLATE)
