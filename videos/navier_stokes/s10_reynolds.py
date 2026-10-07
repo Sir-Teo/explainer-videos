@@ -165,11 +165,11 @@ class ReynoldsNumber(VoiceoverScene):
             r"tighter, more intense vortices (3D flows: turbulent)",
         ]
         lines = [
-            "Watch the flow past a cylinder as we dial up the Reynolds number. <bookmark mark='go'/> At Re equals one, viscosity "
-            "dominates. The flow oozes smoothly around the cylinder, and the disturbance spreads far out to the sides.",
-            "At Re equals forty, two swirling eddies form behind the cylinder and just sit there, perfectly steady.",
+            "Watch the flow past a cylinder as we dial up the Reynolds number. <bookmark mark='go'/> At a Reynolds number of one, "
+            "viscosity dominates. The flow oozes smoothly around the cylinder, and the disturbance spreads far out to the sides.",
+            "At a Reynolds number of forty, two swirling eddies form behind the cylinder and just sit there, perfectly steady.",
             "Past roughly fifty, that steady arrangement becomes unstable. The eddies begin to break away, alternating sides. "
-            "The vortex street from the beginning was at Re equals one hundred fifty.",
+            "The vortex street from the beginning was at a Reynolds number of one hundred fifty.",
             "Turn it up to a thousand, and the vortices become tighter and more intense, with thin filaments wrapped around them. "
             "In our two-dimensional simulation the street survives, but in real three-dimensional flows at this Reynolds "
             "number, the wake becomes turbulent.",
@@ -222,7 +222,7 @@ class ReynoldsNumber(VoiceoverScene):
         with self.voiceover(
             "The range in nature is staggering. <bookmark mark='b'/> A swimming bacterium lives at a Reynolds number around one "
             "ten-thousandth. For it, water is so syrupy that the moment it stops swimming, it stops dead. "
-            "<bookmark mark='a'/> Blood in your aorta flows at Re in the thousands. <bookmark mark='p'/> A person swimming, around a "
+            "<bookmark mark='a'/> Blood in your aorta flows at Reynolds numbers in the thousands. <bookmark mark='p'/> A person swimming, around a "
             "million. <bookmark mark='j'/> The air flowing over a jetliner's wing, tens of millions."
         ) as vo:
             self.play(Write(title), Create(line), FadeIn(ticks))

@@ -38,7 +38,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bNavier\b", "[Navier](/nævjˈeɪ/)"),
     (r"\bLeray\b", "[Leray](/ləɹˈeɪ/)"),
     (r"\bKármán\b", "[Karman](/kˈɑɹmɑn/)"),
-    (r"\bRe\b", "[Re](/ɹˈeɪ/)"),
+    (r"\bRe\b", "[Re](/ˌɑɹˈi/)"),  # "R-E"
+    (r"\bdy\b", "[dy](/dˌiwˈI/)"),  # "dee-why", not "die"
+    (r"\bdz\b", "[dz](/dˌizˈi/)"),
     (r"\bmu\b", "[mu](/mjˈu/)"),
     (r"\bnu\b", "[nu](/nˈu/)"),
     (r"\brho\b", "[rho](/ɹˈO/)"),
@@ -196,11 +198,14 @@ def synthesize(text: str) -> Utterance:
     else:
         synth = _synth_silent if BACKEND == "silent" else _synth_kokoro
         audio, tokens = synth(spoken)
-        tmp = wav_path.with_suffix(".tmp.wav")
+        # Atomic, process-unique temp files: parallel scene renders share this cache.
+        tmp = wav_path.with_suffix(f".{os.getpid()}.tmp.wav")
         _write_wav(tmp, audio)
         tmp.replace(wav_path)
         meta = {"text": text, "spoken": spoken, "duration": len(audio) / SAMPLE_RATE, "tokens": tokens}
-        meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+        tmp_meta = meta_path.with_suffix(f".{os.getpid()}.tmp.json")
+        tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+        tmp_meta.replace(meta_path)
 
     words = align_words(text, [tuple(t) for t in meta["tokens"]], meta["duration"])
     return Utterance(text=text, audio_path=wav_path, duration=meta["duration"], words=words)
