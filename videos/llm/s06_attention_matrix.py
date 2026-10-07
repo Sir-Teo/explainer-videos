@@ -61,9 +61,9 @@ class AttentionMatrix(VoiceoverScene):
         row = token_row(P, font_size=26, buff=0.25).move_to(LEFT * 2.0 + DOWN * 3.2)
         strips = VGroup(*[vector_strip(np.random.default_rng(i).normal(0, 1, 8), color=C.EMBED, cell=0.16, gap=0.03)
                           .next_to(t, UP, buff=0.25) for i, t in enumerate(row)])
-        X = cell_grid(n, 8, C.EMBED, cell=0.2, seed=1).move_to(LEFT * 3.4 + DOWN * 0.2)
+        X = cell_grid(n, 8, C.EMBED, cell=0.32, seed=1).move_to(LEFT * 3.2 + DOWN * 0.2)
         X_l = MathTex("X", font_size=44, color=C.EMBED).next_to(X, UP, buff=0.15)
-        X_rows = VGroup(*[mono(p) for p in P])
+        X_rows = VGroup(*[mono(p, font_size=24) for p in P])
         for i, m in enumerate(X_rows):
             m.next_to(X.grid[i * 8], LEFT, buff=0.15)
         with self.voiceover(
@@ -102,7 +102,7 @@ class AttentionMatrix(VoiceoverScene):
             "Now compare every query with every key in one go: <bookmark mark='s'/> that's Q times K transpose, a grid of "
             "scores with one row and one column for each token."
         ) as vo:
-            self.play(FadeOut(X_rows), VGroup(X, X_l).animate.scale(0.75).to_edge(LEFT, buff=0.3).shift(UP * 1.2),
+            self.play(FadeOut(X_rows), VGroup(X, X_l).animate.scale(0.5).to_edge(LEFT, buff=0.3).shift(UP * 1.2),
                       mats.animate.scale(0.75).move_to(LEFT * 1.6 + UP * 0.9))
             vo.wait_until("s")
             self.play(TransformFromCopy(VGroup(mats[0][0], mats[1][0]), S[0]), Create(S[1]), FadeIn(S_l), FadeIn(S_note),
