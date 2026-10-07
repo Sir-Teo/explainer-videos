@@ -172,7 +172,7 @@ class EarningsBoom(VoiceoverScene):
         p_g = VGroup(Dot(ax1.c2p(2.5 * PI, 1), color=C.EARNINGS, radius=0.11),
                      tagged(r"peak growth", font_size=24, color=C.EARNINGS).next_to(ax1.c2p(2.5 * PI, 1), UP, buff=0.12))
         lag = tagged(r"a quarter-cycle later: about a year,\\if the cycle is four years", font_size=24).move_to(
-            ax1.c2p(3.55 * PI, 0.8))
+            ax1.c2p(3.75 * PI, 1.0))
         sch = label(r"(schematic)", font_size=22, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
             "To see where a wave is heading, Timmer looks at its derivatives, exactly as in calculus. <bookmark mark='a'/> "
