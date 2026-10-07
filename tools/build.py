@@ -7,7 +7,7 @@
     python tools/build.py navier_stokes --stitch-only   # reuse rendered scenes
 
 Outputs (in ``renders/``):
-    <video>.mp4            video + narration + soft subtitles + chapters
+    <video>.mp4            video + narration (loudness-normalized) + soft subtitles + chapters
     <video>.srt            subtitles
     <video>.chapters.txt   YouTube-style chapter list
 """
@@ -44,6 +44,22 @@ def ffprobe_duration(path: Path) -> float:
 def has_audio(path: Path) -> bool:
     out = run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)])
     return bool(out.stdout.strip())
+
+
+# Audio mastering for the stitched soundtrack: remove sub-bass rumble, then two-pass EBU R128
+# loudness normalization to -16 LUFS integrated (the usual target for online video) with a
+# -1.5 dBTP true-peak ceiling, so every video plays at the same, comfortable level.
+HIGHPASS = "highpass=f=60"
+LOUDNORM = "loudnorm=I=-16:TP=-1.5:LRA=11"
+
+
+def master_filter(measure_cmd: list[str]) -> str:
+    """Run the first loudnorm pass and return the filter for the second (linear) pass."""
+    err = subprocess.run(measure_cmd, text=True, capture_output=True, check=True).stderr
+    m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
+    return (f"{HIGHPASS},{LOUDNORM}:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
+            f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}"
+            f":offset={m['target_offset']}:linear=true")
 
 
 def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> Path:
@@ -151,11 +167,15 @@ def main():
     ffmeta.write_text("\n".join(lines) + "\n")
 
     final = out_dir / f"{name}.mp4"
+    audio_filter = master_filter([
+        "ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
+        "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-",
+    ])
     run([
         "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
         "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
-        "-c:v", "copy", "-c:a", "copy", "-c:s", "mov_text", "-metadata:s:s:0", "language=eng",
-        "-movflags", "+faststart", str(final),
+        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
+        "-c:s", "mov_text", "-metadata:s:s:0", "language=eng", "-movflags", "+faststart", str(final),
     ])
     yt = "\n".join(f"{int(s // 60)}:{int(s % 60):02d} {t}" for s, t in chapters)
     (out_dir / f"{name}.chapters.txt").write_text(yt + "\n")
