@@ -57,6 +57,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Tt]okenizer\b", r"[\g<0>](/tˈOkənˌIzəɹ/)"),
     (r"\b[Cc]ompleter\b", r"[\g<0>](/kəmplˈiTəɹ/)"),
     (r"\b[Ss]ubword\b", r"[\g<0>](/sˈʌbwˌɜɹd/)"),
+    (r"\b[Ss]uperposition\b", r"[\g<0>](/sˌupəɹpəzˈɪʃən/)"),  # the G2P dictionary drops the "p"
     (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
