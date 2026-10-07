@@ -54,7 +54,7 @@ class Debt(VoiceoverScene):
     def cost(self):
         t, v = ts("interest_pct_gdp")
         k = int(np.argmax(np.where(t > 2024, v, 0)))
-        low = int(np.argmin(np.where((t > 2020.5) & (t < 2023), v, 9)))
+        low = int(np.argmin(np.where((t >= 2021) & (t < 2022), v, 9)))
         prior = t[(v >= v[k]) & (t < 2024)][-1]
         assert abs(v[k] - NOTE["debt_service_gdp"]) < 0.1 and 1997 < prior < 1999 and 2.2 < v[low] < 2.5
         ch = TimeChart((1960, 2027), (0, 5.5), width=10.6, height=4.6, x_ticks=range(1960, 2030, 10),

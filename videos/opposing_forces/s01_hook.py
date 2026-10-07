@@ -62,7 +62,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "If investors had kept paying the same price for each dollar of expected earnings, <bookmark mark='h'/> the "
             "index would have climbed along this line. <bookmark mark='g'/> Instead, the price they're willing to pay, "
-            "the multiple, shrank, and ate up most of the earnings gain."
+            "the multiple, shrank, and swallowed most of the earnings gain."
         ) as vo:
             vo.wait_until("h")
             self.play(FadeOut(band_l), Create(held), FadeIn(held_l))

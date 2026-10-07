@@ -134,7 +134,7 @@ class Valuation(VoiceoverScene):
             "below zero, less. <bookmark mark='f'/> Using forward earnings, the gap is roughly zero: about 5.1 percent "
             "against 5.3. <bookmark mark='t'/> Using the past year's earnings, it's about minus 1.4 points: the lowest since "
             "2002, setting aside 2009, when earnings briefly collapsed. <bookmark mark='d'/> The real danger zones were "
-            "1987 and 2000. <bookmark mark='c'/> And the version Shiller computes, from CAPE and real yields, is down to "
+            "1987 and 2000. <bookmark mark='c'/> And the measure Shiller computes, from CAPE and real yields, is down to "
             "about half a point, also its lowest since 2002."
         ) as vo:
             self.play(FadeIn(title), FadeIn(src))

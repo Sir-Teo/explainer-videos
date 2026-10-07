@@ -114,7 +114,7 @@ class Discounting(VoiceoverScene):
                     r"\cdots", font_size=46),
             MathTex(r"=", r"\frac{D}{1+r}", r"\Big(1 + q + q^2 + \cdots\Big)", r",\quad q = \frac{1+g}{1+r}", font_size=46),
             MathTex(r"P", r"=", r"\frac{D}{r-g}", font_size=60),
-        ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to(DOWN * 0.15 + LEFT * 0.4)
+        ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to(UP * 0.1 + LEFT * 0.4)
         rows[1].shift(RIGHT * (rows[0][1].get_x() - rows[1][0].get_x()))
         rows[2].shift(RIGHT * (rows[0][1].get_x() - rows[2][1].get_x()))
         rows[0][0].set_color(C.PRICE)
@@ -145,11 +145,11 @@ class Discounting(VoiceoverScene):
 
         pe = MathTex(r"\frac{P}{E}", r"=", r"\frac{D/E}{r-g}", font_size=60).move_to(rows[2]).shift(RIGHT * 4.6)
         pe[0].set_color(C.MULTIPLE)
-        payout = label(r"$D/E$: share of profits paid out", font_size=26, color=GREY_A).next_to(pe, DOWN, buff=0.3)
+        payout = label(r"$D/E$: share of profits paid out", font_size=26, color=GREY_A).next_to(pe, DOWN, buff=0.15)
         rdef = MathTex(r"r", r"=", r"\text{risk-free rate}", r"+", r"\text{equity risk premium}", font_size=42)
         rdef[0].set_color(C.RATE)
         rdef[2].set_color(C.RATE)
-        rdef.to_edge(DOWN, buff=0.6)
+        rdef.to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Divide both sides by earnings, <bookmark mark='p'/> and out comes the P/E ratio itself: the share of profits "
             "paid out, divided by r minus g. <bookmark mark='r'/> And the discount rate r is the risk-free interest rate, "
@@ -212,11 +212,11 @@ class Discounting(VoiceoverScene):
         near = (1.09 / 1.10) ** 1 - 1
         far = (1.09 / 1.10) ** 30 - 1
         assert round(100 * near) == -1 and round(100 * far) == -24
-        dur = VGroup(label(r"when $r$ goes from $9\%$ to $10\%$:", font_size=30),
-                     label(r"a dollar due next year: $-1\%$", font_size=30, color=C.EARNINGS),
-                     label(r"a dollar due in 30 years: $-24\%$", font_size=30, color=C.RATE)).arrange(DOWN, aligned_edge=LEFT,
+        dur = VGroup(label(r"when $r$ goes from $9\%$ to $10\%$:", font_size=28),
+                     label(r"a dollar due next year: $-1\%$", font_size=28, color=C.EARNINGS),
+                     label(r"a dollar due in 30 years: $-24\%$", font_size=28, color=C.RATE)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                     buff=0.18)
-        dur.move_to(RIGHT * 4.6 + DOWN * 2.0)
+        dur.move_to(RIGHT * 4.85 + DOWN * 1.55)
         dur.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.15)
         with self.voiceover(
             "It also matters which dollars you're discounting. <bookmark mark='a'/> When rates rise from nine to ten "

@@ -90,13 +90,15 @@ class EarningsBoom(VoiceoverScene):
             vo.wait_until("t")
             self.play(FadeIn(band), FadeIn(band_l))
 
-        rec = VGroup(label(rf"record profit margin: {FACTSET['margin_q2']:.1f}\% in Q2 (FactSet; Timmer: {NOTE['margin']}\%)",
-                           font_size=26, color=C.EARNINGS),
-                     label(rf"record {FACTSET['positive_guidance']} companies raised Q3 guidance (prior record: "
-                           rf"{FACTSET['positive_guidance_prior_record']})", font_size=26, color=C.EARNINGS),
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        rec = VGroup(label(rf"record profit margin: {FACTSET['margin_q2']:.1f}\% in Q2", font_size=26, color=C.EARNINGS),
+                     label(rf"(FactSet; Timmer's measure: {NOTE['margin']}\%)", font_size=22, color=GREY_A),
+                     label(rf"record {FACTSET['positive_guidance']} companies raised Q3 guidance", font_size=26,
+                           color=C.EARNINGS),
+                     label(rf"(prior record: {FACTSET['positive_guidance_prior_record']}, in 2021)", font_size=22,
+                           color=GREY_A),
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         rec.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.12)
-        rec.move_to(RIGHT * 3.6 + UP * 0.75)
+        rec.move_to(LEFT * 4.25 + UP * 1.3)
         assert FACTSET["positive_guidance"] > FACTSET["positive_guidance_prior_record"]
         with self.voiceover(
             "Profit margins are at a record, and a record number of companies raised their guidance going into the "
@@ -169,8 +171,8 @@ class EarningsBoom(VoiceoverScene):
                        tagged(r"peak acceleration", font_size=24, color=YELLOW).next_to(ax2.c2p(2 * PI, 1), RIGHT, buff=0.2))
         p_g = VGroup(Dot(ax1.c2p(2.5 * PI, 1), color=C.EARNINGS, radius=0.11),
                      tagged(r"peak growth", font_size=24, color=C.EARNINGS).next_to(ax1.c2p(2.5 * PI, 1), UP, buff=0.12))
-        lag = tagged(r"a quarter-cycle later: about a year,\\if the cycle is four years", font_size=24).next_to(
-            ax1.c2p(2.5 * PI, 1), RIGHT, buff=0.3).shift(UP * 0.25)
+        lag = tagged(r"a quarter-cycle later: about a year,\\if the cycle is four years", font_size=24).move_to(
+            ax1.c2p(3.55 * PI, 0.8))
         sch = label(r"(schematic)", font_size=22, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
             "To see where a wave is heading, Timmer looks at its derivatives, exactly as in calculus. <bookmark mark='a'/> "

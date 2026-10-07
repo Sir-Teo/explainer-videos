@@ -112,7 +112,7 @@ class Clock(VoiceoverScene):
         dr_now = at(rt, rv, k1) - at(rt, rv, k0)
         now = ch.dot(dr_now, NOTE["trailing_eps_growth"], YELLOW, 0.11)
         now_l = tagged(rf"Oct 2026: real yields ${dr_now:+.1f}$,\\earnings about $+{NOTE['trailing_eps_growth']}\%$",
-                       font_size=24, color=YELLOW).next_to(now, UP, buff=0.12)
+                       font_size=24, color=YELLOW).next_to(now, RIGHT, buff=0.15)
         jump = Arrow(ch.c2p(xs3[-1], ys3[-1]), now.get_center(), buff=0.1, color=YELLOW, stroke_width=3, tip_length=0.18)
         jump.set_stroke(opacity=0.7)
         quads = VGroup(tagged(r"9--12", font_size=24).move_to(ch.c2p(-1.2, 52)), tagged(r"12--3", font_size=24).move_to(ch.c2p(2.2, 52)),

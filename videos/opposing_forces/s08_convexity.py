@@ -84,8 +84,8 @@ class Convexity(VoiceoverScene):
         l_bond = ch.line(ys * 100, bond, GREY_A, 4)
         l_mbs = ch.line(ys * 100, mbs, C.MORTGAGE, 6)
         t_bond = tagged(r"if borrowers couldn't refinance", font_size=24, color=GREY_A).next_to(ch.c2p(3.9, 128), RIGHT, buff=0.1)
-        t_mbs = tagged(r"mortgage bond", font_size=26, color=C.MORTGAGE).move_to(ch.c2p(4.4, 96))
-        cap = tagged(r"upside capped:\\borrowers refinance", font_size=24, color=C.MORTGAGE).move_to(ch.c2p(4.7, 109))
+        t_mbs = tagged(r"mortgage bond", font_size=26, color=C.MORTGAGE).move_to(ch.c2p(4.2, 108))
+        cap = tagged(r"upside capped:\\borrowers refinance", font_size=24, color=C.MORTGAGE).move_to(ch.c2p(4.65, 93))
         sch = label(r"(schematic model: 6\% mortgages, refinancing speeds up as rates fall)", font_size=22,
                     color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
@@ -110,9 +110,9 @@ class Convexity(VoiceoverScene):
             yv = y.get_value() / 100
             p = pool_price(yv)
             slope = -duration(yv) * p / 100  # price change per percentage point
-            a, b = yv * 100 - 0.8, yv * 100 + 0.8
-            return VGroup(Line(ch.c2p(a, p + slope * (a - yv * 100)), ch.c2p(b, p + slope * (b - yv * 100)), color=YELLOW,
-                               stroke_width=4), Dot(ch.c2p(yv * 100, p), radius=0.08, color=YELLOW))
+            a, b = yv * 100 - 1.0, yv * 100 + 1.0
+            return VGroup(Line(ch.c2p(a, p + slope * (a - yv * 100)), ch.c2p(b, p + slope * (b - yv * 100)), color=WHITE,
+                               stroke_width=4), Dot(ch.c2p(yv * 100, p), radius=0.09, color=YELLOW))
 
         tan = always_redraw(tangent)
         read = always_redraw(lambda: VGroup(
