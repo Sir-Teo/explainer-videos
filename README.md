@@ -4,10 +4,20 @@
 [Manim Community](https://www.manim.community/), narrated by an offline neural
 TTS voice, and stitched into a finished video with subtitles and chapters.
 
-| Video | Length | Folder |
-|---|---|---|
-| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`videos/navier_stokes`](videos/navier_stokes) |
-| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`videos/llm`](videos/llm) |
+| Video | Length | Watch | Source |
+|---|---|---|---|
+| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`published/navier_stokes.mp4`](published/navier_stokes.mp4) | [`videos/navier_stokes`](videos/navier_stokes) |
+| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`published/llm.mp4`](published/llm.mp4) | [`videos/llm`](videos/llm) |
+
+The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
+-16 LUFS) with soft English subtitles and chapter markers, sized to fit under
+GitHub's 100 MB file limit by `tools/publish.py`; a sidecar `.srt` sits next
+to each. Download one and open it in any player (VLC, QuickTime, a browser).
+The LLM video's picture is bit-identical to the full render; the
+Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
+0.98–0.9996 against the full render, lowest on the turbulence footage). The
+96 kb/s narration is within measurement noise of the 192 kb/s master on
+UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
 ## Quick start
 

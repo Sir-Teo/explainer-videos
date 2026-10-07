@@ -5,6 +5,27 @@ equations from Newton's second law, deriving every term on screen. It then
 shows what the equations do, using real simulations, and covers the open
 mathematics: the Millennium Prize problem and the 2026 claimed forced blow-up.
 
+**Watch:** [`published/navier_stokes.mp4`](../../published/navier_stokes.mp4) (1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters</summary>
+
+- `0:00` Every swirl obeys one equation
+- `1:21` Describing a fluid: fields
+- `2:46` F = ma for a fluid parcel
+- `4:04` Acceleration: the material derivative
+- `7:07` The pressure force
+- `8:59` The viscous force
+- `11:57` Conservation of mass
+- `13:41` What decides the pressure?
+- `15:30` Putting it together
+- `17:00` The Reynolds number
+- `19:34` Instability and turbulence
+- `21:14` Vortex stretching and the $1M question
+- `23:39` 2026: OpenAI's forced blow-up claim
+- `27:10` Recap
+
+</details>
+
 ```bash
 python -m videos.navier_stokes.simulate        # once: precompute footage (~40 min, cached in .cache/sims)
 python tools/build.py navier_stokes -q l       # preview

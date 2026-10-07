@@ -1,0 +1,1855 @@
+1
+00:00:00,275 --> 00:00:04,550
+This is a computer simulation of fluid flowing past a cylinder.
+
+2
+00:00:04,550 --> 00:00:09,138
+Notice the swirls peeling off, alternating between the top and the bottom,
+
+3
+00:00:09,138 --> 00:00:13,108
+one after another, in a perfectly rhythmic pattern.
+
+4
+00:00:13,108 --> 00:00:16,121
+This pattern is called a Kármán vortex street.
+
+5
+00:00:16,121 --> 00:00:19,883
+You can see it in the clouds downwind of islands, and it's why a telephone
+
+6
+00:00:19,883 --> 00:00:22,342
+wire hums in the wind.
+
+7
+00:00:22,342 --> 00:00:27,304
+Every swirl here, every detail of this flow, comes from a single set of equations,
+
+8
+00:00:27,304 --> 00:00:29,467
+written down two centuries ago:
+
+9
+00:00:29,467 --> 00:00:32,867
+the Navier–Stokes equations.
+
+10
+00:00:33,383 --> 00:00:37,433
+They govern the weather, ocean currents, the blood in your arteries, the air
+
+11
+00:00:37,433 --> 00:00:41,783
+over an airplane's wing, and the cream swirling in your coffee.
+
+12
+00:00:41,783 --> 00:00:44,208
+At first glance they look intimidating.
+
+13
+00:00:44,208 --> 00:00:47,071
+But the core idea is something you already know.
+
+14
+00:00:47,071 --> 00:00:51,671
+They are nothing more than Newton's second law, F equals m a, applied to every
+
+15
+00:00:51,671 --> 00:00:53,950
+tiny parcel of fluid.
+
+16
+00:00:53,950 --> 00:00:57,337
+By the end of this video, we'll have derived every one of these terms from
+
+17
+00:00:57,337 --> 00:01:02,000
+scratch, and every symbol will feel not just familiar, but inevitable.
+
+18
+00:01:02,000 --> 00:01:05,862
+Along the way, we'll see why these innocent-looking equations hide one of
+
+19
+00:01:05,862 --> 00:01:10,475
+the great problems in mathematics, with a million-dollar prize attached, and
+
+20
+00:01:10,475 --> 00:01:15,300
+one that an AI system, in September 2026, claimed to have cracked.
+
+21
+00:01:22,067 --> 00:01:24,404
+So, how do you even describe a fluid?
+
+22
+00:01:24,404 --> 00:01:28,842
+A glass of water holds roughly ten to the twenty-five molecules, all jostling
+
+23
+00:01:28,842 --> 00:01:32,154
+around, colliding billions of times per second.
+
+24
+00:01:32,154 --> 00:01:34,642
+Tracking each one is hopeless.
+
+25
+00:01:34,642 --> 00:01:35,967
+So we zoom out.
+
+26
+00:01:35,967 --> 00:01:40,354
+We pretend the fluid is a smooth, continuous substance, and at every point
+
+27
+00:01:40,354 --> 00:01:42,792
+in space we ask just one question:
+
+28
+00:01:42,792 --> 00:01:46,750
+which way, and how fast, is the fluid moving right here?
+
+29
+00:01:46,750 --> 00:01:50,650
+The answer is a vector, which we'll call u, and color blue throughout this
+
+30
+00:01:50,650 --> 00:01:51,650
+video.
+
+31
+00:01:51,650 --> 00:01:56,267
+Its direction is the direction of flow, and its length is the speed.
+
+32
+00:01:56,267 --> 00:02:00,917
+Do this at every point and you get a velocity field, written u of x and t,
+
+33
+00:02:00,917 --> 00:02:03,505
+since it depends on position and on time.
+
+34
+00:02:03,505 --> 00:02:06,230
+In three dimensions it has three components:
+
+35
+00:02:06,230 --> 00:02:08,750
+u, v, and w.
+
+36
+00:02:08,750 --> 00:02:13,000
+If you sprinkle tiny specks of dust into the flow, they get carried along
+
+37
+00:02:13,000 --> 00:02:16,817
+by these arrows, tracing out the motion of the fluid.
+
+38
+00:02:16,817 --> 00:02:18,304
+We'll need one more field:
+
+39
+00:02:18,304 --> 00:02:22,154
+pressure, a single number at each point, colored in red.
+
+40
+00:02:22,154 --> 00:02:26,392
+You can think of it as how tightly the fluid is being squeezed at that spot.
+
+41
+00:02:26,392 --> 00:02:29,279
+Notice that it's lowest in the middle of each swirl.
+
+42
+00:02:29,279 --> 00:02:30,342
+Hold on to that;
+
+43
+00:02:30,342 --> 00:02:32,275
+we'll see why soon.
+
+44
+00:02:32,275 --> 00:02:36,475
+So the unknowns are the three components of velocity, and the pressure:
+
+45
+00:02:36,475 --> 00:02:39,738
+four unknown functions of space and time.
+
+46
+00:02:39,738 --> 00:02:43,775
+The Navier–Stokes equations are the rules that determine how these fields
+
+47
+00:02:43,775 --> 00:02:44,550
+evolve.
+
+48
+00:02:46,823 --> 00:02:48,261
+Now for the physics.
+
+49
+00:02:48,261 --> 00:02:52,986
+Follow one tiny blob of fluid, a parcel, as it drifts along.
+
+50
+00:02:52,986 --> 00:02:56,986
+Picture it as small enough that the velocity is essentially uniform across
+
+51
+00:02:56,986 --> 00:03:01,548
+it, yet large enough to contain an enormous number of molecules.
+
+52
+00:03:01,548 --> 00:03:07,073
+Its volume is dV, and if the fluid's density is rho, its mass is rho times
+
+53
+00:03:07,073 --> 00:03:07,448
+dV.
+
+54
+00:03:07,448 --> 00:03:12,148
+Newton's second law says mass times acceleration equals the total force on
+
+55
+00:03:12,148 --> 00:03:13,240
+it.
+
+56
+00:03:13,240 --> 00:03:18,265
+Since the parcel is tiny, it's more natural to divide both sides by its volume.
+
+57
+00:03:18,265 --> 00:03:21,415
+On the left, density times acceleration.
+
+58
+00:03:21,415 --> 00:03:25,390
+On the right, force per unit volume.
+
+59
+00:03:25,540 --> 00:03:28,040
+So what forces act on a parcel of fluid?
+
+60
+00:03:28,040 --> 00:03:29,640
+Only three kinds.
+
+61
+00:03:29,640 --> 00:03:34,078
+First, the surrounding fluid pushes on it, perpendicular to its surface.
+
+62
+00:03:34,078 --> 00:03:35,798
+That's pressure.
+
+63
+00:03:35,798 --> 00:03:40,736
+Second, neighboring fluid sliding past drags on it, tangent to its surface.
+
+64
+00:03:40,736 --> 00:03:44,273
+That's viscosity, a kind of internal friction.
+
+65
+00:03:44,273 --> 00:03:47,948
+And third, there can be forces acting on the whole body of the parcel from
+
+66
+00:03:47,948 --> 00:03:50,607
+outside, like gravity.
+
+67
+00:03:50,607 --> 00:03:53,269
+So the equation we're after has this shape.
+
+68
+00:03:53,269 --> 00:03:57,457
+Each piece has a clean mathematical form, and we're going to derive every
+
+69
+00:03:57,457 --> 00:03:58,594
+one of them.
+
+70
+00:03:58,594 --> 00:04:02,269
+Let's start with the left side, which turns out to be the subtlest:
+
+71
+00:04:02,269 --> 00:04:03,432
+acceleration.
+
+72
+00:04:05,037 --> 00:04:06,187
+Here's a puzzle.
+
+73
+00:04:06,187 --> 00:04:09,412
+Water flows steadily through a pipe that narrows.
+
+74
+00:04:09,412 --> 00:04:12,125
+'Steady' means the picture never changes:
+
+75
+00:04:12,125 --> 00:04:16,512
+at any fixed spot, the velocity now is the same as the velocity a minute from
+
+76
+00:04:16,512 --> 00:04:17,771
+now.
+
+77
+00:04:17,771 --> 00:04:21,471
+So if you take the time derivative of the velocity field at a fixed point,
+
+78
+00:04:21,471 --> 00:04:24,433
+partial u, partial t, you get zero.
+
+79
+00:04:24,433 --> 00:04:25,937
+Everywhere.
+
+80
+00:04:25,937 --> 00:04:28,925
+And yet, follow a single parcel of water.
+
+81
+00:04:28,925 --> 00:04:33,312
+As it enters the narrow section, it must speed up, since the same amount of
+
+82
+00:04:33,312 --> 00:04:36,662
+water per second has to squeeze through a smaller gap.
+
+83
+00:04:36,662 --> 00:04:40,537
+The parcel is clearly accelerating.
+
+84
+00:04:41,679 --> 00:04:42,879
+The resolution:
+
+85
+00:04:42,879 --> 00:04:45,267
+there are two different rates of change here.
+
+86
+00:04:45,267 --> 00:04:49,779
+How the velocity changes at a fixed location, and how the velocity changes
+
+87
+00:04:49,779 --> 00:04:52,454
+for a particular parcel as it travels.
+
+88
+00:04:52,454 --> 00:04:56,154
+Newton's law is about the second one.
+
+89
+00:04:56,396 --> 00:04:57,658
+Let's compute it.
+
+90
+00:04:57,658 --> 00:05:02,108
+Say the parcel's position at time t is x of t, y of t.
+
+91
+00:05:02,108 --> 00:05:06,446
+Its velocity is just the velocity field evaluated wherever the parcel happens
+
+92
+00:05:06,446 --> 00:05:07,704
+to be.
+
+93
+00:05:07,704 --> 00:05:09,929
+Focus on the horizontal component, u.
+
+94
+00:05:09,929 --> 00:05:13,267
+As time passes, it changes for two reasons.
+
+95
+00:05:13,267 --> 00:05:16,404
+Time is ticking, so the field itself may change.
+
+96
+00:05:16,404 --> 00:05:20,517
+And the parcel moves, so it samples the field at new locations.
+
+97
+00:05:20,517 --> 00:05:23,137
+The chain rule accounts for both.
+
+98
+00:05:23,137 --> 00:05:25,137
+Here's the key physical input:
+
+99
+00:05:25,137 --> 00:05:27,150
+the parcel moves with the flow.
+
+100
+00:05:27,150 --> 00:05:33,312
+So its rate of change of x is just u, and its rate of change of y is v.
+
+101
+00:05:35,479 --> 00:05:39,129
+Pull the velocity out, and what's left is an operator:
+
+102
+00:05:39,129 --> 00:05:43,254
+u times partial partial x, plus v times partial partial y.
+
+103
+00:05:43,254 --> 00:05:47,679
+That's the derivative in the direction of the flow, scaled by the speed, which
+
+104
+00:05:47,679 --> 00:05:50,771
+we write compactly as u dot del.
+
+105
+00:05:50,771 --> 00:05:55,421
+The vertical component works exactly the same way, so in vector form:
+
+106
+00:05:55,421 --> 00:06:00,421
+the acceleration of a parcel is partial u partial t, plus u dot del, u.
+
+107
+00:06:00,421 --> 00:06:04,496
+This combination is called the material derivative, written with a capital
+
+108
+00:06:04,496 --> 00:06:05,779
+D.
+
+109
+00:06:05,779 --> 00:06:08,917
+The first term is the change you'd see sitting still.
+
+110
+00:06:08,917 --> 00:06:12,679
+The second is the change that comes purely from moving to a place where the
+
+111
+00:06:12,679 --> 00:06:14,204
+flow is different.
+
+112
+00:06:14,204 --> 00:06:17,104
+It's called advection.
+
+113
+00:06:17,237 --> 00:06:19,725
+Here's a nice way to see that second term.
+
+114
+00:06:19,725 --> 00:06:22,562
+Take a fluid spinning steadily in a circle.
+
+115
+00:06:22,562 --> 00:06:26,837
+Nothing changes in time, so partial u partial t is zero.
+
+116
+00:06:26,837 --> 00:06:31,312
+But take the velocity at one point, follow the flow a small step, and compare
+
+117
+00:06:31,312 --> 00:06:32,975
+with the velocity there.
+
+118
+00:06:32,975 --> 00:06:35,629
+The difference points toward the center.
+
+119
+00:06:35,629 --> 00:06:39,354
+So u dot del u is the centripetal acceleration:
+
+120
+00:06:39,354 --> 00:06:44,242
+the speed squared over the radius, pointing inward, exactly what any object
+
+121
+00:06:44,242 --> 00:06:47,454
+moving in a circle must have.
+
+122
+00:06:47,696 --> 00:06:50,846
+Finally, notice that u appears twice in this term:
+
+123
+00:06:50,846 --> 00:06:53,221
+the flow is carrying itself along.
+
+124
+00:06:53,221 --> 00:06:56,496
+Double the velocity, and this term quadruples.
+
+125
+00:06:56,496 --> 00:07:00,596
+This makes the equation nonlinear, and nearly everything that makes fluids
+
+126
+00:07:00,596 --> 00:07:05,271
+rich, chaotic, and mathematically difficult traces back to this one term.
+
+127
+00:07:07,426 --> 00:07:10,013
+Now the forces, starting with pressure.
+
+128
+00:07:10,013 --> 00:07:14,513
+Pressure pushes on any surface, perpendicular to it, with a force equal to
+
+129
+00:07:14,513 --> 00:07:16,809
+the pressure times the area.
+
+130
+00:07:16,809 --> 00:07:20,884
+If the pressure is the same on all sides of our parcel, the pushes cancel
+
+131
+00:07:20,884 --> 00:07:22,121
+perfectly.
+
+132
+00:07:22,121 --> 00:07:26,746
+A uniform pressure, no matter how large, produces no net force at all.
+
+133
+00:07:26,746 --> 00:07:30,409
+What matters is how pressure varies.
+
+134
+00:07:30,534 --> 00:07:33,471
+So suppose the pressure varies from left to right.
+
+135
+00:07:33,471 --> 00:07:36,559
+Take a box of width dx and face area A.
+
+136
+00:07:36,559 --> 00:07:40,934
+The left face feels the pressure at x, pushing rightward with force p of x
+
+137
+00:07:40,934 --> 00:07:41,884
+times A.
+
+138
+00:07:41,884 --> 00:07:46,609
+The right face feels p at x plus dx, pushing leftward.
+
+139
+00:07:46,609 --> 00:07:48,509
+The net force is the difference.
+
+140
+00:07:48,509 --> 00:07:54,121
+For a tiny box, p of x plus dx minus p of x is just the derivative of p times
+
+141
+00:07:54,121 --> 00:07:55,134
+dx.
+
+142
+00:07:55,134 --> 00:07:58,801
+And dx times A is the volume of the box.
+
+143
+00:07:58,801 --> 00:08:03,601
+So the horizontal force per unit volume is minus partial p partial x.
+
+144
+00:08:03,601 --> 00:08:08,301
+The same argument in the y and z directions gives the other components, and
+
+145
+00:08:08,301 --> 00:08:12,251
+together they make minus the gradient of p.
+
+146
+00:08:12,509 --> 00:08:17,309
+The gradient points uphill, toward higher pressure, so the force points downhill.
+
+147
+00:08:17,309 --> 00:08:20,942
+Fluid gets pushed from high pressure toward low pressure.
+
+148
+00:08:20,942 --> 00:08:24,917
+It's exactly why wind blows from high-pressure regions toward low-pressure
+
+149
+00:08:24,917 --> 00:08:27,067
+ones.
+
+150
+00:08:27,201 --> 00:08:30,551
+And remember those swirls with low pressure in their cores?
+
+151
+00:08:30,551 --> 00:08:32,226
+Now we can see why.
+
+152
+00:08:32,226 --> 00:08:36,626
+For fluid to move in a circle, something must supply the inward, centripetal
+
+153
+00:08:36,626 --> 00:08:38,788
+acceleration we just found.
+
+154
+00:08:38,788 --> 00:08:43,709
+The only candidate is pressure, so the pressure has to drop toward the center.
+
+155
+00:08:43,709 --> 00:08:48,384
+Comparing the inward parts, the pressure gradient balances density times speed
+
+156
+00:08:48,384 --> 00:08:50,259
+squared over radius.
+
+157
+00:08:50,259 --> 00:08:54,596
+It's why the core of a tornado is a region of very low pressure, and why the
+
+158
+00:08:54,596 --> 00:08:57,834
+water's surface dips down in the middle of a whirlpool.
+
+159
+00:08:59,547 --> 00:09:00,972
+Next, viscosity:
+
+160
+00:09:00,972 --> 00:09:04,784
+the internal friction that makes honey ooze differently from water.
+
+161
+00:09:04,784 --> 00:09:09,584
+Picture a flow made of thin horizontal layers sliding past each other, faster
+
+162
+00:09:09,584 --> 00:09:12,522
+at the top, slower at the bottom.
+
+163
+00:09:12,522 --> 00:09:15,109
+Each layer rubs against its neighbors.
+
+164
+00:09:15,109 --> 00:09:19,647
+A faster layer above drags a slower one forward, and the slower layer below
+
+165
+00:09:19,647 --> 00:09:21,364
+holds it back.
+
+166
+00:09:21,364 --> 00:09:25,876
+For fluids like water and air, this frictional force per unit area, called
+
+167
+00:09:25,876 --> 00:09:30,126
+the shear stress, is proportional to how quickly the velocity changes from
+
+168
+00:09:30,126 --> 00:09:31,926
+one layer to the next:
+
+169
+00:09:31,926 --> 00:09:33,839
+mu times partial u partial y.
+
+170
+00:09:33,839 --> 00:09:38,639
+The constant mu, in green, is the viscosity.
+
+171
+00:09:38,880 --> 00:09:40,668
+Now let's derive the force.
+
+172
+00:09:40,668 --> 00:09:45,243
+Here's a velocity profile, and a slab of fluid of thickness dy.
+
+173
+00:09:45,243 --> 00:09:50,068
+The layer above pulls it forward with stress tau at y plus dy, times the area
+
+174
+00:09:50,068 --> 00:09:50,255
+A.
+
+175
+00:09:50,255 --> 00:09:54,864
+The layer below drags it backward with tau at y, times A.
+
+176
+00:09:54,864 --> 00:09:57,664
+Once again, the net force comes from a difference.
+
+177
+00:09:57,664 --> 00:10:01,226
+It's partial tau partial y, times dy times A.
+
+178
+00:10:01,226 --> 00:10:05,651
+Plug in the stress, and dividing by the volume, the force per unit volume
+
+179
+00:10:05,651 --> 00:10:10,047
+is mu times the second derivative of u with respect to y.
+
+180
+00:10:10,047 --> 00:10:11,622
+Notice what this means.
+
+181
+00:10:11,622 --> 00:10:16,622
+If the velocity profile is a straight line, the second derivative is zero:
+
+182
+00:10:16,622 --> 00:10:20,484
+the pull from above exactly balances the drag from below.
+
+183
+00:10:20,484 --> 00:10:24,805
+Viscosity only produces a net force where the profile curves.
+
+184
+00:10:24,805 --> 00:10:28,455
+When you account for sliding in every direction, and use the fact that the
+
+185
+00:10:28,455 --> 00:10:33,530
+flow is incompressible, all these second derivatives add up to one operator:
+
+186
+00:10:33,530 --> 00:10:37,455
+the Laplacian, written del squared.
+
+187
+00:10:38,572 --> 00:10:41,459
+The Laplacian has a wonderful intuition.
+
+188
+00:10:41,459 --> 00:10:45,555
+Compare a value at some point to the average of its neighbors.
+
+189
+00:10:45,555 --> 00:10:50,843
+Using a Taylor expansion on both sides and adding, the first derivatives cancel,
+
+190
+00:10:50,843 --> 00:10:55,168
+and the second derivative is, up to a constant, the average of the neighbors
+
+191
+00:10:55,168 --> 00:10:57,930
+minus the value at the point itself.
+
+192
+00:10:57,930 --> 00:11:02,130
+So the Laplacian is positive where the value sits below its surroundings,
+
+193
+00:11:02,130 --> 00:11:06,555
+like the bottom of a valley, and negative at a peak.
+
+194
+00:11:06,889 --> 00:11:11,314
+In two or three dimensions it's the same story, just averaging over neighbors
+
+195
+00:11:11,314 --> 00:11:14,114
+in every direction.
+
+196
+00:11:14,264 --> 00:11:18,351
+So viscosity nudges each parcel's velocity toward the average velocity of
+
+197
+00:11:18,351 --> 00:11:19,589
+its neighbors.
+
+198
+00:11:19,589 --> 00:11:23,801
+Fast spots get slowed down, slow spots get pulled along.
+
+199
+00:11:23,801 --> 00:11:28,589
+Peaks get shaved off, valleys get filled in, and the velocity profile smooths
+
+200
+00:11:28,589 --> 00:11:30,639
+out.
+
+201
+00:11:32,330 --> 00:11:37,030
+Here's the effect on a full flow, colored by how fast the fluid is spinning.
+
+202
+00:11:37,030 --> 00:11:41,293
+On the left, a swirling flow with low viscosity, like water.
+
+203
+00:11:41,293 --> 00:11:45,768
+On the right, the same starting flow with high viscosity, like honey.
+
+204
+00:11:45,768 --> 00:11:49,768
+The honey version smears out and quickly dies away, while the water keeps
+
+205
+00:11:49,768 --> 00:11:51,780
+its intricate structure much longer.
+
+206
+00:11:57,469 --> 00:12:01,819
+We now have one vector equation, three equations in three dimensions.
+
+207
+00:12:01,819 --> 00:12:03,694
+But there are four unknowns:
+
+208
+00:12:03,694 --> 00:12:06,482
+three velocity components and the pressure.
+
+209
+00:12:06,482 --> 00:12:10,919
+The missing equation comes from conservation of mass.
+
+210
+00:12:11,086 --> 00:12:14,711
+Water is, for all practical purposes, incompressible.
+
+211
+00:12:14,711 --> 00:12:17,898
+You can't squeeze a parcel of it into a smaller volume.
+
+212
+00:12:17,898 --> 00:12:22,352
+So for any small region, whatever flows in must flow out.
+
+213
+00:12:22,352 --> 00:12:24,865
+Let's count the flow through a small box.
+
+214
+00:12:24,865 --> 00:12:29,002
+Through the left face, fluid enters at a rate of u at x, times the face's
+
+215
+00:12:29,002 --> 00:12:30,565
+length, dy.
+
+216
+00:12:30,565 --> 00:12:35,936
+Through the right face, it leaves at a rate of u at x plus dx, times dy.
+
+217
+00:12:35,936 --> 00:12:40,611
+The net horizontal outflow is the difference, partial u partial x times dx
+
+218
+00:12:40,611 --> 00:12:41,686
+dy.
+
+219
+00:12:41,686 --> 00:12:46,161
+Likewise, the net outflow through the top and bottom is partial v partial
+
+220
+00:12:46,161 --> 00:12:48,569
+y times dx dy.
+
+221
+00:12:48,569 --> 00:12:53,344
+The total, per unit volume, is partial u partial x plus partial v partial
+
+222
+00:12:53,344 --> 00:12:57,544
+y, plus partial w partial z in three dimensions.
+
+223
+00:12:57,544 --> 00:13:00,982
+This is the divergence of u, written del dot u.
+
+224
+00:13:00,982 --> 00:13:05,644
+It measures how much fluid is streaming out of each point.
+
+225
+00:13:05,794 --> 00:13:08,394
+Here's a field with positive divergence:
+
+226
+00:13:08,394 --> 00:13:11,544
+fluid gushes out of every point, like a source.
+
+227
+00:13:11,544 --> 00:13:13,969
+Here's negative divergence, a sink.
+
+228
+00:13:13,969 --> 00:13:16,494
+And here's a field with zero divergence:
+
+229
+00:13:16,494 --> 00:13:21,644
+fluid swirls and streams around, but around every little region, inflow exactly
+
+230
+00:13:21,644 --> 00:13:23,727
+balances outflow.
+
+231
+00:13:23,727 --> 00:13:28,065
+Incompressibility means the divergence is zero everywhere, always.
+
+232
+00:13:28,065 --> 00:13:31,052
+That's our fourth equation.
+
+233
+00:13:31,169 --> 00:13:33,044
+And it explains our nozzle.
+
+234
+00:13:33,044 --> 00:13:36,957
+The flow rate through the pipe must be the same at every cross-section, so
+
+235
+00:13:36,957 --> 00:13:39,594
+where the area shrinks, the speed must grow.
+
+236
+00:13:41,700 --> 00:13:43,300
+Here's something curious.
+
+237
+00:13:43,300 --> 00:13:47,175
+The velocity has an equation telling it how to change in time.
+
+238
+00:13:47,175 --> 00:13:48,475
+But the pressure doesn't:
+
+239
+00:13:48,475 --> 00:13:51,325
+there's no partial p partial t anywhere.
+
+240
+00:13:51,325 --> 00:13:53,600
+So what decides the pressure?
+
+241
+00:13:53,600 --> 00:13:54,563
+The answer:
+
+242
+00:13:54,563 --> 00:13:59,600
+pressure is whatever it needs to be to keep the flow incompressible.
+
+243
+00:13:59,783 --> 00:14:02,571
+Imagine fluid flowing straight toward a wall.
+
+244
+00:14:02,571 --> 00:14:08,583
+Left alone, with no pressure, it would just pile up against the wall, compressing.
+
+245
+00:14:10,283 --> 00:14:14,533
+Instead, a region of high pressure forms right in front of the wall.
+
+246
+00:14:14,533 --> 00:14:18,946
+Its gradient pushes back on the incoming fluid, slowing it down and steering
+
+247
+00:14:18,946 --> 00:14:24,283
+it aside, exactly enough that nothing ever gets compressed.
+
+248
+00:14:27,000 --> 00:14:28,638
+We can make this precise.
+
+249
+00:14:28,638 --> 00:14:31,850
+Take the divergence of the whole momentum equation.
+
+250
+00:14:31,850 --> 00:14:36,950
+The time derivative term vanishes, since the divergence of u is always zero.
+
+251
+00:14:36,950 --> 00:14:38,613
+So does the viscous term.
+
+252
+00:14:38,613 --> 00:14:42,950
+What's left is an equation for the pressure alone.
+
+253
+00:14:44,358 --> 00:14:49,221
+This is a Poisson equation, the same kind of equation that describes gravitational
+
+254
+00:14:49,221 --> 00:14:51,108
+and electric potentials.
+
+255
+00:14:51,108 --> 00:14:55,983
+Its solution at any point depends on the flow everywhere else, all at once.
+
+256
+00:14:55,983 --> 00:15:01,192
+In an incompressible fluid, a push anywhere is felt everywhere instantly.
+
+257
+00:15:01,192 --> 00:15:04,379
+Physically, the news travels as sound waves.
+
+258
+00:15:04,379 --> 00:15:09,092
+In water, sound moves at about fifteen hundred meters per second, so fast
+
+259
+00:15:09,092 --> 00:15:15,117
+compared to everyday flows that 'instantly' is an excellent approximation.
+
+260
+00:15:15,258 --> 00:15:18,258
+So pressure isn't really an independent player.
+
+261
+00:15:18,258 --> 00:15:23,358
+It's an enforcer, mathematically a Lagrange multiplier, constantly adjusting
+
+262
+00:15:23,358 --> 00:15:28,258
+itself so the velocity field never violates the incompressibility constraint.
+
+263
+00:15:30,388 --> 00:15:31,713
+We have all the pieces.
+
+264
+00:15:31,713 --> 00:15:33,472
+Let's assemble them.
+
+265
+00:15:33,472 --> 00:15:37,809
+Density times the acceleration of a parcel, made of the local change plus
+
+266
+00:15:37,809 --> 00:15:42,584
+the advection term, equals the pressure force, plus the viscous force, plus
+
+267
+00:15:42,584 --> 00:15:47,234
+any external force per unit volume, like gravity, which would be rho times
+
+268
+00:15:47,234 --> 00:15:47,684
+g.
+
+269
+00:15:47,684 --> 00:15:50,847
+And alongside it, incompressibility.
+
+270
+00:15:50,847 --> 00:15:54,397
+These are the incompressible Navier–Stokes equations.
+
+271
+00:15:54,397 --> 00:15:59,584
+Claude-Louis Navier first wrote them down in 1822, starting from a model of
+
+272
+00:15:59,584 --> 00:16:05,509
+forces between molecules, and George Gabriel Stokes rederived them in 1845
+
+273
+00:16:05,509 --> 00:16:09,597
+from continuum reasoning much like ours.
+
+274
+00:16:09,747 --> 00:16:12,984
+Often you'll see them divided through by the density.
+
+275
+00:16:12,984 --> 00:16:18,297
+Then the viscosity divided by the density becomes nu, the kinematic viscosity,
+
+276
+00:16:18,297 --> 00:16:23,347
+which measures how quickly momentum diffuses through the fluid.
+
+277
+00:16:23,547 --> 00:16:25,734
+Read the equation like a sentence:
+
+278
+00:16:25,734 --> 00:16:30,184
+a parcel of fluid, carried along by the flow, changes its velocity because
+
+279
+00:16:30,184 --> 00:16:34,334
+it's pushed from high pressure to low, because it's dragged toward the velocity
+
+280
+00:16:34,334 --> 00:16:37,822
+of its neighbors, and because of outside forces.
+
+281
+00:16:37,822 --> 00:16:42,122
+And through it all, the fluid never compresses.
+
+282
+00:16:43,280 --> 00:16:45,855
+Four equations, four unknowns.
+
+283
+00:16:45,855 --> 00:16:50,355
+Add an initial velocity field, and conditions at the boundaries, for instance,
+
+284
+00:16:50,355 --> 00:16:55,243
+that fluid touching a solid wall sticks to it, the so-called no-slip condition,
+
+285
+00:16:55,243 --> 00:16:58,955
+and in principle, the entire future of the flow is determined.
+
+286
+00:17:01,086 --> 00:17:02,674
+So which effect wins?
+
+287
+00:17:02,674 --> 00:17:07,111
+Inertia, the fluid carrying itself along, or viscosity, smoothing everything
+
+288
+00:17:07,111 --> 00:17:07,774
+out?
+
+289
+00:17:07,774 --> 00:17:10,003
+Let's make a rough estimate.
+
+290
+00:17:10,003 --> 00:17:14,453
+Suppose the flow has a typical speed U, and changes over a typical length
+
+291
+00:17:14,453 --> 00:17:18,341
+L, like the diameter of a cylinder in a wind tunnel.
+
+292
+00:17:18,341 --> 00:17:22,928
+The advection term is a velocity times a velocity gradient, so it's roughly
+
+293
+00:17:22,928 --> 00:17:25,261
+U times U over L.
+
+294
+00:17:25,261 --> 00:17:30,736
+The viscous term has two derivatives, so it's roughly nu times U over L squared.
+
+295
+00:17:30,736 --> 00:17:34,861
+Their ratio, U L over nu, is called the Reynolds number.
+
+296
+00:17:34,861 --> 00:17:40,086
+It's arguably the single most important number in fluid mechanics.
+
+297
+00:17:40,253 --> 00:17:42,453
+In fact, we can make this exact.
+
+298
+00:17:42,453 --> 00:17:47,116
+Measure lengths in units of L, velocities in units of U, time in units of
+
+299
+00:17:47,116 --> 00:17:51,016
+L over U, and pressure in units of rho U squared.
+
+300
+00:17:51,016 --> 00:17:56,370
+Substitute these into the equation, and divide through by U squared over L.
+
+301
+00:17:56,370 --> 00:17:59,545
+Everything cancels except a single parameter:
+
+302
+00:17:59,545 --> 00:18:03,895
+one over the Reynolds number, sitting in front of the viscous term.
+
+303
+00:18:03,895 --> 00:18:08,170
+Two flows with the same geometry and the same Reynolds number are the same
+
+304
+00:18:08,170 --> 00:18:10,520
+flow, just rescaled.
+
+305
+00:18:10,520 --> 00:18:14,470
+That's why engineers can test a small model in a wind tunnel and trust the
+
+306
+00:18:14,470 --> 00:18:19,170
+results, as long as the Reynolds number matches.
+
+307
+00:18:19,345 --> 00:18:23,295
+Watch the flow past a cylinder as we dial up the Reynolds number.
+
+308
+00:18:23,295 --> 00:18:26,882
+At a Reynolds number of one, viscosity dominates.
+
+309
+00:18:26,882 --> 00:18:31,132
+The flow oozes smoothly around the cylinder, and the disturbance spreads far
+
+310
+00:18:31,132 --> 00:18:32,928
+out to the sides.
+
+311
+00:18:32,928 --> 00:18:37,353
+At a Reynolds number of forty, two swirling eddies form behind the cylinder
+
+312
+00:18:37,353 --> 00:18:40,386
+and just sit there, perfectly steady.
+
+313
+00:18:40,386 --> 00:18:44,761
+Past roughly fifty, that steady arrangement becomes unstable.
+
+314
+00:18:44,761 --> 00:18:48,249
+The eddies begin to break away, alternating sides.
+
+315
+00:18:48,249 --> 00:18:51,811
+The vortex street from the beginning was at a Reynolds number of one hundred
+
+316
+00:18:51,811 --> 00:18:53,261
+fifty.
+
+317
+00:18:53,261 --> 00:18:57,936
+Turn it up to a thousand, and the vortices become tighter and more intense,
+
+318
+00:18:57,936 --> 00:19:00,524
+with thin filaments wrapped around them.
+
+319
+00:19:00,524 --> 00:19:05,049
+In our two-dimensional simulation the street survives, but in real three-dimensional
+
+320
+00:19:05,049 --> 00:19:10,186
+flows at this Reynolds number, the wake becomes turbulent.
+
+321
+00:19:11,386 --> 00:19:13,724
+The range in nature is staggering.
+
+322
+00:19:13,724 --> 00:19:17,874
+A swimming bacterium lives at a Reynolds number around one ten-thousandth.
+
+323
+00:19:17,874 --> 00:19:23,011
+For it, water is so syrupy that the moment it stops swimming, it stops dead.
+
+324
+00:19:23,011 --> 00:19:26,599
+Blood in your aorta flows at Reynolds numbers in the thousands.
+
+325
+00:19:26,599 --> 00:19:29,274
+A person swimming, around a million.
+
+326
+00:19:29,274 --> 00:19:33,011
+The air flowing over a jetliner's wing, tens of millions.
+
+327
+00:19:34,992 --> 00:19:36,980
+Where does all that complexity come from?
+
+328
+00:19:36,980 --> 00:19:38,317
+Here's a clue.
+
+329
+00:19:38,317 --> 00:19:40,567
+Start with a simple layered flow:
+
+330
+00:19:40,567 --> 00:19:45,117
+the middle band moves to the right, and the outer bands move to the left.
+
+331
+00:19:45,117 --> 00:19:49,855
+Along each interface, tiny ripples get amplified by the nonlinear term, and
+
+332
+00:19:49,855 --> 00:19:53,942
+the shear layers roll up into chains of spiraling vortices.
+
+333
+00:19:53,942 --> 00:19:58,717
+This is the Kelvin–Helmholtz instability, the same mechanism that sculpts
+
+334
+00:19:58,717 --> 00:20:02,884
+those rare clouds shaped like breaking ocean waves.
+
+335
+00:20:02,884 --> 00:20:07,147
+Then the vortices themselves start to interact, pairing up and merging, and
+
+336
+00:20:07,147 --> 00:20:10,384
+the orderly picture dissolves.
+
+337
+00:20:10,584 --> 00:20:15,009
+In a turbulent flow, this kind of thing happens at every scale at once.
+
+338
+00:20:15,009 --> 00:20:19,522
+Large swirls stretch, fold, and break into smaller swirls, which break into
+
+339
+00:20:19,522 --> 00:20:24,172
+smaller ones still, until the eddies are so tiny that viscosity finally smooths
+
+340
+00:20:24,172 --> 00:20:27,392
+them away, turning their energy into heat.
+
+341
+00:20:27,392 --> 00:20:31,042
+The physicist Lewis Fry Richardson put it as a poem:
+
+342
+00:20:31,042 --> 00:20:34,405
+Big whorls have little whorls that feed on their velocity;
+
+343
+00:20:34,405 --> 00:20:39,867
+and little whorls have lesser whorls, and so on to viscosity.
+
+344
+00:20:41,051 --> 00:20:43,363
+That's the picture in three dimensions.
+
+345
+00:20:43,363 --> 00:20:48,276
+But two dimensions, which is what all of these simulations are, behaves differently,
+
+346
+00:20:48,276 --> 00:20:49,926
+in a surprising way.
+
+347
+00:20:49,926 --> 00:20:52,788
+Watch this two-dimensional turbulent flow.
+
+348
+00:20:52,788 --> 00:20:57,026
+Instead of shattering into ever-smaller eddies, the swirls tend to merge into
+
+349
+00:20:57,026 --> 00:20:59,751
+larger and larger vortices.
+
+350
+00:20:59,751 --> 00:21:04,051
+That difference between two and three dimensions turns out to be at the heart
+
+351
+00:21:04,051 --> 00:21:07,176
+of the deepest open question about these equations.
+
+352
+00:21:14,884 --> 00:21:16,147
+Here's the question.
+
+353
+00:21:16,147 --> 00:21:20,809
+Start with a smooth, well-behaved flow in three dimensions, with finite total
+
+354
+00:21:20,809 --> 00:21:21,822
+energy.
+
+355
+00:21:21,822 --> 00:21:24,484
+Let it evolve according to Navier–Stokes.
+
+356
+00:21:24,484 --> 00:21:27,784
+Does it remain smooth forever?
+
+357
+00:21:27,884 --> 00:21:31,784
+Or could the velocity somewhere blow up to infinity in a finite amount of
+
+358
+00:21:31,784 --> 00:21:37,418
+time, a singularity, where the equations themselves stop making sense?
+
+359
+00:21:37,418 --> 00:21:39,480
+For decades, nobody knew.
+
+360
+00:21:39,480 --> 00:21:44,443
+In 2000, the Clay Mathematics Institute made this one of its seven Millennium
+
+361
+00:21:44,443 --> 00:21:50,168
+Prize Problems, offering a million dollars for a proof either way.
+
+362
+00:21:50,318 --> 00:21:55,468
+To see what's at stake, look at vorticity, omega, the curl of the velocity.
+
+363
+00:21:55,468 --> 00:21:59,805
+It measures how fast the fluid is spinning locally, like a tiny paddle wheel
+
+364
+00:21:59,805 --> 00:22:01,759
+dropped into the flow.
+
+365
+00:22:01,759 --> 00:22:04,834
+Take the curl of the Navier–Stokes equation.
+
+366
+00:22:04,834 --> 00:22:09,459
+The pressure term disappears, since the curl of a gradient is always zero.
+
+367
+00:22:09,459 --> 00:22:14,151
+And after some vector calculus, the advection term splits in two.
+
+368
+00:22:14,151 --> 00:22:19,251
+The result says that vorticity is carried along by the flow, smoothed by viscosity,
+
+369
+00:22:19,251 --> 00:22:21,276
+and has one extra term:
+
+370
+00:22:21,276 --> 00:22:22,564
+omega dot del u.
+
+371
+00:22:22,564 --> 00:22:25,701
+This is vortex stretching.
+
+372
+00:22:25,793 --> 00:22:30,155
+When a spinning tube of fluid gets stretched along its axis, it gets thinner,
+
+373
+00:22:30,155 --> 00:22:34,518
+and just like a figure skater pulling in their arms, it spins faster.
+
+374
+00:22:34,518 --> 00:22:39,330
+Faster spin can drive more stretching, a feedback loop that could, in principle,
+
+375
+00:22:39,330 --> 00:22:41,718
+run away.
+
+376
+00:22:42,943 --> 00:22:46,343
+In two dimensions, this term is exactly zero.
+
+377
+00:22:46,343 --> 00:22:50,268
+The spin axis always points straight out of the plane, and nothing varies
+
+378
+00:22:50,268 --> 00:22:53,230
+in that direction, so there's nothing to stretch.
+
+379
+00:22:53,230 --> 00:22:56,505
+That's why the two-dimensional problem was settled long ago:
+
+380
+00:22:56,505 --> 00:22:59,676
+smooth solutions stay smooth forever.
+
+381
+00:22:59,676 --> 00:23:01,951
+In three dimensions it's a battle.
+
+382
+00:23:01,951 --> 00:23:06,451
+Vortex stretching tries to concentrate the spin into ever smaller, ever more
+
+383
+00:23:06,451 --> 00:23:07,701
+intense regions;
+
+384
+00:23:07,701 --> 00:23:10,239
+viscosity tries to smooth it all out.
+
+385
+00:23:10,239 --> 00:23:13,676
+Does viscosity always win?
+
+386
+00:23:14,859 --> 00:23:16,047
+We do know a lot.
+
+387
+00:23:16,047 --> 00:23:22,022
+In 1934, Jean Leray proved that weak, generalized solutions always exist.
+
+388
+00:23:22,022 --> 00:23:25,459
+Smooth solutions are known to exist at least for a while.
+
+389
+00:23:25,459 --> 00:23:30,359
+And if singularities ever do form, they must be extremely rare, confined to
+
+390
+00:23:30,359 --> 00:23:33,484
+vanishingly small sets in space and time.
+
+391
+00:23:33,484 --> 00:23:37,584
+But for nearly a century, whether they can happen at all remained unknown.
+
+392
+00:23:40,191 --> 00:23:43,341
+Which brings us to a remarkable recent development.
+
+393
+00:23:43,341 --> 00:23:49,603
+On September 8th, 2026, OpenAI announced that an internal AI system had produced
+
+394
+00:23:49,603 --> 00:23:51,691
+a proof that the answer is no:
+
+395
+00:23:51,691 --> 00:23:54,941
+solutions can break down.
+
+396
+00:23:56,082 --> 00:23:59,082
+There's a subtlety in how the prize problem is phrased.
+
+397
+00:23:59,082 --> 00:24:02,832
+The official statement, written by Charles Fefferman, offers four ways to
+
+398
+00:24:02,832 --> 00:24:03,707
+win.
+
+399
+00:24:03,707 --> 00:24:07,982
+Two ask you to prove that smooth solutions last forever, in all of space or
+
+400
+00:24:07,982 --> 00:24:11,507
+in a periodic box, with no external force at all.
+
+401
+00:24:11,507 --> 00:24:13,532
+The other two ask for the opposite:
+
+402
+00:24:13,532 --> 00:24:15,657
+show that a solution can break down.
+
+403
+00:24:15,657 --> 00:24:19,495
+And for those, you're allowed to push on the fluid with an external force,
+
+404
+00:24:19,495 --> 00:24:23,016
+as long as the force itself is perfectly smooth.
+
+405
+00:24:23,016 --> 00:24:27,616
+That second door, breakdown with a smooth force, is the one OpenAI's result
+
+406
+00:24:27,616 --> 00:24:29,991
+walks through.
+
+407
+00:24:30,149 --> 00:24:32,374
+Here is the claim, as announced.
+
+408
+00:24:32,374 --> 00:24:37,099
+For any viscosity, there is a smooth force, confined to a bounded region,
+
+409
+00:24:37,099 --> 00:24:41,499
+which, acting on a fluid that starts completely at rest, keeps the total energy
+
+410
+00:24:41,499 --> 00:24:46,982
+bounded, yet drives the flow to a singularity in a finite amount of time.
+
+411
+00:24:46,982 --> 00:24:49,032
+Why does the force matter so much?
+
+412
+00:24:49,032 --> 00:24:53,032
+Without it, you would need a flow that tears itself apart entirely on its
+
+413
+00:24:53,032 --> 00:24:53,932
+own.
+
+414
+00:24:53,932 --> 00:24:57,957
+With a force, you get to keep feeding the flow, as long as you never cheat
+
+415
+00:24:57,957 --> 00:25:02,632
+by using a force that is itself rough, or infinite.
+
+416
+00:25:02,757 --> 00:25:07,320
+The strategy goes back to Diego Córdoba and Luis Martínez-Zoroa, who had spent
+
+417
+00:25:07,320 --> 00:25:10,407
+years building what they call an infinite cascade.
+
+418
+00:25:10,407 --> 00:25:11,657
+Roughly speaking:
+
+419
+00:25:11,657 --> 00:25:16,982
+an infinite sequence of layers, each one a smaller, faster swirl, each perfectly
+
+420
+00:25:16,982 --> 00:25:21,407
+smooth on its own, timed so that infinitely many of them pile up in a finite
+
+421
+00:25:21,407 --> 00:25:24,899
+amount of time, producing a singularity.
+
+422
+00:25:24,899 --> 00:25:29,161
+Each layer needs its own little push, and the total force is the sum of all
+
+423
+00:25:29,161 --> 00:25:30,111
+of them.
+
+424
+00:25:30,111 --> 00:25:34,936
+In their earlier constructions, that infinite sum ended up rough, which falls
+
+425
+00:25:34,936 --> 00:25:36,736
+short of the prize rules.
+
+426
+00:25:36,736 --> 00:25:42,799
+The missing step was to build the cascade so that the total force stays smooth.
+
+427
+00:25:43,516 --> 00:25:48,566
+According to OpenAI, about ten thousand AI agents running on an unreleased
+
+428
+00:25:48,566 --> 00:25:53,628
+model worked in parallel for about 88 hours to close that gap.
+
+429
+00:25:53,628 --> 00:25:58,366
+Another model then translated the proof into Lean, a language in which a computer
+
+430
+00:25:58,366 --> 00:26:01,416
+can check every single logical step.
+
+431
+00:26:01,416 --> 00:26:05,691
+Charles Fefferman, who wrote the official problem statement, said he was thrilled
+
+432
+00:26:05,691 --> 00:26:10,203
+that the problem was solved, and credited Córdoba and Martínez-Zoroa as the
+
+433
+00:26:10,203 --> 00:26:13,141
+heroes of the story.
+
+434
+00:26:13,257 --> 00:26:15,257
+The story is also tangled.
+
+435
+00:26:15,257 --> 00:26:19,582
+Just hours before the announcement, mathematicians Tristan Buckmaster and
+
+436
+00:26:19,582 --> 00:26:24,482
+Levent Alpöge, who had been using AI tools themselves, posted Lean-verified
+
+437
+00:26:24,482 --> 00:26:29,032
+forced blow-up results for closely related equations, including Euler, the
+
+438
+00:26:29,032 --> 00:26:31,320
+version with no viscosity.
+
+439
+00:26:31,320 --> 00:26:35,607
+The two sides dispute how the timelines relate, and OpenAI has said it will
+
+440
+00:26:35,607 --> 00:26:38,457
+not claim the prize.
+
+441
+00:26:38,641 --> 00:26:40,003
+So, is it over?
+
+442
+00:26:40,003 --> 00:26:41,128
+Not quite.
+
+443
+00:26:41,128 --> 00:26:45,691
+As of this video, the proof is still being checked by human mathematicians,
+
+444
+00:26:45,691 --> 00:26:51,066
+and the Clay Institute only recognizes a solution after publication and review.
+
+445
+00:26:51,066 --> 00:26:55,328
+A formal proof is only as good as the check that its formal statement really
+
+446
+00:26:55,328 --> 00:26:57,491
+says what we think it says.
+
+447
+00:26:57,491 --> 00:26:59,466
+And notice what it doesn't answer:
+
+448
+00:26:59,466 --> 00:27:04,841
+whether a fluid left alone, with no force at all, can ever form a singularity.
+
+449
+00:27:04,841 --> 00:27:08,766
+For the physical question that started all of this, the mystery remains.
+
+450
+00:27:10,911 --> 00:27:14,378
+Let's step back and look at the equations once more.
+
+451
+00:27:14,378 --> 00:27:15,253
+On the left:
+
+452
+00:27:15,253 --> 00:27:19,778
+the acceleration of a fluid parcel, as felt by the parcel itself, carried
+
+453
+00:27:19,778 --> 00:27:21,365
+along by the flow.
+
+454
+00:27:21,365 --> 00:27:22,390
+On the right:
+
+455
+00:27:22,390 --> 00:27:26,515
+pressure pushing from high to low, viscosity smoothing out differences, and
+
+456
+00:27:26,515 --> 00:27:28,028
+outside forces.
+
+457
+00:27:28,028 --> 00:27:31,253
+And the promise that the fluid never compresses.
+
+458
+00:27:31,253 --> 00:27:34,865
+It's just F equals m a, written for a continuum.
+
+459
+00:27:34,865 --> 00:27:37,640
+Every term has a simple physical meaning.
+
+460
+00:27:37,640 --> 00:27:41,878
+Yet out of these few pieces comes everything from the rhythm of a vortex street,
+
+461
+00:27:41,878 --> 00:27:45,428
+to the chaos of turbulence, to the weather on our planet.
+
+462
+00:27:45,428 --> 00:27:50,353
+And whether a fluid, left entirely to itself, can ever tear itself apart is
+
+463
+00:27:50,353 --> 00:27:53,261
+still waiting for someone to figure out.
+
+464
+00:27:53,261 --> 00:27:54,436
+Thanks for watching.

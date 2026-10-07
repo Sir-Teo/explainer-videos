@@ -8,12 +8,34 @@ heads, MLP neurons, position vectors and predictions. Learning is shown with a
 real training run of a tiny transformer on Shakespeare. Schematics are labeled
 as schematics.
 
+**Watch:** [`published/llm.mp4`](../../published/llm.mp4) (1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters</summary>
+
+- `0:00` One token at a time
+- `1:47` Text into tokens
+- `4:27` Tokens into vectors
+- `7:19` The plan: refine every vector with context
+- `9:33` Attention: letting tokens talk
+- `11:58` Attention in matrix form, and many heads
+- `16:18` Word order
+- `19:02` The MLP: where knowledge lives
+- `22:35` Stacking the blocks
+- `24:28` From a vector to a prediction
+- `27:16` How it learns
+- `30:36` Scale
+- `33:21` From autocomplete to assistant
+- `35:45` Recap
+
+</details>
+
 ```bash
 python -m videos.llm.analyze                   # once: probe GPT-2, train the tiny model (~20 min, cached in .cache/llm)
 python tools/build.py llm -q l                 # preview
 python tools/build.py llm                      # final 1080p30 + subtitles + chapters
 python tools/export_script.py llm              # regenerate SCRIPT.md from the code
 python tools/check_narration.py llm            # Whisper listen test of every narration line
+python tools/publish.py llm                    # GitHub-sized copy -> published/llm.mp4
 ```
 
 `analyze.py gpt2_family` downloads GPT-2 medium, large and XL (~9 GB) for the
