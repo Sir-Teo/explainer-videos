@@ -90,7 +90,7 @@ class Buyers(VoiceoverScene):
             self.play(FadeIn(nw), FadeIn(rest_l))
 
         punch = tagged(r"``taking the punch bowl away, rather than spiking it''", font_size=30, color=YELLOW)
-        punch.to_edge(DOWN, buff=0.12).shift(LEFT * 2.0)
+        punch.to_edge(DOWN, buff=0.12).shift(LEFT * 2.5)
         with self.voiceover(
             "In Timmer's words, central banks are taking the punch bowl away rather than spiking it. <bookmark mark='r'/> "
             "So more and more of the debt has to be sold to everyone else: pension funds, asset managers, hedge funds, "

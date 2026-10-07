@@ -66,6 +66,12 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bP/E\b", "[P/E](/pˌiˈi/)"),  # "pee-ee", not "pee slash ee"
     (r"\bS&P\b", "S and P"),
     (r"\bBernanke\b", "[Bernanke](/bəɹnˈæŋki/)"),
+    (r"\bJurrien\b", "[Jurrien](/jˈʊɹiən/)"),  # Dutch first name: "YUR-ee-en"
+    (r"\bTimmer's\b", "[Timmer's](/tˈɪməɹz/)"),
+    (r"\bTimmer\b", "[Timmer](/tˈɪməɹ/)"),
+    (r"\bHemingway\b", "[Hemingway](/hˈɛmɪŋwˌA/)"),
+    (r"\bBloomberg\b", "[Bloomberg](/blˈumbɜɹɡ/)"),
+    (r"\bselloffs\b", "sell offs"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

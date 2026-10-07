@@ -206,7 +206,7 @@ class PriceIdentity(VoiceoverScene):
             self.play(FadeIn(pl.dots[2]), FadeIn(pl.tags[2]), FadeIn(n2, shift=LEFT * 0.2))
 
         P_end = E[k_end] * PE[k_end]
-        es = np.linspace(E[k_end], E[k_end] * 1.09, 30)
+        es = np.linspace(E[k_end], E[k_end] * 1.06, 30)
         slide = Arrow(ch.c2p(es[0], P_end / es[0]), ch.c2p(es[-1], P_end / es[-1]), buff=0, color=YELLOW,
                       stroke_width=6, max_tip_length_to_length_ratio=0.35)
         slide_l = tagged(r"since June: sliding along\\a curve of constant price", font_size=26, color=YELLOW)

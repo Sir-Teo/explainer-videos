@@ -7,7 +7,7 @@ _Scene `s01_hook.py::Hook`_
 
 Over the summer of 2026, Wall Street analysts raised their estimates of what S&P 500 companies will earn over the next twelve months by more than nine percent. The stock market's response? For four months, the index went essentially nowhere.
 
-If investors had kept paying the same price for each dollar of expected earnings, the index would have climbed along this line. Instead, the price they're willing to pay, the multiple, shrank almost exactly as fast as earnings grew.
+If investors had kept paying the same price for each dollar of expected earnings, the index would have climbed along this line. Instead, the price they're willing to pay, the multiple, shrank, and swallowed most of the earnings gain.
 
 And underneath that calm surface, something stranger was happening. Here are the stocks in the S&P 500. A stock is lit if its price is above its own average of the past fifty trading days, a simple sign that it has been rising lately. In early October, only about one in four were lit, even though the index itself sat within a fraction of a percent of its record high. The average stock was falling, while the giants at the top held the index up.
 
@@ -35,7 +35,7 @@ One more picture, which we'll come back to. Put earnings on one axis and the mul
 
 Here's the real path of the S&P 500. From the bear-market low of October 2022 to the end of 2024, the dot mostly climbed. Earnings grew modestly, about 15 percent, but the multiple jumped from about 20 to 29. That was a rally driven by the multiple. Since then, it's the reverse: earnings surged, from 210 dollars to 295, while the multiple fell back to about 25. Both legs carried the price higher, but with completely different engines.
 
-And since June, the story has sharpened. Earnings estimates kept rising, but the price has gone mostly sideways for four months. On this map, the market is sliding along a curve of constant price: every step to the right is cancelled by a step down. Something is pulling the multiple down exactly as fast as earnings push it up. To see what, we need to understand where the multiple comes from.
+And since June, the story has sharpened. Earnings estimates kept rising, but the price has gone mostly sideways for four months. On this map, the market is sliding along a curve of constant price: almost every step to the right is cancelled by a step down. Something is pulling the multiple down nearly as fast as earnings push it up. To see what, we need to understand where the multiple comes from.
 
 ## What sets the multiple?
 
@@ -57,7 +57,7 @@ It also matters which dollars you're discounting. When rates rise from nine to t
 
 This is the idea behind a shortcut Timmer leans on: the Fed Model, which compares what stocks earn with what bonds pay. Flip the P/E upside down and you get the earnings yield. At a forward P/E of 19.7, the stock market earns about 5.1 percent of its price per year. A ten-year Treasury now pays 5.3 percent, guaranteed. And inflation-protected Treasuries pay 2.9 percent on top of inflation.
 
-That's stiff competition. Why take the risks of owning stocks for a 5.1 percent earnings yield, when the government will pay you 5.3 with no risk at all? You'd only do it if you expect those earnings to keep growing fast, and even then you won't pay top dollar for them. In Timmer's words: ignore the Fed Model at your peril.
+That's stiff competition. Why take the risks of owning stocks for a 5.1 percent earnings yield, when the government will pay you 5.3 with essentially no risk of default? You'd only do it if you expect those earnings to keep growing fast, and even then you won't pay top dollar for them. In Timmer's words: ignore the Fed Model at your peril.
 
 We can even check the size of the effect. Over the third quarter, the ten-year yield rose by about 0.85 percentage points. Our simple model, with nothing else changing, says that should knock roughly fifteen percent off the P/E. The market's actual forward P/E fell about seven. So far, stocks have absorbed only part of the shock: investors may be counting on faster growth, or accepting a thinner premium for owning stocks. Either way, the real question is: why are interest rates rising?
 
@@ -71,7 +71,7 @@ Now zoom out. This is the ten-year Treasury yield since the 1960s. It peaked abo
 
 Zoom in on the last few years. After the surge of 2022 and 2023, the yield spent almost three years going back and forth. Each high was a little lower than the last, and each low a little higher: a pattern chart-watchers call a triangle, a market coiling up, undecided.
 
-Timmer's rule of thumb, technical analysis 101, is that a triangle usually breaks in the direction of the trend that came before it, and that trend was up. This summer, as the triangle narrowed, the yield broke out, upward. By early October it was 5.3 percent. Timmer borrows Hemingway's line about how you go bankrupt: gradually, then suddenly.
+Timmer's rule of thumb, technical analysis 101, is that a triangle usually breaks in the direction of the trend that came before it, and that trend was up. This summer, as the triangle narrowed, the yield broke out, upward. By early October it was 5.3 percent. Timmer borrows a line adapted from Hemingway, about how people go bankrupt: slowly, then all at once.
 
 What kind of rise is this? A bond's yield has two parts. The nominal yield is a real yield, what you earn after inflation, plus the inflation investors expect along the way. And the Treasury sells inflation-protected bonds, so we can measure both. Here they are.
 
@@ -87,7 +87,7 @@ So what's pushing real yields and the term premium up? Timmer names four forces,
 
 _Scene `s05_debt.py::Debt`_
 
-Force number one: the government's debt. Total federal debt passed 40 trillion dollars this year. At the end of 2019 it was 23 trillion, so it has grown by about 17 trillion dollars since COVID.
+Force number one: the government's debt. In August, total federal debt passed 40 trillion dollars. At the end of 2019 it was 23 trillion, so it has grown by about 17 trillion dollars since COVID.
 
 But Timmer's point is that the size of the debt is old news. What's new is the cost of carrying it. Here's what the government pays in interest each year, as a share of the whole economy. In 2021, with rates near zero, it was about two and a third percent. Now it's about four percent, the highest since the late 1990s. Interest is now one of the biggest items in the federal budget.
 
@@ -153,7 +153,7 @@ Remember r minus g, from the debt arithmetic? Let's measure it: the real yield o
 
 The government still pays a lower average rate on its older debt, so this isn't an emergency today. But every new dollar it borrows now costs more, after inflation, than the economy is expected to grow. Timmer calls that a warning sign for both the budget and for growth.
 
-If fiscal risk is the story, you'd expect bond markets to punish weak government balance sheets most. Timmer's exhibit A is France. French ten-year yields are around four percent, the highest since 2008, and France now pays about eight-tenths of a point more than Germany to borrow for ten years, a gap that used to be far narrower. The same rising rates hurt anyone with a weak balance sheet: indebted governments, lower-quality companies, and most consumers.
+If fiscal risk is the story, you'd expect bond markets to punish weak government balance sheets most. Timmer's exhibit A is France. French ten-year yields are around four percent, the highest since 2008, and France now pays about eight-tenths of a point more than Germany to borrow for ten years, a gap that was usually far narrower over the past decade. The same rising rates hurt anyone with a weak balance sheet: indebted governments, lower-quality companies, and most consumers.
 
 So Timmer's verdict: the main reason real yields are rising is not a booming economy. It's fiscal risk, amplified by AI's appetite for capital and by convexity hedging in the mortgage market. That's a less comfortable reason for rates to rise, because it doesn't come with faster growth to pay for it.
 
@@ -175,13 +175,13 @@ _Scene `s11_stealth.py::StealthCorrection`_
 
 Back to the stock market, and the strange calm we started with. The S&P 500 that everyone quotes weights each company by its size, its total market value. So a handful of trillion-dollar giants carry a big share of the index. There's also an equal-weighted version, where every company counts the same. It's a good gauge of how the average stock is doing.
 
-Here are the two versions in 2026. In blue, the familiar cap-weighted index; in gold, the equal-weighted one. Since the end of June, the big index is up about five percent. The average stock: down slightly. Timmer's reading: higher borrowing costs are starting to bite the weaker companies, while the trillion-dollar club shrugs it off, so far, at least.
+Here are the two versions in 2026. In blue, the familiar cap-weighted index; in gold, the equal-weighted one. From the end of June to early October, the big index rose about four percent. The average stock: down slightly. Timmer's reading: higher borrowing costs are starting to bite the weaker companies, while the trillion-dollar club shrugs it off, so far, at least.
 
 Timmer measures this with breadth: the share of stocks trading above their own recent average price. On top, the index. Below, computed from the daily prices of all the index's members: the share above their fifty-day average, and above their two-hundred-day average. By October 2nd, only about a quarter of stocks were above their fifty-day average, and fewer than half above their two-hundred-day, while the index sat near a record.
 
 Timmer's phrase for it: a stealth correction. The rising cost of money has the indexes in a vise. The headline number holds steady, while underneath, most stocks are already falling.
 
-There's one more wrinkle: the calendar. Since 1950, September and October have been the weakest months on average, and November and December among the strongest. Timmer notes that this seasonally weak stretch ends in about two weeks, just as earnings season gets going. If the pressure from rates eases, he thinks the indexes could easily pick up speed again. But for now, as he puts it: ignore the Fed Model at your peril.
+There's one more wrinkle: the calendar. Since 1950, measured by monthly average prices, the stretch from September into October has been the weakest of the year, and November and December among the strongest. Timmer notes that this seasonally weak stretch ends in about two weeks, just as earnings season gets going. If the pressure from rates eases, he thinks the indexes could easily pick up speed again. But for now, as he puts it: ignore the Fed Model at your peril.
 
 ## The other side of the rope: earnings
 
@@ -215,7 +215,7 @@ By the usual yardstick, prices relative to the next twelve months of expected ea
 
 To be fair, not every measure is so relaxed. Shiller's CAPE, which compares prices with ten years of inflation-adjusted earnings, is above 40, not far below its 2000 peak, partly because recent earnings have grown so fast that a ten-year average lags far behind them. Which measure you trust matters, and that's why Timmer checks the Fed Model three different ways.
 
-The Fed Model again: stocks' earnings yield minus the bond yield. Above zero, stocks pay more than bonds; below zero, less. Using forward earnings, the gap is roughly zero: about 5.1 percent against 5.3. Using the past year's earnings, it's about minus 1.4 points: the lowest since 2002, setting aside 2009, when earnings briefly collapsed. The real danger zones were 1987 and 2000. And the version Shiller computes, from CAPE and real yields, is down to about half a point, also its lowest since 2002.
+The Fed Model again: stocks' earnings yield minus the bond yield. Above zero, stocks pay more than bonds; below zero, less. Using forward earnings, the gap is roughly zero: about 5.1 percent against 5.3. Using the past year's earnings, it's about minus 1.4 points: the lowest since 2002, setting aside 2009, when earnings briefly collapsed. The real danger zones were 1987 and 2000. And the measure Shiller computes, from CAPE and real yields, is down to about half a point, also its lowest since 2002.
 
 So, depending on which version you use, the market is either still fine, or getting close to the danger zone. One caution about the classic version: earnings tend to grow with inflation, so an earnings yield is closer to a real return, yet it gets compared with a bond yield that includes inflation. That's why the CAPE version, measured against real yields, is the more careful one. Either way, the direction is the same. Earnings are strong, but rates are squeezing what investors will pay for them.
 
@@ -249,4 +249,4 @@ This video explained one strategist's view, as of early October 2026, and checke
 
 ---
 
-5881 words (~38 min at 155 wpm).
+5901 words (~38 min at 155 wpm).

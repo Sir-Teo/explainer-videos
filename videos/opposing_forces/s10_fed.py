@@ -106,7 +106,7 @@ class FedDilemma(VoiceoverScene):
         for r in rows:
             r[1].move_to([rows.get_right()[0] - 1.1, r[1].get_y(), 0])
         pain_l = label(r"how much a hike hurts (schematic)", font_size=24, color=C.RATE).next_to(rows, UP, buff=0.3)
-        pain_l.align_to(rows[0][1], LEFT)
+        pain_l.align_to(rows[0][1], RIGHT)
         wires = VGroup(*[Line(lever.get_right(), r[0].get_left() + LEFT * 0.15, color=GREY_D, stroke_width=2) for r in rows])
         with self.voiceover(
             "But the Fed has one blunt instrument, and many different borrowers on the other end of it. <bookmark "

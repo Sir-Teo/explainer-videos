@@ -62,17 +62,17 @@ class StealthCorrection(VoiceoverScene):
         sj, rj = at(t, s, ym(2026, 6, 30)), at(t, r, ym(2026, 6, 30))
         s_chg, r_chg = s[-1] / sj - 1, r[-1] / rj - 1
         assert 0.04 < s_chg < 0.05 and -0.01 < r_chg < 0.005
-        ch = TimeChart((2026.0, 2026.8), (92, 116), width=9.4, height=4.6,
+        ch = TimeChart((2026.0, 2026.8), (90, 116), width=9.4, height=4.6,
                        x_ticks=[ym(2026, m) for m in (1, 3, 5, 7, 9)],
                        x_fmt=lambda x: ["Jan", "Mar", "May", "July", "Sept"][[ym(2026, m) for m in (1, 3, 5, 7, 9)].index(x)],
-                       y_ticks=[95, 100, 105, 110, 115]).move_to(DOWN * 0.4 + LEFT * 0.9)
+                       y_ticks=[90, 95, 100, 105, 110, 115]).move_to(DOWN * 0.4 + LEFT * 0.9)
         yl = ch.y_title(r"2026, indexed to 100 on January 2", color=GREY_A)
         l_s, l_r = ch.line(t, s, C.PRICE, 4), ch.line(t, r, C.EQUAL_WEIGHT, 4)
         t_s = tagged(r"cap-weighted", font_size=26, color=C.PRICE).next_to(ch.c2p(t[-1], s[-1]), RIGHT, buff=0.15)
         t_r = tagged(r"equal-weighted", font_size=26, color=C.EQUAL_WEIGHT).next_to(ch.c2p(t[-1], r[-1]), RIGHT, buff=0.15)
         band = ch.span(ym(2026, 6, 30), t[-1], GREY_B, 0.1)
         nums = tagged(rf"since June 30: cap-weighted ${100 * s_chg:+.1f}\%$, equal-weighted ${100 * r_chg:+.1f}\%$",
-                      font_size=26).move_to(ch.c2p(2026.3, 114))
+                      font_size=26).move_to(ch.c2p(2026.5, 92.3))
         src = source(r"Nasdaq: SPY and RSP exchange-traded funds (prices)")
         with self.voiceover(
             "Here are the two versions in 2026. <bookmark mark='a'/> In blue, the familiar cap-weighted index; in "
