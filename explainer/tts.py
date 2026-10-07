@@ -61,6 +61,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Ss]uperposition\b", r"[\g<0>](/sˌupəɹpəzˈɪʃən/)"),  # the G2P dictionary drops the "p"
     (r"\b[Pp]retraining\b", r"[\g<0>](/pɹˌitɹˈAnɪŋ/)"),  # "pree-training", not "pr'training"
     (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
+    (r"\bjetliner's\b", "[jetliner's](/ʤˈɛtlˌInəɹz/)"),  # dictionary entry drops the r
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
