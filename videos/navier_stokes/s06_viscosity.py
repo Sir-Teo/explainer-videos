@@ -159,10 +159,10 @@ class ViscousForce(VoiceoverScene):
         rows.arrange(DOWN, buff=0.38, aligned_edge=LEFT)
         for r in rows[1:]:
             r.shift(RIGHT * (rows[0][1].get_left()[0] - r[0].get_left()[0]))
-        rows.move_to(RIGHT * 2.7 + DOWN * 0.1)
+        rows.move_to(RIGHT * 2.7 + UP * 0.35)
         res = MathTex(r"{F_x \over dV}", r"=", r"\mu {\partial^2 u \over \partial y^2}", font_size=50)
         res[2].set_color(C.VISCOUS)
-        res.next_to(rows, DOWN, buff=0.55)
+        res.next_to(rows, DOWN, buff=0.45)
         res_box = caption_box(res, color=C.VISCOUS)
 
         with self.voiceover(
@@ -227,7 +227,7 @@ class ViscousForce(VoiceoverScene):
             return 1.2 + 0.9 * np.sin(1.1 * x - 0.6) + 0.35 * np.sin(2.3 * x)
 
         graph = ax.plot(f, x_range=[0.1, 5.9], color=C.VELOCITY, stroke_width=4)
-        flab = MathTex("f(x)", font_size=36, color=C.VELOCITY).next_to(graph.get_end(), RIGHT, buff=0.1)
+        flab = MathTex("f(x)", font_size=36, color=C.VELOCITY).move_to(ax.c2p(0.45, 2.75))
         xt = ValueTracker(2.1)
         hh = 0.9
 

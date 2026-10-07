@@ -167,10 +167,10 @@ class ForcedBlowup(VoiceoverScene):
         t_lab = MathTex("t", font_size=30).next_to(line.n2p(0), DOWN, buff=0.18)
 
         notes = VGroup(
-            label(r"each layer: a smaller, faster swirl", font_size=28),
-            label(r"each layer on its own: perfectly smooth", font_size=28),
-            label(r"infinitely many, packed into finite time $\Rightarrow$ singularity", font_size=28, color=YELLOW),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 3.7 + UP * 1.0)
+            label(r"each layer: a smaller, faster swirl", font_size=27),
+            label(r"each layer on its own: perfectly smooth", font_size=27),
+            label(r"infinitely many, packed into finite time\\$\Rightarrow$ a singularity at $T^*$", font_size=27, color=YELLOW),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(UP * 1.0).to_edge(RIGHT, buff=0.45)
 
         with self.voiceover(
             "The strategy goes back to Diego Córdoba and Luis Martínez-Zoroa, who had spent years building what they call an infinite "

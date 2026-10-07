@@ -9,8 +9,9 @@ from videos.navier_stokes.common import (
 class Outro(VoiceoverScene):
     def construct(self):
         movie = cylinder_movie("cyl_re150", width=config.frame_width, alpha=0.0, start=300)
+        movie.move_to(DOWN * 1.65)
         self.add(movie)
-        system = ns_system(font_size=60).move_to(UP * 0.4)
+        system = ns_system(font_size=56).move_to(UP * 1.95)
         bg = BackgroundRectangle(system, fill_opacity=0.75, buff=0.45, corner_radius=0.15)
         eq, div = system
 
@@ -47,7 +48,7 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(t_d))
 
         fma = MathTex(r"F = m\,a", font_size=56, color=YELLOW)
-        fma.next_to(bg, DOWN, buff=0.45)
+        fma.next_to(div, RIGHT, buff=1.2)
         fma.add_background_rectangle(opacity=0.8, buff=0.12)
         with self.voiceover(
             "It's just <bookmark mark='f'/> F equals m a, written for a continuum. Every term has a simple physical meaning. Yet out of "
@@ -60,6 +61,7 @@ class Outro(VoiceoverScene):
 
         thanks = label(r"Thanks for watching.", font_size=56)
         thanks.add_background_rectangle(opacity=0.7, buff=0.3)
+        thanks.move_to(UP * 1.95)
         with self.voiceover("Thanks for watching.") as vo:
             self.play(FadeOut(VGroup(system, bg, fma)), FadeIn(thanks))
         self.wait(2.0)

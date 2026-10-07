@@ -326,8 +326,8 @@ class MaterialDerivative(VoiceoverScene):
         diff = Arrow(Qp + scale * rot(P), Qp + scale * rot(Qp), buff=0, color=C.ADVECT, stroke_width=7,
                      max_tip_length_to_length_ratio=0.35)
         lP = MathTex(r"\vu(P)", font_size=34, color=C.VELOCITY).next_to(uP.get_end(), RIGHT, buff=0.1)
-        lQ = MathTex(r"\vu(Q)", font_size=34, color=C.VELOCITY).next_to(uQ.get_end(), UP, buff=0.1)
-        lD = MathTex(r"\Delta \vu", font_size=38, color=C.ADVECT).next_to(diff, UP, buff=0.05).shift(RIGHT * 0.15)
+        lQ = MathTex(r"\vu(Q)", font_size=34, color=C.VELOCITY).next_to(uQ.get_end(), LEFT, buff=0.12)
+        lD = MathTex(r"\Delta \vu", font_size=38, color=C.ADVECT).next_to(diff, UP, buff=0.12).shift(RIGHT * 0.35)
         dP = Dot(P, color=WHITE)
         dQ = Dot(Qp, color=WHITE)
         step = ArcBetweenPoints(P, Qp, angle=dth, color=WHITE, stroke_width=3)

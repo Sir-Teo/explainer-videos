@@ -39,7 +39,7 @@ class ReynoldsNumber(VoiceoverScene):
         cyl = Circle(0.75, color=GREY_A, fill_color=GREY_D, fill_opacity=1).move_to(LEFT * 4.6 + DOWN * 1.6)
         flow = VGroup(*[Arrow([-6.9, y, 0], [-6.0, y, 0], buff=0, color=C.VELOCITY, stroke_width=4) for y in np.linspace(-2.8, -0.4, 5)])
         Ul = MathTex("U", font_size=40, color=C.VELOCITY).next_to(flow, UP, buff=0.1)
-        Lb = BraceBetweenPoints(cyl.get_bottom(), cyl.get_top(), direction=RIGHT)
+        Lb = Brace(cyl, RIGHT, buff=0.12)
         Ll = MathTex("L", font_size=40).next_to(Lb, RIGHT, buff=0.1)
 
         rows = VGroup(

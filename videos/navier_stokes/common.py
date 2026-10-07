@@ -110,17 +110,19 @@ class FieldMovie(ImageMobject):
         return UpdateFromAlphaFunc(self, upd, suspend_mobject_updating=False, **kwargs)
 
 
-CROP_INLET = 6  # lattice columns hidden at the inlet (boundary artifacts)
+CROP_INLET = 6  # lattice columns hidden at the inlet / outlet (boundary artifacts)
+CROP_OUTLET = 6
 
 
 def cylinder_movie(name: str, mode: str = "vorticity", width: float = 13.5, vmax: float = 4.0, **kwargs) -> FieldMovie:
     data = load(name)
-    vort, dye, solid = data["vorticity"], data["dye"], data["solid"][:, CROP_INLET:][::-1]
+    cols = slice(CROP_INLET, -CROP_OUTLET)
+    vort, dye, solid = data["vorticity"], data["dye"], data["solid"][:, cols][::-1]
 
     def render(k):
-        w = vort[k][:, CROP_INLET:][::-1]
+        w = vort[k][:, cols][::-1]
         if mode == "dye":
-            rgb = cm.dye_overlay(dye[k][:, CROP_INLET:][::-1], w, vmax)
+            rgb = cm.dye_overlay(dye[k][:, cols][::-1], w, vmax)
         else:
             rgb = cm.diverging(w, vmax, gamma=0.9)
         return cm.to_uint8(cm.solid_mask(rgb, solid))
@@ -134,7 +136,7 @@ def cylinder_geometry(movie: FieldMovie, name: str) -> tuple[np.ndarray, float]:
     """Scene-space center and radius of the cylinder inside ``movie``."""
     data = load(name)
     ny, nx = data["solid"].shape
-    nx -= CROP_INLET
+    nx -= CROP_INLET + CROP_OUTLET
     cx, cy = data["center"]
     scale = movie.width / nx
     x = movie.get_left()[0] + (cx - CROP_INLET + 0.5) * scale

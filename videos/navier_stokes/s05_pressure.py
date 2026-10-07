@@ -72,7 +72,8 @@ class PressureForce(VoiceoverScene):
         box.move_to([-4.1, -0.1, 0])
         left = Arrow(box.get_left() + LEFT * 1.75, box.get_left() + LEFT * 0.06, buff=0, color=P_FORCE, stroke_width=8)
         right = Arrow(box.get_right() + RIGHT * 1.0, box.get_right() + RIGHT * 0.06, buff=0, color=P_FORCE, stroke_width=8)
-        net = Arrow(box.get_center(), box.get_center() + RIGHT * 0.95, buff=0, color=YELLOW, stroke_width=8)
+        net = Arrow(box.get_center() + DOWN * 0.45 + LEFT * 0.4, box.get_center() + DOWN * 0.45 + RIGHT * 0.5, buff=0,
+                    color=YELLOW, stroke_width=8)
         l_lab = MathTex(r"p(x)\,A", font_size=34).next_to(left, UP, buff=0.12)
         r_lab = MathTex(r"p(x{+}dx)\,A", font_size=34).next_to(right, UP, buff=0.12).align_to(right, RIGHT).shift(RIGHT * 0.35)
         for m in (l_lab, r_lab):
