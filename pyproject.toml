@@ -13,6 +13,8 @@ dependencies = [
     "kokoro>=0.9.4",
     "soundfile>=0.12",
     "transformers>=4.45",
+    # Market data for videos/opposing_forces (Shiller's .xls); only fetch.py needs it.
+    "xlrd>=2.0",
 ]
 
 [build-system]
