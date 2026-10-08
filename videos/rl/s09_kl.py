@@ -121,7 +121,7 @@ class KLOptimum(VoiceoverScene):
         head.to_edge(UP, buff=0.35).shift(RIGHT * 1.6)
         tag = real_tag(r"real probabilities, exact tilt")
         ratio = label(r"every right answer is multiplied by the same factor: their proportions never change",
-                      font_size=24, color=YELLOW).to_edge(DOWN, buff=0.2)
+                      font_size=24, color=YELLOW).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Let's apply it to a real distribution: the answers our pocket model gives to one problem, before any "
             "reinforcement learning. Green answers are right, red ones are wrong, and the long ones show their work. "
@@ -232,7 +232,7 @@ class KLOptimum(VoiceoverScene):
         col = VGroup(rdef, defs).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(LEFT, buff=0.6).shift(UP * 0.8)
         plot = Plot(x_range=(-2.5, 2.5), y_range=(-2.5, 3.5), width=5.4, height=3.8, x_ticks=[-2, -1, 0, 1, 2],
                     y_ticks=[-2, 0, 2], x_label=r"$\log \rho$")
-        plot.to_edge(RIGHT, buff=0.6).shift(DOWN * 0.1)
+        plot.to_edge(RIGHT, buff=0.6).shift(DOWN * 0.65)
         xs = np.linspace(-2.5, 2.5, 300)
         c1 = plot.line(xs, -xs, color=C.PENALTY, stroke_width=3)
         c2 = plot.line(xs, 0.5 * xs**2, color=C.BASELINE, stroke_width=3)
@@ -249,10 +249,9 @@ class KLOptimum(VoiceoverScene):
         for nm, bias, std, col_ in rows:
             tab.add(VGroup(label(nm, font_size=26, color=col_), label(rf"${bias:+.3f}$", font_size=26),
                            label(rf"${std:.2f}$", font_size=26)).arrange(RIGHT, buff=0.7))
-        for row in tab:
+        for i, row in enumerate(tab):  # a fixed grid: the header's first cell is empty, so don't align rows by their edges
             for j, cell in enumerate(row):
-                cell.move_to([j * 1.6, 0, 0], aligned_edge=LEFT)
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+                cell.move_to([j * 1.6, -0.45 * i, 0], aligned_edge=LEFT)
         tcap = label(r"true KL $= 0.005$; numbers relative to it (2 million samples)", font_size=22, color=GREY_A)
         tg = VGroup(tcap, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(col, DOWN, buff=0.45).align_to(col, LEFT)
         head = label(r"Estimating the KL from samples", font_size=30).to_edge(UP, buff=0.3)
