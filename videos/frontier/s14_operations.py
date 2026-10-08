@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import LLAMA3, Plot, bar_rows, label, note, pow10_label, source
+from videos.frontier.common import LLAMA3, Plot, bar_rows, calc, label, note, pow10_label, source
 
 MTTF = [  # (GPUs per job, mean time to failure in hours, measured?) -- Kokolis et al. (Meta) 2024
     (8, 47.7 * 24, True),
@@ -28,6 +28,7 @@ class Operations(VoiceoverScene):
         self.failure_law()
         self.llama_snapshot()
         self.checkpoints()
+        self.ckpt_math()
         self.silent()
 
     # ------------------------------------------------------------------
@@ -142,6 +143,64 @@ class Operations(VoiceoverScene):
             self.play(FadeIn(facts[0]))
             self.play(FadeIn(facts[1]))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def ckpt_math(self):
+        M = LLAMA3["days"] * 24 * 60 / LLAMA3["interruptions"]  # minutes between interruptions (54 days, 466 stops)
+        assert round(M / 60, 1) == 2.8
+        M = 168.0  # 2.8 hours, as stated
+
+        def waste(tau, d):
+            return d / tau + tau / (2 * M)
+        d1, d2 = 1.0, 1.0 / 6  # checkpoint write time: 1 minute; 10 seconds (both illustrative)
+        t1, t2 = np.sqrt(2 * d1 * M), np.sqrt(2 * d2 * M)
+        assert round(t1, 1) == 18.3 and round(100 * waste(t1, d1), 1) == 10.9 and round(t2, 1) == 7.5
+        assert round(100 * waste(t2, d2), 1) == 4.5
+        f = calc(r"\text{waste} &= \underbrace{\frac{\delta}{\tau}}_{\text{saving}} + "
+                 r"\underbrace{\frac{\tau}{2M}}_{\text{work lost per failure}}",
+                 r"\\ \frac{d}{d\tau}: \ -\frac{\delta}{\tau^2} + \frac{1}{2M} = 0 \;&\Rightarrow\; \tau^{*} = \sqrt{2\,\delta M}",
+                 font_size=30)
+        f.to_edge(UP, buff=0.35).set_x(0)
+        nums = calc(r"M &= 2.8\ \text{h} = 168\ \text{min},\quad \delta = 1\ \text{min}",
+                    r"\\ \tau^{*} &= \sqrt{2 \times 1 \times 168} = 18.3\ \text{min}",
+                    r"\\ \text{waste} &= 5.5\% + 5.5\% = 10.9\%",
+                    r"\\ \delta = 10\ \text{s}:\ \tau^{*} &= 7.5\ \text{min},\ \ \text{waste} = 4.5\%", font_size=28)
+        nums[3].set_color(C.KEPT)
+        plot = Plot(x_range=(0, 90), y_range=(0, 0.3), width=5.2, height=3.0, x_ticks=[0, 30, 60, 90],
+                    y_ticks=[0, 0.1, 0.2, 0.3], y_fmt=lambda v: MathTex(rf"{int(round(100 * v))}\%", font_size=22, color=GREY_A),
+                    x_label=r"checkpoint every $\tau$ minutes", y_label=r"time wasted", font_size=22)
+        plot.next_to(f, DOWN, buff=0.75).to_edge(LEFT, buff=1.0)
+        nums.next_to(plot, RIGHT, buff=0.8).align_to(plot, UP).shift(DOWN * 0.3)
+        ts = np.linspace(2.5, 90, 200)
+        l_save = plot.line(ts, np.minimum(d1 / ts, 0.3), color=GREY_B, stroke_width=2)
+        l_lost = plot.line(ts, ts / (2 * M), color=GREY_B, stroke_width=2)
+        l_tot = plot.line(ts, np.minimum(waste(ts, d1), 0.3), color=C.PENALTY, stroke_width=4)
+        l_fast = plot.line(ts, np.minimum(waste(ts, d2), 0.3), color=C.KEPT, stroke_width=4)
+        m1 = Dot(plot.c2p(t1, waste(t1, d1)), radius=0.07, color=C.PENALTY)
+        m2 = Dot(plot.c2p(t2, waste(t2, d2)), radius=0.07, color=C.KEPT)
+        tag = note(r"write times illustrative; $M$ from Llama 3 (466 stops in 54 days)").to_corner(DL, buff=0.2)
+        with self.voiceover(
+            "How often should you save? Saving takes time, delta, every tau minutes. But with a failure every M "
+            "minutes, each failure throws away, on average, half an interval of work. <bookmark mark='d'/> Add the "
+            "two, set the derivative to zero, and the best interval is the square root of two delta M. "
+            "<bookmark mark='n'/> With Llama 3's failure every 2.8 hours and a checkpoint that takes one minute, save "
+            "every eighteen minutes and lose eleven percent, split evenly between the two costs. "
+            "<bookmark mark='f'/> Make checkpoints take ten seconds, from memory, and the best interval drops to seven "
+            "and a half minutes, losing four and a half percent: one reason Google kept copies of Gemini's state in "
+            "memory."
+        ) as vo:
+            self.play(Write(f[0]), FadeIn(plot), FadeIn(tag))
+            self.play(Create(l_save), Create(l_lost), run_time=1.2)
+            vo.wait_until("d")
+            self.play(Create(l_tot), Write(f[1]), run_time=1.5)
+            vo.wait_until("n")
+            self.play(Write(nums[0]))
+            self.play(Write(nums[1]), FadeIn(m1))
+            self.play(Write(nums[2]))
+            vo.wait_until("f")
+            self.play(Create(l_fast), FadeIn(m2), Write(nums[3]))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
