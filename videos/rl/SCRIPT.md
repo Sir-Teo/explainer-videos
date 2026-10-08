@@ -153,7 +153,7 @@ Notice what the tilt can't do. Right answers keep the proportions the reference 
 
 Back on the triangle of three-action policies, the optimal policies for every beta trace out a single curve, from the reference toward the best corner. And here's a surprise: it's exactly the path the natural gradient followed. Natural gradient ascent on the logits adds a multiple of the reward, so after time t the policy is the reference tilted by e to the t r. Training longer plays the same role as loosening the leash.
 
-Averaged over many problems, the optimal policies give a frontier: the most reward you can possibly have at each distance from the starting model. Being right every time costs only 0.39 nats. Our actual training run, which had no KL penalty at all, sits below the frontier, as every policy must. It ends almost as accurate, but about 2 times farther from where it started than it needed to be: unlike the optimum, it also reshuffled its right answers.
+Averaged over many problems, the optimal policies give a frontier: the most reward you can possibly have at each distance from the starting model. Being right every time costs only 0.39 nats. Our actual training run, which had no KL penalty at all, sits below the frontier, as every policy must. It ends almost as accurate, but about twice as far from where it started as it needed to be: unlike the optimum, it also reshuffled its right answers.
 
 In practice the KL itself has to be estimated from samples, one token at a time. John Schulman's three estimators are now in nearly every RL library. The obvious one, minus the log ratio, is unbiased, but it's negative half the time and very noisy. Half the squared log ratio is always positive, but slightly biased. And k3 adds a term whose average is exactly zero, rho minus one: it stays unbiased, it's never negative, and it's far less noisy. For two close distributions, its spread is fourteen times smaller.
 
@@ -193,7 +193,7 @@ Now we can read the whole GRPO objective, the formula from the start of the vide
 
 _Scene `s12_run.py::RealRun`_
 
-Time to run it. We train the adder with GRPO: thirty-two problems per step, eight answers each, a reward of one or zero, and nothing else. Accuracy on problems it has never seen climbs from 70 percent to 99 percent within forty steps. But how? You might expect it to start showing its work, since that's almost always right. It barely does: from 26 to 42 percent of answers. Instead, its direct answers stopped slipping: from 55 to 98 percent right. Forgetting a carry was always a choice the network could unlearn, one token at a time, and that was the cheapest way up.
+Time to run it. We train the adder with GRPO: thirty-two problems per step, eight answers each, a reward of one or zero, and nothing else. Accuracy on problems it has never seen climbs from 70 percent to 98 percent within forty steps. But how? You might expect it to start showing its work, since that's almost always right. It barely does: from 28 to 41 percent of answers. Instead, its direct answers stopped slipping: from 59 to 97 percent right. Forgetting a carry was always a choice the network could unlearn, one token at a time, and that was the cheapest way up.
 
 Here are its five likeliest answers to our running example, before and after. Before, the right answer shared its probability with several slips. After, nearly all of it sits on the right answer, written directly. That's what RL did to this model: it sharpened.
 
@@ -221,7 +221,7 @@ For a softmax, the derivative of the entropy with respect to a logit is minus th
 
 Two examples, each with the same five-token distribution. On the left, the token the model already likes is the one that gets rewarded: a positive covariance. One natural gradient step, and the distribution sharpens; the entropy drops. On the right, a rare token is rewarded. The covariance is negative, and the step spreads probability out: entropy rises. In RL on a pretrained model, the first case is overwhelmingly common: the confident tokens are usually the right ones, so entropy steadily drains away.
 
-Does the formula hold up in a real network, where every logit is tied to every other through shared weights? Here is the covariance between each sampled token's log probability and its advantage, measured in every batch of our run, and here is how much the entropy actually changed. The covariance stays positive, and the entropy keeps falling; the bigger the covariance, the faster the fall, a correlation of -0.6.
+Does the formula hold up in a real network, where every logit is tied to every other through shared weights? Here is the covariance between each sampled token's log probability and its advantage, measured in every batch of our run, and here is how much the entropy actually changed. The covariance is positive in 87 percent of the batches, and the entropy keeps falling. Averaged over a few steps, the bigger the covariance, the faster the fall: a correlation of minus 0.8.
 
 Remember the clipping windows. With a symmetric clip, a rare token can rise by at most twenty percent of its probability per round, while a likely one can rise all the way to certainty. That's exactly the positive covariance again: the clip itself favors sharpening. ByteDance's DAPO simply raises the upper limit to one point two eight, giving rare tokens more room to grow. Along with dynamic sampling, a token-level loss and a soft penalty for overlong answers, it took a naive GRPO run on the AIME math competition from thirty to fifty percent.
 
@@ -231,7 +231,7 @@ _Scene `s15_sharpen.py::Sharpening`_
 
 Does reinforcement learning teach a model new things, or just make it more reliable at things it could already do? To ask that precisely, we need pass at k: the chance that at least one of k attempts is right. With a success rate p, it's one minus the chance that all k fail. To estimate it, draw n samples, count the right ones, and ask: of all the ways to pick k of them, what fraction contain no right answer at all? Here, ten of the fifty-six ways fail, so pass at three is about point eight two.
 
-Here is pass at k for our adder, measured with 128 samples on each of 300 held-out problems. Before RL, a single attempt is right 70 percent of the time, but with 128 attempts, 100.0 percent of problems get solved at least once. After RL, a single attempt is right 99 percent of the time. The curve went flat: RL moved the probability onto answers the model could already produce. Its mistakes were slips, and the right answer was always within reach.
+Here is pass at k for our adder, measured with 128 samples on each of 300 held-out problems. Before RL, a single attempt is right 70 percent of the time, but with 128 attempts, every one of the problems gets solved at least once. After RL, a single attempt is right 99 percent of the time. The curve went flat: RL moved the probability onto answers the model could already produce. Its mistakes were slips, and the right answer was always within reach.
 
 This matches the math. The KL-regularized optimum is the reference times a positive factor, so any answer the reference would never produce stays at probability zero. In 2025, a careful study found the same thing in large reasoning models: given enough attempts, the base model catches up with, and even passes, the RL-trained one. NVIDIA's ProRL pushed back, finding problems that only prolonged RL could solve; and in practice, generalization lets a network reach answers it never sampled. As of 2026, the question is still open.
 
@@ -277,4 +277,4 @@ Every one of these is the log-derivative trick, plus one idea about noise or abo
 
 ---
 
-7131 words (~46 min at 155 wpm).
+7144 words (~46 min at 155 wpm).
