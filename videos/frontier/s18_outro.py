@@ -5,7 +5,7 @@ import json
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import label, load, note, pipeline_map, pocket_total_flops, sci, source
+from videos.frontier.common import Plot, label, load, note, pipeline_map, pocket_total_flops, sci, source
 
 
 class Outro(VoiceoverScene):
@@ -114,7 +114,47 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def recap(self):
+        """Four mini-charts, each redrawn from this video's own data."""
+        from videos.frontier.compute import STAB_LRS
+        from videos.frontier.s06_scaling import isoflop_fits
+
+        def panel(title, body):
+            box = RoundedRectangle(width=3.05, height=2.5, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5)
+            body.move_to(box).shift(UP * 0.15)
+            return VGroup(box, body, label(title, font_size=22).next_to(box, DOWN, buff=0.15))
+        st = load("funnel")["stats"]
+        stages = ["input", "url", "extract", "lang", "gopher_rep", "gopher_qual", "c4", "fineweb"]
+        f_bars = VGroup(*[Rectangle(width=2.4 * st[k]["docs"] / st["input"]["docs"], height=0.16, stroke_width=0,
+                                    fill_color=C.KEPT if k == "fineweb" else C.PAGE, fill_opacity=0.9) for k in stages])
+        f_bars.arrange(DOWN, buff=0.06, aligned_edge=LEFT)
+        f_t = label(rf"{st['fineweb']['docs']:,} of {st['input']['docs']:,} pages".replace(",", "{,}"), font_size=18, color=GREY_A)
+        p1 = panel(r"get the data right", VGroup(f_bars, f_t.next_to(f_bars, DOWN, buff=0.12)))
+        fits, slope, _ = isoflop_fits(load("isoflop")["rows"])
+        pl2 = Plot(x_range=(1e4, 2e6), y_range=(3.8, 6.8), width=2.4, height=1.5, log_x=True)
+        vall = VGroup()
+        for fobj, col in zip(fits, [YELLOW_A, YELLOW_C, GOLD_C, GOLD_E]):
+            vall.add(pl2.dots([r["params"] for r in fobj["rows"]], [r["val"] for r in fobj["rows"]], col, radius=0.035))
+        s_t = MathTex(rf"N_{{\rm opt}}\propto C^{{{slope:.2f}}}", font_size=24, color=C.PARAMS).next_to(pl2, DOWN, buff=0.1)
+        p2 = panel(r"choose the size", VGroup(pl2, vall, s_t))
+        res = load("stability")
+        pb = [max(x[1] for x in res[f"stab_base_{lr:.0e}"]["probes"]) for lr in STAB_LRS]
+        pq = [max(x[1] for x in res[f"stab_qk_{lr:.0e}"]["probes"]) for lr in STAB_LRS]
+        pl3 = Plot(x_range=(2e-4, 1.5e-1), y_range=(2, 3e4), width=2.4, height=1.5, log_x=True, log_y=True)
+        k_t = label(r"attention scores, QK-norm vs not", font_size=18, color=GREY_A).next_to(pl3, DOWN, buff=0.12)
+        p3 = panel(r"keep the run stable", VGroup(pl3, pl3.line(STAB_LRS, pb, color=C.PENALTY, stroke_width=3),
+                                                   pl3.line(STAB_LRS, pq, color=C.KEPT, stroke_width=3), k_t))
+        rl = load("toy_rl")["curve"]
+        pl4 = Plot(x_range=(0, rl[-1]["step"]), y_range=(0.5, 1.0), width=2.4, height=1.5)
+        r_t = label(rf"pass@1: {100 * rl[0]['pass1']:.0f}\% $\rightarrow$ {100 * rl[-1]['pass1']:.0f}\%", font_size=18,
+                    color=GREY_A).next_to(pl4, DOWN, buff=0.12)
+        p4 = panel(r"teach with feedback", VGroup(pl4, pl4.line([r["step"] for r in rl], [r["pass1"] for r in rl], color=C.REWARD,
+                                                                stroke_width=3), r_t))
+        row = VGroup(p1, p2, p3, p4).arrange(RIGHT, buff=0.25).move_to(DOWN * 0.2)
+        return row
+
     def closing(self):
+        recap = self.recap()
         lines = VGroup(
             label(r"Most of what is known comes from open-weight labs' reports:", font_size=30),
             label(r"the leading closed labs publish very little about how they train.", font_size=30, color=GREY_A),
@@ -128,14 +168,19 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Almost everything in this video comes from open-weight labs and open-source projects; the leading "
             "closed labs publish very little about how their models are trained. But the shape of the pipeline has "
-            "been stable for years: get the data right, choose the size with scaling laws, keep the run stable across "
-            "thousands of machines, and then teach the model with feedback. <bookmark mark='o'/> And more of it is "
+            "been stable for years: <bookmark mark='r1'/> get the data right, <bookmark mark='r2'/> choose the size "
+            "with scaling laws, <bookmark mark='r3'/> keep the run stable across thousands of machines, "
+            "<bookmark mark='r4'/> and then teach the model with feedback. <bookmark mark='o'/> And more of it is "
             "open than ever. AI2's OLMo 3 releases every dataset and checkpoint; nanochat trains a GPT-2-grade chat "
             "model for under a hundred dollars; Hugging Face's playbooks write down the hard-won lessons. If you want "
             "to know how these models are made, you can run the whole thing yourself, at whatever scale you have."
         ) as vo:
             self.play(FadeIn(lines))
+            for i in range(4):
+                vo.wait_until(f"r{i + 1}")
+                self.play(FadeIn(recap[i], shift=UP * 0.15), run_time=0.8)
             vo.wait_until("o")
+            self.play(FadeOut(recap), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(o, shift=RIGHT * 0.2) for o in opens], lag_ratio=0.3), run_time=2.5)
         self.wait(1.0)
         self.clear_scene()
