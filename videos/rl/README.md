@@ -102,9 +102,10 @@ held-out problems at temperature 1, unless stated otherwise.
   from 69% to 80% at step 100, then collapses to 0.7% by step 300 as the log
   probability of the *preferred* answers falls by 10 nats and the rejected ones
   by 18 (likelihood displacement; at lr 1e-4 it collapses within 50 steps).
-* **Entropy** of the next-token distribution falls 4.2× during the GRPO run;
+* **Entropy** of the next-token distribution falls about 4× during the GRPO run;
   the batch covariance between token log-probability and advantage is positive
-  in 98% of steps, and correlates −0.8 with the per-step entropy change.
+  in 87% of batches (90% and 94% in the other two seeds), and, averaged over
+  9 steps, correlates −0.64 with the per-step entropy change (−0.63, −0.77).
 * **ScaleRL's sigmoid**, fitted to GRPO with 1, 4 and 16 updates per batch: the
   same ceiling (A = 1.00, 1.00, 1.00), with the compute to get halfway spanning
   7.5× (1.1×10¹¹, 3.0×10¹⁰, 1.4×10¹⁰ FLOPs).

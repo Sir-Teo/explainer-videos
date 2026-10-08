@@ -163,14 +163,18 @@ class Entropy(VoiceoverScene):
         lh = bot.line(st[1:], dHc, color=C.ENTROPY, stroke_width=3.5)
         z1 = top.hline(0, color=GREY_D)
         z2 = bot.hline(0, color=GREY_D)
-        corr = float(np.corrcoef(smooth(cov, 9)[1:], dH)[0, 1])
-        cl = label(rf"correlation: ${corr:+.2f}$", font_size=28, color=YELLOW).to_edge(RIGHT, buff=0.4)
+        corr = float(np.corrcoef(smooth(cov, 9)[1:], dH)[0, 1])  # 9-step averages of both series
+        pos = float(np.mean(cov > 0))
+        assert corr < -0.4 and pos > 0.8, (corr, pos)
+        cl = VGroup(label(rf"correlation: ${corr:+.2f}$", font_size=28, color=YELLOW),
+                    label(r"(9-step averages)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "Does the formula hold up in a real network, where every logit is tied to every other through shared "
             "weights? Here is the covariance between each sampled token's log probability and its advantage, "
             "measured in every batch of our run, <bookmark mark='h'/> and here is how much the entropy actually "
-            "changed. The covariance stays positive, and the entropy keeps falling; the bigger the covariance, the "
-            f"faster the fall, a correlation of {corr:.1f}."
+            f"changed. The covariance is positive in {pos * 100:.0f} percent of the batches, and the entropy keeps "
+            "falling. Averaged over a few steps, the bigger the covariance, the faster the fall: a correlation of "
+            f"minus {abs(corr):.1f}."
         ) as vo:
             self.play(FadeIn(top), Create(z1), FadeIn(real_tag()))
             self.play(Create(lc), run_time=2)
