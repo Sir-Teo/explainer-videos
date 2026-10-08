@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    KEYS, MCOLOR, NAMES, Plot, block, cfg, label, model, note, random_values, schematic_tag, show_chapter_card,
+    KEYS, MCOLOR, NAMES, Plot, cfg, label, model, note, random_values, show_chapter_card,
     toy_tag, vector_strip,
 )
 from videos.open_models.toys import balancing_demo, expert_vectors, route, sigmoid, synthetic_batch
@@ -51,7 +51,7 @@ class Routing(VoiceoverScene):
         sig_note.next_to(f1, DOWN, buff=0.12)
         w = s[top] / s[top].sum()
         f2 = MathTex(r"\text{weight}_i", "=", r"{s_i \over \sum_{j\in\text{top}} s_j}", font_size=36)
-        f2.to_corner(DR, buff=0.4).shift(UP * 0.9)
+        f2.to_corner(DR, buff=0.4)
         w_l = VGroup(*[MathTex(f"{v:.2f}", font_size=28, color=YELLOW).next_to(vals[i], RIGHT, buff=0.35)
                        for v, i in zip(w, top)])
         w_head = label(r"weights", font_size=24, color=YELLOW).next_to(w_l, UP, buff=0.3).align_to(w_l, LEFT)
@@ -268,7 +268,7 @@ class Routing(VoiceoverScene):
         lg = VGroup(label(r"fixed nudges", font_size=24, color=GREY_B),
                     label(r"quantile rule", font_size=24, color=C.BALANCE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         lg.next_to(pl, RIGHT, buff=0.4)
-        tt = toy_tag(r"toy: 16 experts, 8{,}192 random tokens per step", corner=UR)
+        tt = toy_tag(r"toy: 16 experts, 8{,}192 random tokens per step", corner=DL)
         with self.voiceover(
             "Kimi K3 sharpens this. With 896 experts, small fixed nudges are too slow, and big ones overshoot. "
             "<bookmark mark='q'/> So instead of nudging, its Quantile Balancing computes, from a single batch, the bias "

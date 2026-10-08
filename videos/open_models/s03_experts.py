@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
     KEYS, MCOLOR, NAMES, bar_row, block, cfg, expert_grid, label, model, note, pick_active, random_values,
-    schematic_tag, show_chapter_card, vector_strip,
+    show_chapter_card, vector_strip,
 )
 from videos.open_models.toys import expert_combinations
 

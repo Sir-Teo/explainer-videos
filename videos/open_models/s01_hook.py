@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    KEYS, MAKERS, MCOLOR, NAMES, Plot, data, label, layer_strip, model, note, source,
+    KEYS, MAKERS, MCOLOR, NAMES, Plot, data, label, layer_strip, model, note,
 )
 
 OPEN_COLOR = "#57A8FB"  # Artificial Analysis draws open-weights models in this blue

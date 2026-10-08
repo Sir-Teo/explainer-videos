@@ -171,7 +171,7 @@ class LinearMemory(VoiceoverScene):
         t5 = MathTex(r"S \mathrel{+}= \vec v_1' \vec k_1^{\top}", font_size=36)
         t6 = MathTex(r"S\vec k_1 = \vec v_1 + \vec v_1' + \text{smudge}", font_size=36, color=C.MEMORY)
         blend = label(r"a blend of the old and the new", font_size=28, color=RED)
-        g = VGroup(t5, t6, blend).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(side, aligned_edge=UL)
+        VGroup(t5, t6, blend).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(side, aligned_edge=UL)
         with self.voiceover(
             "And there's a worse problem. <bookmark mark='o'/> Suppose a fact changes: the same key gets a new value, like "
             "a variable in a program being reassigned. <bookmark mark='p'/> The plain sum just piles the new value on top "

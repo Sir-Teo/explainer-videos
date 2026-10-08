@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    MCOLOR, NAMES, cfg, label, model, note, show_chapter_card,
+    MCOLOR, NAMES, cfg, label, model, show_chapter_card,
 )
 from videos.open_models.toys import kv_cache
 

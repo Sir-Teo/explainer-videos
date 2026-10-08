@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    cfg, label, layer_strip, model_tag, note, random_values, show_chapter_card, source, vector_strip,
+    cfg, label, layer_strip, model_tag, note, random_values, show_chapter_card, vector_strip,
 )
 from videos.open_models.toys import kv_cache
 
@@ -134,7 +134,7 @@ class Hybrid(VoiceoverScene):
                            color=C.ATTN, direction=RIGHT, vmax=np.abs(random_values(8, seed=4)).max())
         times = MathTex(r"\odot", font_size=40)
         eq = MathTex("=", font_size=40)
-        g = VGroup(out, times, gate, eq, res).arrange(RIGHT, buff=0.3).move_to(UP * 1.5)
+        VGroup(out, times, gate, eq, res).arrange(RIGHT, buff=0.3).move_to(UP * 1.5)
         gl = VGroup(label(r"attention output", font_size=22, color=C.ATTN).next_to(out, DOWN, buff=0.15),
                     label(r"$\sigma(W_g \vec x)$: a gate per channel", font_size=22).next_to(gate, DOWN, buff=0.15),
                     label(r"what gets through", font_size=22, color=C.ATTN).next_to(res, DOWN, buff=0.15))
