@@ -19,6 +19,7 @@ Runs:
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import time
 import urllib.request
@@ -228,6 +229,10 @@ def _gpt2_family() -> tuple[dict, dict]:
         if name == "gpt2-xl":
             out["completions"] = {p: g.generate(p, 40, name) for p in prompts}
         g.load.cache_clear()
+        # Release the previous family member before loading the next one.
+        # Keeping this local reference can make GPT-2 XL exceed laptop RAM.
+        del model
+        gc.collect()
     return out, {}
 
 

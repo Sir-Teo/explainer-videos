@@ -54,6 +54,13 @@ python tools/build.py open_models             # -> renders/open_models.mp4
 python tools/build.py frontier                # -> renders/frontier.mp4
 ```
 
+For high-quality YouTube masters, add `--crf 18 -j 2` to the build command.
+This renders the animations with less H.264 compression, uses each scene's
+uncompressed narration WAV when available, keeps the intermediate soundtrack
+lossless, and masters to 48 kHz stereo AAC at 384 kb/s. Upload the finished
+file from `renders/`, with its `.srt` subtitles and `.chapters.txt` chapter list.
+The `tools/publish.py` command makes the smaller GitHub distribution copy.
+
 Iterate on a single scene:
 
 ```bash
