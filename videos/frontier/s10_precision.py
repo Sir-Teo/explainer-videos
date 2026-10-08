@@ -64,15 +64,29 @@ class Precision(VoiceoverScene):
         title = label(r"Fewer bits per number $\Rightarrow$ more arithmetic per second", font_size=38).to_edge(UP, buff=0.6)
         src = source(r"NVIDIA H100 and Blackwell Ultra datasheets (dense throughput)")
 
+        def bitrow(n):
+            sq = VGroup(*[Square(0.3, stroke_width=1, stroke_color=BLACK, fill_color=C.COMPUTE, fill_opacity=0.85)
+                          for _ in range(n)]).arrange(RIGHT, buff=0.04)
+            sq.move_to(UP * 0.4)
+            t = label(rf"{n} bits: {n // 8 if n >= 8 else 0.5:g} byte{'s' if n > 8 else ''} per number", font_size=30)
+            return VGroup(sq, t.next_to(sq, DOWN, buff=0.35))
+        rowb = bitrow(32)
+        half = label(r"half the bits: $\approx 2\times$ the multiplications per second, half the memory to move",
+                     font_size=26, color=GREY_A).to_edge(DOWN, buff=1.2)
         with self.voiceover(
             "Every number in a training run is stored in a fixed number of bits, and that choice is one of the "
-            "biggest levers on speed. Use half as many bits, and a chip can do roughly twice as many "
-            "multiplications per second, while moving half as much memory. <bookmark mark='h'/> An H100 does about "
-            "a thousand trillion operations per second in sixteen-bit bfloat, and twice that in eight-bit. "
+            "biggest levers on speed. <bookmark mark='u'/> Use half as many bits, and a chip can do roughly twice as "
+            "many multiplications per second, while moving half as much memory. <bookmark mark='h'/> An H100 does "
+            "about a thousand trillion operations per second in sixteen-bit bfloat, and twice that in eight-bit. "
             "<bookmark mark='b'/> A Blackwell Ultra chip does fifteen thousand trillion in four-bit."
         ) as vo:
-            self.play(FadeIn(title))
+            self.play(FadeIn(title), FadeIn(rowb))
+            vo.wait_until("u")
+            for n in (16, 8, 4):
+                self.play(Transform(rowb, bitrow(n)), FadeIn(half) if n == 16 else Wait(0.01), run_time=0.9)
+                self.wait(0.3)
             vo.wait_until("h")
+            self.play(FadeOut(rowb), FadeOut(half), run_time=0.5)
             for r in rows[:2]:
                 self.play(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]), run_time=0.8)
             self.play(FadeIn(src))
