@@ -129,7 +129,8 @@ class LogDerivative(VoiceoverScene):
             "algorithm in this video."
         ) as vo:
             vo.wait_until("n")
-            self.play(GrowFromCenter(brace), FadeIn(name))
+            # make room under line 3 for the brace's name: the last line steps down
+            self.play(VGroup(L[4], reasons[3]).animate.shift(DOWN * 0.45), GrowFromCenter(brace), FadeIn(name))
             vo.wait_until("r")
             self.play(FadeIn(hdr))
         self.wait(0.4)

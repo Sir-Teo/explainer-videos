@@ -110,7 +110,7 @@ class Policy(VoiceoverScene):
         J = mtex(r"J(\theta)", r"=", r"\sum_y \pi_\theta(y \mid x)\, R(x, y)", r"=", r"\text{the green part of the last column}", font_size=34)
         J[0].set_color(C.RL_POLICY)
         J[4].set_color(C.REWARD)
-        J.to_edge(DOWN, buff=0.15)
+        J.to_edge(DOWN, buff=0.15).shift(RIGHT * 0.9)  # clear of the corner tag
         pc = label(rf"${T0.p_correct * 100:.0f}\%$", font_size=26, color=C.REWARD).next_to(T0.leaf_bars, RIGHT, buff=0.12)
         with self.voiceover(
             "The checker marks each complete answer right or wrong: <bookmark mark='c'/> this last column. With a "
