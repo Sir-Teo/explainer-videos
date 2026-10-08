@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Plot, eval_curve, label, load, note, source
+from videos.frontier.common import Plot, bar_rows, eval_curve, label, load, note, source
 
 A_NS, B_NS, C_NS = 3.4445, -4.7750, 2.0315
 
@@ -231,28 +231,61 @@ class Optimizer(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def adoption(self):
-        items = VGroup(
-            label(r"\textbf{Moonlight} (Feb 2025): Muon scaled up; about half the training FLOPs of AdamW", font_size=27),
-            label(r"\textbf{Kimi K2} (Jul 2025): MuonClip, 1T parameters, 15.5T tokens, ``zero loss spike''", font_size=27),
-            label(r"\textbf{GLM-4.5 / GLM-5}, \textbf{DeepSeek-V4} (Apr 2026), \textbf{Kimi K3}: Muon variants", font_size=27),
-            label(r"\textbf{Caveat}: with carefully tuned baselines, the speed-up shrinks with scale:", font_size=27, color=GREY_A),
-            label(r"$1.4\times$ at 0.1B parameters, $1.1\times$ at 1.2B (Wen et al., 2025)", font_size=27, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.2)
-        items[3].shift(DOWN * 0.25)
-        items[4].shift(DOWN * 0.25 + RIGHT * 0.4)
-        head = label(r"From a speedrun trick to frontier models", font_size=36).to_edge(UP, buff=0.5)
-        src = source(r"Jordan et al.\ 2024; Liu et al.\ arXiv 2502.16982; Kimi K2 report; DeepSeek-V4 report; Wen et al.\ arXiv 2509.02046")
+        head = label(r"From a speedrun trick to frontier models", font_size=34).to_edge(UP, buff=0.35)
+        src = source(r"Jordan et al.\ 2024; Liu et al.\ arXiv 2502.16982; Kimi K2 report; GLM-4.5 report; DeepSeek-V4 report; "
+                     r"Wen et al.\ arXiv 2509.02046")
+        x0, x1, y = -6.0, 6.0, 1.3
+        t0, t1 = 2024.7, 2026.8
+
+        def X(t):
+            return x0 + (x1 - x0) * (t - t0) / (t1 - t0)
+        axis = Line([x0, y, 0], [x1, y, 0], color=GREY_C, stroke_width=2)
+        years = VGroup(*[VGroup(Line([X(t), y - 0.08, 0], [X(t), y + 0.08, 0], color=GREY_C, stroke_width=2),
+                                label(str(t), font_size=22, color=GREY_A).next_to([X(t), y, 0], DOWN, buff=0.15))
+                         for t in (2025, 2026)])
+        events = [  # (date, label, above?)
+            (2024.85, r"modded-nanoGPT\\speedrun", True),
+            (2025.13, r"\textbf{Moonlight}: about half\\the FLOPs of AdamW", False),
+            (2025.53, r"\textbf{Kimi K2}: MuonClip,\\1T parameters", True),
+            (2025.57, r"\textbf{GLM-4.5}", False),
+            (2026.29, r"\textbf{DeepSeek-V4}", True),
+            (2026.53, r"\textbf{Kimi K3}", False),
+        ]
+        marks = VGroup()
+        for t, txt, up in events:
+            d = Dot([X(t), y, 0], radius=0.08, color=C.MUON)
+            stem = Line([X(t), y, 0], [X(t), y + (0.55 if up else -0.75), 0], color=C.MUON, stroke_width=1.5)
+            lab = label(txt, font_size=22).next_to(stem, UP if up else DOWN, buff=0.08)
+            marks.add(VGroup(stem, d, lab))
+        speed = 1 / self.frac
+        assert 1.5 < speed < 1.7
+        bars = bar_rows([(r"our pocket model, $\approx$1M parameters (lightly tuned)", speed - 1, C.MUON, rf"{speed:.1f}$\times$"),
+                         (r"0.1B parameters (Wen et al.)", 0.4, GREY_B, r"1.4$\times$"),
+                         (r"1.2B parameters (Wen et al.)", 0.1, GREY_B, r"1.1$\times$")],
+                        5.0, font_size=22, bar_h=0.3, buff=0.14)
+        bt = label(r"Muon's speed-up over AdamW (tokens to reach the same loss), bar = gain above 1$\times$", font_size=22,
+                   color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
+        cav = VGroup(bt, bars).to_edge(DOWN, buff=0.6).set_x(0)
         with self.voiceover(
-            "Muon began in 2024 as a trick for a community speedrun of small GPT models. In 2025, Moonshot showed it "
-            "scales, needing about half the training compute of AdamW, and trained the trillion-parameter Kimi K2 "
-            "with it. By 2026, Zhipu's GLM models, DeepSeek-V4 and Kimi K3 all use Muon variants. <bookmark mark='c'/> "
-            "One caveat: a careful 2025 benchmark found the speed-up shrinks as models grow, from 1.4 times at a "
-            "hundred million parameters to 1.1 times at 1.2 billion. Optimizer gains are real, but they're hard to "
-            "measure at scale."
+            "Muon began in 2024 as a trick for a community speedrun of small GPT models. <bookmark mark='m'/> In "
+            "2025, Moonshot showed it scales, needing about half the training compute of AdamW, <bookmark mark='k'/> "
+            "and trained the trillion-parameter Kimi K2 with it. <bookmark mark='g'/> By 2026, Zhipu's GLM models, "
+            "DeepSeek-V4 and Kimi K3 all use Muon variants. <bookmark mark='c'/> One caveat: a careful 2025 "
+            "benchmark found the speed-up shrinks as models grow, from 1.4 times at a hundred million parameters to "
+            "1.1 times at 1.2 billion. <bookmark mark='o'/> Our tiny model's 1.6 fits that trend, though our tuning "
+            "was far lighter. Optimizer gains are real, but they're hard to measure at scale."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            self.play(LaggedStart(*[FadeIn(i, shift=RIGHT * 0.2) for i in items[:3]], lag_ratio=0.5), run_time=4.0)
+            self.play(FadeIn(head), FadeIn(src), Create(axis), FadeIn(years))
+            self.play(FadeIn(marks[0]))
+            vo.wait_until("m")
+            self.play(FadeIn(marks[1]))
+            vo.wait_until("k")
+            self.play(FadeIn(marks[2]))
+            vo.wait_until("g")
+            self.play(LaggedStart(*[FadeIn(m) for m in marks[3:]], lag_ratio=0.3))
             vo.wait_until("c")
-            self.play(FadeIn(items[3]), FadeIn(items[4]))
+            self.play(FadeIn(bt), *[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2])) for r in bars[1:]])
+            vo.wait_until("o")
+            self.play(FadeIn(bars[0][0]), GrowFromEdge(bars[0][1], LEFT), FadeIn(bars[0][2]))
         self.wait(0.4)
         self.clear_scene()
