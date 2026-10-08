@@ -115,7 +115,7 @@ class Preferences(VoiceoverScene):
             "<bookmark mark='l'/> The loss is minus the log of that probability, 0.34. <bookmark mark='g'/> Its slope "
             "with respect to A's score is minus 0.29, and with respect to B's, plus 0.29: each step raises A's score "
             "and lowers B's by the same amount. <bookmark mark='c'/> Once a pair is ranked confidently, say with a gap "
-            "of 3, the loss is 0.05 and the push shrinks to 0.05 too: the training effort goes to the comparisons the "
+            "of 3, the loss and the push both shrink to 0.05: the training effort goes to the comparisons the "
             "model still gets wrong. <bookmark mark='s'/> And only the gap matters: add ten to every score, and "
             "nothing changes."
         ) as vo:
