@@ -59,7 +59,7 @@ class Operations(VoiceoverScene):
             "clusters: an eight-GPU job ran, on average, forty-eight days between failures. <bookmark mark='b'/> A "
             "thousand-GPU job: about eight hours. <bookmark mark='c'/> Failures scale with the number of parts, so at "
             "sixteen thousand GPUs you'd expect one every couple of hours, <bookmark mark='d'/> and at a hundred "
-            "thousand, every few minutes."
+            "thousand, about every quarter of an hour."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot), FadeIn(src))
             for i, m in enumerate("abcd"):
