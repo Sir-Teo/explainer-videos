@@ -249,7 +249,7 @@ Imitation only goes so far. For many qualities, it's far easier to judge an answ
 
 Those choices train a reward model: a copy of the language model whose output is a single number, a score. It's trained so that the probability a person prefers answer A over answer B is the sigmoid of the difference between their scores. That's the Bradley-Terry model, from 1952.
 
-Here's one comparison with numbers. Say the reward model scores answer A at 1.3 and answer B at 0.4. Then it predicts that a person prefers A with probability sigma of 0.9: 71 percent. The loss is minus the log of that probability, 0.34. Its slope with respect to A's score is minus 0.29, and with respect to B's, plus 0.29: each step raises A's score and lowers B's by the same amount. Once a pair is ranked confidently, say with a gap of 3, the loss is 0.05 and the push shrinks to 0.05 too: the training effort goes to the comparisons the model still gets wrong. And only the gap matters: add ten to every score, and nothing changes.
+Here's one comparison with numbers. Say the reward model scores answer A at 1.3 and answer B at 0.4. Then it predicts that a person prefers A with probability sigma of 0.9: 71 percent. The loss is minus the log of that probability, 0.34. Its slope with respect to A's score is minus 0.29, and with respect to B's, plus 0.29: each step raises A's score and lowers B's by the same amount. Once a pair is ranked confidently, say with a gap of 3, the loss and the push both shrink to 0.05: the training effort goes to the comparisons the model still gets wrong. And only the gap matters: add ten to every score, and nothing changes.
 
 Then comes reinforcement learning. The model writes answers, the reward model scores them, and the model is nudged toward the answers that score higher, with one constraint: a penalty for drifting too far from the fine-tuned model it started from, measured by the KL divergence. This is RLHF, reinforcement learning from human feedback: the recipe behind InstructGPT and the first ChatGPT.
 
@@ -299,4 +299,4 @@ Almost everything in this video comes from open-weight labs and open-source proj
 
 ---
 
-8524 words (~55 min at 155 wpm).
+8522 words (~55 min at 155 wpm).
