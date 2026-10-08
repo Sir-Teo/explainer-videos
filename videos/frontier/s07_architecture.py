@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import DSV3, KIMI_K2, label, load, note, schematic_tag, source
+from videos.frontier.common import DSV3, KIMI_K2, bar_rows, label, load, note, schematic_tag, source
 
 EXPERT_COLORS = [PURPLE_B, TEAL_C, GOLD_C, PINK, BLUE_C, GREEN_C, RED_C, ORANGE]
 
@@ -246,21 +246,81 @@ class Architecture(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def other_shifts(self):
-        items = VGroup(
-            label(r"\textbf{Sparse attention} (DeepSeek-V3.2, GLM-5): each token attends to its top 2{,}048 earlier tokens", font_size=27),
-            label(r"\textbf{Hybrid linear attention} (Qwen3.5, Kimi K3): 3 linear-time layers for every full-attention layer", font_size=27),
-            label(r"\textbf{Multi-token prediction} (DeepSeek-V3/V4, GLM-5, Qwen3-Next): extra heads predict further ahead", font_size=27),
-            label(r"\textbf{1-million-token context}, reached in stages late in training", font_size=27),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
-        head = label(r"Other 2025--26 shifts, mostly for long contexts and cheaper inference", font_size=32).to_edge(UP, buff=0.5)
+        head = label(r"Other 2025--26 shifts, mostly for long contexts and cheaper inference", font_size=32).to_edge(UP, buff=0.35)
+
+        def titled(title, who, body, caption):
+            t = VGroup(label(title, font_size=26), label(who, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.06)
+            return VGroup(t, body, label(caption, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.22)
+
+        # (a) sparse attention: a causal attention pattern where each token keeps only its top few earlier tokens
+        n, k = 10, 4
+        rng = np.random.default_rng(2)
+        cells, keep = VGroup(), []
+        for i in range(n):
+            picks = {i} | set(rng.choice(i, min(k, i + 1) - 1, replace=False).tolist()) if i else {0}
+            for j in range(i + 1):
+                sq = Square(0.14, stroke_width=0, fill_color=C.ATTN, fill_opacity=0.8).move_to([j * 0.17, -i * 0.17, 0])
+                cells.add(sq)
+                keep.append((i, j) in {(i, q) for q in picks})
+        qk = VGroup(cells, label(r"keys (earlier tokens) $\rightarrow$", font_size=18, color=GREY_B).next_to(cells, UP, buff=0.08))
+        pa = titled(r"\textbf{Sparse attention}", r"DeepSeek-V3.2, GLM-5", qk, r"each token reads only its top 2{,}048 earlier tokens")
+        # (b) hybrid stacks: three linear-time layers for every full-attention layer
+        layers = VGroup(*[RoundedRectangle(width=0.5, height=1.3, corner_radius=0.06, stroke_width=0,
+                                           fill_color=C.ATTN if (i + 1) % 4 == 0 else C.KEPT, fill_opacity=0.85)
+                          for i in range(8)]).arrange(RIGHT, buff=0.1)
+        lk = VGroup(VGroup(Square(0.16, stroke_width=0, fill_color=C.KEPT, fill_opacity=0.85), label(r"linear-time", font_size=18)).arrange(RIGHT, buff=0.08),
+                    VGroup(Square(0.16, stroke_width=0, fill_color=C.ATTN, fill_opacity=0.85), label(r"full attention", font_size=18)).arrange(RIGHT, buff=0.08)
+                    ).arrange(RIGHT, buff=0.3)
+        pb = titled(r"\textbf{Hybrid layers}", r"Qwen3.5, Kimi K3", VGroup(layers, lk).arrange(DOWN, buff=0.15),
+                    r"3 linear-time layers for every full-attention layer")
+        # (c) multi-token prediction
+        ctx = VGroup(*[label(w, font_size=22) for w in (r"the", r"cat", r"sat", r"on")]).arrange(RIGHT, buff=0.18)
+        mdl = RoundedRectangle(width=2.6, height=0.6, corner_radius=0.1, stroke_color=C.PARAMS, fill_color=C.PARAMS, fill_opacity=0.15)
+        mdl.add(label(r"model", font_size=22).move_to(mdl))
+        mdl.next_to(ctx, DOWN, buff=0.3)
+        h1 = label(r"next: ``the''", font_size=22, color=C.KEPT)
+        h2 = label(r"one further: ``mat''", font_size=22, color=C.EDU)
+        VGroup(h1, h2).arrange(RIGHT, buff=0.5).next_to(mdl, DOWN, buff=0.45)
+        ar = VGroup(Arrow(mdl.get_bottom(), h1.get_top(), buff=0.06, stroke_width=3, color=C.KEPT),
+                    Arrow(mdl.get_bottom(), h2.get_top(), buff=0.06, stroke_width=3, color=C.EDU))
+        mtp_body = VGroup(ctx, mdl, h1, h2, ar)
+        pc = titled(r"\textbf{Multi-token prediction}", r"DeepSeek-V3/V4, GLM-5, Qwen3-Next", mtp_body,
+                    r"an extra head guesses further ahead: more signal, faster decoding")
+        # (d) context length, log scale
+        ctxs = [(r"GPT-3 (2020)", 2_048), (r"Llama 3.1 (2024)", 131_072), (r"common in 2026", 1_048_576)]
+        bars = bar_rows([(nm, np.log2(v) - 9, C.DATA, lab) for (nm, v), lab in zip(ctxs, [r"2K", r"128K", r"1M"])],
+                        3.0 / (np.log2(1_048_576) - 9), font_size=20, bar_h=0.3, buff=0.18)
+        pd = titled(r"\textbf{Million-token context}", r"tokens a model can read at once (log scale)", bars,
+                    r"reached in stages, late in training")
+        grid = VGroup(pa, pb, pc, pd)
+        for g in grid:
+            g.scale_to_fit_height(min(g.height, 2.95))
+        cell_w, cell_h = 6.6, 3.25
+        for g, (cx, cy) in zip(grid, [(-3.4, 1.3), (3.4, 1.3), (-3.4, -2.05), (3.4, -2.05)]):
+            g.move_to([cx, cy, 0])
+        frames = VGroup(*[RoundedRectangle(width=cell_w, height=cell_h, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.2).move_to(g)
+                          for g in grid])
         with self.voiceover(
             "A few other shifts are reshaping the blueprint, mostly to make long contexts and inference cheaper. "
-            "Sparse attention lets each token look at only its most relevant earlier tokens. Hybrid models replace "
-            "three of every four attention layers with cheaper linear-time layers. Multi-token prediction adds heads "
-            "that guess several tokens ahead, both as extra training signal and to speed up generation. And context "
-            "windows of a million tokens are now common, reached in stages near the end of training."
+            "<bookmark mark='a'/> Sparse attention lets each token look at only its most relevant earlier tokens. "
+            "<bookmark mark='b'/> Hybrid models replace three of every four attention layers with cheaper linear-time "
+            "layers. <bookmark mark='c'/> Multi-token prediction adds heads that guess several tokens ahead, both as "
+            "extra training signal and to speed up generation. <bookmark mark='d'/> And context windows of a million "
+            "tokens are now common, reached in stages near the end of training."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(i, shift=RIGHT * 0.2) for i in items], lag_ratio=0.6), run_time=vo.remaining() * 0.7)
+            self.play(FadeIn(head), FadeIn(schematic_tag(DR)), FadeIn(frames))
+            vo.wait_until("a")
+            self.play(FadeIn(pa[0]), FadeIn(pa[2]), FadeIn(qk[1]), LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.01), run_time=1.0)
+            self.play(*[c.animate.set_fill(opacity=0.12) for c, kk in zip(cells, keep) if not kk], run_time=1.0)
+            vo.wait_until("b")
+            self.play(FadeIn(pb[0]), FadeIn(pb[2]), FadeIn(pb[1][1]), LaggedStart(*[GrowFromEdge(L_, DOWN) for L_ in layers], lag_ratio=0.1), run_time=1.2)
+            vo.wait_until("c")
+            self.play(FadeIn(pc[0]), FadeIn(pc[2]), FadeIn(ctx), FadeIn(mdl))
+            self.play(GrowArrow(ar[0]), FadeIn(h1))
+            self.play(GrowArrow(ar[1]), FadeIn(h2))
+            vo.wait_until("d")
+            self.play(FadeIn(pd[0]), FadeIn(pd[2]),
+                      LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2])) for r in bars], lag_ratio=0.3),
+                      run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
