@@ -1,6 +1,6 @@
 # Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3
 
-A __LENGTH__-minute, 16-chapter explainer of how the three strongest open-weights
+A 33-minute, 16-chapter explainer of how the three strongest open-weights
 language models work inside. The models were picked by the [Artificial
 Analysis Intelligence Index](https://artificialanalysis.ai/models/open-source)
 (v4.3.2, as of **October 8, 2026**): Xiaomi's **MiMo-V2.6-Pro** (46), Z.ai's
@@ -37,7 +37,22 @@ labeled `schematic`.
 
 <details><summary>Chapters</summary>
 
-__CHAPTERS__
+- `0:00` Three open frontier models
+- `2:36` The blueprint, and its two bills
+- `4:10` Mixture of experts
+- `6:11` Routing, and keeping the experts busy
+- `8:52` The million-token problem
+- `10:06` MiMo: look nearby, mostly
+- `12:14` MiMo: permission to look at nothing
+- `14:34` GLM: compress the memory
+- `16:43` GLM: read only what matters
+- `19:02` Kimi: a memory that never grows
+- `20:56` Kimi: the delta rule, and forgetting
+- `23:15` Kimi: three to one
+- `25:14` Kimi: attention across depth
+- `27:16` Kimi: 896 experts, kept stable
+- `29:14` Side by side
+- `31:23` Recap
 
 </details>
 
