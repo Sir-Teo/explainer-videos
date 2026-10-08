@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, label, load, mtex, note, pct_fmt, real_tag, schematic_tag, smooth, source
+from videos.rl.common import Plot, label, mtex, pct_fmt, real_tag, source
 from videos.rl.compute import load_run
 
 EPS = 0.2
@@ -58,7 +58,6 @@ class PPO(VoiceoverScene):
             unc = p.line(xs, xs * A, color=GREY_B, stroke_width=2)
             unc.set_stroke(opacity=0.5)
             cl = p.line(xs, clip_obj(xs, A), color=color, stroke_width=5)
-            flat = (xs > 1 + EPS) if A > 0 else (xs < 1 - EPS)
             x0, x1 = (1 + EPS, 2) if A > 0 else (0, 1 - EPS)
             shade = Polygon(p.c2p(x0, -2), p.c2p(x1, -2), p.c2p(x1, 2), p.c2p(x0, 2), stroke_width=0,
                             fill_color=GREY_D, fill_opacity=0.35)

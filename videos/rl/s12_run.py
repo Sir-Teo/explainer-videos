@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, label, load, mtex, note, pct_fmt, real_tag, smooth, source, tokens
-from videos.rl.compute import HERO, load_run, prompt_text
+from videos.rl.common import Plot, label, load, pct_fmt, real_tag, smooth, tokens
+from videos.rl.compute import load_run
 
 ALGOS = [
     ("reinforce", r"REINFORCE, no baseline", C.PENALTY),
@@ -30,10 +30,13 @@ class RealRun(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hero(self):
-        e = evals(HERO)
+        runs = [evals(f"grpo_s{s}") for s in range(3)]  # the same numbers as the README: means over 3 seeds
+        assert all(np.array_equal(r["step"], runs[0]["step"]) for r in runs)
+        e = {k: np.mean([r[k] for r in runs], axis=0) for k in runs[0]}
         S = e["step"][-1]
         plot = Plot(x_range=(0, S), y_range=(0, 1), width=8.2, height=4.3, x_ticks=list(np.linspace(0, S, 5).astype(int)),
-                    y_ticks=[0, 0.25, 0.5, 0.75, 1], y_fmt=pct_fmt, x_label=r"RL step (32 problems $\times$ 8 answers each)")
+                    y_ticks=[0, 0.25, 0.5, 0.75, 1], y_fmt=pct_fmt,
+                    x_label=r"RL step (32 problems $\times$ 8 answers each; mean of 3 seeds)")
         plot.move_to(LEFT * 1.5 + DOWN * 0.45)
         spec = [("pass1", r"right, overall", C.REWARD, 5), ("acc_direct", r"right, when answering directly", WHITE, 3),
                 ("acc_think", r"right, when showing work", C.WORK_TOK, 3), ("think_frac", r"shows its work", C.LENGTH, 3)]
@@ -43,7 +46,7 @@ class RealRun(VoiceoverScene):
             keys.add(VGroup(Line(ORIGIN, RIGHT * 0.4, color=col, stroke_width=5), label(txt, font_size=22)).arrange(RIGHT, buff=0.12))
         keys.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(plot, RIGHT, buff=0.25).shift(UP * 0.5)
         head = label(r"The adder, trained with GRPO: reward 1 if right, 0 if wrong", font_size=30).to_edge(UP, buff=0.3)
-        p0, p1 = e["pass1"][0], e["pass1"][-1]
+        p0 = e["pass1"][0]
         d0, d1 = e["acc_direct"][0], e["acc_direct"][-1]
         t0, t1 = e["think_frac"][0], e["think_frac"][-1]
         k40 = int(np.searchsorted(e["step"], 40))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer import *  # noqa: F403
-from videos.rl.common import label, mtex, note
+from videos.rl.common import label
 
 
 class Outro(VoiceoverScene):

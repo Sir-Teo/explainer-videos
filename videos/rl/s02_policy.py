@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import (AnswerTree, Mono, label, load, mtex, note, part_card, real_tag, tokens, union_texts)
+from videos.rl.common import (AnswerTree, label, load, mtex, part_card, real_tag, tokens, union_texts)
 from videos.rl.compute import P_SLIP, P_THINK, answer_text, prompt_text
 
 

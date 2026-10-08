@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Mono, Plot, exact_tag, label, load, mtex, note, real_tag, smooth, source, why
+from videos.rl.common import Plot, exact_tag, label, mtex, real_tag, smooth, source, why
 from videos.rl.compute import HERO, load_run
 
 

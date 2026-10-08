@@ -5,7 +5,7 @@ from math import comb
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import (Plot, color_grpo, exact_tag, grpo_objective, label, load, mtex, note, part_card, real_tag,
+from videos.rl.common import (Plot, color_grpo, exact_tag, grpo_objective, label, load, mtex, part_card, real_tag,
                               source, tokens, why)
 from videos.rl.compute import prompt_text
 
