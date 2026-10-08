@@ -1,0 +1,3591 @@
+1
+00:00:00,275 --> 00:00:05,838
+In 1827, the botanist Robert Brown put grains of pollen in water, and looked
+
+2
+00:00:05,838 --> 00:00:09,325
+at the tiny particles they released under his microscope.
+
+3
+00:00:09,325 --> 00:00:11,638
+The particles never stopped moving.
+
+4
+00:00:11,638 --> 00:00:16,908
+Each one jittered, darting this way and that, for no visible reason.
+
+5
+00:00:16,908 --> 00:00:20,258
+And the jitter isn't a vibration around some home position.
+
+6
+00:00:20,258 --> 00:00:21,821
+The particle wanders.
+
+7
+00:00:21,821 --> 00:00:23,071
+Watch its trail:
+
+8
+00:00:23,071 --> 00:00:28,058
+it never settles, and it never retraces a smooth curve.
+
+9
+00:00:28,242 --> 00:00:31,367
+In 1905, Einstein explained it.
+
+10
+00:00:31,367 --> 00:00:36,092
+The particle is being hit from every side by water molecules, and at any instant
+
+11
+00:00:36,092 --> 00:00:38,354
+the kicks never quite cancel.
+
+12
+00:00:38,354 --> 00:00:42,917
+The leftover push points somewhere new every moment.
+
+13
+00:00:43,075 --> 00:00:46,863
+Release a crowd of such particles from one point, and they spread out like
+
+14
+00:00:46,863 --> 00:00:48,213
+a drop of ink.
+
+15
+00:00:48,213 --> 00:00:50,850
+Einstein's key prediction was how fast:
+
+16
+00:00:50,850 --> 00:00:54,963
+the average squared distance grows in proportion to time, so the width of
+
+17
+00:00:54,963 --> 00:00:57,863
+the cloud grows like the square root of time.
+
+18
+00:00:57,863 --> 00:01:02,125
+A few years later, Jean Perrin measured exactly that, and used it to count
+
+19
+00:01:02,125 --> 00:01:04,550
+molecules.
+
+20
+00:01:04,792 --> 00:01:09,054
+Now follow just one coordinate of one particle as time goes by, and you get
+
+21
+00:01:09,054 --> 00:01:10,479
+a graph like this.
+
+22
+00:01:10,479 --> 00:01:12,267
+This is Brownian motion:
+
+23
+00:01:12,267 --> 00:01:15,792
+the mathematician's idealized version of that jitter.
+
+24
+00:01:15,792 --> 00:01:20,892
+Louis Bachelier used it in 1900 to model prices on the Paris stock exchange,
+
+25
+00:01:20,892 --> 00:01:24,254
+and Norbert Wiener made it rigorous in the 1920s.
+
+26
+00:01:24,254 --> 00:01:28,854
+Today it's the basic model of noise in physics, biology, engineering, and
+
+27
+00:01:28,854 --> 00:01:31,192
+finance.
+
+28
+00:01:31,317 --> 00:01:33,529
+And it breaks ordinary calculus.
+
+29
+00:01:33,529 --> 00:01:35,179
+Here's a simple test.
+
+30
+00:01:35,179 --> 00:01:40,229
+In ordinary calculus, the integral of s d s, from zero to x, is x squared
+
+31
+00:01:40,229 --> 00:01:41,392
+over two.
+
+32
+00:01:41,392 --> 00:01:46,467
+So for our path, the integral of W d W, from time zero to time one, ought
+
+33
+00:01:46,467 --> 00:01:50,200
+to be W at time one, squared, over two.
+
+34
+00:01:50,200 --> 00:01:52,962
+Let's just compute it, the way integrals are defined:
+
+35
+00:01:52,962 --> 00:01:58,025
+chop time into steps, multiply W by its change over each step, and add up.
+
+36
+00:01:58,025 --> 00:02:00,500
+We'll use more than four million steps.
+
+37
+00:02:00,500 --> 00:02:06,650
+Our path ends at 1.2528, so half its square is 0.7847.
+
+38
+00:02:06,650 --> 00:02:10,112
+But the sum comes out to 0.2847.
+
+39
+00:02:10,112 --> 00:02:13,200
+We're off by 0.5000.
+
+40
+00:02:13,200 --> 00:02:15,050
+Maybe that path was special.
+
+41
+00:02:15,050 --> 00:02:18,987
+So here are five more, each with sixty-five thousand steps.
+
+42
+00:02:18,987 --> 00:02:19,937
+The gaps:
+
+43
+00:02:19,937 --> 00:02:28,987
+0.498, 0.501, 0.503, 0.499, 0.495.
+
+44
+00:02:28,987 --> 00:02:33,025
+Every time, almost exactly one half.
+
+45
+00:02:33,208 --> 00:02:37,021
+That missing half isn't rounding error, and it isn't bad luck.
+
+46
+00:02:37,021 --> 00:02:41,308
+The true answer is one half W squared, minus one half.
+
+47
+00:02:41,308 --> 00:02:45,346
+And that extra term is the first sign of a different kind of calculus:
+
+48
+00:02:45,346 --> 00:02:51,408
+stochastic calculus, created by Kiyosi Itô in the 1940s.
+
+49
+00:02:51,542 --> 00:02:52,717
+Here's the plan.
+
+50
+00:02:52,717 --> 00:02:56,404
+First, Brownian motion itself, and the one strange fact that drives everything
+
+51
+00:02:56,404 --> 00:02:57,254
+else:
+
+52
+00:02:57,254 --> 00:02:58,967
+d W squared equals d t.
+
+53
+00:02:58,967 --> 00:03:02,104
+Then the Itô integral, and where the missing half comes from.
+
+54
+00:03:02,104 --> 00:03:03,392
+Then Itô's lemma:
+
+55
+00:03:03,392 --> 00:03:05,879
+the chain rule, corrected for randomness.
+
+56
+00:03:05,879 --> 00:03:09,592
+Then the equations of noise, and a surprising bridge between random paths
+
+57
+00:03:09,592 --> 00:03:12,192
+and the partial differential equations of physics.
+
+58
+00:03:12,192 --> 00:03:13,942
+And finally two payoffs:
+
+59
+00:03:13,942 --> 00:03:18,217
+how Black and Scholes priced options by hedging the noise away, and how Girsanov's
+
+60
+00:03:18,217 --> 00:03:19,917
+theorem changes the odds.
+
+61
+00:03:25,772 --> 00:03:29,947
+Brownian motion is the limit of the simplest random process there is.
+
+62
+00:03:29,947 --> 00:03:31,434
+Flip a fair coin.
+
+63
+00:03:31,434 --> 00:03:32,909
+Heads, take a step up;
+
+64
+00:03:32,909 --> 00:03:34,560
+tails, a step down.
+
+65
+00:03:34,560 --> 00:03:39,322
+Do it again, and again, and you trace out a random walk.
+
+66
+00:03:39,490 --> 00:03:43,565
+To get something in continuous time, we'll squeeze n steps into one unit of
+
+67
+00:03:43,565 --> 00:03:44,553
+time.
+
+68
+00:03:44,553 --> 00:03:48,065
+Each step takes a time delta t, equal to one over n.
+
+69
+00:03:48,065 --> 00:03:50,003
+But how tall should each step be?
+
+70
+00:03:50,003 --> 00:03:52,632
+Call the step size delta x.
+
+71
+00:03:52,632 --> 00:03:55,507
+There's only one choice that works, and here's why.
+
+72
+00:03:55,507 --> 00:03:59,607
+At time t, the walker's position is delta x times a sum of plus and minus
+
+73
+00:03:59,607 --> 00:04:02,132
+ones, one for each step taken.
+
+74
+00:04:02,132 --> 00:04:05,507
+The coin flips are independent, so their variances add:
+
+75
+00:04:05,507 --> 00:04:09,707
+the number of steps, t over delta t, times the variance of each step, delta
+
+76
+00:04:09,707 --> 00:04:10,844
+x squared.
+
+77
+00:04:10,844 --> 00:04:14,824
+That's t, times delta x squared over delta t.
+
+78
+00:04:14,824 --> 00:04:17,111
+So everything depends on that ratio.
+
+79
+00:04:17,111 --> 00:04:21,049
+Make the steps as small as the time steps, and the variance dies away:
+
+80
+00:04:21,049 --> 00:04:22,411
+the walk freezes.
+
+81
+00:04:22,411 --> 00:04:26,261
+Make them bigger, like the fourth root, and the variance blows up.
+
+82
+00:04:26,261 --> 00:04:30,049
+Only steps of size square root of delta t keep it finite:
+
+83
+00:04:30,049 --> 00:04:33,036
+space has to scale like the square root of time.
+
+84
+00:04:33,036 --> 00:04:37,674
+That square root is the seed of everything in this video.
+
+85
+00:04:37,790 --> 00:04:39,915
+Here's that argument as a picture.
+
+86
+00:04:39,915 --> 00:04:42,390
+Three panels, the same coin flips in each;
+
+87
+00:04:42,390 --> 00:04:44,128
+only the step height differs.
+
+88
+00:04:44,128 --> 00:04:45,278
+Now let n grow.
+
+89
+00:04:45,278 --> 00:04:46,653
+Sixty-four steps.
+
+90
+00:04:46,653 --> 00:04:48,453
+Two hundred and fifty-six.
+
+91
+00:04:48,453 --> 00:04:49,415
+A thousand.
+
+92
+00:04:49,415 --> 00:04:50,665
+Four thousand.
+
+93
+00:04:50,665 --> 00:04:54,415
+With steps as small as delta t, the walk flattens to nothing.
+
+94
+00:04:54,415 --> 00:04:57,015
+With the fourth root, it runs off the chart.
+
+95
+00:04:57,015 --> 00:05:00,490
+But with the square root, the picture keeps the same overall size and just
+
+96
+00:05:00,490 --> 00:05:04,790
+gets finer and finer, rougher and rougher.
+
+97
+00:05:04,915 --> 00:05:06,865
+And what does the endpoint look like?
+
+98
+00:05:06,865 --> 00:05:11,353
+At time one, it's a sum of n independent coin flips, divided by root n.
+
+99
+00:05:11,353 --> 00:05:16,253
+The central limit theorem says that as n grows, that becomes a bell curve:
+
+100
+00:05:16,253 --> 00:05:20,115
+a normal distribution with mean zero and variance one.
+
+101
+00:05:20,115 --> 00:05:23,790
+Run many walks, and pile up where they end.
+
+102
+00:05:23,790 --> 00:05:25,078
+Two hundred walks.
+
+103
+00:05:25,078 --> 00:05:25,903
+Two thousand.
+
+104
+00:05:25,903 --> 00:05:26,965
+Twenty thousand.
+
+105
+00:05:26,965 --> 00:05:30,015
+And the bell curve emerges.
+
+106
+00:05:30,649 --> 00:05:35,286
+Take the limit at every time, not just at the end, and you get Brownian motion,
+
+107
+00:05:35,286 --> 00:05:36,224
+written W of t.
+
+108
+00:05:36,224 --> 00:05:38,299
+Here are two hundred of its paths.
+
+109
+00:05:38,299 --> 00:05:43,036
+At each time t, W of t is a bell curve with mean zero and variance t.
+
+110
+00:05:43,036 --> 00:05:46,236
+So the spread of the paths grows like the square root of t:
+
+111
+00:05:46,236 --> 00:05:51,036
+about two thirds stay within one root t, and ninety-five percent within two.
+
+112
+00:05:51,036 --> 00:05:56,399
+The same square root law that Einstein found for the spreading cloud.
+
+113
+00:05:56,982 --> 00:05:59,469
+Let's pin down exactly what we've built.
+
+114
+00:05:59,469 --> 00:06:01,682
+Brownian motion starts at zero.
+
+115
+00:06:01,682 --> 00:06:05,382
+What it does over one stretch of time is independent of what it did over any
+
+116
+00:06:05,382 --> 00:06:08,494
+earlier stretch, just like fresh coin flips.
+
+117
+00:06:08,494 --> 00:06:12,857
+Each increment, from time s to time t, is a bell curve with mean zero and
+
+118
+00:06:12,857 --> 00:06:14,557
+variance t minus s:
+
+119
+00:06:14,557 --> 00:06:15,882
+the elapsed time.
+
+120
+00:06:15,882 --> 00:06:18,044
+And its paths are continuous:
+
+121
+00:06:18,044 --> 00:06:19,624
+no jumps.
+
+122
+00:06:19,624 --> 00:06:24,249
+Norbert Wiener proved in 1923 that a process with exactly these properties
+
+123
+00:06:24,249 --> 00:06:29,424
+exists, and Monroe Donsker proved that rescaled random walks converge to it,
+
+124
+00:06:29,424 --> 00:06:34,761
+whatever the step distribution, as long as it has mean zero and finite variance.
+
+125
+00:06:34,761 --> 00:06:37,336
+So Brownian motion is universal:
+
+126
+00:06:37,336 --> 00:06:41,461
+it's what any accumulation of many small, independent kicks looks like from
+
+127
+00:06:41,461 --> 00:06:42,399
+far away.
+
+128
+00:06:44,567 --> 00:06:48,305
+Brownian paths are continuous, but they're strange in another way.
+
+129
+00:06:48,305 --> 00:06:50,480
+Here's an ordinary smooth curve.
+
+130
+00:06:50,480 --> 00:06:54,567
+Let's zoom in on one point, by the same factor in both directions.
+
+131
+00:06:54,567 --> 00:06:58,580
+Four times, sixteen, sixty-four, two hundred and fifty-six.
+
+132
+00:06:58,580 --> 00:07:02,130
+The curve straightens out, until it's indistinguishable from a line:
+
+133
+00:07:02,130 --> 00:07:03,605
+its tangent line.
+
+134
+00:07:03,605 --> 00:07:05,617
+That's what having a derivative means:
+
+135
+00:07:05,617 --> 00:07:09,317
+up close, the curve is a line.
+
+136
+00:07:09,817 --> 00:07:14,367
+Now do the same to our Brownian path, zooming four times in both directions,
+
+137
+00:07:14,367 --> 00:07:16,005
+again and again.
+
+138
+00:07:16,005 --> 00:07:19,217
+Instead of straightening out, it gets steeper and wilder:
+
+139
+00:07:19,217 --> 00:07:22,305
+the wiggles shoot off the top and bottom of the window.
+
+140
+00:07:22,305 --> 00:07:25,892
+There is no tangent line to find.
+
+141
+00:07:26,334 --> 00:07:28,296
+Here's the zoom that does work.
+
+142
+00:07:28,296 --> 00:07:32,309
+Every time you stretch time by four, stretch space by only two:
+
+143
+00:07:32,309 --> 00:07:33,984
+the square root of four.
+
+144
+00:07:33,984 --> 00:07:36,284
+Now every level looks like the one before:
+
+145
+00:07:36,284 --> 00:07:40,234
+just as rough, just as wild, statistically the same picture.
+
+146
+00:07:40,234 --> 00:07:44,559
+These are all one path, simulated at four million points, and we could keep
+
+147
+00:07:44,559 --> 00:07:47,084
+going forever.
+
+148
+00:07:48,292 --> 00:07:49,280
+In symbols:
+
+149
+00:07:49,280 --> 00:07:53,667
+Brownian motion with time sped up by a factor c has the same distribution
+
+150
+00:07:53,667 --> 00:07:56,130
+as the original, scaled up by root c.
+
+151
+00:07:56,130 --> 00:07:57,392
+It's a fractal.
+
+152
+00:07:57,392 --> 00:07:59,442
+And that same square root again:
+
+153
+00:07:59,442 --> 00:08:03,542
+zooming in never reveals anything smooth.
+
+154
+00:08:04,234 --> 00:08:06,496
+This kills the derivative for good.
+
+155
+00:08:06,496 --> 00:08:09,384
+A derivative is the limit of secant slopes:
+
+156
+00:08:09,384 --> 00:08:13,159
+the change in W over a short time h, divided by h.
+
+157
+00:08:13,159 --> 00:08:17,609
+But that change is a bell curve with variance h, so the slope is a bell curve
+
+158
+00:08:17,609 --> 00:08:19,259
+with variance one over h.
+
+159
+00:08:19,259 --> 00:08:24,842
+Its typical size is one over root h, and as h shrinks, it blows up.
+
+160
+00:08:24,842 --> 00:08:27,380
+On our path, at the point we zoomed into:
+
+161
+00:08:27,380 --> 00:08:31,880
+each time h shrinks by four, the slope roughly doubles, from about four, to
+
+162
+00:08:31,880 --> 00:08:35,730
+eight, to over two hundred, right along with one over root h.
+
+163
+00:08:35,730 --> 00:08:41,517
+Brownian motion is continuous everywhere, and differentiable nowhere.
+
+164
+00:08:42,134 --> 00:08:44,446
+And there's an even stranger consequence.
+
+165
+00:08:44,446 --> 00:08:47,909
+Walk along the path and add up the size of every move, up or down:
+
+166
+00:08:47,909 --> 00:08:49,709
+the total distance traveled.
+
+167
+00:08:49,709 --> 00:08:52,784
+Sampled at sixteen steps, our path travels 4.0.
+
+168
+00:08:52,784 --> 00:08:55,684
+At 256 steps, 12.7.
+
+169
+00:08:55,684 --> 00:08:58,059
+At four thousand, 50.6.
+
+170
+00:08:58,059 --> 00:09:01,121
+And at four million steps, more than sixteen hundred.
+
+171
+00:09:01,121 --> 00:09:05,734
+Each time the steps get sixteen times finer, the distance quadruples, exactly
+
+172
+00:09:05,734 --> 00:09:07,892
+as the formula predicts.
+
+173
+00:09:07,892 --> 00:09:09,755
+In the limit, it's infinite.
+
+174
+00:09:09,755 --> 00:09:14,792
+A Brownian path has infinite length over every interval of time, however short.
+
+175
+00:09:14,792 --> 00:09:18,730
+And that's a real problem for calculus, because the classical way to integrate
+
+176
+00:09:18,730 --> 00:09:23,042
+against a curve, the Riemann–Stieltjes integral, needs the curve to have finite
+
+177
+00:09:23,042 --> 00:09:23,892
+length.
+
+178
+00:09:23,892 --> 00:09:25,567
+So we need a new idea.
+
+179
+00:09:25,567 --> 00:09:27,280
+And it comes from a surprise:
+
+180
+00:09:27,280 --> 00:09:30,817
+add up the squares of those moves instead, and the sum doesn't blow up at
+
+181
+00:09:30,817 --> 00:09:31,417
+all.
+
+182
+00:09:33,365 --> 00:09:34,802
+Here's that surprise.
+
+183
+00:09:34,802 --> 00:09:37,890
+Take a smooth curve, and chop time into steps.
+
+184
+00:09:37,890 --> 00:09:42,352
+On each step, build a square whose side is the curve's change over that step.
+
+185
+00:09:42,352 --> 00:09:45,340
+Then pour all of the squares' area into this tank.
+
+186
+00:09:45,340 --> 00:09:48,315
+Its capacity is exactly one unit of area:
+
+187
+00:09:48,315 --> 00:09:52,831
+the same number as the length of our time interval, T equals one.
+
+188
+00:09:52,831 --> 00:09:56,331
+For a smooth curve, the squares fill only part of the tank.
+
+189
+00:09:56,331 --> 00:09:59,469
+And finer steps make it emptier and emptier:
+
+190
+00:09:59,469 --> 00:10:03,881
+each change is about the slope times delta t, so each square is about delta
+
+191
+00:10:03,881 --> 00:10:08,131
+t squared, and the n of them add up to something on the order of delta t,
+
+192
+00:10:08,131 --> 00:10:11,006
+which goes to zero.
+
+193
+00:10:11,681 --> 00:10:13,194
+Now the Brownian path.
+
+194
+00:10:13,194 --> 00:10:14,281
+Sixteen steps:
+
+195
+00:10:14,281 --> 00:10:17,631
+the squares more than fill the tank.
+
+196
+00:10:18,123 --> 00:10:19,298
+Sixty-four steps:
+
+197
+00:10:19,298 --> 00:10:21,231
+just over the brim.
+
+198
+00:10:21,231 --> 00:10:22,806
+Two hundred and fifty-six:
+
+199
+00:10:22,806 --> 00:10:24,390
+just under.
+
+200
+00:10:24,390 --> 00:10:25,227
+Four thousand:
+
+201
+00:10:25,227 --> 00:10:27,040
+0.993.
+
+202
+00:10:27,040 --> 00:10:27,952
+Four million:
+
+203
+00:10:27,952 --> 00:10:28,790
+1.0000.
+
+204
+00:10:28,790 --> 00:10:31,815
+The squares' total area converges to exactly one:
+
+205
+00:10:31,815 --> 00:10:34,540
+the elapsed time.
+
+206
+00:10:35,223 --> 00:10:35,773
+Why?
+
+207
+00:10:35,773 --> 00:10:39,898
+Each increment is a bell curve with variance delta t, so each square has an
+
+208
+00:10:39,898 --> 00:10:42,148
+expected area of exactly delta t.
+
+209
+00:10:42,148 --> 00:10:46,123
+Add up n of them, and the expected total is n delta t:
+
+210
+00:10:46,123 --> 00:10:48,565
+the elapsed time, T.
+
+211
+00:10:48,565 --> 00:10:50,240
+That's only the average.
+
+212
+00:10:50,240 --> 00:10:52,652
+But the randomness disappears too.
+
+213
+00:10:52,652 --> 00:10:56,802
+The variance of a single square works out to two delta t squared, using the
+
+214
+00:10:56,802 --> 00:11:00,402
+fact that a standard bell curve has fourth moment three.
+
+215
+00:11:00,402 --> 00:11:05,352
+The increments are independent, so the variances add, giving two T delta t.
+
+216
+00:11:05,352 --> 00:11:08,498
+And that goes to zero as the steps shrink.
+
+217
+00:11:08,498 --> 00:11:12,923
+A sum of many small, independent, positive pieces, whose fluctuations die
+
+218
+00:11:12,923 --> 00:11:13,635
+away:
+
+219
+00:11:13,635 --> 00:11:15,585
+it converges to a constant.
+
+220
+00:11:15,585 --> 00:11:17,023
+Not just on average.
+
+221
+00:11:17,023 --> 00:11:20,248
+On essentially every path.
+
+222
+00:11:20,798 --> 00:11:23,573
+Here it is across four thousand fresh paths.
+
+223
+00:11:23,573 --> 00:11:27,223
+With sixteen steps, the sum of squares is all over the place.
+
+224
+00:11:27,223 --> 00:11:30,323
+With 256, it bunches up around one.
+
+225
+00:11:30,323 --> 00:11:33,073
+With four thousand, it's nearly a spike.
+
+226
+00:11:33,073 --> 00:11:37,398
+The spread shrinks exactly like root of two over n.
+
+227
+00:11:37,931 --> 00:11:40,769
+The same is true at every moment along the way.
+
+228
+00:11:40,769 --> 00:11:44,731
+Add up the squares only up to time t, and plot that running total.
+
+229
+00:11:44,731 --> 00:11:47,469
+With sixteen steps it's a ragged staircase.
+
+230
+00:11:47,469 --> 00:11:48,794
+Refine the steps:
+
+231
+00:11:48,794 --> 00:11:51,944
+sixty-four, two fifty-six, four thousand.
+
+232
+00:11:51,944 --> 00:11:54,681
+The staircase lies down on the line y equals t.
+
+233
+00:11:54,681 --> 00:11:59,206
+The path is random, but its accumulated squared wiggle is a perfect clock:
+
+234
+00:11:59,206 --> 00:12:03,006
+quadratic variation equals time.
+
+235
+00:12:04,665 --> 00:12:08,640
+This is the one rule that makes stochastic calculus different, and we write
+
+236
+00:12:08,640 --> 00:12:10,190
+it in a single line:
+
+237
+00:12:10,190 --> 00:12:12,365
+d W squared equals d t.
+
+238
+00:12:12,365 --> 00:12:14,902
+It doesn't mean each little square equals delta t.
+
+239
+00:12:14,902 --> 00:12:19,752
+Each one is delta t times a random number with mean one, which can be almost
+
+240
+00:12:19,752 --> 00:12:22,065
+zero or bigger than four.
+
+241
+00:12:22,065 --> 00:12:26,640
+It means that in any sum over many small steps, the squares add up exactly
+
+242
+00:12:26,640 --> 00:12:28,673
+like delta t would.
+
+243
+00:12:28,673 --> 00:12:31,385
+And the other products of small quantities vanish.
+
+244
+00:12:31,385 --> 00:12:35,310
+d t times d t sums to T delta t, which goes to zero.
+
+245
+00:12:35,310 --> 00:12:40,385
+d t times d W sums to something like T root delta t, which also goes to zero.
+
+246
+00:12:40,385 --> 00:12:43,060
+Only d W times d W survives.
+
+247
+00:12:43,060 --> 00:12:46,360
+That's the multiplication table of stochastic calculus.
+
+248
+00:12:46,360 --> 00:12:50,898
+In ordinary calculus, every product of two small changes is negligible.
+
+249
+00:12:50,898 --> 00:12:56,148
+Here, d W is the size of root d t, so its square is as big as d t itself,
+
+250
+00:12:56,148 --> 00:12:57,098
+and it stays.
+
+251
+00:13:02,977 --> 00:13:06,177
+Most of science is written in differential equations:
+
+252
+00:13:06,177 --> 00:13:08,727
+the rate of change of X is some function of X.
+
+253
+00:13:08,727 --> 00:13:11,702
+To add randomness, it's natural to write:
+
+254
+00:13:11,702 --> 00:13:15,877
+rate of change equals a drift, plus some amplitude times noise.
+
+255
+00:13:15,877 --> 00:13:17,277
+But what is the noise?
+
+256
+00:13:17,277 --> 00:13:21,202
+It would have to be the derivative of Brownian motion, and we just saw that
+
+257
+00:13:21,202 --> 00:13:22,927
+doesn't exist.
+
+258
+00:13:22,927 --> 00:13:25,177
+Here's what happens if you try anyway:
+
+259
+00:13:25,177 --> 00:13:29,777
+the slopes of our path over steps of one sixty-fourth, one two-fifty-sixth,
+
+260
+00:13:29,777 --> 00:13:31,477
+and one four-thousandth.
+
+261
+00:13:31,477 --> 00:13:34,202
+The finer you look, the bigger the spikes.
+
+262
+00:13:34,202 --> 00:13:37,852
+There's no function there to converge to.
+
+263
+00:13:38,127 --> 00:13:40,714
+The way out is to never differentiate.
+
+264
+00:13:40,714 --> 00:13:42,939
+Integrate both sides instead.
+
+265
+00:13:42,939 --> 00:13:47,464
+X at time t is its starting value, plus the integral of the drift, which is
+
+266
+00:13:47,464 --> 00:13:51,127
+an ordinary integral, plus the integral of sigma d W.
+
+267
+00:13:51,127 --> 00:13:52,964
+That last one is new.
+
+268
+00:13:52,964 --> 00:13:57,064
+To make sense of noisy differential equations, we first have to define what
+
+269
+00:13:57,064 --> 00:14:01,252
+it means to integrate against a Brownian path.
+
+270
+00:14:01,769 --> 00:14:04,431
+The cleanest way to think about it is gambling.
+
+271
+00:14:04,431 --> 00:14:08,669
+Let W be the price of a stock, or your running score in a fair game.
+
+272
+00:14:08,669 --> 00:14:10,744
+Let H be how many shares you hold:
+
+273
+00:14:10,744 --> 00:14:11,881
+your stake.
+
+274
+00:14:11,881 --> 00:14:16,244
+Over one short step, your gain is your stake times the change in the price,
+
+275
+00:14:16,244 --> 00:14:19,927
+and your winnings, G, are the sum of all those gains.
+
+276
+00:14:19,927 --> 00:14:21,064
+Here's a strategy:
+
+277
+00:14:21,064 --> 00:14:23,714
+hold as many shares as the current price.
+
+278
+00:14:23,714 --> 00:14:25,102
+Watch it play out.
+
+279
+00:14:25,102 --> 00:14:29,239
+At the start of each step, you choose your stake, looking only at the past.
+
+280
+00:14:29,239 --> 00:14:33,639
+Then the curtain lifts, the price moves, and the gain, stake times move, goes
+
+281
+00:14:33,639 --> 00:14:35,902
+into your winnings.
+
+282
+00:14:35,902 --> 00:14:38,189
+Notice the one rule we followed.
+
+283
+00:14:38,189 --> 00:14:40,727
+Each stake was set before the price moved:
+
+284
+00:14:40,727 --> 00:14:44,364
+you could see the past, but the future was behind a curtain.
+
+285
+00:14:44,364 --> 00:14:49,014
+A strategy that never peeks is called adapted, or non-anticipating, and it's
+
+286
+00:14:49,014 --> 00:14:51,377
+the only kind of integrand we allow.
+
+287
+00:14:51,377 --> 00:14:57,302
+It's also the only kind a real gambler, or a real investor, can use.
+
+288
+00:14:58,735 --> 00:15:03,185
+The Itô integral is what these winnings converge to as the steps shrink:
+
+289
+00:15:03,185 --> 00:15:07,185
+the limit of the sum of H at the left end of each step, decided before the
+
+290
+00:15:07,185 --> 00:15:12,060
+move, times the change in W across the step.
+
+291
+00:15:12,194 --> 00:15:16,069
+Despite the path's infinite length, these sums do converge, because the random
+
+292
+00:15:16,069 --> 00:15:19,169
+gains and losses cancel each other in a controlled way;
+
+293
+00:15:19,169 --> 00:15:21,356
+we'll see exactly how in a moment.
+
+294
+00:15:21,356 --> 00:15:25,606
+Here's the same strategy with sixty-four steps, two hundred and fifty-six,
+
+295
+00:15:25,606 --> 00:15:26,956
+four thousand.
+
+296
+00:15:26,956 --> 00:15:31,069
+The winnings settle onto one curve, and at time one they settle onto a number
+
+297
+00:15:31,069 --> 00:15:32,444
+we've seen before:
+
+298
+00:15:32,444 --> 00:15:36,194
+0.2847, the answer with the missing half.
+
+299
+00:15:38,322 --> 00:15:40,185
+So where does the missing half come from?
+
+300
+00:15:40,185 --> 00:15:43,972
+In ordinary calculus, it doesn't matter where inside each little step you
+
+301
+00:15:43,972 --> 00:15:45,472
+evaluate the integrand:
+
+302
+00:15:45,472 --> 00:15:47,785
+the left end, the right end, the middle.
+
+303
+00:15:47,785 --> 00:15:49,960
+All the choices give the same limit.
+
+304
+00:15:49,960 --> 00:15:50,822
+Not here.
+
+305
+00:15:50,822 --> 00:15:56,272
+On our path, sampling W at the left end of each step gives 0.2847.
+
+306
+00:15:56,272 --> 00:15:59,885
+Sampling at the right end gives 1.2847.
+
+307
+00:15:59,885 --> 00:16:03,522
+The midpoint gives 0.7847.
+
+308
+00:16:03,522 --> 00:16:07,722
+The right sum minus the left sum is the sum of W at the right end minus W
+
+309
+00:16:07,722 --> 00:16:10,510
+at the left end, times delta W:
+
+310
+00:16:10,510 --> 00:16:13,672
+that's the sum of the squares, delta W squared.
+
+311
+00:16:13,672 --> 00:16:15,347
+And we know where that goes:
+
+312
+00:16:15,347 --> 00:16:17,447
+to T, which here is one.
+
+313
+00:16:17,447 --> 00:16:20,947
+And notice the midpoint gives exactly half of W squared:
+
+314
+00:16:20,947 --> 00:16:24,722
+the answer from ordinary calculus.
+
+315
+00:16:25,255 --> 00:16:28,068
+Here's the exact algebra, on one step.
+
+316
+00:16:28,068 --> 00:16:32,705
+The change in W squared, from the left end to the right end, is W plus delta
+
+317
+00:16:32,705 --> 00:16:40,139
+W, squared, minus W squared, which is two W delta W, plus delta W squared.
+
+318
+00:16:40,139 --> 00:16:42,364
+Now add this up over all the steps.
+
+319
+00:16:42,364 --> 00:16:44,514
+On the left, the sum telescopes:
+
+320
+00:16:44,514 --> 00:16:49,226
+everything cancels except W squared at the end, minus W squared at the start,
+
+321
+00:16:49,226 --> 00:16:50,576
+which is zero.
+
+322
+00:16:50,576 --> 00:16:51,626
+On the right:
+
+323
+00:16:51,626 --> 00:16:55,489
+twice the left-endpoint sum, plus the sum of the squares, which converges
+
+324
+00:16:55,489 --> 00:16:57,014
+to T.
+
+325
+00:16:57,014 --> 00:17:02,676
+In the limit, W squared at time T equals twice the integral of W d W, plus
+
+326
+00:17:02,676 --> 00:17:03,251
+T.
+
+327
+00:17:03,251 --> 00:17:07,189
+So the integral is one half W squared, minus one half T.
+
+328
+00:17:07,189 --> 00:17:13,239
+That's the missing half, and it is the quadratic variation, in disguise.
+
+329
+00:17:13,864 --> 00:17:16,201
+There's a lovely picture behind this.
+
+330
+00:17:16,201 --> 00:17:21,476
+Draw a plane where both axes measure the value of W, and draw the line y equals
+
+331
+00:17:21,476 --> 00:17:21,939
+w.
+
+332
+00:17:21,939 --> 00:17:27,322
+As time runs, W moves back and forth along the horizontal axis.
+
+333
+00:17:27,322 --> 00:17:31,510
+Take one step, from W at the left end to W at the right end.
+
+334
+00:17:31,510 --> 00:17:36,797
+The left-endpoint gain, W times delta W, is the area of this rectangle:
+
+335
+00:17:36,797 --> 00:17:38,810
+width delta W, height W.
+
+336
+00:17:38,810 --> 00:17:43,060
+The area under the line over the same stretch is one half the new W squared,
+
+337
+00:17:43,060 --> 00:17:45,035
+minus one half the old one.
+
+338
+00:17:45,035 --> 00:17:49,922
+They differ by a triangle, with two legs of length delta W, and area one half
+
+339
+00:17:49,922 --> 00:17:52,089
+delta W squared.
+
+340
+00:17:52,089 --> 00:17:56,589
+And when the step goes the other way, the rectangle counts as negative area,
+
+341
+00:17:56,589 --> 00:18:00,701
+overshoots the region under the line, and again they differ by exactly the
+
+342
+00:18:00,701 --> 00:18:02,551
+same kind of triangle.
+
+343
+00:18:02,551 --> 00:18:09,039
+Up or down, the left-endpoint sum always loses one half delta W squared.
+
+344
+00:18:10,539 --> 00:18:15,276
+Now run all sixteen steps, and collect the triangles in a tank whose brim
+
+345
+00:18:15,276 --> 00:18:16,464
+is at one half T.
+
+346
+00:18:16,464 --> 00:18:21,364
+The areas under the line telescope to one half W squared at the end, no matter
+
+347
+00:18:21,364 --> 00:18:22,914
+how the path wandered.
+
+348
+00:18:22,914 --> 00:18:26,964
+But every step drops a triangle, and they pile up.
+
+349
+00:18:26,964 --> 00:18:31,814
+With sixteen steps, the triangles hold 0.64, more than the brim.
+
+350
+00:18:31,814 --> 00:18:35,464
+With 256 steps, 0.487.
+
+351
+00:18:35,464 --> 00:18:36,664
+With four million:
+
+352
+00:18:36,664 --> 00:18:38,214
+0.5000.
+
+353
+00:18:38,214 --> 00:18:43,126
+For a smooth path, these triangles are second-order small and add up to nothing.
+
+354
+00:18:43,126 --> 00:18:46,726
+For a Brownian path there are so many of them that they add up to exactly
+
+355
+00:18:46,726 --> 00:18:49,689
+half the elapsed time.
+
+356
+00:18:50,322 --> 00:18:51,910
+So which choice is right?
+
+357
+00:18:51,910 --> 00:18:56,522
+Itô's left-endpoint integral gives one half W squared minus one half T.
+
+358
+00:18:56,522 --> 00:19:01,397
+The midpoint gives the ordinary-calculus answer, one half W squared.
+
+359
+00:19:01,397 --> 00:19:03,685
+It's called the Stratonovich integral.
+
+360
+00:19:03,685 --> 00:19:07,314
+The right endpoint overshoots by one half T.
+
+361
+00:19:07,314 --> 00:19:09,114
+Think about the gambler again.
+
+362
+00:19:09,114 --> 00:19:12,364
+The midpoint and right-end rules set your stake using the price after the
+
+363
+00:19:12,364 --> 00:19:13,039
+move:
+
+364
+00:19:13,039 --> 00:19:14,489
+they peek at the future.
+
+365
+00:19:14,489 --> 00:19:16,401
+And it shows in the averages.
+
+366
+00:19:16,401 --> 00:19:21,089
+Since W squared has mean T, Itô's answer has mean zero, while the others win
+
+367
+00:19:21,089 --> 00:19:23,901
+money on average, in a perfectly fair game.
+
+368
+00:19:23,901 --> 00:19:25,601
+Only cheating does that.
+
+369
+00:19:25,601 --> 00:19:27,926
+The left endpoint is the honest choice:
+
+370
+00:19:27,926 --> 00:19:31,522
+Itô integrals are fair games, with mean zero.
+
+371
+00:19:31,522 --> 00:19:34,122
+Stratonovich's integral isn't wrong, though.
+
+372
+00:19:34,122 --> 00:19:37,985
+It's a different integral, and in physics it's often the natural one:
+
+373
+00:19:37,985 --> 00:19:42,672
+if the noise is a limit of smooth, rapidly varying forces, the Stratonovich
+
+374
+00:19:42,672 --> 00:19:44,560
+integral is what you get.
+
+375
+00:19:44,560 --> 00:19:47,510
+The two are related by a simple correction term.
+
+376
+00:19:47,510 --> 00:19:52,597
+In this video, we'll use Itô's, which is the standard in probability and finance.
+
+377
+00:19:54,642 --> 00:19:58,892
+That fairness is the first of two rules that make the Itô integral work.
+
+378
+00:19:58,892 --> 00:20:03,392
+On each step, the stake is fixed before the move, and the move is a fresh,
+
+379
+00:20:03,392 --> 00:20:06,230
+independent coin flip with mean zero.
+
+380
+00:20:06,230 --> 00:20:11,417
+So the expected gain on every step factors into the expected stake times zero.
+
+381
+00:20:11,417 --> 00:20:12,430
+Add them up:
+
+382
+00:20:12,430 --> 00:20:16,075
+every Itô integral has expected value zero.
+
+383
+00:20:16,075 --> 00:20:19,525
+Here are our winnings from the double-down strategy, on two hundred different
+
+384
+00:20:19,525 --> 00:20:20,925
+Brownian paths.
+
+385
+00:20:20,925 --> 00:20:25,088
+They spread out, and some win big, but their average stays pinned at zero,
+
+386
+00:20:25,088 --> 00:20:26,563
+all the way along.
+
+387
+00:20:26,563 --> 00:20:31,013
+A process like this, whose best forecast of the future is its present value,
+
+388
+00:20:31,013 --> 00:20:32,688
+is called a martingale.
+
+389
+00:20:32,688 --> 00:20:36,075
+Itô integrals of adapted strategies are martingales:
+
+390
+00:20:36,075 --> 00:20:39,550
+no strategy beats a fair game.
+
+391
+00:20:40,050 --> 00:20:43,275
+The second rule tells us how big an Itô integral is.
+
+392
+00:20:43,275 --> 00:20:45,950
+Square the sum, and take the average.
+
+393
+00:20:45,950 --> 00:20:50,413
+Squaring a sum of n terms gives n squared cross terms, one for every pair
+
+394
+00:20:50,413 --> 00:20:51,388
+of steps.
+
+395
+00:20:51,388 --> 00:20:53,450
+Here they are as a grid.
+
+396
+00:20:53,450 --> 00:20:57,100
+Take any cell off the diagonal, say steps two and five.
+
+397
+00:20:57,100 --> 00:20:59,288
+Step five's move comes last.
+
+398
+00:20:59,288 --> 00:21:03,100
+Everything else in the product is known by the start of step five, and step
+
+399
+00:21:03,100 --> 00:21:05,975
+five's move is fresh, with mean zero.
+
+400
+00:21:05,975 --> 00:21:08,300
+So the whole term averages to zero.
+
+401
+00:21:08,300 --> 00:21:11,225
+The same goes for every off-diagonal cell.
+
+402
+00:21:11,225 --> 00:21:14,900
+The fairness of each step wipes out all the cross terms.
+
+403
+00:21:14,900 --> 00:21:17,025
+Only the diagonal survives:
+
+404
+00:21:17,025 --> 00:21:21,000
+the stake squared times the move squared, which averages to the stake squared
+
+405
+00:21:21,000 --> 00:21:22,150
+times delta t.
+
+406
+00:21:22,150 --> 00:21:25,750
+Add up the diagonal, and you get an ordinary integral.
+
+407
+00:21:25,750 --> 00:21:27,975
+This is the Itô isometry:
+
+408
+00:21:27,975 --> 00:21:31,850
+the average square of the integral equals the average of the integral of H
+
+409
+00:21:31,850 --> 00:21:33,850
+squared d t.
+
+410
+00:21:33,850 --> 00:21:39,675
+Notice the d W squared equals d t rule hiding inside it, on the diagonal.
+
+411
+00:21:39,675 --> 00:21:44,038
+And this identity is also what guarantees that the Riemann sums converge in
+
+412
+00:21:44,038 --> 00:21:45,363
+the first place:
+
+413
+00:21:45,363 --> 00:21:51,725
+it turns questions about random sums into questions about ordinary integrals.
+
+414
+00:21:52,200 --> 00:21:56,388
+Let's test both rules on our double-down strategy, H equals W.
+
+415
+00:21:56,388 --> 00:22:00,350
+The isometry predicts that the average square of the winnings is the integral
+
+416
+00:22:00,350 --> 00:22:02,963
+of t d t from zero to one:
+
+417
+00:22:02,963 --> 00:22:04,559
+one half.
+
+418
+00:22:04,559 --> 00:22:06,884
+Now simulate forty thousand paths.
+
+419
+00:22:06,884 --> 00:22:08,296
+The average of the winnings:
+
+420
+00:22:08,296 --> 00:22:12,534
+minus 0.0007, zero up to sampling noise.
+
+421
+00:22:12,534 --> 00:22:13,471
+The variance:
+
+422
+00:22:13,471 --> 00:22:15,246
+0.505.
+
+423
+00:22:15,246 --> 00:22:16,709
+Both rules check out.
+
+424
+00:22:16,709 --> 00:22:17,634
+And look at the shape:
+
+425
+00:22:17,634 --> 00:22:20,934
+you can never lose more than about one half, but you can win big.
+
+426
+00:22:20,934 --> 00:22:22,771
+Lopsided, but fair.
+
+427
+00:22:22,771 --> 00:22:27,134
+The ordinary-calculus answer, one half W squared, would average one half:
+
+428
+00:22:27,134 --> 00:22:30,734
+it would win money in a fair game, which is exactly why it can't be right.
+
+429
+00:22:36,498 --> 00:22:40,173
+In ordinary calculus, the chain rule tells you how a function of a changing
+
+430
+00:22:40,173 --> 00:22:41,648
+quantity changes:
+
+431
+00:22:41,648 --> 00:22:43,861
+d f equals f prime times d x.
+
+432
+00:22:43,861 --> 00:22:48,561
+Applied to W squared, it would say the change in W squared is two W d W.
+
+433
+00:22:48,561 --> 00:22:50,461
+But we've already found the truth:
+
+434
+00:22:50,461 --> 00:22:55,336
+W squared at time T is twice the integral of W d W, plus T.
+
+435
+00:22:55,336 --> 00:22:58,386
+So the change in W squared has an extra piece:
+
+436
+00:22:58,386 --> 00:22:59,448
+plus d t.
+
+437
+00:22:59,448 --> 00:23:03,973
+Where does it come from, and what is it for a general function?
+
+438
+00:23:04,406 --> 00:23:05,844
+Go back to basics:
+
+439
+00:23:05,844 --> 00:23:07,269
+Taylor's theorem.
+
+440
+00:23:07,269 --> 00:23:12,669
+Over one small step, the change in f is f prime times delta W, plus one half
+
+441
+00:23:12,669 --> 00:23:17,819
+f double prime times delta W squared, plus a cubic term, and so on.
+
+442
+00:23:17,819 --> 00:23:21,894
+In ordinary calculus, only the first term matters, because the others are
+
+443
+00:23:21,894 --> 00:23:24,706
+too small to survive being added up.
+
+444
+00:23:24,706 --> 00:23:28,169
+But now delta W is the size of root delta t.
+
+445
+00:23:28,169 --> 00:23:33,419
+So the first term is of order root delta t, the second of order delta t, and
+
+446
+00:23:33,419 --> 00:23:37,073
+the third of order delta t to the three halves.
+
+447
+00:23:37,073 --> 00:23:40,673
+Now add up n of them, one per step, where n is T over delta t.
+
+448
+00:23:40,673 --> 00:23:44,873
+The first terms have random signs, and their sum is an Itô integral.
+
+449
+00:23:44,873 --> 00:23:48,123
+The second terms are n times something of order delta t:
+
+450
+00:23:48,123 --> 00:23:49,711
+that stays finite.
+
+451
+00:23:49,711 --> 00:23:54,486
+In fact, by our rule, delta W squared adds up like delta t, so this sum becomes
+
+452
+00:23:54,486 --> 00:23:57,761
+an ordinary integral of one half f double prime.
+
+453
+00:23:57,761 --> 00:24:01,798
+The third terms add up to n times delta t to the three halves, which goes
+
+454
+00:24:01,798 --> 00:24:02,761
+to zero.
+
+455
+00:24:02,761 --> 00:24:04,731
+So do all the rest.
+
+456
+00:24:04,731 --> 00:24:06,031
+Let's watch it happen.
+
+457
+00:24:06,031 --> 00:24:10,144
+For f equals x cubed, Taylor's expansion stops after three terms, so it's
+
+458
+00:24:10,144 --> 00:24:11,169
+exact:
+
+459
+00:24:11,169 --> 00:24:16,231
+W cubed at time one is exactly the sum of these three columns, at every resolution.
+
+460
+00:24:16,231 --> 00:24:19,631
+As the steps shrink, the cubic column dies away to nothing.
+
+461
+00:24:19,631 --> 00:24:24,681
+The middle column settles to 0.338, which is three times the integral of W
+
+462
+00:24:24,681 --> 00:24:26,831
+d t, just as predicted.
+
+463
+00:24:26,831 --> 00:24:28,544
+And the totals never change:
+
+464
+00:24:28,544 --> 00:24:33,031
+always W cubed, 1.966.
+
+465
+00:24:33,565 --> 00:24:35,815
+So here's the corrected chain rule.
+
+466
+00:24:35,815 --> 00:24:41,390
+The change in f of W is f prime d W, the term you'd expect, plus one half
+
+467
+00:24:41,390 --> 00:24:43,302
+f double prime d t:
+
+468
+00:24:43,302 --> 00:24:46,990
+a new term that comes straight from d W squared equals d t.
+
+469
+00:24:46,990 --> 00:24:49,073
+This is Itô's lemma.
+
+470
+00:24:49,073 --> 00:24:50,673
+Check it on W squared:
+
+471
+00:24:50,673 --> 00:24:55,023
+f double prime is two, so the change is two W d W plus d t.
+
+472
+00:24:55,023 --> 00:24:59,636
+Exactly what the telescoping sum told us, by a completely different route.
+
+473
+00:24:59,636 --> 00:25:04,373
+For W cubed, three W squared d W plus three W d t:
+
+474
+00:25:04,373 --> 00:25:06,348
+the two columns in the table.
+
+475
+00:25:06,348 --> 00:25:12,348
+And for e to the W, the correction is one half e to the W d t.
+
+476
+00:25:12,731 --> 00:25:14,881
+Here's the lemma at work on our path.
+
+477
+00:25:14,881 --> 00:25:17,969
+The faint thick curve is W squared itself.
+
+478
+00:25:17,969 --> 00:25:23,594
+The red curve integrates the ordinary chain rule, two W d W, step by step:
+
+479
+00:25:23,594 --> 00:25:26,056
+it falls further and further behind.
+
+480
+00:25:26,056 --> 00:25:31,456
+Add Itô's correction, plus t, and it lands right on top.
+
+481
+00:25:32,115 --> 00:25:33,552
+Here's the intuition.
+
+482
+00:25:33,552 --> 00:25:35,940
+Picture a curved bowl, f, and a point at x.
+
+483
+00:25:35,940 --> 00:25:39,752
+The noise pushes x to the left or right by the same amount, h, with equal
+
+484
+00:25:39,752 --> 00:25:40,590
+odds.
+
+485
+00:25:40,590 --> 00:25:42,690
+On average, x hasn't moved.
+
+486
+00:25:42,690 --> 00:25:43,790
+But f has:
+
+487
+00:25:43,790 --> 00:25:47,715
+the average of the two outcomes is the midpoint of this chord, and on a convex
+
+488
+00:25:47,715 --> 00:25:50,165
+curve, the chord lies above the curve.
+
+489
+00:25:50,165 --> 00:25:53,515
+It sits higher by one half f double prime h squared.
+
+490
+00:25:53,515 --> 00:25:56,136
+And h squared is delta t.
+
+491
+00:25:56,136 --> 00:25:58,823
+So noise, plus curvature, makes drift.
+
+492
+00:25:58,823 --> 00:26:03,248
+Across two hundred paths, the average of W stays at zero, but the average
+
+493
+00:26:03,248 --> 00:26:05,486
+of W squared climbs steadily:
+
+494
+00:26:05,486 --> 00:26:07,811
+one unit of height per unit of time.
+
+495
+00:26:07,811 --> 00:26:13,461
+That climb is the Itô term, one half f double prime d t.
+
+496
+00:26:13,890 --> 00:26:17,202
+The same argument works for anything driven by noise.
+
+497
+00:26:17,202 --> 00:26:21,465
+Suppose X moves with a drift mu and a noise amplitude sigma:
+
+498
+00:26:21,465 --> 00:26:24,415
+d X equals mu d t plus sigma d W.
+
+499
+00:26:24,415 --> 00:26:28,590
+For a function of time and X, Taylor's theorem gives three terms that might
+
+500
+00:26:28,590 --> 00:26:29,690
+survive:
+
+501
+00:26:29,690 --> 00:26:34,277
+the time derivative, the slope times d X, and one half the curvature times
+
+502
+00:26:34,277 --> 00:26:36,186
+d X squared.
+
+503
+00:26:36,186 --> 00:26:39,311
+Use the multiplication table on d X squared.
+
+504
+00:26:39,311 --> 00:26:41,586
+It expands into three products.
+
+505
+00:26:41,586 --> 00:26:46,961
+d t squared is zero, d t d W is zero, and d W squared is d t.
+
+506
+00:26:46,961 --> 00:26:50,711
+So d X squared is just sigma squared d t.
+
+507
+00:26:50,711 --> 00:26:52,111
+Collect the terms:
+
+508
+00:26:52,111 --> 00:26:58,386
+d f has a drift part, f t plus mu f x plus one half sigma squared f x x, all
+
+509
+00:26:58,386 --> 00:27:02,236
+times d t, and a noise part, sigma f x d W.
+
+510
+00:27:02,236 --> 00:27:06,386
+This is Itô's lemma in its general form, and it's the workhorse of everything
+
+511
+00:27:06,386 --> 00:27:07,386
+that follows.
+
+512
+00:27:09,236 --> 00:27:12,299
+Itô's lemma has consequences you can feel in your wallet.
+
+513
+00:27:12,299 --> 00:27:13,436
+Here's a game.
+
+514
+00:27:13,436 --> 00:27:16,224
+You start with a hundred dollars and flip a coin.
+
+515
+00:27:16,224 --> 00:27:18,999
+Heads, your wealth grows by fifty percent.
+
+516
+00:27:18,999 --> 00:27:21,511
+Tails, it shrinks by forty percent.
+
+517
+00:27:21,511 --> 00:27:25,961
+On average, each round multiplies your money by 1.05:
+
+518
+00:27:25,961 --> 00:27:28,886
+an expected gain of five percent per round.
+
+519
+00:27:28,886 --> 00:27:30,469
+Should you play?
+
+520
+00:27:30,469 --> 00:27:34,194
+Here's one player over a hundred rounds, on a logarithmic scale.
+
+521
+00:27:34,194 --> 00:27:37,669
+And here are eighty more, out of ten thousand we simulated.
+
+522
+00:27:37,669 --> 00:27:42,319
+The expected wealth really does grow by five percent a round, to 131 and a
+
+523
+00:27:42,319 --> 00:27:45,044
+half times the stake after a hundred rounds.
+
+524
+00:27:45,044 --> 00:27:48,982
+But the typical player goes down, and down, and down.
+
+525
+00:27:48,982 --> 00:27:52,469
+After a hundred rounds, the median player has half a percent of their money
+
+526
+00:27:52,469 --> 00:27:56,478
+left, and 87 percent of the players lost money.
+
+527
+00:27:56,478 --> 00:28:00,978
+The average is held up by a handful of spectacularly lucky players, so rare
+
+528
+00:28:00,978 --> 00:28:05,203
+that even the average of our ten thousand only reaches 52 times the stake,
+
+529
+00:28:05,203 --> 00:28:07,115
+not 131.
+
+530
+00:28:07,115 --> 00:28:08,540
+The reason is simple:
+
+531
+00:28:08,540 --> 00:28:15,340
+one heads and one tails multiply your wealth by 1.5 times 0.6, which is 0.9.
+
+532
+00:28:15,340 --> 00:28:17,778
+You lose ten percent every two rounds.
+
+533
+00:28:17,778 --> 00:28:21,840
+For a typical path, what matters is the average of the logarithm, not the
+
+534
+00:28:21,840 --> 00:28:24,928
+logarithm of the average.
+
+535
+00:28:25,553 --> 00:28:27,465
+Now the continuous version.
+
+536
+00:28:27,465 --> 00:28:32,828
+Let a price S have returns made of a drift, mu d t, plus noise, sigma d W.
+
+537
+00:28:32,828 --> 00:28:37,465
+That's geometric Brownian motion, the standard model of a stock price.
+
+538
+00:28:37,465 --> 00:28:42,453
+To match the coin game, take mu equal to five percent and sigma equal to forty-five
+
+539
+00:28:42,453 --> 00:28:43,853
+percent per round:
+
+540
+00:28:43,853 --> 00:28:47,736
+the game's average return and its standard deviation.
+
+541
+00:28:47,736 --> 00:28:50,411
+Ordinary calculus suggests a solution:
+
+542
+00:28:50,411 --> 00:28:54,086
+S equals S zero times e to the mu t plus sigma W.
+
+543
+00:28:54,086 --> 00:28:56,249
+But check it with Itô's lemma.
+
+544
+00:28:56,249 --> 00:29:01,224
+The function e to the mu t plus sigma w has time derivative mu f, slope sigma
+
+545
+00:29:01,224 --> 00:29:03,449
+f, and curvature sigma squared f.
+
+546
+00:29:03,449 --> 00:29:09,061
+So its change is S times mu d t, plus sigma d W, plus one half sigma squared
+
+547
+00:29:09,061 --> 00:29:09,749
+d t.
+
+548
+00:29:09,749 --> 00:29:14,386
+That extra term means the guess solves a different equation.
+
+549
+00:29:14,911 --> 00:29:17,524
+The way to solve it is to look at the logarithm.
+
+550
+00:29:17,524 --> 00:29:19,774
+Apply Itô's lemma to log S:
+
+551
+00:29:19,774 --> 00:29:25,736
+one over S, times d S, minus one half, one over S squared, times d S squared.
+
+552
+00:29:25,736 --> 00:29:30,761
+d S squared is sigma squared S squared d t, by the multiplication table.
+
+553
+00:29:30,761 --> 00:29:36,399
+So the change in log S is mu d t plus sigma d W, minus one half sigma squared
+
+554
+00:29:36,399 --> 00:29:36,924
+d t.
+
+555
+00:29:36,924 --> 00:29:38,436
+Constant coefficients:
+
+556
+00:29:38,436 --> 00:29:40,744
+we can integrate directly.
+
+557
+00:29:40,744 --> 00:29:45,332
+Log S grows at the rate mu minus one half sigma squared, plus sigma times
+
+558
+00:29:45,332 --> 00:29:45,982
+W.
+
+559
+00:29:45,982 --> 00:29:51,582
+And the price is S zero, times e to the mu minus one half sigma squared, t,
+
+560
+00:29:51,582 --> 00:29:52,844
+plus sigma W.
+
+561
+00:29:52,844 --> 00:29:56,932
+The one half sigma squared is Itô's correction, and it's exactly what the
+
+562
+00:29:56,932 --> 00:30:00,019
+naive guess was missing.
+
+563
+00:30:00,569 --> 00:30:02,469
+Let's check that numerically.
+
+564
+00:30:02,469 --> 00:30:06,969
+Simulate the equation directly, one small step at a time, a million steps,
+
+565
+00:30:06,969 --> 00:30:09,732
+with one fixed sequence of random kicks.
+
+566
+00:30:09,732 --> 00:30:13,457
+The naive formula, driven by the same kicks, flies off:
+
+567
+00:30:13,457 --> 00:30:17,907
+after a hundred rounds it's too big by a factor of about twenty-five thousand.
+
+568
+00:30:17,907 --> 00:30:22,569
+Itô's formula sits right on top of the simulation.
+
+569
+00:30:23,228 --> 00:30:26,315
+Now we can see the coin game's paradox in the formula.
+
+570
+00:30:26,315 --> 00:30:29,653
+Here are geometric Brownian paths with the game's parameters.
+
+571
+00:30:29,653 --> 00:30:33,703
+The expected price grows like e to the mu t, because the exponential of a
+
+572
+00:30:33,703 --> 00:30:36,378
+bell curve is pulled up by its lucky tail.
+
+573
+00:30:36,378 --> 00:30:40,528
+But the typical path, the median, grows at the rate mu minus one half sigma
+
+574
+00:30:40,528 --> 00:30:41,478
+squared.
+
+575
+00:30:41,478 --> 00:30:46,078
+With mu at five percent and sigma at forty-five percent, that's minus five
+
+576
+00:30:46,078 --> 00:30:50,553
+point one percent per round, almost exactly the coin game's minus five point
+
+577
+00:30:50,553 --> 00:30:51,803
+three.
+
+578
+00:30:51,803 --> 00:30:55,253
+On the log scale, the final prices form a bell curve:
+
+579
+00:30:55,253 --> 00:30:57,640
+the price itself is log-normal.
+
+580
+00:30:57,640 --> 00:31:01,553
+Eighty-seven percent of paths end below where they started, even though the
+
+581
+00:31:01,553 --> 00:31:04,953
+expected price has grown a hundred and fifty times.
+
+582
+00:31:04,953 --> 00:31:09,178
+This is volatility drag, and it's Itô's correction term at work:
+
+583
+00:31:09,178 --> 00:31:13,803
+noise doesn't just add uncertainty, it lowers the long-run growth rate, by
+
+584
+00:31:13,803 --> 00:31:15,828
+exactly one half sigma squared.
+
+585
+00:31:21,574 --> 00:31:25,599
+With the integral and Itô's lemma in hand, we can finally write down noisy
+
+586
+00:31:25,599 --> 00:31:28,362
+differential equations, and solve them.
+
+587
+00:31:28,362 --> 00:31:32,924
+A stochastic differential equation says that over each instant, X changes
+
+588
+00:31:32,924 --> 00:31:38,199
+by a drift, a steady push that depends on where X is, plus a random kick,
+
+589
+00:31:38,199 --> 00:31:41,533
+whose size can also depend on where X is.
+
+590
+00:31:41,533 --> 00:31:44,745
+Remember, it's shorthand for an integral equation:
+
+591
+00:31:44,745 --> 00:31:50,145
+X at time t is where it started, plus the accumulated drift, plus an Itô integral
+
+592
+00:31:50,145 --> 00:31:52,533
+of the noise.
+
+593
+00:31:52,966 --> 00:31:55,166
+And we can simulate them directly.
+
+594
+00:31:55,166 --> 00:31:57,104
+Step forward by delta t:
+
+595
+00:31:57,104 --> 00:32:02,041
+add the drift times delta t, then add a random kick, the noise amplitude times
+
+596
+00:32:02,041 --> 00:32:05,204
+root delta t times a fresh standard normal.
+
+597
+00:32:05,204 --> 00:32:06,266
+Here's one step:
+
+598
+00:32:06,266 --> 00:32:08,379
+the green arrow is the drift.
+
+599
+00:32:08,379 --> 00:32:10,766
+The bell shows where the kick might land you.
+
+600
+00:32:10,766 --> 00:32:13,566
+And a draw from it picks the next point.
+
+601
+00:32:13,566 --> 00:32:16,204
+Repeat, and you've drawn a sample path.
+
+602
+00:32:16,204 --> 00:32:20,066
+This is how nearly every simulation of a stochastic differential equation
+
+603
+00:32:20,066 --> 00:32:23,891
+works, from molecules to markets.
+
+604
+00:32:24,299 --> 00:32:27,937
+Here's the most important example after Brownian motion itself.
+
+605
+00:32:27,937 --> 00:32:30,087
+The drift is minus theta X:
+
+606
+00:32:30,087 --> 00:32:33,924
+always pulling back toward zero, harder the farther away you are.
+
+607
+00:32:33,924 --> 00:32:36,124
+The green arrows show that pull.
+
+608
+00:32:36,124 --> 00:32:41,012
+It's the Ornstein–Uhlenbeck process, invented in 1930 as the velocity of a
+
+609
+00:32:41,012 --> 00:32:43,637
+Brownian particle slowed by friction.
+
+610
+00:32:43,637 --> 00:32:47,699
+Today it also models interest rates, and anything that wanders but is pulled
+
+611
+00:32:47,699 --> 00:32:49,433
+back to a mean.
+
+612
+00:32:49,433 --> 00:32:52,420
+Start forty particles at two, and let them go.
+
+613
+00:32:52,420 --> 00:32:55,770
+The drift pulls them in, and the noise keeps them jittering.
+
+614
+00:32:55,770 --> 00:33:01,333
+They settle into a band around zero, where the pull and the kicks balance.
+
+615
+00:33:01,766 --> 00:33:06,141
+And we can solve it exactly, with a trick from ordinary differential equations:
+
+616
+00:33:06,141 --> 00:33:07,941
+an integrating factor.
+
+617
+00:33:07,941 --> 00:33:10,129
+Look at e to the theta t, times X.
+
+618
+00:33:10,129 --> 00:33:14,629
+Its time derivative is theta times itself, its slope in x is e to the theta
+
+619
+00:33:14,629 --> 00:33:17,529
+t, and its curvature in x is zero:
+
+620
+00:33:17,529 --> 00:33:18,491
+it's linear in x.
+
+621
+00:33:18,491 --> 00:33:22,641
+So Itô's lemma gives the ordinary chain rule, with no correction, and the
+
+622
+00:33:22,641 --> 00:33:24,854
+drift terms cancel exactly.
+
+623
+00:33:24,854 --> 00:33:27,133
+Only the noise is left.
+
+624
+00:33:27,133 --> 00:33:29,170
+Integrate, and multiply back:
+
+625
+00:33:29,170 --> 00:33:34,083
+X at time t is the starting point, decayed by e to the minus theta t, plus
+
+626
+00:33:34,083 --> 00:33:39,270
+a weighted Itô integral of the noise, where old kicks are forgotten exponentially.
+
+627
+00:33:39,270 --> 00:33:43,408
+The Itô integral has mean zero, so the mean just decays.
+
+628
+00:33:43,408 --> 00:33:47,270
+And the isometry gives the variance as an ordinary integral:
+
+629
+00:33:47,270 --> 00:33:51,983
+sigma squared over two theta, times one minus e to the minus two theta t.
+
+630
+00:33:51,983 --> 00:33:56,833
+As time goes on, every particle forgets where it started, and the distribution
+
+631
+00:33:56,833 --> 00:34:02,733
+settles to a bell curve with variance sigma squared over two theta.
+
+632
+00:34:03,299 --> 00:34:07,237
+Here's the prediction against three thousand simulated particles.
+
+633
+00:34:07,237 --> 00:34:12,399
+As time runs, the histogram of where they are slides toward zero and widens,
+
+634
+00:34:12,399 --> 00:34:16,362
+and the theoretical bell curve tracks it the whole way, until it locks into
+
+635
+00:34:16,362 --> 00:34:20,999
+the stationary bell curve, with variance one half.
+
+636
+00:34:21,216 --> 00:34:23,616
+Notice what changed in this picture.
+
+637
+00:34:23,616 --> 00:34:27,404
+We stopped following individual paths, and started watching the density of
+
+638
+00:34:27,404 --> 00:34:31,391
+the whole cloud evolve, smoothly and deterministically.
+
+639
+00:34:31,391 --> 00:34:36,091
+That density obeys a partial differential equation of its own, and Itô's lemma
+
+640
+00:34:36,091 --> 00:34:37,416
+is how we find it.
+
+641
+00:34:39,385 --> 00:34:40,985
+So here's the question.
+
+642
+00:34:40,985 --> 00:34:45,972
+If every particle in a cloud follows the same stochastic differential equation,
+
+643
+00:34:45,972 --> 00:34:50,260
+each with its own independent noise, how does the density of the cloud change
+
+644
+00:34:50,260 --> 00:34:52,660
+over time?
+
+645
+00:34:53,118 --> 00:34:55,755
+Itô's lemma answers it, with a classic trick:
+
+646
+00:34:55,755 --> 00:34:57,930
+don't look at the density directly.
+
+647
+00:34:57,930 --> 00:35:01,443
+Look at the average of some smooth test function, phi, of X.
+
+648
+00:35:01,443 --> 00:35:06,443
+By Itô's lemma, phi of X changes by a drift term, mu phi prime plus one half
+
+649
+00:35:06,443 --> 00:35:09,930
+sigma squared phi double prime, plus a noise term.
+
+650
+00:35:09,930 --> 00:35:12,730
+Take the average, and the noise term vanishes:
+
+651
+00:35:12,730 --> 00:35:15,293
+Itô integrals have mean zero.
+
+652
+00:35:15,293 --> 00:35:17,905
+An average is an integral against the density p.
+
+653
+00:35:17,905 --> 00:35:19,780
+Now integrate by parts:
+
+654
+00:35:19,780 --> 00:35:24,505
+once to move the derivative off phi prime, twice for phi double prime.
+
+655
+00:35:24,505 --> 00:35:29,318
+The boundary terms vanish, and we get phi times something, integrated.
+
+656
+00:35:29,318 --> 00:35:34,326
+Since this holds for every test function phi, the somethings must be equal.
+
+657
+00:35:34,326 --> 00:35:35,226
+The result:
+
+658
+00:35:35,226 --> 00:35:39,701
+the rate of change of the density is minus the slope of mu times p, plus one
+
+659
+00:35:39,701 --> 00:35:42,389
+half the curvature of sigma squared times p.
+
+660
+00:35:42,389 --> 00:35:47,514
+This is the Fokker–Planck equation, also called Kolmogorov's forward equation.
+
+661
+00:35:47,514 --> 00:35:50,964
+The first term carries probability along with the drift.
+
+662
+00:35:50,964 --> 00:35:52,776
+The second spreads it out.
+
+663
+00:35:52,776 --> 00:35:56,701
+Randomness in each path became a perfectly deterministic equation for the
+
+664
+00:35:56,701 --> 00:35:58,901
+cloud.
+
+665
+00:35:59,360 --> 00:36:01,022
+Start with the simplest case:
+
+666
+00:36:01,022 --> 00:36:04,872
+pure Brownian motion, no drift, sigma equal to one.
+
+667
+00:36:04,872 --> 00:36:07,310
+Then Fokker–Planck is the heat equation:
+
+668
+00:36:07,310 --> 00:36:10,910
+the density changes at a rate equal to one half its curvature.
+
+669
+00:36:10,910 --> 00:36:14,747
+It's the same equation Einstein derived for diffusing particles.
+
+670
+00:36:14,747 --> 00:36:17,997
+Here are four thousand particles released at one point.
+
+671
+00:36:17,997 --> 00:36:22,535
+Their histogram spreads out, exactly along the bell curve with variance t,
+
+672
+00:36:22,535 --> 00:36:25,493
+which solves the heat equation.
+
+673
+00:36:25,493 --> 00:36:27,168
+You can see why it spreads.
+
+674
+00:36:27,168 --> 00:36:30,730
+At the peak, the curve bends down, so the density falls.
+
+675
+00:36:30,730 --> 00:36:34,205
+Out on the shoulders, it bends up, so the density rises.
+
+676
+00:36:34,205 --> 00:36:38,018
+Peaks get shaved, valleys get filled, and the bell flattens.
+
+677
+00:36:38,018 --> 00:36:42,118
+And the width grows like the square root of time.
+
+678
+00:36:44,618 --> 00:36:46,155
+Now something richer.
+
+679
+00:36:46,155 --> 00:36:50,855
+Let the drift be the downhill slope of a landscape with two valleys, so particles
+
+680
+00:36:50,855 --> 00:36:54,330
+roll toward the bottoms, while the noise keeps shaking them.
+
+681
+00:36:54,330 --> 00:36:57,801
+Drop three thousand particles into the left valley.
+
+682
+00:36:57,801 --> 00:37:01,426
+At first they huddle in the left valley, and the density there settles into
+
+683
+00:37:01,426 --> 00:37:02,376
+a bell.
+
+684
+00:37:02,376 --> 00:37:07,514
+But every so often, a run of unlucky kicks throws a particle over the ridge.
+
+685
+00:37:07,514 --> 00:37:09,776
+Slowly, the right valley fills.
+
+686
+00:37:09,776 --> 00:37:14,014
+And all along, the histogram of the simulated particles follows the Fokker–Planck
+
+687
+00:37:14,014 --> 00:37:20,501
+equation, solved on a computer as a smooth curve, with no randomness at all.
+
+688
+00:37:23,193 --> 00:37:25,468
+Eventually the cloud stops changing.
+
+689
+00:37:25,468 --> 00:37:29,468
+Setting the time derivative to zero, and the flow of probability to zero,
+
+690
+00:37:29,468 --> 00:37:32,143
+gives a first-order equation we can solve:
+
+691
+00:37:32,143 --> 00:37:36,268
+the stationary density is proportional to e to the minus two V over sigma
+
+692
+00:37:36,268 --> 00:37:37,255
+squared.
+
+693
+00:37:37,255 --> 00:37:41,355
+That's exactly Boltzmann's distribution from statistical mechanics, with the
+
+694
+00:37:41,355 --> 00:37:44,118
+noise strength playing the role of temperature.
+
+695
+00:37:44,118 --> 00:37:46,318
+Our simulated particles have found it:
+
+696
+00:37:46,318 --> 00:37:49,993
+by the end, they're split nearly half and half between the valleys.
+
+697
+00:37:52,224 --> 00:37:54,461
+Fokker–Planck runs forward in time:
+
+698
+00:37:54,461 --> 00:37:57,036
+given where the particles start, where will they be?
+
+699
+00:37:57,036 --> 00:37:58,899
+Now turn the question around.
+
+700
+00:37:58,899 --> 00:38:00,211
+Start a particle at x.
+
+701
+00:38:00,211 --> 00:38:03,386
+Some payoff g depends on where it ends up at time T.
+
+702
+00:38:03,386 --> 00:38:05,861
+What is that payoff worth on average?
+
+703
+00:38:05,861 --> 00:38:09,849
+Call the answer u of t and x.
+
+704
+00:38:10,257 --> 00:38:11,969
+Here's the simplest case:
+
+705
+00:38:11,969 --> 00:38:16,057
+a Brownian gambler starts with fortune point three, and plays until reaching
+
+706
+00:38:16,057 --> 00:38:19,044
+one, a win, or zero, ruin.
+
+707
+00:38:19,044 --> 00:38:21,644
+Each path is colored by how it ended.
+
+708
+00:38:21,644 --> 00:38:27,157
+Out of four thousand simulated gamblers, 29.5 percent reach the top first,
+
+709
+00:38:27,157 --> 00:38:31,624
+and the game lasts 0.203 time units on average.
+
+710
+00:38:31,624 --> 00:38:35,336
+Both numbers have exact answers, and here's where they come from.
+
+711
+00:38:35,336 --> 00:38:37,511
+Let u of x be the chance of winning from x.
+
+712
+00:38:37,511 --> 00:38:41,574
+Your chance, re-evaluated as the game goes on, is a fair game:
+
+713
+00:38:41,574 --> 00:38:42,899
+it's a martingale.
+
+714
+00:38:42,899 --> 00:38:47,674
+So by Itô's lemma, its drift, one half u double prime, must be zero.
+
+715
+00:38:47,674 --> 00:38:51,099
+u is a straight line, zero at zero and one at one:
+
+716
+00:38:51,099 --> 00:38:52,374
+u of x equals x.
+
+717
+00:38:52,374 --> 00:38:53,749
+Point three.
+
+718
+00:38:53,749 --> 00:38:58,149
+The same argument for the expected time gives one half u double prime equals
+
+719
+00:38:58,149 --> 00:39:02,011
+minus one, and the answer x times one minus x:
+
+720
+00:39:02,011 --> 00:39:05,049
+0.21.
+
+721
+00:39:05,590 --> 00:39:08,115
+The same argument works for any payoff.
+
+722
+00:39:08,115 --> 00:39:12,003
+Your best forecast of the payoff, given everything you know at time s, is
+
+723
+00:39:12,003 --> 00:39:13,340
+u of s and X s.
+
+724
+00:39:13,340 --> 00:39:17,590
+As information arrives, the forecast gets updated, but it can't be expected
+
+725
+00:39:17,590 --> 00:39:18,578
+to drift:
+
+726
+00:39:18,578 --> 00:39:21,540
+if you expected it to rise, you'd have raised it already.
+
+727
+00:39:21,540 --> 00:39:22,903
+It's a martingale.
+
+728
+00:39:22,903 --> 00:39:26,928
+Itô's lemma splits its change into a drift term and a noise term.
+
+729
+00:39:26,928 --> 00:39:31,565
+A martingale has no drift, so the drift term must vanish, everywhere.
+
+730
+00:39:31,565 --> 00:39:36,065
+That's a partial differential equation for u, Kolmogorov's backward equation,
+
+731
+00:39:36,065 --> 00:39:39,278
+solved backward from the payoff at the final time.
+
+732
+00:39:39,278 --> 00:39:42,853
+Add a discount rate, and you get the Feynman–Kac formula:
+
+733
+00:39:42,853 --> 00:39:47,265
+averages over random paths solve partial differential equations.
+
+734
+00:39:47,265 --> 00:39:52,578
+Mark Kac found it in 1949, inspired by Feynman's path integrals in quantum
+
+735
+00:39:52,578 --> 00:39:54,965
+mechanics.
+
+736
+00:39:55,549 --> 00:39:59,786
+In two dimensions, this idea solves a classic problem of physics.
+
+737
+00:39:59,786 --> 00:40:01,561
+Heat the rim of a metal disk:
+
+738
+00:40:01,561 --> 00:40:04,149
+three hot arcs, three cold ones.
+
+739
+00:40:04,149 --> 00:40:06,561
+Wait for the temperature inside to settle.
+
+740
+00:40:06,561 --> 00:40:09,724
+The steady temperature solves Laplace's equation:
+
+741
+00:40:09,724 --> 00:40:13,111
+zero curvature, on average, in every direction.
+
+742
+00:40:13,111 --> 00:40:15,490
+What's the temperature at this point?
+
+743
+00:40:15,490 --> 00:40:17,328
+Brownian motion knows.
+
+744
+00:40:17,328 --> 00:40:21,690
+Release a random walker from the point, let it wander until it hits the rim,
+
+745
+00:40:21,690 --> 00:40:24,040
+and record the temperature where it lands.
+
+746
+00:40:24,040 --> 00:40:26,003
+Do it again, and again.
+
+747
+00:40:26,003 --> 00:40:31,290
+The average temperature they report converges to the temperature at the point.
+
+748
+00:40:32,499 --> 00:40:36,699
+With twenty thousand walkers, the average is 0.533.
+
+749
+00:40:36,699 --> 00:40:40,174
+The exact solution of Laplace's equation at that point:
+
+750
+00:40:40,174 --> 00:40:42,336
+0.534.
+
+751
+00:40:42,336 --> 00:40:44,674
+The reason is Itô's lemma once more:
+
+752
+00:40:44,674 --> 00:40:48,986
+for two-dimensional Brownian motion the drift term is one half the Laplacian,
+
+753
+00:40:48,986 --> 00:40:54,299
+so a function with zero Laplacian, evaluated along the walk, is a fair game.
+
+754
+00:40:54,299 --> 00:40:59,074
+Averaging where the walkers stop gives the value where they started.
+
+755
+00:40:59,607 --> 00:41:02,182
+Now do that at every point of the disk at once.
+
+756
+00:41:02,182 --> 00:41:06,119
+With one walker per pixel, each pixel is just hot or cold:
+
+757
+00:41:06,119 --> 00:41:07,107
+pure noise.
+
+758
+00:41:07,107 --> 00:41:08,282
+Four walkers.
+
+759
+00:41:08,282 --> 00:41:09,282
+Sixteen.
+
+760
+00:41:09,282 --> 00:41:10,269
+Sixty-four.
+
+761
+00:41:10,269 --> 00:41:11,969
+Two hundred fifty-six.
+
+762
+00:41:11,969 --> 00:41:15,969
+The noise melts into the smooth solution of Laplace's equation.
+
+763
+00:41:15,969 --> 00:41:20,019
+Shizuo Kakutani discovered this connection in 1944:
+
+764
+00:41:20,019 --> 00:41:23,990
+harmonic functions are averages over Brownian paths.
+
+765
+00:41:23,990 --> 00:41:28,740
+So there are two bridges between random paths and partial differential equations.
+
+766
+00:41:28,740 --> 00:41:31,903
+Fokker–Planck pushes densities forward in time.
+
+767
+00:41:31,903 --> 00:41:35,403
+Kolmogorov and Feynman–Kac pull averages backward.
+
+768
+00:41:35,403 --> 00:41:37,540
+Both come straight out of Itô's lemma.
+
+769
+00:41:43,117 --> 00:41:46,930
+Here's the application that made stochastic calculus famous.
+
+770
+00:41:46,930 --> 00:41:50,205
+A stock follows geometric Brownian motion.
+
+771
+00:41:50,205 --> 00:41:54,242
+A call option gives you the right, but not the obligation, to buy the stock
+
+772
+00:41:54,242 --> 00:41:56,692
+at a fixed price K at a future time T.
+
+773
+00:41:56,692 --> 00:41:59,980
+If the stock ends above K, you collect the difference;
+
+774
+00:41:59,980 --> 00:42:02,255
+if not, you walk away with nothing.
+
+775
+00:42:02,255 --> 00:42:04,517
+What is that right worth today?
+
+776
+00:42:04,517 --> 00:42:08,380
+Call its value V, a function of time and the stock price.
+
+777
+00:42:08,380 --> 00:42:10,805
+Itô's lemma tells us how V changes:
+
+778
+00:42:10,805 --> 00:42:15,105
+a drift part, which includes the curvature term one half sigma squared S squared
+
+779
+00:42:15,105 --> 00:42:20,917
+V S S, and a noise part, sigma S V S d W.
+
+780
+00:42:21,317 --> 00:42:24,680
+Black and Scholes, with Robert Merton, had a brilliant idea:
+
+781
+00:42:24,680 --> 00:42:25,530
+hedge.
+
+782
+00:42:25,530 --> 00:42:28,792
+Hold the option, and sell delta shares of the stock.
+
+783
+00:42:28,792 --> 00:42:33,005
+The portfolio's change is the option's change minus delta times the stock's
+
+784
+00:42:33,005 --> 00:42:34,017
+change.
+
+785
+00:42:34,017 --> 00:42:39,300
+Both have noise in them, sigma S d W, and both have the drift mu.
+
+786
+00:42:39,300 --> 00:42:44,375
+Now choose delta to be exactly V S, the option's sensitivity to the stock.
+
+787
+00:42:44,375 --> 00:42:46,125
+The noise term cancels.
+
+788
+00:42:46,125 --> 00:42:47,475
+And so does mu:
+
+789
+00:42:47,475 --> 00:42:51,013
+the stock's expected return has dropped out entirely.
+
+790
+00:42:51,013 --> 00:42:53,984
+What's left is perfectly predictable.
+
+791
+00:42:53,984 --> 00:42:58,084
+A riskless portfolio must earn the risk-free interest rate, r, or there'd
+
+792
+00:42:58,084 --> 00:42:59,909
+be free money to be made.
+
+793
+00:42:59,909 --> 00:43:02,096
+Set the two equal, and rearrange:
+
+794
+00:43:02,096 --> 00:43:08,159
+V t plus r S V S, plus one half sigma squared S squared V S S, minus r V,
+
+795
+00:43:08,159 --> 00:43:09,446
+equals zero.
+
+796
+00:43:09,446 --> 00:43:11,484
+That's the Black–Scholes equation.
+
+797
+00:43:11,484 --> 00:43:16,759
+And the term that makes it work, the curvature term, is Itô's correction.
+
+798
+00:43:17,217 --> 00:43:19,755
+And we know how to solve equations like this one:
+
+799
+00:43:19,755 --> 00:43:21,205
+Feynman–Kac.
+
+800
+00:43:21,205 --> 00:43:25,680
+The option's value is the discounted average payoff, computed as if the stock
+
+801
+00:43:25,680 --> 00:43:28,530
+grew at the risk-free rate r instead of mu.
+
+802
+00:43:28,530 --> 00:43:31,717
+For a call, the average can be done in closed form:
+
+803
+00:43:31,717 --> 00:43:34,484
+the famous Black–Scholes formula.
+
+804
+00:43:34,484 --> 00:43:38,771
+Here's the value as a function of the stock price, a year before expiry, then
+
+805
+00:43:38,771 --> 00:43:42,609
+closer and closer, until it becomes the hockey-stick payoff.
+
+806
+00:43:42,609 --> 00:43:46,459
+With a stock at a hundred, a strike of a hundred, five percent interest and
+
+807
+00:43:46,459 --> 00:43:51,396
+twenty percent volatility, the formula gives 10.4506.
+
+808
+00:43:51,396 --> 00:43:57,321
+Averaging the payoff over a million simulated risk-neutral paths gives 10.4512,
+
+809
+00:43:57,321 --> 00:44:01,759
+plus or minus 0.015.
+
+810
+00:44:02,317 --> 00:44:04,655
+The derivation is also a recipe.
+
+811
+00:44:04,655 --> 00:44:07,180
+Here's a simulated stock over one year.
+
+812
+00:44:07,180 --> 00:44:10,017
+Here's what the option is worth along the way.
+
+813
+00:44:10,017 --> 00:44:14,305
+Now start with the option's price in cash, and each week, hold delta shares
+
+814
+00:44:14,305 --> 00:44:16,980
+of the stock, financed from the cash.
+
+815
+00:44:16,980 --> 00:44:21,605
+The portfolio tracks the option, week after week, and at expiry it lands within
+
+816
+00:44:21,605 --> 00:44:27,067
+a dollar of the payoff, using nothing but the stock and a bank account.
+
+817
+00:44:27,617 --> 00:44:28,830
+How good is the hedge?
+
+818
+00:44:28,830 --> 00:44:33,242
+Here's the leftover error after a year, across five thousand simulated years,
+
+819
+00:44:33,242 --> 00:44:38,605
+rebalancing four times, sixteen, sixty-four, and two hundred fifty-six times.
+
+820
+00:44:38,605 --> 00:44:43,767
+Each time you rebalance four times as often, the error halves, from 3.25 dollars
+
+821
+00:44:43,767 --> 00:44:45,755
+down to 43 cents.
+
+822
+00:44:45,755 --> 00:44:47,967
+In the continuous limit it vanishes:
+
+823
+00:44:47,967 --> 00:44:52,367
+the option can be manufactured exactly, so its price is forced.
+
+824
+00:44:52,367 --> 00:44:57,367
+And the leftover error on each step comes from how far delta W squared strays
+
+825
+00:44:57,367 --> 00:44:58,830
+from delta t:
+
+826
+00:44:58,830 --> 00:45:02,842
+the very fluctuation that dies away in the quadratic variation.
+
+827
+00:45:04,873 --> 00:45:07,385
+One last idea, and it's a strange one:
+
+828
+00:45:07,385 --> 00:45:09,835
+change the probabilities, not the paths.
+
+829
+00:45:09,835 --> 00:45:13,673
+Here are two thousand Brownian paths, all equally likely.
+
+830
+00:45:13,673 --> 00:45:18,973
+Now give each path a weight, Z, equal to e to the theta W at time one, minus
+
+831
+00:45:18,973 --> 00:45:24,014
+one half theta squared, and draw it with opacity proportional to its weight.
+
+832
+00:45:24,014 --> 00:45:25,127
+Turn up theta.
+
+833
+00:45:25,127 --> 00:45:27,202
+Paths that end high get heavier;
+
+834
+00:45:27,202 --> 00:45:29,602
+paths that end low fade away.
+
+835
+00:45:29,602 --> 00:45:33,602
+The weighted average path tilts up into a straight line of slope theta, and
+
+836
+00:45:33,602 --> 00:45:37,652
+the weighted distribution of where the paths end slides over to a bell curve
+
+837
+00:45:37,652 --> 00:45:39,077
+centered at theta.
+
+838
+00:45:39,077 --> 00:45:44,002
+Under the new weights, W looks exactly like Brownian motion with drift theta.
+
+839
+00:45:44,002 --> 00:45:48,239
+Turn theta negative, and the drift goes down.
+
+840
+00:45:50,689 --> 00:45:52,339
+Where does that weight come from?
+
+841
+00:45:52,339 --> 00:45:56,377
+Compare the bell curve for one step with drift theta to the one without.
+
+842
+00:45:56,377 --> 00:46:01,202
+Their ratio is e to the theta delta W, minus one half theta squared delta
+
+843
+00:46:01,202 --> 00:46:01,839
+t.
+
+844
+00:46:01,839 --> 00:46:06,639
+The steps are independent, so for a whole path the ratios multiply, and the
+
+845
+00:46:06,639 --> 00:46:12,481
+exponents add up to theta W at time T minus one half theta squared T.
+
+846
+00:46:12,481 --> 00:46:16,781
+And that minus one half theta squared is Itô's correction yet again.
+
+847
+00:46:16,781 --> 00:46:18,956
+Apply Itô's lemma to Z:
+
+848
+00:46:18,956 --> 00:46:22,906
+the minus one half theta squared from the time derivative exactly cancels
+
+849
+00:46:22,906 --> 00:46:27,606
+the plus one half theta squared from the curvature, so Z has no drift.
+
+850
+00:46:27,606 --> 00:46:31,881
+It's a martingale, with average one, which makes it a legitimate way to reweight
+
+851
+00:46:31,881 --> 00:46:33,614
+probabilities.
+
+852
+00:46:33,614 --> 00:46:35,402
+That's Girsanov's theorem:
+
+853
+00:46:35,402 --> 00:46:41,277
+reweighting by Z turns W into a Brownian motion with drift theta, or, equivalently,
+
+854
+00:46:41,277 --> 00:46:45,239
+W minus theta t into a standard Brownian motion.
+
+855
+00:46:45,239 --> 00:46:49,764
+Changing the drift is the same as changing the odds.
+
+856
+00:46:50,214 --> 00:46:53,377
+This explains the strangest step in Black–Scholes.
+
+857
+00:46:53,377 --> 00:46:56,227
+In the real world, the stock drifts at mu.
+
+858
+00:46:56,227 --> 00:47:01,289
+Reweight with theta equal to r minus mu, over sigma, and under the new probabilities,
+
+859
+00:47:01,289 --> 00:47:04,389
+the stock drifts at exactly the risk-free rate.
+
+860
+00:47:04,389 --> 00:47:08,364
+That's the risk-neutral world, where the option price is a plain discounted
+
+861
+00:47:08,364 --> 00:47:09,314
+average.
+
+862
+00:47:09,314 --> 00:47:11,552
+It isn't an assumption about investors:
+
+863
+00:47:11,552 --> 00:47:14,614
+it's Girsanov's theorem.
+
+864
+00:47:15,073 --> 00:47:17,960
+Changing the odds is also a practical tool.
+
+865
+00:47:17,960 --> 00:47:20,785
+Suppose you need the probability of a rare event:
+
+866
+00:47:20,785 --> 00:47:24,473
+say, Brownian motion ending above four at time one.
+
+867
+00:47:24,473 --> 00:47:28,160
+The exact answer is about three in a hundred thousand.
+
+868
+00:47:28,160 --> 00:47:32,373
+Simulate a hundred thousand paths, and you'll see it about three times.
+
+869
+00:47:32,373 --> 00:47:33,598
+We saw it once:
+
+870
+00:47:33,598 --> 00:47:36,539
+an estimate off by a factor of three.
+
+871
+00:47:36,539 --> 00:47:40,639
+Instead, simulate with a drift of four, so half the paths land in the rare
+
+872
+00:47:40,639 --> 00:47:45,427
+region, and undo the change by weighting each path with Girsanov's factor.
+
+873
+00:47:45,427 --> 00:47:50,977
+Ten thousand tilted paths give 3.24 times ten to the minus five, within about
+
+874
+00:47:50,977 --> 00:47:52,639
+two percent of the truth.
+
+875
+00:47:52,639 --> 00:47:56,789
+This is importance sampling, and it's how banks and engineers estimate the
+
+876
+00:47:56,789 --> 00:47:58,589
+probability of disasters.
+
+877
+00:48:00,670 --> 00:48:02,220
+Let's put it all together.
+
+878
+00:48:02,220 --> 00:48:04,007
+It started with one fact:
+
+879
+00:48:04,007 --> 00:48:08,157
+over a short time d t, Brownian motion moves about root d t.
+
+880
+00:48:08,157 --> 00:48:12,232
+That makes its paths rough at every scale, with infinite length, but their
+
+881
+00:48:12,232 --> 00:48:15,645
+squared increments add up to exactly the elapsed time:
+
+882
+00:48:15,645 --> 00:48:18,653
+d W squared equals d t.
+
+883
+00:48:18,653 --> 00:48:21,166
+That one rule decides everything else.
+
+884
+00:48:21,166 --> 00:48:24,916
+Integrals against noise have to be taken at the left end of each step, so
+
+885
+00:48:24,916 --> 00:48:29,803
+they're fair games, and the integral of W d W picks up a minus one half t.
+
+886
+00:48:29,803 --> 00:48:34,353
+The chain rule picks up a correction, one half f double prime d t:
+
+887
+00:48:34,353 --> 00:48:37,166
+noise acting on curvature creates drift.
+
+888
+00:48:37,166 --> 00:48:41,970
+That's why noisy growth compounds at mu minus one half sigma squared.
+
+889
+00:48:41,970 --> 00:48:46,482
+Averaging Itô's lemma turns random paths into deterministic equations:
+
+890
+00:48:46,482 --> 00:48:51,007
+Fokker–Planck pushes densities forward in time, and Kolmogorov and Feynman–Kac
+
+891
+00:48:51,007 --> 00:48:56,145
+pull averages backward, which is how random walkers solve Laplace's equation.
+
+892
+00:48:56,145 --> 00:48:58,682
+And in finance it all comes together:
+
+893
+00:48:58,682 --> 00:49:02,645
+Black and Scholes hedged the noise away to price an option, and Girsanov's
+
+894
+00:49:02,645 --> 00:49:07,195
+theorem explains why that price is an average in a world where the stock grows
+
+895
+00:49:07,195 --> 00:49:09,945
+at the risk-free rate.
+
+896
+00:49:10,137 --> 00:49:11,887
+All of it, from one line.
+
+897
+00:49:11,887 --> 00:49:13,687
+d W squared equals d t.
+
+898
+00:49:13,687 --> 00:49:14,837
+Thanks for watching.
