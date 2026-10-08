@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.riemann.common import RELEASE, label, note, schematic_tag
@@ -113,7 +112,7 @@ class Descent(VoiceoverScene):
             box(r"asymmetric scales", width=3.6, height=0.7),
             box(r"two new moment estimates", width=3.6, height=0.7),
         ).arrange(DOWN, buff=0.22)
-        row = VGroup(start, ingredients, end).arrange(RIGHT, buff=0.9).move_to(DOWN * 0.2)
+        VGroup(start, ingredients, end).arrange(RIGHT, buff=0.9).move_to(DOWN * 0.2)
         a1 = Arrow(start.get_right(), ingredients.get_left(), buff=0.15, color=GREY_B)
         a2 = Arrow(ingredients.get_right(), end.get_left(), buff=0.15, color=GREY_B)
         fine = note(r"same skeleton: compare two exact representations of a completed cubic-theta sum ---\\"

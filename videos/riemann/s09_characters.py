@@ -26,7 +26,7 @@ class DirichletL(VoiceoverScene):
         l3 = MathTex(r"p \equiv 3 \pmod 4:", font_size=32, color=C.CHARACTER)
         g1 = VGroup(l1, row1).arrange(RIGHT, buff=0.4)
         g3 = VGroup(l3, row3).arrange(RIGHT, buff=0.4)
-        rows = VGroup(g1, g3).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.5)
+        VGroup(g1, g3).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(UP, buff=0.5)
 
         ax = Axes(x_range=[0, 100_000, 20_000], y_range=[-20, 100, 20], x_length=11, y_length=3.9, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_numbers": True, "font_size": 20}).move_to(DOWN * 1.5)

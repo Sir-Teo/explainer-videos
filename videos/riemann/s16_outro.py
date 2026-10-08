@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.riemann.common import gammas, label, load, note, polyline, psi_approx, psi_steps, region, staircase, strip_axes
+from videos.riemann.common import gammas, label, polyline, psi_approx, psi_steps, region, staircase, strip_axes
 
 
 class Outro(VoiceoverScene):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.riemann.common import label, load, note, polyline, schematic_tag
+from videos.riemann.common import label, load, note
 
 P_GAUSS, G_ROOT = 37, 2  # Gauss-sum walk for a sextic character mod 37 (2 is a primitive root)
 

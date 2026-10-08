@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.riemann.common import RELEASE, gammas, label, note, part_card, polyline, region, strip_axes
+from videos.riemann.common import RELEASE, gammas, label, part_card, region, strip_axes
 
 
 def check_row(mark: str, color, text: str, font_size=28) -> VGroup:

@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.riemann.common import part_card, PI_POWERS_OF_TEN, fmt_int, label, load, note, polyline
-from videos.riemann.compute import li
+from videos.riemann.common import part_card, PI_POWERS_OF_TEN, fmt_int, label, load, note
 
 
 def table(rows, col_colors, font_size=30, h_buff=0.7, v_buff=0.2, aligns=None) -> VGroup:

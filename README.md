@@ -9,13 +9,13 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`published/navier_stokes.mp4`](published/navier_stokes.mp4) | [`videos/navier_stokes`](videos/navier_stokes) |
 | **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`published/llm.mp4`](published/llm.mp4) | [`videos/llm`](videos/llm) |
 | **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`published/opposing_forces.mp4`](published/opposing_forces.mp4) | [`videos/opposing_forces`](videos/opposing_forces) |
-| **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | RIEMANN_MIN min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
+| **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
 GitHub's 100 MB file limit by `tools/publish.py`; a sidecar `.srt` sits next
 to each. Download one and open it in any player (VLC, QuickTime, a browser).
-The LLM and Opposing Forces videos' pictures are bit-identical to the full renders; the
+The LLM, Opposing Forces and Riemann videos' pictures are bit-identical to the full renders; the
 Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
 0.98–0.9996 against the full render, lowest on the turbulence footage). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
