@@ -205,8 +205,10 @@ class Dedup(VoiceoverScene):
             label(r"``Access denied \dots bot activity'': 24 pages", font_size=28),
             label(r"``Why am I seeing this page?'' (default hosting): 7 pages", font_size=28),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        top = label(rf"Our 8 files: {d['n_in']:,} pages $\rightarrow$ {d['n_out']:,} ({100 * removed:.0f}\% removed, {d['n_clusters_multi']} clusters)".replace(",", "{,}"),
+        top = label(rf"Our 8 files, after filtering: {d['n_in']:,} pages $\rightarrow$ {d['n_out']:,} ({100 * removed:.0f}\% removed, {d['n_clusters_multi']} clusters)".replace(",", "{,}"),
                     font_size=32).to_edge(UP, buff=0.6)
+        if top.width > 13.0:
+            top.scale_to_fit_width(13.0)
         kinds.next_to(top, DOWN, buff=0.4)
         fw = VGroup(
             label(r"\textbf{FineWeb's surprise:} deduplicating across all 96 crawls", font_size=28),
