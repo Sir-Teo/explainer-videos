@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, Simplex, exact_tag, label, load, mtex, note, part_card, schematic_tag, source, why
+from videos.rl.common import Plot, Simplex, exact_tag, label, load, mtex, part_card, schematic_tag, why
 
 
 class TrustRegions(VoiceoverScene):

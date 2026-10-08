@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, label, load, mtex, note, pct_fmt, real_tag, source, why
+from videos.rl.common import Plot, label, load, mtex, pct_fmt, real_tag, source, why
 
 
 class DPO(VoiceoverScene):
@@ -141,7 +141,6 @@ class DPO(VoiceoverScene):
         bot = Plot(x_range=(0, S), y_range=(lo, 1), width=5.2, height=3.4, x_ticks=list(np.linspace(0, S, 4).astype(int)),
                    y_ticks=[lo, 0], x_label=r"DPO steps", y_label=r"change in $\log \pi(y)$, vs.\ the reference")
         bot.move_to(RIGHT * 3.6 + DOWN * 0.5)
-        la = top.line(steps, acc, color=C.REWARD, stroke_width=4)
         pk = Dot(top.c2p(steps[k], acc[k]), radius=0.08, color=YELLOW)
         pkl = label(rf"peak {acc[k] * 100:.0f}\%", font_size=24, color=YELLOW).next_to(pk, UP, buff=0.1)
         lw_ = bot.line(steps, dw, color=C.REWARD, stroke_width=4)

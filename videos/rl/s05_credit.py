@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import label, load, mtex, note, real_tag, source, tokens, why
+from videos.rl.common import label, load, mtex, real_tag, tokens
 from videos.rl.compute import prompt_text
 
 
@@ -91,7 +91,6 @@ class Credit(VoiceoverScene):
         n0 = len(self.prompt)
         ans = strip[n0:]
         V = np.array(s["V"], float)
-        T = len(V)
         base_y = y_strip + 0.75
         # V(s_t) sits at the left edge of answer token t (state before token t is written); V(s_T) := R
         xs = [c.get_left()[0] for c in ans] + [ans[-1].get_right()[0]]

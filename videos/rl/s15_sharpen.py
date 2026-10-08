@@ -6,7 +6,7 @@ from math import comb
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, label, load, mtex, note, pct_fmt, real_tag, source, why
+from videos.rl.common import Plot, label, load, mtex, pct_fmt, real_tag, source, why
 
 
 class Sharpening(VoiceoverScene):
@@ -79,12 +79,13 @@ class Sharpening(VoiceoverScene):
             keys.add(VGroup(Line(ORIGIN, RIGHT * 0.4, color=col, stroke_width=5), label(txt, font_size=24)).arrange(RIGHT, buff=0.15))
         keys.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(plot, RIGHT, buff=0.3).shift(UP * 0.6)
         b1, f1 = d["base"]["curve"][0], d["final"]["curve"][0]
-        bK, fK = d["base"]["curve"][-1], d["final"]["curve"][-1]
+        bK = d["base"]["curve"][-1]
         head = label(rf"The adder: pass@$k$ from {d['n']} samples per problem, {d['problems']} problems", font_size=28).to_edge(UP, buff=0.35)
         with self.voiceover(
             f"Here is pass at k for our adder, measured with {d['n']} samples on each of {d['problems']} held-out "
             f"problems. <bookmark mark='b'/> Before RL, a single attempt is right {b1 * 100:.0f} percent of the "
-            f"time, but with {int(ks[-1])} attempts, {bK * 100:.1f} percent of problems get solved at least once. "
+            f"time, but with {int(ks[-1])} attempts, "
+            + ("every one of the problems" if bK >= 1.0 else f"{bK * 100:.1f} percent of problems") + " gets solved at least once. "
             f"<bookmark mark='f'/> After RL, a single attempt is right {f1 * 100:.0f} percent of the time. The "
             "curve went flat: RL moved the probability onto answers the model could already produce. Its mistakes "
             "were slips, and the right answer was always within reach."

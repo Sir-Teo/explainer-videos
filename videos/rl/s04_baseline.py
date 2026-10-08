@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, exact_tag, label, load, mtex, note, tagged, why
+from videos.rl.common import Plot, exact_tag, label, load, mtex, tagged
 
 
 class Baselines(VoiceoverScene):

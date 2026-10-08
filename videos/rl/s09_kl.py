@@ -3,13 +3,19 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import (Mono, Plot, Simplex, exact_tag, label, load, mtex, note, pct_fmt, real_tag, source,
-                              token_color, why)
+from videos.rl.common import (Mono, Plot, Simplex, exact_tag, label, load, mtex, pct_fmt, real_tag, source,
+                              why)
 
 
 def tilt(p, r, beta):
     w = p * np.exp((r - r.max()) / beta)
     return w / w.sum()
+
+
+def times(x: float) -> str:
+    """A spoken multiple: 'twice', 'three times', ..."""
+    n = int(round(x))
+    return {1: "just", 2: "twice", 3: "three times", 4: "four times", 5: "five times"}.get(n, f"{n} times")
 
 
 class KLOptimum(VoiceoverScene):
@@ -25,7 +31,7 @@ class KLOptimum(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def derive(self):
-        K, P, R = C.KL, C.RL_POLICY, C.REWARD
+        K, R = C.KL, C.REWARD
         L = [
             mtex(r"\max_\pi\;", r"\mathbb{E}_{y\sim\pi}\big[r(y)\big]", r"-", r"\beta\, \mathrm{KL}\big(\pi \,\|\, \pi_{\text{ref}}\big)", font_size=42),
             mtex(r"=", r"\sum_y \pi(y)\Big[\, r(y) - \beta \log\frac{\pi(y)}{\pi_{\text{ref}}(y)} \Big]", font_size=40),
@@ -210,8 +216,8 @@ class KLOptimum(VoiceoverScene):
             "Averaged over many problems, the optimal policies give a frontier: the most reward you can possibly "
             f"have at each distance from the starting model. Being right every time costs only {kl_full:.2f} nats. "
             "<bookmark mark='r'/> Our actual training run, which had no KL penalty at all, sits below the frontier, as "
-            f"every policy must. It ends almost as accurate, but about {last['KL'] / kl_full:.0f} times farther from "
-            "where it started than it needed to be: unlike the optimum, it also reshuffled its right answers."
+            f"every policy must. It ends almost as accurate, but about {times(last['KL'] / kl_full)} as far from where "
+            "it started as it needed to be: unlike the optimum, it also reshuffled its right answers."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot), FadeIn(real_tag(r"exact frontier; real RL checkpoints")))
             self.play(Create(curve), FadeIn(cl), run_time=2)

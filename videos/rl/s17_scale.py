@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import (Mono, Plot, label, load, mono_lines, mtex, note, pct_fmt, real_tag, schematic_tag, sci, source,
-                              tokens)
+from videos.rl.common import (Mono, Plot, label, load, mtex, note, pct_fmt, real_tag, sci, source)
 from videos.rl.compute import scalerl_curve
 
 
@@ -214,7 +213,7 @@ class Scaling(VoiceoverScene):
             "specialist teachers, themselves trained with GRPO. Others run RL continuously from deployment. Rewards "
             "increasingly come from rubrics graded by models. And the deepest question, whether RL teaches models "
             "new skills or only sharpens old ones, is still argued in both directions."
-        ) as vo:
+        ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(i, shift=RIGHT * 0.1) for i in items], lag_ratio=0.25), run_time=4)
         self.wait(0.4)

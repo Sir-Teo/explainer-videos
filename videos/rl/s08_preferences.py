@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.rl.common import Plot, exact_tag, label, mono_lines, mtex, note, part_card, schematic_tag, source, why
+from videos.rl.common import Plot, exact_tag, label, mono_lines, mtex, note, part_card, schematic_tag, source
 
 
 def gumbel_pdf(x):
