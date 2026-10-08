@@ -18,7 +18,7 @@ Data
     tokenizer   byte-level BPE (2,048 tokens) trained on FineWeb-Edu, which encodes the pretraining text
 Pretraining (PocketGPT, explainer/lm/pocket.py)
     sweeps      every run below in one 4-process pool, longest first (each cached in runs/<name>.json)
-    isoflop     a Chinchilla-style IsoFLOP sweep: 4 compute budgets, 20 runs over 6 model sizes
+    isoflop     a Chinchilla-style IsoFLOP sweep: 4 compute budgets, 25 runs over 9 model sizes
     optim       AdamW vs Muon, same model and data
     schedule    cosine vs warmup-stable-decay, plus WSD cooldown branches
     stability   learning-rate sweep with and without QK-norm (after Wortsman et al. 2023)
@@ -304,8 +304,9 @@ def corpus_tokens():
 # and is cached on its own in .cache/frontier/runs/<name>.json, so a sweep resumes where it stopped.
 # ---------------------------------------------------------------------------
 SEQ = 256
-ISO_SIZES = [(1, 32), (2, 48), (2, 64), (3, 96), (4, 128), (5, 160), (6, 192), (8, 256)]  # (layers, width)
-ISO_BUDGETS = {1e12: ISO_SIZES[0:4], 3e12: ISO_SIZES[0:5], 1e13: ISO_SIZES[0:6], 3e13: ISO_SIZES[1:6]}
+ISO_SIZES = [(1, 12), (1, 16), (1, 24), (1, 32), (2, 48), (2, 64), (3, 96), (4, 128), (5, 160)]  # (layers, width)
+# each budget spans its own valley: the smallest budgets need the tiniest models to show the left wall
+ISO_BUDGETS = {1e12: ISO_SIZES[0:7], 3e12: ISO_SIZES[1:8], 1e13: ISO_SIZES[3:9], 3e13: ISO_SIZES[4:9]}
 
 
 def _cfg(layers: int, d: int, **kw):
