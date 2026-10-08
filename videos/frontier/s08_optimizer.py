@@ -58,7 +58,7 @@ class Optimizer(VoiceoverScene):
         la = label(r"Adam: each coordinate's step\\divided by its typical size", font_size=26, color=C.ADAMW)
         VGroup(ls, la).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(RIGHT * 4.0 + UP * 1.0)
         head = label(r"The optimizer turns a gradient into a step", font_size=36).to_edge(UP, buff=0.35)
-        mem = label(r"AdamW (2017): the default for most of the last decade", font_size=26, color=GREY_A).next_to(la, DOWN, buff=0.6).align_to(la, LEFT)
+        mem = label(r"AdamW (2017): Adam + decoupled weight decay,\\the default for most of a decade", font_size=26, color=GREY_A).next_to(la, DOWN, buff=0.6).align_to(la, LEFT)
         tag = note(r"computed on $f = \tfrac12(25x^2 + y^2)$").to_corner(DL, buff=0.3)
         with self.voiceover(
             "Next, the optimizer: the rule that turns each gradient into an update. Plain gradient descent steps "
@@ -100,7 +100,8 @@ class Optimizer(VoiceoverScene):
         svd[0][0:6].set_color(C.GRADS)
         lt = label(rf"top 5 of 128 directions: {100 * top5:.0f}\% of the gradient", font_size=26, color=C.GRADS)
         lt.next_to(plot.c2p(60, 0.6), RIGHT, buff=0.1)
-        lm = label(r"Muon: every direction gets the same size step", font_size=26, color=C.MUON).move_to(lt)
+        lm = label(r"Muon: every direction gets the same size step", font_size=26, color=C.MUON)
+        lm.next_to(svd, DOWN, buff=0.12).align_to(plot, RIGHT)
         with self.voiceover(
             "A newer optimizer, Muon, treats each weight matrix as a whole. A matrix's gradient can be broken into "
             "directions, its singular vectors, each with a size. <bookmark mark='g'/> Here are the sizes for a real "
@@ -131,6 +132,10 @@ class Optimizer(VoiceoverScene):
         poly = MathTex(r"p(\sigma) = 3.4445\,\sigma - 4.7750\,\sigma^3 + 2.0315\,\sigma^5", font_size=30, color=C.MUON)
         poly.to_edge(UP, buff=0.4)
         mat = MathTex(r"X \leftarrow aX + (bA + cA^2)X,\quad A = XX^{\top}", font_size=30).next_to(poly, DOWN, buff=0.2)
+        exact = VGroup(MathTex(r"G = U\,\Sigma\,V^{\top} \;\longrightarrow\; U V^{\top}", font_size=44),
+                       label(r"exact, but needs a singular value decomposition: slow on GPUs", font_size=26, color=GREY_A)
+                       ).arrange(DOWN, buff=0.3)
+        exact[0][0][0:6].set_color(C.GRADS)
         why = label(r"(a matrix polynomial acts on each singular value: no SVD needed)", font_size=22, color=GREY_A).next_to(mat, DOWN, buff=0.12)
         line = NumberLine(x_range=[0, 1.3, 0.25], length=5.4, include_numbers=False, color=GREY_C).move_to(RIGHT * 3.4 + DOWN * 2.5)
         nums = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_A).next_to(line.n2p(v), DOWN, buff=0.12) for v in [0, 0.5, 1]])
@@ -154,8 +159,9 @@ class Optimizer(VoiceoverScene):
             "gradient, scaled below one, going through five iterations: small ones are lifted fast, any that overshoot "
             "are pulled back, and all of them end up between about 0.6 and 1.2."
         ) as vo:
+            self.play(FadeIn(exact))
             vo.wait_until("p")
-            self.play(FadeIn(poly), FadeIn(mat), FadeIn(why))
+            self.play(FadeOut(exact), FadeIn(poly), FadeIn(mat), FadeIn(why))
             vo.wait_until("i")
             self.play(FadeIn(plot), Create(diag), Create(curve), run_time=1.5)
             vo.wait_until("d")
@@ -172,36 +178,54 @@ class Optimizer(VoiceoverScene):
         a, m = res["opt_adamw"], res["opt_muon"]
         _, ta, va = eval_curve(a)
         _, tm, vm = eval_curve(m)
-        target = va[-1]
-        hit = tm[np.argmax(vm <= target)] if (vm <= target).any() else tm[-1]
-        frac = hit / ta[-1]
+        assert a["run"]["decay_frac"] == m["run"]["decay_frac"] and a["run"]["tokens"] == m["run"]["tokens"]
+        decay_at = (1 - a["run"]["decay_frac"]) * ta[-1]
+
+        def muon_tokens_to(loss):  # tokens Muon needed to first reach `loss` (linear between evals)
+            i = int(np.argmax(vm <= loss))
+            f = (vm[i - 1] - loss) / (vm[i - 1] - vm[i])
+            return tm[i - 1] + f * (tm[i] - tm[i - 1])
+        # compare while both learning rates are still at their peak (before the cooldown)
+        stable = [(t, v) for t, v in zip(ta, va) if 1e6 <= t <= decay_at]
+        ratios = np.array([muon_tokens_to(v) / t for t, v in stable])
+        t_ref, l_ref = stable[-1]
+        t_mu = muon_tokens_to(l_ref)
+        frac = t_mu / t_ref
         self.frac = frac
-        assert vm[-1] < va[-1]
+        assert (vm < va).all() and ratios.max() < 2 / 3 and 0.6 < frac < 0.66
+        assert round(va[-1], 2) == 3.80 and round(vm[-1], 2) == 3.61
         plot = Plot(x_range=(0, ta[-1] / 1e6), y_range=(3.4, 6.0), width=9.0, height=4.4,
                     x_ticks=[0, 3, 6, 9, 12], y_ticks=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0],
                     x_label=r"training tokens (millions)", y_label=r"validation loss")
         plot.move_to(DOWN * 0.4 + LEFT * 0.6)
+        cool = Polygon(plot.c2p(decay_at / 1e6, 3.4), plot.c2p(ta[-1] / 1e6, 3.4), plot.c2p(ta[-1] / 1e6, 6.0),
+                       plot.c2p(decay_at / 1e6, 6.0), stroke_width=0, fill_color=C.LR, fill_opacity=0.12)
+        cool_t = label(r"learning rate\\lowered", font_size=20, color=C.LR).move_to(plot.c2p((decay_at + ta[-1]) / 2e6, 5.6))
         la = plot.line(ta / 1e6, np.minimum(va, 6.0), color=C.ADAMW, stroke_width=4)
         lm = plot.line(tm / 1e6, np.minimum(vm, 6.0), color=C.MUON, stroke_width=4)
-        ka = label(rf"AdamW: {va[-1]:.3f}", font_size=26, color=C.ADAMW).next_to(plot.c2p(ta[-1] / 1e6, va[-1]), UR, buff=0.05)
-        km = label(rf"Muon: {vm[-1]:.3f}", font_size=26, color=C.MUON).next_to(plot.c2p(tm[-1] / 1e6, vm[-1]), DR, buff=0.05)
-        hl = plot.hline(target, color=GREY_B, dash_length=0.08)
-        hd = Dot(plot.c2p(hit / 1e6, target), radius=0.07, color=C.MUON)
-        ht = label(rf"Muon reaches AdamW's final loss\\after {100 * frac:.0f}\% of the tokens", font_size=24, color=C.MUON)
-        ht.next_to(hd, UP, buff=0.3)
+        ka = label(rf"AdamW {va[-1]:.2f}", font_size=24, color=C.ADAMW).next_to(plot.c2p(ta[-1] / 1e6, va[-1]), RIGHT, buff=0.1)
+        km = label(rf"Muon {vm[-1]:.2f}", font_size=24, color=C.MUON).next_to(plot.c2p(tm[-1] / 1e6, vm[-1]), RIGHT, buff=0.1)
+        pa = Dot(plot.c2p(t_ref / 1e6, l_ref), radius=0.08, color=C.ADAMW)
+        pm = Dot(plot.c2p(t_mu / 1e6, l_ref), radius=0.08, color=C.MUON)
+        arr = Arrow(pa.get_center(), pm.get_center(), buff=0.1, color=WHITE, stroke_width=3, max_tip_length_to_length_ratio=0.15)
+        ht = label(rf"same loss with {100 * frac:.0f}\% of the tokens", font_size=24).move_to(plot.c2p(3.4, 3.7))
         head = label(r"Same model, same data, two optimizers (real runs, $\approx$1M parameters)", font_size=30).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Does it help? Here's our pocket model trained twice on the same data, once with AdamW and once with "
-            "Muon, each with the better of the learning rates we tried in short test runs. <bookmark mark='r'/> Muon pulls ahead early and "
-            "stays ahead. <bookmark mark='h'/> It reaches AdamW's final loss with only about MUONFRAC of the "
-            "tokens."
+            "Muon, each with the better of the learning rates we tried in short test runs. <bookmark mark='r'/> Muon "
+            "pulls ahead early and stays ahead. <bookmark mark='h'/> While the learning rate is held at its peak, Muon "
+            "reaches any given loss with less than two thirds of the tokens AdamW needs. <bookmark mark='d'/> At the "
+            "end, both learning rates are lowered and both losses drop, which is the subject of the next chapter. "
+            "Muon finishes at 3.61, AdamW at 3.80."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("r")
             self.play(Create(la), Create(lm), run_time=3.0)
-            self.play(FadeIn(ka), FadeIn(km))
             vo.wait_until("h")
-            self.play(Create(hl), FadeIn(hd), FadeIn(ht))
+            self.play(FadeIn(pa), FadeIn(pm), GrowArrow(arr), FadeIn(ht))
+            vo.wait_until("d")
+            self.play(FadeIn(cool), FadeIn(cool_t))
+            self.play(FadeIn(ka), FadeIn(km))
         self.wait(0.3)
         self.clear_scene()
 
