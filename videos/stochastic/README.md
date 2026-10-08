@@ -1,6 +1,6 @@
 # Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt
 
-A 15-chapter explainer in five parts that builds stochastic calculus from a coin
+A 49-minute, 15-chapter explainer in five parts that builds stochastic calculus from a coin
 flip. **Brownian motion** comes first: the √Δt scaling, self-similarity, nowhere
 differentiability, infinite length and the one rule (dW)² = dt. Then **the Itô
 integral**: fair games, the left-endpoint rule, the "missing half" of
@@ -23,7 +23,21 @@ illustrates (see [Simulations](#simulations-computepy)). Schematics are labeled
 
 <details><summary>Chapters</summary>
 
-CHAPTERS
+- `0:00` A calculus for randomness
+- `3:21` Part 1: From coin flips to Brownian motion
+- `6:44` Continuous everywhere, smooth nowhere
+- `9:33` The one rule: dW² = dt
+- `12:59` Part 2: Integrating against noise
+- `15:38` Where the missing half comes from
+- `19:54` Fair games and the Itô isometry
+- `22:32` Part 3: Itô's lemma: the chain rule, corrected
+- `27:09` Growth, noise, and volatility drag
+- `31:17` Part 4: Stochastic differential equations
+- `34:39` From paths to densities: Fokker–Planck
+- `37:52` Backwards: averages over paths solve PDEs
+- `41:39` Part 5: Black–Scholes: hedging the noise away
+- `45:04` Changing the odds: Girsanov's theorem
+- `48:00` Recap
 
 </details>
 
