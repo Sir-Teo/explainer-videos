@@ -149,7 +149,7 @@ class GRPO(VoiceoverScene):
         plot.to_edge(RIGHT, buff=0.3).shift(DOWN * 0.3)
         ps = np.linspace(0.004, 0.996, 300)
         inf = plot.line(ps, np.minimum(1 / np.sqrt(ps * (1 - ps)), 6), color=YELLOW, stroke_width=4)
-        cols = {2: GREY_B, 4: C.BASELINE, 8: C.ADVANTAGE, 64: C.KL}
+        cols = {2: GREY_B, 4: BLUE_C, 8: TEAL_C, 64: ORANGE}  # distinct from the yellow G -> infinity curve
         finite = VGroup(*[plot.line(ps, np.minimum(kappa(G, ps), 6), color=c, stroke_width=2.5) for G, c in cols.items()])
         keys = VGroup(label(r"$G \to \infty$: $1/\sqrt{p(1-p)}$", font_size=22, color=YELLOW),
                       *[label(rf"$G = {G}$", font_size=22, color=c) for G, c in cols.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
