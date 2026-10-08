@@ -261,11 +261,11 @@ class Credit(VoiceoverScene):
             vo.wait_until("g")
             self.play(Transform(crit, flat2), FadeOut(clab), FadeIn(nolab))
         cost = label(r"the price of a critic: a second network as large as the policy, trained alongside it", font_size=28, color=C.BASELINE)
-        cost.to_edge(DOWN, buff=0.3)
+        cost.move_to(nolab)
         with self.voiceover(
             "The price is a critic network as large as the policy itself, trained alongside it. The algorithm "
             "behind today's reasoning models decided that price wasn't worth paying."
         ):
-            self.play(FadeIn(cost))
+            self.play(FadeOut(nolab), FadeIn(cost))
         self.wait(0.4)
         self.clear_scene()
