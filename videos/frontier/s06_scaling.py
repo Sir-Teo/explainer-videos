@@ -9,17 +9,22 @@ BUDGET_COLORS = [YELLOW_A, YELLOW_C, GOLD_C, GOLD_E]
 CHINCHILLA = dict(E=1.69, A=406.4, B=410.7, alpha=0.34, beta=0.28)  # Hoffmann et al. 2022, Eq. 10
 
 
-def isoflop_fits(rows):
-    """Per budget: a parabola in log10(N) through (log N, loss); its vertex is the compute-optimal size."""
+def isoflop_fits(rows, k: int = 5):
+    """Per budget: a parabola in log10(N) through the k runs around the lowest loss (the valley floor; far-off
+    runs would skew it); its vertex is the compute-optimal size."""
     budgets = sorted({r["budget"] for r in rows})
     fits = []
     for C in budgets:
         rs = sorted([r for r in rows if r["budget"] == C], key=lambda r: r["params"])
-        x = np.log10([r["params"] for r in rs])
-        y = np.array([r["val"] for r in rs])
+        i = int(np.argmin([r["val"] for r in rs]))
+        assert 0 < i < len(rs) - 1, f"budget {C:g}: the best size is at the edge of the sweep"
+        lo = max(0, min(i - k // 2, len(rs) - k))
+        near = rs[lo:lo + k]
+        x = np.log10([r["params"] for r in near])
+        y = np.array([r["val"] for r in near])
         a, b, c = np.polyfit(x, y, 2)
         xv = -b / (2 * a)
-        fits.append(dict(C=C, rows=rs, coef=(a, b, c), n_opt=10**xv, l_opt=a * xv**2 + b * xv + c,
+        fits.append(dict(C=C, rows=rs, near=near, coef=(a, b, c), n_opt=10**xv, l_opt=a * xv**2 + b * xv + c,
                          flops=np.mean([r["flops"] for r in rs])))
     slope, icpt = np.polyfit(np.log10([f["C"] for f in fits]), np.log10([f["n_opt"] for f in fits]), 1)
     return fits, slope, icpt
@@ -93,13 +98,14 @@ class ScalingLaws(VoiceoverScene):
     def isoflop(self):
         d = load("isoflop")
         rows = d["rows"]
-        assert len(rows) == 20 and len({r["budget"] for r in rows}) == 4
+        assert len(rows) == 25 and len({r["budget"] for r in rows}) == 4
         fits, slope, icpt = isoflop_fits(rows)
+        assert 0.7 < slope < 0.82 and all(np.diff([f["n_opt"] for f in fits]) > 0)
         self.slope = slope
         self.fits = fits
         allN = [r["params"] for r in rows]
         allL = [r["val"] for r in rows]
-        plot = Plot(x_range=(min(allN) / 1.5, max(allN) * 1.5), y_range=(min(allL) - 0.15, min(7.6, max(allL) + 0.1)),
+        plot = Plot(x_range=(min(allN) / 1.8, max(allN) * 1.5), y_range=(min(allL) - 0.15, min(7.6, max(allL) + 0.1)),
                     width=7.4, height=4.8, log_x=True, x_ticks=[1e5, 1e6],
                     y_ticks=list(np.arange(np.ceil((min(allL) - 0.15) * 2) / 2, min(7.6, max(allL) + 0.1), 0.5)),
                     x_fmt=lambda v: pow10_label(int(round(np.log10(v)))), x_label=r"model size $N$ (parameters)",
@@ -110,7 +116,7 @@ class ScalingLaws(VoiceoverScene):
         stars = VGroup()
         for f, col in zip(fits, BUDGET_COLORS):
             pts = plot.dots([r["params"] for r in f["rows"]], [min(r["val"], plot.y_range[1]) for r in f["rows"]], col, radius=0.07)
-            xs = np.linspace(np.log10(f["rows"][0]["params"]) - 0.05, np.log10(f["rows"][-1]["params"]) + 0.05, 60)
+            xs = np.linspace(np.log10(f["near"][0]["params"]) - 0.05, np.log10(f["near"][-1]["params"]) + 0.05, 60)
             a, b, c = f["coef"]
             ys = a * xs**2 + b * xs + c
             m = ys <= plot.y_range[1]
@@ -127,8 +133,8 @@ class ScalingLaws(VoiceoverScene):
         # right panel: N_opt vs C
         Cs = np.array([f["C"] for f in fits])
         Ns = np.array([f["n_opt"] for f in fits])
-        p2 = Plot(x_range=(Cs.min() / 2, Cs.max() * 2), y_range=(Ns.min() / 2, Ns.max() * 2), width=3.6, height=3.2,
-                  log_x=True, log_y=True, x_ticks=[1e12, 1e13], y_ticks=[1e5, 1e6],
+        p2 = Plot(x_range=(Cs.min() / 2, Cs.max() * 2), y_range=(1e4, 1e6), width=3.6, height=3.2,
+                  log_x=True, log_y=True, x_ticks=[1e12, 1e13], y_ticks=[1e4, 1e5, 1e6],
                   x_fmt=lambda v: pow10_label(int(round(np.log10(v))), font_size=20),
                   y_fmt=lambda v: pow10_label(int(round(np.log10(v))), font_size=20),
                   x_label=r"compute $C$", y_label=r"best $N$", font_size=20)
@@ -144,8 +150,11 @@ class ScalingLaws(VoiceoverScene):
             "The way to find out is an experiment, so we ran one. Pick a compute budget, and train models of "
             "several sizes, each on exactly the number of tokens the budget allows. <bookmark mark='a'/> Plot final "
             "loss against model size, and you get a valley: too small a model can't hold what it sees, too large a "
-            "model doesn't get to see enough. <bookmark mark='b'/> Repeat at four budgets, twenty runs in all, and "
-            "fit a parabola to each valley. <bookmark mark='c'/> The best size grows with the budget, as a power law."
+            "model doesn't get to see enough. <bookmark mark='b'/> Repeat at four budgets, twenty-five runs in all, "
+            "and fit a parabola to each valley floor. <bookmark mark='c'/> The best size grows with the budget, as a "
+            "power law, with an exponent of about three quarters. That's close to what OpenAI found in 2020 with small "
+            "models. DeepMind's much larger study found about one half, and later work traced most of the gap to how "
+            "parameters are counted in very small models like ours."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("a")
@@ -208,6 +217,9 @@ class ScalingLaws(VoiceoverScene):
             label(r"Chinchilla 70B on 1.4T beat the 280B Gopher", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(notes, DOWN, buff=0.35)
         src = source(r"Hoffmann et al., \emph{Training Compute-Optimal Large Language Models} (2022), Eq.\ 10")
+        study = VGroup(label(r"400+ training runs", font_size=34, color=C.COMPUTE),
+                       label(r"70M to 16B parameters", font_size=28, color=C.PARAMS),
+                       label(r"5B to 500B tokens", font_size=28, color=C.DATA)).arrange(DOWN, buff=0.25).move_to(img)
         with self.voiceover(
             "In 2022, DeepMind's Chinchilla paper did this with more than four hundred models, up to sixteen billion "
             "parameters, and fitted a formula for the loss as a function of model size and data. <bookmark mark='l'/> "
@@ -217,9 +229,9 @@ class ScalingLaws(VoiceoverScene):
             "<bookmark mark='g'/> By that measure, GPT-3 had been trained on far too little data, and the 70-billion "
             "parameter Chinchilla, trained on 1.4 trillion tokens, beat a model four times its size."
         ) as vo:
-            self.play(FadeIn(formula), FadeIn(vals), FadeIn(src))
+            self.play(FadeIn(formula), FadeIn(vals), FadeIn(src), LaggedStart(*[FadeIn(x) for x in study], lag_ratio=0.4))
             vo.wait_until("l")
-            self.play(FadeIn(img), FadeIn(ax), FadeIn(notes[0]))
+            self.play(FadeOut(study), FadeIn(img), FadeIn(ax), FadeIn(notes[0]))
             vo.wait_until("i")
             self.play(LaggedStart(*[Create(i) for i in iso], lag_ratio=0.2), FadeIn(notes[1]))
             vo.wait_until("o")
