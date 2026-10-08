@@ -30,6 +30,9 @@ Post-training
     toy_rl      a miniature RLVR run (GRPO) on arithmetic: pass@1 vs pass@8
 Context
     epoch       Epoch AI's database of notable AI models (training compute over time)
+Worked examples
+    math        exact intermediates for on-screen calculations: Gopher statistics of one page, the first
+                BPE merges, per-token SFT loss under two real models, one NVFP4 block step by step
 """
 
 from __future__ import annotations
