@@ -17,6 +17,13 @@ dependencies = [
     "xlrd>=2.0",
     # Zeta zeros, li(x), domain coloring for videos/riemann (compute.py).
     "mpmath>=1.3",
+    # Common Crawl -> FineWeb filters, FineWeb-Edu shards for videos/frontier (compute.py only).
+    "datatrove[processing]>=0.10",
+    "warcio>=1.8",
+    "faust-cchardet>=3.2",
+    "python-magic>=0.4",
+    "aiohttp>=3.9",
+    "pyarrow>=15",
 ]
 
 [build-system]
