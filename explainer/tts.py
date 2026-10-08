@@ -72,6 +72,41 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bHemingway\b", "[Hemingway](/hˈɛmɪŋwˌA/)"),
     (r"\bBloomberg\b", "[Bloomberg](/blˈumbɜɹɡ/)"),
     (r"\bselloffs\b", "sell offs"),
+    # The Riemann hypothesis (videos/riemann)
+    (r"Landau[–—-]Siegel", "Landau Siegel"),  # no pause at the dash; names follow below
+    (r"\bli of\b", "[li](/ˌɛlˈI/) of"),  # the logarithmic integral: "L I of x"
+    (r"\bchi\b", "[chi](/kˈI/)"),
+    (r"\bpsi\b", "[psi](/sˈI/)"),
+    (r"\bMöbius\b", "[Möbius](/mˈObiəs/)"),
+    (r"\bMertens\b", "[Mertens](/mˈɜɹtənz/)"),
+    (r"\bDirichlet\b", "[Dirichlet](/dˌɪɹɪʃlˈA/)"),
+    (r"\bEisenstein\b", "[Eisenstein](/ˈIzənʃtˌIn/)"),
+    (r"\bChebyshev\b", "[Chebyshev](/ʧˈɛbɪʃɛf/)"),
+    (r"\bHadamard\b", "[Hadamard](/hˌædəmˈɑɹd/)"),
+    (r"\bde la Vallée Poussin\b", "de la [Vallée](/vælˈA/) [Poussin](/pusˈæn/)"),
+    (r"\bvon Mangoldt\b", "von [Mangoldt](/mˈɑnɡɔlt/)"),
+    (r"\bvon Koch\b", "[von Koch](/fɔn kˈɔk/)"),
+    (r"\bVon Koch\b", "[Von Koch](/fɔn kˈɔk/)"),
+    (r"\bSiegel\b", "[Siegel](/zˈiɡəl/)"),
+    (r"\bLandau\b", "[Landau](/lˈændW/)"),
+    (r"\bVinogradov\b", "[Vinogradov](/vˌinəɡɹˈɑdɔf/)"),
+    (r"\bKorobov\b", "[Korobov](/kˈɔɹəbɔf/)"),
+    (r"\bTrudgian\b", "[Trudgian](/tɹˈʌʤiən/)"),
+    (r"\bOdlyzko\b", "[Odlyzko](/ɑdlˈɪzkO/)"),
+    (r"\bte Riele\b", "[te Riele](/tə ɹˈilə/)"),
+    (r"\bKummer\b", "[Kummer](/kˈʊməɹ/)"),
+    (r"\bKubota\b", "[Kubota](/kubˈOtə/)"),
+    (r"\bHasse\b", "[Hasse](/hˈɑsə/)"),
+    (r"\bJacobi's\b", "[Jacobi's](/ʤəkˈObiz/)"),
+    (r"\bGoldmakher\b", "[Goldmakher](/ɡˈOldmɑkəɹ/)"),
+    (r"\bLouvel\b", "[Louvel](/luvˈɛl/)"),
+    (r"\bRadziwiłł\b", "[Radziwiłł](/ɹɑʤˈiviw/)"),
+    (r"\bConrey\b", "[Conrey](/kˈɑnɹi/)"),
+    (r"\bidoneal\b", "[idoneal](/ɪdˈOniəl/)"),
+    (r"\bsextic\b", "[sextic](/sˈɛkstɪk/)"),
+    (r"\bFourier\b", "[Fourier](/fˈʊɹiˌA/)"),  # heard as "four year"
+    (r"\bPoisson\b", "[Poisson](/pwɑsˈOn/)"),  # "pwah-SOHN"; heard as "poison" without this
+    (r"\bquasi\b", "[quasi](/kwˈɑzi/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
