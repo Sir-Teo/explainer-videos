@@ -43,6 +43,15 @@ class QuadraticVariation(VoiceoverScene):
     def squares(self, w, ts, opacity=0.45):
         return VGroup(*[square_on(self.ax, ts[i], w[i], w[i + 1], UNIT, opacity=opacity) for i in range(len(w) - 1)])
 
+    def refill(self, strips, n, total):
+        """Empty the tank, grow the n squares of the hero path, and pour them in."""
+        w, ts = hero(n), np.linspace(0, 1, n + 1)
+        sq = self.squares(w, ts, opacity=0.5)
+        self.play(self.empty_tank(strips), LaggedStart(*[GrowFromEdge(s_, LEFT) for s_ in sq], lag_ratio=0.01), run_time=1.0)
+        strips = pour(self, self.tank, list(sq), np.diff(w) ** 2, run_time=1.4, lag=0.004)
+        self.play(self.readout_val.animate.set_value(total), run_time=0.6)
+        return strips
+
     def empty_tank(self, strips):
         self.tank.level = 0.0
         return FadeOut(strips)
@@ -124,20 +133,17 @@ class QuadraticVariation(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(s_, LEFT) for s_ in sq], lag_ratio=0.06), run_time=1.5)
             strips = pour(self, tank, list(sq), np.diff(w) ** 2, run_time=2.0)
             self.play(self.readout_val.animate.set_value(qv[16]))
-        for n, text in [(64, "Sixty-four steps: just over the brim."),
-                        (256, "Two hundred and fifty-six: just under.")]:
-            with self.voiceover(text) as vo:
-                w, ts = hero(n), np.linspace(0, 1, n + 1)
-                sq = self.squares(w, ts, opacity=0.5)
-                self.play(self.empty_tank(strips), LaggedStart(*[GrowFromEdge(s_, LEFT) for s_ in sq], lag_ratio=0.01),
-                          run_time=1.0)
-                strips = pour(self, tank, list(sq), np.diff(w) ** 2, run_time=1.4, lag=0.004)
-                self.play(self.readout_val.animate.set_value(qv[n]), run_time=0.6)
+        assert qv[64] > 1 > qv[256]  # "just over the brim", "just under"
+        with self.voiceover("Sixty-four steps: just over the brim."):
+            strips = self.refill(strips, 64, qv[64])
+        with self.voiceover("Two hundred and fifty-six: just under."):
+            strips = self.refill(strips, 256, qv[256])
         fill = tank.fill_rect(qv[256])
         self.remove(*strips)
         self.add(fill)
+        assert f"{qv[4096]:.3f}" == "0.993" and f"{qv[4194304]:.4f}" == "1.0000"  # quoted below
         with self.voiceover(
-            f"Four thousand: {qv[4096]:.3f}. <bookmark mark='m'/> Four million: {qv[4194304]:.4f}. "
+            "Four thousand: 0.993. <bookmark mark='m'/> Four million: 1.0000. "
             "<bookmark mark='e'/> The squares' total area converges to exactly one: the elapsed time."
         ) as vo:
             self.play(Transform(fill, tank.fill_rect(qv[4096])), self.readout_val.animate.set_value(qv[4096]))

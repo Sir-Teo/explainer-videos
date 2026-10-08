@@ -286,11 +286,12 @@ class Roughness(VoiceoverScene):
         z256 = zigzag(256)
         full = path_curve(ax, W, stroke_width=1.6)
         tv16, tv256, tv4k, tv65k, tv4m = [v for _, v in rows]
+        assert (f"{tv16:.1f}", f"{tv256:.1f}", f"{tv4k:.1f}") == ("4.0", "12.7", "50.6") and 1600 < tv4m < 1700  # quoted
         with self.voiceover(
             "And there's an even stranger consequence. <bookmark mark='a'/> Walk along the path and add up the size of "
             "every move, up or down: the total distance traveled. <bookmark mark='b'/> Sampled at sixteen steps, our path "
-            f"travels {tv16:.1f}. <bookmark mark='c'/> At 256 steps, {tv256:.1f}. <bookmark mark='d'/> At four thousand, "
-            f"{tv4k:.1f}. And at four million steps, more than sixteen hundred. <bookmark mark='e'/> Each time the steps get "
+            "travels 4.0. <bookmark mark='c'/> At 256 steps, 12.7. <bookmark mark='d'/> At four thousand, "
+            "50.6. And at four million steps, more than sixteen hundred. <bookmark mark='e'/> Each time the steps get "
             "sixteen times finer, the distance quadruples, exactly as the formula predicts."
         ) as vo:
             self.play(Create(ax))
