@@ -14,26 +14,26 @@ from types import SimpleNamespace
 from manim import (
     BLUE,
     BLUE_B,
-    GREEN_B,
-    RED_B,
-    TEAL_B,
     GOLD,
     GOLD_A,
     GREEN,
     GREEN_A,
+    GREEN_B,
     GREY_A,
     GREY_B,
     GREY_D,
-    MAROON,
-    ORANGE,
     LIGHT_BROWN,
     LIGHT_PINK,
+    MAROON,
+    ORANGE,
     PINK,
     PURPLE,
     PURPLE_A,
     PURPLE_B,
     RED,
+    RED_B,
     TEAL,
+    TEAL_B,
     WHITE,
     YELLOW,
     Tex,
@@ -95,6 +95,23 @@ C = SimpleNamespace(
     GAUSS=LIGHT_PINK,  # Gauss sums
     THETA=GOLD,  # theta functions, automorphy, the "reflection"
     SIEVE=GREEN_A,  # the large sieve, near-orthogonality
+    # Open frontier models (videos/open_models).  Reuses the LLM colors above for
+    # tokens, the residual stream, q/k/v, attention weights and FFNs.
+    MIMO="#FF9F5A",  # Xiaomi MiMo-V2.6-Pro (model identity: tags, chart series)
+    GLM="#6EA8FE",  # Z.ai GLM-5.3
+    KIMI="#D4A5FF",  # Moonshot Kimi K3
+    EXPERT=PURPLE_B,  # routed experts (an FFN, so the MLP color)
+    SHARED_EXPERT=PURPLE_A,  # always-on shared experts
+    ROUTER=GOLD,  # router scores, expert selection
+    BALANCE=LIGHT_BROWN,  # load-balancing biases, expert load
+    LOCAL=TEAL_B,  # sliding-window (local) attention layers and windows
+    GLOBAL=ORANGE,  # global (full) attention layers
+    SINK="#B39C8E",  # attention-sink logits, attention that goes "nowhere"
+    LATENT=GREEN_B,  # MLA's compressed latent KV
+    INDEXER=PINK,  # DSA's lightning indexer, selected tokens
+    MEMORY=GREEN,  # linear-attention / KDA recurrent state S
+    DEPTH=ORANGE,  # attention over depth (attention residuals): it is attention
+    QUANT=GREY_A,  # low-precision number formats
     # Training frontier models (videos/frontier)
     PAGE=GREY_B,  # raw web pages, HTML, Common Crawl
     KEPT=TEAL,  # text that survives filtering, the clean corpus
@@ -107,7 +124,7 @@ C = SimpleNamespace(
     LR=GOLD_A,  # learning rate, schedules
     ADAMW=BLUE_B,  # AdamW
     MUON=PINK,  # Muon, orthogonalized updates
-    EXPERT=PURPLE_B,  # mixture-of-experts experts and routers
+    # EXPERT (PURPLE_B) is defined above, shared with videos/open_models
     SIGN_BIT=RED_B,  # floating-point layouts: sign
     EXP_BIT=GREEN_B,  # exponent
     MAN_BIT=BLUE_B,  # mantissa
