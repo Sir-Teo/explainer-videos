@@ -40,14 +40,49 @@ class Quality(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def classifier_idea(self):
-        steps = VGroup(
-            label(r"1. Llama 3 70B grades 500{,}000 pages: educational value 0--5", font_size=30),
-            label(r"2. a small classifier learns to imitate those grades", font_size=30),
-            label(r"3. it scores all 15 trillion tokens (6{,}000 H100 hours)", font_size=30),
-            label(r"4. keep pages scoring 3 or more", font_size=30, color=C.EDU),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.1)
-        head = label(r"Model-based filtering: FineWeb-Edu", font_size=38).to_edge(UP, buff=0.5)
-        src = source(r"Penedo et al., \emph{The FineWeb Datasets} (2024)")
+        def mini_page(badge=None, color=GREY_B):
+            r = RoundedRectangle(width=0.5, height=0.66, corner_radius=0.05, stroke_color=GREY_B, stroke_width=1.5,
+                                 fill_color="#1b1f27", fill_opacity=1)
+            lines = VGroup(*[Line(LEFT * w / 2, RIGHT * w / 2, stroke_width=1.5, color=GREY_C)
+                             for w in (0.32, 0.3, 0.34, 0.2)]).arrange(DOWN, buff=0.1).move_to(r)
+            g = VGroup(r, lines)
+            if badge is not None:
+                c = Circle(radius=0.15, stroke_width=0, fill_color=color, fill_opacity=1).move_to(r.get_corner(UR))
+                g.add(c, MathTex(str(badge), font_size=22, color=BLACK).move_to(c))
+            return g
+
+        grades = [1, 4, 0, 3, 2, 1]  # illustrative grades
+        unknown = VGroup(*[mini_page("?", GREY_B) for _ in grades]).arrange(RIGHT, buff=0.3).move_to(UP * 0.3)
+        worth = label(r"worth learning from?", font_size=30, color=GREY_A).next_to(unknown, DOWN, buff=0.4)
+        raw = VGroup(*[mini_page() for _ in grades]).arrange_in_grid(2, 3, buff=0.2).scale(1.2).move_to(LEFT * 5.0 + UP * 1.2)
+        raw_t = label(r"500{,}000 pages", font_size=24).next_to(raw, DOWN, buff=0.15)
+        llm = VGroup(RoundedRectangle(width=2.6, height=1.0, corner_radius=0.15, stroke_color=C.EDU, fill_color=C.EDU,
+                                      fill_opacity=0.15),
+                     label(r"Llama 3 70B", font_size=30, color=C.EDU)).move_to(LEFT * 1.2 + UP * 1.2)
+        llm[1].move_to(llm[0])
+        llm_t = label(r"prompt: rate educational value, 0--5", font_size=20, color=GREY_A).next_to(llm, UP, buff=0.12)
+        graded = VGroup(*[mini_page(g, C.EDU if g >= 3 else GREY_B) for g in grades]).arrange_in_grid(2, 3, buff=0.2).scale(1.2)
+        graded.move_to(RIGHT * 2.8 + UP * 1.2)
+        graded_t = label(r"graded pages", font_size=24).next_to(graded, DOWN, buff=0.15)
+        a1 = Arrow(raw.get_right(), llm.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
+        a2 = Arrow(llm.get_right(), graded.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
+        clf = VGroup(RoundedRectangle(width=2.6, height=1.0, corner_radius=0.15, stroke_color=C.PARAMS, fill_color=C.PARAMS,
+                                      fill_opacity=0.15),
+                     label(r"small classifier", font_size=30, color=C.PARAMS)).move_to(LEFT * 1.2 + DOWN * 1.9)
+        clf[1].move_to(clf[0])
+        clf_t = label(r"$\approx$110M parameters: cheap enough for the whole web", font_size=20, color=GREY_A).next_to(clf, DOWN, buff=0.12)
+        a3 = DashedLine(graded_t.get_bottom() + DOWN * 0.05, clf.get_corner(UR) + LEFT * 0.3 + UP * 0.05, color=C.PARAMS, stroke_width=2.5,
+                        dash_length=0.1).add_tip(tip_length=0.2)
+        a3_t = label(r"learns to imitate", font_size=24, color=C.PARAMS).next_to(a3.get_center(), LEFT, buff=0.55).shift(UP * 0.12)
+        web = VGroup(*[mini_page() for _ in range(18)]).arrange_in_grid(3, 6, buff=0.12).scale(0.85)
+        web.move_to(RIGHT * 4.0 + DOWN * 1.9)
+        web_t = label(r"all 15 trillion tokens (6{,}000 H100 hours)", font_size=22).next_to(web, DOWN, buff=0.15)
+        a4 = Arrow(clf.get_right(), web.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
+        rng = np.random.default_rng(3)
+        web_scores = rng.choice([0, 1, 1, 1, 2, 2, 3, 4], size=len(web))
+        keep_t = label(r"keep score $\geq 3$", font_size=26, color=C.EDU).next_to(web, UP, buff=0.15)
+        head = label(r"Model-based filtering: FineWeb-Edu", font_size=38).to_edge(UP, buff=0.4)
+        src = source(r"Penedo et al., \emph{The FineWeb Datasets} (2024); grades on screen are illustrative")
         with self.voiceover(
             "Hand-written rules catch obvious junk, but they can't tell whether a page is worth learning from. For "
             "that, labs use models. <bookmark mark='a'/> FineWeb-Edu asked Llama 3 70B to grade half a million pages "
@@ -55,10 +90,19 @@ class Quality(VoiceoverScene):
             "imitate those grades, <bookmark mark='c'/> and ran it over all fifteen trillion tokens. "
             "<bookmark mark='d'/> Then it kept the pages scoring three or more."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            for i, m in enumerate("abcd"):
-                vo.wait_until(m)
-                self.play(FadeIn(steps[i], shift=RIGHT * 0.2), run_time=0.8)
+            self.play(FadeIn(head), FadeIn(src), LaggedStart(*[FadeIn(u, shift=UP * 0.2) for u in unknown], lag_ratio=0.15))
+            self.play(FadeIn(worth))
+            vo.wait_until("a")
+            self.play(FadeOut(worth), ReplacementTransform(unknown, raw), FadeIn(raw_t), run_time=1.0)
+            self.play(GrowArrow(a1), FadeIn(llm), FadeIn(llm_t), run_time=0.8)
+            self.play(GrowArrow(a2), TransformFromCopy(raw, graded), FadeIn(graded_t), run_time=1.0)
+            vo.wait_until("b")
+            self.play(Create(a3), FadeIn(a3_t), FadeIn(clf), FadeIn(clf_t), run_time=1.0)
+            vo.wait_until("c")
+            self.play(GrowArrow(a4), LaggedStart(*[FadeIn(w, scale=0.6) for w in web], lag_ratio=0.04), FadeIn(web_t), run_time=1.5)
+            vo.wait_until("d")
+            self.play(FadeIn(keep_t), *[w.animate.set_opacity(1.0 if sc >= 3 else 0.2) for w, sc in zip(web, web_scores)],
+                      *[w[0].animate.set_stroke(C.EDU, width=2.5) for w, sc in zip(web, web_scores) if sc >= 3])
         self.wait(0.3)
         self.clear_scene()
 
