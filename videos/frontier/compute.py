@@ -626,6 +626,138 @@ def compute_precision():
 
 
 # ---------------------------------------------------------------------------
+# Worked examples: exact intermediate numbers for the formulas on screen
+# ---------------------------------------------------------------------------
+GOPHER_PAGE = "codebricks.io/blog/cat-and-mouse"  # the false positive shown in Filtering
+
+
+def _math_gopher() -> dict:
+    """Every Gopher quality statistic of one real page the funnel removed, computed with datatrove's own word
+    splitter on the same Trafilatura text the funnel saw (re-extracted from the cached WARC)."""
+    from datatrove.data import Document
+    from datatrove.pipeline.filters import GopherQualityFilter
+    from datatrove.utils.text import PUNCTUATION_SET, split_into_words
+    from warcio.archiveiterator import ArchiveIterator
+
+    from explainer.data import crawl
+
+    html, url = None, None
+    with open(warc_head(), "rb") as fh:
+        for rec in ArchiveIterator(fh):
+            u = rec.rec_headers.get_header("WARC-Target-URI") or ""
+            if rec.rec_type == "response" and GOPHER_PAGE in u:
+                html, url = rec.content_stream().read().decode("utf-8", "replace"), u
+                break
+    text = crawl._extract_one(html)
+    f = GopherQualityFilter()
+    verdict = f.filter(Document(text=text, id=url))
+    words = split_into_words(text, "en")
+    non_symbol = [w for w in words if any(ch not in PUNCTUATION_SET for ch in w)]
+    lines = text.splitlines()
+    alpha = [w for w in words if any(c.isalpha() for c in w)]
+    no_alpha = [w for w in words if not any(c.isalpha() for c in w)]
+    return dict(url=url, chars=len(text), n_words=len(words), n_non_symbol=len(non_symbol),
+                mean_word_len=float(np.mean([len(w) for w in non_symbol])),
+                hash_ratio=text.count("#") / len(words),
+                ellipsis_ratio=(text.count("...") + text.count("\u2026")) / len(words),
+                bullet_lines=sum(s.lstrip().startswith(("\u2022", "-")) for s in lines) / len(lines),
+                ellipsis_lines=sum(s.rstrip().endswith(("...", "\u2026")) for s in lines) / len(lines),
+                n_alpha=len(alpha), alpha_ratio=len(alpha) / len(words),
+                stop_words=sorted(f.stop_words.intersection(set(words))),
+                no_alpha_examples=no_alpha[:40], verdict=list(verdict) if isinstance(verdict, tuple) else [verdict])
+
+
+def _math_bpe(n_merges: int = 8) -> dict:
+    """The first BPE merges, re-derived by counting adjacent pairs over the exact word counts the tokenizer was
+    trained on (the same 60,000 FineWeb-Edu documents and byte-level pre-tokenizer)."""
+    from collections import Counter
+
+    from tokenizers import Tokenizer, pre_tokenizers
+
+    pre = pre_tokenizers.ByteLevel(add_prefix_space=False)
+    words = Counter()
+    for doc in fineweb_edu_docs()[2000:62_000]:
+        words.update(w for w, _ in pre.pre_tokenize_str(doc))
+    seqs = {w: tuple(w) for w in words}
+    steps = []
+    for _ in range(n_merges):
+        pairs = Counter()
+        for w, sq in seqs.items():
+            c = words[w]
+            for a, b in zip(sq, sq[1:]):
+                pairs[a, b] += c
+        (a, b), cnt = max(pairs.items(), key=lambda kv: (kv[1], kv[0]))
+        top = [[x, y, n] for (x, y), n in pairs.most_common(5)]
+        steps.append(dict(pair=[a, b], count=cnt, top=top))
+        for w, sq in seqs.items():
+            out, i = [], 0
+            while i < len(sq):
+                if i + 1 < len(sq) and sq[i] == a and sq[i + 1] == b:
+                    out.append(a + b)
+                    i += 2
+                else:
+                    out.append(sq[i])
+                    i += 1
+            seqs[w] = tuple(out)
+    tok = Tokenizer.from_file(str(DATA_DIR / "bpe.json"))
+    merges = [list(m) if isinstance(m, (list, tuple)) else m.split(" ")
+              for m in json.loads((DATA_DIR / "bpe.json").read_text())["model"]["merges"][:n_merges]]
+    sentence = "the cat sat on the mat"
+    return dict(steps=steps, trained_merges=merges, total_words=sum(words.values()), unique_words=len(words),
+                sentence=sentence, sentence_tokens=tok.encode(sentence).tokens)
+
+
+def _math_sft() -> dict:
+    """Per-token cross-entropy, -log p(token | everything before), of the example conversation under Qwen3-0.6B-Base
+    and Qwen3-0.6B (after post-training); only the assistant's tokens count toward the SFT loss."""
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    torch.set_num_threads(4)
+    tok = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
+    text = tok.apply_chat_template(CHAT, tokenize=False)
+    prefix = tok.apply_chat_template(CHAT[:-1], tokenize=False, add_generation_prompt=True)
+    ids = tok(text, return_tensors="pt").input_ids
+    n_prompt = len(tok(prefix).input_ids)
+    out = dict(pieces=[tok.decode([i]) for i in ids[0]], n_prompt=n_prompt)
+    for key, name in [("base", "Qwen/Qwen3-0.6B-Base"), ("chat", "Qwen/Qwen3-0.6B")]:
+        model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=torch.float32).eval()
+        with torch.no_grad():
+            logp = torch.log_softmax(model(ids).logits[0].float(), -1)
+        nll = [float("nan")] + [float(-logp[t - 1, ids[0, t]]) for t in range(1, ids.shape[1])]
+        out[f"nll_{key}"] = nll
+    return out
+
+
+def _math_nvfp4() -> dict:
+    """One NVFP4 block (16 values of GPT-2's residual stream at the token ' Paris'), step by step, with the same
+    arithmetic as quantize(x, 'nvfp4')."""
+    d = np.load(DATA_DIR / "precision.npz")
+    tokens = json.loads((DATA_DIR / "precision.json").read_text())["tokens"]
+    X = d["X"].astype(np.float64)
+    t = tokens.index(" Paris")
+    blk = X[t, :16]
+    st = np.abs(X).max() / (448.0 * 6.0)
+    sb_raw = np.abs(blk).max() / 6.0 / st
+    sb = float(round_to(np.array([sb_raw]), E4M3)[0])
+    scaled = blk / (sb * st)
+    q = round_to(scaled, E2M1)
+    deq = q * sb * st
+    assert np.allclose(deq, quantize(X, "nvfp4")[t, :16])
+    e = int(np.floor(np.log2(sb)))
+    m = int(round((sb / 2.0**e - 1) * 8))
+    return dict(token=" Paris", row=t, x=blk.tolist(), tensor_amax=float(np.abs(X).max()), st=float(st),
+                block_amax=float(np.abs(blk).max()), sb_raw=float(sb_raw), sb=sb, sb_bits=[0, e + 7, m],
+                scaled=scaled.tolist(), q=q.tolist(), deq=deq.tolist(),
+                rel_err=float(np.sqrt(((deq - blk) ** 2).sum() / (blk**2).sum())))
+
+
+def compute_math():
+    """Exact intermediate numbers for the worked examples (each formula on screen is evaluated on real data)."""
+    return dict(gopher=_math_gopher(), bpe=_math_bpe(), sft=_math_sft(), nvfp4=_math_nvfp4())
+
+
+# ---------------------------------------------------------------------------
 # Post-training
 # ---------------------------------------------------------------------------
 CHAT = [
@@ -846,6 +978,7 @@ ITEMS = {
     "precision": compute_precision,
     "chat": compute_chat,
     "toy_rl": compute_toy_rl,
+    "math": compute_math,
     "goodhart": compute_goodhart,
     "epoch": compute_epoch,
 }
