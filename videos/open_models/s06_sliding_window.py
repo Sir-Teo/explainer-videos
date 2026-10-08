@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    Plot, cfg, label, layer_strip, model_tag, note, schematic_tag, show_chapter_card,
+    Plot, cfg, label, layer_strip, model_tag, note, show_chapter_card,
 )
 from videos.open_models.toys import cache_gb, kv_cache, swa_reach
 

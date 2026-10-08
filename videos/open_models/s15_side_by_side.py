@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    KEYS, MCOLOR, NAMES, Plot, cfg, label, model, note, show_chapter_card, source,
+    KEYS, MCOLOR, NAMES, Plot, cfg, label, model, note, show_chapter_card,
 )
 from videos.open_models.toys import cache_gb, kv_cache
 
@@ -86,8 +86,8 @@ class SideBySide(VoiceoverScene):
         for b, good in zip(boxes[3:], ok):
             m = MathTex(r"\checkmark" if good else r"\times", font_size=36, color=GREEN if good else RED)
             marks.add(m.next_to(b, DOWN, buff=0.15))
-        v_l = label(r"verify: the full model checks all the guesses in one pass, keeps the ones it agrees with",
-                    font_size=26).next_to(marks, DOWN, buff=0.3)
+        v_l = label(r"verify: the full model checks every guess in one pass and keeps the ones it agrees with",
+                    font_size=26).next_to(marks, DOWN, buff=0.3).set_x(0)
         facts = VGroup(
             label(r"\textbf{MiMo}: a 5-layer drafter that proposes 7 tokens per pass", font_size=26, color=C.MIMO),
             label(r"\textbf{GLM}: a drafter that reuses the indexer's choices and the main model's cache;", font_size=26,

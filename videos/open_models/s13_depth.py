@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    block, cfg, heat_image, label, model, model_tag, note, show_chapter_card, source,
+    block, cfg, heat_image, label, model, model_tag, show_chapter_card,
 )
 from videos.open_models.toys import softmax
 

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    cfg, label, layer_strip, model_tag, note, schematic_tag, show_chapter_card, source,
+    cfg, label, layer_strip, model_tag, note, show_chapter_card, source,
 )
 
 # GLM-5 technical report (arXiv:2602.15763), Table 3: base models after DSA continued pre-training.

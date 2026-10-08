@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.open_models.common import (
-    Plot, block, cfg, label, model_tag, note, random_values, show_chapter_card, source, vector_strip,
+    Plot, block, cfg, label, model_tag, note, random_values, show_chapter_card, vector_strip,
 )
 from videos.open_models.toys import situ_diag, swiglu_diag
 
@@ -152,9 +152,10 @@ class LatentMoE(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(l_si), Create(cap), FadeIn(cap_l), FadeIn(si_l), run_time=1.8)
 
-        res = VGroup(label(r"Moonshot: K3's architecture and training changes reach Kimi K2's loss", font_size=30),
+        res = VGroup(label(r"Moonshot reports: K3 reaches Kimi K2's loss", font_size=30),
                      label(r"with about $2.5\times$ less compute", font_size=34, color=YELLOW)).arrange(DOWN, buff=0.2)
-        res.next_to(eqs, DOWN, buff=0.6).align_to(eqs, LEFT)
+        res.next_to(eqs, DOWN, buff=0.6)
+        res.set_x(eqs.get_x())
         with self.voiceover(
             "<bookmark mark='r'/> Altogether, Moonshot reports that K3's new architecture, data, and training recipe reach "
             "the same loss as its predecessor, Kimi K2, with about two and a half times less compute."
