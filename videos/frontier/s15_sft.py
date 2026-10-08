@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer import *  # noqa: F403
-from videos.frontier.common import Mono, label, load, mono_lines, part_card, pipeline_map, source
+from videos.frontier.common import Mono, bar_rows, label, load, mono_lines, part_card, pipeline_map, source
 
 SPECIAL = ("<|im_start|>", "<|im_end|>", "<think>", "</think>")
 
@@ -135,16 +137,24 @@ class SFT(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def data(self):
-        rows = VGroup(
-            label(r"\textbf{InstructGPT} (2022): $\approx$13{,}000 human-written demonstrations", font_size=30),
-            label(r"\textbf{LIMA} (2023): 1{,}000 curated examples go a long way", font_size=30),
-            label(r"\textbf{T\"ulu 3} (2024): 939{,}344 prompts, mostly synthetic, filtered", font_size=30),
-            label(r"\textbf{OLMo 3 Think} (2025): $\approx$2.3 million prompts, $\approx$45 billion tokens", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.8)
-        distil = VGroup(
-            label(r"Distillation: DeepSeek-R1's reasoning, imitated by Qwen2.5-32B (SFT only)", font_size=28, color=C.ASSISTANT),
-            label(r"AIME 2024: 72.6\%\quad vs.\quad 47.0\% from RL on the same base", font_size=30),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.9)
+        sets = [  # (name, year, examples, what)
+            (r"\textbf{InstructGPT}", 2022, 13_000, r"human-written demonstrations"),
+            (r"\textbf{LIMA}", 2023, 1_000, r"carefully curated examples"),
+            (r"\textbf{T\"ulu 3}", 2024, 939_344, r"prompts, mostly synthetic, filtered"),
+            (r"\textbf{OLMo 3 Think}", 2025, 2_300_000, r"prompts ($\approx$45B tokens)"),
+        ]
+        fmt = {13_000: r"$\approx$13{,}000", 1_000: r"1{,}000", 939_344: r"939{,}344", 2_300_000: r"$\approx$2.3M"}
+        rows = bar_rows([(rf"{n} ({y})", np.log10(v) - 2, C.USER if y < 2024 else C.ASSISTANT, fmt[v]) for n, y, v, _ in sets],
+                        6.0 / (np.log10(2_300_000) - 2), font_size=26, bar_h=0.42, buff=0.32)
+        whats = VGroup(*[label(w, font_size=20, color=GREY_A).next_to(r[1], DOWN, buff=0.06).align_to(r[1], LEFT)
+                         for r, (_, _, _, w) in zip(rows, sets)])
+        chart = VGroup(rows, whats).move_to(UP * 0.9)
+        head = label(r"Supervised fine-tuning data: how many examples (log scale)", font_size=32).to_edge(UP, buff=0.35)
+        aime = bar_rows([(r"distilled from R1 (fine-tuning only)", 72.6, C.ASSISTANT, r"72.6\%"),
+                         (r"RL directly on the same base", 47.0, C.RL_POLICY, r"47.0\%")],
+                        5.0 / 100, font_size=24, bar_h=0.36, buff=0.18)
+        at = label(r"Qwen2.5-32B base, AIME 2024 (pass@1)", font_size=24).next_to(aime, UP, buff=0.18).align_to(aime, LEFT)
+        dist = VGroup(at, aime).to_edge(DOWN, buff=0.75).set_x(0)
         src = source(r"Ouyang et al.\ 2022; Zhou et al.\ 2023; Lambert et al.\ 2024; OLMo 3 (2025); DeepSeek-R1 (2025), Table 6")
         with self.voiceover(
             "Where do the conversations come from? <bookmark mark='a'/> Early on, from people: OpenAI's InstructGPT "
@@ -157,11 +167,13 @@ class SFT(VoiceoverScene):
             "alone, and it scored 72.6 percent on the AIME 2024 math competition, far above the 47 percent that "
             "reinforcement learning reached directly on the same base."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(head), FadeIn(src))
             for i, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(rows[i], shift=RIGHT * 0.2), run_time=0.8)
+                r = rows[i]
+                self.play(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]), FadeIn(whats[i]), run_time=0.9)
             vo.wait_until("e")
-            self.play(FadeIn(distil))
+            self.play(FadeIn(at), *[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2])) for r in aime],
+                      run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
