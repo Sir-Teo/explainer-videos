@@ -126,7 +126,8 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bMLA\b", "M L A"),
     (r"\bKDA\b", "K D A"),
     (r"\bMuon\b", "[Muon](/mjˈuɑn/)"),
-    (r"\bSwiGLU\b", "[SwiGLU](/swˈIɡlu/)"),
+    (r"\bSwiGLU\b", "[SwiGLU](/swˈiɡlu/)"),  # "swee-glue"
+    (r"\b[Qq]uantile\b", r"[\g<0>](/kwˈɑntIl/)"),  # heard as "quantal" without this
     (r"\bSiTU-GLU\b", "[SiTU](/sˈitu/) [GLU](/ɡlˈu/)"),
     (r"\bLatentMoE\b", "Latent M O E"),
     (r"\bReLU\b", "[ReLU](/ɹˈɛlu/)"),
