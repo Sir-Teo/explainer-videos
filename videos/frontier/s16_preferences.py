@@ -3,16 +3,18 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Plot, label, load, mono_lines, note, source
+from videos.frontier.common import Plot, calc, label, load, mono_lines, note, num_table, source
 
 
 class Preferences(VoiceoverScene):
     def construct(self):
         self.compare()
         self.reward_model()
+        self.rm_math()
         self.rlhf()
         self.goodhart()
         self.dpo()
+        self.dpo_math()
 
     # ------------------------------------------------------------------
     def compare(self):
@@ -72,6 +74,63 @@ class Preferences(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(bt), FadeIn(plot), FadeIn(src))
             self.play(Create(curve), run_time=1.2)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def rm_math(self):
+        ra, rb = 1.3, 0.4  # illustrative scores
+
+        def sig(z):
+            return 1 / (1 + np.exp(-z))
+        m = ra - rb
+        p, L, g = sig(m), -np.log(sig(m)), 1 - sig(m)
+        assert round(p, 3) == 0.711 and round(L, 3) == 0.341 and round(g, 3) == 0.289
+        assert round(-np.log(sig(3.0)), 3) == 0.049 and round(1 - sig(3.0), 3) == 0.047
+        head = label(r"Training the reward model on one comparison", font_size=34).to_edge(UP, buff=0.4)
+        sc = VGroup(*[VGroup(label(rf"answer {n}", font_size=28, color=GREY_A), MathTex(rf"r_{n} = {v}", font_size=40, color=c)
+                             ).arrange(DOWN, buff=0.12) for n, v, c in [("A", ra, C.REWARD), ("B", rb, C.PENALTY)]])
+        sc.arrange(RIGHT, buff=0.8)
+        nums = calc(r"P(A \succ B) &= \sigma(1.3 - 0.4) = \frac{1}{1 + e^{-0.9}} = 0.711",
+                    r"\\ \mathcal{L} &= -\log \sigma(r_A - r_B) = -\log 0.711 = 0.341",
+                    r"\\ \frac{\partial \mathcal{L}}{\partial r_A} &= -\big(1 - \sigma(0.9)\big) = -0.289",
+                    r"\\ \frac{\partial \mathcal{L}}{\partial r_B} &= +\big(1 - \sigma(0.9)\big) = +0.289",
+                    r"\\ \text{gap } 3: \ \mathcal{L} &= 0.049, \ \text{slope } {-0.047}", font_size=32)
+        nums[4].set_color(GREY_A)
+        left = VGroup(sc, nums).arrange(DOWN, buff=0.6, aligned_edge=LEFT).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=0.6)
+        plot = Plot(x_range=(-3, 4), y_range=(0, 3.5), width=4.4, height=3.6, x_ticks=[-2, 0, 2, 4], y_ticks=[0, 1, 2, 3],
+                    x_label=r"gap $r_A - r_B$", y_label=r"loss $-\log\sigma$", font_size=22)
+        plot.to_edge(RIGHT, buff=0.5).align_to(nums, UP).shift(DOWN * 0.2)
+        xs = np.linspace(-3, 4, 200)
+        curve = plot.line(xs, -np.log(sig(xs)), color=C.LOSS, stroke_width=4)
+        d1 = Dot(plot.c2p(m, L), radius=0.08, color=C.REWARD)
+        d2 = Dot(plot.c2p(3.0, -np.log(sig(3.0))), radius=0.08, color=GREY_A)
+        tx = np.array([m - 1.2, m + 1.2])
+        tan = plot.line(tx, L - g * (tx - m), color=C.REWARD, stroke_width=3)
+        shift = note(r"only the gap matters: add 10 to both scores and nothing changes").to_edge(DOWN, buff=0.35)
+        tag = note(r"illustrative scores").to_corner(UR, buff=0.3)
+        with self.voiceover(
+            "Here's one comparison with numbers. Say the reward model scores answer A at 1.3 and answer B at 0.4. "
+            "<bookmark mark='p'/> Then it predicts that a person prefers A with probability sigma of 0.9: 71 percent. "
+            "<bookmark mark='l'/> The loss is minus the log of that probability, 0.34. <bookmark mark='g'/> Its slope "
+            "with respect to A's score is minus 0.29, and with respect to B's, plus 0.29: each step raises A's score "
+            "and lowers B's by the same amount. <bookmark mark='c'/> Once a pair is ranked confidently, say with a gap "
+            "of 3, the loss is 0.05 and the push shrinks to 0.05 too: the training effort goes to the comparisons the "
+            "model still gets wrong. <bookmark mark='s'/> And only the gap matters: add ten to every score, and "
+            "nothing changes."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(sc, lag_ratio=0.3))
+            vo.wait_until("p")
+            self.play(Write(nums[0]))
+            vo.wait_until("l")
+            self.play(Write(nums[1]), FadeIn(plot), Create(curve))
+            self.play(FadeIn(d1, scale=2))
+            vo.wait_until("g")
+            self.play(Write(nums[2:4]), Create(tan))
+            vo.wait_until("c")
+            self.play(Write(nums[4]), FadeIn(d2, scale=2))
+            vo.wait_until("s")
+            self.play(FadeIn(shift))
         self.wait(0.3)
         self.clear_scene()
 
@@ -200,4 +259,57 @@ class Preferences(VoiceoverScene):
             vo.wait_until("o")
             self.play(FadeIn(foot))
         self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def dpo_math(self):
+        beta = 0.1
+        lp = {"w": (-41.2, -43.2), "l": (-38.5, -37.5)}  # (policy, reference) sequence log-probs, illustrative
+        ratio = {k: round(a - b, 1) for k, (a, b) in lp.items()}
+        rhat = {k: beta * v for k, v in ratio.items()}
+        z = rhat["w"] - rhat["l"]
+        sz = 1 / (1 + np.exp(-z))
+        assert ratio == {"w": 2.0, "l": -1.0} and round(z, 2) == 0.30
+        assert round(sz, 3) == 0.574 and round(-np.log(sz), 3) == 0.554 and round(np.log(2), 3) == 0.693
+        assert lp["l"][0] > lp["w"][0]  # the rejected answer is still the likelier one in absolute terms
+        head = label(r"DPO on one pair, in numbers", font_size=34).to_edge(UP, buff=0.4)
+        seq = MathTex(r"\log \pi(y \mid x) = \sum_{t} \log \pi(y_t \mid x, y_{<t})", font_size=36, color=GREY_A)
+        seq.next_to(head, DOWN, buff=0.4)
+        tab = num_table([r"", r"\log \pi_\theta", r"\log \pi_{\text{ref}}", r"\text{log-ratio}", r"\hat r = \beta \times \text{ratio}"],
+                        [[r"y_w", "-41.2", "-43.2", "+2.0", "+0.20"],
+                         [r"y_l", "-38.5", "-37.5", "-1.0", "-0.10"]], font_size=38, h_buff=0.8, v_buff=0.3)
+        tab.rows[0][0].set_color(C.REWARD)
+        tab.rows[1][0].set_color(C.PENALTY)
+        tab.next_to(seq, DOWN, buff=0.55)
+        nums = calc(r"z &= \beta\big[(+2.0) - (-1.0)\big] = 0.1 \times 3.0 = 0.30",
+                    r"\\ \mathcal{L}_{\text{DPO}} &= -\log \sigma(0.30) = -\log 0.574 = 0.554",
+                    r"\\ \text{step } 0\ (\pi_\theta = \pi_{\text{ref}}): \ \mathcal{L}_{\text{DPO}} &= -\log \sigma(0) = \log 2 = 0.693",
+                    font_size=36)
+        nums[2].set_color(GREY_A)
+        nums.next_to(tab, DOWN, buff=0.6)
+        box = SurroundingRectangle(VGroup(tab.rows[0][1], tab.rows[1][1]), buff=0.1, color=C.HIGHLIGHT, corner_radius=0.08)
+        tag = note(r"illustrative log-probabilities, $\beta = 0.1$").to_corner(UR, buff=0.3)
+        with self.voiceover(
+            "Here's DPO on one pair. Each log-probability is a sum over the answer's tokens: the same per-token "
+            "numbers as in fine-tuning. <bookmark mark='r'/> Compared with the reference model, the policy has raised "
+            "the log-probability of the preferred answer by 2, and lowered the rejected one by 1. Times beta, 0.1, "
+            "those are implicit rewards: 0.2, and minus 0.1. <bookmark mark='z'/> Their gap, 0.3, goes into the same "
+            "Bradley-Terry loss as the reward model: minus log sigma of 0.3, which is 0.554. <bookmark mark='s'/> "
+            "Every pair starts at log 2, 0.693, because at step zero the policy is the reference. "
+            "<bookmark mark='a'/> And notice: the rejected answer is still the more likely one, in absolute terms. "
+            "DPO doesn't care. Only the ratios to the reference count."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(seq))
+            self.play(FadeIn(tab.header), Create(tab.rule), FadeIn(VGroup(*[VGroup(*r[:3]) for r in tab.rows])))
+            vo.wait_until("r")
+            self.play(FadeIn(VGroup(*[r[3] for r in tab.rows]), shift=LEFT * 0.1))
+            self.play(FadeIn(VGroup(*[r[4] for r in tab.rows]), shift=LEFT * 0.1))
+            vo.wait_until("z")
+            self.play(Write(nums[0]))
+            self.play(Write(nums[1]))
+            vo.wait_until("s")
+            self.play(Write(nums[2]))
+            vo.wait_until("a")
+            self.play(Create(box))
+        self.wait(0.4)
         self.clear_scene()

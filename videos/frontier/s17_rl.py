@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Mono, Plot, label, load, note, schematic_tag, smooth, source
+from videos.frontier.common import Mono, Plot, calc, label, load, note, num_table, schematic_tag, smooth, source
 
 
 class RL(VoiceoverScene):
@@ -12,7 +12,10 @@ class RL(VoiceoverScene):
         self.verifiable()
         self.setup_toy()
         self.group()
+        self.adv_math()
+        self.clip_math()
         self.curve()
+        self.passk_math()
         self.r1()
         self.agentic()
         self.hacking()
@@ -137,6 +140,144 @@ class RL(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def adv_math(self):
+        d = self.d
+        a, b = d["show"]
+        r = np.array([1.0 if x == a + b else 0.0 for x in d["groups"][0]["answers"]])
+        G = len(r)
+        mean, std = r.mean(), r.std(ddof=1)  # torch's default (unbiased) std, as in the run
+        adv = (r - mean) / (std + 1e-4)
+        assert G == 8 and mean == 0.125 and round(std, 3) == 0.354 and abs(std ** 2 - 0.125) < 1e-12
+        assert round(adv.max(), 2) == 2.47 and round(adv.min(), 2) == -0.35 and abs(adv.sum()) < 1e-9
+
+        def adv_k(k):  # advantages of a right and a wrong answer when k of the 8 are right
+            m, sd = k / G, np.sqrt(k * (G - k) / (G * (G - 1)))
+            return (1 - m) / (sd + 1e-4), (0 - m) / (sd + 1e-4)
+        tab_vals = {k: adv_k(k) for k in (1, 4, 7, 8)}
+        assert [round(v, 2) for v in tab_vals[4]] == [0.94, -0.94] and [round(v, 2) for v in tab_vals[7]] == [0.35, -2.47]
+        assert abs(tab_vals[8][0]) < 1e-9
+        head = label(r"The advantages for $478 + 356$, worked out", font_size=34).to_edge(UP, buff=0.4)
+        nums = calc(r"r &= (1, 0, 0, 0, 0, 0, 0, 0)",
+                    r"\\ \operatorname{mean}(r) &= \tfrac{1}{8}\,(1 + 0 + \dots + 0) = 0.125",
+                    r"\\ \operatorname{std}(r) &= \sqrt{\tfrac{1}{7}\big[\,0.875^2 + 7 \times 0.125^2\,\big]} = \sqrt{0.125} = 0.354",
+                    r"\\ A_{834} &= \frac{1 - 0.125}{0.354} = +2.47",
+                    r"\\ A_{\text{wrong}} &= \frac{0 - 0.125}{0.354} = -0.35",
+                    r"\\ \textstyle\sum_i A_i &= 2.47 - 7 \times 0.354 = 0", font_size=32)
+        nums[3].set_color(C.REWARD)
+        nums[4].set_color(C.PENALTY)
+        nums.next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.6)
+
+        def f(v):
+            return "0" if abs(v) < 1e-9 else f"{v:+.2f}"
+        tab = num_table([r"\text{right of } 8", r"A_{\text{right}}", r"A_{\text{wrong}}"],
+                        [[str(k), f(v[0]), (f(v[1]) if k < G else r"\text{---}")] for k, v in tab_vals.items()],
+                        font_size=32, col_colors=[WHITE, C.REWARD, C.PENALTY])
+        tab.next_to(nums, RIGHT, buff=0.9).align_to(nums, UP).shift(DOWN * 0.3)
+        VGroup(nums, tab).set_y(-0.35)
+        hl = SurroundingRectangle(tab.rows[0], buff=0.1, color=C.HIGHLIGHT, corner_radius=0.08)
+        tab.rows[3].set_color(GREY_B)
+        none = label(r"no signal", font_size=24, color=GREY_B).next_to(tab.rows[3], DOWN, buff=0.15)
+        with self.voiceover(
+            "Here are those numbers, worked out. The rewards are a single one and seven zeros, <bookmark mark='m'/> "
+            "so the mean is one eighth: 0.125. <bookmark mark='s'/> The spread, the sample standard deviation, is the "
+            "square root of an eighth: 0.354. <bookmark mark='a'/> So the right answer gets 0.875 divided by 0.354: "
+            "plus 2.47. <bookmark mark='b'/> Each wrong one gets minus 0.35. <bookmark mark='z'/> The advantages always "
+            "sum to zero: probability pushed up in one place is pushed down somewhere else. <bookmark mark='t'/> And "
+            "their size depends on how rare the outcome was. One success in eight earns plus 2.47; one failure in "
+            "eight costs minus 2.47. <bookmark mark='n'/> And when all eight agree, the spread is zero, and so is "
+            "every advantage."
+        ) as vo:
+            self.play(FadeIn(head), Write(nums[0]))
+            vo.wait_until("m")
+            self.play(Write(nums[1]))
+            vo.wait_until("s")
+            self.play(Write(nums[2]), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Write(nums[3]))
+            vo.wait_until("b")
+            self.play(Write(nums[4]))
+            vo.wait_until("z")
+            self.play(Write(nums[5]))
+            vo.wait_until("t")
+            self.play(FadeIn(tab.header), Create(tab.rule), FadeIn(VGroup(*tab.rows[:3]), lag_ratio=0.2), Create(hl))
+            vo.wait_until("n")
+            self.play(FadeIn(tab.rows[3]), FadeIn(none))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def clip_math(self):
+        eps = 0.2
+        A_pos, A_neg = 2.47, -0.35  # the advantages just computed (rounded as shown)
+
+        def obj(rho, A):
+            return np.minimum(rho * A, np.clip(rho, 1 - eps, 1 + eps) * A)
+        assert round(1.3 * A_pos, 2) == 3.21 and round(1.2 * A_pos, 2) == 2.96 and round(obj(1.3, A_pos), 2) == 2.96
+        assert round(0.6 * A_neg, 2) == -0.21 and round(0.8 * A_neg, 2) == -0.28 and round(obj(0.6, A_neg), 2) == -0.28
+        J = MathTex(r"J(\theta) = \frac{1}{G}\sum_{i=1}^{G} \frac{1}{|o_i|}\sum_{t}",
+                    r"\min\!\Big(\rho_{i,t} A_i,\ \operatorname{clip}(\rho_{i,t},\, 1 - \varepsilon,\, 1 + \varepsilon)\, A_i\Big)",
+                    r",\qquad \rho_{i,t} = \frac{\pi_\theta(o_{i,t} \mid \cdot)}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid \cdot)}",
+                    font_size=32).to_edge(UP, buff=0.4)
+        J[1].set_color(C.HIGHLIGHT)
+        sub = note(r"GRPO (Shao et al.\ 2024), PPO's clipped objective; $\varepsilon = 0.2$; KL term omitted, as in many recent recipes",
+                   font_size=20).next_to(J, DOWN, buff=0.2)
+        rs = np.linspace(0.4, 1.6, 121)
+        plots = VGroup()
+        for A, yr, yt in [(A_pos, (0, 4), [0, 1, 2, 3, 4]), (A_neg, (-0.6, 0), [-0.6, -0.3, 0])]:
+            pl = Plot(x_range=(0.4, 1.6), y_range=yr, width=3.6, height=2.0, x_ticks=[0.4, 0.8, 1.2, 1.6], y_ticks=yt,
+                      x_label=r"$\rho$", y_label=rf"objective, $A = {A:+.2f}$", font_size=22)
+            band = Rectangle(width=pl.c2p(1.2, 0)[0] - pl.c2p(0.8, 0)[0], height=2.0, stroke_width=0, fill_color=GREY_D, fill_opacity=0.35)
+            band.move_to(pl.c2p(1.0, (yr[0] + yr[1]) / 2))
+            plots.add(VGroup(band, pl))
+        plots.arrange(RIGHT, buff=1.6).set_x(0).to_edge(DOWN, buff=0.45)
+        lines = []  # unclipped (dashed) and clipped objective, built on the plots' final positions
+        for (A, color), grp in zip([(A_pos, C.REWARD), (A_neg, C.PENALTY)], plots):
+            pl = grp[1]
+            lines.append((DashedLine(pl.c2p(0.4, 0.4 * A), pl.c2p(1.6, 1.6 * A), color=GREY_B, stroke_width=2),
+                          pl.line(rs, obj(rs, A), color=color, stroke_width=4)))
+        p1, p2 = plots[0][1], plots[1][1]
+        d1 = Dot(p1.c2p(1.3, obj(1.3, A_pos)), radius=0.08, color=C.REWARD)
+        d1u = Dot(p1.c2p(1.3, 1.3 * A_pos), radius=0.06, color=GREY_B)
+        d2 = Dot(p2.c2p(0.6, obj(0.6, A_neg)), radius=0.08, color=C.PENALTY)
+        d2u = Dot(p2.c2p(0.6, 0.6 * A_neg), radius=0.06, color=GREY_B)
+        nums = calc(r"\rho = 1.3:\ \min(1.3 \times 2.47,\ 1.2 \times 2.47) &= \min(3.21,\ 2.96) = 2.96",
+                    r"\\ \rho = 0.6:\ \min\big(0.6 \times (-0.35),\ 0.8 \times (-0.35)\big) &= \min(-0.21,\ -0.28) = -0.28",
+                    font_size=28)
+        nums[0].set_color(C.REWARD)
+        nums[1].set_color(C.PENALTY)
+        nums.next_to(sub, DOWN, buff=0.3)
+        flat = MathTex(r"\text{clipped value is flat in } \theta \;\Rightarrow\; \text{zero gradient: this token has moved enough}",
+                       font_size=28).next_to(nums, DOWN, buff=0.3)
+        toy = MathTex(r"\text{our toy: one step per batch, so } \rho = 1 \;\Rightarrow\; \nabla J = A\, \nabla \log \pi_\theta",
+                      font_size=28, color=GREY_A).next_to(flat, DOWN, buff=0.2)
+        with self.voiceover(
+            "GRPO's full objective adds one safeguard, borrowed from PPO. Rho is the ratio of a token's probability "
+            "now to its probability when the answers were sampled, <bookmark mark='c'/> and it's clipped to within "
+            "twenty percent of one. <bookmark mark='p'/> Take a token of the right answer, advantage plus 2.47, whose "
+            "probability has already risen by thirty percent: rho is 1.3. Unclipped, the objective would be 3.21; "
+            "clipped at 1.2 it's 2.96, and the minimum takes the clipped value. <bookmark mark='f'/> That value no "
+            "longer depends on the weights, so its gradient is zero: this token has been pushed enough for this "
+            "batch. <bookmark mark='n'/> Likewise a wrong answer's token already down to 0.6 of its old probability: "
+            "the minimum is the clipped minus 0.28, and the push stops. <bookmark mark='t'/> In our toy, each batch "
+            "is used for one step only, so rho is exactly one, and the gradient is simply the advantage times the "
+            "gradient of the log-probability."
+        ) as vo:
+            self.play(Write(J), FadeIn(sub), run_time=2.0)
+            self.play(FadeIn(plots), Create(lines[0][0]), Create(lines[1][0]))
+            vo.wait_until("c")
+            self.play(Create(lines[0][1]), Create(lines[1][1]), run_time=1.5)
+            vo.wait_until("p")
+            self.play(Write(nums[0]), FadeIn(d1u), FadeIn(d1, scale=2))
+            vo.wait_until("f")
+            self.play(FadeIn(flat))
+            vo.wait_until("n")
+            self.play(Write(nums[1]), FadeIn(d2u), FadeIn(d2, scale=2))
+            vo.wait_until("t")
+            self.play(FadeIn(toy))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def curve(self):
         d = self.d
         c = d["curve"]
@@ -193,6 +334,61 @@ class RL(VoiceoverScene):
         ) as vo:
             vo.wait_until("z")
             self.play(Create(zl), FadeIn(zt), run_time=1.5)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def passk_math(self):
+        d = self.d
+        c0 = d["curve"][0]
+        p1, p8 = c0["pass1"], c0["pass8"]
+        assert round(p1, 2) == 0.61 and round(100 * p8, 1) == 98.8
+        ideal = 1 - (1 - round(p1, 2)) ** 8
+        hard = 1 - (7 / 8) ** 8
+        assert round(100 * ideal, 2) == 99.95 and round(100 * hard) == 66
+        assert d["groups"][0]["answers"].count(sum(d["show"])) == 1  # 478+356: one right in eight
+        plot = Plot(x_range=(0, 1), y_range=(0, 1), width=4.4, height=4.6, x_ticks=[0, 0.25, 0.5, 0.75, 1],
+                    y_ticks=[0, 0.25, 0.5, 0.75, 1], y_fmt=lambda v: MathTex(rf"{int(100 * v)}\%", font_size=22, color=GREY_A),
+                    x_fmt=lambda v: f"{v:g}", x_label=r"$p$: chance one sample is right", font_size=22)
+        plot.to_edge(LEFT, buff=0.9).set_y(-0.5)
+        ps = np.linspace(0, 1, 200)
+        l1 = plot.line(ps, ps, color=GREY_B, stroke_width=2.5)
+        l8 = plot.line(ps, 1 - (1 - ps) ** 8, color=WHITE, stroke_width=4)
+        t1 = label(r"pass@1 $= p$", font_size=22, color=GREY_B).next_to(plot.c2p(0.7, 0.7), DR, buff=0.05)
+        t8 = label(r"pass@8", font_size=22).move_to(plot.c2p(0.42, 0.86))
+        dh = Dot(plot.c2p(1 / 8, hard), radius=0.08, color=C.PENALTY)
+        da = Dot(plot.c2p(0.61, ideal), radius=0.08, color=C.REWARD)
+        head = label(r"Why pass@8 started near the ceiling", font_size=34).to_edge(UP, buff=0.4)
+        nums = calc(r"P(\text{all } k \text{ wrong}) &= (1 - p)^k",
+                    r"\\ \text{pass@}k &= 1 - (1 - p)^k",
+                    r"\\ \text{average: } \bar p = 0.61 \;\Rightarrow\; \text{pass@}8 &= 1 - 0.39^8 = 99.95\%",
+                    r"\\ \text{measured: } \text{pass@}8 &= 98.8\%",
+                    r"\\ 478{+}356:\ \hat p = \tfrac{1}{8} \;\Rightarrow\; \text{pass@}8 &= 1 - \big(\tfrac{7}{8}\big)^8 = 66\%",
+                    font_size=30)
+        nums[2].set_color(C.REWARD)
+        nums[4].set_color(C.PENALTY)
+        nums.to_edge(RIGHT, buff=0.5).align_to(plot, UP).shift(DOWN * 0.4)
+        assert nums.get_left()[0] > plot.get_right()[0] + 0.3, "pass@k: formulas collide with the plot"
+        with self.voiceover(
+            "Back to pass at eight: why did it barely move? If each sample is right with probability p, all k samples "
+            "fail with probability one minus p, to the k. <bookmark mark='a'/> At the start, the average sample was "
+            "right 61 percent of the time. If every problem were average, pass at eight would be one minus 0.39 to "
+            "the eighth: 99.95 percent. <bookmark mark='m'/> The measured 98.8 is a little lower, because failures "
+            "cluster on the hard problems, <bookmark mark='h'/> like 478 plus 356, where one sample in eight was "
+            "right. There, pass at eight is one minus seven eighths to the eighth: 66 percent. <bookmark mark='r'/> "
+            "RL raised p on exactly those problems, and pass at one followed. Pass at eight was already near its "
+            "ceiling."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(plot), Write(nums[:2]))
+            self.play(Create(l1), FadeIn(t1), Create(l8), FadeIn(t8), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Write(nums[2]), FadeIn(da, scale=2))
+            vo.wait_until("m")
+            self.play(Write(nums[3]))
+            vo.wait_until("h")
+            self.play(Write(nums[4]), FadeIn(dh, scale=2))
+            vo.wait_until("r")
+            self.play(Indicate(dh, color=C.PENALTY))
         self.wait(0.3)
         self.clear_scene()
 
