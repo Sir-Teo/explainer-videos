@@ -11,6 +11,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`published/opposing_forces.mp4`](published/opposing_forces.mp4) | [`videos/opposing_forces`](videos/opposing_forces) |
 | **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
 | **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
+| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU) | rendering | (final cut in progress) | [`videos/frontier`](videos/frontier) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -26,7 +27,7 @@ UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
 ```bash
 # 1. System packages (Ubuntu/Debian). LaTeX is used for all math.
-sudo apt-get install ffmpeg libpango1.0-dev pkg-config espeak-ng \
+sudo apt-get install ffmpeg libpango1.0-dev pkg-config espeak-ng libmagic1 \
      texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science dvisvgm cm-super
 
 # 2. Python env (3.10–3.12)
@@ -38,6 +39,7 @@ uv pip install -e .
 python -m videos.navier_stokes.simulate      # fluid simulations (~40 min on 4 cores)
 python -m videos.llm.analyze                 # GPT-2 probes + a tiny transformer trained on Shakespeare (~20 min)
 python -m videos.riemann.compute             # real zeta zeros, prime counts, Möbius sums, domain coloring (~4 min)
+python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
 
 # 4. Render: fast preview, then the final 1080p cut
@@ -47,6 +49,7 @@ python tools/build.py llm                     # -> renders/llm.mp4
 python tools/build.py opposing_forces         # -> renders/opposing_forces.mp4
 python tools/build.py riemann                 # -> renders/riemann.mp4
 python tools/build.py open_models             # -> renders/open_models.mp4
+python tools/build.py frontier                # -> renders/frontier.mp4
 ```
 
 Iterate on a single scene:
@@ -71,16 +74,21 @@ explainer/                 shared toolkit (import with `from explainer import *`
     lbm.py                 D2Q9 lattice-Boltzmann (flow past a cylinder), Smagorinsky LES
     spectral.py            pseudo-spectral 2D vorticity solver (periodic box)
     colormaps.py           field -> RGB maps tuned for the dark background
-  lm/                      "real model" footage for the LLM video
+  lm/                      "real model" footage for the LLM and frontier-training videos
     gpt2.py                probes of GPT-2 (tokens, attention, residual stream, logit lens, ...)
     tiny_gpt.py            a minimal character-level GPT, trained from scratch on CPU
     bpe.py                 byte-pair encoding, step by step
+    pocket.py              a modern pocket GPT (RMSNorm, RoPE, SwiGLU, QK-norm, MoE) + AdamW/Muon, cosine/WSD
+  data/                    web-data footage for the frontier-training video
+    crawl.py               Common Crawl through datatrove's FineWeb filters; MinHash LSH with FineWeb's settings
 videos/<name>/
   manifest.py              scene order + chapter titles
   sNN_*.py                 one Scene class per chapter (narration lives in the code)
   simulate.py / analyze.py precomputes and caches the simulations / model data for this video
   fetch.py                 (opposing_forces) downloads public market data into a committed data.json snapshot
   compute.py               (riemann) mpmath/NumPy: zeta zeros, prime counts, Möbius walk, Gauss sums, domain coloring
+                           (frontier) Common Crawl funnel, dedup, FineWeb-Edu scores, BPE, scaling-law / optimizer /
+                           schedule / stability / MoE sweeps, Newton-Schulz, FP8/FP4, chat template, GRPO, Epoch data
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   README.md                outline, color legend, sources and fact-check notes
@@ -165,6 +173,7 @@ voice). Set `EXPLAINER_VOICE` to try another Kokoro voice.
 * Training text for the tiny model: Tiny Shakespeare from [`karpathy/char-rnn`](https://github.com/karpathy/char-rnn) (Shakespeare, public domain).
 * Market note explained: Jurrien Timmer, [*Opposing Forces*](https://www.linkedin.com/pulse/opposing-forces-week-10526-jurrien-timmer-anaac/) (Fidelity Investments, Oct 5, 2026). The video paraphrases and attributes its arguments; it is not affiliated with Fidelity.
 * Market and macro data: [FRED](https://fred.stlouisfed.org/) (Federal Reserve Bank of St. Louis), the [New York Fed](https://www.newyorkfed.org/research/data_indicators/term-premia-tabs) (ACM term premium), [Robert Shiller](https://shillerdata.com/), [U.S. Treasury Fiscal Data](https://fiscaldata.treasury.gov/), [FactSet Earnings Insight](https://insight.factset.com/), and Nasdaq daily prices.
+* Frontier-training video: web data from [Common Crawl](https://commoncrawl.org/) (CC-MAIN-2026-39) filtered with Hugging Face's [`datatrove`](https://github.com/huggingface/datatrove) (Apache-2.0); pretraining text from [FineWeb-Edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) (ODC-By) via `karpathy/fineweb-edu-100b-shuffle`; quality scores from [`HuggingFaceFW/fineweb-edu-classifier`](https://huggingface.co/HuggingFaceFW/fineweb-edu-classifier); chat template and outputs from [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) and its base model (Apache-2.0); training-compute data from [Epoch AI](https://epoch.ai/data/ai-models) (CC BY 4.0). Muon after [`KellerJordan/Muon`](https://github.com/KellerJordan/Muon); the end-to-end framing owes much to [`karpathy/nanochat`](https://github.com/karpathy/nanochat) and Hugging Face's training playbooks.
 * Mathematics explained: OpenAI, [`github.com/openai/math`](https://github.com/openai/math), family 003, *The quasi-Riemann hypothesis* (Sept 30 – Oct 5, 2026). The video explains and attributes the manuscripts; it is not affiliated with OpenAI. Numerics: [mpmath](https://mpmath.org/) (BSD) and NumPy.
 * Models explained: Xiaomi [MiMo-V2.6-Pro](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL), Z.ai [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3), Moonshot AI [Kimi K3](https://huggingface.co/moonshotai/Kimi-K3), as ranked by the [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/models/open-source) (v4.3.2, Oct 8, 2026). Configs and weights are read from Hugging Face; the video explains and attributes the labs' technical reports and is not affiliated with any of them.
 * Visual style inspired by Grant Sanderson's [3Blue1Brown](https://www.3blue1brown.com/).
