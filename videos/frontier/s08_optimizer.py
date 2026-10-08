@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Plot, bar_rows, eval_curve, label, load, note, source
+from videos.frontier.common import Plot, bar_rows, calc, eval_curve, label, load, note, num_table, source
 
 A_NS, B_NS, C_NS = 3.4445, -4.7750, 2.0315
 
@@ -36,8 +36,10 @@ def valley_paths(n=60):
 class Optimizer(VoiceoverScene):
     def construct(self):
         self.adam()
+        self.adam_math()
         self.spectrum()
         self.newton_schulz()
+        self.ns_math()
         self.race()
         self.adoption()
 
@@ -76,6 +78,72 @@ class Optimizer(VoiceoverScene):
             vo.wait_until("w")
             self.play(FadeIn(mem))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def adam_math(self):
+        b1, b2, eps = 0.9, 0.95, 1e-8  # the betas our runs use
+
+        def adam(gs):
+            m = v = 0.0
+            out = []
+            for t, g in enumerate(gs, 1):
+                m = b1 * m + (1 - b1) * g
+                v = b2 * v + (1 - b2) * g * g
+                mh, vh = m / (1 - b1**t), v / (1 - b2**t)
+                out.append((mh, np.sqrt(vh), mh / (np.sqrt(vh) + eps)))
+            return out
+        big, small = [4.0, 5.0, 3.0], [0.04, 0.05, 0.03]
+        A, Bs = adam(big), adam(small)
+        assert all(abs(a[2] - b[2]) < 1e-5 for a, b in zip(A, Bs)) and round(A[-1][2], 3) == 0.974
+        eqs = calc(r"m_t &= \beta_1\, m_{t-1} + (1-\beta_1)\, g_t", r"\\ v_t &= \beta_2\, v_{t-1} + (1-\beta_2)\, g_t^2",
+                   r"\\ \Delta\theta &= -\eta\,\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon},\qquad "
+                   r"\hat m_t = \frac{m_t}{1-\beta_1^t},\ \hat v_t = \frac{v_t}{1-\beta_2^t}", font_size=32)
+        eqs.to_edge(UP, buff=0.4).set_x(0)
+        betas = MathTex(r"\beta_1 = 0.9,\ \beta_2 = 0.95", font_size=26, color=GREY_A).next_to(eqs, DOWN, buff=0.15)
+        f = lambda x: f"{x:.3g}"  # noqa: E731
+        rows = [[str(t + 1), f(gb), f(a[0]), f(a[1]), rf"{a[2]:.3f}", f(gs), f(b[0]), f(b[1]), rf"{b[2]:.3f}"]
+                for t, (gb, gs, a, b) in enumerate(zip(big, small, A, Bs))]
+        tab = num_table([r"t", r"g", r"\hat m", r"\sqrt{\hat v}", r"\hat m/\sqrt{\hat v}",
+                         r"g", r"\hat m", r"\sqrt{\hat v}", r"\hat m/\sqrt{\hat v}"], rows, font_size=28,
+                        col_colors=[GREY_A, C.GRADS, WHITE, WHITE, C.ADAMW, C.GRADS, WHITE, WHITE, C.ADAMW])
+        tab.next_to(betas, DOWN, buff=0.55).set_x(0)
+        c1 = VGroup(*tab.cols[1:5])
+        c2 = VGroup(*tab.cols[5:9])
+        g1 = label(r"parameter 1: big gradients", font_size=24, color=C.GRADS).next_to(c1, UP, buff=0.2)
+        g2 = label(r"parameter 2: 100$\times$ smaller", font_size=24, color=C.GRADS).next_to(c2, UP, buff=0.2)
+        hi = VGroup(*[SurroundingRectangle(VGroup(tab.rows[i][4], tab.rows[i][8]), buff=0.06, color=C.ADAMW, stroke_width=0)
+                      for i in range(3)])
+        box1 = SurroundingRectangle(tab.cols[4][1:], buff=0.1, color=C.ADAMW, stroke_width=2)
+        box2 = SurroundingRectangle(tab.cols[8][1:], buff=0.1, color=C.ADAMW, stroke_width=2)
+        tag = label(r"same step for both: Adam divides out the gradient's scale", font_size=28, color=C.ADAMW)
+        tag.next_to(tab, DOWN, buff=0.45)
+        wd = MathTex(r"\text{AdamW also shrinks every weight: } \theta \leftarrow \theta - \eta\lambda\theta", font_size=28,
+                     color=GREY_A).next_to(tag, DOWN, buff=0.25)
+        del hi
+        with self.voiceover(
+            "Here's Adam in equations. It keeps a running average of the gradient, m, <bookmark mark='v'/> and of "
+            "the squared gradient, v. <bookmark mark='u'/> The step is m divided by the square root of v, after a "
+            "correction for the averages starting at zero. <bookmark mark='t'/> Run it on two parameters: one with "
+            "gradients around four, one with gradients a hundred times smaller. <bookmark mark='r'/> The averages "
+            "differ by a factor of a hundred, but their ratio doesn't: after three steps both parameters move by "
+            "0.974 learning rates. <bookmark mark='w'/> AdamW adds one more term, shrinking every weight slightly, "
+            "kept separate from the gradient step."
+        ) as vo:
+            self.play(Write(eqs[0]), FadeIn(betas))
+            vo.wait_until("v")
+            self.play(Write(eqs[1]))
+            vo.wait_until("u")
+            self.play(Write(eqs[2]))
+            vo.wait_until("t")
+            self.play(FadeIn(tab.header), Create(tab.rule), FadeIn(g1), FadeIn(g2))
+            for r in tab.rows:
+                self.play(LaggedStart(*[FadeIn(c) for c in r], lag_ratio=0.06), run_time=0.9)
+            vo.wait_until("r")
+            self.play(Create(box1), Create(box2), FadeIn(tag))
+            vo.wait_until("w")
+            self.play(FadeIn(wd))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -170,6 +238,47 @@ class Optimizer(VoiceoverScene):
                 self.play(Transform(dots, dots_at(k)), it[1].animate.set_value(k), run_time=1.0)
             self.play(FadeIn(band))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def ns_math(self):
+        start = [0.9, 0.3, 0.03]
+        hist = []
+        for s0 in start:
+            row, x = [s0], s0
+            for _ in range(5):
+                x = ns_poly(x)
+                row.append(x)
+            hist.append(row)
+        hist = np.array(hist)
+        assert round(hist[2, 1], 3) == 0.103 and 0.65 < hist[:, -1].min() and hist[:, -1].max() < 1.15
+        one = calc(r"p(0.03) &= 3.4445(0.03) - 4.7750(0.03)^3 + 2.0315(0.03)^5",
+                   r"\\ &= 0.1033 - 0.0001 + 0.0000 = 0.103", font_size=32)
+        one.to_edge(UP, buff=0.5).set_x(0)
+        rows = [[rf"{v:.3f}" for v in r] for r in hist]
+        tab = num_table([r"\sigma_0", r"p(\sigma)", r"p^{2}", r"p^{3}", r"p^{4}", r"p^{5}"], rows, font_size=32,
+                        col_colors=[C.GRADS] + [C.MUON] * 5)
+        tab.next_to(one, DOWN, buff=0.7).set_x(0)
+        band = SurroundingRectangle(tab.cols[5][1:], buff=0.12, color=C.MUON, stroke_width=2)
+        bt = label(rf"all end between {hist[:, -1].min():.2f} and {hist[:, -1].max():.2f}: roughly equal, which is all Muon needs",
+                   font_size=26, color=C.MUON).next_to(tab, DOWN, buff=0.5)
+        with self.voiceover(
+            "Here is that arithmetic for three of them. Take a singular value of 0.03. One application of the "
+            "polynomial is mostly the first term: 3.4445 times 0.03, minus a tiny cubic correction, gives 0.103. "
+            "<bookmark mark='t'/> Apply it again: 0.35, then 1.01. A value that starts at 0.9 overshoots and "
+            "oscillates instead. <bookmark mark='e'/> But after five rounds, all three sit between 0.68 and 1.12. "
+            "They aren't exactly one, and they don't need to be: roughly equal steps in every direction is the whole "
+            "point."
+        ) as vo:
+            self.play(Write(one[0]))
+            self.play(Write(one[1]))
+            vo.wait_until("t")
+            self.play(FadeIn(tab.header), Create(tab.rule), FadeIn(tab.cols[0][1:]))
+            for k in range(1, 6):
+                self.play(FadeIn(tab.cols[k][1:], shift=RIGHT * 0.1), run_time=0.6)
+            vo.wait_until("e")
+            self.play(Create(band), FadeIn(bt))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
