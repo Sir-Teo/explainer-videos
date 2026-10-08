@@ -156,21 +156,55 @@ class Schedule(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def practice(self):
-        items = VGroup(
-            label(r"\textbf{DeepSeek-V3}: peak learning rate for 10T tokens, then decay over 4.3T", font_size=28),
-            label(r"\textbf{Llama 3 405B}: cosine; annealed to zero over the last 40M tokens; checkpoint averaging", font_size=28),
-            label(r"\textbf{Kimi K3} (2026): fitted scaling laws for both schedules, chose cosine", font_size=28),
-            label(r"batch size grows too: from a few million to tens of millions of tokens per step", font_size=28, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
-        head = label(r"In practice", font_size=36).to_edge(UP, buff=0.5)
-        src = source(r"DeepSeek-V3 report; Llama 3 paper; Kimi K3 report (arXiv 2607.24653)")
+        head = label(r"In practice: schedules from the labs' reports", font_size=34).to_edge(UP, buff=0.35)
+        src = source(r"DeepSeek-V3 report, Sec.\ 4.2; Llama 3 paper, Sec.\ 3.4; Kimi K3 report (arXiv 2607.24653)")
+        centers = [(-3.45, 1.0), (3.55, 1.0), (-3.45, -2.1), (3.55, -2.1)]
+
+        def panel(i, title, x_range, y_range, x_ticks, y_ticks, x_label, y_fmt=None):
+            pl = Plot(x_range=x_range, y_range=y_range, width=5.0, height=1.65, x_ticks=x_ticks, y_ticks=y_ticks,
+                      x_label=x_label, font_size=20, y_fmt=y_fmt)
+            pl.move_to(centers[i])
+            t = label(title, font_size=24).next_to(pl, UP, buff=0.25).align_to(pl, LEFT)
+            return pl, t
+        pct = lambda v: f"{int(round(100 * v))}\\%"  # noqa: E731
+        # DeepSeek-V3: peak to 10T tokens, cosine decay to 10% over 4.3T, then 10% for 333B and ~3.3% for 167B
+        p1, t1 = panel(0, r"\textbf{DeepSeek-V3}: hold the peak for 10T tokens, then decay", (0, 14.8), (0, 1.1),
+                       [0, 5, 10, 14.8], [0, 1], r"tokens (trillions)", pct)
+        x = np.linspace(0, 14.8, 600)
+        y = np.where(x < 10, 1.0, np.where(x < 14.3, 0.1 + 0.45 * (1 + np.cos(np.pi * (x - 10) / 4.3)),
+                                           np.where(x < 14.633, 0.1, 7.3 / 220)))
+        l1 = p1.line(np.r_[0, x], np.r_[0, y], color=C.LR)
+        # Llama 3 405B: cosine; the last 40M tokens annealed linearly to zero, then checkpoint averaging
+        p2, t2 = panel(1, r"\textbf{Llama 3 405B}: cosine, annealed to 0 at the end", (0, 15.6), (0, 1.1),
+                       [0, 5, 10, 15.6], [0, 1], r"tokens (trillions)", pct)
+        x2 = np.linspace(0, 15.6, 400)
+        l2 = p2.line(np.r_[0, x2, 15.6], np.r_[0, 0.01 + 0.495 * (1 + np.cos(np.pi * x2 / 15.6)), 0], color=C.LR)
+        n2 = label(r"last 40M tokens: to zero; checkpoints averaged", font_size=18, color=GREY_A).next_to(p2.c2p(15.6, 0.9), LEFT, buff=0.0)
+        # Kimi K3: fitted scaling laws for both, chose cosine
+        p3, t3 = panel(2, r"\textbf{Kimi K3}: fitted scaling laws for both, chose cosine", (0, 1), (0, 1.1),
+                       [0, 1], [0, 1], r"fraction of training", pct)
+        x3 = np.linspace(0, 1, 300)
+        l3c = p3.line(x3, 0.05 + 0.475 * (1 + np.cos(np.pi * x3)), color=C.LR, stroke_width=4)
+        l3w = DashedVMobject(p3.line(x3, np.where(x3 < 0.8, 1.0, 1 - 0.95 * (x3 - 0.8) / 0.2), color=C.KEPT, stroke_width=2.5), num_dashes=40)
+        k3 = VGroup(label(r"cosine (chosen)", font_size=18, color=C.LR), label(r"WSD", font_size=18, color=C.KEPT)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(p3.c2p(1, 1.05), LEFT, buff=0.05).align_to(p3.c2p(1, 1.05), UP)
+        # Llama 3 405B batch size: 4M tokens, 8M after 252M tokens, 16M after 2.87T tokens
+        p4, t4 = panel(3, r"\textbf{Batch size grows}: Llama 3 405B, tokens per step", (0, 15.6), (0, 18),
+                       [0, 5, 10, 15.6], [4, 8, 16], r"tokens (trillions)", lambda v: f"{v:g}\\text{{M}}")
+        l4 = p4.line([0, 0.252, 0.252, 2.87, 2.87, 15.6], [4, 4, 8, 8, 16, 16], color=C.DATA)
+        sch = note(r"shapes as described in each report").to_corner(DL, buff=0.15)
         with self.voiceover(
-            "Frontier runs use variations of both. DeepSeek-V3 held its peak learning rate for ten trillion tokens, "
-            "then decayed over the next four. Llama 3 used cosine, annealed to zero over its last forty million "
-            "tokens, and averaged checkpoints. Kimi K3 fitted scaling laws for both schedules and chose cosine. And "
-            "the batch size usually grows as training goes, from a few million tokens per step to tens of millions."
+            "Frontier runs use variations of both. <bookmark mark='a'/> DeepSeek-V3 held its peak learning rate for "
+            "ten trillion tokens, then decayed over the next four. <bookmark mark='b'/> Llama 3 used cosine, "
+            "annealed to zero over its last forty million tokens, and averaged checkpoints. <bookmark mark='c'/> "
+            "Kimi K3 fitted scaling laws for both schedules and chose cosine. <bookmark mark='d'/> And the batch "
+            "size usually grows as training goes, from a few million tokens per step to tens of millions."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            self.play(LaggedStart(*[FadeIn(i, shift=RIGHT * 0.2) for i in items], lag_ratio=0.6), run_time=vo.remaining() * 0.75)
+            self.play(FadeIn(head), FadeIn(src), FadeIn(sch))
+            for m, (pl, t, lines, texts) in zip("abcd", [(p1, t1, [l1], []), (p2, t2, [l2], [n2]), (p3, t3, [l3c, l3w], [k3]),
+                                                       (p4, t4, [l4], [])]):
+                vo.wait_until(m)
+                self.play(FadeIn(pl), FadeIn(t), run_time=0.6)
+                self.play(*[Create(x_) for x_ in lines], *[FadeIn(x_) for x_ in texts], run_time=1.2)
         self.wait(0.4)
         self.clear_scene()
