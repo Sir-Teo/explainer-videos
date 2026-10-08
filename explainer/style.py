@@ -13,6 +13,10 @@ from types import SimpleNamespace
 
 from manim import (
     BLUE,
+    BLUE_B,
+    GREEN_B,
+    RED_B,
+    TEAL_B,
     GOLD,
     GOLD_A,
     GREEN,
@@ -91,6 +95,35 @@ C = SimpleNamespace(
     GAUSS=LIGHT_PINK,  # Gauss sums
     THETA=GOLD,  # theta functions, automorphy, the "reflection"
     SIEVE=GREEN_A,  # the large sieve, near-orthogonality
+    # Training frontier models (videos/frontier)
+    PAGE=GREY_B,  # raw web pages, HTML, Common Crawl
+    KEPT=TEAL,  # text that survives filtering, the clean corpus
+    REMOVED=RED,  # pages or text dropped by a filter
+    DUP=ORANGE,  # near-duplicates, MinHash
+    EDU=GOLD,  # quality / educational-value scores
+    PARAMS=BLUE,  # model size N
+    DATA=GREEN,  # training tokens D
+    COMPUTE=YELLOW,  # FLOPs C
+    LR=GOLD_A,  # learning rate, schedules
+    ADAMW=BLUE_B,  # AdamW
+    MUON=PINK,  # Muon, orthogonalized updates
+    EXPERT=PURPLE_B,  # mixture-of-experts experts and routers
+    SIGN_BIT=RED_B,  # floating-point layouts: sign
+    EXP_BIT=GREEN_B,  # exponent
+    MAN_BIT=BLUE_B,  # mantissa
+    GPU=TEAL_B,  # accelerators
+    WEIGHTS=BLUE,  # memory: parameters
+    GRADS=ORANGE,  # memory: gradients; the backward pass
+    OPT_STATE=PURPLE_B,  # memory: optimizer state (master weights, Adam moments)
+    ACTS=GREEN,  # memory: activations; the forward pass
+    COMM=YELLOW,  # communication between GPUs
+    BUBBLE=GREY_D,  # idle time in a pipeline schedule
+    REWARD=GREEN,  # correct answers, positive reward / advantage
+    PENALTY=RED,  # wrong answers, negative advantage
+    RL_POLICY=BLUE,  # the model being trained by RL
+    REFERENCE=GREY_B,  # the frozen reference model, KL anchor
+    USER=BLUE_B,  # chat: user turns
+    ASSISTANT=GREEN_B,  # chat: assistant turns (the trained tokens)
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
