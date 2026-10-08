@@ -134,10 +134,10 @@ class Baselines(VoiceoverScene):
         assert 15 < ratio < 40, ratio
         vt = VGroup(vn, vb).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.15).shift(RIGHT * 2.6)
         arrows = VGroup()
-        for p, r in zip(singles, sR):
-            v = (p - mu) * r * 0.11
-            arrows.add(Arrow(w2s(p), w2s(p) + np.array([v[0], v[1], 0.0]) * S / 8 * 4, buff=0, stroke_width=2.5, color=C.SCORE,
-                             max_tip_length_to_length_ratio=0.25))
+        vecs = [np.array([*((p - mu) * r * 0.11), 0.0]) * S / 8 * 4 for p, r in zip(singles, sR)]
+        k = min(1.0, 1.1 / max(np.linalg.norm(v) for v in vecs))  # one common scale: the longest arrow stays in the panel
+        for p, v in zip(singles, vecs):
+            arrows.add(Arrow(w2s(p), w2s(p) + k * v, buff=0, stroke_width=2.5, color=C.SCORE, max_tip_length_to_length_ratio=0.25))
         tag = exact_tag(r"exact toy, real samples")
         with self.voiceover(
             "Let's watch the noise directly. A policy over a two-dimensional action, on a landscape with two "
@@ -234,7 +234,7 @@ class Baselines(VoiceoverScene):
         pans = VGroup(easy, hard).arrange(RIGHT, buff=2.2).to_edge(DOWN, buff=0.35)
         rr = label(r"reward 1 if right, 0 if wrong; $p$ = chance of being right", font_size=24, color=GREY_A)
         rr.next_to(pans, UP, buff=0.15)
-        intro = label(r"Different prompts deserve different baselines", font_size=32).to_edge(UP, buff=0.6)
+        intro = label(r"Different prompts deserve different baselines", font_size=40)
         self.add(intro)
         self.play(FadeIn(intro))
         with self.voiceover(
