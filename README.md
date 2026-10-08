@@ -22,7 +22,9 @@ The LLM, Opposing Forces, Riemann and open-models videos' pictures are bit-ident
 Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
 0.98–0.9996 against the full render, lowest on the turbulence footage), and
 the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
-dense 15 s segments, lowest single frame 0.993). The
+dense 15 s segments, lowest single frame 0.993), and the stochastic-calculus video at
+~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
+fans and Monte Carlo noise, lowest single frame 0.975). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
