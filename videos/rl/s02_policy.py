@@ -139,20 +139,18 @@ class Policy(VoiceoverScene):
         l1 = label(rf"{int(P_THINK * 100)}\%: show the work (sum written right to left, then the answer)", font_size=24, color=C.WORK_TOK)
         l2 = label(r"the rest answer at once\dots", font_size=24)
         l3 = label(rf"\dots and forget each carry with probability {P_SLIP:g}", font_size=24, color=C.PENALTY)
-        rows = VGroup(*[VGroup(e, l).arrange(RIGHT, buff=0.4) for e, l in ((ex1, l1), (ex2, l2), (ex3, l3))])
-        for r in rows:
-            r[0].align_to(rows[0][0], LEFT)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        rows = VGroup(*[VGroup(e, l).arrange(DOWN, aligned_edge=LEFT, buff=0.12) for e, l in ((ex1, l1), (ex2, l2), (ex3, l3))])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         if rows.width > 13.2:
             rows.width = 13.2
-        rows.move_to(UP * 1.2)
+        rows.move_to(UP * 0.85)
         head = label(rf"The adder: a {b['cfg']['layers']}-layer transformer with {b['params']:,} parameters".replace(",", "{,}", 1),
                      font_size=30).to_edge(UP, buff=0.3)
         res = VGroup(
             label(rf"shows its work {ev['think_frac'] * 100:.0f}\% of the time, and is then right {ev['acc_think'] * 100:.1f}\%", font_size=28, color=C.WORK_TOK),
             label(rf"answers directly otherwise, and is then right {ev['acc_direct'] * 100:.0f}\%", font_size=28),
             label(rf"overall: {ev['pass1'] * 100:.0f}\% right", font_size=30, color=C.REWARD),
-        ).arrange(DOWN, buff=0.18).move_to(DOWN * 1.6)
+        ).arrange(DOWN, buff=0.18).move_to(DOWN * 2.1)
         with self.voiceover(
             "Meet the model behind that picture. It's a pocket-sized transformer, three layers deep, pretrained on "
             "text full of four-digit additions. <bookmark mark='w'/> A quarter of the examples show their work: the "
