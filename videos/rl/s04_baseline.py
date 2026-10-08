@@ -105,8 +105,10 @@ class Baselines(VoiceoverScene):
             return o + RIGHT * (p[0] / 8.0) * S + UP * (p[1] / 8.0) * S
         circles = VGroup(*[Circle(radius=r * S / 8, color=C.RL_POLICY, stroke_width=2.5, stroke_opacity=0.9 - 0.25 * k)
                            .move_to(w2s(mu)) for k, r in enumerate([1.0, 2.0])])
-        cl = label(r"policy $\mathcal{N}(\mu, I)$", font_size=24, color=C.RL_POLICY).next_to(frame, UP, buff=0.12)
-        lt = label(r"reward landscape", font_size=24, color=C.REWARD).next_to(frame, DOWN, buff=0.12)
+        # both labels above the panel: below it, a far sample's long arrow needs the room
+        cl = label(r"policy $\mathcal{N}(\mu, I)$", font_size=24, color=C.RL_POLICY)
+        lt = label(r"on a reward landscape", font_size=24, color=C.REWARD)
+        VGroup(cl, lt).arrange(RIGHT, buff=0.15).next_to(frame, UP, buff=0.12)
         singles = np.array(c["singles"], float)
         sR = np.array(c["singles_R"], float)
         sd = VGroup(*[Dot(w2s(p), radius=0.05, color=WHITE) for p in singles])
@@ -135,7 +137,8 @@ class Baselines(VoiceoverScene):
         vt = VGroup(vn, vb).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.15).shift(RIGHT * 2.6)
         arrows = VGroup()
         vecs = [np.array([*((p - mu) * r * 0.11), 0.0]) * S / 8 * 4 for p, r in zip(singles, sR)]
-        k = min(1.0, 1.1 / max(np.linalg.norm(v) for v in vecs))  # one common scale: the longest arrow stays in the panel
+        # one common scale for all arrows (their relative lengths are the point); the longest is capped at 1.1
+        k = min(1.0, 1.1 / max(np.linalg.norm(v) for v in vecs))
         for p, v in zip(singles, vecs):
             arrows.add(Arrow(w2s(p), w2s(p) + k * v, buff=0, stroke_width=2.5, color=C.SCORE, max_tip_length_to_length_ratio=0.25))
         tag = exact_tag(r"exact toy, real samples")
