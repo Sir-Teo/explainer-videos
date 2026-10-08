@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import LLAMA3, gpu, label, schematic_tag, source
+from videos.frontier.common import LLAMA3, calc, gpu, label, schematic_tag, source
 
 GPU_A, GPU_B = BLUE_C, GOLD_C  # local colors for "GPU 1" and "GPU 2" in the tensor-parallel example
 
@@ -76,6 +76,7 @@ class Parallelism(VoiceoverScene):
         self.pipeline()
         self.experts_and_context()
         self.mesh()
+        self.run_math()
 
     # ------------------------------------------------------------------
     def tensor_parallel(self):
@@ -327,4 +328,64 @@ class Parallelism(VoiceoverScene):
             vo.wait_until("ds")
             self.play(FadeIn(ds))
         self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def run_math(self):
+        N, D, G = LLAMA3["params"], LLAMA3["tokens"], LLAMA3["gpus"]
+        peak, achieved = 989e12, 400e12  # H100 dense BF16 peak; Llama 3.1 405B's sustained rate (Table 4)
+        flops = 6 * N * D
+        secs = flops / (G * achieved)
+        gpu_h = secs * G / 3600
+        step = 16e6 * 6 * N / (G * achieved)
+        shard = N / (8 * 16) * 2  # bytes of BF16 gradient per GPU (TP 8 x PP 16)
+        sent = 2 * 127 / 128 * shard
+        t_sync = sent / 50e9
+        assert round(achieved / peak, 2) == 0.40 and round(secs / 86400) == 67 and round(gpu_h / 1e6, 1) == 26.3
+        assert round(step, 1) == 5.9 and round(shard / 1e9, 1) == 6.3 and round(sent / 1e9, 1) == 12.6 and round(t_sync, 2) == 0.25
+        assert round(gpu_h / LLAMA3["gpu_hours"], 2) == 0.85
+        head = label(r"The arithmetic of a real run: Llama 3.1 405B", font_size=34).to_edge(UP, buff=0.35)
+        mfu = calc(r"\text{MFU} &= \frac{\text{achieved}}{\text{peak}} = \frac{400\ \text{TFLOP/s}}{989\ \text{TFLOP/s}} = 40\%",
+                   font_size=30)
+        run = calc(r"T_{\rm train} &= \frac{6ND}{n_{\rm GPU}\times \text{FLOP/s}} = "
+                   r"\frac{3.79\times10^{25}}{16{,}384 \times 4.0\times10^{14}}",
+                   r"\\ &= 5.8\times10^{6}\ \text{s} \approx 67\ \text{days} \;=\; 26.3\text{M GPU-hours}",
+                   font_size=30)
+        rep = label(r"Meta reports 30.84M GPU-hours: the formula is within 15\%", font_size=26, color=C.COMPUTE)
+        stp = calc(r"\text{one step: } \frac{16\times10^{6} \times 6N}{n_{\rm GPU}\times\text{FLOP/s}} &= 5.9\ \text{s}",
+                   r"\\ \text{gradient per GPU: } \frac{405\times10^{9}}{8 \times 16} \times 2\ \text{bytes} &= 6.3\ \text{GB}",
+                   r"\\ \text{ring all-reduce over 128 copies: } 2\,\tfrac{127}{128} \times 6.3 &= 12.6\ \text{GB}"
+                   r"\ \Rightarrow\ \frac{12.6\ \text{GB}}{50\ \text{GB/s}} = 0.25\ \text{s}",
+                   font_size=30)
+        col = VGroup(mfu, run, rep, stp).arrange(DOWN, aligned_edge=LEFT, buff=0.38).next_to(head, DOWN, buff=0.4)
+        if col.width > 13.2:
+            col.scale_to_fit_width(13.2)
+        col.set_x(0)
+        rep.shift(RIGHT * 0.3)
+        run[1].set_color(C.COMPUTE)
+        src = source(r"Llama 3 paper, Table 4 (TP 8, PP 16, DP 128; 400 TFLOP/s per GPU); Llama 3.1 model card (GPU-hours)")
+        with self.voiceover(
+            "Now the arithmetic of a real run. An H100 peaks at 989 trillion operations per second; Llama 3.1's GPUs "
+            "sustained about 400 trillion, forty percent, a figure called model FLOPs utilization. "
+            "<bookmark mark='t'/> So training takes six N D divided by the cluster's speed: 3.8 times ten to the "
+            "twenty-five, over sixteen thousand GPUs times 400 trillion. <bookmark mark='d'/> That's 5.8 million "
+            "seconds: sixty-seven days, or 26 million GPU-hours. <bookmark mark='r'/> Meta reports 30.8 million, so "
+            "this one line gets within fifteen percent. <bookmark mark='s'/> One step, sixteen million tokens, takes "
+            "about six seconds. <bookmark mark='g'/> In that time each GPU must average its gradients with its 127 "
+            "copies. It holds 3.2 billion parameters, 6.3 gigabytes of gradients; a ring sends about twice that, and "
+            "at fifty gigabytes per second it takes a quarter of a second, hidden behind the backward pass."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(src), Write(mfu))
+            vo.wait_until("t")
+            self.play(Write(run[0]))
+            vo.wait_until("d")
+            self.play(Write(run[1]))
+            vo.wait_until("r")
+            self.play(FadeIn(rep, shift=UP * 0.1))
+            vo.wait_until("s")
+            self.play(Write(stp[0]))
+            vo.wait_until("g")
+            self.play(Write(stp[1]))
+            self.play(Write(stp[2]))
+        self.wait(0.4)
         self.clear_scene()
