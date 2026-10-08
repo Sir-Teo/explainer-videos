@@ -11,7 +11,7 @@ Count them as you go, and you get a staircase that climbs by one at every prime.
 
 But zoom out, say to a hundred thousand, and the staircase follows a smooth curve almost perfectly. The primes are random in the small, but astonishingly regular in the large.
 
-In 1859, Bernhard Riemann found the reason. He showed that the staircase is exactly equal to a smooth curve, plus a sum of waves, and that each wave comes from a single point where one particular function, the zeta function, equals zero.
+In 1859, Bernhard Riemann found the reason. He found that the staircase is exactly equal to a smooth curve, plus a sum of waves, and that each wave comes from a single point where one particular function, the zeta function, equals zero.
 
 Add the waves one at a time, and the smooth curve bends, step by step, into the exact staircase of the primes. The zeros of zeta are like the frequencies in the music of the primes.
 
@@ -139,7 +139,7 @@ So what do we actually know? Theta is at least a half, since there are zeros on 
 
 Then came zero-free regions. In 1899, de la Vallée Poussin showed there are no zeros in a thin region hugging that line. But here it is drawn to scale, with the height on a logarithmic axis. As you go up, the region gets thinner and thinner, like one over the logarithm of the height.
 
-In 1958, Vinogradov and Korobov found a region that shrinks more slowly, though with constants this good it only wins at astronomically large heights. And it still pinches toward the line. For more than a century, every zero-free region known has had this shape.
+In 1958, Vinogradov and Korobov found a region that shrinks more slowly, though with the explicit constants known today it only wins at astronomically large heights. And it still pinches toward the line. For more than a century, every zero-free region known has had this shape.
 
 And a region that pinches toward the line isn't enough to push Theta below one. Far enough up, a zero could still be hiding arbitrarily close to the line real-part-one, and the error term would be almost as big as x itself.
 
@@ -231,7 +231,7 @@ The crucial estimate in the paper says that this family is small on average. Add
 
 But averages can hide outliers. One member could still be large, and it might be ours. Now use the fact from before: the symbol of a sixth power is one. So when u is p to the sixth, for an Eisenstein prime p, the twist does nothing at all, except on the few n that are divisible by p. Our sum doesn't appear in the family just once. It appears over and over again.
 
-You can see it in the toy version: every highlighted bar is, in effect, a copy of the first one.
+You can see it in the toy version: every highlighted bar lands at the same height as the first one. In effect, each is a copy of it.
 
 Now count. Sixth powers of primes up to size H: there are roughly H to the one sixth of them. Each copy contributes about A one squared to the total, and the total is at most D times H.
 
@@ -309,4 +309,4 @@ The 2026 claim hides one Möbius sum in a family twisted by sixth-power symbols,
 
 ---
 
-6056 words (~39 min at 155 wpm).
+6066 words (~39 min at 155 wpm).

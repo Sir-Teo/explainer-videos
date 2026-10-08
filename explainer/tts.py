@@ -104,6 +104,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bConrey\b", "[Conrey](/kˈɑnɹi/)"),
     (r"\bidoneal\b", "[idoneal](/ɪdˈOniəl/)"),
     (r"\bsextic\b", "[sextic](/sˈɛkstɪk/)"),
+    (r"\bFourier\b", "[Fourier](/fˈʊɹiˌA/)"),  # heard as "four year"
+    (r"\bPoisson\b", "[Poisson](/pwɑsˈOn/)"),  # "pwah-SOHN"; heard as "poison" without this
+    (r"\bquasi\b", "[quasi](/kwˈɑzi/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

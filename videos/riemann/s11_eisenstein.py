@@ -77,7 +77,7 @@ class EisensteinWorld(VoiceoverScene):
     # ------------------------------------------------------------------
     def primes(self):
         ps = eisenstein_primes(WIDE_RADIUS)
-        wide = VGroup(*[Dot(to_screen(eis(a, b), unit=WIDE_UNIT), radius=0.018, color=GREY_C) for a, b in lattice(WIDE_RADIUS)])
+        wide = VGroup(*[Dot(to_screen(eis(a, b), unit=WIDE_UNIT), radius=0.014, color=GREY_D) for a, b in lattice(WIDE_RADIUS)])
         pdots = VGroup(*[Dot(to_screen(eis(a, b), unit=WIDE_UNIT), radius=0.045, color=C.PRIME) for a, b in ps])
         self.play(FadeOut(self.dots), FadeIn(wide), run_time=1.2)
         txt = VGroup(

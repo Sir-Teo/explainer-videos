@@ -95,7 +95,7 @@ class ZeroLandscape(VoiceoverScene):
         pole_l.add_background_rectangle(opacity=0.75, buff=0.05)
         pole_a = Arrow(pole_l.get_left(), ax.c2p(1, 0), buff=0.08, color=WHITE, stroke_width=2.5)
         triv = VGroup(*[Dot(ax.c2p(-2 * k, 0), radius=0.07, color=GREY_A) for k in range(1, 3)])
-        triv_l = label(r"trivial zeros: $-2, -4, -6, \ldots$", font_size=26).next_to(ax.c2p(-3, 0), DOWN, buff=0.45)
+        triv_l = label(r"trivial zeros: $-2, -4, -6, \ldots$", font_size=26).move_to(ax.c2p(-3, 4.2))
         triv_l.add_background_rectangle(opacity=0.75, buff=0.05)
         g = gammas(5)
         zeros = VGroup(*[Dot(ax.c2p(0.5, t), radius=0.07, color=C.ZERO) for t in g])
