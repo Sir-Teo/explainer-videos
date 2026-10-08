@@ -235,9 +235,10 @@ class MissingHalf(VoiceoverScene):
                 val.set_value(tank.level)
         h = load("hero")
         qv = dict(zip(h["n"].tolist(), h["qv"].tolist()))
+        assert (f"{0.5 * qv[16]:.2f}", f"{0.5 * qv[256]:.3f}", f"{0.5 * qv[4194304]:.4f}") == ("0.64", "0.487", "0.5000")
         with self.voiceover(
-            f"With sixteen steps, the triangles hold {0.5 * qv[16]:.2f}, more than the brim. <bookmark mark='a'/> With 256 "
-            f"steps, {0.5 * qv[256]:.3f}. <bookmark mark='b'/> With four million: {0.5 * qv[4194304]:.4f}. "
+            "With sixteen steps, the triangles hold 0.64, more than the brim. <bookmark mark='a'/> With 256 "
+            "steps, 0.487. <bookmark mark='b'/> With four million: 0.5000. "
             "<bookmark mark='c'/> For a smooth path, these triangles are second-order small and add up to nothing. For a "
             "Brownian path there are so many of them that they add up to exactly half the elapsed time."
         ) as vo:

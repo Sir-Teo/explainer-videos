@@ -12,6 +12,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
 | **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
 | **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`published/frontier.mp4`](published/frontier.mp4) | [`videos/frontier`](videos/frontier) |
+| **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | LENGTH | [`published/stochastic.mp4`](published/stochastic.mp4) | [`videos/stochastic`](videos/stochastic) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -42,6 +43,7 @@ python -m videos.navier_stokes.simulate      # fluid simulations (~40 min on 4 c
 python -m videos.llm.analyze                 # GPT-2 probes + a tiny transformer trained on Shakespeare (~20 min)
 python -m videos.riemann.compute             # real zeta zeros, prime counts, Möbius sums, domain coloring (~4 min)
 python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
+python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
 
 # 4. Render: fast preview, then the final 1080p cut
@@ -52,6 +54,7 @@ python tools/build.py opposing_forces         # -> renders/opposing_forces.mp4
 python tools/build.py riemann                 # -> renders/riemann.mp4
 python tools/build.py open_models             # -> renders/open_models.mp4
 python tools/build.py frontier                # -> renders/frontier.mp4
+python tools/build.py stochastic              # -> renders/stochastic.mp4
 ```
 
 Iterate on a single scene:
@@ -91,6 +94,8 @@ videos/<name>/
   compute.py               (riemann) mpmath/NumPy: zeta zeros, prime counts, Möbius walk, Gauss sums, domain coloring
                            (frontier) Common Crawl funnel, dedup, FineWeb-Edu scores, BPE, scaling-law / optimizer /
                            schedule / stability / MoE sweeps, Newton-Schulz, FP8/FP4, chat template, GRPO, Epoch data
+                           (stochastic) seeded simulations: the 2^22-step hero path, Ito sums, GBM, Ornstein-Uhlenbeck,
+                           a double well with a Fokker-Planck solve, Kakutani's walkers, delta hedging, Girsanov weights
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   README.md                outline, color legend, sources and fact-check notes

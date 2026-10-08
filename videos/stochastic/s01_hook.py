@@ -278,10 +278,10 @@ class Hook(VoiceoverScene):
                         [[num(r[0], 3), num(r[1], 3), num(r[2], 3), num(r[3], 3)] for r in rows],
                         font_size=30, col_colors=[C.BROWNIAN, C.GAINS, WHITE, C.QV])
         tab.move_to([col_x, -0.2, 0])
-        gaps = ", ".join(f"{g:.3f}" for g in rows[:, 3])
+        assert [f"{g:.3f}" for g in rows[:, 3]] == ["0.498", "0.501", "0.503", "0.499", "0.495"]  # quoted below
         with self.voiceover(
             "Maybe that path was special. So here are five more, each with sixty-five thousand steps. "
-            f"<bookmark mark='t'/> The gaps: {gaps}. Every time, almost exactly one half."
+            "<bookmark mark='t'/> The gaps: 0.498, 0.501, 0.503, 0.499, 0.495. Every time, almost exactly one half."
         ) as vo:
             self.play(FadeOut(VGroup(res, line, WT_dot, WT_l, steps, sum_)), self.path.animate.set_stroke(opacity=0.25),
                       FadeOut(self.tip))
