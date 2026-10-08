@@ -13,6 +13,7 @@ from types import SimpleNamespace
 
 from manim import (
     BLUE,
+    BLUE_B,
     GOLD,
     GOLD_A,
     GREEN,
@@ -21,15 +22,16 @@ from manim import (
     GREY_A,
     GREY_B,
     GREY_D,
-    MAROON,
-    ORANGE,
     LIGHT_BROWN,
     LIGHT_PINK,
+    MAROON,
+    ORANGE,
     PINK,
     PURPLE,
     PURPLE_A,
     PURPLE_B,
     RED,
+    RED_B,
     TEAL,
     TEAL_B,
     WHITE,
@@ -110,6 +112,35 @@ C = SimpleNamespace(
     MEMORY=GREEN,  # linear-attention / KDA recurrent state S
     DEPTH=ORANGE,  # attention over depth (attention residuals): it is attention
     QUANT=GREY_A,  # low-precision number formats
+    # Training frontier models (videos/frontier)
+    PAGE=GREY_B,  # raw web pages, HTML, Common Crawl
+    KEPT=TEAL,  # text that survives filtering, the clean corpus
+    REMOVED=RED,  # pages or text dropped by a filter
+    DUP=ORANGE,  # near-duplicates, MinHash
+    EDU=GOLD,  # quality / educational-value scores
+    PARAMS=BLUE,  # model size N
+    DATA=GREEN,  # training tokens D
+    COMPUTE=YELLOW,  # FLOPs C
+    LR=GOLD_A,  # learning rate, schedules
+    ADAMW=BLUE_B,  # AdamW
+    MUON=PINK,  # Muon, orthogonalized updates
+    # EXPERT (PURPLE_B) is defined above, shared with videos/open_models
+    SIGN_BIT=RED_B,  # floating-point layouts: sign
+    EXP_BIT=GREEN_B,  # exponent
+    MAN_BIT=BLUE_B,  # mantissa
+    GPU=TEAL_B,  # accelerators
+    WEIGHTS=BLUE,  # memory: parameters
+    GRADS=ORANGE,  # memory: gradients; the backward pass
+    OPT_STATE=PURPLE_B,  # memory: optimizer state (master weights, Adam moments)
+    ACTS=GREEN,  # memory: activations; the forward pass
+    COMM=YELLOW,  # communication between GPUs
+    BUBBLE=GREY_D,  # idle time in a pipeline schedule
+    REWARD=GREEN,  # correct answers, positive reward / advantage
+    PENALTY=RED,  # wrong answers, negative advantage
+    RL_POLICY=BLUE,  # the model being trained by RL
+    REFERENCE=GREY_B,  # the frozen reference model, KL anchor
+    USER=BLUE_B,  # chat: user turns
+    ASSISTANT=GREEN_B,  # chat: assistant turns (the trained tokens)
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
