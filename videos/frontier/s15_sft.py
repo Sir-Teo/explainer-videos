@@ -18,6 +18,7 @@ class SFT(VoiceoverScene):
         self.opening()
         self.base_vs_chat()
         self.template()
+        self.sft_math()
         self.data()
 
     # ------------------------------------------------------------------
@@ -132,6 +133,75 @@ class SFT(VoiceoverScene):
             vo.wait_until("m")
             self.play(*[b.animate.set_opacity(0.25) for b in dim], *[b[0].animate.set_fill(opacity=0.45) for b in train],
                       FadeIn(loss))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def sft_math(self):
+        m = load("math")["sft"]
+        pcs = m["pieces"]
+        i0, i1 = pcs.index("The"), pcs.index("<|im_end|>", m["n_prompt"])
+        idx = list(range(i0, i1 + 1))
+        nb = np.array([m["nll_base"][i] for i in idx])
+        nc = np.array([m["nll_chat"][i] for i in idx])
+        assert len(idx) == 12 and round(nb.mean(), 2) == 2.12 and round(nc.mean(), 2) == 0.52
+        assert round(nb[0], 1) == 7.3 and round(nb[-1], 1) == 12.9 and pcs[idx[6]] == " in" and round(nc[6], 1) == 3.6
+        f = MathTex(r"\mathcal{L}_{\rm SFT} = -\frac{1}{|A|}\sum_{t\,\in\,A} \log p\left(x_t \mid x_{<t}\right)",
+                    r"\qquad A = \text{the assistant's tokens}", font_size=34)
+        f[1].set_color(C.ASSISTANT)
+        f.to_edge(UP, buff=0.45)
+        unit = 2.6 / 13.0
+        cols = VGroup()
+        for i, (k, b, c) in enumerate(zip(idx, nb, nc)):
+            t = Mono(show_piece(pcs[k]).replace(" ", "␣"), font_size=20, color=GOLD_B if pcs[k] in SPECIAL else WHITE)
+            box = RoundedRectangle(width=max(0.62, t.width + 0.14), height=0.42, corner_radius=0.06, stroke_color=C.ASSISTANT,
+                                   stroke_width=1.5, fill_color=C.ASSISTANT, fill_opacity=0.18)
+            t.move_to(box)
+            bb = Rectangle(width=0.22, height=max(0.02, b * unit), stroke_width=0, fill_color=GREY_B, fill_opacity=0.9)
+            bc = Rectangle(width=0.22, height=max(0.02, c * unit), stroke_width=0, fill_color=C.ASSISTANT, fill_opacity=0.95)
+            pair = VGroup(bb, bc).arrange(RIGHT, buff=0.04, aligned_edge=DOWN).next_to(box, UP, buff=0.12)
+            vb = MathTex(f"{b:.2f}" if b < 10 else f"{b:.1f}", font_size=18, color=GREY_B)
+            vc = MathTex(f"{c:.2f}", font_size=18, color=C.ASSISTANT)
+            nums = VGroup(vb, vc).arrange(DOWN, buff=0.06).next_to(pair, UP, buff=0.08)
+            col = VGroup(VGroup(box, t), pair, nums)
+            col.box, col.pair, col.nums = VGroup(box, t), pair, nums
+            cols.add(col)
+        cols.arrange(RIGHT, buff=0.1, aligned_edge=DOWN).move_to(DOWN * 0.6)
+        for c in cols:
+            c.box.align_to(cols, DOWN)
+            c.pair.next_to(c.box, UP, buff=0.12, aligned_edge=DOWN) if False else c.pair.move_to(c.box.get_top() + UP * (0.12 + c.pair.height / 2))
+            c.nums.next_to(c.pair, UP, buff=0.08)
+        if cols.width > 13.4:
+            cols.scale_to_fit_width(13.4)
+        legend = VGroup(VGroup(Square(0.2, stroke_width=0, fill_color=GREY_B, fill_opacity=0.9),
+                               label(r"Qwen3-0.6B-Base", font_size=24, color=GREY_B)).arrange(RIGHT, buff=0.12),
+                        VGroup(Square(0.2, stroke_width=0, fill_color=C.ASSISTANT, fill_opacity=0.95),
+                               label(r"after post-training", font_size=24, color=C.ASSISTANT)).arrange(RIGHT, buff=0.12)
+                        ).arrange(RIGHT, buff=0.6).next_to(f, DOWN, buff=0.3)
+        res = VGroup(MathTex(rf"\mathcal{{L}} = {nb.mean():.2f}", font_size=34, color=GREY_B),
+                     MathTex(rf"\mathcal{{L}} = {nc.mean():.2f}", font_size=34, color=C.ASSISTANT)
+                     ).arrange(RIGHT, buff=2.0).to_edge(DOWN, buff=0.5)
+        res_t = label(r"mean over these 12 tokens, in nats", font_size=22, color=GREY_A).next_to(res, UP, buff=0.12)
+        with self.voiceover(
+            "Here is that loss on real numbers. For each of the assistant's tokens, take minus the log of the "
+            "probability the model gave it. <bookmark mark='b'/> Qwen3's base model, in grey, finds most of the answer "
+            "easy, but pays heavily for the first word, at 7.3, for 'in', at 4.5, and for the end-of-turn marker it "
+            "has never seen, at 12.9. Averaged over these twelve tokens, its loss is 2.12. <bookmark mark='c'/> The "
+            "same model after post-training, in green, averages 0.52. Its biggest cost is 'in', at 3.6, because it "
+            "would have said 'located in'. <bookmark mark='p'/> Fine-tuning is exactly the pressure that pushes these "
+            "numbers down."
+        ) as vo:
+            self.play(Write(f), FadeIn(legend))
+            self.play(LaggedStart(*[FadeIn(c.box) for c in cols], lag_ratio=0.05))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(c.pair[0], DOWN), FadeIn(c.nums[0])) for c in cols],
+                                  lag_ratio=0.08), run_time=2.0)
+            self.play(FadeIn(res_t), FadeIn(res[0]))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(c.pair[1], DOWN), FadeIn(c.nums[1])) for c in cols],
+                                  lag_ratio=0.08), run_time=2.0)
+            self.play(FadeIn(res[1]))
+            vo.wait_until("p")
         self.wait(0.4)
         self.clear_scene()
 
