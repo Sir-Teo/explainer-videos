@@ -192,7 +192,7 @@ class Optimizer(VoiceoverScene):
         head = label(r"Same model, same data, two optimizers (real runs, $\approx$1M parameters)", font_size=30).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Does it help? Here's our pocket model trained twice on the same data, once with AdamW and once with "
-            "Muon, each at its best learning rate from a small sweep. <bookmark mark='r'/> Muon pulls ahead early and "
+            "Muon, each with the better of the learning rates we tried in short test runs. <bookmark mark='r'/> Muon pulls ahead early and "
             "stays ahead. <bookmark mark='h'/> It reaches AdamW's final loss with only about MUONFRAC of the "
             "tokens."
         ) as vo:

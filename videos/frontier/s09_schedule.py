@@ -83,7 +83,7 @@ class Schedule(VoiceoverScene):
         T = curves["cos100"][0][-1]
         lo = min(min(v) for _, v in curves.values())
         hi = 5.2
-        plot = Plot(x_range=(0, T), y_range=(lo - 0.05, hi), width=9.2, height=4.6, x_ticks=[0, 2, 4, 6, 8],
+        plot = Plot(x_range=(0, T), y_range=(lo - 0.05, hi), width=9.2, height=4.6, x_ticks=[0, 1, 2, 3, 4, 5],
                     y_ticks=list(np.round(np.arange(np.ceil((lo - 0.05) * 10) / 10, hi + 0.01, 0.2), 1)),
                     x_label=r"training tokens (millions)", y_label=r"validation loss")
         plot.move_to(DOWN * 0.4 + LEFT * 0.4)

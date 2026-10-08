@@ -12,7 +12,7 @@ rewards, agentic RL, evaluation). It describes the field **as of October 2026**.
 
 **Every chart is a real run, in miniature, on the 4-core CPU that rendered the
 video**: the FineWeb recipe run on 10,498 pages of Common Crawl's September 2026
-crawl, MinHash on 170,000 more, FineWeb-Edu's classifier, a 21-run IsoFLOP
+crawl, MinHash on 170,000 more, FineWeb-Edu's classifier, a 20-run IsoFLOP
 scaling-law sweep, AdamW vs Muon, cosine vs warmup-stable-decay, a learning-rate
 stability sweep with and without QK-norm, three mixture-of-experts load-balancing
 runs, the singular values of a real gradient going through Newton–Schulz, FP8 /

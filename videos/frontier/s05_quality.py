@@ -81,7 +81,10 @@ class Quality(VoiceoverScene):
         xl = VGroup(*[MathTex(str(k), font_size=28, color=GREY_A).next_to(b, DOWN, buff=0.12) for k, b in enumerate(bars)])
         cl = VGroup(*[label(f"{c:,}".replace(",", "{,}"), font_size=22).next_to(b, UP, buff=0.08) for c, b in zip(counts, bars)])
         xt = label(r"educational score", font_size=24, color=GREY_A).next_to(xl, DOWN, buff=0.15)
-        head = label(rf"FineWeb-Edu's classifier on our {n:,} surviving pages".replace(",", "{,}"), font_size=32).to_edge(UP, buff=0.4)
+        n_all = self.e["n_survivors"]
+        assert n == 400 and n_all == 1363
+        head = label(rf"FineWeb-Edu's classifier on {n} random pages of our {n_all:,} survivors".replace(",", "{,}"),
+                     font_size=32).to_edge(UP, buff=0.4)
         kt = label(rf"score $\geq 3$: {100 * keep:.0f}\%", font_size=32, color=C.EDU).next_to(bars, UP, buff=0.5).align_to(bars, RIGHT)
         texts = {json.loads(ln)["url"]: json.loads(ln)["text"] for ln in open(DATA_DIR / "funnel_kept.jsonl")}
         order = np.argsort(-scores)
@@ -97,7 +100,8 @@ class Quality(VoiceoverScene):
         if right.height > 6.2:
             right.scale_to_fit_height(6.2)
         with self.voiceover(
-            "We ran that same classifier on the pages that survived our filters. <bookmark mark='h'/> Most score low: "
+            "We ran that same classifier on four hundred random pages that survived our filters. "
+            "<bookmark mark='h'/> Most score low: "
             "shops, services, local news. <bookmark mark='k'/> Keeping three and up, as FineWeb-Edu does, leaves "
             "EDUKEEP percent. <bookmark mark='t'/> The top scorer looks like this, and a typical low scorer like "
             "this."

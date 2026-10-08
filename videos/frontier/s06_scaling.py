@@ -93,6 +93,7 @@ class ScalingLaws(VoiceoverScene):
     def isoflop(self):
         d = load("isoflop")
         rows = d["rows"]
+        assert len(rows) == 20 and len({r["budget"] for r in rows}) == 4
         fits, slope, icpt = isoflop_fits(rows)
         self.slope = slope
         self.fits = fits
@@ -121,7 +122,7 @@ class ScalingLaws(VoiceoverScene):
         legend = VGroup(*[VGroup(Dot(radius=0.07, color=col), MathTex(rf"C = {f['C']:.0e}".replace("e+", r"\times10^{") + "}", font_size=24))
                           .arrange(RIGHT, buff=0.12) for f, col in zip(fits, BUDGET_COLORS)])
         legend.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(plot, RIGHT, buff=0.15).align_to(plot, UP)
-        head = label(r"Our IsoFLOP experiment: 21 real training runs", font_size=32).to_edge(UP, buff=0.3)
+        head = label(rf"Our IsoFLOP experiment: {len(rows)} real training runs", font_size=32).to_edge(UP, buff=0.3)
         head.set_x(-2.2)
         # right panel: N_opt vs C
         Cs = np.array([f["C"] for f in fits])
@@ -143,7 +144,7 @@ class ScalingLaws(VoiceoverScene):
             "The way to find out is an experiment, so we ran one. Pick a compute budget, and train models of "
             "several sizes, each on exactly the number of tokens the budget allows. <bookmark mark='a'/> Plot final "
             "loss against model size, and you get a valley: too small a model can't hold what it sees, too large a "
-            "model doesn't get to see enough. <bookmark mark='b'/> Repeat at four budgets, twenty-one runs in all, and "
+            "model doesn't get to see enough. <bookmark mark='b'/> Repeat at four budgets, twenty runs in all, and "
             "fit a parabola to each valley. <bookmark mark='c'/> The best size grows with the budget, as a power law."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
