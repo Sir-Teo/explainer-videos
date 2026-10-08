@@ -1,6 +1,6 @@
 # The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof
 
-A 16-chapter explainer in four parts. It builds the Riemann hypothesis from
+A 39-minute, 16-chapter explainer in four parts. It builds the Riemann hypothesis from
 prime counting, Euler's product and analytic continuation. It shows how the
 zeros of zeta control the primes, through the explicit formula, the error
 term, Möbius cancellation and Dirichlet L-functions. Then it explains OpenAI's
@@ -16,7 +16,26 @@ coloring, Gauss sums, Kummer's angles, the explicit-formula waves and the
 
 **Watch:** [`published/riemann.mp4`](../../published/riemann.mp4) (1080p, subtitles and chapters embedded).
 
-<!-- CHAPTERS -->
+<details><summary>Chapters</summary>
+
+- `0:00` The music of the primes
+- `2:06` How many primes?
+- `4:03` Zeta: a bridge from primes to analysis
+- `6:19` Going complex: spirals and continuation
+- `8:19` Where zeta vanishes: the Riemann hypothesis
+- `11:26` How the zeros build the primes
+- `13:48` Why the real part matters
+- `16:24` Coin flips: the Möbius function
+- `18:53` Primes in progressions, and a ghost
+- `21:57` October 6, 2026: the quasi-Riemann claim
+- `24:25` A detour through the Eisenstein integers
+- `26:34` Hiding one sum among many
+- `29:14` Why the family is small
+- `33:04` Peeling off cubes; from 11/12 to 7/8
+- `35:00` Is it right, and what does it mean?
+- `37:46` Recap
+
+</details>
 
 ```bash
 python -m videos.riemann.compute          # once: real-math footage (~4 min on 4 cores, cached in .cache/riemann)
@@ -71,7 +90,7 @@ python tools/publish.py riemann           # GitHub-sized copy -> published/riema
 | `primes` | odd-only sieve to 10⁹; π(x), ψ(x) staircases; li(10ᵏ) − π(10ᵏ) at 40 digits | π(10ᵏ) = OEIS A006880 for k ≤ 9 |
 | `mobius` | μ and M(x) to 10⁷ | — |
 | `race` | π(x; 4, 3) − π(x; 4, 1) to 10⁷ | first lead change at 26,861 |
-| `landscape` | ζ(s) on σ ∈ [−9, 4], t ∈ [−3, 33] | — |
+| `landscape` | ζ(s) on σ ∈ [−4.6, 3], t ∈ [−3, 33] (1170 × 900 points) | — |
 | `hardy` | Z(t), 0 ≤ t ≤ 52 | 10 sign changes = 10 zeros |
 | `riemann_pi` | R(x) − Σ 2Re R(x^ρ) (first three Möbius terms of R(x^ρ)), 200 zero pairs | median error 0.09 at K = 200 |
 | `kummer` | Σₓ e(x³/p) for all 3,014 primes p ≡ 1 (mod 3) below 60,000 | \|cos θ_p\| ≤ 1 |

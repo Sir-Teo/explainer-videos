@@ -27,7 +27,7 @@ class ZeroLandscape(VoiceoverScene):
         return ax
 
     def tick_labels(self, ax):
-        (s0, s1), (t0, t1) = LANDSCAPE["sig"], LANDSCAPE["t"]
+        (s0, _), (t0, _) = LANDSCAPE["sig"], LANDSCAPE["t"]
         g = VGroup()
         for v in (-4, -2, 0, 1, 2):
             g.add(MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(v, t0), DOWN, buff=0.1))
