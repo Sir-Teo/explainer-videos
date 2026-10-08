@@ -60,6 +60,9 @@ uncompressed narration WAV when available, keeps the intermediate soundtrack
 lossless, and masters to 48 kHz stereo AAC at 384 kb/s. Upload the finished
 file from `renders/`, with its `.srt` subtitles and `.chapters.txt` chapter list.
 The `tools/publish.py` command makes the smaller GitHub distribution copy.
+Run `python tools/youtube_qa.py frontier` (or another video name) to check
+decoding, audio, caption timing, and chapters, then review the generated
+contact sheets in `renders/youtube/`.
 
 Iterate on a single scene:
 

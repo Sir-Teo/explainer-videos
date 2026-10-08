@@ -85,7 +85,7 @@ class RL(VoiceoverScene):
         ans = g0["answers"]
         G = len(ans)
         r = np.array([1.0 if x == a + b else 0.0 for x in ans])
-        assert r.sum() == 1 and ans.count(724) == 5 and ans.count(824) == 2, ans  # as narrated
+        assert r.sum() == 2 and ans.count(724) == 4 and ans.count(824) == 1, ans  # as narrated
         mean, std = r.mean(), r.std(ddof=1)
         adv = (r - mean) / (std + 1e-4)
         prompt = Mono(f"{a}+{b}=", font_size=34).to_edge(UP, buff=0.5).shift(LEFT * 3.5)
@@ -115,8 +115,8 @@ class RL(VoiceoverScene):
         formula = MathTex(r"A_i = \frac{r_i - \operatorname{mean}(r)}{\operatorname{std}(r)}", font_size=38).to_corner(DR, buff=0.6).shift(UP * 0.3)
         upd = label(r"every token of answer $i$: probability pushed up or down by $A_i$", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Give it a problem, 478 plus 356, and sample a group of eight answers. <bookmark mark='a'/> Only one is "
-            "right: 834. Five drop both carries, 724, and two drop one of them. <bookmark mark='r'/> Each answer gets a "
+            "Give it a problem, 478 plus 356, and sample a group of eight answers. <bookmark mark='a'/> Two are "
+            "right: 834. Four drop both carries, giving 724, and the other two make mistakes too. <bookmark mark='r'/> Each answer gets a "
             "reward: one or zero. "
             "<bookmark mark='g'/> GRPO's key idea is to grade each answer against its own group: subtract the "
             "group's average reward, and divide by the spread. Better than average gets a positive advantage; worse "
@@ -147,8 +147,8 @@ class RL(VoiceoverScene):
         G = len(r)
         mean, std = r.mean(), r.std(ddof=1)  # torch's default (unbiased) std, as in the run
         adv = (r - mean) / (std + 1e-4)
-        assert G == 8 and mean == 0.125 and round(std, 3) == 0.354 and abs(std ** 2 - 0.125) < 1e-12
-        assert round(adv.max(), 2) == 2.47 and round(adv.min(), 2) == -0.35 and abs(adv.sum()) < 1e-9
+        assert G == 8 and mean == 0.25 and round(std, 3) == 0.463 and abs(std ** 2 - 3 / 14) < 1e-12
+        assert round(adv.max(), 2) == 1.62 and round(adv.min(), 2) == -0.54 and abs(adv.sum()) < 1e-9
 
         def adv_k(k):  # advantages of a right and a wrong answer when k of the 8 are right
             m, sd = k / G, np.sqrt(k * (G - k) / (G * (G - 1)))
@@ -157,12 +157,12 @@ class RL(VoiceoverScene):
         assert [round(v, 2) for v in tab_vals[4]] == [0.94, -0.94] and [round(v, 2) for v in tab_vals[7]] == [0.35, -2.47]
         assert abs(tab_vals[8][0]) < 1e-9
         head = label(r"The advantages for $478 + 356$, worked out", font_size=34).to_edge(UP, buff=0.4)
-        nums = calc(r"r &= (1, 0, 0, 0, 0, 0, 0, 0)",
-                    r"\\ \operatorname{mean}(r) &= \tfrac{1}{8}\,(1 + 0 + \dots + 0) = 0.125",
-                    r"\\ \operatorname{std}(r) &= \sqrt{\tfrac{1}{7}\big[\,0.875^2 + 7 \times 0.125^2\,\big]} = \sqrt{0.125} = 0.354",
-                    r"\\ A_{834} &= \frac{1 - 0.125}{0.354} = +2.47",
-                    r"\\ A_{\text{wrong}} &= \frac{0 - 0.125}{0.354} = -0.35",
-                    r"\\ \textstyle\sum_i A_i &= 2.47 - 7 \times 0.354 = 0", font_size=32)
+        nums = calc(r"r &= (0, 0, 1, 0, 1, 0, 0, 0)",
+                    r"\\ \operatorname{mean}(r) &= \tfrac{2}{8} = 0.25",
+                    r"\\ \operatorname{std}(r) &= \sqrt{\tfrac{1}{7}\big[\,2 \times 0.75^2 + 6 \times 0.25^2\,\big]} = \sqrt{3/14} \approx 0.463",
+                    r"\\ A_{834} &= \frac{1 - 0.25}{0.463} \approx +1.62",
+                    r"\\ A_{\text{wrong}} &= \frac{0 - 0.25}{0.463} \approx -0.54",
+                    r"\\ \textstyle\sum_i A_i &= 2 \times 1.62 - 6 \times 0.54 = 0", font_size=32)
         nums[3].set_color(C.REWARD)
         nums[4].set_color(C.PENALTY)
         nums.next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.6)
@@ -178,10 +178,10 @@ class RL(VoiceoverScene):
         tab.rows[3].set_color(GREY_B)
         none = label(r"no signal", font_size=24, color=GREY_B).next_to(tab.rows[3], DOWN, buff=0.15)
         with self.voiceover(
-            "Here are those numbers, worked out. The rewards are a single one and seven zeros, <bookmark mark='m'/> "
-            "so the mean is one eighth: 0.125. <bookmark mark='s'/> The spread, the sample standard deviation, is the "
-            "square root of an eighth: 0.354. <bookmark mark='a'/> So the right answer gets 0.875 divided by 0.354: "
-            "plus 2.47. <bookmark mark='b'/> Each wrong one gets minus 0.35. <bookmark mark='z'/> The advantages always "
+            "Here are those numbers, worked out. The rewards are two ones and six zeros, <bookmark mark='m'/> "
+            "so the mean is two eighths: 0.25. <bookmark mark='s'/> The spread, the sample standard deviation, is the "
+            "square root of three fourteenths: about 0.463. <bookmark mark='a'/> So each right answer gets 0.75 divided by 0.463: "
+            "plus 1.62. <bookmark mark='b'/> Each wrong one gets minus 0.54. <bookmark mark='z'/> The advantages always "
             "sum to zero: probability pushed up in one place is pushed down somewhere else. <bookmark mark='t'/> And "
             "their size depends on how rare the outcome was. One success in eight earns plus 2.47; one failure in "
             "eight costs minus 2.47. <bookmark mark='n'/> And when all eight agree, the spread is zero, and so is "
@@ -208,12 +208,12 @@ class RL(VoiceoverScene):
     # ------------------------------------------------------------------
     def clip_math(self):
         eps = 0.2
-        A_pos, A_neg = 2.47, -0.35  # the advantages just computed (rounded as shown)
+        A_pos, A_neg = 1.62, -0.54  # the advantages just computed (rounded as shown)
 
         def obj(rho, A):
             return np.minimum(rho * A, np.clip(rho, 1 - eps, 1 + eps) * A)
-        assert round(1.3 * A_pos, 2) == 3.21 and round(1.2 * A_pos, 2) == 2.96 and round(obj(1.3, A_pos), 2) == 2.96
-        assert round(0.6 * A_neg, 2) == -0.21 and round(0.8 * A_neg, 2) == -0.28 and round(obj(0.6, A_neg), 2) == -0.28
+        assert round(1.3 * A_pos, 2) == 2.11 and round(1.2 * A_pos, 2) == 1.94 and round(obj(1.3, A_pos), 2) == 1.94
+        assert round(0.6 * A_neg, 2) == -0.32 and round(0.8 * A_neg, 2) == -0.43 and round(obj(0.6, A_neg), 2) == -0.43
         J = MathTex(r"J(\theta) = \frac{1}{G}\sum_{i=1}^{G} \frac{1}{|o_i|}\sum_{t}",
                     r"\min\!\Big(\rho_{i,t} A_i,\ \operatorname{clip}(\rho_{i,t},\, 1 - \varepsilon,\, 1 + \varepsilon)\, A_i\Big)",
                     r",\qquad \rho_{i,t} = \frac{\pi_\theta(o_{i,t} \mid \cdot)}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid \cdot)}",
@@ -223,7 +223,7 @@ class RL(VoiceoverScene):
                    font_size=20).next_to(J, DOWN, buff=0.2)
         rs = np.linspace(0.4, 1.6, 121)
         plots = VGroup()
-        for A, yr, yt in [(A_pos, (0, 4), [0, 1, 2, 3, 4]), (A_neg, (-0.6, 0), [-0.6, -0.3, 0])]:
+        for A, yr, yt in [(A_pos, (0, 4), [0, 1, 2, 3, 4]), (A_neg, (-0.9, 0), [-0.9, -0.6, -0.3, 0])]:
             pl = Plot(x_range=(0.4, 1.6), y_range=yr, width=3.6, height=2.0, x_ticks=[0.4, 0.8, 1.2, 1.6], y_ticks=yt,
                       x_label=r"$\rho$", y_label=rf"objective, $A = {A:+.2f}$", font_size=22)
             band = Rectangle(width=pl.c2p(1.2, 0)[0] - pl.c2p(0.8, 0)[0], height=2.0, stroke_width=0, fill_color=GREY_D, fill_opacity=0.35)
@@ -240,8 +240,8 @@ class RL(VoiceoverScene):
         d1u = Dot(p1.c2p(1.3, 1.3 * A_pos), radius=0.06, color=GREY_B)
         d2 = Dot(p2.c2p(0.6, obj(0.6, A_neg)), radius=0.08, color=C.PENALTY)
         d2u = Dot(p2.c2p(0.6, 0.6 * A_neg), radius=0.06, color=GREY_B)
-        nums = calc(r"\rho = 1.3:\ \min(1.3 \times 2.47,\ 1.2 \times 2.47) &= \min(3.21,\ 2.96) = 2.96",
-                    r"\\ \rho = 0.6:\ \min\big(0.6 \times (-0.35),\ 0.8 \times (-0.35)\big) &= \min(-0.21,\ -0.28) = -0.28",
+        nums = calc(r"\rho = 1.3:\ \min(1.3 \times 1.62,\ 1.2 \times 1.62) &= \min(2.11,\ 1.94) = 1.94",
+                    r"\\ \rho = 0.6:\ \min\big(0.6 \times (-0.54),\ 0.8 \times (-0.54)\big) &= \min(-0.32,\ -0.43) = -0.43",
                     font_size=28)
         nums[0].set_color(C.REWARD)
         nums[1].set_color(C.PENALTY)
@@ -253,12 +253,12 @@ class RL(VoiceoverScene):
         with self.voiceover(
             "GRPO's full objective adds one safeguard, borrowed from PPO. Rho is the ratio of a token's probability "
             "now to its probability when the answers were sampled, <bookmark mark='c'/> and it's clipped to within "
-            "twenty percent of one. <bookmark mark='p'/> Take a token of the right answer, advantage plus 2.47, whose "
-            "probability has already risen by thirty percent: rho is 1.3. Unclipped, the objective would be 3.21; "
-            "clipped at 1.2 it's 2.96, and the minimum takes the clipped value. <bookmark mark='f'/> That value no "
+            "twenty percent of one. <bookmark mark='p'/> Take a token of the right answer, advantage plus 1.62, whose "
+            "probability has already risen by thirty percent: rho is 1.3. Unclipped, the objective would be 2.11; "
+            "clipped at 1.2 it's 1.94, and the minimum takes the clipped value. <bookmark mark='f'/> That value no "
             "longer depends on the weights, so its gradient is zero: this token has been pushed enough for this "
             "batch. <bookmark mark='n'/> Likewise a wrong answer's token already down to 0.6 of its old probability: "
-            "the minimum is the clipped minus 0.28, and the push stops. <bookmark mark='t'/> In our toy, each batch "
+            "the minimum is the clipped minus 0.43, and the push stops. <bookmark mark='t'/> In our toy, each batch "
             "is used for one step only, so rho is exactly one, and the gradient is simply the advantage times the "
             "gradient of the log-probability."
         ) as vo:
@@ -284,7 +284,7 @@ class RL(VoiceoverScene):
         steps = np.array([x["step"] for x in c], float)
         p1 = np.array([x["pass1"] for x in c])
         p8 = np.array([x["pass8"] for x in c])
-        assert p1[0] < 0.75 and p1[-1] > 0.93 and p8[0] > 0.95 and abs(p8[-1] - p8[0]) < 0.05, (p1[0], p1[-1], p8[0], p8[-1])
+        assert p1[0] < 0.75 and p1[-1] > 0.93 and p8[0] > 0.9 and abs(p8[-1] - p8[0]) < 0.1, (p1[0], p1[-1], p8[0], p8[-1])
         S = steps[-1]
         plot = Plot(x_range=(0, S), y_range=(0, 1), width=8.6, height=4.3, x_ticks=list(range(0, int(S) + 1, 20)),
                     y_ticks=[0, 0.25, 0.5, 0.75, 1], y_fmt=lambda v: MathTex(rf"{int(100 * v)}\%", font_size=24, color=GREY_A),
@@ -310,10 +310,10 @@ class RL(VoiceoverScene):
         deb.next_to(side, DOWN, buff=0.35).align_to(side, LEFT)
         with self.voiceover(
             "Repeat that over thousands of problems. <bookmark mark='p1'/> Pass at one, the chance that a single "
-            "sample is right, climbs from about sixty percent to nearly a hundred. <bookmark mark='p8'/> But look at "
-            "pass at eight, the chance that at least one of eight samples is right. It barely moves: it was already "
-            "near the top. <bookmark mark='s'/> In this toy, reinforcement learning didn't teach the model anything "
-            "new. It made it reliable at what it could already sometimes do. <bookmark mark='d'/> Whether that also "
+            f"sample is right, climbs from about {100*p1[0]:.0f} percent to {100*p1[-1]:.0f} percent. <bookmark mark='p8'/> But look at "
+            f"pass at eight, the chance that at least one of eight samples is right. It rises from {100*p8[0]:.0f} percent to a hundred: "
+            "a much smaller gain. <bookmark mark='s'/> In this toy, most of the gain came from making the model "
+            "reliable at answers it could already sometimes produce. <bookmark mark='d'/> Whether that also "
             "holds at the frontier is debated: a 2025 study found the same pattern in large models, while others "
             "find that prolonged RL discovers genuinely new strategies."
         ) as vo:
@@ -342,11 +342,11 @@ class RL(VoiceoverScene):
         d = self.d
         c0 = d["curve"][0]
         p1, p8 = c0["pass1"], c0["pass8"]
-        assert round(p1, 2) == 0.61 and round(100 * p8, 1) == 98.8
+        assert round(p1, 2) == 0.56 and round(100 * p8, 1) == 92.2
         ideal = 1 - (1 - round(p1, 2)) ** 8
-        hard = 1 - (7 / 8) ** 8
-        assert round(100 * ideal, 2) == 99.95 and round(100 * hard) == 66
-        assert d["groups"][0]["answers"].count(sum(d["show"])) == 1  # 478+356: one right in eight
+        hard = 1 - (6 / 8) ** 8
+        assert round(100 * ideal, 2) == 99.86 and round(100 * hard) == 90
+        assert d["groups"][0]["answers"].count(sum(d["show"])) == 2
         plot = Plot(x_range=(0, 1), y_range=(0, 1), width=4.4, height=4.6, x_ticks=[0, 0.25, 0.5, 0.75, 1],
                     y_ticks=[0, 0.25, 0.5, 0.75, 1], y_fmt=lambda v: MathTex(rf"{int(100 * v)}\%", font_size=22, color=GREY_A),
                     x_fmt=lambda v: f"{v:g}", x_label=r"$p$: chance one sample is right", font_size=22)
@@ -356,14 +356,14 @@ class RL(VoiceoverScene):
         l8 = plot.line(ps, 1 - (1 - ps) ** 8, color=WHITE, stroke_width=4)
         t1 = label(r"pass@1 $= p$", font_size=22, color=GREY_B).next_to(plot.c2p(0.7, 0.7), DR, buff=0.05)
         t8 = label(r"pass@8", font_size=22).move_to(plot.c2p(0.42, 0.86))
-        dh = Dot(plot.c2p(1 / 8, hard), radius=0.08, color=C.PENALTY)
-        da = Dot(plot.c2p(0.61, ideal), radius=0.08, color=C.REWARD)
+        dh = Dot(plot.c2p(2 / 8, hard), radius=0.08, color=C.PENALTY)
+        da = Dot(plot.c2p(0.56, ideal), radius=0.08, color=C.REWARD)
         head = label(r"Why pass@8 started near the ceiling", font_size=34).to_edge(UP, buff=0.4)
         nums = calc(r"P(\text{all } k \text{ wrong}) &= (1 - p)^k",
                     r"\\ \text{pass@}k &= 1 - (1 - p)^k",
-                    r"\\ \text{average: } \bar p = 0.61 \;\Rightarrow\; \text{pass@}8 &= 1 - 0.39^8 = 99.95\%",
-                    r"\\ \text{measured: } \text{pass@}8 &= 98.8\%",
-                    r"\\ 478{+}356:\ \hat p = \tfrac{1}{8} \;\Rightarrow\; \text{pass@}8 &= 1 - \big(\tfrac{7}{8}\big)^8 = 66\%",
+                    r"\\ \text{average: } \bar p = 0.56 \;\Rightarrow\; \text{pass@}8 &= 1 - 0.44^8 \approx 99.86\%",
+                    r"\\ \text{measured: } \text{pass@}8 &= 92.2\%",
+                    r"\\ 478{+}356:\ \hat p = \tfrac{2}{8} \;\Rightarrow\; \text{pass@}8 &= 1 - \big(\tfrac{6}{8}\big)^8 \approx 90\%",
                     font_size=30)
         nums[2].set_color(C.REWARD)
         nums[4].set_color(C.PENALTY)
@@ -372,10 +372,10 @@ class RL(VoiceoverScene):
         with self.voiceover(
             "Back to pass at eight: why did it barely move? If each sample is right with probability p, all k samples "
             "fail with probability one minus p, to the k. <bookmark mark='a'/> At the start, the average sample was "
-            "right 61 percent of the time. If every problem were average, pass at eight would be one minus 0.39 to "
-            "the eighth: 99.95 percent. <bookmark mark='m'/> The measured 98.8 is a little lower, because failures "
-            "cluster on the hard problems, <bookmark mark='h'/> like 478 plus 356, where one sample in eight was "
-            "right. There, pass at eight is one minus seven eighths to the eighth: 66 percent. <bookmark mark='r'/> "
+            "right 56 percent of the time. If every problem were average, pass at eight would be one minus 0.44 to "
+            "the eighth: 99.86 percent. <bookmark mark='m'/> The measured 92.2 is lower, because failures "
+            "cluster on the hard problems, <bookmark mark='h'/> like 478 plus 356, where two samples in eight were "
+            "right. There, pass at eight is one minus six eighths to the eighth: about 90 percent. <bookmark mark='r'/> "
             "RL raised p on exactly those problems, and pass at one followed. Pass at eight was already near its "
             "ceiling."
         ) as vo:

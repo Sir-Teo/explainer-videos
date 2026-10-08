@@ -133,7 +133,7 @@ class Stability(VoiceoverScene):
         res = self.res
         pb = np.array([np.array(res[f"stab_base_{lr:.0e}"]["probes"], float)[:, 1].max() for lr in STAB_LRS])
         pq = np.array([np.array(res[f"stab_qk_{lr:.0e}"]["probes"], float)[:, 1].max() for lr in STAB_LRS])
-        assert round(pb[0]) == 9 and pb[STAB_LRS.index(1e-2)] > 100 and 9_000 < pb[-1] < 11_000 and pq.max() < 10
+        assert round(pb[0]) == 9 and pb[STAB_LRS.index(1e-2)] > 100 and 9_000 < pb[-1] < 12_000 and pq.max() < 25
         plot = Plot(x_range=(2e-4, 1.5e-1), y_range=(2, 3e4), width=8.6, height=4.4, log_x=True, log_y=True,
                     x_ticks=[1e-3, 1e-2, 1e-1], y_ticks=[10, 100, 1000, 10000],
                     x_fmt=lambda v: pow10_label(int(round(np.log10(v)))), y_fmt=lambda v: pow10_label(int(round(np.log10(v)))),
@@ -146,7 +146,7 @@ class Stability(VoiceoverScene):
         nb = VGroup(*[label(rf"{v:,.0f}".replace(",", "{,}"), font_size=22, color=C.PENALTY).next_to(d, UL, buff=0.05)
                       for v, d in zip(pb, db) if v > 50])
         tb = label(r"standard", font_size=26, color=C.PENALTY).next_to(plot, RIGHT, buff=0.3).shift(UP * 1.4)
-        tq = label(r"QK-norm:\\always below 10", font_size=26, color=C.KEPT).next_to(plot.c2p(1.5e-1, pq[-1]), RIGHT, buff=0.25)
+        tq = label(r"QK-norm:\\always below 25", font_size=26, color=C.KEPT).next_to(plot.c2p(1.5e-1, pq[-1]), RIGHT, buff=0.25)
         tb.next_to(plot.c2p(1.5e-1, pb[-1]), RIGHT, buff=0.25)
         head = label(r"What's inside: attention scores blow up", font_size=32).to_edge(UP, buff=0.35)
         side = label(r"huge scores $\Rightarrow$ softmax becomes one-hot\\$\Rightarrow$ gradients vanish or explode", font_size=24,
@@ -155,10 +155,10 @@ class Stability(VoiceoverScene):
         with self.voiceover(
             "What's going on inside? <bookmark mark='b'/> Here is the largest attention score each model produced, "
             "the dot product of a query and a key, against the learning rate. In the standard model it explodes: "
-            "about nine at the gentlest rate, over a hundred at 0.01, and ten thousand at 0.1. <bookmark mark='s'/> A "
+            f"about nine at the gentlest rate, over a hundred at 0.01, and roughly {pb[-1]:,.0f} at 0.1. <bookmark mark='s'/> A "
             "softmax over scores that large is one-hot, and in longer runs, this is what Wortsman and colleagues saw "
             "right before the loss diverged. <bookmark mark='q'/> QK-norm normalizes every query and key vector before "
-            "the dot product, and the largest score stays below ten at every learning rate."
+            "the dot product, and the largest score stays below twenty-five at every learning rate."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("b")
@@ -177,8 +177,8 @@ class Stability(VoiceoverScene):
         hd = 128 // 4  # head dimension of the L4 d128 stability models
         bound = np.sqrt(hd)
         pq, pb = self.pq, self.pb
-        assert round(bound, 2) == 5.66 and round(pq[0], 1) == 4.8 and pq[0] < bound and round(pq.max(), 1) == 9.1
-        assert round(pb[-1]) == 10045 and res[f"stab_qk_{STAB_LRS[0]:.0e}"]["run"]["model"]["qk_norm"]
+        assert round(bound, 2) == 5.66 and pq[0] < bound and pq.max() < 25
+        assert pb[-1] > 9_000 and res[f"stab_qk_{STAB_LRS[0]:.0e}"]["run"]["model"]["qk_norm"]
         der = calc(r"|q\cdot k| &\le \|q\|\,\|k\| \qquad \text{(Cauchy--Schwarz)}",
                    r"\\ \hat q &= g \odot \frac{q}{\operatorname{rms}(q)},\quad \operatorname{rms}(q) = "
                    r"\sqrt{\tfrac1d\textstyle\sum_i q_i^2} \;\Rightarrow\; \|\hat q\| = \sqrt d \ \ (g=1)",
@@ -205,9 +205,9 @@ class Stability(VoiceoverScene):
             "that's the Cauchy-Schwarz inequality. <bookmark mark='r'/> RMS normalization divides each "
             "32-dimensional query and key by its root-mean-square, which sets its length to root 32. "
             "<bookmark mark='b'/> So the score, q dot k over root d, can be at most root 32, about 5.66, unless the "
-            "learned gains grow. <bookmark mark='m'/> Our gentlest run peaked at 4.8, under the bound. Even at the "
-            "highest learning rate, with grown gains, it reached only 9.1, while without normalization the score hit "
-            "ten thousand. <bookmark mark='s'/> And a softmax over scores like that is brutal. Two scores 45 apart get "
+            f"learned gains grow. <bookmark mark='m'/> Our gentlest run peaked at {pq[0]:.1f}, under the bound. Even at the "
+            f"highest learning rate, with grown gains, it reached only {pq.max():.1f}, while without normalization the score hit "
+            f"roughly {pb[-1]:,.0f}. <bookmark mark='s'/> And a softmax over scores like that is brutal. Two scores 45 apart get "
             "weights in the ratio e to the minus 45, about three in ten to the twenty: the output is one-hot, and its "
             "gradient, p times one minus p, is zero."
         ) as vo:

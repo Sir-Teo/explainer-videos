@@ -301,8 +301,8 @@ class Optimizer(VoiceoverScene):
         t_mu = muon_tokens_to(l_ref)
         frac = t_mu / t_ref
         self.frac = frac
-        assert (vm < va).all() and ratios.max() < 2 / 3 and 0.6 < frac < 0.66
-        assert round(va[-1], 2) == 3.80 and round(vm[-1], 2) == 3.61
+        assert (vm < va).all() and ratios.max() < 0.7 and 0.6 < frac < 0.67
+        assert np.isfinite(va).all() and np.isfinite(vm).all()
         plot = Plot(x_range=(0, ta[-1] / 1e6), y_range=(3.4, 6.0), width=9.0, height=4.4,
                     x_ticks=[0, 3, 6, 9, 12], y_ticks=[3.5, 4.0, 4.5, 5.0, 5.5, 6.0],
                     x_label=r"training tokens (millions)", y_label=r"validation loss")
@@ -323,9 +323,9 @@ class Optimizer(VoiceoverScene):
             "Does it help? Here's our pocket model trained twice on the same data, once with AdamW and once with "
             "Muon, each with the better of the learning rates we tried in short test runs. <bookmark mark='r'/> Muon "
             "pulls ahead early and stays ahead. <bookmark mark='h'/> While the learning rate is held at its peak, Muon "
-            "reaches any given loss with less than two thirds of the tokens AdamW needs. <bookmark mark='d'/> At the "
+            "reaches these losses with roughly two thirds of the tokens AdamW needs. <bookmark mark='d'/> At the "
             "end, both learning rates are lowered and both losses drop, which is the subject of the next chapter. "
-            "Muon finishes at 3.61, AdamW at 3.80."
+            f"Muon finishes at {vm[-1]:.2f}, AdamW at {va[-1]:.2f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("r")
@@ -381,7 +381,7 @@ class Optimizer(VoiceoverScene):
             "and trained the trillion-parameter Kimi K2 with it. <bookmark mark='g'/> By 2026, Zhipu's GLM models, "
             "DeepSeek-V4 and Kimi K3 all use Muon variants. <bookmark mark='c'/> One caveat: a careful 2025 "
             "benchmark found the speed-up shrinks as models grow, from 1.4 times at a hundred million parameters to "
-            "1.1 times at 1.2 billion. <bookmark mark='o'/> Our tiny model's 1.6 fits that trend, though our tuning "
+            f"1.1 times at 1.2 billion. <bookmark mark='o'/> Our tiny model's {speed:.1f} fits that trend, though our tuning "
             "was far lighter. Optimizer gains are real, but they're hard to measure at scale."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), Create(axis), FadeIn(years))

@@ -255,17 +255,18 @@ class Architecture(VoiceoverScene):
         imb = {k: float(final[k][-1].max() * 8) for k in final}
         self.imbalance = imb
         vals = {k: res[k]["final_val"] for k, _ in names}
-        assert round(imb["moe_none"], 1) == 3.0 and final["moe_none"][-1].min() < 0.01
-        assert imb["moe_bias"] < 1.2 < imb["moe_aux"] < 1.5 and vals["moe_aux"] < vals["moe_bias"] < vals["moe_none"]
+        assert imb["moe_none"] > 3 and final["moe_none"][-1].min() < 0.01
+        assert imb["moe_aux"] < imb["moe_bias"] < imb["moe_none"] and vals["moe_aux"] < vals["moe_bias"]
         with self.voiceover(
             "But routers have a failure mode. Experts that get more tokens improve faster and get chosen even more: "
             "the rich get richer. Here are three real runs of our pocket mixture of experts, eight experts, two per "
             "token. <bookmark mark='g'/> Watch the share of tokens each expert receives as training goes. With no "
-            "balancing, the busiest expert ends up with three times its fair share, while another gets almost "
+            f"balancing, the busiest expert ends up with {imb['moe_none']:.1f} times its fair share, while another gets almost "
             "nothing. <bookmark mark='a'/> The classic fix is an extra loss term that penalizes uneven routing. "
             "<bookmark mark='b'/> DeepSeek-V3 used a gentler trick: a bias added to each expert's score, only for "
             "choosing experts, nudged up after every step if the expert was underused and down if it was overused, "
-            "with no extra loss term competing with learning. Here, it balances almost perfectly. "
+            "with no extra loss term competing with learning. Here, it spreads the traffic more evenly, though "
+            "some imbalance remains. "
             "<bookmark mark='c'/> In our tiny runs, the auxiliary loss still finished with a slightly lower loss; in "
             "DeepSeek's experiments, at billions of parameters, the bias came out ahead."
         ) as vo:
@@ -293,7 +294,7 @@ class Architecture(VoiceoverScene):
         aux = {k: 8 * (v**2).sum() for k, v in f.items()}
         bias = np.array(res["moe_bias"]["bias"][-1][1:])[-1]
         cfg = res["moe_bias"]["run"]["model"]
-        assert round(aux["moe_none"], 2) == 1.84 and round(aux["moe_aux"], 2) == 1.07 and cfg["bias_speed"] == 0.001
+        assert aux["moe_none"] > aux["moe_aux"] > 1 and cfg["bias_speed"] == 0.001
         assert res["moe_aux"]["run"]["model"]["aux_coef"] == 0.01 and bias.min() < -0.25 and bias.max() > 0.25
         fn = f["moe_none"]
         left = calc(r"\mathcal{L}_{\rm aux} &= \alpha\, E \sum_i f_i\, P_i \qquad (\alpha = 0.01,\ E = 8)",
@@ -314,18 +315,18 @@ class Architecture(VoiceoverScene):
             bars.add(r)
         axis = Line(LEFT * 0.3, RIGHT * (7 * 0.45 + 0.3), color=GREY_C, stroke_width=1.5)
         bt = label(r"final biases $b_i$, last layer", font_size=22, color=GREY_A).next_to(VGroup(bars, axis), UP, buff=0.2)
-        bl = VGroup(MathTex(r"+0.3", font_size=20, color=GREY_A).next_to(axis, LEFT, buff=0.1).shift(UP * 1.2),
+        bl = VGroup(MathTex(r"+0.4", font_size=20, color=GREY_A).next_to(axis, LEFT, buff=0.1).shift(UP * 1.6),
                     MathTex(r"-0.3", font_size=20, color=GREY_A).next_to(axis, LEFT, buff=0.1).shift(DOWN * 1.2))
         bgroup = VGroup(bars, axis, bt, bl).to_edge(RIGHT, buff=0.8).shift(DOWN * 1.2)
         with self.voiceover(
             "Here's the arithmetic behind the two fixes. The auxiliary loss multiplies, for each expert, the share of "
             "tokens it gets, f, by the average probability the router gives it, P, and adds them up. "
             "<bookmark mark='b'/> If every expert gets an eighth, the total is exactly one, its minimum. "
-            "<bookmark mark='n'/> Plug in our unbalanced run's real shares, taking P close to f, and it's 1.84; "
-            "training with the loss brought it to 1.07. <bookmark mark='r'/> DeepSeek's bias never touches the loss. "
+            f"<bookmark mark='n'/> Plug in our unbalanced run's real shares, taking P close to f, and it's {aux['moe_none']:.2f}; "
+            f"training with the loss brought it to {aux['moe_aux']:.2f}. <bookmark mark='r'/> DeepSeek's bias never touches the loss. "
             "After every step, each expert's bias moves by 0.001 toward balance: up if it got fewer tokens than "
             "average, down if it got more. <bookmark mark='f'/> By the end of our run, the naturally popular experts "
-            "carried biases near minus 0.3 and the neglected ones near plus 0.3: just enough to even out the choices."
+            "carried biases near minus 0.3 and the neglected ones near plus 0.4: nudging the choices toward balance."
         ) as vo:
             self.play(Write(left[0]), FadeIn(fp))
             vo.wait_until("b")
