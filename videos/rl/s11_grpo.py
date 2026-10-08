@@ -134,7 +134,7 @@ class GRPO(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def stdnorm(self):
-        A = mtex(r"\hat A_i", r"=", r"\frac{R_i - \operatorname{mean}(R)}{\operatorname{std}(R)}", font_size=44).to_edge(UP, buff=0.4).shift(LEFT * 3.4)
+        A = mtex(r"\hat A_i", r"=", r"\frac{R_i - \operatorname{mean}(R)}{\operatorname{std}(R)}", font_size=44).to_edge(UP, buff=0.4).shift(LEFT * 4.2)
         A[0].set_color(C.ADVANTAGE)
         bin_ = VGroup(mtex(r"\text{right: } +\sqrt{\tfrac{1-p}{p}}", font_size=32, color=C.REWARD),
                       mtex(r"\text{wrong: } -\sqrt{\tfrac{p}{1-p}}", font_size=32, color=C.PENALTY)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
@@ -144,9 +144,9 @@ class GRPO(VoiceoverScene):
                   r"\nabla\big[\,2\arcsin\sqrt{p}\,\big]", font_size=36)
         e1[4].set_color(YELLOW)
         e1.next_to(bn, DOWN, buff=0.45).align_to(A, LEFT)
-        plot = Plot(x_range=(0, 1), y_range=(0, 6), width=5.6, height=3.6, x_ticks=[0, 0.25, 0.5, 0.75, 1], y_ticks=[0, 2, 4, 6],
+        plot = Plot(x_range=(0, 1), y_range=(0, 6), width=4.9, height=3.6, x_ticks=[0, 0.25, 0.5, 0.75, 1], y_ticks=[0, 2, 4, 6],
                     x_label=r"$p$: chance the model gets this prompt right", y_label=r"weight on $\nabla p$")
-        plot.to_edge(RIGHT, buff=0.5).shift(DOWN * 0.5)
+        plot.to_edge(RIGHT, buff=0.3).shift(DOWN * 0.3)
         ps = np.linspace(0.004, 0.996, 300)
         inf = plot.line(ps, np.minimum(1 / np.sqrt(ps * (1 - ps)), 6), color=YELLOW, stroke_width=4)
         cols = {2: GREY_B, 4: C.BASELINE, 8: C.ADVANTAGE, 64: C.KL}
@@ -191,7 +191,7 @@ class GRPO(VoiceoverScene):
             self.play(LaggedStart(*[Create(f) for f in finite], lag_ratio=0.2), FadeIn(keys[1:]), run_time=2)
             vo.wait_until("f")
             fr = label(r"$2\arcsin\sqrt{p} = \int_0^p \frac{dt}{\sqrt{t(1-t)}}$:\ \ Fisher--Rao arc length of a coin",
-                       font_size=24, color=YELLOW).next_to(plot, DOWN, buff=0.15)
+                       font_size=24, color=YELLOW).to_edge(DOWN, buff=0.55)
             self.play(FadeIn(fr))
         self.wait(0.3)
         self.clear_scene()
