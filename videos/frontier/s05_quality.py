@@ -82,7 +82,7 @@ class Quality(VoiceoverScene):
         cl = VGroup(*[label(f"{c:,}".replace(",", "{,}"), font_size=22).next_to(b, UP, buff=0.08) for c, b in zip(counts, bars)])
         xt = label(r"educational score", font_size=24, color=GREY_A).next_to(xl, DOWN, buff=0.15)
         n_all = self.e["n_survivors"]
-        assert n == 400 and n_all == 1363
+        assert n == 400 and n_all == 1363 and round(100 * keep) == 7 and counts.argmax() == 1
         head = label(rf"FineWeb-Edu's classifier on {n} random pages of our {n_all:,} survivors".replace(",", "{,}"),
                      font_size=32).to_edge(UP, buff=0.4)
         kt = label(rf"score $\geq 3$: {100 * keep:.0f}\%", font_size=32, color=C.EDU).next_to(bars, UP, buff=0.5).align_to(bars, RIGHT)
@@ -103,7 +103,7 @@ class Quality(VoiceoverScene):
             "We ran that same classifier on four hundred random pages that survived our filters. "
             "<bookmark mark='h'/> Most score low: "
             "shops, services, local news. <bookmark mark='k'/> Keeping three and up, as FineWeb-Edu does, leaves "
-            "EDUKEEP percent. <bookmark mark='t'/> The top scorer looks like this, and a typical low scorer like "
+            "just seven percent. <bookmark mark='t'/> The top scorer looks like this, and a typical low scorer like "
             "this."
         ) as vo:
             self.play(FadeIn(head))
@@ -130,7 +130,7 @@ class Quality(VoiceoverScene):
         head = label(r"Keep the best, and rewrite the rest", font_size=36).to_edge(UP, buff=0.5)
         src = source(r"FineWeb (2024); Su et al.\ 2024 (Nemotron-CC); Kimi K2 report (2025); OLMo 3 report (2025)")
         with self.voiceover(
-            "The payoff is large. FineWeb-Edu kept only eight percent of FineWeb, 1.3 trillion tokens, and models "
+            "At full scale, FineWeb-Edu kept a similar eight percent of FineWeb, 1.3 trillion tokens, and models "
             "trained on it matched older datasets on knowledge benchmarks with ten times fewer tokens. "
             "<bookmark mark='r'/> Since then, the trend is to rewrite rather than throw away. NVIDIA's Nemotron-CC "
             "used a language model to rephrase web pages, producing almost two trillion synthetic tokens. "
