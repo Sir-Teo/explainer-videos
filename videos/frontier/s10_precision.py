@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Mono, Plot, bar_rows, label, load, note, source
+from videos.frontier.common import Mono, Plot, bar_rows, calc, label, load, note, num_table, source
 
 FORMATS = [  # name, sign, exponent, mantissa
     (r"FP32", 1, 8, 23),
@@ -47,7 +47,9 @@ class Precision(VoiceoverScene):
         self.throughput()
         self.layouts()
         self.number_lines()
+        self.decode()
         self.real_tensor()
+        self.block_math()
         self.at_scale()
 
     # ------------------------------------------------------------------
@@ -168,6 +170,56 @@ class Precision(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def decode(self):
+        nv = load("math")["nvfp4"]
+        assert nv["sb"] == 1.375 and nv["sb_bits"] == [0, 7, 3]
+
+        def bits(sign, exp, man, ne):
+            cells = VGroup()
+            for b, col in [(sign, C.SIGN_BIT)] + [(x, C.EXP_BIT) for x in exp] + [(x, C.MAN_BIT) for x in man]:
+                sq = Square(0.5, stroke_width=1.5, stroke_color=col, fill_color=col, fill_opacity=0.35)
+                cells.add(VGroup(sq, Mono(str(b), font_size=26).move_to(sq)))
+            cells.arrange(RIGHT, buff=0.06)
+            cells[1:1 + ne].shift(RIGHT * 0.12)
+            cells[1 + ne:].shift(RIGHT * 0.24)
+            return cells
+        e4 = MathTex(r"\text{E4M3:}\quad x = (-1)^{s} \times 2^{\,e-7} \times \left(1 + \tfrac{m}{8}\right)", font_size=36)
+        e4.to_edge(UP, buff=0.5)
+        r1 = bits(0, "0111", "011", 4)
+        c1 = calc(r"e = 0111_2 = 7,\ m = 011_2 = 3:\quad x &= 2^{0} \times \left(1 + \tfrac38\right) = 1.375", font_size=32)
+        r2 = bits(0, "1111", "110", 4)
+        c2 = calc(r"e = 15,\ m = 6:\quad x &= 2^{8} \times \left(1 + \tfrac68\right) = 448\ \ \text{(the largest)}", font_size=32)
+        e2 = MathTex(r"\text{E2M1 (FP4):}\quad x = 2^{\,e-1} \times \left(1 + \tfrac{m}{2}\right)", font_size=36)
+        r3 = bits(0, "11", "1", 2)
+        c3 = calc(r"e = 3,\ m = 1:\quad x &= 2^{2} \times 1.5 = 6\ \ \text{(the largest)}", font_size=32)
+        lines = VGroup(VGroup(r1, c1).arrange(RIGHT, buff=0.5), VGroup(r2, c2).arrange(RIGHT, buff=0.5), e2,
+                       VGroup(r3, c3).arrange(RIGHT, buff=0.5)).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+        if lines.width > 13.0:
+            lines.scale_to_fit_width(13.0)
+        lines.next_to(e4, DOWN, buff=0.55).set_x(0)
+        tag = label(r"$1.375$ is a real number from later in this chapter: the scale of one NVFP4 block", font_size=24,
+                    color=GREY_A).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Decoding one is simple arithmetic. In E4M3, the value is two to the exponent minus seven, times one plus "
+            "the mantissa over eight. <bookmark mark='a'/> Take the bits 0, 0111, 011: the exponent is seven, so two "
+            "to the zero; the mantissa is three, so the value is 1.375. <bookmark mark='b'/> The largest pattern, "
+            "0, 1111, 110, is two to the eighth times 1.75: 448. <bookmark mark='c'/> FP4 works the same way with "
+            "a bias of one: its largest value, 0, 11, 1, is four times 1.5, which is six."
+        ) as vo:
+            self.play(Write(e4))
+            vo.wait_until("a")
+            self.play(FadeIn(r1), run_time=0.6)
+            self.play(Write(c1), FadeIn(tag))
+            vo.wait_until("b")
+            self.play(FadeIn(r2), run_time=0.6)
+            self.play(Write(c2))
+            vo.wait_until("c")
+            self.play(Write(e2), FadeIn(r3))
+            self.play(Write(c3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def real_tensor(self):
         p = self.p
         X = p["X"]
@@ -273,6 +325,59 @@ class Precision(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromCenter(b) for b in braces], lag_ratio=0.2),
                       LaggedStart(*[FadeIn(s) for s in scales], lag_ratio=0.2))
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def block_math(self):
+        nv = load("math")["nvfp4"]
+        x, sc, q, dq = (np.array(nv[k]) for k in ("x", "scaled", "q", "deq"))
+        st, sb = nv["st"], nv["sb"]
+        assert round(nv["tensor_amax"]) == 2883 and round(st, 3) == 1.072 and round(nv["block_amax"], 2) == 8.84
+        assert round(nv["sb_raw"], 3) == 1.374 and q[7] == 6.0 and q[1] == 3.0 and round(100 * nv["rel_err"], 1) == 9.6
+        head = label(r"One NVFP4 block, step by step: 16 real values of `` Paris''", font_size=32).to_edge(UP, buff=0.35)
+        steps = calc(r"s_{\rm tensor} &= \frac{\max|X|}{448 \times 6} = \frac{2883}{2688} = 1.072",
+                     rf"\\ s_{{\rm block}} &= \operatorname{{round}}_{{\rm FP8}}\!\left(\frac{{8.84}}{{6 \times 1.072}}\right)"
+                     rf" = \operatorname{{round}}_{{\rm FP8}}(1.374) = 1.375",
+                     r"\\ \hat x &= \operatorname{round}_{\rm FP4}\!\left(\frac{x}{1.375 \times 1.072}\right) \times 1.375 \times 1.072",
+                     font_size=30)
+        steps.next_to(head, DOWN, buff=0.35).set_x(0)
+        f2 = lambda v: f"{v + 0.0:.2f}" if abs(v) >= 0.005 else "0"  # noqa: E731  (no "-0.00")
+        rows = [[r"x"] + [f2(v) for v in x], [r"x/s"] + [f2(v) for v in sc],
+                [r"\text{FP4}"] + [f"{abs(v) if v == 0 else v:g}" for v in q], [r"\hat x"] + [f2(v) for v in dq]]
+        tab = num_table([r""] + [""] * 16, rows, font_size=21, h_buff=0.16, v_buff=0.2,
+                        col_colors=[GREY_A] + [WHITE] * 16)
+        tab.header.set_opacity(0)
+        tab.rule.set_opacity(0)
+        for c, col in zip(tab.rows, [WHITE, GREY_A, C.MAN_BIT, C.KEPT]):
+            c[1:].set_color(col)
+        tab.next_to(steps, DOWN, buff=0.45).set_x(0)
+        if tab.width > 13.4:
+            tab.scale_to_fit_width(13.4)
+        mark = VGroup(SurroundingRectangle(VGroup(*[r[8] for r in tab.rows]), buff=0.05, color=C.KEPT, stroke_width=2),
+                      SurroundingRectangle(VGroup(*[r[2] for r in tab.rows]), buff=0.05, color=C.EDU, stroke_width=2))
+        err = label(rf"block error: {100 * nv['rel_err']:.1f}\%", font_size=28, color=C.KEPT).next_to(tab, DOWN, buff=0.35)
+        with self.voiceover(
+            "Here's one block, step by step: sixteen real values from the Paris token. First, one scale for the "
+            "whole tensor, so its largest value fits: 2,883, over 448 times 6, is 1.072. <bookmark mark='b'/> Then "
+            "the block's own scale: its largest value is 8.84; divided by 6 and by 1.072 that's 1.374, rounded to "
+            "the nearest FP8 number, the 1.375 we just decoded. <bookmark mark='q'/> Divide every value by the "
+            "combined scale, round to the nearest FP4 value, and multiply back. <bookmark mark='r'/> The block's "
+            "largest value, 8.84, becomes exactly 6 and comes back almost perfectly; 5.11 lands at 3.47, rounds to 3, "
+            "and comes back as 4.42. <bookmark mark='e'/> Over the block, the error is 9.6 percent."
+        ) as vo:
+            self.play(FadeIn(head), Write(steps[0]))
+            vo.wait_until("b")
+            self.play(Write(steps[1]))
+            vo.wait_until("q")
+            self.play(Write(steps[2]))
+            for r in tab.rows:
+                self.play(FadeIn(r, shift=DOWN * 0.05), run_time=0.6)
+            vo.wait_until("r")
+            self.play(Create(mark[0]))
+            self.play(Create(mark[1]))
+            vo.wait_until("e")
+            self.play(FadeIn(err))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
