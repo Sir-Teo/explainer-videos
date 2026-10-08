@@ -828,6 +828,14 @@ def _rl_example(a: int, b: int, ans: int) -> list[int]:
 
 
 def compute_toy_rl():
+    import torch
+
+    # GPT-2's preceding inference probes disable autograd globally.
+    with torch.enable_grad():
+        return _compute_toy_rl()
+
+
+def _compute_toy_rl():
     """Pretrain a 3-layer PocketGPT on 3-digit additions where 40% of the answers forget every carry,
     then run GRPO-style RL with a verifiable reward (exact answer).  Tracks pass@1 and pass@8."""
     import torch

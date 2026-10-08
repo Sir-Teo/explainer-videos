@@ -75,6 +75,7 @@ class TinyGPT(nn.Module):
         return idx[0].tolist()
 
 
+@torch.enable_grad()
 def train(text, steps=3000, batch=32, lr=2e-3, sample_at=(0, 100, 300, 1000, 3000), sample_len=240,
           prompt="\n", seed=1337, log=print, **model_kw):
     """Train on ``text``; return the loss curve and samples taken along the way."""
