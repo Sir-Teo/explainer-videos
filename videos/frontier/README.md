@@ -1,6 +1,6 @@
 # How Frontier AI Models Are Trained, End to End
 
-A 45-minute, 18-chapter explainer in four parts, following one frontier
+A one-hour, 18-chapter explainer in four parts, following one frontier
 training run from the raw web to a reasoning assistant: **the data** (Common
 Crawl, the FineWeb filters, MinHash deduplication, quality classifiers,
 mixtures, tokens), **the recipe** (scaling laws, mixture-of-experts
@@ -37,23 +37,23 @@ answers); the rest are labeled `illustrative`. See
 <details><summary>Chapters</summary>
 
 - `0:00` One of the largest computations ever run
-- `2:02` Part 1: The raw web
-- `3:53` Filtering: the FineWeb recipe
-- `5:59` Deduplication with MinHash
-- `8:13` Quality, mixtures, and tokens
-- `10:48` Part 2: How big? Scaling laws
-- `13:26` Architecture and mixture of experts
-- `16:33` The optimizer: AdamW and Muon
-- `19:34` Learning-rate schedules
-- `21:33` Fewer bits: FP8 and FP4
-- `24:54` Loss spikes and stability
-- `27:25` Part 3: Memory and data parallelism
-- `29:59` Tensor, pipeline, expert parallelism
-- `32:54` Keeping the run alive
-- `34:39` Part 4: Supervised fine-tuning
-- `36:41` Learning from preferences
-- `38:54` Reinforcement learning and reasoning
-- `42:49` The whole pipeline
+- `2:00` Part 1: The raw web
+- `3:52` Filtering: the FineWeb recipe
+- `6:21` Deduplication with MinHash
+- `8:35` Quality, mixtures, and tokens
+- `11:44` Part 2: How big? Scaling laws
+- `15:43` Architecture and mixture of experts
+- `20:21` The optimizer: AdamW and Muon
+- `24:37` Learning-rate schedules
+- `26:47` Fewer bits: FP8 and FP4
+- `31:38` Loss spikes and stability
+- `35:00` Part 3: Memory and data parallelism
+- `37:50` Tensor, pipeline, expert parallelism
+- `41:47` Keeping the run alive
+- `44:12` Part 4: Supervised fine-tuning
+- `46:54` Learning from preferences
+- `50:45` Reinforcement learning and reasoning
+- `57:11` The whole pipeline
 
 </details>
 
