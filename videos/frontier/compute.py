@@ -198,7 +198,7 @@ def compute_edu():
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-    torch.set_num_threads(4)
+    torch.set_num_threads(2)
     name = "HuggingFaceFW/fineweb-edu-classifier"
     tok = AutoTokenizer.from_pretrained(name)
     model = AutoModelForSequenceClassification.from_pretrained(name).eval()
@@ -476,11 +476,11 @@ def compute_muon_svd():
 
     from explainer.lm.pocket import NS_COEFFS, Run, TokenStream, newton_schulz, train
 
-    torch.set_num_threads(4)
+    torch.set_num_threads(1)  # tiny matrices: threads only add overhead
     run = Run(model=_cfg(4, 128), lr=iso_lr(128), batch=16, tokens=400 * 16 * SEQ, warmup=40, schedule="constant")
     tr, va = corpus_tokens()
     data = TokenStream(tr, va, SEQ, seed=7)
-    res = train(run, data, threads=4)
+    res = train(run, data, threads=1)
     model, opts = res["_model"], res["_opts"]
     W = model.blocks[2].mlp.up.weight
     adam_state = opts[0].state[W]
