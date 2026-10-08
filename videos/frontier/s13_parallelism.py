@@ -306,7 +306,7 @@ class Parallelism(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(RIGHT * 3.3 + DOWN * 1.2)
         src = source(r"Llama 3 paper (arXiv 2407.21783), Table 4; DeepSeek-V3 report (arXiv 2412.19437)")
         with self.voiceover(
-            "Real runs combine all of these. Llama 3.1 405B trained on 16,384 H100s arranged as a grid: "
+            "Real runs combine all of these. Llama 3.1, the 405-billion-parameter model, trained on 16,384 H100s arranged as a grid: "
             "<bookmark mark='t'/> tensor parallel across the eight GPUs inside each server, <bookmark mark='p'/> a "
             "sixteen-stage pipeline across sixteen servers, <bookmark mark='d'/> and a hundred and twenty-eight copies "
             "of that pipeline doing data parallelism. <bookmark mark='m'/> Each GPU sustained about 400 teraflops: "
