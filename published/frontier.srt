@@ -1,0 +1,3067 @@
+1
+00:00:00,275 --> 00:00:04,775
+You ask a question, and a moment later the answer starts streaming back, one
+
+2
+00:00:04,775 --> 00:00:06,338
+token at a time.
+
+3
+00:00:06,338 --> 00:00:10,500
+The model writing it is the result of one of the largest computations people
+
+4
+00:00:10,500 --> 00:00:13,125
+have ever run.
+
+5
+00:00:13,575 --> 00:00:18,100
+Here is every notable AI model with a published estimate of its training compute,
+
+6
+00:00:18,100 --> 00:00:22,700
+placed by release date and by how many arithmetic operations it took to train,
+
+7
+00:00:22,700 --> 00:00:24,625
+on a logarithmic scale.
+
+8
+00:00:24,625 --> 00:00:26,812
+GPT-2, in 2019:
+
+9
+00:00:26,812 --> 00:00:29,400
+about ten to the twenty-one operations.
+
+10
+00:00:29,400 --> 00:00:31,412
+GPT-3, a year later:
+
+11
+00:00:31,412 --> 00:00:33,225
+more than a hundred times that.
+
+12
+00:00:33,225 --> 00:00:34,463
+GPT-4:
+
+13
+00:00:34,463 --> 00:00:36,983
+about seventy times more again.
+
+14
+00:00:36,983 --> 00:00:43,708
+The largest runs of 2025 and 2026 are estimated at ten to the twenty-six operations
+
+15
+00:00:43,708 --> 00:00:45,033
+and beyond.
+
+16
+00:00:45,033 --> 00:00:49,796
+At the frontier, training compute has been growing almost five times, every
+
+17
+00:00:49,796 --> 00:00:51,442
+single year.
+
+18
+00:00:51,442 --> 00:00:53,729
+And so that none of this is a cartoon:
+
+19
+00:00:53,729 --> 00:00:58,367
+every experiment in this video was actually run, in miniature, on the four-core
+
+20
+00:00:58,367 --> 00:01:00,254
+computer that rendered it.
+
+21
+00:01:00,254 --> 00:01:04,679
+All of our training runs together took less than ten to the fifteen operations,
+
+22
+00:01:04,679 --> 00:01:08,267
+roughly a hundred billion times less than a frontier run.
+
+23
+00:01:08,267 --> 00:01:09,979
+The scale is different.
+
+24
+00:01:09,979 --> 00:01:13,117
+The ideas are the same.
+
+25
+00:01:13,675 --> 00:01:17,150
+This video follows one of those training runs from end to end.
+
+26
+00:01:17,150 --> 00:01:21,487
+It starts with a crawl of the public web, which is filtered, deduplicated
+
+27
+00:01:21,487 --> 00:01:24,862
+and mixed into a dataset of tens of trillions of tokens.
+
+28
+00:01:24,862 --> 00:01:28,762
+Pretraining teaches a network to predict the next token of that text, with
+
+29
+00:01:28,762 --> 00:01:32,462
+the work spread across tens of thousands of GPUs for months.
+
+30
+00:01:32,462 --> 00:01:36,325
+Post-training then turns that raw text predictor into something that follows
+
+31
+00:01:36,325 --> 00:01:41,500
+instructions and reasons, and the result is the assistant.
+
+32
+00:01:42,117 --> 00:01:43,717
+We'll go in four parts:
+
+33
+00:01:43,717 --> 00:01:48,992
+the data, the training recipe, scaling it out across a cluster, and post-training.
+
+34
+00:01:48,992 --> 00:01:52,542
+Along the way, we'll look at what the labs have actually published about how
+
+35
+00:01:52,542 --> 00:01:55,467
+they do it, as of October 2026.
+
+36
+00:02:02,306 --> 00:02:03,006
+Part one:
+
+37
+00:02:03,006 --> 00:02:05,256
+the data.
+
+38
+00:02:06,231 --> 00:02:09,606
+Almost every large language model starts from the same place:
+
+39
+00:02:09,606 --> 00:02:13,494
+Common Crawl, a non-profit that crawls the web every month or two and gives
+
+40
+00:02:13,494 --> 00:02:14,906
+the result away.
+
+41
+00:02:14,906 --> 00:02:20,406
+Its September 2026 crawl alone holds 2.17 billion web pages, a hundred and
+
+42
+00:02:20,406 --> 00:02:24,394
+six terabytes compressed, split into a hundred thousand files.
+
+43
+00:02:24,394 --> 00:02:26,431
+Each square here is one of them.
+
+44
+00:02:26,431 --> 00:02:30,869
+For this video, we downloaded eight of them, plus the first four hundred megabytes
+
+45
+00:02:30,869 --> 00:02:34,781
+of the raw HTML behind the first.
+
+46
+00:02:35,181 --> 00:02:37,769
+Here's one page from the very first file:
+
+47
+00:02:37,769 --> 00:02:42,231
+a blog post with a recipe for savory custard.
+
+48
+00:02:42,373 --> 00:02:44,436
+This is what the crawler actually stored:
+
+49
+00:02:44,436 --> 00:02:47,398
+more than two thousand lines of HTML.
+
+50
+00:02:47,398 --> 00:02:50,923
+Scripts, style sheets, menus, links, metadata.
+
+51
+00:02:50,923 --> 00:02:52,586
+And the recipe itself?
+
+52
+00:02:52,586 --> 00:02:54,511
+All of it sits on a single line:
+
+53
+00:02:54,511 --> 00:02:56,673
+number 436.
+
+54
+00:02:56,673 --> 00:03:00,648
+Ninety-eight kilobytes of HTML, for three kilobytes of text:
+
+55
+00:03:00,648 --> 00:03:03,423
+about three percent.
+
+56
+00:03:03,973 --> 00:03:08,036
+Across the first ten thousand pages of that file, it's the same story:
+
+57
+00:03:08,036 --> 00:03:12,911
+1.65 gigabytes of HTML become thirty-seven megabytes of text.
+
+58
+00:03:12,911 --> 00:03:15,711
+Pulling out the main text is a step of its own.
+
+59
+00:03:15,711 --> 00:03:20,473
+Common Crawl ships an extracted version, but the FineWeb team found that re-extracting
+
+60
+00:03:20,473 --> 00:03:25,448
+from the raw HTML, with a library called Trafilatura, leaves out more menus
+
+61
+00:03:25,448 --> 00:03:28,273
+and boilerplate, and trains better models.
+
+62
+00:03:28,273 --> 00:03:30,998
+Here's our recipe page both ways.
+
+63
+00:03:30,998 --> 00:03:35,198
+Common Crawl's version keeps the comments, the cookbook ads, and a hundred-line
+
+64
+00:03:35,198 --> 00:03:36,536
+blog archive.
+
+65
+00:03:36,536 --> 00:03:40,323
+Over all the pages that survive our filters, it's twice as long.
+
+66
+00:03:40,323 --> 00:03:42,236
+And the web is multilingual:
+
+67
+00:03:42,236 --> 00:03:46,073
+in this sample, only four pages in ten are in English.
+
+68
+00:03:46,073 --> 00:03:48,561
+Frontier models train on many languages;
+
+69
+00:03:48,561 --> 00:03:51,698
+here, like the original FineWeb, we'll keep English.
+
+70
+00:03:53,888 --> 00:03:55,388
+Next, filtering.
+
+71
+00:03:55,388 --> 00:04:00,226
+We took the exact recipe behind FineWeb, Hugging Face's open web dataset of
+
+72
+00:04:00,226 --> 00:04:05,276
+fifteen trillion tokens, and ran their own code on those ten thousand pages.
+
+73
+00:04:05,276 --> 00:04:08,397
+Here's how many pages survive each step.
+
+74
+00:04:08,397 --> 00:04:12,734
+First, a blocklist of four and a half million domains removes adult sites,
+
+75
+00:04:12,734 --> 00:04:14,509
+malware and spam.
+
+76
+00:04:14,509 --> 00:04:19,172
+Pages with no extractable text go next, like this one, which does nothing
+
+77
+00:04:19,172 --> 00:04:21,072
+but redirect your browser.
+
+78
+00:04:21,072 --> 00:04:25,409
+Then a language classifier keeps only pages that are confidently English:
+
+79
+00:04:25,409 --> 00:04:27,638
+about a third of what's left.
+
+80
+00:04:27,638 --> 00:04:29,851
+Then come rules written by hand.
+
+81
+00:04:29,851 --> 00:04:34,213
+Repetition rules, from DeepMind's Gopher paper, drop pages where too many
+
+82
+00:04:34,213 --> 00:04:38,663
+lines, paragraphs or phrases repeat, like this forum index:
+
+83
+00:04:38,663 --> 00:04:43,647
+zero replies, last post by Archive, over and over.
+
+84
+00:04:43,647 --> 00:04:48,272
+Quality rules drop pages with fewer than fifty words, or where too few words
+
+85
+00:04:48,272 --> 00:04:52,384
+contain a letter, or that lack ordinary words like the and and.
+
+86
+00:04:52,384 --> 00:04:55,163
+Like this login form.
+
+87
+00:04:55,163 --> 00:05:00,338
+Rules from Google's C4 dataset drop lines that don't end in punctuation, and
+
+88
+00:05:00,338 --> 00:05:03,751
+any page with lorem ipsum or a curly bracket in it:
+
+89
+00:05:03,751 --> 00:05:06,051
+a sign of code or templates.
+
+90
+00:05:06,051 --> 00:05:12,047
+This page is spun advertising text with its template syntax still showing.
+
+91
+00:05:12,047 --> 00:05:16,334
+And FineWeb added three rules of its own, chosen by training small models
+
+92
+00:05:16,334 --> 00:05:17,509
+on the output:
+
+93
+00:05:17,509 --> 00:05:22,584
+drop pages where few lines end in punctuation, where most lines are very short,
+
+94
+00:05:22,584 --> 00:05:24,647
+or where many lines repeat.
+
+95
+00:05:24,647 --> 00:05:28,005
+Menus and navigation, mostly.
+
+96
+00:05:28,005 --> 00:05:29,718
+These rules are blunt.
+
+97
+00:05:29,718 --> 00:05:33,930
+This page, a programming puzzle full of symbols, was thrown out for having
+
+98
+00:05:33,930 --> 00:05:35,630
+too few real words.
+
+99
+00:05:35,630 --> 00:05:38,218
+At web scale that's an acceptable trade:
+
+100
+00:05:38,218 --> 00:05:43,530
+losing some good pages costs far less than training on bad ones.
+
+101
+00:05:43,697 --> 00:05:47,834
+In the end, thirteen percent of the pages survive, holding about a third of
+
+102
+00:05:47,834 --> 00:05:50,047
+a percent of the original bytes.
+
+103
+00:05:50,047 --> 00:05:55,184
+FineWeb ran this, plus deduplication, over ninety-six crawls, and ended up
+
+104
+00:05:55,184 --> 00:05:57,147
+with fifteen trillion tokens.
+
+105
+00:05:59,402 --> 00:06:01,215
+The web is full of copies:
+
+106
+00:06:01,215 --> 00:06:04,590
+mirrored sites, templates, boilerplate pages.
+
+107
+00:06:04,590 --> 00:06:09,890
+Training on the same text over and over wastes compute and encourages memorization.
+
+108
+00:06:09,890 --> 00:06:13,390
+Here's the biggest cluster of near-duplicates in our eight files:
+
+109
+00:06:13,390 --> 00:06:18,727
+forty-one pages announcing that some domain name is for sale.
+
+110
+00:06:19,194 --> 00:06:23,919
+To measure how alike two pages are, cut each one into overlapping five-word
+
+111
+00:06:23,919 --> 00:06:24,957
+shingles.
+
+112
+00:06:24,957 --> 00:06:28,919
+The Jaccard similarity is the number of shingles they share, divided by the
+
+113
+00:06:28,919 --> 00:06:31,257
+number of distinct shingles in either.
+
+114
+00:06:31,257 --> 00:06:35,894
+For these two pages, it's 0.78.
+
+115
+00:06:36,286 --> 00:06:39,486
+But comparing every page with every other is hopeless.
+
+116
+00:06:39,486 --> 00:06:43,086
+Billions of pages means billions of billions of pairs.
+
+117
+00:06:43,086 --> 00:06:45,973
+MinHash gets around this with a beautiful trick.
+
+118
+00:06:45,973 --> 00:06:50,111
+Run every shingle of a page through a random hash function, and keep only
+
+119
+00:06:50,111 --> 00:06:51,911
+the smallest value.
+
+120
+00:06:51,911 --> 00:06:55,848
+Two pages get the same minimum exactly when the smallest-hashed shingle of
+
+121
+00:06:55,848 --> 00:07:00,511
+the two pages combined is one they share, which happens with probability equal
+
+122
+00:07:00,511 --> 00:07:02,711
+to their Jaccard similarity.
+
+123
+00:07:02,711 --> 00:07:08,248
+Repeat with 112 different hash functions, and each page gets a short fingerprint.
+
+124
+00:07:08,248 --> 00:07:12,473
+For our two pages, 86 of the 112 minimums agree:
+
+125
+00:07:12,473 --> 00:07:16,561
+an estimate of 0.77.
+
+126
+00:07:17,827 --> 00:07:20,915
+Then, instead of comparing fingerprints, hash them.
+
+127
+00:07:20,915 --> 00:07:24,390
+Cut the 112 numbers into 14 bands of eight.
+
+128
+00:07:24,390 --> 00:07:28,352
+Pages that match on all eight numbers of any band land in the same bucket,
+
+129
+00:07:28,352 --> 00:07:30,090
+and become candidates.
+
+130
+00:07:30,090 --> 00:07:34,090
+The chance of that, as a function of similarity, is this S-curve:
+
+131
+00:07:34,090 --> 00:07:38,040
+pages that are eighty percent alike are caught ninety-two percent of the time;
+
+132
+00:07:38,040 --> 00:07:42,477
+pages that are half alike, about five percent.
+
+133
+00:07:42,961 --> 00:07:46,761
+In our eight files, deduplication removed about three percent of the pages
+
+134
+00:07:46,761 --> 00:07:50,161
+that survived filtering, in 114 clusters:
+
+135
+00:07:50,161 --> 00:07:55,023
+domain-for-sale pages, access-denied pages, default web-hosting pages.
+
+136
+00:07:55,023 --> 00:07:59,111
+Across a hundred crawls, the same pages turn up again and again, so the stakes
+
+137
+00:07:59,111 --> 00:08:02,023
+are much higher, and FineWeb found a surprise.
+
+138
+00:08:02,023 --> 00:08:05,711
+Deduplicating across all the crawls threw away ninety percent of the oldest
+
+139
+00:08:05,711 --> 00:08:08,798
+ones, and what remained trained worse models.
+
+140
+00:08:08,798 --> 00:08:11,811
+So FineWeb deduplicates each crawl separately.
+
+141
+00:08:13,967 --> 00:08:17,792
+Hand-written rules catch obvious junk, but they can't tell whether a page
+
+142
+00:08:17,792 --> 00:08:19,367
+is worth learning from.
+
+143
+00:08:19,367 --> 00:08:21,905
+For that, labs use models.
+
+144
+00:08:21,905 --> 00:08:26,867
+FineWeb-Edu asked Llama 3 70B to grade half a million pages for educational
+
+145
+00:08:26,867 --> 00:08:31,767
+value, from zero to five, trained a small, fast classifier to imitate those
+
+146
+00:08:31,767 --> 00:08:35,780
+grades, and ran it over all fifteen trillion tokens.
+
+147
+00:08:35,780 --> 00:08:39,792
+Then it kept the pages scoring three or more.
+
+148
+00:08:40,234 --> 00:08:44,309
+We ran that same classifier on four hundred random pages that survived our
+
+149
+00:08:44,309 --> 00:08:45,434
+filters.
+
+150
+00:08:45,434 --> 00:08:46,709
+Most score low:
+
+151
+00:08:46,709 --> 00:08:49,172
+shops, services, local news.
+
+152
+00:08:49,172 --> 00:08:53,622
+Keeping three and up, as FineWeb-Edu does, leaves just seven percent.
+
+153
+00:08:53,622 --> 00:08:58,934
+The top scorer looks like this, and a typical low scorer like this.
+
+154
+00:08:59,342 --> 00:09:04,667
+At full scale, FineWeb-Edu kept a similar eight percent of FineWeb, 1.3 trillion
+
+155
+00:09:04,667 --> 00:09:09,192
+tokens, and models trained on it matched older datasets on knowledge benchmarks
+
+156
+00:09:09,192 --> 00:09:11,542
+with ten times fewer tokens.
+
+157
+00:09:11,542 --> 00:09:15,817
+Since then, the trend is to rewrite rather than throw away.
+
+158
+00:09:15,817 --> 00:09:20,630
+NVIDIA's Nemotron-CC used a language model to rephrase web pages, producing
+
+159
+00:09:20,630 --> 00:09:23,842
+almost two trillion synthetic tokens.
+
+160
+00:09:23,842 --> 00:09:29,042
+Moonshot rephrased Kimi K2's knowledge data, and a factual-recall score rose
+
+161
+00:09:29,042 --> 00:09:31,492
+from 24 to 29 percent.
+
+162
+00:09:31,492 --> 00:09:36,767
+And AI2's OLMo 3 repeats its best data up to seven times, instead of drawing
+
+163
+00:09:36,767 --> 00:09:39,317
+a hard line.
+
+164
+00:09:39,792 --> 00:09:41,455
+Then the data is mixed.
+
+165
+00:09:41,455 --> 00:09:46,205
+Llama 3's recipe was about half general knowledge, a quarter math and reasoning,
+
+166
+00:09:46,205 --> 00:09:49,817
+seventeen percent code, and eight percent other languages.
+
+167
+00:09:49,817 --> 00:09:54,217
+And in the last stretch of training, the mix shifts toward the very best data.
+
+168
+00:09:54,217 --> 00:09:58,892
+Annealing Llama 3's 8-billion-parameter model this way raised its score on
+
+169
+00:09:58,892 --> 00:10:03,342
+grade-school math problems by twenty-four percent.
+
+170
+00:10:03,776 --> 00:10:05,888
+The finished datasets are enormous:
+
+171
+00:10:05,888 --> 00:10:11,188
+around fifteen trillion tokens for Llama 3, DeepSeek-V3 and Kimi K2;
+
+172
+00:10:11,188 --> 00:10:14,063
+twenty-eight and a half trillion for GLM-5;
+
+173
+00:10:14,063 --> 00:10:18,863
+thirty-three trillion for DeepSeek-V4, released in April 2026;
+
+174
+00:10:18,863 --> 00:10:21,526
+thirty-six trillion for Qwen3.
+
+175
+00:10:21,526 --> 00:10:24,376
+Last, the text becomes tokens.
+
+176
+00:10:24,376 --> 00:10:30,163
+A tokenizer, trained with byte-pair encoding, breaks text into frequent pieces;
+
+177
+00:10:30,163 --> 00:10:35,776
+frontier tokenizers have between 128 and 260 thousand of them.
+
+178
+00:10:35,776 --> 00:10:42,251
+We trained a small one, with 2,048, and used it to encode 168 million tokens
+
+179
+00:10:42,251 --> 00:10:43,751
+of FineWeb-Edu:
+
+180
+00:10:43,751 --> 00:10:46,451
+the fuel for the training runs in the next part.
+
+181
+00:10:48,474 --> 00:10:49,124
+Part two:
+
+182
+00:10:49,124 --> 00:10:51,574
+the recipe.
+
+183
+00:10:52,508 --> 00:10:56,720
+Before training anything, a lab has to decide how big the model should be.
+
+184
+00:10:56,720 --> 00:10:59,583
+The budget is compute, and there's a simple rule for it:
+
+185
+00:10:59,583 --> 00:11:03,070
+training costs about six times the number of parameters, times the number
+
+186
+00:11:03,070 --> 00:11:04,308
+of tokens.
+
+187
+00:11:04,308 --> 00:11:08,345
+Two operations per parameter per token on the forward pass, a multiply and
+
+188
+00:11:08,345 --> 00:11:11,270
+an add, and about four more on the backward pass.
+
+189
+00:11:11,270 --> 00:11:13,383
+So a fixed budget is a fixed area:
+
+190
+00:11:13,383 --> 00:11:17,283
+you can spend it on a big model trained on fewer tokens, or a small model
+
+191
+00:11:17,283 --> 00:11:18,595
+trained on many.
+
+192
+00:11:18,595 --> 00:11:21,133
+Which is better?
+
+193
+00:11:21,574 --> 00:11:24,662
+The way to find out is an experiment, so we ran one.
+
+194
+00:11:24,662 --> 00:11:28,687
+Pick a compute budget, and train models of several sizes, each on exactly
+
+195
+00:11:28,687 --> 00:11:30,962
+the number of tokens the budget allows.
+
+196
+00:11:30,962 --> 00:11:34,087
+Plot final loss against model size, and you get a valley:
+
+197
+00:11:34,087 --> 00:11:37,524
+too small a model can't hold what it sees, too large a model doesn't get to
+
+198
+00:11:37,524 --> 00:11:38,512
+see enough.
+
+199
+00:11:38,512 --> 00:11:42,274
+Repeat at four budgets, twenty-five runs in all, and fit a parabola to each
+
+200
+00:11:42,274 --> 00:11:43,512
+valley floor.
+
+201
+00:11:43,512 --> 00:11:47,612
+The best size grows with the budget, as a power law, with an exponent of about
+
+202
+00:11:47,612 --> 00:11:49,174
+three quarters.
+
+203
+00:11:49,174 --> 00:11:53,787
+That's close to what OpenAI found in 2020 with small models.
+
+204
+00:11:53,787 --> 00:11:57,937
+The much larger study we'll see next found about one half, and later work
+
+205
+00:11:57,937 --> 00:12:02,412
+traced the gap to details of how very small models like ours are measured
+
+206
+00:12:02,412 --> 00:12:04,824
+and tuned.
+
+207
+00:12:05,266 --> 00:12:09,616
+In 2022, DeepMind's Chinchilla paper did this with more than four hundred
+
+208
+00:12:09,616 --> 00:12:13,941
+models, up to sixteen billion parameters, and fitted a formula for the loss
+
+209
+00:12:13,941 --> 00:12:16,479
+as a function of model size and data.
+
+210
+00:12:16,479 --> 00:12:18,391
+Here is the landscape it describes;
+
+211
+00:12:18,391 --> 00:12:20,404
+darker means lower loss.
+
+212
+00:12:20,404 --> 00:12:23,204
+Each yellow line is a fixed compute budget.
+
+213
+00:12:23,204 --> 00:12:27,154
+Along each one there's a best point, and together they trace this path:
+
+214
+00:12:27,154 --> 00:12:32,366
+grow parameters and tokens together, about twenty tokens for every parameter.
+
+215
+00:12:32,366 --> 00:12:37,916
+By that measure, GPT-3 had been trained on far too little data, and the 70-billion
+
+216
+00:12:37,916 --> 00:12:43,379
+parameter Chinchilla, trained on 1.4 trillion tokens, beat a model four times
+
+217
+00:12:43,379 --> 00:12:45,741
+its size.
+
+218
+00:12:46,174 --> 00:12:48,674
+But nobody actually stops at twenty.
+
+219
+00:12:48,674 --> 00:12:53,174
+Llama 3's team used the same kind of IsoFLOP experiment, up to ten to the
+
+220
+00:12:53,174 --> 00:12:58,899
+twenty-two operations, to choose the size of their 405-billion-parameter model,
+
+221
+00:12:58,899 --> 00:13:01,812
+and then trained their small models far longer:
+
+222
+00:13:01,812 --> 00:13:07,049
+the 8-billion-parameter Llama 3 saw fifteen trillion tokens, almost nineteen
+
+223
+00:13:07,049 --> 00:13:10,324
+hundred per parameter, and it kept improving.
+
+224
+00:13:10,324 --> 00:13:12,687
+The reason is cost after training:
+
+225
+00:13:12,687 --> 00:13:16,649
+a smaller model trained for longer is much cheaper to run for millions of
+
+226
+00:13:16,649 --> 00:13:17,699
+people.
+
+227
+00:13:17,699 --> 00:13:22,274
+Frontier mixtures of experts land in between, at hundreds to over a thousand
+
+228
+00:13:22,274 --> 00:13:24,374
+tokens per active parameter.
+
+229
+00:13:26,406 --> 00:13:27,469
+What gets trained?
+
+230
+00:13:27,469 --> 00:13:28,831
+Still a transformer:
+
+231
+00:13:28,831 --> 00:13:33,106
+the same basic blueprint as GPT-2, which our earlier video took apart piece
+
+232
+00:13:33,106 --> 00:13:34,181
+by piece.
+
+233
+00:13:34,181 --> 00:13:36,669
+But nearly every component has been refined:
+
+234
+00:13:36,669 --> 00:13:41,806
+a simpler normalization, rotary position embeddings, gated MLPs, attention
+
+235
+00:13:41,806 --> 00:13:46,394
+that shares or compresses its keys and values to save memory, and normalization
+
+236
+00:13:46,394 --> 00:13:48,831
+of the queries and keys for stability.
+
+237
+00:13:48,831 --> 00:13:53,119
+Our pocket models use the first three, and QK-norm gets an experiment of its
+
+238
+00:13:53,119 --> 00:13:55,731
+own later on.
+
+239
+00:13:56,140 --> 00:14:00,527
+The biggest architectural change of the last two years is the mixture of experts.
+
+240
+00:14:00,527 --> 00:14:04,965
+In a standard transformer, every token passes through the whole MLP in every
+
+241
+00:14:04,965 --> 00:14:06,027
+layer.
+
+242
+00:14:06,027 --> 00:14:10,690
+A mixture-of-experts layer replaces that one MLP with many smaller ones, the
+
+243
+00:14:10,690 --> 00:14:14,990
+experts, and a small router that scores them for each token and sends the
+
+244
+00:14:14,990 --> 00:14:17,077
+token to only the top few.
+
+245
+00:14:17,077 --> 00:14:21,140
+So the number of parameters grows with the number of experts, while the computation
+
+246
+00:14:21,140 --> 00:14:25,365
+per token grows only with the number chosen.
+
+247
+00:14:25,823 --> 00:14:28,348
+Frontier open models push this hard.
+
+248
+00:14:28,348 --> 00:14:34,273
+DeepSeek-V3 has 256 experts per layer and uses eight of them, plus one shared
+
+249
+00:14:34,273 --> 00:14:36,648
+expert that every token visits:
+
+250
+00:14:36,648 --> 00:14:42,323
+671 billion parameters in total, but only 37 billion doing work for any one
+
+251
+00:14:42,323 --> 00:14:43,436
+token.
+
+252
+00:14:43,436 --> 00:14:49,323
+Kimi K2 has 384 experts and passes a trillion parameters.
+
+253
+00:14:49,323 --> 00:14:57,661
+And Kimi K3, from July 2026, picks sixteen of 896, for 2.8 trillion parameters.
+
+254
+00:14:57,661 --> 00:15:01,686
+Experts keep getting more numerous, and the fraction used per token keeps
+
+255
+00:15:01,686 --> 00:15:06,123
+shrinking, now around three to five percent.
+
+256
+00:15:06,540 --> 00:15:08,602
+But routers have a failure mode.
+
+257
+00:15:08,602 --> 00:15:12,465
+Experts that get more tokens improve faster and get chosen even more:
+
+258
+00:15:12,465 --> 00:15:13,827
+the rich get richer.
+
+259
+00:15:13,827 --> 00:15:17,777
+Here are three real runs of our pocket mixture of experts, eight experts,
+
+260
+00:15:17,777 --> 00:15:19,102
+two per token.
+
+261
+00:15:19,102 --> 00:15:22,715
+Watch the share of tokens each expert receives as training goes.
+
+262
+00:15:22,715 --> 00:15:27,215
+With no balancing, the busiest expert ends up with three times its fair share,
+
+263
+00:15:27,215 --> 00:15:29,340
+while another gets almost nothing.
+
+264
+00:15:29,340 --> 00:15:34,340
+The classic fix is an extra loss term that penalizes uneven routing.
+
+265
+00:15:34,340 --> 00:15:36,952
+DeepSeek-V3 used a gentler trick:
+
+266
+00:15:36,952 --> 00:15:41,465
+a bias added to each expert's score, only for choosing experts, nudged up
+
+267
+00:15:41,465 --> 00:15:45,490
+after every step if the expert was underused and down if it was overused,
+
+268
+00:15:45,490 --> 00:15:48,565
+with no extra loss term competing with learning.
+
+269
+00:15:48,565 --> 00:15:51,327
+Here, it balances almost perfectly.
+
+270
+00:15:51,327 --> 00:15:55,465
+In our tiny runs, the auxiliary loss still finished with a slightly lower
+
+271
+00:15:55,465 --> 00:15:56,252
+loss;
+
+272
+00:15:56,252 --> 00:16:02,290
+in DeepSeek's experiments, at billions of parameters, the bias came out ahead.
+
+273
+00:16:02,965 --> 00:16:07,215
+A few other shifts are reshaping the blueprint, mostly to make long contexts
+
+274
+00:16:07,215 --> 00:16:08,640
+and inference cheaper.
+
+275
+00:16:08,640 --> 00:16:13,277
+Sparse attention lets each token look at only its most relevant earlier tokens.
+
+276
+00:16:13,277 --> 00:16:17,315
+Hybrid models replace three of every four attention layers with cheaper linear-time
+
+277
+00:16:17,315 --> 00:16:18,352
+layers.
+
+278
+00:16:18,352 --> 00:16:22,477
+Multi-token prediction adds heads that guess several tokens ahead, both as
+
+279
+00:16:22,477 --> 00:16:25,940
+extra training signal and to speed up generation.
+
+280
+00:16:25,940 --> 00:16:30,365
+And context windows of a million tokens are now common, reached in stages
+
+281
+00:16:30,365 --> 00:16:31,640
+near the end of training.
+
+282
+00:16:33,747 --> 00:16:35,322
+Next, the optimizer:
+
+283
+00:16:35,322 --> 00:16:38,209
+the rule that turns each gradient into an update.
+
+284
+00:16:38,209 --> 00:16:42,559
+Plain gradient descent steps straight downhill, and in a long, narrow valley
+
+285
+00:16:42,559 --> 00:16:46,472
+it zigzags across the steep walls while creeping along the floor.
+
+286
+00:16:46,472 --> 00:16:49,309
+Adam fixes this one coordinate at a time:
+
+287
+00:16:49,309 --> 00:16:53,472
+it keeps running averages of each parameter's gradient and squared gradient,
+
+288
+00:16:53,472 --> 00:16:57,509
+and divides one by the square root of the other, so every coordinate moves
+
+289
+00:16:57,509 --> 00:16:59,372
+at a similar speed.
+
+290
+00:16:59,372 --> 00:17:05,747
+With decoupled weight decay, AdamW has been the default for most of a decade.
+
+291
+00:17:06,222 --> 00:17:10,409
+A newer optimizer, Muon, treats each weight matrix as a whole.
+
+292
+00:17:10,409 --> 00:17:14,784
+A matrix's gradient can be broken into directions, its singular vectors, each
+
+293
+00:17:14,784 --> 00:17:16,009
+with a size.
+
+294
+00:17:16,009 --> 00:17:19,447
+Here are the sizes for a real gradient from one of our pocket models, on a
+
+295
+00:17:19,447 --> 00:17:20,684
+log scale.
+
+296
+00:17:20,684 --> 00:17:22,822
+A handful of directions dominate:
+
+297
+00:17:22,822 --> 00:17:28,022
+the top five, out of 128, carry about two thirds of it, while a typical direction
+
+298
+00:17:28,022 --> 00:17:31,122
+is some fifty times smaller than the largest.
+
+299
+00:17:31,122 --> 00:17:34,609
+Muon keeps the directions but sets every size to one:
+
+300
+00:17:34,609 --> 00:17:38,122
+each direction gets an equal step.
+
+301
+00:17:38,538 --> 00:17:42,888
+Computing that exactly would need a singular value decomposition, which is
+
+302
+00:17:42,888 --> 00:17:44,963
+slow on GPUs.
+
+303
+00:17:44,963 --> 00:17:47,526
+Muon's trick is a polynomial.
+
+304
+00:17:47,526 --> 00:17:52,063
+Multiplying a matrix by itself in this pattern applies the same polynomial
+
+305
+00:17:52,063 --> 00:17:56,888
+to every singular value at once, and the coefficients are chosen so that five
+
+306
+00:17:56,888 --> 00:17:59,813
+rounds push every value toward one.
+
+307
+00:17:59,813 --> 00:18:04,513
+Here are the real singular values of our gradient, scaled below one, going
+
+308
+00:18:04,513 --> 00:18:06,401
+through five iterations:
+
+309
+00:18:06,401 --> 00:18:10,901
+small ones are lifted fast, any that overshoot are pulled back, and all of
+
+310
+00:18:10,901 --> 00:18:16,013
+them end up between about 0.6 and 1.2.
+
+311
+00:18:16,463 --> 00:18:17,263
+Does it help?
+
+312
+00:18:17,263 --> 00:18:21,488
+Here's our pocket model trained twice on the same data, once with AdamW and
+
+313
+00:18:21,488 --> 00:18:25,288
+once with Muon, each with the better of the learning rates we tried in short
+
+314
+00:18:25,288 --> 00:18:26,501
+test runs.
+
+315
+00:18:26,501 --> 00:18:29,026
+Muon pulls ahead early and stays ahead.
+
+316
+00:18:29,026 --> 00:18:32,988
+While the learning rate is held at its peak, Muon reaches any given loss with
+
+317
+00:18:32,988 --> 00:18:36,363
+less than two thirds of the tokens AdamW needs.
+
+318
+00:18:36,363 --> 00:18:40,688
+At the end, both learning rates are lowered and both losses drop, which is
+
+319
+00:18:40,688 --> 00:18:42,988
+the subject of the next chapter.
+
+320
+00:18:42,988 --> 00:18:48,738
+Muon finishes at 3.61, AdamW at 3.80.
+
+321
+00:18:49,222 --> 00:18:54,784
+Muon began in 2024 as a trick for a community speedrun of small GPT models.
+
+322
+00:18:54,784 --> 00:18:59,534
+In 2025, Moonshot showed it scales, needing about half the training compute
+
+323
+00:18:59,534 --> 00:19:03,972
+of AdamW, and trained the trillion-parameter Kimi K2 with it.
+
+324
+00:19:03,972 --> 00:19:11,872
+By 2026, Zhipu's GLM models, DeepSeek-V4 and Kimi K3 all use Muon variants.
+
+325
+00:19:11,872 --> 00:19:13,034
+One caveat:
+
+326
+00:19:13,034 --> 00:19:18,547
+a careful 2025 benchmark found the speed-up shrinks as models grow, from 1.4
+
+327
+00:19:18,547 --> 00:19:23,997
+times at a hundred million parameters to 1.1 times at 1.2 billion.
+
+328
+00:19:23,997 --> 00:19:29,059
+Our tiny model's 1.6 fits that trend, though our tuning was far lighter.
+
+329
+00:19:29,059 --> 00:19:32,922
+Optimizer gains are real, but they're hard to measure at scale.
+
+330
+00:19:34,962 --> 00:19:38,787
+The learning rate sets how big each step is, and how it changes over the run
+
+331
+00:19:38,787 --> 00:19:40,062
+matters a lot.
+
+332
+00:19:40,062 --> 00:19:44,224
+Runs begin with a short warmup, ramping up from near zero, because big steps
+
+333
+00:19:44,224 --> 00:19:47,149
+on a freshly initialized network can blow it up.
+
+334
+00:19:47,149 --> 00:19:48,762
+Then the rate decays.
+
+335
+00:19:48,762 --> 00:19:52,524
+The classic choice is a cosine curve, down to a tenth of the peak.
+
+336
+00:19:52,524 --> 00:19:53,962
+Cosine has a catch:
+
+337
+00:19:53,962 --> 00:19:56,662
+you must choose the length of the run in advance.
+
+338
+00:19:56,662 --> 00:19:59,987
+Stop halfway, and the rate was never brought down.
+
+339
+00:19:59,987 --> 00:20:02,974
+The alternative is warmup, stable, decay:
+
+340
+00:20:02,974 --> 00:20:08,162
+hold the peak for most of the run, and decay only in the last fifth.
+
+341
+00:20:08,595 --> 00:20:12,332
+Here are both schedules on one of our pocket models, with the same data.
+
+342
+00:20:12,332 --> 00:20:16,470
+During the stable phase, WSD's loss lags slightly behind.
+
+343
+00:20:16,470 --> 00:20:21,170
+Then its decay begins, and the loss drops off a cliff, finishing below cosine.
+
+344
+00:20:21,170 --> 00:20:24,745
+Larger published comparisons usually find the two about level.
+
+345
+00:20:24,745 --> 00:20:26,945
+And the stable phase can be reused:
+
+346
+00:20:26,945 --> 00:20:31,282
+branch off and decay early, here at forty and sixty percent of the way, and
+
+347
+00:20:31,282 --> 00:20:34,445
+each branch is a finished model for that budget.
+
+348
+00:20:34,445 --> 00:20:38,595
+Our half-length branch even beat a separate half-length cosine run.
+
+349
+00:20:38,595 --> 00:20:42,870
+One long run gives you a model at every budget.
+
+350
+00:20:43,328 --> 00:20:45,316
+Why does the loss fall so suddenly?
+
+351
+00:20:45,316 --> 00:20:46,466
+One picture:
+
+352
+00:20:46,466 --> 00:20:50,478
+late in training, the loss landscape looks like a river valley, with steep
+
+353
+00:20:50,478 --> 00:20:53,178
+walls and a slowly descending floor.
+
+354
+00:20:53,178 --> 00:20:57,203
+At a high learning rate, the optimizer bounces between the walls while drifting
+
+355
+00:20:57,203 --> 00:20:58,528
+downstream.
+
+356
+00:20:58,528 --> 00:21:02,541
+Lower the rate, and it settles onto the valley floor, revealing progress it
+
+357
+00:21:02,541 --> 00:21:05,103
+had already made.
+
+358
+00:21:05,587 --> 00:21:08,337
+Frontier runs use variations of both.
+
+359
+00:21:08,337 --> 00:21:12,849
+DeepSeek-V3 held its peak learning rate for ten trillion tokens, then decayed
+
+360
+00:21:12,849 --> 00:21:14,299
+over the next four.
+
+361
+00:21:14,299 --> 00:21:19,387
+Llama 3 used cosine, annealed to zero over its last forty million tokens,
+
+362
+00:21:19,387 --> 00:21:21,124
+and averaged checkpoints.
+
+363
+00:21:21,124 --> 00:21:25,762
+Kimi K3 fitted scaling laws for both schedules and chose cosine.
+
+364
+00:21:25,762 --> 00:21:29,987
+And the batch size usually grows as training goes, from a few million tokens
+
+365
+00:21:29,987 --> 00:21:31,912
+per step to tens of millions.
+
+366
+00:21:33,986 --> 00:21:37,848
+Every number in a training run is stored in a fixed number of bits, and that
+
+367
+00:21:37,848 --> 00:21:40,498
+choice is one of the biggest levers on speed.
+
+368
+00:21:40,498 --> 00:21:44,686
+Use half as many bits, and a chip can do roughly twice as many multiplications
+
+369
+00:21:44,686 --> 00:21:47,723
+per second, while moving half as much memory.
+
+370
+00:21:47,723 --> 00:21:52,261
+An H100 does about a thousand trillion operations per second in sixteen-bit
+
+371
+00:21:52,261 --> 00:21:55,073
+bfloat, and twice that in eight-bit.
+
+372
+00:21:55,073 --> 00:22:00,661
+A Blackwell Ultra chip does fifteen thousand trillion in four-bit.
+
+373
+00:22:00,794 --> 00:22:03,106
+A floating-point number has three parts:
+
+374
+00:22:03,106 --> 00:22:07,794
+a sign, an exponent that sets its scale, and a mantissa that sets its precision
+
+375
+00:22:07,794 --> 00:22:09,356
+within that scale.
+
+376
+00:22:09,356 --> 00:22:13,644
+Ordinary thirty-two-bit floats have eight exponent bits and twenty-three mantissa
+
+377
+00:22:13,644 --> 00:22:14,594
+bits.
+
+378
+00:22:14,594 --> 00:22:19,594
+Bfloat16 keeps all eight exponent bits but only seven of mantissa:
+
+379
+00:22:19,594 --> 00:22:21,744
+the same range, less precision.
+
+380
+00:22:21,744 --> 00:22:24,144
+It's the workhorse of training today.
+
+381
+00:22:24,144 --> 00:22:29,769
+The eight-bit format called E4M3 has four exponent bits and three of mantissa,
+
+382
+00:22:29,769 --> 00:22:36,369
+and four-bit E2M1 has just two exponent bits and one mantissa bit.
+
+383
+00:22:36,527 --> 00:22:40,990
+Here is every positive number each format can represent, on a log scale.
+
+384
+00:22:40,990 --> 00:22:45,190
+FP8 has a hundred and twenty-six of them, from about two thousandths up to
+
+385
+00:22:45,190 --> 00:22:46,915
+448.
+
+386
+00:22:46,915 --> 00:22:48,590
+FP4 has seven:
+
+387
+00:22:48,590 --> 00:22:52,490
+one half, one, one and a half, two, three, four and six.
+
+388
+00:22:52,490 --> 00:22:54,827
+That's all.
+
+389
+00:22:54,936 --> 00:22:58,586
+Because the range is so small, low-precision numbers are stored with a scale
+
+390
+00:22:58,586 --> 00:22:59,386
+factor:
+
+391
+00:22:59,386 --> 00:23:02,536
+divide by the scale, round, and multiply back.
+
+392
+00:23:02,536 --> 00:23:05,223
+The question is how many numbers share one scale.
+
+393
+00:23:05,223 --> 00:23:06,686
+Here is a real tensor:
+
+394
+00:23:06,686 --> 00:23:11,161
+the residual stream of GPT-2 after six blocks, for one sentence.
+
+395
+00:23:11,161 --> 00:23:14,498
+Forty-five tokens by 768 channels.
+
+396
+00:23:14,498 --> 00:23:16,536
+A typical entry is about one.
+
+397
+00:23:16,536 --> 00:23:18,561
+But a few channels are enormous:
+
+398
+00:23:18,561 --> 00:23:22,636
+this one reaches almost 2,900 at the first token.
+
+399
+00:23:22,636 --> 00:23:26,844
+Such massive activations show up in many transformers.
+
+400
+00:23:26,844 --> 00:23:30,694
+Now store it in FP4 with a single scale for the whole tensor.
+
+401
+00:23:30,694 --> 00:23:35,056
+The outlier sets the scale, and every ordinary value rounds to zero:
+
+402
+00:23:35,056 --> 00:23:38,906
+99.99 percent of the tensor simply vanishes.
+
+403
+00:23:38,906 --> 00:23:44,019
+Give every block of sixteen numbers its own scale, as NVIDIA's NVFP4 format
+
+404
+00:23:44,019 --> 00:23:46,456
+does, and the picture comes back.
+
+405
+00:23:46,456 --> 00:23:50,794
+Each value is still rounded coarsely, here with about twelve percent error,
+
+406
+00:23:50,794 --> 00:23:53,802
+but the information survives.
+
+407
+00:23:53,802 --> 00:23:56,765
+Zooming in on one token, the word Paris:
+
+408
+00:23:56,765 --> 00:24:01,377
+each block of sixteen values gets its own scale, stored in eight bits, so
+
+409
+00:24:01,377 --> 00:24:06,927
+a large value only coarsens its own block, not the whole tensor.
+
+410
+00:24:07,061 --> 00:24:10,786
+FP8, with its four exponent bits, is more forgiving:
+
+411
+00:24:10,786 --> 00:24:15,186
+on this same tensor, even a single scale gives under three percent error.
+
+412
+00:24:15,186 --> 00:24:18,211
+Labs still scale finely, for safety.
+
+413
+00:24:18,211 --> 00:24:23,823
+DeepSeek-V3 was trained in FP8 with a separate scale for every 128 values,
+
+414
+00:24:23,823 --> 00:24:28,911
+adding up partial sums in full precision every 128 products, and in tests
+
+415
+00:24:28,911 --> 00:24:33,311
+against sixteen-bit training its loss stayed within a quarter of a percent.
+
+416
+00:24:33,311 --> 00:24:40,611
+And in 2026, NVIDIA pretrained Nemotron 3 Ultra, a 550-billion-parameter model,
+
+417
+00:24:40,611 --> 00:24:46,561
+on twenty trillion tokens in NVFP4, keeping the most sensitive layers in higher
+
+418
+00:24:46,561 --> 00:24:51,448
+precision and using tricks like random rotations and stochastic rounding to
+
+419
+00:24:51,448 --> 00:24:52,861
+tame the outliers.
+
+420
+00:24:55,092 --> 00:24:56,642
+Big runs are fragile.
+
+421
+00:24:56,642 --> 00:25:00,842
+The loss can suddenly spike, and sometimes it never recovers.
+
+422
+00:25:00,842 --> 00:25:04,992
+Google's PaLM saw about twenty spikes during training, even with gradient
+
+423
+00:25:04,992 --> 00:25:05,867
+clipping;
+
+424
+00:25:05,867 --> 00:25:09,954
+the fix was to restart from a checkpoint about a hundred steps earlier and
+
+425
+00:25:09,954 --> 00:25:12,367
+skip a few hundred batches of data.
+
+426
+00:25:12,367 --> 00:25:17,042
+Meta's OPT needed more than thirty-five manual restarts.
+
+427
+00:25:17,042 --> 00:25:20,154
+And labs still hit this in 2026:
+
+428
+00:25:20,154 --> 00:25:25,592
+NVIDIA's Nemotron 3 Ultra report describes two divergences, one traced to
+
+429
+00:25:25,592 --> 00:25:30,942
+gradients being summed in sixteen-bit instead of thirty-two-bit.
+
+430
+00:25:31,442 --> 00:25:34,479
+Many instabilities can be reproduced in miniature.
+
+431
+00:25:34,479 --> 00:25:38,817
+Researchers at Google showed in 2023 that small models trained at high learning
+
+432
+00:25:38,817 --> 00:25:41,629
+rates fail in the same ways big ones do.
+
+433
+00:25:41,629 --> 00:25:43,817
+So we trained twelve pocket models:
+
+434
+00:25:43,817 --> 00:25:49,004
+six learning rates, each with standard attention and with a fix called QK-norm.
+
+435
+00:25:49,004 --> 00:25:52,192
+These runs are short, so nothing blows up outright.
+
+436
+00:25:52,192 --> 00:25:53,842
+But look at the shape.
+
+437
+00:25:53,842 --> 00:26:01,017
+From 0.003 to 0.03, the QK-norm model's loss barely moves, while the standard
+
+438
+00:26:01,017 --> 00:26:02,592
+model's climbs.
+
+439
+00:26:02,592 --> 00:26:06,979
+QK-norm makes training far less sensitive to the learning rate, for a small
+
+440
+00:26:06,979 --> 00:26:10,067
+cost at the best setting.
+
+441
+00:26:10,500 --> 00:26:12,062
+What's going on inside?
+
+442
+00:26:12,062 --> 00:26:15,887
+Here is the largest attention score each model produced, the dot product of
+
+443
+00:26:15,887 --> 00:26:18,712
+a query and a key, against the learning rate.
+
+444
+00:26:18,712 --> 00:26:20,837
+In the standard model it explodes:
+
+445
+00:26:20,837 --> 00:26:25,837
+about nine at the gentlest rate, over a hundred at 0.01, and ten thousand
+
+446
+00:26:25,837 --> 00:26:27,475
+at 0.1.
+
+447
+00:26:27,475 --> 00:26:32,050
+A softmax over scores that large is one-hot, and in longer runs, this is what
+
+448
+00:26:32,050 --> 00:26:35,825
+Wortsman and colleagues saw right before the loss diverged.
+
+449
+00:26:35,825 --> 00:26:40,762
+QK-norm normalizes every query and key vector before the dot product, and
+
+450
+00:26:40,762 --> 00:26:45,925
+the largest score stays below ten at every learning rate.
+
+451
+00:26:46,358 --> 00:26:49,646
+QK-norm is now standard in many open models.
+
+452
+00:26:49,646 --> 00:26:50,821
+Alongside it:
+
+453
+00:26:50,821 --> 00:26:55,371
+a small z-loss that keeps the output logits from drifting, gradient clipping,
+
+454
+00:26:55,371 --> 00:26:57,883
+warmup and careful initialization.
+
+455
+00:26:57,883 --> 00:27:02,108
+Moonshot's MuonClip rescales the query and key weights whenever an attention
+
+456
+00:27:02,108 --> 00:27:06,633
+score passes a hundred, and Kimi K2 trained on fifteen and a half trillion
+
+457
+00:27:06,633 --> 00:27:09,183
+tokens with zero loss spikes.
+
+458
+00:27:09,183 --> 00:27:11,671
+And new failure modes keep appearing:
+
+459
+00:27:11,671 --> 00:27:17,633
+in 2026, DeepSeek-V4 traced spikes to outliers in its mixture of experts,
+
+460
+00:27:17,633 --> 00:27:22,183
+and added activation clamping and an emergency re-routing mode that switches
+
+461
+00:27:22,183 --> 00:27:23,533
+on after a spike.
+
+462
+00:27:25,566 --> 00:27:26,253
+Part three:
+
+463
+00:27:26,253 --> 00:27:28,741
+scaling out.
+
+464
+00:27:29,716 --> 00:27:32,566
+Let's count what a training run has to keep in memory.
+
+465
+00:27:32,566 --> 00:27:33,891
+For every parameter:
+
+466
+00:27:33,891 --> 00:27:36,616
+the weight itself, in sixteen-bit, two bytes.
+
+467
+00:27:36,616 --> 00:27:37,428
+Its gradient:
+
+468
+00:27:37,428 --> 00:27:38,353
+two more.
+
+469
+00:27:38,353 --> 00:27:40,128
+Then the optimizer's state:
+
+470
+00:27:40,128 --> 00:27:44,141
+a full-precision master copy of the weight, four bytes, and Adam's two running
+
+471
+00:27:44,141 --> 00:27:46,253
+averages, four bytes each.
+
+472
+00:27:46,253 --> 00:27:49,566
+Sixteen bytes per parameter.
+
+473
+00:27:49,991 --> 00:27:56,203
+For a 405-billion-parameter model like Llama 3.1, that's six and a half terabytes.
+
+474
+00:27:56,203 --> 00:27:58,653
+An H100 has eighty gigabytes;
+
+475
+00:27:58,653 --> 00:28:02,191
+even the newest Blackwell Ultra has 288.
+
+476
+00:28:02,191 --> 00:28:06,503
+So just holding the training state takes eighty-one H100s, before counting
+
+477
+00:28:06,503 --> 00:28:07,941
+the activations:
+
+478
+00:28:07,941 --> 00:28:11,741
+the intermediate values saved during the forward pass for use in the backward
+
+479
+00:28:11,741 --> 00:28:15,666
+pass, which for long sequences can be even larger.
+
+480
+00:28:15,666 --> 00:28:19,591
+They're often thrown away and recomputed when needed, trading compute for
+
+481
+00:28:19,591 --> 00:28:21,816
+memory.
+
+482
+00:28:23,257 --> 00:28:27,382
+So the work has to be split across many GPUs, and there are several ways to
+
+483
+00:28:27,382 --> 00:28:28,370
+split it.
+
+484
+00:28:28,370 --> 00:28:31,020
+The simplest is data parallelism:
+
+485
+00:28:31,020 --> 00:28:35,632
+every GPU holds a full copy of the model and processes a different slice of
+
+486
+00:28:35,632 --> 00:28:36,870
+each batch.
+
+487
+00:28:36,870 --> 00:28:40,957
+Each computes its own gradient, and then they must all agree on the average
+
+488
+00:28:40,957 --> 00:28:44,207
+before taking a step together.
+
+489
+00:28:44,691 --> 00:28:48,828
+That averaging is called an all-reduce, and the standard algorithm passes
+
+490
+00:28:48,828 --> 00:28:50,703
+messages around a ring.
+
+491
+00:28:50,703 --> 00:28:53,753
+Each GPU's gradient is cut into chunks;
+
+492
+00:28:53,753 --> 00:28:56,878
+here, four GPUs with four numbers each.
+
+493
+00:28:56,878 --> 00:28:59,982
+Every GPU needs to end up with the sum.
+
+494
+00:28:59,982 --> 00:29:04,282
+In each step, every GPU sends one chunk to its neighbor, which adds it to
+
+495
+00:29:04,282 --> 00:29:05,320
+its own.
+
+496
+00:29:05,320 --> 00:29:09,732
+After three steps, each GPU holds one chunk of the complete sum.
+
+497
+00:29:09,732 --> 00:29:14,170
+Three more steps pass the finished chunks around the ring, and now every GPU
+
+498
+00:29:14,170 --> 00:29:15,645
+has the whole sum.
+
+499
+00:29:15,645 --> 00:29:20,020
+Each one sent only about twice the size of its gradient, no matter how many
+
+500
+00:29:20,020 --> 00:29:23,032
+GPUs are in the ring.
+
+501
+00:29:23,516 --> 00:29:27,941
+But in plain data parallelism, every GPU still stores all sixteen bytes per
+
+502
+00:29:27,941 --> 00:29:28,966
+parameter.
+
+503
+00:29:28,966 --> 00:29:33,191
+ZeRO, and PyTorch's FSDP, shard that state instead.
+
+504
+00:29:33,191 --> 00:29:38,441
+For a 7.5-billion-parameter model on sixty-four GPUs, that's 120 gigabytes
+
+505
+00:29:38,441 --> 00:29:39,616
+per GPU.
+
+506
+00:29:39,616 --> 00:29:43,841
+Split the optimizer state sixty-four ways, and it drops to 31.
+
+507
+00:29:43,841 --> 00:29:45,328
+Shard the gradients too:
+
+508
+00:29:45,328 --> 00:29:46,541
+17.
+
+509
+00:29:46,541 --> 00:29:50,416
+Shard the weights themselves, gathering each layer just before it's needed:
+
+510
+00:29:50,416 --> 00:29:52,266
+under two gigabytes.
+
+511
+00:29:52,266 --> 00:29:54,578
+The price is more communication:
+
+512
+00:29:54,578 --> 00:29:58,016
+about one and a half times that of plain data parallelism.
+
+513
+00:30:00,071 --> 00:30:04,321
+Data parallelism still runs every layer in full on every GPU.
+
+514
+00:30:04,321 --> 00:30:07,733
+When a single layer is too big, you split the layer itself.
+
+515
+00:30:07,733 --> 00:30:09,608
+That's tensor parallelism.
+
+516
+00:30:09,608 --> 00:30:11,658
+Take a matrix multiplication.
+
+517
+00:30:11,658 --> 00:30:15,833
+Cut the weight matrix into columns, and each GPU computes its own slice of
+
+518
+00:30:15,833 --> 00:30:18,446
+the output, with no communication at all.
+
+519
+00:30:18,446 --> 00:30:23,158
+Feed those slices into the next matrix, cut into rows, and each GPU produces
+
+520
+00:30:23,158 --> 00:30:24,471
+a partial sum.
+
+521
+00:30:24,471 --> 00:30:27,721
+One all-reduce adds them up.
+
+522
+00:30:28,217 --> 00:30:32,854
+NVIDIA's Megatron-LM arranged a whole transformer layer this way, with just
+
+523
+00:30:32,854 --> 00:30:36,492
+two all-reduces in the forward pass and two in the backward.
+
+524
+00:30:36,492 --> 00:30:40,842
+But they happen in every layer, on the critical path, so tensor parallelism
+
+525
+00:30:40,842 --> 00:30:46,742
+is kept inside one server, where eight GPUs are joined by NVLink at 450 gigabytes
+
+526
+00:30:46,742 --> 00:30:48,954
+per second in each direction.
+
+527
+00:30:48,954 --> 00:30:52,567
+Between servers, a network card manages about 50:
+
+528
+00:30:52,567 --> 00:30:55,467
+nine times slower.
+
+529
+00:30:55,917 --> 00:30:59,504
+To spread a model across servers, cut it by depth instead:
+
+530
+00:30:59,504 --> 00:31:01,367
+pipeline parallelism.
+
+531
+00:31:01,367 --> 00:31:05,617
+The first GPU holds the first quarter of the layers, the next GPU the next
+
+532
+00:31:05,617 --> 00:31:07,379
+quarter, and so on.
+
+533
+00:31:07,379 --> 00:31:11,542
+Only activations pass between stages, so slower links are fine.
+
+534
+00:31:11,542 --> 00:31:14,204
+But a naive pipeline is mostly idle.
+
+535
+00:31:14,204 --> 00:31:16,504
+While one stage works, the others wait:
+
+536
+00:31:16,504 --> 00:31:19,108
+three quarters of the time is bubble.
+
+537
+00:31:19,108 --> 00:31:23,558
+The fix is to cut each batch into micro-batches and keep the pipeline full.
+
+538
+00:31:23,558 --> 00:31:28,083
+With eight micro-batches, the bubble shrinks to p minus one, over m plus p
+
+539
+00:31:28,083 --> 00:31:29,071
+minus one:
+
+540
+00:31:29,071 --> 00:31:30,396
+about a quarter.
+
+541
+00:31:30,396 --> 00:31:32,608
+Cleverer schedules push it further.
+
+542
+00:31:32,608 --> 00:31:36,946
+Zero-bubble pipelines split the backward pass in two and use one half to fill
+
+543
+00:31:36,946 --> 00:31:41,208
+the gaps, and DeepSeek's DualPipe feeds micro-batches in from both ends at
+
+544
+00:31:41,208 --> 00:31:45,958
+once, hiding communication behind computation.
+
+545
+00:31:46,442 --> 00:31:49,929
+Mixture-of-experts models add expert parallelism.
+
+546
+00:31:49,929 --> 00:31:54,667
+Each GPU holds different experts, and every token must travel to the GPUs
+
+547
+00:31:54,667 --> 00:31:57,767
+holding its chosen experts, and back again:
+
+548
+00:31:57,767 --> 00:32:01,567
+an all-to-all exchange in every MoE layer.
+
+549
+00:32:01,567 --> 00:32:06,292
+And for very long sequences, context parallelism splits the sequence itself
+
+550
+00:32:06,292 --> 00:32:09,192
+across GPUs.
+
+551
+00:32:09,683 --> 00:32:11,921
+Real runs combine all of these.
+
+552
+00:32:11,921 --> 00:32:19,183
+Llama 3.1, the 405-billion-parameter model, trained on 16,384 H100s arranged
+
+553
+00:32:19,183 --> 00:32:20,196
+as a grid:
+
+554
+00:32:20,196 --> 00:32:24,583
+tensor parallel across the eight GPUs inside each server, a sixteen-stage
+
+555
+00:32:24,583 --> 00:32:28,408
+pipeline across sixteen servers, and a hundred and twenty-eight copies of
+
+556
+00:32:28,408 --> 00:32:31,121
+that pipeline doing data parallelism.
+
+557
+00:32:31,121 --> 00:32:34,521
+Each GPU sustained about 400 teraflops:
+
+558
+00:32:34,521 --> 00:32:38,058
+roughly forty percent of its peak, which is typical.
+
+559
+00:32:38,058 --> 00:32:44,383
+DeepSeek-V3 took a different shape, on 2,048 export-limited H800s:
+
+560
+00:32:44,383 --> 00:32:49,783
+no tensor parallelism at all, a sixteen-stage DualPipe pipeline, and experts
+
+561
+00:32:49,783 --> 00:32:52,808
+spread across 64 GPUs on eight nodes.
+
+562
+00:32:54,877 --> 00:32:59,302
+A run like this lasts weeks or months, and keeping it alive is a job in itself,
+
+563
+00:32:59,302 --> 00:33:03,002
+because the more GPUs you use, the more often something breaks.
+
+564
+00:33:03,002 --> 00:33:05,577
+Meta measured this across its research clusters:
+
+565
+00:33:05,577 --> 00:33:10,065
+an eight-GPU job ran, on average, forty-eight days between failures.
+
+566
+00:33:10,065 --> 00:33:11,777
+A thousand-GPU job:
+
+567
+00:33:11,777 --> 00:33:13,327
+about eight hours.
+
+568
+00:33:13,327 --> 00:33:17,415
+Failures scale with the number of parts, so at sixteen thousand GPUs you'd
+
+569
+00:33:17,415 --> 00:33:21,790
+expect one every couple of hours, and at a hundred thousand, about every quarter
+
+570
+00:33:21,790 --> 00:33:24,077
+of an hour.
+
+571
+00:33:24,519 --> 00:33:26,581
+And that's what Llama 3 saw.
+
+572
+00:33:26,581 --> 00:33:33,294
+In one fifty-four-day stretch of training on 16,384 GPUs, the job was interrupted
+
+573
+00:33:33,294 --> 00:33:35,531
+466 times:
+
+574
+00:33:35,531 --> 00:33:37,806
+once every two point eight hours.
+
+575
+00:33:37,806 --> 00:33:42,669
+About four fifths of the unexpected stops traced to hardware, mostly the GPUs
+
+576
+00:33:42,669 --> 00:33:45,969
+themselves and their memory.
+
+577
+00:33:46,519 --> 00:33:49,244
+So the training state is checkpointed regularly.
+
+578
+00:33:49,244 --> 00:33:53,919
+When a GPU dies, the job restarts from the last checkpoint on healthy machines,
+
+579
+00:33:53,919 --> 00:33:56,156
+and only the work since then is lost.
+
+580
+00:33:56,156 --> 00:33:59,606
+Doing this well is the difference between a run that spends nine tenths of
+
+581
+00:33:59,606 --> 00:34:02,269
+its time training and one that doesn't.
+
+582
+00:34:02,269 --> 00:34:04,969
+Llama 3 stayed above ninety percent.
+
+583
+00:34:04,969 --> 00:34:09,369
+Google kept redundant copies of Gemini's state in memory, so recovery took
+
+584
+00:34:09,369 --> 00:34:13,669
+seconds, and raised the share of useful time from eighty-five to ninety-seven
+
+585
+00:34:13,669 --> 00:34:15,894
+percent.
+
+586
+00:34:16,377 --> 00:34:18,090
+Some failures are silent:
+
+587
+00:34:18,090 --> 00:34:21,652
+a chip that keeps running but computes slightly wrong numbers.
+
+588
+00:34:21,652 --> 00:34:25,990
+At Gemini's scale, Google expected such silent data corruption every week
+
+589
+00:34:25,990 --> 00:34:28,890
+or two, and caught it by replaying steps.
+
+590
+00:34:28,890 --> 00:34:30,852
+Even the power grid notices:
+
+591
+00:34:30,852 --> 00:34:35,640
+when sixteen thousand GPUs pause at the same moment, Meta saw the power draw
+
+592
+00:34:35,640 --> 00:34:37,577
+swing by tens of megawatts.
+
+593
+00:34:39,692 --> 00:34:40,317
+Part four:
+
+594
+00:34:40,317 --> 00:34:42,867
+post-training.
+
+595
+00:34:43,817 --> 00:34:46,330
+After pretraining, we have a base model:
+
+596
+00:34:46,330 --> 00:34:49,717
+a superb document completer, but not an assistant.
+
+597
+00:34:49,717 --> 00:34:54,792
+Ask the base version of Qwen3's smallest model where the Eiffel Tower is,
+
+598
+00:34:54,792 --> 00:34:57,017
+and it decides it's reading a quiz.
+
+599
+00:34:57,017 --> 00:35:01,717
+It writes the multiple-choice options, the answer key, and then the next question.
+
+600
+00:35:01,717 --> 00:35:06,292
+The same model after post-training simply answers.
+
+601
+00:35:06,892 --> 00:35:09,655
+The first step is supervised fine-tuning.
+
+602
+00:35:09,655 --> 00:35:13,942
+Conversations are written out as a single stream of tokens, with special tokens
+
+603
+00:35:13,942 --> 00:35:15,680
+marking who is speaking.
+
+604
+00:35:15,680 --> 00:35:18,255
+Here is Qwen3's actual format:
+
+605
+00:35:18,255 --> 00:35:22,505
+a start marker, the speaker's role, the message, and an end marker.
+
+606
+00:35:22,505 --> 00:35:26,692
+The assistant's turn even begins with a thinking block, empty here because
+
+607
+00:35:26,692 --> 00:35:28,751
+thinking was switched off.
+
+608
+00:35:28,751 --> 00:35:33,376
+Training is the same next-token prediction as before, with one change:
+
+609
+00:35:33,376 --> 00:35:36,663
+the loss is only counted on the assistant's tokens.
+
+610
+00:35:36,663 --> 00:35:39,651
+The model isn't learning to predict what users say.
+
+611
+00:35:39,651 --> 00:35:43,551
+It's learning how the assistant replies.
+
+612
+00:35:44,059 --> 00:35:46,022
+Where do the conversations come from?
+
+613
+00:35:46,022 --> 00:35:47,947
+Early on, from people:
+
+614
+00:35:47,947 --> 00:35:53,309
+OpenAI's InstructGPT used about thirteen thousand demonstrations written by
+
+615
+00:35:53,309 --> 00:35:54,747
+contractors.
+
+616
+00:35:54,747 --> 00:35:59,009
+The LIMA paper showed that a thousand carefully chosen examples go a long
+
+617
+00:35:59,009 --> 00:36:03,059
+way, because the knowledge is already there from pretraining.
+
+618
+00:36:03,059 --> 00:36:07,834
+Today most of the data is generated by stronger models and then filtered:
+
+619
+00:36:07,834 --> 00:36:14,159
+Allen AI's Tülu 3 mix has 939 thousand prompts, and OLMo 3's reasoning set
+
+620
+00:36:14,159 --> 00:36:18,622
+has 2.3 million, about forty-five billion tokens.
+
+621
+00:36:18,622 --> 00:36:21,409
+This kind of imitation is powerful.
+
+622
+00:36:21,409 --> 00:36:26,872
+DeepSeek distilled R1's reasoning into a 32-billion-parameter Qwen model with
+
+623
+00:36:26,872 --> 00:36:33,909
+fine-tuning alone, and it scored 72.6 percent on the AIME 2024 math competition,
+
+624
+00:36:33,909 --> 00:36:38,672
+far above the 47 percent that reinforcement learning reached directly on the
+
+625
+00:36:38,672 --> 00:36:39,684
+same base.
+
+626
+00:36:41,816 --> 00:36:44,141
+Imitation only goes so far.
+
+627
+00:36:44,141 --> 00:36:48,353
+For many qualities, it's far easier to judge an answer than to write a perfect
+
+628
+00:36:48,353 --> 00:36:49,141
+one.
+
+629
+00:36:49,141 --> 00:36:51,978
+So the next stage learns from comparisons:
+
+630
+00:36:51,978 --> 00:36:58,216
+show a person two responses to the same prompt, and ask which one is better.
+
+631
+00:36:58,707 --> 00:37:01,270
+Those choices train a reward model:
+
+632
+00:37:01,270 --> 00:37:06,107
+a copy of the language model whose output is a single number, a score.
+
+633
+00:37:06,107 --> 00:37:10,407
+It's trained so that the probability a person prefers answer A over answer
+
+634
+00:37:10,407 --> 00:37:14,095
+B is the sigmoid of the difference between their scores.
+
+635
+00:37:14,095 --> 00:37:18,757
+That's the Bradley-Terry model, from 1952.
+
+636
+00:37:19,182 --> 00:37:21,307
+Then comes reinforcement learning.
+
+637
+00:37:21,307 --> 00:37:25,582
+The model writes answers, the reward model scores them, and the model is nudged
+
+638
+00:37:25,582 --> 00:37:29,145
+toward the answers that score higher, with one constraint:
+
+639
+00:37:29,145 --> 00:37:32,995
+a penalty for drifting too far from the fine-tuned model it started from,
+
+640
+00:37:32,995 --> 00:37:35,432
+measured by the KL divergence.
+
+641
+00:37:35,432 --> 00:37:39,882
+This is RLHF, reinforcement learning from human feedback:
+
+642
+00:37:39,882 --> 00:37:45,457
+the recipe behind InstructGPT and the first ChatGPT.
+
+643
+00:37:45,916 --> 00:37:49,516
+The leash matters, because the reward model is only a proxy for what people
+
+644
+00:37:49,516 --> 00:37:50,228
+want.
+
+645
+00:37:50,228 --> 00:37:51,803
+Here's a simulation.
+
+646
+00:37:51,803 --> 00:37:56,091
+Each candidate answer has a true quality, and the reward model sees that quality
+
+647
+00:37:56,091 --> 00:37:57,428
+plus some error.
+
+648
+00:37:57,428 --> 00:38:00,791
+Pick the best of n answers by the reward model's score.
+
+649
+00:38:00,791 --> 00:38:03,191
+At first, true quality climbs.
+
+650
+00:38:03,191 --> 00:38:07,516
+But push harder, and you start selecting the answers whose errors were biggest:
+
+651
+00:38:07,516 --> 00:38:11,441
+the proxy reward keeps rising while the true quality falls.
+
+652
+00:38:11,441 --> 00:38:16,416
+That's Goodhart's law, and OpenAI measured exactly this shape with real reward
+
+653
+00:38:16,416 --> 00:38:19,641
+models in 2022.
+
+654
+00:38:20,082 --> 00:38:25,232
+In 2023, Direct Preference Optimization showed you can skip the reward model
+
+655
+00:38:25,232 --> 00:38:27,470
+and the RL loop altogether.
+
+656
+00:38:27,470 --> 00:38:32,045
+A bit of algebra turns the same objective into a simple loss on each pair:
+
+657
+00:38:32,045 --> 00:38:36,320
+raise the probability of the preferred answer, relative to the reference model,
+
+658
+00:38:36,320 --> 00:38:38,407
+and lower the rejected one.
+
+659
+00:38:38,407 --> 00:38:43,607
+DPO and its variants are now standard in open post-training pipelines.
+
+660
+00:38:43,607 --> 00:38:46,482
+And the comparisons don't have to come from people:
+
+661
+00:38:46,482 --> 00:38:51,282
+with constitutional AI, a model judges responses against a written list of
+
+662
+00:38:51,282 --> 00:38:52,182
+principles.
+
+663
+00:38:54,289 --> 00:38:58,789
+The biggest change in post-training since 2024 is reinforcement learning on
+
+664
+00:38:58,789 --> 00:39:02,102
+problems whose answers can be checked automatically.
+
+665
+00:39:02,102 --> 00:39:04,527
+A math problem has a final answer;
+
+666
+00:39:04,527 --> 00:39:06,077
+code has tests.
+
+667
+00:39:06,077 --> 00:39:10,752
+The reward is simply one if the answer is right, and zero if it isn't.
+
+668
+00:39:10,752 --> 00:39:15,264
+There's no learned reward model for the policy to fool.
+
+669
+00:39:15,714 --> 00:39:21,764
+Here's the most popular algorithm for this, GRPO, run for real on a miniature.
+
+670
+00:39:21,764 --> 00:39:25,702
+We pretrained a pocket model on three-digit additions, where four in ten of
+
+671
+00:39:25,702 --> 00:39:29,564
+the examples were written by someone who always forgets to carry.
+
+672
+00:39:29,564 --> 00:39:31,589
+So the model learned two habits:
+
+673
+00:39:31,589 --> 00:39:35,964
+the right answer, and the carry-dropping mistake.
+
+674
+00:39:36,414 --> 00:39:41,952
+Give it a problem, 478 plus 356, and sample a group of eight answers.
+
+675
+00:39:41,952 --> 00:39:43,039
+Only one is right:
+
+676
+00:39:43,039 --> 00:39:44,527
+834.
+
+677
+00:39:44,527 --> 00:39:48,527
+Five drop both carries, 724, and two drop one of them.
+
+678
+00:39:48,527 --> 00:39:50,002
+Each answer gets a reward:
+
+679
+00:39:50,002 --> 00:39:51,339
+one or zero.
+
+680
+00:39:51,339 --> 00:39:55,577
+GRPO's key idea is to grade each answer against its own group:
+
+681
+00:39:55,577 --> 00:39:59,189
+subtract the group's average reward, and divide by the spread.
+
+682
+00:39:59,189 --> 00:40:01,927
+Better than average gets a positive advantage;
+
+683
+00:40:01,927 --> 00:40:04,114
+worse gets a negative one.
+
+684
+00:40:04,114 --> 00:40:08,464
+Then every token of each answer is pushed up or down in probability according
+
+685
+00:40:08,464 --> 00:40:10,014
+to its advantage.
+
+686
+00:40:10,014 --> 00:40:12,877
+No critic network, no reward model:
+
+687
+00:40:12,877 --> 00:40:16,464
+just a group of samples and a checker.
+
+688
+00:40:16,914 --> 00:40:19,352
+Repeat that over thousands of problems.
+
+689
+00:40:19,352 --> 00:40:23,864
+Pass at one, the chance that a single sample is right, climbs from about sixty
+
+690
+00:40:23,864 --> 00:40:25,889
+percent to nearly a hundred.
+
+691
+00:40:25,889 --> 00:40:29,339
+But look at pass at eight, the chance that at least one of eight samples is
+
+692
+00:40:29,339 --> 00:40:30,089
+right.
+
+693
+00:40:30,089 --> 00:40:31,339
+It barely moves:
+
+694
+00:40:31,339 --> 00:40:33,164
+it was already near the top.
+
+695
+00:40:33,164 --> 00:40:37,239
+In this toy, reinforcement learning didn't teach the model anything new.
+
+696
+00:40:37,239 --> 00:40:40,714
+It made it reliable at what it could already sometimes do.
+
+697
+00:40:40,714 --> 00:40:43,877
+Whether that also holds at the frontier is debated:
+
+698
+00:40:43,877 --> 00:40:49,039
+a 2025 study found the same pattern in large models, while others find that
+
+699
+00:40:49,039 --> 00:40:53,281
+prolonged RL discovers genuinely new strategies.
+
+700
+00:40:53,281 --> 00:40:55,618
+And notice what happens late in training:
+
+701
+00:40:55,618 --> 00:41:01,593
+most groups are all correct, like our 478 plus 356, which now gets eight out
+
+702
+00:41:01,593 --> 00:41:02,543
+of eight.
+
+703
+00:41:02,543 --> 00:41:06,143
+Every advantage is zero, and those groups teach nothing.
+
+704
+00:41:06,143 --> 00:41:10,581
+Refinements like DAPO's dynamic sampling filter them out, alongside other
+
+705
+00:41:10,581 --> 00:41:15,281
+tweaks to the clipping and to how the loss is averaged.
+
+706
+00:41:15,689 --> 00:41:19,039
+At frontier scale, this is how reasoning models are made.
+
+707
+00:41:19,039 --> 00:41:23,589
+DeepSeek-R1-Zero applied it directly to a base model, with just two rewards:
+
+708
+00:41:23,589 --> 00:41:26,114
+is the answer correct, and is the format right?
+
+709
+00:41:26,114 --> 00:41:31,939
+Its score on the AIME 2024 math competition rose from 15.6 percent to 71.
+
+710
+00:41:31,939 --> 00:41:35,464
+Its answers grew from hundreds of tokens to thousands, as it learned on its
+
+711
+00:41:35,464 --> 00:41:37,152
+own to re-check its work.
+
+712
+00:41:37,152 --> 00:41:39,614
+In one transcript it stops and writes:
+
+713
+00:41:39,614 --> 00:41:40,964
+wait, wait.
+
+714
+00:41:40,964 --> 00:41:42,114
+Wait.
+
+715
+00:41:42,114 --> 00:41:45,789
+That's an aha moment I can flag here.
+
+716
+00:41:46,348 --> 00:41:48,773
+Today's frontier RL goes further:
+
+717
+00:41:48,773 --> 00:41:52,635
+long, multi-step tasks with tools, in sandboxes.
+
+718
+00:41:52,635 --> 00:41:56,973
+Fixing real software issues, driving a terminal, browsing the web.
+
+719
+00:41:56,973 --> 00:42:01,835
+DeepSeek-V3.2 synthesized more than eighteen hundred environments, and spent
+
+720
+00:42:01,835 --> 00:42:05,448
+over ten percent of its pretraining compute on post-training.
+
+721
+00:42:05,448 --> 00:42:08,660
+Generating those long rollouts dominates the cost:
+
+722
+00:42:08,660 --> 00:42:12,823
+in OLMo 3's runs, the learner spent three quarters of its time waiting for
+
+723
+00:42:12,823 --> 00:42:13,998
+data.
+
+724
+00:42:13,998 --> 00:42:19,248
+So generation and training run on separate GPUs, asynchronously, with fresh
+
+725
+00:42:19,248 --> 00:42:23,648
+weights streamed to the generators as training goes.
+
+726
+00:42:24,156 --> 00:42:26,906
+And reinforcement learning finds loopholes.
+
+727
+00:42:26,906 --> 00:42:31,531
+If a test can be gamed, a model will eventually game it, like a prime checker
+
+728
+00:42:31,531 --> 00:42:34,356
+that simply memorizes the test cases.
+
+729
+00:42:34,356 --> 00:42:39,193
+Anthropic reported in 2025 that models which learned to cheat in real coding
+
+730
+00:42:39,193 --> 00:42:42,831
+environments generalized to broader bad behavior.
+
+731
+00:42:42,831 --> 00:42:47,231
+Building environments that can't be gamed is now a central part of the job.
+
+732
+00:42:49,412 --> 00:42:51,912
+Before release, the model is evaluated:
+
+733
+00:42:51,912 --> 00:42:56,524
+on hard benchmarks in science, math and coding, on long agentic tasks, and
+
+734
+00:42:56,524 --> 00:43:00,012
+on safety tests, all written up in a system card.
+
+735
+00:43:00,012 --> 00:43:02,012
+Benchmarks are a moving target:
+
+736
+00:43:02,012 --> 00:43:05,124
+they saturate, and they leak into training data.
+
+737
+00:43:05,124 --> 00:43:10,962
+In February 2026, OpenAI stopped reporting the popular SWE-bench Verified
+
+738
+00:43:10,962 --> 00:43:14,137
+because of contamination.
+
+739
+00:43:14,603 --> 00:43:16,628
+So here is the whole pipeline.
+
+740
+00:43:16,628 --> 00:43:21,166
+Billions of crawled pages, filtered and deduplicated down to tens of trillions
+
+741
+00:43:21,166 --> 00:43:22,416
+of tokens.
+
+742
+00:43:22,416 --> 00:43:27,291
+A recipe chosen with scaling laws, today usually a sparse mixture of experts,
+
+743
+00:43:27,291 --> 00:43:32,216
+trained with Muon or AdamW in eight- or even four-bit arithmetic.
+
+744
+00:43:32,216 --> 00:43:37,353
+Tens of thousands of GPUs, coordinated by four kinds of parallelism, and kept
+
+745
+00:43:37,353 --> 00:43:40,453
+alive through failures every few hours.
+
+746
+00:43:40,453 --> 00:43:44,653
+Then fine-tuning, preferences and reinforcement learning, which now takes
+
+747
+00:43:44,653 --> 00:43:47,028
+a substantial share of the compute.
+
+748
+00:43:47,028 --> 00:43:50,403
+And finally, the assistant.
+
+749
+00:43:50,987 --> 00:43:52,562
+And our pocket versions?
+
+750
+00:43:52,562 --> 00:43:56,712
+The largest model we trained had about three million parameters, against up
+
+751
+00:43:56,712 --> 00:43:59,449
+to 2.8 trillion at the frontier.
+
+752
+00:43:59,449 --> 00:44:03,787
+All of our training runs together took less than ten to the fifteen operations;
+
+753
+00:44:03,787 --> 00:44:08,274
+the largest frontier run is estimated at around ten to the twenty-seven.
+
+754
+00:44:08,274 --> 00:44:12,474
+Four CPU cores, against a hundred thousand GPUs.
+
+755
+00:44:12,474 --> 00:44:16,112
+Yet the curves have the same shapes.
+
+756
+00:44:16,770 --> 00:44:20,645
+Almost everything in this video comes from open-weight labs and open-source
+
+757
+00:44:20,645 --> 00:44:21,695
+projects;
+
+758
+00:44:21,695 --> 00:44:26,120
+the leading closed labs publish very little about how their models are trained.
+
+759
+00:44:26,120 --> 00:44:29,457
+But the shape of the pipeline has been stable for years:
+
+760
+00:44:29,457 --> 00:44:34,120
+get the data right, choose the size with scaling laws, keep the run stable
+
+761
+00:44:34,120 --> 00:44:38,320
+across thousands of machines, and then teach the model with feedback.
+
+762
+00:44:38,320 --> 00:44:40,895
+And more of it is open than ever.
+
+763
+00:44:40,895 --> 00:44:45,057
+AI2's OLMo 3 releases every dataset and checkpoint;
+
+764
+00:44:45,057 --> 00:44:50,082
+nanochat trains a GPT-2-grade chat model for under a hundred dollars;
+
+765
+00:44:50,082 --> 00:44:53,545
+Hugging Face's playbooks write down the hard-won lessons.
+
+766
+00:44:53,545 --> 00:44:57,045
+If you want to know how these models are made, you can run the whole thing
+
+767
+00:44:57,045 --> 00:44:59,470
+yourself, at whatever scale you have.

@@ -79,7 +79,7 @@ Part two: the recipe.
 
 Before training anything, a lab has to decide how big the model should be. The budget is compute, and there's a simple rule for it: training costs about six times the number of parameters, times the number of tokens. Two operations per parameter per token on the forward pass, a multiply and an add, and about four more on the backward pass. So a fixed budget is a fixed area: you can spend it on a big model trained on fewer tokens, or a small model trained on many. Which is better?
 
-The way to find out is an experiment, so we ran one. Pick a compute budget, and train models of several sizes, each on exactly the number of tokens the budget allows. Plot final loss against model size, and you get a valley: too small a model can't hold what it sees, too large a model doesn't get to see enough. Repeat at four budgets, twenty-five runs in all, and fit a parabola to each valley floor. The best size grows with the budget, as a power law, with an exponent of about three quarters. That's close to what OpenAI found in 2020 with small models. DeepMind's much larger study found about one half, and later work traced the gap to details of how very small models like ours are measured and tuned.
+The way to find out is an experiment, so we ran one. Pick a compute budget, and train models of several sizes, each on exactly the number of tokens the budget allows. Plot final loss against model size, and you get a valley: too small a model can't hold what it sees, too large a model doesn't get to see enough. Repeat at four budgets, twenty-five runs in all, and fit a parabola to each valley floor. The best size grows with the budget, as a power law, with an exponent of about three quarters. That's close to what OpenAI found in 2020 with small models. The much larger study we'll see next found about one half, and later work traced the gap to details of how very small models like ours are measured and tuned.
 
 In 2022, DeepMind's Chinchilla paper did this with more than four hundred models, up to sixteen billion parameters, and fitted a formula for the loss as a function of model size and data. Here is the landscape it describes; darker means lower loss. Each yellow line is a fixed compute budget. Along each one there's a best point, and together they trace this path: grow parameters and tokens together, about twenty tokens for every parameter. By that measure, GPT-3 had been trained on far too little data, and the 70-billion parameter Chinchilla, trained on 1.4 trillion tokens, beat a model four times its size.
 
@@ -187,13 +187,13 @@ The fix is to cut each batch into micro-batches and keep the pipeline full. With
 
 Mixture-of-experts models add expert parallelism. Each GPU holds different experts, and every token must travel to the GPUs holding its chosen experts, and back again: an all-to-all exchange in every MoE layer. And for very long sequences, context parallelism splits the sequence itself across GPUs.
 
-Real runs combine all of these. Llama 3.1 405B trained on 16,384 H100s arranged as a grid: tensor parallel across the eight GPUs inside each server, a sixteen-stage pipeline across sixteen servers, and a hundred and twenty-eight copies of that pipeline doing data parallelism. Each GPU sustained about 400 teraflops: roughly forty percent of its peak, which is typical. DeepSeek-V3 took a different shape, on 2,048 export-limited H800s: no tensor parallelism at all, a sixteen-stage DualPipe pipeline, and experts spread across 64 GPUs on eight nodes.
+Real runs combine all of these. Llama 3.1, the 405-billion-parameter model, trained on 16,384 H100s arranged as a grid: tensor parallel across the eight GPUs inside each server, a sixteen-stage pipeline across sixteen servers, and a hundred and twenty-eight copies of that pipeline doing data parallelism. Each GPU sustained about 400 teraflops: roughly forty percent of its peak, which is typical. DeepSeek-V3 took a different shape, on 2,048 export-limited H800s: no tensor parallelism at all, a sixteen-stage DualPipe pipeline, and experts spread across 64 GPUs on eight nodes.
 
 ## Keeping the run alive
 
 _Scene `s14_operations.py::Operations`_
 
-A run like this lasts weeks or months, and keeping it alive is a job in itself, because the more GPUs you use, the more often something breaks. Meta measured this across its research clusters: an eight-GPU job ran, on average, forty-eight days between failures. A thousand-GPU job: about eight hours. Failures scale with the number of parts, so at sixteen thousand GPUs you'd expect one every couple of hours, and at a hundred thousand, every few minutes.
+A run like this lasts weeks or months, and keeping it alive is a job in itself, because the more GPUs you use, the more often something breaks. Meta measured this across its research clusters: an eight-GPU job ran, on average, forty-eight days between failures. A thousand-GPU job: about eight hours. Failures scale with the number of parts, so at sixteen thousand GPUs you'd expect one every couple of hours, and at a hundred thousand, about every quarter of an hour.
 
 And that's what Llama 3 saw. In one fifty-four-day stretch of training on 16,384 GPUs, the job was interrupted 466 times: once every two point eight hours. About four fifths of the unexpected stops traced to hardware, mostly the GPUs themselves and their memory.
 
@@ -263,4 +263,4 @@ Almost everything in this video comes from open-weight labs and open-source proj
 
 ---
 
-6459 words (~42 min at 155 wpm).
+6467 words (~42 min at 155 wpm).

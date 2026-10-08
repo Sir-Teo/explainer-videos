@@ -11,7 +11,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`published/opposing_forces.mp4`](published/opposing_forces.mp4) | [`videos/opposing_forces`](videos/opposing_forces) |
 | **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
 | **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
-| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU) | rendering | (final cut in progress) | [`videos/frontier`](videos/frontier) |
+| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU) | 45 min | [`published/frontier.mp4`](published/frontier.mp4) | [`videos/frontier`](videos/frontier) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -19,7 +19,9 @@ GitHub's 100 MB file limit by `tools/publish.py`; a sidecar `.srt` sits next
 to each. Download one and open it in any player (VLC, QuickTime, a browser).
 The LLM, Opposing Forces, Riemann and open-models videos' pictures are bit-identical to the full renders; the
 Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
-0.98–0.9996 against the full render, lowest on the turbulence footage). The
+0.98–0.9996 against the full render, lowest on the turbulence footage), and
+the 45-minute frontier-training video at ~180 kb/s (mean SSIM 0.9989–0.99998 on four
+dense 15 s segments, lowest single frame 0.995). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
