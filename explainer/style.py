@@ -141,6 +141,25 @@ C = SimpleNamespace(
     REFERENCE=GREY_B,  # the frozen reference model, KL anchor
     USER=BLUE_B,  # chat: user turns
     ASSISTANT=GREEN_B,  # chat: assistant turns (the trained tokens)
+    # Stochastic calculus (videos/stochastic)
+    BROWNIAN=BLUE,  # W_t, Brownian paths, dW, the noise term sigma dW
+    CLOCK=TEAL,  # time t, dt, Delta t
+    QV=YELLOW,  # (dW)^2, quadratic variation, Ito's correction 1/2 f'' dt, the "missing half"
+    DRIFT=GREEN,  # mu, drift, mu dt
+    STAKE=PURPLE_B,  # the integrand H: a stake, a position, a hedge ratio
+    GAINS=GOLD,  # the Ito integral, accumulated gains
+    LEFT_PT=GREEN_B,  # left-endpoint (Ito) sums
+    RIGHT_PT=RED_B,  # right-endpoint sums (they peek at the future)
+    MID_PT=PINK,  # midpoint / trapezoid sums (Stratonovich)
+    PDF=ORANGE,  # probability densities, histograms, Fokker-Planck solutions
+    MEAN=GOLD_A,  # expectations, the mean path
+    MEDIAN=TEAL_B,  # the median / typical path
+    LANDSCAPE=GREY_B,  # potentials V(x), domains, boundaries
+    OPTION=PURPLE_A,  # option value V(t, S), payoffs
+    HEDGE=LIGHT_BROWN,  # the hedge portfolio
+    WEIGHT="#FF7EB6",  # Girsanov likelihood ratios, path weights
+    HOT="#F2A541",  # boundary temperature 1 (Dirichlet problem)
+    COLD="#3D5A98",  # boundary temperature 0
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
