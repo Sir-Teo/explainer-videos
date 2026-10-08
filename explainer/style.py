@@ -23,6 +23,7 @@ from manim import (
     MAROON,
     ORANGE,
     LIGHT_BROWN,
+    LIGHT_PINK,
     PINK,
     PURPLE,
     PURPLE_A,
@@ -79,6 +80,17 @@ C = SimpleNamespace(
     DEBT=LIGHT_BROWN,  # government debt, deficits, interest costs
     GROWTH=GREEN_A,  # GDP growth g, potential growth
     MORTGAGE=GOLD,  # mortgage rates, MBS
+    # The Riemann hypothesis (videos/riemann)
+    PRIME=BLUE,  # primes, prime staircases pi(x) and psi(x), Eisenstein primes
+    SMOOTH=GREEN,  # the smooth prediction: li(x), x, R(x)
+    ZERO=YELLOW,  # nontrivial zeros, the critical line, the waves they create
+    ZERO_FREE=TEAL,  # proven zero-free regions (incl. the 7/8 half-plane)
+    DANGER=RED,  # hypothetical zeros off the line, Landau-Siegel zeros
+    MOBIUS=PURPLE_B,  # mu(n), Mertens' M(x), Möbius sums A_u(D)
+    CHARACTER=ORANGE,  # Dirichlet characters, residue symbols chi_n(u)
+    GAUSS=LIGHT_PINK,  # Gauss sums
+    THETA=GOLD,  # theta functions, automorphy, the "reflection"
+    SIEVE=GREEN_A,  # the large sieve, near-orthogonality
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
@@ -104,6 +116,9 @@ TEX_TEMPLATE.add_to_preamble(
 \newcommand{\vf}{\mathbf{f}}
 \newcommand{\dd}{\partial}
 \DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\li}{li}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
 """
 )
 MathTex.set_default(tex_template=TEX_TEMPLATE)
