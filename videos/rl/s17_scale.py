@@ -79,7 +79,7 @@ class Scaling(VoiceoverScene):
         plot = Plot(x_range=(10**e0, 10**e1), y_range=(0.6, 1.0), width=8.0, height=3.9, log_x=True,
                     x_ticks=[10**e for e in range(e0, e1 + 1)], x_fmt=lambda v: MathTex(rf"10^{{{int(round(np.log10(v)))}}}", font_size=22, color=GREY_A),
                     y_ticks=[0.6, 0.8, 1.0], y_fmt=pct_fmt, x_label=r"training compute (FLOPs)", y_label=r"held-out accuracy")
-        plot.move_to(LEFT * 1.4 + DOWN * 1.0)
+        plot.move_to(LEFT * 1.4 + DOWN * 0.7)
         dots, fits, keys = VGroup(), VGroup(), VGroup()
         for name, txt, col in algos:
             d = sc[name]

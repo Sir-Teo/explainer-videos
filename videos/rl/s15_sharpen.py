@@ -38,7 +38,8 @@ class Sharpening(VoiceoverScene):
         for s in bad[:4]:
             g = VGroup(*[Circle(radius=0.12, color=C.PENALTY, fill_opacity=0.8, stroke_width=1.5) for _ in s]).arrange(RIGHT, buff=0.08)
             ex.add(g)
-        ex.arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.9)
+        ex.add(label(rf"\dots\ ({comb(n - c, k)} such picks in all)", font_size=24, color=GREY_A))
+        ex.arrange(RIGHT, buff=0.5).next_to(w, DOWN, buff=0.7)
         val = label(rf"$1 - \binom{{5}}{{3}}/\binom{{8}}{{3}} = 1 - {comb(n - c, k)}/{comb(n, k)} = {1 - comb(n - c, k) / comb(n, k):.3f}$",
                     font_size=28, color=YELLOW).next_to(ex, DOWN, buff=0.2)
         src = source(r"Chen et al., \emph{Evaluating Large Language Models Trained on Code} (Codex), 2021")
@@ -169,9 +170,9 @@ class Sharpening(VoiceoverScene):
         n.next_to(f, DOWN, buff=0.2)
         bars = VGroup(
             VGroup(label(r"RL", font_size=26), Rectangle(width=17920 / 3400, height=0.5, stroke_width=0, fill_color=C.RL_POLICY, fill_opacity=0.85),
-                   label(r"67.6\% \ \ 17{,}920 GPU-hours", font_size=24)),
+                   label(r"17{,}920 GPU-hours \ \ $\to$ 67.6\%", font_size=24)),
             VGroup(label(r"on-policy distillation", font_size=26), Rectangle(width=1800 / 3400, height=0.5, stroke_width=0, fill_color=C.REWARD, fill_opacity=0.85),
-                   label(r"74.4\% \ \ 1{,}800 GPU-hours", font_size=24)),
+                   label(r"1{,}800 GPU-hours \ \ $\to$ 74.4\%", font_size=24)),
         )
         for r in bars:
             r[1].move_to([-3.0, 0, 0], aligned_edge=LEFT)
@@ -182,7 +183,7 @@ class Sharpening(VoiceoverScene):
             r[1].align_to(np.array([-3.0, 0, 0]), LEFT)
             r[0].next_to(r[1], LEFT, buff=0.3)
             r[2].next_to(r[1], RIGHT, buff=0.2)
-        bl = label(r"Qwen3-8B on AIME 2024, as reported in the Qwen3 technical report", font_size=24, color=GREY_A).next_to(bars, UP, buff=0.3)
+        bl = label(r"Qwen3-8B: compute spent (bars) and AIME 2024 score, as reported in the Qwen3 technical report", font_size=24, color=GREY_A).next_to(bars, UP, buff=0.3)
         foot = label(r"DeepSeek-V4 (Apr 2026): its final RL stage replaced by on-policy distillation from specialist teachers",
                      font_size=24, color=YELLOW).to_edge(DOWN, buff=0.6)
         src = source(r"Lu \& Thinking Machines, \emph{On-Policy Distillation} (2025); Qwen3 report, Table 21; DeepSeek-V4 report")
