@@ -79,7 +79,7 @@ class Architecture(VoiceoverScene):
         ol = MathTex(r"\textstyle\sum", font_size=36).move_to(out)
         arrows = VGroup(*[Arrow(experts[e].get_right(), out.get_left(), buff=0.08, stroke_width=3, color=EXPERT_COLORS[e]) for e in top])
         a0 = Arrow(tok.get_right(), router.get_left(), buff=0.1, stroke_width=3, color=GREY_B)
-        res = label(r"weighted sum of the chosen experts' outputs", font_size=24, color=GREY_A).next_to(out, DOWN, buff=0.3)
+        res = label(r"weighted sum of the chosen experts' outputs", font_size=24, color=GREY_A).next_to(out, DOWN, buff=0.5).shift(RIGHT * 1.0)
         head = label(r"Mixture of experts: many MLPs, only a few used per token", font_size=34).to_edge(UP, buff=0.4)
         foot = VGroup(label(r"parameters grow with the number of experts", font_size=26, color=C.PARAMS),
                       label(r"compute per token grows only with the number chosen", font_size=26, color=C.COMPUTE)
@@ -136,12 +136,13 @@ class Architecture(VoiceoverScene):
             s = label(sub, font_size=24, color=GREY_A).next_to(g, DOWN, buff=0.2)
             s2 = label(rf"{k} of {n} experts per token", font_size=22, color=C.EXPERT).next_to(s, DOWN, buff=0.1)
             cols.add(VGroup(t, g, s, s2))
-        cols.arrange(RIGHT, buff=0.6, aligned_edge=DOWN).move_to(DOWN * 0.1)
-        if cols.width > 13.4:
-            cols.width = 13.4
-        key = VGroup(VGroup(Square(0.18, stroke_width=0, fill_color=C.EXPERT), label(r"chosen expert", font_size=22)).arrange(RIGHT, buff=0.1),
-                     VGroup(Square(0.18, stroke_width=0, fill_color=C.COMPUTE), label(r"shared expert (always on)", font_size=22)).arrange(RIGHT, buff=0.1)
-                     ).arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.4)
+        cols.arrange(RIGHT, buff=0.6, aligned_edge=DOWN)
+        head = label(r"Frontier mixtures of experts: more experts, a smaller share used per token", font_size=32).to_edge(UP, buff=0.35)
+        key = VGroup(VGroup(Square(0.18, stroke_width=0, fill_color=C.EXPERT, fill_opacity=1), label(r"chosen expert", font_size=22)).arrange(RIGHT, buff=0.1),
+                     VGroup(Square(0.18, stroke_width=0, fill_color=C.COMPUTE, fill_opacity=1), label(r"shared expert (always on)", font_size=22)).arrange(RIGHT, buff=0.1),
+                     VGroup(Square(0.18, stroke_width=0, fill_color=GREY_D, fill_opacity=0.5), label(r"idle for this token", font_size=22)).arrange(RIGHT, buff=0.1)
+                     ).arrange(RIGHT, buff=0.5).next_to(head, DOWN, buff=0.2)
+        cols.scale(min(1.0, 13.4 / cols.width, 5.6 / cols.height)).next_to(key, DOWN, buff=0.25)
         src = source(r"DeepSeek-V3 report; Kimi K2 report (arXiv 2507.20534); Kimi K3 report (arXiv 2607.24653)")
         with self.voiceover(
             "Frontier open models push this hard. DeepSeek-V3 has 256 experts per layer and uses eight of them, plus "
@@ -151,7 +152,7 @@ class Architecture(VoiceoverScene):
             "Experts keep getting more numerous, and the fraction used per token keeps shrinking, now around three to "
             "five percent."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(src), FadeIn(cols[0]))
+            self.play(FadeIn(head), FadeIn(key), FadeIn(src), FadeIn(cols[0]))
             vo.wait_until("k2")
             self.play(FadeIn(cols[1]))
             vo.wait_until("k3")
@@ -172,7 +173,7 @@ class Architecture(VoiceoverScene):
             steps = np.array([x[0] for x in loads], float)
             L = np.array([x[1:] for x in loads], float)  # (t, layers, experts)
             final[key] = L[-20:].mean(0)
-            lay = L[:, 1, :]  # the second MoE layer
+            lay = L[:, -1, :]  # the last of the 4 MoE layers
             bars = VGroup(*[Rectangle(width=0.28, height=0.01, stroke_width=0, fill_color=EXPERT_COLORS[e],
                                       fill_opacity=0.9) for e in range(8)]).arrange(RIGHT, buff=0.06, aligned_edge=DOWN)
             base = Line(bars.get_left() + LEFT * 0.1, bars.get_right() + RIGHT * 0.1, color=GREY_C, stroke_width=1.5)
@@ -180,13 +181,17 @@ class Architecture(VoiceoverScene):
                               color=WHITE, stroke_width=1.5, dash_length=0.06)
             t = label(title, font_size=26).next_to(base, UP, buff=2.95)
             v = label(rf"val loss {r['final_val']:.3f}", font_size=22, color=GREY_A).next_to(base, DOWN, buff=0.25)
+            busy = label(rf"busiest: {8 * final[key][-1].max():.1f}$\times$ fair", font_size=22,
+                         color=C.PENALTY if key == "moe_none" else C.KEPT).next_to(v, DOWN, buff=0.12)
             g = VGroup(t, bars, base, fair, v)
+            g.busy = busy
             g.bars, g.base, g.lay, g.steps = bars, base, lay, steps
             panels.add(g)
         panels.arrange(RIGHT, buff=1.1).move_to(DOWN * 0.2)
         for g in panels:
             for b in g.bars:
                 b.align_to(g.base, DOWN)
+            g.busy.next_to(g[4], DOWN, buff=0.12)
         tr = ValueTracker(0)
 
         def updater_for(g):
@@ -201,24 +206,38 @@ class Architecture(VoiceoverScene):
             g.bars.add_updater(updater_for(g))
             trackers.append(g)
         head = label(r"Load balancing: our three real MoE runs (8 experts, top-2)", font_size=32).to_edge(UP, buff=0.35)
-        sub = label(r"share of tokens routed to each expert, layer 2, during training", font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.15)
+        sub = label(r"share of tokens routed to each expert in the last layer, during training", font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.15)
         fair_l = label(r"dashed: a fair share (1/8)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.35)
         clock = VGroup(label(r"step", font_size=24, color=GREY_A), Integer(0, font_size=26)).arrange(RIGHT, buff=0.15).to_corner(DR, buff=0.4)
         clock[1].add_updater(lambda m: m.set_value(int(tr.get_value() * panels[0].steps[-1])))
-        imb = {k: float(final[k].max() / (1 / 8)) for k in final}
+        imb = {k: float(final[k][-1].max() * 8) for k in final}
         self.imbalance = imb
+        vals = {k: res[k]["final_val"] for k, _ in names}
+        assert round(imb["moe_none"], 1) == 3.0 and final["moe_none"][-1].min() < 0.01
+        assert imb["moe_bias"] < 1.2 < imb["moe_aux"] < 1.5 and vals["moe_aux"] < vals["moe_bias"] < vals["moe_none"]
         with self.voiceover(
-            "But routers have a failure mode. Experts that get more tokens improve faster, get chosen more, and "
-            "the rich get richer, until a few experts do all the work. Here are three real runs of our pocket "
-            "mixture of experts, eight experts, two per token. <bookmark mark='g'/> Watch the share of tokens each "
-            "expert receives as training goes. <bookmark mark='a'/> The classic fix is an extra loss term that "
-            "penalizes uneven routing. <bookmark mark='b'/> DeepSeek-V3 used a gentler trick: a bias added to each "
-            "expert's score, only for choosing experts, nudged up after every step if the expert was underused and "
-            "down if it was overused. No extra loss to compete with learning."
+            "But routers have a failure mode. Experts that get more tokens improve faster and get chosen even more: "
+            "the rich get richer. Here are three real runs of our pocket mixture of experts, eight experts, two per "
+            "token. <bookmark mark='g'/> Watch the share of tokens each expert receives as training goes. With no "
+            "balancing, the busiest expert ends up with three times its fair share, while another gets almost "
+            "nothing. <bookmark mark='a'/> The classic fix is an extra loss term that penalizes uneven routing. "
+            "<bookmark mark='b'/> DeepSeek-V3 used a gentler trick: a bias added to each expert's score, only for "
+            "choosing experts, nudged up after every step if the expert was underused and down if it was overused, "
+            "with no extra loss term competing with learning. Here, it balances almost perfectly. "
+            "<bookmark mark='c'/> In our tiny runs, the auxiliary loss still finished with a slightly lower loss; in "
+            "DeepSeek's experiments, at billions of parameters, the bias came out ahead."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(panels), FadeIn(fair_l), FadeIn(clock))
             vo.wait_until("g")
-            self.play(tr.animate.set_value(1.0), run_time=max(4.0, vo.until("b") - 0.5), rate_func=linear)
+            self.play(tr.animate.set_value(1.0), run_time=max(4.0, vo.until("a") - 0.5), rate_func=linear)
+            self.play(FadeIn(panels[0].busy))
+            vo.wait_until("a")
+            self.play(FadeIn(panels[1].busy), Indicate(panels[1][0], color=C.KEPT))
+            vo.wait_until("b")
+            self.play(Indicate(panels[2][0], color=C.KEPT))
+            self.play(FadeIn(panels[2].busy))
+            vo.wait_until("c")
+            self.play(*[Indicate(g[4], color=WHITE, scale_factor=1.1) for g in panels])
         for g in panels:
             g.bars.clear_updaters()
         clock[1].clear_updaters()
