@@ -28,7 +28,7 @@ Items:
     exit        gambler's ruin: Brownian motion from x = 0.3 until it leaves (0, 1)
     disk        Kakutani: Brownian walkers solving Laplace's equation in a disk
     hedge       delta-hedging a call option at 4, 16, 64, 256 rebalances; the Black-Scholes price by Monte Carlo
-    girsanov    reweighted paths and importance sampling of P(W_1 > 4)
+    girsanov    2,000 reweighted paths and importance sampling of P(W_1 > 4)
 """
 
 from __future__ import annotations
@@ -578,7 +578,13 @@ def compute_girsanov():
     g = rng(81)
     m, n = 400, 256
     dW = g.standard_normal((m, n)) * math.sqrt(1 / n)
-    paths = np.concatenate([np.zeros((m, 1)), np.cumsum(dW, axis=1)], axis=1)
+    # 1,600 more from their own generator (the draws below, and so the quoted numbers, don't move)
+    dW = np.concatenate([dW, rng(83).standard_normal((1600, n)) * math.sqrt(1 / n)])
+    paths = np.concatenate([np.zeros((len(dW), 1)), np.cumsum(dW, axis=1)], axis=1)
+    W1 = paths[:, -1]
+    for th in (0.5, 1.0, 1.2, -1.0):  # with 2,000 paths the reweighted picture is not carried by a handful of them
+        w = np.exp(th * W1 - 0.5 * th**2)
+        assert w.sum() ** 2 / (w**2).sum() > 300 and abs((w * W1).sum() / w.sum() - th) < 0.12, th
     # Reweighting check with a big sample: E_Q[W_1] = theta under weights exp(theta W_1 - theta^2/2)
     big = g.standard_normal(200_000)
     for th in [0.5, 1.0, 1.5]:

@@ -268,31 +268,36 @@ class Raster(ImageMobject):
     keeps running during them.  ``clear_scene`` removes the updater before fading it out.
     """
 
-    def __init__(self, draw, tracker: ValueTracker, width: float, height: float, center=ORIGIN, alpha=1.0, **kw):
+    def __init__(self, draw, tracker, width: float, height: float, center=ORIGIN, alpha=1.0, **kw):
+        """``tracker``: a ValueTracker, or a list of them (``draw`` then reads them itself and gets the first)."""
         self.draw = draw
-        self.tracker = tracker
+        self.trackers = list(tracker) if isinstance(tracker, (list, tuple)) else [tracker]
+        self.tracker = self.trackers[0]
         self.alpha = alpha
-        self._v = tracker.get_value()
+        self._v = self._values()
         super().__init__(self._render(self._v), **kw)
         self.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
         self.stretch_to_fit_width(width).stretch_to_fit_height(height).move_to(center)
         self.add_updater(Raster._tick)
 
+    def _values(self):
+        return tuple(t.get_value() for t in self.trackers)
+
     def _render(self, v):
-        img = self.draw(v)
+        img = self.draw(v[0] if isinstance(v, tuple) else v)
         if self.alpha < 1:
             img = img.copy()
             img[..., 3] = (img[..., 3] * self.alpha).astype(np.uint8)
         return img
 
     def refresh(self):
-        self._v = self.tracker.get_value()
+        self._v = self._values()
         self.pixel_array = self._render(self._v)
         return self
 
     @staticmethod
     def _tick(m):
-        if m.tracker.get_value() != m._v:
+        if m._values() != m._v:
             m.refresh()
 
     def fade(self, to: float = 1.0, **kwargs) -> Animation:
@@ -313,6 +318,47 @@ def raster_for(ax: Axes, x_range, y_range, px_per_unit=110):
     width, height = p1[0] - p0[0], p1[1] - p0[1]
     shape = (max(8, int(height * px_per_unit)), max(8, int(width * px_per_unit)))
     return (x0, x1, y0, y1), shape, width, height, (p0 + p1) / 2
+
+
+class PathBundle:
+    """Thousands of paths on one Axes, rasterized once.  Each path's pixel footprint is precomputed, so redrawing the
+    bundle with new per-path opacities is a single weighted bincount (vector paths with per-frame opacity updates
+    would take minutes per second of video)."""
+
+    def __init__(self, ax: Axes, ts, paths, x_range, y_range, px_per_unit=120):
+        self.extent, self.shape, self.width, self.height, self.center = raster_for(ax, x_range, y_range, px_per_unit)
+        x0, x1, y0, y1 = self.extent
+        H, Wd = self.shape
+        idx, counts = [], []
+        for p in np.asarray(paths, float):
+            px = (np.asarray(ts, float) - x0) / (x1 - x0) * (Wd - 1)
+            py = (y1 - p) / (y1 - y0) * (H - 1)
+            dx, dy = np.diff(px), np.diff(py)
+            k = np.maximum(1, np.ceil(1.5 * np.hypot(dx, dy))).astype(int)
+            seg = np.repeat(np.arange(len(k)), k)
+            frac = (np.arange(k.sum()) - np.repeat(np.cumsum(k) - k, k)) / np.repeat(k, k)
+            sx = np.rint(px[seg] + frac * dx[seg]).astype(int)
+            sy = np.rint(py[seg] + frac * dy[seg]).astype(int)
+            ok = (sx >= 0) & (sx < Wd) & (sy >= 0) & (sy < H)
+            lin = np.unique(sy[ok] * Wd + sx[ok])
+            idx.append(lin)
+            counts.append(len(lin))
+        self.idx = np.concatenate(idx)
+        self.counts = np.array(counts)
+
+    def rgba(self, opacity, color=C.BROWNIAN, white=0.45) -> np.ndarray:
+        """``opacity``: one value per path, in [0, 1]."""
+        H, Wd = self.shape
+        acc = np.bincount(self.idx, weights=np.repeat(np.asarray(opacity, float), self.counts), minlength=H * Wd)
+        acc = gaussian_filter(acc.reshape(H, Wd), 0.6) * 1.5
+        a = 1 - np.exp(-acc)
+        c = np.array(ManimColor(color).to_rgb(), dtype=np.float32)
+        hot = np.clip((acc - 1.5) / 6.0, 0, 1)[..., None] * white
+        rgb = c + (1 - c) * hot
+        return cm.to_uint8(np.concatenate([rgb, a[..., None]], axis=2))
+
+    def raster(self, draw, trackers) -> Raster:
+        return Raster(draw, trackers, self.width, self.height, self.center)
 
 
 # ---------------------------------------------------------------------------
