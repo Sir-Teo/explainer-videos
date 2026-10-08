@@ -23,28 +23,59 @@ class Stability(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def spikes(self):
-        items = VGroup(
-            label(r"\textbf{PaLM} (540B, 2022): about 20 loss spikes, despite gradient clipping", font_size=28),
-            label(r"fix: restart $\sim$100 steps before the spike and skip 200--500 batches of data", font_size=26, color=GREY_A),
-            label(r"\textbf{OPT-175B} (2022): 35+ manual restarts over two months", font_size=28),
-            label(r"\textbf{Nemotron 3 Ultra} (2026): two divergences; one traced to gradients summed in BF16", font_size=28),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        items[1].shift(RIGHT * 0.4)
-        items.move_to(DOWN * 0.3)
-        head = label(r"Loss spikes: a big run can suddenly go wrong", font_size=36).to_edge(UP, buff=0.5)
+        rng = np.random.default_rng(5)
+        t = np.arange(0, 1001)
+        base = 2.3 + 2.6 * np.exp(-t / 170) + rng.normal(0, 0.035, len(t))
+        t_spike, t_ckpt, t_end = 620, 520, 700
+        bad = base[t_spike:t_end + 1].copy()
+        bad += np.clip((np.arange(len(bad)) - 2) * 0.35, 0, 2.9) + rng.normal(0, 0.25, len(bad)) * (np.arange(len(bad)) > 3)
+        plot = Plot(x_range=(0, 1000), y_range=(2.0, 6.2), width=8.6, height=3.0, x_label=r"training step",
+                    y_label=r"loss", font_size=22)
+        plot.move_to(UP * 0.75)
+        ok = plot.line(t[:t_spike + 1], base[:t_spike + 1], color=C.LR, stroke_width=3)
+        blow = plot.line(t[t_spike:t_end + 1], np.minimum(bad, 6.1), color=C.PENALTY, stroke_width=3)
+        ck = plot.vline(t_ckpt, color=C.KEPT, dash_length=0.08)
+        ckl = label(r"checkpoint", font_size=20, color=C.KEPT).next_to(plot.c2p(t_ckpt, 6.2), UP, buff=0.05)
+        back = CurvedArrow(plot.c2p(t_end, 6.0), plot.c2p(t_ckpt + 10, 5.6), angle=PI / 3, color=WHITE, stroke_width=3)
+        redo = plot.line(t[t_ckpt:], base[t_ckpt:] - 0.02, color=C.KEPT, stroke_width=3)
+        fix = label(r"PaLM's fix: restart $\sim$100 steps earlier, skip 200--500 batches of data", font_size=24,
+                    color=C.KEPT).next_to(plot, DOWN, buff=0.15)
+        tag = note(r"illustrative curve").to_corner(UR, buff=0.3)
+        head = label(r"Loss spikes: a big run can suddenly go wrong", font_size=34).to_edge(UP, buff=0.35)
+
+        def card(title, body):
+            g = VGroup(label(title, font_size=24), label(body, font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            box = SurroundingRectangle(g, buff=0.18, corner_radius=0.1, color=GREY_D, stroke_width=1.5)
+            return VGroup(box, g)
+        cards = VGroup(card(r"\textbf{PaLM} 540B (2022)", r"about 20 spikes, despite gradient clipping"),
+                       card(r"\textbf{OPT-175B} (2022)", r"35+ manual restarts in two months"),
+                       card(r"\textbf{Nemotron 3 Ultra} (2026)", r"2 divergences; one from gradients summed in BF16")
+                       ).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.55)
+        if cards.width > 13.4:
+            cards.scale_to_fit_width(13.4)
         src = source(r"Chowdhery et al.\ 2022 (PaLM); Zhang et al.\ 2022 (OPT); NVIDIA, arXiv 2606.15007")
         with self.voiceover(
-            "Big runs are fragile. The loss can suddenly spike, and sometimes it never recovers. Google's PaLM saw "
-            "about twenty spikes during training, even with gradient clipping; the fix was to restart from a "
-            "checkpoint about a hundred steps earlier and skip a few hundred batches of data. Meta's OPT needed more "
-            "than thirty-five manual restarts. <bookmark mark='n'/> And labs still hit this in 2026: NVIDIA's "
-            "Nemotron 3 Ultra report describes two divergences, one traced to gradients being summed in sixteen-bit "
-            "instead of thirty-two-bit."
+            "Big runs are fragile. <bookmark mark='s'/> The loss can suddenly spike, and sometimes it never "
+            "recovers. <bookmark mark='p'/> Google's PaLM saw about twenty spikes during training, even with gradient "
+            "clipping; <bookmark mark='f'/> the fix was to restart from a checkpoint about a hundred steps earlier "
+            "and skip a few hundred batches of data. <bookmark mark='o'/> Meta's OPT needed more than thirty-five "
+            "manual restarts. <bookmark mark='n'/> And labs still hit this in 2026: NVIDIA's Nemotron 3 Ultra report "
+            "describes two divergences, one traced to gradients being summed in sixteen-bit instead of thirty-two-bit."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            self.play(LaggedStart(*[FadeIn(i, shift=RIGHT * 0.2) for i in items[:3]], lag_ratio=0.5), run_time=3.0)
+            self.play(FadeIn(head), FadeIn(plot), FadeIn(tag), FadeIn(src))
+            self.play(Create(ok), run_time=2.0, rate_func=linear)
+            vo.wait_until("s")
+            self.play(Create(blow), run_time=1.2, rate_func=linear)
+            vo.wait_until("p")
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("f")
+            self.play(Create(ck), FadeIn(ckl), Create(back))
+            self.play(blow.animate.set_stroke(opacity=0.25), FadeOut(back))
+            self.play(Create(redo), FadeIn(fix), run_time=2.0, rate_func=linear)
+            vo.wait_until("o")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
             vo.wait_until("n")
-            self.play(FadeIn(items[3]))
+            self.play(FadeIn(cards[2], shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

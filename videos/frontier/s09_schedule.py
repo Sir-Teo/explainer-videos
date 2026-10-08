@@ -48,26 +48,34 @@ class Schedule(VoiceoverScene):
                     y_ticks=[0, 0.5, 1], x_fmt=lambda v: MathTex(rf"{int(v / 10)}\%", font_size=24, color=GREY_A),
                     x_label=r"progress through training", y_label=r"learning rate (fraction of peak)")
         plot.move_to(DOWN * 0.5)
-        lc = plot.line(t, cos, color=C.LR, stroke_width=4)
+        lu = plot.line(t[:51], cos[:51], color=C.LR, stroke_width=4)
+        lc = plot.line(t[50:], cos[50:], color=C.LR, stroke_width=4)
         lw = plot.line(t, wsd, color=C.KEPT, stroke_width=4)
+        half = plot.vline(500, color=GREY_B, dash_length=0.08)
+        hd = Dot(plot.c2p(500, cos[500]), radius=0.08, color=C.LR)
+        hl = label(rf"stop at 50\%: still at {100 * cos[500]:.0f}\% of peak", font_size=22, color=C.LR).next_to(hd, DL, buff=0.1)
         tc = label(r"warmup, then cosine decay", font_size=26, color=C.LR).next_to(plot.c2p(520, 0.55), RIGHT, buff=0.1)
         tw = label(r"warmup--stable--decay (WSD)", font_size=26, color=C.KEPT).next_to(plot.c2p(400, 1.0), UP, buff=0.1)
-        wu = Brace(Line(plot.c2p(0, 0), plot.c2p(50, 0)), DOWN, color=GREY_B)
-        wl = label(r"warmup", font_size=22, color=GREY_B).next_to(wu, DOWN, buff=0.05)
+        wl = label(r"warmup", font_size=22, color=C.LR).next_to(plot.c2p(50, 0.2), RIGHT, buff=0.12)
         head = label(r"The learning rate over a run", font_size=36).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The learning rate sets how big each step is, and how it changes over the run matters a lot. Runs begin "
-            "with a short warmup, ramping up from near zero, because big steps on a freshly initialized network can "
-            "blow it up. <bookmark mark='c'/> Then the rate decays. The classic choice is a cosine curve, down to a "
-            "tenth of the peak. <bookmark mark='w'/> Cosine has a catch: you must choose the length of the run in "
-            "advance. Stop halfway, and the rate was never brought down. The alternative is warmup, stable, decay: "
-            "hold the peak for most of the run, and decay only in the last fifth."
+            "The learning rate sets how big each step is, and how it changes over the run matters a lot. "
+            "<bookmark mark='u'/> Runs begin with a short warmup, ramping up from near zero, because big steps on a "
+            "freshly initialized network can blow it up. <bookmark mark='c'/> Then the rate decays. The classic "
+            "choice is a cosine curve, down to a tenth of the peak. <bookmark mark='h'/> Cosine has a catch: you "
+            "must choose the length of the run in advance. Stop halfway, and the rate was never brought down. "
+            "<bookmark mark='w'/> The alternative is warmup, stable, decay: hold the peak for most of the run, and "
+            "decay only in the last fifth."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(plot), GrowFromCenter(wu), FadeIn(wl))
+            self.play(FadeIn(head), FadeIn(plot))
+            vo.wait_until("u")
+            self.play(Create(lu), FadeIn(wl), run_time=1.2)
             vo.wait_until("c")
             self.play(Create(lc), FadeIn(tc), run_time=1.5)
+            vo.wait_until("h")
+            self.play(Create(half), FadeIn(hd), FadeIn(hl))
             vo.wait_until("w")
-            self.play(Create(lw), FadeIn(tw), run_time=1.5)
+            self.play(FadeOut(half), FadeOut(hd), FadeOut(hl), Create(lw), FadeIn(tw), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -90,23 +98,34 @@ class Schedule(VoiceoverScene):
 
         def line(k, color, w=4):
             x, v = curves[k]
-            return plot.line(x, np.minimum(v, hi), color=color, stroke_width=w)
+            m = v <= hi
+            return plot.line(x[m], v[m], color=color, stroke_width=w)
         lc, lw = line("cos100", C.LR), line("wsd100", C.KEPT)
         b5, b7 = line("wsd050", C.KEPT, 3), line("wsd075", C.KEPT, 3)
         c5 = line("cos050", C.LR, 2.5)
         fc, fw = curves["cos100"][1][-1], curves["wsd100"][1][-1]
         f5, fc5 = curves["wsd050"][1][-1], curves["cos050"][1][-1]
         self.final = (fc, fw, f5, fc5)
+        xs, vc_ = curves["cos100"]
+        stable = (xs >= 1.5) & (xs <= 4.0)
+        lag = curves["wsd100"][1][stable] - np.interp(xs[stable], *curves["cos100"])
+        assert 0 < lag.mean() < 0.05 and (round(fw, 2), round(fc, 2)) == (4.18, 4.30) and f5 < fc5 - 0.2
+        del vc_
+        k5 = label(rf"{f5:.2f}", font_size=22, color=C.KEPT).next_to(plot.c2p(curves["wsd050"][0][-1], f5), DOWN, buff=0.12)
+        kc5 = label(rf"{fc5:.2f}", font_size=22, color=C.LR).next_to(plot.c2p(curves["cos050"][0][-1], fc5), UP, buff=0.12)
         kc = label(rf"cosine {fc:.3f}", font_size=24, color=C.LR).next_to(plot.c2p(T, fc), RIGHT, buff=0.1).shift(UP * 0.15)
         kw = label(rf"WSD {fw:.3f}", font_size=24, color=C.KEPT).next_to(plot.c2p(T, fw), RIGHT, buff=0.1).shift(DOWN * 0.15)
         head = label(r"Real runs: one pocket model, same data, two schedules", font_size=32).to_edge(UP, buff=0.35)
-        br = label(r"WSD cooldown branches, started at 40\% and 60\%", font_size=24, color=C.KEPT).next_to(plot.c2p(T * 0.35, lo + 0.25), UP, buff=0.0)
+        br = label(r"WSD cooldown branches,\\started at 40\% and 60\%", font_size=24, color=C.KEPT)
+        br.next_to(plot.c2p(0.15, lo + 0.05), UR, buff=0.0)
         with self.voiceover(
             "Here are both schedules on one of our pocket models, with the same data. <bookmark mark='a'/> During the "
-            "stable phase, WSD's loss lags behind. <bookmark mark='d'/> Then its decay begins, and the loss drops off a "
-            "cliff, finishing level with cosine. <bookmark mark='b'/> And the stable phase can be reused: branch off and "
-            "decay early, here at forty and sixty percent of the way, and each branch lands where a separate cosine "
-            "run of that length would. One long run gives you a model at every budget."
+            "stable phase, WSD's loss lags slightly behind. <bookmark mark='d'/> Then its decay begins, and the loss "
+            "drops off a cliff, finishing below cosine. Larger published comparisons usually find the two about "
+            "level. <bookmark mark='b'/> And the stable phase can be reused: branch off and decay early, here at forty "
+            "and sixty percent of the way, and each branch is a finished model for that budget. <bookmark mark='h'/> "
+            "Our half-length branch even beat a separate half-length cosine run. One long run gives you a model at "
+            "every budget."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("a")
@@ -115,7 +134,9 @@ class Schedule(VoiceoverScene):
             self.play(FadeIn(kc), FadeIn(kw))
             vo.wait_until("b")
             self.play(Create(b5), Create(b7), FadeIn(br), run_time=1.5)
+            vo.wait_until("h")
             self.play(Create(c5), run_time=1.0)
+            self.play(FadeIn(k5), FadeIn(kc5))
         self.wait(0.3)
         self.clear_scene()
 
@@ -133,12 +154,12 @@ class Schedule(VoiceoverScene):
         cool = VMobject(stroke_color=C.KEPT, stroke_width=2.5).set_points_as_corners([ax.c2p(*q) for q in path[t_decay - 1:]])
         lp = Plot(x_range=(0, len(losses)), y_range=(0, max(1.2, float(np.percentile(losses, 98)))), width=8.0, height=2.0,
                   x_ticks=[], y_ticks=[], x_label=r"steps", y_label=r"loss")
-        lp.move_to(DOWN * 2.3)
+        lp.move_to(DOWN * 2.05)
         l1 = lp.line(np.arange(t_decay), np.minimum(losses[:t_decay], lp.y_range[1]), color=C.LR, stroke_width=2.5)
         l2 = lp.line(np.arange(t_decay - 1, len(losses)), np.minimum(losses[t_decay - 1:], lp.y_range[1]), color=C.KEPT, stroke_width=2.5)
-        tag = note(r"computed toy: noisy gradient descent on $f = 12\,(y - \tfrac12\sin x)^2 + 0.4\,(5 - x)$").to_corner(DL, buff=0.2)
-        ah = label(r"high learning rate: bouncing between the walls", font_size=24, color=C.LR).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
-        ac = label(r"decay: settles onto the floor", font_size=24, color=C.KEPT).next_to(ax, UP, buff=0.05).align_to(ax, RIGHT)
+        tag = note(r"computed toy: noisy gradient descent on $f = 12\,(y - \tfrac12\sin x)^2 + 0.4\,(5 - x)$").to_corner(UL, buff=0.2)
+        ac = label(r"decay: settles onto the floor", font_size=24, color=C.KEPT).next_to(ax, UP, buff=0.0).align_to(ax, RIGHT)
+        ah = label(r"high learning rate: bouncing between the walls", font_size=24, color=C.LR).next_to(ac, UP, buff=0.08).align_to(ax, LEFT)
         src = source(r"after Wen et al., \emph{Understanding Warmup-Stable-Decay Learning Rates: A River Valley Loss Landscape} (2024)")
         with self.voiceover(
             "Why does the loss fall so suddenly? One picture: late in training, the loss landscape looks like a river "
@@ -163,7 +184,7 @@ class Schedule(VoiceoverScene):
         def panel(i, title, x_range, y_range, x_ticks, y_ticks, x_label, y_fmt=None):
             pl = Plot(x_range=x_range, y_range=y_range, width=5.0, height=1.65, x_ticks=x_ticks, y_ticks=y_ticks,
                       x_label=x_label, font_size=20, y_fmt=y_fmt)
-            pl.move_to(centers[i])
+            pl.move_to([*centers[i], 0])
             t = label(title, font_size=24).next_to(pl, UP, buff=0.25).align_to(pl, LEFT)
             return pl, t
         pct = lambda v: f"{int(round(100 * v))}\\%"  # noqa: E731
@@ -187,7 +208,7 @@ class Schedule(VoiceoverScene):
         l3c = p3.line(x3, 0.05 + 0.475 * (1 + np.cos(np.pi * x3)), color=C.LR, stroke_width=4)
         l3w = DashedVMobject(p3.line(x3, np.where(x3 < 0.8, 1.0, 1 - 0.95 * (x3 - 0.8) / 0.2), color=C.KEPT, stroke_width=2.5), num_dashes=40)
         k3 = VGroup(label(r"cosine (chosen)", font_size=18, color=C.LR), label(r"WSD", font_size=18, color=C.KEPT)
-                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(p3.c2p(1, 1.05), LEFT, buff=0.05).align_to(p3.c2p(1, 1.05), UP)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to(p3.c2p(0.04, 0.08), aligned_edge=DL)
         # Llama 3 405B batch size: 4M tokens, 8M after 252M tokens, 16M after 2.87T tokens
         p4, t4 = panel(3, r"\textbf{Batch size grows}: Llama 3 405B, tokens per step", (0, 15.6), (0, 18),
                        [0, 5, 10, 15.6], [4, 8, 16], r"tokens (trillions)", lambda v: f"{v:g}\\text{{M}}")
