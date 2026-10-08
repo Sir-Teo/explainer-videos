@@ -331,7 +331,7 @@ class RandomWalk(VoiceoverScene):
         hline = DashedLine(ax.c2p(s, ws), ax.c2p(t, ws), color=C.QV, stroke_width=2)
         inc_l = MathTex(r"W_t - W_s", font_size=28, color=C.QV).next_to(inc, RIGHT, buff=0.12)
         credit = note(r"Wiener (1923): it exists. \ Donsker (1951): rescaled random walks converge to it.", font_size=24)
-        credit.to_corner(DL, buff=0.35)
+        credit.next_to(props, DOWN, buff=0.4).align_to(props, LEFT)
 
         with self.voiceover(
             "Let's pin down exactly what we've built. <bookmark mark='a'/> Brownian motion starts at zero. "

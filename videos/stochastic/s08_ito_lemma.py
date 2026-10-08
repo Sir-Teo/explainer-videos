@@ -106,7 +106,7 @@ class ItoLemma(VoiceoverScene):
                          num(h["cube3"][i], 4), num(h["cube1"][i] + h["cube2"][i] + h["cube3"][i], 4)])
         tab = num_table([r"n", r"\sum 3W^2\,\Delta W", r"\sum 3W\,(\Delta W)^2", r"\sum (\Delta W)^3", r"\text{total}"],
                         rows, font_size=28, col_colors=[C.CLOCK, C.BROWNIAN, C.QV, GREY_B, WHITE])
-        tab.to_edge(DOWN, buff=0.75).set_x(0)
+        tab.to_edge(DOWN, buff=1.15).set_x(0)
         ftitle = label(r"exact for $f(x) = x^3$, on our path:", font_size=28).next_to(tab, UP, buff=0.25)
         target = MathTex(r"3\int_0^1 W\,dt = " + num(3 * float(h["int_W"][0]), 3), font_size=28, color=C.QV)
         target.next_to(tab.cols[2], DOWN, buff=0.2)
