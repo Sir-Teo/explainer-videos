@@ -22,9 +22,30 @@ on screen from the one before it, starting with the log-derivative trick:
    model (TIS, masking, GSPO, CISPO), asynchronous RL, ScaleRL's sigmoid
    compute law, agentic environments, reward hacking, the state of play.
 
-**Watch:** [`published/rl.mp4`](../../published/rl.mp4) (1080p, subtitles and chapters embedded).
+**Watch:** [`published/rl.mp4`](../../published/rl.mp4) (46 min, 1080p, subtitles and chapters embedded).
 
-CHAPTERS_TBD
+<details><summary>Chapters</summary>
+
+- `0:00` Learning from a single bit
+- `1:47` Part 1: A language model is a policy
+- `3:39` The log-derivative trick
+- `7:01` Baselines: same mean, less noise
+- `9:48` Credit assignment: values, TD errors, GAE
+- `12:58` Part 2: Importance sampling and trust regions
+- `16:30` PPO: the clipped objective
+- `18:54` Part 3: Rewards from preferences
+- `20:49` The KL leash and its exact optimum
+- `24:14` DPO: the reward hiding in the policy
+- `26:18` Part 4: GRPO: the group is the baseline
+- `29:42` A real run: what RL actually changed
+- `31:17` Hidden biases: lengths and averages
+- `33:23` Entropy: the exploration budget
+- `36:03` Sharpening or discovery?
+- `38:48` Part 5: When the sampler and the learner disagree
+- `42:01` Scaling RL: compute, environments, reward hacking
+- `44:59` The whole family, one equation at a time
+
+</details>
 
 ```bash
 python -m videos.rl.compute          # once: all real footage (about 3 hours on 4 cores; cached in .cache/rl)
