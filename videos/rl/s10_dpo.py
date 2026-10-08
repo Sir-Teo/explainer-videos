@@ -108,7 +108,7 @@ class DPO(VoiceoverScene):
         plot.move_to(DOWN * 1.6 + LEFT * 0.5)
         xs = np.linspace(-5, 5, 200)
         w = plot.line(xs, 1 / (1 + np.exp(xs)), color=YELLOW, stroke_width=4)
-        a1 = label(r"ranked wrong:\\push hard", font_size=24, color=YELLOW).next_to(plot.c2p(-3.5, 0.95), RIGHT, buff=0.1)
+        a1 = label(r"ranked wrong:\\push hard", font_size=24, color=YELLOW).next_to(plot.c2p(-4.2, 0.55), RIGHT, buff=0.1)
         a2 = label(r"already right:\\leave it", font_size=24, color=GREY_A).next_to(plot.c2p(2.2, 0.35), RIGHT, buff=0.1)
         with self.voiceover(
             "Its gradient is easy to read. Raise the log probability of the preferred answer, lower the rejected "
@@ -147,8 +147,10 @@ class DPO(VoiceoverScene):
         lw_ = bot.line(steps, dw, color=C.REWARD, stroke_width=4)
         ll_ = bot.line(steps, dl, color=C.PENALTY, stroke_width=4)
         z = bot.hline(0, color=GREY_D)
-        kw = label(r"preferred answers", font_size=22, color=C.REWARD).next_to(bot.c2p(S, dw[-1]), UP, buff=0.1).shift(LEFT * 0.9)
-        kl = label(r"rejected answers", font_size=22, color=C.PENALTY).next_to(bot.c2p(S, dl[-1]), UP, buff=0.1).shift(LEFT * 0.9)
+        kw = label(r"preferred answers", font_size=22, color=C.REWARD)
+        kl = label(r"rejected answers", font_size=22, color=C.PENALTY)
+        # a legend in the empty lower-left: both curves stay near 0 for the first half of the run
+        VGroup(kw, kl).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(bot.c2p(0.06 * S, 0.6 * lo), aligned_edge=LEFT)
         head = label(rf"DPO on the adder: {d['n_pairs']:,} fixed pairs (right vs.\ wrong), sampled once".replace(",", "{,}"),
                      font_size=28).to_edge(UP, buff=0.35)
         foot = label(r"the gap widens by pushing \emph{both} down: ``likelihood displacement'' (Razin et al.\ 2024; DPO-Positive, Pal et al.\ 2024)",
