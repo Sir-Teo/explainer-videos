@@ -210,6 +210,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bo3\b", "O three"),
     (r"\bxAI\b", "x A I"),
     (r"\bProRL\b", "Pro R L"),
+    (r"\b([Rr])eweight", r"\1e-weight"),  # not in the G2P dictionary: "reweighted" came out as "related"
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
