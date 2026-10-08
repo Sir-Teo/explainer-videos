@@ -87,6 +87,7 @@ class Optimizer(VoiceoverScene):
         assert d["shape"] == [336, 128] and n == 128
         top5 = (g[:5] ** 2).sum() / (g**2).sum()
         self.top5 = top5
+        assert 0.6 < top5 < 0.72 and 35 < 1 / np.median(g) < 65
         plot = Plot(x_range=(0, n), y_range=(1e-3, 1.5), width=9.0, height=3.8, log_y=True, x_ticks=[1, 32, 64, 96, 128],
                     y_ticks=[1e-3, 1e-2, 1e-1, 1], x_label=r"direction (singular vector), largest first",
                     y_label=r"size of the gradient along it", y_fmt=lambda v: MathTex(rf"10^{{{int(round(np.log10(v)))}}}", font_size=24, color=GREY_A))
@@ -104,8 +105,7 @@ class Optimizer(VoiceoverScene):
             "A newer optimizer, Muon, treats each weight matrix as a whole. A matrix's gradient can be broken into "
             "directions, its singular vectors, each with a size. <bookmark mark='g'/> Here are the sizes for a real "
             "gradient from one of our pocket models, on a log scale. A handful of directions dominate: the top five, "
-            "out of 128, carry most of the gradient, and an Adam-style step mostly follows them. The rest barely "
-            "move. <bookmark mark='m'/> Muon keeps the directions but sets every size to one: each direction gets an "
+            "out of 128, carry about two thirds of it, while a typical direction is some fifty times smaller than the largest. <bookmark mark='m'/> Muon keeps the directions but sets every size to one: each direction gets an "
             "equal step."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
@@ -143,16 +143,16 @@ class Optimizer(VoiceoverScene):
         dots = dots_at(0)
         it = VGroup(label(r"iteration", font_size=24, color=GREY_A), Integer(0, font_size=28)).arrange(RIGHT, buff=0.15)
         it.next_to(line, UP, buff=2.9)
-        band = label(r"after 5 iterations: all between 0.3 and 1.2", font_size=24, color=C.MUON).next_to(line, DOWN, buff=0.6)
         lo, hi = ns[-1].min(), ns[-1].max()
-        assert 0.3 <= lo and hi <= 1.25
+        band = label(rf"after 5 iterations: all between {lo:.1f} and {hi:.1f}", font_size=24, color=C.MUON).next_to(line, DOWN, buff=0.6)
+        assert round(lo, 1) == 0.6 and round(hi, 1) == 1.2
         with self.voiceover(
             "Computing that exactly would need a singular value decomposition, which is slow on GPUs. Muon's trick "
             "is a polynomial. <bookmark mark='p'/> Multiplying a matrix by itself in this pattern applies the same "
             "polynomial to every singular value at once, <bookmark mark='i'/> and the coefficients are chosen so that "
             "five rounds push every value toward one. <bookmark mark='d'/> Here are the real singular values of our "
-            "gradient, scaled below one, going through five iterations: small ones are lifted fast, large ones pulled "
-            "back, and they end up in a narrow band."
+            "gradient, scaled below one, going through five iterations: small ones are lifted fast, any that overshoot "
+            "are pulled back, and all of them end up between about 0.6 and 1.2."
         ) as vo:
             vo.wait_until("p")
             self.play(FadeIn(poly), FadeIn(mat), FadeIn(why))
