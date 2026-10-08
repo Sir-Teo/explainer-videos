@@ -258,8 +258,10 @@ def pct_fmt(v) -> MathTex:
     return MathTex(rf"{int(round(100 * v))}\%", font_size=24, color=GREY_A)
 
 
-def smooth(y, k: int = 5) -> np.ndarray:
-    """Centered moving average (edges use the available window)."""
+def smooth(y, k: int = 5, exact_ends: bool = True) -> np.ndarray:
+    """Centered moving average (edges use the available window).  ``exact_ends`` pins the first and last points to
+    the data, so a chart starts where the data starts; turn it off for a series that will be differenced, where a
+    pinned endpoint would show up as a spurious jump."""
     y = np.asarray(y, float)
     if k <= 1:
         return y
@@ -267,7 +269,8 @@ def smooth(y, k: int = 5) -> np.ndarray:
     h = k // 2
     for i in range(len(y)):
         out[i] = y[max(0, i - h):i + h + 1].mean()
-    out[0], out[-1] = y[0], y[-1]  # keep the endpoints exact: a chart must start where the data starts
+    if exact_ends:
+        out[0], out[-1] = y[0], y[-1]
     return out
 
 

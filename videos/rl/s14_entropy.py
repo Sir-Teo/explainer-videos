@@ -147,7 +147,7 @@ class Entropy(VoiceoverScene):
         st = np.array([l["step"] for l in log], float)
         H = np.array([l["entropy"] for l in log])
         cov = np.array([l["cov"] for l in log])
-        dH = np.diff(smooth(H, 9))
+        dH = np.diff(smooth(H, 9, exact_ends=False))
         S = int(np.ceil(st[-1] / 30) * 30)
         top = Plot(x_range=(0, S), y_range=(min(0, cov.min()), cov.max() * 1.1), width=8.0, height=2.3,
                    x_ticks=[], y_ticks=[0], x_label=None,
@@ -163,7 +163,7 @@ class Entropy(VoiceoverScene):
         lh = bot.line(st[1:], dHc, color=C.ENTROPY, stroke_width=3.5)
         z1 = top.hline(0, color=GREY_D)
         z2 = bot.hline(0, color=GREY_D)
-        corr = float(np.corrcoef(smooth(cov, 9)[1:], dH)[0, 1])  # 9-step averages of both series
+        corr = float(np.corrcoef(smooth(cov, 9, exact_ends=False)[1:], dH)[0, 1])  # 9-step averages of both series
         pos = float(np.mean(cov > 0))
         assert corr < -0.4 and pos > 0.8, (corr, pos)
         cl = VGroup(label(rf"correlation: ${corr:+.2f}$", font_size=28, color=YELLOW),
