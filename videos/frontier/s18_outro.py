@@ -83,7 +83,7 @@ class Outro(VoiceoverScene):
         pocket = pocket_total_flops()
         biggest = max(json.loads(f.read_text())["counts"]["total"] for f in RUN_DIR.glob("*.json"))
         most_tokens = max(json.loads(f.read_text())["run"]["tokens"] for f in RUN_DIR.glob("*.json"))
-        assert 1e14 < pocket < 1e16 and 2.5e6 < biggest < 3.5e6
+        assert 1e14 < pocket < 1e15 and 2.5e6 < biggest < 3.5e6
         rows = [
             (r"largest model", rf"{biggest / 1e6:.1f} million parameters", r"up to 2.8 trillion (Kimi K3)"),
             (r"tokens in one run", rf"{most_tokens / 1e6:.0f} million", r"33 trillion (DeepSeek-V4)"),
@@ -104,7 +104,7 @@ class Outro(VoiceoverScene):
         src = source(r"Kimi K3 (Moonshot AI, Jul 2026); DeepSeek-V4 (Apr 2026); Epoch AI; OpenAI (GPT-6 Astra, Sep 2026)")
         with self.voiceover(
             "And our pocket versions? The largest model we trained had about three million parameters, against up "
-            "to 2.8 trillion at the frontier. All of our training runs together took about ten to the fifteen "
+            "to 2.8 trillion at the frontier. All of our training runs together took less than ten to the fifteen "
             "operations; the largest frontier run is estimated at around ten to the twenty-seven. Four CPU cores, "
             "against a hundred thousand GPUs. Yet the curves have the same shapes."
         ) as vo:

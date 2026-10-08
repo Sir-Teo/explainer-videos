@@ -13,7 +13,7 @@ HIGHLIGHTS = [  # (Epoch model name, on-screen name, label direction)
     ("GPT-3 175B (davinci)", r"GPT-3", UL),
     ("GPT-4 (Mar 2023)", r"GPT-4", UL),
     ("Llama 3.1-405B", r"Llama 3.1 405B", DR),
-    ("Grok 4", r"Grok 4", UL),
+    ("Grok 4", r"Grok 4", DR),
     ("GPT-6 Astra", r"GPT-6 Astra", UL),
 ]
 
@@ -41,7 +41,7 @@ class Hook(VoiceoverScene):
         answer = ("In stages. First I read trillions of words from the web and learned to predict the next one. "
                   "Then I was trained on conversations, and with reinforcement learning, to be helpful and to "
                   "reason step by step.")
-        ans = mono_lines(answer, width=58, max_lines=5, font_size=24, color=WHITE, line_buff=0.14)
+        ans = mono_lines(answer, width=50, max_lines=5, font_size=24, color=WHITE, line_buff=0.14)
         ans.next_to(quest, DOWN, buff=0.4).align_to(win, LEFT).shift(RIGHT * 0.45)
         glyphs = [g for line in ans for g in line.glyphs]
         chunks = [glyphs[i:i + 4] for i in range(0, len(glyphs), 4)]  # "tokens" of ~4 characters
@@ -125,21 +125,21 @@ class Hook(VoiceoverScene):
             self.play(Create(trend), FadeIn(tl), run_time=1.5)
 
         pocket = pocket_total_flops()
-        e = int(np.floor(np.log10(pocket)))
         ratio = 1e26 / pocket
         pd = Dot(plot.c2p(2026.7, pocket), radius=0.08, color=C.KEPT)
-        pl = label(r"every experiment in this video\\(a 4-core CPU)", font_size=24, color=C.KEPT)
+        pl = label(r"all our training runs\\(a 4-core CPU)", font_size=24, color=C.KEPT)
         pl.next_to(pd, LEFT, buff=0.2)
         gap = DoubleArrow(plot.c2p(2026.95, pocket * 2), plot.c2p(2026.95, 1e26 / 2), buff=0, color=GREY_A,
                           stroke_width=3, tip_length=0.2)
-        gl = MathTex(rf"\sim {sci(ratio, 0)}\times", font_size=30, color=GREY_A).next_to(gap, LEFT, buff=0.15)
+        gl = MathTex(rf"\sim 10^{{{round(np.log10(ratio))}}}\times", font_size=30, color=GREY_A).next_to(gap, LEFT, buff=0.15)
         gl.shift(UP * 0.6)
-        assert 14 <= e <= 16, pocket
+        assert 1e14 < pocket < 1e15 and round(np.log10(ratio)) == 11, pocket
 
         with self.voiceover(
             "And so that none of this is a cartoon: every experiment in this video was actually run, in miniature, "
-            "on the four-core computer that rendered it. <bookmark mark='dot'/> All of them together took about "
-            "ten to the fifteen operations, <bookmark mark='gap'/> roughly a hundred billion times less than a "
+            "on the four-core computer that rendered it. <bookmark mark='dot'/> All of our training runs together "
+            "took less than ten to the fifteen operations, <bookmark mark='gap'/> roughly a hundred billion times "
+            "less than a "
             "frontier run. The scale is different. The ideas are the same."
         ) as vo:
             vo.wait_until("dot")
@@ -174,7 +174,8 @@ class Hook(VoiceoverScene):
             "predictor into something that follows instructions and reasons, <bookmark mark='asst'/> and the "
             "result is the assistant."
         ) as vo:
-            self.play(FadeIn(head))
+            ghost = m.copy().set_opacity(0.15)
+            self.play(FadeIn(head), FadeIn(ghost))
             for i, k in enumerate(keys):
                 vo.wait_until(k)
                 anims = [FadeIn(m.stages[i], shift=UP * 0.15), FadeIn(sub[i])]
