@@ -1,6 +1,6 @@
 """Precompute every piece of real footage in the frontier-training video.
 
-    python -m videos.frontier.compute                    # everything missing (a few CPU-hours on 4 cores)
+    python -m videos.frontier.compute                    # everything missing (several CPU-hours on 4 cores)
     python -m videos.frontier.compute funnel corpus      # specific items
     python -m videos.frontier.compute --force isoflop    # recompute
 
@@ -11,12 +11,13 @@ stage of the pipeline is run for real, in miniature, on a 4-core CPU:
 Data
     funnel      the first 400 MB of one real WARC file from Common Crawl's September 2026
                 crawl (CC-MAIN-2026-39) through the full FineWeb recipe (datatrove's filters)
-    corpus      8 whole WET files (172K pages) through the same filters -> training text
+    corpus      8 whole WET files (169,783 pages) through the same filters -> training text
     dedup       MinHash LSH (FineWeb's 5-grams, 14 bands x 8 hashes) over the corpus
     edu         FineWeb-Edu's educational-quality classifier on the funnel's survivors
     tokenizer   byte-level BPE (2,048 tokens) trained on FineWeb-Edu, which encodes the pretraining text
 Pretraining (PocketGPT, explainer/lm/pocket.py)
-    isoflop     a Chinchilla-style IsoFLOP sweep: 4 compute budgets x 7 model sizes
+    sweeps      every run below in one 4-process pool, longest first (each cached in runs/<name>.json)
+    isoflop     a Chinchilla-style IsoFLOP sweep: 4 compute budgets, 20 runs over 6 model sizes
     optim       AdamW vs Muon, same model and data
     schedule    cosine vs warmup-stable-decay, plus WSD cooldown branches
     stability   learning-rate sweep with and without QK-norm (after Wortsman et al. 2023)
@@ -25,8 +26,7 @@ Pretraining (PocketGPT, explainer/lm/pocket.py)
     precision   FP8 / MXFP8 / NVFP4 quantization of real GPT-2 activations
 Post-training
     chat        a real chat template (Qwen3 tokenizer) and its loss mask
-    grpo        a real GRPO group: 8 sampled answers from a small open model, verified
-    toy_rl      a miniature RLVR run on arithmetic (pass@1 vs pass@k)
+    toy_rl      a miniature RLVR run (GRPO) on arithmetic: pass@1 vs pass@8
 Context
     epoch       Epoch AI's database of notable AI models (training compute over time)
 """
@@ -668,7 +668,7 @@ def _rl_example(a: int, b: int, ans: int) -> list[int]:
 
 
 def compute_toy_rl():
-    """Pretrain a 2-layer PocketGPT on 3-digit additions where 40% of the answers forget every carry,
+    """Pretrain a 3-layer PocketGPT on 3-digit additions where 40% of the answers forget every carry,
     then run GRPO-style RL with a verifiable reward (exact answer).  Tracks pass@1 and pass@8."""
     import torch
     import torch.nn.functional as F

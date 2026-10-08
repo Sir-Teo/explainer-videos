@@ -35,13 +35,14 @@ class Architecture(VoiceoverScene):
             for j, cell in enumerate(r):
                 cell.move_to([xs[j], 2.2 - i * 0.78, 0])
         head = label(r"The transformer blueprint, refined", font_size=36).to_edge(UP, buff=0.4)
-        foot = label(r"our pocket models use all of the modern column", font_size=24, color=C.KEPT).to_edge(DOWN, buff=0.7)
+        foot = label(r"our pocket models: RMSNorm, RoPE, SwiGLU, no biases; QK-norm gets its own experiment",
+                     font_size=24, color=C.KEPT).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "What gets trained? Still a transformer: the same basic blueprint as GPT-2, which our earlier video took "
             "apart piece by piece. <bookmark mark='r'/> But nearly every component has been refined: a simpler "
             "normalization, rotary position embeddings, gated MLPs, attention that shares or compresses its keys and "
             "values to save memory, and normalization of the queries and keys for stability. <bookmark mark='p'/> Our "
-            "pocket models use all of these."
+            "pocket models use the first three, and QK-norm gets an experiment of its own later on."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr))
             vo.wait_until("r")
