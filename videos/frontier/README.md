@@ -1,6 +1,6 @@
 # How Frontier AI Models Are Trained, End to End
 
-A ~45-minute, 18-chapter explainer in four parts, following one frontier
+A 45-minute, 18-chapter explainer in four parts, following one frontier
 training run from the raw web to a reasoning assistant: **the data** (Common
 Crawl, the FineWeb filters, MinHash deduplication, quality classifiers,
 mixtures, tokens), **the recipe** (scaling laws, mixture-of-experts
@@ -24,8 +24,31 @@ examples `illustrative`.
 
 **Watch:** [`published/frontier.mp4`](../../published/frontier.mp4) (1080p, subtitles and chapters embedded).
 
+<details><summary>Chapters</summary>
+
+- `0:00` One of the largest computations ever run
+- `2:02` Part 1: The raw web
+- `3:53` Filtering: the FineWeb recipe
+- `5:59` Deduplication with MinHash
+- `8:13` Quality, mixtures, and tokens
+- `10:48` Part 2: How big? Scaling laws
+- `13:26` Architecture and mixture of experts
+- `16:33` The optimizer: AdamW and Muon
+- `19:34` Learning-rate schedules
+- `21:33` Fewer bits: FP8 and FP4
+- `24:54` Loss spikes and stability
+- `27:25` Part 3: Memory and data parallelism
+- `29:59` Tensor, pipeline, expert parallelism
+- `32:54` Keeping the run alive
+- `34:39` Part 4: Supervised fine-tuning
+- `36:41` Learning from preferences
+- `38:54` Reinforcement learning and reasoning
+- `42:49` The whole pipeline
+
+</details>
+
 ```bash
-python -m videos.frontier.compute          # once: all real footage (a few CPU-hours on 4 cores; cached in .cache/frontier)
+python -m videos.frontier.compute          # once: all real footage (about 20 CPU-hours, several hours on 4 cores; cached in .cache/frontier)
 python tools/build.py frontier -q l        # preview
 python tools/build.py frontier             # final 1080p30 + subtitles + chapters
 python tools/export_script.py frontier     # regenerate SCRIPT.md from the code
