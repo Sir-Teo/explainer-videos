@@ -189,8 +189,12 @@ def compute_dedup():
                 bands=crawl.BANDS, rows=crawl.ROWS, n_grams=crawl.N_GRAMS)
 
 
+EDU_SAMPLE = 400  # pages scored (a seeded random sample of the funnel's survivors; ~4 CPU-seconds per page)
+
+
 def compute_edu():
-    """FineWeb-Edu's classifier (HuggingFaceFW/fineweb-edu-classifier): an educational score 0-5."""
+    """FineWeb-Edu's classifier (HuggingFaceFW/fineweb-edu-classifier): an educational score 0-5, on a random
+    sample of the pages that survived our filters (sorted by length so batches need little padding)."""
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
@@ -199,15 +203,17 @@ def compute_edu():
     tok = AutoTokenizer.from_pretrained(name)
     model = AutoModelForSequenceClassification.from_pretrained(name).eval()
     docs = _read_jsonl(DATA_DIR / "funnel_kept.jsonl")
+    idx = np.random.default_rng(0).choice(len(docs), min(EDU_SAMPLE, len(docs)), replace=False)
+    docs = sorted((docs[i] for i in idx), key=lambda d: len(d["text"]))
     scores = []
     with torch.no_grad():
         for k in range(0, len(docs), 16):
             batch = [d["text"] for d in docs[k:k + 16]]
             enc = tok(batch, return_tensors="pt", padding="longest", truncation=True, max_length=512)
             scores += model(**enc).logits.squeeze(-1).float().tolist()
-            if k % 320 == 0:
+            if k % 80 == 0:
                 print(f"    edu {k}/{len(docs)}", flush=True)
-    return dict(scores=scores, urls=[d["url"] for d in docs], model=name)
+    return dict(scores=scores, urls=[d["url"] for d in docs], model=name, n_survivors=len(_read_jsonl(DATA_DIR / "funnel_kept.jsonl")))
 
 
 FWEDU_URL = "https://huggingface.co/datasets/karpathy/fineweb-edu-100b-shuffle/resolve/main/shard_{:05d}.parquet"
@@ -275,7 +281,7 @@ def corpus_tokens():
 # ---------------------------------------------------------------------------
 SEQ = 256
 ISO_SIZES = [(1, 32), (2, 48), (2, 64), (3, 96), (4, 128), (5, 160), (6, 192), (8, 256)]  # (layers, width)
-ISO_BUDGETS = {1e12: ISO_SIZES[0:4], 3e12: ISO_SIZES[0:5], 1e13: ISO_SIZES[0:6], 3e13: ISO_SIZES[1:7]}
+ISO_BUDGETS = {1e12: ISO_SIZES[0:4], 3e12: ISO_SIZES[0:5], 1e13: ISO_SIZES[0:6], 3e13: ISO_SIZES[1:6]}
 
 
 def _cfg(layers: int, d: int, **kw):
@@ -377,10 +383,10 @@ def compute_isoflop():
 
 
 OPT_TOKENS = 12_000_000  # AdamW vs Muon: L4 d128 (~1M params), ~12 tokens per parameter
-SCHED_TOKENS = 8_000_000  # schedules: L3 d96 (~0.5M params)
-STAB_TOKENS = 2_000_000
+SCHED_TOKENS = 5_000_000  # schedules: L3 d96 (~0.5M params)
+STAB_TOKENS = 800_000
 STAB_LRS = [3e-4, 1e-3, 3e-3, 1e-2, 3e-2, 1e-1]
-MOE_TOKENS = 4_000_000
+MOE_TOKENS = 2_000_000
 
 
 def opt_runs() -> dict:

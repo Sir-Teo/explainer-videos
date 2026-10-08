@@ -109,8 +109,8 @@ class Stability(VoiceoverScene):
             "What goes wrong? Look inside attention. <bookmark mark='b'/> In the standard model, the largest "
             "attention score, the dot product of a query and a key, keeps growing as training goes on. Once scores are "
             "huge, the softmax turns one-hot, and the gradients through it either vanish or explode. "
-            "<bookmark mark='q'/> QK-norm normalizes every query and key vector before the dot product, which caps "
-            "how large the scores can get."
+            "<bookmark mark='q'/> QK-norm normalizes every query and key vector before the dot product, which keeps "
+            "the scores from running away."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("b")
