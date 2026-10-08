@@ -153,8 +153,8 @@ class ScalingLaws(VoiceoverScene):
             "model doesn't get to see enough. <bookmark mark='b'/> Repeat at four budgets, twenty-five runs in all, "
             "and fit a parabola to each valley floor. <bookmark mark='c'/> The best size grows with the budget, as a "
             "power law, with an exponent of about three quarters. That's close to what OpenAI found in 2020 with small "
-            "models. DeepMind's much larger study found about one half, and later work traced the gap to details of "
-            "how very small models like ours are measured and tuned."
+            "models. The much larger study we'll see next found about one half, and later work traced the gap to "
+            "details of how very small models like ours are measured and tuned."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("a")
