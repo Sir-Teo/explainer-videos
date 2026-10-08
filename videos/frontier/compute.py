@@ -12,6 +12,7 @@ Data
     funnel      the first 400 MB of one real WARC file from Common Crawl's September 2026
                 crawl (CC-MAIN-2026-39) through the full FineWeb recipe (datatrove's filters)
     corpus      8 whole WET files (169,783 pages) through the same filters -> training text
+    wet         Common Crawl's own extracted text vs Trafilatura's, for the funnel's survivors
     dedup       MinHash LSH (FineWeb's 5-grams, 14 bands x 8 hashes) over the corpus
     edu         FineWeb-Edu's educational-quality classifier on the funnel's survivors
     tokenizer   byte-level BPE (2,048 tokens) trained on FineWeb-Edu, which encodes the pretraining text
@@ -50,7 +51,7 @@ RUN_DIR = DATA_DIR / "runs"
 CRAWL = "CC-MAIN-2026-39"
 CC = "https://data.commoncrawl.org/"
 WARC_HEAD_BYTES = 400 * 2**20  # first 400 MiB of the first WARC file of the crawl
-N_WET = 8  # WET files 1, 12501, 25001, ... of the crawl's 100,000
+N_WET = 8  # WET files 0, 12500, 25000, ... (0-based) of the crawl's 100,000
 
 
 # ---------------------------------------------------------------------------
@@ -143,6 +144,29 @@ def _filter_one_wet(p: str):
 
     f = _download(CC + p, CRAWL_DIR / Path(p).name)
     return crawl.filter_wet(str(CRAWL_DIR), f.name)
+
+
+def compute_wet():
+    """Common Crawl's own text extraction (the WET file) next to Trafilatura's, for the same records: WET file 0 is
+    the text twin of the WARC file the funnel read, so every page that survived the funnel appears in it."""
+    import gzip
+
+    from warcio.archiveiterator import ArchiveIterator
+
+    kept = {d["url"]: d for d in _read_jsonl(DATA_DIR / "funnel_kept.jsonl")}
+    wet = {}
+    with gzip.open(_download(CC + wet_paths()[0], CRAWL_DIR / Path(wet_paths()[0]).name), "rb") as fh:
+        for rec in ArchiveIterator(fh):
+            u = rec.rec_headers.get_header("WARC-Target-URI")
+            if rec.rec_type == "conversion" and u in kept:
+                wet[u] = rec.content_stream().read().decode("utf-8", "replace")
+    pairs = [(len(wet[u].encode()), len(kept[u]["text"].encode())) for u in wet]
+    show = next(u for u in wet if "hungrycravings.com/2010/04/savory-custard" in u)
+    traf_lines = {ln.strip() for ln in kept[show]["text"].splitlines() if ln.strip()}
+    lines = [dict(text=ln, kept=ln.strip() in traf_lines) for ln in wet[show].splitlines()]
+    return dict(n=len(pairs), wet_bytes=sum(a for a, _ in pairs), traf_bytes=sum(b for _, b in pairs),
+                median_ratio=float(np.median([a / max(1, b) for a, b in pairs])), show_url=show,
+                show_wet_bytes=len(wet[show].encode()), show_traf_bytes=len(kept[show]["text"].encode()), show_lines=lines)
 
 
 def compute_corpus():
@@ -807,6 +831,7 @@ def compute_epoch():
 ITEMS = {
     "funnel": compute_funnel,
     "corpus": compute_corpus,
+    "wet": compute_wet,
     "dedup": compute_dedup,
     "edu": compute_edu,
     "tokenizer": compute_tokenizer,

@@ -41,6 +41,47 @@ def minimap(lines: list[str], content: set[int], cols: int = 6, col_w: int = 90,
     return img
 
 
+def link_graph(n: int = 42, seed: int = 4):
+    """A random web of pages and links (schematic) and the order a breadth-first crawler reaches the pages."""
+    rng = np.random.default_rng(seed)
+    pts = []
+    while len(pts) < n:  # spread the pages out a little
+        q = np.array([rng.uniform(-6.0, 6.0), rng.uniform(-2.4, 2.3), 0.0])
+        if all(np.linalg.norm(q - p) > 0.85 for p in pts):
+            pts.append(q)
+    adj = {i: set() for i in range(n)}
+    for i, p in enumerate(pts):
+        for j in np.argsort([np.linalg.norm(p - q) for q in pts])[1:1 + int(rng.integers(2, 4))]:
+            adj[i].add(int(j))
+            adj[int(j)].add(i)
+    pages = VGroup()
+    for p in pts:
+        r = RoundedRectangle(width=0.3, height=0.38, corner_radius=0.04, stroke_color=GREY_B, stroke_width=1.5,
+                             fill_color="#1b1f27", fill_opacity=1).move_to(p)
+        ln = VGroup(*[Line(LEFT * 0.08, RIGHT * 0.08, stroke_width=1.2, color=GREY_C) for _ in range(3)]).arrange(DOWN, buff=0.06).move_to(p)
+        pages.add(VGroup(r, ln))
+    links = VGroup(*[Line(pts[i], pts[j], stroke_width=1.2, color=GREY_D) for i in adj for j in adj[i] if i < j])
+    start = int(np.argmin([np.linalg.norm(p - np.array([-6.0, 2.3, 0])) for p in pts]))
+    order, seen, queue = [], {start}, [start]
+    while queue:
+        i = queue.pop(0)
+        order.append(i)
+        for j in sorted(adj[i]):
+            if j not in seen:
+                seen.add(j)
+                queue.append(j)
+    return pages, links, order
+
+
+def text_rows(lines: list[str], width: int = 120) -> list[int]:
+    """Row lengths (in characters) of text wrapped at `width`, skipping empty lines."""
+    rows = []
+    for ln in lines:
+        t = ln.strip()
+        rows += [len(t[i:i + width]) for i in range(0, len(t), width)]
+    return rows
+
+
 class RawWeb(VoiceoverScene):
     def construct(self):
         self.opening()
@@ -83,20 +124,26 @@ class RawWeb(VoiceoverScene):
         for idx in picked:
             r, c = divmod(idx, cols)
             pos = grid.get_corner(UL) + RIGHT * (c + 0.5) * 8.0 / cols + DOWN * (r + 0.5) * 5.0 / rows
-            rings.add(Circle(radius=0.09, color=C.KEPT, stroke_width=3).move_to(pos))
+            rings.add(Circle(radius=0.13, color=C.KEPT, stroke_width=4).move_to(pos))
         ours = label(r"downloaded for this video: 8 files, plus 400 MB of the raw HTML of one", font_size=26,
                      color=C.KEPT).next_to(frame, DOWN, buff=0.25).align_to(frame, LEFT)
         src = source(r"commoncrawl.org, crawl statistics for CC-MAIN-2026-39")
 
+        web, links, order = link_graph()
+        crawler = label(r"a crawler follows links and saves every page it reaches (schematic)", font_size=24,
+                        color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Almost every large language model starts from the same place: Common Crawl, a non-profit that crawls "
             "the web every month or two and gives the result away. <bookmark mark='p'/> Its September 2026 crawl "
             "alone holds 2.17 billion web pages, a hundred and six terabytes compressed, <bookmark mark='f'/> split "
             "into a hundred thousand files. Each square here is one of them. <bookmark mark='o'/> For this video, "
-            "we downloaded nine."
+            "we downloaded eight of them, plus the first four hundred megabytes of the raw HTML behind the first."
         ) as vo:
-            self.play(FadeIn(title))
-            vo.wait_until("p")
+            self.play(FadeIn(title), FadeIn(links), FadeIn(web), FadeIn(crawler), run_time=1.0)
+            self.play(LaggedStart(*[AnimationGroup(web[i][0].animate.set_stroke(C.KEPT, width=2.5),
+                                                   web[i][1].animate.set_color(C.KEPT)) for i in order], lag_ratio=0.06),
+                      run_time=max(2.0, vo.until("p") - 1.3))
+            self.play(FadeOut(web), FadeOut(links), FadeOut(crawler), run_time=0.6)
             self.play(FadeIn(facts[0]), FadeIn(facts[1]), FadeIn(src))
             vo.wait_until("f")
             self.play(FadeIn(grid), Create(frame), FadeIn(facts[2]), FadeIn(one), run_time=1.2)
@@ -160,9 +207,9 @@ class RawWeb(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(h) for h in head], lag_ratio=0.05), run_time=1.5)
             self.play(FadeIn(mm), Create(mmf), FadeIn(mml), run_time=1.2)
             vo.wait_until("r")
-            self.play(GrowArrow(arrow), FadeIn(hl))
+            self.play(FadeOut(head), GrowArrow(arrow), FadeIn(hl))
             vo.wait_until("s")
-            self.play(FadeOut(head), FadeIn(stat))
+            self.play(FadeIn(stat))
         self.wait(0.4)
         self.clear_scene()
 
@@ -170,10 +217,10 @@ class RawWeb(VoiceoverScene):
     def extraction(self):
         f = load("funnel")
         st = f["stats"]
-        html_gb = st["url"]["bytes"] / 1e9
+        html_gb = st["input"]["bytes"] / 1e9
         text_mb = st["extract"]["bytes"] / 1e6
         n = st["input"]["docs"]
-        assert 10_000 < n < 11_000 and 1.5 < html_gb < 1.8 and 30 < text_mb < 45
+        assert 10_000 < n < 11_000 and round(html_gb, 2) == 1.65 and round(text_mb) == 37
         langs = f["languages"]
         total = sum(langs.values())
         top = list(langs.items())[:10]
@@ -182,14 +229,72 @@ class RawWeb(VoiceoverScene):
 
         a = label(rf"{n:,} pages from one raw file: ".replace(",", "{,}") + rf"{html_gb:.2f} GB of HTML $\rightarrow$ "
                   rf"{text_mb:.0f} MB of text", font_size=32).to_edge(UP, buff=0.5)
-        b = label(r"text extraction: Trafilatura, as in FineWeb (Common Crawl's own WET text keeps more boilerplate)",
-                  font_size=24, color=GREY_A).next_to(a, DOWN, buff=0.2)
+        # --- bytes as areas
+        side = 4.2
+        big = Square(side, stroke_width=0, fill_color=C.PAGE, fill_opacity=0.5).move_to(LEFT * 2.4 + DOWN * 0.5)
+        small = Square(side * np.sqrt(text_mb * 1e6 / (html_gb * 1e9)), stroke_width=0, fill_color=C.KEPT,
+                       fill_opacity=0.95).next_to(big, RIGHT, buff=1.4).align_to(big, DOWN)
+        bl = label(rf"{html_gb:.2f} GB of HTML", font_size=28, color=C.PAGE).next_to(big, DOWN, buff=0.15)
+        sl = label(rf"{text_mb:.0f} MB of text ({100 * text_mb * 1e6 / (html_gb * 1e9):.1f}\%)", font_size=28,
+                   color=C.KEPT).next_to(small, RIGHT, buff=0.2).align_to(small, DOWN)
+        area = note(r"area $\propto$ bytes").next_to(big, UP, buff=0.12).align_to(big, LEFT)
+
+        # --- WET vs Trafilatura, for the recipe page
+        w = load("wet")
+        ratio = w["wet_bytes"] / w["traf_bytes"]
+        L = [x["text"] for x in w["show_lines"]]
+        keep = [x["kept"] for x in w["show_lines"]]
+
+        def at(prefix):
+            return next(i for i, t in enumerate(L) if t.startswith(prefix))
+        i_rec, i_post, i_side, i_arch, i_foot = keep.index(True), at("Posted by"), at("Over 275"), at("Blog Archive"), at("Twitter Updates")
+        n_arch = i_foot - i_arch
+        assert w["n"] == 1363 and round(ratio, 1) == 2.0 and round(w["show_wet_bytes"] / 1000, 1) == 8.7
+        assert round(w["show_traf_bytes"] / 1000, 1) == 3.3 and 95 <= n_arch <= 110
+        assert all(i_rec <= i < i_post for i, k in enumerate(keep) if k)
+        width, pitch = 120, 5.0 / len(text_rows(L))
+        x0, top_y = -6.4, 2.0
+
+        def column(lines, flags, x):
+            bars, starts, kept_bars, r = VGroup(), [], VGroup(), 0
+            for ln, k_ in zip(lines, flags):
+                starts.append(r)
+                for k in text_rows([ln], width):
+                    b = Rectangle(width=max(0.03, 3.4 * k / width), height=pitch * 0.7, stroke_width=0,
+                                  fill_color=C.KEPT if k_ else C.PENALTY, fill_opacity=0.9)
+                    bars.add(b.move_to([x, top_y - r * pitch, 0], aligned_edge=LEFT))
+                    if k_:
+                        kept_bars.add(b)
+                    r += 1
+            return bars, starts + [r], kept_bars
+        left, starts, left_kept = column(L, keep, x0)
+        traf = [t for t in w["show_lines"] if t["kept"]]
+        right, _, _ = column([t["text"] for t in traf], [True] * len(traf), 2.4)
+        lh = label(rf"Common Crawl's own text (WET): {w['show_wet_bytes'] / 1000:.1f} KB", font_size=24, color=C.PENALTY)
+        lh.next_to(left, UP, buff=0.2).align_to(left, LEFT)
+        rh = label(rf"Trafilatura, as in FineWeb: {w['show_traf_bytes'] / 1000:.1f} KB", font_size=24, color=C.KEPT)
+        rh.next_to(right, UP, buff=0.2).align_to(right, LEFT).match_y(lh)
+        sections = [(0, i_rec, r"title, menu"), (i_rec, i_post, r"the recipe"), (i_post, i_side, r"byline, 4 comments"),
+                    (i_side, i_arch, r"sidebar: cookbooks, classes"), (i_arch, i_foot, rf"blog archive: {n_arch} lines"),
+                    (i_foot, len(L), r"footer")]
+        marks = VGroup()
+        for s0, s1, name in sections:
+            y0, y1 = top_y - starts[s0] * pitch - pitch * 0.2, top_y - (starts[s1] - 1) * pitch + pitch * 0.2
+            col = C.KEPT if s0 == i_rec else GREY_B
+            br = VMobject(stroke_color=col, stroke_width=2).set_points_as_corners(
+                [[-2.85, y0, 0], [-2.75, y0, 0], [-2.75, y1, 0], [-2.85, y1, 0]])
+            marks.add(VGroup(br, label(name, font_size=20, color=col).next_to(br, RIGHT, buff=0.12)))
+        tot = label(rf"over all {w['n']:,} pages that survive our filters,\\WET text is {ratio:.1f}$\times$ as long".replace(",", "{,}"),
+                    font_size=26, color=GREY_A)
+        tot.next_to(right, DOWN, buff=0.8).set_x(4.0)
+        src = source(r"Penedo et al., \emph{The FineWeb Datasets} (2024): Trafilatura on WARC beat WET text").to_corner(DR, buff=0.12)
+
         names = {"en": "English", "ru": "Russian", "ja": "Japanese", "es": "Spanish", "zh": "Chinese",
                  "de": "German", "fr": "French", "pt": "Portuguese", "pl": "Polish", "id": "Indonesian",
                  "nl": "Dutch", "it": "Italian"}
         bars = bar_rows([(names.get(code, code), cnt, C.KEPT if code == "en" else C.PAGE, rf"{100 * cnt / total:.0f}\%")
                          for code, cnt in top], 6.0 / top[0][1], font_size=26, bar_h=0.32, buff=0.12)
-        bars.next_to(b, DOWN, buff=0.45)
+        bars.next_to(a, DOWN, buff=0.6)
         cap = label(r"language of each page (fastText language ID)", font_size=24, color=GREY_B).next_to(bars, DOWN, buff=0.25)
 
         with self.voiceover(
@@ -197,13 +302,25 @@ class RawWeb(VoiceoverScene):
             "thirty-seven megabytes of text. <bookmark mark='t'/> Pulling out the main text is a step of its own. "
             "Common Crawl ships an extracted version, but the FineWeb team found that re-extracting from the raw "
             "HTML, with a library called Trafilatura, leaves out more menus and boilerplate, and trains better "
-            "models. <bookmark mark='l'/> And the web is multilingual: in this sample, only four pages in ten are in "
-            "English. Frontier models train on many languages; here, like the original FineWeb, we'll keep English."
+            "models. <bookmark mark='w'/> Here's our recipe page both ways. Common Crawl's version keeps the "
+            "comments, the cookbook ads, and a hundred-line blog archive. <bookmark mark='x'/> Over all the pages "
+            "that survive our filters, it's twice as long. <bookmark mark='l'/> And the web is multilingual: in "
+            "this sample, only four pages in ten are in English. Frontier models train on many languages; here, "
+            "like the original FineWeb, we'll keep English."
         ) as vo:
-            self.play(FadeIn(a))
+            self.play(FadeIn(a), FadeIn(big), FadeIn(bl), FadeIn(area))
+            self.play(TransformFromCopy(big, small), FadeIn(sl), run_time=1.5)
             vo.wait_until("t")
-            self.play(FadeIn(b))
+            self.play(FadeOut(VGroup(big, small, bl, sl, area)), FadeIn(src))
+            self.play(FadeIn(lh), LaggedStart(*[FadeIn(b) for b in left], lag_ratio=0.004), run_time=2.0)
+            self.play(FadeIn(rh), TransformFromCopy(left_kept, right),
+                      run_time=1.5)
+            vo.wait_until("w")
+            self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in marks], lag_ratio=0.25), run_time=2.0)
+            vo.wait_until("x")
+            self.play(FadeIn(tot))
             vo.wait_until("l")
+            self.play(FadeOut(VGroup(left, right, lh, rh, marks, tot, src)))
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in bars], lag_ratio=0.08), FadeIn(cap),
                       run_time=1.5)
         self.wait(0.5)
