@@ -39,21 +39,21 @@ answers); the rest are labeled `illustrative`. See
 - `0:00` One of the largest computations ever run
 - `2:00` Part 1: The raw web
 - `3:52` Filtering: the FineWeb recipe
-- `6:21` Deduplication with MinHash
+- `6:20` Deduplication with MinHash
 - `8:35` Quality, mixtures, and tokens
-- `11:44` Part 2: How big? Scaling laws
+- `11:43` Part 2: How big? Scaling laws
 - `15:43` Architecture and mixture of experts
-- `20:21` The optimizer: AdamW and Muon
+- `20:20` The optimizer: AdamW and Muon
 - `24:37` Learning-rate schedules
-- `26:47` Fewer bits: FP8 and FP4
-- `31:38` Loss spikes and stability
-- `35:00` Part 3: Memory and data parallelism
-- `37:50` Tensor, pipeline, expert parallelism
-- `41:47` Keeping the run alive
-- `44:12` Part 4: Supervised fine-tuning
-- `46:54` Learning from preferences
-- `50:45` Reinforcement learning and reasoning
-- `57:11` The whole pipeline
+- `26:46` Fewer bits: FP8 and FP4
+- `31:37` Loss spikes and stability
+- `34:59` Part 3: Memory and data parallelism
+- `37:49` Tensor, pipeline, expert parallelism
+- `41:46` Keeping the run alive
+- `44:11` Part 4: Supervised fine-tuning
+- `46:53` Learning from preferences
+- `50:44` Reinforcement learning and reasoning
+- `57:10` The whole pipeline
 
 </details>
 
