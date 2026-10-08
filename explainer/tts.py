@@ -107,6 +107,33 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bFourier\b", "[Fourier](/fˈʊɹiˌA/)"),  # heard as "four year"
     (r"\bPoisson\b", "[Poisson](/pwɑsˈOn/)"),  # "pwah-SOHN"; heard as "poison" without this
     (r"\bquasi\b", "[quasi](/kwˈɑzi/)"),
+    # Open frontier models (videos/open_models)
+    (r"\bMiMo-V2\.6-Pro\b", "[MiMo](/mˈimO/) V two point six Pro"),
+    (r"\bMiMo-V2-Flash\b", "[MiMo](/mˈimO/) V two Flash"),
+    (r"\bMiMo\b", "[MiMo](/mˈimO/)"),
+    (r"\bXiaomi's\b", "[Xiaomi's](/ʃˈWmiz/)"),
+    (r"\bXiaomi\b", "[Xiaomi](/ʃˈWmi/)"),
+    (r"\bGLM-(\d)\.(\d)\b", r"G L M \1 point \2"),
+    (r"\bGLM-(\d)\b", r"G L M \1"),
+    (r"\bGLM\b", "G L M"),
+    (r"\bZ\.ai's\b", "Z dot A I's"),
+    (r"\bZ\.ai\b", "Z dot A I"),
+    (r"\bKimi\b", "[Kimi](/kˈimi/)"),
+    (r"\bK3's\b", "K three's"),
+    (r"\bK3\b", "K three"),
+    (r"\bK2\b", "K two"),
+    (r"\bgpt-oss\b", "G P T [oss](/ˈɑs/)"),
+    (r"\bMLA\b", "M L A"),
+    (r"\bKDA\b", "K D A"),
+    (r"\bMuon\b", "[Muon](/mjˈuɑn/)"),
+    (r"\bSwiGLU\b", "[SwiGLU](/swˈIɡlu/)"),
+    (r"\bSiTU-GLU\b", "[SiTU](/sˈitu/) [GLU](/ɡlˈu/)"),
+    (r"\bLatentMoE\b", "Latent M O E"),
+    (r"\bReLU\b", "[ReLU](/ɹˈɛlu/)"),
+    (r"\btanh\b", "[tanh](/tˈænʧ/)"),
+    (r"\bWidrow\b", "[Widrow](/wˈɪdɹO/)"),
+    (r"\bDeepSeek's\b", "Deep Seek's"),
+    (r"\bDeepSeek\b", "Deep Seek"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
