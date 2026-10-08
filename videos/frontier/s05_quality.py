@@ -163,16 +163,47 @@ class Quality(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def rewrite(self):
-        items = VGroup(
-            label(r"\textbf{FineWeb-Edu}: kept 8\% of FineWeb (1.3T tokens); matched older datasets'", font_size=28),
-            label(r"knowledge-benchmark scores with 10$\times$ fewer tokens", font_size=28),
-            label(r"\textbf{Nemotron-CC} (NVIDIA): rephrase pages with an LLM $\rightarrow$ 1.9T synthetic tokens", font_size=28),
-            label(r"\textbf{Kimi K2}: rephrased knowledge data; SimpleQA 23.8\% $\rightarrow$ 28.9\%", font_size=28),
-            label(r"\textbf{OLMo 3}: repeat the best data up to 7 times instead of a hard cut", font_size=28),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.1)
-        items[1].shift(RIGHT * 0.4)
-        head = label(r"Keep the best, and rewrite the rest", font_size=36).to_edge(UP, buff=0.5)
+        head = label(r"Keep the best, and rewrite the rest", font_size=34).to_edge(UP, buff=0.35)
         src = source(r"FineWeb (2024); Su et al.\ 2024 (Nemotron-CC); Kimi K2 report (2025); OLMo 3 report (2025)")
+
+        def page(color=GREY_B, fill=0.0, s=1.0):
+            r = RoundedRectangle(width=0.36 * s, height=0.46 * s, corner_radius=0.04, stroke_color=color, stroke_width=1.5,
+                                 fill_color=color, fill_opacity=fill)
+            ln = VGroup(*[Line(LEFT * 0.1 * s, RIGHT * 0.1 * s, stroke_width=1.2, color=GREY_C) for _ in range(3)]).arrange(DOWN, buff=0.07 * s).move_to(r)
+            return VGroup(r, ln)
+
+        def titled(title, body, caption):
+            return VGroup(label(title, font_size=26), body, label(caption, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.2)
+        # FineWeb-Edu: keep 8 in 100
+        rng = np.random.default_rng(8)
+        kept = set(rng.choice(100, 8, replace=False).tolist())
+        grid = VGroup(*[Square(0.17, stroke_width=0, fill_color=C.EDU if i in kept else GREY_D, fill_opacity=1 if i in kept else 0.6)
+                        for i in range(100)]).arrange_in_grid(10, 10, buff=0.04)
+        pa = titled(r"\textbf{FineWeb-Edu}: keep 8\% (1.3T tokens)", grid, r"matched older datasets with 10$\times$ fewer tokens")
+        # Nemotron-CC: rephrase pages with an LLM
+        src_pg = page(GREY_B)
+        llm = RoundedRectangle(width=1.0, height=0.6, corner_radius=0.1, stroke_color=C.PARAMS, fill_color=C.PARAMS, fill_opacity=0.15)
+        llm.add(label(r"LLM", font_size=22).move_to(llm))
+        outs = VGroup(*[page(c, 0.15) for c in (C.KEPT, C.EDU, C.USER)]).arrange(DOWN, buff=0.12)
+        flow = VGroup(src_pg, llm, outs).arrange(RIGHT, buff=0.6)
+        fa = VGroup(Arrow(src_pg.get_right(), llm.get_left(), buff=0.08, stroke_width=3, color=GREY_B),
+                    *[Arrow(llm.get_right(), o.get_left(), buff=0.08, stroke_width=2.5, color=GREY_B) for o in outs])
+        pb = titled(r"\textbf{Nemotron-CC} (NVIDIA): rephrase", VGroup(flow, fa), r"$\approx$1.9T synthetic tokens")
+        # Kimi K2: SimpleQA before/after rephrasing
+        qa = bar_rows([(r"original data", 23.8, GREY_B, r"23.8\%"), (r"rephrased", 28.9, C.KEPT, r"28.9\%")], 3.4 / 30,
+                      font_size=22, bar_h=0.34, buff=0.16)
+        pc = titled(r"\textbf{Kimi K2}: rephrased knowledge data", qa, r"SimpleQA (factual recall) accuracy")
+        # OLMo 3: repeat the best data instead of a hard cut
+        best = VGroup(*[page(C.EDU, 0.25, 1.4) for _ in range(7)])
+        for i, b in enumerate(best):
+            b.shift(RIGHT * 0.1 * i + UP * 0.1 * i)
+        rest = VGroup(*[page(GREY_B, 0.0, 1.4) for _ in range(3)]).arrange(RIGHT, buff=0.15)
+        rep = VGroup(VGroup(best, label(r"best: $\times$7", font_size=22, color=C.EDU)).arrange(DOWN, buff=0.12),
+                     VGroup(rest, label(r"the rest: $\times$1", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(RIGHT, buff=0.8, aligned_edge=DOWN)
+        pd = titled(r"\textbf{OLMo 3}: repeat the best data", rep, r"up to 7 times, instead of a hard cut")
+        panels = VGroup(pa, pb, pc, pd)
+        for g, (cx, cy) in zip(panels, [(-3.4, 1.0), (3.4, 1.0), (-3.4, -2.2), (3.4, -2.2)]):
+            g.scale_to_fit_height(min(g.height, 2.9)).move_to([cx, cy, 0])
         with self.voiceover(
             "At full scale, FineWeb-Edu kept a similar eight percent of FineWeb, 1.3 trillion tokens, and models "
             "trained on it matched older datasets on knowledge benchmarks with ten times fewer tokens. "
@@ -182,13 +213,15 @@ class Quality(VoiceoverScene):
             "24 to 29 percent. <bookmark mark='o'/> And AI2's OLMo 3 repeats its best data up to seven times, instead "
             "of drawing a hard line."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src), FadeIn(items[0]), FadeIn(items[1]))
+            self.play(FadeIn(head), FadeIn(src), FadeIn(pa[0]), FadeIn(pa[2]), LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.01))
             vo.wait_until("r")
-            self.play(FadeIn(items[2]))
+            self.play(FadeIn(pb[0]), FadeIn(pb[2]), FadeIn(src_pg), GrowArrow(fa[0]), FadeIn(llm))
+            self.play(*[GrowArrow(a) for a in fa[1:]], LaggedStart(*[FadeIn(o, shift=RIGHT * 0.1) for o in outs], lag_ratio=0.2))
             vo.wait_until("k")
-            self.play(FadeIn(items[3]))
+            self.play(FadeIn(pc[0]), FadeIn(pc[2]), *[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2])) for r in qa])
             vo.wait_until("o")
-            self.play(FadeIn(items[4]))
+            self.play(FadeIn(pd[0]), FadeIn(pd[2]), FadeIn(rep[1]), LaggedStart(*[FadeIn(b, shift=UP * 0.05) for b in best], lag_ratio=0.12),
+                      FadeIn(rep[0][1]))
         self.wait(0.3)
         self.clear_scene()
 
