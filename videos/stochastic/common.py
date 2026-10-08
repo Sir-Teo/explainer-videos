@@ -147,14 +147,29 @@ def hero(n: int | None = None) -> np.ndarray:
     return W[:: (len(W) - 1) // n]
 
 
-def tw_axes(x_length=11.0, y_range=(-1.0, 1.6, 0.5), y_length=4.6, t_max=1.0, numbers=True, **kw) -> Axes:
+class TWAxes(Axes):
+    """Axes whose end-of-axis numbers are built on first access of ``x_labels``, i.e. after the axes have been
+    positioned (labels made at construction would be left behind by ``move_to`` / ``to_edge``)."""
+
+    def __init__(self, *args, t_max=1.0, y_min=0.0, numbers=True, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._t_max, self._y_min, self._numbers, self._x_labels = t_max, y_min, numbers, None
+
+    @property
+    def x_labels(self) -> VGroup:
+        if self._x_labels is None:
+            g = VGroup()
+            if self._numbers:
+                g.add(MathTex("0", font_size=24).next_to(self.c2p(0, self._y_min), DOWN, buff=0.12),
+                      MathTex(f"{self._t_max:g}", font_size=24).next_to(self.c2p(self._t_max, self._y_min), DOWN, buff=0.12))
+            self._x_labels = g
+        return self._x_labels
+
+
+def tw_axes(x_length=11.0, y_range=(-1.0, 1.6, 0.5), y_length=4.6, t_max=1.0, numbers=True, **kw) -> TWAxes:
     cfg = {"stroke_color": GREY_B, "stroke_width": 2, "include_ticks": False}
-    ax = Axes(x_range=[0, t_max, t_max / 4], y_range=list(y_range), x_length=x_length, y_length=y_length,
-              tips=False, axis_config=cfg, **kw)
-    if numbers:
-        ax.x_labels = VGroup(MathTex("0", font_size=24).next_to(ax.c2p(0, y_range[0]), DOWN, buff=0.12),
-                             MathTex(f"{t_max:g}", font_size=24).next_to(ax.c2p(t_max, y_range[0]), DOWN, buff=0.12))
-    return ax
+    return TWAxes(x_range=[0, t_max, t_max / 4], y_range=list(y_range), x_length=x_length, y_length=y_length,
+                  tips=False, axis_config=cfg, t_max=t_max, y_min=y_range[0], numbers=numbers, **kw)
 
 
 def axis_labels(ax: Axes, x="t", y="W_t", y_color=C.BROWNIAN, font_size=30) -> VGroup:
