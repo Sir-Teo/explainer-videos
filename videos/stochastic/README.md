@@ -31,10 +31,10 @@ illustrates (see [Simulations](#simulations-computepy)). Schematics are labeled
 - `15:38` Where the missing half comes from
 - `19:54` Fair games and the Itô isometry
 - `22:32` Part 3: Itô's lemma: the chain rule, corrected
-- `27:09` Growth, noise, and volatility drag
+- `27:08` Growth, noise, and volatility drag
 - `31:17` Part 4: Stochastic differential equations
 - `34:39` From paths to densities: Fokker–Planck
-- `37:52` Backwards: averages over paths solve PDEs
+- `37:51` Backwards: averages over paths solve PDEs
 - `41:39` Part 5: Black–Scholes: hedging the noise away
 - `45:04` Changing the odds: Girsanov's theorem
 - `48:00` Recap
