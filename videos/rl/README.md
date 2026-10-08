@@ -97,8 +97,8 @@ held-out problems at temperature 1, unless stated otherwise.
 * **The base adder** shows its work 27.5% of the time (then right 99.9%), answers
   directly otherwise (then right 59.9%): **70.9%** right overall.
 * **RL sharpened rather than taught.** GRPO reaches 98.4%, mostly by removing
-  slips: direct answers go from 60% to 97% right, while showing work only rises
-  from 27% to 41%. pass@k before RL: 70.4% (k = 1), 99.9% (k = 8), 100%
+  slips: direct answers go from 59% to 97% right, while showing work only rises
+  from 28% to 41% (the runs' own evaluations, from step 0). pass@k before RL: 70.4% (k = 1), 99.9% (k = 8), 100%
   (k ≥ 16); after RL, pass@1 is 99.2%. No problem the base model could solve
   was lost. On the running example, 5675 + 5563, the probability of a right
   answer goes from 56.2% to 99.8%.
