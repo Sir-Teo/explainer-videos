@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import LLAMA3, gpu, label, part_card, pipeline_map, source
+from videos.frontier.common import calc, LLAMA3, gpu, label, part_card, pipeline_map, source
 
 BYTES = [  # (component, bytes per parameter, color)
     (r"weight (BF16)", 2, C.WEIGHTS),
@@ -246,7 +246,8 @@ class Memory(VoiceoverScene):
         ]
         totals = [sum(c[1:]) for c in cases]
         assert [round(t, 1) for t in totals] == [120.0, 31.4, 16.6, 1.9]
-        scale = 4.6 / 120
+        scale = 4.0 / 120
+        forms = [r"16\Psi", r"4\Psi + \tfrac{12\Psi}{N_d}", r"2\Psi + \tfrac{14\Psi}{N_d}", r"\tfrac{16\Psi}{N_d}"]
         bars = VGroup()
         for k, (name, w, g, o) in enumerate(cases):
             stack = VGroup()
@@ -257,12 +258,13 @@ class Memory(VoiceoverScene):
                           .move_to([0, y + h / 2, 0]))
                 y += h
             tot = label(rf"{totals[k]:.1f} GB", font_size=28).next_to(stack, UP, buff=0.12)
-            nm = label(name, font_size=24, color=GREY_A).next_to(stack, DOWN, buff=0.2)
+            nm = VGroup(label(name, font_size=24, color=GREY_A), MathTex(forms[k], font_size=28, color=C.COMPUTE)
+                        ).arrange(DOWN, buff=0.12).next_to(stack, DOWN, buff=0.2)
             col = VGroup(stack, tot, nm)
             col.stack = stack
             bars.add(col)
         for k, b in enumerate(bars):  # bottoms aligned on y = -2.4, columns 2.9 apart
-            b.shift(RIGHT * (k * 2.9 - 4.35) + UP * (-2.4 - b.stack.get_bottom()[1]))
+            b.shift(RIGHT * (k * 2.9 - 4.35) + UP * (-1.9 - b.stack.get_bottom()[1]))
         legend = VGroup(*[VGroup(Square(0.22, stroke_width=0, fill_color=c, fill_opacity=0.85),
                                  label(t, font_size=24)).arrange(RIGHT, buff=0.12)
                           for c, t in [(C.WEIGHTS, r"weights"), (C.GRADS, r"gradients"),
@@ -270,12 +272,18 @@ class Memory(VoiceoverScene):
         head = label(r"Memory per GPU: a 7.5B model on 64 GPUs", font_size=36).to_edge(UP, buff=0.4)
         legend.next_to(head, DOWN, buff=0.2)
         src = source(r"Rajbhandari et al., \emph{ZeRO} (2019); PyTorch FSDP")
+        key = MathTex(r"\Psi = 7.5\times10^{9}\ \text{parameters},\quad N_d = 64\ \text{GPUs}", font_size=28, color=GREY_A)
+        ex1 = calc(r"\text{ZeRO-1: } 4\Psi + \tfrac{12\Psi}{N_d} &= 4(7.5) + \tfrac{12(7.5)}{64}",
+                   r"\\ &= 30 + 1.41 = 31.4\ \text{GB}", font_size=30)
+        VGroup(key, ex1).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 2.6 + UP * 1.2)
         with self.voiceover(
             "But in plain data parallelism, every GPU still stores all sixteen bytes per parameter. ZeRO, and "
             "PyTorch's FSDP, shard that state instead. <bookmark mark='a'/> For a 7.5-billion-parameter model on "
-            "sixty-four GPUs, that's 120 gigabytes per GPU. <bookmark mark='b'/> Split the optimizer state sixty-four "
-            "ways, and it drops to 31. <bookmark mark='c'/> Shard the gradients too: 17. <bookmark mark='d'/> Shard "
-            "the weights themselves, gathering each layer just before it's needed: under two gigabytes. "
+            "sixty-four GPUs, replicated state is sixteen bytes times 7.5 billion: 120 gigabytes on every GPU. "
+            "<bookmark mark='b'/> Split the twelve bytes of optimizer state sixty-four ways: four times 7.5, plus "
+            "twelve times 7.5 over sixty-four, is 31.4. <bookmark mark='c'/> Shard the gradients too: 16.6. "
+            "<bookmark mark='d'/> Shard the weights themselves, gathering each layer just before it's needed: sixteen "
+            "times 7.5 over sixty-four, under two gigabytes. "
             "<bookmark mark='e'/> The price is more communication: about one and a half times that of plain data "
             "parallelism."
         ) as vo:
@@ -283,5 +291,7 @@ class Memory(VoiceoverScene):
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
                 self.play(GrowFromEdge(bars[k][0], DOWN), FadeIn(bars[k][1]), FadeIn(bars[k][2]), run_time=0.9)
+                if k == 1:
+                    self.play(FadeIn(key), Write(ex1), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()

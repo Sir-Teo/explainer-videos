@@ -37,6 +37,7 @@ class Quality(VoiceoverScene):
         self.rewrite()
         self.mixture()
         self.tokens()
+        self.bpe_math()
 
     # ------------------------------------------------------------------
     def classifier_idea(self):
@@ -297,5 +298,75 @@ class Quality(VoiceoverScene):
             self.play(FadeIn(cap), LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in boxes], lag_ratio=0.04))
             vo.wait_until("f")
             self.play(FadeIn(fuel))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def bpe_math(self):
+        b = load("math")["bpe"]
+        steps = b["steps"]
+        assert [st["pair"] for st in steps] == b["trained_merges"]  # recounting reproduces the trained merges
+        assert steps[0]["pair"] == ["Ġ", "t"] and steps[0]["count"] == 6_071_917 and steps[5]["pair"] == ["Ġt", "he"]
+        assert b["sentence_tokens"] == ["the", "Ġc", "at", "Ġs", "at", "Ġon", "Ġthe", "Ġmat"] and len(b["sentence"]) == 22
+
+        def tk(t, color=C.TOKEN, fs=24):
+            m = Mono(t.replace("Ġ", "␣"), font_size=fs)
+            bx = RoundedRectangle(width=m.width + 0.14, height=0.42, corner_radius=0.05, stroke_color=color,
+                                  stroke_width=1.3, fill_color=color, fill_opacity=0.14)
+            return VGroup(bx, m.move_to(bx))
+        head = label(r"Byte-pair encoding, on our real training text", font_size=34).to_edge(UP, buff=0.35)
+        sub = label(rf"{b['total_words'] / 1e6:.1f} million words ({b['unique_words']:,} distinct); ␣ marks a space".replace(",", "{,}"),
+                    font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.15)
+        sub = VGroup(label(rf"{b['total_words'] / 1e6:.1f} million words ({b['unique_words']:,} distinct);".replace(",", "{,}"),
+                           font_size=24, color=GREY_A), Mono("␣", font_size=22, color=GREY_A),
+                     label(r"marks a space", font_size=24, color=GREY_A)).arrange(RIGHT, buff=0.12).next_to(head, DOWN, buff=0.15)
+        # step 1: the ranking
+        rank = VGroup()
+        for x, y, n in steps[0]["top"][:3]:
+            rank.add(VGroup(tk(x), Mono("+", font_size=22), tk(y),
+                            label(rf"{n:,}".replace(",", "{,}"), font_size=26, color=C.DATA)).arrange(RIGHT, buff=0.15))
+        rank.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        rt = label(r"step 1: count every adjacent pair", font_size=26).next_to(rank, UP, buff=0.25).align_to(rank, LEFT)
+        rgroup = VGroup(rt, rank).to_edge(LEFT, buff=0.6).shift(UP * 0.3)
+        win = SurroundingRectangle(rank[0], buff=0.08, color=C.DATA, stroke_width=2)
+        # the merge list
+        rows = VGroup()
+        for i, st in enumerate(steps):
+            x, y = st["pair"]
+            rows.add(VGroup(Mono(f"{i + 1}.", font_size=22, color=GREY_A), tk(x), Mono("+", font_size=22), tk(y),
+                            MathTex(r"\rightarrow", font_size=28), tk(x + y, C.KEPT),
+                            label(rf"{st['count']:,}".replace(",", "{,}"), font_size=24, color=C.DATA)).arrange(RIGHT, buff=0.14))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        mt = label(r"merge the most frequent pair, recount, repeat", font_size=26).next_to(rows, UP, buff=0.25).align_to(rows, LEFT)
+        mgroup = VGroup(mt, rows).to_edge(RIGHT, buff=0.6).shift(UP * 0.1)
+        if mgroup.height > 5.6:
+            mgroup.scale_to_fit_height(5.6)
+        # the sentence
+        bytes_ = VGroup(*[tk(ch.replace(" ", "Ġ"), GREY_B, 20) for ch in b["sentence"]]).arrange(RIGHT, buff=0.04)
+        final = VGroup(*[tk(t, C.KEPT, 24) for t in b["sentence_tokens"]]).arrange(RIGHT, buff=0.06)
+        lb = label(r"22 bytes", font_size=24, color=GREY_A)
+        lf = label(r"8 tokens", font_size=24, color=C.KEPT)
+        sent = VGroup(VGroup(lb, bytes_).arrange(RIGHT, buff=0.3), VGroup(lf, final).arrange(RIGHT, buff=0.3)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "How does byte-pair encoding choose its pieces? Start from single bytes, and count every adjacent pair "
+            "in the training text. <bookmark mark='c'/> In our 57 million words, the most common pair is a space "
+            "followed by t: six million times. <bookmark mark='m'/> Merge it into one token, recount, and repeat: "
+            "space-a, then h-e, i-n, r-e. <bookmark mark='t'/> At the sixth merge, space-t plus h-e makes space-the. "
+            "Recounting the pairs ourselves gives exactly the merges our tokenizer learned. <bookmark mark='e'/> After "
+            "two thousand merges, 'the cat sat on the mat', twenty-two bytes, becomes eight tokens."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sub))
+            vo.wait_until("c")
+            self.play(FadeIn(rt), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rank], lag_ratio=0.3))
+            self.play(Create(win))
+            vo.wait_until("m")
+            self.play(FadeIn(mt), LaggedStart(*[FadeIn(r, shift=LEFT * 0.1) for r in rows[:5]], lag_ratio=0.4), run_time=3.0)
+            vo.wait_until("t")
+            self.play(LaggedStart(*[FadeIn(r, shift=LEFT * 0.1) for r in rows[5:]], lag_ratio=0.4), run_time=1.5)
+            self.play(Indicate(rows[5], color=C.KEPT, scale_factor=1.05))
+            vo.wait_until("e")
+            self.play(FadeOut(rgroup), FadeOut(win), FadeIn(sent[0]))
+            self.play(TransformFromCopy(sent[0][1], sent[1][1]), FadeIn(sent[1][0]), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()

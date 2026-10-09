@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from explainer.lm.pocket import lr_factor
-from videos.frontier.common import Plot, eval_curve, label, load, note, source
+from videos.frontier.common import Plot, calc, eval_curve, label, load, note, source
 
 
 def river_path(steps=320, seed=4):
@@ -44,38 +44,59 @@ class Schedule(VoiceoverScene):
         t = np.arange(T)
         cos = np.array([lr_factor(s, T, "cosine", 50, final=0.1) for s in t])
         wsd = np.array([lr_factor(s, T, "wsd", 50, decay_frac=0.2, final=0.1) for s in t])
-        plot = Plot(x_range=(0, T), y_range=(0, 1.1), width=8.5, height=3.8, x_ticks=[0, 250, 500, 750, 1000],
+        plot = Plot(x_range=(0, T), y_range=(0, 1.1), width=7.0, height=3.8, x_ticks=[0, 250, 500, 750, 1000],
                     y_ticks=[0, 0.5, 1], x_fmt=lambda v: MathTex(rf"{int(v / 10)}\%", font_size=24, color=GREY_A),
                     x_label=r"progress through training", y_label=r"learning rate (fraction of peak)")
-        plot.move_to(DOWN * 0.5)
+        plot.move_to(DOWN * 0.5 + LEFT * 2.9)
         lu = plot.line(t[:51], cos[:51], color=C.LR, stroke_width=4)
         lc = plot.line(t[50:], cos[50:], color=C.LR, stroke_width=4)
         lw = plot.line(t, wsd, color=C.KEPT, stroke_width=4)
         half = plot.vline(500, color=GREY_B, dash_length=0.08)
         hd = Dot(plot.c2p(500, cos[500]), radius=0.08, color=C.LR)
-        hl = label(rf"stop at 50\%: still at {100 * cos[500]:.0f}\% of peak", font_size=22, color=C.LR).next_to(hd, DL, buff=0.1)
-        tc = label(r"warmup, then cosine decay", font_size=26, color=C.LR).next_to(plot.c2p(520, 0.55), RIGHT, buff=0.1)
+        hl = label(rf"stop at 50\%: still at {100 * cos[500]:.0f}\% of peak", font_size=22, color=C.LR).next_to(hd, UR, buff=0.1)
+        tc = label(r"warmup, then cosine decay", font_size=26, color=C.LR).next_to(plot.c2p(660, 0.36), RIGHT, buff=0.1)
         tw = label(r"warmup--stable--decay (WSD)", font_size=26, color=C.KEPT).next_to(plot.c2p(400, 1.0), UP, buff=0.1)
         wl = label(r"warmup", font_size=22, color=C.LR).next_to(plot.c2p(50, 0.2), RIGHT, buff=0.12)
         head = label(r"The learning rate over a run", font_size=36).to_edge(UP, buff=0.45)
+        pw = (500 - 50) / (T - 50)
+        assert round(pw, 3) == 0.474 and round(cos[500], 3) == round(0.1 + 0.45 * (1 + np.cos(np.pi * pw)), 3) == 0.587
+        f_cos = calc(r"\eta(t) &= \eta_{\min} + \tfrac12(\eta_{\max}-\eta_{\min})\,(1+\cos \pi p)",
+                     r"\\ p &= \frac{t - t_{\rm warmup}}{T - t_{\rm warmup}}", font_size=28, color=C.LR)
+        f_cos.to_edge(RIGHT, buff=0.3).shift(UP * 1.3)
+        f_num = VGroup(label(r"at $t = T/2$ (warmup $= 0.05\,T$):", font_size=24, color=GREY_A),
+                       calc(r"p &= 0.45/0.95 = 0.474", r"\\ \cos(0.474\,\pi) &= 0.083",
+                            r"\\ \eta &= 0.1 + 0.45 \times 1.083 = 0.587\,\eta_{\max}", font_size=28)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        f_num.next_to(f_cos, DOWN, buff=0.4).align_to(f_cos, LEFT)
+        f_wsd = calc(r"\text{WSD: }\eta &= \eta_{\max} \quad (p < 0.8)",
+                     r"\\ \eta &= \eta_{\max} - (\eta_{\max}-\eta_{\min})\,\frac{p - 0.8}{0.2} \quad (p \ge 0.8)",
+                     font_size=28, color=C.KEPT)
+        f_wsd.next_to(f_cos, DOWN, buff=0.45).align_to(f_cos, LEFT)
+        for m in (f_cos, f_num, f_wsd):
+            if m.get_right()[0] > 6.9:
+                m.shift(LEFT * (m.get_right()[0] - 6.9))
         with self.voiceover(
             "The learning rate sets how big each step is, and how it changes over the run matters a lot. "
             "<bookmark mark='u'/> Runs begin with a short warmup, ramping up from near zero, because big steps on a "
             "freshly initialized network can blow it up. <bookmark mark='c'/> Then the rate decays. The classic "
-            "choice is a cosine curve, down to a tenth of the peak. <bookmark mark='h'/> Cosine has a catch: you "
-            "must choose the length of the run in advance. Stop halfway, and the rate was never brought down. "
-            "<bookmark mark='w'/> The alternative is warmup, stable, decay: hold the peak for most of the run, and "
+            "choice is half a cosine wave, falling from the peak to a tenth of it. <bookmark mark='h'/> Cosine has a "
+            "catch: you must choose the length of the run in advance. Stop halfway, and the rate was never brought "
+            "down: <bookmark mark='n'/> at t equals half of T, p is 0.474, the cosine is 0.083, and the rate is "
+            "still 59 percent of its peak. <bookmark mark='w'/> The alternative is warmup, stable, decay: hold the peak for most of the run, and "
             "decay only in the last fifth."
         ) as vo:
             self.play(FadeIn(head), FadeIn(plot))
             vo.wait_until("u")
             self.play(Create(lu), FadeIn(wl), run_time=1.2)
             vo.wait_until("c")
-            self.play(Create(lc), FadeIn(tc), run_time=1.5)
+            self.play(Create(lc), FadeIn(tc), Write(f_cos), run_time=1.5)
             vo.wait_until("h")
             self.play(Create(half), FadeIn(hd), FadeIn(hl))
+            vo.wait_until("n")
+            self.play(Write(f_num), run_time=2.0)
             vo.wait_until("w")
-            self.play(FadeOut(half), FadeOut(hd), FadeOut(hl), Create(lw), FadeIn(tw), run_time=1.5)
+            self.play(FadeOut(half), FadeOut(hd), FadeOut(hl), FadeOut(f_num), Create(lw), FadeIn(tw), Write(f_wsd),
+                      run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 

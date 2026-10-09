@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import chip, label, load, note, page_card, source
+from videos.frontier.common import chip, label, load, note, num_table, page_card, source
 
 ROWS = [  # (stats key, on-screen stage)
     ("input", r"crawled pages"),
@@ -157,18 +157,56 @@ class Filtering(VoiceoverScene):
     # ------------------------------------------------------------------
     def false_positive(self):
         ex = self.example("gopher_qual", FALSE_POSITIVE)
-        assert ex["reason"] == "gopher_below_alpha_threshold"
-        card = page_card(ex["text"], ex["url"], width=5.6, lines=7, chars=44, font_size=16, color=C.EDU)
-        reason = chip("gopher below alpha threshold", color=C.REMOVED, font_size=20, mono=True)
-        cap = label(r"a programming puzzle, thrown out by mistake", font_size=24, color=GREY_A)
-        g = VGroup(card, reason, cap).arrange(DOWN, buff=0.18).move_to(RIGHT * 3.55 + DOWN * 0.3)
+        g = load("math")["gopher"]
+        assert ex["reason"] == "gopher_below_alpha_threshold" and g["verdict"] == [False, "gopher_below_alpha_threshold"]
+        assert (g["n_words"], g["n_alpha"]) == (2756, 2037) and round(100 * g["alpha_ratio"], 1) == 73.9
+        card = page_card(ex["text"], ex["url"], width=4.6, lines=7, chars=38, font_size=15, color=C.EDU)
+        cap = label(r"a programming puzzle", font_size=24, color=GREY_A)
+        left = VGroup(card, cap).arrange(DOWN, buff=0.15).to_edge(LEFT, buff=0.35).shift(DOWN * 0.2)
+        ok, bad = r"\checkmark", r"\times"
+        rows = [
+            [r"\text{words (not pure symbols)}", rf"{g['n_non_symbol']:,}".replace(",", "{,}"), r"\ge 50", ok],
+            [r"\text{mean word length}", rf"{g['mean_word_len']:.2f}", r"3 \text{ to } 10", ok],
+            [r"\#\ \text{per word}", rf"{g['hash_ratio']:.4f}", r"\le 0.1", ok],
+            [r"\text{lines starting with a bullet}", rf"{100 * g['bullet_lines']:.1f}\%", r"\le 90\%", ok],
+            [r"\text{lines ending in ``\ldots''}", rf"{100 * g['ellipsis_lines']:.0f}\%", r"\le 30\%", ok],
+            [r"\text{stop words present}", rf"{len(g['stop_words'])}", r"\ge 2", ok],
+            [r"\text{words containing a letter}", rf"{g['n_alpha']:,}/{g['n_words']:,} = {100 * g['alpha_ratio']:.1f}\%".replace(",", "{,}"),
+             r"\ge 80\%", bad],
+        ]
+        tab = num_table([r"\text{Gopher rule}", r"\text{this page}", r"\text{keep if}", r""], rows, font_size=26,
+                        col_colors=[WHITE, C.EDU, GREY_A, C.KEPT])
+        for c in tab.rows[-1]:
+            c.set_color(C.REMOVED)
+        tab.rows[-1][0].set_color(WHITE)
+        tab.to_edge(RIGHT, buff=0.35).set_y(0.55)
+        sym = label(r"the other 719 \emph{words}: quotes, brackets, commas, numbers from its code", font_size=22, color=GREY_A)
+        sym.next_to(tab, DOWN, buff=0.3).align_to(tab, LEFT)
+        reason = chip("gopher below alpha threshold", color=C.REMOVED, font_size=20, mono=True).next_to(sym, DOWN, buff=0.2)
+        reason.align_to(tab, LEFT)
+        assert g["n_words"] - g["n_alpha"] == 719
+        behind = [m for m in self.mobjects]  # the funnel: set aside for this beat, restored after
+        if behind:
+            self.play(*[FadeOut(m) for m in behind], run_time=0.5)
         with self.voiceover(
-            "These rules are blunt. This page, a programming puzzle full of symbols, was thrown out for having too "
-            "few real words. At web scale that's an acceptable trade: losing some good pages costs far less than "
-            "training on bad ones."
-        ):
-            self.play(FadeIn(g, shift=LEFT * 0.3))
-        self.play(FadeOut(g))
+            "These rules are blunt. This page, a programming puzzle full of code, was thrown out. Here is the "
+            "arithmetic. <bookmark mark='t'/> It passes six of Gopher's seven tests: enough words, a normal word "
+            "length, few hashes, bullets or trailing dots, and plenty of ordinary words like the, and, of. "
+            "<bookmark mark='f'/> But of its 2,756 words, only 2,037 contain a letter: 73.9 percent, under the "
+            "80 percent threshold. The rest are quotes, brackets and numbers from its code. <bookmark mark='w'/> At "
+            "web scale that's an acceptable trade: losing some good pages costs far less than training on bad ones."
+        ) as vo:
+            self.play(FadeIn(left, shift=RIGHT * 0.2))
+            vo.wait_until("t")
+            self.play(FadeIn(tab.header), Create(tab.rule))
+            self.play(LaggedStart(*[FadeIn(r, shift=LEFT * 0.1) for r in tab.rows[:-1]], lag_ratio=0.35), run_time=3.5)
+            vo.wait_until("f")
+            self.play(FadeIn(tab.rows[-1], shift=LEFT * 0.1))
+            self.play(FadeIn(sym), FadeIn(reason))
+            vo.wait_until("w")
+        self.play(FadeOut(VGroup(left, tab, sym, reason)))
+        if behind:
+            self.play(*[FadeIn(m) for m in behind], run_time=0.5)
 
     # ------------------------------------------------------------------
     def summary(self):

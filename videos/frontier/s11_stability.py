@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Plot, label, load, note, pow10_label, source, train_curve
+from videos.frontier.common import Plot, calc, label, load, note, pow10_label, source, train_curve
 from videos.frontier.compute import STAB_LRS
 
 FAIL = 7.0  # a run whose final loss is above this (or diverged) counts as failed
@@ -19,6 +19,7 @@ class Stability(VoiceoverScene):
         self.spikes()
         self.sweep()
         self.logits()
+        self.qk_math()
         self.fixes()
 
     # ------------------------------------------------------------------
@@ -168,6 +169,59 @@ class Stability(VoiceoverScene):
             vo.wait_until("q")
             self.play(Create(lq), FadeIn(dq), FadeIn(tq), run_time=1.5)
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def qk_math(self):
+        res = self.res
+        hd = 128 // 4  # head dimension of the L4 d128 stability models
+        bound = np.sqrt(hd)
+        pq, pb = self.pq, self.pb
+        assert round(bound, 2) == 5.66 and round(pq[0], 1) == 4.8 and pq[0] < bound and round(pq.max(), 1) == 9.1
+        assert round(pb[-1]) == 10045 and res[f"stab_qk_{STAB_LRS[0]:.0e}"]["run"]["model"]["qk_norm"]
+        der = calc(r"|q\cdot k| &\le \|q\|\,\|k\| \qquad \text{(Cauchy--Schwarz)}",
+                   r"\\ \hat q &= g \odot \frac{q}{\operatorname{rms}(q)},\quad \operatorname{rms}(q) = "
+                   r"\sqrt{\tfrac1d\textstyle\sum_i q_i^2} \;\Rightarrow\; \|\hat q\| = \sqrt d \ \ (g=1)",
+                   rf"\\ \frac{{|\hat q\cdot \hat k|}}{{\sqrt d}} &\le \frac{{\sqrt d\,\sqrt d}}{{\sqrt d}} = \sqrt{{{hd}}} \approx {bound:.2f}",
+                   font_size=32)
+        der.to_edge(UP, buff=0.5).set_x(-0.6)
+        der[2].set_color(C.KEPT)
+        meas = VGroup(
+            label(rf"measured, QK-norm: {pq[0]:.1f} at learning rate 0.0003 (below the bound)", font_size=26, color=C.KEPT),
+            label(rf"at 0.1 the learned gains $g$ have grown: {pq.max():.1f}", font_size=26, color=C.KEPT),
+            label(rf"without QK-norm, nothing limits $\|q\|$ and $\|k\|$: {pb[-1]:,.0f}".replace(",", "{,}"), font_size=26,
+                  color=C.PENALTY),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(der, DOWN, buff=0.45).align_to(der, LEFT)
+        gap = 45
+        ratio = np.exp(-gap)
+        assert 2.5e-20 < ratio < 3.2e-20
+        sm = calc(r"\operatorname{softmax}(10045,\ 10000) &= \left(\frac{1}{1+e^{-45}},\ \frac{e^{-45}}{1+e^{-45}}\right)",
+                  r"\\ &= (1,\ 2.9\times10^{-20}), \qquad \frac{\partial p_i}{\partial s_i} = p_i(1-p_i) \approx 0",
+                  font_size=30)
+        sm.next_to(meas, DOWN, buff=0.5).align_to(der, LEFT)
+        ill = note(r"two scores 45 apart (illustrative)").next_to(sm, DOWN, buff=0.12).align_to(sm, LEFT)
+        with self.voiceover(
+            "Why does normalizing cap the scores? A dot product can never exceed the product of the two lengths: "
+            "that's the Cauchy-Schwarz inequality. <bookmark mark='r'/> RMS normalization divides each "
+            "32-dimensional query and key by its root-mean-square, which sets its length to root 32. "
+            "<bookmark mark='b'/> So the score, q dot k over root d, can be at most root 32, about 5.66, unless the "
+            "learned gains grow. <bookmark mark='m'/> Our gentlest run peaked at 4.8, under the bound. Even at the "
+            "highest learning rate, with grown gains, it reached only 9.1, while without normalization the score hit "
+            "ten thousand. <bookmark mark='s'/> And a softmax over scores like that is brutal. Two scores 45 apart get "
+            "weights in the ratio e to the minus 45, about three in ten to the twenty: the output is one-hot, and its "
+            "gradient, p times one minus p, is zero."
+        ) as vo:
+            self.play(Write(der[0]))
+            vo.wait_until("r")
+            self.play(Write(der[1]))
+            vo.wait_until("b")
+            self.play(Write(der[2]))
+            vo.wait_until("m")
+            self.play(LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in meas], lag_ratio=0.5), run_time=2.5)
+            vo.wait_until("s")
+            self.play(Write(sm[0]), FadeIn(ill))
+            self.play(Write(sm[1]))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
