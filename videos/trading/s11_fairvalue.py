@@ -19,12 +19,14 @@ class FairValue(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def queues(self):
-        lad = Ladder([(18385, [400, 300, 200, 100])], [(18386, [100])], row_h=0.7, price_w=1.6).shift(UP * 0.3)
+        lad = Ladder([(18385, [400, 300, 200, 100])], [(18386, [100])], row_h=1.0, price_w=1.8).scale(1.25).shift(UP * 0.2)
         q = VGroup(label(r"1{,}000 shares want to buy at 183.85", font_size=26, color=C.BID),
                    label(r"100 shares want to sell at 183.86", font_size=26, color=C.ASK)).arrange(DOWN, buff=0.12)
         q.to_edge(DOWN, buff=1.0)
         quest = label(r"which way will the price move next?", font_size=34).to_edge(UP, buff=0.5)
         tag = schematic_tag()
+        head = VGroup(label(r"the brain", font_size=48, color=C.SIGNAL),
+                      label(r"what is the stock really worth, right now?", font_size=32, color=GREY_A)).arrange(DOWN, buff=0.25)
         with self.voiceover(
             "Speed only matters if you know what to do with it. The other half of the machine is the brain: an "
             "estimate, updated on every message, of what the stock is really worth. <bookmark mark='q'/> Start with "
@@ -32,9 +34,9 @@ class FairValue(VoiceoverScene):
             "are offered at the ask. <bookmark mark='w'/> Which way is the price more likely to move? The thin side "
             "is the one that's about to run out: one modest buyer clears the ask, and the price ticks up."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(head, shift=UP * 0.2))
             vo.wait_until("q")
-            self.play(FadeIn(lad), FadeIn(q))
+            self.play(FadeOut(head), FadeIn(tag), FadeIn(lad), FadeIn(q))
             vo.wait_until("w")
             self.play(FadeIn(quest), Indicate(lad.blocks[("S", 18386)], color=C.ASK))
         self.clear_scene()
