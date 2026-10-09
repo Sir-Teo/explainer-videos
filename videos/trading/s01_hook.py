@@ -155,10 +155,12 @@ class Hook(VoiceoverScene):
             tagged(r"4:00 close", font_size=22).next_to(ch.c2p(16.0, 1.75e6), LEFT, buff=0.12),
         )
         total = VGroup(
-            label(rf"{d['messages'] / 1e6:.1f} million messages", font_size=34, color=C.MSG),
-            label(rf"{d['bytes'] / 1e9:.1f} gigabytes", font_size=34, color=C.MSG),
-            label(r"one exchange, one day", font_size=28, color=GREY_A),
+            label(rf"{d['messages'] / 1e6:.1f} million messages", font_size=30, color=C.MSG),
+            label(rf"{d['bytes'] / 1e9:.1f} gigabytes", font_size=30, color=C.MSG),
+            label(r"one exchange, one day", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ch.c2p(11.6, 1.0e6))
+        total.next_to(notes[0], RIGHT, buff=0.3).set_y(ch.c2p(0, 1.1e6)[1])
+        assert total.get_right()[0] < min(notes[1].get_left()[0], notes[2].get_left()[0]) - 0.1
         assert abs(d["messages"] / 1e6 - 846.8) < 0.05 and abs(d["bytes"] / 1e9 - 27.0) < 0.05
         with self.voiceover(
             "Zoom out to the whole day. <bookmark mark='o'/> The opening bell at 9:30: more than seven hundred "
