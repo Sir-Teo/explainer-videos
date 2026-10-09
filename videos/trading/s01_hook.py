@@ -206,7 +206,7 @@ class Hook(VoiceoverScene):
             "trades on nearly all the world's electronic markets. <bookmark mark='o'/> And there are others. <bookmark "
             "mark='p'/> None of them publishes a blueprint. But between their engineers' public talks and blog posts, "
             "exchange specifications, regulatory filings, a full day of real exchange data, and some experiments on "
-            "this very computer, we can rebuild the machine they all converge on, piece by piece, and measure every "
+            "a four-core Intel Xeon virtual machine, we can rebuild the machine they all converge on, piece by piece, and measure every "
             "piece."
         ) as vo:
             vo.wait_until("j")

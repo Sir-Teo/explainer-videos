@@ -21,7 +21,7 @@ academic studies) and checks it against two kinds of measurement:
   scanned in one pass by [`native/itch_scan.c`](native/itch_scan.c). Every chart of
   market data, every order book, every queue, and the market-making backtest
   come from it.
-* **Experiments on the computer that rendered the video**
+* **Experiments on the original measured 4-core Intel Xeon virtual machine**
   ([`native/bench.c`](native/bench.c), [`native/book.c`](native/book.c)): the
   memory-latency staircase with and without huge pages, system calls,
   core-to-core hand-offs, kernel UDP, a lock-free ring buffer, false sharing,

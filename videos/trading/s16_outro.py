@@ -105,7 +105,7 @@ class Outro(VoiceoverScene):
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
             "Every chart of market data in this video came from one real day of Nasdaq's feed, and every timing "
-            "measurement from the computer that made the video. The sources are listed in the description. Thanks "
+            "measurement from the original four-core Intel Xeon virtual machine. The sources are listed in the description. Thanks "
             "for watching."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(l, shift=UP * 0.1) for l in lines], lag_ratio=0.3), run_time=3)
