@@ -54,8 +54,8 @@ class LatencyLadder(VoiceoverScene):
         xl = label(r"amount of memory being read at random", font_size=24, color=GREY_A).next_to(ch.x_labels, DOWN, buff=0.12)
         yl = ch.y_title(r"time per read", font_size=24)
         cpu = b["cpu"]["Model name"].replace("(R)", "").replace("  ", " ")
-        tag = machine_tag()
-        sub = note(rf"{cpu}, 4 virtual cores", font_size=20).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
+        tag = machine_tag(corner=UR).shift(DOWN * 0.5)
+        sub = note(rf"{cpu}, 4 virtual cores", font_size=20).next_to(tag, DOWN, buff=0.08).align_to(tag, RIGHT)
         tpn = b["syscall"]["tsc_per_ns"]
         foot = VGroup(Line(LEFT * 3, RIGHT * 3, color=C.LIGHT, stroke_width=6),
                       label(r"in 1 nanosecond, light travels 30 cm, about a foot", font_size=30, color=C.LIGHT))
@@ -99,7 +99,7 @@ class LatencyLadder(VoiceoverScene):
             label(r"a 2 MiB ``huge page'' covers 512$\times$ more memory per entry", font_size=24, color=C.SIGNAL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         box.add_background_rectangle(color=BACKGROUND, opacity=0.92, buff=0.12)
-        box.move_to(ch.c2p(2**26, 1), aligned_edge=DR).shift(UP * 0.25 + LEFT * 0.15)
+        box.move_to(ch.c2p(2**30, 1), aligned_edge=DR).shift(UP * 0.2 + LEFT * 0.1)
         hl = tagged(rf"1 GiB: {gib[0]:.0f} ns $\to$ {gib[1]:.0f} ns with huge pages", font_size=24, color=C.SIGNAL)
         hl.next_to(ch.c2p(2**27, gib[1]), UP, buff=0.5)
         with self.voiceover(

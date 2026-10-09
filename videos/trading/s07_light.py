@@ -257,7 +257,7 @@ class SpeedOfLight(VoiceoverScene):
             vo.wait_until("e")
             self.play(LaggedStart(*[Create(c) for c in cables], lag_ratio=0.2), run_time=2.5)
             coil_l = label(r"nearer racks: extra fiber, coiled up", font_size=22, color=C.FIBER).next_to(
-                cables[0].get_start(), UP, buff=0.55).shift(RIGHT * 1.6)
+                cage, DOWN, buff=0.2).align_to(cage, LEFT)
             self.play(FadeIn(coil_l), FadeIn(equal))
             vo.wait_until("f")
             pulses = VGroup(*[Dot(radius=0.07, color=C.LIGHT).move_to(c.get_start()) for c in cables])
