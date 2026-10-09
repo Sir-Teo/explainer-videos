@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from tools.export_script import narration_by_class  # noqa: E402
+from tools.export_script import script_lines  # noqa: E402
 
 
 def norm_words(text: str) -> list[str]:
@@ -47,8 +47,10 @@ def main():
     asr = pipeline("automatic-speech-recognition", model=args.model, device="cpu")
     flagged = 0
     for module, cls, _ in manifest.SCENES:
-        for line in narration_by_class(ROOT / "videos" / args.video / f"{module}.py").get(cls, []):
+        for line in script_lines(args.video, module, cls):
             if args.grep and not re.search(args.grep, line):
+                continue
+            if re.search(r"\{[^}]*\}", line):  # computed from data, and this scene has not been rendered yet
                 continue
             utt = tts.synthesize(line)
             audio, sr = sf.read(utt.audio_path)

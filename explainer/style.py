@@ -141,6 +141,18 @@ C = SimpleNamespace(
     REFERENCE=GREY_B,  # the frozen reference model, KL anchor
     USER=BLUE_B,  # chat: user turns
     ASSISTANT=GREEN_B,  # chat: assistant turns (the trained tokens)
+    # Reinforcement learning, derived (videos/rl).  Reuses RL_POLICY (pi_theta), REFERENCE (pi_ref),
+    # REWARD (R, correct) and PENALTY (wrong, negative) from above.
+    OLD_POLICY=TEAL,  # pi_old: the policy that sampled the batch; the inference engine
+    ADVANTAGE=YELLOW,  # A, advantages (individual signs use REWARD / PENALTY)
+    SCORE=ORANGE,  # the score function grad log pi, gradient arrows
+    BASELINE=PURPLE_A,  # baselines b, values V(s), the critic
+    RATIO=PINK,  # importance ratios rho = pi_theta / pi_old
+    KL=GOLD,  # KL divergence, beta: the leash to the reference
+    ENTROPY=LIGHT_PINK,  # entropy H
+    LENGTH=LIGHT_BROWN,  # answer length |o|, token counts
+    PROMPT_TOK=GREY_A,  # prompt tokens
+    WORK_TOK="#9DD6F0",  # "showing the work" tokens (the scratchpad)
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
