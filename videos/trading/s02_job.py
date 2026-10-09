@@ -29,7 +29,8 @@ class TheJob(VoiceoverScene):
         bid_y = (lad.anchor("B", bids[0][0])[1] + lad.anchor("B", bids[-1][0])[1]) / 2
         ask_y = (lad.anchor("S", asks[0][0])[1] + lad.anchor("S", asks[-1][0])[1]) / 2
         bid_l = label(r"bids:\\waiting to buy", font_size=28, color=C.BID).move_to([-5.4, bid_y, 0])
-        ask_l = label(r"asks:\\waiting to sell", font_size=28, color=C.ASK).move_to([5.4, ask_y, 0])
+        ask_l = label(r"asks: waiting to sell", font_size=28, color=C.ASK).next_to(lad.rows_bg, UP, buff=0.12).align_to(
+            lad.rows_bg, RIGHT)
         n_orders = sum(len(q) for _, q in bids + asks)
         with self.voiceover(
             "This is what the market looks like to a trading machine. It's Nasdaq's order book for Nvidia, at 10:30 that "
@@ -117,7 +118,7 @@ class TheJob(VoiceoverScene):
             self.play(FadeIn(sold), FadeOut(ours_a))
             vo.wait_until("p")
             pnl = VGroup(mtex(r"100 \times (\$183.86 - \$183.85) = +\$1.00", font_size=40, color=C.PNL_UP))
-            pnl.to_edge(DOWN, buff=0.35).shift(RIGHT * 2.2)
+            pnl.move_to(RIGHT * 2.6 + DOWN * 2.75)
             pnl.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.12)
             self.play(FadeOut(buyer), FadeOut(bl), Write(pnl))
         self.wait(0.5)
@@ -187,7 +188,8 @@ class TheJob(VoiceoverScene):
             vo.wait_until("g")
             self.play(FadeIn(gm, shift=UP * 0.2))
             vo.wait_until("e")
-            ex.next_to(gm, UP, buff=0.2).add_background_rectangle(color=BACKGROUND, opacity=0.95, buff=0.08)
+            ex.next_to(ledger, DOWN, buff=0.35).align_to(ledger, LEFT).add_background_rectangle(color=BACKGROUND,
+                                                                                                   opacity=0.95, buff=0.08)
             self.play(FadeIn(ex))
         self.clear_scene()
 

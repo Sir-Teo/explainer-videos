@@ -148,7 +148,7 @@ class Hook(VoiceoverScene):
         ttl = label(r"Nasdaq messages per second, the whole trading day", font_size=34).to_edge(UP, buff=0.4)
         sub = note(r"busiest second in every 10-second window", font_size=22).next_to(ttl, DOWN, buff=0.12)
         notes = VGroup(
-            tagged(rf"9:30 open\\{fmt_int(open_n)} in one second", font_size=22).next_to(ch.c2p(9.5, open_n), UP, buff=0.1),
+            tagged(rf"9:30 open\\{fmt_int(open_n)} in one second", font_size=22).next_to(ch.c2p(9.5, open_n), RIGHT, buff=0.15),
             tagged(r"2:00 the Fed", font_size=22, color=C.LATENCY).next_to(ch.c2p(14.0, 3.0e5), UP, buff=0.1).shift(LEFT * 0.5),
             tagged(rf"2:40:07, the press conference\\{fmt_int(peak_n)} in one second", font_size=22).next_to(
                 ch.c2p(14 + 40 / 60, peak_n), UP, buff=0.12).shift(LEFT * 0.6),
