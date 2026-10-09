@@ -254,7 +254,7 @@ class HotPath(VoiceoverScene):
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "And then there's the noise that isn't your code at all. <bookmark mark='j'/> Here a reserved core on this "
-            "machine did nothing but read the clock as fast as it could for ten seconds, and recorded every gap: every "
+            "machine did nothing but check the clock as fast as it could for ten seconds, and recorded every gap: every "
             "moment something else took the processor away from it. <bookmark mark='d'/> Tens of thousands of "
             "interruptions, eleven thousand of them longer than ten microseconds, the longest almost seven "
             "milliseconds. <bookmark mark='t'/> Those gaps are exactly the tail we saw in the ring buffer: a median "

@@ -65,9 +65,9 @@ class LatencyLadder(VoiceoverScene):
         with self.voiceover(
             "Now let's go inside a single server, where the units shrink from milliseconds to nanoseconds. <bookmark "
             "mark='f'/> In one nanosecond, light travels thirty centimeters, about a foot. <bookmark mark='k'/> This "
-            "machine's processor ticks every half nanosecond. <bookmark mark='m'/> Here's an experiment run on the computer that rendered this video: read "
-            "memory at random addresses, each read depending on the last, and time each read as the amount of memory "
-            "grows. <bookmark mark='l1'/> While everything fits in the tiny first-level cache, a read takes about a "
+            "machine's processor ticks every half nanosecond. <bookmark mark='m'/> Here's an experiment run on the computer that rendered this video: fetch "
+            "memory from random addresses, each fetch depending on the last, and time each fetch as the amount of memory "
+            "grows. <bookmark mark='l1'/> While everything fits in the tiny first-level cache, a fetch takes about a "
             "nanosecond and a half. <bookmark mark='l2'/> In the second-level cache, about five. <bookmark mark='l3'/> "
             "In the big shared third level, fifty or more. <bookmark mark='d'/> And out in main memory, two to three "
             "hundred nanoseconds. Two hundred times slower than the fastest case, for the same line of code."

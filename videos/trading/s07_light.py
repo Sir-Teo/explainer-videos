@@ -138,7 +138,7 @@ class SpeedOfLight(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='mw'/> Then the industry did something that sounds backwards: it went back to radio. "
             "Microwaves travel through air at almost exactly the speed of light, so firms built chains of towers, "
-            "each in sight of the next, as close to the great circle as the landscape allows. <bookmark mark='q'/> "
+            "each able to see the next, as close to the great circle as the landscape allows. <bookmark mark='q'/> "
             "By 2016, one network was delivering data from Aurora to Carteret in 3.982 milliseconds, just 53 "
             "microseconds, or 1.3 percent, slower than light in a vacuum."
         ) as vo:

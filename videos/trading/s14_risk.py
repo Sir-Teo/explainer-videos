@@ -90,7 +90,7 @@ class Risk(VoiceoverScene):
         emails = label(rf"8:01 a.m.: the first of {F['knight_emails']} automated e-mails saying ``Power Peg disabled''",
                        font_size=24, color=GREY_A).next_to(notes, DOWN, buff=0.35)
         with self.voiceover(
-            "<bookmark mark='e'/> On the morning of August 1st, starting at 8:01, Knight's systems sent ninety-seven "
+            "<bookmark mark='e'/> On the morning of August 1st, starting at one minute past eight, Knight's systems sent ninety-seven "
             "automated e-mails mentioning Power Peg. They weren't designed as alerts, and nobody acted on them."
         ) as vo:
             vo.wait_until("e")
@@ -177,7 +177,7 @@ class Risk(VoiceoverScene):
                   r"exchange's copy \quad automated, rehearsed deployments", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='m'/> The SEC's findings read like a checklist of everything in that risk gate. There was "
+            "<bookmark mark='m'/> The SEC's findings are a checklist of everything in that risk gate. There was "
             "no automated, firm-wide capital limit connected to order entry. The account that filled up with unwanted "
             "shares had a two-million-dollar limit, but it wasn't wired to anything that could stop the orders. Position "
             "monitoring depended on people watching a screen. Nobody double-checked the deployment, and there was no "
