@@ -1,5 +1,7 @@
 # Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO
 
+The October 9 high-quality YouTube rebuild uses the experiment settings and measured results documented in [YOUTUBE_REBUILD.md](YOUTUBE_REBUILD.md).
+
 A math-heavy explainer, in five parts, of the reinforcement learning used to
 post-train language models, **as of October 2026**. Every algorithm is derived
 on screen from the one before it, starting with the log-derivative trick:
