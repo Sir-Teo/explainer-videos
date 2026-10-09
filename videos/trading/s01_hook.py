@@ -196,7 +196,7 @@ class Hook(VoiceoverScene):
             r"\textbullet\ engineers' talks, papers and blog posts",
             r"\textbullet\ exchange specifications and regulatory filings",
             r"\textbullet\ one real day of Nasdaq data, every message",
-            r"\textbullet\ experiments on the computer that rendered this video",
+            r"\textbullet\ experiments on a 4-core Intel Xeon virtual machine",
         ]]).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.55)
         src = source(r"janestreet.com; hudsonrivertrading.com; Reuters (Jan 2026)", font_size=18)
         with self.voiceover(

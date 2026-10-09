@@ -65,7 +65,7 @@ class LatencyLadder(VoiceoverScene):
         with self.voiceover(
             "Now let's go inside a single server, where the units shrink from milliseconds to nanoseconds. <bookmark "
             "mark='f'/> In one nanosecond, light travels thirty centimeters, about a foot. <bookmark mark='k'/> This "
-            "machine's processor ticks every half nanosecond. <bookmark mark='m'/> Here's an experiment run on the computer that rendered this video: fetch "
+            "machine's processor ticks every half nanosecond. <bookmark mark='m'/> Here's an experiment run on a four-core Intel Xeon virtual machine: fetch "
             "memory from random addresses, each fetch depending on the last, and time each fetch as the amount of memory "
             "grows. <bookmark mark='l1'/> While everything fits in the tiny first-level cache, a fetch takes about a "
             "nanosecond and a half. <bookmark mark='l2'/> In the second-level cache, about five. <bookmark mark='l3'/> "
@@ -150,7 +150,7 @@ class LatencyLadder(VoiceoverScene):
             names.add(label(t, font_size=22, color=col).next_to(p0, LEFT, buff=0.15))
             vals.add(MathTex(fmt_ns(ns), font_size=24).next_to(bar, RIGHT, buff=0.1))
             hum.add(label(human(ns / l1), font_size=20, color=GREY_A).next_to(vals[-1], RIGHT, buff=0.25))
-        ttl = label(r"the latency ladder of this computer (medians)", font_size=32).to_edge(UP, buff=0.3)
+        ttl = label(r"the latency ladder of the measured machine (medians)", font_size=32).to_edge(UP, buff=0.3)
         scale = label(r"if an L1 read took one second:", font_size=22, color=GREY_A).next_to(hum[0], UP, buff=0.35)
         scale.align_to(hum, LEFT)
         with self.voiceover(

@@ -82,7 +82,7 @@ def real_tag(text: str = r"real Nasdaq data, Dec 10, 2025", corner=DR) -> Tex:
 
 
 def machine_tag(corner=DR) -> Tex:
-    return note(r"measured on the computer that rendered this video", color=GREY_A).to_corner(corner, buff=0.3)
+    return note(r"measured on a 4-core Intel Xeon virtual machine", color=GREY_A).to_corner(corner, buff=0.3)
 
 
 def tagged(text: str, color=WHITE, font_size=28, opacity=0.85) -> Tex:

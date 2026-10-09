@@ -95,7 +95,7 @@ class Outro(VoiceoverScene):
             label(r"Building a Top-Tier Real-Time Trading System", font_size=40),
             label(r"market data: Nasdaq TotalView-ITCH 5.0, Wednesday December 10, 2025 (846.8 million messages)",
                   font_size=22, color=GREY_A),
-            label(r"measurements: the 4-core virtual machine that rendered this video", font_size=22, color=GREY_A),
+            label(r"measurements: a 4-core Intel Xeon virtual machine", font_size=22, color=GREY_A),
             label(r"sources: Jane Street tech talks and Signals and Threads (Brian Nigito); HRT Beat; Budish, Cramton \& Shim "
                   r"(2015);", font_size=22, color=GREY_A),
             label(r"Aquilina, Budish \& O'Neill (2022); Glosten \& Milgrom (1985); Avellaneda \& Stoikov (2008); STAC; "
