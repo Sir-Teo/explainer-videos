@@ -118,8 +118,8 @@ class Risk(VoiceoverScene):
             )
             g[0].align_to(ORIGIN, LEFT)
             g[1].align_to(ORIGIN, RIGHT)
-            g.add(label(rf"long \${F['knight_long'] / 1e9 * f:.2f} billion", font_size=26, color=C.BID).next_to(g[0], DOWN, buff=0.15).align_to(ORIGIN, LEFT),
-                  label(rf"short \${F['knight_short'] / 1e9 * f:.2f} billion", font_size=26, color=C.ASK).next_to(g[1], DOWN, buff=0.15).align_to(ORIGIN, RIGHT))
+            g.add(label(rf"long \${F['knight_long'] / 1e9 * f:.2f} billion", font_size=26, color=C.BID).next_to(g[0], DOWN, buff=0.15).align_to(ORIGIN, LEFT).shift(RIGHT * 0.3),
+                  label(rf"short \${F['knight_short'] / 1e9 * f:.2f} billion", font_size=26, color=C.ASK).next_to(g[1], DOWN, buff=0.15).align_to(ORIGIN, RIGHT).shift(LEFT * 0.3))
             return g
 
         pos = always_redraw(bars)
@@ -139,7 +139,8 @@ class Risk(VoiceoverScene):
         ) as vo:
             vo.wait_until("o")
             self.add(clock, execs, pos)
-            self.play(FadeIn(axis), FadeIn(what))
+            even = note(r"totals from the SEC's order; growth over the 45 minutes drawn evenly", font_size=20).to_corner(DR, buff=0.3)
+            self.play(FadeIn(axis), FadeIn(what), FadeIn(even))
             vo.wait_until("g")
             self.play(minutes.animate.set_value(20), run_time=max(vo.until("f") - 0.2, 1.0), rate_func=linear)
             self.play(FadeIn(fix))
