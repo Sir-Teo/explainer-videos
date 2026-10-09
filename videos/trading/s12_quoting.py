@@ -48,6 +48,8 @@ class Quoting(VoiceoverScene):
                       label(r"wiping out the profit of 10 round trips", font_size=28, color=C.PNL_DOWN)).arrange(DOWN, buff=0.1)
         risk.to_edge(UP, buff=0.6)
         tag = schematic_tag()
+        head = label(r"quoting: exactly where to buy and sell?", font_size=40).to_edge(UP, buff=0.5)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "With a fair value in hand, the market maker has to decide exactly where to quote. And there's a "
             "complication we skipped: inventory. <bookmark mark='m'/> Every time a seller hits your bid, you own more "
@@ -57,7 +59,7 @@ class Quoting(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("m")
-            self.play(Create(meter), FadeIn(ml), FadeIn(ptr))
+            self.play(Create(meter), FadeIn(ml), FadeIn(ptr), FadeOut(head))
             vo.wait_until("l")
             for v in range(1, 6):
                 self.play(q.animate.set_value(v), run_time=0.35)
@@ -76,9 +78,10 @@ class Quoting(VoiceoverScene):
         f1[7].set_color(C.LATENCY)
         f2 = MathTex(r"\delta^{\mathrm{ask}} + \delta^{\mathrm{bid}}", r"=", r"\gamma\sigma^2(T-t)", r"+",
                      r"\tfrac{2}{\gamma}\ln\!\left(1+\tfrac{\gamma}{k}\right)", font_size=48)
-        VGroup(f1, f2).arrange(DOWN, buff=0.7).shift(UP * 0.8)
-        cite = label(r"Avellaneda \& Stoikov, \emph{High-frequency trading in a limit order book} (2008)", font_size=24,
-                     color=GREY_A).to_edge(UP, buff=0.35)
+        VGroup(f1, f2).arrange(DOWN, buff=0.7).shift(UP * 0.3)
+        cite = VGroup(label(r"Avellaneda \& Stoikov (2008)", font_size=40),
+                      label(r"\emph{High-frequency trading in a limit order book}", font_size=26, color=GREY_A)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
         legend = VGroup(
             label(r"$r$: the reservation price, where you center your quotes", font_size=24, color=C.OURS),
             label(r"$s$: fair value (the mid)\quad $q$: inventory\quad $\gamma$: risk aversion", font_size=24),
@@ -135,10 +138,10 @@ class Quoting(VoiceoverScene):
             label(rf"inventory $q$ = {q.get_value():+.1f} lots", font_size=28, color=C.INVENTORY),
             label(rf"volatility $\sigma$: {sig.get_value():.1f}$\times$", font_size=28, color=C.KERNEL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(RIGHT * 3.8 + UP * 1.0))
-        msg = VGroup(label(r"long: lower both quotes, so you're likelier to sell", font_size=24, color=GREY_A),
-                     label(r"short: raise them, so you're likelier to buy", font_size=24, color=GREY_A),
-                     label(r"volatile: widen the spread", font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        msg.move_to(RIGHT * 3.8 + DOWN * 1.2)
+        msg = VGroup(label(r"long: lower both quotes,\\so you're likelier to sell", font_size=24, color=GREY_A),
+                     label(r"short: raise them,\\so you're likelier to buy", font_size=24, color=GREY_A),
+                     label(r"volatile: widen the spread", font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        msg.move_to(RIGHT * 4.3 + DOWN * 1.4)
         tag = schematic_tag()
         with self.voiceover(
             "Here's what that does. <bookmark mark='z'/> With no inventory, the quotes sit symmetrically around fair "
@@ -185,7 +188,7 @@ class Quoting(VoiceoverScene):
                        *[Dot(top.c2p(grid[i], ask[i]), radius=0.05, color=C.TRADE) for i in np.nonzero(fa)[0]])
         ttl = label(r"SPY's real mid-price, 11:00 to 11:01 a.m.; quotes and fills simulated as in the paper", font_size=26)
         ttl.to_edge(UP, buff=0.2)
-        il = label(r"inventory (lots)", font_size=22, color=C.INVENTORY).next_to(bot, LEFT, buff=0.15).shift(UP * 0.6)
+        il = label(r"inventory (lots)", font_size=22, color=C.INVENTORY).next_to(bot, UP, buff=0.05).align_to(bot, LEFT)
         swing = mid.max() - mid.min()
         assert 40 <= swing <= 50 and np.abs(q).max() <= 3
         with self.voiceover(

@@ -21,18 +21,18 @@ class Backtest(VoiceoverScene):
         t0 = rp["t0"]
         msgs = [m for m in rp["msgs"] if m["side"] == "B" and m["price"] == 18385]
         # build the queue: real orders + ours (gold) at the back
-        y = 0.4
-        unit = lambda s: float(np.clip(0.11 * np.sqrt(s), 0.12, 1.6))
+        y = 0.3
+        unit = lambda s: float(np.clip(0.15 * np.sqrt(s), 0.16, 2.2))
         queue = [("real", s) for s in start] + [("ours", 100)]
         blocks = []
 
         def make(kind, s, behind=False):
             col = C.OURS if kind == "ours" else (GREY_B if behind else C.BID)
-            return Rectangle(width=unit(s), height=0.6, stroke_color=col, stroke_width=1.5, fill_color=col,
+            return Rectangle(width=unit(s), height=0.85, stroke_color=col, stroke_width=1.5, fill_color=col,
                              fill_opacity=0.75 if kind == "ours" else 0.5)
 
-        price = MathTex("183.85", font_size=36, color=C.BID).move_to([5.6, y, 0])
-        front_x = 4.7
+        price = MathTex("183.85", font_size=44, color=C.BID).move_to([3.9, y, 0])
+        front_x = 2.8
 
         def layout(bl):
             x = front_x
@@ -43,14 +43,14 @@ class Backtest(VoiceoverScene):
         for kind, s in queue:
             blocks.append([kind, s, make(kind, s)])
         layout([b_[2] for b_ in blocks])
-        front = label(r"front", font_size=22, color=GREY_A).next_to([front_x, y + 0.45, 0], UP, buff=0.05)
+        front = label(r"front of the queue", font_size=24, color=GREY_A).next_to([front_x, y + 0.5, 0], UP, buff=0.05).shift(LEFT * 0.6)
         ttl = label(r"a backtest's hardest question: if our order had been there, when would it have filled?", font_size=28)
         ttl.to_edge(UP, buff=0.3)
         clock = Text("10:30:00.000 000", font="DejaVu Sans Mono", font_size=30, color=C.LATENCY).to_edge(UP, buff=1.0)
         ahead_t = always_redraw(lambda: label(
             rf"ahead of us: {sum(1 for k, s, _ in blocks[:[k for k, _, _ in blocks].index('ours')] if k == 'real')} orders, "
             rf"{sum(s for k, s, _ in blocks[:[k for k, _, _ in blocks].index('ours')] if k == 'real')} shares"
-            if any(k == 'ours' for k, _, _ in blocks) else r"filled", font_size=28, color=C.OURS).move_to(DOWN * 0.9))
+            if any(k == 'ours' for k, _, _ in blocks) else r"filled", font_size=30, color=C.OURS).move_to(DOWN * 1.1))
         log = VGroup().to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Now the hardest question in this whole business: does a strategy actually make money? You test it on "
@@ -143,7 +143,8 @@ class Backtest(VoiceoverScene):
         assert run["fills"] > 80_000 and mk[0] > 0.1 and mk[1] < -0.2 and -0.26 < run["pnl_cents_per_share"] < -0.22
         xs = np.arange(len(hz))
         ch = Plot((-0.3, len(hz) - 0.7), (-0.6, 0.3), width=10.0, height=4.2, x_ticks=list(xs),
-                  x_fmt=lambda i: ["at the fill", "1 ms", "10 ms", "100 ms", "1 s", "10 s", "1 min"][int(i)],
+                  x_fmt=lambda i: label(["at the fill", "1 ms", "10 ms", "100 ms", "1 s", "10 s", "1 min"][int(i)],
+                                        font_size=22, color=GREY_A),
                   y_ticks=[-0.6, -0.4, -0.2, 0, 0.2], y_fmt=lambda v: rf"{v:+.1f}" if v else "0").shift(DOWN * 0.5)
         zero = ch.hline(0, color=GREY_B)
         line = ch.line(xs, mk, C.OURS, 5)
@@ -156,6 +157,13 @@ class Backtest(VoiceoverScene):
                      r" every action reaches the exchange 10 $\mu$s after the decision", font_size=20, color=GREY_A)
         rules.next_to(ttl, DOWN, buff=0.1)
         yl = ch.y_title(r"profit per share bought or sold, measured against the mid, cents", font_size=22)
+        big_rules = VGroup(*[label(t, font_size=30) for t in [
+            r"\textbullet\ always join the best bid and the best ask, 100 shares each",
+            r"\textbullet\ when they move, cancel and re-join",
+            r"\textbullet\ never more than 500 shares long or short",
+            r"\textbullet\ every action reaches the exchange 10 $\mu$s after the decision",
+            r"\textbullet\ our orders are virtual: queued behind the real ones",
+        ]]).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 0.3)
         a1 = tagged(rf"+{mk[0]:.2f}\textcent: we seem to earn the spread", font_size=22, color=C.PNL_UP).next_to(
             ch.c2p(0, mk[0]), UR, buff=0.1)
         a2 = tagged(rf"{mk[1]:.2f}\textcent\ a millisecond later", font_size=22, color=C.PNL_DOWN).next_to(
@@ -173,8 +181,11 @@ class Backtest(VoiceoverScene):
             f"<bookmark mark='r'/> Over {run['fills']:,} fills, the strategy loses about a quarter of a cent per share. "
             "That's adverse selection, measured: you get filled precisely when you least want to be."
         ) as vo:
-            self.play(FadeIn(ttl), FadeIn(rules), FadeIn(real_tag()))
+            self.play(FadeIn(ttl), FadeIn(real_tag()))
+            vo.wait_until("s")
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in big_rules], lag_ratio=0.6), run_time=5)
             vo.wait_until("m")
+            self.play(FadeOut(big_rules), FadeIn(rules))
             self.play(Create(ch), FadeIn(yl), Create(zero))
             vo.wait_until("a")
             self.play(FadeIn(dots[0]), FadeIn(a1))
@@ -195,7 +206,7 @@ class Backtest(VoiceoverScene):
         xs = np.arange(len(lat))
         ch = Plot((-0.6, len(lat) - 0.4), (-0.6, 0), width=9.6, height=4.3, x_ticks=list(xs),
                   x_fmt=lambda i: fmt_ns(lat[int(i)]), y_ticks=[-0.6, -0.4, -0.2, 0],
-                  y_fmt=lambda v: rf"{v:+.1f}" if v else "0", grid=True).shift(DOWN * 0.45 + LEFT * 0.3)
+                  y_fmt=lambda v: rf"{v:+.1f}" if v else "0", grid=True).shift(DOWN * 0.45 + LEFT * 1.1)
         bars_j, bars_s = VGroup(), VGroup()
         for x, j, s in zip(xs, join, sig):
             bars_j.add(ch.bar(x - 0.18, j, 0.32, C.OURS, base=0))
@@ -208,10 +219,10 @@ class Backtest(VoiceoverScene):
         key.to_edge(UP, buff=0.3)
         band = Rectangle(width=ch.w, height=abs(ch.y_to(-0.27) - ch.y_to(-0.20)), stroke_width=0, fill_color=C.PNL_UP,
                          fill_opacity=0.2).move_to([ch.x_to((-0.6 + len(lat) - 0.4) / 2), (ch.y_to(-0.27) + ch.y_to(-0.20)) / 2, 0])
-        band_l = label(r"Nasdaq's rebates for posting orders, 2025 tiers: about 0.20 to 0.27\textcent\ a share", font_size=20,
-                       color=C.PNL_UP).next_to(band, RIGHT, buff=0.1).shift(LEFT * 3.0 + UP * 0.32)
+        band_l = label(r"Nasdaq's rebates\\for posting orders\\(2025 tiers):\\0.20--0.27\textcent\ a share", font_size=22,
+                       color=C.PNL_UP).next_to(band, RIGHT, buff=0.2)
         q = label(rf"slower also means further back in the queue: median {ahead[0]:.0f} shares ahead at 1 $\mu$s, "
-                  rf"{ahead[3]:.0f} at 1 ms", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.15)
+                  rf"{ahead[3]:.0f} at 1 ms", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.15).to_edge(LEFT, buff=0.4)
         with self.voiceover(
             "Now change one thing: how long our actions take to reach the exchange. <bookmark mark='j'/> From one "
             "microsecond up to a hundred, the loss barely changes. At one millisecond it's almost half again as bad, and at "
