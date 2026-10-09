@@ -27,15 +27,15 @@ class BuildingTheBook(VoiceoverScene):
         add, dele = p["A"]["fields"], p["D"]["fields"]
         # price levels: an array indexed by price in cents, each the head of a FIFO list
         prices = [18033, 18034, 18035, 18036, 18037]
-        lv_cells = VGroup(*[cell(f"{x / 100:.2f}", C.BID if x <= 18035 else C.ASK, w=1.35, h=0.55, font_size=22)
-                            for x in prices]).arrange(RIGHT, buff=0.05).move_to(UP * 2.3 + RIGHT * 2.2)
-        arr_l = label(r"price levels: an array indexed by price", font_size=24, color=GREY_A).next_to(lv_cells, UP, buff=0.15)
+        lv_cells = VGroup(*[cell(f"{x / 100:.2f}", C.BID if x <= 18035 else C.ASK, w=1.55, h=0.62, font_size=26)
+                            for x in prices]).arrange(RIGHT, buff=0.06).move_to(UP * 1.9 + RIGHT * 2.3)
+        arr_l = label(r"price levels: an array indexed by price", font_size=26, color=GREY_A).next_to(lv_cells, UP, buff=0.6)
         queues = {18033: [200, 100], 18034: [50, 300, 100], 18035: [100, 400], 18036: [100, 25], 18037: [300]}
         chains = {}
         for x, c in zip(prices, lv_cells):
             col = C.BID if x <= 18035 else C.ASK
-            nodes = VGroup(*[cell(str(s), col, w=0.85, h=0.38, font_size=18, fill=0.35) for s in queues[x]])
-            nodes.arrange(DOWN, buff=0.22).next_to(c, DOWN, buff=0.25)
+            nodes = VGroup(*[cell(str(s), col, w=1.0, h=0.46, font_size=22, fill=0.35) for s in queues[x]])
+            nodes.arrange(DOWN, buff=0.26).next_to(c, DOWN, buff=0.3)
             links = VGroup(*[Arrow(a.get_bottom(), b.get_top(), buff=0.02, stroke_width=2, color=col,
                                    max_tip_length_to_length_ratio=0.4, tip_length=0.1) for a, b in zip(nodes[:-1], nodes[1:])])
             head = Arrow(c.get_bottom(), nodes[0].get_top(), buff=0.02, stroke_width=2, color=col, tip_length=0.1,
@@ -45,14 +45,16 @@ class BuildingTheBook(VoiceoverScene):
         fifo = label(r"each level: a first-in, first-out list of orders", font_size=22, color=GREY_A)
         fifo.next_to(VGroup(*[chains[x] for x in prices]), DOWN, buff=0.25)
         # the order map: a hash table from reference number to the order's node
-        slots = VGroup(*[cell("", GREY_B, w=2.3, h=0.42) for _ in range(7)]).arrange(DOWN, buff=0.04)
-        slots.move_to(LEFT * 4.6 + DOWN * 0.3)
-        map_l = label(r"order map: reference \# $\to$ order", font_size=24, color=GREY_A).next_to(slots, UP, buff=0.15)
+        slots = VGroup(*[cell("", GREY_B, w=2.6, h=0.5) for _ in range(7)]).arrange(DOWN, buff=0.05)
+        slots.move_to(LEFT * 4.6 + DOWN * 0.1)
+        map_l = label(r"order map: reference \# $\to$ order", font_size=26, color=GREY_A).next_to(slots, UP, buff=0.15)
         filled = {1: "\\#53{,}998{,}112", 3: "\\#" + fmt_int(dele["order reference"]), 5: "\\#54{,}007{,}380"}
         for i, t in filled.items():
-            slots[i].text = label(t, font_size=18).move_to(slots[i])
+            slots[i].text = label(t, font_size=21).move_to(slots[i])
             slots[i].add(slots[i].text)
-        tag = schematic_tag(corner=UL)
+        tag = schematic_tag(corner=DR)
+        head = label(r"rebuilding the order book", font_size=36).to_corner(UL, buff=0.4)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "So a feed handler must remember every live order. How you store them decides how fast you are, so here is "
             "the design almost everyone converges on. <bookmark mark='a'/> First, an array of price levels, indexed "
@@ -73,15 +75,13 @@ class BuildingTheBook(VoiceoverScene):
         msg = tagged(rf"Add \#{fmt_int(add['order reference'])}: buy 100 @ 180.35", font_size=26, color=C.MSG)
         msg.to_corner(DL, buff=0.4)
         h_lab = mtex(r"h(\#54{,}010{,}847) \bmod 7 = 6", font_size=26, color=GREY_A).next_to(slots, DOWN, buff=0.2)
-        new_node = cell("100", C.BID, w=0.85, h=0.38, font_size=18, fill=0.35)
+        new_node = cell("100", C.BID, w=1.0, h=0.46, font_size=22, fill=0.35)
         c35 = chains[18035]
-        new_node.next_to(c35.nodes[-1], DOWN, buff=0.22)
+        new_node.next_to(c35.nodes[-1], DOWN, buff=0.26)
         new_link = Arrow(c35.nodes[-1].get_bottom(), new_node.get_top(), buff=0.02, stroke_width=2, color=C.BID,
                          tip_length=0.1, max_tip_length_to_length_ratio=0.4)
-        best = VGroup(Arrow(LEFT * 0.6, ORIGIN, buff=0, color=C.BID, stroke_width=3),
-                      label(r"best bid", font_size=22, color=C.BID))
-        best[1].next_to(best[0], LEFT, buff=0.08)
-        best.next_to(lv_cells[2], DOWN, buff=0.05).shift(LEFT * 1.15 + UP * 0.6)
+        best = VGroup(SurroundingRectangle(lv_cells[2], color=C.BID, buff=0.06, stroke_width=4),
+                      label(r"best bid", font_size=24, color=C.BID).next_to(lv_cells[2], UP, buff=0.12))
         with self.voiceover(
             "<bookmark mark='a'/> Watch the real add order from before arrive. <bookmark mark='h'/> Hash its number "
             "to find a slot in the map. <bookmark mark='n'/> Take a pre-allocated order record, fill it in, and link it "
@@ -93,7 +93,7 @@ class BuildingTheBook(VoiceoverScene):
             self.play(FadeIn(msg, shift=UP * 0.2))
             vo.wait_until("h")
             self.play(FadeIn(h_lab), Indicate(slots[6], color=C.MSG))
-            slots[6].text = label(r"\#54{,}010{,}847", font_size=18, color=C.MSG).move_to(slots[6])
+            slots[6].text = label(r"\#54{,}010{,}847", font_size=21, color=C.MSG).move_to(slots[6])
             self.play(FadeIn(slots[6].text))
             vo.wait_until("n")
             ptr = CurvedArrow(slots[6].get_right(), new_node.get_left(), angle=-0.4, color=C.MSG, stroke_width=2)
@@ -194,7 +194,7 @@ class BuildingTheBook(VoiceoverScene):
             "machine underneath it, interrupted the program. Those rare stalls tend to arrive exactly when the market "
             "is busiest. We'll come back to them."
         ) as vo:
-            self.play(FadeIn(ttl2), Create(ch2), FadeIn(machine_tag()))
+            self.play(FadeIn(ttl2), Create(ch2), FadeIn(machine_tag(corner=DR)))
             vo.wait_until("h")
             self.play(FadeIn(hist), FadeIn(marks[0]), FadeIn(marks[1]))
             vo.wait_until("t")

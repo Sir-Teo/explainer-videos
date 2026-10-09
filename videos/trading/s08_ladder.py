@@ -53,7 +53,7 @@ class LatencyLadder(VoiceoverScene):
         yl = ch.y_title(r"time per read", font_size=24)
         cpu = b["cpu"]["Model name"].replace("(R)", "").replace("  ", " ")
         tag = machine_tag()
-        sub = note(rf"{cpu}, 4 virtual cores", font_size=20).next_to(tag, DOWN, buff=0.08).align_to(tag, RIGHT)
+        sub = note(rf"{cpu}, 4 virtual cores", font_size=20).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
         with self.voiceover(
             "Now let's go inside a single server, where the units shrink from milliseconds to nanoseconds. In one "
             "nanosecond, light travels thirty centimeters, about a foot. This machine's processor ticks every half "
@@ -152,7 +152,7 @@ class LatencyLadder(VoiceoverScene):
             "milliseconds, which on this scale is a month. And remember the market's reaction spike: twenty "
             "microseconds. Most of these rungs fit inside it many times over, but the bottom two eat a big piece."
         ) as vo:
-            self.play(FadeIn(ttl), FadeIn(machine_tag()), Create(ch.x_axis), FadeIn(ch.x_labels), FadeIn(ch.grid))
+            self.play(FadeIn(ttl), FadeIn(machine_tag(corner=UR).shift(DOWN * 0.45)), Create(ch.x_axis), FadeIn(ch.x_labels), FadeIn(ch.grid))
             groups = [range(0, 4), range(4, 5), range(5, 7), range(7, 9)]
             for g, m in zip(groups, "abcd"):
                 vo.wait_until(m)

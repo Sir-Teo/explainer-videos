@@ -139,7 +139,7 @@ class TheFeed(VoiceoverScene):
         pl = label(r"one UDP packet (MoldUDP64): a numbered header, then messages", font_size=26).next_to(pkt, UP, buff=0.2)
         # two lanes A and B; lane A loses #4, lane B is late on #2
         lane_y = {"A": -0.3, "B": -1.6}
-        start_x, end_x = -6.3, 1.8
+        start_x, end_x = -5.5, 1.8
         lanes = VGroup(*[Line([start_x, y, 0], [end_x, y, 0], color=GREY_D, stroke_width=2) for y in lane_y.values()])
         ll = VGroup(label(r"feed A", font_size=24, color=C.MSG).next_to(lanes[0], LEFT, buff=0.1),
                     label(r"feed B", font_size=24, color=C.MSG).next_to(lanes[1], LEFT, buff=0.1))
@@ -209,11 +209,11 @@ class TheFeed(VoiceoverScene):
         lines.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(UP * 0.3)
         assert d["peaks"][6]["at_ns"] == 57_602_000_000_000
         punch = label(r"fall behind, and you are trading on a picture of the past", font_size=32, color=C.LATENCY)
-        punch.to_edge(DOWN, buff=0.6)
+        punch.to_edge(DOWN, buff=1.0)
         with self.voiceover(
             "And the volume is relentless. <bookmark mark='a'/> On an ordinary stretch of that day, about 34 thousand "
             "messages a second. <bookmark mark='b'/> In the busiest second, just after the closing bell, 1.75 million. "
-            "<bookmark mark='c'/> And bursts arrive all at once: that single Netflix event was about 135 kilobytes, "
+            "<bookmark mark='c'/> And bursts arrive all at once: that single Netflix event was about 136 kilobytes, "
             "which takes over a hundred microseconds just to cross a ten gigabit wire. <bookmark mark='p'/> A feed "
             "handler has to swallow all of it, in order, without falling behind, because the moment it falls behind, "
             "every decision it makes is based on a picture of the past."

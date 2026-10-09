@@ -135,7 +135,7 @@ class TheExchange(VoiceoverScene):
             "one event."
         ) as vo:
             vo.wait_until("n")
-            self.play(FadeIn(burst[0]), FadeIn(real_tag()))
+            self.play(FadeIn(burst[0]), FadeIn(real_tag(corner=UR)))
             self.play(FadeIn(burst[1]), LaggedStart(*[FadeIn(s) for s in grid], lag_ratio=0.0006), run_time=2.5)
             self.play(FadeIn(burst[2]))
             self.play(FadeIn(burst[3]))
