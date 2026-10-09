@@ -77,11 +77,11 @@ def schematic_tag(corner=UR) -> Tex:
     return note(r"schematic").to_corner(corner, buff=0.3)
 
 
-def real_tag(text: str = r"real Nasdaq data, Dec 10, 2025", corner=UR) -> Tex:
+def real_tag(text: str = r"real Nasdaq data, Dec 10, 2025", corner=DR) -> Tex:
     return note(text, color=GREY_A).to_corner(corner, buff=0.3)
 
 
-def machine_tag(corner=UR) -> Tex:
+def machine_tag(corner=DR) -> Tex:
     return note(r"measured on the computer that rendered this video", color=GREY_A).to_corner(corner, buff=0.3)
 
 

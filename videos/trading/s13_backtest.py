@@ -161,7 +161,7 @@ class Backtest(VoiceoverScene):
         a2 = tagged(rf"{mk[1]:.2f}\textcent\ a millisecond later", font_size=22, color=C.PNL_DOWN).next_to(
             ch.c2p(1, mk[1]), DOWN, buff=0.2)
         res = label(rf"{fmt_int(run['fills'])} fills; result: {run['pnl_cents_per_share']:+.2f} cents per share",
-                    font_size=26, color=C.PNL_DOWN).to_edge(DOWN, buff=0.25)
+                    font_size=26, color=C.PNL_DOWN).to_edge(DOWN, buff=0.25).shift(LEFT * 1.5)
         with self.voiceover(
             "Now run that idea all day long. <bookmark mark='s'/> A simple market maker on Nvidia: always join the best "
             "bid and the best ask with a hundred shares, re-join whenever they move, never hold more than five hundred "

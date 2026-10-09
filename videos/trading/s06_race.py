@@ -31,7 +31,8 @@ class TheRace(VoiceoverScene):
                   x_fmt=lambda v: f"{int(v) if v <= 12 else int(v) - 12}", y_ticks=[-0.5, 0, 0.5, 1.0],
                   y_fmt=lambda v: f"{v:+.1f}\\%" if v else "0").shift(DOWN * 0.4)
         assert lo > -0.6 and hi < 1.0
-        lines = VGroup(*[ch.line(x, pct[k], ETF_COLORS[k], 3) for k in ("SPY", "IVV", "VOO")])
+        # drawn widest first so all three stay visible where they coincide
+        lines = VGroup(*[ch.line(x, pct[k], ETF_COLORS[k], w) for k, w in (("SPY", 9), ("IVV", 5.5), ("VOO", 2.5))])
         key = VGroup(*[label(t, font_size=26, color=ETF_COLORS[k]) for k, t in [
             ("SPY", r"SPY (State Street)"), ("IVV", r"IVV (BlackRock)"), ("VOO", r"VOO (Vanguard)")]]).arrange(RIGHT, buff=0.6)
         key.next_to(ch, UP, buff=0.2)
@@ -98,15 +99,15 @@ class TheRace(VoiceoverScene):
         yl = ch.y_title(r"correlation of returns", font_size=22)
         key = VGroup(label(r"SPY--IVV", font_size=22, color=C.SIGNAL), label(r"SPY--VOO", font_size=22, color=C.OURS),
                      label(r"IVV--VOO", font_size=22, color=C.MSG)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        key.move_to(ch.c2p(1.0, 0.82))
+        key.move_to(ch.c2p(3000, 0.35))
         notes = VGroup(
-            tagged(rf"1 minute: {c['SPY_IVV'][i60]:.3f}", font_size=22).next_to(ch.c2p(60000, c['SPY_IVV'][i60]), DL, buff=0.1),
-            tagged(rf"1 second: {c['SPY_IVV'][i1s]:.2f}", font_size=22).next_to(ch.c2p(1000, c['SPY_IVV'][i1s]), DR, buff=0.1),
+            tagged(rf"1 minute: {c['SPY_IVV'][i60]:.3f}", font_size=22).next_to(ch.c2p(60000, c['SPY_IVV'][i60]), DOWN, buff=0.35).shift(LEFT * 0.5),
+            tagged(rf"1 second: {c['SPY_IVV'][i1s]:.2f}", font_size=22).next_to(ch.c2p(1000, c['SPY_IVV'][i1s]), UL, buff=0.1),
             tagged(rf"10 ms: {c['SPY_IVV'][i10]:.2f}", font_size=22).next_to(ch.c2p(10, c['SPY_IVV'][i10]), RIGHT, buff=0.15),
             tagged(rf"1 ms: {c['SPY_IVV'][i1]:.2f}", font_size=22).next_to(ch.c2p(1, c['SPY_IVV'][i1]), RIGHT, buff=0.15),
         )
         bcs = note(rf"Budish, Cramton \& Shim (2015): S\&P 500 futures vs SPY, 2011: {FACTS['bcs_corr_1ms']} at 1 ms",
-                   font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25)
+                   font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25).to_edge(LEFT, buff=0.4)
         with self.voiceover(
             "We can measure this. <bookmark mark='c'/> Take the price changes of two of these funds over intervals of "
             "a given length, and compute their correlation. <bookmark mark='m'/> Over a minute: 0.999, practically "
@@ -162,6 +163,7 @@ class TheRace(VoiceoverScene):
             self.add(a, b)
             self.play(MoveAlongPath(a, pa), MoveAlongPath(b, pb), run_time=1.4, rate_func=linear)
             self.play(Flash(book[1], color=C.INFORMED), book[1][0].animate.set_fill(C.TRADE, 0.9))
+        self.clear_scene()
         facts = VGroup(
             label(r"latency-arbitrage races, London Stock Exchange (Aquilina, Budish \& O'Neill, 2022)", font_size=26),
             label(rf"typical race: {FACTS['abo_race_us'][0]}--{FACTS['abo_race_us'][1]} microseconds, start to finish",
@@ -171,8 +173,7 @@ class TheRace(VoiceoverScene):
             label(rf"over {100 * FACTS['abo_top6_share']:.0f}\% of races won or lost by just 6 firms", font_size=26, color=GREY_A),
             label(rf"worth about \${FACTS['abo_global_per_year'] / 1e9:.0f} billion a year in global stock markets", font_size=26,
                   color=C.PNL_UP),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.3)
-        facts.add_background_rectangle(color=BACKGROUND, opacity=0.95, buff=0.15)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(ORIGIN)
         with self.voiceover(
             "<bookmark mark='f'/> How often does this happen? Using the London Stock Exchange's own message logs, "
             "which record the losers of each race as well as the winners, Matteo Aquilina, Eric Budish and Peter "
@@ -234,6 +235,6 @@ class TheRace(VoiceoverScene):
             self.play(FadeIn(peak), Indicate(hist[int(np.searchsorted(idx, mode_bin))], color=C.LATENCY))
             vo.wait_until("l")
             fl = label(rf"canceled within 1 ms: {100 * q1ms:.0f}\% \qquad within 0.1 s: {100 * q100:.0f}\%", font_size=30,
-                       color=C.CANCEL).to_edge(DOWN, buff=0.2)
+                       color=C.CANCEL).to_edge(DOWN, buff=0.2).shift(LEFT * 1.6)
             self.play(FadeIn(fl))
         self.clear_scene()
