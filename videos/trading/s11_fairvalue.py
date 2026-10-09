@@ -19,7 +19,8 @@ class FairValue(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def queues(self):
-        lad = Ladder([(18385, [400, 300, 200, 100])], [(18386, [100])], row_h=1.0, price_w=1.8).scale(1.25).shift(UP * 0.2)
+        lad = Ladder([(18385, [400, 300, 200, 100])], [(18386, [100])], row_h=1.0, price_w=1.8, max_len=5.5,
+                     font_size=32).shift(UP * 0.2)
         q = VGroup(label(r"1{,}000 shares want to buy at 183.85", font_size=26, color=C.BID),
                    label(r"100 shares want to sell at 183.86", font_size=26, color=C.ASK)).arrange(DOWN, buff=0.12)
         q.to_edge(DOWN, buff=1.0)
