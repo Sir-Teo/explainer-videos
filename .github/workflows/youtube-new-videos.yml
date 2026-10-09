@@ -5,11 +5,13 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 env:
   PYTHONWARNINGS: ignore
   OMP_NUM_THREADS: '1'
   OPENBLAS_NUM_THREADS: '1'
   RL_THREADS: '4'
+  RL_BASE_STEPS: '8000'
   EXPLAINER_RENDER_THREADS: '2'
 jobs:
   seed:
@@ -27,7 +29,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3 transformers==4.57.6 huggingface-hub==0.36.2
           uv pip install --python .venv/bin/python --no-deps -e .
       - name: Compute exact toys and base model
@@ -43,22 +45,41 @@ jobs:
           include-hidden-files: true
           retention-days: 1
           if-no-files-found: error
+      - name: Verify the worked-answer baseline is learned
+        run: |
+          .venv/bin/python -u - <<'PYCODE'
+          from videos.rl.compute import load
+          result = load('base')['eval']
+          print(result, flush=True)
+          assert result['acc_think'] >= 0.99, 'Worked-answer baseline remains undertrained'
+          PYCODE
   mismatch:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - name: Install computation dependencies
+      - name: Wait for the already-running full Qwen measurement
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
-          python3 -m pip install uv
-          uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
-          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3 transformers==4.57.6 huggingface-hub==0.36.2
-          uv pip install --python .venv/bin/python --no-deps -e .
-      - name: Measure inference and training mismatch
-        run: .venv/bin/python -u -m videos.rl.compute mismatch
+          python3 -u - <<'PYCODE'
+          import json, os, subprocess, time
+          repository = os.environ['GITHUB_REPOSITORY']
+          for _ in range(220):
+              result = subprocess.run(['gh','api',f'repos/{repository}/actions/runs/37879919062/artifacts'],capture_output=True,text=True,check=True)
+              if any(a['name']=='rl-mismatch' and not a['expired'] for a in json.loads(result.stdout)['artifacts']):
+                  print('Full Qwen measurement is ready.',flush=True)
+                  break
+              print('Waiting for the original full eight-trace measurement.',flush=True)
+              time.sleep(45)
+          else:
+              raise RuntimeError('Qwen measurement artifact did not arrive')
+          PYCODE
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-mismatch
+          run-id: 37879919062
+          github-token: ${{ github.token }}
+          path: .cache/rl
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: rl-mismatch
@@ -82,7 +103,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
           uv pip install --python .venv/bin/python --no-deps -e .
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
@@ -124,7 +145,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
           uv pip install --python .venv/bin/python --no-deps -e .
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
@@ -167,7 +188,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
           uv pip install --python .venv/bin/python --no-deps -e .
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
@@ -198,7 +219,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config espeak-ng fonts-dejavu texlive-latex-extra texlive-science texlive-fonts-recommended dvisvgm tipa
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
           uv pip install --python .venv/bin/python manim==0.19.0 kokoro==0.9.4 numpy==2.2.6 scipy==1.16.3 numba==0.62.1 transformers==4.57.6 huggingface-hub==0.36.2 soundfile
           uv pip install --python .venv/bin/python --no-deps -e .
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093

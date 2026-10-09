@@ -285,7 +285,7 @@ SEQ = PL + ANS_MAX
 P_THINK = 0.25  # share of pretraining answers that show their work
 P_SLIP = 0.25  # in quick (direct) answers, each carry is forgotten with this probability
 BASE_CFG = dict(vocab=len(VOCAB), d=96, layers=3, heads=3, seq=SEQ)
-BASE_STEPS = 4000
+BASE_STEPS = int(os.environ.get("RL_BASE_STEPS", "4000"))
 
 
 def answer_text(a: int, b: int, think: bool) -> str:
