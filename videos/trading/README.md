@@ -33,9 +33,11 @@ against the data at render time.
 
 *An explanation of public information, not affiliated with any firm named, and not investment advice.*
 
-**Watch:** [`published/trading.mp4`](../../published/trading.mp4) (1080p, subtitles and chapters embedded).
+**Watch on YouTube:** [Building a Top-Tier Real-Time Trading System](https://youtu.be/EIN-8aFXXR4) (1080p, English captions, 16 chapters). See [the October 9 rebuild notes](YOUTUBE_REBUILD.md) for its chapter timestamps and validation.
 
-<details><summary>Chapters</summary>
+**GitHub download:** [`published/trading.mp4`](../../published/trading.mp4) (1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters in the GitHub download</summary>
 
 - `0:00` Two o'clock on Fed day
 - `2:47` Part 1: What a market maker does
