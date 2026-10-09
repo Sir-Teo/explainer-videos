@@ -13,6 +13,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
 | **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`published/frontier.mp4`](published/frontier.mp4) | [`videos/frontier`](videos/frontier) |
 | **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`published/rl.mp4`](published/rl.mp4) | [`videos/rl`](videos/rl) |
+| **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`published/stochastic.mp4`](published/stochastic.mp4) | [`videos/stochastic`](videos/stochastic) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -22,7 +23,9 @@ The LLM, Opposing Forces, Riemann and open-models videos' pictures are bit-ident
 Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
 0.98–0.9996 against the full render, lowest on the turbulence footage), and
 the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
-dense 15 s segments, lowest single frame 0.993). The
+dense 15 s segments, lowest single frame 0.993), and the stochastic-calculus video at
+~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
+fans and Monte Carlo noise, lowest single frame 0.975). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
@@ -44,6 +47,7 @@ python -m videos.llm.analyze                 # GPT-2 probes + a tiny transformer
 python -m videos.riemann.compute             # real zeta zeros, prime counts, Möbius sums, domain coloring (~4 min)
 python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
 python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO, PPO, DPO, ...), Qwen3 mismatch (~3 h)
+python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
 
 # 4. Render: fast preview, then the final 1080p cut
@@ -55,6 +59,7 @@ python tools/build.py riemann                 # -> renders/riemann.mp4
 python tools/build.py open_models             # -> renders/open_models.mp4
 python tools/build.py frontier                # -> renders/frontier.mp4
 python tools/build.py rl                      # -> renders/rl.mp4
+python tools/build.py stochastic              # -> renders/stochastic.mp4
 ```
 
 Iterate on a single scene:
@@ -96,6 +101,8 @@ videos/<name>/
                            schedule / stability / MoE sweeps, Newton-Schulz, FP8/FP4, chat template, GRPO, Epoch data
                            (rl) a pocket adder that can show its work, REINFORCE/RLOO/GRPO/DAPO/Dr. GRPO/PPO runs,
                            critic, KL-tilted optimum, pass@k, DPO, ScaleRL fits, Qwen3 bf16-vs-fp32 log-probs
+                           (stochastic) seeded simulations: the 2^22-step hero path, Ito sums, GBM, Ornstein-Uhlenbeck,
+                           a double well with a Fokker-Planck solve, Kakutani's walkers, delta hedging, Girsanov weights
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   README.md                outline, color legend, sources and fact-check notes

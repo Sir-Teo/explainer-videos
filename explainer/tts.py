@@ -211,6 +211,28 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bxAI\b", "x A I"),
     (r"\bProRL\b", "Pro R L"),
     (r"\b([Rr])eweight", r"\1e-weight"),  # not in the G2P dictionary: "reweighted" came out as "related"
+    # Stochastic calculus (videos/stochastic)
+    (r"\bItô's\b", "[Itô's](/ˈitOz/)"),  # "EE-toh", not "eye-toe"
+    (r"\bItô\b(?!')", "[Itô](/ˈitO/)"),  # (?!') / (?<!\[): don't rewrite inside a link made by an earlier rule
+    (r"\bStratonovich\b", "[Stratonovich](/stɹˌætənˈOvɪʧ/)"),
+    (r"\bGirsanov's\b", "[Girsanov's](/ɡɪɹsˈɑnəfs/)"),
+    (r"\bGirsanov\b(?!')", "[Girsanov](/ɡɪɹsˈɑnəf/)"),
+    (r"\bFokker[–—-]Planck\b", "[Fokker](/fˈɑkəɹ/) [Planck](/plˈɑŋk/)"),
+    (r"\bFeynman[–—-]Kac\b", "Feynman [Kac](/kˈɑts/)"),
+    (r"(?<!\[)\bKac\b", "[Kac](/kˈɑts/)"),
+    (r"\bOrnstein[–—-]Uhlenbeck\b", "[Ornstein](/ˈɔɹnstIn/) [Uhlenbeck](/ˈuləŋbɛk/)"),
+    (r"\bEuler[–—-]Maruyama\b", "[Euler](/ˈYləɹ/) [Maruyama](/mˌɑɹujˈɑmə/)"),
+    (r"\bRiemann[–—-]Stieltjes\b", "Riemann [Stieltjes](/stˈilʧəs/)"),
+    (r"\bWong[–—-]Zakai\b", "Wong [Zakai](/zɑkˈI/)"),
+    (r"\bBlack[–—-]Scholes\b", "Black [Scholes](/ʃˈOlz/)"),
+    (r"(?<!\[)\bScholes\b", "[Scholes](/ʃˈOlz/)"),
+    (r"\bKolmogorov\b", "[Kolmogorov](/kˌOlməɡˈɔɹəf/)"),
+    (r"\bBachelier\b", "[Bachelier](/bˌɑʃəljˈA/)"),
+    (r"\bLévy\b", "[Lévy](/lAvˈi/)"),
+    (r"\bKakutani\b", "[Kakutani](/kˌɑkutˈɑni/)"),
+    (r"\bLangevin\b", "[Langevin](/lˌɑnʒəvˈæn/)"),
+    (r"\bDonsker's\b", "[Donsker's](/dˈɑnskəɹz/)"),
+    (r"\bKramers\b", "[Kramers](/kɹˈɑməɹz/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
