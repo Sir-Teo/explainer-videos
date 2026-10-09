@@ -37,7 +37,22 @@ against the data at render time.
 
 <details><summary>Chapters</summary>
 
-CHAPTERS
+- `0:00` Two o'clock on Fed day
+- `2:47` Part 1: What a market maker does
+- `5:46` Inside the exchange
+- `9:06` Part 2: The feed, byte by byte
+- `11:38` Rebuilding the order book
+- `13:56` Part 3: Why microseconds matter
+- `16:52` The speed of light
+- `19:55` Inside the box: the latency ladder
+- `22:15` The hot path in software
+- `25:50` Hardware: deciding before the packet ends
+- `28:11` Part 4: Fair value
+- `30:47` Quoting: spread, skew, inventory
+- `32:47` Testing on real queues
+- `35:42` Part 5: Risk, and Knight Capital
+- `38:43` Determinism and the research loop
+- `40:59` The whole machine
 
 </details>
 
