@@ -34,6 +34,8 @@ class ResearchLoop(VoiceoverScene):
         uses = VGroup(label(r"why it matters: explain any decision after the fact \quad test new code on last month's "
                             r"markets \quad rebuild a crashed process in seconds", font_size=22, color=GREY_A)).to_edge(DOWN, buff=0.4)
         tag = schematic_tag()
+        head = label(r"same inputs, same decisions", font_size=40).to_edge(UP, buff=0.4)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "Remember the exchange's trick: put every input in one numbered line, and make every component a "
             "deterministic function of that line. <bookmark mark='l'/> The best trading systems are built the same "
@@ -47,7 +49,8 @@ class ResearchLoop(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("l")
-            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in log], lag_ratio=0.06), FadeIn(ll), run_time=1.6)
+            self.play(FadeOut(head), LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in log], lag_ratio=0.06), FadeIn(ll),
+                      run_time=1.6)
             vo.wait_until("p")
             self.play(FadeIn(prod), GrowArrow(a1))
             self.play(FadeIn(outs[0]))
@@ -121,6 +124,8 @@ class ResearchLoop(VoiceoverScene):
             label(r"HRT: C++ ``at the center of our live trading systems and research infrastructure''", font_size=22,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
+        head = label(r"the research loop", font_size=40).to_edge(UP, buff=0.3)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "And then the whole machine sits inside a bigger loop, the one that makes it better. <bookmark mark='d'/> "
             "Data: every message from every venue, kept for years. <bookmark mark='r'/> Research: ideas and models, "
