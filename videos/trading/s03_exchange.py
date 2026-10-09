@@ -36,6 +36,8 @@ class TheExchange(VoiceoverScene):
         counter = Integer(0, font_size=30, color=C.LATENCY).next_to(seq, UP, buff=0.15)
         clab = label(r"\#", font_size=30, color=C.LATENCY).next_to(counter, LEFT, buff=0.08)
         tag = schematic_tag()
+        head = label(r"inside the exchange", font_size=40).to_edge(UP, buff=0.4)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "Now the other side of every trade: the exchange. An exchange is at heart a machine for one job: deciding "
             "the order in which things happened. <bookmark mark='c'/> Thousands of connections from trading firms "
@@ -88,7 +90,7 @@ class TheExchange(VoiceoverScene):
             row.blocks = blocks
             queues.add(row)
         incoming = VGroup(Rectangle(width=2.8, height=0.42, stroke_color=C.BID, fill_color=C.BID, fill_opacity=0.6),
-                          label(r"buy 25 at up to 100.01", font_size=22)).move_to(LEFT * 4.6 + DOWN * 0.0)
+                          label(r"buy 35 at up to 100.01", font_size=22)).move_to(LEFT * 4.6 + DOWN * 0.0)
         incoming[1].move_to(incoming[0])
         rule = VGroup(label(r"price-time priority", font_size=34, color=C.TRADE),
                       label(r"best price first; at the same price, first come, first served", font_size=26, color=GREY_A)
@@ -96,31 +98,25 @@ class TheExchange(VoiceoverScene):
         with self.voiceover(
             "The matching rule is called price-time priority. <bookmark mark='i'/> An incoming order to buy trades first "
             "against the cheapest offers, <bookmark mark='q'/> and among offers at the same price, against whichever "
-            "arrived first. <bookmark mark='r'/> Whatever can't be filled rests in the book, at the back of its "
-            "queue."
+            "arrived first. <bookmark mark='r'/> Whatever can't be filled rests in the book, at the back of the queue "
+            "at its price: here it becomes the new best bid."
         ) as vo:
             self.play(FadeIn(rule), LaggedStart(*[FadeIn(q) for q in queues], lag_ratio=0.2))
             vo.wait_until("i")
             self.play(FadeIn(incoming, shift=RIGHT * 0.3))
             vo.wait_until("q")
-            # eat 100.00 fully (15), then 100.01 from the front (10 of 15)
-            for b in queues[2].blocks:
-                self.play(b.animate.set_fill(C.TRADE, 0.9).set_stroke(C.TRADE), run_time=0.15)
-                self.play(FadeOut(b, scale=0.5), run_time=0.15)
-            eaten = 0
-            for b in list(queues[1].blocks):
-                s = round(b.width / 0.18)
-                if eaten + s > 10:
-                    break
-                eaten += s
-                self.play(b.animate.set_fill(C.TRADE, 0.9).set_stroke(C.TRADE), run_time=0.15)
-                self.play(FadeOut(b, scale=0.5), run_time=0.15)
+            # 15 shares at 100.00, then all 15 at 100.01, front to back; 5 shares are left over
+            for row in (queues[2], queues[1]):
+                for b in row.blocks:
+                    self.play(b.animate.set_fill(C.TRADE, 0.9).set_stroke(C.TRADE), run_time=0.12)
+                    self.play(FadeOut(b, scale=0.5), run_time=0.12)
             vo.wait_until("r")
-            rest = Rectangle(width=0.18 * (25 - 15 - eaten), height=0.42, stroke_color=C.BID, fill_color=C.BID,
-                             fill_opacity=0.6)
-            rest.move_to([-0.3 + rest.width / 2, -0.7, 0])
-            rl = MathTex("100.01", font_size=30, color=C.BID).move_to([-1.0, -0.7, 0])
-            self.play(ReplacementTransform(incoming, rest), FadeIn(rl))
+            rest = Rectangle(width=0.18 * 5, height=0.42, stroke_color=C.BID, fill_color=C.BID, fill_opacity=0.6)
+            rest.move_to([-1.75 - rest.width / 2, row_y[1], 0])
+            self.play(ReplacementTransform(incoming, rest), queues[1][0].animate.set_color(C.BID),
+                      queues[2][0].animate.set_opacity(0.3))
+            nb = label(r"the rest, 5 shares, now the best bid", font_size=22, color=C.BID).next_to(rest, DOWN, buff=0.15)
+            self.play(FadeIn(nb))
         self.clear_scene()
 
         burst = VGroup(
@@ -210,17 +206,17 @@ class TheExchange(VoiceoverScene):
         other = tot - adds - repl - dels - exe - hidden
         share_exec = exe / tot
         assert 0.018 < share_exec < 0.022
-        parts = [(adds, C.MSG, r"new orders"), (repl, C.SIGNAL, r"replaced (price or size changed)"),
-                 (dels, C.CANCEL, r"canceled"), (exe, C.TRADE, r"executions against displayed orders"),
-                 (hidden + other, GREY_D, r"other (hidden-order trades, auctions, admin)")]
+        parts = [(adds, C.MSG, r"new orders"), (repl, C.SIGNAL, r"replaced:\\new price or size"),
+                 (dels, C.CANCEL, r"canceled"), (exe, C.TRADE, r"trades"),
+                 (hidden + other, GREY_D, r"other: hidden trades,\\auctions, admin")]
         n = 1000
         counts = [int(round(p[0] / tot * n)) for p in parts]
         counts[0] += n - sum(counts)
         squares = VGroup()
         for (v, col, _), k in zip(parts, counts):
             for _ in range(k):
-                squares.add(Square(0.2, stroke_width=0, fill_color=col, fill_opacity=0.9))
-        squares.arrange_in_grid(20, 50, buff=0.04).move_to(LEFT * 1.9 + DOWN * 0.45)
+                squares.add(Square(0.16, stroke_width=0, fill_color=col, fill_opacity=0.9))
+        squares.arrange_in_grid(25, 40, buff=0.035).move_to(LEFT * 2.0 + DOWN * 0.3)
         ttl = label(rf"what the {tot / 1e6:.0f} million messages of the regular session were", font_size=32)
         ttl.to_edge(UP, buff=0.35)
         sub = note(r"1{,}000 squares; each is 0.1\% of the messages", font_size=22).next_to(ttl, DOWN, buff=0.1)
@@ -243,7 +239,7 @@ class TheExchange(VoiceoverScene):
             "traded at all. Most of the activity of a modern market is quoting, and re-quoting, and getting out of "
             "the way."
         ) as vo:
-            self.play(FadeIn(ttl), FadeIn(sub), FadeIn(real_tag()))
+            self.play(FadeIn(ttl), FadeIn(sub), FadeIn(real_tag(corner=DR)))
             starts = np.cumsum([0] + counts)
             for i, m in enumerate("aude"):
                 vo.wait_until(m)
@@ -263,11 +259,11 @@ class TheExchange(VoiceoverScene):
         log.arrange(RIGHT, buff=0.06).to_edge(UP, buff=1.0)
         ll = label(r"the sequenced log: every input, numbered", font_size=26, color=C.LATENCY).next_to(log, UP, buff=0.15)
         comps = VGroup(
-            node(r"matching engine", color=C.TRADE, width=3.0, height=0.8, font_size=24),
-            node(r"backup engine (passive)", color=C.TRADE, width=3.0, height=0.8, font_size=24),
-            node(r"market data publisher", color=C.MSG, width=3.0, height=0.8, font_size=24),
-            node(r"drop copies, clearing", color=GREY_B, width=3.0, height=0.8, font_size=24),
-        ).arrange_in_grid(2, 2, buff=(0.8, 0.5)).shift(DOWN * 1.0)
+            node(r"matching\\engine", color=C.TRADE, width=2.9, height=1.0, font_size=24),
+            node(r"backup engine\\(passive)", color=C.TRADE, width=2.9, height=1.0, font_size=24),
+            node(r"market data\\publisher", color=C.MSG, width=2.9, height=1.0, font_size=24),
+            node(r"drop copies,\\clearing", color=GREY_B, width=2.9, height=1.0, font_size=24),
+        ).arrange(RIGHT, buff=0.35).shift(DOWN * 0.7)
         arrows = VGroup(*[Arrow(log.get_bottom(), c.get_top(), buff=0.15, color=C.LATENCY, stroke_width=2.5) for c in comps])
         eq = label(r"same inputs, same order $\Rightarrow$ same state, on every replica", font_size=30, color=WHITE)
         eq.to_edge(DOWN, buff=0.4)

@@ -38,7 +38,8 @@ class Hook(VoiceoverScene):
         ymax = 55_000
         assert tot.max() < ymax
         ch = Plot((-2, 3), (0, ymax), width=11.5, height=4.4, x_ticks=[-2, -1, 0, 1, 2, 3],
-                  x_fmt=lambda v: ["1:59:58", "1:59:59", "2:00:00", "2:00:01", "2:00:02", "2:00:03"][int(v) + 2],
+                  x_fmt=lambda v: label(["1:59:58", "1:59:59", "2:00:00", "2:00:01", "2:00:02", "2:00:03"][int(v) + 2],
+                                        font_size=22, color=GREY_A),
                   y_ticks=[0, 20_000, 40_000], y_fmt=lambda v: fmt_int(v)).shift(DOWN * 0.55)
         ytl = ch.y_title(r"Nasdaq messages per 0.1 second", color=GREY_A)
         key = VGroup(*[VGroup(Square(0.2, stroke_width=0, fill_color=c, fill_opacity=0.9), label(t, font_size=22, color=c)
@@ -137,17 +138,18 @@ class Hook(VoiceoverScene):
         close_n = int(ps[16 * 3600 + 2 - t0])
         assert peak_at == 14 * 3600 + 40 * 60 + 7 and 900_000 < peak_n < 950_000
         assert 700_000 < open_n < 740_000 and close_n > 1_700_000
-        ch = Plot((9, 16.5), (0, 1.8e6), width=11.8, height=4.6, x_ticks=list(range(9, 17)),
-                  x_fmt=lambda v: f"{int(v) if v <= 12 else int(v) - 12}{'am' if v < 12 else 'pm'}".replace("12pm", "noon"),
-                  y_ticks=[0, 5e5, 1e6, 1.5e6], y_fmt=lambda v: ["0", "500{,}000", "1{,}000{,}000", "1{,}500{,}000"][int(v / 5e5)]
+        ch = Plot((9, 16.5), (5e3, 2e6), width=11.8, height=4.6, log_y=True, x_ticks=list(range(9, 17)),
+                  x_fmt=lambda v: label(f"{int(v) if v <= 12 else int(v) - 12}{'am' if v < 12 else 'pm'}".replace("12pm", "noon"),
+                                        font_size=22, color=GREY_A),
+                  y_ticks=[1e4, 1e5, 1e6], y_fmt=lambda v: {1e4: "10{,}000", 1e5: "100{,}000", 1e6: "1{,}000{,}000"}[v]
                   ).shift(DOWN * 0.45 + RIGHT * 0.4)
-        env_c = np.minimum(env, 1.8e6)
-        area = ch.area(np.r_[xs, xs[-1]], np.r_[env_c, 0], C.MSG, opacity=0.8)
+        env_c = np.clip(env, 5e3, 2e6)
+        area = ch.area(np.r_[xs, xs[-1]], np.r_[env_c, 5e3], C.MSG, opacity=0.8)
         ttl = label(r"Nasdaq messages per second, the whole trading day", font_size=34).to_edge(UP, buff=0.4)
         sub = note(r"busiest second in every 10-second window", font_size=22).next_to(ttl, DOWN, buff=0.12)
         notes = VGroup(
             tagged(rf"9:30 open\\{fmt_int(open_n)} in one second", font_size=22).next_to(ch.c2p(9.5, open_n), UP, buff=0.1),
-            tagged(r"2:00 the Fed", font_size=22, color=C.LATENCY).next_to(ch.c2p(14.0, 3.2e5), UP, buff=0.1).shift(LEFT * 0.4),
+            tagged(r"2:00 the Fed", font_size=22, color=C.LATENCY).next_to(ch.c2p(14.0, 3.0e5), UP, buff=0.1).shift(LEFT * 0.5),
             tagged(rf"2:40:07, the press conference\\{fmt_int(peak_n)} in one second", font_size=22).next_to(
                 ch.c2p(14 + 40 / 60, peak_n), UP, buff=0.12).shift(LEFT * 0.6),
             tagged(r"4:00 close", font_size=22).next_to(ch.c2p(16.0, 1.75e6), LEFT, buff=0.12),
@@ -156,7 +158,7 @@ class Hook(VoiceoverScene):
             label(rf"{d['messages'] / 1e6:.1f} million messages", font_size=34, color=C.MSG),
             label(rf"{d['bytes'] / 1e9:.1f} gigabytes", font_size=34, color=C.MSG),
             label(r"one exchange, one day", font_size=28, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ch.c2p(11.0, 1.35e6))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ch.c2p(11.6, 1.0e6))
         assert abs(d["messages"] / 1e6 - 846.8) < 0.05 and abs(d["bytes"] / 1e9 - 27.0) < 0.05
         with self.voiceover(
             "Zoom out to the whole day. <bookmark mark='o'/> The opening bell at 9:30: more than seven hundred "
