@@ -94,7 +94,7 @@ class Backtest(VoiceoverScene):
                     if i is None:
                         continue
                     blk = blocks.pop(i)
-                    anims = [FadeOut(blk[2], shift=UP * 0.4), Transform(clock, new_clock)]
+                    anims = [FadeOut(blk[2], shift=UP * 0.4), UpdateFromFunc(clock, lambda m, n=new_clock: m.become(n))]
                     tgt = [b_[2].copy() for b_ in blocks]
                     layout(tgt)
                     anims += [b_[2].animate.move_to(t.get_center()) for b_, t in zip(blocks, tgt)]
@@ -103,7 +103,7 @@ class Backtest(VoiceoverScene):
                     blk = ["real", m["shares"], make("real", m["shares"], behind=True)]
                     blocks.append(blk)
                     layout([b_[2] for b_ in blocks])
-                    self.play(FadeIn(blk[2], shift=LEFT * 0.3), Transform(clock, new_clock), run_time=0.4)
+                    self.play(FadeIn(blk[2], shift=LEFT * 0.3), UpdateFromFunc(clock, lambda m, n=new_clock: m.become(n)), run_time=0.4)
                 elif m["type"] == "E":
                     pending_exec.append(m)
                     if len(pending_exec) < 4 and m["ref"] != msgs[-1]["ref"]:
@@ -111,13 +111,13 @@ class Backtest(VoiceoverScene):
                     if m["ref"] == msgs[-1]["ref"]:
                         vo.wait_until("f")
                         ours = blocks[[k for k, _, _ in blocks].index("ours")]
-                        self.play(Transform(clock, new_clock), Flash(ours[2], color=C.TRADE),
+                        self.play(UpdateFromFunc(clock, lambda m, n=new_clock: m.become(n)), Flash(ours[2], color=C.TRADE),
                                   ours[2].animate.set_fill(C.TRADE, 0.95), run_time=0.6)
                         filled_at = m["ts"]
                         break
                     vo.wait_until("e")
                     front_blocks = [b_ for b_ in blocks if b_[0] == "real"][:4]
-                    self.play(Transform(clock, new_clock),
+                    self.play(UpdateFromFunc(clock, lambda m, n=new_clock: m.become(n)),
                               *[b_[2].animate.set_fill(C.TRADE, 0.9).set_stroke(C.TRADE) for b_ in front_blocks], run_time=0.4)
                     for b_ in front_blocks:
                         blocks.remove(b_)
