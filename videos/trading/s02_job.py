@@ -22,14 +22,14 @@ class TheJob(VoiceoverScene):
         bids, asks = s["bids"][:5], s["asks"][:5]
         bb, ba = bids[0][0], asks[0][0]
         assert (bb, ba) == (18385, 18386)
-        lad = Ladder(bids, asks).shift(DOWN * 0.35)
+        lad = Ladder(bids, asks, row_h=0.42).shift(UP * 0.05)
         self.lad, self.bb, self.ba = lad, bb, ba
         ttl = label(r"Nvidia (NVDA) on Nasdaq at 10:30:00 a.m.", font_size=34).to_edge(UP, buff=0.3)
-        tag = real_tag(r"real order book, rebuilt from the feed").to_corner(UR, buff=0.3).shift(DOWN * 0.55)
-        bid_l = label(r"bids: waiting to buy", font_size=28, color=C.BID).next_to(lad.anchor("B", bids[-1][0]), DL, buff=0.25)
-        ask_l = label(r"asks: waiting to sell", font_size=28, color=C.ASK).next_to(lad.anchor("S", asks[-1][0]), UR, buff=0.25)
-        bid_l.align_to(lad, LEFT).shift(RIGHT * 0.3)
-        ask_l.align_to(lad, RIGHT).shift(LEFT * 0.3)
+        tag = real_tag(r"real order book, rebuilt from the feed", corner=DR)
+        bid_y = (lad.anchor("B", bids[0][0])[1] + lad.anchor("B", bids[-1][0])[1]) / 2
+        ask_y = (lad.anchor("S", asks[0][0])[1] + lad.anchor("S", asks[-1][0])[1]) / 2
+        bid_l = label(r"bids:\\waiting to buy", font_size=28, color=C.BID).move_to([-5.4, bid_y, 0])
+        ask_l = label(r"asks:\\waiting to sell", font_size=28, color=C.ASK).move_to([5.4, ask_y, 0])
         n_orders = sum(len(q) for _, q in bids + asks)
         with self.voiceover(
             "This is what the market looks like to a trading machine. It's Nasdaq's order book for Nvidia, at 10:30 that "
@@ -60,10 +60,10 @@ class TheJob(VoiceoverScene):
         sp = VGroup(
             label(rf"best bid \${bb / 100:.2f} \quad best ask \${ba / 100:.2f}", font_size=28),
             label(r"spread: 1 cent, \enspace mid-price: \$" + f"{mid:.3f}", font_size=28, color=C.MID),
-        ).arrange(DOWN, buff=0.1).to_corner(DL, buff=0.35)
+        ).arrange(DOWN, buff=0.1).to_corner(DL, buff=0.3)
         sp.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.1)
-        day = note(rf"average spread over the day: {spread_cents:.2f} cents on a \$183 stock, about 0.6 basis points",
-                   font_size=22, color=GREY_A).next_to(sp, UP, buff=0.12).align_to(sp, LEFT)
+        day = note(rf"average spread over the day:\\{spread_cents:.2f} cents on a \$183 stock, about 0.6 basis points",
+                   font_size=22, color=GREY_A).next_to(sp, UP, buff=0.1).align_to(sp, LEFT)
         brace = BraceBetweenPoints(lad.anchor("S", ba) + RIGHT * 0.05, lad.anchor("B", bb) + RIGHT * 0.05 + RIGHT * 1.5,
                                    direction=RIGHT, color=C.MID)
         with self.voiceover(
@@ -126,8 +126,8 @@ class TheJob(VoiceoverScene):
     # ------------------------------------------------------------------
     def adverse(self):
         # a schematic price path: our quotes around the mid; uninformed flow vs one informed trade
-        ch = Plot((0, 10), (183.80, 183.92), width=8.4, height=4.6, x_ticks=[], y_ticks=[183.82, 183.86, 183.90],
-                  y_fmt=lambda v: f"{v:.2f}").move_to(LEFT * 2.2 + DOWN * 0.3)
+        ch = Plot((0, 10), (183.80, 183.92), width=8.4, height=3.5, x_ticks=[], y_ticks=[183.82, 183.86, 183.90],
+                  y_fmt=lambda v: f"{v:.2f}").move_to(LEFT * 2.2 + UP * 0.75)
         tl = label(r"time $\to$", font_size=24, color=GREY_B).next_to(ch.x_axis, DOWN, buff=0.15)
         mid_path = [(0, 183.855), (2.0, 183.855), (2.0, 183.855), (5.6, 183.855), (5.6, 183.895), (10, 183.895)]
         bid_l = ch.line([0, 5.6], [183.85, 183.85], C.OURS, 3)
@@ -203,6 +203,8 @@ class TheJob(VoiceoverScene):
         ).arrange(RIGHT, buff=1.6).shift(UP * 0.3)
         edge = label(r"edge per share: a fraction of a cent \quad$\Rightarrow$\quad the business is volume", font_size=30)
         edge.to_edge(DOWN, buff=0.8)
+        hdr = label(r"the market maker's edge", font_size=40).to_edge(UP, buff=0.6)
+        self.play(FadeIn(hdr), run_time=0.6)
         with self.voiceover(
             "So the market maker's edge is a fraction of a cent per share, and it lives or dies on two abilities. "
             "<bookmark mark='r'/> Be right: know where the price is going, so the spread you charge covers the risk. "
