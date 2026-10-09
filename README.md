@@ -12,6 +12,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
 | **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
 | **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`published/frontier.mp4`](published/frontier.mp4) | [`videos/frontier`](videos/frontier) |
+| **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`published/rl.mp4`](published/rl.mp4) | [`videos/rl`](videos/rl) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -42,6 +43,7 @@ python -m videos.navier_stokes.simulate      # fluid simulations (~40 min on 4 c
 python -m videos.llm.analyze                 # GPT-2 probes + a tiny transformer trained on Shakespeare (~20 min)
 python -m videos.riemann.compute             # real zeta zeros, prime counts, Möbius sums, domain coloring (~4 min)
 python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
+python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO, PPO, DPO, ...), Qwen3 mismatch (~3 h)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
 
 # 4. Render: fast preview, then the final 1080p cut
@@ -52,6 +54,7 @@ python tools/build.py opposing_forces         # -> renders/opposing_forces.mp4
 python tools/build.py riemann                 # -> renders/riemann.mp4
 python tools/build.py open_models             # -> renders/open_models.mp4
 python tools/build.py frontier                # -> renders/frontier.mp4
+python tools/build.py rl                      # -> renders/rl.mp4
 ```
 
 Iterate on a single scene:
@@ -91,6 +94,8 @@ videos/<name>/
   compute.py               (riemann) mpmath/NumPy: zeta zeros, prime counts, Möbius walk, Gauss sums, domain coloring
                            (frontier) Common Crawl funnel, dedup, FineWeb-Edu scores, BPE, scaling-law / optimizer /
                            schedule / stability / MoE sweeps, Newton-Schulz, FP8/FP4, chat template, GRPO, Epoch data
+                           (rl) a pocket adder that can show its work, REINFORCE/RLOO/GRPO/DAPO/Dr. GRPO/PPO runs,
+                           critic, KL-tilted optimum, pass@k, DPO, ScaleRL fits, Qwen3 bf16-vs-fp32 log-probs
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   README.md                outline, color legend, sources and fact-check notes
@@ -178,4 +183,5 @@ voice). Set `EXPLAINER_VOICE` to try another Kokoro voice.
 * Frontier-training video: web data from [Common Crawl](https://commoncrawl.org/) (CC-MAIN-2026-39) filtered with Hugging Face's [`datatrove`](https://github.com/huggingface/datatrove) (Apache-2.0); pretraining text from [FineWeb-Edu](https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu) (ODC-By) via `karpathy/fineweb-edu-100b-shuffle`; quality scores from [`HuggingFaceFW/fineweb-edu-classifier`](https://huggingface.co/HuggingFaceFW/fineweb-edu-classifier); chat template and outputs from [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) and its base model (Apache-2.0); training-compute data from [Epoch AI](https://epoch.ai/data/ai-models) (CC BY 4.0). Muon after [`KellerJordan/Muon`](https://github.com/KellerJordan/Muon); the end-to-end framing owes much to [`karpathy/nanochat`](https://github.com/karpathy/nanochat) and Hugging Face's training playbooks.
 * Mathematics explained: OpenAI, [`github.com/openai/math`](https://github.com/openai/math), family 003, *The quasi-Riemann hypothesis* (Sept 30 – Oct 5, 2026). The video explains and attributes the manuscripts; it is not affiliated with OpenAI. Numerics: [mpmath](https://mpmath.org/) (BSD) and NumPy.
 * Models explained: Xiaomi [MiMo-V2.6-Pro](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL), Z.ai [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3), Moonshot AI [Kimi K3](https://huggingface.co/moonshotai/Kimi-K3), as ranked by the [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/models/open-source) (v4.3.2, Oct 8, 2026). Configs and weights are read from Hugging Face; the video explains and attributes the labs' technical reports and is not affiliated with any of them.
+* Reinforcement-learning video: sampler/learner mismatch measured on [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) (Apache-2.0); defaults compared across the open RL frameworks [verl](https://github.com/volcengine/verl), [TRL](https://github.com/huggingface/trl), [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF), [open-instruct](https://github.com/allenai/open-instruct), [nanochat](https://github.com/karpathy/nanochat), [prime-rl](https://github.com/PrimeIntellect-ai/prime-rl), [slime](https://github.com/THUDM/slime), [AReaL](https://github.com/inclusionAI/AReaL), [SkyRL](https://github.com/NovaSky-AI/SkyRL), [ROLL](https://github.com/alibaba/ROLL) and [ART](https://github.com/OpenPipe/ART). GRPO's arcsine objective after Davis & Recht (2025), the KL estimators after John Schulman's note, the entropy-covariance identity after Cui et al. (2025); full list in [`videos/rl/README.md`](videos/rl/README.md).
 * Visual style inspired by Grant Sanderson's [3Blue1Brown](https://www.3blue1brown.com/).
