@@ -48,6 +48,7 @@ class Hardware(VoiceoverScene):
                   color=C.ORDER),
         ).arrange(DOWN, buff=0.15).move_to(DOWN * 0.6)
         price_i = [n for n, *_ in FRAME].index("price")
+        self.play(FadeIn(ttl), FadeIn(segs), FadeIn(labs), run_time=0.8)
         with self.voiceover(
             "Software, however well tuned, has a floor: the whole packet has to arrive, cross into memory, and be read "
             "by the processor before any code can look at it. The fastest firms don't wait. <bookmark mark='f'/> Here "
@@ -55,9 +56,8 @@ class Hardware(VoiceoverScene):
             "ten-gigabit link, a byte arrives every eight tenths of a nanosecond, so the frame takes 83 nanoseconds to "
             "arrive, and the field that matters most, the price, comes almost last."
         ) as vo:
-            self.play(FadeIn(ttl))
             vo.wait_until("f")
-            self.play(LaggedStart(*[FadeIn(s) for s in segs], lag_ratio=0.08), FadeIn(labs), run_time=1.5)
+            self.play(LaggedStart(*[Indicate(s, scale_factor=1.15, color=WHITE) for s in segs], lag_ratio=0.08), run_time=1.5)
             vo.wait_until("w")
             self.play(FadeIn(info[0]), FadeIn(info[1]))
             self.play(Indicate(segs[price_i], color=C.ORDER, scale_factor=1.3), FadeIn(info[2]))
@@ -76,16 +76,19 @@ class Hardware(VoiceoverScene):
         boxes.move_to(chip)
         wires = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.02, stroke_width=2.5, color=GREY_B, tip_length=0.1,
                                max_tip_length_to_length_ratio=0.5) for a, b in zip(boxes[:-1], boxes[1:])])
-        port_in = Line(LEFT * 7.0, chip.get_left(), color=C.MSG, stroke_width=4).set_y(boxes.get_y())
-        port_out = Line(chip.get_right(), RIGHT * 7.0, color=C.ORDER, stroke_width=4).set_y(boxes.get_y())
+        yb = boxes.get_y()
+        port_in = Line([-7.2, yb, 0], [chip.get_left()[0], yb, 0], color=C.MSG, stroke_width=4)
+        port_out = Line([chip.get_right()[0], yb, 0], [7.2, yb, 0], color=C.ORDER, stroke_width=4)
         clock_t = ValueTracker(0)
         clk = always_redraw(lambda: VGroup(label(r"elapsed", font_size=24, color=GREY_A),
                                            MathTex(rf"{clock_t.get_value():5.1f}\,\mathrm{{ns}}", font_size=32,
                                                    color=C.LATENCY)).arrange(RIGHT, buff=0.15).to_corner(UL, buff=0.4))
-        words = VGroup(*[Rectangle(width=0.32, height=0.32, stroke_width=1, stroke_color=C.MSG, fill_color=C.MSG,
-                                   fill_opacity=0.6) for _ in range(13)])
-        words.arrange(RIGHT, buff=0.04).next_to(port_in.get_start(), RIGHT, buff=0).set_y(port_in.get_y() + 0.0)
-        words.shift(LEFT * (words.width + 0.2))
+        def word():
+            return Rectangle(width=0.3, height=0.3, stroke_width=1, stroke_color=C.MSG, fill_color=C.MSG,
+                             fill_opacity=0.7)
+        step = 0.36
+        x_in = chip.get_left()[0]
+        words = VGroup(*[word().move_to([x_in - 0.2 - step * k, yb, 0]) for k in range(1, 9)])
         clk_note = note(r"one clock tick = 6.4 ns = 8 bytes in", font_size=22).next_to(chip, DOWN, buff=0.25)
         tag = schematic_tag()
         out_frame = VGroup(*[Rectangle(width=0.32, height=0.32, stroke_width=1, stroke_color=C.ORDER, fill_color=C.ORDER,
@@ -109,16 +112,25 @@ class Hardware(VoiceoverScene):
                       Create(port_out), run_time=1.5)
             vo.wait_until("s")
             self.add(clk, words)
-            self.play(FadeIn(clk_note))
-            span = boxes[-1].get_right()[0] - (port_in.get_start()[0])
-            # words stream across: every 6.4 ns one word reaches the chip; stages light up as their fields pass
-            for k in range(6):
-                self.play(words.animate.shift(RIGHT * 0.8), clock_t.animate.set_value(6.4 * (k + 1)),
-                          boxes[min(k, 3)].box.animate.set_fill(opacity=0.5), run_time=0.45, rate_func=linear)
-            vo.wait_until("o")
-            self.play(FadeIn(out_frame, shift=RIGHT * 0.3), words.animate.shift(RIGHT * 2.0),
-                      clock_t.animate.set_value(83.2), boxes[3].box.animate.set_fill(opacity=0.5),
-                      run_time=1.6, rate_func=linear)
+            self.play(FadeIn(clk_note), FadeIn(words))
+            # one 8-byte word reaches the chip every 6.4 ns (13 words in all); stages light up as their fields arrive
+            stage_at = {1: 0, 6: 1, 8: 2, 12: 3}
+            for k in range(1, 14):
+                entering = words[0]
+                new = word().move_to(words[-1].get_center() + LEFT * step) if k <= 5 else None
+                anims = [words.animate.shift(RIGHT * step), clock_t.animate.set_value(6.4 * k)]
+                if k in stage_at:
+                    anims.append(boxes[stage_at[k]].box.animate.set_fill(opacity=0.55))
+                if k == 11:
+                    anims.append(FadeIn(out_frame, shift=RIGHT * 0.3))
+                self.play(*anims, run_time=0.32 if k < 7 else 0.42, rate_func=linear)
+                words.remove(entering)
+                self.remove(entering)
+                if new is not None:
+                    words.add(new)
+                    self.add(new)
+                if k == 7:
+                    vo.wait_until("o")
             self.play(boxes[4].box.animate.set_fill(opacity=0.6), out_frame.animate.shift(RIGHT * 1.4),
                       clock_t.animate.set_value(96.0), run_time=1.0, rate_func=linear)
         clk.clear_updaters()

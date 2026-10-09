@@ -25,7 +25,7 @@ class SpeedOfLight(VoiceoverScene):
         r = g["routes"]["carteret"]
         km, vac_ms, fib_ms = r["km"], r["vacuum_ms"], r["fiber_straight_ms"]
         assert 1170 < km < 1185 and abs(vac_ms - 3.93) < 0.01 and abs(fib_ms - 5.77) < 0.01
-        m = GeoMap().shift(DOWN * 0.35)
+        m = GeoMap(width=12.6).shift(DOWN * 0.62)
         self.m = m
         pts = {k: m.site(k) for k in ("aurora", "carteret", "mahwah", "secaucus")}
         dots = VGroup(*[Dot(p, radius=0.08, color=C.LIGHT if k == "aurora" else WHITE) for k, p in pts.items()])
@@ -33,10 +33,12 @@ class SpeedOfLight(VoiceoverScene):
         cme.next_to(pts["aurora"], DOWN, buff=0.2)
         nj = VGroup(
             tagged(r"NYSE, Mahwah", font_size=22).next_to(pts["mahwah"], UL, buff=0.08),
-            tagged(r"Equinix NY4, Secaucus", font_size=22).next_to(pts["secaucus"], RIGHT, buff=0.12).shift(UP * 0.12),
+            tagged(r"Equinix NY4, Secaucus", font_size=22).next_to(pts["secaucus"], LEFT, buff=0.15),
             tagged(r"Nasdaq, Carteret", font_size=22).next_to(pts["carteret"], DOWN, buff=0.12).shift(LEFT * 0.3),
         )
         src = source(r"OpenStreetMap (addresses), Natural Earth (outlines)", font_size=18)
+        head = label(r"the speed of light", font_size=40).to_edge(UP, buff=0.5)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "Every race in this market is limited by one fact about the universe: information cannot travel faster "
             "than light. <bookmark mark='map'/> Here is the most valuable stretch of geography in American finance. "
@@ -46,7 +48,7 @@ class SpeedOfLight(VoiceoverScene):
             "around Secaucus."
         ) as vo:
             vo.wait_until("map")
-            self.play(FadeIn(m), FadeIn(src), run_time=1.5)
+            self.play(FadeIn(m), FadeIn(src), FadeOut(head), run_time=1.5)
             vo.wait_until("cme")
             self.play(GrowFromCenter(dots[0]), FadeIn(cme, shift=UP * 0.1))
             vo.wait_until("nj")
@@ -230,7 +232,7 @@ class SpeedOfLight(VoiceoverScene):
                 for k in range(24 * loops + 1):
                     ang = k / 24 * TAU
                     pts.append(c + 0.22 * np.array([np.sin(ang), -np.cos(ang) + 1, 0]) + RIGHT * 0.04 * k / 24)
-                coils.add(label(rf"+{loops * 2} m coiled", font_size=18, color=GREY_B).next_to(c, DOWN, buff=0.35))
+                pass
             pts += [b + LEFT * 0.3, b]
             path.set_points_smoothly(pts)
             path.set_stroke(C.FIBER, 2.5)
@@ -254,7 +256,9 @@ class SpeedOfLight(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r, shift=LEFT * 0.2) for r in racks], lag_ratio=0.15), FadeIn(rack_l))
             vo.wait_until("e")
             self.play(LaggedStart(*[Create(c) for c in cables], lag_ratio=0.2), run_time=2.5)
-            self.play(FadeIn(coils), FadeIn(equal))
+            coil_l = label(r"nearer racks: extra fiber, coiled up", font_size=22, color=C.FIBER).next_to(
+                cables[0].get_start(), UP, buff=0.55).shift(RIGHT * 1.6)
+            self.play(FadeIn(coil_l), FadeIn(equal))
             vo.wait_until("f")
             pulses = VGroup(*[Dot(radius=0.07, color=C.LIGHT).move_to(c.get_start()) for c in cables])
             self.add(pulses)

@@ -40,6 +40,8 @@ class HotPath(VoiceoverScene):
         m2 = tagged(r"frame to program: under 1 $\mu$s (Nigito)", font_size=22, color=C.MSG).next_to(right, DOWN, buff=0.2)
         m2.align_to(m1, UP)
         tag = schematic_tag()
+        head = label(r"the hot path in software", font_size=40).to_edge(UP, buff=0.4)
+        self.play(FadeIn(head), run_time=0.6)
         with self.voiceover(
             "That bottom rung, the operating system, is the first thing a trading system gets rid of. <bookmark "
             "mark='l'/> Normally, when a packet arrives, the network card interrupts the processor, the kernel's "
@@ -52,7 +54,7 @@ class HotPath(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("l")
-            self.play(FadeIn(lt), LaggedStart(*[FadeIn(n, shift=UP * 0.1) for n in left], lag_ratio=0.12), run_time=1.5)
+            self.play(FadeOut(head), FadeIn(lt), LaggedStart(*[FadeIn(n, shift=UP * 0.1) for n in left], lag_ratio=0.12), run_time=1.5)
             d = Dot(left[0].get_center(), radius=0.1, color=C.MSG)
             path = VMobject().set_points_as_corners([n.get_center() for n in left])
             self.add(d)
@@ -76,9 +78,9 @@ class HotPath(VoiceoverScene):
         rate = sp["throughput_msgs_per_s"]
         med = sp["paced_latency"]["pct"]["50"]
         assert 1e7 < rate < 3e7 and 150 < med < 500
-        die = cpu_die(4, size=3.2, labels=["", "", "", ""]).move_to(LEFT * 4.3 + DOWN * 0.2)
+        die = cpu_die(4, size=3.9, labels=["", "", "", ""]).move_to(LEFT * 4.2 + DOWN * 0.2)
         roles = [("operating\\\\system", C.KERNEL), ("feed\\\\handler", C.MSG), ("strategy", C.SIGNAL), ("order\\\\gateway", C.ORDER)]
-        rl = VGroup(*[label(t, font_size=20, color=c).move_to(core) for (t, c), core in zip(roles, die.cores)])
+        rl = VGroup(*[label(t, font_size=19, color=c).move_to(core).shift(UP * 0.18) for (t, c), core in zip(roles, die.cores)])
         spin = VGroup(*[Arc(radius=0.22, angle=1.6 * PI, color=c, stroke_width=3).move_to(core).shift(DOWN * 0.42)
                         for (_, c), core in zip(roles[1:], die.cores[1:])])
         dt = label(r"one core per job, pinned, never sleeping", font_size=24).next_to(die, UP, buff=0.3)
@@ -92,7 +94,7 @@ class HotPath(VoiceoverScene):
             s = AnnularSector(inner_radius=R - 0.45, outer_radius=R, angle=TAU / n - 0.04, start_angle=a - TAU / n + 0.02,
                               fill_color=GREY_D, fill_opacity=0.5, stroke_width=1, stroke_color=GREY_B).shift(center)
             slots.add(s)
-        rlab = label(r"a ring buffer between two cores", font_size=26).next_to(slots, UP, buff=0.3)
+        rlab = label(r"a ring buffer between two cores", font_size=26).next_to(slots, UP, buff=1.05)
         head = ValueTracker(0)
         tail = ValueTracker(0)
 
@@ -262,7 +264,8 @@ class HotPath(VoiceoverScene):
             "saving switched off, and constant monitoring for exactly these spikes, because a race is lost in the "
             "tail, not the median."
         ) as vo:
-            self.play(FadeIn(ttl), Create(ch), FadeIn(yl), FadeIn(machine_tag(corner=DR)))
+            mt = machine_tag().next_to(ch.x_labels, DOWN, buff=0.12).align_to(ch.x_axis, RIGHT)
+            self.play(FadeIn(ttl), Create(ch), FadeIn(yl), FadeIn(mt))
             vo.wait_until("j")
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.8), run_time=3)
             vo.wait_until("d")
