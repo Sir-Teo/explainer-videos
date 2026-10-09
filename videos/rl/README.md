@@ -29,21 +29,21 @@ on screen from the one before it, starting with the log-derivative trick:
 - `0:00` Learning from a single bit
 - `1:47` Part 1: A language model is a policy
 - `3:39` The log-derivative trick
-- `7:01` Baselines: same mean, less noise
+- `7:00` Baselines: same mean, less noise
 - `9:48` Credit assignment: values, TD errors, GAE
 - `12:58` Part 2: Importance sampling and trust regions
 - `16:30` PPO: the clipped objective
-- `18:54` Part 3: Rewards from preferences
-- `20:49` The KL leash and its exact optimum
-- `24:14` DPO: the reward hiding in the policy
-- `26:18` Part 4: GRPO: the group is the baseline
-- `29:42` A real run: what RL actually changed
+- `18:53` Part 3: Rewards from preferences
+- `20:48` The KL leash and its exact optimum
+- `24:13` DPO: the reward hiding in the policy
+- `26:17` Part 4: GRPO: the group is the baseline
+- `29:41` A real run: what RL actually changed
 - `31:17` Hidden biases: lengths and averages
-- `33:23` Entropy: the exploration budget
-- `36:03` Sharpening or discovery?
+- `33:22` Entropy: the exploration budget
+- `36:02` Sharpening or discovery?
 - `38:48` Part 5: When the sampler and the learner disagree
-- `42:01` Scaling RL: compute, environments, reward hacking
-- `44:59` The whole family, one equation at a time
+- `42:00` Scaling RL: compute, environments, reward hacking
+- `44:58` The whole family, one equation at a time
 
 </details>
 
