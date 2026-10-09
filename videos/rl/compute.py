@@ -1134,9 +1134,14 @@ def compute_mismatch(max_new: int = 768):
                            output_logits=True, return_dict_in_generate=True)
     print(f"    mismatch: sampled {len(texts)} x {max_new} tokens in {time.time() - t0:.0f}s", flush=True)
     gen = out.sequences[:, batch.input_ids.shape[1]:]
-    logits = torch.stack(out.logits, 1).float()  # (B, T, V): raw logits of the bf16 sampler
-    lp_all = torch.log_softmax(logits, -1).gather(2, gen[..., None])[..., 0]
-    del logits
+    # Keep only the sampled token's log probability. Stacking all vocabulary
+    # logits and normalizing them together creates several multi-GB copies.
+    lp_all = torch.stack([
+        torch.log_softmax(step_logits.float(), -1)
+        .gather(1, gen[:, t:t + 1])[:, 0]
+        for t, step_logits in enumerate(out.logits)
+    ], 1)
+    del out
     m32 = AutoModelForCausalLM.from_pretrained(QWEN, torch_dtype=torch.float32).eval()
     seqs = []
     for i, q in enumerate(MISMATCH_PROMPTS):

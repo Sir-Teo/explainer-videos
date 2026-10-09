@@ -1,0 +1,280 @@
+name: Rebuild new YouTube videos
+on:
+  push:
+    branches: [codex/youtube-new-videos]
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PYTHONWARNINGS: ignore
+  OMP_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  RL_THREADS: '4'
+  EXPLAINER_RENDER_THREADS: '2'
+jobs:
+  seed:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [base]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install computation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3 transformers==4.57.6 huggingface-hub==0.36.2
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - name: Compute exact toys and base model
+        if: matrix.task == 'base'
+        run: .venv/bin/python -u -m videos.rl.compute gauss cloud simplex kl_est base
+      - name: Measure inference and training mismatch
+        if: matrix.task == 'mismatch'
+        run: .venv/bin/python -u -m videos.rl.compute mismatch
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-${{ matrix.task }}
+          path: .cache/rl/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+  mismatch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install computation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3 transformers==4.57.6 huggingface-hub==0.36.2
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - name: Measure inference and training mismatch
+        run: .venv/bin/python -u -m videos.rl.compute mismatch
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-mismatch
+          path: .cache/rl/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+  training:
+    needs: seed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install computation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-base
+          path: .cache/rl
+      - name: Train assigned algorithms and seeds
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          .venv/bin/python -u - <<'PY'
+          import os
+          from concurrent.futures import ProcessPoolExecutor
+          from videos.rl import compute as c
+          c.RUN_DIR.mkdir(parents=True, exist_ok=True)
+          specs = list(c.run_specs().values())
+          assigned = specs[int(os.environ['SHARD'])::8]
+          print('Assigned runs:', [s['name'] for s in assigned], flush=True)
+          with ProcessPoolExecutor(max_workers=4) as pool:
+              for name, seconds in pool.map(c._run_one, assigned):
+                  print(name, seconds, flush=True)
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-runs-${{ matrix.shard }}
+          path: .cache/rl/runs/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+  tree:
+    needs: training
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install computation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-base
+          path: .cache/rl
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: rl-runs-*
+          path: .cache/rl/runs
+          merge-multiple: true
+      - name: Verify all runs and compute answer tree
+        run: |
+          .venv/bin/python -u - <<'PY'
+          from videos.rl import compute as c
+          c._save('runs', {n:c.load_run(n) for n in c.run_specs()})
+          c._save('tree', c.compute_tree())
+          c._save('scaling', c.compute_scaling())
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-training-data
+          path: .cache/rl/
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+  analysis:
+    needs: tree
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        item: [tilt, passk, critic, dpo]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install computation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-training-data
+          path: .cache/rl
+      - run: .venv/bin/python -u -m videos.rl.compute '${{ matrix.item }}'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-analysis-${{ matrix.item }}
+          path: .cache/rl/${{ matrix.item }}.*
+          include-hidden-files: true
+          retention-days: 1
+          if-no-files-found: error
+  render:
+    needs: [analysis, mismatch]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install native rendering tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config espeak-ng fonts-dejavu texlive-latex-extra texlive-science texlive-fonts-recommended dvisvgm tipa
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 kokoro==0.9.4 numpy==2.2.6 scipy==1.16.3 numba==0.62.1 transformers==4.57.6 huggingface-hub==0.36.2 soundfile
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-training-data
+          path: .cache/rl
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: rl-analysis-*
+          path: .cache/rl
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: rl-mismatch
+          path: .cache/rl
+      - name: Render assigned chapters at native 1080p30 CRF 18
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          .venv/bin/python -u - <<'PY'
+          import os
+          from concurrent.futures import ThreadPoolExecutor
+          from tools.build import ROOT, render_scene
+          from videos.rl.manifest import SCENES
+          assigned = SCENES[int(os.environ['SHARD'])::6]
+          print('Assigned scenes:', assigned, flush=True)
+          def render(scene):
+              module, cls, _ = scene
+              return render_scene('rl',module,cls,'h',30,ROOT/'media'/'rl'/'crf18',18)
+          with ThreadPoolExecutor(max_workers=2) as pool:
+              for cls, seconds, error in pool.map(render,assigned):
+                  print(cls,seconds,error,flush=True)
+                  if error: raise RuntimeError(cls)
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: rl-scenes-${{ matrix.shard }}
+          path: |
+            media/rl/crf18/videos/*/1080p30/*.mp4
+            media/rl/crf18/videos/*/1080p30/*.wav
+            media/rl/crf18/videos/*/1080p30/*.narration.json
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
+  stitch:
+    needs: render
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install stitching tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 pillow soundfile
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: rl-scenes-*
+          path: media/rl/crf18/videos
+          merge-multiple: true
+      - name: Stitch and master narration
+        run: .venv/bin/python -u tools/build.py rl --crf 18 --stitch-only
+      - name: Verify decoding, audio synchronization, captions, and chapters
+        run: .venv/bin/python -u tools/youtube_qa.py rl
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: youtube-rl
+          path: |
+            renders/rl.mp4
+            renders/rl.srt
+            renders/rl.chapters.txt
+            renders/youtube/rl.qa.json
+            renders/youtube/rl-qa-*.jpg
+          retention-days: 1
+          compression-level: 0
+          if-no-files-found: error
