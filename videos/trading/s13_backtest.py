@@ -55,7 +55,7 @@ class Backtest(VoiceoverScene):
         with self.voiceover(
             "Now the hardest question in this whole business: does a strategy actually make money? You test it on "
             "history, but your orders weren't in the history. <bookmark mark='q'/> So take the real Nvidia bid queue "
-            "at 10:30 that morning, six real orders, <bookmark mark='o'/> and put a virtual order of ours at the "
+            "at 10:30 that morning, six real orders, <bookmark mark='o'/> and put a virtual order of our own at the "
             "back. Because the feed reports every order individually, we can track exactly which orders are ahead of "
             "us, and replay what really happened to them."
         ) as vo:

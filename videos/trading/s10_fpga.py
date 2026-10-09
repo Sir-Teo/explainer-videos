@@ -50,7 +50,7 @@ class Hardware(VoiceoverScene):
         price_i = [n for n, *_ in FRAME].index("price")
         self.play(FadeIn(ttl), FadeIn(segs), FadeIn(labs), run_time=0.8)
         with self.voiceover(
-            "Software, however well tuned, has a floor: the whole packet has to arrive, cross into memory, and be read "
+            "Software, however well tuned, has a floor: the whole packet has to arrive, cross into memory, and be picked up "
             "by the processor before any code can look at it. The fastest firms don't wait. <bookmark mark='f'/> Here "
             "is that real Nvidia order again, wrapped in the headers it travels in: 104 bytes. <bookmark mark='w'/> On a "
             "ten-gigabit link, a byte arrives every eight tenths of a nanosecond, so the frame takes 83 nanoseconds to "
@@ -98,7 +98,7 @@ class Hardware(VoiceoverScene):
             "<bookmark mark='c'/> An FPGA is a chip full of programmable logic: instead of running instructions, you "
             "lay out a circuit. <bookmark mark='p'/> A trading firm lays out a pipeline: decode the network headers, "
             "check the sequence number, parse the message, compare it against a table of triggers, send an order. "
-            "<bookmark mark='s'/> The bytes stream in eight at a time, one chunk every 6.4 nanoseconds, and each stage "
+            "<bookmark mark='s'/> The bytes stream in, eight at a time, one chunk every 6.4 nanoseconds, and each stage "
             "works on its piece of the frame while the rest is still arriving. <bookmark mark='o'/> And the reply can "
             "start before the input ends: the outgoing order's headers are prepared in advance, so the circuit starts "
             "sending them while the price is still on its way in, and fills in the decision at the last moment, or "

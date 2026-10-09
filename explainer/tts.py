@@ -201,7 +201,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bSTAC-T0\b", "stack T zero"),
     (r"\bHardcaml\b", "Hard [Caml](/kˈæməl/)"),
     (r"\bOCaml\b", "[OCaml](/ˈOkæməl/)"),
-    (r"\bCarteret\b", "[Carteret](/kˈɑɹtəɹət/)"),
+    (r"\bCarteret\b", "[Carteret](/kˈɑɹtəɹˌɛt/)"),
     (r"\bMahwah\b", "[Mahwah](/mˈɑwɑ/)"),
     (r"\bSecaucus\b", "[Secaucus](/sɪkˈɔkəs/)"),
     (r"\bAvellaneda\b", "[Avellaneda](/ˌævəjənˈAdə/)"),

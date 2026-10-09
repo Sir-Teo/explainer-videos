@@ -112,7 +112,7 @@ class TheFeed(VoiceoverScene):
         missing = label(r"no price, no side, no ticker: just a reference number", font_size=28, color=C.CANCEL)
         missing.to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Other messages are even terser. <bookmark mark='d'/> A delete is nineteen bytes, and says only: remove "
+            "Other messages are even shorter. <bookmark mark='d'/> A delete is nineteen bytes, and says only: remove "
             "order number such-and-such. <bookmark mark='e'/> An execution names the order that traded, and how many "
             "shares. <bookmark mark='u'/> A replace swaps an old order for a new one with a new price or size. "
             "<bookmark mark='x'/> Notice what's missing. A delete doesn't say the price, the side, or even the stock. "
