@@ -171,3097 +171,3097 @@ When the answer ends, a reward arrives.
 Everything else in this video is about that last line.
 
 44
-00:02:16,157 --> 00:02:19,845
+00:02:16,165 --> 00:02:19,853
 Here is the whole space of answers for one prompt, as the real model sees
 
 45
-00:02:19,845 --> 00:02:20,470
+00:02:19,853 --> 00:02:20,478
 it.
 
 46
-00:02:20,470 --> 00:02:24,370
+00:02:20,478 --> 00:02:24,378
 Reading left to right, each column is a token, and each block's height is
 
 47
-00:02:24,370 --> 00:02:26,920
+00:02:24,378 --> 00:02:26,928
 the probability of reaching that prefix.
 
 48
-00:02:26,920 --> 00:02:29,795
+00:02:26,928 --> 00:02:29,803
 The river splits wherever the model is unsure.
 
 49
-00:02:29,795 --> 00:02:33,532
+00:02:29,803 --> 00:02:33,540
 The top stream shows its work, writing the sum backwards first;
 
 50
-00:02:33,532 --> 00:02:36,907
+00:02:33,540 --> 00:02:36,915
 the rest answer directly, and fork at every carry.
 
 51
-00:02:36,907 --> 00:02:40,995
+00:02:36,915 --> 00:02:41,003
 The probability of a whole answer is the product of its tokens' probabilities,
 
 52
-00:02:40,995 --> 00:02:43,632
+00:02:41,003 --> 00:02:43,640
 along its path.
 
 53
-00:02:43,765 --> 00:02:46,940
+00:02:43,774 --> 00:02:46,949
 The checker marks each complete answer right or wrong:
 
 54
-00:02:46,940 --> 00:02:48,415
+00:02:46,949 --> 00:02:48,424
 this last column.
 
 55
-00:02:48,415 --> 00:02:52,603
+00:02:48,424 --> 00:02:52,611
 With a reward of one for right and zero for wrong, the expected reward is
 
 56
-00:02:52,603 --> 00:02:55,590
+00:02:52,611 --> 00:02:55,599
 simply the total probability of the right answers:
 
 57
-00:02:55,590 --> 00:02:57,690
+00:02:55,599 --> 00:02:57,699
 the green part of that column.
 
 58
-00:02:57,690 --> 00:03:00,703
+00:02:57,699 --> 00:03:00,711
 Reinforcement learning, for us, means one thing:
 
 59
-00:03:00,703 --> 00:03:05,340
+00:03:00,711 --> 00:03:05,349
 reshape the river so that more of it ends in green.
 
 60
-00:03:05,832 --> 00:03:07,907
+00:03:05,857 --> 00:03:07,932
 Meet the model behind that picture.
 
 61
-00:03:07,907 --> 00:03:12,157
+00:03:07,932 --> 00:03:12,182
 It's a pocket-sized transformer, three layers deep, pretrained on text full
 
 62
-00:03:12,157 --> 00:03:13,970
+00:03:12,182 --> 00:03:13,995
 of four-digit additions.
 
 63
-00:03:13,970 --> 00:03:16,307
+00:03:13,995 --> 00:03:16,332
 A quarter of the examples show their work:
 
 64
-00:03:16,307 --> 00:03:21,020
+00:03:16,332 --> 00:03:21,045
 the sum written right to left, digit by digit with its carries, then the answer.
 
 65
-00:03:21,020 --> 00:03:25,532
+00:03:21,045 --> 00:03:25,557
 The rest answer at once, and like people doing sums in their heads, they sometimes
 
 66
-00:03:25,532 --> 00:03:26,870
+00:03:25,557 --> 00:03:26,895
 forget to carry.
 
 67
-00:03:26,870 --> 00:03:29,757
+00:03:26,895 --> 00:03:29,782
 The model learned both habits faithfully.
 
 68
-00:03:29,757 --> 00:03:34,370
+00:03:29,782 --> 00:03:34,395
 It shows its work about a quarter of the time and is then almost always right;
 
 69
-00:03:34,370 --> 00:03:36,832
+00:03:34,395 --> 00:03:36,857
 otherwise it slips like its teachers.
 
 70
-00:03:36,832 --> 00:03:38,082
+00:03:36,857 --> 00:03:38,107
 We'll call it the adder.
 
 71
-00:03:40,072 --> 00:03:43,372
+00:03:40,039 --> 00:03:43,339
 Here is the problem reinforcement learning has to solve.
 
 72
-00:03:43,372 --> 00:03:45,922
+00:03:43,339 --> 00:03:45,889
 The parameters theta define a policy.
 
 73
-00:03:45,922 --> 00:03:49,547
+00:03:45,889 --> 00:03:49,514
 We sample an answer from it, and a checker hands back a reward.
 
 74
-00:03:49,547 --> 00:03:53,547
+00:03:49,514 --> 00:03:53,514
 We want to make the expected reward bigger, so we want its gradient with respect
 
 75
-00:03:53,547 --> 00:03:54,547
+00:03:53,514 --> 00:03:54,514
 to theta.
 
 76
-00:03:54,547 --> 00:03:56,885
+00:03:54,514 --> 00:03:56,852
 But backpropagation can't get there.
 
 77
-00:03:56,885 --> 00:04:01,097
+00:03:56,852 --> 00:04:01,064
 Sampling is a discrete choice, and the checker might be a test suite running
 
 78
-00:04:01,097 --> 00:04:02,247
+00:04:01,064 --> 00:04:02,214
 in a sandbox:
 
 79
-00:04:02,247 --> 00:04:05,572
+00:04:02,214 --> 00:04:05,539
 there is no derivative to follow.
 
 80
-00:04:06,047 --> 00:04:10,272
+00:04:06,039 --> 00:04:10,264
 The way around it is one of the most useful identities in machine learning.
 
 81
-00:04:10,272 --> 00:04:15,260
+00:04:10,264 --> 00:04:15,252
 Write the expected reward as a sum over every possible answer y, of its probability
 
 82
-00:04:15,260 --> 00:04:16,835
+00:04:15,252 --> 00:04:16,827
 times its reward.
 
 83
-00:04:16,835 --> 00:04:21,672
+00:04:16,827 --> 00:04:21,664
 The reward doesn't depend on theta, so the gradient only touches the probability.
 
 84
-00:04:21,672 --> 00:04:24,222
+00:04:21,664 --> 00:04:24,214
 Now multiply and divide by pi:
 
 85
-00:04:24,222 --> 00:04:28,447
+00:04:24,214 --> 00:04:28,439
 the gradient of pi equals pi times the gradient of log pi.
 
 86
-00:04:28,447 --> 00:04:33,022
+00:04:28,439 --> 00:04:33,014
 And a sum weighted by pi is just an average over samples from pi.
 
 87
-00:04:33,022 --> 00:04:36,685
+00:04:33,014 --> 00:04:36,677
 So we can estimate the gradient without differentiating through anything we
 
 88
-00:04:36,685 --> 00:04:37,747
+00:04:36,677 --> 00:04:37,739
 can't:
 
 89
-00:04:37,747 --> 00:04:42,647
+00:04:37,739 --> 00:04:42,639
 sample answers, score them, and average reward times the gradient of the log
 
 90
-00:04:42,647 --> 00:04:44,297
+00:04:42,639 --> 00:04:44,289
 probability.
 
 91
-00:04:44,297 --> 00:04:48,247
+00:04:44,289 --> 00:04:48,239
 That gradient of log pi has a name, the score function.
 
 92
-00:04:48,247 --> 00:04:53,747
+00:04:48,239 --> 00:04:53,739
 And this estimator, published by Ronald Williams in 1992 as REINFORCE, is
 
 93
-00:04:53,747 --> 00:04:57,847
+00:04:53,739 --> 00:04:57,839
 the seed of every algorithm in this video.
 
 94
-00:04:58,356 --> 00:05:01,781
+00:04:58,364 --> 00:05:01,789
 To see what this does, shrink the problem to one dimension.
 
 95
-00:05:01,781 --> 00:05:05,881
+00:05:01,789 --> 00:05:05,889
 The policy picks a number a from a bell curve centered at mu, and the reward
 
 96
-00:05:05,881 --> 00:05:08,268
+00:05:05,889 --> 00:05:08,277
 is this landscape with two hills.
 
 97
-00:05:08,268 --> 00:05:09,981
+00:05:08,277 --> 00:05:09,989
 Sample ten actions.
 
 98
-00:05:09,981 --> 00:05:13,168
+00:05:09,989 --> 00:05:13,177
 For a bell curve, the score is simply a minus mu:
 
 99
-00:05:13,168 --> 00:05:18,066
+00:05:13,177 --> 00:05:18,089
 each sample says move toward me, in proportion to how far away I am.
 
 100
-00:05:18,066 --> 00:05:21,328
+00:05:18,089 --> 00:05:21,352
 On their own, these pushes cancel out on average.
 
 101
-00:05:21,328 --> 00:05:24,053
+00:05:21,352 --> 00:05:24,077
 In fact the score always has mean zero:
 
 102
-00:05:24,053 --> 00:05:28,366
+00:05:24,077 --> 00:05:28,389
 its average is the gradient of the total probability, and the total is always
 
 103
-00:05:28,366 --> 00:05:29,228
+00:05:28,389 --> 00:05:29,252
 one.
 
 104
-00:05:29,228 --> 00:05:30,216
+00:05:29,252 --> 00:05:30,239
 Remember this;
 
 105
-00:05:30,216 --> 00:05:33,141
+00:05:30,239 --> 00:05:33,164
 it will matter in a minute.
 
 106
-00:05:33,366 --> 00:05:36,653
+00:05:33,389 --> 00:05:36,677
 Now weight each push by the reward its sample earned.
 
 107
-00:05:36,653 --> 00:05:39,453
+00:05:36,677 --> 00:05:39,477
 Samples near the tall hill keep their arrows;
 
 108
-00:05:39,453 --> 00:05:41,541
+00:05:39,477 --> 00:05:41,564
 samples in the valley lose theirs.
 
 109
-00:05:41,541 --> 00:05:45,803
+00:05:41,564 --> 00:05:45,839
 The symmetry breaks, and the average points toward higher reward.
 
 110
-00:05:45,803 --> 00:05:50,266
+00:05:45,839 --> 00:05:50,302
 Take a small step along that average, sample again, and repeat.
 
 111
-00:05:50,266 --> 00:05:54,241
+00:05:50,302 --> 00:05:54,277
 The bell curve climbs the hill, and nobody ever computed the derivative of
 
 112
-00:05:54,241 --> 00:05:56,578
+00:05:54,277 --> 00:05:56,614
 the reward.
 
 113
-00:05:57,045 --> 00:06:01,607
+00:05:57,089 --> 00:06:01,652
 For a language model the answer is a sequence of tokens, and its log probability
 
 114
-00:06:01,607 --> 00:06:04,257
+00:06:01,652 --> 00:06:04,302
 is a sum, one term per token.
 
 115
-00:06:04,257 --> 00:06:06,370
+00:06:04,302 --> 00:06:06,414
 So the policy gradient becomes:
 
 116
-00:06:06,370 --> 00:06:10,257
+00:06:06,414 --> 00:06:10,302
 the answer's reward times the sum of every token's score.
 
 117
-00:06:10,257 --> 00:06:15,145
+00:06:10,302 --> 00:06:15,189
 Each token of a sampled answer gets pushed up, or down, by the same amount:
 
 118
-00:06:15,145 --> 00:06:17,503
+00:06:15,189 --> 00:06:17,535
 the reward of the whole answer.
 
 119
-00:06:17,503 --> 00:06:20,153
+00:06:17,535 --> 00:06:20,185
 Compare that with supervised fine-tuning.
 
 120
-00:06:20,153 --> 00:06:24,778
+00:06:20,185 --> 00:06:24,810
 There, you maximize the log probability of a reference answer someone wrote.
 
 121
-00:06:24,778 --> 00:06:29,116
+00:06:24,810 --> 00:06:29,148
 Here, you do the same thing to the model's own answer, weighted by how well
 
 122
-00:06:29,116 --> 00:06:30,128
+00:06:29,148 --> 00:06:30,160
 it did.
 
 123
-00:06:30,128 --> 00:06:35,728
+00:06:30,160 --> 00:06:35,760
 Reinforcement learning is fine-tuning on your own samples, graded.
 
 124
-00:06:36,278 --> 00:06:39,066
+00:06:36,335 --> 00:06:39,123
 What does pushing up one token actually do?
 
 125
-00:06:39,066 --> 00:06:43,316
+00:06:39,123 --> 00:06:43,373
 Inside the model, the next token comes from a softmax over logits.
 
 126
-00:06:43,316 --> 00:06:47,728
+00:06:43,373 --> 00:06:47,785
 The score of the sampled token, with respect to the logits, is one minus its
 
 127
-00:06:47,728 --> 00:06:51,978
+00:06:47,785 --> 00:06:52,035
 probability for the sampled token, and minus the probability for every other
 
 128
-00:06:51,978 --> 00:06:53,041
+00:06:52,035 --> 00:06:53,098
 token.
 
 129
-00:06:53,041 --> 00:06:57,678
+00:06:53,098 --> 00:06:57,735
 So a positive reward raises the sampled token and takes mass from the others,
 
 130
-00:06:57,678 --> 00:06:59,503
+00:06:57,735 --> 00:06:59,560
 the popular ones most of all.
 
 131
-00:07:01,444 --> 00:07:02,457
+00:07:01,144 --> 00:07:02,157
 There's a catch.
 
 132
-00:07:02,457 --> 00:07:06,707
+00:07:02,157 --> 00:07:06,407
 Suppose the grader is generous, and every answer earns at least two points.
 
 133
-00:07:06,707 --> 00:07:09,569
+00:07:06,407 --> 00:07:09,269
 Then every sample pushes the policy toward itself;
 
 134
-00:07:09,569 --> 00:07:13,094
+00:07:09,269 --> 00:07:12,794
 the pushes still average out to the right direction, but each estimate is
 
 135
-00:07:13,094 --> 00:07:14,332
+00:07:12,794 --> 00:07:14,032
 mostly noise.
 
 136
-00:07:14,332 --> 00:07:17,744
+00:07:14,032 --> 00:07:17,444
 Here are six runs of exactly the algorithm we just derived.
 
 137
-00:07:17,744 --> 00:07:20,119
+00:07:17,444 --> 00:07:19,819
 They wander, and some never find the hill.
 
 138
-00:07:20,119 --> 00:07:21,582
+00:07:19,819 --> 00:07:21,282
 Now make one change:
 
 139
-00:07:21,582 --> 00:07:24,807
+00:07:21,282 --> 00:07:24,507
 subtract the batch's average reward before weighting.
 
 140
-00:07:24,807 --> 00:07:28,594
+00:07:24,507 --> 00:07:28,294
 All six runs climb straight to the top.
 
 141
-00:07:29,069 --> 00:07:30,907
+00:07:28,794 --> 00:07:30,632
 Why are we allowed to do that?
 
 142
-00:07:30,907 --> 00:07:35,119
+00:07:30,632 --> 00:07:34,844
 Subtract any number b from the reward, and look at the expected gradient.
 
 143
-00:07:35,119 --> 00:07:39,644
+00:07:34,844 --> 00:07:39,369
 It splits into the policy gradient, minus b times the expected score.
 
 144
-00:07:39,644 --> 00:07:42,769
+00:07:39,369 --> 00:07:42,494
 And the expected score is zero, as we saw.
 
 145
-00:07:42,769 --> 00:07:47,007
+00:07:42,494 --> 00:07:46,732
 So any baseline that doesn't depend on the sampled answer leaves the gradient
 
 146
-00:07:47,007 --> 00:07:48,957
+00:07:46,732 --> 00:07:48,682
 unchanged on average.
 
 147
-00:07:48,957 --> 00:07:52,294
+00:07:48,682 --> 00:07:52,019
 What it changes is the noise.
 
 148
-00:07:52,761 --> 00:07:54,649
+00:07:52,519 --> 00:07:54,407
 Let's watch the noise directly.
 
 149
-00:07:54,649 --> 00:07:58,761
+00:07:54,407 --> 00:07:58,519
 A policy over a two-dimensional action, on a landscape with two hills, plus
 
 150
-00:07:58,761 --> 00:08:00,549
+00:07:58,519 --> 00:08:00,307
 the constant two points.
 
 151
-00:08:00,549 --> 00:08:02,561
+00:08:00,307 --> 00:08:02,319
 Each sample suggests a direction:
 
 152
-00:08:02,561 --> 00:08:05,699
+00:08:02,319 --> 00:08:05,457
 from the center toward itself, scaled by its reward.
 
 153
-00:08:05,699 --> 00:08:09,749
+00:08:05,457 --> 00:08:09,507
 Average a batch of sixteen such suggestions and you get one gradient estimate,
 
 154
-00:08:09,749 --> 00:08:11,561
+00:08:09,507 --> 00:08:11,319
 a single point on the right.
 
 155
-00:08:11,561 --> 00:08:13,736
+00:08:11,319 --> 00:08:13,494
 Three hundred batches make this cloud.
 
 156
-00:08:13,736 --> 00:08:18,174
+00:08:13,494 --> 00:08:17,932
 Its center is the true gradient, but the cloud is so wide that a single estimate
 
 157
-00:08:18,174 --> 00:08:20,586
+00:08:17,932 --> 00:08:20,349
 often points the wrong way.
 
 158
-00:08:20,586 --> 00:08:22,924
+00:08:20,349 --> 00:08:22,686
 Now subtract the average reward.
 
 159
-00:08:22,924 --> 00:08:25,711
+00:08:22,686 --> 00:08:25,474
 Same center, but the cloud collapses:
 
 160
-00:08:25,711 --> 00:08:28,824
+00:08:25,474 --> 00:08:28,586
 the variance drops by a factor of 27.
 
 161
-00:08:28,824 --> 00:08:30,711
+00:08:28,586 --> 00:08:30,474
 The signal was always there;
 
 162
-00:08:30,711 --> 00:08:36,361
+00:08:30,474 --> 00:08:36,124
 the baseline removes the part of the reward that every answer gets anyway.
 
 163
-00:08:36,778 --> 00:08:38,453
+00:08:36,574 --> 00:08:38,249
 Which baseline is best?
 
 164
-00:08:38,453 --> 00:08:43,865
+00:08:38,249 --> 00:08:43,661
 The variance is a quadratic in b, a parabola, so set its derivative to zero.
 
 165
-00:08:43,865 --> 00:08:48,065
+00:08:43,661 --> 00:08:47,861
 The best baseline is the average reward, weighted by the squared size of the
 
 166
-00:08:48,065 --> 00:08:49,040
+00:08:47,861 --> 00:08:48,836
 score.
 
 167
-00:08:49,040 --> 00:08:52,553
+00:08:48,836 --> 00:08:52,349
 In practice that's very close to the plain average reward.
 
 168
-00:08:52,553 --> 00:08:56,303
+00:08:52,349 --> 00:08:56,099
 Here, they agree to within a percent.
 
 169
-00:08:57,769 --> 00:08:58,957
+00:08:57,586 --> 00:08:58,774
 One more step.
 
 170
-00:08:58,957 --> 00:09:01,557
+00:08:58,774 --> 00:09:01,374
 Different prompts deserve different baselines:
 
 171
-00:09:01,557 --> 00:09:05,557
+00:09:01,374 --> 00:09:05,374
 a policy that usually solves an easy problem shouldn't get excited about solving
 
 172
-00:09:05,557 --> 00:09:06,569
+00:09:05,374 --> 00:09:06,386
 it again.
 
 173
-00:09:06,569 --> 00:09:10,894
+00:09:06,386 --> 00:09:10,711
 So subtract V of x, the average reward the policy gets on this particular
 
 174
-00:09:10,894 --> 00:09:11,832
+00:09:10,711 --> 00:09:11,649
 prompt.
 
 175
-00:09:11,832 --> 00:09:13,994
+00:09:11,649 --> 00:09:13,811
 What's left is called the advantage:
 
 176
-00:09:13,994 --> 00:09:16,744
+00:09:13,811 --> 00:09:16,561
 was this answer better or worse than usual?
 
 177
-00:09:16,744 --> 00:09:20,994
+00:09:16,561 --> 00:09:20,811
 With a reward of one for right and zero for wrong, V is just the chance p
 
 178
-00:09:20,994 --> 00:09:22,494
+00:09:20,811 --> 00:09:22,311
 of being right.
 
 179
-00:09:22,494 --> 00:09:27,007
+00:09:22,311 --> 00:09:26,824
 On an easy prompt, a right answer earns a tiny plus zero point one, and a
 
 180
-00:09:27,007 --> 00:09:29,894
+00:09:26,824 --> 00:09:29,711
 mistake a big minus zero point nine.
 
 181
-00:09:29,894 --> 00:09:32,032
+00:09:29,711 --> 00:09:31,849
 On a hard prompt it's the reverse:
 
 182
-00:09:32,032 --> 00:09:34,769
+00:09:31,849 --> 00:09:34,578
 a rare success is worth a lot.
 
 183
-00:09:34,769 --> 00:09:39,119
+00:09:34,578 --> 00:09:38,928
 But to compute an advantage, we need V, and nobody hands it to us.
 
 184
-00:09:39,119 --> 00:09:42,994
+00:09:38,928 --> 00:09:42,803
 And when the answer is a long sequence of tokens with a single reward at the
 
 185
-00:09:42,994 --> 00:09:45,594
+00:09:42,803 --> 00:09:45,403
 end, a deeper question appears:
 
 186
-00:09:45,594 --> 00:09:47,444
+00:09:45,403 --> 00:09:47,253
 which tokens deserve the credit?
 
 187
-00:09:49,267 --> 00:09:54,117
+00:09:48,900 --> 00:09:53,750
 Here is a real answer from the model we'll train later, to the problem 5675
 
 188
-00:09:54,117 --> 00:09:56,242
+00:09:53,750 --> 00:09:55,875
 plus 5563.
 
 189
-00:09:56,242 --> 00:10:00,705
+00:09:55,875 --> 00:10:00,338
 It's wrong, so the reward is zero, and the policy gradient pushes every one
 
 190
-00:10:00,705 --> 00:10:02,742
+00:10:00,338 --> 00:10:02,375
 of its tokens down equally.
 
 191
-00:10:02,742 --> 00:10:04,805
+00:10:02,375 --> 00:10:04,438
 But most of those digits were fine.
 
 192
-00:10:04,805 --> 00:10:06,417
+00:10:04,438 --> 00:10:06,050
 Only one was a mistake:
 
 193
-00:10:06,417 --> 00:10:07,855
+00:10:06,050 --> 00:10:07,488
 a forgotten carry.
 
 194
-00:10:07,855 --> 00:10:12,767
+00:10:07,488 --> 00:10:12,400
 A single reward at the end can't say which token earned it.
 
 195
-00:10:13,234 --> 00:10:16,047
+00:10:12,875 --> 00:10:15,688
 The fix is to measure progress along the way.
 
 196
-00:10:16,047 --> 00:10:18,309
+00:10:15,688 --> 00:10:17,950
 Define the value of a partial answer:
 
 197
-00:10:18,309 --> 00:10:23,109
+00:10:17,950 --> 00:10:22,750
 the expected final reward, given the prompt and the tokens written so far.
 
 198
-00:10:23,109 --> 00:10:27,472
+00:10:22,750 --> 00:10:27,113
 With a zero-one reward, it's simply the chance of ending up right from here.
 
 199
-00:10:27,472 --> 00:10:31,709
+00:10:27,113 --> 00:10:31,350
 For a language model, nothing random happens between tokens except the next
 
 200
-00:10:31,709 --> 00:10:36,747
+00:10:31,350 --> 00:10:36,388
 token itself, so the value now is the average value after one more token.
 
 201
-00:10:36,747 --> 00:10:38,784
+00:10:36,388 --> 00:10:38,425
 That's the Bellman equation.
 
 202
-00:10:38,784 --> 00:10:41,322
+00:10:38,425 --> 00:10:40,963
 And it hands us exactly what we wanted:
 
 203
-00:10:41,322 --> 00:10:44,797
+00:10:40,963 --> 00:10:44,438
 a token's advantage is how much it changed the odds.
 
 204
-00:10:44,797 --> 00:10:48,009
+00:10:44,438 --> 00:10:47,650
 The value after it, minus the value before.
 
 205
-00:10:48,009 --> 00:10:52,134
+00:10:47,650 --> 00:10:51,775
 With an estimated value function, this difference is called the temporal difference
 
 206
-00:10:52,134 --> 00:10:54,909
+00:10:51,775 --> 00:10:54,550
 error, delta.
 
 207
-00:10:55,359 --> 00:10:57,922
+00:10:54,980 --> 00:10:57,542
 We can't compute V exactly, so we learn it:
 
 208
-00:10:57,922 --> 00:11:01,559
+00:10:57,542 --> 00:11:01,180
 a second network, the critic, trained to predict the final reward from every
 
 209
-00:11:01,559 --> 00:11:03,822
+00:11:01,180 --> 00:11:03,442
 prefix of the model's own answers.
 
 210
-00:11:03,822 --> 00:11:06,859
+00:11:03,442 --> 00:11:06,480
 Here is a real one, reading three real answers.
 
 211
-00:11:06,859 --> 00:11:11,222
+00:11:06,480 --> 00:11:10,842
 Before the model writes anything, the critic gives it a 58 percent chance.
 
 212
-00:11:11,222 --> 00:11:15,734
+00:11:10,842 --> 00:11:15,355
 In this first answer the model starts by showing its work, and the value jumps:
 
 213
-00:11:15,734 --> 00:11:19,522
+00:11:15,355 --> 00:11:19,142
 the critic has learned that worked answers are almost always right.
 
 214
-00:11:19,522 --> 00:11:22,834
+00:11:19,142 --> 00:11:22,480
 Every later token barely changes anything.
 
 215
-00:11:22,834 --> 00:11:25,747
+00:11:22,480 --> 00:11:25,392
 This one answers directly, and gets it right.
 
 216
-00:11:25,747 --> 00:11:30,734
+00:11:25,392 --> 00:11:30,380
 Each digit nudges the value a little, as the carries go by without a slip.
 
 217
-00:11:30,734 --> 00:11:32,622
+00:11:30,380 --> 00:11:32,267
 And here's our wrong answer.
 
 218
-00:11:32,622 --> 00:11:35,209
+00:11:32,267 --> 00:11:34,855
 The value drops at exactly one token:
 
 219
-00:11:35,209 --> 00:11:37,497
+00:11:34,855 --> 00:11:37,142
 the digit where the carry was forgotten.
 
 220
-00:11:37,497 --> 00:11:42,209
+00:11:37,142 --> 00:11:41,855
 That negative delta is the credit assignment we wanted.
 
 221
-00:11:43,717 --> 00:11:48,817
+00:11:43,380 --> 00:11:48,480
 Using delta alone trusts the critic completely, and the critic is only a guess.
 
 222
-00:11:48,817 --> 00:11:52,880
+00:11:48,480 --> 00:11:52,542
 Generalized advantage estimation blends in the actual outcome:
 
 223
-00:11:52,880 --> 00:11:56,792
+00:11:52,542 --> 00:11:56,455
 add up the deltas from here to the end, discounting each step by a factor
 
 224
-00:11:56,792 --> 00:11:57,742
+00:11:56,455 --> 00:11:57,405
 lambda.
 
 225
-00:11:57,742 --> 00:12:01,142
+00:11:57,405 --> 00:12:00,805
 With lambda zero, you get the critic's one-step opinion.
 
 226
-00:12:01,142 --> 00:12:05,292
+00:12:00,805 --> 00:12:04,955
 With lambda one, the sum telescopes into the final reward minus the value
 
 227
-00:12:05,292 --> 00:12:05,930
+00:12:04,955 --> 00:12:05,592
 now:
 
 228
-00:12:05,930 --> 00:12:08,417
+00:12:05,592 --> 00:12:08,096
 unbiased, but noisier.
 
 229
-00:12:08,417 --> 00:12:11,905
+00:12:08,096 --> 00:12:11,584
 On our wrong answer, slide lambda from zero to one.
 
 230
-00:12:11,905 --> 00:12:13,842
+00:12:11,584 --> 00:12:13,521
 Almost nothing changes.
 
 231
-00:12:13,842 --> 00:12:15,267
+00:12:13,521 --> 00:12:14,946
 This critic is good:
 
 232
-00:12:15,267 --> 00:12:19,292
+00:12:14,946 --> 00:12:18,971
 the value already collapsed at the bad digit, so the later tokens owe nothing
 
 233
-00:12:19,292 --> 00:12:20,876
+00:12:18,971 --> 00:12:20,571
 either way.
 
 234
-00:12:20,876 --> 00:12:26,601
+00:12:20,571 --> 00:12:26,296
 Now take the critic away and use one number per prompt, the way GRPO and RLOO
 
 235
-00:12:26,601 --> 00:12:27,513
+00:12:26,296 --> 00:12:27,209
 do.
 
 236
-00:12:27,513 --> 00:12:31,976
+00:12:27,209 --> 00:12:31,671
 Every token gets the same blame, the correct digits included.
 
 237
-00:12:31,976 --> 00:12:34,601
+00:12:31,671 --> 00:12:34,296
 And on a right answer that showed its work:
 
 238
-00:12:34,601 --> 00:12:38,363
+00:12:34,296 --> 00:12:38,059
 the critic puts nearly all the credit on the single token that decided to
 
 239
-00:12:38,363 --> 00:12:39,601
+00:12:38,059 --> 00:12:39,296
 show the work.
 
 240
-00:12:39,601 --> 00:12:44,613
+00:12:39,296 --> 00:12:44,309
 Without a critic, that decision is just one token among thirteen, all sharing
 
 241
-00:12:44,613 --> 00:12:46,467
+00:12:44,309 --> 00:12:46,196
 the same reward.
 
 242
-00:12:46,467 --> 00:12:51,092
+00:12:46,196 --> 00:12:50,821
 The price is a critic network as large as the policy itself, trained alongside
 
 243
-00:12:51,092 --> 00:12:51,780
+00:12:50,821 --> 00:12:51,509
 it.
 
 244
-00:12:51,780 --> 00:12:56,267
+00:12:51,509 --> 00:12:55,996
 The algorithm behind today's reasoning models decided that price wasn't worth
 
 245
-00:12:56,267 --> 00:12:56,967
+00:12:55,996 --> 00:12:56,696
 paying.
 
 246
-00:13:02,556 --> 00:13:06,956
+00:13:02,122 --> 00:13:06,522
 So far, every gradient step used fresh samples from the current policy.
 
 247
-00:13:06,956 --> 00:13:12,043
+00:13:06,522 --> 00:13:11,610
 But for a language model, generating the samples is by far the expensive part.
 
 248
-00:13:12,043 --> 00:13:16,006
+00:13:11,610 --> 00:13:15,572
 A long answer is written one token at a time, while the gradient step that
 
 249
-00:13:16,006 --> 00:13:19,093
+00:13:15,572 --> 00:13:18,660
 consumes it is a single parallel pass.
 
 250
-00:13:19,093 --> 00:13:22,843
+00:13:18,660 --> 00:13:22,410
 So we'd like to squeeze several gradient steps out of each batch.
 
 251
-00:13:22,843 --> 00:13:26,556
+00:13:22,410 --> 00:13:26,122
 The trouble is that after the first step, the batch was written by an older
 
 252
-00:13:26,556 --> 00:13:28,906
+00:13:26,122 --> 00:13:28,472
 policy.
 
 253
-00:13:29,352 --> 00:13:32,852
+00:13:28,947 --> 00:13:32,447
 There's a standard fix for data drawn from the wrong distribution:
 
 254
-00:13:32,852 --> 00:13:34,389
+00:13:32,447 --> 00:13:33,985
 importance sampling.
 
 255
-00:13:34,389 --> 00:13:38,552
+00:13:33,985 --> 00:13:38,147
 An average under the new policy is a sum weighted by its probabilities.
 
 256
-00:13:38,552 --> 00:13:43,052
+00:13:38,147 --> 00:13:42,647
 Multiply and divide by the old policy's probability, and it becomes an average
 
 257
-00:13:43,052 --> 00:13:47,202
+00:13:42,647 --> 00:13:46,797
 under the old policy, with each sample reweighted by the ratio rho of new
 
 258
-00:13:47,202 --> 00:13:48,939
+00:13:46,797 --> 00:13:48,535
 to old probability.
 
 259
-00:13:48,939 --> 00:13:53,589
+00:13:48,535 --> 00:13:53,185
 Apply that to the advantage and you get the surrogate objective that PPO and
 
 260
-00:13:53,589 --> 00:13:56,427
+00:13:53,185 --> 00:13:56,022
 GRPO both optimize.
 
 261
-00:13:56,427 --> 00:14:01,227
+00:13:56,022 --> 00:14:00,822
 At the old parameters the ratio is one, and its gradient is exactly the policy
 
 262
-00:14:01,227 --> 00:14:03,527
+00:14:00,822 --> 00:14:03,122
 gradient.
 
 263
-00:14:03,968 --> 00:14:07,743
+00:14:03,593 --> 00:14:07,368
 For a language model, the ratio is taken token by token.
 
 264
-00:14:07,743 --> 00:14:11,781
+00:14:07,368 --> 00:14:11,406
 The exact ratio for a whole answer would be the product of all of them, and
 
 265
-00:14:11,781 --> 00:14:16,268
+00:14:11,406 --> 00:14:15,893
 a product of hundreds of numbers near one can explode, so instead each token
 
 266
-00:14:16,268 --> 00:14:18,168
+00:14:15,893 --> 00:14:17,793
 is reweighted on its own.
 
 267
-00:14:18,168 --> 00:14:19,581
+00:14:17,793 --> 00:14:19,206
 How wrong is that?
 
 268
-00:14:19,581 --> 00:14:23,668
+00:14:19,206 --> 00:14:23,293
 A classic identity, the performance difference lemma, says the improvement
 
 269
-00:14:23,668 --> 00:14:28,518
+00:14:23,293 --> 00:14:28,143
 from one policy to another is the sum of the old policy's advantages, along
 
 270
-00:14:28,518 --> 00:14:30,918
+00:14:28,143 --> 00:14:30,543
 trajectories of the new policy.
 
 271
-00:14:30,918 --> 00:14:33,406
+00:14:30,543 --> 00:14:33,031
 The surrogate makes one approximation:
 
 272
-00:14:33,406 --> 00:14:36,531
+00:14:33,031 --> 00:14:36,156
 it uses the prefixes the old policy visited.
 
 273
-00:14:36,531 --> 00:14:42,293
+00:14:36,156 --> 00:14:41,918
 That's exact when the policies match, and good only while they stay close.
 
 274
-00:14:42,760 --> 00:14:46,385
+00:14:42,381 --> 00:14:46,006
 Here's the picture, along one direction in parameter space.
 
 275
-00:14:46,385 --> 00:14:48,910
+00:14:46,006 --> 00:14:48,531
 The true objective rises, then falls.
 
 276
-00:14:48,910 --> 00:14:52,472
+00:14:48,531 --> 00:14:52,093
 The surrogate touches it at the old parameters and has the same slope, but
 
 277
-00:14:52,472 --> 00:14:54,810
+00:14:52,093 --> 00:14:54,431
 it keeps promising more the further you go.
 
 278
-00:14:54,810 --> 00:14:57,097
+00:14:54,431 --> 00:14:56,718
 Follow it blindly and you overshoot.
 
 279
-00:14:57,097 --> 00:15:01,822
+00:14:56,718 --> 00:15:01,443
 TRPO proved that subtracting a multiple of the largest KL divergence between
 
 280
-00:15:01,822 --> 00:15:06,010
+00:15:01,443 --> 00:15:05,631
 old and new policies gives a lower bound on the true objective.
 
 281
-00:15:06,010 --> 00:15:10,285
+00:15:05,631 --> 00:15:09,906
 Maximize the bound instead, and every step is guaranteed not to make things
 
 282
-00:15:10,285 --> 00:15:12,435
+00:15:09,906 --> 00:15:12,056
 worse.
 
 283
-00:15:12,877 --> 00:15:16,214
+00:15:12,510 --> 00:15:15,847
 TRPO's constraint leads to a beautiful idea.
 
 284
-00:15:16,214 --> 00:15:19,764
+00:15:15,847 --> 00:15:19,397
 Picture a policy over just three actions, A, B, and C.
 
 285
-00:15:19,764 --> 00:15:22,977
+00:15:19,397 --> 00:15:22,610
 Every point of this triangle is a probability distribution;
 
 286
-00:15:22,977 --> 00:15:24,664
+00:15:22,610 --> 00:15:24,297
 the corners are certainty.
 
 287
-00:15:24,664 --> 00:15:26,614
+00:15:24,297 --> 00:15:26,247
 Action A pays the most.
 
 288
-00:15:26,614 --> 00:15:30,952
+00:15:26,247 --> 00:15:30,585
 Now draw every distribution within the same small KL divergence of a few starting
 
 289
-00:15:30,952 --> 00:15:31,889
+00:15:30,585 --> 00:15:31,522
 points.
 
 290
-00:15:31,889 --> 00:15:36,077
+00:15:31,522 --> 00:15:35,710
 The regions aren't circles, and they shrink near the edges, where small probabilities
 
 291
-00:15:36,077 --> 00:15:37,514
+00:15:35,710 --> 00:15:37,147
 become precious.
 
 292
-00:15:37,514 --> 00:15:42,572
+00:15:37,147 --> 00:15:42,235
 KL measures distance between distributions, not between parameters.
 
 293
-00:15:42,572 --> 00:15:46,910
+00:15:42,235 --> 00:15:46,572
 To second order, KL is a quadratic form in the parameter step, built from
 
 294
-00:15:46,910 --> 00:15:48,972
+00:15:46,572 --> 00:15:48,635
 the Fisher information matrix.
 
 295
-00:15:48,972 --> 00:15:52,247
+00:15:48,635 --> 00:15:51,910
 Steepest ascent measured this way is the natural gradient:
 
 296
-00:15:52,247 --> 00:15:56,310
+00:15:51,910 --> 00:15:55,972
 the ordinary gradient, multiplied by the inverse Fisher matrix.
 
 297
-00:15:56,310 --> 00:15:59,522
+00:15:55,972 --> 00:15:59,185
 Here are both, followed exactly from the same start.
 
 298
-00:15:59,522 --> 00:16:01,410
+00:15:59,185 --> 00:16:01,072
 The ordinary gradient crawls:
 
 299
-00:16:01,410 --> 00:16:05,522
+00:16:01,072 --> 00:16:05,185
 it moves each logit in proportion to its action's probability, so the rare
 
 300
-00:16:05,522 --> 00:16:08,197
+00:16:05,185 --> 00:16:07,860
 best action barely moves at first.
 
 301
-00:16:08,197 --> 00:16:12,435
+00:16:07,860 --> 00:16:12,097
 The natural gradient moves every logit by its advantage, and heads almost
 
 302
-00:16:12,435 --> 00:16:14,664
+00:16:12,097 --> 00:16:14,331
 straight for the best corner.
 
 303
-00:16:14,664 --> 00:16:19,039
+00:16:14,331 --> 00:16:18,706
 TRPO takes natural-gradient steps with a KL budget.
 
 304
-00:16:19,039 --> 00:16:23,264
+00:16:18,706 --> 00:16:22,931
 It works, but it needs second-order machinery that is painful at the scale
 
 305
-00:16:23,264 --> 00:16:24,827
+00:16:22,931 --> 00:16:24,493
 of a language model.
 
 306
-00:16:24,827 --> 00:16:29,389
+00:16:24,493 --> 00:16:29,056
 PPO, in 2017, replaced it with something much simpler.
 
 307
-00:16:31,170 --> 00:16:35,645
+00:16:30,637 --> 00:16:35,112
 Proximal policy optimization keeps the surrogate, but takes away the incentive
 
 308
-00:16:35,645 --> 00:16:37,208
+00:16:35,112 --> 00:16:36,674
 to move too far.
 
 309
-00:16:37,208 --> 00:16:41,858
+00:16:36,674 --> 00:16:41,324
 Take the surrogate term, ratio times advantage, compute a second copy with
 
 310
-00:16:41,858 --> 00:16:46,158
+00:16:41,324 --> 00:16:45,624
 the ratio clipped to between zero point eight and one point two, and keep
 
 311
-00:16:46,158 --> 00:16:49,070
+00:16:45,624 --> 00:16:48,537
 the smaller of the two.
 
 312
-00:16:49,579 --> 00:16:51,904
+00:16:49,045 --> 00:16:51,370
 Look at it as a function of the ratio.
 
 313
-00:16:51,904 --> 00:16:55,791
+00:16:51,370 --> 00:16:55,258
 For a good answer, the objective rises with the ratio, so the gradient pushes
 
 314
-00:16:55,791 --> 00:16:59,966
+00:16:55,258 --> 00:16:59,433
 the token's probability up, until the ratio passes one point two.
 
 315
-00:16:59,966 --> 00:17:02,791
+00:16:59,433 --> 00:17:02,258
 Then the objective goes flat, and the gradient is zero:
 
 316
-00:17:02,791 --> 00:17:04,729
+00:17:02,258 --> 00:17:04,195
 no reward for pushing further.
 
 317
-00:17:04,729 --> 00:17:06,904
+00:17:04,195 --> 00:17:06,370
 For a bad answer it's the mirror image:
 
 318
-00:17:06,904 --> 00:17:10,529
+00:17:06,370 --> 00:17:09,995
 push the probability down, until it has fallen by twenty percent.
 
 319
-00:17:10,529 --> 00:17:11,604
+00:17:09,995 --> 00:17:11,070
 Note the minimum:
 
 320
-00:17:11,604 --> 00:17:14,279
+00:17:11,070 --> 00:17:13,745
 in the direction that would hurt, there's no clipping.
 
 321
-00:17:14,279 --> 00:17:18,879
+00:17:13,745 --> 00:17:18,345
 The objective is a pessimistic bound on the surrogate.
 
 322
-00:17:19,329 --> 00:17:22,966
+00:17:18,795 --> 00:17:22,433
 In probability terms, the clip gives each token a window.
 
 323
-00:17:22,966 --> 00:17:27,779
+00:17:22,433 --> 00:17:27,245
 A token the old policy chose with probability zero point nine can move anywhere
 
 324
-00:17:27,779 --> 00:17:30,554
+00:17:27,245 --> 00:17:30,020
 from zero point seven two up to one.
 
 325
-00:17:30,554 --> 00:17:32,441
+00:17:30,020 --> 00:17:31,908
 But the window is relative:
 
 326
-00:17:32,441 --> 00:17:36,879
+00:17:31,908 --> 00:17:36,345
 a token at one percent can only rise to one point two percent in a round of
 
 327
-00:17:36,879 --> 00:17:37,991
+00:17:36,345 --> 00:17:37,458
 updates.
 
 328
-00:17:37,991 --> 00:17:42,166
+00:17:37,458 --> 00:17:41,633
 That asymmetry between likely and unlikely tokens will come back to haunt
 
 329
-00:17:42,166 --> 00:17:44,179
+00:17:41,633 --> 00:17:43,645
 us.
 
 330
-00:17:44,629 --> 00:17:45,379
+00:17:44,095 --> 00:17:44,845
 Does it matter?
 
 331
-00:17:45,379 --> 00:17:49,141
+00:17:44,845 --> 00:17:48,608
 Here's a real test on the pocket model you'll meet properly in a few minutes.
 
 332
-00:17:49,141 --> 00:17:49,691
+00:17:48,608 --> 00:17:49,158
 Teal:
 
 333
-00:17:49,691 --> 00:17:51,329
+00:17:49,158 --> 00:17:50,795
 one gradient step per batch.
 
 334
-00:17:51,329 --> 00:17:53,891
+00:17:50,795 --> 00:17:53,358
 After five steps it's at 75 percent.
 
 335
-00:17:53,891 --> 00:17:54,466
+00:17:53,358 --> 00:17:53,933
 Red:
 
 336
-00:17:54,466 --> 00:17:56,666
+00:17:53,933 --> 00:17:56,133
 sixteen steps per batch, without the clip.
 
 337
-00:17:56,666 --> 00:17:58,679
+00:17:56,133 --> 00:17:58,145
 Reusing the data is far more efficient:
 
 338
-00:17:58,679 --> 00:18:00,929
+00:17:58,145 --> 00:18:00,395
 93 percent after five steps.
 
 339
-00:18:00,929 --> 00:18:01,729
+00:18:00,395 --> 00:18:01,195
 But it wobbles:
 
 340
-00:18:01,729 --> 00:18:04,979
+00:18:01,195 --> 00:18:04,445
 around step 40, one seed falls back to 91.
 
 341
-00:18:04,979 --> 00:18:05,704
+00:18:04,445 --> 00:18:05,170
 Green:
 
 342
-00:18:05,704 --> 00:18:07,866
+00:18:05,170 --> 00:18:07,333
 the same sixteen steps, clipped.
 
 343
-00:18:07,866 --> 00:18:12,279
+00:18:07,333 --> 00:18:11,745
 Just as fast, and it climbs steadily, to 99.1 percent.
 
 344
-00:18:12,279 --> 00:18:15,229
+00:18:11,745 --> 00:18:14,695
 In a model this small the difference is modest;
 
 345
-00:18:15,229 --> 00:18:19,129
+00:18:14,695 --> 00:18:18,595
 the point of the clip is that you can take many steps on one batch without
 
 346
-00:18:19,129 --> 00:18:22,504
+00:18:18,595 --> 00:18:21,970
 worrying about how far they go.
 
 347
-00:18:23,662 --> 00:18:28,774
+00:18:23,129 --> 00:18:28,241
 This is the algorithm behind InstructGPT and the original ChatGPT.
 
 348
-00:18:28,774 --> 00:18:30,062
+00:18:28,241 --> 00:18:29,529
 Count the networks:
 
 349
-00:18:30,062 --> 00:18:35,037
+00:18:29,529 --> 00:18:34,504
 the policy being trained, a frozen copy of where it started, a reward model,
 
 350
-00:18:35,037 --> 00:18:39,174
+00:18:34,504 --> 00:18:38,641
 and the critic, each as large as the language model itself.
 
 351
-00:18:39,174 --> 00:18:43,087
+00:18:38,641 --> 00:18:42,554
 Every token pays a small penalty for drifting from the reference, and the
 
 352
-00:18:43,087 --> 00:18:46,262
+00:18:42,554 --> 00:18:45,729
 reward model's score arrives at the end.
 
 353
-00:18:46,262 --> 00:18:50,624
+00:18:45,729 --> 00:18:50,091
 Two of those four networks exist to turn human judgment into a number.
 
 354
-00:18:50,624 --> 00:18:52,437
+00:18:50,091 --> 00:18:51,904
 So where does that number come from?
 
 355
-00:18:57,993 --> 00:18:59,756
+00:18:57,460 --> 00:18:59,222
 Arithmetic has a checker.
 
 356
-00:18:59,756 --> 00:19:02,318
+00:18:59,222 --> 00:19:01,785
 Helpfulness, clarity and tone don't.
 
 357
-00:19:02,318 --> 00:19:03,893
+00:19:01,785 --> 00:19:03,360
 But people can compare:
 
 358
-00:19:03,893 --> 00:19:07,956
+00:19:03,360 --> 00:19:07,422
 show someone two answers to the same prompt, and ask which is better.
 
 359
-00:19:07,956 --> 00:19:12,393
+00:19:07,422 --> 00:19:11,860
 How do we turn a pile of such choices into a reward?
 
 360
-00:19:12,877 --> 00:19:14,939
+00:19:12,343 --> 00:19:14,406
 Model each judgment like this.
 
 361
-00:19:14,939 --> 00:19:19,364
+00:19:14,406 --> 00:19:18,831
 Every answer has a hidden utility, and each time a person judges, they perceive
 
 362
-00:19:19,364 --> 00:19:22,627
+00:19:18,831 --> 00:19:22,093
 it with some noise, and choose whichever looks better.
 
 363
-00:19:22,627 --> 00:19:26,877
+00:19:22,093 --> 00:19:26,343
 If that noise follows a Gumbel distribution, the distribution of the largest
 
 364
-00:19:26,877 --> 00:19:31,452
+00:19:26,343 --> 00:19:30,918
 of many small effects, then the difference of two independent noises is exactly
 
 365
-00:19:31,452 --> 00:19:32,677
+00:19:30,918 --> 00:19:32,143
 logistic.
 
 366
-00:19:32,677 --> 00:19:37,277
+00:19:32,143 --> 00:19:36,743
 So the probability of choosing A is the area to the left of the utility gap:
 
 367
-00:19:37,277 --> 00:19:40,060
+00:19:36,743 --> 00:19:39,527
 the logistic sigmoid of the difference.
 
 368
-00:19:40,060 --> 00:19:43,710
+00:19:39,527 --> 00:19:43,177
 This is the Bradley-Terry model, from 1952.
 
 369
-00:19:43,710 --> 00:19:46,997
+00:19:43,177 --> 00:19:46,464
 Notice that only the difference of utilities matters.
 
 370
-00:19:46,997 --> 00:19:52,735
+00:19:46,464 --> 00:19:52,202
 Add the same constant to every answer for a prompt, and nothing changes.
 
 371
-00:19:53,193 --> 00:19:56,081
+00:19:52,660 --> 00:19:55,547
 So fit the utilities by maximum likelihood.
 
 372
-00:19:56,081 --> 00:19:59,718
+00:19:55,547 --> 00:19:59,185
 The reward model is a copy of the language model with a single number as its
 
 373
-00:19:59,718 --> 00:20:04,131
+00:19:59,185 --> 00:20:03,597
 output, trained so that the preferred answer's score beats the rejected one's
 
 374
-00:20:04,131 --> 00:20:05,518
+00:20:03,597 --> 00:20:04,985
 through the sigmoid.
 
 375
-00:20:05,518 --> 00:20:09,581
+00:20:04,985 --> 00:20:09,047
 And because only differences matter, the reward model can carry an arbitrary
 
 376
-00:20:09,581 --> 00:20:11,381
+00:20:09,047 --> 00:20:10,847
 offset for each prompt.
 
 377
-00:20:11,381 --> 00:20:12,843
+00:20:10,847 --> 00:20:12,310
 That's harmless for us:
 
 378
-00:20:12,843 --> 00:20:17,006
+00:20:12,310 --> 00:20:16,472
 a per-prompt offset is just a baseline, and we've seen that baselines don't
 
 379
-00:20:17,006 --> 00:20:20,143
+00:20:16,472 --> 00:20:19,610
 change the policy gradient.
 
 380
-00:20:20,568 --> 00:20:25,181
+00:20:20,035 --> 00:20:24,647
 But a reward model is a learned approximation, and the policy is an optimizer.
 
 381
-00:20:25,181 --> 00:20:28,768
+00:20:24,647 --> 00:20:28,235
 Push hard enough, and the policy finds answers the reward model loves and
 
 382
-00:20:28,768 --> 00:20:29,793
+00:20:28,235 --> 00:20:29,260
 people don't:
 
 383
-00:20:29,793 --> 00:20:33,331
+00:20:29,260 --> 00:20:32,797
 the proxy keeps rising while true quality peaks and falls.
 
 384
-00:20:33,331 --> 00:20:36,731
+00:20:32,797 --> 00:20:36,197
 OpenAI measured exactly this shape in 2022.
 
 385
-00:20:36,731 --> 00:20:39,943
+00:20:36,197 --> 00:20:39,410
 That's why RLHF keeps the policy on a leash:
 
 386
-00:20:39,943 --> 00:20:42,218
+00:20:39,410 --> 00:20:41,685
 the KL penalty to the reference.
 
 387
-00:20:42,218 --> 00:20:43,981
+00:20:41,685 --> 00:20:43,447
 What does that leash actually do?
 
 388
-00:20:43,981 --> 00:20:47,368
+00:20:43,447 --> 00:20:46,835
 Remarkably, we can solve for the best policy exactly.
 
 389
-00:20:49,325 --> 00:20:52,963
+00:20:48,792 --> 00:20:52,429
 Here is the objective RLHF actually optimizes:
 
 390
-00:20:52,963 --> 00:20:58,238
+00:20:52,429 --> 00:20:57,704
 expected reward, minus beta times the KL divergence from the reference policy.
 
 391
-00:20:58,238 --> 00:21:00,975
+00:20:57,704 --> 00:21:00,442
 Write the KL as a sum over answers.
 
 392
-00:21:00,975 --> 00:21:05,925
+00:21:00,442 --> 00:21:05,392
 Now fold the reward into the logarithm, as the log of e to the r over beta.
 
 393
-00:21:05,925 --> 00:21:10,625
+00:21:05,392 --> 00:21:10,092
 Normalize that tilted distribution, with a constant Z, and the whole objective
 
 394
-00:21:10,625 --> 00:21:15,425
+00:21:10,092 --> 00:21:14,892
 becomes minus beta times a KL divergence to a single distribution, plus a
 
 395
-00:21:15,425 --> 00:21:16,963
+00:21:14,892 --> 00:21:16,417
 constant.
 
 396
-00:21:16,963 --> 00:21:21,863
+00:21:16,417 --> 00:21:21,317
 A KL divergence is never negative, and it's zero only when the two distributions
 
 397
-00:21:21,863 --> 00:21:22,700
+00:21:21,317 --> 00:21:22,154
 match.
 
 398
-00:21:22,700 --> 00:21:25,763
+00:21:22,154 --> 00:21:25,217
 So the best possible policy is exactly this one:
 
 399
-00:21:25,763 --> 00:21:29,763
+00:21:25,217 --> 00:21:29,217
 the reference, reweighted by e to the reward over beta.
 
 400
-00:21:29,763 --> 00:21:32,025
+00:21:29,217 --> 00:21:31,479
 No training needed to know the answer;
 
 401
-00:21:32,025 --> 00:21:35,488
+00:21:31,479 --> 00:21:34,942
 training is just a way to get there.
 
 402
-00:21:36,988 --> 00:21:39,263
+00:21:36,442 --> 00:21:38,717
 Let's apply it to a real distribution:
 
 403
-00:21:39,263 --> 00:21:43,063
+00:21:38,717 --> 00:21:42,517
 the answers our pocket model gives to one problem, before any reinforcement
 
 404
-00:21:43,063 --> 00:21:44,063
+00:21:42,517 --> 00:21:43,517
 learning.
 
 405
-00:21:44,063 --> 00:21:48,063
+00:21:43,517 --> 00:21:47,517
 Green answers are right, red ones are wrong, and the long ones show their
 
 406
-00:21:48,063 --> 00:21:48,913
+00:21:47,517 --> 00:21:48,367
 work.
 
 407
-00:21:48,913 --> 00:21:52,538
+00:21:48,367 --> 00:21:51,992
 With a large beta, the leash is tight and nothing changes.
 
 408
-00:21:52,538 --> 00:21:57,025
+00:21:51,992 --> 00:21:56,479
 As beta shrinks, every right answer gets multiplied by the same factor, and
 
 409
-00:21:57,025 --> 00:21:58,638
+00:21:56,479 --> 00:21:58,092
 the wrong ones fade.
 
 410
-00:21:58,638 --> 00:22:03,171
+00:21:58,092 --> 00:22:02,667
 At small beta, the optimal policy is essentially always right.
 
 411
-00:22:03,171 --> 00:22:05,396
+00:22:02,667 --> 00:22:04,892
 Notice what the tilt can't do.
 
 412
-00:22:05,396 --> 00:22:09,521
+00:22:04,892 --> 00:22:09,017
 Right answers keep the proportions the reference gave them, and an answer
 
 413
-00:22:09,521 --> 00:22:14,309
+00:22:09,017 --> 00:22:13,804
 the reference would never write gets probability zero, whatever its reward.
 
 414
-00:22:14,309 --> 00:22:19,521
+00:22:13,804 --> 00:22:19,017
 The optimum only reweights what the starting model could already say.
 
 415
-00:22:19,954 --> 00:22:24,129
+00:22:19,492 --> 00:22:23,667
 Back on the triangle of three-action policies, the optimal policies for every
 
 416
-00:22:24,129 --> 00:22:28,504
+00:22:23,667 --> 00:22:28,042
 beta trace out a single curve, from the reference toward the best corner.
 
 417
-00:22:28,504 --> 00:22:30,017
+00:22:28,042 --> 00:22:29,554
 And here's a surprise:
 
 418
-00:22:30,017 --> 00:22:33,304
+00:22:29,554 --> 00:22:32,842
 it's exactly the path the natural gradient followed.
 
 419
-00:22:33,304 --> 00:22:37,729
+00:22:32,842 --> 00:22:37,267
 Natural gradient ascent on the logits adds a multiple of the reward, so after
 
 420
-00:22:37,729 --> 00:22:41,804
+00:22:37,267 --> 00:22:41,342
 time t the policy is the reference tilted by e to the t r.
 
 421
-00:22:41,804 --> 00:22:46,854
+00:22:41,342 --> 00:22:46,392
 Training longer plays the same role as loosening the leash.
 
 422
-00:22:47,321 --> 00:22:50,921
+00:22:46,892 --> 00:22:50,492
 Averaged over many problems, the optimal policies give a frontier:
 
 423
-00:22:50,921 --> 00:22:54,859
+00:22:50,492 --> 00:22:54,429
 the most reward you can possibly have at each distance from the starting model.
 
 424
-00:22:54,859 --> 00:22:58,746
+00:22:54,429 --> 00:22:58,317
 Being right every time costs only 0.39 nats.
 
 425
-00:22:58,746 --> 00:23:03,571
+00:22:58,317 --> 00:23:03,142
 Our actual training run, which had no KL penalty at all, sits below the frontier,
 
 426
-00:23:03,571 --> 00:23:05,371
+00:23:03,142 --> 00:23:04,942
 as every policy must.
 
 427
-00:23:05,371 --> 00:23:09,309
+00:23:04,942 --> 00:23:08,879
 It ends almost as accurate, but about twice as far from where it started as
 
 428
-00:23:09,309 --> 00:23:10,584
+00:23:08,879 --> 00:23:10,154
 it needed to be:
 
 429
-00:23:10,584 --> 00:23:15,671
+00:23:10,154 --> 00:23:15,242
 unlike the optimum, it also reshuffled its right answers.
 
 430
-00:23:16,363 --> 00:23:20,588
+00:23:15,942 --> 00:23:20,167
 In practice the KL itself has to be estimated from samples, one token at a
 
 431
-00:23:20,588 --> 00:23:21,513
+00:23:20,167 --> 00:23:21,092
 time.
 
 432
-00:23:21,513 --> 00:23:25,588
+00:23:21,092 --> 00:23:25,167
 John Schulman's three estimators are now in nearly every RL library.
 
 433
-00:23:25,588 --> 00:23:29,750
+00:23:25,167 --> 00:23:29,329
 The obvious one, minus the log ratio, is unbiased, but it's negative half
 
 434
-00:23:29,750 --> 00:23:31,575
+00:23:29,329 --> 00:23:31,154
 the time and very noisy.
 
 435
-00:23:31,575 --> 00:23:35,663
+00:23:31,154 --> 00:23:35,242
 Half the squared log ratio is always positive, but slightly biased.
 
 436
-00:23:35,663 --> 00:23:40,275
+00:23:35,242 --> 00:23:39,854
 And k3 adds a term whose average is exactly zero, rho minus one:
 
 437
-00:23:40,275 --> 00:23:44,688
+00:23:39,854 --> 00:23:44,267
 it stays unbiased, it's never negative, and it's far less noisy.
 
 438
-00:23:44,688 --> 00:23:49,288
+00:23:44,267 --> 00:23:48,859
 For two close distributions, its spread is fourteen times smaller.
 
 439
-00:23:49,288 --> 00:23:50,550
+00:23:48,859 --> 00:23:50,121
 One subtlety.
 
 440
-00:23:50,550 --> 00:23:54,188
+00:23:50,121 --> 00:23:53,759
 An estimator with the right value can have the wrong gradient.
 
 441
-00:23:54,188 --> 00:23:59,625
+00:23:53,759 --> 00:23:59,196
 GRPO puts k3 directly in its loss, and differentiating it pulls the policy
 
 442
-00:23:59,625 --> 00:24:03,313
+00:23:59,196 --> 00:24:02,884
 toward the reversed KL, from reference to policy.
 
 443
-00:24:03,313 --> 00:24:08,138
+00:24:02,884 --> 00:24:07,709
 DeepSeek's V3.2 corrects this by multiplying in the importance ratio.
 
 444
-00:24:08,138 --> 00:24:12,838
+00:24:07,709 --> 00:24:12,409
 And many reasoning recipes skip the leash entirely, and set beta to zero.
 
 445
-00:24:14,714 --> 00:24:19,164
+00:24:14,114 --> 00:24:18,564
 In 2023, a group at Stanford ran this formula backwards.
 
 446
-00:24:19,164 --> 00:24:23,927
+00:24:18,564 --> 00:24:23,327
 If the optimal policy is the reference tilted by the reward, take logs, and
 
 447
-00:24:23,927 --> 00:24:25,677
+00:24:23,327 --> 00:24:25,077
 solve for the reward.
 
 448
-00:24:25,677 --> 00:24:27,889
+00:24:25,077 --> 00:24:27,289
 Any policy implies a reward:
 
 449
-00:24:27,889 --> 00:24:32,327
+00:24:27,289 --> 00:24:31,727
 the log ratio of its probabilities to the reference's, times beta, plus a
 
 450
-00:24:32,327 --> 00:24:36,064
+00:24:31,727 --> 00:24:35,464
 term that depends only on the prompt.
 
 451
-00:24:36,556 --> 00:24:40,781
+00:24:35,977 --> 00:24:40,202
 Now plug that implied reward into the Bradley-Terry model of comparisons.
 
 452
-00:24:40,781 --> 00:24:44,381
+00:24:40,202 --> 00:24:43,802
 The probability that the preferred answer wins is the sigmoid of the reward
 
 453
-00:24:44,381 --> 00:24:45,406
+00:24:43,802 --> 00:24:44,827
 difference.
 
 454
-00:24:45,406 --> 00:24:49,531
+00:24:44,827 --> 00:24:48,952
 Substitute, and the troublesome normalizer Z appears twice, with opposite
 
 455
-00:24:49,531 --> 00:24:50,531
+00:24:48,952 --> 00:24:49,952
 signs.
 
 456
-00:24:50,531 --> 00:24:53,843
+00:24:49,952 --> 00:24:53,264
 Both answers answer the same prompt, so it cancels.
 
 457
-00:24:53,843 --> 00:24:57,231
+00:24:53,264 --> 00:24:56,652
 What's left depends only on the policy and the reference.
 
 458
-00:24:57,231 --> 00:25:01,768
+00:24:56,652 --> 00:25:01,189
 Fit it by maximum likelihood, and you have Direct Preference Optimization:
 
 459
-00:25:01,768 --> 00:25:04,931
+00:25:01,189 --> 00:25:04,352
 a simple classification loss on pairs.
 
 460
-00:25:04,931 --> 00:25:09,306
+00:25:04,352 --> 00:25:08,727
 No reward model, no sampling, no critic.
 
 461
-00:25:09,731 --> 00:25:12,006
+00:25:09,164 --> 00:25:11,439
 Its gradient is easy to read.
 
 462
-00:25:12,006 --> 00:25:16,593
+00:25:11,439 --> 00:25:16,027
 Raise the log probability of the preferred answer, lower the rejected one,
 
 463
-00:25:16,593 --> 00:25:20,893
+00:25:16,027 --> 00:25:20,327
 and weight the pair by a sigmoid of how badly the model's own implicit reward
 
 464
-00:25:20,893 --> 00:25:22,418
+00:25:20,327 --> 00:25:21,852
 currently ranks it.
 
 465
-00:25:22,418 --> 00:25:24,843
+00:25:21,852 --> 00:25:24,277
 Pairs it already gets right fade away;
 
 466
-00:25:24,843 --> 00:25:28,556
+00:25:24,277 --> 00:25:27,989
 pairs it gets wrong get the full push.
 
 467
-00:25:28,989 --> 00:25:33,077
+00:25:28,452 --> 00:25:32,539
 Here it is on the adder, from four thousand pairs of right and wrong answers,
 
 468
-00:25:33,077 --> 00:25:35,439
+00:25:32,539 --> 00:25:34,902
 sampled once from the starting model.
 
 469
-00:25:35,439 --> 00:25:38,602
+00:25:34,902 --> 00:25:38,064
 Accuracy climbs from 69 to 80 percent.
 
 470
-00:25:38,602 --> 00:25:40,064
+00:25:38,064 --> 00:25:39,527
 Then it collapses.
 
 471
-00:25:40,064 --> 00:25:41,789
+00:25:39,527 --> 00:25:41,252
 Look at what the loss is doing:
 
 472
-00:25:41,789 --> 00:25:45,489
+00:25:41,252 --> 00:25:44,952
 it only cares about the gap between the preferred and the rejected answer,
 
 473
-00:25:45,489 --> 00:25:49,064
+00:25:44,952 --> 00:25:48,527
 and it found that pushing both down widens the gap fastest.
 
 474
-00:25:49,064 --> 00:25:51,002
+00:25:48,527 --> 00:25:50,464
 The probability doesn't vanish;
 
 475
-00:25:51,002 --> 00:25:54,689
+00:25:50,464 --> 00:25:54,152
 it flows to answers that were in neither set, and the model starts writing
 
 476
-00:25:54,689 --> 00:25:56,139
+00:25:54,152 --> 00:25:55,602
 nonsense.
 
 477
-00:25:56,139 --> 00:25:59,698
+00:25:55,602 --> 00:25:59,202
 This failure has a name, likelihood displacement.
 
 478
-00:25:59,698 --> 00:26:04,260
+00:25:59,202 --> 00:26:03,764
 The fix people use is to stop early, regularize, or keep sampling:
 
 479
-00:26:04,260 --> 00:26:08,148
+00:26:03,764 --> 00:26:07,652
 train on the model's own fresh answers instead of a fixed set.
 
 480
-00:26:08,148 --> 00:26:11,760
+00:26:07,652 --> 00:26:11,264
 Which is exactly what the reinforcement learning methods do.
 
 481
-00:26:11,760 --> 00:26:16,085
+00:26:11,264 --> 00:26:15,589
 For reasoning, the field went back to sampling, and to a much simpler kind
 
 482
-00:26:16,085 --> 00:26:16,948
+00:26:15,589 --> 00:26:16,452
 of reward.
 
 483
-00:26:22,479 --> 00:26:26,917
+00:26:21,879 --> 00:26:26,317
 In 2024, DeepSeek's math model introduced the algorithm behind many of today's
 
 484
-00:26:26,917 --> 00:26:28,567
+00:26:26,317 --> 00:26:27,967
 open reasoning models:
 
 485
-00:26:28,567 --> 00:26:31,517
+00:26:27,967 --> 00:26:30,917
 group relative policy optimization, GRPO.
 
 486
-00:26:31,517 --> 00:26:34,529
+00:26:30,917 --> 00:26:33,929
 Its idea is to replace the critic with something free.
 
 487
-00:26:34,529 --> 00:26:37,242
+00:26:33,929 --> 00:26:36,642
 For each prompt, sample a group of answers.
 
 488
-00:26:37,242 --> 00:26:39,592
+00:26:36,642 --> 00:26:38,992
 Here are 8 real ones from our pocket model.
 
 489
-00:26:39,592 --> 00:26:41,292
+00:26:38,992 --> 00:26:40,692
 A checker grades each one:
 
 490
-00:26:41,292 --> 00:26:43,517
+00:26:40,692 --> 00:26:42,917
 one if right, zero if wrong.
 
 491
-00:26:43,517 --> 00:26:47,017
+00:26:42,917 --> 00:26:46,417
 The group's average reward is an estimate of the value of the prompt, the
 
 492
-00:26:47,017 --> 00:26:49,904
+00:26:46,417 --> 00:26:49,304
 very thing the critic was trained to predict.
 
 493
-00:26:49,904 --> 00:26:54,329
+00:26:49,304 --> 00:26:53,729
 Subtract it, and you have an advantage for every answer, with no value network
 
 494
-00:26:54,329 --> 00:26:56,479
+00:26:53,729 --> 00:26:55,879
 at all.
 
 495
-00:26:56,903 --> 00:26:58,628
+00:26:56,304 --> 00:26:58,029
 Is that baseline legal?
 
 496
-00:26:58,628 --> 00:27:02,815
+00:26:58,029 --> 00:27:02,216
 It includes the answer itself, and a baseline isn't allowed to depend on the
 
 497
-00:27:02,815 --> 00:27:04,290
+00:27:02,216 --> 00:27:03,691
 sampled answer.
 
 498
-00:27:04,290 --> 00:27:08,678
+00:27:03,691 --> 00:27:08,079
 But split the average into answer i's own share and the average of the other
 
 499
-00:27:08,678 --> 00:27:10,053
+00:27:08,079 --> 00:27:09,454
 answers.
 
 500
-00:27:10,053 --> 00:27:14,815
+00:27:09,454 --> 00:27:14,216
 Rearranged, answer i minus the group mean is exactly a constant times answer
 
 501
-00:27:14,815 --> 00:27:19,140
+00:27:14,216 --> 00:27:18,541
 i minus the average of the others, and that leave-one-out baseline is independent
 
 502
-00:27:19,140 --> 00:27:20,265
+00:27:18,541 --> 00:27:19,666
 of answer i.
 
 503
-00:27:20,265 --> 00:27:25,090
+00:27:19,666 --> 00:27:24,491
 So the group mean gives an unbiased gradient, just scaled by G minus one over
 
 504
-00:27:25,090 --> 00:27:25,715
+00:27:24,491 --> 00:27:25,116
 G.
 
 505
-00:27:25,715 --> 00:27:31,053
+00:27:25,116 --> 00:27:30,454
 This leave-one-out version is known as RLOO.
 
 506
-00:27:31,528 --> 00:27:33,790
+00:27:30,954 --> 00:27:33,216
 GRPO does one more thing:
 
 507
-00:27:33,790 --> 00:27:36,565
+00:27:33,216 --> 00:27:35,991
 it divides by the group's standard deviation.
 
 508
-00:27:36,565 --> 00:27:41,053
+00:27:35,991 --> 00:27:40,479
 That looks like a harmless normalization, but it changes what's being optimized.
 
 509
-00:27:41,053 --> 00:27:45,278
+00:27:40,479 --> 00:27:44,704
 With rewards of zero and one and a success rate p, the standard deviation
 
 510
-00:27:45,278 --> 00:27:50,228
+00:27:44,704 --> 00:27:49,654
 is the square root of p times one minus p, so a right answer gets this advantage,
 
 511
-00:27:50,228 --> 00:27:51,803
+00:27:49,654 --> 00:27:51,229
 and a wrong one this.
 
 512
-00:27:51,803 --> 00:27:56,328
+00:27:51,229 --> 00:27:55,754
 Average over the samples, and the expected update is the gradient of p, divided
 
 513
-00:27:56,328 --> 00:27:58,503
+00:27:55,754 --> 00:27:57,929
 by that same square root.
 
 514
-00:27:58,503 --> 00:28:01,853
+00:27:57,929 --> 00:28:01,262
 And that's the derivative of two arcsine root p.
 
 515
-00:28:01,853 --> 00:28:05,628
+00:28:01,262 --> 00:28:05,037
 So GRPO doesn't maximize the success rate itself.
 
 516
-00:28:05,628 --> 00:28:09,790
+00:28:05,037 --> 00:28:09,199
 It maximizes the arcsine of its square root, which puts extra weight on prompts
 
 517
-00:28:09,790 --> 00:28:13,790
+00:28:09,199 --> 00:28:13,199
 the model almost always fails or almost always solves.
 
 518
-00:28:13,790 --> 00:28:16,003
+00:28:13,199 --> 00:28:15,412
 Here's that weight, as a function of p.
 
 519
-00:28:16,003 --> 00:28:17,965
+00:28:15,412 --> 00:28:17,374
 With a finite group it's tamer:
 
 520
-00:28:17,965 --> 00:28:21,603
+00:28:17,374 --> 00:28:21,012
 these are the exact curves for groups of two to sixty-four.
 
 521
-00:28:21,603 --> 00:28:25,378
+00:28:21,012 --> 00:28:24,787
 With two answers, the normalization does nothing at all.
 
 522
-00:28:25,378 --> 00:28:27,865
+00:28:24,787 --> 00:28:27,274
 And two arcsine root p has a meaning:
 
 523
-00:28:27,865 --> 00:28:31,565
+00:28:27,274 --> 00:28:30,974
 it's the distance along the family of coin flips, measured with the Fisher
 
 524
-00:28:31,565 --> 00:28:35,528
+00:28:30,974 --> 00:28:34,937
 information, the same geometry as the natural gradient.
 
 525
-00:28:35,528 --> 00:28:37,340
+00:28:34,937 --> 00:28:36,749
 Some labs keep this weighting;
 
 526
-00:28:37,340 --> 00:28:41,140
+00:28:36,749 --> 00:28:40,549
 others, like OLMo 3, DeepSeek-V3.2 and Dr.
 
 527
-00:28:41,140 --> 00:28:45,153
+00:28:40,549 --> 00:28:44,562
 GRPO, drop the division.
 
 528
-00:28:45,574 --> 00:28:47,524
+00:28:45,008 --> 00:28:46,958
 There's a catch hiding in the group.
 
 529
-00:28:47,524 --> 00:28:51,624
+00:28:46,958 --> 00:28:51,058
 If every answer in a group is right, or every one is wrong, every advantage
 
 530
-00:28:51,624 --> 00:28:54,599
+00:28:51,058 --> 00:28:54,033
 is zero, and the whole group teaches nothing.
 
 531
-00:28:54,599 --> 00:28:58,599
+00:28:54,033 --> 00:28:58,033
 That happens with probability p to the G plus one minus p to the G.
 
 532
-00:28:58,599 --> 00:29:03,561
+00:28:58,033 --> 00:29:02,995
 On easy prompts, late in training, most groups are wasted compute.
 
 533
-00:29:03,561 --> 00:29:07,974
+00:29:02,995 --> 00:29:07,408
 ByteDance's DAPO filters these groups out and keeps sampling until the batch
 
 534
-00:29:07,974 --> 00:29:11,324
+00:29:07,408 --> 00:29:10,758
 is full of informative ones.
 
 535
-00:29:11,865 --> 00:29:15,865
+00:29:11,295 --> 00:29:15,295
 Now we can read the whole GRPO objective, the formula from the start of the
 
 536
-00:29:15,865 --> 00:29:16,778
+00:29:15,295 --> 00:29:16,208
 video.
 
 537
-00:29:16,778 --> 00:29:19,665
+00:29:16,208 --> 00:29:19,095
 Answers sampled by the old policy, in groups.
 
 538
-00:29:19,665 --> 00:29:24,340
+00:29:19,095 --> 00:29:23,770
 The importance ratio, clipped as in PPO, times the group-relative advantage.
 
 539
-00:29:24,340 --> 00:29:27,640
+00:29:23,770 --> 00:29:27,070
 And the leash to the reference model, estimated with k3.
 
 540
-00:29:27,640 --> 00:29:29,653
+00:29:27,070 --> 00:29:29,083
 There's one piece we haven't explained:
 
 541
-00:29:29,653 --> 00:29:33,840
+00:29:29,083 --> 00:29:33,270
 inside, each answer's tokens are averaged, one over the length of answer i.
 
 542
-00:29:33,840 --> 00:29:36,690
+00:29:33,270 --> 00:29:36,120
 That innocent-looking average turns out to be a trap.
 
 543
-00:29:36,690 --> 00:29:40,440
+00:29:36,120 --> 00:29:39,870
 But first, let's watch GRPO train a real model.
 
 544
-00:29:42,386 --> 00:29:43,536
+00:29:41,686 --> 00:29:42,836
 Time to run it.
 
 545
-00:29:43,536 --> 00:29:45,798
+00:29:42,836 --> 00:29:45,098
 We train the adder with GRPO:
 
 546
-00:29:45,798 --> 00:29:50,286
+00:29:45,098 --> 00:29:49,586
 thirty-two problems per step, eight answers each, a reward of one or zero,
 
 547
-00:29:50,286 --> 00:29:51,698
+00:29:49,586 --> 00:29:50,998
 and nothing else.
 
 548
-00:29:51,698 --> 00:29:56,448
+00:29:50,998 --> 00:29:55,748
 Accuracy on problems it has never seen climbs from 70 percent to 98 percent
 
 549
-00:29:56,448 --> 00:29:57,986
+00:29:55,748 --> 00:29:57,286
 within forty steps.
 
 550
-00:29:57,986 --> 00:29:58,936
+00:29:57,286 --> 00:29:58,236
 But how?
 
 551
-00:29:58,936 --> 00:30:02,486
+00:29:58,236 --> 00:30:01,786
 You might expect it to start showing its work, since that's almost always
 
 552
-00:30:02,486 --> 00:30:03,236
+00:30:01,786 --> 00:30:02,536
 right.
 
 553
-00:30:03,236 --> 00:30:04,361
+00:30:02,536 --> 00:30:03,661
 It barely does:
 
 554
-00:30:04,361 --> 00:30:07,611
+00:30:03,661 --> 00:30:06,911
 from 28 to 41 percent of answers.
 
 555
-00:30:07,611 --> 00:30:10,536
+00:30:06,911 --> 00:30:09,836
 Instead, its direct answers stopped slipping:
 
 556
-00:30:10,536 --> 00:30:13,673
+00:30:09,836 --> 00:30:12,973
 from 59 to 97 percent right.
 
 557
-00:30:13,673 --> 00:30:17,711
+00:30:12,973 --> 00:30:17,011
 Forgetting a carry was always a choice the network could unlearn, one token
 
 558
-00:30:17,711 --> 00:30:21,936
+00:30:17,011 --> 00:30:21,236
 at a time, and that was the cheapest way up.
 
 559
-00:30:22,386 --> 00:30:27,173
+00:30:21,690 --> 00:30:26,477
 Here are its five likeliest answers to our running example, before and after.
 
 560
-00:30:27,173 --> 00:30:31,336
+00:30:26,477 --> 00:30:30,640
 Before, the right answer shared its probability with several slips.
 
 561
-00:30:31,336 --> 00:30:35,686
+00:30:30,640 --> 00:30:34,990
 After, nearly all of it sits on the right answer, written directly.
 
 562
-00:30:35,686 --> 00:30:37,723
+00:30:34,990 --> 00:30:37,027
 That's what RL did to this model:
 
 563
-00:30:37,723 --> 00:30:40,186
+00:30:37,027 --> 00:30:39,490
 it sharpened.
 
 564
-00:30:40,811 --> 00:30:44,498
+00:30:40,140 --> 00:30:43,827
 Now the same experiment with six of the algorithms we've derived, three seeds
 
 565
-00:30:44,498 --> 00:30:45,261
+00:30:43,827 --> 00:30:44,590
 each.
 
 566
-00:30:45,261 --> 00:30:48,023
+00:30:44,590 --> 00:30:47,352
 On accuracy, they look almost interchangeable.
 
 567
-00:30:48,023 --> 00:30:52,048
+00:30:47,352 --> 00:30:51,377
 PPO starts late, because its critic has to be trained first, and every one
 
 568
-00:30:52,048 --> 00:30:54,336
+00:30:51,377 --> 00:30:53,665
 of them ends above ninety-five percent.
 
 569
-00:30:54,336 --> 00:30:56,086
+00:30:53,665 --> 00:30:55,415
 But look at what they learned to do.
 
 570
-00:30:56,086 --> 00:31:01,061
+00:30:55,415 --> 00:31:00,390
 GRPO and RLOO end up showing their work about 42 percent of the time;
 
 571
-00:31:01,061 --> 00:31:02,073
+00:31:00,390 --> 00:31:01,402
 DAPO, Dr.
 
 572
-00:31:02,073 --> 00:31:05,236
+00:31:01,402 --> 00:31:04,565
 GRPO and PPO, about 50.
 
 573
-00:31:05,236 --> 00:31:09,036
+00:31:04,565 --> 00:31:08,365
 And plain REINFORCE abandons showing its work completely.
 
 574
-00:31:09,036 --> 00:31:12,661
+00:31:08,365 --> 00:31:11,990
 Same reward, same accuracy, different behavior.
 
 575
-00:31:12,661 --> 00:31:16,061
+00:31:11,990 --> 00:31:15,390
 The difference turns out to hide in one innocent-looking average.
 
 576
-00:31:18,185 --> 00:31:19,310
+00:31:17,452 --> 00:31:18,577
 Here's the trap.
 
 577
-00:31:19,310 --> 00:31:23,685
+00:31:18,577 --> 00:31:22,952
 GRPO averages over an answer's tokens before averaging over the group, so
 
 578
-00:31:23,685 --> 00:31:27,347
+00:31:22,952 --> 00:31:26,614
 each token's push is the advantage divided by the answer's length.
 
 579
-00:31:27,347 --> 00:31:29,910
+00:31:26,614 --> 00:31:29,177
 Two right answers, one short and one long:
 
 580
-00:31:29,910 --> 00:31:32,547
+00:31:29,177 --> 00:31:31,814
 the short one's tokens get pushed up twice as hard.
 
 581
-00:31:32,547 --> 00:31:33,785
+00:31:31,814 --> 00:31:33,052
 Two wrong answers:
 
 582
-00:31:33,785 --> 00:31:36,522
+00:31:33,052 --> 00:31:35,789
 the long one's tokens are punished half as much.
 
 583
-00:31:36,522 --> 00:31:40,210
+00:31:35,789 --> 00:31:39,477
 So when the model is right, it learns to be brief, and when it's wrong, it
 
 584
-00:31:40,210 --> 00:31:42,697
+00:31:39,477 --> 00:31:41,964
 learns that rambling dilutes the blame.
 
 585
-00:31:42,697 --> 00:31:46,585
+00:31:41,964 --> 00:31:45,852
 Long, wrong answers are the result.
 
 586
-00:31:47,018 --> 00:31:51,268
+00:31:46,285 --> 00:31:50,535
 Two 2025 papers removed the bias in different ways.
 
 587
-00:31:51,268 --> 00:31:56,143
+00:31:50,535 --> 00:31:55,410
 ByteDance's DAPO averages over all tokens in the batch at once, so every token
 
 588
-00:31:56,143 --> 00:31:57,593
+00:31:55,410 --> 00:31:56,860
 counts equally.
 
 589
-00:31:57,593 --> 00:31:58,056
+00:31:56,860 --> 00:31:57,323
 Dr.
 
 590
-00:31:58,056 --> 00:32:04,143
+00:31:57,323 --> 00:32:03,410
 GRPO divides by a fixed constant, the maximum length, and also drops the division
 
 591
-00:32:04,143 --> 00:32:10,768
+00:32:03,410 --> 00:32:10,035
 by the standard deviation, arguing that both normalizations bias the gradient.
 
 592
-00:32:11,243 --> 00:32:14,356
+00:32:10,510 --> 00:32:13,623
 In our pocket model, this bias isn't hypothetical.
 
 593
-00:32:14,356 --> 00:32:17,868
+00:32:13,623 --> 00:32:17,135
 Remember plain REINFORCE, which abandoned showing its work?
 
 594
-00:32:17,868 --> 00:32:20,956
+00:32:17,135 --> 00:32:20,223
 It used GRPO's per-answer average.
 
 595
-00:32:20,956 --> 00:32:25,268
+00:32:20,223 --> 00:32:24,535
 Without a baseline, only right answers get pushed, and a right direct answer
 
 596
-00:32:25,268 --> 00:32:29,081
+00:32:24,535 --> 00:32:28,348
 is six tokens long while a right worked answer is thirteen:
 
 597
-00:32:29,081 --> 00:32:33,368
+00:32:28,348 --> 00:32:32,635
 per token, the short answers push twice as hard on the very first choice,
 
 598
-00:32:33,368 --> 00:32:35,393
+00:32:32,635 --> 00:32:34,660
 and nothing pushes back.
 
 599
-00:32:35,393 --> 00:32:39,068
+00:32:34,660 --> 00:32:38,335
 Replace that average with a constant and change nothing else:
 
 600
-00:32:39,068 --> 00:32:43,318
+00:32:38,335 --> 00:32:42,585
 the same algorithm now ends up showing its work 50 percent of the time.
 
 601
-00:32:43,318 --> 00:32:46,843
+00:32:42,585 --> 00:32:46,110
 With a baseline the effect is milder, but it's still there:
 
 602
-00:32:46,843 --> 00:32:51,331
+00:32:46,110 --> 00:32:50,598
 GRPO, with the per-answer average, ends at 41 percent;
 
 603
-00:32:51,331 --> 00:32:52,356
+00:32:50,598 --> 00:32:51,623
 DAPO and Dr.
 
 604
-00:32:52,356 --> 00:32:57,493
+00:32:51,623 --> 00:32:56,760
 GRPO, without it, at 48 and 50.
 
 605
-00:32:58,251 --> 00:33:00,276
+00:32:57,518 --> 00:32:59,543
 These choices aren't academic.
 
 606
-00:33:00,276 --> 00:33:03,514
+00:32:59,543 --> 00:33:02,781
 We read the code of eleven open-source RL libraries;
 
 607
-00:33:03,514 --> 00:33:04,789
+00:33:02,781 --> 00:33:04,056
 here are nine.
 
 608
-00:33:04,789 --> 00:33:07,264
+00:33:04,056 --> 00:33:06,531
 They disagree on almost every one of them:
 
 609
-00:33:07,264 --> 00:33:11,901
+00:33:06,531 --> 00:33:11,168
 how to average over tokens, whether to divide by the standard deviation, whether
 
 610
-00:33:11,901 --> 00:33:15,901
+00:33:11,168 --> 00:33:15,168
 to keep a KL leash at all, and which estimator to use for it.
 
 611
-00:33:15,901 --> 00:33:21,826
+00:33:15,168 --> 00:33:21,093
 When a paper says it used GRPO, it's naming a family of choices, not one algorithm.
 
 612
-00:33:24,009 --> 00:33:28,009
+00:33:23,276 --> 00:33:27,276
 Every RL run on a language model shows the same signature.
 
 613
-00:33:28,009 --> 00:33:32,821
+00:33:27,276 --> 00:33:32,088
 The policy's entropy, its average uncertainty about the next token, collapses.
 
 614
-00:33:32,821 --> 00:33:34,446
+00:33:32,088 --> 00:33:33,713
 Here it is in our run.
 
 615
-00:33:34,446 --> 00:33:36,609
+00:33:33,713 --> 00:33:35,876
 Entropy is the exploration budget:
 
 616
-00:33:36,609 --> 00:33:41,546
+00:33:35,876 --> 00:33:40,813
 once the policy is certain, it stops sampling anything new, and learning stalls.
 
 617
-00:33:41,546 --> 00:33:45,234
+00:33:40,813 --> 00:33:44,501
 Why does it fall, and can we control it?
 
 618
-00:33:45,680 --> 00:33:49,605
+00:33:44,976 --> 00:33:48,901
 For a softmax, the derivative of the entropy with respect to a logit is minus
 
 619
-00:33:49,605 --> 00:33:54,280
+00:33:48,901 --> 00:33:53,576
 that token's probability, times how much more surprising than average it is.
 
 620
-00:33:54,280 --> 00:33:58,242
+00:33:53,576 --> 00:33:57,538
 Sum over a small change of all the logits, and the change in entropy is minus
 
 621
-00:33:58,242 --> 00:33:59,530
+00:33:57,538 --> 00:33:58,826
 a covariance:
 
 622
-00:33:59,530 --> 00:34:04,105
+00:33:58,826 --> 00:34:03,401
 between how likely each token already is, and how much its logit moves.
 
 623
-00:34:04,105 --> 00:34:08,217
+00:34:03,401 --> 00:34:07,513
 Plug in the policy gradient, which moves each logit by its probability times
 
 624
-00:34:08,217 --> 00:34:13,555
+00:34:07,513 --> 00:34:12,851
 its advantage, or the natural gradient, which moves it by the advantage alone.
 
 625
-00:34:13,555 --> 00:34:14,480
+00:34:12,851 --> 00:34:13,776
 Either way:
 
 626
-00:34:14,480 --> 00:34:18,455
+00:34:13,776 --> 00:34:17,751
 the entropy falls whenever the tokens the model already likes are the ones
 
 627
-00:34:18,455 --> 00:34:21,080
+00:34:17,751 --> 00:34:20,376
 being rewarded.
 
 628
-00:34:21,538 --> 00:34:25,388
+00:34:20,834 --> 00:34:24,684
 Two examples, each with the same five-token distribution.
 
 629
-00:34:25,388 --> 00:34:29,350
+00:34:24,684 --> 00:34:28,647
 On the left, the token the model already likes is the one that gets rewarded:
 
 630
-00:34:29,350 --> 00:34:31,213
+00:34:28,647 --> 00:34:30,509
 a positive covariance.
 
 631
-00:34:31,213 --> 00:34:34,613
+00:34:30,509 --> 00:34:33,909
 One natural gradient step, and the distribution sharpens;
 
 632
-00:34:34,613 --> 00:34:36,088
+00:34:33,909 --> 00:34:35,384
 the entropy drops.
 
 633
-00:34:36,088 --> 00:34:38,663
+00:34:35,384 --> 00:34:37,959
 On the right, a rare token is rewarded.
 
 634
-00:34:38,663 --> 00:34:42,500
+00:34:37,959 --> 00:34:41,797
 The covariance is negative, and the step spreads probability out:
 
 635
-00:34:42,500 --> 00:34:44,313
+00:34:41,797 --> 00:34:43,609
 entropy rises.
 
 636
-00:34:44,313 --> 00:34:49,313
+00:34:43,609 --> 00:34:48,609
 In RL on a pretrained model, the first case is overwhelmingly common:
 
 637
-00:34:49,313 --> 00:34:53,763
+00:34:48,609 --> 00:34:53,059
 the confident tokens are usually the right ones, so entropy steadily drains
 
 638
-00:34:53,763 --> 00:34:55,913
+00:34:53,059 --> 00:34:55,209
 away.
 
 639
-00:34:56,380 --> 00:35:00,430
+00:34:55,676 --> 00:34:59,726
 Does the formula hold up in a real network, where every logit is tied to every
 
 640
-00:35:00,430 --> 00:35:02,167
+00:34:59,726 --> 00:35:01,463
 other through shared weights?
 
 641
-00:35:02,167 --> 00:35:05,992
+00:35:01,463 --> 00:35:05,288
 Here is the covariance between each sampled token's log probability and its
 
 642
-00:35:05,992 --> 00:35:10,267
+00:35:05,288 --> 00:35:09,563
 advantage, measured in every batch of our run, and here is how much the entropy
 
 643
-00:35:10,267 --> 00:35:11,742
+00:35:09,563 --> 00:35:11,038
 actually changed.
 
 644
-00:35:11,742 --> 00:35:16,355
+00:35:11,038 --> 00:35:15,651
 The covariance is positive in 87 percent of the batches, and the entropy keeps
 
 645
-00:35:16,355 --> 00:35:17,380
+00:35:15,651 --> 00:35:16,676
 falling.
 
 646
-00:35:17,380 --> 00:35:21,567
+00:35:16,676 --> 00:35:20,863
 Averaged over a few steps, the bigger the covariance, the faster the fall:
 
 647
-00:35:21,567 --> 00:35:25,580
+00:35:20,863 --> 00:35:24,876
 a correlation of minus 0.8.
 
 648
-00:35:26,013 --> 00:35:27,838
+00:35:25,334 --> 00:35:27,159
 Remember the clipping windows.
 
 649
-00:35:27,838 --> 00:35:32,125
+00:35:27,159 --> 00:35:31,447
 With a symmetric clip, a rare token can rise by at most twenty percent of
 
 650
-00:35:32,125 --> 00:35:37,100
+00:35:31,447 --> 00:35:36,422
 its probability per round, while a likely one can rise all the way to certainty.
 
 651
-00:35:37,100 --> 00:35:40,013
+00:35:36,422 --> 00:35:39,334
 That's exactly the positive covariance again:
 
 652
-00:35:40,013 --> 00:35:42,613
+00:35:39,334 --> 00:35:41,934
 the clip itself favors sharpening.
 
 653
-00:35:42,613 --> 00:35:47,250
+00:35:41,934 --> 00:35:46,572
 ByteDance's DAPO simply raises the upper limit to one point two eight, giving
 
 654
-00:35:47,250 --> 00:35:49,763
+00:35:46,572 --> 00:35:49,084
 rare tokens more room to grow.
 
 655
-00:35:49,763 --> 00:35:54,963
+00:35:49,084 --> 00:35:54,284
 Along with dynamic sampling, a token-level loss and a soft penalty for overlong
 
 656
-00:35:54,963 --> 00:36:00,763
+00:35:54,284 --> 00:36:00,084
 answers, it took a naive GRPO run on the AIME math competition from thirty
 
 657
-00:36:00,763 --> 00:36:01,963
+00:36:00,084 --> 00:36:01,284
 to fifty percent.
 
 658
-00:36:03,882 --> 00:36:07,207
+00:36:03,149 --> 00:36:06,474
 Does reinforcement learning teach a model new things, or just make it more
 
 659
-00:36:07,207 --> 00:36:09,370
+00:36:06,474 --> 00:36:08,637
 reliable at things it could already do?
 
 660
-00:36:09,370 --> 00:36:12,007
+00:36:08,637 --> 00:36:11,274
 To ask that precisely, we need pass at k:
 
 661
-00:36:12,007 --> 00:36:14,557
+00:36:11,274 --> 00:36:13,824
 the chance that at least one of k attempts is right.
 
 662
-00:36:14,557 --> 00:36:18,445
+00:36:13,824 --> 00:36:17,712
 With a success rate p, it's one minus the chance that all k fail.
 
 663
-00:36:18,445 --> 00:36:21,832
+00:36:17,712 --> 00:36:21,099
 To estimate it, draw n samples, count the right ones, and ask:
 
 664
-00:36:21,832 --> 00:36:25,282
+00:36:21,099 --> 00:36:24,549
 of all the ways to pick k of them, what fraction contain no right answer at
 
 665
-00:36:25,282 --> 00:36:25,970
+00:36:24,549 --> 00:36:25,237
 all?
 
 666
-00:36:25,970 --> 00:36:29,945
+00:36:25,237 --> 00:36:29,212
 Here, ten of the fifty-six ways fail, so pass at three is about point eight
 
 667
-00:36:29,945 --> 00:36:32,007
+00:36:29,212 --> 00:36:31,274
 two.
 
 668
-00:36:32,482 --> 00:36:37,307
+00:36:31,770 --> 00:36:36,595
 Here is pass at k for our adder, measured with 128 samples on each of 300
 
 669
-00:36:37,307 --> 00:36:38,770
+00:36:36,595 --> 00:36:38,057
 held-out problems.
 
 670
-00:36:38,770 --> 00:36:43,945
+00:36:38,057 --> 00:36:43,232
 Before RL, a single attempt is right 70 percent of the time, but with 128
 
 671
-00:36:43,945 --> 00:36:47,895
+00:36:43,232 --> 00:36:47,182
 attempts, every one of the problems gets solved at least once.
 
 672
-00:36:47,895 --> 00:36:52,545
+00:36:47,182 --> 00:36:51,832
 After RL, a single attempt is right 99 percent of the time.
 
 673
-00:36:52,545 --> 00:36:54,045
+00:36:51,832 --> 00:36:53,332
 The curve went flat:
 
 674
-00:36:54,045 --> 00:36:58,657
+00:36:53,332 --> 00:36:57,945
 RL moved the probability onto answers the model could already produce.
 
 675
-00:36:58,657 --> 00:37:04,107
+00:36:57,945 --> 00:37:03,395
 Its mistakes were slips, and the right answer was always within reach.
 
 676
-00:37:04,595 --> 00:37:06,220
+00:37:03,874 --> 00:37:05,499
 This matches the math.
 
 677
-00:37:06,220 --> 00:37:11,270
+00:37:05,499 --> 00:37:10,549
 The KL-regularized optimum is the reference times a positive factor, so any
 
 678
-00:37:11,270 --> 00:37:15,307
+00:37:10,549 --> 00:37:14,587
 answer the reference would never produce stays at probability zero.
 
 679
-00:37:15,307 --> 00:37:20,632
+00:37:14,587 --> 00:37:19,912
 In 2025, a careful study found the same thing in large reasoning models:
 
 680
-00:37:20,632 --> 00:37:25,032
+00:37:19,912 --> 00:37:24,312
 given enough attempts, the base model catches up with, and even passes, the
 
 681
-00:37:25,032 --> 00:37:27,045
+00:37:24,312 --> 00:37:26,324
 RL-trained one.
 
 682
-00:37:27,045 --> 00:37:32,407
+00:37:26,324 --> 00:37:31,687
 NVIDIA's ProRL pushed back, finding problems that only prolonged RL could
 
 683
-00:37:32,407 --> 00:37:33,307
+00:37:31,687 --> 00:37:32,587
 solve;
 
 684
-00:37:33,307 --> 00:37:38,582
+00:37:32,587 --> 00:37:37,862
 and in practice, generalization lets a network reach answers it never sampled.
 
 685
-00:37:38,582 --> 00:37:43,320
+00:37:37,862 --> 00:37:42,599
 As of 2026, the question is still open.
 
 686
-00:37:43,765 --> 00:37:45,978
+00:37:43,045 --> 00:37:45,257
 Other measurements point the same way.
 
 687
-00:37:45,978 --> 00:37:50,278
+00:37:45,257 --> 00:37:49,557
 A reward of zero or one carries about one bit of information per attempt,
 
 688
-00:37:50,278 --> 00:37:55,415
+00:37:49,557 --> 00:37:54,695
 so even DeepSeek's R1-Zero received only a few million bits, fewer than the
 
 689
-00:37:55,415 --> 00:37:57,890
+00:37:54,695 --> 00:37:57,170
 parameters of a tiny adapter.
 
 690
-00:37:57,890 --> 00:37:59,890
+00:37:57,170 --> 00:37:59,170
 Most weights don't change at all.
 
 691
-00:37:59,890 --> 00:38:04,340
+00:37:59,170 --> 00:38:03,620
 And on-policy RL tends to find the solution closest to the starting model,
 
 692
-00:38:04,340 --> 00:38:09,890
+00:38:03,620 --> 00:38:09,170
 which is why it forgets less than fine-tuning on someone else's answers.
 
 693
-00:38:10,311 --> 00:38:14,286
+00:38:09,620 --> 00:38:13,595
 If one bit per attempt is the bottleneck, there's a fix when a stronger model
 
 694
-00:38:14,286 --> 00:38:15,436
+00:38:13,595 --> 00:38:14,745
 exists.
 
 695
-00:38:15,436 --> 00:38:20,111
+00:38:14,745 --> 00:38:19,420
 Sample from the student, as in RL, but let a teacher grade every token:
 
 696
-00:38:20,111 --> 00:38:23,999
+00:38:19,420 --> 00:38:23,307
 the reward for each token is how much more likely the teacher finds it.
 
 697
-00:38:23,999 --> 00:38:28,111
+00:38:23,307 --> 00:38:27,420
 That's on-policy distillation, the same log-derivative trick with a dense
 
 698
-00:38:28,111 --> 00:38:29,111
+00:38:27,420 --> 00:38:28,420
 reward.
 
 699
-00:38:29,111 --> 00:38:34,186
+00:38:28,420 --> 00:38:33,495
 For Qwen3's eight-billion-parameter model it beat RL on the AIME benchmark
 
 700
-00:38:34,186 --> 00:38:36,086
+00:38:33,495 --> 00:38:35,395
 for a tenth of the compute.
 
 701
-00:38:36,086 --> 00:38:41,836
+00:38:35,395 --> 00:38:41,145
 And in April 2026, DeepSeek's V4 replaced its final RL stage with exactly
 
 702
-00:38:41,836 --> 00:38:45,911
+00:38:41,145 --> 00:38:45,220
 this, distilling from specialist teachers that had each been trained with
 
 703
-00:38:45,911 --> 00:38:47,286
+00:38:45,220 --> 00:38:46,595
 GRPO.
 
 704
-00:38:52,789 --> 00:38:56,502
+00:38:52,022 --> 00:38:55,735
 At scale, generation and training run in different software.
 
 705
-00:38:56,502 --> 00:39:02,077
+00:38:55,735 --> 00:39:01,310
 An inference engine like vLLM writes the answers, with kernels tuned for speed.
 
 706
-00:39:02,077 --> 00:39:05,914
+00:39:01,310 --> 00:39:05,147
 A training framework computes the gradients, with different kernels and often
 
 707
-00:39:05,914 --> 00:39:07,302
+00:39:05,147 --> 00:39:06,535
 different precision.
 
 708
-00:39:07,302 --> 00:39:11,302
+00:39:06,535 --> 00:39:10,535
 They hold the same weights, but they don't compute the same probabilities.
 
 709
-00:39:11,302 --> 00:39:16,264
+00:39:10,535 --> 00:39:15,497
 So even a perfectly on-policy algorithm is quietly off-policy, and the importance
 
 710
-00:39:16,264 --> 00:39:20,289
+00:39:15,497 --> 00:39:19,522
 ratio that should be exactly one isn't.
 
 711
-00:39:20,689 --> 00:39:21,727
+00:39:19,922 --> 00:39:20,960
 We measured it.
 
 712
-00:39:21,727 --> 00:39:27,289
+00:39:20,960 --> 00:39:26,522
 A 0.6-billion-parameter Qwen3 model wrote eight reasoning traces, sampled
 
 713
-00:39:27,289 --> 00:39:31,889
+00:39:26,522 --> 00:39:31,122
 token by token in bfloat16, the way an inference engine runs.
 
 714
-00:39:31,889 --> 00:39:36,739
+00:39:31,122 --> 00:39:35,972
 Then we re-scored exactly the same tokens in a single float32 pass, the way
 
 715
-00:39:36,739 --> 00:39:38,064
+00:39:35,972 --> 00:39:37,297
 a trainer might.
 
 716
-00:39:38,064 --> 00:39:41,627
+00:39:37,297 --> 00:39:40,860
 Most log ratios are tiny, but the tails are wide:
 
 717
-00:39:41,627 --> 00:39:45,639
+00:39:40,860 --> 00:39:44,872
 25 percent of tokens differ by more than one percent.
 
 718
-00:39:45,639 --> 00:39:50,952
+00:39:44,872 --> 00:39:50,185
 Re-scoring in the same bfloat16, just in one pass instead of token by token,
 
 719
-00:39:50,952 --> 00:39:52,052
+00:39:50,185 --> 00:39:51,285
 is no better:
 
 720
-00:39:52,052 --> 00:39:53,514
+00:39:51,285 --> 00:39:52,747
 24 percent.
 
 721
-00:39:53,514 --> 00:39:56,914
+00:39:52,747 --> 00:39:56,147
 It's the order of the arithmetic, not only the precision.
 
 722
-00:39:56,914 --> 00:40:00,064
+00:39:56,147 --> 00:39:59,297
 And the disagreement lives on the unlikely tokens.
 
 723
-00:40:00,064 --> 00:40:04,989
+00:39:59,297 --> 00:40:04,222
 Near-certain tokens almost never move, but 92 percent of tokens the sampler
 
 724
-00:40:04,989 --> 00:40:09,077
+00:40:04,222 --> 00:40:08,310
 gave less than a ten percent chance are off by more than one percent:
 
 725
-00:40:09,077 --> 00:40:13,889
+00:40:08,310 --> 00:40:13,122
 exactly the rare choices that exploration depends on.
 
 726
-00:40:14,397 --> 00:40:16,147
+00:40:13,631 --> 00:40:15,381
 Now look at whole answers.
 
 727
-00:40:16,147 --> 00:40:20,447
+00:40:15,381 --> 00:40:19,681
 The exact importance weight of a sequence is the product of its token ratios,
 
 728
-00:40:20,447 --> 00:40:22,335
+00:40:19,681 --> 00:40:21,568
 so its logarithm is a sum:
 
 729
-00:40:22,335 --> 00:40:23,760
+00:40:21,568 --> 00:40:22,993
 a random walk.
 
 730
-00:40:23,760 --> 00:40:26,060
+00:40:22,993 --> 00:40:25,293
 Here are the walks for our eight traces.
 
 731
-00:40:26,060 --> 00:40:29,235
+00:40:25,293 --> 00:40:28,468
 They wander away from zero as the answers get longer:
 
 732
-00:40:29,235 --> 00:40:36,247
+00:40:28,468 --> 00:40:35,481
 after 768 tokens, one answer's weight is 8.5 and another's is 0.48, though
 
 733
-00:40:36,247 --> 00:40:38,722
+00:40:35,481 --> 00:40:37,956
 not one weight of the model changed.
 
 734
-00:40:38,722 --> 00:40:44,460
+00:40:37,956 --> 00:40:43,693
 Qwen's GSPO uses the geometric mean instead, the average log ratio, which
 
 735
-00:40:44,460 --> 00:40:48,622
+00:40:43,693 --> 00:40:47,856
 shrinks back toward zero as the answer grows.
 
 736
-00:40:50,006 --> 00:40:54,468
+00:40:49,239 --> 00:40:53,702
 Since 2025 the field has converged on a handful of fixes.
 
 737
-00:40:54,468 --> 00:40:58,981
+00:40:53,702 --> 00:40:58,214
 Truncated importance sampling multiplies each token's gradient by its sampler-to-learner
 
 738
-00:40:58,981 --> 00:41:01,381
+00:40:58,214 --> 00:41:00,614
 ratio, capped at a constant.
 
 739
-00:41:01,381 --> 00:41:06,456
+00:41:00,614 --> 00:41:05,689
 Masking simply drops tokens or sequences whose ratios are too extreme.
 
 740
-00:41:06,456 --> 00:41:11,768
+00:41:05,689 --> 00:41:11,002
 GSPO uses one ratio per answer, and for mixture-of-experts models replays
 
 741
-00:41:11,768 --> 00:41:16,231
+00:41:11,002 --> 00:41:15,464
 the experts the sampler used, since about one expert in ten changes after
 
 742
-00:41:16,231 --> 00:41:17,756
+00:41:15,464 --> 00:41:16,989
 each update.
 
 743
-00:41:17,756 --> 00:41:22,693
+00:41:16,989 --> 00:41:21,927
 MiniMax's CISPO caps the importance weight but never zeroes a token's gradient,
 
 744
-00:41:22,693 --> 00:41:27,506
+00:41:21,927 --> 00:41:26,739
 so rare reflective tokens like wait, or however, keep contributing.
 
 745
-00:41:27,506 --> 00:41:29,718
+00:41:26,739 --> 00:41:28,952
 And some just fix the arithmetic:
 
 746
-00:41:29,718 --> 00:41:35,331
+00:41:28,952 --> 00:41:34,564
 a float32 output layer, or float16 rollouts.
 
 747
-00:41:35,806 --> 00:41:38,806
+00:41:35,039 --> 00:41:38,039
 Staleness is the other source of off-policy data.
 
 748
-00:41:38,806 --> 00:41:41,618
+00:41:38,039 --> 00:41:40,852
 Long answers make generation the bottleneck:
 
 749
-00:41:41,618 --> 00:41:46,006
+00:41:40,852 --> 00:41:45,239
 in OLMo 3's runs the learner spent three quarters of its time waiting.
 
 750
-00:41:46,006 --> 00:41:50,356
+00:41:45,239 --> 00:41:49,589
 So large systems decouple the two, generating with slightly old weights while
 
 751
-00:41:50,356 --> 00:41:54,956
+00:41:49,589 --> 00:41:54,189
 training continues, and stream new weights to the generators as they go.
 
 752
-00:41:54,956 --> 00:41:59,293
+00:41:54,189 --> 00:41:58,527
 Every one of these importance-ratio corrections now has to absorb that lag
 
 753
-00:41:59,293 --> 00:41:59,906
+00:41:58,527 --> 00:41:59,139
 too.
 
 754
-00:42:01,946 --> 00:42:03,984
+00:42:01,179 --> 00:42:03,217
 How much compute goes into this?
 
 755
-00:42:03,984 --> 00:42:10,046
+00:42:03,217 --> 00:42:09,279
 In 2022, InstructGPT's reinforcement learning cost under two percent of GPT-3's
 
 756
-00:42:10,046 --> 00:42:11,346
+00:42:09,279 --> 00:42:10,579
 pretraining.
 
 757
-00:42:11,346 --> 00:42:14,596
+00:42:10,579 --> 00:42:13,829
 DeepSeek's R1-Zero, a few percent.
 
 758
-00:42:14,596 --> 00:42:20,596
+00:42:13,829 --> 00:42:19,829
 DeepSeek-V3.2 reported a post-training budget above ten percent of pretraining.
 
 759
-00:42:20,596 --> 00:42:26,059
+00:42:19,829 --> 00:42:25,292
 xAI described Grok 4's reinforcement learning as running at pretraining scale,
 
 760
-00:42:26,059 --> 00:42:31,521
+00:42:25,292 --> 00:42:30,754
 and in February 2026 Cursor reported that post-training its coding model took
 
 761
-00:42:31,521 --> 00:42:36,471
+00:42:30,754 --> 00:42:35,704
 more compute than pretraining the base model it started from.
 
 762
-00:42:36,954 --> 00:42:42,154
+00:42:36,196 --> 00:42:41,396
 In late 2025, a Meta team spent more than four hundred thousand GPU hours
 
 763
-00:42:42,154 --> 00:42:46,279
+00:42:41,396 --> 00:42:45,521
 studying how RL improves with compute, and found a law.
 
 764
-00:42:46,279 --> 00:42:50,892
+00:42:45,521 --> 00:42:50,134
 Accuracy follows a sigmoid in the logarithm of compute, with three parameters:
 
 765
-00:42:50,892 --> 00:42:56,004
+00:42:50,134 --> 00:42:55,246
 a ceiling A, an efficiency exponent B, and the compute needed to get halfway.
 
 766
-00:42:56,004 --> 00:42:59,629
+00:42:55,246 --> 00:42:58,871
 Fit it on small runs, and it predicts large ones.
 
 767
-00:42:59,629 --> 00:43:02,354
+00:42:58,871 --> 00:43:01,596
 Here it is fitted to our own pocket-sized runs:
 
 768
-00:43:02,354 --> 00:43:07,942
+00:43:01,596 --> 00:43:07,184
 GRPO taking one, four or sixteen gradient steps per batch, three seeds each.
 
 769
-00:43:07,942 --> 00:43:10,054
+00:43:07,184 --> 00:43:09,296
 All three head for the same ceiling;
 
 770
-00:43:10,054 --> 00:43:13,279
+00:43:09,296 --> 00:43:12,521
 what changes is how much compute it takes to get there.
 
 771
-00:43:13,279 --> 00:43:15,717
+00:43:12,521 --> 00:43:14,959
 That was their key finding at scale too:
 
 772
-00:43:15,717 --> 00:43:20,354
+00:43:14,959 --> 00:43:19,596
 most tricks change how fast you climb, not the ceiling.
 
 773
-00:43:20,796 --> 00:43:22,996
+00:43:20,063 --> 00:43:22,263
 The same math now trains agents.
 
 774
-00:43:22,996 --> 00:43:26,071
+00:43:22,263 --> 00:43:25,338
 An episode is a long conversation with an environment:
 
 775
-00:43:26,071 --> 00:43:30,146
+00:43:25,338 --> 00:43:29,413
 the model calls tools, reads their output, and acts again, and a test suite
 
 776
-00:43:30,146 --> 00:43:32,109
+00:43:29,413 --> 00:43:31,375
 decides the reward at the end.
 
 777
-00:43:32,109 --> 00:43:36,084
+00:43:31,375 --> 00:43:35,350
 Only the model's own tokens are actions, so the tool outputs are masked out
 
 778
-00:43:36,084 --> 00:43:37,234
+00:43:35,350 --> 00:43:36,500
 of the gradient.
 
 779
-00:43:37,234 --> 00:43:39,734
+00:43:36,500 --> 00:43:39,000
 Everything else is the log-derivative trick.
 
 780
-00:43:39,734 --> 00:43:41,434
+00:43:39,000 --> 00:43:40,700
 What changed is scale:
 
 781
-00:43:41,434 --> 00:43:45,934
+00:43:40,700 --> 00:43:45,200
 labs now build environments by the thousands, and in 2026 by the hundreds
 
 782
-00:43:45,934 --> 00:43:47,134
+00:43:45,200 --> 00:43:46,400
 of thousands.
 
 783
-00:43:47,134 --> 00:43:50,521
+00:43:46,400 --> 00:43:49,788
 Each one is a reward function.
 
 784
-00:43:50,971 --> 00:43:55,921
+00:43:50,209 --> 00:43:55,159
 And every reward function is a specification that an optimizer will read literally.
 
 785
-00:43:55,921 --> 00:44:00,321
+00:43:55,159 --> 00:43:59,559
 If an object that claims to equal everything makes the tests pass, RL will
 
 786
-00:44:00,321 --> 00:44:01,421
+00:43:59,559 --> 00:44:00,659
 find it.
 
 787
-00:44:01,421 --> 00:44:06,459
+00:44:00,659 --> 00:44:05,696
 Anthropic reported in 2025 that models which learned such hacks in real coding
 
 788
-00:44:06,459 --> 00:44:11,459
+00:44:05,696 --> 00:44:10,696
 environments generalized to broader misbehavior, including sabotage;
 
 789
-00:44:11,459 --> 00:44:14,971
+00:44:10,696 --> 00:44:14,209
 a one-line framing in the prompt cut most of that.
 
 790
-00:44:14,971 --> 00:44:19,446
+00:44:14,209 --> 00:44:18,684
 OpenAI found that reading the model's chain of thought catches most hacks,
 
 791
-00:44:19,446 --> 00:44:24,771
+00:44:18,684 --> 00:44:24,009
 but that training against that monitor teaches the model to hide them.
 
 792
-00:44:25,188 --> 00:44:28,563
+00:44:24,442 --> 00:44:27,817
 Where does that leave things, in October 2026?
 
 793
-00:44:28,563 --> 00:44:32,038
+00:44:27,817 --> 00:44:31,292
 Some labs now get part of what RL gave them more cheaply:
 
 794
-00:44:32,038 --> 00:44:37,188
+00:44:31,292 --> 00:44:36,442
 DeepSeek's V4 replaced its final mixed reinforcement learning stage with on-policy
 
 795
-00:44:37,188 --> 00:44:41,788
+00:44:36,442 --> 00:44:41,042
 distillation from specialist teachers, themselves trained with GRPO.
 
 796
-00:44:41,788 --> 00:44:45,350
+00:44:41,042 --> 00:44:44,604
 Others run RL continuously from deployment.
 
 797
-00:44:45,350 --> 00:44:49,363
+00:44:44,604 --> 00:44:48,617
 Rewards increasingly come from rubrics graded by models.
 
 798
-00:44:49,363 --> 00:44:54,238
+00:44:48,617 --> 00:44:53,492
 And the deepest question, whether RL teaches models new skills or only sharpens
 
 799
-00:44:54,238 --> 00:44:57,313
+00:44:53,492 --> 00:44:56,567
 old ones, is still argued in both directions.
 
 800
-00:44:59,336 --> 00:45:01,736
+00:44:58,536 --> 00:45:00,936
 Let's put the whole family in one place.
 
 801
-00:45:01,736 --> 00:45:03,836
+00:45:00,936 --> 00:45:03,036
 It all starts from one identity:
 
 802
-00:45:03,836 --> 00:45:08,561
+00:45:03,036 --> 00:45:07,761
 the gradient of an expected reward is the expected reward times the score.
 
 803
-00:45:08,561 --> 00:45:13,086
+00:45:07,761 --> 00:45:12,286
 Subtract a baseline, and the noise falls while the mean stays put.
 
 804
-00:45:13,086 --> 00:45:17,236
+00:45:12,286 --> 00:45:16,436
 Learn a value function, and each token gets its own credit.
 
 805
-00:45:17,236 --> 00:45:21,424
+00:45:16,436 --> 00:45:20,624
 Reweight old samples by an importance ratio and clip it, and you can reuse
 
 806
-00:45:21,424 --> 00:45:23,074
+00:45:20,624 --> 00:45:22,274
 every batch safely:
 
 807
-00:45:23,074 --> 00:45:24,149
+00:45:22,274 --> 00:45:23,349
 that's PPO.
 
 808
-00:45:24,149 --> 00:45:28,486
+00:45:23,349 --> 00:45:27,686
 Add a leash to the reference, and the optimal policy has a closed form, which
 
 809
-00:45:28,486 --> 00:45:29,611
+00:45:27,686 --> 00:45:28,811
 hands you DPO.
 
 810
-00:45:29,611 --> 00:45:33,461
+00:45:28,811 --> 00:45:32,661
 Replace the critic with a group of samples, and you have GRPO.
 
 811
-00:45:33,461 --> 00:45:38,011
+00:45:32,661 --> 00:45:37,211
 Fix how it averages over tokens, tame its ratios when sampler and learner
 
 812
-00:45:38,011 --> 00:45:42,374
+00:45:37,211 --> 00:45:41,574
 disagree, and if you have a better model to learn from, give every token its
 
 813
-00:45:42,374 --> 00:45:44,086
+00:45:41,574 --> 00:45:43,278
 own reward.
 
 814
-00:45:44,086 --> 00:45:48,349
+00:45:43,278 --> 00:45:47,541
 Every one of these is the log-derivative trick, plus one idea about noise
 
 815
-00:45:48,349 --> 00:45:49,824
+00:45:47,541 --> 00:45:49,016
 or about trust.
 
 816
-00:45:49,824 --> 00:45:55,086
+00:45:49,016 --> 00:45:54,278
 A model samples, a checker says one or zero, and those single bits, multiplied
 
 817
-00:45:55,086 --> 00:45:59,986
+00:45:54,278 --> 00:45:59,178
 across millions of attempts, add up to a model that reasons far more reliably.
