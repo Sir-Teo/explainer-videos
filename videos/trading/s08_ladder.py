@@ -9,6 +9,8 @@ from videos.trading.common import (
 
 
 def human(seconds: float) -> str:
+    if seconds < 1:
+        return f"{seconds:.1f} seconds"
     if seconds < 90:
         return f"{seconds:.0f} seconds"
     if seconds < 5400:
@@ -54,18 +56,29 @@ class LatencyLadder(VoiceoverScene):
         cpu = b["cpu"]["Model name"].replace("(R)", "").replace("  ", " ")
         tag = machine_tag()
         sub = note(rf"{cpu}, 4 virtual cores", font_size=20).next_to(tag, UP, buff=0.08).align_to(tag, RIGHT)
+        tpn = b["syscall"]["tsc_per_ns"]
+        foot = VGroup(Line(LEFT * 3, RIGHT * 3, color=C.LIGHT, stroke_width=6),
+                      label(r"in 1 nanosecond, light travels 30 cm, about a foot", font_size=30, color=C.LIGHT))
+        foot[1].next_to(foot[0], UP, buff=0.25)
+        tick = label(rf"this processor's clock ticks every {1 / tpn:.2f} ns", font_size=30, color=GREY_A)
+        intro = VGroup(foot, tick).arrange(DOWN, buff=0.8)
         with self.voiceover(
-            "Now let's go inside a single server, where the units shrink from milliseconds to nanoseconds. In one "
-            "nanosecond, light travels thirty centimeters, about a foot. This machine's processor ticks every half "
-            "nanosecond. <bookmark mark='m'/> Here's an experiment run on the computer that rendered this video: read "
+            "Now let's go inside a single server, where the units shrink from milliseconds to nanoseconds. <bookmark "
+            "mark='f'/> In one nanosecond, light travels thirty centimeters, about a foot. <bookmark mark='k'/> This "
+            "machine's processor ticks every half nanosecond. <bookmark mark='m'/> Here's an experiment run on the computer that rendered this video: read "
             "memory at random addresses, each read depending on the last, and time each read as the amount of memory "
             "grows. <bookmark mark='l1'/> While everything fits in the tiny first-level cache, a read takes about a "
             "nanosecond and a half. <bookmark mark='l2'/> In the second-level cache, about five. <bookmark mark='l3'/> "
             "In the big shared third level, fifty or more. <bookmark mark='d'/> And out in main memory, two to three "
             "hundred nanoseconds. Two hundred times slower than the fastest case, for the same line of code."
         ) as vo:
-            self.play(FadeIn(ttl), FadeIn(tag), FadeIn(sub))
+            vo.wait_until("f")
+            dot = Dot(foot[0].get_start(), color=C.LIGHT, radius=0.1)
+            self.play(FadeIn(foot[1]), Create(foot[0]), MoveAlongPath(dot, foot[0]), run_time=1.2)
+            vo.wait_until("k")
+            self.play(FadeIn(tick))
             vo.wait_until("m")
+            self.play(FadeOut(intro), FadeOut(dot), FadeIn(ttl), FadeIn(tag), FadeIn(sub))
             self.play(Create(ch), FadeIn(xl), FadeIn(yl))
             self.play(Create(c_small), run_time=3)
             for i, m in enumerate(["l1", "l2", "l3", "d"]):
@@ -85,10 +98,10 @@ class LatencyLadder(VoiceoverScene):
                  font_size=30, color=C.KERNEL),
             label(r"a 2 MiB ``huge page'' covers 512$\times$ more memory per entry", font_size=24, color=C.SIGNAL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        box.to_corner(UL, buff=0.35).shift(DOWN * 0.75 + RIGHT * 1.0)
         box.add_background_rectangle(color=BACKGROUND, opacity=0.92, buff=0.12)
+        box.move_to(ch.c2p(2**26, 1), aligned_edge=DR).shift(UP * 0.25 + LEFT * 0.15)
         hl = tagged(rf"1 GiB: {gib[0]:.0f} ns $\to$ {gib[1]:.0f} ns with huge pages", font_size=24, color=C.SIGNAL)
-        hl.next_to(ch.c2p(2**28, gib[1]), DOWN, buff=0.35)
+        hl.next_to(ch.c2p(2**27, gib[1]), UP, buff=0.5)
         with self.voiceover(
             "Part of that cost isn't the data at all. Programs use virtual addresses, and the processor must translate "
             "each one into a physical address, with the help of a small cache of translations called the TLB. "
@@ -123,8 +136,8 @@ class LatencyLadder(VoiceoverScene):
             (r"send through the kernel, receiver asleep", pp["udp_blocking"]["pct"]["50"], C.KERNEL),
         ]
         assert 0.4 < rungs[0][1] < 0.6 and 80 < rungs[4][1] < 130 and 2000 < rungs[7][1] < 4000 and 10_000 < rungs[8][1] < 20_000
-        ch = Plot((0.3, 30_000), (0, len(rungs)), width=7.2, height=5.6, log_x=True, x_ticks=[1, 10, 100, 1e3, 1e4],
-                  x_fmt=lambda v: fmt_ns(v), grid=False, x_grid=True).move_to(RIGHT * 2.6 + DOWN * 0.35)
+        ch = Plot((0.3, 30_000), (0, len(rungs)), width=5.9, height=5.6, log_x=True, x_ticks=[1, 10, 100, 1e3, 1e4],
+                  x_fmt=lambda v: fmt_ns(v), grid=False, x_grid=True).move_to(RIGHT * 1.75 + DOWN * 0.35)
         ch.y_axis.set_opacity(0)
         bars, names, vals, hum = VGroup(), VGroup(), VGroup(), VGroup()
         l1 = rungs[1][1]
