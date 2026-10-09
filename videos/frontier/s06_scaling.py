@@ -3,10 +3,13 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import Plot, bar_rows, label, load, note, part_card, pipeline_map, pow10_label, source
+from videos.frontier.common import Plot, bar_rows, calc, label, load, note, part_card, pipeline_map, pow10_label, source
 
 BUDGET_COLORS = [YELLOW_A, YELLOW_C, GOLD_C, GOLD_E]
-CHINCHILLA = dict(E=1.69, A=406.4, B=410.7, alpha=0.34, beta=0.28)  # Hoffmann et al. 2022, Eq. 10
+# Chinchilla's parametric loss L = E + A/N^alpha + B/D^beta, as re-estimated by Besiroglu et al. (Epoch AI, 2024,
+# arXiv 2404.10102, Table 1). Hoffmann et al.'s published values (E 1.69, A 406.4, B 410.7, alpha 0.34, beta 0.28)
+# imply ~70 tokens per parameter, inconsistent with their own Approaches 1-2 and with how Chinchilla was trained.
+CHINCHILLA = dict(E=1.8172, A=482.01, B=2085.43, alpha=0.3478, beta=0.3658)
 
 
 def isoflop_fits(rows, k: int = 5):
@@ -34,8 +37,10 @@ class ScalingLaws(VoiceoverScene):
     def construct(self):
         self.opening()
         self.rectangle()
+        self.six_nd()
         self.isoflop()
         self.chinchilla()
+        self.optimal_split()
         self.overtraining()
 
     # ------------------------------------------------------------------
@@ -92,6 +97,47 @@ class ScalingLaws(VoiceoverScene):
         for m in (R, nl, dl, cl):
             m.clear_updaters()
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def six_nd(self):
+        rows = {r["model"]: r for r in load("epoch")["rows"]}
+        N, D = 405e9, 15.6e12
+        flops = 6 * N * D
+        epoch = rows["Llama 3.1-405B"]["flop"]
+        assert round(flops / 1e25, 1) == 3.8 and epoch == 3.8e25
+        head = label(r"The rule on a real model: Llama 3.1 405B", font_size=34).to_edge(UP, buff=0.45)
+        per = calc(r"\text{per token: } 6N &= 6 \times 405\times10^{9}", r"\\ &= 2.43\times10^{12}\ \text{operations}",
+                   font_size=36)
+        total = calc(r"C \approx 6\,N\,D &= 2.43\times10^{12} \times 15.6\times10^{12}",
+                     r"\\ &= 3.79\times10^{25}\ \text{operations}", font_size=36)
+        VGroup(per, total).arrange(DOWN, aligned_edge=LEFT, buff=0.6).move_to(UP * 0.3)
+        per[1].set_color(C.PARAMS)
+        total[1].set_color(C.COMPUTE)
+        tags = VGroup(label(r"$N$ = 405 billion parameters", font_size=26, color=C.PARAMS),
+                      label(r"$D$ = 15.6 trillion training tokens", font_size=26, color=C.DATA)
+                      ).arrange(RIGHT, buff=0.8).next_to(head, DOWN, buff=0.35)
+        chk = label(rf"Epoch AI's independent estimate of this run: $3.8\times10^{{25}}$", font_size=30, color=C.COMPUTE)
+        chk.next_to(total, DOWN, buff=0.6).set_x(0)
+        box = SurroundingRectangle(total[1], buff=0.12, color=C.COMPUTE, stroke_width=2)
+        src = source(r"Llama 3 paper (405B on 15.6T tokens); Epoch AI, \emph{Data on AI models}")
+        with self.voiceover(
+            "Check the rule on a real model. Llama 3.1's largest version has 405 billion parameters, so every "
+            "token costs six times that: <bookmark mark='p'/> 2.4 trillion operations. <bookmark mark='d'/> It was "
+            "trained on 15.6 trillion tokens. <bookmark mark='c'/> Multiply, and the whole run comes to 3.8 times "
+            "ten to the twenty-five operations. <bookmark mark='e'/> Epoch AI's independent estimate of that run: the "
+            "same, 3.8 times ten to the twenty-five."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tags[0]), FadeIn(src), Write(per[0]))
+            vo.wait_until("p")
+            self.play(Write(per[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(tags[1]), Write(total[0]))
+            vo.wait_until("c")
+            self.play(Write(total[1]), Create(box))
+            vo.wait_until("e")
+            self.play(FadeIn(chk, shift=UP * 0.1))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -204,7 +250,7 @@ class ScalingLaws(VoiceoverScene):
             label(r"tokens $D$ ($10^9$ to $10^{14}$)", font_size=22, color=C.DATA).rotate(PI / 2).next_to(img, LEFT, buff=0.15),
         )
         formula = MathTex(r"L(N, D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}", font_size=36).move_to(RIGHT * 3.7 + UP * 2.2)
-        vals = MathTex(r"E{=}1.69,\ A{=}406.4,\ B{=}410.7", r"\\ \alpha{=}0.34,\ \beta{=}0.28", font_size=26, color=GREY_A).next_to(formula, DOWN, buff=0.15)
+        vals = MathTex(r"E{=}1.82,\ A{=}482,\ B{=}2085", r"\\ \alpha{=}0.348,\ \beta{=}0.366", font_size=26, color=GREY_A).next_to(formula, DOWN, buff=0.15)
         notes = VGroup(
             label(r"dark: lower loss", font_size=22, color=GREY_A),
             label(r"yellow: equal compute", font_size=22, color=C.COMPUTE),
@@ -216,14 +262,15 @@ class ScalingLaws(VoiceoverScene):
             label(r"GPT-3: 175B params on 300B tokens (1.7)", font_size=22, color=GREY_A),
             label(r"Chinchilla 70B on 1.4T beat the 280B Gopher", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(notes, DOWN, buff=0.35)
-        src = source(r"Hoffmann et al., \emph{Training Compute-Optimal Large Language Models} (2022), Eq.\ 10")
+        src = source(r"Hoffmann et al.\ (2022), Eq.\ 10, with the coefficients as re-estimated by Besiroglu et al.\ (Epoch AI, 2024)")
         study = VGroup(label(r"400+ training runs", font_size=34, color=C.COMPUTE),
                        label(r"70M to 16B parameters", font_size=28, color=C.PARAMS),
                        label(r"5B to 500B tokens", font_size=28, color=C.DATA)).arrange(DOWN, buff=0.25).move_to(img)
         with self.voiceover(
             "In 2022, DeepMind's Chinchilla paper did this with more than four hundred models, up to sixteen billion "
             "parameters, and fitted a formula for the loss as a function of model size and data. <bookmark mark='l'/> "
-            "Here is the landscape it describes; darker means lower loss. <bookmark mark='i'/> Each yellow line is a "
+            "Here is the landscape it describes, with the coefficients as corrected by a 2024 replication; darker means "
+            "lower loss. <bookmark mark='i'/> Each yellow line is a "
             "fixed compute budget. <bookmark mark='o'/> Along each one there's a best point, and together they trace "
             "this path: grow parameters and tokens together, about twenty tokens for every parameter. "
             "<bookmark mark='g'/> By that measure, GPT-3 had been trained on far too little data, and the 70-billion "
@@ -240,6 +287,60 @@ class ScalingLaws(VoiceoverScene):
             vo.wait_until("g")
             self.play(FadeIn(res[2:]))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def optimal_split(self):
+        E, A, B, al, be = (CHINCHILLA[k] for k in ("E", "A", "B", "alpha", "beta"))
+        a = be / (al + be)
+        G = (al * A / (be * B)) ** (1 / (al + be))
+        Cb = 5.76e23  # Chinchilla's (and Gopher's) training budget
+        N = G * (Cb / 6) ** a
+        D = Cb / (6 * N)
+        assert round(a, 2) == 0.51 and round(G, 2) == 0.12 and round(N / 1e9) == 72 and round(D / 1e12, 2) == 1.33
+        assert round(D / N) == 18
+        head = label(r"How to split a budget, from the formula", font_size=34).to_edge(UP, buff=0.4)
+        der = calc(r"L &= E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}, \qquad D = \frac{C}{6N}",
+                   r"\\ L(N) &= E + A\,N^{-\alpha} + B\left(\frac{6N}{C}\right)^{\beta}",
+                   r"\\ \frac{dL}{dN} &= -\alpha A\,N^{-\alpha-1} + \beta B\left(\frac{6}{C}\right)^{\beta} N^{\beta-1} = 0",
+                   r"\\ \Rightarrow\; N_{\rm opt} &= G\left(\frac{C}{6}\right)^{\frac{\beta}{\alpha+\beta}},"
+                   r"\quad G = \left(\frac{\alpha A}{\beta B}\right)^{\frac{1}{\alpha+\beta}}", font_size=29)
+        der.to_edge(LEFT, buff=0.35).shift(UP * 0.4)
+        num = calc(rf"\frac{{\beta}}{{\alpha+\beta}} &= \frac{{0.366}}{{0.714}} = {a:.3f},\quad G = {G:.3f}",
+                   rf"\\ C &= 5.76\times10^{{23}}\ \text{{(Chinchilla's budget)}}",
+                   rf"\\ N_{{\rm opt}} &= {G:.3f}\times(9.6\times10^{{22}})^{{{a:.3f}}} = {N / 1e10:.1f}\times10^{{10}}",
+                   rf"\\ D_{{\rm opt}} &= \frac{{C}}{{6N_{{\rm opt}}}} = {D / 1e12:.2f}\times10^{{12}}",
+                   rf"\\ \frac{{D_{{\rm opt}}}}{{N_{{\rm opt}}}} &\approx {D / N:.0f}\ \text{{tokens per parameter}}", font_size=29)
+        num.to_edge(RIGHT, buff=0.35).align_to(der, UP)
+        num[3:].set_color(C.DATA)
+        real = label(r"DeepMind trained Chinchilla with\\70B parameters on 1.4T tokens", font_size=28, color=C.DATA)
+        real.next_to(num, DOWN, buff=0.5)
+        src = source(r"coefficients: Besiroglu et al.\ (Epoch AI, 2024), Table 1; budget: Hoffmann et al.\ (2022)")
+        with self.voiceover(
+            "The formula also tells you how to split any budget. Since C is six N D, the number of tokens is C over "
+            "six N, so the loss becomes a function of the model size alone. <bookmark mark='d'/> Set its derivative "
+            "to zero, and the best size turns out to be a power of the budget: C to the beta over alpha plus beta. "
+            "<bookmark mark='n'/> With the corrected coefficients, that exponent is 0.51, so model size and data "
+            "should grow at almost the same rate. <bookmark mark='c'/> Now plug in Chinchilla's own budget, 5.76 "
+            "times ten to the twenty-three operations. <bookmark mark='r'/> The formula asks for 72 billion "
+            "parameters and 1.3 trillion tokens, about eighteen tokens per parameter. <bookmark mark='k'/> DeepMind "
+            "trained Chinchilla with 70 billion parameters on 1.4 trillion tokens."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(src), Write(der[0]))
+            self.play(Write(der[1]))
+            vo.wait_until("d")
+            self.play(Write(der[2]))
+            self.play(Write(der[3]))
+            vo.wait_until("n")
+            self.play(Write(num[0]))
+            vo.wait_until("c")
+            self.play(Write(num[1]))
+            vo.wait_until("r")
+            self.play(Write(num[2]))
+            self.play(Write(num[3]), Write(num[4]))
+            vo.wait_until("k")
+            self.play(FadeIn(real, shift=UP * 0.1))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

@@ -44,6 +44,37 @@ def mtex(tex: str, color=WHITE, font_size=36, **kw) -> MathTex:
     return MathTex(tex, color=color, font_size=font_size, **kw)
 
 
+def calc(*lines: str, font_size=36, color=WHITE) -> MathTex:
+    """A worked calculation: one MathTex in an align* environment, one submobject per line, aligned at '&'.
+    Lines after the first should start with r"\\" (a line break), e.g. calc(r"C &= 6ND", r"\\ &= 2.4\times10^{12}")."""
+    return MathTex(*lines, font_size=font_size, color=color)
+
+
+def num_table(header: list[str], rows: list[list[str]], font_size=30, col_colors=None, h_buff=0.55, v_buff=0.22):
+    """A small table of MathTex cells: header row, a rule, then rows.  Returns a VGroup with .header, .rule,
+    .rows (list of VGroups of cells) and .cols (list of VGroups, header included) for staged reveals."""
+    cols = len(header)
+    cells = [[MathTex(h, font_size=font_size, color=GREY_A) for h in header]]
+    for r in rows:
+        cells.append([MathTex(c, font_size=font_size, color=(col_colors[j] if col_colors else WHITE))
+                      for j, c in enumerate(r)])
+    widths = [max(cells[i][j].width for i in range(len(cells))) for j in range(cols)]
+    xs = np.cumsum([0] + [w + h_buff for w in widths[:-1]])
+    height = max(c.height for row in cells for c in row)
+    grid = VGroup()
+    for i, row in enumerate(cells):
+        y = -i * (height + v_buff) - (0.15 if i else 0)
+        for j, c in enumerate(row):
+            c.move_to([xs[j] + widths[j] / 2, y, 0])
+        grid.add(VGroup(*row))
+    rule = Line([0, -(height + v_buff) / 2 - 0.05, 0], [xs[-1] + widths[-1], -(height + v_buff) / 2 - 0.05, 0],
+                color=GREY_D, stroke_width=1.5)
+    t = VGroup(grid, rule)
+    t.header, t.rule, t.rows = grid[0], rule, list(grid[1:])
+    t.cols = [VGroup(*[grid[i][j] for i in range(len(cells))]) for j in range(cols)]
+    return t
+
+
 def note(text: str, font_size=22, color=GREY_B) -> Tex:
     return label(text, font_size=font_size, color=color)
 

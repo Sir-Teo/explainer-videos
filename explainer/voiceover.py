@@ -92,7 +92,7 @@ class VoiceoverScene(Scene):
         clean, marks = _strip_bookmarks(text)
         utt = tts.synthesize(clean)
         start = self.renderer.time
-        self.add_sound(str(utt.audio_path), gain=gain)
+        self._add_narration(str(utt.audio_path), gain)
         tracker = VoiceoverTracker(self, utt, marks, start)
         yield tracker
         left = utt.duration - tracker.elapsed()
@@ -108,6 +108,14 @@ class VoiceoverScene(Scene):
                 "words": [[w.text, start + w.start, start + w.end] for w in utt.words],
             }
         )
+
+    def _add_narration(self, path: str, gain: float | None) -> None:
+        # Not Scene.add_sound: it returns early while renderer.skip_animations is set, which is also the
+        # case right after any play() served from the partial-movie cache, so a re-render of a cached
+        # scene silently lost most of its narration. Only genuine skipping (-n, -s) drops the sound.
+        if getattr(self.renderer, "_original_skipping_status", False):
+            return
+        self.renderer.file_writer.add_sound(path, self.renderer.time, gain)
 
     def clear_scene(self, *keep, extra=(), run_time: float = 1.0):
         """Fade out everything except ``keep`` (plus run any ``extra`` animations).

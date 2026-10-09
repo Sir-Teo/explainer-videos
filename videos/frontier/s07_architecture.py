@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.frontier.common import DSV3, KIMI_K2, bar_rows, label, load, note, schematic_tag, source
+from videos.frontier.common import DSV3, KIMI_K2, bar_rows, calc, label, load, note, schematic_tag, source
 
 EXPERT_COLORS = [PURPLE_B, TEAL_C, GOLD_C, PINK, BLUE_C, GREEN_C, RED_C, ORANGE]
 
@@ -12,8 +12,10 @@ class Architecture(VoiceoverScene):
     def construct(self):
         self.blueprint()
         self.moe_idea()
+        self.moe_math()
         self.frontier_moes()
         self.balancing()
+        self.balance_math()
         self.other_shifts()
 
     # ------------------------------------------------------------------
@@ -106,6 +108,46 @@ class Architecture(VoiceoverScene):
             vo.wait_until("f")
             self.play(FadeIn(foot))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def moe_math(self):
+        s6, s2 = 0.38, 0.31  # the two top scores in the router picture above (illustrative)
+        g6, g2 = s6 / (s6 + s2), s2 / (s6 + s2)
+        dense, sparse = 6 * DSV3["total"], 6 * DSV3["active"]
+        assert (round(g6, 2), round(g2, 2)) == (0.55, 0.45) and round(dense / sparse) == 18
+        head = label(r"Mixture of experts, in symbols", font_size=34).to_edge(UP, buff=0.4)
+        f = calc(r"s &= \operatorname{softmax}(W_r\, x) \qquad \text{(one score per expert)}",
+                 r"\\ y &= \sum_{i \,\in\, \operatorname{TopK}(s)} g_i\, E_i(x), \qquad g_i = \frac{s_i}{\sum_{j \in \operatorname{TopK}} s_j}",
+                 font_size=34)
+        f.next_to(head, DOWN, buff=0.4)
+        ex = calc(r"g_6 &= \frac{0.38}{0.38 + 0.31} = 0.55, \qquad g_2 = \frac{0.31}{0.69} = 0.45",
+                  r"\\ y &= 0.55\, E_6(x) + 0.45\, E_2(x)", font_size=32, color=C.EXPERT)
+        ex.next_to(f, DOWN, buff=0.45)
+        cost = calc(r"\text{DeepSeek-V3, training cost per token:}\quad 6 \times 37\times10^{9} &= 2.2\times10^{11}"
+                    r"\quad \text{(active)}",
+                    r"\\ \text{vs. }\ 6 \times 671\times10^{9} &= 4.0\times10^{12} \quad \text{(if dense): } 18\times \text{ more}",
+                    font_size=30)
+        cost.next_to(ex, DOWN, buff=0.55)
+        cost[0].set_color(C.COMPUTE)
+        ill = note(r"scores illustrative; parameter counts from the DeepSeek-V3 report").to_corner(DR, buff=0.2)
+        with self.voiceover(
+            "In symbols: the router turns the token's vector into one score per expert, with a softmax. "
+            "<bookmark mark='y'/> Keep the top two, rescale their scores to sum to one, and add up those experts' "
+            "outputs. <bookmark mark='e'/> With the scores we just saw, 0.38 and 0.31 become 0.55 and 0.45. "
+            "<bookmark mark='c'/> And the saving is plain arithmetic. DeepSeek-V3 has 671 billion parameters, but each "
+            "token passes through 37 billion of them, so training costs six times 37 billion operations per token, "
+            "not six times 671 billion: eighteen times less."
+        ) as vo:
+            self.play(FadeIn(head), Write(f[0]), FadeIn(ill))
+            vo.wait_until("y")
+            self.play(Write(f[1]))
+            vo.wait_until("e")
+            self.play(Write(ex))
+            vo.wait_until("c")
+            self.play(Write(cost[0]))
+            self.play(Write(cost[1]))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -242,6 +284,61 @@ class Architecture(VoiceoverScene):
             g.bars.clear_updaters()
         clock[1].clear_updaters()
         self.wait(0.5)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def balance_math(self):
+        res = load("moe")
+        f = {k: np.array([x[1:] for x in res[k]["loads"]])[-20:].mean(0)[-1] for k in ("moe_none", "moe_aux", "moe_bias")}
+        aux = {k: 8 * (v**2).sum() for k, v in f.items()}
+        bias = np.array(res["moe_bias"]["bias"][-1][1:])[-1]
+        cfg = res["moe_bias"]["run"]["model"]
+        assert round(aux["moe_none"], 2) == 1.84 and round(aux["moe_aux"], 2) == 1.07 and cfg["bias_speed"] == 0.001
+        assert res["moe_aux"]["run"]["model"]["aux_coef"] == 0.01 and bias.min() < -0.25 and bias.max() > 0.25
+        fn = f["moe_none"]
+        left = calc(r"\mathcal{L}_{\rm aux} &= \alpha\, E \sum_i f_i\, P_i \qquad (\alpha = 0.01,\ E = 8)",
+                    r"\\ \text{balanced: } &8 \times 8 \times \tfrac18 \times \tfrac18 = 1 \ \ \text{(its minimum)}",
+                    rf"\\ \text{{no balancing: }} &8\,({fn[3]:.3f}^2 + {fn[0]:.3f}^2 + \cdots + {fn[4]:.3f}^2) = {aux['moe_none']:.2f}",
+                    rf"\\ \text{{with the loss: }} &{aux['moe_aux']:.2f}", font_size=28)
+        left.to_edge(LEFT, buff=0.4).shift(UP * 1.0)
+        fp = note(r"$f_i$: share of routing slots (real, last layer);  $P_i$: mean router probability, taken $\approx f_i$")
+        fp.next_to(left, DOWN, buff=0.25).align_to(left, LEFT)
+        right = calc(r"\text{choose experts by } &s_i + b_i,\ \text{weight them by } s_i",
+                     r"\\ b_i &\leftarrow b_i + \gamma\, \operatorname{sign}(\bar f - f_i), \quad \gamma = 0.001", font_size=28)
+        right.to_edge(LEFT, buff=0.4).shift(DOWN * 1.6)
+        bars = VGroup()
+        for e, b in enumerate(bias):
+            h = abs(b) * 4.0
+            r = Rectangle(width=0.32, height=max(0.02, h), stroke_width=0, fill_color=EXPERT_COLORS[e], fill_opacity=0.9)
+            r.move_to([e * 0.45, (h / 2) * np.sign(b), 0])
+            bars.add(r)
+        axis = Line(LEFT * 0.3, RIGHT * (7 * 0.45 + 0.3), color=GREY_C, stroke_width=1.5)
+        bt = label(r"final biases $b_i$, last layer", font_size=22, color=GREY_A).next_to(VGroup(bars, axis), UP, buff=0.2)
+        bl = VGroup(MathTex(r"+0.3", font_size=20, color=GREY_A).next_to(axis, LEFT, buff=0.1).shift(UP * 1.2),
+                    MathTex(r"-0.3", font_size=20, color=GREY_A).next_to(axis, LEFT, buff=0.1).shift(DOWN * 1.2))
+        bgroup = VGroup(bars, axis, bt, bl).to_edge(RIGHT, buff=0.8).shift(DOWN * 1.2)
+        with self.voiceover(
+            "Here's the arithmetic behind the two fixes. The auxiliary loss multiplies, for each expert, the share of "
+            "tokens it gets, f, by the average probability the router gives it, P, and adds them up. "
+            "<bookmark mark='b'/> If every expert gets an eighth, the total is exactly one, its minimum. "
+            "<bookmark mark='n'/> Plug in our unbalanced run's real shares, taking P close to f, and it's 1.84; "
+            "training with the loss brought it to 1.07. <bookmark mark='r'/> DeepSeek's bias never touches the loss. "
+            "After every step, each expert's bias moves by 0.001 toward balance: up if it got fewer tokens than "
+            "average, down if it got more. <bookmark mark='f'/> By the end of our run, the naturally popular experts "
+            "carried biases near minus 0.3 and the neglected ones near plus 0.3: just enough to even out the choices."
+        ) as vo:
+            self.play(Write(left[0]), FadeIn(fp))
+            vo.wait_until("b")
+            self.play(Write(left[1]))
+            vo.wait_until("n")
+            self.play(Write(left[2]))
+            self.play(Write(left[3]))
+            vo.wait_until("r")
+            self.play(Write(right))
+            vo.wait_until("f")
+            self.play(Create(axis), FadeIn(bt), FadeIn(bl), LaggedStart(*[GrowFromEdge(b, DOWN if v > 0 else UP)
+                                                                         for b, v in zip(bars, bias)], lag_ratio=0.1))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

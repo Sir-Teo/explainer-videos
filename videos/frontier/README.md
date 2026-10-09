@@ -1,6 +1,6 @@
 # How Frontier AI Models Are Trained, End to End
 
-A 45-minute, 18-chapter explainer in four parts, following one frontier
+A one-hour, 18-chapter explainer in four parts, following one frontier
 training run from the raw web to a reasoning assistant: **the data** (Common
 Crawl, the FineWeb filters, MinHash deduplication, quality classifiers,
 mixtures, tokens), **the recipe** (scaling laws, mixture-of-experts
@@ -22,28 +22,38 @@ GRPO run with a verifiable reward. Frontier numbers come from the labs' own
 reports and are cited below. Schematics are labeled `schematic`, illustrative
 examples `illustrative`.
 
+**Every chapter also works its key formula through with numbers**, on screen,
+one line at a time: formula → the values substituted → the result. Most use
+real numbers (Llama 3.1 405B's 6ND, the Chinchilla optimum derived by calculus,
+Adam's step on two gradients, five Newton–Schulz iterations, one FP8 number
+decoded bit by bit, an NVFP4 block of GPT-2's activations, the QK-norm bound,
+ZeRO's memory formulas, the Young–Daly checkpoint interval, the per-token SFT
+loss under two real models, GRPO's advantages for a real group of eight
+answers); the rest are labeled `illustrative`. See
+[Worked examples](#worked-examples) for the full list.
+
 **Watch:** [`published/frontier.mp4`](../../published/frontier.mp4) (1080p, subtitles and chapters embedded).
 
 <details><summary>Chapters</summary>
 
 - `0:00` One of the largest computations ever run
-- `2:02` Part 1: The raw web
-- `3:53` Filtering: the FineWeb recipe
-- `5:59` Deduplication with MinHash
-- `8:13` Quality, mixtures, and tokens
-- `10:48` Part 2: How big? Scaling laws
-- `13:26` Architecture and mixture of experts
-- `16:33` The optimizer: AdamW and Muon
-- `19:34` Learning-rate schedules
-- `21:33` Fewer bits: FP8 and FP4
-- `24:54` Loss spikes and stability
-- `27:25` Part 3: Memory and data parallelism
-- `29:59` Tensor, pipeline, expert parallelism
-- `32:54` Keeping the run alive
-- `34:39` Part 4: Supervised fine-tuning
-- `36:41` Learning from preferences
-- `38:54` Reinforcement learning and reasoning
-- `42:49` The whole pipeline
+- `2:00` Part 1: The raw web
+- `3:52` Filtering: the FineWeb recipe
+- `6:20` Deduplication with MinHash
+- `8:35` Quality, mixtures, and tokens
+- `11:43` Part 2: How big? Scaling laws
+- `15:43` Architecture and mixture of experts
+- `20:20` The optimizer: AdamW and Muon
+- `24:37` Learning-rate schedules
+- `26:46` Fewer bits: FP8 and FP4
+- `31:37` Loss spikes and stability
+- `34:59` Part 3: Memory and data parallelism
+- `37:49` Tensor, pipeline, expert parallelism
+- `41:46` Keeping the run alive
+- `44:11` Part 4: Supervised fine-tuning
+- `46:53` Learning from preferences
+- `50:44` Reinforcement learning and reasoning
+- `57:10` The whole pipeline
 
 </details>
 
@@ -65,7 +75,7 @@ python tools/publish.py frontier           # GitHub-sized copy -> published/fron
 | 3 | `Filtering` | The FineWeb recipe run stage by stage with FineWeb's own code (datatrove): URL blocklist, extractable text, English (fastText > 0.65), Gopher repetition, Gopher quality, C4 line rules, FineWeb's three rules. The rules are blunt (one false positive shown). | Pages surviving each stage, 10,498 → 1,363. Real rejected pages: a redirect-only page, a forum index, a login form, spun ad copy with template braces, a course-handbook menu. A programming puzzle dropped by mistake (`gopher_below_alpha_threshold`). 13% of pages and about a third of a percent of the bytes survive. *Quoted:* 4.56M blocked domains; FineWeb = 96 crawls → 15T tokens. |
 | 4 | `Dedup` | Why copies hurt (wasted compute, memorization). 5-word shingles and Jaccard similarity. MinHash: P(minima match) = J, so 112 minima are a fingerprint. LSH banding (14 × 8) and its S-curve 1 − (1 − s⁸)¹⁴. Deduplicate each crawl separately, not globally. | The biggest cluster in the 8 WET files: 41 "[domain] is for sale" pages. Two GoDaddy for-sale pages: shingle Venn counts, J = 0.78; 86 of 112 minima agree (estimate 0.77). P(0.8) = 92%, P(0.5) ≈ 5%. 8,457 → 8,208 pages (after the filters), ≈ 3% removed in 114 clusters (for-sale 41, access-denied 24, default hosting 7). *Quoted:* FineWeb's cross-crawl dedup removed 90% of the oldest crawls and trained worse models. |
 | 5 | `Quality` | Model-based filtering, animated: an LLM grades pages, a 110M-parameter classifier imitates it, scores the crawl, keep ≥ 3 (grades illustrative). Keep the best and rewrite the rest (four panels). Data mixtures and annealing. How big datasets are. BPE tokenizers. | FineWeb-Edu's own classifier on 400 random pages of our 1,363 survivors: scores 0–5 (55 / 253 / 63 / 25 / 4 / 0), 7% score ≥ 3, the top page (3.8) and a typical low one. Our 2,048-token BPE splitting a real sentence; 168M tokens of FineWeb-Edu for the pretraining runs. *Quoted:* 500,000 graded pages, 6,000 H100 hours; FineWeb-Edu kept 8% (1.3T tokens); Nemotron-CC 1.9T synthetic tokens; Kimi K2 SimpleQA 23.8% → 28.9%; OLMo 3 repeats data ≤ 7×; Llama 3 mix 50/25/17/8%, +24% GSM8K from annealing; Llama 3 15.6T, DeepSeek-V3 14.8T, Kimi K2 15.5T, GLM-5 28.5T, DeepSeek-V4 33T, Qwen3 36T tokens; vocabularies of 128K–260K. |
-| 6 | `ScalingLaws` | Part 2. C ≈ 6ND (2 operations forward + 4 backward); a fixed budget is a fixed area. IsoFLOP valleys and parabola fits; the compute-optimal N is a power law in C. Chinchilla's loss landscape and ≈ 20 tokens per parameter. Why everyone overtrains (cheaper inference). | Our IsoFLOP sweep: 25 real runs at 10¹², 3×10¹², 10¹³ and 3×10¹³ FLOPs, final validation loss vs model size, parabolas through each valley floor: optimal size 25K, 75K, 174K, 340K parameters, N_opt ∝ C^0.76 (close to Kaplan et al.'s 0.73 at small scale; Chinchilla found ≈ 0.5). A heat map of Hoffmann et al.'s Eq. 10 (E 1.69, A 406.4, B 410.7, α 0.34, β 0.28; the formula, not data). Tokens per (active) parameter: 20 (Chinchilla), 39 (Llama 3.1 405B), 400 (DeepSeek-V3), 1,636 (Qwen3-235B), 1,875 (Llama 3 8B). *Quoted:* 400+ Chinchilla runs, 70M–16B parameters; GPT-3 175B on 300B tokens; Chinchilla 70B on 1.4T beat the 280B Gopher; Llama 3 IsoFLOPs up to 10²². |
+| 6 | `ScalingLaws` | Part 2. C ≈ 6ND (2 operations forward + 4 backward); a fixed budget is a fixed area. IsoFLOP valleys and parabola fits; the compute-optimal N is a power law in C. Chinchilla's loss landscape and ≈ 20 tokens per parameter. Why everyone overtrains (cheaper inference). | Our IsoFLOP sweep: 25 real runs at 10¹², 3×10¹², 10¹³ and 3×10¹³ FLOPs, final validation loss vs model size, parabolas through each valley floor: optimal size 25K, 75K, 174K, 340K parameters, N_opt ∝ C^0.76 (close to Kaplan et al.'s 0.73 at small scale; Chinchilla found ≈ 0.5). A heat map of the Chinchilla loss formula with Besiroglu et al.'s 2024 re-estimate of its coefficients (E 1.82, A 482, B 2,085, α 0.348, β 0.366; the formula, not data). Tokens per (active) parameter: 20 (Chinchilla), 39 (Llama 3.1 405B), 400 (DeepSeek-V3), 1,636 (Qwen3-235B), 1,875 (Llama 3 8B). *Quoted:* 400+ Chinchilla runs, 70M–16B parameters; GPT-3 175B on 300B tokens; Chinchilla 70B on 1.4T beat the 280B Gopher; Llama 3 IsoFLOPs up to 10²². |
 | 7 | `Architecture` | The GPT-2 blueprint, refined: RMSNorm, RoPE, SwiGLU, grouped-query or latent attention, QK-norm, no biases. Mixture of experts: a router, top-k, parameters vs compute per token (schematic). Frontier MoEs keep getting sparser. Load balancing: rich-get-richer, an auxiliary loss, DeepSeek-V3's bias. Sparse attention, hybrid linear attention, multi-token prediction, 1M-token context (four schematic panels). | Three real pocket MoE runs (8 experts, top-2; no balancing / auxiliary loss / bias): the share of tokens each expert gets in the last layer, animated over 487 steps; busiest expert 3.0× / 1.3× / 1.1× its fair share (one expert under 1% without balancing); final validation loss 4.876 / 4.820 / 4.868 (the auxiliary loss is ahead in these tiny runs; DeepSeek found the bias ahead at scale). *Quoted:* DeepSeek-V3 8 of 256 experts + 1 shared, 671B total / 37B active; Kimi K2 8 of 384, 1.04T / 32B; Kimi K3 16 of 896, 2.8T; sparse attention over the top 2,048 tokens; 3 linear layers per full-attention layer. |
 | 8 | `Optimizer` | Gradient descent zigzags while Adam normalizes each coordinate (computed on ½(25x² + y²)); AdamW. Muon: G = UΣVᵀ → UVᵀ, so every direction takes an equal step; a Newton–Schulz polynomial replaces the SVD. AdamW vs Muon, compared while the learning rate is at its peak. Adoption timeline; a speed-up that shrinks with scale. | Singular values of a real gradient (a 336 × 128 MLP matrix of a pocket model): the top 5 of 128 directions hold 65% of it, the median is 1/47 of the largest; through 5 Newton–Schulz iterations of p(σ) = 3.4445σ − 4.7750σ³ + 2.0315σ⁵ every value ends in 0.6–1.2. AdamW vs Muon on the same ≈ 1M-parameter model and 12M tokens: at the peak learning rate Muon reaches each of AdamW's losses with 55–66% of the tokens (63% at the end of the stable phase); final 3.80 vs 3.61. Speed-ups: ours ≈ 1.6× (lightly tuned) next to Wen et al.'s 1.4× at 0.1B and 1.1× at 1.2B. *Quoted:* Moonlight ≈ half the FLOPs; Kimi K2 (MuonClip, 1T); GLM-4.5, DeepSeek-V4, Kimi K3. |
 | 9 | `Schedule` | Warmup; cosine decay vs warmup–stable–decay (WSD); cosine fixes the run length in advance (stop at 50% and the rate is still at 59% of peak). WSD's loss lags, then drops in the cooldown; cooldown branches give a model at every budget. The river-valley picture (computed toy). Real schedules from the labs' reports; batch sizes grow. | Schedule shapes from the training code's own `lr_factor`. Cosine vs WSD on one pocket model (L3 d96, 5M tokens): WSD lags slightly during the stable phase, then finishes at 4.18 vs cosine's 4.30; WSD cooldown branches from 40% and 60%; the half-length branch (4.59) beats a separate half-length cosine run (4.87). Charts drawn from the reports: DeepSeek-V3 (peak to 10T tokens, cosine to 10% over 4.3T, two low-LR stages), Llama 3 405B (cosine, annealed to 0 over the last 40M tokens), Kimi K3 (chose cosine over WSD), Llama 3's batch 4M → 8M → 16M tokens. |
@@ -78,6 +88,30 @@ python tools/publish.py frontier           # GitHub-sized copy -> published/fron
 | 16 | `Preferences` | Judging is easier than writing: pairwise comparisons (illustrative). Reward model and Bradley–Terry, P = σ(r_A − r_B). RLHF: maximize reward minus β·KL to the reference (schematic). Goodhart: over-optimizing a proxy. DPO (no reward model, no RL loop); Constitutional AI. | A best-of-n simulation (true quality g ~ N(0, 1); the reward model sees g plus heavy-tailed error), against √KL: the proxy reward keeps rising while true quality peaks at n ≈ 35, then falls below half its peak. |
 | 17 | `RL` | RL with verifiable rewards (final answers, unit tests; reward 1 or 0). GRPO: sample a group, advantage = (r − mean)/std, no critic or reward model. RL raises pass@1 but not pass@k (debated at scale); groups where every answer agrees carry no signal (DAPO). DeepSeek-R1-Zero. Agentic RL with sandboxes and asynchronous rollouts (schematic). Reward hacking (illustrative). | A real miniature: a 3-layer pocket model with 334,944 parameters, pretrained on 384,000 three-digit additions, 40% of them with every carry dropped (347+285 = 0632 vs 0522). Its real group of 8 answers to 478+356: one 834 (A = +2.47), five 724, two 824 (A = −0.35). On held-out problems over 120 GRPO steps (32 prompts × 8): pass@1 goes from 61% to 97% while pass@8 stays flat near the top (99% → 100%); groups where all 8 agree pass 50%; at the end, 834 eight times out of eight. *Quoted:* R1-Zero AIME 2024 15.6% → 71.0%, the "aha moment" line; DeepSeek-V3.2 > 1,800 environments and > 10% of pretraining compute; OLMo 3's learner waits for rollouts 75% of the time. |
 | 18 | `Outro` | Evaluation before release (capability benchmarks, safety tests, system card; contamination). The whole pipeline in one picture. Pocket scale vs frontier scale. The four lessons, recapped with mini-charts. Most of what is known comes from open-weight labs; open end-to-end projects. | Read from the cached runs: largest pocket model 2.9M parameters (the 8-expert MoE) vs up to 2.8T (Kimi K3); 30M tokens in one run vs 33T (DeepSeek-V4); all pocket training 6.6 × 10¹⁴ vs ~10²⁷ FLOPs; 4 CPU cores vs 100,000+ GPUs. Recap charts redrawn from the funnel, IsoFLOP, stability and RL data. *Quoted:* OpenAI stopped reporting SWE-bench Verified (Feb 2026); pipeline notes (13% of pages survive, 15–36T tokens, 10²⁵–10²⁷ FLOPs, 10⁴–10⁵ GPUs). |
+
+## Worked examples
+
+Each chapter has a beat that evaluates its central formula with numbers, line by line. Numbers come from the
+cached runs, from `compute.py`'s `math` item, or from the cited reports, and each one stated in the narration is
+asserted at render time. Illustrative inputs are labeled on screen.
+
+| # | Formula on screen | Numbers |
+|---|---|---|
+| 3 | Gopher quality rules, one by one | A real programming-puzzle page the funnel removed, with datatrove's own statistics: passes 6 of 7 rules; fails "words containing a letter ≥ 80%": 2,037 / 2,756 = 73.9%. |
+| 4 | J(A, B) = \|A ∩ B\| / \|A ∪ B\|; P(minima match) = J; 1 − (1 − s⁸)¹⁴ | Two real for-sale pages: J = 0.78, 86 / 112 minima agree (0.77); P(0.8) = 92%, P(0.5) ≈ 5%. |
+| 5 | BPE: count adjacent pairs, merge the most frequent, repeat | Recounted over the tokenizer's real training text (56.6M words, 660,950 distinct): ␣t 6,071,917 → ␣a, he, in, re, ␣the, on, er (8 merges, matching the trained tokenizer); "the cat sat on the mat": 22 bytes → 8 tokens. |
+| 6 | C = 6ND; L(N) = E + A N^−α + B (6N/C)^β, dL/dN = 0 ⇒ N_opt = G (C/6)^(β/(α+β)) | Llama 3.1 405B: 6 × 405×10⁹ × 15.6×10¹² = 3.79×10²⁵ (Epoch AI: 3.8×10²⁵). Chinchilla's budget 5.76×10²³: β/(α+β) = 0.513, G = 0.120 → N = 72B, D = 1.33T, 18 tokens per parameter. |
+| 7 | g_i = s_i / Σ_TopK s_j; y = Σ g_i E_i(x); L_aux = α E Σ f_i P_i; b_i ← b_i + γ sign(f̄ − f_i) | Router scores 0.38, 0.31 → weights 0.55, 0.45 (illustrative). DeepSeek-V3: 6 × 37B vs 6 × 671B per token, 18× less. Our MoE runs' real loads: E Σ f_i² = 1.84 unbalanced, 1.07 with the auxiliary loss (minimum 1); final biases about ±0.3 at γ = 0.001. |
+| 8 | Adam's m̂, v̂, m̂/√v̂ (β₁ 0.9, β₂ 0.95); p(σ) = 3.4445σ − 4.7750σ³ + 2.0315σ⁵ | Gradients 4, 5, 3 and 0.04, 0.05, 0.03 give identical steps 1.000, 0.997, 0.974. p(0.03) = 0.103; σ₀ = 0.9, 0.3, 0.03 through 5 iterations all end between 0.68 and 1.12. |
+| 9 | Cosine: η = η_min + ½(η_max − η_min)(1 + cos πp); WSD | At T/2 with 5% warmup: p = 0.474, cos(0.474π) = 0.083, η = 0.587 η_max (η_min = 0.1 η_max). |
+| 10 | E4M3: x = (−1)^s 2^(e−7)(1 + m/8); E2M1: 2^(e−1)(1 + m/2); NVFP4 two-level scales | 0 0111 011 = 1.375; 448 and 6 are the largest values. 16 real values of GPT-2's residual stream at " Paris": s_tensor = 2883 / (448 × 6) = 1.072, block scale 1.374 → 1.375 (E4M3), each value divided, rounded to FP4, multiplied back: 9.6% error. |
+| 11 | \|q·k\| ≤ \|q\|\|k\| (Cauchy–Schwarz); QK-norm makes \|q̂\| = √d, so \|q̂·k̂\|/√d ≤ √d with unit gains | Head dimension 32: bound √32 = 5.66; measured 4.8 at learning rate 3×10⁻⁴, at most 9.1 once the learned gains grow; 10,045 without QK-norm. Two scores 45 apart (illustrative): softmax = (1, 2.9×10⁻²⁰), and the gradient p(1 − p) ≈ 0. |
+| 12 | ZeRO: 16Ψ, 4Ψ + 12Ψ/N, 2Ψ + 14Ψ/N, 16Ψ/N | Ψ = 7.5B, N = 64: 120 / 31.4 / 16.6 / 1.9 GB per GPU (ZeRO-1: 30 + 1.41). |
+| 13 | MFU = achieved / peak; T = 6ND / (n_GPU × FLOP/s); ring all-reduce 2(N−1)/N | Llama 3.1 405B on 16,384 H100s at 400 TFLOP/s: MFU 40%, 5.8×10⁶ s ≈ 67 days = 26.3M GPU-hours (Meta reports 30.84M); 5.9 s per 16M-token step; 6.3 GB of gradients per GPU, 12.6 GB moved per all-reduce. |
+| 14 | waste(τ) = δ/τ + τ/2M ⇒ τ* = √(2δM) (Young–Daly) | M = 2.8 h (Llama 3: 466 stops in 54 days). δ = 1 min: τ* = 18.3 min, 10.9% lost; δ = 10 s: 7.5 min, 4.5% (write times illustrative). |
+| 15 | L_SFT = −(1/\|A\|) Σ_{t∈A} log p(x_t \| x_<t) | The real assistant tokens of the example conversation, scored by Qwen3-0.6B-Base and Qwen3-0.6B: mean 2.12 vs 0.52 nats. |
+| 16 | P(A ≻ B) = σ(r_A − r_B); L = −log σ(r_A − r_B); L_DPO = −log σ(β[log-ratio_w − log-ratio_l]) | r = 1.3, 0.4: σ(0.9) = 0.711, L = 0.341, ∂L/∂r_A = −0.289 (gap 3: 0.049, slope −0.047). DPO, β = 0.1, log-ratios +2.0 and −1.0: σ(0.30) = 0.574, L = 0.554; every pair starts at log 2 = 0.693 (illustrative). |
+| 17 | A_i = (r_i − mean) / std; PPO/GRPO clip min(ρA, clip(ρ, 0.8, 1.2) A); pass@k = 1 − (1 − p)^k | The real group for 478 + 356: mean 0.125, std √0.125 = 0.354, A = +2.47 and −0.35, ΣA = 0; 4 of 8 right → ±0.94, all 8 → 0. ρ = 1.3: min(3.21, 2.96) = 2.96; ρ = 0.6, A = −0.35: −0.28 (clipped, no gradient). pass@8 at p̄ = 0.61: 99.95% if every problem were average vs 98.8% measured; p̂ = 1/8 → 66%. |
 
 ### Method notes (so the charts are not over-read)
 
@@ -207,8 +241,12 @@ Numbers marked *real run* were computed for this video by `compute.py`; everythi
 * **C ≈ 6ND**: Kaplan et al. 2020 (arXiv 2001.08361). Our FLOP count adds attention (6 · layers · seq · d / 2
   per token) to 6N on the matrices each token multiplies through (body + unembedding).
 * **Chinchilla**: Hoffmann et al. 2022 (arXiv 2203.15556): > 400 models, 70M–16B parameters, 5–500B tokens;
-  Eq. 10 fit L = 1.69 + 406.4/N^0.34 + 410.7/D^0.28 (the heat map is this formula, not new data);
-  ≈ 20 tokens per parameter; Chinchilla 70B on 1.4T tokens beat Gopher 280B. GPT-3: 175B parameters, 300B
+  parametric fit L = E + A/N^α + B/D^β; ≈ 20 tokens per parameter. **The heat map and the worked optimum use
+  Besiroglu et al.'s re-estimate** (Epoch AI, *Chinchilla Scaling: A replication attempt*, arXiv 2404.10102,
+  Table 1: E 1.8172, A 482.01, B 2085.43, α 0.3478, β 0.3658), not the published Eq. 10 values (E 1.69,
+  A 406.4, B 410.7, α 0.34, β 0.28): with the rounded published values the formula's optimum is ≈ 70–90 tokens
+  per parameter, inconsistent with the paper's own Approaches 1–2 and with Chinchilla itself; the re-estimate
+  gives 72B parameters on 1.33T tokens (18 per parameter) at Chinchilla's budget of 5.76 × 10²³ FLOPs; Chinchilla 70B on 1.4T tokens beat Gopher 280B. GPT-3: 175B parameters, 300B
   tokens (Brown et al. 2020).
 * **Overtraining**: Llama 3 8B trained on 15T tokens (Meta blog, Apr 2024) = 1,875 tokens per parameter;
   tokens per active parameter: DeepSeek-V3 ≈ 400, Qwen3-235B-A22B ≈ 1,640 (arithmetic).

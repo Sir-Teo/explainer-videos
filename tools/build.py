@@ -85,6 +85,17 @@ def render_scene(video: str, module: str, cls: str, quality: str, fps: int, medi
     return cls, time.time() - t, ""
 
 
+def check_narration_audio(mp4: Path, lines: list[dict]) -> None:
+    """Fail if a scene's soundtrack stops before its last narration line ends (sound dropped while rendering)."""
+    if not lines:
+        return
+    end = max(ln["start"] + ln["duration"] for ln in lines)
+    out = run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=duration", "-of", "csv=p=0", str(mp4)])
+    audio = float(out.stdout.strip() or 0)
+    if audio < end - 0.5:
+        sys.exit(f"{mp4.name}: the soundtrack ends at {audio:.1f} s but the narration runs to {end:.1f} s")
+
+
 def normalize(src: Path, dst: Path) -> None:
     """Pad/trim audio to exactly the video length so concatenation stays in sync."""
     dur = ffprobe_duration(src)
@@ -144,11 +155,12 @@ def main():
         if not mp4.exists():
             sys.exit(f"Missing render for {cls}: {mp4}")
         norm = work / f"{cls}.mp4"
+        meta = mp4.with_suffix(".narration.json")
+        lines = json.loads(meta.read_text())["lines"] if meta.exists() else []
+        check_narration_audio(mp4, lines)
         normalize(mp4, norm)
         dur = ffprobe_duration(norm)
-        meta = mp4.with_suffix(".narration.json")
-        if meta.exists():
-            cues += subtitle_cues(json.loads(meta.read_text())["lines"], offset)
+        cues += subtitle_cues(lines, offset)
         if chapter:
             chapters.append((offset, chapter))
         parts.append(norm)
