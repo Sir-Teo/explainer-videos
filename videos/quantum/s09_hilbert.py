@@ -197,7 +197,7 @@ class HilbertSpace(VoiceoverScene):
             curve = polyline(a, xx, s_, color=C.ENERGY, stroke_width=2).set_stroke(opacity=0.7)
             lab = MathTex(rf"n = {n + 1}", font_size=26, color=C.ENERGY).next_to(a, LEFT, buff=0.15)
             eig.add(VGroup(a, curve, bars, lab))
-        eig.arrange(DOWN, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
+        eig.arrange(DOWN, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.55)  # below the header
         el = label(r"eigenvectors of the $8 \times 8$ matrix:\\exactly the sampled sine waves", font_size=24, color=GREY_A)
         el.next_to(eig, DOWN, buff=0.15)
         r8, r64, r1k = (fd[f"E{N}"][:5] / fd[f"E{N}"][0] for N in (8, 64, 1024))

@@ -115,8 +115,9 @@ class FreeParticle(VoiceoverScene):
             "<bookmark mark='b'/> So the frequency grows like the square of the wave number. This is the free particle's "
             "dispersion relation, and it means different components travel at different speeds."
         ) as vo:
+            self.play(Write(d1))
             vo.wait_until("a")
-            self.play(Write(d1), Write(d2), FadeIn(w2))
+            self.play(Write(d2), FadeIn(w2))
             vo.wait_until("b")
             self.play(Write(d3), Create(db[0]))
         with self.voiceover(

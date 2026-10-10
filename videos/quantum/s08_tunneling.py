@@ -81,7 +81,7 @@ class Tunneling(VoiceoverScene):
         band = barrier_band(ax, 0, a)
         wv = WaveView(ax, x, psi, mode="density", scale=1.0)
         yl = ylabel(ax, r"|\varphi(x)|^2", font_size=28)
-        lab_l = label(r"incoming $+$ reflected: they interfere", font_size=24, color=GREY_A).next_to(ax.c2p(-7.0, 4.0), UP, buff=0.12)
+        lab_l = label(r"incoming $+$ reflected: they interfere", font_size=24, color=GREY_A).next_to(ax.c2p(0.5 * x[0], 0), DOWN, buff=0.15)
         lab_r = label(rf"transmitted: $|t|^2 = {T:.3f}$", font_size=24, color=C.BORN).move_to(ax.c2p(10.5, 1.0))
         lab_m = label(r"decays inside", font_size=24, color=C.POTENTIAL).next_to(band, UP, buff=0.1)
         joins = VGroup(*[Circle(radius=0.22, color=WHITE, stroke_width=2).move_to(ax.c2p(xx, float(np.interp(xx, x, np.abs(psi) ** 2))))
@@ -144,8 +144,9 @@ class Tunneling(VoiceoverScene):
             "<bookmark mark='b'/> For a thick barrier that's dominated by a single factor: e to the minus two kappa a. "
             "Exponential in the width, and in the square root of the energy deficit."
         ) as vo:
+            self.play(Write(f1[:2]), FadeIn(n1))
             vo.wait_until("a")
-            self.play(Write(f1), FadeIn(n1))
+            self.play(Write(f1[2:]))
             vo.wait_until("b")
             self.play(Write(f2), FadeIn(n2))
         with self.voiceover(

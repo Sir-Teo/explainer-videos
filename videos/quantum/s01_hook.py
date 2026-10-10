@@ -104,9 +104,11 @@ class Hook(VoiceoverScene):
         dc = always_redraw(dens)
         base = Line([right, mv.get_bottom()[1], 0], [right, mv.get_top()[1], 0], color=GREY_C, stroke_width=1.5)
         dl = MathTex(r"|\psi|^2 \text{ at the screen}", font_size=26, color=C.BORN).next_to(base, UP, buff=0.1).shift(RIGHT * 1.2)
+        dl.shift(DOWN * max(0.0, dl.get_top()[1] - 3.8))  # keep it off the frame edge
         wheel = corner_wheel(corner=UL, buff=0.25, radius=0.3)
         tag = note(r"simulated: the Schr\"odinger equation on a $1024 \times 1024$ grid; color = phase, brightness = "
                    r"$|\psi|$ ($\times 2$ right of the slits)").to_edge(DOWN, buff=0.15)
+        tag.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.06)  # the wall runs behind it
         with self.voiceover(
             "So what goes through the slits? Here's the answer quantum mechanics gives, computed by solving its central "
             "equation numerically. <bookmark mark='w'/> Before detection, the electron is described by a wave, a "

@@ -79,13 +79,14 @@ class Wavefunction(VoiceoverScene):
         g = depth_sorted(*parts)
         if with_axes:
             o = np.array([x0, 0, 0])
-            ax = VGroup(*[line_3d(proj, o - v * amp * 1.15, o + v * amp * 1.15, color=GREY_C, n=6, stroke_width=1.5,
+            R = amp * float(np.abs(psi).max())  # the helix's largest radius: axes and labels scale with it
+            ax = VGroup(*[line_3d(proj, o - v * R * 1.2, o + v * R * 1.2, color=GREY_C, n=6, stroke_width=1.5,
                                   depth_range=amp) for v in (np.array([0, 1, 0]), np.array([0, 0, 1]))])
-            re = MathTex(r"\mathrm{Re}\,\psi", font_size=26, color=GREY_A).move_to(proj.point(o + [0, amp * 1.4, 0]))
-            im = MathTex(r"\mathrm{Im}\,\psi", font_size=26, color=GREY_A).move_to(proj.point(o + [0, 0, amp * 1.55]))
+            re = MathTex(r"\mathrm{Re}\,\psi", font_size=26, color=GREY_A).move_to(proj.point(o + [0, R * 1.42, 0]))
+            im = MathTex(r"\mathrm{Im}\,\psi", font_size=26, color=GREY_A).move_to(proj.point(o + [0, 0, R * 1.5]))
             for lab, v in ((re, [0, 1, 0]), (im, [0, 0, 1])):  # fade a label whose axis points at the camera
-                seen = np.linalg.norm(proj.point(o + np.array(v) * amp) - proj.point(o))
-                lab.set_opacity(float(np.clip((seen / amp - 0.25) / 0.4, 0, 1)))
+                seen = np.linalg.norm(proj.point(o + np.array(v) * R) - proj.point(o))
+                lab.set_opacity(float(np.clip((seen / R - 0.25) / 0.4, 0, 1)))
             xl = MathTex("x", font_size=30, color=C.XPOS).move_to(proj.point([x1 + 0.35, 0, 0]))
             g = VGroup(ax, g, re, im, xl)
         return g
