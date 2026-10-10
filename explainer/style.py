@@ -21,6 +21,7 @@ from manim import (
     GREEN_B,
     GREY_A,
     GREY_B,
+    GREY_C,
     GREY_D,
     LIGHT_BROWN,
     LIGHT_PINK,
@@ -198,6 +199,28 @@ C = SimpleNamespace(
     PNL_UP=GREEN,  # profit
     PNL_DOWN=RED,  # loss, adverse selection
     RISK=RED,  # risk checks, limits, the kill switch
+    # Quantum mechanics (videos/quantum).  The amplitude psi itself has no single color: its phase is the hue
+    # (videos/quantum/colormap.py: 0 red, pi/2 yellow-green, pi cyan, 3pi/2 violet) and its size the brightness.
+    XPOS=BLUE,  # x, position space, <x>, sigma_x
+    MOMENTUM=ORANGE,  # p, k, momentum space phi(p), <p>, sigma_p
+    ENERGY=GREEN,  # E, the Hamiltonian H, energy levels and eigenvalues
+    QTIME=TEAL,  # t, clocks, e^{-iEt/hbar}, revival times
+    POTENTIAL=GREY_B,  # V(x): walls, barriers, wells
+    BORN="#FFE66D",  # |psi|^2, probabilities, the Born rule, detection events
+    CURRENT=PINK,  # the probability current j
+    HBAR=PURPLE_A,  # i hbar, commutators, the quantum of action, the uncertainty bound
+    CLASSICAL=LIGHT_BROWN,  # classical particles, trajectories, bounds and expectations ("sepia physics")
+    RAISE="#9BE37B",  # the raising operator a-dagger
+    LOWER="#F08A7E",  # the lowering operator a
+    SPIN_UP="#FFC857",  # |up>, the north pole of the Bloch sphere
+    SPIN_DOWN="#7E9CF0",  # |down>, the south pole
+    BLOCH=TEAL_B,  # the Bloch vector, spin directions, measurement axes
+    ALICE="#5CD0B3",  # Alice's side of an entangled pair, her settings a, a'
+    BOB="#E37BD3",  # Bob's side, his settings b, b'
+    QUANTUM_BOUND=PURPLE_B,  # 2 sqrt 2, Tsirelson's bound, quantum correlations
+    WIGNER_POS="#F2A541",  # Wigner function > 0
+    WIGNER_NEG="#4FA3D9",  # Wigner function < 0
+    WALL=GREY_C,  # the slit plate, detector screens, apparatus
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
@@ -226,6 +249,10 @@ TEX_TEMPLATE.add_to_preamble(
 \DeclareMathOperator{\li}{li}
 \DeclareMathOperator{\Real}{Re}
 \DeclareMathOperator{\Imag}{Im}
+\newcommand{\ket}[1]{\left|#1\right\rangle}
+\newcommand{\bra}[1]{\left\langle#1\right|}
+\newcommand{\braket}[2]{\left\langle#1\middle|#2\right\rangle}
+\newcommand{\expval}[1]{\left\langle#1\right\rangle}
 """
 )
 MathTex.set_default(tex_template=TEX_TEMPLATE)

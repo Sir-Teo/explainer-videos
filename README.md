@@ -15,6 +15,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`published/rl.mp4`](published/rl.mp4) | [`videos/rl`](videos/rl) |
 | **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`published/stochastic.mp4`](published/stochastic.mp4) | [`videos/stochastic`](videos/stochastic) |
 | **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`published/trading.mp4`](published/trading.mp4) | [`videos/trading`](videos/trading) |
+| **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | 64 min | [`published/quantum.mp4`](published/quantum.mp4) | [`videos/quantum`](videos/quantum) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -22,11 +23,13 @@ GitHub's 100 MB file limit by `tools/publish.py`; a sidecar `.srt` sits next
 to each. Download one and open it in any player (VLC, QuickTime, a browser).
 The LLM, Opposing Forces, Riemann and open-models videos' pictures are bit-identical to the full renders; the
 Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
-0.98–0.9996 against the full render, lowest on the turbulence footage), and
+0.98–0.9996 against the full render, lowest on the turbulence footage);
 the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
-dense 15 s segments, lowest single frame 0.993), and the stochastic-calculus video at
+dense 15 s segments, lowest single frame 0.993); the stochastic-calculus video at
 ~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
-fans and Monte Carlo noise, lowest single frame 0.975). The
+fans and Monte Carlo noise, lowest single frame 0.975); and the quantum-mechanics video at
+~99 kb/s (mean SSIM 0.998–0.9994 on five dense 15 s segments: the 2D double slit, the quantum
+carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
@@ -49,6 +52,7 @@ python -m videos.riemann.compute             # real zeta zeros, prime counts, M�
 python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
 python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO, PPO, DPO, ...), Qwen3 mismatch (~3 h)
 python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
+python -m videos.quantum.compute             # every Schrödinger solution, Born-rule sample and orbital render of the quantum video (~15 min)
 # (trading's derived data, videos/trading/data/*.json, is committed; `python -m videos.trading.compute` re-downloads
 #  the 11.6 GB Nasdaq ITCH day, rescans it, and re-measures this machine)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
@@ -64,6 +68,7 @@ python tools/build.py frontier                # -> renders/frontier.mp4
 python tools/build.py rl                      # -> renders/rl.mp4
 python tools/build.py stochastic              # -> renders/stochastic.mp4
 python tools/build.py trading                 # -> renders/trading.mp4
+python tools/build.py quantum                 # -> renders/quantum.mp4
 ```
 
 Iterate on a single scene:
@@ -107,6 +112,9 @@ videos/<name>/
                            critic, KL-tilted optimum, pass@k, DPO, ScaleRL fits, Qwen3 bf16-vs-fp32 log-probs
                            (stochastic) seeded simulations: the 2^22-step hero path, Ito sums, GBM, Ornstein-Uhlenbeck,
                            a double well with a Fokker-Planck solve, Kakutani's walkers, delta hedging, Girsanov weights
+                           (quantum) split-operator Schrodinger solutions in 1D and 2D (double slit, packets, tunneling,
+                           coherent states), exact eigen-expansions (carpets), finite-difference spectra, Wigner functions,
+                           hydrogen orbital volume renders, Stern-Gerlach and CHSH Monte Carlo; colormap.py: phase -> hue
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   compute.py, native/      (trading) a full day of Nasdaq TotalView-ITCH scanned in C; order books in Python and C;
@@ -199,4 +207,5 @@ voice). Set `EXPLAINER_VOICE` to try another Kokoro voice.
 * Models explained: Xiaomi [MiMo-V2.6-Pro](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL), Z.ai [GLM-5.3](https://huggingface.co/zai-org/GLM-5.3), Moonshot AI [Kimi K3](https://huggingface.co/moonshotai/Kimi-K3), as ranked by the [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/models/open-source) (v4.3.2, Oct 8, 2026). Configs and weights are read from Hugging Face; the video explains and attributes the labs' technical reports and is not affiliated with any of them.
 * Reinforcement-learning video: sampler/learner mismatch measured on [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) (Apache-2.0); defaults compared across the open RL frameworks [verl](https://github.com/volcengine/verl), [TRL](https://github.com/huggingface/trl), [OpenRLHF](https://github.com/OpenRLHF/OpenRLHF), [open-instruct](https://github.com/allenai/open-instruct), [nanochat](https://github.com/karpathy/nanochat), [prime-rl](https://github.com/PrimeIntellect-ai/prime-rl), [slime](https://github.com/THUDM/slime), [AReaL](https://github.com/inclusionAI/AReaL), [SkyRL](https://github.com/NovaSky-AI/SkyRL), [ROLL](https://github.com/alibaba/ROLL) and [ART](https://github.com/OpenPipe/ART). GRPO's arcsine objective after Davis & Recht (2025), the KL estimators after John Schulman's note, the entropy-covariance identity after Cui et al. (2025); full list in [`videos/rl/README.md`](videos/rl/README.md).
 * Trading-system video: market data from Nasdaq's public TotalView-ITCH 5.0 sample files (December 10, 2025); facts from Jane Street's tech talks and the [Signals and Threads](https://signalsandthreads.com/) podcast, HRT's [tech blog](https://www.hudsonrivertrading.com/hrtbeat/), Budish, Cramton & Shim (2015), Aquilina, Budish & O'Neill (2022), STAC, and the SEC's 2013 order against Knight Capital; map data from Natural Earth and OpenStreetMap (ODbL). The video explains public information and is not affiliated with any firm named.
+* Quantum-mechanics video: no external data; every wave is computed from the Schrödinger equation. Physical constants are CODATA 2022 (via `scipy.constants`). Historical claims were checked against the primary papers (Schrödinger 1926, Born 1926, Born & Jordan 1925, Kennard 1927, Stern & Gerlach 1922, Tonomura et al. 1989, Bell 1964, CHSH 1969, Hensen et al. 2015), with the full list in [`videos/quantum/README.md`](videos/quantum/README.md#fact-check-notes-and-sources).
 * Visual style inspired by Grant Sanderson's [3Blue1Brown](https://www.3blue1brown.com/).
