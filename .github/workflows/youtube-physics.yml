@@ -21,9 +21,11 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - name: Install simulation tools
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config
           python3 -m pip install uv
           uv venv --python 3.12 --seed
-          uv pip install --python .venv/bin/python numpy==2.2.6 scipy==1.16.3 pillow
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 scipy==1.16.3 pillow soundfile
       - name: Compute and validate numerical footage
         run: .venv/bin/python -u -m videos.${{ matrix.video }}.compute
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
