@@ -3,12 +3,15 @@
 
     python tools/publish.py llm                 # renders/llm.mp4 -> published/llm.mp4
     python tools/publish.py navier_stokes --max-mb 95
+    python tools/publish.py relativity --audio-kbps 64   # very long videos: more bits for the picture
 
 GitHub rejects pushes containing files over 100 MiB, so published copies aim
 just under that (95 MB by default).  Narration is re-encoded as mono AAC at
-96 kb/s (transparent for speech).  The video stream is copied bit-for-bit when
-that already fits; otherwise it is re-encoded with two-pass x264 at exactly
-the bitrate that fills the remaining budget.  Soft subtitles and chapter
+96 kb/s (transparent for speech; --audio-kbps 64 is still clean for a single
+voice and leaves more of the budget to the picture in long videos).  The
+video stream is copied bit-for-bit when that already fits; otherwise it is
+re-encoded with two-pass x264 at exactly the bitrate that fills the remaining
+budget.  Soft subtitles and chapter
 markers are kept, and the .srt is copied alongside.
 """
 
@@ -43,6 +46,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video")
     ap.add_argument("--max-mb", type=float, default=95.0, help="size budget in MB (10^6 bytes)")
+    ap.add_argument("--audio-kbps", type=int, default=AUDIO_KBPS, help="mono AAC narration bitrate")
     ap.add_argument("--force-reencode", action="store_true")
     args = ap.parse_args()
 
@@ -56,9 +60,9 @@ def main():
     budget = args.max_mb * 1e6
     duration = float(probe(src, "format=duration"))
     video_bits = float(probe(src, "stream=bit_rate", "v:0")) * duration
-    audio_bits = AUDIO_KBPS * 1000 * duration
+    audio_bits = args.audio_kbps * 1000 * duration
     usable = budget * 8 * (1 - CONTAINER_OVERHEAD)
-    audio = ["-c:a", "aac", "-b:a", f"{AUDIO_KBPS}k", "-ac", "1", "-ar", "48000"]
+    audio = ["-c:a", "aac", "-b:a", f"{args.audio_kbps}k", "-ac", "1", "-ar", "48000"]
 
     with tempfile.TemporaryDirectory() as tmp:
         av = str(Path(tmp) / "av.mp4")
