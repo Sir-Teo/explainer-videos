@@ -7,7 +7,7 @@ _Scene `s01_hook.py::Hook`_
 
 Fire electrons, one at a time, at a barrier with two narrow openings, and record where each one lands on a screen behind it. Each electron arrives as a single, sharp dot, at a place nobody can predict. Ten electrons look like random noise. A hundred, still noise.
 
-But by three thousand, a pattern is appearing, and by seventy thousand it's unmistakable: stripes. Bright bands where many electrons land, dark bands where almost none ever do. That's an interference pattern, the signature of a wave. Akira Tonomura's team at Hitachi recorded exactly this in 1989, one electron at a time, at these same five counts.
+But by three thousand, a pattern is appearing, and by seventy thousand it's unmistakable: stripes. Bright bands where many electrons land, dark bands where almost none ever do. That's an interference pattern, the signature of a wave. Akira Tonomura's team at Hitachi recorded this buildup in 1989, one electron at a time, at these same five counts, using an electron biprism, the electron version of two slits.
 
 So what goes through the slits? Here's the answer quantum mechanics gives, computed by solving its central equation numerically. Before detection, the electron is described by a wave, a complex number at every point in space; the color shows its phase, the brightness its size. The wave reaches the barrier, and part of it passes through both openings at once. The two halves spread out and overlap, and where they meet, they interfere.
 
@@ -79,7 +79,7 @@ _Scene `s04_schrodinger.py::SchrodingerEquation`_
 
 So a quantum state is a complex number at every point. How does it change in time? Whatever the rule is, it has to do three things. It must be linear: if two wavefunctions are allowed, so is their sum, because that's where interference comes from. It should be first order in time, so the wavefunction now determines the wavefunction later. And it must keep the total probability equal to one, forever.
 
-Here's the most direct route, the one that guided Schrödinger in 1926. Start with the simplest wavefunction of all, a plane wave, e to the i k x minus omega t: a helix that spins as time goes on. We know two facts about it from experiment: its energy is h-bar omega, the Planck-Einstein relation, and its momentum is h-bar k, de Broglie's.
+Here's the most direct route, the one most textbooks take. Start with the simplest wavefunction of all, a plane wave, e to the i k x minus omega t: a helix that spins as time goes on. We know two facts about it from experiment: its energy is h-bar omega, the Planck-Einstein relation, and its momentum is h-bar k, de Broglie's.
 
 Now differentiate. A time derivative brings down a factor of minus i omega, so i h-bar times d psi d t is h-bar omega psi: the energy times psi. A space derivative brings down i k, so minus i h-bar d psi d x is the momentum times psi. Do it twice, and minus h-bar squared times the second derivative is the momentum squared times psi.
 
@@ -189,7 +189,7 @@ Look at the momentum of each part. Here's the incoming packet's spread of moment
 
 That exponential makes tunneling extremely sensitive to distance. For an electron one electron volt short of the top, kappa is about five per nanometer. Through half a nanometer, roughly six in a thousand get through; through one nanometer, about four in a hundred thousand.
 
-That sensitivity is useful. A scanning tunneling microscope holds a sharp tip just above a surface; with a typical work function, the tunneling current changes about ninefold for every angstrom of gap, enough to map individual atoms. Tunneling is how alpha particles escape from nuclei, as Gamow explained in 1928. And the 2025 Nobel Prize in physics went to experiments showing that a whole electric circuit, billions of electrons acting together, can tunnel too.
+That sensitivity is useful. A scanning tunneling microscope holds a sharp tip just above a surface; with a typical work function, the tunneling current changes about ninefold for every angstrom of gap, enough to map individual atoms. Tunneling is how alpha particles escape from nuclei, as Gamow explained in 1928. And the 2025 Nobel Prize in physics went to experiments showing that a whole superconducting circuit, with vast numbers of electrons moving together as one, can tunnel too.
 
 ## Part 3: Wavefunctions are vectors
 
@@ -337,9 +337,9 @@ Here are the stationary states themselves, computed from the exact solutions and
 
 And where do chemistry's dumbbell-shaped p orbitals come from? Take the states with m equals minus one and plus one: two rings of probability whose phases wind in opposite directions. Subtract them. On one side the phases agree and the waves add; on the other they cancel. The result is the dumbbell, a superposition of two angular momenta. Interference again.
 
-Finally, light. Remember the box: a superposition of two energies sloshes back and forth at the difference frequency. Here's the same thing in hydrogen: the ground state plus the 2 p state. The electron cloud swings up and down, a tiny oscillating charge, at the Bohr frequency, E two minus E one over h: about two and a half million billion times per second. An oscillating charge radiates, at exactly that frequency: 121.6 nanometers, the Lyman alpha line, the brightest line in the ultraviolet sky.
+Finally, light. Remember the box: a superposition of two energies sloshes back and forth at the difference frequency. Here's the same thing in hydrogen: the ground state plus the 2 p state. The electron cloud swings up and down, a tiny oscillating charge, at the Bohr frequency, E two minus E one over h: about two and a half million billion times per second. An oscillating charge radiates, at exactly that frequency: 121.6 nanometers, the Lyman alpha line, the strongest line hydrogen emits.
 
-Every spectral line is a Bohr frequency. Transitions down to the second level give the visible Balmer lines: the red line at 656 nanometers, then 486, 434 and 410, exactly where astronomers find them in every hydrogen nebula in the sky. The colors of the universe are differences between eigenvalues.
+Every spectral line is a Bohr frequency. Transitions down to the second level give the visible Balmer lines: the red line at 656 nanometers, then 486, 434 and 410, exactly where astronomers find them in glowing hydrogen clouds across the sky. The colors of the universe are differences between eigenvalues.
 
 ## Part 5: Spin, the simplest quantum system
 
@@ -395,4 +395,4 @@ There's much more. Identical particles and the Pauli exclusion principle, which 
 
 ---
 
-10007 words (~65 min at 155 wpm).
+10017 words (~65 min at 155 wpm).

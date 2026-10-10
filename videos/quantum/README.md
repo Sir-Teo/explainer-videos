@@ -1,6 +1,6 @@
 # Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ
 
-A __LENGTH__-minute, 18-chapter explainer in five parts. It builds quantum mechanics from one experiment,
+A 64-minute, 18-chapter explainer in five parts. It builds quantum mechanics from one experiment,
 electrons landing one at a time behind two slits, and is released in the centenary year of the
 Schrödinger equation (1926–2026).
 
@@ -32,7 +32,24 @@ histogram is counted from seeded Born-rule samples. Every number the narration q
 
 <details><summary>Chapters</summary>
 
-__CHAPTERS__
+- `0:00` One electron at a time
+- `2:34` Part 1: Arrows that add
+- `6:13` A complex number at every point
+- `10:27` Part 2: Building the Schrödinger equation
+- `15:39` Wave packets: why a free particle spreads
+- `18:44` A particle in a box: where quantization comes from
+- `22:23` Quantum carpets: the wave that reassembles itself
+- `24:58` Tunneling through a wall
+- `28:39` Part 3: Wavefunctions are vectors
+- `32:34` Observables, eigenvalues and the Born rule
+- `35:47` Momentum, Fourier, and [x, p] = iħ
+- `38:45` The uncertainty principle, derived
+- `42:34` Part 4: The harmonic oscillator, by ladder operators
+- `46:16` Coherent states, phase space and the classical limit
+- `49:19` The hydrogen atom
+- `54:03` Part 5: Spin, the simplest quantum system
+- `57:55` Entanglement and Bell's theorem
+- `62:19` Recap
 
 </details>
 
