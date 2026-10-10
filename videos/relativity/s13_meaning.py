@@ -212,7 +212,7 @@ class Meaning(VoiceoverScene):
         a_acc = float(d["a_acc"])
         acc = Dot(ax.c2p(t_acc, a_acc), radius=0.08, color=C.LAMBDA)
         accl = label(r"starts to accelerate: 7.7 billion years", font_size=24, color=C.LAMBDA).next_to(acc, RIGHT, buff=0.15).shift(DOWN * 0.2)
-        dec = label(r"matter: decelerating", font_size=24, color=C.MATTER).move_to(ax.c2p(3.5, 1.15))
+        dec = label(r"matter: decelerating", font_size=24, color=C.MATTER).next_to(ax.c2p(0.6, 1.15), RIGHT, buff=0)
         tt = ValueTracker(0.5)
         center = np.array([3.9, -0.9, 0])
         rng = np.random.default_rng(2)
@@ -230,7 +230,8 @@ class Meaning(VoiceoverScene):
                                            color=YELLOW))
         lam = label(r"vacuum energy has $p = -\rho c^2$: \ $\rho + 3p/c^2 < 0$ \ repels", font_size=26,
                     color=C.LAMBDA).next_to(frl, DOWN, buff=0.2)
-        params = note(r"flat $\Lambda$CDM, Planck 2018: $H_0 = 67.4$, $\Omega_m = 0.315$").next_to(ax, UP, buff=0.15).align_to(ax, RIGHT)
+        # wider than the plot: it sits in the empty lower-right corner, clear of the y label
+        params = note(r"flat $\Lambda$CDM, Planck 2018: $H_0 = 67.4$, $\Omega_m = 0.315$").next_to(ax.c2p(20, 0), UP + LEFT, buff=0.15)
         with self.voiceover(
             "Finally, apply the same sentence to the biggest ball there is. <bookmark mark='f'/> In a universe filled "
             "uniformly with matter, any region is a ball of freely falling particles: the galaxies. Its radius obeys this "
