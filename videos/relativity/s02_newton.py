@@ -26,14 +26,14 @@ class Newton(VoiceoverScene):
                 u = np.array([math.cos(a), math.sin(a), 0])
                 L = min(0.5, 0.9 / r**2 * 1.4)
                 p = M.get_center() + r * u
-                arrows.add(Arrow(p, p - L * u, buff=0, color=C.POTENTIAL, stroke_width=3,
+                arrows.add(Arrow(p, p - L * u, buff=0, color=C.GRAV_POTENTIAL, stroke_width=3,
                                  max_tip_length_to_length_ratio=0.35))
         law = mtex(r"\mathbf{F}", r"=", r"-\frac{G M m}{r^2}\,\hat{\mathbf r}", font_size=44)
         field = mtex(r"\mathbf{g}", r"=", r"-\nabla\Phi", r",\qquad", r"\Phi", r"=", r"-\frac{GM}{r}", font_size=40)
         for m in (law, field):
-            m.set_color_by_tex(r"\Phi", C.POTENTIAL)
-        law[0].set_color(C.POTENTIAL)
-        field[0].set_color(C.POTENTIAL)
+            m.set_color_by_tex(r"\Phi", C.GRAV_POTENTIAL)
+        law[0].set_color(C.GRAV_POTENTIAL)
+        field[0].set_color(C.GRAV_POTENTIAL)
         col = VGroup(law, field).arrange(DOWN, buff=0.6, aligned_edge=LEFT).move_to([2.6, 0.6, 0])
         cap = label(r"Newton, 1687", font_size=28, color=GREY_A).next_to(col, UP, buff=0.5).align_to(col, LEFT)
         with self.voiceover(
@@ -67,7 +67,7 @@ class Newton(VoiceoverScene):
 
         surf = redraw(lambda: VMobject(stroke_color=C.METRIC, stroke_width=3.5).set_points_smoothly(surface_pts()))
         flux = mtex(r"\oint \mathbf{g}\cdot d\mathbf{A}", r"=", r"-4\pi G\,M_{\text{inside}}", font_size=44)
-        flux[0].set_color(C.POTENTIAL)
+        flux[0].set_color(C.GRAV_POTENTIAL)
         flux[2].set_color(C.MATTER)
         flux.move_to([2.4, 1.6, 0])
         why = VGroup(label(r"area grows like $r^2$,", font_size=28), label(r"field falls like $1/r^2$:", font_size=28),
@@ -101,7 +101,7 @@ class Newton(VoiceoverScene):
             buff=0.45,
         )
         for r in rows:
-            r[0].set_color(C.POTENTIAL)
+            r[0].set_color(C.GRAV_POTENTIAL)
             r[2].set_color(C.MATTER)
         rows.move_to([1.4, -0.1, 0])
         whys = VGroup(
@@ -123,9 +123,9 @@ class Newton(VoiceoverScene):
             self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[1]))
             vo.wait_until("c")
             self.play(TransformMatchingTex(rows[2].copy(), rows[3]), FadeIn(whys[2]))
-        box = SurroundingRectangle(rows[3], color=C.POTENTIAL, buff=0.2, corner_radius=0.1)
-        b1 = Brace(rows[3][0], DOWN, color=C.POTENTIAL)
-        b1l = label(r"second derivatives\\of the field", font_size=24, color=C.POTENTIAL).next_to(b1, DOWN, buff=0.1)
+        box = SurroundingRectangle(rows[3], color=C.GRAV_POTENTIAL, buff=0.2, corner_radius=0.1)
+        b1 = Brace(rows[3][0], DOWN, color=C.GRAV_POTENTIAL)
+        b1l = label(r"second derivatives\\of the field", font_size=24, color=C.GRAV_POTENTIAL).next_to(b1, DOWN, buff=0.1)
         b2 = Brace(rows[3][2], DOWN, color=C.MATTER)
         b2l = label(r"matter", font_size=24, color=C.MATTER).next_to(b2, DOWN, buff=0.1)
         with self.voiceover(
@@ -167,8 +167,8 @@ class Newton(VoiceoverScene):
         el = label(r"Earth", font_size=26, color=C.METRIC).next_to(ax.c2p(D, 0.4), RIGHT, buff=0.15)
         ev = Dot(ax.c2p(0, t0), radius=0.08, color=WHITE)
         evl = label(r"the Sun\\vanishes", font_size=24).next_to(ev, LEFT, buff=0.15)
-        newton = DashedLine(ax.c2p(0, t0), ax.c2p(D, t0), color=C.POTENTIAL, stroke_width=3)
-        nl = label(r"Newton: felt instantly", font_size=24, color=C.POTENTIAL).next_to(newton, UP, buff=0.08)
+        newton = DashedLine(ax.c2p(0, t0), ax.c2p(D, t0), color=C.GRAV_POTENTIAL, stroke_width=3)
+        nl = label(r"Newton: felt instantly", font_size=24, color=C.GRAV_POTENTIAL).next_to(newton, UP, buff=0.08)
         tip = ax.c2p(0, t0)
         cone = VGroup(Polygon(tip, ax.c2p(-0.6, t0 + 0.6), ax.c2p(-0.6, 4.3), ax.c2p(4.3 - t0, 4.3), stroke_width=0,
                               fill_color=C.LIGHT, fill_opacity=0.15),
@@ -214,12 +214,12 @@ class Newton(VoiceoverScene):
             mtex(r"\mathbf F", r"=", r"m_{I}\,\mathbf a", font_size=42),
             mtex(r"\mathbf a", r"=", r"\frac{m_G}{m_I}\,\mathbf g", font_size=42),
         ).arrange(DOWN, buff=0.45)
-        eqs[0][2].set_color(C.POTENTIAL)
+        eqs[0][2].set_color(C.GRAV_POTENTIAL)
         eqs[1][2].set_color(C.METRIC)
         eqs[2][2].set_color(WHITE)
         eqs.move_to([-3.6, 0.6, 0])
         tags = VGroup(
-            label(r"gravitational mass: how hard gravity pulls", font_size=24, color=C.POTENTIAL),
+            label(r"gravitational mass: how hard gravity pulls", font_size=24, color=C.GRAV_POTENTIAL),
             label(r"inertial mass: how hard it is to accelerate", font_size=24, color=C.METRIC),
         )
         tags[0].next_to(eqs[0], RIGHT, buff=0.4)

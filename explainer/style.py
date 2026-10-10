@@ -201,10 +201,10 @@ C = SimpleNamespace(
     # General relativity (videos/relativity).  Reuses LIGHT (YELLOW) for photons, light rays and light cones.
     METRIC=BLUE,  # g_mu_nu, ds^2, lengths, rulers, the metric's unit ellipses; spatial curvature (g_rr)
     PROPER_TIME=TEAL,  # tau, clocks and their ticks; the time part of the metric (g_tt)
-    POTENTIAL=GOLD,  # Newton: Phi, the field g, Newtonian predictions
+    GRAV_POTENTIAL=GOLD,  # Newton: Phi, the field g, Newtonian predictions
     CONNECTION=GREEN,  # Christoffel symbols, the correction terms of the covariant derivative
     CURVATURE=PURPLE_A,  # Riemann, Ricci, Einstein tensor, Gaussian curvature, tides; GR's predictions
-    MATTER="#FF6E40",  # T_mu_nu, rho, p, masses (Sun, Earth, stars): a deep orange, apart from POTENTIAL's gold
+    MATTER="#FF6E40",  # T_mu_nu, rho, p, masses (Sun, Earth, stars): a deep orange, apart from GRAV_POTENTIAL's gold
     VECTOR=PINK,  # tangent vectors, vectors being parallel transported
     COVECTOR=LIGHT_BROWN,  # one-forms: stacks of level lines, gradients, lower indices
     WAVE="#FF7EB6",  # gravitational waves: h_mu_nu, h_+, h_x, strain

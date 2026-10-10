@@ -60,7 +60,7 @@ class FieldEquations(VoiceoverScene):
             mtex(r"R_{00}", r"=", r"\frac{4\pi G}{c^4}\,T_{00}", font_size=44),
             buff=0.5,
         )
-        rows[0][0].set_color(C.POTENTIAL)
+        rows[0][0].set_color(C.GRAV_POTENTIAL)
         rows[1][0].set_color(C.CURVATURE)
         rows[2][0].set_color(C.CURVATURE)
         rows[2][2].set_color(C.MATTER)
@@ -256,7 +256,7 @@ class FieldEquations(VoiceoverScene):
         for r in rows:
             r[0].set_color(C.CURVATURE)
             r[2].set_color(C.MATTER)
-        rows[4][0].set_color(C.POTENTIAL)
+        rows[4][0].set_color(C.GRAV_POTENTIAL)
         rows[5][0].set_color(WHITE)
         rows[5][2].set_color(WHITE)
         x0 = -1.4

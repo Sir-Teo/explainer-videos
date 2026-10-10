@@ -61,8 +61,8 @@ class Equivalence(VoiceoverScene):
         ground = VGroup(Line(L + DOWN * 1.6 + LEFT * 2.2, L + DOWN * 1.6 + RIGHT * 2.2, color=GREY_B, stroke_width=4),
                         *[Line(L + DOWN * 1.6 + RIGHT * x, L + DOWN * 1.9 + RIGHT * (x - 0.3), color=GREY_D)
                           for x in np.linspace(-2.0, 2.2, 12)])
-        garrow = Arrow(L + LEFT * 2.0 + UP * 1.0, L + LEFT * 2.0 + DOWN * 0.2, buff=0, color=C.POTENTIAL)
-        gl = MathTex(r"g", font_size=34, color=C.POTENTIAL).next_to(garrow, LEFT, buff=0.1)
+        garrow = Arrow(L + LEFT * 2.0 + UP * 1.0, L + LEFT * 2.0 + DOWN * 0.2, buff=0, color=C.GRAV_POTENTIAL)
+        gl = MathTex(r"g", font_size=34, color=C.GRAV_POTENTIAL).next_to(garrow, LEFT, buff=0.1)
         fl = flame(R + DOWN * 1.6)
         aarrow = Arrow(R + RIGHT * 2.0 + DOWN * 0.2, R + RIGHT * 2.0 + UP * 1.0, buff=0, color=C.METRIC)
         al = MathTex(r"a = g", font_size=34, color=C.METRIC).next_to(aarrow, RIGHT, buff=0.1)
@@ -110,7 +110,7 @@ class Equivalence(VoiceoverScene):
         b2b = redraw(lambda: Dot(R + UP * 0.2 + RIGHT * 0.3 * math.sin(3 * k2.get_value()), radius=0.14, color=C.MATTER))
         tl2 = label(r"falling freely near Earth", font_size=30).move_to(tl)
         tr2 = label(r"floating in empty space", font_size=30).move_to(tr)
-        gtag = label(r"falling", font_size=26, color=C.POTENTIAL).next_to(bl, LEFT, buff=0.3)
+        gtag = label(r"falling", font_size=26, color=C.GRAV_POTENTIAL).next_to(bl, LEFT, buff=0.3)
         loc = label(r"Locally, gravity can be made to vanish by falling.", font_size=32, color=C.CURVATURE).move_to(same)
         with self.voiceover(
             "<bookmark mark='a'/> It works the other way too. Cut the cable, and a box falling freely near the Earth is "
@@ -220,7 +220,7 @@ class Equivalence(VoiceoverScene):
             label(r"clocks lower down run slower.", font_size=30, color=C.PROPER_TIME),
             mtex(r"\frac{d\tau}{dt}", r"\approx", r"1 + \frac{\Phi}{c^2}", font_size=40),
         ).arrange(DOWN, buff=0.22).move_to([3.6, -1.4, 0])
-        concl[2][2].set_color(C.POTENTIAL)
+        concl[2][2].set_color(C.GRAV_POTENTIAL)
         with self.voiceover(
             "The second consequence is about time. <bookmark mark='d'/> Here's the rocket on a spacetime diagram, with "
             "height across and time up. Because it accelerates, its floor and ceiling trace out curves that bend toward the "
@@ -302,11 +302,11 @@ class Equivalence(VoiceoverScene):
         ax.to_edge(LEFT, buff=0.9).shift(DOWN * 0.3)
         xl = label(r"orbit radius (thousand km)", font_size=24).next_to(ax.x_axis, DOWN, buff=0.45)
         yl = label(r"$\mu$s per day vs. a clock on the ground", font_size=24).rotate(PI / 2).next_to(ax.y_axis, LEFT, buff=0.55)
-        cg = polyline(ax, r, d["grav"], color=C.POTENTIAL, stroke_width=4)
+        cg = polyline(ax, r, d["grav"], color=C.GRAV_POTENTIAL, stroke_width=4)
         cs = polyline(ax, r, d["speed"], color=C.METRIC, stroke_width=4)
         cn = polyline(ax, r, d["net"], color=WHITE, stroke_width=5)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(50, 0), color=GREY_C, stroke_width=1.5)
-        lg = label(r"higher: faster (gravity)", font_size=24, color=C.POTENTIAL).next_to(ax.c2p(50, d["grav"][-1]), UP, buff=0.12).shift(LEFT * 1.4)
+        lg = label(r"higher: faster (gravity)", font_size=24, color=C.GRAV_POTENTIAL).next_to(ax.c2p(50, d["grav"][-1]), UP, buff=0.12).shift(LEFT * 1.4)
         ls = label(r"orbital speed: slower", font_size=24, color=C.METRIC).move_to(ax.c2p(38, -13))
         rg = float(d["r_gps"]) / 1e6
         gdot = Dot(ax.c2p(rg, n_gps), radius=0.09, color=WHITE)
@@ -322,7 +322,7 @@ class Equivalence(VoiceoverScene):
             mtex(r"-7.2", r"\ \text{speed}", font_size=32),
             mtex(r"\approx +38", r"\ \mu\text{s per day}", font_size=34),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_corner(UR, buff=0.6)
-        nums[0].set_color(C.POTENTIAL)
+        nums[0].set_color(C.GRAV_POTENTIAL)
         nums[1].set_color(C.METRIC)
         line = Line(nums[2].get_corner(UL) + UP * 0.12, nums[2].get_corner(UR) + UP * 0.12, color=GREY_C)
         km = VGroup(label(r"uncorrected, positions", font_size=26, color=GREY_A),
