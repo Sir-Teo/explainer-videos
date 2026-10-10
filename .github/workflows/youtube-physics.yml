@@ -1,0 +1,130 @@
+name: Rebuild physics YouTube videos
+on:
+  push:
+    branches: [codex/youtube-physics]
+permissions:
+  contents: read
+env:
+  PYTHONWARNINGS: ignore
+  OMP_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  EXPLAINER_RENDER_THREADS: '2'
+jobs:
+  compute:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        video: [quantum, relativity]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install simulation tools
+        run: |
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python numpy==2.2.6 scipy==1.16.3 pillow
+      - name: Compute and validate numerical footage
+        run: .venv/bin/python -u -m videos.${{ matrix.video }}.compute
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: physics-data-${{ matrix.video }}
+          path: .cache/${{ matrix.video }}/
+          include-hidden-files: true
+          retention-days: 2
+          compression-level: 1
+          if-no-files-found: error
+  render:
+    needs: compute
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        video: [quantum, relativity]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install native rendering tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config espeak-ng fonts-dejavu texlive-latex-extra texlive-science texlive-fonts-recommended dvisvgm tipa cm-super
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 kokoro==0.9.4 numpy==2.2.6 scipy==1.16.3 numba==0.62.1 transformers==4.57.6 huggingface-hub==0.36.2 soundfile sympy
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: physics-data-${{ matrix.video }}
+          path: .cache/${{ matrix.video }}
+      - name: Render assigned chapters at native 1080p30 CRF 18
+        env:
+          SHARD: ${{ matrix.shard }}
+          VIDEO: ${{ matrix.video }}
+        run: |
+          .venv/bin/python -u - <<'PY'
+          import os, importlib
+          from concurrent.futures import ThreadPoolExecutor
+          from tools.build import ROOT, render_scene
+          video=os.environ['VIDEO']
+          SCENES=importlib.import_module(f'videos.{video}.manifest').SCENES
+          assigned = SCENES[int(os.environ['SHARD'])::12]
+          print('Assigned scenes:', assigned, flush=True)
+          def render(scene):
+              module, cls, _ = scene
+              return render_scene(video,module,cls,'h',30,ROOT/'media'/video/'crf18',18)
+          with ThreadPoolExecutor(max_workers=2) as pool:
+              for cls, seconds, error in pool.map(render,assigned):
+                  print(cls,seconds,error,flush=True)
+                  if error: raise RuntimeError(cls)
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ matrix.video }}-scenes-${{ matrix.shard }}
+          path: |
+            media/${{ matrix.video }}/crf18/videos/*/1080p30/*.mp4
+            media/${{ matrix.video }}/crf18/videos/*/1080p30/*.wav
+            media/${{ matrix.video }}/crf18/videos/*/1080p30/*.narration.json
+          retention-days: 2
+          compression-level: 0
+          if-no-files-found: error
+  stitch:
+    needs: render
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        video: [quantum, relativity]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install stitching tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python manim==0.19.0 numpy==2.2.6 pillow soundfile
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: ${{ matrix.video }}-scenes-*
+          path: media/${{ matrix.video }}/crf18/videos
+          merge-multiple: true
+      - name: Stitch and master narration
+        run: .venv/bin/python -u tools/build.py ${{ matrix.video }} --crf 18 --stitch-only
+      - name: Verify decoding, audio synchronization, captions, and chapters
+        run: .venv/bin/python -u tools/youtube_qa.py ${{ matrix.video }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: youtube-${{ matrix.video }}
+          path: |
+            renders/${{ matrix.video }}.mp4
+            renders/${{ matrix.video }}.srt
+            renders/${{ matrix.video }}.chapters.txt
+            renders/youtube/${{ matrix.video }}.qa.json
+            renders/youtube/${{ matrix.video }}-qa-*.jpg
+          retention-days: 2
+          compression-level: 0
+          if-no-files-found: error

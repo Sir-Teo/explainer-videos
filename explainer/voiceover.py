@@ -19,6 +19,7 @@ next to its video; ``tools/build.py`` stitches those into the final cut.
 from __future__ import annotations
 
 import json
+import os
 import re
 from contextlib import contextmanager
 from pathlib import Path
@@ -86,6 +87,27 @@ class VoiceoverScene(Scene):
     def setup(self):
         super().setup()
         self._narration: list[dict] = []
+        # Set encoding quality before the first frame reaches PyAV. Manim's
+        # default CRF is 23; source masters for YouTube can use a lower value.
+        crf = os.environ.get("EXPLAINER_RENDER_CRF")
+        if crf is not None:
+            value = int(crf)
+            if not 0 <= value <= 51:
+                raise ValueError("EXPLAINER_RENDER_CRF must be between 0 and 51")
+            writer = self.renderer.file_writer
+            open_stream = writer.open_partial_movie_stream
+
+            def open_master_stream(*args, **kwargs):
+                open_stream(*args, **kwargs)
+                if writer.video_stream.codec_context.name == "libx264":
+                    writer.video_stream.codec_context.thread_count = int(
+                        os.environ.get("EXPLAINER_RENDER_THREADS", "2")
+                    )
+                    writer.video_stream.codec_context.options = {
+                        **writer.video_stream.codec_context.options, "crf": str(value),
+                    }
+
+            writer.open_partial_movie_stream = open_master_stream
 
     @contextmanager
     def voiceover(self, text: str, gain: float | None = None, pad: float = 0.15):

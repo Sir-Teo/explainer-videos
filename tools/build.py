@@ -66,19 +66,23 @@ def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> 
     return media / "videos" / module / f"{QUALITY[quality]}{fps}" / f"{cls}.mp4"
 
 
-def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path) -> tuple[str, float, str]:
+def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path, crf: int | None = None) -> tuple[str, float, str]:
     src = ROOT / "videos" / video / f"{module}.py"
     # Each scene gets its own LaTeX cache: parallel manim processes sharing one
     # Tex dir race on the .dvi files (one cleans up what another converts).
     cfg = media / "cfg" / f"{cls}.cfg"
     cfg.parent.mkdir(parents=True, exist_ok=True)
-    cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\n")
+    tex_dir = media / "Tex" / cls
+    tex_dir.mkdir(parents=True, exist_ok=True)
+    cfg.write_text(f"[CLI]\ntex_dir = {tex_dir}\n")
     cmd = [
         sys.executable, "-m", "manim", "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
         "--media_dir", str(media), "--progress_bar", "none", str(src), cls,
     ]
     t = time.time()
     env = dict(os.environ, PYTHONWARNINGS="ignore")
+    if crf is not None:
+        env["EXPLAINER_RENDER_CRF"] = str(crf)
     proc = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, env=env)
     if proc.returncode != 0:
         return cls, time.time() - t, proc.stdout[-3000:] + proc.stderr[-3000:]
@@ -96,19 +100,27 @@ def check_narration_audio(mp4: Path, lines: list[dict]) -> None:
         sys.exit(f"{mp4.name}: the soundtrack ends at {audio:.1f} s but the narration runs to {end:.1f} s")
 
 
-def normalize(src: Path, dst: Path) -> None:
+def normalize(src: Path, dst: Path, lossless: bool = False) -> None:
     """Pad/trim audio to exactly the video length so concatenation stays in sync."""
     dur = ffprobe_duration(src)
-    if has_audio(src):
+    wav = src.with_suffix(".wav")
+    source_has_audio = has_audio(src)
+    if lossless and wav.exists():
+        # Manim retains its PCM soundtrack next to the scene. Use it rather
+        # than repeatedly encoding its AAC preview soundtrack.
+        audio_in = ["-i", str(src), "-i", str(wav)]
+        amap = "[1:a]aresample=48000,aformat=channel_layouts=stereo,apad[a]"
+    elif source_has_audio:
         audio_in = ["-i", str(src)]
         amap = "[0:a]aresample=48000,aformat=channel_layouts=stereo,apad[a]"
     else:
         audio_in = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-i", str(src)]
         amap = "[0:a]apad[a]"
-    vin = 0 if has_audio(src) else 1
+    vin = 0 if source_has_audio or (lossless and wav.exists()) else 1
     cmd = ["ffmpeg", "-y", "-v", "error", *audio_in]
     cmd += ["-filter_complex", amap, "-map", f"{vin}:v", "-map", "[a]", "-t", f"{dur:.3f}"]
-    cmd += ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(dst)]
+    audio_codec = ["-c:a", "alac", "-sample_fmt", "s32p"] if lossless else ["-c:a", "aac", "-b:a", "192k"]
+    cmd += ["-c:v", "copy", *audio_codec, str(dst)]
     run(cmd)
 
 
@@ -117,6 +129,8 @@ def main():
     ap.add_argument("video")
     ap.add_argument("-q", "--quality", default="h", choices=list(QUALITY))
     ap.add_argument("--fps", type=int, default=30)
+    ap.add_argument("--crf", type=int, choices=range(52), metavar="0-51",
+                    help="H.264 encoding quality (lower is better; 18 for YouTube masters)")
     ap.add_argument("-j", "--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2))
     ap.add_argument("--only", nargs="*", help="render only these scene classes (still stitches all)")
     ap.add_argument("--stitch-only", action="store_true")
@@ -125,13 +139,16 @@ def main():
     manifest = importlib.import_module(f"videos.{args.video}.manifest")
     scenes = manifest.SCENES
     media = ROOT / "media" / args.video
+    if args.crf is not None:
+        # Manim's animation hashes do not include our encoder override.
+        media = media / f"crf{args.crf}"
 
     if not args.stitch_only:
         todo = [s for s in scenes if not args.only or s[1] in args.only]
         print(f"Rendering {len(todo)} scene(s) at {QUALITY[args.quality]}{args.fps} with {args.jobs} job(s)...")
         failed = []
         with ThreadPoolExecutor(args.jobs) as pool:
-            futs = [pool.submit(render_scene, args.video, m, c, args.quality, args.fps, media) for m, c, _ in todo]
+            futs = [pool.submit(render_scene, args.video, m, c, args.quality, args.fps, media, args.crf) for m, c, _ in todo]
             for f in futs:
                 cls, dt, err = f.result()
                 print(f"  {'FAIL' if err else 'ok  '} {cls:<28} {dt:6.0f}s", flush=True)
@@ -158,7 +175,7 @@ def main():
         meta = mp4.with_suffix(".narration.json")
         lines = json.loads(meta.read_text())["lines"] if meta.exists() else []
         check_narration_audio(mp4, lines)
-        normalize(mp4, norm)
+        normalize(mp4, norm, lossless=args.crf is not None)
         dur = ffprobe_duration(norm)
         cues += subtitle_cues(lines, offset)
         if chapter:
@@ -186,7 +203,7 @@ def main():
     run([
         "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
         "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
-        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
+        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac", "-b:a", "384k" if args.crf is not None else "192k",
         "-c:s", "mov_text", "-metadata:s:s:0", "language=eng", "-movflags", "+faststart", str(final),
     ])
     yt = "\n".join(f"{int(s // 60)}:{int(s % 60):02d} {t}" for s, t in chapters)
