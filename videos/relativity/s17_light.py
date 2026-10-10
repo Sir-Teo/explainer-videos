@@ -9,7 +9,7 @@ from explainer import *  # noqa: F403
 from videos.relativity.common import redraw, BHShader, Raster, boxed, label, ladder, load, mtex, note, stack
 
 EHT = Path(__file__).resolve().parent / "data" / "eht_m87.jpg"
-NEWTON = C.POTENTIAL
+NEWTON = C.GRAV_POTENTIAL
 EINSTEIN = C.CURVATURE
 
 

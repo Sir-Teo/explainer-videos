@@ -247,10 +247,10 @@ class MaximalAging(VoiceoverScene):
         for w in why:
             if w.get_right()[0] > 7.0:
                 w.shift((7.0 - w.get_right()[0]) * RIGHT + DOWN * 0.45)
-        lag = Brace(rows[2][2], DOWN, color=C.POTENTIAL)
-        lagl = label(r"Newton's action: kinetic minus potential energy", font_size=26, color=C.POTENTIAL).next_to(lag, DOWN, buff=0.1)
+        lag = Brace(rows[2][2], DOWN, color=C.GRAV_POTENTIAL)
+        lagl = label(r"Newton's action: kinetic minus potential energy", font_size=26, color=C.GRAV_POTENTIAL).next_to(lag, DOWN, buff=0.1)
         res = mtex(r"\delta\tau = 0", r"\;\Longleftrightarrow\;", r"m\,\ddot{\mathbf x} = -m\,\nabla\Phi", font_size=44)
-        res[2].set_color(C.POTENTIAL)
+        res[2].set_color(C.GRAV_POTENTIAL)
         res.to_edge(DOWN, buff=0.6)
         rb = SurroundingRectangle(res, color=C.PROPER_TIME, buff=0.2, corner_radius=0.1)
         with self.voiceover(
@@ -278,7 +278,7 @@ class MaximalAging(VoiceoverScene):
             vo.wait_until("r")
             self.play(Write(res), Create(rb))
             vo.wait_until("m")
-            self.play(Indicate(res[2], color=C.POTENTIAL))
+            self.play(Indicate(res[2], color=C.GRAV_POTENTIAL))
         self.clear_scene()
 
     # ------------------------------------------------------------------

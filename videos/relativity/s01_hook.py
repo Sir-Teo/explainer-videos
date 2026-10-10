@@ -8,7 +8,7 @@ from explainer import *  # noqa: F403
 from videos.relativity.common import redraw, BHShader, boxed, label, load, mtex, note, polyline, rgba
 from videos.relativity.s16_mercury import orbit_xy
 
-NEWTON = C.POTENTIAL
+NEWTON = C.GRAV_POTENTIAL
 EINSTEIN = C.CURVATURE
 
 

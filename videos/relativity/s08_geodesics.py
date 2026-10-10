@@ -246,8 +246,8 @@ class Geodesics(VoiceoverScene):
         rows[0][2].set_color(C.CONNECTION)
         rows[1][2].set_color(C.CONNECTION)
         rows[2][0].set_color(C.CONNECTION)
-        rows[2][4].set_color(C.POTENTIAL)
-        rows[3][2].set_color(C.POTENTIAL)
+        rows[2][4].set_color(C.GRAV_POTENTIAL)
+        rows[3][2].set_color(C.GRAV_POTENTIAL)
         rows.move_to([-1.2, 0.1, 0])
         whys = VGroup(
             note(r"geodesic equation, space components", font_size=24),
@@ -257,7 +257,7 @@ class Geodesics(VoiceoverScene):
         )
         for w_, r_ in zip(whys, rows):
             w_.next_to(r_, RIGHT, buff=0.4)
-        box = SurroundingRectangle(rows[3], color=C.POTENTIAL, buff=0.18, corner_radius=0.1)
+        box = SurroundingRectangle(rows[3], color=C.GRAV_POTENTIAL, buff=0.18, corner_radius=0.1)
         with self.voiceover(
             "Now apply the geodesic equation to a slowly moving particle in the weak, static field we found earlier. "
             "<bookmark mark='a'/> Look at the space components of the acceleration. <bookmark mark='b'/> For a slow "

@@ -7,7 +7,7 @@ import numpy as np
 from explainer import *  # noqa: F403
 from videos.relativity.common import redraw, boxed, label, ladder, load, mtex, note, polyline, stack
 
-NEWTON = C.POTENTIAL
+NEWTON = C.GRAV_POTENTIAL
 EINSTEIN = C.CURVATURE
 
 
