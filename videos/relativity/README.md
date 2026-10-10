@@ -28,9 +28,11 @@ are integrations of Newtonian gravity, and parallel transport is an ODE solve on
 gravitational-wave chapter shows LIGO's public strain data. Exaggerations are labeled on screen with
 their factor, and schematics are labeled `schematic`.
 
-**Watch:** [`published/relativity.mp4`](../../published/relativity.mp4) (69 min, 1080p, subtitles and chapters embedded).
+**Watch on YouTube:** [General Relativity, Derived: From a Falling Elevator to Einstein's Field Equations](https://youtu.be/HqpjxO4fQmA) (1080p, English captions and chapters). See [YouTube rebuild details](YOUTUBE_REBUILD.md).
 
-<details><summary>Chapters</summary>
+**Original GitHub download:** [`published/relativity.mp4`](../../published/relativity.mp4) (69 min, 1080p, subtitles and chapters embedded).
+
+<details><summary>Original GitHub download chapters (YouTube timings are linked above)</summary>
 
 - `0:00` Gravity is not a force
 - `2:07` Newton's gravity, and what's wrong with it

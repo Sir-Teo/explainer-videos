@@ -28,9 +28,11 @@ histogram is counted from seeded Born-rule samples. Every number the narration q
 [`compute.py`](compute.py) and asserted against theory, either there or in the scene that uses it (see
 [Simulations](#simulations-computepy)). Schematics are labeled `schematic`.
 
-**Watch:** [`published/quantum.mp4`](../../published/quantum.mp4) (1080p, subtitles and chapters embedded).
+**Watch on YouTube:** [Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ](https://youtu.be/aaPbLBw0ZYc) (1080p, English captions and chapters). See [YouTube rebuild details](YOUTUBE_REBUILD.md).
 
-<details><summary>Chapters</summary>
+**Original GitHub download:** [`published/quantum.mp4`](../../published/quantum.mp4) (1080p, subtitles and chapters embedded).
+
+<details><summary>Original GitHub download chapters (YouTube timings are linked above)</summary>
 
 - `0:00` One electron at a time
 - `2:34` Part 1: Arrows that add
