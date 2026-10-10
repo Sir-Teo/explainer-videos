@@ -323,9 +323,11 @@ class WaveView(Group):
     wave on an energy level).  Call :meth:`set_psi` to redraw, or use :meth:`follow` to drive it from a tracker.
     """
 
-    def __init__(self, ax: Axes, x, psi, mode="density", scale=1.0, base=0.0, opacity=0.85, px_per_unit=90,
+    def __init__(self, ax: Axes, x, psi, mode="density", scale=1.0, base=0.0, opacity=0.85, px_per_unit=None,
                  outline=True, outline_color=WHITE, outline_width=2.2, x_window=None):
         super().__init__()
+        if px_per_unit is None:  # match the output resolution (60 px/unit at 480p, 135 at 1080p)
+            px_per_unit = config.pixel_width / config.frame_width
         self.ax, self.x, self.mode, self.yscale, self.base = ax, np.asarray(x, float), mode, scale, base
         self.opacity = opacity
         x0, x1 = (self.x[0], self.x[-1]) if x_window is None else x_window
@@ -619,7 +621,7 @@ class FieldMovie2D(ImageMobject):
             c = np.array(ManimColor(C.BORN).to_rgb(), np.float32)
             rgb = qcm.BG + t[..., None] * (c - qcm.BG)
         else:
-            rgb = qcm.phase_rgb(psi, vmax=self.vmax, gamma=self.gamma)
+            rgb = qcm.phase_rgb(psi, vmax=self.vmax, gamma=self.gamma, hot=0.0)
         return qcm.rgba(rgb, self.alpha)
 
     def frame_index(self):
@@ -706,4 +708,4 @@ def spectrum_color(lam_nm: float) -> ManimColor:
     else:
         r, g, b = 1.0, 0.0, 0.0
     f = 0.3 + 0.7 * (lam - 380) / 40 if lam < 420 else (0.3 + 0.7 * (780 - lam) / 80 if lam > 700 else 1.0)
-    return ManimColor.from_rgb((min(1, (r * f) ** 0.8), min(1, (g * f) ** 0.8), min(1, (b * f) ** 0.8)))
+    return ManimColor.from_rgb(tuple(float(min(1.0, (c * f) ** 0.8)) for c in (r, g, b)))  # floats: 0..1 scale

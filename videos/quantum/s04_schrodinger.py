@@ -67,7 +67,7 @@ class SchrodingerEquation(VoiceoverScene):
         w3 = why(d3, r"twice", font_size=22)
         place_whys([d1, d2, d3], [w1, w2, w3])
         with self.voiceover(
-            "Here's the most direct route, the one that guided Schrödinger in 1926. Start with the simplest "
+            "Here's the most direct route, the one most textbooks take. Start with the simplest "
             "wavefunction of all, a plane wave, e to the i k x minus omega t: a helix that spins as time goes on. "
             "<bookmark mark='r'/> We know two facts about it from experiment: its energy is h-bar omega, the "
             "Planck-Einstein relation, and its momentum is h-bar k, de Broglie's."

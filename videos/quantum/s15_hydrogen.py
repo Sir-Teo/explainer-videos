@@ -70,11 +70,16 @@ class Hydrogen(VoiceoverScene):
         ax = Axes(x_range=[0, 12, 2], y_range=[-1.1, 0.5, 0.5], x_length=4.6, y_length=2.8, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).to_corner(DR, buff=0.45)
         rs = np.linspace(0.05, 12, 600)
-        cols = (C.POTENTIAL, GREY_A, GREY_C)
-        curves = VGroup(*[polyline(ax, rs, np.clip(-1 / rs + l * (l + 1) / (2 * rs**2), -1.1, 0.5), color=c, stroke_width=3)
-                          for l, c in zip((0, 1, 2), cols)])
-        cl = VGroup(*[MathTex(rf"\ell = {l}", font_size=24, color=c).next_to(ax.c2p(12, -1 / 12 + l * (l + 1) / 288), UP, buff=0.05)
-                      .shift(LEFT * 0.35 + UP * 0.12 * l) for l, c in zip((0, 1, 2), cols)])
+        cols = [interpolate_color(ManimColor(C.POTENTIAL), ManimColor(C.MOMENTUM), l / 2) for l in (0, 1, 2)]
+
+        def veff_curve(l, c):
+            v = -1 / rs + l * (l + 1) / (2 * rs**2)
+            k = v <= 0.5  # draw only inside the axes (no flat clipped segments)
+            return polyline(ax, rs[k], np.maximum(v[k], -1.1), color=c, stroke_width=3)
+
+        curves = VGroup(*[veff_curve(l, c) for l, c in zip((0, 1, 2), cols)])
+        cl = VGroup(*[MathTex(rf"\ell = {l}", font_size=24, color=c) for l, c in zip((0, 1, 2), cols)]).arrange(RIGHT, buff=0.3)
+        cl.next_to(ax.c2p(12, 0.5), DL, buff=0.05)
         ax_l = note(r"$r$ in units of $a_0$").next_to(ax, DOWN, buff=0.08)
         with self.voiceover(
             "The potential depends only on the distance r, so separate the wavefunction into a radial part and an "
@@ -93,7 +98,7 @@ class Hydrogen(VoiceoverScene):
             "the Coulomb well plus a centrifugal barrier that keeps electrons with angular momentum away from the "
             "nucleus."
         ) as vo:
-            self.play(Write(r1))
+            self.play(Write(r1), FadeOut(wn))
             vo.wait_until("v")
             self.play(Write(r2), Create(ax), LaggedStart(*[Create(c) for c in curves], lag_ratio=0.3), FadeIn(cl), FadeIn(ax_l))
         self.wait(0.3)
@@ -158,14 +163,17 @@ class Hydrogen(VoiceoverScene):
         keep = rs <= 8.0
         ax = Axes(x_range=[0, 8, 2], y_range=[-1.2, 1.2, 0.5], x_length=6.0, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(LEFT * 3.3 + UP * 0.9)
-        def clip(u):
-            return np.clip(u, -1.2, 1.2)
-        c_lo = polyline(ax, rs[keep], clip(ulo[keep]), color=GREY_B, stroke_width=2.5)
-        c_hi = polyline(ax, rs[keep], clip(uhi[keep]), color=GREY_A, stroke_width=2.5)
-        c_ex = polyline(ax, rs[keep], clip(uex[keep]), color=C.ENERGY, stroke_width=4)
-        labs = VGroup(MathTex(r"E = 1.04\,E_1", font_size=26, color=GREY_B).next_to(c_lo.get_end(), LEFT, buff=0.1),
-                      MathTex(r"E = 0.96\,E_1", font_size=26, color=GREY_A).next_to(c_hi.get_end(), LEFT, buff=0.1),
-                      MathTex(r"E = E_1", font_size=28, color=C.ENERGY).next_to(ax.c2p(3.5, 0.35), UR, buff=0.05))
+        def inside(u):
+            out = np.nonzero(np.abs(u[keep]) > 1.2)[0]
+            n = out[0] if len(out) else keep.sum()
+            return rs[keep][:n], u[keep][:n]
+
+        c_lo = polyline(ax, *inside(ulo), color=GREY_B, stroke_width=2.5)
+        c_hi = polyline(ax, *inside(uhi), color=GREY_A, stroke_width=2.5)
+        c_ex = polyline(ax, *inside(uex), color=C.ENERGY, stroke_width=4)
+        labs = VGroup(MathTex(r"E = 1.04\,E_1", font_size=26, color=GREY_B).next_to(c_lo.get_end(), RIGHT, buff=0.12),
+                      MathTex(r"E = 0.96\,E_1", font_size=26, color=GREY_A).next_to(c_hi.get_end(), RIGHT, buff=0.12),
+                      MathTex(r"E = E_1", font_size=28, color=C.ENERGY).next_to(ax.c2p(7.0, 0.0), UP, buff=0.15))
         rl = MathTex(r"r/a_0", font_size=26).next_to(ax.x_axis.get_end(), RIGHT, buff=0.08)
         ul = MathTex(r"u(r)", font_size=26).next_to(ax.y_axis.get_end(), UP, buff=0.08)
         en = MathTex(r"E_n", r"=", r"-\frac{13.6\ \text{eV}}{n^2}", r",\qquad n = 1, 2, 3, \dots", font_size=40)
@@ -185,9 +193,8 @@ class Hydrogen(VoiceoverScene):
             rows.append(row)
         tab = num_table([r"n", r"\ell = 0", r"\ell = 1", r"\ell = 2", r"-\tfrac{1}{2n^2}"], rows, font_size=26,
                         col_colors=[WHITE, C.ENERGY, C.ENERGY, C.ENERGY, GREY_A]).to_corner(UR, buff=0.4)
-        tn = note(r"radial equation as an $8{,}000 \times 8{,}000$ matrix (energies in Hartree, $= 27.2$ eV)").next_to(tab, DOWN, buff=0.12)
-        if tn.get_right()[0] > 7.0:
-            tn.shift(LEFT * (tn.get_right()[0] - 7.0))
+        tn = note(r"radial equation as an $8{,}000 \times 8{,}000$ matrix\\(energies in Hartree, $= 27.2$ eV)")
+        tn.next_to(tab, DOWN, buff=0.12).align_to(tab, RIGHT)
         with self.voiceover(
             "For the other states, the same idea works with a polynomial in front of the exponential. Integrate outward "
             "from the nucleus at a trial energy: <bookmark mark='s'/> if the energy is a little off, the solution blows "
@@ -226,12 +233,12 @@ class Hydrogen(VoiceoverScene):
             lab = MathTex(rf"{k[0]},{k[1]},{k[2]}", font_size=24, color=GREY_A).next_to(im, DOWN, buff=0.02)
             imgs.add(Group(im, lab))
         imgs.arrange_in_grid(rows=2, buff=(0.15, 0.25)).move_to(DOWN * 0.15)
-        title = MathTex(r"(n,\ \ell,\ m)", font_size=32, color=GREY_A).to_edge(UP, buff=0.3)
+        title = MathTex(r"(n,\ \ell,\ m)", font_size=32, color=GREY_A).to_corner(UL, buff=0.4)
         cap = note(r"brightness: probability density, summed along the line of sight; color: phase; each image scaled to "
                    r"its own size ($\sim n^2 a_0$)").to_edge(DOWN, buff=0.2)
         wheel = corner_wheel(corner=UR, buff=0.15, radius=0.24)
         deg = MathTex(r"\text{states with energy } E_n:\ \sum_{\ell = 0}^{n-1}(2\ell + 1) = n^2", font_size=30, color=C.ENERGY)
-        deg.next_to(title, RIGHT, buff=0.8)
+        deg.next_to(title, RIGHT, buff=0.8).align_to(title, DOWN)
         with self.voiceover(
             "Here are the stationary states themselves, computed from the exact solutions and rendered as glowing "
             "clouds: the brightness is the probability density, the color is the phase. <bookmark mark='o'/> The first "
@@ -306,16 +313,17 @@ class Hydrogen(VoiceoverScene):
                               color=spectrum_color(l), stroke_width=5) for l in bal])
         ll = VGroup(*[MathTex(f"{l:.0f}", font_size=24, color=GREY_A).next_to([xof(l), strip.get_top()[1], 0], UP, buff=0.08)
                       for l in bal])
-        tr = VGroup(*[MathTex(rf"{n}\to 2", font_size=22, color=GREY_B).next_to([xof(l), strip.get_bottom()[1] - 0.2, 0], DOWN, buff=0.08)
+        tr = VGroup(*[MathTex(rf"{n}\to 2", font_size=22, color=GREY_B)
+                      .next_to([xof(l), strip.get_bottom()[1] - 0.2 - 0.3 * (n == 6), 0], DOWN, buff=0.08)
                       for n, l in zip((3, 4, 5, 6), bal)])
-        bt = label(r"the Balmer lines (nm, in air): $hc/\lambda = E_n - E_2$", font_size=26).next_to(strip, DOWN, buff=0.75)
+        bt = label(r"the Balmer lines (nm, in air): $hc/\lambda = E_n - E_2$", font_size=26).next_to(strip, DOWN, buff=1.0)
         with self.voiceover(
             "Finally, light. Remember the box: a superposition of two energies sloshes back and forth at the difference "
             "frequency. <bookmark mark='s'/> Here's the same thing in hydrogen: the ground state plus the 2 p state. The "
             "electron cloud swings up and down, a tiny oscillating charge, <bookmark mark='n'/> at the Bohr frequency, "
             "E two minus E one over h: about two and a half million billion times per second. <bookmark mark='l'/> An "
             "oscillating charge radiates, at exactly that frequency: 121.6 nanometers, the Lyman alpha line, the "
-            "brightest line in the ultraviolet sky."
+            "strongest line hydrogen emits."
         ) as vo:
             self.add(img)
             vo.wait_until("s")
@@ -327,8 +335,8 @@ class Hydrogen(VoiceoverScene):
         with self.voiceover(
             "Every spectral line is a Bohr frequency. <bookmark mark='b'/> Transitions down to the second level give "
             "the visible Balmer lines: the red line at 656 nanometers, then 486, 434 and 410, exactly where "
-            "astronomers find them in every hydrogen nebula in the sky. The colors of the universe are differences "
-            "between eigenvalues."
+            "astronomers find them in glowing hydrogen clouds across the sky. The colors of the universe are "
+            "differences between eigenvalues."
         ) as vo:
             vo.wait_until("b")
             self.play(FadeIn(strip), FadeIn(grad), LaggedStart(*[Create(l) for l in lines], lag_ratio=0.25), FadeIn(ll), FadeIn(tr),

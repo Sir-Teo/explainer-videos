@@ -28,16 +28,18 @@ class ClassicalLimit(VoiceoverScene):
                      r"\frac{\langle p\rangle}{m}", font_size=40)
         l2 = MathTex(r"\frac{d\langle p\rangle}{dt}", r"=", r"\tfrac{i}{\hbar}\big\langle[\hat H, \hat p]\big\rangle", r"=",
                      r"-\big\langle V'(x)\big\rangle", font_size=40)
-        col = stack(l1, l2, buff=0.5, align=1).to_edge(UP, buff=0.5)
+        gen = MathTex(r"\frac{d\langle A\rangle}{dt}", r"=", r"\tfrac{i}{\hbar}\big\langle[\hat H, \hat A]\big\rangle",
+                      font_size=36, color=GREY_A).to_edge(UP, buff=0.4)
+        col = stack(l1, l2, buff=0.5, align=1).next_to(gen, DOWN, buff=0.5)
         l1[4].set_color(C.MOMENTUM)
         l2[4].set_color(C.POTENTIAL)
         w1 = why(l1, r"$[\hat p^2, \hat x] = -2i\hbar\,\hat p$")
         w2 = why(l2, r"$[V, \hat p] = i\hbar\,V'$")
         place_whys([l1, l2], [w1, w2])
         name = label(r"Ehrenfest's theorem (1927): Newton's laws, for averages", font_size=30, color=C.CLASSICAL)
-        name.next_to(col, DOWN, buff=0.45)
+        name.next_to(col, DOWN, buff=0.4)
         cav = MathTex(r"\big\langle V'(x)\big\rangle", r"\ne", r"V'\big(\langle x\rangle\big)", r"\quad\text{in general}",
-                      font_size=36).next_to(name, DOWN, buff=0.45)
+                      font_size=36).next_to(name, DOWN, buff=0.4)
         ok = label(r"equal when $V'$ is linear: a free particle, a uniform force, the harmonic oscillator", font_size=28,
                    color=GREY_A).next_to(cav, DOWN, buff=0.3)
         with self.voiceover(
@@ -49,6 +51,7 @@ class ClassicalLimit(VoiceoverScene):
             "the force at the average position, <bookmark mark='o'/> unless the force is linear in x. For the harmonic "
             "oscillator it is, so the averages follow the classical motion exactly."
         ) as vo:
+            self.play(Write(gen))
             vo.wait_until("a")
             self.play(Write(l1), FadeIn(w1))
             vo.wait_until("b")
@@ -73,8 +76,9 @@ class ClassicalLimit(VoiceoverScene):
         ax1 = wave_axes((-7, 7), (0, 1.25), x_length=7.6, y_length=2.4).move_to(LEFT * 2.6 + UP * 1.55)
         ax2 = wave_axes((-7, 7), (0, 1.25), x_length=7.6, y_length=2.4).move_to(LEFT * 2.6 + DOWN * 1.85)
         V = lambda x: 0.045 * x**2  # noqa: E731
-        pots = VGroup(*[polyline(a, np.linspace(-6.6, 6.6, 200), V(np.linspace(-6.6, 6.6, 200)), color=C.POTENTIAL,
-                                 stroke_width=2).set_stroke(opacity=0.6) for a in (ax1, ax2)])
+        xv = np.linspace(-5.2, 5.2, 200)  # V(5.2) = 1.22: the arms stop at the top of each panel
+        pots = VGroup(*[polyline(a, xv, V(xv), color=C.POTENTIAL, stroke_width=2).set_stroke(opacity=0.6)
+                        for a in (ax1, ax2)])
         w1 = WaveView(ax1, xs, coh[0], mode="density", x_window=(-7, 7)).follow(t, frames_at(tf, coh))
         w2 = WaveView(ax2, xs, sq[0], mode="density", x_window=(-7, 7)).follow(t, frames_at(tf, sq))
 
@@ -89,11 +93,11 @@ class ClassicalLimit(VoiceoverScene):
             MathTex(r"\ket{\alpha} = e^{-|\alpha|^2/2}\sum_n \frac{\alpha^n}{\sqrt{n!}}\ket{n}", font_size=32),
             MathTex(r"\alpha(t) = \alpha\,e^{-i\omega t}", font_size=36, color=C.QTIME),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4).shift(UP * 1.4)
-        sig = always_redraw(lambda: VGroup(
-            MathTex(r"\sigma_x = " + num(float(np.interp(t.get_value(), tf, mc[:, 1])), 3), font_size=30),
-            MathTex(r"\sigma_x = " + num(float(np.interp(t.get_value(), tf, ms[:, 1])), 3), font_size=30)))
-        sig_pos = [ax1.get_right() + RIGHT * 0.9 + DOWN * 0.3, ax2.get_right() + RIGHT * 0.9 + DOWN * 0.3]
-        sig.add_updater(lambda m: [m[i].move_to(sig_pos[i]) for i in range(2)])
+        def width_readout(lab, mom):
+            return always_redraw(lambda: MathTex(r"\sigma_x = " + num(float(np.interp(t.get_value(), tf, mom[:, 1])), 3),
+                                                 font_size=30).next_to(lab, RIGHT, buff=0.6))
+
+        sig = [width_readout(l1, mc), width_readout(l2, ms)]
         bl = label(r"sepia dot: a classical particle", font_size=24, color=C.CLASSICAL).to_corner(DR, buff=0.3)
         sim = note(r"split-operator simulation, $\hbar = m = \omega = 1$").to_corner(DL, buff=0.25)
         wheel = corner_wheel(corner=UL, buff=0.15, radius=0.24, labels=False, title=False)
@@ -120,7 +124,7 @@ class ClassicalLimit(VoiceoverScene):
             self.add(b2, sig[1])
             vo.wait_until("s")
             self.play(t.animate.set_value(4 * PI), run_time=vo.remaining() + 2.0, rate_func=linear)
-        for m in (w1, w2, b1, b2, sig):
+        for m in (w1, w2, b1, b2, *sig):
             m.clear_updaters()
         self.clear_scene()
 
@@ -129,8 +133,8 @@ class ClassicalLimit(VoiceoverScene):
         o = load("oscillator")
         pw, xsw, Wt = o["pw"], o["xs_w"], o["W_orbit"]
         tW = o["t_frames"][::2][: len(Wt)]
-        ax = Axes(x_range=[-8, 8, 2], y_range=[-6, 6, 2], x_length=7.2, y_length=5.4, tips=False,
-                  axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(LEFT * 2.2 + DOWN * 0.45)
+        ax = Axes(x_range=[-8, 8, 2], y_range=[-6, 6, 2], x_length=6.8, y_length=5.1, tips=False,
+                  axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(LEFT * 2.4 + DOWN * 0.1)
         xl = MathTex("x", font_size=32, color=C.XPOS).next_to(ax.x_axis.get_end(), RIGHT, buff=0.1)
         pl = MathTex("p", font_size=32, color=C.MOMENTUM).next_to(ax.y_axis.get_end(), UP, buff=0.1)
         t = ValueTracker(0.0)
@@ -161,16 +165,17 @@ class ClassicalLimit(VoiceoverScene):
             return VGroup(sx, sp)
 
         sh = always_redraw(shadows)
-        wdef = MathTex(r"W(x, p)", r"=", r"\frac{1}{\pi\hbar}\int \psi^*(x + y)\,\psi(x - y)\,e^{2ipy/\hbar}\,dy", font_size=32)
-        wdef.to_corner(UR, buff=0.35)
+        wdef = MathTex(r"W(x, p)", r"=", r"\frac{1}{\pi\hbar}\int \psi^*(x + y)\,\psi(x - y)\,e^{2ipy/\hbar}\,dy", font_size=30)
+        wdef.to_corner(UR, buff=0.3)
+        col_left = np.array([1.75, 0.0, 0.0])  # the text column starts right of the plot
         props = VGroup(
             MathTex(r"\int W\,dp = |\psi(x)|^2", font_size=30, color=C.XPOS),
             MathTex(r"\int W\,dx = |\phi(p)|^2", font_size=30, color=C.MOMENTUM),
             label(r"real, but can be negative", font_size=26, color=GREY_A),
-        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(wdef, DOWN, buff=0.4).align_to(wdef, LEFT)
+        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(wdef, DOWN, buff=0.45).align_to(col_left, LEFT)
         leg = VGroup(VGroup(Square(0.22, fill_color=C.WIGNER_POS, fill_opacity=1, stroke_width=0), label(r"$W > 0$", font_size=24)).arrange(RIGHT, buff=0.12),
                      VGroup(Square(0.22, fill_color=C.WIGNER_NEG, fill_opacity=1, stroke_width=0), label(r"$W < 0$", font_size=24)).arrange(RIGHT, buff=0.12)
-                     ).arrange(RIGHT, buff=0.4).next_to(props, DOWN, buff=0.35).align_to(props, LEFT)
+                     ).arrange(RIGHT, buff=0.4).next_to(props, DOWN, buff=0.3).align_to(props, LEFT)
         area = label(r"a classical state is a point;\\a quantum state is a blob of area $\sim\hbar$", font_size=26,
                      color=C.CLASSICAL).next_to(leg, DOWN, buff=0.5).align_to(leg, LEFT)
         with self.voiceover(
@@ -185,7 +190,7 @@ class ClassicalLimit(VoiceoverScene):
             self.play(Write(wdef), FadeIn(img))
             vo.wait_until("s")
             self.add(sh)
-            self.play(FadeIn(sh), FadeIn(props[:2]), FadeIn(leg))
+            self.play(FadeIn(sh), FadeIn(props), FadeIn(leg))
         with self.voiceover(
             "For our coherent state, it's a round blob, <bookmark mark='o'/> and it simply rotates around the origin, "
             "riding on the circle a classical particle traces in phase space. <bookmark mark='a'/> A classical state "
@@ -207,6 +212,8 @@ class ClassicalLimit(VoiceoverScene):
         o = load("oscillator")
         pw, xw, W1, Wcat = o["pw"], o["xw"], o["W1"], o["Wcat"]
         assert abs(W1[len(pw) // 2, len(xw) // 2] + 1 / np.pi) < 2e-3
+        # the cat's Wigner function in closed form, for any hbar (ground-state blobs at x = +-3)
+        assert np.abs(cat_wigner(*np.meshgrid(xw, pw), 1.0) - Wcat).max() < 2e-3
         axL = Axes(x_range=[-6, 6, 2], y_range=[-5, 5, 2], x_length=5.4, y_length=4.5, tips=False,
                    axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(LEFT * 3.5 + DOWN * 0.3)
         axR = Axes(x_range=[-6, 6, 2], y_range=[-5, 5, 2], x_length=5.4, y_length=4.5, tips=False,
@@ -214,14 +221,22 @@ class ClassicalLimit(VoiceoverScene):
         selx = (xw >= -6) & (xw <= 6)
         selp = (pw >= -5) & (pw <= 5)
         imL = image_on(axL, wigner_rgba(W1[np.ix_(selp, selx)]), (-6, 6), (-5, 5))
-        imR = image_on(axR, wigner_rgba(Wcat[np.ix_(selp, selx)]), (-6, 6), (-5, 5))
-        tL = MathTex(r"\ket{1}:\ \text{one rung up}", font_size=32).next_to(axL, UP, buff=0.15)
-        tR = MathTex(r"\ket{\text{cat}} \propto \ket{\psi_0(x - 3)} + \ket{\psi_0(x + 3)}", font_size=30).next_to(axR, UP, buff=0.15)
-        cen = MathTex(r"W(0, 0) = -\frac{1}{\pi\hbar}", font_size=30, color=C.WIGNER_NEG).next_to(axL, DOWN, buff=0.2)
-        fr = label(r"fringes between the two blobs:\\interference, in momentum", font_size=26, color=C.WIGNER_NEG).next_to(axR, DOWN, buff=0.2)
+        hb = ValueTracker(1.0)
+        X, P = np.meshgrid(np.linspace(-6, 6, 720), np.linspace(-5, 5, 600))
+        p0, p1 = axR.c2p(-6, -5), axR.c2p(6, 5)
+        imR = Raster(lambda h: wigner_rgba(cat_wigner(X, P, h), vmax=1 / (np.pi * h)), hb, p1[0] - p0[0], p1[1] - p0[1],
+                     center=(p0 + p1) / 2)
         labs = VGroup(*[VGroup(MathTex("x", font_size=26, color=C.XPOS).next_to(a.x_axis.get_end(), RIGHT, buff=0.08),
                                MathTex("p", font_size=26, color=C.MOMENTUM).next_to(a.y_axis.get_end(), UP, buff=0.08))
                         for a in (axL, axR)])
+        tL = MathTex(r"\ket{1}:\ \text{one rung up}", font_size=32).next_to(labs[0][1], UP, buff=0.15)
+        tR = MathTex(r"\ket{\text{cat}} \propto \ket{\psi_0(x - 3)} + \ket{\psi_0(x + 3)}", font_size=30).next_to(labs[1][1], UP, buff=0.15)
+        cen = MathTex(r"W(0, 0) = -\frac{1}{\pi\hbar}", font_size=30, color=C.WIGNER_NEG).next_to(axL, DOWN, buff=0.2)
+        fr = label(r"fringes between the two blobs:\\interference, in momentum", font_size=26, color=C.WIGNER_NEG).next_to(axR, DOWN, buff=0.2)
+        hread = always_redraw(lambda: MathTex(r"\hbar = " + num(hb.get_value(), 2), font_size=32, color=C.HBAR)
+                              .next_to(axR, DOWN, buff=0.2))
+        hnote = MathTex(r"\text{blob width} \propto \sqrt{\hbar}, \quad \Delta p_{\text{fringe}} = \pi\hbar/3", font_size=26,
+                        color=GREY_A).next_to(hread, DOWN, buff=0.15)
         with self.voiceover(
             "But the Wigner function is not a probability distribution. <bookmark mark='o'/> Here's the first excited "
             "state of the oscillator: a ring, and right in the middle it goes negative, down to minus one over pi "
@@ -230,17 +245,32 @@ class ClassicalLimit(VoiceoverScene):
             "the interference between the two parts. The sign flips as you move along p, so the interference shows up "
             "in the momentum distribution, while the position distribution shows just two lumps."
         ) as vo:
+            self.play(Create(axL), FadeIn(labs[0]), Create(axR), FadeIn(labs[1]))
             vo.wait_until("o")
-            self.play(Create(axL), FadeIn(labs[0]), FadeIn(imL), FadeIn(tL))
+            self.play(FadeIn(imL), FadeIn(tL))
             self.play(FadeIn(cen))
             vo.wait_until("c")
-            self.play(Create(axR), FadeIn(labs[1]), FadeIn(imR), FadeIn(tR))
+            self.add(imR)
+            self.play(FadeIn(imR), FadeIn(tR))
             self.play(FadeIn(fr))
         with self.voiceover(
-            "Negative regions and fringes are the signatures of genuinely quantum states. In the classical limit, when "
-            "the distances involved are huge compared with the scale set by h-bar, the blobs shrink toward points and "
-            "the fringes become far too fine for any measurement to resolve, and the familiar classical world appears."
-        ):
-            pass
-        self.wait(0.3)
+            "Negative regions and fringes are the signatures of genuinely quantum states. <bookmark mark='h'/> In the "
+            "classical limit, when the distances involved are huge compared with the scale set by h-bar, the blobs "
+            "shrink toward points and the fringes become far too fine for any measurement to resolve, and the familiar "
+            "classical world appears."
+        ) as vo:
+            vo.wait_until("h")
+            self.play(FadeOut(fr), FadeIn(hread), FadeIn(hnote))
+            self.play(hb.animate.set_value(0.1), run_time=max(vo.remaining() - 0.5, 2.0), rate_func=smooth)
+        imR.clear_updaters()
+        hread.clear_updaters()
+        self.wait(0.6)
         self.clear_scene()
+
+
+def cat_wigner(x, p, hbar):
+    """W(x, p) of (psi_0(x - 3) + psi_0(x + 3)), normalized, with m = omega = 1: two blobs plus a fringe term."""
+    a = 3.0
+    g = lambda u: np.exp(-(u**2 + p**2) / hbar)  # noqa: E731
+    norm = 1 / (2 * (1 + np.exp(-a * a / hbar)))
+    return norm / (np.pi * hbar) * (g(x - a) + g(x + a) + 2 * g(x) * np.cos(2 * a * p / hbar))

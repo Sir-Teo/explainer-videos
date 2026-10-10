@@ -306,6 +306,11 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Qq]ubit\b", r"[\g<0>](/kjˈubɪt/)"),
     (r"\bPlanck's\b", "[Planck's](/plˈɑŋks/)"),
     (r"(?<!\[)\bPlanck\b(?!')", "[Planck](/plˈɑŋk/)"),
+    (r"\bBohr's\b", "[Bohr's](/bˈɔɹz/)"),
+    (r"(?<!\[)\bBohr\b(?!')", "[Bohr](/bˈɔɹ/)"),
+    (r"\bpicometers\b", "[picometers](/pˈikOmˌitəɹz/)"),
+    (r"\bbiprism\b", "[biprism](/bˈIpɹˌɪzəm/)"),
+    (r"\bbetween a and b\b", "between [a](/ˈA/) and b"),
     (r"\bCHSH\b", "C H S H"),
     (r"\bh-bar\b", "[h-bar](/ˈAʧ bˈɑɹ/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause

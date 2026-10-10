@@ -110,16 +110,18 @@ class Commutator(VoiceoverScene):
         cr = MathTex(r"[\hat x, \hat p]", r"=", r"\hat x\hat p - \hat p\hat x", r"=", r"i\hbar", font_size=58)
         cr[4].set_color(C.HBAR)
         crb = boxed(cr, color=C.HBAR, buff=0.25).next_to(col, DOWN, buff=0.6)
-        hist = label(r"Born and Jordan, 1925; engraved on Max Born's gravestone in G\"ottingen as $pq - qp = \frac{h}{2\pi i}$",
+        hist = label(r"Born and Jordan, 1925; engraved on Max Born's gravestone\\in G\"ottingen as $pq - qp = \frac{h}{2\pi i}$",
                      font_size=26, color=GREY_A).next_to(crb, DOWN, buff=0.3)
         mean = label(r"no function is both a spike in $x$ and a plane wave in $p$:\\the two sets of axes share no direction",
                      font_size=28).next_to(hist, DOWN, buff=0.35)
+        test = label(r"apply $\hat x\hat p$ and $\hat p\hat x$ to any function $f(x)$", font_size=30, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Here's the single most important equation in quantum mechanics. Apply position and momentum to a test "
             "function f, in both orders. <bookmark mark='a'/> Momentum first, then position: minus i h-bar x f prime. "
             "<bookmark mark='b'/> Position first, then momentum: the product rule gives an extra term, minus i h-bar f. "
             "<bookmark mark='c'/> Subtract, and everything cancels except i h-bar times f."
         ) as vo:
+            self.play(FadeIn(test))
             vo.wait_until("a")
             self.play(Write(l1), FadeIn(w1))
             vo.wait_until("b")
@@ -134,7 +136,7 @@ class Commutator(VoiceoverScene):
             "quantum mechanics flows from this one line, starting with the uncertainty principle."
         ) as vo:
             vo.wait_until("r")
-            self.play(Write(cr), Create(crb[0]))
+            self.play(FadeOut(test), Write(cr), Create(crb[0]))
             vo.wait_until("g")
             self.play(FadeIn(hist))
             vo.wait_until("m")

@@ -15,6 +15,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`published/rl.mp4`](published/rl.mp4) | [`videos/rl`](videos/rl) |
 | **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`published/stochastic.mp4`](published/stochastic.mp4) | [`videos/stochastic`](videos/stochastic) |
 | **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`published/trading.mp4`](published/trading.mp4) | [`videos/trading`](videos/trading) |
+| **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | __QLEN__ min | [`published/quantum.mp4`](published/quantum.mp4) | [`videos/quantum`](videos/quantum) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -49,6 +50,7 @@ python -m videos.riemann.compute             # real zeta zeros, prime counts, M�
 python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
 python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO, PPO, DPO, ...), Qwen3 mismatch (~3 h)
 python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
+python -m videos.quantum.compute             # every Schrödinger solution, Born-rule sample and orbital render of the quantum video (~15 min)
 # (trading's derived data, videos/trading/data/*.json, is committed; `python -m videos.trading.compute` re-downloads
 #  the 11.6 GB Nasdaq ITCH day, rescans it, and re-measures this machine)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
@@ -64,6 +66,7 @@ python tools/build.py frontier                # -> renders/frontier.mp4
 python tools/build.py rl                      # -> renders/rl.mp4
 python tools/build.py stochastic              # -> renders/stochastic.mp4
 python tools/build.py trading                 # -> renders/trading.mp4
+python tools/build.py quantum                 # -> renders/quantum.mp4
 ```
 
 Iterate on a single scene:
@@ -107,6 +110,9 @@ videos/<name>/
                            critic, KL-tilted optimum, pass@k, DPO, ScaleRL fits, Qwen3 bf16-vs-fp32 log-probs
                            (stochastic) seeded simulations: the 2^22-step hero path, Ito sums, GBM, Ornstein-Uhlenbeck,
                            a double well with a Fokker-Planck solve, Kakutani's walkers, delta hedging, Girsanov weights
+                           (quantum) split-operator Schrodinger solutions in 1D and 2D (double slit, packets, tunneling,
+                           coherent states), exact eigen-expansions (carpets), finite-difference spectra, Wigner functions,
+                           hydrogen orbital volume renders, Stern-Gerlach and CHSH Monte Carlo; colormap.py: phase -> hue
   fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
                            read with HTTP range requests; seeded toy computations of the mechanisms
   compute.py, native/      (trading) a full day of Nasdaq TotalView-ITCH scanned in C; order books in Python and C;

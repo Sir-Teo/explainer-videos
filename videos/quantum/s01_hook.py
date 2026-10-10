@@ -55,7 +55,8 @@ class Hook(VoiceoverScene):
             "<bookmark mark='d'/> But by three thousand, a pattern is appearing, <bookmark mark='e'/> and by seventy "
             "thousand it's unmistakable: stripes. Bright bands where many electrons land, dark bands where almost none "
             "ever do. That's an interference pattern, the signature of a wave. Akira Tonomura's team at Hitachi recorded "
-            "exactly this in 1989, one electron at a time, at these same five counts."
+            "this buildup in 1989, one electron at a time, at these same five counts, using an electron biprism, the "
+            "electron version of two slits."
         ) as vo:
             vo.wait_until("d")
             self.play(n.animate.set_value(TONOMURA[2]), run_time=2.0, rate_func=lambda a: a**1.5)
@@ -167,7 +168,7 @@ class Hook(VoiceoverScene):
             (r"5.\ Spin and entanglement", r"the Bloch sphere and Bell's theorem"),
         ]
         rows = VGroup(*[VGroup(label(a, font_size=34), label(b, font_size=26, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-                        for a, b in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(LEFT, buff=0.8)
+                        for a, b in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
         thumb = orbital_image("orb_321", 2.4)
         thumb.to_edge(RIGHT, buff=1.0).shift(UP * 1.4)
         proj = Projector(az=-0.5, el=0.3, scale=1.0, center=RIGHT * 4.6 + DOWN * 1.8)
@@ -175,6 +176,7 @@ class Hook(VoiceoverScene):
         arr = bs.arrow(bloch_vector(0.9, 0.7), stroke_width=4)
         prereq = note(r"you'll need: complex numbers, calculus, a little linear algebra. Every result is derived on "
                       r"screen; every picture is computed.").to_edge(DOWN, buff=0.3)
+        plan = label(r"The plan", font_size=44, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
             "In this video we'll build quantum mechanics from the ground up, with the mathematics on screen at every "
             "step. <bookmark mark='a'/> First, amplitudes: why probabilities don't add, but complex arrows do. "
@@ -185,6 +187,7 @@ class Hook(VoiceoverScene):
             "hydrogen atom. <bookmark mark='e'/> And finally spin and entanglement, ending with Bell's theorem. All you "
             "need is complex numbers, calculus and a little linear algebra."
         ) as vo:
+            self.play(FadeIn(plan))
             for m, r in zip("abcde", rows):
                 vo.wait_until(m)
                 anims = [FadeIn(r, shift=RIGHT * 0.2)]

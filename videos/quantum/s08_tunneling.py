@@ -81,7 +81,7 @@ class Tunneling(VoiceoverScene):
         band = barrier_band(ax, 0, a)
         wv = WaveView(ax, x, psi, mode="density", scale=1.0)
         yl = ylabel(ax, r"|\varphi(x)|^2", font_size=28)
-        lab_l = label(r"incoming $+$ reflected:\\they interfere", font_size=24, color=GREY_A).move_to(ax.c2p(-8.5, 3.55))
+        lab_l = label(r"incoming $+$ reflected: they interfere", font_size=24, color=GREY_A).next_to(ax.c2p(-7.0, 4.0), UP, buff=0.12)
         lab_r = label(rf"transmitted: $|t|^2 = {T:.3f}$", font_size=24, color=C.BORN).move_to(ax.c2p(10.5, 1.0))
         lab_m = label(r"decays inside", font_size=24, color=C.POTENTIAL).next_to(band, UP, buff=0.1)
         joins = VGroup(*[Circle(radius=0.22, color=WHITE, stroke_width=2).move_to(ax.c2p(xx, float(np.interp(xx, x, np.abs(psi) ** 2))))
@@ -287,8 +287,9 @@ class Tunneling(VoiceoverScene):
             "nanometer, roughly six in a thousand get through; <bookmark mark='c'/> through one nanometer, about four in "
             "a hundred thousand."
         ) as vo:
+            self.play(FadeIn(rows[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), Write(rows[1]))
+            self.play(Write(rows[1]))
             vo.wait_until("b")
             self.play(Write(rows[2]))
             vo.wait_until("c")
@@ -298,8 +299,8 @@ class Tunneling(VoiceoverScene):
             "above a surface; with a typical work function, the tunneling current changes about ninefold for every "
             "angstrom of gap, enough to map individual atoms. <bookmark mark='g'/> Tunneling is how alpha particles "
             "escape from nuclei, as Gamow explained in 1928. <bookmark mark='n'/> And the 2025 Nobel Prize in physics "
-            "went to experiments showing that a whole electric circuit, billions of electrons acting together, can "
-            "tunnel too."
+            "went to experiments showing that a whole superconducting circuit, with vast numbers of electrons moving "
+            "together as one, can tunnel too."
         ) as vo:
             vo.wait_until("s")
             self.play(FadeIn(uses[0], shift=RIGHT * 0.2))

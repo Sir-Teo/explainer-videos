@@ -65,17 +65,18 @@ class Outro(VoiceoverScene):
         gold = qcm.hex_rgb(C.BORN)
         carpet = ImageMobject(qcm.to_uint8(qcm.BG + d[..., None] * (gold - qcm.BG)))
         carpet.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
-        carpet.height = 3.0
-        carpet.width = 3.6
-        orb = orbital_image("orb_432", height=3.0)
+        carpet.stretch_to_fit_height(2.5).stretch_to_fit_width(3.4)
+        orb = orbital_image("orb_432", height=2.5)
         o = load("oscillator")
         wig = ImageMobject(wigner_rgba(o["Wcat"]))
         wig.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
-        wig.height, wig.width = 3.0, 3.6
-        mv.height = 3.0
+        wig.stretch_to_fit_height(2.5).stretch_to_fit_width(3.4)
+        mv.height = 2.5
         tiles = Group(framed(mv, r"two slits"), framed(carpet, r"a quantum carpet"), framed(orb, r"hydrogen, $(4, 3, 2)$"),
-                      framed(wig, r"a cat state's Wigner function")).arrange_in_grid(rows=2, buff=(0.6, 0.5)).move_to(DOWN * 0.1)
-        cap = note(r"every picture in this video was computed from the equations, not drawn").to_edge(DOWN, buff=0.2)
+                      framed(wig, r"a cat state's Wigner function")).arrange_in_grid(rows=2, buff=(0.8, 0.35))
+        cap = note(r"every picture in this video was computed from the equations, not drawn").to_edge(DOWN, buff=0.25)
+        tiles.next_to(cap, UP, buff=0.3)
+        assert tiles.get_top()[1] < 3.9
         with self.voiceover(
             "And every picture in this video, the wave through the slits, the carpet, the orbitals, the phase-space "
             "pictures, came from solving those equations, not from an artist's impression. A hundred years after "
