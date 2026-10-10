@@ -270,6 +270,11 @@ class Equivalence(VoiceoverScene):
             label(r"Pound \& Snider (1965): agreement to 1\%", font_size=28),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         title.move_to([0.9, 2.9, 0], aligned_edge=LEFT)
+        right_width = config.frame_width / 2 - title.get_left()[0] - 0.5
+        for row in (title, eq, *res):
+            if row.width > right_width:
+                row.scale_to_fit_width(right_width)
+        res.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         VGroup(eq, res).arrange(DOWN, buff=0.5, aligned_edge=LEFT).next_to(title, DOWN, buff=0.6).align_to(title, LEFT)
         with self.voiceover(
             "This was tested in 1959, in a tower at Harvard. <bookmark mark='t'/> Robert Pound and Glen Rebka sent gamma "

@@ -1,0 +1,65 @@
+name: Repair relativity YouTube layout
+on:
+  push:
+    branches: [codex/youtube-physics]
+permissions:
+  contents: read
+  actions: read
+env:
+  PYTHONWARNINGS: ignore
+  OMP_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  EXPLAINER_RENDER_THREADS: '2'
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install native rendering tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg libcairo2-dev libpango1.0-dev pkg-config espeak-ng fonts-dejavu texlive-latex-extra texlive-science texlive-fonts-recommended dvisvgm tipa cm-super
+          python3 -m pip install uv
+          uv venv --python 3.12 --seed
+          uv pip install --python .venv/bin/python torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python manim==0.19.0 kokoro==0.9.4 numpy==2.2.6 scipy==1.16.3 numba==0.62.1 transformers==4.57.6 huggingface-hub==0.36.2 soundfile sympy
+          uv pip install --python .venv/bin/python --no-deps -e .
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: physics-data-relativity
+          path: .cache/relativity
+          run-id: 38052032314
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: relativity-scenes-*
+          path: media/relativity/crf18/videos
+          merge-multiple: true
+          run-id: 38052032314
+          github-token: ${{ github.token }}
+      - name: Rerender the corrected chapter and master the complete video
+        run: .venv/bin/python -u tools/build.py relativity --crf 18 -j 1 --only Equivalence
+      - name: Verify the complete repaired master
+        run: .venv/bin/python -u tools/youtube_qa.py relativity
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: relativity-repaired-Equivalence
+          path: |
+            media/relativity/crf18/videos/s04_equivalence/1080p30/Equivalence.mp4
+            media/relativity/crf18/videos/s04_equivalence/1080p30/Equivalence.wav
+            media/relativity/crf18/videos/s04_equivalence/1080p30/Equivalence.narration.json
+          retention-days: 2
+          compression-level: 0
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: youtube-relativity
+          path: |
+            renders/relativity.mp4
+            renders/relativity.srt
+            renders/relativity.chapters.txt
+            renders/youtube/relativity.qa.json
+            renders/youtube/relativity-qa-*.jpg
+          retention-days: 2
+          compression-level: 0
+          if-no-files-found: error
