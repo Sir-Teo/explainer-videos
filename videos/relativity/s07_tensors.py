@@ -197,7 +197,7 @@ class Tensors(VoiceoverScene):
         for l in lines:
             # clip each line to the box by sampling
             pts = [l.point_from_proportion(t) for t in np.linspace(0, 1, 300)]
-            pts = [p for p in pts if BOX[0] <= p[0] <= BOX[1] and BOX[2] <= p[1] <= BOX[3]]
+            pts = [p for p in pts if BOX[0] <= p[0] <= BOX[1] - 0.9 and BOX[2] <= p[1] <= BOX[3]]
             if len(pts) > 1:
                 l.put_start_and_end_on(pts[0], pts[-1])
             else:
@@ -211,7 +211,7 @@ class Tensors(VoiceoverScene):
             s = k / crossings
             marks.add(Dot(P + s * V, radius=0.07, color=WHITE))
         title = label(r"A covector: a stack of level lines", font_size=34, color=C.COVECTOR).to_corner(UR, buff=0.5)
-        eq = mtex(r"\omega(\mathbf V)", r"=", r"\omega_\mu V^\mu", r"=", r"\text{number of lines crossed}", font_size=36)
+        eq = mtex(r"\omega(\mathbf V)", r"=", r"\omega_\mu V^\mu", r"=", r"\text{number of lines crossed}", font_size=32)
         eq[0].set_color(C.COVECTOR)
         eq[2].set_color(C.COVECTOR)
         eq.next_to(title, DOWN, buff=0.5).align_to(title, RIGHT)
@@ -223,8 +223,9 @@ class Tensors(VoiceoverScene):
         law[0].set_color(C.COVECTOR)
         law[3].set_color(C.COVECTOR)
         law.next_to(gradl, DOWN, buff=0.5).align_to(eq, RIGHT)
-        lawl = label(r"the inverse Jacobian: so $\omega_\mu V^\mu$ is the same in every coordinate system", font_size=24,
-                     color=GREY_A).next_to(law, DOWN, buff=0.15).align_to(eq, RIGHT)
+        lawl = VGroup(label(r"the inverse Jacobian: so $\omega_\mu V^\mu$", font_size=24, color=GREY_A),
+                      label(r"is the same in every coordinate system", font_size=24, color=GREY_A))
+        lawl.arrange(DOWN, aligned_edge=RIGHT, buff=0.08).next_to(law, DOWN, buff=0.15).align_to(eq, RIGHT)
         with self.voiceover(
             "The second kind of object is a covector. <bookmark mark='l'/> Picture it as a stack of parallel level lines, "
             "like the contour lines of a function on a map: the gradient of the function. <bookmark mark='a'/> A covector "

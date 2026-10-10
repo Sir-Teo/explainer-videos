@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, ladder, mtex, note, stack
+from videos.relativity.common import redraw, boxed, label, ladder, mtex, note, stack
 
 
 class Action(VoiceoverScene):
@@ -60,13 +60,13 @@ class Action(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def volume(self):
-        P0 = np.array([-4.0, -1.2, 0])
-        e1 = np.array([1.9, 0.0, 0])
+        P0 = np.array([-5.2, -2.2, 0])
+        e1 = np.array([2.7, 0.0, 0])
         tilt = ValueTracker(0.0)
 
         def e2():
             a = tilt.get_value()
-            return np.array([0.9 * a, 1.7 + 0.4 * a, 0])
+            return np.array([1.3 * a, 2.4 + 0.5 * a, 0])
 
         def cell():
             v = e2()
@@ -76,11 +76,12 @@ class Action(VoiceoverScene):
             a2 = Arrow(P0, P0 + v, buff=0, color=GREY_A, stroke_width=5, max_tip_length_to_length_ratio=0.15)
             return VGroup(poly, a1, a2)
 
-        cm = always_redraw(cell)
+        cm = redraw(cell)
         heads = MathTex(r"\text{area} = \sqrt{\det g}\;dx^1dx^2 =", font_size=34)
         heads.move_to([-3.0, 2.6, 0])
-        val = DecimalNumber(1.9 * 1.7, num_decimal_places=2, font_size=34)
+        val = DecimalNumber(2.7 * 2.4, num_decimal_places=2, font_size=34)
         val.add_updater(lambda m: m.set_value(abs(np.cross(e1, e2())[2])).next_to(heads, RIGHT, buff=0.15))
+        val.update()  # waits freeze frames when no updater is time-based
         rows = stack(
             mtex(r"\delta\det g", r"=", r"\det g\; g^{\mu\nu}\,\delta g_{\mu\nu}", font_size=38),
             mtex(r"\delta\sqrt{-g}", r"=", r"-\tfrac12\sqrt{-g}\;g_{\mu\nu}\,\delta g^{\mu\nu}", font_size=38),
@@ -144,8 +145,6 @@ class Action(VoiceoverScene):
         x0 = -2.2
         for r, w in zip(rows, whys):
             r.shift((x0 - r[1].get_center()[0]) * RIGHT)
-            if r.get_right()[0] > 6.9:
-                r.scale_to_fit_width(13.6 - 0.2).set_x(0)
             if w is not None:
                 w.next_to(r, DOWN, buff=0.08).align_to(r, RIGHT)
         step = ladder(self, rows, whys, keep=4, top=2.4, x=x0, buff=0.75)

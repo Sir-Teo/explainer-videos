@@ -41,8 +41,9 @@ class FieldEquations(VoiceoverScene):
             "divergence-free automatically, because T is. <bookmark mark='d'/> And in the limit of weak fields and slow "
             "motion, it has to give back Newton."
         ) as vo:
-            vo.wait_until("h")
             self.play(Write(head))
+            vo.wait_until("h")
+            self.play(Indicate(head[2], color=C.MATTER))
             for m, r in zip("abcd", reqs):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.2))
@@ -115,9 +116,8 @@ class FieldEquations(VoiceoverScene):
         x0 = -1.0
         for r, w in zip(rows, whys):
             r.shift((x0 - r[1].get_center()[0]) * RIGHT)
-            w.next_to(r, RIGHT, buff=0.35)
-            w.set_x(min(w.get_x(), 6.9 - w.width / 2))
-        step = ladder(self, rows, whys, keep=4, top=2.2, x=x0, buff=0.55)
+            w.next_to(r, DOWN, buff=0.08).align_to(r, RIGHT)
+        step = ladder(self, rows, whys, keep=4, top=2.2, x=x0, buff=0.62)
         proof = VGroup(
             label(r"In locally inertial coordinates ($\Gamma = 0$ at the point):", font_size=26, color=GREY_A),
             mtex(r"\nabla_\lambda R_{\rho\sigma\mu\nu} = \partial_\lambda\big(\partial_\mu\Gamma_{\rho\nu\sigma} - "
@@ -251,7 +251,7 @@ class FieldEquations(VoiceoverScene):
             note(r"so $R = -\kappa T$: the trace-reversed form", font_size=24),
             note(r"static dust: $T_{00} = \rho c^2$, $T = -\rho c^2$, $g_{00} \approx -1$", font_size=24),
             note(r"$c^2 R_{00} = \nabla^2\Phi$", font_size=24),
-            note(r"$= 4\pi G\rho$ requires", font_size=24),
+            note(r"so that $\nabla^2\Phi = 4\pi G\rho$", font_size=24),
         ]
         for r in rows:
             r[0].set_color(C.CURVATURE)
@@ -262,9 +262,8 @@ class FieldEquations(VoiceoverScene):
         x0 = -1.4
         for r, w in zip(rows, whys):
             r.shift((x0 - r[1].get_center()[0]) * RIGHT)
-            w.next_to(r, RIGHT, buff=0.35)
-            w.set_x(min(w.get_x(), 6.9 - w.width / 2))
-        step = ladder(self, rows, whys, keep=4, top=2.3, x=x0, buff=0.55)
+            w.next_to(r, DOWN, buff=0.08).align_to(r, RIGHT)
+        step = ladder(self, rows, whys, keep=4, top=2.3, x=x0, buff=0.62)
         with self.voiceover(
             "<bookmark mark='a'/> Start from G equals kappa T, and take the trace. <bookmark mark='b'/> The trace of the "
             "metric is four, so the left side becomes R minus two R: minus R equals kappa times the trace of T. "
@@ -304,9 +303,9 @@ class FieldEquations(VoiceoverScene):
         eq[5].set_color(C.MATTER)
         eb = boxed(eq, color=C.CURVATURE, buff=0.35).move_to(UP * 1.3)
         date = label(r"Einstein, 25 November 1915 \quad ($\Lambda$: 1917)", font_size=30, color=GREY_A).next_to(eb, UP, buff=0.3)
-        b1 = Brace(eq[0], DOWN, color=C.CURVATURE)
+        b1 = Brace(eq[0], DOWN, color=C.CURVATURE, buff=0.5)
         b1l = label(r"curvature", font_size=28, color=C.CURVATURE).next_to(b1, DOWN, buff=0.1)
-        b2 = Brace(eq[5], DOWN, color=C.MATTER)
+        b2 = Brace(eq[5], DOWN, color=C.MATTER, buff=0.5)
         b2l = label(r"energy, momentum, stress", font_size=28, color=C.MATTER).next_to(b2, DOWN, buff=0.1)
         stiff = mtex(r"\frac{8\pi G}{c^4} = " + sci(kap, 2) + r"\ \frac{\text{s}^2}{\text{kg}\cdot\text{m}}", font_size=36)
         stiff.next_to(VGroup(b1l, b2l), DOWN, buff=0.6).set_x(0)

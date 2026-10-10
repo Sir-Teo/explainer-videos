@@ -16,8 +16,8 @@ class Outro(VoiceoverScene):
     def recap(self):
         sh = BHShader(load("bh80"), exposure=0.8)
         t = ValueTracker(0.0)
-        W = 6.6
-        img = Raster(lambda v: sh(v), t, W, W * 720 / 1280, center=[3.55, 0.6, 0], alpha=0.0)
+        W = 5.3
+        img = Raster(lambda v: sh(v), t, W, W * 720 / 1280, center=[4.3, 0.4, 0], alpha=0.0)
 
         def item(head, formula, color):
             h = label(head, font_size=26, color=GREY_A)

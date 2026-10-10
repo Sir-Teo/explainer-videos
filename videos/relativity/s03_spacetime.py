@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, light_cone, mtex, note, part_card, st_axes, stack
+from videos.relativity.common import redraw, boxed, label, light_cone, mtex, note, part_card, st_axes, stack
 
 
 def clip_segment(f, x0, x1, t0, t1, n=200):
@@ -37,16 +37,16 @@ class Spacetime(VoiceoverScene):
         g.move_to(DOWN * 0.55)
         ax = g.ax
         head = label(r"Special relativity (1905): one spacetime", font_size=36).to_edge(UP, buff=0.35)
-        rest = Line(ax.c2p(-1.8, 0), ax.c2p(-1.8, 3.5), color=WHITE, stroke_width=4)
-        moving = Line(ax.c2p(0.2, 0), ax.c2p(0.2 + 0.45 * 3.5, 3.5), color=C.METRIC, stroke_width=4)
-        light = Line(ax.c2p(-0.6, 0), ax.c2p(2.9, 3.5), color=C.LIGHT, stroke_width=4)
-        lr = label(r"at rest", font_size=26).next_to(rest.get_end(), DOWN, buff=0.1).shift(LEFT * 0.6)
-        lm = label(r"moving at $0.45c$", font_size=26, color=C.METRIC).next_to(moving.get_end(), LEFT, buff=0.15).shift(DOWN * 0.4)
-        ll = label(r"light: $45^\circ$", font_size=26, color=C.LIGHT).next_to(light.get_end(), RIGHT, buff=0.1).shift(DOWN * 0.4)
+        rest = Line(ax.c2p(-2.4, 0), ax.c2p(-2.4, 3.5), color=WHITE, stroke_width=4)
+        moving = Line(ax.c2p(0.8, 0), ax.c2p(0.8 + 0.45 * 3.5, 3.5), color=C.METRIC, stroke_width=4)
+        light = Line(ax.c2p(-2.0, 0), ax.c2p(1.5, 3.5), color=C.LIGHT, stroke_width=4)
+        lr = label(r"at rest", font_size=26).next_to(rest.get_end(), LEFT, buff=0.15).shift(DOWN * 0.3)
+        lm = label(r"moving at $0.45c$", font_size=26, color=C.METRIC).next_to(moving.get_end(), RIGHT, buff=0.15).shift(DOWN * 0.3)
+        ll = label(r"light: $45^\circ$", font_size=26, color=C.LIGHT).next_to(light.get_end(), LEFT, buff=0.2).shift(DOWN * 0.3)
         ev = Dot(ax.c2p(-1.0, 1.6), radius=0.08)
         evl = label(r"an event: \emph{here}, \emph{now}", font_size=24).next_to(ev, LEFT, buff=0.12)
         with self.voiceover(
-            "Before gravity, we need the stage it acts on. Special relativity, Einstein's theory from 1905, treats space "
+            "Before gravity, we need the stage it plays out on. Special relativity, Einstein's theory from 1905, treats space "
             "and time as a single four-dimensional spacetime. <bookmark mark='d'/> We'll draw it with one space "
             "direction across and time going up, with time multiplied by the speed of light, c, so both axes are "
             "measured in meters. <bookmark mark='e'/> A point is an event: a place and a moment. <bookmark mark='w'/> "
@@ -96,7 +96,7 @@ class Spacetime(VoiceoverScene):
                                stroke_opacity=0.9 if k == 0 else 0.35))
             return G
 
-        grid_m = always_redraw(grid)
+        grid_m = redraw(grid)
         cone = VGroup(DashedLine(ax.c2p(0, 0), ax.c2p(3.0, 3.0), color=C.LIGHT, stroke_width=2),
                       DashedLine(ax.c2p(0, 0), ax.c2p(-3.0, 3.0), color=C.LIGHT, stroke_width=2))
         # hyperbola -(ct)^2 + x^2 = -s2 through the event
@@ -115,7 +115,7 @@ class Spacetime(VoiceoverScene):
             t = P[1] * ch + P[0] * sh
             return x, t
 
-        ev = always_redraw(lambda: Dot(ax.c2p(*event_pos()), radius=0.08, color=WHITE))
+        ev = redraw(lambda: Dot(ax.c2p(*event_pos()), radius=0.08, color=WHITE))
 
         heads = VGroup(MathTex(r"ct =", font_size=34), MathTex(r"x =", font_size=34),
                        MathTex(r"-(ct)^2 + x^2 =", font_size=34, color=C.PROPER_TIME))
@@ -133,6 +133,7 @@ class Spacetime(VoiceoverScene):
 
         for i, v in enumerate(vals):
             v.add_updater(upd(i))
+            v.update()  # waits freeze frames when no updater is time-based: show the right value from the start
         ro = VGroup(heads, vals)
 
         inv = mtex(r"\Delta s^2", r"=", r"-(c\,\Delta t)^2 + \Delta x^2 + \Delta y^2 + \Delta z^2", font_size=36)

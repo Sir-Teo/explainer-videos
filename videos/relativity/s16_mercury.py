@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, ladder, load, mtex, note, polyline, stack
+from videos.relativity.common import redraw, boxed, label, ladder, load, mtex, note, polyline, stack
 
 NEWTON = C.POTENTIAL
 EINSTEIN = C.CURVATURE
@@ -42,7 +42,7 @@ class Mercury(VoiceoverScene):
             j = max(2, int(k.get_value() * (n - 1)))
             return VMobject(stroke_color=EINSTEIN, stroke_width=2.5).set_points_as_corners(orbit_xy(phis[:j], u[:j], sc, center))
 
-        tr = always_redraw(trail)
+        tr = redraw(trail)
         title = label(r"Mercury's orbit turns: 43 arcseconds per century that Newton can't explain", font_size=30)
         title.to_edge(UP, buff=0.35)
         ex = note(r"computed orbit, effect exaggerated 590{,}000$\times$").to_corner(DR, buff=0.3)
@@ -190,10 +190,6 @@ class Mercury(VoiceoverScene):
             rr.shift((x0 - rr[1].get_center()[0]) * RIGHT)
             w.next_to(rr, DOWN, buff=0.1).align_to(rr, RIGHT)
         step = ladder(self, rows, whys, keep=3, top=2.3, x=x0, buff=0.7)
-        b1 = Brace(rows[2][2], DOWN, color=NEWTON)
-        b1l = label(r"Newton: a closed ellipse", font_size=26, color=NEWTON).next_to(b1, DOWN, buff=0.1)
-        b2 = Brace(rows[2][4], DOWN, color=EINSTEIN)
-        b2l = label(r"tiny: $3GM/(c^2 r) \sim 10^{-7}$", font_size=26, color=EINSTEIN).next_to(b2, DOWN, buff=0.1)
         with self.voiceover(
             "To get the shape of the orbit, change variables. <bookmark mark='a'/> Start from the energy equation. "
             "<bookmark mark='b'/> Use u, one over r, as the variable, and the angle phi instead of time: by conservation "
@@ -207,6 +203,14 @@ class Mercury(VoiceoverScene):
             step(1)
             vo.wait_until("c")
             step(2)
+        # braces only once step(2) has put the last row in place
+        b1 = Brace(rows[2][2], DOWN, color=NEWTON)
+        b1l = label(r"Newton: a closed ellipse", font_size=26, color=NEWTON).next_to(b1, DOWN, buff=0.1).align_to(b1, RIGHT)
+        b2 = Brace(rows[2][4], DOWN, color=EINSTEIN)
+        b2l = label(r"tiny: $3GM/(c^2 r) \sim 10^{-7}$", font_size=26, color=EINSTEIN).next_to(b2, DOWN, buff=0.1).align_to(b2, LEFT)
+        # the braces are neighbors: each label hangs away from the other
+        if b2l.get_left()[0] < b1l.get_right()[0] + 0.3:
+            b2l.shift((b1l.get_right()[0] + 0.3 - b2l.get_left()[0]) * RIGHT)
         with self.voiceover(
             "<bookmark mark='n'/> Without the last term, it's Newton's: its solution is a conic section, an ellipse "
             "for a bound planet. <bookmark mark='e'/> The last term is Einstein's correction, three G M u squared over c "
@@ -323,12 +327,12 @@ class Mercury(VoiceoverScene):
             j = max(2, int(k.get_value() * (n - 1)))
             g = VGroup(VMobject(stroke_color=EINSTEIN, stroke_width=2.5).set_points_as_corners(P[:j]))
             g.add(Dot(P[j - 1], radius=0.08, color=WHITE))
+            # a fixed number of submobjects: always_redraw's become() misaligns a family whose size changes
             for i in peri:
-                if i < j:
-                    g.add(Line(center, P[i], color=EINSTEIN, stroke_width=1.5, stroke_opacity=0.6))
+                g.add(Line(center, P[i], color=EINSTEIN, stroke_width=1.5, stroke_opacity=0.6 if i < j else 0.0))
             return g
 
-        tr = always_redraw(trail)
+        tr = redraw(trail)
         ex = note(rf"the exact orbit equation, with the effect exaggerated {exag / 1e3:.0f}{{,}}000$\times$", font_size=22)
         ex.to_corner(DL, buff=0.3)
         moon = Circle(radius=1.6, color=GREY_B, fill_color=GREY_D, fill_opacity=0.6).move_to([4.4, 0.4, 0])
@@ -341,7 +345,7 @@ class Mercury(VoiceoverScene):
             "<bookmark mark='a'/> Here's that effect, magnified about six hundred thousand times, by integrating the exact "
             "orbit equation around a far denser star. Each time the planet swings past its closest point, the ellipse has "
             "turned a little further, tracing out a rosette. <bookmark mark='m'/> For the real Mercury, forty-three "
-            "arcseconds is tiny: lay it next to the full Moon, and it's one forty-third of the Moon's width, accumulated "
+            "arcseconds is tiny: lay it next to the full Moon, and it's a forty-third of the Moon's width, accumulated "
             "over a century. Astronomers measured it anyway, and Newton couldn't account for it."
         ) as vo:
             self.play(FadeIn(sun), Create(ell), FadeIn(ex))

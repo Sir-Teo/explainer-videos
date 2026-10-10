@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import (Globe, View3D, arrow3d, curve3d, great_arc, label, latitude, load, mtex,
+from videos.relativity.common import (redraw, Globe, View3D, arrow3d, curve3d, great_arc, label, latitude, load, mtex,
                                       note, part_card, sphere_points, stack)
 from videos.relativity.geometry import polar_plane, same, sphere
 
@@ -65,9 +65,9 @@ class IntrinsicCurvature(VoiceoverScene):
             i = int(k.get_value() * (len(path) - 1))
             return Dot(view.point(path[i]), radius=0.07, color=C.VECTOR)
 
-        trail = always_redraw(lambda: curve3d(view, path[: max(2, int(k.get_value() * (len(path) - 1)) + 1)],
+        trail = redraw(lambda: curve3d(view, path[: max(2, int(k.get_value() * (len(path) - 1)) + 1)],
                                               color=C.VECTOR, stroke_width=3))
-        dot = always_redraw(ant)
+        dot = redraw(ant)
         claim = VGroup(
             label(r"Curvature can be measured", font_size=32),
             label(r"by someone who never leaves the surface:", font_size=32),
@@ -165,7 +165,7 @@ class IntrinsicCurvature(VoiceoverScene):
             for lo in lons:
                 p = sphere_points(np.pi / 2 - la, lo)
                 circles3d.append(small_circle(p, eps))
-        g3d = always_redraw(lambda: VGroup(*[curve3d(view, P, color=C.METRIC, stroke_width=2.2, back_opacity=0.0)
+        g3d = redraw(lambda: VGroup(*[curve3d(view, P, color=C.METRIC, stroke_width=2.2, back_opacity=0.0)
                                             for P in circles3d]))
         ax = Axes(x_range=[-np.pi, np.pi, np.pi / 2], y_range=[-np.pi / 2, np.pi / 2, np.pi / 4], x_length=7.6,
                   y_length=3.8, tips=False, axis_config={"stroke_color": GREY_B, "include_ticks": False})
@@ -229,8 +229,8 @@ class IntrinsicCurvature(VoiceoverScene):
         globe = Globe(view, grid_opacity=0.2)
         N, A, B = np.array([0, 0, 1.0]), np.array([1.0, 0, 0]), np.array([0, 1.0, 0])
         edges = [great_arc(N, A), great_arc(A, B), great_arc(B, N)]
-        tri = always_redraw(lambda: VGroup(*[curve3d(view, E, color=WHITE, stroke_width=4) for E in edges]))
-        marks = always_redraw(lambda: VGroup(
+        tri = redraw(lambda: VGroup(*[curve3d(view, E, color=WHITE, stroke_width=4) for E in edges]))
+        marks = redraw(lambda: VGroup(
             right_angle_mark(view, N, A - N * (A @ N), B - N * (B @ N), color=C.CURVATURE),
             right_angle_mark(view, A, N, B, color=C.CURVATURE),
             right_angle_mark(view, B, A, N, color=C.CURVATURE)))
@@ -304,7 +304,7 @@ class IntrinsicCurvature(VoiceoverScene):
             return arrow3d(view, paths[i], L * vecs[i], color=C.VECTOR, stroke_width=6)
 
         ghost = arrow3d(view, paths[0], L * vecs[0], color=C.VECTOR, stroke_width=4).set_opacity(0.35)
-        arr = always_redraw(arrow)
+        arr = redraw(arrow)
         rule = VGroup(
             label(r"\textbf{Parallel transport}", font_size=32, color=C.VECTOR),
             label(r"carry an arrow along the path,", font_size=28),

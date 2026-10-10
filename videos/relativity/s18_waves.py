@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, ladder, load, mtex, note, polyline, rgba, sci, stack
+from videos.relativity.common import redraw, boxed, label, ladder, load, mtex, note, polyline, rgba, sci, stack
 
 SNAP = Path(__file__).resolve().parent / "data" / "gw150914.json"
 
@@ -100,7 +100,7 @@ class Waves(VoiceoverScene):
                 g = VGroup(VMobject(stroke_color=C.WAVE, stroke_width=1.5, stroke_opacity=0.5).set_points_as_corners([*pts, pts[0]]))
                 g.add(*[Dot(p, radius=0.07, color=C.WAVE) for p in pts])
                 return g
-            return always_redraw(make)
+            return redraw(make)
 
         rp, rx = ring(cl, True), ring(cr, False)
         lp = mtex(r"h_+", font_size=40, color=C.WAVE).next_to(cl + UP * R * 1.25, UP, buff=0.1)
@@ -192,7 +192,7 @@ class Waves(VoiceoverScene):
             u = np.array([math.cos(p), math.sin(p), 0])
             return VGroup(Dot(cen + a * 0.55 * u, radius=0.2, color=GREY_A), Dot(cen - a * 0.45 * u, radius=0.18, color=GREY_A))
 
-        bm = always_redraw(binary)
+        bm = redraw(binary)
         ax = Axes(x_range=[-0.36, 0.0, 0.1], y_range=[-1.2, 1.2, 1], x_length=6.0, y_length=2.0, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to([-3.4, -2.6, 0])
         tt = np.linspace(-0.354, -0.004, 1500)
@@ -241,6 +241,7 @@ class Waves(VoiceoverScene):
         sc = 1 / np.max(np.abs(H1[sel]))
         ax = Axes(x_range=[-0.30, 0.05, 0.05], y_range=[-1.2, 1.2, 1], x_length=11.5, y_length=2.4, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to([0, 1.7, 0])
+        ax.y_axis.set_stroke(opacity=0)  # (it would sit at t = 0, right through the merger)
         cH = polyline(ax, t[sel], H1[sel] * sc, color=C.WAVE, stroke_width=2.5)
         cL = polyline(ax, t[sel], L1[sel] * sc, color=C.METRIC, stroke_width=2).set_stroke(opacity=0.8)
         leg = VGroup(label(r"Hanford", font_size=24, color=C.WAVE),

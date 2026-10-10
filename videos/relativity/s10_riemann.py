@@ -6,7 +6,7 @@ import numpy as np
 import sympy as sp
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import (Globe, View3D, boxed, curve3d, label, load, meridian, mtex, note, polyline,
+from videos.relativity.common import (redraw, Globe, View3D, boxed, curve3d, label, load, meridian, mtex, note, polyline,
                                       sphere_points, stack)
 from videos.relativity.geometry import first_order, polar_plane, same, sphere, weak_static
 
@@ -220,7 +220,7 @@ class Riemann(VoiceoverScene):
             g.add(Line(view.point(a[-1]), view.point(b[-1]), color=C.CURVATURE, stroke_width=4))
             return g
 
-        pr = always_redraw(pair)
+        pr = redraw(pair)
         eqs = VGroup(
             label(r"Two geodesics, parallel at the equator:", font_size=28),
             mtex(r"\frac{d^2\xi}{ds^2}", r"=", r"-K\,\xi", font_size=40),
@@ -280,8 +280,8 @@ class Riemann(VoiceoverScene):
         # direction's -1 makes the trace vanish, so a 3D ball keeps its volume -- checked on the ball item)
         bv = load("ball")["v_vac"]
         assert abs(bv[len(bv) // 10] - 1) < 1e-3 and area[len(area) // 3] > 1
-        zc = np.array([-4.2, -2.2, 0])
-        m = 1.1 / float(d["ring"])
+        zc = np.array([-4.6, -1.55, 0])
+        m = 0.88 / float(d["ring"])
         kk = ValueTracker(0.0)
         n = int(np.searchsorted(d["stretch"], 1.6)) + 1  # stop at 1.6x stretch
 
@@ -292,7 +292,7 @@ class Riemann(VoiceoverScene):
             return VGroup(VMobject(stroke_color=C.CURVATURE, stroke_width=2.5, fill_color=C.CURVATURE, fill_opacity=0.15)
                           .set_points_as_corners([*pts, pts[0]]), *[Dot(p, radius=0.05, color=C.CURVATURE) for p in pts])
 
-        rg = always_redraw(ring)
+        rg = redraw(ring)
         trace = VGroup(
             mtex(r"\text{trace: }\ c^2 R_{00}", r"=", r"\nabla^2\Phi", font_size=36),
             mtex(r"\text{vacuum: } \nabla^2\Phi = 0", r"\ \Rightarrow\ ", r"\text{a ball keeps its volume}", font_size=32),

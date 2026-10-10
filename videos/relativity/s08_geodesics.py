@@ -6,7 +6,7 @@ import numpy as np
 import sympy as sp
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import (Globe, View3D, boxed, curve3d, label, ladder, latitude, load, mtex, note,
+from videos.relativity.common import (redraw, Globe, View3D, boxed, curve3d, label, ladder, latitude, load, mtex, note,
                                       sphere_points, stack)
 from videos.relativity.geometry import first_order, polar_plane, same, sphere, weak_static
 
@@ -23,7 +23,7 @@ class Geodesics(VoiceoverScene):
     def straightest(self):
         d = load("sgeo")
         assert abs(float(d["arc_lat"]) - 0.785) < 1e-3 and abs(float(d["arc_gc"]) - 0.723) < 1e-3
-        view = View3D(center=[-3.3, -0.5, 0], scale=2.8, azimuth=-math.pi / 4 - math.pi / 2, elevation=0.75)
+        view = View3D(center=[-3.3, -0.5, 0], scale=2.9, azimuth=-math.pi / 4 - math.pi / 2, elevation=1.15)
         globe = Globe(view, grid_opacity=0.18)
         lat = math.radians(60)
         A = sphere_points(np.pi / 2 - lat, 0.0)
@@ -32,12 +32,12 @@ class Geodesics(VoiceoverScene):
         om = math.acos(A @ B)
         t = np.linspace(0, 1, 120)[:, None]
         arc_gc = (np.sin((1 - t) * om) * A + np.sin(t * om) * B) / math.sin(om)
-        c_lat = always_redraw(lambda: curve3d(view, arc_lat, color=GREY_A, stroke_width=4))
-        c_gc = always_redraw(lambda: curve3d(view, arc_gc, color=WHITE, stroke_width=5))
-        dots = always_redraw(lambda: VGroup(Dot(view.point(A), radius=0.08), Dot(view.point(B), radius=0.08)))
+        c_lat = redraw(lambda: DashedVMobject(curve3d(view, arc_lat, color=GOLD_A, stroke_width=4)[0], num_dashes=24))
+        c_gc = redraw(lambda: curve3d(view, arc_gc, color=WHITE, stroke_width=5))
+        dots = redraw(lambda: VGroup(Dot(view.point(A), radius=0.08), Dot(view.point(B), radius=0.08)))
         info = VGroup(
             label(r"two points at $60^\circ$ N, $90^\circ$ apart:", font_size=30),
-            mtex(r"\text{along the latitude: }", r"0.785\,R", font_size=34, color=GREY_A),
+            mtex(r"\text{along the latitude: }", r"0.785\,R", font_size=34, color=GOLD_A),
             mtex(r"\text{great circle: }", r"0.723\,R", font_size=34),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 1.2, 0])
         rule = VGroup(label(r"A \emph{geodesic}: a path whose length is stationary.", font_size=30, color=C.METRIC),
@@ -97,10 +97,8 @@ class Geodesics(VoiceoverScene):
         x0 = -1.2
         for r, w in zip(rows, whys):
             r.shift((x0 - r[1].get_center()[0]) * RIGHT)
-        for r, w in zip(rows, whys):
-            w.next_to(r, RIGHT, buff=0.35)
-            w.set_x(min(w.get_x(), 6.9 - w.width / 2))
-        step = ladder(self, rows, whys, keep=4, top=2.3, x=x0)
+            w.next_to(r, DOWN, buff=0.08).align_to(r, RIGHT)
+        step = ladder(self, rows, whys, keep=4, top=2.3, x=x0, buff=0.62)
         gam = mtex(r"\Gamma^\lambda{}_{\mu\nu}", r"=", r"\tfrac12\, g^{\lambda\sigma}\big(\partial_\mu g_{\sigma\nu} + "
                    r"\partial_\nu g_{\sigma\mu} - \partial_\sigma g_{\mu\nu}\big)", font_size=40)
         gam[0].set_color(C.CONNECTION)
@@ -161,8 +159,8 @@ class Geodesics(VoiceoverScene):
             n = max(2, int(k.get_value() * (curves.shape[1] - 1)) + 1)
             return VGroup(*[curve3d(view, P[:n], color=WHITE, stroke_width=2.8, back_opacity=0.3) for P in curves])
 
-        fan_m = always_redraw(fan)
-        sdot = always_redraw(lambda: Dot(view.point(start), radius=0.08, color=C.VECTOR))
+        fan_m = redraw(fan)
+        sdot = redraw(lambda: Dot(view.point(start), radius=0.08, color=C.VECTOR))
         gs = VGroup(
             mtex(r"\Gamma^\theta{}_{\phi\phi} = -\sin\theta\cos\theta", font_size=38, color=C.CONNECTION),
             mtex(r"\Gamma^\phi{}_{\theta\phi} = \Gamma^\phi{}_{\phi\theta} = \cot\theta", font_size=38, color=C.CONNECTION),
@@ -172,8 +170,9 @@ class Geodesics(VoiceoverScene):
             mtex(r"\ddot\theta - \sin\theta\cos\theta\,\dot\phi^2 = 0", font_size=38),
             mtex(r"\ddot\phi + 2\cot\theta\,\dot\theta\,\dot\phi = 0", font_size=38),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(gs, DOWN, buff=0.6).align_to(gs, LEFT)
-        meet = label(r"integrated in 12 directions: great circles, all meeting at the antipode", font_size=24,
-                     color=GREY_A).next_to(eqs, DOWN, buff=0.45).align_to(gs, LEFT)
+        meet = VGroup(label(r"integrated in 12 directions:", font_size=24, color=GREY_A),
+                      label(r"great circles, all meeting at the antipode", font_size=24, color=GREY_A))
+        meet.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(eqs, DOWN, buff=0.45).align_to(gs, LEFT)
         with self.voiceover(
             "Let's try it on the sphere. <bookmark mark='g'/> Plugging its metric into the formula, only two kinds of "
             "Christoffel symbols survive. <bookmark mark='e'/> So geodesics obey these two equations. <bookmark mark='f'/> "
