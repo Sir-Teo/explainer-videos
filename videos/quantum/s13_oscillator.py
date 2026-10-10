@@ -29,7 +29,8 @@ class Oscillator(VoiceoverScene):
         ax = Axes(x_range=[-3, 3, 1], y_range=[-1.2, 2.2, 1], x_length=7.0, y_length=4.2, tips=False,
                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(LEFT * 2.6 + DOWN * 0.3)
         V = lambda x: 0.25 * x**4 - 0.9 * x**2 + 0.25 * x + 0.3 + 0.1 * np.sin(3 * x)  # noqa: E731
-        xs = np.linspace(-2.8, 2.8, 400)
+        xs = np.linspace(-2.8, 2.8, 2000)
+        xs = xs[V(xs) <= 2.1]  # keep the curve inside its axes (and clear of the formula above)
         curve = polyline(ax, xs, V(xs), color=C.POTENTIAL, stroke_width=3.5)
         i0 = np.argmin(V(xs) + 10 * (xs > 0))  # the left minimum
         x0 = xs[i0]
@@ -157,7 +158,8 @@ class Oscillator(VoiceoverScene):
             "half h-bar omega. <bookmark mark='n'/> Every other state is a dagger applied n times, with energy h-bar "
             "omega times n plus one half. We never solved a second-order differential equation."
         ) as vo:
-            self.play(FadeOut(VGroup(c1, c2)), VGroup(e1, e2).animate.to_edge(UP, buff=0.4))
+            self.play(FadeOut(VGroup(c1, c2)), run_time=0.5)
+            self.play(VGroup(e1, e2).animate.to_edge(UP, buff=0.4))
             vo.wait_until("b")
             self.play(Write(b1))
             vo.wait_until("z")
@@ -165,7 +167,7 @@ class Oscillator(VoiceoverScene):
             vo.wait_until("g")
             self.play(Write(b3))
             vo.wait_until("n")
-            self.play(Write(b4), Create(b4b[0]), FadeIn(lnum))
+            self.play(Write(b4), Create(b4b[0]), FadeOut(VGroup(up, dn, ul, dl)), FadeIn(lnum))
         self.wait(0.3)
         self.clear_scene()
 

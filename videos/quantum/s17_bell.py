@@ -36,28 +36,41 @@ class Bell(VoiceoverScene):
         nL = label(r"product state:\\independent", font_size=26, color=GREY_A).next_to(axL, DOWN, buff=0.2)
         nR = label(r"entangled:\\where 1 is says where 2 is", font_size=26, color=GREY_A).next_to(axR, DOWN, buff=0.2)
         cut = DashedLine(axR.c2p(1.5, -5), axR.c2p(1.5, 5), color=C.ALICE, stroke_width=2.5)
-        cl = MathTex(r"x_1 = 1.5", font_size=24, color=C.ALICE).next_to(axR.c2p(1.5, -5), DOWN, buff=0.08)
+        cl = MathTex(r"x_1 = 1.5", font_size=24, color=C.ALICE).next_to(axR.c2p(1.5, -4.4), RIGHT, buff=0.1)
         wheel = corner_wheel(corner=UR, buff=0.2, radius=0.26)
+        # the opening: not two wavefunctions, one -- on the plane of pairs
+        q0 = MathTex(r"\psi_1(x_1)", r"\ \text{and}\ ", r"\psi_2(x_2)\ ?", font_size=44).move_to(UP * 0.4)
+        q0[0].set_color(C.ALICE)
+        q0[2].set_color(C.BOB)
+        no = Cross(q0, stroke_color=C.WIGNER_NEG, stroke_width=5).scale(1.05)
+        one = MathTex(r"\psi(x_1, x_2)", font_size=40)
+        one_n = label(r"one complex number for every pair of positions", font_size=28, color=GREY_A)
+        hd = VGroup(one, one_n).arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.3)
         side = VGroup(
-            MathTex(r"\sigma(x_2) = " + num(float(sd_e[0]), 2), font_size=28, color=C.BOB),
-            MathTex(r"\sigma(x_2 \mid x_1 = 1.5) = " + num(float(sd_e[1]), 2), font_size=28, color=C.BOB),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(axR, RIGHT, buff=0.3).shift(UP * 0.4)
-        if side.get_right()[0] > 7.0:
-            side.shift(LEFT * (side.get_right()[0] - 7.0))
+            MathTex(r"\sigma(x_2) = " + num(float(sd_e[0]), 2), font_size=26, color=C.BOB),
+            MathTex(r"\sigma(x_2 \mid x_1) = " + num(float(sd_e[1]), 2), font_size=26, color=C.BOB),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(axR, RIGHT, buff=0.55).shift(UP * 0.9)
+        assert side.get_right()[0] < 7.0
         assert abs(sd_e[0] - 1.14) < 0.01 and abs(sd_e[1] - 0.28) < 0.01
         with self.voiceover(
             "With two particles, quantum mechanics gets truly strange. The key point first: two particles don't have "
-            "two wavefunctions. They share one, a single complex number for every pair of positions, x one and x two. "
+            "two wavefunctions. <bookmark mark='o'/> They share one, a single complex number for every pair of positions, "
+            "<bookmark mark='x'/> x one and x two. "
             "<bookmark mark='p'/> If it factors into a function of x one times a function of x two, the particles are "
             "independent. <bookmark mark='e'/> But most two-particle states don't factor. In this one, the probability "
             "lies along the diagonal: <bookmark mark='c'/> find particle one at 1.5, and particle two is pinned near 1.5 "
             "too, though on its own it could have been almost anywhere. That's entanglement."
         ) as vo:
-            self.play(FadeIn(wheel))
+            self.play(FadeIn(wheel), Write(q0))
+            vo.wait_until("o")
+            self.play(Create(no))
+            self.play(FadeOut(VGroup(q0, no)), Write(one), FadeIn(one_n))
+            vo.wait_until("x")
+            self.play(Create(axL), Create(axR), FadeIn(labs))
             vo.wait_until("p")
-            self.play(Create(axL), FadeIn(imL), FadeIn(labs[0]), Write(tL), FadeIn(nL))
+            self.play(FadeIn(imL), Write(tL), FadeIn(nL))
             vo.wait_until("e")
-            self.play(Create(axR), FadeIn(imR), FadeIn(labs[1]), Write(tR), FadeIn(nR))
+            self.play(FadeIn(imR), Write(tR), FadeIn(nR))
             vo.wait_until("c")
             self.play(Create(cut), FadeIn(cl), FadeIn(side))
         self.wait(0.3)
@@ -207,7 +220,7 @@ class Bell(VoiceoverScene):
         sres = VGroup(MathTex(r"|S|_{\text{quantum}} = " + num(abs(Sq), 3), font_size=34, color=C.QUANTUM_BOUND),
                       MathTex(r"|S|_{\text{hidden}} = " + num(abs(Sl), 3), font_size=34, color=C.CLASSICAL)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.25).next_to(leg, DOWN, buff=0.6).align_to(leg, LEFT)
-        sn = note(r"$10^5$ pairs per setting, each side sampled independently from its rule").next_to(sres, DOWN, buff=0.2).align_to(sres, LEFT)
+        sn = note(r"$10^5$ pairs per setting,\\each side sampled independently from its rule").next_to(sres, DOWN, buff=0.2).align_to(sres, LEFT)
         ns = label(r"either way, Alice alone sees 50/50:\\no message travels between them", font_size=26, color=GREY_A).next_to(sn, DOWN, buff=0.4).align_to(sn, LEFT)
         with self.voiceover(
             "We can watch the difference in a simulation. <bookmark mark='q'/> Sample a hundred thousand pairs per "

@@ -42,8 +42,9 @@ def hue_rgb(phase, lightness=L_PHASE, chroma=C_PHASE) -> np.ndarray:
     return _oklab_to_srgb(np.full_like(h, lightness), chroma * np.cos(h), chroma * np.sin(h)).astype(np.float32)
 
 
-def phase_rgb(psi, vmax=None, gamma=0.75, floor=0.0) -> np.ndarray:
-    """Complex array -> RGB: hue = arg(psi), brightness = (|psi| / vmax)^gamma over the background."""
+def phase_rgb(psi, vmax=None, gamma=0.75, floor=0.0, hot=0.35) -> np.ndarray:
+    """Complex array -> RGB: hue = arg(psi), brightness = (|psi| / vmax)^gamma over the background; where |psi|
+    exceeds 0.85 vmax the color whitens by up to ``hot`` (0 keeps pure hues)."""
     psi = np.asarray(psi)
     mag = np.abs(psi)
     vmax = float(mag.max()) if vmax is None else float(vmax)
@@ -51,8 +52,8 @@ def phase_rgb(psi, vmax=None, gamma=0.75, floor=0.0) -> np.ndarray:
     t = np.maximum(t, floor)
     col = hue_rgb(np.angle(psi))
     # Very bright spots turn slightly whiter (like light piling up), keeping the hue readable.
-    hot = np.clip((np.abs(psi) / max(vmax, 1e-30) - 0.85) / 0.6, 0, 1)[..., None] * 0.35
-    col = col + (1 - col) * hot
+    w = np.clip((np.abs(psi) / max(vmax, 1e-30) - 0.85) / 0.6, 0, 1)[..., None] * hot
+    col = col + (1 - col) * w
     return BG + t * (col - BG)
 
 

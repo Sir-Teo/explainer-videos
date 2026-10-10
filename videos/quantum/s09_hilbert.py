@@ -32,19 +32,19 @@ class HilbertSpace(VoiceoverScene):
         ax = wave_axes((-0.02, 1.02), (-2.9, 2.9), x_length=6.2, y_length=3.6).move_to(LEFT * 3.2 + UP * 0.3)
         wv = WaveView(ax, x, psi, mode="real", scale=1.0, x_window=(0, 1))
         yl = ylabel(ax, r"\mathrm{Re}\,\psi", font_size=28)
-        N = 12
+        N = 9
         xs = np.linspace(0, 1, N + 2)[1:-1]
         vals = np.interp(xs, x, psi.real) + 1j * np.interp(xs, x, psi.imag)
         sticks = VGroup(*[Line(ax.c2p(xx, 0), ax.c2p(xx, v.real), color=WHITE, stroke_width=3) for xx, v in zip(xs, vals)])
         dots = VGroup(*[Dot(ax.c2p(xx, v.real), radius=0.05, color=WHITE) for xx, v in zip(xs, vals)])
         entries = [[rf"\psi_{{{i + 1}}}"] for i in range(N)]
-        vec = Matrix(entries, element_to_mobject_config={"font_size": 30}, v_buff=0.48).scale(0.82)
-        vec.move_to(RIGHT * 1.6 + UP * 0.2)
+        vec = Matrix(entries, element_to_mobject_config={"font_size": 30}, v_buff=0.42).scale(0.8)
+        vec.move_to(RIGHT * 2.4 + UP * 0.5)
         vl = MathTex(r"\ket{\psi} \;=", font_size=38).next_to(vec, LEFT, buff=0.2)
         cn = MathTex(r"\in \mathbb{C}^N", font_size=36).next_to(vec, RIGHT, buff=0.2)
         ip = MathTex(r"\braket{f}{g}", r"=", r"\sum_i f_i^*\, g_i\,\Delta x", r"\;\xrightarrow{\;N\to\infty\;}\;",
-                     r"\int f^*(x)\,g(x)\,dx", font_size=34).to_edge(DOWN, buff=1.2)
-        nrm = MathTex(r"\braket{\psi}{\psi}", r"=", r"\int |\psi|^2\,dx", r"=", r"1", font_size=34, color=C.BORN).next_to(ip, DOWN, buff=0.3)
+                     r"\int f^*(x)\,g(x)\,dx", font_size=34).to_edge(DOWN, buff=1.0)
+        nrm = MathTex(r"\braket{\psi}{\psi}", r"=", r"\int |\psi|^2\,dx", r"=", r"1", font_size=34, color=C.BORN).next_to(ip, DOWN, buff=0.22)
         with self.voiceover(
             "Step back and look at what we've been doing. A wavefunction is a list of complex numbers, one for each "
             "point. <bookmark mark='s'/> Sample it at N points, <bookmark mark='v'/> and it literally is a vector with N "
@@ -170,12 +170,14 @@ class HilbertSpace(VoiceoverScene):
         pre = MathTex(r"\hat H", r"=", r"\frac{\hbar^2}{2m\,\Delta x^2}", font_size=38)
         pre[0].set_color(C.ENERGY)
         grp = VGroup(pre, M).arrange(RIGHT, buff=0.2).scale(0.8).next_to(d1, DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
+        head = label(r"The Hamiltonian as a matrix", font_size=36, color=GREY_A).to_edge(UP, buff=0.45).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
             "If states are vectors, then the Hamiltonian, which acts on states, must be a matrix. Let's build it. "
             "<bookmark mark='d'/> On a grid, the second derivative at one point is the neighbors minus twice the point "
             "itself, over the spacing squared. <bookmark mark='m'/> So minus h-bar squared over two m times the second "
             "derivative is this matrix: twos on the diagonal, minus ones beside it, zeros everywhere else."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("d")
             self.play(Write(d1))
             vo.wait_until("m")

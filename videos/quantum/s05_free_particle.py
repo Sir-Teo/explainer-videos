@@ -34,7 +34,7 @@ class FreeParticle(VoiceoverScene):
         wv.add_updater(lambda m: m.set_psi(psi_n(int(n_tr.get_value()))))
         # the components: little bars of weight w(k), drawn above
         kax = Axes(x_range=[k0 - 1.6, k0 + 1.6, 0.5], y_range=[0, 1.1, 1], x_length=6.5, y_length=1.9, tips=False,
-                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(UP * 1.9)
+                   axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to(RIGHT * 2.3 + UP * 1.6)
 
         def bars():
             n = int(n_tr.get_value())

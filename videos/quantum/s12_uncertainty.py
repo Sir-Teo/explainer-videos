@@ -37,7 +37,6 @@ class Uncertainty(VoiceoverScene):
             "state. <bookmark mark='t'/> It isn't about measurements disturbing things. It's a property of the state "
             "itself, and we can now prove it in a few lines."
         ) as vo:
-            vo.wait_until("h")
             self.play(Write(hu))
             vo.wait_until("n")
             self.play(FadeIn(hist))
@@ -122,7 +121,6 @@ class Uncertainty(VoiceoverScene):
             "inner product squared. <bookmark mark='b'/> A complex number's size squared is at least its imaginary part "
             "squared, and the imaginary part is the difference between the inner product and its conjugate, over two i."
         ) as vo:
-            vo.wait_until("s")
             self.play(Write(setup))
             vo.wait_until("n")
             self.play(FadeIn(sn))
@@ -166,14 +164,16 @@ class Uncertainty(VoiceoverScene):
         col2 = VGroup(e1, w1, e2, w2, e3).arrange(DOWN, buff=0.28).to_edge(UP, buff=0.6)
         res = label(r"the only states with $\sigma_x\sigma_p = \hbar/2$ exactly: \textbf{Gaussians}", font_size=34,
                     color=C.HBAR).next_to(col2, DOWN, buff=0.6)
+        q = label(r"When is $\sigma_x\sigma_p = \hbar/2$ exactly?", font_size=40).move_to(UP * 0.3)
         with self.voiceover(
             "When is the bound reached exactly? <bookmark mark='a'/> Both inequalities must be tight: g must be "
             "parallel to f, with a purely imaginary factor. <bookmark mark='b'/> For position and momentum, that's a "
             "first-order differential equation, <bookmark mark='c'/> and its solution is a Gaussian. So Gaussian "
             "packets, the ones we've been using all along, are the least uncertain states there are."
         ) as vo:
+            self.play(FadeIn(q))
             vo.wait_until("a")
-            self.play(Write(e1), FadeIn(w1))
+            self.play(FadeOut(q), Write(e1), FadeIn(w1))
             vo.wait_until("b")
             self.play(Write(e2), FadeIn(w2))
             vo.wait_until("c")
@@ -196,8 +196,19 @@ class Uncertainty(VoiceoverScene):
                          stroke_width=0, fill_color=C.HBAR, fill_opacity=0.18)
         forb = label(r"forbidden", font_size=30, color=C.HBAR).move_to(ax.c2p(-0.75, -0.65))
         ll = MathTex(r"\sigma_x\sigma_p = \tfrac{\hbar}{2}", font_size=30, color=C.HBAR).move_to(ax.c2p(0.45, -1.0 + 0.12)).shift(UP * 0.35)
-        xl = MathTex(r"\sigma_x", font_size=32, color=C.XPOS).next_to(ax.x_axis.get_end(), RIGHT, buff=0.1)
-        yl = MathTex(r"\sigma_p", font_size=32, color=C.MOMENTUM).next_to(ax.y_axis.get_end(), UP, buff=0.1)
+        ax.x_axis.set_stroke(opacity=0)
+        ax.y_axis.set_stroke(opacity=0)
+        frame_l = VGroup(Line(ax.c2p(-1.2, -1.0), ax.c2p(0.8, -1.0), color=GREY_B, stroke_width=2),
+                         Line(ax.c2p(-1.2, -1.0), ax.c2p(-1.2, 1.4), color=GREY_B, stroke_width=2))
+        tks = VGroup()
+        for v, s_ in ((-1, "0.1"), (0, "1")):
+            tks.add(Line(ax.c2p(v, -1.0), ax.c2p(v, -1.0) + UP * 0.1, color=GREY_B),
+                    MathTex(s_, font_size=24, color=GREY_B).next_to(ax.c2p(v, -1.0), DOWN, buff=0.1))
+        for v, s_ in ((-1, "0.1"), (0, "1"), (1, "10")):
+            tks.add(Line(ax.c2p(-1.2, v), ax.c2p(-1.2, v) + RIGHT * 0.1, color=GREY_B),
+                    MathTex(s_, font_size=24, color=GREY_B).next_to(ax.c2p(-1.2, v), LEFT, buff=0.1))
+        xl = MathTex(r"\sigma_x", font_size=32, color=C.XPOS).next_to(ax.c2p(0.8, -1.0), RIGHT, buff=0.1)
+        yl = MathTex(r"\sigma_p", font_size=32, color=C.MOMENTUM).next_to(ax.c2p(-1.2, 1.4), UP, buff=0.1)
         logn = note(r"both axes logarithmic; $\hbar = m = 1$ (box: $L = 1$; oscillator: $\omega = 1$)").to_corner(DL, buff=0.25)
 
         def dots(k, color):
@@ -224,7 +235,7 @@ class Uncertainty(VoiceoverScene):
             "<bookmark mark='o'/> The harmonic oscillator's states, which we'll meet next, sit at n plus one half "
             "times h-bar."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(logn), Create(line))
+            self.play(Create(frame_l), FadeIn(tks), FadeIn(xl), FadeIn(yl), FadeIn(logn), Create(line))
             vo.wait_until("f")
             self.play(FadeIn(region), FadeIn(forb), FadeIn(ll))
             vo.wait_until("g")
@@ -253,7 +264,8 @@ class Uncertainty(VoiceoverScene):
         sr[4].set_color(C.HBAR)
         srl = label(r"Schr\"odinger, 1930: keep the real part we dropped", font_size=26, color=GREY_A).next_to(sr, DOWN, buff=0.2)
         cl = MathTex(r"\text{covariance of } x \text{ and } p", font_size=28, color=C.CURRENT).next_to(srl, DOWN, buff=0.15)
-        rows = [[num(t, 0), num(sx, 3), num(sp, 3), num(cv, 3), num((sx * sp) ** 2 - cv**2, 4)] for t, sx, sp, cv in traj[::15]]
+        rows = [[num(t, 1), num(sx, 3), num(sp, 3), num(cv + 0.0, 3).replace("{-}0.000", "0.000"), num((sx * sp) ** 2 - cv**2, 4)]
+                for t, sx, sp, cv in traj[::15]]
         assert all(abs(float(r[4]) - 0.25) < 1e-4 for r in rows)
         from videos.quantum.common import num_table
         tab = num_table([r"t", r"\sigma_x", r"\sigma_p", r"\text{cov}", r"\sigma_x^2\sigma_p^2 - \text{cov}^2"], rows, font_size=32,

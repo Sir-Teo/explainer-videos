@@ -46,7 +46,7 @@ class Measurement(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def geometry(self):
-        proj = Projector(az=-0.75, el=0.38, scale=2.3, center=LEFT * 2.6 + DOWN * 0.4)
+        proj = Projector(az=-0.75, el=0.38, scale=2.9, center=LEFT * 2.8 + DOWN * 0.6)
         v = np.array([0.48, 0.6, 0.64])
         assert abs(np.linalg.norm(v) - 1) < 1e-12
         state = ValueTracker(0.0)  # 0: superposition, 1: collapsed onto axis 2
@@ -141,7 +141,7 @@ class Measurement(VoiceoverScene):
         def hist():
             n = int(k.get_value())
             cnt = np.bincount(shots[:n], minlength=18)[1:18] / max(n, 1)
-            return bar_chart(bax, np.arange(1, 18), cnt, width=0.27, color=C.BORN, opacity=0.85)
+            return bar_chart(bax, np.arange(1, 18), np.minimum(cnt, 0.17), width=0.27, color=C.BORN, opacity=0.85)
 
         hb = always_redraw(hist)
         cnt_l = always_redraw(lambda: MathTex(r"\text{measurements: }" + f"{int(k.get_value()):,}".replace(",", "{,}"),

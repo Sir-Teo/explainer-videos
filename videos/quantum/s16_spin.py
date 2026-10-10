@@ -106,7 +106,7 @@ class Spin(VoiceoverScene):
         arr = always_redraw(lambda: bs.arrow(bloch_vector(th.get_value(), ph.get_value())))
         ang = always_redraw(lambda: VGroup(
             MathTex(r"\theta = " + f"{np.degrees(th.get_value()):.0f}" + r"^\circ", font_size=30),
-            MathTex(r"\varphi = " + f"{np.degrees(ph.get_value()):.0f}" + r"^\circ", font_size=30)).arrange(DOWN, aligned_edge=LEFT)
+            MathTex(r"\varphi = " + f"{round(np.degrees(ph.get_value())) % 360}" + r"^\circ", font_size=30)).arrange(DOWN, aligned_edge=LEFT)
             .to_corner(DL, buff=0.6))
         anti = label(r"perpendicular states ($\ket{\uparrow}$, $\ket{\downarrow}$)\\are \emph{opposite} points: hence $\theta/2$",
                      font_size=26, color=C.BLOCH).to_corner(DL, buff=0.5).shift(UP * 1.4)
@@ -197,10 +197,12 @@ class Spin(VoiceoverScene):
         blocks = VGroup(*[Line([xs_[i] + 0.65, 1.25, 0], [xs_[i] + 0.95, 1.25, 0], color=GREY_C, stroke_width=6) for i in range(2)])
         al = VGroup(MathTex(r"\uparrow_z", font_size=24, color=C.SPIN_UP).next_to(arrows[0], UP, buff=0.05),
                     MathTex(r"\uparrow_x", font_size=24, color=C.SPIN_UP).next_to(arrows[1], UP, buff=0.05))
-        res = MathTex(r"\uparrow_z:\ " + str(zxz), r",\quad", r"\downarrow_z:\ " + str(1000 - zxz), font_size=30).next_to(seq[2], DOWN, buff=0.45)
+        res = MathTex(r"\uparrow_z:\ " + str(zxz), r",\quad", r"\downarrow_z:\ " + str(1000 - zxz), font_size=30)
+        res.next_to(seq, DOWN, buff=0.45).align_to(seq, RIGHT)
         rn = label(r"measuring $x$ erased what we knew about $z$", font_size=26, color=GREY_A).next_to(res, DOWN, buff=0.2)
-        if rn.get_right()[0] > 7.0:
-            rn.shift(LEFT * (rn.get_right()[0] - 7.0))
+        rn.align_to(seq, RIGHT)
+        setup = label(r"prepare $\uparrow_z$, then measure along $\mathbf n$, tilted by $\theta$", font_size=30,
+                      color=GREY_A).to_corner(UL, buff=0.5)
         sch = note(r"schematic: the other beam is blocked after each magnet").next_to(seq, UP, buff=0.2)
         with self.voiceover(
             "Now chain measurements. Prepare atoms with spin up along z, then measure along a direction n tilted by an "
@@ -209,10 +211,11 @@ class Spin(VoiceoverScene):
             "<bookmark mark='d'/> A thousand simulated atoms at each angle land right on the curve: always up at zero "
             "degrees, fifty-fifty at ninety, never at one eighty."
         ) as vo:
+            self.play(FadeIn(setup), Create(ax), FadeIn(xl), FadeIn(ticks))
             vo.wait_until("p")
-            self.play(Write(d1[:3]))
+            self.play(FadeOut(setup), Write(d1[:3]))
             vo.wait_until("c")
-            self.play(Write(d1[3:]), Create(ax), FadeIn(xl), FadeIn(ticks), Create(curve))
+            self.play(Write(d1[3:]), Create(curve))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.08), FadeIn(dn))
         with self.voiceover(
