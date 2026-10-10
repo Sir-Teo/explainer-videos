@@ -143,7 +143,7 @@ class Amplitudes(VoiceoverScene):
         ticks = VGroup(*[MathTex(s, font_size=24, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.12)
                          for v, s in ((0, "0"), (PI, r"\pi"), (TAU, r"2\pi"))])
         one = DashedLine(ax.c2p(0, 2), ax.c2p(TAU, 2), color=C.CLASSICAL, stroke_width=2)
-        one_l = MathTex(r"|z_1|^2 + |z_2|^2", font_size=26, color=C.CLASSICAL).next_to(one, RIGHT, buff=0.1).shift(UP * 0.2 + LEFT * 1.4)
+        one_l = MathTex(r"|z_1|^2 + |z_2|^2", font_size=26, color=C.CLASSICAL).next_to(ax.c2p(PI, 2), UP, buff=0.1)  # above the dip, clear of the curve
         trace = always_redraw(lambda: ax.plot(lambda t: abs(1 + np.exp(1j * t)) ** 2, x_range=[0, max(1e-3, dphi.get_value())],
                                               color=C.BORN, stroke_width=3.5))
         dot = always_redraw(lambda: Dot(ax.c2p(dphi.get_value(), abs(z1 + z2()) ** 2), color=C.BORN, radius=0.07))

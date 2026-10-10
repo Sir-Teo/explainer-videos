@@ -45,8 +45,9 @@ class Commutator(VoiceoverScene):
             "the shadow of psi on each plane wave, is this integral: <bookmark mark='f'/> the Fourier transform. "
             "Position and momentum are two sets of axes for the same vector, related by a Fourier transform."
         ) as vo:
+            self.play(Write(l1[:3]))
             vo.wait_until("a")
-            self.play(Write(l1), FadeIn(w1))
+            self.play(Write(l1[3:]), FadeIn(w1))
             vo.wait_until("b")
             self.play(Write(l2), FadeIn(w2))
             vo.wait_until("c")
@@ -153,7 +154,9 @@ class Commutator(VoiceoverScene):
         s1[4].set_color(C.XPOS)
         sn = label(r"Taylor's theorem: the momentum operator \emph{generates} translations", font_size=28, color=GREY_A)
         sn.next_to(s1, DOWN, buff=0.2)
-        ax = wave_axes((-6, 9), (-1.3, 1.3), x_length=11, y_length=3.6).shift(DOWN * 1.2)
+        # low-order partial sums overshoot (to 1.88 at n = 2): room above, so nothing is clipped flat
+        ax = wave_axes((-6, 9), (-1.0, 2.0), x_length=11, y_length=4.2).shift(DOWN * 1.0)
+        assert tay.max() < 2.0 and tay.min() > -1.0
         orig = polyline(ax, xt, np.exp(-(xt**2) / 4), color=GREY_B, stroke_width=2)
         orig = DashedVMobject(orig, num_dashes=60)
         target = polyline(ax, xt, np.exp(-((xt - a) ** 2) / 4), color=C.XPOS, stroke_width=6).set_stroke(opacity=0.35)

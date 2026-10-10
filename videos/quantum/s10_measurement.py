@@ -193,11 +193,11 @@ class Measurement(VoiceoverScene):
         m = load("measure")
         Eavg, Eint, Es = float(m["E_avg"][0]), float(m["E_int"][0]), float(m["sample_mean"][0])
         assert abs(Eavg - 484.73) < 0.01 and abs(Eint - 484.73) < 0.01 and abs(Es - 487.1) < 0.05
-        l1 = MathTex(r"\langle A\rangle", r"=", r"\sum_a a\,P(a)", font_size=40)
-        l2 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\sum_a a\,\braket{\psi}{a}\braket{a}{\psi}", font_size=40)
-        l3 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\bra{\psi}\Big(\sum_a a\,\ket{a}\bra{a}\Big)\ket{\psi}", font_size=40)
-        l4 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\braket{\psi}{\hat A\psi}", font_size=44)
-        col = stack(l1, l2, l3, l4, buff=0.35, align=1).to_edge(UP, buff=0.4).shift(LEFT * 2.2)
+        l1 = MathTex(r"\langle A\rangle", r"=", r"\sum_a a\,P(a)", font_size=38)
+        l2 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\sum_a a\,\braket{\psi}{a}\braket{a}{\psi}", font_size=38)
+        l3 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\bra{\psi}\Big(\sum_a a\,\ket{a}\bra{a}\Big)\ket{\psi}", font_size=38)
+        l4 = MathTex(r"\phantom{\langle A\rangle}", r"=", r"\braket{\psi}{\hat A\psi}", font_size=42)
+        col = stack(l1, l2, l3, l4, buff=0.3, align=1).to_edge(UP, buff=0.3).shift(LEFT * 2.2)
         w1 = why(l1, r"average outcome")
         w2 = why(l2, r"Born rule: $|z|^2 = z^* z$")
         w3 = why(l3, r"pull the sum inside")
@@ -206,19 +206,21 @@ class Measurement(VoiceoverScene):
         place_whys([l1, l2, l3, l4], [w1, w2, w3, w4])
         l4[2].set_color(C.ENERGY)
         nums = VGroup(
-            MathTex(r"\sum_n E_n |c_n|^2 = " + num(Eavg, 2), font_size=34),
-            MathTex(r"\braket{\psi}{\hat H\psi} = \frac{\hbar^2}{2m}\int|\psi'|^2dx = " + num(Eint, 2), font_size=34),
-            MathTex(r"\text{mean of the 2{,}000 outcomes: } " + num(Es, 1), font_size=34, color=C.BORN),
-        ).arrange(DOWN, buff=0.28, aligned_edge=LEFT).to_edge(DOWN, buff=0.45)
+            MathTex(r"\sum_n E_n |c_n|^2 = " + num(Eavg, 2), font_size=32),
+            MathTex(r"\braket{\psi}{\hat H\psi} = \frac{\hbar^2}{2m}\int|\psi'|^2dx = " + num(Eint, 2), font_size=32),
+            MathTex(r"\text{mean of the 2{,}000 outcomes: } " + num(Es, 1), font_size=32, color=C.BORN),
+        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).to_edge(DOWN, buff=0.35)
         un = note(r"$\hbar = m = L = 1$").next_to(nums, RIGHT, buff=0.4)
+        assert nums.get_top()[1] < col.get_bottom()[1] - 0.25
         with self.voiceover(
             "With the probabilities in hand, the average outcome follows. <bookmark mark='a'/> It's the sum of each "
             "outcome times its probability. <bookmark mark='b'/> Write the probability as the shadow times its "
             "conjugate, <bookmark mark='c'/> pull the sum inside, <bookmark mark='d'/> and the operator itself appears: "
             "the average of A is psi, A psi. You never need the eigenvectors to compute an average."
         ) as vo:
+            self.play(Write(l1[0]))
             vo.wait_until("a")
-            self.play(Write(l1), FadeIn(w1))
+            self.play(Write(l1[1:]), FadeIn(w1))
             vo.wait_until("b")
             self.play(Write(l2[1:]), FadeIn(w2))
             vo.wait_until("c")

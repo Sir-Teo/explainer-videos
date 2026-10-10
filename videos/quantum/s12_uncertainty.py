@@ -195,7 +195,7 @@ class Uncertainty(VoiceoverScene):
         region = Polygon(*[ax.c2p(v, max(-1.0, L(0.5) - v)) for v in xs], ax.c2p(0.8, -1.0), ax.c2p(-1.2, -1.0),
                          stroke_width=0, fill_color=C.HBAR, fill_opacity=0.18)
         forb = label(r"forbidden", font_size=30, color=C.HBAR).move_to(ax.c2p(-0.75, -0.65))
-        ll = MathTex(r"\sigma_x\sigma_p = \tfrac{\hbar}{2}", font_size=30, color=C.HBAR).move_to(ax.c2p(0.45, -1.0 + 0.12)).shift(UP * 0.35)
+        ll = MathTex(r"\sigma_x\sigma_p = \tfrac{\hbar}{2}", font_size=30, color=C.HBAR).next_to(ax.c2p(0.35, L(0.5) - 0.35), UR, buff=0.08)
         ax.x_axis.set_stroke(opacity=0)
         ax.y_axis.set_stroke(opacity=0)
         frame_l = VGroup(Line(ax.c2p(-1.2, -1.0), ax.c2p(0.8, -1.0), color=GREY_B, stroke_width=2),
@@ -224,7 +224,7 @@ class Uncertainty(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_corner(UR, buff=0.4)
         b1 = float(sx[kind == "box"][0] * sp[kind == "box"][0])
         assert abs(b1 - 0.568) < 0.001
-        bl = MathTex(r"0.568\,\hbar", font_size=26, color=C.ENERGY).next_to(db[0], LEFT, buff=0.12)
+        bl = MathTex(r"0.568\,\hbar", font_size=26, color=C.ENERGY).next_to(db[0], RIGHT, buff=0.12)  # above the line
         tr = VMobject(color=C.XPOS, stroke_width=4)
         tr.set_points_as_corners(ax.c2p(L(traj[:, 1]), L(traj[:, 2])).T)
         with self.voiceover(
