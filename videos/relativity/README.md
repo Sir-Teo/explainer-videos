@@ -28,7 +28,31 @@ are integrations of Newtonian gravity, and parallel transport is an ODE solve on
 gravitational-wave chapter shows LIGO's public strain data. Exaggerations are labeled on screen with
 their factor, and schematics are labeled `schematic`.
 
-**Watch:** [`published/relativity.mp4`](../../published/relativity.mp4) (1080p, subtitles and chapters embedded).
+**Watch:** [`published/relativity.mp4`](../../published/relativity.mp4) (69 min, 1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters</summary>
+
+- `0:00` Gravity is not a force
+- `2:07` Newton's gravity, and what's wrong with it
+- `5:47` Part 1: Spacetime and proper time
+- `9:19` The equivalence principle: light falls, clocks slow
+- `13:37` Falling is maximal aging
+- `18:19` Part 2: Curvature, measured from the inside
+- `22:36` Tensors: equations every observer agrees on
+- `26:16` Geodesics and the Christoffel symbols
+- `30:14` The covariant derivative and parallel transport
+- `34:23` The Riemann tensor: curvature is tides
+- `38:45` Part 3: Matter: the stress-energy tensor
+- `41:48` Deriving Einstein's field equations
+- `46:40` What the equation says: a ball of falling particles
+- `49:41` The same equation from an action
+- `52:53` Part 4: The Schwarzschild solution
+- `57:14` Orbits: Mercury's 43 arcseconds
+- `61:07` Light: bending, eclipses and black holes
+- `64:32` Gravitational waves
+- `68:00` Recap
+
+</details>
 
 ```bash
 python -m videos.relativity.fetch             # optional: re-download GW150914 strain + the EHT image (committed in data/)
@@ -38,7 +62,7 @@ python tools/build.py relativity -q l         # preview
 python tools/build.py relativity              # final 1080p30 + subtitles + chapters
 python tools/export_script.py relativity      # regenerate SCRIPT.md from the code
 python tools/check_narration.py relativity    # Whisper listen test of every narration line
-python tools/publish.py relativity            # GitHub-sized copy -> published/relativity.mp4
+python tools/publish.py relativity --audio-kbps 64   # GitHub-sized copy (69 min in 95 MB) -> published/relativity.mp4
 ```
 
 ## Outline
