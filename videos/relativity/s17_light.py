@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import BHShader, Raster, boxed, label, ladder, load, mtex, note, stack
+from videos.relativity.common import redraw, BHShader, Raster, boxed, label, ladder, load, mtex, note, stack
 
 EHT = Path(__file__).resolve().parent / "data" / "eht_m87.jpg"
 NEWTON = C.POTENTIAL
@@ -143,7 +143,7 @@ class Light(VoiceoverScene):
                     g.add(Line(center + np.array([*p, 0]), q, color=C.LIGHT, stroke_width=2))
             return g
 
-        fm = always_redraw(field)
+        fm = redraw(field)
         exag = boost / R * 959.6 / 1.751  # the Sun's angular radius is ~960 arcseconds
         assert 250 < exag < 330
         lab = note(rf"schematic star field; displacements $\propto 1/b$, exaggerated $\sim {round(exag, -1):.0f}\times$").to_corner(DL, buff=0.3)
@@ -269,7 +269,7 @@ class Light(VoiceoverScene):
         eht.set_height(W2 * 720 / 1280).move_to([3.5, 0.2, 0])
         c1 = label(r"ray-traced, seen nearly face-on", font_size=26).next_to(img2, DOWN, buff=0.25)
         c2 = label(r"M87*, Event Horizon Telescope (2019)", font_size=26).next_to(eht, DOWN, buff=0.25)
-        cr = note(r"image: EHT Collaboration (ESO), CC BY 4.0").to_corner(DR, buff=0.25)
+        cr = note(r"image: EHT Collaboration (ESO), CC BY 4.0").next_to(c2, DOWN, buff=0.12)
         with self.voiceover(
             "<bookmark mark='a'/> Seen more nearly face-on, the disk surrounds a dark shadow, edged by a bright ring. "
             "<bookmark mark='b'/> In 2019, the Event Horizon Telescope, a network of radio dishes the size of the Earth, "

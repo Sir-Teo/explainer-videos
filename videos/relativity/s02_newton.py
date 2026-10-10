@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, light_cone, load, mtex, note, st_axes, stack
+from videos.relativity.common import redraw, boxed, label, light_cone, load, mtex, note, st_axes, stack
 
 
 class Newton(VoiceoverScene):
@@ -65,7 +65,7 @@ class Newton(VoiceoverScene):
             r = 1.8 + wob * (0.45 * np.sin(3 * a) + 0.3 * np.cos(5 * a + 1))
             return c0 + np.stack([r * np.cos(a), 0.92 * r * np.sin(a), 0 * a], 1)
 
-        surf = always_redraw(lambda: VMobject(stroke_color=C.METRIC, stroke_width=3.5).set_points_smoothly(surface_pts()))
+        surf = redraw(lambda: VMobject(stroke_color=C.METRIC, stroke_width=3.5).set_points_smoothly(surface_pts()))
         flux = mtex(r"\oint \mathbf{g}\cdot d\mathbf{A}", r"=", r"-4\pi G\,M_{\text{inside}}", font_size=44)
         flux[0].set_color(C.POTENTIAL)
         flux[2].set_color(C.MATTER)
@@ -229,7 +229,7 @@ class Newton(VoiceoverScene):
         t = ValueTracker(0.0)
 
         def body(x, r, color):
-            return always_redraw(lambda: Circle(radius=r, color=color, fill_opacity=0.7, stroke_width=2).move_to(
+            return redraw(lambda: Circle(radius=r, color=color, fill_opacity=0.7, stroke_width=2).move_to(
                 [x, 1.0 - 3.95 * t.get_value() ** 2 + r - 0.25, 0]))
 
         hammer = body(2.8, 0.3, GREY_B)

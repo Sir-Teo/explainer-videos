@@ -50,6 +50,7 @@ class StressEnergy(VoiceoverScene):
             mtex(r"\text{each particle's energy:}\ \times \gamma", font_size=30),
             mtex(r"\text{energy density:}\ \times\gamma^2 = 1.5625", font_size=34, color=C.MATTER),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(b2, DOWN, buff=0.4).set_x(1.6)
+        head = label(r"The source of gravity", font_size=40).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Now the other side of the equation: matter. In Newton's theory, the source of gravity is the mass density, "
             "rho. But relativity says mass is a form of energy, E equals m c squared, so the source should be energy "
@@ -59,8 +60,9 @@ class StressEnergy(VoiceoverScene):
             "densely: one factor of gamma. <bookmark mark='e'/> And each particle is moving, so it carries more energy: a "
             "second factor of gamma. <bookmark mark='f'/> The energy density goes up by gamma squared."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("d")
-            self.play(Create(b1), FadeIn(d1), FadeIn(t1), FadeIn(e1))
+            self.play(FadeOut(head), Create(b1), FadeIn(d1), FadeIn(t1), FadeIn(e1))
             vo.wait_until("b")
             self.play(TransformFromCopy(b1, b2), TransformFromCopy(d1, d2), GrowArrow(arr), FadeIn(arrl), run_time=1.5)
             vo.wait_until("c")
@@ -182,7 +184,7 @@ class StressEnergy(VoiceoverScene):
         sl = note(r"(slow fluid, $p \ll \rho c^2$)", font_size=22).next_to(rows, DOWN, buff=0.15).align_to(rows, RIGHT)
         c2 = mtex(r"\nabla_\mu T^{\mu\nu}", r"=", r"0", font_size=56)
         c2[0].set_color(C.MATTER)
-        cb = boxed(c2, color=C.MATTER, buff=0.25).next_to(sl, DOWN, buff=0.45)
+        cb = boxed(c2, color=C.MATTER, buff=0.25).next_to(sl, DOWN, buff=0.35).set_x(-1.0)
         c2l = label(r"curved spacetime: $\partial \to \nabla$", font_size=26, color=GREY_A).next_to(cb, RIGHT, buff=0.4)
         with self.voiceover(
             "One more property, and it's the crucial one. <bookmark mark='c'/> Energy and momentum are conserved, and for "

@@ -11,7 +11,7 @@ In November 1915, Albert Einstein explained it, with a new theory of gravity and
 
 In Einstein's theory, gravity isn't a force at all. Here's the strangest consequence, which we'll derive in this video. When you throw an apple, nothing pulls it down. It follows the straightest possible path through spacetime, and the reason that path curves back to the ground is that time passes more slowly near the Earth than higher up.
 
-From that equation flow some of the most remarkable predictions in science. Light bends around massive objects. Clocks run at different rates at different heights, which your phone's GPS has to correct for every day. Black holes. And ripples in spacetime itself, detected for the first time in 2015.
+From that equation flow some of the most remarkable predictions in science. Light bends around massive objects. Clocks run at different rates at different heights, which your phone's GPS has to correct for every day. Black holes, regions from which not even light can escape. And ripples in spacetime itself, gravitational waves, detected for the first time in 2015, a century after Einstein predicted them.
 
 In this video we'll derive Einstein's theory from scratch, and the mathematics will be front and center. First, why gravity is geometry: the equivalence principle, clocks, and the idea that falling is maximal aging. Then the mathematics of curved spaces: metrics, tensors, Christoffel symbols, the covariant derivative, and the Riemann curvature tensor. Then we'll derive Einstein's equation, two different ways, and see what it means. And finally, we'll solve it, and test it: black holes, Mercury's orbit, the bending of light, and gravitational waves.
 
@@ -41,13 +41,13 @@ For Newton, this was a coincidence. For Einstein, it was a clue. If every object
 
 _Scene `s03_spacetime.py::Spacetime`_
 
-Before gravity, we need the stage it acts on. Special relativity, Einstein's theory from 1905, treats space and time as a single four-dimensional spacetime. We'll draw it with one space direction across and time going up, with time multiplied by the speed of light, c, so both axes are measured in meters. A point is an event: a place and a moment. The history of an object is a line, its worldline. Something at rest goes straight up. Something moving tilts. And light moves at forty-five degrees, one meter of distance per meter of time.
+Before gravity, we need the stage it plays out on. Special relativity, Einstein's theory from 1905, treats space and time as a single four-dimensional spacetime. We'll draw it with one space direction across and time going up, with time multiplied by the speed of light, c, so both axes are measured in meters. A point is an event: a place and a moment. The history of an object is a line, its worldline. Something at rest goes straight up. Something moving tilts. And light moves at forty-five degrees, one meter of distance per meter of time.
 
 Different observers, moving relative to each other, slice spacetime differently. Here's the coordinate grid of one observer. Here's what it looks like for someone moving to the right: their time axis tilts toward the light ray, and so does their space axis. They disagree about which events are simultaneous, and about distances and durations.
 
 But there's one thing they all agree on. Take two events, and compute minus c delta t squared plus delta x squared, plus delta y squared plus delta z squared. This combination, the spacetime interval, is the same for every observer. Pick an event. As we change observers, its time and space coordinates change, but the event only ever slides along this hyperbola, and the interval stays fixed. It's the spacetime version of distance, with one crucial minus sign.
 
-For two events along the worldline of a clock, the interval has a direct meaning. Minus the interval, divided by c squared, is the time that clock measures between them: its proper time, tau. For a clock moving at speed v, d tau is d t times the square root of one minus v squared over c squared. Moving clocks run slow. Add it up along the whole worldline, and a clock's reading is simply the length of its path through spacetime, measured with this minus-sign geometry.
+For two events along the worldline of a clock, the interval has a direct meaning. Minus the interval, divided by c squared, is the square of the time that clock measures between them: its proper time, tau. For a clock moving at speed v, d tau is d t times the square root of one minus v squared over c squared. Moving clocks run slow. Add it up along the whole worldline, and a clock's reading is simply the length of its path through spacetime, measured with this minus-sign geometry.
 
 That minus sign has a famous consequence. Take two events at the same place, ten years apart. One twin stays home, on the straight worldline between them, and ages ten years. The other flies out at eight tenths the speed of light, turns around, and comes back. Their path is bent, and along each leg their clock ticks at only six tenths the rate. They return having aged six years.
 
@@ -97,7 +97,7 @@ Here's the bookkeeping. To first order, the extra time is the integral of g z ov
 
 It isn't just parabolas. Any other way of getting from the throw to the catch, hovering at the top, rising slowly and falling fast, or going too high, records less proper time. Among all possible paths, the ball's real one is the longest-lived.
 
-Now let's prove it in general. The proper time of any path is the integral of the square root of minus d s squared, using the metric we just found: one plus two phi over c squared, minus v squared over c squared, all under the root. Both corrections are tiny, so expand the square root to first order. Now multiply by minus m c squared. What's inside the integral is one half m v squared minus m phi: kinetic energy minus potential energy. That's exactly the action of Newtonian mechanics, plus a constant.
+Now let's prove it in general. The proper time of any path is the integral of d tau, the square root of minus d s squared over c squared, using the metric we just found: one plus two phi over c squared, minus v squared over c squared, all under the root. Both corrections are tiny, so expand the square root to first order. Now multiply by minus m c squared. What's inside the integral is one half m v squared minus m phi: kinetic energy minus potential energy. That's exactly the action of Newtonian mechanics, plus a constant.
 
 And the principle of least action says Newton's laws are what you get when that action is stationary. So making the proper time stationary gives m times acceleration equals minus m times the gradient of phi: Newton's law of gravity. Notice that the mass cancels from both sides, so every object falls the same way. That isn't a coincidence anymore: the path depends only on the geometry. Gravity, for slow objects, is nothing but the warping of time.
 
@@ -139,7 +139,7 @@ In curved spacetime there are no preferred coordinates. Any labeling of events i
 
 A vector is an arrow at a point: a direction and a size, like a velocity. To describe it with numbers, we lay down coordinates. Their grid lines give two basis vectors at our point, e one and e two, and the vector is some amount of each: its components, V one and V two.
 
-Now change the coordinates. The arrow itself doesn't move: it's the same physical thing. But the basis vectors change, so the components change. Polar coordinates again: new basis vectors, new numbers, same arrow. How the numbers change is completely determined by how the coordinates change: the new components are the Jacobian matrix of partial derivatives times the old ones. Anything whose components change this way is a vector.
+Now change the coordinates. The arrow itself doesn't move: it's the same physical thing. But the basis vectors change, so the components change. Now polar coordinates: new basis vectors, new numbers, same arrow. How the numbers change is completely determined by how the coordinates change: the new components are the Jacobian matrix of partial derivatives times the old ones. Anything whose components change this way is a vector.
 
 There's a slick way to see why. Think of the basis vector e mu as the operation "move along the x mu coordinate line", that is, the partial derivative with respect to x mu. Then a vector is V mu times partial mu: a directional derivative. The chain rule for partial derivatives is exactly the Jacobian rule for components.
 
@@ -217,7 +217,7 @@ And now the payoff for physics. Start two geodesics on the equator, both heading
 
 Now apply it to slowly moving particles in a weak gravitational field. Their separation accelerates according to minus c squared times the components of Riemann with two time indices. Newton's theory has its own version, the tidal acceleration: minus the second derivatives of the potential times the separation. These must agree, and they do: for the weak-field metric, R i zero j zero is exactly the second derivative of phi over c squared. The tidal tensor of Newton is the curvature of spacetime.
 
-Our falling ring is a curvature detector. And its most important reading is the trace, the sum of the diagonal tidal terms, which is the Ricci component R zero zero: the Laplacian of phi. In empty space around the Earth, the Laplacian is zero, so the ring stretches one way and squeezes the other, but its area stays the same at first. Inside matter, it's four pi G rho, and the ring shrinks. Matter shows up in the trace of the curvature. That's the clue Einstein needed.
+Our falling ring is a curvature detector. And its most important reading is the trace, the sum of the diagonal tidal terms, which is the Ricci component R zero zero: the Laplacian of phi. In empty space around the Earth, the Laplacian is zero: the stretching along the fall exactly balances the squeezing in the two sideways directions, so a ball of particles keeps its volume at first. Inside matter, it's four pi G rho, and the ring shrinks. Matter shows up in the trace of the curvature. That's the clue Einstein needed.
 
 ## Part 3: Matter: the stress-energy tensor
 
@@ -245,7 +245,7 @@ Start from the clue at the end of the last chapter. Newton says the Laplacian of
 
 But first we need one more fact about curvature. The Riemann tensor obeys a differential identity: the cyclic sum of its covariant derivatives over the first three indices vanishes. This is the Bianchi identity. The proof is short: go to a freely falling frame at a point, where every gamma vanishes. There, Riemann is just derivatives of gamma, and the cyclic sum cancels term by term. And since it's a tensor equation, it holds in every coordinate system.
 
-Now contract it with the metric: the first and fourth indices, which turns two of the Riemann tensors into Ricci tensors. Contract once more, and everything is Ricci or the Ricci scalar: the divergence of Ricci equals half the gradient of R. Move everything inside one derivative. The combination R mu nu minus one half R g mu nu has zero divergence, always, for any metric whatsoever.
+Now contract it with the metric, pairing the derivative's index with Riemann's third index. Two of the Riemann tensors become Ricci tensors. Contract once more, and everything is Ricci or the Ricci scalar: the divergence of Ricci equals half the gradient of R. Move everything inside one derivative. The combination R mu nu minus one half R g mu nu has zero divergence, always, for any metric whatsoever.
 
 Now test the guess. Take the divergence of both sides. The right side vanishes, because matter conserves energy and momentum. But by the Bianchi identity, the divergence of Ricci is half the gradient of the Ricci scalar. So the Ricci scalar would have to be constant. And taking the trace of the guess, R is kappa times the trace of T. So the trace of T would have to be constant too: for ordinary matter that's minus the energy density plus three times the pressure, the same value everywhere in the universe, inside stars and in empty space. That's absurd. The guess is wrong.
 
@@ -279,7 +279,7 @@ Here's the size of such a ball over cosmic history, for the measured contents of
 
 _Scene `s14_action.py::Action`_
 
-There's a second road to the same equation, and it's the one David Hilbert took, five days before Einstein presented his final version. We saw that a free particle moves so as to make its proper time, its action, stationary. A field's action is an integral over all of spacetime of a scalar Lagrangian, weighted by the square root of minus the determinant of the metric. So which scalar should the gravitational field use? It has to be built from the metric with at most two derivatives. Apart from a constant, there's essentially one choice: the Ricci scalar. This is the Einstein–Hilbert action. The constant in front is chosen so that Newton comes out right.
+There's a second road to the same equation. David Hilbert took it, in a paper he submitted five days before Einstein presented his final version. We saw that a free particle moves so as to make its proper time, its action, stationary. A field's action is an integral over all of spacetime of a scalar Lagrangian, weighted by the square root of minus the determinant of the metric. So which scalar should the gravitational field use? It has to be built from the metric with at most two derivatives. Apart from a constant, there's essentially one choice: the Ricci scalar. This is the Einstein–Hilbert action. The constant in front is chosen so that Newton comes out right.
 
 First, that square root. A coordinate cell is a little parallelogram spanned by the basis vectors, and its true area is the square root of the determinant of the metric, times the coordinate steps. Change the metric, and the area changes. So the square root of minus g times d four x is the true four-dimensional volume, the same in every coordinate system. We'll need how it responds to a small change in the metric. Jacobi's formula for the derivative of a determinant gives it: the variation of root minus g is minus one half root minus g, g mu nu, delta g upper mu nu.
 
@@ -295,7 +295,7 @@ Two routes, one destination. And in 1971, David Lovelock proved that this isn't 
 
 _Scene `s15_schwarzschild.py::Schwarzschild`_
 
-Einstein's equation is ten coupled nonlinear partial differential equations. Einstein himself thought exact solutions might never be found. The first came within weeks. Take the simplest situation: empty space outside a static, spherical star. There, T is zero, so the trace-reversed equation says simply that the Ricci tensor vanishes. Symmetry narrows down the metric enormously. Static means nothing depends on time. Spherical means the angular part is r squared times the metric of a sphere, with r defined so that the sphere at r has area four pi r squared. All that's left unknown are two functions of r: alpha in the time part, and beta in the radial part.
+Einstein's equation is ten coupled nonlinear partial differential equations, and Einstein himself had worked only with approximate solutions. The first exact one came within weeks, and its simplicity surprised him. Take the simplest situation: empty space outside a static, spherical star. There, T is zero, so the trace-reversed equation says simply that the Ricci tensor vanishes. Symmetry narrows down the metric enormously. Static means nothing depends on time. Spherical means the angular part is r squared times the metric of a sphere, with r defined so that the sphere at r has area four pi r squared. All that's left unknown are two functions of r: alpha in the time part, and beta in the radial part.
 
 Now it's just computation, the same machinery we've built, applied to this metric. First the Christoffel symbols: nine kinds are nonzero. Then the Ricci tensor, through the formula for Riemann and one contraction. Everything off the diagonal vanishes, and the four diagonal components are these. They look complicated, but setting them to zero is surprisingly easy.
 
@@ -329,7 +329,7 @@ Small as it is, it adds up. Start from Newton's ellipse, and feed it into the co
 
 Now the numbers. For Mercury, the semi-major axis, eccentricity, and the mass of the Sun give a turn of five times ten to the minus seven radians per orbit: a tenth of an arcsecond. Mercury orbits four hundred and fifteen times a century. Total: forty-two point nine eight arcseconds per century. Exactly the anomaly astronomers had been unable to explain for more than half a century. Einstein found this on the eighteenth of November, 1915, with no adjustable parameters. He later wrote to a friend that for several days he was beside himself with joy.
 
-Here's that effect, magnified about six hundred thousand times, by integrating the exact orbit equation around a far denser star. Each time the planet swings past its closest point, the ellipse has turned a little further, tracing out a rosette. For the real Mercury, forty-three arcseconds is tiny: lay it next to the full Moon, and it's one forty-third of the Moon's width, accumulated over a century. Astronomers measured it anyway, and Newton couldn't account for it.
+Here's that effect, magnified about six hundred thousand times, by integrating the exact orbit equation around a far denser star. Each time the planet swings past its closest point, the ellipse has turned a little further, tracing out a rosette. For the real Mercury, forty-three arcseconds is tiny: lay it next to the full Moon, and it's a forty-third of the Moon's width, accumulated over a century. Astronomers measured it anyway, and Newton couldn't account for it.
 
 ## Light: bending, eclipses and black holes
 
@@ -363,7 +363,7 @@ What makes them? Solving the wave equation with a source gives the quadrupole fo
 
 Two black holes in orbit radiate. The waves carry away energy, so the orbit shrinks; a tighter orbit is faster, so it radiates more strongly; so it shrinks faster still. The result is a chirp: a wave whose frequency and amplitude sweep upward until the black holes merge. The quadrupole formula predicts the sweep exactly, and it depends on the masses through a single combination, the chirp mass. For thirty solar masses, the last stretch, from thirty-five hertz to the merger, takes about a sixth of a second.
 
-Measuring that seemed hopeless. Then, on the fourteenth of September 2015, the two detectors of LIGO, in Washington State and Louisiana, three thousand kilometers apart, recorded this. This is the actual data, which LIGO makes public. Livingston saw the wave seven milliseconds before Hanford, as a signal traveling at light speed between them should, and flipped, because its arms point differently.
+Measuring that seemed hopeless. Then, on the fourteenth of September 2015, the two detectors of LIGO, in Washington State and Louisiana, three thousand kilometers apart, recorded this. This is the actual data, which LIGO makes public. Livingston saw the wave seven milliseconds before Hanford, within the ten milliseconds that light needs to travel between them, and flipped, because its arms point differently.
 
 Spread the signal out by frequency, and the chirp is unmistakable: a rising sweep, from about thirty-five hertz to a few hundred. And laid over it, the sweep that the quadrupole formula predicts for a chirp mass of thirty-one Suns. Two black holes, thirty-six and thirty-one times the mass of the Sun, merged into one of sixty-three. The missing three solar masses left as gravitational waves. By the time they reached Earth, they stretched LIGO's four kilometer arms by a four hundredth of the width of a proton.
 
@@ -379,4 +379,4 @@ Ten equations, one line. Spacetime tells matter how to move; matter tells spacet
 
 ---
 
-11337 words (~73 min at 155 wpm).
+11379 words (~73 min at 155 wpm).

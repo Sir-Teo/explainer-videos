@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import BHShader, boxed, label, load, mtex, note, polyline, rgba
+from videos.relativity.common import redraw, BHShader, boxed, label, load, mtex, note, polyline, rgba
 from videos.relativity.s16_mercury import orbit_xy
 
 NEWTON = C.POTENTIAL
@@ -38,12 +38,11 @@ class Hook(VoiceoverScene):
             j = max(2, int(k.get_value() * (n - 1)))
             g = VGroup(VMobject(stroke_color=EINSTEIN, stroke_width=2.5).set_points_as_corners(P[:j]))
             g.add(Dot(P[j - 1], radius=0.08, color=WHITE))
-            for i in peri:
-                if i < j:
-                    g.add(Dot(P[i], radius=0.05, color=EINSTEIN))
+            for i in peri:  # fixed size: always_redraw's become() misaligns a family whose size changes
+                g.add(Dot(P[i], radius=0.05, color=EINSTEIN).set_opacity(1.0 if i < j else 0.0))
             return g
 
-        tr = always_redraw(trail)
+        tr = redraw(trail)
         ex = note(r"computed orbit; the effect exaggerated about 600{,}000$\times$").to_corner(DL, buff=0.3)
         num = VGroup(label(r"Mercury's orbit turns by", font_size=32),
                      mtex(r"43''\ \text{per century}", font_size=48, color=EINSTEIN),
@@ -55,7 +54,6 @@ class Hook(VoiceoverScene):
             "<bookmark mark='n'/> But a tiny part, forty-three arcseconds per century, refused to be explained."
         ) as vo:
             self.play(FadeIn(sun))
-            vo.wait_until("o")
             self.add(tr)
             self.play(FadeIn(ex), k.animate.set_value(0.6), run_time=vo.until("n"), rate_func=linear)
             self.play(FadeIn(num, lag_ratio=0.3), k.animate.set_value(1.0), run_time=vo.remaining() + 0.5, rate_func=linear)
@@ -95,8 +93,8 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def apple(self):
-        ax = Axes(x_range=[0, 2, 1], y_range=[0, 6, 2], x_length=5.0, y_length=4.0, tips=False,
-                  axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to([-3.2, -0.6, 0])
+        ax = Axes(x_range=[0, 2, 1], y_range=[0, 6, 2], x_length=4.6, y_length=4.0, tips=False,
+                  axis_config={"stroke_color": GREY_B, "include_ticks": False}).move_to([-4.2, -0.6, 0])
         xl = label(r"time", font_size=24).next_to(ax.x_axis, DOWN, buff=0.2)
         yl = label(r"height", font_size=24).next_to(ax.y_axis, UP, buff=0.15)
         p0, p1 = ax.c2p(0, 0), ax.c2p(2, 6)
@@ -111,7 +109,7 @@ class Hook(VoiceoverScene):
             label(r"it isn't pulled by anything.", font_size=32),
             label(r"It follows the straightest path through spacetime,", font_size=32),
             label(r"and it falls because \emph{time runs slower near the ground}.", font_size=32, color=C.PROPER_TIME),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.0, 0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([2.7, 0.3, 0])
         with self.voiceover(
             "In Einstein's theory, gravity isn't a force at all. Here's the strangest consequence, which we'll derive in "
             "this video. <bookmark mark='a'/> When you throw an apple, nothing pulls it down. It follows the straightest "
@@ -173,8 +171,9 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "From that equation flow some of the most remarkable predictions in science. <bookmark mark='a'/> Light bends "
             "around massive objects. <bookmark mark='b'/> Clocks run at different rates at different heights, which your "
-            "phone's GPS has to correct for every day. <bookmark mark='c'/> Black holes. <bookmark mark='d'/> And ripples "
-            "in spacetime itself, detected for the first time in 2015."
+            "phone's GPS has to correct for every day. <bookmark mark='c'/> Black holes, regions from which not even light "
+            "can escape. <bookmark mark='d'/> And ripples in spacetime itself, gravitational waves, detected for the first "
+            "time in 2015, a century after Einstein predicted them."
         ) as vo:
             self.play(FadeIn(frames))
             vo.wait_until("a")
@@ -185,6 +184,7 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(bh), FadeIn(t3))
             vo.wait_until("d")
             self.play(FadeIn(t4), Create(ax), Create(wave), run_time=2)
+        self.wait(1.0)
         self.clear_scene()
 
     # ------------------------------------------------------------------

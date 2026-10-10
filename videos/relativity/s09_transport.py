@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import (Globe, View3D, arrow3d, boxed, curve3d, label, latitude, load, mtex, note,
+from videos.relativity.common import (redraw, Globe, View3D, arrow3d, boxed, curve3d, label, latitude, load, mtex, note,
                                       stack)
 from videos.relativity.geometry import polar_plane, same
 
@@ -53,7 +53,8 @@ class ParallelTransport(VoiceoverScene):
             g.add(MathTex(r"\hat{\mathbf e}_\phi", font_size=28).move_to(p + 1.2 * ep))
             return g
 
-        pr = always_redraw(probe)
+        pr = redraw(probe)
+        head = label(r"Comparing vectors at different points", font_size=36).to_corner(UR, buff=0.45)
         eq = mtex(r"\mathbf V", r"=", r"V^r\,\mathbf e_r + V^\phi\,\mathbf e_\phi", font_size=40)
         eq[0].set_color(C.VECTOR)
         eq.move_to([3.6, 2.4, 0])
@@ -68,6 +69,7 @@ class ParallelTransport(VoiceoverScene):
                 mm.set_value(math.cos(a) if i == 0 else -math.sin(a) / RP)
                 mm.next_to(heads[i], RIGHT, buff=0.2)
             m.add_updater(upd)
+            m.update()
         bad = mtex(r"\partial_\phi V^r = -\sin\phi \neq 0", font_size=38).next_to(heads, DOWN, buff=0.6).set_x(3.6)
         badl = label(r"\ldots for a field that doesn't change at all", font_size=26, color=GREY_A).next_to(bad, DOWN, buff=0.15)
         with self.voiceover(
@@ -77,12 +79,13 @@ class ParallelTransport(VoiceoverScene):
             "coordinates. At each point, the basis vectors point outward and around, and they rotate as you go around. "
             "<bookmark mark='c'/> So the components of our constant arrow, V r and V phi, keep changing."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("f")
             self.play(LaggedStart(*[GrowArrow(a) for a in field], lag_ratio=0.005), run_time=1.5)
             vo.wait_until("p")
             self.play(Create(rings), Create(spokes))
             self.add(pr)
-            self.play(Write(eq))
+            self.play(FadeOut(head), Write(eq))
             vo.wait_until("c")
             self.play(FadeIn(sol), FadeIn(heads))
             self.add(dv)
@@ -243,8 +246,8 @@ class ParallelTransport(VoiceoverScene):
             j = int(round(k.get_value() * (len(P) - 1)))
             return arrow3d(view, P[j], 0.38 * Vv[j], color=C.VECTOR, stroke_width=6)
 
-        arr = always_redraw(arrow)
-        paths = [always_redraw(lambda i=i: curve3d(view, d["lat_paths"][i], color=WHITE, stroke_width=3.5))
+        arr = redraw(arrow)
+        paths = [redraw(lambda i=i: curve3d(view, d["lat_paths"][i], color=WHITE, stroke_width=3.5))
                  for i in range(2)]
         ghosts = [arrow3d(view, d["lat_paths"][i][0], 0.38 * d["lat_vecs"][i][0], color=C.VECTOR, stroke_width=4)
                   .set_opacity(0.35) for i in range(2)]
@@ -270,7 +273,7 @@ class ParallelTransport(VoiceoverScene):
             "opposite way: rotated by a hundred and eighty degrees."
         ) as vo:
             self.play(FadeIn(globe))
-            self.add(paths[0])
+            self.add(paths[1])
             vo.wait_until("a")
             self.add(ghosts[1], arr)
             self.play(k.animate.set_value(0.5), run_time=vo.until("e") - 0.2, rate_func=linear)
@@ -288,7 +291,7 @@ class ParallelTransport(VoiceoverScene):
             vo.wait_until("s")
             which["i"] = 0
             self.remove(ghosts[1])
-            self.add(paths[1], ghosts[0])
+            self.add(paths[0], ghosts[0])
             k.set_value(0.0)
             self.play(FadeIn(rows[1]), k.animate.set_value(1.0), run_time=3, rate_func=linear)
             vo.wait_until("t")
@@ -307,11 +310,11 @@ class ParallelTransport(VoiceoverScene):
                               disk.get_center() + 2.2 * np.array([math.cos(a), math.sin(a), 0]), color=GREY_B)
                          for a in np.linspace(0, 2 * np.pi, 24, endpoint=False)])
         ang = ValueTracker(0.0)
-        swing = always_redraw(lambda: Line(disk.get_center() + 1.9 * np.array([math.cos(PI / 2 - ang.get_value()), math.sin(PI / 2 - ang.get_value()), 0]),
+        swing = redraw(lambda: Line(disk.get_center() + 1.9 * np.array([math.cos(PI / 2 - ang.get_value()), math.sin(PI / 2 - ang.get_value()), 0]),
                                            disk.get_center() - 1.9 * np.array([math.cos(PI / 2 - ang.get_value()), math.sin(PI / 2 - ang.get_value()), 0]),
                                            color=C.VECTOR, stroke_width=6))
         bob = Dot(disk.get_center(), radius=0.12, color=WHITE)
-        tl = label(r"Foucault's pendulum, Paris (1851)", font_size=34).to_corner(UR, buff=0.5)
+        tl = label(r"Foucault's pendulum, Paris (1851)", font_size=34).move_to([0.4, 2.9, 0], aligned_edge=LEFT)
         rows = VGroup(
             label(r"The Earth carries it around its latitude circle once a day;", font_size=28),
             label(r"its swing plane is parallel transported.", font_size=28),

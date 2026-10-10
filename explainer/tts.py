@@ -290,6 +290,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bSoldner\b", "[Soldner](/zˈɔldnəɹ/)"),
     (r"\b[Cc]ovectors\b", r"[\g<0>](/kˈOvɛktəɹz/)"),
     (r"\b[Cc]ovector\b", r"[\g<0>](/kˈOvɛktəɹ/)"),
+    (r"\bintegrands\b", "[integrands](/ˈɪntəɡɹˌændz/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

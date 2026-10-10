@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import View3D, boxed, label, load, mtex, note, polyline, stack
+from videos.relativity.common import redraw, View3D, boxed, label, load, mtex, note, polyline, stack
 
 
 def cloud(view: View3D, P, color, r=0.055):
@@ -37,6 +37,7 @@ class Meaning(VoiceoverScene):
                   font_size=30),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(UP, buff=0.6)
         who = note(r"after John Baez and Emory Bunn, \emph{The Meaning of Einstein's Equation} (2005)").next_to(q, DOWN, buff=0.25)
+        title = label(r"What does the equation say?", font_size=44).move_to(UP * 0.5)
         eq = mtex(r"\frac{\ddot V}{V}\Big|_{t=0}", r"=", r"-4\pi G\,\Big(\rho + \frac{p_x + p_y + p_z}{c^2}\Big)",
                   font_size=50)
         eq[0].set_color(C.CURVATURE)
@@ -57,8 +58,9 @@ class Meaning(VoiceoverScene):
             "to shrink is proportional to its volume, times the energy density at its center, plus the pressure in the x "
             "direction, plus the pressure in the y direction, plus the pressure in the z direction."
         ) as vo:
+            self.play(FadeIn(title))
             vo.wait_until("q")
-            self.play(FadeIn(q, lag_ratio=0.3), FadeIn(who), run_time=3)
+            self.play(FadeOut(title), FadeIn(q, lag_ratio=0.3), FadeIn(who), run_time=3)
             self.play(Write(eq), Create(eb[0]))
         with self.voiceover(
             "<bookmark mark='a'/> We've already done the work to see why. The ball's volume responds to the trace of the "
@@ -92,12 +94,12 @@ class Meaning(VoiceoverScene):
             i = int(round(k.get_value() * (n - 1)))
             return cloud(vr, mat[i], C.MATTER)
 
-        L, R = always_redraw(left), always_redraw(right)
+        L, R = redraw(left), redraw(right)
         tl = label(r"empty space, near a planet", font_size=30).move_to([-3.6, 3.1, 0])
         tr = label(r"inside matter (a cloud of dust)", font_size=30).move_to([3.6, 3.1, 0])
         planet = Arc(radius=5.5, start_angle=PI / 2 - 0.35, angle=0.7, color=C.MATTER, stroke_width=6)
         planet.move_to([-3.6, -3.6, 0])
-        pl = label(r"planet $\downarrow$", font_size=24, color=C.MATTER).move_to([-1.4, -3.55, 0])
+        pl = label(r"planet $\downarrow$", font_size=24, color=C.MATTER).move_to([-6.2, -3.2, 0])
 
         def readout(view_center, vals, color):
             h = MathTex(r"V/V_0 =", font_size=34, color=color)
@@ -113,7 +115,7 @@ class Meaning(VoiceoverScene):
 
         rl, dl = readout(vl.center, vv, C.CURVATURE)
         rr, dr = readout(vr.center, vm, C.MATTER)
-        sim = note(r"computed: Newtonian free fall of 320 test particles (tidal regime)").to_edge(DOWN, buff=0.25)
+        sim = note(r"computed: Newtonian free fall of 320 test particles (tidal regime)").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Let's watch it. <bookmark mark='a'/> On the left, a ball of test particles in empty space, falling toward a "
             "planet below. <bookmark mark='b'/> On the right, a ball inside a uniform cloud of dust. Release both. "
@@ -139,22 +141,29 @@ class Meaning(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def weyl(self):
+        d = load("ball")
+        i = int(round(0.4 * (len(d["ts"]) - 1)))
         top = mtex(r"\text{Riemann}\ (20)", r"=", r"\text{Weyl}\ (10)", r"+", r"\text{Ricci}\ (10)", font_size=46)
         top[0].set_color(C.CURVATURE)
         top[4].set_color(C.MATTER)
-        top.move_to(UP * 2.2)
-        rows = VGroup(
-            VGroup(label(r"Weyl:", font_size=32), label(r"changes shape, keeps volume. Tides, gravitational waves.", font_size=30)),
-            VGroup(label(r"Ricci:", font_size=32, color=C.MATTER), label(r"changes volume. Fixed, point by point, by the matter there.", font_size=30)),
-        )
-        for r in rows:
-            r.arrange(RIGHT, buff=0.3)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(top, DOWN, buff=0.7)
+        top.to_edge(UP, buff=0.45)
+        vl = View3D(center=[-3.4, 0.0, 0], scale=1.05, azimuth=1.1, elevation=0.25)
+        vr = View3D(center=[3.4, 0.0, 0], scale=1.05, azimuth=1.1, elevation=0.25)
+        egg = cloud(vl, d["vac"][i], C.CURVATURE, r=0.045)
+        ball = cloud(vr, d["mat"][i], C.MATTER, r=0.045)
+        ref_l = DashedVMobject(Circle(radius=1.05, color=GREY_C, stroke_width=1.5).move_to(vl.center), num_dashes=40)
+        ref_r = DashedVMobject(Circle(radius=1.05, color=GREY_C, stroke_width=1.5).move_to(vr.center), num_dashes=40)
+        cap_l = VGroup(label(r"Weyl: changes shape, keeps volume", font_size=28, color=C.CURVATURE),
+                       label(r"tides, gravitational waves", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.1)
+        cap_r = VGroup(label(r"Ricci: changes volume", font_size=28, color=C.MATTER),
+                       label(r"fixed by the matter right there", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.1)
+        cap_l.next_to(vl.center + DOWN * 1.9, DOWN, buff=0.0)
+        cap_r.next_to(vr.center + DOWN * 1.9, DOWN, buff=0.0)
         count = VGroup(
-            label(r"10 equations $-$ 4 Bianchi identities $=$ 6 that evolve the geometry;", font_size=30),
-            label(r"the remaining freedom is the choice of 4 coordinates (like gauge freedom in electromagnetism).", font_size=28,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.2).next_to(rows, DOWN, buff=0.8)
+            label(r"10 equations $-$ 4 Bianchi identities $=$ 6 that evolve the geometry;", font_size=28),
+            label(r"the other 4 functions are the freedom to choose coordinates (like gauge freedom in electromagnetism)",
+                  font_size=24, color=GREY_A),
+        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "This splits curvature into two kinds. <bookmark mark='t'/> Riemann's twenty components divide into ten that "
             "make up the Ricci tensor and ten more called the Weyl tensor. <bookmark mark='w'/> Weyl curvature changes the "
@@ -168,9 +177,9 @@ class Meaning(VoiceoverScene):
             vo.wait_until("t")
             self.play(Write(top))
             vo.wait_until("w")
-            self.play(FadeIn(rows[0], shift=RIGHT * 0.2))
+            self.play(Create(ref_l), FadeIn(egg), FadeIn(cap_l))
             vo.wait_until("r")
-            self.play(FadeIn(rows[1], shift=RIGHT * 0.2))
+            self.play(Create(ref_r), FadeIn(ball), FadeIn(cap_r))
             vo.wait_until("c")
             self.play(FadeIn(count, lag_ratio=0.3))
         self.clear_scene()
@@ -195,7 +204,7 @@ class Meaning(VoiceoverScene):
                   y_axis_config={"numbers_to_include": [0.5, 1.0, 1.5, 2.0]})
         ax.to_edge(LEFT, buff=0.9).shift(DOWN * 0.9)
         xl = label(r"billions of years since the Big Bang", font_size=24).next_to(ax.x_axis, DOWN, buff=0.4)
-        yl = label(r"size of the ball (today $= 1$)", font_size=24).next_to(ax.y_axis, UP, buff=0.15)
+        yl = label(r"size of the ball (today $= 1$)", font_size=24).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         ok = t <= 20
         curve = polyline(ax, t[ok], a[ok], color=WHITE, stroke_width=4)
         now = Dot(ax.c2p(age, 1.0), radius=0.08, color=WHITE)
@@ -216,12 +225,12 @@ class Meaning(VoiceoverScene):
             g.add(*[Dot(center + s * np.array([x, y, 0]), radius=0.045, color=WHITE) for x, y in gal])
             return g
 
-        gm = always_redraw(galaxies)
-        marker = always_redraw(lambda: Dot(ax.c2p(tt.get_value(), float(np.interp(tt.get_value(), t, a))), radius=0.07,
+        gm = redraw(galaxies)
+        marker = redraw(lambda: Dot(ax.c2p(tt.get_value(), float(np.interp(tt.get_value(), t, a))), radius=0.07,
                                            color=YELLOW))
         lam = label(r"vacuum energy has $p = -\rho c^2$: \ $\rho + 3p/c^2 < 0$ \ repels", font_size=26,
-                    color=C.LAMBDA).to_edge(DOWN, buff=0.3)
-        params = note(r"flat $\Lambda$CDM, Planck 2018: $H_0 = 67.4$, $\Omega_m = 0.315$").next_to(ax, UP, buff=0.5).align_to(ax, LEFT)
+                    color=C.LAMBDA).next_to(frl, DOWN, buff=0.2)
+        params = note(r"flat $\Lambda$CDM, Planck 2018: $H_0 = 67.4$, $\Omega_m = 0.315$").next_to(ax, UP, buff=0.15).align_to(ax, RIGHT)
         with self.voiceover(
             "Finally, apply the same sentence to the biggest ball there is. <bookmark mark='f'/> In a universe filled "
             "uniformly with matter, any region is a ball of freely falling particles: the galaxies. Its radius obeys this "

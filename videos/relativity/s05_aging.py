@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import (View3D, boxed, curve3d, label, load, mtex, note, polyline, rgba, stack)
+from videos.relativity.common import (redraw, View3D, boxed, curve3d, label, load, mtex, note, polyline, rgba, stack)
 
 C_LIGHT = 299_792_458.0
 G0 = 9.81
@@ -77,7 +77,7 @@ class MaximalAging(VoiceoverScene):
             hh = self.h.get_value()
             return polyline(ax, ts, 4 * hh * ts * (T - ts) / T**2, color=WHITE, stroke_width=4)
 
-        self.path = always_redraw(path)
+        self.path = redraw(path)
 
         # right: excess proper time vs peak height
         rax = Axes(x_range=[0, 12, 2], y_range=[-4, 4, 2], x_length=5.0, y_length=4.2, tips=False,
@@ -91,7 +91,7 @@ class MaximalAging(VoiceoverScene):
         curve = polyline(rax, hs, d["excess"] / UNIT, color=C.PROPER_TIME, stroke_width=4)
         self.rax, self.curve = rax, curve
         self.rlabels = VGroup(rxl, ryl)
-        dot = always_redraw(lambda: Dot(rax.c2p(self.h.get_value(), excess(self.h.get_value()) / UNIT), radius=0.08,
+        dot = redraw(lambda: Dot(rax.c2p(self.h.get_value(), excess(self.h.get_value()) / UNIT), radius=0.08,
                                         color=WHITE))
         head = MathTex(r"\tau - T =", font_size=34, color=C.PROPER_TIME)
         val = DecimalNumber(0, num_decimal_places=2, font_size=34, include_sign=True, color=C.PROPER_TIME)
@@ -345,7 +345,7 @@ class MaximalAging(VoiceoverScene):
             pts = np.concatenate([P, np.zeros((len(P), 1))], 1) + earth_c
             return VGroup(*[Dot(p, radius=0.025, color=C.CURVATURE) for p in pts])
 
-        left = always_redraw(ring_left)
+        left = redraw(ring_left)
         # right: the same ring seen from its freely falling center, magnified
         zc = np.array([2.6, -0.2, 0])
         m = 1.45 / float(d["ring"])
@@ -359,7 +359,7 @@ class MaximalAging(VoiceoverScene):
             g.add(*[Dot(p, radius=0.07, color=C.CURVATURE) for p in pts])
             return g
 
-        right = always_redraw(ring_right)
+        right = redraw(ring_right)
         circle0 = DashedVMobject(Circle(radius=1.45, color=GREY_B, stroke_width=2).move_to(zc), num_dashes=40)
         center = Dot(zc, radius=0.05, color=WHITE)
         frame = label(r"seen from the freely falling center (magnified)", font_size=24, color=GREY_A).move_to([zc[0], 3.3, 0])

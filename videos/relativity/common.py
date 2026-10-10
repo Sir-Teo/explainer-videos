@@ -99,8 +99,21 @@ def stack(*rows: MathTex, buff=0.42, align_index=1) -> VGroup:
 def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1):
     """Reveal derivation rows one at a time, keeping at most ``keep`` on screen (older rows scroll off the top).
     Returns a function step(i) that animates row i."""
-    for r in rows:
+    edge = 6.95
+    for r, w in zip(rows, whys):
         r.shift((x - r[align_index].get_center()[0]) * RIGHT)
+        # a row too wide for the frame once its '=' is aligned shrinks about that '=' (its note follows it)
+        lo, hi = r.get_left()[0], r.get_right()[0]
+        f = min(1.0, (edge - x) / (hi - x) if hi > edge else 1.0, (x + edge) / (x - lo) if lo < -edge else 1.0)
+        if f < 1.0:
+            below = w is not None and w.get_top()[1] < r.get_bottom()[1] - 0.01
+            r.scale(f, about_point=np.array([x, r.get_y(), 0]))
+            if w is not None:
+                if below:
+                    w.next_to(r, DOWN, buff=0.08).align_to(r, RIGHT)
+                else:
+                    w.next_to(r, RIGHT, buff=0.35)
+                    w.set_x(min(w.get_x(), edge - 0.05 - w.width / 2))
     # each note keeps its vertical offset from its row (beside it: 0; below it: negative)
     offs = [0.0 if w is None else w.get_y() - r.get_y() for r, w in zip(rows, whys)]
 
@@ -136,6 +149,29 @@ def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1):
             scene.play(FadeIn(whys[i]), run_time=0.5)
 
     return step
+
+
+# ---------------------------------------------------------------------------
+# Redrawing
+# ---------------------------------------------------------------------------
+class Redraw(VGroup):
+    """Like ``always_redraw``, but each frame *swaps in* the freshly built mobject instead of calling ``become``.
+    ``become`` pairs old and new submobjects in family order, so when the family's size or nesting changes from
+    frame to frame (curves split by visibility, markers appearing) mismatched pieces trade points and draw spikes."""
+
+    def __init__(self, func):
+        super().__init__()
+        self.func = func
+        self.submobjects = [func()]
+        self.add_updater(Redraw._rebuild)
+
+    @staticmethod
+    def _rebuild(m):
+        m.submobjects = [m.func()]
+
+
+def redraw(func) -> Redraw:
+    return Redraw(func)
 
 
 # ---------------------------------------------------------------------------
@@ -361,11 +397,11 @@ class Globe(Group):
                         g.add(m)
                 return g
 
-            self.gridlines = always_redraw(make)
+            self.gridlines = redraw(make)
             self.add(self.gridlines)
 
     def curve(self, P, **kw) -> VGroup:
-        return always_redraw(lambda: curve3d(self.view, P, **kw))
+        return redraw(lambda: curve3d(self.view, P, **kw))
 
 
 # ---------------------------------------------------------------------------
@@ -413,7 +449,7 @@ class Clock(VGroup):
             c0 = self.face.get_center()
             return Line(c0, c0 + 0.8 * self.r * np.array([math.sin(a), math.cos(a), 0]), color=WHITE, stroke_width=3)
 
-        self.hand = always_redraw(hand)
+        self.hand = redraw(hand)
         self.add(self.hand)
 
 

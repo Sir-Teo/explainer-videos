@@ -39,6 +39,7 @@ class Schwarzschild(VoiceoverScene):
             label(r"Outside a static, spherical star: \ $T_{\mu\nu} = 0$", font_size=34),
             mtex(r"R_{\mu\nu} = \kappa\Big(T_{\mu\nu} - \tfrac12 T g_{\mu\nu}\Big) = 0", font_size=40, color=C.CURVATURE),
         ).arrange(DOWN, buff=0.3).to_edge(UP, buff=0.5)
+        intro = label(r"Solving Einstein's equation", font_size=44).move_to(UP * 0.5)
         ans = mtex(r"ds^2", r"=", r"-e^{2\alpha(r)}\,c^2dt^2", r"+", r"e^{2\beta(r)}\,dr^2", r"+",
                    r"r^2\big(d\theta^2 + \sin^2\theta\,d\phi^2\big)", font_size=44)
         ans[2].set_color(C.PROPER_TIME)
@@ -60,8 +61,9 @@ class Schwarzschild(VoiceoverScene):
             "<bookmark mark='u'/> All that's left unknown are two functions of r: alpha in the time part, and beta in the "
             "radial part."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("p")
-            self.play(FadeIn(prob, lag_ratio=0.3))
+            self.play(FadeOut(intro), FadeIn(prob, lag_ratio=0.3))
             vo.wait_until("a")
             self.play(Write(ans))
             vo.wait_until("s")
@@ -243,12 +245,12 @@ class Schwarzschild(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def flamm(self):
-        view = View3D(center=[-2.6, -1.6, 0], scale=0.62, azimuth=0.4, elevation=0.42)
+        view = View3D(center=[-3.6, -1.5, 0], scale=0.55, azimuth=0.4, elevation=0.42)
 
         def z(r):
             return 2 * np.sqrt(np.maximum(r - 1, 0))
 
-        rings = [1.0, 1.1, 1.3, 1.6, 2.0, 2.6, 3.3, 4.2, 5.2, 6.4]
+        rings = [1.0, 1.1, 1.3, 1.6, 2.0, 2.6, 3.3, 4.2, 5.2]
         sheet = VGroup()
         for rr in rings:
             a = np.linspace(0, 2 * np.pi, 140)
@@ -256,7 +258,7 @@ class Schwarzschild(VoiceoverScene):
             sheet.add(curve3d(view, P, color=C.METRIC, stroke_width=2.2 if rr > 1 else 4, sphere_r=None,
                               back_opacity=1.0))
         for a in np.linspace(0, 2 * np.pi, 24, endpoint=False):
-            rr = np.linspace(1.0, 6.4, 80)
+            rr = np.linspace(1.0, 5.2, 80)
             P = np.stack([rr * np.cos(a), rr * np.sin(a), z(rr)], 1)
             sheet.add(curve3d(view, P, color=C.METRIC, stroke_width=1.6, sphere_r=None))
         sheet[0].set_color(C.CURVATURE)
@@ -298,8 +300,8 @@ class Schwarzschild(VoiceoverScene):
         for r0 in (1.15, 1.5, 2.2, 3.2, 4.4):
             s = 1 - 1 / r0  # dr/(c dt) = +-(1 - r_s/r)
             h = 0.55
-            tip = ax.c2p(r0, 1.6)
-            a, b = ax.c2p(r0 - s * h, 1.6 + h), ax.c2p(r0 + s * h, 1.6 + h)
+            tip = ax.c2p(r0, 0.9)
+            a, b = ax.c2p(r0 - s * h, 0.9 + h), ax.c2p(r0 + s * h, 0.9 + h)
             cones.add(VGroup(Polygon(tip, a, b, stroke_width=0, fill_color=C.LIGHT, fill_opacity=0.3),
                              Line(tip, a, color=C.LIGHT, stroke_width=2.5), Line(tip, b, color=C.LIGHT, stroke_width=2.5)))
         eq = mtex(r"\frac{dr}{c\,dt}", r"=", r"\pm\Big(1 - \frac{r_s}{r}\Big)", font_size=40)

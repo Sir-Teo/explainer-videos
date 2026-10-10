@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity.common import boxed, label, load, mtex, note, polyline, sci, stack, st_axes
+from videos.relativity.common import redraw, boxed, label, load, mtex, note, polyline, sci, stack, st_axes
 
 
 def cabin(center, w=2.6, h=3.2, color=GREY_A):
@@ -73,13 +73,13 @@ class Equivalence(VoiceoverScene):
         sx = rng.uniform(R[0] - 3.2, R[0] + 3.4, 26)
         sy0 = rng.uniform(-4, 4, 26)
         st = ValueTracker(0.0)
-        stars = always_redraw(lambda: VGroup(*[Dot([x, ((y - st.get_value() * 2.5 + 4) % 8) - 4, 0], radius=0.02,
+        stars = redraw(lambda: VGroup(*[Dot([x, ((y - st.get_value() * 2.5 + 4) % 8) - 4, 0], radius=0.02,
                                                    color=GREY_B) for x, y in zip(sx, sy0)
                                                if not (abs(x - R[0]) < 1.4 and abs(((y - st.get_value() * 2.5 + 4) % 8) - 4 - R[1]) < 1.7)]))
         k = ValueTracker(0.0)
 
         def ball(c):
-            return always_redraw(lambda: Dot(c + UP * (0.9 - 2.38 * k.get_value() ** 2), radius=0.14, color=C.MATTER))
+            return redraw(lambda: Dot(c + UP * (0.9 - 2.38 * k.get_value() ** 2), radius=0.14, color=C.MATTER))
 
         b1, b2 = ball(L), ball(R)
         same = label(r"No experiment inside the box can tell these apart.", font_size=32, color=C.CURVATURE)
@@ -106,8 +106,8 @@ class Equivalence(VoiceoverScene):
         b2.clear_updaters()
         # free fall vs floating
         k2 = ValueTracker(0.0)
-        b1b = always_redraw(lambda: Dot(L + UP * 0.2 + RIGHT * 0.3 * math.sin(3 * k2.get_value()), radius=0.14, color=C.MATTER))
-        b2b = always_redraw(lambda: Dot(R + UP * 0.2 + RIGHT * 0.3 * math.sin(3 * k2.get_value()), radius=0.14, color=C.MATTER))
+        b1b = redraw(lambda: Dot(L + UP * 0.2 + RIGHT * 0.3 * math.sin(3 * k2.get_value()), radius=0.14, color=C.MATTER))
+        b2b = redraw(lambda: Dot(R + UP * 0.2 + RIGHT * 0.3 * math.sin(3 * k2.get_value()), radius=0.14, color=C.MATTER))
         tl2 = label(r"falling freely near Earth", font_size=30).move_to(tl)
         tr2 = label(r"floating in empty space", font_size=30).move_to(tr)
         gtag = label(r"falling", font_size=26, color=C.POTENTIAL).next_to(bl, LEFT, buff=0.3)
@@ -156,7 +156,7 @@ class Equivalence(VoiceoverScene):
             beam = VMobject(color=C.LIGHT, stroke_width=5).set_points_smoothly(pts)
             return VGroup(box, beam)
 
-        o, i = always_redraw(outside), always_redraw(inside)
+        o, i = redraw(outside), redraw(inside)
         lo = label(r"seen from outside", font_size=30).move_to([cl[0], 3.2, 0])
         li = label(r"seen inside the cabin", font_size=30).move_to([cr[0], 3.2, 0])
         exag = note(r"acceleration exaggerated about $10^{16}$ times").to_corner(UR, buff=0.3)
@@ -316,7 +316,7 @@ class Equivalence(VoiceoverScene):
         il = label(r"ISS", font_size=24).next_to(idot, RIGHT, buff=0.12)
         rz = float(d["r_zero"]) / 1e6
         zdot = Dot(ax.c2p(rz, 0), radius=0.06, color=GREY_A)
-        zl = MathTex(r"\tfrac32 R_\oplus", font_size=26, color=GREY_A).next_to(zdot, DR, buff=0.08)
+        zl = MathTex(r"\tfrac32 R_\oplus", font_size=26, color=GREY_A).next_to(zdot, UL, buff=0.06)
         nums = VGroup(
             mtex(r"+45.7", r"\ \text{gravity}", font_size=32),
             mtex(r"-7.2", r"\ \text{speed}", font_size=32),
