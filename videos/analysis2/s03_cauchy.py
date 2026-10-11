@@ -34,11 +34,12 @@ class Cauchy(VoiceoverScene):
         d = load("cauchy")
         s = d["s"]
         n_max = 40
-        ax = plain_axes([0, n_max + 1, 5], [0.4, 1.05, 0.1], 11.0, 3.7, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.35, -1.75, 0])
+        ax = plain_axes([0, n_max + 1, 5], [0.4, 1.05, 0.1], 11.0, 3.3, numbers=True, font_size=20,
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.35, -1.95, 0])
         dots = VGroup(*[Dot(ax.c2p(k, s[k - 1]), radius=0.045, color=C.SEQ) for k in range(1, n_max + 1)])
         series = MathTex(r"s_n = 1 - \tfrac12 + \tfrac13 - \cdots \pm \tfrac1n", font_size=34, color=C.SEQ)
-        series.move_to([3.6, 0.55, 0])
+        series.move_to([3.6, 1.55, 0])
         q = label(r"It converges (to $\ln 2$). \ But how would we know, without knowing $\ln 2$?", font_size=30)
         q.to_edge(UP, buff=0.45)
         dfn = MathTex(r"\forall \varepsilon > 0", r"\;\exists N", r":\;", r"n, m \ge N", r"\Rightarrow",
@@ -80,14 +81,14 @@ class Cauchy(VoiceoverScene):
             return VGroup(band, br, thr)
 
         band = always_redraw(tail_band)
-        tail_def = MathTex(r"E_N = \{p_N, p_{N+1}, p_{N+2}, \ldots\}", font_size=34).move_to([-3.6, 0.55, 0])
+        tail_def = MathTex(r"E_N = \{p_N, p_{N+1}, p_{N+2}, \ldots\}", font_size=34).move_to([-3.6, 1.55, 0])
         crit = label(r"Cauchy $\iff \operatorname{diam} E_N \to 0$ \ (Rudin 3.9)", font_size=28).next_to(tail_def, DOWN,
                                                                                                      buff=0.18)
         crit.align_to(tail_def, LEFT)
 
         def dlab(N):
             return MathTex(rf"\operatorname{{diam}} E_{{{N}}} = \tfrac{{1}}{{{N + 1}}}", font_size=32).move_to(
-                [3.6, -0.15, 0])
+                [3.6, 0.85, 0])
 
         dl = dlab(1)
         eps_l = MathTex(r"\varepsilon = 0.1", font_size=32, color=C.EPS).next_to(dl, DOWN, buff=0.12).align_to(dl, LEFT)
@@ -287,11 +288,11 @@ class Cauchy(VoiceoverScene):
         lo, hi = allp.min(0), allp.max(0)
         box = Rectangle(width=hi[0] - lo[0] + 0.5, height=hi[1] - lo[1] + 0.5, color=C.CLOSED_SET, stroke_width=3)
         box.move_to((lo + hi) / 2)
-        rk = VGroup(label(r"\textbf{Rudin 3.11(c)} \ In $\R^k$, every Cauchy sequence converges:", font_size=28),
-                    label(r"it is bounded (one tail has finite diameter, and the rest is finite),", font_size=26,
-                          color=GREY_A),
-                    label(r"so it lives in a closed box, which is compact (Heine--Borel).", font_size=26,
-                          color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        rk = VGroup(label(r"\textbf{Rudin 3.11(c)} \ In $\R^k$, Cauchy $\Rightarrow$ convergent:", font_size=28),
+                    label(r"a Cauchy sequence is bounded,", font_size=26, color=GREY_A),
+                    label(r"so it lives in a closed box,", font_size=26, color=GREY_A),
+                    label(r"which is compact (Heine--Borel).", font_size=26, color=GREY_A)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         rk.next_to(rows, DOWN, buff=0.45).align_to(thm, LEFT)
         with self.voiceover(
             "<bookmark mark='a'/> And in R k, the same is true, with no compactness assumed. A Cauchy sequence is "
@@ -333,8 +334,8 @@ class Cauchy(VoiceoverScene):
             r[1].move_to([xs[1], y, 0])
             r[2].move_to([xs[2], y, 0], aligned_edge=LEFT)
         sep = DashedLine([-6.4, 2.3 - 0.62 * 4.5, 0], [6.4, 2.3 - 0.62 * 4.5, 0], color=GREY_D, stroke_width=1.5)
-        later = label(r"function spaces, later:", font_size=22, color=GREY_B).next_to(sep, UP, buff=0.05).to_edge(RIGHT,
-                                                                                                             buff=0.6)
+        later = label(r"function spaces, later:", font_size=22, color=GREY_B).next_to(sep, DOWN, buff=0.08).to_edge(
+            RIGHT, buff=0.6)
         foot = VGroup(label(r"Banach and Hilbert spaces are \emph{required} to be complete.", font_size=28,
                             color=C.EPS),
                       label(r"Every metric space has a completion; completing $\mathbb{Q}$ is one way to build $\R$ "
@@ -368,13 +369,14 @@ class Cauchy(VoiceoverScene):
         e_seq = d["e_seq"]
         e_N = int(d["e_N"])
         n_max = 40
-        ax = plain_axes([0, n_max + 1, 5], [1.9, 3.1, 0.25], 11.0, 4.0, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.3, -1.45, 0])
+        ax = plain_axes([0, n_max + 1, 5], [1.9, 3.1, 0.25], 11.0, 3.4, numbers=True, font_size=20,
+                        axis_config={"decimal_number_config": {"num_decimal_places": 2}},
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.3, -1.95, 0])
         board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=n_max, n_max=n_max)  # no dot judged yet
         dots = board.dots()
         thm = label(r"\textbf{Rudin 3.14} \ A monotone, bounded sequence converges: \ to its supremum.", font_size=30)
         thm.to_edge(UP, buff=0.45)
-        ex = MathTex(r"s_n = \big(1 + \tfrac1n\big)^n", font_size=36, color=C.SEQ).move_to([-3.9, 1.55, 0])
+        ex = MathTex(r"s_n = \big(1 + \tfrac1n\big)^n", font_size=36, color=C.SEQ).move_to([-4.4, 2.45, 0])
         ex2 = label(r"increasing, and always below 3 \ (Rudin 3.30--3.31)", font_size=24, color=GREY_A)
         ex2.next_to(ex, DOWN, buff=0.12).align_to(ex, LEFT)
         ceil = ValueTracker(3.0)
@@ -403,7 +405,7 @@ class Cauchy(VoiceoverScene):
         band, thr = board.eps_band(), board.threshold()
         pf = VGroup(label(r"$s^* - \varepsilon$ is not an upper bound, \ so some $s_N > s^* - \varepsilon$;", font_size=26),
                     label(r"increasing: \ $s^* - \varepsilon < s_N \le s_n \le s^*$ \ for every $n \ge N$.", font_size=26)
-                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.9, 1.5, 0])
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.4, 2.35, 0])
         nm = label(r"Chapter 5: \ $s^* = 1 + 1 + \tfrac12 + \tfrac16 + \cdots = e$", font_size=26, color=GREY_B)
         nm.next_to(pf, DOWN, buff=0.25).align_to(pf, LEFT)
         with self.voiceover(
@@ -424,7 +426,7 @@ class Cauchy(VoiceoverScene):
             self.play(FadeIn(nm))
         assert e_N == board.smallest_N(0.1) == 12, (e_N, board.smallest_N(0.1))
         moral = label(r"In $\mathbb{Q}$ it fails again: \ $1, 1.4, 1.41, 1.414, \ldots$ rises, is bounded, and has no "
-                      r"rational supremum.", font_size=26, color=C.HOLE).to_edge(DOWN, buff=0.25)
+                      r"rational supremum.", font_size=26, color=C.HOLE).move_to([0, 0.75, 0])
         with self.voiceover(
             "<bookmark mark='m'/> And in the rationals this fails too: the decimal truncations of root two increase, "
             "stay bounded, and have no rational supremum. Completeness, in either form, is exactly what the rationals "
