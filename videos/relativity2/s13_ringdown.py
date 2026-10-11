@@ -277,13 +277,17 @@ class Ringdown(VoiceoverScene):
                      label(r"$33.6 + 32.2\,M_\odot \rightarrow 62.7\,M_\odot$, spin $0.68$, \ signal-to-noise ratio $\approx 80$",
                            font_size=26, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
         s = 0.0042  # screen units per sqrt(km^2)
-        c1 = Circle(radius=s * math.sqrt(A1 / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-4.6, -0.2, 0])
-        c2 = Circle(radius=s * math.sqrt(A2 / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-3.2, -0.2, 0])
-        cf = Circle(radius=s * math.sqrt(Af / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-0.4, -0.2, 0])
-        arr = Arrow([-2.4, -0.2, 0], [-1.7, -0.2, 0], buff=0, color=GREY_B)
-        la = label(rf"${Ai / 1e5:.2f}\times10^5$ km$^2$", font_size=26, color=HOR).next_to(VGroup(c1, c2), DOWN, buff=0.35)
-        lf = label(rf"${Af / 1e5:.2f}\times10^5$ km$^2$", font_size=26, color=HOR).next_to(cf, DOWN, buff=0.35)
-        cap = note(r"horizon areas $8\pi M^2(1 + \sqrt{1 - \chi^2})$ from the median masses and spins (circles to scale)").next_to(la, DOWN, buff=0.35).align_to(c1, LEFT)
+        c1 = Circle(radius=s * math.sqrt(A1 / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-5.25, -0.2, 0])
+        c2 = Circle(radius=s * math.sqrt(A2 / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-3.5, -0.2, 0])
+        cf = Circle(radius=s * math.sqrt(Af / math.pi), color=HOR, fill_color=HOR, fill_opacity=0.3).move_to([-0.25, -0.2, 0])
+        arr = Arrow([-2.55, -0.2, 0], [-1.8, -0.2, 0], buff=0, color=GREY_B)
+        y_lab = cf.get_bottom()[1] - 0.35  # both labels on one line, below the larger circle
+        la = label(rf"before: ${Ai / 1e5:.2f}\times10^5$ km$^2$", font_size=26, color=HOR).move_to(
+            [VGroup(c1, c2).get_center()[0], y_lab, 0])
+        lf = label(rf"after: ${Af / 1e5:.2f}\times10^5$ km$^2$", font_size=26, color=HOR).move_to([cf.get_center()[0], y_lab, 0])
+        cap = note(r"horizon areas $8\pi M^2(1 + \sqrt{1 - \chi^2})$ from the median masses and spins (circles to scale)")
+        cap.next_to(VGroup(la, lf), DOWN, buff=0.35)
+        clamp_x(cap)
         res = VGroup(
             label(r"area increase confirmed at $4.4\sigma$", font_size=28, color=HOR),
             label(r"(LIGO--Virgo--KAGRA, PRL 2025)", font_size=22, color=GREY_A),
