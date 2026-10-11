@@ -48,7 +48,7 @@ class Connectedness(VoiceoverScene):
         img = VGroup(Line(ax.c2p(0, ys.min()) + LEFT * 0.18, ax.c2p(0, ys.max()) + LEFT * 0.18, color=C.CONNECTED_SET,
                           stroke_width=8))
         il = label(r"$f([a, b])$ is connected, \ so an interval \ (2.47): \ it contains $c$", font_size=26,
-                   color=C.CONNECTED_SET).move_to([3.6, 0.9, 0])
+                   color=C.CONNECTED_SET).move_to([2.2, 2.3, 0])
         with self.voiceover(
             "<bookmark mark='t'/> Continuous functions carry connected sets to connected sets: if the image split into "
             "two separated pieces, their preimages would split the domain. <bookmark mark='a'/> On an interval, that's "
@@ -80,10 +80,10 @@ class Connectedness(VoiceoverScene):
                             color=C.RATIONAL) for x in pts])
         zero = DashedLine(ax.c2p(1, 0), ax.c2p(2, 0), color=GREY_B, stroke_width=1.5)
         hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(ax.c2p(SQRT2, 0))
-        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE).next_to(hole, DR, buff=0.12)
+        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE).next_to(hole, UL, buff=0.12)
         txt = VGroup(label(r"$f(1) = -1 < 0 < 2 = f(2)$, \ $f$ is continuous on $\mathbb{Q}$,", font_size=26),
                      label(r"and $f$ is never $0$: \ $\mathbb{Q}$ is not connected (Part 1)", font_size=26,
-                           color=C.HOLE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-2.6, 1.5, 0])
+                           color=C.HOLE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-1.4, 1.65, 0])
         with self.voiceover(
             "Without completeness the theorem fails. <bookmark mark='a'/> Take x squared minus 2, but only at rational "
             "points between one and two. It's continuous there, negative at one and positive at two. "
