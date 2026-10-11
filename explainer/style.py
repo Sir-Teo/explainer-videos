@@ -253,6 +253,34 @@ C = SimpleNamespace(
     EXPANSION="#FFE08A",  # the expansion theta of a congruence (a bundle of light rays or free particles)
     TEMPERATURE="#FF8A80",  # temperature, thermal (Hawking) radiation, Planck spectra
     NEG_ENERGY="#8C9EFF",  # negative-energy orbits and fragments (Penrose process)
+    # Analysis, from the real line to functional analysis (videos/analysis1-10).  One meaning per color across all
+    # ten parts; APPROX (magenta, quantum2) is reused for approximants: partial sums, polynomials, Fejér means.
+    EPS="#F7D154",  # epsilon: a tolerance, a target band, "how close"
+    DELTA="#2EC4B6",  # delta, N: the response, "how near / how far out"
+    SEQ="#58A6FF",  # points of a sequence x_n; the hero sequence
+    LIMIT=WHITE,  # the limit, the exact object
+    FUNC="#58A6FF",  # the hero function f
+    OPEN_SET="#7CC4FF",  # open sets, neighborhoods, balls (dashed edge, airy fill)
+    CLOSED_SET="#FF9F45",  # closed sets, closures, boundaries (solid edge)
+    COMPACT_SET="#E8C547",  # compact sets, finite subcovers
+    CONNECTED_SET="#5BD17A",  # connected sets, intervals, paths
+    RATIONAL="#9AA4B2",  # the rationals, countable scaffolding, dust
+    HOLE="#FF6B6B",  # a hole: where a limit should be and is not
+    CUT_LOW="#58A6FF",  # the lower set of a Dedekind cut
+    CUT_HIGH="#FF8A65",  # the upper set (everything above the cut)
+    UPPER_SUM="#F28B82",  # upper sums, suprema, upper bounds
+    LOWER_SUM="#81C995",  # lower sums, infima, lower bounds
+    MEASURE="#F2A541",  # measure, lengths, outer-measure covers
+    NULL_SET="#5C6370",  # null sets, "almost everywhere" exceptions
+    DIST="#FFD9A0",  # norms, distances, tubes around graphs
+    INNER=PURPLE_A,  # inner products, orthogonality, projections
+    FUNCTIONAL=LIGHT_BROWN,  # functionals, duals, hyperplanes (stacks of level sets)
+    FREQ=ORANGE,  # the frequency side: Fourier coefficients and transforms
+    OPERATOR="#7C7FE0",  # operators T, A; their graphs
+    SPECTRUM=GREEN,  # spectra, eigenvalues
+    TEST_FN="#9BE37B",  # test functions (bumps)
+    DISTRIBUTION="#FF6B8B",  # distributions, delta, principal values
+    PATHOLOGY="#FF5C5C",  # counterexamples: the museum's red corner tag
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
