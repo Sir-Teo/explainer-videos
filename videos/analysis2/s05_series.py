@@ -184,8 +184,9 @@ class Series(VoiceoverScene):
             "with is the geometric series: <bookmark mark='h'/> one plus a half plus a quarter, and so on, each term "
             "covering half the remaining distance to two."
         ) as vo:
+            self.play(FadeIn(comp[0]))
             vo.wait_until("a")
-            self.play(FadeIn(comp), FadeIn(why1))
+            self.play(FadeIn(comp[1:]), FadeIn(why1))
             vo.wait_until("g")
             self.play(FadeIn(geo), FadeIn(geo_r))
             vo.wait_until("h")
