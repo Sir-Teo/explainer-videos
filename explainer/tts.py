@@ -347,11 +347,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bintegrands\b", "[integrands](/ˈɪntəɡɹˌændz/)"),
     # Quantum mechanics, part 2 (videos/quantum2)
     (r"Aharonov[–—-]Bohm", "[Aharonov](/ɑhɑɹˈOnɔf/) [Bohm](/bˈOm/)"),
-    (r"\bAharonov\b", "[Aharonov](/ɑhɑɹˈOnɔf/)"),
-    (r"\bTonomura's\b", "[Tonomura's](/tˌOnOmˈʊɹəz/)"),
-    (r"(?<!\[)\bTonomura\b(?!')", "[Tonomura](/tˌOnOmˈʊɹə/)"),
+    (r"(?<!\[)\bAharonov\b", "[Aharonov](/ɑhɑɹˈOnɔf/)"),
+    (r"(?<!\[)\bBohm\b", "[Bohm](/bˈOm/)"),
     (r"\bWentzel\b", "[Wentzel](/vˈɛntsəl/)"),
-    (r"\bKramers\b", "[Kramers](/kɹˈɑməɹz/)"),
     (r"\bBrillouin\b", "[Brillouin](/bɹijˈuæn/)"),
     (r"Bohr[–—-]Sommerfeld", "[Bohr](/bˈɔɹ/) [Sommerfeld](/zˈɔməɹfɛlt/)"),
     (r"(?<!\[)\bSommerfeld\b", "[Sommerfeld](/zˈɔməɹfɛlt/)"),
@@ -366,10 +364,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bSchwinger\b", "[Schwinger](/ʃwˈɪŋəɹ/)"),
     (r"\bHong, Ou and Mandel\b", "Hong, [Ou](/ˈO/) and Mandel"),
     (r"\banyons\b", "[anyons](/ˈæniɑnz/)"),
-    (r"\beta\b", "[eta](/ˈAtə/)"),
-    (r"\bzeta\b", "[zeta](/zˈAtə/)"),
     (r"\bGurney\b", "[Gurney](/ɡˈɜɹni/)"),
-    (r"\bKac\b", "[Kac](/kˈɑts/)"),
+    (r"\bGeiger\b", "[Geiger](/ɡˈIɡəɹ/)"),
+    (r"\bsuperpositions\b", "[superpositions](/sˌupəɹpəzˈɪʃənz/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
