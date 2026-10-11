@@ -236,8 +236,8 @@ class Cantor(VoiceoverScene):
     # ------------------------------------------------------------------
     def staircase(self):
         d = load("cantor")
-        ax = Axes(x_range=[0, 1, 1 / 3], y_range=[0, 1, 0.5], x_length=7.6, y_length=5.2, tips=False,
-                  axis_config={"stroke_color": GREY_C}).shift(LEFT * 2.2 + DOWN * 0.4)
+        ax = Axes(x_range=[0, 1, 1 / 3], y_range=[0, 1, 0.5], x_length=6.8, y_length=5.2, tips=False,
+                  axis_config={"stroke_color": GREY_C}).shift(LEFT * 2.8 + DOWN * 0.4)
         xs = np.linspace(0, 1, 3001)
 
         def stair(n):
