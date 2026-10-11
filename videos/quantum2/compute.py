@@ -1344,7 +1344,7 @@ def compute_numbers():
     E2_32 = dirac_level(2, 1.5, alpha, mc2)
     fs = (E2_32 - E2_12) / h
     out["fs_dirac_GHz"] = np.array(fs / 1e9)
-    check(abs(fs / 1e9 - 10.95) < 0.02, f"numbers: Dirac 2P3/2 - 2P1/2 = {fs / 1e9:.3f} GHz")
+    check(abs(fs / 1e9 - 10.944) < 0.002, f"numbers: Dirac 2P3/2 - 2P1/2 = {fs / 1e9:.3f} GHz")
     out["fs_meas_GHz"] = np.array(10.96905)  # NIST ASD levels (2P3/2 - 2P1/2)
     out["lamb_MHz"] = np.array(1057.847)  # NIST ASD (2S1/2 - 2P1/2); Lundeen & Pipkin 1057.845(9)
     out["E2_bohr_eV"] = np.array(-0.25 * sc.physical_constants["Rydberg constant times hc in eV"][0] * mu / me)

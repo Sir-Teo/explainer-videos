@@ -97,7 +97,7 @@ class Rotations(VoiceoverScene):
         loop.to_edge(UP, buff=0.8)
         loop[2].set_color(C.ANGMOM)
         with self.voiceover(
-            "Even for tiny turns: <bookmark mark='a'/> rotate by epsilon about x, then about y, then undo both, and "
+            "<bookmark mark='a'/> Even for tiny turns: rotate by epsilon about x, then about y, then undo both, and "
             "you're left with a rotation about z by epsilon squared. <bookmark mark='b'/> Here are the numbers, for "
             "real rotation matrices: the leftover angle divided by epsilon squared goes to one, and its axis to z."
         ) as vo:
@@ -123,7 +123,7 @@ class Rotations(VoiceoverScene):
         box = SurroundingRectangle(r4, color=C.ANGMOM, buff=0.18, corner_radius=0.12)
         msg = label(r"one relation decides every possible value of angular momentum", font_size=28, color=GREY_A).next_to(box, DOWN, buff=0.35)
         with self.voiceover(
-            "Each rotation is a unitary, <bookmark mark='a'/> e to the minus i theta J over h-bar, and the three "
+            "<bookmark mark='a'/> Each rotation is a unitary, e to the minus i theta J over h-bar, and the three "
             "generators are the components of angular momentum. <bookmark mark='b'/> Expand that loop of four rotations "
             "to second order, <bookmark mark='c'/> match it to the leftover rotation about z, <bookmark mark='d'/> and "
             "you get J x J y minus J y J x equals i h-bar J z, and the same for every cyclic pair. "

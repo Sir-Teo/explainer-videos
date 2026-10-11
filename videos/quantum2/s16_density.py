@@ -10,7 +10,7 @@ from videos.quantum2.common import (BlochSphere, Projector, bloch_vector, label,
 
 
 def mat2(entries, colors=None, font_size=34):
-    m = MathTex(r"\begin{pmatrix} " + entries[0] + " & " + entries[1] + r" \\ " + entries[2] + " & " + entries[3] + r" \end{pmatrix}",
+    m = MathTex(r"\begin{pmatrix} " + entries[0] + " & " + entries[1] + r" \\[0.3em] " + entries[2] + " & " + entries[3] + r" \end{pmatrix}",
                 font_size=font_size)
     return m
 
@@ -51,7 +51,7 @@ class Density(VoiceoverScene):
         pur = VGroup(MathTex(r"\operatorname{tr}\hat\rho^2 = 1:\ \text{pure}", font_size=26, color=C.COHERENCE).next_to(off, DOWN, buff=0.1),
                      MathTex(r"\operatorname{tr}\hat\rho^2 = \tfrac12:\ \text{mixed}", font_size=26, color=C.BORN).next_to(r2, DOWN, buff=0.4))
         with self.voiceover(
-            "Here are two very different kinds of uncertainty. <bookmark mark='a'/> A spin in the superposition up plus "
+            "<bookmark mark='a'/> Here are two very different kinds of uncertainty. A spin in the superposition up plus "
             "down, over root two: pointing along x. <bookmark mark='b'/> And a spin that's up or down depending on a coin "
             "toss. <bookmark mark='c'/> Measure either one along z, and you get up half the time. <bookmark mark='d'/> "
             "But measure along x, and the superposition gives plus every time, while the coin-flip spin is still "
@@ -138,7 +138,7 @@ class Density(VoiceoverScene):
         msg = label(r"the whole is perfectly definite; each part alone is completely random", font_size=28, color=C.BORN).to_edge(DOWN, buff=0.9)
         imp = note(r"an ``improper'' mixture: nothing here is unknown --- the randomness comes from entanglement").to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Mixed states don't only come from ignorance. <bookmark mark='a'/> Take two spins in the singlet: a pure "
+            "<bookmark mark='a'/> Mixed states don't only come from ignorance. Take two spins in the singlet: a pure "
             "state of the pair. <bookmark mark='b'/> Ask what Alice alone can measure, by tracing out Bob's spin: summing "
             "over his possible outcomes. <bookmark mark='c'/> The result is one half times the identity, the center of "
             "the ball, <bookmark mark='d'/> with the largest entropy a spin can have. <bookmark mark='e'/> The whole is "
@@ -201,8 +201,8 @@ class Density(VoiceoverScene):
             thm.width = 5.4
         thm.move_to(RIGHT * 4.1 + DOWN * 1.0)
         with self.voiceover(
-            "And the density matrix closes a gap from the start of this video: why the Born rule? "
-            "<bookmark mark='a'/> Suppose you assign a probability to every possible outcome of every measurement, "
+            "<bookmark mark='a'/> And the density matrix closes a gap from the start of this video: why the Born rule? "
+            "Suppose you assign a probability to every possible outcome of every measurement, "
             "<bookmark mark='b'/> such that for any set of mutually perpendicular outcomes, the probabilities add to one. "
             "<bookmark mark='c'/> In 1957 Andrew Gleason proved that in three or more dimensions, the only such "
             "assignments are the trace of rho times the projector, for some density matrix rho. <bookmark mark='d'/> "

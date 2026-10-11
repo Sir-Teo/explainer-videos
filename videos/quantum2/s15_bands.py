@@ -101,7 +101,7 @@ class Bands(VoiceoverScene):
         wheel = corner_wheel(corner=DR, buff=0.15, radius=0.25)
         assert abs(float(b["bloch_k"]) - np.pi / 2) < 1e-6
         with self.voiceover(
-            "For an infinite lattice, symmetry tells us what the states look like. <bookmark mark='a'/> The potential "
+            "<bookmark mark='a'/> For an infinite lattice, symmetry tells us what the states look like. The potential "
             "repeats with period a, so the Hamiltonian commutes with the translation by one period. <bookmark mark='b'/> "
             "They share eigenstates, and since the translation is unitary, its eigenvalue is a phase: shifting by a "
             "multiplies psi by e to the i k a. <bookmark mark='c'/> So every stationary state is a plane wave, e to the i "
@@ -163,7 +163,7 @@ class Bands(VoiceoverScene):
         dts = VGroup(*[Dot(dax.c2p(k * a, e), radius=0.06, color=WHITE) for k, e in zip(rk, rE)])
         dl = label(r"dots: a ring of 8 wells,\\ $k = 2\pi n/8a$", font_size=20, color=GREY_A).next_to(dax.c2p(0, 40), UP, buff=0)
         with self.voiceover(
-            "Now we can find the bands exactly. <bookmark mark='a'/> Carry a solution across one cell with a two-by-two "
+            "<bookmark mark='a'/> Now we can find the bands exactly. Carry a solution across one cell with a two-by-two "
             "transfer matrix. Bloch's condition says its eigenvalues are e to the plus and minus i k a, "
             "<bookmark mark='b'/> so cos k a equals half its trace: an explicit function of the energy, worked out by "
             "Kronig and Penney in 1931. <bookmark mark='c'/> But a cosine lies between minus one and one. Wherever this "
@@ -211,7 +211,7 @@ class Bands(VoiceoverScene):
         top = label(r"each band holds 2 electrons per cell (one of each spin): the exclusion principle again", font_size=26).to_edge(UP, buff=0.35)
         wil = note(r"Wilson (1931); band 2 of the model above, filled at 24 $k$-points").to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Now fill the bands with electrons. <bookmark mark='a'/> Each band holds two electrons per cell, one of each "
+            "<bookmark mark='a'/> Now fill the bands with electrons. Each band holds two electrons per cell, one of each "
             "spin. <bookmark mark='b'/> With one electron per cell, a band is half full, and the electrons at the top of "
             "the filled states can move into empty ones with an arbitrarily small push: a metal. <bookmark mark='c'/> "
             "With two per cell, the band is full, and the nearest empty states are across a gap: an insulator. Alan "

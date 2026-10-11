@@ -213,7 +213,7 @@ class Dirac(VoiceoverScene):
         cap = note(r"1 + 1 dimensions, $\hbar = m = c = 1$; computed exactly").to_corner(UR, buff=0.2)
         wheel = corner_wheel(corner=UL, buff=0.15, radius=0.22)
         with self.voiceover(
-            "Mixing the two branches has a strange consequence. <bookmark mark='a'/> Here's a packet in a one-dimensional "
+            "<bookmark mark='a'/> Mixing the two branches has a strange consequence. Here's a packet in a one-dimensional "
             "version of the Dirac equation, half positive energy and half negative, solved exactly. "
             "<bookmark mark='b'/> Its center doesn't sit still: it trembles, at a frequency of about two m c squared over "
             "h-bar, around the center of its positive-energy part, which doesn't move at all. Schrödinger called this "

@@ -191,8 +191,8 @@ class Perturbation(VoiceoverScene):
         msg = label(r"levels that come close push each other apart", font_size=28, color=C.PERTURB).move_to(RIGHT * 3.3 + DOWN * 0.6)
         unc = label(r"(uncoupled: dashed; they would cross)", font_size=22, color=GREY_B).next_to(msg, DOWN, buff=0.2)
         with self.voiceover(
-            "Notice the energy differences in the denominators: when two levels come close, they push each other apart. "
-            "<bookmark mark='a'/> For two levels it's exact: <bookmark mark='b'/> the eigenvalues are hyperbolas, and "
+            "<bookmark mark='a'/> Notice the energy differences in the denominators: when two levels come close, they push each other apart. "
+            "For two levels it's exact: <bookmark mark='b'/> the eigenvalues are hyperbolas, and "
             "the closest approach is twice the coupling."
         ) as vo:
             vo.wait_until("a")
@@ -303,8 +303,8 @@ class Perturbation(VoiceoverScene):
         dys = label(r"Dyson: for $g < 0$ the well opens up and the particle tunnels out, so $E_0(g)$ can't be smooth at $g = 0$",
                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Last, a warning. For the anharmonic oscillator, the energy as a series in the coupling g can be computed "
-            "exactly, to any order: <bookmark mark='a'/> one half, plus three quarters g, minus twenty-one eighths g "
+            "<bookmark mark='a'/> Last, a warning. For the anharmonic oscillator, the energy as a series in the coupling g can be computed "
+            "exactly, to any order: one half, plus three quarters g, minus twenty-one eighths g "
             "squared, and on. <bookmark mark='b'/> But the coefficients grow like n factorial. The series converges for "
             "no value of g except zero: Bender and Wu proved it in 1969. <bookmark mark='c'/> Dyson saw why: flip the "
             "sign of g and the well opens up; the particle can tunnel out, and no smooth formula can cover both signs."

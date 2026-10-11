@@ -58,7 +58,7 @@ class Decoherence(VoiceoverScene):
         ax = plain_axes((0, 12), (0, 1.05), 7.2, 3.9).move_to(LEFT * 2.6 + DOWN * 0.75)
         tks = VGroup(tick_labels(ax, xs=(0, 4, 8, 12)), tick_labels(ax, ys=(0, 0.5, 1)))
         tl = MathTex("t", font_size=28, color=C.QTIME).next_to(ax.x_axis.get_end(), RIGHT, buff=0.1)
-        yl = MathTex(r"|\braket{E_1(t)}{E_0(t)}|", font_size=28, color=C.COHERENCE).next_to(ax.y_axis.get_end(), UP, buff=0.1)
+        yl = MathTex(r"|\braket{E_1(t)}{E_0(t)}|", font_size=28, color=C.COHERENCE).next_to(ax.y_axis.get_end(), UP, buff=0.1).align_to(ax, LEFT)
         Ns = (1, 5, 20, 200)
         cols = ["#E9D5FF", "#C4B5FD", "#A78BFA", C.COHERENCE]
         curves = VGroup(*[polyline(ax, t, d[f"env_{N}"], color=c, stroke_width=3 if N < 200 else 4.5) for N, c in zip(Ns, cols)])
@@ -82,7 +82,7 @@ class Decoherence(VoiceoverScene):
         ar = always_redraw(arr)
         bl = label(r"$N = 200$: the Bloch arrow\\shrinks onto the $z$ axis", font_size=22, color=GREY_A).next_to(bs, DOWN, buff=0.15)
         with self.voiceover(
-            "A real environment has many parts, and each takes a slightly different record. <bookmark mark='a'/> The "
+            "<bookmark mark='a'/> A real environment has many parts, and each takes a slightly different record. The "
             "overlap is a product of many numbers, each a little less than one. Here's a computed example: one qubit, "
             "dephased by N environment spins. <bookmark mark='b'/> With one, the coherence oscillates and comes back. "
             "<bookmark mark='c'/> With five, it comes back in bursts. <bookmark mark='d'/> With twenty, it's gone and "

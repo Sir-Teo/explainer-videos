@@ -60,7 +60,7 @@ class Gauge(VoiceoverScene):
         kick = label(r"an extra momentum $q\nabla\chi$ that varies from place to place: the physics would change", font_size=26,
                      color=GREY_A).next_to(p0, DOWN, buff=0.25)
         with self.voiceover(
-            "The Schrödinger equation, however, notices. <bookmark mark='a'/> Apply the momentum operator to the new "
+            "<bookmark mark='a'/> The Schrödinger equation, however, notices. Apply the momentum operator to the new "
             "wavefunction. The product rule brings down an extra term, the gradient of the phase: <bookmark mark='b'/> "
             "as far as the equation is concerned, the particle has been given a momentum kick that varies from place to "
             "place. A pure change of bookkeeping would change the physics."

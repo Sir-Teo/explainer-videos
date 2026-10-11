@@ -139,7 +139,7 @@ class Translations(VoiceoverScene):
         box = SurroundingRectangle(l3, color=C.MOMENTUM, buff=0.2, corner_radius=0.12)
         msg = label(r"Part 1 guessed this; here it is forced", font_size=30, color=GREY_A).next_to(box, DOWN, buff=0.4)
         with self.voiceover(
-            "And the formula for momentum follows. <bookmark mark='a'/> In the position basis, the slid wavefunction is "
+            "<bookmark mark='a'/> And the formula for momentum follows. In the position basis, the slid wavefunction is "
             "psi of x minus a. Expand both sides to first order in a: <bookmark mark='b'/> Taylor's theorem on one side, "
             "the generator on the other. <bookmark mark='c'/> Matching them, P acting on psi is minus i h-bar times the "
             "derivative. Part 1 guessed this; here it's forced."
@@ -189,8 +189,8 @@ class Translations(VoiceoverScene):
             concl.width = 8.2
         concl.move_to(RIGHT * 2.55 + DOWN * 1.35)
         with self.voiceover(
-            "One consequence is startling. No finite matrices can satisfy X P minus P X equals i h-bar. "
-            "<bookmark mark='a'/> The trace of any commutator is zero, because the trace of X P equals the trace of P X. "
+            "<bookmark mark='a'/> One consequence is startling. No finite matrices can satisfy X P minus P X equals i h-bar. "
+            "The trace of any commutator is zero, because the trace of X P equals the trace of P X. "
             "<bookmark mark='m'/> Here's a random five-by-five example, whose diagonal entries cancel exactly. "
             "<bookmark mark='b'/> But the trace of i h-bar times the identity is i h-bar times the dimension. "
             "<bookmark mark='c'/> So the Hilbert space of a particle on a line has to be infinite-dimensional, and, "

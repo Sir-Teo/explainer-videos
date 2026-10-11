@@ -37,7 +37,7 @@ class WKB(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.6, buff=0.5)
         hist = note(r"Wentzel, Kramers, Brillouin (1926); Jeffreys (1925)").to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The third road runs backward, from classical mechanics. <bookmark mark='a'/> Look for solutions with a "
+            "<bookmark mark='a'/> The third road runs backward, from classical mechanics. Look for solutions with a "
             "classical-looking action in the exponent: an amplitude A times e to the i S over h-bar, both functions of "
             "x. <bookmark mark='b'/> Put that into the time-independent Schrödinger equation, and sort the terms by "
             "powers of h-bar."

@@ -50,11 +50,12 @@ def fmt_int(n: int) -> str:
 # ---------------------------------------------------------------------------
 # Derivations
 # ---------------------------------------------------------------------------
-def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.95):
+def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.95, room_below=False):
     """Reveal derivation rows one at a time, keeping at most ``keep`` on screen (older rows scroll off the top).
     Each row's ``align_index`` part (usually '=') is lined up at ``x``.  Returns ``step(i)`` that animates row i:
     the first row is written, each later one grows out of a copy of the previous one (matching tex parts move into
-    place), and its grey 'why' note fades in beside or below it."""
+    place), and its grey 'why' note fades in beside or below it.  ``room_below`` adds the height of a note that
+    had to go under its row to that row's spacing, so it cannot touch the next row."""
     for r, w in zip(rows, whys):
         r.shift((x - r[align_index].get_center()[0]) * RIGHT)
         lo, hi = r.get_left()[0], r.get_right()[0]
@@ -72,6 +73,7 @@ def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, 
                 w.set_x(min(r.get_right()[0], edge) - w.width / 2)
                 w.set_x(max(w.get_x(), -edge + w.width / 2))
     offs = [0.0 if w is None else w.get_y() - r.get_y() for r, w in zip(rows, whys)]
+    extra = [0.0 if (w is None or not room_below) else max(0.0, r.get_bottom()[1] - w.get_bottom()[1]) for r, w in zip(rows, whys)]
 
     def step(i, run_time=1.3):
         anims = []
@@ -84,7 +86,7 @@ def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, 
         targets = []
         for r in list(shown) + [rows[i]]:
             targets.append(y - r.height / 2)
-            y -= r.height + buff
+            y -= r.height + buff + extra[rows.index(r)]
         for r, ty in zip(shown, targets[:-1]):
             anims.append(r.animate.set_y(ty))
             j = rows.index(r)
