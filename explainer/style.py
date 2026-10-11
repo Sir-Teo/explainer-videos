@@ -233,6 +233,13 @@ C = SimpleNamespace(
     WAVE="#FF7EB6",  # gravitational waves: h_mu_nu, h_+, h_x, strain
     LAMBDA="#7C7FE0",  # the cosmological constant, dark energy
     OBSERVED=WHITE,  # measurements and data
+    # General relativity, part 2 (videos/relativity2).  Reuses all of part 1's colors (horizons are CURVATURE, like
+    # part 1's r = r_s) and ENTROPY (LIGHT_PINK) for black-hole entropy.
+    SINGULARITY="#FF3B5C",  # r = 0, the ring singularity: drawn as a zigzag
+    SPIN="#B8F04A",  # angular momentum J, spin a, frame dragging, Omega, the ergosphere; rotation omega_ab
+    EXPANSION="#FFE08A",  # the expansion theta of a congruence (a bundle of light rays or free particles)
+    TEMPERATURE="#FF8A80",  # temperature, thermal (Hawking) radiation, Planck spectra
+    NEG_ENERGY="#8C9EFF",  # negative-energy orbits and fragments (Penrose process)
     # UI
     TEXT=WHITE,
     DIM=GREY_B,
