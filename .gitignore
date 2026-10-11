@@ -10,6 +10,7 @@ media/
 # Generated narration audio + simulation data (regenerable, can be large)
 .cache/
 
-# Final renders (large binaries; share via releases, not git)
+# Finished videos (large binaries; built locally with tools/build.py, never committed)
 renders/
+published/
 *.egg-info/

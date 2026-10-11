@@ -8,7 +8,7 @@ heads, MLP neurons, position vectors and predictions. Learning is shown with a
 real training run of a tiny transformer on Shakespeare. Schematics are labeled
 as schematics.
 
-**Watch:** [`published/llm.mp4`](../../published/llm.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/llm.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -35,7 +35,6 @@ python tools/build.py llm -q l                 # preview
 python tools/build.py llm                      # final 1080p30 + subtitles + chapters
 python tools/export_script.py llm              # regenerate SCRIPT.md from the code
 python tools/check_narration.py llm            # Whisper listen test of every narration line
-python tools/publish.py llm                    # GitHub-sized copy -> published/llm.mp4
 ```
 
 `analyze.py gpt2_family` downloads GPT-2 medium, large and XL (~9 GB) for the

@@ -4,42 +4,32 @@
 [Manim Community](https://www.manim.community/), narrated by an offline neural
 TTS voice, and stitched into a finished video with subtitles and chapters.
 
-| Video | Length | Watch | Source |
+| Video | Length | Source | Build (after the one-time setup below) |
 |---|---|---|---|
-| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`published/navier_stokes.mp4`](published/navier_stokes.mp4) | [`videos/navier_stokes`](videos/navier_stokes) |
-| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`published/llm.mp4`](published/llm.mp4) | [`videos/llm`](videos/llm) |
-| **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`published/opposing_forces.mp4`](published/opposing_forces.mp4) | [`videos/opposing_forces`](videos/opposing_forces) |
-| **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`published/riemann.mp4`](published/riemann.mp4) | [`videos/riemann`](videos/riemann) |
-| **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`published/open_models.mp4`](published/open_models.mp4) | [`videos/open_models`](videos/open_models) |
-| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`published/frontier.mp4`](published/frontier.mp4) | [`videos/frontier`](videos/frontier) |
-| **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`published/rl.mp4`](published/rl.mp4) | [`videos/rl`](videos/rl) |
-| **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`published/stochastic.mp4`](published/stochastic.mp4) | [`videos/stochastic`](videos/stochastic) |
-| **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`published/trading.mp4`](published/trading.mp4) | [`videos/trading`](videos/trading) |
-| **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | 64 min | [`published/quantum.mp4`](published/quantum.mp4) | [`videos/quantum`](videos/quantum) |
-| **General Relativity, Derived: From a Falling Elevator to Einstein's Field Equations** (the equivalence principle, falling as maximal aging, metrics, tensors, Christoffel symbols, parallel transport, the Riemann tensor and geodesic deviation, the field equations derived two ways, Schwarzschild, Mercury's 43″, light bending, a ray-traced black hole and gravitational waves; every curvature formula computed with sympy and asserted, every orbit and light ray an integrated geodesic, and LIGO's real GW150914 strain) | 69 min | [`published/relativity.mp4`](published/relativity.mp4) | [`videos/relativity`](videos/relativity) |
-| **General Relativity, Part 2: Inside Black Holes, Spinning Spacetime, and the Expanding Universe** (the sequel: Eddington–Finkelstein, Kruskal and Penrose diagrams, the Einstein–Rosen bridge, Raychaudhuri's equation and Penrose's singularity theorem, frame dragging and Gravity Probe B, the Kerr metric, the ergosphere and Penrose process, the shadow of a spinning black hole, the quadrupole formula and chirp derived, Hulse–Taylor, ringdown and the area theorem, black-hole thermodynamics and Hawking radiation, Friedmann's equations and cosmic horizons; Kerr's Ricci-flatness checked exactly with sympy, ray-traced Kerr images matching Bardeen's shadow pixel for pixel, a simulated ringdown matching Leaver's frequency, and LIGO's real data) | 56 min | [`published/relativity2.mp4`](published/relativity2.mp4) | [`videos/relativity2`](videos/relativity2) |
-| **Quantum Mechanics, Part 2: Where the Rules Come From (Symmetry, Sums over Paths, and the Structure of Matter)** (the sequel derives what Part 1 guessed: the Schrödinger equation from time symmetry via Wigner's and Stone's theorems, [x, p] = iħ from translations, the Hamiltonian from Galilean boosts, spin from the rotation algebra, electromagnetism from local phase symmetry and a simulated Aharonov–Bohm effect; then Feynman's path integral, the Schrödinger equation derived from it, stationary phase, WKB and Gamow's alpha decay against 29 measured half-lives; perturbation theory and why its series diverge, Fermi's golden rule; identical particles, helium, the periodic table and bands; density matrices, Gleason's theorem and decoherence; the Dirac equation, g = 2, fine structure and the Lamb shift; every wave a numerical solution, every number asserted against theory or data) | 57 min | [`published/quantum2.mp4`](published/quantum2.mp4) | [`videos/quantum2`](videos/quantum2) |
+| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`videos/navier_stokes`](videos/navier_stokes) | `python -m videos.navier_stokes.simulate && python tools/build.py navier_stokes` |
+| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`videos/llm`](videos/llm) | `python -m videos.llm.analyze && python tools/build.py llm` |
+| **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`videos/opposing_forces`](videos/opposing_forces) | `python tools/build.py opposing_forces` |
+| **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`videos/riemann`](videos/riemann) | `python -m videos.riemann.compute && python tools/build.py riemann` |
+| **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`videos/open_models`](videos/open_models) | `python tools/build.py open_models` |
+| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`videos/frontier`](videos/frontier) | `python -m videos.frontier.compute && python tools/build.py frontier` |
+| **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`videos/rl`](videos/rl) | `python -m videos.rl.compute && python tools/build.py rl` |
+| **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`videos/stochastic`](videos/stochastic) | `python -m videos.stochastic.compute && python tools/build.py stochastic` |
+| **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`videos/trading`](videos/trading) | `python tools/build.py trading` |
+| **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | 64 min | [`videos/quantum`](videos/quantum) | `python -m videos.quantum.compute && python tools/build.py quantum` |
+| **General Relativity, Derived: From a Falling Elevator to Einstein's Field Equations** (the equivalence principle, falling as maximal aging, metrics, tensors, Christoffel symbols, parallel transport, the Riemann tensor and geodesic deviation, the field equations derived two ways, Schwarzschild, Mercury's 43″, light bending, a ray-traced black hole and gravitational waves; every curvature formula computed with sympy and asserted, every orbit and light ray an integrated geodesic, and LIGO's real GW150914 strain) | 69 min | [`videos/relativity`](videos/relativity) | `python -m videos.relativity.compute && python tools/build.py relativity` |
+| **General Relativity, Part 2: Inside Black Holes, Spinning Spacetime, and the Expanding Universe** (the sequel: Eddington–Finkelstein, Kruskal and Penrose diagrams, the Einstein–Rosen bridge, Raychaudhuri's equation and Penrose's singularity theorem, frame dragging and Gravity Probe B, the Kerr metric, the ergosphere and Penrose process, the shadow of a spinning black hole, the quadrupole formula and chirp derived, Hulse–Taylor, ringdown and the area theorem, black-hole thermodynamics and Hawking radiation, Friedmann's equations and cosmic horizons; Kerr's Ricci-flatness checked exactly with sympy, ray-traced Kerr images matching Bardeen's shadow pixel for pixel, a simulated ringdown matching Leaver's frequency, and LIGO's real data) | 56 min | [`videos/relativity2`](videos/relativity2) | `python -m videos.relativity2.compute && python tools/build.py relativity2` |
+| **Quantum Mechanics, Part 2: Where the Rules Come From (Symmetry, Sums over Paths, and the Structure of Matter)** (the sequel derives what Part 1 guessed: the Schrödinger equation from time symmetry via Wigner's and Stone's theorems, [x, p] = iħ from translations, the Hamiltonian from Galilean boosts, spin from the rotation algebra, electromagnetism from local phase symmetry and a simulated Aharonov–Bohm effect; then Feynman's path integral, the Schrödinger equation derived from it, stationary phase, WKB and Gamow's alpha decay against 29 measured half-lives; perturbation theory and why its series diverge, Fermi's golden rule; identical particles, helium, the periodic table and bands; density matrices, Gleason's theorem and decoherence; the Dirac equation, g = 2, fine structure and the Lamb shift; every wave a numerical solution, every number asserted against theory or data) | 57 min | [`videos/quantum2`](videos/quantum2) | `python -m videos.quantum2.compute && python tools/build.py quantum2` |
 
-The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
--16 LUFS) with soft English subtitles and chapter markers, sized to fit under
-GitHub's 100 MB file limit by `tools/publish.py`; a sidecar `.srt` sits next
-to each. Download one and open it in any player (VLC, QuickTime, a browser).
-The LLM, Opposing Forces, Riemann and open-models videos' pictures are bit-identical to the full renders; the
-Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
-0.98–0.9996 against the full render, lowest on the turbulence footage);
-the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
-dense 15 s segments, lowest single frame 0.993); the stochastic-calculus video at
-~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
-fans and Monte Carlo noise, lowest single frame 0.975); the quantum-mechanics video at
-~99 kb/s (mean SSIM 0.998–0.9994 on five dense 15 s segments: the 2D double slit, the quantum
-carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977);
-the general-relativity Part 2 video at ~159 kb/s (mean SSIM 0.997–0.9996 on five dense 15 s segments: the spinning
-black hole, the Penrose process, the spin comparison, the binary's wave spiral and the expanding galaxy grid; lowest
-single frame 0.957, apart from one frame at a cut); and the quantum-mechanics Part 2 video at ~123 kb/s (mean SSIM
-0.9987–0.9996 on five dense 15 s segments: the Feynman path sum through two slits, the Aharonov–Bohm flux sweep,
-the Cornu spiral, the decohering cat state and the Zitterbewegung; lowest single frame 0.993). The
-96 kb/s narration is within measurement noise of the 192 kb/s master on
-UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
+The finished videos are not stored in this repository: only the code that makes
+them is. Each one is built from source with the command in its row (after the
+one-time setup in the quick start below); the first part of the command
+precomputes the video's footage, data or simulations into `.cache/` and is needed
+only once. `tools/build.py` writes `renders/<video>.mp4`: a 1080p30 MP4 (H.264,
+AAC narration mastered to -16 LUFS) with soft English subtitles and chapter
+markers, plus a sidecar `.srt` and a YouTube chapter list. Add `-q p` for 1440p
+or `-q k` for 2160p (4K), and `--fps 60` for 60 frames per second. The
+opposing-forces, open-models and trading videos need no precomputation: their
+data snapshots are committed.
 
 ## Quick start
 
@@ -149,12 +139,11 @@ videos/<name>/
   SCRIPT.md                narration, generated by tools/export_script.py
 tools/
   build.py                 parallel render -> concat -> loudness mastering -> subtitles + chapters
-  publish.py               GitHub-sized copy (< 100 MB) of a finished video -> published/
+  publish.py               a smaller copy (< 100 MB) of a finished video, for sharing -> published/ (not committed)
   export_script.py         extracts the narration script from the scene code
   contact_sheet.py         tiles frames of a render into one image for layout QA
   check_narration.py       Whisper "listen test": diffs what the TTS said against the script
   score_voice.py           UTMOSv2 naturalness + Whisper word error rate for narration audio
-published/                 the finished videos, small enough for GitHub (see tools/publish.py)
 ```
 
 ## How a video is made (the workflow these tools encode)

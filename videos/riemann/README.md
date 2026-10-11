@@ -14,7 +14,7 @@ not drawn. That covers the zeros, prime counts, the Mertens walk, the domain
 coloring, Gauss sums, Kummer's angles, the explicit-formula waves and the
 "spectrum of the primes". Schematics are labeled `schematic`.
 
-**Watch:** [`published/riemann.mp4`](../../published/riemann.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/riemann.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -43,7 +43,6 @@ python tools/build.py riemann -q l        # preview
 python tools/build.py riemann             # final 1080p30 + subtitles + chapters
 python tools/export_script.py riemann     # regenerate SCRIPT.md from the code
 python tools/check_narration.py riemann   # Whisper listen test of every narration line
-python tools/publish.py riemann           # GitHub-sized copy -> published/riemann.mp4
 ```
 
 ## Outline

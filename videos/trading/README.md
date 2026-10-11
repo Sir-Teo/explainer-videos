@@ -33,7 +33,7 @@ against the data at render time.
 
 *An explanation of public information, not affiliated with any firm named, and not investment advice.*
 
-**Watch:** [`published/trading.mp4`](../../published/trading.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/trading.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -63,7 +63,6 @@ python tools/build.py trading -q l            # preview
 python tools/build.py trading                 # final 1080p30 + subtitles + chapters
 python tools/export_script.py trading         # regenerate SCRIPT.md from the code
 python tools/check_narration.py trading       # Whisper listen test of every narration line
-python tools/publish.py trading               # GitHub-sized copy -> published/trading.mp4
 ```
 
 The derived results the scenes read (`data/*.json`, 1.8 MB) are committed, so the

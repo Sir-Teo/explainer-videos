@@ -45,7 +45,7 @@ sample is seeded. Every symbolic step the slides rely on is checked with sympy o
 the narration states is computed in [`compute.py`](compute.py) and asserted against theory or data. Schematics are
 labeled `schematic`.
 
-**Watch:** [`published/quantum2.mp4`](../../published/quantum2.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/quantum2.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -78,7 +78,6 @@ python tools/build.py quantum2 -q l        # preview
 python tools/build.py quantum2             # final 1080p30 + subtitles + chapters
 python tools/export_script.py quantum2     # regenerate SCRIPT.md from the code
 python tools/check_narration.py quantum2   # Whisper listen test of every narration line
-python tools/publish.py quantum2           # GitHub-sized copy -> published/quantum2.mp4
 ```
 
 ## The visual language

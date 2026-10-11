@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Make a copy of a finished video small enough to commit to GitHub.
+"""Make a smaller copy of a finished video, for sharing (finished videos are not committed to the repo).
 
     python tools/publish.py llm                 # renders/llm.mp4 -> published/llm.mp4
     python tools/publish.py navier_stokes --max-mb 95

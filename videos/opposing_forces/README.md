@@ -14,7 +14,7 @@ to Timmer on screen.
 
 *An explanation of one strategist's view, not investment advice.*
 
-**Watch:** [`published/opposing_forces.mp4`](../../published/opposing_forces.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/opposing_forces.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -43,7 +43,6 @@ python tools/build.py opposing_forces -q l        # preview
 python tools/build.py opposing_forces             # final 1080p30 + subtitles + chapters
 python tools/export_script.py opposing_forces     # regenerate SCRIPT.md from the code
 python tools/check_narration.py opposing_forces   # Whisper listen test of every narration line
-python tools/publish.py opposing_forces           # GitHub-sized copy -> published/opposing_forces.mp4
 ```
 
 `data.json` (about 0.3 MB) is committed, so the video renders offline exactly

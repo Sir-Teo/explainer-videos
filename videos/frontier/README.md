@@ -32,7 +32,7 @@ loss under two real models, GRPO's advantages for a real group of eight
 answers); the rest are labeled `illustrative`. See
 [Worked examples](#worked-examples) for the full list.
 
-**Watch:** [`published/frontier.mp4`](../../published/frontier.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/frontier.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -63,7 +63,6 @@ python tools/build.py frontier -q l        # preview
 python tools/build.py frontier             # final 1080p30 + subtitles + chapters
 python tools/export_script.py frontier     # regenerate SCRIPT.md from the code
 python tools/check_narration.py frontier   # Whisper listen test of every narration line
-python tools/publish.py frontier           # GitHub-sized copy -> published/frontier.mp4
 ```
 
 ## Outline

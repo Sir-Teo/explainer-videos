@@ -19,7 +19,7 @@ hedging, and 2,000 reweighted paths. Each is asserted against the theory it
 illustrates (see [Simulations](#simulations-computepy)). Schematics are labeled
 `schematic`; the one enlarged illustrative step is labeled `one step, enlarged`.
 
-**Watch:** [`published/stochastic.mp4`](../../published/stochastic.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/stochastic.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -47,7 +47,6 @@ python tools/build.py stochastic -q l        # preview
 python tools/build.py stochastic             # final 1080p30 + subtitles + chapters
 python tools/export_script.py stochastic     # regenerate SCRIPT.md from the code
 python tools/check_narration.py stochastic   # Whisper listen test of every narration line
-python tools/publish.py stochastic           # GitHub-sized copy -> published/stochastic.mp4
 ```
 
 ## Outline
