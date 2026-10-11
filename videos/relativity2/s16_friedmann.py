@@ -135,15 +135,24 @@ class Friedmann(VoiceoverScene):
         gal = rng.uniform(-1, 1, (40, 2)) * np.array([3.0, 1.5])
         cen = np.array([0, -1.0, 0])
 
+        X0, X1, Y0, Y1 = -6.9, 6.9, -2.45, 2.2  # the window between the metric and the text
+
         def galaxies():
             s = k.get_value()
             g = VGroup()
             for x in np.arange(-3, 3.01, 0.75):
-                g.add(Line(cen + s * np.array([x, -1.6, 0]), cen + s * np.array([x, 1.6, 0]), color=GREY_D, stroke_width=1))
+                xs = cen[0] + s * x
+                if X0 < xs < X1:
+                    g.add(Line([xs, max(cen[1] - s * 1.6, Y0), 0], [xs, min(cen[1] + s * 1.6, Y1), 0], color=GREY_D,
+                               stroke_width=1))
             for y in np.arange(-1.5, 1.51, 0.75):
-                g.add(Line(cen + s * np.array([-3.2, y, 0]), cen + s * np.array([3.2, y, 0]), color=GREY_D, stroke_width=1))
-            g.add(*[Dot(cen + s * np.array([x, y, 0]), radius=0.05, color=WHITE) for x, y in gal])
-            g.add(Dot(cen + s * np.array([*gal[0], 0]), radius=0.09, color=C.LIGHT))
+                ys = cen[1] + s * y
+                if Y0 < ys < Y1:
+                    g.add(Line([max(-s * 3.2, X0), ys, 0], [min(s * 3.2, X1), ys, 0], color=GREY_D, stroke_width=1))
+            for i, (x, y) in enumerate(gal):
+                p = cen + s * np.array([x, y, 0])
+                if X0 < p[0] < X1 and Y0 < p[1] < Y1:
+                    g.add(Dot(p, radius=0.09 if i == 0 else 0.05, color=C.LIGHT if i == 0 else WHITE))
             return g
 
         G = redraw(galaxies)
@@ -235,9 +244,10 @@ class Friedmann(VoiceoverScene):
         c_r = polyline(ax, la, np.log10(rr), color=C.LIGHT, stroke_width=4)
         c_m = polyline(ax, la, np.log10(rm), color=MAT, stroke_width=4)
         c_l = polyline(ax, la, np.log10(rl), color=LAM, stroke_width=4)
-        lab = VGroup(label(r"radiation $\propto a^{-4}$", font_size=22, color=C.LIGHT).next_to(ax.c2p(-5.5, 17.5), RIGHT, buff=0.1),
-                     label(r"matter $\propto a^{-3}$", font_size=22, color=MAT).next_to(ax.c2p(-5.6, 13.0), RIGHT, buff=0.1),
-                     label(r"$\Lambda$: constant", font_size=22, color=LAM).next_to(ax.c2p(-5.0, 0.5), RIGHT, buff=0.1))
+        lab = VGroup(*[VGroup(Line(ORIGIN, RIGHT * 0.45, color=col, stroke_width=4), label(t_, font_size=22, color=col)).arrange(
+            RIGHT, buff=0.12) for t_, col in ((r"radiation $\propto a^{-4}$", C.LIGHT), (r"matter $\propto a^{-3}$", MAT),
+                                             (r"$\Lambda$: constant", LAM))]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        lab.next_to(ax.c2p(-2.9, 23.0), DR, buff=0)  # a legend in the empty upper right of the plot
         eq1 = Dot(ax.c2p(math.log10(1 / (1 + z_eq)), math.log10(rm[np.argmin(np.abs(a - 1 / (1 + z_eq)))])), radius=0.08)
         eq2 = Dot(ax.c2p(math.log10(1 / (1 + z_ml)), math.log10(0.685)), radius=0.08)
         facts = VGroup(
@@ -293,9 +303,11 @@ class Friedmann(VoiceoverScene):
         labs.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.35)
         now = DashedLine(ax.c2p(0, 0), ax.c2p(0, 3.0), color=GREY_C, stroke_width=1.5)
         hist = VGroup(
-            label(r"Einstein (1917): a static universe, held up by $\Lambda$, and unstable", font_size=22, color=GREY_A),
-            label(r"Friedmann (1922): the universe must expand or contract; Hubble (1929): it expands", font_size=22, color=GREY_A),
-        ).arrange(DOWN, buff=0.08).to_edge(DOWN, buff=0.2)
+            label(r"Einstein (1917): a static universe,", font_size=22, color=GREY_A),
+            label(r"held up by $\Lambda$, and unstable", font_size=22, color=GREY_A),
+            label(r"Friedmann (1922): it must expand", font_size=22, color=GREY_A),
+            label(r"or contract; Hubble (1929): it expands", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.8, -1.6, 0])
         flat_age = -float(co["fam_flat_matter"][0, 0])
         assert abs(flat_age - 9.7) < 0.1
         with self.voiceover(

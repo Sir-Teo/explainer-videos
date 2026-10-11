@@ -37,21 +37,27 @@ class Horizons(VoiceoverScene):
         rows[3][2].set_color(MET)
         under(rows, whys, -0.6)
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-0.6, buff=0.6)
-        # a wave crossing an expanding grid (illustrative a(t) = 1 + t)
+        # a wave crossing an expanding grid (illustrative a(t) = 1 + t), in a panel right of the derivation
         k = ValueTracker(0.0)
-        y0 = -2.85
+        y0, X0, XS, XL, XR = -1.1, 4.75, 0.35, 2.55, 6.95  # panel center, scale, clip edges
 
         def wave():
             s = k.get_value()
             a = 1 + 1.5 * s
             g = VGroup()
             for xc in np.arange(-6, 6.01, 1.0):
-                g.add(Line([xc * a / 2.5, y0 - 0.5, 0], [xc * a / 2.5, y0 + 0.5, 0], color=GREY_D, stroke_width=1))
+                X = X0 + XS * xc * a / 2.5
+                if XL <= X <= XR:
+                    g.add(Line([X, y0 - 0.5, 0], [X, y0 + 0.5, 0], color=GREY_D, stroke_width=1))
             x_front = -5.5 + 10.5 * s
             xs = np.linspace(x_front - 2.2 * a / 1.6, x_front, 200)
             env = np.exp(-((xs - (x_front - 1.1 * a / 1.6)) / (0.6 * a / 1.6)) ** 2)
             ys = y0 + 0.4 * env * np.sin(2 * np.pi * (xs - x_front) / (0.45 * a))
-            g.add(VMobject(stroke_color=C.LIGHT, stroke_width=3).set_points_smoothly(np.stack([xs, ys, 0 * xs], 1)))
+            Xs = X0 + XS * xs
+            keep = (Xs >= XL) & (Xs <= XR)
+            if keep.sum() > 3:
+                g.add(VMobject(stroke_color=C.LIGHT, stroke_width=3).set_points_smoothly(
+                    np.stack([Xs[keep], ys[keep], 0 * xs[keep]], 1)))
             return g
 
         W = redraw(wave)
@@ -178,8 +184,8 @@ class Horizons(VoiceoverScene):
         D, eta_ls, th = float(co["D_ls"]), float(co["eta_ls"]), float(co["theta_h"])
         t_ls = float(co["t_ls"])
         assert abs(D - 45.2) < 0.2 and abs(eta_ls - 0.91) < 0.02 and abs(th - 1.16) < 0.02
-        cen = np.array([-2.6, -0.4, 0])
-        sc = 3.1 / D
+        cen = np.array([-3.4, -0.4, 0])
+        sc = 2.95 / D
         sky = Circle(radius=D * sc, color=C.LIGHT, stroke_width=4).move_to(cen)
         us = Dot(cen, radius=0.08, color=WHITE)
         usl = label(r"us", font_size=22).next_to(us, DOWN, buff=0.08)
