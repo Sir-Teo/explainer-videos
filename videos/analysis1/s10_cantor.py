@@ -72,6 +72,8 @@ class Cantor(VoiceoverScene):
                       for i, p in enumerate(xs)])
         for i, p in enumerate(xs):
             assert np.linalg.norm(p - centers[i + 1]) > radii[i + 1]
+        perf = label(r"\textbf{perfect}: closed, and every point is a limit point (no isolated points)", font_size=30,
+                     color=GREY_A).move_to(UP * 0.8)
         with self.voiceover(
             "Recall that a set is perfect if it's closed and every one of its points is a limit point: no isolated "
             "points. <bookmark mark='s'/> Every nonempty perfect set in k-dimensional space is uncountable. "
@@ -80,8 +82,9 @@ class Cantor(VoiceoverScene):
             "it that still meets P but avoids x one. That's possible because every point of P is a limit point, so there "
             "are other points of P nearby to aim for. Then a smaller one avoiding x two, and so on."
         ) as vo:
+            self.play(FadeIn(perf))
             vo.wait_until("s")
-            self.play(FadeIn(stmt))
+            self.play(FadeIn(stmt), FadeOut(perf))
             vo.wait_until("a")
             self.play(FadeIn(steps[0]))
             vo.wait_until("b")

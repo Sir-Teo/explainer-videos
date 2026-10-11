@@ -329,11 +329,12 @@ class Distance(VoiceoverScene):
         assert abs(xs_ - 0.2074) < 1e-3 and abs(ds - 0.5267) < 1e-3
         self.play(FadeIn(best), FadeOut(s_), Transform(v_, best_l))
         props = VGroup(
-            label(r"(a) \ $d(f,g) = 0$ only if $f = g$", font_size=26),
-            label(r"(b) \ symmetric", font_size=26),
-            label(r"(c) \ $|f - h| \le |f - g| + |g - h|$ at each $x$;", font_size=26),
-            label(r"\phantom{(c)} \ take the sup", font_size=26),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.85, -0.6, 0])
+            label(r"(a) \ $d(f,g) = 0$ only if $f = g$", font_size=24),
+            label(r"(b) \ symmetric", font_size=24),
+            label(r"(c) \ $|f - h| \le |f - g| + |g - h|$", font_size=24),
+            label(r"\phantom{(c)} \ at each $x$; take the sup", font_size=24),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        props.move_to([5.05, -0.7, 0])
         with self.voiceover(
             "And it really is a distance. <bookmark mark='a'/> It's zero only when the graphs coincide; it's symmetric; "
             "<bookmark mark='c'/> and the triangle inequality holds at every single x, so it holds for the supremum too."

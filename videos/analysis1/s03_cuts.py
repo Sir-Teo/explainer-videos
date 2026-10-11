@@ -81,8 +81,8 @@ class Cuts(VoiceoverScene):
         with self.voiceover(
             "Picture it as a way of coloring the fractions: blue for the ones in the cut, orange for the rest. "
             "<bookmark mark='e'/> This one is the cut of one half: every fraction strictly below one half. "
-            "<bookmark mark='d'/> Condition two says the blue part is a ray: once a fraction is blue, everything to its "
-            "left is blue too."
+            "<bookmark mark='d'/> Condition two says the blue part runs all the way to the left: once a fraction is "
+            "blue, everything to its left is blue too."
         ) as vo:
             vo.wait_until("e")
             self.play(Write(ex))

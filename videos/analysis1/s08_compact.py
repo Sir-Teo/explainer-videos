@@ -183,29 +183,35 @@ class Compact(VoiceoverScene):
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.34)", font_size=28, color=GREY_A),
                       label(r"Compact subsets of a metric space are closed.", font_size=32)).arrange(DOWN, buff=0.12)
         stmt.to_edge(UP, buff=0.4)
-        c0 = np.array([-2.2, -0.7, 0])
-        pts = blob_pts(c0, scale=0.85)
+        c0 = np.array([-4.3, -0.5, 0])
+        pts = blob_pts(c0, scale=0.78)
         K = Polygon(*pts, stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET, fill_opacity=0.25)
-        Kl = MathTex(r"K", font_size=38, color=C.COMPACT_SET).move_to(c0 + np.array([-0.2, 0.2, 0]))
-        p = np.array([3.0, -0.2, 0])
+        Kl = MathTex(r"K", font_size=38, color=C.COMPACT_SET).move_to(c0 + np.array([-0.35, 0.3, 0]))
+        p = np.array([-1.2, 0.35, 0])
         pd = Dot(p, radius=0.08, color=WHITE)
-        pl = MathTex(r"p", font_size=36).next_to(pd, RIGHT, buff=0.12)
-        qs = [c0 + 0.62 * np.array([np.cos(t), np.sin(t), 0]) * s for t, s in
-              ((0.2, 1.3), (1.4, 1.15), (2.7, 1.25), (3.9, 1.2), (5.2, 1.25), (0.0, 0.0))]
+        pl = MathTex(r"p", font_size=36).next_to(pd, UR, buff=0.08)
+        qs = [c0 + np.array(v) for v in ((0.9, 0.35, 0), (0.55, -0.6, 0), (-0.1, 0.75, 0), (-0.7, -0.35, 0), (0.15, -0.05, 0),
+                                         (-0.95, 0.55, 0))]
         colors = [C.OPEN_SET, C.CONNECTED_SET, C.APPROX, C.SEQ, C.DELTA, C.EPS]
         W, V, Qd = VGroup(), VGroup(), VGroup()
         for q, col in zip(qs, colors):
             r = np.linalg.norm(p - q) / 2
-            W.add(nbhd(q, r, color=col, fill=0.08, width=2, dashes=40))
-            V.add(nbhd(p, r, color=col, fill=0.0, width=2, dashes=40))
-            Qd.add(Dot(q, radius=0.05, color=col))
+            W.add(nbhd(q, r, color=col, fill=0.06, width=2, dashes=40))
+            V.add(DashedVMobject(Circle(radius=r, color=col, stroke_width=2).move_to(p), num_dashes=40))
+            Qd.add(Dot(q, radius=0.06, color=col))
         rmin = min(np.linalg.norm(p - q) for q in qs) / 2
-        Vmin = nbhd(p, rmin, color=WHITE, fill=0.25, width=3)
+        Vmin = nbhd(p, rmin, color=WHITE, fill=0.3, width=3)
+        for q in qs:  # each pair of disks is disjoint
+            r = np.linalg.norm(p - q) / 2
+            assert np.linalg.norm(p - q) >= 2 * r - 1e-9
         txt = VGroup(
-            label(r"$q \in K$: disjoint disks around $q$ and $p$, radius $\tfrac12 d(p,q)$", font_size=24),
-            label(r"the disks around the $q$'s cover $K$: keep finitely many", font_size=24),
-            label(r"intersect the matching disks around $p$: a disk missing $K$", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
+            label(r"1. for each $q \in K$: disks around $q$ and $p$", font_size=24),
+            label(r"\quad of radius $\tfrac12 d(p,q)$: they cannot meet", font_size=24),
+            label(r"2. the disks around the $q$'s cover $K$:", font_size=24),
+            label(r"\quad keep finitely many", font_size=24),
+            label(r"3. intersect the matching disks around $p$:", font_size=24),
+            label(r"\quad still a disk, and it misses $K$", font_size=24, color=WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.2, -0.6, 0])
         with self.voiceover(
             "Now three theorems that make compact sets useful. <bookmark mark='s'/> First, compact sets are closed. "
             "<bookmark mark='p'/> Take a point p outside a compact set K. <bookmark mark='q'/> For each point q of K, "
@@ -221,12 +227,12 @@ class Compact(VoiceoverScene):
             vo.wait_until("p")
             self.play(FadeIn(pd, scale=2), FadeIn(pl))
             vo.wait_until("q")
-            self.play(FadeIn(Qd[0]), FadeIn(W[0]), FadeIn(V[0]), FadeIn(txt[0]))
+            self.play(FadeIn(Qd[0]), FadeIn(W[0]), Create(V[0]), FadeIn(txt[0:2]))
             vo.wait_until("c")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(Qd[i]), FadeIn(W[i]), FadeIn(V[i])) for i in range(1, len(qs))],
-                                  lag_ratio=0.3), FadeIn(txt[1]), run_time=2.4)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(Qd[i]), FadeIn(W[i]), Create(V[i])) for i in range(1, len(qs))],
+                                  lag_ratio=0.3), FadeIn(txt[2:4]), run_time=2.4)
             vo.wait_until("i")
-            self.play(FadeIn(Vmin), V.animate.set_opacity(0.25), FadeIn(txt[2]))
+            self.play(FadeIn(Vmin), V.animate.set_stroke(opacity=0.3), FadeIn(txt[4:]))
         self.wait(0.3)
         self.clear_scene()
 

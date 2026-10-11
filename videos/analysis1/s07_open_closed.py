@@ -46,7 +46,7 @@ class OpenClosed(VoiceoverScene):
         E = Polygon(*pts, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.28)
         edge = Polygon(*pts, color=C.SEQ, stroke_width=2.5)
         iso = Dot(c0 + np.array([2.55, 1.85, 0]), radius=0.07, color=C.SEQ)
-        El = MathTex(r"E", font_size=40, color=C.SEQ).move_to(c0 + np.array([-0.4, 0.5, 0]))
+        El = MathTex(r"E", font_size=40, color=C.SEQ).move_to(c0 + np.array([0.75, -0.45, 0]))
         defs = VGroup(
             MathTex(r"N_r(p) = \{\, q : d(p,q) < r \,\}", font_size=32, color=C.OPEN_SET),
             label(r"$p$ is an \textbf{interior point} of $E$: \ some $N_r(p) \subset E$", font_size=26),
@@ -64,15 +64,15 @@ class OpenClosed(VoiceoverScene):
             self.play(FadeIn(E), Create(edge), FadeIn(iso), FadeIn(El))
             vo.wait_until("n")
             self.play(FadeIn(defs[0]))
-        p_in = c0 + np.array([-0.3, -0.4, 0])
+        p_in = c0 + np.array([-0.35, 0.45, 0])
         n_in = nbhd(p_in, 0.55)
         d_in = Dot(p_in, radius=0.06)
         ok = label(r"interior", font_size=26, color=C.CONNECTED_SET).next_to(n_in, DOWN, buff=0.1)
-        b_idx = 40
+        b_idx = 300  # the bottom of the blob
         p_b = pts[b_idx]
         d_b = Dot(p_b, radius=0.07, color=C.CLOSED_SET)
         n_bs = [nbhd(p_b, r) for r in (0.6, 0.35, 0.18)]
-        bl = label(r"boundary: every disk pokes out", font_size=24, color=C.CLOSED_SET).next_to(p_b, RIGHT, buff=0.7)
+        bl = label(r"boundary: every disk pokes out", font_size=24, color=C.CLOSED_SET).next_to(p_b, DOWN, buff=0.75)
         with self.voiceover(
             "A point is interior if some neighborhood of it fits entirely inside E: <bookmark mark='i'/> this one does, "
             "with room to spare. <bookmark mark='o'/> A set is open if every one of its points is interior. "
@@ -136,7 +136,7 @@ class OpenClosed(VoiceoverScene):
             MathTex(r"h = r - d(p, q) > 0", font_size=34),
             MathTex(r"d(p, s) \le d(p, q) + d(q, s)", font_size=34),
             MathTex(r"< d(p, q) + h = r", font_size=34),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.4, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.75).move_to([3.4, 0.0, 0])
         rows[2].shift(RIGHT * 1.25)
         whys = VGroup(why(r"room left before the edge"), why(r"triangle inequality"), why(r"so $s \in N_r(p)$"))
         for r_, w_ in zip(rows, whys):
@@ -325,7 +325,8 @@ class OpenClosed(VoiceoverScene):
             vo.wait_until("p")
             self.play(FadeIn(perfect), Indicate(hd[3], color=C.EPS))
             vo.wait_until("g")
-            self.play(FadeIn(body[6]), Indicate(body[6][2], color=C.PATHOLOGY))
+            self.play(FadeIn(body[6]))
+            self.play(Indicate(body[6][2], color=C.PATHOLOGY))
         self.wait(0.3)
         self.clear_scene()
 
