@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.relativity2 import spacetime as st
-from videos.relativity2.common import (under, Chart, View3D, clipped, curve3d, label, ladder, load, mtex, note, redraw,
+from videos.relativity2.common import (opener, under, Chart, View3D, clipped, curve3d, label, ladder, load, mtex, note, redraw,
                                        zigzag_curve)
 from videos.relativity2.geometry import check_kruskal
 
@@ -59,7 +59,10 @@ class Kruskal(VoiceoverScene):
             "infinity at the horizon. <bookmark mark='b'/> So squeeze it: define capital U and V as exponentials of u "
             "and v. <bookmark mark='c'/> Their product depends only on r, and vanishes exactly at the horizon."
         ) as vo:
+            op = opener(self, r"Eddington--Finkelstein: ingoing light, \ $v = t + r^*$",
+                        r"Kruskal--Szekeres: both kinds, \ $v$ and $u = t - r^*$")
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)
@@ -119,9 +122,10 @@ class Kruskal(VoiceoverScene):
             "the spokes of a fan. All of Schwarzschild time, from minus infinity to plus infinity, fits inside a wedge, "
             "and the edges of the wedge, where t is infinite, are the lines X equals plus or minus T: the horizon."
         ) as vo:
+            self.play(FadeIn(hdr))
             vo.wait_until("a")
             self.add(L)
-            self.play(FadeIn(hdr), FadeIn(leg), FadeIn(rl))
+            self.play(FadeIn(leg), FadeIn(rl))
             vo.wait_until("b")
             self.play(FadeOut(rl), FadeOut(hdr), FadeIn(hdr2))
             vo.wait_until("c")

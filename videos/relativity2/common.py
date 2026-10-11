@@ -57,6 +57,14 @@ def part_card(numeral: str, title: str, subtitle: str = "") -> VGroup:
     return g.arrange(DOWN, buff=0.3)
 
 
+def opener(scene, *lines, font_size=36, buff=0.3) -> VGroup:
+    """Fade in a centered premise card while a section's first sentence is spoken, so the screen is never blank;
+    the caller fades it out at the first bookmark.  Lines are strings (text with $math$) or mobjects."""
+    g = VGroup(*[label(x, font_size=font_size) if isinstance(x, str) else x for x in lines]).arrange(DOWN, buff=buff)
+    scene.play(FadeIn(g, shift=UP * 0.15))
+    return g
+
+
 def zigzag(start, end, n=None, amp=0.06, color=None, stroke_width=3) -> VMobject:
     """A singularity: a zigzag line from start to end (screen points)."""
     start, end = np.asarray(start, float), np.asarray(end, float)

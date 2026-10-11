@@ -25,6 +25,7 @@ Items:
     kerr80_0/20_0  the same for a non-spinning hole (a = 1e-4), traced and shaded identically
     shadows      Bardeen's shadow outline for a sequence of spins
     qnm          quasinormal modes: Leaver's continued fraction, Kerr modes, a time-domain ringdown, GW150914's
+                 ringdown in LIGO's data
     inspiral     the leading-order inspiral and chirp; the Hulse-Taylor pulsar
     quad         the quadrupole formula's angular integral; a spinning steel beam
     hawking      an exponentially redshifted wave and its spectrum; peeling light rays; the Euclidean cigar

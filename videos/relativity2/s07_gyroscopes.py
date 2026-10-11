@@ -181,8 +181,8 @@ class Gyroscopes(VoiceoverScene):
             "in the direction of the orbit: fifty-nine degrees per orbit at r equals ten M. This is geodetic "
             "precession, predicted by Willem de Sitter in 1916."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hole), Create(orbit))
+            vo.wait_until("a")
             self.add(G)
             self.play(FadeIn(start))
             vo.wait_until("b")
@@ -253,8 +253,9 @@ class Gyroscopes(VoiceoverScene):
             "degrees here. <bookmark mark='c'/> In weak gravity, curved space supplies exactly two thirds of the "
             "geodetic effect, and the warping of time the other third."
         ) as vo:
+            self.play(FadeIn(hdr))
             vo.wait_until("a")
-            self.play(FadeIn(hdr), Create(surf, lag_ratio=0.02), run_time=2)
+            self.play(Create(surf, lag_ratio=0.02), run_time=2)
             self.play(LaggedStart(*[GrowArrow(v) for v in vecs], lag_ratio=0.15), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(sector), Create(miss))

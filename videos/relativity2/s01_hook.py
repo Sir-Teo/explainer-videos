@@ -89,27 +89,24 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def roadmap(self):
         rows = [
-            ("I", r"Horizons and singularities", r"falling in; coordinates that see through the horizon; Penrose diagrams; "
-                                                r"Raychaudhuri and the singularity theorem", C.CURVATURE),
-            ("II", r"Spinning spacetime", r"gyroscopes and frame dragging; the Kerr solution; mining a black hole's spin; "
-                                         r"shadows", C.SPIN),
-            ("III", r"Gravitational waves, derived", r"the quadrupole formula; the chirp; the binary pulsar; ringdown and the "
-                                                    r"area theorem", C.WAVE),
-            ("IV", r"Black holes and quantum theory", r"the four laws of black-hole mechanics; Hawking radiation", C.TEMPERATURE),
-            ("V", r"The universe", r"Friedmann's equations derived; redshift; horizons; the CMB", C.LAMBDA),
+            ("I", r"Horizons and singularities", r"falling in; seeing through the horizon; Penrose diagrams; the singularity theorem",
+             C.CURVATURE),
+            ("II", r"Spinning spacetime", r"gyroscopes and frame dragging; the Kerr solution; mining spin; shadows", C.SPIN),
+            ("III", r"Gravitational waves, derived", r"the quadrupole formula; the chirp; the binary pulsar; ringdown", C.WAVE),
+            ("IV", r"Black holes and quantum theory", r"the laws of black-hole mechanics; Hawking radiation", C.TEMPERATURE),
+            ("V", r"The universe", r"Friedmann's equations; redshift; horizons; the CMB", C.LAMBDA),
         ]
+        hdr = label(r"The plan", font_size=44).to_edge(UP, buff=0.35)
         items = VGroup()
         for num_, head, sub, col in rows:
-            n = label(num_, font_size=40, color=col)
-            h = label(head, font_size=34, color=col)
-            s = label(sub, font_size=22, color=GREY_A)
-            txt = VGroup(h, s).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-            row = VGroup(n, txt).arrange(RIGHT, buff=0.4, aligned_edge=UP)
-            n.set_width(0.55, stretch=False) if n.width > 0.55 else None
-            items.add(row)
-        items.arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(LEFT, buff=0.7)
-        for it in items:  # line up the headings
-            it[1].set_x(items[0][1].get_left()[0] + it[1].width / 2)
+            h = label(head, font_size=46, color=col)
+            s = label(sub, font_size=28, color=GREY_A)
+            items.add(VGroup(label(num_, font_size=46, color=col), VGroup(h, s).arrange(DOWN, aligned_edge=LEFT, buff=0.1)))
+        # headings left-aligned in one column, numerals right-aligned just before them
+        VGroup(*[it[1] for it in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.36).next_to(hdr, DOWN, buff=0.5)
+        for it in items:
+            it[0].next_to(it[1][0], LEFT, buff=0.35)
+        items.set_x(0)
         with self.voiceover(
             "Here's the plan. <bookmark mark='a'/> First, we'll fall into a black hole, find coordinates that see "
             "through the horizon, draw the entire spacetime on a single page, and prove that singularities are "
@@ -120,6 +117,7 @@ class Hook(VoiceoverScene):
             "and have a temperature. <bookmark mark='e'/> And finally, we'll apply Einstein's equation to the universe "
             "as a whole."
         ) as vo:
+            self.play(FadeIn(hdr))
             for k, m in zip("abcde", items):
                 vo.wait_until(k)
                 self.play(FadeIn(m, shift=RIGHT * 0.2), run_time=0.8)

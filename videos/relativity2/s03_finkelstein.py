@@ -174,10 +174,11 @@ class Finkelstein(VoiceoverScene):
         hzl = label(r"$r = 2M$", font_size=24, color=C.CURVATURE).next_to(hz, UP, buff=0.08)
         xl = label(r"$r$", font_size=26).move_to(ch.p(15.8, -2.3))
         yl = always_redraw(lambda: label(r"$t$" if s.get_value() < 0.5 else r"$\tilde t = v - r$", font_size=26,
-                                         color=C.PROPER_TIME).move_to([-6.6, 3.0, 0]))
+                                         color=C.PROPER_TIME).move_to([-3.4, 2.6, 0]))
         leg = VGroup(label(r"lines of constant $r$", font_size=22, color=C.METRIC),
                      label(r"lines of constant $t$", font_size=22, color=C.PROPER_TIME),
-                     label(r"light cones", font_size=22, color=C.LIGHT)).arrange(RIGHT, buff=0.5).to_corner(DR, buff=0.15)
+                     label(r"light cones", font_size=22, color=C.LIGHT)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        leg.to_corner(DL, buff=0.3)
         eqs = mtex(r"\tilde t", r"=", r"t + 2M\ln\Big|\frac{r}{2M} - 1\Big|", font_size=34).to_corner(UR, buff=0.3)
         eqs.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.08)
         with self.voiceover(

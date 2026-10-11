@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.relativity2 import spacetime as st
-from videos.relativity2.common import (Chart, View3D, clamp_x, curve3d, label, ladder, load, mtex, note, polyline,
+from videos.relativity2.common import (opener, Chart, View3D, clamp_x, curve3d, label, ladder, load, mtex, note, polyline,
                                        redraw, sci, under, zigzag)
 from videos.relativity2.geometry import check_near_horizon
 
@@ -65,7 +65,10 @@ class Hawking(VoiceoverScene):
             "Rays arriving later and later trace back to a region squeezed by a factor of e every four M: the past "
             "position of a ray depends exponentially on when it arrives, with rate kappa, the surface gravity."
         ) as vo:
+            op = opener(self, r"Hawking (1974): quantum fields around a collapsing star",
+                        r"expected: \ perfectly black", label(r"found: \ a thermal glow", font_size=36, color=TEMP))
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             self.play(Create(axis), FadeIn(xl), Create(hz), FadeIn(hzl), FadeIn(yl), FadeIn(cap))
             self.play(LaggedStart(*[Create(r) for r in rays], lag_ratio=0.35), FadeIn(labs, lag_ratio=0.3),
                       FadeIn(eq[:3]), run_time=4)
@@ -115,7 +118,10 @@ class Hawking(VoiceoverScene):
             "<bookmark mark='d'/> That's a Boltzmann factor. The particles come out with a thermal, Planck spectrum, at "
             "temperature kappa over two pi: one over eight pi M."
         ) as vo:
+            op = opener(self, r"a particle $\leftrightarrow$ a positive-frequency wave, \ $e^{-i\omega t}$ with $\omega > 0$",
+                        label(r"\dots but positive frequency with respect to \emph{whose} clock $t$?", font_size=36, color=GREY_A))
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             self.play(Create(ax), FadeIn(t1), FadeIn(xl))
             self.play(Create(wv), run_time=2)
             vo.wait_until("b")

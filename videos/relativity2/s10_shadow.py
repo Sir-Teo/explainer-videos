@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.relativity2 import spacetime as st
-from videos.relativity2.common import (BHShader, KerrShader, Raster, bh_screen_scale, label, ladder, load, load1, mtex,
+from videos.relativity2.common import (opener, BHShader, KerrShader, Raster, bh_screen_scale, label, ladder, load, load1, mtex,
                                        note, polyline, redraw, shadow_outline, under)
 from videos.relativity2.compute import L_SUN
 
@@ -98,7 +98,9 @@ class Shadow(VoiceoverScene):
             "orbits. <bookmark mark='d'/> And each pair of constants marks one point on the sky of a distant observer. "
             "Together, they trace the edge of the shadow, as James Bardeen worked out in 1973."
         ) as vo:
+            op = opener(self, r"the edge of the shadow:", label(r"light rays that \emph{barely} escape", font_size=36, color=C.LIGHT))
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)

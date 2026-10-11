@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity2.common import (Raster, boxed, clamp_x, label, ladder, load, mtex, note, part_card, polyline,
+from videos.relativity2.common import (opener, Raster, boxed, clamp_x, label, ladder, load, mtex, note, part_card, polyline,
                                        redraw, rgba, sci, under)
 from videos.relativity2.geometry import check_binary_luminosity
 
@@ -77,7 +77,10 @@ class Quadrupole(VoiceoverScene):
             "spatial part of the wave is four over r times the integral of the stresses, T i j. "
             "<bookmark mark='d'/> That looks hard to know: it involves pressures and stresses deep inside the source."
         ) as vo:
+            op = opener(self, r"part 1 quoted: \ $h_{ij} = \dfrac{2}{r}\,\ddot Q_{ij}$",
+                        label(r"now: derive it, and the energy it carries", font_size=36, color=WAVE))
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)

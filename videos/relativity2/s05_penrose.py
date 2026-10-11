@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.relativity2 import spacetime as st
-from videos.relativity2.common import (Chart, clipped, label, ladder, load, mtex, note, redraw, under, zigzag,
+from videos.relativity2.common import (opener, Chart, clipped, label, ladder, load, mtex, note, redraw, under, zigzag,
                                        zigzag_curve)
 from videos.relativity2.geometry import check_penrose
 
@@ -51,7 +51,10 @@ class Penrose(VoiceoverScene):
             "changes lengths, but not angles, so light cones keep their shape, and the causal structure, who can "
             "signal whom, is exactly preserved. What's left is a finite picture of an infinite spacetime."
         ) as vo:
+            op = opener(self, r"Kruskal's diagram still runs off to infinity.",
+                        r"Penrose: all of spacetime, infinity included, on a finite page")
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)
@@ -325,9 +328,9 @@ class Penrose(VoiceoverScene):
             "standard Penrose diagram of a collapse looks like this: the star's surface falls through the horizon and "
             "meets the singularity, and outside, everything is as before."
         ) as vo:
+            self.play(Create(hz), Create(sing), FadeIn(hz_l))
             vo.wait_until("a")
             self.play(FadeIn(kl), Create(surf), run_time=2)
-            self.play(Create(hz), Create(sing), FadeIn(hz_l))
             vo.wait_until("b")
             self.play(FadeIn(star), FadeIn(st_l))
             vo.wait_until("c")
