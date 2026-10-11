@@ -32,7 +32,7 @@ class Gamow(VoiceoverScene):
         assert 23.5 < np.log10(tu / tp) < 24.0
         gn = note(r"Geiger \& Nuttall (1911): the empirical pattern; data: NNDC NuDat 3, AME2020").to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "WKB's formula for tunneling solved one of the great puzzles of the 1920s. <bookmark mark='a'/> "
+            "<bookmark mark='a'/> WKB's formula for tunneling solved one of the great puzzles of the 1920s. "
             "Uranium-238 emits alpha particles with about 4.27 million electron volts of energy, and has a half-life of "
             "four and a half billion years. <bookmark mark='b'/> Polonium-212 emits them with 8.95, and lasts a third of "
             "a microsecond. <bookmark mark='c'/> Twice the energy, ten to the twenty-four times faster. Geiger and "
@@ -112,7 +112,7 @@ class Gamow(VoiceoverScene):
         rows[0][1].set_color(C.HBAR)
         rows[3][1].set_color(C.HBAR)
         with self.voiceover(
-            "Quantum mechanically, it tunnels, and WKB gives the probability: <bookmark mark='a'/> e to the minus two "
+            "<bookmark mark='a'/> Quantum mechanically, it tunnels, and WKB gives the probability: e to the minus two "
             "times the integral of kappa across the forbidden region, where kappa is the square root of 2 mu times V "
             "minus Q, over h-bar. <bookmark mark='b'/> For a Coulomb barrier the integral can be done in closed form. "
             "<bookmark mark='c'/> For uranium the exponent is 88: each time the alpha hits the wall, it gets through "

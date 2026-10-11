@@ -200,8 +200,8 @@ class StationaryPhase(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.7, x=-2.3, buff=0.55)
         msg = label(r"classical mechanics: the paths whose arrows add up", font_size=30, color=C.CLASSICAL).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "So the paths that survive are those where small changes don't change the action, to first order. "
-            "<bookmark mark='a'/> Vary the path by delta x, keeping its ends fixed. <bookmark mark='b'/> Integrate by "
+            "<bookmark mark='a'/> So the paths that survive are those where small changes don't change the action, to first order. "
+            "Vary the path by delta x, keeping its ends fixed. <bookmark mark='b'/> Integrate by "
             "parts, and the first-order change in S is the integral of delta x times something. <bookmark mark='c'/> "
             "For that to vanish for every delta x, the something must be zero: the Euler-Lagrange equation. "
             "<bookmark mark='d'/> For L equals one half m x dot squared minus V, it's m x double dot equals minus V "
@@ -245,7 +245,7 @@ class StationaryPhase(VoiceoverScene):
         fermat = label(r"Fermat's principle for light rays is the same mathematics: rays are where wave phases are stationary",
                        font_size=26, color=GREY_B).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "How small is h-bar, really? <bookmark mark='a'/> For a one-gram ball moving at a meter per second for one "
+            "<bookmark mark='a'/> How small is h-bar, really? For a one-gram ball moving at a meter per second for one "
             "second, the action is about four point seven times ten to the thirty h-bars: <bookmark mark='b'/> bending "
             "its path by the width of a single atom turns its arrow some forty billion times. Only the classical path "
             "survives. <bookmark mark='c'/> For an electron in an atom, the action around an orbit is about h itself; "

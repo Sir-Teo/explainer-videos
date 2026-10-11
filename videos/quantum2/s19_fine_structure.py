@@ -61,7 +61,7 @@ class FineStructure(VoiceoverScene):
         sch = note(r"Schwinger (1948): the first correction from quantum electrodynamics").next_to(l2, DOWN, buff=0.15)
         l3 = label(r"with higher orders of QED: agreement to about one part in a trillion", font_size=28).next_to(sch, DOWN, buff=0.5)
         with self.voiceover(
-            "Measured, g is not exactly two. <bookmark mark='a'/> The best value, from a single electron held in a trap, "
+            "<bookmark mark='a'/> Measured, g is not exactly two. The best value, from a single electron held in a trap, "
             "is 2.00231930436, to thirteen digits. <bookmark mark='b'/> The small excess comes from the next layer of the "
             "theory, quantum electrodynamics: its first term, computed by Julian Schwinger in 1948, is the fine-structure "
             "constant over two pi. <bookmark mark='c'/> With the higher terms included, theory and experiment agree to "
@@ -106,7 +106,7 @@ class FineStructure(VoiceoverScene):
         zl2 = label(r"zoom $\times 10$", font_size=20, color=GREY_B).next_to(z2, UP, buff=0.05)
         lr = note(r"Lamb \& Retherford (1947): ``about 1000 Mc/sec''").to_edge(DOWN, buff=0.15).shift(RIGHT * 3.0)
         with self.voiceover(
-            "Dirac's equation can be solved exactly for hydrogen, <bookmark mark='a'/> and the energies depend not just "
+            "<bookmark mark='a'/> Dirac's equation can be solved exactly for hydrogen, and the energies depend not just "
             "on n but on j, the total angular momentum including spin. <bookmark mark='b'/> Zoom in on the second level. "
             "In Schrödinger's theory it's a single energy, minus 3.4 electron volts. <bookmark mark='c'/> In Dirac's, it "
             "splits: the 2 P three-halves states sit higher by 10.94 gigahertz, about forty-five millionths of an "
@@ -143,11 +143,14 @@ class FineStructure(VoiceoverScene):
             hd.next_to(bx.get_corner(UL), DR, buff=0.22)
             boxes.add(bx)
             heads.add(hd)
+        top_l = label(r"each theory contains the one before it", font_size=30, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Each layer of the theory contains the one before it, and each new decimal place has been checked: "
+            "<bookmark mark='t'/> Each layer of the theory contains the one before it, and each new decimal place has been checked: "
             "<bookmark mark='a'/> Schrödinger's equation, <bookmark mark='b'/> Dirac's, <bookmark mark='c'/> and quantum "
             "electrodynamics, the most precisely tested theory in science."
         ) as vo:
+            vo.wait_until("t")
+            self.play(FadeIn(top_l, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(DrawBorderThenFill(boxes[0]), FadeIn(heads[0]))
             vo.wait_until("b")

@@ -153,7 +153,7 @@ class TimeSymmetry(VoiceoverScene):
         ]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.6)
         with self.voiceover(
-            "Here's the heart of that argument. <bookmark mark='a'/> For a tiny time epsilon, U is the identity plus "
+            "<bookmark mark='a'/> Here's the heart of that argument. For a tiny time epsilon, U is the identity plus "
             "something small: call it minus i epsilon H over h-bar. That defines H. <bookmark mark='b'/> Now demand "
             "unitarity. Multiply out U dagger U: the first-order term is i epsilon over h-bar times H dagger minus H, "
             "and it must vanish. <bookmark mark='c'/> So H equals its own adjoint: it's Hermitian."
@@ -228,7 +228,7 @@ class TimeSymmetry(VoiceoverScene):
                        r"\hat A = -\tfrac{i}{\hbar}\hat H,\ \ \hat H^\dagger = \hat H", font_size=32).to_edge(UP, buff=0.3)
         anti[2].set_color(C.ENERGY)
         with self.voiceover(
-            "And the i is no longer mysterious. <bookmark mark='a'/> A unitary operator close to the identity is the "
+            "<bookmark mark='a'/> And the i is no longer mysterious. A unitary operator close to the identity is the "
             "identity plus a small anti-Hermitian operator; writing it as minus i times a Hermitian one is bookkeeping "
             "that makes H's eigenvalues real. <bookmark mark='p'/> You've seen the same thing in the plane: rotating a "
             "vector, its velocity is always perpendicular to it, and the matrix J that turns a vector a quarter turn "

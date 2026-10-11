@@ -101,7 +101,10 @@ class Identical(VoiceoverScene):
         nums[2].become(MathTex(r"P(|x_1 - x_2| < 0.1L) = 1.6\%", font_size=24, color=C.FERMION).next_to(forms[2], DOWN, buff=0.15))
         fr2 = sqs[2][1]
         node = VGroup(Line(fr2.get_corner(DL), fr2.get_corner(UR), color=C.FERMION, stroke_width=4),
-                      MathTex(r"\psi_A = 0", font_size=24, color=C.FERMION).next_to(fr2.get_corner(UR), UR, buff=0.05))
+                      MathTex(r"\psi_A = 0", font_size=24, color=C.FERMION))
+        node[1].add_background_rectangle(color=config.background_color, opacity=0.7, buff=0.05).rotate(PI / 4)
+        dl, ur = fr2.get_corner(DL), fr2.get_corner(UR)
+        node[1].move_to(dl + 0.7 * (ur - dl) + 0.2 * normalize(np.array([-1.0, 1.0, 0.0])))
         nf = label(r"no force: the same Hamiltonian in all three; a correlation from symmetry alone", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.25)
         tag = note(r"two particles in a box, in the lowest two states; color = sign of $\psi$ (red $+$, cyan $-$), brightness = $|\psi|$").to_edge(UP, buff=0.15)
         with self.voiceover(
@@ -150,7 +153,8 @@ class Identical(VoiceoverScene):
         leg = VGroup(VGroup(Line(ORIGIN, RIGHT * 0.35, color=C.BORN, stroke_width=4), label(r"density of 3 fermions", font_size=22)).arrange(RIGHT, buff=0.1),
                      VGroup(Line(ORIGIN, RIGHT * 0.35, color=C.FERMION, stroke_width=4), label(r"the other two, given one at $0.3L$", font_size=22, color=C.FERMION)).arrange(RIGHT, buff=0.1)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, UP, buff=0.15)
-        hole = label(r"the exchange hole", font_size=24, color=C.FERMION).next_to(ax.c2p(0.3, 0.2), DOWN, buff=0.45).shift(RIGHT * 1.2)
+        hole = label(r"the exchange hole", font_size=24, color=C.FERMION)
+        hole.next_to(ax.c2p(0.42, 0), DOWN, buff=0.12).align_to(ax.c2p(0.42, 0), LEFT)
         with self.voiceover(
             "<bookmark mark='a'/> Put two fermions in the same state, and the antisymmetric combination is zero: there's "
             "no such state. That's Pauli's exclusion principle, from 1925. <bookmark mark='b'/> For N fermions, the "

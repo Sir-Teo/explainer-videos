@@ -174,7 +174,7 @@ class Hook(VoiceoverScene):
         ) as vo:
             vo.wait_until("w")
             pl.clear_updaters()
-            self.play(FadeOut(gtag), FadeOut(plate), LaggedStart(*[Create(m) for m in wig], lag_ratio=0.25), FadeIn(wtag), run_time=2.5)
+            self.play(FadeOut(gtag), FadeOut(plate), FadeOut(scr_l), LaggedStart(*[Create(m) for m in wig], lag_ratio=0.25), FadeIn(wtag), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(act))
         for m in (chn, prof):
@@ -202,7 +202,7 @@ class Hook(VoiceoverScene):
         box = SurroundingRectangle(same, color=WHITE, buff=0.25, corner_radius=0.12)
         arrs = VGroup(*[Arrow(c.get_bottom(), box.get_top(), buff=0.2, color=GREY_B, stroke_width=3) for c in cols])
         with self.voiceover(
-            "It's one of three roads we'll take. <bookmark mark='a'/> The first is symmetry: the laws don't change from "
+            "<bookmark mark='a'/> It's one of three roads we'll take. The first is symmetry: the laws don't change from "
             "moment to moment, or from place to place, and those two facts alone force the Schrödinger equation and the "
             "commutator. <bookmark mark='b'/> The second is Feynman's sum over paths. <bookmark mark='c'/> The third "
             "runs backward from classical mechanics, and explains the old quantum rules of Bohr and Sommerfeld. "

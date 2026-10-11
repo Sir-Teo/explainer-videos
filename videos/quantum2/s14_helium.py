@@ -37,7 +37,7 @@ class Helium(VoiceoverScene):
         assert abs(float(h["E_naive"]) + 108.8) < 0.1 and abs(float(h["E_exp"]) + 79.0) < 0.05
         sp = label(r"both electrons in 1s: the spatial part is symmetric, so the spins pair up (a singlet)", font_size=24, color=GREY_B).next_to(r2, DOWN, buff=0.6)
         with self.voiceover(
-            "Helium has two electrons, <bookmark mark='a'/> and the term that couples them, their repulsion, one over r "
+            "<bookmark mark='a'/> Helium has two electrons, and the term that couples them, their repulsion, one over r "
             "one two, makes it impossible to solve exactly. <bookmark mark='b'/> Ignore that term, and each electron "
             "sits in a hydrogen-like orbit around a nucleus of charge two: an energy of minus 108.8 electron volts. "
             "<bookmark mark='c'/> The measured value is minus 79.0. The repulsion matters."
@@ -72,8 +72,8 @@ class Helium(VoiceoverScene):
             r.shift(RIGHT * 2.5)
         step = ladder(self, rows, whys, keep=3, top=2.2, x=0.4, buff=0.6)
         with self.voiceover(
-            "First-order perturbation theory says: average the repulsion over the unperturbed state. "
-            "<bookmark mark='a'/> Each electron is a spherical cloud, and by Newton's shell theorem, a spherical shell of "
+            "<bookmark mark='a'/> First-order perturbation theory says: average the repulsion over the unperturbed state. "
+            "Each electron is a spherical cloud, and by Newton's shell theorem, a spherical shell of "
             "charge acts like a point charge at its center from outside, and like nothing at all from inside. "
             "<bookmark mark='b'/> That reduces a six-dimensional integral to a two-dimensional one, "
             "<bookmark mark='c'/> and the answer is exactly five eighths of Z, in atomic units: 34 electron volts. "
@@ -117,7 +117,7 @@ class Helium(VoiceoverScene):
         lad.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(RIGHT * 3.6 + DOWN * 1.5)
         nv = note(r"$-108.8$ eV without the repulsion; the screening charge $\zeta < 2$: each electron partly hides the nucleus").to_edge(DOWN, buff=0.12)
         with self.voiceover(
-            "We can do better with the variational principle. <bookmark mark='a'/> Expand any trial state in the true "
+            "<bookmark mark='a'/> We can do better with the variational principle. Expand any trial state in the true "
             "eigenstates: its average energy is a weighted average of the eigenvalues, so it can never be below the "
             "lowest one. Every guess gives an upper bound, and the best guess in a family is the one with the lowest "
             "energy. <bookmark mark='b'/> Let each electron see an effective charge zeta instead of two, because each "

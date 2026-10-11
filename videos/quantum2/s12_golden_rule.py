@@ -34,8 +34,8 @@ class GoldenRule(VoiceoverScene):
         ]
         step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.6, buff=0.55)
         with self.voiceover(
-            "So far, energies. Now rates: how fast do things happen? Let a perturbation V act on a system that starts in "
-            "state i. <bookmark mark='a'/> Write the state as a sum over energy eigenstates, with each one's clock "
+            "<bookmark mark='a'/> So far, energies. Now rates: how fast do things happen? Let a perturbation V act on a system that starts in "
+            "state i. Write the state as a sum over energy eigenstates, with each one's clock "
             "factored out. <bookmark mark='b'/> The exact equations for the coefficients involve V's matrix elements, "
             "times phases turning at the Bohr frequencies. <bookmark mark='c'/> To first order, the amplitude to have "
             "jumped to state f is an integral of V times that turning phase."
@@ -157,7 +157,7 @@ class GoldenRule(VoiceoverScene):
         units = note(r"$\hbar = 1$, $\delta = 0.05$, $V = 0.05$; exact solution (eigen-decomposition of the $602 \times 602$ matrix)").to_edge(DOWN, buff=0.2)
         n_end = int(np.searchsorted(t, 40))
         with self.voiceover(
-            "Let's test it, exactly. <bookmark mark='a'/> One level, coupled with the same strength to 601 evenly spaced "
+            "<bookmark mark='a'/> Let's test it, exactly. One level, coupled with the same strength to 601 evenly spaced "
             "levels. <bookmark mark='b'/> Solve the Schrödinger equation exactly, and watch the probability of staying "
             "put, on a logarithmic scale. <bookmark mark='c'/> It falls off exponentially, at a rate within one percent "
             "of the golden rule's."
@@ -229,7 +229,7 @@ class GoldenRule(VoiceoverScene):
         slosh = label(r"in that time the charge cloud sloshes " + f"{cyc / 1e6:.1f}" + r" million times at Lyman-$\alpha$ ("
                       + f"{float(n['lyman_alpha_nm']):.1f}" + r" nm)", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "In an atom, the continuum is the electromagnetic field itself. <bookmark mark='a'/> An excited hydrogen "
+            "<bookmark mark='a'/> In an atom, the continuum is the electromagnetic field itself. An excited hydrogen "
             "atom in its 2p state is coupled to the vacuum's photon modes, whose density grows like the frequency "
             "squared. <bookmark mark='b'/> Put in the dipole matrix element, <bookmark mark='c'/> and the golden rule "
             "gives a lifetime of 1.596 nanoseconds, <bookmark mark='d'/> matching measurement. <bookmark mark='e'/> In "

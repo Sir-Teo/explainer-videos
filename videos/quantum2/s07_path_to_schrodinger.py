@@ -35,8 +35,8 @@ class PathToSchrodinger(VoiceoverScene):
                     font_size=24, color=GREY_B).next_to(ax, DOWN, buff=0.45)
         wheel = corner_wheel(corner=UR, buff=0.2, radius=0.26).shift(DOWN * 1.0)
         with self.voiceover(
-            "Feynman's formulation has to agree with Schrödinger's, and checking that is a beautiful piece of calculus. "
-            "<bookmark mark='a'/> Advance the wavefunction by one short step epsilon: integrate the short-time kernel "
+            "<bookmark mark='a'/> Feynman's formulation has to agree with Schrödinger's, and checking that is a beautiful piece of calculus. "
+            "Advance the wavefunction by one short step epsilon: integrate the short-time kernel "
             "against psi, over every displacement eta. <bookmark mark='b'/> The kernel's phase is m eta squared over two "
             "h-bar epsilon. Outside a window of width about the square root of h-bar epsilon over m, it oscillates so "
             "fast that its contributions cancel. <bookmark mark='c'/> As epsilon shrinks, the window shrinks, but only "
@@ -74,7 +74,7 @@ class PathToSchrodinger(VoiceoverScene):
             why(rows[3], r"the $\psi$ terms cancel"),
             why(rows[4], r"multiply by $i\hbar/\epsilon$"),
         ]
-        step = ladder(self, rows, whys, keep=4, top=3.1, x=-1.4, buff=0.5)
+        step = ladder(self, rows, whys, keep=4, top=3.2, x=-1.4, buff=0.42, room_below=True)
         with self.voiceover(
             "<bookmark mark='a'/> Expand psi of x plus eta in a Taylor series. Normally we'd keep only the first-order "
             "term, but here eta squared is as big as epsilon, so the second derivative stays in. "
@@ -131,7 +131,7 @@ class PathToSchrodinger(VoiceoverScene):
         msg = label(r"typical paths are nowhere smooth: zoom in and they look just as rough", font_size=28).next_to(panels, DOWN, buff=0.55)
         tag = note(r"a computed Brownian path ($2^{18}$ steps; the imaginary-time version of a typical path), zoomed $\times 8$ each time").to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "That i h-bar epsilon over m deserves a second look. <bookmark mark='a'/> A step of size eta, whose square is "
+            "<bookmark mark='a'/> That i h-bar epsilon over m deserves a second look. A step of size eta, whose square is "
             "proportional to the time step: it's the same rule as d W squared equals d t, the heart of the stochastic "
             "calculus video, just with an i. <bookmark mark='b'/> It means the paths that matter in Feynman's sum are "
             "not smooth curves at all. <bookmark mark='c'/> Here is a typical path, in imaginary time, at four zoom "
@@ -172,13 +172,15 @@ class PathToSchrodinger(VoiceoverScene):
         # left: the split-operator step = one Feynman slice
         f1 = MathTex(r"\hat U(\epsilon)", r"\approx", r"e^{-i\epsilon V/2\hbar}\;\underbrace{e^{-i\epsilon\hat p^2/2m\hbar}}_{\text{free kernel}}\;e^{-i\epsilon V/2\hbar}",
                      font_size=34).move_to(LEFT * 3.2 + UP * 1.6)
-        f2 = label(r"the free kernel is a multiplication in momentum space (an FFT away)", font_size=24, color=GREY_A).next_to(f1, DOWN, buff=0.3)
-        f3 = label(r"this is how every simulation in Part 1 was computed", font_size=26, color=C.ACTION).next_to(f2, DOWN, buff=0.35)
+        f2 = VGroup(label(r"the free kernel is a multiplication", font_size=24, color=GREY_A),
+                    label(r"in momentum space (an FFT away)", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(f1, DOWN, buff=0.3)
+        f3 = VGroup(label(r"this is how every simulation", font_size=26, color=C.ACTION),
+                    label(r"in Part 1 was computed", font_size=26, color=C.ACTION)).arrange(DOWN, buff=0.08).next_to(f2, DOWN, buff=0.35)
         slope = float(s["slope"])
         f4 = MathTex(r"\text{measured slope} = " + f"{slope:.2f}", font_size=30, color=C.ACTION).next_to(f3, DOWN, buff=0.5)
         cap = note(r"a packet in an anharmonic well, evolved to $t = 6$ by $N = 6/\epsilon$ slices vs.\ an exact eigen-expansion").to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The time-slicing isn't just a proof device; it's an algorithm. <bookmark mark='a'/> Split each short step "
+            "<bookmark mark='a'/> The time-slicing isn't just a proof device; it's an algorithm. Split each short step "
             "into half a step of potential phase, the free kernel, and another half step of potential. The free kernel "
             "is just multiplication in momentum space, one fast Fourier transform away. <bookmark mark='b'/> That's how "
             "every simulation in Part 1 was computed. <bookmark mark='c'/> Here's a wave packet in an anharmonic well, "

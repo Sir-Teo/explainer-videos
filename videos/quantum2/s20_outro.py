@@ -69,7 +69,7 @@ class Outro(VoiceoverScene):
         ).arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to(DOWN * 0.3)
         t = MathTex(r"\text{phase} = \frac{\text{area}}{\hbar}", font_size=56, color=C.HBAR).to_edge(UP, buff=0.6)
         with self.voiceover(
-            "And one idea kept coming back: <bookmark mark='a'/> a phase is an area divided by h-bar. The area of a "
+            "<bookmark mark='a'/> And one idea kept coming back: a phase is an area divided by h-bar. The area of a "
             "rectangle in phase space, when translations and boosts fail to commute; <bookmark mark='b'/> the magnetic "
             "flux through a loop, in the Aharonov-Bohm effect; <bookmark mark='c'/> and the area of a classical orbit, in "
             "the quantum condition."

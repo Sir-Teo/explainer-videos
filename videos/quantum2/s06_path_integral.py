@@ -45,7 +45,7 @@ class PathIntegral(VoiceoverScene):
         hl = label(r"height $= |K|$, color $=$ phase; $\hbar = m = 1$, $x_a = 0$", font_size=22, color=GREY_B).next_to(ax, DOWN, buff=0.12)
         wheel = corner_wheel(corner=UR, buff=0.2, radius=0.26)
         with self.voiceover(
-            "Everything about time evolution is packed into one function: <bookmark mark='a'/> the amplitude to start at "
+            "<bookmark mark='a'/> Everything about time evolution is packed into one function: the amplitude to start at "
             "x a and be found at x b a time t later, called the propagator, K. <bookmark mark='b'/> Any initial "
             "wavefunction evolves by adding up the propagator from every starting point. <bookmark mark='c'/> For a free "
             "particle it's a Gaussian with an imaginary exponent: <bookmark mark='d'/> its size is the same everywhere, "
@@ -254,8 +254,8 @@ class PathIntegral(VoiceoverScene):
         tab = num_table([r"\epsilon", r"E_0\ \text{estimate}"], rows, font_size=28, col_colors=[C.QTIME, C.ENERGY]).move_to(RIGHT * 5.1 + DOWN * 0.9)
         exact = MathTex(r"\to \tfrac12\hbar\omega", font_size=30, color=C.ENERGY).next_to(tab, DOWN, buff=0.2)
         with self.voiceover(
-            "Can we actually do this sum? In real time the arrows spin so fast that sampling paths is hopeless. "
-            "<bookmark mark='a'/> But if we let time be imaginary, each path gets a positive weight, e to the minus the "
+            "<bookmark mark='a'/> Can we actually do this sum? In real time the arrows spin so fast that sampling paths is hopeless. "
+            "But if we let time be imaginary, each path gets a positive weight, e to the minus the "
             "action, and the paths become Brownian motion, the subject of our stochastic calculus video. Then the sum is "
             "ordinary arithmetic. <bookmark mark='b'/> Here's the short-time kernel of the harmonic oscillator, as a "
             "matrix."
