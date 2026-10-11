@@ -43,8 +43,8 @@ class Abel(VoiceoverScene):
 
         axes = VGroup(Arrow(P(0, 0), P(A[-1] + 0.5, 0), buff=0, color=GREY_C, stroke_width=2, tip_length=0.15),
                       Arrow(P(0, 0), P(0, 2.9), buff=0, color=GREY_C, stroke_width=2, tip_length=0.15))
-        xl = MathTex(r"A_n = a_1 + \cdots + a_n", font_size=26, color=GREY_B).next_to(P(A[-1] + 0.5, 0), DOWN, buff=0.1)
-        xl.shift(LEFT * 1.0)
+        xl = MathTex(r"A_n = a_1 + \cdots + a_n", font_size=26, color=GREY_B).next_to(P(A[-1] + 0.5, 0), DOWN, buff=0.5)
+        xl.align_to(P(A[-1] + 0.5, 0), RIGHT)
         yl = MathTex(r"b_n", font_size=28, color=GREY_B).next_to(P(0, 2.9), LEFT, buff=0.1)
         ticks = VGroup(*[MathTex(rf"A_{n + 1}", font_size=22, color=GREY_B).next_to(P(A[n], 0), DOWN, buff=0.1)
                          for n in range(N - 1)])
@@ -281,7 +281,7 @@ class Abel(VoiceoverScene):
             self.play(FadeIn(mert))
         self.wait(0.3)
 
-        ax = plain_axes([0, 61, 10], [-2.5, 2.5, 1], 6.4, 2.9, numbers=True, font_size=18).move_to([3.3, -2.1, 0])
+        ax = plain_axes([0, 61, 10], [-2.5, 2.5, 1], 6.4, 2.6, numbers=True, font_size=18).move_to([3.3, -1.75, 0])
         dots = VGroup(*[Dot(ax.c2p(n, c[n]), radius=0.04, color=C.PATHOLOGY) for n in range(len(c))])
         bnd = VGroup(polyline(ax, np.arange(len(c)), bound, color=GREY_B, stroke_width=1.5),
                      polyline(ax, np.arange(len(c)), -bound, color=GREY_B, stroke_width=1.5))
