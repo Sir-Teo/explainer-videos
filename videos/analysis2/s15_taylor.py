@@ -12,6 +12,21 @@ def taylor_poly(coef, x):
     return sum(c * x**k for k, c in enumerate(coef))
 
 
+def runs_in_range(ax, x, y, lo, hi, color, stroke_width=3) -> VGroup:
+    """The graph of y over x, drawn only where it lies within [lo, hi] (pieces that leave the axes are cut, not
+    flattened against the edge)."""
+    ok = (y > lo) & (y < hi)
+    g, start = VGroup(), None
+    for i in range(len(x) + 1):
+        if i < len(x) and ok[i]:
+            start = i if start is None else start
+        elif start is not None:
+            if i - start > 1:
+                g.add(polyline(ax, x[start:i], y[start:i], color=color, stroke_width=stroke_width))
+            start = None
+    return g
+
+
 class Taylor(VoiceoverScene):
     def construct(self):
         self.card()
@@ -44,14 +59,13 @@ class Taylor(VoiceoverScene):
         for i, (name, f, coef, xr, yr, degs) in enumerate(specs):
             ax = plain_axes([xr[0], xr[1], 1], [yr[0], yr[1], 1], 6.2, 4.0, numbers=False).move_to(
                 [-3.4 + 6.8 * i, -1.0, 0])
-            lo = xr[0] + 1e-3 if i == 1 else xr[0]
-            g = ax.plot(f, x_range=[max(lo, -0.999), xr[1], 0.01], color=C.FUNC, stroke_width=4)
+            lo = math.exp(yr[0]) - 1 + 1e-3 if i == 1 else xr[0]  # log(1 + x) stays above the axes' bottom
+            g = ax.plot(f, x_range=[lo, xr[1], 0.005], color=C.FUNC, stroke_width=4)
             t = label(name, font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.12)
 
             def poly(n, ax=ax, coef=coef, xr=xr, yr=yr):
-                x = np.linspace(xr[0], xr[1], 800)
-                y = np.clip(taylor_poly(coef[:n + 1], x), yr[0], yr[1])
-                return polyline(ax, x, y, color=C.APPROX, stroke_width=3)
+                x = np.linspace(xr[0], xr[1], 2400)
+                return runs_in_range(ax, x, taylor_poly(coef[:n + 1], x), yr[0], yr[1], C.APPROX)
 
             panels.append((ax, g, t, poly, degs))
         wall = VGroup(DashedLine(panels[1][0].c2p(1, -2.5), panels[1][0].c2p(1, 1.5), color=C.PATHOLOGY,
@@ -136,14 +150,14 @@ class Taylor(VoiceoverScene):
         d = load("taylor")
         errs, bounds = d["errs"], d["bounds"]
         N = len(errs)
-        ax = plain_axes([0, N, 2], [-9, 1, 2], 8.6, 4.4, numbers=False).move_to([0.4, -1.0, 0])
-        yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.1)
+        ax = plain_axes([0, N, 2], [0, 10, 2], 8.6, 4.4, numbers=False).move_to([0.4, -1.0, 0])  # y = log10 + 9
+        yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, k + 9), LEFT, buff=0.1)
                       for k in (-8, -6, -4, -2, 0)])
-        xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(k, -9), DOWN, buff=0.12)
+        xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.12)
                       for k in (0, 2, 4, 6, 8, 10)])
         n = np.arange(N)
-        ed = VGroup(*[Dot(ax.c2p(k, math.log10(e)), radius=0.07, color=C.FUNC) for k, e in zip(n, errs)])
-        bd = polyline(ax, n, np.log10(bounds), color=C.EPS, stroke_width=3)
+        ed = VGroup(*[Dot(ax.c2p(k, math.log10(e) + 9), radius=0.07, color=C.FUNC) for k, e in zip(n, errs)])
+        bd = polyline(ax, n, np.log10(bounds) + 9, color=C.EPS, stroke_width=3)
         head = MathTex(r"e - P_n(1)", r"\ \le\ ", r"\frac{e}{(n+1)!}", font_size=38).to_edge(UP, buff=0.45)
         head[0].set_color(C.FUNC)
         head[2].set_color(C.EPS)
@@ -182,13 +196,15 @@ class Taylor(VoiceoverScene):
                        label(r"to the wrong function", font_size=26, color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                buff=0.15)
         facts.move_to([3.6, 0.9, 0])
-        lx = plain_axes([0.0, 0.2, 0.1], [-60, 0, 20], 5.0, 2.4, numbers=False).move_to([3.4, -2.3, 0])
+        lx = plain_axes([0.0, 0.2, 0.1], [0, 60, 20], 5.0, 2.4, numbers=False).move_to([3.4, -2.3, 0])  # log10 + 60
         xx = np.linspace(0.02, 0.2, 400)
-        c1 = polyline(lx, xx, np.log10(np.exp(-1 / xx**2)), color=C.FUNC, stroke_width=3)
-        c2 = polyline(lx, xx, 10 * np.log10(xx), color=C.EPS, stroke_width=3)
-        ll = VGroup(MathTex(r"x^{10}", font_size=24, color=C.EPS).next_to(lx.c2p(0.06, 10 * math.log10(0.06)), UP,
+        x1 = np.linspace(math.sqrt(math.log10(math.e) / 60) + 1e-4, 0.2, 400)
+        c1 = polyline(lx, x1, -math.log10(math.e) / x1**2 + 60, color=C.FUNC, stroke_width=3)
+        c2 = polyline(lx, xx, 10 * np.log10(xx) + 60, color=C.EPS, stroke_width=3)
+        ll = VGroup(MathTex(r"x^{10}", font_size=24, color=C.EPS).next_to(lx.c2p(0.06, 10 * math.log10(0.06) + 60), UP,
                                                                          buff=0.1),
-                    MathTex(r"e^{-1/x^2}", font_size=24, color=C.FUNC).next_to(lx.c2p(0.09, -54), RIGHT, buff=0.1),
+                    MathTex(r"e^{-1/x^2}", font_size=24, color=C.FUNC).next_to(
+                        lx.c2p(0.1, -math.log10(math.e) / 0.01 + 60), LEFT, buff=0.1),
                     label(r"log scale, $0 < x \le 0.2$", font_size=20, color=GREY_B).next_to(lx, UP, buff=0.05))
         with self.voiceover(
             "And the payoff museum piece. <bookmark mark='a'/> e to the minus one over x squared, with value zero at "
