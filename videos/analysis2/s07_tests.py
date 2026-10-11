@@ -29,10 +29,11 @@ class Tests(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def _log_axes(self, n_max=30):
-        ax = plain_axes([0, n_max + 1, 5], [-8, 0.5, 2], 10.6, 4.2, numbers=False).move_to([0.3, -1.25, 0])
-        ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.1)
+        # y is log10 of the term, shifted up by 8 so the horizontal axis sits at 10^-8, along the bottom
+        ax = plain_axes([0, n_max + 1, 5], [0, 8.5, 2], 10.6, 4.2, numbers=False).move_to([0.3, -1.25, 0])
+        ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(ax.c2p(0, k + 8), LEFT, buff=0.1)
                          for k in (-8, -6, -4, -2, 0)])
-        nt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(k, -8), DOWN, buff=0.12)
+        nt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.12)
                       for k in (5, 10, 15, 20, 25, 30)])
         return ax, VGroup(ticks, nt)
 
@@ -45,17 +46,16 @@ class Tests(VoiceoverScene):
                            r"information", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
         ax, ticks = self._log_axes(n_max)
         n = np.arange(1, n_max + 1)
-        dots = VGroup(*[Dot(ax.c2p(k, math.log10(a[k - 1])), radius=0.055, color=C.SEQ if k % 2 else C.FREQ)
+        dots = VGroup(*[Dot(ax.c2p(k, math.log10(a[k - 1]) + 8), radius=0.055, color=C.SEQ if k % 2 else C.FREQ)
                         for k in n])
         ex = MathTex(r"\tfrac12 + \tfrac13 + \tfrac1{2^2} + \tfrac1{3^2} + \tfrac1{2^3} + \tfrac1{3^3} + \cdots",
                      font_size=32).move_to([3.0, 1.15, 0])
         ex_r = note(r"Rudin 3.35(b); \ log scale").next_to(ex, DOWN, buff=0.1)
         beta = 0.75
-        env = polyline(ax, np.array([0, n_max + 1]), np.array([0, (n_max + 1) * math.log10(beta)]), color=C.EPS,
+        env = polyline(ax, np.array([0, n_max + 1]), np.array([8, 8 + (n_max + 1) * math.log10(beta)]), color=C.EPS,
                        stroke_width=3)
-        env_l = MathTex(r"\beta^n,\ \beta = 0.75", font_size=28, color=C.EPS).next_to(ax.c2p(n_max * 0.62,
-                                                                                           n_max * 0.62 * math.log10(beta)),
-                                                                                    UR, buff=0.08)
+        env_l = MathTex(r"\beta^n,\ \beta = 0.75", font_size=28, color=C.EPS).next_to(
+            ax.c2p(n_max * 0.62, 8 + n_max * 0.62 * math.log10(beta)), UR, buff=0.08)
         why_ = label(r"$\alpha < \beta < 1$: \ eventually $\sqrt[n]{|a_n|} < \beta$, \ i.e.\ $|a_n| < \beta^n$: "
                      r"\ compare with the geometric series", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
@@ -88,8 +88,8 @@ class Tests(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Ratio test} (Rudin 3.34) \ $\limsup \left|\tfrac{a_{n+1}}{a_n}\right| < 1$: "
                            r"converges; \ \ $\left|\tfrac{a_{n+1}}{a_n}\right| \ge 1$ from some $n$ on: diverges",
                            font_size=28),).to_edge(UP, buff=0.35)
-        axl = plain_axes([0, n_max + 1, 10], [-6, 6, 2], 5.6, 4.2, numbers=False).move_to([-3.4, -0.9, 0])
-        axr = plain_axes([0, n_max + 1, 10], [0, 1.2, 0.5], 5.6, 4.2, numbers=False).move_to([3.4, -0.9, 0])
+        axl = plain_axes([0, n_max + 1, 10], [-6, 6, 2], 5.6, 3.6, numbers=False).move_to([-3.4, -0.55, 0])
+        axr = plain_axes([0, n_max + 1, 10], [0, 1.2, 0.5], 5.6, 3.6, numbers=False).move_to([3.4, -0.55, 0])
         lt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(axl.c2p(0, k), LEFT, buff=0.08)
                       for k in (-6, 0, 6)])
         rt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(axr.c2p(0, v), LEFT, buff=0.08)
@@ -210,8 +210,19 @@ class Tests(VoiceoverScene):
             def g(x):
                 return sum((-x * x) ** k for k in range(N + 1))
 
-            return ax.plot(lambda x: np.clip(g(x), -1.2, 2.2), x_range=[-1.45, 1.45, 0.005], color=C.APPROX,
-                           stroke_width=3)
+            # draw only where the partial sum is inside the axes' range: the flailing leaves through the top
+            x = np.linspace(-1.6, 1.6, 3201)
+            y = g(x)
+            ok = (y > -1.0) & (y < 2.0)
+            runs, start = VGroup(), None
+            for i in range(len(x) + 1):
+                if i < len(x) and ok[i]:
+                    start = i if start is None else start
+                elif start is not None:
+                    if i - start > 1:
+                        runs.add(polyline(ax, x[start:i], y[start:i], color=C.APPROX, stroke_width=3))
+                    start = None
+            return runs
 
         series = MathTex(r"= 1 - x^2 + x^4 - x^6 + \cdots", font_size=32, color=C.APPROX).next_to(f_l, RIGHT, buff=0.1)
         Tn = taylor(2)
@@ -230,9 +241,10 @@ class Tests(VoiceoverScene):
                          for s, t in ((1, r"i"), (-1, r"-i"))])
         real = Line(o + LEFT * 2 * u, o + RIGHT * 2 * u, color=C.FUNC, stroke_width=5)
         ans = label(r"$1 + z^2 = 0$ at $z = \pm i$: \ the disk can't reach past them", font_size=26,
-                    color=C.PATHOLOGY).next_to(plane, DOWN, buff=0.25)
-        fwd = label(r"The real line can't see why. \ Part 7: power series live in $\mathbb{C}$.", font_size=26,
-                    color=C.EPS).to_edge(DOWN, buff=0.15)
+                    color=C.PATHOLOGY).next_to(plane, DOWN, buff=0.2)
+        fwd = VGroup(label(r"The real line can't see why.", font_size=24, color=C.EPS),
+                     label(r"Part 7: power series live in $\mathbb{C}$.", font_size=24, color=C.EPS)
+                     ).arrange(DOWN, buff=0.08).next_to(ax, DOWN, buff=0.3)
         with self.voiceover(
             "One last puzzle. <bookmark mark='a'/> One over one plus x squared is as smooth as a function can be, on "
             "the whole real line. Its power series is one minus x squared plus x to the fourth, and so on. "
