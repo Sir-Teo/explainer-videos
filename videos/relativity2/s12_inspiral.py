@@ -173,11 +173,39 @@ class Inspiral(VoiceoverScene):
         eqs = VGroup(
             mtex(r"\dot P_b", r"=", r"-\frac{192\pi}{5}\Big(\frac{2\pi}{P_b}\Big)^{5/3}\frac{m_1m_2}{M^{1/3}}\,f(e)", font_size=36),
             mtex(r"f(e) = \frac{1 + \tfrac{73}{24}e^2 + \tfrac{37}{96}e^4}{(1 - e^2)^{7/2}} = 11.86", font_size=34),
-            label(r"(Peters \& Mathews 1963: eccentric orbits radiate much more, mostly at closest approach)",
-                  font_size=22, color=GREY_A),
+            VGroup(label(r"(Peters \& Mathews 1963: eccentric orbits radiate much more,", font_size=22, color=GREY_A),
+                   label(r"mostly at closest approach)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.06),
             mtex(r"\dot P_b^{\rm GR} = " + sci(Pdot, 4).replace("{-}", "-"), font_size=40, color=WAVE),
         ).arrange(DOWN, buff=0.22).move_to([2.9, 0.2, 0])
         eqs[0][0].set_color(WAVE)
+        # the orbit itself, to scale in shape: both stars about their center of mass, timed by Kepler's equation
+        e_, m1, m2 = 0.617, 1.438, 1.390
+        oc, A_ = np.array([-3.4, -2.1, 0]), 2.2  # center of mass; semi-major axis of the relative orbit (screen)
+
+        def rel(E_):
+            return A_ * np.array([math.cos(E_) - e_, math.sqrt(1 - e_**2) * math.sin(E_), 0])
+
+        def kepler(Mm):
+            E_ = Mm
+            for _ in range(40):
+                E_ -= (E_ - e_ * math.sin(E_) - Mm) / (1 - e_ * math.cos(E_))
+            return E_
+
+        mean = ValueTracker(0.0)
+        mean.add_updater(lambda m, dt: m.increment_value(dt * 2 * math.pi / 3.5))  # one orbit per 3.5 s
+
+        def stars():
+            r = rel(kepler(mean.get_value()))
+            return VGroup(Dot(oc + r * m2 / (m1 + m2), radius=0.1, color=WHITE),
+                          Dot(oc - r * m1 / (m1 + m2), radius=0.1, color=MAT))
+
+        Es = np.linspace(0, 2 * math.pi, 240)
+        orbits = VGroup(*[VMobject(stroke_color=GREY_B, stroke_width=1.5, stroke_opacity=0.6).set_points_as_corners(
+            [oc + sgn * rel(E_) * w for E_ in Es]) for sgn, w in ((1, m2 / (m1 + m2)), (-1, m1 / (m1 + m2)))])
+        B = redraw(stars)
+        ocap = note(r"the orbit, to scale in shape ($e = 0.617$): the pulsar (white) and its companion, timed by "
+                    r"Kepler's equation").next_to(orbits, DOWN, buff=0.15)
+        clamp_x(ocap)
         with self.voiceover(
             "The first evidence that gravitational waves carry energy came from a pair of neutron stars. "
             "<bookmark mark='a'/> In 1974, Russell Hulse and Joseph Taylor found a pulsar in a binary orbit: two neutron "
@@ -189,11 +217,14 @@ class Inspiral(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(hdr))
             vo.wait_until("a")
-            self.play(FadeIn(facts, lag_ratio=0.3), run_time=2)
+            self.add(mean, B)
+            self.play(FadeIn(facts, lag_ratio=0.3), Create(orbits), FadeIn(ocap), run_time=2)
             vo.wait_until("b")
             self.play(Write(eqs[0]), FadeIn(eqs[1:3]))
             vo.wait_until("c")
             self.play(FadeIn(eqs[3]))
+        mean.clear_updaters()
+        B.clear_updaters()
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -204,10 +235,11 @@ class Inspiral(VoiceoverScene):
         assert abs(merge - 301) < 2 and abs(wdot - 4.2266) < 0.001
         ax = Axes(x_range=[1974, 2026, 10], y_range=[-120, 0, 20], x_length=6.2, y_length=4.0, tips=False,
                   axis_config={"stroke_color": GREY_B, "font_size": 20},
-                  x_axis_config={"numbers_to_include": [1980, 1990, 2000, 2010, 2020], "decimal_number_config": {"group_with_commas": False, "num_decimal_places": 0}},
+                  x_axis_config={"numbers_to_include": [1980, 1990, 2000, 2010, 2020], "label_direction": UP,
+                                 "decimal_number_config": {"group_with_commas": False, "num_decimal_places": 0}},
                   y_axis_config={"numbers_to_include": [-100, -80, -60, -40, -20]}).move_to([-3.1, -0.8, 0])
         cur = polyline(ax, 1974 + years, shift, color=WAVE, stroke_width=4)
-        yl = label(r"shift of periastron time (s)", font_size=22).next_to(ax, UP, buff=0.12)
+        yl = label(r"shift of periastron time (s)", font_size=22).next_to(ax, UP, buff=0.45)
         cl = note(r"curve: GR's prediction, $\tfrac12(\dot P_b/P_b)\,t^2$, computed").next_to(ax, DOWN, buff=0.45)
         res = VGroup(
             label(r"measured, corrected for the Galaxy's pull:", font_size=26),

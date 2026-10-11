@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity2.common import (label, ladder, load, mtex, note, part_card, redraw, under)
+from videos.relativity2.common import (label, ladder, load, mtex, note, part_card, polyline, redraw, under)
 from videos.relativity2.geometry import check_kerr_thermo
 
 HOR, ENT, TEMP = C.CURVATURE, C.ENTROPY, C.TEMPERATURE
@@ -31,7 +31,7 @@ class Thermodynamics(VoiceoverScene):
         cen = np.array([2.6, -0.6, 0])
         hole = Circle(radius=1.2, color=HOR, stroke_width=4, fill_color=BLACK, fill_opacity=1).move_to(cen)
         rng = np.random.default_rng(4)
-        box0 = np.array([-3.4, 0.9, 0])
+        box0 = np.array([-3.4, 2.7, 0])  # above the text, then into the hole
         k = ValueTracker(0.0)
         P = rng.uniform(-0.45, 0.45, (40, 2))
         V = rng.normal(size=(40, 2))
@@ -80,19 +80,37 @@ class Thermodynamics(VoiceoverScene):
     # ------------------------------------------------------------------
     def surface_gravity(self):
         rows = [
-            mtex(r"a_{\rm hover}", r"=", r"\frac{M}{r^2\sqrt{1 - 2M/r}}", font_size=42),
-            mtex(r"\kappa", r"=", r"\lim_{r\to 2M}\ \sqrt{1 - \frac{2M}{r}}\;a_{\rm hover} = \frac{1}{4M}", font_size=42),
-            mtex(r"\kappa", r"=", r"\frac{r_+ - M}{r_+^2 + a^2}", font_size=42),
+            mtex(r"a_{\rm hover}", r"=", r"\frac{M}{r^2\sqrt{1 - 2M/r}}", font_size=36),
+            mtex(r"\kappa", r"=", r"\lim_{r\to 2M}\ \sqrt{1 - \frac{2M}{r}}\;a_{\rm hover} = \frac{1}{4M}", font_size=36),
+            mtex(r"\kappa", r"=", r"\frac{r_+ - M}{r_+^2 + a^2}", font_size=36),
         ]
         whys = [
-            note(r"the acceleration a rocket needs to hover at $r$: it diverges at the horizon"),
-            note(r"as measured from far away (times the redshift factor): the surface gravity (checked symbolically)"),
-            note(r"for Kerr; it is the same everywhere on the horizon, and vanishes for an extremal hole ($a = M$)"),
+            note(r"the acceleration needed to hover at $r$: it diverges at the horizon"),
+            note(r"times the redshift factor, as measured from far away: the surface gravity (sympy)"),
+            note(r"for Kerr: the same everywhere on the horizon; zero for an extremal hole ($a = M$)"),
         ]
         for r in rows:
             r[0].set_color(TEMP)
-        under(rows, whys, -0.6)
-        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.6, buff=0.8)
+        under(rows, whys, 1.6)
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=1.6, buff=0.8)
+        # the two curves, computed (M = 1): a_hover diverges; the redshifted acceleration is exactly M/r^2
+        ax = Axes(x_range=[2, 10, 2], y_range=[0, 0.6, 0.2], x_length=4.6, y_length=3.6, tips=False,
+                  axis_config={"stroke_color": GREY_B, "font_size": 20},
+                  x_axis_config={"numbers_to_include": [2, 4, 6, 8, 10]},
+                  y_axis_config={"numbers_to_include": [0.2, 0.4, 0.6]}).move_to([-4.3, -0.7, 0])
+        xl = label(r"$r/M$", font_size=22).next_to(ax.x_axis, DOWN, buff=0.35)
+        rr = np.linspace(2.0004, 10, 600)
+        ah = 1 / (rr**2 * np.sqrt(1 - 2 / rr))
+        kr = np.sqrt(1 - 2 / rr) * ah
+        assert np.allclose(kr, 1 / rr**2) and abs(kr[0] - 0.25) < 1e-3
+        ok = ah < 0.6
+        c_a = polyline(ax, rr[ok], ah[ok], color=TEMP, stroke_width=4)
+        c_k = polyline(ax, rr, kr, color=HOR, stroke_width=4)
+        hz = DashedLine(ax.c2p(2, 0), ax.c2p(2, 0.6), color=HOR, stroke_width=2)
+        la = label(r"$a_{\rm hover}$ (in $1/M$)", font_size=22, color=TEMP).next_to(ax.c2p(2.7, 0.55), RIGHT, buff=0.1)
+        lk = label(r"redshifted: $\to 1/4M$", font_size=22, color=HOR).next_to(ax.c2p(4.2, 0.12), UR, buff=0.05)
+        kd = Dot(ax.c2p(2, 0.25), radius=0.08, color=HOR)
+        cap = note(r"computed, $M = 1$").next_to(ax, DOWN, buff=0.75)
         with self.voiceover(
             "If area is like entropy, what's like temperature? <bookmark mark='a'/> Hover a rocket above a black hole. "
             "The acceleration it needs grows without bound as it nears the horizon. <bookmark mark='b'/> But measured "
@@ -101,10 +119,14 @@ class Thermodynamics(VoiceoverScene):
             "turns out to be the same everywhere on the horizon of any stationary black hole, just as temperature is "
             "the same everywhere in a body in equilibrium."
         ) as vo:
+            self.play(Create(ax), FadeIn(xl), Create(hz), FadeIn(cap))
             vo.wait_until("a")
             step(0)
+            self.play(Create(c_a), FadeIn(la), run_time=1.5)
             vo.wait_until("b")
             step(1)
+            self.play(Create(c_k), FadeIn(lk), run_time=1.5)
+            self.play(FadeIn(kd, scale=2), Indicate(kd, color=WHITE))
             vo.wait_until("c")
             step(2)
         self.clear_scene()
