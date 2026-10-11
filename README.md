@@ -31,7 +31,9 @@ dense 15 s segments, lowest single frame 0.993); the stochastic-calculus video a
 ~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
 fans and Monte Carlo noise, lowest single frame 0.975); and the quantum-mechanics video at
 ~99 kb/s (mean SSIM 0.998–0.9994 on five dense 15 s segments: the 2D double slit, the quantum
-carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977). The
+carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977); and quantum mechanics Part 2 at
+~123 kb/s (mean SSIM 0.9987–0.9996 on five dense 15 s segments: the Feynman path sum through two slits, the
+Aharonov–Bohm flux sweep, the Cornu spiral, the decohering cat state and the Zitterbewegung; lowest single frame 0.993). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
