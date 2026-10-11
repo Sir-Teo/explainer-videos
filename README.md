@@ -29,9 +29,12 @@ Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
 the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
 dense 15 s segments, lowest single frame 0.993); the stochastic-calculus video at
 ~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
-fans and Monte Carlo noise, lowest single frame 0.975); and the quantum-mechanics video at
+fans and Monte Carlo noise, lowest single frame 0.975); the quantum-mechanics video at
 ~99 kb/s (mean SSIM 0.998–0.9994 on five dense 15 s segments: the 2D double slit, the quantum
-carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977). The
+carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977); and
+the general-relativity Part 2 video at ~159 kb/s (mean SSIM 0.997–0.9996 on five dense 15 s segments: the spinning
+black hole, the Penrose process, the spin comparison, the binary's wave spiral and the expanding galaxy grid; lowest
+single frame 0.957, apart from one frame at a cut). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
