@@ -182,7 +182,7 @@ class Kerr(VoiceoverScene):
         with self.voiceover(
             "The ergosphere is where frame dragging becomes irresistible. <bookmark mark='a'/> Ask: at a fixed radius, "
             "how fast can something orbit, as seen from far away? For its worldline to be timelike, slower than light, "
-            "its angular velocity Omega has to make this quadratic negative, which confines it to a band. "
+            "its angular velocity Omega has to make this quadratic negative, <bookmark mark='w'/> which confines it to a band. "
             "<bookmark mark='b'/> Far out, the band includes zero: you can orbit either way, or simply hover in place. "
             "<bookmark mark='c'/> At the ergosurface, the lower edge reaches zero. Inside, the whole band is positive: "
             "no rocket, however powerful, can hold you still relative to the distant stars. You must rotate with the "
@@ -191,8 +191,10 @@ class Kerr(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(zero), FadeIn(cond[:2]))
-            vo.wait_until("b")
+            vo.wait_until("w")
             self.play(FadeIn(fill), Create(top), Create(bot), run_time=2)
+            vo.wait_until("b")
+            self.play(Indicate(zero, color=WHITE, scale_factor=1.0), run_time=1.5)
             vo.wait_until("c")
             self.play(Create(ergo), FadeIn(el), FadeIn(cond[2:5]))
             vo.wait_until("d")
