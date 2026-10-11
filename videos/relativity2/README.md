@@ -52,7 +52,30 @@ the video explains in its first minutes.
 
 Schematics are labeled `schematic`, and the few illustrative choices are listed below.
 
-**Watch:** [`published/relativity2.mp4`](../../published/relativity2.mp4) (1080p, subtitles and chapters embedded).
+**Watch:** [`published/relativity2.mp4`](../../published/relativity2.mp4) (56 min, 1080p, subtitles and chapters embedded).
+
+<details><summary>Chapters</summary>
+
+- `0:00` Beyond the horizon
+- `2:06` I. Falling into a black hole
+- `5:05` Eddington-Finkelstein: light cones that tip over
+- `7:49` Kruskal-Szekeres: the whole Schwarzschild spacetime
+- `11:16` Penrose diagrams and gravitational collapse
+- `14:39` Raychaudhuri's equation and the singularity theorem
+- `19:38` II. Gyroscopes: geodetic precession and frame dragging
+- `23:00` The Kerr black hole
+- `26:04` The ergosphere and the Penrose process
+- `28:48` Orbits and the shadow of a spinning black hole
+- `32:09` III. The quadrupole formula, derived
+- `35:12` The chirp, derived, and the binary pulsar
+- `38:16` Ringdown and Hawking's area theorem
+- `41:46` IV. The laws of black-hole mechanics
+- `44:14` Hawking radiation
+- `48:14` V. The expanding universe: Friedmann's equations
+- `51:34` Light in an expanding universe: redshift and horizons
+- `54:40` Recap
+
+</details>
 
 ```bash
 python -m videos.relativity2.compute          # once: every computed item (~6 min on 4 cores, cached in .cache/relativity2)
@@ -61,7 +84,7 @@ python tools/build.py relativity2 -q l        # preview
 python tools/build.py relativity2             # final 1080p30 + subtitles + chapters
 python tools/export_script.py relativity2     # regenerate SCRIPT.md from the code
 python tools/check_narration.py relativity2   # Whisper listen test of every narration line
-python tools/publish.py relativity2 --audio-kbps 64   # GitHub-sized copy -> published/relativity2.mp4
+python tools/publish.py relativity2 --audio-kbps 64   # GitHub-sized copy (56 min in 95 MB) -> published/relativity2.mp4
 ```
 
 The GW150914 ringdown reuses Part 1's strain snapshot (`videos/relativity/data/gw150914.json`), and
@@ -77,12 +100,12 @@ the black-hole shading reuses Part 1's disk texture. The narration script is in 
 | 4 | `Kruskal` | u = t − r*; U = −e^{−u/4M}, V = e^{v/4M}; UV = (1 − r/2M)e^{r/2M}; ds² = −(32M³/r)e^{−r/2M}dUdV. The Schwarzschild grid morphs into Kruskal's wedge (hyperbolas and spokes). Regions I–IV; r = 0 as a hyperbola; inside, r is time. The Einstein–Rosen bridge embedded at T = const, pinching off (Fuller & Wheeler). | The grid morph; the boosted infaller; the bridge profiles embedded exactly (the T = 0 slice equals Flamm's paraboloid; throat radius asserted against UV). |
 | 5 | `Penrose` | arctan compactification; conformal factors preserve light cones. Minkowski's grid folds into a triangle (i±, i⁰, ℐ±). Kruskal → the Penrose diagram, with r = 0 at arctan U + arctan V = π/2. The black hole as the region that can't reach ℐ⁺. A star at 5M collapsing: the exterior is exact (Birkhoff); the event horizon forms at the center before the surface reaches 2M (teleology). | Both morphs; the star's surface in compactified Kruskal coordinates, drawn over the eternal diagram it covers (crosses r = 2M, ends at UV = 1, asserted). |
 | 6 | `Focusing` | Lifshitz–Khalatnikov (1963) vs Penrose (1965). B_ab = ∇_b u_a = θ/3 h + σ + ω; dB/dτ from the commutator [∇,∇] = Riemann; the trace gives Raychaudhuri's equation. R_μν u^μ u^ν = 4π(ρ + 3p) is Baez–Bunn's ball. dθ/dλ ≤ −θ²/2 ⇒ caustic within 2/\|θ₀\|. Trapped surfaces (both fronts shrink inside 2M). Penrose's theorem and the idea of its proof; Nobel 2020; Hawking's cosmological version. | The focusing bound and a matter-filled example (ODE, asserted); a parallel beam focused by a mass (exact null geodesics); flash fronts outside and inside the horizon in EF coordinates (asserted to grow / shrink). |
-| 7 | `Gyroscopes` | Linearized field equation with mass currents ⇒ g_0i ~ the magnetic vector potential; far field −2J sin²θ/r. ZAMOs circle at ω = 2J/r³; Lense–Thirring precession (a dipole field). Geodetic precession 2π(1 − √(1 − 3M/r)) per orbit (58.8° at 10M, de Sitter 1916). The space part: Flamm's cone unrolled, wedge 2π(1 − √(1 − 2M/r)) = 38° here, 2/3 of the effect in weak fields. Gravity Probe B. | Gyroscope spin parallel-transported around the orbit (asserted vs the closed form); transport on the cone (wedge asserted); GP-B's 6606 and 39.2 mas/yr computed from its orbit. |
+| 7 | `Gyroscopes` | Linearized field equation with mass currents ⇒ g_0i ~ the magnetic vector potential; far field −2J sin²θ/r. ZAMOs circle at ω = 2J/r³; Lense–Thirring precession (a dipole field). Geodetic precession 2π(1 − √(1 − 3M/r)) per orbit (58.8° at 10M, de Sitter 1916). The space part: Flamm's cone unrolled, wedge 2π(1 − √(1 − 2M/r)) = 38° here, 2/3 of the effect in weak fields. Gravity Probe B. | A zero-angular-momentum particle falling into a Kerr hole (a = 0.99), integrated exactly; gyroscope spin parallel-transported around the orbit (asserted vs the closed form); transport on the cone (wedge asserted); GP-B's 6606 and 39.2 mas/yr computed from its orbit. |
 | 8 | `Kerr` | The Kerr metric in Boyer–Lindquist form, Ricci-flat; a → 0 Schwarzschild, M → 0 flat; the g_tφ far field matches Part II's. No-hair. Δ = 0 ⇒ r± = M ± √(M² − a²); the ergosurface r = M + √(M² − a² cos²θ); the ring singularity; cosmic censorship. The band of allowed Ω (closing to Ω_H at the horizon; no static observers inside the ergosphere). Light circles swept around by the dragging. | Horizon, ergosurface and ring drawn from the metric as a sweeps 0 → 0.99; the Ω band from g_tt + 2g_tφΩ + g_φφΩ² = 0 (asserted); null directions from the metric. |
 | 9 | `Extraction` | E = −p·ξ_t = local energy + ω L; negative-energy orbits inside the ergosphere. The Penrose process (Penrose 1969): +9.5% energy out. E − Ω_H L ≥ 0 ⇒ δM ≥ Ω_H δJ ⇔ δA ≥ 0. Christodoulou's irreducible mass, M² = M_irr² + J²/4M_irr²; up to 29% of an extremal hole's mass extractable (fusion: 0.7%). | A decay at r = 1.4M (a = 0.99) with exact conservation of E and L at the split; both fragments' geodesics; the area change asserted positive; constant-area curves in the J–M plane. |
 | 10 | `Shadow` | ISCO vs spin (6M → M prograde, 9M retrograde, Bardeen–Press–Teukolsky); efficiency 1 − E_ISCO: 5.7%, 32% at Thorne's a = 0.998, 42% at extremality. Carter's constant; spherical photon orbits ⇒ Bardeen's (ξ, η) and the shadow edge; circle (√27 M) → letter D. Side-by-side ray traces at a = 0 and a = 0.99, edge-on and nearly face-on (size within 7%). M87*: ~40 µas predicted, 42 µas measured; Sgr A*. | ISCOs by minimizing E (asserted vs BPT); shadow edges from Bardeen's formulas; four 1280×720 Kerr ray traces, their captured pixels equal to Bardeen's interior. |
 | 11 | `Quadrupole` | h̄ = 4∫T/\|x − y\| retarded ⇒ h̄_ij = (4/r)∫T_ij; ∂_t²T⁰⁰ = ∂_i∂_jT^ij and two integrations by parts ⇒ h_ij = (2/r)Q̈_ij. Isaacson's ⟨∂h∂h⟩/32π; the TT angular integral 8π/5 ⇒ L = ⅕⟨Q⃛_ij Q⃛_ij⟩ (× G/c⁵). A steel beam: 2 × 10⁻²⁹ W. The binary: Q⃛² = 32μ²a⁴ω⁶, L = (32/5)μ²M³/a⁵; the radiation pattern (8× stronger along the axis). | The angular integral (numerical vs 8π/5 for random Q, asserted); the spiral h₊ field of a binary in its plane; L sympy-checked; the radiation pattern. |
-| 12 | `Inspiral` | E = −μM/2a ⇒ ȧ = −(64/5)μM²/a³; t_merge = (5/256)a₀⁴/(μM²). f = ω/π, ḟ ∝ 𝓜^{5/3}f^{11/3}, the chirp mass, f(τ). A GW150914-like inspiral: 30 → 180 Hz, 980 → 310 km. Hulse–Taylor: Peters–Mathews f(e) = 11.86; Ṗ = −2.40 × 10⁻¹²; the periastron-shift parabola; agreement 0.998; ω̇ = 4.23°/yr; the Double Pulsar; merger in ~300 Myr. | The inspiral integrated (vs Peters, asserted); Ṗ from the measured masses and orbit (asserted vs Weisberg & Huang); the cumulative shift curve. |
+| 12 | `Inspiral` | E = −μM/2a ⇒ ȧ = −(64/5)μM²/a³; t_merge = (5/256)a₀⁴/(μM²). f = ω/π, ḟ ∝ 𝓜^{5/3}f^{11/3}, the chirp mass, f(τ). A GW150914-like inspiral: 30 → 180 Hz, 980 → 310 km. Hulse–Taylor: Peters–Mathews f(e) = 11.86; Ṗ = −2.40 × 10⁻¹²; the periastron-shift parabola; agreement 0.998; ω̇ = 4.23°/yr; the Double Pulsar; merger in ~300 Myr. | The inspiral integrated (vs Peters, asserted); the Hulse–Taylor orbit to scale, timed by Kepler's equation; Ṗ from the measured masses and orbit (asserted vs Weisberg & Huang); the cumulative shift curve. |
 | 13 | `Ringdown` | Regge–Wheeler: ∂_t²ψ − ∂_{r*}²ψ + V ψ = 0, V = (1 − 2M/r)(ℓ(ℓ+1)/r² − 6M/r³), peak at 3.28M. A pulse hits the barrier: a damped ringing, then a power-law tail. Fit vs Leaver: Mω = 0.3737 − 0.0890i. The photon-sphere picture. GW150914's last cycles with the predicted 251 Hz, 4.0 ms tone. Hawking's area theorem (1971): ≤ 29% radiated for equal masses; GW150914 radiated ~5%. GW250114: areas 2.37 × 10⁵ → 3.73 × 10⁵ km², 4.4σ. | The wave equation solved on a grid; the fitted ringdown vs Leaver's continued fraction (to <1.5% across fit windows, asserted); the Kerr QNM from the `qnm` package; LIGO strain with the predicted damped sinusoid. |
 | 14 | `Thermodynamics` | Bekenstein's box of gas (1972). Surface gravity: a hovering rocket's redshifted acceleration → 1/4M; κ = (r₊ − r₋)/2(r₊² + a²). Differentiating A(M, J) gives dM = (κ/8π)dA + Ω_H dJ. The four laws (Bardeen, Carter & Hawking 1973), and why classically T = 0. | The first law and κ sympy-checked; the redshifted acceleration curve. |
 | 15 | `Hawking` | Peeling: each factor of 10 closer delays escape by 4M ln 10. A wave stretched exponentially (rate κ); its Fourier transform has negative-frequency content with \|β/α\|² = e^{−2πω/κ}: a Planck spectrum at T = κ/2π = 1/8πM. The Euclidean route: near the horizon ds² = ρ²dτ²/16M² + dρ², smooth only if τ ~ τ + 8πM (Gibbons & Hawking 1977). The cigar vs the cone. Numbers: 6.2 × 10⁻⁸ K per M☉; T = T_CMB at 0.61 Moon masses; S = A/4 = 10⁷⁷ k; ~10⁶⁷ yr. | Outgoing null rays near the horizon (gaps asserted = 4M ln 10); the stretched wave's transform, checked against the exact Gamma-function result and the Boltzmann factor (within 3%); the cigar embedded exactly. |
