@@ -17,6 +17,7 @@ TTS voice, and stitched into a finished video with subtitles and chapters.
 | **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`published/trading.mp4`](published/trading.mp4) | [`videos/trading`](videos/trading) |
 | **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | 64 min | [`published/quantum.mp4`](published/quantum.mp4) | [`videos/quantum`](videos/quantum) |
 | **General Relativity, Derived: From a Falling Elevator to Einstein's Field Equations** (the equivalence principle, falling as maximal aging, metrics, tensors, Christoffel symbols, parallel transport, the Riemann tensor and geodesic deviation, the field equations derived two ways, Schwarzschild, Mercury's 43″, light bending, a ray-traced black hole and gravitational waves; every curvature formula computed with sympy and asserted, every orbit and light ray an integrated geodesic, and LIGO's real GW150914 strain) | 69 min | [`published/relativity.mp4`](published/relativity.mp4) | [`videos/relativity`](videos/relativity) |
+| **General Relativity, Part 2: Inside Black Holes, Spinning Spacetime, and the Expanding Universe** (the sequel: Eddington–Finkelstein, Kruskal and Penrose diagrams, the Einstein–Rosen bridge, Raychaudhuri's equation and Penrose's singularity theorem, frame dragging and Gravity Probe B, the Kerr metric, the ergosphere and Penrose process, the shadow of a spinning black hole, the quadrupole formula and chirp derived, Hulse–Taylor, ringdown and the area theorem, black-hole thermodynamics and Hawking radiation, Friedmann's equations and cosmic horizons; Kerr's Ricci-flatness checked exactly with sympy, ray-traced Kerr images matching Bardeen's shadow pixel for pixel, a simulated ringdown matching Leaver's frequency, and LIGO's real data) | 56 min | [`published/relativity2.mp4`](published/relativity2.mp4) | [`videos/relativity2`](videos/relativity2) |
 
 The published files are 1080p30 MP4s (H.264, mono AAC narration mastered to
 -16 LUFS) with soft English subtitles and chapter markers, sized to fit under
@@ -28,9 +29,12 @@ Navier–Stokes video is re-encoded with two-pass x264 at ~350 kb/s (SSIM
 the hour-long frontier-training video at ~113 kb/s (mean SSIM 0.9992–0.9997 on five
 dense 15 s segments, lowest single frame 0.993); the stochastic-calculus video at
 ~156 kb/s (mean SSIM 0.988–0.9998 on five dense 15 s segments of particle clouds, path
-fans and Monte Carlo noise, lowest single frame 0.975); and the quantum-mechanics video at
+fans and Monte Carlo noise, lowest single frame 0.975); the quantum-mechanics video at
 ~99 kb/s (mean SSIM 0.998–0.9994 on five dense 15 s segments: the 2D double slit, the quantum
-carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977). The
+carpet, the shrinking-ħ cat state, the orbital gallery and the closing collage; lowest single frame 0.977); and
+the general-relativity Part 2 video at ~159 kb/s (mean SSIM 0.997–0.9996 on five dense 15 s segments: the spinning
+black hole, the Penrose process, the spin comparison, the binary's wave spiral and the expanding galaxy grid; lowest
+single frame 0.957, apart from one frame at a cut). The
 96 kb/s narration is within measurement noise of the 192 kb/s master on
 UTMOSv2 (3.99 vs 4.06 on seven 12 s speech clips).
 
@@ -55,6 +59,7 @@ python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO,
 python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
 python -m videos.quantum.compute             # every Schrödinger solution, Born-rule sample and orbital render of the quantum video (~15 min)
 python -m videos.relativity.compute          # Schwarzschild orbits and light rays, two black-hole ray traces, transport, tides, GW150914 (~4 min)
+python -m videos.relativity2.compute         # Kerr ray traces, infall, Penrose process, Regge-Wheeler ringdown, Hawking spectrum, cosmology (~6 min)
 # (trading's derived data, videos/trading/data/*.json, is committed; `python -m videos.trading.compute` re-downloads
 #  the 11.6 GB Nasdaq ITCH day, rescans it, and re-measures this machine)
 # (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
@@ -72,6 +77,7 @@ python tools/build.py stochastic              # -> renders/stochastic.mp4
 python tools/build.py trading                 # -> renders/trading.mp4
 python tools/build.py quantum                 # -> renders/quantum.mp4
 python tools/build.py relativity              # -> renders/relativity.mp4
+python tools/build.py relativity2             # -> renders/relativity2.mp4
 ```
 
 Iterate on a single scene:
@@ -126,6 +132,9 @@ videos/<name>/
   geometry.py, compute.py (relativity) sympy curvature (Christoffel, Riemann, Ricci, Einstein, Kretschmann) asserted
   fetch.py                 against every slide; Schwarzschild geodesics, a thin-disk black-hole ray tracer, parallel
                            transport, tides; LIGO's GW150914 strain and the EHT image, committed in data/
+  geometry.py, compute.py (relativity2) sympy checks of Eddington-Finkelstein, Kruskal, Kerr (exactly Ricci-flat),
+  raytrace.py              Kerr thermodynamics and FLRW; a numba Kerr ray tracer in Mino time; infall, Penrose process,
+                           Regge-Wheeler ringdown vs Leaver, Hawking spectrum, LambdaCDM horizons
   README.md                outline, color legend, sources and fact-check notes
   SCRIPT.md                narration, generated by tools/export_script.py
 tools/
@@ -215,4 +224,5 @@ voice). Set `EXPLAINER_VOICE` to try another Kokoro voice.
 * Trading-system video: market data from Nasdaq's public TotalView-ITCH 5.0 sample files (December 10, 2025); facts from Jane Street's tech talks and the [Signals and Threads](https://signalsandthreads.com/) podcast, HRT's [tech blog](https://www.hudsonrivertrading.com/hrtbeat/), Budish, Cramton & Shim (2015), Aquilina, Budish & O'Neill (2022), STAC, and the SEC's 2013 order against Knight Capital; map data from Natural Earth and OpenStreetMap (ODbL). The video explains public information and is not affiliated with any firm named.
 * Quantum-mechanics video: no external data; every wave is computed from the Schrödinger equation. Physical constants are CODATA 2022 (via `scipy.constants`). Historical claims were checked against the primary papers (Schrödinger 1926, Born 1926, Born & Jordan 1925, Kennard 1927, Stern & Gerlach 1922, Tonomura et al. 1989, Bell 1964, CHSH 1969, Hensen et al. 2015), with the full list in [`videos/quantum/README.md`](videos/quantum/README.md#fact-check-notes-and-sources).
 * General-relativity video: gravitational-wave strain for GW150914 from LIGO via the [Gravitational Wave Open Science Center](https://gwosc.org/) (GWTC-1); the image of M87* by the [Event Horizon Telescope Collaboration](https://www.eso.org/public/images/eso1907a/) (ESO, CC BY 4.0); derivations after Carroll's *Spacetime and Geometry*, Misner–Thorne–Wheeler and Schutz; the "ball of coffee grounds" after Baez & Bunn (2005); the thin-disk image after Luminet (1979); experimental values after Will's Living Review (2014) and Ashby (2003); full list in [`videos/relativity/README.md`](videos/relativity/README.md).
+* General-relativity Part 2: GW150914 strain from LIGO via [GWOSC](https://gwosc.org/) (reused from Part 1); event parameters from LVK (GWTC-1; GW250114, PRL 135, 111403, 2025); Kerr quasinormal modes from the [`qnm`](https://github.com/duetosymmetry/qnm) package (Stein 2019, MIT); cosmological parameters from Planck 2018; the horizon diagram after Davis & Lineweaver (2004); Hulse–Taylor timing from Weisberg & Huang (2016); Gravity Probe B from Everitt et al. (2011); EHT values for M87* and Sgr A*; derivations after Carroll, Poisson's *A Relativist's Toolkit*, Wald, MTW and Maggiore; full list in [`videos/relativity2/README.md`](videos/relativity2/README.md#fact-check-notes-and-sources).
 * Visual style inspired by Grant Sanderson's [3Blue1Brown](https://www.3blue1brown.com/).

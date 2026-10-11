@@ -1,0 +1,3991 @@
+1
+00:00:00,275 --> 00:00:02,200
+This is a black hole that spins.
+
+2
+00:00:02,200 --> 00:00:04,212
+It isn't an artist's impression.
+
+3
+00:00:04,212 --> 00:00:07,575
+Every pixel is a ray of light, traced backward from the camera through the
+
+4
+00:00:07,575 --> 00:00:12,838
+geometry of a rotating black hole, the solution Roy Kerr found in 1963, until
+
+5
+00:00:12,838 --> 00:00:17,738
+it hits a thin disk of hot gas, falls in, or escapes to the distant stars.
+
+6
+00:00:17,738 --> 00:00:21,450
+The gas on the left is coming toward us, so it's brighter and bluer.
+
+7
+00:00:21,450 --> 00:00:25,538
+And the dark region, the shadow, is flattened on one side by the rotation,
+
+8
+00:00:25,538 --> 00:00:29,025
+exactly as the theory predicts.
+
+9
+00:00:29,725 --> 00:00:33,863
+In part one, we derived Einstein's field equation from scratch, and solved
+
+10
+00:00:33,863 --> 00:00:35,425
+it outside a star.
+
+11
+00:00:35,425 --> 00:00:39,625
+With that solution, we explained the orbit of Mercury and the bending of light,
+
+12
+00:00:39,625 --> 00:00:43,200
+and we saw that ripples in spacetime travel at the speed of light.
+
+13
+00:00:43,200 --> 00:00:46,175
+But we stopped at the edge of the most interesting place.
+
+14
+00:00:46,175 --> 00:00:51,363
+At r equals two G M over c squared, the Schwarzschild metric misbehaves:
+
+15
+00:00:51,363 --> 00:00:56,450
+a clock there stops, as seen from far away, and the radial part blows up.
+
+16
+00:00:56,450 --> 00:01:00,463
+We claimed that inside, every future direction points inward.
+
+17
+00:01:00,463 --> 00:01:04,975
+This time we'll make that precise, and go much further.
+
+18
+00:01:05,175 --> 00:01:06,425
+Here's the plan.
+
+19
+00:01:06,425 --> 00:01:09,750
+First, we'll fall into a black hole, find coordinates that see through the
+
+20
+00:01:09,750 --> 00:01:14,550
+horizon, draw the entire spacetime on a single page, and prove that singularities
+
+21
+00:01:14,550 --> 00:01:15,975
+are unavoidable.
+
+22
+00:01:15,975 --> 00:01:17,588
+Second, we'll make it spin:
+
+23
+00:01:17,588 --> 00:01:21,575
+gyroscopes, the dragging of space, Kerr's solution, and how to mine energy
+
+24
+00:01:21,575 --> 00:01:23,700
+from a black hole's rotation.
+
+25
+00:01:23,700 --> 00:01:26,650
+Third, we'll derive what part one could only quote:
+
+26
+00:01:26,650 --> 00:01:30,750
+the energy carried by gravitational waves, and the chirp of two black holes
+
+27
+00:01:30,750 --> 00:01:32,000
+merging.
+
+28
+00:01:32,000 --> 00:01:36,263
+Fourth, we'll find that black holes obey the laws of thermodynamics, and have
+
+29
+00:01:36,263 --> 00:01:37,450
+a temperature.
+
+30
+00:01:37,450 --> 00:01:43,000
+And finally, we'll apply Einstein's equation to the universe as a whole.
+
+31
+00:01:43,183 --> 00:01:45,158
+One piece of bookkeeping first.
+
+32
+00:01:45,158 --> 00:01:50,008
+From here on, we'll use units in which G and c are both equal to one, as relativists
+
+33
+00:01:50,008 --> 00:01:50,796
+do.
+
+34
+00:01:50,796 --> 00:01:53,833
+Then a mass is also a length, and also a time:
+
+35
+00:01:53,833 --> 00:01:58,083
+the Sun's mass is one point four eight kilometers, or four point nine three
+
+36
+00:01:58,083 --> 00:01:59,496
+microseconds.
+
+37
+00:01:59,496 --> 00:02:03,508
+The Schwarzschild metric loses its clutter, and the Schwarzschild radius is
+
+38
+00:02:03,508 --> 00:02:04,833
+simply two M.
+
+39
+00:02:10,449 --> 00:02:13,962
+Picture an astronaut stepping off a space station that hovers at r equals
+
+40
+00:02:13,962 --> 00:02:15,949
+ten M, and falling straight in.
+
+41
+00:02:15,949 --> 00:02:17,599
+We already have the tools.
+
+42
+00:02:17,599 --> 00:02:21,312
+Because the metric doesn't change with time, the quantity E is conserved along
+
+43
+00:02:21,312 --> 00:02:22,099
+the fall:
+
+44
+00:02:22,099 --> 00:02:25,574
+it's the energy per unit mass, as measured from far away.
+
+45
+00:02:25,574 --> 00:02:28,599
+And the four-velocity always has length minus one.
+
+46
+00:02:28,599 --> 00:02:32,574
+Substituting the first equation into the second gives the radial speed.
+
+47
+00:02:32,574 --> 00:02:37,186
+Starting from rest, it's exactly Newton's energy equation, with proper time
+
+48
+00:02:37,186 --> 00:02:39,249
+playing the role of time.
+
+49
+00:02:39,249 --> 00:02:43,549
+Its solution is a cycloid, written with a parameter eta.
+
+50
+00:02:43,549 --> 00:02:46,462
+Nothing special happens at r equals two M.
+
+51
+00:02:46,462 --> 00:02:50,574
+The astronaut's watch reads a finite time when they cross it, and a finite
+
+52
+00:02:50,574 --> 00:02:54,299
+time when they reach r equals zero.
+
+53
+00:02:54,466 --> 00:02:56,466
+Let's watch it, with two clocks.
+
+54
+00:02:56,466 --> 00:03:00,603
+On top, the astronaut's distance from the center against their own watch:
+
+55
+00:03:00,603 --> 00:03:05,516
+a smooth fall, through r equals two M, and on to zero, in about thirty-five
+
+56
+00:03:05,516 --> 00:03:05,716
+M.
+
+57
+00:03:05,716 --> 00:03:10,053
+Below, the same fall against the station's clock, which runs at the rate of
+
+58
+00:03:10,053 --> 00:03:11,241
+coordinate time t.
+
+59
+00:03:11,241 --> 00:03:15,416
+Here the astronaut slows down as they approach two M, and never quite gets
+
+60
+00:03:15,416 --> 00:03:16,216
+there:
+
+61
+00:03:16,216 --> 00:03:18,491
+t grows without bound.
+
+62
+00:03:18,491 --> 00:03:23,766
+For a black hole of ten solar masses, M is forty-nine microseconds, so the
+
+63
+00:03:23,766 --> 00:03:28,541
+whole trip takes under two milliseconds of the astronaut's time.
+
+64
+00:03:28,674 --> 00:03:30,611
+So what does the station actually see?
+
+65
+00:03:30,611 --> 00:03:32,586
+Draw it on a spacetime diagram:
+
+66
+00:03:32,586 --> 00:03:35,249
+distance across, the station's time up.
+
+67
+00:03:35,249 --> 00:03:39,049
+The astronaut's worldline bends over and runs up along r equals two M.
+
+68
+00:03:39,049 --> 00:03:43,199
+Now suppose they send a flash of light back to the station every so often,
+
+69
+00:03:43,199 --> 00:03:44,586
+by their own watch.
+
+70
+00:03:44,586 --> 00:03:47,361
+The flashes arrive further and further apart.
+
+71
+00:03:47,361 --> 00:03:51,349
+A flash sent exactly at r equals two M never arrives at all:
+
+72
+00:03:51,349 --> 00:03:55,674
+that outgoing light ray stays at r equals two M forever.
+
+73
+00:03:55,674 --> 00:03:57,824
+The light also arrives stretched.
+
+74
+00:03:57,824 --> 00:04:01,574
+Its redshift grows, and at late times it grows exponentially:
+
+75
+00:04:01,574 --> 00:04:06,149
+the wavelength increases by a factor of e every four M of the station's time.
+
+76
+00:04:06,149 --> 00:04:10,011
+For a ten-solar-mass black hole, that's a fifth of a millisecond.
+
+77
+00:04:10,011 --> 00:04:14,411
+To the station, the astronaut seems to freeze at the horizon, turn red, and
+
+78
+00:04:14,411 --> 00:04:18,761
+fade from view almost instantly, while the astronaut, by their own watch,
+
+79
+00:04:18,761 --> 00:04:21,449
+simply falls through.
+
+80
+00:04:21,632 --> 00:04:23,607
+Two more facts about the inside.
+
+81
+00:04:23,607 --> 00:04:27,407
+Once you've crossed, the longest you can possibly survive, by your own watch,
+
+82
+00:04:27,407 --> 00:04:30,782
+is pi M, and firing rockets only shortens it.
+
+83
+00:04:30,782 --> 00:04:32,457
+And what you feel is tides:
+
+84
+00:04:32,457 --> 00:04:36,370
+the difference in acceleration across your body, two M over r cubed times
+
+85
+00:04:36,370 --> 00:04:37,345
+your height.
+
+86
+00:04:37,345 --> 00:04:41,220
+For a stellar black hole, at the horizon that's twenty million g's, and you'd
+
+87
+00:04:41,220 --> 00:04:43,532
+be torn apart well before you reached it.
+
+88
+00:04:43,532 --> 00:04:46,382
+But tides shrink with the square of the mass.
+
+89
+00:04:46,382 --> 00:04:50,695
+At the horizon of the black hole in the center of our galaxy, they're a ten-thousandth
+
+90
+00:04:50,695 --> 00:04:56,020
+of a g, and at the giant one in M87, utterly unnoticeable, and you'd have
+
+91
+00:04:56,020 --> 00:04:58,082
+more than a day before the end.
+
+92
+00:04:58,082 --> 00:05:01,495
+So locally, the horizon is an ordinary place.
+
+93
+00:05:01,495 --> 00:05:03,657
+What breaks there is our coordinates.
+
+94
+00:05:05,305 --> 00:05:07,668
+To find better coordinates, follow light.
+
+95
+00:05:07,668 --> 00:05:10,993
+A light ray moving straight in or out has zero interval.
+
+96
+00:05:10,993 --> 00:05:14,680
+So dt d r is plus or minus one over one minus two M over r.
+
+97
+00:05:14,680 --> 00:05:20,218
+Integrating, t is plus or minus a new radial coordinate, r star, plus a constant.
+
+98
+00:05:20,218 --> 00:05:23,818
+Physicists call r star the tortoise coordinate, for a reason you can see in
+
+99
+00:05:23,818 --> 00:05:24,955
+its graph.
+
+100
+00:05:24,955 --> 00:05:29,118
+As r approaches two M, r star plunges to minus infinity:
+
+101
+00:05:29,118 --> 00:05:35,205
+measured in t, light takes forever to reach the horizon, like Zeno's tortoise.
+
+102
+00:05:35,364 --> 00:05:38,726
+So label events by the ingoing light ray they sit on.
+
+103
+00:05:38,726 --> 00:05:41,376
+Define v equals t plus r star;
+
+104
+00:05:41,376 --> 00:05:44,564
+it's constant along every ingoing ray.
+
+105
+00:05:44,564 --> 00:05:48,339
+Then dt is d v minus d r over one minus two M over r.
+
+106
+00:05:48,339 --> 00:05:51,839
+Substitute that into the metric, and something lovely happens:
+
+107
+00:05:51,839 --> 00:05:56,076
+the d r squared terms cancel exactly, and what's left has nothing that blows
+
+108
+00:05:56,076 --> 00:05:57,476
+up at r equals two M.
+
+109
+00:05:57,476 --> 00:06:00,989
+The determinant isn't zero there, and it's still a solution of Einstein's
+
+110
+00:06:00,989 --> 00:06:02,964
+equation in empty space:
+
+111
+00:06:02,964 --> 00:06:06,176
+the same spacetime, in better coordinates.
+
+112
+00:06:06,176 --> 00:06:11,014
+Eddington wrote down this form in 1924, but didn't remark on it.
+
+113
+00:06:11,014 --> 00:06:17,089
+David Finkelstein rediscovered it in 1958, and saw what it meant.
+
+114
+00:06:17,239 --> 00:06:19,226
+Let's see what this does to the picture.
+
+115
+00:06:19,226 --> 00:06:20,964
+Here's the Schwarzschild chart:
+
+116
+00:06:20,964 --> 00:06:24,389
+r across, t up, with light cones at a few places.
+
+117
+00:06:24,389 --> 00:06:28,951
+Near r equals two M, the cones get narrower and narrower, and close up.
+
+118
+00:06:28,951 --> 00:06:31,451
+That's what made the horizon look like a wall.
+
+119
+00:06:31,451 --> 00:06:36,014
+Now change the time coordinate to t tilde, which is v minus r, so that ingoing
+
+120
+00:06:36,014 --> 00:06:38,726
+light always moves at forty-five degrees.
+
+121
+00:06:38,726 --> 00:06:39,964
+Watch the cones.
+
+122
+00:06:39,964 --> 00:06:41,789
+They stop closing.
+
+123
+00:06:41,789 --> 00:06:45,989
+Instead, as you approach the horizon, they tip over, toward smaller r.
+
+124
+00:06:45,989 --> 00:06:51,176
+The lines of constant t, which seemed so natural, plunge down at the horizon:
+
+125
+00:06:51,176 --> 00:06:54,489
+they were the problem all along.
+
+126
+00:06:54,689 --> 00:06:57,201
+Now draw the black hole in these coordinates.
+
+127
+00:06:57,201 --> 00:07:00,951
+Ingoing light rays are straight lines at forty-five degrees.
+
+128
+00:07:00,951 --> 00:07:05,114
+Outgoing rays, launched outside the horizon, escape, though the closer they
+
+129
+00:07:05,114 --> 00:07:07,451
+start to it, the longer they linger.
+
+130
+00:07:07,451 --> 00:07:11,739
+A ray launched outward exactly at r equals two M stays there forever:
+
+131
+00:07:11,739 --> 00:07:15,589
+the horizon is itself made of light rays, hovering in place.
+
+132
+00:07:15,589 --> 00:07:20,814
+And inside, even a ray aimed outward moves to smaller r, and ends at r equals
+
+133
+00:07:20,814 --> 00:07:22,172
+zero.
+
+134
+00:07:22,172 --> 00:07:25,085
+Here's our astronaut again, falling from the station.
+
+135
+00:07:25,085 --> 00:07:29,122
+In these coordinates, their worldline crosses the horizon smoothly, at a finite
+
+136
+00:07:29,122 --> 00:07:29,935
+time.
+
+137
+00:07:29,935 --> 00:07:32,135
+Follow their light cone along the way.
+
+138
+00:07:32,135 --> 00:07:35,022
+Outside, part of the future still points outward.
+
+139
+00:07:35,022 --> 00:07:38,422
+At the horizon, the outward edge of the cone points straight up.
+
+140
+00:07:38,422 --> 00:07:42,385
+Inside, the entire future points toward r equals zero.
+
+141
+00:07:42,385 --> 00:07:44,610
+The horizon is a one-way membrane:
+
+142
+00:07:44,610 --> 00:07:47,822
+things can cross it inward, and nothing can cross it outward.
+
+143
+00:07:49,495 --> 00:07:53,133
+Finkelstein's coordinates see through the horizon, but only for things falling
+
+144
+00:07:53,133 --> 00:07:53,908
+in.
+
+145
+00:07:53,908 --> 00:07:57,245
+To see the whole spacetime, use both kinds of light rays.
+
+146
+00:07:57,245 --> 00:08:01,995
+With u equal to t minus r star, constant along outgoing rays, the metric is
+
+147
+00:08:01,995 --> 00:08:05,445
+just minus one minus two M over r, times d u d v.
+
+148
+00:08:05,445 --> 00:08:08,383
+But u runs off to infinity at the horizon.
+
+149
+00:08:08,383 --> 00:08:09,495
+So squeeze it:
+
+150
+00:08:09,495 --> 00:08:12,908
+define capital U and V as exponentials of u and v.
+
+151
+00:08:12,908 --> 00:08:18,254
+Their product depends only on r, and vanishes exactly at the horizon.
+
+152
+00:08:18,254 --> 00:08:23,504
+In U and V, the metric's factor is finite, and nonzero, at r equals two M.
+
+153
+00:08:23,504 --> 00:08:27,829
+And with T and X, the sum and difference, it's the flat metric of special
+
+154
+00:08:27,829 --> 00:08:30,591
+relativity times a positive factor.
+
+155
+00:08:30,591 --> 00:08:34,729
+So light travels at forty-five degrees everywhere in this picture.
+
+156
+00:08:34,729 --> 00:08:39,629
+These are the coordinates Martin Kruskal and George Szekeres found, independently,
+
+157
+00:08:39,629 --> 00:08:42,479
+in 1960.
+
+158
+00:08:42,637 --> 00:08:45,775
+Let's see how the familiar picture fits inside this one.
+
+159
+00:08:45,775 --> 00:08:49,375
+Here's the outside of the black hole in Schwarzschild's coordinates:
+
+160
+00:08:49,375 --> 00:08:53,125
+blue lines of constant r, teal lines of constant t.
+
+161
+00:08:53,125 --> 00:08:56,912
+Now move every point to its place in Kruskal's coordinates.
+
+162
+00:08:56,912 --> 00:08:59,912
+Lines of constant r become hyperbolas.
+
+163
+00:08:59,912 --> 00:09:04,300
+Lines of constant t become straight lines through the origin, like the spokes
+
+164
+00:09:04,300 --> 00:09:05,687
+of a fan.
+
+165
+00:09:05,687 --> 00:09:10,375
+All of Schwarzschild time, from minus infinity to plus infinity, fits inside
+
+166
+00:09:10,375 --> 00:09:14,687
+a wedge, and the edges of the wedge, where t is infinite, are the lines X
+
+167
+00:09:14,687 --> 00:09:16,837
+equals plus or minus T:
+
+168
+00:09:16,837 --> 00:09:19,337
+the horizon.
+
+169
+00:09:19,470 --> 00:09:21,820
+And now we can see what lies beyond.
+
+170
+00:09:21,820 --> 00:09:25,620
+The horizon is the pair of diagonal lines, made of light rays, just as we
+
+171
+00:09:25,620 --> 00:09:26,633
+found.
+
+172
+00:09:26,633 --> 00:09:30,808
+Above them is the inside of the black hole, region two, where lines of constant
+
+173
+00:09:30,808 --> 00:09:35,195
+r are hyperbolas again, but now horizontal ones, ending at the singularity,
+
+174
+00:09:35,195 --> 00:09:38,233
+r equals zero, which is also a hyperbola.
+
+175
+00:09:38,233 --> 00:09:42,183
+The equations, solved in full, also contain two more regions:
+
+176
+00:09:42,183 --> 00:09:46,320
+a mirror-image exterior on the left, and below, a white hole, a region that
+
+177
+00:09:46,320 --> 00:09:48,245
+things can only leave.
+
+178
+00:09:48,245 --> 00:09:52,087
+This is the maximally extended Schwarzschild spacetime.
+
+179
+00:09:52,087 --> 00:09:56,525
+Light cones are forty-five degrees everywhere, so causality is easy to read.
+
+180
+00:09:56,525 --> 00:09:58,262
+Here's our astronaut's worldline:
+
+181
+00:09:58,262 --> 00:10:01,825
+it crosses the horizon smoothly, and ends on the singularity.
+
+182
+00:10:01,825 --> 00:10:03,750
+Look at their light cone inside.
+
+183
+00:10:03,750 --> 00:10:06,412
+Every direction in it hits the singularity.
+
+184
+00:10:06,412 --> 00:10:10,550
+Inside the black hole, the lines of constant r run sideways:
+
+185
+00:10:10,550 --> 00:10:12,862
+r has become a time coordinate.
+
+186
+00:10:12,862 --> 00:10:15,712
+The singularity isn't a place you could steer around.
+
+187
+00:10:15,712 --> 00:10:20,887
+It's a moment in your future, as unavoidable as next Tuesday.
+
+188
+00:10:21,037 --> 00:10:23,475
+This picture also contains a wormhole.
+
+189
+00:10:23,475 --> 00:10:25,687
+Take a slice of constant Kruskal time T.
+
+190
+00:10:25,687 --> 00:10:30,025
+At T equals zero, it runs from the other exterior on the left, through r equals
+
+191
+00:10:30,025 --> 00:10:32,337
+two M, to ours on the right.
+
+192
+00:10:32,337 --> 00:10:36,137
+Its geometry, embedded as a surface, is two copies of Flamm's funnel from
+
+193
+00:10:36,137 --> 00:10:38,262
+part one, joined at the throat:
+
+194
+00:10:38,262 --> 00:10:42,062
+the Einstein–Rosen bridge, a tunnel between two universes.
+
+195
+00:10:42,062 --> 00:10:43,575
+But it isn't static.
+
+196
+00:10:43,575 --> 00:10:48,762
+Move the slice up in T, and the throat shrinks, and pinches off, at the singularity.
+
+197
+00:10:48,762 --> 00:10:52,587
+Running backward, it was born from the white hole's singularity.
+
+198
+00:10:52,587 --> 00:10:56,475
+It closes too fast for anything, even light, to get through:
+
+199
+00:10:56,475 --> 00:11:00,079
+a light ray sent across ends on the singularity.
+
+200
+00:11:00,079 --> 00:11:01,529
+Is any of this real?
+
+201
+00:11:01,529 --> 00:11:05,629
+The extra regions are there because Schwarzschild's solution describes a black
+
+202
+00:11:05,629 --> 00:11:07,979
+hole that has existed forever.
+
+203
+00:11:07,979 --> 00:11:12,579
+Real black holes form from collapsing stars, and to see what that changes,
+
+204
+00:11:12,579 --> 00:11:15,154
+we need one more way of drawing spacetime.
+
+205
+00:11:16,776 --> 00:11:20,764
+Kruskal's picture still runs off to infinity in every direction.
+
+206
+00:11:20,764 --> 00:11:25,226
+Roger Penrose found a way to fit all of spacetime, infinity included, on a
+
+207
+00:11:25,226 --> 00:11:26,626
+finite page.
+
+208
+00:11:26,626 --> 00:11:30,114
+Start with flat spacetime, in the null coordinates u and v.
+
+209
+00:11:30,114 --> 00:11:34,814
+Squeeze each of them with an arctangent, so their infinite ranges become finite.
+
+210
+00:11:34,814 --> 00:11:38,001
+The metric picks up a factor that blows up at the edges.
+
+211
+00:11:38,001 --> 00:11:38,901
+Now the trick:
+
+212
+00:11:38,901 --> 00:11:41,101
+throw that factor away.
+
+213
+00:11:41,101 --> 00:11:46,026
+Multiplying a metric by a positive function changes lengths, but not angles,
+
+214
+00:11:46,026 --> 00:11:50,176
+so light cones keep their shape, and the causal structure, who can signal
+
+215
+00:11:50,176 --> 00:11:52,564
+whom, is exactly preserved.
+
+216
+00:11:52,564 --> 00:11:57,601
+What's left is a finite picture of an infinite spacetime.
+
+217
+00:11:57,735 --> 00:12:00,022
+Here's what that does to flat spacetime.
+
+218
+00:12:00,022 --> 00:12:04,797
+A grid of lines, one per unit of time and of distance, stretching off forever.
+
+219
+00:12:04,797 --> 00:12:06,135
+Apply the squeeze.
+
+220
+00:12:06,135 --> 00:12:09,372
+The whole infinite half-plane folds into a triangle.
+
+221
+00:12:09,372 --> 00:12:13,272
+Every line of constant r runs from one point at the bottom to one point at
+
+222
+00:12:13,272 --> 00:12:14,110
+the top:
+
+223
+00:12:14,110 --> 00:12:17,860
+that's where every inertial observer comes from, and goes to.
+
+224
+00:12:17,860 --> 00:12:22,710
+Lines of constant t all meet at the far corner, spatial infinity.
+
+225
+00:12:22,710 --> 00:12:26,672
+And the two diagonal edges are where light rays come from and go to, called
+
+226
+00:12:26,672 --> 00:12:29,035
+scri minus and scri plus.
+
+227
+00:12:29,035 --> 00:12:33,047
+Light still moves at forty-five degrees, so you can read off at a glance what
+
+228
+00:12:33,047 --> 00:12:35,735
+can influence what.
+
+229
+00:12:35,918 --> 00:12:37,931
+Now do the same to the black hole.
+
+230
+00:12:37,931 --> 00:12:42,281
+Start from Kruskal's diagram, and squeeze U and V with arctangents.
+
+231
+00:12:42,281 --> 00:12:46,756
+The exterior becomes a diamond, the black hole a triangle on top, and the
+
+232
+00:12:46,756 --> 00:12:51,506
+singularity, which was a hyperbola, becomes a straight horizontal line:
+
+233
+00:12:51,506 --> 00:12:56,768
+r equals zero is where the arctangents of U and V add up to pi over two.
+
+234
+00:12:56,768 --> 00:13:00,168
+This is the Penrose diagram of the Schwarzschild black hole.
+
+235
+00:13:00,168 --> 00:13:03,681
+Our universe is the diamond on the right, with its own infinities:
+
+236
+00:13:03,681 --> 00:13:08,681
+scri plus, where outgoing light ends up, and future and past timelike infinity.
+
+237
+00:13:08,681 --> 00:13:10,043
+Here's the astronaut.
+
+238
+00:13:10,043 --> 00:13:13,043
+And now the definition of a black hole becomes visual:
+
+239
+00:13:13,043 --> 00:13:16,543
+it's the region from which no light ray can reach scri plus.
+
+240
+00:13:16,543 --> 00:13:18,193
+Light from here gets out.
+
+241
+00:13:18,193 --> 00:13:23,618
+Light from inside the horizon can only go up, into the singularity.
+
+242
+00:13:23,710 --> 00:13:25,935
+But real black holes weren't always there:
+
+243
+00:13:25,935 --> 00:13:27,997
+they form when a star collapses.
+
+244
+00:13:27,997 --> 00:13:32,097
+Here's a star that sits at r equals five M and then collapses.
+
+245
+00:13:32,097 --> 00:13:36,535
+Outside its surface, by Birkhoff's theorem, the geometry is exactly Schwarzschild's,
+
+246
+00:13:36,535 --> 00:13:38,910
+so this part of the picture is exact.
+
+247
+00:13:38,910 --> 00:13:42,210
+Inside is the star itself, not empty space.
+
+248
+00:13:42,210 --> 00:13:46,060
+So the left half of Kruskal's diagram, with the white hole, the other universe
+
+249
+00:13:46,060 --> 00:13:50,735
+and the wormhole, is simply covered up by the star, and never exists.
+
+250
+00:13:50,735 --> 00:13:54,335
+The standard Penrose diagram of a collapse looks like this:
+
+251
+00:13:54,335 --> 00:13:58,410
+the star's surface falls through the horizon and meets the singularity, and
+
+252
+00:13:58,410 --> 00:14:01,668
+outside, everything is as before.
+
+253
+00:14:01,668 --> 00:14:04,043
+And look at where the event horizon is.
+
+254
+00:14:04,043 --> 00:14:08,056
+It's the boundary of the region that can never send light to scri plus, and
+
+255
+00:14:08,056 --> 00:14:12,081
+it starts at the center of the star, before the surface has reached r equals
+
+256
+00:14:12,081 --> 00:14:13,156
+two M:
+
+257
+00:14:13,156 --> 00:14:17,318
+a horizon grows outward from the center, through matter that hasn't yet noticed
+
+258
+00:14:17,318 --> 00:14:18,431
+anything.
+
+259
+00:14:18,431 --> 00:14:23,218
+To know where the event horizon is today, you need to know the entire future.
+
+260
+00:14:23,218 --> 00:14:25,401
+Nothing local marks it.
+
+261
+00:14:25,401 --> 00:14:27,289
+That leaves the singularity.
+
+262
+00:14:27,289 --> 00:14:30,564
+Every picture so far has been perfectly spherical.
+
+263
+00:14:30,564 --> 00:14:34,951
+Maybe, in a real, lumpy collapse, the matter would miss the center and bounce
+
+264
+00:14:34,951 --> 00:14:35,926
+back out?
+
+265
+00:14:35,926 --> 00:14:38,326
+For decades, many physicists thought so.
+
+266
+00:14:39,966 --> 00:14:45,428
+In 1963, two Soviet physicists, Lifshitz and Khalatnikov, argued that the
+
+267
+00:14:45,428 --> 00:14:48,128
+singularity was an artifact of symmetry:
+
+268
+00:14:48,128 --> 00:14:53,303
+in a realistic, irregular collapse, they concluded, no singularity would form.
+
+269
+00:14:53,303 --> 00:14:56,628
+Two years later, Roger Penrose proved the opposite.
+
+270
+00:14:56,628 --> 00:15:00,891
+Once a certain kind of surface forms, a trapped surface, a singularity is
+
+271
+00:15:00,891 --> 00:15:03,491
+unavoidable, whatever the symmetry.
+
+272
+00:15:03,491 --> 00:15:09,091
+The key tool is an equation found in 1955 by Amal Kumar Raychaudhuri, about
+
+273
+00:15:09,091 --> 00:15:15,641
+how a bundle of free particles, or light rays, spreads out or converges.
+
+274
+00:15:15,741 --> 00:15:19,853
+Picture a whole family of freely falling worldlines, side by side, like the
+
+275
+00:15:19,853 --> 00:15:22,328
+ball of test particles from part one.
+
+276
+00:15:22,328 --> 00:15:26,366
+Let u be their four-velocity, and B the tensor that says how u changes across
+
+277
+00:15:26,366 --> 00:15:27,278
+the bundle:
+
+278
+00:15:27,278 --> 00:15:30,303
+it tells you how the separation between neighbors grows.
+
+279
+00:15:30,303 --> 00:15:33,516
+B splits into three parts, each with its own meaning.
+
+280
+00:15:33,516 --> 00:15:38,016
+Its trace, theta, the expansion, says how fast the bundle's volume grows.
+
+281
+00:15:38,016 --> 00:15:42,303
+Its symmetric, traceless part, the shear sigma, changes the shape without
+
+282
+00:15:42,303 --> 00:15:44,116
+changing the volume.
+
+283
+00:15:44,116 --> 00:15:49,166
+And its antisymmetric part, the rotation omega, twists it.
+
+284
+00:15:49,349 --> 00:15:52,574
+Now let's derive how theta changes along the bundle.
+
+285
+00:15:52,574 --> 00:15:56,299
+The rate of change of B is u dotted into a second covariant derivative of
+
+286
+00:15:56,299 --> 00:15:56,612
+u.
+
+287
+00:15:56,612 --> 00:15:59,012
+Swap the order of the two derivatives.
+
+288
+00:15:59,012 --> 00:16:03,274
+Their commutator, as we found in part one, is the Riemann tensor.
+
+289
+00:16:03,274 --> 00:16:05,712
+Use the product rule on the first term.
+
+290
+00:16:05,712 --> 00:16:08,712
+The worldlines are free, so they're geodesics:
+
+291
+00:16:08,712 --> 00:16:13,999
+u dot grad u is zero, and what's left is B times B, and curvature.
+
+292
+00:16:13,999 --> 00:16:17,399
+Take the trace, and Riemann contracts to the Ricci tensor.
+
+293
+00:16:17,399 --> 00:16:20,199
+Finally, write B as its three parts:
+
+294
+00:16:20,199 --> 00:16:23,949
+the trace gives a third of theta squared, the shear and rotation give their
+
+295
+00:16:23,949 --> 00:16:26,624
+squares, and the cross terms vanish.
+
+296
+00:16:26,624 --> 00:16:30,249
+This is Raychaudhuri's equation.
+
+297
+00:16:30,424 --> 00:16:31,962
+Read it term by term.
+
+298
+00:16:31,962 --> 00:16:33,099
+Theta squared:
+
+299
+00:16:33,099 --> 00:16:36,824
+once a bundle starts converging, convergence feeds on itself.
+
+300
+00:16:36,824 --> 00:16:38,937
+Shear always adds to the focusing.
+
+301
+00:16:38,937 --> 00:16:43,474
+Rotation is the only term that pushes the other way, like a centrifugal force.
+
+302
+00:16:43,474 --> 00:16:45,937
+And the last term is where gravity enters.
+
+303
+00:16:45,937 --> 00:16:50,099
+By Einstein's equation, for a fluid it's four pi times rho plus three p.
+
+304
+00:16:50,099 --> 00:16:51,512
+We've seen this before:
+
+305
+00:16:51,512 --> 00:16:55,174
+it's exactly Baez and Bunn's statement about a ball of particles starting
+
+306
+00:16:55,174 --> 00:16:56,137
+at rest.
+
+307
+00:16:56,137 --> 00:16:59,149
+That was Raychaudhuri's equation all along.
+
+308
+00:16:59,149 --> 00:17:04,074
+As long as rho plus three p is positive, which is true of all ordinary matter,
+
+309
+00:17:04,074 --> 00:17:05,612
+gravity focuses.
+
+310
+00:17:05,612 --> 00:17:08,924
+For light rays, the condition needed is even weaker:
+
+311
+00:17:08,924 --> 00:17:12,249
+rho plus p non-negative.
+
+312
+00:17:12,449 --> 00:17:14,837
+Now the key consequence, for light rays.
+
+313
+00:17:14,837 --> 00:17:18,537
+Suppose there's no rotation, which is true for the light rays leaving any
+
+314
+00:17:18,537 --> 00:17:21,437
+surface, and the energy condition holds.
+
+315
+00:17:21,437 --> 00:17:25,799
+Then every term on the right is negative or zero, so d theta d lambda is at
+
+316
+00:17:25,799 --> 00:17:28,024
+most minus one half theta squared.
+
+317
+00:17:28,024 --> 00:17:30,574
+Divide by theta squared and integrate.
+
+318
+00:17:30,574 --> 00:17:34,724
+If the bundle starts out converging, with theta naught negative, then theta
+
+319
+00:17:34,724 --> 00:17:38,812
+must reach minus infinity within an affine distance two over the magnitude
+
+320
+00:17:38,812 --> 00:17:40,349
+of theta naught.
+
+321
+00:17:40,349 --> 00:17:44,599
+Here's that bound, and an example with matter, which gets there even sooner.
+
+322
+00:17:44,599 --> 00:17:47,049
+Minus infinity means the rays cross:
+
+323
+00:17:47,049 --> 00:17:49,337
+a caustic, a focal point.
+
+324
+00:17:49,337 --> 00:17:53,949
+Gravity is a lens that only ever converges.
+
+325
+00:17:54,124 --> 00:17:56,399
+So where would light rays start out converging?
+
+326
+00:17:56,399 --> 00:17:59,799
+Take a sphere outside a black hole and set off a flash of light on it.
+
+327
+00:17:59,799 --> 00:18:03,699
+The flash splits into two fronts, one moving out and one moving in.
+
+328
+00:18:03,699 --> 00:18:07,062
+The inner front shrinks, but the outer one grows, as you'd expect.
+
+329
+00:18:07,062 --> 00:18:09,137
+Now do the same inside the horizon.
+
+330
+00:18:09,137 --> 00:18:10,462
+Both fronts shrink.
+
+331
+00:18:10,462 --> 00:18:14,899
+Even the light aimed outward converges, because inside, r is a time and it
+
+332
+00:18:14,899 --> 00:18:16,387
+only decreases.
+
+333
+00:18:16,387 --> 00:18:20,262
+A closed surface whose outgoing and ingoing light both converge is called
+
+334
+00:18:20,262 --> 00:18:22,999
+a trapped surface.
+
+335
+00:18:23,133 --> 00:18:24,983
+Here is Penrose's theorem.
+
+336
+00:18:24,983 --> 00:18:29,133
+If gravity focuses light, if space at one moment is infinite, and if a trapped
+
+337
+00:18:29,133 --> 00:18:32,908
+surface forms, then some light ray must come to an end after a finite affine
+
+338
+00:18:32,908 --> 00:18:33,983
+distance:
+
+339
+00:18:33,983 --> 00:18:36,658
+spacetime has an edge, a singularity.
+
+340
+00:18:36,658 --> 00:18:38,058
+The idea of the proof:
+
+341
+00:18:38,058 --> 00:18:42,583
+the light rays leaving a trapped surface are all converging, so by Raychaudhuri,
+
+342
+00:18:42,583 --> 00:18:45,520
+they all reach caustics within a finite distance.
+
+343
+00:18:45,520 --> 00:18:49,433
+So the boundary of everything the surface can influence is finite, closed
+
+344
+00:18:49,433 --> 00:18:50,533
+off.
+
+345
+00:18:50,533 --> 00:18:55,008
+But that finite boundary would have to map onto the whole of an infinite space,
+
+346
+00:18:55,008 --> 00:18:59,541
+which is impossible, unless some of those light rays simply end.
+
+347
+00:18:59,541 --> 00:19:03,591
+Nothing in this argument needs symmetry, and a slightly deformed trapped surface
+
+348
+00:19:03,591 --> 00:19:06,728
+is still trapped, so the conclusion is robust.
+
+349
+00:19:06,728 --> 00:19:11,091
+In 2020, Penrose received the Nobel Prize for exactly this:
+
+350
+00:19:11,091 --> 00:19:15,991
+showing that black hole formation is a robust prediction of general relativity.
+
+351
+00:19:15,991 --> 00:19:19,416
+Stephen Hawking turned the same argument around in time:
+
+352
+00:19:19,416 --> 00:19:23,491
+an expanding universe filled with ordinary matter must have a singularity
+
+353
+00:19:23,491 --> 00:19:27,141
+in its past, a precise version of the Big Bang.
+
+354
+00:19:27,141 --> 00:19:30,853
+What the theorems don't say is what the singularity is like.
+
+355
+00:19:30,853 --> 00:19:35,241
+They predict where general relativity itself breaks down, and a quantum theory
+
+356
+00:19:35,241 --> 00:19:36,891
+of gravity must take over.
+
+357
+00:19:42,130 --> 00:19:46,467
+In part one, Mercury and the bending of light came from a mass sitting still.
+
+358
+00:19:46,467 --> 00:19:49,392
+What changes when the mass moves, or spins?
+
+359
+00:19:49,392 --> 00:19:51,942
+Go back to the linearized field equation.
+
+360
+00:19:51,942 --> 00:19:55,880
+For a static source, the time-time part gives Newton's potential.
+
+361
+00:19:55,880 --> 00:20:00,105
+But a moving source also has momentum, and mass currents feed the time-space
+
+362
+00:20:00,105 --> 00:20:04,367
+part of the metric, through exactly the equation electric currents use to
+
+363
+00:20:04,367 --> 00:20:06,930
+make a magnetic vector potential.
+
+364
+00:20:06,930 --> 00:20:11,205
+Far from a spinning body, the solution has the shape of a magnetic dipole's
+
+365
+00:20:11,205 --> 00:20:17,580
+field, with the angular momentum J playing the role of the magnetic moment.
+
+366
+00:20:17,747 --> 00:20:20,522
+This gravitomagnetic field has two effects.
+
+367
+00:20:20,522 --> 00:20:22,734
+First, it drags things around.
+
+368
+00:20:22,734 --> 00:20:26,447
+Drop something with zero angular momentum near a spinning body, and it doesn't
+
+369
+00:20:26,447 --> 00:20:27,559
+fall straight in:
+
+370
+00:20:27,559 --> 00:20:31,547
+it circles, with angular velocity two J over r cubed.
+
+371
+00:20:31,547 --> 00:20:35,097
+Spacetime itself is being dragged around by the rotation.
+
+372
+00:20:35,097 --> 00:20:37,534
+Second, it twists gyroscopes.
+
+373
+00:20:37,534 --> 00:20:41,872
+A gyroscope's spin axis precesses at a rate with the shape of a dipole field,
+
+374
+00:20:41,872 --> 00:20:45,347
+worked out by Lense and Thirring in 1918.
+
+375
+00:20:45,347 --> 00:20:49,284
+Over the poles, the gyroscope is dragged along with the rotation;
+
+376
+00:20:49,284 --> 00:20:52,647
+at the equator, the other way.
+
+377
+00:20:52,813 --> 00:20:56,988
+There's a second, larger effect on gyroscopes, which doesn't need rotation
+
+378
+00:20:56,988 --> 00:20:57,888
+at all.
+
+379
+00:20:57,888 --> 00:21:02,513
+Send a gyroscope around a mass in a circular orbit, its spin axis pointing
+
+380
+00:21:02,513 --> 00:21:03,926
+outward to start.
+
+381
+00:21:03,926 --> 00:21:07,801
+A gyroscope is the best definition of a fixed direction we have:
+
+382
+00:21:07,801 --> 00:21:11,326
+its spin is parallel transported along its worldline.
+
+383
+00:21:11,326 --> 00:21:15,263
+Yet after one orbit, it no longer points where it started.
+
+384
+00:21:15,263 --> 00:21:19,838
+Computed exactly, it has turned by two pi times one minus the square root
+
+385
+00:21:19,838 --> 00:21:23,876
+of one minus three M over r, in the direction of the orbit:
+
+386
+00:21:23,876 --> 00:21:27,288
+fifty-nine degrees per orbit at r equals ten M.
+
+387
+00:21:27,288 --> 00:21:33,788
+This is geodetic precession, predicted by Willem de Sitter in 1916.
+
+388
+00:21:33,938 --> 00:21:35,476
+Where does that turning come from?
+
+389
+00:21:35,476 --> 00:21:37,626
+Part of it is the curvature of space.
+
+390
+00:21:37,626 --> 00:21:39,938
+Here's Flamm's paraboloid from part one:
+
+391
+00:21:39,938 --> 00:21:42,876
+the geometry of space around the mass at one moment.
+
+392
+00:21:42,876 --> 00:21:47,676
+Transport a vector around the circle at r equals ten M, staying on the surface.
+
+393
+00:21:47,676 --> 00:21:50,376
+Near that circle, the surface is like a cone.
+
+394
+00:21:50,376 --> 00:21:54,863
+Cut the cone open and unroll it, and you get a flat sheet with a wedge missing.
+
+395
+00:21:54,863 --> 00:21:58,013
+On the flat sheet, parallel transport is trivial:
+
+396
+00:21:58,013 --> 00:22:00,113
+the arrows stay parallel.
+
+397
+00:22:00,113 --> 00:22:04,113
+But when you glue the edges back together, the last arrow is turned relative
+
+398
+00:22:04,113 --> 00:22:08,651
+to the first, by the angle of the missing wedge, thirty-eight degrees here.
+
+399
+00:22:08,651 --> 00:22:13,138
+In weak gravity, curved space supplies exactly two thirds of the geodetic
+
+400
+00:22:13,138 --> 00:22:17,638
+effect, and the warping of time the other third.
+
+401
+00:22:17,813 --> 00:22:20,051
+Both effects were measured in orbit.
+
+402
+00:22:20,051 --> 00:22:24,638
+Gravity Probe B, launched in 2004, carried four gyroscopes around the Earth
+
+403
+00:22:24,638 --> 00:22:27,788
+in a polar orbit, pointed at a guide star.
+
+404
+00:22:27,788 --> 00:22:31,851
+General relativity predicts that their axes should turn by six thousand six
+
+405
+00:22:31,851 --> 00:22:36,038
+hundred milliarcseconds a year from geodetic precession, and by thirty-nine
+
+406
+00:22:36,038 --> 00:22:40,551
+milliarcseconds a year, sideways, from the Earth's frame dragging:
+
+407
+00:22:40,551 --> 00:22:44,688
+about the width of a human hair seen from half a kilometer away.
+
+408
+00:22:44,688 --> 00:22:45,676
+The measurements:
+
+409
+00:22:45,676 --> 00:22:50,251
+six thousand six hundred and two, plus or minus eighteen, and thirty-seven,
+
+410
+00:22:50,251 --> 00:22:52,138
+plus or minus seven.
+
+411
+00:22:52,138 --> 00:22:56,026
+Laser-tracked satellites see the Earth drag their orbits as well.
+
+412
+00:22:56,026 --> 00:22:59,288
+Space really is dragged around by rotating mass.
+
+413
+00:23:00,878 --> 00:23:05,853
+Real stars rotate, and a collapsing star spins faster and faster, like a skater
+
+414
+00:23:05,853 --> 00:23:07,378
+pulling in their arms.
+
+415
+00:23:07,378 --> 00:23:09,353
+So real black holes spin.
+
+416
+00:23:09,353 --> 00:23:13,903
+The spacetime of a spinning black hole wasn't found until 1963, when Roy Kerr
+
+417
+00:23:13,903 --> 00:23:15,128
+discovered this:
+
+418
+00:23:15,128 --> 00:23:19,803
+the Kerr metric, with mass M and angular momentum J equal to M times a.
+
+419
+00:23:19,803 --> 00:23:24,628
+Like Schwarzschild's, it's a solution of Einstein's equation in empty space;
+
+420
+00:23:24,628 --> 00:23:29,828
+our symbolic code confirms that all ten components of its Ricci tensor vanish.
+
+421
+00:23:29,828 --> 00:23:32,078
+With no spin, it's Schwarzschild.
+
+422
+00:23:32,078 --> 00:23:36,078
+With no mass, it's flat spacetime in unusual coordinates.
+
+423
+00:23:36,078 --> 00:23:40,578
+And far away, its time-space term is exactly the gravitomagnetic field we
+
+424
+00:23:40,578 --> 00:23:41,841
+just derived.
+
+425
+00:23:41,841 --> 00:23:44,516
+Remarkably, it's the only possibility:
+
+426
+00:23:44,516 --> 00:23:48,928
+every stationary black hole in empty space is a Kerr black hole, described
+
+427
+00:23:48,928 --> 00:23:50,566
+by just two numbers.
+
+428
+00:23:50,566 --> 00:23:53,778
+Black holes have no hair.
+
+429
+00:23:53,903 --> 00:23:55,703
+What does a Kerr black hole look like?
+
+430
+00:23:55,703 --> 00:23:58,603
+Here's a slice through it, containing the spin axis.
+
+431
+00:23:58,603 --> 00:24:02,153
+The horizon is where g r r blows up, where Delta vanishes.
+
+432
+00:24:02,153 --> 00:24:05,316
+That happens at two radii, r plus and r minus.
+
+433
+00:24:05,316 --> 00:24:06,778
+Let's turn up the spin.
+
+434
+00:24:06,778 --> 00:24:11,153
+As a grows, the outer horizon shrinks, from two M toward M, and an inner horizon
+
+435
+00:24:11,153 --> 00:24:12,741
+appears inside it.
+
+436
+00:24:12,741 --> 00:24:17,216
+Outside the horizon there's a new surface, where g t t vanishes, which touches
+
+437
+00:24:17,216 --> 00:24:20,028
+the horizon at the poles and bulges out at the equator:
+
+438
+00:24:20,028 --> 00:24:22,278
+the boundary of the ergosphere.
+
+439
+00:24:22,278 --> 00:24:24,691
+And the singularity is no longer a point:
+
+440
+00:24:24,691 --> 00:24:28,503
+it's a ring, of radius a, here cut in two places.
+
+441
+00:24:28,503 --> 00:24:32,678
+If a exceeded M, there'd be no horizon at all, and the singularity would be
+
+442
+00:24:32,678 --> 00:24:35,216
+naked, visible from outside.
+
+443
+00:24:35,216 --> 00:24:38,566
+Penrose conjectured that nature never allows that.
+
+444
+00:24:38,566 --> 00:24:43,278
+This cosmic censorship conjecture is still unproven, but no generic process
+
+445
+00:24:43,278 --> 00:24:46,528
+that violates it is known.
+
+446
+00:24:46,637 --> 00:24:50,237
+The ergosphere is where frame dragging becomes irresistible.
+
+447
+00:24:50,237 --> 00:24:50,999
+Ask:
+
+448
+00:24:50,999 --> 00:24:55,137
+at a fixed radius, how fast can something orbit, as seen from far away?
+
+449
+00:24:55,137 --> 00:24:59,099
+For its worldline to be timelike, slower than light, its angular velocity
+
+450
+00:24:59,099 --> 00:25:03,512
+Omega has to make this quadratic negative, which confines it to a band.
+
+451
+00:25:03,512 --> 00:25:05,537
+Far out, the band includes zero:
+
+452
+00:25:05,537 --> 00:25:08,637
+you can orbit either way, or simply hover in place.
+
+453
+00:25:08,637 --> 00:25:12,212
+At the ergosurface, the lower edge reaches zero.
+
+454
+00:25:12,212 --> 00:25:14,637
+Inside, the whole band is positive:
+
+455
+00:25:14,637 --> 00:25:19,487
+no rocket, however powerful, can hold you still relative to the distant stars.
+
+456
+00:25:19,487 --> 00:25:21,387
+You must rotate with the hole.
+
+457
+00:25:21,387 --> 00:25:25,862
+At the horizon, the band closes to a single value, Omega H:
+
+458
+00:25:25,862 --> 00:25:30,312
+the horizon itself rotates rigidly at that rate.
+
+459
+00:25:30,462 --> 00:25:32,749
+Here's a way to see the dragging directly.
+
+460
+00:25:32,749 --> 00:25:36,674
+In the equatorial plane, set off a flash of light at each dot, and draw where
+
+461
+00:25:36,674 --> 00:25:38,637
+the light has reached a moment later.
+
+462
+00:25:38,637 --> 00:25:42,024
+Without spin, each flash is a circle around its source.
+
+463
+00:25:42,024 --> 00:25:43,412
+Turn up the spin.
+
+464
+00:25:43,412 --> 00:25:47,312
+The circles are swept around in the direction of rotation, most strongly near
+
+465
+00:25:47,312 --> 00:25:48,362
+the hole.
+
+466
+00:25:48,362 --> 00:25:52,624
+Inside the ergosurface, every circle is carried completely off its source:
+
+467
+00:25:52,624 --> 00:25:56,962
+even light can't move against the rotation, or even stay put.
+
+468
+00:25:56,962 --> 00:26:00,187
+That's why it's called the ergosphere, from the Greek for work:
+
+469
+00:26:00,187 --> 00:26:03,287
+as we'll see next, energy can be extracted from it.
+
+470
+00:26:04,902 --> 00:26:08,302
+The ergosphere allows something impossible anywhere else:
+
+471
+00:26:08,302 --> 00:26:09,865
+negative energy.
+
+472
+00:26:09,865 --> 00:26:14,552
+A particle's conserved energy, the one measured from far away, is minus its
+
+473
+00:26:14,552 --> 00:26:17,290
+momentum dotted into the time direction.
+
+474
+00:26:17,290 --> 00:26:21,927
+Split it into what a local observer, carried around by the dragging, measures,
+
+475
+00:26:21,927 --> 00:26:26,315
+which is always positive, plus a term from frame dragging times the angular
+
+476
+00:26:26,315 --> 00:26:27,652
+momentum.
+
+477
+00:26:27,652 --> 00:26:32,540
+If the particle moves backward against the rotation, L is negative, and inside
+
+478
+00:26:32,540 --> 00:26:36,952
+the ergosphere, the dragging is strong enough that the total can be negative.
+
+479
+00:26:36,952 --> 00:26:41,302
+Geometrically, the time direction of the distant observers is spacelike there,
+
+480
+00:26:41,302 --> 00:26:44,140
+so this dot product can have either sign.
+
+481
+00:26:44,140 --> 00:26:47,177
+A particle on such an orbit can never escape.
+
+482
+00:26:47,177 --> 00:26:49,927
+But it can fall in.
+
+483
+00:26:50,111 --> 00:26:53,598
+Roger Penrose saw what this allows, in 1969.
+
+484
+00:26:53,598 --> 00:26:55,773
+Send a particle into the ergosphere.
+
+485
+00:26:55,773 --> 00:27:00,473
+There, let it split in two, throwing one piece backward, against the rotation,
+
+486
+00:27:00,473 --> 00:27:03,086
+fast enough that its energy is negative.
+
+487
+00:27:03,086 --> 00:27:05,073
+That piece falls into the hole.
+
+488
+00:27:05,073 --> 00:27:09,411
+Energy is conserved, so the other piece leaves with more energy than the original
+
+489
+00:27:09,411 --> 00:27:10,961
+particle brought in.
+
+490
+00:27:10,961 --> 00:27:14,636
+In this computed example, almost ten percent more.
+
+491
+00:27:14,636 --> 00:27:18,136
+The extra energy came from the black hole's rotation:
+
+492
+00:27:18,136 --> 00:27:22,586
+swallowing negative energy and negative angular momentum, the hole gets a
+
+493
+00:27:22,586 --> 00:27:26,411
+little lighter and spins a little slower.
+
+494
+00:27:26,536 --> 00:27:27,673
+Is there a limit?
+
+495
+00:27:27,673 --> 00:27:31,136
+Anything that crosses the horizon must move forward in time relative to the
+
+496
+00:27:31,136 --> 00:27:35,323
+horizon's own light rays, which rotate with angular velocity Omega H.
+
+497
+00:27:35,323 --> 00:27:39,436
+For the piece that falls in, that means E minus Omega H times L is at least
+
+498
+00:27:39,436 --> 00:27:40,348
+zero.
+
+499
+00:27:40,348 --> 00:27:43,686
+So the hole's mass can drop, but only by so much:
+
+500
+00:27:43,686 --> 00:27:47,461
+the change in M is at least Omega H times the change in J.
+
+501
+00:27:47,461 --> 00:27:49,123
+And here's a surprise.
+
+502
+00:27:49,123 --> 00:27:53,386
+Differentiate the area of Kerr's horizon, and this inequality says exactly
+
+503
+00:27:53,386 --> 00:27:55,561
+that the area can't decrease.
+
+504
+00:27:55,561 --> 00:27:59,886
+Spin energy can be extracted, but the horizon's area only grows.
+
+505
+00:27:59,886 --> 00:28:02,586
+We'll meet this again.
+
+506
+00:28:02,727 --> 00:28:06,415
+Demetrios Christodoulou made this precise in 1970.
+
+507
+00:28:06,415 --> 00:28:09,202
+A Kerr black hole's mass splits into two parts:
+
+508
+00:28:09,202 --> 00:28:13,990
+an irreducible mass, fixed by the horizon's area, and the energy of its spin.
+
+509
+00:28:13,990 --> 00:28:16,990
+Here are curves of constant area in the plane of J and M.
+
+510
+00:28:16,990 --> 00:28:21,927
+A Penrose process, done as gently as possible, moves along one of these curves,
+
+511
+00:28:21,927 --> 00:28:25,977
+removing spin and mass together, until the hole stops spinning.
+
+512
+00:28:25,977 --> 00:28:29,552
+Starting from a maximally spinning hole, up to twenty-nine percent of its
+
+513
+00:28:29,552 --> 00:28:31,627
+mass can be extracted.
+
+514
+00:28:31,627 --> 00:28:36,215
+For comparison, nuclear fusion turns seven tenths of a percent of hydrogen's
+
+515
+00:28:36,215 --> 00:28:38,077
+mass into energy.
+
+516
+00:28:38,077 --> 00:28:42,777
+Nature's version probably uses magnetic fields threading the ergosphere, which
+
+517
+00:28:42,777 --> 00:28:46,177
+may power the jets of quasars, like the one shooting out of M87.
+
+518
+00:28:48,759 --> 00:28:52,084
+Spin also changes how close matter can orbit.
+
+519
+00:28:52,084 --> 00:28:55,822
+In part one we found that around a non-spinning hole, the innermost stable
+
+520
+00:28:55,822 --> 00:28:57,559
+circular orbit is at six M.
+
+521
+00:28:57,559 --> 00:29:02,059
+Around a spinning one, orbits going the same way as the spin, prograde, can
+
+522
+00:29:02,059 --> 00:29:03,572
+get much closer:
+
+523
+00:29:03,572 --> 00:29:07,309
+down to M itself for a maximally spinning hole, while backward orbits are
+
+524
+00:29:07,309 --> 00:29:08,272
+pushed out to nine M.
+
+525
+00:29:08,272 --> 00:29:13,184
+That matters, because gas in an accretion disk spirals in through these orbits,
+
+526
+00:29:13,184 --> 00:29:17,309
+radiating away its binding energy, until it reaches the innermost one and
+
+527
+00:29:17,309 --> 00:29:18,684
+plunges.
+
+528
+00:29:18,684 --> 00:29:23,409
+The fraction of its rest mass radiated is one minus the energy of that orbit:
+
+529
+00:29:23,409 --> 00:29:27,847
+five point seven percent for a non-spinning hole, and up to forty-two percent
+
+530
+00:29:27,847 --> 00:29:29,947
+for a maximally spinning one.
+
+531
+00:29:29,947 --> 00:29:34,197
+Kip Thorne showed that accretion itself spins holes up to about a equals zero
+
+532
+00:29:34,197 --> 00:29:38,084
+point nine nine eight, where the efficiency is thirty-two percent:
+
+533
+00:29:38,084 --> 00:29:41,959
+the most efficient engines in the universe.
+
+534
+00:29:42,105 --> 00:29:44,180
+What does a spinning black hole look like?
+
+535
+00:29:44,180 --> 00:29:47,793
+The dark shadow is outlined by light rays that barely escape.
+
+536
+00:29:47,793 --> 00:29:52,705
+In Kerr, light rays obey a separated radial equation, thanks to a hidden conserved
+
+537
+00:29:52,705 --> 00:29:56,493
+quantity found by Brandon Carter in 1968.
+
+538
+00:29:56,493 --> 00:30:00,505
+The critical rays are the ones that can circle forever at a fixed radius,
+
+539
+00:30:00,505 --> 00:30:03,255
+where R and its derivative both vanish.
+
+540
+00:30:03,255 --> 00:30:07,318
+Solving those two equations gives the ray's constants for every radius between
+
+541
+00:30:07,318 --> 00:30:10,555
+the prograde and retrograde photon orbits.
+
+542
+00:30:10,555 --> 00:30:15,368
+And each pair of constants marks one point on the sky of a distant observer.
+
+543
+00:30:15,368 --> 00:30:19,705
+Together, they trace the edge of the shadow, as James Bardeen worked out in
+
+544
+00:30:19,705 --> 00:30:22,580
+1973.
+
+545
+00:30:22,751 --> 00:30:25,301
+Here's that edge for a black hole seen edge-on.
+
+546
+00:30:25,301 --> 00:30:29,751
+Without spin, it's a circle, of radius the square root of twenty-seven M,
+
+547
+00:30:29,751 --> 00:30:31,651
+as we found in part one.
+
+548
+00:30:31,651 --> 00:30:32,726
+Spin it up.
+
+549
+00:30:32,726 --> 00:30:36,838
+Photons orbiting with the rotation can get closer before being captured, so
+
+550
+00:30:36,838 --> 00:30:41,451
+on that side the edge moves in and flattens, while the other side bulges out.
+
+551
+00:30:41,451 --> 00:30:46,126
+Near maximal spin, the shadow becomes a letter D.
+
+552
+00:30:46,526 --> 00:30:48,651
+Now the full picture, ray-traced.
+
+553
+00:30:48,651 --> 00:30:51,851
+On the left, a non-spinning black hole, like part one's;
+
+554
+00:30:51,851 --> 00:30:55,526
+on the right, the same disk and camera around a hole spinning at ninety-nine
+
+555
+00:30:55,526 --> 00:30:57,188
+percent of the maximum.
+
+556
+00:30:57,188 --> 00:31:01,301
+The disk reaches much closer in, because the innermost orbit has moved in,
+
+557
+00:31:01,301 --> 00:31:05,838
+and the approaching side is brighter still, because the gas there moves faster.
+
+558
+00:31:05,838 --> 00:31:08,588
+Overlay Bardeen's analytic shadow edge:
+
+559
+00:31:08,588 --> 00:31:12,701
+it's exactly the boundary of the rays our tracer sees captured, pixel for
+
+560
+00:31:12,701 --> 00:31:15,001
+pixel.
+
+561
+00:31:15,705 --> 00:31:20,568
+Seen nearly face-on, which is roughly how we see the black hole in M87, the
+
+562
+00:31:20,568 --> 00:31:25,180
+shadow is almost round whatever the spin, and its size changes by less than
+
+563
+00:31:25,180 --> 00:31:26,605
+seven percent.
+
+564
+00:31:26,605 --> 00:31:30,455
+That makes the shadow a good way to weigh a black hole, and a hard way to
+
+565
+00:31:30,455 --> 00:31:33,130
+measure its spin.
+
+566
+00:31:33,830 --> 00:31:38,630
+For the black hole in the galaxy M87, six and a half billion solar masses,
+
+567
+00:31:38,630 --> 00:31:43,893
+fifty-five million light-years away, the shadow should span about forty micro-arcseconds.
+
+568
+00:31:43,893 --> 00:31:49,355
+In 2019, the Event Horizon Telescope, a planet-sized array of radio dishes,
+
+569
+00:31:49,355 --> 00:31:54,268
+imaged a bright ring forty-two micro-arcseconds across, around a dark center.
+
+570
+00:31:54,268 --> 00:32:00,355
+In 2022 it imaged Sagittarius A star, at the center of our own galaxy.
+
+571
+00:32:00,355 --> 00:32:03,218
+Both are consistent with Kerr black holes;
+
+572
+00:32:03,218 --> 00:32:07,405
+models of the glowing gas favor spinning ones, but neither spin has been pinned
+
+573
+00:32:07,405 --> 00:32:08,230
+down yet.
+
+574
+00:32:13,291 --> 00:32:17,691
+In part one, we found that ripples in spacetime obey a wave equation, and
+
+575
+00:32:17,691 --> 00:32:20,603
+quoted the formula for the waves a source makes.
+
+576
+00:32:20,603 --> 00:32:21,916
+Let's derive it.
+
+577
+00:32:21,916 --> 00:32:24,578
+Start from the linearized field equation.
+
+578
+00:32:24,578 --> 00:32:29,541
+Like the equations of electromagnetism, it's solved by a retarded integral:
+
+579
+00:32:29,541 --> 00:32:33,691
+the field here and now adds up the source everywhere, as it was when the signal
+
+580
+00:32:33,691 --> 00:32:34,941
+left it.
+
+581
+00:32:34,941 --> 00:32:39,503
+Far from a slowly moving source, the delay is the same for all of it, and
+
+582
+00:32:39,503 --> 00:32:44,053
+the spatial part of the wave is four over r times the integral of the stresses,
+
+583
+00:32:44,053 --> 00:32:44,966
+T i j.
+
+584
+00:32:44,966 --> 00:32:46,503
+That looks hard to know:
+
+585
+00:32:46,503 --> 00:32:51,391
+it involves pressures and stresses deep inside the source.
+
+586
+00:32:51,499 --> 00:32:53,811
+Conservation comes to the rescue.
+
+587
+00:32:53,811 --> 00:32:56,161
+Energy and momentum are conserved:
+
+588
+00:32:56,161 --> 00:33:01,374
+two equations, one for the energy density and one for the momentum density.
+
+589
+00:33:01,374 --> 00:33:05,574
+Differentiate the first with respect to time and substitute the second:
+
+590
+00:33:05,574 --> 00:33:09,486
+the second time derivative of the energy density is a double divergence of
+
+591
+00:33:09,486 --> 00:33:10,749
+the stresses.
+
+592
+00:33:10,749 --> 00:33:15,549
+Now multiply by y i y j and integrate by parts, twice.
+
+593
+00:33:15,549 --> 00:33:19,311
+The left side becomes the second time derivative of the mass distribution's
+
+594
+00:33:19,311 --> 00:33:20,349
+second moment;
+
+595
+00:33:20,349 --> 00:33:23,599
+the right side, twice the integrated stress.
+
+596
+00:33:23,599 --> 00:33:28,224
+So the wave is two over r, times the second time derivative of the quadrupole
+
+597
+00:33:28,224 --> 00:33:29,186
+moment.
+
+598
+00:33:29,186 --> 00:33:34,049
+Only its traceless, transverse part is physical, which is the formula we quoted
+
+599
+00:33:34,049 --> 00:33:36,524
+in part one.
+
+600
+00:33:36,657 --> 00:33:39,120
+How much energy does the wave carry?
+
+601
+00:33:39,120 --> 00:33:44,270
+Gravitational waves carry energy and momentum, with an effective energy density,
+
+602
+00:33:44,270 --> 00:33:48,532
+averaged over a few wavelengths, given by this expression, due to Richard
+
+603
+00:33:48,532 --> 00:33:49,770
+Isaacson.
+
+604
+00:33:49,770 --> 00:33:54,707
+Integrate the flux over a big sphere around the source, and insert our wave.
+
+605
+00:33:54,707 --> 00:33:58,495
+The angular integral of the transverse projection comes out to eight pi over
+
+606
+00:33:58,495 --> 00:34:03,307
+five, which we checked numerically, and the result is the quadrupole formula:
+
+607
+00:34:03,307 --> 00:34:07,520
+the luminosity is one fifth of the third time derivative of Q, squared.
+
+608
+00:34:07,520 --> 00:34:12,320
+In everyday units, there's a factor G over c to the fifth, which is tiny.
+
+609
+00:34:12,320 --> 00:34:16,582
+A huge steel beam spun almost to breaking radiates about ten to the minus
+
+610
+00:34:16,582 --> 00:34:17,995
+twenty-nine watts.
+
+611
+00:34:17,995 --> 00:34:22,170
+To radiate appreciably, you need stars' worth of mass moving at a good fraction
+
+612
+00:34:22,170 --> 00:34:24,782
+of the speed of light.
+
+613
+00:34:24,974 --> 00:34:29,261
+Now apply it to two stars, or black holes, in a circular orbit.
+
+614
+00:34:29,261 --> 00:34:33,361
+The waves spiral out from the binary like water from a rotating sprinkler,
+
+615
+00:34:33,361 --> 00:34:35,686
+here computed in the orbital plane.
+
+616
+00:34:35,686 --> 00:34:39,161
+Pink is stretching in one direction, blue in the other.
+
+617
+00:34:39,161 --> 00:34:44,349
+The quadrupole moment of the pair is mu a squared times n i n j, where n points
+
+618
+00:34:44,349 --> 00:34:46,374
+along the line between them.
+
+619
+00:34:46,374 --> 00:34:50,374
+It oscillates at twice the orbital frequency, because the pair looks the same
+
+620
+00:34:50,374 --> 00:34:54,386
+after half a turn, and its third derivative squared is thirty-two mu squared
+
+621
+00:34:54,386 --> 00:34:56,574
+a to the fourth omega to the sixth.
+
+622
+00:34:56,574 --> 00:35:00,886
+With Kepler's law, the luminosity is thirty-two fifths mu squared M cubed
+
+623
+00:35:00,886 --> 00:35:02,236
+over a to the fifth:
+
+624
+00:35:02,236 --> 00:35:04,861
+closer orbits radiate ferociously.
+
+625
+00:35:04,861 --> 00:35:09,374
+The radiation is strongest along the orbit's axis, eight times stronger than
+
+626
+00:35:09,374 --> 00:35:10,324
+in its plane.
+
+627
+00:35:12,465 --> 00:35:15,115
+The energy radiated has to come from somewhere:
+
+628
+00:35:15,115 --> 00:35:16,090
+the orbit.
+
+629
+00:35:16,090 --> 00:35:19,240
+The orbital energy of the pair is minus mu M over two a.
+
+630
+00:35:19,240 --> 00:35:22,615
+It decreases at the rate the waves carry energy away.
+
+631
+00:35:22,615 --> 00:35:24,240
+Solve for the separation:
+
+632
+00:35:24,240 --> 00:35:29,327
+the orbit shrinks, slowly at first, and faster and faster as a gets smaller.
+
+633
+00:35:29,327 --> 00:35:33,652
+Integrating, two bodies starting a distance a naught apart merge after five
+
+634
+00:35:33,652 --> 00:35:38,115
+two-hundred-fifty-sixths of a naught to the fourth, over mu M squared.
+
+635
+00:35:38,115 --> 00:35:39,865
+That fourth power is brutal:
+
+636
+00:35:39,865 --> 00:35:44,940
+halve the distance, and the time to merge drops sixteen-fold.
+
+637
+00:35:45,065 --> 00:35:47,390
+What a detector hears is the frequency.
+
+638
+00:35:47,390 --> 00:35:51,640
+The gravitational-wave frequency is twice the orbital frequency, which Kepler's
+
+639
+00:35:51,640 --> 00:35:53,577
+law ties to the separation.
+
+640
+00:35:53,577 --> 00:35:57,015
+Differentiate it, substitute the shrinking rate, and eliminate a.
+
+641
+00:35:57,015 --> 00:35:58,765
+Something remarkable happens:
+
+642
+00:35:58,765 --> 00:36:02,977
+the two masses only appear in one combination, mu to the three fifths times
+
+643
+00:36:02,977 --> 00:36:05,977
+M to the two fifths, called the chirp mass.
+
+644
+00:36:05,977 --> 00:36:10,665
+Integrating gives the frequency as a function of the time left before coalescence.
+
+645
+00:36:10,665 --> 00:36:13,490
+It rises without limit, a chirp.
+
+646
+00:36:13,490 --> 00:36:18,490
+This is exactly the formula part one quoted, and laid over LIGO's data.
+
+647
+00:36:18,490 --> 00:36:23,865
+Now we've derived it, five over two hundred fifty-six and all.
+
+648
+00:36:24,023 --> 00:36:28,135
+Here it is for two black holes with the masses of LIGO's first detection.
+
+649
+00:36:28,135 --> 00:36:31,860
+Two tenths of a second before they merge, they're a thousand kilometers apart
+
+650
+00:36:31,860 --> 00:36:34,048
+and the wave is at thirty hertz.
+
+651
+00:36:34,048 --> 00:36:38,335
+As they spiral together, the frequency and the amplitude both climb, faster
+
+652
+00:36:38,335 --> 00:36:39,473
+and faster:
+
+653
+00:36:39,473 --> 00:36:40,535
+the chirp.
+
+654
+00:36:40,535 --> 00:36:44,898
+In the last instants, a few hundred kilometers apart, our leading-order formula
+
+655
+00:36:44,898 --> 00:36:49,235
+breaks down, and only a full numerical solution of Einstein's equation can
+
+656
+00:36:49,235 --> 00:36:52,348
+follow the merger itself.
+
+657
+00:36:52,465 --> 00:36:56,402
+The first evidence that gravitational waves carry energy came from a pair
+
+658
+00:36:56,402 --> 00:36:58,052
+of neutron stars.
+
+659
+00:36:58,052 --> 00:37:03,677
+In 1974, Russell Hulse and Joseph Taylor found a pulsar in a binary orbit:
+
+660
+00:37:03,677 --> 00:37:08,702
+two neutron stars, each about one point four solar masses, orbiting every
+
+661
+00:37:08,702 --> 00:37:12,965
+seven and three quarter hours, one of them a spinning beacon that ticks seventeen
+
+662
+00:37:12,965 --> 00:37:15,790
+times a second, a superb clock.
+
+663
+00:37:15,790 --> 00:37:20,227
+The orbit is eccentric, so the quadrupole formula needs a correction, worked
+
+664
+00:37:20,227 --> 00:37:22,227
+out by Peters and Mathews:
+
+665
+00:37:22,227 --> 00:37:26,277
+it radiates almost twelve times more than a circular orbit would.
+
+666
+00:37:26,277 --> 00:37:27,415
+The prediction:
+
+667
+00:37:27,415 --> 00:37:31,365
+the orbital period should shrink by two point four trillionths of a second,
+
+668
+00:37:31,365 --> 00:37:33,940
+every second.
+
+669
+00:37:34,156 --> 00:37:38,294
+A shrinking period shows up as a drift in the time of closest approach, growing
+
+670
+00:37:38,294 --> 00:37:40,494
+like the square of the elapsed time.
+
+671
+00:37:40,494 --> 00:37:44,231
+Here's general relativity's prediction since 1974:
+
+672
+00:37:44,231 --> 00:37:46,669
+by now, more than a hundred seconds.
+
+673
+00:37:46,669 --> 00:37:50,269
+The measured decay, after correcting for the acceleration of the pulsar in
+
+674
+00:37:50,269 --> 00:37:54,419
+our galaxy, agrees with the prediction to two parts in a thousand.
+
+675
+00:37:54,419 --> 00:37:57,944
+The orbit's ellipse also turns, by four degrees a year:
+
+676
+00:37:57,944 --> 00:38:01,156
+Mercury's effect, in a far stronger field.
+
+677
+00:38:01,156 --> 00:38:05,869
+And a second system, the Double Pulsar, now agrees with the quadrupole formula
+
+678
+00:38:05,869 --> 00:38:08,344
+to a few parts in a hundred thousand.
+
+679
+00:38:08,344 --> 00:38:12,694
+In about three hundred million years, these two stars will merge, ending with
+
+680
+00:38:12,694 --> 00:38:14,781
+a chirp like the ones LIGO hears.
+
+681
+00:38:16,395 --> 00:38:20,770
+When two black holes merge, the result is a single, distorted black hole,
+
+682
+00:38:20,770 --> 00:38:23,858
+which settles down by ringing, like a struck bell.
+
+683
+00:38:23,858 --> 00:38:28,020
+Small ripples of a black hole obey a wave equation in the tortoise coordinate,
+
+684
+00:38:28,020 --> 00:38:33,108
+found by Tullio Regge and John Wheeler in 1957, with a potential barrier.
+
+685
+00:38:33,108 --> 00:38:37,245
+The barrier peaks just outside the photon sphere, where light can orbit:
+
+686
+00:38:37,245 --> 00:38:40,970
+waves near the hole are partly trapped there, leaking slowly inward to the
+
+687
+00:38:40,970 --> 00:38:44,295
+horizon and outward to us.
+
+688
+00:38:44,449 --> 00:38:45,787
+Let's watch it happen.
+
+689
+00:38:45,787 --> 00:38:49,574
+Send a pulse of gravitational waves toward the barrier, and solve the equation
+
+690
+00:38:49,574 --> 00:38:50,762
+numerically.
+
+691
+00:38:50,762 --> 00:38:53,987
+Part of the pulse crosses the barrier and falls into the hole.
+
+692
+00:38:53,987 --> 00:38:57,524
+Part bounces back, and what comes back isn't a copy of the pulse:
+
+693
+00:38:57,524 --> 00:39:01,049
+it's a ringing, at a definite frequency, dying away.
+
+694
+00:39:01,049 --> 00:39:04,874
+On a logarithmic scale, the ringing's envelope is a straight line:
+
+695
+00:39:04,874 --> 00:39:10,399
+an exponential decay, until a faint power-law tail takes over.
+
+696
+00:39:10,570 --> 00:39:14,558
+Fitting the ringing in our simulation gives a frequency and a damping rate.
+
+697
+00:39:14,558 --> 00:39:19,395
+They match, to a fraction of a percent, the exact quasinormal frequency, computed
+
+698
+00:39:19,395 --> 00:39:23,120
+by a completely different method, Edward Leaver's continued fraction from
+
+699
+00:39:23,120 --> 00:39:24,695
+1985.
+
+700
+00:39:24,695 --> 00:39:26,770
+And there's a simple picture behind it:
+
+701
+00:39:26,770 --> 00:39:31,270
+the ringing is waves trapped near the photon sphere, so its frequency is roughly
+
+702
+00:39:31,270 --> 00:39:35,145
+the orbital frequency of light there, and it leaks away at the rate light
+
+703
+00:39:35,145 --> 00:39:37,320
+orbits there are unstable.
+
+704
+00:39:37,320 --> 00:39:38,620
+The crucial point:
+
+705
+00:39:38,620 --> 00:39:42,295
+the frequencies depend only on the final mass and spin.
+
+706
+00:39:42,295 --> 00:39:46,245
+Measure them, and you test whether the remnant really is a Kerr black hole
+
+707
+00:39:46,245 --> 00:39:47,520
+with no hair.
+
+708
+00:39:47,520 --> 00:39:51,783
+For the black hole left by LIGO's first detection, the main tone is at about
+
+709
+00:39:51,783 --> 00:39:57,145
+two hundred and fifty hertz, dying away in four milliseconds.
+
+710
+00:39:57,295 --> 00:40:01,495
+Here are the last cycles of LIGO's first signal, the real data.
+
+711
+00:40:01,495 --> 00:40:05,895
+After the peak, lay on a ringing with the frequency and damping time predicted
+
+712
+00:40:05,895 --> 00:40:10,158
+for the final black hole, fitting only its amplitude and phase.
+
+713
+00:40:10,158 --> 00:40:14,495
+The signal is faint and noisy here, but the tail end of the collision rings
+
+714
+00:40:14,495 --> 00:40:17,995
+just as a Kerr black hole should.
+
+715
+00:40:18,212 --> 00:40:22,837
+In 1971, Stephen Hawking proved that this kind of collision can only make
+
+716
+00:40:22,837 --> 00:40:24,424
+black holes bigger.
+
+717
+00:40:24,424 --> 00:40:28,549
+The horizon is made of light rays, and Raychaudhuri's equation applies to
+
+718
+00:40:28,549 --> 00:40:29,287
+them.
+
+719
+00:40:29,287 --> 00:40:33,424
+If they ever started converging, they'd meet within a finite distance.
+
+720
+00:40:33,424 --> 00:40:37,887
+But light rays that meet leave the horizon, and the horizon's light rays never
+
+721
+00:40:37,887 --> 00:40:38,724
+leave it.
+
+722
+00:40:38,724 --> 00:40:43,012
+So they never converge, and the horizon's area never decreases.
+
+723
+00:40:43,012 --> 00:40:46,112
+That limits how much energy a merger can radiate:
+
+724
+00:40:46,112 --> 00:40:50,787
+for two equal non-spinning holes, at most twenty-nine percent of their mass.
+
+725
+00:40:50,787 --> 00:40:55,837
+LIGO's first event radiated about five percent, three solar masses' worth,
+
+726
+00:40:55,837 --> 00:40:58,637
+in a fifth of a second.
+
+727
+00:40:58,828 --> 00:41:03,691
+In January 2025, LIGO caught the loudest black-hole merger yet, two holes
+
+728
+00:41:03,691 --> 00:41:06,203
+of about thirty-three solar masses each.
+
+729
+00:41:06,203 --> 00:41:09,428
+From the inspiral, you can infer the areas of the two horizons before the
+
+730
+00:41:09,428 --> 00:41:10,003
+merger;
+
+731
+00:41:10,003 --> 00:41:11,978
+from the ringdown, the area after.
+
+732
+00:41:11,978 --> 00:41:12,666
+Before:
+
+733
+00:41:12,666 --> 00:41:15,816
+two hundred and thirty-seven thousand square kilometers.
+
+734
+00:41:15,816 --> 00:41:16,391
+After:
+
+735
+00:41:16,391 --> 00:41:18,616
+three hundred and seventy-three thousand.
+
+736
+00:41:18,616 --> 00:41:22,516
+The collaboration found the area increased, with a confidence of four point
+
+737
+00:41:22,516 --> 00:41:23,541
+four sigma:
+
+738
+00:41:23,541 --> 00:41:27,528
+Hawking's area theorem, tested on real black holes.
+
+739
+00:41:27,528 --> 00:41:31,866
+And the ringdown was loud enough to hear the main tone and its first overtone,
+
+740
+00:41:31,866 --> 00:41:36,820
+at the frequencies a Kerr black hole of that mass and spin should have.
+
+741
+00:41:36,820 --> 00:41:38,883
+An area that can only grow.
+
+742
+00:41:38,883 --> 00:41:42,458
+That's a lot like another quantity in physics that can only grow:
+
+743
+00:41:42,458 --> 00:41:43,420
+entropy.
+
+744
+00:41:43,420 --> 00:41:45,420
+Is the resemblance a coincidence?
+
+745
+00:41:50,518 --> 00:41:55,993
+In 1972, Jacob Bekenstein, a graduate student of John Wheeler's, asked a simple
+
+746
+00:41:55,993 --> 00:41:57,056
+question.
+
+747
+00:41:57,056 --> 00:42:01,293
+Take a box of hot gas, which has entropy, and drop it into a black hole.
+
+748
+00:42:01,293 --> 00:42:05,743
+From the outside, the gas and its entropy are simply gone, so the total entropy
+
+749
+00:42:05,743 --> 00:42:10,931
+of the universe outside has gone down, violating the second law of thermodynamics.
+
+750
+00:42:10,931 --> 00:42:15,668
+Unless the black hole itself has entropy, which grows when things fall in.
+
+751
+00:42:15,668 --> 00:42:17,643
+And there was an obvious candidate:
+
+752
+00:42:17,643 --> 00:42:21,793
+the one property of a black hole that, like entropy, can only increase.
+
+753
+00:42:21,793 --> 00:42:24,193
+Its area.
+
+754
+00:42:24,293 --> 00:42:27,381
+If area is like entropy, what's like temperature?
+
+755
+00:42:27,381 --> 00:42:29,543
+Hover a rocket above a black hole.
+
+756
+00:42:29,543 --> 00:42:33,881
+The acceleration it needs grows without bound as it nears the horizon.
+
+757
+00:42:33,881 --> 00:42:39,006
+But measured from far away, redshifted by the same factor that slows its clocks,
+
+758
+00:42:39,006 --> 00:42:41,031
+it tends to a finite limit:
+
+759
+00:42:41,031 --> 00:42:41,993
+one over four M.
+
+760
+00:42:41,993 --> 00:42:44,743
+This is the surface gravity, kappa.
+
+761
+00:42:44,743 --> 00:42:48,543
+For a spinning hole it's this, and it turns out to be the same everywhere
+
+762
+00:42:48,543 --> 00:42:53,356
+on the horizon of any stationary black hole, just as temperature is the same
+
+763
+00:42:53,356 --> 00:42:57,018
+everywhere in a body in equilibrium.
+
+764
+00:42:57,126 --> 00:42:58,876
+The analogy goes deeper.
+
+765
+00:42:58,876 --> 00:43:03,789
+The area of a Kerr horizon is a function of the hole's mass and angular momentum.
+
+766
+00:43:03,789 --> 00:43:04,976
+Differentiate it:
+
+767
+00:43:04,976 --> 00:43:09,139
+the partial derivatives are exactly the surface gravity over eight pi, and
+
+768
+00:43:09,139 --> 00:43:11,576
+the horizon's angular velocity.
+
+769
+00:43:11,576 --> 00:43:15,589
+So a small change in mass splits into kappa over eight pi times the change
+
+770
+00:43:15,589 --> 00:43:20,051
+in area, plus Omega H times the change in angular momentum:
+
+771
+00:43:20,051 --> 00:43:22,226
+the work done spinning it up.
+
+772
+00:43:22,226 --> 00:43:25,014
+Compare the first law of thermodynamics:
+
+773
+00:43:25,014 --> 00:43:29,314
+energy changes by temperature times entropy change, plus work.
+
+774
+00:43:29,314 --> 00:43:30,951
+Temperature goes with kappa;
+
+775
+00:43:30,951 --> 00:43:33,951
+entropy goes with area.
+
+776
+00:43:34,110 --> 00:43:38,710
+In 1973, James Bardeen, Brandon Carter and Stephen Hawking laid out the full
+
+777
+00:43:38,710 --> 00:43:39,822
+parallel.
+
+778
+00:43:39,822 --> 00:43:40,947
+The zeroth law:
+
+779
+00:43:40,947 --> 00:43:45,335
+surface gravity is uniform on the horizon, like temperature in equilibrium.
+
+780
+00:43:45,335 --> 00:43:47,410
+The first law we've just derived.
+
+781
+00:43:47,410 --> 00:43:49,710
+The second law is the area theorem.
+
+782
+00:43:49,710 --> 00:43:50,610
+And the third:
+
+783
+00:43:50,610 --> 00:43:54,647
+you can't reduce kappa to zero, an extremal black hole, in a finite number
+
+784
+00:43:54,647 --> 00:43:57,710
+of steps, just as you can't reach absolute zero.
+
+785
+00:43:57,710 --> 00:44:01,210
+But there was a catch, and Hawking himself insisted on it.
+
+786
+00:44:01,210 --> 00:44:03,572
+A body with a temperature radiates.
+
+787
+00:44:03,572 --> 00:44:08,535
+A black hole, classically, absorbs everything and emits nothing, so its temperature
+
+788
+00:44:08,535 --> 00:44:09,860
+must be zero.
+
+789
+00:44:09,860 --> 00:44:11,710
+The analogy looked like just that:
+
+790
+00:44:11,710 --> 00:44:12,685
+an analogy.
+
+791
+00:44:14,342 --> 00:44:19,342
+In 1974, Hawking applied quantum field theory to a collapsing star, expecting
+
+792
+00:44:19,342 --> 00:44:22,042
+to confirm that black holes are perfectly black.
+
+793
+00:44:22,042 --> 00:44:23,330
+He found the opposite.
+
+794
+00:44:23,330 --> 00:44:24,655
+Here's the heart of it.
+
+795
+00:44:24,655 --> 00:44:27,805
+Look at light rays leaving from just outside the horizon.
+
+796
+00:44:27,805 --> 00:44:31,705
+A ray starting a tenth of the horizon radius out escapes quickly.
+
+797
+00:44:31,705 --> 00:44:36,142
+One starting a hundred times closer takes four M times the log of ten longer,
+
+798
+00:44:36,142 --> 00:44:37,205
+and so on:
+
+799
+00:44:37,205 --> 00:44:41,080
+every factor of ten closer delays the escape by the same amount.
+
+800
+00:44:41,080 --> 00:44:42,792
+Turn that around.
+
+801
+00:44:42,792 --> 00:44:47,592
+The light reaching a distant observer late, at time u, left from an exponentially
+
+802
+00:44:47,592 --> 00:44:49,792
+thin layer near the horizon.
+
+803
+00:44:49,792 --> 00:44:54,192
+Rays arriving later and later trace back to a region squeezed by a factor
+
+804
+00:44:54,192 --> 00:44:56,017
+of e every four M:
+
+805
+00:44:56,017 --> 00:45:00,167
+the past position of a ray depends exponentially on when it arrives, with
+
+806
+00:45:00,167 --> 00:45:04,067
+rate kappa, the surface gravity.
+
+807
+00:45:04,184 --> 00:45:05,296
+Why does that matter?
+
+808
+00:45:05,296 --> 00:45:08,859
+In quantum field theory, what counts as a particle depends on what counts
+
+809
+00:45:08,859 --> 00:45:12,896
+as a positive-frequency wave, and that depends on whose clock you use.
+
+810
+00:45:12,896 --> 00:45:16,809
+A wave that oscillates smoothly in the past reaches the distant observer stretched
+
+811
+00:45:16,809 --> 00:45:18,046
+exponentially:
+
+812
+00:45:18,046 --> 00:45:20,296
+rapid at first, then frozen.
+
+813
+00:45:20,296 --> 00:45:23,834
+Take its Fourier transform with respect to the observer's time.
+
+814
+00:45:23,834 --> 00:45:26,496
+It isn't purely positive frequency any more:
+
+815
+00:45:26,496 --> 00:45:30,559
+it contains negative frequencies too, which means particles have been created
+
+816
+00:45:30,559 --> 00:45:32,109
+from the vacuum.
+
+817
+00:45:32,109 --> 00:45:36,634
+And the ratio of negative to positive is exactly e to the minus two pi omega
+
+818
+00:45:36,634 --> 00:45:37,834
+over kappa.
+
+819
+00:45:37,834 --> 00:45:40,209
+We computed the transform numerically:
+
+820
+00:45:40,209 --> 00:45:42,171
+the dots fall right on the line.
+
+821
+00:45:42,171 --> 00:45:44,009
+That's a Boltzmann factor.
+
+822
+00:45:44,009 --> 00:45:48,084
+The particles come out with a thermal, Planck spectrum, at temperature kappa
+
+823
+00:45:48,084 --> 00:45:49,384
+over two pi:
+
+824
+00:45:49,384 --> 00:45:52,584
+one over eight pi M.
+
+825
+00:45:52,717 --> 00:45:56,480
+There's a second, astonishingly short route to the same temperature.
+
+826
+00:45:56,480 --> 00:45:59,005
+Measure distance from the horizon with rho.
+
+827
+00:45:59,005 --> 00:46:03,330
+Near the horizon, the metric becomes flat spacetime as described by accelerated
+
+828
+00:46:03,330 --> 00:46:04,567
+observers.
+
+829
+00:46:04,567 --> 00:46:06,080
+Now do something strange:
+
+830
+00:46:06,080 --> 00:46:07,742
+make time imaginary.
+
+831
+00:46:07,742 --> 00:46:12,392
+The metric becomes rho squared times d tau over four M squared, plus d rho
+
+832
+00:46:12,392 --> 00:46:16,992
+squared, which is the flat plane in polar coordinates, with tau over four
+
+833
+00:46:16,992 --> 00:46:18,850
+M as the angle.
+
+834
+00:46:18,850 --> 00:46:22,963
+For the plane to be smooth at the origin, the angle has to go around exactly
+
+835
+00:46:22,963 --> 00:46:27,275
+two pi, so imaginary time must repeat with period eight pi M.
+
+836
+00:46:27,275 --> 00:46:29,825
+Otherwise the origin is the tip of a cone.
+
+837
+00:46:29,825 --> 00:46:34,150
+And in quantum statistical mechanics, a system whose fields are periodic in
+
+838
+00:46:34,150 --> 00:46:39,088
+imaginary time, with period h-bar over k T, is at temperature T.
+
+839
+00:46:39,088 --> 00:46:44,350
+So a black hole has temperature one over eight pi M, the same answer, as Gibbons
+
+840
+00:46:44,350 --> 00:46:47,350
+and Hawking showed in 1977.
+
+841
+00:46:47,350 --> 00:46:51,925
+With the constants put back, that's this formula, which is carved on Hawking's
+
+842
+00:46:51,925 --> 00:46:55,775
+memorial stone in Westminster Abbey.
+
+843
+00:46:55,917 --> 00:47:00,642
+Here's that geometry, the plane of r and imaginary time, embedded exactly
+
+844
+00:47:00,642 --> 00:47:01,942
+as a surface.
+
+845
+00:47:01,942 --> 00:47:03,805
+Far away, it's a cylinder:
+
+846
+00:47:03,805 --> 00:47:06,142
+imaginary time going around.
+
+847
+00:47:06,142 --> 00:47:08,342
+At the horizon, it closes off.
+
+848
+00:47:08,342 --> 00:47:12,242
+With the right period, the tip is smooth, like the end of a cigar.
+
+849
+00:47:12,242 --> 00:47:15,317
+With any other period, it ends in a sharp cone.
+
+850
+00:47:15,317 --> 00:47:19,267
+The geometry itself picks out the temperature.
+
+851
+00:47:19,392 --> 00:47:20,655
+Put the numbers in.
+
+852
+00:47:20,655 --> 00:47:24,117
+A black hole of one solar mass has a temperature of sixty billionths of a
+
+853
+00:47:24,117 --> 00:47:26,780
+kelvin, and heavier ones are colder still:
+
+854
+00:47:26,780 --> 00:47:30,855
+far colder than the cosmic microwave background, so every black hole we know
+
+855
+00:47:30,855 --> 00:47:32,905
+of absorbs more than it emits.
+
+856
+00:47:32,905 --> 00:47:36,367
+Only one lighter than about sixty percent of the Moon's mass would be hotter
+
+857
+00:47:36,367 --> 00:47:37,892
+than the sky around it.
+
+858
+00:47:37,892 --> 00:47:39,805
+The temperature fixes the entropy:
+
+859
+00:47:39,805 --> 00:47:42,992
+one quarter of the horizon area, in Planck units.
+
+860
+00:47:42,992 --> 00:47:46,817
+Bekenstein's guess was right, with the factor now fixed.
+
+861
+00:47:46,817 --> 00:47:51,380
+For a solar-mass black hole, that's ten to the seventy-seven, about ten billion
+
+862
+00:47:51,380 --> 00:47:54,167
+billion times the entropy of the Sun itself.
+
+863
+00:47:54,167 --> 00:47:56,655
+And a body that radiates loses mass:
+
+864
+00:47:56,655 --> 00:48:01,830
+left alone, a black hole evaporates, in a time proportional to its mass cubed,
+
+865
+00:48:01,830 --> 00:48:05,330
+around ten to the sixty-seven years for a solar mass.
+
+866
+00:48:05,330 --> 00:48:08,880
+Whether the information that fell in comes back out in the radiation, and
+
+867
+00:48:08,880 --> 00:48:12,692
+how, is still one of the deepest open questions in physics.
+
+868
+00:48:17,973 --> 00:48:19,873
+Finally, the biggest solution of all:
+
+869
+00:48:19,873 --> 00:48:21,023
+the universe.
+
+870
+00:48:21,023 --> 00:48:24,598
+On the largest scales, the universe looks the same everywhere and in every
+
+871
+00:48:24,598 --> 00:48:25,648
+direction.
+
+872
+00:48:25,648 --> 00:48:30,048
+If that's exactly true, space must have the same curvature at every point,
+
+873
+00:48:30,048 --> 00:48:32,386
+and there are only three possibilities.
+
+874
+00:48:32,386 --> 00:48:34,411
+Positive curvature, like a sphere:
+
+875
+00:48:34,411 --> 00:48:38,973
+a closed universe, where triangles have more than one hundred eighty degrees.
+
+876
+00:48:38,973 --> 00:48:40,111
+Zero curvature:
+
+877
+00:48:40,111 --> 00:48:41,673
+flat space.
+
+878
+00:48:41,673 --> 00:48:47,023
+Or negative curvature, a hyperbolic space, drawn here in Poincaré's disk,
+
+879
+00:48:47,023 --> 00:48:51,386
+where triangles have less than one hundred eighty degrees, and the circumference
+
+880
+00:48:51,386 --> 00:48:55,948
+of a circle grows exponentially with its radius.
+
+881
+00:48:56,107 --> 00:49:00,069
+Space with constant curvature, multiplied by a scale factor a that can change
+
+882
+00:49:00,069 --> 00:49:01,119
+with time:
+
+883
+00:49:01,119 --> 00:49:06,069
+this is the Friedmann–Lemaître–Robertson–Walker metric, where k is plus one,
+
+884
+00:49:06,069 --> 00:49:07,932
+zero, or minus one.
+
+885
+00:49:07,932 --> 00:49:11,832
+Galaxies sit at fixed coordinates, and all distances between them grow in
+
+886
+00:49:11,832 --> 00:49:13,057
+proportion to a of t.
+
+887
+00:49:13,057 --> 00:49:17,532
+From any one galaxy, all the others recede, at speeds proportional to their
+
+888
+00:49:17,532 --> 00:49:18,569
+distance:
+
+889
+00:49:18,569 --> 00:49:23,232
+Hubble's law, with the Hubble rate a dot over a.
+
+890
+00:49:23,390 --> 00:49:25,665
+Now run the machine from part one.
+
+891
+00:49:25,665 --> 00:49:27,140
+The Christoffel symbols:
+
+892
+00:49:27,140 --> 00:49:30,515
+the Ricci tensor, computed and checked symbolically.
+
+893
+00:49:30,515 --> 00:49:34,640
+Fill the universe with a perfect fluid, at rest relative to the galaxies,
+
+894
+00:49:34,640 --> 00:49:38,103
+and take the time-time component of Einstein's equation.
+
+895
+00:49:38,103 --> 00:49:39,503
+Divide by three:
+
+896
+00:49:39,503 --> 00:49:41,590
+this is the Friedmann equation.
+
+897
+00:49:41,590 --> 00:49:46,390
+The expansion rate squared is set by the density, the curvature, and the cosmological
+
+898
+00:49:46,390 --> 00:49:47,890
+constant.
+
+899
+00:49:47,890 --> 00:49:51,765
+The space-space components give the acceleration equation, which we found
+
+900
+00:49:51,765 --> 00:49:55,515
+in part one from Baez and Bunn's ball of coffee grounds.
+
+901
+00:49:55,515 --> 00:50:00,590
+And energy conservation says how each ingredient thins out as space expands:
+
+902
+00:50:00,590 --> 00:50:05,228
+matter as one over a cubed, radiation as one over a to the fourth, because
+
+903
+00:50:05,228 --> 00:50:10,665
+each photon is also stretched, and vacuum energy not at all.
+
+904
+00:50:10,815 --> 00:50:14,140
+Here are the three ingredients of our universe, with their measured amounts,
+
+905
+00:50:14,140 --> 00:50:15,928
+against the scale factor.
+
+906
+00:50:15,928 --> 00:50:20,853
+Radiation dominated early on, until the universe was about a three-thousand-four-hundredth
+
+907
+00:50:20,853 --> 00:50:22,428
+of its present size.
+
+908
+00:50:22,428 --> 00:50:26,765
+Then matter took over, and only recently, at a redshift of about a third,
+
+909
+00:50:26,765 --> 00:50:30,003
+did the cosmological constant overtake matter.
+
+910
+00:50:30,003 --> 00:50:34,040
+The Friedmann equation also says how much density makes space flat:
+
+911
+00:50:34,040 --> 00:50:38,640
+the critical density, about five protons per cubic meter today.
+
+912
+00:50:38,640 --> 00:50:42,678
+The departure from it measures curvature, and our universe turns out to be
+
+913
+00:50:42,678 --> 00:50:46,465
+flat to within a fraction of a percent.
+
+914
+00:50:46,640 --> 00:50:50,903
+Solve the Friedmann equation, and each mix of ingredients gives its own history.
+
+915
+00:50:50,903 --> 00:50:54,178
+All of these universes expand at today's measured rate.
+
+916
+00:50:54,178 --> 00:50:58,203
+A closed universe of matter expands, stops, and recollapses.
+
+917
+00:50:58,203 --> 00:51:00,790
+A flat one of matter alone keeps slowing forever;
+
+918
+00:51:00,790 --> 00:51:02,478
+an open one coasts.
+
+919
+00:51:02,478 --> 00:51:06,165
+A universe of pure vacuum energy expands exponentially.
+
+920
+00:51:06,165 --> 00:51:10,915
+Ours, matter plus a cosmological constant, decelerated for its first seven
+
+921
+00:51:10,915 --> 00:51:15,415
+billion years, and now accelerates, heading toward the exponential.
+
+922
+00:51:15,415 --> 00:51:19,765
+Einstein himself had wanted a static universe, and added the cosmological
+
+923
+00:51:19,765 --> 00:51:21,315
+constant to hold it up;
+
+924
+00:51:21,315 --> 00:51:23,728
+but that balance is unstable.
+
+925
+00:51:23,728 --> 00:51:28,778
+Alexander Friedmann saw in 1922 that the equation demands a universe that
+
+926
+00:51:28,778 --> 00:51:33,390
+changes, and in 1929 Edwin Hubble found that it expands.
+
+927
+00:51:35,046 --> 00:51:36,996
+How do we know the universe expands?
+
+928
+00:51:36,996 --> 00:51:38,009
+Through light.
+
+929
+00:51:38,009 --> 00:51:42,409
+A light ray moving through flat, expanding space covers a comoving distance
+
+930
+00:51:42,409 --> 00:51:44,721
+d t over a in each moment.
+
+931
+00:51:44,721 --> 00:51:49,159
+Two successive crests of a light wave, sent a moment apart, travel the same
+
+932
+00:51:49,159 --> 00:51:50,759
+comoving distance.
+
+933
+00:51:50,759 --> 00:51:54,684
+So the interval between them grows in proportion to the scale factor.
+
+934
+00:51:54,684 --> 00:51:58,934
+The wavelength stretches by exactly the factor the universe expanded while
+
+935
+00:51:58,934 --> 00:52:00,796
+the light was in flight.
+
+936
+00:52:00,796 --> 00:52:02,921
+That's the cosmological redshift:
+
+937
+00:52:02,921 --> 00:52:08,446
+not a Doppler shift through space, but space itself stretching the wave.
+
+938
+00:52:08,630 --> 00:52:12,630
+Expansion makes distances and horizons subtle, and one picture sorts them
+
+939
+00:52:12,630 --> 00:52:13,392
+out.
+
+940
+00:52:13,392 --> 00:52:17,617
+Time goes up, distance from us across, computed for our universe.
+
+941
+00:52:17,617 --> 00:52:20,530
+Galaxies drift apart along these grey lines.
+
+942
+00:52:20,530 --> 00:52:25,180
+Our past light cone, everything we can see now, is this yellow teardrop:
+
+943
+00:52:25,180 --> 00:52:28,605
+light that reaches us from the most distant sources was emitted when those
+
+944
+00:52:28,605 --> 00:52:32,730
+sources were close to us, and the expansion then carried the light away before
+
+945
+00:52:32,730 --> 00:52:34,855
+it could make headway toward us.
+
+946
+00:52:34,855 --> 00:52:38,780
+The teal curve is the Hubble sphere, where galaxies recede at the speed of
+
+947
+00:52:38,780 --> 00:52:39,705
+light.
+
+948
+00:52:39,705 --> 00:52:44,305
+Galaxies beyond it recede faster than light, and we still see many of them:
+
+949
+00:52:44,305 --> 00:52:46,755
+nothing moves faster than light locally;
+
+950
+00:52:46,755 --> 00:52:49,596
+space between us is expanding.
+
+951
+00:52:49,596 --> 00:52:53,046
+Now divide out the expansion, and use comoving distance.
+
+952
+00:52:53,046 --> 00:52:56,696
+And finally, replace time by conformal time, the distance light could have
+
+953
+00:52:56,696 --> 00:52:57,684
+traveled.
+
+954
+00:52:57,684 --> 00:53:01,721
+In these coordinates, light moves at forty-five degrees again, like in a Penrose
+
+955
+00:53:01,721 --> 00:53:02,871
+diagram.
+
+956
+00:53:02,871 --> 00:53:06,834
+The particle horizon, the farthest anything we see could be today, is forty-six
+
+957
+00:53:06,834 --> 00:53:08,596
+billion light-years away.
+
+958
+00:53:08,596 --> 00:53:10,084
+And the event horizon:
+
+959
+00:53:10,084 --> 00:53:13,896
+events beyond it today, sixteen and a half billion light-years away, will
+
+960
+00:53:13,896 --> 00:53:18,821
+never be seen by us, because the expansion is accelerating.
+
+961
+00:53:18,946 --> 00:53:22,859
+The farthest light we can see is the cosmic microwave background, released
+
+962
+00:53:22,859 --> 00:53:26,696
+when the universe became transparent, a few hundred thousand years after the
+
+963
+00:53:26,696 --> 00:53:27,821
+Big Bang.
+
+964
+00:53:27,821 --> 00:53:31,571
+The places that emitted it now lie on a sphere forty-five billion light-years
+
+965
+00:53:31,571 --> 00:53:32,471
+away.
+
+966
+00:53:32,471 --> 00:53:35,884
+But at the moment of emission, each of those places could only have received
+
+967
+00:53:35,884 --> 00:53:39,309
+signals from a tiny region, drawn here to scale:
+
+968
+00:53:39,309 --> 00:53:42,184
+about a degree across, as seen from Earth.
+
+969
+00:53:42,184 --> 00:53:46,146
+So the sky contains some ten thousand patches that had never been in causal
+
+970
+00:53:46,146 --> 00:53:47,546
+contact.
+
+971
+00:53:47,546 --> 00:53:51,884
+Yet they all have the same temperature, to one part in a hundred thousand.
+
+972
+00:53:51,884 --> 00:53:53,059
+How did they know?
+
+973
+00:53:53,059 --> 00:53:58,109
+This is the horizon problem, and the leading proposed answer, inflation, adds
+
+974
+00:53:58,109 --> 00:54:04,121
+an early epoch of exponential expansion, before the history we've drawn.
+
+975
+00:54:04,288 --> 00:54:07,513
+These equations are still being tested at the largest scales.
+
+976
+00:54:07,513 --> 00:54:11,688
+The expansion rate inferred from the microwave background, assuming this model,
+
+977
+00:54:11,688 --> 00:54:15,376
+is about sixty-seven kilometers per second per megaparsec.
+
+978
+00:54:15,376 --> 00:54:19,901
+Measured directly from nearby supernovae, it's about seventy-three and a half.
+
+979
+00:54:19,901 --> 00:54:24,488
+The disagreement, now at five to seven sigma, is called the Hubble tension.
+
+980
+00:54:24,488 --> 00:54:28,663
+And maps of millions of galaxies from the DESI survey hint that dark energy
+
+981
+00:54:28,663 --> 00:54:32,888
+may change over time, which a cosmological constant can't.
+
+982
+00:54:32,888 --> 00:54:38,788
+The evidence isn't yet decisive, and DESI's full results are expected in 2027.
+
+983
+00:54:40,370 --> 00:54:41,820
+Let's put it together.
+
+984
+00:54:41,820 --> 00:54:45,645
+Choosing coordinates that follow light showed us that the horizon is an ordinary
+
+985
+00:54:45,645 --> 00:54:49,682
+place to cross, and that inside, r becomes time.
+
+986
+00:54:49,682 --> 00:54:54,070
+Raychaudhuri's equation showed that gravity always focuses, so once a trapped
+
+987
+00:54:54,070 --> 00:54:57,445
+surface forms, a singularity is unavoidable.
+
+988
+00:54:57,445 --> 00:55:01,582
+Spinning black holes drag spacetime around them, and store energy that can
+
+989
+00:55:01,582 --> 00:55:04,845
+be mined, while their area only grows.
+
+990
+00:55:04,845 --> 00:55:09,482
+Gravitational waves carry energy away, and from that one fact we derived the
+
+991
+00:55:09,482 --> 00:55:14,032
+chirp of merging black holes and the slow death of the binary pulsar.
+
+992
+00:55:14,032 --> 00:55:18,595
+Quantum theory turned the laws of black-hole mechanics into real thermodynamics,
+
+993
+00:55:18,595 --> 00:55:20,820
+with a temperature and an entropy.
+
+994
+00:55:20,820 --> 00:55:25,095
+And the same equation, applied to everything at once, describes an expanding
+
+995
+00:55:25,095 --> 00:55:28,970
+universe, with horizons of its own.
+
+996
+00:55:29,170 --> 00:55:33,232
+All of it from one line, derived from a falling elevator, and reaching to
+
+997
+00:55:33,232 --> 00:55:35,557
+the edge of the observable universe.
+
+998
+00:55:35,557 --> 00:55:36,820
+Thanks for watching.
