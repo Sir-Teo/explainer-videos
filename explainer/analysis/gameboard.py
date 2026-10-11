@@ -72,11 +72,12 @@ class FunctionBoard:
             A = ax.ax
             L, e = ax.L, ax.eps.get_value()
             x0, x1 = A.x_range[0], A.x_range[1]
-            p0, p1 = A.c2p(x0, L - e), A.c2p(x1, L + e)
+            lo, hi = max(L - e, A.y_range[0]), min(L + e, A.y_range[1])  # the band stays inside the axes
+            p0, p1 = A.c2p(x0, lo), A.c2p(x1, hi)
             band = Rectangle(width=p1[0] - p0[0], height=max(0.004, p1[1] - p0[1]), stroke_width=0, fill_color=color,
                              fill_opacity=EPS_FILL).move_to((p0 + p1) / 2)
-            edges = VGroup(DashedLine(A.c2p(x0, L + e), A.c2p(x1, L + e), color=color, stroke_width=2),
-                           DashedLine(A.c2p(x0, L - e), A.c2p(x1, L - e), color=color, stroke_width=2))
+            edges = VGroup(*[DashedLine(A.c2p(x0, v), A.c2p(x1, v), color=color, stroke_width=2)
+                             for v in (L + e, L - e) if A.y_range[0] <= v <= A.y_range[1]])
             return VGroup(band, edges)
 
         return always_redraw(draw)
@@ -112,12 +113,14 @@ class FunctionBoard:
             x = np.linspace(lo, hi, ax.samples)
             y = ax.f(x)
             inside = np.abs(y - L) < e
-            yc = np.clip(y, A.y_range[0], A.y_range[1])
+            shown = (y >= A.y_range[0]) & (y <= A.y_range[1])  # parts beyond the axes are cut, not flattened
+            key = np.where(shown, inside.astype(int), -1)
             start = 0
             for i in range(1, len(x) + 1):
-                if i == len(x) or inside[i] != inside[start]:
-                    seg = x[start:i + 1 if i < len(x) else i], yc[start:i + 1 if i < len(x) else i]
-                    if len(seg[0]) >= 2:
+                if i == len(x) or key[i] != key[start]:
+                    end = i + 1 if i < len(x) and key[start] >= 0 and key[i] >= 0 else i
+                    seg = x[start:end], y[start:end]
+                    if key[start] >= 0 and len(seg[0]) >= 2:
                         m = VMobject(color=good if inside[start] else bad, stroke_width=stroke_width)
                         m.set_points_as_corners(np.array([A.c2p(u, v) for u, v in zip(*seg)]))
                         g.add(m)

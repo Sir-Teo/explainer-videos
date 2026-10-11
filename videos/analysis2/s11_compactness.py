@@ -44,7 +44,7 @@ class Compactness(VoiceoverScene):
                      endpoint(ax.c2p(0, m) + LEFT * 0.3, True, C.COMPACT_SET),
                      endpoint(ax.c2p(0, M) + LEFT * 0.3, True, C.COMPACT_SET))
         dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, DOWN, buff=0.15)
-        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, UP, buff=0.15)
+        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, DOWN, buff=0.15)
         thm = label(r"\textbf{Rudin 4.14} \ A continuous image of a compact set is compact.", font_size=30)
         thm.to_edge(UP, buff=0.4)
         steps = VGroup(
