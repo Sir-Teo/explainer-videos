@@ -28,7 +28,7 @@ are integrations of Newtonian gravity, and parallel transport is an ODE solve on
 gravitational-wave chapter shows LIGO's public strain data. Exaggerations are labeled on screen with
 their factor, and schematics are labeled `schematic`.
 
-**Watch:** [`published/relativity.mp4`](../../published/relativity.mp4) (69 min, 1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/relativity.mp4` (69 min, 1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -62,7 +62,6 @@ python tools/build.py relativity -q l         # preview
 python tools/build.py relativity              # final 1080p30 + subtitles + chapters
 python tools/export_script.py relativity      # regenerate SCRIPT.md from the code
 python tools/check_narration.py relativity    # Whisper listen test of every narration line
-python tools/publish.py relativity --audio-kbps 64   # GitHub-sized copy (69 min in 95 MB) -> published/relativity.mp4
 ```
 
 ## Outline

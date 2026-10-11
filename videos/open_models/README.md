@@ -33,7 +33,7 @@ range requests read exactly what is needed (`fetch.py`). Mechanisms are shown
 with small, seeded toy computations, labeled as such, and schematics are
 labeled `schematic`.
 
-**Watch:** [`published/open_models.mp4`](../../published/open_models.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/open_models.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -63,7 +63,6 @@ python tools/build.py open_models -q l      # preview
 python tools/build.py open_models           # final 1080p30 + subtitles + chapters
 python tools/export_script.py open_models   # regenerate SCRIPT.md from the code
 python tools/check_narration.py open_models # Whisper listen test of every narration line
-python tools/publish.py open_models         # GitHub-sized copy -> published/open_models.mp4
 ```
 
 `data.json` (committed, ~300 kB) is all the scenes read; they never touch the

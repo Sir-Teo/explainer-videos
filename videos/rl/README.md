@@ -22,7 +22,7 @@ on screen from the one before it, starting with the log-derivative trick:
    model (TIS, masking, GSPO, CISPO), asynchronous RL, ScaleRL's sigmoid
    compute law, agentic environments, reward hacking, the state of play.
 
-**Watch:** [`published/rl.mp4`](../../published/rl.mp4) (46 min, 1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/rl.mp4` (46 min, 1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -54,7 +54,6 @@ python tools/build.py rl -q l        # preview
 python tools/build.py rl             # final 1080p30 + subtitles + chapters
 python tools/export_script.py rl     # regenerate SCRIPT.md from the code (and the last render, for data-driven lines)
 python tools/check_narration.py rl   # Whisper listen test of every narration line
-python tools/publish.py rl           # GitHub-sized copy -> published/rl.mp4
 ```
 
 ## Outline

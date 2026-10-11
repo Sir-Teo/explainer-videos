@@ -5,7 +5,7 @@ equations from Newton's second law, deriving every term on screen. It then
 shows what the equations do, using real simulations, and covers the open
 mathematics: the Millennium Prize problem and the 2026 claimed forced blow-up.
 
-**Watch:** [`published/navier_stokes.mp4`](../../published/navier_stokes.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/navier_stokes.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 

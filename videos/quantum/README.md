@@ -28,7 +28,7 @@ histogram is counted from seeded Born-rule samples. Every number the narration q
 [`compute.py`](compute.py) and asserted against theory, either there or in the scene that uses it (see
 [Simulations](#simulations-computepy)). Schematics are labeled `schematic`.
 
-**Watch:** [`published/quantum.mp4`](../../published/quantum.mp4) (1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/quantum.mp4` (1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -59,7 +59,6 @@ python tools/build.py quantum -q l        # preview
 python tools/build.py quantum             # final 1080p30 + subtitles + chapters
 python tools/export_script.py quantum     # regenerate SCRIPT.md from the code
 python tools/check_narration.py quantum   # Whisper listen test of every narration line
-python tools/publish.py quantum           # GitHub-sized copy -> published/quantum.mp4
 ```
 
 ## The visual language

@@ -52,7 +52,7 @@ the video explains in its first minutes.
 
 Schematics are labeled `schematic`, and the few illustrative choices are listed below.
 
-**Watch:** [`published/relativity2.mp4`](../../published/relativity2.mp4) (56 min, 1080p, subtitles and chapters embedded).
+**Build it:** the finished video is not stored in the repository. The commands below render it to `renders/relativity2.mp4` (56 min, 1080p30, subtitles and chapters embedded); add `-q k` for 2160p.
 
 <details><summary>Chapters</summary>
 
@@ -84,7 +84,6 @@ python tools/build.py relativity2 -q l        # preview
 python tools/build.py relativity2             # final 1080p30 + subtitles + chapters
 python tools/export_script.py relativity2     # regenerate SCRIPT.md from the code
 python tools/check_narration.py relativity2   # Whisper listen test of every narration line
-python tools/publish.py relativity2 --audio-kbps 64   # GitHub-sized copy (56 min in 95 MB) -> published/relativity2.mp4
 ```
 
 The GW150914 ringdown reuses Part 1's strain snapshot (`videos/relativity/data/gw150914.json`), and
