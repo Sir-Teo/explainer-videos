@@ -213,7 +213,7 @@ class Compactness(VoiceoverScene):
         tl = MathTex(r"\sqrt{x} \text{ on } [0, 1]:\ \delta = \varepsilon^2 \text{ works everywhere}", font_size=26,
                      color=C.CONNECTED_SET).next_to(ax, UP, buff=0.15)
         ax2 = plain_axes([0, 1.05, 0.25], [0, 12, 4], 5.6, 4.0, numbers=True, font_size=18,
-                         axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([3.4, -1.4, 0])
+                         axis_config={"decimal_number_config": {"num_decimal_places": 2}}, y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.4, -1.4, 0])
         g2 = ax2.plot(lambda x: 1 / x, x_range=[1 / 12, 1.05, 0.001], color=C.FUNC, stroke_width=3)
         e2 = 1.0
         bT = ValueTracker(0.9)

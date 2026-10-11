@@ -32,7 +32,7 @@ class Sequences(VoiceoverScene):
         n = np.arange(1, n_max + 1)
         a = 1 + (-1.0) ** n * 1.5 / n
         ax = plain_axes([0, n_max + 1, 5], [-0.2, 2.2, 0.5], 11.5, 4.4, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to(DOWN * 1.0)
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 1.0)
         board = SequenceBoard(ax, a, L=1.0, eps=0.5, N=n_max, n_max=n_max)  # N = n_max: no dot judged yet
         dfn = MathTex(r"p_n \to p", r"\iff", r"\forall \varepsilon > 0", r"\;\exists N", r"\;:\;",
                       r"n > N \Rightarrow |p_n - p| < \varepsilon", font_size=40).to_edge(UP, buff=0.45)
@@ -97,7 +97,7 @@ class Sequences(VoiceoverScene):
         n = np.arange(1, n_max + 1)
         a = (-1.0) ** n
         ax = plain_axes([0, n_max + 1, 5], [-1.6, 1.6, 0.5], 11.5, 4.4, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to(DOWN * 0.8)
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 0.8)
         board = SequenceBoard(ax, a, L=0.0, eps=0.5, N=10, n_max=n_max)
         dots, band, thr = board.dots(), board.eps_band(), board.threshold()
         head = MathTex(r"p_n = (-1)^n", font_size=40, color=C.SEQ).to_edge(UP, buff=0.5)

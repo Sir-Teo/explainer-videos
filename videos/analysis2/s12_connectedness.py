@@ -71,7 +71,7 @@ class Connectedness(VoiceoverScene):
     # ------------------------------------------------------------------
     def over_q(self):
         ax = plain_axes([1, 2, 0.25], [-1.2, 2.2, 1], 9.0, 4.6, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-0.6, -0.9, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}, y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.6, -0.9, 0])
         head = MathTex(r"f(x) = x^2 - 2 \quad \text{on } \mathbb{Q} \cap [1, 2]", font_size=36).to_edge(UP, buff=0.4)
         from math import gcd
         pts = sorted({p / q for q in range(1, 61) for p in range(q, 2 * q + 1) if gcd(p, q) == 1})
