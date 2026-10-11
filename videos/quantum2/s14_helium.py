@@ -171,7 +171,7 @@ class Helium(VoiceoverScene):
         hund = label(r"the origin of Hund's rule and of ferromagnetism: an energy that depends on spin, from electric repulsion alone",
                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Now the excited state with one electron in 1s and one in 2s. <bookmark mark='a'/> Here the two electrons "
+            "Now the excited state with one electron in the one S orbital and one in the two S. <bookmark mark='a'/> Here the two electrons "
             "can have opposite spins or parallel ones. The total wavefunction must be antisymmetric, so parallel spins "
             "force an antisymmetric spatial part. <bookmark mark='b'/> Here are both states, computed on the plane of the "
             "two radii, r one and r two. <bookmark mark='c'/> The triplet's wavefunction vanishes along the diagonal: the "
