@@ -147,9 +147,10 @@ class Horizons(VoiceoverScene):
             "sphere, where galaxies recede at the speed of light. Galaxies beyond it recede faster than light, and we "
             "still see many of them: nothing moves faster than light locally; space between us is expanding."
         ) as vo:
-            vo.wait_until("a")
             self.add(G)
-            self.play(FadeIn(leg), FadeIn(cap), FadeIn(xlab), FadeIn(ylab))
+            self.play(FadeIn(xlab), FadeIn(ylab))
+            vo.wait_until("a")
+            self.play(FadeIn(leg), FadeIn(cap))
             vo.wait_until("b")
             self.play(Indicate(leg[2], color=HUB))
         with self.voiceover(

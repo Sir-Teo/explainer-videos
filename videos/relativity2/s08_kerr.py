@@ -183,7 +183,7 @@ class Kerr(VoiceoverScene):
             "The ergosphere is where frame dragging becomes irresistible. <bookmark mark='a'/> Ask: at a fixed radius, "
             "how fast can something orbit, as seen from far away? For its worldline to be timelike, slower than light, "
             "its angular velocity Omega has to make this quadratic negative, which confines it to a band. "
-            "<bookmark mark='b'/> Far out, the band includes zero, and in either direction you can go is fine. "
+            "<bookmark mark='b'/> Far out, the band includes zero: you can orbit either way, or simply hover in place. "
             "<bookmark mark='c'/> At the ergosurface, the lower edge reaches zero. Inside, the whole band is positive: "
             "no rocket, however powerful, can hold you still relative to the distant stars. You must rotate with the "
             "hole. <bookmark mark='d'/> At the horizon, the band closes to a single value, Omega H: the horizon itself "

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
-from videos.relativity2.common import (clamp_x, label, ladder, load, mtex, note, polyline, redraw, under)
+from videos.relativity2.common import (opener, clamp_x, label, ladder, load, mtex, note, polyline, redraw, under)
 from videos.relativity2.compute import L_SUN
 
 WAVE, HOR, MAT = C.WAVE, C.CURVATURE, C.MATTER
@@ -61,7 +61,13 @@ class Ringdown(VoiceoverScene):
             "<bookmark mark='c'/> The barrier peaks just outside the photon sphere, where light can orbit: waves near "
             "the hole are partly trapped there, leaking slowly inward to the horizon and outward to us."
         ) as vo:
+            tt = np.linspace(0, 60, 900)
+            bell = VMobject(stroke_color=WAVE, stroke_width=4).set_points_as_corners(
+                [[-5 + 10 * t_ / 60, 1.4 * math.exp(-0.0890 * t_) * math.cos(0.3737 * t_), 0] for t_ in tt])
+            op = opener(self, bell, label(r"a distorted black hole settles down by ringing", font_size=32, color=GREY_A),
+                        buff=0.5)
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)
@@ -246,7 +252,9 @@ class Ringdown(VoiceoverScene):
             "a merger can radiate: for two equal non-spinning holes, at most twenty-nine percent of their mass. "
             "LIGO's first event radiated about five percent, three solar masses' worth, in a fifth of a second."
         ) as vo:
+            op = opener(self, r"Hawking (1971): the area theorem", mtex(r"\delta A \ge 0", font_size=60, color=HOR))
             vo.wait_until("a")
+            self.play(FadeOut(op), run_time=0.5)
             step(0)
             vo.wait_until("b")
             step(1)
