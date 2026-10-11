@@ -74,7 +74,7 @@ class Continuity(VoiceoverScene):
     def board(self):
         d = load("deltas")
         ax = plain_axes([2.0, 4.0, 0.5], [4, 16, 2], 9.0, 5.0, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-1.3, -0.75, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-1.3, -0.75, 0])
         f = lambda x: x * x  # noqa: E731
         graph = ax.plot(f, x_range=[2.0, 4.0], color=C.FUNC, stroke_width=3)
         board = FunctionBoard(ax, f, a=3.0, eps=1.0, delta=0.4)

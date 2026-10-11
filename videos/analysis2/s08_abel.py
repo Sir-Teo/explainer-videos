@@ -149,7 +149,7 @@ class Abel(VoiceoverScene):
             plane, DOWN, buff=0.15)
         bound = MathTex(r"|A_n| \le \frac{1}{|\sin(x/2)|}", font_size=30).next_to(lab, DOWN, buff=0.12)
         ax = plain_axes([0, 201, 50], [0.6, 1.5, 0.2], 6.0, 3.6, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.3, -0.4, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.3, -0.4, 0])
         nn = np.arange(1, 201)
         curve = polyline(ax, nn, S[:200], color=C.APPROX, stroke_width=2.5)
         tl = DashedLine(ax.c2p(0, target), ax.c2p(201, target), color=C.FUNC, stroke_width=2)

@@ -35,7 +35,7 @@ class Cauchy(VoiceoverScene):
         s = d["s"]
         n_max = 40
         ax = plain_axes([0, n_max + 1, 5], [0.4, 1.05, 0.1], 11.0, 3.7, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-0.35, -1.75, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.35, -1.75, 0])
         dots = VGroup(*[Dot(ax.c2p(k, s[k - 1]), radius=0.045, color=C.SEQ) for k in range(1, n_max + 1)])
         series = MathTex(r"s_n = 1 - \tfrac12 + \tfrac13 - \cdots \pm \tfrac1n", font_size=34, color=C.SEQ)
         series.move_to([3.6, 0.55, 0])
@@ -369,7 +369,7 @@ class Cauchy(VoiceoverScene):
         e_N = int(d["e_N"])
         n_max = 40
         ax = plain_axes([0, n_max + 1, 5], [1.9, 3.1, 0.25], 11.0, 4.0, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-0.3, -1.45, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.3, -1.45, 0])
         board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=n_max, n_max=n_max)  # no dot judged yet
         dots = board.dots()
         thm = label(r"\textbf{Rudin 3.14} \ A monotone, bounded sequence converges: \ to its supremum.", font_size=30)

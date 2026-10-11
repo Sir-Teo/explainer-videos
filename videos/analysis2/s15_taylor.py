@@ -168,7 +168,7 @@ class Taylor(VoiceoverScene):
     def flat(self):
         d = load("taylor")
         ax = plain_axes([-3, 3, 1], [-0.2, 1.1, 0.5], 7.0, 3.6, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.0, -0.4, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.0, -0.4, 0])
         f = lambda x: np.where(np.abs(x) < 1e-9, 0.0, np.exp(-1 / np.maximum(x * x, 1e-300)))  # noqa: E731
         g = ax.plot(f, x_range=[-3, 3, 0.005], color=C.FUNC, stroke_width=4)
         zero = Line(ax.c2p(-3, 0), ax.c2p(3, 0), color=C.APPROX, stroke_width=4)

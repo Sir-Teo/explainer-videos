@@ -97,8 +97,8 @@ class LimSup(VoiceoverScene):
             return DashedLine(ax.c2p(0, x), ax.c2p(n_max + 1, x), color=C.PATHOLOGY, stroke_width=2.5)
 
         lev = always_redraw(level)
-        x_l = always_redraw(lambda: MathTex(r"x", font_size=32, color=C.PATHOLOGY).next_to(ax.c2p(0, xv.get_value()),
-                                                                                          LEFT, buff=0.12))
+        x_l = always_redraw(lambda: MathTex(r"x", font_size=32, color=C.PATHOLOGY).next_to(
+            ax.c2p(n_max + 1, xv.get_value()), RIGHT, buff=0.12))
 
         def recolor():
             x = xv.get_value()
@@ -157,7 +157,8 @@ class LimSup(VoiceoverScene):
         r = d["rats"]
         M = len(r)
         ax = plain_axes([0, M + 10, 100], [-0.1, 1.1, 0.5], 11.6, 4.0, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([0, -1.2, 0])
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0, -1.2, 0])
         dots = VGroup(*[Dot(ax.c2p(k, v), radius=0.022, color=C.RATIONAL) for k, v in enumerate(r, start=1)])
         head = MathTex(r"0,\ 1,\ \tfrac12,\ \tfrac13,\ \tfrac23,\ \tfrac14,\ \tfrac34,\ \tfrac15,\ \ldots", font_size=38,
                        color=C.RATIONAL).to_edge(UP, buff=0.4)
@@ -263,9 +264,8 @@ class LimSup(VoiceoverScene):
         d = load("limsup")
         lgv, peak, lg_max, cross = d["lg"], int(d["peak"]), float(d["lg_max"]), int(d["cross"])
         k = np.arange(1, len(lgv) + 1)
-        ax = plain_axes([0, 1000, 100], [-6, 18, 3], 11.0, 4.6, numbers=True, font_size=20).move_to([0.2, -0.9, 0])
-        ylab = MathTex(r"\log_{10} \frac{n^{10}}{1.1^n}", font_size=28).next_to(ax, LEFT, buff=0.1).shift(UP * 1.4)
-        ylab.shift(RIGHT * 0.9 + UP * 0.6)
+        ax = plain_axes([0, 1000, 100], [-6, 18, 3], 10.0, 4.6, numbers=True, font_size=20).move_to([0.8, -0.9, 0])
+        ylab = MathTex(r"\log_{10} \frac{n^{10}}{1.1^n}", font_size=26).next_to(ax.c2p(0, 12), LEFT, buff=0.6)
         curve = polyline(ax, k, lgv, color=C.FREQ, stroke_width=3.5)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(1000, 0), color=GREY_B, stroke_width=1.5)
         head = label(r"$\dfrac{n^\alpha}{(1+p)^n} \to 0$: \ exponentials beat powers, eventually", font_size=32)
@@ -275,7 +275,7 @@ class LimSup(VoiceoverScene):
         pk_l = MathTex(rf"n = {peak}:\ \ \frac{{n^{{10}}}}{{1.1^n}} \approx {sci(val, 1)}", font_size=28).next_to(pk, UR,
                                                                                                           buff=0.1)
         cr = Dot(ax.c2p(cross, 0), radius=0.07, color=C.EPS)
-        cr_l = label(rf"below 1 for good from $n = {cross}$", font_size=26, color=C.EPS).next_to(cr, UP, buff=0.15)
+        cr_l = label(rf"below 1 for good from $n = {cross}$", font_size=26, color=C.EPS).next_to(cr, UR, buff=0.12)
         with self.voiceover(
             "And powers against exponentials. <bookmark mark='a'/> n to the tenth over 1.1 to the n: the numerator "
             "starts far ahead. On a log scale, <bookmark mark='b'/> the ratio climbs to about seven quadrillion at n "
