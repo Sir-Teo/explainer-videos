@@ -46,7 +46,7 @@ class Hawking(VoiceoverScene):
             rays.add(polyline(ax, r[ok], tt[ok], color=C.LIGHT, stroke_width=2.5))
         labs = VGroup(*[label(rf"$\epsilon = 10^{{-{k_}}}$", font_size=18, color=C.LIGHT).next_to(ax.c2p(10, arr[i]), RIGHT, buff=0.08)
                         for i, k_ in enumerate(ks) if arr[i] < 95])
-        axis, cap = ax, note(r"computed outgoing null rays (Eddington--Finkelstein), launched at $\tilde t = 0$").to_corner(DL, buff=0.2)
+        axis, cap = ax, note(r"computed outgoing null rays (Eddington--Finkelstein), launched at $\tilde t = 0$").move_to([3.6, -3.55, 0])
         eq = VGroup(
             label(r"rays leaving from $r = 2M(1 + \epsilon)$:", font_size=26),
             mtex(r"\Delta\tilde t = 4M\ln\frac{1}{\epsilon} + \dots", font_size=36, color=C.LIGHT),
@@ -220,9 +220,9 @@ class Hawking(VoiceoverScene):
             "temperature."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(cap))
+            self.play(FadeIn(cap), Create(S1, lag_ratio=0.02), run_time=2.5)
             vo.wait_until("b")
-            self.play(Create(S1, lag_ratio=0.02), FadeIn(l1), run_time=2)
+            self.play(FadeIn(l1))
             vo.wait_until("c")
             self.play(Create(S2, lag_ratio=0.02), FadeIn(l2), run_time=2)
         self.clear_scene()
