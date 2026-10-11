@@ -63,8 +63,9 @@ class Rearrangement(VoiceoverScene):
             "if one pile were finite, then since the series converges the other would be too, and the series would "
             "converge absolutely. <bookmark mark='d'/> And in both piles the terms go to zero."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("t")
-            self.play(FadeIn(head), FadeIn(head2))
+            self.play(FadeIn(head2))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in pos], lag_ratio=0.06), FadeIn(pl))
             vo.wait_until("b")
@@ -206,7 +207,7 @@ class Rearrangement(VoiceoverScene):
         d = load("swing")
         s = d["sin_sums"]
         K = len(s)
-        ax, ticks = log_axes(math.log10(K), [0.5, 3.5, 0.5], center=(0.2, -1.1, 0))
+        ax, ticks = log_axes(math.log10(K), [0.5, 3.5, 0.5], y_length=3.4, center=(0.2, -0.65, 0))
         yl = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in (1, 2, 3)])
         k = np.arange(1, K + 1)
