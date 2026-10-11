@@ -222,7 +222,7 @@ class Derivative(VoiceoverScene):
         h, q = d["h"], d["q"]
         ax = plain_axes([-0.4, 0.4, 0.2], [-0.12, 0.12, 0.1], 6.2, 4.2, numbers=False).move_to([-3.3, -0.9, 0])
         u = np.linspace(1 / 0.4, 400, 60000)
-        x = np.r_[-1 / u[::-1], 1 / u]
+        x = np.r_[-1 / u, 1 / u[::-1]]  # left to right through 0
         y = x * x * np.sin(1 / x)
         g = polyline(ax, x, y, color=C.FUNC, stroke_width=2.5)
         env = VGroup(ax.plot(lambda t: t * t, x_range=[-0.35, 0.35], color=GREY_B, stroke_width=1.5),
@@ -230,7 +230,7 @@ class Derivative(VoiceoverScene):
         fl = MathTex(r"f(x) = x^2 \sin\tfrac1x,\ \ f(0) = 0", font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.15)
         ax2 = plain_axes([-0.4, 0.4, 0.2], [-1.4, 1.4, 1], 6.2, 4.2, numbers=False).move_to([3.4, -0.9, 0])
         u2 = np.linspace(1 / 0.4, 160, 60000)
-        x2 = np.r_[-1 / u2[::-1], 1 / u2]
+        x2 = np.r_[-1 / u2, 1 / u2[::-1]]
         y2 = 2 * x2 * np.sin(1 / x2) - np.cos(1 / x2)
         g2 = polyline(ax2, x2, y2, color=C.PATHOLOGY, stroke_width=1.5)
         f2l = MathTex(r"f'(x) = 2x\sin\tfrac1x - \cos\tfrac1x \ (x \ne 0),\ \ f'(0) = 0", font_size=26,
