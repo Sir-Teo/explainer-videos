@@ -68,11 +68,12 @@ def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> 
 
 def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path) -> tuple[str, float, str]:
     src = ROOT / "videos" / video / f"{module}.py"
-    # Each scene gets its own LaTeX cache: parallel manim processes sharing one
-    # Tex dir race on the .dvi files (one cleans up what another converts).
+    # Each scene gets its own LaTeX and Text caches: parallel manim processes sharing one
+    # Tex dir race on the .dvi files (one cleans up what another converts), and sharing one
+    # texts dir race on the .svg files of identical Text strings (one unlinks what another reads).
     cfg = media / "cfg" / f"{cls}.cfg"
     cfg.parent.mkdir(parents=True, exist_ok=True)
-    cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\n")
+    cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\ntext_dir = {media / 'texts' / cls}\n")
     cmd = [
         sys.executable, "-m", "manim", "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
         "--media_dir", str(media), "--progress_bar", "none", str(src), cls,
