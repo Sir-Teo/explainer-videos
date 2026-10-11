@@ -29,7 +29,7 @@ class Compactness(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def image(self):
-        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-2.0, -0.6, 0])
+        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-1.3, -0.6, 0])
         f = lambda x: 0.9 * np.sin(1.7 * x) + 0.35 * np.cos(4.3 * x)  # noqa: E731
         a, b = 0.3, 3.7
         g = ax.plot(f, x_range=[a, b, 0.005], color=C.FUNC, stroke_width=4)
@@ -43,15 +43,15 @@ class Compactness(VoiceoverScene):
         img = VGroup(Line(ax.c2p(0, m) + LEFT * 0.3, ax.c2p(0, M) + LEFT * 0.3, color=C.COMPACT_SET, stroke_width=8),
                      endpoint(ax.c2p(0, m) + LEFT * 0.3, True, C.COMPACT_SET),
                      endpoint(ax.c2p(0, M) + LEFT * 0.3, True, C.COMPACT_SET))
-        dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, DOWN, buff=0.15)
-        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, DOWN, buff=0.15)
+        dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, RIGHT, buff=0.2)
+        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, LEFT, buff=0.75)
         thm = label(r"\textbf{Rudin 4.14} \ A continuous image of a compact set is compact.", font_size=30)
         thm.to_edge(UP, buff=0.4)
         steps = VGroup(
-            label(r"cover $f(X)$ by open sets $V_\alpha$", font_size=26),
-            label(r"the preimages $f^{-1}(V_\alpha)$ are open (4.8) and cover $X$", font_size=26),
-            label(r"$X$ compact: finitely many do", font_size=26),
-            label(r"so finitely many $V_\alpha$ cover $f(X)$", font_size=26, color=C.EPS),
+            label(r"cover $f(X)$ by open sets $V_\alpha$", font_size=24),
+            label(r"the preimages $f^{-1}(V_\alpha)$ are open (4.8) and cover $X$", font_size=24),
+            label(r"$X$ compact: finitely many do", font_size=24),
+            label(r"so finitely many $V_\alpha$ cover $f(X)$", font_size=24, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.0, 0.4, 0])
         # an open cover of the image by overlapping intervals, and the preimage of one of them
         centers = np.linspace(m - 0.1, M + 0.1, 7)
