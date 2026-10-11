@@ -1,0 +1,3935 @@
+1
+00:00:00,250 --> 00:00:03,400
+At the end of Part 1, the whole theory fit on one screen:
+
+2
+00:00:03,400 --> 00:00:07,212
+the Schrödinger equation, the Born rule, and the commutator of position and
+
+3
+00:00:07,212 --> 00:00:08,250
+momentum.
+
+4
+00:00:08,250 --> 00:00:10,125
+But look at how we got them.
+
+5
+00:00:10,125 --> 00:00:13,325
+We guessed the equation by making it work for plane waves.
+
+6
+00:00:13,325 --> 00:00:15,675
+We took the Born rule as a postulate.
+
+7
+00:00:15,675 --> 00:00:19,300
+And we computed the commutator from a formula for momentum that we had also
+
+8
+00:00:19,300 --> 00:00:20,238
+guessed.
+
+9
+00:00:20,238 --> 00:00:25,275
+In this video, we derive them, and then we put them to work.
+
+10
+00:00:25,708 --> 00:00:29,121
+Start with the double slit again, seen Richard Feynman's way.
+
+11
+00:00:29,121 --> 00:00:31,746
+A source on the left, two slits, a screen.
+
+12
+00:00:31,746 --> 00:00:34,958
+Pick one point on the screen, and consider every way to get there:
+
+13
+00:00:34,958 --> 00:00:36,746
+through any point of either slit.
+
+14
+00:00:36,746 --> 00:00:40,721
+Each path contributes an arrow, and the arrow turns one full revolution for
+
+15
+00:00:40,721 --> 00:00:44,596
+every wavelength of path length, so the color of each path shows which way
+
+16
+00:00:44,596 --> 00:00:46,083
+its arrow points.
+
+17
+00:00:46,083 --> 00:00:49,058
+Now add all the arrows, tip to tail.
+
+18
+00:00:49,058 --> 00:00:53,008
+The paths through each slit give a gently curving string of arrows;
+
+19
+00:00:53,008 --> 00:00:54,696
+the two strings join;
+
+20
+00:00:54,696 --> 00:00:59,058
+and the length of the total, squared, is the brightness at that point.
+
+21
+00:00:59,058 --> 00:01:00,408
+Now move the point.
+
+22
+00:01:00,408 --> 00:01:04,908
+As it moves, the path lengths change, the arrows swing around, and the total
+
+23
+00:01:04,908 --> 00:01:06,546
+grows and shrinks.
+
+24
+00:01:06,546 --> 00:01:10,771
+Tracing its length squared along the screen draws the interference fringes.
+
+25
+00:01:10,771 --> 00:01:12,846
+In Part 1 we had two arrows;
+
+26
+00:01:12,846 --> 00:01:16,596
+here every point of each slit has its own, and the fringes come out with the
+
+27
+00:01:16,596 --> 00:01:19,267
+slits' finite width built in.
+
+28
+00:01:19,267 --> 00:01:21,829
+Feynman's real claim is far stronger:
+
+29
+00:01:21,829 --> 00:01:25,817
+not just straight paths through the slits, but every path at all, however
+
+30
+00:01:25,817 --> 00:01:30,479
+wild, contributes an arrow, turning at a rate set by a quantity from classical
+
+31
+00:01:30,479 --> 00:01:32,542
+mechanics, the action.
+
+32
+00:01:32,542 --> 00:01:36,917
+That single idea contains the Schrödinger equation, and it explains why a
+
+33
+00:01:36,917 --> 00:01:40,692
+thrown ball follows just one path.
+
+34
+00:01:41,117 --> 00:01:43,092
+It's one of three roads we'll take.
+
+35
+00:01:43,092 --> 00:01:44,542
+The first is symmetry:
+
+36
+00:01:44,542 --> 00:01:48,629
+the laws don't change from moment to moment, or from place to place, and those
+
+37
+00:01:48,629 --> 00:01:52,679
+two facts alone force the Schrödinger equation and the commutator.
+
+38
+00:01:52,679 --> 00:01:55,529
+The second is Feynman's sum over paths.
+
+39
+00:01:55,529 --> 00:01:59,992
+The third runs backward from classical mechanics, and explains the old quantum
+
+40
+00:01:59,992 --> 00:02:02,204
+rules of Bohr and Sommerfeld.
+
+41
+00:02:02,204 --> 00:02:05,892
+All three arrive at the same theory.
+
+42
+00:02:06,342 --> 00:02:07,954
+Then we'll use the theory.
+
+43
+00:02:07,954 --> 00:02:12,467
+Approximation methods for real atoms, what identical particles do, from helium
+
+44
+00:02:12,467 --> 00:02:16,367
+to the periodic table and solids, what happens to interference when a system
+
+45
+00:02:16,367 --> 00:02:20,642
+touches its environment, and finally Dirac's equation, where relativity brings
+
+46
+00:02:20,642 --> 00:02:22,004
+in antimatter.
+
+47
+00:02:22,004 --> 00:02:25,579
+This is Part 2, and it's more mathematical than Part 1;
+
+48
+00:02:25,579 --> 00:02:29,842
+it assumes the wavefunction, operators, commutators and the hydrogen atom
+
+49
+00:02:29,842 --> 00:02:30,829
+from there.
+
+50
+00:02:30,829 --> 00:02:34,692
+Every derivation is on screen, and every picture is computed.
+
+51
+00:02:36,873 --> 00:02:37,536
+Part 1:
+
+52
+00:02:37,536 --> 00:02:39,823
+Symmetry.
+
+53
+00:02:40,581 --> 00:02:43,181
+What is a symmetry, in quantum mechanics?
+
+54
+00:02:43,181 --> 00:02:47,819
+It's a change in how we describe things that leaves every prediction unchanged:
+
+55
+00:02:47,819 --> 00:02:51,831
+turn your lab around, start your clock later, move everything a meter to the
+
+56
+00:02:51,831 --> 00:02:52,794
+left.
+
+57
+00:02:52,794 --> 00:02:57,331
+Every prediction is a probability, the squared size of an inner product, so
+
+58
+00:02:57,331 --> 00:03:01,356
+a symmetry must preserve the size of every inner product.
+
+59
+00:03:01,356 --> 00:03:06,769
+Eugene Wigner showed in 1931 that such a map can always be chosen to be unitary,
+
+60
+00:03:06,769 --> 00:03:12,256
+U dagger U equals one, which preserves inner products exactly, or antiunitary,
+
+61
+00:03:12,256 --> 00:03:14,269
+which also conjugates them;
+
+62
+00:03:14,269 --> 00:03:17,756
+that second kind is needed only for time reversal.
+
+63
+00:03:17,756 --> 00:03:22,256
+Geometrically, a unitary is a rigid rotation of Hilbert space:
+
+64
+00:03:22,256 --> 00:03:26,206
+lengths and angles all stay the same.
+
+65
+00:03:26,423 --> 00:03:28,186
+Now apply this to time.
+
+66
+00:03:28,186 --> 00:03:32,123
+Let U of t take any state at time zero to the state at time t.
+
+67
+00:03:32,123 --> 00:03:36,861
+If the laws are the same at every moment, evolving for s and then for t is
+
+68
+00:03:36,861 --> 00:03:39,598
+the same as evolving for s plus t:
+
+69
+00:03:39,598 --> 00:03:46,023
+U of t plus s equals U of t times U of s, with U of zero the identity.
+
+70
+00:03:46,023 --> 00:03:50,523
+A family like this is called a one-parameter group, and Marshall Stone proved
+
+71
+00:03:50,523 --> 00:03:57,173
+in 1932 that every continuous one has the form e to the minus i t H over h-bar,
+
+72
+00:03:57,173 --> 00:04:01,523
+for a unique self-adjoint operator H.
+
+73
+00:04:01,973 --> 00:04:03,873
+Here's the heart of that argument.
+
+74
+00:04:03,873 --> 00:04:07,936
+For a tiny time epsilon, U is the identity plus something small:
+
+75
+00:04:07,936 --> 00:04:11,011
+call it minus i epsilon H over h-bar.
+
+76
+00:04:11,011 --> 00:04:12,086
+That defines H.
+
+77
+00:04:12,086 --> 00:04:13,948
+Now demand unitarity.
+
+78
+00:04:13,948 --> 00:04:16,048
+Multiply out U dagger U:
+
+79
+00:04:16,048 --> 00:04:21,148
+the first-order term is i epsilon over h-bar times H dagger minus H, and it
+
+80
+00:04:21,148 --> 00:04:22,398
+must vanish.
+
+81
+00:04:22,398 --> 00:04:24,486
+So H equals its own adjoint:
+
+82
+00:04:24,486 --> 00:04:26,190
+it's Hermitian.
+
+83
+00:04:26,190 --> 00:04:28,140
+Now differentiate the group law:
+
+84
+00:04:28,140 --> 00:04:32,877
+the change in U over a short time is U of epsilon minus one, over epsilon,
+
+85
+00:04:32,877 --> 00:04:33,765
+times U of t.
+
+86
+00:04:33,765 --> 00:04:37,677
+By the first line, that's minus i over h-bar, H, U.
+
+87
+00:04:37,677 --> 00:04:42,165
+Act on any state, and you get i h-bar times the time derivative of psi equals
+
+88
+00:04:42,165 --> 00:04:43,452
+H psi.
+
+89
+00:04:43,452 --> 00:04:46,402
+The Schrödinger equation, with no waves anywhere:
+
+90
+00:04:46,402 --> 00:04:50,515
+only the assumption that the laws don't change with time, and that probabilities
+
+91
+00:04:50,515 --> 00:04:53,040
+are conserved.
+
+92
+00:04:53,548 --> 00:04:56,061
+And the i is no longer mysterious.
+
+93
+00:04:56,061 --> 00:05:01,398
+A unitary operator close to the identity is the identity plus a small anti-Hermitian
+
+94
+00:05:01,398 --> 00:05:02,461
+operator;
+
+95
+00:05:02,461 --> 00:05:06,761
+writing it as minus i times a Hermitian one is bookkeeping that makes H's
+
+96
+00:05:06,761 --> 00:05:08,461
+eigenvalues real.
+
+97
+00:05:08,461 --> 00:05:10,461
+You've seen the same thing in the plane:
+
+98
+00:05:10,461 --> 00:05:15,261
+rotating a vector, its velocity is always perpendicular to it, and the matrix
+
+99
+00:05:15,261 --> 00:05:19,373
+J that turns a vector a quarter turn squares to minus one.
+
+100
+00:05:19,373 --> 00:05:24,148
+Exponentiate a generator like that, term by term, and the partial sums spiral
+
+101
+00:05:24,148 --> 00:05:25,411
+onto the circle.
+
+102
+00:05:25,411 --> 00:05:28,523
+Rotations come from an i.
+
+103
+00:05:29,373 --> 00:05:30,223
+What is H?
+
+104
+00:05:30,223 --> 00:05:34,398
+It's the generator of time translations, and it commutes with U, so its average
+
+105
+00:05:34,398 --> 00:05:35,761
+never changes.
+
+106
+00:05:35,761 --> 00:05:40,311
+That's what energy is, in quantum mechanics and in classical mechanics alike.
+
+107
+00:05:40,311 --> 00:05:44,036
+The constant h-bar just converts the rate at which phases turn into units
+
+108
+00:05:44,036 --> 00:05:47,236
+of energy, and its value comes from experiment.
+
+109
+00:05:47,236 --> 00:05:51,423
+For an energy eigenstate the evolution is a single turning phase, e to the
+
+110
+00:05:51,423 --> 00:05:53,861
+minus i E t over h-bar:
+
+111
+00:05:53,861 --> 00:05:55,648
+Part 1's clocks.
+
+112
+00:05:55,648 --> 00:06:00,323
+And for a spin in a magnetic field, U of t is a rigid rotation of the whole
+
+113
+00:06:00,323 --> 00:06:01,973
+Bloch sphere about the field.
+
+114
+00:06:03,971 --> 00:06:05,784
+Space works the same way.
+
+115
+00:06:05,784 --> 00:06:09,559
+Let T of a be the operator that slides every wavefunction a distance a to
+
+116
+00:06:09,559 --> 00:06:10,521
+the right:
+
+117
+00:06:10,521 --> 00:06:12,709
+psi of x becomes psi of x minus a.
+
+118
+00:06:12,709 --> 00:06:17,071
+Sliding twice adds the distances, and nothing about probabilities changes,
+
+119
+00:06:17,071 --> 00:06:22,484
+so T is a one-parameter unitary group, and by Stone's theorem it has a generator.
+
+120
+00:06:22,484 --> 00:06:23,584
+Call it P:
+
+121
+00:06:23,584 --> 00:06:27,384
+T of a equals e to the minus i a P over h-bar.
+
+122
+00:06:27,384 --> 00:06:29,471
+This is the definition of momentum:
+
+123
+00:06:29,471 --> 00:06:31,896
+the generator of translations.
+
+124
+00:06:31,896 --> 00:06:36,721
+If the Hamiltonian doesn't care where things are, H commutes with T, and momentum
+
+125
+00:06:36,721 --> 00:06:39,271
+is conserved.
+
+126
+00:06:39,454 --> 00:06:43,742
+Now we can derive the commutator, instead of computing it from a guess.
+
+127
+00:06:43,742 --> 00:06:48,817
+A position eigenstate, slid by a, is the position eigenstate at x plus a.
+
+128
+00:06:48,817 --> 00:06:52,892
+So measuring position after the slide gives x plus a, and before it gives
+
+129
+00:06:52,892 --> 00:06:53,817
+x:
+
+130
+00:06:53,817 --> 00:06:57,179
+X and T fail to commute, by exactly a times T.
+
+131
+00:06:57,179 --> 00:07:01,371
+That's true for every x, so it's an operator equation.
+
+132
+00:07:01,371 --> 00:07:03,534
+Expand T for a small slide:
+
+133
+00:07:03,534 --> 00:07:06,096
+one minus i a P over h-bar.
+
+134
+00:07:06,096 --> 00:07:10,759
+The identity commutes with everything, and what's left is minus i a over h-bar
+
+135
+00:07:10,759 --> 00:07:13,696
+times X P minus P X, equal to a.
+
+136
+00:07:13,696 --> 00:07:15,084
+Divide by a:
+
+137
+00:07:15,084 --> 00:07:18,409
+X P minus P X equals i h-bar.
+
+138
+00:07:18,409 --> 00:07:22,571
+The canonical commutation relation is just the statement that momentum moves
+
+139
+00:07:22,571 --> 00:07:24,946
+position.
+
+140
+00:07:25,379 --> 00:07:27,717
+And the formula for momentum follows.
+
+141
+00:07:27,717 --> 00:07:31,779
+In the position basis, the slid wavefunction is psi of x minus a.
+
+142
+00:07:31,779 --> 00:07:34,542
+Expand both sides to first order in a:
+
+143
+00:07:34,542 --> 00:07:38,229
+Taylor's theorem on one side, the generator on the other.
+
+144
+00:07:38,229 --> 00:07:43,267
+Matching them, P acting on psi is minus i h-bar times the derivative.
+
+145
+00:07:43,267 --> 00:07:44,604
+Part 1 guessed this;
+
+146
+00:07:44,604 --> 00:07:47,129
+here it's forced.
+
+147
+00:07:47,596 --> 00:07:49,746
+One consequence is startling.
+
+148
+00:07:49,746 --> 00:07:55,196
+No finite matrices can satisfy X P minus P X equals i h-bar.
+
+149
+00:07:55,196 --> 00:07:59,759
+The trace of any commutator is zero, because the trace of X P equals the trace
+
+150
+00:07:59,759 --> 00:08:00,759
+of P X.
+
+151
+00:08:00,759 --> 00:08:06,121
+Here's a random five-by-five example, whose diagonal entries cancel exactly.
+
+152
+00:08:06,121 --> 00:08:11,896
+But the trace of i h-bar times the identity is i h-bar times the dimension.
+
+153
+00:08:11,896 --> 00:08:16,446
+So the Hilbert space of a particle on a line has to be infinite-dimensional,
+
+154
+00:08:16,446 --> 00:08:21,434
+and, as Stone and von Neumann proved, any operators satisfying the relation
+
+155
+00:08:21,434 --> 00:08:26,084
+are just x and minus i h-bar d d x in disguise.
+
+156
+00:08:26,084 --> 00:08:31,571
+That's why Heisenberg's matrices and Schrödinger's waves had to agree.
+
+157
+00:08:32,029 --> 00:08:36,404
+Boosts, changing to a frame moving at velocity v, give the rest.
+
+158
+00:08:36,404 --> 00:08:41,379
+Seen from the moving frame, every momentum shifts by m v, and on a wavefunction
+
+159
+00:08:41,379 --> 00:08:45,892
+that's multiplication by e to the i m v x over h-bar:
+
+160
+00:08:45,892 --> 00:08:49,729
+a twist of the phase that winds the colors faster, while the density doesn't
+
+161
+00:08:49,729 --> 00:08:51,054
+change at all.
+
+162
+00:08:51,054 --> 00:08:56,779
+Watch the momentum distribution slide over by exactly m v.
+
+163
+00:08:56,921 --> 00:08:59,646
+Now require that velocities add properly:
+
+164
+00:08:59,646 --> 00:09:03,996
+the rate of change of X, which by the Heisenberg equation is i over h-bar
+
+165
+00:09:03,996 --> 00:09:09,059
+times the commutator of H with X, must be P over m in every frame.
+
+166
+00:09:09,059 --> 00:09:14,434
+The kinetic energy, P squared over 2m, has exactly that commutator with X.
+
+167
+00:09:14,434 --> 00:09:19,496
+So H minus P squared over 2m commutes with X, and anything that commutes with
+
+168
+00:09:19,496 --> 00:09:22,396
+position is a function of position.
+
+169
+00:09:22,396 --> 00:09:25,796
+H equals P squared over 2m plus V of X.
+
+170
+00:09:25,796 --> 00:09:31,396
+The form of the Hamiltonian, derived from Galilean relativity.
+
+171
+00:09:31,829 --> 00:09:34,692
+One last detail will come back again and again.
+
+172
+00:09:34,692 --> 00:09:38,079
+Slide by a and then boost, or boost and then slide:
+
+173
+00:09:38,079 --> 00:09:43,229
+the results differ only by a phase, e to the minus i m v a over h-bar.
+
+174
+00:09:43,229 --> 00:09:48,479
+And m v a is the area of a rectangle in phase space, a wide and m v tall.
+
+175
+00:09:48,479 --> 00:09:50,929
+Phase equals area over h-bar.
+
+176
+00:09:50,929 --> 00:09:54,954
+We'll meet it next with magnetic flux, and later in the old quantum rules.
+
+177
+00:09:57,002 --> 00:10:01,277
+Rotations are the third symmetry, and the most interesting, because they don't
+
+178
+00:10:01,277 --> 00:10:02,265
+commute.
+
+179
+00:10:02,265 --> 00:10:06,102
+Turn a book a quarter turn about one axis and then about another;
+
+180
+00:10:06,102 --> 00:10:08,290
+now do it in the opposite order.
+
+181
+00:10:08,290 --> 00:10:12,002
+The book ends up facing a different way.
+
+182
+00:10:12,135 --> 00:10:13,873
+Even for tiny turns:
+
+183
+00:10:13,873 --> 00:10:18,773
+rotate by epsilon about x, then about y, then undo both, and you're left with
+
+184
+00:10:18,773 --> 00:10:21,960
+a rotation about z by epsilon squared.
+
+185
+00:10:21,960 --> 00:10:25,210
+Here are the numbers, for real rotation matrices:
+
+186
+00:10:25,210 --> 00:10:29,710
+the leftover angle divided by epsilon squared goes to one, and its axis to
+
+187
+00:10:29,710 --> 00:10:31,960
+z.
+
+188
+00:10:32,360 --> 00:10:37,510
+Each rotation is a unitary, e to the minus i theta J over h-bar, and the three
+
+189
+00:10:37,510 --> 00:10:40,573
+generators are the components of angular momentum.
+
+190
+00:10:40,573 --> 00:10:44,785
+Expand that loop of four rotations to second order, match it to the leftover
+
+191
+00:10:44,785 --> 00:10:51,098
+rotation about z, and you get J x J y minus J y J x equals i h-bar J z, and
+
+192
+00:10:51,098 --> 00:10:53,498
+the same for every cyclic pair.
+
+193
+00:10:53,498 --> 00:10:58,610
+That one algebraic relation determines every possible value of angular momentum,
+
+194
+00:10:58,610 --> 00:11:02,110
+without solving any equation.
+
+195
+00:11:02,569 --> 00:11:03,456
+Here's how.
+
+196
+00:11:03,456 --> 00:11:07,481
+Combine J x and J y into J plus and J minus.
+
+197
+00:11:07,481 --> 00:11:12,656
+Their commutator with J z is plus or minus h-bar times themselves, so J plus
+
+198
+00:11:12,656 --> 00:11:17,756
+raises the z component by one unit of h-bar, and J minus lowers it.
+
+199
+00:11:17,756 --> 00:11:22,531
+The total, J squared, commutes with all three components, so the whole ladder
+
+200
+00:11:22,531 --> 00:11:25,144
+shares one value of J squared.
+
+201
+00:11:25,144 --> 00:11:29,519
+But J z squared can't exceed J squared, so the ladder has a top rung, where
+
+202
+00:11:29,519 --> 00:11:32,306
+J plus gives zero, and a bottom rung.
+
+203
+00:11:32,306 --> 00:11:37,031
+Multiply out J minus J plus, apply it to the top rung, and J squared equals
+
+204
+00:11:37,031 --> 00:11:40,156
+h-bar squared, j times j plus one.
+
+205
+00:11:40,156 --> 00:11:44,169
+Do the same at the bottom with J plus J minus, and the bottom rung must be
+
+206
+00:11:44,169 --> 00:11:44,969
+at minus j.
+
+207
+00:11:44,969 --> 00:11:49,594
+Getting from minus j to j takes a whole number of steps, so two j is a whole
+
+208
+00:11:49,594 --> 00:11:51,744
+number.
+
+209
+00:11:52,202 --> 00:11:56,465
+So j can be zero, one, two, but also one half, three halves.
+
+210
+00:11:56,465 --> 00:12:01,465
+Orbital angular momentum, x cross p, only gives whole numbers, because the
+
+211
+00:12:01,465 --> 00:12:06,065
+phase e to the i m phi has to come back to itself after a full turn.
+
+212
+00:12:06,065 --> 00:12:09,802
+The half-integers are spin, and the algebra allowed them before anyone knew
+
+213
+00:12:09,802 --> 00:12:10,990
+they were needed:
+
+214
+00:12:10,990 --> 00:12:15,077
+a rotation by three hundred sixty degrees multiplies such a state by minus
+
+215
+00:12:15,077 --> 00:12:19,802
+one, the sign Part 1 found for the electron.
+
+216
+00:12:20,235 --> 00:12:24,110
+Here's the ladder for j equals two, painted on spheres:
+
+217
+00:12:24,110 --> 00:12:28,810
+the color is the phase of each spherical harmonic, the brightness its size.
+
+218
+00:12:28,810 --> 00:12:33,435
+Going up, the phase winds once more around the vertical axis, and each step
+
+219
+00:12:33,435 --> 00:12:38,760
+multiplies by exactly the square root of l times l plus one, minus m times
+
+220
+00:12:38,760 --> 00:12:43,910
+m plus one, checked here on a grid to better than one part in ten thousand.
+
+221
+00:12:43,910 --> 00:12:49,560
+And because J squared is j times j plus one, h-bar squared, while J z is at
+
+222
+00:12:49,560 --> 00:12:54,985
+most j h-bar, angular momentum can never point exactly along an axis:
+
+223
+00:12:54,985 --> 00:12:57,810
+the other two components can never both be zero.
+
+224
+00:12:59,841 --> 00:13:04,429
+Part 1 showed that multiplying the whole wavefunction by one phase, e to the
+
+225
+00:13:04,429 --> 00:13:06,741
+i alpha, changes nothing.
+
+226
+00:13:06,741 --> 00:13:08,779
+So here's a bolder question.
+
+227
+00:13:08,779 --> 00:13:12,516
+What if we change the phase by a different amount at every point?
+
+228
+00:13:12,516 --> 00:13:18,241
+The colors scramble, but every probability stays exactly the same.
+
+229
+00:13:18,341 --> 00:13:21,279
+The Schrödinger equation, however, notices.
+
+230
+00:13:21,279 --> 00:13:24,666
+Apply the momentum operator to the new wavefunction.
+
+231
+00:13:24,666 --> 00:13:29,104
+The product rule brings down an extra term, the gradient of the phase:
+
+232
+00:13:29,104 --> 00:13:33,229
+as far as the equation is concerned, the particle has been given a momentum
+
+233
+00:13:33,229 --> 00:13:36,079
+kick that varies from place to place.
+
+234
+00:13:36,079 --> 00:13:39,541
+A pure change of bookkeeping would change the physics.
+
+235
+00:13:39,541 --> 00:13:42,016
+There's only one way to rescue the symmetry.
+
+236
+00:13:42,016 --> 00:13:46,066
+Introduce a field, A, that shifts by the same gradient whenever the phase
+
+237
+00:13:46,066 --> 00:13:49,529
+is changed, and use p minus q A in place of p.
+
+238
+00:13:49,529 --> 00:13:52,129
+Now the extra terms cancel exactly:
+
+239
+00:13:52,129 --> 00:13:56,429
+p minus q A acting on the new wavefunction is just the phase factor times
+
+240
+00:13:56,429 --> 00:13:59,054
+p minus q A acting on the old one.
+
+241
+00:13:59,054 --> 00:14:02,974
+Do the same with time, and you need a second field, phi.
+
+242
+00:14:02,974 --> 00:14:08,337
+The Hamiltonian becomes p minus q A, squared, over 2m, plus q phi:
+
+243
+00:14:08,337 --> 00:14:12,699
+exactly how a charge couples to the electromagnetic potentials, with the electric
+
+244
+00:14:12,699 --> 00:14:17,074
+and magnetic fields, built from derivatives of A and phi, unchanged by the
+
+245
+00:14:17,074 --> 00:14:18,537
+phase change.
+
+246
+00:14:18,537 --> 00:14:23,537
+Fock, London and Weyl found this between 1926 and 1929:
+
+247
+00:14:23,537 --> 00:14:29,924
+demand that local phase changes be a symmetry, and electromagnetism appears.
+
+248
+00:14:30,366 --> 00:14:32,404
+This has a startling consequence.
+
+249
+00:14:32,404 --> 00:14:37,191
+A charged particle moving along a path picks up an extra phase, q over h-bar
+
+250
+00:14:37,191 --> 00:14:39,816
+times the integral of A along the path.
+
+251
+00:14:39,816 --> 00:14:43,316
+For two paths that start and end together, the difference is the integral
+
+252
+00:14:43,316 --> 00:14:47,216
+around the loop, which by Stokes' theorem is the magnetic flux through the
+
+253
+00:14:47,216 --> 00:14:48,104
+loop.
+
+254
+00:14:48,104 --> 00:14:53,104
+So the relative phase is q times the flux, over h-bar, even if the magnetic
+
+255
+00:14:53,104 --> 00:14:56,291
+field is zero everywhere the particle goes.
+
+256
+00:14:56,291 --> 00:14:58,966
+Phase equals area over h-bar again;
+
+257
+00:14:58,966 --> 00:15:02,291
+this time the area is threaded by magnetic flux.
+
+258
+00:15:02,291 --> 00:15:07,366
+Aharonov and Bohm pointed this out in 1959.
+
+259
+00:15:07,799 --> 00:15:09,862
+Here's the effect, simulated.
+
+260
+00:15:09,862 --> 00:15:12,599
+An electron wave passes through two slits;
+
+261
+00:15:12,599 --> 00:15:16,799
+hidden inside the wall between them is a thin tube of magnetic flux.
+
+262
+00:15:16,799 --> 00:15:18,424
+The wave never reaches it:
+
+263
+00:15:18,424 --> 00:15:21,974
+the density there stays below a ten-thousandth of its peak.
+
+264
+00:15:21,974 --> 00:15:23,924
+On the left, no flux.
+
+265
+00:15:23,924 --> 00:15:27,962
+On the right, half a flux quantum, and the bright central fringe has become
+
+266
+00:15:27,962 --> 00:15:30,449
+a dark line.
+
+267
+00:15:30,683 --> 00:15:34,545
+Now turn the flux up slowly, and watch the pattern on the screen.
+
+268
+00:15:34,545 --> 00:15:38,933
+The fringes slide sideways under a fixed envelope, by one whole fringe for
+
+269
+00:15:38,933 --> 00:15:44,370
+each flux quantum, h over e, and then the pattern is exactly what it was.
+
+270
+00:15:44,370 --> 00:15:48,633
+The electrons never touch the magnetic field, yet they know how much flux
+
+271
+00:15:48,633 --> 00:15:51,208
+they went around.
+
+272
+00:15:51,691 --> 00:15:57,204
+In 1986 Akira Tonomura's group at Hitachi did it with electrons passing around
+
+273
+00:15:57,204 --> 00:16:02,141
+a tiny ring-shaped magnet, sealed inside a superconductor so that no field
+
+274
+00:16:02,141 --> 00:16:03,479
+could leak out.
+
+275
+00:16:03,479 --> 00:16:08,591
+A superconducting ring traps flux only in multiples of h over 2e, half a flux
+
+276
+00:16:08,591 --> 00:16:13,529
+quantum, so the fringes could only be shifted by zero or by half a fringe.
+
+277
+00:16:13,529 --> 00:16:15,316
+That's exactly what they saw.
+
+278
+00:16:17,372 --> 00:16:18,085
+Part 2:
+
+279
+00:16:18,085 --> 00:16:20,772
+Sums over paths.
+
+280
+00:16:21,530 --> 00:16:24,980
+Everything about time evolution is packed into one function:
+
+281
+00:16:24,980 --> 00:16:29,480
+the amplitude to start at x a and be found at x b a time t later, called the
+
+282
+00:16:29,480 --> 00:16:30,768
+propagator, K.
+
+283
+00:16:30,768 --> 00:16:34,930
+Any initial wavefunction evolves by adding up the propagator from every starting
+
+284
+00:16:34,930 --> 00:16:35,918
+point.
+
+285
+00:16:35,918 --> 00:16:39,643
+For a free particle it's a Gaussian with an imaginary exponent:
+
+286
+00:16:39,643 --> 00:16:43,730
+its size is the same everywhere, and its phase grows with the square of the
+
+287
+00:16:43,730 --> 00:16:47,830
+distance, so the colors cycle faster and faster.
+
+288
+00:16:47,830 --> 00:16:53,530
+A particle that starts at one point can be found anywhere a moment later.
+
+289
+00:16:53,689 --> 00:16:57,251
+Feynman's way of thinking about K starts with the double slit.
+
+290
+00:16:57,251 --> 00:16:58,476
+Add a third slit:
+
+291
+00:16:58,476 --> 00:16:59,726
+three paths.
+
+292
+00:16:59,726 --> 00:17:01,989
+Add a second screen with its own slits:
+
+293
+00:17:01,989 --> 00:17:05,076
+the amplitude is a sum over every way through both.
+
+294
+00:17:05,076 --> 00:17:08,714
+Keep adding screens and drilling holes, until there's nothing left of the
+
+295
+00:17:08,714 --> 00:17:09,889
+screens.
+
+296
+00:17:09,889 --> 00:17:15,289
+Now the amplitude is a sum over every path from source to detector.
+
+297
+00:17:15,730 --> 00:17:18,393
+Here's the same idea as mathematics.
+
+298
+00:17:18,393 --> 00:17:22,705
+Cut the time into N short steps of length epsilon, so the evolution is U of
+
+299
+00:17:22,705 --> 00:17:25,080
+epsilon, applied N times.
+
+300
+00:17:25,080 --> 00:17:28,293
+At each intermediate time, the particle could be anywhere:
+
+301
+00:17:28,293 --> 00:17:31,155
+x 1, x 2, and so on.
+
+302
+00:17:31,155 --> 00:17:33,755
+One choice of all of them is a zigzag path;
+
+303
+00:17:33,755 --> 00:17:37,255
+every choice is a different zigzag.
+
+304
+00:17:37,755 --> 00:17:40,680
+Write the propagator as N short evolutions.
+
+305
+00:17:40,680 --> 00:17:44,718
+Between each pair of factors, insert a complete set of positions:
+
+306
+00:17:44,718 --> 00:17:48,418
+one integral over x k for each intermediate time.
+
+307
+00:17:48,418 --> 00:17:52,455
+For one short step, the propagator is the free one times a phase from the
+
+308
+00:17:52,455 --> 00:17:57,855
+potential, and its exponent is i epsilon over h-bar times the kinetic minus
+
+309
+00:17:57,855 --> 00:17:59,430
+the potential energy:
+
+310
+00:17:59,430 --> 00:18:01,255
+the Lagrangian.
+
+311
+00:18:01,255 --> 00:18:05,843
+Multiply N of these together and the exponents add up to i over h-bar times
+
+312
+00:18:05,843 --> 00:18:08,530
+the action of the zigzag path through all the x k.
+
+313
+00:18:08,530 --> 00:18:12,418
+Integrating over every x k means adding up every zigzag.
+
+314
+00:18:12,418 --> 00:18:17,968
+In the limit, K is the integral over all paths of e to the i S over h-bar.
+
+315
+00:18:17,968 --> 00:18:23,780
+Dirac noticed in 1933 that e to the i S over h-bar plays this role;
+
+316
+00:18:23,780 --> 00:18:29,655
+Feynman, in 1948, showed it is all of quantum mechanics.
+
+317
+00:18:30,097 --> 00:18:31,960
+Can we actually do this sum?
+
+318
+00:18:31,960 --> 00:18:36,597
+In real time the arrows spin so fast that sampling paths is hopeless.
+
+319
+00:18:36,597 --> 00:18:41,097
+But if we let time be imaginary, each path gets a positive weight, e to the
+
+320
+00:18:41,097 --> 00:18:45,672
+minus the action, and the paths become Brownian motion, the subject of our
+
+321
+00:18:45,672 --> 00:18:47,885
+stochastic calculus video.
+
+322
+00:18:47,885 --> 00:18:50,760
+Then the sum is ordinary arithmetic.
+
+323
+00:18:50,760 --> 00:18:55,489
+Here's the short-time kernel of the harmonic oscillator, as a matrix.
+
+324
+00:18:55,489 --> 00:18:57,951
+Multiply it by itself again and again:
+
+325
+00:18:57,951 --> 00:19:02,189
+any starting shape relaxes onto the ground state, the Gaussian, and the rate
+
+326
+00:19:02,189 --> 00:19:05,014
+at which it shrinks gives the ground-state energy.
+
+327
+00:19:05,014 --> 00:19:09,401
+With epsilon equal to one, the estimate is 0.481;
+
+328
+00:19:09,401 --> 00:19:14,051
+at 0.05 it's 0.49995.
+
+329
+00:19:14,051 --> 00:19:19,564
+The error falls like epsilon squared, toward exactly one half.
+
+330
+00:19:19,997 --> 00:19:22,260
+Or sample the paths themselves.
+
+331
+00:19:22,260 --> 00:19:26,872
+Here are closed random paths in imaginary time, each drawn with its proper
+
+332
+00:19:26,872 --> 00:19:29,885
+weight, each with a hundred time slices.
+
+333
+00:19:29,885 --> 00:19:33,847
+Histogram where they spend their time, and you get the ground-state density,
+
+334
+00:19:33,847 --> 00:19:36,447
+computed from nothing but a sum over paths.
+
+335
+00:19:38,492 --> 00:19:42,305
+Feynman's formulation has to agree with Schrödinger's, and checking that is
+
+336
+00:19:42,305 --> 00:19:44,455
+a beautiful piece of calculus.
+
+337
+00:19:44,455 --> 00:19:47,742
+Advance the wavefunction by one short step epsilon:
+
+338
+00:19:47,742 --> 00:19:52,205
+integrate the short-time kernel against psi, over every displacement eta.
+
+339
+00:19:52,205 --> 00:19:56,355
+The kernel's phase is m eta squared over two h-bar epsilon.
+
+340
+00:19:56,355 --> 00:20:00,867
+Outside a window of width about the square root of h-bar epsilon over m, it
+
+341
+00:20:00,867 --> 00:20:04,567
+oscillates so fast that its contributions cancel.
+
+342
+00:20:04,567 --> 00:20:09,455
+As epsilon shrinks, the window shrinks, but only like the square root of epsilon.
+
+343
+00:20:09,455 --> 00:20:12,992
+That square root is the whole story.
+
+344
+00:20:13,126 --> 00:20:16,301
+Expand psi of x plus eta in a Taylor series.
+
+345
+00:20:16,301 --> 00:20:20,413
+Normally we'd keep only the first-order term, but here eta squared is as big
+
+346
+00:20:20,413 --> 00:20:23,701
+as epsilon, so the second derivative stays in.
+
+347
+00:20:23,701 --> 00:20:26,076
+Now we need three Gaussian integrals.
+
+348
+00:20:26,076 --> 00:20:29,638
+The kernel's normalization makes the first one exactly one.
+
+349
+00:20:29,638 --> 00:20:31,976
+The second vanishes by symmetry.
+
+350
+00:20:31,976 --> 00:20:36,926
+And the third, the average of eta squared, is i h-bar epsilon over m:
+
+351
+00:20:36,926 --> 00:20:39,692
+the spread of the step, with an i in it.
+
+352
+00:20:39,692 --> 00:20:42,417
+Collect everything to first order in epsilon.
+
+353
+00:20:42,417 --> 00:20:45,842
+On the left, psi plus epsilon times its time derivative;
+
+354
+00:20:45,842 --> 00:20:50,317
+on the right, the potential's phase times psi plus i h-bar epsilon over 2m
+
+355
+00:20:50,317 --> 00:20:52,117
+times psi double prime.
+
+356
+00:20:52,117 --> 00:20:53,880
+The psi terms cancel.
+
+357
+00:20:53,880 --> 00:20:58,367
+Multiply by i h-bar over epsilon, and out comes the Schrödinger equation,
+
+358
+00:20:58,367 --> 00:20:59,942
+every factor in place:
+
+359
+00:20:59,942 --> 00:21:03,892
+the i, the h-bar squared over 2m, and the potential.
+
+360
+00:21:03,892 --> 00:21:08,867
+Feynman did exactly this in his 1948 paper.
+
+361
+00:21:09,301 --> 00:21:12,688
+That i h-bar epsilon over m deserves a second look.
+
+362
+00:21:12,688 --> 00:21:16,376
+A step of size eta, whose square is proportional to the time step:
+
+363
+00:21:16,376 --> 00:21:20,576
+it's the same rule as d W squared equals d t, the heart of the stochastic
+
+364
+00:21:20,576 --> 00:21:22,613
+calculus video, just with an i.
+
+365
+00:21:22,613 --> 00:21:26,863
+It means the paths that matter in Feynman's sum are not smooth curves at all.
+
+366
+00:21:26,863 --> 00:21:31,301
+Here is a typical path, in imaginary time, at four zoom levels, each eight
+
+367
+00:21:31,301 --> 00:21:32,488
+times closer:
+
+368
+00:21:32,488 --> 00:21:34,151
+it never smooths out.
+
+369
+00:21:34,151 --> 00:21:39,401
+The kinetic term in the Schrödinger equation is the trace of that roughness.
+
+370
+00:21:39,834 --> 00:21:42,084
+The time-slicing isn't just a proof device;
+
+371
+00:21:42,084 --> 00:21:43,384
+it's an algorithm.
+
+372
+00:21:43,384 --> 00:21:47,109
+Split each short step into half a step of potential phase, the free kernel,
+
+373
+00:21:47,109 --> 00:21:49,184
+and another half step of potential.
+
+374
+00:21:49,184 --> 00:21:53,384
+The free kernel is just multiplication in momentum space, one fast Fourier
+
+375
+00:21:53,384 --> 00:21:54,796
+transform away.
+
+376
+00:21:54,796 --> 00:21:57,921
+That's how every simulation in Part 1 was computed.
+
+377
+00:21:57,921 --> 00:22:02,784
+Here's a wave packet in an anharmonic well, evolved with fewer and fewer slices,
+
+378
+00:22:02,784 --> 00:22:04,734
+compared with the exact answer:
+
+379
+00:22:04,734 --> 00:22:07,109
+the error falls like epsilon squared.
+
+380
+00:22:09,074 --> 00:22:13,087
+If every path counts, why does a thrown ball follow just one?
+
+381
+00:22:13,087 --> 00:22:16,649
+Take a ball thrown straight up and caught again two seconds later.
+
+382
+00:22:16,649 --> 00:22:19,499
+The classical path is a parabola in time.
+
+383
+00:22:19,499 --> 00:22:24,099
+Now consider a whole family of other paths with the same start and end, bent
+
+384
+00:22:24,099 --> 00:22:26,291
+by different amounts a.
+
+385
+00:22:26,291 --> 00:22:30,116
+For each one, compute the action, the integral of kinetic minus potential
+
+386
+00:22:30,116 --> 00:22:31,103
+energy.
+
+387
+00:22:31,103 --> 00:22:34,891
+Plotted against a, it's a parabola, smallest at a equals zero:
+
+388
+00:22:34,891 --> 00:22:36,328
+the classical path.
+
+389
+00:22:36,328 --> 00:22:40,441
+Each path's arrow turns by S over h-bar, and that's its color.
+
+390
+00:22:40,441 --> 00:22:44,603
+Near the bottom, neighboring paths have almost the same action, so their arrows
+
+391
+00:22:44,603 --> 00:22:46,141
+point the same way.
+
+392
+00:22:46,141 --> 00:22:51,366
+Far from it, the action changes quickly, and their arrows spin.
+
+393
+00:22:51,716 --> 00:22:54,366
+Add the arrows tip to tail, in order of a.
+
+394
+00:22:54,366 --> 00:22:58,566
+The middle of the chain, from paths near the classical one, is a long straight
+
+395
+00:22:58,566 --> 00:22:59,478
+run.
+
+396
+00:22:59,478 --> 00:23:02,628
+The ends curl into tight spirals that go nowhere:
+
+397
+00:23:02,628 --> 00:23:04,991
+those paths cancel each other out.
+
+398
+00:23:04,991 --> 00:23:09,378
+This curve is a Cornu spiral, the same one that describes light at the edge
+
+399
+00:23:09,378 --> 00:23:11,766
+of a shadow.
+
+400
+00:23:11,974 --> 00:23:13,924
+Now make h-bar smaller.
+
+401
+00:23:13,924 --> 00:23:18,274
+The spirals wind tighter, the straight run shrinks, and fewer and fewer paths
+
+402
+00:23:18,274 --> 00:23:21,674
+around the classical one survive.
+
+403
+00:23:22,099 --> 00:23:26,487
+With two ways to bend the path, the picture is a whole plane of arrows.
+
+404
+00:23:26,487 --> 00:23:29,299
+Color each point by its arrow's direction:
+
+405
+00:23:29,299 --> 00:23:33,099
+the rings crowd together everywhere except at the center, where the action
+
+406
+00:23:33,099 --> 00:23:34,437
+is stationary.
+
+407
+00:23:34,437 --> 00:23:38,324
+That's the principle of stationary phase.
+
+408
+00:23:38,758 --> 00:23:42,483
+So the paths that survive are those where small changes don't change the action,
+
+409
+00:23:42,483 --> 00:23:43,833
+to first order.
+
+410
+00:23:43,833 --> 00:23:47,008
+Vary the path by delta x, keeping its ends fixed.
+
+411
+00:23:47,008 --> 00:23:50,908
+Integrate by parts, and the first-order change in S is the integral of delta
+
+412
+00:23:50,908 --> 00:23:52,458
+x times something.
+
+413
+00:23:52,458 --> 00:23:56,458
+For that to vanish for every delta x, the something must be zero:
+
+414
+00:23:56,458 --> 00:23:58,570
+the Euler-Lagrange equation.
+
+415
+00:23:58,570 --> 00:24:03,895
+For L equals one half m x dot squared minus V, it's m x double dot equals
+
+416
+00:24:03,895 --> 00:24:05,658
+minus V prime.
+
+417
+00:24:05,658 --> 00:24:11,108
+Newton's second law, recovered as the limit of quantum mechanics.
+
+418
+00:24:11,558 --> 00:24:13,758
+How small is h-bar, really?
+
+419
+00:24:13,758 --> 00:24:17,658
+For a one-gram ball moving at a meter per second for one second, the action
+
+420
+00:24:17,658 --> 00:24:21,295
+is about four point seven times ten to the thirty h-bars:
+
+421
+00:24:21,295 --> 00:24:25,220
+bending its path by the width of a single atom turns its arrow some forty
+
+422
+00:24:25,220 --> 00:24:26,670
+billion times.
+
+423
+00:24:26,670 --> 00:24:28,983
+Only the classical path survives.
+
+424
+00:24:28,983 --> 00:24:33,370
+For an electron in an atom, the action around an orbit is about h itself;
+
+425
+00:24:33,370 --> 00:24:36,983
+many paths contribute, and the world is quantum.
+
+426
+00:24:36,983 --> 00:24:40,283
+Fermat's principle for light rays is the same story:
+
+427
+00:24:40,283 --> 00:24:43,083
+rays are where the phases of waves are stationary.
+
+428
+00:24:45,097 --> 00:24:48,810
+The third road runs backward, from classical mechanics.
+
+429
+00:24:48,810 --> 00:24:52,760
+Look for solutions with a classical-looking action in the exponent:
+
+430
+00:24:52,760 --> 00:24:57,772
+an amplitude A times e to the i S over h-bar, both functions of x.
+
+431
+00:24:57,772 --> 00:25:01,797
+Put that into the time-independent Schrödinger equation, and sort the terms
+
+432
+00:25:01,797 --> 00:25:04,131
+by powers of h-bar.
+
+433
+00:25:04,131 --> 00:25:06,318
+At order h-bar to the zero:
+
+434
+00:25:06,318 --> 00:25:09,206
+S prime squared over 2m plus V equals E.
+
+435
+00:25:09,206 --> 00:25:12,843
+That's the Hamilton-Jacobi equation of classical mechanics:
+
+436
+00:25:12,843 --> 00:25:17,743
+S prime is the classical momentum, p of x, and the phase is the integral of
+
+437
+00:25:17,743 --> 00:25:18,056
+p.
+
+438
+00:25:18,056 --> 00:25:23,031
+At the next order, two A prime S prime plus A S double prime equals zero,
+
+439
+00:25:23,031 --> 00:25:26,306
+which says A squared times p is constant:
+
+440
+00:25:26,306 --> 00:25:28,843
+A goes like one over the square root of p.
+
+441
+00:25:28,843 --> 00:25:33,381
+Where the particle is slow, it's more likely to be found, just as a classical
+
+442
+00:25:33,381 --> 00:25:36,406
+particle spends more time where it's slow.
+
+443
+00:25:36,406 --> 00:25:41,831
+Dropping the next order is the WKB approximation, after Wentzel, Kramers and
+
+444
+00:25:41,831 --> 00:25:47,031
+Brillouin in 1926, and Jeffreys before them.
+
+445
+00:25:47,489 --> 00:25:51,351
+Here's how well it works, for a particle in a quartic well, V equals x to
+
+446
+00:25:51,351 --> 00:25:52,364
+the fourth.
+
+447
+00:25:52,364 --> 00:25:57,076
+The exact sixth state, computed numerically, and the WKB wave:
+
+448
+00:25:57,076 --> 00:26:00,926
+inside the well they're nearly indistinguishable, with short wavelengths where
+
+449
+00:26:00,926 --> 00:26:04,464
+the particle is fast, and big amplitudes where it's slow.
+
+450
+00:26:04,464 --> 00:26:08,464
+But at the turning points, where p goes to zero, one over the square root
+
+451
+00:26:08,464 --> 00:26:11,164
+of p blows up.
+
+452
+00:26:11,647 --> 00:26:15,597
+Near a turning point the potential is nearly a straight line, and the exact
+
+453
+00:26:15,597 --> 00:26:18,147
+solution there is an Airy function.
+
+454
+00:26:18,147 --> 00:26:23,097
+Matching it to the WKB wave shows that each turning point shifts the phase
+
+455
+00:26:23,097 --> 00:26:26,322
+by pi over four, an eighth of a cycle.
+
+456
+00:26:26,322 --> 00:26:30,122
+So fitting a standing wave between two turning points requires the integral
+
+457
+00:26:30,122 --> 00:26:34,922
+of p dx, there and back, to be n plus one half, times h.
+
+458
+00:26:34,922 --> 00:26:38,947
+That's Bohr and Sommerfeld's quantum condition, with the half that Kramers
+
+459
+00:26:38,947 --> 00:26:41,097
+found in 1926:
+
+460
+00:26:41,097 --> 00:26:47,047
+his paper's title is "wave mechanics and half-integer quantization."
+
+461
+00:26:47,464 --> 00:26:48,189
+The test:
+
+462
+00:26:48,189 --> 00:26:50,564
+exact energies against this rule.
+
+463
+00:26:50,564 --> 00:26:53,251
+The ground state is off by eighteen percent:
+
+464
+00:26:53,251 --> 00:26:56,614
+it has barely one bump, hardly a short wavelength.
+
+465
+00:26:56,614 --> 00:27:00,676
+But by the tenth state the error is three parts in ten thousand, and by the
+
+466
+00:27:00,676 --> 00:27:03,701
+twentieth it's less than one in ten thousand.
+
+467
+00:27:03,701 --> 00:27:08,639
+The old rule, without the half, is wrong at every n.
+
+468
+00:27:09,056 --> 00:27:10,793
+And here's the geometry.
+
+469
+00:27:10,793 --> 00:27:14,918
+Each energy level is a closed orbit in phase space, and the orbit for level
+
+470
+00:27:14,918 --> 00:27:18,206
+n encloses an area of n plus one half times h.
+
+471
+00:27:18,206 --> 00:27:22,143
+Consecutive orbits are separated by exactly one h of area:
+
+472
+00:27:22,143 --> 00:27:24,931
+each quantum state occupies one cell of size h.
+
+473
+00:27:24,931 --> 00:27:28,681
+Phase equals area over h-bar, one more time.
+
+474
+00:27:28,681 --> 00:27:32,968
+And the Wigner function of the eighth state, computed from the exact wavefunction,
+
+475
+00:27:32,968 --> 00:27:37,431
+lies right along its classical orbit, with interference ripples inside.
+
+476
+00:27:39,512 --> 00:27:44,325
+WKB's formula for tunneling solved one of the great puzzles of the 1920s.
+
+477
+00:27:44,325 --> 00:27:49,587
+Uranium-238 emits alpha particles with about 4.27 million electron volts of
+
+478
+00:27:49,587 --> 00:27:53,225
+energy, and has a half-life of four and a half billion years.
+
+479
+00:27:53,225 --> 00:27:58,550
+Polonium-212 emits them with 8.95, and lasts a third of a microsecond.
+
+480
+00:27:58,550 --> 00:28:02,112
+Twice the energy, ten to the twenty-four times faster.
+
+481
+00:28:02,112 --> 00:28:05,300
+Geiger and Nuttall had found the pattern in 1911;
+
+482
+00:28:05,300 --> 00:28:08,312
+nobody could explain it.
+
+483
+00:28:08,754 --> 00:28:13,904
+In 1928, George Gamow, and independently Ronald Gurney and Edward Condon,
+
+484
+00:28:13,904 --> 00:28:18,266
+pictured the alpha particle rattling around inside the nucleus, held in by
+
+485
+00:28:18,266 --> 00:28:22,241
+the electric repulsion of the rest of the nucleus once it's outside.
+
+486
+00:28:22,241 --> 00:28:26,241
+The repulsion makes a barrier about twenty-eight million electron volts high
+
+487
+00:28:26,241 --> 00:28:29,991
+at the nuclear surface, far above the alpha's energy.
+
+488
+00:28:29,991 --> 00:28:34,304
+Classically it could only escape beyond sixty femtometers, and it could never
+
+489
+00:28:34,304 --> 00:28:36,529
+get there.
+
+490
+00:28:36,962 --> 00:28:41,550
+Quantum mechanically, it tunnels, and WKB gives the probability:
+
+491
+00:28:41,550 --> 00:28:45,387
+e to the minus two times the integral of kappa across the forbidden region,
+
+492
+00:28:45,387 --> 00:28:50,425
+where kappa is the square root of 2 mu times V minus Q, over h-bar.
+
+493
+00:28:50,425 --> 00:28:54,325
+For a Coulomb barrier the integral can be done in closed form.
+
+494
+00:28:54,325 --> 00:28:57,075
+For uranium the exponent is 88:
+
+495
+00:28:57,075 --> 00:29:00,900
+each time the alpha hits the wall, it gets through with a probability of about
+
+496
+00:29:00,900 --> 00:29:03,187
+one in ten to the thirty-eight.
+
+497
+00:29:03,187 --> 00:29:06,862
+It hits the wall nearly ten to the twenty-one times a second, so it takes
+
+498
+00:29:06,862 --> 00:29:08,550
+billions of years.
+
+499
+00:29:08,550 --> 00:29:13,812
+For polonium-212, with twice the energy, the barrier is thinner, the exponent
+
+500
+00:29:13,812 --> 00:29:19,662
+drops to 32, and the decay takes a fraction of a microsecond.
+
+501
+00:29:20,121 --> 00:29:24,696
+Here are 29 alpha emitters, their half-lives from the nuclear data tables
+
+502
+00:29:24,696 --> 00:29:28,946
+spanning twenty-four orders of magnitude, plotted against the nuclear charge
+
+503
+00:29:28,946 --> 00:29:31,208
+over the square root of the energy.
+
+504
+00:29:31,208 --> 00:29:36,271
+The crosses are Gamow's formula, with one assumed nuclear radius and no fitting
+
+505
+00:29:36,271 --> 00:29:37,546
+to these data.
+
+506
+00:29:37,546 --> 00:29:41,333
+It follows the measurements across all twenty-four decades, typically within
+
+507
+00:29:41,333 --> 00:29:43,021
+a factor of two.
+
+508
+00:29:43,021 --> 00:29:49,846
+The worst misses, polonium-210 and 208, sit at a closed shell of 126 neutrons,
+
+509
+00:29:49,846 --> 00:29:53,546
+where forming an alpha particle inside the nucleus is harder:
+
+510
+00:29:53,546 --> 00:29:56,121
+physics this simple picture leaves out.
+
+511
+00:29:56,121 --> 00:30:00,721
+One integral, from the semiclassical limit of the Schrödinger equation, explains
+
+512
+00:30:00,721 --> 00:30:01,521
+the rest.
+
+513
+00:30:03,528 --> 00:30:04,203
+Part 3:
+
+514
+00:30:04,203 --> 00:30:06,878
+Approximations.
+
+515
+00:30:07,594 --> 00:30:11,732
+The box, the oscillator and hydrogen are almost the only systems we can solve
+
+516
+00:30:11,732 --> 00:30:12,857
+exactly.
+
+517
+00:30:12,857 --> 00:30:16,982
+Add a second electron, an electric field, or a slightly different shape, and
+
+518
+00:30:16,982 --> 00:30:18,944
+exact solutions vanish.
+
+519
+00:30:18,944 --> 00:30:22,807
+So most of quantum mechanics is approximation, done carefully.
+
+520
+00:30:22,807 --> 00:30:24,994
+The workhorse is perturbation theory:
+
+521
+00:30:24,994 --> 00:30:29,794
+split the Hamiltonian into a part we can solve, H zero, plus a small extra
+
+522
+00:30:29,794 --> 00:30:32,919
+piece, lambda V.
+
+523
+00:30:33,319 --> 00:30:37,432
+Expand both the energy and the state in powers of lambda, put them into the
+
+524
+00:30:37,432 --> 00:30:40,532
+eigenvalue equation, and match powers.
+
+525
+00:30:40,532 --> 00:30:44,444
+At first order, take the inner product with the unperturbed state.
+
+526
+00:30:44,444 --> 00:30:49,294
+Because H zero is Hermitian, its terms cancel, and the first-order energy
+
+527
+00:30:49,294 --> 00:30:53,519
+shift is simply the average of V in the unperturbed state.
+
+528
+00:30:53,519 --> 00:30:57,757
+Taking the inner product with any other state m gives the first-order change
+
+529
+00:30:57,757 --> 00:30:58,869
+of the state:
+
+530
+00:30:58,869 --> 00:31:02,669
+V's matrix element, divided by the energy difference.
+
+531
+00:31:02,669 --> 00:31:07,132
+And at second order, the energy shift is a sum of squared matrix elements
+
+532
+00:31:07,132 --> 00:31:09,094
+over energy differences.
+
+533
+00:31:09,094 --> 00:31:13,544
+For the ground state every denominator is negative, so second order always
+
+534
+00:31:13,544 --> 00:31:16,769
+pushes the ground state down.
+
+535
+00:31:17,219 --> 00:31:20,307
+Try it on a particle in a box, in a uniform field F.
+
+536
+00:31:20,307 --> 00:31:22,219
+The first-order shift is zero:
+
+537
+00:31:22,219 --> 00:31:26,269
+by symmetry, the average of x minus L over two vanishes.
+
+538
+00:31:26,269 --> 00:31:29,232
+The second-order sum can be done in closed form:
+
+539
+00:31:29,232 --> 00:31:33,769
+minus fifteen minus pi squared, over twenty-four pi to the fourth, times F
+
+540
+00:31:33,769 --> 00:31:34,757
+squared.
+
+541
+00:31:34,757 --> 00:31:39,507
+The computed sum agrees to six digits, and the exact energy follows the parabola
+
+542
+00:31:39,507 --> 00:31:44,219
+at small fields, before higher orders take over.
+
+543
+00:31:44,728 --> 00:31:47,928
+Notice the energy differences in the denominators:
+
+544
+00:31:47,928 --> 00:31:51,328
+when two levels come close, they push each other apart.
+
+545
+00:31:51,328 --> 00:31:53,128
+For two levels it's exact:
+
+546
+00:31:53,128 --> 00:31:59,328
+the eigenvalues are hyperbolas, and the closest approach is twice the coupling.
+
+547
+00:31:59,786 --> 00:32:03,623
+Here's a rectangular drum of fixed area, stretched one way and squeezed the
+
+548
+00:32:03,623 --> 00:32:04,411
+other.
+
+549
+00:32:04,411 --> 00:32:08,736
+Its levels cross freely, because the problem separates into x and y:
+
+550
+00:32:08,736 --> 00:32:11,748
+states with different symmetries don't talk to each other.
+
+551
+00:32:11,748 --> 00:32:15,398
+Add a small dent off-center, and the symmetry is gone.
+
+552
+00:32:15,398 --> 00:32:17,673
+Every crossing opens up into a gap:
+
+553
+00:32:17,673 --> 00:32:20,461
+levels of the same symmetry never cross.
+
+554
+00:32:20,461 --> 00:32:25,211
+Wigner and von Neumann proved this in 1929.
+
+555
+00:32:25,711 --> 00:32:27,161
+Last, a warning.
+
+556
+00:32:27,161 --> 00:32:31,048
+For the anharmonic oscillator, the energy as a series in the coupling g can
+
+557
+00:32:31,048 --> 00:32:33,598
+be computed exactly, to any order:
+
+558
+00:32:33,598 --> 00:32:38,661
+one half, plus three quarters g, minus twenty-one eighths g squared, and on.
+
+559
+00:32:38,661 --> 00:32:41,498
+But the coefficients grow like n factorial.
+
+560
+00:32:41,498 --> 00:32:45,073
+The series converges for no value of g except zero:
+
+561
+00:32:45,073 --> 00:32:48,636
+Bender and Wu proved it in 1969.
+
+562
+00:32:48,636 --> 00:32:49,948
+Dyson saw why:
+
+563
+00:32:49,948 --> 00:32:52,586
+flip the sign of g and the well opens up;
+
+564
+00:32:52,586 --> 00:32:57,494
+the particle can tunnel out, and no smooth formula can cover both signs.
+
+565
+00:32:57,494 --> 00:33:01,269
+Yet the partial sums are wonderfully accurate if you stop in time.
+
+566
+00:33:01,269 --> 00:33:06,569
+At g equals 0.02, the error falls to three parts in a hundred million at order
+
+567
+00:33:06,569 --> 00:33:09,419
+sixteen, then grows without bound.
+
+568
+00:33:09,419 --> 00:33:14,132
+At g equals 0.05, the best you can do is order six.
+
+569
+00:33:14,132 --> 00:33:16,544
+Perturbation series are asymptotic:
+
+570
+00:33:16,544 --> 00:33:19,094
+use them, but stop at the smallest term.
+
+571
+00:33:21,142 --> 00:33:22,504
+So far, energies.
+
+572
+00:33:22,504 --> 00:33:23,454
+Now rates:
+
+573
+00:33:23,454 --> 00:33:25,329
+how fast do things happen?
+
+574
+00:33:25,329 --> 00:33:28,779
+Let a perturbation V act on a system that starts in state i.
+
+575
+00:33:28,779 --> 00:33:33,217
+Write the state as a sum over energy eigenstates, with each one's clock factored
+
+576
+00:33:33,217 --> 00:33:34,079
+out.
+
+577
+00:33:34,079 --> 00:33:38,692
+The exact equations for the coefficients involve V's matrix elements, times
+
+578
+00:33:38,692 --> 00:33:41,179
+phases turning at the Bohr frequencies.
+
+579
+00:33:41,179 --> 00:33:45,179
+To first order, the amplitude to have jumped to state f is an integral of
+
+580
+00:33:45,179 --> 00:33:47,750
+V times that turning phase.
+
+581
+00:33:47,750 --> 00:33:52,075
+For a perturbation switched on at time zero and then held fixed, the integral
+
+582
+00:33:52,075 --> 00:33:57,475
+is elementary, and the probability is V's matrix element squared, over h-bar
+
+583
+00:33:57,475 --> 00:34:02,475
+squared, times this function of the detuning, omega.
+
+584
+00:34:02,917 --> 00:34:05,329
+This function controls everything.
+
+585
+00:34:05,329 --> 00:34:10,092
+As time goes on, its peak grows like t squared, while its width shrinks like
+
+586
+00:34:10,092 --> 00:34:11,079
+one over t.
+
+587
+00:34:11,079 --> 00:34:16,267
+So its area grows exactly like t, and the function concentrates into a spike:
+
+588
+00:34:16,267 --> 00:34:20,292
+two pi t times a delta function.
+
+589
+00:34:20,425 --> 00:34:23,475
+If there's just one final state, that means nothing much:
+
+590
+00:34:23,475 --> 00:34:25,950
+the probability sloshes back and forth.
+
+591
+00:34:25,950 --> 00:34:30,137
+But if the final states form a continuum, with rho states per unit energy,
+
+592
+00:34:30,137 --> 00:34:33,800
+adding up the spike over all of them gives a probability that grows in proportion
+
+593
+00:34:33,800 --> 00:34:34,562
+to t:
+
+594
+00:34:34,562 --> 00:34:36,050
+a constant rate.
+
+595
+00:34:36,050 --> 00:34:41,575
+Gamma equals two pi over h-bar, times V squared, times the density of states.
+
+596
+00:34:41,575 --> 00:34:44,137
+Dirac derived it in 1927;
+
+597
+00:34:44,137 --> 00:34:47,625
+Fermi called it the golden rule.
+
+598
+00:34:48,083 --> 00:34:49,933
+Let's test it, exactly.
+
+599
+00:34:49,933 --> 00:34:55,196
+One level, coupled with the same strength to 601 evenly spaced levels.
+
+600
+00:34:55,196 --> 00:34:59,246
+Solve the Schrödinger equation exactly, and watch the probability of staying
+
+601
+00:34:59,246 --> 00:35:01,808
+put, on a logarithmic scale.
+
+602
+00:35:01,808 --> 00:35:07,142
+It falls off exponentially, at a rate within one percent of the golden rule's.
+
+603
+00:35:07,142 --> 00:35:12,342
+Then, at two pi h-bar over the level spacing, every phase lines up again,
+
+604
+00:35:12,342 --> 00:35:14,479
+and the probability comes back.
+
+605
+00:35:14,479 --> 00:35:17,854
+A finite ladder of levels is not a true continuum;
+
+606
+00:35:17,854 --> 00:35:22,092
+it only acts like one for times shorter than that.
+
+607
+00:35:22,525 --> 00:35:25,787
+And the energy of whatever was emitted is spread out.
+
+608
+00:35:25,787 --> 00:35:29,637
+Here are the populations of the 601 levels after the decay:
+
+609
+00:35:29,637 --> 00:35:34,037
+a Lorentzian line whose full width is exactly h-bar gamma.
+
+610
+00:35:34,037 --> 00:35:38,000
+A short lifetime means a broad line.
+
+611
+00:35:38,475 --> 00:35:42,562
+In an atom, the continuum is the electromagnetic field itself.
+
+612
+00:35:42,562 --> 00:35:46,750
+An excited hydrogen atom in its 2p state is coupled to the vacuum's photon
+
+613
+00:35:46,750 --> 00:35:50,337
+modes, whose density grows like the frequency squared.
+
+614
+00:35:50,337 --> 00:35:54,075
+Put in the dipole matrix element, and the golden rule gives a lifetime of
+
+615
+00:35:54,075 --> 00:35:58,137
+1.596 nanoseconds, matching measurement.
+
+616
+00:35:58,137 --> 00:36:02,950
+In that time the electron cloud sloshes about four million times, at the Lyman-alpha
+
+617
+00:36:02,950 --> 00:36:05,175
+frequency, before the light gets out.
+
+618
+00:36:07,189 --> 00:36:07,864
+Part 4:
+
+619
+00:36:07,864 --> 00:36:10,414
+Many particles.
+
+620
+00:36:11,147 --> 00:36:15,197
+Two particles share one wavefunction on the plane of their positions, x one
+
+621
+00:36:15,197 --> 00:36:17,572
+and x two, as in Part 1.
+
+622
+00:36:17,572 --> 00:36:21,847
+If the particles are identical, two electrons say, swapping them can't change
+
+623
+00:36:21,847 --> 00:36:23,122
+any prediction.
+
+624
+00:36:23,122 --> 00:36:26,622
+And swapping is reflecting the picture across the diagonal.
+
+625
+00:36:26,622 --> 00:36:31,485
+So the swap, P, is a symmetry, and since swapping twice does nothing, P squared
+
+626
+00:36:31,485 --> 00:36:32,410
+is one:
+
+627
+00:36:32,410 --> 00:36:36,881
+its only possible eigenvalues are plus one and minus one.
+
+628
+00:36:36,881 --> 00:36:38,943
+Every kind of particle picks one:
+
+629
+00:36:38,943 --> 00:36:44,256
+symmetric wavefunctions for bosons, like photons, antisymmetric ones for fermions,
+
+630
+00:36:44,256 --> 00:36:45,656
+like electrons.
+
+631
+00:36:45,656 --> 00:36:48,831
+Which particles are which is the spin-statistics theorem:
+
+632
+00:36:48,831 --> 00:36:52,593
+integer spin means boson, half-integer means fermion;
+
+633
+00:36:52,593 --> 00:36:54,793
+its proof needs relativity.
+
+634
+00:36:54,793 --> 00:37:00,606
+In a flat, two-dimensional world there's a third option, called anyons.
+
+635
+00:37:01,047 --> 00:37:02,285
+Here's what that does.
+
+636
+00:37:02,285 --> 00:37:06,447
+Two particles in a box, one in the lowest state and one in the second.
+
+637
+00:37:06,447 --> 00:37:09,735
+If they were distinguishable, the wavefunction would be this.
+
+638
+00:37:09,735 --> 00:37:12,785
+Symmetrize it, and it piles up along the diagonal:
+
+639
+00:37:12,785 --> 00:37:15,835
+bosons are found close together more often.
+
+640
+00:37:15,835 --> 00:37:19,710
+Antisymmetrize it, and it vanishes along the entire diagonal:
+
+641
+00:37:19,710 --> 00:37:23,689
+two identical fermions are never found at the same place.
+
+642
+00:37:23,689 --> 00:37:27,226
+The chance of finding the two within a tenth of the box of each other:
+
+643
+00:37:27,226 --> 00:37:31,326
+twenty percent if they're distinguishable, thirty-eight for bosons, under
+
+644
+00:37:31,326 --> 00:37:32,914
+two for fermions.
+
+645
+00:37:32,914 --> 00:37:34,414
+There's no force here.
+
+646
+00:37:34,414 --> 00:37:37,676
+The Hamiltonian is the same in all three cases;
+
+647
+00:37:37,676 --> 00:37:42,214
+this is a correlation produced by symmetry alone.
+
+648
+00:37:42,622 --> 00:37:47,197
+Put two fermions in the same state, and the antisymmetric combination is zero:
+
+649
+00:37:47,197 --> 00:37:48,685
+there's no such state.
+
+650
+00:37:48,685 --> 00:37:52,585
+That's Pauli's exclusion principle, from 1925.
+
+651
+00:37:52,585 --> 00:37:57,147
+For N fermions, the antisymmetric state is a determinant of their single-particle
+
+652
+00:37:57,147 --> 00:38:01,585
+wavefunctions, and a determinant with two equal rows vanishes.
+
+653
+00:38:01,585 --> 00:38:05,235
+Hold one fermion still, and the others are kept away from it:
+
+654
+00:38:05,235 --> 00:38:09,072
+a hole travels with every electron.
+
+655
+00:38:09,539 --> 00:38:13,576
+Bosons do the opposite, and the most striking demonstration uses light.
+
+656
+00:38:13,576 --> 00:38:18,251
+Send two identical photons into a half-silvered mirror, one from each side.
+
+657
+00:38:18,251 --> 00:38:22,764
+Each photon is either transmitted, with amplitude one over root two, or reflected,
+
+658
+00:38:22,764 --> 00:38:24,964
+with amplitude i over root two.
+
+659
+00:38:24,964 --> 00:38:28,839
+For the photons to leave by different ports, both must be transmitted, or
+
+660
+00:38:28,839 --> 00:38:30,251
+both reflected.
+
+661
+00:38:30,251 --> 00:38:33,189
+Those two amplitudes are one half and minus one half:
+
+662
+00:38:33,189 --> 00:38:34,864
+they cancel exactly.
+
+663
+00:38:34,864 --> 00:38:38,564
+The photons always leave together.
+
+664
+00:38:39,039 --> 00:38:44,026
+Delay one photon so they no longer overlap, and they act independently, splitting
+
+665
+00:38:44,026 --> 00:38:45,576
+up half the time.
+
+666
+00:38:45,576 --> 00:38:49,364
+As the delay goes to zero, coincidences vanish.
+
+667
+00:38:49,364 --> 00:38:54,751
+This dip was measured by Hong, Ou and Mandel in 1987, and it's now a standard
+
+668
+00:38:54,751 --> 00:38:57,864
+test of whether two photons are truly identical.
+
+669
+00:38:59,911 --> 00:39:04,324
+Helium has two electrons, and the term that couples them, their repulsion,
+
+670
+00:39:04,324 --> 00:39:08,736
+one over r one two, makes it impossible to solve exactly.
+
+671
+00:39:08,736 --> 00:39:13,099
+Ignore that term, and each electron sits in a hydrogen-like orbit around a
+
+672
+00:39:13,099 --> 00:39:14,811
+nucleus of charge two:
+
+673
+00:39:14,811 --> 00:39:18,674
+an energy of minus 108.8 electron volts.
+
+674
+00:39:18,674 --> 00:39:21,261
+The measured value is minus 79.0.
+
+675
+00:39:21,261 --> 00:39:24,186
+The repulsion matters.
+
+676
+00:39:24,611 --> 00:39:26,949
+First-order perturbation theory says:
+
+677
+00:39:26,949 --> 00:39:29,924
+average the repulsion over the unperturbed state.
+
+678
+00:39:29,924 --> 00:39:34,674
+Each electron is a spherical cloud, and by Newton's shell theorem, a spherical
+
+679
+00:39:34,674 --> 00:39:38,724
+shell of charge acts like a point charge at its center from outside, and like
+
+680
+00:39:38,724 --> 00:39:40,786
+nothing at all from inside.
+
+681
+00:39:40,786 --> 00:39:44,899
+That reduces a six-dimensional integral to a two-dimensional one, and the
+
+682
+00:39:44,899 --> 00:39:48,824
+answer is exactly five eighths of Z, in atomic units:
+
+683
+00:39:48,824 --> 00:39:51,236
+34 electron volts.
+
+684
+00:39:51,236 --> 00:39:54,124
+So the estimate becomes minus 74.8:
+
+685
+00:39:54,124 --> 00:39:57,636
+much better, but now too high.
+
+686
+00:39:58,053 --> 00:40:00,766
+We can do better with the variational principle.
+
+687
+00:40:00,766 --> 00:40:04,016
+Expand any trial state in the true eigenstates:
+
+688
+00:40:04,016 --> 00:40:08,303
+its average energy is a weighted average of the eigenvalues, so it can never
+
+689
+00:40:08,303 --> 00:40:10,241
+be below the lowest one.
+
+690
+00:40:10,241 --> 00:40:14,578
+Every guess gives an upper bound, and the best guess in a family is the one
+
+691
+00:40:14,578 --> 00:40:16,503
+with the lowest energy.
+
+692
+00:40:16,503 --> 00:40:20,928
+Let each electron see an effective charge zeta instead of two, because each
+
+693
+00:40:20,928 --> 00:40:24,428
+electron partly screens the nucleus from the other.
+
+694
+00:40:24,428 --> 00:40:29,478
+The energy is a parabola in zeta, with its minimum at twenty-seven sixteenths,
+
+695
+00:40:29,478 --> 00:40:33,620
+giving minus 77.5 electron volts.
+
+696
+00:40:33,620 --> 00:40:38,595
+A computer solution of the full two-electron equation, keeping only the spherically
+
+697
+00:40:38,595 --> 00:40:43,220
+symmetric part of the repulsion, gets to minus 78.3.
+
+698
+00:40:43,220 --> 00:40:49,395
+With everything included, theory and experiment agree at minus 79.0.
+
+699
+00:40:49,895 --> 00:40:53,782
+Now the excited state with one electron in the one S orbital and one in the
+
+700
+00:40:53,782 --> 00:40:54,282
+two S.
+
+701
+00:40:54,282 --> 00:40:58,145
+Here the two electrons can have opposite spins or parallel ones.
+
+702
+00:40:58,145 --> 00:41:03,095
+The total wavefunction must be antisymmetric, so parallel spins force an antisymmetric
+
+703
+00:41:03,095 --> 00:41:04,307
+spatial part.
+
+704
+00:41:04,307 --> 00:41:08,732
+Here are both states, computed on the plane of the two radii, r one and r
+
+705
+00:41:08,732 --> 00:41:09,682
+two.
+
+706
+00:41:09,682 --> 00:41:12,770
+The triplet's wavefunction vanishes along the diagonal:
+
+707
+00:41:12,770 --> 00:41:17,520
+the electrons keep apart, repel each other less, and have lower energy.
+
+708
+00:41:17,520 --> 00:41:21,470
+The computed splitting is 0.82 electron volts;
+
+709
+00:41:21,470 --> 00:41:23,807
+the measured one is 0.80.
+
+710
+00:41:23,807 --> 00:41:27,945
+That's the origin of Hund's rule, and of magnetism in materials:
+
+711
+00:41:27,945 --> 00:41:34,070
+an energy that depends on spin, although no magnetic force is involved.
+
+712
+00:41:34,486 --> 00:41:38,486
+With more electrons, the exclusion principle forces them into higher and higher
+
+713
+00:41:38,486 --> 00:41:40,699
+orbitals, filling shells.
+
+714
+00:41:40,699 --> 00:41:44,574
+Here is the energy needed to remove the outermost electron, for every element
+
+715
+00:41:44,574 --> 00:41:47,486
+up to radon, from NIST's measurements.
+
+716
+00:41:47,486 --> 00:41:51,311
+It peaks at the noble gases, where a shell has just been completed, and plunges
+
+717
+00:41:51,311 --> 00:41:55,811
+at the alkali metals, whose one extra electron starts a new shell, far out
+
+718
+00:41:55,811 --> 00:41:57,274
+and well screened.
+
+719
+00:41:57,274 --> 00:42:01,436
+The periodic table is the exclusion principle, written in chemistry.
+
+720
+00:42:03,476 --> 00:42:06,614
+A solid is a lattice of atoms, each a potential well.
+
+721
+00:42:06,614 --> 00:42:08,664
+Let's build one, well by well.
+
+722
+00:42:08,664 --> 00:42:10,401
+One well has its own levels.
+
+723
+00:42:10,401 --> 00:42:13,426
+Put a second well beside it, and each level splits in two:
+
+724
+00:42:13,426 --> 00:42:16,976
+the particle can tunnel between the wells, and the even and odd combinations
+
+725
+00:42:16,976 --> 00:42:19,051
+have slightly different energies.
+
+726
+00:42:19,051 --> 00:42:19,876
+Three wells:
+
+727
+00:42:19,876 --> 00:42:21,664
+each level becomes three.
+
+728
+00:42:21,664 --> 00:42:23,639
+Eight, sixteen, thirty-two:
+
+729
+00:42:23,639 --> 00:42:27,976
+each level becomes a band of closely spaced levels, with gaps in between where
+
+730
+00:42:27,976 --> 00:42:29,901
+there are no states at all.
+
+731
+00:42:29,901 --> 00:42:33,626
+The deepest band is the narrowest, because tunneling through the barriers
+
+732
+00:42:33,626 --> 00:42:36,276
+is hardest there.
+
+733
+00:42:36,710 --> 00:42:40,410
+For an infinite lattice, symmetry tells us what the states look like.
+
+734
+00:42:40,410 --> 00:42:44,060
+The potential repeats with period a, so the Hamiltonian commutes with the
+
+735
+00:42:44,060 --> 00:42:46,172
+translation by one period.
+
+736
+00:42:46,172 --> 00:42:50,410
+They share eigenstates, and since the translation is unitary, its eigenvalue
+
+737
+00:42:50,410 --> 00:42:51,635
+is a phase:
+
+738
+00:42:51,635 --> 00:42:54,585
+shifting by a multiplies psi by e to the i k a.
+
+739
+00:42:54,585 --> 00:42:59,460
+So every stationary state is a plane wave, e to the i k x, times a function
+
+740
+00:42:59,460 --> 00:43:01,322
+with the period of the lattice.
+
+741
+00:43:01,322 --> 00:43:04,535
+That's Bloch's theorem, from 1928.
+
+742
+00:43:04,535 --> 00:43:05,460
+Here's one:
+
+743
+00:43:05,460 --> 00:43:09,760
+the size repeats from cell to cell, and the color advances by a quarter turn
+
+744
+00:43:09,760 --> 00:43:12,010
+per cell.
+
+745
+00:43:12,493 --> 00:43:14,656
+Now we can find the bands exactly.
+
+746
+00:43:14,656 --> 00:43:18,606
+Carry a solution across one cell with a two-by-two transfer matrix.
+
+747
+00:43:18,606 --> 00:43:22,843
+Bloch's condition says its eigenvalues are e to the plus and minus i k a,
+
+748
+00:43:22,843 --> 00:43:25,143
+so cos k a equals half its trace:
+
+749
+00:43:25,143 --> 00:43:30,168
+an explicit function of the energy, worked out by Kronig and Penney in 1931.
+
+750
+00:43:30,168 --> 00:43:33,206
+But a cosine lies between minus one and one.
+
+751
+00:43:33,206 --> 00:43:37,268
+Wherever this function strays outside that strip, there's no real k:
+
+752
+00:43:37,268 --> 00:43:40,218
+those energies are forbidden, the gaps.
+
+753
+00:43:40,218 --> 00:43:44,031
+Plot energy against k, and the bands are smooth curves.
+
+754
+00:43:44,031 --> 00:43:48,418
+The levels of a ring of eight wells, computed separately, sit exactly on them,
+
+755
+00:43:48,418 --> 00:43:52,243
+at the eight allowed values of k.
+
+756
+00:43:52,726 --> 00:43:54,814
+Now fill the bands with electrons.
+
+757
+00:43:54,814 --> 00:43:58,476
+Each band holds two electrons per cell, one of each spin.
+
+758
+00:43:58,476 --> 00:44:02,176
+With one electron per cell, a band is half full, and the electrons at the
+
+759
+00:44:02,176 --> 00:44:05,926
+top of the filled states can move into empty ones with an arbitrarily small
+
+760
+00:44:05,926 --> 00:44:06,539
+push:
+
+761
+00:44:06,539 --> 00:44:07,501
+a metal.
+
+762
+00:44:07,501 --> 00:44:11,264
+With two per cell, the band is full, and the nearest empty states are across
+
+763
+00:44:11,264 --> 00:44:11,901
+a gap:
+
+764
+00:44:11,901 --> 00:44:13,114
+an insulator.
+
+765
+00:44:13,114 --> 00:44:16,164
+Alan Wilson worked this out in 1931.
+
+766
+00:44:16,164 --> 00:44:18,851
+That's why copper conducts and diamond doesn't.
+
+767
+00:44:20,850 --> 00:44:21,600
+Part 5:
+
+768
+00:44:21,600 --> 00:44:24,175
+Open systems.
+
+769
+00:44:24,908 --> 00:44:27,796
+Here are two very different kinds of uncertainty.
+
+770
+00:44:27,796 --> 00:44:31,371
+A spin in the superposition up plus down, over root two:
+
+771
+00:44:31,371 --> 00:44:32,483
+pointing along x.
+
+772
+00:44:32,483 --> 00:44:36,058
+And a spin that's up or down depending on a coin toss.
+
+773
+00:44:36,058 --> 00:44:39,608
+Measure either one along z, and you get up half the time.
+
+774
+00:44:39,608 --> 00:44:43,971
+But measure along x, and the superposition gives plus every time, while the
+
+775
+00:44:43,971 --> 00:44:47,133
+coin-flip spin is still fifty-fifty.
+
+776
+00:44:47,133 --> 00:44:51,158
+A list of states with probabilities is not a superposition, and to describe
+
+777
+00:44:51,158 --> 00:44:52,883
+it we need a new object:
+
+778
+00:44:52,883 --> 00:44:57,208
+the density matrix, rho, the probability-weighted sum of projectors onto the
+
+779
+00:44:57,208 --> 00:44:58,296
+states.
+
+780
+00:44:58,296 --> 00:45:02,946
+The Born rule becomes the trace of rho times the projector for the outcome.
+
+781
+00:45:02,946 --> 00:45:07,983
+The superposition's density matrix has off-diagonal terms, called coherences;
+
+782
+00:45:07,983 --> 00:45:11,133
+the coin flip's has none.
+
+783
+00:45:11,575 --> 00:45:16,150
+For a spin, every density matrix is one half, times one plus r dot sigma,
+
+784
+00:45:16,150 --> 00:45:18,562
+with r a vector no longer than one.
+
+785
+00:45:18,562 --> 00:45:20,100
+Pure states have length one:
+
+786
+00:45:20,100 --> 00:45:21,337
+the Bloch sphere.
+
+787
+00:45:21,337 --> 00:45:22,950
+Mixtures fill the inside:
+
+788
+00:45:22,950 --> 00:45:24,025
+the Bloch ball.
+
+789
+00:45:24,025 --> 00:45:26,337
+And different mixtures can give the same rho:
+
+790
+00:45:26,337 --> 00:45:30,787
+a coin flip between up and down, or between plus x and minus x, both land
+
+791
+00:45:30,787 --> 00:45:34,112
+at the center, and no measurement can ever tell them apart.
+
+792
+00:45:34,112 --> 00:45:38,500
+The density matrix is everything there is to know.
+
+793
+00:45:38,966 --> 00:45:41,429
+Mixed states don't only come from ignorance.
+
+794
+00:45:41,429 --> 00:45:43,316
+Take two spins in the singlet:
+
+795
+00:45:43,316 --> 00:45:45,004
+a pure state of the pair.
+
+796
+00:45:45,004 --> 00:45:48,479
+Ask what Alice alone can measure, by tracing out Bob's spin:
+
+797
+00:45:48,479 --> 00:45:50,804
+summing over his possible outcomes.
+
+798
+00:45:50,804 --> 00:45:54,629
+The result is one half times the identity, the center of the ball, with the
+
+799
+00:45:54,629 --> 00:45:56,829
+largest entropy a spin can have.
+
+800
+00:45:56,829 --> 00:45:58,641
+The whole is perfectly definite;
+
+801
+00:45:58,641 --> 00:46:01,454
+each part, on its own, is completely random.
+
+802
+00:46:01,454 --> 00:46:05,466
+That's entanglement, seen from one side.
+
+803
+00:46:05,908 --> 00:46:09,421
+And the density matrix closes a gap from the start of this video:
+
+804
+00:46:09,421 --> 00:46:10,946
+why the Born rule?
+
+805
+00:46:10,946 --> 00:46:15,496
+Suppose you assign a probability to every possible outcome of every measurement,
+
+806
+00:46:15,496 --> 00:46:19,796
+such that for any set of mutually perpendicular outcomes, the probabilities
+
+807
+00:46:19,796 --> 00:46:21,271
+add to one.
+
+808
+00:46:21,271 --> 00:46:26,696
+In 1957 Andrew Gleason proved that in three or more dimensions, the only such
+
+809
+00:46:26,696 --> 00:46:31,083
+assignments are the trace of rho times the projector, for some density matrix
+
+810
+00:46:31,083 --> 00:46:32,233
+rho.
+
+811
+00:46:32,233 --> 00:46:37,083
+Given the vector structure of quantum states, the Born rule is the only consistent
+
+812
+00:46:37,083 --> 00:46:39,133
+way to get probabilities out of them.
+
+813
+00:46:41,073 --> 00:46:43,423
+Why don't we see cats in superpositions?
+
+814
+00:46:43,423 --> 00:46:46,035
+The answer starts with the density matrix.
+
+815
+00:46:46,035 --> 00:46:50,385
+Take a qubit, a times zero plus b times one, and let it interact with its
+
+816
+00:46:50,385 --> 00:46:51,560
+environment:
+
+817
+00:46:51,560 --> 00:46:54,173
+a stray photon, an air molecule.
+
+818
+00:46:54,173 --> 00:46:58,260
+If the environment ends up in a state that depends on the qubit, E zero or
+
+819
+00:46:58,260 --> 00:47:02,498
+E one, the qubit and its environment are now entangled.
+
+820
+00:47:02,498 --> 00:47:06,923
+Trace out the environment, and the qubit's density matrix keeps its diagonal,
+
+821
+00:47:06,923 --> 00:47:11,360
+the probabilities, but its coherences are multiplied by the overlap of the
+
+822
+00:47:11,360 --> 00:47:13,373
+two environment states.
+
+823
+00:47:13,373 --> 00:47:17,710
+Once the environment has recorded the difference, the overlap is zero, and
+
+824
+00:47:17,710 --> 00:47:21,048
+so are the coherences.
+
+825
+00:47:21,531 --> 00:47:25,681
+A real environment has many parts, and each takes a slightly different record.
+
+826
+00:47:25,681 --> 00:47:29,544
+The overlap is a product of many numbers, each a little less than one.
+
+827
+00:47:29,544 --> 00:47:31,044
+Here's a computed example:
+
+828
+00:47:31,044 --> 00:47:34,206
+one qubit, dephased by N environment spins.
+
+829
+00:47:34,206 --> 00:47:37,131
+With one, the coherence oscillates and comes back.
+
+830
+00:47:37,131 --> 00:47:39,556
+With five, it comes back in bursts.
+
+831
+00:47:39,556 --> 00:47:42,356
+With twenty, it's gone and barely flickers.
+
+832
+00:47:42,356 --> 00:47:46,006
+With two hundred, it decays and never comes back on any time scale we could
+
+833
+00:47:46,006 --> 00:47:47,306
+wait for.
+
+834
+00:47:47,306 --> 00:47:50,844
+On the Bloch ball, the state's arrow shrinks onto the axis:
+
+835
+00:47:50,844 --> 00:47:54,556
+a superposition has become a mixture.
+
+836
+00:47:55,006 --> 00:47:58,769
+For the double slit, the environment records which slit the electron went
+
+837
+00:47:58,769 --> 00:48:02,906
+through, and the interference term is multiplied by the overlap of the two
+
+838
+00:48:02,906 --> 00:48:04,069
+records.
+
+839
+00:48:04,069 --> 00:48:08,269
+A perfect record erases the fringes completely, leaving the sum of the two
+
+840
+00:48:08,269 --> 00:48:09,869
+single-slit patterns;
+
+841
+00:48:09,869 --> 00:48:12,606
+a partial record leaves faded fringes.
+
+842
+00:48:12,606 --> 00:48:16,931
+This is complementarity, made quantitative.
+
+843
+00:48:17,373 --> 00:48:22,085
+Here's a Schrödinger cat state, two separated packets, as a Wigner function,
+
+844
+00:48:22,085 --> 00:48:24,960
+losing its coherence to a scattering environment.
+
+845
+00:48:24,960 --> 00:48:29,085
+Each scattered particle multiplies the density matrix by a factor that depends
+
+846
+00:48:29,085 --> 00:48:31,698
+on how far apart the two positions are:
+
+847
+00:48:31,698 --> 00:48:36,273
+the off-diagonal terms decay like e to the minus Lambda t times the separation
+
+848
+00:48:36,273 --> 00:48:37,335
+squared.
+
+849
+00:48:37,335 --> 00:48:41,298
+The interference fringes between the blobs fade, exactly at the predicted
+
+850
+00:48:41,298 --> 00:48:45,398
+rate, while the blobs themselves survive.
+
+851
+00:48:45,814 --> 00:48:50,014
+And because the rate grows with the square of the separation, big superpositions
+
+852
+00:48:50,014 --> 00:48:51,277
+die fast.
+
+853
+00:48:51,277 --> 00:48:53,127
+Estimates from the literature:
+
+854
+00:48:53,127 --> 00:48:58,064
+a dust grain a hundredth of a millimeter across, in air, loses a superposition
+
+855
+00:48:58,064 --> 00:49:03,652
+of two positions its own size apart in about ten to the minus thirty-one seconds.
+
+856
+00:49:03,652 --> 00:49:09,489
+Even the cosmic microwave background alone would do it in about a second.
+
+857
+00:49:09,939 --> 00:49:12,064
+That's why the world looks classical:
+
+858
+00:49:12,064 --> 00:49:16,739
+the environment is constantly measuring positions, and only states that survive
+
+859
+00:49:16,739 --> 00:49:18,302
+that are ever seen.
+
+860
+00:49:18,302 --> 00:49:23,252
+Serge Haroche's group watched it happen, step by step, with photons in a cavity
+
+861
+00:49:23,252 --> 00:49:25,014
+in 1996.
+
+862
+00:49:25,014 --> 00:49:29,539
+But decoherence doesn't explain why one particular outcome occurs.
+
+863
+00:49:29,539 --> 00:49:34,139
+The density matrix ends up looking like a list of possibilities with probabilities,
+
+864
+00:49:34,139 --> 00:49:37,389
+yet the whole state is still one superposition;
+
+865
+00:49:37,389 --> 00:49:41,552
+which outcome we see is the measurement problem, and the interpretations of
+
+866
+00:49:41,552 --> 00:49:44,539
+quantum mechanics part ways exactly there.
+
+867
+00:49:46,546 --> 00:49:47,346
+Part 6:
+
+868
+00:49:47,346 --> 00:49:49,846
+Relativity.
+
+869
+00:49:50,571 --> 00:49:53,533
+Everything so far has been non-relativistic.
+
+870
+00:49:53,533 --> 00:49:57,808
+Relativity demands that energy and momentum be related by E squared equals
+
+871
+00:49:57,808 --> 00:50:01,658
+p squared c squared plus m squared c to the fourth.
+
+872
+00:50:01,658 --> 00:50:05,646
+The obvious move is to replace E and p by their operators.
+
+873
+00:50:05,646 --> 00:50:09,796
+That gives the Klein-Gordon equation, but it's second order in time, so the
+
+874
+00:50:09,796 --> 00:50:13,846
+wavefunction now no longer determines its own future, and the quantity it
+
+875
+00:50:13,846 --> 00:50:15,633
+conserves can be negative:
+
+876
+00:50:15,633 --> 00:50:17,846
+it can't be a probability.
+
+877
+00:50:17,846 --> 00:50:23,546
+In 1928 Paul Dirac insisted on keeping the Schrödinger form, first order in
+
+878
+00:50:23,546 --> 00:50:28,921
+time, which means a Hamiltonian that is linear in momentum.
+
+879
+00:50:29,396 --> 00:50:34,546
+So write H as c times alpha dot p, plus beta m c squared, with four unknown
+
+880
+00:50:34,546 --> 00:50:35,796
+coefficients.
+
+881
+00:50:35,796 --> 00:50:38,821
+Square it, carefully keeping the order of the factors.
+
+882
+00:50:38,821 --> 00:50:43,033
+For this to equal p squared c squared plus m squared c to the fourth, each
+
+883
+00:50:43,033 --> 00:50:47,233
+alpha and beta must square to one, and every pair must anticommute:
+
+884
+00:50:47,233 --> 00:50:51,371
+alpha i times alpha j equals minus alpha j times alpha i.
+
+885
+00:50:51,371 --> 00:50:53,246
+No numbers behave like that.
+
+886
+00:50:53,246 --> 00:50:56,171
+They have to be matrices.
+
+887
+00:50:56,604 --> 00:51:01,017
+The smallest matrices that work are four by four, built from the Pauli matrices
+
+888
+00:51:01,017 --> 00:51:02,229
+of Part 1.
+
+889
+00:51:02,229 --> 00:51:04,129
+Two by two is too small:
+
+890
+00:51:04,129 --> 00:51:08,017
+only three two-by-two matrices anticommute, and we need four.
+
+891
+00:51:08,017 --> 00:51:10,579
+So the wavefunction has four components.
+
+892
+00:51:10,579 --> 00:51:12,779
+Two of them are spin up and spin down:
+
+893
+00:51:12,779 --> 00:51:15,617
+spin one half appears without being put in.
+
+894
+00:51:15,617 --> 00:51:17,579
+The doubling comes from something new:
+
+895
+00:51:17,579 --> 00:51:21,204
+solutions with negative energy.
+
+896
+00:51:21,613 --> 00:51:23,263
+The energies come in pairs:
+
+897
+00:51:23,263 --> 00:51:27,050
+plus and minus the square root of p squared c squared plus m squared c to
+
+898
+00:51:27,050 --> 00:51:31,300
+the fourth, two branches separated by a gap of two m c squared.
+
+899
+00:51:31,300 --> 00:51:33,425
+The negative branch was a crisis.
+
+900
+00:51:33,425 --> 00:51:37,363
+Dirac proposed in 1930 that those states are all filled, so that a missing
+
+901
+00:51:37,363 --> 00:51:40,975
+one, a hole, would act like a particle of positive charge;
+
+902
+00:51:40,975 --> 00:51:44,900
+a year later he predicted an anti-electron with the electron's mass.
+
+903
+00:51:44,900 --> 00:51:48,638
+Carl Anderson found it in cosmic rays in 1932:
+
+904
+00:51:48,638 --> 00:51:50,213
+the positron.
+
+905
+00:51:50,213 --> 00:51:54,663
+Today the negative-energy solutions are understood through quantum field theory,
+
+906
+00:51:54,663 --> 00:51:58,038
+as describing antiparticles.
+
+907
+00:51:58,496 --> 00:52:01,508
+Mixing the two branches has a strange consequence.
+
+908
+00:52:01,508 --> 00:52:05,846
+Here's a packet in a one-dimensional version of the Dirac equation, half positive
+
+909
+00:52:05,846 --> 00:52:08,996
+energy and half negative, solved exactly.
+
+910
+00:52:08,996 --> 00:52:10,758
+Its center doesn't sit still:
+
+911
+00:52:10,758 --> 00:52:15,758
+it trembles, at a frequency of about two m c squared over h-bar, around the
+
+912
+00:52:15,758 --> 00:52:19,408
+center of its positive-energy part, which doesn't move at all.
+
+913
+00:52:19,408 --> 00:52:23,246
+Schrödinger called this Zitterbewegung, trembling motion.
+
+914
+00:52:23,246 --> 00:52:25,583
+It isn't a point particle jittering;
+
+915
+00:52:25,583 --> 00:52:29,671
+it's the interference between the two energy branches, beating at their energy
+
+916
+00:52:29,671 --> 00:52:30,733
+difference.
+
+917
+00:52:30,733 --> 00:52:34,996
+For a free electron it would be far too small and fast to see, but it has
+
+918
+00:52:34,996 --> 00:52:37,146
+been simulated with trapped ions.
+
+919
+00:52:39,102 --> 00:52:42,352
+Dirac's equation predicts more than antimatter.
+
+920
+00:52:42,352 --> 00:52:46,365
+At low speeds, its upper two components obey a Schrödinger equation with a
+
+921
+00:52:46,365 --> 00:52:47,377
+twist:
+
+922
+00:52:47,377 --> 00:52:52,865
+the kinetic energy appears as sigma dot pi, squared, over 2m, where pi is
+
+923
+00:52:52,865 --> 00:52:54,077
+p minus q A.
+
+924
+00:52:54,077 --> 00:52:56,852
+The Pauli matrices obey this identity:
+
+925
+00:52:56,852 --> 00:53:01,527
+sigma dot a times sigma dot b is a dot b plus i sigma dot a cross b.
+
+926
+00:53:01,527 --> 00:53:05,815
+And because the components of pi don't commute in a magnetic field, pi cross
+
+927
+00:53:05,815 --> 00:53:07,627
+pi isn't zero:
+
+928
+00:53:07,627 --> 00:53:09,202
+it's i q h-bar B.
+
+929
+00:53:09,202 --> 00:53:13,640
+So the kinetic energy contains a magnetic term, and it says the electron's
+
+930
+00:53:13,640 --> 00:53:16,640
+spin is a magnet with g equal to two:
+
+931
+00:53:16,640 --> 00:53:22,552
+twice as strong, for its angular momentum, as an orbiting charge.
+
+932
+00:53:23,052 --> 00:53:25,427
+Measured, g is not exactly two.
+
+933
+00:53:25,427 --> 00:53:32,277
+The best value, from a single electron held in a trap, is 2.00231930436, to
+
+934
+00:53:32,277 --> 00:53:33,702
+thirteen digits.
+
+935
+00:53:33,702 --> 00:53:38,190
+The small excess comes from the next layer of the theory, quantum electrodynamics:
+
+936
+00:53:38,190 --> 00:53:43,002
+its first term, computed by Julian Schwinger in 1948, is the fine-structure
+
+937
+00:53:43,002 --> 00:53:44,902
+constant over two pi.
+
+938
+00:53:44,902 --> 00:53:49,127
+With the higher terms included, theory and experiment agree to about one part
+
+939
+00:53:49,127 --> 00:53:51,527
+in a trillion.
+
+940
+00:53:51,994 --> 00:53:56,144
+Dirac's equation can be solved exactly for hydrogen, and the energies depend
+
+941
+00:53:56,144 --> 00:54:00,906
+not just on n but on j, the total angular momentum including spin.
+
+942
+00:54:00,906 --> 00:54:02,656
+Zoom in on the second level.
+
+943
+00:54:02,656 --> 00:54:07,631
+In Schrödinger's theory it's a single energy, minus 3.4 electron volts.
+
+944
+00:54:07,631 --> 00:54:09,494
+In Dirac's, it splits:
+
+945
+00:54:09,494 --> 00:54:14,756
+the 2 P three-halves states sit higher by 10.94 gigahertz, about forty-five
+
+946
+00:54:14,756 --> 00:54:18,244
+millionths of an electron volt, within a quarter of a percent of the measured
+
+947
+00:54:18,244 --> 00:54:19,494
+splitting.
+
+948
+00:54:19,494 --> 00:54:24,381
+But Dirac's theory leaves 2 S one-half and 2 P one-half exactly together.
+
+949
+00:54:24,381 --> 00:54:29,744
+In 1947 Willis Lamb and Robert Retherford found them apart by about a thousand
+
+950
+00:54:29,744 --> 00:54:33,844
+megahertz, now measured as 1057.8.
+
+951
+00:54:33,844 --> 00:54:38,119
+Explaining that shift, the electron interacting with fluctuations of the field
+
+952
+00:54:38,119 --> 00:54:42,894
+itself, launched quantum electrodynamics.
+
+953
+00:54:43,361 --> 00:54:47,311
+Each layer of the theory contains the one before it, and each new decimal
+
+954
+00:54:47,311 --> 00:54:49,023
+place has been checked:
+
+955
+00:54:49,023 --> 00:54:54,173
+Schrödinger's equation, Dirac's, and quantum electrodynamics, the most precisely
+
+956
+00:54:54,173 --> 00:54:55,786
+tested theory in science.
+
+957
+00:54:57,959 --> 00:54:59,159
+Let's look back.
+
+958
+00:54:59,159 --> 00:55:02,022
+The rules that Part 1 guessed came out of symmetry:
+
+959
+00:55:02,022 --> 00:55:06,197
+time gave the Schrödinger equation, space gave the commutator, boosts gave
+
+960
+00:55:06,197 --> 00:55:12,184
+the Hamiltonian, rotations allowed spin, and local phase demanded electromagnetism.
+
+961
+00:55:12,184 --> 00:55:16,159
+Feynman's sum over paths gave the same equation, and in the limit of small
+
+962
+00:55:16,159 --> 00:55:20,797
+h-bar, Newton's laws, the old quantum rules and alpha decay.
+
+963
+00:55:20,797 --> 00:55:25,459
+Perturbation theory and the golden rule turned it into numbers for real atoms.
+
+964
+00:55:25,459 --> 00:55:29,684
+Exchange symmetry built the periodic table and the bands of solids.
+
+965
+00:55:29,684 --> 00:55:33,484
+Density matrices gave us the Born rule and decoherence.
+
+966
+00:55:33,484 --> 00:55:40,959
+And relativity, through Dirac, gave spin's magnetism, fine structure and antimatter.
+
+967
+00:55:41,376 --> 00:55:43,588
+And one idea kept coming back:
+
+968
+00:55:43,588 --> 00:55:46,613
+a phase is an area divided by h-bar.
+
+969
+00:55:46,613 --> 00:55:51,076
+The area of a rectangle in phase space, when translations and boosts fail
+
+970
+00:55:51,076 --> 00:55:52,001
+to commute;
+
+971
+00:55:52,001 --> 00:55:55,988
+the magnetic flux through a loop, in the Aharonov-Bohm effect;
+
+972
+00:55:55,988 --> 00:56:00,901
+and the area of a classical orbit, in the quantum condition.
+
+973
+00:56:01,334 --> 00:56:06,222
+As in Part 1, every picture you've seen came from solving equations, not from
+
+974
+00:56:06,222 --> 00:56:07,934
+an artist's impression:
+
+975
+00:56:07,934 --> 00:56:12,709
+the electron going around a flux tube, the arrows of a thrown ball's paths,
+
+976
+00:56:12,709 --> 00:56:17,272
+an orbit in phase space, the two electrons of helium keeping apart, and a
+
+977
+00:56:17,272 --> 00:56:21,109
+cat state about to lose its fringes.
+
+978
+00:56:21,593 --> 00:56:25,855
+From here, the roads lead to quantum field theory, where particles are excitations
+
+979
+00:56:25,855 --> 00:56:29,518
+of fields and the vacuum itself shifts atomic levels;
+
+980
+00:56:29,518 --> 00:56:33,043
+to quantum information, where entanglement is a resource;
+
+981
+00:56:33,043 --> 00:56:35,480
+to the measurement problem, still open;
+
+982
+00:56:35,480 --> 00:56:39,068
+and to gauge theories, where the same local-symmetry argument that gave us
+
+983
+00:56:39,068 --> 00:56:42,768
+electromagnetism gives the other forces of nature.
+
+984
+00:56:42,768 --> 00:56:43,993
+Thanks for watching.

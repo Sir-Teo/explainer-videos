@@ -377,6 +377,28 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bquasinormal\b", "[quasinormal](/kwˌAzInˈɔɹməl/)"),
     (r"\bgravitomagnetic\b", "[gravitomagnetic](/ɡɹˌævɪtOmæɡnˈɛtɪk/)"),
     (r"\bgravitomagnetism\b", "[gravitomagnetism](/ɡɹˌævɪtOmˈæɡnətˌɪzəm/)"),
+    # Quantum mechanics, part 2 (videos/quantum2)
+    (r"Aharonov[–—-]Bohm", "[Aharonov](/ɑhɑɹˈOnɔf/) [Bohm](/bˈOm/)"),
+    (r"(?<!\[)\bAharonov\b", "[Aharonov](/ɑhɑɹˈOnɔf/)"),
+    (r"(?<!\[)\bBohm\b", "[Bohm](/bˈOm/)"),
+    (r"\bWentzel\b", "[Wentzel](/vˈɛntsəl/)"),
+    (r"\bBrillouin\b", "[Brillouin](/bɹijˈuæn/)"),
+    (r"Bohr[–—-]Sommerfeld", "[Bohr](/bˈɔɹ/) [Sommerfeld](/zˈɔməɹfɛlt/)"),
+    (r"(?<!\[)\bSommerfeld\b", "[Sommerfeld](/zˈɔməɹfɛlt/)"),
+    (r"\bNuttall\b", "[Nuttall](/nˈʌtɔl/)"),
+    (r"\bKronig\b", "[Kronig](/kɹˈOnɪɡ/)"),
+    (r"\bZitterbewegung\b", "[Zitterbewegung](/tsˈɪtəɹbəvˌAɡʊŋ/)"),
+    (r"\bHaroche's\b", "[Haroche's](/ɑɹˈɔʃɪz/)"),
+    (r"\bHaroche\b(?!')", "[Haroche](/ɑɹˈɔʃ/)"),
+    (r"Euler[–—-]Lagrange", "[Euler](/ˈɔɪləɹ/) [Lagrange](/ləɡɹˈAnʤ/)"),
+    (r"\bCornu\b", "[Cornu](/kɔɹnˈu/)"),
+    (r"\bHund's\b", "[Hund's](/hˈʊnts/)"),
+    (r"\bSchwinger\b", "[Schwinger](/ʃwˈɪŋəɹ/)"),
+    (r"\bHong, Ou and Mandel\b", "Hong, [Ou](/ˈO/) and Mandel"),
+    (r"\banyons\b", "[anyons](/ˈæniɑnz/)"),
+    (r"\bGurney\b", "[Gurney](/ɡˈɜɹni/)"),
+    (r"\bGeiger\b", "[Geiger](/ɡˈIɡəɹ/)"),
+    (r"\bsuperpositions\b", "[superpositions](/sˌupəɹpəzˈɪʃənz/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

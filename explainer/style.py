@@ -221,6 +221,19 @@ C = SimpleNamespace(
     WIGNER_POS="#F2A541",  # Wigner function > 0
     WIGNER_NEG="#4FA3D9",  # Wigner function < 0
     WALL=GREY_C,  # the slit plate, detector screens, apparatus
+    # Quantum mechanics, part 2 (videos/quantum2).  Reuses every part-1 color above with the same meaning.
+    ACTION="#FF6B8B",  # the action S, Lagrangians, the phase S/hbar of a path
+    GAUGE="#A3E635",  # the vector potential A, gauge functions chi, magnetic flux Phi
+    ANGMOM="#FFB070",  # angular momentum J, L and its components (J+ / J- reuse RAISE / LOWER)
+    PERTURB="#F472B6",  # a perturbation lambda V and its matrix elements
+    APPROX="#F0ABFC",  # approximations: WKB waves, partial sums of a series, variational estimates
+    BOSON="#38BDF8",  # symmetric states, bosons, bunching
+    FERMION="#F87171",  # antisymmetric states, fermions, the exchange hole
+    ENVIRONMENT="#94A3B8",  # an environment that records information (decoherence)
+    COHERENCE="#C084FC",  # off-diagonal elements of a density matrix, interference terms
+    DIRAC_POS="#FBBF24",  # positive-energy solutions of the Dirac equation (particles)
+    DIRAC_NEG="#60A5FA",  # negative-energy solutions (holes, antiparticles)
+    NUCLEUS="#FF6E40",  # nuclei, alpha particles
     # General relativity (videos/relativity).  Reuses LIGHT (YELLOW) for photons, light rays and light cones.
     METRIC=BLUE,  # g_mu_nu, ds^2, lengths, rulers, the metric's unit ellipses; spatial curvature (g_rr)
     PROPER_TIME=TEAL,  # tau, clocks and their ticks; the time part of the metric (g_tt)
