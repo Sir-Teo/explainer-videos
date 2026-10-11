@@ -370,7 +370,7 @@ class Cauchy(VoiceoverScene):
         n_max = 40
         ax = plain_axes([0, n_max + 1, 5], [1.9, 3.1, 0.25], 11.0, 4.0, numbers=True, font_size=20,
                         axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-0.3, -1.45, 0])
-        board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=0, n_max=n_max)
+        board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=n_max, n_max=n_max)  # no dot judged yet
         dots = board.dots()
         thm = label(r"\textbf{Rudin 3.14} \ A monotone, bounded sequence converges: \ to its supremum.", font_size=30)
         thm.to_edge(UP, buff=0.45)
@@ -417,6 +417,7 @@ class Cauchy(VoiceoverScene):
                                                                    color=WHITE, stroke_width=2), sup_l)))
             vo.wait_until("e")
             self.play(FadeIn(band), FadeIn(pf[0]))
+            board.N.set_value(0)
             vo.wait_until("n")
             self.play(FadeIn(thr), board.N.animate.set_value(e_N), FadeIn(pf[1]), run_time=1.2)
             vo.wait_until("c")

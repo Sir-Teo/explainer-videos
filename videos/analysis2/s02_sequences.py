@@ -33,13 +33,13 @@ class Sequences(VoiceoverScene):
         a = 1 + (-1.0) ** n * 1.5 / n
         ax = plain_axes([0, n_max + 1, 5], [-0.2, 2.2, 0.5], 11.5, 4.4, numbers=True, font_size=20,
                         axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to(DOWN * 1.0)
-        board = SequenceBoard(ax, a, L=1.0, eps=0.5, N=0, n_max=n_max)
+        board = SequenceBoard(ax, a, L=1.0, eps=0.5, N=n_max, n_max=n_max)  # N = n_max: no dot judged yet
         dfn = MathTex(r"p_n \to p", r"\iff", r"\forall \varepsilon > 0", r"\;\exists N", r"\;:\;",
                       r"n > N \Rightarrow |p_n - p| < \varepsilon", font_size=40).to_edge(UP, buff=0.45)
         dfn[2].set_color(C.EPS)
         dfn[3].set_color(C.DELTA)
         ref = note(r"Rudin 3.1").next_to(dfn, DOWN, buff=0.12).align_to(dfn, RIGHT)
-        seq_l = MathTex(r"p_n = 1 + \frac{(-1)^n\, 1.5}{n}", font_size=34, color=C.SEQ).move_to([4.3, 1.4, 0])
+        seq_l = MathTex(r"p_n = 1 + \frac{(-1)^n\, 1.5}{n}", font_size=34, color=C.SEQ).move_to([4.6, 2.05, 0])
         Lline = DashedLine(ax.c2p(0, 1), ax.c2p(n_max + 1, 1), color=WHITE, stroke_width=1.5)
         dots = board.dots()
         with self.voiceover(
@@ -63,6 +63,8 @@ class Sequences(VoiceoverScene):
         ) as vo:
             vo.wait_until("e")
             self.play(FadeIn(band))
+            board.N.set_value(0)
+            self.wait(0.4)
             for mk, e in (("n", 0.5), ("s", 0.2), ("t", 0.05)):
                 vo.wait_until(mk)
                 if e != 0.5:
@@ -172,7 +174,6 @@ class Sequences(VoiceoverScene):
             "thresholds, the total error is less than epsilon. <bookmark mark='t'/> This is the epsilon over two trick, "
             "and it, with its cousin epsilon over three, does most of the routine work in analysis."
         ) as vo:
-            vo.wait_until("h")
             self.play(FadeIn(head))
             vo.wait_until("a")
             step(0)
@@ -208,8 +209,9 @@ class Sequences(VoiceoverScene):
             "subsequence, because an infinite set of terms must pile up somewhere. In particular, every bounded sequence "
             "of real numbers does."
         ) as vo:
+            self.play(FadeIn(dfn[0]))
             vo.wait_until("d")
-            self.play(FadeIn(dfn))
+            self.play(FadeIn(dfn[1]))
             vo.wait_until("e")
             self.play(Create(ax), FadeIn(ex), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03))
             vo.wait_until("a")
