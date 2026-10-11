@@ -286,6 +286,8 @@ PART_NAMES = [
 LEDGER_ROWS = {
     1: [r"1", r"$\R$, $\R^k$", r"built so: least upper bounds", r"closed and bounded", r"none yet",
         r"cannot ask yet"],
+    2: [r"2", r"sequences, series", r"Cauchy $\Rightarrow$ convergent", r"subsequences converge",
+        r"reorder $\sum |a_n| < \infty$", r"converges at each $x$"],
 }
 
 
@@ -470,3 +472,6 @@ def dictionary_card(left_title: str, right_title: str, pairs, font_size=26, widt
     g = VGroup(lt, rt, rows, arrows)
     g.titles, g.rows, g.arrows, g.mid = VGroup(lt, rt), rows, arrows, mid
     return g.move_to(ORIGIN)
+
+
+from .gameboard import FunctionBoard, SequenceBoard, largest_delta  # noqa: E402,F401

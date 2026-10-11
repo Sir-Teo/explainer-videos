@@ -92,7 +92,7 @@ class Window:
                 step *= 10
             dec = max(0, -math.floor(math.log10(step) + 1e-9))
             # widen the step until the labels (about 0.13 units per character at size 22) have room
-            est = (len(f"{abs(b):.{dec}f}") + 1) * 0.13 * font_size / 22
+            est = (len(f"{abs(b):.{dec}f}") + 1) * 0.17 * font_size / 22
             while (b - a) / step * (est + 0.5) > (self.R - self.L):
                 for mult in (2, 2.5, 2):
                     step *= mult

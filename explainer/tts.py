@@ -430,6 +430,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bsubcover\b", "[subcover](/sˈʌbkˌʌvəɹ/)"),
     (r"\bsubcovers\b", "[subcovers](/sˈʌbkˌʌvəɹz/)"),
     (r"\btaxicab\b", "[taxicab](/tˈæksikˌæb/)"),
+    # A capital A in mid-sentence is a symbol (a set, a matrix, a potential), never the article: say "ay", not "uh".
+    (r"(?<=[a-z,;:] )A['’]s\b", "[A's](/ˈAz/)"),
+    (r"(?<=[a-z,;:] )A\b(?!['’])", "[A](/ˈA/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

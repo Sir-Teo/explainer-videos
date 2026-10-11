@@ -41,13 +41,15 @@ class HeineBorel(VoiceoverScene):
         stmt.move_to([3.6, 2.2, 0])
         target = np.array([0.6234, 0.3711])
         steps = VGroup(
-            label(r"suppose some open cover of $I$ has no finite subcover", font_size=26),
-            label(r"cut $I$ into $2^k$ halves: if each had a finite subcover,", font_size=26),
-            label(r"so would $I$; so one of them has none", font_size=26),
-            label(r"repeat: nested cells, diameters $\delta / 2^n$, shrinking to a point $x^*$", font_size=26),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, -0.5, 0])
+            label(r"suppose some open cover of $I$ has no finite subcover", font_size=25),
+            label(r"cut $I$ into $2^k$ pieces: if each had a finite subcover,", font_size=25),
+            label(r"so would $I$; so one of them has none", font_size=25),
+            label(r"repeat: nested cells, diameters $\delta / 2^n$,", font_size=25),
+            label(r"shrinking to a single point $x^*$", font_size=25),
+        )
         for s_ in steps:
-            s_.set_max_width(6.6)
+            s_.set_max_width(6.0)
+        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.75, -0.6, 0])
         tag = schematic_tag(corner=DL)
         with self.voiceover(
             "The basic compact set is a box: a product of closed intervals, which Rudin calls a k-cell. <bookmark mark='t'/> "
@@ -90,7 +92,7 @@ class HeineBorel(VoiceoverScene):
                 cells.add(lines)
                 lo, hi = nlo, nhi
             vo.wait_until("p")
-            self.play(FadeIn(steps[3]))
+            self.play(FadeIn(steps[3:]))
         xs = Dot(P(*target), radius=0.07, color=WHITE)
         xsl = MathTex(r"x^*", font_size=34).next_to(xs, UR, buff=0.05)
         disk = nbhd(P(*target), 0.55, color=C.OPEN_SET, fill=0.2, width=3)
@@ -215,12 +217,12 @@ class HeineBorel(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def weierstrass(self):
-        n = np.arange(1, 4001)
+        n = np.arange(1, 100001)
         pts = np.stack([np.cos(n), np.sin(np.sqrt(2) * n)], 1)
         side = 5.6
         o = np.array([-3.4, -0.4, 0])
 
-        def make_view(lo, hi, cnt=4000):
+        def make_view(lo, hi, cnt=100000):
             sel = np.all((pts[:cnt] >= lo) & (pts[:cnt] <= hi), axis=1)
             P = pts[:cnt][sel]
             u = (P - lo) / (hi - lo)
@@ -236,18 +238,21 @@ class HeineBorel(VoiceoverScene):
         seqn = MathTex(r"x_n = (\cos n,\ \sin \sqrt2\, n)", font_size=34, color=C.SEQ).move_to([3.6, 0.6, 0])
         lo, hi = np.array([-1.0, -1.0]), np.array([1.0, 1.0])
         dots, cnt = make_view(lo, hi)
-        count = MathTex(rf"\text{{points shown: }} {cnt}", font_size=30).move_to([3.6, -0.3, 0])
+        count = MathTex(rf"\text{{in view: }} {fmt_int(cnt)}", font_size=30).move_to([3.6, -0.3, 0])
+        of = label(r"(of the first $100{,}000$ points; at most $1{,}500$ drawn)", font_size=22, color=GREY_B)
+        of.move_to([3.6, -1.5, 0])
         zl = MathTex(r"\text{zoom } \times 1", font_size=30, color=GREY_A).move_to([3.6, -0.9, 0])
         with self.voiceover(
             "A corollary that we'll use constantly in Part 2. <bookmark mark='s'/> Every bounded infinite set in "
             "k-dimensional space has a limit point. <bookmark mark='e'/> Here are the first four thousand points of the "
-            "sequence cosine of n, sine of root two times n, all inside a square."
+            "sequence cosine of n, sine of root two times n, all inside a square: here, a sample of the first hundred "
+            "thousand."
         ) as vo:
             self.play(Create(frame))
             vo.wait_until("s")
             self.play(FadeIn(stmt))
             vo.wait_until("e")
-            self.play(FadeIn(seqn), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0005), FadeIn(count), FadeIn(zl),
+            self.play(FadeIn(seqn), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0005), FadeIn(count), FadeIn(zl), FadeIn(of),
                       run_time=2)
         with self.voiceover(
             "The proof is bisection once more. <bookmark mark='q'/> Cut the square into quarters; at least one contains "
@@ -273,7 +278,7 @@ class HeineBorel(VoiceoverScene):
                 lo, hi = nlo, nhi
                 nd, cnt = make_view(lo, hi)
                 self.play(FadeOut(quarter), FadeOut(dots), FadeIn(nd),
-                          Transform(count, MathTex(rf"\text{{points shown: }} {cnt}", font_size=30).move_to([3.6, -0.3, 0])),
+                          Transform(count, MathTex(rf"\text{{in view: }} {fmt_int(cnt)}", font_size=30).move_to([3.6, -0.3, 0])),
                           Transform(zl, MathTex(rf"\text{{zoom }} \times {2 ** (k + 1)}", font_size=30, color=GREY_A)
                                     .move_to([3.6, -0.9, 0])), run_time=0.8)
                 dots = nd

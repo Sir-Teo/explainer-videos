@@ -415,6 +415,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(4, 10)], lag_ratio=0.2))
             vo.wait_until("d")
-            self.play(FadeIn(items[10], shift=RIGHT * 0.2), Indicate(items[10], color=C.PATHOLOGY))
+            self.play(FadeIn(items[10], shift=RIGHT * 0.2))
+            self.play(Indicate(items[10], color=C.PATHOLOGY))
         self.wait(0.6)
         self.clear_scene()

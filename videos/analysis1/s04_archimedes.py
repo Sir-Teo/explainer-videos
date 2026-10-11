@@ -86,7 +86,7 @@ class Archimedes(VoiceoverScene):
         am = DashedLine([X(alpha - xs_), -1.0, 0], [X(alpha - xs_), 0.2, 0], color=GREY_B, stroke_width=2)
         am_l = MathTex(r"\alpha - x", font_size=28, color=GREY_B).move_to([X(alpha - xs_), -1.45, 0])
         mx = Dot([X(4 * xs_), -0.6, 0], radius=0.09, color=C.DELTA)
-        mx_l = MathTex(r"mx", font_size=30, color=C.DELTA).move_to([X(4 * xs_) + 0.15, -1.0, 0])
+        mx_l = MathTex(r"mx", font_size=30, color=C.DELTA).move_to([X(4 * xs_) - 0.4, -0.2, 0])
         nxt = Dot([X(5 * xs_), -0.6, 0], radius=0.09, color=C.PATHOLOGY)
         nxt_l = MathTex(r"(m+1)x > \alpha", font_size=30, color=C.PATHOLOGY).move_to([X(5 * xs_) + 1.6, -1.45, 0])
         arr = CurvedArrow(mx.get_center() + UP * 0.1, nxt.get_center() + UP * 0.1, angle=-TAU / 5, color=C.DELTA)
