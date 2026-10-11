@@ -362,6 +362,8 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bPoincaré's\b", "[Poincaré's](/pwˌæŋkɑɹˈAz/)"),
     (r"\bPoincaré\b(?!')", "[Poincaré](/pwˌæŋkɑɹˈA/)"),
     (r"\bBoltzmann\b", "[Boltzmann](/bˈOltsmən/)"),
+    (r"\bKerr's\b", "[Kerr's](/kˈɜɹz/)"),  # Roy Kerr says "cur", not "care"
+    (r"\bKerr\b(?!')", "[Kerr](/kˈɜɹ/)"),
     (r"\bM87\b", "M eighty-seven"),
     (r"\bDESI's\b", "[DESI's](/dˈɛziz/)"),
     (r"\bDESI\b(?!')", "[DESI](/dˈɛzi/)"),
