@@ -260,7 +260,7 @@ class Kruskal(VoiceoverScene):
             return Line(ch.p(-2.5, T), ch.p(2.5, T), color=C.METRIC, stroke_width=4)
 
         SL = redraw(slice_line)
-        view = View3D(center=[3.1, -0.45, 0], scale=0.44, azimuth=0.3, elevation=0.35)
+        view = View3D(center=[3.1, -0.2, 0], scale=0.41, azimuth=0.3, elevation=0.35)
 
         def surface():
             T = abs(Tt.get_value())
