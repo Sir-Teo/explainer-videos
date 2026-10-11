@@ -1,6 +1,6 @@
 # Quantum Mechanics, Part 2: Where the Rules Come From (Symmetry, Sums over Paths, and the Structure of Matter)
 
-A 20-chapter, math-heavy sequel to [Part 1](../quantum). Part 1 ended with the whole theory on one screen: the
+A 57-minute, 20-chapter, math-heavy sequel to [Part 1](../quantum). Part 1 ended with the whole theory on one screen: the
 Schrödinger equation, the Born rule and [x̂, p̂] = iħ. It also admitted how we got them: the equation was guessed
 from plane waves, the Born rule was postulated, and the commutator was computed from a guessed p̂ = −iħ∂ₓ. Part 2
 **derives** them, by three independent roads, and then uses the theory on real matter.
@@ -49,7 +49,26 @@ labeled `schematic`.
 
 <details><summary>Chapters</summary>
 
-CHAPTERS
+- `0:00` Where do the rules come from?
+- `2:36` Part 1: Time symmetry gives the Schrödinger equation
+- `6:03` Translations and boosts: deriving [x, p] = iħ
+- `9:56` Rotations: angular momentum and spin from algebra
+- `12:59` Local phase symmetry and the Aharonov–Bohm effect
+- `16:17` Part 2: Feynman's sum over paths
+- `19:38` The Schrödinger equation from the path integral
+- `22:08` Stationary phase: how Newton's laws emerge
+- `24:44` WKB and the Bohr–Sommerfeld rule
+- `27:39` Alpha decay: 24 orders of magnitude from one integral
+- `30:03` Part 3: Perturbation theory, and why its series diverge
+- `33:20` Fermi's golden rule: where exponential decay comes from
+- `36:06` Part 4: Identical particles: bosons, fermions, Pauli
+- `38:59` Helium, exchange and the periodic table
+- `42:03` Bloch's theorem: why solids have bands
+- `44:20` Part 5: The density matrix and Gleason's theorem
+- `46:40` Decoherence: where the interference goes
+- `49:46` Part 6: The Dirac equation
+- `52:38` g = 2, fine structure and the Lamb shift
+- `54:57` Recap
 
 </details>
 
