@@ -29,7 +29,7 @@ class MeanValue(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def extremum(self):
-        ax = plain_axes([0, 4, 1], [0, 3, 1], 6.4, 4.2, numbers=False).move_to([-3.0, -0.8, 0])
+        ax = plain_axes([0, 4, 1], [-1, 3, 1], 6.4, 4.4, numbers=False).move_to([-3.0, -0.8, 0])
         f = lambda x: 1.2 + 1.3 * np.sin(1.2 * x) - 0.15 * x  # noqa: E731
         g = ax.plot(f, x_range=[0, 4, 0.01], color=C.FUNC, stroke_width=4)
         xm = brentq(lambda x: 1.56 * np.cos(1.2 * x) - 0.15, 0.5, 2.0)
