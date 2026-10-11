@@ -446,6 +446,8 @@ LEXICON: list[tuple[str, str]] = [
     # A capital A in mid-sentence is a symbol (a set, a matrix, a potential), never the article: say "ay", not "uh".
     (r"(?<=[a-z,;:] )A['’]s\b", "[A's](/ˈAz/)"),
     (r"(?<=[a-z,;:] )A\b(?!['’])", "[A](/ˈA/)"),
+    # Likewise a lowercase a followed by an index (a n, a k, a i) is the sequence a, not the article.
+    (r"\ba(?= [nkij]\b(?!-))", "[a](/ˈA/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
