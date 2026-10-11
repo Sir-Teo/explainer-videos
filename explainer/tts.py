@@ -364,6 +364,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bBoltzmann\b", "[Boltzmann](/bˈOltsmən/)"),
     (r"\binspiral\b", "[inspiral](/ˈɪnspˌIɹəl/)"),  # not in the G2P dictionary ("insperil")
     (r"\bringdown\b", "[ringdown](/ɹˈɪŋdˌWn/)"),
+    (r"\bcomoving\b", "[comoving](/kˌOmˈuvɪŋ/)"),  # "co-moving", not "commoving"
     (r"\bmilliarcseconds\b", "[milliarcseconds](/mˌɪliˈɑɹksˌɛkəndz/)"),  # not in the G2P dictionary
     (r"\bmicro-arcseconds\b", "[micro-arcseconds](/mˌIkɹOˈɑɹksˌɛkəndz/)"),
     (r"\bKerr's\b", "[Kerr's](/kˈɜɹz/)"),  # Roy Kerr says "cur", not "care"
