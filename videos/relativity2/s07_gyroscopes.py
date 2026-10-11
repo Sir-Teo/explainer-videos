@@ -5,6 +5,7 @@ import math
 import numpy as np
 
 from explainer import *  # noqa: F403
+from videos.relativity2 import spacetime as st
 from videos.relativity2.common import (View3D, clamp_x, curve3d, label, ladder, load, mtex, note, part_card, redraw,
                                        under)
 
@@ -118,6 +119,43 @@ class Gyroscopes(VoiceoverScene):
         sense = VGroup(label(r"over the poles: with the spin", font_size=22, color=GYRO),
                        label(r"at the equator: against it", font_size=22, color=GYRO)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         sense.move_to([-3.6, -2.6, 0])
+        # first effect, exactly: a particle dropped from far away with zero angular momentum toward a Kerr hole
+        # (a = 0.99M), in the equatorial plane, against the distant observer's time t
+        d = load("kerr_orbits")
+        za = float(d["zamo_a"])
+        keep = d["zamo_r"] <= 3.6
+        zt, zr, zp = d["zamo_t"][keep], d["zamo_r"][keep], d["zamo_phi"][keep]
+        zp = zp - zp[0]  # start on the dashed radial line
+        zc, zs = np.array([3.5, -0.95, 0]), 0.72
+
+        def zxy(r, p):
+            return zc + zs * np.stack([r * np.cos(p), r * np.sin(p), 0 * r], -1)
+
+        kt = ValueTracker(float(zt[0]))
+
+        def trail():
+            j = max(int(np.searchsorted(zt, kt.get_value())), 2)
+            P = zxy(zr[:j], zp[:j])
+            return VGroup(VMobject(stroke_color=SPIN, stroke_width=3).set_points_as_corners(P),
+                          Dot(P[-1], radius=0.07, color=WHITE))
+
+        Z = redraw(trail)
+        zhole = Circle(radius=zs * st.r_plus(za), color=C.CURVATURE, stroke_width=3, fill_color=BLACK,
+                       fill_opacity=1).move_to(zc)
+        zergo = DashedVMobject(Circle(radius=zs * 2.0, color=SPIN, stroke_width=2).move_to(zc), num_dashes=40)
+        zstraight = DashedLine(zxy(np.array([3.6]), np.array([0.0]))[0], zc + zs * st.r_plus(za) * RIGHT, color=GREY_B,
+                               stroke_width=2)
+        zrot = Arc(radius=zs * 3.95, start_angle=0.5, angle=0.7, arc_center=zc, color=SPIN, stroke_width=3).add_tip(
+            tip_length=0.16)
+        zrl = label(r"spin", font_size=22, color=SPIN).next_to(zrot.point_from_proportion(0.5), UR, buff=0.05)
+        zlab = VGroup(label(r"computed exactly:", font_size=24),
+                      label(r"dropped from far away with $L = 0$", font_size=24, color=GREY_A),
+                      label(r"toward a Kerr hole ($a = 0.99M$),", font_size=24, color=GREY_A),
+                      label(r"as seen from far away", font_size=24, color=GREY_A),
+                      label(r"dashed: straight in, as without spin", font_size=22, color=GREY_B),
+                      label(r"dashed circle: the ergosphere", font_size=22, color=SPIN),
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([-3.4, -1.2, 0])
+        zgrp = VGroup(zhole, zergo, zstraight, zrot, zrl, zlab)
         with self.voiceover(
             "This gravitomagnetic field has two effects. <bookmark mark='a'/> First, it drags things around. Drop "
             "something with zero angular momentum near a spinning body, and it doesn't fall straight in: it circles, "
@@ -127,9 +165,12 @@ class Gyroscopes(VoiceoverScene):
             "the gyroscope is dragged along with the rotation; at the equator, the other way."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(eq, lag_ratio=0.2))
+            self.play(FadeIn(eq, lag_ratio=0.2), FadeIn(zgrp))
+            self.add(Z)
+            self.play(kt.animate.set_value(60.0), run_time=max(vo.until("b") - 0.2, 3), rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(lt, lag_ratio=0.2))
+            Z.clear_updaters()
+            self.play(FadeOut(VGroup(zgrp, Z)), FadeIn(lt, lag_ratio=0.2))
             self.play(FadeIn(earth), GrowArrow(axis), FadeIn(jl))
             self.play(Create(lines), run_time=1.5)
             vo.wait_until("c")

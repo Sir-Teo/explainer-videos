@@ -218,7 +218,7 @@ class Focusing(VoiceoverScene):
                   axis_config={"stroke_color": GREY_B, "font_size": 20},
                   x_axis_config={"numbers_to_include": [0.5, 1, 1.5, 2]},
                   y_axis_config={"numbers_to_include": [-12, -8, -4]}).move_to([-3.3, -1.0, 0])
-        xl = label(r"$\lambda \,/\, |\theta_0|^{-1}$", font_size=22).next_to(ax.x_axis, DOWN, buff=0.35)
+        xl = label(r"$\lambda\,|\theta_0|$", font_size=22).next_to(ax.x_axis, RIGHT, buff=0.1)
         yl = label(r"$\theta / |\theta_0|$", font_size=22, color=TH).next_to(ax.y_axis, UP, buff=0.1)
         lam = np.linspace(0, 1.99, 400)
         pure = -1 / (1 - lam / 2)
@@ -248,7 +248,9 @@ class Focusing(VoiceoverScene):
         cen = np.array([3.0, -0.5, 0])
         sc = 0.2
         rays = VGroup()
-        for P in beam:
+        for b_, P in zip(rz["beam_b"], beam):
+            if b_ < 4:  # skip the two rays bent by more than ~60 degrees near the photon sphere: a lens, not a mirror
+                continue
             P = P[np.isfinite(P[:, 0])]
             pts = np.concatenate([cen[:2] + sc * P, np.zeros((len(P), 1))], 1)
             for sgn in (1, -1):
@@ -269,6 +271,7 @@ class Focusing(VoiceoverScene):
             "infinity means the rays cross: a caustic, a focal point. <bookmark mark='d'/> Gravity is a lens that only "
             "ever converges."
         ) as vo:
+            self.play(FadeIn(mass), Create(rays, lag_ratio=0.05), FadeIn(bl), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(eqs[0]))
             vo.wait_until("b")
@@ -277,17 +280,17 @@ class Focusing(VoiceoverScene):
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(wall))
             self.play(Create(c0), Create(c1), FadeIn(lab), FadeIn(eqs[3]), run_time=2)
             vo.wait_until("d")
-            self.play(FadeIn(mass), Create(rays, lag_ratio=0.05), FadeIn(bl), run_time=2.5)
+            self.play(Indicate(rays, color=WHITE, scale_factor=1.0), run_time=1.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def trapped(self):
         rz = load("raych")
         tt = rz["tt"]
-        sets = [("out3", np.array([-3.4, -0.4, 0]), r"a sphere at $r = 3M$ (outside)"),
-                ("in15", np.array([3.4, -0.4, 0]), r"a sphere at $r = 1.5M$ (inside)")]
+        sets = [("out3", np.array([-3.4, 0.0, 0]), r"a sphere at $r = 3M$ (outside)"),
+                ("in15", np.array([3.4, 0.0, 0]), r"a sphere at $r = 1.5M$ (inside)")]
         k = ValueTracker(0.0)
-        sc = 0.55
+        sc = 0.5  # the outgoing front reaches r = 3.75M: 1.9 units
 
         def panel(name, cen):
             ro, ri = rz[name + "_out"], rz[name + "_in"]
@@ -309,8 +312,8 @@ class Focusing(VoiceoverScene):
         leg = VGroup(label(r"outgoing flash", font_size=22, color=C.LIGHT),
                      label(r"ingoing flash (dashed)", font_size=22, color=C.LIGHT),
                      label(r"horizon", font_size=22, color=C.CURVATURE)).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.7)
-        verdict = VGroup(label(r"outgoing area grows: $\theta_{\rm out} > 0$", font_size=24).move_to(sets[0][1] + DOWN * 2.05),
-                         label(r"\emph{both} areas shrink: a trapped surface", font_size=24, color=C.CURVATURE).move_to(sets[1][1] + DOWN * 2.05))
+        verdict = VGroup(label(r"outgoing area grows: $\theta_{\rm out} > 0$", font_size=24).move_to(sets[0][1] + DOWN * 2.2),
+                         label(r"\emph{both} areas shrink: a trapped surface", font_size=24, color=C.CURVATURE).move_to(sets[1][1] + DOWN * 2.2))
         cmp = note(r"radii of the light fronts computed from outgoing and ingoing radial null rays (Eddington--Finkelstein)").to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "So where would light rays start out converging? <bookmark mark='a'/> Take a sphere outside a black hole and "
@@ -348,22 +351,22 @@ class Focusing(VoiceoverScene):
         box = SurroundingRectangle(thm, color=GREY_B, buff=0.25, corner_radius=0.1)
         g = VGroup(box, thm).to_edge(UP, buff=0.35)
         # schematic of the proof idea: the boundary of the trapped surface's future closes up
-        o1, o2 = np.array([-3.4, -2.3, 0]), np.array([3.4, -2.3, 0])
+        o1, o2 = np.array([-3.4, -2.1, 0]), np.array([3.4, -2.1, 0])
 
         def sheet(o, converge):
             g_ = VGroup()
-            w = 0.9
+            w = 1.3
             L, R = o + LEFT * w, o + RIGHT * w
             g_.add(Line(L, R, color=WHITE, stroke_width=4))
             if converge:
-                apex = o + UP * 0.9
+                apex = o + UP * w  # light at 45 degrees
                 g_.add(Line(L, apex, color=C.LIGHT, stroke_width=3), Line(R, apex, color=C.LIGHT, stroke_width=3))
                 g_.add(Polygon(L, R, apex, stroke_width=0, fill_color=C.LIGHT, fill_opacity=0.15))
             else:
-                g_.add(Line(L, L + np.array([-1.3, 1.3, 0]), color=C.LIGHT, stroke_width=3),
-                       Line(R, R + np.array([1.3, 1.3, 0]), color=C.LIGHT, stroke_width=3))
-                g_.add(Line(L, L + np.array([0.9, 0.9, 0]), color=C.LIGHT, stroke_width=2, stroke_opacity=0.6),
-                       Line(R, R + np.array([-0.9, 0.9, 0]), color=C.LIGHT, stroke_width=2, stroke_opacity=0.6))
+                g_.add(Line(L, L + np.array([-1.9, 1.9, 0]), color=C.LIGHT, stroke_width=3),
+                       Line(R, R + np.array([1.9, 1.9, 0]), color=C.LIGHT, stroke_width=3))
+                g_.add(Line(L, L + np.array([1.2, 1.2, 0]), color=C.LIGHT, stroke_width=2, stroke_opacity=0.6),
+                       Line(R, R + np.array([-1.2, 1.2, 0]), color=C.LIGHT, stroke_width=2, stroke_opacity=0.6))
             return g_
 
         s1, s2 = sheet(o1, False), sheet(o2, True)
@@ -375,7 +378,14 @@ class Focusing(VoiceoverScene):
             label(r"Nobel Prize 2020: ``for the discovery that black hole formation is a robust", font_size=24,
                   color=GREY_A),
             label(r"prediction of the general theory of relativity''", font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.08).move_to(DOWN * 0.15)
+        ).arrange(DOWN, buff=0.08).move_to(DOWN * 0.1)
+        hawk = VGroup(
+            label(r"Hawking (1965--70): the same argument, run backward in time:", font_size=26),
+            label(r"an expanding universe of ordinary matter has a singularity in its past", font_size=26,
+                  color=C.SINGULARITY),
+        ).arrange(DOWN, buff=0.08).move_to(DOWN * 1.55)
+        qg = label(r"what the theorems don't say: what happens there. \ That needs quantum gravity.", font_size=26,
+                   color=GREY_A).move_to(DOWN * 2.9)
         with self.voiceover(
             "Here is Penrose's theorem. <bookmark mark='a'/> If gravity focuses light, if space at one moment is "
             "infinite, and if a trapped surface forms, then some light ray must come to an end after a finite affine "
@@ -401,4 +411,8 @@ class Focusing(VoiceoverScene):
         ) as vo:
             vo.wait_until("n")
             self.play(FadeOut(VGroup(s1, s2, c1, c2, sch)), FadeIn(nob, lag_ratio=0.2))
+            vo.wait_until("h")
+            self.play(FadeIn(hawk, lag_ratio=0.3))
+            vo.wait_until("q")
+            self.play(FadeIn(qg))
         self.clear_scene()
