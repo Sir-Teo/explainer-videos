@@ -177,7 +177,7 @@ class Continuity(VoiceoverScene):
                            font_size=30),
                      label(r"(no epsilons: \ only open sets)", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.12)
         thm.to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 6.3, 1], [-1.6, 1.6, 1], 7.6, 4.4, numbers=False).move_to([-2.2, -0.9, 0])
+        ax = plain_axes([0, 6.3, 1], [-1.6, 1.6, 1], 7.6, 3.8, numbers=False).move_to([-2.2, -0.55, 0])
         f = lambda x: np.sin(1.6 * x) * 0.8 + 0.25 * np.sin(4.1 * x)  # noqa: E731
         graph = ax.plot(f, x_range=[0, 6.3, 0.005], color=C.FUNC, stroke_width=3.5)
         lo, hi = 0.3, 0.75
@@ -223,8 +223,9 @@ class Continuity(VoiceoverScene):
         y2 = ax2.c2p(0, 0)[1] - 0.25
         p2 = VGroup(Line([ax2.c2p(1, 0)[0], y2, 0], [ax2.c2p(2, 0)[0], y2, 0], color=C.PATHOLOGY, stroke_width=8),
                     endpoint([ax2.c2p(1, 0)[0], y2, 0], True, C.PATHOLOGY))
-        p2l = label(r"contains $1$, but no interval around $1$: \ not open", font_size=22, color=C.PATHOLOGY).next_to(
-            p2, DOWN, buff=0.15)
+        p2l = VGroup(label(r"contains $1$, but no", font_size=22, color=C.PATHOLOGY),
+                     label(r"interval around $1$: \ not open", font_size=22, color=C.PATHOLOGY)
+                     ).arrange(DOWN, buff=0.06).next_to(p2, DOWN, buff=0.15)
         with self.voiceover(
             "Now the reformulation that changed mathematics. <bookmark mark='t'/> A function is continuous exactly "
             "when the preimage of every open set is open. <bookmark mark='a'/> Pick an open interval V of values. "
@@ -272,8 +273,9 @@ class Continuity(VoiceoverScene):
             "<bookmark mark='b'/> Sums and products are continuous by the epsilon over two trick, so polynomials and "
             "rational functions are continuous wherever they're defined."
         ) as vo:
+            self.play(FadeIn(rows[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            self.play(FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]), FadeIn(rows[3]))
         self.wait(0.5)
