@@ -29,7 +29,7 @@ class Compactness(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def image(self):
-        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-2.8, -0.6, 0])
+        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-2.0, -0.6, 0])
         f = lambda x: 0.9 * np.sin(1.7 * x) + 0.35 * np.cos(4.3 * x)  # noqa: E731
         a, b = 0.3, 3.7
         g = ax.plot(f, x_range=[a, b, 0.005], color=C.FUNC, stroke_width=4)
@@ -44,7 +44,7 @@ class Compactness(VoiceoverScene):
                      endpoint(ax.c2p(0, m) + LEFT * 0.3, True, C.COMPACT_SET),
                      endpoint(ax.c2p(0, M) + LEFT * 0.3, True, C.COMPACT_SET))
         dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, DOWN, buff=0.15)
-        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, LEFT, buff=0.15)
+        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, UP, buff=0.15)
         thm = label(r"\textbf{Rudin 4.14} \ A continuous image of a compact set is compact.", font_size=30)
         thm.to_edge(UP, buff=0.4)
         steps = VGroup(
@@ -52,7 +52,7 @@ class Compactness(VoiceoverScene):
             label(r"the preimages $f^{-1}(V_\alpha)$ are open (4.8) and cover $X$", font_size=26),
             label(r"$X$ compact: finitely many do", font_size=26),
             label(r"so finitely many $V_\alpha$ cover $f(X)$", font_size=26, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.7, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.0, 0.4, 0])
         # an open cover of the image by overlapping intervals, and the preimage of one of them
         centers = np.linspace(m - 0.1, M + 0.1, 7)
         cov = VGroup()
@@ -259,7 +259,7 @@ class Compactness(VoiceoverScene):
         pts = VGroup(*[Dot(ax3.c2p(x, dd), radius=0.07, color=WHITE) for x, dd in zip(xs, d_inv)])
         head = MathTex(r"\tfrac1x,\ \varepsilon = 0.1:\ \text{the largest } \delta \text{ at each } x", font_size=34)
         head.to_edge(UP, buff=0.5)
-        f_l = MathTex(r"\delta(x) = x - \frac{1}{1/x + \varepsilon} \to 0", font_size=32, color=C.DELTA).move_to([-2.6, 1.2, 0])
+        f_l = MathTex(r"\delta(x) = x - \frac{1}{1/x + \varepsilon} \to 0", font_size=32, color=C.DELTA).move_to([-2.6, 1.75, 0])
         note_ = label(r"no single $\delta > 0$ is below all of them", font_size=28, color=C.PATHOLOGY).next_to(
             ax3, DOWN, buff=0.35)
         with self.voiceover(
