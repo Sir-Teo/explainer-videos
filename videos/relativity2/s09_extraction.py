@@ -84,7 +84,8 @@ class Extraction(VoiceoverScene):
             return np.concatenate([cen[:2] + sc * P, np.zeros((len(P), 1))], 1)
 
         S0, S1, S2 = scr(P0)[::-1], scr(P1), scr(P2)
-        tt0 = -t0[::-1]  # (particle 0 was integrated backward from the split, tau <= 0)
+        tt0 = t0[::-1]  # particle 0 was integrated backward from the split: tau runs from -T0 up to 0
+        assert np.all(np.diff(tt0) >= 0)
         T0 = float(-tt0[0])
         k = ValueTracker(-T0)
 
@@ -92,8 +93,9 @@ class Extraction(VoiceoverScene):
             t = k.get_value()
             g = VGroup()
             j = int(np.searchsorted(tt0, min(t, 0.0)))
-            if j >= 2:
-                g.add(VMobject(stroke_color=C.MATTER, stroke_width=4).set_points_as_corners(S0[:j]))
+            if j >= 2:  # (dimmed after the split, so the escaping fragment stands out)
+                g.add(VMobject(stroke_color=C.MATTER, stroke_width=4, stroke_opacity=1.0 if t < 0 else 0.35)
+                      .set_points_as_corners(S0[:j]))
             if t < 0:
                 g.add(Dot(S0[max(j - 1, 0)], radius=0.1, color=C.MATTER))
                 return g
@@ -118,8 +120,8 @@ class Extraction(VoiceoverScene):
             note(r"computed: Kerr geodesics, $a = 0.99M$, split at $r = 1.4M$; each fragment"),
             note(r"$0.05\times$ the mass, flung apart at 99.5\% of light speed (4-momentum conserved)"),
             note(r"drawn in Kerr--Schild coordinates; dashed: the ergosurface"),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).to_corner(DR, buff=0.25)
-        t_end = min(float(t1[-1]), float(t2[-1]))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.05).to_corner(UR, buff=0.25)
+        t_end = max(float(t1[-1]), float(t2[-1]))  # each fragment stops at the end of its own track
         with self.voiceover(
             "Roger Penrose saw what this allows, in 1969. <bookmark mark='a'/> Send a particle into the ergosphere. "
             "<bookmark mark='b'/> There, let it split in two, throwing one piece backward, against the rotation, fast "
@@ -134,7 +136,7 @@ class Extraction(VoiceoverScene):
             self.add(TR)
             self.play(k.animate.set_value(0.0), FadeIn(tab[0]), run_time=vo.until("b"), rate_func=linear)
             vo.wait_until("b")
-            self.play(k.animate.set_value(0.25 * t_end), run_time=2, rate_func=linear)
+            self.play(k.animate.set_value(0.15 * t_end), run_time=2, rate_func=linear)
             vo.wait_until("c")
             self.play(k.animate.set_value(t_end), FadeIn(tab[1]), FadeIn(tab[2]), run_time=4, rate_func=linear)
             vo.wait_until("d")

@@ -524,9 +524,11 @@ def penrose_process(a, r_s, m12=0.05):
     dA = 8 * math.pi / kap * (E1 - OmH * L1)
     assert dA > 0
     # trajectories (Mino time): particle 0 backward from the split (lam < 0), fragments forward
-    r0, ph0, tau0, _ = equatorial_geodesic(E0, L0, mu0, a, r_s, 0.0, -0.9, n=2500, r_stop=14.0)
+    # (Mino time runs slowly far out, d lambda = d tau / r^2: integrate long enough to reach r = 7 both ways)
+    r0, ph0, tau0, _ = equatorial_geodesic(E0, L0, mu0, a, r_s, 0.0, -20.0, n=8000, r_stop=7.0)
     r1, ph1, tau1, _ = equatorial_geodesic(E1, L1, m12, a, r_s, 0.0, 6.0, n=2500, r_stop=0.25)
-    r2, ph2, tau2, _ = equatorial_geodesic(E2, L2, m12, a, r_s, 0.0, 0.9, n=2500, r_stop=14.0)
+    r2, ph2, tau2, _ = equatorial_geodesic(E2, L2, m12, a, r_s, 0.0, 20.0, n=8000, r_stop=7.0)
+    assert r0[-1] > 6.5 and r2[-1] > 6.5, (r0[-1], r2[-1])  # (the last sample before the stop event)
     xy = lambda r, p: np.stack(st.kerr_schild_xy(r, p, a), 1)  # noqa: E731
     return dict(pp_a=a, pp_r=r_s, pp_E=np.array([E0, E1, E2]), pp_L=np.array([L0, L1, L2]), pp_m=m12, pp_dA=dA,
                 pp_in=xy(r0, ph0), pp_tau0=tau0, pp_neg=xy(r1, ph1), pp_r1=r1, pp_tau1=tau1, pp_out=xy(r2, ph2),
