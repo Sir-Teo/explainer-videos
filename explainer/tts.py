@@ -448,6 +448,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"(?<=[a-z,;:] )A\b(?!['’])", "[A](/ˈA/)"),
     # Likewise a lowercase a followed by an index (a n, a k, a i) is the sequence a, not the article.
     (r"\ba(?= [nkij]\b(?!-))", "[a](/ˈA/)"),
+    (r"(?<=\bf of )a\b", "[a](/ˈA/)"),  # f of a
+    (r"\ba(?= (?:to|and) b\b)", "[a](/ˈA/)"),  # from a to b
+    (r"(?<=\bat )a(?= and\b)", "[a](/ˈA/)"),  # down at a and up at b
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 
