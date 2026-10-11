@@ -24,8 +24,9 @@ class Hook(VoiceoverScene):
             "<bookmark mark='l'/> That's the first row of our ledger. Now we put it to work on limits: sequences, "
             "infinite sums, continuity and derivatives. And we start with a warning about infinite sums."
         ) as vo:
-            vo.wait_until("l")
             self.play(FadeIn(led))
+            vo.wait_until("l")
+            self.play(Indicate(led.rows[0], color=C.EPS, scale_factor=1.04))
         self.play(FadeOut(led))
 
     # ------------------------------------------------------------------
@@ -111,7 +112,7 @@ class Hook(VoiceoverScene):
         pl = MathTex(r"\pi", font_size=30, color=C.EPS).next_to(ax.c2p(K, math.pi), RIGHT, buff=0.1)
         fin = VGroup(MathTex(rf"\text{{after }} 10^6 \text{{ terms: }} {float(d['final_pi']):.6f}", font_size=34),
                      MathTex(rf"\pi = {math.pi:.6f}", font_size=34, color=C.EPS)).arrange(DOWN, buff=0.15)
-        fin.move_to([4.4, 1.4, 0])
+        fin.move_to([-2.6, 2.25, 0])
         assert abs(float(d["final_pi"]) - math.pi) < 1e-5 and abs(ratio - 134) < 1.5
         with self.voiceover(
             "<bookmark mark='p'/> Plot the running total against the number of terms used. It overshoots pi, falls back, "
@@ -150,7 +151,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> Keep raising the target and the total runs off to infinity. Same terms, every time; "
             "only the order changes, <bookmark mark='c'/> and in the natural order they add up to log two."
         ) as vo:
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeOut(self.series), FadeIn(head), Create(ax))
             self.play(Create(c_pi), FadeIn(labs[0]), run_time=1.2)
             vo.wait_until("a")
             self.play(Create(c_m1), FadeIn(labs[1]), run_time=1.5)
