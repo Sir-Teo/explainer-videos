@@ -66,7 +66,7 @@ class NumberE(VoiceoverScene):
         d = load("etail")
         ns, terms = [int(v) for v in d["tn_n"]], d["tn_terms"]
         K = terms.shape[1]
-        H, w, x0, base = 2.4, 1.15, -6.0, -2.6
+        H, w, x0, base = 2.1, 0.95, -6.4, -2.9
         outl = VGroup()
         for k in range(K):
             h = H / math.factorial(k)
@@ -93,17 +93,18 @@ class NumberE(VoiceoverScene):
             n = ns[i]
             t = (1 + 1 / n) ** n
             return MathTex(rf"n = {n}:\quad \Big(1 + \tfrac1n\Big)^n = {t:.4f}", font_size=34, color=C.FREQ).move_to(
-                [3.3, 1.2, 0])
+                [4.3, 1.5, 0])
 
         bars, nl = fill(0), nlab(0)
-        cmp = VGroup(label(r"each orange bar is shorter than its blue box, so $(1 + \tfrac1n)^n \le s_n < e$;",
-                           font_size=26),
-                     label(r"for fixed $k$, the bar fills its box as $n \to \infty$, \ so the limit is at least "
-                           r"$s_m$ for every $m$", font_size=26)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        cmp.move_to([2.6, -0.2, 0])
+        cmp = VGroup(label(r"each orange bar is shorter than its blue box:", font_size=24),
+                     label(r"$(1 + \tfrac1n)^n \le s_n < e$", font_size=26),
+                     label(r"for fixed $k$, each bar fills its box as $n \to \infty$:", font_size=24),
+                     label(r"the limit is at least $s_m$, for every $m$", font_size=26)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                            buff=0.12)
+        cmp.move_to([4.4, 0.0, 0])
         for r in cmp:
             r.set_color(GREY_A)
-        res = MathTex(r"\lim_{n \to \infty} \Big(1 + \frac1n\Big)^n = e", font_size=40, color=C.EPS).move_to([3.3, -1.6, 0])
+        res = MathTex(r"\lim_{n \to \infty} \Big(1 + \frac1n\Big)^n = e", font_size=40, color=C.EPS).move_to([4.4, -1.85, 0])
         with self.voiceover(
             "The other definition of e is compound interest: one plus one over n, to the n-th power. "
             "<bookmark mark='a'/> Expand it with the binomial theorem. The k-th term is one over k factorial, "
@@ -133,8 +134,9 @@ class NumberE(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(res))
             vo.wait_until("c")
-            slow = label(rf"at $n = 10$: \ off by ${float(d['err_t10']):.3f}$, \ versus ${sci(float(d['err_s10']), 1)}$ "
-                         r"for $s_{10}$", font_size=26, color=GREY_B).next_to(res, DOWN, buff=0.25)
+            slow = VGroup(label(rf"at $n = 10$: \ off by ${float(d['err_t10']):.3f}$,", font_size=24, color=GREY_B),
+                          label(rf"versus ${sci(float(d['err_s10']), 1)}$ for $s_{{10}}$", font_size=24, color=GREY_B)
+                          ).arrange(DOWN, buff=0.08).next_to(res, DOWN, buff=0.22)
             self.play(FadeIn(slow))
         assert np.all(np.diff(terms, axis=0) >= -1e-15)
         for k in range(K):
@@ -155,7 +157,7 @@ class NumberE(VoiceoverScene):
                 why(r"no integer lies strictly between $0$ and $1$")]
         rows[2][2].set_color(C.PATHOLOGY)
         step = ladder(self, rows, whys, keep=3, top=2.4, buff=0.42, x=-0.4)
-        y = -2.2
+        y = -2.8
         X = lambda v: -5.6 + v * 11.2  # noqa: E731
         line = Line([X(0) - 0.2, y, 0], [X(1) + 0.2, y, 0], color=GREY_C, stroke_width=2)
         ints = VGroup(*[VGroup(Dot([X(v), y, 0], radius=0.07, color=WHITE),
@@ -176,7 +178,7 @@ class NumberE(VoiceoverScene):
         def qlab(i):
             q = qs[i]
             return MathTex(rf"q = {q}:\quad q!\,(e - s_q) = {tail[i]:.4f} < \tfrac{{1}}{{{q}}}", font_size=30,
-                           color=C.FREQ).move_to([0, y + 0.85, 0])
+                           color=C.FREQ).move_to([0, y + 0.62, 0])
 
         ql = qlab(0)
         with self.voiceover(
