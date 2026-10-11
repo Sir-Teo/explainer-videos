@@ -37,9 +37,10 @@ class Outro(VoiceoverScene):
                        label(r"\textbf{Rudin 5.19}: \ the inequality survives:", font_size=28),
                        MathTex(r"|f(b) - f(a)| \le (b - a)\, |f'(\xi)| \text{ for some } \xi", font_size=32,
                                color=C.CONNECTED_SET),
-                       label(r"the form that works in every later space \ (Part 4: $\R^n$; Banach spaces)",
-                             font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        facts.move_to([3.3, -0.9, 0])
+                       VGroup(label(r"the form that works in every later space", font_size=24, color=GREY_A),
+                              label(r"(Part 4: $\R^n$; \ Banach spaces)", font_size=24, color=GREY_A)
+                              ).arrange(DOWN, aligned_edge=LEFT, buff=0.08)).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        facts.next_to(o + R * RIGHT, RIGHT, buff=0.7)
         with self.voiceover(
             "One last result, to close the part. <bookmark mark='a'/> Let a point go once around the unit circle at "
             "unit speed. <bookmark mark='b'/> It ends where it started, so the total change is zero, <bookmark mark='c'/> "
@@ -122,7 +123,7 @@ class Outro(VoiceoverScene):
         head = label(r"Next: Part 3, \ Integration and the first function space", font_size=38).to_edge(UP, buff=0.35)
         M = 6
         cs = 0.72
-        o = np.array([-4.6, 1.3, 0])
+        o = np.array([-4.6, 1.75, 0])
         cells = VGroup()
         for m in range(1, M + 1):
             for n in range(1, M + 1):
