@@ -167,7 +167,16 @@ class Redraw(VGroup):
 
     @staticmethod
     def _rebuild(m):
-        m.submobjects = [m.func()]
+        # Scene.play flattens the moving mobjects' families once, when the animation starts, and draws that list
+        # every frame; so the pieces swapped out here would keep being drawn, frozen.  Empty them (except any the new
+        # frame reuses) so they draw nothing.
+        new = m.func()
+        keep = {id(x) for x in new.get_family()}
+        for old in m.submobjects:
+            for x in old.get_family():
+                if id(x) not in keep:
+                    x.clear_points()
+        m.submobjects = [new]
 
 
 def redraw(func) -> Redraw:

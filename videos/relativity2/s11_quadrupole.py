@@ -228,11 +228,16 @@ class Quadrupole(VoiceoverScene):
         th2 = np.linspace(0, np.pi, 4001)
         tot = 2 * np.pi * np.trapezoid(pat_f(th2) * np.sin(th2), th2)
         assert abs(tot - 16 * np.pi / 5) < 1e-5 and abs(pat_f(0.0) / pat_f(np.pi / 2) - 8) < 1e-12
-        pc = np.array([3.4, -2.4, 0])
+        pc = np.array([4.6, -1.85, 0])
         pat = VMobject(stroke_color=WAVE, stroke_width=3, fill_color=WAVE, fill_opacity=0.25)
-        pat.set_points_as_corners([pc + 0.55 * fi * np.array([math.sin(t_), math.cos(t_), 0]) for fi, t_ in zip(f, th)])
-        axl = Line(pc + DOWN * 1.3, pc + UP * 1.3, color=GREY_C, stroke_width=1.5)
-        pl = label(r"power vs direction: $8\times$ stronger along the orbit's axis", font_size=22, color=WAVE).next_to(pc + DOWN * 1.2, DOWN, buff=0.05)
+        pat.set_points_as_corners([pc + 0.78 * fi * np.array([math.sin(t_), math.cos(t_), 0]) for fi, t_ in zip(f, th)])
+        axl = Line(pc + DOWN * 1.85, pc + UP * 1.85, color=GREY_C, stroke_width=1.5)
+        orb = Ellipse(width=1.3, height=0.22, color=MAT, stroke_width=2).move_to(pc)
+        pl = VGroup(label(r"power vs direction", font_size=24, color=WAVE),
+                    label(r"$8\times$ stronger along", font_size=24, color=WAVE),
+                    label(r"the orbit's axis", font_size=24, color=WAVE),
+                    label(r"(the orbit, edge-on)", font_size=20, color=MAT)).arrange(DOWN, aligned_edge=RIGHT, buff=0.08)
+        pl.next_to(pc + LEFT * 0.9, LEFT, buff=0.1)
         with self.voiceover(
             "Now apply it to two stars, or black holes, in a circular orbit. <bookmark mark='a'/> The waves spiral out "
             "from the binary like water from a rotating sprinkler, here computed in the orbital plane. Pink is "
@@ -252,7 +257,7 @@ class Quadrupole(VoiceoverScene):
             self.play(phase.animate.set_value(6 * np.pi), run_time=vo.until("d"), rate_func=linear)
             step(2)
             self.play(phase.animate.set_value(8 * np.pi), run_time=vo.until("e"), rate_func=linear)
-            self.play(Create(axl), DrawBorderThenFill(pat), FadeIn(pl), phase.animate.set_value(10 * np.pi),
+            self.play(Create(axl), Create(orb), DrawBorderThenFill(pat), FadeIn(pl), phase.animate.set_value(10 * np.pi),
                       run_time=vo.remaining() + 0.5, rate_func=linear)
         img.clear_updaters()
         S.clear_updaters()
