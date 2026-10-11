@@ -197,6 +197,12 @@ def _depth_curve(view, P, color, stroke_width, opacity, back_opacity):
 _PT_SCHW_MAX = float(st.page_thorne_kerr(np.linspace(6.0001, 26, 6000), 1e-9).max())
 
 
+def peak_flux(a: float) -> float:
+    """The peak Page-Thorne flux of a thin disk around a Kerr hole of spin a (same accretion rate and mass for every
+    spin, so values for different spins compare directly)."""
+    return float(st.page_thorne_kerr(np.linspace(st.isco(a) + 1e-4, 26, 6000), max(a, 1e-9)).max())
+
+
 def disk_texture_M(r, phi, t, a=0.0, seed=3):
     """Part 1's streaky gas texture, in units of M, wound up by the Kerr Keplerian shear Omega = 1/(r^1.5 + a)."""
     rr = np.random.default_rng(seed)
@@ -215,9 +221,10 @@ class KerrShader:
     """RGBA image of a precomputed Kerr ray trace at disk time t (in M), shaded like part 1's: Page-Thorne flux for
     this spin times g^4 (Doppler and gravitational shift).  A spinning hole's inner disk is about a hundred times
     brighter than a non-spinning one's peak, so the brightness is compressed with a gamma, (F g^4)^gamma, and the
-    color temperature uses the flux relative to this disk's own peak.  Colors are illustrative, as in part 1."""
+    color temperature uses the flux relative to this disk's own peak, or to ``fref`` (pass the same value to images
+    that are compared side by side, so equal fluxes get equal colors).  Colors are illustrative, as in part 1."""
 
-    def __init__(self, d, exposure=0.55, stars=True, gamma=0.5, tscale=1.0):
+    def __init__(self, d, exposure=0.55, stars=True, gamma=0.5, tscale=1.0, fref=None):
         a = float(d["a"])
         H, W = d["captured"].shape
         base = np.zeros((H, W, 3), np.float32)
@@ -229,7 +236,7 @@ class KerrShader:
             base += s[..., None] * np.array([0.85, 0.9, 1.0], np.float32)
         rr, pp, g = d["hit_r"][ok], d["hit_phi"][ok], d["g"][ok]
         F = st.page_thorne_kerr(rr, max(a, 1e-9))
-        F_own = F / float(st.page_thorne_kerr(np.linspace(st.isco(a) + 1e-4, 26, 6000), max(a, 1e-9)).max())
+        F_own = F / (fref if fref is not None else peak_flux(a))
         fade = np.clip((26.0 - rr) / 6.0, 0, 1)
         self.amp = exposure * (F / _PT_SCHW_MAX * g**4) ** gamma * fade
         temp = np.clip(tscale * g * F_own ** 0.25, 0, 2)

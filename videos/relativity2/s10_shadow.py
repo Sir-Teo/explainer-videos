@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import *  # noqa: F403
 from videos.relativity2 import spacetime as st
-from videos.relativity2.common import (opener, BHShader, KerrShader, Raster, bh_screen_scale, label, ladder, load, load1, mtex,
+from videos.relativity2.common import (opener, BHShader, KerrShader, peak_flux, Raster, bh_screen_scale, label, ladder, load, load1, mtex,
                                        note, polyline, redraw, shadow_outline, under)
 from videos.relativity2.compute import L_SUN
 
@@ -158,8 +158,9 @@ class Shadow(VoiceoverScene):
     def images(self):
         kd = load("kerr80")
         assert int(kd["mismatch"]) == 0
+        fref = peak_flux(float(kd["a"]))  # one temperature scale for both images: equal fluxes, equal colors
         ks = KerrShader(kd)
-        ss = KerrShader(load("kerr80_0"))
+        ss = KerrShader(load("kerr80_0"), fref=fref)
         t = ValueTracker(0.0)
         W = 6.8
         H = W * 720 / 1280
@@ -196,7 +197,7 @@ class Shadow(VoiceoverScene):
         kd2 = load("kerr20")
         assert int(kd2["mismatch"]) == 0
         ks2 = KerrShader(kd2)
-        ss2 = KerrShader(load("kerr20_0"))
+        ss2 = KerrShader(load("kerr20_0"), fref=fref)
         t2 = ValueTracker(0.0)
         left = Raster(lambda v: ss2(v), t2, W, H, center=cl)
         right = Raster(lambda v: ks2(v), t2, W, H, center=cr)

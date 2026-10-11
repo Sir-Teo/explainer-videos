@@ -155,7 +155,10 @@ Shading the Kerr images: the Page–Thorne flux of a thin Kerr disk (Page & Thor
 zero at the ISCO) times g⁴, where g is the redshift of the disk's circular-orbit gas as seen by the
 camera. Brightness is compressed
 with a gamma of 0.5 so the inner edge and the lensed far side are both visible, and color is a
-monotonic temperature map normalized per image. The colors are illustrative; the geometry is exact.
+monotonic map of the local flux, normalized to the disk's peak. In each side-by-side pair, both images use
+the spinning disk's scale: Page–Thorne fluxes at the same accretion rate compare directly, so equal radii get
+equal colors and only the spinning disk's inner region runs hotter. The colors are illustrative; the geometry
+is exact.
 
 ## Fact-check notes and sources
 
@@ -261,7 +264,7 @@ On-screen simplifications, stated here for the record:
 * The stretched wave in the redshift derivation (chapter 17) is schematic. The diagram after it is
   computed.
 * The Kerr images use illustrative colors and a gamma-compressed brightness (above). The comparison
-  pairs (a = 0 vs a = 0.99) are traced and shaded identically.
+  pairs (a = 0 vs a = 0.99) are traced identically and shaded on one temperature scale.
 * Gravity Probe B's predictions use the leading-order formulas for a circular polar orbit. The
   official analysis includes Earth's oblateness and the orbit's actual shape (6606.1 and 39.2).
 * "A few hundred thousand years" for the CMB (narration): this model gives ~370,000 years.
