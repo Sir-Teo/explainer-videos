@@ -262,30 +262,57 @@ class Penrose(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def collapse(self):
-        # Left: exact exterior (Kruskal) of a star that sits at r = 5M and then collapses.  Right: the standard
+        # Left: the exact exterior of a star that sits at r = 5M and then collapses, drawn in Penrose's compactified
+        # Kruskal coordinates over the (faint) eternal diagram, which the star covers up.  Right: the standard
         # (schematic) Penrose diagram of gravitational collapse.
         c = load("collapse")
         U, V = c["U"], c["V"]
-        kch = Chart(center=[-4.6, -1.3, 0], scale=0.78, origin=(0, 0), box=(-6.9, -0.5, -3.6, 2.7))
-        T, X = st.TX(U, V)
-        ok = U * V < 0.999
-        surf = kch.curve(X[ok], T[ok], color=C.MATTER, stroke_width=5)
-        # shade the star: everything to the left of its surface
-        # shade the star: the region to the left of its surface, inside the panel
-        vis = ok & (kch.p(X, T)[:, 1] > -3.6) & (kch.p(X, T)[:, 0] < -0.5)
-        Ps = kch.p(X[vis], T[vis])
-        x_left = -6.9
-        poly_pts = [np.array([x_left, Ps[0, 1], 0])] + list(Ps) + [np.array([x_left, Ps[-1, 1], 0])]
-        star = Polygon(*poly_pts, stroke_width=0, fill_color=C.MATTER, fill_opacity=0.18)
-        hz = kch.curve(np.linspace(float(X[np.argmin(np.abs(U))]), 2.9, 50), np.linspace(float(X[np.argmin(np.abs(U))]), 2.9, 50),
-                       color=C.CURVATURE, stroke_width=4)
-        xs = np.linspace(float(X[ok][-1]), 2.6, 200)
-        sing = zigzag_curve(kch.p(xs, np.sqrt(1 + xs**2)), amp=0.04)
-        kl = VGroup(label(r"the star's surface (computed)", font_size=22, color=C.MATTER),
-                    label(r"exact exterior, Kruskal coordinates", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08)
+        # Time translation is an exact symmetry (a boost of U and V), so slide the collapse to cross the horizon at
+        # V = 1, the middle of the diagram, instead of up against i+.
+        Vh = float(c["V_h"])
+        U, V = U * Vh, V / Vh
+        ok = U * V < 0.99999
+        Tp, Xp = st.penrose(U[ok], V[ok])
+        Xp, Tp = np.concatenate([[PI / 2], Xp]), np.concatenate([[-PI / 2], Tp])  # static since t = -infinity: from i-
+        assert abs(Tp[-1] - PI / 2) < 1e-2 and abs(st.r_of_UV(U[np.argmin(np.abs(U))] * V[np.argmin(np.abs(U))]) - 2) < 0.01
+        lc, ls = np.array([-3.75, -0.75, 0]), 0.98
+
+        def L(x, y):
+            return lc + ls * np.array([x, y, 0])
+
+        surf = VMobject(stroke_color=C.MATTER, stroke_width=5).set_points_smoothly([L(x, y) for x, y in zip(Xp, Tp)])
+        top, rgt, bot, lft = (0, PI / 2), (PI, 0), (0, -PI / 2), (-PI, 0)
+        corners = [(PI / 2, PI / 2), (PI, 0), (PI / 2, -PI / 2), (-PI / 2, -PI / 2), (-PI, 0), (-PI / 2, PI / 2)]
+        faint = VGroup(
+            *[Line(L(*corners[i]), L(*corners[(i + 1) % 6]), color=C.LIGHT, stroke_width=2, stroke_opacity=0.35)
+              for i in (0, 1, 3, 4)],
+            Line(L(-PI / 2, -PI / 2), L(PI / 2, PI / 2), color=C.CURVATURE, stroke_width=2, stroke_opacity=0.45),
+            Line(L(-PI / 2, PI / 2), L(PI / 2, -PI / 2), color=C.CURVATURE, stroke_width=2, stroke_opacity=0.45),
+            zigzag(L(-PI / 2, PI / 2), L(PI / 2, PI / 2)).set_stroke(opacity=0.45),
+            zigzag(L(-PI / 2, -PI / 2), L(PI / 2, -PI / 2)).set_stroke(opacity=0.45),
+            *[label(t_, font_size=26, color=GREY_B).move_to(L(*xy)) for t_, xy in
+              (("I", (PI / 2 + 0.25, 0)), ("II", (0, PI / 2 - 0.45)), ("III", (-PI / 2, 0)), ("IV", (0, -PI / 2 + 0.45)))],
+        )
+        # the star: everything to the left of its surface; opaque, because those regions never exist
+        poly = [L(x, y) for x, y in zip(Xp, Tp)] + [L(-PI / 2, PI / 2), L(*lft), L(-PI / 2, -PI / 2)]
+        star = VGroup(Polygon(*poly, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1),
+                      Polygon(*poly, stroke_width=0, fill_color=C.MATTER, fill_opacity=0.2))
+        x_end = float(Xp[-1])
+        hz = Line(L(PI / 4, PI / 4), L(PI / 2, PI / 2), color=C.CURVATURE, stroke_width=4)
+        sing = zigzag(L(x_end, PI / 2), L(PI / 2, PI / 2))
+        scri1 = VGroup(Line(L(PI / 2, PI / 2), L(*rgt), color=C.LIGHT, stroke_width=3),
+                       Line(L(*rgt), L(PI / 2, -PI / 2), color=C.LIGHT, stroke_width=3))
+        kl = VGroup(label(r"the star's surface: static at $r = 5M$, then free fall (computed)", font_size=22,
+                          color=C.MATTER),
+                    label(r"exact exterior, in Penrose's compactified Kruskal coordinates", font_size=22,
+                          color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         kl.to_corner(UL, buff=0.25)
-        st_l = label(r"star", font_size=26, color=C.MATTER).move_to(kch.p(-1.2, -0.6))
-        hz_l = label(r"horizon", font_size=22, color=C.CURVATURE).move_to(kch.p(2.6, 1.9))
+        st_l = label(r"star", font_size=28, color=C.MATTER).move_to(L(-1.3, -0.2))
+        hz_l = label(r"horizon", font_size=22, color=C.CURVATURE).next_to(L(0.92, 0.92), RIGHT, buff=0.1)
+        ends = VGroup(mtex(r"i^-", font_size=26).next_to(L(PI / 2, -PI / 2), DOWN, buff=0.06),
+                      mtex(r"i^+", font_size=26).next_to(L(PI / 2, PI / 2), UR, buff=0.04),
+                      mtex(r"i^0", font_size=26).next_to(L(*rgt), RIGHT, buff=0.06),
+                      label(r"$r = 0$", font_size=22, color=C.SINGULARITY).next_to(L(0.9, PI / 2), UP, buff=0.12))
         # schematic Penrose diagram of collapse
         o = np.array([1.2, -3.2, 0])
         sc = 1.0
@@ -328,11 +355,13 @@ class Penrose(VoiceoverScene):
             "standard Penrose diagram of a collapse looks like this: the star's surface falls through the horizon and "
             "meets the singularity, and outside, everything is as before."
         ) as vo:
-            self.play(Create(hz), Create(sing), FadeIn(hz_l))
+            self.play(Create(faint, lag_ratio=0.05), run_time=2)
             vo.wait_until("a")
             self.play(FadeIn(kl), Create(surf), run_time=2)
+            self.play(Create(scri1), Create(hz), Create(sing), FadeIn(hz_l), FadeIn(ends))
             vo.wait_until("b")
-            self.play(FadeIn(star), FadeIn(st_l))
+            self.play(FadeIn(star), FadeIn(st_l), FadeOut(VGroup(*faint[:-4], *faint[-3:])), run_time=1.5)
+            self.bring_to_front(surf)
             vo.wait_until("c")
             self.play(Create(center), Create(scri_m), Create(scri_p), FadeIn(sch))
             self.play(FadeIn(fill2), Create(surf2), Create(sing2), FadeIn(labs2[:6]), run_time=2)
