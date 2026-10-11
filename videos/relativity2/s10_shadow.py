@@ -205,7 +205,10 @@ class Shadow(VoiceoverScene):
         rl = label(r"$a = 0.99M$, $20^\circ$", font_size=28, color=SPIN).next_to(right, DOWN, buff=0.2)
         o_r2 = shadow_outline(0.99, 20, cr, sc, color=HOR, stroke_width=2.5)
         o_l2 = shadow_outline(0.0005, 20, cl, sc, color=HOR, stroke_width=2.5)
-        txt = note(r"seen nearly face-on, as we see M87* (about $17^\circ$): the shadow is almost round either way").to_edge(DOWN, buff=0.35)
+        txt = VGroup(
+            note(r"seen nearly face-on, as we see M87* (about $17^\circ$): the shadow's edge (lilac) is almost round, and"),
+            note(r"nearly the same size, either way; the dark patch inside it depends on where the disk ends ($6M$ vs $1.45M$)"),
+        ).arrange(DOWN, buff=0.06).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Seen nearly face-on, which is roughly how we see the black hole in M87, the shadow "
             "is almost round whatever the spin, and its size changes by less than seven percent. That makes the "
