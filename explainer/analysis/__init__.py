@@ -318,6 +318,8 @@ LEDGER_ROWS = {
         r"pointwise bounds are uniform", r"diverges for most $f \in C$; \ a.e.\ for $L^2$"],
     9: [r"9", r"$\mathcal D'$, \ $\mathcal S'$", r"Fr\'echet pieces; \ weak-$*$ limits", r"(bounded sets, \ Montel-like)",
         r"$\partial$ commutes with every limit", r"every series converges in $\mathcal D'$"],
+    10: [r"10", r"$B(H)$; \ $C^*$-algebras", r"closed in norm; \ Gelfand--Naimark", r"Alaoglu again: \ $\Delta$ compact",
+         r"$f(T)$ for every Borel $f$", r"$\mathcal F$ is the spectral theorem"],
 }
 
 
