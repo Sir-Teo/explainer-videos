@@ -146,6 +146,7 @@ tools/
   publish.py               a smaller copy (< 100 MB) of a finished video, for sharing -> published/ (not committed)
   export_script.py         extracts the narration script from the scene code
   contact_sheet.py         tiles frames of a render into one image for layout QA
+  dead_air.py              finds stretches where the screen is empty or nearly so while the narration runs
   check_narration.py       Whisper "listen test": diffs what the TTS said against the script
   score_voice.py           UTMOSv2 naturalness + Whisper word error rate for narration audio
 ```
@@ -179,6 +180,7 @@ tools/
    asserted against the data at render time.
 6. **QA every render.** `--dry_run` catches exceptions in seconds;
    `tools/contact_sheet.py` catches overlaps and off-screen text;
+   `tools/dead_air.py` finds narration playing over an empty screen;
    `tools/check_narration.py` catches mispronunciations (e.g. "dy" read as
    "die", "m a" read as "Emma"), fixed via the lexicon in `explainer/tts.py`;
    `tools/score_voice.py` measures how natural the narration sounds; the
