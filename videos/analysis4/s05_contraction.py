@@ -57,6 +57,8 @@ class Contraction(VoiceoverScene):
         for row in tab:
             for j in range(4):
                 row[j].set_x(x0 + cols_x[j] + row[j].width / 2)
+        if tab.get_right()[0] > 6.85:  # keep the widest header inside the frame
+            tab.shift((6.85 - tab.get_right()[0]) * RIGHT)
         fl = MathTex(rf"x^* = {fix:.10f}", font_size=30, color=C.EPS).next_to(tab, DOWN, buff=0.3)
         assert np.all(errs <= bound + 1e-15) and abs(c - math.sin(1)) < 1e-15
         with self.voiceover(
