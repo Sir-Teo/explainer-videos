@@ -131,7 +131,13 @@ class Sobolev(VoiceoverScene):
                   font_size=24, color=C.EPS),
             label(r"in $n$ dimensions $\int (1 + |\xi|^2)^{-s} d\xi$ needs $2s > n$: \ the dimension costs smoothness",
                   font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(why, DOWN, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        for r_ in rows:
+            if r_.width > 6.6:
+                r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(why, DOWN, buff=0.3)
+        if rows.get_right()[0] > 6.9:
+            rows.shift((6.9 - rows.get_right()[0]) * RIGHT)
         head = label(r"Sobolev's lemma, \ in three lines", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> When does a finite Sobolev norm force a function to be continuous? The inversion "
@@ -197,6 +203,11 @@ class Sobolev(VoiceoverScene):
             label(r"at $s = \tfrac12$ each decade adds $\log 10 = 2.3026$: \ a logarithm", font_size=22, color=GREY_A),
             label(r"sharp: \ $s > \tfrac12$ would make it continuous, \ and it jumps", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35)
+        x_free = max(t_.get_right()[0] for t_ in tags) + 0.25  # clear of the curve tags
+        if rows.get_left()[0] < x_free:
+            if rows.width > 6.9 - x_free:
+                rows.width = 6.9 - x_free
+            rows.shift((x_free - rows.get_left()[0]) * RIGHT)
         head = label(r"The sawtooth sits exactly at $s = \tfrac12$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The Fourier thread once more. The sawtooth's coefficients are one over n, so its "
