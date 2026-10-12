@@ -35,7 +35,7 @@ class RadonNikodym(VoiceoverScene):
         x = np.linspace(0, 1, 600)
         area = area_under(ax, x, h(x), C.MEASURE, 0.22)
         gh = polyline(ax, x, h(x), color=C.MEASURE, stroke_width=3).set_stroke(opacity=0.0)
-        gh_l = MathTex(r"h = \frac{d\lambda}{dm} \ ?", font_size=30, color=C.MEASURE).next_to(ax.c2p(0.42, 1.8), RIGHT,
+        gh_l = MathTex(r"h = \frac{d\lambda}{dm} \ ?", font_size=30, color=C.MEASURE).next_to(ax.c2p(0.62, 1.85), RIGHT,
                                                                                               buff=0.1)
         lam_l = label(r"$\lambda$: \ a measure on $[0, 1]$, \ shown as mass (orange)", font_size=24,
                       color=C.MEASURE).next_to(ax, UP, buff=0.12)
@@ -56,10 +56,13 @@ class RadonNikodym(VoiceoverScene):
         tab = VGroup(MathTex(r"x", *[rf"\ r = {sci(r_, 0)}" for r_ in rs], font_size=22, color=GREY_A))
         for p, row, hv in zip(pts, ratios, hp):
             tab.add(MathTex(f"{p:.2f}", *[rf"\ {v:.4f}" for v in row], font_size=22))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.15, 0.5, 0])
-        for row in tab[1:]:
-            for j in range(1, len(rs) + 1):
-                row[j].align_to(tab[0][j], LEFT)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        widths = [max(r_[j].width for r_ in tab) for j in range(len(rs) + 1)]
+        lefts = np.concatenate([[0], np.cumsum(np.array(widths) + 0.3)[:-1]])
+        for r_ in tab:  # a real grid: every column starts clear of the widest entry before it
+            for j in range(len(rs) + 1):
+                r_[j].set_x(lefts[j] + r_[j].width / 2)
+        tab.move_to([4.15, 0.5, 0])
         concl = VGroup(label(r"the ratios settle on a function: \ the density", font_size=24),
                        MathTex(r"h(x) = 1 + 0.8 \sin 4x \quad (\text{checked to } 10^{-5})", font_size=26,
                                color=C.MEASURE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(tab, DOWN, buff=0.3)
