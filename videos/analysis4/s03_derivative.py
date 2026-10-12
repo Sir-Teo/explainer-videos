@@ -116,8 +116,8 @@ class Derivative(VoiceoverScene):
         pts = VGroup(*[Dot(ax.c2p(math.log10(h), math.log10(w)), radius=0.07, color=C.EPS) for h, w in zip(hs, worst)])
         slope = DashedLine(ax.c2p(-3, math.log10(worst[-1]) - 0.0), ax.c2p(0, math.log10(worst[-1]) + 3),
                            color=GREY_B, stroke_width=2)
-        sl = label(r"slope $1$: \ the error is of order $|h|^2$", font_size=22, color=GREY_B).next_to(
-            ax.c2p(-1.3, -3.0), RIGHT, buff=0.05)
+        sl = label(r"dashed: slope $1$, \ the error is of order $|h|^2$", font_size=22, color=GREY_B).next_to(
+            ax, DOWN, buff=0.12)  # below the axes, clear of the tick labels
         tab = VGroup(MathTex(r"|h|", r"\quad \max_{\text{200 directions}} \text{ratio}", font_size=26, color=GREY_A))
         for h, w in zip(hs, worst):
             tab.add(MathTex(rf"{h:g}", rf"\quad {w:.5f}", font_size=26))
