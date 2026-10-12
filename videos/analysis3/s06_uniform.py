@@ -230,11 +230,13 @@ class Uniform(VoiceoverScene):
                              DashedLine(ax.c2p(0, -1 / n**2), ax.c2p(2 * np.pi, -1 / n**2), color=col,
                                         stroke_width=1.5),
                              MathTex(rf"\pm\tfrac{{1}}{{{n * n}}}", font_size=24, color=col).next_to(
-                                 ax.c2p(2 * np.pi, 1 / n**2), RIGHT, buff=0.1)))
+                                 ax.c2p(2 * np.pi, (-1) ** (n + 1) / n**2), RIGHT, buff=0.1)))  # alternate sides
         head = VGroup(label(r"\textbf{Rudin 7.10} \ (Weierstrass M-test) \ $|f_n| \le M_n$ and $\sum M_n < \infty$ "
                             r"$\Rightarrow$ $\sum f_n$ converges uniformly", font_size=28),
                       MathTex(r"\sum_{n=1}^{\infty} \frac{\sin nx}{n^2}: \qquad M_n = \frac{1}{n^2}", font_size=34,
                               color=C.APPROX)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
+        if head[0].width > 13.0:
+            head[0].width = 13.0
         idx = {1: 0, 2: 1, 3: 2, 5: 3, 10: 4, 20: 5}
         shown = [1, 2, 5, 10, 20]
 
