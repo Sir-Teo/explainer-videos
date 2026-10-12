@@ -1,0 +1,183 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.analysis import *  # noqa: F403
+from videos.analysis9.common import area_under, load, plain_axes, polyline, rho
+
+
+class Hook(VoiceoverScene):
+    def construct(self):
+        self.recap()
+        self.spike()
+        self.step()
+        self.plan()
+
+    # ------------------------------------------------------------------
+    def recap(self):
+        led = ledger(filled=8, highlight=9).scale(0.9)
+        with self.voiceover(
+            "Eight rows of the ledger are filled. Part 9 builds the spaces in which every function can be "
+            "differentiated, <bookmark mark='l'/> and in which the Fourier transform becomes a perfect symmetry."
+        ) as vo:
+            self.play(FadeIn(led))
+            vo.wait_until("l")
+            self.play(Indicate(led.rows[8], color=C.EPS, scale_factor=1.03))
+        self.play(FadeOut(led))
+
+    # ------------------------------------------------------------------
+    def spike(self):
+        d = load("delta")
+        ns, vals, phi0 = d["ns"], d["vals"], d["phi0"]
+        ax = plain_axes([-1.5, 1.5, 0.5], [-0.6, 4.2, 1], 6.4, 4.2, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.1, -0.6, 0])
+        x = np.linspace(-1.5, 1.5, 3001)
+        rng = np.random.default_rng(1)
+        a, b, c = rng.normal(size=3)
+        phi = np.exp(-x * x) * (1 + a * x) * np.cos(b * x + c)
+        gphi = polyline(ax, x, phi, color=C.TEST_FN, stroke_width=3.5)
+        nT = ValueTracker(1.0)
+
+        def spike_():
+            n = nT.get_value()
+            y = n * rho(n * x)
+            return VGroup(area_under(ax, x, np.minimum(y, 4.2), C.DISTRIBUTION, 0.35),
+                          polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3))
+
+        sp = always_redraw(spike_)
+
+        def readout():
+            n = nT.get_value()
+            xx = np.linspace(-1.5, 1.5, 60001)
+            ph = np.exp(-xx * xx) * (1 + a * xx) * np.cos(b * xx + c)
+            v = float(np.sum((ph * n * rho(n * xx))[1:] + (ph * n * rho(n * xx))[:-1]) / 2 * (xx[1] - xx[0]))
+            return VGroup(MathTex(rf"n = {n:.1f}: \ \int \varphi(x)\, n\rho(nx)\,dx = {v:.5f}", font_size=28,
+                                  color=C.DISTRIBUTION),
+                          MathTex(rf"\varphi(0) = {phi0[0]:.5f}", font_size=28, color=C.TEST_FN)
+                          ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.6, 1.5, 0])
+
+        rd = always_redraw(readout)
+        assert abs(vals[0, -1] - phi0[0]) < 2e-4
+        rows = VGroup(
+            label(r"\emph{``a function that is $0$ except at $0$, \ with integral $1$''}", font_size=24),
+            label(r"cannot exist: \ an integral cannot see one point", font_size=24, color=C.PATHOLOGY),
+            label(r"but its \emph{action} is perfectly clear:", font_size=24),
+            MathTex(r"\langle \delta, \varphi\rangle = \varphi(0)", font_size=36, color=C.EPS),
+            MathTex(r"\text{10 random } \varphi: \ |\text{integral} - \varphi(0)| < 2 \times 10^{-4} \ (n = 256)",
+                    font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -1.3, 0])
+        for r_ in rows:
+            if r_.width > 6.4:
+                r_.width = 6.4
+        lab = MathTex(r"\varphi", font_size=30, color=C.TEST_FN).next_to(ax.c2p(-1.3, float(np.interp(-1.3, x, phi))), UP,
+                                                                         buff=0.1)
+        head = label(r"Dirac's delta, \ and why it cannot be a function", font_size=34).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "<bookmark mark='a'/> Physicists used Dirac's delta for twenty years before mathematicians could say "
+            "what it was: a function that is zero everywhere except at one point, with integral one. "
+            "<bookmark mark='b'/> No such function exists: an integral can't see a single point. But look at what "
+            "the narrowing bumps do. Each has area one; their heights blow up. <bookmark mark='c'/> Integrated "
+            "against a fixed smooth function phi, they return phi of zero, more and more exactly. "
+            "<bookmark mark='d'/> So stop asking what delta is, and ask what it does: it takes a test function and "
+            "returns its value at zero. That's a perfectly good linear functional."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1]), FadeIn(sp))
+            self.play(nT.animate.set_value(6.0), run_time=3.0)
+            vo.wait_until("c")
+            self.play(Create(gphi), FadeIn(lab), FadeIn(rd))
+            self.play(nT.animate.set_value(40.0), run_time=4.0)
+            vo.wait_until("d")
+            self.play(FadeIn(rows[2:4]))
+            self.play(FadeIn(rows[4]))
+        for m in (sp, rd):
+            m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def step(self):
+        ax = plain_axes([-1.5, 1.5, 0.5], [-0.2, 1.3, 0.5], 6.0, 2.4).move_to([-3.2, 1.0, 0])
+        bx = plain_axes([-1.5, 1.5, 0.5], [-0.3, 4.2, 1], 6.0, 2.6).move_to([-3.2, -2.0, 0])
+        x = np.linspace(-1.5, 1.5, 3001)
+        nT = ValueTracker(1.5)
+
+        def smooth():
+            n = nT.get_value()
+            y = n * rho(n * x)
+            Hn = np.concatenate([[0], np.cumsum((y[1:] + y[:-1]) / 2 * np.diff(x))])
+            return VGroup(polyline(ax, x, Hn, color=C.SEQ, stroke_width=3.5),
+                          polyline(bx, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3.5))
+
+        sm = always_redraw(smooth)
+        H = VGroup(Line(ax.c2p(-1.5, 0), ax.c2p(0, 0), color=WHITE, stroke_width=2),
+                   Line(ax.c2p(0, 1), ax.c2p(1.5, 1), color=WHITE, stroke_width=2)).set_stroke(opacity=0.5)
+        l1 = MathTex(r"H_n \to H \ \text{(Heaviside's step)}", font_size=26, color=C.SEQ).next_to(ax, UP, buff=0.05)
+        l2 = MathTex(r"H_n' = n\rho(nx) \to \delta", font_size=26, color=C.DISTRIBUTION).next_to(bx, UP, buff=0.05)
+        rows = VGroup(
+            label(r"Heaviside (1890s): \ $H' = \delta$, \ used to solve circuits", font_size=24),
+            label(r"the step has no derivative at $0$ as a function,", font_size=24),
+            label(r"but its smoothings have derivatives that act like $\delta$", font_size=24),
+            label(r"\textbf{the move} \ (Sobolev 1936, \ Schwartz 1945):", font_size=26, color=C.EPS),
+            label(r"define everything by its action on smooth test functions", font_size=26, color=C.EPS),
+            label(r"then \emph{every} function has derivatives of every order", font_size=26, color=C.CONNECTED_SET),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.4, 0])
+        for r_ in rows:
+            if r_.width > 6.6:
+                r_.width = 6.6
+        head = label(r"The derivative of a step", font_size=34).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "<bookmark mark='a'/> Heaviside, solving circuit equations in the 1890s, wrote that the derivative of a "
+            "step is delta. <bookmark mark='b'/> Smooth the step slightly: the smoothed steps have honest "
+            "derivatives, and they're exactly the narrowing bumps. <bookmark mark='c'/> The move that makes this "
+            "rigorous, made by Sobolev and then Laurent Schwartz, is to define everything by its action on smooth "
+            "test functions. Then every function, and much more, has derivatives of every order."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(H), FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(sm), FadeIn(l1), FadeIn(l2))
+            self.play(nT.animate.set_value(30.0), run_time=4.0)
+            self.play(FadeIn(rows[1:3]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[3:5]))
+            self.play(FadeIn(rows[5]))
+        sm.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        chapters = [
+            r"Test functions", r"Distributions", r"Calculus with distributions", r"Supports and local structure",
+            r"Convolution and mollifiers", r"The Fourier transform", r"Inversion and Plancherel",
+            r"Tempered distributions", r"Paley--Wiener", r"Sobolev spaces", r"Fundamental solutions",
+            r"Wiener and the primes",
+        ]
+        items = VGroup(*[label(rf"{i + 1}.\; {t}", font_size=28) for i, t in enumerate(chapters)])
+        colL = VGroup(*items[:6]).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([-3.0, -0.5, 0])
+        colR = VGroup(*items[6:]).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([3.0, -0.5, 0]).align_to(colL, UP)
+        head = label(r"Part 9: \ distributions and the Fourier transform", font_size=40).to_edge(UP, buff=0.4)
+        sub = label(r"Rudin, \textit{Functional Analysis}, chapters 6--9, \ and \textit{Real and Complex Analysis}, chapter 9",
+                    font_size=24, color=GREY_B).next_to(head, DOWN, buff=0.15)
+        with self.voiceover(
+            "Here's the plan, following chapters six to nine of Functional Analysis. <bookmark mark='a'/> First the "
+            "test functions and the distributions, their calculus and their structure. <bookmark mark='b'/> Then the "
+            "Fourier transform, from L one to the tempered distributions, where it becomes a symmetry. "
+            "<bookmark mark='c'/> Then what it buys: Paley-Wiener, Sobolev spaces, fundamental solutions of partial "
+            "differential equations, and finally Wiener's theorem and the prime numbers."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sub))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(5)], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(5, 8)], lag_ratio=0.3))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(8, 12)], lag_ratio=0.3))
+        self.wait(0.6)
+        self.clear_scene()

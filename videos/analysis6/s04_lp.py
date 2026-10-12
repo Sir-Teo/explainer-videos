@@ -80,9 +80,9 @@ class Lp(VoiceoverScene):
             "two."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax), Create(g))
             vo.wait_until("b")
-            self.play(Create(ax), Create(g), FadeIn(f_l))
+            self.play(FadeIn(f_l), Indicate(g, color=C.FUNC))
             self.play(FadeIn(hole), FadeIn(spike), FadeIn(sp_l))
             vo.wait_until("c")
             self.play(Create(nax), FadeIn(ticks), FadeIn(yt), FadeIn(p_l), FadeIn(mk), FadeIn(rd))
@@ -161,13 +161,13 @@ class Lp(VoiceoverScene):
         a1 = area_under(ax, x0, x0**-0.5, C.CONNECTED_SET, 0.25)
         f2 = polyline(ax, np.linspace(1 / 6, 1, 300), np.linspace(1 / 6, 1, 300) ** -1, color=C.PATHOLOGY,
                       stroke_width=3)
-        l1 = MathTex(r"x^{-1/2}", font_size=28, color=C.CONNECTED_SET).move_to(ax.c2p(0.42, 4.2))
-        l2 = MathTex(r"(x^{-1/2})^2 = \tfrac1x", font_size=28, color=C.PATHOLOGY).move_to(ax.c2p(0.62, 2.4))
+        l1 = MathTex(r"x^{-1/2}", font_size=28, color=C.CONNECTED_SET).next_to(ax.c2p(0.45, 5.2), RIGHT, buff=0)
+        l2 = MathTex(r"(x^{-1/2})^2 = \tfrac1x", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.45, 4.2), RIGHT, buff=0)
         x1 = np.linspace(1, 8, 300)
         g1 = polyline(bx, x1, 1 / x1, color=C.CONNECTED_SET, stroke_width=4)
         g2 = polyline(bx, x1, 1 / x1**2, color=C.PATHOLOGY, stroke_width=3)
-        k1 = MathTex(r"\tfrac1x", font_size=28, color=C.CONNECTED_SET).move_to(bx.c2p(3.0, 0.55))
-        k2 = MathTex(r"(\tfrac1x)^2", font_size=28, color=C.PATHOLOGY).move_to(bx.c2p(1.9, 0.12)).shift(RIGHT * 0.5)
+        k1 = MathTex(r"\tfrac1x", font_size=28, color=C.CONNECTED_SET).next_to(bx.c2p(5.0, 0.9), RIGHT, buff=0)
+        k2 = MathTex(r"(\tfrac1x)^2", font_size=28, color=C.PATHOLOGY).next_to(bx.c2p(5.0, 0.62), RIGHT, buff=0)
         t1 = VGroup(
             MathTex(r"\varepsilon:\ " + r",\ ".join(sci(e, 0) for e in eps), font_size=24, color=GREY_A),
             MathTex(r"\int_\varepsilon^1 x^{-1/2} = " + r",\ ".join(f"{v:.4f}" for v in half) + r" \to 2",

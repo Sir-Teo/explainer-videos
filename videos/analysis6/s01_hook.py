@@ -89,8 +89,9 @@ class Hook(VoiceoverScene):
                          MathTex(str(b), font_size=30, color=C.SEQ).move_to([cols[2], y, 0]))
             tab.add(row)
         rule = Line([3.0, 0.95, 0], [6.8, 0.95, 0], color=GREY_C, stroke_width=1.5)
-        out = label(r"same area, \ twice the energy, \ four times the height: \ which distance is right?",
-                    font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3)
+        out = VGroup(label(r"same area, \ twice the energy, \ four times the height:", font_size=26, color=C.EPS),
+                     label(r"which distance is right?", font_size=26, color=C.EPS)).arrange(DOWN, buff=0.1).move_to(
+            [3.7, -2.75, 0])
         head = label(r"How long is a vector? \ How big is a function?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> How long is a vector? In the plane we have a choice. Add the sizes of the "
@@ -144,7 +145,7 @@ class Hook(VoiceoverScene):
                          color=C.MEASURE).next_to(ax, DOWN, buff=0.2) for n, v in zip(ns, d1)]
         rl = MathTex(r"r_n(x) = \text{clip}\big(n(x - \tfrac12) + \tfrac12,\ 0,\ 1\big)", font_size=26,
                      color=C.SEQ).next_to(ax, UP, buff=0.15)
-        mapax = plain_axes([0, 0.14, 0.05], [0.36, 0.52, 0.05], 3.6, 3.6).move_to([3.4, -0.2, 0])
+        mapax = plain_axes([0, 0.14, 0.05], [0.36, 0.52, 0.05], 3.0, 3.0).move_to([3.6, 0.15, 0])
         u_l = MathTex(r"\int_0^{1/2} f", font_size=24, color=GREY_B).next_to(mapax, DOWN, buff=0.12)
         v_l = MathTex(r"\int_{1/2}^1 f", font_size=24, color=GREY_B).next_to(mapax, LEFT, buff=0.12)
         cam_h = label(r"the camera: \ each function is one point", font_size=24, color=GREY_A).next_to(mapax, UP,
@@ -164,7 +165,10 @@ class Hook(VoiceoverScene):
             label(r"Cauchy in $C[0, 1]$ with $\int |f - g|$, \ but no continuous limit:", font_size=24),
             label(r"a limit $g$ would have $\int |g - \mathbf 1_{(1/2, 1]}| = 0$, \ so $g = 0$ then $1$", font_size=24,
                   color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.22)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.75, 0])
+        for r_ in side:
+            if r_.width > 6.6:
+                r_.width = 6.6
         # Cauchy, exactly: the ramps are nested on each side of 1/2
         for i in range(len(ns)):
             for j in range(i + 1, len(ns)):

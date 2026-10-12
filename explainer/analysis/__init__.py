@@ -316,6 +316,8 @@ LEDGER_ROWS = {
         r"$\frac{d}{dz}\sum = \sum \frac{d}{dz}$; \ $\oint$ and $\lim$", r"$H^2$: \ $\hat f(n) = 0$ for $n < 0$"],
     8: [r"8", r"Banach; \ Fr\'echet", r"Baire: \ not a countable union of thin sets", r"weak-* compact (Alaoglu)",
         r"pointwise bounds are uniform", r"diverges for most $f \in C$; \ a.e.\ for $L^2$"],
+    9: [r"9", r"$\mathcal D'$, \ $\mathcal S'$", r"Fr\'echet pieces; \ weak-$*$ limits", r"(bounded sets, \ Montel-like)",
+        r"$\partial$ commutes with every limit", r"every series converges in $\mathcal D'$"],
 }
 
 
