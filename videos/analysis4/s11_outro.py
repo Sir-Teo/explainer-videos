@@ -92,6 +92,8 @@ class Outro(VoiceoverScene):
                    label(r"Lebesgue can: \ and then limits pass under $\int$", font_size=24, color=C.EPS),
                    label(r"with no uniformity at all", font_size=24, color=C.EPS),
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.0, -1.6, 0])
+        if q.get_right()[0] > 6.9:
+            q.shift((6.9 - q.get_right()[0]) * RIGHT)
         with self.voiceover(
             "Next time, in Part 5, measure, and Lebesgue's integral. <bookmark mark='a'/> Raise cosine of m factorial "
             "pi x to a higher and higher even power, then let m grow. <bookmark mark='b'/> The functions are "
