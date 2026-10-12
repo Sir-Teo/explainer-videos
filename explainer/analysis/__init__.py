@@ -310,6 +310,8 @@ LEDGER_ROWS = {
         r"$\frac{d}{dt}\int = \int \frac{\partial}{\partial t}$", r"(unchanged)"],
     5: [r"5", r"$(X, \mathfrak M, \mu)$", r"(Part 6: $L^1$ is complete)", r"regular: compact sets fill",
         r"$\lim \int = \int \lim$ under a lid", r"term by term, by Fubini"],
+    6: [r"6", r"$L^p(\mu)$; \ Hilbert $H$", r"Riesz--Fischer: summable increments", r"not the ball: $\|e_m - e_n\| = \sqrt 2$",
+        r"$\frac{d}{dx}\int_a^x f = f$ a.e.", r"$s_N \to f$ in $L^2$; \ Fej\'er: uniform"],
 }
 
 
@@ -528,3 +530,4 @@ from .gameboard import FunctionBoard, SequenceBoard, largest_delta  # noqa: E402
 from .dashboard import Dashboard, FunctionCamera, fast_graph, runs  # noqa: E402,F401
 from .proofmap import ProofMap  # noqa: E402,F401
 from .contours import contour_mobject, contour_segments, contours  # noqa: E402,F401
+from .complexplot import domain_image, domain_rgb, hue_rgb  # noqa: E402,F401

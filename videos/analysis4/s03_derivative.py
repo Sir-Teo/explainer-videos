@@ -111,19 +111,21 @@ class Derivative(VoiceoverScene):
         ax = plain_axes([-3, 0, 1], [-4, 0, 1], 6.0, 3.6, numbers=True, font_size=20,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.6, -1.6, 0])
-        xl = MathTex(r"\log_{10}|h|", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.15)
-        yl = MathTex(r"\log_{10}\text{ratio}", font_size=24, color=GREY_A).next_to(ax, LEFT, buff=0.1).shift(UP * 1.2)
+        xl = MathTex(r"\log_{10}|h|", font_size=24, color=GREY_A).next_to(ax.c2p(-1.5, 0), UP, buff=0.4)
+        yl = MathTex(r"\log_{10}\text{ratio}", font_size=24, color=GREY_A).next_to(ax.c2p(0, -0.6), RIGHT, buff=0.35)
         pts = VGroup(*[Dot(ax.c2p(math.log10(h), math.log10(w)), radius=0.07, color=C.EPS) for h, w in zip(hs, worst)])
         slope = DashedLine(ax.c2p(-3, math.log10(worst[-1]) - 0.0), ax.c2p(0, math.log10(worst[-1]) + 3),
                            color=GREY_B, stroke_width=2)
         sl = label(r"slope $1$: \ the error is of order $|h|^2$", font_size=22, color=GREY_B).next_to(
-            ax.c2p(-1.6, -0.6), UP, buff=0.05)
+            ax.c2p(-1.3, -3.0), RIGHT, buff=0.05)
         tab = VGroup(MathTex(r"|h|", r"\quad \max_{\text{200 directions}} \text{ratio}", font_size=26, color=GREY_A))
         for h, w in zip(hs, worst):
             tab.add(MathTex(rf"{h:g}", rf"\quad {w:.5f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.2, -1.55, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.4, -1.55, 0])
+        x0 = tab.get_left()[0]
+        for row in tab:
+            row[0].set_x(x0 + row[0].width / 2)
+            row[1].set_x(x0 + 1.1 + row[1].width / 2)
         assert np.all(np.diff(worst) < 0)
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's definition: f is differentiable at x if some linear map A approximates the "
@@ -135,8 +137,8 @@ class Derivative(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
-            vo.wait_until("b")
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(tab[0]))
+            vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(p_, scale=1.5), FadeIn(r_)) for p_, r_ in zip(pts, tab[1:])],
                                   lag_ratio=0.35), run_time=3.0)
             vo.wait_until("c")
@@ -191,8 +193,8 @@ class Derivative(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
-            vo.wait_until("b")
             self.play(*[Create(a) for a in axs], FadeIn(names), FadeIn(shapes[0]))
+            vo.wait_until("b")
             self.play(GrowArrow(arrows[0]), FadeIn(al[0]), TransformFromCopy(shapes[0], shapes[1]), run_time=1.5)
             self.play(Create(lin1))
             vo.wait_until("c")

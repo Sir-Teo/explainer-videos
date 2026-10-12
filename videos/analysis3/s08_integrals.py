@@ -69,17 +69,17 @@ class IntegralsDerivatives(VoiceoverScene):
         def readout():
             n = nT.get_value()
             In = trap(seq(n, x), x)
-            return VGroup(MathTex(rf"\int_0^3 f_n = {In:.4f}", font_size=30, color=C.FUNC),
-                          MathTex(rf"\int_0^3 f = {I_f:.4f}", font_size=30),
-                          MathTex(rf"\text{{gap}} = {abs(In - I_f):.4f}", font_size=30, color=C.MEASURE)
-                          ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.0, -0.25, 0])
+            return VGroup(MathTex(rf"\int_0^3 f_n = {In:.4f},", font_size=26, color=C.FUNC),
+                          MathTex(rf"\int_0^3 f = {I_f:.4f},", font_size=26),
+                          MathTex(rf"\text{{gap}} = {abs(In - I_f):.4f}", font_size=26, color=C.MEASURE)
+                          ).arrange(RIGHT, buff=0.25).move_to([3.45, -0.2, 0])
 
         ro = always_redraw(readout)
         cor = VGroup(label(r"so a uniformly convergent series", font_size=26),
-                     label(r"may be integrated term by term", font_size=26)).arrange(DOWN, buff=0.08).move_to([3.75, -1.6, 0])
+                     label(r"may be integrated term by term", font_size=26)).arrange(DOWN, buff=0.08).move_to([3.75, -1.35, 0])
         saw_note = VGroup(label(r"the sawtooth series is \emph{not} uniformly convergent", font_size=24, color=C.PATHOLOGY),
                           label(r"(it jumps): \ chapter 15 settles it another way", font_size=24, color=GREY_A)
-                          ).arrange(DOWN, buff=0.06).move_to([3.75, -2.75, 0])
+                          ).arrange(DOWN, buff=0.06).move_to([3.75, -2.55, 0])
         n_l = always_redraw(lambda: MathTex(rf"n = {round(nT.get_value())}", font_size=28, color=C.FUNC).next_to(ax, UP,
                                                                                                          buff=0.1))
         with self.voiceover(
