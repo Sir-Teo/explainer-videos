@@ -170,12 +170,11 @@ class Approximation(VoiceoverScene):
             "<bookmark mark='c'/> With c n below root n, the far part is at most four M root n times one minus delta "
             "squared, to the n, which goes to zero. The bound doesn't depend on x, so the convergence is uniform."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(kx), Create(kq), FadeIn(kl))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1)
-            self.play(Create(kx), Create(kq), FadeIn(kl))
             self.play(FadeIn(shade_n), FadeIn(nums[0]))
             self.play(FadeIn(far_parts), FadeIn(nums[1]))
             vo.wait_until("c")
