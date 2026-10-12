@@ -93,9 +93,9 @@ class Dominated(VoiceoverScene):
         head = label(r"On an infinite interval, \ uniform convergence is not enough; \ a lid is", font_size=30)
         head.to_edge(UP, buff=0.3)
         verdicts = VGroup(label(r"uniformly to $0$, \ no integrable lid: \ the swap fails", font_size=24,
-                                color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.75),
+                                color=C.PATHOLOGY).next_to(ax, DOWN, buff=1.0),
                           label(r"under the lid $e^{-x}$: \ the swap is legal", font_size=24,
-                                color=C.CONNECTED_SET).next_to(bx, DOWN, buff=0.75))
+                                color=C.CONNECTED_SET).next_to(bx, DOWN, buff=1.0))
         with self.voiceover(
             "<bookmark mark='a'/> Compare two sequences on the half-line. On the left, the spreading sequence: it "
             "converges to zero uniformly, the strongest convergence Part 3 knew, yet every function has integral one. "
