@@ -28,30 +28,43 @@ class ArzelaAscoli(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def statement(self):
+        d = load("arzela")
+        x, sample, pts = d["x"], d["sample"], d["pts"]
         thm = VGroup(label(r"\textbf{Rudin 7.25} \ $K$ compact, \ $f_n \in C(K)$ \ pointwise bounded and equicontinuous",
                            font_size=30),
                      label(r"$\Rightarrow$ \ uniformly bounded, \ and some subsequence converges uniformly", font_size=30,
-                           color=C.COMPACT_SET)).arrange(DOWN, buff=0.15).move_to([0, 1.4, 0])
-        pm = VGroup()
-        steps = [r"1. converge on a countable dense set \ (the diagonal process)",
-                 r"2. equicontinuity spreads it to every point, \ uniformly",
-                 r"(compactness of $K$: \ finitely many points suffice)"]
-        for i, t in enumerate(steps):
-            pm.add(label(t, font_size=26, color=GREY_A if i == 2 else WHITE))
-        pm.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(thm, DOWN, buff=0.6)
+                           color=C.COMPACT_SET)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
+        pm = ProofMap([r"converge on a countable dense set \ (the diagonal process)",
+                       r"spread it to every point, uniformly \ (equicontinuity + compactness)"], font_size=22,
+                      width=5.6, buff=0.4).next_to(thm, DOWN, buff=0.3)
+        ax = plain_axes([0, 1, 0.25], [-0.6, 0.6, 0.3], 9.0, 3.6).move_to([0, -1.75, 0])
+        fan = VGroup(*[polyline(ax, x, s_, color=GREY_C, stroke_width=1.2).set_stroke(opacity=0.55) for s_ in sample])
+        fl = label(r"a bounded, equicontinuous family: \ random functions with $|f| \le 1$, \ $|f'| \le 1$",
+                   font_size=22, color=GREY_B).next_to(ax, DOWN, buff=0.1)
+        dense = VGroup(*[Dot(ax.c2p(float(p_), -0.6), radius=0.06, color=C.EPS) for p_ in pts])
+        dl = VGroup(*[MathTex(f"{float(p_):g}", font_size=18, color=C.EPS).next_to(dt, UP, buff=0.06)
+                      for p_, dt in zip(pts[:3], dense[:3])])
+        delta = 0.07
+        boxes = VGroup(*[Rectangle(width=ax.c2p(2 * delta, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 1.2)[1] - ax.c2p(0, 0)[1],
+                                   stroke_width=0, fill_color=C.DELTA, fill_opacity=0.12).move_to(ax.c2p(float(p_), 0))
+                         for p_ in pts])
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: if a sequence of continuous functions on a compact set is pointwise "
-            "bounded and equicontinuous, then it has a uniformly convergent subsequence. <bookmark mark='b'/> The "
-            "proof has two steps. First, get convergence at countably many points, densely spread, by Cantor's "
-            "diagonal trick. <bookmark mark='c'/> Then use equicontinuity, and compactness, to spread that convergence "
-            "to every point, uniformly."
+            "bounded and equicontinuous, then it has a uniformly convergent subsequence. Here's such a family: random "
+            "functions, all bounded by one, with slopes at most one. <bookmark mark='b'/> The proof has two steps. "
+            "First, get convergence at countably many points, densely spread, by Cantor's diagonal trick. "
+            "<bookmark mark='c'/> Then use equicontinuity, and compactness, to spread that convergence to every point, "
+            "uniformly."
         ) as vo:
+            self.play(FadeIn(thm[0]), Create(ax), LaggedStart(*[Create(f_) for f_ in fan], lag_ratio=0.03), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm[1]), FadeIn(fl))
             vo.wait_until("b")
-            self.play(FadeIn(pm[0]))
+            self.play(FadeIn(pm), *pm.light(0))
+            self.play(LaggedStart(*[FadeIn(dt, scale=1.5) for dt in dense], lag_ratio=0.2), FadeIn(dl), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(pm[1]), FadeIn(pm[2]))
+            self.play(*pm.light(1))
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.1), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 

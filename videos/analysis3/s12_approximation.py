@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from videos.analysis3.common import load, plain_axes, polyline
-from videos.analysis3.compute import c_landau, tent
+from videos.analysis3.compute import c_landau, tent, trap
 
 
 class Approximation(VoiceoverScene):
@@ -22,8 +22,7 @@ class Approximation(VoiceoverScene):
                             r"Can the simplest functions imitate all the others?", lit=(), part=3)
         with self.voiceover(
             "Chapter eleven. In 1885 Weierstrass proved that every continuous function on a closed interval is a "
-            "uniform limit of polynomials. However wild the graph, some polynomial stays within any tolerance of it, "
-            "all along the interval."
+            "uniform limit of polynomials."
         ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -46,15 +45,16 @@ class Approximation(VoiceoverScene):
         side = label(r"all its mass crowds into any $[-\delta, \delta]$", font_size=26, color=GREY_A).next_to(labs, DOWN,
                                                                                                     buff=0.3)
         with self.voiceover(
+            "However wild the graph, some polynomial stays within any tolerance of it, all along the interval. "
             "<bookmark mark='a'/> Rudin's proof uses a family of polynomials that act like a narrowing bump: c n "
             "times one minus x squared, to the n, with c n chosen so the area is one. <bookmark mark='b'/> As n grows, "
             "the bump gets taller and narrower. The normalizing constant stays below root n, which is what the "
             "estimates need. <bookmark mark='c'/> And for any fixed delta, the fraction of the area outside the "
             "interval from minus delta to delta goes to zero."
         ) as vo:
-            self.play(FadeIn(head[0]))
+            self.play(FadeIn(head[0]), Create(ax))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), Create(ax), Create(ks[0]), FadeIn(labs[0]))
+            self.play(FadeIn(head[1]), Create(ks[0]), FadeIn(labs[0]))
             vo.wait_until("b")
             self.play(Create(ks[1]), FadeIn(labs[1]))
             self.play(Create(ks[2]), FadeIn(labs[2]))
@@ -128,10 +128,40 @@ class Approximation(VoiceoverScene):
         ]
         whys = [why(r"$\int Q_n = 1$"), why(r"far: \ $|f| \le M$; \ \ near: \ uniform continuity"),
                 why(r"$c_n < \sqrt n$; \ then $n$ large, \ the same $n$ for every $x$")]
-        step = ladder(self, rows, whys, keep=3, top=1.9, buff=0.55, x=-1.6)
-        head = label(r"Why it converges uniformly", font_size=34).to_edge(UP, buff=0.35)
-        concl = label(r"$\sqrt n\,(1 - \delta^2)^n \to 0$: \ exponential decay beats the square root", font_size=26,
-                      color=C.EPS).to_edge(DOWN, buff=0.5)
+        for r_ in rows:
+            r_.scale(0.88)
+        step = ladder(self, rows, whys, keep=3, top=2.95, buff=0.3, x=-1.2)
+        head = label(r"Why it converges uniformly", font_size=30).to_edge(UP, buff=0.15)
+        # the picture behind the split: the kernel's mass near 0 and far from it
+        n, dl = 60, 0.25
+        c = c_landau(n)
+        tq = np.linspace(-1, 1, 4001)
+        Q = c * (1 - tq**2) ** n
+        kx = plain_axes([-1, 1, 0.5], [0, 1.08, 0.5], 6.6, 1.45).move_to([-3.2, -2.85, 0])
+        near = tq[np.abs(tq) <= dl]
+        shade_n = Polygon(*([kx.c2p(near[0], 0)] + [kx.c2p(a, b / Q.max()) for a, b in zip(near[::8], Q[np.abs(tq) <= dl][::8])]
+                            + [kx.c2p(near[-1], 0)]), stroke_width=0, fill_color=C.CONNECTED_SET, fill_opacity=0.45)
+        far_parts = VGroup()
+        for msk in (tq < -dl, tq > dl):
+            xs_, ys_ = tq[msk], Q[msk] / Q.max()
+            far_parts.add(Polygon(*([kx.c2p(xs_[0], 0)] + [kx.c2p(a, b) for a, b in zip(xs_[::8], ys_[::8])]
+                                    + [kx.c2p(xs_[-1], 0)]), stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.6))
+        kq = polyline(kx, tq, Q / Q.max(), color=C.APPROX, stroke_width=2.5)
+        kl = MathTex(rf"Q_{{{n}}}, \ \delta = {dl}", font_size=24, color=C.APPROX).next_to(kx, UP, buff=0.05)
+        kl.align_to(kx, LEFT)
+        far_mass = trap(np.where(np.abs(tq) > dl, Q, 0.0), tq)
+        bound = 2 * np.sqrt(n) * (1 - dl**2) ** n
+        assert far_mass <= bound and abs(trap(Q, tq) - 1) < 1e-6
+        nums = VGroup(label(r"near ($|t| < \delta$): \ $|f(x + t) - f(x)| < \varepsilon/2$", font_size=24,
+                            color=C.CONNECTED_SET),
+                      label(rf"far: \ mass $= {far_mass:.4f} \le 2\sqrt n\,(1 - \delta^2)^n = {bound:.4f}$", font_size=24,
+                            color=C.PATHOLOGY),
+                      label(r"$\sqrt n\,(1 - \delta^2)^n \to 0$: \ exponential decay beats the square root",
+                            font_size=24, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        for r_ in nums:
+            if r_.width > 6.3:
+                r_.width = 6.3
+        nums.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.55, -2.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The estimate is the epsilon-over-two trick again. Because the bump has area one, the "
             "error at x is at most the bump-weighted average of the gaps between f near x and f at x. "
@@ -145,9 +175,12 @@ class Approximation(VoiceoverScene):
             step(0)
             vo.wait_until("b")
             step(1)
+            self.play(Create(kx), Create(kq), FadeIn(kl))
+            self.play(FadeIn(shade_n), FadeIn(nums[0]))
+            self.play(FadeIn(far_parts), FadeIn(nums[1]))
             vo.wait_until("c")
             step(2)
-            self.play(FadeIn(concl))
+            self.play(FadeIn(nums[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -165,8 +198,9 @@ class Approximation(VoiceoverScene):
         for i in range(len(ns)):
             tab.add(MathTex(rf"{int(ns[i])}", rf"\quad {err[i]:.4f}", font_size=28))
         tab.arrange(DOWN, aligned_edge=RIGHT, buff=0.15).move_to([4.2, -0.4, 0])
-        note_ = label(r"the error is worst at the corners, and shrinks like $1/\sqrt n$", font_size=24,
-                      color=GREY_A).next_to(tab, DOWN, buff=0.35)
+        note_ = VGroup(label(r"the error is worst at the corners,", font_size=24, color=GREY_A),
+                       label(r"and shrinks like $1/\sqrt n$", font_size=24, color=GREY_A)
+                       ).arrange(DOWN, buff=0.08).next_to(tab, DOWN, buff=0.35)
         assert np.all(np.diff(err) < 0) and err[-1] < 0.005
         with self.voiceover(
             "<bookmark mark='a'/> Here's the construction carried out for a tent with two corners. "

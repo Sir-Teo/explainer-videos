@@ -48,10 +48,8 @@ class StoneWeierstrass(VoiceoverScene):
         card = chapter_card(12, r"Stone--Weierstrass", r"Which families of functions can imitate every continuous one?",
                             lit=(), part=3)
         with self.voiceover(
-            "Chapter twelve. Weierstrass's theorem is about polynomials. In 1937 Marshall Stone asked what it is about "
-            "polynomials that makes the theorem true, and found that only two properties matter. His answer covers "
-            "polynomials in several variables, trigonometric polynomials, and much more, and his 1948 proof is the one "
-            "Rudin gives."
+            "Chapter twelve. In 1937 Marshall Stone asked what it is about polynomials that makes Weierstrass's "
+            "theorem true."
         ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -128,7 +126,8 @@ class StoneWeierstrass(VoiceoverScene):
         vC = label(rf"both hold: \ dense \ (error ${float(dl['err'][-1]):.4f}$ here)", font_size=22,
                    color=C.CONNECTED_SET).next_to(axC, DOWN, buff=0.12)
         with self.voiceover(
-            "<bookmark mark='a'/> The setting is an algebra of functions: a family closed under sums, products and "
+            "He found that only two properties matter. <bookmark mark='a'/> The setting is an algebra of functions: a "
+            "family closed under sums, products and "
             "constant multiples, like the polynomials. <bookmark mark='b'/> Here is the first thing that can go wrong. "
             "The even polynomials on the interval from minus one to one form an algebra, but each one takes the same "
             "value at x and at minus x, so none of them can come near the function x: at plus and minus one, the "
@@ -164,30 +163,49 @@ class StoneWeierstrass(VoiceoverScene):
             label(r"that separates points and vanishes at no point", font_size=32),
             MathTex(r"\Longrightarrow \quad \overline{\mathcal A} = C(K) \qquad (\text{the uniform closure})",
                     font_size=40, color=C.EPS),
-        ).arrange(DOWN, buff=0.22).move_to(UP * 1.2)
-        box = SurroundingRectangle(thm, color=C.EPS, buff=0.3, corner_radius=0.1, stroke_width=2)
+        ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.45)
+        box = SurroundingRectangle(thm, color=C.EPS, buff=0.25, corner_radius=0.1, stroke_width=2)
         ex = VGroup(
-            label(r"polynomials in $x_1, \dots, x_k$ on any compact $K \subset \R^k$", font_size=26),
-            label(r"the even polynomials on $[0, 1]$: \ $x^2$ separates points there", font_size=26),
+            label(r"polynomials in $x_1, \dots, x_k$", font_size=26),
+            label(r"\quad on any compact $K \subset \R^k$", font_size=26),
             label(r"sums $\sum_{n=0}^{N} a_n e^{-nx}$ on $[0, 1]$", font_size=26),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(box, DOWN, buff=0.45)
-        ex_h = label(r"so, for example, these are dense:", font_size=26, color=GREY_A).next_to(ex, UP, buff=0.18)
+            label(r"the even polynomials on $[0, 1]$:", font_size=26, color=C.APPROX),
+            label(r"\quad $x^2$ separates points there", font_size=26, color=C.APPROX),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-3.9, -1.75, 0])
+        ex_h = label(r"so, for example, these are dense:", font_size=26, color=GREY_A).next_to(ex, UP, buff=0.22)
         ex_h.align_to(ex, LEFT)
-        ex.shift(DOWN * 0.25)
+        d = load("stone")
+        xe, ek, EV, eerr = d["xe"], d["ek"], d["EV"], d["eerr"]
+        eax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 4.4, 2.6).move_to([1.0, -1.85, 0])
+        tgt = polyline(eax, xe, xe, color=WHITE, stroke_width=3)
+        fits = [polyline(eax, xe, EV[i], color=C.APPROX, stroke_width=3) for i in range(len(ek))]
+        etl = MathTex(r"\text{target } f(x) = x", font_size=24).next_to(eax, UP, buff=0.08)
+        elabs = [MathTex(rf"\text{{degree }} {2 * int(k)} \text{{ in }} x: \ \sup|g - x| = {e:.4f}", font_size=24,
+                         color=C.APPROX).next_to(eax, DOWN, buff=0.12) for k, e in zip(ek, eerr)]
+        enote = VGroup(label(r"the algebra that failed", font_size=22, color=GREY_A),
+                       label(r"on $[-1, 1]$ succeeds here", font_size=22, color=GREY_A)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(eax, RIGHT, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Stone's theorem says these two defects are the only obstructions. If an algebra of "
             "continuous functions on a compact set separates points and vanishes at no point, then its uniform closure "
             "is everything: every continuous function is a uniform limit of members of the algebra. "
-            "<bookmark mark='b'/> So polynomials in several variables are dense on any compact set in R k. The even "
-            "polynomials, which failed on the symmetric interval, are dense on the interval from zero to one, where x "
-            "squared separates points. And so are sums of decaying exponentials."
+            "<bookmark mark='b'/> So polynomials in several variables are dense on any compact set in R k, and so are "
+            "sums of decaying exponentials on the unit interval. And the even polynomials, which failed on the "
+            "symmetric interval, are dense on the interval from zero to one, where x squared separates points: here "
+            "they close in on the function x, the very function they could not reach before."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm[:3]), Create(box))
             self.play(Write(thm[3]))
             vo.wait_until("b")
-            self.play(FadeIn(ex_h), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in ex], lag_ratio=0.5),
-                      run_time=3)
+            self.play(FadeIn(ex_h), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in ex[:3]], lag_ratio=0.4),
+                      run_time=2)
+            self.play(FadeIn(ex[3:]), Create(eax), Create(tgt), FadeIn(etl), Create(fits[0]), FadeIn(elabs[0]))
+            cur, cl = fits[0], elabs[0]
+            for i in range(1, len(ek)):
+                self.play(ReplacementTransform(cur, fits[i]), FadeTransform(cl, elabs[i]), run_time=0.9)
+                cur, cl = fits[i], elabs[i]
+            self.play(FadeIn(enote))
         self.wait(0.3)
         self.clear_scene()
 

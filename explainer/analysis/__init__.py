@@ -306,6 +306,8 @@ LEDGER_ROWS = {
         r"reorder $\sum |a_n| < \infty$", r"converges at each $x$"],
     3: [r"3", r"$C(X)$, sup norm", r"uniform limits are continuous", r"+ equicontinuous (Arzel\`a--Ascoli)",
         r"$\lim \int = \int \lim$ if uniform", r"in mean square; Gibbs at jumps"],
+    4: [r"4", r"$\R^n$; $C[a, b]$ again", r"so contractions have fixed points", r"(as in Parts 1 and 3)",
+        r"$\frac{d}{dt}\int = \int \frac{\partial}{\partial t}$", r"(unchanged)"],
 }
 
 
@@ -523,3 +525,4 @@ def magnifier(src_ax: Axes, x_window, y_window, center, width=3.4, height=2.4, c
 from .gameboard import FunctionBoard, SequenceBoard, largest_delta  # noqa: E402,F401
 from .dashboard import Dashboard, FunctionCamera, fast_graph, runs  # noqa: E402,F401
 from .proofmap import ProofMap  # noqa: E402,F401
+from .contours import contour_mobject, contour_segments, contours  # noqa: E402,F401

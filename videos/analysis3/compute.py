@@ -502,8 +502,19 @@ def compute_stone():
         mean = complex(trap(w.real, th), trap(w.imag, th)) / (2 * np.pi)
         assert abs(mean - 1) < 1e-9 and np.abs(w).max() >= 1
         W.append(w)
+    # the even polynomials on [0, 1] (polynomials in x^2) approximate f(x) = x: least-squares fits of degree 2k
+    xe = np.linspace(0, 1, 2001)
+    ek = np.array([1, 2, 4, 8, 16])
+    EV, eerr = [], []
+    for k in ek:
+        V = np.polynomial.chebyshev.chebvander(2 * xe * xe - 1, int(k))
+        c, *_ = np.linalg.lstsq(V, xe, rcond=None)
+        EV.append(V @ c)
+        eerr.append(np.abs(V @ c - xe).max())
+    eerr = np.array(eerr)
+    assert np.all(np.diff(eerr) < 0) and eerr[-1] < 0.02
     return dict(t=t, f=f, H=H, approx=approx, err=err, eps=eps, xs=xs, ys=ys, y=y, absdeg=absdeg, absP=absP,
-                abserr=abserr, f1=f1, Pf1=Pf1, th=th, W=np.array(W))
+                abserr=abserr, f1=f1, Pf1=Pf1, th=th, W=np.array(W), xe=xe, ek=ek, EV=np.array(EV), eerr=eerr)
 
 
 # ---------------------------------------------------------------------------
