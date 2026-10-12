@@ -85,8 +85,8 @@ class Partials(VoiceoverScene):
     def not_linear(self):
         d = load("museum")
         th, Du = d["th"], d["Du"]
-        S = 4.2
-        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-4.3, -0.9, 0])
+        S = 3.6
+        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-4.5, -1.35, 0])
         img = heatmap(g_bad, (-1, 1), (-1, 1), S, S, -0.6, 0.6).move_to(ax.c2p(0, 0))
         head = VGroup(MathTex(r"g(x, y) = \frac{x^2 y}{x^2 + y^2}, \qquad g(0, 0) = 0", font_size=36),
                       label(r"continuous \ ($|g| \le |y|$), \ and differentiable in every direction at $0$",
@@ -111,7 +111,7 @@ class Partials(VoiceoverScene):
         side.arrange(DOWN, buff=0.15).next_to(bx, DOWN, buff=0.3)
         card = museum_card(r"$x^2y/(x^2 + y^2)$", r"a classical example", r"`all directional derivatives make a "
                            r"derivative'", r"Rudin 9.21 is the repair", width=4.0).scale(0.8)
-        card.to_corner(DL, buff=0.2)
+        card.move_to([-4.5, 1.25, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The second exhibit is subtler: x squared y over x squared plus y squared. It is "
             "continuous, and at the origin it has a derivative in every direction, not just along the axes. "
@@ -124,9 +124,9 @@ class Partials(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), FadeIn(img), Create(ax))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1]), Create(bx))
             vo.wait_until("b")
-            self.play(Create(bx), Create(pred), FadeIn(bl[1]))
+            self.play(Create(pred), FadeIn(bl[1]))
             self.play(Create(actual), FadeIn(bl[0]), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(side[0]), Create(part1))
@@ -192,8 +192,9 @@ class Partials(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(img), Create(ax))
+            self.play(FadeIn(dots), FadeIn(dl), Create(direct))
             vo.wait_until("b")
-            self.play(FadeIn(dots), FadeIn(dl), Create(direct), FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]))
             self.play(GrowArrow(leg1))
             self.play(GrowArrow(leg2))
             vo.wait_until("c")
