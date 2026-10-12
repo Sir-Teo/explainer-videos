@@ -187,6 +187,11 @@ class Integral(VoiceoverScene):
         labs = VGroup(MathTex("f", font_size=30).next_to(ax.c2p(2, f[-1]), RIGHT, buff=0.1),
                       MathTex("s", font_size=30, color=C.MEASURE).next_to(ax.c2p(2, svals[-1]), RIGHT, buff=0.1),
                       MathTex("cs", font_size=26, color=C.MEASURE).next_to(ax.c2p(2, c * svals[-1]), RIGHT, buff=0.1))
+        x_free = max(l_.get_right()[0] for l_ in labs) + 0.25  # the text column starts right of the curve labels
+        if rows.get_left()[0] < x_free:
+            if rows.width > 6.95 - x_free:
+                rows.width = 6.95 - x_free
+            rows.shift((x_free - rows.get_left()[0]) * RIGHT)
         with self.voiceover(
             "<bookmark mark='a'/> The proof is short and worth seeing. The integrals of f n increase, so they have a "
             "limit alpha, at most the integral of f. <bookmark mark='b'/> For the other direction, fix a simple "
