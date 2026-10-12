@@ -177,7 +177,7 @@ class ComplexMeasures(VoiceoverScene):
         for _ in range(n):
             ivs = [iv for a, b in ivs for iv in ((a, a + (b - a) / 3), (b - (b - a) / 3, b))]
         assert abs(sum(b - a for a, b in ivs) - lens[n]) < 1e-12
-        band = VGroup(*[Line(axes[2].c2p(a, -0.08), axes[2].c2p(b, -0.08), color=C.EPS, stroke_width=7) for a, b in ivs])
+        band = VGroup(*[Line(axes[2].c2p(a, 0), axes[2].c2p(b, 0), color=C.EPS, stroke_width=7) for a, b in ivs])
         rows = VGroup(
             label(r"\textbf{RCA 6.7} \ $\lambda \ll \mu$: \ $\mu(E) = 0 \Rightarrow \lambda(E) = 0$; \quad "
                   r"$\lambda \perp \mu$: \ they live on disjoint sets", font_size=24),
@@ -199,8 +199,9 @@ class ComplexMeasures(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(F_l), *[Create(a) for a in axes])
+            self.play(Create(g1))
             vo.wait_until("b")
-            self.play(Create(g1), FadeIn(titles[0]))
+            self.play(FadeIn(titles[0]))
             self.play(FadeIn(verdicts[0]))
             vo.wait_until("c")
             self.play(Create(g2), FadeIn(titles[1]))
