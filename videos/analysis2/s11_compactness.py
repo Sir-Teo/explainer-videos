@@ -44,7 +44,7 @@ class Compactness(VoiceoverScene):
                      endpoint(ax.c2p(0, m) + LEFT * 0.3, True, C.COMPACT_SET),
                      endpoint(ax.c2p(0, M) + LEFT * 0.3, True, C.COMPACT_SET))
         dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, RIGHT, buff=0.2)
-        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, LEFT, buff=0.75)
+        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, UP, buff=0.2).shift(LEFT * 0.5)
         thm = label(r"\textbf{Rudin 4.14} \ A continuous image of a compact set is compact.", font_size=30)
         thm.to_edge(UP, buff=0.4)
         steps = VGroup(
@@ -231,9 +231,8 @@ class Compactness(VoiceoverScene):
             "slides all the way to zero. <bookmark mark='c'/> For one over x on the open interval, any fixed box "
             "fails once it gets close enough to zero, where the graph is too steep."
         ) as vo:
-            self.play(FadeIn(dfn))
+            self.play(FadeIn(dfn), Create(ax), Create(graph), FadeIn(tl))
             vo.wait_until("a")
-            self.play(Create(ax), Create(graph), FadeIn(tl))
             self.play(FadeIn(eb), FadeIn(db), FadeIn(pc))
             vo.wait_until("b")
             self.play(aT.animate.set_value(0.0), run_time=3.5, rate_func=linear)
@@ -279,7 +278,7 @@ class Compactness(VoiceoverScene):
     def heine(self):
         thm = label(r"\textbf{Rudin 4.19} \ Continuous on a compact space $\Rightarrow$ uniformly continuous.",
                     font_size=30).to_edge(UP, buff=0.4)
-        y0 = 0.4
+        y0 = -0.25
         X = lambda v: -5.5 + v * 11.0  # noqa: E731
         line = Line([X(0) - 0.2, y0, 0], [X(1) + 0.2, y0, 0], color=GREY_C, stroke_width=2)
         eps = 0.25
@@ -301,14 +300,23 @@ class Compactness(VoiceoverScene):
             assert pts[best] + deltas[best] / 2 > reach, "the sample intervals must cover [0, 1]"
             chosen.append(best)
             reach = pts[best] + deltas[best] / 2
-        dmin = min(deltas[i] / 2 for i in chosen)
         steps = VGroup(label(r"each point $p$ has its own $\delta_p$ (for $\varepsilon/2$)", font_size=26),
                        label(r"the intervals of half-width $\delta_p/2$ cover the space; \ finitely many suffice",
                              font_size=26),
                        label(r"$\delta = $ the smallest of those finitely many $\delta_p/2$, \ which is positive",
                              font_size=26, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         steps.to_edge(DOWN, buff=0.4)
-        lbl = MathTex(r"\sqrt{x} \text{ on } [0, 1]", font_size=30, color=C.FUNC).next_to(line, UP, buff=0.3)
+        vv = np.linspace(0, 1, 400)
+        graph = VMobject(color=C.FUNC, stroke_width=3.5).set_points_as_corners(
+            np.c_[X(vv), y0 + 0.3 + 2.5 * np.sqrt(vv), np.zeros_like(vv)])
+        lbl = MathTex(r"\sqrt{x} \text{ on } [0, 1]", font_size=30, color=C.FUNC).move_to([X(0.12), y0 + 2.6, 0])
+        steep = label(r"steep near $0$: \ small $\delta_p$ there", font_size=22, color=GREY_A).next_to(lbl, DOWN,
+                                                                                                buff=0.1)
+        pdots = VGroup(*[Dot([X(p), y0, 0], radius=0.035, color=C.FUNC) for p in pts])
+        dmin = min(deltas[i] / 2 for i in chosen)
+        ruler = VGroup(Line([X(0), y0 + 0.13, 0], [X(dmin), y0 + 0.13, 0], color=C.DELTA, stroke_width=7),
+                       MathTex(rf"\delta = {dmin:.4f}", font_size=26, color=C.DELTA).next_to([X(dmin), y0 + 0.13, 0], UR,
+                                                                                         buff=0.08))
         with self.voiceover(
             "<bookmark mark='t'/> And now the theorem: on a compact space, continuous implies uniformly continuous. "
             "<bookmark mark='a'/> Each point has its own delta, for epsilon over two. <bookmark mark='b'/> The "
@@ -318,15 +326,17 @@ class Compactness(VoiceoverScene):
             "infinitely many, the infimum could be zero, which is exactly what happened to one over x."
         ) as vo:
             vo.wait_until("t")
-            self.play(FadeIn(thm), Create(line), FadeIn(lbl))
+            self.play(FadeIn(thm), Create(line), Create(graph), FadeIn(lbl))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.05))
+            self.play(FadeIn(steps[0]), FadeIn(pdots), FadeIn(steep),
+                      LaggedStart(*[Create(b) for b in bars], lag_ratio=0.05))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]), *[bars[i].animate.set_stroke(opacity=0.25) for i in range(len(bars))
                                           if i not in chosen])
             self.play(*[bars[i].animate.set_color(C.EPS).set_stroke(width=6) for i in chosen])
             vo.wait_until("c")
-            self.play(FadeIn(steps[2]))
+            self.play(FadeIn(steps[2]), FadeIn(ruler))
+            self.play(ruler.animate.shift(RIGHT * (X(1 - dmin) - X(0))), run_time=3.0, rate_func=linear)
         assert dmin > 0 and reach >= 1.0
         self.wait(0.5)
         self.clear_scene()
