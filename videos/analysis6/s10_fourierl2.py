@@ -108,8 +108,9 @@ class FourierL2(VoiceoverScene):
         for N, v in zip(Ns, l2):
             tab.add(MathTex(f"{N}", rf"\quad {v:.4f}", font_size=26, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(facts, DOWN, buff=0.12).align_to(facts, LEFT)
-        for row in tab:
-            row[1].align_to(facts[2][1], LEFT)
+        col2 = max(max(r_[0].get_right()[0] for r_ in tab), facts[2][0].get_right()[0]) + 0.3
+        for row in list(tab) + [facts[2]]:  # the second column starts clear of the widest N
+            row[1].shift((col2 - row[1].get_left()[0]) * RIGHT)
         rate = label(r"$\times 0.707 = 4^{-1/4}$ per factor 4 in $N$: \ slow, \ but to $0$", font_size=22,
                      color=GREY_A).next_to(tab, DOWN, buff=0.12).align_to(facts, LEFT)
         assert np.all(np.diff(l2) < 0) and np.all(np.abs(l2[1:] / l2[:-1] - 4 ** -0.25) < 0.02)
