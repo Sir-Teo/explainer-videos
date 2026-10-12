@@ -182,14 +182,16 @@ class Counting(VoiceoverScene):
                 m.move_to([-4.2 + 1.25 * k, 1.6 - 0.85 * (i - 1), 0])
             rows.add(row)
         rows.add(MathTex(r"\vdots", font_size=36).move_to([-4.2 + 1.25, 1.6 - 0.85 * 4 + 0.15, 0]))
-        visit = []
+        visit = []  # diagonal by diagonal, alternating direction, so each step goes to a neighbor
         for s in range(2, 8):
-            for i in range(1, s):
-                j = s - i
-                if i <= 4 and j <= 5:
-                    visit.append((i, j))
-        path = VMobject(color=C.APPROX, stroke_width=3)
-        path.set_points_as_corners([rows[i - 1][j].get_center() for (i, j) in visit])
+            diag = [(i, s - i) for i in range(1, s) if i <= 4 and s - i <= 5]
+            visit += diag[::-1] if s % 2 == 0 else diag
+        assert all(abs(a - c) + abs(b - d) <= 2 for (a, b), (c, d) in zip(visit, visit[1:]))
+        # the walk, drawn between the entries (not through them), with each entry's place in the list
+        cs = [rows[i - 1][j].get_center() for (i, j) in visit]
+        path = VGroup(*[Line(a, b, buff=0.32, color=C.APPROX, stroke_width=3) for a, b in zip(cs, cs[1:])])
+        order = VGroup(*[MathTex(str(k + 1), font_size=20, color=C.APPROX).next_to(rows[i - 1][j], UR, buff=0.02)
+                         for k, (i, j) in enumerate(visit)])
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.12)", font_size=28, color=GREY_A),
                       label(r"A countable union of countable sets is countable.", font_size=32))
         stmt.arrange(DOWN, buff=0.15).to_edge(UP, buff=0.45)
@@ -203,7 +205,9 @@ class Counting(VoiceoverScene):
             vo.wait_until("t")
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.2))
             vo.wait_until("z")
-            self.play(Create(path), run_time=3, rate_func=linear)
+            self.play(FadeIn(order[0]), run_time=0.3)
+            self.play(LaggedStart(*[AnimationGroup(Create(sg), FadeIn(o_)) for sg, o_ in zip(path, order[1:])],
+                                  lag_ratio=1.0), run_time=3, rate_func=linear)
         self.wait(0.3)
         self.clear_scene()
 
