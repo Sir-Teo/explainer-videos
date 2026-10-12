@@ -72,8 +72,8 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def next_time(self):
         head = label(r"Next: Part 7, \ complex analysis", font_size=38).to_edge(UP, buff=0.3)
-        S = 4.4
-        ax = square_axes([-2, 2, 1], [-2, 2, 1], S / 4).move_to([-3.4, -0.6, 0])
+        S = 4.2
+        ax = square_axes([-2, 2, 1], [-2, 2, 1], S / 4).move_to([-3.4, -0.3, 0])
         img = domain_image(lambda Z: (Z**3 - 1) / (Z**2 + 0.5), (-2, 2), (-2, 2), S, S).move_to(ax.c2p(0, 0))
         frame = Square(side_length=S, color=GREY_C, stroke_width=2).move_to(ax.c2p(0, 0))
         f_l = MathTex(r"f(z) = \frac{z^3 - 1}{z^2 + \frac12}", font_size=30).next_to(frame, DOWN, buff=0.15)
