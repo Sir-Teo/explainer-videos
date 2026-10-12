@@ -43,7 +43,7 @@ class Spectrum(VoiceoverScene):
         nc = DashedVMobject(Circle(radius=nrm * (cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0]), color=C.EPS, stroke_width=2.5).move_to(
             cx.c2p(0, 0)), num_dashes=50)
         ncl = MathTex(rf"|\lambda| = \|A\| = {nrm:.3f}", font_size=22, color=C.EPS).next_to(cx, DOWN, buff=0.1)
-        wheel = phase_wheel(0.3).next_to(cx, LEFT, buff=0.15).shift(DOWN * 0.5)
+        wheel = phase_wheel(0.3).to_corner(DL, buff=0.25)
         tl = MathTex(r"\operatorname{tr}(\lambda - A)^{-1}", font_size=24).next_to(cx, UP, buff=0.08)
         assert np.abs(ev).max() <= nrm + 1e-12
         pm = ProofMap([
@@ -154,10 +154,12 @@ class Spectrum(VoiceoverScene):
             label(r"yet $0$ is not an eigenvalue: \ $Vf = 0 \Rightarrow f = (Vf)' = 0$", font_size=24),
             label(r"a nonzero operator whose spectrum is a single point, \ with no eigenvector", font_size=22,
                   color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
+            if r_.width > 6.2:
+                r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
+        rows.shift((6.9 - rows.get_right()[0]) * RIGHT)  # clear of the axis label n on the left
         head = label(r"The museum: \ the Volterra operator", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Part 8's Volterra operator integrates from zero. Its norm is two over pi. "
