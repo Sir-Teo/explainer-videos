@@ -114,7 +114,31 @@ class DualLp(VoiceoverScene):
             label(r"in $L^\infty$ that norm stays $1$: \ the step fails,", font_size=24, color=C.PATHOLOGY),
             label(r"and $(L^\infty)^*$ is bigger than $L^1$ \ (Part 8)", font_size=24, color=C.PATHOLOGY),
             label(r"$p = 2$: \ $q = 2$, \ chapter 7 again", font_size=24, color=C.INNER),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -1.1, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -1.95, 0])
+        # the proof, run: a functional given only as a black box on L^3[0, 1]; feed it indicators of [0, x]
+        xq = np.linspace(0, 1, 20001)
+        w_hidden = 1 + 0.6 * np.cos(3 * np.pi * xq) + 0.8 * xq
+
+        cum = np.concatenate([[0], np.cumsum((w_hidden[1:] + w_hidden[:-1]) / 2 * np.diff(xq))])
+
+        def Phi_indicator(t_):  # the black box, applied to 1_[0, t]
+            return float(np.interp(t_, xq, cum))
+
+        xs_ = np.linspace(0, 1, 201)
+        lam_ = np.array([Phi_indicator(t_) for t_ in xs_])
+        g_ = np.gradient(lam_, xs_)
+        w_at = 1 + 0.6 * np.cos(3 * np.pi * xs_) + 0.8 * xs_
+        err_g = float(np.abs(g_[2:-2] - w_at[2:-2]).max())
+        assert err_g < 5e-3  # central differences with step 0.005
+        px = plain_axes([0, 1, 0.25], [0, 2.6, 1], 5.0, 1.75, numbers=True, font_size=16,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.6, 0.75, 0])
+        gl_ = polyline(px, xs_, lam_, color=C.MEASURE, stroke_width=3)
+        gg_ = polyline(px, xs_[2:-2], g_[2:-2], color=C.INNER, stroke_width=3)
+        gw_ = DashedVMobject(polyline(px, xs_, w_at, color=WHITE, stroke_width=2), num_dashes=40)
+        pl_ = VGroup(MathTex(r"\lambda([0, x]) = \Phi(\mathbf 1_{[0, x]})", font_size=20, color=C.MEASURE),
+                     MathTex(rf"g = \tfrac{{d\lambda}}{{dx}}: \ \max|g - w| = {sci(err_g, 0)}", font_size=20,
+                             color=C.INNER)).arrange(RIGHT, buff=0.35).next_to(px, UP, buff=0.06)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: for finite p, every bounded functional on L p is integration against "
             "a function g in L q, and the norms match. <bookmark mark='b'/> The proof turns the functional into a "
@@ -129,11 +153,11 @@ class DualLp(VoiceoverScene):
             self.play(FadeIn(thm))
             vo.wait_until("b")
             self.play(FadeIn(pm))
-            self.play(*pm.light(0))
+            self.play(*pm.light(0), Create(px), Create(gl_), FadeIn(pl_[0]))
             vo.wait_until("c")
             self.play(*pm.light(1))
             vo.wait_until("d")
-            self.play(*pm.light(2))
+            self.play(*pm.light(2), Create(gw_), Create(gg_), FadeIn(pl_[1]))
             vo.wait_until("e")
             self.play(*pm.light(3))
             self.play(*pm.done())
