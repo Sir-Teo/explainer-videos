@@ -150,7 +150,7 @@ class Uniform(VoiceoverScene):
         bx = plain_axes([0, 2 * np.pi, np.pi / 2], [0, 0.3, 0.1], 6.4, 1.5).move_to([-3.3, -2.55, 0])
         tl = MathTex(r"f_n = \sum_{k \le n} \frac{\sin kx}{k^2}", font_size=26, color=GREY_A).next_to(ax, UP, buff=0.05)
         tl.align_to(ax, RIGHT)
-        bl = MathTex(r"|f_n - f_m|", font_size=24, color=C.DIST).next_to(bx, LEFT, buff=0.1).shift(UP * 0.3)
+        bl = MathTex(r"|f_n - f_m|", font_size=24, color=C.DIST).move_to(bx.c2p(5.3, 0.25))
         el = DashedLine(bx.c2p(0, eps), bx.c2p(2 * np.pi, eps), color=C.EPS, stroke_width=2)
         el_l = MathTex(r"\varepsilon = 0.06", font_size=22, color=C.EPS).next_to(el, RIGHT, buff=0.08)
 
@@ -197,10 +197,10 @@ class Uniform(VoiceoverScene):
             "f. <bookmark mark='c'/> Everything is measured by one number, the largest gap, the height of the dot "
             "below. That suggests giving functions a size: the sup norm."
         ) as vo:
+            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(tl), FadeIn(bl), Create(el), FadeIn(el_l))
             vo.wait_until("a")
-            self.play(FadeIn(head))
             cur = frame(0)
-            self.play(Create(ax), Create(bx), FadeIn(tl), FadeIn(bl), Create(el), FadeIn(el_l), FadeIn(cur))
+            self.play(FadeIn(cur))
             for k in range(1, len(pairs)):
                 nxt = frame(k)
                 self.play(*[ReplacementTransform(a_, b_) for a_, b_ in zip(cur[:5], nxt[:5])],

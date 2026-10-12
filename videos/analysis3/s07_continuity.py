@@ -155,6 +155,11 @@ class UniformContinuity(VoiceoverScene):
                             color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
         seq_l = label(r"Bernstein polynomials of $|x - \tfrac12|$", font_size=24, color=C.APPROX).next_to(lax, UP, buff=0.1)
         curves = [polyline(lax, x, B[i], color=C.APPROX, stroke_width=3) for i in range(len(ns))]
+        jg = int(np.argmax(np.abs(B[0] - np.abs(x - 0.5))))
+        gap = Line(lax.c2p(x[jg], abs(x[jg] - 0.5)), lax.c2p(x[jg], B[0][jg]), color=C.DIST, stroke_width=6)
+        gap_l = MathTex(rf"d(f, g) = \sup|f - g| = {err[0]:.3f}", font_size=28, color=C.DIST).next_to(lax, DOWN,
+                                                                                                buff=0.15)
+        assert abs(abs(B[0][jg] - abs(x[jg] - 0.5)) - err[0]) < 1e-12
         dots = [Dot(mapax.c2p(*coords[i]), radius=0.06, color=C.APPROX) for i in range(len(ns))]
         path = VMobject(color=C.APPROX, stroke_width=1.5, stroke_opacity=0.6).set_points_as_corners(
             [mapax.c2p(*c) for c in coords])
@@ -181,10 +186,12 @@ class UniformContinuity(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head[0]), Create(lax), Create(target))
+            self.play(Create(curves[0]), FadeIn(seq_l))
+            self.play(Create(gap), FadeIn(gap_l))
             vo.wait_until("b")
             self.play(FadeIn(head[1]), Create(mapax), FadeIn(u_l), FadeIn(v_l), FadeIn(lim_dot), Create(probes))
             vo.wait_until("c")
-            self.play(FadeIn(seq_l), Create(curves[0]), FadeIn(dots[0]))
+            self.play(FadeOut(gap), FadeOut(gap_l), FadeIn(dots[0]))
             cur = curves[0]
             for i in range(1, len(ns)):
                 self.play(cur.animate.set_stroke(opacity=0.25, width=1.5), TransformFromCopy(dots[i - 1], dots[i]),

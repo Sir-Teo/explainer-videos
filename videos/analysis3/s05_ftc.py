@@ -220,7 +220,7 @@ class FTC(VoiceoverScene):
         src = Axes(x_range=[0, 1, 1], y_range=[0, 0.3, 0.3], x_length=sc, y_length=0.3 * sc, tips=False,
                    axis_config={"stroke_opacity": 0, "include_ticks": False})
         src.shift(o - src.c2p(0, 0))
-        inset, decor = magnifier(src, (-0.004, 0.3373), (-0.006, 0.1025), center=[-3.7, 1.45, 0], width=4.2,
+        inset, decor = magnifier(src, (-0.004, 0.3373), (-0.006, 0.1025), center=[-3.6, 2.3, 0], width=4.2,
                                  height=4.2 * 0.1085 / 0.3413, color=GREY_B, tag=r"\times 3")
         P6 = d["p6"]
         q = P6[: (len(P6) - 1) // 4 + 1]

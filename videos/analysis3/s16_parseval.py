@@ -56,22 +56,24 @@ class Parseval(VoiceoverScene):
             "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, form an "
             "algebra of functions on the circle that contains the constants, separates points, and is closed under "
             "complex conjugation. So by Stone's theorem, every continuous periodic function is a uniform limit of "
-            "trigonometric polynomials. <bookmark mark='b'/> One explicit choice, found by Fejér in 1900, averages the "
-            "partial sums, which damps the high frequencies. Its kernel is positive, like Landau's, and the averages "
-            "converge uniformly. <bookmark mark='c'/> Here they are for a continuous function with three corners."
+"trigonometric polynomials. Here are such polynomials closing in on a continuous function with three corners. "
+            "<bookmark mark='b'/> They are an explicit choice, found by Fejér in 1900: averages of the Fourier partial "
+            "sums, which damp the high frequencies. <bookmark mark='c'/> Fejér's kernel is positive, like Landau's, and "
+            "the averages converge uniformly."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), Create(fg))
-            vo.wait_until("b")
-            self.play(FadeIn(sl))
-            vo.wait_until("c")
             self.play(Create(curves[0]), FadeIn(tab[0]), FadeIn(tab[1]))
             cur = curves[0]
             for k in range(1, len(shown)):
                 self.play(ReplacementTransform(cur, curves[k]),
                           LaggedStart(*[FadeIn(tab[j + 1]) for j in range(shown[k - 1] + 1, shown[k] + 1)],
-                                      lag_ratio=0.3), run_time=1.3)
+                                      lag_ratio=0.3), run_time=2.2)
                 cur = curves[k]
+            vo.wait_until("b")
+            self.play(FadeIn(sl))
+            vo.wait_until("c")
+            self.play(Indicate(cur, color=C.APPROX))
         self.wait(0.3)
         self.clear_scene()
 
@@ -157,10 +159,10 @@ class Parseval(VoiceoverScene):
         lhs, rhs = float(d["lhs"]), float(d["rhs"])
         rows = [
             MathTex(r"\frac{1}{2\pi}\int_0^{2\pi} \Big(\frac{\pi - x}{2}\Big)^2 dx", r"=", r"\sum_{n \ne 0} |c_n|^2",
-                    font_size=36),
-            MathTex(r"\frac{\pi^2}{12}", r"=", r"\sum_{n \ne 0} |c_n|^2", font_size=36),
-            MathTex(r"\frac{\pi^2}{12}", r"=", r"\sum_{n \ge 1} 2 \cdot \frac{1}{4n^2}", font_size=36),
-            MathTex(r"\frac{\pi^2}{6}", r"=", r"\sum_{n \ge 1} \frac{1}{n^2}", font_size=40),
+                    font_size=32),
+            MathTex(r"\frac{\pi^2}{12}", r"=", r"\sum_{n \ne 0} |c_n|^2", font_size=32),
+            MathTex(r"\frac{\pi^2}{12}", r"=", r"\sum_{n \ge 1} 2 \cdot \frac{1}{4n^2}", font_size=32),
+            MathTex(r"\frac{\pi^2}{6}", r"=", r"\sum_{n \ge 1} \frac{1}{n^2}", font_size=36),
         ]
         whys = [why(r"Parseval for the sawtooth"), why(r"$\frac{1}{2\pi}\int_0^{2\pi} \frac{(\pi - x)^2}{4} = "
                                                       r"\frac{1}{8\pi}\cdot\frac{2\pi^3}{3}$"),
@@ -168,17 +170,17 @@ class Parseval(VoiceoverScene):
                 why(r"multiply by $2$")]
         head = label(r"The payoff: \ $\sum 1/n^2$, \ from Parseval \ (Rudin, Exercise 8.13)", font_size=32).to_edge(
             UP, buff=0.35)
-        step = ladder(self, rows, whys, keep=4, top=2.4, buff=0.42, x=-1.6)
+        step = ladder(self, rows, whys, keep=4, top=2.65, buff=0.3, x=-1.6)
         n = np.arange(1, 10**6 + 1)
         ps = np.cumsum(1.0 / n**2)
         nums = VGroup(*[MathTex(rf"\sum_{{n \le {k}}} \tfrac{{1}}{{n^2}} = {ps[k - 1]:.8f}", font_size=26)
                         for k in (10, 1000, 10**6)],
                       MathTex(rf"\tfrac{{\pi^2}}{{6}} = {math.pi**2 / 6:.8f}", font_size=26, color=C.EPS)
-                      ).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.9)
+                      ).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.7)
         if nums.width > 13.4:
             nums.width = 13.4
         nod = label(r"Euler, 1734 (the Basel problem); \ 3Blue1Brown proved it with lighthouses: \ this is "
-                    r"another way in", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
+                    r"another way in", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.2)
         assert abs(lhs - math.pi**2 / 12) < 1e-6 and abs(2 * rhs - math.pi**2 / 6) < 2e-6
         with self.voiceover(
             "<bookmark mark='a'/> Parseval's equation, applied to the sawtooth, sums a famous series. On one side, the "
