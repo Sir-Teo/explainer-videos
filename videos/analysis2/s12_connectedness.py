@@ -57,9 +57,9 @@ class Connectedness(VoiceoverScene):
             "in between: here the level c is crossed three times."
         ) as vo:
             vo.wait_until("t")
-            self.play(FadeIn(thm[0]))
+            self.play(FadeIn(thm[0]), Create(ax), Create(g))
             vo.wait_until("a")
-            self.play(FadeIn(thm[1]), Create(ax), Create(g))
+            self.play(FadeIn(thm[1]))
             vo.wait_until("b")
             self.play(FadeIn(img), FadeIn(il))
             vo.wait_until("c")
@@ -183,7 +183,6 @@ class Connectedness(VoiceoverScene):
             "increasing function that jumps at every single rational. Here it is, with jumps at fractions of denominator "
             "up to forty, each sized by its denominator."
         ) as vo:
-            vo.wait_until("t")
             self.play(FadeIn(thm[0]), Create(ax), Create(segs))
             vo.wait_until("a")
             self.play(FadeIn(thm[1]))
@@ -219,7 +218,6 @@ class Connectedness(VoiceoverScene):
             "because it's the rational ruler we've used since Part 1, with each tick's height set to one over its "
             "denominator."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head), Create(ax))
             self.play(LaggedStart(*[FadeIn(p) for p in dots], lag_ratio=0.001), run_time=2.0)
             vo.wait_until("b")
@@ -228,8 +226,8 @@ class Connectedness(VoiceoverScene):
                          stroke_width=0, fill_color=C.EPS, fill_opacity=0.16).move_to((ax.c2p(0, 0) + ax.c2p(1, eps)) / 2)
         bline = DashedLine(ax.c2p(0, eps), ax.c2p(1, eps), color=C.EPS, stroke_width=2)
         strip = Rectangle(width=ax.c2p(x0 + delta, 0)[0] - ax.c2p(x0 - delta, 0)[0],
-                          height=ax.c2p(0, 0.55)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=C.DELTA,
-                          fill_opacity=0.25).move_to((ax.c2p(x0 - delta, 0) + ax.c2p(x0 + delta, 0.55)) / 2)
+                          height=ax.c2p(0, 0.45)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=C.DELTA,
+                          fill_opacity=0.25).move_to((ax.c2p(x0 - delta, 0) + ax.c2p(x0 + delta, 0.45)) / 2)
         xm = Dot(ax.c2p(x0, 0), radius=0.07, color=WHITE)
         xl = MathTex(r"\tfrac{1}{\sqrt2}", font_size=28).next_to(xm, DOWN, buff=0.3)
         big = VGroup(*[dots[i] for i, (a, b) in enumerate(zip(x[keep], y[keep])) if b >= eps])
@@ -242,6 +240,21 @@ class Connectedness(VoiceoverScene):
                      label(r"so $f$ is \textbf{continuous at every irrational}, \ and discontinuous at every rational",
                            font_size=26, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         txt.move_to([0.6, 1.1, 0])
+        # under a magnifier (horizontal only): the strip, the band, and every fraction (q <= 60) near 1/sqrt 2
+        win_x, win_y = (0.68, 0.735), (0.0, 0.16)
+        mag_ax, mag = magnifier(ax, win_x, win_y, center=np.array([4.35, -0.6, 0]), width=2.3, height=1.7,
+                                color=GREY_B, tag=rf"x \times {2.3 / (ax.c2p(win_x[1], 0)[0] - ax.c2p(win_x[0], 0)[0]):.0f}")
+        sel = (x >= win_x[0]) & (x <= win_x[1]) & (y <= win_y[1])
+        m_band = Rectangle(width=2.3, height=mag_ax.c2p(0, eps)[1] - mag_ax.c2p(0, 0)[1], stroke_width=0,
+                           fill_color=C.EPS, fill_opacity=0.16).move_to((mag_ax.c2p(win_x[0], 0) + mag_ax.c2p(win_x[1], eps)) / 2)
+        m_bline = DashedLine(mag_ax.c2p(win_x[0], eps), mag_ax.c2p(win_x[1], eps), color=C.EPS, stroke_width=1.5)
+        m_strip = Rectangle(width=mag_ax.c2p(x0 + delta, 0)[0] - mag_ax.c2p(x0 - delta, 0)[0], height=1.7, stroke_width=0,
+                            fill_color=C.DELTA, fill_opacity=0.25).move_to(mag_ax.c2p(x0, win_y[1] / 2))
+        m_dots = VGroup(*[Dot(mag_ax.c2p(a, b), radius=0.025 + 0.25 * b,
+                              color=C.PATHOLOGY if abs(a - 0.7) < 1e-12 else (C.CLOSED_SET if b >= eps else C.RATIONAL))
+                          for a, b in zip(x[sel], y[sel])])
+        m_x0 = Dot(mag_ax.c2p(x0, 0), radius=0.05, color=WHITE)
+        assert sel.sum() >= 8 and np.all(y[sel & (np.abs(x - x0) < delta)] < eps)
         with self.voiceover(
             "<bookmark mark='a'/> It's continuous at every irrational. Take one over root two, and epsilon equal to a "
             "tenth. <bookmark mark='b'/> Only the fractions with denominator at most ten reach the band's top edge, "
@@ -256,6 +269,8 @@ class Connectedness(VoiceoverScene):
             self.play(FadeIn(txt[0]), big.animate.set_color(C.CLOSED_SET))
             vo.wait_until("c")
             self.play(FadeIn(strip), FadeIn(near), FadeIn(nl), FadeIn(txt[1]))
+            self.play(Create(mag.src), FadeIn(mag.frame), Create(mag.guides), FadeIn(mag.tag), run_time=0.8)
+            self.play(FadeIn(m_band), Create(m_bline), FadeIn(m_strip), FadeIn(m_dots), FadeIn(m_x0), run_time=1.0)
             vo.wait_until("d")
             self.play(FadeIn(txt[2]))
         assert np.all(y[np.abs(x - x0) < delta] < eps)

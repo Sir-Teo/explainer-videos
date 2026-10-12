@@ -50,15 +50,57 @@ class Series(VoiceoverScene):
     # ------------------------------------------------------------------
     def criterion(self):
         dfn = MathTex(r"\sum_{n=1}^{\infty} a_n = s", r"\quad\text{means}\quad", r"s_n = a_1 + \cdots + a_n \to s",
-                      font_size=40).to_edge(UP, buff=0.5)
-        crit = VGroup(label(r"\textbf{Cauchy criterion} (Rudin 3.22): \ $\sum a_n$ converges $\iff$", font_size=30),
+                      font_size=38).to_edge(UP, buff=0.35)
+        crit = VGroup(label(r"\textbf{Cauchy criterion} (Rudin 3.22): \ $\sum a_n$ converges $\iff$", font_size=28),
                       MathTex(r"\forall \varepsilon > 0 \;\exists N:\; m \ge n \ge N \Rightarrow "
-                              r"\Big| a_n + a_{n+1} + \cdots + a_m \Big| \le \varepsilon", font_size=36)
-                      ).arrange(DOWN, buff=0.18).next_to(dfn, DOWN, buff=0.45)
+                              r"\Big| a_n + a_{n+1} + \cdots + a_m \Big| \le \varepsilon", font_size=34)
+                      ).arrange(DOWN, buff=0.15).next_to(dfn, DOWN, buff=0.3)
         crit[1][0][0:4].set_color(C.EPS)
-        nec = VGroup(label(r"take $m = n$: \ $|a_n| \le \varepsilon$, \ so $a_n \to 0$ \ (Rudin 3.23)", font_size=30),
-                     label(r"necessary, \ but not sufficient", font_size=30, color=C.PATHOLOGY)).arrange(DOWN, buff=0.18)
-        nec.next_to(crit, DOWN, buff=0.5)
+        nec = VGroup(label(r"take $m = n$: \ $|a_n| \le \varepsilon$, \ so $a_n \to 0$ \ (Rudin 3.23);", font_size=28),
+                     label(r"necessary, \ but not sufficient", font_size=28, color=C.PATHOLOGY)).arrange(RIGHT, buff=0.25)
+        nec.to_edge(DOWN, buff=0.25)
+        # a block of terms, stacked into one tower: far enough out, every tower stays under epsilon
+        n_max, eps, H, W, X0, B = 30, 0.3, 3.0, 0.28, -6.35, -2.65
+        a = 1 / np.arange(1, n_max + 1) ** 2
+        bs = bars(a, X0, B, W, H, color=C.SEQ, opacity=0.8)
+        base = Line([X0 - 0.1, B, 0], [X0 + W * n_max + 0.1, B, 0], color=GREY_C, stroke_width=2)
+        alab = MathTex(r"a_n = \tfrac{1}{n^2}", font_size=32, color=C.SEQ).move_to([-3.2, -0.3, 0])
+        tx = 4.2
+        tbase = Line([tx - 0.7, B, 0], [tx + 0.7, B, 0], color=GREY_C, stroke_width=2)
+        eline = DashedLine([tx - 0.8, B + H * eps, 0], [tx + 0.8, B + H * eps, 0], color=C.EPS, stroke_width=2.5)
+        elab = MathTex(r"\varepsilon", font_size=30, color=C.EPS).next_to(eline, RIGHT, buff=0.12)
+        tlab = MathTex(r"|a_n + \cdots + a_m|", font_size=28).move_to([tx, -0.3, 0])
+        tail = [float(np.sum(1 / np.arange(k, 200001, dtype=float) ** 2)) for k in (3, 4)]
+        N = 4  # the tail from 4 on is below 0.3 (so is every block in it); from 3 on it is not
+        assert tail[0] > eps > tail[1]
+        Nline = DashedLine([X0 + W * (N - 1), B - 0.1, 0], [X0 + W * (N - 1), B + 1.5, 0], color=C.DELTA,
+                           stroke_width=2.5)
+        Nlab = MathTex(r"N", font_size=30, color=C.DELTA).next_to(Nline, UP, buff=0.08)
+
+        def block(n, m):
+            """The highlight over bars n..m and the tower they stack into (green under epsilon, red above)."""
+            tot = float(a[n - 1:m].sum())
+            col = C.CONNECTED_SET if tot <= eps else C.PATHOLOGY
+            hl = Rectangle(width=W * (m - n + 1) + 0.04, height=0.18, stroke_width=0, fill_color=col,
+                           fill_opacity=0.9).move_to([X0 + W * (n - 1 + (m - n + 1) / 2), B - 0.16, 0])
+            stack, y = VGroup(), B
+            for k in range(n, m + 1):
+                h = max(0.004, H * a[k - 1])
+                stack.add(Rectangle(width=0.9, height=h, stroke_width=0.6, stroke_color=BACKGROUND, fill_color=col,
+                                    fill_opacity=0.85).move_to([tx, y + h / 2, 0]))
+                y += h
+            lab = MathTex(rf"n = {n},\ m = {m}" if m > n else rf"n = m = {n}", font_size=24, color=col)
+            lab.next_to(stack, UP, buff=0.12).set_y(max(B + H * eps + 0.3, stack.get_top()[1] + 0.25))
+            return VGroup(hl, stack, lab), tot
+
+        def show(prev, n, m, rt=1.2):
+            (hl, stack, lab), tot = block(n, m)
+            src = VGroup(*[bs[k - 1] for k in range(n, m + 1)])
+            anims = [FadeOut(prev)] if prev is not None else []
+            self.play(*anims, FadeIn(hl), run_time=0.4)
+            self.play(TransformFromCopy(src, stack), FadeIn(lab), run_time=rt)
+            return VGroup(hl, stack, lab), tot
+
         with self.voiceover(
             "A series converges to s when its partial sums do. <bookmark mark='c'/> So the Cauchy criterion carries "
             "over: the series converges exactly when every long enough block of consecutive terms, far enough out, adds "
@@ -66,12 +108,20 @@ class Series(VoiceoverScene):
             "<bookmark mark='p'/> That's necessary, but it's not enough, and the classic example is seven centuries old."
         ) as vo:
             self.play(FadeIn(dfn))
+            self.play(Create(base), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bs], lag_ratio=0.04), FadeIn(alab),
+                      run_time=1.4)
             vo.wait_until("c")
-            self.play(FadeIn(crit))
+            self.play(FadeIn(crit), Create(tbase), Create(eline), FadeIn(elab), FadeIn(tlab))
+            cur, t0 = show(None, 2, 3)
+            self.play(Create(Nline), FadeIn(Nlab), run_time=0.6)
+            cur, t1 = show(cur, 4, 9)
+            cur, t2 = show(cur, 5, 30)
             vo.wait_until("n")
+            cur, t3 = show(cur, 6, 6, rt=0.8)
             self.play(FadeIn(nec[0]))
             vo.wait_until("p")
             self.play(FadeIn(nec[1]))
+        assert t0 > eps and max(t1, t2, t3) < eps
         self.wait(0.3)
         self.clear_scene()
 

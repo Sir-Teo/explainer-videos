@@ -215,7 +215,6 @@ class Hook(VoiceoverScene):
             "<bookmark mark='s'/> Now take the numbers 1, 1.4, 1.41, 1.414, each one the square root of two cut off "
             "one digit later."
         ) as vo:
-            vo.wait_until("i")
             self.play(Write(lim))
             vo.wait_until("l")
             self.play(FadeIn(land, shift=UP * 0.2))
@@ -348,7 +347,6 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> Send m to infinity first, and every column goes to one. Same numbers, different "
             "order, different answer."
         ) as vo:
-            vo.wait_until("k")
             self.play(LaggedStart(*[FadeIn(k_, shift=RIGHT * 0.2) for k_ in kinds], lag_ratio=0.35), run_time=2.2)
             vo.wait_until("w")
             self.play(FadeIn(q_swap, shift=UP * 0.2))
@@ -382,7 +380,6 @@ class Hook(VoiceoverScene):
             "holes, what compactness means there, which limits we've earned the right to swap, and how far we've "
             "gotten with Fourier. <bookmark mark='r'/> Today's row is the first: the real numbers."
         ) as vo:
-            vo.wait_until("l")
             self.play(FadeIn(led.head), LaggedStart(*[FadeIn(r) for r in led.rows], lag_ratio=0.08), FadeIn(led[-1]),
                       run_time=2)
             vo.wait_until("r")

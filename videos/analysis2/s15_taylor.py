@@ -5,26 +5,11 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import load, plain_axes, polyline
+from videos.analysis2.common import load, plain_axes, polyline, runs_in_range
 
 
 def taylor_poly(coef, x):
     return sum(c * x**k for k, c in enumerate(coef))
-
-
-def runs_in_range(ax, x, y, lo, hi, color, stroke_width=3) -> VGroup:
-    """The graph of y over x, drawn only where it lies within [lo, hi] (pieces that leave the axes are cut, not
-    flattened against the edge)."""
-    ok = (y > lo) & (y < hi)
-    g, start = VGroup(), None
-    for i in range(len(x) + 1):
-        if i < len(x) and ok[i]:
-            start = i if start is None else start
-        elif start is not None:
-            if i - start > 1:
-                g.add(polyline(ax, x[start:i], y[start:i], color=color, stroke_width=stroke_width))
-            start = None
-    return g
 
 
 class Taylor(VoiceoverScene):
@@ -83,10 +68,9 @@ class Taylor(VoiceoverScene):
             "one to one, and flail outside it, however many terms you take. Same story as the last power series "
             "puzzle: the series has radius one."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), *[AnimationGroup(Create(p_[0]), Create(p_[1]), FadeIn(p_[2])) for p_ in panels])
             for mk, (ax, g, t, poly, degs), lab in zip("ab", panels, (sl, rl)):
                 vo.wait_until(mk)
-                self.play(Create(ax), Create(g), FadeIn(t))
                 cur = poly(degs[0])
                 self.play(Create(cur))
                 for n in degs[1:]:
@@ -101,6 +85,27 @@ class Taylor(VoiceoverScene):
                            r"and $\beta$:", font_size=28),
                      MathTex(r"f(\beta) = P_{n-1}(\beta) + \frac{f^{(n)}(x)}{n!}\,(\beta - \alpha)^n", font_size=38,
                              color=C.EPS)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        # an example: f = e^t, alpha = 0, beta = 2, n = 3; the unknown point is computable here
+        ex = plain_axes([0, 2.2, 0.5], [0, 8, 2], 5.2, 4.0, numbers=False).move_to([-3.0, -1.3, 0])
+        al, be = 0.0, 2.0
+        p2 = lambda t: 1 + t + t * t / 2  # noqa: E731
+        ef = ex.plot(np.exp, x_range=[0, 2.1, 0.01], color=C.FUNC, stroke_width=4)
+        ep = ex.plot(p2, x_range=[0, 2.1, 0.01], color=C.APPROX, stroke_width=3.5)
+        gap = Line(ex.c2p(be, p2(be)), ex.c2p(be, math.exp(be)), color=C.EPS, stroke_width=6)
+        xi = math.log((math.exp(be) - p2(be)) * 6 / be**3)  # e^x / 3! * 2^3 = e^2 - P_2(2)
+        assert 0 < xi < be and abs(math.exp(xi) / 6 * be**3 + p2(be) - math.exp(be)) < 1e-12
+        xm = VGroup(Dot(ex.c2p(xi, 0), radius=0.07, color=C.EPS),
+                    MathTex(rf"x = {xi:.3f}", font_size=26, color=C.EPS).next_to(ex.c2p(xi, 0), DOWN, buff=0.15))
+        ab_ = VGroup(MathTex(r"\alpha", font_size=28).next_to(ex.c2p(al, 0), DOWN, buff=0.15),
+                     MathTex(r"\beta", font_size=28).next_to(ex.c2p(be, 0), DOWN, buff=0.15))
+        exl = VGroup(MathTex(r"f(t) = e^t", font_size=30, color=C.FUNC),
+                     MathTex(r"P_2(t) = 1 + t + \tfrac{t^2}{2}", font_size=30, color=C.APPROX),
+                     MathTex(r"e^2 - P_2(2)", r"=", r"\frac{e^{x}}{3!}\,2^3", font_size=34),
+                     MathTex(rf"{math.exp(be) - p2(be):.4f}", r"=", rf"\frac{{e^{{{xi:.3f}}}}}{{6}}\cdot 8", font_size=34)
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.2, -1.0, 0])
+        exl[2][0].set_color(C.EPS)
+        exl[3][0].set_color(C.EPS)
+        example = VGroup(ex, ef, ep, gap, xm, ab_, exl)
         rows = [MathTex(r"g(t)", r"=", r"f(t) - P_{n-1}(t) - M (t - \alpha)^n", font_size=34),
                 MathTex(r"g(\alpha) = g'(\alpha) = \cdots = g^{(n-1)}(\alpha)", r"=", r"0, \qquad g(\beta) = 0",
                         font_size=34),
@@ -132,7 +137,12 @@ class Taylor(VoiceoverScene):
         ) as vo:
             vo.wait_until("t")
             self.play(FadeIn(thm))
+            self.play(Create(ex), FadeIn(ab_), Create(ef), FadeIn(exl[0]), run_time=1.2)
+            self.play(Create(ep), FadeIn(exl[1]), run_time=1.2)
+            self.play(Create(gap), FadeIn(exl[2]))
+            self.play(FadeIn(xm, shift=UP * 0.2), FadeIn(exl[3]))
             vo.wait_until("a")
+            self.play(FadeOut(example), run_time=0.6)
             step(0)
             vo.wait_until("b")
             step(1)
@@ -170,7 +180,6 @@ class Taylor(VoiceoverScene):
             "error of the degree n polynomial at one is at most e over n plus one factorial. <bookmark mark='b'/> On a "
             "log scale, the actual errors sit just under the bound, all the way down."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(sub), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(nl))
             vo.wait_until("b")
             self.play(Create(bd), LaggedStart(*[FadeIn(x) for x in ed], lag_ratio=0.1), run_time=2.0)

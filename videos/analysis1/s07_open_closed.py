@@ -179,7 +179,6 @@ class OpenClosed(VoiceoverScene):
             "held only finitely many, shrink the radius below the nearest of them, and you'd have a neighborhood with "
             "none at all. <bookmark mark='c'/> In particular, a finite set has no limit points."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(lim), FadeIn(pd), FadeIn(n1), FadeIn(qs_))
             vo.wait_until("b")
             self.play(Transform(n1, n2), FadeIn(txt))
@@ -240,7 +239,6 @@ class OpenClosed(VoiceoverScene):
             "open sets is also open: <bookmark mark='m'/> a point in all of them has a disk inside each, and the "
             "smallest of those finitely many disks fits inside all of them."
         ) as vo:
-            vo.wait_until("u")
             self.play(FadeIn(stmt))
             vo.wait_until("i")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in disks], lag_ratio=0.3), FadeIn(xd))

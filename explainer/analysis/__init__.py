@@ -127,7 +127,17 @@ def schematic_tag(corner=UR) -> Tex:
 # ---------------------------------------------------------------------------
 # Derivations
 # ---------------------------------------------------------------------------
-def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.95):
+def changed_parts(prev: Mobject, row: Mobject) -> list:
+    """The parts of a MathTex row whose TeX does not occur in the previous row (what a derivation step changed)."""
+    if not isinstance(row, MathTex) or not isinstance(prev, MathTex):
+        return []
+    old = {t.strip() for t in prev.tex_strings}
+    relations = {"=", "<", ">", r"\le", r"\ge", r"\leq", r"\geq", r"\Rightarrow", r"\iff", r"\in", r"\ne"}
+    return [part for part, t in zip(row, row.tex_strings)
+            if t.strip() and t.strip() not in old and t.strip() not in relations and len(part) > 0]
+
+
+def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.95, highlight=True):
     """Reveal derivation rows one at a time, keeping at most ``keep`` on screen (older rows scroll off the top).
     Each row's ``align_index`` part (usually '=') is lined up at ``x``.  Returns ``step(i)``: the first row is
     written, each later one grows out of a copy of the previous one, and its grey 'why' note fades in beside it
@@ -180,8 +190,14 @@ def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, 
             scene.play(Write(rows[i]), run_time=run_time)
         else:
             scene.play(TransformMatchingTex(rows[i - 1].copy(), rows[i]), run_time=run_time)
-        if whys[i] is not None:
-            scene.play(FadeIn(whys[i]), run_time=0.5)
+        anims = [FadeIn(whys[i])] if whys[i] is not None else []
+        changed = changed_parts(rows[i - 1], rows[i]) if i > 0 else []
+        if highlight and changed:
+            # a yellow underline sweeps under the parts that are new in this line
+            anims += [ShowPassingFlash(Underline(m, buff=0.06, stroke_width=4).set_color(C.EPS), time_width=0.6)
+                      for m in changed]
+        if anims:
+            scene.play(*anims, run_time=0.8 if highlight and changed else 0.5)
 
     return step
 
@@ -458,9 +474,9 @@ def dictionary_card(left_title: str, right_title: str, pairs, font_size=26, widt
     for i, (l, r) in enumerate(pairs):
         lm = label(l, font_size=font_size).move_to([lx, y, 0])
         rm = label(r, font_size=font_size).move_to([rx, y, 0])
-        for m in (lm, rm):
-            if m.width > width / 2 - 0.5:
-                m.width = width / 2 - 0.5
+        for m in (lm, rm):  # keep clear of the arrow in the middle
+            if m.width > width / 2 - 1.3:
+                m.width = width / 2 - 1.3
         row = VGroup(lm, rm)
         if i in strike:
             row.add(Line(rm.get_left() + LEFT * 0.1, rm.get_right() + RIGHT * 0.1, color=C.PATHOLOGY, stroke_width=4))
@@ -472,6 +488,34 @@ def dictionary_card(left_title: str, right_title: str, pairs, font_size=26, widt
     g = VGroup(lt, rt, rows, arrows)
     g.titles, g.rows, g.arrows, g.mid = VGroup(lt, rt), rows, arrows, mid
     return g.move_to(ORIGIN)
+
+
+def magnifier(src_ax: Axes, x_window, y_window, center, width=3.4, height=2.4, color=GREY_B, tag=None) -> tuple:
+    """A magnified view of the window x_window × y_window of ``src_ax``, drawn as a framed inset at ``center``.
+
+    Returns ``(inset_ax, decor)``: draw on ``inset_ax`` with the same functions and trackers as on the source (it
+    has invisible axes, so nothing but your drawings and the frame show); ``decor`` holds the small frame on the
+    source, the inset's frame, the two guide lines between them, and the magnification tag."""
+    x0, x1 = x_window
+    y0, y1 = y_window
+    inset = Axes(x_range=[x0, x1, x1 - x0], y_range=[y0, y1, y1 - y0], x_length=width, y_length=height, tips=False,
+                 axis_config={"stroke_opacity": 0, "include_ticks": False}).move_to(center)
+    p0, p1 = src_ax.c2p(x0, y0), src_ax.c2p(x1, y1)
+    src = Rectangle(width=max(p1[0] - p0[0], 0.04), height=max(p1[1] - p0[1], 0.04), color=color, stroke_width=2)
+    src.move_to((p0 + p1) / 2)
+    dst = Rectangle(width=width, height=height, color=color, stroke_width=2).move_to(center)
+    dst.set_fill(BACKGROUND, opacity=1.0)
+    if center[0] >= src.get_center()[0]:
+        pairs = ((src.get_corner(UR), dst.get_corner(UL)), (src.get_corner(DR), dst.get_corner(DL)))
+    else:
+        pairs = ((src.get_corner(UL), dst.get_corner(UR)), (src.get_corner(DL), dst.get_corner(DR)))
+    guides = VGroup(*[DashedLine(a, b, color=color, stroke_width=1.5, dash_length=0.08) for a, b in pairs])
+    k = (width / max(p1[0] - p0[0], 1e-9))
+    tag = tag if tag is not None else rf"\times {k:.0f}"
+    t = MathTex(tag, font_size=24, color=color).next_to(dst, UP, buff=0.08).align_to(dst, LEFT)
+    decor = VGroup(src, guides, dst, t)
+    decor.src, decor.guides, decor.frame, decor.tag = src, guides, dst, t
+    return inset, decor
 
 
 from .gameboard import FunctionBoard, SequenceBoard, largest_delta  # noqa: E402,F401

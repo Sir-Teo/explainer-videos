@@ -143,10 +143,51 @@ class Derivative(VoiceoverScene):
             MathTex(r"f(t) - f(x) = \frac{f(t) - f(x)}{t - x}\,(t - x) \to f'(x) \cdot 0 = 0", font_size=36),
             label(r"the converse fails: $|x|$, \ and Rudin's function, continuous everywhere, differentiable nowhere",
                   font_size=26, color=C.PATHOLOGY),
-        ).arrange(DOWN, buff=0.28)
-        rows[3].shift(DOWN * 0.25)
-        rows[4].shift(DOWN * 0.25)
-        rows[5].shift(DOWN * 0.25)
+        )
+        rows[0].to_edge(UP, buff=0.35)
+        rows[1].next_to(rows[0], DOWN, buff=0.25)
+        rows[2].to_edge(DOWN, buff=0.3)
+        VGroup(rows[3], rows[4], rows[5]).arrange(DOWN, buff=0.35).move_to([0, -0.6, 0])
+        # the picture: tangent line at x, and the error r(h) between it and the curve, as h shrinks (a convex
+        # curve, so the error sits on top of the tangent's rise instead of overlapping it)
+        f = lambda x: 0.35 + 0.12 * x**2 + 0.03 * x**3  # noqa: E731
+        fp = lambda x: 0.24 * x + 0.09 * x**2  # noqa: E731
+        x0 = 1.0
+        ax = plain_axes([0, 3.4, 1], [0, 2.6, 1], 6.4, 3.9, numbers=False).move_to([-3.2, -0.75, 0])
+        g = ax.plot(f, x_range=[0, 3.2, 0.01], color=C.FUNC, stroke_width=4)
+        tan = Line(ax.c2p(0.2, f(x0) - 0.8 * fp(x0)), ax.c2p(3.4, f(x0) + 2.4 * fp(x0)), color=C.EPS, stroke_width=2.5)
+        P = Dot(ax.c2p(x0, f(x0)), radius=0.07, color=WHITE)
+        hT = ValueTracker(1.6)
+
+        def pieces():
+            h = hT.get_value()
+            x1, y0, yt, yc = x0 + h, f(x0), f(x0) + fp(x0) * h, f(x0 + h)
+            return VGroup(Line(ax.c2p(x0, y0), ax.c2p(x1, y0), color=GREY_B, stroke_width=2.5),
+                          Line(ax.c2p(x1, y0), ax.c2p(x1, yt), color=C.EPS, stroke_width=5),
+                          Line(ax.c2p(x1, yt), ax.c2p(x1, yc), color=C.PATHOLOGY, stroke_width=6),
+                          Dot(ax.c2p(x1, yc), radius=0.06, color=C.FUNC))
+
+        pc = always_redraw(pieces)
+        h0 = 1.6
+        tags = VGroup(MathTex(r"h", font_size=28, color=GREY_B).next_to(ax.c2p(x0 + h0 / 2, f(x0)), DOWN, buff=0.1),
+                      MathTex(r"f'(x)\,h", font_size=28, color=C.EPS).next_to(
+                          ax.c2p(x0 + h0, f(x0) + fp(x0) * h0 / 2), RIGHT, buff=0.12),
+                      MathTex(r"r(h)", font_size=28, color=C.PATHOLOGY).next_to(
+                          ax.c2p(x0 + h0, (f(x0) + fp(x0) * h0 + f(x0 + h0)) / 2), RIGHT, buff=0.12),
+                      MathTex(r"x", font_size=28).next_to(ax.c2p(x0, 0), DOWN, buff=0.12))
+        r_over_h = lambda h: (f(x0 + h) - f(x0) - fp(x0) * h) / h  # noqa: E731
+        bx = plain_axes([0, 1.7, 0.5], [0, 0.5, 0.25], 4.6, 2.6, numbers=False).move_to([3.9, -0.5, 0])
+        hs = np.linspace(1e-3, 1.6, 400)
+        trace = always_redraw(lambda: polyline(bx, hs[hs >= hT.get_value()], r_over_h(hs[hs >= hT.get_value()]),
+                                               color=C.PATHOLOGY, stroke_width=3)
+                              if hT.get_value() < 1.6 - 1e-3 else VMobject())
+        bdot = always_redraw(lambda: Dot(bx.c2p(hT.get_value(), r_over_h(hT.get_value())), radius=0.07,
+                                         color=C.PATHOLOGY))
+        blab = VGroup(MathTex(r"\frac{r(h)}{h}", font_size=30, color=C.PATHOLOGY).next_to(bx, LEFT, buff=0.15),
+                      MathTex(r"h", font_size=26, color=GREY_B).next_to(bx.c2p(1.7, 0), DOWN, buff=0.12),
+                      MathTex(r"0", font_size=24, color=GREY_B).next_to(bx.c2p(0, 0), UL, buff=0.06))
+        assert r_over_h(1.6) > 0.35 and 0 < r_over_h(0.02) < 0.01
+        pic = VGroup(ax, g, tan, P, tags, bx, blab)
         with self.voiceover(
             "<bookmark mark='a'/> Straightening has an algebraic form: f of x plus h is f of x, plus the derivative "
             "times h, plus an error that's small even compared with h. <bookmark mark='b'/> That's the version that "
@@ -155,11 +196,20 @@ class Derivative(VoiceoverScene):
             "difference quotient times t minus x, which goes to zero. <bookmark mark='d'/> The converse fails, "
             "spectacularly."
         ) as vo:
+            self.play(FadeIn(rows[0]), Create(ax), Create(g), FadeIn(tags[3]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            self.play(Write(rows[1]), FadeIn(P), Create(tan))
+            self.play(FadeIn(pc), FadeIn(tags[:3]))
+            self.play(Create(bx), FadeIn(blab), FadeIn(bdot))
+            self.play(FadeOut(tags[:3]), run_time=0.4)
+            self.add(trace)
+            self.play(hT.animate.set_value(0.02), run_time=4.0, rate_func=smooth)
             vo.wait_until("b")
             self.play(FadeIn(rows[2]))
             vo.wait_until("c")
+            for m in (pc, trace, bdot):
+                m.clear_updaters()
+            self.play(FadeOut(VGroup(pic, pc, trace, bdot, rows[2])), run_time=0.6)
             self.play(FadeIn(rows[3]), FadeIn(rows[4]))
             vo.wait_until("d")
             self.play(FadeIn(rows[5]))

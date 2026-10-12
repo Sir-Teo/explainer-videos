@@ -54,7 +54,6 @@ class Connected(VoiceoverScene):
             "of the first. Not separated. <bookmark mark='b'/> Remove the point one, and the two open intervals are "
             "separated."
         ) as vo:
-            vo.wait_until("s")
             self.play(FadeIn(defs[0]))
             vo.wait_until("c")
             self.play(FadeIn(defs[1]))
@@ -88,7 +87,6 @@ class Connected(VoiceoverScene):
             "easy. If a set skips some z between two of its points, then the part below z and the part above z are "
             "nonempty and separated, since nothing in either piece is a limit of the other."
         ) as vo:
-            vo.wait_until("s")
             self.play(FadeIn(stmt), FadeIn(sub))
             vo.wait_until("g")
             self.play(FadeIn(E))
