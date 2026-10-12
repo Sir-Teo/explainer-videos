@@ -375,8 +375,8 @@ class StoneWeierstrass(VoiceoverScene):
                         enumerate(Gs)])
         cover = np.any(Gs > f - eps, axis=0)
         assert cover.all()
-        bl = label(r"where $g_{xy} > f - \varepsilon$:", font_size=20, color=C.APPROX).next_to(bars, LEFT, buff=0.15)
-        bl.align_to(bars, UP)
+        bl = label(r"where $g_{xy} > f - \varepsilon$:", font_size=20, color=C.APPROX).next_to(bars, DOWN, buff=0.08)
+        bl.align_to(bars, LEFT)  # under the bars: left of them is off-screen
         flab = MathTex(r"f(x) = e^x", font_size=28).next_to(ax.c2p(0.95, math.exp(0.95)), UL, buff=0.1)
         side = VGroup(
             label(rf"fix $x = {x:.2f}$; \ for each $y$, \ step 3 gives", font_size=24),
@@ -434,8 +434,8 @@ class StoneWeierstrass(VoiceoverScene):
         assert np.any(Wsets, axis=0).all()
         bars = VGroup(*[interval_bars(ax, t, w, y_top - 0.075 * j, C.CLOSED_SET, height=0.05) for j, w in
                         enumerate(Wsets)])
-        bl = label(r"where $h_x < f + \varepsilon$:", font_size=20, color=C.CLOSED_SET).next_to(bars, LEFT, buff=0.15)
-        bl.align_to(bars, UP)
+        bl = label(r"where $h_x < f + \varepsilon$:", font_size=20, color=C.CLOSED_SET).next_to(bars, DOWN, buff=0.08)
+        bl.align_to(bars, LEFT)  # under the bars: left of them is off-screen
         dots = VGroup(*[Dot(ax.c2p(float(x), math.exp(float(x))), radius=0.04, color=C.CLOSED_SET) for x in xs])
         side = VGroup(
             label(r"a cap $h_x$ at each $x$", font_size=24, color=C.CLOSED_SET),
