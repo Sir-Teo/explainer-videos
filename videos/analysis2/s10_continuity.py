@@ -102,10 +102,14 @@ class Continuity(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(db), FadeIn(pc), FadeIn(ro))
             vo.wait_until("c")
-            self.play(board.delta.animate.set_value(0.55), Transform(ro, readout(1.0, 0.55)), run_time=1.2)
+            ro2 = readout(1.0, 0.55)
+            self.play(board.delta.animate.set_value(0.55), FadeTransform(ro, ro2), run_time=1.2)
+            ro = ro2
             vo.wait_until("d")
             best = board.largest_delta(1.0)
-            self.play(board.delta.animate.set_value(best), Transform(ro, readout(1.0, best)), run_time=1.2)
+            ro2 = readout(1.0, best)
+            self.play(board.delta.animate.set_value(best), FadeTransform(ro, ro2), run_time=1.2)
+            ro = ro2
         deltas = []
         # under a magnifier: the same game (same trackers), in the window 2.97 < x < 3.03, 8.82 < y < 9.18
         mag_ax, mag = magnifier(ax, (2.97, 3.03), (8.82, 9.18), center=np.array([5.0, -1.95, 0]), width=3.4,
@@ -125,7 +129,9 @@ class Continuity(VoiceoverScene):
                 self.play(board.eps.animate.set_value(e), run_time=1.0)
                 best = board.largest_delta(1.0)
                 deltas.append(best)
-                self.play(board.delta.animate.set_value(best), Transform(ro, readout(e, best)), run_time=1.0)
+                ro2 = readout(e, best)
+                self.play(board.delta.animate.set_value(best), FadeTransform(ro, ro2), run_time=1.0)
+                ro = ro2
             # too thin to see at this scale: magnify the window around (3, 9)
             m_eb, m_db, m_pc = mboard.eps_band(), mboard.delta_band(), mboard.piece(stroke_width=6)
             self.play(Create(mag.src), FadeIn(mag.frame), Create(mag.guides), FadeIn(mag.tag), run_time=0.8)

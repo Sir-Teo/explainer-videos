@@ -147,8 +147,9 @@ class Hook(VoiceoverScene):
             self.play(Create(top), Create(over))
             vo.wait_until("n")
             for n in (60, 200):
-                self.play(Transform(S, curve(n)), Transform(n_t, MathTex(rf"n = {n}", font_size=32, color=C.APPROX)
-                                                              .to_corner(UR, buff=0.5)), run_time=1.2)
+                n_t2 = MathTex(rf"n = {n}", font_size=32, color=C.APPROX).to_corner(UR, buff=0.5)
+                self.play(Transform(S, curve(n)), FadeTransform(n_t, n_t2), run_time=1.2)
+                n_t = n_t2
             vo.wait_until("p")
             self.play(GrowFromCenter(br), FadeIn(over_l))
         self.wait(0.5)

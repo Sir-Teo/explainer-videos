@@ -108,13 +108,17 @@ class Cauchy(VoiceoverScene):
             self.play(FadeIn(eps_l))
             vo.wait_until("w")
             for N in range(2, 11):
-                self.play(Nv.animate.set_value(N), Transform(dl, dlab(N)), run_time=0.3)
+                dl2 = dlab(N)
+                self.play(Nv.animate.set_value(N), FadeTransform(dl, dl2), run_time=0.3)
+                dl = dl2
             vo.wait_until("f")
-            self.play(eps.animate.set_value(0.05), Transform(eps_l, MathTex(r"\varepsilon = 0.05", font_size=32,
-                                                                               color=C.EPS).move_to(eps_l, LEFT)),
-                      run_time=0.5)
+            eps_l2 = MathTex(r"\varepsilon = 0.05", font_size=32, color=C.EPS).move_to(eps_l, LEFT)
+            self.play(eps.animate.set_value(0.05), FadeTransform(eps_l, eps_l2), run_time=0.5)
+            eps_l = eps_l2
             for N in range(11, 21):
-                self.play(Nv.animate.set_value(N), Transform(dl, dlab(N)), run_time=0.2)
+                dl2 = dlab(N)
+                self.play(Nv.animate.set_value(N), FadeTransform(dl, dl2), run_time=0.2)
+                dl = dl2
         assert abs(d["diam"][9] - 1 / 11) < 1e-12 and d["diam"][8] >= 0.1 - 1e-12 and d["diam"][19] < 0.05
         self.wait(0.3)
         band.clear_updaters()
