@@ -42,7 +42,7 @@ class PowerSeries(VoiceoverScene):
         strip_l = MathTex(r"[-r, r], \ r = 0.8", font_size=24, color=C.COMPACT_SET).next_to(strip, DOWN, buff=0.12)
         target = runs(ax, x, 1 / (1 - x), WHITE, 3.5)
         parts = [runs(ax, x, sum(x**k for k in range(int(N) + 1)), C.APPROX, 3) for N in Ng]
-        tlab = MathTex(r"\frac{1}{1 - x} = \sum_{n \ge 0} x^n", font_size=30).next_to(ax.c2p(0.55, 5.2), LEFT, buff=0.1)
+        tlab = MathTex(r"\frac{1}{1 - x} = \sum_{n \ge 0} x^n", font_size=30).move_to(ax.c2p(-0.5, 4.3))
         head = VGroup(label(r"\textbf{Rudin 8.1} \ radius $R$ $\Rightarrow$ uniform convergence on $[-r, r]$ for "
                             r"every $r < R$", font_size=28),
                       ).to_edge(UP, buff=0.3)
@@ -122,10 +122,11 @@ class PowerSeries(VoiceoverScene):
             "one minus one plus one, and so on, has an Abel limit of one half but no sum. That kind of averaged sum "
             "comes back in Part 7, for Fourier series."
         ) as vo:
+            self.play(Create(ax), Create(ln2), FadeIn(ln2_l))
             vo.wait_until("a")
             self.play(FadeIn(head))
             vo.wait_until("b")
-            self.play(Create(ax), Create(g), FadeIn(fl), Create(ln2), FadeIn(ln2_l))
+            self.play(Create(g), FadeIn(fl))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bt), Create(bl), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.05),
                       run_time=2.5)
@@ -171,8 +172,10 @@ class PowerSeries(VoiceoverScene):
         sp = always_redraw(spiral)
         arc = always_redraw(lambda: Arc(radius=u, start_angle=0, angle=max(tT.get_value(), 1e-3), arc_center=o,
                                         color=C.EPS, stroke_width=4))
+        land = always_redraw(lambda: Dot(Z(complex(np.cos(tT.get_value()), np.sin(tT.get_value()))), radius=0.09,
+                                         color=C.EPS))
         tl = always_redraw(lambda: MathTex(rf"t = {tT.get_value():.2f}", font_size=28, color=C.EPS).move_to(
-            o + np.array([-1.5, 2.6, 0])))
+            o + np.array([-2.1, 2.75, 0])))
         heads = d["heads"]
         head = VGroup(label(r"\textbf{Rudin 8.6--8.7} \ one series makes $\exp$, $\cos$ and $\sin$", font_size=30),
                       MathTex(r"E(z) = \sum_{n \ge 0} \frac{z^n}{n!}, \qquad E(z)E(w) = E(z + w)", font_size=32)
@@ -213,11 +216,13 @@ class PowerSeries(VoiceoverScene):
             self.play(FadeIn(side[2]))
             self.play(FadeIn(side[3]), FadeIn(side[4]))
             vo.wait_until("d")
+            sp.clear_updaters()
+            self.play(FadeOut(sp), FadeIn(land))
             self.play(tT.animate.set_value(0.0), run_time=1.2)
             self.add(arc)
             self.play(FadeIn(side[5]), tT.animate.set_value(2 * np.pi - 0.05), run_time=6.0, rate_func=linear)
             self.play(FadeIn(side[6]))
-        for m in (sp, arc, tl):
+        for m in (arc, tl, land):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -356,9 +361,9 @@ class PowerSeries(VoiceoverScene):
             "after all. <bookmark mark='d'/> Repeat the step from the new point, and the values march down to zero, "
             "at a root. In Part 7 the same theorem will take one line."
         ) as vo:
-            self.play(FadeIn(head), Create(zax), Create(wax), FadeIn(zl), FadeIn(wl))
+            self.play(FadeIn(head[0]), Create(zax), Create(wax), FadeIn(zl), FadeIn(wl), FadeIn(zd), FadeIn(wd))
             vo.wait_until("a")
-            self.play(FadeIn(zd), FadeIn(wd), Create(lvl), FadeIn(lvl_l))
+            self.play(FadeIn(head[1]), Create(lvl), FadeIn(lvl_l))
             vo.wait_until("b")
             self.play(Create(zc), Create(wimg), run_time=2.0)
             vo.wait_until("c")

@@ -49,8 +49,7 @@ class FourierSeries(VoiceoverScene):
                             r"Which trigonometric polynomial is closest to $f$?", lit=(1807, 1829), part=3)
         with self.voiceover(
             "Chapter fourteen. In 1807 Fourier claimed that every function is a sum of sines and cosines, and in 1829 "
-            "Dirichlet proved it for a large class of functions. Rudin starts not from convergence but from a "
-            "geometric question: which trigonometric polynomial is closest to f?"
+            "Dirichlet proved it for a large class of functions."
         ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -79,29 +78,30 @@ class FourierSeries(VoiceoverScene):
         ql = MathTex(rf"\int \sin^2 3x\,dx = {I2:.4f} = \pi", font_size=28).next_to(bx, UP, buff=0.08)
         # the Gram matrix of e^{inx}, |n| <= 3
         ks = list(range(-3, 4))
-        cs = 0.52
-        o = np.array([2.2, 1.4, 0])
+        cs = 0.43
+        o = np.array([2.35, 2.55, 0])
         cells = VGroup()
         for i in range(7):
             for j in range(7):
                 v = float(gram[i, j])
                 sq_ = Square(side_length=cs * 0.94, stroke_width=0, fill_color=C.INNER if v > 0.5 else GREY_E,
                              fill_opacity=0.9 if v > 0.5 else 0.6).move_to(o + np.array([j * cs, -i * cs, 0]))
-                cells.add(VGroup(sq_, MathTex(f"{abs(v):.0f}", font_size=22, color=WHITE if v > 0.5 else GREY_B)
+                cells.add(VGroup(sq_, MathTex(f"{abs(v):.0f}", font_size=19, color=WHITE if v > 0.5 else GREY_B)
                                  .move_to(sq_)))
         rl = VGroup(*[MathTex(str(k), font_size=20, color=GREY_B).next_to(cells[i * 7], LEFT, buff=0.12)
                       for i, k in enumerate(ks)])
         cl_ = VGroup(*[MathTex(str(k), font_size=20, color=GREY_B).next_to(cells[j], UP, buff=0.1)
                        for j, k in enumerate(ks)])
         gl = MathTex(r"\frac{1}{2\pi}\int_{-\pi}^{\pi} e^{imx}\,\overline{e^{inx}}\,dx = \delta_{mn}", font_size=30,
-                     color=C.INNER).next_to(cells, DOWN, buff=0.3)
+                     color=C.INNER).next_to(cells, DOWN, buff=0.25)
         gl2 = label(r"(Rudin 8.9; \ computed for $|m|, |n| \le 3$)", font_size=20, color=GREY_B).next_to(gl, DOWN,
                                                                                                    buff=0.1)
         coef = VGroup(MathTex(r"c_n = \frac{1}{2\pi}\int_{-\pi}^{\pi} f(x)\, e^{-inx}\,dx", font_size=30, color=C.FREQ),
                       label(r"$f$'s coordinate along $e^{inx}$", font_size=24, color=GREY_A)
-                      ).arrange(DOWN, buff=0.1).next_to(gl2, DOWN, buff=0.3)
+                      ).arrange(DOWN, buff=0.1).next_to(gl2, DOWN, buff=0.35)
         with self.voiceover(
-            "<bookmark mark='a'/> The key fact is orthogonality. Take two different sine waves, <bookmark mark='b'/> "
+            "Rudin starts not from convergence but from a geometric question: which trigonometric polynomial is "
+            "closest to f? <bookmark mark='a'/> The key fact is orthogonality. Take two different sine waves, <bookmark mark='b'/> "
             "multiply them, and integrate over a period: the positive and negative parts cancel exactly. "
             "<bookmark mark='c'/> The same wave times itself is positive, and integrates to pi. "
             "<bookmark mark='d'/> In complex form, the exponentials e to the i n x behave like perpendicular unit "
@@ -217,7 +217,7 @@ class FourierSeries(VoiceoverScene):
         tot = float(d["tot"])
         W = 9.0
         x0 = -W / 2 - 0.4
-        y = 0.4
+        y = -0.55
         outline = Rectangle(width=W, height=0.7, stroke_color=WHITE, stroke_width=2).move_to([x0 + W / 2, y, 0])
         tl = MathTex(r"\frac{1}{2\pi}\int_{-\pi}^{\pi} |f|^2 = \frac{\pi^2}{12} = " + f"{tot:.4f}", font_size=30)
         tl.next_to(outline, UP, buff=0.2)
@@ -242,11 +242,11 @@ class FourierSeries(VoiceoverScene):
                        color=GREY_A).next_to(rows, DOWN, buff=0.15)
         tab = VGroup(*[MathTex(rf"N = {N}: \ {v:.4f}", font_size=24) for N, v in
                        zip((1, 2, 5, 10, 100, 1000), d["bessel"])]).arrange(RIGHT, buff=0.45)
-        tab.next_to(outline, DOWN, buff=0.75)
+        tab.next_to(outline, DOWN, buff=0.7)
         out = VGroup(label(r"so $c_n \to 0$ \ (the Riemann--Lebesgue lemma, for Riemann-integrable $f$)", font_size=26,
                            color=C.EPS),
                      label(r"whether the bar fills completely is chapter 15", font_size=24, color=GREY_A)
-                     ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+                     ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "<bookmark mark='a'/> Take the competitor t to be zero. Pythagoras says the energy of f is the energy of "
             "its partial sum plus the energy of the error, so the partial sum has less energy than f. "
@@ -299,12 +299,12 @@ class FourierSeries(VoiceoverScene):
         for N, L_ in zip(Ns, leb):
             if N in (1, 5, 20, 100, 500):
                 tab.add(MathTex(rf"{int(N)}", rf"\quad {L_:.3f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.1, -0.4, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.95, -0.85, 0])
         asym = MathTex(r"\approx \tfrac{4}{\pi^2}\ln N + 1.27", font_size=28, color=C.FREQ).next_to(tab, DOWN, buff=0.25)
         notes = VGroup(label(r"signed area: \ always $2\pi$", font_size=22, color=GREY_A),
                        label(r"area of $|D_N|$: \ grows without bound", font_size=22, color=C.PATHOLOGY),
                        label(r"unlike the Landau kernel, \ $D_N$ is not positive", font_size=22, color=GREY_A),
-                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, RIGHT, buff=0.4).align_to(tab, UP)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.2, 1.25, 0])
         for N in shown:
             assert abs(trap(D(N), t) - 2 * np.pi) < 1e-3
         assert np.all(np.diff(leb) > 0)
@@ -349,7 +349,8 @@ class FourierSeries(VoiceoverScene):
             g = (ft - f0) / np.sin(t / 2)
         g[np.isclose(t, 0)] = 1.0
         g[np.isclose(t, x0, atol=1e-9)] = 0.0
-        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-2.2, 2.2, 1], 6.6, 3.2).move_to([-3.3, -0.35, 0])
+        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-6.5, 2.5, 2], 6.6, 3.6).move_to([-3.3, -0.55, 0])
+        assert g.min() > -6.5 and g.max() < 2.5
         gg = VGroup(polyline(ax, t[t < x0 - 1e-3], g[t < x0 - 1e-3], color=C.FUNC, stroke_width=3),
                     polyline(ax, t[t > x0 + 1e-3], g[t > x0 + 1e-3], color=C.FUNC, stroke_width=3))
         nT = ValueTracker(3)
@@ -375,14 +376,18 @@ class FourierSeries(VoiceoverScene):
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
         gl = label(r"$g$ is bounded \ (Lipschitz at $x$)", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.08)
         why_ = label(r"$\to 0$ by Bessel, \ applied to $g$", font_size=24, color=C.EPS)
-        tab = VGroup(MathTex(r"N", r"\quad s_N(\pi/2)", r"\quad s_N(1)", font_size=26, color=GREY_A))
-        for N, (a, b) in zip(dN, dini):
-            tab.add(MathTex(rf"{int(N)}", rf"\quad {a:.5f}", rf"\quad {b:.5f}", font_size=26))
-        tab.add(MathTex(r"f", rf"\quad {np.pi / 4:.5f}", rf"\quad {f0:.5f}", font_size=26, color=C.EPS))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.9, -0.6, 0])
-        for row in tab:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        cells = [(r"N", r"s_N(\pi/2)", r"s_N(1)")] + [(f"{int(N)}", f"{a:.5f}", f"{b:.5f}") for N, (a, b) in
+                                                       zip(dN, dini)] + [(r"f", f"{np.pi / 4:.5f}", f"{f0:.5f}")]
+        tab = VGroup()
+        for i, (c0, c1, c2) in enumerate(cells):
+            col = GREY_A if i == 0 else (C.EPS if i == len(cells) - 1 else WHITE)
+            row = VGroup(MathTex(c0, font_size=26, color=col), MathTex(c1, font_size=26, color=col),
+                         MathTex(c2, font_size=26, color=col))
+            y_ = 0.9 - 0.38 * i
+            row[0].move_to([2.15, y_, 0], aligned_edge=RIGHT)
+            row[1].move_to([2.55, y_, 0], aligned_edge=LEFT)
+            row[2].move_to([4.35, y_, 0], aligned_edge=LEFT)
+            tab.add(row)
         why_.next_to(tab, UP, buff=0.2)
         out = label(r"Part 2 proved $\sum \frac{\sin nx}{n}$ converges at every $x$; \ now we know the sum: "
                     r"$\frac{\pi - x}{2}$ on $(0, 2\pi)$", font_size=24, color=C.EPS).to_edge(DOWN, buff=0.15)

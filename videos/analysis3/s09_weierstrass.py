@@ -39,6 +39,7 @@ class Nowhere(VoiceoverScene):
         partial = [sum(0.75**k * phi(4.0**k * x) for k in range(n + 1)) for n in range(6)]
         term = [0.75**n * phi(4.0**n * x) for n in range(6)]
         cur = polyline(ax, x, partial[0], color=C.FUNC, stroke_width=3)
+        teaser = polyline(ax, x, partial[5], color=C.FUNC, stroke_width=2).set_stroke(opacity=0.45)
         side = VGroup(MathTex(r"\text{term } n: \ \text{height } (\tfrac34)^n, \ \text{slope } \pm 3^n", font_size=30),
                       label(r"M-test with $M_n = (\tfrac34)^n$:", font_size=26, color=C.EPS),
                       label(r"uniform, \ so $f$ is continuous", font_size=26, color=C.EPS),
@@ -56,8 +57,9 @@ class Nowhere(VoiceoverScene):
             "is all corners."
         ) as vo:
             self.play(FadeIn(head), Create(ax))
+            self.play(Create(teaser), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(cur), FadeIn(nl[0]))
+            self.play(FadeOut(teaser), Create(cur), FadeIn(nl[0]))
             vo.wait_until("b")
             self.play(FadeIn(side[0]))
             for n in range(1, 6):
@@ -155,9 +157,9 @@ class Nowhere(VoiceoverScene):
         ]
         grp = VGroup(*rows)
         for r_ in grp:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        grp.arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([-3.4, -0.5, 0])
+            if r_.width > 5.9:
+                r_.width = 5.9
+        grp.arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([-3.75, -0.5, 0])
         # one small panel per term n = 0..m+2, over the step [x, x + delta_m] (shaded)
         a, b = (x0 - abs(dm), x0 + 2 * abs(dm)) if dm > 0 else (x0 - 2 * abs(dm), x0 + abs(dm))
         tt = np.linspace(a, b, 1500)

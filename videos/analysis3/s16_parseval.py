@@ -337,7 +337,7 @@ class Parseval(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's chapter ends with the gamma function, which we'll keep to one card. It "
             "interpolates the factorials, <bookmark mark='b'/> and it's the only interpolation whose logarithm is "
-            "convex and which obeys the factorial's recursion: that's the Bohr–Mollerup theorem. <bookmark mark='c'/> "
+            "convex and which obeys the factorial's recursion: that's the theorem of Bohr and Mollerup. <bookmark mark='c'/> "
             "Stirling's formula estimates it: the ratio of n factorial to the formula goes to one, already within a "
             "tenth of a percent at a thousand."
         ) as vo:
