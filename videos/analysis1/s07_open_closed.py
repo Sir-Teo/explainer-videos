@@ -298,6 +298,7 @@ class OpenClosed(VoiceoverScene):
             for v, x in zip(vals, xs[1:]):
                 r.add(label(v, font_size=26, color=C.CONNECTED_SET if v == "yes" else GREY_C).move_to([x, y, 0]))
             r[0].align_to([-5.4, 0, 0], LEFT)
+            r.add(self.icon(i).move_to([-6.25, y, 0]))  # a thumbnail of the set, last in the row
             body.add(r)
         g.add(body)
         rule = Line([-5.5, y0 - 0.3, 0], [4.6, y0 - 0.3, 0], color=GREY_C, stroke_width=1.5)
@@ -328,6 +329,32 @@ class OpenClosed(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+    @staticmethod
+    def icon(i):
+        """Thumbnails for the rows of the table (a)..(g), about 0.5 across."""
+        frame = Square(side_length=0.5, stroke_color=GREY_D, stroke_width=1)
+        c = frame.get_center()
+        if i == 0:
+            body = nbhd(c, 0.2, color=C.OPEN_SET, fill=0.3, width=1.5, dashes=14)
+        elif i == 1:
+            body = Circle(radius=0.2, stroke_color=C.CLOSED_SET, stroke_width=2).set_fill(C.CLOSED_SET, 0.3)
+        elif i == 2:
+            body = VGroup(*[Dot(c + np.array(v), radius=0.035, color=C.SEQ)
+                            for v in ((-0.12, 0.1, 0), (0.1, 0.13, 0), (0.0, -0.05, 0), (0.14, -0.14, 0))])
+        elif i == 3:
+            body = VGroup(*[Dot(c + np.array([x, y, 0]), radius=0.025, color=C.SEQ)
+                            for x in (-0.18, -0.06, 0.06, 0.18) for y in (-0.18, -0.06, 0.06, 0.18)])
+        elif i == 4:
+            body = VGroup(*[Dot(c + np.array([-0.2 + 0.4 / n, 0, 0]), radius=0.025, color=C.SEQ) for n in range(1, 13)],
+                          Circle(radius=0.03, color=C.PATHOLOGY, stroke_width=1.5).move_to(c + np.array([-0.2, 0, 0])))
+        elif i == 5:
+            body = Square(side_length=0.5, stroke_width=0).set_fill(C.OPEN_SET, 0.3)
+        else:
+            body = VGroup(Line(c + np.array([-0.17, 0, 0]), c + np.array([0.17, 0, 0]), color=C.SEQ, stroke_width=2.5),
+                          *[Circle(radius=0.035, color=C.SEQ, stroke_width=1.5).set_fill(BACKGROUND, 1).move_to(
+                              c + np.array([x, 0, 0])) for x in (-0.17, 0.17)])
+        return VGroup(frame, body)
+
     # ------------------------------------------------------------------
     def closure(self):
         defs = VGroup(
@@ -339,10 +366,28 @@ class OpenClosed(VoiceoverScene):
             label(r"every real number is a limit of fractions: $\Q$ is \textbf{dense}", font_size=28),
             MathTex(r"\text{yet the interior of } \Q \text{ is empty}", font_size=34, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(defs, DOWN, buff=0.6)
+        ex.next_to(defs, DOWN, buff=0.35)
+        # E = {1/n} together with the open interval (1.3, 2): the closure adds 0, 1.3 and 2
+        X = lambda v: -5.0 + 4.6 * v  # noqa: E731
+        y1, y2 = -0.95, -2.05
+        l1 = Line([X(-0.08), y1, 0], [X(2.1), y1, 0], color=GREY_C, stroke_width=1.5)
+        E_pts = VGroup(*[Dot([X(1 / n), y1, 0], radius=0.045, color=C.SEQ) for n in range(1, 31)],
+                       Line([X(1.3), y1, 0], [X(2.0), y1, 0], color=C.SEQ, stroke_width=6),
+                       *[endpoint([X(v), y1, 0], False, C.SEQ, radius=0.06) for v in (1.3, 2.0)])
+        E_l = MathTex(r"E = \{1, \tfrac12, \tfrac13, \ldots\} \cup (1.3,\, 2)", font_size=26, color=C.SEQ).next_to(
+            [X(1.0), y1, 0], UP, buff=0.25)
+        added = VGroup(*[Dot([X(v), y1, 0], radius=0.07, color=C.CLOSED_SET) for v in (0.0, 1.3, 2.0)])
+        added_l = label(r"$\overline{E}$ adds $0$, \ $1.3$, \ $2$", font_size=24, color=C.CLOSED_SET).next_to(
+            [X(0.0), y1, 0], DOWN, buff=0.2).shift(RIGHT * 0.9)
+        l2 = Line([X(-0.08), y2, 0], [X(2.1), y2, 0], color=GREY_C, stroke_width=1.5)
+        dust = rational_dust(0.0, 2.1, X(0.0), X(2.1), y=y2, height=0.45, target=900)
+        Qbar = VGroup(Line([X(0.0), y2 - 0.12, 0], [X(2.1), y2 - 0.12, 0], color=C.CLOSED_SET, stroke_width=4),
+                      MathTex(r"\Q \ \to \ \overline{\Q} = \R", font_size=26, color=C.CLOSED_SET).next_to(
+                          [X(2.1), y2, 0], RIGHT, buff=0.15))
         sup = VGroup(label(r"\textbf{Rudin 2.28} \ If $E \subset \R$ is nonempty and bounded above, $\sup E \in \overline{E}$.",
                            font_size=28),
                      label(r"(If $\sup E$ were not a limit point, a slightly smaller number would be an upper bound.)",
-                           font_size=24, color=GREY_B)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.5)
+                           font_size=24, color=GREY_B)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Adding the limit points to a set gives its closure, <bookmark mark='c'/> the smallest closed set containing "
             "it. <bookmark mark='q'/> The closure of the rationals is the whole real line: every real number is a limit "
@@ -351,11 +396,13 @@ class OpenClosed(VoiceoverScene):
             "theorem. <bookmark mark='s'/> And one fact that ties back to chapter one: the supremum of a set of reals "
             "always lies in its closure."
         ) as vo:
-            self.play(FadeIn(defs[0]))
+            self.play(FadeIn(defs[0]), Create(l1), FadeIn(E_pts), FadeIn(E_l))
+            self.play(LaggedStart(*[FadeIn(a_, scale=2) for a_ in added], lag_ratio=0.3), FadeIn(added_l))
             vo.wait_until("c")
             self.play(FadeIn(defs[1]))
             vo.wait_until("q")
-            self.play(FadeIn(ex[0]), FadeIn(ex[1]))
+            self.play(FadeIn(ex[0]), FadeIn(ex[1]), Create(l2), FadeIn(dust))
+            self.play(Create(Qbar[0]), FadeIn(Qbar[1]))
             vo.wait_until("i")
             self.play(FadeIn(ex[2]))
             vo.wait_until("s")
