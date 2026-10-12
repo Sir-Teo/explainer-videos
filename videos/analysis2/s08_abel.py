@@ -107,6 +107,23 @@ class Abel(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=0.3, buff=0.45, x=-0.6)
         alt = label(r"$a_n = (-1)^n$: \ the alternating series test (3.43)", font_size=28, color=GREY_A).to_edge(DOWN,
                                                                                                                buff=0.5)
+        # the hypotheses, for a_n = sin n (the sawtooth at x = 1) and b_n = 1/n
+        K = 40
+        nn = np.arange(1, K + 1)
+        A = np.cumsum(np.sin(nn))
+        M = 1 / math.sin(0.5)
+        assert np.abs(A).max() <= M
+        axA = plain_axes([0, K + 1, 10], [-2.4, 2.4, 1], 3.1, 1.7, numbers=False).move_to([-5.2, 2.15, 0])
+        axB = plain_axes([0, K + 1, 10], [0, 1.1, 0.5], 3.1, 1.7, numbers=False).move_to([5.2, 2.15, 0])
+        bandA = Rectangle(width=axA.c2p(K + 1, 0)[0] - axA.c2p(0, 0)[0], height=axA.c2p(0, M)[1] - axA.c2p(0, -M)[1],
+                          stroke_width=0, fill_color=C.EPS, fill_opacity=0.14).move_to(axA.c2p((K + 1) / 2, 0))
+        edgesA = VGroup(*[DashedLine(axA.c2p(0, v), axA.c2p(K + 1, v), color=C.EPS, stroke_width=1.5) for v in (M, -M)])
+        dotsA = VGroup(*[Dot(axA.c2p(k, v), radius=0.03, color=C.SEQ) for k, v in zip(nn, A)])
+        dotsB = VGroup(*[Dot(axB.c2p(k, 1 / k), radius=0.03, color=C.FREQ) for k in nn])
+        labA = VGroup(MathTex(r"A_n = \sum_{k \le n} \sin k", font_size=22, color=C.SEQ),
+                      MathTex(r"\pm M", font_size=22, color=C.EPS)).arrange(RIGHT, buff=0.3).next_to(axA, DOWN,
+                                                                                                buff=0.1)
+        labB = MathTex(r"b_n = \tfrac1n \downarrow 0", font_size=22, color=C.FREQ).next_to(axB, DOWN, buff=0.1)
         with self.voiceover(
             "Summation by parts goes back to Abel; the test it gives is named for Dirichlet. <bookmark mark='t'/> Suppose the partial sums of the a n stay bounded, by "
             "some M, without converging, and the b n decrease to zero. Then the sum of a n b n converges. "
@@ -114,8 +131,12 @@ class Abel(VoiceoverScene):
             "and the drops in b telescope, leaving at most two M times b p, which goes to zero. That's the Cauchy "
             "criterion. <bookmark mark='c'/> With a n equal to plus and minus one, this is the alternating series test."
         ) as vo:
-            vo.wait_until("t")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm[0]))
+            self.play(FadeIn(thm[1]), Create(axA), FadeIn(bandA), Create(edgesA), FadeIn(labA))
+            self.play(LaggedStart(*[FadeIn(x) for x in dotsA], lag_ratio=0.05), run_time=1.6)
+            self.play(FadeIn(thm[2]), Create(axB), FadeIn(labB))
+            self.play(LaggedStart(*[FadeIn(x) for x in dotsB], lag_ratio=0.05), run_time=1.4)
+            self.play(FadeIn(thm[3]))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -159,6 +180,10 @@ class Abel(VoiceoverScene):
                                                                                                       buff=0.2)
         env_l = label(r"Dirichlet's bound $2M b_{n+1}$", font_size=22, color=C.EPS).next_to(ax.c2p(120, 1.25), UP,
                                                                                          buff=0.05)
+        ia = saw_axes(x_length=8.0, y_length=2.8).move_to([0, -0.9, 0])
+        ic = partial_curve(ia, 12, stroke_width=3)
+        iq = label(r"Part 1: \ does it converge, \ and to what?", font_size=28, color=GREY_A).next_to(ia, DOWN, buff=0.3)
+        intro = VGroup(ia, ic, iq)
         with self.voiceover(
             "Now the sawtooth. Part 1 opened with the series sine x, plus sine 2 x over two, plus sine 3 x over three, "
             "and asked whether it even converges. <bookmark mark='a'/> Here a k is sine k x, which doesn't go to zero, "
@@ -168,7 +193,9 @@ class Abel(VoiceoverScene):
             "one, the partial sums close in on pi minus one over two, inside Dirichlet's shrinking bound."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(Create(ia), Create(ic), FadeIn(iq), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.5)
             self.play(Create(plane), Create(circ))
             vo.wait_until("b")
             self.play(Create(path), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.05), FadeIn(lab), run_time=2.5)
@@ -204,8 +231,9 @@ class Abel(VoiceoverScene):
             self.play(Create(cur), FadeIn(nl), FadeIn(probes))
             vo.wait_until("b")
             for n, cv in zip(ns[1:], curves[1:]):
-                self.play(Transform(cur, cv), Transform(nl, MathTex(rf"N = {n}", font_size=32, color=C.APPROX).move_to(nl)),
-                          run_time=1.2)
+                nl2 = MathTex(rf"N = {n}", font_size=32, color=C.APPROX).move_to(nl)
+                self.play(Transform(cur, cv), FadeTransform(nl, nl2), run_time=1.2)
+                nl = nl2
             vo.wait_until("c")
             self.play(FadeIn(led))
         self.wait(0.4)
@@ -213,15 +241,36 @@ class Abel(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def absolute(self):
-        rows = VGroup(
+        head = VGroup(
             label(r"\textbf{Absolute convergence} (Rudin 3.45): \ $\sum |a_n| < \infty \Rightarrow \sum a_n$ converges",
                   font_size=30),
             label(r"(blocks: $|a_n + \cdots + a_m| \le |a_n| + \cdots + |a_m|$)", font_size=26, color=GREY_A),
-            label(r"$1 - \tfrac12 + \tfrac13 - \cdots$ converges, but not absolutely: \ \emph{conditionally}", font_size=30,
-                  color=C.FREQ),
-            label(r"$\sum \frac{\sin kx}{k}$: \ conditionally, for $x$ not a multiple of $\pi$", font_size=30,
-                  color=C.FREQ),
-        ).arrange(DOWN, buff=0.35)
+        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
+        K = 40
+        nn = np.arange(1, K + 1)
+        panels = []
+        for i, p in enumerate((2, 1)):
+            a = (-1.0) ** (nn + 1) / nn**p
+            ax = plain_axes([0, K + 1, 10], [0, 4.6, 1], 5.6, 3.2, numbers=True, font_size=18,
+                            axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.4 + 6.9 * i, -0.75, 0])
+            s_abs, s_sgn = np.cumsum(np.abs(a)), np.cumsum(a)
+            c_abs = polyline(ax, nn, s_abs, color=C.SEQ, stroke_width=3)
+            c_sgn = polyline(ax, nn, s_sgn, color=C.FREQ, stroke_width=2.5)
+            d_sgn = VGroup(*[Dot(ax.c2p(k, v), radius=0.03, color=C.FREQ) for k, v in zip(nn, s_sgn)])
+            lim = float(np.pi**2 / 12) if p == 2 else math.log(2)
+            tl = DashedLine(ax.c2p(0, lim), ax.c2p(K + 1, lim), color=WHITE, stroke_width=1.2)
+            l_abs = MathTex(r"\sum |a_n|" + (r" \to \infty" if p == 1 else ""), font_size=24, color=C.SEQ)
+            l_abs.move_to(ax.c2p(31, 2.9 if p == 1 else 2.15))
+            l_sgn = MathTex(r"\sum a_n" + (r" \to \ln 2" if p == 1 else ""), font_size=24, color=C.FREQ)
+            l_sgn.move_to(ax.c2p(31, lim - 0.42))
+            ttl = MathTex(rf"a_n = \frac{{(-1)^{{n+1}}}}{{n{'^2' if p == 2 else ''}}}", font_size=28)
+            verdict = label(r"absolutely convergent" if p == 2 else r"\emph{conditionally} convergent", font_size=24,
+                            color=C.CONNECTED_SET if p == 2 else C.FREQ)
+            VGroup(ttl, verdict).arrange(RIGHT, buff=0.3).next_to(ax, UP, buff=0.15)
+            panels.append(VGroup(ax, tl, c_abs, c_sgn, d_sgn, l_abs, l_sgn, ttl, verdict))
+            assert abs(s_sgn[-1] - lim) < 0.02 and (s_abs[-1] < 1.7 if p == 2 else s_abs[-1] > 4.2)
+        saw = label(r"$\sum \frac{\sin kx}{k}$: \ conditionally, for $x$ not a multiple of $\pi$", font_size=28,
+                    color=C.FREQ).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> If the absolute values have a finite sum, the series converges: blocks can only shrink "
             "when you allow cancellation. <bookmark mark='b'/> Series that converge only thanks to cancellation, like "
@@ -229,11 +278,19 @@ class Abel(VoiceoverScene):
             "series is one of them. That matters, as the next chapter will show."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            P = panels[0]
+            self.play(FadeIn(head), Create(P[0]), FadeIn(P[7]))
+            self.play(Create(P[2]), FadeIn(P[5]), run_time=1.2)
+            self.play(Create(P[3]), FadeIn(P[4]), Create(P[1]), FadeIn(P[6]), run_time=1.2)
+            self.play(FadeIn(P[8]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]))
+            P = panels[1]
+            self.play(Create(P[0]), FadeIn(P[7]))
+            self.play(Create(P[3]), FadeIn(P[4]), Create(P[1]), FadeIn(P[6]), run_time=1.2)
+            self.play(Create(P[2]), FadeIn(P[5]), run_time=1.5)
+            self.play(FadeIn(P[8]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[3]))
+            self.play(FadeIn(saw))
         self.wait(0.3)
         self.clear_scene()
 
@@ -271,7 +328,6 @@ class Abel(VoiceoverScene):
             "absolutely. Adding up a doubly infinite array in a different order is the first glimpse of a question that "
             "comes back in Part 5, as Fubini's theorem."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head[0]), LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.01), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(head[1:]))

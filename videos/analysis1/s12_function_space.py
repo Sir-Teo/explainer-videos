@@ -161,10 +161,10 @@ class FunctionSpace(VoiceoverScene):
     def dictionary(self):
         card = dictionary_card(r"in $\R^k$", r"in $C[0,1]$", [
             (r"closed and bounded $\Rightarrow$ compact", r"closed and bounded $\Rightarrow$ compact"),
-            (r"bounded sequences: convergent subsequences", r"bounded sequences: convergent subsequences"),
+            (r"bounded sequences have convergent subsequences", r"bounded sequences have convergent subsequences"),
             (r"the closed unit ball is compact", r"the closed unit ball is compact"),
             (r"Bolzano--Weierstrass", r"Arzel\`a--Ascoli (adds equicontinuity)"),
-        ], strike=(0, 1, 2), font_size=26).shift(UP * 0.3)
+        ], strike=(0, 1, 2), font_size=26, width=13.2).shift(UP * 0.3)
         tail = VGroup(label(r"Part 3: what replaces Heine--Borel in a space of functions.", font_size=28, color=C.EPS),
                       label(r"Part 8: why no infinite-dimensional space can have a compact unit ball (Riesz).",
                             font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)

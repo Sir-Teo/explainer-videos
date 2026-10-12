@@ -89,11 +89,12 @@ class FunctionBoard:
             A = ax.ax
             a, d = ax.a.get_value(), ax.delta.get_value()
             y0, y1 = A.y_range[0], A.y_range[1]
-            p0, p1 = A.c2p(a - d, y0), A.c2p(a + d, y1)
+            lo, hi = max(a - d, A.x_range[0]), min(a + d, A.x_range[1])  # the strip stays inside the axes
+            p0, p1 = A.c2p(lo, y0), A.c2p(hi, y1)
             band = Rectangle(width=max(0.004, p1[0] - p0[0]), height=p1[1] - p0[1], stroke_width=0, fill_color=color,
                              fill_opacity=DELTA_FILL).move_to((p0 + p1) / 2)
-            edges = VGroup(DashedLine(A.c2p(a - d, y0), A.c2p(a - d, y1), color=color, stroke_width=2),
-                           DashedLine(A.c2p(a + d, y0), A.c2p(a + d, y1), color=color, stroke_width=2))
+            edges = VGroup(*[DashedLine(A.c2p(v, y0), A.c2p(v, y1), color=color, stroke_width=2)
+                             for v in (a - d, a + d) if A.x_range[0] <= v <= A.x_range[1]])
             return VGroup(band, edges)
 
         return always_redraw(draw)
@@ -172,7 +173,7 @@ class SequenceBoard:
 
         return always_redraw(draw)
 
-    def threshold(self, color=C.DELTA) -> VMobject:
+    def threshold(self, color=C.DELTA, label_tex=r"N", font_size=30) -> VMobject:
         b = self
 
         def draw():
@@ -180,7 +181,8 @@ class SequenceBoard:
             N = b.N.get_value()
             return VGroup(DashedLine(A.c2p(N + 0.5, A.y_range[0]), A.c2p(N + 0.5, A.y_range[1]), color=color,
                                      stroke_width=3),
-                          MathTex(r"N", font_size=30, color=color).next_to(A.c2p(N + 0.5, A.y_range[1]), UP, buff=0.08))
+                          MathTex(label_tex, font_size=font_size, color=color).next_to(A.c2p(N + 0.5, A.y_range[1]),
+                                                                                      UP, buff=0.08))
 
         return always_redraw(draw)
 

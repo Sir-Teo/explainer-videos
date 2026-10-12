@@ -114,7 +114,6 @@ class Rearrangement(VoiceoverScene):
             "<bookmark mark='c'/> And each time the sum crosses the target, it overshoots by at most the last term "
             "used. Those terms go to zero, so the overshoots do too: the rearranged series converges to pi."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head[0]), Create(ax), FadeIn(ticks), FadeIn(yl), Create(pi_l), FadeIn(pl))
             self.play(Create(curve), run_time=2.5)
             vo.wait_until("b")
@@ -190,7 +189,6 @@ class Rearrangement(VoiceoverScene):
             "the original and rearranged partial sums share those terms, and differ only by terms past N, whose total "
             "size is less than epsilon."
         ) as vo:
-            vo.wait_until("t")
             self.play(FadeIn(thm))
             vo.wait_until("a")
             self.play(FadeIn(toks), FadeIn(brace), FadeIn(bl))
@@ -235,7 +233,6 @@ class Rearrangement(VoiceoverScene):
             "Summing in a different way is an interchange of limits, and that's exactly the question the rest of the "
             "series is about."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head[0]), Create(ax), FadeIn(ticks), FadeIn(yl), Create(nat), FadeIn(nl))
             vo.wait_until("b")
             self.play(FadeIn(head[1]), Create(tgt), FadeIn(tl))

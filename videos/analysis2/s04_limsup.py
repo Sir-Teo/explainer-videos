@@ -182,7 +182,6 @@ class LimSup(VoiceoverScene):
             "converging to one over root two. <bookmark mark='c'/> The same works for every point of the interval, so E "
             "is the whole interval from zero to one. Its upper limit is one, its lower limit zero."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(sub), Create(ax))
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.004), run_time=2.0)
             vo.wait_until("b")

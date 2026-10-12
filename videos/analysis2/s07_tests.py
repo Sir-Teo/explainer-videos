@@ -67,7 +67,6 @@ class Tests(VoiceoverScene):
             "one: from some point on, every term lies under beta to the n, <bookmark mark='c'/> and comparison with the "
             "geometric series does the rest."
         ) as vo:
-            vo.wait_until("t")
             self.play(FadeIn(thm))
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(ticks), FadeIn(ex), FadeIn(ex_r))
@@ -112,7 +111,6 @@ class Tests(VoiceoverScene):
             "infinity. The ratio test can't decide. <bookmark mark='b'/> But the n-th roots settle down, below one: the "
             "root test proves convergence."
         ) as vo:
-            vo.wait_until("t")
             self.play(FadeIn(thm))
             vo.wait_until("a")
             self.play(Create(axl), FadeIn(lt), Create(one_l), FadeIn(tl))
@@ -255,7 +253,6 @@ class Tests(VoiceoverScene):
             "interval is just the disk's shadow. <bookmark mark='d'/> The real line can't see the reason. We'll come "
             "back to this in Part 7, where power series turn out to live naturally in the complex plane."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(ax), Create(f), FadeIn(f_l), FadeIn(series))
             vo.wait_until("b")
             self.play(Create(Tn))

@@ -33,3 +33,18 @@ def sum_plot(ax: Axes, sums, color=C.SEQ, stroke_width=2.5, k0=1) -> VMobject:
     """Partial sums s_k against k as a polyline on ``ax`` (k starting at k0)."""
     k = np.arange(k0, k0 + len(sums))
     return polyline(ax, k, sums, color=color, stroke_width=stroke_width)
+
+
+def runs_in_range(ax, x, y, lo, hi, color, stroke_width=3) -> VGroup:
+    """The graph of y over x, drawn only where it lies within [lo, hi] (pieces that leave the axes are cut, not
+    flattened against the edge)."""
+    ok = (y > lo) & (y < hi)
+    g, start = VGroup(), None
+    for i in range(len(x) + 1):
+        if i < len(x) and ok[i]:
+            start = i if start is None else start
+        elif start is not None:
+            if i - start > 1:
+                g.add(polyline(ax, x[start:i], y[start:i], color=color, stroke_width=stroke_width))
+            start = None
+    return g

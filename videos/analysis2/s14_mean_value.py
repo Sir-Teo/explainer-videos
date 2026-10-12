@@ -143,22 +143,81 @@ class MeanValue(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def monotone(self):
-        rows = VGroup(
-            label(r"\textbf{Rudin 5.11} \ On $(a, b)$:", font_size=32),
-            label(r"$f' \ge 0$ $\Rightarrow$ $f$ increasing; \quad $f' = 0$ $\Rightarrow$ $f$ constant; \quad "
-                  r"$f' \le 0$ $\Rightarrow$ $f$ decreasing", font_size=30),
-            MathTex(r"f(x_2) - f(x_1) = (x_2 - x_1)\, f'(\xi)", font_size=36),
-            label(r"the mean value theorem turns information about $f'$ into information about $f$", font_size=26,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.35)
+        head = VGroup(label(r"\textbf{Rudin 5.11} \ On $(a, b)$:", font_size=32),
+                      label(r"$f' \ge 0$ $\Rightarrow$ $f$ increasing; \quad $f' = 0$ $\Rightarrow$ $f$ constant; \quad "
+                            r"$f' \le 0$ $\Rightarrow$ $f$ decreasing", font_size=28)).arrange(DOWN, buff=0.15)
+        head.to_edge(UP, buff=0.35)
+        # f' is positive, then zero on [2.5, 3.3], then negative, then positive; f is its integral
+        def fp(x):
+            x = np.asarray(x, float)
+            return np.select([x < 2.5, x < 3.3, x < 4.9],
+                             [1.2 * np.sin(np.pi * x / 2.5), 0.0 * x, -1.0 * np.sin(np.pi * (x - 3.3) / 1.6)],
+                             0.9 * np.sin(np.pi * (x - 4.9) / 1.1))
+        xs = np.linspace(0, 6.0, 3001)
+        F = -1.0 + np.concatenate([[0.0], np.cumsum((fp(xs[1:]) + fp(xs[:-1])) / 2 * np.diff(xs))])
+        f = lambda x: np.interp(x, xs, F)  # noqa: E731
+        axf = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 2.5, numbers=False).move_to([-2.5, 0.75, 0])
+        axd = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 1.9, numbers=False).move_to([-2.5, -2.05, 0])
+        sign = np.select([xs < 2.5, xs <= 3.3, xs < 4.9], [1.0, 0.0, -1.0], 1.0)  # the sign of f', by construction
+        assert np.all(np.sign(np.round(fp(xs), 9)) * sign >= 0)
+        cols = {1.0: C.CONNECTED_SET, 0.0: C.EPS, -1.0: C.PATHOLOGY}
+        f_plain = polyline(axf, xs, F, color=C.FUNC, stroke_width=4)
+        d_plain = polyline(axd, xs, fp(xs), color=GREY_A, stroke_width=3)
+        f_col, shade = VGroup(), VGroup()
+        start = 0
+        for i in range(1, len(xs) + 1):
+            if i == len(xs) or sign[i] != sign[start]:
+                seg = slice(start, min(i + 1, len(xs)))
+                c = cols[float(sign[start])]
+                f_col.add(polyline(axf, xs[seg], F[seg], color=c, stroke_width=5))
+                if sign[start] != 0:
+                    pts = [axd.c2p(xs[seg][0], 0)] + [axd.c2p(a, b) for a, b in zip(xs[seg], fp(xs[seg]))] + [
+                        axd.c2p(xs[seg][-1], 0)]
+                    shade.add(Polygon(*pts, stroke_width=0, fill_color=c, fill_opacity=0.35))
+                start = i
+        assert len(f_col) == 4
+        fl = MathTex(r"f", font_size=30, color=C.FUNC).next_to(axf, LEFT, buff=0.15)
+        dl = MathTex(r"f'", font_size=30, color=GREY_A).next_to(axd, LEFT, buff=0.15)
+        keys = VGroup(label(r"$f' > 0$: \ $f$ rises", font_size=24, color=C.CONNECTED_SET),
+                      label(r"$f' = 0$: \ $f$ is constant", font_size=24, color=C.EPS),
+                      label(r"$f' < 0$: \ $f$ falls", font_size=24, color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                               buff=0.15)
+        keys.move_to([4.6, -1.9, 0])
+        # the reason: a chord over [x1, x2] has the slope of the tangent at some xi between
+        x1, x2 = 0.25, 2.3
+        m = (f(x2) - f(x1)) / (x2 - x1)
+        cand = xs[(xs > x1) & (xs < x2)]
+        xi = float(cand[np.argmin(np.abs(fp(cand) - m))])
+        assert abs(fp(xi) - m) < 1e-2 and m > 0
+        chord = Line(axf.c2p(x1, f(x1)), axf.c2p(x2, f(x2)), color=C.APPROX, stroke_width=3)
+        tng = Line(axf.c2p(xi - 0.6, f(xi) - 0.6 * m), axf.c2p(xi + 0.6, f(xi) + 0.6 * m), color=WHITE, stroke_width=2.5)
+        cd = VGroup(Dot(axf.c2p(x1, f(x1)), radius=0.06, color=C.APPROX), Dot(axf.c2p(x2, f(x2)), radius=0.06,
+                                                                               color=C.APPROX),
+                    Dot(axf.c2p(xi, f(xi)), radius=0.06, color=WHITE))
+        mvt = VGroup(MathTex(r"f(x_2) - f(x_1)", r"=", r"\underbrace{(x_2 - x_1)}_{> 0}", r"\,",
+                             r"\underbrace{f'(\xi)}_{\ge 0}", font_size=32),
+                     MathTex(r"\Rightarrow\ f(x_2) \ge f(x_1)", font_size=32, color=C.CONNECTED_SET)
+                     ).arrange(DOWN, buff=0.25)
+        mvt[0][0].set_color(C.APPROX)
+        mvt.move_to([4.2, 0.9, 0])
+        note = label(r"information about $f'$ becomes information about $f$", font_size=24, color=GREY_A)
+        note.next_to(mvt, DOWN, buff=0.35).set_x(4.2)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem's main job is to turn facts about the derivative into facts about the "
-            "function. If the derivative is never negative, then for any two points the difference f of x two minus f "
-            "of x one is x two minus x one times some derivative, so it's never negative: f increases. A zero "
-            "derivative means a constant function."
+            "function. <bookmark mark='b'/> If the derivative is never negative, then for any two points the difference "
+            "f of x two minus f of x one is x two minus x one times some derivative, so it's never negative: f "
+            "increases. <bookmark mark='c'/> A zero derivative means a constant function."
         ) as vo:
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.4), run_time=3.0)
+            self.play(FadeIn(head[0]), Create(axf), Create(axd), FadeIn(fl), FadeIn(dl))
+            self.play(Create(f_plain), Create(d_plain), run_time=1.5)
+            self.play(FadeIn(shade), ReplacementTransform(f_plain, f_col), FadeIn(head[1]), FadeIn(keys), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(chord), FadeIn(cd[:2]))
+            self.play(Create(tng), FadeIn(cd[2]), FadeIn(mvt[0]))
+            self.play(FadeIn(mvt[1]), FadeIn(note))
+            vo.wait_until("c")
+            self.play(Indicate(f_col[1], color=C.EPS, scale_factor=1.0), Indicate(keys[1], color=C.EPS), run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -184,6 +243,23 @@ class MeanValue(VoiceoverScene):
                                                                                           LEFT, buff=0.12))
         cor = label(r"so a derivative cannot jump: \ its discontinuities are all of the second kind", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.15)
+        sk = plain_axes([0, 1, 1], [0, 1, 1], 5.0, 2.6, numbers=False).move_to([0, -1.3, 0])
+        gs = lambda t: 1.8 * (t - 0.45) ** 2 + 0.12  # noqa: E731
+        gsk = sk.plot(gs, x_range=[0.05, 0.95, 0.01], color=C.FUNC, stroke_width=4)
+        slopes = VGroup(*[Line(sk.c2p(t - 0.1, gs(t) - 0.1 * 3.6 * (t - 0.45)), sk.c2p(t + 0.1, gs(t) + 0.1 * 3.6 * (t - 0.45)),
+                               color=c, stroke_width=4) for t, c in ((0.05, C.PATHOLOGY), (0.95, C.CONNECTED_SET),
+                                                                      (0.45, C.EPS))])
+        sdots = VGroup(*[Dot(sk.c2p(t, gs(t)), radius=0.06, color=WHITE) for t in (0.05, 0.95, 0.45)])
+        slabs = VGroup(MathTex(r"a", font_size=28).next_to(sk.c2p(0.05, 0), DOWN, buff=0.1),
+                       MathTex(r"b", font_size=28).next_to(sk.c2p(0.95, 0), DOWN, buff=0.1),
+                       MathTex(r"g'(a) < 0", font_size=24, color=C.PATHOLOGY).next_to(sk.c2p(0.05, gs(0.05)), LEFT,
+                                                                                     buff=0.65),
+                       MathTex(r"g'(b) > 0", font_size=24, color=C.CONNECTED_SET).next_to(sk.c2p(0.95, gs(0.95)),
+                                                                                         RIGHT, buff=0.65),
+                       MathTex(r"g'(x) = 0", font_size=24, color=C.EPS).next_to(sk.c2p(0.45, gs(0.45)), UP,
+                                                                               buff=0.3),
+                       MathTex(r"g(t) = f(t) - \lambda t", font_size=28, color=C.FUNC).move_to(sk.c2p(0.5, 0.95)))
+        sketch = VGroup(sk, gsk, slopes, sdots, slabs)
         with self.voiceover(
             "<bookmark mark='t'/> Darboux noticed something surprising: a derivative always has the intermediate value "
             "property, continuous or not. <bookmark mark='p'/> To hit a value lambda, subtract lambda t from f: the "
@@ -195,8 +271,11 @@ class MeanValue(VoiceoverScene):
             vo.wait_until("t")
             self.play(FadeIn(thm))
             vo.wait_until("p")
-            self.play(FadeIn(pf))
+            self.play(FadeIn(pf), Create(sk), Create(gsk), FadeIn(slabs[5]))
+            self.play(Create(slopes[:2]), FadeIn(sdots[:2]), FadeIn(slabs[:4]))
+            self.play(Create(slopes[2]), FadeIn(sdots[2]), FadeIn(slabs[4]))
             vo.wait_until("a")
+            self.play(FadeOut(sketch), run_time=0.5)
             self.play(Create(ax), FadeIn(lab), Create(g), run_time=1.6)
             vo.wait_until("b")
             self.play(FadeIn(lline), FadeIn(lt))

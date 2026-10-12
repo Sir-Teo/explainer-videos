@@ -231,7 +231,6 @@ class Compactness(VoiceoverScene):
             "slides all the way to zero. <bookmark mark='c'/> For one over x on the open interval, any fixed box "
             "fails once it gets close enough to zero, where the graph is too steep."
         ) as vo:
-            vo.wait_until("d")
             self.play(FadeIn(dfn))
             vo.wait_until("a")
             self.play(Create(ax), Create(graph), FadeIn(tl))

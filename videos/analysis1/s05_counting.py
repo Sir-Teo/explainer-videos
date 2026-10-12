@@ -153,7 +153,6 @@ class Counting(VoiceoverScene):
             "<bookmark mark='s'/> and number each fraction as you reach it, skipping any you've already counted, like two "
             "over two, which is one."
         ) as vo:
-            vo.wait_until("g")
             self.play(LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.01), FadeIn(ph), FadeIn(qh), run_time=1.5)
             vo.wait_until("z")
             self.play(Create(path), run_time=3.0, rate_func=linear)
@@ -245,7 +244,6 @@ class Counting(VoiceoverScene):
             "so on, claiming it contains every such sequence. <bookmark mark='d'/> Look at the diagonal: the first digit "
             "of the first sequence, the second digit of the second, and so on."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(names), LaggedStart(*[FadeIn(t) for t in table], lag_ratio=0.004), FadeIn(more),
                       FadeIn(dots_r), run_time=2)
             vo.wait_until("d")
@@ -295,7 +293,6 @@ class Counting(VoiceoverScene):
             "<bookmark mark='b'/> which is one over three to the n, more than zero. So different sequences give "
             "different numbers, <bookmark mark='c'/> and the reals contain an uncountable set."
         ) as vo:
-            vo.wait_until("m")
             self.play(Write(m))
             vo.wait_until("e")
             self.play(FadeIn(ex))
@@ -330,7 +327,6 @@ class Counting(VoiceoverScene):
             "the reals are not countable, almost every real number is transcendental: not the root of any such "
             "polynomial."
         ) as vo:
-            vo.wait_until("p")
             self.play(Write(poly))
             for mk, s_ in zip("abcd", steps):
                 vo.wait_until(mk)

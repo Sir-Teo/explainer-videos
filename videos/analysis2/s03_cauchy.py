@@ -137,7 +137,6 @@ class Cauchy(VoiceoverScene):
             "limit, <bookmark mark='b'/> with the epsilon over two trick. <bookmark mark='c'/> The converse is the "
             "interesting direction, and whether it holds depends on the space you're in."
         ) as vo:
-            vo.wait_until("h")
             self.play(FadeIn(head))
             vo.wait_until("a")
             step(0)

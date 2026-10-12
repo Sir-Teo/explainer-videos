@@ -230,19 +230,53 @@ class Cuts(VoiceoverScene):
         self.play(FadeOut(VGroup(bars, labs, union, union_l, A_l)))
 
         rows = [
-            label(r"$\gamma \ne \emptyset$; \ $\gamma \subset \beta$, so $\gamma \ne \Q$", font_size=30),
-            label(r"$p \in \gamma,\ q < p$: \ $p$ is in some $\alpha$, so $q \in \alpha \subset \gamma$", font_size=30),
-            label(r"$p \in \gamma$: \ $p \in$ some $\alpha$, which has $r > p$; \ $r \in \gamma$", font_size=30),
-            label(r"every $\alpha \subset \gamma$: \ $\gamma$ is an upper bound", font_size=30),
+            label(r"$\gamma \ne \emptyset$; \ $\gamma \subset \beta$, so $\gamma \ne \Q$", font_size=26),
+            label(r"$p \in \gamma,\ q < p$: \ $p$ is in some $\alpha$, so $q \in \alpha \subset \gamma$", font_size=26),
+            label(r"$p \in \gamma$: \ $p \in$ some $\alpha$, which has $r > p$; \ $r \in \gamma$", font_size=26),
+            label(r"every $\alpha \subset \gamma$: \ $\gamma$ is an upper bound", font_size=26),
             label(r"$\delta < \gamma$: some $p \in \gamma \setminus \delta$, \ $p \in$ some $\alpha \not\subset \delta$",
-                  font_size=30),
+                  font_size=26),
         ]
         tags = [r"(I)", r"(II)", r"(III)", r"upper bound", r"least"]
-        tag_m = [label(t, font_size=28, color=C.EPS) for t in tags]
+        tag_m = [label(t, font_size=26, color=C.EPS) for t in tags]
         lines = VGroup(*[VGroup(t, r).arrange(RIGHT, buff=0.35) for t, r in zip(tag_m, rows)])
         for ln in lines:
-            ln[1].shift(RIGHT * (2.3 - ln[0].width - 0.35))
-        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.8).shift(DOWN * 0.4)
+            ln[1].shift(RIGHT * (2.0 - ln[0].width - 0.35))
+        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
+        # the proof, drawn: cuts as rays on the right (values 0.9 .. 1.8)
+        X = lambda v: 2.75 + (float(v) - 0.9) * 4.0 / 0.9  # noqa: E731
+
+        def ray(v, y, color, sw=5):
+            return VGroup(Line([2.45, y, 0], [X(v), y, 0], color=color, stroke_width=sw),
+                          Circle(radius=0.06, color=color, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to([X(v), y, 0]))
+
+        a_vals, a_ys = (1.0, 1.4, 1.41), (2.05, 1.75, 1.45)
+        r_al = VGroup(*[ray(v, y, C.CUT_LOW) for v, y in zip(a_vals, a_ys)])
+        r_al_l = MathTex(r"\alpha \in \mathcal{A}", font_size=26, color=C.CUT_LOW).next_to([X(1.0), 2.05, 0], RIGHT,
+                                                                                         buff=0.2)
+        r_ga = ray(SQRT2, 0.95, C.EPS, sw=7)
+        r_ga_l = MathTex(r"\gamma", font_size=30, color=C.EPS).next_to(r_ga, RIGHT, buff=0.12)
+        r_be = ray(1.7, 0.35, GREY_A)
+        r_be_l = MathTex(r"\beta", font_size=30, color=GREY_A).next_to(r_be, RIGHT, buff=0.12)
+        nl = VGroup(Line([2.45, -0.15, 0], [6.85, -0.15, 0], color=GREY_C, stroke_width=2),
+                    *[VGroup(Line([X(v), -0.22, 0], [X(v), -0.08, 0], color=GREY_C, stroke_width=2),
+                             MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to([X(v), -0.22, 0], DOWN, buff=0.08))
+                      for v in (1.0, 1.5)])
+        fade = Rectangle(width=0.5, height=2.6, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1.0).move_to(
+            [2.3, 1.0, 0])  # the rays run off to the left, toward minus infinity
+        pq = VGroup(Dot([X(1.2), 0.95, 0], radius=0.06, color=WHITE),
+                    MathTex(r"p", font_size=24).next_to([X(1.2), 0.95, 0], UP, buff=0.1),
+                    Arrow([X(1.2), 0.75, 0], [X(1.02), 0.75, 0], buff=0, color=C.CUT_LOW, stroke_width=3,
+                          tip_length=0.12),
+                    MathTex(r"q", font_size=24, color=C.CUT_LOW).next_to([X(1.0), 0.75, 0], LEFT, buff=0.06))
+        pr = VGroup(Dot([X(1.2), 1.45, 0], radius=0.06, color=WHITE),
+                    Arrow([X(1.2), 1.6, 0], [X(1.33), 1.6, 0], buff=0, color=C.EPS, stroke_width=3, tip_length=0.12),
+                    MathTex(r"r", font_size=24, color=C.EPS).next_to([X(1.35), 1.6, 0], RIGHT, buff=0.06))
+        r_de = ray(1.36, 0.65, C.PATHOLOGY)
+        r_de_l = MathTex(r"\delta", font_size=28, color=C.PATHOLOGY).next_to([X(1.36), 0.65, 0], RIGHT, buff=0.1)
+        pl_ = VGroup(Dot([X(1.39), 0.95, 0], radius=0.06, color=WHITE),
+                     MathTex(r"p", font_size=24).next_to([X(1.39), 0.95, 0], UP, buff=0.1))
+        assert 1.36 < 1.39 < 1.41 < SQRT2 < 1.7
         head = label(r"Claim: for $\mathcal{A}$ nonempty and bounded above by a cut $\beta$, \ "
                      r"$\gamma = \bigcup \mathcal{A}$ is a cut, and $\gamma = \sup \mathcal{A}$.", font_size=30)
         head.to_edge(UP, buff=0.5)
@@ -254,10 +288,14 @@ class Cuts(VoiceoverScene):
             "<bookmark mark='b'/> It's closed downward, because each of the cuts is. <bookmark mark='c'/> It has no "
             "largest element, because any p in gamma lies in some cut, which has something bigger. So gamma is a cut."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(nl), FadeIn(r_al), FadeIn(r_al_l), FadeIn(fade))
+            self.play(TransformFromCopy(r_al, VGroup(r_ga)), FadeIn(r_ga_l), FadeIn(fade))
+            extra = [lambda: (Create(r_be), FadeIn(r_be_l), FadeIn(fade)),
+                     lambda: (FadeIn(pq),),
+                     lambda: (FadeIn(pr),)]
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(lines[i], shift=RIGHT * 0.2))
+                self.play(FadeIn(lines[i], shift=RIGHT * 0.2), *extra[i]())
         with self.voiceover(
             "<bookmark mark='u'/> It contains every cut in the collection, so it's an upper bound. <bookmark mark='l'/> "
             "And it's the least one: if delta is smaller than gamma, some p in gamma is missing from delta, and that p "
@@ -266,12 +304,14 @@ class Cuts(VoiceoverScene):
             "supremum is the union."
         ) as vo:
             vo.wait_until("u")
-            self.play(FadeIn(lines[3], shift=RIGHT * 0.2))
+            self.play(FadeIn(lines[3], shift=RIGHT * 0.2), FadeOut(pq), FadeOut(pr))
+            self.play(*[Indicate(r_[0], color=C.CUT_LOW, scale_factor=1.0) for r_ in r_al], run_time=1.0)
             vo.wait_until("l")
-            self.play(FadeIn(lines[4], shift=RIGHT * 0.2))
+            self.play(FadeIn(lines[4], shift=RIGHT * 0.2), Create(r_de), FadeIn(r_de_l), FadeIn(fade))
+            self.play(FadeIn(pl_), Indicate(r_al[2][0], color=C.CUT_LOW, scale_factor=1.0))
             vo.wait_until("q")
-            box = MathTex(r"\sup \mathcal{A} = \bigcup_{\alpha \in \mathcal{A}} \alpha", font_size=46, color=C.EPS)
-            box = boxed(box, color=C.EPS).to_edge(RIGHT, buff=0.8).shift(DOWN * 0.4)
+            box = MathTex(r"\sup \mathcal{A} = \bigcup_{\alpha \in \mathcal{A}} \alpha", font_size=42, color=C.EPS)
+            box = boxed(box, color=C.EPS).move_to([4.6, -2.3, 0])
             self.play(FadeIn(box, scale=1.1))
         self.wait(0.5)
         for m in (self.axis, self.labs, self.root):
@@ -285,12 +325,41 @@ class Cuts(VoiceoverScene):
             MathTex(r"0^* = \{\, q \in \Q : q < 0 \,\}", font_size=40),
             MathTex(r"\alpha\beta = \{\, p : p \le rs,\ r \in \alpha,\ s \in \beta,\ r, s > 0 \,\}"
                     r"\quad (\alpha, \beta > 0^*)", font_size=36),
-        ).arrange(DOWN, buff=0.45).to_edge(UP, buff=0.7)
+        ).arrange(DOWN, buff=0.3).to_edge(UP, buff=0.7)
         rows[2].set_color(GREY_A)
         emb = VGroup(
             MathTex(r"r \;\longmapsto\; r^* = \{\, q \in \Q : q < r \,\}", font_size=40),
             MathTex(r"(r + s)^* = r^* + s^*,\quad (rs)^* = r^* s^*,\quad r < s \iff r^* < s^*", font_size=34),
         ).arrange(DOWN, buff=0.3).next_to(rows, DOWN, buff=0.6)
+        rows.to_edge(UP, buff=0.4)
+        emb.next_to(rows, DOWN, buff=0.4)
+        Xa = lambda v: -0.4 + float(v) * 2.4  # noqa: E731
+
+        def aray(v, y, color, sw=6):
+            return VGroup(Line([-6.6, y, 0], [Xa(v), y, 0], color=color, stroke_width=sw),
+                          Circle(radius=0.07, color=color, stroke_width=3).set_fill(BACKGROUND, 1).move_to([Xa(v), y, 0]))
+
+        a_, b_ = SQRT2, 0.5
+        ys_ = (-1.45, -1.8, -2.15, -2.6)
+        rays = VGroup(aray(a_, ys_[0], C.CUT_LOW), aray(b_, ys_[1], C.APPROX), aray(a_ + b_, ys_[2], C.EPS, sw=7),
+                      aray(0, ys_[3], GREY_B))
+        rlabs = VGroup(MathTex(r"\alpha = (\sqrt2)^*", font_size=26, color=C.CUT_LOW),
+                       MathTex(r"\beta = (\tfrac12)^*", font_size=26, color=C.APPROX),
+                       MathTex(r"\alpha + \beta", font_size=26, color=C.EPS),
+                       MathTex(r"0^*", font_size=26, color=GREY_B))
+        for l_, r_ in zip(rlabs, rays):
+            l_.next_to(r_, RIGHT, buff=0.15)
+        axis_ = VGroup(Line([-6.6, -3.0, 0], [6.6, -3.0, 0], color=GREY_C, stroke_width=2),
+                       *[VGroup(Line([Xa(v), -3.07, 0], [Xa(v), -2.93, 0], color=GREY_C, stroke_width=2),
+                                MathTex(f"{v}", font_size=22, color=GREY_B).next_to([Xa(v), -3.07, 0], DOWN, buff=0.08))
+                         for v in (-2, -1, 0, 1, 2)])
+        r_, s_ = 1.1, 0.3
+        assert r_ < a_ and s_ < b_
+        sample = VGroup(Dot([Xa(r_), ys_[0], 0], radius=0.06, color=WHITE), Dot([Xa(s_), ys_[1], 0], radius=0.06, color=WHITE),
+                        Dot([Xa(r_ + s_), ys_[2], 0], radius=0.07, color=WHITE),
+                        MathTex(r"r", font_size=24).next_to([Xa(r_), ys_[0], 0], UP, buff=0.08),
+                        MathTex(r"s", font_size=24).next_to([Xa(s_), ys_[1], 0], UP, buff=0.08),
+                        MathTex(r"r + s", font_size=24).next_to([Xa(r_ + s_), ys_[2], 0], DOWN, buff=0.08))
         with self.voiceover(
             "Then comes arithmetic, and it's mostly routine. <bookmark mark='a'/> To add two cuts, add their elements in "
             "every possible way. <bookmark mark='z'/> Zero is the cut of the negative fractions, and you can check that "
@@ -299,10 +368,11 @@ class Cuts(VoiceoverScene):
             "new, so we'll trust it. <bookmark mark='e'/> And the rationals sit inside, each fraction r becoming "
             "the cut of fractions below it, in a way that respects sums, products and order."
         ) as vo:
-            vo.wait_until("a")
-            self.play(Write(rows[0]))
+            self.play(Write(rows[0]), Create(axis_), FadeIn(rays[:2]), FadeIn(rlabs[:2]))
+            self.play(FadeIn(sample[:2]), FadeIn(sample[3:5]))
+            self.play(Create(rays[2]), FadeIn(rlabs[2]), TransformFromCopy(sample[:2], sample[2]), FadeIn(sample[5]))
             vo.wait_until("z")
-            self.play(Write(rows[1]))
+            self.play(Write(rows[1]), Create(rays[3]), FadeIn(rlabs[3]))
             vo.wait_until("m")
             self.play(FadeIn(rows[2]))
             vo.wait_until("e")
@@ -346,7 +416,6 @@ class Cuts(VoiceoverScene):
             "sequences counting as the same number when their difference goes to zero, like the decimals and the hops "
             "for root two."
         ) as vo:
-            vo.wait_until("t")
             self.play(FadeIn(thm))
             vo.wait_until("c")
             self.play(FadeIn(grid[0]), FadeIn(grid[1]), FadeIn(who))

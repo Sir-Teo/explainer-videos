@@ -194,12 +194,41 @@ class Distance(VoiceoverScene):
                       label(r"a set $X$ with a distance $d(p, q)$ such that", font_size=32)).arrange(DOWN, buff=0.15)
         head.to_edge(UP, buff=0.5)
         ax = VGroup(
-            MathTex(r"\text{(a)}\quad d(p,q) > 0 \text{ if } p \ne q, \qquad d(p,p) = 0", font_size=38),
-            MathTex(r"\text{(b)}\quad d(p,q) = d(q,p)", font_size=38),
-            MathTex(r"\text{(c)}\quad d(p,q) \le d(p,r) + d(r,q)", font_size=38),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.5)
+            MathTex(r"\text{(a)}\quad d(p,q) > 0 \text{ if } p \ne q, \qquad d(p,p) = 0", font_size=34),
+            MathTex(r"\text{(b)}\quad d(p,q) = d(q,p)", font_size=34),
+            MathTex(r"\text{(c)}\quad d(p,q) \le d(p,r) + d(r,q)", font_size=34),
+        )
+        rows_y = (1.45, -0.05, -1.65)
+        for a_, y in zip(ax, rows_y):
+            a_.move_to([0, y, 0]).to_edge(LEFT, buff=0.7)
         coda = label(r"Everything from here to chapter 11 uses only (a), (b), (c).", font_size=30, color=C.EPS)
-        coda.next_to(ax, DOWN, buff=0.6)
+        coda.to_edge(DOWN, buff=0.35)
+        # a picture beside each axiom
+        def pt(x, y, name, side=DOWN):
+            return VGroup(Dot([x, y, 0], radius=0.07), MathTex(name, font_size=28).next_to([x, y, 0], side, buff=0.12))
+
+        y = rows_y[0]
+        pa, qa = pt(2.3, y, "p"), pt(5.1, y, "q")
+        da = VGroup(Line([2.3, y, 0], [5.1, y, 0], color=C.DIST, stroke_width=4),
+                    MathTex(r"d(p,q) > 0", font_size=26, color=C.DIST).next_to([3.7, y, 0], UP, buff=0.12))
+        y = rows_y[1]
+        pb, qb = pt(2.3, y, "p", LEFT), pt(5.1, y, "q", RIGHT)
+        db = VGroup(CurvedArrow([2.4, y + 0.1, 0], [5.0, y + 0.1, 0], angle=-0.6, color=C.DIST, stroke_width=3,
+                                tip_length=0.15),
+                    CurvedArrow([5.0, y - 0.1, 0], [2.4, y - 0.1, 0], angle=-0.6, color=C.DIST, stroke_width=3,
+                                tip_length=0.15),
+                    MathTex(r"d(p,q)", font_size=24, color=C.DIST).move_to([3.7, y + 0.5, 0]),
+                    MathTex(r"d(q,p)", font_size=24, color=C.DIST).move_to([3.7, y - 0.5, 0]))
+        P, Q, R = np.array([2.1, -2.35, 0]), np.array([5.3, -2.35, 0]), np.array([4.0, -1.05, 0])
+        tri = VGroup(Line(P, Q, color=C.DIST, stroke_width=5),
+                     Line(P, R, color=C.APPROX, stroke_width=3.5), Line(R, Q, color=C.APPROX, stroke_width=3.5),
+                     *[Dot(v, radius=0.07) for v in (P, Q, R)],
+                     MathTex(r"p", font_size=28).next_to(P, LEFT, buff=0.12),
+                     MathTex(r"q", font_size=28).next_to(Q, RIGHT, buff=0.12),
+                     MathTex(r"r", font_size=28).next_to(R, UP, buff=0.12))
+        tlab = VGroup(MathTex(r"d(p,q)", font_size=24, color=C.DIST).next_to((P + Q) / 2, DOWN, buff=0.1),
+                      MathTex(r"d(p,r)", font_size=24, color=C.APPROX).next_to((P + R) / 2, UL, buff=0.02),
+                      MathTex(r"d(r,q)", font_size=24, color=C.APPROX).next_to((R + Q) / 2, UR, buff=0.02))
         with self.voiceover(
             "In 1906, Maurice Fréchet turned this into a definition. <bookmark mark='h'/> A metric space is a set "
             "together with a distance function d with three properties. <bookmark mark='a'/> Distances between "
@@ -211,9 +240,17 @@ class Distance(VoiceoverScene):
             self.play(FadeIn(head[0]))
             vo.wait_until("h")
             self.play(FadeIn(head[1]))
-            for mk, a_ in zip("abc", ax):
-                vo.wait_until(mk)
-                self.play(FadeIn(a_, shift=RIGHT * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(ax[0], shift=RIGHT * 0.2), FadeIn(pa), FadeIn(qa))
+            self.play(Create(da[0]), FadeIn(da[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(ax[1], shift=RIGHT * 0.2), FadeIn(pb), FadeIn(qb))
+            self.play(Create(db[0]), FadeIn(db[2]))
+            self.play(Create(db[1]), FadeIn(db[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(ax[2], shift=RIGHT * 0.2), FadeIn(tri[3:]))
+            self.play(Create(tri[0]), FadeIn(tlab[0]))
+            self.play(Create(tri[1]), Create(tri[2]), FadeIn(tlab[1:]), run_time=1.2)
             vo.wait_until("d")
             self.play(FadeIn(coda))
         self.wait(0.3)
@@ -308,7 +345,6 @@ class Distance(VoiceoverScene):
             "from zero to one. <bookmark mark='d'/> The distance between two of them, f and g, is the biggest vertical "
             "gap between their graphs: the supremum of f of x minus g of x, in absolute value, over all x."
         ) as vo:
-            vo.wait_until("c")
             self.play(Create(ax), FadeIn(space))
             self.play(Create(F), Create(G), FadeIn(fl), FadeIn(gl))
             vo.wait_until("d")

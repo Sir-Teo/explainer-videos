@@ -52,7 +52,6 @@ class Compact(VoiceoverScene):
             "infinitely often. <bookmark mark='c'/> Infinite sets lose both properties, in general. Compactness is the "
             "property that brings them back; it's often called the next best thing to being finite."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.15), FadeIn(l1))
             self.play(FadeIn(top))
             vo.wait_until("b")
@@ -238,19 +237,73 @@ class Compact(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def consequences(self):
-        t1 = VGroup(label(r"\textbf{Rudin 2.35} \ Closed subsets of compact sets are compact.", font_size=30),
-                    label(r"(cover $F$; add the open set $F^c$; that covers all of $K$; keep finitely many)", font_size=24,
-                          color=GREY_B)).arrange(DOWN, buff=0.12)
-        t2 = VGroup(label(r"\textbf{Rudin 2.36} \ If $K_1 \supset K_2 \supset \cdots$ are nonempty and compact,", font_size=30),
-                    label(r"then $\bigcap K_n \neq \emptyset$. \quad (Compare $\bigcap (0, \tfrac1n) = \emptyset$.)", font_size=30)
-                    ).arrange(DOWN, buff=0.12)
-        t3 = VGroup(label(r"\textbf{Rudin 2.37} \ Every infinite subset of a compact set $K$ has a limit point in $K$.",
-                          font_size=30),
-                    label(r"(otherwise each point of $K$ has a disk with at most one point of the subset;", font_size=24,
-                          color=GREY_B),
-                    label(r"finitely many disks cover $K$, so the subset is finite)", font_size=24, color=GREY_B)
-                    ).arrange(DOWN, buff=0.12)
-        grp = VGroup(t1, t2, t3).arrange(DOWN, buff=0.55).move_to(UP * 0.4)
+        def head(num, lines):
+            return VGroup(label(rf"\textbf{{Rudin {num}}}", font_size=28),
+                          *[label(t, font_size=24, color=GREY_A) for t in lines]).arrange(DOWN, buff=0.08)
+
+        xs = (-4.6, 0.0, 4.6)
+        heads = VGroup(head("2.35", [r"$F$ closed, \ $F \subset K$ compact", r"$\Rightarrow$ $F$ is compact"]),
+                       head("2.36", [r"$K_1 \supset K_2 \supset \cdots$ compact, nonempty",
+                                     r"$\Rightarrow$ $\bigcap K_n \neq \emptyset$"]),
+                       head("2.37", [r"$E \subset K$ compact, \ $E$ infinite",
+                                     r"$\Rightarrow$ $E$ has a limit point in $K$"]))
+        for h, x in zip(heads, xs):
+            h.move_to([x, 2.75, 0])
+        seps = VGroup(*[DashedLine([x, 2.9, 0], [x, -2.7, 0], color=GREY_D, stroke_width=1.5) for x in (-2.3, 2.3)])
+        # 2.35: cover F, add the open set F^c, keep finitely many, drop F^c
+        c1 = np.array([xs[0], -0.45, 0])
+        K1 = Polygon(*blob_pts(c1, scale=0.82), stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET,
+                     fill_opacity=0.12)
+        cF = c1 + np.array([0.12, -0.05, 0])
+        F = Polygon(*blob_pts(cF, scale=0.42, n=200), stroke_color=C.CLOSED_SET, stroke_width=3.5,
+                    fill_color=C.CLOSED_SET, fill_opacity=0.3)
+        Fl = MathTex(r"F", font_size=30, color=C.CLOSED_SET).move_to(cF + np.array([0.0, 0.05, 0]))
+        Kl1 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c1 + np.array([-1.05, 0.95, 0]))
+        bp = blob_pts(cF, scale=0.42, n=8)
+        keep = [(cF, 0.45)] + [(q, 0.4) for q in bp]
+        rng = np.random.default_rng(7)
+        extra = [(cF + np.array([*rng.uniform(-0.6, 0.6, 2), 0]), rng.uniform(0.22, 0.34)) for _ in range(9)]
+        # the kept disks really cover F (checked on a fine sample of F)
+        fpts = np.array([cF + t * (q - cF) for q in blob_pts(cF, scale=0.42, n=200) for t in np.linspace(0, 1, 12)])
+        assert all(any(np.linalg.norm(x - c) < r for c, r in keep) for x in fpts)
+        disks_keep = VGroup(*[nbhd(c, r, color=C.OPEN_SET, fill=0.08, width=2, dashes=24) for c, r in keep])
+        disks_extra = VGroup(*[nbhd(c, r, color=C.OPEN_SET, fill=0.08, width=2, dashes=20) for c, r in extra])
+        Fc = Difference(K1.copy(), F.copy(), stroke_width=0, fill_color=C.OPEN_SET, fill_opacity=0.28)
+        Fcl = MathTex(r"F^c", font_size=28, color=C.OPEN_SET).move_to(c1 + np.array([0.95, -1.0, 0]))
+        # 2.36: nested compact sets shrink to a point, nested open intervals to nothing
+        c2 = np.array([xs[1], 0.15, 0])
+        nested = VGroup(*[Polygon(*blob_pts(c2, scale=0.74 * 0.68 ** k, n=200), stroke_color=C.COMPACT_SET,
+                                  stroke_width=2.5, fill_color=C.COMPACT_SET, fill_opacity=0.1) for k in range(7)])
+        nlabs = VGroup(*[MathTex(rf"K_{k + 1}", font_size=24, color=C.COMPACT_SET).next_to(
+            blob_pts(c2, scale=0.74 * 0.68 ** k, n=8)[1], UR, buff=0.02) for k in range(2)])
+        core = Dot(c2, radius=0.06, color=WHITE)
+        core_l = MathTex(r"\bigcap K_n", font_size=24).next_to(core, DOWN, buff=0.35).shift(RIGHT * 0.9)
+        core_a = Arrow(core_l.get_left(), c2 + np.array([0.05, -0.05, 0]), buff=0.05, color=WHITE, stroke_width=2,
+                       tip_length=0.12)
+        X = lambda v: xs[1] - 1.7 + 3.4 * v  # noqa: E731
+        ints = VGroup(*[VGroup(Line([X(0), -1.75 - 0.17 * k, 0], [X(1 / (k + 1)), -1.75 - 0.17 * k, 0],
+                                    color=C.OPEN_SET, stroke_width=4),
+                               endpoint([X(0), -1.75 - 0.17 * k, 0], False, C.OPEN_SET, radius=0.04),
+                               endpoint([X(1 / (k + 1)), -1.75 - 0.17 * k, 0], False, C.OPEN_SET, radius=0.04))
+                        for k in range(5)])
+        zero = MathTex(r"0", font_size=22, color=GREY_B).next_to([X(0), -1.75, 0], LEFT, buff=0.12)
+        ints_l = MathTex(r"\bigcap\, (0, \tfrac1n) = \emptyset", font_size=26, color=C.PATHOLOGY).next_to(
+            [X(0.5), -2.43, 0], DOWN, buff=0.08)
+        # 2.37: an infinite set in K piles up at a point of K
+        c3 = np.array([xs[2], -0.45, 0])
+        K3 = Polygon(*blob_pts(c3, scale=0.82), stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET,
+                     fill_opacity=0.12)
+        Kl3 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c3 + np.array([-1.05, 0.95, 0]))
+        pp = c3 + np.array([0.3, -0.15, 0])
+        E = VGroup(*[Dot(pp + 1.0 * 0.83 ** k * np.array([np.cos(2.4 * k), np.sin(2.4 * k), 0]), radius=0.045,
+                         color=C.SEQ) for k in range(30)])
+        El = MathTex(r"E", font_size=28, color=C.SEQ).move_to(pp + np.array([-0.95, 0.75, 0]))
+        pd = Dot(pp, radius=0.06, color=WHITE)
+        disk = nbhd(pp, 0.28, color=WHITE, fill=0.15, width=2, dashes=24)
+        pl = VGroup(label(r"every disk around $p$ holds", font_size=22, color=GREY_A),
+                    label(r"infinitely many points of $E$", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.06)
+        pl.next_to(K3, DOWN, buff=0.15)
+        pnm = MathTex(r"p", font_size=28).next_to(pd, DR, buff=0.18)
         with self.voiceover(
             "<bookmark mark='a'/> Second, a closed subset of a compact set is compact: given a cover of the subset, throw "
             "in the complement of the subset, an open set, to cover everything; keep finitely many; then drop the "
@@ -261,11 +314,24 @@ class Compact(VoiceoverScene):
             "at most one point of the subset, finitely many disks would cover everything, and the subset would be "
             "finite."
         ) as vo:
-            for mk, t in zip("abc", grp):
-                vo.wait_until(mk)
-                self.play(FadeIn(t, shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(FadeIn(heads[0]), FadeIn(K1), FadeIn(Kl1), FadeIn(F), FadeIn(Fl), Create(seps))
+            self.play(LaggedStart(*[FadeIn(d) for d in (*disks_keep, *disks_extra)], lag_ratio=0.12), run_time=2.0)
+            self.play(FadeIn(Fc), FadeIn(Fcl))
+            self.play(disks_extra.animate.set_opacity(0.08), run_time=1.0)
+            self.play(FadeOut(Fc), FadeOut(Fcl), run_time=1.0)
+            vo.wait_until("b")
+            self.play(FadeIn(heads[1]))
+            self.play(LaggedStart(*[FadeIn(k_) for k_ in nested], lag_ratio=0.3), FadeIn(nlabs), run_time=2.4)
+            self.play(FadeIn(core, scale=2), FadeIn(core_l), GrowArrow(core_a))
+            self.play(FadeIn(zero), LaggedStart(*[FadeIn(i_) for i_ in ints], lag_ratio=0.3), run_time=1.8)
+            self.play(FadeIn(ints_l))
+            vo.wait_until("c")
+            self.play(FadeIn(heads[2]), FadeIn(K3), FadeIn(Kl3))
+            self.play(LaggedStart(*[FadeIn(e_, scale=1.5) for e_ in E], lag_ratio=0.12), FadeIn(El), run_time=3.0)
+            self.play(FadeIn(pd), FadeIn(pnm), FadeIn(disk), FadeIn(pl))
         moral = label(r"An infinite set inside a compact set cannot spread out without piling up somewhere.",
-                      font_size=30, color=C.COMPACT_SET).to_edge(DOWN, buff=0.5)
+                      font_size=28, color=C.COMPACT_SET).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "That last one is the finiteness we were after: <bookmark mark='m'/> inside a compact set, infinitely many "
             "points can't spread out without piling up somewhere. Which sets are compact? For subsets of the real line, "
