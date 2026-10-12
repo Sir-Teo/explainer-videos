@@ -314,6 +314,8 @@ LEDGER_ROWS = {
         r"$\frac{d}{dx}\int_a^x f = f$ a.e.", r"$s_N \to f$ in $L^2$; \ Fej\'er: uniform"],
     7: [r"7", r"$H(\Omega)$, \ locally uniform", r"locally uniform limits stay holomorphic", r"bounded families: Montel",
         r"$\frac{d}{dz}\sum = \sum \frac{d}{dz}$; \ $\oint$ and $\lim$", r"$H^2$: \ $\hat f(n) = 0$ for $n < 0$"],
+    8: [r"8", r"Banach; \ Fr\'echet", r"Baire: \ not a countable union of thin sets", r"weak-* compact (Alaoglu)",
+        r"pointwise bounds are uniform", r"diverges for most $f \in C$; \ a.e.\ for $L^2$"],
 }
 
 

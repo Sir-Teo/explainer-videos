@@ -1,0 +1,152 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.analysis import *  # noqa: F403
+from videos.analysis8.common import load, plain_axes, polyline
+
+
+class Hook(VoiceoverScene):
+    def construct(self):
+        self.recap()
+        self.kernel()
+        self.counting()
+        self.plan()
+
+    # ------------------------------------------------------------------
+    def recap(self):
+        led = ledger(filled=7, highlight=8).scale(0.9)
+        with self.voiceover(
+            "Seven rows of the ledger are filled. Each part found a complete space and asked what compactness costs "
+            "there. <bookmark mark='l'/> Part 8 asks those questions about every complete normed space at once."
+        ) as vo:
+            self.play(FadeIn(led))
+            vo.wait_until("l")
+            self.play(Indicate(led.rows[7], color=C.EPS, scale_factor=1.03))
+        self.play(FadeOut(led))
+
+    # ------------------------------------------------------------------
+    def kernel(self):
+        d = load("lebesgue")
+        xs, D20 = d["xs"], d["D20"]
+        ax = plain_axes([-math.pi, math.pi, math.pi / 2], [-8, 42, 10], 6.2, 3.4).move_to([-3.3, 0.5, 0])
+        tk = VGroup(*[MathTex(s, font_size=20).next_to(ax.c2p(v, -8), DOWN, buff=0.1)
+                      for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
+        g = polyline(ax, xs, D20, color=C.SEQ, stroke_width=2.5)
+        absg = polyline(ax, xs, np.abs(D20), color=C.PATHOLOGY, stroke_width=2).set_stroke(opacity=0.7)
+        neg = Polygon(*([ax.c2p(a, 0) for a in xs[::2]] + [ax.c2p(a, b) for a, b in zip(xs[::-2], np.minimum(D20, 0)[::-2])]),
+                      stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.5)
+        k_l = MathTex(r"D_{20}(t) = \sum_{|k| \le 20} e^{ikt}", font_size=28, color=C.SEQ).next_to(ax, UP, buff=0.1)
+        s_l = MathTex(r"s_n(f)(0) = \frac{1}{2\pi}\int f(t)\, D_n(t)\,dt", font_size=30).move_to([3.6, 2.3, 0])
+        rows = VGroup(
+            label(r"the best $f$ with $|f| \le 1$ is $\mathrm{sign}\, D_n$:", font_size=24),
+            MathTex(r"\sup_{\|f\|_\infty \le 1} |s_n(f)(0)| = \|D_n\|_1", font_size=30, color=C.EPS),
+            label(r"a continuous $f$ gets within $3\%$ of it:", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, 1.0, 0])
+        near, nn = d["near"], d["near_ns"]
+        tab = VGroup(MathTex(r"n", r"\quad \|D_n\|_1", r"\quad s_n(f_n)(0)", font_size=24, color=GREY_A))
+        from videos.analysis8.compute import lebesgue_constant
+        for n, v in zip(nn, near):
+            tab.add(MathTex(f"{int(n)}", rf"\quad {lebesgue_constant(int(n)):.4f}", rf"\quad {v:.4f}", font_size=24))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, -0.6, 0])
+        for row in tab[1:]:
+            row[1].align_to(tab[0][1], LEFT)
+            row[2].align_to(tab[0][2], LEFT)
+        L, ns, asym = d["L"], d["ns"], d["asym"]
+        bx = plain_axes([0, 6, 1], [0, 7.5, 2], 6.2, 2.0).move_to([-3.3, -2.45, 0])
+        bt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=18).next_to(bx.c2p(k, 0), DOWN, buff=0.08) for k in range(0, 7, 2)])
+        lg = np.log10(ns)
+        pts = VGroup(*[Dot(bx.c2p(a, b), radius=0.05, color=C.EPS) for a, b in zip(lg, L)])
+        curve = polyline(bx, np.linspace(0.5, 6, 100), 4 / math.pi**2 * np.log(10 ** np.linspace(0.5, 6, 100)) + 1.2703,
+                         color=WHITE, stroke_width=1.5)
+        b_l = MathTex(r"\|D_n\|_1 \approx \tfrac{4}{\pi^2}\log n + 1.27 \to \infty", font_size=24, color=C.EPS).next_to(
+            bx, UP, buff=0.05).align_to(bx, LEFT)
+        out = MathTex(rf"n = 10^6: \ {L[-1]:.4f} \ \text{{vs}} \ {asym[-1]:.4f}", font_size=24, color=GREY_A).move_to(
+            [3.6, -2.45, 0])
+        assert np.all(np.abs(L[2:] - asym[2:]) / L[2:] < 0.01)
+        head = label(r"Why might a Fourier series diverge? \ The Dirichlet kernel's side lobes", font_size=32).to_edge(
+            UP, buff=0.25)
+        with self.voiceover(
+            "<bookmark mark='a'/> The n-th partial sum of a Fourier series at zero is the integral of f against the "
+            "Dirichlet kernel. The kernel has a tall peak and many side lobes, some negative. "
+            "<bookmark mark='b'/> A function bounded by one can line up its sign with the kernel's, and then its "
+            "partial sum at zero is the total area under the absolute value of the kernel. Continuous functions can "
+            "come within three percent of that. <bookmark mark='c'/> And that area grows without bound: like four "
+            "over pi squared times the log of n, computed here out to a million. So for each n there's a bounded "
+            "continuous function whose n-th partial sum at zero is large. Does a single continuous function have "
+            "partial sums that grow without bound?"
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), Create(ax), FadeIn(tk), Create(g), FadeIn(k_l), FadeIn(s_l))
+            self.play(FadeIn(neg))
+            vo.wait_until("b")
+            self.play(Create(absg), FadeIn(rows))
+            self.play(FadeIn(tab))
+            vo.wait_until("c")
+            self.play(Create(bx), FadeIn(bt), FadeIn(b_l), Create(curve))
+            self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.15), FadeIn(out), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def counting(self):
+        rows = VGroup(
+            label(r"du Bois-Reymond (1873): \ yes, \ by an explicit and delicate construction", font_size=28),
+            label(r"Banach and Steinhaus (1927): \ yes, \ by counting:", font_size=28, color=C.EPS),
+            MathTex(r"\|\Lambda_n\| = \|D_n\|_1 \to \infty \ \Rightarrow \ \sup_n |s_n(f)(0)| = \infty \text{ for "
+                    r"\emph{most} } f \in C(T)", font_size=32, color=C.EPS),
+            label(r"``most'' \ = \ all but a countable union of nowhere dense sets \ (Baire, 1899)", font_size=26),
+            label(r"a theorem about the existence of monsters, \ proved by counting", font_size=28, color=C.PATHOLOGY),
+        ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.2)
+        head = label(r"The answer, two ways", font_size=36).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "<bookmark mark='a'/> Du Bois-Reymond answered yes in 1873, with an explicit and delicate construction. "
+            "<bookmark mark='b'/> Banach and Steinhaus answered it in three lines. The functionals that take f to its "
+            "n-th partial sum at zero have norms that go to infinity. Their theorem then says the partial sums are "
+            "unbounded, not just for one f, but for most continuous functions, in a precise sense due to Baire. "
+            "<bookmark mark='c'/> A theorem about the existence of monsters, proved by counting. That's the spirit of "
+            "this part."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[1]))
+            self.play(FadeIn(rows[2]))
+            self.play(FadeIn(rows[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def plan(self):
+        chapters = [
+            r"Banach spaces and bounded operators", r"Spaces without norms", r"Baire's theorem", r"Uniform boundedness",
+            r"Open mappings and closed graphs", r"Hahn--Banach", r"Dual spaces", r"Weak convergence",
+            r"Banach--Alaoglu", r"Extreme points (Krein--Milman)", r"Compact operators", r"Four applications",
+        ]
+        items = VGroup(*[label(rf"{i + 1}.\; {t}", font_size=27) for i, t in enumerate(chapters)])
+        colL = VGroup(*items[:6]).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([-3.2, -0.5, 0])
+        colR = VGroup(*items[6:]).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([3.3, -0.5, 0]).align_to(colL, UP)
+        head = label(r"Part 8: Banach spaces", font_size=42).to_edge(UP, buff=0.4)
+        sub = label(r"Rudin, \textit{Real and Complex Analysis}, chapter 5, \ and \textit{Functional Analysis}, chapters 1--5",
+                    font_size=24, color=GREY_B).next_to(head, DOWN, buff=0.15)
+        with self.voiceover(
+            "Here's the plan, following chapter five of Real and Complex Analysis and the first five chapters of "
+            "Rudin's Functional Analysis. <bookmark mark='a'/> First the spaces, and Baire's theorem with its three "
+            "children: uniform boundedness, open mappings and closed graphs. <bookmark mark='b'/> Then Hahn-Banach "
+            "and duality, weak convergence, and the compactness that comes back in the weak-star topology. "
+            "<bookmark mark='c'/> Then extreme points, compact operators, and four applications."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sub))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(5)], lag_ratio=0.3))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(5, 9)], lag_ratio=0.3))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(items[i], shift=RIGHT * 0.2) for i in range(9, 12)], lag_ratio=0.3))
+        self.wait(0.6)
+        self.clear_scene()

@@ -46,15 +46,17 @@ class Contraction(VoiceoverScene):
         head = VGroup(label(r"Solve $\cos x = x$ by iterating: \ $x_{n+1} = \cos x_n$", font_size=30),
                       label(r"on $[0, 1]$, \ $|\cos' x| = |\sin x| \le \sin 1 = c$: \ every distance shrinks by $c$",
                             font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
-        tab = VGroup(MathTex(r"n", r"\quad x_n", r"\quad |x_n - x^*|", r"\quad \frac{c^n}{1 - c}|x_1 - x_0|",
+        tab = VGroup(MathTex(r"n", r"x_n", r"|x_n - x^*|", r"\frac{c^n}{1 - c}|x_1 - x_0|",
                              font_size=26, color=GREY_A))
         for n in (0, 1, 2, 3, 5, 10, 20, 30):
-            tab.add(MathTex(rf"{n}", rf"\quad {x[n]:.6f}", rf"\quad {errs[n]:.2e}", rf"\quad {bound[n]:.2e}",
+            tab.add(MathTex(rf"{n}", rf"{x[n]:.6f}", rf"{sci(float(errs[n]), 2)}", rf"{sci(float(bound[n]), 2)}",
                             font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.5, -0.6, 0])
-        for row in tab[1:]:
-            for j in (1, 2, 3):
-                row[j].align_to(tab[0][j], LEFT)
+        x0 = tab.get_left()[0]
+        cols_x = (0.0, 0.55, 2.0, 3.75)  # fixed column starts (scene units from the table's left edge)
+        for row in tab:
+            for j in range(4):
+                row[j].set_x(x0 + cols_x[j] + row[j].width / 2)
         fl = MathTex(rf"x^* = {fix:.10f}", font_size=30, color=C.EPS).next_to(tab, DOWN, buff=0.3)
         assert np.all(errs <= bound + 1e-15) and abs(c - math.sin(1)) < 1e-15
         with self.voiceover(
@@ -82,7 +84,9 @@ class Contraction(VoiceoverScene):
     # ------------------------------------------------------------------
     def proof(self):
         pm = ProofMap([r"steps shrink like $c^n$", r"so $(x_n)$ is Cauchy", r"$X$ complete: \ $x_n \to x$",
-                       r"$\varphi(x) = x$; \ unique"], font_size=22, width=3.05, buff=0.3).to_edge(UP, buff=0.2)
+                       r"$\varphi(x) = x$; \ unique"], font_size=22, width=2.9, buff=0.28).to_edge(UP, buff=0.2)
+        if pm.width > 13.2:
+            pm.width = 13.2
         ax = square_axes([-2.6, 2.6, 1], [-2.0, 2.0, 1], 1.25).move_to([-3.4, -0.8, 0])
         ax.set_opacity(0)
         star = np.array([0.5, -0.2])

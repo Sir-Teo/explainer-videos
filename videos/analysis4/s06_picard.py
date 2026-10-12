@@ -74,12 +74,11 @@ class Picard(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]))
+            self.play(FadeIn(rows[1]), Create(ax), Create(gy), Create(gz), FadeIn(lab1))
             self.play(FadeIn(rows[2]))
             vo.wait_until("c")
-            self.play(FadeIn(est[:3]))
+            self.play(FadeIn(est[:3]), Create(gap1))
             vo.wait_until("d")
-            self.play(Create(ax), Create(gy), Create(gz), FadeIn(lab1), Create(gap1))
             self.play(ReplacementTransform(gy, gTy), ReplacementTransform(gz, gTz), ReplacementTransform(gap1, gap2),
                       FadeTransform(lab1, lab2), run_time=2.0)
             self.play(FadeIn(est[3]))
@@ -101,7 +100,7 @@ class Picard(VoiceoverScene):
         its = [polyline(ax, t, Y[k], color=cols[k], stroke_width=3) for k in range(9)]
         names = [r"0", r"1", r"1 + t", r"1 + t + \tfrac{t^2}{2}", r"1 + t + \tfrac{t^2}{2} + \tfrac{t^3}{6}"]
         nl = [MathTex(rf"y_{{{k}}} = {names[k]}" if k < len(names) else rf"y_{{{k}}}: \ \sup|y_{{{k}}} - e^t| = "
-                      rf"{err1[k]:.4f}", font_size=28, color=cols[k]).next_to(ax, UP, buff=0.1) for k in range(9)]
+                      rf"{sci(float(err1[k]), 2)}", font_size=28, color=cols[k]).next_to(ax, UP, buff=0.1) for k in range(9)]
         head = label(r"$y' = y$, \ $y(0) = 1$: \ iterate $T$ from $y_0 = 0$", font_size=32).to_edge(UP, buff=0.3)
         cax = self.camera_axes((0, 2), (0, 3))
         cl = VGroup(MathTex(r"y(\tfrac12)", font_size=22, color=GREY_B).next_to(cax, DOWN, buff=0.1),
