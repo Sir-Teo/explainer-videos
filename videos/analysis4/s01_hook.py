@@ -38,7 +38,7 @@ class Hook(VoiceoverScene):
         xs, ys = np.linspace(-0.3, 3.3, 241), np.linspace(-0.3, 2.5, 201)
         circ = contour_mobject(ax, contour_segments(lambda X, Y: X**2 + Y**2 - 4, xs, ys), C.SEQ, 3.5)
         hyp = contour_mobject(ax, contour_segments(lambda X, Y: X * Y - 1, xs, ys), C.APPROX, 3.5)
-        cl = MathTex(r"x^2 + y^2 = 4", font_size=28, color=C.SEQ).move_to(ax.c2p(0.55, 2.25))
+        cl = MathTex(r"x^2 + y^2 = 4", font_size=28, color=C.SEQ).move_to(ax.c2p(2.35, 1.7))
         hl = MathTex(r"xy = 1", font_size=28, color=C.APPROX).move_to(ax.c2p(2.95, 0.6))
         dots = [Dot(ax.c2p(*p), radius=0.07, color=WHITE) for p in its[:5]]
         tangents = []

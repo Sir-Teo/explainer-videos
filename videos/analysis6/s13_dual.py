@@ -1,0 +1,240 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.analysis import *  # noqa: F403
+from videos.analysis6.common import load, p_ball, plain_axes, pnorm, polyline, square_axes
+
+
+class DualLp(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.touch()
+        self.theorem()
+        self.probe()
+        self.dictionary()
+
+    # ------------------------------------------------------------------
+    def card(self):
+        card = chapter_card(12, r"The dual of $L^p$", r"Which linear functionals live on $L^p$?", lit=(), part=6)
+        with self.voiceover("Chapter twelve: the functionals on L p, and on the continuous functions."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def touch(self):
+        d = load("dual")
+        p, q, gq, best, g8 = float(d["p"]), float(d["q"]), float(d["gq"]), float(d["best"]), d["g"]
+        ax = square_axes([-1.4, 1.4, 1], [-1.4, 1.4, 1], 1.8).move_to([-3.8, -0.6, 0])
+        ax.set_opacity(0.35)
+        ball = p_ball(ax, p, C.DIST)
+        g = np.array([0.8, 0.5])
+        nq = pnorm(g, q)
+        xstar = np.sign(g) * np.abs(g) ** (q - 1)
+        xstar /= pnorm(xstar, p)
+        assert abs(g @ xstar - nq) < 1e-12 and abs(pnorm(xstar, p) - 1) < 1e-12
+        th = np.linspace(0, 2 * np.pi, 7201)
+        bd = np.stack([np.cos(th), np.sin(th)], 1)
+        bd = bd / np.array([pnorm(v, p) for v in bd])[:, None]
+        assert abs((bd @ g).max() - nq) < 1e-5
+        cT = ValueTracker(0.2)
+        gu = g / np.linalg.norm(g)
+        tg = np.array([-gu[1], gu[0]])
+
+        def level():
+            c = cT.get_value()
+            p0 = c / np.linalg.norm(g) * gu
+            return Line(ax.c2p(*(p0 - 1.6 * tg)), ax.c2p(*(p0 + 1.6 * tg)), color=C.FUNCTIONAL, stroke_width=3)
+
+        lv = always_redraw(level)
+        lv_l = always_redraw(lambda: MathTex(rf"\{{x : 0.8x_1 + 0.5x_2 = {cT.get_value():.4f}\}}", font_size=26,
+                                             color=C.FUNCTIONAL).next_to(ax, DOWN, buff=0.15))
+        xd = Dot(ax.c2p(*xstar), radius=0.09, color=C.EPS)
+        x_l = MathTex(r"x^*", font_size=28, color=C.EPS).next_to(xd, UR, buff=0.05)
+        b_l = MathTex(r"\|x\|_3 \le 1", font_size=28, color=C.DIST).move_to(ax.c2p(-0.5, -0.45))
+        side = VGroup(
+            MathTex(r"\Lambda x = g \cdot x, \quad g = (0.8,\ 0.5)", font_size=30),
+            MathTex(rf"\|\Lambda\| = \max_{{\|x\|_3 \le 1}} \Lambda x = \|g\|_{{3/2}} = {nq:.4f}", font_size=30,
+                    color=C.EPS),
+            label(r"attained at $x^* \propto \mathrm{sign}(g)\,|g|^{q-1}$ \ (H\"older's equality case)", font_size=24,
+                  color=GREY_A),
+            label(r"in $\R^8$, \ $g$ random, \ $p = 3$:", font_size=24),
+            MathTex(rf"\|g\|_{{3/2}} = {gq:.4f}; \ \ 20{{,}}000 \text{{ random unit }} x: \ \max = {best:.4f}", font_size=26),
+            MathTex(rf"x^*: \ \Lambda x^* = {gq:.4f}", font_size=26, color=C.EPS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.2, -0.5, 0])
+        side[3:].shift(DOWN * 0.2)
+        for r_ in side:
+            if r_.width > 6.4:
+                r_.width = 6.4
+        head = label(r"The norm of a functional: \ slide its level line out until it last touches the ball",
+                     font_size=30).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "<bookmark mark='a'/> How big is a functional on L p? Start in the plane with the three-norm. The "
+            "functional zero point eight x one plus a half x two has level lines. <bookmark mark='b'/> Slide one "
+            "outward until it last touches the unit ball. <bookmark mark='c'/> The value there is the norm of the "
+            "functional, and it's the three-halves norm of the vector g. The exponent flips to the conjugate one, q. "
+            "The touching point comes from Hölder's equality case. <bookmark mark='d'/> In eight dimensions: twenty "
+            "thousand random unit vectors never beat the q-norm of g, and the extremal vector hits it exactly."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), Create(ax), FadeIn(ball), FadeIn(b_l), FadeIn(side[0]))
+            self.play(FadeIn(lv), FadeIn(lv_l))
+            vo.wait_until("b")
+            self.play(cT.animate.set_value(nq), run_time=3.0)
+            vo.wait_until("c")
+            self.play(FadeIn(xd, scale=2), FadeIn(x_l), FadeIn(side[1]))
+            self.play(FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3:]))
+        for m in (lv, lv_l):
+            m.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def theorem(self):
+        thm = VGroup(
+            label(r"\textbf{RCA 6.16} \ $1 \le p < \infty$, \ $\mu$ $\sigma$-finite, \ $\Phi$ a bounded linear functional "
+                  r"on $L^p(\mu)$:", font_size=26),
+            MathTex(r"\Phi(f) = \int f g\,d\mu \ \text{ for a unique } g \in L^q(\mu), \qquad \|\Phi\| = \|g\|_q",
+                    font_size=32, color=C.EPS),
+        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
+        pm = ProofMap([r"$\lambda(E) = \Phi(\mathbf 1_E)$ \ is a complex measure",
+                       r"$\mu(E) = 0 \Rightarrow \lambda(E) = 0$: \ $\lambda \ll \mu$",
+                       r"Radon--Nikodym: \ $d\lambda = g\,d\mu$",
+                       r"$\Phi(f) = \int fg$ \ for simple $f$, \ then all $f$; \ $\|g\|_q = \|\Phi\|$"],
+                      font_size=20, width=5.2, buff=0.22, direction=DOWN).move_to([-3.2, -1.2, 0])
+        notes = VGroup(
+            label(r"step 1 needs $p < \infty$:", font_size=24),
+            MathTex(r"E_n \nearrow E \ \Rightarrow \ \|\mathbf 1_E - \mathbf 1_{E_n}\|_p = \mu(E \setminus E_n)^{1/p} \to 0",
+                    font_size=26),
+            label(r"so $\Phi(\mathbf 1_E)$ is countably additive", font_size=24, color=GREY_A),
+            label(r"in $L^\infty$ that norm stays $1$: \ the step fails,", font_size=24, color=C.PATHOLOGY),
+            label(r"and $(L^\infty)^*$ is bigger than $L^1$ \ (Part 8)", font_size=24, color=C.PATHOLOGY),
+            label(r"$p = 2$: \ $q = 2$, \ chapter 7 again", font_size=24, color=C.INNER),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -1.1, 0])
+        with self.voiceover(
+            "<bookmark mark='a'/> The theorem: for finite p, every bounded functional on L p is integration against "
+            "a function g in L q, and the norms match. <bookmark mark='b'/> The proof turns the functional into a "
+            "measure. Feed it indicator functions of sets: that defines lambda of E. <bookmark mark='c'/> Lambda "
+            "vanishes on null sets, <bookmark mark='d'/> so Radon-Nikodym gives a density g. "
+            "<bookmark mark='e'/> Then phi of f is the integral of f g, first for simple functions, then for all. "
+            "<bookmark mark='f'/> Countable additivity in step one is where p must be finite: the indicators of an "
+            "increasing sequence of sets converge in L p, but not in L infinity. The dual of L infinity is bigger "
+            "than L one, a story for Part 8."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(thm))
+            vo.wait_until("b")
+            self.play(FadeIn(pm))
+            self.play(*pm.light(0))
+            vo.wait_until("c")
+            self.play(*pm.light(1))
+            vo.wait_until("d")
+            self.play(*pm.light(2))
+            vo.wait_until("e")
+            self.play(*pm.light(3))
+            self.play(*pm.done())
+            vo.wait_until("f")
+            self.play(FadeIn(notes[:3]))
+            self.play(FadeIn(notes[3:5]))
+            self.play(FadeIn(notes[5]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def probe(self):
+        d = load("probe")
+        a, rs, D, wa = d["a"], d["rs"], d["D"], d["wa"]
+        ax = plain_axes([0, 1, 0.25], [0, 4, 1], 6.6, 3.8, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.7, -0.55, 0])
+        cols = [C.SEQ, C.APPROX, C.EPS]
+        curves = [runs(ax, a, D[i], cols[i], 3) for i in range(len(rs))]
+        tops = [float(D[i].max()) for i in range(len(rs))]
+        labels_ = [MathTex(rf"r = {r_}: \ \text{{peak }} {t_:.1f}", font_size=26, color=cols[i]).next_to(ax, DOWN, buff=0.15)
+                   for i, (r_, t_) in enumerate(zip(rs, tops))]
+        gw = polyline(ax, a, wa, color=C.MEASURE, stroke_width=5).set_stroke(opacity=0.5)
+        atom = VGroup(Arrow(ax.c2p(0.3, 1.3), ax.c2p(0.3, 4.0), buff=0, color=C.PATHOLOGY, stroke_width=5,
+                            tip_length=0.2),
+                      MathTex(r"0.5\,\delta_{0.3}", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.3, 3.6), LEFT,
+                                                                                         buff=0.15))
+        w_l = MathTex(r"w(x) = 1 + \tfrac12 \sin 2\pi x", font_size=26, color=C.MEASURE).next_to(ax.c2p(0.62, 1.55),
+                                                                                              UR, buff=0.05)
+        side = VGroup(
+            MathTex(r"\Phi(f) = \tfrac12 f(0.3) + \int_0^1 f\,w", font_size=30),
+            label(r"probe: \ a tent $\varphi_{a,r}$ of half-width $r$ at $a$", font_size=24, color=GREY_A),
+            MathTex(r"\frac{\Phi(\varphi_{a, r})}{\int \varphi_{a, r}} \ \text{ for every } a", font_size=28),
+            label(r"away from $0.3$: \ $\to w(a)$ \ (to $2 \times 10^{-3}$)", font_size=24, color=C.MEASURE),
+            label(r"at $0.3$: \ a spike of height $\approx \frac{0.5}{r}$: \ an atom", font_size=24, color=C.PATHOLOGY),
+            label(r"\textbf{RCA 6.19} \ (Riesz) \ $C_0(X)^* = M(X)$:", font_size=24, color=C.EPS),
+            MathTex(r"\Phi(f) = \int f\,d\mu, \quad \|\Phi\| = |\mu|(X) = 0.5 + 1 = 1.5", font_size=26, color=C.EPS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.3, -0.4, 0])
+        for r_ in side:
+            if r_.width > 4.9:
+                r_.width = 4.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.4, -0.4, 0])
+        xf = np.linspace(0, 1, 100001)
+        wf = 1 + 0.5 * np.sin(2 * math.pi * xf)
+        assert wf.min() > 0 and abs(float(np.sum((wf[1:] + wf[:-1]) / 2) * (xf[1] - xf[0])) - 1) < 1e-9
+        far = np.abs(a - 0.3) > 0.12
+        assert np.abs(D[-1][far] - wa[far]).max() < 2e-3 and tops[-1] > 40
+        head = label(r"A functional on $C[0, 1]$, \ probed with narrowing bumps, \ reveals a measure", font_size=32).to_edge(
+            UP, buff=0.25)
+        with self.voiceover(
+            "<bookmark mark='a'/> On the continuous functions with the sup norm, functionals are something else. "
+            "Here's one: half the value at 0.3, plus the integral of f against a weight w. Pretend we can only "
+            "evaluate it. <bookmark mark='b'/> Probe it with a narrow tent at each point a, divided by the tent's "
+            "area. <bookmark mark='c'/> As the tents narrow, the readings converge to the weight w, except at 0.3, "
+            "where a spike grows like one over r: an atom of mass one half. <bookmark mark='d'/> That's the Riesz "
+            "representation theorem: every bounded functional on the continuous functions is integration against a "
+            "complex measure, and its norm is the total variation, here one and a half. The dual of C is a space of "
+            "measures."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), Create(ax), FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[1:3]))
+            self.play(Create(curves[0]), FadeIn(labels_[0]), run_time=1.5)
+            vo.wait_until("c")
+            for i in (1, 2):
+                self.play(curves[i - 1].animate.set_stroke(opacity=0.3), Create(curves[i]),
+                          FadeTransform(labels_[i - 1], labels_[i]), run_time=1.3)
+            self.play(Create(gw), FadeIn(w_l), FadeIn(side[3]))
+            self.play(GrowArrow(atom[0]), FadeIn(atom[1]), FadeIn(side[4]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[5:]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def dictionary(self):
+        card = dictionary_card(r"the space", r"its bounded linear functionals", [
+            (r"$\R^n$", r"vectors: \ $x \mapsto x \cdot y$"),
+            (r"a Hilbert space $H$", r"vectors: \ $\langle \cdot, y\rangle$ \ (ch.~7)"),
+            (r"$L^p(\mu)$, \ $1 \le p < \infty$", r"functions in $L^q$: \ $\int f g\,d\mu$"),
+            (r"$C_0(X)$", r"complex measures: \ $\int f\,d\mu$"),
+            (r"$L^\infty$", r"more than $L^1$ \ (Part 8)"),
+        ], font_size=28)
+        card.move_to(DOWN * 0.3)
+        head = label(r"The dictionary: \ a functional is a vector, \ a function, \ or a measure", font_size=34).to_edge(UP,
+                                                                                                                  buff=0.35)
+        with self.voiceover(
+            "<bookmark mark='a'/> So the dictionary grows a column. In the plane and in Hilbert space, a functional "
+            "is a vector. <bookmark mark='b'/> On L p, it's a function in the conjugate space. On the continuous "
+            "functions, it's a measure. <bookmark mark='c'/> And on L infinity, something stranger, which needs the "
+            "Hahn-Banach theorem."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(FadeIn(head), FadeIn(card.titles))
+            for i in range(2):
+                self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
+            vo.wait_until("b")
+            for i in range(2, 4):
+                self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
+            vo.wait_until("c")
+            self.play(FadeIn(card.rows[4]), FadeIn(card.arrows[4]))
+        self.wait(0.4)
+        self.clear_scene()

@@ -33,10 +33,12 @@ class LinearMaps(VoiceoverScene):
     def grid(self):
         d = load("linmaps")
         A = d["A"]
-        ax = square_axes([-3.4, 3.4, 1], [-2.3, 2.3, 1], 1.0).move_to([-2.6, -0.55, 0])
+        ax = square_axes([-4.8, 4.8, 1], [-3.0, 3.0, 1], 0.72).move_to([-2.9, -0.55, 0])
         ax.set_opacity(0.6)
-        base = mapped_grid(ax, lambda P: P, (-3, 3), (-2, 2), n=7, color=GREY_D, stroke_width=1.2)
-        img = mapped_grid(ax, lambda P: P @ A.T, (-3, 3), (-2, 2), n=7, color=C.OPERATOR, stroke_width=2.0)
+        base = mapped_grid(ax, lambda P: P, (-2, 2), (-1.5, 1.5), n=9, color=GREY_D, stroke_width=1.2)
+        img = mapped_grid(ax, lambda P: P @ A.T, (-2, 2), (-1.5, 1.5), n=9, color=C.OPERATOR, stroke_width=2.0)
+        corners = np.array([[2, 1.5], [-2, 1.5], [2, -1.5], [-2, -1.5]]) @ A.T
+        assert np.all(np.abs(corners[:, 0]) <= 4.8) and np.all(np.abs(corners[:, 1]) <= 3.0)
         e1 = Arrow(ax.c2p(0, 0), ax.c2p(1, 0), buff=0, color=C.SEQ, stroke_width=5, tip_length=0.18)
         e2 = Arrow(ax.c2p(0, 0), ax.c2p(0, 1), buff=0, color=C.APPROX, stroke_width=5, tip_length=0.18)
         Ae1 = Arrow(ax.c2p(0, 0), ax.c2p(*A[:, 0]), buff=0, color=C.SEQ, stroke_width=5, tip_length=0.18)
@@ -90,6 +92,15 @@ class LinearMaps(VoiceoverScene):
                                 tip_length=0.18))
 
         vv = always_redraw(vecs)
+        E = ellipse_pts(A, 721)
+
+        def trace():
+            k = int(np.clip(tT.get_value() / (2 * math.pi), 0, 1) * 720)
+            if k < 2:
+                return VMobject()
+            return VMobject(color=C.OPERATOR, stroke_width=3.5).set_points_as_corners([ax.c2p(*p) for p in E[:k + 1]])
+
+        tr = always_redraw(trace)
         rd = always_redraw(lambda: MathTex(
             rf"|Ax| = {np.linalg.norm(A @ np.array([math.cos(tT.get_value()), math.sin(tT.get_value())])):.3f}",
             font_size=32, color=C.OPERATOR).move_to([3.0, 2.0, 0]))
@@ -128,15 +139,18 @@ class LinearMaps(VoiceoverScene):
             self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("b")
             self.play(FadeIn(vv), FadeIn(rd))
+            self.add(tr)
+            self.play(tT.animate.set_value(2 * math.pi), run_time=6.0, rate_func=linear)
+            tr.clear_updaters()
+            self.remove(tr)
             self.add(ell)
-            self.play(Create(ell), tT.animate.set_value(2 * math.pi), run_time=6.0, rate_func=linear)
             vo.wait_until("c")
             self.play(tT.animate.set_value(2 * math.pi + (t_max % math.pi)), run_time=1.5)
             self.play(Create(axes_), FadeIn(side[2]), FadeIn(side[3:5]))
             vo.wait_until("d")
             self.play(FadeIn(side[5]))
             self.play(FadeIn(side[6:]))
-        for m in (vv, rd):
+        for m in (vv, rd, tr):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -238,6 +252,10 @@ class LinearMaps(VoiceoverScene):
                        label(r"runs spectral theory", font_size=24, color=GREY_B),
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.4, -0.4, 0])
         assert np.all(np.diff(errs) < 0)
+        scalar = VGroup(label(r"the scalar version:", font_size=24, color=GREY_A),
+                        MathTex(r"\frac{1}{1 - q} = 1 + q + q^2 + \cdots, \quad |q| < 1", font_size=30),
+                        MathTex(r"B = A\big(I - A^{-1}(A - B)\big)", font_size=30, color=C.OPERATOR)
+                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, 0.9, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The proof is a geometric series. Write B as A times the identity minus a small map; "
             "then B inverse is the sum of the powers of that small map, times A inverse, just as one over one minus q "
@@ -245,12 +263,12 @@ class LinearMaps(VoiceoverScene):
             "close in on B inverse's ellipse, <bookmark mark='c'/> with the error shrinking geometrically. "
             "<bookmark mark='d'/> This little series comes back in Part 10, where it runs the theory of the spectrum."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), Create(target), FadeIn(tl))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1]), FadeIn(scalar[:2]))
+            self.play(FadeIn(scalar[2]))
             vo.wait_until("b")
-            self.play(Create(target), FadeIn(tl))
-            self.play(Create(parts[0]), FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(FadeOut(scalar), Create(parts[0]), FadeIn(tab[0]), FadeIn(tab[1]))
             cur = parts[0]
             for k in range(1, 6):
                 self.play(cur.animate.set_stroke(opacity=0.3, width=1.5), Create(parts[k]), FadeIn(tab[k + 1]),

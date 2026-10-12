@@ -98,6 +98,12 @@ class ArzelaAscoli(VoiceoverScene):
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         foot = label(r"actual indices, from 400{,}000 random 1-Lipschitz functions; \ `converges' = a shrinking bin",
                      font_size=20, color=GREY_B).to_corner(UR, buff=0.2)
+        dl_ = NumberLine(x_range=[0, 1, 0.25], length=8.0, include_numbers=True, font_size=20,
+                         decimal_number_config={"num_decimal_places": 2}).move_to([-0.6, 2.6, 0])
+        dyad = VGroup(*[VGroup(Dot(dl_.n2p(float(p_)), radius=0.07, color=C.EPS),
+                               MathTex(rf"p_{{{k + 1}}}", font_size=22, color=C.EPS).next_to(dl_.n2p(float(p_)), UP,
+                                                                                         buff=0.12))
+                        for k, p_ in enumerate(pts)])
         with self.voiceover(
             "<bookmark mark='a'/> Step one. List the rational points, or any countable dense set: here, the dyadic "
             "points one half, one quarter, three quarters, and so on. <bookmark mark='b'/> The values at the first "
@@ -109,7 +115,8 @@ class ArzelaAscoli(VoiceoverScene):
             "a computed family."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(foot))
+            self.play(FadeIn(foot), Create(dl_))
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.4) for d_ in dyad], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("b")
             for i in range(rows_n):
                 self.play(FadeIn(rlabs[i]), LaggedStart(*[FadeIn(t) for t in grid[i]], lag_ratio=0.05), FadeIn(plabs[i]),
