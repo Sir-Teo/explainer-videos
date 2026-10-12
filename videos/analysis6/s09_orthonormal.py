@@ -110,7 +110,7 @@ class Orthonormal(VoiceoverScene):
         pl = [MathTex(rf"s_N = \sum_{{n < {M}}} \langle f, e_n\rangle e_n", font_size=24, color=C.EPS).next_to(
             ax.c2p(-1, 1.3), RIGHT, buff=0.05) for M in Ms]  # the empty upper-left corner (sign x = -1 there)
         # the bar: the squares of the coefficients stacked, against ||f||^2 = 2
-        W, x0, y0 = 11.0, -5.5, -2.55
+        W, x0, y0 = 11.0, -5.5, -2.95
         frame = Rectangle(width=W, height=0.5, stroke_color=WHITE, stroke_width=2).move_to([x0 + W / 2, y0, 0])
         f_l = MathTex(r"\|f\|^2 = 2", font_size=26).next_to(frame, RIGHT, buff=0.1).shift(LEFT * 0.05)
         segs = VGroup()
