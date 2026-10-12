@@ -106,6 +106,32 @@ class InverseFunction(VoiceoverScene):
                   color=GREY_A),
             MathTex(r"\varphi_y'(x) = I - A^{-1} f'(x) \approx 0 \text{ near } a", font_size=32),
         ).arrange(DOWN, buff=0.2).next_to(pm, DOWN, buff=0.5)
+        # the statement as a picture: a disk U around a, its image V around b, f one way and g back
+        a = np.array([0.0, 0.6])
+        r = 0.35
+        th = np.linspace(0, 2 * math.pi, 241)
+        circ = a + r * np.c_[np.cos(th), np.sin(th)]
+        dax2 = square_axes([-0.7, 0.7, 0.5], [-0.1, 1.3, 0.5], 1.9).move_to([-3.2, -1.15, 0])
+        iax2 = square_axes([0.2, 1.6, 0.5], [0.0, 1.4, 0.5], 1.9).move_to([3.2, -1.15, 0])
+        U = VMobject(color=C.OPEN_SET, stroke_width=3, fill_color=C.OPEN_SET, fill_opacity=0.15).set_points_as_corners(
+            [dax2.c2p(*q) for q in circ])
+        V = VMobject(color=C.OPEN_SET, stroke_width=3, fill_color=C.OPEN_SET, fill_opacity=0.15).set_points_as_corners(
+            [iax2.c2p(*q) for q in F(circ)])
+        sq = (a[0] - 0.22, a[0] + 0.22), (a[1] - 0.22, a[1] + 0.22)
+        g1 = mapped_grid(dax2, lambda P: P, *sq, n=7, color=GREY_B, stroke_width=1.2)
+        g2 = mapped_grid(iax2, F, *sq, n=7, color=C.OPERATOR, stroke_width=1.4)
+        b = F(a)
+        dots = VGroup(Dot(dax2.c2p(*a), radius=0.06, color=C.EPS), Dot(iax2.c2p(*b), radius=0.06, color=C.EPS))
+        dl = VGroup(MathTex(r"a", font_size=26, color=C.EPS).next_to(dots[0], DL, buff=0.05),
+                    MathTex(r"b = f(a)", font_size=26, color=C.EPS).next_to(dots[1], DL, buff=0.05),
+                    MathTex(r"U", font_size=30, color=C.OPEN_SET).next_to(U, UP, buff=0.08),
+                    MathTex(r"V = f(U)", font_size=30, color=C.OPEN_SET).next_to(V, UP, buff=0.08))
+        fa = Arrow([-1.2, -0.75, 0], [1.2, -0.75, 0], buff=0, color=C.OPERATOR, stroke_width=4)
+        ga = Arrow([1.2, -1.55, 0], [-1.2, -1.55, 0], buff=0, color=C.EPS, stroke_width=4)
+        fal = MathTex(r"f", font_size=30, color=C.OPERATOR).next_to(fa, UP, buff=0.08)
+        gal = MathTex(r"g = f^{-1}", font_size=30, color=C.EPS).next_to(ga, DOWN, buff=0.08)
+        assert abs(np.linalg.det(J_exp(a)) - math.exp(2 * a[0])) < 1e-12
+        pic = VGroup(dax2, iax2, U, V, g1, g2, dots, dl, fa, ga, fal, gal)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem, Rudin 9.24: if f is continuously differentiable near a and its "
             "derivative at a is invertible, then f maps some neighborhood of a one-to-one onto a neighborhood of f of "
@@ -118,11 +144,12 @@ class InverseFunction(VoiceoverScene):
             "solution, and only one."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm[0]))
-            self.play(FadeIn(thm[1]))
-            self.play(FadeIn(thm[2]))
+            self.play(FadeIn(thm[0]), Create(dax2), Create(U), Create(g1), FadeIn(dots[0]), FadeIn(dl[0]), FadeIn(dl[2]))
+            self.play(FadeIn(thm[1]), GrowArrow(fa), FadeIn(fal), Create(iax2), TransformFromCopy(U, V),
+                      TransformFromCopy(g1, g2), FadeIn(dots[1]), FadeIn(dl[1]), FadeIn(dl[3]), run_time=2.0)
+            self.play(FadeIn(thm[2]), GrowArrow(ga), FadeIn(gal))
             vo.wait_until("b")
-            self.play(FadeIn(pm))
+            self.play(FadeOut(pic), FadeIn(pm))
             vo.wait_until("c")
             self.play(*pm.light(0), FadeIn(idea[0]), FadeIn(idea[1]))
             self.play(FadeIn(idea[2]))

@@ -195,12 +195,12 @@ class Convexity(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def amgm(self):
-        a = np.array([1.0, 4.0, 16.0])
+        a = np.array([1.0, 8.0, 27.0])
         L = np.log(a)
-        ax = plain_axes([0, 3.0, 0.5], [0, 17, 4], 5.6, 4.6, numbers=True, font_size=18,
+        ax = plain_axes([0, 3.5, 0.5], [0, 29, 4], 5.6, 4.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.3, -0.6, 0])
-        x = np.linspace(0, 2.85, 400)
+        x = np.linspace(0, 3.36, 400)
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         pts = VGroup(*[Dot(ax.c2p(z, v), radius=0.08, color=C.MEASURE) for z, v in zip(L, a)])
         plabels = VGroup(*[MathTex(rf"(\log {int(v)},\ {int(v)})", font_size=22, color=C.MEASURE).next_to(
@@ -209,11 +209,12 @@ class Convexity(VoiceoverScene):
                       fill_color=GREY_C, fill_opacity=0.12)
         mx, am = float(L.mean()), float(a.mean())
         gm = math.exp(mx)
-        assert abs(gm - 4.0) < 1e-12 and abs(am - 7.0) < 1e-12
+        assert abs(gm - 6.0) < 1e-12 and abs(am - 12.0) < 1e-12
         top, bot = Dot(ax.c2p(mx, am), radius=0.09, color=C.EPS), Dot(ax.c2p(mx, gm), radius=0.08, color=C.DELTA)
         gap = Line(ax.c2p(mx, gm), ax.c2p(mx, am), color=C.PATHOLOGY, stroke_width=5)
-        tl = MathTex(r"\tfrac{1 + 4 + 16}{3} = 7", font_size=28, color=C.EPS).next_to(top, LEFT, buff=0.2)
-        bl = MathTex(r"(1 \cdot 4 \cdot 16)^{1/3} = 4", font_size=28, color=C.DELTA).next_to(bot, RIGHT, buff=0.2)
+        tl = MathTex(r"\tfrac{1 + 8 + 27}{3} = 12", font_size=28, color=C.EPS).next_to(top, LEFT, buff=0.2)
+        bl = MathTex(r"(1 \cdot 8 \cdot 27)^{1/3} = 6", font_size=28, color=C.DELTA).next_to(bot, RIGHT, buff=0.2).shift(
+            DOWN * 0.25)
         side = VGroup(
             label(r"$\varphi = \exp$, \ $x_i = \log a_i$, \ equal weights:", font_size=26),
             MathTex(r"(a_1 a_2 \cdots a_n)^{1/n} \le \frac{a_1 + a_2 + \cdots + a_n}{n}", font_size=32, color=C.EPS),
@@ -228,9 +229,9 @@ class Convexity(VoiceoverScene):
         assert np.all(np.prod(v, axis=1) ** (1 / 5) <= v.mean(axis=1) + 1e-12)
         head = label(r"A corollary: \ the AM--GM inequality", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> One corollary you know. Put the points log one, log four and log sixteen on the "
-            "exponential curve, with equal weights. <bookmark mark='b'/> The center of mass is at height seven, the "
-            "average of one, four and sixteen. The curve below it is at height four, the cube root of their "
+            "<bookmark mark='a'/> One corollary you know. Put the points log one, log eight and log twenty-seven on the "
+            "exponential curve, with equal weights. <bookmark mark='b'/> The center of mass is at height twelve, the "
+            "average of one, eight and twenty-seven. The curve below it is at height six, the cube root of their "
             "product. <bookmark mark='c'/> The geometric mean is at most the arithmetic mean, for any positive "
             "numbers. <bookmark mark='d'/> With unequal weights, one over p and one over q, the same line says: e to "
             "the s over p plus t over q is at most e to the s over p, plus e to the t over q. That single line is "
