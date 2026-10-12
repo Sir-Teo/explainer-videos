@@ -92,7 +92,11 @@ class Differentiation(VoiceoverScene):
             label(r"\textbf{RCA 7.7} \ for $f \in L^1(\R^k)$, \ almost every $x$ is a Lebesgue point:", font_size=24),
             MathTex(r"\lim_{r \to 0} \frac{1}{m(B_r)} \int_{B_r(x)} |f - f(x)|\,dm = 0, \quad \text{so} \quad "
                     r"\frac{d}{dx}\int_a^x f = f(x) \ \text{a.e.}", font_size=28, color=C.EPS),
-        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.15)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        if thm.width > 5.6:
+            thm.width = 5.6
+        thm.to_edge(DOWN, buff=0.2)  # bottom right: below the axes' numbers, right of the readouts
+        thm.shift((6.9 - thm.get_right()[0]) * RIGHT)
         head = label(r"Average $f$ over a shrinking interval: \ do you get $f(x)$ back?", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Average a function over a small interval around x. As the interval shrinks, do "
@@ -151,10 +155,13 @@ class Differentiation(VoiceoverScene):
         tab = VGroup(MathTex(r"\lambda", r"\quad m\{Mf > \lambda\}", r"\quad 3\|f\|_1/\lambda", font_size=26, color=GREY_A))
         for lam, lv_ in zip(lams, level):
             tab.add(MathTex(f"{lam}", rf"\quad {lv_:.2f}", rf"\quad {3 * 0.2 / lam:.2f}", font_size=26, color=C.APPROX))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.7, 0.4, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        widths = [max(r_[j].width for r_ in tab) for j in range(3)]
+        lefts = np.concatenate([[0], np.cumsum(np.array(widths) + 0.25)[:-1]])
+        for r_ in tab:  # a real grid
+            for j in range(3):
+                r_[j].set_x(lefts[j] + r_[j].width / 2)
+        tab.move_to([4.7, 0.4, 0])
         assert np.all(level <= 3 * 0.2 / lams)
         # check the level sets against the computed Mf
         for lam, lv_ in zip(lams, level):
@@ -193,7 +200,7 @@ class Differentiation(VoiceoverScene):
     def vitali(self):
         d = load("lebdiff")
         c, L, chosen, m_union, m_chosen = d["c"], d["L"], d["chosen"], float(d["m_union"]), float(d["m_chosen"])
-        x0, W = -6.2, 8.4
+        x0, W = -5.4, 7.2  # room for the 3x enlargements (they reach -0.11 and 1.11) and the labels
         X = lambda t: x0 + W * t  # noqa: E731
         order = np.argsort(c - L / 2)
         rows_end: list[float] = []
@@ -231,11 +238,11 @@ class Differentiation(VoiceoverScene):
                 start = None
         ubar = VGroup(*[Line([X(a), ybase - 0.6, 0], [X(b), ybase - 0.6, 0], color=C.MEASURE, stroke_width=8)
                         for a, b in runs_])
-        lab = VGroup(label(r"all 60 intervals", font_size=22, color=GREY_B).next_to([X(1.0), top, 0], RIGHT, buff=0.2),
+        lab = VGroup(label(r"all 60 intervals", font_size=22, color=GREY_B).next_to([X(1.13), top, 0], RIGHT, buff=0.2),
                      label(r"chosen: \ greedy, \ longest first, \ disjoint", font_size=22, color=C.EPS),
-                     label(r"chosen, \ enlarged $3\times$", font_size=22, color=C.APPROX).next_to([X(1.0), ybase - 0.25, 0],
+                     label(r"chosen, \ enlarged $3\times$", font_size=22, color=C.APPROX).next_to([X(1.13), ybase - 0.25, 0],
                                                                                               RIGHT, buff=0.2),
-                     label(r"their union", font_size=22, color=C.MEASURE).next_to([X(1.0), ybase - 0.6, 0], RIGHT,
+                     label(r"their union", font_size=22, color=C.MEASURE).next_to([X(1.13), ybase - 0.6, 0], RIGHT,
                                                                                   buff=0.2))
         lab[1].next_to(lab[0], DOWN, buff=0.1).align_to(lab[0], LEFT)
         nums = VGroup(
