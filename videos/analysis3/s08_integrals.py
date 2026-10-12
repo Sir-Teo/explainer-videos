@@ -151,8 +151,9 @@ class IntegralsDerivatives(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm), Create(ax), Create(bx))
+            self.play(Create(gf), FadeIn(fl), FadeIn(n_l))
             vo.wait_until("b")
-            self.play(Create(gf), FadeIn(fl), FadeIn(n_l), FadeIn(facts[0]))
+            self.play(FadeIn(facts[0]))
             vo.wait_until("c")
             self.play(Create(gd), FadeIn(dl), FadeIn(facts[1]))
             self.play(nT.animate.set_value(150), run_time=4.0, rate_func=rate_functions.ease_in_quad)
