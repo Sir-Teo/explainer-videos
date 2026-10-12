@@ -48,7 +48,7 @@ class Holder(VoiceoverScene):
                                              fill_opacity=0))
         a_l = MathTex(r"a", font_size=30, color=C.MEASURE).next_to(ax.c2p(a0, 0), DOWN, buff=0.35)
         b_l = always_redraw(lambda: MathTex(r"b", font_size=30, color=C.SEQ).next_to(ax.c2p(0, bT.get_value()), LEFT,
-                                                                                   buff=0.35))
+                                                                                   buff=0.75))  # clear of the ticks
 
         shown = ValueTracker(1)
 
@@ -178,8 +178,8 @@ class Holder(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def minkowski(self):
-        ax = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.75).move_to([-3.6, -0.75, 0])
-        bx = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.75).move_to([1.6, -0.75, 0])
+        ax = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.6).move_to([-3.6, -0.45, 0])
+        bx = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.6).move_to([1.6, -0.45, 0])
         b3 = p_ball(ax, 3.0, C.DIST)
         b05 = p_ball(bx, 0.5, C.PATHOLOGY)
         u = np.array([1.0, 0.35]) / pnorm([1.0, 0.35], 3)
