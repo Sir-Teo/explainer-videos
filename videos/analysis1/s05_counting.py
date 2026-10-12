@@ -8,6 +8,7 @@ from explainer.analysis import *  # noqa: F403
 from videos.analysis1.common import load
 
 MONO = "DejaVu Sans Mono"
+SQRT2_ = 2 ** 0.5
 
 
 class Counting(VoiceoverScene):
@@ -273,17 +274,52 @@ class Counting(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def reals(self):
-        m = MathTex(r"s = (s_1, s_2, s_3, \ldots) \;\longmapsto\; x = \sum_{k=1}^{\infty} \frac{2 s_k}{3^k}", font_size=42)
-        m.to_edge(UP, buff=0.7)
-        ex = MathTex(r"(1,0,0,1,1,\ldots) \;\mapsto\; 0.20022\ldots_{\,3}", font_size=36, color=C.SEQ).next_to(m, DOWN, buff=0.4)
+        m = MathTex(r"s = (s_1, s_2, s_3, \ldots) \;\longmapsto\; x = \sum_{k=1}^{\infty} \frac{2 s_k}{3^k}", font_size=38)
+        m.to_edge(UP, buff=0.3)
+        ex = MathTex(r"(1,0,0,1,1,\ldots) \;\mapsto\; 0.20022\ldots_{\,3}", font_size=32, color=C.SEQ).next_to(m, DOWN, buff=0.2)
         rows = [
             MathTex(r"|x - x'|", r"\ge", r"\frac{2}{3^n} - \sum_{k > n} \frac{2}{3^k}", font_size=38),
             MathTex(r"|x - x'|", r"\ge", r"\frac{2}{3^n} - \frac{1}{3^n} = \frac{1}{3^n} > 0", font_size=38),
         ]
         whys = [why(r"if $s$ and $s'$ first differ at place $n$"), why(r"so different sequences give different numbers")]
-        step = ladder(self, rows, whys, keep=2, top=0.6, buff=0.4, x=-1.6)
+        step = ladder(self, rows, whys, keep=2, top=-0.75, buff=0.3, x=-1.6)
         conc = label(r"So $[0,1]$, and therefore $\R$, is uncountable. \ (The image is the Cantor set: chapter 9.)",
-                     font_size=30, color=C.EPS).to_edge(DOWN, buff=0.6)
+                     font_size=28, color=C.EPS).to_edge(DOWN, buff=0.2)
+        # where the sequences land: digit 0 keeps the left third, digit 1 (written 2) the right third
+        X = lambda v: -5.5 + 11.0 * float(v)  # noqa: E731
+        lev_y = [1.3 - 0.36 * k for k in range(5)]
+
+        def level(k):
+            ivs = [(Fraction(0), Fraction(1))]
+            for _ in range(k):
+                ivs = [iv for a, b in ivs for iv in ((a, a + (b - a) / 3), (b - (b - a) / 3, b))]
+            return ivs
+
+        tree = VGroup(*[VGroup(*[Line([X(a), lev_y[k], 0], [X(b), lev_y[k], 0], color=GREY_C, stroke_width=5)
+                                 for a, b in level(k)]) for k in range(5)])
+
+        def path(digits, color):
+            a, b, g = Fraction(0), Fraction(1), VGroup()
+            for k, dgt in enumerate(digits):
+                a, b = (a, a + (b - a) / 3) if dgt == 0 else (b - (b - a) / 3, b)
+                g.add(Line([X(a), lev_y[k + 1], 0], [X(b), lev_y[k + 1], 0], color=color, stroke_width=8))
+            return g, a
+
+        s1, x1 = path((1, 0, 0, 1), C.SEQ)
+        s2, x2 = path((1, 1), C.APPROX)
+        land = Dot([X(Fraction(2, 3) + Fraction(2, 81) + Fraction(2, 243)), lev_y[4] - 0.22, 0], radius=0.06,
+                   color=C.SEQ)
+        gap_a, gap_b = Fraction(7, 9), Fraction(8, 9)  # s and s' first differ at place 2: a gap of 1/9 between
+        # drawn in the removed middle third of level 2, where nothing else is
+        gap = VGroup(Line([X(gap_a), lev_y[2], 0], [X(gap_b), lev_y[2], 0], color=C.EPS, stroke_width=3),
+                     MathTex(r"\ge \tfrac{1}{3^n}", font_size=24, color=C.EPS).next_to(
+                         [X((gap_a + gap_b) / 2), lev_y[2], 0], DOWN, buff=0.08))
+        slabs = VGroup(MathTex(r"s", font_size=26, color=C.SEQ).next_to(s1[-1], DOWN, buff=0.08),
+                       MathTex(r"s'", font_size=26, color=C.APPROX).next_to(s2[-1], RIGHT, buff=0.12))
+        ends = VGroup(MathTex(r"0", font_size=24, color=GREY_B).next_to([X(0), lev_y[0], 0], LEFT, buff=0.15),
+                      MathTex(r"1", font_size=24, color=GREY_B).next_to([X(1), lev_y[0], 0], RIGHT, buff=0.15))
+        assert gap_b - gap_a == Fraction(1, 9) and x1 == Fraction(56, 81) and x2 == Fraction(8, 9)
+        assert x1 <= Fraction(170, 243) <= x1 + Fraction(1, 81)  # the landing point lies in the last interval
         with self.voiceover(
             "It follows that the real numbers are uncountable. <bookmark mark='m'/> Turn each zero-one sequence into a "
             "real number by reading it as digits in base three, with the ones written as twos. <bookmark mark='e'/> We "
@@ -294,11 +330,15 @@ class Counting(VoiceoverScene):
             "different numbers, <bookmark mark='c'/> and the reals contain an uncountable set."
         ) as vo:
             self.play(Write(m))
+            self.play(LaggedStart(*[Create(t) for t in tree], lag_ratio=0.3), FadeIn(ends), run_time=2.0)
             vo.wait_until("e")
-            self.play(FadeIn(ex))
+            self.play(FadeIn(ex), LaggedStart(*[Create(x) for x in s1], lag_ratio=0.4), run_time=1.6)
+            self.play(FadeIn(land, scale=2), FadeIn(slabs[0]))
             vo.wait_until("a")
+            self.play(LaggedStart(*[Create(x) for x in s2], lag_ratio=0.4), FadeIn(slabs[1]), run_time=1.2)
             step(0)
             vo.wait_until("b")
+            self.play(Create(gap[0]), FadeIn(gap[1]))
             step(1)
             vo.wait_until("c")
             self.play(FadeIn(conc))
@@ -314,10 +354,45 @@ class Counting(VoiceoverScene):
             label(r"$\Rightarrow$ the algebraic numbers are countable \ (Cantor, 1874)", font_size=30, color=C.SEQ),
             label(r"$\Rightarrow$ almost every real number is \textbf{transcendental}", font_size=30, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(poly, DOWN, buff=0.6)
+        steps.next_to(poly, DOWN, buff=0.4)
+        # real roots in [-2.5, 2.5] of integer polynomials of degree <= 3 with coefficients in [-H, H], H = 1, 2, 3
+        Xr = lambda v: v * 2.4  # noqa: E731
+        y_ax = -1.55
+        axis_r = VGroup(Line([Xr(-2.5), y_ax, 0], [Xr(2.5), y_ax, 0], color=GREY_C, stroke_width=2),
+                        *[VGroup(Line([Xr(v), y_ax - 0.06, 0], [Xr(v), y_ax + 0.06, 0], color=GREY_C, stroke_width=2),
+                                 MathTex(str(v), font_size=22, color=GREY_B).next_to([Xr(v), y_ax - 0.06, 0], DOWN,
+                                                                                    buff=0.08))
+                          for v in (-2, -1, 0, 1, 2)])
+        from itertools import product
+        seen, layers = set(), []
+        for H in (1, 2, 3):
+            new_r = []
+            for deg in (1, 2, 3):
+                for co in product(range(-H, H + 1), repeat=deg + 1):
+                    if co[0] == 0 or max(map(abs, co)) != H and H > 1:
+                        continue
+                    for r in np.roots(co):
+                        if abs(r.imag) < 1e-9 and -2.5 <= r.real <= 2.5:
+                            key = round(float(r.real), 9)
+                            if key not in seen:
+                                seen.add(key)
+                                new_r.append(key)
+            layers.append(np.array(sorted(new_r)))
+        dust = VGroup()
+        for H, rs in zip((1, 2, 3), layers):
+            h = 0.95 / H
+            m_ = VMobject(stroke_color=C.SEQ, stroke_width=2.2 / H ** 0.5, stroke_opacity=0.9)
+            m_.set_points(segments_points(Xr(rs), np.full(len(rs), y_ax), Xr(rs), np.full(len(rs), y_ax + h)))
+            dust.add(m_)
+        r2 = VGroup(Line([Xr(SQRT2_), y_ax, 0], [Xr(SQRT2_), y_ax + 0.95 / 2, 0], color=C.EPS, stroke_width=4),
+                    MathTex(r"\sqrt2", font_size=26, color=C.EPS).next_to([Xr(SQRT2_), y_ax + 0.5, 0], UP, buff=0.06))
+        dl_ = label(r"real roots of $a_0x^3 + a_1x^2 + a_2x + a_3$, \ $|a_i| \le 1, 2, 3$: \ tick height $1/H$",
+                    font_size=22, color=GREY_B).next_to(axis_r, DOWN, buff=0.45)
+        assert round(SQRT2_, 9) in seen and sum(len(r) for r in layers) > 300
         hist = VGroup(
             label(r"first explicit transcendental: Liouville, 1844", font_size=26, color=GREY_A),
             label(r"$e$: Hermite, 1873 \qquad $\pi$: Lindemann, 1882", font_size=26, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.6)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "This has a startling consequence. <bookmark mark='p'/> A number is algebraic if it solves a polynomial "
             "equation with integer coefficients, like root two, which solves x squared minus two equals zero. "
@@ -327,10 +402,14 @@ class Counting(VoiceoverScene):
             "the reals are not countable, almost every real number is transcendental: not the root of any such "
             "polynomial."
         ) as vo:
-            self.play(Write(poly))
+            self.play(Write(poly), Create(axis_r))
+            vo.wait_until("p")
+            self.play(Create(r2[0]), FadeIn(r2[1]))
             for mk, s_ in zip("abcd", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s_, shift=RIGHT * 0.2))
+                if mk == "b":
+                    self.play(LaggedStart(*[Create(d_) for d_ in dust], lag_ratio=0.5), FadeIn(dl_), run_time=2.4)
         with self.voiceover(
             "And yet exhibiting even one is hard. <bookmark mark='l'/> The first explicit example came from Liouville in "
             "1844; e was proved transcendental in 1873, and pi only in 1882. The rationals are dense, yet countable: in "
