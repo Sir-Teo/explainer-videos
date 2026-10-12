@@ -109,10 +109,11 @@ class FourierSeries(VoiceoverScene):
             "otherwise. <bookmark mark='e'/> So the Fourier coefficient c n, the average of f times e to the minus "
             "i n x, is the coordinate of f along the n-th axis."
         ) as vo:
+            self.play(Create(ax), Create(bx))
             vo.wait_until("a")
-            self.play(Create(ax), Create(s2), Create(s3), FadeIn(lab))
+            self.play(Create(s2), Create(s3), FadeIn(lab))
             vo.wait_until("b")
-            self.play(Create(bx), FadeIn(pa), Create(pg), FadeIn(pl))
+            self.play(FadeIn(pa), Create(pg), FadeIn(pl))
             vo.wait_until("c")
             self.play(FadeOut(pa), FadeOut(pg), FadeOut(pl), FadeIn(qa), Create(qg), FadeIn(ql))
             vo.wait_until("d")
@@ -299,7 +300,7 @@ class FourierSeries(VoiceoverScene):
         for N, L_ in zip(Ns, leb):
             if N in (1, 5, 20, 100, 500):
                 tab.add(MathTex(rf"{int(N)}", rf"\quad {L_:.3f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.95, -0.85, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.5, -0.85, 0])
         asym = MathTex(r"\approx \tfrac{4}{\pi^2}\ln N + 1.27", font_size=28, color=C.FREQ).next_to(tab, DOWN, buff=0.25)
         notes = VGroup(label(r"signed area: \ always $2\pi$", font_size=22, color=GREY_A),
                        label(r"area of $|D_N|$: \ grows without bound", font_size=22, color=C.PATHOLOGY),
@@ -403,9 +404,9 @@ class FourierSeries(VoiceoverScene):
             "pi minus x, over two."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax))
             vo.wait_until("b")
-            self.play(Create(ax), Create(gg), FadeIn(gl))
+            self.play(Create(gg), FadeIn(gl))
             vo.wait_until("c")
             self.play(FadeIn(og), FadeIn(val))
             self.play(nT.animate.set_value(40), run_time=5.0, rate_func=linear)

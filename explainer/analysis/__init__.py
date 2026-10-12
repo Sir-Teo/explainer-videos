@@ -308,6 +308,8 @@ LEDGER_ROWS = {
         r"$\lim \int = \int \lim$ if uniform", r"in mean square; Gibbs at jumps"],
     4: [r"4", r"$\R^n$; $C[a, b]$ again", r"so contractions have fixed points", r"(as in Parts 1 and 3)",
         r"$\frac{d}{dt}\int = \int \frac{\partial}{\partial t}$", r"(unchanged)"],
+    5: [r"5", r"$(X, \mathfrak M, \mu)$", r"(Part 6: $L^1$ is complete)", r"regular: compact sets fill",
+        r"$\lim \int = \int \lim$ under a lid", r"term by term, by Fubini"],
 }
 
 

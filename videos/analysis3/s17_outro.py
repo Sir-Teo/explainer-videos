@@ -82,7 +82,7 @@ class Outro(VoiceoverScene):
             x, y = p
             return np.array([[1.0, 0.49 * np.cos(1.4 * y)], [0.49 * np.cos(1.4 * x), 1.0]])
 
-        oL, oR, u = np.array([-4.3, -0.6, 0]), np.array([1.0, -0.6, 0]), 0.95
+        oL, oR, u = np.array([-4.7, -0.6, 0]), np.array([0.5, -0.6, 0]), 0.95
 
         def toL(q):
             return oL + u * np.array([q[0], q[1], 0])
@@ -113,7 +113,11 @@ class Outro(VoiceoverScene):
                       label(r"implicit function theorems, \ and", font_size=24, color=GREY_A),
                       label(r"Picard's theorem: \ an ODE solved", font_size=24, color=GREY_A),
                       label(r"in the space $C[a, b]$ of this part", font_size=24, color=GREY_A),
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.3, -0.6, 0])
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        for r_ in side:
+            if r_.width > 3.4:
+                r_.width = 3.4
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.15, -0.6, 0])
         with self.voiceover(
             "Next time, in Part 4, calculus in many dimensions. <bookmark mark='a'/> A map of the plane bends a square "
             "grid. <bookmark mark='b'/> Up close, it acts like a linear map: a small square goes to almost a "
