@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
@@ -44,6 +46,22 @@ class RieszFischer(VoiceoverScene):
             if r_.width > 6.4:
                 r_.width = 6.4
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([-3.3, -0.6, 0])
+        # the picture: a fast subsequence as a walk whose steps halve, so its total length is finite
+        z = [np.zeros(2)]
+        for i in range(1, 11):
+            z.append(z[-1] + 2.2 * 0.5**i * np.array([math.cos(0.95 * i + 0.3), math.sin(0.95 * i + 0.3)]))
+        z = np.array(z)
+        org = np.array([1.2, -3.3, 0])
+        P = [org + np.array([p_[0], p_[1], 0]) * 1.5 for p_ in z]
+        walk = VGroup(*[Line(P[i], P[i + 1], color=C.SEQ, stroke_width=3) for i in range(10)])
+        wdots = VGroup(*[Dot(q, radius=0.05, color=C.SEQ) for q in P[:-1]])
+        lim = Star(n=5, outer_radius=0.12, color=C.EPS, fill_opacity=1).move_to(P[-1])
+        wl = VGroup(MathTex(r"f_{n_1}", font_size=22, color=C.SEQ).next_to(P[0], DOWN, buff=0.08),
+                    MathTex(r"f", font_size=24, color=C.EPS).next_to(P[-1], UR, buff=0.06))
+        seglen = np.linalg.norm(np.diff(z, axis=0), axis=1)
+        assert np.allclose(seglen, 2.2 * 0.5 ** np.arange(1, 11)) and seglen.sum() < 2.2
+        wt = label(r"steps $< 2^{-i}$: \ total length $< 1$, \ so the walk has an end", font_size=20,
+                   color=GREY_A).next_to(walk, RIGHT, buff=0.4).shift(UP * 0.2)
         with self.voiceover(
             "<bookmark mark='a'/> Riesz-Fischer: L p is complete, for every p from one to infinity. Here's the plan "
             "of Rudin's proof. <bookmark mark='b'/> Start with a Cauchy sequence. Pick a subsequence so fast that the "
@@ -60,6 +78,9 @@ class RieszFischer(VoiceoverScene):
             self.play(FadeIn(pm))
             vo.wait_until("b")
             self.play(*pm.light(0), FadeIn(head[1]))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(d_), Create(w_)) for d_, w_ in zip(wdots, walk)], lag_ratio=0.5),
+                      FadeIn(wl[0]), run_time=2.5)
+            self.play(FadeIn(lim), FadeIn(wl[1]), FadeIn(wt))
             vo.wait_until("c")
             self.play(*pm.light(1), FadeIn(steps[:3]))
             vo.wait_until("d")
@@ -107,8 +128,8 @@ class RieszFischer(VoiceoverScene):
                                fill_color=cols[min(k, K - 1)], fill_opacity=0.85).move_to([bx0 + acc + w / 2, by0, 0]))
             acc += w
         frame = Rectangle(width=W, height=0.42, stroke_color=GREY_B, stroke_width=1.5).move_to([bx0 + W / 2, by0, 0])
-        b_l = MathTex(r"\|r_{2n} - r_n\|_1 = \tfrac{1}{8n}: \ " + r",\ ".join(f"{v:.4f}" for v in inc[:4]) + r",\ \ldots",
-                      font_size=26, color=C.MEASURE).next_to(frame, UP, buff=0.15).align_to(frame, LEFT)
+        b_l = MathTex(r"\|r_{2n} - r_n\|_1 = \tfrac{1}{8n}: \ " + r",\ ".join(f"{v:.4f}" for v in inc[:3]) + r",\ \ldots",
+                      font_size=24, color=C.MEASURE).next_to(frame, UP, buff=0.15).align_to(frame, LEFT)
         tot = MathTex(rf"\sum = {inc.sum():.4f} < \tfrac14", font_size=28, color=C.EPS).next_to(frame, DOWN, buff=0.15)
         assert np.allclose(inc, 1 / (8 * nk), rtol=1e-3) and inc.sum() < 0.25
         gn = MathTex(rf"\|g\|_1 = \tfrac12 + \tfrac14 = {trap(g_lim, x):.4f}", font_size=28, color=WHITE).next_to(

@@ -85,10 +85,10 @@ class Hilbert(VoiceoverScene):
             "product to the two lengths is a cosine. In L two, e to the t and t meet at an angle of 14.3 degrees."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(axs[0]))
+            self.play(FadeIn(axs[0]), Create(ax), Create(gx), FadeIn(xl), FadeIn(gy), FadeIn(yl))
             self.play(FadeIn(axs[1]))
             vo.wait_until("b")
-            self.play(Create(ax), Create(gx), FadeIn(xl), FadeIn(gy), FadeIn(yl), FadeIn(gap))
+            self.play(FadeIn(gap))
             self.play(Create(qx), FadeIn(q_l), FadeIn(lam_l), Create(par), FadeIn(qdot), FadeIn(side[:2]))
             vo.wait_until("c")
             self.play(lT.animate.set_value(5.5), run_time=2.5)

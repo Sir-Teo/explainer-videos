@@ -27,9 +27,9 @@ class Holder(VoiceoverScene):
         d = load("young")
         p, a0 = float(d["p"]), float(d["a"])
         q = p / (p - 1)
-        ax = square_axes([0, 1.7, 0.5], [0, 1.7, 0.5], 2.75, numbers=True, font_size=18,
+        ax = square_axes([0, 1.7, 0.5], [0, 1.7, 0.5], 2.6, numbers=True, font_size=18,
                          x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.7, 0])
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.4, 0])
         xs = np.linspace(0, 1.3, 300)
         curve = polyline(ax, xs, xs ** (p - 1), color=WHITE, stroke_width=3.5)
         c_l = MathTex(r"y = x^{p-1}", font_size=28).next_to(ax.c2p(1.3, 1.69), RIGHT, buff=0.1).shift(DOWN * 0.25)
@@ -88,9 +88,9 @@ class Holder(VoiceoverScene):
             "on the curve, and then grows again on the other side. It never goes negative."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeIn(head), Create(ax), Create(curve), FadeIn(c_l))
             vo.wait_until("b")
-            self.play(Create(curve), FadeIn(c_l))
+            self.play(Indicate(curve, color=C.EPS))
             self.play(FadeIn(A1), FadeIn(a_l), FadeIn(rd))
             vo.wait_until("c")
             shown.set_value(2)
@@ -140,11 +140,18 @@ class Holder(VoiceoverScene):
         ex = MathTex(rf"f = x,\ g = \cos\tfrac{{\pi x}}{{2}} + 0.15: \quad \int_0^1 |fg| = {lhs:.4f} \le "
                      rf"\|f\|_3 \|g\|_{{3/2}} = {rhs:.4f}", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.18)
         assert np.all(L <= U + 1e-12) and abs(lhs / rhs - iL) < 1e-9
-        head = VGroup(label(r"\textbf{RCA 3.5} \ (H\"older, 1889) \ \ $\frac1p + \frac1q = 1$, \ $1 < p < \infty$:",
-                            font_size=28),
-                      MathTex(r"\int |fg|\,d\mu \le \|f\|_p\, \|g\|_q", font_size=38, color=C.EPS),
+        head = VGroup(VGroup(label(r"\textbf{RCA 3.5} \ (H\"older, 1889) \ \ $\frac1p + \frac1q = 1$, \ $1 < p < \infty$:",
+                                   font_size=28),
+                             MathTex(r"\int |fg|\,d\mu \le \|f\|_p\, \|g\|_q", font_size=38, color=C.EPS)
+                             ).arrange(RIGHT, buff=0.45),
                       label(r"$p = q = 2$: \ Cauchy--Schwarz", font_size=24, color=C.INNER)
-                      ).arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.3)
+                      ).arrange(DOWN, buff=0.08).to_edge(UP, buff=0.25)
+        if head.width > 13:
+            head.width = 13
+        gF = polyline(ax, x, F, color=C.FUNC, stroke_width=3)
+        gG = polyline(ax, x, G, color=C.SPECTRUM, stroke_width=3)
+        lFG = VGroup(MathTex(r"F", font_size=26, color=C.FUNC), MathTex(r"G", font_size=26, color=C.SPECTRUM)).arrange(
+            RIGHT, buff=0.4).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         with self.voiceover(
             "<bookmark mark='a'/> Hölder's inequality: the integral of f times g is at most the p-norm of f times "
             "the q-norm of g. With p equal to two, it's the Cauchy-Schwarz inequality. <bookmark mark='b'/> The "
@@ -155,12 +162,12 @@ class Holder(VoiceoverScene):
             "and that's Hölder."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax))
             vo.wait_until("b")
-            self.play(FadeIn(steps[:2]), Create(ax))
+            self.play(FadeIn(steps[:2]), Create(gF), Create(gG), FadeIn(lFG))
             vo.wait_until("c")
             self.play(FadeIn(steps[2:4]))
-            self.play(Create(gL), FadeIn(lL), Create(gU), FadeIn(lU), run_time=1.8)
+            self.play(FadeOut(gF), FadeOut(gG), FadeOut(lFG), Create(gL), FadeIn(lL), Create(gU), FadeIn(lU), run_time=1.8)
             vo.wait_until("d")
             self.play(FadeIn(aU), FadeIn(rU))
             self.play(FadeIn(aL), FadeIn(rL), FadeIn(steps[4]))
@@ -172,7 +179,7 @@ class Holder(VoiceoverScene):
     # ------------------------------------------------------------------
     def minkowski(self):
         ax = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.75).move_to([-3.6, -0.75, 0])
-        bx = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.75).move_to([2.2, -0.75, 0])
+        bx = square_axes([-1.25, 1.25, 1], [-1.25, 1.25, 1], 1.75).move_to([1.6, -0.75, 0])
         b3 = p_ball(ax, 3.0, C.DIST)
         b05 = p_ball(bx, 0.5, C.PATHOLOGY)
         u = np.array([1.0, 0.35]) / pnorm([1.0, 0.35], 3)
@@ -196,8 +203,8 @@ class Holder(VoiceoverScene):
                      MathTex(rf"\|\tfrac{{u + v}}{{2}}\|_{{1/2}} = ({{\textstyle\sqrt{{\tfrac12}} + \sqrt{{\tfrac12}}}})^2 = "
                              rf"{n05:.0f}", font_size=28, color=C.PATHOLOGY)).arrange(DOWN, buff=0.1).next_to(
             bx, DOWN, buff=0.15)
-        card = museum_card(r"$p < 1$", r"the ball is not convex", r"the triangle inequality", width=3.2,
-                           font_size=20).move_to([5.6, 0.6, 0])
+        card = museum_card(r"$p < 1$", r"the ball is not convex", r"the triangle inequality", width=3.0,
+                           font_size=20).move_to([5.45, -0.6, 0])
         thm = VGroup(label(r"\textbf{RCA 3.5} \ (Minkowski) \ for $1 \le p \le \infty$:", font_size=28),
                      MathTex(r"\|f + g\|_p \le \|f\|_p + \|g\|_p", font_size=36, color=C.EPS)
                      ).arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.3)
@@ -216,9 +223,8 @@ class Holder(VoiceoverScene):
             "inequality fails. That's why p runs from one to infinity."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(ax), FadeIn(b3))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(b3))
             self.play(FadeIn(dots3), Create(seg3), FadeIn(mid3), FadeIn(l3))
             vo.wait_until("c")
             self.play(FadeIn(idea))

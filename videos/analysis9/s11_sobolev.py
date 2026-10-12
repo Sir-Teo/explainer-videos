@@ -109,9 +109,12 @@ class Sobolev(VoiceoverScene):
             return VGroup(*[runs(ax, Lg[m], vals[s][m], c, 3.5) for s, c in zip(ss, cols)])
 
         gr = always_redraw(pics)
-        rd = always_redraw(lambda: VGroup(*[MathTex(
-            rf"s = {s}: \ \int_{{-T}}^{{T}}(1 + t^2)^{{-s}}dt = {partial(s, 10 ** LT.get_value()):.3f}", font_size=24,
-            color=c) for s, c in zip(ss, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.6))
+        rd = VGroup(*[VGroup(MathTex(rf"s = {s}: \ \int_{{-T}}^{{T}}(1 + t^2)^{{-s}}dt =", font_size=24, color=c),
+                             DecimalNumber(partial(s, 1.0), num_decimal_places=3, font_size=24, color=c)).arrange(
+            RIGHT, buff=0.15) for s, c in zip(ss, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN,
+                                                                                                    buff=0.6)
+        for row, s in zip(rd, ss):  # numbers, not new TeX, on every frame
+            row[1].add_updater(lambda m, s=s: m.set_value(partial(s, 10 ** LT.get_value())))
         lim = DashedLine(ax.c2p(0, lim6), ax.c2p(6, lim6), color=C.TEST_FN, stroke_width=2)
         liml = MathTex(rf"\sqrt\pi\,\Gamma(0.1)/\Gamma(0.6) = {lim6:.3f}", font_size=20, color=C.TEST_FN).next_to(
             ax.c2p(0.2, lim6), UP, buff=0.06).align_to(ax.c2p(0.2, 0), LEFT)
@@ -152,8 +155,9 @@ class Sobolev(VoiceoverScene):
             self.play(Create(lim), FadeIn(liml), FadeIn(rows[0]))
             vo.wait_until("d")
             self.play(FadeIn(rows[1:]))
-        for m in (rd, gr):
-            m.clear_updaters()
+        gr.clear_updaters()
+        for row in rd:
+            row[1].clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
