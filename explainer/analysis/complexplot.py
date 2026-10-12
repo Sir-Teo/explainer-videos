@@ -9,7 +9,7 @@ points circled by shrinking rings and poles are bright points circled by growing
 from __future__ import annotations
 
 import numpy as np
-from manim import ImageMobject
+from manim import RESAMPLING_ALGORITHMS, ImageMobject
 
 from explainer.style import BACKGROUND
 
@@ -58,15 +58,19 @@ def domain_rgb(Z, rings=True) -> np.ndarray:
     return bg + v[..., None] * (col - bg)
 
 
-def domain_image(F, xr, yr, width, height, px=480, rings=True) -> ImageMobject:
+def domain_image(F, xr, yr, width, height, px=720, rings=True, mask=None) -> ImageMobject:
     """F(Z) on the rectangle xr x yr of the complex plane, as an image of the given scene size (place it with
-    .move_to(ax.c2p(center)))."""
+    .move_to(ax.c2p(center))).  ``mask(Z)`` (optional) makes the pixels where it is False transparent."""
     py = max(2, int(px * height / width))
     X, Y = np.meshgrid(np.linspace(xr[0], xr[1], px), np.linspace(yr[1], yr[0], py))
     with np.errstate(all="ignore"):
         Z = F(X + 1j * Y)
     rgb = domain_rgb(Z, rings=rings)
+    if mask is not None:  # mask(Z) -> bool: transparent where False
+        a = mask(X + 1j * Y).astype(float)[..., None]
+        rgb = np.concatenate([rgb, a], axis=-1)
     img = ImageMobject((np.clip(rgb, 0, 1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
     img.stretch_to_fit_width(width)
     img.stretch_to_fit_height(height)
     return img

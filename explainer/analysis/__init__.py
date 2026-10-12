@@ -312,6 +312,8 @@ LEDGER_ROWS = {
         r"$\lim \int = \int \lim$ under a lid", r"term by term, by Fubini"],
     6: [r"6", r"$L^p(\mu)$; \ Hilbert $H$", r"Riesz--Fischer: summable increments", r"not the ball: $\|e_m - e_n\| = \sqrt 2$",
         r"$\frac{d}{dx}\int_a^x f = f$ a.e.", r"$s_N \to f$ in $L^2$; \ Fej\'er: uniform"],
+    7: [r"7", r"$H(\Omega)$, \ locally uniform", r"locally uniform limits stay holomorphic", r"bounded families: Montel",
+        r"$\frac{d}{dz}\sum = \sum \frac{d}{dz}$; \ $\oint$ and $\lim$", r"$H^2$: \ $\hat f(n) = 0$ for $n < 0$"],
 }
 
 
