@@ -45,7 +45,10 @@ class FourierL1(VoiceoverScene):
             ar = Arrow([-2.15, y - 0.2, 0], [-1.35, y - 0.2, 0], buff=0, color=GREY_B, stroke_width=3, tip_length=0.15)
             e_ = MathTex(rf"\text{{quadrature vs formula: }} {sci(err, 0)}", font_size=18, color=GREY_A).next_to(bx, DOWN,
                                                                                                          buff=0.02)
-            rows.append(VGroup(ax, g1, l1, ar, bx, g2, l2, e_))
+            row = VGroup(ax, g1, l1, ar, bx, g2, l2, e_)
+            if row.get_left()[0] < -6.95:  # a wide label on the left: move the whole row in
+                row.shift((-6.95 - row.get_left()[0]) * RIGHT)
+            rows.append(row)
         conv = MathTex(r"\hat f(t) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} f(x)\,e^{-ixt}\,dx", font_size=32).to_edge(
             UP, buff=0.2)
         tag = label(r"Rudin's convention, \ used from here on", font_size=20, color=GREY_A).next_to(conv, RIGHT, buff=0.3)
