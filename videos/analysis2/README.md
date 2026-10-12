@@ -48,6 +48,27 @@ python tools/check_narration.py analysis2         # Whisper listen test of every
 Part 2 imports helpers from Part 1 (`videos/analysis1/common.py`): the zoomable window with its rational ruler,
 and the sawtooth.
 
+## Chapters (48:36)
+
+```
+0:00 One series, any sum you like
+2:34 1. Sequences and their limits
+5:33 2. Cauchy sequences and completeness
+10:11 3. Upper and lower limits
+13:37 4. Series, and the comparison tests
+16:59 5. The number e
+19:11 6. Root, ratio and power series
+22:03 7. Summation by parts, and multiplying series
+25:44 8. Rearrangements
+28:31 9. Continuity
+31:41 10. Continuity and compactness
+34:56 11. Continuity and connectedness
+38:04 12. The derivative
+40:37 13. Mean value theorems
+43:14 14. Taylor's theorem
+46:01 Vector-valued functions, and the second row of the ledger
+```
+
 ## Outline
 
 | # | Scene | What it establishes | Computed on screen |
