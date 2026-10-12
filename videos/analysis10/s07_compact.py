@@ -31,7 +31,8 @@ class CompactSelfAdjoint(VoiceoverScene):
                       neg=C.SEQ, pos=C.OPERATOR).move_to(ax.c2p(0.5, 0.5))
         kl = MathTex(r"g(x, y) = \min(x, y)\,\big(1 - \max(x, y)\big)", font_size=24, color=C.OPERATOR).next_to(ax, UP,
                                                                                                          buff=0.1)
-        gl = MathTex(r"(Gf)(x) = \int_0^1 g(x, y) f(y)\,dy: \ \ -(Gf)'' = f, \ \ Gf(0) = Gf(1) = 0", font_size=22).next_to(
+        gl = VGroup(MathTex(r"(Gf)(x) = \int_0^1 g(x, y) f(y)\,dy", font_size=22),
+                    MathTex(r"-(Gf)'' = f, \ \ Gf(0) = Gf(1) = 0", font_size=22)).arrange(DOWN, buff=0.08).next_to(
             ax, DOWN, buff=0.15)
         pm = ProofMap([
             r"$m = \sup_{\|x\| = 1}|\langle Tx, x\rangle| = \|T\|$ \ (self-adjoint)",
