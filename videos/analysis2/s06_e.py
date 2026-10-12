@@ -122,7 +122,9 @@ class NumberE(VoiceoverScene):
             self.play(Indicate(outl, color=C.SEQ, scale_factor=1.03))
             vo.wait_until("d")
             for i in range(1, len(ns)):
-                self.play(Transform(bars, fill(i)), Transform(nl, nlab(i)), run_time=0.9)
+                nl2 = nlab(i)
+                self.play(Transform(bars, fill(i)), FadeTransform(nl, nl2), run_time=0.9)
+                nl = nl2
         with self.voiceover(
             "<bookmark mark='a'/> Squeezed from above by the series and, for each fixed number of terms, from below, "
             "<bookmark mark='b'/> the limit is e. The two definitions agree. <bookmark mark='c'/> But the compound "
@@ -190,17 +192,20 @@ class NumberE(VoiceoverScene):
             "the actual quantity for q from 1 to 15: always inside the yellow window, which shrinks, and never reaching "
             "an integer."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(line), FadeIn(ints))
             vo.wait_until("a")
             step(0)
+            self.play(FadeIn(win), FadeIn(ql))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(*[Indicate(i_[0], color=C.PATHOLOGY, scale_factor=1.6) for i_ in ints])
             vo.wait_until("d")
-            self.play(Create(line), FadeIn(ints), FadeIn(win), FadeIn(ql))
             for i in range(1, len(qs)):
-                self.play(qv.animate.set_value(i), Transform(ql, qlab(i)), run_time=0.45)
+                ql2 = qlab(i)
+                self.play(qv.animate.set_value(i), FadeTransform(ql, ql2), run_time=0.45)
+                ql = ql2
         assert all(0 < t < 1 / q for t, q in zip(tail, qs))
         win.clear_updaters()
         more = label(r"Rudin adds: $e$ is not even algebraic \ (Hermite, 1873: $e$ is transcendental).", font_size=26,

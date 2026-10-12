@@ -207,6 +207,22 @@ class LimSup(VoiceoverScene):
             MathTex(r"\tfrac{n^\alpha}{(1 + p)^n} \to 0 \ (p > 0)", font_size=32),
             MathTex(r"x^n \to 0 \ (|x| < 1)", font_size=32),
         ).arrange(RIGHT, buff=0.55).next_to(head, DOWN, buff=0.35)
+        # a sparkline under each: the first 30 terms and the limit
+        k = np.arange(1, 31, dtype=float)
+        seqs = [([1 / k], (0, 1.05), 0.0), ([4 ** (1 / k), 0.25 ** (1 / k)], (0, 4.2), 1.0),
+                ([k ** (1 / k)], (0.9, 1.5), 1.0), ([k**3 / 1.5**k], (0, 21), 0.0), ([(-0.8) ** k], (-0.85, 0.85), 0.0)]
+        sparks = VGroup()
+        for f_, (ys_list, yr, lim) in zip(facts, seqs):
+            sa = Axes(x_range=[0, 31, 10], y_range=[yr[0], yr[1], (yr[1] - yr[0]) / 2], x_length=1.95, y_length=2.6,
+                      tips=False, axis_config={"stroke_color": GREY_D, "stroke_width": 1.5, "include_ticks": False})
+            sa.move_to([f_.get_x(), -0.5, 0])
+            ll = DashedLine(sa.c2p(0, lim), sa.c2p(31, lim), color=WHITE, stroke_width=1.2, stroke_opacity=0.7)
+            dd = VGroup(*[Dot(sa.c2p(a, b), radius=0.03, color=c_) for ys_, c_ in zip(ys_list, (C.SEQ, C.APPROX))
+                          for a, b in zip(k, ys_)])
+            sparks.add(VGroup(sa, ll, dd))
+        assert abs((k**3 / 1.5**k).max() - 20.0) < 0.2 and np.argmax(k ** (1 / k)) == 2
+        xs_ = [sp[0].get_x() for sp in sparks]
+        assert min(b - a for a, b in zip(xs_, xs_[1:])) > 2.1, xs_  # the sparklines do not touch
         with self.voiceover(
             "Rudin collects five limits that the convergence tests will lean on: <bookmark mark='a'/> one over n to "
             "a positive power goes to zero; the n-th root of a positive number goes to one; the n-th root of n goes to "
@@ -215,8 +231,10 @@ class LimSup(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f, shift=UP * 0.15) for f in facts], lag_ratio=0.4), run_time=4.0)
-        self.play(FadeOut(head), facts.animate.scale(0.8).to_edge(UP, buff=0.3))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(f, shift=UP * 0.15), Create(sp[0]), Create(sp[1]),
+                                                   LaggedStart(*[FadeIn(x) for x in sp[2]], lag_ratio=0.03))
+                                    for f, sp in zip(facts, sparks)], lag_ratio=0.4), run_time=6.0)
+        self.play(FadeOut(head), FadeOut(sparks), facts.animate.scale(0.8).to_edge(UP, buff=0.3))
 
         rows = [MathTex(r"n", r"=", r"(1 + x_n)^n", font_size=38),
                 MathTex(r"n", r"\ge", r"\binom{n}{2} x_n^2 = \frac{n(n-1)}{2}\, x_n^2", font_size=38),
@@ -244,6 +262,8 @@ class LimSup(VoiceoverScene):
             "Rearranged, x n is squeezed to zero. <bookmark mark='g'/> On a logarithmic scale, out to a million, the "
             "root peaks at n equal to 3 and then sinks toward one, under the bound."
         ) as vo:
+            self.play(Create(lx), FadeIn(ticks), FadeIn(ylab), Create(one))
+            self.play(Create(curve), FadeIn(c_l), run_time=1.5)
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -251,8 +271,6 @@ class LimSup(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("g")
-            self.play(Create(lx), FadeIn(ticks), FadeIn(ylab), Create(one))
-            self.play(Create(curve), FadeIn(c_l), run_time=1.5)
             self.play(Create(bound), FadeIn(b_l), run_time=1.2)
         assert rr.argmax() == 2 and abs(n[2] - 3) < 1e-9
         self.wait(0.3)

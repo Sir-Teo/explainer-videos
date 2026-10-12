@@ -276,10 +276,11 @@ class HeineBorel(VoiceoverScene):
                 self.play(Create(quarter), run_time=0.5)
                 lo, hi = nlo, nhi
                 nd, cnt = make_view(lo, hi)
-                self.play(FadeOut(quarter), FadeOut(dots), FadeIn(nd),
-                          Transform(count, MathTex(rf"\text{{in view: }} {fmt_int(cnt)}", font_size=30).move_to([3.6, -0.3, 0])),
-                          Transform(zl, MathTex(rf"\text{{zoom }} \times {2 ** (k + 1)}", font_size=30, color=GREY_A)
-                                    .move_to([3.6, -0.9, 0])), run_time=0.8)
+                count2 = MathTex(rf"\text{{in view: }} {fmt_int(cnt)}", font_size=30).move_to([3.6, -0.3, 0])
+                zl2 = MathTex(rf"\text{{zoom }} \times {2 ** (k + 1)}", font_size=30, color=GREY_A).move_to([3.6, -0.9, 0])
+                self.play(FadeOut(quarter), FadeOut(dots), FadeIn(nd), FadeTransform(count, count2),
+                          FadeTransform(zl, zl2), run_time=0.8)
+                count, zl = count2, zl2
                 dots = nd
                 assert cnt > 0
             vo.wait_until("c")
