@@ -122,8 +122,8 @@ class Projection(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def unique(self):
-        ax = square_axes([-0.6, 2.0, 1], [-0.6, 2.0, 1], 1.9).move_to([-3.5, -0.7, 0])
-        bx = square_axes([-0.6, 2.0, 1], [-0.6, 2.0, 1], 1.9).move_to([3.0, -0.7, 0])
+        ax = square_axes([-1.6, 2.0, 1], [-1.6, 2.0, 1], 1.22).move_to([-3.6, -0.55, 0])
+        bx = square_axes([-1.6, 2.0, 1], [-1.6, 2.0, 1], 1.22).move_to([3.2, -0.55, 0])
         for a in (ax, bx):
             a.set_opacity(0.35)
         rT = ValueTracker(0.2)
