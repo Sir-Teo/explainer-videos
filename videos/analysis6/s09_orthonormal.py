@@ -107,9 +107,8 @@ class Orthonormal(VoiceoverScene):
                     Line(ax.c2p(0, 1), ax.c2p(1, 1), color=WHITE, stroke_width=4))
         s_l = MathTex(r"f = \operatorname{sign} x, \quad \|f\|^2 = 2", font_size=28).next_to(ax, UP, buff=0.1)
         pc = [polyline(ax, xs, cv, color=C.EPS, stroke_width=3) for cv in curves]
-        pl = [MathTex(rf"s_N = \sum_{{n < {M}}} \langle f, e_n\rangle e_n", font_size=26, color=C.EPS).next_to(ax, DOWN,
-                                                                                                         buff=0.15)
-              for M in Ms]
+        pl = [MathTex(rf"s_N = \sum_{{n < {M}}} \langle f, e_n\rangle e_n", font_size=24, color=C.EPS).next_to(
+            ax.c2p(-1, 1.3), RIGHT, buff=0.05) for M in Ms]  # the empty upper-left corner (sign x = -1 there)
         # the bar: the squares of the coefficients stacked, against ||f||^2 = 2
         W, x0, y0 = 11.0, -5.5, -2.55
         frame = Rectangle(width=W, height=0.5, stroke_color=WHITE, stroke_width=2).move_to([x0 + W / 2, y0, 0])
@@ -198,7 +197,7 @@ class Orthonormal(VoiceoverScene):
         bars = VGroup()
         for n in range(8):
             h = 0.06 if n != 1 else 0.9
-            col = GREY_D if n == 1 else C.SEQ
+            col = C.EPS if n == 1 else C.SEQ  # the one nonzero coefficient; greyed when e_1 is dropped
             r_ = Rectangle(width=0.22, height=h, stroke_width=0, fill_color=col, fill_opacity=0.9)
             r_.move_to([-2.9 + 0.36 * n, -2.9 + h / 2, 0])
             bars.add(r_)
@@ -210,6 +209,8 @@ class Orthonormal(VoiceoverScene):
             b_l.width = 6.8 - b_l.get_left()[0]
             b_l.next_to(bars, RIGHT, buff=0.3)
         g_l = MathTex(r"x", font_size=24, color=C.PATHOLOGY).next_to(ax, LEFT, buff=0.1)
+        ok_l = label(r"all of the $e_n$: \ $\sum |\langle x, e_n\rangle|^2 = \tfrac23 = \|x\|^2$ \ (Parseval)",
+                     font_size=22, color=C.EPS).next_to(bars, RIGHT, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> When does the bar fill completely? Rudin's theorem gives four equivalent answers. "
             "The orthonormal set is maximal, or its finite combinations are dense, or Parseval's identity holds for "
@@ -223,13 +224,14 @@ class Orthonormal(VoiceoverScene):
             "countable one, from Gram-Schmidt."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows[1:]], lag_ratio=0.5), run_time=4.0)
+            self.play(FadeIn(rows[0]), Create(ax), Create(gx), FadeIn(g_l))
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows[1:]], lag_ratio=0.5),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.2), run_time=4.0)
+            self.play(FadeIn(ok_l))
             vo.wait_until("b")
             self.play(FadeIn(rf))
             vo.wait_until("c")
-            self.play(Create(ax), Create(gx), FadeIn(g_l), FadeIn(bars))
-            self.play(Create(cross), FadeIn(b_l))
+            self.play(bars[1].animate.set_fill(GREY_D), Create(cross), FadeOut(ok_l), FadeIn(b_l))
             vo.wait_until("d")
             self.play(Indicate(rows[1], color=C.EPS, scale_factor=1.02))
         self.wait(0.4)
