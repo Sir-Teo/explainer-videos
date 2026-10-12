@@ -139,6 +139,8 @@ class RieszRepresentation(VoiceoverScene):
             row[1].align_to(tab[0][1], LEFT)
         note_ = label(r"six random open sets: \ all within $10^{-6}$ of their length", font_size=24,
                       color=GREY_A).next_to(tab, DOWN, buff=0.3)
+        if note_.get_right()[0] > 6.9:
+            note_.shift((6.9 - note_.get_right()[0]) * RIGHT)
         assert np.all(np.abs(trials[:, -1] - trials[:, 0]) < 1e-6)
         with self.voiceover(
             "<bookmark mark='a'/> Now the construction. For an open set V, let mu of V be the largest value the "
