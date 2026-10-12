@@ -42,7 +42,7 @@ class SpectralTheorem(VoiceoverScene):
         band = Rectangle(width=ax.c2p(om[1], 0)[0] - ax.c2p(om[0], 0)[0], height=ax.c2p(0, 4.2)[1] - ax.c2p(0, 0)[1],
                          stroke_color=C.EPS, stroke_width=2, fill_color=C.EPS, fill_opacity=0.08).move_to(
             ax.c2p(sum(om) / 2, 2.1))
-        bl = MathTex(r"\omega", font_size=26, color=C.EPS).next_to(band, UP, buff=0.05)
+        bl = MathTex(r"\omega", font_size=26, color=C.EPS).move_to(band.get_top() + DOWN * 0.25)  # inside the band
         Ew = float(wts[inband].sum())
         assert abs(wts.sum() - x2) < 1e-9
         rows = VGroup(
