@@ -128,8 +128,20 @@ class RieszHilbert(VoiceoverScene):
         whys = [why(r"continuity; \ the projection theorem, if $M \ne H$"), why(r"apply $\Lambda$: \ it gives $0$"),
                 why(r"take the inner product with $z \perp M$"), why(r"so $y = \overline{\Lambda z}\, z$")]
         step = ladder(self, rows, whys, keep=4, top=1.3, buff=0.45, x=-1.0)
+        # the picture the proof follows, small: the kernel, its parallel level sets, and the unit normal z
+        c0 = np.array([-5.4, -2.75, 0])
+        nrm = np.array([2.0, 1.0, 0]) / math.sqrt(5)
+        tang = np.array([-nrm[1], nrm[0], 0])
+        mini = VGroup()
+        for k in range(-2, 3):
+            mini.add(Line(c0 + 0.42 * k * nrm - 1.0 * tang, c0 + 0.42 * k * nrm + 1.0 * tang,
+                          color=C.EPS if k == 0 else C.FUNCTIONAL, stroke_width=3.5 if k == 0 else 1.6,
+                          stroke_opacity=1.0 if k == 0 else 0.75))
+        zarr = Arrow(c0, c0 + 0.85 * nrm, buff=0, color=C.INNER, stroke_width=5, tip_length=0.16)
+        mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=22, color=C.EPS).next_to(c0 + 1.0 * tang, UP, buff=0.05),
+                        MathTex(r"z", font_size=26, color=C.INNER).next_to(c0 + 0.85 * nrm, RIGHT, buff=0.06))
         note_ = label(r"$z$ is the normal to the kernel: \ the arrow in the stack of lines", font_size=26,
-                      color=C.INNER).to_edge(DOWN, buff=0.5)
+                      color=C.INNER).next_to(zarr, RIGHT, buff=0.9).align_to(c0 + DOWN * 0.3, DOWN)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: every bounded linear functional on a Hilbert space is the inner "
             "product with a unique vector y, and the norm of the functional is the length of y. "
@@ -141,8 +153,9 @@ class RieszHilbert(VoiceoverScene):
             "vector is the normal to the kernel, scaled."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[Create(m_) for m_ in mini], lag_ratio=0.15), FadeIn(mini_l[0]))
             vo.wait_until("b")
+            self.play(GrowArrow(zarr), FadeIn(mini_l[1]))
             step(0)
             vo.wait_until("c")
             step(1)
@@ -232,9 +245,11 @@ class RieszHilbert(VoiceoverScene):
                            r"boundedness: \ $|f_n(0)| / \|f_n\|_2 = \sqrt n \to \infty$",
                            r"so no $y$ with $f(0) = \langle f, y\rangle$", width=5.4).move_to([3.4, 0.6, 0])
         note_ = VGroup(label(r"on $C[0, 1]$ with the sup norm, \ $f \mapsto f(0)$ is bounded,", font_size=24),
-                       label(r"but that space has no inner product: \ its functionals are measures \ (ch.~12)",
-                             font_size=24, color=C.MEASURE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(
-            [3.4, -1.8, 0])
+                       label(r"but that space has no inner product:", font_size=24, color=C.MEASURE),
+                       label(r"its functionals are measures \ (ch.~12)", font_size=24, color=C.MEASURE)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, -2.0, 0])
+        if note_.width > 6.4:
+            note_.width = 6.4
         head = label(r"The hypothesis \emph{bounded} is not decoration", font_size=34).to_edge(UP, buff=0.3)
         f_l = MathTex(r"f_n = \sqrt n\, \mathbf 1_{[0, 1/n]}", font_size=28).next_to(ax, UP, buff=0.1)
         with self.voiceover(
