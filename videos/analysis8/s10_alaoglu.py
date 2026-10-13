@@ -71,8 +71,10 @@ class Alaoglu(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm))
+            # weak-*: a functional is watched through its values, one coordinate line per vector
+            self.play(LaggedStart(*[Create(i_) for i_ in intervals], lag_ratio=0.1), FadeIn(dl), run_time=1.6)
             vo.wait_until("b")
-            self.play(FadeIn(cube), LaggedStart(*[Create(i_) for i_ in intervals], lag_ratio=0.1), FadeIn(dl))
+            self.play(FadeIn(cube))
             self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.1))
             vo.wait_until("c")
             self.play(FadeIn(pm))
