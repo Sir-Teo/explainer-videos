@@ -31,8 +31,8 @@ class Hook(VoiceoverScene):
     def kernel(self):
         d = load("lebesgue")
         xs, D20 = d["xs"], d["D20"]
-        ax = plain_axes([-math.pi, math.pi, math.pi / 2], [-8, 42, 10], 6.2, 3.2).move_to([-3.3, 0.7, 0])
-        tk = VGroup(*[MathTex(s, font_size=20).next_to(ax.c2p(v, -8), DOWN, buff=0.1)
+        ax = plain_axes([-math.pi, math.pi, math.pi / 2], [-10, 42, 10], 6.2, 3.2).move_to([-3.3, 0.7, 0])  # D20 >= -8.92
+        tk = VGroup(*[MathTex(s, font_size=20).next_to(ax.c2p(v, -10), DOWN, buff=0.1)
                       for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
         g = polyline(ax, xs, D20, color=C.SEQ, stroke_width=2.5)
         absg = polyline(ax, xs, np.abs(D20), color=C.PATHOLOGY, stroke_width=2).set_stroke(opacity=0.7)

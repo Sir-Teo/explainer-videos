@@ -32,9 +32,9 @@ class SymbolicCalculus(VoiceoverScene):
         evd = VGroup(*[Dot(cx.c2p(l_.real, l_.imag), radius=0.06, color=C.SPECTRUM) for l_ in ev])
         circ = Circle(radius=R * u, color=C.EPS, stroke_width=3).move_to(cx.c2p(0, 0))
         circ.add_tip(tip_length=0.18)
-        M = 32
+        M = 128  # every node of the quadrature that computes f(A) below
         th = 2 * math.pi * (np.arange(M) + 0.5) / M
-        nodes = VGroup(*[Dot(cx.c2p(R * math.cos(t_), R * math.sin(t_)), radius=0.035, color=C.EPS) for t_ in th])
+        nodes = VGroup(*[Dot(cx.c2p(R * math.cos(t_), R * math.sin(t_)), radius=0.025, color=C.EPS) for t_ in th])
         sl = label(r"$\sigma(A)$, \ a random $6 \times 6$", font_size=22, color=C.SPECTRUM).next_to(cx, UP, buff=0.08)
         cl = MathTex(rf"|\lambda| = {R:.2f}", font_size=22, color=C.EPS).next_to(cx.c2p(R * 0.71, R * 0.71), UR, buff=0.05)
         rows = VGroup(

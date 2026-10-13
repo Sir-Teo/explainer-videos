@@ -80,7 +80,7 @@ class TestFunctions(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def space(self):
-        ax = plain_axes([-2, 2, 1], [-0.5, 1.4, 0.5], 6.0, 3.0).move_to([-3.2, -0.3, 0])
+        ax = plain_axes([-2, 2, 1], [-0.5, 2.3, 0.5], 6.0, 3.0).move_to([-3.2, -0.3, 0])  # phi_1 peaks at 2.2
         x = np.linspace(-2, 2, 2001)
         phi = bump(x / 1.2) * (1 + 0.5 * np.sin(3 * x)) / math.exp(-1)
         nT = ValueTracker(1.0)

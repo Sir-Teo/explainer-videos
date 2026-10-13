@@ -135,7 +135,7 @@ class Unbounded(VoiceoverScene):
                                         color=C.EPS))
         cl = MathTex(r"f(1) = e^{i\theta} f(0)", font_size=24, color=C.EPS).next_to(cx, DOWN, buff=0.1)
         # the ladder of eigenvalues on a vertical axis
-        lad = NumberLine(x_range=[-20, 20, 2 * math.pi], length=6.4, rotation=PI / 2, include_numbers=False,
+        lad = NumberLine(x_range=[-6 * math.pi, 6 * math.pi, 2 * math.pi], length=6.4,  # ticks at 2 pi n rotation=PI / 2, include_numbers=False,
                          color=GREY_C).move_to([-0.6, -0.1, 0])
         ladl = MathTex(r"\sigma", font_size=26, color=C.SPECTRUM).next_to(lad, UP, buff=0.1)
 
@@ -144,7 +144,7 @@ class Unbounded(VoiceoverScene):
             g = VGroup()
             for n in range(-4, 5):
                 v = 2 * math.pi * n - th
-                if -20 <= v <= 20:
+                if abs(v) <= 6 * math.pi + 1e-9:
                     g.add(Line(lad.n2p(v) + LEFT * 0.35, lad.n2p(v) + RIGHT * 0.35, color=C.SPECTRUM, stroke_width=5))
             return g
 

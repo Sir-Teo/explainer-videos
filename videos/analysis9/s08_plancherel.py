@@ -78,7 +78,7 @@ class Plancherel(VoiceoverScene):
         ratios = d["ratios"]
         rng = np.random.default_rng(9)
         ax = plain_axes([-6, 6, 2], [-2.5, 2.5, 1], 5.4, 2.6).move_to([-3.4, 1.0, 0])
-        bx = plain_axes([-8, 8, 2], [0, 2.4, 1], 5.4, 2.0).move_to([-3.4, -2.1, 0])
+        bx = plain_axes([-14, 14, 7], [0, 0.8, 0.4], 5.4, 2.0).move_to([-3.4, -2.1, 0])
         x = np.linspace(-6, 6, 2400)
         c = rng.normal(size=6)
         f = sum(c[k] * np.exp(-((x - rng.uniform(-3, 3)) ** 2) * rng.uniform(0.5, 3)) * np.cos(rng.uniform(0, 6) * x)
@@ -92,7 +92,8 @@ class Plancherel(VoiceoverScene):
                  for k in range(6))
         F = np.fft.fftshift(np.fft.fft(np.fft.ifftshift(ff))) * (L / N) / math.sqrt(2 * math.pi)
         tt = np.fft.fftshift(np.fft.fftfreq(N, L / N)) * 2 * math.pi
-        m = np.abs(tt) <= 8
+        m = np.abs(tt) <= 14
+        assert 1 - np.sum(np.abs(F[m]) ** 2) / np.sum(np.abs(F) ** 2) < 1e-6 and np.abs(F).max() < 0.8  # all of it shows
         gf = polyline(ax, xx[np.abs(xx) <= 6], ff[np.abs(xx) <= 6], color=C.FUNC, stroke_width=2.5)
         gF = polyline(bx, tt[m], np.abs(F[m]), color=C.FREQ, stroke_width=2.5)
         l1 = MathTex(r"f", font_size=26, color=C.FUNC).next_to(ax, LEFT, buff=0.1)

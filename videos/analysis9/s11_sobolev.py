@@ -40,7 +40,7 @@ class Sobolev(VoiceoverScene):
             MathTex(r"\text{faster than } t^{-N}", font_size=24, color=cols[2]).next_to(ax.c2p(2.0, -7.2), RIGHT, buff=0.1),
         )
         slopes = [np.polyfit(lt[200:], np.log10(v[200:]), 1)[0] for v in (box, tri)]
-        assert abs(slopes[0] + 1) < 1e-9 and abs(slopes[1] + 2) < 1e-9 and bmp[-1] < 1e-6
+        assert abs(slopes[0] + 1) < 0.08 and abs(slopes[1] + 2) < 0.08 and bmp[-1] < 1e-6  # running maxima wobble
         # the three functions, small, in a column on the left
         x = np.linspace(-2, 2, 801)
         fs = [np.where(np.abs(x) <= 1, 1.0, 0.0), np.clip(1 - np.abs(x), 0, None), bump(x) / bump(np.array([0.0]))[0]]

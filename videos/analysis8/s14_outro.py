@@ -79,10 +79,19 @@ class Outro(VoiceoverScene):
                        Line(ax.c2p(0, 1), ax.c2p(2, 1), color=C.APPROX, stroke_width=3.5))
         epsT = ValueTracker(0.5)
 
-        def bump():
+        def bump():  # the derivative of the smoothed sign erf(x / (e sqrt 2)): a Gaussian of total mass 2
             e = epsT.get_value()
-            y = np.exp(-x * x / (2 * e * e)) / (e * math.sqrt(2 * math.pi))
-            return polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3)
+            y = 2 * np.exp(-x * x / (2 * e * e)) / (e * math.sqrt(2 * math.pi))
+            g = VGroup(polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3))
+            if y.max() > 2.2:  # off the top of the axes: say so
+                g.add(Arrow(ax.c2p(0, 1.75), ax.c2p(0, 2.55), buff=0, color=C.EPS, stroke_width=3,
+                            max_tip_length_to_length_ratio=0.35))
+            return g
+
+        xx_ = np.linspace(-2, 2, 200001)
+        for e_ in (0.5, 0.08):
+            m_ = np.sum(2 * np.exp(-xx_**2 / (2 * e_ * e_)) / (e_ * math.sqrt(2 * math.pi))) * (xx_[1] - xx_[0])
+            assert abs(m_ - 2) < 2e-3  # mass two
 
         bp = always_redraw(bump)
         lab = VGroup(MathTex(r"|x|", font_size=28, color=C.FUNC).next_to(ax.c2p(1.5, 1.5), DR, buff=0.1),

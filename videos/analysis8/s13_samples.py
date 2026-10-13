@@ -131,8 +131,9 @@ class Samples(VoiceoverScene):
         disk = Circle(radius=R, color=GREY_C, stroke_width=2).move_to(c0)
         front = pts[pts[:, 2] >= 0]
         back = pts[pts[:, 2] < 0]
-        dots = VGroup(*[Dot(c0 + R * np.array([p[0], p[1], 0]), radius=0.022, color=C.INNER) for p in front[:700]],
-                      *[Dot(c0 + R * np.array([p[0], p[1], 0]), radius=0.018, color=GREY_D) for p in back[:500]])
+        assert len(pts) == 1500  # all of them drawn: the near hemisphere bright, the far one dim
+        dots = VGroup(*[Dot(c0 + R * np.array([p[0], p[1], 0]), radius=0.022, color=C.INNER) for p in front],
+                      *[Dot(c0 + R * np.array([p[0], p[1], 0]), radius=0.018, color=GREY_D) for p in back])
         lab = label(r"the north pole moved by 1500 Haar-random rotations", font_size=22, color=GREY_A).next_to(disk, DOWN,
                                                                                                         buff=0.15)
         rows = VGroup(

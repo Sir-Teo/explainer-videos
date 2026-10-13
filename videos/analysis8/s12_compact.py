@@ -152,7 +152,7 @@ class Compact(VoiceoverScene):
         zero = Dot(ctr, radius=0.06, color=C.EPS)
         sl = MathTex(r"K(x, y) = e^{-|x - y|}\,e^{6ixy}", font_size=24, color=C.OPERATOR).next_to(ctr, RIGHT, buff=Rr + 0.4)
         sl.shift(UP * 0.85)
-        cl = VGroup(label(r"its eigenvalues in $\mathbb C$, \ radius $= \log_{10}|\lambda|$", font_size=22, color=GREY_A),
+        cl = VGroup(label(r"its eigenvalues in $\mathbb C$, \ radius $\propto 4 + \log_{10}|\lambda|$ \ (center: $|\lambda| \le 10^{-4}$)", font_size=22, color=GREY_A),
                     MathTex(rf"\#\{{|\lambda| > 10^{{-1}}\}} = {cnt[0]}, \ \ \#\{{|\lambda| > 10^{{-2}}\}} = {cnt[1]}, "
                             rf"\ \ \#\{{|\lambda| > 10^{{-3}}\}} = {cnt[2]}", font_size=24, color=C.EPS),
                     label(r"finitely many outside every circle: \ they can pile up only at $0$", font_size=22,

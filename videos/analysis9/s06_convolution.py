@@ -83,10 +83,23 @@ class Convolution(VoiceoverScene):
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.6, 0])
         cols = [C.SEQ, C.APPROX, C.EPS]
         curves, labs = [], []
+        def cantor_F(t, depth=40):  # the Cantor function exactly, digit by digit in base 3
+            t = np.clip(np.asarray(t, float), 0, 1).copy()
+            out, sc, live = np.zeros_like(t), 0.5, np.ones(t.shape, bool)
+            for _ in range(depth):
+                t3 = t * 3
+                dg = np.minimum(np.floor(t3), 2)
+                out += np.where(live & (dg >= 1), sc, 0.0)
+                live &= dg != 1  # a digit 1: F is constant from here on
+                t, sc = t3 - dg, sc / 2
+            return out
+
+        assert abs(cantor_F(np.array([0.25]))[0] - 1 / 3) < 1e-12 and abs(cantor_F(np.array([1.0]))[0] - 1) < 1e-9
         for k, c in zip((2, 3, 4), cols):
             w = 3.0**-k
-            xg = np.linspace(0, 1 - w, 1200)
-            avg = (np.interp(xg + w, xs, F) - np.interp(xg, xs, F)) / w
+            xg = np.arange(0, round(30 * (1 - w) / w) + 1) * (w / 30)  # contains every multiple of w
+            avg = (cantor_F(xg + w) - cantor_F(xg)) / w
+            assert abs(avg.max() - 1.5**k) < 1e-6 and abs(dens[k - 1] - 1.5**k) < 1e-6  # (1/2)^k of the mass in 3^-k
             curves.append(runs(ax, xg + w / 2, avg, c, 2.5))
             labs.append(MathTex(rf"\text{{window }} 3^{{-{k}}}: \ \max = {avg.max():.3f}", font_size=26, color=c).next_to(
                 ax, UP, buff=0.1))
