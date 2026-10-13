@@ -180,13 +180,13 @@ class Gelfand(VoiceoverScene):
             "operators."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(thm))
+            self.play(FadeIn(head), FadeIn(thm), Create(cx), FadeIn(dots))  # the spectrum, the space the functions live on
             vo.wait_until("b")
             self.play(FadeIn(card.titles))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
                                   lag_ratio=0.4), run_time=3.0)
             vo.wait_until("c")
-            self.play(Create(cx), FadeIn(dots), FadeIn(rows[:3]))
+            self.play(Indicate(dots, color=C.SPECTRUM), FadeIn(rows[:3]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
         self.wait(0.4)
