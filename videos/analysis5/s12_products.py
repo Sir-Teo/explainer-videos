@@ -105,12 +105,63 @@ class Products(VoiceoverScene):
                        r"all $f \ge 0$ \ (monotone convergence)"], font_size=22, width=3.0, buff=0.3)
         pm.next_to(thm, DOWN, buff=0.7)
         note_ = label(r"the condition matters: \ next, \ a function whose two iterated integrals disagree",
-                      font_size=26, color=C.PATHOLOGY).to_edge(DOWN, buff=0.6)
+                      font_size=26, color=C.PATHOLOGY).to_edge(DOWN, buff=0.3)
+        # one small picture per rung of the ladder, in the unit square under its box
+        P = 2.0
+        centers = [pm.boxes[k].get_x() for k in range(4)]
+        py = (pm.get_bottom()[1] + note_.get_top()[1]) / 2 + 0.1
+
+        def U(c_, u, v):  # unit-square coordinates -> scene
+            return np.array([c_ - P / 2 + P * u, py - P / 2 + P * v, 0])
+
+        def blob(t_, k=1.0):
+            r_ = k * (0.36 + 0.06 * np.sin(3 * t_) + 0.035 * np.cos(5 * t_))
+            return 0.5 + r_[:, None] * np.array([np.cos(t_), np.sin(t_)]).T
+
+        tt_ = np.linspace(0, 2 * np.pi, 200)
+        frames_ = VGroup(*[Square(P, stroke_color=GREY_B, stroke_width=1.5).move_to([c_, py, 0]) for c_ in centers])
+        c0, c1, c2, c3 = centers
+        rect = Polygon(U(c0, 0.18, 0.3), U(c0, 0.66, 0.3), U(c0, 0.66, 0.8), U(c0, 0.18, 0.8), stroke_width=2,
+                       stroke_color=C.MEASURE, fill_color=C.MEASURE, fill_opacity=0.55)
+        Ab = Line(U(c0, 0.18, 0.05), U(c0, 0.66, 0.05), color=C.SEQ, stroke_width=6)
+        Bb = Line(U(c0, 0.05, 0.3), U(c0, 0.05, 0.8), color=C.APPROX, stroke_width=6)
+        pic1 = VGroup(rect, Ab, Bb)
+        bp = blob(tt_)
+        outline = Polygon(*[U(c1, a, b) for a, b in bp], stroke_color=WHITE, stroke_width=2, fill_opacity=0)
+        n_ = 14
+        def inside(u, v):  # the blob is star-shaped about its centre: compare the radius with r(angle)
+            a_ = math.atan2(v - 0.5, u - 0.5)
+            return math.hypot(u - 0.5, v - 0.5) < 0.36 + 0.06 * math.sin(3 * a_) + 0.035 * math.cos(5 * a_)
+
+        cells = VGroup()
+        for i in range(n_):
+            for j in range(n_):
+                u_, v_ = (i + 0.5) / n_, (j + 0.5) / n_
+                if inside(u_, v_):
+                    cells.add(Square(P / n_, stroke_width=0.6, stroke_color=BLACK, fill_color=C.MEASURE,
+                                     fill_opacity=0.6).move_to(U(c1, u_, v_)))
+        pic2 = VGroup(cells, outline)
+        lay_cols = [C.SEQ, C.APPROX, C.EPS]
+        pic3 = VGroup(*[Polygon(*[U(c2, a, b) for a, b in blob(tt_, k_)], stroke_width=1.5, stroke_color=col,
+                                fill_color=col, fill_opacity=0.45) for k_, col in zip((1.0, 0.68, 0.38), lay_cols)])
+
+        def bump(X, Y):
+            return np.exp(-((X - 0.45) ** 2 + (Y - 0.5) ** 2) / 0.05) + 0.55 * np.exp(-((X - 0.75) ** 2 + (Y - 0.3) ** 2) / 0.02)
+
+        pic4 = heatmap(bump, (0, 1), (0, 1), P, P, -1.0, 1.0).move_to([c3, py, 0])
+        assert bump(np.array([0.3]), np.array([0.9]))[0] >= 0
+        caps = VGroup(*[MathTex(t_, font_size=24, color=GREY_A).next_to(frames_[k], DOWN, buff=0.12) for k, t_ in
+                        enumerate((r"A \times B", r"\textstyle\bigcup\ \text{rectangles}",
+                                   r"\textstyle\sum c_i \mathbf 1_{E_i}", r"f = \lim s_n \ge 0"))])
+        assert caps.get_bottom()[1] > note_.get_top()[1] + 0.05 and frames_.get_top()[1] < pm.get_bottom()[1] - 0.1
+        pics = [pic1, pic2, pic3, pic4]
         with self.voiceover(
             "<bookmark mark='a'/> Fubini's theorem, with Tonelli's version: for a non-negative measurable function, "
             "or for any function whose absolute value has a finite double integral, the two iterated integrals agree "
-            "with the double integral. <bookmark mark='b'/> The proof climbs a ladder: rectangles, then all "
-            "measurable sets, using monotone classes, then simple functions, then everything by monotone convergence. "
+            "with the double integral. <bookmark mark='b'/> The proof climbs a ladder: <bookmark mark='r1'/> "
+            "rectangles, where both sides are just length times length; <bookmark mark='r2'/> then all measurable "
+            "sets, built from rectangles using monotone classes; <bookmark mark='r3'/> then simple functions, which "
+            "are finite sums of sets; <bookmark mark='r4'/> then everything, by monotone convergence. "
             "<bookmark mark='c'/> The condition is not decoration."
         ) as vo:
             vo.wait_until("a")
@@ -118,7 +169,15 @@ class Products(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(pm))
             for k in range(4):
-                self.play(*pm.light(k), run_time=0.7)
+                vo.wait_until(f"r{k + 1}")
+                anims = [*pm.light(k), Create(frames_[k]), FadeIn(caps[k])]
+                if k == 1:
+                    anims += [Create(outline), LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.01)]
+                elif k == 3:
+                    anims += [FadeIn(pic4)]
+                else:
+                    anims += [FadeIn(pics[k])]
+                self.play(*anims, run_time=1.2)
             self.play(*pm.done())
             vo.wait_until("c")
             self.play(FadeIn(note_))
