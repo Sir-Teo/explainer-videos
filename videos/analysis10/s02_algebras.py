@@ -35,15 +35,32 @@ class BanachAlgebras(VoiceoverScene):
         card.scale_to_fit_width(12.0).move_to(UP * 0.35)
         # submultiplicativity, checked on random matrices and random l^1 sequences
         rng = np.random.default_rng(2)
-        worst_m = 0.0
+        rat_m, rat_l = [], []
         for _ in range(2000):
             A, B = rng.normal(size=(2, 5, 5))
-            worst_m = max(worst_m, np.linalg.norm(A @ B, 2) / (np.linalg.norm(A, 2) * np.linalg.norm(B, 2)))
-        worst_l = 0.0
+            rat_m.append(np.linalg.norm(A @ B, 2) / (np.linalg.norm(A, 2) * np.linalg.norm(B, 2)))
         for _ in range(2000):
             a, b = rng.normal(size=(2, 30))
-            worst_l = max(worst_l, np.abs(np.convolve(a, b)).sum() / (np.abs(a).sum() * np.abs(b).sum()))
+            rat_l.append(np.abs(np.convolve(a, b)).sum() / (np.abs(a).sum() * np.abs(b).sum()))
+        rat_m, rat_l = np.array(rat_m), np.array(rat_l)
+        worst_m, worst_l = float(rat_m.max()), float(rat_l.max())
         assert worst_m <= 1 + 1e-12 and worst_l <= 1 + 1e-12
+        # the 2000 ratios of each kind as histograms, against the line at 1 they never cross
+        bins = np.linspace(0, 1.1, 45)
+        hists = VGroup()
+        for k_, (vals, col, ttl) in enumerate(((rat_m, C.OPERATOR, r"\|AB\| \,/\, (\|A\|\,\|B\|), \ \ 5 \times 5 \text{ matrices}"),
+                                             (rat_l, C.FUNCTIONAL, r"\|a * b\|_1 \,/\, (\|a\|_1 \|b\|_1), \ \ \ell^1, \text{ length } 30"))):
+            cnt, _ = np.histogram(vals, bins)
+            hx = plain_axes([0, 1.1, 0.25], [0, float(cnt.max()) * 1.1, max(1, int(cnt.max() // 2))], 5.4, 2.3)
+            hx.move_to([-3.4 + 6.8 * k_, -0.15, 0])
+            bars_ = VGroup(*[Rectangle(width=hx.c2p(bins[1], 0)[0] - hx.c2p(bins[0], 0)[0], height=max(
+                hx.c2p(0, c_)[1] - hx.c2p(0, 0)[1], 1e-3), stroke_width=0.5, stroke_color=BLACK, fill_color=col,
+                fill_opacity=0.85).move_to(hx.c2p((bins[i] + bins[i + 1]) / 2, c_ / 2)) for i, c_ in enumerate(cnt) if c_])
+            one = DashedLine(hx.c2p(1, 0), hx.c2p(1, float(cnt.max()) * 1.1), color=C.PATHOLOGY, stroke_width=3)
+            onel = MathTex("1", font_size=26, color=C.PATHOLOGY).next_to(hx.c2p(1, 0), DOWN, buff=0.12)
+            ttl_ = MathTex(ttl, font_size=24, color=col).next_to(hx, UP, buff=0.15)
+            hists.add(VGroup(hx, bars_, one, onel, ttl_))
+        assert hists.get_left()[0] > -6.95 and hists.get_right()[0] < 6.95
         rule = VGroup(
             MathTex(r"\|xy\| \le \|x\|\,\|y\|, \qquad \|e\| = 1", font_size=36, color=C.EPS),
             MathTex(rf"\text{{largest ratio in 2000 random tries: matrices }} {worst_m:.4f}, \ \ \ell^1 \ {worst_l:.4f}",
@@ -55,8 +72,8 @@ class BanachAlgebras(VoiceoverScene):
             "norm of a product at most the product of the norms. <bookmark mark='b'/> The continuous functions on a "
             "compact set, with the pointwise product. The bounded operators on a Banach space, with composition: the "
             "main example. The integrable functions with convolution, from Part 9, and summable sequences with "
-            "convolution, and the disc algebra of Part 7. <bookmark mark='c'/> In random trials the ratio never "
-            "exceeds one."
+            "convolution, and the disc algebra of Part 7. <bookmark mark='c'/> Test the rule: in two thousand random "
+            "trials of each kind, the ratio piles up below one and never crosses it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rule[0]))
@@ -65,6 +82,11 @@ class BanachAlgebras(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
                                   lag_ratio=0.5), run_time=5.0)
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(card.titles, card.rows, card.arrows)))
+            for h_ in hists:
+                self.play(Create(h_[0]), FadeIn(h_[4]), run_time=0.6)
+                self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in h_[1]], lag_ratio=0.03), run_time=1.4)
+                self.play(Create(h_[2]), FadeIn(h_[3]), run_time=0.5)
             self.play(FadeIn(rule[1]))
         self.wait(0.3)
         self.clear_scene()
