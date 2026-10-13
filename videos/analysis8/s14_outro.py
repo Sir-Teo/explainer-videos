@@ -82,7 +82,7 @@ class Outro(VoiceoverScene):
             return polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3)
 
         bp = always_redraw(bump)
-        lab = VGroup(MathTex(r"|x|", font_size=28, color=C.FUNC).next_to(ax.c2p(1.6, 1.6), LEFT, buff=0.1),
+        lab = VGroup(MathTex(r"|x|", font_size=28, color=C.FUNC).next_to(ax.c2p(1.5, 1.5), DR, buff=0.1),
                      MathTex(r"|x|' = \operatorname{sign} x", font_size=26, color=C.APPROX).next_to(ax.c2p(1.0, -0.9), RIGHT,
                                                                                                 buff=0.1),
                      MathTex(r"(\operatorname{sign} x)' = 2\delta", font_size=26, color=C.EPS).next_to(ax.c2p(0.2, 1.9),

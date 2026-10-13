@@ -104,7 +104,8 @@ class TVS(VoiceoverScene):
             label(r"compact neighborhood of $0$ is finite-dimensional", font_size=24, color=C.EPS),
             label(r"the honest end of Heine--Borel \ (Part 1's promise)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
-        sch = note(r"schematic: \ three of the $e_n$, \ in a plane").next_to(bx, RIGHT, buff=0.15)
+        sch = VGroup(note(r"schematic:"), note(r"three of the $e_n$,"), note(r"in a plane")).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.06).to_corner(DL, buff=0.35)
         head = label(r"The unit ball is never compact in infinite dimensions", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Part 1 promised that closed and bounded doesn't mean compact beyond R n. Here's the "

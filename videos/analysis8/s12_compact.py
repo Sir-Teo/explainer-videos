@@ -29,11 +29,11 @@ class Compact(VoiceoverScene):
         bars = VGroup()
         for k in range(10):
             v = float(s[k])
-            bars.add(Rectangle(width=0.35, height=4.0 * v / float(s[0]), stroke_width=0, fill_color=C.OPERATOR,
-                               fill_opacity=0.85).move_to([-6.0 + 0.6 * k, -2.6 + 2.0 * v / float(s[0]), 0]))
+            bars.add(Rectangle(width=0.3, height=4.0 * v / float(s[0]), stroke_width=0, fill_color=C.OPERATOR,
+                               fill_opacity=0.85).move_to([-6.3 + 0.5 * k, -2.6 + 2.0 * v / float(s[0]), 0]))
         b_l = label(r"the semi-axes of $V(B)$: \ $\frac{2}{\pi}, \frac{2}{3\pi}, \frac{2}{5\pi}, \ldots \to 0$", font_size=24,
                     color=C.OPERATOR).next_to(bars, UP, buff=0.2).align_to(bars, LEFT)
-        ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.0).move_to([1.2, -0.6, 0])
+        ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.0).move_to([0.3, -0.6, 0])
         ax.set_opacity(0.3)
         th = np.linspace(0, 2 * np.pi, 300)
         unit = VMobject(color=GREY_B, stroke_width=2).set_points_as_corners([ax.c2p(math.cos(t), math.sin(t)) for t in th])
@@ -41,18 +41,15 @@ class Compact(VoiceoverScene):
             [ax.c2p(math.cos(t), 0.33 * math.sin(t)) for t in th])
         sch = note(r"schematic: \ two of infinitely many axes").next_to(ax, DOWN, buff=0.05)
         rows = VGroup(
-            label(r"\textbf{FA 4.16} \ $T$ is \emph{compact} if $T(B)$ has", font_size=24),
-            label(r"compact closure", font_size=24),
-            label(r"in Hilbert space: \ $T$ is a norm limit", font_size=24),
-            label(r"of finite-rank operators", font_size=24, color=C.EPS),
-            label(r"the unit ball goes to a thin set:", font_size=22, color=GREY_A),
-            label(r"its axes shrink to $0$", font_size=22, color=GREY_A),
-            label(r"$T$ compact $\Rightarrow$ $T^*$ compact \ (4.19)", font_size=22),
+            label(r"\textbf{FA 4.16} \ $T$ is \emph{compact} if $T(B)$ has", font_size=26),
+            label(r"compact closure", font_size=26),
+            label(r"in Hilbert space: \ $T$ is a norm limit", font_size=26),
+            label(r"of finite-rank operators", font_size=26, color=C.EPS),
+            label(r"the unit ball goes to a thin set:", font_size=24, color=GREY_A),
+            label(r"its axes shrink to $0$", font_size=24, color=GREY_A),
+            label(r"$T$ compact $\Rightarrow$ $T^*$ compact \ (4.19)", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.4, 0])
-        for r_ in rows:
-            if r_.width > 3.8:
-                r_.width = 3.8
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.4, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.2, -0.4, 0], RIGHT, buff=0)
         head = label(r"Compact operators squeeze the ball into something thin", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> An operator is compact if it sends the unit ball into a set with compact closure. "

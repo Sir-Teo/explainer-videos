@@ -93,7 +93,7 @@ class Alaoglu(VoiceoverScene):
         ax = plain_axes([0, 1, 0.25], [0, 2.2, 1], 5.0, 2.4).move_to([-3.6, 0.6, 0])
         hs = [histogram(ax, xc, dens(w), C.SEQ) for w in w_first]
         hl = [MathTex(rf"\mu_{{{n}}}", font_size=28, color=C.SEQ).next_to(ax, UP, buff=0.05) for n in (1, 2, 3, 4)]
-        bx = plain_axes([0, 60, 10], [0.4, 0.6, 0.1], 5.0, 1.6).move_to([-3.6, -2.3, 0])
+        bx = plain_axes([0, 60, 10], [0.35, 0.65, 0.1], 5.0, 1.6).move_to([-3.6, -2.45, 0])
         mpts = VGroup(*[Dot(bx.c2p(k + 1, v), radius=0.03, color=C.SEQ) for k, v in enumerate(m1)])
         b_l = MathTex(r"\int x\,d\mu_n, \ n = 1, \ldots, 60: \text{ no limit}", font_size=22, color=C.SEQ).next_to(
             bx, UP, buff=0.05)

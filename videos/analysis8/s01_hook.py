@@ -100,13 +100,41 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def counting(self):
         rows = VGroup(
-            label(r"du Bois-Reymond (1873): \ yes, \ by an explicit and delicate construction", font_size=28),
-            label(r"Banach and Steinhaus (1927): \ yes, \ by counting:", font_size=28, color=C.EPS),
+            label(r"du Bois-Reymond (1873): \ yes, \ by an explicit and delicate construction", font_size=26),
+            label(r"Banach and Steinhaus (1927): \ yes, \ by counting:", font_size=26, color=C.EPS),
             MathTex(r"\|\Lambda_n\| = \|D_n\|_1 \to \infty \ \Rightarrow \ \sup_n |s_n(f)(0)| = \infty \text{ for "
-                    r"\emph{most} } f \in C(T)", font_size=32, color=C.EPS),
-            label(r"``most'' \ = \ all but a countable union of nowhere dense sets \ (Baire, 1899)", font_size=26),
-            label(r"a theorem about the existence of monsters, \ proved by counting", font_size=28, color=C.PATHOLOGY),
-        ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.2)
+                    r"\emph{most} } f \in C(T)", font_size=30, color=C.EPS),
+            label(r"``most'' \ = \ all but a countable union of nowhere dense sets \ (Baire, 1899)", font_size=24),
+            label(r"a theorem about the existence of monsters, \ proved by counting", font_size=26, color=C.PATHOLOGY),
+        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.3)
+        # the construction's building block (Fejer): Q_n = 2 sin(nx) sum_{k <= n} sin(kx)/k is bounded by 2 Si(pi)
+        # for every n, but its partial sums at 0 climb to the harmonic number H_n ~ log n
+        n_ = 40
+        xq = np.linspace(-math.pi, math.pi, 4001)
+        Q = 2 * np.sin(n_ * xq) * sum(np.sin(k * xq) / k for k in range(1, n_ + 1))
+        si_pi = 1.851937051982466  # Si(pi), the Gibbs constant
+        assert np.abs(Q).max() <= 2 * si_pi + 1e-9
+        coef = {}  # Q_n = sum_k [cos((n-k)x) - cos((n+k)x)] / k: its cosine coefficients by frequency
+        for k in range(1, n_ + 1):
+            coef[n_ - k] = coef.get(n_ - k, 0) + 1 / k
+            coef[n_ + k] = coef.get(n_ + k, 0) - 1 / k
+        sN = np.cumsum([coef.get(m, 0.0) for m in range(2 * n_ + 1)])  # s_N(Q_n)(0)
+        Hn = sum(1 / k for k in range(1, n_ + 1))
+        assert abs(sN.max() - Hn) < 1e-12 and abs(sN[-1]) < 1e-12
+        qa = plain_axes([-math.pi, math.pi, math.pi / 2], [-4, 4, 2], 5.4, 2.2).move_to([-3.5, 1.05, 0])
+        qg = polyline(qa, xq, Q, color=C.SEQ, stroke_width=2)
+        bnd = VGroup(*[DashedLine(qa.c2p(-math.pi, s_ * 2 * si_pi), qa.c2p(math.pi, s_ * 2 * si_pi), color=GREY_B,
+                                  stroke_width=1.5) for s_ in (1, -1)])
+        ql = MathTex(rf"Q_{{{n_}}}(x) = 2\sin({n_}x)\sum_{{k \le {n_}}} \tfrac{{\sin kx}}{{k}}: \ |Q_{{{n_}}}| \le "
+                     rf"2\,\mathrm{{Si}}(\pi) = {2 * si_pi:.3f}", font_size=22, color=C.SEQ).next_to(qa, UP, buff=0.08)
+        sa = plain_axes([0, 2 * n_, 10], [0, 5, 1], 5.4, 2.2).move_to([3.5, 1.05, 0])
+        sg = VGroup(*[Line(sa.c2p(m, 0), sa.c2p(m, sN[m]), color=C.PATHOLOGY, stroke_width=3) for m in range(2 * n_ + 1)])
+        sl = MathTex(rf"s_N(Q_{{{n_}}})(0): \ \text{{peak }} H_{{{n_}}} = {Hn:.3f} \approx \log {n_} + \gamma",
+                     font_size=22, color=C.PATHOLOGY).next_to(sa, UP, buff=0.08)
+        nl = MathTex(r"N", font_size=22, color=GREY_A).next_to(sa.c2p(2 * n_, 0), RIGHT, buff=0.1)
+        cap = label(r"the building block of such constructions (Fej\'er's polynomials): \ uniformly bounded, \ yet the "
+                    r"partial sums at $0$ reach $\log n$; \ glue infinitely many, with small weights", font_size=19,
+                    color=GREY_A).move_to([0, -0.3, 0])
         head = label(r"The answer, two ways", font_size=36).to_edge(UP, buff=0.4)
         with self.voiceover(
             "<bookmark mark='a'/> Du Bois-Reymond answered yes in 1873, with an explicit and delicate construction. "
@@ -118,7 +146,9 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]), Create(qa), Create(qg), FadeIn(bnd), FadeIn(ql))
+            self.play(Create(sa), FadeIn(nl), LaggedStart(*[Create(l_) for l_ in sg], lag_ratio=0.03), FadeIn(sl),
+                      FadeIn(cap), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
             self.play(FadeIn(rows[2]))

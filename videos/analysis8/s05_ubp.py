@@ -146,12 +146,25 @@ class UniformBoundedness(VoiceoverScene):
                   font_size=24),
             MathTex(r"\|f\|_1 \le C\, \|\hat f\|_\infty \ \text{ for all } f", font_size=32, color=C.EPS),
             label(r"test it on $D_n$: \ $\hat D_n(k) = 1$ for $|k| \le n$, \ so $\|\hat D_n\|_\infty = 1$, \ while", font_size=24),
-        ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.4)
-        tab = VGroup(*[MathTex(rf"n = {n}: \ \ \|D_n\|_1 / \|\hat D_n\|_\infty = {lebesgue_constant(n):.4f}", font_size=28,
-                               color=C.PATHOLOGY) for n in (10, 1000, 100000)]).arrange(DOWN, buff=0.12).next_to(
-            rows, DOWN, buff=0.3)
+        ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.3)
+        tab = VGroup(*[MathTex(rf"n = {n}: \ \ \|D_n\|_1 / \|\hat D_n\|_\infty = {lebesgue_constant(n):.4f}", font_size=26,
+                               color=C.PATHOLOGY) for n in (10, 1000, 100000)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        tab.next_to([0.6, -1.0, 0], RIGHT, buff=0)
         concl = label(r"no constant $C$ works: \ some sequence tending to $0$ is no Fourier series of an $L^1$ function",
-                      font_size=26, color=C.EPS).to_edge(DOWN, buff=0.4)
+                      font_size=24, color=C.EPS).to_edge(DOWN, buff=0.3)
+        # the picture: ||D_n||_1 / ||D_n^||_inf = ||D_n||_1 against log n, through any fixed C
+        es = np.arange(1, 5.01, 0.25)
+        Ls = np.array([lebesgue_constant(int(round(10**e))) for e in es])
+        assert np.all(np.diff(Ls) > 0) and Ls[0] < 3 < 5 < Ls[-1]
+        pax = plain_axes([1, 5, 1], [2, 6, 1], 5.6, 2.6, numbers=True, font_size=18,
+                         x_axis_config={"include_numbers": False},
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, -1.35, 0])
+        pxl = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=18).next_to(pax.c2p(k, 2), DOWN, buff=0.1) for k in range(1, 6)])
+        pdots = VGroup(*[Dot(pax.c2p(e, L_), radius=0.05, color=C.PATHOLOGY) for e, L_ in zip(es, Ls)])
+        cline = DashedLine(pax.c2p(1, 5), pax.c2p(5, 5), color=C.EPS, stroke_width=2)
+        cl = MathTex(r"\text{any fixed } C", font_size=20, color=C.EPS).next_to(pax.c2p(1.05, 5), UP, buff=0.05).align_to(
+            pax.c2p(1.05, 5), LEFT)
+        pl = MathTex(r"\|D_n\|_1 \ \text{against } n", font_size=20, color=C.PATHOLOGY).next_to(pax, UP, buff=0.05)
         with self.voiceover(
             "<bookmark mark='a'/> The same kernel answers another question. The Fourier coefficients of an integrable "
             "function tend to zero, by the Riemann-Lebesgue lemma, so the Fourier transform maps L one into the "
@@ -165,8 +178,9 @@ class UniformBoundedness(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rows[2:4]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[4]))
-            self.play(LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.4), run_time=2.0)
+            self.play(FadeIn(rows[4]), Create(pax), FadeIn(pxl), FadeIn(pl), Create(cline), FadeIn(cl))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in pdots], lag_ratio=0.1),
+                      LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.4), run_time=2.0)
             self.play(FadeIn(concl))
         self.wait(0.4)
         self.clear_scene()

@@ -25,8 +25,8 @@ class Samples(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def banach_limit(self):
-        ax = plain_axes([0.5, 24.5, 4], [-1.3, 1.3, 1], 6.0, 2.0).move_to([-3.3, 1.2, 0])
-        bx = plain_axes([0.5, 24.5, 4], [-0.2, 1.3, 1], 6.0, 1.6).move_to([-3.3, -1.6, 0])
+        ax = plain_axes([0.5, 24.5, 4], [-1.3, 1.3, 1], 5.6, 2.0).move_to([-3.7, 1.2, 0])
+        bx = plain_axes([0.5, 24.5, 4], [-0.2, 1.3, 1], 5.6, 1.6).move_to([-3.7, -1.6, 0])
         a = np.array([(-1) ** n for n in range(1, 25)], float)
         b = np.array([1.0 if n % 3 == 1 else 0.0 for n in range(1, 25)])
         ba = VGroup(*[Line(ax.c2p(n, 0), ax.c2p(n, v), color=C.SEQ, stroke_width=5) for n, v in zip(range(1, 25), a)])
@@ -37,19 +37,19 @@ class Samples(VoiceoverScene):
         lb = MathTex(r"y = (1, 0, 0, 1, 0, 0, \ldots): \ y + Sy + S^2y = \mathbf 1 \ \Rightarrow \ L(y) = \tfrac13",
                      font_size=26, color=C.APPROX).next_to(bx, UP, buff=0.08)
         rows = VGroup(
-            label(r"a \emph{Banach limit} on $\ell^\infty$:", font_size=24),
-            label(r"linear, \ positive, \ $L(\mathbf 1) = 1$,", font_size=24),
-            label(r"shift-invariant: \ $L(Sx) = L(x)$,", font_size=24),
-            label(r"$= \lim x_n$ whenever it exists", font_size=24),
-            label(r"exists by Hahn--Banach,", font_size=24, color=C.EPS),
-            label(r"dominated by $p(x) = \limsup \frac1n\sum_{k \le n} x_k$", font_size=22, color=C.EPS),
-            label(r"no formula can give it: \ an element", font_size=22, color=GREY_A),
-            label(r"of $(\ell^\infty)^*$ that is not in $\ell^1$", font_size=22, color=GREY_A),
+            label(r"a \emph{Banach limit} on $\ell^\infty$:", font_size=28),
+            label(r"linear, \ positive, \ $L(\mathbf 1) = 1$,", font_size=28),
+            label(r"shift-invariant: \ $L(Sx) = L(x)$,", font_size=28),
+            label(r"$= \lim x_n$ whenever it exists", font_size=28),
+            label(r"exists by Hahn--Banach,", font_size=28, color=C.EPS),
+            label(r"dominated by $p(x) = \limsup \frac1n\sum_{k \le n} x_k$", font_size=26, color=C.EPS),
+            label(r"no formula can give it: \ an element", font_size=26, color=GREY_A),
+            label(r"of $(\ell^\infty)^*$ that is not in $\ell^1$", font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.2, 0])
         for r_ in rows:
-            if r_.width > 4.4:
-                r_.width = 4.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.2, 0])
+            if r_.width > 5.4:
+                r_.width = 5.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([1.3, -0.2, 0], RIGHT, buff=0)
         head = label(r"1. \ A limit for every bounded sequence", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> First, a limit for every bounded sequence. Hahn-Banach extends the ordinary limit to "

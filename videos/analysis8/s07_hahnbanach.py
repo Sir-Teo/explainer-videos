@@ -31,16 +31,16 @@ class HahnBanach(VoiceoverScene):
         y = np.linspace(-3, 3, 600)
         lo = 0.5 * y - np.sqrt(1 + y * y)
         hi = np.sqrt(1 + y * y) - 0.5 * y
-        g_lo = polyline(ax, y, lo, color=C.SEQ, stroke_width=3)
-        g_hi = polyline(ax, y, hi, color=C.APPROX, stroke_width=3)
+        g_lo = runs(ax, y, lo, C.SEQ, 3)  # both curves leave the window at the ends: cut, not drawn over the frame
+        g_hi = runs(ax, y, hi, C.APPROX, 3)
         smax, imin = lo.max(), hi.min()
         assert abs(smax + math.sqrt(0.75)) < 1e-4 and abs(imin - math.sqrt(0.75)) < 1e-4 and smax <= imin
         band = Rectangle(width=6.0, height=ax.c2p(0, imin)[1] - ax.c2p(0, smax)[1], stroke_width=0, fill_color=C.EPS,
                          fill_opacity=0.18).move_to(ax.c2p(0, 0))
         top = DashedLine(ax.c2p(-3, imin), ax.c2p(3, imin), color=C.APPROX, stroke_width=1.5)
         bot = DashedLine(ax.c2p(-3, smax), ax.c2p(3, smax), color=C.SEQ, stroke_width=1.5)
-        l_lo = MathTex(r"f(y) - p(y - x_0)", font_size=24, color=C.SEQ).next_to(ax.c2p(2.0, -0.9), DOWN, buff=0.4)
-        l_hi = MathTex(r"p(y + x_0) - f(y)", font_size=24, color=C.APPROX).next_to(ax.c2p(-2.0, 1.4), UP, buff=0.3)
+        l_lo = MathTex(r"f(y) - p(y - x_0)", font_size=24, color=C.SEQ).move_to(ax.c2p(1.7, -2.15))
+        l_hi = MathTex(r"p(y + x_0) - f(y)", font_size=24, color=C.APPROX).move_to(ax.c2p(1.7, 2.15))
         y_l = MathTex(r"y \in M", font_size=22, color=GREY_B).next_to(ax, RIGHT, buff=0.1).shift(DOWN * 0.3)
         setup = VGroup(
             label(r"$M$ = the $x$-axis in $\R^2$, \ $f(t, 0) = \tfrac t2$, \ $p$ = the Euclidean norm, \ $x_0 = (0, 1)$",
