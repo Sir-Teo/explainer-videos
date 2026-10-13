@@ -129,20 +129,33 @@ class RieszHilbert(VoiceoverScene):
                 why(r"take the inner product with $z \perp M$"), why(r"so $y = \overline{\Lambda z}\, z$")]
         step = ladder(self, rows, whys, keep=4, top=1.3, buff=0.45, x=-1.0)
         # the picture the proof follows, small: the kernel, its parallel level sets, and the unit normal z
-        c0 = np.array([-4.9, -2.65, 0])
-        sc = 1.25  # the picture, scaled up into the free lower-left area (below the third proof row)
-        nrm = np.array([2.0, 1.0, 0]) / math.sqrt(5)
+        c0 = np.array([-4.55, -2.55, 0])
+        sc = 1.3  # the picture sits in the free lower-left strip, below and left of the proof rows
+        nrm = np.array([1.0, 2.0, 0]) / math.sqrt(5)
         tang = np.array([-nrm[1], nrm[0], 0])
         mini = VGroup()
         for k in range(-2, 3):
-            mini.add(Line(c0 + sc * (0.42 * k * nrm - 0.8 * tang), c0 + sc * (0.42 * k * nrm + 0.8 * tang),
+            mini.add(Line(c0 + sc * (0.36 * k * nrm - 0.8 * tang), c0 + sc * (0.36 * k * nrm + 0.8 * tang),
                           color=C.EPS if k == 0 else C.FUNCTIONAL, stroke_width=3.5 if k == 0 else 1.6,
                           stroke_opacity=1.0 if k == 0 else 0.75))
-        zarr = Arrow(c0, c0 + sc * 0.85 * nrm, buff=0, color=C.INNER, stroke_width=6, tip_length=0.2)
-        mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=26, color=C.EPS).next_to(c0 + sc * 0.8 * tang, UP, buff=0.05),
-                        MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.85 * nrm, RIGHT, buff=0.06))
+        zarr = Arrow(c0, c0 + sc * 0.62 * nrm, buff=0, color=C.INNER, stroke_width=6, tip_length=0.2)
+        mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=26, color=C.EPS).next_to(c0 + sc * 0.8 * tang, LEFT, buff=0.08),
+                        MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.62 * nrm, RIGHT, buff=0.08))
+        # the key step drawn, with Lambda = <., z> (so Lambda z = 1): (Lambda x) z - x = -<x, t> t lies on M
+        xv = 0.55 * tang + 0.6 * nrm
+        lx = float(np.dot(xv, nrm))
+        comb = lx * nrm - xv
+        assert abs(np.dot(comb, nrm)) < 1e-12  # the combination is perpendicular to z: it is in the kernel
+        xarr = Arrow(c0, c0 + sc * xv, buff=0, color=WHITE, stroke_width=5, tip_length=0.18)
+        xl = MathTex("x", font_size=30).next_to(c0 + sc * xv, LEFT, buff=0.08)
+        shadow = DashedLine(c0 + sc * xv, c0 + sc * lx * nrm, color=GREY_B, stroke_width=2)
+        lz = Dot(c0 + sc * lx * nrm, radius=0.06, color=C.INNER)
+        carr = Arrow(c0, c0 + sc * comb, buff=0, color=C.EPS, stroke_width=6, tip_length=0.18)
+        cl = MathTex(r"(\Lambda x) z - (\Lambda z) x", font_size=24, color=C.EPS).next_to(c0 + sc * comb, RIGHT, buff=0.1)
+        pic = VGroup(mini, zarr, mini_l, xarr, xl, shadow, lz, carr, cl)
+        assert pic.get_left()[0] > -6.95 and pic.get_bottom()[1] > -3.95 and pic.get_top()[1] < -1.05
         note_ = label(r"$z$ is the normal to the kernel: \ the arrow in the stack of lines", font_size=26,
-                      color=C.INNER).next_to(zarr, RIGHT, buff=1.4).align_to(c0 + DOWN * 0.3, DOWN)
+                      color=C.INNER).move_to([1.6, -3.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: every bounded linear functional on a Hilbert space is the inner "
             "product with a unique vector y, and the norm of the functional is the length of y. "
@@ -160,6 +173,9 @@ class RieszHilbert(VoiceoverScene):
             step(0)
             vo.wait_until("c")
             step(1)
+            self.play(GrowArrow(xarr), FadeIn(xl))
+            self.play(Create(shadow), FadeIn(lz))
+            self.play(GrowArrow(carr), FadeIn(cl))
             vo.wait_until("d")
             step(2)
             vo.wait_until("e")
