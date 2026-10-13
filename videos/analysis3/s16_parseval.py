@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from videos.analysis3.common import load, plain_axes, polyline, saw, saw_partial
+from videos.analysis3.compute import trap
 
 
 class Parseval(VoiceoverScene):
@@ -126,6 +127,36 @@ class Parseval(VoiceoverScene):
         note_ = label(r"the missing energy is exactly the tail $\frac12 \sum_{n > N} \frac{1}{n^2}$ \ (computed both ways)",
                       font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
         assert np.allclose(mse, tail, rtol=2e-3)
+        # the three approximations of the proof, drawn and measured: the sawtooth f, a continuous h (the jump
+        # replaced by a ramp of half-width 0.3), and P = the Fejer mean of h with N = 40
+        xs = np.linspace(-math.pi, math.pi, 20001)
+        fx = np.where(xs > 0, (math.pi - xs) / 2, (-math.pi - xs) / 2)
+        dl_ = 0.3
+        fl, fr = (-math.pi + dl_) / 2, (math.pi - dl_) / 2
+        hx = np.where(np.abs(xs) < dl_, fl + (fr - fl) * (xs + dl_) / (2 * dl_), fx)
+        NN = 40
+        Px = sum((1 - n / (NN + 1)) * (trap(hx * np.sin(n * xs), xs) / math.pi) * np.sin(n * xs) for n in range(1, NN + 1))
+        sN = sum((trap(fx * np.sin(n * xs), xs) / math.pi) * np.sin(n * xs) for n in range(1, NN + 1))
+
+        def l2(g):
+            return math.sqrt(trap(g * g, xs) / (2 * math.pi))
+
+        e_fh, e_hP, e_fP, e_fs = l2(fx - hx), float(np.abs(hx - Px).max()), l2(fx - Px), l2(fx - sN)
+        assert e_fs <= e_fP <= e_fh + e_hP and e_fs < 0.12
+        pax = plain_axes([-math.pi, math.pi, math.pi / 2], [-1.8, 1.8, 1], 7.0, 1.6).move_to([-2.8, -2.25, 0])
+        m_ = xs > 0
+        pf = VGroup(polyline(pax, xs[m_][::10], fx[m_][::10], color=WHITE, stroke_width=3),
+                    polyline(pax, xs[~m_][::10], fx[~m_][::10], color=WHITE, stroke_width=3))
+        ph = polyline(pax, xs[::10], hx[::10], color=C.SEQ, stroke_width=2.5)
+        pP = polyline(pax, xs[::10], Px[::10], color=C.APPROX, stroke_width=2.5)
+        pn = VGroup(MathTex(r"f", r",\ h", r",\ P", font_size=26),
+                    MathTex(rf"\|f - h\|_2 = {e_fh:.3f}", font_size=24, color=C.SEQ),
+                    MathTex(rf"\sup |h - P| = {e_hP:.3f}", font_size=24, color=C.APPROX),
+                    MathTex(rf"\|f - s_{{{NN}}}\|_2 = {e_fs:.3f} \le \|f - P\|_2 = {e_fP:.3f}", font_size=24,
+                            color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([1.1, -2.25, 0], RIGHT,
+                                                                                               buff=0)
+        pn[0][1].set_color(C.SEQ)
+        pn[0][2].set_color(C.APPROX)
         with self.voiceover(
             "<bookmark mark='a'/> Now Parseval's theorem, Rudin 8.16. For every Riemann-integrable function, the mean "
             "square error of the partial sums goes to zero, and Bessel's inequality becomes an equality. "
@@ -138,8 +169,10 @@ class Parseval(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head))
             vo.wait_until("b")
-            self.play(FadeIn(proof[0]))
-            self.play(FadeIn(proof[1]))
+            self.play(FadeIn(proof[0]), Create(pax), Create(pf), FadeIn(pn[0][0]))
+            self.play(Create(ph), FadeIn(pn[0][1]), FadeIn(pn[1]))
+            self.play(FadeIn(proof[1]), Create(pP), FadeIn(pn[0][2]), FadeIn(pn[2]))
+            self.play(FadeIn(pn[3]))
             vo.wait_until("c")
             cur = frames[1]
             self.play(Create(outline), FadeIn(tl), FadeIn(cur), FadeIn(lab[1]))
