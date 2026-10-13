@@ -105,6 +105,7 @@ class ZerosProducts(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
         th = np.linspace(0, 2 * np.pi, 400)
         assert np.allclose(np.abs(B(np.exp(1j * th))), 1, atol=1e-9)  # each factor has size 1 on the circle
         head = label(r"How many zeros can a bounded function on the disk have?", font_size=32).to_edge(UP, buff=0.3)
@@ -153,6 +154,7 @@ class ZerosProducts(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.6:
                 r_.width = 3.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.1, -0.6, 0])
         head = label(r"Analytic continuation: \ the logarithm as a spiral staircase", font_size=32).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The identity theorem makes continuation unique along any path. Follow the logarithm "

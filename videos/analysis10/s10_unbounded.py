@@ -55,6 +55,7 @@ class Unbounded(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, -0.3, 0])
         head = label(r"Derivatives are unbounded", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Momentum is a derivative, and derivatives are not bounded: sine n x has the same "
@@ -100,6 +101,7 @@ class Unbounded(VoiceoverScene):
         for r_ in rows:
             if r_.width > 8.4:
                 r_.width = 8.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([2.4, -0.3, 0])
         assert np.allclose(np.gradient(np.exp(x), x)[5:-5], np.exp(x)[5:-5], rtol=1e-4)
         head = label(r"The museum: \ $i\,\frac{d}{dx}$ on an interval", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -170,6 +172,7 @@ class Unbounded(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(tab, DOWN, buff=0.35)
         head = label(r"A circle of self-adjoint extensions", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> To make it self-adjoint, impose a boundary condition: f at one equals e to the i "

@@ -94,6 +94,7 @@ class Banach(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.1, -0.5, 0])
         lab = VGroup(MathTex(r"\|x\| \le 1", font_size=24, color=GREY_B).next_to(ax.c2p(0.5, -0.9), DOWN, buff=0.05),
                      MathTex(rf"\|T\| = {s[0]:.3f}", font_size=26, color=C.EPS).next_to(ax, UP, buff=0.05))
         head = label(r"For linear maps, \ continuous means bounded", font_size=34).to_edge(UP, buff=0.3)

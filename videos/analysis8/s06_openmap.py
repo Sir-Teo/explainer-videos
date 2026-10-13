@@ -52,6 +52,7 @@ class OpenMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.6:
                 r_.width = 3.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.0, -0.8, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.1, -0.8, 0])
         thm = VGroup(label(r"\textbf{RCA 5.9} \ (open mapping) \ $X, Y$ Banach, \ $T: X \to Y$ bounded, linear and onto:",
                            font_size=26),
@@ -111,6 +112,7 @@ class OpenMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.2:
                 r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, -0.5, 0])
         head = label(r"The closed graph theorem, \ and why derivatives need domains", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

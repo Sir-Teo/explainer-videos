@@ -199,6 +199,7 @@ class FourierL2(VoiceoverScene):
             if r_.width > 6.4:
                 r_.width = 6.4
         panel.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.55, -0.75, 0])
+        panel.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.55, -0.75, 0])
         panel[3].shift(DOWN * 0.15)
         panel[4:].shift(DOWN * 0.15)
         assert np.all(np.diff(sup_err) < 0)

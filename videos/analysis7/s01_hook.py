@@ -110,6 +110,7 @@ class Hook(VoiceoverScene):
             if r_.width > 7.2:
                 r_.width = 7.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
         assert abs(half_pi - math.pi / 2) < 1e-14 and abs(e2pi - 1) < 1e-12
         head = label(r"The exponential, \ the most important function in mathematics", font_size=32).to_edge(UP,
                                                                                                          buff=0.25)

@@ -112,6 +112,7 @@ class Holomorphic(VoiceoverScene):
         for r_ in side:
             if r_.width > 3.9:
                 r_.width = 3.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.5, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.05, -0.5, 0])
         assert np.allclose(angs_sq, 90, atol=1e-6) and np.allclose(angs_exp, 90, atol=1e-6)
         head = label(r"Holomorphic maps preserve angles", font_size=34).to_edge(UP, buff=0.25)

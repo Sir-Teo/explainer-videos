@@ -27,9 +27,9 @@ class SpectralTheorem(VoiceoverScene):
     def resolution(self):
         d = load("pvm")
         lam, wts, x2 = d["lam"], d["weights"], float(d["x2"])
-        ax = plain_axes([-1.5, 1.5, 0.5], [0, 4.2, 1], 7.0, 3.0, numbers=True, font_size=18,
+        ax = plain_axes([-1.5, 1.5, 0.5], [0, 9, 2], 7.0, 3.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.6, 0.6, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0, 0.6, 0])
         ticks = VGroup(*[Line(ax.c2p(l_, -0.15), ax.c2p(l_, 0.15), color=C.SPECTRUM, stroke_width=2) for l_ in lam])
         stems = VGroup(*[Line(ax.c2p(l_, 0), ax.c2p(l_, w_), color=C.MEASURE, stroke_width=4) for l_, w_ in zip(lam, wts)])
         tl = MathTex(r"\sigma(H): \ 50 \text{ eigenvalues}", font_size=22, color=C.SPECTRUM).next_to(ax.c2p(-1.5, 0), DOWN,
@@ -39,12 +39,12 @@ class SpectralTheorem(VoiceoverScene):
                                                                                                          buff=0.1)
         om = (-0.4, 0.3)
         inband = (lam >= om[0]) & (lam <= om[1])
-        band = Rectangle(width=ax.c2p(om[1], 0)[0] - ax.c2p(om[0], 0)[0], height=ax.c2p(0, 4.2)[1] - ax.c2p(0, 0)[1],
+        band = Rectangle(width=ax.c2p(om[1], 0)[0] - ax.c2p(om[0], 0)[0], height=ax.c2p(0, 9)[1] - ax.c2p(0, 0)[1],
                          stroke_color=C.EPS, stroke_width=2, fill_color=C.EPS, fill_opacity=0.08).move_to(
-            ax.c2p(sum(om) / 2, 2.1))
-        bl = MathTex(r"\omega", font_size=26, color=C.EPS).move_to(band.get_top() + DOWN * 0.25)  # inside the band
+            ax.c2p(sum(om) / 2, 4.5))
+        bl = MathTex(r"\omega", font_size=26, color=C.EPS).move_to(band.get_corner(UR) + np.array([-0.18, -0.25, 0]))  # inside
         Ew = float(wts[inband].sum())
-        assert abs(wts.sum() - x2) < 1e-9
+        assert abs(wts.sum() - x2) < 1e-9 and wts.max() < 9  # every stem inside the axes
         rows = VGroup(
             label(r"\textbf{FA 12.17} \ a resolution of the identity: \ a projection $E(\omega)$ for each Borel set "
                   r"$\omega$,", font_size=22),
@@ -133,10 +133,10 @@ class SpectralTheorem(VoiceoverScene):
     def ergodic(self):
         d = load("pvm")
         ns, errs = d["ns"], d["errs"]
-        ax = plain_axes([0, 4, 1], [-4, 1, 1], 6.0, 3.4, numbers=True, font_size=18,
+        ax = plain_axes([0, 4, 1], [-4, 1, 1], 5.6, 3.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.3, -0.5, 0])
-        xl = MathTex(r"\log_{10} n", font_size=22).next_to(ax.x_axis, DOWN, buff=0.35)
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.75, -0.5, 0])
+        xl = MathTex(r"\log_{10} n", font_size=22).next_to(ax.c2p(4, 0), UR, buff=0.1)
         yl = MathTex(r"\log_{10}\Big\|\tfrac1n\sum_{k < n} U^k y - Py\Big\|", font_size=22).next_to(ax, UP, buff=0.1)
         dots = VGroup(*[Dot(ax.c2p(math.log10(n), math.log10(e)), radius=0.05, color=C.OPERATOR) for n, e in zip(ns, errs)])
         slope = np.polyfit(np.log10(ns[10:]), np.log10(errs[10:]), 1)[0]
@@ -157,13 +157,14 @@ class SpectralTheorem(VoiceoverScene):
                     color=C.EPS),
             label(r"proof: \ $\int \frac1n \sum_{k<n} \lambda^k\, dE(\lambda)$, \ and the averages of $\lambda^k$ are $0$ in "
                   r"the limit unless $\lambda = 1$", font_size=20, color=GREY_A),
-            MathTex(rf"8 \times 8, \ \text{{2 fixed directions: slope }} {slope:.2f}", font_size=24),
+            MathTex(rf"8 \times 8, \ \text{{2 fixed directions: slope }} {{{slope:.2f}}}", font_size=24),
             label(r"also from the calculus: \ square roots of positive operators, \ polar decomposition $T = U|T|$",
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -1.3, 0])
         for r_ in rows:
-            if r_.width > 6.8:
-                r_.width = 6.8
+            if r_.width > 6.55:
+                r_.width = 6.55
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([0.3, -1.3, 0], RIGHT, buff=0)
         head = label(r"A payoff: \ averages of a unitary", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> One payoff. Average the powers of a unitary operator applied to a vector. "

@@ -115,6 +115,7 @@ class NormalFamilies(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.9:
                 r_.width = 3.9
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.0, -0.2, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.05, -0.2, 0])
         thm = label(r"\textbf{RCA 14.6} \ (Montel) \ a family of holomorphic functions, \ uniformly bounded on compact "
                     r"sets, \ is normal", font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3)

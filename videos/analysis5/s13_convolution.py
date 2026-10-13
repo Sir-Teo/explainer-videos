@@ -150,6 +150,7 @@ class Convolution(VoiceoverScene):
             if r_.width > 6.0:
                 r_.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.7, -0.7, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.7, -0.7, 0])
         assert np.all(sups < 2) and np.all(sups <= si + 1e-9) and abs(termwise - exact) < 1e-5
         with self.voiceover(
             "<bookmark mark='a'/> And now the question that opened Part 3: may the sawtooth series be integrated term "

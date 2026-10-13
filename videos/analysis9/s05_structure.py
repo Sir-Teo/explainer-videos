@@ -90,6 +90,7 @@ class Structure(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -0.5, 0])
         assert abs(lhs - rhs) < 1e-6
         head = label(r"Every distribution is locally a derivative of a continuous function", font_size=32).to_edge(UP,
                                                                                                               buff=0.25)

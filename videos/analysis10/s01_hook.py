@@ -74,6 +74,11 @@ class Hook(VoiceoverScene):
                          for l_ in lam])
         labs = VGroup(*[MathTex(f"{l_:.1f}", font_size=20, color=GREY_A).next_to(ln, DOWN, buff=0.08)
                         for l_, ln in zip(lam, lines)])
+        for k in range(1, len(labs)):  # lines closer than their labels: drop every other label a row lower
+            a_, b_ = labs[k], labs[k - 1]
+            close = min(a_.get_right()[0], b_.get_right()[0]) - max(a_.get_left()[0], b_.get_left()[0]) > -0.08
+            if close and abs(a_.get_y() - b_.get_y()) < 0.1:
+                a_.shift(DOWN * 0.28)
         sl = label(r"hydrogen's visible lines (nm): \ $\frac{1}{\lambda} = R\big(\frac14 - \frac{1}{n^2}\big)$, \ "
                    r"$n = 3, \ldots, 7$", font_size=24, color=GREY_A).next_to(strip, UP, buff=0.15)
         # energy levels: E_n = -13.6 eV / n^2, and the lines are differences E_n - E_2
@@ -96,6 +101,7 @@ class Hook(VoiceoverScene):
         for r_ in rows:
             if r_.width > 9.0:
                 r_.width = 9.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([1.8, -1.6, 0])
         head = label(r"Two meanings of ``spectrum''", font_size=36).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Spectrum is the word for the lines of light a hot gas gives off. Hydrogen's visible "

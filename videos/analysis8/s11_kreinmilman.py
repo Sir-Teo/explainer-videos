@@ -109,6 +109,7 @@ class KreinMilman(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.5, 0])
         head = label(r"A ball with no corners at all", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

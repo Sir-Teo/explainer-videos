@@ -52,6 +52,7 @@ class TestFunctions(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.0:
                 r_.width = 6.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.4, 0])
         head = label(r"A smooth function that is exactly zero outside an interval", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Test functions must be smooth, and vanish outside a bounded set. Do any exist? Part "
@@ -105,6 +106,7 @@ class TestFunctions(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.4, 0])
         head = label(r"The space of test functions, \ and what convergence means there", font_size=32).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The test functions on a region form the space D. <bookmark mark='b'/> A sequence "

@@ -49,6 +49,7 @@ class OpenMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.3, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.3, 0])
         head = label(r"The third miracle: \ a tiny arc decides everything", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -114,6 +115,7 @@ class OpenMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.3:
                 r_.width = 3.3
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.25, -0.6, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.3, -0.6, 0])
         head = label(r"Near a point, a holomorphic map looks like $z \mapsto z^m$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

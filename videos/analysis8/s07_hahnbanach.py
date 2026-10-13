@@ -60,6 +60,7 @@ class HahnBanach(VoiceoverScene):
         for r_ in side:
             if r_.width > 5.6:
                 r_.width = 5.6
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([3.7, -1.0, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([3.8, -1.0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Hahn-Banach extends a linear functional from a subspace to the whole space without "

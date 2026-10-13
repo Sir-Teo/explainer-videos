@@ -66,6 +66,7 @@ class Wiener(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
         head = label(r"Which kernels can build everything?", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Here's a question that sounds like linear algebra. Take one integrable kernel k. "
@@ -137,6 +138,7 @@ class Wiener(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.2, 0])
         head = label(r"The algebra behind Wiener's theorem", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Why is it true? Integrable functions under convolution form an algebra, with the L "
@@ -201,6 +203,7 @@ class Wiener(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.6:
                 r_.width = 7.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.0, -2.2, 0])
         head = label(r"$\zeta$ has no zeros on the line $\mathrm{Re}\,s = 1$", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> The road to the primes needs one fact about the zeta function from the Riemann "

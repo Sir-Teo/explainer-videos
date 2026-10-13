@@ -72,6 +72,7 @@ class Hook(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -1.3, 0])
         lab = MathTex(r"\varphi", font_size=30, color=C.TEST_FN).next_to(ax.c2p(-1.3, float(np.interp(-1.3, x, phi))), UP,
                                                                          buff=0.1)
         head = label(r"Dirac's delta, \ and why it cannot be a function", font_size=34).to_edge(UP, buff=0.3)
@@ -130,6 +131,7 @@ class Hook(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.4, 0])
         head = label(r"The derivative of a step", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Heaviside, solving circuit equations in the 1890s, wrote that the derivative of a "

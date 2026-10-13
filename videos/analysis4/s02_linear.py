@@ -55,6 +55,7 @@ class LinearMaps(VoiceoverScene):
             if r_.width > 5.4:
                 r_.width = 5.4
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.2, -0.6, 0])
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.2, -0.6, 0])
         assert np.allclose(np.array([[1.6, 0.9], [0.3, 1.1]]), A)
         with self.voiceover(
             "<bookmark mark='a'/> A linear map of the plane respects addition and scaling. Watch what it does to a "

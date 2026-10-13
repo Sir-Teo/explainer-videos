@@ -70,6 +70,7 @@ class Residues(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -1.75, 0])
         thm = VGroup(label(r"\textbf{RCA 10.42} \ (residues) \ $f$ holomorphic except at isolated points $a_k$:",
                            font_size=26),
                      MathTex(r"\frac{1}{2\pi i}\oint_\Gamma f\,dz = \sum_k \mathrm{Res}(f; a_k)\,\mathrm{Ind}_\Gamma(a_k)",
@@ -186,6 +187,7 @@ class Residues(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.9:
                 r_.width = 3.9
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.6, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.05, -0.6, 0])
         head = label(r"Rouch\'e: \ walk a dog on a short leash around a tree", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

@@ -74,7 +74,7 @@ class BanachAlgebras(VoiceoverScene):
         d = load("neumann")
         errs, bound = d["errs"], d["bound"]
         n = np.arange(40)
-        ax = plain_axes([0, 40, 10], [-4, 1, 1], 6.2, 3.6, numbers=True, font_size=18,
+        ax = plain_axes([0, 40, 10], [-7, 1, 1], 6.2, 4.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.5, 0])
         xl = MathTex(r"n", font_size=22).next_to(ax.x_axis, RIGHT, buff=0.1)
@@ -146,8 +146,8 @@ class BanachAlgebras(VoiceoverScene):
         rows = VGroup(
             label(r"\textbf{RCA 18.4} \ if $x$ is invertible and $\|y\| < 1/\|x^{-1}\|$:", font_size=24),
             MathTex(r"x - y = x\,(e - x^{-1}y) \ \text{ is invertible (Neumann)}", font_size=28),
-            label(r"so the invertible elements form an open set, \ and $x \mapsto x^{-1}$ is continuous", font_size=24,
-                  color=C.EPS),
+            label(r"so the invertible elements form an open set,", font_size=24, color=C.EPS),
+            label(r"and $x \mapsto x^{-1}$ is continuous", font_size=24, color=C.EPS),
             MathTex(rf"\text{{here: }} 1/\|A^{{-1}}\| = {rA:.1f}, \ \text{{exactly the distance to }} \det = 0", font_size=24,
                     color=GREY_A),
             label(r"Part 4's lemma (PMA 9.8), \ in its final home", font_size=22, color=GREY_A),
@@ -155,6 +155,7 @@ class BanachAlgebras(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.2, 0])
         head = label(r"The invertible elements form an open set", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Here's a slice through the two by two matrices, around the identity. The red circle "
@@ -171,8 +172,8 @@ class BanachAlgebras(VoiceoverScene):
             self.play(FadeIn(dI), FadeIn(lI), Create(b1), FadeIn(rows[:2]))
             self.play(FadeIn(dA), FadeIn(lA), DrawBorderThenFill(b2))
             vo.wait_until("c")
-            self.play(FadeIn(rows[2:4]))
-            self.play(FadeIn(rows[4]))
+            self.play(FadeIn(rows[2:5]))
+            self.play(FadeIn(rows[5]))
         self.wait(0.4)
         self.clear_scene()
 

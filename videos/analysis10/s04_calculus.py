@@ -51,6 +51,7 @@ class SymbolicCalculus(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.8:
                 r_.width = 6.8
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.3, 0])
         assert err < 1e-10
         head = label(r"Cauchy's formula, \ with an operator in the slot", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
@@ -145,10 +146,11 @@ class SymbolicCalculus(VoiceoverScene):
             label(r"Part 7's Runge: \ rational functions suffice to approximate on $\sigma$", font_size=22, color=GREY_A),
             label(r"\textbf{FA 10.35} \ (Lomonosov, 1973) \ an operator commuting with a compact $K \ne 0$", font_size=22),
             label(r"has a closed invariant subspace: \ by Schauder's fixed-point theorem", font_size=22),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
+        )
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
+            if r_.width > 6.4:
+                r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([0.5, -0.3, 0], RIGHT, buff=0)
         head = label(r"Square roots of operators", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Square roots need care, because the square root isn't holomorphic across its "

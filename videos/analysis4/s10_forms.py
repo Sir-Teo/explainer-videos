@@ -68,6 +68,7 @@ class FormsTour(VoiceoverScene):
             if r_.width > 6.3:
                 r_.width = 6.3
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
         assert np.abs(ratios - 1).max() < 1e-3
         with self.voiceover(
             "<bookmark mark='a'/> First, the change of variables formula. When a map T reshapes a region, integrals "
@@ -145,6 +146,7 @@ class FormsTour(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         faces.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -0.85, 0])
+        faces.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -0.85, 0])
         assert abs(area - 1.5) < 1e-3
         with self.voiceover(
             "<bookmark mark='a'/> The summit of the chapter is Stokes' theorem: the integral of a form over the "
@@ -194,6 +196,7 @@ class FormsTour(VoiceoverScene):
         for r_ in side:
             if r_.width > 6.0:
                 r_.width = 6.0
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.85, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.85, 0])
         assert abs(wa - 2 * math.pi) < 1e-3 and abs(wo) < 1e-3
         with self.voiceover(

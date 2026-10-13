@@ -36,8 +36,8 @@ class Spectrum(VoiceoverScene):
         # the trace formula, checked at a few points against the matrix inverse
         for l_ in (2.0 + 1j, -0.3 - 1.7j, 2.5j):
             assert abs(np.trace(np.linalg.inv(l_ * I - A)) - trace_res(np.array([l_]))[0]) < 1e-10
-        cx = square_axes([-3, 3, 1], [-2.2, 2.2, 1], 1.05).move_to([-3.4, -0.3, 0])
-        img = cplot(cx, trace_res, (-3, 3), (-2.2, 2.2), px=720)
+        cx = square_axes([-3, 3, 1], [-2.7, 2.7, 1], 0.95).move_to([-3.6, -0.3, 0])
+        img = cplot(cx, trace_res, (-3, 3), (-2.7, 2.7), px=720)
         evd = VGroup(*[Dot(cx.c2p(l_.real, l_.imag), radius=0.05, color=WHITE) for l_ in ev])
         nrm = np.linalg.norm(A, 2)
         nc = DashedVMobject(Circle(radius=nrm * (cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0]), color=C.EPS, stroke_width=2.5).move_to(
@@ -45,7 +45,7 @@ class Spectrum(VoiceoverScene):
         ncl = MathTex(rf"|\lambda| = \|A\| = {nrm:.3f}", font_size=22, color=C.EPS).next_to(cx, DOWN, buff=0.1)
         wheel = phase_wheel(0.3).to_corner(DL, buff=0.25)
         tl = MathTex(r"\operatorname{tr}(\lambda - A)^{-1}", font_size=24).next_to(cx, UP, buff=0.08)
-        assert np.abs(ev).max() <= nrm + 1e-12
+        assert np.abs(ev).max() <= nrm + 1e-12 and nrm < 2.7  # the norm circle fits in the window
         pm = ProofMap([
             r"$|\lambda| > \|x\|$: \ $x - \lambda e = -\lambda(e - x/\lambda)$ is invertible",
             r"invertibles are open: \ $\sigma(x)$ is closed, \ so compact",
@@ -109,6 +109,7 @@ class Spectrum(VoiceoverScene):
         for r_ in lad:
             if r_.width > 6.4:
                 r_.width = 6.4
+        lad.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.2, 0])
         head = label(r"How big is the spectrum?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Expand the resolvent in powers of one over lambda. That's a Laurent series, Part "

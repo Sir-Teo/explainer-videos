@@ -58,6 +58,7 @@ class Distributions(VoiceoverScene):
         for r_ in rows:
             if r_.width > 12.6:
                 r_.width = 12.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([0.0, -2.0, 0])
         rows[0].to_edge(UP, buff=0.3)
         rest = VGroup(*rows[1:]).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, 0.2, 0])
         for r_ in rest:

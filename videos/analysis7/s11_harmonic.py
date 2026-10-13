@@ -77,6 +77,7 @@ class Harmonic(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, -1.75, 0])
         assert lap_pt.max() < 1e-4 and abs(u0 - gmean) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> The real part of a holomorphic function is harmonic: its Laplacian is zero. Think "
@@ -125,6 +126,7 @@ class Harmonic(VoiceoverScene):
         for r_ in rows:
             if r_.width > 5.6:
                 r_.width = 5.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.7, -0.5, 0])
         head = label(r"Poisson's kernel: \ the bump, once more", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Poisson's kernel is an old friend: positive, average one, and narrowing as r "
