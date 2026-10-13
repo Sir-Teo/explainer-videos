@@ -82,11 +82,14 @@ class Outro(VoiceoverScene):
         def bump():  # the derivative of the smoothed sign erf(x / (e sqrt 2)): a Gaussian of total mass 2
             e = epsT.get_value()
             y = 2 * np.exp(-x * x / (2 * e * e)) / (e * math.sqrt(2 * math.pi))
-            g = VGroup(polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3))
-            if y.max() > 2.2:  # off the top of the axes: say so
-                g.add(Arrow(ax.c2p(0, 1.75), ax.c2p(0, 2.55), buff=0, color=C.EPS, stroke_width=3,
-                            max_tip_length_to_length_ratio=0.35))
-            return g
+            return polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3)
+
+        # off the top of the axes: say so. A separate mobject, so the redrawn curve keeps one shape throughout
+        # (a group that grows a member mid-animation makes become() scramble the points)
+        peak = lambda: 2 / (epsT.get_value() * math.sqrt(2 * math.pi))  # noqa: E731
+        up = Arrow(ax.c2p(0, 1.75), ax.c2p(0, 2.55), buff=0, color=C.EPS, stroke_width=3,
+                   max_tip_length_to_length_ratio=0.35)
+        up.add_updater(lambda m: m.set_opacity(1.0 if peak() > 2.2 else 0.0))
 
         xx_ = np.linspace(-2, 2, 200001)
         for e_ in (0.5, 0.08):
@@ -116,11 +119,12 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(g_abs), FadeIn(lab[0]))
             vo.wait_until("a")
             self.play(Create(g_sgn), FadeIn(lab[1]))
-            self.add(bp)
+            self.add(bp, up.update())
             self.play(epsT.animate.set_value(0.08), FadeIn(lab[2]), run_time=3.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in side], lag_ratio=0.4), run_time=3.0)
         bp.clear_updaters()
+        up.clear_updaters()
         self.wait(0.5)
         self.clear_scene()
 
