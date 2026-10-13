@@ -26,8 +26,8 @@ class Dual(VoiceoverScene):
         pairs = [(1.0, np.inf, r"\ell^1", r"\ell^\infty"), (2.0, 2.0, r"\ell^2", r"\ell^2"), (3.0, 1.5, r"\ell^3", r"\ell^{3/2}")]
         groups = VGroup()
         for k, (p, q, n1, n2) in enumerate(pairs):
-            ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.05).move_to([-4.6 + 4.6 * k, 0.6, 0])
-            bx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.05).move_to([-4.6 + 4.6 * k, -2.3, 0])
+            ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, 1.05, 0])
+            bx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, -1.6, 0])
             for a in (ax, bx):
                 a.set_opacity(0.3)
             b1 = p_ball(ax, p, C.DIST)
