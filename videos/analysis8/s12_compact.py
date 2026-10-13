@@ -123,8 +123,42 @@ class Compact(VoiceoverScene):
             (r"spectrum = eigenvalues", r"spectrum = eigenvalues, \ and $0$"),
             (r"symmetric: \ an orthonormal eigenbasis", r"the spectral theorem \ (Part 10)"),
         ], font_size=24)
-        card.move_to(DOWN * 0.3)
-        head = label(r"Riesz--Schauder: \ linear algebra survives for compact operators", font_size=32).to_edge(UP, buff=0.35)
+        head = label(r"Riesz--Schauder: \ linear algebra survives for compact operators", font_size=32).to_edge(UP, buff=0.3)
+        card.scale(0.85).next_to(head, DOWN, buff=0.3)
+        # the spectrum of a non-symmetric compact operator, K(x, y) = e^{-|x - y|} e^{6ixy} on L^2[0, 1], in the
+        # complex plane with radius log10|lambda| (rings at 10^-1, 10^-2, 10^-3): finitely many outside every ring
+        def spec(N):
+            xg = (np.arange(N) + 0.5) / N
+            X, Y = np.meshgrid(xg, xg, indexing="ij")
+            w = np.linalg.eigvals(np.exp(-np.abs(X - Y)) * np.exp(6j * X * Y) / N)
+            return w[np.argsort(-np.abs(w))]
+
+        wa, wb = spec(400), spec(800)
+        assert np.max(np.abs(wa[:10] - wb[:10]) / np.abs(wb[:10])) < 2e-3  # these are the operator's, not the grid's
+        eps_ = [1e-1, 1e-2, 1e-3]
+        cnt = [int((np.abs(wb) > e_).sum()) for e_ in eps_]
+        assert cnt == [int((np.abs(wa) > e_).sum()) for e_ in eps_]
+        Rr, ctr = 1.45, np.array([-3.6, -2.3, 0])
+
+        def rho(m):
+            return Rr * max(0.0, (math.log10(m) + 4) / 4)
+
+        rings = VGroup(*[Circle(radius=rho(e_), color=GREY_C, stroke_width=1.5).move_to(ctr) for e_ in eps_])
+        rlabs = VGroup(*[MathTex(rf"10^{{-{k + 1}}}", font_size=20, color=GREY_B).move_to(
+            ctr + (rho(e_) + 0.2) * np.array([math.cos(-0.5), math.sin(-0.5), 0])) for k, e_ in enumerate(eps_)])
+        big = wb[np.abs(wb) > 1e-4]
+        sdots = VGroup(*[Dot(ctr + rho(abs(z)) * np.array([math.cos(np.angle(z)), math.sin(np.angle(z)), 0]),
+                             radius=0.045, color=C.OPERATOR) for z in big])
+        zero = Dot(ctr, radius=0.06, color=C.EPS)
+        sl = MathTex(r"K(x, y) = e^{-|x - y|}\,e^{6ixy}", font_size=24, color=C.OPERATOR).next_to(ctr, RIGHT, buff=Rr + 0.4)
+        sl.shift(UP * 0.85)
+        cl = VGroup(label(r"its eigenvalues in $\mathbb C$, \ radius $= \log_{10}|\lambda|$", font_size=22, color=GREY_A),
+                    MathTex(rf"\#\{{|\lambda| > 10^{{-1}}\}} = {cnt[0]}, \ \ \#\{{|\lambda| > 10^{{-2}}\}} = {cnt[1]}, "
+                            rf"\ \ \#\{{|\lambda| > 10^{{-3}}\}} = {cnt[2]}", font_size=24, color=C.EPS),
+                    label(r"finitely many outside every circle: \ they can pile up only at $0$", font_size=22,
+                          color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        cl.next_to(sl, DOWN, buff=0.25, aligned_edge=LEFT)
+        assert cl.get_right()[0] < 6.95 and card.get_bottom()[1] > ctr[1] + Rr + 0.15 and ctr[1] - Rr > -3.95
         with self.voiceover(
             "<bookmark mark='a'/> For compact operators, almost all of finite-dimensional linear algebra survives. "
             "<bookmark mark='b'/> The nonzero spectrum consists of eigenvalues of finite multiplicity, accumulating "
@@ -137,6 +171,9 @@ class Compact(VoiceoverScene):
             vo.wait_until("b")
             for i in (0, 1):
                 self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
+            self.play(Create(rings), FadeIn(rlabs), FadeIn(zero), FadeIn(sl))
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in sdots], lag_ratio=0.03), FadeIn(cl[0]), run_time=2.0)
+            self.play(FadeIn(cl[1:]))
             vo.wait_until("c")
             for i in (2, 3):
                 self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
