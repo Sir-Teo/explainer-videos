@@ -58,16 +58,19 @@ class Outro(VoiceoverScene):
         after = ledger(filled=9, highlight=9).scale(0.95)
         with self.voiceover(
             "The ledger's ninth row. <bookmark mark='a'/> The spaces: test functions, Schwartz functions, and their "
-            "duals. Completeness comes in Fréchet pieces, and compactness from weak-star limits of bounded sets. The "
-            "interchange is finally free: differentiation commutes with every limit. And the Fourier answer is the "
+            "duals. <bookmark mark='c2'/> Completeness comes in Fréchet pieces, <bookmark mark='c3'/> and compactness from weak-star limits of bounded sets. The "
+            "<bookmark mark='c4'/> interchange is finally free: differentiation commutes with every limit. <bookmark mark='c5'/> And the Fourier answer is the "
             "most generous yet: every trigonometric series with coefficients of polynomial size converges, as a "
             "distribution."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[8][i], after.rows[8][i])
-                                    for i in range(len(after.rows[8]))], lag_ratio=0.6),
-                      FadeOut(before.rows[8]), run_time=6)
+            self.play(FadeOut(before.rows[8]), *[TransformFromCopy(after.rows[8][i], after.rows[8][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[8])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[8][k_], after.rows[8][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 

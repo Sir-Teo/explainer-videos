@@ -54,16 +54,19 @@ class Outro(VoiceoverScene):
         before = ledger(filled=4, highlight=5).scale(0.95)
         after = ledger(filled=5, highlight=5).scale(0.95)
         with self.voiceover(
-            "The ledger's fifth row. <bookmark mark='a'/> The space: a set with a sigma-algebra and a measure. Its "
-            "completeness theorem belongs to the next part. Lebesgue measure is regular, approximated by compact sets "
-            "from inside. The swap: the limit of the integrals is the integral of the limit, under a lid. And "
+            "The ledger's fifth row. <bookmark mark='a'/> The space: a set with a sigma-algebra and a measure. <bookmark mark='c2'/> Its "
+            "completeness theorem belongs to the next part. <bookmark mark='c3'/> Lebesgue measure is regular, approximated by compact sets "
+            "from inside. <bookmark mark='c4'/> The swap: the limit of the integrals is the integral of the limit, under a lid. <bookmark mark='c5'/> And "
             "Fourier's series may now be integrated term by term."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[4][i], after.rows[4][i])
-                                    for i in range(len(after.rows[4]))], lag_ratio=0.6),
-                      FadeOut(before.rows[4]), run_time=6)
+            self.play(FadeOut(before.rows[4]), *[TransformFromCopy(after.rows[4][i], after.rows[4][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[4])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[4][k_], after.rows[4][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 

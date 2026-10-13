@@ -56,16 +56,19 @@ class Outro(VoiceoverScene):
         before = ledger(filled=5, highlight=6).scale(0.95)
         after = ledger(filled=6, highlight=6).scale(0.95)
         with self.voiceover(
-            "The ledger's sixth row. <bookmark mark='a'/> The spaces: L p, and Hilbert space. Complete, by Riesz and "
-            "Fischer's summable steps. Compactness still fails: the unit vectors stay root two apart. The limits we "
-            "may swap: the derivative of the integral is the function, almost everywhere. And Fourier series "
+            "The ledger's sixth row. <bookmark mark='a'/> The spaces: L p, and Hilbert space. <bookmark mark='c2'/> Complete, by Riesz and "
+            "Fischer's summable steps. <bookmark mark='c3'/> Compactness still fails: the unit vectors stay root two apart. <bookmark mark='c4'/> The limits we "
+            "may swap: the derivative of the integral is the function, almost everywhere. <bookmark mark='c5'/> And Fourier series "
             "converge in L two, for every square-integrable function, with Fejér's means converging uniformly."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[5][i], after.rows[5][i])
-                                    for i in range(len(after.rows[5]))], lag_ratio=0.6),
-                      FadeOut(before.rows[5]), run_time=6)
+            self.play(FadeOut(before.rows[5]), *[TransformFromCopy(after.rows[5][i], after.rows[5][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[5])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[5][k_], after.rows[5][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 

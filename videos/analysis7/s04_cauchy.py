@@ -188,6 +188,16 @@ class CauchyFormula(VoiceoverScene):
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.65, -2.0, 0])
         head = label(r"Counting roots with integrals: \ $p(z) = z^5 - 2z^3 + 0.3z^2 + 1.1z - 0.4$", font_size=30).to_edge(
             UP, buff=0.25)
+        # Cauchy's estimate, live: a circle of radius R about 0 where |f| <= M = 1 bounds |f'(0)| by M/R
+        Rv = ValueTracker(0.4)
+        cR = always_redraw(lambda: Circle(radius=Rv.get_value() * u, color=C.FUNC, stroke_width=3).move_to(ax.c2p(0, 0)))
+        c0 = Dot(ax.c2p(0, 0), radius=0.06, color=WHITE)
+        cb = always_redraw(lambda: MathTex(rf"R = {Rv.get_value():.2f}: \ \ |f'(0)| \le M/R = {1 / Rv.get_value():.3f}",
+                                           font_size=26, color=C.FUNC).next_to(ax, UP, buff=0.12))
+        # 1/p, domain-colored: it blows up at the five roots, so it is not bounded; a root-free p would make it so
+        inv = cplot(ax, lambda z: 1 / p(z), (-1.7, 1.7), (-1.7, 1.7), px=480).set_opacity(0.85)
+        inv_l = label(r"$1/p$: \ it blows up exactly at the roots", font_size=24, color=C.EPS).next_to(ax, UP, buff=0.12)
+        assert np.allclose(np.abs(p(roots)), 0, atol=1e-9) and max(abs(r) for r in roots) < 1.7
         with self.voiceover(
             "<bookmark mark='a'/> Cauchy's formula also bounds derivatives: on a circle of radius R where f is at "
             "most M, the n-th derivative is at most n factorial M over R to the n. A bounded function that's "
@@ -199,11 +209,17 @@ class CauchyFormula(VoiceoverScene):
             "zero, one, two, three and five roots, exactly the roots inside."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(notes[:2]))
+            self.play(FadeIn(head), FadeIn(notes[:1]), Create(ax), FadeIn(c0), FadeIn(cR), FadeIn(cb))
+            self.play(Rv.animate.set_value(1.6), run_time=4.0, rate_func=smooth)
+            self.play(FadeIn(notes[1]))
+            for m_ in (cR, cb):
+                m_.clear_updaters()
             vo.wait_until("b")
-            self.play(FadeIn(notes[2:]))
+            self.play(FadeOut(cR), FadeOut(cb), FadeOut(c0), FadeIn(inv), FadeIn(inv_l), FadeIn(notes[2:]))
+            self.add(ax)
             vo.wait_until("c")
-            self.play(Create(ax), FadeIn(rd), Create(bx), FadeIn(o), FadeIn(b_l), FadeIn(tab[0]))
+            self.play(inv.animate.set_opacity(0.25), FadeOut(inv_l), FadeIn(rd), Create(bx), FadeIn(o), FadeIn(b_l),
+                      FadeIn(tab[0]))
             vo.wait_until("d")
             for k in range(len(rs)):
                 self.play(Create(circs[k]), Create(imgs[k]), FadeIn(tab[k + 1]), run_time=1.1)

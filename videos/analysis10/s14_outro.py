@@ -100,17 +100,20 @@ class Outro(VoiceoverScene):
         full = ledger(filled=10).scale(0.95)
         with self.voiceover(
             "The ledger's last row. <bookmark mark='a'/> The space: bounded operators, and the C-star algebras they "
-            "generate. Completeness: they're closed in norm, and Gelfand-Naimark makes them function algebras. "
-            "Compactness: Alaoglu again, behind the maximal ideal space. The interchange: f of T for every Borel "
-            "function f, so limits of functions become limits of operators. And the Fourier answer: the Fourier "
+            "generate. <bookmark mark='c2'/> Completeness: they're closed in norm, and Gelfand-Naimark makes them function algebras. "
+            "<bookmark mark='c3'/> Compactness: Alaoglu again, behind the maximal ideal space. <bookmark mark='c4'/> The interchange: f of T for every Borel "
+            "function f, so limits of functions become limits of operators. <bookmark mark='c5'/> And the Fourier answer: the Fourier "
             "transform is the spectral theorem, for momentum. <bookmark mark='b'/> And that's the whole ledger: ten "
             "rows, from the least upper bound property to the spectral theorem."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[9][i], after.rows[9][i])
-                                    for i in range(len(after.rows[9]))], lag_ratio=0.6),
-                      FadeOut(before.rows[9]), run_time=6)
+            self.play(FadeOut(before.rows[9]), *[TransformFromCopy(after.rows[9][i], after.rows[9][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[9])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[9][k_], after.rows[9][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
             vo.wait_until("b")
             self.play(FadeOut(before), FadeOut(after.rows[9]), FadeIn(full))
         self.wait(1.0)

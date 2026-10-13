@@ -53,16 +53,19 @@ class Outro(VoiceoverScene):
         before = ledger(filled=7, highlight=8).scale(0.95)
         after = ledger(filled=8, highlight=8).scale(0.95)
         with self.voiceover(
-            "The ledger's eighth row. <bookmark mark='a'/> The spaces: Banach and Fréchet. Completeness pays through "
-            "Baire's theorem. Compactness returns in the weak-star topology. The new interchange: pointwise bounds "
-            "become uniform bounds. And the Fourier answer is now sharp: divergence for most continuous functions, and, "
+            "The ledger's eighth row. <bookmark mark='a'/> The spaces: Banach and Fréchet. <bookmark mark='c2'/> Completeness pays through "
+            "Baire's theorem. <bookmark mark='c3'/> Compactness returns in the weak-star topology. <bookmark mark='c4'/> The new interchange: pointwise bounds "
+            "become uniform bounds. <bookmark mark='c5'/> And the Fourier answer is now sharp: divergence for most continuous functions, and, "
             "by Carleson's theorem, convergence almost everywhere for square-integrable ones."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[7][i], after.rows[7][i])
-                                    for i in range(len(after.rows[7]))], lag_ratio=0.6),
-                      FadeOut(before.rows[7]), run_time=6)
+            self.play(FadeOut(before.rows[7]), *[TransformFromCopy(after.rows[7][i], after.rows[7][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[7])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[7][k_], after.rows[7][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 
