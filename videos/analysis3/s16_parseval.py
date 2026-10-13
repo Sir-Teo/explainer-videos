@@ -175,6 +175,7 @@ class Parseval(VoiceoverScene):
             self.play(FadeIn(pn[3]))
             vo.wait_until("c")
             cur = frames[1]
+            self.play(FadeOut(VGroup(pax, pf, ph, pP, pn)))
             self.play(Create(outline), FadeIn(tl), FadeIn(cur), FadeIn(lab[1]))
             cl = lab[1]
             for N in (2, 5, 10, 20, 100):
