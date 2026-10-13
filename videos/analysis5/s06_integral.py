@@ -47,17 +47,64 @@ class Integral(VoiceoverScene):
         tab.add(MathTex(r"\int f", rf"\quad {If:.5f}", font_size=28, color=WHITE))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.2, -0.8, 0])
         regrid(tab)
+        # one simple function under f, taken apart: values 1, 2.5, 4 on the level sets A_i, and its integral as
+        # the sum of value times measure
+        lv = [1.0, 2.5, 4.0]
+        hi_ = lv[1:] + [np.inf]
+        s_ex = np.select([f >= 4.0, f >= 2.5, f >= 1.0], [4.0, 2.5, 1.0], 0.0)
+        mus = [float(trap(((f >= a_) & (f < b_)).astype(float), x)) for a_, b_ in zip(lv, hi_)]
+        I_ex = sum(a_ * m_ for a_, m_ in zip(lv, mus))
+        assert abs(I_ex - float(trap(s_ex, x))) < 5e-3 and np.all(s_ex <= f)
+        lcols = [C.SEQ, C.CONNECTED_SET, C.MEASURE]
+
+        def runs_of(mask):
+            out, st = [], None
+            for i in range(len(x) + 1):
+                o = i < len(x) and mask[i]
+                if o and st is None:
+                    st = i
+                elif not o and st is not None:
+                    out.append((x[st], x[i - 1]))
+                    st = None
+            return out
+
+        ex_areas = VGroup(*[area_under(ax, x[::2], np.where(s_ex == a_, a_, 0.0)[::2], c_, 0.55)
+                            for a_, c_ in zip(lv, lcols)])
+        y0 = ax.c2p(0, 0)[1]
+        ex_bands = VGroup(*[interval_band(ax, runs_of((f >= a_) & (f < b_)), y0 - 0.22 - 0.16 * i, c_, height=0.1)
+                            for i, (a_, b_, c_) in enumerate(zip(lv, hi_, lcols))])
+        ex_txt = VGroup(
+            MathTex(r"s = 1 \cdot \mathbf 1_{A_1} + 2.5 \cdot \mathbf 1_{A_2} + 4 \cdot \mathbf 1_{A_3} \le f", font_size=28),
+            *[MathTex(rf"\mu(A_{i + 1}) = {m_:.4f}", font_size=28, color=c_) for i, (m_, c_) in enumerate(zip(mus, lcols))],
+            MathTex(rf"\int s = 1 \cdot {mus[0]:.4f} + 2.5 \cdot {mus[1]:.4f} + 4 \cdot {mus[2]:.4f}", font_size=26),
+            MathTex(rf"= {I_ex:.4f} \le \int f = {If:.4f}", font_size=28, color=C.EPS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.0, -0.9, 0])
+        for r_ in ex_txt:
+            if r_.width > 5.6:
+                r_.width = 5.6
+        ex_txt.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.0, -0.9, 0])
+        assert ex_txt.get_right()[0] < 6.95 and ex_txt.get_left()[0] > ax.get_right()[0] + 0.15
+        assert ex_bands.get_bottom()[1] > -3.95
         with self.voiceover(
-            "<bookmark mark='a'/> The integral of a simple function is what it should be: each value times the "
-            "measure of the set where it's taken, added up. The integral of a non-negative measurable function is the "
-            "supremum of the integrals of the simple functions below it. <bookmark mark='b'/> With the dyadic simple "
+            "<bookmark mark='a'/> The integral of a simple function is what it should be: <bookmark mark='s1'/> each "
+            "value times the measure of the set where it's taken, added up. <bookmark mark='s2'/> The integral of a "
+            "non-negative measurable function is the supremum of the integrals of the simple functions below it. "
+            "<bookmark mark='b'/> With the dyadic simple "
             "functions from the last chapter, the areas climb, <bookmark mark='c'/> and close in on the area under "
             "f."
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), Create(fg))
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
+            vo.wait_until("s1")
+            self.play(LaggedStart(*[FadeIn(a_) for a_ in ex_areas], lag_ratio=0.3), FadeIn(ex_txt[0]), run_time=1.5)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(b_), FadeIn(t_)) for b_, t_ in zip(ex_bands, ex_txt[1:4])],
+                                  lag_ratio=0.4), run_time=2.0)
+            self.play(FadeIn(ex_txt[4]))
+            vo.wait_until("s2")
+            self.play(FadeIn(ex_txt[5]))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(ex_areas, ex_bands, ex_txt)))
             self.play(FadeIn(areas[0]), FadeIn(tab[0]), FadeIn(tab[1]))
             cur = areas[0]
             for j, k in enumerate(shown[1:], start=1):
