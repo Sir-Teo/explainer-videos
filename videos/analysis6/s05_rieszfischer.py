@@ -144,7 +144,7 @@ class RieszFischer(VoiceoverScene):
             "one, two, four, eight is fast enough: the step from ramp n to ramp two n has area one over eight n. "
             "<bookmark mark='b'/> Stack those steps on top of the first ramp. Each layer is a thin sliver near one "
             "half, and the stack grows toward a bounded function g. <bookmark mark='c'/> The areas of the layers "
-            "form a geometric series, adding up to less than a quarter, so g has finite integral. "
+            "form a geometric series, adding up to a quarter, so g has finite integral. "
             "<bookmark mark='d'/> So the telescoping series converges, at every point except one half, and its sum "
             "is the step. The hole from the hook is filled, by a function in L one."
         ) as vo:

@@ -105,7 +105,7 @@ class NormalFamilies(VoiceoverScene):
             panels.add(Group(im, ring, inner, t_, r_))
         rows = VGroup(
             MathTex(r"f_n(z) = \tfrac12(\cos n\cdot z + \sin n \cdot z^2) + \tfrac12 z^n", font_size=26),
-            label(r"$|f_n| \le 1$ on $D$: \ a bounded family", font_size=22, color=GREY_A),
+            label(r"$|f_n| \le \frac{1 + \sqrt 2}{2}$ on $D$: \ a bounded family", font_size=22, color=GREY_A),
             label(r"along $n = 6, 44, 710, 103993$ \ ($n \bmod 2\pi \to 0$):", font_size=22),
             MathTex(r"f_{n_k} \to \tfrac{z}{2}", font_size=30, color=C.EPS),
             label(r"brightness: \ $|f_n - z/2|$", font_size=22, color=GREY_A),
@@ -119,6 +119,9 @@ class NormalFamilies(VoiceoverScene):
         thm = label(r"\textbf{RCA 14.6} \ (Montel) \ a family of holomorphic functions, \ uniformly bounded on compact "
                     r"sets, \ is normal", font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3)
         assert np.all(np.diff(errs_in) < 0) and np.all(errs_out > 0.45)
+        zb = np.exp(1j * np.linspace(0, 2 * math.pi, 4001))  # max modulus: the sup over D is on the circle
+        assert all(np.abs((math.cos(n) * zb + math.sin(n) * zb ** 2) / 2 + zb ** n / 2).max() <= (1 + math.sqrt(2)) / 2
+                   for n in range(1, 200))
         head = label(r"A bounded family has a locally uniformly convergent subsequence", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Here's a bounded family on the disk: a rotating mixture of z and z squared, plus "

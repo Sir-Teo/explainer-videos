@@ -39,7 +39,7 @@ class Plancherel(VoiceoverScene):
         rows = VGroup(
             label(r"\textbf{RCA 9.11} \ if $f, \hat f \in L^1$:", font_size=24),
             MathTex(r"f(x) = \frac{1}{\sqrt{2\pi}}\int \hat f(t)\, e^{ixt}\,dt \ \text{ a.e.}", font_size=28, color=C.EPS),
-            label(r"proof: \ insert $e^{-\varepsilon^2 t^2}$, \ a Gaussian approximate identity, \ and let $\varepsilon \to 0$",
+            label(r"proof: \ insert $e^{-\lambda |t|}$ \ (in space: the Poisson kernel, an approximate identity), \ let $\lambda \to 0$",
                   font_size=20, color=GREY_A),
             label(r"the box's $\hat f$ is not integrable: \ cut it at $\pm T$", font_size=22),
             label(r"converges in $L^2$; \ the overshoot tends to Gibbs' $8.95\%$", font_size=22, color=C.PATHOLOGY),
@@ -53,8 +53,9 @@ class Plancherel(VoiceoverScene):
         head = label(r"Rebuilding the box from its frequencies", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The inversion theorem: the same integral, with the opposite sign in the exponent, "
-            "gives the function back. Rudin's proof inserts a narrow Gaussian in frequency, an approximate identity "
-            "in space, and lets it widen. <bookmark mark='b'/> For the box, the transform isn't integrable, so cut it "
+            "gives the function back. Rudin's proof inserts a damping factor in frequency, e to "
+            "the minus lambda times the size of t. In space that's the Poisson kernel, an approximate identity, and "
+            "as lambda shrinks it closes in on the function. <bookmark mark='b'/> For the box, the transform isn't integrable, so cut it "
             "off at plus and minus T. <bookmark mark='c'/> As T grows the reconstruction hugs the box, converging in "
             "L two, but near each jump it overshoots, and the overshoot tends to Gibbs' 8.95 percent, the same as for "
             "Fourier series in Part 3."

@@ -171,7 +171,7 @@ class Wiener(VoiceoverScene):
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, 1.0, 0])
         g1 = polyline(ax, tg, np.minimum(one, 2.5), color=C.SPECTRUM, stroke_width=3.5)
         g2 = polyline(ax, tg, np.minimum(half, 2.5), color=GREY_B, stroke_width=2.5)
-        l1 = MathTex(rf"|\zeta(1 + it)| \ge {one.min():.3f}", font_size=24, color=C.SPECTRUM).next_to(ax, UP, buff=0.05).align_to(
+        l1 = MathTex(rf"|\zeta(1 + it)| \ge {one.min():.3f} \ (t \le 40)", font_size=24, color=C.SPECTRUM).next_to(ax, UP, buff=0.05).align_to(
             ax, LEFT)
         l2 = MathTex(r"|\zeta(\tfrac12 + it)|: \text{ zeros at } 14.13, 21.02, \ldots", font_size=22, color=GREY_B).next_to(
             l1, RIGHT, buff=0.4)
@@ -207,7 +207,7 @@ class Wiener(VoiceoverScene):
         head = label(r"$\zeta$ has no zeros on the line $\mathrm{Re}\,s = 1$", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> The road to the primes needs one fact about the zeta function from the Riemann "
-            "video: it has no zeros on the line where the real part is one. On that line its size stays above a third, "
+            "video: it has no zeros on the line where the real part is one. On that line, over this stretch, its size stays above a third, "
             "while on the critical line it touches zero again and again. <bookmark mark='b'/> The proof is a "
             "trigonometric inequality: three plus four cos theta plus cos two theta is twice a square, so it's never "
             "negative. <bookmark mark='c'/> Feed it into the Euler product, and the product of zeta at sigma cubed, "

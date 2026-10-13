@@ -157,15 +157,15 @@ class Distributions(VoiceoverScene):
                     r"= \sum_k \varphi(2\pi k)", font_size=30),
             MathTex(rf"\varphi = e^{{-(x - 1.5)^2/30}}: \ \langle \mathrm{{III}}, \varphi\rangle = {val:.6f}", font_size=28,
                     color=C.TEST_FN),
-            label(r"a periodic train of spikes: \ it will be the derivative of the sawtooth, \ and its own Fourier "
-                  r"transform", font_size=24, color=C.EPS),
+            label(r"a periodic train of spikes: \ it will be the derivative of the sawtooth, \ and its Fourier "
+                  r"transform is again a comb", font_size=24, color=C.EPS),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         head = label(r"A distribution that lives on a lattice", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> One more, which will keep coming back: the Dirac comb, a delta at every multiple of "
             "two pi. <bookmark mark='b'/> It acts on a test function by summing its values on the lattice. "
-            "<bookmark mark='c'/> It's the derivative of the sawtooth, up to a constant, and it is its own Fourier "
-            "transform, as we'll see."
+            "<bookmark mark='c'/> It's the derivative of the sawtooth, up to a constant, and its Fourier transform "
+            "is again a comb, as we'll see."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), LaggedStart(*[GrowArrow(s_) for s_ in spikes], lag_ratio=0.15), FadeIn(lab))

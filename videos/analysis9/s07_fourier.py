@@ -161,7 +161,7 @@ class FourierL1(VoiceoverScene):
         l1 = MathTex(r"e^{-x^2/2\sigma^2}", font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.1)
         l2 = MathTex(r"\sigma\, e^{-\sigma^2 t^2/2}", font_size=28, color=C.FREQ).next_to(bx, UP, buff=0.1)
         rows = VGroup(
-            label(r"\textbf{RCA 9.7} \ $e^{-x^2/2}$ is its own transform: \ both solve $u' = -xu$, \ $u(0) = 1$",
+            label(r"\textbf{FA, ch.\ 7} \ $e^{-x^2/2}$ is its own transform: \ both solve $u' = -xu$, \ $u(0) = 1$",
                   font_size=24),
             label(r"narrow in space $\iff$ wide in frequency: \ the uncertainty principle \ (the quantum video's $\Delta x\,\Delta p$)",
                   font_size=22, color=GREY_A),
