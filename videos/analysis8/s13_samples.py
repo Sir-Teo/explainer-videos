@@ -33,6 +33,13 @@ class Samples(VoiceoverScene):
         bb = VGroup(*[Line(bx.c2p(n, 0), bx.c2p(n, v), color=C.APPROX, stroke_width=5) for n, v in zip(range(1, 25), b)])
         # shift invariance forces the value: L(x) = L(Sx), and L is linear
         assert np.allclose(a + np.roll(a, -1), 0) and np.allclose(b + np.roll(b, -1) + np.roll(b, -2), 1)
+        # first the ordinary limit, which L must keep: x_n = 0.6 + 0.6 (-1)^n / n -> 0.6
+        c0 = np.array([0.6 + 0.6 * (-1) ** n / n for n in range(1, 25)])
+        assert np.all(np.abs(c0 - 0.6) <= 0.6 / np.arange(1, 25) + 1e-12) and np.abs(c0).max() < 1.3
+        b0 = VGroup(*[Line(ax.c2p(n, 0), ax.c2p(n, v), color=C.FUNC, stroke_width=5) for n, v in zip(range(1, 25), c0)])
+        lim0 = DashedLine(ax.c2p(0.5, 0.6), ax.c2p(24.5, 0.6), color=C.EPS, stroke_width=2.5)
+        l0 = MathTex(r"x_n = 0.6 + 0.6\,\tfrac{(-1)^n}{n} \to 0.6: \ L(x) = 0.6", font_size=26,
+                     color=C.FUNC).next_to(ax, UP, buff=0.08)
         la = MathTex(r"x = (-1)^n: \ x + Sx = 0 \ \Rightarrow \ L(x) = 0", font_size=26, color=C.SEQ).next_to(ax, UP, buff=0.08)
         lb = MathTex(r"y = (1, 0, 0, 1, 0, 0, \ldots): \ y + Sy + S^2y = \mathbf 1 \ \Rightarrow \ L(y) = \tfrac13",
                      font_size=26, color=C.APPROX).next_to(bx, UP, buff=0.08)
@@ -61,9 +68,11 @@ class Samples(VoiceoverScene):
             "Part 6 promised."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:5]))
+            self.play(FadeIn(head), FadeIn(rows[:5]), Create(ax))
+            self.play(LaggedStart(*[Create(b_) for b_ in b0], lag_ratio=0.03), FadeIn(l0), run_time=1.5)
+            self.play(Create(lim0))
             vo.wait_until("b")
-            self.play(Create(ax), LaggedStart(*[Create(b_) for b_ in ba], lag_ratio=0.03), FadeIn(la))
+            self.play(ReplacementTransform(b0, ba), FadeOut(lim0), ReplacementTransform(l0, la), run_time=1.5)
             vo.wait_until("c")
             self.play(Create(bx), LaggedStart(*[Create(b_) for b_ in bb], lag_ratio=0.03), FadeIn(lb))
             vo.wait_until("d")
@@ -90,6 +99,28 @@ class Samples(VoiceoverScene):
                              color=C.EPS).next_to(ax, UP, buff=0.1),
                      label(r"$S_n$ = trigonometric polynomials of degree $n$ \ (dim $2n + 1$)", font_size=20,
                            color=GREY_A).next_to(ax, DOWN, buff=0.15))
+        # unit vectors in L^2 whose sup norm grows: f_n = D_n / ||D_n||_2, peak sqrt(2n + 1). Same vertical scale as
+        # the bars, so the line at C carries over
+        dx = plain_axes([-math.pi, math.pi, math.pi / 2], [-1.2, 5.0, 1], 5.4, 3.2 * 6.2 / 5.5)
+        dx.move_to([-3.5, 0, 0]).shift(UP * (ax.c2p(0, 0)[1] - dx.c2p(0, 0)[1]))  # zero lines level
+        xd = np.linspace(-math.pi, math.pi, 2001)
+        nT = ValueTracker(1)
+
+        def dn(n):
+            return np.sum([np.cos(k * xd) for k in range(-n, n + 1)], axis=0) / math.sqrt(2 * n + 1)
+
+        for n in (1, 4, 9):
+            assert abs(dn(n).max() - math.sqrt(2 * n + 1)) < 1e-9 and dn(n).min() > -1.2
+        dk = always_redraw(lambda: polyline(dx, xd, dn(int(round(nT.get_value()))), color=C.FUNC, stroke_width=3))
+        dkl = always_redraw(lambda: MathTex(
+            rf"f = D_{{{int(round(nT.get_value()))}}} / \|D_{{{int(round(nT.get_value()))}}}\|_2: \ \|f\|_2 = 1, \ "
+            rf"\|f\|_\infty = \sqrt{{{2 * int(round(nT.get_value())) + 1}}}", font_size=26, color=C.FUNC).next_to(
+            dx, UP, buff=0.1))
+        Cv = 3.0
+        cl_d = DashedLine(dx.c2p(-math.pi, Cv), dx.c2p(math.pi, Cv), color=C.PATHOLOGY, stroke_width=2.5)
+        cl_a = DashedLine(ax.c2p(-0.5, Cv), ax.c2p(12.5, Cv), color=C.PATHOLOGY, stroke_width=2.5).set_z_index(3)
+        assert abs(cl_d.get_start()[1] - cl_a.get_start()[1]) < 1e-6
+        cl_l = MathTex(r"C", font_size=28, color=C.PATHOLOGY).next_to(cl_d, RIGHT, buff=0.1)
         steps = VGroup(
             label(r"\textbf{FA 5.2} \ (Grothendieck) \ a closed subspace $S$ of $L^p[0, 1]$", font_size=24),
             label(r"made of bounded functions is finite-dimensional", font_size=24, color=C.EPS),
@@ -112,10 +143,17 @@ class Samples(VoiceoverScene):
             "dimension, so no single constant survives infinitely many dimensions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(steps[:2]))
+            self.play(FadeIn(head), FadeIn(steps[:2]), Create(dx))
+            self.play(Create(dk), FadeIn(dkl))
+            self.play(nT.animate.set_value(3), run_time=2.0, rate_func=linear)
             vo.wait_until("b")
-            self.play(FadeIn(steps[2:4]))
+            self.play(FadeIn(steps[2:4]), Create(cl_d), FadeIn(cl_l))
+            self.play(nT.animate.set_value(9), run_time=4.0, rate_func=linear)  # the peak passes C at n = 5
             vo.wait_until("c")
+            dk.clear_updaters()
+            dkl.clear_updaters()
+            self.play(FadeOut(dk), FadeOut(dkl), FadeOut(dx), ReplacementTransform(cl_d, cl_a),
+                      cl_l.animate.next_to(cl_a, RIGHT, buff=0.1))
             self.play(Create(ax), FadeIn(a_l), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.1),
                       run_time=2.0)
             self.play(FadeIn(steps[4:]))
