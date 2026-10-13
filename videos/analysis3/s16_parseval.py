@@ -52,16 +52,22 @@ class Parseval(VoiceoverScene):
                     label(r"a positive kernel, \ like Landau's \ (Parts 6 and 7)", font_size=22, color=GREY_A)
                     ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, form an "
-            "algebra of functions on the circle that contains the constants, separates points, and is closed under "
-            "complex conjugation. So by Stone's theorem, every continuous periodic function is a uniform limit of "
-"trigonometric polynomials. Here are such polynomials closing in on a continuous function with three corners. "
+            "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, "
+            "<bookmark mark='s'/> form an algebra of functions on the circle that contains the constants, separates "
+            "points, and is closed under complex conjugation. <bookmark mark='u'/> So by Stone's theorem, every "
+            "continuous periodic function is a uniform limit of trigonometric polynomials. <bookmark mark='h'/> Here "
+            "are such polynomials closing in on a continuous function with three corners. "
             "<bookmark mark='b'/> They are an explicit choice, found by Fejér in 1900: averages of the Fourier partial "
             "sums, which damp the high frequencies. <bookmark mark='c'/> Fejér's kernel is positive, like Landau's, and "
             "the averages converge uniformly."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(fg))
+            self.play(FadeIn(head[0]), Create(ax))
+            vo.wait_until("s")
+            self.play(FadeIn(head[1]))
+            vo.wait_until("u")
+            self.play(Create(fg), run_time=1.5)
+            vo.wait_until("h")
             self.play(Create(curves[0]), FadeIn(tab[0]), FadeIn(tab[1]))
             cur = curves[0]
             for k in range(1, len(shown)):
@@ -321,11 +327,40 @@ class Parseval(VoiceoverScene):
                        label(r"about $9\%$ of the jump, \ for every $N$", font_size=24, color=C.PATHOLOGY)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tab, DOWN, buff=0.35)
         assert abs(gibbs[-1] - limit) < 1e-3 and np.all(np.diff(gibbs) > 0)
+        # why the overshoot never shrinks: stretch x by N and s_N(t/N) = sum sin(nt/N)/n, a Riemann sum for
+        # Si(t) = int_0^t sin(u)/u du, so every partial sum lands on the same curve, whose first peak is Si(pi)
+        from scipy.special import sici
+        ia = plain_axes([0, 10, 2], [0, 2.0, 0.5], 4.6, 2.6).move_to([4.35, -1.05, 0])
+        tt_ = np.linspace(1e-3, 10, 1500)
+        si = sici(tt_)[0]
+        si_pi = float(sici(math.pi)[0])
+        assert abs(si_pi / math.pi - 0.5 - limit) < 1e-4
+        resc = [saw_partial(tt_ / N, N) for N in shown]
+        errs = [float(np.abs(r_ - si).max()) for r_ in resc]
+        assert all(a > b for a, b in zip(errs, errs[1:])) and errs[-1] < 0.03
+        si_c = DashedVMobject(polyline(ia, tt_, si, color=WHITE, stroke_width=2.5), num_dashes=70)
+        rc = [polyline(ia, tt_, r_, color=C.APPROX, stroke_width=2.5) for r_ in resc]
+        ihalf = DashedLine(ia.c2p(0, math.pi / 2), ia.c2p(10, math.pi / 2), color=GREY_B, stroke_width=1.5)
+        ihead = label(r"stretch $x$ by $N$: \ every $s_N$ lands on one curve", font_size=24).next_to(ia, UP, buff=0.2)
+        iform = MathTex(r"s_N(t/N) \;\to\; \mathrm{Si}(t) = \int_0^t \frac{\sin u}{u}\,du", font_size=26
+                        ).next_to(ia, DOWN, buff=0.2)
+        pk = Dot(ia.c2p(math.pi, si_pi), radius=0.07, color=C.PATHOLOGY)
+        pk_l = VGroup(MathTex(rf"\mathrm{{Si}}(\pi) = {si_pi:.4f}", font_size=24),
+                      MathTex(rf"= \tfrac{{\pi}}{{2}} + {limit:.4f}\,\pi", font_size=24)
+                      ).set_color(C.PATHOLOGY).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        pk_l.next_to(ia.c2p(4.3, 0.7), RIGHT, buff=0)
+        pk_ln = Line(pk_l.get_corner(UL) + 0.05 * UP, pk.get_center(), color=C.PATHOLOGY, stroke_width=1.5, buff=0.09)
+        pk_l = VGroup(pk_l, pk_ln)
+        assert pk_l.get_right()[0] < ia.get_right()[0] + 0.1
+        assert pk_l.get_right()[0] < 6.95 and iform.get_bottom()[1] > -3.95
         with self.voiceover(
             "<bookmark mark='a'/> Zoom in on the jump. Next to it, every partial sum overshoots. "
             "<bookmark mark='b'/> As N grows, the overshoot moves closer to the jump and gets narrower, but not lower: "
             "its height tends to about nine percent of the jump, precisely the integral of sine t over t from zero to "
-            "pi, over pi, minus a half. <bookmark mark='c'/> Wilbraham noticed it in 1848 and Gibbs explained it in "
+            "pi, over pi, minus a half. <bookmark mark='c'/> Here is why it never gets lower. Stretch the picture by "
+            "N near the jump, and every partial sum lands on the same curve: the integral of sine u over u, from "
+            "zero to t. <bookmark mark='p'/> Its first peak, at t equals pi, is the overshoot, and stretching sideways "
+            "doesn't change heights. <bookmark mark='d'/> Wilbraham noticed it in 1848 and Gibbs explained it in "
             "1899. It's the visible face of non-uniform convergence, and it's why sharp edges in compressed images "
             "and audio come with ringing."
         ) as vo:
@@ -341,6 +376,16 @@ class Parseval(VoiceoverScene):
                 cur, cl = curves[k], nls[k]
             self.play(FadeIn(tab[len(shown) + 1:]), FadeIn(note_))
             vo.wait_until("c")
+            self.play(FadeOut(tab), FadeOut(note_))
+            self.play(Create(ia), Create(ihalf), FadeIn(ihead))
+            self.play(Create(rc[0]), run_time=0.8)
+            for k in range(1, len(rc)):
+                self.play(rc[k - 1].animate.set_stroke(opacity=0.3), Create(rc[k]), run_time=0.8)
+            self.play(Create(si_c), FadeIn(iform))
+            vo.wait_until("p")
+            self.play(FadeIn(pk, scale=1.5), FadeIn(pk_l))
+            self.play(Indicate(pk_l[0], color=C.PATHOLOGY), Indicate(lvl_l, color=C.PATHOLOGY))
+            vo.wait_until("d")
         self.wait(0.4)
         self.clear_scene()
 
