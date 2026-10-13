@@ -41,22 +41,22 @@ python tools/export_script.py analysis1           # regenerate SCRIPT.md from th
 python tools/check_narration.py analysis1         # Whisper listen test of every narration line
 ```
 
-## Chapters (49:26)
+## Chapters (49:31)
 
 ```
 0:00 Fourier's question, and the holes in the fractions
 4:28 1. Holes in the rational line
 9:15 2. Filling the holes: Dedekind cuts
-14:28 3. Archimedes, density and decimals
-18:11 4. Counting infinities
-22:34 5. What “close” means: metric spaces
-26:44 6. Open and closed sets
-31:25 7. Compactness
-35:09 8. Heine–Borel, by bisection
-38:43 9. The Cantor set
-42:36 10. Connectedness
-45:24 11. A first space of functions
-47:48 Recap, and the first row of the ledger
+14:29 3. Archimedes, density and decimals
+18:12 4. Counting infinities
+22:36 5. What “close” means: metric spaces
+26:48 6. Open and closed sets
+31:28 7. Compactness
+35:12 8. Heine–Borel, by bisection
+38:45 9. The Cantor set
+42:40 10. Connectedness
+45:28 11. A first space of functions
+47:52 Recap, and the first row of the ledger
 ```
 
 ## Outline
