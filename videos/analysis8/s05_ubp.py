@@ -164,6 +164,21 @@ class UniformBoundedness(VoiceoverScene):
         cl = MathTex(r"\text{any fixed } C", font_size=20, color=C.EPS).next_to(pax.c2p(1.05, 5), UP, buff=0.05).align_to(
             pax.c2p(1.05, 5), LEFT)
         pl = MathTex(r"\|D_n\|_1 \ \text{against } n", font_size=20, color=C.PATHOLOGY).next_to(pax, UP, buff=0.05)
+        # first, Riemann-Lebesgue itself: the coefficients of the box 1_[-1,1] on the circle, sin(n)/(pi n), tend to 0
+        nn = np.arange(1, 41)
+        cf = np.abs(np.sin(nn) / (np.pi * nn))
+        tq = np.linspace(-np.pi, np.pi, 200001)
+        num = np.array([np.sum(np.where(np.abs(tq) <= 1, 1.0, 0.0) * np.cos(k * tq)) * (tq[1] - tq[0]) / (2 * np.pi)
+                        for k in (1, 2, 7)])
+        assert np.allclose(np.abs(num), cf[[0, 1, 6]], atol=1e-4) and cf.max() < 0.3
+        cax = plain_axes([0, 40, 10], [0, 0.3, 0.1], 5.6, 2.6, numbers=True, font_size=18,
+                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.6, -1.35, 0])
+        stems = VGroup(*[VGroup(Line(cax.c2p(k, 0), cax.c2p(k, v), color=C.FREQ, stroke_width=3),
+                                Dot(cax.c2p(k, v), radius=0.04, color=C.FREQ)) for k, v in zip(nn, cf)])
+        cfl = MathTex(r"f = \mathbf 1_{[-1, 1]}: \ \ |\hat f(n)| = \frac{|\sin n|}{\pi n} \to 0", font_size=22,
+                      color=C.FREQ).next_to(cax, UP, buff=0.05)
+        cpic = VGroup(cax, stems, cfl)
         with self.voiceover(
             "<bookmark mark='a'/> The same kernel answers another question. The Fourier coefficients of an integrable "
             "function tend to zero, by the Riemann-Lebesgue lemma, so the Fourier transform maps L one into the "
@@ -173,11 +188,12 @@ class UniformBoundedness(VoiceoverScene):
             "L one norms grow without limit. So the map isn't onto, and nobody had to find the missing sequence."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(rows[:2]))
+            self.play(FadeIn(rows[:2]), Create(cax), FadeIn(cfl))
+            self.play(LaggedStart(*[GrowFromEdge(s_, DOWN) for s_ in stems], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(rows[2:4]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[4]), Create(pax), FadeIn(pxl), FadeIn(pl), Create(cline), FadeIn(cl))
+            self.play(FadeOut(cpic), FadeIn(rows[4]), Create(pax), FadeIn(pxl), FadeIn(pl), Create(cline), FadeIn(cl))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in pdots], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(t_) for t_ in tab], lag_ratio=0.4), run_time=2.0)
             self.play(FadeIn(concl))
