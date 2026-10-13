@@ -101,7 +101,7 @@ class Partials(VoiceoverScene):
                     MathTex(r"\nabla g(0) \cdot u = 0", font_size=30)).arrange(RIGHT, buff=0.6).next_to(bx, UP, buff=0.15)
         side = VGroup(
             MathTex(r"\cos^2\theta \sin\theta = \tfrac14 \sin\theta + \tfrac14 \sin 3\theta", font_size=32),
-            label(r"a derivative would make $D_u g(0)$ \ $a\cos\theta + b\sin\theta$:", font_size=24, color=GREY_A),
+            label(r"a derivative would force $D_u g(0) = a\cos\theta + b\sin\theta$:", font_size=24, color=GREY_A),
             label(r"the $\sin 3\theta$ part is not linear in $u$, \ so $g$ is not differentiable at $0$", font_size=24,
                   color=C.PATHOLOGY),
         ).arrange(DOWN, buff=0.15).next_to(bx, DOWN, buff=0.3)
@@ -111,7 +111,27 @@ class Partials(VoiceoverScene):
         side.arrange(DOWN, buff=0.15).next_to(bx, DOWN, buff=0.3)
         card = museum_card(r"$x^2y/(x^2 + y^2)$", r"a classical example", r"`all directional derivatives make a "
                            r"derivative'", r"Rudin 9.21 is the repair", width=4.0).scale(0.8)
-        card.move_to([-4.5, 1.25, 0])
+        card.next_to(img, UP, buff=0.15)
+        assert card.get_top()[1] < head.get_bottom()[1] - 0.1
+        # the direction u = (cos t, sin t) as a ray on the heatmap; along it g(su) = s cos^2 t sin t is linear in s
+        tt = ValueTracker(0.9)
+        o = ax.c2p(0, 0)
+
+        def ray_():
+            t = tt.get_value()
+            return VGroup(Arrow(o, ax.c2p(0.9 * math.cos(t), 0.9 * math.sin(t)), buff=0, color=C.APPROX,
+                                stroke_width=4, max_tip_length_to_length_ratio=0.12),
+                          Arc(radius=0.3, start_angle=0, angle=max(t, 1e-3), arc_center=o, color=WHITE, stroke_width=2))
+
+        ray = always_redraw(ray_)
+        th_l = always_redraw(lambda: MathTex(r"\theta", font_size=24).move_to(
+            o + 0.48 * np.array([math.cos(tt.get_value() / 2), math.sin(tt.get_value() / 2), 0])))
+        dot = always_redraw(lambda: Dot(bx.c2p(tt.get_value(), math.cos(tt.get_value()) ** 2 * math.sin(tt.get_value())),
+                                        radius=0.06, color=C.APPROX))
+        along = MathTex(r"g(s u) = s\,\cos^2\theta\,\sin\theta", r"\ \Rightarrow\ D_u g(0) = \cos^2\theta\sin\theta",
+                        font_size=26).next_to(img, DOWN, buff=0.15)
+        along.set_x(-6.75 + along.width / 2)
+        assert along.get_left()[0] > -6.95 and along.get_bottom()[1] > -3.95
         with self.voiceover(
             "<bookmark mark='a'/> The second exhibit is subtler: x squared y over x squared plus y squared. It is "
             "continuous, and at the origin it has a derivative in every direction, not just along the axes. "
@@ -125,9 +145,18 @@ class Partials(VoiceoverScene):
             self.play(FadeIn(head[0]), FadeIn(img), Create(ax))
             vo.wait_until("a")
             self.play(FadeIn(head[1]), Create(bx))
+            self.play(FadeIn(ray), FadeIn(th_l))
+            self.play(FadeIn(along[0]))
+            self.play(FadeIn(along[1]))
             vo.wait_until("b")
             self.play(Create(pred), FadeIn(bl[1]))
-            self.play(Create(actual), FadeIn(bl[0]), run_time=2.0)
+            tt.set_value(0)
+            self.add(dot)
+            self.play(Create(actual), tt.animate.set_value(2 * np.pi), FadeIn(bl[0]), run_time=4.0, rate_func=linear)
+            ray.clear_updaters()
+            th_l.clear_updaters()
+            dot.clear_updaters()
+            self.play(FadeOut(ray[1]), FadeOut(th_l), run_time=0.5)
             vo.wait_until("c")
             self.play(FadeIn(side[0]), Create(part1))
             self.play(FadeIn(side[1]))
