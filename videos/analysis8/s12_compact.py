@@ -94,6 +94,31 @@ class Compact(VoiceoverScene):
                 r_.width = 6.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -0.4, 0])
         assert np.allclose(w[:10], exact, rtol=2e-3)
+        # what G does: a load c on [l0, l1] pushes the string into u = Gf, the kernel integrated against the load
+        l0, l1, c_ = 0.25, 0.55, 12.0
+        xg = np.linspace(0, 1, 2001)
+        fg = np.where((xg >= l0) & (xg <= l1), c_, 0.0)
+        X, Y = np.meshgrid(xg, xg, indexing="ij")
+        Gm = np.minimum(X, Y) * (1 - np.maximum(X, Y))
+        wt = np.full(xg.size, xg[1] - xg[0])
+        wt[[0, -1]] /= 2
+        ug = Gm @ (fg * wt)
+        # the exact solution of -u'' = f, u(0) = u(1) = 0: u(x) = x int (1 - y) f - int_0^x (x - y) f
+        m_ = np.clip(xg, l0, l1)
+        u_ex = (xg * c_ * ((l1 - l0) - (l1 ** 2 - l0 ** 2) / 2)
+                - c_ * ((np.maximum(xg - l0, 0)) ** 2 - (xg - m_) ** 2 * (xg > l1)) / 2)
+        assert np.abs(ug - u_ex).max() < 2e-3 * u_ex.max() and abs(ug[0]) < 1e-12 and abs(ug[-1]) < 1e-12
+        load_ = VGroup(*[Arrow(ax.c2p(t, -0.85), ax.c2p(t, -0.2), buff=0, color=C.MEASURE, stroke_width=3,
+                               max_tip_length_to_length_ratio=0.25) for t in np.linspace(l0, l1, 6)])
+        u_g = polyline(ax, xg, ug, color=C.FUNC, stroke_width=4)
+        imax = int(np.argmax(ug))
+        load_l = VGroup(
+            label(rf"a load $f = {c_:.0f}$ on $[{l0}, {l1}]$", font_size=22, color=C.MEASURE).next_to(
+                ax.c2p(l1, -0.6), RIGHT, buff=0.25),
+            MathTex(r"u = Gf", font_size=28, color=C.FUNC).next_to(ax.c2p(xg[imax], ug[imax]), UR, buff=0.12),
+        )
+        u_l = label(r"what $G$ does: \ load in, \ shape of the string out", font_size=24, color=GREY_A).next_to(
+            ax, UP, buff=0.08)
         head = label(r"A compact operator: \ the vibrating string's Green's function", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> The model compact operator is an integral operator with a continuous kernel. This "
@@ -103,9 +128,11 @@ class Compact(VoiceoverScene):
             "to three digits, falling to zero. A compact operator's eigenvalues can only pile up at zero."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:3]))
+            self.play(FadeIn(head), FadeIn(rows[:3]), Create(ax), FadeIn(u_l))
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in load_], lag_ratio=0.1), FadeIn(load_l[0]), run_time=1.5)
+            self.play(Create(u_g), FadeIn(load_l[1]), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(m_l))
+            self.play(FadeOut(load_), FadeOut(load_l), FadeOut(u_g), ReplacementTransform(u_l, m_l))
             self.play(LaggedStart(*[Create(m_) for m_ in modes], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("c")
             self.play(Create(bx), Create(acc), FadeIn(b_l), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.05),
