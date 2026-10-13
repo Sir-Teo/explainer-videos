@@ -72,7 +72,7 @@ class Structure(VoiceoverScene):
         ax = plain_axes([-3, 3, 1], [-0.2, 3.2, 1], 6.2, 3.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.6, 0])
-        g = polyline(ax, x, np.minimum(F, 3.2), color=C.FUNC, stroke_width=3.5)
+        g = runs(ax, x, F, C.FUNC, 3.5)  # cut where it leaves the window (clamping would draw a false plateau)
         kinks = VGroup(*[Dot(ax.c2p(a, float(np.interp(a, x, F))), radius=0.06, color=C.EPS) for a in (-0.4, 0.3, 1.0)])
         f_l = MathTex(r"F(x) = (x - 0.3)_+ + \tfrac{2}{3!}(x + 0.4)_+^3 + \tfrac{1}{5!}(x - 1)_+^5", font_size=24,
                       color=C.FUNC).next_to(ax, UP, buff=0.1)
@@ -114,13 +114,13 @@ class Structure(VoiceoverScene):
                 [(0.3, r"\delta''_{0.3}", 2.7, UR), (-0.4, r"2\delta_{-0.4}", 2.0, UL)],
                 [(0.3, r"\delta'''_{0.3}", 2.7, UR), (-0.4, r"2\delta'_{-0.4}", 2.0, UL)]]
 
-        def stage(k):
-            g_ = VGroup(runs(ax, xr, reg[k], C.FUNC if k == 0 else C.DISTRIBUTION, 3.5))
+        def stage(k):  # (regular part, {position: arrow}, {position: label})
+            arrs, labs = {}, {}
             for a_, t_, h_, dir_ in sing[k]:
-                arr_ = Arrow(ax.c2p(a_, 0), ax.c2p(a_, h_), buff=0, color=C.DISTRIBUTION, stroke_width=5,
-                             max_tip_length_to_length_ratio=0.12)
-                g_.add(arr_, MathTex(t_, font_size=26, color=C.DISTRIBUTION).next_to(ax.c2p(a_, h_), dir_, buff=0.06))
-            return g_
+                arrs[a_] = Arrow(ax.c2p(a_, 0), ax.c2p(a_, h_), buff=0, color=C.DISTRIBUTION, stroke_width=5,
+                                 max_tip_length_to_length_ratio=0.12)
+                labs[a_] = MathTex(t_, font_size=26, color=C.DISTRIBUTION).next_to(ax.c2p(a_, h_), dir_, buff=0.06)
+            return runs(ax, xr, reg[k], C.FUNC if k == 0 else C.DISTRIBUTION, 3.5), arrs, labs
 
         stages = [stage(k) for k in range(6)]
         slabs = [MathTex(r"F" + ("" if k == 0 else rf"^{{({k})}}"), font_size=30, color=C.DISTRIBUTION).move_to(
@@ -139,10 +139,21 @@ class Structure(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(f_l), FadeIn(kinks))
             vo.wait_until("b")
-            self.play(FadeIn(rows[0]), FadeIn(slabs[0]), FadeOut(g), FadeIn(stages[0]))
+            self.play(FadeIn(rows[0]), FadeIn(slabs[0]), FadeOut(g), FadeIn(stages[0][0]))
             for k in range(1, 6):
-                self.play(ReplacementTransform(stages[k - 1], stages[k]), FadeTransform(slabs[k - 1], slabs[k]),
-                          FadeOut(kinks) if k == 1 else Wait(0), run_time=1.3)
+                # the regular part morphs on its own (one transform across differently shaped groups throws stray
+                # strokes); an arrow already up stays put, a new one grows, the labels cross-fade
+                (r0, a0, l0), (r1, a1, l1) = stages[k - 1], stages[k]
+                anims = [ReplacementTransform(r0, r1), FadeTransform(slabs[k - 1], slabs[k])]
+                for p_ in a1:
+                    if p_ in a0:
+                        a1[p_] = a0[p_]
+                        anims.append(FadeTransform(l0[p_], l1[p_]))
+                    else:
+                        anims += [GrowArrow(a1[p_]), FadeIn(l1[p_])]
+                if k == 1:
+                    anims.append(FadeOut(kinks))
+                self.play(*anims, run_time=1.3)
             self.play(FadeIn(rows[1]))
             vo.wait_until("c")
             self.play(FadeIn(rows[2:5]))

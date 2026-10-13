@@ -127,10 +127,15 @@ class Hook(VoiceoverScene):
                           polyline(bx, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3.5))
 
         sm = always_redraw(smooth)
+        # clipped at the top of the axes: the arrow says it goes on up (a separate mobject, so sm keeps one shape)
+        up2 = Arrow(bx.c2p(0, 3.5), bx.c2p(0, 4.7), buff=0, color=C.DISTRIBUTION, stroke_width=3,
+                    max_tip_length_to_length_ratio=0.3)
+        up2.add_updater(lambda m: m.set_opacity(1.0 if nT.get_value() * rho(0.0) > 4.2 else 0.0))
         H = VGroup(Line(ax.c2p(-1.5, 0), ax.c2p(0, 0), color=WHITE, stroke_width=2),
                    Line(ax.c2p(0, 1), ax.c2p(1.5, 1), color=WHITE, stroke_width=2)).set_stroke(opacity=0.5)
         l1 = MathTex(r"H_n \to H \ \text{(Heaviside's step)}", font_size=26, color=C.SEQ).next_to(ax, UP, buff=0.05)
-        l2 = MathTex(r"H_n' = n\rho(nx) \to \delta", font_size=26, color=C.DISTRIBUTION).next_to(bx, UP, buff=0.05)
+        l2 = MathTex(r"H_n' = n\rho(nx) \to \delta", font_size=26, color=C.DISTRIBUTION).next_to(bx, UP, buff=0.05).align_to(
+            bx, LEFT)
         rows = VGroup(
             label(r"Heaviside (1890s): \ $H' = \delta$, \ used to solve circuits", font_size=24),
             label(r"the step has no derivative at $0$ as a function,", font_size=24),
@@ -155,12 +160,14 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(H), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(sm), FadeIn(l1), FadeIn(l2))
+            self.add(up2.update())
             self.play(nT.animate.set_value(30.0), run_time=4.0)
             self.play(FadeIn(rows[1:3]))
             vo.wait_until("c")
             self.play(FadeIn(rows[3:5]))
             self.play(FadeIn(rows[5]))
         sm.clear_updaters()
+        up2.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
