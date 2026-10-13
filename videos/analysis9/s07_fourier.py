@@ -80,8 +80,39 @@ class FourierL1(VoiceoverScene):
             (r"convolve: \ $f * g$", r"multiply: \ $\sqrt{2\pi}\,\hat f\,\hat g$"),
             (r"$f \in L^1$", r"$\hat f$ continuous, \ $\to 0$ at $\pm\infty$ \ (Riemann--Lebesgue)"),
         ], font_size=26)
-        card.move_to(DOWN * 0.3)
-        head = label(r"\textbf{RCA 9.2--9.6} \ the dictionary of the transform", font_size=32).to_edge(UP, buff=0.35)
+        card.scale(0.78).move_to(UP * 1.05)
+        head = label(r"\textbf{RCA 9.2--9.6} \ the dictionary of the transform", font_size=32).to_edge(UP, buff=0.3)
+        # the first rules, live, on f = e^{-x^2/2} (whose transform is e^{-t^2/2}): translating by a multiplies the
+        # transform by e^{-iat}, so Re f^ = cos(at) e^{-t^2/2} oscillates inside the fixed envelope |f^|
+        xs = np.linspace(-14, 14, 5601)
+
+        def ft(fx, t_):  # Rudin's normalization: integral of f(x) e^{-ixt} dx / sqrt(2 pi)
+            return np.trapezoid(fx * np.exp(-1j * xs * t_), xs) / SQ2PI
+
+        for a_ in (0.0, 1.3, 2.5):
+            for t_ in (-1.0, 0.4, 1.7):
+                assert abs(ft(np.exp(-(xs - a_) ** 2 / 2), t_) - np.exp(-1j * a_ * t_ - t_ * t_ / 2)) < 1e-8
+        for t_ in (-1.2, 0.5, 2.0):
+            assert abs(ft(-xs * np.exp(-xs ** 2 / 2), t_) - 1j * t_ * np.exp(-t_ * t_ / 2)) < 1e-8
+        lx = plain_axes([-4, 4, 1], [-1.1, 1.1, 1], 5.6, 2.0).move_to([-3.4, -2.55, 0])
+        rx = plain_axes([-4, 4, 1], [-1.1, 1.1, 1], 5.6, 2.0).move_to([3.4, -2.55, 0])
+        av = ValueTracker(0.0)
+        xg = np.linspace(-4, 4, 801)
+        fcur = always_redraw(lambda: polyline(lx, xg, np.exp(-(xg - av.get_value()) ** 2 / 2), color=C.FUNC, stroke_width=3))
+        env = VGroup(polyline(rx, xg, np.exp(-xg ** 2 / 2), color=GREY_B, stroke_width=2).set_stroke(opacity=0.6),
+                     polyline(rx, xg, -np.exp(-xg ** 2 / 2), color=GREY_B, stroke_width=2).set_stroke(opacity=0.6))
+        fre = always_redraw(lambda: polyline(rx, xg, np.cos(av.get_value() * xg) * np.exp(-xg ** 2 / 2),
+                                             color=C.FREQ, stroke_width=3))
+        ll = always_redraw(lambda: MathTex(rf"f(x - a), \ a = {av.get_value():.2f}", font_size=24, color=C.FUNC
+                                           ).next_to(lx, UP, buff=0.05))
+        rl = MathTex(r"\mathrm{Re}\,\hat f = \cos(at)\,e^{-t^2/2}, \quad |\hat f| = e^{-t^2/2} \text{ (grey)}",
+                     font_size=24, color=C.FREQ).next_to(rx, UP, buff=0.05)
+        fd = polyline(lx, xg, -xg * np.exp(-xg ** 2 / 2), color=C.FUNC, stroke_width=3)
+        fdh = polyline(rx, xg, xg * np.exp(-xg ** 2 / 2), color=C.FREQ, stroke_width=3)
+        ld = MathTex(r"f'(x) = -x\,e^{-x^2/2}", font_size=24, color=C.FUNC).next_to(lx, UP, buff=0.05)
+        rd_ = MathTex(r"\widehat{f'}(t) = i t\,e^{-t^2/2} \ \text{(imaginary part shown)}", font_size=24,
+                      color=C.FREQ).next_to(rx, UP, buff=0.05)
+        assert card.get_bottom()[1] > rl.get_top()[1] + 0.05 and rl.get_right()[0] < 6.95
         with self.voiceover(
             "<bookmark mark='a'/> The transform turns one kind of operation into another. Shifting a function "
             "multiplies its transform by a phase, and multiplying by a phase shifts the transform. "
@@ -92,10 +123,16 @@ class FourierL1(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(card.titles))
-            for i in (0, 1):
-                self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.6)
+            self.play(FadeIn(card.rows[0]), FadeIn(card.arrows[0]), Create(lx), Create(rx), FadeIn(fcur), FadeIn(fre),
+                      FadeIn(env), FadeIn(ll), FadeIn(rl))
+            self.play(av.animate.set_value(2.5), run_time=3.0, rate_func=smooth)
+            self.play(FadeIn(card.rows[1]), FadeIn(card.arrows[1]), run_time=0.6)
+            self.play(av.animate.set_value(0.0), run_time=1.5)
+            for m_ in (fcur, fre, ll):
+                m_.clear_updaters()
             vo.wait_until("b")
-            self.play(FadeIn(card.rows[2]), FadeIn(card.arrows[2]))
+            self.play(FadeIn(card.rows[2]), FadeIn(card.arrows[2]), ReplacementTransform(fcur, fd),
+                      ReplacementTransform(fre, fdh), FadeOut(env), FadeTransform(ll, ld), FadeTransform(rl, rd_))
             vo.wait_until("c")
             self.play(FadeIn(card.rows[3]), FadeIn(card.arrows[3]))
             vo.wait_until("d")
