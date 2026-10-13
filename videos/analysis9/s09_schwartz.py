@@ -127,7 +127,7 @@ class Schwartz(VoiceoverScene):
             arc.add_tip(tip_length=0.15)
             ring.add(VGroup(arc, MathTex(r"\mathcal F", font_size=26, color=C.OPERATOR).move_to(
                 arc.point_from_proportion(0.5) + 0.32 * normalize(arc.point_from_proportion(0.5) - DOWN * 0.25))))
-        key = label(r"solid: real part, \ dashed: imaginary part", font_size=18, color=GREY_B).to_corner(DL, buff=0.3)
+        key = label(r"solid: real part, \ dashed: imaginary part", font_size=18, color=GREY_B)
         mid = VGroup(MathTex(r"\mathcal F^2 f = f(-x)", font_size=28), MathTex(r"\mathcal F^4 = I", font_size=28),
                      MathTex(rf"\text{{DFT check: }} {sci(max(e2, e4), 0)}", font_size=20, color=GREY_A)).arrange(
             DOWN, buff=0.12).move_to(DOWN * 0.25)
@@ -145,6 +145,7 @@ class Schwartz(VoiceoverScene):
             label(r"eigenvalues $1, -i, -1, i$: \ the Hermite functions, \ $\mathcal F h_n = (-i)^n h_n$ \ "
                   rf"(error ${sci(max(herr), 0)}$)", font_size=22, color=C.SPECTRUM),
         ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
+        key.next_to(rows, UP, buff=0.15).to_edge(LEFT, buff=0.4)
         head = label(r"The transform is a quarter turn", font_size=34).to_edge(UP, buff=0.25)
         panels.shift(UP * 0.35)
         ring.shift(UP * 0.35)

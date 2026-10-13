@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import bump, load, plain_axes, polyline, trap
+from videos.analysis9.common import area_under, bump, load, plain_axes, polyline, trap
 
 
 class Calculus(VoiceoverScene):
@@ -25,20 +25,46 @@ class Calculus(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def definition(self):
-        r1 = MathTex(r"\int f'\,\varphi", r"\;=\;", r"-\int f\,\varphi'", font_size=44)
-        r2 = MathTex(r"\langle T', \varphi\rangle", r"\;=\;", r"-\langle T, \varphi'\rangle", font_size=44, color=C.EPS)
-        VGroup(r1, r2).arrange(DOWN, buff=0.9).move_to([0, 0.6, 0])
-        why1 = label(r"integration by parts: \ no boundary terms, \ because $\varphi$ vanishes near the edge", font_size=24,
-                     color=GREY_A).next_to(r1, DOWN, buff=0.2)
-        why2 = label(r"\textbf{FA 6.12} \ the definition: \ the derivative jumps onto the test function", font_size=24,
-                     color=GREY_A).next_to(r2, DOWN, buff=0.2)
+        r1 = MathTex(r"\int f'\,\varphi", r"\;=\;", r"-\int f\,\varphi'", font_size=42)
+        r2 = MathTex(r"\langle T', \varphi\rangle", r"\;=\;", r"-\langle T, \varphi'\rangle", font_size=42, color=C.EPS)
+        VGroup(r1, r2).arrange(DOWN, buff=1.0).move_to([3.6, 0.75, 0])
+        why1 = label(r"integration by parts: \ no boundary terms, \ because $\varphi$ vanishes near the edge", font_size=22,
+                     color=GREY_A)
+        why2 = label(r"\textbf{FA 6.12} \ the definition: \ the derivative jumps onto the test function", font_size=22,
+                     color=GREY_A)
+        for w_, r_ in ((why1, r1), (why2, r2)):
+            if w_.width > 6.6:
+                w_.width = 6.6
+            w_.next_to(r_, DOWN, buff=0.18)
         notes = VGroup(
             label(r"every distribution has derivatives of every order, \ and $\partial_i\partial_j = \partial_j\partial_i$",
                   font_size=26),
             label(r"if $T_n \to T$ in $\mathcal D'$, \ then $T_n' \to T'$: \ differentiation commutes with every limit",
                   font_size=26, color=C.EPS),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         head = label(r"Move the derivative onto the test function", font_size=34).to_edge(UP, buff=0.3)
+        # the picture: f = arctan 3x against a bump; the two shaded areas are equal
+        x = np.linspace(-2.5, 2.5, 40001)
+        u = (x - 0.3) / 1.6
+        inside = np.abs(u) < 1
+        q = np.where(inside, 1 - u * u, 1.0)
+        phi = np.where(inside, np.exp(-1 / q), 0.0) * math.e  # peak 1 at x = 0.3
+        dphi = np.where(inside, phi * (-2 * u / q**2) / 1.6, 0.0)  # exact derivative of the bump
+        f, df = np.arctan(3 * x), 3 / (1 + 9 * x * x)
+        A1, A2 = trap(df * phi, x), -trap(f * dphi, x)
+        assert abs(A1 - A2) < 2e-8 and f"{A1:.6f}" == f"{A2:.6f}"
+        axes = []
+        for k, (yc, top, bot) in enumerate(((1.15, 3.2, -0.2), (-1.65, 1.6, -1.6))):
+            axes.append(plain_axes([-2.5, 2.5, 1], [bot, top, 1], 6.2, 2.1).move_to([-3.6, yc, 0]))
+        a1, a2 = axes
+        p1 = VGroup(area_under(a1, x, df * phi, C.MEASURE, 0.45), polyline(a1, x, df, color=C.FUNC, stroke_width=2.5),
+                    polyline(a1, x, phi, color=C.TEST_FN, stroke_width=2.5))
+        p2 = VGroup(area_under(a2, x, -f * dphi, C.MEASURE, 0.45), polyline(a2, x, f, color=C.FUNC, stroke_width=2.5),
+                    polyline(a2, x, dphi, color=C.TEST_FN, stroke_width=2.5))
+        l1 = MathTex(rf"f' = \tfrac{{3}}{{1 + 9x^2}}, \ \varphi: \quad \int f'\varphi = {A1:.6f}", font_size=22,
+                     color=C.MEASURE).next_to(a1, UP, buff=0.05)
+        l2 = MathTex(rf"f = \arctan 3x, \ \varphi': \quad -\int f\varphi' = {A2:.6f}", font_size=22,
+                     color=C.MEASURE).next_to(a2, UP, buff=0.05)
         with self.voiceover(
             "<bookmark mark='a'/> For a smooth function f, integration by parts moves the derivative onto the test "
             "function, with a minus sign, and no boundary terms, because phi vanishes near the edge. "
@@ -48,7 +74,8 @@ class Calculus(VoiceoverScene):
             "now free: if distributions converge, so do their derivatives."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Write(r1), FadeIn(why1))
+            self.play(FadeIn(head), Write(r1), FadeIn(why1), Create(a1), FadeIn(p1), FadeIn(l1))
+            self.play(Create(a2), FadeIn(p2), FadeIn(l2))
             vo.wait_until("b")
             self.play(TransformMatchingTex(r1.copy(), r2), FadeIn(why2))
             self.play(Indicate(r2[2], color=C.DISTRIBUTION))

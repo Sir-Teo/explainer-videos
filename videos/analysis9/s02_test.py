@@ -30,17 +30,20 @@ class TestFunctions(VoiceoverScene):
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.2, 0.4, 0])
         g = polyline(ax, xs, b, color=C.TEST_FN, stroke_width=4)
         supp = Line(ax.c2p(-1, -0.03), ax.c2p(1, -0.03), color=C.EPS, stroke_width=6)
-        s_l = MathTex(r"\operatorname{supp} = [-1, 1]", font_size=24, color=C.EPS).next_to(ax.c2p(0, -0.03), DOWN, buff=0.12)
+        s_l = MathTex(r"\operatorname{supp} = [-1, 1]", font_size=24, color=C.EPS).next_to(ax, DOWN, buff=0.08)
         f_l = MathTex(r"\rho(x) = e^{-1/(1 - x^2)} \ \text{ on } |x| < 1, \ \ 0 \text{ outside}", font_size=26,
                       color=C.TEST_FN).next_to(ax, UP, buff=0.1)
-        bx = plain_axes([-0.5, 10.5, 1], [0, 1, 0.5], 6.0, 1.8).move_to([-3.2, -2.5, 0])
+        bx = plain_axes([-0.5, 10.5, 1], [0, 1, 0.5], 6.0, 1.5).move_to([-3.2, -2.95, 0])
         assert tiny < -100
         lv = np.log10(np.maximum(edge, 1e-300))
-        hts = 1.6 * (lv - lv.min() + 0.5) / (lv.max() - lv.min() + 0.5)
+        hts = 1.35 * (lv - lv.min() + 0.5) / (lv.max() - lv.min() + 0.5)
         bars = VGroup(*[Rectangle(width=0.35, height=h, stroke_width=0, fill_color=C.TEST_FN, fill_opacity=0.8).move_to(
             [bx.c2p(k, 0)[0], bx.c2p(0, 0)[1] + h / 2, 0]) for k, h in enumerate(hts)])
         b_l = label(r"$|\rho^{(k)}(0.98)|$ for $k = 0, \ldots, 10$ \ (log scale): \ large but finite", font_size=20,
                     color=GREY_A).next_to(bx, UP, buff=0.05)
+        kl = VGroup(*[MathTex(str(k), font_size=16, color=GREY_B).next_to(bx.c2p(k, 0), DOWN, buff=0.08) for k in (0, 5, 10)],
+                    MathTex(rf"{sci(float(edge[0]), 0)}", font_size=16, color=C.TEST_FN).next_to(bars[0], UP, buff=0.05),
+                    MathTex(rf"{sci(float(edge[-1]), 0)}", font_size=16, color=C.TEST_FN).next_to(bars[-1], RIGHT, buff=0.08))
         rows = VGroup(
             label(r"Part 2's flat function, \ $e^{-1/x}$, \ finally earns its keep:", font_size=24),
             label(r"glued at both ends, \ it gives a $C^\infty$ function", font_size=24),
@@ -67,7 +70,7 @@ class TestFunctions(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(f_l), FadeIn(rows[:3]))
             self.play(Create(supp), FadeIn(s_l))
             vo.wait_until("b")
-            self.play(Create(bx), FadeIn(b_l), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.1),
+            self.play(Create(bx), FadeIn(b_l), FadeIn(kl), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.1),
                       run_time=2.0)
             self.play(FadeIn(rows[3:5]))
             vo.wait_until("c")

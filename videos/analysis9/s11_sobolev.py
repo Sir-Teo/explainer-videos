@@ -30,7 +30,7 @@ class Sobolev(VoiceoverScene):
         ax = plain_axes([0, 2.4, 0.5], [-8, 0, 2], 6.4, 4.2, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([2.6, -0.2, 0])
-        xl = MathTex(r"\log_{10} t", font_size=22).next_to(ax.x_axis, DOWN, buff=0.35)
+        xl = MathTex(r"\log_{10} t", font_size=22).next_to(ax.c2p(2.4, 0), UR, buff=0.08)
         yl = MathTex(r"\log_{10} |\hat f|", font_size=22).next_to(ax.y_axis, UP, buff=0.1)
         cols = [C.PATHOLOGY, C.APPROX, C.TEST_FN]
         curves = [polyline(ax, lt, np.log10(v), color=c, stroke_width=4) for v, c in zip((box, tri, bmp), cols)]
@@ -117,7 +117,7 @@ class Sobolev(VoiceoverScene):
             row[1].add_updater(lambda m, s=s: m.set_value(partial(s, 10 ** LT.get_value())))
         lim = DashedLine(ax.c2p(0, lim6), ax.c2p(6, lim6), color=C.TEST_FN, stroke_width=2)
         liml = MathTex(rf"\sqrt\pi\,\Gamma(0.1)/\Gamma(0.6) = {lim6:.3f}", font_size=20, color=C.TEST_FN).next_to(
-            ax.c2p(0.2, lim6), UP, buff=0.06).align_to(ax.c2p(0.2, 0), LEFT)
+            ax.c2p(5.9, lim6), UP, buff=0.08).align_to(ax.c2p(5.9, 0), RIGHT)
         lad = VGroup(
             MathTex(r"|f(x)| \le \tfrac{1}{\sqrt{2\pi}}\int |\hat f(t)|\,dt", font_size=28),
             MathTex(r"= \tfrac{1}{\sqrt{2\pi}}\int (1 + t^2)^{-s/2} \cdot (1 + t^2)^{s/2}|\hat f(t)|\,dt", font_size=28),
