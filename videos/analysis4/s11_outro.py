@@ -34,8 +34,8 @@ class Outro(VoiceoverScene):
         head = label(r"Part 4, in nine lines", font_size=40).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Let's take stock. Linear maps have a norm, the largest stretch, and the invertible ones form an open "
-            "set. The derivative is the linear map you see when you zoom in, and partial derivatives make one only "
-            "when they're continuous. The contraction principle solves equations by iteration in any complete space: "
+            "set. The derivative is the linear map you see when you zoom in, and continuous partial derivatives "
+            "always make one. The contraction principle solves equations by iteration in any complete space: "
             "differential equations in the space of continuous functions, and the inverse and implicit function "
             "theorems. Mixed partial derivatives commute when they're continuous, and derivatives pass through "
             "integrals. And chapter ten's tour ended at Stokes' theorem, where integrals detect holes."

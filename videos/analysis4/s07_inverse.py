@@ -196,16 +196,20 @@ class InverseFunction(VoiceoverScene):
                             font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to([2.6, 0.9, 0], DR, buff=0)
         regrid(tab, gap=0.35)
+        ratio = float(np.median(res[2:8] / res[1:7]))
+        assert abs(ratio - 0.31) < 0.01 and abs(lip - 0.42) < 0.005  # the narration: "0.42", "about a third"
         note_ = VGroup(label(r"on the green ball:", font_size=22, color=C.CONNECTED_SET),
-                       label(rf"$\|\varphi'\| \le {lip:.3f}$, \ so each error", font_size=22, color=C.CONNECTED_SET),
-                       label(r"is about a third of the last", font_size=22, color=C.CONNECTED_SET)).arrange(
+                       label(rf"$\|\varphi'\| \le {lip:.2f}$: \ each error is at most", font_size=22, color=C.CONNECTED_SET),
+                       label(rf"${lip:.2f}$ of the last; \ here about ${ratio:.2f}$", font_size=22,
+                             color=C.CONNECTED_SET)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.06).next_to(tab, DOWN, buff=0.35, aligned_edge=LEFT)
-        assert lip < 0.5 and np.all(np.diff(res[:8]) < 0)
+        assert lip < 0.5 and np.all(np.diff(res[:8]) < 0) and np.all(np.linalg.norm(its[:8] - a, axis=1) < r)
         with self.voiceover(
             "<bookmark mark='a'/> Here it is, run. Choose a target y near f of a. <bookmark mark='b'/> Start at a and "
             "apply the correction again and again. On the left, the iterates in the domain; on the right, their "
-            "images, closing in on y. <bookmark mark='c'/> On the green ball the correction map shrinks distances by "
-            "at most about a third, so each error is about a third of the one before. "
+            "images, closing in on y. <bookmark mark='c'/> On the green ball, which holds every iterate, the correction "
+            "map shrinks distances by a factor of at most 0.42, and here each error is about a third of the one "
+            "before. "
             "<bookmark mark='d'/> If we updated A at every step, using the derivative at the current point, this "
             "would be Newton's method from the opening, and it would converge even faster."
         ) as vo:

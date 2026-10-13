@@ -25,7 +25,7 @@ The scenes share the series' instruments in [`explainer/analysis`](../../explain
 
 | # | Scene | Chapter |
 |---|---|---|
-| 0 | [`Hook`](s01_hook.py) | Every equation you can solve, you solve by a contraction |
+| 0 | [`Hook`](s01_hook.py) | Newton's method, and the contraction behind it |
 | 1 | [`LinearMaps`](s02_linear.py) | 1. Linear maps and their norms |
 | 2 | [`Derivative`](s03_derivative.py) | 2. The derivative is a linear map |
 | 3 | [`Partials`](s04_partials.py) | 3. Partial derivatives are not enough |

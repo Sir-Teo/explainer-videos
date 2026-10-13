@@ -54,7 +54,9 @@ class FormsTour(VoiceoverScene):
                           .set_points_as_corners([ax.c2p(*q) for q in np.vstack([Q, Q[:1]])]))
         base = mapped_grid(ax, lambda P: P, (-1.0, 1.0), (-1.0, 1.0), n=9, color=GREY_D, stroke_width=1)
         head = VGroup(label(r"\textbf{Rudin 10.9} \ change of variables", font_size=30),
-                      MathTex(r"\int_{T(E)} f(y)\,dy = \int_E f(T(x))\,|\det T'(x)|\,dx", font_size=36, color=C.EPS)
+                      MathTex(r"\int_{T(E)} f(y)\,dy = \int_E f(T(x))\,|\det T'(x)|\,dx", font_size=36, color=C.EPS),
+                      label(r"$T$ one-to-one and $C^1$ on $E$, \ $\det T' \ne 0$; \ $f$ continuous, "
+                            r"with compact support in $T(E)$", font_size=22, color=GREY_A)
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
         side = VGroup(
             MathTex(r"T(x, y) = (x + \tfrac14 \sin 2y,\ y + \tfrac15 x^2)", font_size=28),
@@ -69,16 +71,19 @@ class FormsTour(VoiceoverScene):
                 r_.width = 6.3
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
         assert np.abs(ratios - 1).max() < 1e-3
+        # T is one-to-one on the square: T - I = (sin(2y)/4, x^2/5) has derivative norm <= 1/2 there
+        g_ = np.linspace(-1, 1, 41)
+        assert max(np.linalg.norm([[0, 0.5 * math.cos(2 * y_)], [0.4 * x_, 0]], 2) for x_ in g_ for y_ in g_) <= 0.5 + 1e-12
         with self.voiceover(
-            "<bookmark mark='a'/> First, the change of variables formula. When a map T reshapes a region, integrals "
-            "pick up a factor: the absolute value of the determinant of T's derivative. <bookmark mark='b'/> Here's "
+            "<bookmark mark='a'/> First, the change of variables formula. When a one-to-one, continuously "
+            "differentiable map T, with nonzero Jacobian, reshapes a region, integrals pick up a factor: the absolute value of the determinant of T's derivative. <bookmark mark='b'/> Here's "
             "why. Cut the region into small squares; each becomes, nearly, the parallelogram of the derivative, whose "
             "area is the determinant times the square's area. <bookmark mark='c'/> Computed for all sixty-four cells, "
             "the ratio of the true area to the determinant's prediction is one, to within a few millionths."
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), Create(base))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), FadeIn(side[0]))
+            self.play(FadeIn(head[1:]), FadeIn(side[0]))
             vo.wait_until("b")
             self.play(TransformFromCopy(base, cells), FadeIn(side[1:3]), run_time=2.5)
             self.play(FadeIn(side[3]))
@@ -96,15 +101,16 @@ class FormsTour(VoiceoverScene):
         bumps = VGroup(*[polyline(ax, xs, p_, color=c, stroke_width=3) for p_, c in zip(psi, cols)])
         total = polyline(ax, xs, psi.sum(axis=0), color=WHITE, stroke_width=3.5)
         head = VGroup(label(r"\textbf{Rudin 10.8} \ partitions of unity", font_size=30),
-                      label(r"smooth bumps $\psi_i \ge 0$, \ each living on a small piece, \ with $\sum \psi_i = 1$",
+                      label(r"continuous bumps $\psi_i \ge 0$, \ each inside one set of a cover of $K$, \ $\sum \psi_i = 1$ on $K$",
                             font_size=26, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         tl = MathTex(r"\sum_i \psi_i = 1", font_size=32).next_to(ax.c2p(0.5, 1.0), UP, buff=0.12)
         use = label(r"so a global integral is a sum of local ones: \ $\int f = \sum_i \int \psi_i f$", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.3)
         assert np.allclose(psi.sum(axis=0), 1)
         with self.voiceover(
-            "<bookmark mark='a'/> Second, partitions of unity: smooth bumps, each living on a small piece of the "
-            "space, that add up to exactly one. <bookmark mark='b'/> They let us cut an integral into local pieces, "
+            "<bookmark mark='a'/> Second, partitions of unity: continuous bumps, each "
+            "living inside one small piece of a cover, that add up to exactly one on a compact set. Smooth ones exist "
+            "too. <bookmark mark='b'/> They let us cut an integral into local pieces, "
             "do each piece in convenient coordinates, and add the results."
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax))

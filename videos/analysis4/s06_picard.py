@@ -209,8 +209,8 @@ class Picard(VoiceoverScene):
             "of y, starting from zero. <bookmark mark='b'/> The zero function solves it. So does t squared. So does "
             "the function that waits until any time c and then follows t minus c squared. <bookmark mark='c'/> "
             "Infinitely many solutions through one point. Peano's theorem, proved with Arzelà–Ascoli from Part 3, "
-            "still gives existence for any continuous right side, but uniqueness needs the Lipschitz bound that makes "
-            "T a contraction."
+            "still gives existence for any continuous right side, but without the Lipschitz bound that makes T a "
+            "contraction, uniqueness can fail."
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax))
             vo.wait_until("a")

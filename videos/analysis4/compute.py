@@ -254,12 +254,17 @@ def compute_inverse():
         res.append(np.linalg.norm(f_exp(x) - target))
     its, res = np.array(its), np.array(res)
     assert res[-1] < 1e-12 and np.all(np.diff(res[:15]) < 0)
-    # phi is a contraction near a: ||phi'(x)|| = ||I - A^-1 f'(x)|| <= 1/2 on the ball |x - a| <= r
-    r = 0.3
+    # phi is a contraction near a: ||phi'(x)|| = ||I - A^-1 f'(x)|| < 1/2 on the closed ball |x - a| <= r, which
+    # holds every iterate. As complex numbers A^-1 f'(x) = e^(x - a), so the norm is |1 - e^w|, |w| <= r: largest at
+    # w = r (on the circle, by the maximum principle), e^r - 1. Sample the disk and its edge.
+    r = 0.35
     rng = np.random.default_rng(9)
-    pts = a + r * rng.uniform(-1, 1, size=(400, 2)) / math.sqrt(2)
+    rad, ang = r * np.sqrt(rng.uniform(0, 1, 600)), rng.uniform(0, 2 * math.pi, 600)
+    edge = np.linspace(0, 2 * math.pi, 720, endpoint=False)
+    pts = a + np.column_stack([np.r_[rad * np.cos(ang), r * np.cos(edge)], np.r_[rad * np.sin(ang), r * np.sin(edge)]])
     lips = np.array([np.linalg.norm(np.eye(2) - Ainv @ J_exp(p), 2) for p in pts])
-    assert lips.max() < 0.5
+    assert lips.max() < 0.5 and abs(lips.max() - (math.exp(r) - 1)) < 1e-4
+    assert np.all(np.linalg.norm(its - a, axis=1) < r)
     return dict(a=a, A=A, target=target, its=its, res=res, r=r, lip=lips.max())
 
 

@@ -214,9 +214,11 @@ class Derivative(VoiceoverScene):
         cmap = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / 16) for k in range(17)]
         lines = VGroup(*[contour_mobject(ax, contour_segments(f_surf, xs, ys, lv), c, 1.8) for lv, c in zip(levels, cmap)])
         arrows = VGroup()
-        for q in [(0.0, 0.0), (0.6, 0.4), (1.2, -0.3), (0.2, 1.1), (1.4, 1.0), (-0.3, -0.5), (1.0, 0.9)]:
+        qs = [(0.0, 0.0), (0.6, 0.4), (1.2, -0.3), (0.2, 1.1), (1.4, 1.0), (-0.3, -0.5), (1.0, 0.9)]
+        gmax = max(np.linalg.norm(grad_surf(*q)) for q in qs)  # arrow length proportional to |grad f|
+        for q in qs:
             g = grad_surf(*q)
-            arrows.add(Arrow(ax.c2p(*q), ax.c2p(*(np.array(q) + 0.28 * g / max(np.linalg.norm(g), 0.3))), buff=0,
+            arrows.add(Arrow(ax.c2p(*q), ax.c2p(*(np.array(q) + 0.42 * g / gmax)), buff=0,
                              color=C.EPS, stroke_width=4, tip_length=0.14, max_tip_length_to_length_ratio=0.4))
         # the directional derivative at p as a function of the direction's angle: a pure cosine
         th = np.linspace(0, 2 * np.pi, 361)
@@ -260,14 +262,14 @@ class Derivative(VoiceoverScene):
             [(r"$f'(x)$ is a number: \ a slope", r"$f'(x)$ is a linear map $\R^n \to \R^m$"),
              (r"the tangent line", r"the best linear approximation"),
              (r"chain rule: \ multiply the slopes", r"chain rule: \ compose (multiply matrices)"),
-             (r"$|f(b) - f(a)| \le M|b - a|$", r"the same, with $\|f'\| \le M$ \ (9.19)")],
+             (r"$|f(b) - f(a)| \le M|b - a|$", r"the same on convex sets, \ $\|f'\| \le M$ \ (9.19)")],
             font_size=26)
         with self.voiceover(
             "So the dictionary from one variable to several: <bookmark mark='a'/> the derivative stops being a number "
             "and becomes a linear map; <bookmark mark='b'/> the tangent line becomes the best linear approximation; "
             "<bookmark mark='c'/> the chain rule multiplies matrices instead of numbers; <bookmark mark='d'/> and the "
-            "mean value inequality survives word for word, with the norm of the derivative in place of the absolute "
-            "value."
+            "mean value inequality survives on convex sets, with the norm of the derivative in place of the "
+            "absolute value."
         ) as vo:
             self.play(FadeIn(card.titles))
             for i, mk in enumerate("abcd"):
