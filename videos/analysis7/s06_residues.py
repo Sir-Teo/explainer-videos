@@ -149,12 +149,12 @@ class Residues(VoiceoverScene):
     def rouche(self):
         d = load("residues")
         roots = d["roots"]
-        ax = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.35).move_to([-4.3, -0.7, 0])
+        ax = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.3).move_to([-4.65, -0.7, 0])
         ax.set_opacity(0.35)
         u = ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]
         circ = Circle(radius=u, color=WHITE, stroke_width=2.5).move_to(ax.c2p(0, 0))
         rd = VGroup(*[Dot(ax.c2p(r.real, r.imag), radius=0.08, color=C.EPS if abs(r) < 1 else C.SEQ) for r in roots])
-        bx = square_axes([-4.4, 4.4, 2], [-4.4, 4.4, 2], 0.5).move_to([0.6, -0.7, 0])
+        bx = square_axes([-4.4, 4.4, 2], [-4.4, 4.4, 2], 0.5).move_to([0.2, -0.7, 0])
         bx.set_opacity(0.35)
         t = np.linspace(0, 2 * np.pi, 1200)
         z = np.exp(1j * t)
@@ -185,10 +185,9 @@ class Residues(VoiceoverScene):
                     font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.6, 0])
         for r_ in rows:
-            if r_.width > 3.9:
-                r_.width = 3.9
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.6, 0])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.05, -0.6, 0])
+            if r_.width > 3.7:
+                r_.width = 3.7
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([3.2, -0.6, 0], RIGHT, buff=0)
         head = label(r"Rouch\'e: \ walk a dog on a short leash around a tree", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> How many roots does z to the fifth plus three z plus one have inside the unit "
@@ -228,10 +227,32 @@ class Residues(VoiceoverScene):
                 lab.width = 3.6
             box = RoundedRectangle(width=4.0, height=1.0, corner_radius=0.1, stroke_color=C.INNER, stroke_width=2)
             boxes.add(VGroup(box, lab.move_to(box)))
-        boxes.arrange_in_grid(rows=3, cols=3, buff=(0.3, 0.3)).move_to(DOWN * 0.4)
+        boxes.arrange_in_grid(rows=3, cols=3, buff=(0.25, 0.25))
+        boxes.scale(0.76).move_to([1.95, -0.75, 0])
         head = VGroup(label(r"\textbf{RCA 13.11} \ for a region $\Omega \subset \C$, \ these nine are equivalent", font_size=30),
                       label(r"the many faces of ``simply connected''", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.1)
         head.to_edge(UP, buff=0.3)
+        # the failure, computed: on the annulus 1/2 < |z| < 2, the circle |z| = 1 does not shrink, and
+        # the integral of 1/z around it is 2 pi i; continuing log z once around adds 2 pi i
+        th = np.linspace(0, 2 * np.pi, 4001)
+        zc = np.exp(1j * th)
+        I = trap(1j * zc / zc, th)
+        logz = np.log(zc[0]) + np.concatenate([[0], np.cumsum((1 / ((zc[1:] + zc[:-1]) / 2)) * np.diff(zc))])
+        assert abs(I - 2j * np.pi) < 1e-9 and abs(logz[-1] - logz[0] - 2j * np.pi) < 1e-5
+        ax = square_axes([-2.2, 2.2, 1], [-2.2, 2.2, 1], 0.72).move_to([-5.1, 0.05, 0])
+        ax.set_opacity(0.35)
+        u = ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]
+        ann = Annulus(inner_radius=0.5 * u, outer_radius=2 * u, fill_color=C.INNER, fill_opacity=0.25, stroke_width=1.5,
+                      stroke_color=C.INNER).move_to(ax.c2p(0, 0))
+        loop = Circle(radius=u, color=C.EPS, stroke_width=3).move_to(ax.c2p(0, 0))
+        loop_tip = Arrow(ax.c2p(1, -0.25), ax.c2p(1, 0.25), buff=0, color=C.EPS, stroke_width=3, tip_length=0.15)
+        hole = Dot(ax.c2p(0, 0), radius=0.05, color=C.PATHOLOGY)
+        an = VGroup(MathTex(r"\tfrac12 < |z| < 2", font_size=22, color=C.INNER),
+                    MathTex(rf"\oint_{{|z| = 1}} \frac{{dz}}{{z}} = {I.imag:.6f}\,i = 2\pi i \ne 0", font_size=22,
+                            color=C.EPS),
+                    MathTex(r"\log z \text{ comes back } + 2\pi i", font_size=22, color=C.PATHOLOGY)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.12).set_x(-4.9)
+        ann_l = label(r"a region with a hole: \ all nine fail", font_size=22, color=C.PATHOLOGY).next_to(ax, UP, buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> Rudin collects the region's side of the story in one theorem. For a region in the "
             "plane, nine conditions are equivalent: <bookmark mark='b'/> topological ones, like having no holes; "
@@ -240,9 +261,10 @@ class Residues(VoiceoverScene):
             "on. The square roots will build the Riemann mapping."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ann), FadeIn(hole), FadeIn(ann_l), FadeIn(an[0]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes[:4]], lag_ratio=0.3), run_time=2.0)
+            self.play(Create(loop), GrowArrow(loop_tip), FadeIn(an[1]))
+            self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes[:4]], lag_ratio=0.3), FadeIn(an[2]), run_time=2.0)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes[4:]], lag_ratio=0.3), run_time=2.5)
         self.wait(0.4)

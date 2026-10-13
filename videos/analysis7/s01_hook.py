@@ -37,7 +37,7 @@ class Hook(VoiceoverScene):
         with np.errstate(divide="ignore", over="ignore"):
             y = np.where(x == 0, 0.0, np.exp(-1 / x**2))
         g = polyline(ax, x, y, color=C.FUNC, stroke_width=4)
-        g_l = MathTex(r"e^{-1/x^2}", font_size=32, color=C.FUNC).next_to(ax.c2p(1.0, 0.37), UP, buff=0.2)
+        g_l = MathTex(r"e^{-1/x^2}", font_size=32, color=C.FUNC).next_to(ax.c2p(0.85, 0.3), DR, buff=0.12)
         real_t = VGroup(label(r"on $\R$: \ infinitely differentiable,", font_size=24),
                         label(r"every derivative $0$ at $0$: \ Taylor series $\equiv 0$", font_size=24, color=C.PATHOLOGY)
                         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, DOWN, buff=0.3)
@@ -109,7 +109,6 @@ class Hook(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.2:
                 r_.width = 7.2
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
         assert abs(half_pi - math.pi / 2) < 1e-14 and abs(e2pi - 1) < 1e-12
         head = label(r"The exponential, \ the most important function in mathematics", font_size=32).to_edge(UP,

@@ -48,9 +48,9 @@ class Runge(VoiceoverScene):
         K2 = region(bx, 0.0, C.PATHOLOGY)
         p1, p2 = Dot(ax.c2p(0, 0), radius=0.07, color=WHITE), Dot(bx.c2p(0, 0), radius=0.07, color=WHITE)
         esc = Arrow(ax.c2p(0, 0), ax.c2p(1.25, 0), buff=0.05, color=C.EPS, stroke_width=3, tip_length=0.15)
-        l1 = label(r"the pole can escape", font_size=20, color=C.EPS).next_to(ax, RIGHT, buff=0.05).shift(UP * 0.3)
-        l2 = label(r"trapped in the hole", font_size=20, color=C.PATHOLOGY).next_to(bx, RIGHT, buff=0.05).shift(UP * 0.3)
-        cx = plain_axes([1, 8, 1], [-4.2, 0.6, 1], 5.4, 4.0).move_to([2.3, -0.7, 0])
+        l1 = label(r"the pole can escape", font_size=18, color=C.EPS).next_to(ax, RIGHT, buff=0.05).shift(UP * 0.3)
+        l2 = label(r"trapped in the hole", font_size=18, color=C.PATHOLOGY).next_to(bx, RIGHT, buff=0.05).shift(UP * 0.3)
+        cx = plain_axes([1, 8, 1], [-4.2, 0.6, 1], 3.9, 4.0).move_to([1.25, -0.7, 0])
         xt = VGroup(*[MathTex(str(int(v)), font_size=20).next_to(cx.c2p(math.log2(v), -4.2), DOWN, buff=0.1)
                       for v in degs])
         yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20).next_to(cx.c2p(1, k), LEFT, buff=0.1) for k in (0, -2, -4)])
@@ -71,10 +71,9 @@ class Runge(VoiceoverScene):
             label(r"so $\sup |1/z - p| \ge 1$ on the circle", font_size=22, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.6, -0.6, 0])
         for r_ in side:
-            if r_.width > 2.9:
-                r_.width = 2.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.6, -0.6, 0])
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.65, -0.6, 0])
+            if r_.width > 3.45:
+                r_.width = 3.45
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([3.45, -0.6, 0], RIGHT, buff=0)
         assert eh[-1] < 1e-3 and np.all(ea >= 1)
         head = label(r"Can polynomials approximate $1/z$ uniformly on $K$?", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(

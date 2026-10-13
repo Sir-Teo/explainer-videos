@@ -123,7 +123,6 @@ class CauchyFormula(VoiceoverScene):
             if r_.width > 6.4:
                 r_.width = 6.4
         coef.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
-        coef.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
         head = label(r"The first miracle: \ every holomorphic function is a power series", font_size=32).to_edge(UP,
                                                                                                           buff=0.25)
         with self.voiceover(
@@ -186,7 +185,6 @@ class CauchyFormula(VoiceoverScene):
         for r_ in notes:
             if r_.width > 4.4:
                 r_.width = 4.4
-        notes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -2.0, 0])
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.65, -2.0, 0])
         head = label(r"Counting roots with integrals: \ $p(z) = z^5 - 2z^3 + 0.3z^2 + 1.1z - 0.4$", font_size=30).to_edge(
             UP, buff=0.25)

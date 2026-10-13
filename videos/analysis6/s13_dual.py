@@ -199,7 +199,6 @@ class DualLp(VoiceoverScene):
         for r_ in side:
             if r_.width > 4.9:
                 r_.width = 4.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.3, -0.4, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.4, -0.4, 0])
         xf = np.linspace(0, 1, 100001)
         wf = 1 + 0.5 * np.sin(2 * math.pi * xf)

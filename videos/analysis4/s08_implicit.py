@@ -89,7 +89,6 @@ class ImplicitFunction(VoiceoverScene):
             if r_.width > 6.2:
                 r_.width = 6.2
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.8, 0])
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The equation x cubed plus y cubed equals three x y defines a curve, the folium of "
             "Descartes. Does it define y as a function of x? <bookmark mark='b'/> Not globally, but often locally. Near "

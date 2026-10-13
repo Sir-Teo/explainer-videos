@@ -45,7 +45,6 @@ class RieszFischer(VoiceoverScene):
         for r_ in steps:
             if r_.width > 6.4:
                 r_.width = 6.4
-        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([-3.3, -0.9, 0])
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([-3.3, -0.6, 0])
         # the picture: a fast subsequence as a walk whose steps halve, so its total length is finite
         z = [np.zeros(2)]
@@ -195,7 +194,6 @@ class RieszFischer(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.3:
                 r_.width = 6.3
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.15, -0.6, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.15, -0.6, 0])
         rows[4].shift(RIGHT * 0.4)
         head = label(r"Which functions are dense in $L^p$?", font_size=34).to_edge(UP, buff=0.3)
