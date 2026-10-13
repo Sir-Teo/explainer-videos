@@ -39,7 +39,7 @@ class Hook(VoiceoverScene):
         ball = always_redraw(lambda: p_ball(ax, p_now(), C.DIST))
         v = np.array([0.6, 0.8])
         arrow = Arrow(ax.c2p(0, 0), ax.c2p(*v), buff=0, color=WHITE, stroke_width=4, tip_length=0.18)
-        v_l = MathTex(r"v = (0.6,\ 0.8)", font_size=26).next_to(ax.c2p(*v), UR, buff=0.05)
+        v_l = MathTex(r"v = (0.6,\ 0.8)", font_size=26).next_to(ax.c2p(*v), RIGHT, buff=0.12)
 
         def p_text():
             p = p_now()
