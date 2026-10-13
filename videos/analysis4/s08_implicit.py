@@ -211,10 +211,9 @@ class ImplicitFunction(VoiceoverScene):
         whys = [why(r"the trick: \ keep $x$, \ record the value of $f$", 22), why(r"a triangular matrix", 22),
                 why(r"so 9.24 inverts $\Phi$ near $(a, b)$", 22), why(r"$f(x, g(x)) = 0$: \ the level set is a graph", 22)]
         step = ladder(self, rows, whys, keep=4, top=1.9, buff=0.3, x=2.35, edge=6.9)
-        out = label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$, \ so $g' = -f_x / f_y = 0.8$ at $a$",
-                    font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3).set_x(3.6)
-        if out.width > 6.6:
-            out.width = 6.6
+        out = VGroup(label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$,", font_size=28, color=C.EPS),
+                     label(r"so $g' = -f_x / f_y = 0.8$ at $a$", font_size=28, color=C.EPS)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.3).set_x(3.6)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem, Rudin 9.28, here with one variable on each side: if f vanishes at a, "
             "b, and its partial derivative in y is not zero there, then near a the equation defines y as exactly one "
