@@ -143,7 +143,7 @@ class Samples(VoiceoverScene):
             label(r"on $SO(3)$: \ random unit quaternions", font_size=24),
             MathTex(rf"\textstyle\int (z^2 + \tfrac x2)\,d\mu: \ {avg:.4f}; \ \text{{shifted: }} {avg_s:.4f}; \ \tfrac13",
                     font_size=24, color=C.INNER),
-            MathTex(rf"\text{{mean point: }} ({mean[0]:+.3f}, {mean[1]:+.3f}, {mean[2]:+.3f})", font_size=24, color=GREY_A),
+            MathTex(rf"\text{{mean point: }} ({nz(mean[0], 3):+.3f}, {nz(mean[1], 3):+.3f}, {nz(mean[2], 3):+.3f})", font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.3, -0.5, 0])
         for r_ in rows:
             if r_.width > 6.2:

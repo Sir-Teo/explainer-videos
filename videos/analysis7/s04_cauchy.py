@@ -51,10 +51,10 @@ class CauchyFormula(VoiceoverScene):
             v = contour(lambda z: F(z) / (z - a), 0, 1.0, 1024)
             fa = F(np.array([a]))[0]
             return VGroup(
-                MathTex(rf"a = {a.real:+.3f} {a.imag:+.3f}i", font_size=28),
-                MathTex(rf"\tfrac{{1}}{{2\pi i}}\oint \tfrac{{f(z)}}{{z - a}}dz = {v.real:+.5f} {v.imag:+.5f}i", font_size=28,
+                MathTex(rf"a = {nz(a.real, 3):+.3f} {nz(a.imag, 3):+.3f}i", font_size=28),
+                MathTex(rf"\tfrac{{1}}{{2\pi i}}\oint \tfrac{{f(z)}}{{z - a}}dz = {nz(v.real, 5):+.5f} {nz(v.imag, 5):+.5f}i", font_size=28,
                         color=C.EPS),
-                MathTex(rf"f(a) = {fa.real:+.5f} {fa.imag:+.5f}i", font_size=28, color=C.EPS),
+                MathTex(rf"f(a) = {nz(fa.real, 5):+.5f} {nz(fa.imag, 5):+.5f}i", font_size=28, color=C.EPS),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, 0.7, 0])
 
         rd = always_redraw(reads)

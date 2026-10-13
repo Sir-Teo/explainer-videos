@@ -54,7 +54,7 @@ class Residues(VoiceoverScene):
             arc = trap(quartic(R * np.exp(1j * t)) * 1j * R * np.exp(1j * t), t)
             return VGroup(MathTex(rf"R = {R:.2f}", font_size=28),
                           MathTex(rf"\int_{{-R}}^R = {seg.real:.6f}", font_size=28),
-                          MathTex(rf"\int_{{\text{{arc}}}} = {arc.real:+.6f} {arc.imag:+.6f}i", font_size=28, color=GREY_A),
+                          MathTex(rf"\int_{{\text{{arc}}}} = {nz(arc.real, 6):+.6f} {nz(arc.imag, 6):+.6f}i", font_size=28, color=GREY_A),
                           MathTex(rf"\oint = {(seg + arc).real:.6f}", font_size=28, color=C.EPS)
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.2, 1.3, 0])
 
