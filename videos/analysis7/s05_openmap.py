@@ -35,8 +35,14 @@ class OpenMapping(VoiceoverScene):
         arc = 0.35 * np.exp(1j * th) + 0.2
         c0 = 0.2 + 0.35 * np.exp(0.47j)
         arc_m = zcurve(cx, arc, WHITE, 5)
-        radii = [0.12, 0.45, 0.9, 1.6, 2.6]
-        imgs = [cplot(cx, G, (-1.5, 1.5), (-1.5, 1.5), px=600, mask=lambda Z, r=r: np.abs(Z - c0) < r) for r in radii]
+        # the series at c0 converges out to the pole at 2.2 (radius 1.695); a second center c1 inside that disk has a
+        # series reaching 3.0, which covers the rest of the frame: continuation, disk by disk
+        c1 = -0.8 + 0j
+        assert 1.6 < abs(2.2 - c0) < 1.7 and abs(c1 - c0) < 1.6 and abs(2.2 - c1) > 2.9
+        masks = [lambda Z, r=r: np.abs(Z - c0) < r for r in (0.12, 0.45, 0.9, 1.6)]
+        masks.append(lambda Z: (np.abs(Z - c0) < 1.6) | (np.abs(Z - c1) < 2.9))
+        imgs = [cplot(cx, G, (-1.5, 1.5), (-1.5, 1.5), px=600, mask=mk) for mk in masks]
+        c1_d = Dot(cx.c2p(c1.real, c1.imag), radius=0.07, color=WHITE)
         g_l = MathTex(r"f(z) = \frac{z^2 + 1}{z - 2.2} + 0.3z", font_size=28).next_to(frame, UP, buff=0.1)
         rows = VGroup(
             label(r"\textbf{RCA 10.18} \ (the identity theorem) \ if $f, g$ are holomorphic on a region $\Omega$", font_size=24),
@@ -64,10 +70,12 @@ class OpenMapping(VoiceoverScene):
             vo.wait_until("b")
             cur = imgs[0]
             for k in range(1, len(imgs)):
+                if k == len(imgs) - 1:  # the first series has reached its pole: recenter inside its disk
+                    self.play(FadeIn(c1_d, scale=1.5), run_time=0.6)
                 self.play(FadeIn(imgs[k]), run_time=1.1)
                 self.remove(cur)
                 cur = imgs[k]
-                self.bring_to_front(arc_m)
+                self.bring_to_front(arc_m, c1_d) if k == len(imgs) - 1 else self.bring_to_front(arc_m)
             vo.wait_until("c")
             self.play(FadeIn(rows[:3]))
             self.play(FadeIn(rows[3:]))

@@ -169,8 +169,9 @@ def compute_dct():
 
 # ---------------------------------------------------------------------------
 def compute_riesz():
-    """Lambda f = int_0^1 f.  For an open set V (a finite union of intervals), f_k = the trapezoid that is 1 on V
-    minus 1/k-collars and 0 off V has f_k < V and Lambda f_k -> length(V) (Rudin 2.14's definition of mu(V))."""
+    """Lambda f = int_0^1 f.  For an open set V (a finite union of intervals (c, b)), f_k is 0 within col = 1/k of
+    each end, ramps up over the next col, and is 1 in the middle: its support [c + col, b - col] is a compact subset
+    of V, so f_k < V, and Lambda f_k = sum (w - 3 col) -> length(V) (Rudin 2.14's definition of mu(V))."""
     rng = np.random.default_rng(2)
     trials = []
     for _ in range(6):
@@ -178,16 +179,16 @@ def compute_riesz():
         iv = [(a[i], a[i + 1]) for i in range(0, 8, 2)]
         length = sum(b - c for c, b in iv)
         lams = []
-        for k in (5, 20, 100, 1000, 10**7):
+        for k in (5, 20, 100, 1000, 10**8):
             lam = 0.0
             for c, b in iv:
                 w = b - c
-                col = min(1 / k, w / 2)
-                lam += w - col  # trapezoid: full height on the middle, linear ramps of width col at each end
+                col = min(1 / k, w / 4)
+                lam += w - 3 * col  # zero on the end collars (2 col), linear ramps (col/2 each), 1 in the middle
             lams.append(lam)
         assert all(x <= length + 1e-15 for x in lams) and abs(lams[-1] - length) < 1e-6
         trials.append((length, *lams))
-    return dict(trials=np.array(trials), ks=np.array([5, 20, 100, 1000, 10**7]))
+    return dict(trials=np.array(trials), ks=np.array([5, 20, 100, 1000, 10**8]))
 
 
 # ---------------------------------------------------------------------------
@@ -204,7 +205,9 @@ def compute_lusin():
     for k, t in enumerate(jumps):
         m = (x > t - delta) & (x < t + delta)
         g[m] = vals[k] + (vals[k + 1] - vals[k]) * (x[m] - (t - delta)) / (2 * delta)
-    bad = np.mean(np.abs(g - f) > 1e-12)
+    # f and g differ exactly on the 99 disjoint open ramps (jumps are >= 0.001 apart, ramps 2 delta < 0.001 wide)
+    bad = 99 * 2 * delta
+    assert np.diff(jumps).min() > 2 * delta and abs(np.mean(np.abs(g - f) > 1e-12) - bad) < 2e-3
     # g is continuous: its steps on the grid are at most (largest jump) / (2 delta) * dx; f and g differ on < eps
     assert bad < eps and np.abs(np.diff(g)).max() <= (x[1] - x[0]) / (2 * delta) + 1e-12
     return dict(x=x[::10], f=f[::10], g=g[::10], bad=bad, eps=eps, jumps=jumps, vals=vals, delta=delta)

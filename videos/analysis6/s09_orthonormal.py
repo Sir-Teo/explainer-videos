@@ -196,10 +196,12 @@ class Orthonormal(VoiceoverScene):
         assert abs(cfs[1] ** 2 - 2 / 3) < 1e-12 and all(abs(cf) < 1e-13 for i, cf in enumerate(cfs) if i != 1)
         bars = VGroup()
         for n in range(8):
-            h = 0.06 if n != 1 else 0.9
-            col = C.EPS if n == 1 else C.SEQ  # the one nonzero coefficient; greyed when e_1 is dropped
-            r_ = Rectangle(width=0.22, height=h, stroke_width=0, fill_color=col, fill_opacity=0.9)
-            r_.move_to([-2.9 + 0.36 * n, -2.9 + h / 2, 0])
+            if n == 1:  # the one nonzero coefficient, sqrt(2/3)
+                r_ = Rectangle(width=0.22, height=0.9, stroke_width=0, fill_color=C.EPS, fill_opacity=0.9)
+                r_.move_to([-2.9 + 0.36 * n, -2.9 + 0.45, 0])
+            else:  # an exact zero: a flat tick on the baseline, no bar
+                r_ = Line([-2.9 + 0.36 * n - 0.11, -2.9, 0], [-2.9 + 0.36 * n + 0.11, -2.9, 0], color=C.SEQ,
+                          stroke_width=4)
             bars.add(r_)
         cross = VGroup(Line(bars[1].get_corner(UL), bars[1].get_corner(DR), color=C.PATHOLOGY, stroke_width=3),
                        Line(bars[1].get_corner(DL), bars[1].get_corner(UR), color=C.PATHOLOGY, stroke_width=3))

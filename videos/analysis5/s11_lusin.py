@@ -91,14 +91,22 @@ class NearlyContinuous(VoiceoverScene):
         fsteps = VGroup(*[Line(ax.c2p(x[a], f[a]), ax.c2p(x[b - 1], f[a]), color=C.FUNC, stroke_width=3)
                           for a, b in zip(cuts[:-1], cuts[1:])])
         gg = polyline(ax, x, g, color=C.APPROX, stroke_width=2)
+        # the set {f != g} at its true width (each ramp is 2 delta = 0.0005 wide: hairlines, 5% of the line in all)
         badset = interval_band(ax, [(t - delta, t + delta) for t in jumps], ax.c2p(0, 0)[1] - 0.3, C.PATHOLOGY,
-                               height=0.18, min_width=0.012)
+                               height=0.22, opacity=1.0, min_width=0.0)
         bl = MathTex(r"\{f \ne g\}", font_size=26, color=C.PATHOLOGY).next_to(badset, LEFT, buff=0.15)
-        inset, decor = magnifier(ax, (0.30, 0.36), (0.0, 1.05), center=[5.0, 1.3, 0], width=2.6, height=2.0, color=GREY_B)
-        m = (x >= 0.30) & (x <= 0.36)
-        zf = VGroup(*[Line(inset.c2p(max(x[a], 0.30), f[a]), inset.c2p(min(x[b - 1], 0.36), f[a]), color=C.FUNC,
-                           stroke_width=3) for a, b in zip(cuts[:-1], cuts[1:]) if x[b - 1] >= 0.30 and x[a] <= 0.36])
+        # zoom on one isolated jump, far enough in to see the ramp
+        k0 = int(np.argmin(np.abs(jumps - 0.749)))
+        t0 = float(jumps[k0])
+        lo, hi = t0 - 0.0015, t0 + 0.0015
+        assert np.sum((jumps > lo) & (jumps < hi)) == 1 and abs(d["vals"][k0 + 1] - d["vals"][k0]) > 0.8
+        inset, decor = magnifier(ax, (lo, hi), (0.0, 1.05), center=[5.0, 1.3, 0], width=2.6, height=2.0, color=GREY_B)
+        m = (x >= lo) & (x <= hi)
+        zf = VGroup(*[Line(inset.c2p(max(x[a], lo), f[a]), inset.c2p(min(x[b - 1], hi), f[a]), color=C.FUNC,
+                           stroke_width=3) for a, b in zip(cuts[:-1], cuts[1:]) if x[b - 1] >= lo and x[a] <= hi])
         zg = polyline(inset, x[m], g[m], color=C.APPROX, stroke_width=3)
+        zl = MathTex(rf"\text{{ramp width }} 2\delta = {2 * delta:.4f}", font_size=22, color=C.APPROX).next_to(
+            decor.frame, DOWN, buff=0.1)
         head = VGroup(label(r"\textbf{Lusin's theorem} \ (RCA 2.24): \ measurable $f$, \ $\varepsilon > 0$ "
                             r"$\Rightarrow$ continuous $g$ with $\mu\{f \ne g\} < \varepsilon$", font_size=28),
                       ).to_edge(UP, buff=0.25)
@@ -120,7 +128,7 @@ class NearlyContinuous(VoiceoverScene):
             self.play(Create(fsteps), run_time=2.0)
             vo.wait_until("c")
             self.play(Create(gg), run_time=1.5)
-            self.play(FadeIn(decor), Create(zf), Create(zg))
+            self.play(FadeIn(decor), Create(zf), Create(zg), FadeIn(zl))
             vo.wait_until("d")
             self.play(FadeIn(badset), FadeIn(bl))
             self.play(FadeIn(out))
