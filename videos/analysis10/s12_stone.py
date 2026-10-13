@@ -30,7 +30,7 @@ class Stone(VoiceoverScene):
         assert np.abs(frames - an).max() < 1e-9 and err < 1e-5
         ax = plain_axes([-6, 6, 2], [0, 0.8, 0.2], 6.2, 2.6).move_to([-3.3, 1.3, 0])
         xs = np.linspace(-6, 6, 600)
-        pot = polyline(ax, xs, np.minimum(xs**2 / 2, 9) * 0.08, color=GREY_C, stroke_width=2)
+        pot = runs(ax, xs, xs**2 / 2 * 0.08, GREY_C, 2)  # cut where it leaves the window, not flattened
         pl = MathTex(r"V = \tfrac12 x^2", font_size=22, color=GREY_C).next_to(ax.c2p(4.5, 0.65), RIGHT, buff=0.05)
         tT = ValueTracker(0.0)
         dens = always_redraw(lambda: polyline(ax, xs, np.exp(-((xs - 2.5 * math.cos(tT.get_value())) ** 2)) / math.sqrt(math.pi),

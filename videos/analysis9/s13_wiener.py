@@ -166,11 +166,13 @@ class Wiener(VoiceoverScene):
     def zeta(self):
         d = load("zeta")
         ts, sig, Q, lim, tg, one, half = d["ts"], d["sig"], d["Q"], d["lim"], d["tg"], d["one"], d["half"]
-        ax = plain_axes([0, 40, 10], [0, 2.5, 1], 6.4, 2.6, numbers=True, font_size=16,
+        # tall enough for the whole of both curves (|zeta(1/2 + it)| reaches 2.94 near t = 35): nothing clamped
+        ax = plain_axes([0, 40, 10], [0, 3.0, 1], 6.4, 2.6, numbers=True, font_size=16,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, 1.0, 0])
-        g1 = polyline(ax, tg, np.minimum(one, 2.5), color=C.SPECTRUM, stroke_width=3.5)
-        g2 = polyline(ax, tg, np.minimum(half, 2.5), color=GREY_B, stroke_width=2.5)
+        assert max(one.max(), half.max()) < 3.0
+        g1 = polyline(ax, tg, one, color=C.SPECTRUM, stroke_width=3.5)
+        g2 = polyline(ax, tg, half, color=GREY_B, stroke_width=2.5)
         l1 = MathTex(rf"|\zeta(1 + it)| \ge {one.min():.3f} \ (t \le 40)", font_size=24, color=C.SPECTRUM).next_to(ax, UP, buff=0.05).align_to(
             ax, LEFT)
         l2 = MathTex(r"|\zeta(\tfrac12 + it)|: \text{ zeros at } 14.13, 21.02, \ldots", font_size=22, color=GREY_B).next_to(
