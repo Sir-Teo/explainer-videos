@@ -1,7 +1,51 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.analysis import *  # noqa: F403
 from explainer.analysis import TIMELINE
+
+
+def _appear(e):
+    return AnimationGroup(Create(e[0]), FadeIn(e[1], scale=0.5), FadeIn(e[2], shift=UP * 0.1))
+
+
+def place_labels(xs, widths, tiers, allowed, limit=20000):
+    """Tier and centre for each label (time order), by depth-first search: labels on a tier don't touch, and no
+    leader crosses a label nearer the axis on its side. Nearest tiers are tried first."""
+    place, count = [], [0]
+
+    def clash(a, b):
+        (xa, ta, la, ha), (xb, tb, lb, hb) = a, b
+        if ta == tb:
+            return not (ha < lb or la > hb)
+        if ta * tb < 0:
+            return False
+        if abs(ta) > abs(tb):
+            return lb - 0.05 < xa < hb + 0.05
+        return la - 0.05 < xb < ha + 0.05
+
+    def search(k):
+        count[0] += 1
+        if count[0] > limit:
+            raise ValueError("timeline labels: search limit")
+        if k == len(xs):
+            return True
+        w = widths[k]
+        for ty in tiers:
+            for cx in (xs[k], xs[k] + w / 2 - 0.3, xs[k] - w / 2 + 0.3):
+                cx = min(max(cx, -7.0 + w / 2), 7.0 - w / 2)
+                cand = (xs[k], ty, cx - w / 2 - 0.12, cx + w / 2 + 0.12)
+                if allowed(ty, cand[2], cand[3]) and not any(clash(cand, p_) for p_ in place):
+                    place.append(cand)
+                    if search(k + 1):
+                        return True
+                    place.pop()
+        return False
+
+    if not search(0):
+        raise ValueError("timeline labels do not fit")
+    return [(ty, (lo + hi) / 2) for _, ty, lo, hi in place]
 
 
 class Outro(VoiceoverScene):
@@ -74,18 +118,78 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def timeline_(self):
-        years = [y for y, _ in TIMELINE]
-        strip = timeline(lit=tuple(years), width=12.6, font_size=16).move_to(DOWN * 0.2)
-        head = label(r"The Fourier thread, \ from 1807 to 1966", font_size=36).to_edge(UP, buff=0.4)
+        """All fifteen dates: the strip, with the crowded years 1866--1912 magnified in a panel below it."""
+        W, y0, Z0, Z1, zw, zy = 12.8, 1.0, 1866, 1912, 12.0, -1.95
+
+        def X(yr):
+            return -W / 2 + W * (yr - 1800) / 170
+
+        def Xz(yr):
+            return -zw / 2 + zw * (yr - Z0) / (Z1 - Z0)
+
+        def strip(x_of, y, years, ticks):
+            g = VGroup(Line([x_of(years[0]), y, 0], [x_of(years[1]), y, 0], color=GREY_C, stroke_width=2))
+            for yr in ticks:
+                g.add(Line([x_of(yr), y - 0.06, 0], [x_of(yr), y + 0.06, 0], color=GREY_C, stroke_width=1.5))
+                g.add(Text(str(yr), font_size=14, color=GREY_C).next_to([x_of(yr), y, 0], DOWN, buff=0.12))
+            return g
+
+        def events(items, x_of, y, tiers, allowed):
+            labs = [label(rf"{yr}\; {name}", font_size=19, color=C.EPS) for yr, name in items]
+            spots = place_labels([x_of(yr) for yr, _ in items], [t.width for t in labs], tiers, allowed)
+            out = []
+            for (yr, _), t, (ty, cx) in zip(items, labs, spots):
+                t.move_to([cx, y + ty, 0])
+                end = t.get_bottom() if ty > 0 else t.get_top()
+                lead = Line([x_of(yr), y, 0], [x_of(yr), end[1] + (-0.06 if ty > 0 else 0.06), 0], color=C.EPS,
+                            stroke_width=1.2, stroke_opacity=0.6)
+                out.append(VGroup(lead, Dot([x_of(yr), y, 0], radius=0.065, color=C.EPS), t))
+            return out
+
+        # the magnifier: band on the strip, a cone, and the panel
+        pan = RoundedRectangle(width=13.6, height=2.35, corner_radius=0.15, stroke_color=C.EPS, stroke_width=1.5,
+                               stroke_opacity=0.5, fill_color="#151A22", fill_opacity=0.6).move_to([0, zy + 0.12, 0])
+        band = Rectangle(width=X(Z1) - X(Z0), height=0.24, stroke_color=C.EPS, stroke_width=1.2, fill_color=C.EPS,
+                         fill_opacity=0.15).move_to([(X(Z0) + X(Z1)) / 2, y0, 0])
+        a_l, a_r = np.array([X(Z0), y0 - 0.12, 0]), np.array([X(Z1), y0 - 0.12, 0])
+        b_l, b_r = pan.get_corner(UL), pan.get_corner(UR)
+        cone = VGroup(Polygon(a_l, a_r, b_r, b_l, stroke_width=0, fill_color=C.EPS, fill_opacity=0.05),
+                      Line(a_l, b_l, color=C.EPS, stroke_width=1.2, stroke_opacity=0.45),
+                      Line(a_r, b_r, color=C.EPS, stroke_width=1.2, stroke_opacity=0.45))
+
+        def outside_cone(ty, lo, hi):  # labels under the strip stay clear of the cone's edges
+            if ty > 0:
+                return True
+            yb = y0 + ty - 0.15
+            t = (a_l[1] - yb) / (a_l[1] - b_l[1])
+            return hi < a_l[0] + t * (b_l[0] - a_l[0]) or lo > a_r[0] + t * (b_r[0] - a_r[0])
+
+        crowded = [(yr, n) for yr, n in TIMELINE if Z0 <= yr <= Z1]
+        early = [(yr, n) for yr, n in TIMELINE if yr < Z0]
+        late = [(yr, n) for yr, n in TIMELINE if yr > Z1]
+        sparse = events(early + late, X, y0, [0.45, -0.5, 0.95, 1.45], outside_cone)
+        dense = events(crowded, Xz, zy, [0.5, -0.55, 1.0, -1.0], lambda ty, lo, hi: lo > -6.6 and hi < 6.6)
+        base = strip(X, y0, (1800, 1970), (1800, 1850, 1900, 1950))
+        zbase = strip(Xz, zy, (Z0, Z1), (1870, 1880, 1890, 1900, 1910))
+        mag = (zw / (Z1 - Z0)) / (W / 170)
+        tag = label(rf"{Z0}--{Z1}, \ magnified $\times{mag:.1f}$", font_size=18, color=GREY_B).move_to(
+            pan.get_corner(UL) + np.array([0.2, -0.25, 0]), aligned_edge=UL)
+        head = label(r"The Fourier thread, \ from 1807 to 1966", font_size=36).to_edge(UP, buff=0.3)
         with self.voiceover(
             "And the timeline is complete: from Fourier's claim in 1807 that every function is a sum of sines, "
-            "through Dirichlet, Riemann, Cantor, Lebesgue, Fréchet, Riesz and Fischer, Banach and Schwartz, to "
-            "Carleson's theorem in 1966. Every idea in the series was invented to answer a question about Fourier "
-            "series."
+            "through Dirichlet and Riemann; <bookmark mark='z'/> then forty crowded years: Dedekind and Cantor, "
+            "Heine and Borel, Lebesgue, Fréchet, Riesz and Fischer; <bookmark mark='l'/> then Banach and Schwartz, "
+            "to Carleson's theorem in 1966. Every idea in the series was invented to answer a question about "
+            "Fourier series."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(Create(strip), run_time=max(3.0, vo.duration - 2.0))
-        self.wait(0.5)
+            self.play(FadeIn(head), Create(base), run_time=1.0)
+            self.play(LaggedStart(*[_appear(e) for e in sparse[:len(early)]], lag_ratio=0.5), run_time=3.0)
+            vo.wait_until("z")
+            self.play(FadeIn(band), FadeIn(cone), FadeIn(pan), Create(zbase), FadeIn(tag), run_time=1.2)
+            self.play(LaggedStart(*[_appear(e) for e in dense], lag_ratio=0.5), run_time=4.0)
+            vo.wait_until("l")
+            self.play(LaggedStart(*[_appear(e) for e in sparse[len(early):]], lag_ratio=0.5), run_time=2.5)
+        self.wait(1.0)
         self.clear_scene()
 
     # ------------------------------------------------------------------
