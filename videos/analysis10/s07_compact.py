@@ -106,6 +106,7 @@ class CompactSelfAdjoint(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35)
         head = label(r"Peeling off the string's modes", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Watch the proof run. Start with a lopsided function and apply G again and again, "
@@ -159,6 +160,7 @@ class CompactSelfAdjoint(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.3, 0])
         head = label(r"Solving the heat equation by diagonalizing", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Diagonalizing solves equations. For the heat equation on the string, expand the "

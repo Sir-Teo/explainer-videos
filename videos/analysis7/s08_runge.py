@@ -73,6 +73,7 @@ class Runge(VoiceoverScene):
         for r_ in side:
             if r_.width > 2.9:
                 r_.width = 2.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.6, -0.6, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.65, -0.6, 0])
         assert eh[-1] < 1e-3 and np.all(ea >= 1)
         head = label(r"Can polynomials approximate $1/z$ uniformly on $K$?", font_size=34).to_edge(UP, buff=0.25)

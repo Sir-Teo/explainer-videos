@@ -49,6 +49,7 @@ class Samples(VoiceoverScene):
         for r_ in rows:
             if r_.width > 4.4:
                 r_.width = 4.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.2, 0])
         head = label(r"1. \ A limit for every bounded sequence", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> First, a limit for every bounded sequence. Hahn-Banach extends the ordinary limit to "
@@ -100,6 +101,7 @@ class Samples(VoiceoverScene):
         for r_ in steps:
             if r_.width > 6.4:
                 r_.width = 6.4
+        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -0.5, 0])
         head = label(r"2. \ The closed graph theorem at work", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Second, a model use of the closed graph theorem, due to Grothendieck. A closed "
@@ -146,6 +148,7 @@ class Samples(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.2:
                 r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.3, -0.5, 0])
         assert abs(avg - 1 / 3) < 0.02 and abs(avg_s - 1 / 3) < 0.02
         head = label(r"3. \ Haar measure: \ the uniform distribution on a group", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(

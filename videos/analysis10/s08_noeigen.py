@@ -52,6 +52,7 @@ class NoEigenvectors(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.2, 0])
         head = label(r"Multiplication by $x$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Multiply every function by x. That's a bounded self-adjoint operator on L two of "
@@ -160,6 +161,7 @@ class NoEigenvectors(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, -0.3, 0])
         head = label(r"Diagonalized, \ without eigenvectors", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> So what can diagonalizing mean here? M is already diagonal, in a continuous "

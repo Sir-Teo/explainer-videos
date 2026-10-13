@@ -53,6 +53,7 @@ class Schwarz(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         assert np.all(np.abs(imgs) <= rs[:, None] + 1e-12) and abs(d0 - 0.5) < 1e-6
         head = label(r"A map of the disk that fixes the center can only pull points inward", font_size=32).to_edge(UP,
@@ -155,6 +156,7 @@ class Schwarz(VoiceoverScene):
         for r_ in rows:
             if r_.width > 4.3:
                 r_.width = 4.3
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.75, -0.5, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.8, -0.5, 0])
         assert np.all(logM <= (1 - xs) * logM[0] + xs * logM[-1] + 1e-12)
         head = label(r"The maximum principle on a strip: \ three lines", font_size=34).to_edge(UP, buff=0.3)

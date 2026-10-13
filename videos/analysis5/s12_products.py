@@ -153,6 +153,7 @@ class Products(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, -0.9, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, -0.9, 0])
         assert abs(I1 - math.pi / 4) < 1e-12 and abs(I2 + math.pi / 4) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's counterexample: x squared minus y squared, over the square of x squared plus "

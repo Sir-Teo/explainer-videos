@@ -56,6 +56,7 @@ class Integration(VoiceoverScene):
         for r_ in defs:
             if r_.width > 4.6:
                 r_.width = 4.6
+        defs.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, -0.6, 0])
         defs.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.65, -0.6, 0])
         head = label(r"Integrate around the unit circle", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -117,6 +118,7 @@ class Integration(VoiceoverScene):
         for r_ in side:
             if r_.width > 6.0:
                 r_.width = 6.0
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.9, 0])
         assert set(int(k) for k in w) == {0, 1, 2} and len(pts) == 20
         head = label(r"The winding number: \ an integral that counts turns", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -178,6 +180,7 @@ class Integration(VoiceoverScene):
         for r_ in side:
             if r_.width > 3.9:
                 r_.width = 3.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.8, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.05, -0.8, 0])
         assert np.all(np.diff(eps) < 0) and np.allclose(ratio_bad, ratio_bad[0], rtol=1e-6)
         head = VGroup(label(r"\textbf{RCA 10.13} \ (Cauchy--Goursat) \ $\oint_{\partial\Delta} f\,dz = 0$ \ for $f$ "

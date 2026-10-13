@@ -59,6 +59,7 @@ class Weak(VoiceoverScene):
         for r_ in defn:
             if r_.width > 7.0:
                 r_.width = 7.0
+        defn.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-3.0, -1.6, 0])
         y_l = MathTex(r"y = c\,(1, \tfrac12, \tfrac13, \ldots)", font_size=24, color=C.INNER).next_to(ax, UP, buff=0.35)
         head = label(r"Converging weakly: \ every functional's view converges", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
@@ -161,6 +162,7 @@ class Weak(VoiceoverScene):
         for r_ in rows:
             if r_.width > 5.8:
                 r_.width = 5.8
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.7, -0.5, 0])
         head = label(r"Averaging turns weak convergence into norm convergence", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Weak limits aren't far from norm limits, though. Average the first N sine waves. "

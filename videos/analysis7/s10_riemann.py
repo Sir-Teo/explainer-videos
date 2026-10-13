@@ -103,6 +103,7 @@ class RiemannMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.2:
                 r_.width = 3.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -0.75, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.35, -0.75, 0])
         assert ang_err < 1e-4 and bd < 0.02
         head = label(r"The disk, mapped conformally onto an L-shaped hexagon \ (Schwarz--Christoffel)", font_size=30).to_edge(

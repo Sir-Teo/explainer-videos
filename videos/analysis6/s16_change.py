@@ -135,6 +135,7 @@ class ChangeOfVariables(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -0.5, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -0.5, 0])
         assert abs(cart - sq) < 1e-6 and abs(pol - disk) < 1e-5 and disk < sq < math.pi
         head = label(r"The integral that has no antiderivative, \ computed by changing variables", font_size=32).to_edge(
             UP, buff=0.25)

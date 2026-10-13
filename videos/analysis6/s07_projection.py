@@ -79,6 +79,7 @@ class Projection(VoiceoverScene):
         for r_ in formula:
             if r_.width > 6.6:
                 r_.width = 6.6
+        formula.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, 1.0, 0])
         tab = VGroup(MathTex(r"n", r"\quad \|y_n - y_{n+1}\|^2", r"\quad \text{bound}", font_size=24, color=GREY_A))
         for n, lhs, bound in rows:
             tab.add(MathTex(f"{n}", rf"\quad {sci(lhs, 2)}", rf"\quad {sci(bound, 2)}", font_size=24))
@@ -204,6 +205,7 @@ class Projection(VoiceoverScene):
         for r_ in right:
             if r_.width > 6.5:
                 r_.width = 6.5
+        right.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.35, 0])
         right.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.4, 0])
         assert np.all(np.abs(ip) < 1e-15) and terr > 10 * err
         head = label(r"Projection onto a subspace: \ the error is perpendicular to it", font_size=32).to_edge(UP,

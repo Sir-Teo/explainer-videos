@@ -105,6 +105,7 @@ class Convolution(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.2:
                 r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.5, 0])
         head = label(r"Smoothing a singular measure", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Smooth the Cantor measure from Part 6, by averaging over windows. "

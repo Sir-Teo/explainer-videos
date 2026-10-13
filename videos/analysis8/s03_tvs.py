@@ -48,6 +48,7 @@ class TVS(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.0:
                 r_.width = 7.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -0.6, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.1, -0.6, 0])
         lab = VGroup(MathTex(r"f", font_size=28, color=C.FUNC).next_to(ax.c2p(0.0, 1.0), UP, buff=0.12),
                      MathTex(r"g = f + 0.08\sin 25x", font_size=24, color=C.APPROX).next_to(ax, DOWN, buff=0.1))
@@ -143,6 +144,7 @@ class TVS(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.2:
                 r_.width = 7.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.0, -0.6, 0])
         lab = VGroup(MathTex(r"\{|x|^{1/2} + |y|^{1/2} \le 1\}", font_size=26, color=C.PATHOLOGY).next_to(ax, UP, buff=0.05),
                      label(r"dashed: \ its convex hull", font_size=20, color=C.EPS).next_to(ax, DOWN, buff=0.05))
         head = label(r"A space with no functionals at all", font_size=34).to_edge(UP, buff=0.25)

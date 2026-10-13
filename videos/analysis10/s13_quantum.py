@@ -43,7 +43,7 @@ class QuantumClosure(VoiceoverScene):
         tab = VGroup(MathTex(r"n", r"\quad E_n \ (\text{finite differences})", r"\quad -\tfrac{1}{2n^2}", font_size=22,
                              color=GREY_A))
         for k in range(5):
-            tab.add(MathTex(f"{k + 1}", rf"\quad {bound[k]:.6f}", rf"\quad {-1 / (2 * (k + 1) ** 2):.6f}", font_size=22))
+            tab.add(MathTex(f"{k + 1}", rf"\quad {{{bound[k]:.6f}}}", rf"\quad {{{-1 / (2 * (k + 1) ** 2):.6f}}}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([2.4, 1.3, 0])
         regrid(tab)
         rows = VGroup(
@@ -57,6 +57,7 @@ class QuantumClosure(VoiceoverScene):
         for r_ in rows:
             if r_.width > 8.2:
                 r_.width = 8.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(tab, DOWN, buff=0.35)
         head = label(r"Hydrogen: \ point spectrum and continuum", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Back to the hook. Hydrogen's Hamiltonian, for states without angular momentum, is "
@@ -105,6 +106,7 @@ class QuantumClosure(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.3, 0])
         head = label(r"Why $x$ and $p$ cannot be bounded", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> The canonical commutation relation says x p minus p x is i times the identity. "

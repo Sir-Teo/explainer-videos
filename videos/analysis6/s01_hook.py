@@ -169,6 +169,7 @@ class Hook(VoiceoverScene):
         for r_ in side:
             if r_.width > 6.6:
                 r_.width = 6.6
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.75, 0])
         # Cauchy, exactly: the ramps are nested on each side of 1/2
         for i in range(len(ns)):
             for j in range(i + 1, len(ns)):

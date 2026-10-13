@@ -71,6 +71,7 @@ class Stone(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, 1.1, 0])
         head = label(r"Time evolution is a bank of clocks", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> In the quantum videos, a state evolves by e to the minus i t H. Here's a packet in "

@@ -94,6 +94,7 @@ class Outro(VoiceoverScene):
         for r_ in side:
             if r_.width > 6.4:
                 r_.width = 6.4
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.4, 0])
         with self.voiceover(
             "Next time, in Part 7: complex analysis, the part the rest of analysis needs. <bookmark mark='a'/> Here's "
             "a rational function, colored by its phase, with brightness for size. Its three zeros are dark points "

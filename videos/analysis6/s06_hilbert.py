@@ -71,6 +71,7 @@ class Hilbert(VoiceoverScene):
         for r_ in side:
             if r_.width > 3.9:
                 r_.width = 3.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.9, -1.1, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.95, -1.1, 0])
         assert qmin > 0 and abs(lam_star - 3) < 1e-6
         with self.voiceover(
@@ -172,6 +173,7 @@ class Hilbert(VoiceoverScene):
         for r_ in thm:
             if r_.width > 6.4:
                 r_.width = 6.4
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35)
         head = label(r"The parallelogram law: \ $\|x + y\|^2 + \|x - y\|^2 = 2\|x\|^2 + 2\|y\|^2$", font_size=32).to_edge(
             UP, buff=0.3)
         assert abs(res[1, 1] - res[1, 2]) < 1e-8 and abs(res[0, 1] - res[0, 2]) > 0.1 and abs(res[2, 1] - res[2, 2]) > 0.1

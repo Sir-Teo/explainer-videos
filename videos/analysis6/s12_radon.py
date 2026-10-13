@@ -165,6 +165,7 @@ class RadonNikodym(VoiceoverScene):
         for r_ in bnd:
             if r_.width > 5.6:
                 r_.width = 5.6
+        bnd.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.8, -1.25, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Von Neumann's trick: add the two measures, phi equals lambda plus mu. Integration "
             "against lambda is a bounded linear functional on L two of phi, by Cauchy-Schwarz. "

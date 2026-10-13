@@ -52,6 +52,7 @@ class Compact(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.8:
                 r_.width = 3.8
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.4, 0])
         head = label(r"Compact operators squeeze the ball into something thin", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> An operator is compact if it sends the unit ball into a set with compact closure. "
@@ -94,6 +95,7 @@ class Compact(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.2:
                 r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -0.4, 0])
         assert np.allclose(w[:10], exact, rtol=2e-3)
         head = label(r"A compact operator: \ the vibrating string's Green's function", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(

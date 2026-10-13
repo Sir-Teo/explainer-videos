@@ -91,7 +91,7 @@ class HilbertOperators(VoiceoverScene):
         P = np.outer(u, u)
         assert np.allclose(P @ P, P) and np.allclose(P, P.T)
         line = Line(ax.c2p(*(-2.6 * u)), ax.c2p(*(2.6 * u)), color=C.INNER, stroke_width=3)
-        ll = MathTex(r"M = \operatorname{ran} P", font_size=24, color=C.INNER).next_to(ax.c2p(*(2.2 * u)), UP, buff=0.1)
+        ll = MathTex(r"M = \operatorname{ran} P", font_size=24, color=C.INNER).next_to(ax.c2p(*(1.5 * u)), UL, buff=0.05)
         rng = np.random.default_rng(3)
         pts = rng.uniform(-1.8, 1.8, (14, 2))
         dots = VGroup(*[Dot(ax.c2p(*p), radius=0.05, color=C.FUNC) for p in pts])
@@ -109,6 +109,7 @@ class HilbertOperators(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.4, 0])
         head = label(r"Projections are shadows", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The simplest self-adjoint operators are the projections. Each point drops "

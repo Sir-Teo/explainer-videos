@@ -38,7 +38,7 @@ class Cayley(VoiceoverScene):
         cx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.4).move_to([3.4, -0.2, 0])
         circ = Circle(radius=cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0], color=GREY_B, stroke_width=2).move_to(cx.c2p(0, 0))
         hole = Circle(radius=0.08, color=C.PATHOLOGY, stroke_width=3).move_to(cx.c2p(1, 0))
-        hl = MathTex(r"1 = \text{image of } \pm\infty", font_size=22, color=C.PATHOLOGY).next_to(hole, RIGHT, buff=0.1)
+        hl = MathTex(r"1 = \text{image of } \pm\infty", font_size=22, color=C.PATHOLOGY).next_to(hole, UR, buff=0.06)
         w = cayley(np.array(ev))
         assert np.allclose(np.abs(w), 1)
         wpts = VGroup(*[Dot(cx.c2p(z.real, z.imag), radius=0.06, color=C.SPECTRUM) for z in w])
@@ -107,6 +107,7 @@ class Cayley(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.4:
                 r_.width = 7.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(pm, DOWN, buff=0.35)
         head = label(r"Von Neumann's route to the spectral theorem", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Von Neumann applied the same map to operators. If T is self-adjoint, T minus i "

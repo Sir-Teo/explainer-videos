@@ -145,6 +145,7 @@ class Hp(VoiceoverScene):
         for r_ in rows:
             if r_.width > 7.0:
                 r_.width = 7.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([2.6, -0.6, 0])
         head = label(r"Which subspaces does the shift leave invariant?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Which closed subspaces does the shift map into themselves? Beurling's answer: "

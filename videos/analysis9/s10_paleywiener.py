@@ -183,6 +183,7 @@ class PaleyWiener(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.6:
                 r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
         head = label(r"How fast can derivatives grow? \ Quasi-analytic classes", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> This is the honest end of Part 2's function e to the minus one over x squared. A "
