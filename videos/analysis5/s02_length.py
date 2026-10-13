@@ -61,8 +61,8 @@ class Length(VoiceoverScene):
             "<bookmark mark='a'/> Lebesgue's idea, from his thesis of 1902: <bookmark mark='a1'/> cover a set by "
             "countably many intervals, <bookmark mark='a2'/> add up their lengths, <bookmark mark='a3'/> and take the "
             "smallest total you can get. That's the outer measure. "
-            "<bookmark mark='b'/> Here's a set made of a few intervals and points. A crude cover has total length "
-            "one. <bookmark mark='c'/> Tighter covers do better, <bookmark mark='d'/> and the infimum over all "
+            "<bookmark mark='b'/> Here's a set made of a few intervals and points. A crude cover, two overlapping "
+            "intervals, has total length one point oh five. <bookmark mark='c'/> Tighter covers do better, <bookmark mark='d'/> and the infimum over all "
             "countable covers is the outer measure. Two properties are immediate: <bookmark mark='p1'/> bigger sets "
             "have bigger outer measure, <bookmark mark='p2'/> and the outer measure of a countable union is at most "
             "the sum of the outer measures."
@@ -116,7 +116,7 @@ class Length(VoiceoverScene):
             "<bookmark mark='a'/> The rationals between zero and one are dense, but they can be listed, as Part 1 "
             "showed. <bookmark mark='b'/> Cover the first by an interval of length epsilon over two, the second by "
             "epsilon over four, the k-th by epsilon over two to the k. <bookmark mark='c'/> Together the intervals "
-            "have total length less than epsilon, and every rational is covered. Since epsilon was arbitrary, the "
+            "have total length at most epsilon, and every rational is covered. Since epsilon was arbitrary, the "
             "rationals have outer measure zero: dense, but no length at all."
         ) as vo:
             self.play(FadeIn(head[0]), Create(nl))

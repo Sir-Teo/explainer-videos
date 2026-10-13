@@ -254,10 +254,13 @@ def compute_convolution():
     assert abs(lhs - rhs) < 1e-4 * lhs
     # the sawtooth integrated term by term on [0, 1] (its partial sums are bounded by Si(pi) < 2: a constant lid)
     from scipy.special import sici
-    K = np.arange(1, 200001)
-    termwise = float(np.sum((1 - np.cos(K)) / K**2))
+    # 10^7 terms (the tail after N terms is about 1/N), summed in chunks; the narration says "six decimal places"
+    termwise = 0.0
+    for k0 in range(1, 10_000_001, 1_000_000):
+        K = np.arange(k0, k0 + 1_000_000, dtype=float)
+        termwise += float(np.sum((1 - np.cos(K)) / K**2))
     exact = math.pi / 2 - 0.25  # int_0^1 (pi - t)/2 dt
-    assert abs(termwise - exact) < 1e-5 and sici(math.pi)[0] < 2
+    assert abs(termwise - exact) < 5e-7 and f"{termwise:.6f}" == f"{exact:.6f}" and sici(math.pi)[0] < 2
     xs = np.linspace(1e-4, 2 * np.pi - 1e-4, 20001)
     sups = np.array([np.abs(np.cumsum(np.sin(np.outer(np.arange(1, N + 1), xs[::20])) / np.arange(1, N + 1)[:, None],
                                       axis=0)).max() for N in (10, 100, 400)])

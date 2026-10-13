@@ -25,7 +25,7 @@ class SigmaAlgebras(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def sigma(self):
-        dfn = VGroup(label(r"\textbf{Rudin, RCA 1.2} \ a $\sigma$-algebra $\mathfrak M$ on $X$:", font_size=28),
+        dfn = VGroup(label(r"\textbf{Rudin, RCA 1.3} \ a $\sigma$-algebra $\mathfrak M$ on $X$:", font_size=28),
                      label(r"contains $X$; \ closed under complements; \ closed under countable unions", font_size=28,
                            color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
         names = [(r"open sets", C.OPEN_SET), (r"closed sets, \ countable unions of them ($\mathbb Q$)", C.CLOSED_SET),
@@ -92,7 +92,7 @@ class SigmaAlgebras(VoiceoverScene):
         Vl = MathTex("V", font_size=30, color=C.OPEN_SET).next_to(Vbar, LEFT, buff=0.1)
         pl = MathTex(r"f^{-1}(V)", font_size=28, color=C.OPEN_SET).next_to(pre, DOWN, buff=0.12)
         card = dictionary_card(
-            r"continuous (Part 2)", r"measurable (RCA 1.12)",
+            r"continuous (Part 2)", r"measurable (RCA 1.3)",
             [(r"$f^{-1}(V)$ open for open $V$", r"$f^{-1}(V)$ measurable for open $V$"),
              (r"limits can break it (Part 3)", r"$\sup, \inf, \limsup, \lim$ keep it (1.14)"),
              (r"Dirichlet's function: \ no", r"Dirichlet's function: \ yes")],

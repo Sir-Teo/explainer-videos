@@ -148,7 +148,7 @@ class NearlyContinuous(VoiceoverScene):
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to([0.6, 0.6, 0], RIGHT,
                                                                                                buff=0)
         card = VGroup(label(r"\textbf{Vitali--Carath\'eodory} \ (RCA 2.25), \ in one line:", font_size=28),
-                      label(r"every integrable $f$ sits between a lower and an upper semicontinuous function", font_size=26),
+                      label(r"every real integrable $f$ has $u \le f \le v$, \ $u$ upper and $v$ lower semicontinuous,", font_size=26),
                       label(r"whose integrals differ by less than $\varepsilon$", font_size=26)).arrange(DOWN, buff=0.12)
         card.move_to(DOWN * 2.45)
         frame = SurroundingRectangle(card, color=GREY_C, buff=0.25, corner_radius=0.1)
@@ -158,7 +158,7 @@ class NearlyContinuous(VoiceoverScene):
             "<bookmark mark='a'/> A consequence we'll need in Part 6: continuous functions with compact support are "
             "dense among integrable functions. For our step function, the area between f and its repair is about four "
             "thousandths. <bookmark mark='b'/> A close cousin, the Vitali–Carathéodory theorem, squeezes every "
-            "integrable function between semicontinuous ones whose integrals are as close as you like."
+            "real integrable function between semicontinuous ones whose integrals are as close as you like."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), FadeIn(al))

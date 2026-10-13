@@ -97,7 +97,7 @@ class Products(VoiceoverScene):
     def theorem(self):
         thm = VGroup(
             label(r"\textbf{RCA 8.8} \ (Fubini 1907, \ Tonelli 1909)", font_size=30),
-            label(r"if $f \ge 0$ is measurable, \ or if $\int\!\!\int |f| < \infty$:", font_size=28),
+            label(r"$\mu, \lambda$ $\sigma$-finite; \ if $f \ge 0$ is measurable, \ or if $\int\!\!\int |f| < \infty$:", font_size=28),
             MathTex(r"\int_X \Big(\int_Y f\,d\lambda\Big) d\mu = \int_{X \times Y} f\,d(\mu \times \lambda) = "
                     r"\int_Y \Big(\int_X f\,d\mu\Big) d\lambda", font_size=34, color=C.EPS),
         ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.4)
@@ -156,7 +156,8 @@ class Products(VoiceoverScene):
         assert caps.get_bottom()[1] > note_.get_top()[1] + 0.05 and frames_.get_top()[1] < pm.get_bottom()[1] - 0.1
         pics = [pic1, pic2, pic3, pic4]
         with self.voiceover(
-            "<bookmark mark='a'/> Fubini's theorem, with Tonelli's version: for a non-negative measurable function, "
+            "<bookmark mark='a'/> Fubini's theorem, with Tonelli's version, for sigma-finite measures: for a "
+            "non-negative measurable function, "
             "or for any function whose absolute value has a finite double integral, the two iterated integrals agree "
             "with the double integral. <bookmark mark='b'/> The proof climbs a ladder: <bookmark mark='r1'/> "
             "rectangles, where both sides are just length times length; <bookmark mark='r2'/> then all measurable "
@@ -206,7 +207,7 @@ class Products(VoiceoverScene):
             MathTex(rf"\int_0^1\!\!\int_0^1 f\,dx\,dy = -\frac{{\pi}}{{4}} = {I2:.6f}", font_size=30, color=C.SEQ),
             MathTex(rf"\iint_{{[\varepsilon, 1]^2}} |f|:\ {absint[0]:.2f},\ {absint[1]:.2f},\ {absint[2]:.2f}"
                     r"\ (\varepsilon = 10^{-1}, 10^{-2}, 10^{-3})", font_size=26, color=C.PATHOLOGY),
-            label(r"$\iint |f| = \infty$: \ Fubini does not apply \ (RCA 8.9c)", font_size=24, color=C.PATHOLOGY),
+            label(r"$\iint |f| = \infty$: \ Fubini does not apply", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, -0.9, 0])
         for r_ in rows:
             if r_.width > 6.6:
@@ -214,7 +215,7 @@ class Products(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, -0.9, 0])
         assert abs(I1 - math.pi / 4) < 1e-12 and abs(I2 + math.pi / 4) < 1e-12
         with self.voiceover(
-            "<bookmark mark='a'/> Rudin's counterexample: x squared minus y squared, over the square of x squared plus "
+            "<bookmark mark='a'/> The classic counterexample: x squared minus y squared, over the square of x squared plus "
             "y squared, on the unit square. It's positive below the diagonal and negative above, and huge near the "
             "corner. <bookmark mark='b'/> Integrate in y first: each vertical line gives one over one plus x squared, "
             "and integrating that in x gives pi over four. <bookmark mark='c'/> Integrate in x first: each horizontal "
