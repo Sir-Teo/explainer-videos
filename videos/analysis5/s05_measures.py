@@ -124,7 +124,7 @@ class Measures(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def almost(self):
-        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.0, 3.0).move_to([-0.9, -0.15, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.0, 3.0).move_to([-0.9, 0.25, 0])
         zero = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=C.FUNC, stroke_width=5)
         rats = sorted({Fraction(p, q) for q in range(1, 41) for p in range(q + 1)})
         dots = VGroup(*[Dot(ax.c2p(float(r), 1), radius=0.03, color=C.PATHOLOGY) for r in rats])
@@ -136,6 +136,7 @@ class Measures(VoiceoverScene):
                       MathTex(r"\int D\,dm = \int 0\,dm = 0", font_size=34, color=C.EPS),
                       label(r"changing a function on a null set never changes its integral", font_size=24,
                             color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
+        assert rows.get_top()[1] < ax.c2p(0, 0)[1] - 0.3
         with self.voiceover(
             "<bookmark mark='a'/> Sets of measure zero are invisible to integrals, which gives the phrase almost "
             "everywhere: true except on a set of measure zero. <bookmark mark='b'/> Dirichlet's function is one on "
