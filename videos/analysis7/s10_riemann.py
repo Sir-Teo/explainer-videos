@@ -33,13 +33,35 @@ class RiemannMapping(VoiceoverScene):
         pm = ProofMap([r"$\Sigma$ = one-to-one $\psi: \Omega \to D$, \ $\psi(z_0) = 0$: \ nonempty \ (a square root)",
                        r"maximize $|\psi'(z_0)|$ over $\Sigma$: \ Montel gives a maximizer",
                        r"if it missed a point of $D$, \ a square-root trick would beat it: \ so it is onto"],
-                      font_size=20, width=4.0, buff=0.3).move_to([0, -0.4, 0])
+                      font_size=22, width=6.4, buff=0.16, direction=DOWN).move_to([3.3, 0.1, 0])
         ideas = VGroup(
             label(r"the square root exists because $\Omega$ is simply connected \ (13.11)", font_size=22, color=GREY_A),
             label(r"the maximizer exists because the family is bounded: \ $|\psi| < 1$ \ (14.6)", font_size=22,
                   color=GREY_A),
             label(r"compactness again: \ an extremal problem with a solution", font_size=24, color=C.EPS),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+        # the picture, computed (next section's Schwarz--Christoffel map, run backwards): Omega, z_0, the disk
+        d = load("riemann")
+        V, circles, rs, C0 = d["V"], d["circles"], d["rs"], complex(d["C"])
+        om = square_axes([-0.1, 2.1, 1], [-0.1, 2.1, 1], 1.15).move_to([-4.9, 0.05, 0]).set_opacity(0)
+        dk = square_axes([-1.1, 1.1, 1], [-1.1, 1.1, 1], 0.95).move_to([-1.4, 0.05, 0]).set_opacity(0)
+        region = Polygon(*[om.c2p(v.real, v.imag) for v in V], color=WHITE, stroke_width=2.5, fill_color=C.INNER,
+                         fill_opacity=0.25)
+        levels = VGroup(*[zcurve(om, w, C.SEQ, 1.5) for w in circles[::2]])
+        z0 = VGroup(Dot(om.c2p(C0.real, C0.imag), radius=0.07, color=C.EPS),
+                    MathTex(r"z_0", font_size=24, color=C.EPS).next_to(om.c2p(C0.real, C0.imag), LEFT, buff=0.08))
+        thc = np.linspace(0, 2 * np.pi, circles.shape[1])
+        disk = VGroup(Circle(radius=dk.c2p(1, 0)[0] - dk.c2p(0, 0)[0], color=WHITE, stroke_width=2.5, fill_color=C.INNER,
+                             fill_opacity=0.25).move_to(dk.c2p(0, 0)),
+                      *[zcurve(dk, r * np.exp(1j * thc), C.SEQ, 1.5) for r in rs[::2]],
+                      Dot(dk.c2p(0, 0), radius=0.07, color=C.EPS))
+        arr = Arrow(om.get_right() + RIGHT * 0.1, dk.get_left() + LEFT * 0.1, buff=0, color=GREY_B, stroke_width=4,
+                    max_tip_length_to_length_ratio=0.2)
+        arr_l = MathTex(r"\psi", font_size=30, color=GREY_B).next_to(arr, UP, buff=0.06)
+        o_l = MathTex(r"\Omega", font_size=28).next_to(om, UP, buff=0.05)
+        d_l = MathTex(r"D, \ \psi(z_0) = 0", font_size=24).next_to(dk, UP, buff=0.05)
+        cap = label(r"the level curves $|\psi| = r$ of the actual map", font_size=20, color=GREY_A).next_to(
+            VGroup(om, dk), DOWN, buff=0.15)
         with self.voiceover(
             "<bookmark mark='a'/> The Riemann mapping theorem: every simply connected region of the plane, other than "
             "the plane itself, can be mapped one-to-one and conformally onto the disk. <bookmark mark='b'/> The proof "
@@ -51,9 +73,10 @@ class RiemannMapping(VoiceoverScene):
             "and the solution is the map."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), FadeIn(region), FadeIn(o_l), FadeIn(z0))
+            self.play(GrowArrow(arr), FadeIn(arr_l), FadeIn(disk), FadeIn(d_l))
             vo.wait_until("b")
-            self.play(FadeIn(pm))
+            self.play(Create(levels), FadeIn(cap), FadeIn(pm), run_time=1.5)
             self.play(*pm.light(0), FadeIn(ideas[0]))
             vo.wait_until("c")
             self.play(*pm.light(1), FadeIn(ideas[1]))
@@ -103,7 +126,6 @@ class RiemannMapping(VoiceoverScene):
         for r_ in rows:
             if r_.width > 3.2:
                 r_.width = 3.2
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -0.75, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.35, -0.75, 0])
         assert ang_err < 1e-4 and bd < 0.02
         head = label(r"The disk, mapped conformally onto an L-shaped hexagon \ (Schwarz--Christoffel)", font_size=30).to_edge(

@@ -61,7 +61,7 @@ class Hp(VoiceoverScene):
             label(r"= power series with $\sum |c_n|^2 < \infty$ \ = \ the part of $L^2(T)$ with no negative frequencies",
                   font_size=24, color=C.EPS),
         ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.4)
-        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(ax, RIGHT, buff=0.1)
+        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(ax.x_axis, RIGHT, buff=0.1)
         head = label(r"Hardy space: \ functions on the circle that extend holomorphically", font_size=32).to_edge(UP,
                                                                                                          buff=0.3)
         with self.voiceover(

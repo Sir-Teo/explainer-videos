@@ -155,7 +155,6 @@ class Vitali(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, -0.55, 0])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, -0.55, 0])
         head = label(r"Vitali's set", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Call two points equivalent if they differ by a whole number of radians. Each "

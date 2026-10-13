@@ -205,7 +205,6 @@ class Projection(VoiceoverScene):
         for r_ in right:
             if r_.width > 6.5:
                 r_.width = 6.5
-        right.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.35, 0])
         right.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.4, 0])
         assert np.all(np.abs(ip) < 1e-15) and terr > 10 * err
         head = label(r"Projection onto a subspace: \ the error is perpendicular to it", font_size=32).to_edge(UP,

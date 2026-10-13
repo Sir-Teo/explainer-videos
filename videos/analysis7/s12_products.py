@@ -49,7 +49,7 @@ class ZerosProducts(VoiceoverScene):
         tab = VGroup(MathTex(r"N", r"\quad \text{rel. error on } |x| \le 3.2,\ |y| \le 1.2", font_size=22, color=GREY_A))
         for N, e in zip(Ns, errs):
             tab.add(MathTex(f"{N}", rf"\quad {sci(float(e), 2)}", font_size=24, color=C.EPS))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.6, -1.6, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.6, 0.85, 0])  # beside sin(pi z), clear of the product label
         regrid(tab)
         thm = label(r"\textbf{RCA 15.10} \ (Weierstrass) \ every entire function is a product over its zeros \ (with "
                     r"convergence factors)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.15)

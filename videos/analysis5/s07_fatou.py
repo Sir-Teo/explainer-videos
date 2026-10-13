@@ -133,7 +133,6 @@ class Fatou(VoiceoverScene):
             if r_.width > 5.6:
                 r_.width = 5.6
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.0, -0.6, 0])
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.0, -0.6, 0])
         head = label(r"Fatou, strictly: \ $f_n = 1 + \cos nx$ on $[0, 2\pi]$", font_size=32).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here the inequality is strict. The functions one plus cosine n x all have the same "

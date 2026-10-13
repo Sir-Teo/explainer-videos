@@ -53,7 +53,6 @@ class Schwarz(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.4:
                 r_.width = 6.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         assert np.all(np.abs(imgs) <= rs[:, None] + 1e-12) and abs(d0 - 0.5) < 1e-6
         head = label(r"A map of the disk that fixes the center can only pull points inward", font_size=32).to_edge(UP,
@@ -81,8 +80,8 @@ class Schwarz(VoiceoverScene):
     def automorphisms(self):
         a = 0.5
         phi = lambda z: (z - a) / (1 - a * z)  # noqa: E731
-        ax = square_axes([-1.05, 1.05, 1], [-1.05, 1.05, 1], 2.0).move_to([-3.6, -0.6, 0])
-        bx = square_axes([-1.05, 1.05, 1], [-1.05, 1.05, 1], 2.0).move_to([1.6, -0.6, 0])
+        ax = square_axes([-1.05, 1.05, 1], [-1.05, 1.05, 1], 1.75).move_to([-4.75, -0.75, 0])
+        bx = square_axes([-1.05, 1.05, 1], [-1.05, 1.05, 1], 1.75).move_to([-0.05, -0.75, 0])
         th = np.linspace(0, 2 * np.pi, 361)
         grid_a, grid_b = VGroup(), VGroup()
         for r in (0.2, 0.4, 0.6, 0.8, 1.0):
@@ -95,9 +94,9 @@ class Schwarz(VoiceoverScene):
             grid_a.add(zcurve(ax, z, C.APPROX, 1.6))
             grid_b.add(zcurve(bx, phi(z), C.APPROX, 1.6))
         assert np.allclose(np.abs(phi(np.exp(1j * th))), 1) and abs(phi(a)) < 1e-15
-        arrow = Arrow([-1.2, -0.6, 0], [-0.6, -0.6, 0], buff=0, color=GREY_B, stroke_width=4)
-        a_l = MathTex(r"\varphi_\alpha(z) = \frac{z - \alpha}{1 - \bar\alpha z}, \ \alpha = 0.5", font_size=28).next_to(
-            arrow, UP, buff=0.9)
+        arrow = Arrow([-2.75, -0.75, 0], [-2.05, -0.75, 0], buff=0, color=GREY_B, stroke_width=4)
+        a_l = MathTex(r"\varphi_\alpha(z) = \frac{z - \alpha}{1 - \bar\alpha z}, \ \alpha = 0.5", font_size=28).move_to(
+            [-2.4, 1.55, 0])
         rows = VGroup(
             label(r"\textbf{RCA 12.4--12.6}", font_size=24),
             label(r"$\varphi_\alpha$ maps $D$ onto $D$, \ the circle", font_size=22),
@@ -106,7 +105,7 @@ class Schwarz(VoiceoverScene):
             label(r"is $\lambda\varphi_\alpha$, \ $|\lambda| = 1$", font_size=22, color=C.EPS),
             label(r"(Schwarz, \ applied to", font_size=22, color=GREY_A),
             label(r"$f \circ \varphi_\alpha^{-1}$)", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.6, -0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([2.15, -0.6, 0], RIGHT, buff=0)
         head = label(r"The symmetries of the disk", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The lemma pins down every symmetry of the disk. <bookmark mark='b'/> The map z minus "
@@ -129,15 +128,15 @@ class Schwarz(VoiceoverScene):
         d = load("schwarz")
         xs, logM = d["xs"], d["logM"]
         F = lambda Z: np.exp(2 * Z) / (Z + 1) ** 2  # noqa: E731
-        cx = square_axes([-0.3, 1.3, 0.5], [-2.0, 2.0, 1], 1.15).move_to([-4.5, -0.6, 0])
+        cx = square_axes([-0.3, 1.3, 0.5], [-2.0, 2.0, 1], 1.05).move_to([-5.6, -0.6, 0])
         img = cplot(cx, F, (0, 1), (-2.0, 2.0), px=300)
         lines = VGroup(*[Line(cx.c2p(x, -2), cx.c2p(x, 2), color=c, stroke_width=4) for x, c in
                          ((0, C.SEQ), (0.5, C.EPS), (1, C.APPROX))])
         s_l = MathTex(r"0 \le \mathrm{Re}\,z \le 1", font_size=26).next_to(cx, UP, buff=0.1)
         f_l = MathTex(r"f(z) = \frac{e^{2z}}{(z + 1)^2}", font_size=28).next_to(cx, DOWN, buff=0.1)
-        bx = plain_axes([0, 1, 0.5], [-0.2, 0.7, 0.2], 4.2, 3.2, numbers=True, font_size=18,
+        bx = plain_axes([0, 1, 0.5], [-0.2, 0.7, 0.2], 3.7, 3.2, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([0.4, -0.5, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-2.0, -0.5, 0])
         g = polyline(bx, xs, logM, color=C.EPS, stroke_width=3.5)
         chord = DashedLine(bx.c2p(0, logM[0]), bx.c2p(1, logM[-1]), color=WHITE, stroke_width=2)
         b_l = MathTex(r"\log M(x), \ \ M(x) = \sup_y |f(x + iy)|", font_size=26, color=C.EPS).next_to(bx, UP, buff=0.12)
@@ -154,10 +153,9 @@ class Schwarz(VoiceoverScene):
                   color=C.INNER),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.75, -0.5, 0])
         for r_ in rows:
-            if r_.width > 4.3:
-                r_.width = 4.3
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.75, -0.5, 0])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.8, -0.5, 0])
+            if r_.width > 6.2:
+                r_.width = 6.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([0.75, -0.5, 0], RIGHT, buff=0)
         assert np.all(logM <= (1 - xs) * logM[0] + xs * logM[-1] + 1e-12)
         head = label(r"The maximum principle on a strip: \ three lines", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

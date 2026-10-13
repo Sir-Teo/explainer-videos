@@ -71,7 +71,6 @@ class Hilbert(VoiceoverScene):
         for r_ in side:
             if r_.width > 3.9:
                 r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.9, -1.1, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.95, -1.1, 0])
         assert qmin > 0 and abs(lam_star - 3) < 1e-6
         with self.voiceover(

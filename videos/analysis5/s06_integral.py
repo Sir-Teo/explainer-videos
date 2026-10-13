@@ -183,7 +183,6 @@ class Integral(VoiceoverScene):
             if r_.width > 6.2:
                 r_.width = 6.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([3.7, -0.4, 0])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([3.7, -0.4, 0])
         head = label(r"Rudin's proof: \ the sets $E_n$ swallow the whole space", font_size=32).to_edge(UP, buff=0.3)
         labs = VGroup(MathTex("f", font_size=30).next_to(ax.c2p(2, f[-1]), RIGHT, buff=0.1),
                       MathTex("s", font_size=30, color=C.MEASURE).next_to(ax.c2p(2, svals[-1]), RIGHT, buff=0.1),

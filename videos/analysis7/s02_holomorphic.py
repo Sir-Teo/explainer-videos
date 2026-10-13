@@ -92,7 +92,7 @@ class Holomorphic(VoiceoverScene):
     def conformal(self):
         d = load("conformal")
         angs_sq, angs_exp = d["ang_sq"], d["ang_exp"]
-        ax = square_axes([-0.2, 2.2, 1], [-0.2, 2.6, 1], 1.45).move_to([-4.2, -0.6, 0])
+        ax = square_axes([-0.2, 2.2, 1], [-0.2, 2.6, 1], 1.35).move_to([-4.05, -0.6, 0])
         ax.set_opacity(0.3)
         g1 = zgrid(ax, lambda Z: Z * Z, (0.3, 1.4), (0.15, 0.95), n=9, stroke_width=2, colors=(C.SEQ, C.APPROX))
         l1 = MathTex(r"z^2 \text{ on } [0.3, 1.4] \times [0.15, 0.95]", font_size=26).next_to(ax, UP, buff=0.1)
@@ -112,7 +112,6 @@ class Holomorphic(VoiceoverScene):
         for r_ in side:
             if r_.width > 3.9:
                 r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.5, 0])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.05, -0.5, 0])
         assert np.allclose(angs_sq, 90, atol=1e-6) and np.allclose(angs_exp, 90, atol=1e-6)
         head = label(r"Holomorphic maps preserve angles", font_size=34).to_edge(UP, buff=0.25)
