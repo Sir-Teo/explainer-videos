@@ -93,8 +93,8 @@ class Distributions(VoiceoverScene):
         ax = plain_axes([-2.5, 2.5, 1], [-6, 6, 2], 6.4, 4.0).move_to([-3.1, -0.6, 0])
         x1 = np.linspace(0.02, 2.5, 1500)
         x2 = -x1[::-1]
-        g = VGroup(polyline(ax, x2, phi_pv(x2) / x2, color=C.DISTRIBUTION, stroke_width=3),
-                   polyline(ax, x1, np.minimum(phi_pv(x1) / x1, 6), color=C.DISTRIBUTION, stroke_width=3))
+        g = VGroup(runs(ax, x2, phi_pv(x2) / x2, C.DISTRIBUTION, 3),  # both branches cut where they leave the axes
+                   runs(ax, x1, phi_pv(x1) / x1, C.DISTRIBUTION, 3))
         eT = ValueTracker(0.5)
 
         def shade():

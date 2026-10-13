@@ -37,7 +37,7 @@ class FourierL1(VoiceoverScene):
         for k, (fx, fh, nx, nt, err) in enumerate(specs):
             y = 1.35 - 2.05 * k
             ax = plain_axes([-3, 3, 1], [-0.3, 1.2, 1], 3.6, 1.35).move_to([-4.2, y - 0.2, 0])
-            bx = plain_axes([-12, 12, 4], [-0.3, 1.0, 1], 4.4, 1.35).move_to([1.0, y - 0.2, 0])
+            bx = plain_axes([-12, 12, 4], [-0.3, 1.15, 1], 4.4, 1.35).move_to([1.0, y - 0.2, 0])
             g1 = polyline(ax, x, fx, color=C.FUNC, stroke_width=3)
             g2 = polyline(bx, t, fh, color=C.FREQ, stroke_width=3)
             l1 = MathTex(nx, font_size=26, color=C.FUNC).next_to(ax, LEFT, buff=0.1)

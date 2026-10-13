@@ -27,7 +27,7 @@ class Structure(VoiceoverScene):
         line = NumberLine(x_range=[-2, 2, 0.5], length=11, include_numbers=True, font_size=22,
                           decimal_number_config={"num_decimal_places": 1}).move_to([0, 0.6, 0])
         f_reg = Rectangle(width=line.n2p(1.6)[0] - line.n2p(0.8)[0], height=0.5, stroke_width=0, fill_color=C.FUNC,
-                          fill_opacity=0.4).move_to([(line.n2p(0.8)[0] + line.n2p(1.6)[0]) / 2, 0.6, 0])
+                          fill_opacity=0.4).move_to([(line.n2p(0.8)[0] + line.n2p(1.6)[0]) / 2, 0.85, 0])  # sits on the line
         d_pt = VGroup(Arrow(line.n2p(-0.9) + DOWN * 0.0, line.n2p(-0.9) + UP * 1.3, buff=0, color=C.DISTRIBUTION,
                             stroke_width=5, tip_length=0.18),
                       MathTex(r"\delta'_{-0.9}", font_size=26, color=C.DISTRIBUTION).next_to(line.n2p(-0.9) + UP * 1.3, UP,

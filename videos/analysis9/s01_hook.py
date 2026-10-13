@@ -42,7 +42,7 @@ class Hook(VoiceoverScene):
         nT = ValueTracker(1.0)
 
         def spike_():
-            n = nT.get_value()
+            n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
             y = n * rho(n * x)
             return VGroup(area_under(ax, x, np.minimum(y, 4.2), C.DISTRIBUTION, 0.35),
                           polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3))
@@ -50,11 +50,11 @@ class Hook(VoiceoverScene):
         sp = always_redraw(spike_)
 
         def readout():
-            n = nT.get_value()
+            n = max(1, round(nT.get_value()))
             xx = np.linspace(-1.5, 1.5, 60001)
             ph = np.exp(-xx * xx) * (1 + a * xx) * np.cos(b * xx + c)
             v = float(np.sum((ph * n * rho(n * xx))[1:] + (ph * n * rho(n * xx))[:-1]) / 2 * (xx[1] - xx[0]))
-            return VGroup(MathTex(rf"n = {n:.1f}: \ \int \varphi(x)\, n\rho(nx)\,dx = {v:.5f}", font_size=28,
+            return VGroup(MathTex(rf"n = {n}: \ \int \varphi(x)\, n\rho(nx)\,dx = {v:.5f}", font_size=28,
                                   color=C.DISTRIBUTION),
                           MathTex(rf"\varphi(0) = {phi0[0]:.5f}", font_size=28, color=C.TEST_FN)
                           ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.6, 1.5, 0])

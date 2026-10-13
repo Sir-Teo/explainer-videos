@@ -109,8 +109,10 @@ class PaleyWiener(VoiceoverScene):
             row[1].set_color(C.TEST_FN)
             row[2].set_color(C.DISTRIBUTION)
         regrid(tab)
-        tnote = label(rf"inside: \ $b(0.5) = e^{{-4/3}} = {b05:.6f}$ \ at every height; \ outside: \ quadrature noise",
-                      font_size=20, color=GREY_A).next_to(tab, DOWN, buff=0.12)
+        tnote = VGroup(label(rf"inside: \ $b(0.5) = e^{{-4/3}} = {b05:.6f}$ \ at every height;", font_size=20,
+                             color=GREY_A),
+                       label(r"outside: \ quadrature noise", font_size=20, color=GREY_A)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.06).next_to(tab, DOWN, buff=0.12)
         pm = ProofMap([
             r"$|\hat b(z)| \le C_N (1 + |z|)^{-N} e^{A|y|}$",
             r"shift the inversion line to $\mathrm{Im}\,z = y$ \ (Cauchy)",
