@@ -82,7 +82,7 @@ class Projection(VoiceoverScene):
         formula.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, 1.0, 0])
         tab = VGroup(MathTex(r"n", r"\quad \|y_n - y_{n+1}\|^2", r"\quad \text{bound}", font_size=24, color=GREY_A))
         for n, lhs, bound in rows:
-            tab.add(MathTex(f"{n}", rf"\quad {sci(lhs, 2)}", rf"\quad {sci(bound, 2)}", font_size=24))
+            tab.add(MathTex(f"{n + 1}", rf"\quad {sci(lhs, 2)}", rf"\quad {sci(bound, 2)}", font_size=24))  # Y[n] is y_(n+1)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.0, -1.55, 0])
         regrid(tab)
         concl = label(r"Cauchy, \ so it converges \ (completeness), \ and the limit is in $E$ \ (closed)", font_size=24,

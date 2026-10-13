@@ -37,7 +37,7 @@ class Hilbert(VoiceoverScene):
             MathTex(r"L^2(\mu):\ \langle f, g\rangle = \int f\,\bar g\,d\mu, \qquad \|f\| = \sqrt{\langle f, f\rangle}",
                     font_size=32, color=C.INNER),
         ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
-        ax = plain_axes([0, 1, 0.5], [0, 3.2, 1], 3.6, 3.0, numbers=True, font_size=18,
+        ax = plain_axes([0, 1, 0.5], [0, 5.6, 1], 3.6, 3.0, numbers=True, font_size=18,  # lambda t sweeps to 5.5
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-4.6, -1.2, 0])
         gx = polyline(ax, t[::500], X[::500], color=C.FUNC, stroke_width=4)

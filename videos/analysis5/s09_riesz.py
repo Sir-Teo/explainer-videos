@@ -97,13 +97,14 @@ class RieszRepresentation(VoiceoverScene):
         def ramp(t, a, b):
             return np.clip((t - a) / (b - a), 0, 1)
 
-        f = np.minimum(ramp(x, V[0], K[0]), 1 - ramp(x, K[1], V[1]))
+        m = 0.04  # f vanishes a little inside V, so its support [V0 + m, V1 - m] is a compact subset of V
+        f = np.minimum(ramp(x, V[0] + m, K[0]), 1 - ramp(x, K[1], V[1] - m))
         fg = polyline(ax, x, f, color=C.FUNC, stroke_width=3.5)
         Kb = interval_band(ax, [K], ax.c2p(0, 0)[1] - 0.3, C.COMPACT_SET, height=0.16)
         Vb = interval_band(ax, [V], ax.c2p(0, 0)[1] - 0.55, C.OPEN_SET, height=0.16, opacity=0.5)
         Kl = MathTex("K", font_size=28, color=C.COMPACT_SET).next_to(Kb, RIGHT, buff=0.1)
         Vl = MathTex("V", font_size=28, color=C.OPEN_SET).next_to(Vb, RIGHT, buff=0.1)
-        assert np.all(f[(x >= K[0]) & (x <= K[1])] == 1) and np.all(f[(x <= V[0]) | (x >= V[1])] == 0)
+        assert np.all(f[(x >= K[0]) & (x <= K[1])] == 1) and np.all(f[(x <= V[0] + m) | (x >= V[1] - m)] == 0)
         head = VGroup(label(r"\textbf{Urysohn's lemma} \ (RCA 2.12): \ compact $K \subset$ open $V$ $\Rightarrow$",
                             font_size=30),
                       MathTex(r"K \prec f \prec V: \quad f = 1 \text{ on } K,\ \ 0 \le f \le 1,\ \ f = 0 \text{ off a "
@@ -141,21 +142,22 @@ class RieszRepresentation(VoiceoverScene):
 
         def trapz_f(k):
             y = np.zeros_like(x)
-            for c, b in iv:
-                col = min(1 / k, (b - c) / 2)
-                y = np.maximum(y, np.clip(np.minimum((x - c) / col, (b - x) / col), 0, 1))
+            for c, b in iv:  # zero within col of each end, then a ramp of width col: support inside V
+                col = min(1 / k, (b - c) / 4)
+                y = np.maximum(y, np.clip(np.minimum((x - c - col) / col, (b - col - x) / col), 0, 1))
             return y
 
         frames = []
-        for k in (5, 20, 100, 1000):
+        for k, lam in zip((5, 20, 100, 1000), trials[0, 1:5]):
             y = trapz_f(k)
+            assert abs(np.sum((y[1:] + y[:-1]) / 2) * (x[1] - x[0]) - lam) < 1e-6  # the drawn f_k has integral Lambda f_k
             frames.append(VGroup(area_under(ax, x, y, C.MEASURE, 0.4), polyline(ax, x, y, color=C.FUNC, stroke_width=3)))
         head = VGroup(label(r"Rudin's construction, \ run for $\Lambda f = \int_0^1 f$", font_size=30),
                       MathTex(r"\mu(V) = \sup\{\Lambda f : f \prec V\}, \qquad \mu(E) = \inf\{\mu(V) : E \subset V "
                               r"\text{ open}\}", font_size=32, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
         tab = VGroup(MathTex(r"\text{collar}", r"\quad \Lambda f", font_size=28, color=GREY_A))
         for k, v in zip(ks, trials[0, 1:]):
-            tab.add(MathTex(rf"1/{int(k)}" if k < 10**6 else r"10^{-7}", rf"\quad {v:.7f}", font_size=28))
+            tab.add(MathTex(rf"1/{int(k)}" if k < 10**6 else r"10^{-8}", rf"\quad {v:.7f}", font_size=28))
         tab.add(MathTex(r"\text{length}(V)", rf"\quad {L:.7f}", font_size=28, color=C.OPEN_SET))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.5, 0])
         regrid(tab)

@@ -422,6 +422,9 @@ def _sc_setup():
 
 def compute_riemann():
     V, zs, beta, A, C = _sc_setup()
+    # normalize f'(0) > 0 (the theorem's choice): precompose with the rotation z -> (A/|A|) z, which moves the
+    # prevertices to zs A/|A| and makes the constant |A|. The image of the disk is unchanged.
+    zs, A = zs * (A / abs(A)), abs(A) + 0j
 
     def fprime(w):
         out = A * np.ones_like(w, dtype=complex)
@@ -465,9 +468,11 @@ def compute_riemann():
 
     bd = max(dist_to_poly(w) for w in wb)
     assert bd < 0.02
-    # f'(0) > 0 picks the map up to nothing: the conformal center and the derivative there
+    # f(0) = C and f'(0) > 0 pick the map: the conformal center and the (real, positive) derivative there
+    fp0 = complex(fprime(np.array([0j]))[0])
+    assert abs(fp0.imag) < 1e-12 and fp0.real > 0 and abs(fmap(np.array([0j]))[0] - C) < 1e-12
     return dict(V=V, zs=zs, rs=rs, circles=circles, angs=angs, rays=rays, ang_err=ang_err, bd=bd, C=C,
-                d0=abs(fprime(np.array([0j]))[0]))
+                d0=fp0.real)
 
 
 def compute_poisson():
