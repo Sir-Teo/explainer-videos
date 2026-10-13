@@ -176,11 +176,30 @@ class Length(VoiceoverScene):
                      label(r"yet it contains no interval \ (its pieces shrink to $0$): \ thin, but not small",
                            font_size=26, color=C.PATHOLOGY)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         assert abs(float(d["fat_measure"]) - 0.5) < 1e-3
+        # the first piece after stage 5, magnified: the depth-12 set inside it (stages 6..12, 128 pieces)
+        keep12 = d["fat_keep"]
+        a5 = float(d["fat5"][0][1])
+        zin = keep12[keep12[:, 1] <= a5 + 1e-12] / a5
+        assert len(zin) == 2**7 and abs(zin.max() - 1) < 1e-9 and zin.min() == 0
+        lens = [float(np.diff(d[f"fat{k}"], axis=1).max()) for k in range(1, 6)]
+        assert all(a > 2 * b for a, b in zip(lens, lens[1:]))  # each stage more than halves the longest piece
+        y5, zy = 1.2, -0.2
+        zbar = interval_band(ax, zin, zy, C.CONNECTED_SET, height=0.3, min_width=0.004)
+        xa, xb = ax.c2p(0, 0)[0], ax.c2p(a5, 0)[0]
+        win = Rectangle(width=xb - xa + 0.08, height=0.34, stroke_color=C.EPS, stroke_width=2.5).move_to(
+            [(xa + xb) / 2, y5, 0])
+        conn = VGroup(DashedLine(win.get_corner(DL), [ax.c2p(0, 0)[0], zy + 0.17, 0], color=C.EPS, stroke_width=1.5),
+                      DashedLine(win.get_corner(DR), [ax.c2p(1, 0)[0], zy + 0.17, 0], color=C.EPS, stroke_width=1.5))
+        zlab = MathTex(rf"\times {1 / a5:.0f}: \ \text{{stages }} 6\text{{--}}12", font_size=24, color=C.EPS
+                       ).next_to([2.95, zy, 0], RIGHT, buff=0)
+        plab = label(r"longest piece after stage $n$: \ " + r", \ ".join(f"{v:.3f}" for v in lens) + r", \ \dots \ $\to 0$",
+                     font_size=24, color=GREY_A).move_to([ax.get_center()[0], -0.95, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now change the recipe. At stage n, remove from the middle of each piece an interval "
             "of length only four to the minus n. <bookmark mark='b'/> The removed lengths add up to one half, so what "
-            "remains has measure one half. <bookmark mark='c'/> Yet the remaining pieces shrink to nothing, so the "
-            "set contains no interval at all. It's nowhere dense, full of holes everywhere, and still has half the "
+            "remains has measure one half. <bookmark mark='c'/> Yet the remaining pieces shrink to nothing: "
+            "each stage more than halves the longest one. <bookmark mark='z'/> Magnify a piece sixty times and the "
+            "same pattern of holes is there again. So the set contains no interval at all. It's nowhere dense, full of holes everywhere, and still has half the "
             "length of the line. Being thin and having measure zero are different things."
         ) as vo:
             self.play(FadeIn(head))
@@ -191,6 +210,11 @@ class Length(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(out[0]))
             vo.wait_until("c")
+            self.play(FadeOut(rows[:5]), FadeOut(labs[:5]), VGroup(rows[5], labs[5]).animate.shift(UP * (y5 - rows[5].get_y())))
+            self.play(FadeIn(plab))
+            vo.wait_until("z")
+            self.play(Create(win))
+            self.play(Create(conn), GrowFromEdge(zbar, LEFT), FadeIn(zlab), run_time=1.6)
             self.play(FadeIn(out[1]))
         self.wait(0.3)
         self.clear_scene()
