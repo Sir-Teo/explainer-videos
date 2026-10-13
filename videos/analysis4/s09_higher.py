@@ -121,16 +121,75 @@ class HigherOrder(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.4, 0])
         expected = (x**6 + 9 * x**4 * y**2 - 9 * x**2 * y**4 - y**6) / (x**2 + y**2) ** 3
         assert sp.simplify(fxy - expected) == 0
+        # why 9.41 holds (Rudin 9.40): Delta(h, k)/hk = f_xy at some point (xi, eta) inside the h x k rectangle;
+        # the dot is drawn at (0.55 h, 0.4 k) to stand for that point. Shrinking the rectangle squeezes it to the
+        # corner, so a continuous f_xy leaves one possible limit; the museum f_xy (degree-0 homogeneous) does not.
+        hv, kv = ValueTracker(0.8), ValueTracker(0.6)
+        XI, ETA = 0.55, 0.4
+
+        def rect_():
+            h, k = hv.get_value(), kv.get_value()
+            return Polygon(ax.c2p(0, 0), ax.c2p(h, 0), ax.c2p(h, k), ax.c2p(0, k), color=WHITE, stroke_width=3,
+                           fill_color=WHITE, fill_opacity=0.08).set_z_index(3)
+
+        rect = always_redraw(rect_)
+        pt = always_redraw(lambda: Dot(ax.c2p(XI * hv.get_value(), ETA * kv.get_value()), radius=0.07,
+                                       color=C.EPS).set_z_index(4))
+        sg = VGroup(*[MathTex(c_, font_size=30, color=WHITE).move_to(ax.c2p(*xy_)).shift(sh_)
+                      for c_, xy_, sh_ in (("+", (0.8, 0.6), 0.25 * UR), ("-", (0, 0.6), 0.25 * UL),
+                                           ("-", (0.8, 0), 0.25 * DR), ("+", (0, 0), 0.25 * DL))]).set_z_index(4)
+        why = VGroup(
+            MathTex(r"\frac{f(h,k) - f(0,k) - f(h,0) + f(0,0)}{hk} = f_{xy}(\xi, \eta)", font_size=28),
+            label(r"for some $(\xi, \eta)$ inside the rectangle \ (mean value theorem twice, Rudin 9.40)",
+                  font_size=22, color=GREY_A),
+            label(r"any shape, shrunk to $0$: \ $(\xi, \eta) \to 0$, \ so continuity leaves one limit",
+                  font_size=22, color=C.EPS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
+        for r_ in why:
+            if r_.width > 6.5:
+                r_.width = 6.5
+        why.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
+        assert why.get_right()[0] < 6.95 and why.get_bottom()[1] > -3.9
+
+        def fxy_at(h, k):
+            return float(F(np.array(XI * h), np.array(ETA * k)))
+
+        rd = VGroup(MathTex(r"f_{xy}(\xi, \eta) =", font_size=30, color=C.EPS),
+                    DecimalNumber(fxy_at(0.8, 0.6), num_decimal_places=2, font_size=30, color=C.EPS)
+                    ).arrange(RIGHT, buff=0.15).next_to(ax, UP, buff=0.12)
+        rd[1].add_updater(lambda m: m.set_value(fxy_at(hv.get_value(), kv.get_value())))
+        assert fxy_at(0.8, 0.05) > 0.98 and fxy_at(0.05, 0.8) < -0.98
+        img.set_z_index(0)
         with self.voiceover(
             "<bookmark mark='a'/> The cure is continuity again. Rudin's theorem 9.41: if the mixed partial f x y "
             "exists near a point and is continuous there, then the other one exists and they're equal. "
-            "<bookmark mark='b'/> In the museum piece, f x y is plus one along the x-axis and minus one along the "
-            "y-axis, so it can't be continuous at the origin. The swap fails exactly where continuity does."
+            "<bookmark mark='m'/> The reason: by the mean value theorem, used twice, the second difference over h k "
+            "equals f x y at some point inside the rectangle. <bookmark mark='s'/> Shrink the rectangle, whatever its "
+            "shape, and that point is squeezed into the corner; if f x y is continuous, the quotient has only one "
+            "possible limit. <bookmark mark='b'/> In the museum piece, f x y is plus one along the x-axis and minus "
+            "one along the y-axis. <bookmark mark='w'/> A flat rectangle samples it near the x-axis, a tall one near "
+            "the y-axis, and the quotient follows them. The swap fails exactly where continuity does."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm[:3]))
+            self.play(Create(ax))
+            vo.wait_until("m")
+            self.play(Create(rect), FadeIn(sg))
+            self.play(FadeIn(pt, scale=1.5), FadeIn(why[0]))
+            self.play(FadeIn(why[1]))
+            vo.wait_until("s")
+            self.play(FadeOut(sg), hv.animate.set_value(0.5), kv.animate.set_value(0.1), run_time=1.4)
+            self.play(hv.animate.set_value(0.1), kv.animate.set_value(0.5), run_time=1.4)
+            self.play(hv.animate.set_value(0.04), kv.animate.set_value(0.03), FadeIn(why[2]), run_time=1.4)
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(ax), FadeIn(il))
+            self.play(FadeOut(why), hv.animate.set_value(0.8), kv.animate.set_value(0.6))
+            self.play(FadeIn(img), FadeIn(il), FadeIn(rd))
+            vo.wait_until("w")
+            self.play(hv.animate.set_value(0.8), kv.animate.set_value(0.05), run_time=1.8)
+            self.play(hv.animate.set_value(0.05), kv.animate.set_value(0.8), run_time=2.2)
+            self.play(hv.animate.set_value(0.03), kv.animate.set_value(0.4), run_time=1.0)
+            self.play(hv.animate.set_value(0.4), kv.animate.set_value(0.02), run_time=1.6)
+            rd[1].clear_updaters()
             self.play(FadeIn(thm[3:]))
         self.wait(0.3)
         self.clear_scene()
@@ -167,10 +226,38 @@ class HigherOrder(VoiceoverScene):
         if note_.width > 7.6:
             note_.width = 7.6
         assert np.allclose(lhs, rhs, atol=1e-5)
+        # the statement as a picture: F(t + dt) - F(t) is the area of the sliver between two members of the family,
+        # i.e. the integral of the change in height; dividing by dt and letting dt -> 0 is the interchange
+        t0, xs_ = 0.5, np.linspace(0, 1, 160)
+        dtv = ValueTracker(0.8)
+        base = Polygon(ax.c2p(0, 0), *[ax.c2p(v, v**t0) for v in xs_], ax.c2p(1, 0), stroke_width=0,
+                       fill_color=C.SEQ, fill_opacity=0.28)
+        c0 = polyline(ax, xs_, xs_**t0, color=C.SEQ, stroke_width=3)
+        c1 = always_redraw(lambda: polyline(ax, xs_, xs_ ** (t0 + dtv.get_value()), color=C.APPROX, stroke_width=3))
+        sliver = always_redraw(lambda: Polygon(*[ax.c2p(v, v**t0) for v in xs_],
+                                               *[ax.c2p(v, v ** (t0 + dtv.get_value())) for v in xs_[::-1]],
+                                               stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.75))
+        Fl = MathTex(r"F(t)", font_size=26, color=C.SEQ).move_to(ax.c2p(0.78, 0.2))
+        idt = VGroup(
+            MathTex(r"\frac{F(t + \Delta t) - F(t)}{\Delta t} = \int_a^b \frac{\varphi(x, t + \Delta t) - "
+                    r"\varphi(x, t)}{\Delta t}\,dx", font_size=30),
+            label(r"the change in area is the integral of the change in height \ (red)", font_size=22,
+                  color=GREY_A),
+            label(r"let $\Delta t \to 0$ on both sides: \ the theorem lets the limit pass inside", font_size=22,
+                  color=C.EPS),
+        ).arrange(DOWN, buff=0.22).move_to([3.0, -0.6, 0])
+        for r_ in idt:
+            if r_.width > 7.4:
+                r_.width = 7.4
+        idt.set_x(3.0)
+        assert idt.get_left()[0] > ax.get_right()[0] + 0.2 and idt.get_right()[0] < 6.95
+        assert np.all(xs_[1:-1] ** t0 > xs_[1:-1] ** (t0 + 0.1))  # the sliver has positive height inside (0, 1)
         with self.voiceover(
             "<bookmark mark='a'/> The swap that works is differentiation under the integral sign, Rudin 9.42: if phi "
-            "and its partial derivative in t are continuous on a closed rectangle, the derivative of the integral is "
-            "the integral of the derivative. <bookmark mark='b'/> Try it on the integral of x to the t from zero to "
+            "and its partial derivative in t are continuous on a closed rectangle, <bookmark mark='p'/> the derivative "
+            "of the integral is the integral of the derivative. The change in area between two nearby curves is the "
+            "integral of the change in height; dividing by delta t and shrinking it is exactly the interchange. "
+            "<bookmark mark='b'/> Try it on the integral of x to the t from zero to "
             "one, which is one over t plus one. <bookmark mark='c'/> Differentiating the answer gives minus one over t "
             "plus one squared; integrating the derivative of the integrand, x to the t times log x, gives the same "
             "numbers. <bookmark mark='d'/> A derivative is a limit, so this is one more interchange of limits, made "
@@ -178,8 +265,16 @@ class HigherOrder(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
+            self.play(Create(ax), FadeIn(base), Create(c0), FadeIn(Fl))
+            vo.wait_until("p")
+            self.play(Create(c1), FadeIn(sliver), FadeIn(idt[0]))
+            self.play(FadeIn(idt[1]))
+            self.play(dtv.animate.set_value(0.12), FadeIn(idt[2]), run_time=2.5)
+            c1.clear_updaters()
+            sliver.clear_updaters()
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(al), LaggedStart(*[Create(g_) for g_ in fam], lag_ratio=0.3), FadeIn(rows[0]))
+            self.play(FadeOut(VGroup(base, c0, c1, sliver, Fl, idt)))
+            self.play(FadeIn(al), LaggedStart(*[Create(g_) for g_ in fam], lag_ratio=0.3), FadeIn(rows[0]))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bl), LaggedStart(*[Create(g_) for g_ in dfam], lag_ratio=0.3), FadeIn(rows[1]))
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
