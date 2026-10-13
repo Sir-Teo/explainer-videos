@@ -527,8 +527,13 @@ class StoneWeierstrass(VoiceoverScene):
             label(r"(every term $e^{i(k+1)\theta}$ integrates to $0$)", font_size=20, color=GREY_B),
             MathTex(r"\int_0^{2\pi} \bar z\, z\,d\theta = 2\pi", font_size=30, color=C.PATHOLOGY),
             MathTex(r"|\bar z - P(z)| = |1 - zP(z)|", font_size=30),
-            label(r"$1 - zP$ averages to $1$, \ so somewhere $|1 - zP| \ge 1$", font_size=24, color=C.PATHOLOGY),
+            label(r"$1 - zP$ has mean $1$: \ $\max |1 - zP| \ge 1$", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([5.0, -0.3, 0])
+        for r_ in rows:
+            if r_.width > 3.8:
+                r_.width = 3.8
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.95, -0.3, 0])
+        assert rows.get_left()[0] > 2.9 and rows.get_right()[0] < 6.95
         fix = label(r"add $\bar z$ (a \textbf{self-adjoint} algebra): \ the trigonometric polynomials "
                     r"$\sum c_n e^{in\theta}$ are dense in $C(\mathbb T)$", font_size=26, color=C.CONNECTED_SET)
         fix.to_edge(DOWN, buff=0.2)

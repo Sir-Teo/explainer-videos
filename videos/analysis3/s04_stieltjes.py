@@ -96,6 +96,11 @@ class Stieltjes(VoiceoverScene):
             MathTex(r"\int f\,d\alpha = \sum_{n} c_n f(s_n)", font_size=38, color=C.EPS),
             label(r"an integral can be a series", font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.4, -0.2, 0])
+        for r_ in side:
+            if r_.width > 6.5:
+                r_.width = 6.5
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.4, -0.2, 0])
+        assert side.get_right()[0] < 6.9
         with self.voiceover(
             "Now the extreme case. <bookmark mark='a'/> Let alpha be a single unit step at a point s: zero before it, "
             "one after. <bookmark mark='b'/> In any partition, only the piece containing s has an increase in alpha, "
