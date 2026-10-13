@@ -66,17 +66,17 @@ class Hook(VoiceoverScene):
             tab.add(MathTex(rf"{k}", rf"\quad {txt}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, 0.2, 0])
         regrid(tab)
-        rule = VGroup(label(r"each step: replace each curve by", font_size=24, color=GREY_A),
-                      label(r"its tangent line, and solve", font_size=24, color=GREY_A),
+        rule = VGroup(label(r"each step: replace $F$ by its linearization", font_size=24, color=GREY_A),
+                      label(r"at $p_k$: two lines; \ they cross at $p_{k+1}$", font_size=24, color=GREY_A),
                       label(r"correct digits double each step", font_size=24, color=C.EPS)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tab, DOWN, buff=0.35)
-        assert res[4] < 1e-10 and abs(root[0] ** 2 + root[1] ** 2 - 4) < 1e-12
+        assert 0.5e-11 < res[4] < 2e-11 and abs(root[0] ** 2 + root[1] ** 2 - 4) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> Here are two equations in two unknowns: a circle and a hyperbola, and we want a "
             "point where they cross. <bookmark mark='b'/> Newton's method starts from a guess. At the guess, replace "
-            "each curve by its tangent line, the zero set of its best linear approximation. Two lines are easy: "
-            "they cross at one point, the next guess. <bookmark mark='c'/> Repeat. <bookmark mark='d'/> After four "
-            "steps the error is ten to the minus eleven. Once close, the number of correct digits doubles at every "
+            "each of the two functions by its best linear approximation. Where each approximation is zero is a "
+            "straight line, and two lines are easy: they cross at one point, the next guess. <bookmark mark='c'/> Repeat. <bookmark mark='d'/> After four "
+            "steps F is about ten to the minus eleven away from zero. Once close, the number of correct digits doubles at every "
             "step."
         ) as vo:
             self.play(FadeIn(head), Create(ax))
@@ -136,8 +136,8 @@ class Hook(VoiceoverScene):
             "every distance by a fixed factor, here 0.62, while it turns and slides. <bookmark mark='b'/> Apply it "
             "again and again, and the whole plane collapses onto one point, the only point the map leaves where it is. "
             "<bookmark mark='c'/> That's the contraction principle, and this part uses it four times: for Newton's "
-            "method, for differential equations, and for the inverse and implicit function theorems. Every equation "
-            "you can solve, you solve by a contraction."
+            "method, for differential equations, and for the inverse and implicit function theorems. Equation after "
+            "equation, the solution is the fixed point of a contraction."
         ) as vo:
             self.play(FadeIn(head), Create(copies[0]), run_time=1.5)
             vo.wait_until("a")

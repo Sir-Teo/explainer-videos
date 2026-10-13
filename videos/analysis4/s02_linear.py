@@ -46,7 +46,7 @@ class LinearMaps(VoiceoverScene):
         mat = MathTex(r"A = \begin{pmatrix} 1.6 & 0.9 \\ 0.3 & 1.1 \end{pmatrix}", font_size=36).move_to([4.4, 1.4, 0])
         mat[0][2:5].set_color(C.SEQ)
         side = VGroup(
-            label(r"\textbf{Rudin 9.6} \ $A(x + y) = Ax + Ay$, \ $A(cx) = cAx$", font_size=24),
+            label(r"\textbf{Rudin 9.4} \ $A(x + y) = Ax + Ay$, \ $A(cx) = cAx$", font_size=24),
             label(r"lines go to lines, \ evenly spaced stay evenly spaced,", font_size=24, color=GREY_A),
             label(r"and $0$ stays put", font_size=24, color=GREY_A),
             label(r"the columns are $Ae_1$ and $Ae_2$", font_size=24, color=C.EPS),
@@ -256,7 +256,7 @@ class LinearMaps(VoiceoverScene):
                         MathTex(r"B = A\big(I - A^{-1}(A - B)\big)", font_size=30, color=C.OPERATOR)
                         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, 0.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The proof is a geometric series. Write B as A times the identity minus a small map; "
+            "<bookmark mark='a'/> One proof is a geometric series. Write B as A times the identity minus a small map; "
             "then B inverse is the sum of the powers of that small map, times A inverse, just as one over one minus q "
             "is the sum of the powers of q. <bookmark mark='b'/> The partial sums, drawn as images of the unit circle, "
             "close in on B inverse's ellipse, <bookmark mark='c'/> with the error shrinking geometrically. "

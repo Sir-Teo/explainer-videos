@@ -121,11 +121,27 @@ class HigherOrder(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.4, 0])
         expected = (x**6 + 9 * x**4 * y**2 - 9 * x**2 * y**4 - y**6) / (x**2 + y**2) ** 3
         assert sp.simplify(fxy - expected) == 0
-        # why 9.41 holds (Rudin 9.40): Delta(h, k)/hk = f_xy at some point (xi, eta) inside the h x k rectangle;
-        # the dot is drawn at (0.55 h, 0.4 k) to stand for that point. Shrinking the rectangle squeezes it to the
-        # corner, so a continuous f_xy leaves one possible limit; the museum f_xy (degree-0 homogeneous) does not.
+        # why 9.41 holds (Rudin 9.40): Delta(h, k)/hk = f_xy at some point (xi, eta) inside the h x k rectangle.
+        # For the museum f the quotient is (h^2 - k^2)/(h^2 + k^2), and f_xy depends only on the direction:
+        # f_xy = 3u - 2u^3 with u = cos 2theta. So the mean-value points fill the ray where 3u - 2u^3 equals the
+        # quotient (|u| <= 1/sqrt 2, where that is increasing); the dot sits halfway out along it.
         hv, kv = ValueTracker(0.8), ValueTracker(0.6)
-        XI, ETA = 0.55, 0.4
+        from scipy.optimize import brentq
+
+        def quot(h, k):
+            return (h * h - k * k) / (h * h + k * k)
+
+        def mvt(h, k):
+            u = brentq(lambda u_: 3 * u_ - 2 * u_**3 - quot(h, k), -1 / math.sqrt(2), 1 / math.sqrt(2))
+            th = 0.5 * math.acos(u)
+            t = 0.5 * min(h / math.cos(th), k / math.sin(th))
+            return t * math.cos(th), t * math.sin(th), th
+
+        for h_, k_ in ((0.8, 0.6), (0.8, 0.05), (0.05, 0.8), (0.04, 0.03), (0.4, 0.02)):
+            a_, b_, _ = mvt(h_, k_)
+            fq = float(f.subs({x: h_, y: k_})) / (h_ * k_)  # f(0, k) = f(h, 0) = f(0, 0) = 0
+            assert abs(fq - quot(h_, k_)) < 1e-12 and abs(F(np.array(a_), np.array(b_)) - fq) < 1e-9
+            assert 0 < a_ < h_ and 0 < b_ < k_
 
         def rect_():
             h, k = hv.get_value(), kv.get_value()
@@ -133,8 +149,16 @@ class HigherOrder(VoiceoverScene):
                            fill_color=WHITE, fill_opacity=0.08).set_z_index(3)
 
         rect = always_redraw(rect_)
-        pt = always_redraw(lambda: Dot(ax.c2p(XI * hv.get_value(), ETA * kv.get_value()), radius=0.07,
+        pt = always_redraw(lambda: Dot(ax.c2p(*mvt(hv.get_value(), kv.get_value())[:2]), radius=0.07,
                                        color=C.EPS).set_z_index(4))
+
+        def ray_():
+            th = mvt(hv.get_value(), kv.get_value())[2]
+            L = min(1 / math.cos(th), 1 / math.sin(th))
+            return DashedLine(ax.c2p(0, 0), ax.c2p(L * math.cos(th), L * math.sin(th)), color=C.EPS, stroke_width=2,
+                              dash_length=0.08).set_z_index(3)
+
+        ray = always_redraw(ray_)
         sg = VGroup(*[MathTex(c_, font_size=30, color=WHITE).move_to(ax.c2p(*xy_)).shift(sh_)
                       for c_, xy_, sh_ in (("+", (0.8, 0.6), 0.25 * UR), ("-", (0, 0.6), 0.25 * UL),
                                            ("-", (0.8, 0), 0.25 * DR), ("+", (0, 0), 0.25 * DL))]).set_z_index(4)
@@ -151,24 +175,22 @@ class HigherOrder(VoiceoverScene):
         why.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
         assert why.get_right()[0] < 6.95 and why.get_bottom()[1] > -3.9
 
-        def fxy_at(h, k):
-            return float(F(np.array(XI * h), np.array(ETA * k)))
-
-        rd = VGroup(MathTex(r"f_{xy}(\xi, \eta) =", font_size=30, color=C.EPS),
-                    DecimalNumber(fxy_at(0.8, 0.6), num_decimal_places=2, font_size=30, color=C.EPS)
+        rd = VGroup(MathTex(r"\frac{\Delta}{hk} = f_{xy}(\xi, \eta) =", font_size=30, color=C.EPS),
+                    DecimalNumber(quot(0.8, 0.6), num_decimal_places=2, font_size=30, color=C.EPS)
                     ).arrange(RIGHT, buff=0.15).next_to(ax, UP, buff=0.12)
-        rd[1].add_updater(lambda m: m.set_value(fxy_at(hv.get_value(), kv.get_value())))
-        assert fxy_at(0.8, 0.05) > 0.98 and fxy_at(0.05, 0.8) < -0.98
+        rd[1].add_updater(lambda m: m.set_value(quot(hv.get_value(), kv.get_value())))
+        assert quot(0.8, 0.05) > 0.99 and quot(0.05, 0.8) < -0.99
         img.set_z_index(0)
         with self.voiceover(
-            "<bookmark mark='a'/> The cure is continuity again. Rudin's theorem 9.41: if the mixed partial f x y "
-            "exists near a point and is continuous there, then the other one exists and they're equal. "
+            "<bookmark mark='a'/> The cure is continuity again. Rudin's theorem 9.41: if f x, f y and the mixed "
+            "partial f x y exist near a point, and f x y is continuous there, then the other one exists and they're equal. "
             "<bookmark mark='m'/> The reason: by the mean value theorem, used twice, the second difference over h k "
             "equals f x y at some point inside the rectangle. <bookmark mark='s'/> Shrink the rectangle, whatever its "
             "shape, and that point is squeezed into the corner; if f x y is continuous, the quotient has only one "
-            "possible limit. <bookmark mark='b'/> In the museum piece, f x y is plus one along the x-axis and minus "
-            "one along the y-axis. <bookmark mark='w'/> A flat rectangle samples it near the x-axis, a tall one near "
-            "the y-axis, and the quotient follows them. The swap fails exactly where continuity does."
+            "possible limit. <bookmark mark='b'/> In the museum piece, f x y depends only on the direction: plus one "
+            "along the x-axis, minus one along the y-axis. <bookmark mark='w'/> A flat rectangle's quotient is near "
+            "plus one, a tall one's near minus one, so the mean-value point rides a different ray for each shape, "
+            "however small the rectangle. The swap fails exactly where continuity does."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm[:3]))
@@ -183,13 +205,14 @@ class HigherOrder(VoiceoverScene):
             self.play(hv.animate.set_value(0.04), kv.animate.set_value(0.03), FadeIn(why[2]), run_time=1.4)
             vo.wait_until("b")
             self.play(FadeOut(why), hv.animate.set_value(0.8), kv.animate.set_value(0.6))
-            self.play(FadeIn(img), FadeIn(il), FadeIn(rd))
+            self.play(FadeIn(img), FadeIn(il), FadeIn(rd), FadeIn(ray))
             vo.wait_until("w")
             self.play(hv.animate.set_value(0.8), kv.animate.set_value(0.05), run_time=1.8)
             self.play(hv.animate.set_value(0.05), kv.animate.set_value(0.8), run_time=2.2)
             self.play(hv.animate.set_value(0.03), kv.animate.set_value(0.4), run_time=1.0)
             self.play(hv.animate.set_value(0.4), kv.animate.set_value(0.02), run_time=1.6)
-            rd[1].clear_updaters()
+            for m_ in (rd[1], ray):
+                m_.clear_updaters()
             self.play(FadeIn(thm[3:]))
         self.wait(0.3)
         self.clear_scene()

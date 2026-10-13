@@ -3,7 +3,7 @@
 TITLE = "Analysis, Built: Part 4, Calculus in Many Dimensions"
 
 SCENES = [
-    ("s01_hook", "Hook", "Every equation you can solve, you solve by a contraction"),
+    ("s01_hook", "Hook", "Newton's method, and the contraction behind it"),
     ("s02_linear", "LinearMaps", "1. Linear maps and their norms"),
     ("s03_derivative", "Derivative", "2. The derivative is a linear map"),
     ("s04_partials", "Partials", "3. Partial derivatives are not enough"),
