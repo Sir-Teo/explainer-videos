@@ -33,7 +33,7 @@ Chapter two: integrals along paths, and the number that counts turns.
 
 To integrate along a path, parametrize it and integrate f of gamma times gamma prime. Around the unit circle, the powers of z all give zero, except one. One over z gives two pi i. Every other power has an antiderivative, and around a closed path an antiderivative returns to where it started. One over z would need a logarithm, and no single-valued logarithm exists around the origin. Those two pi i's are the whole story of this part.
 
-Divide by two pi i, shift the singularity to a point a, and the integral of one over z minus a counts how many times the curve winds around a. Follow an arrow from a point inside the small loop to the moving point of the curve. By the time the curve closes, the arrow has turned exactly twice. Compute the integral for twenty four points: every answer is an integer, zero, one or two, constant on each piece of the complement, and zero outside the curve.
+Divide by two pi i, shift the singularity to a point a, and the integral of one over z minus a counts how many times the curve winds around a. Follow an arrow from a point inside the small loop to the moving point of the curve. By the time the curve closes, the arrow has turned exactly twice. Compute the integral at twenty points: every answer is an integer, zero, one or two, constant on each piece of the complement, and zero outside the curve.
 
 Cauchy's theorem starts with triangles, and Goursat's proof is bisection, the fourth time in this series that halving has proved a theorem. Cut the triangle into four by its midpoints. The four boundary integrals add up to the whole, so one of them is at least a quarter of it. Keep that one, and repeat: the triangles shrink to a point z zero. Near z zero, f is linear plus a small error, and the linear part integrates to zero around any closed path. So the n-th integral is at most epsilon n times four to the minus n, with epsilon n going to zero, here for the exponential. But bisection kept at least four to the minus n of the original. The only way out: the original integral was zero. For z bar, which isn't holomorphic, the corresponding ratio stays fixed, and the argument fails, as it must. Rudin extends this from triangles to every convex set.
 
@@ -167,4 +167,4 @@ This part followed chapters ten through fourteen of Rudin's Real and Complex Ana
 
 ---
 
-3869 words (~25 min at 155 wpm).
+3868 words (~25 min at 155 wpm).

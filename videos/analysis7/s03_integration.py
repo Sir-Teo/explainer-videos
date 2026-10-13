@@ -89,7 +89,7 @@ class Integration(VoiceoverScene):
         cols = {0: GREY_B, 1: C.SEQ, 2: C.MEASURE}
         dots = VGroup(*[Dot(ax.c2p(p.real, p.imag), radius=0.07, color=cols[int(k)]) for p, k in zip(pts, w)])
         nums = VGroup(*[MathTex(str(int(k)), font_size=22, color=cols[int(k)]).next_to(ax.c2p(p.real, p.imag), UR,
-                                                                                       buff=0.02)
+                                                                                       buff=0.09)
                         for p, k in zip(pts, w)])
         # one point, the turning arrow
         a = complex(pts[list(w).index(2)])
@@ -111,19 +111,19 @@ class Integration(VoiceoverScene):
             MathTex(r"\mathrm{Ind}_\gamma(a) = \frac{1}{2\pi i}\oint_\gamma \frac{dz}{z - a}", font_size=32),
             label(r"\textbf{RCA 10.10} \ an integer, \ constant on each", font_size=24),
             label(r"component of the complement, \ $0$ outside", font_size=24),
-            MathTex(r"\text{24 points, from the integral: } |\mathrm{Ind} - \text{integer}| < 10^{-4}", font_size=24,
-                    color=GREY_A),
+            MathTex(rf"\text{{{len(pts)} points, from the integral: }} |\mathrm{{Ind}} - \text{{integer}}| < 10^{{-4}}",
+                    font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.9, 0])
         for r_ in side:
             if r_.width > 6.0:
                 r_.width = 6.0
-        assert set(int(k) for k in w) == {0, 1, 2}
+        assert set(int(k) for k in w) == {0, 1, 2} and len(pts) == 20
         head = label(r"The winding number: \ an integral that counts turns", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Divide by two pi i, shift the singularity to a point a, and the integral of one "
             "over z minus a counts how many times the curve winds around a. <bookmark mark='b'/> Follow an arrow "
             "from a point inside the small loop to the moving point of the curve. By the time the curve closes, the "
-            "arrow has turned exactly twice. <bookmark mark='c'/> Compute the integral for twenty four points: every "
+            "arrow has turned exactly twice. <bookmark mark='c'/> Compute the integral at twenty points: every "
             "answer is an integer, zero, one or two, constant on each piece of the complement, and zero outside the "
             "curve."
         ) as vo:

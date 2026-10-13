@@ -118,15 +118,15 @@ class Banach(VoiceoverScene):
     def volterra(self):
         d = load("volterra")
         s, exact, nrm = d["s"], d["exact"], float(d["norm"])
-        ax = plain_axes([0, 1, 0.25], [0, 1.5, 0.5], 5.4, 3.0, numbers=True, font_size=18,
+        ax = plain_axes([0, 1, 0.25], [0, 1.5, 0.5], 5.4, 2.8, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, 0.3, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, 0.55, 0])
         x = np.linspace(0, 1, 400)
         f = math.sqrt(2) * np.cos(math.pi * x / 2)
         Vf = math.sqrt(2) * (2 / math.pi) * np.sin(math.pi * x / 2)
         gf = polyline(ax, x, f, color=C.SEQ, stroke_width=3.5)
         gV = polyline(ax, x, Vf, color=C.OPERATOR, stroke_width=3.5)
-        lf = MathTex(r"f = \sqrt2\cos\tfrac{\pi x}{2}, \ \|f\|_2 = 1", font_size=24, color=C.SEQ).next_to(ax.c2p(0.02, 1.45),
+        lf = MathTex(r"f = \sqrt2\cos\tfrac{\pi x}{2}, \ \|f\|_2 = 1", font_size=24, color=C.SEQ).next_to(ax.c2p(0.28, 1.45),
                                                                                                     RIGHT, buff=0.05)
         lV = MathTex(r"Vf = \tfrac{2}{\pi}\sqrt2\sin\tfrac{\pi x}{2}", font_size=24, color=C.OPERATOR).next_to(
             ax.c2p(0.55, 0.55), DOWN, buff=0.1)
@@ -134,15 +134,18 @@ class Banach(VoiceoverScene):
         fx = math.sqrt(2) * np.cos(math.pi * xx / 2)
         cumf = np.concatenate([[0], np.cumsum((fx[1:] + fx[:-1]) / 2 * np.diff(xx))])
         assert np.abs(cumf - math.sqrt(2) * (2 / math.pi) * np.sin(math.pi * xx / 2)).max() < 1e-8
-        bx = plain_axes([0.5, 8.5, 1], [0, 0.7, 0.2], 5.4, 2.0, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, -2.6, 0])
+        bx = plain_axes([0.5, 8.5, 1], [0, 0.7, 0.2], 5.4, 1.9, numbers=True, font_size=18,
+                        x_axis_config={"include_numbers": False},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, -2.75, 0])
+        kl = VGroup(*[MathTex(str(k), font_size=18).next_to(bx.c2p(k, 0), DOWN, buff=0.1) for k in range(1, 9)],
+                    MathTex("k", font_size=20, color=GREY_A).next_to(bx.c2p(8.5, 0), DOWN, buff=0.1).shift(RIGHT * 0.2))
         bars = VGroup(*[Rectangle(width=0.35, height=bx.c2p(0, v)[1] - bx.c2p(0, 0)[1], stroke_width=0, fill_color=C.OPERATOR,
                                   fill_opacity=0.85).move_to(bx.c2p(k + 1, v / 2)) for k, v in enumerate(s[:8])])
         ticks = VGroup(*[Line(bx.c2p(k + 1 - 0.3, 2 / ((2 * k + 1) * math.pi)), bx.c2p(k + 1 + 0.3, 2 / ((2 * k + 1) * math.pi)),
                               color=C.EPS, stroke_width=3) for k in range(8)])
-        b_l = label(r"singular values (bars) \ and $\frac{2}{(2k - 1)\pi}$ (ticks)", font_size=20, color=GREY_A).next_to(
-            bx, UP, buff=0.02)
+        b_l = VGroup(label(r"singular values (bars)", font_size=20, color=GREY_A),
+                     label(r"$\frac{2}{(2k - 1)\pi}$ (ticks)", font_size=20, color=C.EPS)).arrange(
+            DOWN, aligned_edge=RIGHT, buff=0.08).next_to(bx.c2p(8.5, 0.62), DL, buff=0)
         rows = VGroup(
             MathTex(r"(Vf)(x) = \int_0^x f(t)\,dt \ \text{ on } L^2[0, 1]", font_size=30),
             MathTex(r"\|V\| = \frac{2}{\pi}", font_size=36, color=C.EPS),
@@ -169,7 +172,7 @@ class Banach(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[2:5]))
             vo.wait_until("d")
-            self.play(Create(bx), FadeIn(b_l), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.15),
+            self.play(Create(bx), FadeIn(kl), FadeIn(b_l), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.15),
                       run_time=2.0)
             self.play(FadeIn(ticks), FadeIn(rows[5]))
         self.wait(0.4)

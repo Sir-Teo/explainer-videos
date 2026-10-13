@@ -46,7 +46,7 @@ The scenes share the series' instruments in [`explainer/analysis`](../../explain
 |---|---|
 | `exp` | e^z from its series: e^(2 pi i) = 1, pi/2 as the first zero of the cosine series, periodicity |
 | `conformal` | grids under z^2 and e^z: angles preserved, Jacobians are rotation-scalings; z + 0.4i conj(z) is not |
-| `winding` | a random closed curve and the winding numbers of 24 points, from the integral, asserted integers |
+| `winding` | a three-mode closed curve with an inner loop; winding numbers of 20 well-separated points (8 outside, 8 once, 4 twice), from the integral, asserted integers |
 | `goursat` | nested triangles: the remainder bound for e^z shrinks like 8^-n; for conj(z) the ratio is stuck |
 | `cauchy` | Cauchy's formula at random points; the Fibonacci numbers as contour integrals; roots by the argument principle |
 | `maxmod` | |z^2 + e^z| on the closed unit disk: the maximum is on the boundary |
