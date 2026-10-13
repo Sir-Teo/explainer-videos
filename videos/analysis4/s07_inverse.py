@@ -95,9 +95,8 @@ class InverseFunction(VoiceoverScene):
             label(r"and the inverse $g: V \to U$ is $\mathcal C^1$, \ with $g'(y) = f'(g(y))^{-1}$", font_size=30,
                   color=C.EPS),
         ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.4)
-        pm = ProofMap([r"$\varphi_y(x) = x + A^{-1}(y - f(x))$ is a contraction",
-                       r"so $f$ is one-to-one on a ball $U$", r"$V = f(U)$ is open",
-                       r"$g$ is differentiable: \ $g' = (f')^{-1}$"], font_size=22, width=3.0, buff=0.3)
+        pm = ProofMap([r"$\varphi_y$ is a contraction", r"$f$ is one-to-one on a ball $U$", r"$V = f(U)$ is open",
+                       r"$g' = (f')^{-1}$"], font_size=24, width=3.0, buff=0.3)
         pm.next_to(thm, DOWN, buff=0.6)
         idea = VGroup(
             label(r"the idea: \ to solve $f(x) = y$, \ correct $x$ by the linear guess", font_size=26),
@@ -123,7 +122,7 @@ class InverseFunction(VoiceoverScene):
         b = F(a)
         dots = VGroup(Dot(dax2.c2p(*a), radius=0.06, color=C.EPS), Dot(iax2.c2p(*b), radius=0.06, color=C.EPS))
         dl = VGroup(MathTex(r"a", font_size=26, color=C.EPS).next_to(dots[0], DL, buff=0.05),
-                    MathTex(r"b = f(a)", font_size=26, color=C.EPS).next_to(dots[1], DL, buff=0.05),
+                    MathTex(r"b", font_size=28, color=C.EPS).next_to(dots[1], DR, buff=0.05),
                     MathTex(r"U", font_size=30, color=C.OPEN_SET).next_to(U, UP, buff=0.08),
                     MathTex(r"V = f(U)", font_size=30, color=C.OPEN_SET).next_to(V, UP, buff=0.08))
         fa = Arrow([-1.2, -0.75, 0], [1.2, -0.75, 0], buff=0, color=C.OPERATOR, stroke_width=4)
@@ -165,12 +164,13 @@ class InverseFunction(VoiceoverScene):
     def run(self):
         d = load("inverse")
         a, A, target, its, res, r, lip = d["a"], d["A"], d["target"], d["its"], d["res"], float(d["r"]), float(d["lip"])
-        dax = square_axes([-0.45, 0.45, 0.25], [0.15, 1.05, 0.25], 5.2).move_to([-3.6, -0.75, 0])
+        ud, ui = 4.6, 4.4
+        dax = square_axes([-0.45, 0.45, 0.25], [0.15, 1.05, 0.25], ud).move_to([-4.75, -0.75, 0])
         dax.set_opacity(0.5)
         b = f_exp(a)
-        iax = square_axes([b[0] - 0.4, b[0] + 0.55, 0.25], [b[1] - 0.55, b[1] + 0.4, 0.25], 4.9).move_to([3.0, -0.75, 0])
+        iax = square_axes([b[0] - 0.4, b[0] + 0.55, 0.25], [b[1] - 0.55, b[1] + 0.4, 0.25], ui).move_to([-0.2, -0.75, 0])
         iax.set_opacity(0.5)
-        ball = Circle(radius=5.2 * r, color=C.CONNECTED_SET, stroke_width=2).move_to(dax.c2p(*a)).set_fill(
+        ball = Circle(radius=ud * r, color=C.CONNECTED_SET, stroke_width=2).move_to(dax.c2p(*a)).set_fill(
             C.CONNECTED_SET, 0.06)
         th = np.linspace(0, 2 * np.pi, 200)
         bimg = VMobject(color=C.CONNECTED_SET, stroke_width=2, fill_color=C.CONNECTED_SET, fill_opacity=0.06)
@@ -192,10 +192,14 @@ class InverseFunction(VoiceoverScene):
         head = MathTex(r"x_{k+1} = x_k + A^{-1}\big(y - f(x_k)\big)", font_size=34, color=C.EPS).to_edge(UP, buff=0.25)
         tab = VGroup(MathTex(r"k", r"\quad |f(x_k) - y|", font_size=26, color=GREY_A))
         for k in range(7):
-            tab.add(MathTex(rf"{k}", rf"\quad {res[k]:.2e}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).scale(0.95).to_corner(DR, buff=0.25)
-        note_ = label(rf"on the green ball: \ $\|\varphi'\| \le {lip:.3f}$, \ so each error is about a third of the last",
-                      font_size=22, color=C.CONNECTED_SET).to_edge(DOWN, buff=0.15).shift(LEFT * 1.6)
+            tab.add(MathTex(rf"{k}", rf"\quad {res[k]:.4f}" if res[k] >= 1e-3 else rf"\quad {sci(float(res[k]), 2)}",
+                            font_size=26))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to([2.6, 0.9, 0], DR, buff=0)
+        regrid(tab, gap=0.35)
+        note_ = VGroup(label(r"on the green ball:", font_size=22, color=C.CONNECTED_SET),
+                       label(rf"$\|\varphi'\| \le {lip:.3f}$, \ so each error", font_size=22, color=C.CONNECTED_SET),
+                       label(r"is about a third of the last", font_size=22, color=C.CONNECTED_SET)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.06).next_to(tab, DOWN, buff=0.35, aligned_edge=LEFT)
         assert lip < 0.5 and np.all(np.diff(res[:8]) < 0)
         with self.voiceover(
             "<bookmark mark='a'/> Here it is, run. Choose a target y near f of a. <bookmark mark='b'/> Start at a and "
