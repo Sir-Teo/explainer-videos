@@ -70,7 +70,7 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def next_time(self):
         head = label(r"Next: Part 6, \ $L^p$ and Hilbert space", font_size=38).to_edge(UP, buff=0.3)
-        ax = square_axes([-1.4, 1.4, 1], [-1.4, 1.4, 1], 2.1).move_to([-3.4, -0.6, 0])
+        ax = square_axes([-1.4, 1.4, 1], [-1.4, 1.4, 1], 1.9).move_to([-3.4, -0.45, 0])
         pT = ValueTracker(1.0)
 
         def ball():
@@ -82,7 +82,7 @@ class Outro(VoiceoverScene):
                 [ax.c2p(rr * a, rr * b) for rr, a, b in zip(r, c, s)])
 
         b = always_redraw(ball)
-        pl = always_redraw(lambda: MathTex(rf"\{{|x|_p \le 1\}}, \ p = {pT.get_value():.1f}", font_size=30,
+        pl = always_redraw(lambda: MathTex(rf"\{{|x|_p \le 1\}}, \ p = {pT.get_value():.3g}", font_size=30,
                                            color=C.DIST).next_to(ax, DOWN, buff=0.15))
         side = VGroup(
             MathTex(r"\|f\|_p = \Big(\int |f|^p\,d\mu\Big)^{1/p}", font_size=34),

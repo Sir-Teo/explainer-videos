@@ -137,7 +137,7 @@ class NearlyContinuous(VoiceoverScene):
             UP, buff=0.35)
         ax = plain_axes([0, 1, 0.25], [0, 0.5, 0.25], 6.6, 2.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-3.4, 0.55, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-3.05, 0.55, 0])
         pk = diff > 1e-9
         spikes = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, b), color=C.PATHOLOGY, stroke_width=2)
                           for a, b in zip(x[pk][::3], diff[pk][::3])])
