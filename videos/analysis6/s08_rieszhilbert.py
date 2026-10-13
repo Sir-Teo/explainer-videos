@@ -129,19 +129,20 @@ class RieszHilbert(VoiceoverScene):
                 why(r"take the inner product with $z \perp M$"), why(r"so $y = \overline{\Lambda z}\, z$")]
         step = ladder(self, rows, whys, keep=4, top=1.3, buff=0.45, x=-1.0)
         # the picture the proof follows, small: the kernel, its parallel level sets, and the unit normal z
-        c0 = np.array([-5.4, -2.75, 0])
+        c0 = np.array([-4.9, -2.65, 0])
+        sc = 1.25  # the picture, scaled up into the free lower-left area (below the third proof row)
         nrm = np.array([2.0, 1.0, 0]) / math.sqrt(5)
         tang = np.array([-nrm[1], nrm[0], 0])
         mini = VGroup()
         for k in range(-2, 3):
-            mini.add(Line(c0 + 0.42 * k * nrm - 1.0 * tang, c0 + 0.42 * k * nrm + 1.0 * tang,
+            mini.add(Line(c0 + sc * (0.42 * k * nrm - 0.8 * tang), c0 + sc * (0.42 * k * nrm + 0.8 * tang),
                           color=C.EPS if k == 0 else C.FUNCTIONAL, stroke_width=3.5 if k == 0 else 1.6,
                           stroke_opacity=1.0 if k == 0 else 0.75))
-        zarr = Arrow(c0, c0 + 0.85 * nrm, buff=0, color=C.INNER, stroke_width=5, tip_length=0.16)
-        mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=22, color=C.EPS).next_to(c0 + 1.0 * tang, UP, buff=0.05),
-                        MathTex(r"z", font_size=26, color=C.INNER).next_to(c0 + 0.85 * nrm, RIGHT, buff=0.06))
+        zarr = Arrow(c0, c0 + sc * 0.85 * nrm, buff=0, color=C.INNER, stroke_width=6, tip_length=0.2)
+        mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=26, color=C.EPS).next_to(c0 + sc * 0.8 * tang, UP, buff=0.05),
+                        MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.85 * nrm, RIGHT, buff=0.06))
         note_ = label(r"$z$ is the normal to the kernel: \ the arrow in the stack of lines", font_size=26,
-                      color=C.INNER).next_to(zarr, RIGHT, buff=0.9).align_to(c0 + DOWN * 0.3, DOWN)
+                      color=C.INNER).next_to(zarr, RIGHT, buff=1.4).align_to(c0 + DOWN * 0.3, DOWN)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: every bounded linear functional on a Hilbert space is the inner "
             "product with a unique vector y, and the norm of the functional is the length of y. "

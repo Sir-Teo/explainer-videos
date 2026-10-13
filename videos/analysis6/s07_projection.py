@@ -86,12 +86,12 @@ class Projection(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.0, -1.55, 0])
         regrid(tab)
         concl = label(r"Cauchy, \ so it converges \ (completeness), \ and the limit is in $E$ \ (closed)", font_size=24,
-                      color=C.EPS).to_edge(DOWN, buff=0.2)
+                      color=C.EPS).to_edge(DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
         head = VGroup(label(r"\textbf{RCA 4.10} \ a nonempty closed convex set $E$ in a Hilbert space", font_size=28),
                       label(r"has exactly one point nearest to $x$", font_size=28)).arrange(DOWN, buff=0.08).to_edge(
             UP, buff=0.2)
         d_l = MathTex(rf"\delta = \inf_{{y \in E}} \|x - y\| = {delta:.4f}", font_size=26, color=C.DIST).next_to(
-            ax, DOWN, buff=0.1)
+            ax, UP, buff=0.1).align_to(ax, LEFT)
         with self.voiceover(
             "<bookmark mark='a'/> The projection theorem. A closed convex set in a Hilbert space has exactly one "
             "point nearest to any given x. <bookmark mark='b'/> Let delta be the distance from x to the set. By "
