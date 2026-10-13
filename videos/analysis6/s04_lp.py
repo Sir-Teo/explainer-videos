@@ -61,7 +61,7 @@ class Lp(VoiceoverScene):
                           DashedLine(ax.c2p(0, v), ax.c2p(1, v), color=C.DIST, stroke_width=2))
 
         mk = always_redraw(marker)
-        rd = always_redraw(lambda: MathTex(rf"p = {pnow():.1f}: \ \|f\|_p = \frac{{2}}{{(p + 1)^{{1/p}}}} = "
+        rd = always_redraw(lambda: MathTex(rf"p = {pnow():.3g}: \ \|f\|_p = \frac{{2}}{{(p + 1)^{{1/p}}}} = "
                                            rf"{2 / (pnow() + 1) ** (1 / pnow()):.4f}", font_size=28,
                                            color=C.DIST).next_to(nax, UP, buff=0.55))
         assert np.allclose(nv, 2 / (ps + 1) ** (1 / ps), rtol=1e-6)
