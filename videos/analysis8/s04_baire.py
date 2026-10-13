@@ -114,6 +114,12 @@ class Baire(VoiceoverScene):
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
         head = label(r"Meager and residual: \ Baire's notion of ``small'' and ``almost everything''", font_size=30).to_edge(
             UP, buff=0.3)
+        # a meager set to look at first: the rationals, each point nowhere dense, countably many of them
+        ticks = VGroup(*[VGroup(*[Line([X(q), y - 0.12, 0], [X(q), y + 0.12, 0], color=GREY_A, stroke_width=1.5)
+                                  for q in rats]) for y in rows_y])
+        q_l = MathTex(r"\mathbb Q \cap [0, 1]: \ \text{countably many points, each nowhere dense: meager}", font_size=26,
+                      color=GREY_A).next_to([L, rows_y[0] + 0.45, 0], RIGHT, buff=0)
+        assert q_l.get_right()[0] < 6.9 and q_l.get_top()[1] < head.get_bottom()[1] - 0.2
         with self.voiceover(
             "<bookmark mark='a'/> Baire's theorem gives a notion of size. A set is meager if it's a countable union of "
             "nowhere dense sets, and residual if its complement is meager. In a complete space, residual sets are "
@@ -125,8 +131,9 @@ class Baire(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(defs[0]))
+            self.play(Create(lines), LaggedStart(*[FadeIn(t_) for t_ in ticks], lag_ratio=0.2), FadeIn(q_l), run_time=1.6)
             vo.wait_until("b")
-            self.play(Create(lines))
+            self.play(FadeOut(q_l))
             for k in range(3):
                 self.play(FadeIn(covers[k]), FadeIn(labs[k]), run_time=1.0)
             self.play(FadeIn(defs[1]))
