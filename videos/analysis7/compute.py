@@ -113,20 +113,32 @@ def compute_conformal():
 def compute_winding():
     rng = np.random.default_rng(3)
     t = np.linspace(0, 2 * np.pi, 4001)
-    # a closed curve with an inner loop: three Fourier modes
-    z = np.exp(1j * t) + 0.7 * np.exp(2j * t) + 0.25 * np.exp(-1j * t)
+    # a closed curve with an inner loop big enough to hold points: three Fourier modes
+    z = 0.85 * (np.exp(1j * t) + 1.2 * np.exp(2j * t) + 0.2 * np.exp(-1j * t))
     dz = np.gradient(z, t)
-    cand = rng.uniform(-2, 2, 600) + 1j * rng.uniform(-2, 2, 600)
-    dist = np.min(np.abs(cand[:, None] - z[None, :]), axis=1)
-    cand = cand[dist > 0.12]
+    cand = rng.uniform(-2, 2, 3000) + 1j * rng.uniform(-2, 2, 3000)
+    dist = np.array([np.min(np.abs(a - z)) for a in cand])
+    keep = dist > 0.15
+    cand, dist = cand[keep], dist[keep]
     wc = np.array([trap(dz / (z - a), t) / (2j * np.pi) for a in cand])
     assert np.all(np.abs(wc.imag) < 1e-6) and np.all(np.abs(wc.real - np.round(wc.real)) < 1e-4)
     vals_all = np.round(wc.real).astype(int)
     assert set(vals_all.tolist()) == {0, 1, 2}
-    pick = np.concatenate([np.where(vals_all == v)[0][:8] for v in (0, 1, 2)])
-    pts, w = cand[pick], wc[pick]
-    vals = vals_all[pick]
-    return dict(z=z[::4], pts=pts, w=vals, raw=w.real)
+    # well-separated samples: 8 outside, 8 winding once, 4 in the inner loop (deepest first, for the arrow)
+    pick = []
+    for v, cap in ((2, 4), (1, 8), (0, 8)):
+        idx = np.where(vals_all == v)[0]
+        idx = idx[np.argsort(-dist[idx])] if v == 2 else idx
+        got = []
+        for i in idx:
+            if all(abs(cand[i] - cand[j]) > 0.32 for j in pick + got):
+                got.append(i)
+            if len(got) == cap:
+                break
+        assert len(got) == cap, (v, len(got))
+        pick += got
+    pick = np.array(pick)
+    return dict(z=z[::4], pts=cand[pick], w=vals_all[pick], raw=wc[pick].real)
 
 
 def compute_goursat():

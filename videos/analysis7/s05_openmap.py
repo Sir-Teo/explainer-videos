@@ -165,10 +165,10 @@ class OpenMapping(VoiceoverScene):
         lines = VGroup(*[contour_mobject(ax, inside_disk(contour_segments(lambda X_, Y_, L=L: Mf(X_, Y_) - L, xs, xs)),
                                          WHITE, 1.2, opacity=0.6) for L in levels])
         mx = Dot(ax.c2p(math.cos(th_max), math.sin(th_max)), radius=0.1, color=C.PATHOLOGY)
-        mx_l = MathTex(rf"|f(1)| = 1 + e = {bmax:.4f}", font_size=26, color=C.PATHOLOGY).next_to(mx, UR, buff=0.1)
+        mx_l = MathTex(r"z = 1", font_size=26, color=C.PATHOLOGY).next_to(mx, UR, buff=0.08)
         rows = VGroup(
             MathTex(r"|f(z)| = |z^2 + e^z| \ \text{on } |z| \le 1", font_size=30),
-            MathTex(rf"\max_{{|z| = 1}} |f| = {bmax:.4f}", font_size=28, color=C.PATHOLOGY),
+            MathTex(rf"\max_{{|z| = 1}} |f| = |f(1)| = 1 + e = {bmax:.4f}", font_size=28, color=C.PATHOLOGY),
             MathTex(rf"\max_{{|z| \le 0.98}} |f| = {imax:.4f}", font_size=28, color=C.MEASURE),
             label(r"\textbf{RCA 10.24} \ (maximum modulus) \ a nonconstant", font_size=24),
             label(r"holomorphic $f$ has no interior maximum of $|f|$", font_size=24, color=C.EPS),
