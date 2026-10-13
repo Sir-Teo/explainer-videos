@@ -105,7 +105,7 @@ class OpenMapping(VoiceoverScene):
             label(r"(open mapping applied to $x \mapsto (x, Tx)$)", font_size=22, color=GREY_A),
             label(r"\textbf{Hellinger--Toeplitz} \ a symmetric operator", font_size=24),
             label(r"defined on \emph{all} of a Hilbert space is bounded", font_size=24, color=C.EPS),
-            label(r"$\frac{d}{dx}$ is symmetric on $L^2$ (periodic $f$), \ and unbounded:", font_size=24),
+            label(r"$i\frac{d}{dx}$ is symmetric on $L^2$ (periodic $f$), \ and unbounded:", font_size=24),
             label(r"so it can only live on a domain: \ Part 10's unbounded operators", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         for r_ in rows:
@@ -117,8 +117,8 @@ class OpenMapping(VoiceoverScene):
             "<bookmark mark='a'/> The closed graph theorem: a linear map between Banach spaces whose graph is closed is "
             "automatically bounded. It's the open mapping theorem applied to the graph. <bookmark mark='b'/> A "
             "striking corollary, due to Hellinger and Toeplitz: a symmetric operator defined on all of a Hilbert space "
-            "is bounded. <bookmark mark='c'/> Differentiation is symmetric on periodic functions, but sine n x over "
-            "root pi has norm one while its derivative has norm n. So differentiation can't be defined on all of L "
+            "is bounded. <bookmark mark='c'/> i times the derivative is symmetric on periodic functions, but sine n x "
+            "over root pi has norm one while its derivative has norm n. So differentiation can't be defined on all of L "
             "two. It must live on a smaller domain, and that's why Part 10 needs unbounded operators."
         ) as vo:
             vo.wait_until("a")

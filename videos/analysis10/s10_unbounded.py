@@ -88,13 +88,13 @@ class Unbounded(VoiceoverScene):
             ax, UP, buff=0.05)
         g2 = VGroup(polyline(bx, x, np.exp(x), color=C.PATHOLOGY, stroke_width=3),
                     polyline(bx, x, np.exp(-x), color=C.APPROX, stroke_width=3))
-        l2 = MathTex(r"D^*f = \pm i f: \ \ f = e^{\mp x}", font_size=22).next_to(bx, UP, buff=0.05)
+        l2 = MathTex(r"D^*f = \pm i f: \ \ f = e^{\pm x}", font_size=22).next_to(bx, UP, buff=0.05)
         rows = VGroup(
             MathTex(r"D = i\frac{d}{dx}, \qquad \langle Df, g\rangle - \langle f, Dg\rangle = "
                     r"i\big(f(1)\overline{g(1)} - f(0)\overline{g(0)}\big)", font_size=26),
             label(r"on $C_c^\infty(0, 1)$ the boundary term vanishes: \ $D$ is \emph{symmetric}", font_size=22),
             label(r"but $D^*$ acts on everything with $f' \in L^2$: \ no boundary conditions at all", font_size=22),
-            label(r"$D^* f = \pm i f$ has solutions $e^{\mp x}$: \ deficiency indices $(1, 1)$", font_size=22,
+            label(r"$D^* f = \pm i f$ has solutions $e^{\pm x}$: \ deficiency indices $(1, 1)$", font_size=22,
                   color=C.PATHOLOGY),
             label(r"symmetric $\ne$ self-adjoint: \ the distinction that matters", font_size=24, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([2.4, -0.3, 0])
@@ -103,13 +103,15 @@ class Unbounded(VoiceoverScene):
                 r_.width = 8.4
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([2.4, -0.3, 0])
         assert np.allclose(np.gradient(np.exp(x), x)[5:-5], np.exp(x)[5:-5], rtol=1e-4)
+        # D* f = i f' = +i f  gives f' = f (e^x);  = -i f  gives f' = -f (e^{-x})
+        assert np.allclose(1j * np.gradient(np.exp(-x), x)[5:-5], -1j * np.exp(-x)[5:-5], rtol=1e-4)
         head = label(r"The museum: \ $i\,\frac{d}{dx}$ on an interval", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the cautionary example. Take i times the derivative on the interval from "
             "zero to one, defined on smooth functions that vanish near both ends. Integration by parts gives a "
             "boundary term, which vanishes, so the operator is symmetric. <bookmark mark='b'/> But its adjoint has no "
             "boundary conditions at all, so it's much bigger. The equations D star f equals plus or minus i f have "
-            "solutions, e to the minus x and e to the x: one dimension each. <bookmark mark='c'/> Symmetric is not "
+            "solutions, e to the x and e to the minus x: one dimension each. <bookmark mark='c'/> Symmetric is not "
             "self-adjoint, and only self-adjoint operators get a spectral theorem."
         ) as vo:
             vo.wait_until("a")

@@ -67,7 +67,7 @@ class Hook(VoiceoverScene):
         sl = MathTex(r"f = 4 \cdot \mathbf 1_{[0, 1/4]}", font_size=26, color=C.APPROX).next_to(fx.c2p(0.25, 4), RIGHT,
                                                                                               buff=0.15)
         gl = MathTex(r"g = 1", font_size=26, color=C.SEQ).next_to(fx.c2p(1, 1), UP, buff=0.12).shift(LEFT * 0.3)
-        # the three norms, exactly: area, energy, height
+        # the three norms, exactly: area, L^2 size (energy^(1/2)), height
         x = np.linspace(0, 1, 400001)
         f, g = 4.0 * (x <= 0.25), np.ones_like(x)
         vals = {}
@@ -89,7 +89,7 @@ class Hook(VoiceoverScene):
                          MathTex(str(b), font_size=30, color=C.SEQ).move_to([cols[2], y, 0]))
             tab.add(row)
         rule = Line([3.0, 0.95, 0], [6.8, 0.95, 0], color=GREY_C, stroke_width=1.5)
-        out = VGroup(label(r"same area, \ twice the energy, \ four times the height:", font_size=26, color=C.EPS),
+        out = VGroup(label(r"same area, \ twice the $L^2$ size, \ four times the height:", font_size=26, color=C.EPS),
                      label(r"which distance is right?", font_size=26, color=C.EPS)).arrange(DOWN, buff=0.1).move_to(
             [3.7, -2.75, 0])
         head = label(r"How long is a vector? \ How big is a function?", font_size=34).to_edge(UP, buff=0.3)
@@ -99,7 +99,7 @@ class Hook(VoiceoverScene):
             "<bookmark mark='b'/> The vectors of length one form a diamond, then a circle, then a square, and in "
             "between the p-norms, for every p from one to infinity. <bookmark mark='c'/> The same vector has three "
             "different lengths. <bookmark mark='d'/> Functions have the same choice. A tall spike and a flat line "
-            "have the same area, but the spike has twice the energy and four times the height. "
+            "have the same area, but the spike has twice the L two size and four times the height. "
             "<bookmark mark='e'/> So which distance between functions is the right one? Each answers a different "
             "question, and this part is about all of them, and about one that's special."
         ) as vo:

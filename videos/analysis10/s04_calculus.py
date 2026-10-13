@@ -144,8 +144,8 @@ class SymbolicCalculus(VoiceoverScene):
             MathTex(rf"\big\|(\sqrt B)^2 - B\big\| = {sci(err, 1)}", font_size=26, color=C.OPERATOR),
             label(r"logarithms, \ fractional powers, \ resolvents: \ the same way", font_size=22, color=GREY_A),
             label(r"Part 7's Runge: \ rational functions suffice to approximate on $\sigma$", font_size=22, color=GREY_A),
-            label(r"\textbf{FA 10.35} \ (Lomonosov, 1973) \ an operator commuting with a compact $K \ne 0$", font_size=22),
-            label(r"has a closed invariant subspace: \ by Schauder's fixed-point theorem", font_size=22),
+            label(r"\textbf{FA 10.35} \ (Lomonosov, 1973) \ an operator $T \ne \lambda I$ commuting with a compact $K \ne 0$", font_size=22),
+            label(r"has a nontrivial closed invariant subspace: \ by Schauder's fixed-point theorem", font_size=22),
         )
         for r_ in rows:
             if r_.width > 6.4:
@@ -158,7 +158,7 @@ class SymbolicCalculus(VoiceoverScene):
             "a contour that encloses the spectrum without touching the cut. The same formula, with the square root "
             "in it, gives a matrix whose square is B, to rounding error. <bookmark mark='c'/> Logarithms and "
             "fractional powers work the same way, and Runge's theorem from Part 7 explains why rational functions "
-            "are enough. One famous consequence of this circle of ideas, Lomonosov's theorem, finds invariant "
+            "are enough. One famous consequence of this circle of ideas, Lomonosov's theorem, finds nontrivial invariant "
             "subspaces with a fixed-point argument."
         ) as vo:
             vo.wait_until("a")

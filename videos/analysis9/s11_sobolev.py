@@ -147,7 +147,7 @@ class Sobolev(VoiceoverScene):
             "Watch it as the cutoff T runs out: at s equal to 0.4 it grows without bound, at one half it grows like a "
             "logarithm, and at 0.6 it settles. <bookmark mark='d'/> So in one dimension, H s functions are continuous "
             "once s passes one half. In n dimensions the weight's integral needs two s bigger than n, and each extra "
-            "half derivative buys one continuous derivative."
+            "Sobolev derivative buys one more continuous derivative."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(lad[0]))

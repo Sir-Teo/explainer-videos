@@ -67,8 +67,8 @@ class Hook(VoiceoverScene):
             "infinitely differentiable, and every derivative at zero vanishes, so its Taylor series is zero, and "
             "says nothing about it. <bookmark mark='b'/> Now feed it complex numbers. Here's the same formula on a "
             "square of the complex plane, colored by phase, with brightness for size. Along the imaginary axis, "
-            "minus one over z squared is positive, and the function explodes: at 0.2 i it's already about ten to the "
-            "ten. <bookmark mark='c'/> The real line hid a catastrophe. In the complex plane a function with a "
+            "minus one over z squared is positive, and the function explodes: at 0.2 i it's already about seven times "
+            "ten to the ten. <bookmark mark='c'/> The real line hid a catastrophe. In the complex plane a function with a "
             "derivative can't behave like this, and that buys three miracles: one derivative gives infinitely many; "
             "the function is its own power series; and its values on any tiny arc decide it everywhere."
         ) as vo:
