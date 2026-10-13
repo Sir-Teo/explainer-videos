@@ -179,9 +179,22 @@ class FourierL2(VoiceoverScene):
         saw = VGroup(polyline(sx, xs, f, color=WHITE, stroke_width=2.5))
         gs = polyline(sx, xs[::2], s200[::2], color=C.SEQ, stroke_width=2)
         gsig = polyline(sx, xs[::2], sig200[::2], color=C.EPS, stroke_width=3)
-        lvl = DashedLine(sx.c2p(0, math.pi / 2), sx.c2p(2 * math.pi, math.pi / 2), color=GREY_B, stroke_width=1.5)
-        sl = MathTex(r"s_{200}", font_size=24, color=C.SEQ).next_to(sx.c2p(0.3, 1.9), RIGHT, buff=0.1)
-        sgl = MathTex(r"\sigma_{200}", font_size=24, color=C.EPS).next_to(sx.c2p(0.35, 1.2), RIGHT, buff=0.15)
+        lvl = DashedLine(sx.c2p(0, math.pi / 2), sx.c2p(2.7, math.pi / 2), color=GREY_B, stroke_width=1.5)  # stops before the inset
+        sl = MathTex(r"s_{200}", font_size=24, color=C.SEQ).move_to(sx.c2p(0.9, -0.9))
+        sgl = MathTex(r"\sigma_{200}", font_size=24, color=C.EPS).move_to(sx.c2p(0.9, -1.55))
+        # the overshoot, magnified: x in [0, 0.25], y in [1.3, 1.95], in the empty upper right of the plot
+        zx0, zx1, zy0, zy1 = 0.0, 0.25, 1.3, 1.95
+        za = plain_axes([zx0, zx1, 0.05], [zy0, zy1, 0.25], 2.1, 0.95, numbers=False).move_to(sx.c2p(4.75, 1.25))
+        zm = (xs >= zx0) & (xs <= zx1)
+        zs = runs(za, xs[zm], s200[zm], C.SEQ, 2)
+        zg = runs(za, xs[zm], sig200[zm], C.EPS, 3)
+        zl = DashedLine(za.c2p(zx0, math.pi / 2), za.c2p(zx1, math.pi / 2), color=GREY_B, stroke_width=1.5)
+        zf = SurroundingRectangle(za, buff=0.04, color=GREY_B, stroke_width=1.5)
+        src = Rectangle(width=sx.c2p(zx1, 0)[0] - sx.c2p(zx0, 0)[0], height=sx.c2p(0, zy1)[1] - sx.c2p(0, zy0)[1],
+                        color=GREY_B, stroke_width=1.5).move_to(sx.c2p((zx0 + zx1) / 2, (zy0 + zy1) / 2))
+        link = DashedLine(src.get_right(), zf.get_left(), color=GREY_B, stroke_width=1.2)
+        zt = MathTex(rf"\times {(zf.width / src.width):.0f}", font_size=20, color=GREY_B).move_to(zf.get_corner(DR) + np.array([-0.25, 0.17, 0]))
+        assert s200[zm].max() > math.pi / 2 + 0.25 and sig200[zm].max() < math.pi / 2  # the overshoot is in the window
         assert s200.max() > math.pi / 2 + 0.25 and sig200.max() <= math.pi / 2
         panel = VGroup(
             label(r"$s_N$ \ (partial sums)", font_size=26, color=C.SEQ),
@@ -223,7 +236,8 @@ class FourierL2(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(sx), Create(saw), Create(lvl))
             self.play(Create(gs), FadeIn(sl), FadeIn(panel[:3]))
-            self.play(Create(gsig), FadeIn(sgl), FadeIn(panel[3:5]))
+            self.play(Create(src), Create(link), Create(zf), Create(zl), Create(zs), FadeIn(zt))
+            self.play(Create(gsig), Create(zg), FadeIn(sgl), FadeIn(panel[3:5]))
             vo.wait_until("d")
             self.play(FadeIn(panel[5:]))
         self.wait(0.4)

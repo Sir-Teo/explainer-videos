@@ -141,16 +141,16 @@ class RadonNikodym(VoiceoverScene):
         pm = ProofMap([r"$\varphi = \lambda + \mu$; \ $f \mapsto \int f\,d\lambda$ \ is bounded on $L^2(\varphi)$",
                        r"Riesz (ch.~7): \ $\int f\,d\lambda = \int f g\,d\varphi$, \ $0 \le g \le 1$",
                        r"$\{g = 1\}$ carries $\lambda_s$; \ elsewhere $h = \dfrac{g}{1 - g}$"],
-                      font_size=20, width=4.2, buff=0.35).to_edge(UP, buff=0.4)
+                      font_size=22, width=6.3, buff=0.14, direction=DOWN).move_to([3.6, 1.75, 0])
         ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 6.0, 3.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.0, -1.35, 0])
         gg = polyline(ax, t, g, color=C.INNER, stroke_width=4)
         one = DashedLine(ax.c2p(0, 1), ax.c2p(1, 1), color=GREY_B, stroke_width=1.5)
         atom_g = Dot(ax.c2p(0.7, 1.0), radius=0.09, color=C.PATHOLOGY)
-        atom_l = MathTex(r"g(0.7) = 1", font_size=24, color=C.PATHOLOGY).next_to(atom_g, UP, buff=0.1)
+        atom_l = MathTex(r"g(0.7) = 1", font_size=24, color=C.PATHOLOGY).next_to(atom_g, UR, buff=0.08).shift(RIGHT * 0.1)
         g_l = MathTex(r"g = \frac{d\lambda}{d\varphi} = \frac{h}{1 + h}", font_size=28, color=C.INNER).next_to(ax, UP,
-                                                                                                        buff=0.1)
+                                                                                                        buff=0.35)
         assert np.all((g >= 0) & (g < 1)) and np.allclose(g / (1 - g), h(t))
         bnd = VGroup(
             MathTex(r"\Big|\int f\,d\lambda\Big| \le \int |f|\,d\varphi \le \varphi(X)^{1/2}\, \|f\|_{L^2(\varphi)}",
