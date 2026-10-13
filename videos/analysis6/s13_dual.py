@@ -183,8 +183,8 @@ class DualLp(VoiceoverScene):
         gw = polyline(ax, a, wa, color=C.MEASURE, stroke_width=5).set_stroke(opacity=0.5)
         atom = VGroup(Arrow(ax.c2p(0.3, 1.3), ax.c2p(0.3, 4.0), buff=0, color=C.PATHOLOGY, stroke_width=5,
                             tip_length=0.2),
-                      MathTex(r"0.5\,\delta_{0.3}", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.3, 3.6), LEFT,
-                                                                                         buff=0.15))
+                      MathTex(r"0.5\,\delta_{0.3}", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.45, 3.5), RIGHT,
+                                                                                         buff=0.05))
         w_l = MathTex(r"w(x) = 1 + \tfrac12 \sin 2\pi x", font_size=26, color=C.MEASURE).next_to(ax.c2p(0.62, 1.55),
                                                                                               UR, buff=0.05)
         side = VGroup(

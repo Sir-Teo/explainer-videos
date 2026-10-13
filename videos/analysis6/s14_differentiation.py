@@ -89,14 +89,15 @@ class Differentiation(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.8, 0.6, 0])
         assert good[-1] >= 0.998 and np.all(np.diff(good) >= 0)
         thm = VGroup(
-            label(r"\textbf{RCA 7.7} \ for $f \in L^1(\R^k)$, \ almost every $x$ is a Lebesgue point:", font_size=24),
-            MathTex(r"\lim_{r \to 0} \frac{1}{m(B_r)} \int_{B_r(x)} |f - f(x)|\,dm = 0, \quad \text{so} \quad "
-                    r"\frac{d}{dx}\int_a^x f = f(x) \ \text{a.e.}", font_size=28, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        if thm.width > 5.6:
-            thm.width = 5.6
-        thm.to_edge(DOWN, buff=0.2)  # bottom right: below the axes' numbers, right of the readouts
-        thm.shift((6.9 - thm.get_right()[0]) * RIGHT)
+            label(r"\textbf{RCA 7.7} \ for $f \in L^1(\R^k)$,", font_size=26),
+            label(r"almost every $x$ is a Lebesgue point:", font_size=26),
+            MathTex(r"\lim_{r \to 0} \frac{1}{m(B_r)} \int_{B_r(x)} |f - f(x)|\,dm = 0,", font_size=30, color=C.EPS),
+            MathTex(r"\text{so} \quad \frac{d}{dx}\int_a^x f = f(x) \ \text{a.e.}", font_size=30, color=C.EPS),
+        )
+        for r_ in thm:
+            if r_.width > 4.2:
+                r_.width = 4.2
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.65, -1.15, 0], DR, buff=0)  # right column, below the readouts
         head = label(r"Average $f$ over a shrinking interval: \ do you get $f(x)$ back?", font_size=32).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Average a function over a small interval around x. As the interval shrinks, do "
