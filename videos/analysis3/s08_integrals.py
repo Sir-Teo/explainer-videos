@@ -54,9 +54,9 @@ class IntegralsDerivatives(VoiceoverScene):
                              fill_color=C.EPS, fill_opacity=0.15).move_to((p0 + p1) / 2)
 
         box = always_redraw(bound_box)
-        box_l = label(r"same area as a box $(b - a) \times \sup|f_n - f|$", font_size=22, color=C.EPS).next_to(ax, DOWN,
+        box_l = label(r"area at most a box's: \ $(b - a) \times \sup|f_n - f|$", font_size=22, color=C.EPS).next_to(ax, DOWN,
                                                                                                     buff=0.15)
-        thm = VGroup(label(r"\textbf{Rudin 7.16} \ $f_n \to f$ uniformly on $[a, b]$ $\Rightarrow$", font_size=28),
+        thm = VGroup(label(r"\textbf{Rudin 7.16} \ $f_n \in \mathcal R(\alpha)$, \ $f_n \to f$ uniformly on $[a, b]$ $\Rightarrow$", font_size=28),
                      MathTex(r"\int_a^b f\,d\alpha = \lim_{n \to \infty} \int_a^b f_n\,d\alpha", font_size=34, color=C.EPS),
                      MathTex(r"\Big|\int f_n - \int f\Big| \le \int |f_n - f| \le (b - a) \sup|f_n - f| \to 0",
                              font_size=28)).arrange(DOWN, buff=0.2)

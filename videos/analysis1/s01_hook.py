@@ -132,13 +132,13 @@ class Hook(VoiceoverScene):
         top = DashedLine(ax.c2p(jx, np.pi / 2), ax.c2p(jx + 0.7, np.pi / 2), color=GREY_B, stroke_width=1.5)
         br = Brace(VGroup(Dot(ax.c2p(jx + 0.72, np.pi / 2), radius=0.001), Dot(ax.c2p(jx + 0.72, si), radius=0.001)),
                    RIGHT, buff=0.05, color=C.EPS)
-        over_l = label(r"overshoot: $8.95\%$ of the jump,\\ whatever $n$ is", font_size=26, color=C.EPS)
+        over_l = label(r"overshoot $\to 8.95\%$ of the jump\\ as $n$ grows", font_size=26, color=C.EPS)
         over_l.next_to(br, RIGHT, buff=0.15)
         assert abs((si - np.pi / 2) / np.pi - 0.0895) < 1e-3
         with self.voiceover(
             "At the jump itself, <bookmark mark='m'/> every partial sum equals zero, exactly halfway between the two "
             "sides. And right next to the jump, <bookmark mark='o'/> the partial sums overshoot. <bookmark mark='n'/> "
-            "Add more terms, and the overshoot gets narrower, <bookmark mark='p'/> but not lower: it stays at about "
+            "Add more terms, and the overshoot gets narrower, <bookmark mark='p'/> but not lower: it settles at about "
             "nine percent of the size of the jump. We'll prove that in Part 3."
         ) as vo:
             vo.wait_until("m")

@@ -260,7 +260,7 @@ class OpenClosed(VoiceoverScene):
             "But only finitely many. <bookmark mark='a'/> The intervals from minus one over n to one over n are all open, "
             "and they shrink down onto a single point, zero. <bookmark mark='b'/> Their intersection is just zero, which "
             "is not open. With infinitely many sets, the minimum radius can be zero. That one word, finite, is the seed "
-            "of compactness, two chapters from now."
+            "of compactness, in the next chapter."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(line), FadeIn(zero), FadeIn(bars[0]))

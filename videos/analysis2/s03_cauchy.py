@@ -342,7 +342,7 @@ class Cauchy(VoiceoverScene):
         foot = VGroup(label(r"Banach and Hilbert spaces are \emph{required} to be complete.", font_size=28,
                             color=C.EPS),
                       label(r"Every metric space has a completion; completing $\mathbb{Q}$ is one way to build $\R$ "
-                            r"(Cauchy--M\'eray, Part 1).", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.15)
+                            r"(Cantor--M\'eray, Part 1).", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.15)
         foot.to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "A space where every Cauchy sequence converges is called complete. <bookmark mark='a'/> R k is complete, "
@@ -352,7 +352,7 @@ class Cauchy(VoiceoverScene):
             "and proving it will be real work: continuous functions with the sup distance in Part 3, and square "
             "integrable functions in Part 5. <bookmark mark='d'/> Completeness is so useful that Banach and Hilbert "
             "spaces are defined to have it. And every metric space can be completed, by adding the missing limits: "
-            "that's how Cauchy and Méray built the reals from the rationals."
+            "that's how Cantor and Méray built the reals from the rationals."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -414,8 +414,9 @@ class Cauchy(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='s'/> Call the least upper bound s star. <bookmark mark='e'/> Given epsilon, s star minus "
             "epsilon is not an upper bound, so some term s N is above it; <bookmark mark='n'/> and since the sequence "
-            "increases, every later term is trapped between s star minus epsilon and s star. For a tenth, N is 12. "
-            "<bookmark mark='c'/> Chapter five identifies this supremum: it's the number e."
+            "increases, every later term is trapped between s star minus epsilon and s star. For a tenth, every term "
+            "from the thirteenth on is trapped. <bookmark mark='c'/> Chapter five identifies this supremum: it's the "
+            "number e."
         ) as vo:
             vo.wait_until("s")
             self.play(ReplacementTransform(roof, VGroup(DashedLine(ax.c2p(0, math.e), ax.c2p(n_max + 1, math.e),

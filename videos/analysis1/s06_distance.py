@@ -201,7 +201,7 @@ class Distance(VoiceoverScene):
         rows_y = (1.45, -0.05, -1.65)
         for a_, y in zip(ax, rows_y):
             a_.move_to([0, y, 0]).to_edge(LEFT, buff=0.7)
-        coda = label(r"Everything from here to chapter 11 uses only (a), (b), (c).", font_size=30, color=C.EPS)
+        coda = label(r"A theorem that uses only (a), (b), (c) holds in every metric space.", font_size=30, color=C.EPS)
         coda.to_edge(DOWN, buff=0.35)
         # a picture beside each axiom
         def pt(x, y, name, side=DOWN):
@@ -234,8 +234,8 @@ class Distance(VoiceoverScene):
             "together with a distance function d with three properties. <bookmark mark='a'/> Distances between "
             "different points are positive, and a point is at distance zero from itself. <bookmark mark='b'/> Distance "
             "is symmetric. <bookmark mark='c'/> And the triangle inequality: a detour through a third point is never "
-            "shorter. <bookmark mark='d'/> That's all. Every theorem in the rest of this video uses only these three "
-            "properties, so it holds in every metric space at once."
+            "shorter. <bookmark mark='d'/> That's all. A theorem proved from these three properties alone holds in "
+            "every metric space at once, and we'll be careful to say when a result needs more."
         ) as vo:
             self.play(FadeIn(head[0]))
             vo.wait_until("h")

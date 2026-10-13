@@ -483,7 +483,7 @@ class StoneWeierstrass(VoiceoverScene):
     def complex_case(self):
         d = load("stone")
         th, W = d["th"], d["W"]
-        head = VGroup(label(r"Complex functions: \ separating points is not enough \ (Rudin 7.33)", font_size=30),
+        head = VGroup(label(r"Complex functions: \ separating points is not enough \ (Rudin, Exercise 7.21)", font_size=30),
                       label(r"polynomials $P(z)$ on the unit circle $|z| = 1$; \ target $f(z) = \bar z$", font_size=26,
                             color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
         # left: z and conj(z) running around the circle in opposite directions
@@ -527,7 +527,7 @@ class StoneWeierstrass(VoiceoverScene):
             label(r"(every term $e^{i(k+1)\theta}$ integrates to $0$)", font_size=20, color=GREY_B),
             MathTex(r"\int_0^{2\pi} \bar z\, z\,d\theta = 2\pi", font_size=30, color=C.PATHOLOGY),
             MathTex(r"|\bar z - P(z)| = |1 - zP(z)|", font_size=30),
-            label(r"its mean is $1$, \ so its max is $\ge 1$", font_size=24, color=C.PATHOLOGY),
+            label(r"$1 - zP$ averages to $1$, \ so somewhere $|1 - zP| \ge 1$", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([5.0, -0.3, 0])
         fix = label(r"add $\bar z$ (a \textbf{self-adjoint} algebra): \ the trigonometric polynomials "
                     r"$\sum c_n e^{in\theta}$ are dense in $C(\mathbb T)$", font_size=26, color=C.CONNECTED_SET)
@@ -539,9 +539,9 @@ class StoneWeierstrass(VoiceoverScene):
             "in z separate points and contain the constants, yet they can't approximate z bar, the complex conjugate, "
             "which runs around the circle the other way. <bookmark mark='b'/> Here's why. Every polynomial times z has "
             "average zero around the circle, because each power of e to the i theta integrates to zero. But z bar "
-            "times z is one. <bookmark mark='c'/> So the distance from z bar to P of z, which is the size of one minus "
-            "z P of z, has an average of exactly one: the curve traced by one minus z P of z is centered at one, so it "
-            "can never stay inside the unit disk. <bookmark mark='d'/> Whatever polynomial we try, somewhere the error "
+            "times z is one. <bookmark mark='c'/> So the distance from z bar to P of z is the size of one minus z P of z, "
+            "and one minus z P of z averages to exactly one: the curve it traces is centered at one, so it can never "
+            "stay inside the unit disk. <bookmark mark='d'/> Whatever polynomial we try, somewhere the error "
             "is at least one. <bookmark mark='e'/> The fix, Rudin 7.33, is to require the algebra to contain the "
             "conjugate of each of its members. Adding z bar gives the trigonometric polynomials, and those are dense: "
             "the key to Fourier series, three chapters from now."

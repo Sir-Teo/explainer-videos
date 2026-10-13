@@ -111,7 +111,7 @@ class UpperLower(VoiceoverScene):
         vals = VGroup(MathTex(rf"U = {U1:.3f} \to {U2:.3f}", font_size=28, color=C.UPPER_SUM),
                       MathTex(rf"L = {L1:.3f} \to {L2:.3f}", font_size=28, color=C.LOWER_SUM)).arrange(DOWN, buff=0.1)
         vals.move_to([4.6, -2.4, 0])
-        eq = label(r"$f$ is \textbf{integrable} when the two agree (Rudin 6.2)", font_size=28, color=C.EPS)
+        eq = label(r"$f$ is \textbf{integrable} when the two agree (Rudin 6.1)", font_size=28, color=C.EPS)
         eq.to_edge(DOWN, buff=0.2).shift(LEFT * 2.0)
         with self.voiceover(
             "Now refine the partition by adding a point. <bookmark mark='a'/> On the piece that gets cut, the supremum "

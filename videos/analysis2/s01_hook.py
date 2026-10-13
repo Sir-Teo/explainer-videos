@@ -117,7 +117,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='p'/> Plot the running total against the number of terms used. It overshoots pi, falls back, "
             "overshoots again, and the swings shrink, because each swing is at most the size of the last term used. "
-            "<bookmark mark='m'/> After a million terms, the total agrees with pi to five decimal places. Reaching pi "
+            "<bookmark mark='m'/> After a million terms, the total is within a hundred-thousandth of pi. Reaching pi "
             "takes about a hundred and thirty-four positive terms for every negative one, but every term of the original "
             "series gets used, exactly once."
         ) as vo:

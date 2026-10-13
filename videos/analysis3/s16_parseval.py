@@ -324,7 +324,7 @@ class Parseval(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, -0.3, 0])
         regrid(tab, gap=0.35)
         note_ = VGroup(label(r"the overshoot gets narrower, \ never lower:", font_size=24),
-                       label(r"about $9\%$ of the jump, \ for every $N$", font_size=24, color=C.PATHOLOGY)
+                       label(rf"it climbs to ${100 * limit:.2f}\%$ of the jump \ as $N \to \infty$", font_size=24, color=C.PATHOLOGY)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tab, DOWN, buff=0.35)
         assert abs(gibbs[-1] - limit) < 1e-3 and np.all(np.diff(gibbs) > 0)
         # why the overshoot never shrinks: stretch x by N and s_N(t/N) = sum sin(nt/N)/n, a Riemann sum for
@@ -414,12 +414,13 @@ class Parseval(VoiceoverScene):
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.06),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, -0.7, 0])
         assert all(abs(G(k + 1) - math.factorial(k)) < 1e-9 for k in range(5))
+        assert abs(float(st[list(sn).index(1000)]) - 1) < 1e-4  # "within a hundredth of a percent at a thousand"
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's chapter ends with the gamma function, which we'll keep to one card. It "
             "interpolates the factorials, <bookmark mark='b'/> and it's the only interpolation whose logarithm is "
             "convex and which obeys the factorial's recursion: that's the theorem of Bohr and Mollerup. <bookmark mark='c'/> "
             "Stirling's formula estimates it: the ratio of n factorial to the formula goes to one, already within a "
-            "tenth of a percent at a thousand."
+            "hundredth of a percent at a thousand."
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax))
             vo.wait_until("a")
