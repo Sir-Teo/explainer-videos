@@ -346,7 +346,7 @@ class Abel(VoiceoverScene):
         assert np.abs(c).max() < math.pi and np.abs(c[-1]) > 2.7
         pis = VGroup(*[DashedLine(ax.c2p(0, sg * math.pi), ax.c2p(61, sg * math.pi), color=GREY_C, stroke_width=1.5,
                                   dash_length=0.06) for sg in (1, -1)])
-        pil = MathTex(r"\pm\pi", font_size=24, color=GREY_B).next_to(ax.c2p(61, math.pi), RIGHT, buff=0.08)
+        pil = MathTex(r"\pm\pi", font_size=24, color=GREY_B).next_to(ax.c2p(61, math.pi), UL, buff=0.04)
         dots = VGroup(*[Dot(ax.c2p(n, c[n]), radius=0.04, color=C.PATHOLOGY) for n in range(len(c))])
         bnd = VGroup(polyline(ax, np.arange(len(c)), bound, color=GREY_B, stroke_width=1.5),
                      polyline(ax, np.arange(len(c)), -bound, color=GREY_B, stroke_width=1.5))

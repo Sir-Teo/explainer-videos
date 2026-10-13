@@ -45,6 +45,7 @@ class Tests(VoiceoverScene):
                      label(r"$\alpha < 1$: \ converges; \qquad $\alpha > 1$: \ diverges; \qquad $\alpha = 1$: \ no "
                            r"information", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
         ax, ticks = self._log_axes(n_max)
+        VGroup(ax, ticks).shift(UP * 0.35)  # room for the comparison line along the bottom
         n = np.arange(1, n_max + 1)
         dots = VGroup(*[Dot(ax.c2p(k, math.log10(a[k - 1]) + 8), radius=0.055, color=C.SEQ if k % 2 else C.FREQ)
                         for k in n])
