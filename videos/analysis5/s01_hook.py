@@ -131,6 +131,20 @@ class Hook(VoiceoverScene):
                     font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3)
         # floor(1/x) >= 1/x - 1, whose integral diverges; 1 on [0, inf) diverges; 1/ceil(x) >= 1/(x + 1) diverges
         assert np.all(np.floor(1 / xe) >= 1 / xe - 1) and np.all(env3 >= 1 / (xe + 1))
+
+        # the lid traced live: the running max over k <= n of f_k, as n sweeps again
+        def lid_(i):
+            def f_():
+                if i == 0:
+                    n = n1.get_value()
+                    y = np.maximum(np.minimum(np.floor(1 / xe), math.floor(n)), np.where(xe <= 1 / n, n, 0.0))
+                    m = xe <= 1
+                else:
+                    n = (n2 if i == 1 else n3).get_value()
+                    y = np.ones_like(xe) if i == 1 else np.maximum(1 / np.maximum(np.ceil(xe), 1), 1 / n)
+                    m = xe <= n
+                return polyline(axs[i], xe[m], np.minimum(y[m], 8.4), color=C.EPS, stroke_width=3)
+            return always_redraw(f_)
         with self.voiceover(
             "<bookmark mark='a'/> The theme of this part is mass escaping. Here are three sequences of functions, each "
             "with integral exactly one. <bookmark mark='b'/> The first gets taller and narrower; the second slides off "
@@ -149,8 +163,15 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(verdict))
             vo.wait_until("d")
-            self.play(FadeOut(verdict), Create(envs), run_time=1.5)
-            self.play(FadeIn(lid))
+            self.play(FadeOut(verdict), n1.animate.set_value(1), n2.animate.set_value(1), n3.animate.set_value(1),
+                      run_time=1.0)
+            lids = [lid_(i) for i in range(3)]
+            self.add(*lids)
+            self.play(n1.animate.set_value(8), n2.animate.set_value(4), n3.animate.set_value(4), run_time=5.0,
+                      rate_func=linear)
+            for l_ in lids:
+                l_.clear_updaters()
+            self.play(*[ReplacementTransform(l_, e_) for l_, e_ in zip(lids, envs)], FadeIn(lid), run_time=1.2)
         for m in (g1, g2, g3):
             m.clear_updaters()
         self.wait(0.3)
@@ -195,13 +216,25 @@ class Hook(VoiceoverScene):
         honest = VGroup(label(r"the honest difference: \ each slice needs the length of $\{x : f(x) > t\}$,", font_size=26),
                         label(r"which can be any set at all \ (for Dirichlet's function: \ the rationals)", font_size=26,
                               color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.15)
+        # Dirichlet's level set {D > 1/2} = Q in [0, 1], drawn as ticks of height 1/q (q <= 40) on the left panel
+        fr = sorted({(p_ // math.gcd(p_, q_), q_ // math.gcd(p_, q_)) for q_ in range(1, 41) for p_ in range(q_ + 1)})
+        ticks = VGroup(*[Line(ax.c2p(p_ / q_, 0), ax.c2p(p_ / q_, 1.0 / q_), color=C.EPS,
+                              stroke_width=2.2 if q_ < 8 else 1.2) for p_, q_ in fr])
+        ql = label(r"Dirichlet: \ $\{x : D(x) > \tfrac12\} = \mathbb{Q} \cap [0, 1]$", font_size=26,
+                   color=C.EPS).next_to(ax, UP, buff=0.12)
+        qn = label(r"dense, yet it contains no interval \ (tick height $1/q$, \ $q \le 40$)", font_size=22,
+                   color=GREY_A).next_to(ax.c2p(0.5, 1.05), UP, buff=0)
+        assert len(fr) == 1 + sum(sum(1 for p_ in range(1, q_ + 1) if math.gcd(p_, q_) == 1) for q_ in range(1, 41))
+        half = 4
+        assert abs(levels[half] - 0.5) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> Lebesgue described his integral with a picture of counting money: rather than adding "
             "the coins in the order you meet them, sort them by value first. <bookmark mark='b'/> Riemann slices the "
             "domain into strips. <bookmark mark='c'/> Lebesgue slices the range into layers, and for each layer he "
             "needs the total length of the set where f exceeds that level. <bookmark mark='d'/> But the picture hides "
-            "the real change. Those sets can be complicated: for Dirichlet's function, the set where it exceeds one "
-            "half is the set of rationals. The new idea is a way to give a length to such sets, and the first chapter "
+            "the real change. Here the set above one half is a few intervals. Those sets can be complicated: "
+            "<bookmark mark='q'/> for Dirichlet's function, the set where it exceeds one half is the set of "
+            "rationals, which is everywhere and contains no interval at all. <bookmark mark='e'/> The new idea is a way to give a length to such sets, and the first chapter "
             "is about exactly that."
         ) as vo:
             self.play(FadeIn(quote))
@@ -215,6 +248,15 @@ class Hook(VoiceoverScene):
             self.play(LaggedStart(*[TransformFromCopy(b_, s_) for b_, s_ in zip(hbands, sets)], lag_ratio=0.12),
                       run_time=2.5)
             vo.wait_until("d")
+            self.play(*[b_.animate.set_fill(opacity=0.1) for i, b_ in enumerate(hbands) if i != half],
+                      *[s_.animate.set_opacity(0.2) for i, s_ in enumerate(sets) if i != half],
+                      hbands[half].animate.set_fill(C.EPS, opacity=0.9), sets[half].animate.set_fill(C.EPS, opacity=1))
+            self.play(Indicate(sets[half], scale_factor=1.15, color=C.EPS))
+            vo.wait_until("q")
+            self.play(FadeOut(VGroup(vstrips, fa, tl[0])))
+            self.play(LaggedStart(*[Create(t_) for t_ in ticks], lag_ratio=0.004), FadeIn(ql), run_time=2.5)
+            self.play(FadeIn(qn))
+            vo.wait_until("e")
             self.play(FadeIn(honest))
         self.wait(0.3)
         self.clear_scene()
