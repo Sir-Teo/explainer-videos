@@ -128,6 +128,20 @@ class RiemannMapping(VoiceoverScene):
                 r_.width = 3.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.35, -0.75, 0])
         assert ang_err < 1e-4 and bd < 0.02
+
+        # two polar cells of the disk and their images, cut from the same circle and ray arrays: small squares
+        # go to small (curved) squares
+        def cell(k, j, col):
+            ti = np.nonzero((th >= angs[j] - 1e-9) & (th <= angs[j + 1] + 1e-9))[0]
+            ri = np.nonzero((rr >= rs[k] - 1e-9) & (rr <= rs[k + 1] + 1e-9))[0]
+            zc = np.concatenate([rs[k] * np.exp(1j * th[ti]), rr[ri] * np.exp(1j * angs[j + 1]),
+                                 rs[k + 1] * np.exp(1j * th[ti][::-1]), rr[ri][::-1] * np.exp(1j * angs[j])])
+            wc = np.concatenate([circles[k][ti], rays[j + 1][ri], circles[k + 1][ti][::-1], rays[j][ri][::-1]])
+            kw = dict(stroke_color=col, stroke_width=2, fill_color=col, fill_opacity=0.75)
+            return (Polygon(*[ax.c2p(z.real, z.imag) for z in zc], **kw),
+                    Polygon(*[bx.c2p(w.real, w.imag) for w in wc], **kw))
+
+        cells = [cell(2, 3, C.EPS), cell(4, 18, C.PATHOLOGY)]
         head = label(r"The disk, mapped conformally onto an L-shaped hexagon \ (Schwarz--Christoffel)", font_size=30).to_edge(
             UP, buff=0.25)
         with self.voiceover(
@@ -150,6 +164,9 @@ class RiemannMapping(VoiceoverScene):
             self.play(GrowArrow(arrow), FadeIn(f_l), FadeIn(c0))
             self.play(TransformFromCopy(disk, image), run_time=4.0)
             vo.wait_until("d")
-            self.play(FadeIn(rows[4:]))
+            for cz, cw in cells:
+                self.play(FadeIn(cz), TransformFromCopy(cz, cw), run_time=1.4)
+            self.play(Indicate(c0[0], scale_factor=2.0), Indicate(c0[1], scale_factor=2.0), FadeIn(rows[4:6]))
+            self.play(FadeIn(rows[6:]))
         self.wait(0.4)
         self.clear_scene()
