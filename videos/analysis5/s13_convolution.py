@@ -51,9 +51,9 @@ class Convolution(VoiceoverScene):
                       label(r"a $g$-weighted average of $f$ around $x$ \ (RCA 8.13--8.14; \ Part 3's Landau kernel)",
                             font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         labs = VGroup(MathTex("f", font_size=30).next_to(ax.c2p(-1.5, 1.0), UP, buff=0.05),
-                      MathTex("g", font_size=30, color=C.APPROX), MathTex("f * g", font_size=30, color=C.EPS))
-        labs[1].next_to(ax, DOWN, buff=0.15).shift(LEFT * 1.5)
-        labs[2].next_to(ax, DOWN, buff=0.15).shift(RIGHT * 1.5)
+                      always_redraw(lambda: MathTex("g", font_size=30, color=C.APPROX).next_to(
+                          ax.c2p(xT.get_value() + 0.12, 1.4), RIGHT, buff=0.05)),
+                      MathTex("f * g", font_size=30, color=C.EPS).next_to(ax.c2p(2.0, 0.55), UR, buff=0.05))
         with self.voiceover(
             "<bookmark mark='a'/> Convolution averages one function against another. At each point x, weight the "
             "values of f near x by a bump g, and add. <bookmark mark='b'/> Slide the bump along: the averages trace a "
@@ -65,7 +65,7 @@ class Convolution(VoiceoverScene):
             vo.wait_until("b")
             self.add(trace)
             self.play(xT.animate.set_value(2.6), FadeIn(labs[2]), run_time=6.0, rate_func=linear)
-        for m in (kg, trace):
+        for m in (kg, trace, labs[1]):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -81,11 +81,27 @@ class Convolution(VoiceoverScene):
         ]
         whys = [why(r"the triangle inequality, \ inside"), why(r"Tonelli: \ swap the order"),
                 why(r"translation invariance")]
-        step = ladder(self, rows, whys, keep=3, top=1.6, buff=0.45, x=-1.6)
+        step = ladder(self, rows, whys, keep=3, top=2.35, buff=0.38, x=-1.6)
         head = label(r"\textbf{RCA 8.14} \ $f, g \in L^1$ $\Rightarrow$ $f * g$ is defined a.e., \ and in $L^1$",
-                     font_size=30).to_edge(UP, buff=0.35)
+                     font_size=30).to_edge(UP, buff=0.3)
+        # one signed pair, drawn: cancellation makes the inequality strict
+        xs = np.linspace(-4, 4, 3201)
+        dx = xs[1] - xs[0]
+        f1 = np.sin(2 * xs) * np.exp(-xs**2 / 2)
+        g1 = np.clip(1 - np.abs(xs) / 0.7, 0, None)
+        h1 = np.convolve(f1, g1, mode="same") * dx
+        nf, ng, nh = trap(np.abs(f1), xs), trap(np.abs(g1), xs), trap(np.abs(h1), xs)
+        assert abs(ng - 0.7) < 1e-4 and nh <= nf * ng
+        px = plain_axes([-4, 4, 1], [-1, 1, 1], 6.4, 2.0).move_to([-3.4, -2.55, 0])
+        pic = VGroup(px, polyline(px, xs, f1, color=WHITE, stroke_width=2.5),
+                     polyline(px, xs, g1, color=C.APPROX, stroke_width=2.5),
+                     polyline(px, xs, h1, color=C.EPS, stroke_width=3.5))
+        pk = VGroup(MathTex(rf"\|f\|_1 = {nf:.4f}", font_size=24), MathTex(rf"\|g\|_1 = {ng:.4f}", font_size=24,
+                                                                              color=C.APPROX),
+                    MathTex(rf"\|f * g\|_1 = {nh:.4f} \le {nf * ng:.4f}", font_size=24, color=C.EPS)
+                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(px, RIGHT, buff=0.35)
         out = MathTex(rf"\text{{20 random pairs: }} \ \frac{{\|f * g\|_1}}{{\|f\|_1 \|g\|_1}} \le {ratios.max():.4f}",
-                      font_size=32, color=C.EPS).to_edge(DOWN, buff=0.5)
+                      font_size=30, color=C.EPS).next_to([0.9, -1.3, 0], RIGHT, buff=0)
         assert ratios.max() <= 1 + 1e-6
         with self.voiceover(
             "<bookmark mark='a'/> Is the convolution of two integrable functions integrable? The proof is Fubini at "
@@ -94,10 +110,11 @@ class Convolution(VoiceoverScene):
             "integral of f, shifted. The norm of a convolution is at most the product of the norms. "
             "<bookmark mark='d'/> Checked on twenty random pairs."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(pic[0]), Create(pic[1]), Create(pic[2]), FadeIn(pk[:2]))
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 step(i)
+            self.play(Create(pic[3]), FadeIn(pk[2]))
             vo.wait_until("d")
             self.play(FadeIn(out))
         self.wait(0.3)
@@ -179,9 +196,9 @@ class Convolution(VoiceoverScene):
             layers.add(VGroup(*[Rectangle(width=ax.c2p(b, 0)[0] - ax.c2p(a, 0)[0], height=ax.c2p(0, dt)[1] -
                                           ax.c2p(0, 0)[1], stroke_width=0.5, stroke_color=BLACK, fill_color=cols[k],
                                           fill_opacity=0.55).move_to(ax.c2p((a + b) / 2, t + dt / 2)) for a, b in runs_]))
-        bx = plain_axes([0, 5.0, 1], [0, 3.2, 1], 5.0, 3.0).move_to([3.4, -0.4, 0])
-        mg = polyline(bx, ts, mu, color=C.MEASURE, stroke_width=3)
-        mshade = area_under(bx, ts, mu, C.MEASURE, 0.35)
+        bx = plain_axes([0, 4, 1], [0, 5, 1], 5.0, 3.6).move_to([3.5, -0.6, 0])
+        mg = runs(bx, ts, mu, C.MEASURE, 3)  # m{f > 0} = 12 (the whole window) at t = 0: cut at the top
+        mshade = area_under(bx, ts, np.minimum(mu, 5.0), C.MEASURE, 0.35)
         bl = MathTex(r"t \mapsto m\{f > t\}", font_size=28, color=C.MEASURE).next_to(bx, UP, buff=0.1)
         head = VGroup(label(r"\textbf{RCA 8.16} \ the layer cake", font_size=30),
                       MathTex(r"\int f\,dm = \int_0^\infty m\{f > t\}\,dt", font_size=38, color=C.EPS)
