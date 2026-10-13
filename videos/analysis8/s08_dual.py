@@ -87,8 +87,38 @@ class Dual(VoiceoverScene):
             (r"$\ell^\infty$", r"much more than $\ell^1$: \ Banach limits"),
             (r"a row vector", r"a functional \ (the dictionary)"),
         ], font_size=24)
-        card.move_to(DOWN * 0.35)
+        card.scale(0.8)
+        card.move_to([-6.85 + card.width / 2, -0.35, 0])
         head = label(r"\textbf{FA 4.1--4.7, RCA 6.16, 6.19} \ the duals, computed", font_size=32).to_edge(UP, buff=0.3)
+        # why c_0* = l^1: against y in l^1, the best x in the unit ball of c_0 is sign(y) cut off at N, and the
+        # pairing climbs to sum |y_n| = ||y||_1 (here y_n = (-0.75)^n, ||y||_1 = 4, partial sums 4(1 - 0.75^N))
+        nn = np.arange(20)
+        yv = (-0.75) ** nn
+        cxp, W_, H_ = 4.0, 5.4, 1.6
+        x0p = cxp - W_ / 2
+
+        def bars(vals, yc, color, scale):
+            g = VGroup(Line([x0p, yc, 0], [x0p + W_, yc, 0], color=GREY_D, stroke_width=1.5))
+            for i, v in enumerate(vals):
+                if abs(v) > 1e-12:
+                    g.add(Rectangle(width=0.18, height=abs(v) * scale, stroke_width=0, fill_color=color,
+                                    fill_opacity=0.85).move_to([x0p + (i + 0.5) * W_ / len(vals), yc + v * scale / 2, 0]))
+            return g
+
+        yb = bars(yv, 1.35, C.FUNCTIONAL, H_ / 2)
+        yl = MathTex(r"y = \big((-0.75)^n\big) \in \ell^1, \ \ \|y\|_1 = 4", font_size=26, color=C.FUNCTIONAL
+                     ).next_to([cxp, 1.35 + H_ / 2, 0], UP, buff=0.15)
+        Ns = [1, 2, 3, 4, 6, 8, 11, 14]
+        xbs = [bars(np.where(nn < N, np.sign(yv), 0.0), -1.0, C.SEQ, 0.55) for N in Ns]
+        xl = MathTex(r"x^{(N)} = \operatorname{sign}(y_n) \text{ for } n < N: \ \ \|x^{(N)}\|_\infty = 1", font_size=24,
+                     color=C.SEQ).next_to([cxp, -1.0 + 0.55, 0], UP, buff=0.15)
+        pair = [float(np.sum(np.where(nn < N, np.sign(yv), 0.0) * yv)) for N in Ns]
+        assert all(abs(v - 4 * (1 - 0.75**N)) < 1e-12 for v, N in zip(pair, Ns))
+        prd = [MathTex(rf"N = {N}: \ \langle x^{{(N)}}, y\rangle = \sum_{{n < N}} |y_n| = {v:.4f}", font_size=26,
+                       color=C.EPS).move_to([cxp, -2.35, 0]) for N, v in zip(Ns, pair)]
+        pnote = label(r"$\to \|y\|_1$: \ the norm of $y$ as a functional on $c_0$", font_size=22, color=GREY_A
+                      ).move_to([cxp, -2.95, 0])
+        assert card.get_right()[0] < x0p - 0.2 and x0p + W_ < 6.95 and max(m.width for m in prd) < 6.0
         with self.voiceover(
             "<bookmark mark='a'/> The duals we know. For p between one and infinity, the dual of l p is l q, and the "
             "dual of that is l p again: these spaces are reflexive. <bookmark mark='b'/> The sequences tending to "
@@ -100,7 +130,12 @@ class Dual(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]))
             vo.wait_until("b")
-            for i in (1, 2, 3):
+            self.play(FadeIn(card.rows[1]), FadeIn(card.arrows[1]), FadeIn(yb), FadeIn(yl))
+            self.play(FadeIn(xbs[0]), FadeIn(xl), FadeIn(prd[0]))
+            for k in range(1, len(Ns)):
+                self.play(ReplacementTransform(xbs[k - 1], xbs[k]), FadeTransform(prd[k - 1], prd[k]), run_time=0.55)
+            self.play(FadeIn(pnote))
+            for i in (2, 3):
                 self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
             vo.wait_until("c")
             for i in (4, 5):
