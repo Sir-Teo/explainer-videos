@@ -33,7 +33,7 @@ A distribution is a continuous linear functional on the test functions. Every lo
 
 A subtler distribution: one over x. It isn't integrable near zero, so integrating it against phi makes no sense. But cut out a symmetric window around zero. The right half pulls up, the left half pulls down, each by about the log of epsilon, and they cancel. As the window shrinks, the truncated integrals converge: here to 2.036324. That limit is the principal value of one over x: a distribution of order one, which no function or measure gives.
 
-One more, which will keep coming back: the Dirac comb, a delta at every multiple of two pi. It acts on a test function by summing its values on the lattice. It's the derivative of the sawtooth, up to a constant, and it is its own Fourier transform, as we'll see.
+One more, which will keep coming back: the Dirac comb, a delta at every multiple of two pi. It acts on a test function by summing its values on the lattice. It's the derivative of the sawtooth, up to a constant, and its Fourier transform is again a comb, as we'll see.
 
 ## 3. Calculus with distributions
 
@@ -85,7 +85,7 @@ _Scene `s08_plancherel.py::Plancherel`_
 
 Chapter seven: getting the function back, and the transform as a rotation of L two.
 
-The inversion theorem: the same integral, with the opposite sign in the exponent, gives the function back. Rudin's proof inserts a narrow Gaussian in frequency, an approximate identity in space, and lets it widen. For the box, the transform isn't integrable, so cut it off at plus and minus T. As T grows the reconstruction hugs the box, converging in L two, but near each jump it overshoots, and the overshoot tends to Gibbs' 8.95 percent, the same as for Fourier series in Part 3.
+The inversion theorem: the same integral, with the opposite sign in the exponent, gives the function back. Rudin's proof inserts a damping factor in frequency, e to the minus lambda times the size of t. In space that's the Poisson kernel, an approximate identity, and as lambda shrinks it closes in on the function. For the box, the transform isn't integrable, so cut it off at plus and minus T. As T grows the reconstruction hugs the box, converging in L two, but near each jump it overshoots, and the overshoot tends to Gibbs' 8.95 percent, the same as for Fourier series in Part 3.
 
 Plancherel's theorem: the transform preserves the L two norm. Here's a random wave packet and the size of its transform; their norms agree to ten digits, and so do those of twenty other random functions. So the transform extends from the nice functions to all of L two, as a unitary map: it's an orthogonal change of basis, from positions to frequencies, in an infinite-dimensional Hilbert space.
 
@@ -123,7 +123,7 @@ Chapter ten: Sobolev spaces, where smoothness is measured by the transform.
 
 Differentiating multiplies the transform by i t, so smoothness in space is decay in frequency. On a log-log plot: a box, which jumps, has a transform decaying like one over t. A triangle, which only has kinks, decays like one over t squared. And the smooth bump plunges faster than any power. The Sobolev norm turns this into a scale: weight the transform by one plus t squared to the power s. The box has finite norm exactly for s below one half, the triangle for s below three halves, the bump for every s. And s needn't be a whole number.
 
-When does a finite Sobolev norm force a function to be continuous? The inversion formula bounds f by the integral of the size of f hat. Split the integrand into a weight and the rest, and apply Cauchy-Schwarz, in frequency. The Sobolev norm appears, times the integral of the weight. That integral is finite only when s is more than a half. Watch it as the cutoff T runs out: at s equal to 0.4 it grows without bound, at one half it grows like a logarithm, and at 0.6 it settles. So in one dimension, H s functions are continuous once s passes one half. In n dimensions the weight's integral needs two s bigger than n, and each extra half derivative buys one continuous derivative.
+When does a finite Sobolev norm force a function to be continuous? The inversion formula bounds f by the integral of the size of f hat. Split the integrand into a weight and the rest, and apply Cauchy-Schwarz, in frequency. The Sobolev norm appears, times the integral of the weight. That integral is finite only when s is more than a half. Watch it as the cutoff T runs out: at s equal to 0.4 it grows without bound, at one half it grows like a logarithm, and at 0.6 it settles. So in one dimension, H s functions are continuous once s passes one half. In n dimensions the weight's integral needs two s bigger than n, and each extra Sobolev derivative buys one more continuous derivative.
 
 The Fourier thread once more. The sawtooth's coefficients are one over n, so its Sobolev norm is this sum. Summed to a million terms: at s equal to 0.3 and 0.45 the sums level off, each decade adding a fixed fraction of the last one; at one half, every decade adds exactly the log of ten; above one half, the gains grow. So the sawtooth is in H s exactly for s below one half. And that's sharp, because above one half, Sobolev's lemma would make it continuous, and it jumps.
 
@@ -151,7 +151,7 @@ Here's a question that sounds like linear algebra. Take one integrable kernel k.
 
 Why is it true? Integrable functions under convolution form an algebra, with the L one norm of a convolution at most the product of the norms, and the transform turns convolution into multiplication. The homomorphisms from this algebra to the complex numbers are exactly the evaluations of the transform at a point t. So the real line is the space of maximal ideals, and a kernel lies in one exactly where its transform vanishes. The squared sinc lies in all the ideals beyond two. A kernel whose transform never vanishes lies in none of them, and that is what makes its translates span. This is the first glimpse of Gelfand's theory, which is Part 10.
 
-The road to the primes needs one fact about the zeta function from the Riemann video: it has no zeros on the line where the real part is one. On that line its size stays above a third, while on the critical line it touches zero again and again. The proof is a trigonometric inequality: three plus four cos theta plus cos two theta is twice a square, so it's never negative. Feed it into the Euler product, and the product of zeta at sigma cubed, zeta at sigma plus i t to the fourth, and zeta at sigma plus two i t, is always at least one. If zeta vanished at one plus i t, the fourth power would beat the cube of the pole, and the product would go to zero. It doesn't.
+The road to the primes needs one fact about the zeta function from the Riemann video: it has no zeros on the line where the real part is one. On that line, over this stretch, its size stays above a third, while on the critical line it touches zero again and again. The proof is a trigonometric inequality: three plus four cos theta plus cos two theta is twice a square, so it's never negative. Feed it into the Euler product, and the product of zeta at sigma cubed, zeta at sigma plus i t to the fourth, and zeta at sigma plus two i t, is always at least one. If zeta vanished at one plus i t, the fourth power would beat the cube of the pole, and the product would go to zero. It doesn't.
 
 Wiener's theorem then gives the prime number theorem. The non-vanishing of zeta on the line says that a certain kernel's transform has no zeros. Wiener's Tauberian theorem moves a known average from that kernel to every other kernel, and that unlocks Chebyshev's function psi, the sum of log p over prime powers, which is asymptotic to x. Partial summation converts that into the count of primes. Up to ten to the eight, counted exactly: psi of x over x is within two parts in a hundred thousand of one; pi of x over x over log x is still six percent high, closing in slowly; and the logarithmic integral fits to about one part in ten thousand. That's the analytic engine behind the Riemann video's second chapter.
 
@@ -169,4 +169,4 @@ This part followed chapter nine of Real and Complex Analysis and chapters six th
 
 ---
 
-4017 words (~26 min at 155 wpm).
+4042 words (~26 min at 155 wpm).

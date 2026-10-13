@@ -67,7 +67,7 @@ Chapter five: Baire's second and third children, the open mapping and closed gra
 
 The open mapping theorem: a bounded linear map of one Banach space onto another sends the unit ball to a set that contains a ball. In the plane, the image of the disk is an ellipse, and the largest disk inside it has radius one over the norm of the inverse. In infinite dimensions that's a theorem. Baire says some multiple of the image is dense in a ball; completeness, through an iteration, removes the word dense. Checked on sixty coordinates of l two: fifty random targets inside the predicted ball are all hit from inside the unit ball. The consequence: a bounded bijection between Banach spaces has a bounded inverse, for free.
 
-The closed graph theorem: a linear map between Banach spaces whose graph is closed is automatically bounded. It's the open mapping theorem applied to the graph. A striking corollary, due to Hellinger and Toeplitz: a symmetric operator defined on all of a Hilbert space is bounded. Differentiation is symmetric on periodic functions, but sine n x over root pi has norm one while its derivative has norm n. So differentiation can't be defined on all of L two. It must live on a smaller domain, and that's why Part 10 needs unbounded operators.
+The closed graph theorem: a linear map between Banach spaces whose graph is closed is automatically bounded. It's the open mapping theorem applied to the graph. A striking corollary, due to Hellinger and Toeplitz: a symmetric operator defined on all of a Hilbert space is bounded. i times the derivative is symmetric on periodic functions, but sine n x over root pi has norm one while its derivative has norm n. So differentiation can't be defined on all of L two. It must live on a smaller domain, and that's why Part 10 needs unbounded operators.
 
 ## 6. Hahn-Banach
 
@@ -163,4 +163,4 @@ This part followed chapter five of Real and Complex Analysis and the first five 
 
 ---
 
-3503 words (~23 min at 155 wpm).
+3506 words (~23 min at 155 wpm).

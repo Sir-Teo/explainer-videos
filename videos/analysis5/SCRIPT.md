@@ -11,7 +11,7 @@ Here's a function from Part 3's museum, built as a limit. Take the cosine of m f
 
 The theme of this part is mass escaping. Here are three sequences of functions, each with integral exactly one. The first gets taller and narrower; the second slides off to the right; the third spreads thinner and thinner. At every single point, all three go to zero, so the limit has integral zero, while every function in the sequence has integral one. What would stop the escape is a lid: one integrable function lying above every function of the sequence. Here the smallest possible lids have infinite integral. Lebesgue's dominated convergence theorem will say that a lid is all you need.
 
-Lebesgue described his integral with a picture of counting money: rather than adding the coins in the order you meet them, sort them by value first. Riemann slices the domain into strips. Lebesgue slices the range into layers, and for each layer he needs the total length of the set where f exceeds that level. But the picture hides the real change. Those sets can be complicated: for Dirichlet's function, the set where it exceeds one half is the set of rationals. The new idea is a way to give a length to such sets, and the first chapter is about exactly that.
+Lebesgue described his integral with a picture of counting money: rather than adding the coins in the order you meet them, sort them by value first. Riemann slices the domain into strips. Lebesgue slices the range into layers, and for each layer he needs the total length of the set where f exceeds that level. But the picture hides the real change. Here the set above one half is a few intervals. Those sets can be complicated: for Dirichlet's function, the set where it exceeds one half is the set of rationals, which is everywhere and contains no interval at all. The new idea is a way to give a length to such sets, and the first chapter is about exactly that.
 
 The plan follows Rudin's Real and Complex Analysis. First, which sets can have a length, and why not all of them can. Then the integral and its three great limit theorems: monotone convergence, Fatou's lemma and dominated convergence. Then where measures come from, and how the new integral compares with Riemann's. And finally, integrals in several variables, Fubini's theorem, and convolution.
 
@@ -21,13 +21,13 @@ _Scene `s02_length.py::Length`_
 
 Chapter one: how to give a length to sets that are not intervals.
 
-Lebesgue's idea, from his thesis of 1902: cover a set by countably many intervals, add up their lengths, and take the smallest total you can get. That's the outer measure. Here's a set made of a few intervals and points. A crude cover has total length one. Tighter covers do better, and the infimum over all countable covers is the outer measure. Two properties are immediate: bigger sets have bigger outer measure, and the outer measure of a countable union is at most the sum of the outer measures.
+Lebesgue's idea, from his thesis of 1902: cover a set by countably many intervals, add up their lengths, and take the smallest total you can get. That's the outer measure. Here's a set made of a few intervals and points. A crude cover, two overlapping intervals, has total length one point oh five. Tighter covers do better, and the infimum over all countable covers is the outer measure. Two properties are immediate: bigger sets have bigger outer measure, and the outer measure of a countable union is at most the sum of the outer measures.
 
-The rationals between zero and one are dense, but they can be listed, as Part 1 showed. Cover the first by an interval of length epsilon over two, the second by epsilon over four, the k-th by epsilon over two to the k. Together the intervals have total length less than epsilon, and every rational is covered. Since epsilon was arbitrary, the rationals have outer measure zero: dense, but no length at all.
+The rationals between zero and one are dense, but they can be listed, as Part 1 showed. Cover the first by an interval of length epsilon over two, the second by epsilon over four, the k-th by epsilon over two to the k. Together the intervals have total length at most epsilon, and every rational is covered. Since epsilon was arbitrary, the rationals have outer measure zero: dense, but no length at all.
 
 Part 1's Cantor set is uncountable, as big as the whole interval by counting. But its stages cover it: two to the n intervals with total length two thirds to the n, which goes to zero. So the Cantor set has outer measure zero. Counting and measuring are different kinds of size.
 
-Now change the recipe. At stage n, remove from the middle of each piece an interval of length only four to the minus n. The removed lengths add up to one half, so what remains has measure one half. Yet the remaining pieces shrink to nothing, so the set contains no interval at all. It's nowhere dense, full of holes everywhere, and still has half the length of the line. Being thin and having measure zero are different things.
+Now change the recipe. At stage n, remove from the middle of each piece an interval of length only four to the minus n. The removed lengths add up to one half, so what remains has measure one half. Yet the remaining pieces shrink to nothing: each stage more than halves the longest one. Magnify a piece sixty times and the same pattern of holes is there again. So the set contains no interval at all. It's nowhere dense, full of holes everywhere, and still has half the length of the line. Being thin and having measure zero are different things.
 
 A sanity check: does an interval get its usual length? Covering it by itself shows the outer measure is at most b minus a. The other direction is where compactness enters. Widen each interval of a countable cover slightly to an open one, at a total cost of epsilon. By Heine–Borel, finitely many of them already cover the closed interval, and finitely many intervals that chain across it must have total length at least its length. So the outer measure of an interval is its length, as it should be.
 
@@ -41,7 +41,7 @@ Outer measure is defined for every set, but it isn't additive on every set. Coul
 
 The construction uses rotation of the circle by one radian. Since one radian is not a rational multiple of a full turn, the orbit of a point never comes back to it. It fills the circle densely: after two thousand steps, the largest gap is less than a hundredth of a radian.
 
-Call two points equivalent if they differ by a whole number of radians. Each class is one orbit, countable and dense; here are five of them, though there are uncountably many. Using the axiom of choice, pick one point from every class, and call the resulting set V. This step can only be drawn as a schematic. Now rotate V by one radian, by two, by minus one, and so on. These copies are disjoint, and since every point is in some class, they fill the whole circle. If V had a length, countable additivity and rotation invariance would make two pi a sum of infinitely many copies of the same number: zero if the number is zero, infinite otherwise. Neither is two pi. So V has no length, and a theory of length must restrict itself to a smaller class of sets: the measurable ones. In three dimensions the same idea gives the Banach–Tarski paradox.
+Call two points equivalent if they differ by a whole number of radians. Each class is one orbit, countable and dense; here are five of them, though there are uncountably many. Using the axiom of choice, pick one point from every class, and call the resulting set V. This step can only be drawn as a schematic. Now rotate V by one radian, by two, by minus one, and so on. These copies are disjoint, and since every point is in some class, they fill the whole circle. If V had a length, countable additivity and rotation invariance would make two pi a sum of infinitely many copies of the same number: zero if the number is zero, infinite otherwise, because copies of any positive length, laid end to end, go around the circle again and again. Neither is two pi. So V has no length, and a theory of length must restrict itself to a smaller class of sets: the measurable ones. In three dimensions the same idea gives the Banach–Tarski paradox.
 
 ## 3. Sigma-algebras and measurable functions
 
@@ -51,7 +51,7 @@ Chapter three: the sets that get a length, and the functions we will integrate.
 
 The sets that get a length form a sigma-algebra: a family that contains the whole space and is closed under complements and countable unions, so countable intersections too. Start from the open sets. Their complements are the closed sets, and countable unions of closed sets include the rationals, a union of single points. Keep going and you reach the Borel sets, the smallest sigma-algebra containing the open sets. Lebesgue's sigma-algebra is a little larger still, and Vitali's set lies outside it, among the sets no length can handle.
 
-Which functions can we integrate? Part 2 characterized continuity by preimages: the preimage of every open set is open. A function is measurable if the preimage of every open set is measurable. Same template, weaker demand. And here is the point: limits are free. The supremum, infimum, upper limit and limit of measurable functions are measurable, so Dirichlet's function, a double limit of continuous ones, is measurable, though it is nowhere continuous.
+Which functions can we integrate? Part 2 characterized continuity by preimages: the preimage of every open set is open. A function is measurable if the preimage of every open set is measurable. Same template, weaker demand. And here is the point: limits are free. The supremum, infimum, upper limit and limit of measurable functions are measurable, so Dirichlet's function, a double limit of continuous ones, is measurable, though it is nowhere continuous: raise cosine of m factorial pi x to a high power and it becomes spikes at the fractions with denominator m factorial; then let m grow.
 
 Every non-negative measurable function is the limit of an increasing sequence of simple functions, functions with finitely many values. The recipe slices the range: at stage n, round f down to the nearest multiple of one over two to the n. Each layer's preimage is a measurable set, so each stage is a finite combination of indicator functions. Each stage refines the last, so the sequence increases, and where f is below n, the error is at most one over two to the n. This is the honest version of Lebesgue's coins.
 
@@ -99,7 +99,7 @@ _Scene `s08_dominated.py::Dominated`_
 
 Chapter seven: Lebesgue's dominated convergence theorem, the answer this part promised.
 
-The theorem: if f n converges to f at every point, and all the f n lie under one integrable function g, the lid, then the integrals converge, and in fact the integral of the difference goes to zero. The proof is Fatou's lemma applied to the right functions. Two g minus the difference is non-negative, and it converges to two g, so Fatou bounds the integral of two g by the lower limit of its integrals. Pull out the integral of two g, which is finite because the lid is integrable, and the upper limit of the integral of the difference is at most zero. The lid is the whole story.
+The theorem: if f n converges to f at every point, and the absolute values of all the f n lie under one integrable function g, the lid, then the integrals converge, and in fact the integral of the difference goes to zero. The proof is Fatou's lemma applied to the right functions. Two g minus the difference is non-negative, and it converges to two g, so Fatou bounds the integral of two g by the lower limit of its integrals. Pull out the integral of two g, which is finite because the lid is integrable, and the upper limit of the integral of the difference is at most zero. The lid is the whole story.
 
 Compare two sequences on the half-line. On the left, the spreading sequence: it converges to zero uniformly, the strongest convergence Part 3 knew, yet every function has integral one. Part 3's theorem needed a bounded interval. On the right, one minus x over n, to the n. These lie under the single integrable lid, e to the minus x, so dominated convergence applies: the integrals, n over n plus one, converge to the integral of the limit, which is one.
 
@@ -127,7 +127,7 @@ _Scene `s10_lebesgue.py::Lebesgue`_
 
 Chapter nine: Lebesgue measure, and how the new integral compares with Riemann's.
 
-Feed the Riemann integral into the Riesz machine and out comes Lebesgue measure. A box gets its volume. Sliding a set doesn't change its measure. Every measurable set is squeezed between a compact set inside and an open set outside, with as little room between them as you like. And these properties pin it down: it's the only translation-invariant measure that gives the unit cube measure one.
+Feed the Riemann integral into the Riesz machine and out comes Lebesgue measure. A box gets its volume. Sliding a set doesn't change its measure. Every measurable set is squeezed between a closed set inside and an open set outside, with as little room between them as you like. And these properties pin it down: it's the only translation-invariant measure that gives the unit cube measure one.
 
 Which functions could Riemann integrate? Lebesgue answered exactly: a bounded function is Riemann integrable if and only if its points of discontinuity form a set of measure zero, and then the two integrals agree. Thomae's function is discontinuous at the rationals, a null set: Riemann can integrate it, and so can Lebesgue. Dirichlet's function is discontinuous everywhere: Riemann cannot. Lebesgue can, because it is zero almost everywhere. Every Riemann-integrable function is Lebesgue integrable, with the same integral.
 
@@ -143,7 +143,7 @@ Littlewood summed up the theory in three principles. Every measurable set is nea
 
 Lusin's theorem makes the second principle precise: a measurable function agrees with a continuous one except on a set of measure less than epsilon. Here f is a step function with a hundred random steps. The continuous g replaces each jump by a steep ramp; zoom in on one. The two functions differ only on the little intervals around the jumps, of total measure just under a twentieth.
 
-A consequence we'll need in Part 6: continuous functions with compact support are dense among integrable functions. For our step function, the area between f and its repair is about four thousandths. A close cousin, the Vitali–Carathéodory theorem, squeezes every integrable function between semicontinuous ones whose integrals are as close as you like.
+A consequence we'll need in Part 6: continuous functions with compact support are dense among integrable functions. For our step function, the area between f and its repair is about four thousandths. A close cousin, the Vitali–Carathéodory theorem, squeezes every real integrable function between semicontinuous ones whose integrals are as close as you like.
 
 ## 11. Product measures and Fubini
 
@@ -153,9 +153,9 @@ Chapter eleven: integrals over products, and the order of integration.
 
 The product of two measures gives rectangles their area, and every measurable set in the plane can be measured by slices. Slide a vertical line across the region and record the length of each vertical section; the integral of those lengths is the area. Slicing horizontally instead gives the same number.
 
-Fubini's theorem, with Tonelli's version: for a non-negative measurable function, or for any function whose absolute value has a finite double integral, the two iterated integrals agree with the double integral. The proof climbs a ladder: rectangles, then all measurable sets, using monotone classes, then simple functions, then everything by monotone convergence. The condition is not decoration.
+Fubini's theorem, with Tonelli's version, for sigma-finite measures: for a non-negative measurable function, or for any function whose absolute value has a finite double integral, the two iterated integrals agree with the double integral. The proof climbs a ladder: rectangles, where both sides are just length times length; then all measurable sets, built from rectangles using monotone classes; then simple functions, which are finite sums of sets; then everything, by monotone convergence. The condition is not decoration.
 
-Rudin's counterexample: x squared minus y squared, over the square of x squared plus y squared, on the unit square. It's positive below the diagonal and negative above, and huge near the corner. Integrate in y first: each vertical line gives one over one plus x squared, and integrating that in x gives pi over four. Integrate in x first: each horizontal line gives minus one over one plus y squared, and the total is minus pi over four. Two orders, two answers, exactly like Part 3's grid. The absolute value has infinite integral near the corner, so Fubini's hypothesis fails.
+The classic counterexample: x squared minus y squared, over the square of x squared plus y squared, on the unit square. It's positive below the diagonal and negative above, and huge near the corner. Integrate in y first: each vertical line gives one over one plus x squared, and integrating that in x gives pi over four. Integrate in x first: each horizontal line gives minus one over one plus y squared, and the total is minus pi over four. Two orders, two answers, exactly like Part 3's grid. The absolute value has infinite integral near the corner, so Fubini's hypothesis fails.
 
 ## 12. Convolution and the layer cake
 
@@ -185,4 +185,4 @@ This part followed chapters one, two and eight of Rudin's Real and Complex Analy
 
 ---
 
-4012 words (~26 min at 155 wpm).
+4128 words (~27 min at 155 wpm).

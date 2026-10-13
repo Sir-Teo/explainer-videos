@@ -21,7 +21,7 @@ _Scene `s02_algebras.py::BanachAlgebras`_
 
 Chapter one: Banach algebras, where elements can be multiplied as well as added.
 
-A Banach algebra is a complete normed space where you can also multiply, with the norm of a product at most the product of the norms. The continuous functions on a compact set, with the pointwise product. The bounded operators on a Banach space, with composition: the main example. The integrable functions with convolution, from Part 9, and summable sequences with convolution, and the disc algebra of Part 7. In random trials the ratio never exceeds one.
+A Banach algebra is a complete normed space where you can also multiply, with the norm of a product at most the product of the norms. The continuous functions on a compact set, with the pointwise product. The bounded operators on a Banach space, with composition: the main example. The integrable functions with convolution, from Part 9, and summable sequences with convolution, and the disc algebra of Part 7. Test the rule: in two thousand random trials of each kind, the ratio piles up below one and never crosses it.
 
 The first tool is the oldest series there is. Multiply I minus A by one plus A plus up to A to the n, and everything telescopes to I minus A to the n plus one. If the norm of A is below one, that last term dies, so I minus A is invertible, and its inverse is the geometric series: the Neumann series. For a random matrix of norm 0.8, the partial sums close in on the inverse, always under the geometric bound.
 
@@ -49,7 +49,7 @@ How do you take the exponential of a matrix, or of any element of a Banach algeb
 
 And the spectrum goes along. The eigenvalues of A, on the left, are carried by the exponential to the eigenvalues of e to the A, on the right, while the grid around them is bent by the same map. That's the spectral mapping theorem: the spectrum of f of A is f of the spectrum of A, for every holomorphic f, in every Banach algebra.
 
-Square roots need care, because the square root isn't holomorphic across its branch cut. Shift the matrix so its spectrum sits in the right half-plane, and take a contour that encloses the spectrum without touching the cut. The same formula, with the square root in it, gives a matrix whose square is B, to rounding error. Logarithms and fractional powers work the same way, and Runge's theorem from Part 7 explains why rational functions are enough. One famous consequence of this circle of ideas, Lomonosov's theorem, finds invariant subspaces with a fixed-point argument.
+Square roots need care, because the square root isn't holomorphic across its branch cut. Shift the matrix so its spectrum sits in the right half-plane, and take a contour that encloses the spectrum without touching the cut. The same formula, with the square root in it, gives a matrix whose square is B, to rounding error. Logarithms and fractional powers work the same way, and Runge's theorem from Part 7 explains why rational functions are enough. One famous consequence of this circle of ideas, Lomonosov's theorem, finds nontrivial invariant subspaces with a fixed-point argument.
 
 ## 4. Gelfand theory
 
@@ -119,7 +119,7 @@ Chapter nine: unbounded operators, where the domain is part of the operator.
 
 Momentum is a derivative, and derivatives are not bounded: sine n x has the same size for every n, but its derivative is n times bigger. And Part 8's Hellinger-Toeplitz theorem says a symmetric operator defined on all of Hilbert space is automatically bounded. So the operators of physics can't be defined everywhere. They come with a domain, a dense subspace, and the domain is part of the operator.
 
-Here's the cautionary example. Take i times the derivative on the interval from zero to one, defined on smooth functions that vanish near both ends. Integration by parts gives a boundary term, which vanishes, so the operator is symmetric. But its adjoint has no boundary conditions at all, so it's much bigger. The equations D star f equals plus or minus i f have solutions, e to the minus x and e to the x: one dimension each. Symmetric is not self-adjoint, and only self-adjoint operators get a spectral theorem.
+Here's the cautionary example. Take i times the derivative on the interval from zero to one, defined on smooth functions that vanish near both ends. Integration by parts gives a boundary term, which vanishes, so the operator is symmetric. But its adjoint has no boundary conditions at all, so it's much bigger. The equations D star f equals plus or minus i f have solutions, e to the x and e to the minus x: one dimension each. Symmetric is not self-adjoint, and only self-adjoint operators get a spectral theorem.
 
 To make it self-adjoint, impose a boundary condition: f at one equals e to the i theta times f at zero, one condition for each point on a circle. Each gives a self-adjoint operator, with eigenfunctions e to the minus i lambda x, and the condition forces lambda into the ladder two pi n minus theta. Computed numerically for three values of theta, the eigenvalues match to many digits. Now turn theta around the circle. The whole ladder slides down, and after a full turn it lands on itself. The same differential expression, a circle of different operators, each with its own spectrum.
 
@@ -165,7 +165,7 @@ Let's take stock one last time. Banach algebras gave operators an arithmetic, wi
 
 The ledger's last row. The space: bounded operators, and the C-star algebras they generate. Completeness: they're closed in norm, and Gelfand-Naimark makes them function algebras. Compactness: Alaoglu again, behind the maximal ideal space. The interchange: f of T for every Borel function f, so limits of functions become limits of operators. And the Fourier answer: the Fourier transform is the spectral theorem, for momentum. And that's the whole ledger: ten rows, from the least upper bound property to the spectral theorem.
 
-And the timeline is complete: from Fourier's claim in 1807 that every function is a sum of sines, through Dirichlet, Riemann, Cantor, Lebesgue, Fréchet, Riesz and Fischer, Banach and Schwartz, to Carleson's theorem in 1966. Every idea in the series was invented to answer a question about Fourier series.
+And the timeline is complete: from Fourier's claim in 1807 that every function is a sum of sines, through Dirichlet and Riemann; then forty crowded years: Dedekind and Cantor, Heine and Borel, Lebesgue, Fréchet, Riesz and Fischer; then Banach and Schwartz, to Carleson's theorem in 1966. Every idea in the series was invented to answer a question about Fourier series.
 
 From here the road divides. Operator algebras and noncommutative geometry. Index theory. Nonlinear analysis, where Sobolev spaces do their real work. Partial differential equations, which use all of it. And harmonic analysis, which is still answering Fourier's question.
 
@@ -173,4 +173,4 @@ This part followed chapters ten to thirteen of Functional Analysis and chapter e
 
 ---
 
-3941 words (~25 min at 155 wpm).
+3966 words (~26 min at 155 wpm).
