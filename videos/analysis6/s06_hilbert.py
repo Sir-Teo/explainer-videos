@@ -221,14 +221,40 @@ class Hilbert(VoiceoverScene):
         card.scale(0.95).to_edge(DOWN, buff=0.3)
         head = label(r"The dictionary: \ geometry that survives into infinite dimensions", font_size=32).to_edge(UP,
                                                                                                               buff=0.25)
+        # the row that does not survive, made concrete: e_n = sqrt2 sin(n pi x) in L^2[0, 1]
+        xs = np.linspace(0, 1, 4001)
+        ecols = [C.SEQ, C.APPROX, C.CLOSED_SET, C.CONNECTED_SET]
+        E = [np.sqrt(2) * np.sin(n * np.pi * xs) for n in range(1, 6)]
+
+        def l2(g):
+            return math.sqrt(float(np.trapezoid(g * g, xs)))
+
+        norms = [l2(e) for e in E]
+        d12, d25 = l2(E[0] - E[1]), l2(E[1] - E[4])
+        assert max(abs(v - 1) for v in norms) < 1e-6 and abs(d12 - math.sqrt(2)) < 1e-6 and abs(d25 - math.sqrt(2)) < 1e-6
+        eax = plain_axes([0, 1, 0.25], [-1.6, 1.6, 1], 6.0, 3.2).move_to([-3.4, -0.95, 0])
+        eg = [polyline(eax, xs, E[n], color=ecols[n], stroke_width=3) for n in range(4)]
+        el = MathTex(r"e_n(x) = \sqrt2\,\sin(n\pi x) \ \text{in } L^2[0, 1]", font_size=28).next_to(eax, UP, buff=0.12)
+        eside = VGroup(
+            MathTex(r"\|e_n\| = 1, \qquad \langle e_m, e_n\rangle = 0 \ (m \ne n)", font_size=28),
+            MathTex(r"\|e_m - e_n\|^2 = \|e_m\|^2 + \|e_n\|^2 = 2", font_size=28),
+            MathTex(rf"\|e_1 - e_2\| = {d12:.5f}, \quad \|e_2 - e_5\| = {d25:.5f}", font_size=26, color=C.EPS),
+            label(r"no subsequence is Cauchy: \ the closed unit ball is not compact", font_size=24, color=C.PATHOLOGY),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, -0.95, 0])
+        for r_ in eside:
+            if r_.width > 6.6:
+                r_.width = 6.6
+        eside.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, -0.95, 0])
+        assert eside.get_left()[0] > eax.get_right()[0] + 0.2 and eside.get_right()[0] < 6.95
         with self.voiceover(
             "<bookmark mark='a'/> A complete inner-product space is a Hilbert space, and almost all of the plane's "
             "geometry carries over. <bookmark mark='b'/> Dot products become integrals. Lengths become norms, and "
             "the space is complete. Pythagoras holds for perpendicular functions. <bookmark mark='c'/> And the next "
             "three chapters carry over three more facts: nearest points, functionals as vectors, and orthonormal "
-            "bases. <bookmark mark='d'/> One thing does not survive. The unit vectors e one, e two, and so on are "
-            "all at distance root two from each other, so the closed unit ball is not compact. Compactness is the "
-            "price of infinitely many dimensions."
+            "bases. <bookmark mark='d'/> One thing does not survive. <bookmark mark='e'/> In L two of the unit interval, "
+            "take e n equal to root two times sine of n pi x. Each has norm one and any two are perpendicular, so by "
+            "Pythagoras they are all at distance root two from each other: no subsequence can converge, and the closed "
+            "unit ball is not compact. Compactness is the price of infinitely many dimensions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(card.titles))
@@ -241,5 +267,14 @@ class Hilbert(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(card.rows[6][:2]), FadeIn(card.arrows[6]))
             self.play(Create(card.rows[6][2]))
+            vo.wait_until("e")
+            keep = VGroup(card.rows[6], card.arrows[6])
+            self.play(FadeOut(VGroup(card.titles, *card.rows[:6], *card.arrows[:6])),
+                      keep.animate.next_to(head, DOWN, buff=0.35))
+            self.play(Create(eax), FadeIn(el))
+            for n in range(4):
+                self.play(Create(eg[n]), run_time=0.8)
+            self.play(FadeIn(eside[:2]))
+            self.play(FadeIn(eside[2:]))
         self.wait(0.4)
         self.clear_scene()
