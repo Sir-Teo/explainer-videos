@@ -96,7 +96,7 @@ class ComplexMeasures(VoiceoverScene):
     def signed(self):
         d = load("variation")
         tv = float(d["tv"])
-        ax = plain_axes([0, 2 * math.pi, math.pi / 2], [-1.3, 1.3, 1], 7.6, 3.0, numbers=False).move_to([-2.6, 0.5, 0])
+        ax = plain_axes([0, 2 * math.pi, math.pi / 2], [-1.3, 1.3, 1], 7.0, 3.0, numbers=False).move_to([-3.2, 0.5, 0])
         x = np.linspace(0, 2 * math.pi, 2001)
         y = np.sin(5 * x)
         g = polyline(ax, x, y, color=WHITE, stroke_width=3)
@@ -116,14 +116,16 @@ class ComplexMeasures(VoiceoverScene):
             MathTex(rf"\mu^- = -\mu(\,\cdot \cap B) : \ \mu^-(X) = {Pp:.4f}", font_size=28, color=C.SEQ),
             MathTex(rf"|\mu| = \mu^+ + \mu^- : \ |\mu|(X) = \int |\sin 5x| = {tv:.4f}", font_size=28, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-2.4, -2.7, 0])
-        thm = VGroup(label(r"\textbf{RCA 6.14} \ (Hahn) \ a real measure splits $X = A \cup B$:", font_size=24),
-                     label(r"$\mu \ge 0$ on subsets of $A$, \ $\mu \le 0$ on subsets of $B$", font_size=24),
-                     label(r"(Jordan) \ $\mu = \mu^+ - \mu^-$, \ $|\mu| = \mu^+ + \mu^-$", font_size=24,
-                           color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        thm = VGroup(label(r"\textbf{RCA 6.14} \ (Hahn) \ a real measure", font_size=28),
+                     label(r"splits $X = A \cup B$:", font_size=28),
+                     label(r"$\mu \ge 0$ on subsets of $A$,", font_size=28, color=C.MEASURE),
+                     label(r"$\mu \le 0$ on subsets of $B$", font_size=28, color=C.SEQ),
+                     label(r"(Jordan) \ $\mu = \mu^+ - \mu^-$, \ $|\mu| = \mu^+ + \mu^-$", font_size=28,
+                           color=C.EPS))
         for r_ in thm:
-            if r_.width > 4.6:
-                r_.width = 4.6
-        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.5, 0.3, 0])
+            if r_.width > 5.6:
+                r_.width = 5.6
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([0.85, 0.3, 0], RIGHT, buff=0)
         head = label(r"Real measures: \ split the space where the measure is positive", font_size=32).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A real measure is a special case: sine of five x, dx. Its total is zero. "
@@ -136,9 +138,9 @@ class ComplexMeasures(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(pos), FadeIn(neg))
-            self.play(Create(A), FadeIn(A_l), FadeIn(thm[:2]))
+            self.play(Create(A), FadeIn(A_l), FadeIn(thm[:4]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[1:]), FadeIn(thm[2]))
+            self.play(FadeIn(rows[1:]), FadeIn(thm[4]))
         self.wait(0.3)
         self.clear_scene()
 
