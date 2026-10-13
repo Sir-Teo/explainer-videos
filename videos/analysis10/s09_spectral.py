@@ -166,6 +166,29 @@ class SpectralTheorem(VoiceoverScene):
                 r_.width = 6.55
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([0.3, -1.3, 0], RIGHT, buff=0)
         head = label(r"A payoff: \ averages of a unitary", font_size=34).to_edge(UP, buff=0.3)
+        # the proof's picture, large: each eigenvalue's running average (1/n) sum_{k<n} lambda^k as n = 1 .. 60;
+        # at lambda = 1 it stays 1, elsewhere it is (1 - lambda^n) / (n (1 - lambda)), which spirals into 0
+        big = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.5).move_to([-3.75, -0.6, 0])
+        bcirc = Circle(radius=big.c2p(1, 0)[0] - big.c2p(0, 0)[0], color=GREY_B, stroke_width=1.5).move_to(big.c2p(0, 0))
+        lams = np.exp(1j * np.asarray(ph))
+
+        def avg(lam, n):
+            return 1.0 + 0j if abs(lam - 1) < 1e-12 else (1 - lam ** n) / (n * (1 - lam))
+
+        assert all(abs(avg(l_, 60) - np.mean(l_ ** np.arange(60))) < 1e-12 for l_ in lams)
+        assert all(abs(avg(l_, 60)) < 2 / (60 * abs(1 - l_)) + 1e-12 for l_ in lams if abs(l_ - 1) > 1e-12)
+        NN = np.arange(1, 61)
+        tracks = VGroup(*[VMobject(stroke_color=C.EPS if abs(l_ - 1) < 1e-12 else C.SPECTRUM, stroke_width=1.6,
+                                   stroke_opacity=0.7).set_points_as_corners(
+            [big.c2p(avg(l_, n).real, avg(l_, n).imag) for n in NN] + ([big.c2p(1.0001, 0)] if abs(l_ - 1) < 1e-12 else []))
+            for l_ in lams])
+        nv = ValueTracker(1)
+        movers = always_redraw(lambda: VGroup(*[Dot(big.c2p(avg(l_, max(1, round(nv.get_value()))).real,
+                                                            avg(l_, max(1, round(nv.get_value()))).imag), radius=0.07,
+                                                     color=C.EPS if abs(l_ - 1) < 1e-12 else C.SPECTRUM) for l_ in lams]))
+        nrd = always_redraw(lambda: MathTex(rf"\tfrac1n \sum_{{k<n}} \lambda^k, \quad n = {max(1, round(nv.get_value()))}",
+                                            font_size=26).next_to(big, UP, buff=0.1))
+        bdots = VGroup(*[Dot(big.c2p(l_.real, l_.imag), radius=0.06, color=GREY_B) for l_ in lams])
         with self.voiceover(
             "<bookmark mark='a'/> One payoff. Average the powers of a unitary operator applied to a vector. "
             "<bookmark mark='b'/> In the spectral picture, that averages lambda to the k over the spectrum, which "
@@ -177,8 +200,12 @@ class SpectralTheorem(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rows[0]), Create(cx), Create(circ), FadeIn(eig), FadeIn(el))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1:3]))
+            self.play(FadeIn(rows[1:3]), Create(bcirc), FadeIn(bdots), FadeIn(movers), FadeIn(nrd))
+            self.play(nv.animate.set_value(60), Create(tracks), run_time=5.0, rate_func=linear)
+            movers.clear_updaters()
+            nrd.clear_updaters()
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(bcirc, bdots, movers, nrd, tracks)))
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(ref), FadeIn(rl))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.05), FadeIn(rows[3]), run_time=2.0)
             self.play(FadeIn(rows[4]))
