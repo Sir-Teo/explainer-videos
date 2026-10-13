@@ -196,12 +196,12 @@ class Nowhere(VoiceoverScene):
                      + RIGHT * 0.1, color=GREY_B, stroke_width=1.5)
         stot = MathTex(rf"{int(total):+d}", font_size=30, color=C.PATHOLOGY).next_to(sline, DOWN, buff=0.15)
         stot.align_to(panels[-1][5], RIGHT)
-        sbound = MathTex(rf"|{int(total)}| \ge 27 - (1 + 3 + 9) = 14 = \tfrac{{3^3 + 1}}{{2}}", font_size=26,
+        sbound = MathTex(rf"|{{{int(total)}}}| \ge 27 - (1 + 3 + 9) = 14 = \tfrac{{3^3 + 1}}{{2}}", font_size=26,
                          color=C.PATHOLOGY).next_to(stot, LEFT, buff=0.4)
         tab = VGroup(MathTex(r"m", r"\quad \text{quotient at } x = 0.3", font_size=26, color=GREY_A))
         for mm in (1, 2, 3, 4, 6, 8, 10):
             q = float(quot[mm - 1])
-            tab.add(MathTex(rf"{mm}", rf"\quad {q:,.0f}".replace(",", "{,}"), font_size=26))
+            tab.add(MathTex(rf"{mm}", r"\quad {" + f"{q:,.0f}".replace(",", "{,}") + "}", font_size=26))
             assert abs(q) >= (3**mm + 1) / 2 - 1e-6
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
         regrid(tab, gap=0.35)
@@ -243,10 +243,19 @@ class Nowhere(VoiceoverScene):
         card = museum_card(r"Weierstrass's function", r"Weierstrass, 1872; \ this form Rudin 7.18",
                            r"`continuous means differentiable, mostly'", r"Rudin 7.18; \ Part 8: most continuous "
                            r"functions are like this (Baire)")
+        # beside the card, the exhibit itself: f on [0, 2], to 12 terms (12 more change it by at most 4 (3/4)^12 < 0.13)
+        gx = plain_axes([0, 2, 0.5], [0, 4.2, 1], 6.0, 3.4).move_to([-3.4, -0.4, 0])
+        xg = np.linspace(0, 2, 16001)
+        fg = sum(0.75**k * phi(4.0**k * xg) for k in range(12))
+        assert 4 * 0.75**12 < 0.13 and fg.max() < 4.2
+        gg = polyline(gx, xg, fg, color=C.FUNC, stroke_width=1.6)
+        gl_ = MathTex(r"f(x) = \sum_n \left(\tfrac34\right)^n \varphi(4^n x)", font_size=28, color=C.FUNC).next_to(
+            gx, UP, buff=0.15)
+        card.move_to([3.6, -0.4, 0])
         with self.voiceover(
             "Into the museum. And a teaser: in Part 8, Baire's theorem will show that in a precise sense most continuous "
             "functions are like this one, and the smooth ones are the rare exceptions."
         ):
-            self.play(FadeIn(card, scale=0.95))
+            self.play(Create(gx), Create(gg), FadeIn(gl_), FadeIn(card, scale=0.95), run_time=2.0)
         self.wait(0.8)
         self.clear_scene()
