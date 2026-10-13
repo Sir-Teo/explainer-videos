@@ -90,7 +90,7 @@ class PowerSeries(VoiceoverScene):
         head = VGroup(label(r"\textbf{Rudin 8.2} \ (Abel, 1826)", font_size=30),
                       MathTex(r"\sum c_n \text{ converges} \;\Rightarrow\; \lim_{x \to 1^-} \sum c_n x^n = \sum c_n",
                               font_size=34, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
-        ax = plain_axes([0, 1, 0.25], [0, 0.8, 0.2], 6.2, 3.8).move_to([-3.3, -1.0, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 0.8, 0.2], 5.6, 3.8).move_to([-3.85, -1.0, 0])
         x = np.linspace(0, 1, 801)
         g = polyline(ax, x, np.log1p(x), color=C.FUNC, stroke_width=3.5)
         ln2 = DashedLine(ax.c2p(0, math.log(2)), ax.c2p(1, math.log(2)), color=C.EPS, stroke_width=2)
@@ -101,10 +101,10 @@ class PowerSeries(VoiceoverScene):
         tab = VGroup(MathTex(r"x", r"\quad f(x) \ (\text{summed})", font_size=26, color=GREY_A))
         for u, v in zip(xs, abel):
             tab.add(MathTex(rf"{u:g}", rf"\quad {v:.6f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.95, -0.6, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.3, -0.6, 0])
         regrid(tab, gap=0.35)
         # the series at x = 1 itself: alternating partial sums closing in on ln 2
-        bx = plain_axes([0, 40, 10], [0.4, 1.05, 0.2], 3.6, 2.3).move_to([5.0, -0.95, 0])
+        bx = plain_axes([0, 40, 10], [0.4, 1.05, 0.2], 3.3, 2.3).move_to([5.25, -0.95, 0])
         pts = VGroup(*[Dot(bx.c2p(k + 1, float(v)), radius=0.035, color=C.SEQ) for k, v in enumerate(alt)])
         bl = DashedLine(bx.c2p(0, math.log(2)), bx.c2p(40, math.log(2)), color=C.EPS, stroke_width=1.5)
         bt = MathTex(r"1 - \tfrac12 + \tfrac13 - \cdots", font_size=26, color=C.SEQ).next_to(bx, UP, buff=0.1)
@@ -147,20 +147,23 @@ class PowerSeries(VoiceoverScene):
         d = load("power")
         o = np.array([-3.4, -1.25, 0])
         u = 1.3
-        tT = ValueTracker(float(d["tt"]))
+        x_real = 0.8
+        tT = ValueTracker(x_real)  # first a real argument, then (at mark b) it swings to z = it with t = 2
+        thT = ValueTracker(0.0)
         K = 20
 
         def Z(w):
             return o + u * np.array([w.real, w.imag, 0])
 
-        axes = VGroup(Line(Z(-1.4 + 0j), Z(1.6 + 0j), color=GREY_D, stroke_width=1.5),
+        axes = VGroup(Line(Z(-1.4 + 0j), Z(2.5 + 0j), color=GREY_D, stroke_width=1.5),
                       Line(Z(-1.4j), Z(2.2j), color=GREY_D, stroke_width=1.5))
         circ = DashedVMobject(Circle(radius=u, color=GREY_B, stroke_width=2).move_to(o), num_dashes=48)
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / (K - 1)) for k in range(K)]
 
         def spiral():
             t = tT.get_value()
-            terms = np.array([(1j * t) ** k / math.factorial(k) for k in range(K)])
+            z = t * complex(math.cos(thT.get_value()), math.sin(thT.get_value()))
+            terms = np.array([z ** k / math.factorial(k) for k in range(K)])
             heads = np.concatenate([[0], np.cumsum(terms)])
             g = VGroup()
             for k in range(K):
@@ -179,6 +182,11 @@ class PowerSeries(VoiceoverScene):
         tl = always_redraw(lambda: MathTex(rf"t = {tT.get_value():.2f}", font_size=28, color=C.EPS).move_to(
             o + np.array([-2.1, 2.75, 0])))
         heads = d["heads"]
+        assert abs(float(d["tt"]) - 2.0) < 1e-12
+        e08 = sum(x_real**k / math.factorial(k) for k in range(K))
+        assert abs(e08 - math.exp(x_real)) < 1e-15
+        rl = MathTex(rf"E({x_real}) = {e08:.4f} = e^{{{x_real}}}", font_size=26, color=C.EPS).next_to(Z(e08), UP, buff=0.45)
+        rl.shift(LEFT * 0.4)
         head = VGroup(label(r"\textbf{Rudin 8.6--8.7} \ one series makes $\exp$, $\cos$ and $\sin$", font_size=30),
                       MathTex(r"E(z) = \sum_{n \ge 0} \frac{z^n}{n!}, \qquad E(z)E(w) = E(z + w)", font_size=32)
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
@@ -211,9 +219,13 @@ class PowerSeries(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), Create(axes), Create(circ))
+            self.play(Create(axes), Create(circ))
+            self.play(FadeIn(sp), run_time=1.5)
+            self.play(FadeIn(side[0]), FadeIn(rl))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]), FadeIn(sp), FadeIn(tl))
+            self.play(FadeOut(rl), FadeIn(side[1]))
+            self.play(thT.animate.set_value(math.pi / 2), tT.animate.set_value(2.0), run_time=3.0)
+            self.play(FadeIn(tl))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             self.play(FadeIn(side[3]), FadeIn(side[4]))
@@ -241,8 +253,8 @@ class PowerSeries(VoiceoverScene):
         p0 = Dot(ax.c2p(0, 1), radius=0.07, color=C.CONNECTED_SET)
         p2 = Dot(ax.c2p(2, cos_series(2.0)), radius=0.07, color=C.PATHOLOGY)
         l0 = MathTex(r"\cos 0 = 1", font_size=24, color=C.CONNECTED_SET).next_to(p0, RIGHT, buff=0.12).shift(DOWN * 0.2)
-        l2 = MathTex(rf"\cos 2 = {cos_series(2.0):.4f} < 0", font_size=24, color=C.PATHOLOGY).next_to(p2, DOWN,
-                                                                                                buff=0.12)
+        l2 = MathTex(rf"\cos 2 = {cos_series(2.0):.4f} < 0", font_size=24, color=C.PATHOLOGY).next_to(p2, LEFT,
+                                                                                                buff=0.15).shift(DOWN * 0.3)
         # nested brackets under the axis
         y0 = ax.c2p(0, -1)[1] - 0.25
         bars = VGroup()
