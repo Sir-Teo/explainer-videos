@@ -165,7 +165,11 @@ class Convexity(VoiceoverScene):
             label(r"proof: \ a line under $\varphi$ touching at $\int f$, \ integrated", font_size=22, color=GREY_A),
             MathTex(rf"10^4 \text{{ random weightings: smallest gap }} {sci(worst, 1)} \ge 0", font_size=24,
                     color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.75, -1.55, 0])
+        )
+        for r_ in thm:
+            if r_.width > 6.3:
+                r_.width = 6.3
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([0.55, -1.55, 0], RIGHT, buff=0)
         head = label(r"Weights on a convex curve: \ the center of mass lies above the curve", font_size=32).to_edge(
             UP, buff=0.3)
         with self.voiceover(
@@ -204,7 +208,7 @@ class Convexity(VoiceoverScene):
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         pts = VGroup(*[Dot(ax.c2p(z, v), radius=0.08, color=C.MEASURE) for z, v in zip(L, a)])
         plabels = VGroup(*[MathTex(rf"(\log {int(v)},\ {int(v)})", font_size=22, color=C.MEASURE).next_to(
-            ax.c2p(z, v), RIGHT if i < 2 else LEFT, buff=0.15) for i, (z, v) in enumerate(zip(L, a))])
+            ax.c2p(z, v), (UR, RIGHT, LEFT)[i], buff=0.15) for i, (z, v) in enumerate(zip(L, a))])  # (log 1, 1) above the axis
         tri = Polygon(*[ax.c2p(z, v) for z, v in zip(L, a)], stroke_color=GREY_C, stroke_width=1.5,
                       fill_color=GREY_C, fill_opacity=0.12)
         mx, am = float(L.mean()), float(a.mean())

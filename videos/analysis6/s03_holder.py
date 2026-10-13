@@ -61,7 +61,7 @@ class Holder(VoiceoverScene):
                 MathTex(rf"\text{{blue}} = \int_0^b y^{{q-1}}dy = \frac{{b^q}}{{q}} = {B:.3f}", font_size=28,
                         color=C.SEQ),
                 MathTex(rf"\text{{rectangle}} = ab = {a0 * b:.3f}", font_size=28, color=C.EPS),
-                MathTex(rf"\text{{leftover}} = {A + B - a0 * b:.3f} \ge 0", font_size=28, color=C.PATHOLOGY),
+                MathTex(rf"\text{{leftover}} = {max(A + B - a0 * b, 0.0):.3f} \ge 0", font_size=28, color=C.PATHOLOGY),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, 0.25, 0])
             return VGroup(*rows[:int(shown.get_value())])
 

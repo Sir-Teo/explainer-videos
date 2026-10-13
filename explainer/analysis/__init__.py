@@ -44,6 +44,11 @@ def label(text: str, color=WHITE, font_size=32, **kw) -> Tex:
     return t
 
 
+def nz(x, digits):
+    """x rounded for display, with -0 turned into 0 (so a readout never shows -0.000)."""
+    return round(float(x), digits) + 0.0
+
+
 def regrid(tab, gap=0.45, center=False, max_width=None):
     """Put a table's rows (MathTex rows split into the same parts, header first) on a real grid: each column as
     wide as its widest entry, ``gap`` apart, entries left-aligned (or centred). The table keeps its centre, is

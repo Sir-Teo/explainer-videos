@@ -380,7 +380,7 @@ class FourierSeries(VoiceoverScene):
         og = always_redraw(osc)
         val = always_redraw(lambda: MathTex(
             rf"N = {round(nT.get_value())}: \ \frac{{1}}{{2\pi}}\int g(t)\sin\!\big((N + \tfrac12)t\big)dt = "
-            rf"{trap(g * np.sin((round(nT.get_value()) + 0.5) * t), t) / (2 * np.pi):+.4f}", font_size=26,
+            rf"{nz(trap(g * np.sin((round(nT.get_value()) + 0.5) * t), t) / (2 * np.pi), 4):+.4f}", font_size=26,
             color=C.APPROX).next_to(ax, DOWN, buff=0.2))
         for N in (3, 10, 40):
             n = np.arange(1, N + 1)
