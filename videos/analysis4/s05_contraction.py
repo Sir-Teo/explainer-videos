@@ -35,8 +35,8 @@ class Contraction(VoiceoverScene):
         t = np.linspace(0, 1.1, 300)
         cg = polyline(ax, t, np.cos(t), color=C.FUNC, stroke_width=3.5)
         dg = polyline(ax, t, t, color=GREY_B, stroke_width=2.5)
-        cl = MathTex(r"y = \cos x", font_size=28, color=C.FUNC).next_to(ax.c2p(0.15, 1.0), RIGHT, buff=0.1)
-        dl = MathTex(r"y = x", font_size=28, color=GREY_B).next_to(ax.c2p(1.05, 1.05), DOWN, buff=0.15)
+        cl = MathTex(r"y = \cos x", font_size=28, color=C.FUNC).move_to(ax.c2p(0.27, 0.78))  # under the curve, left of the web
+        dl = MathTex(r"y = x", font_size=28, color=GREY_B).next_to(ax.c2p(0.3, 0.12), RIGHT, buff=0.05)  # below the diagonal
         web = VGroup()
         for k in range(9):
             a, b = x[k], x[k + 1]
@@ -109,12 +109,11 @@ class Contraction(VoiceoverScene):
         fixd = Dot(ax.c2p(*star), radius=0.09, color=WHITE)
         rows = [
             MathTex(r"d(x_{n+1}, x_n)", r"\le", r"c^n\, d(x_1, x_0)", font_size=30),
-            MathTex(r"d(x_m, x_n)", r"\le", r"(c^n + \dots + c^{m-1})\, d(x_1, x_0) \le \frac{c^n}{1 - c}\, d(x_1, x_0)",
-                    font_size=30),
+            MathTex(r"d(x_m, x_n)", r"\le", r"\frac{c^n}{1 - c}\, d(x_1, x_0)", font_size=30),
             MathTex(r"\varphi(x)", r"=", r"\lim \varphi(x_n) = \lim x_{n+1} = x", font_size=30),
             MathTex(r"d(x, y)", r"=", r"d(\varphi x, \varphi y) \le c\, d(x, y) \;\Rightarrow\; x = y", font_size=30),
         ]
-        whys = [why(r"$\varphi$ shrinks every distance by $c$"), why(r"triangle inequality: \ Cauchy"),
+        whys = [why(r"$\varphi$ shrinks every distance by $c$"), why(r"triangle inequality: \ $\le (c^n + \dots + c^{m-1})\,d(x_1, x_0)$; \ Cauchy"),
                 why(r"$\varphi$ is continuous"), why(r"uniqueness")]
         step = ladder(self, rows, whys, keep=4, top=2.2, buff=0.42, x=2.0, edge=6.95)
         head = label(r"\textbf{Rudin 9.23} \ $X$ complete, \ $d(\varphi x, \varphi y) \le c\, d(x, y)$ with $c < 1$ "
@@ -219,7 +218,7 @@ class Contraction(VoiceoverScene):
         for n in range(5):
             tab.add(MathTex(rf"{n}", r"\quad " + (f"{nerr[n]:.4f}" if nerr[n] > 1e-3 else sci(float(nerr[n]), 1)),
                             font_size=28))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([2.6, -0.6, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([1.5, -0.6, 0])
         regrid(tab)
         side = VGroup(label(r"flat at the fixed point:", font_size=24),
                       label(r"near it, $c$ is as small as we like,", font_size=24),
@@ -227,9 +226,9 @@ class Contraction(VoiceoverScene):
                       label(r"the error squares, \ the digits double", font_size=24, color=C.EPS),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -0.7, 0])
         for r_ in side:
-            if r_.width > 3.4:
-                r_.width = 3.4
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.25, -0.7, 0])
+            if r_.width > 3.9:
+                r_.width = 3.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([3.0, -0.7, 0], RIGHT, buff=0)
         assert nerr[4] < 1e-11
         with self.voiceover(
             "<bookmark mark='a'/> And Newton's method from the opening is a contraction too. Its step is the map g of "
