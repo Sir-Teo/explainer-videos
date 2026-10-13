@@ -21,6 +21,28 @@ python tools/check_narration.py analysis6         # Whisper listen test of every
 
 The scenes share the series' instruments in [`explainer/analysis`](../../explainer/analysis) and helpers from earlier parts (see [`common.py`](common.py)). The full narration is in [`SCRIPT.md`](SCRIPT.md).
 
+## Chapters (35:42)
+
+```
+0:00 Which distance between functions?
+2:09 1. Convex functions and Jensen's inequality
+3:59 2. Young, Hoelder and Minkowski
+6:07 3. The spaces L^p
+8:01 4. L^p is complete
+10:14 5. Inner products and the parallelogram law
+12:39 6. The nearest point
+14:46 7. Every functional is an inner product
+17:16 8. Orthonormal bases, Bessel and Parseval
+19:46 9. Fourier series in L^2, and Fejer
+22:21 10. Complex measures
+24:21 11. The Radon-Nikodym theorem
+26:04 12. The dual of L^p
+28:27 13. Differentiating measures
+30:21 14. The fundamental theorem, for Lebesgue
+32:21 15. Change of variables
+33:41 The sixth row of the ledger
+```
+
 ## Scenes
 
 | # | Scene | Chapter |
