@@ -21,6 +21,25 @@ python tools/check_narration.py analysis5         # Whisper listen test of every
 
 The scenes share the series' instruments in [`explainer/analysis`](../../explainer/analysis) and helpers from earlier parts (see [`common.py`](common.py)). The full narration is in [`SCRIPT.md`](SCRIPT.md).
 
+## Chapters (26:19)
+
+```
+0:00 Limits under the integral, without uniformity
+2:37 1. A length for every set
+5:08 2. A set with no length
+6:54 3. Sigma-algebras and measurable functions
+8:52 4. Measures
+10:12 5. The integral, and monotone convergence
+12:23 6. Fatou's lemma
+13:44 7. Dominated convergence
+16:04 8. Every positive functional is an integral
+17:59 9. Lebesgue measure, and Riemann revisited
+19:39 10. Measurable is nearly continuous
+20:59 11. Product measures and Fubini
+22:37 12. Convolution and the layer cake
+24:29 The fifth row of the ledger
+```
+
 ## Scenes
 
 | # | Scene | Chapter |
