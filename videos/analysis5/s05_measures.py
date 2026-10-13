@@ -124,7 +124,7 @@ class Measures(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def almost(self):
-        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.0, 3.4).move_to([-0.9, -0.7, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.0, 3.0).move_to([-0.9, -0.15, 0])
         zero = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=C.FUNC, stroke_width=5)
         rats = sorted({Fraction(p, q) for q in range(1, 41) for p in range(q + 1)})
         dots = VGroup(*[Dot(ax.c2p(float(r), 1), radius=0.03, color=C.PATHOLOGY) for r in rats])

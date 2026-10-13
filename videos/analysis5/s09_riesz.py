@@ -167,7 +167,7 @@ class RieszRepresentation(VoiceoverScene):
         pm = ProofMap([r"$\mu$ on open sets: \ sup of $\Lambda f$", r"$\mu$ on all sets: \ outer approximation",
                        r"a $\sigma$-algebra where $\mu$ is countably additive", r"$\Lambda f = \int f\,d\mu$: \ slice "
                        r"$f$ into layers"], font_size=20, width=3.1, buff=0.28).to_edge(UP, buff=0.2)
-        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.25], 7.0, 4.0).move_to([-2.9, -1.0, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.25], 6.3, 4.0).move_to([-3.75, -1.0, 0])
         x = np.linspace(0, 1, 1601)
         f = 0.5 + 0.4 * np.sin(6 * x) * np.exp(-x)
         f = np.clip(f, 0, 1)
@@ -200,9 +200,9 @@ class RieszRepresentation(VoiceoverScene):
                       label(r"the layer picture from the opening: \ now inside Rudin's proof", font_size=24,
                             color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, -1.0, 0])
         for r_ in rows:
-            if r_.width > 6.0:
-                r_.width = 6.0
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, -1.0, 0])
+            if r_.width > 6.6:
+                r_.width = 6.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to([0.15, -1.0, 0], RIGHT, buff=0)
         with self.voiceover(
             "<bookmark mark='a'/> The rest of the proof has four steps: define mu on open sets, extend it to all sets "
             "by approximating from outside, <bookmark mark='b'/> find a sigma-algebra on which it is countably "
