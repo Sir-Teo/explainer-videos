@@ -192,9 +192,7 @@ class Sobolev(VoiceoverScene):
             tab.add(MathTex(f"{s:g}", rf"\quad {r_.mean():.3f}", rf"\quad {10 ** (2 * s - 1):.3f}", font_size=24,
                             color=c))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 1.3, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         assert np.allclose(ratios.mean(axis=1), 10 ** (2 * ss - 1), rtol=0.03)
         rows = VGroup(
             label(r"the sawtooth $\sum \sin(nx)/n$ has coefficients $1/n$:", font_size=22),

@@ -169,8 +169,7 @@ class AbsolutelyContinuous(VoiceoverScene):
         for e, v in zip(eps, var):
             tab.add(MathTex(f"{e}", rf"\quad {v:.3f}", font_size=26, color=C.PATHOLOGY))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.1, 1.0, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         grow = label(r"each factor 10 in $\varepsilon$ adds $\frac{4}{\pi}\log 10 = 2.93$", font_size=22,
                      color=GREY_A).next_to(tab, DOWN, buff=0.15)
         assert abs((var[3] - var[1]) - 4 / math.pi * math.log(10)) < 0.1

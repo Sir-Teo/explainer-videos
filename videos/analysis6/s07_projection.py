@@ -83,9 +83,7 @@ class Projection(VoiceoverScene):
         for n, lhs, bound in rows:
             tab.add(MathTex(f"{n}", rf"\quad {sci(lhs, 2)}", rf"\quad {sci(bound, 2)}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.0, -1.55, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         concl = label(r"Cauchy, \ so it converges \ (completeness), \ and the limit is in $E$ \ (closed)", font_size=24,
                       color=C.EPS).to_edge(DOWN, buff=0.2)
         head = VGroup(label(r"\textbf{RCA 4.10} \ a nonempty closed convex set $E$ in a Hilbert space", font_size=28),

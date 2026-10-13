@@ -133,9 +133,7 @@ class Lebesgue(VoiceoverScene):
         for N, a, b in zip(Ns, si, absint):
             tab.add(MathTex(rf"{int(N)}", rf"\quad {a:.5f}", rf"\quad {b:.4f}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-1.6, -2.3, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         side = VGroup(label(r"$\to \pi/2$: \ an improper", font_size=24, color=C.CONNECTED_SET),
                       label(r"Riemann integral", font_size=24, color=C.CONNECTED_SET),
                       label(r"$\approx \tfrac2\pi \log N + 1.1$: \ no", font_size=24, color=C.PATHOLOGY),

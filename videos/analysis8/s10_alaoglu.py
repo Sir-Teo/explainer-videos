@@ -107,8 +107,7 @@ class Alaoglu(VoiceoverScene):
         for n, e in zip(sub, errs):
             tab.add(MathTex(f"{int(n)}", rf"\quad {sci(float(e), 1)}", font_size=24, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.4, -2.2, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         assert np.ptp(m1) > 0.05 and np.all(np.diff(errs) < 0)
         head = label(r"Probability measures on $[0, 1]$: \ a sequence with no limit has a convergent subsequence",
                      font_size=28).to_edge(UP, buff=0.25)

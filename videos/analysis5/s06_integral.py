@@ -46,8 +46,7 @@ class Integral(VoiceoverScene):
             tab.add(MathTex(rf"{k + 1}", rf"\quad {ints[k]:.5f}", font_size=28))
         tab.add(MathTex(r"\int f", rf"\quad {If:.5f}", font_size=28, color=WHITE))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.2, -0.8, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         with self.voiceover(
             "<bookmark mark='a'/> The integral of a simple function is what it should be: each value times the "
             "measure of the set where it's taken, added up. The integral of a non-negative measurable function is the "

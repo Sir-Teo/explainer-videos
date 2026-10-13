@@ -31,8 +31,8 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def dirichlet(self):
-        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 9.0, 3.6).move_to([-1.4, -0.9, 0])
-        x = np.linspace(0, 1, 6001)
+        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 9.0, 3.3).move_to([-1.4, -0.45, 0])
+        x = np.union1d(np.linspace(0, 1, 6001), np.arange(121) / 120)  # include every spike centre k / 5!
 
         def g(m, n):
             return np.cos(math.factorial(m) * np.pi * x) ** (2 * n)
@@ -48,7 +48,7 @@ class Hook(VoiceoverScene):
         side = VGroup(
             label(r"$n \to \infty$: \ $1$ where $m!\,x$ is an integer, \ else $0$", font_size=26),
             label(r"then $m \to \infty$: \ $1$ at every rational, \ $0$ elsewhere", font_size=26, color=C.PATHOLOGY),
-            label(r"each stage has integral $0$; \ the limit has no Riemann integral", font_size=26,
+            label(r"each limit in $n$ has integral $0$; \ the double limit has no Riemann integral", font_size=26,
                   color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)
         head = label(r"Dirichlet's function as a double limit of continuous functions", font_size=32).to_edge(UP,

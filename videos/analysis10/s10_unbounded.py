@@ -154,12 +154,10 @@ class Unbounded(VoiceoverScene):
             near = np.sort(ev[np.argsort(np.abs(ev))[:3]])
             ex = 2 * math.pi * np.round((near + th) / (2 * math.pi)) - th  # the ladder's nearest rung
             assert np.allclose(near, ex, atol=1e-4)
-            tab.add(MathTex(f"{th:.3f}", r"\quad " + r",\ ".join(f"{v:.6f}" for v in near),
-                            r"\quad " + r",\ ".join(f"{v:.6f}" for v in ex), font_size=20))
+            tab.add(MathTex(f"{th:.3f}", r"\quad " + r",\ ".join(f"{{{v:.4f}}}" for v in near),
+                            r"\quad " + r",\ ".join(f"{{{v:.4f}}}" for v in ex), font_size=20))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.9, 1.4, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab, gap=0.35, max_width=6.6)
         for th, ev in ((0.0, t0), (math.pi / 2, t1), (math.pi, t2)):
             assert all(np.min(np.abs(ev - (2 * math.pi * n - th))) < 1e-4 for n in range(-3, 4))
         rows = VGroup(

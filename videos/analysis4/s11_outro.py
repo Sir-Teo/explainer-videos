@@ -67,8 +67,8 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def next_time(self):
         head = label(r"Next: Part 5, \ Measure and the Lebesgue integral", font_size=38).to_edge(UP, buff=0.3)
-        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 7.6, 3.4).move_to([-2.4, -0.6, 0])
-        x = np.linspace(0, 1, 4001)
+        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 6.0, 3.4).move_to([-3.75, -0.6, 0])
+        x = np.union1d(np.linspace(0, 1, 4001), np.arange(121) / 120)  # include every spike centre k / 5!
 
         def g(m, n):
             return np.cos(math.factorial(m) * np.pi * x) ** (2 * n)
@@ -84,14 +84,15 @@ class Outro(VoiceoverScene):
                 .next_to(ax, UP, buff=0.1) for m, n in shown]
         lim = MathTex(r"\lim_{m \to \infty} \lim_{n \to \infty} \cos(m!\,\pi x)^{2n} = "
                       r"\begin{cases} 1 & x \in \mathbb Q \\ 0 & x \notin \mathbb Q \end{cases}", font_size=32,
-                      color=C.PATHOLOGY).move_to([4.0, 0.6, 0])
-        if lim.width > 5.6:
-            lim.width = 5.6
+                      color=C.PATHOLOGY)
+        if lim.width > 6.2:
+            lim.width = 6.2
+        lim.next_to([-0.2, 0.6, 0], RIGHT, buff=0)
         q = VGroup(label(r"Dirichlet's function: \ a double limit of continuous functions", font_size=24),
                    label(r"that Riemann cannot integrate", font_size=24, color=C.PATHOLOGY),
                    label(r"Lebesgue can: \ and then limits pass under $\int$", font_size=24, color=C.EPS),
                    label(r"with no uniformity at all", font_size=24, color=C.EPS),
-                   ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.0, -1.6, 0])
+                   ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([-0.2, -1.6, 0], RIGHT, buff=0)
         if q.get_right()[0] > 6.9:
             q.shift((6.9 - q.get_right()[0]) * RIGHT)
         with self.voiceover(

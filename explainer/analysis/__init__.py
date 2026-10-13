@@ -44,6 +44,28 @@ def label(text: str, color=WHITE, font_size=32, **kw) -> Tex:
     return t
 
 
+def regrid(tab, gap=0.45, center=False, max_width=None):
+    """Put a table's rows (MathTex rows split into the same parts, header first) on a real grid: each column as
+    wide as its widest entry, ``gap`` apart, entries left-aligned (or centred). The table keeps its centre, is
+    scaled down to ``max_width`` if given, and is kept inside the frame."""
+    c = tab.get_center()
+    ncol = min(len(r) for r in tab)
+    w = [max(r[j].width for r in tab) for j in range(ncol)]
+    x = tab.get_left()[0]
+    for j in range(ncol):
+        for r in tab:
+            r[j].set_x(x + (w[j] if center else r[j].width) / 2)
+        x += w[j] + gap
+    tab.move_to(c)
+    if max_width is not None and tab.width > max_width:
+        tab.width = max_width
+    if tab.get_right()[0] > 6.95:
+        tab.shift((6.95 - tab.get_right()[0]) * RIGHT)
+    if tab.get_left()[0] < -6.95:
+        tab.shift((-6.95 - tab.get_left()[0]) * RIGHT)
+    return tab
+
+
 def note(text: str, font_size=22, color=GREY_B) -> Tex:
     """Small grey caption, e.g. a source line, 'computed' or 'schematic'."""
     return label(text, font_size=font_size, color=color)

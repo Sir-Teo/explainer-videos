@@ -27,12 +27,30 @@ class Vitali(VoiceoverScene):
         head = label(r"What we would like: \ a length $m(E)$ for \emph{every} set $E$ on the circle", font_size=32)
         head.to_edge(UP, buff=0.4)
         wishes = VGroup(
-            label(r"1. \ countably additive: \ $m\big(\bigcup E_k\big) = \sum m(E_k)$ for disjoint $E_k$", font_size=30),
-            label(r"2. \ rotation invariant: \ turning a set does not change its length", font_size=30),
-            label(r"3. \ the whole circle has length $2\pi$", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.3)
-        verdict = label(r"impossible \ (Vitali, 1905): \ some set must be left out", font_size=32,
-                        color=C.PATHOLOGY).to_edge(DOWN, buff=0.8)
+            label(r"1. \ countably additive: \ $m\big(\bigcup E_k\big) = \sum m(E_k)$ for disjoint $E_k$", font_size=26),
+            label(r"2. \ rotation invariant: \ turning a set does not change its length", font_size=26),
+            label(r"3. \ the whole circle has length $2\pi$", font_size=26),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        for w_ in wishes:
+            if w_.width > 8.3:
+                w_.width = 8.3
+        wishes.next_to([-1.6, 0.7, 0], RIGHT, buff=0)
+        verdict = label(r"impossible \ (Vitali, 1905): \ some set must be left out", font_size=30,
+                        color=C.PATHOLOGY).next_to(wishes, DOWN, buff=0.7, aligned_edge=LEFT)
+        # the picture: three disjoint arcs of the unit circle, measured by angle
+        o, R = np.array([-4.6, -0.5, 0]), 1.85
+        base = Circle(radius=R, color=GREY_D, stroke_width=2).move_to(o)
+        starts, lens, cols = [0.3, 1.6, 3.6], [0.6, 0.9, 0.4], [C.FUNC, C.APPROX, C.MEASURE]
+        arcs = VGroup(*[Arc(radius=R, start_angle=a0, angle=ln, color=c, stroke_width=10).move_arc_center_to(o)
+                        for a0, ln, c in zip(starts, lens, cols)])
+        assert all(starts[k] + lens[k] < starts[k + 1] for k in range(2))  # disjoint
+        tot = sum(lens)
+        r1 = MathTex(rf"m(E_1 \cup E_2 \cup E_3) = {lens[0]} + {lens[1]} + {lens[2]} = {tot:.1f}", font_size=24).next_to(
+            base, DOWN, buff=0.3)
+        r2 = MathTex(rf"\text{{turned by }} 1.2: \ \text{{still }} {tot:.1f}", font_size=24).next_to(r1, DOWN, buff=0.15)
+        whole = Circle(radius=R, color=C.EPS, stroke_width=3, stroke_opacity=0.8).move_to(o)
+        r3 = MathTex(rf"m(\text{{circle}}) = 2\pi = {2 * math.pi:.4f}", font_size=24, color=C.EPS).next_to(base, UP,
+                                                                                                         buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> Outer measure is defined for every set, but it isn't additive on every set. Could "
             "some cleverer definition be? We'd want three things on the circle: <bookmark mark='b'/> the length of a "
@@ -41,10 +59,16 @@ class Vitali(VoiceoverScene):
             "showed that no length function on all subsets can do all three."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
-            for i, mk in enumerate("bcd"):
-                vo.wait_until(mk)
-                self.play(FadeIn(wishes[i], shift=RIGHT * 0.15))
+            self.play(FadeIn(head), Create(base))
+            vo.wait_until("b")
+            self.play(FadeIn(wishes[0], shift=RIGHT * 0.15), LaggedStart(*[Create(a_) for a_ in arcs], lag_ratio=0.4),
+                      FadeIn(r1))
+            vo.wait_until("c")
+            self.play(FadeIn(wishes[1], shift=RIGHT * 0.15))
+            self.play(Rotate(arcs, angle=1.2, about_point=o), FadeIn(r2), run_time=1.5)
+            vo.wait_until("d")
+            self.play(FadeIn(wishes[2], shift=RIGHT * 0.15), Create(whole), FadeIn(r3))
+            self.bring_to_front(arcs)
             vo.wait_until("e")
             self.play(FadeIn(verdict))
         self.wait(0.3)
@@ -71,8 +95,7 @@ class Vitali(VoiceoverScene):
         for n, g in zip(Ns, maxgap):
             tab.add(MathTex(rf"{int(n)}", rf"\quad {g:.4f}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, 0.0, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         out = label(r"the orbit is dense: \ it comes within $0.0044$ of every point", font_size=26, color=C.EPS).next_to(
             tab, DOWN, buff=0.35)
         assert maxgap[-1] < 0.0088 + 1e-4

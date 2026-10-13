@@ -161,9 +161,7 @@ class Integration(VoiceoverScene):
         for n in range(8):
             tab.add(MathTex(f"{n}", rf"\ \ {sci(float(eps[n]), 2)}", rf"\ \ {ratio_bad[n]:.4f}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([1.5, -0.9, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         for row in tab[1:]:
             row[1].set_color(C.EPS)
             row[2].set_color(C.PATHOLOGY)

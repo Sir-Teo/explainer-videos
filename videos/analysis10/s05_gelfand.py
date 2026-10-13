@@ -105,9 +105,8 @@ class Gelfand(VoiceoverScene):
         tab = VGroup(MathTex(r"N", r"\quad \sum_{|n| \le N}|b_n|", font_size=24, color=GREY_A))
         for N_, p_ in zip(Ns, partial):
             tab.add(MathTex(f"{N_:,}".replace(",", r"{,}"), rf"\quad {p_:.6f}", font_size=24))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([1.4, 0.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.3, 1.65, 0])
+        regrid(tab, gap=0.6)
         rows = VGroup(
             label(r"\textbf{Wiener's lemma} \ (RCA 18.21)", font_size=26, color=C.EPS),
             label(r"if $\hat a$ has $\sum |a_n| < \infty$ and never vanishes,", font_size=24),
@@ -116,10 +115,11 @@ class Gelfand(VoiceoverScene):
             label(r"$\hat a(h) \ne 0$ for every $h$, \ so $a$ lies in no maximal ideal;", font_size=22),
             label(r"so $a$ is invertible in $\ell^1(\mathbb Z)$; \ and $\widehat{a^{-1}} = 1/\hat a$", font_size=22),
             label(r"Wiener's own proof (1932) took pages", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.5, -0.5, 0])
+        )
         for r_ in rows:
-            if r_.width > 4.9:
-                r_.width = 4.9
+            if r_.width > 5.6:
+                r_.width = 5.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([1.3, -1.35, 0], RIGHT, buff=0)
         assert np.all(np.diff(partial) > 0) and partial[-1] - partial[-2] < 1e-4
         head = label(r"Wiener's $1/f$ theorem, \ in three lines", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(

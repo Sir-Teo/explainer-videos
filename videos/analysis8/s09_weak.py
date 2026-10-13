@@ -47,8 +47,7 @@ class Weak(VoiceoverScene):
         for n, v in zip(ns, inner):
             tab.add(MathTex(f"{int(n)}", rf"\quad {v:.4f}", font_size=26, color=C.INNER))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, -1.2, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         assert np.all(np.diff(inner) < 0)
         defn = VGroup(
             label(r"$x_n \rightharpoonup x$ \ (weakly) \ if $\Lambda x_n \to \Lambda x$ for every $\Lambda \in X^*$",

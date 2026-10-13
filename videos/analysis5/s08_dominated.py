@@ -204,8 +204,7 @@ class Dominated(VoiceoverScene):
         for n, v in zip((10, 50, 100, 200), eg):
             tab.add(MathTex(rf"{n}", r"\quad " + (f"{v:.4f}" if v > 1e-3 else sci(float(v), 1)), font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -0.3, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         note_ = VGroup(label(r"infinite measure breaks it:", font_size=24, color=GREY_A),
                        label(r"$\mathbf 1_{[n, \infty)} \to 0$ everywhere, \ never uniformly", font_size=24,
                              color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tab, DOWN, buff=0.35)

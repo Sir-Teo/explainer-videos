@@ -93,9 +93,7 @@ class CompactSelfAdjoint(VoiceoverScene):
         for n in range(6):
             tab.add(MathTex(f"{n + 1}", rf"\quad {w[n]:.8f}", rf"\quad {exact[n]:.8f}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 1.1, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         assert np.allclose(w, exact, rtol=1e-4) and abs(rq[5] - exact[0]) < 1e-5
         rows = VGroup(
             label(r"eigenfunctions: \ $\sin(n\pi x)$, \ to $3 \times 10^{-4}$", font_size=22, color=C.EPS),

@@ -135,8 +135,7 @@ class RieszRepresentation(VoiceoverScene):
             tab.add(MathTex(rf"1/{int(k)}" if k < 10**6 else r"10^{-7}", rf"\quad {v:.7f}", font_size=28))
         tab.add(MathTex(r"\text{length}(V)", rf"\quad {L:.7f}", font_size=28, color=C.OPEN_SET))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.5, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         note_ = label(r"six random open sets: \ all within $10^{-6}$ of their length", font_size=24,
                       color=GREY_A).next_to(tab, DOWN, buff=0.3)
         if note_.get_right()[0] > 6.9:

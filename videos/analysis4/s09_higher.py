@@ -58,10 +58,12 @@ class HigherOrder(VoiceoverScene):
         rc = always_redraw(rect)
         dot = always_redraw(lambda: Dot(bx.c2p(rT.get_value(), (10 ** (2 * rT.get_value()) - 1) /
                                                (10 ** (2 * rT.get_value()) + 1)), radius=0.08, color=WHITE))
-        ends = VGroup(MathTex(r"h \ll k:\ \to -1 = f_{xy}(0, 0)", font_size=26, color=C.SEQ).next_to(
-                          bx.c2p(-2, -1), UP, buff=0.15).shift(RIGHT * 1.0),
-                      MathTex(r"k \ll h:\ \to +1 = f_{yx}(0, 0)", font_size=26, color=C.CLOSED_SET).next_to(
-                          bx.c2p(2, 1), DOWN, buff=0.15).shift(LEFT * 1.0))
+        e1 = MathTex(r"h \ll k:\ \to -1 = f_{xy}(0, 0)", font_size=24, color=C.SEQ).move_to(bx.c2p(-1.05, 0.5))
+        e2 = MathTex(r"k \ll h:\ \to +1 = f_{yx}(0, 0)", font_size=24, color=C.CLOSED_SET).move_to(bx.c2p(1.05, -0.5))
+        ends = VGroup(VGroup(e1, Arrow(e1.get_bottom(), bx.c2p(-1.6, -0.93), buff=0.08, color=C.SEQ, stroke_width=2.5,
+                                       max_tip_length_to_length_ratio=0.15)),
+                      VGroup(e2, Arrow(e2.get_top(), bx.c2p(1.6, 0.93), buff=0.08, color=C.CLOSED_SET, stroke_width=2.5,
+                                       max_tip_length_to_length_ratio=0.15)))
         note_ = label(r"only the shape matters, \ not the size: \ $f(\lambda h, \lambda k) = \lambda^2 f(h, k)$",
                       font_size=22, color=GREY_A).next_to(bx, UP, buff=0.15)
         assert d["fxy"] == -1 and d["fyx"] == 1 and q[0] < -0.999 and q[-1] > 0.999
@@ -138,8 +140,8 @@ class HigherOrder(VoiceoverScene):
         d = load("mixed")
         ts, lhs, rhs = d["ts"], d["lhs"], d["rhs"]
         x = np.linspace(1e-4, 1, 600)
-        ax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 4.6, 2.8).move_to([-3.6, 0.2, 0])
-        bx = plain_axes([0, 1, 0.5], [-0.8, 0.05, 0.4], 4.6, 2.8).move_to([-3.6, -2.55, 0])
+        ax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 4.6, 2.6).move_to([-3.6, 0.55, 0])
+        bx = plain_axes([0, 1, 0.5], [-0.8, 0.05, 0.4], 4.6, 2.45).move_to([-3.6, -2.68, 0])
         cols = [C.SEQ, C.APPROX, C.CLOSED_SET]
         fam = VGroup(*[polyline(ax, x, x**t, color=c, stroke_width=3) for t, c in zip(ts, cols)])
         dfam = VGroup(*[polyline(bx, x, np.clip(x**t * np.log(x), -0.8, 0), color=c, stroke_width=3)
@@ -157,11 +159,9 @@ class HigherOrder(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, 0.6, 0])
         tab = VGroup(MathTex(r"t", r"\quad F'(t)", r"\quad \int_0^1 x^t \log x\,dx", font_size=26, color=GREY_A))
         for t, c, a, b in zip(ts, cols, lhs, rhs):
-            tab.add(MathTex(rf"{t:g}", rf"\quad {a:.6f}", rf"\quad {b:.6f}", font_size=26, color=c))
+            tab.add(MathTex(rf"{t:g}", rf"\quad {{{a:.6f}}}", rf"\quad {{{b:.6f}}}", font_size=26, color=c))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.0, -1.4, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         note_ = label(r"the limit inside $\frac{d}{dt}$ passes through $\int$: \ uniform continuity on a compact "
                       r"rectangle (Part 3)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.15).shift(RIGHT * 2.6)
         if note_.width > 7.6:
