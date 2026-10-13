@@ -57,8 +57,8 @@ class Hilbert(VoiceoverScene):
         qdot = always_redraw(lambda: Dot(qx.c2p(lT.get_value(), xx - 2 * lT.get_value() * xy + lT.get_value()**2 * yy),
                                          radius=0.08, color=C.EPS))
         vert = VGroup(DashedLine(qx.c2p(lam_star, 0), qx.c2p(lam_star, qmin), color=C.EPS, stroke_width=2),
-                      MathTex(rf"\min = {qmin:.4f} \ge 0", font_size=24, color=C.EPS).next_to(qx.c2p(lam_star, qmin), UP,
-                                                                                           buff=0.4))
+                      MathTex(rf"\min = {qmin:.4f} \ge 0", font_size=24, color=C.EPS).move_to(qx.c2p(lam_star, 1.6)))
+        # inside the U: q = 1.6 at lambda = 3 +- 2.05, wider than the label
         side = VGroup(
             MathTex(r"q(\lambda) = \|x\|^2 - 2\lambda\,\mathrm{Re}\langle x, y\rangle + \lambda^2 \|y\|^2", font_size=26),
             MathTex(rf"= {xx:.4f} - 2\lambda \cdot {xy:.0f} + \lambda^2 \cdot \tfrac13", font_size=26, color=GREY_A),
@@ -69,9 +69,9 @@ class Hilbert(VoiceoverScene):
                     font_size=28, color=C.INNER),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.9, -1.1, 0])
         for r_ in side:
-            if r_.width > 3.9:
-                r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.95, -1.1, 0])
+            if r_.width > 3.75:
+                r_.width = 3.75
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([3.05, -1.1, 0], RIGHT, buff=0)
         assert qmin > 0 and abs(lam_star - 3) < 1e-6
         with self.voiceover(
             "<bookmark mark='a'/> An inner product is a way to multiply two vectors and get a number: symmetric, "

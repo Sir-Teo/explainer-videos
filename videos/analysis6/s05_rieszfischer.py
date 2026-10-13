@@ -30,7 +30,7 @@ class RieszFischer(VoiceoverScene):
                        r"$g = \sum_i |f_{n_{i+1}} - f_{n_i}|$ \ has $\|g\|_p \le 1$",
                        r"so $g < \infty$ a.e., \ and $f_{n_i} \to f$ a.e.",
                        r"Fatou: \ $\|f - f_m\|_p \le \varepsilon$ \ for $m \ge N$"],
-                      font_size=20, width=5.6, buff=0.22, direction=DOWN).move_to([3.6, 0.15, 0])
+                      font_size=20, width=5.6, buff=0.2, direction=DOWN).move_to([3.6, 0.55, 0])
         head = VGroup(label(r"\textbf{RCA 3.11} \ (Riesz--Fischer) \ $L^p(\mu)$ is complete, \ $1 \le p \le \infty$",
                             font_size=30),
                       label(r"the idea: \ a Cauchy sequence has a subsequence whose steps are summable", font_size=24,
@@ -51,8 +51,8 @@ class RieszFischer(VoiceoverScene):
         for i in range(1, 11):
             z.append(z[-1] + 2.2 * 0.5**i * np.array([math.cos(0.95 * i + 0.3), math.sin(0.95 * i + 0.3)]))
         z = np.array(z)
-        org = np.array([1.2, -3.3, 0])
-        P = [org + np.array([p_[0], p_[1], 0]) * 1.5 for p_ in z]
+        org = np.array([1.9, -3.55, 0])
+        P = [org + np.array([p_[0], p_[1], 0]) * 1.2 for p_ in z]  # height 1.49 * 1.2: clear of the proof map
         walk = VGroup(*[Line(P[i], P[i + 1], color=C.SEQ, stroke_width=3) for i in range(10)])
         wdots = VGroup(*[Dot(q, radius=0.05, color=C.SEQ) for q in P[:-1]])
         lim = Star(n=5, outer_radius=0.12, color=C.EPS, fill_opacity=1).move_to(P[-1])
@@ -60,8 +60,9 @@ class RieszFischer(VoiceoverScene):
                     MathTex(r"f", font_size=24, color=C.EPS).next_to(P[-1], UR, buff=0.06))
         seglen = np.linalg.norm(np.diff(z, axis=0), axis=1)
         assert np.allclose(seglen, 2.2 * 0.5 ** np.arange(1, 11)) and seglen.sum() < 2.2
-        wt = label(r"steps $< 2^{-i}$: \ total length $< 1$, \ so the walk has an end", font_size=20,
-                   color=GREY_A).next_to(walk, RIGHT, buff=0.4).shift(UP * 0.2)
+        wt = VGroup(label(r"steps $< 2^{-i}$: \ total length $< 1$,", font_size=22, color=GREY_A),
+                    label(r"so the walk has an end", font_size=22, color=GREY_A)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.08).next_to(walk, RIGHT, buff=0.5)
         with self.voiceover(
             "<bookmark mark='a'/> Riesz-Fischer: L p is complete, for every p from one to infinity. Here's the plan "
             "of Rudin's proof. <bookmark mark='b'/> Start with a Cauchy sequence. Pick a subsequence so fast that the "
