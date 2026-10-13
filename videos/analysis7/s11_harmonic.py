@@ -53,6 +53,19 @@ class Harmonic(VoiceoverScene):
         im = ImageMobject((np.concatenate([rgb, alpha], -1) * 255).astype(np.uint8))
         im.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
         im.stretch_to_fit_width(S).stretch_to_fit_height(S).move_to(ax.c2p(0, 0))
+        # first, the simplest harmonic function: u = Re z^2 = x^2 - y^2 (saddle: warm along x, cool along y)
+        Ua = X * X - Y * Y
+        ta = np.clip((Ua - vmin) / (vmax - vmin), 0, 1)[..., None]
+        rgba = np.where(ta < mid, c_lo + (ta / mid) * (c_mid - c_lo), c_mid + ((ta - mid) / (1 - mid)) * (c_hi - c_mid))
+        imA = ImageMobject((np.concatenate([rgba, alpha], -1) * 255).astype(np.uint8))
+        imA.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
+        imA.stretch_to_fit_width(S).stretch_to_fit_height(S).move_to(ax.c2p(0, 0))
+        lapA = ((Ua[1:-1, 2:] + Ua[1:-1, :-2] + Ua[2:, 1:-1] + Ua[:-2, 1:-1] - 4 * Ua[1:-1, 1:-1]) / (x[1] - x[0]) ** 2)
+        assert np.abs(lapA).max() < 1e-6  # x^2 - y^2 is exactly harmonic (the 5-point stencil is exact)
+        labA = VGroup(MathTex(r"u = \mathrm{Re}\, z^2 = x^2 - y^2", font_size=32, color=C.MEASURE),
+                      MathTex(r"\Delta u = u_{xx} + u_{yy} = 2 - 2 = 0", font_size=30, color=C.EPS),
+                      label(r"warm along the real axis, \ cool along the imaginary one", font_size=22, color=GREY_A)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, 1.0, 0])
         ring = VGroup()
         for k in range(len(th)):
             a0, a1 = th[k], th[(k + 1) % len(th)] if k + 1 < len(th) else 2 * np.pi
@@ -90,8 +103,10 @@ class Harmonic(VoiceoverScene):
         ) as vo:
             self.add(tour_tag())
             vo.wait_until("a")
+            self.play(FadeIn(imA), FadeIn(labA[0]), run_time=1.2)
+            self.play(FadeIn(labA[1:]))
             vo.wait_until("b")
-            self.play(FadeIn(ring), Create(bx), Create(gg), FadeIn(b_l))
+            self.play(FadeOut(imA), FadeOut(labA), FadeIn(ring), Create(bx), Create(gg), FadeIn(b_l))
             vo.wait_until("c")
             self.play(FadeIn(im), FadeIn(rows[:3]), run_time=2.0)
             self.play(FadeIn(rows[3]))
