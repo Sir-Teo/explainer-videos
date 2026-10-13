@@ -404,14 +404,25 @@ def compute_contour():
 
 def compute_decay():
     # the size of the transform against smoothness: a jump (box), a kink (triangle), C-infinity (the bump)
+    # all three curves are the same kind of envelope: the largest |f^(u)| for u in [t, 2t], from the exact transforms
     t = np.geomspace(1, 200, 300)
-    box = math.sqrt(2 / math.pi) / t  # envelopes of |sin t| / t and (2 - 2 cos t) / t^2
-    tri = 4 / (SQ2PI * t * t)
+    u = np.linspace(0, 400, 16001)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        fb = np.where(u > 0, math.sqrt(2 / math.pi) * np.sin(u) / u, math.sqrt(2 / math.pi))  # box on [-1, 1]
+        ft = np.where(u > 0, (2 - 2 * np.cos(u)) / (SQ2PI * u * u), 1 / SQ2PI)  # triangle 1 - |x|
     x = np.linspace(-1, 1, 4001)
     bw = bump(x) * (x[1] - x[0])  # the trapezoid weights (the bump vanishes at the ends)
-    u = np.linspace(0, 400, 16001)
     w = np.concatenate([np.cos(np.outer(u[i:i + 2000], x)) @ bw for i in range(0, len(u), 2000)]) / SQ2PI  # even
-    env = np.array([np.abs(w[(u >= tt) & (u <= 2 * tt)]).max() for tt in t])
+    win = [(u >= tt) & (u <= 2 * tt) for tt in t]
+    box = np.array([np.abs(fb[m]).max() for m in win])
+    tri = np.array([np.abs(ft[m]).max() for m in win])
+    env = np.array([np.abs(w[m]).max() for m in win])
+    # the exact formulas, checked against quadrature at a few points
+    for uu in (0.7, 3.0, 11.0):
+        assert abs(np.sum(np.where(np.abs(x) <= 1, 1.0, 0.0) * np.cos(uu * x)) * (x[1] - x[0]) / SQ2PI
+                   - math.sqrt(2 / math.pi) * math.sin(uu) / uu) < 2e-3
+        assert abs(np.sum((1 - np.abs(x)) * np.cos(uu * x)) * (x[1] - x[0]) / SQ2PI - (2 - 2 * math.cos(uu)) / (SQ2PI * uu * uu)) < 1e-5
+    assert tri.max() <= 1 / SQ2PI + 1e-12 and np.all(tri[t > 6] < box[t > 6])  # the kink wins only from t ~ 6 on
     # faster than every power: t^k * env(t) eventually decreases, for k = 1..6
     for k in range(1, 7):
         y = t**k * env

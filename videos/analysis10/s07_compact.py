@@ -72,7 +72,7 @@ class CompactSelfAdjoint(VoiceoverScene):
     def peel(self):
         d = load("green")
         xc, iters, rq, w, exact = d["xc"], d["iters"], d["rq"], d["w"], d["exact"]
-        ax = plain_axes([0, 1, 0.25], [-1.6, 1.6, 0.5], 6.0, 3.2).move_to([-3.3, -0.2, 0])
+        ax = plain_axes([0, 1, 0.25], [-2.2, 2.2, 1], 6.0, 3.2).move_to([-3.3, -0.2, 0])  # the first iterate reaches 2.08
         cols = [C.FUNC, C.APPROX, C.FREQ]
         stage = ValueTracker(0)
 

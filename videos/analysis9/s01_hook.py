@@ -44,8 +44,13 @@ class Hook(VoiceoverScene):
         def spike_():
             n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
             y = n * rho(n * x)
-            return VGroup(area_under(ax, x, np.minimum(y, 4.2), C.DISTRIBUTION, 0.35),
-                          polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3))
+            if y.max() <= 4.2:  # all of the spike fits: shade its area (always 1)
+                return VGroup(area_under(ax, x, y, C.DISTRIBUTION, 0.35),
+                              polyline(ax, x, y, color=C.DISTRIBUTION, stroke_width=3))
+            # taller than the axes: no clipped shading (it would lose area); an arrow says it goes on up
+            return VGroup(polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3),
+                          Arrow(ax.c2p(0, 3.6), ax.c2p(0, 4.75), buff=0, color=C.DISTRIBUTION, stroke_width=3,
+                                max_tip_length_to_length_ratio=0.3))
 
         sp = always_redraw(spike_)
 

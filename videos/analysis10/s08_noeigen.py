@@ -79,7 +79,7 @@ class NoEigenvectors(VoiceoverScene):
         d = load("multop")
         ws, ratios, c = d["ws"], d["ratios"], float(d["c"])
         lam = 0.4
-        ax = plain_axes([0, 1, 0.25], [0, 11, 5], 6.2, 3.6, numbers=True, font_size=18,
+        ax = plain_axes([0, 1, 0.25], [0, 13, 5], 6.2, 3.6, numbers=True, font_size=18,  # peak 1/sqrt(w) <= 12.65
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.4, 0])
         x = np.linspace(0, 1, 4001)
@@ -89,13 +89,14 @@ class NoEigenvectors(VoiceoverScene):
             w_ = wT.get_value()
             psi = np.where(np.abs(x - lam) < w_, np.cos(math.pi * (x - lam) / (2 * w_)), 0.0)
             psi /= math.sqrt(trap(psi**2, x))
-            return polyline(ax, x, np.minimum(psi, 11), color=C.FUNC, stroke_width=3.5)
+            assert psi.max() < 13
+            return polyline(ax, x, psi, color=C.FUNC, stroke_width=3.5)
 
         g = always_redraw(bumpf)
         rd = always_redraw(lambda: MathTex(
             rf"w = {wT.get_value():.4f}: \ \ \frac{{\|(M - 0.4)\psi\|}}{{\|\psi\|}} = {c * wT.get_value():.5f}", font_size=28,
             color=C.EPS).next_to(ax, UP, buff=0.12))
-        mark = DashedLine(ax.c2p(lam, 0), ax.c2p(lam, 11), color=C.SPECTRUM, stroke_width=2)
+        mark = DashedLine(ax.c2p(lam, 0), ax.c2p(lam, 13), color=C.SPECTRUM, stroke_width=2)
         ml = MathTex(r"\lambda = 0.4", font_size=22, color=C.SPECTRUM).next_to(ax.c2p(lam, 0), DOWN, buff=0.35)
         tab = VGroup(MathTex(r"w", r"\quad \text{ratio (quadrature)}", font_size=22, color=GREY_A))
         for w_, r_ in zip(ws, ratios):
