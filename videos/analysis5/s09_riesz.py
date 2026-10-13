@@ -43,6 +43,24 @@ class RieszRepresentation(VoiceoverScene):
                      MathTex(r"\Lambda f = f(a)", font_size=30),
                      MathTex(r"\Lambda f = \sum c_k f(x_k),\ c_k > 0", font_size=30)).arrange(RIGHT, buff=0.8)
         exs.to_edge(DOWN, buff=0.3)
+        # each example run through the machine on the same f: the area, a point value, a weighted set of points
+        a0, xk, ck = 0.3, [0.2, 0.45, 0.7], [0.5, 0.3, 0.2]
+
+        def fv(t):
+            return max(0.0, 1 - 9 * (t - 0.45) ** 2)
+
+        outs = [float(trap(f, x)), fv(a0), sum(c_ * fv(t_) for c_, t_ in zip(ck, xk))]
+        assert abs(outs[1] - 0.7975) < 1e-12 and abs(outs[2] - 0.60625) < 1e-12
+        blabs = [MathTex(r"\int_0^1", font_size=50, color=C.FUNCTIONAL), MathTex(r"\delta_{0.3}", font_size=50,
+                 color=C.FUNCTIONAL), MathTex(r"\textstyle\sum c_k \delta_{x_k}", font_size=44, color=C.FUNCTIONAL)]
+        for b_ in blabs:
+            b_.move_to(box)
+        vals = [MathTex(rf"{v_:.4f}", font_size=40, color=C.MEASURE).next_to(out, RIGHT, buff=0.15) for v_ in outs]
+        marks = [area_under(ax, x, f, C.MEASURE, 0.35),
+                 VGroup(DashedLine(ax.c2p(a0, 0), ax.c2p(a0, fv(a0)), color=C.EPS, stroke_width=2),
+                        Dot(ax.c2p(a0, fv(a0)), radius=0.07, color=C.EPS)),
+                 VGroup(*[VGroup(DashedLine(ax.c2p(t_, 0), ax.c2p(t_, fv(t_)), color=C.EPS, stroke_width=2),
+                                 Dot(ax.c2p(t_, fv(t_)), radius=0.05 + 0.12 * c_, color=C.EPS)) for c_, t_ in zip(ck, xk)])]
         thm = VGroup(label(r"\textbf{RCA 2.14} \ (F.~Riesz 1909, \ Markov, \ Kakutani)", font_size=28),
                      MathTex(r"\Lambda f = \int_X f\,d\mu \quad \text{for one regular Borel measure } \mu", font_size=36,
                              color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
@@ -58,9 +76,14 @@ class RieszRepresentation(VoiceoverScene):
             vo.wait_until("a")
             self.play(GrowArrow(inp), GrowArrow(out), FadeIn(val), FadeIn(rules))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(e_) for e_ in exs], lag_ratio=0.4), run_time=2.0)
+            self.play(FadeIn(exs[0]), FadeIn(marks[0]), ReplacementTransform(bl, blabs[0]), FadeTransform(val, vals[0]))
+            self.play(FadeIn(exs[1]), FadeOut(marks[0]), FadeIn(marks[1]), ReplacementTransform(blabs[0], blabs[1]),
+                      FadeTransform(vals[0], vals[1]))
+            self.play(FadeIn(exs[2]), FadeOut(marks[1]), FadeIn(marks[2]), ReplacementTransform(blabs[1], blabs[2]),
+                      FadeTransform(vals[1], vals[2]))
             vo.wait_until("c")
-            self.play(FadeIn(thm))
+            bl2 = MathTex(r"\Lambda", font_size=60, color=C.FUNCTIONAL).move_to(box)
+            self.play(FadeIn(thm), FadeOut(marks[2]), ReplacementTransform(blabs[2], bl2), FadeTransform(vals[2], val))
         self.wait(0.3)
         self.clear_scene()
 
