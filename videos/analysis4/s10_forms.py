@@ -61,8 +61,8 @@ class FormsTour(VoiceoverScene):
             label(r"each small square becomes a near-parallelogram", font_size=24),
             label(r"whose area is $|\det T'|$ times the square's", font_size=24),
             label(r"(color: \ $|\det T'|$, \ from $0.8$ to $1.2$)", font_size=22, color=GREY_A),
-            label(rf"computed for all {len(ratios)} cells: \ area / ($|\det T'| \times h^2$)", font_size=24),
-            MathTex(rf"\in [{ratios.min():.5f},\ {ratios.max():.5f}]", font_size=30, color=C.EPS),
+            label(rf"computed for all {len(ratios)} cells: \ area $\big/ \int_{{\text{{square}}}} |\det T'|$", font_size=24),
+            MathTex(rf"\in [{ratios.min():.6f},\ {ratios.max():.6f}]", font_size=30, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
         for r_ in side:
             if r_.width > 6.3:
@@ -146,6 +146,39 @@ class FormsTour(VoiceoverScene):
                 r_.width = 6.6
         faces.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -0.85, 0])
         assert abs(area - 1.5) < 1e-3
+        om = MathTex(r"\Omega", font_size=34, color=C.FUNC).move_to(ax.c2p(0.85, 0.85))
+        bom = MathTex(r"\partial\Omega", font_size=30, color=C.EPS).next_to(ax.c2p(1.56, 0.95), RIGHT, buff=0.1)
+
+        # walking the loop: (1/2)(x dy - y dx) is the area swept by the radius from the origin. In polar form the
+        # loop is r = 3 sin t cos t / (sin^3 t + cos^3 t), t in [0, pi/2], and the swept area has the closed form
+        # A(t) = (3/2) sin^3 t / (sin^3 t + cos^3 t), which reaches 3/2 at t = pi/2
+        def rpol(t_):
+            return 3 * np.sin(t_) * np.cos(t_) / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
+
+        def A_(t_):
+            return 1.5 * np.sin(t_) ** 3 / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
+
+        gg = np.linspace(0, math.pi / 2, 20001)
+        num = np.concatenate([[0], np.cumsum(0.5 * (rpol(gg[1:]) ** 2 + rpol(gg[:-1]) ** 2) / 2 * np.diff(gg))])
+        assert np.abs(num - A_(gg)).max() < 1e-6 and abs(A_(math.pi / 2) - 1.5) < 1e-12
+        thv = ValueTracker(1e-4)
+
+        def swept_():
+            g_ = np.linspace(1e-4, thv.get_value(), 160)
+            return Polygon(ax.c2p(0, 0), *[ax.c2p(rpol(a) * math.cos(a), rpol(a) * math.sin(a)) for a in g_],
+                           stroke_width=0, fill_color=C.EPS, fill_opacity=0.45)
+
+        def tip_():
+            t_ = thv.get_value()
+            return ax.c2p(rpol(t_) * math.cos(t_), rpol(t_) * math.sin(t_))
+
+        swept = always_redraw(swept_)
+        ray = always_redraw(lambda: Line(ax.c2p(0, 0), tip_(), color=C.EPS, stroke_width=2.5))
+        walker = always_redraw(lambda: Dot(tip_(), radius=0.08, color=WHITE))
+        rd = VGroup(MathTex(r"\frac12 \int (x\,dy - y\,dx) =", font_size=32, color=C.EPS),
+                    DecimalNumber(0, num_decimal_places=6, font_size=32, color=C.EPS)).arrange(RIGHT, buff=0.15)
+        rd.move_to(faces[5], aligned_edge=LEFT)
+        rd[1].add_updater(lambda m: m.set_value(A_(thv.get_value())))
         with self.voiceover(
             "<bookmark mark='a'/> The summit of the chapter is Stokes' theorem: the integral of a form over the "
             "boundary of a region equals the integral of its exterior derivative over the region. "
@@ -157,13 +190,19 @@ class FormsTour(VoiceoverScene):
             self.play(FadeIn(head[0]), Create(ax))
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
+            self.play(Create(loop), LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.3), FadeIn(om),
+                      FadeIn(bom), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(faces[:2]))
             vo.wait_until("c")
             self.play(FadeIn(faces[2:4]))
             vo.wait_until("d")
-            self.play(Create(loop), LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.3), run_time=2.5)
-            self.play(FadeIn(faces[4:]))
+            self.play(FadeIn(faces[4]), FadeIn(rd), FadeOut(om), loop.animate.set_fill(opacity=0.08))
+            self.add(swept, ray, walker)
+            self.play(thv.animate.set_value(math.pi / 2), run_time=5.0, rate_func=linear)
+            for m_ in (swept, ray, walker, rd[1]):
+                m_.clear_updaters()
+            self.play(FadeOut(ray), FadeOut(walker), FadeTransform(rd, faces[5]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -196,6 +235,19 @@ class FormsTour(VoiceoverScene):
                 r_.width = 6.0
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.85, 0])
         assert abs(wa - 2 * math.pi) < 1e-3 and abs(wo) < 1e-3
+        # the vector field dual to omega, (-y, x)/r^2: it swirls around the hole, faster near it
+        field = VGroup()
+        for gx in np.arange(-1.5, 2.51, 0.5):
+            for gy in np.arange(-1.5, 1.51, 0.5):
+                r2 = gx * gx + gy * gy
+                if r2 < 0.2:
+                    continue
+                v = np.array([-gy, gx]) / r2
+                L = min(0.42, 0.22 / math.sqrt(r2))
+                u = v / np.linalg.norm(v) * L / 1.45
+                field.add(Arrow(ax.c2p(gx - u[0] / 2, gy - u[1] / 2), ax.c2p(gx + u[0] / 2, gy + u[1] / 2), buff=0,
+                                color=GREY_B, stroke_width=2.5, max_tip_length_to_length_ratio=0.35).set_opacity(0.7))
+        fl_ = label(r"$\omega$ measures the change of angle around $0$", font_size=22, color=GREY_B).next_to(ax, DOWN, buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> Last stop: a form with zero exterior derivative, a closed form, need not be the "
             "derivative of a function, an exact form. The classic example is the angle form in the plane with the "
@@ -206,7 +258,9 @@ class FormsTour(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), FadeIn(hole))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), FadeIn(side[:3]))
+            self.play(FadeIn(head[1]), LaggedStart(*[GrowArrow(a_) for a_ in field], lag_ratio=0.02), FadeIn(fl_),
+                      run_time=2.0)
+            self.play(FadeIn(side[:3]))
             vo.wait_until("b")
             self.play(Create(c2), FadeIn(l2))
             vo.wait_until("c")
