@@ -21,6 +21,22 @@ python tools/check_narration.py analysis4         # Whisper listen test of every
 
 The scenes share the series' instruments in [`explainer/analysis`](../../explainer/analysis) and helpers from earlier parts (see [`common.py`](common.py)). The full narration is in [`SCRIPT.md`](SCRIPT.md).
 
+## Chapters (23:31)
+
+```
+0:00 Newton's method, and the contraction behind it
+1:40 1. Linear maps and their norms
+3:45 2. The derivative is a linear map
+6:09 3. Partial derivatives are not enough
+8:13 4. The contraction principle
+10:35 5. Picard: differential equations in C[a, b]
+12:59 6. The inverse function theorem
+15:03 7. The implicit function theorem
+17:12 8. Mixed partials, and differentiating under the integral
+19:39 9. A tour of integration in many variables
+21:49 The fourth row of the ledger
+```
+
 ## Scenes
 
 | # | Scene | Chapter |

@@ -13,7 +13,7 @@ And yet, as we add more of them, the sum hugs the sawtooth more and more closely
 
 Now look closely at the jump, and the questions start. Every one of these partial sums is smooth: you can differentiate it as often as you like. But the thing they approach is not even continuous. So a limit of continuous functions can fail to be continuous.
 
-At the jump itself, every partial sum equals zero, exactly halfway between the two sides. And right next to the jump, the partial sums overshoot. Add more terms, and the overshoot gets narrower, but not lower: it stays at about nine percent of the size of the jump. We'll prove that in Part 3.
+At the jump itself, every partial sum equals zero, exactly halfway between the two sides. And right next to the jump, the partial sums overshoot. Add more terms, and the overshoot gets narrower, but not lower: it settles at about nine percent of the size of the jump. We'll prove that in Part 3.
 
 Lagrange, one of the mathematicians who read Fourier's memoir, objected: a sum of smooth waves ought to be smooth. The arguments that followed took most of the nineteenth century, and they forced mathematicians to say exactly what a limit is, what a function is, and what an integral is. Georg Cantor invented set theory while studying these series. And at the bottom of it all, they had to say what a number is.
 
@@ -91,9 +91,9 @@ It contains every cut in the collection, so it's an upper bound. And it's the le
 
 Then comes arithmetic, and it's mostly routine. To add two cuts, add their elements in every possible way. Zero is the cut of the negative fractions, and you can check that adding it changes nothing. Multiplication is defined first for positive cuts, then extended by cases of sign. Rudin checks the field rules one by one; it's tedious and teaches nothing new, so we'll trust it. And the rationals sit inside, each fraction r becoming the cut of fractions below it, in a way that respects sums, products and order.
 
-That's Rudin's theorem: there is an ordered field with the least-upper-bound property, containing the rationals, and it's unique: any two such fields are the same up to renaming. There's a second classic construction, by Cantor and Méray, in the same year. A real number is a sequence of fractions that bunches up, a Cauchy sequence, with two sequences counting as the same number when their difference goes to zero, like the decimals and the hops for root two.
+That's Rudin's theorem: there is an ordered field with the least-upper-bound property, containing the rationals. And, as Rudin remarks, it's unique: any two such fields are the same up to renaming. There's a second classic construction, by Méray and Cantor, from the same years. A real number is a sequence of fractions that bunches up, a Cauchy sequence, with two sequences counting as the same number when their difference goes to zero, like the decimals and the hops for root two.
 
-That second construction is the one this series will reuse. Whenever a space has holes, and the spaces of functions we meet later will, we fill them with the space's own Cauchy sequences. From here on, though, we can forget how the reals were built. Everything we need follows from one fact: every set that is bounded above has a least upper bound.
+That second construction is the one this series will reuse. Whenever a space has holes, and the spaces of functions we meet later will, we fill them with the space's own Cauchy sequences. From here on, though, we can forget how the reals were built. Everything we need follows from one fact: every nonempty set that is bounded above has a least upper bound.
 
 ## 3. Archimedes, density and decimals
 
@@ -135,7 +135,7 @@ The integers are countable: list zero, then one, minus one, two, minus two, and 
 
 The positive fractions are countable too, which is more surprising, since they're dense. Lay them out in a grid: p over q, with p across and q down. Every positive fraction appears somewhere, many of them several times. Now walk the grid along its diagonals, zigzagging back and forth, and number each fraction as you reach it, skipping any you've already counted, like two over two, which is one.
 
-The result is a list: one, two, a half, three, a third, four, three halves, and on, in which every positive fraction appears exactly once. Add zero and the negatives by interleaving, as we did for the integers, and all of Q is countable. The dense dust of chapter one is just a list.
+The result is a list: one, a half, two, three, a third, a quarter, two thirds, and on, in which every positive fraction appears exactly once. Add zero and the negatives by interleaving, as we did for the integers, and all of Q is countable. The dense dust of chapter one is just a list.
 
 The same zigzag proves something more general. Take countably many countable sets, E one, E two, E three, and so on, and write each as a row. Walking the diagonals lists every element of every row. So a countable union of countable sets is countable. It's a tool we'll use again and again, for instance when we measure sets in Part 5.
 
@@ -163,7 +163,7 @@ Call the length of y squared B, and the inner product C. Then B x minus C y is B
 
 Cauchy–Schwarz immediately gives the triangle inequality. Expand the length of x plus y squared; bound the middle term by Cauchy–Schwarz; and what's left is a perfect square. The side of a triangle is never longer than the other two sides together.
 
-In 1906, Maurice Fréchet turned this into a definition. A metric space is a set together with a distance function d with three properties. Distances between different points are positive, and a point is at distance zero from itself. Distance is symmetric. And the triangle inequality: a detour through a third point is never shorter. That's all. Every theorem in the rest of this video uses only these three properties, so it holds in every metric space at once.
+In 1906, Maurice Fréchet turned this into a definition. A metric space is a set together with a distance function d with three properties. Distances between different points are positive, and a point is at distance zero from itself. Distance is symmetric. And the triangle inequality: a detour through a third point is never shorter. That's all. A theorem proved from these three properties alone holds in every metric space at once, and we'll be careful to say when a result needs more.
 
 The same set can carry many distances. On the plane: the Euclidean distance, whose ball of radius one is a disk; the taxicab distance, adding the horizontal and vertical differences, whose ball is a diamond; the max distance, taking the larger of the two, whose ball is a square; and the discrete distance, where any two different points are at distance one. Its open ball of radius one contains only its center.
 
@@ -199,7 +199,7 @@ Open and closed are related through complements. E is open exactly when everythi
 
 How do open sets combine? Any union of open sets is open: a point in the union is in one of them, and that one already gives it room. The intersection of finitely many open sets is also open: a point in all of them has a disk inside each, and the smallest of those finitely many disks fits inside all of them.
 
-But only finitely many. The intervals from minus one over n to one over n are all open, and they shrink down onto a single point, zero. Their intersection is just zero, which is not open. With infinitely many sets, the minimum radius can be zero. That one word, finite, is the seed of compactness, two chapters from now.
+But only finitely many. The intervals from minus one over n to one over n are all open, and they shrink down onto a single point, zero. Their intersection is just zero, which is not open. With infinitely many sets, the minimum radius can be zero. That one word, finite, is the seed of compactness, in the next chapter.
 
 Rudin collects the standard examples in a table, here in the plane. The open disk is open but not closed; the closed disk, closed but not open. The points one, a half, a third, and so on, are neither: zero is a limit point the set doesn't contain. The whole plane is both. The new column is perfect: closed, with every point a limit point, no isolated points. Perfect sets will give us the Cantor set. And look at the last row: a segment of the x-axis is not open in the plane.
 
@@ -249,7 +249,7 @@ Closed and bounded gives compact: a bounded set sits inside some box, which is c
 
 One warning, which will matter at the end of this video. Compact and the limit-point property are equivalent in every metric space. But closed and bounded implies compact only in k-dimensional space, because the proof needed boxes, and bisection, and finitely many coordinates.
 
-A corollary that we'll use constantly in Part 2. Every bounded infinite set in k-dimensional space has a limit point. Here are the first four thousand points of the sequence cosine of n, sine of root two times n, all inside a square: here, a sample of the first hundred thousand.
+A corollary that we'll use constantly in Part 2. Every bounded infinite set in k-dimensional space has a limit point. Here are points of the sequence cosine of n, sine of root two times n, all inside a square: up to fifteen hundred of the first hundred thousand.
 
 The proof is bisection once more. Cut the square into quarters; at least one contains infinitely many of the points. Zoom into it, and repeat. The quarters shrink to a point, and every disk around that point contains infinitely many points of the set: a limit point. In sequence language: every bounded sequence has a convergent subsequence.
 
@@ -261,7 +261,7 @@ Chapter nine. Compactness gives a second, completely different proof that the re
 
 Recall that a set is perfect if it's closed and every one of its points is a limit point: no isolated points. Every nonempty perfect set in k-dimensional space is uncountable. Suppose instead that a perfect set P could be listed: x one, x two, x three. Choose a closed disk that meets P, then a smaller closed disk inside it that still meets P but avoids x one. That's possible because every point of P is a limit point, so there are other points of P nearby to aim for. Then a smaller one avoiding x two, and so on.
 
-The pieces of P inside these disks are nested, nonempty and compact, so by last chapter's theorem something lies in all of them. That something is a point of P, but it can't be x n for any n, because the n plus first disk avoids x n. So the list missed a point. The real line is perfect, so this is a second proof that it's uncountable, built from compactness instead of digits.
+The pieces of P inside these disks are nested, nonempty and compact, so by theorem 2.36, from the chapter on compactness, something lies in all of them. That something is a point of P, but it can't be x n for any n, because the n plus first disk avoids x n. So the list missed a point. The real line is perfect, so this is a second proof that it's uncountable, built from compactness instead of digits.
 
 The Cantor set, from 1883, is built by removing. Start with the interval from zero to one. Remove its open middle third, leaving two closed pieces. Remove the middle third of each of those, leaving four, then eight, then sixteen. The Cantor set is what survives every step: the intersection of all these stages.
 
@@ -313,7 +313,7 @@ So here's the warning, as a dictionary between k-dimensional space and our first
 
 _Scene `s13_outro.py::Outro`_
 
-Let's take stock. We found that the rationals have holes, and filled them in a way that turns having no holes into a theorem: every bounded set has a least upper bound. We used that to prove the Archimedean property, density, and the nested interval theorem, and we built the bisection engine. We learned that the rationals, dense as they are, are countable, while the reals are not. Then we stepped back to metric spaces, where a function can be a point, and built the vocabulary: open, closed, compact, connected. We proved Heine–Borel by bisection, met the Cantor set, and found that our first function space already breaks Heine–Borel.
+Let's take stock. We found that the rationals have holes, and filled them in a way that turns having no holes into a theorem: every nonempty set that's bounded above has a least upper bound. We used that to prove the Archimedean property, density, and the nested interval theorem, and we built the bisection engine. We learned that the rationals, dense as they are, are countable, while the reals are not. Then we stepped back to metric spaces, where a function can be a point, and built the vocabulary: open, closed, compact, connected. We proved Heine–Borel by bisection, met the Cantor set, and found that our first function space already breaks Heine–Borel.
 
 And the ledger gets its first row. The space: the real line, and k-dimensional space. Complete because we built it so, with least upper bounds. Compact means closed and bounded. Which limits may we swap? None yet. And Fourier's question: we can't even ask it yet, because we haven't said what it means for a sequence of functions to converge.
 
@@ -323,4 +323,4 @@ This part followed the first two chapters of Rudin's Principles of Mathematical 
 
 ---
 
-8163 words (~53 min at 155 wpm).
+8176 words (~53 min at 155 wpm).

@@ -7,7 +7,7 @@ _Scene `s01_hook.py::Hook`_
 
 Six rows of the ledger are filled. Part 7 takes a step sideways, into the complex plane. It's the part the rest of the series needs: the spectral theory of Part 10 runs on Cauchy's integral formula.
 
-Part 2 met this function: e to the minus one over x squared. On the real line it's infinitely differentiable, and every derivative at zero vanishes, so its Taylor series is zero, and says nothing about it. Now feed it complex numbers. Here's the same formula on a square of the complex plane, colored by phase, with brightness for size. Along the imaginary axis, minus one over z squared is positive, and the function explodes: at 0.2 i it's already about ten to the ten. The real line hid a catastrophe. In the complex plane a function with a derivative can't behave like this, and that buys three miracles: one derivative gives infinitely many; the function is its own power series; and its values on any tiny arc decide it everywhere.
+Part 2 met this function: e to the minus one over x squared. On the real line it's infinitely differentiable, and every derivative at zero vanishes, so its Taylor series is zero, and says nothing about it. Now feed it complex numbers. Here's the same formula on a square of the complex plane, colored by phase, with brightness for size. Along the imaginary axis, minus one over z squared is positive, and the function explodes: at 0.2 i it's already about seven times ten to the ten. The real line hid a catastrophe. In the complex plane a function with a derivative can't behave like this, and that buys three miracles: one derivative gives infinitely many; the function is its own power series; and its values on any tiny arc decide it everywhere.
 
 Rudin begins Real and Complex Analysis with one series: the exponential. On the left, its domain coloring. Moving up, the colors cycle, and the whole picture repeats. From the series alone come the addition law, and the fact that exp never vanishes. Even pi comes out of it: half of pi is the first positive zero of the cosine, the real part of e to the i t. Bisection on the series pins it down to every digit. And the partial sums at two pi i converge to one: the exponential repeats every two pi i, which is the horizontal stripe pattern in the picture.
 
@@ -167,4 +167,4 @@ This part followed chapters ten through fourteen of Rudin's Real and Complex Ana
 
 ---
 
-3868 words (~25 min at 155 wpm).
+3870 words (~25 min at 155 wpm).

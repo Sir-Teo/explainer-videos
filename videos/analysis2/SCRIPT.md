@@ -11,7 +11,7 @@ Here's the alternating harmonic series: one, minus a half, plus a third, minus a
 
 Now take exactly the same terms, and add them in a different order. Use positive terms, one, a third, a fifth, and so on, until the total passes pi. Then use negative terms until it drops back below pi. Then positive terms again. Watch where the total goes.
 
-Plot the running total against the number of terms used. It overshoots pi, falls back, overshoots again, and the swings shrink, because each swing is at most the size of the last term used. After a million terms, the total agrees with pi to five decimal places. Reaching pi takes about a hundred and thirty-four positive terms for every negative one, but every term of the original series gets used, exactly once.
+Plot the running total against the number of terms used. It overshoots pi, falls back, overshoots again, and the swings shrink, because each swing is at most the size of the last term used. After a million terms, the total is within a hundred-thousandth of pi. Reaching pi takes about a hundred and thirty-four positive terms for every negative one, but every term of the original series gets used, exactly once.
 
 And pi isn't special. Aim at minus one instead, and the same recipe lands on minus one. Keep raising the target and the total runs off to infinity. Same terms, every time; only the order changes, and in the natural order they add up to log two.
 
@@ -59,11 +59,11 @@ So when does Cauchy imply convergent? Rudin's first answer: in a compact space, 
 
 And in R k, the same is true, with no compactness assumed. A Cauchy sequence is bounded: one tail has a finite diameter, and there are only finitely many terms before it. So the whole sequence sits in a closed box, and Part 1's Heine-Borel theorem says the box is compact. Part 1 pays off again.
 
-A space where every Cauchy sequence converges is called complete. R k is complete, and so is every compact space, and every closed subset of a complete space. The rationals are not, and neither is the interval from zero to one with zero removed: one over n is Cauchy there, with nowhere to go. The function spaces of this series will be complete too, and proving it will be real work: continuous functions with the sup distance in Part 3, and square integrable functions in Part 5. Completeness is so useful that Banach and Hilbert spaces are defined to have it. And every metric space can be completed, by adding the missing limits: that's how Cauchy and Méray built the reals from the rationals.
+A space where every Cauchy sequence converges is called complete. R k is complete, and so is every compact space, and every closed subset of a complete space. The rationals are not, and neither is the interval from zero to one with zero removed: one over n is Cauchy there, with nowhere to go. The function spaces of this series will be complete too, and proving it will be real work: continuous functions with the sup distance in Part 3, and square integrable functions in Part 5. Completeness is so useful that Banach and Hilbert spaces are defined to have it. And every metric space can be completed, by adding the missing limits: that's how Cantor and Méray built the reals from the rationals.
 
 There's one more way to know a sequence converges without knowing its limit, and it uses the least-upper-bound property directly. A monotone, bounded sequence converges, to its supremum. Take one plus one over n, to the n-th power: it increases, and it never reaches 3. Three is an upper bound, and so are smaller numbers, down to a least one.
 
-Call the least upper bound s star. Given epsilon, s star minus epsilon is not an upper bound, so some term s N is above it; and since the sequence increases, every later term is trapped between s star minus epsilon and s star. For a tenth, N is 12. Chapter five identifies this supremum: it's the number e.
+Call the least upper bound s star. Given epsilon, s star minus epsilon is not an upper bound, so some term s N is above it; and since the sequence increases, every later term is trapped between s star minus epsilon and s star. For a tenth, every term from the thirteenth on is trapped. Chapter five identifies this supremum: it's the number e.
 
 And in the rationals this fails too: the decimal truncations of root two increase, stay bounded, and have no rational supremum. Completeness, in either form, is exactly what the rationals lack.
 
@@ -115,11 +115,11 @@ _Scene `s06_e.py::NumberE`_
 
 Chapter five: the number e, defined twice, and a proof, entirely from the tail of a series, that it isn't a fraction.
 
-Rudin defines e as the sum of one over n factorial. How fast does it converge? The error after n terms is the tail. Each later factorial is at least the first one times a power of n plus one, so the tail is smaller than a geometric series, and summing it, the error is less than one over n factorial times n. That's fast: ten terms give e to within three hundred millionths. Hold on to this inequality: it will prove that e is irrational.
+Rudin defines e as the sum of one over n factorial. How fast does it converge? The error after n terms is the tail. Each later factorial is at least the first one times a power of n plus one, so the tail is smaller than a geometric series, and summing it, the error is less than one over n factorial times n. That's fast: s ten, which stops at one over ten factorial, is within three parts in a hundred million of e. Hold on to this inequality: it will prove that e is irrational.
 
 The other definition of e is compound interest: one plus one over n, to the n-th power. Expand it with the binomial theorem. The k-th term is one over k factorial, times k minus one factors, each a little less than one. So in this picture each orange bar sits inside its blue box, of height one over k factorial: the compound-interest number is less than the series. As n grows, each shortfall factor tends to one, and the bars rise to fill their boxes.
 
-Squeezed from above by the series and, for each fixed number of terms, from below, the limit is e. The two definitions agree. But the compound interest version is slow: at n equal to ten it's still off by an eighth, where the series was off by three hundred millionths.
+Squeezed from above by the series and, for each fixed number of terms, from below, the limit is e. The two definitions agree. But the compound interest version is slow: at n equal to ten it's still off by an eighth, where the series was off by three parts in a hundred million.
 
 Now the proof that e is irrational, as Rudin gives it. Multiply the tail estimate by q factorial: q factorial times e minus s q lies strictly between zero and one over q. Now suppose e were a fraction p over q. Then q factorial times e is an integer, and so is q factorial times s q, since every denominator in s q divides q factorial. So their difference is an integer strictly between zero and one, and there isn't one. Here's the actual quantity for q from 1 to 15: always inside the yellow window, which shrinks, and never reaching an integer.
 
@@ -159,7 +159,7 @@ If the absolute values have a finite sum, the series converges: blocks can only 
 
 How do you multiply two series? The product of the sums is the sum of every product a i times b j, an infinite grid. The Cauchy product adds the grid along diagonals: c n collects the terms where the indices add up to n, just as you'd collect powers of x when multiplying power series. Mertens proved this gives the right answer if one of the two series converges absolutely. Adding up a doubly infinite array in a different order is the first glimpse of a question that comes back in Part 5, as Fubini's theorem.
 
-Without absolute convergence it can fail. Take the alternating series of one over root n plus one, which converges, and multiply it by itself. Every term in the n-th diagonal has the same sign, so they pile up instead of cancelling: the Cauchy product's terms stay near plus or minus two, and the product series diverges.
+Without absolute convergence it can fail. Take the alternating series of one over root n plus one, which converges, and multiply it by itself. Every term in the n-th diagonal has the same sign, so they pile up instead of cancelling: the Cauchy product's terms never shrink. Their size climbs toward pi, and the product series diverges.
 
 ## 8. Rearrangements
 
@@ -175,7 +175,7 @@ With two targets, the same idea gives any upper and lower limits. Climb past one
 
 Absolute convergence makes all this impossible. If the absolute values have a finite sum, every rearrangement converges, to the same value. Given epsilon, choose N so that all the terms past N have total size less than epsilon. A rearrangement shuffles the terms, but after finitely many steps it has used each of the first N. From then on, the original and rearranged partial sums share those terms, and differ only by terms past N, whose total size is less than epsilon.
 
-And the Fourier thread. The sawtooth series at x equal to one converges to pi minus one over two, but only conditionally. So it, too, can be reordered to sum to anything. Here it is, steered to three. After two million terms it's within three hundred thousandths, having used nearly all the positive terms and only a couple of thousand negative ones. When we write a Fourier series, the order, by frequency, is part of what we mean. Summing in a different way is an interchange of limits, and that's exactly the question the rest of the series is about.
+And the Fourier thread. The sawtooth series at x equal to one converges to pi minus one over two, but only conditionally. So it, too, can be reordered to sum to anything. Here it is, steered to three. After about a million terms it's off by less than three parts in a hundred thousand, having used nearly all the positive terms and only a couple of thousand negative ones. When we write a Fourier series, the order, by frequency, is part of what we mean. Summing in a different way is an interchange of limits, and that's exactly the question the rest of the series is about.
 
 ## 9. Continuity
 
@@ -299,4 +299,4 @@ This part followed chapters three to five of Rudin's Principles of Mathematical 
 
 ---
 
-7897 words (~51 min at 155 wpm).
+7922 words (~51 min at 155 wpm).
