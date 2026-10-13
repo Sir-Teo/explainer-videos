@@ -32,7 +32,7 @@ class Parseval(VoiceoverScene):
     def density(self):
         d = load("parseval")
         xf, ff, FN, sig, ferr = d["xf"], d["ff"], d["FN"], d["sig"], d["ferr"]
-        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-0.2, 1.1, 0.5], 7.2, 4.2).move_to([-2.9, -0.8, 0])
+        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-0.2, 1.1, 0.5], 7.2, 3.4).move_to([-2.9, -0.5, 0])
         fg = polyline(ax, xf, ff, color=WHITE, stroke_width=3.5)
         shown = [0, 2, 4, 6]
         curves = [polyline(ax, xf, sig[i], color=C.APPROX, stroke_width=3) for i in shown]
@@ -44,14 +44,12 @@ class Parseval(VoiceoverScene):
         for N, e in zip(FN, ferr):
             tab.add(MathTex(rf"{int(N)}", rf"\quad {e:.4f}", font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.3, -0.2, 0])
-        sl = VGroup(label(r"one explicit choice: \ Fej\'er's averages (1900)", font_size=24, color=C.APPROX),
-                    MathTex(r"\sigma_N = \sum_{|n| \le N} \Big(1 - \frac{|n|}{N + 1}\Big) c_n e^{inx}", font_size=28,
-                            color=C.APPROX),
+        regrid(tab, gap=0.35)
+        sl = VGroup(VGroup(label(r"one explicit choice: \ Fej\'er's averages (1900)", font_size=24, color=C.APPROX),
+                           MathTex(r"\sigma_N = \sum_{|n| \le N} \Big(1 - \frac{|n|}{N + 1}\Big) c_n e^{inx}",
+                                   font_size=28, color=C.APPROX)).arrange(RIGHT, buff=0.4),
                     label(r"a positive kernel, \ like Landau's \ (Parts 6 and 7)", font_size=22, color=GREY_A)
-                    ).arrange(DOWN, buff=0.12).next_to(ax, DOWN, buff=0.15)
-        for k in range(len(sl)):
-            if sl[k].width > 7.2:
-                sl[k].width = 7.2
+                    ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, form an "
             "algebra of functions on the circle that contains the constants, separates points, and is closed under "
@@ -284,6 +282,7 @@ class Parseval(VoiceoverScene):
         for N, gv in zip(GNs, gibbs):
             tab.add(MathTex(rf"{int(N)}", rf"\quad {gv:.4f}", font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, -0.3, 0])
+        regrid(tab, gap=0.35)
         note_ = VGroup(label(r"the overshoot gets narrower, \ never lower:", font_size=24),
                        label(r"about $9\%$ of the jump, \ for every $N$", font_size=24, color=C.PATHOLOGY)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(tab, DOWN, buff=0.35)

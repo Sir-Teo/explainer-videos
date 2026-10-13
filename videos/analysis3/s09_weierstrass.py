@@ -204,6 +204,7 @@ class Nowhere(VoiceoverScene):
             tab.add(MathTex(rf"{mm}", rf"\quad {q:,.0f}".replace(",", "{,}"), font_size=26))
             assert abs(q) >= (3**mm + 1) / 2 - 1e-6
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
+        regrid(tab, gap=0.35)
         concl = label(r"$\to \infty$: \ no derivative at $x$; \ and $x$ was arbitrary", font_size=28,
                       color=C.PATHOLOGY).next_to(tab, DOWN, buff=0.3)
         with self.voiceover(

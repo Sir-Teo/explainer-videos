@@ -99,6 +99,15 @@ class FourierSeries(VoiceoverScene):
         coef = VGroup(MathTex(r"c_n = \frac{1}{2\pi}\int_{-\pi}^{\pi} f(x)\, e^{-inx}\,dx", font_size=30, color=C.FREQ),
                       label(r"$f$'s coordinate along $e^{inx}$", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.1).next_to(gl2, DOWN, buff=0.35)
+        # the opening question, drawn: a triangle wave and its closest polynomial of degree 3 (its Fourier sum)
+        tri = 1 - 2 * np.abs(x) / np.pi
+        t3 = 8 / np.pi**2 * (np.cos(x) + np.cos(3 * x) / 9)
+        assert np.abs(tri - t3).max() < 0.1
+        q_f = polyline(ax, x, tri, color=WHITE, stroke_width=3)
+        q_t = polyline(ax, x, t3, color=C.FREQ, stroke_width=3)
+        q_l = label(r"$f$, \ and the trigonometric polynomial of degree $\le 3$ closest to it", font_size=24).next_to(
+            ax, UP, buff=0.08)
+        q_l[0].set_color(WHITE)
         with self.voiceover(
             "Rudin starts not from convergence but from a geometric question: which trigonometric polynomial is "
             "closest to f? <bookmark mark='a'/> The key fact is orthogonality. Take two different sine waves, <bookmark mark='b'/> "
@@ -109,9 +118,10 @@ class FourierSeries(VoiceoverScene):
             "otherwise. <bookmark mark='e'/> So the Fourier coefficient c n, the average of f times e to the minus "
             "i n x, is the coordinate of f along the n-th axis."
         ) as vo:
-            self.play(Create(ax), Create(bx))
+            self.play(Create(ax), Create(bx), Create(q_f), FadeIn(q_l))
+            self.play(Create(q_t))
             vo.wait_until("a")
-            self.play(Create(s2), Create(s3), FadeIn(lab))
+            self.play(FadeOut(q_f), FadeOut(q_t), FadeOut(q_l), Create(s2), Create(s3), FadeIn(lab))
             vo.wait_until("b")
             self.play(FadeIn(pa), Create(pg), FadeIn(pl))
             vo.wait_until("c")
@@ -300,8 +310,10 @@ class FourierSeries(VoiceoverScene):
         for N, L_ in zip(Ns, leb):
             if N in (1, 5, 20, 100, 500):
                 tab.add(MathTex(rf"{int(N)}", rf"\quad {L_:.3f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.5, -0.85, 0])
-        asym = MathTex(r"\approx \tfrac{4}{\pi^2}\ln N + 1.27", font_size=28, color=C.FREQ).next_to(tab, DOWN, buff=0.25)
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.4, -0.55, 0])
+        regrid(tab, gap=0.3)
+        asym = MathTex(r"\approx \tfrac{4}{\pi^2}\ln N + 1.27", font_size=28, color=C.FREQ).next_to(tab, DOWN, buff=0.25,
+                                                                                         aligned_edge=LEFT)
         notes = VGroup(label(r"signed area: \ always $2\pi$", font_size=22, color=GREY_A),
                        label(r"area of $|D_N|$: \ grows without bound", font_size=22, color=C.PATHOLOGY),
                        label(r"unlike the Landau kernel, \ $D_N$ is not positive", font_size=22, color=GREY_A),
@@ -350,8 +362,12 @@ class FourierSeries(VoiceoverScene):
             g = (ft - f0) / np.sin(t / 2)
         g[np.isclose(t, 0)] = 1.0
         g[np.isclose(t, x0, atol=1e-9)] = 0.0
-        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-6.5, 2.5, 2], 6.6, 3.6).move_to([-3.3, -0.55, 0])
-        assert g.min() > -6.5 and g.max() < 2.5
+        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-6.6, 6.6, 2], 6.6, 4.0).move_to([-3.3, -0.7, 0])
+        assert np.abs(g).max() < 6.6  # so g and every g sin((N + 1/2)t) stay inside the axes
+        num = ft - f0
+        numg = VGroup(polyline(ax, t[t < x0 - 1e-3], num[t < x0 - 1e-3], color=GREY_B, stroke_width=3),
+                      polyline(ax, t[t > x0 + 1e-3], num[t > x0 + 1e-3], color=GREY_B, stroke_width=3))
+        numl = label(r"$f(x - t) - f(x)$: \ the sawtooth at $x = 1$, \ shifted", font_size=24, color=GREY_B)
         gg = VGroup(polyline(ax, t[t < x0 - 1e-3], g[t < x0 - 1e-3], color=C.FUNC, stroke_width=3),
                     polyline(ax, t[t > x0 + 1e-3], g[t > x0 + 1e-3], color=C.FUNC, stroke_width=3))
         nT = ValueTracker(3)
@@ -376,6 +392,7 @@ class FourierSeries(VoiceoverScene):
                               r"\quad g(t) = \frac{f(x - t) - f(x)}{\sin(t/2)}", font_size=30)
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
         gl = label(r"$g$ is bounded \ (Lipschitz at $x$)", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.08)
+        numl.move_to(gl)
         why_ = label(r"$\to 0$ by Bessel, \ applied to $g$", font_size=24, color=C.EPS)
         cells = [(r"N", r"s_N(\pi/2)", r"s_N(1)")] + [(f"{int(N)}", f"{a:.5f}", f"{b:.5f}") for N, (a, b) in
                                                        zip(dN, dini)] + [(r"f", f"{np.pi / 4:.5f}", f"{f0:.5f}")]
@@ -405,8 +422,9 @@ class FourierSeries(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax))
+            self.play(Create(numg), FadeIn(numl))
             vo.wait_until("b")
-            self.play(Create(gg), FadeIn(gl))
+            self.play(ReplacementTransform(numg, gg), FadeTransform(numl, gl), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(og), FadeIn(val))
             self.play(nT.animate.set_value(40), run_time=5.0, rate_func=linear)

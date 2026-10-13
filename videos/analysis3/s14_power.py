@@ -51,6 +51,7 @@ class PowerSeries(VoiceoverScene):
         for N, e in zip(Ng, gerr):
             tab.add(MathTex(rf"{int(N)}", rf"\quad {e:.5f}", font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([4.2, 0.9, 0])
+        regrid(tab, gap=0.35)
         bad = label(r"on $(-1, 1)$: \ $\sup = \infty$ for every $N$", font_size=24, color=C.PATHOLOGY)
         bad.next_to(tab, DOWN, buff=0.3).align_to(tab, LEFT)
         cons = VGroup(MathTex(r"f'(x) = \sum n c_n x^{n-1} \ (\text{same radius})", font_size=28, color=C.EPS),
@@ -101,6 +102,7 @@ class PowerSeries(VoiceoverScene):
         for u, v in zip(xs, abel):
             tab.add(MathTex(rf"{u:g}", rf"\quad {v:.6f}", font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.95, -0.6, 0])
+        regrid(tab, gap=0.35)
         # the series at x = 1 itself: alternating partial sums closing in on ln 2
         bx = plain_axes([0, 40, 10], [0.4, 1.05, 0.2], 3.6, 2.3).move_to([5.0, -0.95, 0])
         pts = VGroup(*[Dot(bx.c2p(k + 1, float(v)), radius=0.035, color=C.SEQ) for k, v in enumerate(alt)])
