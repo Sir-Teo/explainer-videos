@@ -110,8 +110,7 @@ class Distributions(VoiceoverScene):
         for e, v in zip(eps, vals):
             tab.add(MathTex(sci(float(e), 0), rf"\quad {v:.6f}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.4, 0.8, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         rows = VGroup(
             MathTex(rf"\to \int_0^\infty \frac{{\varphi(x) - \varphi(-x)}}{{x}}\,dx = {lim:.6f}", font_size=26, color=C.EPS),
             label(r"each half diverges like $\log\varepsilon$; \ the halves cancel", font_size=22),

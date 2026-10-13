@@ -106,10 +106,9 @@ class PaleyWiener(VoiceoverScene):
             tab.add(MathTex(f"{y:g}", rf"\quad {a:.6f}", rf"\quad {sci(abs(b), 0)}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 0.6, 0])
         for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
             row[1].set_color(C.TEST_FN)
             row[2].set_color(C.DISTRIBUTION)
+        regrid(tab)
         tnote = label(rf"inside: \ $b(0.5) = e^{{-4/3}} = {b05:.6f}$ \ at every height; \ outside: \ quadrature noise",
                       font_size=20, color=GREY_A).next_to(tab, DOWN, buff=0.12)
         pm = ProofMap([

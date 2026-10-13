@@ -188,8 +188,7 @@ class Wiener(VoiceoverScene):
         for s, q in zip(sig, Q[k]):
             tab.add(MathTex(f"{s:g}", rf"\quad {q:,.3f}".replace(",", r"{,}"), font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 1.2, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         tt = MathTex(rf"t = {ts[k]:.6f}", font_size=22, color=GREY_A).next_to(tab, UP, buff=0.1)
         assert np.all(Q >= 1)
         rows = VGroup(

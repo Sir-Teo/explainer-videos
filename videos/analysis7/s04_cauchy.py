@@ -173,9 +173,7 @@ class CauchyFormula(VoiceoverScene):
         for r, k in zip(rs, counts):
             tab.add(MathTex(f"{r}", rf"\quad {int(k)}", rf"\quad {int(np.sum(np.abs(roots) < r))}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.6, 0.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT).shift(RIGHT * 0.4)
-            row[2].align_to(tab[0][2], LEFT).shift(RIGHT * 0.4)
+        regrid(tab, center=True)
         for i, row in enumerate(tab[1:]):
             row.set_color(cols[i])
         notes = VGroup(

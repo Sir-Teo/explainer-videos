@@ -220,8 +220,7 @@ class Contraction(VoiceoverScene):
             tab.add(MathTex(rf"{n}", r"\quad " + (f"{nerr[n]:.4f}" if nerr[n] > 1e-3 else sci(float(nerr[n]), 1)),
                             font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([2.6, -0.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         side = VGroup(label(r"flat at the fixed point:", font_size=24),
                       label(r"near it, $c$ is as small as we like,", font_size=24),
                       label(r"so each step does better than the last:", font_size=24),

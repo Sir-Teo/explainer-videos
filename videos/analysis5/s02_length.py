@@ -95,7 +95,7 @@ class Length(VoiceoverScene):
                                 fill_color=C.MEASURE, fill_opacity=0.35).move_to([(pa + pb) / 2, nl.get_y() + 0.45, 0]))
         kT = ValueTracker(0)
         total = always_redraw(lambda: MathTex(
-            rf"\text{{first {int(kT.get_value())} rationals: total }} = {eps * (1 - 2.0 ** -int(kT.get_value())):.6f} "
+            rf"\text{{first {int(kT.get_value())} rationals: total }} = \varepsilon\,(1 - 2^{{-{int(kT.get_value())}}}) "
             rf"< \varepsilon = {eps}", font_size=30, color=C.MEASURE).next_to(nl, DOWN, buff=0.7))
         head = VGroup(label(r"The rationals have outer measure $0$", font_size=32),
                       MathTex(r"q_1, q_2, q_3, \dots \text{ listed (Part 1)}; \quad \text{cover } q_k \text{ by an interval "
@@ -127,7 +127,7 @@ class Length(VoiceoverScene):
     def cantor(self):
         d = load("cantor")
         depths, tot = d["depths"], d["tot"]
-        ax = plain_axes([0, 1, 1], [0, 1, 1], 11.0, 1.0).move_to([0, 0, 0])
+        ax = plain_axes([0, 1, 1], [0, 1, 1], 9.3, 1.0).move_to([-2.15, 0, 0])
         ax.set_opacity(0)
         rows = VGroup()
         labs = VGroup()
@@ -135,11 +135,7 @@ class Length(VoiceoverScene):
             y = 1.9 - 0.62 * k
             rows.add(interval_band(ax, cantor_intervals(k), y, C.CLOSED_SET, height=0.2, min_width=0.008))
             labs.add(MathTex(rf"2^{{{k}}} \text{{ intervals, total }} (\tfrac23)^{{{k}}} = {tot[k]:.4f}", font_size=24,
-                             color=C.MEASURE).next_to([5.6, y, 0], RIGHT, buff=0.0).shift(LEFT * 0.05))
-        for r_ in rows:
-            r_.shift(LEFT * 1.3)
-        for l_ in labs:
-            l_.move_to([4.8, l_.get_y(), 0])
+                             color=C.MEASURE).next_to([2.95, y, 0], RIGHT, buff=0.0))
         head = label(r"The Cantor set: \ uncountable, \ and outer measure $0$", font_size=32).to_edge(UP, buff=0.3)
         out = label(r"its stage-$n$ intervals cover it with total $(2/3)^n \to 0$", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.35)
@@ -165,15 +161,14 @@ class Length(VoiceoverScene):
     def fat(self):
         d = load("cantor")
         meas = d["stage_meas"]
-        ax = plain_axes([0, 1, 1], [0, 1, 1], 11.0, 1.0).move_to([0, 0, 0])
+        ax = plain_axes([0, 1, 1], [0, 1, 1], 9.3, 1.0).move_to([-2.15, 0, 0])
         ax.set_opacity(0)
         rows, labs = VGroup(), VGroup()
         for k in range(6):
             y = 1.7 - 0.62 * k
             rows.add(interval_band(ax, d[f"fat{k}"], y, C.CONNECTED_SET, height=0.2, min_width=0.008))
-            labs.add(MathTex(rf"\text{{measure }} {meas[k]:.6f}", font_size=24, color=C.MEASURE).move_to([4.9, y, 0]))
-        for r_ in rows:
-            r_.shift(LEFT * 1.3)
+            labs.add(MathTex(rf"\text{{measure }} {meas[k]:.6f}", font_size=24, color=C.MEASURE).next_to([2.95, y, 0], RIGHT,
+                                                                                                       buff=0))
         head = VGroup(label(r"A fat Cantor set: \ remove middle intervals of length $4^{-n}$ at stage $n$", font_size=30),
                       ).to_edge(UP, buff=0.3)
         out = VGroup(MathTex(rf"\text{{measure }} = 1 - \sum_{{n \ge 1}} 2^{{n-1}} 4^{{-n}} = \tfrac12", font_size=32,

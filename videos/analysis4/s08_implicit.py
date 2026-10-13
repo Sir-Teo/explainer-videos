@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis4.common import heatmap, load, square_axes
+from videos.analysis4.common import heatmap, load, plain_axes, polyline, square_axes
 
 
 def fol(X, Y):
@@ -127,41 +127,129 @@ class ImplicitFunction(VoiceoverScene):
                   r"$\partial f / \partial y\,(a, b) \ne 0$ $\Rightarrow$", font_size=28),
             label(r"near $a$ there is exactly one $\mathcal C^1$ function $g$ with $g(a) = b$ and $f(x, g(x)) = 0$",
                   font_size=28, color=C.EPS),
-        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
+        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        # the picture: a window around (a, b) = (2/3, 4/3) on the folium, and its image under Phi(x, y) = (x, f(x, y))
+        a, b, h = 2 / 3, 4 / 3, 0.3
+        xr, yr = (a - h, a + h), (b - h, b + h)
+        fy = lambda x, y: 3 * y * y - 3 * x  # noqa: E731
+        fx = lambda x, y: 3 * x * x - 3 * y  # noqa: E731
+        Xg, Yg = np.meshgrid(np.linspace(*xr, 121), np.linspace(*yr, 121))
+        vals = fol(Xg, Yg)
+        assert np.all(fy(Xg, Yg) > 0.25)  # f_y > 0 on the window: f increases up each vertical, Phi is one-to-one
+        vlo, vhi = math.floor(vals.min() * 2) / 2, math.ceil(vals.max() * 2) / 2
+        A = square_axes([xr[0], xr[1], 0.3], [yr[0], yr[1], 0.3], 2.7 / (2 * h)).move_to([-5.3, -1.05, 0])
+        B = plain_axes([xr[0], xr[1], 0.3], [vlo, vhi, 1.0], 2.7, 2.7).move_to([-1.75, -1.05, 0])
+        z0 = DashedLine(B.c2p(xr[0], 0), B.c2p(xr[1], 0), color=GREY_B, stroke_width=1.5)
+        img = heatmap(fol, xr, yr, 2.7, 2.7, -1.5, 1.5, px=240).move_to(A.c2p(a, b)).set_opacity(0.45)
+        levels = [-0.8, -0.4, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
+        xs_ = np.linspace(*xr, 161)
+        ys_ = np.linspace(*yr, 161)
+
+        def level(c_, n=121):
+            """{f = c} in the window as a graph over x: f increases up each vertical, so bisect in y."""
+            xs, ys = [], []
+            for x in np.linspace(*xr, n):
+                lo, hi = yr
+                if not fol(x, lo) <= c_ <= fol(x, hi):
+                    continue
+                for _ in range(60):
+                    mid = (lo + hi) / 2
+                    lo, hi = (mid, hi) if fol(x, mid) < c_ else (lo, mid)
+                xs.append(x)
+                ys.append((lo + hi) / 2)
+            xs, ys = np.array(xs), np.array(ys)
+            assert len(xs) > 5 and np.abs(fol(xs, ys) - c_).max() < 1e-9
+            return xs, ys
+
+        lv_src, lv_img = VGroup(), VGroup()
+        for c_ in levels:
+            lx, ly = level(c_)
+            col = C.SEQ if c_ < 0 else C.CLOSED_SET
+            lv_src.add(polyline(A, lx, ly, color=col, stroke_width=1.8))
+            lv_img.add(polyline(B, lx, fol(lx, ly), color=col, stroke_width=1.8))  # = the line v = c
+        lx, ly = level(0.0)
+        cur_src = polyline(A, lx, ly, color=C.FUNC, stroke_width=4)
+        cur_img = polyline(B, lx, fol(lx, ly), color=C.FUNC, stroke_width=4)
+        vert_src, vert_img = VGroup(), VGroup()
+        t_ = np.linspace(*yr, 60)
+        for xc in np.linspace(xr[0] + 0.1, xr[1] - 0.1, 5):
+            vert_src.add(polyline(A, np.full_like(t_, xc), t_, color=GREY_B, stroke_width=1.4))
+            vert_img.add(polyline(B, np.full_like(t_, xc), fol(np.full_like(t_, xc), t_), color=GREY_B, stroke_width=1.4))
+        # g by Newton on f(x, .) = 0 from b: the inverse of Phi along v = 0
+        gx = np.linspace(xr[0] + 0.03, xr[1] - 0.03, 41)
+
+        def g_of(x):
+            y = b
+            for _ in range(30):
+                y -= fol(x, y) / fy(x, y)
+            return y
+
+        gy = np.array([g_of(x) for x in gx])
+        assert np.abs(fol(gx, gy)).max() < 1e-12
+        slope = (g_of(a + 1e-6) - g_of(a - 1e-6)) / 2e-6
+        assert abs(slope - 0.8) < 1e-6 and abs(-fx(a, b) / fy(a, b) - 0.8) < 1e-12
+        tT = ValueTracker(0.0)
+        pa = always_redraw(lambda: Dot(A.c2p(gx[int(tT.get_value() * 40)], gy[int(tT.get_value() * 40)]), radius=0.08,
+                                       color=C.EPS))
+        pb = always_redraw(lambda: Dot(B.c2p(gx[int(tT.get_value() * 40)], 0), radius=0.08, color=C.EPS))
+        P_ = Dot(A.c2p(a, b), radius=0.07, color=WHITE)
+        tan_ = Line(A.c2p(a - 0.22, b - 0.8 * 0.22), A.c2p(a + 0.22, b + 0.8 * 0.22), color=C.EPS, stroke_width=3)
+        arr = Arrow(A.get_right() + RIGHT * 0.05, B.get_left() + LEFT * 0.05, buff=0.05, color=WHITE, stroke_width=3,
+                    max_tip_length_to_length_ratio=0.25)
+        arr_l = MathTex(r"\Phi", font_size=30).next_to(arr, UP, buff=0.05)
+        A_l = MathTex(r"(x, y) \text{ near } (\tfrac23, \tfrac43)", font_size=22, color=GREY_A).next_to(A, UP, buff=0.12)
+        B_l = MathTex(r"(x,\ v = f(x, y))", font_size=22, color=GREY_A).next_to(B, UP, buff=0.12)
+        B_0 = MathTex(r"v = 0", font_size=20, color=C.FUNC).next_to(B.c2p(xr[1], 0), RIGHT, buff=0.08)
+        A_n = label(r"level sets of $f$", font_size=20, color=GREY_A).next_to(A, DOWN, buff=0.15)
+        B_n = label(r"become horizontal lines", font_size=20, color=GREY_A).next_to(B, DOWN, buff=0.15)
         rows = [
-            MathTex(r"\Phi(x, y)", r"=", r"(x,\ f(x, y))", font_size=34),
-            MathTex(r"\Phi'(x, y)", r"=", r"\begin{pmatrix} 1 & 0 \\ f_x & f_y \end{pmatrix}", font_size=34),
-            MathTex(r"\det \Phi'(a, b)", r"=", r"f_y(a, b) \ne 0", font_size=34),
-            MathTex(r"g(x)", r"=", r"\text{second coordinate of } \Phi^{-1}(x, 0)", font_size=34),
+            MathTex(r"\Phi(x, y)", r"=", r"(x,\ f(x, y))", font_size=32),
+            MathTex(r"\Phi'(x, y)", r"=", r"\begin{pmatrix} 1 & 0 \\ f_x & f_y \end{pmatrix}", font_size=32),
+            MathTex(r"\det \Phi'(a, b)", r"=", r"f_y(a, b) = \tfrac{10}{3} \ne 0", font_size=32),
+            MathTex(r"g(x)", r"=", r"\text{second coordinate of } \Phi^{-1}(x, 0)", font_size=32),
         ]
-        whys = [why(r"the trick: \ keep $x$, \ record the value of $f$"), why(r"a triangular matrix"),
-                why(r"so 9.24 inverts $\Phi$ near $(a, b)$"), why(r"$f(x, g(x)) = 0$: \ the level set is a graph")]
-        step = ladder(self, rows, whys, keep=4, top=1.6, buff=0.4, x=-1.6)
-        out = label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$, \ so $g' = -f_x / f_y$", font_size=26,
-                    color=C.EPS).to_edge(DOWN, buff=0.35)
+        whys = [why(r"the trick: \ keep $x$, \ record the value of $f$", 22), why(r"a triangular matrix", 22),
+                why(r"so 9.24 inverts $\Phi$ near $(a, b)$", 22), why(r"$f(x, g(x)) = 0$: \ the level set is a graph", 22)]
+        step = ladder(self, rows, whys, keep=4, top=1.9, buff=0.3, x=2.35, edge=6.9)
+        out = label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$, \ so $g' = -f_x / f_y = 0.8$ at $a$",
+                    font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3).set_x(3.6)
+        if out.width > 6.6:
+            out.width = 6.6
         with self.voiceover(
             "<bookmark mark='a'/> The theorem, Rudin 9.28, here with one variable on each side: if f vanishes at a, "
             "b, and its partial derivative in y is not zero there, then near a the equation defines y as exactly one "
             "continuously differentiable function of x. <bookmark mark='b'/> It comes straight from the inverse "
-            "function theorem. Build a map of the plane that keeps x and records the value of f. "
-            "<bookmark mark='c'/> Its derivative is a triangular matrix <bookmark mark='d'/> whose determinant is the "
+            "function theorem. Build a map of the plane that keeps x and records the value of f. Near the point, "
+            "it straightens the level sets of f into horizontal lines. <bookmark mark='c'/> Its derivative is a "
+            "triangular matrix: vertical lines stay vertical, <bookmark mark='d'/> and its determinant is the "
             "partial derivative in y, so the inverse function theorem inverts it near a, b. <bookmark mark='e'/> The "
             "points where f is zero are the points that map to the x-axis, so the inverse, applied to the x-axis, "
             "traces the graph. <bookmark mark='f'/> Differentiating the identity f of x, g of x equals zero gives the "
-            "slope."
+            "slope: zero point eight here, the tangent we met on the folium."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm))
+            self.play(Create(A), FadeIn(img), FadeIn(A_l), Create(lv_src), Create(cur_src), FadeIn(P_), run_time=1.5)
             vo.wait_until("b")
             step(0)
+            self.play(GrowArrow(arr), FadeIn(arr_l), Create(B), Create(z0), FadeIn(B_l))
+            self.play(TransformFromCopy(lv_src, lv_img), TransformFromCopy(cur_src, cur_img), FadeIn(A_n), FadeIn(B_n), FadeIn(B_0),
+                      run_time=2.5)
             vo.wait_until("c")
             step(1)
+            self.play(Create(vert_src), run_time=0.8)
+            self.play(TransformFromCopy(vert_src, vert_img), run_time=1.5)
             vo.wait_until("d")
             step(2)
             vo.wait_until("e")
             step(3)
+            self.add(pa, pb)
+            self.play(tT.animate.set_value(1.0), run_time=2.0)
+            self.play(tT.animate.set_value(0.5), run_time=1.2)
             vo.wait_until("f")
-            self.play(FadeIn(out))
+            self.play(Create(tan_), FadeIn(out))
+        for m_ in (pa, pb):
+            m_.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 

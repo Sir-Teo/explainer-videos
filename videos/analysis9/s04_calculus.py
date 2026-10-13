@@ -133,8 +133,7 @@ class Calculus(VoiceoverScene):
         for N, e in zip(Ns, errs):
             tab.add(MathTex(f"{int(N)}", rf"\quad {sci(float(e), 1)}", font_size=24, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.9, 0.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         notes = VGroup(
             label(r"differentiate the series term by term:", font_size=22),
             MathTex(r"\sum_n \cos nx \ \text{ diverges at every } x,", font_size=24),

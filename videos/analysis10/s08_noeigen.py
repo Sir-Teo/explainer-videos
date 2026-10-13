@@ -100,8 +100,7 @@ class NoEigenvectors(VoiceoverScene):
         for w_, r_ in zip(ws, ratios):
             tab.add(MathTex(f"{w_:g}", rf"\quad {r_:.6f}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.07).move_to([3.4, 1.0, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         assert np.allclose(ratios, c * ws, rtol=1e-4)
         rows = VGroup(
             MathTex(r"= w\sqrt{\tfrac13 - \tfrac{2}{\pi^2}} \to 0", font_size=28, color=C.EPS),

@@ -153,9 +153,7 @@ class Picard(VoiceoverScene):
             tab.add(MathTex(rf"{k}", r"\quad " + sci(float(steps[k]), 2), r"\quad " + sci(float(fact[k]), 2),
                             font_size=26))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.7, -0.4, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         out = label(rf"after 12 steps: \ within ${sci(float(err2[-1]), 1)}$ of Runge--Kutta", font_size=24,
                     color=C.EPS).next_to(tab, DOWN, buff=0.3)
         assert np.all(steps <= fact + 1e-9)

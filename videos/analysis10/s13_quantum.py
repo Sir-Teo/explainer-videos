@@ -45,9 +45,7 @@ class QuantumClosure(VoiceoverScene):
         for k in range(5):
             tab.add(MathTex(f"{k + 1}", rf"\quad {bound[k]:.6f}", rf"\quad {-1 / (2 * (k + 1) ** 2):.6f}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([2.4, 1.3, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         rows = VGroup(
             MathTex(r"H = -\tfrac12 \frac{d^2}{dr^2} - \frac1r \ \ \text{(atomic units, } \ell = 0)", font_size=26),
             label(r"point spectrum below $0$: \ the bound states, \ piling up at $0$", font_size=22),

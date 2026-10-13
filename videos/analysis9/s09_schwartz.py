@@ -279,9 +279,7 @@ class Schwartz(VoiceoverScene):
         for s, l_, r_ in zip(ts, lhs, rhs):
             tab.add(MathTex(f"{s:g}", rf"\quad {l_:.12f}", rf"\quad {r_:.12f}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.5, -2.0, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         rule = MathTex(r"\textstyle\sum_k f(2\pi k) = \frac{1}{\sqrt{2\pi}}\sum_n \hat f(n)", font_size=30,
                        color=C.EPS).move_to([3.5, -0.35, 0])
         head = label(r"The comb is its own transform: \ Poisson summation", font_size=34).to_edge(UP, buff=0.25)

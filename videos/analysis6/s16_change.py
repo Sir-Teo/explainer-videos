@@ -26,14 +26,18 @@ class ChangeOfVariables(VoiceoverScene):
         d = load("polar")
         r0s, dr, dt, exact = d["r0"], float(d["dr"]), float(d["dt"]), d["exact_area"]
         ax = plain_axes([0, 3, 1], [0, 2 * math.pi, math.pi / 2], 2.6, 4.4).move_to([-5.0, -0.6, 0])
-        tl = VGroup(MathTex(r"r", font_size=26, color=GREY_B).next_to(ax, DOWN, buff=0.1),
-                    MathTex(r"\theta", font_size=26, color=GREY_B).next_to(ax, LEFT, buff=0.1))
+        tl = VGroup(MathTex(r"r", font_size=26, color=GREY_B).next_to(ax.c2p(3, 0), RIGHT, buff=0.12),
+                    MathTex(r"\theta", font_size=26, color=GREY_B).next_to(ax.c2p(0, 2 * math.pi), UL, buff=0.08),
+                    *[MathTex(str(k), font_size=18, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in (1, 2, 3)],
+                    *[MathTex(t_, font_size=18, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
+                      for t_, v in ((r"\tfrac{\pi}{2}", math.pi / 2), (r"\pi", math.pi), (r"\tfrac{3\pi}{2}", 1.5 * math.pi),
+                                    (r"2\pi", 2 * math.pi))])
         grid1 = VGroup()
         for r_ in np.arange(0.25, 3.01, 0.25):
             grid1.add(Line(ax.c2p(r_, 0), ax.c2p(r_, 2 * math.pi), color=C.SEQ, stroke_width=1.2))
         for t_ in np.arange(dt, 2 * math.pi + 1e-9, dt):
             grid1.add(Line(ax.c2p(0, t_), ax.c2p(3, t_), color=C.APPROX, stroke_width=1.2))
-        px = square_axes([-3.2, 3.2, 1], [-3.2, 3.2, 1], 0.72).move_to([0.2, -0.6, 0])
+        px = square_axes([-3.2, 3.2, 1], [-3.2, 3.2, 1], 0.68).move_to([0.0, -0.6, 0])
         px.set_opacity(0.3)
         grid2 = VGroup()
         for r_ in np.arange(0.25, 3.01, 0.25):
@@ -66,7 +70,7 @@ class ChangeOfVariables(VoiceoverScene):
                 MathTex(rf"\text{{area of the image}} = {exact[k]:.4f}", font_size=26, color=C.EPS),
                 MathTex(rf"\text{{ratio}} = r_0 + \tfrac{{\Delta r}}{{2}} = {exact[k] / (dr * dt):.3f}", font_size=26,
                         color=C.EPS),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.95, 0.9, 0])
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([2.75, 0.9, 0], RIGHT, buff=0)
 
         rd = always_redraw(reads)
         assert np.allclose(exact / (dr * dt), r0s + dr / 2)
@@ -75,10 +79,11 @@ class ChangeOfVariables(VoiceoverScene):
             label(r"\textbf{RCA 7.26} \ $T$ one-to-one, \ differentiable:", font_size=24),
             MathTex(r"\int_{T(V)} f\,dm = \int_V (f \circ T)\, |J_T|\,dm", font_size=30, color=C.EPS),
             label(r"Part 4's area factors, \ now for Lebesgue measure", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.95, -1.75, 0])
+        )
         for r_ in thm:
-            if r_.width > 4.0:
-                r_.width = 4.0
+            if r_.width > 4.2:
+                r_.width = 4.2
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([2.75, -1.75, 0], RIGHT, buff=0)
         head = label(r"Polar coordinates: \ a small rectangle becomes a curved patch $r$ times as large", font_size=30).to_edge(
             UP, buff=0.25)
         with self.voiceover(

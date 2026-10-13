@@ -243,8 +243,7 @@ class LinearMaps(VoiceoverScene):
             tab.add(MathTex(rf"{k}", r"\quad " + (f"{errs[k]:.4f}" if errs[k] > 1e-3 else sci(float(errs[k]), 1)),
                             font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.4, -0.5, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         note_ = VGroup(label(r"each term shrinks by", font_size=24, color=GREY_A),
                        label(r"at least the ratio", font_size=24, color=GREY_A),
                        MathTex(rf"\|A^{{-1}}(A - B)\| = {float(d['q']):.3f}", font_size=28, color=C.EPS),

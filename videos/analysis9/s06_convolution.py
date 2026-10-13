@@ -42,9 +42,7 @@ class Convolution(VoiceoverScene):
         for e, s in zip(eps, sups):
             tab.add(MathTex(f"{e:g}", rf"\quad {s:.1f}", rf"\quad {s * e * e:.3f}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 0.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
-            row[2].align_to(tab[0][2], LEFT)
+        regrid(tab)
         assert np.allclose(sups * eps**2, sups[0] * eps[0] ** 2)
         rows = VGroup(
             label(r"\textbf{FA 6.30} \ $T * \varphi$ is $C^\infty$ \ (a smooth function!)", font_size=24),

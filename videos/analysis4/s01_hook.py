@@ -65,8 +65,7 @@ class Hook(VoiceoverScene):
             txt = f"{r_:.3g}" if r_ > 1e-3 else (sci(r_, 1) if r_ > 0 else "0")
             tab.add(MathTex(rf"{k}", rf"\quad {txt}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, 0.2, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         rule = VGroup(label(r"each step: replace each curve by", font_size=24, color=GREY_A),
                       label(r"its tangent line, and solve", font_size=24, color=GREY_A),
                       label(r"correct digits double each step", font_size=24, color=C.EPS)

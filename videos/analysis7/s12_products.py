@@ -50,8 +50,7 @@ class ZerosProducts(VoiceoverScene):
         for N, e in zip(Ns, errs):
             tab.add(MathTex(f"{N}", rf"\quad {sci(float(e), 2)}", font_size=24, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.6, -1.6, 0])
-        for row in tab[1:]:
-            row[1].align_to(tab[0][1], LEFT)
+        regrid(tab)
         thm = label(r"\textbf{RCA 15.10} \ (Weierstrass) \ every entire function is a product over its zeros \ (with "
                     r"convergence factors)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.15)
         assert np.all(np.diff(np.log10(errs)) < -0.9)
