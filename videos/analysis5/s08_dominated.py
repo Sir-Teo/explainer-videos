@@ -80,8 +80,8 @@ class Dominated(VoiceoverScene):
             font_size=26, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.35))
         key = MathTex(r"f_n = f + n x e^{-nx}", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         with self.voiceover(
-            "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and all the f n lie under one "
-            "integrable function g, the lid, then the integrals converge, and in fact the integral of the "
+            "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and the absolute values of all the f n "
+            "lie under one integrable function g, the lid, then the integrals converge, and in fact the integral of the "
             "difference goes to zero. <bookmark mark='b'/> The proof is Fatou's lemma applied to the right functions. "
             "Two g minus the difference is non-negative, <bookmark mark='c'/> and it converges to two g, so Fatou "
             "bounds the integral of two g by the lower limit of its integrals. <bookmark mark='d'/> Pull out the "

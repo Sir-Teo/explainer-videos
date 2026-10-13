@@ -28,7 +28,7 @@ class Lebesgue(VoiceoverScene):
     def properties(self):
         head = VGroup(label(r"\textbf{RCA 2.19--2.20} \ Lebesgue measure on $\R^k$: \ the Riesz measure of the "
                             r"Riemann integral", font_size=28)).to_edge(UP, buff=0.35)
-        # three small pictures: a box, a translated set, regularity (open above, compact below)
+        # three small pictures: a box, a translated set, regularity (open outside, closed inside: RCA 2.20)
         o1, o2, o3 = np.array([-4.6, 0.3, 0]), np.array([0.0, 0.3, 0]), np.array([4.6, 0.3, 0])
         box = Rectangle(width=2.4, height=1.4, color=C.MEASURE, fill_opacity=0.3).move_to(o1)
         bl = MathTex(r"m(\text{box}) = \text{volume}", font_size=28, color=C.MEASURE).next_to(box, DOWN, buff=0.4)
@@ -40,7 +40,7 @@ class Lebesgue(VoiceoverScene):
         Kc = Circle(radius=0.55, color=C.COMPACT_SET, fill_opacity=0.25).move_to(o3)
         Ec = Circle(radius=0.8, color=WHITE, stroke_width=2.5).move_to(o3)
         Vc = DashedVMobject(Circle(radius=1.05, color=C.OPEN_SET, stroke_width=2.5).move_to(o3), num_dashes=40)
-        rl = MathTex(r"K \subset E \subset V, \ \ m(V \setminus K) < \varepsilon", font_size=28).next_to(Vc, DOWN,
+        rl = MathTex(r"F \subset E \subset V, \ \ m(V \setminus F) < \varepsilon", font_size=28).next_to(Vc, DOWN,
                                                                                                     buff=0.4)
         names = VGroup(label(r"boxes get their volume", font_size=24, color=GREY_A).next_to(box, UP, buff=0.5),
                        label(r"translation invariant", font_size=24, color=GREY_A).next_to(VGroup(blob, blob2), UP,
@@ -51,7 +51,7 @@ class Lebesgue(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Feed the Riemann integral into the Riesz machine and out comes Lebesgue measure. "
             "<bookmark mark='b'/> A box gets its volume. <bookmark mark='c'/> Sliding a set doesn't change its "
-            "measure. <bookmark mark='d'/> Every measurable set is squeezed between a compact set inside and an open "
+            "measure. <bookmark mark='d'/> Every measurable set is squeezed between a closed set inside and an open "
             "set outside, with as little room between them as you like. <bookmark mark='e'/> And these properties "
             "pin it down: it's the only translation-invariant measure that gives the unit cube measure one."
         ) as vo:
