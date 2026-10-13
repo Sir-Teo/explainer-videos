@@ -284,20 +284,41 @@ class ImplicitFunction(VoiceoverScene):
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         note_ = label(r"rank $1$: \ each colored line collapses to a point, \ the plane folds onto a curve",
                       font_size=24, color=C.OPERATOR).to_edge(DOWN, buff=0.3)
+        # the model first: in the right coordinates a rank-one map is the projection (x, y) -> (x, 0)
+        cs = np.linspace(-1.2, 1.2, 9)
+        mlines = VGroup(*[Line(ax.c2p(c, -1.5), ax.c2p(c, 1.5), color=cols[k], stroke_width=3) for k, c in enumerate(cs)])
+        mseg = Line(bx.c2p(-1.2, 0), bx.c2p(1.2, 0), color=C.OPERATOR, stroke_width=4)
+        mdots = VGroup(*[Dot(bx.c2p(c, 0), radius=0.07, color=cols[k]) for k, c in enumerate(cs)])
+        ml = MathTex(r"(x, y) \mapsto (x, 0)", font_size=26).next_to(arrow, UP, buff=0.15)
+        fl = VGroup(MathTex(r"F = (\tanh u,\ 0.6 \sinh u)", font_size=24),
+                    MathTex(r"u = x + 0.4\,y", font_size=24)).arrange(DOWN, buff=0.08).next_to(arrow, UP, buff=0.15)
+        for m_ in (ml, fl):
+            if m_.width > 2.2:
+                m_.width = 2.2
+            m_.next_to(arrow, UP, buff=0.15)
+        mlab = label(r"the model: \ a projection", font_size=24, color=GREY_A).next_to(bx, UP, buff=0.1)
+        flab = label(r"a rank-one map, \ before straightening", font_size=24, color=GREY_A).next_to(bx, UP, buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> The same circle of ideas gives Rudin's rank theorem, which we'll only picture. If "
-            "the derivative of a map has the same rank everywhere, then in suitable coordinates the map is just a "
-            "projection. <bookmark mark='b'/> Here the rank is one: a whole family of lines in the plane, each "
+            "the derivative of a map has the same rank everywhere, then <bookmark mark='p'/> in suitable coordinates "
+            "the map is just a projection, which flattens each vertical line to a point. <bookmark mark='b'/> Here "
+            "is a rank-one map before the coordinates are straightened. The rank is one: a whole family of lines in the plane, each "
             "collapsed to a single point, and the plane folded onto a curve."
         ) as vo:
             self.play(FadeIn(head[0]))
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
+            vo.wait_until("p")
+            self.play(Create(ax), Create(mlines), run_time=1.2)
+            self.play(GrowArrow(arrow), Create(bx), FadeIn(ml), FadeIn(mlab))
+            self.play(Create(mseg), LaggedStart(*[TransformFromCopy(l_, d_) for l_, d_ in zip(mlines, mdots)],
+                                                lag_ratio=0.12), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(ax), Create(lvl), run_time=1.5)
-            self.play(GrowArrow(arrow), Create(bx))
-            self.play(Create(imgc), LaggedStart(*[TransformFromCopy(l_, d_) for l_, d_ in zip(lvl, dots)],
-                                                lag_ratio=0.15), run_time=2.5)
+            self.play(ReplacementTransform(mlines, lvl), ReplacementTransform(mseg, imgc),
+                      ReplacementTransform(mdots, dots), FadeTransform(ml, fl), FadeTransform(mlab, flab), run_time=2.0)
+            self.play(LaggedStart(*[Indicate(l_, color=l_.get_color(), scale_factor=1.0) for l_ in lvl], lag_ratio=0.1),
+                      LaggedStart(*[Flash(d_, color=d_.get_color(), line_length=0.12, flash_radius=0.15) for d_ in dots],
+                                  lag_ratio=0.1), run_time=2.0)
             self.play(FadeIn(note_))
         del t
         self.wait(0.4)
