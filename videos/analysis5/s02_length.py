@@ -50,23 +50,29 @@ class Length(VoiceoverScene):
         lenE = sum(b - a for a, b in E)
         assert all(sum(b - a for a, b in cv) >= lenE for cv in covers)
         head = VGroup(label(r"\textbf{Outer measure} \ (Lebesgue, 1902)", font_size=32),
-                      MathTex(r"m^*(E) = \inf\Big\{ \sum_k \ell(I_k) : E \subset \bigcup_k I_k,\ I_k \text{ intervals}\Big\}",
-                              font_size=36, color=C.MEASURE)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+                      MathTex(r"m^*(E) = \inf\Big\{", r"\sum_k \ell(I_k)", r":", r"E \subset \bigcup_k I_k",
+                              r",\ I_k \text{ intervals}\Big\}", font_size=36, color=C.MEASURE)
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         props = VGroup(label(r"monotone: \ $A \subset B \Rightarrow m^*(A) \le m^*(B)$", font_size=26),
                        label(r"countably subadditive: \ $m^*(\bigcup E_k) \le \sum m^*(E_k)$", font_size=26),
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
         el = MathTex("E", font_size=32, color=C.FUNC).next_to(nl.n2p(0.15), DOWN, buff=0.5)
         with self.voiceover(
-            "<bookmark mark='a'/> Lebesgue's idea, from his thesis of 1902: cover a set by countably many intervals, "
-            "add up their lengths, and take the smallest total you can get. That's the outer measure. "
+            "<bookmark mark='a'/> Lebesgue's idea, from his thesis of 1902: <bookmark mark='a1'/> cover a set by "
+            "countably many intervals, <bookmark mark='a2'/> add up their lengths, <bookmark mark='a3'/> and take the "
+            "smallest total you can get. That's the outer measure. "
             "<bookmark mark='b'/> Here's a set made of a few intervals and points. A crude cover has total length "
             "one. <bookmark mark='c'/> Tighter covers do better, <bookmark mark='d'/> and the infimum over all "
-            "countable covers is the outer measure. Two properties are immediate: bigger sets have bigger outer "
-            "measure, and the outer measure of a countable union is at most the sum of the outer measures."
+            "countable covers is the outer measure. Two properties are immediate: <bookmark mark='p1'/> bigger sets "
+            "have bigger outer measure, <bookmark mark='p2'/> and the outer measure of a countable union is at most "
+            "the sum of the outer measures."
         ) as vo:
             self.play(FadeIn(head[0]), Create(nl))
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
+            for mk, part in (("a1", 3), ("a2", 1), ("a3", 0)):
+                vo.wait_until(mk)
+                self.play(Indicate(head[1][part], color=C.EPS, scale_factor=1.1))
             vo.wait_until("b")
             self.play(FadeIn(Eb), FadeIn(Ep), FadeIn(el))
             self.play(FadeIn(bands[0]), FadeIn(totals[0]))
@@ -74,7 +80,10 @@ class Length(VoiceoverScene):
             self.play(ReplacementTransform(bands[0], bands[1]), FadeTransform(totals[0], totals[1]))
             vo.wait_until("d")
             self.play(ReplacementTransform(bands[1], bands[2]), FadeTransform(totals[1], totals[2]))
-            self.play(FadeIn(props))
+            vo.wait_until("p1")
+            self.play(FadeIn(props[0]))
+            vo.wait_until("p2")
+            self.play(FadeIn(props[1]))
         self.wait(0.3)
         self.clear_scene()
 

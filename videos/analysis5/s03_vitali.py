@@ -156,6 +156,24 @@ class Vitali(VoiceoverScene):
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, -0.55, 0])
         head = label(r"Vitali's set", font_size=34).to_edge(UP, buff=0.3)
+        # the sum over k of m(V + k), laid end to end around the circle as arcs of a common length c (a spiral, so
+        # that the wraps stay visible): c = 0 gives nothing, any c > 0 wraps around more than once, forever
+        cv = ValueTracker(1e-3)
+        K = 16
+        acols = [C.SEQ, C.APPROX, C.CLOSED_SET, C.CONNECTED_SET, C.FREQ]
+
+        def arcs_():
+            c = cv.get_value()
+            return VGroup(*[Arc(radius=R + 0.15 + 0.035 * k, start_angle=k * c, angle=c, arc_center=o,
+                                color=acols[k % len(acols)], stroke_width=5) for k in range(K)])
+
+        arcs = always_redraw(arcs_)
+        zl = MathTex(r"m(V) = 0: \ 0 + 0 + 0 + \cdots = 0", font_size=26).move_to(o + 0.35 * UP)
+        il = MathTex(r"m(V) = c > 0: \ c + c + c + \cdots = \infty", font_size=26, color=C.PATHOLOGY
+                     ).move_to(o + 0.35 * DOWN)
+        assert K * 0.9 > 2 * 2 * math.pi  # at c = 0.9 the 16 shown arcs already wrap around twice
+        assert (R + 0.15 + 0.035 * (K - 1)) + abs(o[0]) < 7.0 and o[1] - (R + 0.15 + 0.035 * (K - 1)) > -3.95
+        assert max(zl.width, il.width) < 2 * R - 0.6
         with self.voiceover(
             "<bookmark mark='a'/> Call two points equivalent if they differ by a whole number of radians. Each "
             "class is one orbit, countable and dense; here are five of them, though there are uncountably many. "
@@ -163,10 +181,11 @@ class Vitali(VoiceoverScene):
             "set V. This step can only be drawn as a schematic. <bookmark mark='c'/> Now rotate V by one radian, by "
             "two, by minus one, and so on. These copies are disjoint, and since every point is in some class, they "
             "fill the whole circle. <bookmark mark='d'/> If V had a length, countable additivity and rotation "
-            "invariance would make two pi a sum of infinitely many copies of the same number: zero if the number is "
-            "zero, infinite otherwise. Neither is two pi. So V has no length, and a theory of length must restrict "
-            "itself to a smaller class of sets: the measurable ones. In three dimensions the same idea gives the "
-            "Banach–Tarski paradox."
+            "invariance would make two pi a sum of infinitely many copies of the same number: <bookmark mark='z'/> "
+            "zero if the number is zero, <bookmark mark='i'/> infinite otherwise, because copies of any positive "
+            "length, laid end to end, go around the circle again and again. <bookmark mark='n'/> Neither is two pi. "
+            "So V has no length, and a theory of length must restrict itself to a smaller class of sets: the "
+            "measurable ones. <bookmark mark='t'/> In three dimensions the same idea gives the Banach–Tarski paradox."
         ) as vo:
             self.play(FadeIn(head), Create(circ))
             vo.wait_until("a")
@@ -182,6 +201,15 @@ class Vitali(VoiceoverScene):
             self.play(FadeIn(rows[3]))
             vo.wait_until("d")
             self.play(FadeIn(rows[4]))
-            self.play(FadeIn(rows[5]), FadeIn(rows[6]))
+            vo.wait_until("z")
+            self.add(arcs)
+            self.play(FadeIn(zl))
+            vo.wait_until("i")
+            self.play(cv.animate.set_value(0.9), FadeIn(il), run_time=3.5, rate_func=smooth)
+            arcs.clear_updaters()
+            vo.wait_until("n")
+            self.play(FadeIn(rows[5]), Indicate(rows[4][0][0:2], color=C.PATHOLOGY))
+            vo.wait_until("t")
+            self.play(FadeIn(rows[6]))
         self.wait(0.4)
         self.clear_scene()
