@@ -87,9 +87,9 @@ class Residues(VoiceoverScene):
             "quadrature agrees to nine digits."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), FadeIn(img), Create(frame))  # the picture under the statement from the start
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(frame), Create(pm))
+            self.play(Create(pm))
             self.play(FadeIn(pth), FadeIn(val))
             vo.wait_until("c")
             self.play(RT.animate.set_value(2.7), run_time=4.0)

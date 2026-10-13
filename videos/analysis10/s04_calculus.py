@@ -63,9 +63,9 @@ class SymbolicCalculus(VoiceoverScene):
             "the circle, the result matches the exponential computed the usual way, to rounding error."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]))
+            self.play(FadeIn(head), FadeIn(rows[:2]), Create(cx))  # the plane under the statement from the start
             vo.wait_until("b")
-            self.play(Create(cx), FadeIn(sl), LaggedStart(*[FadeIn(d_, scale=2) for d_ in evd], lag_ratio=0.2))
+            self.play(FadeIn(sl), LaggedStart(*[FadeIn(d_, scale=2) for d_ in evd], lag_ratio=0.2))
             self.play(FadeIn(rows[2:5]), Create(circ), FadeIn(cl))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(n_, scale=0.3) for n_ in nodes], lag_ratio=0.05), run_time=1.5)

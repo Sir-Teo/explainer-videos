@@ -72,10 +72,11 @@ class Schwartz(VoiceoverScene):
             "space is a Fréchet space."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))  # the axes under the definition from the start
+            self.play(Create(ga[0]), run_time=1.5)
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(la))
-            self.play(LaggedStart(*[Create(g) for g in ga], lag_ratio=0.4), run_time=2.4)
+            self.play(FadeIn(la))
+            self.play(LaggedStart(*[Create(g) for g in ga[1:]], lag_ratio=0.4), run_time=2.0)
             self.play(FadeIn(ok), FadeIn(rows[1]))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(lb))
