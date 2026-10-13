@@ -92,6 +92,39 @@ class Structure(VoiceoverScene):
                 r_.width = 6.4
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, -0.5, 0])
         assert abs(lhs - rhs) < 1e-6
+        # the five derivatives drawn: a regular part (cut at the window) plus labelled arrows for the deltas
+        xr = np.linspace(-3, 3, 6001)
+
+        def pp(t, k):
+            return np.where(t > 0, t ** k, 0.0) / math.factorial(k)
+
+        H = lambda t: np.where(t > 0, 1.0, 0.0)  # noqa: E731
+        reg = [pp(xr - 0.3, 1) + 2 * pp(xr + 0.4, 3) + pp(xr - 1, 5),
+               H(xr - 0.3) + 2 * pp(xr + 0.4, 2) + pp(xr - 1, 4),
+               2 * pp(xr + 0.4, 1) + pp(xr - 1, 3),
+               2 * H(xr + 0.4) + pp(xr - 1, 2),
+               pp(xr - 1, 1),
+               H(xr - 1)]
+        away = (np.abs(xr + 0.4) > 0.02) & (np.abs(xr - 0.3) > 0.02) & (np.abs(xr - 1) > 0.02) & (np.abs(xr) < 2.9)
+        for k in range(5):  # each regular part differentiates into the next, away from the kinks
+            assert np.abs(np.gradient(reg[k], xr) - reg[k + 1])[away].max() < 2e-2
+        assert abs(np.interp(0.301, xr, reg[1]) - np.interp(0.299, xr, reg[1]) - 1) < 5e-3  # jump 1 -> delta_0.3
+        assert abs(np.interp(-0.399, xr, reg[3]) - np.interp(-0.401, xr, reg[3]) - 2) < 5e-3  # jump 2 -> 2 delta_-0.4
+        sing = [[], [], [(0.3, r"\delta_{0.3}", 2.7, UR)], [(0.3, r"\delta'_{0.3}", 2.7, UR)],
+                [(0.3, r"\delta''_{0.3}", 2.7, UR), (-0.4, r"2\delta_{-0.4}", 2.0, UL)],
+                [(0.3, r"\delta'''_{0.3}", 2.7, UR), (-0.4, r"2\delta'_{-0.4}", 2.0, UL)]]
+
+        def stage(k):
+            g_ = VGroup(runs(ax, xr, reg[k], C.FUNC if k == 0 else C.DISTRIBUTION, 3.5))
+            for a_, t_, h_, dir_ in sing[k]:
+                arr_ = Arrow(ax.c2p(a_, 0), ax.c2p(a_, h_), buff=0, color=C.DISTRIBUTION, stroke_width=5,
+                             max_tip_length_to_length_ratio=0.12)
+                g_.add(arr_, MathTex(t_, font_size=26, color=C.DISTRIBUTION).next_to(ax.c2p(a_, h_), dir_, buff=0.06))
+            return g_
+
+        stages = [stage(k) for k in range(6)]
+        slabs = [MathTex(r"F" + ("" if k == 0 else rf"^{{({k})}}"), font_size=30, color=C.DISTRIBUTION).move_to(
+            ax.c2p(-2.4, 2.7)) for k in range(6)]
         head = label(r"Every distribution is locally a derivative of a continuous function", font_size=32).to_edge(UP,
                                                                                                               buff=0.25)
         with self.voiceover(
@@ -106,7 +139,11 @@ class Structure(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(f_l), FadeIn(kinks))
             vo.wait_until("b")
-            self.play(FadeIn(rows[:2]))
+            self.play(FadeIn(rows[0]), FadeIn(slabs[0]), FadeOut(g), FadeIn(stages[0]))
+            for k in range(1, 6):
+                self.play(ReplacementTransform(stages[k - 1], stages[k]), FadeTransform(slabs[k - 1], slabs[k]),
+                          FadeOut(kinks) if k == 1 else Wait(0), run_time=1.3)
+            self.play(FadeIn(rows[1]))
             vo.wait_until("c")
             self.play(FadeIn(rows[2:5]))
             vo.wait_until("d")
