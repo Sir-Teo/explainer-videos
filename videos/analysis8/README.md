@@ -21,6 +21,25 @@ python tools/check_narration.py analysis8         # Whisper listen test of every
 
 The scenes share the series' instruments in [`explainer/analysis`](../../explainer/analysis) and helpers from earlier parts (see [`common.py`](common.py)). The full narration is in [`SCRIPT.md`](SCRIPT.md).
 
+## Chapters (22:45)
+
+```
+0:00 A continuous function whose Fourier series diverges
+1:54 1. Banach spaces and bounded operators
+3:29 2. Spaces without norms
+5:12 3. Baire's theorem
+6:39 4. Uniform boundedness
+8:37 5. Open mappings and closed graphs
+10:02 6. Hahn-Banach
+11:41 7. Dual spaces
+12:52 8. Weak convergence
+14:22 9. Banach-Alaoglu
+15:51 10. Extreme points
+17:05 11. Compact operators
+18:36 12. Four applications
+21:00 The eighth row of the ledger
+```
+
 ## Scenes
 
 | # | Scene | Chapter |
