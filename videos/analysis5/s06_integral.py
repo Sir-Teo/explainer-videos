@@ -121,7 +121,7 @@ class Integral(VoiceoverScene):
     def mct(self):
         d = load("mct")
         ns, ints = d["ns"], d["ints"]
-        ax = plain_axes([0, 1, 0.25], [0, 8.5, 2], 7.0, 4.4).move_to([-2.9, -0.8, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 8.5, 2], 7.0, 4.1).move_to([-2.9, -0.55, 0])
         x = np.linspace(1e-4, 1, 3000)
         full = polyline(ax, x, np.minimum(x**-0.5, 8.5), color=WHITE, stroke_width=3)
         nT = ValueTracker(1.0)
