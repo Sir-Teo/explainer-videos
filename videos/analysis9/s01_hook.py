@@ -41,18 +41,23 @@ class Hook(VoiceoverScene):
         gphi = polyline(ax, x, phi, color=C.TEST_FN, stroke_width=3.5)
         nT = ValueTracker(1.0)
 
-        def spike_():
+        def tall():
             n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
+            return n * rho(0.0) > 4.2  # the peak is at 0
+
+        def spike_():
+            n = max(1, round(nT.get_value()))
             y = n * rho(n * x)
-            if y.max() <= 4.2:  # all of the spike fits: shade its area (always 1)
-                return VGroup(area_under(ax, x, y, C.DISTRIBUTION, 0.35),
-                              polyline(ax, x, y, color=C.DISTRIBUTION, stroke_width=3))
-            # taller than the axes: no clipped shading (it would lose area); an arrow says it goes on up
-            return VGroup(polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3),
-                          Arrow(ax.c2p(0, 3.6), ax.c2p(0, 4.75), buff=0, color=C.DISTRIBUTION, stroke_width=3,
-                                max_tip_length_to_length_ratio=0.3))
+            # all of the spike fits: shade its area (always 1). Taller than the axes: no clipped shading (it would
+            # lose area). The group keeps one shape throughout; a group that changes shape mid-animation makes
+            # become() scramble the points
+            return VGroup(area_under(ax, x, np.minimum(y, 4.2), C.DISTRIBUTION, 0.0 if tall() else 0.35),
+                          polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3))
 
         sp = always_redraw(spike_)
+        up = Arrow(ax.c2p(0, 3.6), ax.c2p(0, 4.75), buff=0, color=C.DISTRIBUTION, stroke_width=3,
+                   max_tip_length_to_length_ratio=0.3)  # taller than the axes: the arrow says it goes on up
+        up.add_updater(lambda m: m.set_opacity(1.0 if tall() else 0.0))
 
         def readout():
             n = max(1, round(nT.get_value()))
@@ -94,6 +99,7 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]), FadeIn(sp))
+            self.add(up.update())
             self.play(nT.animate.set_value(6.0), run_time=3.0)
             vo.wait_until("c")
             self.play(Create(gphi), FadeIn(lab), FadeIn(rd))
@@ -101,7 +107,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(rows[2:4]))
             self.play(FadeIn(rows[4]))
-        for m in (sp, rd):
+        for m in (sp, rd, up):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
