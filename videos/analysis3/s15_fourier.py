@@ -258,6 +258,19 @@ class FourierSeries(VoiceoverScene):
                            color=C.EPS),
                      label(r"whether the bar fills completely is chapter 15", font_size=24, color=GREY_A)
                      ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
+        # Pythagoras first, on the same bar: the energy of s_3 plus the energy of the error is the energy of f
+        e3 = sum(0.5 / n**2 for n in range(1, 4))
+        pa = Rectangle(width=W * e3 / tot, height=0.7, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.6).move_to(
+            [x0 + W * e3 / tot / 2, y, 0])
+        pb = Rectangle(width=W * (tot - e3) / tot, height=0.7, stroke_color=C.PATHOLOGY, stroke_width=2,
+                       fill_color=C.PATHOLOGY, fill_opacity=0.3).move_to([x0 + W * (e3 + (tot - e3) / 2) / tot, y, 0])
+        pl = VGroup(MathTex(rf"\tfrac{{1}}{{2\pi}}\textstyle\int |s_3|^2 = {e3:.4f}", font_size=26, color=C.SEQ).next_to(
+            pa, DOWN, buff=0.2),
+                    MathTex(rf"\tfrac{{1}}{{2\pi}}\textstyle\int |f - s_3|^2 = {tot - e3:.4f}", font_size=26,
+                            color=C.PATHOLOGY).next_to(pb, DOWN, buff=0.2))
+        if pl[1].get_left()[0] < pl[0].get_right()[0] + 0.2:
+            pl[1].next_to(pl[0], RIGHT, buff=0.3)
+        assert abs(e3 - 49 / 72) < 1e-12 and 0 < tot - e3 < tot
         with self.voiceover(
             "<bookmark mark='a'/> Take the competitor t to be zero. Pythagoras says the energy of f is the energy of "
             "its partial sum plus the energy of the error, so the partial sum has less energy than f. "
@@ -269,11 +282,13 @@ class FourierSeries(VoiceoverScene):
             "completely is the question of the next chapter."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]), Create(outline), FadeIn(tl))
+            self.play(GrowFromEdge(pa, LEFT), FadeIn(pl[0]))
+            self.play(FadeIn(pb), FadeIn(pl[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]), FadeIn(head_l))
             vo.wait_until("c")
-            self.play(Create(outline), FadeIn(tl))
+            self.play(FadeOut(pa), FadeOut(pb), FadeOut(pl))
             self.play(GrowFromEdge(segs[0], LEFT), FadeIn(nl[0]), FadeIn(tab[0]), run_time=0.8)
             self.play(GrowFromEdge(segs[1], LEFT), FadeIn(nl[1]), FadeIn(tab[1]), run_time=0.6)
             self.play(LaggedStart(*[GrowFromEdge(s_, LEFT) for s_ in segs[2:]], lag_ratio=0.12),
