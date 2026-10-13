@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from videos.analysis5.common import area_under, load, plain_axes, polyline
+from videos.analysis5.compute import trap
 
 
 class Dominated(VoiceoverScene):
@@ -30,16 +31,54 @@ class Dominated(VoiceoverScene):
             label(r"\textbf{RCA 1.34} \ $f_n \to f$ pointwise, \ $|f_n| \le g$ for all $n$, \ $\int g < \infty$ "
                   r"$\Rightarrow$", font_size=30),
             MathTex(r"\int |f_n - f|\,d\mu \to 0, \qquad \text{so} \quad \int f_n\,d\mu \to \int f\,d\mu", font_size=38,
-                    color=C.EPS)).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.35)
+                    color=C.EPS)).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.3)
         rows = [
-            MathTex(r"2g - |f_n - f|", r"\ge", r"0", font_size=34),
-            MathTex(r"\int 2g", r"\le", r"\liminf \int \big(2g - |f_n - f|\big)", font_size=34),
-            MathTex(r"\int 2g", r"\le", r"\int 2g - \limsup \int |f_n - f|", font_size=34),
-            MathTex(r"\limsup \int |f_n - f|", r"\le", r"0", font_size=34),
+            MathTex(r"2g - |f_n - f|", r"\ge", r"0", font_size=30),
+            MathTex(r"\int 2g", r"\le", r"\liminf \int \big(2g - |f_n - f|\big)", font_size=30),
+            MathTex(r"\int 2g", r"\le", r"\int 2g - \limsup \int |f_n - f|", font_size=30),
+            MathTex(r"\limsup \int |f_n - f|", r"\le", r"0", font_size=30),
         ]
-        whys = [why(r"$|f_n - f| \le |f_n| + |f| \le 2g$"), why(r"Fatou, \ with $2g - |f_n - f| \to 2g$"),
-                why(r"linearity"), why(r"subtract $\int 2g < \infty$")]
-        step = ladder(self, rows, whys, keep=4, top=1.0, buff=0.4, x=-0.4)
+        whys = [why(r"$|f_n - f| \le |f_n| + |f| \le 2g$", 22), why(r"Fatou, \ with $2g - |f_n - f| \to 2g$", 22),
+                why(r"linearity", 22), why(r"subtract $\int 2g < \infty$", 22)]
+        step = ladder(self, rows, whys, keep=3, top=1.25, buff=0.35, x=3.3, edge=6.9)
+        # the picture: f_n = f + n x e^(-nx) on [0, 4]; the bump keeps height 1/e (no uniform convergence) under the
+        # lid g = f + 1/e, and its area (1 - (1 + 4n) e^(-4n)) / n goes to 0
+        x = np.linspace(0, 4, 1601)
+        f = 0.5 * np.exp(-x / 2)
+        g = f + 1 / math.e
+
+        def bump(n):
+            return n * x * np.exp(-n * x)
+
+        def area(n):
+            return (1 - (1 + 4 * n) * math.exp(-4 * n)) / n
+
+        xf = np.linspace(0, 4, 200001)
+        for n in (1, 2, 5, 20, 60):
+            b_ = n * xf * np.exp(-n * xf)
+            assert b_.max() <= 1 / math.e + 1e-12 and abs(trap(b_, xf) - area(n)) < 1e-7
+        ax = plain_axes([0, 4, 1], [0, 1.0, 0.5], 5.8, 3.1, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.85, -0.95, 0])
+        lid_ = polyline(ax, x, g, color=C.EPS, stroke_width=3)
+        lid_l = MathTex(r"g = f + \tfrac1e", font_size=24, color=C.EPS).next_to(ax.c2p(2.6, g[1040]), UP, buff=0.1)
+        f_ = DashedVMobject(polyline(ax, x, f, color=WHITE, stroke_width=2.5), num_dashes=50)
+        f_l = MathTex(r"f", font_size=24).next_to(ax.c2p(1.2, f[480]), DOWN, buff=0.12)
+        nT = ValueTracker(1)
+
+        def pic():
+            n = max(1, round(nT.get_value()))
+            y = f + bump(n)
+            band = Polygon(*[ax.c2p(a, b) for a, b in zip(x[::4], y[::4])],
+                           *[ax.c2p(a, b) for a, b in zip(x[::-4], f[::-4])], stroke_width=0, fill_color=C.PATHOLOGY,
+                           fill_opacity=0.45)
+            return VGroup(band, polyline(ax, x, y, color=C.FUNC, stroke_width=3))
+
+        fn = always_redraw(pic)
+        rd = always_redraw(lambda: MathTex(
+            rf"n = {max(1, round(nT.get_value()))}: \ \int_0^4 |f_n - f| = {area(max(1, round(nT.get_value()))):.4f}",
+            font_size=26, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.35))
+        key = MathTex(r"f_n = f + n x e^{-nx}", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and all the f n lie under one "
             "integrable function g, the lid, then the integrals converge, and in fact the integral of the "
@@ -50,10 +89,15 @@ class Dominated(VoiceoverScene):
             "limit of the integral of the difference is at most zero. The lid is the whole story."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax))
+            self.play(Create(lid_), FadeIn(lid_l), Create(f_), FadeIn(f_l), FadeIn(fn), FadeIn(rd), FadeIn(key))
+            self.play(nT.animate.set_value(12), run_time=4.0, rate_func=linear)
             for i, mk in enumerate("bcde"):
                 vo.wait_until(mk)
                 step(i)
+            self.play(nT.animate.set_value(40), run_time=2.5, rate_func=linear)
+        for m_ in (fn, rd):
+            m_.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 

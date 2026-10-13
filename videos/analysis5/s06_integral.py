@@ -80,14 +80,15 @@ class Integral(VoiceoverScene):
         nT = ValueTracker(1.0)
 
         def fn():
-            n = nT.get_value()
+            n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
             y = np.minimum(x**-0.5, n)
             return VGroup(area_under(ax, x, np.minimum(y, 8.5), C.MEASURE, 0.45),
                           polyline(ax, x, np.minimum(y, 8.5), color=C.FUNC, stroke_width=3))
 
         g = always_redraw(fn)
         rd = always_redraw(lambda: MathTex(
-            rf"n = {nT.get_value():.1f}: \ \int_0^1 f_n = 2 - \tfrac1n = {2 - 1 / nT.get_value():.4f}", font_size=30,
+            rf"n = {max(1, round(nT.get_value()))}: \ \int_0^1 f_n = 2 - \tfrac1n = {2 - 1 / max(1, round(nT.get_value())):.4f}",
+            font_size=30,
             color=C.MEASURE).next_to(ax, DOWN, buff=0.15))
         head = VGroup(label(r"\textbf{RCA 1.26} \ (monotone convergence) \ $0 \le f_1 \le f_2 \le \dots \to f$ "
                             r"pointwise $\Rightarrow$", font_size=28),
@@ -144,7 +145,7 @@ class Integral(VoiceoverScene):
             return f * (1 - np.exp(-n * x))
 
         def picture():
-            n = nT.get_value()
+            n = max(1, round(nT.get_value()))
             y = fn_vals(n)
             E = y >= c * s
             runs_, start = [], None
@@ -165,7 +166,7 @@ class Integral(VoiceoverScene):
             return trap(np.where(y >= c * s, c * s, 0.0), x)
 
         rd = always_redraw(lambda: MathTex(
-            rf"n = {nT.get_value():.1f}: \ \int_{{E_n}} c\,s = {int_En(nT.get_value()):.4f} \to c\int s = "
+            rf"n = {max(1, round(nT.get_value()))}: \ \int_{{E_n}} c\,s = {int_En(max(1, round(nT.get_value()))):.4f} \to c\int s = "
             rf"{c * trap(s, x):.4f}", font_size=28, color=C.CONNECTED_SET).next_to(ax, DOWN, buff=0.55))
         vals = [int_En(n) for n in (1, 2, 5, 20, 100, 1000)]
         assert all(a <= b + 1e-12 for a, b in zip(vals, vals[1:])) and abs(vals[-1] - c * trap(s, x)) < 1e-2

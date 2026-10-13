@@ -40,8 +40,8 @@ class SigmaAlgebras(VoiceoverScene):
             t = label(names[k][0], font_size=22, color=names[k][1])
             t.move_to(boxes[k].get_top() + DOWN * 0.28)
             labs.add(t)
-        vit = VGroup(Dot([5.4, 1.1, 0], radius=0.08, color=C.PATHOLOGY),
-                     label(r"Vitali's set", font_size=22, color=C.PATHOLOGY).next_to([5.4, 1.1, 0], DOWN, buff=0.1))
+        vit = VGroup(Dot([5.45, 1.5, 0], radius=0.08, color=C.PATHOLOGY),
+                     label(r"Vitali's set", font_size=22, color=C.PATHOLOGY).next_to([5.45, 1.5, 0], LEFT, buff=0.12))
         cant = VGroup(Dot([-1.0, -0.75, 0], radius=0.06, color=C.CLOSED_SET),
                       label(r"Cantor set", font_size=20, color=C.CLOSED_SET).next_to([-1.0, -0.75, 0], RIGHT, buff=0.1))
         with self.voiceover(

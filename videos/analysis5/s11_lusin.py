@@ -26,12 +26,44 @@ class NearlyContinuous(VoiceoverScene):
     def principles(self):
         head = label(r"Littlewood's three principles \ (1944)", font_size=34).to_edge(UP, buff=0.5)
         rows = VGroup(
-            label(r"1. \ every measurable set is nearly a finite union of intervals", font_size=30),
-            label(r"2. \ every measurable function is nearly continuous \ (Lusin)", font_size=30, color=C.EPS),
-            label(r"3. \ every convergent sequence is nearly uniformly convergent \ (Egorov, chapter 7)", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(UP * 0.1)
+            label(r"1. \ every measurable set is nearly a finite union of intervals", font_size=27),
+            label(r"2. \ every measurable function is nearly continuous \ (Lusin)", font_size=27, color=C.EPS),
+            label(r"3. \ every convergent sequence is nearly uniformly convergent \ (Egorov, chapter 7)", font_size=27),
+        )
+        for r_ in rows:
+            if r_.width > 9.6:
+                r_.width = 9.6
+        ys = [1.55, -0.2, -1.95]
+        for r_, y in zip(rows, ys):
+            r_.next_to([-2.65, y, 0], RIGHT, buff=0)
+        # three small pictures, one per principle
+        pics = VGroup()
+        ax1 = plain_axes([0, 1, 1], [0, 1, 1], 3.6, 1.2).move_to([-4.85, ys[0], 0]).set_opacity(0)
+        rng = np.random.default_rng(7)
+        dust = []
+        for c0, w0 in ((0.12, 0.16), (0.45, 0.22), (0.8, 0.12)):
+            for _ in range(9):
+                a = c0 + rng.uniform(-w0 / 2, w0 / 2)
+                dust.append((a, a + rng.uniform(0.004, 0.02)))
+        p1 = VGroup(interval_band(ax1, dust, ys[0] - 0.25, GREY_B, height=0.18),
+                    interval_band(ax1, [(0.04, 0.21), (0.34, 0.57), (0.74, 0.87)], ys[0] + 0.25, C.MEASURE, height=0.18),
+                    Line(ax1.c2p(0, 0), ax1.c2p(1, 0), color=GREY_D).set_y(ys[0] - 0.45))
+        pics.add(p1)
+        d = load("lusin")
+        x, f, g = d["x"], d["f"], d["g"]
+        m = x <= 0.2
+        ax2 = plain_axes([0, 0.2, 0.1], [0, 1.05, 0.5], 3.6, 1.3).move_to([-4.85, ys[1], 0])
+        pics.add(VGroup(ax2, polyline(ax2, x[m][::2], f[m][::2], color=GREY_B, stroke_width=6),
+                        polyline(ax2, x[m][::2], g[m][::2], color=C.EPS, stroke_width=2)))
+        ax3 = plain_axes([0, 1, 0.5], [0, 1, 0.5], 3.6, 1.3).move_to([-4.85, ys[2], 0])
+        xx = np.linspace(0, 1, 200)
+        bad = Rectangle(width=ax3.c2p(1, 0)[0] - ax3.c2p(0.9, 0)[0], height=1.3, stroke_width=0, fill_color=C.PATHOLOGY,
+                        fill_opacity=0.3).move_to(ax3.c2p(0.95, 0.5))
+        pics.add(VGroup(ax3, bad, *[polyline(ax3, xx, xx**n, color=C.FUNC, stroke_width=1.8).set_stroke(
+            opacity=0.35 + 0.08 * k) for k, n in enumerate((1, 2, 4, 8, 16, 32, 64))]))
+        assert 0.9**64 < 1.2e-3  # off [0.9, 1], x^n is uniformly within 0.0012 of 0 by n = 64
         foot = label(r"``nearly'' \ $=$ \ except on a set of measure as small as you like", font_size=26,
-                     color=GREY_A).to_edge(DOWN, buff=0.7)
+                     color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "<bookmark mark='a'/> Littlewood summed up the theory in three principles. Every measurable set is "
             "nearly a finite union of intervals. <bookmark mark='b'/> Every measurable function is nearly "
@@ -42,7 +74,7 @@ class NearlyContinuous(VoiceoverScene):
             self.play(FadeIn(head))
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(rows[i], shift=RIGHT * 0.15))
+                self.play(FadeIn(rows[i], shift=RIGHT * 0.15), FadeIn(pics[i]))
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.wait(0.3)
@@ -99,17 +131,29 @@ class NearlyContinuous(VoiceoverScene):
     def dense(self):
         d = load("lusin")
         x, f, g = d["x"], d["f"], d["g"]
-        l1 = trap(np.abs(f - g), x)
-        head = VGroup(label(r"A consequence for Part 6: \ $C_c$ is dense in $L^1$ \ (RCA 3.14)", font_size=32),
-                      MathTex(rf"\int_0^1 |f - g| = {l1:.5f}", font_size=36, color=C.EPS),
-                      label(r"since $|f - g| \le 2 \sup|f|$ on a set of measure $< \varepsilon$", font_size=26,
-                            color=GREY_A)).arrange(DOWN, buff=0.25).move_to(UP * 1.4)
+        diff = np.abs(f - g)
+        l1 = trap(diff, x)
+        head = label(r"A consequence for Part 6: \ $C_c$ is dense in $L^1$ \ (RCA 3.14)", font_size=32).to_edge(
+            UP, buff=0.35)
+        ax = plain_axes([0, 1, 0.25], [0, 0.5, 0.25], 6.6, 2.6, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-3.4, 0.55, 0])
+        pk = diff > 1e-9
+        spikes = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, b), color=C.PATHOLOGY, stroke_width=2)
+                          for a, b in zip(x[pk][::3], diff[pk][::3])])
+        al = MathTex(r"|f - g|", font_size=26, color=C.PATHOLOGY).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        side = VGroup(MathTex(rf"\int_0^1 |f - g| = {l1:.5f}", font_size=36, color=C.EPS),
+                      label(r"nonzero only on the ramps:", font_size=24, color=GREY_A),
+                      label(r"a set of measure $< \varepsilon$, \ where $|f - g| \le 2 \sup|f|$", font_size=24,
+                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to([0.6, 0.6, 0], RIGHT,
+                                                                                               buff=0)
         card = VGroup(label(r"\textbf{Vitali--Carath\'eodory} \ (RCA 2.25), \ in one line:", font_size=28),
                       label(r"every integrable $f$ sits between a lower and an upper semicontinuous function", font_size=26),
                       label(r"whose integrals differ by less than $\varepsilon$", font_size=26)).arrange(DOWN, buff=0.12)
-        card.move_to(DOWN * 1.6)
+        card.move_to(DOWN * 2.45)
         frame = SurroundingRectangle(card, color=GREY_C, buff=0.25, corner_radius=0.1)
         assert l1 < 2 * 1.0 * 0.05 and 0.0035 < l1 < 0.0045  # "about four thousandths"
+        assert diff.max() < 0.5 and trap(pk.astype(float), x) < 0.05
         with self.voiceover(
             "<bookmark mark='a'/> A consequence we'll need in Part 6: continuous functions with compact support are "
             "dense among integrable functions. For our step function, the area between f and its repair is about four "
@@ -117,7 +161,8 @@ class NearlyContinuous(VoiceoverScene):
             "integrable function between semicontinuous ones whose integrals are as close as you like."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax), FadeIn(al))
+            self.play(LaggedStart(*[Create(l_) for l_ in spikes], lag_ratio=0.002), FadeIn(side), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(card), Create(frame))
         self.wait(0.4)
