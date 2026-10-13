@@ -23,9 +23,36 @@ import re
 from contextlib import contextmanager
 from pathlib import Path
 
+from collections import OrderedDict
+
+import manim.mobject.svg.svg_mobject as _svg_mobject
 from manim import FadeOut, Scene
 
 from . import tts
+
+
+class _BoundedCache(OrderedDict):
+    """Manim keeps every parsed SVG (every distinct Tex string) forever. A readout that re-typesets a number each
+    frame fills that cache by the thousand, and a long scene can grow past 6 GB. Keep only the most recent ones:
+    the cache is an optimization, so rendering is unchanged."""
+
+    def __init__(self, maxsize: int = 400):
+        super().__init__()
+        self.maxsize = maxsize
+
+    def __getitem__(self, key):
+        self.move_to_end(key)
+        return super().__getitem__(key)
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self.move_to_end(key)
+        while len(self) > self.maxsize:
+            self.popitem(last=False)
+
+
+if not isinstance(_svg_mobject.SVG_HASH_TO_MOB_MAP, _BoundedCache):
+    _svg_mobject.SVG_HASH_TO_MOB_MAP = _BoundedCache()
 
 _BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
 
