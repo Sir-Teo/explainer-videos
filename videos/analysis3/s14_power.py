@@ -94,7 +94,7 @@ class PowerSeries(VoiceoverScene):
         x = np.linspace(0, 1, 801)
         g = polyline(ax, x, np.log1p(x), color=C.FUNC, stroke_width=3.5)
         ln2 = DashedLine(ax.c2p(0, math.log(2)), ax.c2p(1, math.log(2)), color=C.EPS, stroke_width=2)
-        ln2_l = MathTex(r"\ln 2", font_size=26, color=C.EPS).next_to(ax.c2p(0, math.log(2)), LEFT, buff=0.1)
+        ln2_l = MathTex(r"\ln 2", font_size=26, color=C.EPS).next_to(ax.c2p(0, math.log(2)), UR, buff=0.08)
         fl = MathTex(r"f(x) = \sum_{n \ge 1} \frac{(-1)^{n+1}}{n} x^n = \ln(1 + x)", font_size=28, color=C.FUNC)
         fl.next_to(ax, UP, buff=0.1)
         dots = VGroup(*[Dot(ax.c2p(float(u), float(v)), radius=0.06, color=WHITE) for u, v in zip(xs, abel)])
