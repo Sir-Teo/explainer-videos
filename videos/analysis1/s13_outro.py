@@ -33,7 +33,7 @@ class Outro(VoiceoverScene):
         head = label(r"Part 1, in eleven lines", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. We found that the rationals have holes, and filled them in a way that turns having no "
-            "holes into a theorem: every bounded set has a least upper bound. We used that to prove the Archimedean "
+            "holes into a theorem: every nonempty set that's bounded above has a least upper bound. We used that to prove the Archimedean "
             "property, density, and the nested interval theorem, and we built the bisection engine. We learned that the "
             "rationals, dense as they are, are countable, while the reals are not. Then we stepped back to metric "
             "spaces, where a function can be a point, and built the vocabulary: open, closed, compact, connected. We "

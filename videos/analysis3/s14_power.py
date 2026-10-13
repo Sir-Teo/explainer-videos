@@ -276,6 +276,7 @@ class PowerSeries(VoiceoverScene):
             tab.add(MathTex(rf"{k}", r"\quad " + s[:good], r"\," + s[good:] if good < len(s) else r"", font_size=26))
             tab[-1][1].set_color(C.EPS)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.3, 0.15, 0])
+        assert good == len(s) == 16  # the last row (k = 59) matches pi in every digit shown
         head = VGroup(label(r"\textbf{Rudin 8.7} \ $\pi$ is defined: \ twice the first zero of $\cos$", font_size=30),
                       ).to_edge(UP, buff=0.3)
         out = VGroup(MathTex(r"\pi := 2x_0 = 3.14159265358979\ldots", font_size=32, color=C.EPS),
@@ -288,7 +289,7 @@ class PowerSeries(VoiceoverScene):
             "intermediate value theorem the cosine has a first positive zero, and Rudin defines pi to be twice that "
             "zero. <bookmark mark='c'/> We can find it from the series alone, by bisection: halve the interval, keep "
             "the half where the sign changes, and repeat. Twice the midpoint gains a correct digit about every three "
-            "steps. <bookmark mark='d'/> After sixty halvings, it agrees with pi to twelve decimal places. The rest "
+            "steps. <bookmark mark='d'/> After sixty halvings, it agrees with pi in all fourteen decimal places shown. The rest "
             "follows from the addition law: E of i pi over two is i, E is periodic with period two pi i, and since "
             "the circle is traced at unit speed, pi is half its circumference. Not one triangle was needed."
         ) as vo:

@@ -219,16 +219,17 @@ class Rearrangement(VoiceoverScene):
                       MathTex(r"\sum_k \frac{\sin k}{k}, \text{ reordered greedily, sums to } 3", font_size=34,
                               color=C.APPROX)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
         used = [int(v) for v in d["sin_used"]]
-        stat = label(rf"after $2 \times 10^6$ terms: \ {float(d['sin_final']):.5f}, \ using {fmt_int(used[0])} "
+        stat = label(rf"{fmt_int(used[0] + used[1])} terms in: \ {float(d['sin_final']):.5f}, \ using {fmt_int(used[0])} "
                      rf"positive terms and only {fmt_int(used[1])} negative ones", font_size=24, color=GREY_A)
+        assert 0.9e6 < used[0] + used[1] < 1.1e6 and abs(float(d["sin_final"]) - 3) < 3e-5
         stat.to_edge(DOWN, buff=0.2)
         moral = label(r"So the order of a Fourier series (by frequency) is part of its meaning.", font_size=28,
                       color=C.EPS).next_to(stat, UP, buff=0.15)
         with self.voiceover(
             "And the Fourier thread. <bookmark mark='a'/> The sawtooth series at x equal to one converges to pi minus "
             "one over two, but only conditionally. <bookmark mark='b'/> So it, too, can be reordered to sum to anything. "
-            "Here it is, steered to three. <bookmark mark='c'/> After two million terms it's within three hundred "
-            "thousandths, having used nearly all the positive terms and only a couple of thousand negative ones. "
+            "Here it is, steered to three. <bookmark mark='c'/> After about a million terms it's off by less than "
+            "three parts in a hundred thousand, having used nearly all the positive terms and only a couple of thousand negative ones. "
             "<bookmark mark='d'/> When we write a Fourier series, the order, by frequency, is part of what we mean. "
             "Summing in a different way is an interchange of limits, and that's exactly the question the rest of the "
             "series is about."

@@ -192,12 +192,13 @@ class FourierSeries(VoiceoverScene):
             eq[1][k].set_color(col)
             eq[2][k].set_color(col)
         assert abs(h2 - best - l2) < 1e-6
+        assert 1.7 < float(np.min(worse)) / best < 2.0  # "nearly twice the squared error"
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's theorem 8.11: among all trigonometric polynomials of degree at most N, the "
             "one whose coefficients are f's Fourier coefficients is the closest to f in mean square. "
             "<bookmark mark='b'/> Here's the sawtooth, its Fourier partial sum of degree six, and one competitor. "
             "<bookmark mark='c'/> I tried five hundred random competitors near the partial sum: every one has a "
-            "larger squared error. The best of them is nearly twice as far. <bookmark mark='d'/> The reason is "
+            "larger squared error. Even the best of them has nearly twice the squared error. <bookmark mark='d'/> The reason is "
             "Pythagoras. The error f minus s N is orthogonal to every trigonometric polynomial of degree N, so for "
             "any competitor t, the squared distance from f to t is the squared distance to s N plus the squared "
             "distance from s N to t. <bookmark mark='e'/> The Fourier partial sum is the foot of the perpendicular "

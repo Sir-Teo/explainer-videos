@@ -160,12 +160,21 @@ class Counting(VoiceoverScene):
             vo.wait_until("s")
             self.play(LaggedStart(*[FadeIn(c, scale=1.5) for c in counters], lag_ratio=0.15), run_time=3)
             self.play(dims.animate.set_opacity(0.25))
-        lst = MathTex(r"1,\ 2,\ \tfrac12,\ 3,\ \tfrac13,\ 4,\ \tfrac32,\ \tfrac23,\ \tfrac14,\ 5,\ \tfrac15,\ 6,\ \ldots",
-                      font_size=38, color=C.SEQ).to_edge(DOWN, buff=0.5)
-        assert order[:12] == [(1, 1), (2, 1), (1, 2), (3, 1), (1, 3), (4, 1), (3, 2), (2, 3), (1, 4), (5, 1), (1, 5), (6, 1)]
+        # the list is the walk's own order: each new fraction, in the order the zigzag reaches it
+        walk, seen_ = [], set()
+        for s_ in range(2, 40):
+            diag = [(s_ - q, q) for q in range(1, s_)]
+            for v in (diag[::-1] if s_ % 2 == 1 else diag):
+                if Fraction(*v) not in seen_:
+                    seen_.add(Fraction(*v))
+                    walk.append(v)
+        counted = [v for v in visit[:22] if v == (Fraction(*v).numerator, Fraction(*v).denominator)]
+        assert walk[:len(counted)] == counted and len(counted) == len(counters) >= 12
+        lst = MathTex(",\\ ".join(str(p_) if q_ == 1 else rf"\tfrac{{{p_}}}{{{q_}}}" for p_, q_ in walk[:12])
+                      + r",\ \ldots", font_size=38, color=C.SEQ).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The result is a list: one, two, a half, three, a third, four, three halves, and on, in which every positive "
-            "fraction appears exactly once. <bookmark mark='m'/> Add zero and the negatives by interleaving, as we did "
+            "The result is a list: one, a half, two, three, a third, a quarter, two thirds, and on, in which every "
+            "positive fraction appears exactly once. <bookmark mark='m'/> Add zero and the negatives by interleaving, as we did "
             "for the integers, and all of Q is countable. The dense dust of chapter one is just a list."
         ) as vo:
             self.play(Write(lst))

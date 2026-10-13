@@ -50,7 +50,7 @@ class Tests(VoiceoverScene):
                         for k in n])
         ex = MathTex(r"\tfrac12 + \tfrac13 + \tfrac1{2^2} + \tfrac1{3^2} + \tfrac1{2^3} + \tfrac1{3^3} + \cdots",
                      font_size=32).move_to([3.0, 1.15, 0])
-        ex_r = note(r"Rudin 3.35(b); \ log scale").next_to(ex, DOWN, buff=0.1)
+        ex_r = note(r"Rudin 3.35(a); \ log scale").next_to(ex, DOWN, buff=0.1)
         beta = 0.75
         env = polyline(ax, np.array([0, n_max + 1]), np.array([8, 8 + (n_max + 1) * math.log10(beta)]), color=C.EPS,
                        stroke_width=3)
@@ -166,7 +166,7 @@ class Tests(VoiceoverScene):
 
         cases = [
             ("in", 400, C.CONNECTED_SET, r"|z| = 0.9: \ \text{converges to } -\log(1 - z)"),
-            ("m1", 400, C.SEQ, r"z = -1: \ 1 - \tfrac12 + \tfrac13 - \cdots \text{ converges}"),
+            ("m1", 400, C.SEQ, r"z = -1: \ -1 + \tfrac12 - \tfrac13 + \cdots \text{ converges}"),
             ("p1", 4000, C.PATHOLOGY, r"z = 1: \ \text{the harmonic series diverges}"),
             ("out", 200, C.FREQ, r"|z| = 1.1: \ \text{terms grow; diverges}"),
         ]

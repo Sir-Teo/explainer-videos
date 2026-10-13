@@ -89,10 +89,10 @@ class Stieltjes(VoiceoverScene):
                       Dot(ax.c2p(s, fr(s)), radius=0.08, color=C.EPS),
                       MathTex(r"s", font_size=28).next_to(ax.c2p(s, 0), DOWN, buff=0.12))
         side = VGroup(
-            label(r"\textbf{Rudin 6.15} \ a unit step at $s$:", font_size=28),
+            label(r"\textbf{Rudin 6.15} \ a unit step at $s$, \ $f$ continuous at $s$:", font_size=28),
             MathTex(r"\int f\,d\alpha = f(s)", font_size=40, color=C.EPS),
             label(r"only the piece containing $s$ has $\Delta\alpha_i \ne 0$", font_size=24, color=GREY_A),
-            label(r"\textbf{Rudin 6.16} \ steps $c_n$ at points $s_n$, \ $\sum c_n < \infty$:", font_size=28),
+            label(r"\textbf{Rudin 6.16} \ steps $c_n \ge 0$ at $s_n$, \ $\sum c_n < \infty$, \ $f$ continuous:", font_size=28),
             MathTex(r"\int f\,d\alpha = \sum_{n} c_n f(s_n)", font_size=38, color=C.EPS),
             label(r"an integral can be a series", font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.4, -0.2, 0])

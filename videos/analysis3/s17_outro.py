@@ -40,8 +40,8 @@ class Outro(VoiceoverScene):
             "derivatives, and gave curves a length, though not every curve has one. Then the main problem: limits of "
             "functions. Uniform convergence makes limits pass through continuity and integrals, and turns the "
             "continuous functions into a complete space, where Weierstrass's monster lives. Equicontinuity is what "
-            "compactness costs there, by Arzelà and Ascoli. Polynomials, and any algebra that separates points, "
-            "approximate everything. Power series gave us the exponential and pi, and Fourier series turned out to be "
+            "compactness costs there, by Arzelà and Ascoli. Polynomials, and any algebra that separates points and "
+            "vanishes at no point, approximate everything. Power series gave us the exponential and pi, and Fourier series turned out to be "
             "best approximations: they converge in energy, which summed one over n squared, and at jumps they "
             "overshoot by nine percent."
         ) as vo:

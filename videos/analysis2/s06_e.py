@@ -44,8 +44,8 @@ class NumberE(VoiceoverScene):
             "Rudin defines e as the sum of one over n factorial. <bookmark mark='a'/> How fast does it converge? The "
             "error after n terms is the tail. <bookmark mark='b'/> Each later factorial is at least the first one times "
             "a power of n plus one, so the tail is smaller than a geometric series, <bookmark mark='c'/> and summing it, "
-            "the error is less than one over n factorial times n. <bookmark mark='d'/> That's fast: ten terms give e to "
-            "within three hundred millionths. Hold on to this inequality: it will prove that e is irrational."
+            "the error is less than one over n factorial times n. <bookmark mark='d'/> That's fast: s ten, which stops at one over ten "
+            "factorial, is within three parts in a hundred million of e. Hold on to this inequality: it will prove that e is irrational."
         ) as vo:
             self.play(FadeIn(dfn), FadeIn(ref))
             vo.wait_until("a")
@@ -129,7 +129,7 @@ class NumberE(VoiceoverScene):
             "<bookmark mark='a'/> Squeezed from above by the series and, for each fixed number of terms, from below, "
             "<bookmark mark='b'/> the limit is e. The two definitions agree. <bookmark mark='c'/> But the compound "
             "interest version is slow: at n equal to ten it's still off by an eighth, where the series was off by three "
-            "hundred millionths."
+            "parts in a hundred million."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cmp))

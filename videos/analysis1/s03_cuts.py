@@ -385,7 +385,7 @@ class Cuts(VoiceoverScene):
     def cauchy(self):
         thm = VGroup(
             label(r"\textbf{Theorem} (Rudin 1.19) \ There is an ordered field $\R$ with the least-upper-bound property", font_size=28),
-            label(r"that contains $\Q$; \ it is unique: any two such fields are isomorphic.", font_size=28),
+            label(r"that contains $\Q$. \ (And it is unique: any two such fields are isomorphic.)", font_size=28),
         ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
         h_ = [Fraction(1), Fraction(4, 3), Fraction(7, 5), Fraction(24, 17), Fraction(41, 29), Fraction(140, 99)]
         d_ = [Fraction(1), Fraction(14, 10), Fraction(141, 100), Fraction(1414, 1000), Fraction(14142, 10000),
@@ -404,14 +404,15 @@ class Cuts(VoiceoverScene):
         for g in grid:
             g[1].shift(RIGHT * (2.2 - g[0].width))
         assert diff[-1] < 1e-4
-        who = label(r"Cantor and M\'eray, also 1872: \ a real number is a Cauchy sequence of fractions,", font_size=28)
+        who = label(r"M\'eray (1869) and Cantor (1872): \ a real number is a Cauchy sequence of fractions,", font_size=28)
         who2 = label(r"two sequences counting as the same number when their difference tends to $0$.", font_size=28,
                      color=GREY_A)
         txt = VGroup(who, who2).arrange(DOWN, buff=0.12).next_to(grid, DOWN, buff=0.6)
         with self.voiceover(
             "That's Rudin's theorem: <bookmark mark='t'/> there is an ordered field with the least-upper-bound property, "
-            "containing the rationals, and it's unique: any two such fields are the same up to renaming. "
-            "<bookmark mark='c'/> There's a second classic construction, by Cantor and Méray, in the same year. A real "
+            "containing the rationals. And, as Rudin remarks, it's unique: any two such fields are the same up to "
+            "renaming. "
+            "<bookmark mark='c'/> There's a second classic construction, by Méray and Cantor, from the same years. A real "
             "number is a sequence of fractions that bunches up, a Cauchy sequence, <bookmark mark='d'/> with two "
             "sequences counting as the same number when their difference goes to zero, like the decimals and the hops "
             "for root two."
@@ -427,7 +428,7 @@ class Cuts(VoiceoverScene):
             "That second construction is the one this series will reuse. <bookmark mark='r'/> Whenever a space has holes, "
             "and the spaces of functions we meet later will, we fill them with the space's own Cauchy sequences. "
             "From here on, though, we can forget how the reals were built. Everything we need follows from one fact: "
-            "every set that is bounded above has a least upper bound."
+            "every nonempty set that is bounded above has a least upper bound."
         ) as vo:
             vo.wait_until("r")
             self.play(FadeIn(reuse, shift=UP * 0.2))

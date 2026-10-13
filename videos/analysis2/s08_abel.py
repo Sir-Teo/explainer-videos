@@ -174,8 +174,12 @@ class Abel(VoiceoverScene):
         nn = np.arange(1, 201)
         curve = polyline(ax, nn, S[:200], color=C.APPROX, stroke_width=2.5)
         tl = DashedLine(ax.c2p(0, target), ax.c2p(201, target), color=C.FUNC, stroke_width=2)
-        env_hi = polyline(ax, nn[4:], target + 2 * r / (nn[4:] + 1), color=C.EPS, stroke_width=2)
-        env_lo = polyline(ax, nn[4:], target - 2 * r / (nn[4:] + 1), color=C.EPS, stroke_width=2)
+        # Dirichlet's tail bound 2M b_{n+1}, with M = 1/|sin(x/2)| = 2r (the circle's diameter)
+        M_ = 2 * r
+        assert abs(M_ - 1 / abs(math.sin(0.5))) < 1e-9
+        assert np.all(np.abs(S[:200] - target) <= 2 * M_ / (nn + 1))
+        env_hi = polyline(ax, nn[9:], target + 2 * M_ / (nn[9:] + 1), color=C.EPS, stroke_width=2)
+        env_lo = polyline(ax, nn[9:], target - 2 * M_ / (nn[9:] + 1), color=C.EPS, stroke_width=2)
         ax_l = MathTex(r"x = 1:\ \ \sum_{k \le n} \frac{\sin k}{k} \to \frac{\pi - 1}{2}", font_size=28).next_to(ax, UP,
                                                                                                       buff=0.2)
         env_l = label(r"Dirichlet's bound $2M b_{n+1}$", font_size=22, color=C.EPS).next_to(ax.c2p(120, 1.25), UP,
@@ -337,7 +341,12 @@ class Abel(VoiceoverScene):
             self.play(FadeIn(mert))
         self.wait(0.3)
 
-        ax = plain_axes([0, 61, 10], [-2.5, 2.5, 1], 6.4, 2.6, numbers=True, font_size=18).move_to([3.3, -1.75, 0])
+        ax = plain_axes([0, 61, 10], [-3.5, 3.5, 1], 6.4, 2.6, numbers=True, font_size=18).move_to([3.3, -1.75, 0])
+        # |c_n| = sum_k 1/sqrt((k+1)(n-k+1)) climbs toward pi (a Riemann sum for the Beta integral B(1/2, 1/2))
+        assert np.abs(c).max() < math.pi and np.abs(c[-1]) > 2.7
+        pis = VGroup(*[DashedLine(ax.c2p(0, sg * math.pi), ax.c2p(61, sg * math.pi), color=GREY_C, stroke_width=1.5,
+                                  dash_length=0.06) for sg in (1, -1)])
+        pil = MathTex(r"\pm\pi", font_size=24, color=GREY_B).next_to(ax.c2p(61, math.pi), RIGHT, buff=0.08)
         dots = VGroup(*[Dot(ax.c2p(n, c[n]), radius=0.04, color=C.PATHOLOGY) for n in range(len(c))])
         bnd = VGroup(polyline(ax, np.arange(len(c)), bound, color=GREY_B, stroke_width=1.5),
                      polyline(ax, np.arange(len(c)), -bound, color=GREY_B, stroke_width=1.5))
@@ -347,14 +356,15 @@ class Abel(VoiceoverScene):
         with self.voiceover(
             "Without absolute convergence it can fail. <bookmark mark='a'/> Take the alternating series of one over "
             "root n plus one, which converges, and multiply it by itself. <bookmark mark='b'/> Every term in the n-th "
-            "diagonal has the same sign, so they pile up instead of cancelling: the Cauchy product's terms stay near "
-            "plus or minus two, and the product series diverges."
+            "diagonal has the same sign, so they pile up instead of cancelling: the Cauchy product's terms never shrink. "
+            "Their size climbs toward pi, and the product series diverges."
         ) as vo:
             self.play(FadeOut(mert))
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(ex))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), Create(bnd), FadeIn(verdict), run_time=2)
+            self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), Create(bnd), FadeIn(verdict),
+                      Create(pis), FadeIn(pil), run_time=2)
         assert np.all(np.abs(c) >= bound - 1e-12)
         self.wait(0.5)
         self.clear_scene()

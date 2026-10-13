@@ -243,8 +243,8 @@ class HeineBorel(VoiceoverScene):
         zl = MathTex(r"\text{zoom } \times 1", font_size=30, color=GREY_A).move_to([3.6, -0.9, 0])
         with self.voiceover(
             "A corollary that we'll use constantly in Part 2. <bookmark mark='s'/> Every bounded infinite set in "
-            "k-dimensional space has a limit point. <bookmark mark='e'/> Here are the first four thousand points of the "
-            "sequence cosine of n, sine of root two times n, all inside a square: here, a sample of the first hundred "
+            "k-dimensional space has a limit point. <bookmark mark='e'/> Here are points of the sequence cosine "
+            "of n, sine of root two times n, all inside a square: up to fifteen hundred of the first hundred "
             "thousand."
         ) as vo:
             self.play(Create(frame))

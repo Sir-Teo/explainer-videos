@@ -94,8 +94,8 @@ class Cantor(VoiceoverScene):
             for i in range(4):
                 self.play(FadeIn(xd[i]), Create(disks[i + 1]), run_time=0.7)
         with self.voiceover(
-            "<bookmark mark='k'/> The pieces of P inside these disks are nested, nonempty and compact, so by last "
-            "chapter's theorem something lies in all of them. <bookmark mark='m'/> That something is a point of P, but "
+            "<bookmark mark='k'/> The pieces of P inside these disks are nested, nonempty and compact, so by theorem "
+            "2.36, from the chapter on compactness, something lies in all of them. <bookmark mark='m'/> That something is a point of P, but "
             "it can't be x n for any n, because the n plus first disk avoids x n. So the list missed a point. The real "
             "line is perfect, so this is a second proof that it's uncountable, built from compactness instead of digits."
         ) as vo:

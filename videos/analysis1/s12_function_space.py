@@ -133,8 +133,8 @@ class FunctionSpace(VoiceoverScene):
         cap = label(r"every edge has length $1$ \ (impossible to draw flat)", font_size=26, color=C.DIST)
         cap.next_to(VGroup(edges, names), DOWN, buff=0.2)
         txt = VGroup(
-            label(r"In $\R^3$: \ $e_1, e_2, e_3$ are all $\sqrt2$ apart;", font_size=30),
-            label(r"a fourth such point needs a fourth dimension.", font_size=30),
+            label(r"In $\R^3$: \ at most four points equally far apart", font_size=30),
+            label(r"(a tetrahedron); \ a fifth needs a fourth dimension.", font_size=30),
             label(r"In $C[0,1]$, there is always room", font_size=30, color=C.EPS),
             label(r"for one more direction.", font_size=30, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, 0.5, 0])
