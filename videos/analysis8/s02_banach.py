@@ -89,7 +89,7 @@ class Banach(VoiceoverScene):
             label(r"(c) \ $\Lambda$ is continuous at one point", font_size=26),
             MathTex(r"\|\Lambda\| = \sup_{\|x\| \le 1} \|\Lambda x\|", font_size=32, color=C.EPS),
             label(r"why: \ $\|\Lambda x - \Lambda y\| = \|\Lambda(x - y)\| \le C\|x - y\|$", font_size=22, color=GREY_A),
-            label(r"$B(X, Y)$ with this norm is a Banach space when $Y$ is", font_size=24, color=C.OPERATOR),
+            label(r"$B(X, Y)$ with this norm is a Banach space whenever $Y$ is one", font_size=24, color=C.OPERATOR),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.1, -0.5, 0])
         for r_ in rows:
             if r_.width > 6.6:

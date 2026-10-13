@@ -84,7 +84,7 @@ class Baire(VoiceoverScene):
     def meager(self):
         d = load("baire")
         rats, eps, measures = d["rats"], d["eps"], d["measures"]
-        L, R_ = -6.4, 3.0
+        L, R_ = -6.6, 2.4
 
         def X(t):
             return L + (R_ - L) * t
@@ -102,7 +102,7 @@ class Baire(VoiceoverScene):
             covers.add(g)
             labs.add(MathTex(rf"U: \ \varepsilon = {e}, \ m(U) \le {e} \ ({m:.4f})", font_size=24, color=C.MEASURE).next_to(
                 [R_, y, 0], RIGHT, buff=0.2))
-        assert np.all(measures <= eps + 1e-3)
+        assert np.all(measures <= eps + 1e-3) and labs.get_right()[0] < 6.9
         defs = VGroup(
             label(r"\emph{nowhere dense}: \ closure has empty interior; \ \emph{meager}: \ a countable union of those",
                   font_size=24),
