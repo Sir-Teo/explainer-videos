@@ -21,6 +21,25 @@ python tools/check_narration.py analysis7         # Whisper listen test of every
 
 The scenes share the series' instruments in [`explainer/analysis`](../../explainer/analysis) and helpers from earlier parts (see [`common.py`](common.py)). The full narration is in [`SCRIPT.md`](SCRIPT.md).
 
+## Chapters (24:19)
+
+```
+0:00 Why is C so much better behaved than R?
+2:06 1. Complex derivatives are rotations
+3:59 2. Path integrals and winding numbers
+5:56 3. Cauchy's formula and its miracles
+7:48 4. Zeros, open maps, the maximum modulus
+9:34 5. The global Cauchy theorem and residues
+11:46 6. The Schwarz lemma and three lines
+13:25 7. Runge's theorem
+14:50 8. Normal families
+16:32 9. The Riemann mapping theorem
+18:04 10. A tour: harmonic functions
+19:16 11. A tour: products and continuation
+21:01 12. A tour: H^p and the shift
+22:33 The seventh row of the ledger
+```
+
 ## Scenes
 
 | # | Scene | Chapter |
