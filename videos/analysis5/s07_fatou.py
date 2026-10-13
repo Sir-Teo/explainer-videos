@@ -182,6 +182,38 @@ class Fatou(VoiceoverScene):
                 row[1].set_color(C.CONNECTED_SET)
                 row[2].set_color(C.MEASURE)
         head = label(r"Mass can escape in the limit; \ it can never appear", font_size=34).to_edge(UP, buff=0.4)
+        # a thumbnail of each sequence, animated as n grows: the shaded area stays put while the mass moves off
+        sv = ValueTracker(0.0)
+        IW, IH, IX = 1.8, 0.62, -5.75
+
+        def icon(kind, y):
+            X, Y = ((4.0, 4.2), (6.0, 1.25), (6.0, 1.25), (2 * math.pi, 2.2))[kind]
+
+            def P_(u, v):
+                return np.array([IX - IW / 2 + IW * min(u, X) / X, y - IH / 2 + IH * min(v, Y) / Y, 0])
+
+            def f_():
+                s_ = sv.get_value()
+                if kind == 0:
+                    n = 1 + 3 * s_
+                    pts = [P_(0, 0), P_(0, n), P_(1 / n, n), P_(1 / n, 0)]
+                elif kind == 1:
+                    n = 1 + 4 * s_
+                    pts = [P_(n - 1, 0), P_(n - 1, 1), P_(n, 1), P_(n, 0)]
+                elif kind == 2:
+                    n = 1 + 5 * s_
+                    pts = [P_(0, 0), P_(0, 1 / n), P_(n, 1 / n), P_(n, 0)]
+                else:
+                    n = 1 + 7 * s_
+                    xx = np.linspace(0, X, 160)
+                    pts = [P_(0, 0)] + [P_(a, 1 + math.cos(n * a)) for a in xx] + [P_(X, 0)]
+                return VGroup(Line(P_(0, 0), P_(X, 0), color=GREY_B, stroke_width=1.5),
+                              Polygon(*pts, stroke_color=C.FUNC, stroke_width=2, fill_color=C.MEASURE, fill_opacity=0.5))
+            return always_redraw(f_)
+
+        icons = [icon(k, tab[k + 1][0].get_y()) for k in range(4)]
+        assert all(ic.get_left()[0] > -6.95 and ic.get_right()[0] < tab[k + 1][0].get_left()[0] - 0.15
+                   for k, ic in enumerate(icons))
         out = label(r"Fatou's $\le$ is exactly the room for escaping mass; \ next: \ a lid closes it", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.5)
         with self.voiceover(
@@ -192,7 +224,11 @@ class Fatou(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in tab[1:]], lag_ratio=0.4), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(VGroup(r_, ic), shift=RIGHT * 0.15) for r_, ic in zip(tab[1:], icons)],
+                                  lag_ratio=0.4), run_time=3.0)
+            self.play(sv.animate.set_value(1.0), run_time=4.0, rate_func=linear)
+            for ic in icons:
+                ic.clear_updaters()
             vo.wait_until("b")
             self.play(FadeIn(out))
         self.wait(0.4)
