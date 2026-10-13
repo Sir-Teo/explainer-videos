@@ -50,6 +50,28 @@ Part 3 imports helpers from Parts 1 and 2 (`polyline`, `endpoint`, `plain_axes`)
 ([`dashboard.py`](../../explainer/analysis/dashboard.py)) and the proof map
 ([`proofmap.py`](../../explainer/analysis/proofmap.py)).
 
+## Chapters (50:07)
+
+```
+0:00 The main problem: when may two limits be swapped?
+2:49 1. Upper and lower sums
+5:07 2. Which functions are integrable?
+7:43 3. Integrating against a staircase
+9:58 4. The fundamental theorem, and the length of a curve
+12:23 5. Uniform convergence
+15:34 6. Uniform limits, and the space C(X)
+18:41 7. Integrals and derivatives of limits
+20:32 8. A continuous function with no derivative
+22:58 9. Equicontinuity
+25:17 10. Arzelà–Ascoli: compactness in C(X)
+28:12 11. Every continuous function is nearly a polynomial
+30:51 12. Stone–Weierstrass
+36:06 13. Power series, exp, and the birth of π
+40:20 14. Fourier series: the best approximation
+44:24 15. Parseval, Gibbs, and π²/6
+48:05 The third row of the ledger
+```
+
 ## Outline
 
 | # | Scene | What it establishes | Computed on screen |
