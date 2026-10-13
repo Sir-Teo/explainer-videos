@@ -144,17 +144,32 @@ class Convexity(VoiceoverScene):
 
         pts = always_redraw(scene_pts)
 
-        def readout():
+        # the readout: fixed labels with DecimalNumbers (re-typesetting whole formulas every frame is slow and
+        # fills memory)
+        def lr():
             w = weights()
-            mx = float(w @ xs)
-            lhs, rhs = math.exp(mx), float(w @ np.exp(xs))
-            return VGroup(
-                MathTex(rf"\varphi\Big(\sum w_i x_i\Big) = {lhs:.3f}", font_size=30, color=C.DELTA),
-                MathTex(rf"\sum w_i\, \varphi(x_i) = {rhs:.3f}", font_size=30, color=C.EPS),
-                MathTex(rf"w = ({', '.join(f'{v:.2f}' for v in w)})", font_size=24, color=C.MEASURE),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.7, 1.05, 0])
+            return math.exp(float(w @ xs)), float(w @ np.exp(xs))
 
-        ro = always_redraw(readout)
+        n_l = DecimalNumber(lr()[0], num_decimal_places=3, font_size=30, color=C.DELTA)
+        n_r = DecimalNumber(lr()[1], num_decimal_places=3, font_size=30, color=C.EPS)
+        n_w = [DecimalNumber(v, num_decimal_places=2, font_size=24, color=C.MEASURE) for v in weights()]
+        wrow = VGroup(MathTex(r"w = (", font_size=24, color=C.MEASURE))
+        for i, d_ in enumerate(n_w):
+            wrow.add(d_)
+            wrow.add(MathTex(r"," if i < len(n_w) - 1 else r")", font_size=24, color=C.MEASURE))
+        wrow.arrange(RIGHT, buff=0.05)
+        for k_ in range(2, len(wrow) - 1, 2):  # commas hang just below the digits' baseline
+            wrow[k_].align_to(wrow[1], DOWN).shift(DOWN * 0.05)
+        wrow[-1].set_y(wrow[0].get_y())  # the closing bracket matches the opening one
+        ro = VGroup(
+            VGroup(MathTex(r"\varphi\Big(\sum w_i x_i\Big) =", font_size=30, color=C.DELTA), n_l).arrange(RIGHT, buff=0.15),
+            VGroup(MathTex(r"\sum w_i\, \varphi(x_i) =", font_size=30, color=C.EPS), n_r).arrange(RIGHT, buff=0.15),
+            wrow,
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.7, 1.05, 0])
+        n_l.add_updater(lambda m: m.set_value(lr()[0]))
+        n_r.add_updater(lambda m: m.set_value(lr()[1]))
+        for i, d_ in enumerate(n_w):
+            d_.add_updater(lambda m, i=i: m.set_value(weights()[i]))
         for row in W:
             assert math.exp(row @ xs) <= row @ np.exp(xs)
         thm = VGroup(
@@ -192,7 +207,7 @@ class Convexity(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(thm[:2]))
             self.play(FadeIn(thm[2:]))
-        for m in (pts, ro):
+        for m in (pts, n_l, n_r, *n_w):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
