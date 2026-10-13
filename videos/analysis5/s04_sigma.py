@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
@@ -96,13 +98,32 @@ class SigmaAlgebras(VoiceoverScene):
              (r"Dirichlet's function: \ no", r"Dirichlet's function: \ yes")],
             font_size=24, width=7.4).move_to([3.3, -0.5, 0])
         head = label(r"Measurable functions: \ the same template as continuity", font_size=32).to_edge(UP, buff=0.3)
+        # Dirichlet's function as a double limit of continuous functions: cos(m! pi x)^(2n) -> 1 on {k/m!} as n -> oo
+        xx = np.linspace(0, 1, 24001)
+        seq = [(2, 1), (2, 6), (2, 60), (3, 60), (4, 60), (5, 60)]
+
+        def dl(m, n):
+            return polyline(ax, xx, np.cos(math.factorial(m) * np.pi * xx) ** (2 * n), color=C.PATHOLOGY,
+                            stroke_width=2.2)
+
+        dls = [dl(m, n) for m, n in seq]
+        dlab = [MathTex(rf"m = {m}, \ n = {n}", font_size=28, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.25)
+                for m, n in seq]
+        dform = MathTex(r"D(x) = \lim_{m \to \infty} \lim_{n \to \infty} \cos(m!\,\pi x)^{2n}", font_size=30,
+                        color=C.PATHOLOGY).next_to(ax, UP, buff=0.1)
+        for m, n in seq[2:]:
+            k_ = np.arange(math.factorial(m) + 1) / math.factorial(m)
+            assert np.allclose(np.cos(math.factorial(m) * np.pi * k_) ** (2 * n), 1)
+        assert np.cos(math.factorial(2) * np.pi * 0.3) ** 120 < 1e-10  # off the grid the bumps have died
+        assert dform.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> Which functions can we integrate? Part 2 characterized continuity by preimages: "
             "the preimage of every open set is open. <bookmark mark='b'/> A function is measurable if the preimage "
             "of every open set is measurable. Same template, weaker demand. <bookmark mark='c'/> And here is the "
             "point: limits are free. The supremum, infimum, upper limit and limit of measurable functions are "
-            "measurable, so Dirichlet's function, a double limit of continuous ones, is measurable, though it is "
-            "nowhere continuous."
+            "measurable, <bookmark mark='d'/> so Dirichlet's function, a double limit of continuous ones, is "
+            "measurable, though it is nowhere continuous: raise cosine of m factorial pi x to a high power and it "
+            "becomes spikes at the fractions with denominator m factorial; then let m grow."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(fg))
             vo.wait_until("a")
@@ -112,6 +133,10 @@ class SigmaAlgebras(VoiceoverScene):
             self.play(FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]))
             vo.wait_until("c")
             self.play(FadeIn(card.rows[1]), FadeIn(card.arrows[1]))
+            vo.wait_until("d")
+            self.play(FadeOut(VGroup(fg, Vbar, band, Vl, pre, pl)), FadeIn(dform), Create(dls[0]), FadeIn(dlab[0]))
+            for k in range(1, len(seq)):
+                self.play(ReplacementTransform(dls[k - 1], dls[k]), FadeTransform(dlab[k - 1], dlab[k]), run_time=1.1)
             self.play(FadeIn(card.rows[2]), FadeIn(card.arrows[2]))
         self.wait(0.3)
         self.clear_scene()
