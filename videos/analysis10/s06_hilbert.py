@@ -65,6 +65,46 @@ class HilbertOperators(VoiceoverScene):
             label(r"so $B(H)$ is a $C^*$-algebra: \ chapter 4's theory applies to it", font_size=24),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         head = label(r"\textbf{FA 12.1--12.15} \ the adjoint", font_size=34).to_edge(UP, buff=0.3)
+        # the identity as a picture: the unit circle under T, then under T*; the longest semi-axis goes from
+        # sigma_1 = ||T|| to sigma_1^2 = ||T*T||
+        Tm = np.array([[1.1, 0.6], [0.1, 0.7]])
+        U_, sv, Vt = np.linalg.svd(Tm)
+        assert abs(np.linalg.norm(Tm.T @ Tm, 2) - sv[0] ** 2) < 1e-12
+        k_, py_ = 0.8, 0.15
+        cx = [-4.6, 0.0, 4.6]
+        th = np.linspace(0, 2 * np.pi, 241)
+        circ = np.stack([np.cos(th), np.sin(th)], 1)
+        maps = [np.eye(2), Tm, Tm.T @ Tm]
+
+        def P2(i, v):
+            return np.array([cx[i] + k_ * v[0], py_ + k_ * v[1], 0])
+
+        panels = VGroup()
+        for i, M in enumerate(maps):
+            pts = circ @ M.T
+            g = VGroup(Line(P2(i, [-1.9, 0]), P2(i, [1.9, 0]), color=GREY_D, stroke_width=1.5),
+                       Line(P2(i, [0, -1.9]), P2(i, [0, 1.9]), color=GREY_D, stroke_width=1.5),
+                       VMobject(color=C.OPERATOR, stroke_width=3).set_points_as_corners([P2(i, q) for q in pts]))
+            for j, t_ in enumerate(np.linspace(0, 2 * np.pi, 6, endpoint=False)):
+                q = M @ np.array([math.cos(t_), math.sin(t_)])
+                g.add(Dot(P2(i, q), radius=0.05, color=[C.SEQ, C.APPROX, C.EPS, C.CONNECTED_SET, C.FREQ, C.MEASURE][j]))
+            panels.add(g)
+        v1 = Vt[0]
+        ax2 = Line(P2(1, [0, 0]), P2(1, Tm @ v1), color=C.EPS, stroke_width=5)
+        ax3 = Line(P2(2, [0, 0]), P2(2, Tm.T @ Tm @ v1), color=C.EPS, stroke_width=5)
+        assert np.allclose(Tm.T @ Tm @ v1, sv[0] ** 2 * v1)
+        plabs = VGroup(MathTex(r"\|x\| = 1", font_size=26),
+                       MathTex(rf"\|T\| = \sigma_1 = {sv[0]:.4f}", font_size=26, color=C.EPS),
+                       MathTex(rf"\|T^*T\| = {sv[0] ** 2:.4f} = {sv[0]:.4f}^2", font_size=26, color=C.EPS))
+        for i, l_ in enumerate(plabs):
+            l_.move_to([cx[i], py_ - 1.75, 0])
+        arrs = VGroup(*[Arrow([cx[i] + 1.55, py_, 0], [cx[i + 1] - 1.55, py_, 0], buff=0.05, color=GREY_B,
+                              stroke_width=3, max_tip_length_to_length_ratio=0.25) for i in range(2)])
+        alabs = VGroup(MathTex("T", font_size=30).next_to(arrs[0], UP, buff=0.08),
+                       MathTex("T^*", font_size=30).next_to(arrs[1], UP, buff=0.08))
+        tml = MathTex(r"T = \begin{pmatrix} 1.1 & 0.6 \\ 0.1 & 0.7 \end{pmatrix}", font_size=26).next_to(
+            plabs[1], DOWN, buff=0.12)
+        assert max(abs(c_) for c_ in cx) + k_ * 1.9 < 6.95 and tml.get_bottom()[1] > rows.get_top()[1] + 0.05
         with self.voiceover(
             "<bookmark mark='a'/> On a Hilbert space every bounded operator has an adjoint, defined by moving it "
             "across the inner product. The matrix words all survive: self-adjoint, unitary, normal, projection. "
@@ -78,6 +118,12 @@ class HilbertOperators(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
                                   lag_ratio=0.4), run_time=4.0)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(card.titles, card.rows, card.arrows)))
+            self.play(Create(panels[0]), FadeIn(plabs[0]))
+            self.play(GrowArrow(arrs[0]), FadeIn(alabs[0]), TransformFromCopy(panels[0], panels[1]), FadeIn(tml))
+            self.play(Create(ax2), FadeIn(plabs[1]))
+            self.play(GrowArrow(arrs[1]), FadeIn(alabs[1]), TransformFromCopy(panels[1], panels[2]))
+            self.play(Create(ax3), FadeIn(plabs[2]))
             self.play(FadeIn(rows[:2]))
             vo.wait_until("c")
             self.play(FadeIn(rows[2]))
