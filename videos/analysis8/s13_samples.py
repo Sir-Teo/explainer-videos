@@ -160,9 +160,9 @@ class Samples(VoiceoverScene):
             "shifting the measure by a fixed rotation gives a third again."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:4]))
+            self.play(FadeIn(head), FadeIn(rows[:4]), Create(disk))  # the disk under the statement from the start
             vo.wait_until("b")
-            self.play(Create(disk), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.001), FadeIn(lab),
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.001), FadeIn(lab),
                       FadeIn(rows[4]), run_time=2.5)
             vo.wait_until("c")
             self.play(FadeIn(rows[5:]))

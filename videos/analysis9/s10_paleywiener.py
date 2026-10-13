@@ -136,9 +136,9 @@ class PaleyWiener(VoiceoverScene):
             "is zero there. <bookmark mark='d'/> Support in space is growth in the complex plane."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(thm))
+            self.play(FadeIn(head), FadeIn(thm), FadeIn(img), Create(cx))  # the picture under the statement
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(cx), FadeIn(inv))
+            self.play(FadeIn(inv))
             self.add(line, yl)
             self.play(FadeIn(tab[0]), FadeIn(tab[1]))
             for k in range(1, 4):

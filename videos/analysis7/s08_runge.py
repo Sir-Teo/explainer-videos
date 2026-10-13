@@ -135,9 +135,9 @@ class Runge(VoiceoverScene):
             "becomes a polynomial. Part 10 needs exactly this for its functional calculus."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(ax), FadeIn(K))  # the compact set K under the statement from the start
             vo.wait_until("b")
-            self.play(FadeIn(pm), Create(ax), FadeIn(K), FadeIn(sch))
+            self.play(FadeIn(pm), FadeIn(sch))
             self.play(*pm.light(0))
             self.play(*pm.light(1))
             vo.wait_until("c")
