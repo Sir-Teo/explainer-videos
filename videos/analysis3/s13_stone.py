@@ -136,8 +136,9 @@ class StoneWeierstrass(VoiceoverScene):
             "constant one. <bookmark mark='d'/> All polynomials have neither defect, and they are dense: that was "
             "chapter eleven."
         ) as vo:
+            self.play(FadeIn(defs[0]), run_time=1.2)  # no blank screen while the first sentence is read
             vo.wait_until("a")
-            self.play(FadeIn(defs[0]))
+            self.play(Indicate(defs[0], color=C.EPS, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(defs[1]), Create(axA), FadeIn(tA), Create(tgtA), FadeIn(gA), FadeIn(prA))
             self.play(sA.animate.set_value(3.0), run_time=4.5, rate_func=linear)
