@@ -147,7 +147,7 @@ class Integration(VoiceoverScene):
     def goursat(self):
         d = load("goursat")
         tris, z0, eps, ratio_bad = d["tris"], complex(d["z0"]), d["eps"], d["ratio_bad"]
-        ax = square_axes([-0.05, 1.05, 0.5], [-0.05, 0.95, 0.5], 5.0).move_to([-3.6, -0.65, 0])
+        ax = square_axes([-0.05, 1.05, 0.5], [-0.05, 0.95, 0.5], 4.3).move_to([-4.55, -0.65, 0])
         ax.set_opacity(0.0)
         polys = [Polygon(*[ax.c2p(v.real, v.imag) for v in T], stroke_color=interpolate_color(
             ManimColor(C.SEQ), ManimColor(C.EPS), min(1, k / 6)), stroke_width=3 if k < 5 else 2,
@@ -161,7 +161,7 @@ class Integration(VoiceoverScene):
                              color=GREY_A))
         for n in range(8):
             tab.add(MathTex(f"{n}", rf"\ \ {sci(float(eps[n]), 2)}", rf"\ \ {ratio_bad[n]:.4f}", font_size=24))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([1.5, -0.9, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([-0.1, -0.9, 0])
         regrid(tab)
         for row in tab[1:]:
             row[1].set_color(C.EPS)
@@ -172,14 +172,18 @@ class Integration(VoiceoverScene):
             label(r"the linear part integrates to $0$, so", font_size=22, color=GREY_A),
             MathTex(r"\Big|\oint_{\Delta_n} f\Big| \le \varepsilon_n d_n p_n = \varepsilon_n 4^{-n} d p", font_size=26,
                     color=C.EPS),
-            label(r"while bisection keeps \ $|\oint_{\Delta_n}| \ge 4^{-n}|\oint_\Delta|$:", font_size=22, color=GREY_A),
+            label(r"while bisection keeps \ $|\oint_{\Delta_n} f| \ge 4^{-n}|\oint_\Delta f|$:", font_size=22, color=GREY_A),
             label(r"so $\oint_\Delta f = 0$", font_size=26, color=C.EPS),
             label(r"$\bar z$ is not holomorphic: \ its ratio never drops", font_size=22, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.8, 0])
         for r_ in side:
-            if r_.width > 3.9:
-                r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.05, -0.8, 0])
+            if r_.width > 5.3:
+                r_.width = 5.3
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0, -0.8, 0])
+        side.align_to(np.array([tab.get_right()[0] + 0.45, 0, 0]), LEFT)
+        tri = VGroup(*polys)
+        assert tri.get_left()[0] > -6.95 and tri.get_right()[0] < tab.get_left()[0] - 0.3
+        assert side.get_right()[0] < 6.95 and side.get_left()[0] > tab.get_right()[0] + 0.3
         assert np.all(np.diff(eps) < 0) and np.allclose(ratio_bad, ratio_bad[0], rtol=1e-6)
         head = VGroup(label(r"\textbf{RCA 10.13} \ (Cauchy--Goursat) \ $\oint_{\partial\Delta} f\,dz = 0$ \ for $f$ "
                             r"holomorphic on a triangle", font_size=28),
