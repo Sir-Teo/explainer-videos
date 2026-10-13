@@ -50,6 +50,26 @@ class Plancherel(VoiceoverScene):
                 r_.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.5, 0])
         assert abs(over[-1] - 0.0895) < 0.003 and np.all(np.diff(over) > 0)
+        # Rudin's proof, live: damp the frequencies by e^{-lambda|t|}. In space that convolves the box with the
+        # Poisson kernel lambda / (pi (lambda^2 + x^2)): (arctan((x + 1)/lambda) - arctan((x - 1)/lambda)) / pi
+        xp = np.linspace(-3, 3, 1201)
+
+        def pbox(lam, x_=xp):
+            return (np.arctan((x_ + 1) / lam) - np.arctan((x_ - 1) / lam)) / math.pi
+
+        tq = np.linspace(-3000, 3000, 3_000_001)
+        fh = math.sqrt(2 / math.pi) * np.sinc(tq / math.pi)  # the box's transform, sqrt(2/pi) sin t / t
+        for lam in (1.0, 0.3, 0.1):
+            for x0 in (0.0, 0.9, 1.5):
+                v_ = np.trapezoid(fh * np.exp(-lam * np.abs(tq)) * np.cos(x0 * tq), tq) / math.sqrt(2 * math.pi)
+                assert abs(v_ - pbox(lam, np.array([x0]))[0]) < 1e-6
+        lv = ValueTracker(0.0)  # log10 lambda
+        pc = always_redraw(lambda: polyline(ax, xp, pbox(10 ** lv.get_value()), color=C.TEST_FN, stroke_width=3))
+        pl = VGroup(MathTex(r"\text{damped by } e^{-\lambda |t|}: \ \text{Poisson kernel} * \text{box}, \ \lambda =",
+                            font_size=26, color=C.TEST_FN),
+                    DecimalNumber(1.0, num_decimal_places=2, font_size=26, color=C.TEST_FN)).arrange(RIGHT, buff=0.12)
+        pl.next_to(ax, UP, buff=0.1)
+        pl[1].add_updater(lambda m: m.set_value(10 ** lv.get_value()))
         head = label(r"Rebuilding the box from its frequencies", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The inversion theorem: the same integral, with the opposite sign in the exponent, "
@@ -62,7 +82,12 @@ class Plancherel(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rows[:3]), Create(ax), Create(box))
+            self.play(FadeIn(pc), FadeIn(pl))
+            self.play(lv.animate.set_value(-1.7), run_time=11.0)  # lambda from 1 down to 0.02: it closes in on the box
             vo.wait_until("b")
+            pc.clear_updaters()
+            pl[1].clear_updaters()
+            self.play(FadeOut(pc), FadeOut(pl), run_time=0.6)
             self.play(Create(gs[0]), FadeIn(ls[0]), FadeIn(rows[3]))
             vo.wait_until("c")
             for k in (1, 2):

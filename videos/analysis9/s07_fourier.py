@@ -53,6 +53,27 @@ class FourierL1(VoiceoverScene):
             UP, buff=0.2)
         tag = label(r"Rudin's convention, \ used from here on", font_size=20, color=GREY_A).next_to(conv, RIGHT, buff=0.3)
         assert eb < 1e-6 and eg < 1e-8 and et < 1e-6
+        # what the transform measures: f = e^{-x^2/8}(cos 2x + 0.6 cos 5x) is made of frequencies 2 and 5, and its
+        # transform is bumps at +-2 and +-5 (e^{-x^2/8} -> 2 e^{-2t^2}; cos(wx) g -> (g^(t - w) + g^(t + w))/2)
+        xi = np.linspace(-6, 6, 2401)
+        fi = np.exp(-xi * xi / 8) * (np.cos(2 * xi) + 0.6 * np.cos(5 * xi))
+        ti = np.linspace(-7, 7, 1401)
+        fhi = (np.exp(-2 * (ti - 2) ** 2) + np.exp(-2 * (ti + 2) ** 2)
+               + 0.6 * (np.exp(-2 * (ti - 5) ** 2) + np.exp(-2 * (ti + 5) ** 2)))
+        xq = np.linspace(-40, 40, 160001)
+        fq = np.exp(-xq * xq / 8) * (np.cos(2 * xq) + 0.6 * np.cos(5 * xq))
+        for t_ in (0.0, 2.0, 3.3, 5.0):
+            v_ = np.trapezoid(fq * np.exp(-1j * xq * t_), xq) / SQ2PI
+            assert abs(v_ - float(np.interp(t_, ti, fhi))) < 1e-6
+        iax = plain_axes([-6, 6, 2], [-1.7, 1.7, 1], 5.4, 2.4).move_to([-3.6, -0.6, 0])
+        ibx = plain_axes([-7, 7, 1], [-0.2, 1.2, 1], 5.4, 2.4).move_to([3.4, -0.6, 0])
+        ig = polyline(iax, xi, fi, color=C.FUNC, stroke_width=3)
+        ih = polyline(ibx, ti, fhi, color=C.FREQ, stroke_width=3.5)
+        iar = Arrow([-0.6, -0.6, 0], [0.4, -0.6, 0], buff=0, color=GREY_B, stroke_width=3, tip_length=0.15)
+        il = VGroup(MathTex(r"f(x) = e^{-x^2/8}\,(\cos 2x + 0.6\cos 5x)", font_size=26, color=C.FUNC).next_to(iax, UP, buff=0.15),
+                    MathTex(r"\hat f(t): \ \text{bumps at } \pm 2 \text{ and } \pm 5", font_size=26, color=C.FREQ).next_to(
+                        ibx, UP, buff=0.15))
+        intro = VGroup(iax, ig, iar, ibx, ih, il)
         with self.voiceover(
             "<bookmark mark='a'/> The Fourier transform measures how much of each frequency a function contains. "
             "We fix Rudin's convention, with one over root two pi in front, for the rest of the series. "
@@ -62,9 +83,12 @@ class FourierL1(VoiceoverScene):
             "like one over t squared. Each formula is checked against direct quadrature."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(conv), FadeIn(tag))
+            self.play(FadeIn(conv), FadeIn(tag), Create(iax), Create(ig), FadeIn(il[0]))
+            self.play(GrowArrow(iar), Create(ibx), Create(ih), FadeIn(il[1]), run_time=1.5)
             for k, mk in enumerate(("b", "c", "d")):
                 vo.wait_until(mk)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.6)
                 r_ = rows[k]
                 self.play(Create(r_[0]), Create(r_[1]), FadeIn(r_[2]), run_time=0.8)
                 self.play(GrowArrow(r_[3]), Create(r_[4]), Create(r_[5]), FadeIn(r_[6]), FadeIn(r_[7]), run_time=1.2)
