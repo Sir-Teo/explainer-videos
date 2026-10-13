@@ -53,16 +53,19 @@ class Outro(VoiceoverScene):
         after = ledger(filled=7, highlight=7).scale(0.95)
         with self.voiceover(
             "The ledger's seventh row. <bookmark mark='a'/> The space: holomorphic functions on a region, with "
-            "locally uniform convergence. It's complete, because locally uniform limits of holomorphic functions are "
-            "holomorphic. Its compact sets are the bounded ones, by Montel. Power series may be differentiated term "
-            "by term, and the Cauchy integral commutes with limits. And on the Fourier side: H two, the functions "
+            "locally uniform convergence. <bookmark mark='c2'/> It's complete, because locally uniform limits of holomorphic functions are "
+            "holomorphic. <bookmark mark='c3'/> Its compact sets are the bounded ones, by Montel. <bookmark mark='c4'/> Power series may be differentiated term "
+            "by term, and the Cauchy integral commutes with limits. <bookmark mark='c5'/> And on the Fourier side: H two, the functions "
             "with no negative frequencies."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[6][i], after.rows[6][i])
-                                    for i in range(len(after.rows[6]))], lag_ratio=0.6),
-                      FadeOut(before.rows[6]), run_time=6)
+            self.play(FadeOut(before.rows[6]), *[TransformFromCopy(after.rows[6][i], after.rows[6][i]) for i in (0, 1)],
+                      Indicate(before.head[1], color=C.EPS), run_time=1.5)
+            for k_ in range(2, len(after.rows[6])):  # each cell arrives with its sentence
+                vo.wait_until(f"c{k_}")
+                self.play(TransformFromCopy(after.rows[6][k_], after.rows[6][k_]),
+                          Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 
