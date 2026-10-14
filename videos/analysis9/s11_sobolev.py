@@ -109,9 +109,16 @@ class Sobolev(VoiceoverScene):
         assert abs(vals[0.6][-1] + 10 * 1e6**-0.2 - lim6) < 0.01 and abs(vals[0.5][-1] - 2 * math.asinh(1e6)) < 1e-6
         LT = ValueTracker(0.0)
 
+        assert all(np.all(np.diff(vals[s]) > 0) for s in ss)  # increasing: the part inside the window is a prefix
+
         def pics():
-            m = Lg <= LT.get_value() + 1e-9
-            return VGroup(*[runs(ax, Lg[m], vals[s][m], c, 3.5) for s, c in zip(ss, cols)])
+            # one polyline per s, every frame (always_redraw must keep one family shape): the points up to the cutoff
+            # T that are inside the window (s = 0.4 is cut where it leaves the top, not flattened)
+            out = VGroup()
+            for s, c in zip(ss, cols):
+                m = (Lg <= max(LT.get_value(), Lg[1]) + 1e-9) & (vals[s] <= 40)
+                out.add(polyline(ax, Lg[m], vals[s][m], color=c, stroke_width=3.5))
+            return out
 
         gr = always_redraw(pics)
         rd = VGroup(*[VGroup(MathTex(rf"s = {s}: \ \int_{{-T}}^{{T}}(1 + t^2)^{{-s}}dt =", font_size=22, color=c),
