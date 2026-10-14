@@ -182,7 +182,7 @@ class Differentiation(VoiceoverScene):
             label(r"$Mf \approx \frac{0.1}{|x|}$ far away: \ not integrable, \ but its level sets are controlled",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
-        head = label(r"The maximal function: \ the worst average at each point", font_size=32).to_edge(UP, buff=0.25)
+        head = label(r"The maximal function: \ the worst average at each point", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The proof needs a way to control all the averages at once. The maximal function "
             "takes, at each point, the largest average over all intervals centered there. "
@@ -209,64 +209,59 @@ class Differentiation(VoiceoverScene):
     def vitali(self):
         d = load("lebdiff")
         c, L, chosen, m_union, m_chosen = d["c"], d["L"], d["chosen"], float(d["m_union"]), float(d["m_chosen"])
+        runs_ = d["runs"]
+        assert np.all(c - L / 2 >= 0) and np.all(c + L / 2 <= 1)  # every interval inside [0, 1]
+        assert abs(float(np.sum(runs_[:, 1] - runs_[:, 0])) - m_union) < 1e-12 and m_union <= 3 * m_chosen
         x0, W = -5.4, 7.2  # room for the 3x enlargements (they reach -0.11 and 1.11) and the labels
         X = lambda t: x0 + W * t  # noqa: E731
-        order = np.argsort(c - L / 2)
-        rows_end: list[float] = []
-        row_of = {}
-        for i in order:
-            a = c[i] - L[i] / 2
-            for k, e in enumerate(rows_end):
-                if a > e + 0.004:
-                    rows_end[k] = c[i] + L[i] / 2
-                    row_of[i] = k
-                    break
-            else:
-                rows_end.append(c[i] + L[i] / 2)
-                row_of[i] = len(rows_end) - 1
-        nrows = len(rows_end)
-        top, dy = 2.2, min(0.3, 3.4 / nrows)
+
+        def stack(lo, hi, gap):
+            """Rows for intervals [lo_i, hi_i]: each goes into the first row where it clears the last one by gap."""
+            ends, row = [], {}
+            for i in np.argsort(lo):
+                for k, e in enumerate(ends):
+                    if lo[i] > e + gap:
+                        ends[k], row[i] = hi[i], k
+                        break
+                else:
+                    ends.append(hi[i])
+                    row[i] = len(ends) - 1
+            return row, len(ends)
+
+        row_of, nrows = stack(c - L / 2, c + L / 2, 0.012)
+        top, dy = 2.25, min(0.22, 2.6 / nrows)
         segs = VGroup()
-        chosen_set = set(int(i) for i in chosen)
         for i in range(len(c)):
             y = top - dy * row_of[i]
             segs.add(Line([X(c[i] - L[i] / 2), y, 0], [X(c[i] + L[i] / 2), y, 0], color=GREY_B, stroke_width=4))
         hl = VGroup(*[segs[i].copy().set_color(C.EPS).set_stroke(width=6) for i in chosen])
-        ybase = top - dy * nrows - 0.25
-        enl = VGroup(*[Line([X(c[i] - 1.5 * L[i]), ybase - 0.25, 0], [X(c[i] + 1.5 * L[i]), ybase - 0.25, 0],
-                            color=C.APPROX, stroke_width=6).set_stroke(opacity=0.8) for i in chosen])
-        grid = np.linspace(0, 1, 4001)
-        union = np.any([(np.abs(grid - c[i]) <= L[i] / 2) for i in range(len(c))], axis=0)
-        runs_ = []
-        start = None
-        for j, u in enumerate(np.append(union, False)):
-            if u and start is None:
-                start = j
-            elif not u and start is not None:
-                runs_.append((grid[start], grid[j - 1]))
-                start = None
-        ubar = VGroup(*[Line([X(a), ybase - 0.6, 0], [X(b), ybase - 0.6, 0], color=C.MEASURE, stroke_width=8)
-                        for a, b in runs_])
+        # the 3x enlargements of the chosen ones, on as few rows as keep them apart
+        e_lo, e_hi = c[chosen] - 1.5 * L[chosen], c[chosen] + 1.5 * L[chosen]
+        erow, nerow = stack(e_lo, e_hi, 0.01)
+        ytop_e = top - dy * (nrows - 1) - 0.45
+        enl = VGroup(*[Line([X(e_lo[j]), ytop_e - 0.2 * erow[j], 0], [X(e_hi[j]), ytop_e - 0.2 * erow[j], 0],
+                            color=C.APPROX, stroke_width=6) for j in range(len(chosen))])
+        yu = ytop_e - 0.2 * (nerow - 1) - 0.45
+        ubar = VGroup(*[Line([X(a), yu, 0], [X(b), yu, 0], color=C.MEASURE, stroke_width=8) for a, b in runs_])
         lab = VGroup(label(r"all 60 intervals", font_size=22, color=GREY_B).next_to([X(1.13), top, 0], RIGHT, buff=0.2),
                      label(r"chosen: \ greedy, \ longest first, \ disjoint", font_size=22, color=C.EPS),
-                     label(r"chosen, \ enlarged $3\times$", font_size=22, color=C.APPROX).next_to([X(1.13), ybase - 0.25, 0],
-                                                                                              RIGHT, buff=0.2),
-                     label(r"their union", font_size=22, color=C.MEASURE).next_to([X(1.13), ybase - 0.6, 0], RIGHT,
-                                                                                  buff=0.2))
+                     label(r"chosen, \ enlarged $3\times$", font_size=22, color=C.APPROX).next_to(
+                         [X(1.13), ytop_e - 0.1 * (nerow - 1), 0], RIGHT, buff=0.2),
+                     label(r"their union", font_size=22, color=C.MEASURE).next_to([X(1.13), yu, 0], RIGHT, buff=0.2))
         lab[1].next_to(lab[0], DOWN, buff=0.1).align_to(lab[0], LEFT)
         nums = VGroup(
             MathTex(rf"m(\text{{union}}) = {m_union:.3f}", font_size=28, color=C.MEASURE),
             MathTex(rf"3 \sum_{{\text{{chosen}}}} m(I_j) = 3 \times {m_chosen:.3f} = {3 * m_chosen:.3f}", font_size=28,
                     color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3).shift(LEFT * 2.0)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.4).shift(LEFT * 2.0)
         why_ = label(r"each interval meets a chosen one at least as long, \ so it lies in that one's $3\times$ enlargement",
                      font_size=22, color=GREY_A).next_to(nums, UP, buff=0.12).align_to(nums, LEFT)
-        assert m_union <= 3 * m_chosen + 1e-3
+        rca = label(r"\textbf{RCA 7.3}", font_size=24, color=GREY_A).next_to([X(1.13), 3.0 - 0.3, 0], RIGHT, buff=0.2)
         pm = ProofMap([r"Vitali: \ $3\times$", r"$m\{Mf > \lambda\} \le 3\|f\|_1/\lambda$",
                        r"$f = g + (f - g)$, \ $g$ continuous", r"bad set: \ measure $\le 6\varepsilon/\lambda$, \ any $\varepsilon$"],
                       font_size=18, width=3.0, buff=0.3).to_edge(DOWN, buff=0.3)
-        head = label(r"\textbf{RCA 7.3} \ the Vitali covering lemma: \ a disjoint subfamily whose triples cover", font_size=30).to_edge(
-            UP, buff=0.25)
+        head = label(r"The Vitali covering lemma: \ a disjoint subfamily whose triples cover", font_size=34).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the covering lemma, with sixty random intervals. <bookmark mark='b'/> Pick "
             "greedily: the longest interval, then the longest one disjoint from it, and so on. "

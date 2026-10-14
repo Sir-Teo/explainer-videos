@@ -388,16 +388,23 @@ def compute_arzela():
     pts = np.array([0.5, 0.25, 0.75, 0.125, 0.375, 0.625, 0.875])
     V = curves(np.arange(K), pts)
     idx = np.arange(K)
-    stages, diag, survivors = [], [], []
+    stages, diag, survivors, bin_lo, bin_w = [], [], [], [], []
     for i in range(len(pts)):
         v = V[idx, i]
         w = 0.25 * 0.55**i
         bins = np.floor(v / w)
         vals, counts = np.unique(bins, return_counts=True)
-        idx = idx[bins == vals[np.argmax(counts)]]
+        best = vals[np.argmax(counts)]
+        idx = idx[bins == best]
         stages.append(len(idx))
         diag.append(idx[min(i, len(idx) - 1)])
         survivors.append(idx[:12])
+        bin_lo.append(best * w)
+        bin_w.append(w)
+    # the values of the first 12 survivors of each stage at that stage's point: all inside the stage's bin
+    surv_vals = np.array([V[survivors[i], i] for i in range(len(pts))])
+    bin_lo, bin_w = np.array(bin_lo), np.array(bin_w)
+    assert np.all(surv_vals >= bin_lo[:, None] - 1e-12) and np.all(surv_vals <= (bin_lo + bin_w)[:, None] + 1e-12)
     stages = np.array(stages)
     x = np.linspace(0, 1, 401)
     G = curves(np.array(diag), x)
@@ -407,7 +414,7 @@ def compute_arzela():
     assert np.all(stages[1:] < stages[:-1]) and stages[-1] >= len(pts)
     assert np.all(np.diff(gaps) < 0) and gaps[-1] < gaps[0] / 4
     return dict(x=x, G=G, gaps=gaps, stages=stages, pts=pts, sample=sample, survivors=np.array(survivors),
-                diag=np.array(diag))
+                diag=np.array(diag), surv_vals=surv_vals, bin_lo=bin_lo, bin_w=bin_w)
 
 
 # ---------------------------------------------------------------------------
