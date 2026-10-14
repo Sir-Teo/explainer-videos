@@ -8,6 +8,31 @@ from explainer.analysis import *  # noqa: F403
 from videos.analysis9.common import area_under, load, plain_axes, polyline, rho
 
 
+TOP = 4.2  # the top of the spike panels
+
+
+def spike_halves(ax, x, y, color, stroke_width, top=TOP):
+    """The graph of a spike peaked at 0, cut where it leaves the window (never flattened), as two pieces, left and
+    right of the peak: the group keeps one shape whether or not the spike fits."""
+    out = VGroup()
+    for side in (x <= 0, x >= 0):
+        xs, ys = x[side], y[side]
+        if side[0]:  # left half: rising
+            k = np.flatnonzero(ys > top)
+            if len(k):
+                i = k[0]
+                xc = xs[i - 1] + (top - ys[i - 1]) * (xs[i] - xs[i - 1]) / (ys[i] - ys[i - 1])
+                xs, ys = np.append(xs[:i], xc), np.append(ys[:i], top)
+        else:  # right half: falling
+            k = np.flatnonzero(ys > top)
+            if len(k):
+                i = k[-1]
+                xc = xs[i] + (ys[i] - top) * (xs[i + 1] - xs[i]) / (ys[i] - ys[i + 1])
+                xs, ys = np.insert(xs[i + 1:], 0, xc), np.insert(ys[i + 1:], 0, top)
+        out.add(polyline(ax, xs, ys, color=color, stroke_width=stroke_width))
+    return out
+
+
 class Hook(VoiceoverScene):
     def construct(self):
         self.recap()
@@ -31,33 +56,35 @@ class Hook(VoiceoverScene):
     def spike(self):
         d = load("delta")
         ns, vals, phi0 = d["ns"], d["vals"], d["phi0"]
-        ax = plain_axes([-1.5, 1.5, 0.5], [-0.6, 4.2, 1], 6.4, 4.2, numbers=True, font_size=18,
+        # x numbered (the readout carries the values); no y numbers on the central axis, where the spike runs
+        ax = plain_axes([-1.5, 1.5, 0.5], [-0.6, TOP, 1], 6.4, 4.2, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.1, -0.6, 0])
+                        y_axis_config={"include_numbers": False}).move_to([-3.1, -0.6, 0])
         x = np.linspace(-1.5, 1.5, 3001)
         rng = np.random.default_rng(1)
         a, b, c = rng.normal(size=3)
         phi = np.exp(-x * x) * (1 + a * x) * np.cos(b * x + c)
         gphi = polyline(ax, x, phi, color=C.TEST_FN, stroke_width=3.5)
         nT = ValueTracker(1.0)
+        assert 5 * rho(0.0) < TOP < 6 * rho(0.0)  # n = 5 fits, n = 6 is the first spike taller than the window
 
-        def tall():
-            n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
-            return n * rho(0.0) > 4.2  # the peak is at 0
+        def tall_ramp():
+            # 0 while the spike fits, 1 once it is taller than the window: n steps 5 -> 6 at nT = 5.5, and the
+            # shading fades out / the arrow fades in across that step instead of switching in one frame
+            return float(np.clip((nT.get_value() - 5.25) / 0.5, 0, 1))
 
         def spike_():
-            n = max(1, round(nT.get_value()))
+            n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
             y = n * rho(n * x)
-            # all of the spike fits: shade its area (always 1). Taller than the axes: no clipped shading (it would
-            # lose area). The group keeps one shape throughout; a group that changes shape mid-animation makes
-            # become() scramble the points
-            return VGroup(area_under(ax, x, np.minimum(y, 4.2), C.DISTRIBUTION, 0.0 if tall() else 0.35),
-                          polyline(ax, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3))
+            # all of the spike fits: shade its area (always 1). Taller than the axes: no shading (clipped, it would
+            # lose area). The group keeps one shape throughout (become() scrambles a group that changes shape)
+            return VGroup(area_under(ax, x, np.minimum(y, TOP), C.DISTRIBUTION, 0.35 * (1 - tall_ramp())),
+                          spike_halves(ax, x, y, C.DISTRIBUTION, 3))
 
         sp = always_redraw(spike_)
         up = Arrow(ax.c2p(0, 3.6), ax.c2p(0, 4.75), buff=0, color=C.DISTRIBUTION, stroke_width=3,
                    max_tip_length_to_length_ratio=0.3)  # taller than the axes: the arrow says it goes on up
-        up.add_updater(lambda m: m.set_opacity(1.0 if tall() else 0.0))
+        up.add_updater(lambda m: m.set_opacity(tall_ramp()))
 
         def readout():
             n = max(1, round(nT.get_value()))
@@ -96,10 +123,10 @@ class Hook(VoiceoverScene):
             "returns its value at zero. That's a perfectly good linear functional."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax), FadeIn(sp))  # n = 1: the area-1 bump, shaded
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]), FadeIn(sp))
             self.add(up.update())
+            self.play(FadeIn(rows[1]))
             self.play(nT.animate.set_value(6.0), run_time=3.0)
             vo.wait_until("c")
             self.play(Create(gphi), FadeIn(lab), FadeIn(rd))
@@ -115,7 +142,10 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def step(self):
         ax = plain_axes([-1.5, 1.5, 0.5], [-0.2, 1.3, 0.5], 6.0, 2.4).move_to([-3.2, 1.0, 0])
-        bx = plain_axes([-1.5, 1.5, 0.5], [-0.3, 4.2, 1], 6.0, 2.6).move_to([-3.2, -2.0, 0])
+        # stacked on the same x-range: the lower panel's numbers serve both (as the spike panel's did)
+        bx = plain_axes([-1.5, 1.5, 0.5], [-0.3, TOP, 1], 6.0, 2.6, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        y_axis_config={"include_numbers": False}).move_to([-3.2, -2.0, 0])
         x = np.linspace(-1.5, 1.5, 3001)
         nT = ValueTracker(1.5)
 
@@ -124,13 +154,13 @@ class Hook(VoiceoverScene):
             y = n * rho(n * x)
             Hn = np.concatenate([[0], np.cumsum((y[1:] + y[:-1]) / 2 * np.diff(x))])
             return VGroup(polyline(ax, x, Hn, color=C.SEQ, stroke_width=3.5),
-                          polyline(bx, x, np.minimum(y, 4.2), color=C.DISTRIBUTION, stroke_width=3.5))
+                          spike_halves(bx, x, y, C.DISTRIBUTION, 3.5))  # cut at the window, not flattened
 
         sm = always_redraw(smooth)
         # clipped at the top of the axes: the arrow says it goes on up (a separate mobject, so sm keeps one shape)
         up2 = Arrow(bx.c2p(0, 3.5), bx.c2p(0, 4.7), buff=0, color=C.DISTRIBUTION, stroke_width=3,
                     max_tip_length_to_length_ratio=0.3)
-        up2.add_updater(lambda m: m.set_opacity(1.0 if nT.get_value() * rho(0.0) > 4.2 else 0.0))
+        up2.add_updater(lambda m: m.set_opacity(float(np.clip((nT.get_value() * rho(0.0) - TOP) / 0.8, 0, 1))))
         H = VGroup(Line(ax.c2p(-1.5, 0), ax.c2p(0, 0), color=WHITE, stroke_width=2),
                    Line(ax.c2p(0, 1), ax.c2p(1.5, 1), color=WHITE, stroke_width=2)).set_stroke(opacity=0.5)
         l1 = MathTex(r"H_n \to H \ \text{(Heaviside's step)}", font_size=26, color=C.SEQ).next_to(ax, UP, buff=0.05)
@@ -143,11 +173,12 @@ class Hook(VoiceoverScene):
             label(r"\textbf{the move} \ (Sobolev 1936, \ Schwartz 1945):", font_size=26, color=C.EPS),
             label(r"define everything by its action on smooth test functions", font_size=26, color=C.EPS),
             label(r"then \emph{every} function has derivatives of every order", font_size=26, color=C.CONNECTED_SET),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, -0.4, 0])
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.4, 0])
+            if r_.width > 6.0:
+                r_.width = 6.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.3, -0.4, 0])
+        assert rows.get_right()[0] <= 6.6
         head = label(r"The derivative of a step", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Heaviside, solving circuit equations in the 1890s, wrote that the derivative of a "
