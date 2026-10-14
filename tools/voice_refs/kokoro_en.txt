@@ -1,0 +1,1 @@
+It isn't. Here's a sequence inside the ball: f n is a tent of height one over the interval from one over n plus one to one over n, and zero everywhere else. The tents march toward zero, getting narrower, each one sitting where all the others are zero.

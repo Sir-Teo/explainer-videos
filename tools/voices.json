@@ -24,5 +24,59 @@
         }
       }
     }
+  },
+  "qwen3-calm-a": {
+    "kind": "qwen3-clone",
+    "model": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+    "credit": "Qwen3-TTS (a synthetic voice)",
+    "accept": 0.93,
+    "max_chars": {
+      "en": 260,
+      "zh": 90
+    },
+    "voices": {
+      "en": {
+        "ref_audio": "tools/voice_refs/kokoro_en.wav",
+        "ref_text": "It isn't. Here's a sequence inside the ball: f n is a tent of height one over the interval from one over n plus one to one over n, and zero everywhere else. The tents march toward zero, getting narrower, each one sitting where all the others are zero.",
+        "params": {
+          "temperature": 0.7
+        }
+      },
+      "zh": {
+        "ref_audio": "tools/voice_refs/serenaflat_zh.wav",
+        "ref_text": "配方是这样的。先取sin x。加上sin 2x除以2。再加sin 3x除以3，一直加下去，每一项是sin k x除以k。每一条波都完全光滑。",
+        "params": {
+          "temperature": 0.7
+        }
+      }
+    },
+    "note": "Even, lecture-like delivery: English cloned from the series' original Kokoro narration (its calmest line), Chinese from Serena's calmest Part 1 line."
+  },
+  "qwen3-calm-b": {
+    "kind": "qwen3-clone",
+    "model": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+    "credit": "Qwen3-TTS (a synthetic voice)",
+    "accept": 0.93,
+    "max_chars": {
+      "en": 260,
+      "zh": 90
+    },
+    "voices": {
+      "en": {
+        "ref_audio": "tools/voice_refs/ryanflat_en.wav",
+        "ref_text": "That a point is actually there is, again, the least-upper-bound property. If closed intervals are nested, each inside the last, then the left endpoints are bounded above by every right endpoint, so they have a supremum x, and x lies in every interval.",
+        "params": {
+          "temperature": 0.7
+        }
+      },
+      "zh": {
+        "ref_audio": "tools/voice_refs/serenaflat_zh.wav",
+        "ref_text": "配方是这样的。先取sin x。加上sin 2x除以2。再加sin 3x除以3，一直加下去，每一项是sin k x除以k。每一条波都完全光滑。",
+        "params": {
+          "temperature": 0.7
+        }
+      }
+    },
+    "note": "As calm-a, but the English is Ryan cloned from his calmest Part 1 line."
   }
 }

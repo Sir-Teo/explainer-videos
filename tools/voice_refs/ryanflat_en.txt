@@ -1,0 +1,1 @@
+That a point is actually there is, again, the least-upper-bound property. If closed intervals are nested, each inside the last, then the left endpoints are bounded above by every right endpoint, so they have a supremum x, and x lies in every interval.
