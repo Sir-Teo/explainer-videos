@@ -152,14 +152,14 @@ class Hook(VoiceoverScene):
         d = load("shift")
         lam, res, smin = d["lam"], d["res"], d["smin"]
         # the forward shift on coefficient boxes
-        vals = [r"x_0", r"x_1", r"x_2", r"x_3", r"x_4"]
+        vals = [r"x_0", r"x_1", r"x_2", r"x_3", r"x_4", r"x_5"]  # every box filled: the sequence goes on past the window
         boxes = VGroup(*[Square(0.62, color=GREY_B, stroke_width=2) for _ in range(6)]).arrange(RIGHT, buff=0.06)
         boxes.move_to([-3.4, 1.7, 0])
+        step = boxes[1].get_x() - boxes[0].get_x()
         ents = VGroup(*[MathTex(v, font_size=26, color=C.FUNC).move_to(boxes[i]) for i, v in enumerate(vals)])
         dots_ = MathTex(r"\cdots", font_size=30).next_to(boxes, RIGHT, buff=0.1)
         sl = MathTex(r"S(x_0, x_1, \ldots) = (0, x_0, x_1, \ldots)", font_size=28, color=C.OPERATOR).next_to(boxes, UP,
                                                                                                      buff=0.2)
-        shifted = VGroup(*[MathTex(v, font_size=26, color=C.FUNC).move_to(boxes[i + 1]) for i, v in enumerate(vals)])
         zero = MathTex(r"0", font_size=26, color=GREY_B).move_to(boxes[0])
         noeig = VGroup(
             MathTex(r"Sx = \lambda x: \ \ 0 = \lambda x_0, \ \ x_0 = \lambda x_1, \ \ldots \ \Rightarrow \ x = 0",
@@ -179,7 +179,7 @@ class Hook(VoiceoverScene):
             label(r"so $\sigma(S^*)$, \ and $\sigma(S)$, \ are the closed unit disc", font_size=26, color=C.SPECTRUM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([-3.2, -2.0, 0])
         assert res.max() < 1e-12 and np.all(smin >= 1 - np.abs(lam[:20]) - 1e-12)
-        head = label(r"The shift: \ no eigenvalues, \ a whole disc of spectrum", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"The shift: \ no eigenvalues, \ a whole disc of spectrum", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the first surprise. The shift on square-summable sequences moves every "
             "entry one slot to the right. <bookmark mark='b'/> It has no eigenvalues: S x equal to lambda x forces "
@@ -191,7 +191,8 @@ class Hook(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), Create(boxes), FadeIn(ents), FadeIn(dots_), FadeIn(sl))
-            self.play(Transform(ents, shifted), FadeIn(zero), run_time=1.5)
+            self.play(ents[:5].animate.shift(RIGHT * step), FadeOut(ents[5], shift=RIGHT * step), FadeIn(zero),
+                      run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(noeig))
             vo.wait_until("c")
@@ -207,6 +208,7 @@ class Hook(VoiceoverScene):
     def sections(self):
         d = load("shift")
         g = d["g"]
+        levels = (2, 6)  # contours where the resolvent's norm is 10^2 and 10^6
         imgs, axs, labs, conts = Group(), VGroup(), VGroup(), VGroup()
         for k, (key, n) in enumerate((("p8", 8), ("p24", 24), ("p64", 64))):
             ax = square_axes([-1.5, 1.5, 1], [-1.5, 1.5, 1], 1.25).move_to([-4.4 + 4.4 * k, 0.2, 0])
@@ -215,7 +217,7 @@ class Hook(VoiceoverScene):
             img.move_to(ax.c2p(0, 0))
             circ = Circle(radius=ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0], color=WHITE, stroke_width=1.5).move_to(ax.c2p(0, 0))
             c_ = VGroup(circ)
-            for lev, op in ((-2, 0.9), (-6, 0.6)):
+            for lev, op in ((-levels[0], 0.9), (-levels[1], 0.6)):  # Z = log10 smallest singular value = -level
                 c_.add(contour_mobject(ax, contour_segments(lambda X, Y, Z=Z: Z, g, g, level=lev), C.EPS, 2.0, op))
             e0 = Dot(ax.c2p(0, 0), radius=0.06, color=C.PATHOLOGY)
             imgs.add(img)
@@ -231,15 +233,14 @@ class Hook(VoiceoverScene):
         assert radii[0] < radii[1] < radii[2] < 1
         rows = VGroup(
             label(r"$N \times N$ sections of the shift: \ a Jordan block, \ the only eigenvalue is $0$ (red)", font_size=24),
-            MathTex(r"\text{glow: } -\log_{10}\, \|(J_N - \lambda)^{-1}\|^{-1}; \quad \text{contours at } 10^{-2}, 10^{-6}",
-                    font_size=24, color=GREY_A),
+            MathTex(rf"\text{{glow: }} \log_{{10}}\|(J_N - \lambda)^{{-1}}\| \text{{ from 0 to {GLOW_MAX}}}; \ \ "
+                    rf"\text{{contours: }} \|(J_N - \lambda)^{{-1}}\| = 10^{{{levels[0]}}}, 10^{{{levels[1]}}}; \ \ "
+                    r"\text{white: } |\lambda| = 1", font_size=24, color=GREY_A),
             label(r"the resolvent is astronomically large across the disc: \ the spectrum of the infinite shift shows "
                   r"through", font_size=24, color=C.SPECTRUM),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
-        for r_ in rows:
-            if r_.width > 13:
-                r_.width = 13
-        head = label(r"Finite sections hide the spectrum, \ and the resolvent shows it", font_size=34).to_edge(UP, buff=0.25)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+        assert max(r_.width for r_ in rows) <= 13.0
+        head = label(r"Finite sections hide the spectrum, \ and the resolvent shows it", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A computer can only hold a finite piece of the shift: an N by N block whose only "
             "eigenvalue is zero. <bookmark mark='b'/> But measure how close T minus lambda is to failing to be "

@@ -343,8 +343,8 @@ class MeanValue(VoiceoverScene):
         slope = (1 - np.cos(x)) / np.sin(x)
         t = brentq(lambda s: np.sin(s) / np.cos(s) - slope, 1e-6, x)  # f'/g' = tan t equals the chord's slope
         tp = P(np.sin(t), 1 - np.cos(t))
-        tangent = Line(tp - 0.45 * sc * np.array([1, slope, 0]) / np.hypot(1, slope),
-                       tp + 0.45 * sc * np.array([1, slope, 0]) / np.hypot(1, slope), color=C.EPS, stroke_width=3)
+        tangent = Line(tp - 0.25 * sc * np.array([1, slope, 0]) / np.hypot(1, slope),
+                       tp + 0.5 * sc * np.array([1, slope, 0]) / np.hypot(1, slope), color=C.EPS, stroke_width=3)
         assert tangent.get_bottom()[1] > o[1] - 0.05  # the tangent stays above the g-axis
         xend = P(np.sin(x), 1 - np.cos(x))
         xl = MathTex(r"(g(x), f(x))", font_size=26, color=C.APPROX).next_to(xend, RIGHT, buff=0.15)

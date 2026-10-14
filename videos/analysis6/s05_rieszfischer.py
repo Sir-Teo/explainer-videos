@@ -135,9 +135,11 @@ class RieszFischer(VoiceoverScene):
         assert np.allclose(inc, 1 / (8 * nk), rtol=1e-3) and inc.sum() < 0.25
         gn = MathTex(rf"\|g\|_1 = \tfrac12 + \tfrac14 = {trap(g_lim, x):.4f}", font_size=28, color=WHITE).next_to(
             frame, UP, buff=1.0).align_to(frame, LEFT)
-        lim_t = VGroup(label(r"and the series $r_1 + \sum_k (r_{2^{k+1}} - r_{2^k})$ converges everywhere", font_size=24),
-                       label(r"(except at $\tfrac12$) \ to the step $\mathbf 1_{(1/2, 1]}$", font_size=24,
-                             color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 2.0, 0])
+        lim_t = VGroup(label(r"the series $r_1 + \sum_k (r_{2^{k+1}} - r_{2^k})$ converges", font_size=24),
+                       label(r"everywhere except at $\tfrac12$, \ to the step $\mathbf 1_{(1/2, 1]}$", font_size=24,
+                             color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        lim_t.next_to([0.7, 2.0, 0], RIGHT, buff=0)
+        assert lim_t.get_right()[0] < 6.6
         head = label(r"The proof, run on the hook's ramps \ ($n_k = 2^k$)", font_size=34).to_edge(UP, buff=0.3)
         # the partial sums of the telescoping series are the ramps r_(2^k); they close in on the step
         part = [polyline(ax, x, ramp(x, 2**k), color=C.SEQ, stroke_width=3) for k in range(7)]
@@ -183,7 +185,7 @@ class RieszFischer(VoiceoverScene):
     def dense(self):
         d = load("ramps")
         ns = d["ns"]
-        ax = plain_axes([0, 1, 0.25], [-0.6, 1.6, 0.5], 5.6, 3.6).move_to([-3.4, -0.75, 0])
+        ax = plain_axes([0, 1, 0.25], [-0.6, 1.6, 0.5], 5.6, 3.6).move_to([-3.2, -0.75, 0])
         x = np.linspace(0, 1, 2001)
         step = (x > 0.5).astype(float)
         st = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=3),

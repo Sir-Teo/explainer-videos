@@ -107,7 +107,7 @@ class Partials(VoiceoverScene):
     def not_linear(self):
         d = load("museum")
         th, Du = d["th"], d["Du"]
-        S = 2.8
+        S = 2.6
         head = VGroup(label(r"Second exhibit: \ a derivative in every direction, \ and none", font_size=34),
                       MathTex(r"g(x, y) = \frac{x^2 y}{x^2 + y^2}, \qquad g(0, 0) = 0", r"\qquad |g| \le |y|:"
                               r"\ \text{continuous}", font_size=34)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
@@ -115,7 +115,7 @@ class Partials(VoiceoverScene):
         ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2)
         ax.move_to([-6.6 + S / 2, 0, 0]).align_to([0, head.get_bottom()[1] - 0.25, 0], UP)
         img = heatmap(g_bad, (-1, 1), (-1, 1), S, S, -0.6, 0.6).move_to(ax.c2p(0, 0))
-        bx = plain_axes([0, 2 * np.pi, np.pi / 2], [-0.5, 0.5, 0.25], 6.3, 2.7).move_to([3.05, -0.05, 0])
+        bx = plain_axes([0, 2 * np.pi, np.pi / 2], [-0.5, 0.5, 0.25], 5.8, 2.7).move_to([2.9, -0.05, 0])
         bx.align_to([0, head.get_bottom()[1] - 0.75, 0], UP)
         bt = angle_ticks(bx)
         actual = VMobject(color=C.APPROX, stroke_width=3.5).set_points_as_corners([bx.c2p(t, v) for t, v in zip(th, Du)])
@@ -156,7 +156,8 @@ class Partials(VoiceoverScene):
         card.next_to(img, DOWN, buff=0.2).align_to(img, LEFT)
         legend = label(r"blue $< 0 <$ orange", font_size=22, color=GREY_A).next_to(img, RIGHT, buff=0.2).align_to(img, UP)
         assert along.get_right()[0] < bx.get_left()[0] - 0.2 and card.get_right()[0] < bx.get_left()[0] - 0.2
-        assert card.get_bottom()[1] > -3.65 and side.get_bottom()[1] > -3.6 and bt.get_right()[0] <= 6.6
+        assert card.get_bottom()[1] > -3.65 and side.get_bottom()[1] > -3.6 and bt.get_right()[0] <= 6.6, (
+            card.get_bottom()[1], side.get_bottom()[1], bt.get_right()[0])
         assert legend.get_right()[0] < bl.get_left()[0] - 0.2 or legend.get_bottom()[1] > bl.get_top()[1]
         with self.voiceover(
             "<bookmark mark='a'/> The second exhibit is subtler: x squared y over x squared plus y squared. It is "
