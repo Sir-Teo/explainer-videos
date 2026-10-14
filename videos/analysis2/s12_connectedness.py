@@ -257,7 +257,8 @@ class Connectedness(VoiceoverScene):
                           height=ax.c2p(0, 0.45)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=C.DELTA,
                           fill_opacity=0.25).move_to((ax.c2p(x0 - delta, 0) + ax.c2p(x0 + delta, 0.45)) / 2)
         xm = Dot(ax.c2p(x0, 0), radius=0.07, color=WHITE)
-        xl = MathTex(r"1/\sqrt2", font_size=26).next_to(xm, DOWN, buff=0.15)
+        # left of the dot, clear of the axis's 0.75 (1/sqrt 2 = 0.707 is too close to share its row centred)
+        xl = MathTex(r"1/\sqrt2", font_size=26).next_to(xm, DOWN, buff=0.15).align_to(xm, RIGHT).shift(LEFT * 0.12)
         big = VGroup(*[dots[i] for i, (a, b) in enumerate(zip(x[keep], y[keep])) if b >= eps])
         near = Dot(ax.c2p(0.7, 0.1), radius=0.07, color=C.PATHOLOGY)
         nl = MathTex(r"\tfrac{7}{10}", font_size=26, color=C.PATHOLOGY).next_to(near, UL, buff=0.08)

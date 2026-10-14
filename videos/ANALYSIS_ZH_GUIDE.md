@@ -140,3 +140,21 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | Lebesgue, Banach, Riesz, von Neumann | 勒贝格，巴拿赫，里斯，冯·诺伊曼 |
 | ledger (the series' running table) | 账本 |
 | swap two limits | 交换两个极限（的次序） |
+| Joseph Fourier, Georg Cantor, Richard Dedekind, Maurice Fréchet | 约瑟夫·傅里叶，格奥尔格·康托尔，理查德·戴德金，莫里斯·弗雷歇 |
+| Méray, Liouville, Hermite, Lindemann | 梅雷，刘维尔，埃尔米特，林德曼 |
+| Bolzano–Weierstrass, Cauchy–Schwarz | 波尔查诺–魏尔斯特拉斯定理，柯西–施瓦茨不等式 |
+| k-cell (Rudin 2.17) | k-胞腔 |
+| path-connected | 道路连通 |
+| devil's staircase (the Cantor function) | 魔鬼阶梯（康托尔函数） |
+| the bisection engine | 二分法引擎 |
+| the hop (Part 1's p ↦ (2p+2)/(p+2)) | 那一跳 |
+| script A (𝒜) | 花体A |
+| bookkeeping (a technicality) | 技术性的规定 (not 记账: 账本 is the ledger) |
+
+## Conventions settled while translating Part 1
+
+* Subscripts as `x_1`, `E_n`, `f_n`, `G_α` (the voice reads `x_n` as "x n"); a star as `x*` (read "x 星").
+* `sin`, `cos`, `sup`, `inf`, `lim`, `ln`, `log` stay in Latin letters: sin x、cos n、sup E.
+* Spoken fractions in words (三分之一, 二十八分之十二); numbers shown on screen as digits (0.527, 1.414).
+* Function arguments that are expressions get full-width parentheses when spoken: sin（根号2乘n）、sin（x分之1）.
+* "whole numbers" in a counting context is 正整数; for p and q in p/q it is 整数.

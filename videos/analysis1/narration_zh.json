@@ -1,0 +1,706 @@
+{
+ "title": "分析学，从零搭建 · 第1部分：实数与空间的形状",
+ "chapters": {
+  "Hook": "傅里叶的问题，以及分数里的洞",
+  "Holes": "1. 有理数轴上的洞",
+  "Cuts": "2. 把洞填上：戴德金分割",
+  "Archimedes": "3. 阿基米德性质、稠密性与小数",
+  "Counting": "4. 数一数无穷",
+  "Distance": "5. “接近”是什么意思：度量空间",
+  "OpenClosed": "6. 开集与闭集",
+  "Compact": "7. 紧性",
+  "HeineBorel": "8. 海涅–博雷尔定理，用二分法证明",
+  "Cantor": "9. 康托尔集",
+  "Connected": "10. 连通性",
+  "FunctionSpace": "11. 第一个函数空间",
+  "Outro": "回顾，以及账本的第一行"
+ },
+ "lines": {
+  "54cdba59d03f": {
+   "scene": "Hook",
+   "en": "In 1807, Joseph Fourier submitted a memoir on how heat flows through a solid body. Buried in it was a claim that took mathematics a century to digest. <bookmark mark='s'/> Take a function with a corner, or even a jump, like this sawtooth. <bookmark mark='w'/> Fourier said that it can be written as a sum of sine waves.",
+   "zh": "1807年，约瑟夫·傅里叶提交了一篇论文，讲热量如何在固体中流动。论文里藏着一个论断，数学界花了整整一个世纪才把它消化。<bookmark mark='s'/>拿一个带尖角、甚至带跳跃的函数，比如这条锯齿波。<bookmark mark='w'/>傅里叶说，它可以写成一串正弦波的和。"
+  },
+  "c1984a066806": {
+   "scene": "Hook",
+   "en": "Here's the recipe. <bookmark mark='a'/> Start with sine of x. <bookmark mark='b'/> Add sine of 2x, over 2. <bookmark mark='c'/> Then sine of 3x over 3, <bookmark mark='d'/> and keep going, with sine of k x over k. Each wave is perfectly smooth.",
+   "zh": "配方是这样的。<bookmark mark='a'/>先取sin x。<bookmark mark='b'/>加上sin 2x除以2。<bookmark mark='c'/>再加sin 3x除以3，<bookmark mark='d'/>一直加下去，每一项是sin kx除以k。每一条波都完全光滑。"
+  },
+  "a450eb19795a": {
+   "scene": "Hook",
+   "en": "And yet, as we add more of them, the sum hugs the sawtooth more and more closely: <bookmark mark='e'/> the straight edges, and even the sudden jump. <bookmark mark='f'/> Written out, the claim is that pi minus x, over 2, equals the infinite sum of sine k x over k, for every x strictly between 0 and 2 pi.",
+   "zh": "可是，随着加进来的波越来越多，这个和会越来越紧地贴住锯齿波：<bookmark mark='e'/>贴住直的边，连那个突然的跳跃也贴住了。<bookmark mark='f'/>写成公式，这个论断就是：π减x再除以2，等于k从1到无穷的sin kx除以k之和，对严格介于0和2π之间的每一个x都成立。"
+  },
+  "225c3aea69eb": {
+   "scene": "Hook",
+   "en": "Now look closely at the jump, and the questions start. <bookmark mark='a'/> Every one of these partial sums is smooth: you can differentiate it as often as you like. But the thing they approach is not even continuous. So a limit of continuous functions can fail to be continuous.",
+   "zh": "现在仔细看那个跳跃，问题就来了。<bookmark mark='a'/>这些部分和每一个都是光滑的：想求多少次导数都可以。可它们逼近的那个东西，甚至都不连续。所以，连续函数的极限，可以不连续。"
+  },
+  "d8b2277093f2": {
+   "scene": "Hook",
+   "en": "At the jump itself, <bookmark mark='m'/> every partial sum equals zero, exactly halfway between the two sides. And right next to the jump, <bookmark mark='o'/> the partial sums overshoot. <bookmark mark='n'/> Add more terms, and the overshoot gets narrower, <bookmark mark='p'/> but not lower: it settles at about nine percent of the size of the jump. We'll prove that in Part 3.",
+   "zh": "在跳跃点本身，<bookmark mark='m'/>每个部分和都等于0，正好在两侧的正中间。而紧挨着跳跃的地方，<bookmark mark='o'/>部分和会冲过头。<bookmark mark='n'/>项数加得越多，冲过头的那一段就越窄，<bookmark mark='p'/>但并不会变低：它最终稳定在跳跃幅度的百分之九左右。这一点我们会在第3部分证明。"
+  },
+  "297dac13b120": {
+   "scene": "Hook",
+   "en": "Lagrange, one of the mathematicians who read Fourier's memoir, <bookmark mark='l'/> objected: a sum of smooth waves ought to be smooth. The arguments that followed took most of the nineteenth century, <bookmark mark='c'/> and they forced mathematicians to say exactly what a limit is, <bookmark mark='d'/> what a function is, <bookmark mark='r'/> and what an integral is. Georg Cantor invented set theory while studying these series. <bookmark mark='n'/> And at the bottom of it all, they had to say what a number is.",
+   "zh": "拉格朗日是读过傅里叶论文的数学家之一，<bookmark mark='l'/>他提出了反对：光滑的波加起来，理应还是光滑的。随后的争论持续了大半个十九世纪，<bookmark mark='c'/>它逼着数学家们说清楚，极限到底是什么，<bookmark mark='d'/>函数是什么，<bookmark mark='r'/>积分又是什么。格奥尔格·康托尔正是在研究这类级数的时候，创立了集合论。<bookmark mark='n'/>而追到最底层，他们还得说清楚：数是什么。"
+  },
+  "f8957cfff1a3": {
+   "scene": "Hook",
+   "en": "Here's why. <bookmark mark='i'/> An infinite sum is a limit: we add terms, and ask what the partial sums approach. <bookmark mark='l'/> But a limit needs a place to land. <bookmark mark='q'/> These are the rational numbers, the fractions, drawn as a ruler: each fraction gets a tick, and fractions with smaller denominators get taller ticks. <bookmark mark='s'/> Now take the numbers 1, 1.4, 1.41, 1.414, each one the square root of two cut off one digit later.",
+   "zh": "原因是这样的。<bookmark mark='i'/>无穷和就是一个极限：我们一项一项地加，然后问部分和趋近于什么。<bookmark mark='l'/>可是，极限需要一个落脚的地方。<bookmark mark='q'/>这是有理数，也就是分数，画成了一把尺子：每个分数对应一个刻度，分母越小，刻度画得越高。<bookmark mark='s'/>现在取这几个数：1、1.4、1.41、1.414，每一个都是把根号2截断得到的，一个比一个多保留一位。"
+  },
+  "7c5c43885f03": {
+   "scene": "Hook",
+   "en": "Zoom in, and they crowd closer and closer together, <bookmark mark='h'/> closing in on a spot. But no fraction sits there. The square of a fraction is never exactly two, so if fractions were the only numbers we had, these numbers would have nothing to approach. <bookmark mark='t'/> The rational numbers have holes.",
+   "zh": "放大来看，它们挤得越来越近，<bookmark mark='h'/>向某一个位置收拢。可是那里没有任何分数。分数的平方永远不会恰好等于2，所以，如果我们手里只有分数，这些数就没有可以趋近的对象。<bookmark mark='t'/>有理数是有洞的。"
+  },
+  "5e831d06044e": {
+   "scene": "Hook",
+   "en": "This video is Part 1 of a series that builds analysis from those holes <bookmark mark='a'/> all the way to functional analysis: the mathematics of infinite-dimensional spaces, which is where Fourier's question finally gets its full answer. <bookmark mark='b'/> The route follows Walter Rudin's three classic textbooks: <bookmark mark='p'/> Principles of Mathematical Analysis, <bookmark mark='r'/> Real and Complex Analysis, <bookmark mark='f'/> and Functional Analysis. <bookmark mark='h'/> Every theorem we use, we prove on screen.",
+   "zh": "这个视频是一个系列的第1部分。这个系列从这些洞出发搭建分析学，<bookmark mark='a'/>一路走到泛函分析，也就是无穷维空间的数学，傅里叶的问题要到那里才得到完整的回答。<bookmark mark='b'/>路线跟着沃尔特·鲁丁的三本经典教材走：<bookmark mark='p'/>《数学分析原理》、<bookmark mark='r'/>《实分析与复分析》，<bookmark mark='f'/>还有《泛函分析》。<bookmark mark='h'/>我们用到的每一个定理，都会在屏幕上证明。"
+  },
+  "612b6f8c0993": {
+   "scene": "Hook",
+   "en": "One idea runs through the whole series. <bookmark mark='k'/> Continuity, derivatives, integrals and infinite sums are all limits, <bookmark mark='w'/> and almost every theorem we'll prove answers a single question: when may we swap the order of two limits? <bookmark mark='g'/> Here's the simplest example of what goes wrong. Take m over m plus n. <bookmark mark='r'/> Send n to infinity first, and every row goes to zero, so the answer is zero. <bookmark mark='c'/> Send m to infinity first, and every column goes to one. Same numbers, different order, different answer.",
+   "zh": "有一个想法贯穿整个系列。<bookmark mark='k'/>连续、导数、积分和无穷和，全都是极限，<bookmark mark='w'/>而我们要证明的几乎每一个定理，都在回答同一个问题：什么时候可以交换两个极限的次序？<bookmark mark='g'/>举个最简单的例子，看看会出什么问题。取m加n分之m。<bookmark mark='r'/>先让n趋于无穷，每一行都趋于0，答案是0。<bookmark mark='c'/>先让m趋于无穷，每一列都趋于1。同样的数，次序不同，答案就不同。"
+  },
+  "2dfd5a9a4c1a": {
+   "scene": "Hook",
+   "en": "Fourier's sum is exactly this kind of question. <bookmark mark='s'/> Is the integral of the sum the sum of the integrals? Each new space in this series is invented to make one more swap like this legal.",
+   "zh": "傅里叶的那个和，正是这类问题。<bookmark mark='s'/>和的积分，等于积分的和吗？这个系列里的每一个新空间，都是为了让又一次这样的交换变得合法，才被发明出来的。"
+  },
+  "21fba5430a54": {
+   "scene": "Hook",
+   "en": "We'll keep a ledger. <bookmark mark='l'/> Each part adds one row: a new space, the reason it has no holes, what compactness means there, which limits we've earned the right to swap, and how far we've gotten with Fourier. <bookmark mark='r'/> Today's row is the first: the real numbers.",
+   "zh": "我们会记一本账本。<bookmark mark='l'/>每一部分添上一行：一个新空间，它为什么没有洞，紧性在那里意味着什么，我们已经有资格交换哪些极限，以及傅里叶的问题推进到了哪一步。<bookmark mark='r'/>今天是第一行：实数。"
+  },
+  "fcb8c51d6614": {
+   "scene": "Hook",
+   "en": "Here's the plan for today. <bookmark mark='a'/> We'll find the holes in the rational numbers and fill them, in a way that makes having no holes a theorem. <bookmark mark='b'/> We'll count infinities. <bookmark mark='c'/> Then we'll step back and ask what close means in general, which gives us the vocabulary of everything that follows: open sets, compact sets and connected sets. <bookmark mark='d'/> And we'll end with a warning: the very first space of functions we meet already breaks one of today's best theorems.",
+   "zh": "今天的计划是这样的。<bookmark mark='a'/>我们要找出有理数里的洞，再把它们填上，而且填法要让“没有洞”成为一条定理。<bookmark mark='b'/>我们要数一数无穷。<bookmark mark='c'/>然后退一步，问一问一般意义上的“接近”是什么意思，由此得到后面所有内容的基本词汇：开集、紧集和连通集。<bookmark mark='d'/>最后，我们以一个警告收尾：我们遇到的第一个函数空间，就已经打破了今天最漂亮的定理之一。"
+  },
+  "f9490a8a53a5": {
+   "scene": "Holes",
+   "en": "Chapter one. We start with what we have: the rational numbers.",
+   "zh": "第一章。我们从手头已有的东西出发：有理数。"
+  },
+  "e96da3fb0431": {
+   "scene": "Holes",
+   "en": "The rational numbers are the fractions p over q, where p and q are whole numbers and q is not zero. <bookmark mark='f'/> You can add, subtract, multiply and divide them, except by zero, and the familiar rules hold. In Rudin's language, they form a field. <bookmark mark='o'/> You can also compare them, and the order plays well with the arithmetic: adding the same number to both sides of an inequality keeps it true, and a product of positive numbers is positive. <bookmark mark='q'/> An ordered field.",
+   "zh": "有理数就是分数q分之p，其中p和q是整数，q不等于0。<bookmark mark='f'/>它们可以加、减、乘、除，只是不能除以0，熟悉的运算规则都成立。用鲁丁的话说，它们构成一个域。<bookmark mark='o'/>它们还可以比大小，而且顺序和运算配合得很好：不等式两边同时加上同一个数，不等式依然成立；正数乘正数还是正数。<bookmark mark='q'/>这叫有序域。"
+  },
+  "f01f27053100": {
+   "scene": "Holes",
+   "en": "Between any two fractions there's another one: their average. <bookmark mark='a'/> Between five quarters and three halves sits eleven eighths; <bookmark mark='b'/> between five quarters and eleven eighths sits twenty-one sixteenths, and so on forever. So the fractions are dense: <bookmark mark='z'/> zoom in anywhere, and there are more of them.",
+   "zh": "任意两个分数之间，都还有另一个分数：它们的平均数。<bookmark mark='a'/>四分之五和二分之三之间，有八分之十一；<bookmark mark='b'/>四分之五和八分之十一之间，有十六分之二十一，就这样永远进行下去。所以分数是稠密的：<bookmark mark='z'/>不管在哪里放大，都还有更多的分数。"
+  },
+  "2fb2d7e622d0": {
+   "scene": "Holes",
+   "en": "But be careful with this picture. <bookmark mark='w'/> The line I'm drawing the ticks on is already the real line, the thing we haven't built yet. The rationals are only the ticks. <bookmark mark='g'/> Is there a gap between them? You can't see one at any zoom, because there's always another tick nearby. A hole in the rationals only shows up when we ask about limits, or, as Rudin does at the very start of his book, about bounds.",
+   "zh": "不过，对这张图要小心。<bookmark mark='w'/>我画刻度用的这条线，本身已经是实数轴了，而实数是我们还没有造出来的东西。有理数只是那些刻度。<bookmark mark='g'/>刻度之间有空隙吗？无论放大多少倍，你都看不到空隙，因为附近总还有另一个刻度。有理数的洞，只有在我们问到极限的时候才会显现出来，或者像鲁丁在书的一开头那样，问到界的时候。"
+  },
+  "5d499d4d57b5": {
+   "scene": "Holes",
+   "en": "First, the oldest fact in the subject: no fraction squares to two. <bookmark mark='a'/> Suppose p over q, in lowest terms, did. <bookmark mark='b'/> Then p squared is twice q squared, so p squared is even, and therefore p is even: <bookmark mark='c'/> p is 2r for some whole number r. <bookmark mark='d'/> Then four r squared equals two q squared, <bookmark mark='e'/> so q squared is twice r squared, and q is even too. But we said the fraction was in lowest terms. So it can't exist.",
+   "zh": "首先，是这门学科里最古老的事实：没有哪个分数的平方等于2。<bookmark mark='a'/>假设有一个最简分数q分之p做到了。<bookmark mark='b'/>那么p的平方等于q的平方的两倍，所以p的平方是偶数，从而p也是偶数：<bookmark mark='c'/>p等于2r，r是某个整数。<bookmark mark='d'/>于是4倍r的平方等于2倍q的平方，<bookmark mark='e'/>所以q的平方是r的平方的两倍，q也是偶数。可我们说过，这个分数是最简的。所以它不可能存在。"
+  },
+  "469527ea75da": {
+   "scene": "Holes",
+   "en": "Rudin makes this sharper. <bookmark mark='c'/> Color every positive fraction by which side of the missing square root it falls on. <bookmark mark='a'/> Let A be the positive fractions whose square is less than two, <bookmark mark='b'/> and B the ones whose square is more than two. <bookmark mark='t'/> The theorem: A has no largest element, and B has no smallest element.",
+   "zh": "鲁丁把这一点推得更进一步。<bookmark mark='c'/>按照每个正分数落在那个缺失的平方根的哪一侧，给它上色。<bookmark mark='a'/>令A为平方小于2的正分数，<bookmark mark='b'/>B为平方大于2的正分数。<bookmark mark='t'/>定理是：A没有最大元素，B没有最小元素。"
+  },
+  "9dd08494b856": {
+   "scene": "Holes",
+   "en": "The proof is a single clever formula. <bookmark mark='a'/> Given a positive fraction p, define q as p minus p squared minus two, over p plus two. <bookmark mark='b'/> Over a common denominator that's 2p plus 2, over p plus 2: another fraction. <bookmark mark='c'/> And if you square it and subtract two, you get two times p squared minus two, over p plus two squared. That has the same sign as p squared minus two.",
+   "zh": "证明只用一个巧妙的公式。<bookmark mark='a'/>给定一个正分数p，令q等于p减去一个分式：分子是p的平方减2，分母是p加2。<bookmark mark='b'/>通分之后，分子是2p加2，分母是p加2：还是一个分数。<bookmark mark='c'/>再把它平方、减去2，得到的分子是p的平方减2的两倍，分母是p加2的平方。它和p的平方减2同号。"
+  },
+  "86aa49f23a3a": {
+   "scene": "Holes",
+   "en": "Now read it off. <bookmark mark='a'/> If p is in A, then p squared minus two is negative, so we subtracted a negative number: q is bigger than p. And q squared is still less than two, so q is in A. A bigger element of A, every time. <bookmark mark='b'/> If p is in B, everything flips: q is smaller than p, and still in B.",
+   "zh": "现在把结论读出来。<bookmark mark='a'/>如果p在A里，那么p的平方减2是负的，我们减去的是一个负数：q比p大。而q的平方仍然小于2，所以q也在A里。每一次，都得到A中一个更大的元素。<bookmark mark='b'/>如果p在B里，一切都反过来：q比p小，而且仍然在B里。"
+  },
+  "ec0c4bfe8b55": {
+   "scene": "Holes",
+   "en": "Watch it run. <bookmark mark='a'/> Start at one, in A. One hops to four thirds, <bookmark mark='b'/> four thirds hops to seven fifths, <bookmark mark='c'/> then twenty-four seventeenths, <bookmark mark='d'/> then forty-one twenty-ninths. Every hop lands in A again, a little higher, and the squares creep up toward two without ever reaching it.",
+   "zh": "看它跑起来。<bookmark mark='a'/>从1出发，1在A里。1跳到三分之四，<bookmark mark='b'/>三分之四跳到五分之七，<bookmark mark='c'/>然后是十七分之二十四，<bookmark mark='d'/>再然后是二十九分之四十一。每一跳都又落回A里，高了一点点，它们的平方一点点向2爬去，却永远到不了2。"
+  },
+  "903874c3348e": {
+   "scene": "Holes",
+   "en": "From above it's the mirror image. <bookmark mark='a'/> Two hops down to three halves, then ten sevenths, then seventeen twelfths: always in B, always smaller, never reaching the bottom.",
+   "zh": "从上方看，是镜像的情形。<bookmark mark='a'/>2向下跳到二分之三，然后是七分之十，再然后是十二分之十七：始终在B里，越来越小，却永远到不了底。"
+  },
+  "35f0a5b0e65a": {
+   "scene": "Holes",
+   "en": "This is a statement about bounds. <bookmark mark='u'/> A number beta is an upper bound of a set E if everything in E is at most beta. <bookmark mark='s'/> And alpha is the least upper bound, the supremum, written sup E, if it's an upper bound, and nothing smaller is one.",
+   "zh": "这其实是一个关于界的命题。<bookmark mark='u'/>如果集合E中的每个元素都小于等于β，就称数β是E的一个上界。<bookmark mark='s'/>而如果α是一个上界，并且比它小的数都不是上界，α就叫作最小上界，也就是上确界，记作sup E。"
+  },
+  "7c8a7cdef00e": {
+   "scene": "Holes",
+   "en": "A supremum doesn't have to belong to the set. <bookmark mark='a'/> The fractions below one have supremum one, which is not below one. <bookmark mark='b'/> The set one, a half, a third, and so on, has supremum one, which it contains.",
+   "zh": "上确界不一定属于这个集合。<bookmark mark='a'/>小于1的分数，上确界是1，而1并不小于1。<bookmark mark='b'/>集合1、二分之一、三分之一，等等，上确界也是1，而1就在这个集合里。"
+  },
+  "7d3056376568": {
+   "scene": "Holes",
+   "en": "Now apply this to A. <bookmark mark='a'/> Every element of B is an upper bound of A. And there are no others: an upper bound whose square was less than two would itself be in A, and A always has something bigger. <bookmark mark='b'/> So, in the rationals, the upper bounds of A are exactly the elements of B, and B has no smallest element. The set A is bounded above, and yet it has no least upper bound. <bookmark mark='h'/> That's the hole, stated without pictures.",
+   "zh": "现在把它用到A上。<bookmark mark='a'/>B中的每个元素都是A的上界。而且没有别的上界了：如果一个上界的平方小于2，它自己就在A里，而A里总有更大的元素。<bookmark mark='b'/>所以在有理数里，A的上界恰好就是B的元素，而B没有最小元素。集合A有上界，却没有最小上界。<bookmark mark='h'/>这就是那个洞，不用任何图也能说清楚。"
+  },
+  "fbb68ea32cff": {
+   "scene": "Holes",
+   "en": "So here's the property we want. <bookmark mark='p'/> An ordered set has the least-upper-bound property if every nonempty subset that is bounded above has a supremum. <bookmark mark='q'/> The rationals don't have it; that's the precise meaning of the rationals have holes. <bookmark mark='t'/> And the first big theorem of the subject says we can fix it: there is an ordered field, the real numbers, that has the least-upper-bound property and contains the rationals. Next, we build it out of nothing but fractions.",
+   "zh": "所以，我们想要的性质是这样的。<bookmark mark='p'/>如果一个有序集的每个有上界的非空子集都有上确界，就说它具有最小上界性质。<bookmark mark='q'/>有理数没有这个性质；“有理数有洞”的精确含义就是这个。<bookmark mark='t'/>而这门学科的第一个大定理告诉我们，这是可以补救的：存在一个有序域，也就是实数，它具有最小上界性质，并且包含有理数。接下来，我们就只用分数，把它造出来。"
+  },
+  "a9191d1999ce": {
+   "scene": "Cuts",
+   "en": "Chapter two. How do you fill a hole, using nothing but the things around it? <bookmark mark='d'/> In 1872, Richard Dedekind had the idea: describe a number by the set of all the fractions below it.",
+   "zh": "第二章。只用洞周围的东西，怎么把洞填上？<bookmark mark='d'/>1872年，理查德·戴德金想到了办法：用小于一个数的全体分数构成的集合，来描述这个数。"
+  },
+  "2c248293236b": {
+   "scene": "Cuts",
+   "en": "Here's his definition, as Rudin gives it. <bookmark mark='a'/> A cut is a set of fractions, call it alpha, with three properties. <bookmark mark='i'/> First, it isn't empty, and it isn't everything. <bookmark mark='j'/> Second, it's closed downward: if p is in alpha, so is every fraction smaller than p. <bookmark mark='k'/> Third, it has no largest element.",
+   "zh": "下面是他的定义，按鲁丁书里的写法。<bookmark mark='a'/>一个分割，是一个分数的集合，记作α，满足三个条件。<bookmark mark='i'/>第一，它不是空集，也不是全体分数。<bookmark mark='j'/>第二，它向下封闭：如果p在α里，那么比p小的每个分数也都在α里。<bookmark mark='k'/>第三，它没有最大元素。"
+  },
+  "b835037f9960": {
+   "scene": "Cuts",
+   "en": "Picture it as a way of coloring the fractions: blue for the ones in the cut, orange for the rest. <bookmark mark='e'/> This one is the cut of one half: every fraction strictly below one half. <bookmark mark='d'/> Condition two says the blue part runs all the way to the left: once a fraction is blue, everything to its left is blue too.",
+   "zh": "可以把它想成给分数上色：在分割里的涂成蓝色，其余的涂成橙色。<bookmark mark='e'/>这一个是二分之一的分割：所有严格小于二分之一的分数。<bookmark mark='d'/>条件二是说，蓝色部分一直延伸到最左边：一个分数一旦是蓝的，它左边的所有分数也都是蓝的。"
+  },
+  "fc118b127eb3": {
+   "scene": "Cuts",
+   "en": "Condition three is bookkeeping. <bookmark mark='z'/> Zoom in at one half. The fraction one half itself is orange, left out, and blue fractions crowd up to it from below with no last one. Without condition three, one half would have two cuts, with and without the endpoint; this way every fraction gets exactly one.",
+   "zh": "条件三只是一个技术性的规定。<bookmark mark='z'/>在二分之一处放大。二分之一这个分数本身是橙色的，被排除在外，蓝色的分数从下方向它挤过去，却没有最后一个。如果没有条件三，二分之一就会有两个分割，一个包含端点，一个不包含；有了它，每个分数恰好对应一个分割。"
+  },
+  "571d92016c28": {
+   "scene": "Cuts",
+   "en": "Now the interesting one. <bookmark mark='r'/> Color blue every fraction that's negative or squares to less than two. <bookmark mark='c'/> Is this a cut? It's clearly not empty, not everything, and closed downward. And it has no largest element: <bookmark mark='t'/> that's exactly the theorem from chapter one, the hop that always finds a bigger element. This cut sits precisely where the hole was. <bookmark mark='n'/> Dedekind's move is to declare that this set is a number.",
+   "zh": "现在来看有意思的那个。<bookmark mark='r'/>把所有负的分数，以及平方小于2的分数，都涂成蓝色。<bookmark mark='c'/>这是一个分割吗？它显然不是空集，不是全体，而且向下封闭。它也没有最大元素：<bookmark mark='t'/>这正是第一章的那个定理，那一跳总能找到更大的元素。这个分割，恰好坐落在原来那个洞的位置上。<bookmark mark='n'/>戴德金的关键一步，就是宣布：这个集合就是一个数。"
+  },
+  "2545dc8c5004": {
+   "scene": "Cuts",
+   "en": "So: <bookmark mark='r'/> a real number is a cut, and the real line is the set of all cuts. <bookmark mark='o'/> To compare two of them, compare the sets: alpha is less than beta when alpha is a proper subset of beta. <bookmark mark='b'/> Drawn as blue rays, the cut of one half sits inside the cut of root two, so one half is smaller.",
+   "zh": "所以：<bookmark mark='r'/>一个实数就是一个分割，实数轴就是全体分割的集合。<bookmark mark='o'/>要比较两个分割，就比较这两个集合：当α是β的真子集时，就说α小于β。<bookmark mark='b'/>画成蓝色射线，二分之一的分割落在根号2的分割里面，所以二分之一更小。"
+  },
+  "e8cde92c549a": {
+   "scene": "Cuts",
+   "en": "For this to be an order, any two cuts must be comparable: one must contain the other. The proof takes three lines. <bookmark mark='a'/> Suppose alpha is not inside beta, so some p is in alpha but not in beta. <bookmark mark='b'/> Then every q in beta is less than p, because if q were at least p, condition two would put p in beta. <bookmark mark='c'/> And then, by condition two for alpha, every q in beta is in alpha: beta is inside alpha.",
+   "zh": "要让它成为一个序，任意两个分割都必须能比较：其中一个必须包含另一个。证明只要三行。<bookmark mark='a'/>假设α不包含于β，那么有某个p在α里，却不在β里。<bookmark mark='b'/>于是β里的每个q都小于p，因为如果q大于等于p，条件二就会把p放进β。<bookmark mark='c'/>再对α用条件二，β里的每个q都在α里：β包含于α。"
+  },
+  "17e1409b3a34": {
+   "scene": "Cuts",
+   "en": "Now the payoff: the least-upper-bound property. <bookmark mark='a'/> Take any collection of cuts that is bounded above, like the cuts of one, one point four, one point four one, and so on. Each one is a blue ray, and each contains the one before.",
+   "zh": "现在是收获的时候了：最小上界性质。<bookmark mark='a'/>任取一族有上界的分割，比如1的分割、1.4的分割、1.41的分割，依此类推。每一个都是一条蓝色射线，每一个都包含前一个。"
+  },
+  "bf9fd58a5c35": {
+   "scene": "Cuts",
+   "en": "Dedekind's answer for the supremum is almost embarrassingly simple: <bookmark mark='u'/> take the union of all of them. Every fraction that is in at least one of the cuts. <bookmark mark='r'/> Here, that union is every fraction that is negative or squares to less than two: the cut of root two. The hole has been filled by the union of the cuts approaching it.",
+   "zh": "对于上确界，戴德金的答案简单得几乎让人不好意思：<bookmark mark='u'/>把它们全部并起来。也就是至少属于其中一个分割的所有分数。<bookmark mark='r'/>在这里，这个并集就是所有负的或者平方小于2的分数：正是根号2的分割。这个洞，被逼近它的那些分割的并集填上了。"
+  },
+  "ca8f36767369": {
+   "scene": "Cuts",
+   "en": "In general, let script A be any nonempty set of cuts, bounded above by some cut beta, and let gamma be their union. <bookmark mark='a'/> Gamma isn't empty, and it sits inside beta, so it isn't everything. <bookmark mark='b'/> It's closed downward, because each of the cuts is. <bookmark mark='c'/> It has no largest element, because any p in gamma lies in some cut, which has something bigger. So gamma is a cut.",
+   "zh": "一般地，设花体A是任意一个非空的分割集合，以某个分割β为上界，再令γ为它们的并集。<bookmark mark='a'/>γ不是空集，而且它包含在β里，所以不是全体。<bookmark mark='b'/>它向下封闭，因为每个分割都向下封闭。<bookmark mark='c'/>它没有最大元素，因为γ里的任何一个p都落在某个分割里，而那个分割里有比p更大的元素。所以γ是一个分割。"
+  },
+  "14e83dfefef7": {
+   "scene": "Cuts",
+   "en": "<bookmark mark='u'/> It contains every cut in the collection, so it's an upper bound. <bookmark mark='l'/> And it's the least one: if delta is smaller than gamma, some p in gamma is missing from delta, and that p came from a cut alpha, which therefore isn't inside delta. So delta is not an upper bound. <bookmark mark='q'/> The whole difficulty of the real numbers dissolves into one line of set theory: the supremum is the union.",
+   "zh": "<bookmark mark='u'/>它包含这一族里的每一个分割，所以它是一个上界。<bookmark mark='l'/>而且是最小的那个：如果δ比γ小，那么γ里有某个p不在δ里，这个p来自某个分割α，于是α不包含于δ。所以δ不是上界。<bookmark mark='q'/>实数的全部难点，就这样化成了一行集合论：上确界就是并集。"
+  },
+  "c80c76f0b323": {
+   "scene": "Cuts",
+   "en": "Then comes arithmetic, and it's mostly routine. <bookmark mark='a'/> To add two cuts, add their elements in every possible way. <bookmark mark='z'/> Zero is the cut of the negative fractions, and you can check that adding it changes nothing. <bookmark mark='m'/> Multiplication is defined first for positive cuts, then extended by cases of sign. Rudin checks the field rules one by one; it's tedious and teaches nothing new, so we'll trust it. <bookmark mark='e'/> And the rationals sit inside, each fraction r becoming the cut of fractions below it, in a way that respects sums, products and order.",
+   "zh": "接下来是算术，大多是例行公事。<bookmark mark='a'/>两个分割相加，就是把它们的元素按所有可能的方式两两相加。<bookmark mark='z'/>零是全体负分数构成的分割，可以验证，加上它什么都不变。<bookmark mark='m'/>乘法先对正的分割定义，再按符号分情况推广。鲁丁把域的运算法则逐条验证了一遍；过程繁琐，也学不到新东西，我们就相信它吧。<bookmark mark='e'/>有理数也嵌在里面：每个分数r，变成小于它的分数构成的分割，而且这种对应保持加法、乘法和顺序。"
+  },
+  "cfbc2d35621c": {
+   "scene": "Cuts",
+   "en": "That's Rudin's theorem: <bookmark mark='t'/> there is an ordered field with the least-upper-bound property, containing the rationals. And, as Rudin remarks, it's unique: any two such fields are the same up to renaming. <bookmark mark='c'/> There's a second classic construction, by Méray and Cantor, from the same years. A real number is a sequence of fractions that bunches up, a Cauchy sequence, <bookmark mark='d'/> with two sequences counting as the same number when their difference goes to zero, like the decimals and the hops for root two.",
+   "zh": "这就是鲁丁的定理：<bookmark mark='t'/>存在一个具有最小上界性质的有序域，它包含有理数。而且正如鲁丁指出的，它是唯一的：任意两个这样的域，不过是换了名字的同一个东西。<bookmark mark='c'/>还有第二种经典构造，出自梅雷和康托尔，差不多是同一时期。一个实数，就是一列越挨越紧的分数，也就是柯西序列，<bookmark mark='d'/>两个序列的差趋于0时，就算作同一个数，比如逼近根号2的那串小数，和那一跳跳出来的那串分数。"
+  },
+  "1620c6f188b0": {
+   "scene": "Cuts",
+   "en": "That second construction is the one this series will reuse. <bookmark mark='r'/> Whenever a space has holes, and the spaces of functions we meet later will, we fill them with the space's own Cauchy sequences. From here on, though, we can forget how the reals were built. Everything we need follows from one fact: every nonempty set that is bounded above has a least upper bound.",
+   "zh": "这个系列以后会反复用到的，是第二种构造。<bookmark mark='r'/>每当一个空间有洞，而我们后面遇到的函数空间就会有洞，我们就用这个空间自己的柯西序列去填补。不过从现在起，实数是怎么造出来的，可以忘掉了。我们需要的一切，都来自一个事实：每个有上界的非空集合，都有最小上界。"
+  },
+  "e67e36cf9b01": {
+   "scene": "Archimedes",
+   "en": "Chapter three. The real numbers have no holes. What does that buy us? Three things we'll use constantly.",
+   "zh": "第三章。实数没有洞。这能给我们带来什么？三样我们会经常用到的东西。"
+  },
+  "6dd7419bdab4": {
+   "scene": "Archimedes",
+   "en": "First, the Archimedean property. <bookmark mark='s'/> Pick any positive x, however tiny, and any y, however large. <bookmark mark='m'/> Then some whole-number multiple of x passes y.",
+   "zh": "第一，阿基米德性质。<bookmark mark='s'/>任取一个正数x，不管多小，再任取一个y，不管多大。<bookmark mark='m'/>那么x的某个整数倍一定会超过y。"
+  },
+  "07c2926434ae": {
+   "scene": "Archimedes",
+   "en": "It sounds obvious, but it's a consequence of having no holes. <bookmark mark='s'/> Suppose it failed: every multiple of x stays at or below y. Then the multiples are bounded above, <bookmark mark='a'/> so they have a least upper bound, alpha. <bookmark mark='b'/> Alpha minus x is smaller than alpha, so it isn't an upper bound: <bookmark mark='c'/> some multiple, m x, is bigger than alpha minus x. <bookmark mark='d'/> But then the next one, m plus one times x, is bigger than alpha, which was supposed to be an upper bound. Contradiction.",
+   "zh": "这听起来显而易见，但它其实是没有洞的推论。<bookmark mark='s'/>假设它不成立：x的每个倍数都小于等于y。那么这些倍数有上界，<bookmark mark='a'/>所以它们有最小上界，记作α。<bookmark mark='b'/>α减x比α小，所以它不是上界：<bookmark mark='c'/>某个倍数mx比α减x大。<bookmark mark='d'/>可这样一来，下一个倍数，也就是m加1倍的x，就比α大了，而α本该是上界。矛盾。"
+  },
+  "fe666ffbfed3": {
+   "scene": "Archimedes",
+   "en": "That's a genuine theorem, not a triviality: <bookmark mark='n'/> there are ordered fields, with infinitely small elements, where it fails. The real numbers are not one of them.",
+   "zh": "这是一个货真价实的定理，不是废话：<bookmark mark='n'/>确实存在一些有序域，里面有无穷小的元素，阿基米德性质在那里不成立。实数不是这样的域。"
+  },
+  "6c2bb54c7a96": {
+   "scene": "Archimedes",
+   "en": "Second: the rationals are dense in the reals. <bookmark mark='g'/> Between any two different reals, however close, sits a fraction. Take x as root two minus one, and y as 0.45. <bookmark mark='r'/> A ruler with marks every quarter can miss the gap entirely. <bookmark mark='a'/> But by the Archimedean property, we can choose n so that n times the gap is bigger than one: here n is 28. <bookmark mark='t'/> Then the marks of a ruler spaced one over n apart are closer together than x and y, so one of them must land in between: twelve twenty-eighths, which is three sevenths.",
+   "zh": "第二：有理数在实数中稠密。<bookmark mark='g'/>任意两个不同的实数之间，不管靠得多近，都有一个分数。取x为根号2减1，y为0.45。<bookmark mark='r'/>一把每隔四分之一画一个刻度的尺子，可能会整个错过这段空隙。<bookmark mark='a'/>但根据阿基米德性质，我们可以选一个n，使n乘以这段空隙大于1：这里n取28。<bookmark mark='t'/>那么，刻度间隔为n分之1的尺子，刻度之间的距离比x和y之间的距离还小，所以必有一个刻度落在它们之间：二十八分之十二，也就是七分之三。"
+  },
+  "d167bbd1e019": {
+   "scene": "Archimedes",
+   "en": "Third: the hole at root two really is filled. <bookmark mark='a'/> In the reals, let A be the positive numbers whose square is less than two. It's bounded above, by two for instance, <bookmark mark='y'/> so it has a supremum. Call it y. Is y squared equal to two?",
+   "zh": "第三：根号2处的洞确实被填上了。<bookmark mark='a'/>在实数里，令A为平方小于2的正数全体。它有上界，比如2，<bookmark mark='y'/>所以它有上确界。记作y。y的平方等于2吗？"
+  },
+  "220113c38f3d": {
+   "scene": "Archimedes",
+   "en": "Use chapter one's hop again, now on real numbers. <bookmark mark='a'/> If y squared were less than two, the hop would give a bigger number that's still in A, so y wouldn't be an upper bound. <bookmark mark='b'/> If y squared were more than two, the hop would give a smaller upper bound, so y wouldn't be the least one. <bookmark mark='c'/> Only one option is left: y squared is two. The argument that showed the rationals have a hole, run in the reals, shows the reals don't.",
+   "zh": "再用一次第一章的那一跳，这次用在实数上。<bookmark mark='a'/>如果y的平方小于2，那一跳会给出一个更大的数，而且仍在A里，那y就不是上界了。<bookmark mark='b'/>如果y的平方大于2，那一跳会给出一个更小的上界，那y就不是最小的上界了。<bookmark mark='c'/>只剩下一种可能：y的平方等于2。证明有理数有洞的那个论证，放到实数里运行，恰好证明了实数没有洞。"
+  },
+  "41dcb10e09b0": {
+   "scene": "Archimedes",
+   "en": "Decimal expansions are really a statement about nested intervals. <bookmark mark='a'/> Root two lies between 1 and 2; <bookmark mark='b'/> between 1.4 and 1.5; between 1.41 and 1.42, and so on: each digit picks one of ten smaller intervals inside the last one.",
+   "zh": "小数展开，说到底是一个关于区间套的命题。<bookmark mark='a'/>根号2在1和2之间；<bookmark mark='b'/>在1.4和1.5之间；在1.41和1.42之间，依此类推：每一位数字，都是在上一个区间里的十个更小的区间中挑出一个。"
+  },
+  "1e64a68b8221": {
+   "scene": "Archimedes",
+   "en": "Keep zooming and the intervals keep shrinking, by a factor of ten each time, <bookmark mark='c'/> pinning down a single point.",
+   "zh": "不断放大，区间就不断缩小，每次缩小到原来的十分之一，<bookmark mark='c'/>最终锁定唯一的一个点。"
+  },
+  "bc0a87208f35": {
+   "scene": "Archimedes",
+   "en": "That a point is actually there is, again, the least-upper-bound property. <bookmark mark='s'/> If closed intervals are nested, each inside the last, <bookmark mark='p'/> then the left endpoints are bounded above by every right endpoint, so they have a supremum x, and x lies in every interval.",
+   "zh": "那里真的有一个点，靠的又是最小上界性质。<bookmark mark='s'/>如果一列闭区间是套起来的，每一个都在前一个里面，<bookmark mark='p'/>那么每一个右端点都是左端点的上界，所以左端点有上确界x，而x落在每一个区间里。"
+  },
+  "b77bce30d27f": {
+   "scene": "Archimedes",
+   "en": "Both hypotheses matter. <bookmark mark='o'/> The open intervals from zero to one over n are nested and never empty, but no number lies in all of them: zero is excluded from each, and anything positive is eventually left out. <bookmark mark='q'/> And in the rationals, the decimal intervals of root two have no fraction in common.",
+   "zh": "两个假设都不可少。<bookmark mark='o'/>从0到n分之1的开区间是套起来的，也都不是空的，但没有任何一个数落在所有这些区间里：0被每一个区间排除在外，而任何正数迟早也会被排除。<bookmark mark='q'/>而在有理数里，根号2的那些小数区间，没有一个公共的分数。"
+  },
+  "1c073b48d9d1": {
+   "scene": "Archimedes",
+   "en": "Halving instead of cutting into tenths gives the same thing with a clearer rule: <bookmark mark='h'/> split the interval in two and keep the half that still contains the point you're hunting, here the half where t squared minus two changes sign. <bookmark mark='u'/> This bisection engine will prove a surprising number of theorems in this series: the intermediate value theorem, Bolzano–Weierstrass, Heine–Borel, and more. Every time, the least-upper-bound property guarantees there's a point at the bottom of the funnel.",
+   "zh": "如果每次不是切成十份，而是一分为二，得到的是同样的东西，规则却更清楚：<bookmark mark='h'/>把区间对半分开，保留仍然包含你要找的那个点的那一半，这里就是t的平方减2变号的那一半。<bookmark mark='u'/>这台二分法引擎，会在这个系列里证明多得惊人的定理：介值定理、波尔查诺–魏尔斯特拉斯定理、海涅–博雷尔定理，还有更多。每一次，都是最小上界性质保证了漏斗的底部有一个点。"
+  },
+  "ddddc3a89e5d": {
+   "scene": "Counting",
+   "en": "Chapter four. The rationals are dense: they're everywhere. So are there really more real numbers than fractions? To answer, we need a way to compare the sizes of infinite sets.",
+   "zh": "第四章。有理数是稠密的：到处都是。那么，实数真的比分数多吗？要回答这个问题，我们需要一种比较无穷集合大小的办法。"
+  },
+  "cef8e68adabc": {
+   "scene": "Counting",
+   "en": "Two sets have the same size when their elements can be paired off, one to one, with nothing left over on either side. <bookmark mark='p'/> Infinite sets do strange things under this rule. The whole numbers can be paired with the even numbers, one with two, two with four, three with six, even though the evens are only half of them. <bookmark mark='d'/> A set is countable if it can be paired with the whole numbers, which is the same as saying its elements can be listed, first, second, third, forever. <bookmark mark='u'/> An infinite set that can't be listed is uncountable.",
+   "zh": "两个集合大小相同，是指它们的元素可以一一配对，两边都没有剩余。<bookmark mark='p'/>在这条规则下，无穷集合会表现得很奇怪。正整数可以和偶数配对：1配2，2配4，3配6，尽管偶数只占正整数的一半。<bookmark mark='d'/>如果一个集合能和正整数配对，就说它是可数的，这等于说它的元素可以排成一列：第一个、第二个、第三个，永远排下去。<bookmark mark='u'/>不能排成一列的无穷集合，就是不可数的。"
+  },
+  "dd173dfcd630": {
+   "scene": "Counting",
+   "en": "The integers are countable: <bookmark mark='a'/> list zero, then one, minus one, two, minus two, and so on. Every integer gets a place.",
+   "zh": "整数是可数的：<bookmark mark='a'/>先列0，然后是1、负1、2、负2，依此类推。每个整数都有自己的位置。"
+  },
+  "1f27be30d693": {
+   "scene": "Counting",
+   "en": "The positive fractions are countable too, which is more surprising, since they're dense. <bookmark mark='g'/> Lay them out in a grid: p over q, with p across and q down. Every positive fraction appears somewhere, many of them several times. <bookmark mark='z'/> Now walk the grid along its diagonals, zigzagging back and forth, <bookmark mark='s'/> and number each fraction as you reach it, skipping any you've already counted, like two over two, which is one.",
+   "zh": "正分数也是可数的，这就更令人意外了，因为它们是稠密的。<bookmark mark='g'/>把它们排成一张网格：q分之p，p沿横向，q沿纵向。每个正分数都会出现在某处，很多还不止出现一次。<bookmark mark='z'/>现在沿着对角线走遍这张网格，来回折返，<bookmark mark='s'/>走到一个分数就给它编号，已经数过的就跳过，比如二分之二，它就是1。"
+  },
+  "35bd102643c5": {
+   "scene": "Counting",
+   "en": "The result is a list: one, a half, two, three, a third, a quarter, two thirds, and on, in which every positive fraction appears exactly once. <bookmark mark='m'/> Add zero and the negatives by interleaving, as we did for the integers, and all of Q is countable. The dense dust of chapter one is just a list.",
+   "zh": "结果是一张清单：1、二分之一、2、3、三分之一、四分之一、三分之二，等等，每个正分数恰好出现一次。<bookmark mark='m'/>再像处理整数那样，把0和负分数交错插进去，整个Q就是可数的。第一章里那片稠密的尘埃，不过是一张清单。"
+  },
+  "2b2b65862550": {
+   "scene": "Counting",
+   "en": "The same zigzag proves something more general. <bookmark mark='t'/> Take countably many countable sets, E one, E two, E three, and so on, and write each as a row. <bookmark mark='z'/> Walking the diagonals lists every element of every row. So a countable union of countable sets is countable. It's a tool we'll use again and again, for instance when we measure sets in Part 5.",
+   "zh": "同样的之字形走法，还能证明更一般的结论。<bookmark mark='t'/>取可数个可数集，E_1、E_2、E_3，等等，把每一个写成一行。<bookmark mark='z'/>沿着对角线走，就能把每一行的每个元素都列出来。所以，可数个可数集的并集是可数的。这个工具我们会一再用到，比如在第5部分测量集合大小的时候。"
+  },
+  "59868b701b62": {
+   "scene": "Counting",
+   "en": "So is everything countable? <bookmark mark='a'/> Here's Cantor's diagonal argument, from 1891. Consider infinite sequences of zeros and ones. Suppose someone hands us a list of them, s one, s two, s three, and so on, claiming it contains every such sequence. <bookmark mark='d'/> Look at the diagonal: the first digit of the first sequence, the second digit of the second, and so on.",
+   "zh": "那么，是不是一切都可数呢？<bookmark mark='a'/>来看康托尔1891年的对角线论证。考虑由0和1组成的无穷序列。假设有人递给我们一张这种序列的清单：s_1、s_2、s_3，等等，声称里面包含了所有这样的序列。<bookmark mark='d'/>看对角线：第一个序列的第一位，第二个序列的第二位，依此类推。"
+  },
+  "4999a44d7fda": {
+   "scene": "Counting",
+   "en": "<bookmark mark='f'/> Now build a new sequence s by flipping every diagonal digit: zero becomes one, one becomes zero. <bookmark mark='c'/> Then s differs from the first sequence in the first place, from the second in the second place, and from the k-th sequence in the k-th place. So s is not on the list. <bookmark mark='t'/> Any list misses something: the zero-one sequences are uncountable.",
+   "zh": "<bookmark mark='f'/>现在把对角线上的每一位都翻转，造出一个新序列s：0变成1，1变成0。<bookmark mark='c'/>于是s和第一个序列在第一位不同，和第二个序列在第二位不同，和第k个序列在第k位不同。所以s不在清单上。<bookmark mark='t'/>任何清单都会漏掉一些东西：由0和1组成的序列是不可数的。"
+  },
+  "8e6beba3c451": {
+   "scene": "Counting",
+   "en": "It follows that the real numbers are uncountable. <bookmark mark='m'/> Turn each zero-one sequence into a real number by reading it as digits in base three, with the ones written as twos. <bookmark mark='e'/> We use base three and only the digits zero and two to dodge the trap where two expansions name the same number, like 0.4999 forever and 0.5. <bookmark mark='a'/> If two sequences first differ at place n, their numbers differ by at least two over three to the n, minus everything the later digits can make up, <bookmark mark='b'/> which is one over three to the n, more than zero. So different sequences give different numbers, <bookmark mark='c'/> and the reals contain an uncountable set.",
+   "zh": "由此可知，实数是不可数的。<bookmark mark='m'/>把每个由0和1组成的序列变成一个实数：当成三进制的各位数字来读，只是把1写成2。<bookmark mark='e'/>之所以用三进制，而且只用数字0和2，是为了避开两种展开表示同一个数的陷阱，比如9无限循环的0.4999……和0.5。<bookmark mark='a'/>如果两个序列第一次出现不同是在第n位，那么它们对应的数至少相差3的n次方分之2，再减去后面所有数位最多能补回来的量，<bookmark mark='b'/>结果是3的n次方分之1，大于0。所以不同的序列给出不同的数，<bookmark mark='c'/>实数包含一个不可数集。"
+  },
+  "15cd008db229": {
+   "scene": "Counting",
+   "en": "This has a startling consequence. <bookmark mark='p'/> A number is algebraic if it solves a polynomial equation with integer coefficients, like root two, which solves x squared minus two equals zero. <bookmark mark='a'/> There are only countably many such polynomials, since each is a finite list of integers, <bookmark mark='b'/> and each has finitely many roots. <bookmark mark='c'/> So the algebraic numbers are countable, by the theorem on unions. That was Cantor's 1874 result. <bookmark mark='d'/> Since the reals are not countable, almost every real number is transcendental: not the root of any such polynomial.",
+   "zh": "这带来一个惊人的推论。<bookmark mark='p'/>如果一个数是某个整系数多项式方程的解，就称它为代数数，比如根号2，它是x的平方减2等于0的解。<bookmark mark='a'/>这样的多项式只有可数多个，因为每一个都只是有限个整数排成的一串，<bookmark mark='b'/>而每个多项式只有有限多个根。<bookmark mark='c'/>所以根据关于并集的那个定理，代数数是可数的。这是康托尔1874年的结果。<bookmark mark='d'/>既然实数不可数，几乎所有实数都是超越数：不是任何这样的多项式的根。"
+  },
+  "a28873827df8": {
+   "scene": "Counting",
+   "en": "And yet exhibiting even one is hard. <bookmark mark='l'/> The first explicit example came from Liouville in 1844; e was proved transcendental in 1873, and pi only in 1882. The rationals are dense, yet countable: in the sense of size, they're almost nothing, and the numbers that fill the holes are almost everything.",
+   "zh": "然而，哪怕具体举出一个都很难。<bookmark mark='l'/>第一个明确的例子是刘维尔在1844年给出的；e在1873年被证明是超越数，π则要等到1882年。有理数是稠密的，却是可数的：从大小的意义上说，它们几乎什么都不是，而填补那些洞的数，几乎就是全部。"
+  },
+  "b9db83d4ecaf": {
+   "scene": "Distance",
+   "en": "Chapter five. So far everything has lived on a line. But the point of this series is to treat functions as points in a space, with distances between them. So we need to ask what a distance has to be.",
+   "zh": "第五章。到目前为止，一切都发生在一条直线上。但这个系列的要点，是把函数看成一个空间里的点，点与点之间有距离。所以我们要问：距离必须是什么样的？"
+  },
+  "9ec45fcd17c2": {
+   "scene": "Distance",
+   "en": "Start with the familiar case. <bookmark mark='a'/> Points of k-dimensional space are lists of k real numbers, which we can add and scale like arrows. <bookmark mark='b'/> The inner product multiplies coordinates and adds, <bookmark mark='c'/> and the length of x is the square root of x dotted with itself.",
+   "zh": "先从熟悉的情形说起。<bookmark mark='a'/>k维空间中的点，就是由k个实数组成的一组数，可以像箭头一样相加和伸缩。<bookmark mark='b'/>内积就是把对应坐标相乘再相加，<bookmark mark='c'/>而x的长度，就是x与自身内积的平方根。"
+  },
+  "f9035a5f06a6": {
+   "scene": "Distance",
+   "en": "The one inequality that makes all of this work is Cauchy–Schwarz: <bookmark mark='s'/> the inner product of x and y is at most the product of their lengths. <bookmark mark='p'/> Here's the picture behind the proof. Drop x onto the line through y: that gives x's shadow on y. <bookmark mark='g'/> The gap between x and its shadow is an honest vector, so its length squared can't be negative. That's the whole proof; the rest is algebra.",
+   "zh": "让这一切运转起来的，是一个不等式：柯西–施瓦茨不等式。<bookmark mark='s'/>x和y的内积，小于等于它们长度的乘积。<bookmark mark='p'/>证明背后的图是这样的。把x投到过y的直线上：得到x在y上的影子。<bookmark mark='g'/>x和它的影子之间的差，是一个实实在在的向量，所以它长度的平方不可能是负的。证明的全部就是这个；剩下的只是代数。"
+  },
+  "f886d032644a": {
+   "scene": "Distance",
+   "en": "Call the length of y squared B, and the inner product C. <bookmark mark='a'/> Then B x minus C y is B times the gap, so its length squared is at least zero. <bookmark mark='b'/> Expand it. <bookmark mark='c'/> Substitute C for the inner product and B for y's length squared, <bookmark mark='d'/> and factor out B. <bookmark mark='e'/> Since B is positive, the inner product squared is at most the product of the squared lengths. That's Cauchy–Schwarz.",
+   "zh": "把y的长度的平方记作B，把内积记作C。<bookmark mark='a'/>那么Bx减Cy正好是那段差的B倍，所以它长度的平方大于等于0。<bookmark mark='b'/>把它展开。<bookmark mark='c'/>把内积换成C，把y长度的平方换成B，<bookmark mark='d'/>再提出因子B。<bookmark mark='e'/>因为B是正的，内积的平方就小于等于长度平方的乘积。这就是柯西–施瓦茨不等式。"
+  },
+  "28b7c3311246": {
+   "scene": "Distance",
+   "en": "Cauchy–Schwarz immediately gives the triangle inequality. <bookmark mark='a'/> Expand the length of x plus y squared; <bookmark mark='b'/> bound the middle term by Cauchy–Schwarz; and what's left is a perfect square. <bookmark mark='c'/> The side of a triangle is never longer than the other two sides together.",
+   "zh": "由柯西–施瓦茨不等式，马上就得到三角不等式。<bookmark mark='a'/>把x加y的长度的平方展开；<bookmark mark='b'/>用柯西–施瓦茨不等式控制中间那一项；剩下的就是一个完全平方。<bookmark mark='c'/>三角形的一条边，永远不会比另外两条边加起来更长。"
+  },
+  "1a1e9614094c": {
+   "scene": "Distance",
+   "en": "In 1906, Maurice Fréchet turned this into a definition. <bookmark mark='h'/> A metric space is a set together with a distance function d with three properties. <bookmark mark='a'/> Distances between different points are positive, and a point is at distance zero from itself. <bookmark mark='b'/> Distance is symmetric. <bookmark mark='c'/> And the triangle inequality: a detour through a third point is never shorter. <bookmark mark='d'/> That's all. A theorem proved from these three properties alone holds in every metric space at once, and we'll be careful to say when a result needs more.",
+   "zh": "1906年，莫里斯·弗雷歇把它变成了一个定义。<bookmark mark='h'/>度量空间，就是一个集合，加上一个满足三条性质的距离函数d。<bookmark mark='a'/>不同点之间的距离是正的，一个点到自身的距离是0。<bookmark mark='b'/>距离是对称的。<bookmark mark='c'/>还有三角不等式：经过第三个点绕道，路程绝不会更短。<bookmark mark='d'/>就这些。只用这三条性质证明的定理，在所有度量空间里同时成立；如果某个结论需要更多条件，我们会特别说明。"
+  },
+  "a615e1631513": {
+   "scene": "Distance",
+   "en": "The same set can carry many distances. <bookmark mark='a'/> On the plane: the Euclidean distance, whose ball of radius one is a disk; <bookmark mark='b'/> the taxicab distance, adding the horizontal and vertical differences, whose ball is a diamond; <bookmark mark='c'/> the max distance, taking the larger of the two, whose ball is a square; <bookmark mark='d'/> and the discrete distance, where any two different points are at distance one. Its open ball of radius one contains only its center.",
+   "zh": "同一个集合上，可以有许多种距离。<bookmark mark='a'/>在平面上：欧几里得距离，它半径为1的球是一个圆盘；<bookmark mark='b'/>出租车距离，把水平方向和竖直方向的差加起来，它的球是一个菱形；<bookmark mark='c'/>最大值距离，取两者中较大的那个，它的球是一个正方形；<bookmark mark='d'/>还有离散距离，任意两个不同的点之间距离都是1。它半径为1的开球里，只有球心这一个点。"
+  },
+  "d284a2f6e1f1": {
+   "scene": "Distance",
+   "en": "The first three disagree about distances, but not about nearness. <bookmark mark='n'/> Draw their balls together: the diamond sits inside the disk, which sits inside the square, which sits inside a diamond twice as big. <bookmark mark='t'/> So each kind of ball contains a ball of every other kind around the same point. We'll see in the next chapter that this means they agree about which sets are open, and about which sequences converge. The discrete distance agrees with none of them.",
+   "zh": "前三种距离给出的数值不同，但对“接近”的看法是一致的。<bookmark mark='n'/>把它们的球画在一起：菱形在圆盘里面，圆盘在正方形里面，而正方形又在一个大一倍的菱形里面。<bookmark mark='t'/>所以，围绕同一个点，每一种球里都装得下另外每一种的一个球。下一章我们会看到，这意味着它们对哪些集合是开集、哪些序列收敛，看法都一致。离散距离则和它们谁都不一致。"
+  },
+  "ea647c5d11b6": {
+   "scene": "Distance",
+   "en": "Now the big step. <bookmark mark='c'/> Let the points of our space be continuous functions on the interval from zero to one. <bookmark mark='d'/> The distance between two of them, f and g, is the biggest vertical gap between their graphs: the supremum of f of x minus g of x, in absolute value, over all x.",
+   "zh": "现在迈出一大步。<bookmark mark='c'/>设我们这个空间里的点，是定义在从0到1的区间上的连续函数。<bookmark mark='d'/>其中两个函数f和g之间的距离，就是它们图像之间最大的竖直间隔：f(x)减g(x)的绝对值，对所有x取上确界。"
+  },
+  "245f9ffa4fb5": {
+   "scene": "Distance",
+   "en": "<bookmark mark='s'/> Sweep across, measuring the gap. <bookmark mark='m'/> The largest gap here is at x about 0.207, where it's about 0.527. So the distance from f to g is 0.527.",
+   "zh": "<bookmark mark='s'/>从左到右扫过去，量出间隔。<bookmark mark='m'/>这里最大的间隔出现在x约等于0.207的地方，大约是0.527。所以f到g的距离是0.527。"
+  },
+  "0f8a0516d44a": {
+   "scene": "Distance",
+   "en": "And it really is a distance. <bookmark mark='a'/> It's zero only when the graphs coincide; it's symmetric; <bookmark mark='c'/> and the triangle inequality holds at every single x, so it holds for the supremum too.",
+   "zh": "它确实是一个距离。<bookmark mark='a'/>只有两个图像完全重合时，它才是0；它是对称的；<bookmark mark='c'/>而三角不等式在每一个x处都成立，所以对上确界也成立。"
+  },
+  "29b51cccaa79": {
+   "scene": "Distance",
+   "en": "So a function is now a point, and the distance between two functions is a number. <bookmark mark='b'/> What does a ball look like? The functions within 0.12 of f are exactly the ones whose graphs stay inside a tube of half-width 0.12 around f's graph. <bookmark mark='i'/> These wiggly ones are inside the ball. <bookmark mark='o'/> This one pokes out at a single spot, and that's enough to put it outside. From now on, close means small distance, in whatever metric space we happen to be in.",
+   "zh": "所以，一个函数现在就是一个点，两个函数之间的距离就是一个数。<bookmark mark='b'/>球是什么样子的？与f的距离在0.12以内的函数，恰好就是图像始终待在一条管子里的那些函数：这条管子围绕着f的图像，半宽是0.12。<bookmark mark='i'/>这些弯弯曲曲的都在球里。<bookmark mark='o'/>这一个只在一个地方戳了出去，但这就足以把它排除在外。从现在起，“接近”就是距离小，不管我们身处哪个度量空间。"
+  },
+  "9da90c363a13": {
+   "scene": "OpenClosed",
+   "en": "Chapter six. With a distance in hand, we can describe the shape of a set in terms of which points have wiggle room.",
+   "zh": "第六章。有了距离，我们就能根据哪些点有回旋余地，来描述一个集合的形状。"
+  },
+  "2e5070820a88": {
+   "scene": "OpenClosed",
+   "en": "Here's a set E in the plane, <bookmark mark='n'/> and here's the basic tool: the neighborhood of radius r around a point p, all the points at distance less than r. A disk, with its edge left out, which is why it's dashed.",
+   "zh": "这是平面上的一个集合E，<bookmark mark='n'/>这是基本工具：点p的半径为r的邻域，也就是与p的距离小于r的所有点。它是一个不含边缘的圆盘，所以边缘画成了虚线。"
+  },
+  "f1bd0a571aa6": {
+   "scene": "OpenClosed",
+   "en": "A point is interior if some neighborhood of it fits entirely inside E: <bookmark mark='i'/> this one does, with room to spare. <bookmark mark='o'/> A set is open if every one of its points is interior. <bookmark mark='b'/> A point on the edge fails the test: however small the disk, it pokes outside.",
+   "zh": "如果一个点的某个邻域整个落在E里，这个点就是内点：<bookmark mark='i'/>这个点就是，而且还绰绰有余。<bookmark mark='o'/>如果一个集合的每一个点都是内点，它就是开集。<bookmark mark='b'/>边缘上的点通不过这个检验：不管圆盘多小，都会戳到外面去。"
+  },
+  "31493cffdb30": {
+   "scene": "OpenClosed",
+   "en": "<bookmark mark='l'/> The edge point is, however, a limit point of E: every disk around it, however small, catches points of E other than itself. <bookmark mark='c'/> A set is closed if it contains all of its limit points. <bookmark mark='s'/> This isolated point, by contrast, belongs to E but isn't a limit point: a small enough disk around it contains no other point of E.",
+   "zh": "<bookmark mark='l'/>不过，边缘上的这个点是E的极限点：围绕它的每一个圆盘，不管多小，都能捉到E中除它自己以外的点。<bookmark mark='c'/>如果一个集合包含它所有的极限点，它就是闭集。<bookmark mark='s'/>相比之下，这个孤立点属于E，却不是极限点：围绕它取一个足够小的圆盘，里面就没有E的其他点了。"
+  },
+  "068718f26e07": {
+   "scene": "OpenClosed",
+   "en": "Notice that open and closed are not opposites. <bookmark mark='q'/> If E contains some of its edge points but not others, it's neither. And some sets are both, like the whole plane.",
+   "zh": "注意，开和闭并不是对立的。<bookmark mark='q'/>如果E包含一部分边缘点，又不包含另一部分，那它既不开也不闭。还有些集合既开又闭，比如整个平面。"
+  },
+  "ebfd8b3a2e54": {
+   "scene": "OpenClosed",
+   "en": "Our first theorem has a one-picture proof. <bookmark mark='s'/> Every neighborhood is itself an open set. <bookmark mark='q'/> Take any point q inside the disk of radius r around p. <bookmark mark='h'/> Its distance to p is less than r, so there's room to spare: call it h. <bookmark mark='t'/> Any point s within h of q is within r of p, by the triangle inequality. So the small disk around q sits inside the big one, and q is interior.",
+   "zh": "我们的第一个定理，一张图就能证明。<bookmark mark='s'/>每一个邻域本身都是开集。<bookmark mark='q'/>在以p为中心、半径为r的圆盘里任取一点q。<bookmark mark='h'/>它到p的距离小于r，所以还有余量：把这个余量叫作h。<bookmark mark='t'/>由三角不等式，与q的距离小于h的任何点s，到p的距离都小于r。所以q周围的小圆盘落在大圆盘里面，q是内点。"
+  },
+  "d4f9ea2eead5": {
+   "scene": "OpenClosed",
+   "en": "One more consequence of the triangle inequality. <bookmark mark='a'/> If p is a limit point of E, every neighborhood of p contains infinitely many points of E. <bookmark mark='b'/> Because if some neighborhood held only finitely many, shrink the radius below the nearest of them, and you'd have a neighborhood with none at all. <bookmark mark='c'/> In particular, a finite set has no limit points.",
+   "zh": "三角不等式还有一个推论。<bookmark mark='a'/>如果p是E的极限点，那么p的每个邻域都包含E中无穷多个点。<bookmark mark='b'/>因为如果某个邻域里只有有限多个，就把半径缩到比其中最近的那个点还近，得到的邻域里就一个点也没有了。<bookmark mark='c'/>特别地，有限集没有极限点。"
+  },
+  "b549b33e089f": {
+   "scene": "OpenClosed",
+   "en": "Open and closed are related through complements. <bookmark mark='s'/> E is open exactly when everything outside it, its complement, is closed. <bookmark mark='p'/> If E is open, every x in E has a disk around it inside E, a disk that misses the complement entirely, so x is not a limit point of the complement. So every limit point of the complement lies in the complement: it's closed. The converse runs the same argument backwards.",
+   "zh": "开和闭通过补集联系在一起。<bookmark mark='s'/>E是开集，当且仅当E外面的一切，也就是它的补集，是闭集。<bookmark mark='p'/>如果E是开集，E中每个x周围都有一个落在E里的圆盘，这个圆盘和补集完全不相交，所以x不是补集的极限点。于是补集的每个极限点都在补集里：补集是闭集。反过来，把同样的论证倒着走一遍就行。"
+  },
+  "b50d67e6fa35": {
+   "scene": "OpenClosed",
+   "en": "How do open sets combine? <bookmark mark='u'/> Any union of open sets is open: a point in the union is in one of them, and that one already gives it room. <bookmark mark='i'/> The intersection of finitely many open sets is also open: <bookmark mark='m'/> a point in all of them has a disk inside each, and the smallest of those finitely many disks fits inside all of them.",
+   "zh": "开集怎样组合？<bookmark mark='u'/>任意多个开集的并集都是开集：并集里的一个点属于其中某一个开集，而那个开集已经给了它足够的余地。<bookmark mark='i'/>有限多个开集的交集也是开集：<bookmark mark='m'/>属于所有这些开集的点，在每一个里面都有一个圆盘，而这有限多个圆盘中最小的那个，能放进所有这些开集。"
+  },
+  "e751282e18db": {
+   "scene": "OpenClosed",
+   "en": "But only finitely many. <bookmark mark='a'/> The intervals from minus one over n to one over n are all open, and they shrink down onto a single point, zero. <bookmark mark='b'/> Their intersection is just zero, which is not open. With infinitely many sets, the minimum radius can be zero. That one word, finite, is the seed of compactness, in the next chapter.",
+   "zh": "但只能是有限多个。<bookmark mark='a'/>从负n分之1到n分之1的区间都是开的，它们缩向同一个点：0。<bookmark mark='b'/>它们的交集就只有0，而这不是开集。有无穷多个集合时，最小的半径可能是0。“有限”这一个词，就是下一章紧性的种子。"
+  },
+  "5995e2e54072": {
+   "scene": "OpenClosed",
+   "en": "Rudin collects the standard examples in a table, here in the plane. <bookmark mark='a'/> The open disk is open but not closed; the closed disk, closed but not open. <bookmark mark='e'/> The points one, a half, a third, and so on, are neither: zero is a limit point the set doesn't contain. <bookmark mark='f'/> The whole plane is both. <bookmark mark='p'/> The new column is perfect: closed, with every point a limit point, no isolated points. Perfect sets will give us the Cantor set. <bookmark mark='g'/> And look at the last row: a segment of the x-axis is not open in the plane.",
+   "zh": "鲁丁把标准的例子整理成了一张表，这里放在平面上。<bookmark mark='a'/>开圆盘是开集，但不是闭集；闭圆盘是闭集，但不是开集。<bookmark mark='e'/>由点1、二分之一、三分之一等等构成的集合，既不开也不闭：0是一个极限点，而这个集合不包含它。<bookmark mark='f'/>整个平面既开又闭。<bookmark mark='p'/>新加的一列是“完全”：闭集，并且每个点都是极限点，没有孤立点。完全集会带我们走到康托尔集。<bookmark mark='g'/>再看最后一行：x轴上的一段线段，在平面里不是开集。"
+  },
+  "638f0b8f5e47": {
+   "scene": "OpenClosed",
+   "en": "Adding the limit points to a set gives its closure, <bookmark mark='c'/> the smallest closed set containing it. <bookmark mark='q'/> The closure of the rationals is the whole real line: every real number is a limit of fractions. That's what dense means. <bookmark mark='i'/> And yet the rationals contain no interval at all, so their interior is empty. Big and small at once, a theme that will come back in Part 8 as Baire's theorem. <bookmark mark='s'/> And one fact that ties back to chapter one: the supremum of a set of reals always lies in its closure.",
+   "zh": "给一个集合添上它的极限点，就得到它的闭包，<bookmark mark='c'/>也就是包含它的最小闭集。<bookmark mark='q'/>有理数的闭包是整条实数轴：每个实数都是分数的极限。这就是稠密的含义。<bookmark mark='i'/>可是有理数里连一个区间都没有，所以它的内部是空的。既大又小，这个主题会在第8部分以贝尔纲定理的形式再次出现。<bookmark mark='s'/>还有一个和第一章呼应的事实：一个实数集的上确界，总在它的闭包里。"
+  },
+  "772113213701": {
+   "scene": "OpenClosed",
+   "en": "That last example deserves a closer look. <bookmark mark='a'/> The interval from a to b, on the real line, is open: around each of its points there's a little interval inside it. <bookmark mark='b'/> But put the same segment inside the plane, and every disk around a point pokes above and below it. As a subset of the plane, it's not open. <bookmark mark='c'/> Being open is not a property of a set alone: it depends on the space around it. Rudin calls this being open relative to a space. The next property we meet, compactness, is different: it belongs to the set itself.",
+   "zh": "最后那个例子值得细看。<bookmark mark='a'/>在实数轴上，从a到b的区间是开集：它的每个点周围，都有一个落在它里面的小区间。<bookmark mark='b'/>可是把同一段线段放进平面，围绕其中一点的每个圆盘，都会从它的上方和下方戳出去。作为平面的子集，它不是开集。<bookmark mark='c'/>是不是开集，并不只取决于集合自身：它还取决于周围的空间。鲁丁把这叫作相对于某个空间是开的。我们接下来要遇到的性质，紧性，就不一样了：它属于集合本身。"
+  },
+  "40dc8eff4ff4": {
+   "scene": "Compact",
+   "en": "Chapter seven: compactness, the single most useful idea in this video, and the hardest to see the point of at first.",
+   "zh": "第七章：紧性。它是这个视频里最有用的一个想法，也是一开始最难看出用意的一个。"
+  },
+  "320547b3782a": {
+   "scene": "Compact",
+   "en": "Finite sets are pleasant. <bookmark mark='a'/> A function on a finite set always has a largest value: just check them all. <bookmark mark='b'/> And a sequence that stays inside a finite set has to repeat some value infinitely often. <bookmark mark='c'/> Infinite sets lose both properties, in general. Compactness is the property that brings them back; it's often called the next best thing to being finite.",
+   "zh": "有限集很好打交道。<bookmark mark='a'/>有限集上的函数总有最大值：一个个检查一遍就行。<bookmark mark='b'/>一个始终待在有限集里的序列，一定有某个值重复出现无穷多次。<bookmark mark='c'/>一般来说，无穷集会失去这两条性质。紧性就是把它们找回来的那个性质；人们常说，它是仅次于有限的最好的东西。"
+  },
+  "782c11eec949": {
+   "scene": "Compact",
+   "en": "Here's the definition. <bookmark mark='c'/> An open cover of a set K is any collection of open sets whose union contains K. <bookmark mark='k'/> K is compact if every open cover has a finite subcover: finitely many of the sets already cover K. <bookmark mark='g'/> Think of it as a game. You cover K any way you like, with as many open sets as you like. <bookmark mark='m'/> Here's a random cover of the interval from zero to one by seventy little open intervals.",
+   "zh": "定义是这样的。<bookmark mark='c'/>集合K的一个开覆盖，是指任意一族开集，它们的并集包含K。<bookmark mark='k'/>如果K的每一个开覆盖都有有限子覆盖，也就是其中有限多个开集就已经覆盖了K，就说K是紧的。<bookmark mark='g'/>可以把它想成一个游戏。你随便怎么覆盖K都行，用多少开集都行。<bookmark mark='m'/>这是从0到1的区间的一个随机覆盖，用了70个小开区间。"
+  },
+  "185bab74cf3b": {
+   "scene": "Compact",
+   "en": "My move is to throw away all but finitely many and still cover K. <bookmark mark='w'/> On this interval, here's a strategy: start at the left end, and take the interval containing that point that reaches furthest right. Jump to where it ends, and repeat. <bookmark mark='n'/> Nine intervals, out of seventy, and the whole interval is covered.",
+   "zh": "而我要做的，是只留下有限多个，其余全扔掉，同时仍然覆盖K。<bookmark mark='w'/>在这个区间上，有一个策略：从左端点出发，在包含这个点的区间里，取向右延伸得最远的那一个。跳到它的右端，再重复。<bookmark mark='n'/>70个里只用了9个，整个区间就被覆盖了。"
+  },
+  "7eb28ff77718": {
+   "scene": "Compact",
+   "en": "Not every set lets me win. <bookmark mark='a'/> Cover the open interval from zero to one by the intervals from one over n up to one. <bookmark mark='b'/> Together they cover everything, since every point x is bigger than one over n for large n. <bookmark mark='c'/> But any finitely many of them have a largest n, and they leave the gap from zero to one over that n uncovered.",
+   "zh": "并不是每个集合都能让我赢。<bookmark mark='a'/>用从n分之1到1的区间，去覆盖从0到1的开区间。<bookmark mark='b'/>它们合起来覆盖了全部，因为对每个点x，只要n足够大，x就大于n分之1。<bookmark mark='c'/>但其中任意有限多个，总有一个最大的n，于是从0到这个n分之1的那一段就没有被覆盖。"
+  },
+  "0ab5600f33f6": {
+   "scene": "Compact",
+   "en": "So the open interval is not compact. <bookmark mark='r'/> Neither is the whole real line: the intervals from minus n to n cover it, and finitely many of them are bounded. Notice the trouble in both cases: something escapes, either to a missing endpoint or off to infinity. <bookmark mark='i'/> And unlike openness, compactness doesn't depend on the surrounding space: Rudin proves it's a property of the set itself.",
+   "zh": "所以开区间不是紧的。<bookmark mark='r'/>整条实数轴也不是：从负n到n的区间覆盖了它，而其中任意有限多个合起来都是有界的。注意两种情形的问题所在：总有东西逃掉了，要么逃向缺失的端点，要么逃向无穷远。<bookmark mark='i'/>而且，和开不开不同，紧性不依赖于周围的空间：鲁丁证明了它是集合本身的性质。"
+  },
+  "0c16b565e1ca": {
+   "scene": "Compact",
+   "en": "Now three theorems that make compact sets useful. <bookmark mark='s'/> First, compact sets are closed. <bookmark mark='p'/> Take a point p outside a compact set K. <bookmark mark='q'/> For each point q of K, draw a disk around q and a disk around p, each with radius half the distance between them, so they can't overlap. <bookmark mark='c'/> The disks around the points of K cover K, so finitely many of them already do. <bookmark mark='i'/> Now intersect the matching finitely many disks around p. That intersection is still a disk around p, because there are only finitely many, and it misses all of K. So p is not a limit point of K, and K contains all of its limit points: it's closed.",
+   "zh": "下面三个定理，让紧集变得有用。<bookmark mark='s'/>第一，紧集是闭集。<bookmark mark='p'/>在紧集K外面取一点p。<bookmark mark='q'/>对K中的每个点q，以q为中心画一个圆盘，以p为中心也画一个，半径都取它们之间距离的一半，这样两个圆盘就不会重叠。<bookmark mark='c'/>K中各点周围的圆盘覆盖了K，所以其中有限多个就已经能覆盖K。<bookmark mark='i'/>现在把p周围对应的那有限多个圆盘取交集。因为只有有限多个，这个交集仍然是p周围的一个圆盘，而且它和K完全不相交。所以p不是K的极限点，K包含它所有的极限点：K是闭集。"
+  },
+  "30b02b854d47": {
+   "scene": "Compact",
+   "en": "<bookmark mark='a'/> Second, a closed subset of a compact set is compact: given a cover of the subset, throw in the complement of the subset, an open set, to cover everything; keep finitely many; then drop the complement again. <bookmark mark='b'/> Third, nested compact sets can't shrink to nothing: if each one is nonempty and inside the last, something lies in all of them. Compare the open intervals from zero to one over n, which do shrink to nothing. <bookmark mark='c'/> And the one we'll use most: every infinite subset of a compact set has a limit point in the set. Otherwise every point would have a little disk containing at most one point of the subset, finitely many disks would cover everything, and the subset would be finite.",
+   "zh": "<bookmark mark='a'/>第二，紧集的闭子集是紧的：给定这个子集的一个覆盖，把子集的补集也加进来，它是一个开集，这样就覆盖了全部；留下有限多个；再把补集去掉。<bookmark mark='b'/>第三，套起来的紧集不会缩成空无一物：如果每一个都非空，并且都在前一个里面，那么就有某个点落在所有这些集合里。对比一下从0到n分之1的开区间，它们确实缩成了空集。<bookmark mark='c'/>还有我们用得最多的一条：紧集的每个无穷子集，在这个紧集里都有极限点。否则，每个点都会有一个小圆盘，里面至多含有这个子集的一个点，有限多个这样的圆盘就能覆盖一切，于是这个子集只能是有限的。"
+  },
+  "a139f2ccfe22": {
+   "scene": "Compact",
+   "en": "That last one is the finiteness we were after: <bookmark mark='m'/> inside a compact set, infinitely many points can't spread out without piling up somewhere. Which sets are compact? For subsets of the real line, and of k-dimensional space, there's a beautifully simple answer.",
+   "zh": "最后这一条，正是我们想要的那种有限性：<bookmark mark='m'/>在紧集里，无穷多个点没法一直散开，总会在某个地方堆积起来。那么，哪些集合是紧的？对实数轴的子集，以及k维空间的子集，有一个简单得漂亮的答案。"
+  },
+  "2146ba4c650f": {
+   "scene": "HeineBorel",
+   "en": "Chapter eight. Which subsets of the line, or of k-dimensional space, are compact? The proof uses the bisection engine from chapter three.",
+   "zh": "第八章。直线上的哪些子集，或者k维空间中的哪些子集，是紧的？证明要用到第三章的二分法引擎。"
+  },
+  "ba41e31cc8f5": {
+   "scene": "HeineBorel",
+   "en": "The basic compact set is a box: a product of closed intervals, which Rudin calls a k-cell. <bookmark mark='t'/> Every k-cell is compact. Here's the square, with k equal to two. <bookmark mark='s'/> Suppose, to get a contradiction, that some open cover of it has no finite subcover. <bookmark mark='c'/> Cut the square into four quarters. If each quarter could be covered by finitely many of the open sets, so could the whole square. So at least one quarter can't.",
+   "zh": "最基本的紧集是一个盒子：若干个闭区间的乘积，鲁丁称之为k-胞腔。<bookmark mark='t'/>每个k-胞腔都是紧的。这里是k等于2的情形，一个正方形。<bookmark mark='s'/>为了导出矛盾，假设它有某个开覆盖，没有有限子覆盖。<bookmark mark='c'/>把正方形切成四块。如果每一块都能被有限多个开集覆盖，那整个正方形也能。所以至少有一块不能。"
+  },
+  "4fa83b1242c5": {
+   "scene": "HeineBorel",
+   "en": "<bookmark mark='a'/> Keep that bad quarter, and cut it into four again. One of those has no finite subcover either. And so on. <bookmark mark='p'/> We get nested squares, each half the width of the last, and by the nested-cell version of chapter three's theorem, they close in on a single point, call it x star.",
+   "zh": "<bookmark mark='a'/>留下那块坏的，再把它切成四块。其中又有一块没有有限子覆盖。依此类推。<bookmark mark='p'/>我们得到一串套起来的正方形，每一个的边长都是前一个的一半；根据第三章那个定理在k-胞腔上的版本，它们会收拢到唯一的一个点，记作x*。"
+  },
+  "bb86824f4136": {
+   "scene": "HeineBorel",
+   "en": "<bookmark mark='x'/> x star is in the square, so it's in one of the open sets of the cover, call it G alpha, <bookmark mark='g'/> and since G alpha is open, it contains a whole disk around x star. <bookmark mark='f'/> But the nested squares get as small as we like, so eventually one of them fits inside that disk, and a single open set covers it. That's a finite subcover of a square that supposedly had none. Contradiction.",
+   "zh": "<bookmark mark='x'/>x*在正方形里，所以它在覆盖中的某个开集里，记作G_α，<bookmark mark='g'/>而G_α是开集，所以它包含x*周围的一整个圆盘。<bookmark mark='f'/>可是套起来的正方形要多小有多小，所以迟早有一个会落进这个圆盘里，于是单单一个开集就覆盖了它。一个本该没有有限子覆盖的正方形，却有了有限子覆盖。矛盾。"
+  },
+  "2fe3a5e98f60": {
+   "scene": "HeineBorel",
+   "en": "To see what the proof really used, <bookmark mark='r'/> run the same hunt on the half-open interval from zero to one, with the cover from chapter seven. <bookmark mark='h'/> Split it in half. The right half is covered by finitely many of the sets, but the left half isn't. Split the left half again, and again: <bookmark mark='z'/> the hunt for the place where the cover fails closes in on zero. <bookmark mark='m'/> And zero is not in the set. That's the only step that breaks: in a closed box, the point the hunt finds belongs to the box, and an open set swallows everything near it.",
+   "zh": "要看清这个证明真正用到了什么，<bookmark mark='r'/>在从0到1的半开区间上做同样的搜寻，用第七章的那个覆盖。<bookmark mark='h'/>把它一分为二。右半边能被有限多个集合覆盖，左半边却不能。再把左半边一分为二，一次又一次：<bookmark mark='z'/>对覆盖失效之处的搜寻，收拢到了0。<bookmark mark='m'/>而0不在这个集合里。唯一出问题的就是这一步：在闭的盒子里，搜寻找到的点属于这个盒子，于是有一个开集会把它附近的一切都吞进去。"
+  },
+  "3e2a1ab8bb7d": {
+   "scene": "HeineBorel",
+   "en": "Now we can say exactly which subsets of k-dimensional space are compact. <bookmark mark='h'/> The Heine–Borel theorem says three properties are equivalent. <bookmark mark='a'/> Closed and bounded; <bookmark mark='b'/> compact; <bookmark mark='c'/> and every infinite subset has a limit point inside the set.",
+   "zh": "现在我们可以准确地说出，k维空间里哪些子集是紧的。<bookmark mark='h'/>海涅–博雷尔定理说，下面三条性质是等价的。<bookmark mark='a'/>闭且有界；<bookmark mark='b'/>紧；<bookmark mark='c'/>以及，每个无穷子集在这个集合里都有极限点。"
+  },
+  "e648292d7c3f": {
+   "scene": "HeineBorel",
+   "en": "<bookmark mark='x'/> Closed and bounded gives compact: a bounded set sits inside some box, which is compact, and a closed subset of a compact set is compact. <bookmark mark='y'/> Compact gives the limit-point property, as we saw last chapter. <bookmark mark='z'/> And if a set is not bounded, points marching off to infinity form an infinite subset with no limit point; if it's not closed, points crowding toward a missing limit point form an infinite subset whose only limit point is outside the set. So the third property forces the first.",
+   "zh": "<bookmark mark='x'/>闭且有界推出紧：有界集落在某个盒子里，盒子是紧的，而紧集的闭子集是紧的。<bookmark mark='y'/>紧推出极限点性质，上一章已经看到了。<bookmark mark='z'/>而如果一个集合无界，一串奔向无穷远的点就构成一个没有极限点的无穷子集；如果它不闭，一串挤向某个缺失的极限点的点，就构成一个无穷子集，而它唯一的极限点在集合外面。所以第三条性质迫使第一条成立。"
+  },
+  "8c5e7671a471": {
+   "scene": "HeineBorel",
+   "en": "One warning, which will matter at the end of this video. <bookmark mark='w'/> Compact and the limit-point property are equivalent in every metric space. But closed and bounded implies compact only in k-dimensional space, because the proof needed boxes, and bisection, and finitely many coordinates.",
+   "zh": "有一个警告，到这个视频的结尾会很重要。<bookmark mark='w'/>紧和极限点性质，在每个度量空间里都是等价的。但闭且有界推出紧，只在k维空间里成立，因为证明需要盒子、需要二分法，还需要有限多个坐标。"
+  },
+  "f5e7cdfe2c07": {
+   "scene": "HeineBorel",
+   "en": "A corollary that we'll use constantly in Part 2. <bookmark mark='s'/> Every bounded infinite set in k-dimensional space has a limit point. <bookmark mark='e'/> Here are points of the sequence cosine of n, sine of root two times n, all inside a square: up to fifteen hundred of the first hundred thousand.",
+   "zh": "有一个推论，我们在第2部分会经常用到。<bookmark mark='s'/>k维空间里每个有界的无穷集都有极限点。<bookmark mark='e'/>这些是一个序列中的点，坐标是cos n和sin（根号2乘n），全都落在一个正方形里：画的是前10万个点中的至多1500个。"
+  },
+  "7aa2b913dcd4": {
+   "scene": "HeineBorel",
+   "en": "The proof is bisection once more. <bookmark mark='q'/> Cut the square into quarters; at least one contains infinitely many of the points. Zoom into it, and repeat. The quarters shrink to a point, and every disk around that point contains infinitely many points of the set: a limit point. <bookmark mark='c'/> In sequence language: every bounded sequence has a convergent subsequence.",
+   "zh": "证明又是二分法。<bookmark mark='q'/>把正方形切成四块；至少有一块包含无穷多个点。放大这一块，重复下去。这些小块缩向一个点，而围绕这个点的每个圆盘，都包含集合中无穷多个点：这就是一个极限点。<bookmark mark='c'/>用序列的语言说：每个有界序列都有收敛的子序列。"
+  },
+  "c4af1c3b39dd": {
+   "scene": "Cantor",
+   "en": "Chapter nine. Compactness gives a second, completely different proof that the real numbers are uncountable, and it leads to the most famous strange set in analysis.",
+   "zh": "第九章。紧性给出了实数不可数的第二个证明，和第一个完全不同，而且它还会引出分析学里最有名的怪集合。"
+  },
+  "541589600589": {
+   "scene": "Cantor",
+   "en": "Recall that a set is perfect if it's closed and every one of its points is a limit point: no isolated points. <bookmark mark='s'/> Every nonempty perfect set in k-dimensional space is uncountable. <bookmark mark='a'/> Suppose instead that a perfect set P could be listed: x one, x two, x three. <bookmark mark='b'/> Choose a closed disk that meets P, <bookmark mark='c'/> then a smaller closed disk inside it that still meets P but avoids x one. That's possible because every point of P is a limit point, so there are other points of P nearby to aim for. Then a smaller one avoiding x two, and so on.",
+   "zh": "回忆一下，如果一个集合是闭的，并且它的每个点都是极限点，也就是没有孤立点，它就叫完全集。<bookmark mark='s'/>k维空间里每个非空完全集都是不可数的。<bookmark mark='a'/>假设情况相反，某个完全集P可以排成一列：x_1、x_2、x_3。<bookmark mark='b'/>选一个与P相交的闭圆盘，<bookmark mark='c'/>然后在它里面取一个更小的闭圆盘，仍然与P相交，但避开x_1。这是做得到的，因为P的每个点都是极限点，附近总有P的其他点可以瞄准。然后再取一个更小的，避开x_2，依此类推。"
+  },
+  "f524874b7ebf": {
+   "scene": "Cantor",
+   "en": "<bookmark mark='k'/> The pieces of P inside these disks are nested, nonempty and compact, so by theorem 2.36, from the chapter on compactness, something lies in all of them. <bookmark mark='m'/> That something is a point of P, but it can't be x n for any n, because the n plus first disk avoids x n. So the list missed a point. The real line is perfect, so this is a second proof that it's uncountable, built from compactness instead of digits.",
+   "zh": "<bookmark mark='k'/>P落在这些圆盘里的部分，是套起来的、非空的、紧的，所以根据紧性那一章的定理2.36，有某个点落在它们全体之中。<bookmark mark='m'/>这个点是P中的点，但它不可能是任何一个x_n，因为第n加1个圆盘避开了x_n。所以这张清单漏掉了一个点。实数轴是完全集，所以这是它不可数的第二个证明，靠的是紧性，而不是数字。"
+  },
+  "0105bc356474": {
+   "scene": "Cantor",
+   "en": "The Cantor set, from 1883, is built by removing. <bookmark mark='a'/> Start with the interval from zero to one. <bookmark mark='b'/> Remove its open middle third, leaving two closed pieces. <bookmark mark='c'/> Remove the middle third of each of those, leaving four, then eight, then sixteen. <bookmark mark='p'/> The Cantor set is what survives every step: the intersection of all these stages.",
+   "zh": "康托尔集诞生于1883年，是靠挖掉东西造出来的。<bookmark mark='a'/>从0到1的区间开始。<bookmark mark='b'/>挖掉中间三分之一的开区间，剩下两个闭的小段。<bookmark mark='c'/>再挖掉每一段中间的三分之一，剩下四段，然后八段，然后十六段。<bookmark mark='p'/>康托尔集就是每一步都幸存下来的部分：所有这些阶段的交集。"
+  },
+  "3f24b50dff33": {
+   "scene": "Cantor",
+   "en": "What survives? <bookmark mark='a'/> The Cantor set is compact, as an intersection of closed sets inside a compact interval. <bookmark mark='b'/> It's not empty: zero, one, and every endpoint of every stage is never removed. <bookmark mark='c'/> It contains no interval at all, since any interval, however short, contains some removed middle third. <bookmark mark='d'/> And it's perfect: near every point of the set, there are endpoints of later stages. <bookmark mark='e'/> So, by the theorem, it's uncountable. <bookmark mark='f'/> And yet, the lengths we removed add up to one third, plus two ninths, plus four twenty-sevenths, and so on: exactly one. Uncountably many points, total length zero.",
+   "zh": "留下了什么？<bookmark mark='a'/>康托尔集是紧的，因为它是紧区间里一族闭集的交集。<bookmark mark='b'/>它不是空的：0、1，以及每个阶段的每一个端点，都从来没被挖掉。<bookmark mark='c'/>它不包含任何区间，因为任何区间，不管多短，都会包含某个被挖掉的中间三分之一。<bookmark mark='d'/>它还是完全集：在集合的每一个点附近，都有后面阶段的端点。<bookmark mark='e'/>所以根据刚才的定理，它是不可数的。<bookmark mark='f'/>然而，挖掉的长度加起来是三分之一，加九分之二，加二十七分之四，等等：恰好是1。不可数多个点，总长度却是0。"
+  },
+  "17e9b41a09c6": {
+   "scene": "Cantor",
+   "en": "There's a cleaner description in base three. <bookmark mark='t'/> The first removal throws out the numbers whose first base-three digit has to be a one; the second throws out those whose second digit has to be one; and so on. The Cantor set is exactly the numbers that can be written in base three using only zeros and twos. <bookmark mark='l'/> Those are chapter four's zero-one sequences, with ones written as twos. That's why the map we used there landed here.",
+   "zh": "用三进制，可以描述得更干净。<bookmark mark='t'/>第一次挖掉的，是三进制第一位必须是1的数；第二次挖掉的，是第二位必须是1的数；依此类推。康托尔集恰好就是能只用0和2写成三进制的那些数。<bookmark mark='l'/>这正是第四章那些由0和1组成的序列，只是把1写成了2。这就是为什么我们在那里用的映射，落到了这里。"
+  },
+  "b4ac31867889": {
+   "scene": "Cantor",
+   "en": "Here's a strange member. <bookmark mark='q'/> One quarter, in base three, is 0.0202 repeating: only zeros and twos, so it's in the Cantor set, but it's never an endpoint of any stage. <bookmark mark='z'/> Zoom in around it by a factor of nine, and the picture repeats exactly: the set is self-similar. <bookmark mark='d'/> Each zoom reads off two more digits.",
+   "zh": "这里有一个奇特的成员。<bookmark mark='q'/>四分之一写成三进制，是0.0202一直循环下去：只有0和2，所以它在康托尔集里，但它从来不是任何阶段的端点。<bookmark mark='z'/>围绕它放大9倍，画面就精确地重复：这个集合是自相似的。<bookmark mark='d'/>每放大一次，就读出两位数字。"
+  },
+  "38401944df52": {
+   "scene": "Cantor",
+   "en": "One more object to keep for later. <bookmark mark='r'/> Define a function on the Cantor set by reading a number's base-three digits, turning the twos into ones, and reading the result in base two. One quarter, 0.0202 repeating, goes to 0.0101 repeating in binary, which is one third. <bookmark mark='f'/> Fill in each removed middle third with a flat step. As we add stages, the steps multiply.",
+   "zh": "还有一个对象，要留着以后用。<bookmark mark='r'/>在康托尔集上定义一个函数：读出一个数的三进制各位数字，把2都换成1，再把结果当成二进制来读。四分之一，也就是0.0202循环，变成二进制的0.0101循环，也就是三分之一。<bookmark mark='f'/>在每个被挖掉的中间三分之一上，填一级平的台阶。随着阶段增加，台阶越来越多。"
+  },
+  "d23debd4cf77": {
+   "scene": "Cantor",
+   "en": "The limit is the devil's staircase. <bookmark mark='p'/> It's continuous and never decreases, it climbs from zero to one, and it's flat on every removed interval, which have total length one. All of the climbing happens on the Cantor set, a set of length zero. <bookmark mark='l'/> So its derivative is zero almost everywhere, and yet it rises. Keep it in mind: in Part 3 it will be an integrator, in Part 5 a measure, and in Part 6 the function for which the fundamental theorem of calculus fails.",
+   "zh": "极限就是魔鬼阶梯。<bookmark mark='p'/>它连续、从不下降，从0一路爬到1，而且在每个被挖掉的区间上都是平的，这些区间的总长度是1。所有的爬升，都发生在康托尔集上，一个长度为0的集合。<bookmark mark='l'/>所以它的导数几乎处处为0，可它偏偏在上升。记住它：在第3部分，它会是一个积分子；在第5部分，是一个测度；在第6部分，它是让微积分基本定理失效的那个函数。"
+  },
+  "aa5406ee0b64": {
+   "scene": "Connected",
+   "en": "Chapter ten. What does it mean for a set to be all in one piece?",
+   "zh": "第十章。一个集合连成一整块，是什么意思？"
+  },
+  "6bfaa73f7556": {
+   "scene": "Connected",
+   "en": "Rudin's definition is careful. <bookmark mark='s'/> Two sets are separated if neither one contains a point of the other's closure: they don't touch, even at a limit point. <bookmark mark='c'/> A set is connected if it can't be split into two nonempty separated pieces. <bookmark mark='a'/> The half-open interval from zero to one and the closed interval from one to two are disjoint, but they touch at one, which is a limit point of the first. Not separated. <bookmark mark='b'/> Remove the point one, and the two open intervals are separated.",
+   "zh": "鲁丁的定义很讲究。<bookmark mark='s'/>如果两个集合，谁都不包含对方闭包中的点，就说它们是分离的：它们不接触，哪怕在极限点处也不接触。<bookmark mark='c'/>如果一个集合不能拆成两个非空的、分离的部分，它就是连通的。<bookmark mark='a'/>从0到1的半开区间，和从1到2的闭区间，互不相交，但它们在1处接触，而1是第一个区间的极限点。所以不分离。<bookmark mark='b'/>去掉点1，剩下的两个开区间就是分离的。"
+  },
+  "2f39823e4c47": {
+   "scene": "Connected",
+   "en": "On the real line, connected sets are exactly what you'd hope: <bookmark mark='s'/> the intervals, the sets with no gaps, where any number between two members is also a member. <bookmark mark='g'/> One direction is easy. If a set skips some z between two of its points, then the part below z and the part above z are nonempty and separated, since nothing in either piece is a limit of the other.",
+   "zh": "在实数轴上，连通集恰好就是你希望的样子：<bookmark mark='s'/>区间，也就是没有空隙的集合，其中任意两个成员之间的任何数，也是成员。<bookmark mark='g'/>一个方向很容易。如果一个集合在它的某两个点之间漏掉了某个z，那么z以下的部分和z以上的部分都非空，而且是分离的，因为哪一部分里都没有另一部分的极限点。"
+  },
+  "87e199b369d7": {
+   "scene": "Connected",
+   "en": "The other direction is where the real numbers earn their keep. <bookmark mark='a'/> Suppose an interval were split into two nonempty separated pieces, A and B, with a point x of A to the left of a point y of B. <bookmark mark='z'/> Let z be the supremum of the part of A between x and y: the least-upper-bound property again, finding the seam. <bookmark mark='b'/> z is in the closure of A, so it can't be in B. <bookmark mark='c'/> If z isn't in A either, the interval has a gap at z. <bookmark mark='d'/> If z is in A, it's not in the closure of B, so some point just to the right of z is in neither piece: again a gap. Either way, the interval wasn't an interval.",
+   "zh": "另一个方向，才是实数真正派上用场的地方。<bookmark mark='a'/>假设一个区间被拆成了两个非空的分离部分A和B，A中有一点x，在B中一点y的左边。<bookmark mark='z'/>令z为A在x和y之间那部分的上确界：又是最小上界性质，帮我们找到接缝。<bookmark mark='b'/>z在A的闭包里，所以它不可能在B里。<bookmark mark='c'/>如果z也不在A里，这个区间在z处就有空隙。<bookmark mark='d'/>如果z在A里，它就不在B的闭包里，于是z右边紧挨着的某个点，两部分都不属于：又是一个空隙。无论哪种情况，这个区间都算不上区间。"
+  },
+  "b1ed5d87127c": {
+   "scene": "Connected",
+   "en": "Now look at the rationals with this definition. <bookmark mark='s'/> Split them at root two: the fractions below it and the fractions above it. Since root two isn't a fraction, every fraction lands on one side, <bookmark mark='p'/> and neither side contains a limit point of the other that's actually a fraction. So the two sides are separated, and the rationals are not connected. <bookmark mark='h'/> The hole from chapter one is literally a seam you can pull apart.",
+   "zh": "现在用这个定义来看有理数。<bookmark mark='s'/>在根号2处把它们分开：小于根号2的分数，和大于根号2的分数。因为根号2不是分数，每个分数都落在某一边，<bookmark mark='p'/>而且哪一边都不包含另一边的极限点：这样的分数并不存在。所以这两边是分离的，有理数不连通。<bookmark mark='h'/>第一章的那个洞，真的就是一条可以扯开的接缝。"
+  },
+  "5af0b631d09b": {
+   "scene": "Connected",
+   "en": "In fact, there's an irrational number between any two fractions, so every set of fractions with at least two points splits like this. <bookmark mark='n'/> In Part 2 we'll see that continuous functions carry connected sets to connected sets, which is the real reason behind the intermediate value theorem.",
+   "zh": "事实上，任意两个分数之间都有一个无理数，所以任何至少含有两个点的分数集合，都能这样拆开。<bookmark mark='n'/>在第2部分我们会看到，连续函数把连通集映成连通集，这才是介值定理背后真正的原因。"
+  },
+  "2a3aa496d881": {
+   "scene": "Connected",
+   "en": "Connectedness can be subtler than it looks. <bookmark mark='c'/> Here's the graph of sine of one over x, for x between zero and one, oscillating faster and faster as x approaches zero, <bookmark mark='s'/> together with the vertical segment it piles up against. <bookmark mark='t'/> The whole thing is connected: the segment lies in the closure of the curve, so they can't be separated. <bookmark mark='p'/> But you can't walk from the segment onto the curve along a continuous path: the curve wiggles infinitely often before reaching it. Connected, but not path-connected.",
+   "zh": "连通性可能比看上去更微妙。<bookmark mark='c'/>这是sin（x分之1）的图像，x在0和1之间，x越接近0，它振荡得越快，<bookmark mark='s'/>再加上它不断堆积靠拢的那条竖直线段。<bookmark mark='t'/>整个图形是连通的：那条线段落在曲线的闭包里，所以两者无法分离。<bookmark mark='p'/>但你没法沿着一条连续的路径，从线段走到曲线上：曲线在到达线段之前，要来回摆动无穷多次。连通，但不道路连通。"
+  },
+  "f5e85b71f510": {
+   "scene": "FunctionSpace",
+   "en": "Chapter eleven. We end where the series is headed: a space whose points are functions. And it comes with a warning.",
+   "zh": "第十一章。最后，我们来到这个系列要去的地方：一个以函数为点的空间。而且它带着一个警告。"
+  },
+  "3d35c6c51c5b": {
+   "scene": "FunctionSpace",
+   "en": "Take the continuous functions on the interval from zero to one, with the sup distance from chapter five. <bookmark mark='b'/> Its closed unit ball is the set of functions whose graphs stay between minus one and one: <bookmark mark='s'/> any graph inside this band. <bookmark mark='p'/> It's bounded, obviously. And it's closed: if functions with values between minus one and one converge in the sup distance, their limit's values are between minus one and one too. In k-dimensional space, Heine–Borel would now say: compact.",
+   "zh": "取从0到1的区间上的连续函数，用第五章的上确界距离。<bookmark mark='b'/>它的闭单位球，就是图像始终在负1和1之间的函数全体：<bookmark mark='s'/>这条带子里的任何图像。<bookmark mark='p'/>它显然是有界的。它也是闭的：如果取值在负1和1之间的函数按上确界距离收敛，它们的极限取值也在负1和1之间。要是在k维空间里，海涅–博雷尔定理这时就会说：紧。"
+  },
+  "23714d5ae42e": {
+   "scene": "FunctionSpace",
+   "en": "It isn't. <bookmark mark='t'/> Here's a sequence inside the ball: f n is a tent of height one over the interval from one over n plus one to one over n, and zero everywhere else. <bookmark mark='m'/> The tents march toward zero, getting narrower, each one sitting where all the others are zero.",
+   "zh": "它不是紧的。<bookmark mark='t'/>这是球里的一个序列：f_n是一个高度为1的帐篷，搭在从n加1分之1到n分之1的区间上，其他地方都是0。<bookmark mark='m'/>这些帐篷一个接一个地向0推进，越来越窄，每一个所在的地方，其他所有帐篷都是0。"
+  },
+  "6057e2a1ec6e": {
+   "scene": "FunctionSpace",
+   "en": "Now measure distances. <bookmark mark='d'/> Where one tent reaches height one, every other tent is zero, so the distance between any two of them is exactly one. <bookmark mark='g'/> Here's the whole table: zeros on the diagonal, ones everywhere else. <bookmark mark='c'/> So a ball of radius one half contains at most one tent, and the set of tents has no limit point at all. An infinite subset with no limit point: by chapter seven, the unit ball is not compact.",
+   "zh": "现在来量距离。<bookmark mark='d'/>一个帐篷达到高度1的地方，其他每个帐篷都是0，所以任意两个帐篷之间的距离恰好是1。<bookmark mark='g'/>这是完整的距离表：对角线上全是0，其他地方全是1。<bookmark mark='c'/>所以半径为二分之一的球里至多只有一个帐篷，帐篷构成的集合根本没有极限点。一个没有极限点的无穷子集：根据第七章，单位球不是紧的。"
+  },
+  "a51d2148b485": {
+   "scene": "FunctionSpace",
+   "en": "What went wrong? <bookmark mark='a'/> Think of each tent as a point. They're all at distance one from each other, like the corners of a triangle, then a tetrahedron, then shapes in higher and higher dimensions. <bookmark mark='b'/> In three-dimensional space you can fit at most four points all at the same distance from each other; a bounded region of k-dimensional space can only hold finitely many points that keep their distance. <bookmark mark='c'/> The function space has infinitely many independent directions, so there's always room for one more.",
+   "zh": "问题出在哪儿？<bookmark mark='a'/>把每个帐篷想成一个点。它们两两之间的距离都是1，就像三角形的顶点，然后是四面体的顶点，再然后是越来越高维的形状。<bookmark mark='b'/>在三维空间里，最多只能放下四个两两等距的点；k维空间的一个有界区域，只能容纳有限多个彼此保持一定距离的点。<bookmark mark='c'/>而函数空间有无穷多个独立的方向，所以总还有地方再放一个。"
+  },
+  "d900a9e4ec49": {
+   "scene": "FunctionSpace",
+   "en": "So here's the warning, as a dictionary between k-dimensional space and our first function space. <bookmark mark='a'/> Closed and bounded no longer implies compact. <bookmark mark='b'/> Bounded sequences no longer need convergent subsequences. <bookmark mark='c'/> The unit ball is no longer compact. <bookmark mark='d'/> Heine–Borel is a theorem about k-dimensional space, not about space in general. In Part 3 we'll find what replaces it: the Arzelà–Ascoli theorem, which adds one more condition, equicontinuity. And in Part 8 we'll prove that no infinite-dimensional space can have a compact unit ball.",
+   "zh": "所以，警告是这样的，写成k维空间和我们第一个函数空间之间的一张对照表。<bookmark mark='a'/>闭且有界，不再推出紧。<bookmark mark='b'/>有界序列，不再一定有收敛子序列。<bookmark mark='c'/>单位球不再是紧的。<bookmark mark='d'/>海涅–博雷尔定理是关于k维空间的定理，而不是关于一般空间的。在第3部分，我们会找到它的替代品：阿尔泽拉–阿斯科利定理，它多加了一个条件，等度连续性。而在第8部分，我们会证明：任何无穷维空间的单位球都不可能是紧的。"
+  },
+  "a2f08c7f215c": {
+   "scene": "Outro",
+   "en": "Let's take stock. We found that the rationals have holes, and filled them in a way that turns having no holes into a theorem: every nonempty set that's bounded above has a least upper bound. We used that to prove the Archimedean property, density, and the nested interval theorem, and we built the bisection engine. We learned that the rationals, dense as they are, are countable, while the reals are not. Then we stepped back to metric spaces, where a function can be a point, and built the vocabulary: open, closed, compact, connected. We proved Heine–Borel by bisection, met the Cantor set, and found that our first function space already breaks Heine–Borel.",
+   "zh": "我们来盘点一下。我们发现有理数有洞，并且用一种方式把它们填上，让“没有洞”变成了一条定理：每个有上界的非空集合都有最小上界。我们用它证明了阿基米德性质、稠密性和区间套定理，还造出了二分法引擎。我们知道了，有理数虽然稠密，却是可数的，而实数不可数。然后我们退一步，来到度量空间，在那里函数也可以是一个点，并建立起一套词汇：开、闭、紧、连通。我们用二分法证明了海涅–博雷尔定理，认识了康托尔集，还发现我们的第一个函数空间就已经打破了海涅–博雷尔定理。"
+  },
+  "4fe4166f2736": {
+   "scene": "Outro",
+   "en": "And the ledger gets its first row. <bookmark mark='a'/> The space: the real line, and k-dimensional space. Complete because we built it so, with least upper bounds. Compact means closed and bounded. Which limits may we swap? None yet. And Fourier's question: we can't even ask it yet, because we haven't said what it means for a sequence of functions to converge.",
+   "zh": "账本也添上了第一行。<bookmark mark='a'/>空间：实数轴，以及k维空间。它是完备的，因为我们就是这样造它的，靠的是最小上界。紧就意味着闭且有界。哪些极限可以交换？还没有。至于傅里叶的问题：我们现在连问都问不出来，因为我们还没说清楚，一列函数收敛是什么意思。"
+  },
+  "be823b2c4106": {
+   "scene": "Outro",
+   "en": "Next time, in Part 2, we put the new real numbers to work: <bookmark mark='a'/> sequences, series, continuity and the derivative, the limits behind Fourier's sum. <bookmark mark='b'/> It opens with a shock: the alternating harmonic series adds up to the natural log of two, but rearrange its terms and you can make it add up to pi, or minus one, or anything you like.",
+   "zh": "下一次，在第2部分，我们要让新造的实数派上用场：<bookmark mark='a'/>序列、级数、连续性和导数，也就是傅里叶那个和背后的种种极限。<bookmark mark='b'/>第2部分一开场就有一个惊人的结果：交错调和级数的和是2的自然对数，可是只要重排它的项，你就能让它的和变成π，或者负1，或者任何你想要的数。"
+  },
+  "73cf19905bb1": {
+   "scene": "Outro",
+   "en": "This part followed the first two chapters of Rudin's Principles of Mathematical Analysis. Thanks for watching, and see you in Part 2.",
+   "zh": "这一部分对应鲁丁《数学分析原理》的前两章。感谢收看，我们第2部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 1, The Real Numbers and the Shape of Space",
+ "chapters_en": {
+  "Hook": "Fourier's question, and the holes in the fractions",
+  "Holes": "1. Holes in the rational line",
+  "Cuts": "2. Filling the holes: Dedekind cuts",
+  "Archimedes": "3. Archimedes, density and decimals",
+  "Counting": "4. Counting infinities",
+  "Distance": "5. What “close” means: metric spaces",
+  "OpenClosed": "6. Open and closed sets",
+  "Compact": "7. Compactness",
+  "HeineBorel": "8. Heine–Borel, by bisection",
+  "Cantor": "9. The Cantor set",
+  "Connected": "10. Connectedness",
+  "FunctionSpace": "11. A first space of functions",
+  "Outro": "Recap, and the first row of the ledger"
+ }
+}
