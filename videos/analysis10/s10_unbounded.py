@@ -135,8 +135,8 @@ class Unbounded(VoiceoverScene):
                                         color=C.EPS))
         cl = MathTex(r"f(1) = e^{i\theta} f(0)", font_size=24, color=C.EPS).next_to(cx, DOWN, buff=0.1)
         # the ladder of eigenvalues on a vertical axis
-        lad = NumberLine(x_range=[-6 * math.pi, 6 * math.pi, 2 * math.pi], length=6.4,  # ticks at 2 pi n rotation=PI / 2, include_numbers=False,
-                         color=GREY_C).move_to([-0.6, -0.1, 0])
+        lad = NumberLine(x_range=[-6 * math.pi, 6 * math.pi, 2 * math.pi], length=5.6,  # ticks at 2 pi n
+                         rotation=PI / 2, include_numbers=False, color=GREY_C).move_to([-0.6, -0.25, 0])
         ladl = MathTex(r"\sigma", font_size=26, color=C.SPECTRUM).next_to(lad, UP, buff=0.1)
 
         def rungs():
@@ -176,6 +176,10 @@ class Unbounded(VoiceoverScene):
                 r_.width = 6.4
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(tab, DOWN, buff=0.35)
         head = label(r"A circle of self-adjoint extensions", font_size=34).to_edge(UP, buff=0.25)
+        # the ladder stands between the circle and the text: vertical, clear of both, under the title
+        assert lad.get_top()[1] > lad.get_bottom()[1] + 5 and lad.get_bottom()[1] > -3.6
+        assert ladl.get_top()[1] < head.get_bottom()[1] - 0.1
+        assert cx.get_right()[0] < lad.get_left()[0] - 0.35 - 0.2 and lad.get_right()[0] + 0.35 < rows.get_left()[0] - 0.2
         with self.voiceover(
             "<bookmark mark='a'/> To make it self-adjoint, impose a boundary condition: f at one equals e to the i "
             "theta times f at zero, one condition for each point on a circle. <bookmark mark='b'/> Each gives a "

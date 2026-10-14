@@ -1,0 +1,313 @@
+{
+ "title": "分析学，从零搭建 · 第9部分：分布与傅里叶变换",
+ "chapters": {
+  "Hook": "对任何东西求导",
+  "TestFunctions": "1. 检验函数",
+  "Distributions": "2. 分布",
+  "Calculus": "3. 分布的微积分",
+  "Structure": "4. 支集与局部结构",
+  "Convolution": "5. 卷积与磨光",
+  "FourierL1": "6. 傅里叶变换",
+  "Plancherel": "7. 反演与普朗歇尔定理",
+  "Schwartz": "8. 缓增分布",
+  "PaleyWiener": "9. 佩利–维纳定理",
+  "Sobolev": "10. 索伯列夫空间",
+  "Fundamental": "11. 基本解",
+  "Wiener": "12. 维纳与素数",
+  "Outro": "账本的第九行"
+ },
+ "lines": {
+  "4f5fc97730c3": {
+   "scene": "Hook",
+   "en": "Eight rows of the ledger are filled. Part 9 builds the spaces in which every function can be differentiated, <bookmark mark='l'/> and in which the Fourier transform becomes a perfect symmetry.",
+   "zh": "账本已经填好了八行。第9部分要搭建一些空间，在那里每个函数都能求导，<bookmark mark='l'/>而傅里叶变换成为一种完美的对称。"
+  },
+  "3ba4c35ada0e": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Physicists used Dirac's delta for twenty years before mathematicians could say what it was: a function that is zero everywhere except at one point, with integral one. <bookmark mark='b'/> No such function exists: an integral can't see a single point. But look at what the narrowing bumps do. Each has area one; their heights blow up. <bookmark mark='c'/> Integrated against a fixed smooth function phi, they return phi of zero, more and more exactly. <bookmark mark='d'/> So stop asking what delta is, and ask what it does: it takes a test function and returns its value at zero. That's a perfectly good linear functional.",
+   "zh": "<bookmark mark='a'/>物理学家用了狄拉克的δ整整二十年，数学家才说清楚它是什么：一个除了一点以外处处为0、积分却等于1的函数。<bookmark mark='b'/>这样的函数并不存在：积分看不见单独一个点。可是看看这些不断收窄的鼓包在做什么。每一个的面积都是1；它们的高度则爆炸式增长。<bookmark mark='c'/>拿它们和一个固定的光滑函数φ相乘再积分，结果越来越精确地等于φ(0)。<bookmark mark='d'/>所以别再问δ是什么，而要问它做什么：它接收一个检验函数，返回它在0处的值。这是一个再好不过的线性泛函。"
+  },
+  "00bd32080096": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Heaviside, solving circuit equations in the 1890s, wrote that the derivative of a step is delta. <bookmark mark='b'/> Smooth the step slightly: the smoothed steps have honest derivatives, and they're exactly the narrowing bumps. <bookmark mark='c'/> The move that makes this rigorous, made by Sobolev and then Laurent Schwartz, is to define everything by its action on smooth test functions. Then every function, and much more, has derivatives of every order.",
+   "zh": "<bookmark mark='a'/>亥维赛在19世纪90年代解电路方程时，写下了阶跃的导数就是δ。<bookmark mark='b'/>把阶跃稍稍磨光：磨光后的阶跃有实实在在的导数，而它们恰好就是那些不断收窄的鼓包。<bookmark mark='c'/>让这一切严格起来的那一步，先由索伯列夫、后由洛朗·施瓦茨迈出：用一切东西对光滑检验函数的作用来定义它们。这样一来，每个函数，乃至多得多的对象，都有任意阶的导数。"
+  },
+  "61841bc54ec3": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters six to nine of Functional Analysis. <bookmark mark='a'/> First the test functions and the distributions, their calculus and their structure. <bookmark mark='b'/> Then the Fourier transform, from L one to the tempered distributions, where it becomes a symmetry. <bookmark mark='c'/> Then what it buys: Paley-Wiener, Sobolev spaces, fundamental solutions of partial differential equations, and finally Wiener's theorem and the prime numbers.",
+   "zh": "计划是这样的，跟着《泛函分析》的第6到第9章走。<bookmark mark='a'/>首先是检验函数和分布，以及它们的微积分和结构。<bookmark mark='b'/>然后是傅里叶变换，从L¹一直到缓增分布，在那里它成为一种对称。<bookmark mark='c'/>再然后是它带来的东西：佩利–维纳定理、索伯列夫空间、偏微分方程的基本解，最后是维纳定理和素数。"
+  },
+  "0d5dd9f85709": {
+   "scene": "TestFunctions",
+   "en": "Chapter one: test functions, smooth and compactly supported.",
+   "zh": "第一章：检验函数，光滑而且具有紧支集。"
+  },
+  "886ab800566a": {
+   "scene": "TestFunctions",
+   "en": "<bookmark mark='a'/> Test functions must be smooth, and vanish outside a bounded set. Do any exist? Part 2's flat function says yes. Glue e to the minus one over one minus x squared into the interval from minus one to one, and zero outside. <bookmark mark='b'/> It's infinitely differentiable, even at the two gluing points: every derivative goes to zero there, faster than any power. The tenth derivative, a thousandth from the edge, is about ten to the minus one hundred sixty. <bookmark mark='c'/> No analytic function can vanish on an interval without vanishing everywhere, as Part 7 showed. Test functions are smooth, but deliberately not analytic.",
+   "zh": "<bookmark mark='a'/>检验函数必须是光滑的，并且在一个有界集合之外为0。这样的函数存在吗？第2部分的那个平坦函数说：存在。把e的（负的1减x平方分之1）次方，粘进负1到1的区间里，区间外取0。<bookmark mark='b'/>它无穷次可导，即使在两个粘合点上也是如此：每一阶导数在那里都趋于0，比任何幂都快。在离边缘千分之一的地方，它的十阶导数大约是10的负160次方。<bookmark mark='c'/>正如第7部分所说，解析函数不可能在一个区间上为0而不处处为0。检验函数是光滑的，但故意不是解析的。"
+  },
+  "4ab85e3f8d65": {
+   "scene": "TestFunctions",
+   "en": "<bookmark mark='a'/> The test functions on a region form the space D. <bookmark mark='b'/> A sequence converges there when all the supports stay inside one compact set, and every derivative converges uniformly. <bookmark mark='c'/> These blue functions add a fast wiggle of size one over n squared. The wiggle shrinks in the sup norm and in the first derivative, but its second derivative stays the same size and higher ones grow, so the sequence does not converge in D. <bookmark mark='d'/> On each compact set this is a Fréchet space, from Part 8, and D glues them together, which is why Rudin needed topological vector spaces.",
+   "zh": "<bookmark mark='a'/>区域上的检验函数构成空间D。<bookmark mark='b'/>D里的一个序列收敛，是指所有支集都待在同一个紧集里，并且每一阶导数都一致收敛。<bookmark mark='c'/>这些蓝色的函数加上了一个大小为n的平方分之1的快速抖动。抖动在上确界范数和一阶导数上都在缩小，可它的二阶导数始终一样大，更高阶的还在增长，所以这个序列在D里不收敛。<bookmark mark='d'/>在每个紧集上，这是第8部分讲过的弗雷歇空间，而D把它们粘在一起，这就是为什么鲁丁需要拓扑向量空间。"
+  },
+  "937816e0575d": {
+   "scene": "Distributions",
+   "en": "Chapter two: distributions, the continuous linear functionals on test functions.",
+   "zh": "第二章：分布，也就是检验函数上的连续线性泛函。"
+  },
+  "96648dba24fa": {
+   "scene": "Distributions",
+   "en": "<bookmark mark='a'/> A distribution is a continuous linear functional on the test functions. <bookmark mark='b'/> Every locally integrable function is one: it acts by integrating against phi. <bookmark mark='c'/> Delta is one: it reads off the value at zero. <bookmark mark='d'/> So is delta prime, which reads off minus the slope at zero. <bookmark mark='e'/> Continuity means: on each compact set, the action is bounded by finitely many sup norms of derivatives. The number of derivatives needed is the order: zero for functions and delta, one for delta prime.",
+   "zh": "<bookmark mark='a'/>分布是检验函数上的连续线性泛函。<bookmark mark='b'/>每个局部可积函数都是分布：它通过与φ相乘再积分来起作用。<bookmark mark='c'/>δ是分布：它读出0处的值。<bookmark mark='d'/>δ的导数也是，它读出0处斜率的相反数。<bookmark mark='e'/>连续性的意思是：在每个紧集上，作用的大小被有限个导数的上确界范数控制住。需要的导数个数就是阶：函数和δ是0阶，δ的导数是1阶。"
+  },
+  "02ec424456cc": {
+   "scene": "Distributions",
+   "en": "<bookmark mark='a'/> A subtler distribution: one over x. It isn't integrable near zero, so integrating it against phi makes no sense. <bookmark mark='b'/> But cut out a symmetric window around zero. The right half pulls up, the left half pulls down, each by about the log of epsilon, and they cancel. <bookmark mark='c'/> As the window shrinks, the truncated integrals converge: here to 2.036324. <bookmark mark='d'/> That limit is the principal value of one over x: a distribution of order one, which no function or measure gives.",
+   "zh": "<bookmark mark='a'/>一个更微妙的分布：x分之1。它在0附近不可积，所以拿它和φ相乘再积分是没有意义的。<bookmark mark='b'/>但在0周围挖掉一个对称的窗口。右半边往上拉，左半边往下拉，各自大约是ε的对数那么多，而它们相互抵消。<bookmark mark='c'/>随着窗口缩小，截断的积分收敛：这里收敛到2.036324。<bookmark mark='d'/>这个极限就是x分之1的主值：一个1阶的分布，任何函数或测度都给不出它。"
+  },
+  "a156c5d033bf": {
+   "scene": "Distributions",
+   "en": "<bookmark mark='a'/> One more, which will keep coming back: the Dirac comb, a delta at every multiple of two pi. <bookmark mark='b'/> It acts on a test function by summing its values on the lattice. <bookmark mark='c'/> It's the derivative of the sawtooth, up to a constant, and its Fourier transform is again a comb, as we'll see.",
+   "zh": "<bookmark mark='a'/>再来一个，它会一次又一次地回来：狄拉克梳，在2π的每个整数倍处放一个δ。<bookmark mark='b'/>它作用在检验函数上，就是把函数在格点上的值加起来。<bookmark mark='c'/>差一个常数，它就是锯齿波的导数，而它的傅里叶变换又是一把梳子，我们后面会看到。"
+  },
+  "33982903873f": {
+   "scene": "Calculus",
+   "en": "Chapter three: differentiating distributions, by integrating by parts.",
+   "zh": "第三章：用分部积分给分布求导。"
+  },
+  "d3eaea38a934": {
+   "scene": "Calculus",
+   "en": "<bookmark mark='a'/> For a smooth function f, integration by parts moves the derivative onto the test function, with a minus sign, and no boundary terms, because phi vanishes near the edge. <bookmark mark='b'/> For a distribution, make that the definition: the derivative of T acts on phi as minus T acting on phi prime. <bookmark mark='c'/> Since phi can be differentiated forever, so can every distribution, and mixed partials always commute. And the swap of limits that cost so much in Part 3 is now free: if distributions converge, so do their derivatives.",
+   "zh": "<bookmark mark='a'/>对光滑函数f，分部积分把导数挪到检验函数身上，多一个负号，而且没有边界项，因为φ在边缘附近为0。<bookmark mark='b'/>对分布，就把这一点当作定义：T的导数作用在φ上，等于负的T作用在φ的导数上。<bookmark mark='c'/>既然φ可以无限次求导，每个分布也可以，而且混合偏导数总能交换次序。在第3部分代价那么大的极限交换，现在是免费的：分布收敛，它们的导数也收敛。"
+  },
+  "b9137283e2f3": {
+   "scene": "Calculus",
+   "en": "<bookmark mark='a'/> Now corners and jumps are no obstacle. The absolute value has derivative the sign function. <bookmark mark='b'/> The sign function jumps by two, so its derivative is two delta. <bookmark mark='c'/> Check it on a test function: minus the integral of the sign times phi prime is exactly twice phi of zero. The log of the absolute value has derivative the principal value of one over x, and the product rule survives for smooth multipliers.",
+   "zh": "<bookmark mark='a'/>现在，尖角和跳跃都不再是障碍。绝对值函数的导数是符号函数。<bookmark mark='b'/>符号函数跳了2，所以它的导数是2倍的δ。<bookmark mark='c'/>在一个检验函数上验证一下：负的符号函数乘φ的导数的积分，恰好是φ(0)的两倍。绝对值的对数，它的导数是x分之1的主值，而且乘积法则对光滑的乘子依然成立。"
+  },
+  "928c517e74cd": {
+   "scene": "Calculus",
+   "en": "<bookmark mark='a'/> Here's the Fourier thread. The sawtooth is the sum of sine n x over n. Its derivative is minus a half between the jumps, and at each jump, up by pi, a spike: pi times delta. <bookmark mark='b'/> Now differentiate the series term by term: the sum of cos n x. At every point that series diverges. <bookmark mark='c'/> But test it against a smooth phi, and the partial sums converge, fast, to the action of the sawtooth's derivative. <bookmark mark='d'/> Term-by-term differentiation of a Fourier series, the move that started all of this, is simply correct, in the space of distributions.",
+   "zh": "<bookmark mark='a'/>这是傅里叶那条线索。锯齿波是n分之sin nx之和。它的导数在跳跃之间是负二分之一，而在每个跳跃处，往上跳π，是一根尖刺：π倍的δ。<bookmark mark='b'/>现在逐项求导这个级数：得到cos nx之和。这个级数在每一点都发散。<bookmark mark='c'/>可是拿一个光滑的φ去检验它，部分和就收敛，而且很快，收敛到锯齿波导数的作用。<bookmark mark='d'/>傅里叶级数的逐项求导，正是开启这一切的那一步，在分布空间里，它干脆就是对的。"
+  },
+  "b8bd44560df9": {
+   "scene": "Structure",
+   "en": "Chapter four: where a distribution lives, and what it's made of.",
+   "zh": "第四章：分布住在哪里，又由什么构成。"
+  },
+  "f3f870ea3be0": {
+   "scene": "Structure",
+   "en": "<bookmark mark='a'/> A distribution vanishes on an open set if it gives zero on every test function living there. Remove all such sets, and what's left is the support: where the distribution is awake. <bookmark mark='b'/> Delta prime at minus 0.9, plus the indicator of an interval, has support the point and the interval. <bookmark mark='c'/> And a distribution supported at a single point can only be a finite combination of delta and its derivatives. There's nothing else that small.",
+   "zh": "<bookmark mark='a'/>如果一个分布在某个开集里的每个检验函数上都给出0，就说它在这个开集上为0。去掉所有这样的开集，剩下的就是支集：分布醒着的地方。<bookmark mark='b'/>负0.9处δ的导数，加上一个区间的示性函数，它的支集就是那个点和那个区间。<bookmark mark='c'/>而支集只有一个点的分布，只能是δ及其各阶导数的有限组合。再没有比这更小的东西了。"
+  },
+  "45d5ecb40ab4": {
+   "scene": "Structure",
+   "en": "<bookmark mark='a'/> Here's the deepest structure theorem. Take this continuous function F, with a few kinks. <bookmark mark='b'/> Differentiate it five times, as a distribution. Each kink sharpens step by step into a jump, then a delta, then derivatives of delta: the fifth derivative is delta triple prime at 0.3, plus twice delta prime at minus 0.4, plus a step. <bookmark mark='c'/> Tested against a Gaussian, both sides agree to every digit shown. <bookmark mark='d'/> And it works in general: on each compact set, every distribution is some derivative of a continuous function. The whole space is just continuous functions, differentiated.",
+   "zh": "<bookmark mark='a'/>这是最深刻的结构定理。取这个连续函数F，它有几个折点。<bookmark mark='b'/>把它当作分布，求五次导数。每个折点一步步变尖：先成为跳跃，再成为δ，然后是δ的各阶导数：五阶导数是0.3处δ的三阶导数，加上负0.4处δ的导数的两倍，再加上一个阶跃。<bookmark mark='c'/>拿一个高斯函数来检验，两边在显示的每一位上都吻合。<bookmark mark='d'/>而且这一般地成立：在每个紧集上，每个分布都是某个连续函数的某阶导数。整个空间，不过是连续函数求导而已。"
+  },
+  "bad17e5e06c5": {
+   "scene": "Convolution",
+   "en": "Chapter five: convolution, which turns any distribution into a smooth function.",
+   "zh": "第五章：卷积，它把任何分布都变成光滑函数。"
+  },
+  "9bb231658106": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> Convolving a distribution with a test function gives an honest smooth function. With delta prime, it's the derivative of the bump itself: a dipole, up on one side and down on the other. <bookmark mark='b'/> As the bump narrows, the dipole grows: its height scales like one over epsilon squared, exactly, because one power comes from the bump and one from the derivative. <bookmark mark='c'/> And as epsilon goes to zero, the smooth functions converge to delta prime, as distributions. Every distribution is a limit of test functions.",
+   "zh": "<bookmark mark='a'/>把分布与一个检验函数做卷积，得到一个实实在在的光滑函数。与δ的导数卷积，得到的就是鼓包本身的导数：一个偶极子，一边朝上，一边朝下。<bookmark mark='b'/>随着鼓包收窄，偶极子变大：它的高度恰好按ε的平方分之1增长，因为一次幂来自鼓包，另一次来自求导。<bookmark mark='c'/>而当ε趋于0时，这些光滑函数作为分布收敛到δ的导数。每个分布都是检验函数的极限。"
+  },
+  "65d9249fca81": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> Smooth the Cantor measure from Part 6, by averaging over windows. <bookmark mark='b'/> Each narrower window shows more of the fractal structure, and the largest density grows by a factor of one and a half each time the window shrinks by three. <bookmark mark='c'/> That factor is three to the one minus d, where d, the log of two over the log of three, is the dimension of the Cantor set. Smoothing at every scale reveals the geometry of where the measure lives.",
+   "zh": "<bookmark mark='a'/>在一个个窗口上取平均，把第6部分的康托尔测度磨光。<bookmark mark='b'/>窗口每窄一点，就显露出更多的分形结构，而窗口每缩小到三分之一，最大的密度就增大到一点五倍。<bookmark mark='c'/>这个倍数是3的（1减d）次方，其中d等于log 2除以log 3，正是康托尔集的维数。在每个尺度上磨光，揭示了测度所住之处的几何。"
+  },
+  "340632920dfc": {
+   "scene": "FourierL1",
+   "en": "Chapter six: the Fourier transform on the line.",
+   "zh": "第六章：实数轴上的傅里叶变换。"
+  },
+  "a61065834667": {
+   "scene": "FourierL1",
+   "en": "<bookmark mark='a'/> The Fourier transform measures how much of each frequency a function contains. We fix Rudin's convention, with one over root two pi in front, for the rest of the series. <bookmark mark='b'/> A box becomes a sinc: sharp edges need many frequencies, so the transform decays slowly, like one over t. <bookmark mark='c'/> A Gaussian becomes the same Gaussian. <bookmark mark='d'/> A triangle, which is a box convolved with itself, becomes the sinc squared, decaying like one over t squared. Each formula is checked against direct quadrature.",
+   "zh": "<bookmark mark='a'/>傅里叶变换度量一个函数包含每种频率多少。我们采用鲁丁的约定，前面带一个根号2π分之1，本系列余下部分都这样。<bookmark mark='b'/>方波变成抽样函数：陡峭的边缘需要许多频率，所以变换衰减得很慢，像t分之1那样。<bookmark mark='c'/>高斯函数变成同一个高斯函数。<bookmark mark='d'/>三角波，也就是方波与自身的卷积，变成抽样函数的平方，像t的平方分之1那样衰减。每个公式都与直接的数值积分核对过。"
+  },
+  "938f85614d61": {
+   "scene": "FourierL1",
+   "en": "<bookmark mark='a'/> The transform turns one kind of operation into another. Shifting a function multiplies its transform by a phase, and multiplying by a phase shifts the transform. <bookmark mark='b'/> Differentiation becomes multiplication by i t, which is why the transform turns differential equations into algebra. <bookmark mark='c'/> Convolution becomes multiplication. <bookmark mark='d'/> And for an integrable function, the transform is continuous and dies at infinity: the Riemann-Lebesgue lemma again.",
+   "zh": "<bookmark mark='a'/>变换把一种运算变成另一种。平移一个函数，就是把它的变换乘上一个相位；乘上一个相位，就是平移变换。<bookmark mark='b'/>求导变成乘以i t，这就是为什么变换能把微分方程变成代数。<bookmark mark='c'/>卷积变成乘法。<bookmark mark='d'/>而对可积函数，变换是连续的，并且在无穷远处消失：又是黎曼–勒贝格引理。"
+  },
+  "7688e19bbbac": {
+   "scene": "FourierL1",
+   "en": "<bookmark mark='a'/> Why is the Gaussian its own transform? Both it and its transform solve the same differential equation, u prime equals minus x u, with the same starting value. <bookmark mark='b'/> Now squeeze it. A narrower Gaussian in space has a wider transform, and the product of the two widths stays fixed. <bookmark mark='c'/> That's the uncertainty principle, the same one the quantum video met as position against momentum.",
+   "zh": "<bookmark mark='a'/>为什么高斯函数是它自己的变换？它和它的变换满足同一个微分方程：u的导数等于负x乘u，而且初值相同。<bookmark mark='b'/>现在挤压它。空间中越窄的高斯函数，变换就越宽，而两个宽度的乘积保持不变。<bookmark mark='c'/>这就是不确定性原理，量子那期视频里以位置和动量的形式见过的同一个原理。"
+  },
+  "d732c011cb6d": {
+   "scene": "Plancherel",
+   "en": "Chapter seven: getting the function back, and the transform as a rotation of L two.",
+   "zh": "第七章：把函数找回来，以及作为L²上一个旋转的傅里叶变换。"
+  },
+  "2bda05263802": {
+   "scene": "Plancherel",
+   "en": "<bookmark mark='a'/> The inversion theorem: the same integral, with the opposite sign in the exponent, gives the function back. Rudin's proof inserts a damping factor in frequency, e to the minus lambda times the size of t. In space that's the Poisson kernel, an approximate identity, and as lambda shrinks it closes in on the function. <bookmark mark='b'/> For the box, the transform isn't integrable, so cut it off at plus and minus T. <bookmark mark='c'/> As T grows the reconstruction hugs the box, converging in L two, but near each jump it overshoots, and the overshoot tends to Gibbs' 8.95 percent, the same as for Fourier series in Part 3.",
+   "zh": "<bookmark mark='a'/>反演定理：同一个积分，把指数的符号反过来，就把函数找了回来。鲁丁的证明在频率上插入一个阻尼因子，e的负λ乘t的绝对值次方。在空间里，那是泊松核，一个近似单位元，随着λ缩小，它逐渐逼近原函数。<bookmark mark='b'/>对方波来说，它的变换不可积，所以在正负T处截断。<bookmark mark='c'/>随着T增大，重建出的函数紧贴方波，在L²中收敛，但在每个跳跃附近会冲过头，冲过头的量趋于吉布斯的百分之8.95，和第3部分傅里叶级数里的一样。"
+  },
+  "88043cabc464": {
+   "scene": "Plancherel",
+   "en": "<bookmark mark='a'/> Plancherel's theorem: the transform preserves the L two norm. <bookmark mark='b'/> Here's a random wave packet and the size of its transform; <bookmark mark='n'/> their norms agree to ten digits, and so do those of twenty other random functions. <bookmark mark='c'/> So the transform extends from the nice functions to all of L two, as a unitary map: it's an orthogonal change of basis, from positions to frequencies, in an infinite-dimensional Hilbert space.",
+   "zh": "<bookmark mark='a'/>普朗歇尔定理：傅里叶变换保持L²范数。<bookmark mark='b'/>这是一个随机的波包，以及它的变换的大小；<bookmark mark='n'/>它们的范数在十位数字上吻合，另外二十个随机函数也是如此。<bookmark mark='c'/>所以傅里叶变换可以从好函数延拓到整个L²上，成为一个酉映射：它是一个无穷维希尔伯特空间里的正交基变换，从位置换到频率。"
+  },
+  "f516b8301e56": {
+   "scene": "Schwartz",
+   "en": "Chapter eight: the space where the Fourier transform is perfect, and its dual.",
+   "zh": "第八章：傅里叶变换在其中完美无缺的空间，以及它的对偶。"
+  },
+  "7c72d015b5ba": {
+   "scene": "Schwartz",
+   "en": "<bookmark mark='a'/> Test functions with compact support are too few for the Fourier transform, because the transform of a bump never has compact support. So Schwartz enlarged the space: smooth functions that, with all their derivatives, decay faster than every power of x. <bookmark mark='b'/> The Gaussian qualifies: multiply it by x to any power and it stays bounded, with sup exactly k over e, to the power k over two. <bookmark mark='c'/> One over one plus x squared is smooth and integrable, but x squared times it never decays, so it's out. <bookmark mark='d'/> Countably many seminorms again: the Schwartz space is a Fréchet space.",
+   "zh": "<bookmark mark='a'/>有紧支集的检验函数，对傅里叶变换来说太少了，因为鼓包的变换从来没有紧支集。于是施瓦茨扩大了这个空间：光滑函数，连同它所有的导数，都比x的任何次幂衰减得更快。<bookmark mark='b'/>高斯函数符合条件：乘上x的任何次幂，它仍然有界，上确界恰好是（e分之k）的二分之k次方。<bookmark mark='c'/>1加x平方分之1是光滑的、可积的，可乘上x的平方之后它就不衰减了，所以它被排除在外。<bookmark mark='d'/>又是可数多个半范数：施瓦茨空间是一个弗雷歇空间。"
+  },
+  "4e549ad7dec6": {
+   "scene": "Schwartz",
+   "en": "<bookmark mark='a'/> On this space the transform is perfect. Multiplying by x becomes differentiating, and differentiating becomes multiplying, so decay and smoothness trade places, and the Schwartz space maps onto itself. <bookmark mark='b'/> Watch a lopsided function go around. Its transform is complex. Transform again, and you get the function reflected. <bookmark mark='c'/> Four times, and you're back: the Fourier transform is a quarter turn. <bookmark mark='d'/> So its only eigenvalues are the fourth roots of unity, and the eigenvectors are the Hermite functions, the quantum oscillator's states.",
+   "zh": "<bookmark mark='a'/>在这个空间上，傅里叶变换是完美的。乘以x变成求导，求导变成乘法，所以衰减和光滑互换了位置，施瓦茨空间映满它自身。<bookmark mark='b'/>看一个歪斜的函数转上一圈。它的变换是复值的。再变换一次，得到的是函数的镜像。<bookmark mark='c'/>变换四次，就回到了原处：傅里叶变换是转四分之一圈。<bookmark mark='d'/>所以它的特征值只能是1的四次方根，而特征向量是埃尔米特函数，也就是量子谐振子的那些态。"
+  },
+  "c6af0cecb2b6": {
+   "scene": "Schwartz",
+   "en": "<bookmark mark='a'/> The dual of the Schwartz space is the space of tempered distributions: everything that doesn't grow faster than a polynomial. <bookmark mark='b'/> Its transform is defined by passing the hat to the test function, which is legal because the integral of f hat times g equals the integral of f times g hat; here, for a Gaussian and a box, both sides agree. <bookmark mark='c'/> Now squeeze a unit mass toward delta. Its transform flattens out, to the constant one over root two pi. <bookmark mark='d'/> So delta's transform is a constant, a constant's is a delta, and powers of x go to derivatives of delta.",
+   "zh": "<bookmark mark='a'/>施瓦茨空间的对偶是缓增分布的空间：所有增长不快于多项式的东西。<bookmark mark='b'/>它的变换的定义，是把“帽子”移到检验函数上，这是合法的，因为f的变换乘g的积分，等于f乘g的变换的积分；这里对一个高斯函数和一个方波，两边相等。<bookmark mark='c'/>现在把单位质量挤压成δ。它的变换变平了，成为常数根号2π分之1。<bookmark mark='d'/>所以δ的变换是常数，常数的变换是δ，而x的各次幂变成δ的各阶导数。"
+  },
+  "24c777168130": {
+   "scene": "Schwartz",
+   "en": "<bookmark mark='a'/> The Dirac comb, a delta at every multiple of root two pi, is tempered. Smooth it slightly and window it, and transform: the result is the same comb. In the limit the comb is exactly its own transform. <bookmark mark='b'/> Tested against a function, that's Poisson summation: the sum of the samples of f equals the sum of the samples of f hat. <bookmark mark='c'/> With a Gaussian, it's Jacobi's identity for the theta function: the two sides, as curves, coincide, and at every t they agree to twelve digits. It's the identity behind the functional equation of the zeta function, in the Riemann video.",
+   "zh": "<bookmark mark='a'/>狄拉克梳，在根号2π的每个整数倍处放一个δ，是缓增的。把它稍稍磨光、加个窗口，再做变换：结果是同一把梳子。在极限下，这把梳子恰好是它自己的变换。<bookmark mark='b'/>拿一个函数去检验，这就是泊松求和公式：f的采样值之和，等于f的变换的采样值之和。<bookmark mark='c'/>用高斯函数代进去，这就是雅可比关于θ函数的恒等式：两边作为曲线完全重合，在每个t处都在十二位数字上吻合。黎曼那期视频里ζ函数的函数方程，背后正是这个恒等式。"
+  },
+  "c27cb46bfdd6": {
+   "scene": "PaleyWiener",
+   "en": "Chapter nine: the Paley-Wiener theorem, where support in space becomes growth in the complex plane.",
+   "zh": "第九章：佩利–维纳定理，空间中的支集变成了复平面上的增长。"
+  },
+  "fa9d97766750": {
+   "scene": "PaleyWiener",
+   "en": "<bookmark mark='a'/> Take the bump, supported on minus one to one. Its transform is an integral over a bounded interval, so it makes sense for complex t as well, and it's an entire function. <bookmark mark='b'/> Here it is, colored by phase, with brightness rising with size. Along the real axis it oscillates and dies, with its zeros where all the colors meet. <bookmark mark='c'/> Vertically, it grows: the exponential has size e to the x times the imaginary part, at most e to the absolute value of the imaginary part, because x stays within one. <bookmark mark='d'/> On the imaginary axis the growth rate creeps up toward exactly one, the half-width of the support. And along the real axis it decays faster than any power.",
+   "zh": "<bookmark mark='a'/>取那个支集在负1到1上的鼓包。它的变换是有界区间上的积分，所以对复数t也有意义，而且是一个整函数。<bookmark mark='b'/>这就是它，按相位着色，亮度随大小增加。沿着实轴，它振荡并逐渐消失，它的零点就在所有颜色交汇的地方。<bookmark mark='c'/>沿竖直方向，它在增长：指数因子的大小是e的（x乘虚部）次方，因为x始终不超过1，所以至多是e的（虚部绝对值）次方。<bookmark mark='d'/>在虚轴上，增长率一点点爬向恰好等于1，也就是支集的半宽。而沿着实轴，它比任何幂都衰减得快。"
+  },
+  "4f3293774807": {
+   "scene": "PaleyWiener",
+   "en": "<bookmark mark='a'/> The Paley-Wiener theorem says this is a characterization: a smooth function is supported in minus A to A exactly when its transform is entire, decays on horizontal lines, and grows no faster than e to the A times the imaginary part. <bookmark mark='b'/> Here's the converse. Write the inversion integral along a horizontal line, and push the line up. By Cauchy's theorem the answer doesn't change: at x equal to one half, inside the support, every height gives the same value of the bump. <bookmark mark='c'/> But at x equal to one and a half, the factor e to the i x z shrinks like e to the minus x y, faster than the transform grows. As the line rises, the bound goes to zero, so the function is zero there. <bookmark mark='d'/> Support in space is growth in the complex plane.",
+   "zh": "<bookmark mark='a'/>佩利–维纳定理说，这是一个刻画：光滑函数的支集落在负A到A之间，当且仅当它的变换是整函数、在水平线上衰减，并且增长不快于e的（A乘虚部）次方。<bookmark mark='b'/>这是反方向。把反演积分沿一条水平线写出来，然后把这条线往上推。由柯西定理，答案不变：在支集里面的x等于二分之一处，每个高度都给出鼓包的同一个值。<bookmark mark='c'/>可在x等于一又二分之一处，因子e的i x z次方像e的负x y次方那样缩小，比变换增长得快。随着这条线升高，界趋于0，所以函数在那里为0。<bookmark mark='d'/>空间中的支集，就是复平面上的增长。"
+  },
+  "5688ac2798db": {
+   "scene": "PaleyWiener",
+   "en": "<bookmark mark='a'/> This is the honest end of Part 2's function e to the minus one over x squared. A bump is smooth but can't be analytic, because it's flat at the edges of its support. How does that show? <bookmark mark='b'/> In the derivatives. Computed exactly up to order twenty, the largest derivative, divided by n factorial, to the one over n, grows without bound, so no analytic bound holds. <bookmark mark='c'/> Divided by n factorial squared instead, it stays bounded: the bump lives in the class with bounds like n factorial squared. <bookmark mark='d'/> The Denjoy-Carleman theorem says exactly which classes contain a bump: those whose sum of ratios converges. For n factorial it diverges, no bumps, the analytic world; for n factorial squared it converges, and bumps exist.",
+   "zh": "<bookmark mark='a'/>这是第2部分那个函数，e的负x平方分之1次方，老老实实的结局。鼓包是光滑的，却不可能是解析的，因为它在支集的边缘是平的。这怎么体现出来？<bookmark mark='b'/>体现在导数上。精确地算到二十阶，最大的导数除以n的阶乘，再开n次方，无限增长，所以任何解析的界都不成立。<bookmark mark='c'/>改成除以n的阶乘的平方，它就保持有界：鼓包住在界像n的阶乘的平方那样的函数类里。<bookmark mark='d'/>当茹瓦–卡莱曼定理确切地说明了哪些函数类里有鼓包：比值之和收敛的那些。对n的阶乘，它发散，没有鼓包，这是解析的世界；对n的阶乘的平方，它收敛，鼓包就存在。"
+  },
+  "4cbfbc56d136": {
+   "scene": "Sobolev",
+   "en": "Chapter ten: Sobolev spaces, where smoothness is measured by the transform.",
+   "zh": "第十章：索伯列夫空间，用变换来度量光滑程度。"
+  },
+  "cccf2af34719": {
+   "scene": "Sobolev",
+   "en": "<bookmark mark='a'/> Differentiating multiplies the transform by i t, so smoothness in space is decay in frequency. On a log-log plot: <bookmark mark='b'/> a box, which jumps, has a transform decaying like one over t. <bookmark mark='c'/> A triangle, which only has kinks, decays like one over t squared. <bookmark mark='d'/> And the smooth bump plunges faster than any power. <bookmark mark='e'/> The Sobolev norm turns this into a scale: weight the transform by one plus t squared to the power s. The box has finite norm exactly for s below one half, the triangle for s below three halves, the bump for every s. And s needn't be a whole number.",
+   "zh": "<bookmark mark='a'/>求导让变换乘上i t，所以空间中的光滑，就是频率上的衰减。在双对数坐标上：<bookmark mark='b'/>方波会跳跃，它的变换像t分之1那样衰减。<bookmark mark='c'/>三角波只有折点，像t的平方分之1那样衰减。<bookmark mark='d'/>而光滑的鼓包，比任何幂都下降得快。<bookmark mark='e'/>索伯列夫范数把这一点变成一个尺度：用（1加t的平方）的s次方给变换加权。方波的范数有限，恰好是在s小于二分之一时；三角波是s小于二分之三时；鼓包则对每个s都有限。而且s不必是整数。"
+  },
+  "40a3c0ff93be": {
+   "scene": "Sobolev",
+   "en": "<bookmark mark='a'/> When does a finite Sobolev norm force a function to be continuous? The inversion formula bounds f by the integral of the size of f hat. <bookmark mark='b'/> Split the integrand into a weight and the rest, and apply Cauchy-Schwarz, in frequency. The Sobolev norm appears, times the integral of the weight. <bookmark mark='c'/> That integral is finite only when s is more than a half. Watch it as the cutoff T runs out: at s equal to 0.4 it grows without bound, at one half it grows like a logarithm, and at 0.6 it settles. <bookmark mark='d'/> So in one dimension, H s functions are continuous once s passes one half. In n dimensions the weight's integral needs two s bigger than n, and each extra Sobolev derivative buys one more continuous derivative.",
+   "zh": "<bookmark mark='a'/>什么时候，有限的索伯列夫范数能迫使函数连续？反演公式用f的变换的大小的积分，来控制f。<bookmark mark='b'/>把被积函数分成一个权重和其余部分，在频率上用柯西–施瓦茨不等式。索伯列夫范数出现了，再乘上权重的积分。<bookmark mark='c'/>这个积分只在s大于二分之一时有限。看着截断T一路往外走：在s等于0.4时，它无限增长；在二分之一时，像对数那样增长；在0.6时，它稳定下来。<bookmark mark='d'/>所以在一维里，s一旦超过二分之一，Hˢ里的函数就是连续的。在n维里，权重的积分需要2s大于n，而且每多一阶索伯列夫导数，就多换来一阶连续导数。"
+  },
+  "0a888d9b6292": {
+   "scene": "Sobolev",
+   "en": "<bookmark mark='a'/> The Fourier thread once more. The sawtooth's coefficients are one over n, so its Sobolev norm is this sum. <bookmark mark='b'/> Summed to a million terms: at s equal to 0.3 and 0.45 the sums level off, each decade adding a fixed fraction of the last one; at one half, every decade adds exactly the log of ten; above one half, the gains grow. <bookmark mark='c'/> So the sawtooth is in H s exactly for s below one half. And that's sharp, because above one half, Sobolev's lemma would make it continuous, and it jumps.",
+   "zh": "<bookmark mark='a'/>再走一次傅里叶这条线索。锯齿波的系数是n分之1，所以它的索伯列夫范数就是这个和。<bookmark mark='b'/>一直加到一百万项：在s等于0.3和0.45时，和趋于平稳，每个数量级增加的都是上一个数量级的固定比例；在二分之一时，每个数量级恰好增加log 10；超过二分之一，增量越来越大。<bookmark mark='c'/>所以锯齿波在Hˢ里，当且仅当s小于二分之一。而这是精确的，因为超过二分之一，索伯列夫引理就会让它连续，可它是跳跃的。"
+  },
+  "e6590b41df5f": {
+   "scene": "Fundamental",
+   "en": "Chapter eleven: fundamental solutions, which solve a differential equation for every right-hand side at once.",
+   "zh": "第十一章：基本解，它一次性地对所有右端解出一个微分方程。"
+  },
+  "883d3e036855": {
+   "scene": "Fundamental",
+   "en": "<bookmark mark='a'/> A fundamental solution of a differential operator is a distribution E with P of D applied to E equal to delta: the response to a single point source. <bookmark mark='b'/> Then E convolved with f solves the equation with right-hand side f, because derivatives pass through the convolution, and delta convolved with f is f. <bookmark mark='c'/> For u double prime plus u, the oscillator, here are two sources of opposite sign, and two responses: the symmetric one, and the causal one, which is zero before the sources and rings after them. Both satisfy the equation, checked by finite differences.",
+   "zh": "<bookmark mark='a'/>微分算子的基本解，是一个分布E，使得P(D)作用在E上等于δ：也就是对单个点源的响应。<bookmark mark='b'/>于是E与f的卷积，就解出了右端为f的方程，因为导数能穿过卷积，而δ与f的卷积就是f。<bookmark mark='c'/>对u的二阶导数加u，也就是振子，这里有两个符号相反的源，以及两种响应：对称的那一个，和因果的那一个，它在源之前为0，在源之后振荡。两者都满足方程，用有限差分验证过。"
+  },
+  "7ab548cf8d16": {
+   "scene": "Fundamental",
+   "en": "<bookmark mark='a'/> The heat equation's fundamental solution is the heat kernel: a point of heat at time zero spreading into a Gaussian, whose total stays exactly one. <bookmark mark='b'/> Here's the table of classics: the step for the first derivative, half of sine of the absolute value for the oscillator, the logarithm in the plane and minus one over four pi r in space for the Laplacian: the potential of a point charge. <bookmark mark='c'/> Each is checked as a distribution: minus one over four pi r, tested against the Laplacian of a Gaussian, gives phi of zero to ten digits.",
+   "zh": "<bookmark mark='a'/>热方程的基本解是热核：时刻0的一个热点，扩散成一个高斯函数，它的总量始终恰好是1。<bookmark mark='b'/>这是经典解的一览表：一阶导数对应阶跃函数，振子对应二分之一乘sin（x的绝对值），拉普拉斯算子在平面上对应对数，在空间里对应负的4πr分之1：也就是点电荷的势。<bookmark mark='c'/>每一个都作为分布验证过：负的4πr分之1，拿高斯函数的拉普拉斯去检验，在十位数字上给出φ(0)。"
+  },
+  "78e59bfff5e1": {
+   "scene": "Fundamental",
+   "en": "<bookmark mark='a'/> Where do fundamental solutions come from? Transform the equation: one minus t squared times E hat must be constant. But one minus t squared vanishes at plus and minus one, and one over it isn't integrable there. <bookmark mark='b'/> So leave the real line. Write the inversion integral along a line just below the zeros, in the complex plane. Computed numerically, it gives H of x times sine x, the causal solution, and any lower line gives the same, by Cauchy's theorem. <bookmark mark='c'/> Move the line above the zeros, and you get a different fundamental solution, minus H of minus x times sine x. Crossing the poles adds their residues, sine x, which solves the homogeneous equation. <bookmark mark='d'/> Average the two, and you get the symmetric one, half of sine of the absolute value.",
+   "zh": "<bookmark mark='a'/>基本解从哪里来？对方程做变换：（1减t的平方）乘E的变换必须是常数。可是1减t的平方在正负1处为0，而它的倒数在那里不可积。<bookmark mark='b'/>那就离开实数轴。在复平面上，沿着一条刚好在零点下方的直线写出反演积分。数值计算的结果是H(x)乘sin x，也就是因果解，而由柯西定理，任何更低的线给出的都一样。<bookmark mark='c'/>把这条线移到零点上方，就得到另一个基本解，负的H(负x)乘sin x。越过极点，就加上了它们的留数sin x，它解的是齐次方程。<bookmark mark='d'/>把两者平均一下，就得到对称的那一个，二分之一乘sin（x的绝对值）。"
+  },
+  "5917a921b374": {
+   "scene": "Fundamental",
+   "en": "<bookmark mark='a'/> The Malgrange-Ehrenpreis theorem says this always works: every nonzero linear operator with constant coefficients has a fundamental solution. <bookmark mark='b'/> Rudin's proof is the same idea in n variables. The symbol has zeros, so move one variable into the complex plane, along shifts by points of the unit circle, and average. A lemma on polynomials bounds one over P on average, Paley-Wiener bounds control the test functions, and Cauchy's theorem shows that the averaged functional really inverts P of D. <bookmark mark='c'/> In our example, the shifted lines sweep a strip; half pass below the zeros and half above, and the average is the symmetric solution. <bookmark mark='d'/> And for elliptic operators like the Laplacian, every solution with a smooth right side is smooth itself.",
+   "zh": "<bookmark mark='a'/>马尔格朗日–埃伦普雷斯定理说，这总能做到：每个非零的常系数线性微分算子都有基本解。<bookmark mark='b'/>鲁丁的证明是同一个想法在n个变量里的版本。符号有零点，所以把一个变量移进复平面，沿着单位圆上各点给出的平移，再取平均。一条关于多项式的引理在平均意义下控制住P分之1，佩利–维纳的界控制住检验函数，而柯西定理说明平均后的泛函确实是P(D)的逆。<bookmark mark='c'/>在我们的例子里，平移后的直线扫过一个带形；一半从零点下方经过，一半从上方经过，平均起来就是对称解。<bookmark mark='d'/>而对拉普拉斯算子这样的椭圆型算子，只要右端光滑，每个解本身都是光滑的。"
+  },
+  "95d201baefaa": {
+   "scene": "Wiener",
+   "en": "Chapter twelve: Wiener's Tauberian theorem, and the prime number theorem.",
+   "zh": "第十二章：维纳陶伯定理，以及素数定理。"
+  },
+  "58cd4a0b6a9c": {
+   "scene": "Wiener",
+   "en": "<bookmark mark='a'/> Here's a question that sounds like linear algebra. Take one integrable kernel k. Can sums of its translates approximate every integrable function? Try a target with frequencies near five. <bookmark mark='b'/> With a narrow Gaussian kernel, two hundred forty-one translates reproduce it to rounding error. <bookmark mark='c'/> With sine x over x, squared, the best fit misses by 99.93 percent. <bookmark mark='d'/> The frequency side says why. Transforming a sum of translates multiplies the kernel's transform by a trigonometric sum, so it's zero wherever the kernel's transform is. The squared sinc has a triangle for its transform, zero beyond two, exactly where the target lives, and the computed error is the best possible. <bookmark mark='e'/> Wiener's theorem is the converse: if the kernel's transform never vanishes, the translates fill everything.",
+   "zh": "<bookmark mark='a'/>这里有一个听起来像线性代数的问题。取一个可积的核k。它的平移的和，能逼近每一个可积函数吗？试一个频率在5附近的目标。<bookmark mark='b'/>用一个窄的高斯核，241个平移就能把它重现到舍入误差的程度。<bookmark mark='c'/>用x分之sin x的平方，最佳拟合的误差是百分之99.93。<bookmark mark='d'/>频率这一边说明了原因。对一组平移之和做变换，就是把核的变换乘上一个三角和，所以凡是核的变换为0的地方，它也为0。抽样函数的平方，它的变换是一个三角形，在2以外为0，而目标恰好住在那里，算出来的误差已经是最好的了。<bookmark mark='e'/>维纳定理是它的逆：如果核的变换从不为0，它的平移就能填满一切。"
+  },
+  "9273d6cf29bf": {
+   "scene": "Wiener",
+   "en": "<bookmark mark='a'/> Why is it true? Integrable functions under convolution form an algebra, with the L one norm of a convolution at most the product of the norms, and the transform turns convolution into multiplication. <bookmark mark='b'/> The homomorphisms from this algebra to the complex numbers are exactly the evaluations of the transform at a point t. So the real line is the space of maximal ideals, and a kernel lies in one exactly where its transform vanishes. <bookmark mark='c'/> The squared sinc lies in all the ideals beyond two. A kernel whose transform never vanishes lies in none of them, and that is what makes its translates span. <bookmark mark='d'/> This is the first glimpse of Gelfand's theory, which is Part 10.",
+   "zh": "<bookmark mark='a'/>为什么它是对的？可积函数在卷积下构成一个代数，卷积的L¹范数至多是范数的乘积，而变换把卷积变成乘法。<bookmark mark='b'/>从这个代数到复数的同态，恰好就是在某一点t处对变换取值。所以实数轴就是极大理想的空间，而一个核落在某个极大理想里，恰好是在它的变换为0的地方。<bookmark mark='c'/>抽样函数的平方落在2以外的所有理想里。变换从不为0的核，不落在任何一个理想里，正是这一点让它的平移张成一切。<bookmark mark='d'/>这是对盖尔范德理论的第一瞥，那就是第10部分。"
+  },
+  "bbbcb5b9b219": {
+   "scene": "Wiener",
+   "en": "<bookmark mark='a'/> The road to the primes needs one fact about the zeta function from the Riemann video: it has no zeros on the line where the real part is one. On that line, over this stretch, its size never drops below 0.32, while on the critical line it touches zero again and again. <bookmark mark='b'/> The proof is a trigonometric inequality: three plus four cos theta plus cos two theta is twice a square, so it's never negative. <bookmark mark='c'/> Feed it into the Euler product, and the product of zeta at sigma cubed, zeta at sigma plus i t to the fourth, and zeta at sigma plus two i t, is always at least one. <bookmark mark='d'/> If zeta vanished at one plus i t, the fourth power would beat the cube of the pole, and the product would go to zero. It doesn't.",
+   "zh": "<bookmark mark='a'/>通往素数的路，需要黎曼那期视频里关于ζ函数的一个事实：它在实部为1的那条线上没有零点。在那条线上，在这一段里，它的大小从不低于0.32，而在临界线上，它一次又一次地碰到0。<bookmark mark='b'/>证明靠一个三角不等式：3加4cos θ加cos 2θ等于一个平方的两倍，所以它永远不是负的。<bookmark mark='c'/>把它代进欧拉乘积，ζ(σ)的三次方、ζ(σ加i t)的四次方，与ζ(σ加2i t)的乘积，大小总是至少为1。<bookmark mark='d'/>如果ζ在1加i t处为0，那个四次方就会压过极点的三次方，乘积就会趋于0。可它并没有。"
+  },
+  "5e17a72b9419": {
+   "scene": "Wiener",
+   "en": "<bookmark mark='a'/> Wiener's theorem then gives the prime number theorem. The non-vanishing of zeta on the line says that a certain kernel's transform has no zeros. <bookmark mark='b'/> Wiener's Tauberian theorem moves a known average from that kernel to every other kernel, and that unlocks <bookmark mark='p'/> Chebyshev's function psi, the sum of log p over prime powers, which is asymptotic to x. <bookmark mark='q'/> Partial summation converts that into the count of primes. <bookmark mark='c'/> Up to ten to the eight, counted exactly: psi of x over x is within two parts in a hundred thousand of one; pi of x over x over log x is still six percent high, closing in slowly; and the logarithmic integral fits to about one part in ten thousand. <bookmark mark='d'/> That's the analytic engine behind the Riemann video's second chapter.",
+   "zh": "<bookmark mark='a'/>维纳定理接着给出素数定理。ζ在这条线上不为0，说的就是某个核的变换没有零点。<bookmark mark='b'/>维纳陶伯定理把一个已知的平均值，从这个核转移到其他所有核上，这就打开了<bookmark mark='p'/>切比雪夫的ψ函数，它是素数幂p上log p的和，渐近于x。<bookmark mark='q'/>分部求和再把这一点转化成素数的个数。<bookmark mark='c'/>一直精确地数到10的8次方：x分之ψ(x)与1相差不到十万分之二；π(x)除以（log x分之x）仍然高出百分之六，正慢慢地靠近；而对数积分的吻合程度大约是万分之一。<bookmark mark='d'/>这就是黎曼那期视频第二章背后的分析引擎。"
+  },
+  "1c2999b5b656": {
+   "scene": "Outro",
+   "en": "Let's take stock. Test functions gave us a way to ask what an object does instead of what it is, and the answer was distributions, which can all be differentiated, as often as we like. Locally they're all derivatives of continuous functions, and smoothing turns them back into functions. The Fourier transform became a unitary map of L two, a quarter turn of the Schwartz space, and an operation on tempered distributions. Paley-Wiener read support as growth, Sobolev read smoothness as decay, fundamental solutions dodged the zeros of symbols, and Wiener's algebra led all the way to the primes.",
+   "zh": "我们来盘点一下。检验函数让我们可以问一个对象做什么，而不是问它是什么，答案就是分布，它们全都可以求导，想求多少次都行。在局部，它们全都是连续函数的导数，而磨光又把它们变回函数。傅里叶变换成了L²上的酉映射、施瓦茨空间上的四分之一圈旋转，以及缓增分布上的一种运算。佩利–维纳把支集读成增长，索伯列夫把光滑读成衰减，基本解绕开了符号的零点，而维纳的代数一路通到了素数。"
+  },
+  "99f75f531071": {
+   "scene": "Outro",
+   "en": "The ledger's ninth row. <bookmark mark='a'/> The spaces: test functions, Schwartz functions, and their duals. <bookmark mark='c2'/> Completeness comes in Fréchet pieces, <bookmark mark='c3'/> and compactness from weak-star limits of bounded sets. The <bookmark mark='c4'/> interchange is finally free: differentiation commutes with every limit. <bookmark mark='c5'/> And the Fourier answer is the most generous yet: every trigonometric series with coefficients of polynomial size converges, as a distribution.",
+   "zh": "账本的第九行。<bookmark mark='a'/>空间：检验函数、施瓦茨函数，以及它们的对偶。<bookmark mark='c2'/>完备性一块块地来自弗雷歇空间，<bookmark mark='c3'/>紧性来自有界集的弱*极限。<bookmark mark='c4'/>交换终于免费了：求导与每一个极限都可以交换次序。<bookmark mark='c5'/>而傅里叶的答案是迄今最慷慨的：每个系数只有多项式大小的三角级数，都作为分布收敛。"
+  },
+  "aa7e2e41f136": {
+   "scene": "Outro",
+   "en": "Next time, in Part 10: operators, and their spectra. <bookmark mark='a'/> Part 8's Volterra operator, integration from zero, has norm two over pi. Its powers shrink, and the n-th root of the norm of the n-th power goes to zero. <bookmark mark='b'/> It has no eigenvalues at all, yet it has a spectrum: the single point zero. Gelfand's spectral radius formula, built from Part 7's complex analysis, explains why. <bookmark mark='c'/> And then the spectral theorem: how to diagonalize an operator that has no eigenvectors.",
+   "zh": "下一次，在第10部分：算子，以及它们的谱。<bookmark mark='a'/>第8部分的沃尔泰拉算子，也就是从0开始积分，范数是π分之2。它的各次幂越来越小，n次幂的范数开n次方趋于0。<bookmark mark='b'/>它根本没有特征值，却有一个谱：单独一个点0。盖尔范德的谱半径公式，建立在第7部分的复分析之上，解释了其中的原因。<bookmark mark='c'/>然后是谱定理：怎样把一个没有特征向量的算子对角化。"
+  },
+  "dacce015798e": {
+   "scene": "Outro",
+   "en": "This part followed chapter nine of Real and Complex Analysis and chapters six through nine of Functional Analysis. Thanks for watching, and see you in Part 10.",
+   "zh": "这一部分对应《实分析与复分析》的第9章，以及《泛函分析》的第6到第9章。感谢收看，我们第10部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 9, Distributions and the Fourier Transform",
+ "chapters_en": {
+  "Hook": "Differentiating anything",
+  "TestFunctions": "1. Test functions",
+  "Distributions": "2. Distributions",
+  "Calculus": "3. Calculus with distributions",
+  "Structure": "4. Supports and local structure",
+  "Convolution": "5. Convolution and mollifiers",
+  "FourierL1": "6. The Fourier transform",
+  "Plancherel": "7. Inversion and Plancherel",
+  "Schwartz": "8. Tempered distributions",
+  "PaleyWiener": "9. Paley-Wiener",
+  "Sobolev": "10. Sobolev spaces",
+  "Fundamental": "11. Fundamental solutions",
+  "Wiener": "12. Wiener and the primes",
+  "Outro": "The ninth row of the ledger"
+ }
+}
