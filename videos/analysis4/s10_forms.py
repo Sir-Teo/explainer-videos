@@ -40,36 +40,45 @@ class FormsTour(VoiceoverScene):
     def change_of_variables(self):
         d = load("forms")
         ratios, h = d["ratios"], float(d["h"])
-        ax = square_axes([-1.3, 1.5, 1], [-1.3, 1.5, 1], 2.1).move_to([-3.6, -0.75, 0])
-        ax.set_opacity(0.4)
-        cells = VGroup()
-        for x0 in np.arange(-1.0, 1.0, h):
-            for y0 in np.arange(-1.0, 1.0, h):
-                sq = np.array([[x0, y0], [x0 + h, y0], [x0 + h, y0 + h], [x0, y0 + h]])
-                side = np.concatenate([np.linspace(sq[i], sq[(i + 1) % 4], 12, endpoint=False) for i in range(4)])
-                Q = T(side)
-                v = float(detJ(x0 + h / 2, y0 + h / 2))
-                col = interpolate_color(ManimColor(C.SEQ), ManimColor(C.CLOSED_SET), np.clip((v - 0.85) / 0.3, 0, 1))
-                cells.add(VMobject(stroke_color=WHITE, stroke_width=1, fill_color=col, fill_opacity=0.7)
-                          .set_points_as_corners([ax.c2p(*q) for q in np.vstack([Q, Q[:1]])]))
-        base = mapped_grid(ax, lambda P: P, (-1.0, 1.0), (-1.0, 1.0), n=9, color=GREY_D, stroke_width=1)
-        head = VGroup(label(r"\textbf{Rudin 10.9} \ change of variables", font_size=30),
-                      MathTex(r"\int_{T(E)} f(y)\,dy = \int_E f(T(x))\,|\det T'(x)|\,dx", font_size=36, color=C.EPS),
+        head = VGroup(label(r"Change of variables", font_size=34),
+                      MathTex(r"\int_{T(E)} f(y)\,dy = \int_E f(T(x))\,|\det T'(x)|\,dx", r"\quad \text{\small (Rudin 10.9)}",
+                              font_size=34),
                       label(r"$T$ one-to-one and $C^1$ on $E$, \ $\det T' \ne 0$; \ $f$ continuous, "
                             r"with compact support in $T(E)$", font_size=22, color=GREY_A)
-                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][0].set_color(C.EPS)
+        head[1][1].set_color(GREY_B)
+        U_ = 2.05
+        ax = square_axes([-1.3, 1.5, 1], [-1.3, 1.5, 1], U_)
+        ax.shift(np.array([-3.6, head.get_bottom()[1] - 0.3, 0]) - ax.c2p(0, 1.2))  # the cells reach y = 1.2
+        ax.set_opacity(0)  # no axes: the picture is the grid and its image
+        centers = [(x0 + h / 2, y0 + h / 2) for x0 in np.arange(-1.0, 1.0, h) for y0 in np.arange(-1.0, 1.0, h)]
+        vals = np.array([float(detJ(*c_)) for c_ in centers])
+        vmin, vmax = vals.min(), vals.max()  # the colors span exactly the values taken
+        cells = VGroup()
+        for (cx, cy), v in zip(centers, vals):
+            x0, y0 = cx - h / 2, cy - h / 2
+            sq = np.array([[x0, y0], [x0 + h, y0], [x0 + h, y0 + h], [x0, y0 + h]])
+            side = np.concatenate([np.linspace(sq[i], sq[(i + 1) % 4], 12, endpoint=False) for i in range(4)])
+            Q = T(side)
+            col = interpolate_color(ManimColor(C.SEQ), ManimColor(C.CLOSED_SET), (v - vmin) / (vmax - vmin))
+            cells.add(VMobject(stroke_color=WHITE, stroke_width=1, fill_color=col, fill_opacity=0.7)
+                      .set_points_as_corners([ax.c2p(*q) for q in np.vstack([Q, Q[:1]])]))
+        base = mapped_grid(ax, lambda P: P, (-1.0, 1.0), (-1.0, 1.0), n=9, color=GREY_D, stroke_width=1)
+        assert cells.get_top()[1] < head.get_bottom()[1] - 0.2 and cells.get_bottom()[1] > -3.6
         side = VGroup(
             MathTex(r"T(x, y) = (x + \tfrac14 \sin 2y,\ y + \tfrac15 x^2)", font_size=28),
             label(r"each small square becomes a near-parallelogram", font_size=24),
             label(r"whose area is $|\det T'|$ times the square's", font_size=24),
-            label(r"(color: \ $|\det T'|$, \ from $0.8$ to $1.2$)", font_size=22, color=GREY_A),
+            label(rf"(color: \ $|\det T'|$, \ blue ${vmin:.2f}$ to orange ${vmax:.2f}$)", font_size=22, color=GREY_A),
             label(rf"computed for all {len(ratios)} cells: \ area $\big/ \int_{{\text{{square}}}} |\det T'|$", font_size=24),
             MathTex(rf"\in [{ratios.min():.6f},\ {ratios.max():.6f}]", font_size=30, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         for r_ in side:
-            if r_.width > 6.3:
-                r_.width = 6.3
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.7, 0])
+            if r_.width > 6.0:
+                r_.width = 6.0
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to([cells.get_right()[0] + 0.5, -0.9, 0], RIGHT, buff=0)
+        assert side.get_right()[0] <= 6.6 and len(ratios) == len(cells) == 64
         assert np.abs(ratios - 1).max() < 1e-3
         # T is one-to-one on the square: T - I = (sin(2y)/4, x^2/5) has derivative norm <= 1/2 there
         g_ = np.linspace(-1, 1, 41)
@@ -81,7 +90,7 @@ class FormsTour(VoiceoverScene):
             "area is the determinant times the square's area. <bookmark mark='c'/> Computed for all sixty-four cells, "
             "the ratio of the true area to the determinant's prediction is one, to within a few millionths."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax), Create(base))
+            self.play(FadeIn(head[0]), Create(base))
             vo.wait_until("a")
             self.play(FadeIn(head[1:]), FadeIn(side[0]))
             vo.wait_until("b")
@@ -96,26 +105,45 @@ class FormsTour(VoiceoverScene):
     def partition(self):
         d = load("forms")
         xs, psi, cs = d["xs"], d["psi"], d["cs"]
-        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.0, 3.6).move_to([-0.6, -1.0, 0])
-        cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / (len(cs) - 1)) for k in range(len(cs))]
+        head = VGroup(label(r"Partitions of unity", font_size=34),
+                      label(r"continuous bumps $\psi_i \ge 0$, \ each inside one set of a cover of $K$, \ $\sum \psi_i = 1$ "
+                            r"on $K$ \ (Rudin 10.8)", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        ax = plain_axes([0, 1, 0.25], [0, 1.15, 0.5], 9.2, 3.4)
+        ax.move_to([-1.35, 0, 0]).align_to([0, head.get_bottom()[1] - 0.3, 0], UP)
+        cols = [C.SEQ, C.APPROX] * 3  # neighbours in different colors
+        assert len(cs) == 6
         bumps = VGroup(*[polyline(ax, xs, p_, color=c, stroke_width=3) for p_, c in zip(psi, cols)])
         total = polyline(ax, xs, psi.sum(axis=0), color=WHITE, stroke_width=3.5)
-        head = VGroup(label(r"\textbf{Rudin 10.8} \ partitions of unity", font_size=30),
-                      label(r"continuous bumps $\psi_i \ge 0$, \ each inside one set of a cover of $K$, \ $\sum \psi_i = 1$ on $K$",
-                            font_size=26, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         tl = MathTex(r"\sum_i \psi_i = 1", font_size=32).next_to(ax.c2p(0.5, 1.0), UP, buff=0.12)
+        # the cover: each bump's support, the open interval where it is positive, one row each (they overlap)
+        sup = [(xs[p_ > 0].min(), xs[p_ > 0].max()) for p_ in psi]
+        for (lo, hi), c_ in zip(sup, cs):
+            assert lo <= max(c_ - 0.3, 0) and hi >= min(c_ + 0.3, 1) and hi - lo < 0.7  # one small piece each
+        y0 = ax.get_bottom()[1] - 0.35
+        cover = VGroup(*[Line(ax.c2p(lo, 0) * np.array([1, 0, 0]) + np.array([0, y0 - 0.17 * i, 0]),
+                              ax.c2p(hi, 0) * np.array([1, 0, 0]) + np.array([0, y0 - 0.17 * i, 0]),
+                              color=c, stroke_width=6) for i, ((lo, hi), c) in enumerate(zip(sup, cols))])
+        cl = label(r"the cover: \ the sets $\{\psi_i > 0\}$", font_size=22, color=GREY_A).next_to(
+            [ax.c2p(1, 0)[0] + 0.3, cover.get_y(), 0], RIGHT, buff=0)
+        kb = BraceBetweenPoints(ax.c2p(0, 0) * np.array([1, 0, 0]) + np.array([0, cover.get_bottom()[1] - 0.08, 0]),
+                                ax.c2p(1, 0) * np.array([1, 0, 0]) + np.array([0, cover.get_bottom()[1] - 0.08, 0]),
+                                direction=DOWN, color=GREY_B)
+        kl = MathTex(r"K = [0, 1]", font_size=28, color=GREY_A).next_to(kb, DOWN, buff=0.08)
         use = label(r"so a global integral is a sum of local ones: \ $\int f = \sum_i \int \psi_i f$", font_size=26,
-                    color=C.EPS).to_edge(DOWN, buff=0.3)
+                    color=C.EPS).to_edge(DOWN, buff=0.35)
         assert np.allclose(psi.sum(axis=0), 1)
+        assert kl.get_bottom()[1] > use.get_top()[1] + 0.1 and cl.get_right()[0] <= 6.6
         with self.voiceover(
             "<bookmark mark='a'/> Second, partitions of unity: continuous bumps, each "
             "living inside one small piece of a cover, that add up to exactly one on a compact set. Smooth ones exist "
             "too. <bookmark mark='b'/> They let us cut an integral into local pieces, "
             "do each piece in convenient coordinates, and add the results."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), LaggedStart(*[Create(b_) for b_ in bumps], lag_ratio=0.2), run_time=2.0)
+            self.play(FadeIn(head[1]), Create(ax), LaggedStart(*[AnimationGroup(Create(b_), Create(c_))
+                                                                 for b_, c_ in zip(bumps, cover)], lag_ratio=0.2),
+                      FadeIn(cl), GrowFromCenter(kb), FadeIn(kl), run_time=2.5)
             self.play(Create(total), FadeIn(tl))
             vo.wait_until("b")
             self.play(FadeIn(use))

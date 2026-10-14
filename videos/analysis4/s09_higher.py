@@ -232,58 +232,70 @@ class HigherOrder(VoiceoverScene):
         d = load("mixed")
         ts, lhs, rhs = d["ts"], d["lhs"], d["rhs"]
         x = np.linspace(1e-4, 1, 600)
-        ax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 4.6, 2.6).move_to([-3.6, 0.55, 0])
-        bx = plain_axes([0, 1, 0.5], [-0.8, 0.05, 0.4], 4.6, 2.45).move_to([-3.6, -2.68, 0])
+        head = VGroup(label(r"Differentiating under the integral sign", font_size=34),
+                      MathTex(r"\frac{d}{dt}\int_a^b \varphi(x, t)\,dx = \int_a^b \frac{\partial \varphi}{\partial t}(x, t)"
+                              r"\,dx", font_size=34, color=C.EPS),
+                      label(r"if $\varphi$ and $\partial \varphi / \partial t$ are continuous on $[a, b] \times [c, d]$ "
+                            r"\ (Rudin 9.42)", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        top = head.get_bottom()[1] - 0.25
+        # the family and its t-derivative, one panel each (from mark b on)
+        ax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 5.4, 1.75)
+        ax.move_to([-6.55 + 2.7, top - 0.875, 0])
+        bx = plain_axes([0, 1, 0.5], [-0.8, 0.05, 0.4], 5.4, 1.75)
+        bx.move_to([ax.get_x(), ax.get_bottom()[1] - 0.5 - 0.875, 0])
         cols = [C.SEQ, C.APPROX, C.CLOSED_SET]
         fam = VGroup(*[polyline(ax, x, x**t, color=c, stroke_width=3) for t, c in zip(ts, cols)])
-        dfam = VGroup(*[polyline(bx, x, np.clip(x**t * np.log(x), -0.8, 0), color=c, stroke_width=3)
-                        for t, c in zip(ts, cols)])
-        al = MathTex(r"x^t", font_size=28).next_to(ax, UP, buff=0.05)
-        bl = MathTex(r"\frac{\partial}{\partial t} x^t = x^t \log x", font_size=28).next_to(bx, UP, buff=0.05)
-        head = VGroup(label(r"\textbf{Rudin 9.42} \ $\varphi$ and $\partial \varphi / \partial t$ continuous on "
-                            r"$[a, b] \times [c, d]$ $\Rightarrow$", font_size=28),
-                      MathTex(r"\frac{d}{dt}\int_a^b \varphi(x, t)\,dx = \int_a^b \frac{\partial \varphi}{\partial t}(x, t)"
-                              r"\,dx", font_size=36, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.2)
-        head.shift(RIGHT * 1.5)
+        dvals = [x**t * np.log(x) for t in ts]
+        dfam = VGroup(*[runs(bx, x, v, c, 3) for v, c in zip(dvals, cols)])  # cut where they leave the window
+        al = MathTex(r"x^t", font_size=28).move_to(ax.c2p(0.1, 0.85))
+        assert all(np.all(x[x < 0.2] ** t < 0.85 - 0.12) for t in ts if t >= 1) and 0.2 ** 0.5 < 0.85 - 0.3
+        bl = MathTex(r"x^t \log x", font_size=26).move_to(bx.c2p(0.8, -0.66))
+        assert all(np.all(v[x > 0.58] > -0.5) for v in dvals)  # the label's corner of the panel is empty
         rows = VGroup(
-            MathTex(r"F(t) = \int_0^1 x^t\,dx = \frac{1}{t + 1}", font_size=32),
-            MathTex(r"F'(t) = -\frac{1}{(t + 1)^2}", font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, 0.6, 0])
+            MathTex(r"F(t) = \int_0^1 x^t\,dx = \frac{1}{t + 1}", font_size=30),
+            MathTex(r"F'(t) = -\frac{1}{(t + 1)^2}", font_size=30),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        rows.next_to([ax.get_right()[0] + 0.6, top, 0], DR, buff=0)
         tab = VGroup(MathTex(r"t", r"\quad F'(t)", r"\quad \int_0^1 x^t \log x\,dx", font_size=26, color=GREY_A))
         for t, c, a, b in zip(ts, cols, lhs, rhs):
             tab.add(MathTex(rf"{t:g}", rf"\quad {{{a:.6f}}}", rf"\quad {{{b:.6f}}}", font_size=26, color=c))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.0, -1.4, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         regrid(tab)
-        note_ = label(r"the limit inside $\frac{d}{dt}$ passes through $\int$: \ uniform continuity on a compact "
-                      r"rectangle (Part 3)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.15).shift(RIGHT * 2.6)
-        if note_.width > 7.6:
-            note_.width = 7.6
-        assert np.allclose(lhs, rhs, atol=1e-5)
+        tab.next_to(rows, DOWN, buff=0.35, aligned_edge=LEFT)
+        note_ = VGroup(label(r"the limit inside $\frac{d}{dt}$ passes through $\int$:", font_size=24, color=C.EPS),
+                       label(r"uniform continuity on a compact rectangle (Part 3)", font_size=24, color=C.EPS)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(bx, DOWN, buff=0.25, aligned_edge=LEFT)
+        assert np.allclose(lhs, rhs, atol=1e-5) and np.allclose(lhs, -1 / (ts + 1) ** 2, atol=1e-9)
+        assert note_.get_right()[0] < rows.get_left()[0] - 0.2 and note_.get_bottom()[1] > -3.6
+        assert tab.get_right()[0] <= 6.6 and tab.get_bottom()[1] > -3.6
+        assert bx.get_top()[1] < ax.get_bottom()[1] - 0.3 and ax.get_top()[1] < head.get_bottom()[1] - 0.1
         # the statement as a picture: F(t + dt) - F(t) is the area of the sliver between two members of the family,
         # i.e. the integral of the change in height; dividing by dt and letting dt -> 0 is the interchange
+        sax = plain_axes([0, 1, 0.5], [0, 1.05, 0.5], 6.0, top + 3.45 - 0.3)
+        sax.move_to([-6.55 + 3.0, (top - 0.1 - 3.45) / 2, 0])
         t0, xs_ = 0.5, np.linspace(0, 1, 160)
         dtv = ValueTracker(0.8)
-        base = Polygon(ax.c2p(0, 0), *[ax.c2p(v, v**t0) for v in xs_], ax.c2p(1, 0), stroke_width=0,
+        base = Polygon(sax.c2p(0, 0), *[sax.c2p(v, v**t0) for v in xs_], sax.c2p(1, 0), stroke_width=0,
                        fill_color=C.SEQ, fill_opacity=0.28)
-        c0 = polyline(ax, xs_, xs_**t0, color=C.SEQ, stroke_width=3)
-        c1 = always_redraw(lambda: polyline(ax, xs_, xs_ ** (t0 + dtv.get_value()), color=C.APPROX, stroke_width=3))
-        sliver = always_redraw(lambda: Polygon(*[ax.c2p(v, v**t0) for v in xs_],
-                                               *[ax.c2p(v, v ** (t0 + dtv.get_value())) for v in xs_[::-1]],
-                                               stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.75))
-        Fl = MathTex(r"F(t)", font_size=26, color=C.SEQ).move_to(ax.c2p(0.78, 0.2))
+        c0 = polyline(sax, xs_, xs_**t0, color=C.SEQ, stroke_width=3)
+        c1 = always_redraw(lambda: polyline(sax, xs_, xs_ ** (t0 + dtv.get_value()), color=C.APPROX, stroke_width=3))
+        sliver = always_redraw(lambda: Polygon(*[sax.c2p(v, v**t0) for v in xs_],
+                                               *[sax.c2p(v, v ** (t0 + dtv.get_value())) for v in xs_[::-1]],
+                                               stroke_width=0, fill_color=C.MEASURE, fill_opacity=0.75))
+        Fl = MathTex(r"F(t)", font_size=28, color=C.SEQ).move_to(sax.c2p(0.78, 0.2))
+        cl = VGroup(MathTex(r"x^{t}", font_size=26, color=C.SEQ), MathTex(r"x^{t + \Delta t}", font_size=26,
+                                                                           color=C.APPROX))
+        cl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(sax.c2p(0.12, 0.85))
         idt = VGroup(
             MathTex(r"\frac{F(t + \Delta t) - F(t)}{\Delta t} = \int_a^b \frac{\varphi(x, t + \Delta t) - "
-                    r"\varphi(x, t)}{\Delta t}\,dx", font_size=30),
-            label(r"the change in area is the integral of the change in height \ (red)", font_size=22,
+                    r"\varphi(x, t)}{\Delta t}\,dx", font_size=28),
+            label(r"the change in area is the integral of the change in height \ (orange)", font_size=22,
                   color=GREY_A),
             label(r"let $\Delta t \to 0$ on both sides: \ the theorem lets the limit pass inside", font_size=22,
                   color=C.EPS),
-        ).arrange(DOWN, buff=0.22).move_to([3.0, -0.6, 0])
-        for r_ in idt:
-            if r_.width > 7.4:
-                r_.width = 7.4
-        idt.set_x(3.0)
-        assert idt.get_left()[0] > ax.get_right()[0] + 0.2 and idt.get_right()[0] < 6.95
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        idt.next_to([sax.get_right()[0] + 0.4, sax.get_y(), 0], RIGHT, buff=0)
+        assert idt.get_right()[0] <= 6.6 and sax.get_bottom()[1] > -3.6
         assert np.all(xs_[1:-1] ** t0 > xs_[1:-1] ** (t0 + 0.1))  # the sliver has positive height inside (0, 1)
         with self.voiceover(
             "<bookmark mark='a'/> The swap that works is differentiation under the integral sign, Rudin 9.42: if phi "
@@ -297,17 +309,17 @@ class HigherOrder(VoiceoverScene):
             "legal by the uniform continuity of Part 3. It's the swap Part 4 adds to the ledger."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
-            self.play(Create(ax), FadeIn(base), Create(c0), FadeIn(Fl))
+            self.play(FadeIn(head[0]), FadeIn(head[2]))
+            self.play(Create(sax), FadeIn(base), Create(c0), FadeIn(Fl), FadeIn(cl[0]))
             vo.wait_until("p")
-            self.play(Create(c1), FadeIn(sliver), FadeIn(idt[0]))
+            self.play(FadeIn(head[1]), Create(c1), FadeIn(sliver), FadeIn(cl[1]), FadeIn(idt[0]))
             self.play(FadeIn(idt[1]))
             self.play(dtv.animate.set_value(0.12), FadeIn(idt[2]), run_time=2.5)
             c1.clear_updaters()
             sliver.clear_updaters()
             vo.wait_until("b")
-            self.play(FadeOut(VGroup(base, c0, c1, sliver, Fl, idt)))
-            self.play(FadeIn(al), LaggedStart(*[Create(g_) for g_ in fam], lag_ratio=0.3), FadeIn(rows[0]))
+            self.play(FadeOut(VGroup(sax, base, c0, c1, sliver, Fl, cl, idt)))
+            self.play(Create(ax), FadeIn(al), LaggedStart(*[Create(g_) for g_ in fam], lag_ratio=0.3), FadeIn(rows[0]))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bl), LaggedStart(*[Create(g_) for g_ in dfam], lag_ratio=0.3), FadeIn(rows[1]))
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
