@@ -194,11 +194,10 @@ class Compact(VoiceoverScene):
             "eigenbases; that's the spectral theorem, which Part 10 proves in full."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(card.titles))
+            self.play(FadeIn(head), FadeIn(card.titles), Create(rings), FadeIn(rlabs), FadeIn(zero), FadeIn(sl))
             vo.wait_until("b")
             for i in (0, 1):
                 self.play(FadeIn(card.rows[i]), FadeIn(card.arrows[i]), run_time=0.7)
-            self.play(Create(rings), FadeIn(rlabs), FadeIn(zero), FadeIn(sl))
             self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in sdots], lag_ratio=0.03), FadeIn(cl[0]), run_time=2.0)
             self.play(FadeIn(cl[1:]))
             vo.wait_until("c")
