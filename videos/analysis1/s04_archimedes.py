@@ -35,7 +35,7 @@ class Archimedes(VoiceoverScene):
     # ------------------------------------------------------------------
     def card(self):
         card = chapter_card(3, r"Archimedes, density and decimals",
-                            r"What does the least-upper-bound property buy us?", part=1)
+                            r"What does the least-upper-bound property buy us?", lit=(1817,), part=1)
         with self.voiceover(
             "Chapter three. The real numbers have no holes. What does that buy us? Three things we'll use constantly."
         ) as vo:

@@ -47,12 +47,12 @@ def y_axis_at(ax, x_at: float, values=(), font_size=18, decimals=0, color=GREY_C
     return g
 
 
-def logn_axes(width: float, height: float, y_max: float = 7.5, y_step: float = 2, k_max: int = 6, labelled=(0, 2, 4, 6),
-              font_size: int = 18, y_numbers=(2, 4, 6)) -> tuple:
+def logn_axes(width: float, height: float, center=ORIGIN, y_max: float = 7.5, y_step: float = 2, k_max: int = 6,
+              labelled=(0, 2, 4, 6), font_size: int = 18, y_numbers=(2, 4, 6)) -> tuple:
     """The axes of the Part 8 plots of ||D_n||_1 against n: log10 n on [0, k_max] with 10^k under the ticks in
     ``labelled``; the y-axis sits 0.4 to the left of 10^0, so the dot at n = 1 is not drawn on it.
     Returns (ax, decor): plot at ax.c2p(log10 n, value)."""
-    ax = plain_axes([-0.4, k_max + 0.05, 1], [0, y_max, y_step], width, height)
+    ax = plain_axes([-0.4, k_max + 0.05, 1], [0, y_max, y_step], width, height).move_to(center)
     decor = y_axis_at(ax, -0.4, y_numbers, font_size=font_size)
     decor.add(*[MathTex(rf"10^{{{k}}}", font_size=font_size).next_to(ax.c2p(k, 0), DOWN, buff=0.12) for k in labelled])
     return ax, decor

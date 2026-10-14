@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import load
+from videos.analysis2.common import load, plain_axes
 
 
 class NumberE(VoiceoverScene):
@@ -30,16 +30,33 @@ class NumberE(VoiceoverScene):
     def series(self):
         d = load("etail")
         dfn = MathTex(r"e = \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + 1 + \frac12 + \frac16 + \frac1{24} + \cdots",
-                      font_size=42).to_edge(UP, buff=0.5)
+                      font_size=42).to_edge(UP, buff=0.3)
         ref = note(r"Rudin 3.30").next_to(dfn, DOWN, buff=0.12).align_to(dfn, RIGHT)
         rows = [MathTex(r"e - s_n", r"=", r"\frac{1}{(n+1)!} + \frac{1}{(n+2)!} + \cdots", font_size=38),
                 MathTex(r"e - s_n", r"<", r"\frac{1}{(n+1)!}\Big(1 + \frac{1}{n+1} + \frac{1}{(n+1)^2} + \cdots\Big)",
                         font_size=38),
                 MathTex(r"0 < e - s_n", r"<", r"\frac{1}{n!\, n}", font_size=38)]
         whys = [why(r"the tail"), why(r"$(n+k)! \ge (n+1)!\,(n+1)^{k-1}$"), why(r"sum the geometric series")]
-        step = ladder(self, rows, whys, keep=3, top=1.7, buff=0.42, x=-0.9)
-        fast = label(rf"$s_{{10}}$ is already within ${sci(float(d['err_s10']), 1)}$ of $e$", font_size=30,
-                     color=C.EPS).to_edge(DOWN, buff=0.7)
+        step = ladder(self, rows, whys, keep=2, top=1.95, buff=0.42, x=-0.9)
+        # the error e - s_n against its bound 1/(n! n), on a log scale
+        import mpmath as mp
+        mp.mp.dps = 40
+        ns = np.arange(1, 13)
+        err = np.array([float(mp.e - mp.fsum(1 / mp.factorial(k) for k in range(n + 1))) for n in ns])
+        bnd = np.array([1 / (math.factorial(n) * n) for n in ns])
+        assert np.all((0 < err) & (err < bnd)) and abs(err[9] - float(d["err_s10"])) < 1e-20
+        ax = plain_axes([0, 13, 1], [-11, 0.5, 5], 10.0, 2.1, numbers=False).move_to([-0.6, -2.45, 0])
+        ylab = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.15)
+                        for v in (0, -5, -10)])
+        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(ax.c2p(13, -11), RIGHT, buff=0.12)
+        b_curve = polyline(ax, ns, np.log10(bnd), color=C.UPPER_SUM, stroke_width=2.5)
+        e_dots = VGroup(*[Dot(ax.c2p(n, np.log10(v)), radius=0.06, color=C.SEQ) for n, v in zip(ns, err)])
+        b_l = MathTex(r"\frac{1}{n!\, n}", font_size=26, color=C.UPPER_SUM).next_to(ax.c2p(3, np.log10(bnd[2])), UR,
+                                                                                buff=0.12)
+        e_l = MathTex(r"e - s_n", font_size=26, color=C.SEQ).next_to(ax.c2p(3, np.log10(err[2])), DL, buff=0.15)
+        fast = label(rf"$s_{{10}}$ is already within ${sci(float(d['err_s10']), 1)}$ of $e$", font_size=28,
+                     color=C.EPS).move_to([2.6, -1.75, 0])
+        ring = Circle(radius=0.13, color=C.EPS, stroke_width=3).move_to(e_dots[9])
         with self.voiceover(
             "Rudin defines e as the sum of one over n factorial. <bookmark mark='a'/> How fast does it converge? The "
             "error after n terms is the tail. <bookmark mark='b'/> Each later factorial is at least the first one times "
@@ -47,15 +64,17 @@ class NumberE(VoiceoverScene):
             "the error is less than one over n factorial times n. <bookmark mark='d'/> That's fast: s ten, which stops at one over ten "
             "factorial, is within three parts in a hundred million of e. Hold on to this inequality: it will prove that e is irrational."
         ) as vo:
-            self.play(FadeIn(dfn), FadeIn(ref))
+            self.play(FadeIn(dfn), FadeIn(ref), Create(ax), FadeIn(ylab), FadeIn(n_l),
+                      LaggedStart(*[FadeIn(x) for x in e_dots], lag_ratio=0.1), FadeIn(e_l))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(Create(b_curve), FadeIn(b_l))
             vo.wait_until("d")
-            self.play(FadeIn(fast))
+            self.play(Create(ring), FadeIn(fast))
             self.keep_ineq = rows[2]
         assert float(d["err_s10"]) < 3e-8
         self.wait(0.3)
@@ -65,8 +84,9 @@ class NumberE(VoiceoverScene):
     def compound(self):
         d = load("etail")
         ns, terms = [int(v) for v in d["tn_n"]], d["tn_terms"]
-        K = terms.shape[1]
-        H, w, x0, base = 2.1, 0.95, -6.4, -2.9
+        K = 5  # k = 0 .. 4; the boxes for k >= 5 would be under 0.03 high
+        assert terms.shape[1] >= K
+        H, w, x0, base = 3.5, 1.05, -6.4, -2.9
         outl = VGroup()
         for k in range(K):
             h = H / math.factorial(k)
@@ -80,19 +100,19 @@ class NumberE(VoiceoverScene):
             g = VGroup()
             for k in range(K):
                 h = H * terms[i][k]
-                g.add(Rectangle(width=w * 0.8, height=max(h, 0.003), stroke_width=0, fill_color=C.FREQ,
+                g.add(Rectangle(width=w * 0.8, height=max(h, 0.003), stroke_width=0, fill_color=C.CUT_HIGH,
                                 fill_opacity=0.8).move_to([x0 + w * (k + 0.5), base + h / 2, 0]))
             return g
 
         head = MathTex(r"\Big(1 + \frac1n\Big)^n", r"=", r"\sum_{k=0}^{n} \frac{1}{k!}\Big(1 - \frac1n\Big)"
                        r"\Big(1 - \frac2n\Big) \cdots \Big(1 - \frac{k-1}{n}\Big)", font_size=36).to_edge(UP, buff=0.4)
-        head[0].set_color(C.FREQ)
+        head[0].set_color(C.CUT_HIGH)
         ref = note(r"binomial theorem; \ Rudin 3.31").next_to(head, DOWN, buff=0.1).align_to(head, RIGHT)
 
         def nlab(i):
             n = ns[i]
             t = (1 + 1 / n) ** n
-            return MathTex(rf"n = {n}:\quad \Big(1 + \tfrac1n\Big)^n = {t:.4f}", font_size=34, color=C.FREQ).move_to(
+            return MathTex(rf"n = {n}:\quad \Big(1 + \tfrac1n\Big)^n = {t:.4f}", font_size=34, color=C.CUT_HIGH).move_to(
                 [4.3, 1.5, 0])
 
         bars, nl = fill(0), nlab(0)
@@ -150,7 +170,7 @@ class NumberE(VoiceoverScene):
     def irrational(self):
         d = load("etail")
         qs, tail = [int(v) for v in d["q"]], d["tail"]
-        head = label(r"\textbf{Rudin 3.32} \ $e$ is irrational.", font_size=36).to_edge(UP, buff=0.45)
+        head = label(r"\textbf{Rudin 3.32} \ $e$ is irrational.", font_size=34).to_edge(UP, buff=0.3)
         rows = [MathTex(r"0 < q!\,(e - s_q)", r"<", r"\frac{1}{q}", font_size=40),
                 MathTex(r"q!\, e = p\,(q-1)!,", r"\quad", r"q!\, s_q = q!\Big(1 + 1 + \tfrac12 + \cdots + \tfrac1{q!}\Big)",
                         font_size=36),
@@ -159,8 +179,19 @@ class NumberE(VoiceoverScene):
                 why(r"no integer lies strictly between $0$ and $1$")]
         rows[2][2].set_color(C.PATHOLOGY)
         step = ladder(self, rows, whys, keep=3, top=2.4, buff=0.42, x=-0.4)
-        y = -2.8
+        y = -3.0
         X = lambda v: -5.6 + v * 11.2  # noqa: E731
+        # a zoom strip above the line: [0, 0.15] spread over the full width, where the window and the dot get close
+        yz, zw = -2.15, 0.15
+        Z = lambda v: -5.6 + v / zw * 11.2  # noqa: E731
+        zline = Line([Z(0), yz, 0], [Z(zw), yz, 0], color=GREY_C, stroke_width=2)
+        zguides = VGroup(DashedLine([X(0), y + 0.22, 0], [Z(0), yz - 0.27, 0], color=GREY_B, stroke_width=1.5),
+                         DashedLine([X(zw), y + 0.22, 0], [Z(zw), yz - 0.27, 0], color=GREY_B, stroke_width=1.5))
+        zsrc = Rectangle(width=X(zw) - X(0), height=0.44, color=GREY_B, stroke_width=1.5).move_to(
+            [(X(0) + X(zw)) / 2, y, 0])
+        ztag = MathTex(rf"\times {1 / zw:.1f}", font_size=24, color=GREY_B).next_to([Z(zw), yz + 0.27, 0], UP, buff=0.08)
+        ztag.align_to([Z(zw), 0, 0], RIGHT)
+        zoom = VGroup(zline, zguides, zsrc, ztag)
         line = Line([X(0) - 0.2, y, 0], [X(1) + 0.2, y, 0], color=GREY_C, stroke_width=2)
         ints = VGroup(*[VGroup(Dot([X(v), y, 0], radius=0.07, color=WHITE),
                                MathTex(str(v), font_size=28).next_to([X(v), y, 0], DOWN, buff=0.2)) for v in (0, 1)])
@@ -172,15 +203,21 @@ class NumberE(VoiceoverScene):
             r = Rectangle(width=X(1 / q) - X(0), height=0.5, stroke_width=0, fill_color=C.EPS, fill_opacity=0.22)
             r.move_to([(X(0) + X(1 / q)) / 2, y, 0])
             edge = Line([X(1 / q), y - 0.3, 0], [X(1 / q), y + 0.3, 0], color=C.EPS, stroke_width=3)
-            dot = Dot([X(tail[i]), y, 0], radius=0.08, color=C.FREQ)
-            return VGroup(r, edge, dot)
+            dot = Dot([X(tail[i]), y, 0], radius=0.08, color=C.SEQ)
+            # the same on the zoom strip (the window clipped to the strip; the dot only once it is on it)
+            zr = Rectangle(width=Z(min(1 / q, zw)) - Z(0), height=0.5, stroke_width=0, fill_color=C.EPS,
+                           fill_opacity=0.22).move_to([(Z(0) + Z(min(1 / q, zw))) / 2, yz, 0])
+            zedge = Line([Z(1 / q), yz - 0.3, 0], [Z(1 / q), yz + 0.3, 0], color=C.EPS, stroke_width=3).set_opacity(
+                1.0 if 1 / q <= zw else 0.0)
+            zdot = Dot([Z(min(tail[i], zw)), yz, 0], radius=0.08, color=C.SEQ).set_opacity(1.0 if tail[i] <= zw else 0.0)
+            return VGroup(r, edge, dot, zr, zedge, zdot)
 
         win = always_redraw(window)
 
         def qlab(i):
             q = qs[i]
             return MathTex(rf"q = {q}:\quad q!\,(e - s_q) = {tail[i]:.4f} < \tfrac{{1}}{{{q}}}", font_size=30,
-                           color=C.FREQ).move_to([0, y + 0.62, 0])
+                           color=C.SEQ).move_to([0, -1.45, 0])
 
         ql = qlab(0)
         with self.voiceover(
@@ -192,7 +229,7 @@ class NumberE(VoiceoverScene):
             "the actual quantity for q from 1 to 15: always inside the yellow window, which shrinks, and never reaching "
             "an integer."
         ) as vo:
-            self.play(FadeIn(head), Create(line), FadeIn(ints))
+            self.play(FadeIn(head), Create(line), FadeIn(ints), FadeIn(zoom))
             vo.wait_until("a")
             step(0)
             self.play(FadeIn(win), FadeIn(ql))

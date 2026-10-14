@@ -70,9 +70,9 @@ class Distance(VoiceoverScene):
                             axis_config={"stroke_color": GREY_C}).shift(LEFT * 3.0 + DOWN * 0.3)
         o = plane.c2p(0, 0)
         x = Arrow(o, plane.c2p(3.2, 2.6), buff=0, color=C.SEQ, stroke_width=5)
-        y = Arrow(o, plane.c2p(4.6, 0.9), buff=0, color=C.APPROX, stroke_width=5)
+        y = Arrow(o, plane.c2p(4.6, 0.9), buff=0, color=C.DELTA, stroke_width=5)
         xl = MathTex(r"\mathbf{x}", font_size=38, color=C.SEQ).next_to(x.get_end(), UP, buff=0.1)
-        yl = MathTex(r"\mathbf{y}", font_size=38, color=C.APPROX).next_to(y.get_end(), RIGHT, buff=0.1)
+        yl = MathTex(r"\mathbf{y}", font_size=38, color=C.DELTA).next_to(y.get_end(), RIGHT, buff=0.1)
         defs = VGroup(
             MathTex(r"\mathbf{x} = (x_1, \ldots, x_k) \in \R^k", font_size=36),
             MathTex(r"\mathbf{x} \cdot \mathbf{y} = \sum_{i=1}^{k} x_i y_i", font_size=36, color=C.INNER),
@@ -142,7 +142,7 @@ class Distance(VoiceoverScene):
         pic = VGroup(plane, x, y, shadow, drop, gap, ra)
         gap2 = MathTex(r"\mathbf x - \tfrac{C}{B}\,\mathbf y", font_size=26, color=C.EPS)
         xl2 = MathTex(r"\mathbf{x}", font_size=28, color=C.SEQ)
-        yl2 = MathTex(r"\mathbf{y}", font_size=28, color=C.APPROX)
+        yl2 = MathTex(r"\mathbf{y}", font_size=28, color=C.DELTA)
         with self.voiceover(
             "Call the length of y squared B, and the inner product C. <bookmark mark='a'/> Then B x minus C y is B "
             "times the gap, so its length squared is at least zero. <bookmark mark='b'/> Expand it. "
@@ -169,10 +169,10 @@ class Distance(VoiceoverScene):
     def triangle(self):
         A, B_, Cc = np.array([-4.5, -1.8, 0]), np.array([-0.6, 1.6, 0]), np.array([2.4, -1.4, 0])
         xa = Arrow(A, B_, buff=0, color=C.SEQ, stroke_width=5)
-        ya = Arrow(B_, Cc, buff=0, color=C.APPROX, stroke_width=5)
+        ya = Arrow(B_, Cc, buff=0, color=C.DELTA, stroke_width=5)
         sa = Arrow(A, Cc, buff=0, color=C.DIST, stroke_width=5)
         xl = MathTex(r"\mathbf x", font_size=36, color=C.SEQ).next_to(xa.get_center(), UL, buff=0.1)
-        yl = MathTex(r"\mathbf y", font_size=36, color=C.APPROX).next_to(ya.get_center(), UR, buff=0.1)
+        yl = MathTex(r"\mathbf y", font_size=36, color=C.DELTA).next_to(ya.get_center(), UR, buff=0.1)
         sl = MathTex(r"\mathbf x + \mathbf y", font_size=36, color=C.DIST).next_to(sa.get_center(), DOWN, buff=0.15)
         rows = VGroup(
             MathTex(r"|\mathbf x + \mathbf y|^2 = |\mathbf x|^2 + 2\,\mathbf x\cdot\mathbf y + |\mathbf y|^2", font_size=34),
@@ -231,14 +231,14 @@ class Distance(VoiceoverScene):
                     MathTex(r"d(q,p)", font_size=24, color=C.DIST).move_to([3.7, y - 0.5, 0]))
         P, Q, R = np.array([2.1, -2.35, 0]), np.array([5.3, -2.35, 0]), np.array([4.0, -1.05, 0])
         tri = VGroup(Line(P, Q, color=C.DIST, stroke_width=5),
-                     Line(P, R, color=C.APPROX, stroke_width=3.5), Line(R, Q, color=C.APPROX, stroke_width=3.5),
+                     Line(P, R, color=C.DELTA, stroke_width=3.5), Line(R, Q, color=C.DELTA, stroke_width=3.5),
                      *[Dot(v, radius=0.07) for v in (P, Q, R)],
                      MathTex(r"p", font_size=28).next_to(P, LEFT, buff=0.12),
                      MathTex(r"q", font_size=28).next_to(Q, RIGHT, buff=0.12),
                      MathTex(r"r", font_size=28).next_to(R, UP, buff=0.12))
         tlab = VGroup(MathTex(r"d(p,q)", font_size=24, color=C.DIST).next_to((P + Q) / 2, DOWN, buff=0.1),
-                      MathTex(r"d(p,r)", font_size=24, color=C.APPROX).next_to((P + R) / 2, UL, buff=0.02),
-                      MathTex(r"d(r,q)", font_size=24, color=C.APPROX).next_to((R + Q) / 2, UR, buff=0.12))
+                      MathTex(r"d(p,r)", font_size=24, color=C.DELTA).next_to((P + R) / 2, UL, buff=0.02),
+                      MathTex(r"d(r,q)", font_size=24, color=C.DELTA).next_to((R + Q) / 2, UR, buff=0.12))
         with self.voiceover(
             "In 1906, Maurice Fréchet turned this into a definition. <bookmark mark='h'/> A metric space is a set "
             "together with a distance function d with three properties. <bookmark mark='a'/> Distances between "
@@ -345,9 +345,9 @@ class Distance(VoiceoverScene):
                            for t, v in (("0.5", 0.5), ("1", 1))])
         x = np.linspace(0, 1, 600)
         F = polyline(ax, x, sd_f(x), color=C.FUNC, stroke_width=4)
-        G = polyline(ax, x, sd_g(x), color=C.APPROX, stroke_width=4)
+        G = polyline(ax, x, sd_g(x), color=C.DELTA, stroke_width=4)
         fl = MathTex(r"f", font_size=36, color=C.FUNC).next_to(ax.c2p(1, sd_f(1.0)), RIGHT, buff=0.15).shift(UP * 0.18)
-        gl = MathTex(r"g", font_size=36, color=C.APPROX).next_to(ax.c2p(1, sd_g(1.0)), RIGHT, buff=0.15).shift(DOWN * 0.18)
+        gl = MathTex(r"g", font_size=36, color=C.DELTA).next_to(ax.c2p(1, sd_g(1.0)), RIGHT, buff=0.15).shift(DOWN * 0.18)
         dfn = MathTex(r"d(f, g) = \sup_{0 \le x \le 1} |f(x) - g(x)|", font_size=40, color=C.DIST).to_edge(UP, buff=0.45)
         space = label(r"$C[0,1]$: the continuous functions on $[0,1]$", font_size=28, color=GREY_A).next_to(dfn, DOWN, buff=0.2)
         t = ValueTracker(0.0)
@@ -408,7 +408,7 @@ class Distance(VoiceoverScene):
         r = 0.12
         tube = ax.get_area(ax.plot(lambda v: sd_f(v) + r, x_range=[0, 1]), x_range=[0, 1],
                            bounded_graph=ax.plot(lambda v: sd_f(v) - r, x_range=[0, 1]), color=C.DIST, opacity=0.22)
-        inside = VGroup(*[polyline(ax, x, sd_f(x) + 0.07 * np.sin(k * 6 * x + k), color=C.CONNECTED_SET, stroke_width=2.5)
+        inside = VGroup(*[polyline(ax, x, sd_f(x) + 0.07 * np.sin(k * 6 * x + k), color=C.COMPACT_SET, stroke_width=2.5)
                           for k in (1, 2, 3)])
         xo = np.linspace(0.58, 0.82, 200)  # only where the bump lifts it off f (elsewhere it is f itself)
         outside = polyline(ax, xo, sd_f(xo) + 0.2 * np.exp(-((xo - 0.7) / 0.05) ** 2), color=C.PATHOLOGY, stroke_width=2.5)
@@ -416,7 +416,7 @@ class Distance(VoiceoverScene):
         assert all(np.max(np.abs(0.07 * np.sin(k * 6 * x + k))) < r for k in (1, 2, 3))
         assert np.max(0.2 * np.exp(-((x - 0.7) / 0.05) ** 2)) > r
         tl = label(r"the ball of radius $0.12$\\around $f$ is a \textbf{tube}", font_size=28, color=C.DIST).move_to([4.85, 1.1, 0])
-        il = label(r"inside: in the ball", font_size=26, color=C.CONNECTED_SET).move_to([4.85, 0.1, 0])
+        il = label(r"inside: in the ball", font_size=26, color=C.COMPACT_SET).move_to([4.85, 0.1, 0])
         ol = label(r"pokes out once:\\not in the ball", font_size=26, color=C.PATHOLOGY).move_to([4.85, -0.7, 0])
         with self.voiceover(
             "So a function is now a point, and the distance between two functions is a number. <bookmark mark='b'/> "

@@ -63,10 +63,13 @@ class Nowhere(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(side[0]))
             for n in range(1, 6):
-                tm_n = polyline(ax, x, term[n], color=C.APPROX, stroke_width=1.2)
                 new = polyline(ax, x, partial[n], color=C.FUNC, stroke_width=3 if n < 4 else 2)
-                self.play(FadeIn(tm_n), run_time=0.4)
-                self.play(ReplacementTransform(cur, new), FadeOut(tm_n), FadeTransform(nl[n - 1], nl[n]), run_time=0.8)
+                if n <= 3:  # terms 4 and 5 (period 2 * 4^-n) are too fine to draw on their own at this scale
+                    tm_n = polyline(ax, x, term[n], color=C.APPROX, stroke_width=1.5)
+                    self.play(FadeIn(tm_n), run_time=0.4)
+                    self.play(ReplacementTransform(cur, new), FadeOut(tm_n), FadeTransform(nl[n - 1], nl[n]), run_time=0.8)
+                else:
+                    self.play(ReplacementTransform(cur, new), FadeTransform(nl[n - 1], nl[n]), run_time=1.2)
                 cur = new
             vo.wait_until("c")
             self.play(FadeIn(side[1:]))
@@ -83,10 +86,13 @@ class Nowhere(VoiceoverScene):
         widths = [0.5, 0.125, 0.03125, 0.0078125, 0.001953125]
         y0 = float(rough(np.array([x0]), 26)[0])
 
+        ranges = []
+
         def view(w):
             x = np.linspace(x0 - w, x0 + w, 4001)  # x0 itself is the middle sample
             y = rough(x, 26)
             assert abs(y[2000] - y0) < 1e-9
+            ranges.append(float(y.max() - y.min()))
             mid, half = (y.max() + y.min()) / 2, (y.max() - y.min()) / 2 * 1.1
             X = c[0] + (x - x0) / w * S / 2
             Y = c[1] + (y - mid) / half * S / 2
@@ -95,11 +101,18 @@ class Nowhere(VoiceoverScene):
             return VGroup(m, dot)
 
         views = [view(w) for w in widths]
-        labs = [MathTex(rf"\text{{window width }} 2 \times 4^{{-{k}}}" if k else r"\text{window width } 1", font_size=28,
-                        color=GREY_A).next_to(box, DOWN, buff=0.15) for k in range(len(widths))]
+        # the window [x0 - w, x0 + w] has width 2w = 4^-k; each zoom by 4 shrinks the vertical range only by ~4/3
+        # (the Hoelder exponent of f is log(4/3) / log 4), so the slopes look ~3 times steeper
+        assert all(abs(2 * w - 4.0**-k) < 1e-15 for k, w in enumerate(widths))
+        shrink = (ranges[1] / ranges[-1]) ** (1 / (len(ranges) - 2))
+        assert all(1.2 < ranges[k] / ranges[k + 1] < 1.5 for k in range(1, len(ranges) - 1)) and abs(shrink - 4 / 3) < 0.05
+        labs = [MathTex((rf"\text{{window width }} 4^{{-{k}}}" if k else r"\text{window width } 1")
+                        + rf", \ \ \text{{height }} {ranges[k]:.3f}", font_size=28, color=GREY_A).next_to(box, DOWN, buff=0.15)
+                for k in range(len(widths))]
         head = label(r"Zoom in at $x = 0.3$: \ new corners at every scale", font_size=32).to_edge(UP, buff=0.3)
-        side = VGroup(label(r"each zoom by $4$ shrinks the", font_size=26),
-                      label(r"vertical range by only about $3$:", font_size=26),
+        side = VGroup(label(r"each zoom by $4$ shrinks the height", font_size=26),
+                      label(rf"only by about $\tfrac43$ \ (measured: ${shrink:.2f}$),", font_size=26),
+                      label(r"so the slopes look about $3$ times steeper:", font_size=26),
                       label(r"the graph never flattens into a line", font_size=26, color=C.PATHOLOGY),
                       label(r"(each view rescaled to fill the box)", font_size=22, color=GREY_B)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.7, 0.9, 0])
@@ -115,13 +128,13 @@ class Nowhere(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(box), FadeIn(views[0]), FadeIn(labs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(side[:2]))
+            self.play(FadeIn(side[:3]))
             vo.wait_until("b")
             cur, cl = views[0], labs[0]
             for k in range(1, len(widths)):
                 self.play(ReplacementTransform(cur, views[k]), FadeTransform(cl, labs[k]), run_time=1.4)
                 cur, cl = views[k], labs[k]
-            self.play(FadeIn(side[2:]))
+            self.play(FadeIn(side[3:]))
             vo.wait_until("c")
             self.play(FadeIn(brown))
         self.wait(0.3)
@@ -197,16 +210,32 @@ class Nowhere(VoiceoverScene):
         stot = MathTex(rf"{int(total):+d}", font_size=30, color=C.PATHOLOGY).next_to(sline, DOWN, buff=0.15)
         stot.align_to(panels[-1][5], RIGHT)
         sbound = MathTex(rf"|{{{int(total)}}}| \ge 27 - (1 + 3 + 9) = 14 = \tfrac{{3^3 + 1}}{{2}}", font_size=26,
-                         color=C.PATHOLOGY).next_to(stot, LEFT, buff=0.4)
-        tab = VGroup(MathTex(r"m", r"\quad \text{quotient at } x = 0.3", font_size=26, color=GREY_A))
-        for mm in (1, 2, 3, 4, 6, 8, 10):
-            q = float(quot[mm - 1])
-            tab.add(MathTex(rf"{mm}", r"\quad {" + f"{q:,.0f}".replace(",", "{,}") + "}", font_size=26))
-            assert abs(q) >= (3**mm + 1) / 2 - 1e-6
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
-        regrid(tab, gap=0.35)
+                         color=C.PATHOLOGY).next_to(stot, DOWN, buff=0.15, aligned_edge=RIGHT)
+        # the computed quotients for m = 1..10 on a log scale, above the promised bound (3^m + 1)/2; signs alternate
+        ms = np.arange(1, 11)
+        qa = np.abs(quot[:10])
+        assert np.all(qa >= (3.0**ms + 1) / 2 - 1e-6) and np.all(np.sign(quot[1:10]) != np.sign(quot[:9]))
+        qax = plain_axes([0, 10.5, 1], [0, 5, 1], 5.4, 3.8).move_to([3.5, 0.05, 0])
+        qax_y = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(qax.c2p(0, e_), LEFT, buff=0.1)
+                         for e_, t_ in ((0, "1"), (1, "10"), (2, "100"), (3, "10^3"), (4, "10^4"), (5, "10^5"))])
+        qax_x = VGroup(*[MathTex(str(m_), font_size=20, color=GREY_B).next_to(qax.c2p(m_, 0), DOWN, buff=0.1)
+                         for m_ in (1, 5, 10)],
+                       MathTex(r"m", font_size=26, color=GREY_A).next_to(qax.c2p(10.5, 0), DOWN, buff=0.12))
+        mm_ = np.linspace(1, 10, 200)
+        qbound = DashedVMobject(polyline(qax, mm_, np.log10((3.0**mm_ + 1) / 2), color=C.PATHOLOGY, stroke_width=2.5),
+                                num_dashes=40)
+        qdots = VGroup(*[Dot(qax.c2p(m_, np.log10(v_)), radius=0.07, color=WHITE if q_ > 0 else C.EPS)
+                         for m_, v_, q_ in zip(ms, qa, quot[:10])])
+        qlab = VGroup(MathTex(r"|\text{quotient}| \text{ at } x = 0.3", font_size=24, color=GREY_A),
+                      MathTex(r"\text{bound } \tfrac{3^m + 1}{2}", font_size=24, color=C.PATHOLOGY)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(qax.c2p(0.3, 5), RIGHT, buff=0.1)
+        qlast = MathTex(r"{" + f"{quot[9]:,.0f}".replace(",", "{,}") + "}", font_size=24).next_to(qdots[-1], LEFT,
+                                                                                                buff=0.12)
+        qsign = label(r"signs alternate \ ($+$ white, $-$ yellow)", font_size=22, color=GREY_B).next_to(qax, DOWN,
+                                                                                                     buff=0.45)
+        tab = VGroup(qax, qax_y, qax_x, qbound, qlab, qdots, qlast, qsign)
         concl = label(r"$\to \infty$: \ no derivative at $x$; \ and $x$ was arbitrary", font_size=28,
-                      color=C.PATHOLOGY).next_to(tab, DOWN, buff=0.3)
+                      color=C.PATHOLOGY).next_to(qsign, DOWN, buff=0.2)
         with self.voiceover(
             "Here's Rudin's proof that there is no derivative at any x, carried out at x equal to 0.3. "
             "<bookmark mark='a'/> Step away from x by half of four to the minus m, choosing the sign so that the m-th "
@@ -236,7 +265,9 @@ class Nowhere(VoiceoverScene):
             self.play(FadeIn(sbound))
             vo.wait_until("f")
             self.play(FadeOut(VGroup(panels, ph, sline, stot, sbound)))
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.2), run_time=2.0)
+            self.play(Create(qax), FadeIn(qax_y), FadeIn(qax_x), Create(qbound), FadeIn(qlab))
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in qdots], lag_ratio=0.15), FadeIn(qlast), FadeIn(qsign),
+                      run_time=2.0)
             self.play(FadeIn(concl))
         self.wait(0.4)
         self.clear_scene()

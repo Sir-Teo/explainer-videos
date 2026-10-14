@@ -371,62 +371,114 @@ class Series(VoiceoverScene):
         rows = [MathTex(r"\sum_k 2^k \big(2^k\big)^{-p}", r"=", r"\sum_k \big(2^{1-p}\big)^k", font_size=40)]
         whys = [why(r"geometric, with ratio $2^{1-p}$: \ converges exactly when $p > 1$")]
         thm = label(r"\textbf{Rudin 3.28} \ $\displaystyle\sum \frac{1}{n^p}$ converges if $p > 1$ and diverges if "
-                    r"$p \le 1$", font_size=32).to_edge(UP, buff=0.4)
+                    r"$p \le 1$", font_size=32).to_edge(UP, buff=0.3)
         step = ladder(self, rows, whys, keep=1, top=2.0, buff=0.4, x=-0.6)
         lx = plain_axes([0, 6.2, 1], [0, 3.2, 1], 10.4, 3.3, numbers=False).move_to([0.0, -1.8, 0])
         ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(lx.c2p(k, 0), DOWN, buff=0.12)
                          for k in range(0, 7)])
-        ylab = VGroup(*[MathTex(f"{v}", font_size=22, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.1)
+        ylab = VGroup(*[MathTex(f"{v}", font_size=22, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.2)
                         for v in (1, 2, 3)])
         lg = np.log10(d["n"])
-        keep = d["p1"] <= 3.2
-        c1 = polyline(lx, lg[keep], d["p1"][keep], color=C.SEQ, stroke_width=3)
-        c15 = polyline(lx, lg, d["p15"], color=C.FREQ, stroke_width=3)
-        c2 = polyline(lx, lg, d["p2"], color=C.EPS, stroke_width=3)
-        z15 = DashedLine(lx.c2p(0, float(d["zeta15"])), lx.c2p(6.2, float(d["zeta15"])), color=C.FREQ, stroke_width=1.5)
-        z2 = DashedLine(lx.c2p(0, math.pi**2 / 6), lx.c2p(6.2, math.pi**2 / 6), color=C.EPS, stroke_width=1.5)
-        l1 = MathTex(r"p = 1", font_size=26, color=C.SEQ).next_to(lx.c2p(lg[keep][-1], 3.2), RIGHT, buff=0.15)
-        l15 = MathTex(r"p = \tfrac32 \to 2.612\ldots", font_size=26, color=C.FREQ).next_to(lx.c2p(6.2, 2.62), RIGHT,
-                                                                                         buff=0.1).shift(LEFT * 2.2 + UP * 0.25)
-        l2 = MathTex(r"p = 2 \to \tfrac{\pi^2}{6}", font_size=26, color=C.EPS).next_to(lx.c2p(6.2, 1.645), RIGHT,
-                                                                                    buff=0.1).shift(LEFT * 2.0 + UP * 0.3)
+        # p = 1 leaves the window through its top (s_n > 3.2 from n = 14 on) and keeps climbing
+        k_out = int(np.argmax(d["p1"] > 3.2))
+        assert np.all(d["p1"][k_out:] > 3.2) and d["n"][k_out] == 14
+        x_out = float(np.interp(3.2, d["p1"][k_out - 1:k_out + 1], lg[k_out - 1:k_out + 1]))
+        c1 = VGroup(runs_in_range(lx, np.append(lg[:k_out], x_out), np.append(d["p1"][:k_out], 3.2 - 1e-9), 0, 3.2,
+                                  C.SEQ, stroke_width=3),
+                    Arrow(lx.c2p(x_out, 3.2), lx.c2p(x_out, 3.2) + UP * 0.5, buff=0, color=C.SEQ, stroke_width=3,
+                          max_tip_length_to_length_ratio=0.4))
+        c15 = polyline(lx, lg, d["p15"], color=C.CUT_HIGH, stroke_width=3)
+        c2 = polyline(lx, lg, d["p2"], color=C.APPROX, stroke_width=3)
+        z15 = DashedLine(lx.c2p(0, float(d["zeta15"])), lx.c2p(6.2, float(d["zeta15"])), color=C.CUT_HIGH,
+                         stroke_width=1.5)
+        z2 = DashedLine(lx.c2p(0, math.pi**2 / 6), lx.c2p(6.2, math.pi**2 / 6), color=C.APPROX, stroke_width=1.5)
+        l1 = MathTex(r"p = 1 \to \infty", font_size=26, color=C.SEQ).next_to(c1[1].get_end(), RIGHT, buff=0.15)
+        l15 = MathTex(r"p = \tfrac32 \to 2.612\ldots", font_size=26, color=C.CUT_HIGH).next_to(
+            lx.c2p(3.6, float(d["zeta15"])), UP, buff=0.12)
+        l2 = MathTex(r"p = 2 \to \tfrac{\pi^2}{6}", font_size=26, color=C.APPROX).next_to(lx.c2p(4.0, math.pi**2 / 6),
+                                                                                         DOWN, buff=0.15)
+        gap15 = float(d["zeta15"]) - float(d["p15"][-1])
+        assert 0.0015 < gap15 < 0.0025, gap15
+        # the last stretch of p = 3/2, magnified: a million terms in, still about 0.002 below its limit
+        mx, my = (5.3, 6.4), (2.600, 2.6135)
+        ins, deco = magnifier(lx, mx, my, center=(4.4, 0.55), width=3.4, height=1.3,
+                              tag=rf"\text{{heights}} \times {1.3 / (lx.c2p(0, my[1])[1] - lx.c2p(0, my[0])[1]):.0f}")
+        last = lg >= mx[0]
+        assert np.all((d["p15"][last] > my[0]) & (d["p15"][last] < my[1]))
+        ic = polyline(ins, lg[last], d["p15"][last], color=C.CUT_HIGH, stroke_width=3)
+        iz = DashedLine(ins.c2p(mx[0], float(d["zeta15"])), ins.c2p(mx[1], float(d["zeta15"])), color=C.CUT_HIGH,
+                        stroke_width=1.5)
+        ib = BraceBetweenPoints(ins.c2p(6.0, float(d["zeta15"])), ins.c2p(6.0, float(d["p15"][-1])), direction=RIGHT,
+                                color=WHITE)
+        ib_l = MathTex(rf"{gap15:.3f}", font_size=24).next_to(ib, RIGHT, buff=0.06)
         with self.voiceover(
             "<bookmark mark='t'/> Applied to one over n to the p, <bookmark mark='a'/> the condensed series is "
             "geometric, with ratio two to the one minus p. It converges exactly when p is bigger than one. "
             "<bookmark mark='g'/> The partial sums: for p equal to one they climb forever; for three halves they level "
             "off near 2.612; and for p equal to two at pi squared over six, a value Euler found in 1734. Notice how "
-            "slowly the three-halves series settles: after a million terms it's still two thousandths short."
+            "slowly the three-halves series settles: <bookmark mark='s'/> after a million terms it's still two "
+            "thousandths short."
         ) as vo:
             vo.wait_until("t")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(lx), FadeIn(ticks), FadeIn(ylab))
+            self.play(Create(c1), FadeIn(l1), run_time=1.2)
             vo.wait_until("a")
             step(0)
             vo.wait_until("g")
-            self.play(Create(lx), FadeIn(ticks), FadeIn(ylab))
-            self.play(Create(c1), FadeIn(l1), run_time=1.2)
+            self.play(Indicate(l1, color=C.SEQ), run_time=0.8)
             self.play(Create(c15), Create(z15), FadeIn(l15), run_time=1.4)
             self.play(Create(c2), Create(z2), FadeIn(l2), run_time=1.4)
-        gap15 = float(d["zeta15"]) - float(d["p15"][-1])
-        assert 0.0015 < gap15 < 0.0025, gap15
+            vo.wait_until("s")
+            self.play(FadeIn(deco), Create(ic), Create(iz), run_time=1.0)
+            self.play(GrowFromCenter(ib), FadeIn(ib_l), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def no_boundary(self):
         d = load("pseries")
-        rows = VGroup(
-            MathTex(r"\sum \frac{1}{n}", r"\quad\text{diverges}", font_size=36),
-            MathTex(r"\sum \frac{1}{n \log n}", r"\quad\text{diverges (like } \log\log n\text{)}", font_size=36),
-            MathTex(r"\sum \frac{1}{n (\log n)^{1.01}}", r"\quad\text{converges}", font_size=36),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([0, 0.6, 0])
-        rows[0][1].set_color(C.PATHOLOGY)
-        rows[1][1].set_color(C.PATHOLOGY)
-        rows[2][1].set_color(C.CONNECTED_SET)
-        ref = note(r"Rudin 3.29, by condensation").next_to(rows, UP, buff=0.3)
-        val = label(rf"$\sum_{{n=2}}^{{10^6}} \frac{{1}}{{n \log n}} \approx {float(d['nlog_end']):.2f}$", font_size=28,
-                    color=GREY_A).next_to(rows, DOWN, buff=0.4)
+        # the partial sums of 1/(n log n) (diverges) and 1/(n (log n)^1.01) (converges), out to a million terms
+        N = 1_000_000
+        m = np.arange(2, N + 1, dtype=float)
+        f1, f2 = 1 / (m * np.log(m)), 1 / (m * np.log(m) ** 1.01)
+        S1, S2 = np.cumsum(f1), np.cumsum(f2)
+        assert abs(S1[-1] - float(d["nlog_end"])) < 1e-9
+
+        def limit2(K):  # sum to K, plus the integral tail (Euler-Maclaurin; the next terms are below 1e-7)
+            return float(S2[K - 2] + np.log(K) ** -0.01 / 0.01 - f2[K - 2] / 2)
+
+        L2 = limit2(N)
+        assert abs(L2 - limit2(N // 10)) < 1e-6 and 100 < L2 < 101
+        idx = np.unique(np.round(np.logspace(np.log10(2), 6, 400)).astype(int)) - 2
+        lgm = np.log10(m[idx])
+        ref = note(r"Rudin 3.29, by condensation").to_edge(UP, buff=0.3)
+        cols = [(r"\sum \frac{1}{n}", r"diverges", GREY_B, C.PATHOLOGY),
+                (r"\sum \frac{1}{n \log n}", r"diverges, like $\log\log n$", C.SEQ, C.PATHOLOGY),
+                (r"\sum \frac{1}{n (\log n)^{1.01}}", r"converges", C.CUT_HIGH, C.CONNECTED_SET)]
+        rows = VGroup(*[VGroup(MathTex(f_, font_size=36, color=c_), label(v_, font_size=26, color=vc_)).arrange(
+            DOWN, buff=0.15) for f_, v_, c_, vc_ in cols])
+        for r, x_ in zip(rows, (-4.5, 0.0, 4.5)):
+            r.move_to([x_, 2.05, 0])
+        lx = plain_axes([0, 6.2, 1], [0, 4, 1], 10.2, 2.7, numbers=False).move_to([-0.9, -1.45, 0])
+        ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(lx.c2p(k, 0), DOWN, buff=0.12)
+                         for k in range(0, 7)])
+        ylab = VGroup(*[MathTex(f"{v}", font_size=22, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.2)
+                        for v in (1, 2, 3)])
+        lg = np.log10(d["n"])
+        k_out = int(np.argmax(d["p1"] > 4))
+        x_out = float(np.interp(4.0, d["p1"][k_out - 1:k_out + 1], lg[k_out - 1:k_out + 1]))
+        c0 = VGroup(runs_in_range(lx, np.append(lg[:k_out], x_out), np.append(d["p1"][:k_out], 4 - 1e-9), 0, 4, GREY_B,
+                                  stroke_width=2.5),
+                    Arrow(lx.c2p(x_out, 4), lx.c2p(x_out, 4) + UP * 0.45, buff=0, color=GREY_B, stroke_width=3,
+                          max_tip_length_to_length_ratio=0.4))
+        assert S1.max() < 4 and np.all(S2 < S1)
+        c1 = polyline(lx, lgm, S1[idx], color=C.SEQ, stroke_width=3)
+        c2 = polyline(lx, lgm, S2[idx], color=C.CUT_HIGH, stroke_width=3)
+        r1 = MathTex(rf"{S1[-1]:.2f} \to \infty", font_size=28, color=C.SEQ).next_to(lx.c2p(6, S1[-1]), UR, buff=0.08)
+        r2 = MathTex(rf"{S2[-1]:.2f} \to {L2:.1f}", font_size=28, color=C.CUT_HIGH).next_to(lx.c2p(6, S2[-1]), DR,
+                                                                                         buff=0.08)
         foot = label(r"There is no slowest divergent series and no slowest convergent one (Rudin, Exercises 3.11--3.12).",
-                     font_size=26, color=C.EPS).to_edge(DOWN, buff=0.6)
+                     font_size=26, color=C.EPS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Condensation keeps going. <bookmark mark='a'/> One over n log n still diverges, but only like log log n: a "
             "million terms add up to about three point four. <bookmark mark='b'/> Raise the log to the power 1.01 and "
@@ -434,11 +486,14 @@ class Series(VoiceoverScene):
             "series there's one diverging more slowly, and for any convergent series one converging more slowly. There "
             "is no sharp line between convergence and divergence."
         ) as vo:
-            self.play(FadeIn(ref), FadeIn(rows[0]))
+            self.play(FadeIn(ref), FadeIn(rows[0]), Create(lx), FadeIn(ticks), FadeIn(ylab))
+            self.play(Create(c0), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]), FadeIn(val))
+            self.play(FadeIn(rows[1]), Create(c1), run_time=1.5)
+            self.play(FadeIn(r1))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]))
+            self.play(FadeIn(rows[2]), Create(c2), run_time=1.5)
+            self.play(FadeIn(r2))
             vo.wait_until("c")
             self.play(FadeIn(foot))
         assert 3.3 < float(d["nlog_end"]) < 3.5

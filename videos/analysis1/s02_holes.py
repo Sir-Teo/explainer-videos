@@ -27,7 +27,7 @@ class Holes(VoiceoverScene):
     # ------------------------------------------------------------------
     def card(self):
         card = chapter_card(1, r"Holes in the rational line",
-                            r"Why is $\sqrt2$ not a fraction, and why does that matter?", part=1)
+                            r"Why is $\sqrt2$ not a fraction, and why does that matter?", lit=(1872,), part=1)
         with self.voiceover("Chapter one. We start with what we have: the rational numbers.") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

@@ -22,7 +22,7 @@ class Connected(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(10, r"Connectedness", r"What does it mean for a set to be in one piece?", part=1)
+        card = chapter_card(10, r"Connectedness", r"What does it mean for a set to be in one piece?", lit=(1883,), part=1)
         with self.voiceover("Chapter ten. What does it mean for a set to be all in one piece?") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -37,12 +37,12 @@ class Connected(VoiceoverScene):
                   font_size=30, color=C.CONNECTED_SET),
         ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.5)
         y1, y2 = 0.4, -1.4
-        r1 = VGroup(bar(X(0), X(1), y1, C.SEQ, True, False), bar(X(1), X(2), y1, C.APPROX, True, True))
+        r1 = VGroup(bar(X(0), X(1), y1, C.SEQ, True, False), bar(X(1), X(2), y1, C.DELTA, True, True))
         l1 = MathTex(r"[0,1) \text{ and } [1,2]", font_size=32).move_to([X(1), y1 + 0.6, 0])
         v1 = VGroup(label(r"disjoint, but $1 \in \overline{[0,1)}$:", font_size=28, color=C.PATHOLOGY),
                     label(r"they touch", font_size=28, color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         v1.next_to(r1, RIGHT, buff=0.5)
-        r2 = VGroup(bar(X(0), X(1), y2, C.SEQ, False, False), bar(X(1), X(2), y2, C.APPROX, False, False))
+        r2 = VGroup(bar(X(0), X(1), y2, C.SEQ, False, False), bar(X(1), X(2), y2, C.DELTA, False, False))
         l2 = MathTex(r"(0,1) \text{ and } (1,2)", font_size=32).move_to([X(1), y2 + 0.6, 0])
         v2 = VGroup(label(r"separated: no point of either", font_size=28, color=C.CONNECTED_SET),
                     label(r"is a limit of the other", font_size=28, color=C.CONNECTED_SET)).arrange(DOWN, aligned_edge=LEFT,
@@ -94,12 +94,12 @@ class Connected(VoiceoverScene):
                        label(r"not an interval: $0.7$ is skipped", font_size=24, color=C.PATHOLOGY).next_to(
                            [X(1.0), ye2, 0], DOWN, buff=0.2))
         y0 = 0.2
-        E = VGroup(bar(X(0), X(1), y0, C.SEQ), bar(X(2), X(3), y0, C.APPROX))
+        E = VGroup(bar(X(0), X(1), y0, C.SEQ), bar(X(2), X(3), y0, C.DELTA))
         zx = X(1.5)
         z = VGroup(DashedLine([zx, y0 - 0.7, 0], [zx, y0 + 0.7, 0], color=C.PATHOLOGY, stroke_width=3),
                    MathTex(r"z \notin E", font_size=30, color=C.PATHOLOGY).move_to([zx, y0 + 1.0, 0]))
         cut = VGroup(MathTex(r"E \cap (-\infty, z)", font_size=30, color=C.SEQ).move_to([X(0.5), y0 - 0.65, 0]),
-                     MathTex(r"E \cap (z, \infty)", font_size=30, color=C.APPROX).move_to([X(2.5), y0 - 0.65, 0]))
+                     MathTex(r"E \cap (z, \infty)", font_size=30, color=C.DELTA).move_to([X(2.5), y0 - 0.65, 0]))
         with self.voiceover(
             "On the real line, connected sets are exactly what you'd hope: <bookmark mark='s'/> the intervals, the sets "
             "with no gaps, where any number between two members is also a member. <bookmark mark='g'/> One direction is "
@@ -124,9 +124,9 @@ class Connected(VoiceoverScene):
         A_parts = [(0.0, 0.18), (0.31, 0.47)]
         B_parts = [(0.18, 0.31), (0.47, 1.0)]
         A = VGroup(*[Line([X2(a), y1, 0], [X2(b), y1, 0], color=C.SEQ, stroke_width=10) for a, b in A_parts])
-        B = VGroup(*[Line([X2(a), y1, 0], [X2(b), y1, 0], color=C.APPROX, stroke_width=10) for a, b in B_parts])
+        B = VGroup(*[Line([X2(a), y1, 0], [X2(b), y1, 0], color=C.DELTA, stroke_width=10) for a, b in B_parts])
         xl = MathTex(r"x \in A", font_size=30, color=C.SEQ).move_to([X2(0.05), y1 - 0.55, 0])
-        yl = MathTex(r"y \in B", font_size=30, color=C.APPROX).move_to([X2(0.95), y1 - 0.55, 0])
+        yl = MathTex(r"y \in B", font_size=30, color=C.DELTA).move_to([X2(0.95), y1 - 0.55, 0])
         zs = X2(0.47)
         zm = VGroup(Line([zs, y1 - 0.45, 0], [zs, y1 + 0.45, 0], color=C.EPS, stroke_width=4),
                     MathTex(r"z = \sup(A \cap [x, y])", font_size=32, color=C.EPS).move_to([zs, y1 + 0.85, 0]))

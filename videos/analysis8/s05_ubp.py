@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis8.common import load, plain_axes, polyline
+from videos.analysis8.common import boxes_overlap, fixed_runs, load, logn_axes, plain_axes, polyline
 from videos.analysis8.compute import lebesgue_constant
 
 
@@ -26,37 +26,74 @@ class UniformBoundedness(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def theorem(self):
+        head = label(r"Pointwise bounds become uniform bounds", font_size=34).to_edge(UP, buff=0.3)
         thm = VGroup(
             label(r"\textbf{RCA 5.8} \ (Banach--Steinhaus) \ $X$ Banach, \ $\{\Lambda_\alpha\}$ bounded linear maps $X \to Y$:",
                   font_size=26),
             label(r"either \ $\sup_\alpha \|\Lambda_\alpha\| < \infty$, \ or \ $\sup_\alpha \|\Lambda_\alpha x\| = \infty$ "
                   r"for all $x$ in a dense $G_\delta$", font_size=26, color=C.EPS),
-        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        ).arrange(DOWN, buff=0.12).next_to(head, DOWN, buff=0.25)
         # the family this part is about: the Fourier partial sums S_n on C(T), whose norms (the Lebesgue constants)
-        # are unbounded, so Banach-Steinhaus puts us in its second case
-        ln_ = np.array([lebesgue_constant(n) for n in range(41)])
-        assert abs(ln_[0] - 1) < 1e-6 and abs(ln_[1] - (1 / 3 + 2 * math.sqrt(3) / math.pi)) < 1e-6
-        assert np.all(np.diff(ln_) > 0) and ln_[-1] > 2.7
-        lax = plain_axes([-0.5, 40.5, 10], [0, 3, 1], 4.4, 3.0, numbers=True, font_size=16,
-                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, -1.4, 0])
-        lbars = VGroup(*[Line(lax.c2p(n, 0), lax.c2p(n, v), color=C.OPERATOR, stroke_width=4) for n, v in enumerate(ln_)])
-        llab = MathTex(r"\|S_n\| \text{ on } C(\mathbb T) = \tfrac{1}{2\pi}\int|D_n| \ \approx \tfrac{4}{\pi^2}\log n \to \infty",
-                       font_size=24, color=C.OPERATOR).next_to(lax, UP, buff=0.15)
-        lpic = VGroup(lax, lbars, llab)
-        sq = Square(side_length=4.4, color=GREY_C, stroke_width=1.5).move_to([-3.6, -1.1, 0])
-        rng = np.random.default_rng(5)
-        blobs = VGroup()
+        # are unbounded, so Banach-Steinhaus puts us in its second case. Drawn like the hook's plot: log n across
+        d = load("lebesgue")
+        ns, L, asym = d["ns"], d["L"], d["asym"]
+        assert np.allclose(L, [lebesgue_constant(int(n)) for n in ns])
+        assert np.all(np.abs(L[2:] - asym[2:]) / L[2:] < 0.01)  # n >= 10: within 1% of (4/pi^2) log n + 1.27
+        lax, ldec = logn_axes(9.0, 2.8, center=[0.3, -1.25, 0])
+        lg = np.log10(ns)
+        ldots = VGroup(*[Dot(lax.c2p(a, b), radius=0.06, color=C.OPERATOR) for a, b in zip(lg, L)])
+        uu = np.linspace(0.5, 6, 100)
+        lfit = polyline(lax, uu, 4 / math.pi**2 * np.log(10**uu) + 1.2703, color=WHITE, stroke_width=1.5)
+        llab = MathTex(r"\|S_n\| \text{ on } C(\mathbb T) = \|D_n\|_1 \ \approx \tfrac{4}{\pi^2}\log n + 1.27 \to \infty",
+                       font_size=26, color=C.OPERATOR).next_to(lax, UP, buff=0.15).align_to(lax, LEFT).shift(RIGHT * 0.3)
+        lpic = VGroup(lax, ldec, ldots, lfit, llab)
+        # the Baire picture: X a square, the closed sets E_1 c E_2 c ... c E_5 as nested blobs, all inside X
+        side, c0 = 5.0, np.array([-3.6, -0.75, 0])
+        sq = Square(side_length=side, color=GREY_C, stroke_width=1.5).move_to(c0)
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), k / 4) for k in range(5)]
+        th = np.linspace(0, 2 * np.pi, 721)
+
+        def R(k, t):  # the outline of E_{k+1} in polar coordinates about c0
+            return (0.36 + 0.42 * k) * (1 + 0.10 * np.sin(5 * t + 0.3 * k) + 0.06 * np.cos(3 * t - 0.3 * k))
+
+        outl = [np.c_[R(k, th) * np.cos(th), R(k, th) * np.sin(th)] for k in range(5)]
+        assert all(np.abs(o).max() < side / 2 - 0.1 for o in outl)  # every E_k lies inside X
+        assert all(np.all(R(k + 1, th) > R(k, th) + 0.25) for k in range(4))  # nested, with room between outlines
+        blobs = VGroup(*[Polygon(*[c0 + [a, b, 0] for a, b in o[:-1]], stroke_color=cols[k], stroke_width=2.5,
+                                 fill_color=cols[k], fill_opacity=0.08) for k, o in enumerate(outl)])
+        allp = np.vstack([c0[:2] + o for o in outl] + [c0[:2] + np.c_[np.linspace(-1, 1, 200), np.full(200, s_)] * side / 2
+                                                        for s_ in (-1, 1)])
+
+        def clear(m, pad=0.05):  # no outline passes through the label's box
+            l_, r_, b_, t_ = m.get_left()[0] - pad, m.get_right()[0] + pad, m.get_bottom()[1] - pad, m.get_top()[1] + pad
+            return not np.any((allp[:, 0] > l_) & (allp[:, 0] < r_) & (allp[:, 1] > b_) & (allp[:, 1] < t_))
+
+        # each E_k is labelled in the band just outside its own outline, in the upper left (the ball goes lower right)
+        e_l = VGroup()
         for k in range(5):
-            r = 0.45 + 0.42 * k
-            th = np.linspace(0, 2 * np.pi, 120)
-            wob = 1 + 0.12 * np.sin(5 * th + k) + 0.08 * np.cos(3 * th - k)
-            pts = [[-3.6 + r * w * math.cos(t), -1.1 + r * w * math.sin(t), 0] for t, w in zip(th, wob)]
-            blobs.add(Polygon(*pts, stroke_color=cols[k], stroke_width=2.5, fill_color=cols[k], fill_opacity=0.08))
-        e_l = VGroup(*[MathTex(rf"E_{{{k + 1}}}", font_size=22, color=cols[k]).move_to(
-            [-3.6 + (0.45 + 0.42 * k) * 0.72, -1.1 + (0.45 + 0.42 * k) * 0.72, 0]) for k in range(5)])
-        ball = Circle(radius=0.32, color=WHITE, stroke_width=3).move_to([-3.6 + 1.25, -1.1 - 0.6, 0])
+            m = MathTex(rf"E_{{{k + 1}}}", font_size=22, color=cols[k])
+
+            def at(t):
+                outer = R(k + 1, t) if k < 4 else R(k, t) + 0.45
+                return (R(k, t) + outer) / 2 * np.array([math.cos(t), math.sin(t), 0]), outer - R(k, t)
+
+            best = None
+            for sector in ((0.5 * np.pi, np.pi), (-np.pi, np.pi)):  # the upper left first, where the ball is not
+                for t in np.linspace(*sector, 201):
+                    pos, gap = at(t)
+                    m.move_to(c0 + pos)
+                    if clear(m) and all(not boxes_overlap(m, o_, 0.05) for o_ in e_l) and (best is None or gap > best[0]):
+                        best = (gap, t)
+                if best is not None:
+                    break
+            assert best is not None, k
+            e_l.add(m.move_to(c0 + at(best[1])[0]))
+        # the ball Baire finds: inside E_4 (it may cut E_3: the sets are nested)
+        bc, br = c0 + np.array([0.94, -0.34, 0]), 0.3
+        bpts = np.c_[np.cos(th), np.sin(th)] * br + (bc - c0)[:2]
+        assert np.all(np.hypot(bpts[:, 0], bpts[:, 1]) < R(3, np.arctan2(bpts[:, 1], bpts[:, 0])) - 0.03)
+        ball = Circle(radius=br, color=WHITE, stroke_width=3).move_to(bc)
+        assert all(not boxes_overlap(ball, m, 0.05) for m in e_l)
         sch = note(r"schematic").next_to(sq, DOWN, buff=0.08)
         steps = VGroup(
             MathTex(r"E_k = \{x : \sup_\alpha \|\Lambda_\alpha x\| \le k\}", font_size=30),
@@ -66,11 +103,12 @@ class UniformBoundedness(VoiceoverScene):
             MathTex(r"\|x\| < r \Rightarrow \|\Lambda_\alpha x\| \le \|\Lambda_\alpha(x_0 + x)\| + \|\Lambda_\alpha x_0\| "
                     r"\le 2k", font_size=26),
             label(r"so $\|\Lambda_\alpha\| \le 2k/r$ for every $\alpha$: \ uniform", font_size=24, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -1.1, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         for r_ in steps:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -1.1, 0])
+            if r_.width > 6.4:
+                r_.width = 6.4
+        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.2, -0.75, 0])
+        assert steps.get_right()[0] < 6.6 and steps.get_left()[0] > sq.get_right()[0] + 0.3
         with self.voiceover(
             "<bookmark mark='a'/> Banach and Steinhaus: for a family of bounded operators on a Banach space, either "
             "their norms are bounded, or they blow up on a dense G delta. <bookmark mark='b'/> The proof is Baire. "
@@ -80,8 +118,8 @@ class UniformBoundedness(VoiceoverScene):
             "operator's norm by the same constant. Pointwise bounds become uniform bounds."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm), Create(lax), FadeIn(llab))
-            self.play(LaggedStart(*[Create(b_) for b_ in lbars], lag_ratio=0.05), run_time=2.5)
+            self.play(FadeIn(head), FadeIn(thm), Create(lax), FadeIn(ldec), Create(lfit), FadeIn(llab))
+            self.play(LaggedStart(*[FadeIn(p_, scale=0.5) for p_ in ldots], lag_ratio=0.12), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeOut(lpic), run_time=0.5)
             self.play(Create(sq), FadeIn(sch), FadeIn(steps[:2]))

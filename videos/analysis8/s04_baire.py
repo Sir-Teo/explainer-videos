@@ -25,24 +25,46 @@ class Baire(VoiceoverScene):
     def nested(self):
         d = load("baire")
         rats, ivs, x = d["rats"], d["ivs"], float(d["x"])
-        L, R_ = -6.0, 6.0
+        L, R_, yl_ = -6.0, 6.0, 2.0  # the unit interval, drawn high: a 27x magnified copy of I_3 goes below it
 
         def X(t):
             return L + (R_ - L) * t
 
-        line = Line([L, 0.6, 0], [R_, 0.6, 0], color=GREY_B, stroke_width=2)
-        ends = VGroup(MathTex("0", font_size=24).next_to([L, 0.6, 0], DOWN, buff=0.15),
-                      MathTex("1", font_size=24).next_to([R_, 0.6, 0], DOWN, buff=0.15))
-        ticks = VGroup(*[Line([X(q), 0.45, 0], [X(q), 0.75, 0], color=C.RATIONAL, stroke_width=2) for q in rats[:30]])
-        q_l = VGroup(*[MathTex(rf"q_{{{k + 1}}}", font_size=20, color=C.RATIONAL).next_to([X(q), 0.75, 0], UP, buff=0.05)
+        line = Line([L, yl_, 0], [R_, yl_, 0], color=GREY_B, stroke_width=2)
+        ends = VGroup(MathTex("0", font_size=24).next_to([L, yl_, 0], LEFT, buff=0.15),
+                      MathTex("1", font_size=24).next_to([R_, yl_, 0], RIGHT, buff=0.15))
+        ticks = VGroup(*[Line([X(q), yl_ - 0.15, 0], [X(q), yl_ + 0.15, 0], color=C.RATIONAL, stroke_width=2)
+                         for q in rats[:30]])
+        q_l = VGroup(*[MathTex(rf"q_{{{k + 1}}}", font_size=22, color=C.RATIONAL).next_to([X(q), yl_ + 0.15, 0], UP,
+                                                                                         buff=0.05)
                        for k, q in enumerate(rats[:4])])
-        bars = [Line([X(a), 0.2 - 0.0 * k, 0], [X(b), 0.2, 0], color=C.EPS, stroke_width=8) for k, (a, b) in enumerate(ivs)]
-        # a zoom: the last intervals are tiny, so show their lengths
+        yb = yl_ - 0.35
+        bars = [Line([X(a), yb, 0], [X(b), yb, 0], color=C.EPS, stroke_width=8) for a, b in ivs[:3]]
+        # the zoom: I_3 = [26/27, 1] spread over [-5.6, 5.6]; I_4 ... I_8 are drawn there (I_8 is still 0.05 wide)
+        a3, b3 = float(ivs[2][0]), float(ivs[2][1])
+        assert abs(a3 - 26 / 27) < 1e-12 and abs(b3 - 1) < 1e-12
+        ZL, ZR, yz = -5.6, 5.6, 0.55
+
+        def Z(t):
+            return ZL + (ZR - ZL) * (t - a3) / (b3 - a3)
+
+        zline = Line([ZL, yz, 0], [ZR, yz, 0], color=GREY_B, stroke_width=2)
+        zends = VGroup(MathTex(r"\tfrac{26}{27}", font_size=24).next_to([ZL, yz, 0], LEFT, buff=0.15),
+                       MathTex("1", font_size=24).next_to([ZR, yz, 0], RIGHT, buff=0.15))
+        guides = VGroup(DashedLine([X(a3), yb - 0.1, 0], [ZL, yz + 0.1, 0], color=GREY_D, stroke_width=1.5),
+                        DashedLine([X(b3), yb - 0.1, 0], [ZR, yz + 0.1, 0], color=GREY_D, stroke_width=1.5))
+        ztag = MathTex(r"I_3 \text{ magnified } 27\times", font_size=22, color=GREY_B).next_to([ZL, yz - 0.3, 0], RIGHT,
+                                                                                            buff=0)
+        zb = yz - 0.3
+        zbars = [Line([Z(a), zb, 0], [Z(b), zb, 0], color=C.EPS, stroke_width=8) for a, b in ivs[3:8]]
+        assert all(a3 <= a <= b <= b3 for a, b in ivs[3:8]) and ztag.get_right()[0] < Z(ivs[3][0]) - 0.2
+        assert Z(ivs[7][1]) - Z(ivs[7][0]) > 0.04  # I_8 is still visible in the zoom
         lens = [b - a for a, b in ivs]
         readout = [MathTex(rf"I_{{{k + 1}}}: \ \text{{length }} 3^{{-{k + 1}}} = {sci(lens[k], 1)}, \ q_{{{k + 1}}} = "
-                           rf"{rats[k]:.4f} \notin I_{{{k + 1}}}", font_size=26, color=C.EPS).move_to([0, -0.6, 0])
+                           rf"{rats[k]:.4f} \notin I_{{{k + 1}}}", font_size=26, color=C.EPS).move_to([0, -0.7, 0])
                    for k in range(len(ivs))]
-        xl = MathTex(rf"\bigcap_n I_n = \{{{x:.10f}\ldots\}}", font_size=32, color=C.EPS).move_to([0, -1.5, 0])
+        xl = MathTex(rf"\bigcap_n I_n = \{{{x:.10f}\ldots\}}", font_size=32, color=C.EPS).move_to([0, -1.6, 0])
+        xdot = Dot([Z(x), zb, 0], radius=0.07, color=WHITE)
         assert all(not (a <= q <= b) for (a, b), q in zip(ivs, rats))
         thm = VGroup(
             label(r"\textbf{RCA 5.6} \ (Baire) \ a complete metric space is not a countable union of nowhere dense sets",
@@ -67,14 +89,16 @@ class Baire(VoiceoverScene):
                       FadeIn(q_l))
             vo.wait_until("b")
             self.play(Create(bars[0]), FadeIn(readout[0]))
-            for k in range(1, 6):
+            for k in range(1, 3):
                 self.play(Create(bars[k]), bars[k - 1].animate.set_stroke(opacity=0.3),
                           FadeTransform(readout[k - 1], readout[k]), run_time=0.8)
-            for k in range(6, len(bars)):
-                self.add(bars[k])
-            self.play(FadeTransform(readout[5], readout[-1]))
+            self.play(Create(guides), Create(zline), FadeIn(zends), FadeIn(ztag), run_time=0.8)
+            for k in range(3, 8):
+                self.play(Create(zbars[k - 3]), (zbars[k - 4] if k > 3 else bars[2]).animate.set_stroke(opacity=0.3),
+                          FadeTransform(readout[k - 1], readout[k]), run_time=0.8)
+            self.play(FadeTransform(readout[7], readout[-1]))
             vo.wait_until("c")
-            self.play(FadeIn(xl), Flash([X(x), 0.2, 0], color=C.EPS))
+            self.play(FadeIn(xl), FadeIn(xdot, scale=2), Flash([Z(x), zb, 0], color=C.EPS))
             vo.wait_until("d")
             self.play(FadeIn(thm))
         self.wait(0.3)
@@ -100,7 +124,7 @@ class Baire(VoiceoverScene):
                 r = e * 2.0 ** (-(k + 1)) / 2
                 g.add(Line([X(max(0, q - r)), y, 0], [X(min(1, q + r)), y, 0], color=C.MEASURE, stroke_width=10))
             covers.add(g)
-            labs.add(MathTex(rf"U: \ \varepsilon = {e}, \ m(U) \le {e} \ ({m:.4f})", font_size=24, color=C.MEASURE).next_to(
+            labs.add(MathTex(rf"U_{{{e}}}: \ m(U_{{{e}}}) \le {e} \ ({m:.4f})", font_size=24, color=C.MEASURE).next_to(
                 [R_, y, 0], RIGHT, buff=0.2))
         assert np.all(measures <= eps + 1e-3) and labs.get_right()[0] < 6.9
         defs = VGroup(
@@ -112,13 +136,13 @@ class Baire(VoiceoverScene):
                   color=C.PATHOLOGY),
             label(r"two meanings of ``most'', \ and they disagree", font_size=24, color=C.EPS),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
-        head = label(r"Meager and residual: \ Baire's notion of ``small'' and ``almost everything''", font_size=30).to_edge(
+        head = label(r"Meager and residual: \ Baire's notion of ``small'' and ``almost everything''", font_size=34).to_edge(
             UP, buff=0.3)
         # a meager set to look at first: the rationals, each point nowhere dense, countably many of them
-        ticks = VGroup(*[VGroup(*[Line([X(q), y - 0.12, 0], [X(q), y + 0.12, 0], color=GREY_A, stroke_width=1.5)
+        ticks = VGroup(*[VGroup(*[Line([X(q), y - 0.12, 0], [X(q), y + 0.12, 0], color=C.RATIONAL, stroke_width=1.5)
                                   for q in rats]) for y in rows_y])
         q_l = MathTex(r"\mathbb Q \cap [0, 1]: \ \text{countably many points, each nowhere dense: meager}", font_size=26,
-                      color=GREY_A).next_to([L, rows_y[0] + 0.45, 0], RIGHT, buff=0)
+                      color=C.RATIONAL).next_to([L, rows_y[0] + 0.45, 0], RIGHT, buff=0)
         assert q_l.get_right()[0] < 6.9 and q_l.get_top()[1] < head.get_bottom()[1] - 0.2
         with self.voiceover(
             "<bookmark mark='a'/> Baire's theorem gives a notion of size. A set is meager if it's a countable union of "
