@@ -124,14 +124,16 @@ class HigherOrder(VoiceoverScene):
         il = label(r"$f_{xy}$ near $0$: \ $+1$ on the $x$-axis, \ $-1$ on the $y$-axis", font_size=22,
                    color=GREY_A).next_to(ax, DOWN, buff=0.15)
         thm = VGroup(
-            label(r"if $f_x, f_y, f_{xy}$ exist near a point \ (Rudin 9.41)", font_size=28),
+            label(r"if $f_x, f_y, f_{xy}$ exist near a point", font_size=28),
             label(r"and $f_{xy}$ is continuous there, \ then $f_{yx}$ exists and", font_size=28),
-            MathTex(r"f_{yx} = f_{xy}", font_size=40, color=C.EPS),
+            MathTex(r"f_{yx} = f_{xy}", r"\quad \text{\scriptsize (Rudin 9.41)}", font_size=40),
             label(r"in the museum piece $f_{xy}$ jumps at $0$:", font_size=26, color=C.PATHOLOGY),
             MathTex(r"f_{xy} = \frac{x^6 + 9x^4y^2 - 9x^2y^4 - y^6}{(x^2 + y^2)^3}", font_size=30, color=GREY_A),
             label(r"(computed symbolically, \ as are the values $\pm 1$)", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        thm.next_to([0.4, title.get_bottom()[1] - 0.3, 0], DR, buff=0)
+        thm[2][0].set_color(C.EPS)
+        thm[2][1].set_color(GREY_B)
+        thm.next_to([0.1, title.get_bottom()[1] - 0.3, 0], DR, buff=0)
         expected = (x**6 + 9 * x**4 * y**2 - 9 * x**2 * y**4 - y**6) / (x**2 + y**2) ** 3
         assert sp.simplify(fxy - expected) == 0
         # why 9.41 holds (Rudin 9.40): Delta(h, k)/hk = f_xy at some point (xi, eta) inside the h x k rectangle.
@@ -177,12 +179,12 @@ class HigherOrder(VoiceoverScene):
                                            ("-", (0.8, 0), 0.25 * DR), ("+", (0, 0), 0.25 * DL))]).set_z_index(4)
         why = VGroup(
             MathTex(r"\frac{f(h,k) - f(0,k) - f(h,0) + f(0,0)}{hk} = f_{xy}(\xi, \eta)", font_size=28),
-            label(r"for some $(\xi, \eta)$ in the rectangle \ (the mean value theorem twice, 9.40)",
-                  font_size=22, color=GREY_A),
+            label(r"for some $(\xi, \eta)$ in the rectangle \ (Rudin 9.40)", font_size=22, color=GREY_A),
             label(r"any shape, shrunk: \ $(\xi, \eta) \to 0$, \ and continuity leaves one limit",
                   font_size=22, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
-        assert why.get_right()[0] <= 6.6 and why.get_bottom()[1] > -3.6 and thm.get_right()[0] <= 6.6
+        assert why.get_right()[0] <= 6.6 and why.get_bottom()[1] > -3.6 and thm.get_right()[0] <= 6.6, (
+            why.get_right()[0], why.get_bottom()[1], thm.get_right()[0])
         assert thm.get_bottom()[1] > -3.6 and ax.get_top()[1] < title.get_bottom()[1] - 0.6
 
         rd = VGroup(MathTex(r"\frac{\Delta}{hk} = f_{xy}(\xi, \eta) =", font_size=30, color=C.EPS),
