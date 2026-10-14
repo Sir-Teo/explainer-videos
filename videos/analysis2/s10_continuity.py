@@ -196,7 +196,7 @@ class Continuity(VoiceoverScene):
         VGroup(la, lb).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(mag.frame, UP, buff=0.12).align_to(
             mag.frame, RIGHT)
         verdict = label(r"two sequences $\to 0$ with different limits of $f$: \ no limit at $0$, however $f(0)$ is "
-                        r"defined", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.2)
+                        r"defined", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "<bookmark mark='t'/> Limits and continuity can also be tested with sequences: f is continuous at p "
             "exactly when f carries every sequence converging to p to a sequence converging to f of p. This is handy for "
@@ -367,7 +367,7 @@ class Continuity(VoiceoverScene):
         tail = VGroup(label(r"\textbf{Rudin 4.9} \ sums, products and quotients (where defined): \ the "
                             r"$\varepsilon/2$ trick again", font_size=26),
                       label(r"so every polynomial and every rational function is continuous", font_size=24,
-                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
+                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The open-set version makes some proofs one line. <bookmark mark='a'/> A composition of continuous functions "
             "is continuous, because the preimage under g of f is the preimage under f of the preimage under g. "
