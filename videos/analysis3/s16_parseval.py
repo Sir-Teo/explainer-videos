@@ -50,7 +50,7 @@ class Parseval(VoiceoverScene):
                            MathTex(r"\sigma_N = \sum_{|n| \le N} \Big(1 - \frac{|n|}{N + 1}\Big) c_n e^{inx}",
                                    font_size=28, color=C.APPROX)).arrange(RIGHT, buff=0.4),
                     label(r"a positive kernel, \ like Landau's \ (Parts 6 and 7)", font_size=22, color=GREY_A)
-                    ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
+                    ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, "
             "<bookmark mark='s'/> form an algebra of functions on the circle that contains the constants, separates "

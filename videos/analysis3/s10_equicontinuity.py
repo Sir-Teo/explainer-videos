@@ -57,7 +57,7 @@ class Equicontinuity(VoiceoverScene):
                       label(r"every pair is at sup distance $> 1$: \ no subsequence converges uniformly", font_size=24,
                             color=C.PATHOLOGY)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         foot = label(r"(Rudin 7.20 shows more: \ no subsequence converges even pointwise)", font_size=22,
-                     color=GREY_B).to_edge(DOWN, buff=0.25)
+                     color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> Take sine of n x on the interval from zero to two pi. Every one of them is bounded "
             "by one, so they all lie in the unit ball of the space. <bookmark mark='b'/> But compute their sup "

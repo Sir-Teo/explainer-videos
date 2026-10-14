@@ -274,7 +274,7 @@ class PowerSeries(VoiceoverScene):
     def pi_section(self):
         d = load("power")
         br, zero = d["brackets"], float(d["zero"])
-        ax = plain_axes([0, 2.2, 0.5], [-1, 1.1, 0.5], 6.8, 3.4).move_to([-3.1, 0.35, 0])
+        ax = plain_axes([0, 2.2, 0.5], [-1, 1.1, 0.5], 6.8, 3.4).move_to([-3.1, 0.5, 0])
         t = np.linspace(0, 2.2, 600)
         cg = polyline(ax, t, np.array([cos_series(v) for v in t]), color=C.FUNC, stroke_width=3.5)
         cl = MathTex(r"\cos t = 1 - \frac{t^2}{2!} + \frac{t^4}{4!} - \cdots", font_size=28, color=C.FUNC)
@@ -315,7 +315,7 @@ class PowerSeries(VoiceoverScene):
                       ).to_edge(UP, buff=0.3)
         out = VGroup(MathTex(r"\pi := 2x_0 = 3.14159265358979\ldots", font_size=32, color=C.EPS),
                      MathTex(r"E(i\pi/2) = i, \quad E(2\pi i) = 1, \quad E(z + 2\pi i) = E(z)", font_size=28),
-                     ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.25)
+                     ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         assert abs(2 * zero - math.pi) < 1e-12 and cos_series(2.0) < 0
         with self.voiceover(
             "<bookmark mark='a'/> Now pi. The cosine series starts at one, and at t equal to two it's already negative, "
@@ -402,7 +402,7 @@ class PowerSeries(VoiceoverScene):
         step = label(r"if $P(z_0) \ne 0$: \ a small circle around $z_0$ maps to a loop around $P(z_0)$, "
                      r"which dips closer to $0$", font_size=24, color=C.APPROX).to_edge(DOWN, buff=0.75)
         part7 = label(r"Part 7: \ the same fact in one line, from Liouville's theorem", font_size=22, color=GREY_B)
-        part7.to_edge(DOWN, buff=0.25)
+        part7.to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> One more gift of these series: the fundamental theorem of algebra, Rudin 8.8. The "
             "size of a polynomial grows without bound far out, so it has a smallest value somewhere. "

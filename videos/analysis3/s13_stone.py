@@ -275,7 +275,7 @@ class StoneWeierstrass(VoiceoverScene):
                       MathTex(r"\sup_K |P_n(f) - |f|| \le \sup_{[-a, a]} |P_n(y) - |y||", font_size=30, color=C.EPS)
                       ).arrange(DOWN, buff=0.12).next_to(axR, DOWN, buff=0.2)
         foot = label(r"(Bernstein's polynomials here; \ subtract $P_n(0)$ so that no constant is needed)", font_size=20,
-                     color=GREY_B).to_edge(DOWN, buff=0.15)
+                     color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The proof has four steps. Let B be the uniform closure of the algebra; B is itself an algebra, and we "
             "want to show it contains every continuous function. <bookmark mark='a'/> Step one: if f is in B, so is "
@@ -577,7 +577,7 @@ class StoneWeierstrass(VoiceoverScene):
         assert rows.get_left()[0] > 2.9 and rows.get_right()[0] < 6.95
         fix = label(r"add $\bar z$ (a \textbf{self-adjoint} algebra): \ the trigonometric polynomials "
                     r"$\sum c_n e^{in\theta}$ are dense in $C(\mathbb T)$", font_size=26, color=C.CONNECTED_SET)
-        fix.to_edge(DOWN, buff=0.2)
+        fix.to_edge(DOWN, buff=0.35)
         for w in W:
             assert np.abs(w).max() >= 1
         with self.voiceover(

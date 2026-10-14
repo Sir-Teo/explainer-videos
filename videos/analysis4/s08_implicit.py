@@ -128,11 +128,14 @@ class ImplicitFunction(VoiceoverScene):
     # ------------------------------------------------------------------
     def theorem(self):
         thm = VGroup(
-            label(r"\textbf{Rudin 9.28} \ (two variables) \ $f$ is $\mathcal C^1$, \ $f(a, b) = 0$, \ "
-                  r"$\partial f / \partial y\,(a, b) \ne 0$ $\Rightarrow$", font_size=28),
+            label(r"The implicit function theorem", font_size=34),
+            VGroup(label(r"$f$ is $\mathcal C^1$, \ $f(a, b) = 0$, \ $\partial f / \partial y\,(a, b) \ne 0$ "
+                         r"$\Rightarrow$", font_size=28),
+                   label(r"(Rudin 9.28, two variables)", font_size=22, color=GREY_B)).arrange(RIGHT, buff=0.3,
+                                                                                         aligned_edge=DOWN),
             label(r"near $a$ there is exactly one $\mathcal C^1$ function $g$ with $g(a) = b$ and $f(x, g(x)) = 0$",
                   font_size=28, color=C.EPS),
-        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        ).arrange(DOWN, buff=0.14).to_edge(UP, buff=0.3)
         # the picture: a window around (a, b) = (2/3, 4/3) on the folium, and its image under Phi(x, y) = (x, f(x, y))
         a, b, h = 2 / 3, 4 / 3, 0.3
         xr, yr = (a - h, a + h), (b - h, b + h)
@@ -167,11 +170,14 @@ class ImplicitFunction(VoiceoverScene):
             return xs, ys
 
         lv_src, lv_img = VGroup(), VGroup()
-        for c_ in levels:
+        for c_ in levels:  # the other level sets in grey (dashed where f < 0); blue is for f = 0 only
             lx, ly = level(c_)
-            col = C.SEQ if c_ < 0 else C.CLOSED_SET
-            lv_src.add(polyline(A, lx, ly, color=col, stroke_width=1.8))
-            lv_img.add(polyline(B, lx, fol(lx, ly), color=col, stroke_width=1.8))  # = the line v = c
+            src_ = polyline(A, lx, ly, color=GREY_B, stroke_width=1.8)
+            img_ = polyline(B, lx, fol(lx, ly), color=GREY_B, stroke_width=1.8)  # = the line v = c
+            if c_ < 0:
+                src_, img_ = DashedVMobject(src_, num_dashes=14), DashedVMobject(img_, num_dashes=14)
+            lv_src.add(src_)
+            lv_img.add(img_)
         lx, ly = level(0.0)
         cur_src = polyline(A, lx, ly, color=C.FUNC, stroke_width=4)
         cur_img = polyline(B, lx, fol(lx, ly), color=C.FUNC, stroke_width=4)
@@ -205,8 +211,8 @@ class ImplicitFunction(VoiceoverScene):
         A_l = MathTex(r"(x, y) \text{ near } (\tfrac23, \tfrac43)", font_size=22, color=GREY_A).next_to(A, UP, buff=0.12)
         B_l = MathTex(r"(x,\ v = f(x, y))", font_size=22, color=GREY_A).next_to(B, UP, buff=0.12)
         B_0 = MathTex(r"v = 0", font_size=20, color=C.FUNC).next_to(B.c2p(xr[1], 0), RIGHT, buff=0.08)
-        A_n = label(r"level sets of $f$", font_size=20, color=GREY_A).next_to(A, DOWN, buff=0.15)
-        B_n = label(r"become horizontal lines", font_size=20, color=GREY_A).next_to(B, DOWN, buff=0.15)
+        A_n = label(r"level sets of $f$ \ (dashed: $f < 0$)", font_size=22, color=GREY_A).next_to(A, DOWN, buff=0.15)
+        B_n = label(r"become horizontal lines", font_size=22, color=GREY_A).next_to(B, DOWN, buff=0.15)
         rows = [
             MathTex(r"\Phi(x, y)", r"=", r"(x,\ f(x, y))", font_size=32),
             MathTex(r"\Phi'(x, y)", r"=", r"\begin{pmatrix} 1 & 0 \\ f_x & f_y \end{pmatrix}", font_size=32),
@@ -215,7 +221,7 @@ class ImplicitFunction(VoiceoverScene):
         ]
         whys = [why(r"the trick: \ keep $x$, \ record the value of $f$", 22), why(r"a triangular matrix", 22),
                 why(r"so 9.24 inverts $\Phi$ near $(a, b)$", 22), why(r"$f(x, g(x)) = 0$: \ the level set is a graph", 22)]
-        step = ladder(self, rows, whys, keep=4, top=1.9, buff=0.3, x=2.35, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=thm.get_bottom()[1] - 0.35, buff=0.3, x=2.0)
         out = VGroup(label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$,", font_size=28, color=C.EPS),
                      label(r"so $g' = -f_x / f_y = 0.8$ at $a$", font_size=28, color=C.EPS)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.3).set_x(3.6)
