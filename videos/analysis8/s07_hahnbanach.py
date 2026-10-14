@@ -99,6 +99,7 @@ class HahnBanach(VoiceoverScene):
         place_label(fan_l, sx.c2p(-2.4, 1.6), obst, dirs=(UR,), buffs=(0.1, 0.2), avoid=list(s_lab))
         assert fan_l.get_top()[1] < setup.get_bottom()[1] - 0.1
         setting = VGroup(sx, mline, circ, x0d, fd, s_lab)
+        whole = VGroup(setting, fan, fan_l).shift(LEFT * 3.7)  # centred while it is alone; it moves right at 'b'
         with self.voiceover(
             "<bookmark mark='a'/> Hahn-Banach extends a linear functional from a subspace to the whole space without "
             "breaking a bound. Here's the key step, in the plane: a functional on the x-axis, bounded by the length, "
@@ -113,6 +114,7 @@ class HahnBanach(VoiceoverScene):
                       FadeIn(s_lab))
             self.play(LaggedStart(*[Create(l_) for l_ in fan], lag_ratio=0.15), FadeIn(fan_l), run_time=1.6)
             vo.wait_until("b")
+            self.play(whole.animate.shift(RIGHT * 3.7), run_time=0.8)
             self.play(FadeIn(setup[2]), Create(ax), FadeIn(y_l), Create(g_lo), Create(g_hi), FadeIn(l_lo), FadeIn(l_hi))
             vo.wait_until("c")
             self.play(FadeOut(setting), FadeOut(fan), FadeOut(fan_l), run_time=0.5)

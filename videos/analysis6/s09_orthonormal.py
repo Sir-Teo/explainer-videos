@@ -51,8 +51,9 @@ class Orthonormal(VoiceoverScene):
         corner = sch_g.get_center().copy()
         sch_g.scale(1.6).move_to([-0.5, -0.4, 0])  # alone at first: big and centred; to the corner at 'b' 
         ax = plain_axes([-1, 1, 0.5], [-2.2, 2.2, 1], 5.4, 3.6, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0.0, -1.15, 0])
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}, "numbers_to_exclude": [-1, 0]},
+                        y_axis_config={"include_numbers": False}).move_to([0.0, -1.15, 0])
+        ynum = left_y_axis(ax, (-2, -1, 1, 2))  # at x = -1: the constant and the other curves never cross a number
         cols = [C.SEQ, C.APPROX, C.CONNECTED_SET, C.MEASURE, C.INNER]
         monos = [polyline(ax, xs, xs**k, color=GREY_C, stroke_width=2) for k in range(5)]
         legs = [polyline(ax, xs, curves[k], color=cols[k], stroke_width=3.5) for k in range(5)]
@@ -88,7 +89,8 @@ class Orthonormal(VoiceoverScene):
             self.play(Create(shad), GrowArrow(perp), Create(ra), FadeIn(s_l[0]))
             vo.wait_until("b")
             self.play(sch_g.animate.scale(1 / 1.6).move_to(corner), run_time=1.0)
-            self.play(FadeIn(head[1]), Create(ax), LaggedStart(*[Create(m) for m in monos], lag_ratio=0.2), run_time=2)
+            self.play(FadeIn(head[1]), Create(ax), FadeIn(ynum), LaggedStart(*[Create(m) for m in monos], lag_ratio=0.2),
+                      run_time=2)
             vo.wait_until("c")
             for k in range(3):
                 self.play(ReplacementTransform(monos[k], legs[k]), FadeIn(texs[k]), run_time=1.0)
@@ -106,7 +108,7 @@ class Orthonormal(VoiceoverScene):
         d = load("bessel")
         c, partial, xs, curves, Ms = d["c"], d["partial"], d["xs"], d["curves"], d["Ms"]
         ax = plain_axes([-1, 1, 0.5], [-1.5, 1.5, 0.5], 5.6, 3.2, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}, "numbers_to_exclude": [-1, 0]},
                         y_axis_config={"include_numbers": False}).move_to([-3.3, 0.0, 0])
         ynum = left_y_axis(ax, (-1.0, -0.5, 0.5, 1.0), decimals=1)  # at x = -1: sign x and s_N never cross a number
         sg = VGroup(Line(ax.c2p(-1, -1), ax.c2p(0, -1), color=WHITE, stroke_width=4),
