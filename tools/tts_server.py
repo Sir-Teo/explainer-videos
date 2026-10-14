@@ -40,7 +40,13 @@ from explainer import lang as L  # noqa: E402  (pure Python: tokenization and no
 
 QA_LOG = ROOT / ".cache" / "tts" / "qa.jsonl"
 ALIGNER = "mlx-community/Qwen3-ForcedAligner-0.6B-8bit"
-ASR = "mlx-community/Qwen3-ASR-0.6B-8bit"
+ASR = "mlx-community/Qwen3-ASR-0.6B-4bit"
+MODELS = Path.home() / "models"  # local copies (curl-resumed on slow links); else fetched from the Hub
+
+
+def model_path(repo: str) -> str:
+    local = MODELS / repo
+    return str(local) if (local / "config.json").exists() else repo
 LANG_NAME = {"en": "English", "zh": "Chinese"}
 PAUSE = {"sentence": 0.38, "clause": 0.22}
 
@@ -118,7 +124,7 @@ class Engine:
         from mlx_audio.tts.utils import load_model
 
         self.profile = profile
-        self.model = load_model(profile["model"])
+        self.model = load_model(model_path(profile["model"]))
         self.sr = self.model.sample_rate
 
     def take(self, text: str, lang: str, attempt: int) -> np.ndarray:
@@ -149,8 +155,8 @@ class Checker:
     def __init__(self):
         from mlx_audio.stt.utils import load_model
 
-        self.asr = load_model(ASR)
-        self.aligner = load_model(ALIGNER)
+        self.asr = load_model(model_path(ASR))
+        self.aligner = load_model(model_path(ALIGNER))
 
     def transcribe(self, audio: np.ndarray, sr: int, lang: str) -> str:
         a16 = resample(audio, sr, 16000)
