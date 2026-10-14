@@ -3,7 +3,7 @@
 
 Runs in its own environment (MLX on Apple Silicon), separate from the render pipeline:
 
-    uv venv --python 3.12 .venv-tts && source .venv-tts/bin/activate && uv pip install mlx-audio soundfile
+    uv venv --python 3.12 .venv-tts && source .venv-tts/bin/activate && uv pip install mlx-audio soundfile pypinyin
     python tools/tts_server.py --voice qwen3-ryan-vivian        # serves http://127.0.0.1:8765
 
 Render with ``EXPLAINER_TTS=server EXPLAINER_VOICE=<the same profile>`` (``explainer/tts.py`` caches every line,
@@ -106,7 +106,11 @@ _ZH_NUM = str.maketrans("零〇一二两三四五六七八九", "001223456789")
 def comparable(text: str, lang: str) -> str:
     if lang == "en":
         return " ".join(_EN_NUM.get(w, w) for w in re.findall(r"[a-z0-9]+", text.lower()))
-    return text.translate(_ZH_NUM)
+    # Compare Chinese by sound (pinyin with tones): the recognizer often writes a homophone (项数 as 橡树), which
+    # is the right speech and should not cost a re-take; a wrong tone still shows.
+    from pypinyin import Style, lazy_pinyin
+
+    return " ".join(lazy_pinyin(text.translate(_ZH_NUM), style=Style.TONE3)).lower()
 
 
 # ---------------------------------------------------------------------------
