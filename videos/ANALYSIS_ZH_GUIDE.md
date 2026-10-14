@@ -150,6 +150,36 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | the hop (Part 1's p ↦ (2p+2)/(p+2)) | 那一跳 |
 | script A (𝒜) | 花体A |
 | bookkeeping (a technicality) | 技术性的规定 (not 记账: 账本 is the ledger) |
+| the hook (a part's opening chapter) | 开场 |
+| museum piece (a pathology card); into the museum | 博物馆藏品；收进我们的博物馆 |
+| alternating harmonic / harmonic / geometric series | 交错调和级数 / 调和级数 / 几何级数 |
+| running total; overshoot; swing | 累计的和；冲过头；摆动 |
+| the first / second player (ε, then N or δ) | 第一个玩家 / 第二个玩家 |
+| band (ε, horizontal) / strip (δ, vertical) | 带子、横带 / 竖带 |
+| the ε/2 trick, ε/3 | 二分之ε技巧，三分之ε技巧 |
+| tail (E_N); diameter | 尾部；直径 |
+| subsequential limit | 子序列极限 |
+| high-water / low-water mark | 高水位线 / 低水位线 |
+| R^k (spoken "R k") | k维空间 |
+| Cauchy criterion; condensation test | 柯西准则；柯西凝聚判别法 |
+| Dirichlet's test; alternating series test | 狄利克雷判别法；交错级数判别法 |
+| telescope (a sum) | 裂项相消 |
+| Cauchy product | 柯西乘积 |
+| Abel, Dirichlet, Nicole Oresme, Mertens, Bolzano, Darboux | 阿贝尔，狄利克雷，尼科尔·奥雷姆，梅滕斯，波尔查诺，达布 |
+| Euler's constant | 欧拉常数 |
+| pile (Riemann's positive / negative piles) | 堆 |
+| compound interest | 复利 |
+| preimage, pull back | 原像，拉回 |
+| bijection; one to one; onto | 双射；一对一；满射 |
+| extreme value theorem | 最值定理 (not 极值定理) |
+| discontinuity of the first (simple) / second kind; one-sided limit | 第一类（简单）间断 / 第二类间断；单侧极限 |
+| difference quotient, secant, tangent, chord | 差商，割线，切线，弦 |
+| chain rule; (vertical) shear | 链式法则；（竖直方向的）错切 |
+| intermediate value property | 介值性质 |
+| f′(x), f′(0); g′, g″ | f在x处的导数、f在0处的导数；g的一阶导数、二阶导数 (no prime symbols in the text) |
+| p′ (a second point, not a derivative) | p撇 |
+| smooth / analytic; bump function | 光滑 / 解析；鼓包函数 |
+| vector-valued function | 向量值函数 |
 
 ## Conventions settled while translating Part 1
 

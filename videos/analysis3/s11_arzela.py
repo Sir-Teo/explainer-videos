@@ -256,13 +256,15 @@ class ArzelaAscoli(VoiceoverScene):
         # subsequence closing in on one of its limit points (Bolzano-Weierstrass)
         nn = np.arange(1, 4001)
         X2 = np.c_[np.cos(nn), np.sin(2.3 * nn)]
-        Lp = np.array([0.35, -0.2])
+        # 2.3 = 23/10, so the points lie on ten curves (cos t, sin(2.3t + 0.2 pi j)); a limit point must lie on one:
+        # this one is where x = 0.35 on the j = 1 curve
+        Lp = np.array([0.35, np.sin(2.3 * np.arccos(0.35) + 0.2 * np.pi)])
         sub, r_ = [], 0.6
         for n_ in nn:
             dd = np.linalg.norm(X2[n_ - 1] - Lp)
             if dd < r_ and (not sub or n_ > sub[-1]):
                 sub.append(int(n_))
-                r_ = dd * 0.6
+                r_ = dd * 0.7
             if len(sub) == 7:
                 break
         dsub = np.linalg.norm(X2[np.array(sub) - 1] - Lp, axis=1)

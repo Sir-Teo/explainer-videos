@@ -1,0 +1,622 @@
+{
+ "title": "分析学，从零搭建 · 第2部分：极限——序列、级数、连续性与导数",
+ "chapters": {
+  "Hook": "同一个级数，总和由你定",
+  "Sequences": "1. 序列及其极限",
+  "Cauchy": "2. 柯西序列与完备性",
+  "LimSup": "3. 上极限与下极限",
+  "Series": "4. 级数，以及比较判别法",
+  "NumberE": "5. 数e",
+  "Tests": "6. 根值判别法、比值判别法与幂级数",
+  "Abel": "7. 分部求和，以及级数相乘",
+  "Rearrangement": "8. 重排",
+  "Continuity": "9. 连续性",
+  "Compactness": "10. 连续性与紧性",
+  "Connectedness": "11. 连续性与连通性",
+  "Derivative": "12. 导数",
+  "MeanValue": "13. 中值定理",
+  "Taylor": "14. 泰勒定理",
+  "Outro": "向量值函数，以及账本的第二行"
+ },
+ "lines": {
+  "90fe1ad6e0cd": {
+   "scene": "Hook",
+   "en": "In Part 1 we built the real numbers: a line with no holes, where every bounded set has a least upper bound. <bookmark mark='l'/> That's the first row of our ledger. Now we put it to work on limits: sequences, infinite sums, continuity and derivatives. And we start with a warning about infinite sums.",
+   "zh": "在第1部分，我们造出了实数：一条没有洞的直线，其中每个有界集都有最小上界。<bookmark mark='l'/>这是我们账本的第一行。现在，我们要用它来研究极限：序列、无穷和、连续性和导数。我们先从一个关于无穷和的警告说起。"
+  },
+  "f5d817f1a5cc": {
+   "scene": "Hook",
+   "en": "Here's the alternating harmonic series: one, minus a half, plus a third, minus a quarter, and so on. <bookmark mark='a'/> Add it up one term at a time and the running total swings back and forth, each swing smaller than the last, <bookmark mark='l'/> closing in on the natural log of two, about 0.693.",
+   "zh": "这是交错调和级数：1，减二分之一，加三分之一，减四分之一，依此类推。<bookmark mark='a'/>一项一项地加上去，累计的和会来回摆动，每次摆动都比上一次小，<bookmark mark='l'/>逐渐逼近2的自然对数，大约是0.693。"
+  },
+  "b565fd6820d4": {
+   "scene": "Hook",
+   "en": "Now take exactly the same terms, and add them in a different order. <bookmark mark='r'/> Use positive terms, one, a third, a fifth, and so on, until the total passes pi. Then use negative terms until it drops back below pi. Then positive terms again. <bookmark mark='g'/> Watch where the total goes.",
+   "zh": "现在，取完全相同的这些项，换一个顺序来加。<bookmark mark='r'/>先用正项：1、三分之一、五分之一，等等，一直加到总和超过π。然后用负项，直到总和又落回π以下。然后再用正项。<bookmark mark='g'/>看看总和会跑到哪里去。"
+  },
+  "afa32205e02e": {
+   "scene": "Hook",
+   "en": "<bookmark mark='p'/> Plot the running total against the number of terms used. It overshoots pi, falls back, overshoots again, and the swings shrink, because each swing is at most the size of the last term used. <bookmark mark='m'/> After a million terms, the total is within a hundred-thousandth of pi. Reaching pi takes about a hundred and thirty-four positive terms for every negative one, but every term of the original series gets used, exactly once.",
+   "zh": "<bookmark mark='p'/>以用过的项数为横轴，把累计的和画出来。它冲过π，又落回来，再冲过去，而摆动越来越小，因为每次摆动的幅度，至多就是最后用上的那一项的大小。<bookmark mark='m'/>用了100万项之后，总和与π相差不到十万分之一。要到达π，大约每用1个负项，就要用134个正项，但原级数的每一项都会被用到，而且恰好用一次。"
+  },
+  "4b7146866631": {
+   "scene": "Hook",
+   "en": "And pi isn't special. <bookmark mark='a'/> Aim at minus one instead, and the same recipe lands on minus one. <bookmark mark='b'/> Keep raising the target and the total runs off to infinity. Same terms, every time; only the order changes, <bookmark mark='c'/> and in the natural order they add up to log two.",
+   "zh": "π也没什么特别的。<bookmark mark='a'/>换成瞄准负1，同样的配方就落在负1上。<bookmark mark='b'/>让目标不断升高，总和就会跑向无穷。每一次都是同样的项；变的只是顺序，<bookmark mark='c'/>而按原本的自然顺序，它们加起来是ln 2。"
+  },
+  "5219afc34cf4": {
+   "scene": "Hook",
+   "en": "This is Riemann's rearrangement theorem, which we'll prove in chapter eight. The lesson: <bookmark mark='m'/> an infinite sum is not a sum. It's a limit, and limits can depend on the order in which you take them, which is exactly the thesis of this series. So before we can trust any manipulation with infinitely many terms, we need to say precisely what convergence means.",
+   "zh": "这就是黎曼重排定理，我们会在第八章证明它。教训是：<bookmark mark='m'/>无穷和并不是和。它是一个极限，而极限可能取决于取极限的顺序，这正是这个系列的核心论点。所以，在我们敢相信任何涉及无穷多项的操作之前，必须先精确地说清楚，收敛是什么意思。"
+  },
+  "d5074b3e8a01": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters three to five of Rudin's Principles. <bookmark mark='a'/> First, sequences and series: convergence, Cauchy sequences, upper and lower limits, the convergence tests, the number e, and what you may and may not do with an infinite sum. <bookmark mark='b'/> Then continuity, and what it gains from compactness and connectedness. <bookmark mark='c'/> And then the derivative: the mean value theorem, and Taylor's theorem.",
+   "zh": "计划是这样的，跟着鲁丁《数学分析原理》的第3到第5章走。<bookmark mark='a'/>首先是序列和级数：收敛、柯西序列、上极限和下极限、各种收敛判别法、数e，以及对无穷和，什么能做、什么不能做。<bookmark mark='b'/>然后是连续性，以及它从紧性和连通性那里得到了什么。<bookmark mark='c'/>最后是导数：中值定理，还有泰勒定理。"
+  },
+  "02d33ea3057d": {
+   "scene": "Sequences",
+   "en": "Chapter one. Cauchy, in 1821, said a sequence converges to a limit when its terms get, and stay, arbitrarily close to it. Making arbitrarily close precise is the whole subject.",
+   "zh": "第一章。1821年，柯西说：一个序列收敛到一个极限，是指它的项会变得任意接近这个极限，而且一直保持这么近。把“任意接近”说精确，就是这门学科的全部。"
+  },
+  "76ef6dbf76c3": {
+   "scene": "Sequences",
+   "en": "Here's a sequence: one plus or minus one and a half over n, alternating sides of one. <bookmark mark='d'/> Rudin's definition: p n converges to p if for every epsilon greater than zero there's an N such that every term after the N-th is within epsilon of p. <bookmark mark='g'/> Read it as a game with two players.",
+   "zh": "这是一个序列：1加减n分之1.5，在1的两侧交替出现。<bookmark mark='d'/>鲁丁的定义是：如果对任意大于0的ε，都存在一个N，使得第N项之后的每一项与p的距离都小于ε，就说p_n收敛到p。<bookmark mark='g'/>可以把它读成一个双人游戏。"
+  },
+  "8cb1a03977b2": {
+   "scene": "Sequences",
+   "en": "<bookmark mark='e'/> The first player, epsilon, picks a band around the limit: here, half-width a half. <bookmark mark='n'/> The second player answers with an N: past N, every dot must sit inside the band. N equals 3 works. <bookmark mark='s'/> Epsilon tightens the band to 0.2; now N has to be 7. <bookmark mark='t'/> At 0.05, N is 30. The sequence converges because the second player can always answer, however small the band.",
+   "zh": "<bookmark mark='e'/>第一个玩家ε，在极限周围划出一条带子：这里半宽是0.5。<bookmark mark='n'/>第二个玩家用一个N来回应：过了N，每个点都必须落在带子里。N等于3就行。<bookmark mark='s'/>ε把带子收窄到0.2；这时N得取7。<bookmark mark='t'/>到了0.05，N是30。这个序列收敛，是因为不管带子多窄，第二个玩家总能应对。"
+  },
+  "8c5ec02d5d26": {
+   "scene": "Sequences",
+   "en": "Notice the order of the moves. <bookmark mark='o'/> Epsilon goes first, and N is allowed to depend on it. Swapping the order would demand one N that works for every epsilon at once, which only an eventually constant sequence could satisfy. This game, with different rules about who moves when, will define almost everything in this series.",
+   "zh": "注意出招的顺序。<bookmark mark='o'/>ε先走，而N可以依赖于ε。如果把顺序反过来，就要求有一个N对所有的ε同时管用，只有从某一项起恒为常数的序列才做得到。这个系列里几乎所有的概念，都会用这个游戏来定义，只是谁先走、谁后走的规则各不相同。"
+  },
+  "f3fb85b9526e": {
+   "scene": "Sequences",
+   "en": "Here's a sequence that loses: minus one, one, minus one, one. <bookmark mark='b'/> Epsilon picks a band of half-width one half. Whatever limit you propose, and however far out you set N, the band can't hold both one and minus one. <bookmark mark='m'/> Slide the proposed limit anywhere: some dots always escape. The sequence diverges.",
+   "zh": "这是一个输掉游戏的序列：负1、1、负1、1。<bookmark mark='b'/>ε选一条半宽为二分之一的带子。不管你提出哪个极限，也不管N取得多远，这条带子都不可能同时容下1和负1。<bookmark mark='m'/>把提出的极限随便滑到哪里：总有点逃出去。这个序列发散。"
+  },
+  "eefaf54cf0f2": {
+   "scene": "Sequences",
+   "en": "Two quick consequences. <bookmark mark='u'/> A sequence can't have two limits: if it approached both p and p prime, take epsilon to be half the distance between them. The two bands don't overlap, and from some point on the terms would have to be in both. <bookmark mark='b'/> And a convergent sequence is bounded: all but finitely many terms sit in one band.",
+   "zh": "马上可以得到两个推论。<bookmark mark='u'/>一个序列不可能有两个极限：如果它同时趋近p和p撇，就取ε为它们之间距离的一半。两条带子互不重叠，而从某一项起，序列的项却必须同时落在两条带子里。<bookmark mark='b'/>另外，收敛序列是有界的：除了有限多项以外，所有的项都落在同一条带子里。"
+  },
+  "6cb6d93594fd": {
+   "scene": "Sequences",
+   "en": "And limits respect arithmetic. <bookmark mark='h'/> Take sums. <bookmark mark='a'/> The error of s n plus t n is at most the error of s n plus the error of t n, by the triangle inequality. <bookmark mark='b'/> Ask each sequence to get within epsilon over two, which each can do past its own threshold; <bookmark mark='c'/> past both thresholds, the total error is less than epsilon. <bookmark mark='t'/> This is the epsilon over two trick, and it, with its cousin epsilon over three, does most of the routine work in analysis.",
+   "zh": "极限还和算术运算配合得很好。<bookmark mark='h'/>以加法为例。<bookmark mark='a'/>由三角不等式，s_n加t_n的误差，至多是s_n的误差加上t_n的误差。<bookmark mark='b'/>要求每个序列的误差都小于二分之ε，各自过了自己的门槛，就都能做到；<bookmark mark='c'/>两个门槛都过了之后，总误差就小于ε。<bookmark mark='t'/>这就是二分之ε技巧，它和它的表亲三分之ε技巧一起，承担了分析学里大部分的常规工作。"
+  },
+  "e31463a73082": {
+   "scene": "Sequences",
+   "en": "Last idea for this chapter: subsequences. <bookmark mark='d'/> Keep some of the terms, in order, and you get a subsequence; its limits are called subsequential limits. <bookmark mark='e'/> This sequence has no limit, <bookmark mark='a'/> but its even terms converge to one, <bookmark mark='b'/> and its odd terms to minus one. <bookmark mark='c'/> And Part 1 pays off immediately: in a compact space, every sequence has a convergent subsequence, because an infinite set of terms must pile up somewhere. In particular, every bounded sequence of real numbers does.",
+   "zh": "这一章的最后一个概念：子序列。<bookmark mark='d'/>按原来的顺序保留其中一部分项，就得到一个子序列；子序列的极限叫作子序列极限。<bookmark mark='e'/>这个序列没有极限，<bookmark mark='a'/>但它的偶数项收敛到1，<bookmark mark='b'/>奇数项收敛到负1。<bookmark mark='c'/>第1部分马上就派上了用场：在紧空间里，每个序列都有收敛的子序列，因为由项组成的无穷集合，一定会在某个地方堆积起来。特别地，每个有界的实数序列都有收敛的子序列。"
+  },
+  "499b834e5b9a": {
+   "scene": "Cauchy",
+   "en": "Chapter two. To check that a sequence converges, the definition makes you name the limit first. Cauchy found a test that doesn't.",
+   "zh": "第二章。要验证一个序列收敛，按照定义，你得先说出极限是什么。柯西找到了一种不需要这样做的检验方法。"
+  },
+  "03bcd827e622": {
+   "scene": "Cauchy",
+   "en": "In the hook we used the fact that one minus a half plus a third, and so on, sums to the natural log of two. <bookmark mark='q'/> But suppose you didn't know that. How could you tell these partial sums converge at all? <bookmark mark='d'/> Cauchy's answer: call a sequence Cauchy if for every epsilon there's an N such that any two terms past N are within epsilon of each other. <bookmark mark='n'/> No limit appears anywhere: the terms are only compared with one another.",
+   "zh": "在开场里，我们用到了一个事实：1减二分之一加三分之一，依此类推，和是2的自然对数。<bookmark mark='q'/>可是，假如你不知道这一点呢？你怎么判断这些部分和到底收不收敛？<bookmark mark='d'/>柯西的回答是：如果对任意ε，都存在一个N，使得N之后的任意两项彼此相距都小于ε，就称这个序列为柯西序列。<bookmark mark='n'/>这里哪儿都没有出现极限：只是拿各项互相比较。"
+  },
+  "75a9fe410331": {
+   "scene": "Cauchy",
+   "en": "Rudin repackages this with the tail of the sequence: <bookmark mark='e'/> E N, everything from the N-th term on. <bookmark mark='b'/> The sequence is Cauchy exactly when the diameter of the tail shrinks to zero. Here the terms alternate, and each step is smaller than the last, so the whole tail lies between s N and s N plus one, and its diameter is one over N plus one. <bookmark mark='g'/> Epsilon picks a tolerance, say a tenth; <bookmark mark='w'/> and the tail fits once N reaches 10. <bookmark mark='f'/> For one twentieth, N is 20. Convergence, checked without ever mentioning log two.",
+   "zh": "鲁丁借助序列的尾部，把这个定义重新包装了一下：<bookmark mark='e'/>E_N，也就是从第N项起往后的所有项。<bookmark mark='b'/>序列是柯西序列，当且仅当尾部的直径缩小到0。这里的项在两侧交替，每一步都比上一步小，所以整个尾部都落在s_N和它的下一项之间，直径是N加1分之1。<bookmark mark='g'/>ε选一个容许误差，比如十分之一；<bookmark mark='w'/>N一到10，尾部就够窄了。<bookmark mark='f'/>换成二十分之一，N就是20。收敛性就这样验证了，从头到尾都没提到ln 2。"
+  },
+  "66c2e4fd58bd": {
+   "scene": "Cauchy",
+   "en": "One direction is easy. <bookmark mark='h'/> If p n converges to p, then any two late terms are close to each other, <bookmark mark='a'/> because each is close to p: the triangle inequality, routed through the limit, <bookmark mark='b'/> with the epsilon over two trick. <bookmark mark='c'/> The converse is the interesting direction, and whether it holds depends on the space you're in.",
+   "zh": "有一个方向很容易。<bookmark mark='h'/>如果p_n收敛到p，那么任意两个靠后的项都彼此接近，<bookmark mark='a'/>因为它们各自都接近p：这是借道极限的三角不等式，<bookmark mark='b'/>再加上二分之ε技巧。<bookmark mark='c'/>反过来的方向才有意思，它成不成立，取决于你身处哪个空间。"
+  },
+  "7941381a5ec8": {
+   "scene": "Cauchy",
+   "en": "Here's a space where it fails: the rational numbers. <bookmark mark='a'/> Start at one and repeatedly send p over q to p plus 2 q over p plus q. Every term is a fraction, alternating sides of root two. <bookmark mark='b'/> Each tail lies between two consecutive terms, and its diameter is one over the product of their denominators, so the sequence is Cauchy. <bookmark mark='z'/> Zoom in after it, keeping the tail the same size on screen.",
+   "zh": "这里有一个它不成立的空间：有理数。<bookmark mark='a'/>从1出发，反复把q分之p变成一个新的分数：分子是p加2q，分母是p加q。每一项都是分数，交替落在根号2的两侧。<bookmark mark='b'/>每个尾部都落在相邻的两项之间，直径是这两项分母乘积的倒数，所以这个序列是柯西序列。<bookmark mark='z'/>跟着它放大，让尾部在屏幕上保持同样的大小。"
+  },
+  "c5625d91d397": {
+   "scene": "Cauchy",
+   "en": "The tails shrink by a factor of nearly six each time. <bookmark mark='h'/> And they're closing in on a point that isn't there: root two, which Part 1 proved is not a fraction. In the rationals this sequence is Cauchy, and it has no limit.",
+   "zh": "尾部每次都缩小将近6倍。<bookmark mark='h'/>而它们正在逼近的那个点，在这里并不存在：那就是根号2，第1部分已经证明了它不是分数。在有理数里，这个序列是柯西序列，却没有极限。"
+  },
+  "c6342f7f61f7": {
+   "scene": "Cauchy",
+   "en": "So when does Cauchy imply convergent? <bookmark mark='t'/> Rudin's first answer: in a compact space, always. Here's a Cauchy sequence in the plane, spiraling in. <bookmark mark='a'/> Draw its tail, and close it up. <bookmark mark='b'/> As N grows the closed tails are nested, each inside the last, they're compact, and their diameters go to zero. <bookmark mark='c'/> Nested compact sets with diameters shrinking to zero meet in exactly one point, and that point is the limit, <bookmark mark='d'/> because every term of the N-th tail is within the tail's diameter of it.",
+   "zh": "那么，柯西序列什么时候一定收敛？<bookmark mark='t'/>鲁丁的第一个回答：在紧空间里，永远收敛。这是平面上的一个柯西序列，螺旋着向内收拢。<bookmark mark='a'/>画出它的尾部，再取闭包。<bookmark mark='b'/>随着N增大，这些闭的尾部一个套一个，每一个都在前一个里面，它们都是紧的，而且直径趋于0。<bookmark mark='c'/>一串套起来的、直径缩到0的紧集，恰好交于一点，而这个点就是极限，<bookmark mark='d'/>因为第N个尾部里的每一项，与它的距离都不超过这个尾部的直径。"
+  },
+  "1b1126643ecf": {
+   "scene": "Cauchy",
+   "en": "<bookmark mark='a'/> And in R k, the same is true, with no compactness assumed. A Cauchy sequence is bounded: one tail has a finite diameter, and there are only finitely many terms before it. <bookmark mark='b'/> So the whole sequence sits in a closed box, and Part 1's Heine-Borel theorem says the box is compact. Part 1 pays off again.",
+   "zh": "<bookmark mark='a'/>而在k维空间里，不用假设紧性，结论同样成立。柯西序列是有界的：某个尾部的直径有限，而它前面只有有限多项。<bookmark mark='b'/>所以整个序列落在一个闭的盒子里，而第1部分的海涅–博雷尔定理告诉我们，这个盒子是紧的。第1部分又一次派上了用场。"
+  },
+  "073c2fccf771": {
+   "scene": "Cauchy",
+   "en": "A space where every Cauchy sequence converges is called complete. <bookmark mark='a'/> R k is complete, and so is every compact space, and every closed subset of a complete space. <bookmark mark='b'/> The rationals are not, and neither is the interval from zero to one with zero removed: one over n is Cauchy there, with nowhere to go. <bookmark mark='c'/> The function spaces of this series will be complete too, and proving it will be real work: continuous functions with the sup distance in Part 3, and square integrable functions in Part 5. <bookmark mark='d'/> Completeness is so useful that Banach and Hilbert spaces are defined to have it. And every metric space can be completed, by adding the missing limits: that's how Cantor and Méray built the reals from the rationals.",
+   "zh": "如果一个空间里每个柯西序列都收敛，就称它是完备的。<bookmark mark='a'/>k维空间是完备的，每个紧空间也是，完备空间的每个闭子集也是。<bookmark mark='b'/>有理数不完备，从0到1的区间去掉0之后也不完备：n分之1在那里是柯西序列，却无处可去。<bookmark mark='c'/>这个系列里的函数空间也都会是完备的，而证明这一点要下真功夫：第3部分是带上确界距离的连续函数，第5部分是平方可积函数。<bookmark mark='d'/>完备性太有用了，以至于巴拿赫空间和希尔伯特空间在定义里就要求它。而且，每个度量空间都可以完备化，只要补上缺失的极限：康托尔和梅雷正是这样从有理数造出实数的。"
+  },
+  "3f15a5372f98": {
+   "scene": "Cauchy",
+   "en": "There's one more way to know a sequence converges without knowing its limit, and it uses the least-upper-bound property directly. <bookmark mark='t'/> A monotone, bounded sequence converges, to its supremum. <bookmark mark='a'/> Take one plus one over n, to the n-th power: it increases, and it never reaches 3. <bookmark mark='b'/> Three is an upper bound, and so are smaller numbers, down to a least one.",
+   "zh": "还有一种办法，不知道极限也能知道序列收敛，它直接用到最小上界性质。<bookmark mark='t'/>单调有界序列一定收敛，收敛到它的上确界。<bookmark mark='a'/>取（1加n分之1）的n次方：它单调递增，而且永远到不了3。<bookmark mark='b'/>3是一个上界，比3小的一些数也是，一直往下，直到最小的那个上界。"
+  },
+  "d88ac7134330": {
+   "scene": "Cauchy",
+   "en": "<bookmark mark='s'/> Call the least upper bound s star. <bookmark mark='e'/> Given epsilon, s star minus epsilon is not an upper bound, so some term s N is above it; <bookmark mark='n'/> and since the sequence increases, every later term is trapped between s star minus epsilon and s star. For a tenth, every term from the thirteenth on is trapped. <bookmark mark='c'/> Chapter five identifies this supremum: it's the number e.",
+   "zh": "<bookmark mark='s'/>把这个最小上界记作s*。<bookmark mark='e'/>给定ε，s*减ε不是上界，所以有某一项s_N比它大；<bookmark mark='n'/>又因为序列递增，后面的每一项都被夹在s*减ε和s*之间。ε取十分之一时，从第13项起，每一项都被夹住了。<bookmark mark='c'/>第五章会认出这个上确界：它就是数e。"
+  },
+  "63e2c922599e": {
+   "scene": "Cauchy",
+   "en": "<bookmark mark='m'/> And in the rationals this fails too: the decimal truncations of root two increase, stay bounded, and have no rational supremum. Completeness, in either form, is exactly what the rationals lack.",
+   "zh": "<bookmark mark='m'/>在有理数里，这一条同样不成立：根号2的小数截断单调递增、有界，却没有有理数的上确界。完备性，不管哪种形式，恰恰是有理数所缺的。"
+  },
+  "c2255cb9c074": {
+   "scene": "LimSup",
+   "en": "Chapter three. Most sequences don't converge, but even a divergent sequence has a largest and a smallest place where it keeps coming back. Cauchy already needed this, in 1821, for the root test.",
+   "zh": "第三章。大多数序列都不收敛，但即使是发散的序列，在它不断回来的那些地方里，也有最大的一个和最小的一个。早在1821年，柯西为了根值判别法，就已经需要这个概念了。"
+  },
+  "5113b395ecba": {
+   "scene": "LimSup",
+   "en": "Take the sequence that alternates near one and minus one, approaching each from outside. <bookmark mark='d'/> Collect every subsequential limit into a set E, allowing plus and minus infinity. The upper limit, lim sup, is the largest element of E; the lower limit, lim inf, is the smallest. <bookmark mark='e'/> Here E is just minus one and one.",
+   "zh": "取这样一个序列：它在1和负1附近交替，从外侧逼近这两个数。<bookmark mark='d'/>把所有子序列极限收集成一个集合E，允许包含正无穷和负无穷。上极限，记作lim sup，是E中最大的元素；下极限，记作lim inf，是最小的元素。<bookmark mark='e'/>这里E只有负1和1。"
+  },
+  "610eb269475a": {
+   "scene": "LimSup",
+   "en": "There's a more hands-on way to see it. <bookmark mark='h'/> For each N, mark the highest value in the tail from N on: the high-water mark. Dropping terms can only lower it, so it decreases, and here it comes down to one. <bookmark mark='l'/> The low-water mark rises, to minus one. <bookmark mark='q'/> The limit of the high-water mark is exactly the upper limit, and the limit of the low-water mark is the lower limit.",
+   "zh": "还有一种更直观的看法。<bookmark mark='h'/>对每个N，标出从第N项起的尾部里的最高值：这就是高水位线。去掉一些项只会让它变低，所以它是递减的，这里它一路降到1。<bookmark mark='l'/>低水位线则不断上升，升到负1。<bookmark mark='q'/>高水位线的极限恰好就是上极限，低水位线的极限就是下极限。"
+  },
+  "c8b99b8b4465": {
+   "scene": "LimSup",
+   "en": "Rudin pins the upper limit down with two properties. <bookmark mark='t'/> Some subsequence converges to it, and above it the sequence is eventually absent: <bookmark mark='x'/> pick any level x above one. Only finitely many terms are higher: <bookmark mark='y'/> two terms for x equal to 1.2, nine for 1.05. <bookmark mark='z'/> Push x below one and infinitely many terms are above it. So one is the dividing line, and no other number has both properties.",
+   "zh": "鲁丁用两条性质把上极限确定下来。<bookmark mark='t'/>有某个子序列收敛到它，而在它上方，序列最终会消失：<bookmark mark='x'/>任取一个高于1的水平x。只有有限多项比它高：<bookmark mark='y'/>x等于1.2时有2项，x等于1.05时有9项。<bookmark mark='z'/>把x推到1以下，就有无穷多项在它上方。所以1是分界线，没有别的数同时具有这两条性质。"
+  },
+  "e1f59455ad00": {
+   "scene": "LimSup",
+   "en": "<bookmark mark='c'/> And a sequence converges exactly when its upper and lower limits agree: the high-water and low-water marks squeeze together, onto the limit.",
+   "zh": "<bookmark mark='c'/>而一个序列收敛，当且仅当它的上极限和下极限相等：高水位线和低水位线向中间挤拢，挤到极限上。"
+  },
+  "2bf341cd07c5": {
+   "scene": "LimSup",
+   "en": "E can be much bigger than two points. <bookmark mark='a'/> List every fraction between zero and one, by denominator: zero, one, a half, a third, two thirds, and so on. <bookmark mark='b'/> Pick any point, say one over root two. From each block of the list take the fraction nearest to it: that's a subsequence converging to one over root two. <bookmark mark='c'/> The same works for every point of the interval, so E is the whole interval from zero to one. Its upper limit is one, its lower limit zero.",
+   "zh": "E可以比两个点大得多。<bookmark mark='a'/>按分母从小到大，列出0和1之间的每一个分数：0、1、二分之一、三分之一、三分之二，依此类推。<bookmark mark='b'/>任取一个点，比如根号2分之1。从清单的每一段里，取出离它最近的那个分数：这就是一个收敛到根号2分之1的子序列。<bookmark mark='c'/>对区间里的每一个点都可以这样做，所以E是从0到1的整个区间。它的上极限是1，下极限是0。"
+  },
+  "d98f5e7ee3bf": {
+   "scene": "LimSup",
+   "en": "Rudin collects five limits that the convergence tests will lean on: <bookmark mark='a'/> one over n to a positive power goes to zero; the n-th root of a positive number goes to one; the n-th root of n goes to one; any power of n over an exponential goes to zero; and x to the n goes to zero when x is smaller than one in size. Let's look at two of them.",
+   "zh": "鲁丁收集了五个极限，后面的收敛判别法都要靠它们：<bookmark mark='a'/>1除以n的正数次幂，趋于0；正数的n次方根趋于1；n的n次方根趋于1；n的任意次幂除以一个指数式，趋于0；当x的绝对值小于1时，x的n次方趋于0。我们来看其中两个。"
+  },
+  "385765eb2374": {
+   "scene": "LimSup",
+   "en": "The n-th root of n is the subtle one: n grows, but the root shrinks the exponent. Who wins? <bookmark mark='a'/> Write the root as one plus x n. <bookmark mark='b'/> By the binomial theorem, n is at least one term of the expansion, n times n minus one over two, times x n squared. <bookmark mark='c'/> Rearranged, x n is squeezed to zero. <bookmark mark='g'/> On a logarithmic scale, out to a million, the root peaks at n equal to 3 and then sinks toward one, under the bound.",
+   "zh": "n的n次方根是比较微妙的那个：n在增大，可开n次方又把它往下压。谁会赢？<bookmark mark='a'/>把这个根写成1加x_n。<bookmark mark='b'/>由二项式定理，n至少等于展开式中的一项：n乘（n减1）除以2，再乘以x_n的平方。<bookmark mark='c'/>整理一下，x_n就被夹到了0。<bookmark mark='g'/>在对数刻度上，一直画到100万，这个根在n等于3处达到峰值，然后在界的下方，向1沉下去。"
+  },
+  "4633a15c69bf": {
+   "scene": "LimSup",
+   "en": "And powers against exponentials. <bookmark mark='a'/> n to the tenth over 1.1 to the n: the numerator starts far ahead. On a log scale, <bookmark mark='b'/> the ratio climbs to about seven quadrillion at n equal to 105. <bookmark mark='c'/> But each step multiplies the denominator by 1.1, and multiplies the numerator by less and less, so from n equal to 686 on the ratio stays below one, and it goes to zero. Any power, any exponential base above one: the exponential always wins.",
+   "zh": "再看幂和指数的较量。<bookmark mark='a'/>n的10次方除以1.1的n次方：分子一开始遥遥领先。在对数刻度上，<bookmark mark='b'/>这个比值在n等于105时，爬到大约7000万亿。<bookmark mark='c'/>但每走一步，分母都乘以1.1，而分子乘上的因子越来越小，所以从n等于686起，比值就一直小于1，并且趋于0。不管是什么幂次，也不管指数的底数是多少，只要底数大于1，指数总会赢。"
+  },
+  "9dadeda4a734": {
+   "scene": "Series",
+   "en": "Chapter four. A series is a sequence in disguise: the sequence of its partial sums. Everything from the last two chapters applies, and a few new tools appear.",
+   "zh": "第四章。级数其实是乔装打扮的序列：由它的部分和构成的序列。前两章的一切都适用，另外还会出现几件新工具。"
+  },
+  "90e736a47d13": {
+   "scene": "Series",
+   "en": "A series converges to s when its partial sums do. <bookmark mark='c'/> So the Cauchy criterion carries over: the series converges exactly when every block of consecutive terms far enough out, however long, adds up to something small. <bookmark mark='n'/> A block can be a single term, so the terms must go to zero. <bookmark mark='p'/> That's necessary, but it's not enough, and the classic example is seven centuries old.",
+   "zh": "级数收敛到s，是指它的部分和收敛到s。<bookmark mark='c'/>所以柯西准则可以照搬过来：级数收敛，当且仅当足够靠后的任何一段连续的项，不管多长，加起来都很小。<bookmark mark='n'/>一段也可以只有一项，所以各项必须趋于0。<bookmark mark='p'/>这是必要的，但并不充分，经典的例子已经有七百年历史了。"
+  },
+  "b5399166b6cd": {
+   "scene": "Series",
+   "en": "The harmonic series: one, plus a half, plus a third, and so on. <bookmark mark='a'/> The terms shrink to zero. <bookmark mark='b'/> But group them in blocks that double in length: a half; a third and a quarter; the next four; the next eight. <bookmark mark='c'/> In each block every term is at least the last one, so the block is at least its length times its last term, which is exactly one half. <bookmark mark='d'/> Infinitely many halves: the sum grows without bound. This argument is from Nicole Oresme, around 1350.",
+   "zh": "调和级数：1，加二分之一，加三分之一，依此类推。<bookmark mark='a'/>各项缩小到0。<bookmark mark='b'/>但是，把它们分成长度依次加倍的段：二分之一；三分之一和四分之一；接下来的四项；再接下来的八项。<bookmark mark='c'/>在每一段里，每一项都不小于最后一项，所以这一段的和至少是它的长度乘以最后一项，而这恰好是二分之一。<bookmark mark='d'/>无穷多个二分之一：和会无限增大。这个论证出自尼科尔·奥雷姆，大约在1350年。"
+  },
+  "b192db1eb8e9": {
+   "scene": "Series",
+   "en": "<bookmark mark='a'/> It diverges, but slowly: on a logarithmic scale the partial sums are a straight line, hugging the natural log of n plus Euler's constant. <bookmark mark='b'/> A million terms add up to only about fourteen point four.",
+   "zh": "<bookmark mark='a'/>它发散，但很慢：在对数刻度上，部分和是一条直线，紧贴着n的自然对数加上欧拉常数。<bookmark mark='b'/>100万项加起来，也只有大约14.4。"
+  },
+  "2026a5770c59": {
+   "scene": "Series",
+   "en": "The basic tool is comparison. <bookmark mark='a'/> If each term is at most the corresponding term of a convergent series of positive terms, the series converges, because its blocks are smaller. If each term is at least a divergent series's terms, it diverges. <bookmark mark='g'/> The standard series to compare with is the geometric series: <bookmark mark='h'/> one plus a half plus a quarter, and so on, each term covering half the remaining distance to two.",
+   "zh": "最基本的工具是比较。<bookmark mark='a'/>如果每一项都不超过某个收敛的正项级数的对应项，这个级数就收敛，因为它的每一段都更小。如果每一项都不小于某个发散级数的对应项，它就发散。<bookmark mark='g'/>用来比较的标准级数是几何级数：<bookmark mark='h'/>1加二分之一加四分之一，依此类推，每一项都补上离2还差的距离的一半。"
+  },
+  "730ec4fb268b": {
+   "scene": "Series",
+   "en": "Cauchy's condensation test turns a slowly decreasing series into a fast one. <bookmark mark='t'/> If the terms decrease to zero, the series converges exactly when the condensed series, two to the k times the term at two to the k, converges. <bookmark mark='a'/> Here's why, with n to the minus three halves. <bookmark mark='u'/> Over each block from two to the k up to the next power of two, the terms are at most the first one, so a box of height a at two to the k covers the block: the partial sums are bounded by the condensed series. <bookmark mark='l'/> And under each block fits a box of the block's last height, which gives the reverse bound, up to a factor of two. The two series converge or diverge together.",
+   "zh": "柯西凝聚判别法，能把一个下降得很慢的级数，变成一个下降得很快的级数。<bookmark mark='t'/>如果各项递减趋于0，那么原级数收敛，当且仅当凝聚后的级数收敛：它的第k项，是2的k次方乘以原级数的第（2的k次方）项。<bookmark mark='a'/>用n的负二分之三次方，来看看为什么。<bookmark mark='u'/>从2的k次方到下一个2的幂，在每一段上，各项都不超过第一项，所以一个高度等于第（2的k次方）项的盒子，就能盖住这一段：部分和以凝聚级数为界。<bookmark mark='l'/>而每一段的下方，都放得下一个以这一段最后一项为高的盒子，这就给出了反方向的界，至多差一个因子2。这两个级数同时收敛，或者同时发散。"
+  },
+  "532c1cf26c93": {
+   "scene": "Series",
+   "en": "<bookmark mark='t'/> Applied to one over n to the p, <bookmark mark='a'/> the condensed series is geometric, with ratio two to the one minus p. It converges exactly when p is bigger than one. <bookmark mark='g'/> The partial sums: for p equal to one they climb forever; for three halves they level off near 2.612; and for p equal to two at pi squared over six, a value Euler found in 1734. Notice how slowly the three-halves series settles: <bookmark mark='s'/> after a million terms it's still two thousandths short.",
+   "zh": "<bookmark mark='t'/>用到n的p次方分之1上，<bookmark mark='a'/>凝聚后的级数是几何级数，公比是2的（1减p）次方。它收敛，当且仅当p大于1。<bookmark mark='g'/>看部分和：p等于1时，它们永远往上爬；p等于二分之三时，在2.612附近趋于平稳；p等于2时，稳定在π的平方除以6，这个值是欧拉在1734年求出来的。注意p等于二分之三的级数稳定得有多慢：<bookmark mark='s'/>加了100万项之后，还差千分之二。"
+  },
+  "ef3e958478ac": {
+   "scene": "Series",
+   "en": "Condensation keeps going. <bookmark mark='a'/> One over n log n still diverges, but only like log log n: a million terms add up to about three point four. <bookmark mark='b'/> Raise the log to the power 1.01 and it converges. <bookmark mark='c'/> And there's no last word: Rudin's exercises show that for any divergent series there's one diverging more slowly, and for any convergent series one converging more slowly. There is no sharp line between convergence and divergence.",
+   "zh": "凝聚还能接着往下用。<bookmark mark='a'/>1除以n log n，仍然发散，但只像log log n那样增长：100万项加起来，大约只有3.4。<bookmark mark='b'/>把对数换成它的1.01次方，级数就收敛了。<bookmark mark='c'/>而且这个过程没有尽头：鲁丁的习题表明，对任何发散级数，都有一个发散得更慢的；对任何收敛级数，都有一个收敛得更慢的。收敛和发散之间，并没有一条清晰的界线。"
+  },
+  "f6ab359d9fa7": {
+   "scene": "NumberE",
+   "en": "Chapter five: the number e, defined twice, and a proof, entirely from the tail of a series, that it isn't a fraction.",
+   "zh": "第五章：数e。我们会用两种方式定义它，再完全靠一个级数的尾部，证明它不是分数。"
+  },
+  "0d4635978565": {
+   "scene": "NumberE",
+   "en": "Rudin defines e as the sum of one over n factorial. <bookmark mark='a'/> How fast does it converge? The error after n terms is the tail. <bookmark mark='b'/> Each later factorial is at least the first one times a power of n plus one, so the tail is smaller than a geometric series, <bookmark mark='c'/> and summing it, the error is less than one over n factorial times n. <bookmark mark='d'/> That's fast: s ten, which stops at one over ten factorial, is within three parts in a hundred million of e. Hold on to this inequality: it will prove that e is irrational.",
+   "zh": "鲁丁把e定义为n的阶乘分之1的和。<bookmark mark='a'/>它收敛得有多快？前n项之后的误差，就是尾部。<bookmark mark='b'/>尾部里靠后的每个阶乘，都至少是第一个阶乘乘以（n加1）的某次幂，所以尾部比一个几何级数还小，<bookmark mark='c'/>把它加起来，误差小于1除以（n的阶乘乘以n）。<bookmark mark='d'/>这非常快：s_10停在10的阶乘分之1，它和e的差距在一亿分之三以内。记住这个不等式：它将证明e是无理数。"
+  },
+  "72e167449502": {
+   "scene": "NumberE",
+   "en": "The other definition of e is compound interest: one plus one over n, to the n-th power. <bookmark mark='a'/> Expand it with the binomial theorem. The k-th term is one over k factorial, <bookmark mark='b'/> times k minus one factors, each a little less than one. <bookmark mark='c'/> So in this picture each orange bar sits inside its blue box, of height one over k factorial: the compound-interest number is less than the series. <bookmark mark='d'/> As n grows, each shortfall factor tends to one, and the bars rise to fill their boxes.",
+   "zh": "e的另一种定义来自复利：（1加n分之1）的n次方。<bookmark mark='a'/>用二项式定理把它展开。第k项是k的阶乘分之1，<bookmark mark='b'/>再乘以k减1个因子，每个因子都比1小一点。<bookmark mark='c'/>所以在这张图里，每根橙色的柱子都在它的蓝色盒子里面，盒子的高度是k的阶乘分之1：复利得到的数比级数小。<bookmark mark='d'/>随着n增大，每个缩水因子都趋于1，柱子就升上去，填满各自的盒子。"
+  },
+  "83d1ec8d6c1d": {
+   "scene": "NumberE",
+   "en": "<bookmark mark='a'/> Squeezed from above by the series and, for each fixed number of terms, from below, <bookmark mark='b'/> the limit is e. The two definitions agree. <bookmark mark='c'/> But the compound interest version is slow: at n equal to ten it's still off by an eighth, where the series was off by three parts in a hundred million.",
+   "zh": "<bookmark mark='a'/>上方被级数压着，下方，对每个固定的项数，又被相应的部分和托着，<bookmark mark='b'/>极限就是e。两种定义是一致的。<bookmark mark='c'/>但复利的版本很慢：n等于10时，它还差八分之一，而级数那时只差一亿分之三。"
+  },
+  "a7cc9bbe76e5": {
+   "scene": "NumberE",
+   "en": "Now the proof that e is irrational, as Rudin gives it. <bookmark mark='a'/> Multiply the tail estimate by q factorial: q factorial times e minus s q lies strictly between zero and one over q. <bookmark mark='b'/> Now suppose e were a fraction p over q. Then q factorial times e is an integer, and so is q factorial times s q, since every denominator in s q divides q factorial. <bookmark mark='c'/> So their difference is an integer strictly between zero and one, and there isn't one. <bookmark mark='d'/> Here's the actual quantity for q from 1 to 15: always inside the yellow window, which shrinks, and never reaching an integer.",
+   "zh": "现在来看e是无理数的证明，按鲁丁书里的写法。<bookmark mark='a'/>把尾部估计乘以q的阶乘：q的阶乘乘以（e减s_q），严格介于0和q分之1之间。<bookmark mark='b'/>现在假设e是一个分数q分之p。那么q的阶乘乘以e是整数，q的阶乘乘以s_q也是整数，因为s_q里的每个分母都整除q的阶乘。<bookmark mark='c'/>所以它们的差是一个严格介于0和1之间的整数，而这样的整数并不存在。<bookmark mark='d'/>这是q从1到15时这个量的实际值：始终落在黄色窗口里，窗口不断缩小，它也始终碰不到整数。"
+  },
+  "37cc527603e8": {
+   "scene": "NumberE",
+   "en": "<bookmark mark='m'/> In fact e isn't a root of any polynomial with integer coefficients: Hermite proved that in 1873, and Rudin points to a short proof.",
+   "zh": "<bookmark mark='m'/>事实上，e不是任何整系数多项式的根：埃尔米特在1873年证明了这一点，鲁丁还给出了一个简短证明的出处。"
+  },
+  "347563c60856": {
+   "scene": "Tests",
+   "en": "Chapter six. The geometric series is the yardstick: the root and ratio tests are ways of laying a series against it.",
+   "zh": "第六章。几何级数是一把标尺：根值判别法和比值判别法，就是把一个级数放到这把标尺旁边去量。"
+  },
+  "82b5b1b6bb0f": {
+   "scene": "Tests",
+   "en": "The root test. <bookmark mark='t'/> Take the upper limit of the n-th roots of the terms, and call it alpha. If alpha is less than one, the series converges; if it's bigger than one, it diverges; if it's exactly one, the test says nothing. <bookmark mark='a'/> Here's a series from Rudin that interleaves powers of a half and of a third. On a logarithmic scale a geometric series is a straight line. <bookmark mark='b'/> The n-th roots approach one over root two at most, so choose beta between that and one: from some point on, every term lies under beta to the n, <bookmark mark='c'/> and comparison with the geometric series does the rest.",
+   "zh": "根值判别法。<bookmark mark='t'/>取各项n次方根的上极限，记作α。如果α小于1，级数收敛；如果大于1，级数发散；如果恰好等于1，这个判别法什么也说明不了。<bookmark mark='a'/>这是鲁丁书里的一个级数，它把二分之一的幂和三分之一的幂交错排在一起。在对数刻度上，几何级数是一条直线。<bookmark mark='b'/>这些n次方根最多只能趋近根号2分之1，所以在它和1之间选一个β：从某一项起，每一项都在β的n次方下面，<bookmark mark='c'/>剩下的，交给和几何级数的比较就行了。"
+  },
+  "b5488fa6f137": {
+   "scene": "Tests",
+   "en": "The ratio test compares consecutive terms instead. <bookmark mark='t'/> If the ratios are eventually below something less than one, the series converges. <bookmark mark='a'/> For the same series, the ratios jump between two thirds to the k, which goes to zero, and half of three halves to the k, which goes to infinity. The ratio test can't decide. <bookmark mark='b'/> But the n-th roots settle down, below one: the root test proves convergence.",
+   "zh": "比值判别法改为比较相邻的两项。<bookmark mark='t'/>如果从某一项起，比值一直低于某个小于1的数，级数就收敛。<bookmark mark='a'/>对同一个级数，比值在两种值之间跳来跳去：三分之二的k次方，它趋于0；以及二分之一乘以二分之三的k次方，它趋于无穷。比值判别法判断不了。<bookmark mark='b'/>但n次方根会稳定下来，而且在1以下：根值判别法证明了它收敛。"
+  },
+  "412ec2a7b43d": {
+   "scene": "Tests",
+   "en": "<bookmark mark='c'/> This is no accident. The upper limit of the roots is always at most the upper limit of the ratios, so whenever the ratio test gives an answer, the root test gives the same one. The ratio test is just easier to compute.",
+   "zh": "<bookmark mark='c'/>这不是偶然。n次方根的上极限，总是小于等于比值的上极限，所以只要比值判别法能给出答案，根值判别法就会给出同样的答案。比值判别法只是更容易计算而已。"
+  },
+  "00b896bd7376": {
+   "scene": "Tests",
+   "en": "The root test's best use is power series, where z is a complex number. <bookmark mark='t'/> A power series converges inside a disk and diverges outside it; the radius is one over the upper limit of the n-th roots of the coefficients. <bookmark mark='e'/> For the sum of z to the n over n, the radius is one. Each picture is the path of partial sums in the plane. <bookmark mark='a'/> Inside the disk, the path spirals in to a limit. <bookmark mark='b'/> On the boundary anything can happen: at minus one it converges, to minus log two; <bookmark mark='c'/> at one it's the harmonic series, crawling off to infinity. <bookmark mark='d'/> Outside, the terms themselves grow, and the path spirals out.",
+   "zh": "根值判别法最好的用武之地是幂级数，这里z是复数。<bookmark mark='t'/>幂级数在一个圆盘内收敛，在圆盘外发散；半径等于1除以系数n次方根的上极限。<bookmark mark='e'/>对于z的n次方除以n这个级数，半径是1。每张图都是部分和在平面上走出的路径。<bookmark mark='a'/>在圆盘里面，路径螺旋着收拢到一个极限。<bookmark mark='b'/>在边界上，什么都可能发生：在负1处它收敛，收敛到负的ln 2；<bookmark mark='c'/>在1处，它就是调和级数，慢慢爬向无穷。<bookmark mark='d'/>在圆盘外面，各项本身越来越大，路径螺旋着向外散开。"
+  },
+  "95caef539c33": {
+   "scene": "Tests",
+   "en": "One last puzzle. <bookmark mark='a'/> One over one plus x squared is as smooth as a function can be, on the whole real line. Its power series is one minus x squared plus x to the fourth, and so on. <bookmark mark='b'/> But the series only converges between minus one and one: past that, the partial sums flail. <bookmark mark='q'/> Nothing happens to the function at x equal to one. So why stop there? <bookmark mark='c'/> Look in the complex plane. The function blows up at i and at minus i, where one plus z squared is zero, and a disk centered at zero can't grow past them. Its radius is one, and the real interval is just the disk's shadow. <bookmark mark='d'/> The real line can't see the reason. We'll come back to this in Part 7, where power series turn out to live naturally in the complex plane.",
+   "zh": "最后一个谜题。<bookmark mark='a'/>1除以（1加x的平方），在整条实数轴上光滑得不能再光滑。它的幂级数是1减x的平方，加x的4次方，依此类推。<bookmark mark='b'/>可是这个级数只在负1和1之间收敛：一出这个范围，部分和就乱甩一气。<bookmark mark='q'/>在x等于1处，函数本身什么事也没有。那为什么偏偏停在那里？<bookmark mark='c'/>到复平面上看看。这个函数在i和负i处趋于无穷，那里1加z的平方等于0，而以0为中心的圆盘，没法越过它们继续长大。它的半径是1，实轴上的区间不过是这个圆盘的影子。<bookmark mark='d'/>站在实数轴上，看不到真正的原因。我们会在第7部分回到这个问题，到那时会发现，幂级数天然就生活在复平面上。"
+  },
+  "9f5c6dac6c40": {
+   "scene": "Abel",
+   "en": "Chapter seven. Some series converge not because their terms are small, but because they cancel. The tool for cancellation is summation by parts, and with it we can finally answer a question about the sawtooth.",
+   "zh": "第七章。有些级数收敛，不是因为它们的项很小，而是因为它们相互抵消。处理抵消的工具是分部求和，有了它，我们终于可以回答关于锯齿波的一个问题。"
+  },
+  "5a06779759ee": {
+   "scene": "Abel",
+   "en": "Here's summation by parts as a picture. <bookmark mark='a'/> Lay the terms a n end to end along the horizontal axis, so the marks are the partial sums A n, and over each one stand a strip of height b n, with the b n decreasing. <bookmark mark='b'/> The total area is the sum of a n times b n. <bookmark mark='c'/> Now slice the same region horizontally instead. Each slab has width A n, the partial sum, and height b n minus b n plus one, the drop between consecutive heights, plus a bottom slab of width A N. <bookmark mark='d'/> Same area, two ways of adding it up: it's integration by parts, for sums.",
+   "zh": "这是分部求和的图像。<bookmark mark='a'/>把各项a_n沿着横轴首尾相接地排开，于是刻度就是部分和A_n，再在每一项上方立一根高度为b_n的长条，b_n是递减的。<bookmark mark='b'/>总面积就是a_n乘b_n的和。<bookmark mark='c'/>现在换个方向，把同一块区域横着切开。每一块横板的宽度是部分和A_n，高度是b_n减去它后面的那一个，也就是相邻两个高度的落差，再加上最底下一块宽度为A_N的板。<bookmark mark='d'/>同一块面积，两种加法：这就是求和版的分部积分。"
+  },
+  "a634256568fb": {
+   "scene": "Abel",
+   "en": "Summation by parts goes back to Abel; the test it gives is named for Dirichlet. <bookmark mark='t'/> Suppose the partial sums of the a n stay bounded, by some M, without converging, and the b n decrease to zero. Then the sum of a n b n converges. <bookmark mark='a'/> Sum a block by parts: each partial sum is at most M in size, <bookmark mark='b'/> and the drops in b telescope, leaving at most two M times b p, which goes to zero. That's the Cauchy criterion. <bookmark mark='c'/> With a n equal to plus and minus one, this is the alternating series test.",
+   "zh": "分部求和可以追溯到阿贝尔；由它得到的判别法，以狄利克雷命名。<bookmark mark='t'/>假设a_n的部分和不一定收敛，但始终有界，绝对值不超过某个M，而b_n递减趋于0。那么a_n乘b_n的和收敛。<bookmark mark='a'/>对一段用分部求和：每个部分和的绝对值都不超过M，<bookmark mark='b'/>而b的落差裂项相消，剩下的不超过2M乘以b_p，它趋于0。这正是柯西准则。<bookmark mark='c'/>当a_n取正负1交替时，这就是交错级数判别法。"
+  },
+  "036197cdb2e6": {
+   "scene": "Abel",
+   "en": "Now the sawtooth. Part 1 opened with the series sine x, plus sine 2 x over two, plus sine 3 x over three, and asked whether it even converges. <bookmark mark='a'/> Here a k is sine k x, which doesn't go to zero, but its partial sums stay bounded: they're imaginary parts of the sums of e to the i k x, <bookmark mark='b'/> and those just walk around a circle, for x equal to one here. <bookmark mark='c'/> The b k, one over k, decrease to zero. So Dirichlet's test applies: <bookmark mark='d'/> at x equal to one, the partial sums close in on pi minus one over two, inside Dirichlet's shrinking bound.",
+   "zh": "现在来看锯齿波。第1部分一开头就是这个级数：sin x，加sin 2x除以2，加sin 3x除以3，当时还问了：它到底收不收敛？<bookmark mark='a'/>这里a_k是sin kx，它并不趋于0，但它的部分和保持有界：它们是e的ikx次方之和的虚部，<bookmark mark='b'/>而这些和只是绕着一个圆走，这里取的是x等于1。<bookmark mark='c'/>b_k是k分之1，递减趋于0。所以狄利克雷判别法适用：<bookmark mark='d'/>在x等于1处，部分和逼近π减1再除以2，始终在狄利克雷那个不断收缩的界之内。"
+  },
+  "03e229228d86": {
+   "scene": "Abel",
+   "en": "The same argument works at every x except the multiples of two pi, and there every term is zero anyway. <bookmark mark='a'/> So the series converges at every single point, <bookmark mark='b'/> and the partial sums settle onto the sawtooth, each at its own pace, slowest near the jumps. <bookmark mark='c'/> That's the first entry in the Fourier column of the ledger: the series converges at each point.",
+   "zh": "除了2π的整数倍，同样的论证对每个x都适用；而在2π的整数倍处，每一项本来就是0。<bookmark mark='a'/>所以这个级数在每一个点上都收敛，<bookmark mark='b'/>部分和逐渐贴合到锯齿波上，每个点各有各的速度，在跳跃附近最慢。<bookmark mark='c'/>这是账本里傅里叶那一栏的第一项：这个级数在每一点都收敛。"
+  },
+  "2f28f29702eb": {
+   "scene": "Abel",
+   "en": "<bookmark mark='a'/> If the absolute values have a finite sum, the series converges: blocks can only shrink when you allow cancellation. <bookmark mark='b'/> Series that converge only thanks to cancellation, like the alternating harmonic series, are called conditionally convergent. <bookmark mark='c'/> The sawtooth's series is one of them. That matters, as the next chapter will show.",
+   "zh": "<bookmark mark='a'/>如果各项绝对值之和有限，级数就收敛：允许抵消之后，每一段只会变小。<bookmark mark='b'/>只靠抵消才收敛的级数，比如交错调和级数，叫作条件收敛的级数。<bookmark mark='c'/>锯齿波的级数就是其中之一。这一点很要紧，下一章就会看到。"
+  },
+  "97cc8c733ace": {
+   "scene": "Abel",
+   "en": "How do you multiply two series? <bookmark mark='a'/> The product of the sums is the sum of every product a i times b j, an infinite grid. <bookmark mark='b'/> The Cauchy product adds the grid along diagonals: c n collects the terms where the indices add up to n, just as you'd collect powers of x when multiplying power series. <bookmark mark='c'/> Mertens proved this gives the right answer if one of the two series converges absolutely. Adding up a doubly infinite array in a different order is the first glimpse of a question that comes back in Part 5, as Fubini's theorem.",
+   "zh": "两个级数怎么相乘？<bookmark mark='a'/>两个和的乘积，是所有a_i乘b_j的和，这是一张无穷的网格。<bookmark mark='b'/>柯西乘积沿着对角线把网格加起来：c_n收集的是下标之和等于n的那些项，就像幂级数相乘时，按x的幂次合并同类项一样。<bookmark mark='c'/>梅滕斯证明了：只要两个级数中有一个绝对收敛，这样做就能得到正确的答案。按不同的顺序去加一个两个方向都无穷的数表，让我们第一次瞥见一个问题，它会在第5部分以富比尼定理的形式再次出现。"
+  },
+  "8fa82b263292": {
+   "scene": "Abel",
+   "en": "Without absolute convergence it can fail. <bookmark mark='a'/> Take the alternating series of one over root n plus one, which converges, and multiply it by itself. <bookmark mark='b'/> Every term in the n-th diagonal has the same sign, so they pile up instead of cancelling: the Cauchy product's terms never shrink. Their size climbs toward pi, and the product series diverges.",
+   "zh": "没有绝对收敛，就可能出错。<bookmark mark='a'/>取一个交错级数，各项是正负交替的根号（n加1）分之1，它是收敛的，再让它和自己相乘。<bookmark mark='b'/>第n条对角线上的每一项符号都相同，所以它们不会抵消，反而越堆越多：柯西乘积的各项永远不会变小。它们的大小向π爬升，乘积级数发散。"
+  },
+  "081dedadc6d4": {
+   "scene": "Rearrangement",
+   "en": "Chapter eight. Back to the hook, where reordering one series produced any sum we liked. Riemann proved this in the same 1854 work where he defined his integral. Now we have the tools to see why it works, and when it can't happen.",
+   "zh": "第八章。回到开场：在那里，把一个级数重新排序，就能得到我们想要的任何和。黎曼在1854年证明了这一点，就在他定义黎曼积分的同一篇论文里。现在我们有了工具，可以看清它为什么行得通，以及什么时候它不可能发生。"
+  },
+  "295ef9799a11": {
+   "scene": "Rearrangement",
+   "en": "Rudin's version is even stronger than the hook. <bookmark mark='t'/> If a series converges but not absolutely, then for any two targets alpha below beta there's a rearrangement whose partial sums have lower limit alpha and upper limit beta. <bookmark mark='a'/> Split the terms into two piles: the positive ones, <bookmark mark='b'/> and the sizes of the negative ones. <bookmark mark='c'/> Both piles have infinite sums: if one pile were finite, then since the series converges the other would be too, and the series would converge absolutely. <bookmark mark='d'/> And in both piles the terms go to zero.",
+   "zh": "鲁丁的版本比开场里的还要强。<bookmark mark='t'/>如果一个级数收敛，但不绝对收敛，那么对任意两个目标α小于β，都存在一种重排，使部分和的下极限是α，上极限是β。<bookmark mark='a'/>把各项分成两堆：正项，<bookmark mark='b'/>以及负项的绝对值。<bookmark mark='c'/>两堆的和都是无穷大：如果其中一堆的和有限，那么由于级数收敛，另一堆也会有限，级数就绝对收敛了。<bookmark mark='d'/>而且两堆里的项都趋于0。"
+  },
+  "51eea1b33e39": {
+   "scene": "Rearrangement",
+   "en": "Now the hook's algorithm, which is Rudin's proof. <bookmark mark='a'/> Take positive terms until the sum passes the target, then negative terms until it falls below, and repeat; here on a logarithmic axis, out to four thousand terms. Because each pile is infinite, every crossing happens: there's always enough left. <bookmark mark='b'/> Every term eventually gets used. <bookmark mark='c'/> And each time the sum crosses the target, it overshoots by at most the last term used. Those terms go to zero, so the overshoots do too: the rearranged series converges to pi.",
+   "zh": "现在来看开场里的算法，它正是鲁丁的证明。<bookmark mark='a'/>取正项，直到和超过目标；再取负项，直到和落到目标以下；如此反复。这里用的是对数横轴，一直画到4000项。因为每一堆的和都是无穷大，每一次穿越都一定会发生：剩下的总是够用。<bookmark mark='b'/>每一项最终都会被用上。<bookmark mark='c'/>而且每次和穿过目标时，冲过头的量至多是最后用上的那一项。这些项趋于0，所以冲过头的量也趋于0：重排后的级数收敛到π。"
+  },
+  "deaddcbc803e": {
+   "scene": "Rearrangement",
+   "en": "With two targets, the same idea gives any upper and lower limits. <bookmark mark='a'/> Climb past one, then fall below zero, then climb past one again, forever. On a logarithmic axis, each swing takes about seven times as many terms as the last, <bookmark mark='b'/> and the turning points close in on the two targets: the lim sup is one and the lim inf is zero.",
+   "zh": "如果有两个目标，同样的想法就能给出任意指定的上极限和下极限。<bookmark mark='a'/>爬过1，再跌到0以下，再爬过1，永远这样下去。在对数横轴上，每次摆动用的项数，大约是上一次的7倍，<bookmark mark='b'/>而转折点逐渐逼近这两个目标：上极限是1，下极限是0。"
+  },
+  "84950f5c0b49": {
+   "scene": "Rearrangement",
+   "en": "Absolute convergence makes all this impossible. <bookmark mark='t'/> If the absolute values have a finite sum, every rearrangement converges, to the same value. <bookmark mark='a'/> Given epsilon, choose N so that all the terms past N have total size less than epsilon. <bookmark mark='b'/> A rearrangement shuffles the terms, but after finitely many steps it has used each of the first N. <bookmark mark='c'/> From then on, the original and rearranged partial sums share those terms, and differ only by terms past N, whose total size is less than epsilon.",
+   "zh": "绝对收敛让这一切都不可能发生。<bookmark mark='t'/>如果各项绝对值之和有限，那么每一种重排都收敛，而且收敛到同一个值。<bookmark mark='a'/>给定ε，选一个N，使N之后所有项的绝对值之和小于ε。<bookmark mark='b'/>重排会打乱各项的顺序，但走过有限多步之后，前N项就都已经用上了。<bookmark mark='c'/>从那以后，原来的部分和与重排后的部分和，都含有这些项，二者只差N之后的一些项，而这些项的绝对值之和小于ε。"
+  },
+  "e9affcd1c0ab": {
+   "scene": "Rearrangement",
+   "en": "And the Fourier thread. <bookmark mark='a'/> The sawtooth series at x equal to one converges to pi minus one over two, but only conditionally. <bookmark mark='b'/> So it, too, can be reordered to sum to anything. Here it is, steered to three. <bookmark mark='c'/> After about a million terms it's off by less than three parts in a hundred thousand, having used nearly all the positive terms and only a couple of thousand negative ones. <bookmark mark='d'/> When we write a Fourier series, the order, by frequency, is part of what we mean. Summing in a different way is an interchange of limits, and that's exactly the question the rest of the series is about.",
+   "zh": "再来看傅里叶这条线索。<bookmark mark='a'/>锯齿波级数在x等于1处收敛到π减1再除以2，但只是条件收敛。<bookmark mark='b'/>所以它也可以重新排序，加成任何值。这里把它引向3。<bookmark mark='c'/>大约100万项之后，它与3的误差小于十万分之三，几乎用掉了所有的正项，而负项只用了两千个左右。<bookmark mark='d'/>我们写下一个傅里叶级数时，按频率排的顺序，本身就是它含义的一部分。换一种方式求和，就是交换极限的次序，而这正是这个系列接下来要讨论的问题。"
+  },
+  "068016cb3bdc": {
+   "scene": "Continuity",
+   "en": "Chapter nine. Bolzano in 1817 and Cauchy in 1821 turned no jumps into a definition, using the same game we've been playing with sequences.",
+   "zh": "第九章。1817年的波尔查诺和1821年的柯西，把“没有跳跃”变成了一个定义，用的正是我们一直在序列上玩的那个游戏。"
+  },
+  "c580411c73db": {
+   "scene": "Continuity",
+   "en": "First, limits of functions. <bookmark mark='a'/> Here's x squared, except that someone has moved the value at 3 down to 4. <bookmark mark='d'/> The limit of f at p is q if for every epsilon there's a delta such that every x within delta of p, other than p itself, has f of x within epsilon of q. <bookmark mark='n'/> The value at p is deliberately ignored, <bookmark mark='h'/> so here the limit at 3 is nine, whatever f of 3 says. <bookmark mark='c'/> And f is continuous at p when the limit exists and equals the actual value. This f is not continuous at 3.",
+   "zh": "先来看函数的极限。<bookmark mark='a'/>这是x的平方，只不过有人把它在3处的值挪到了4。<bookmark mark='d'/>如果对任意ε，都存在δ，使得与p的距离小于δ的每个x，除了p本身，都满足f(x)与q的距离小于ε，就说f在p处的极限是q。<bookmark mark='n'/>p处的函数值被有意忽略了，<bookmark mark='h'/>所以这里在3处的极限是9，不管f(3)是多少。<bookmark mark='c'/>如果极限存在，并且等于实际的函数值，就说f在p处连续。这个f在3处不连续。"
+  },
+  "e5530db11adc": {
+   "scene": "Continuity",
+   "en": "Continuity as a game. <bookmark mark='a'/> Take x squared at 3. The first player, epsilon, draws a band around the value 9. <bookmark mark='b'/> The second player answers with a strip around 3, of half-width delta. They win if the graph over the strip stays inside the band: green where it does, red where it escapes. <bookmark mark='c'/> A strip too wide loses at the edges. <bookmark mark='d'/> The best answer is the widest strip that works.",
+   "zh": "把连续性看成一个游戏。<bookmark mark='a'/>看x的平方在3处的情形。第一个玩家ε，在函数值9周围画一条横带。<bookmark mark='b'/>第二个玩家用3周围的一条竖带来回应，半宽为δ。如果竖带上方的图像始终待在横带里，第二个玩家就赢了：待在里面的部分是绿色，逃出去的是红色。<bookmark mark='c'/>竖带太宽，就会在边缘输掉。<bookmark mark='d'/>最好的回答，是能赢的最宽的那条竖带。"
+  },
+  "efd122120d0d": {
+   "scene": "Continuity",
+   "en": "<bookmark mark='a'/> Tighten epsilon to a half: the strip must narrow. <bookmark mark='b'/> At a tenth, the widest strip has half-width 0.0166. The right edge binds, because the parabola is steeper there: delta is the square root of 9.1, minus 3. <bookmark mark='c'/> Whatever epsilon you pick, some delta answers it. That's continuity at 3.",
+   "zh": "<bookmark mark='a'/>把ε收紧到二分之一：竖带就必须变窄。<bookmark mark='b'/>ε取十分之一时，最宽的竖带半宽是0.0166。卡住它的是右边缘，因为抛物线在那边更陡：δ等于根号9.1，再减去3。<bookmark mark='c'/>不管你选什么ε，总有某个δ能应对。这就是在3处连续。"
+  },
+  "e2f53857645a": {
+   "scene": "Continuity",
+   "en": "<bookmark mark='t'/> Limits and continuity can also be tested with sequences: f is continuous at p exactly when f carries every sequence converging to p to a sequence converging to f of p. This is handy for showing a limit fails. <bookmark mark='a'/> Sine of one over x oscillates faster and faster near zero. <bookmark mark='b'/> Along one sequence approaching zero it's always one; <bookmark mark='c'/> along another, always minus one. <bookmark mark='d'/> So it has no limit at zero, and no choice of a value at zero makes it continuous there.",
+   "zh": "<bookmark mark='t'/>极限和连续性也可以用序列来检验：f在p处连续，当且仅当f把每一个收敛到p的序列，都变成一个收敛到f(p)的序列。要证明极限不存在，这一招很方便。<bookmark mark='a'/>sin（x分之1）在0附近振荡得越来越快。<bookmark mark='b'/>沿着一个趋于0的序列，它始终等于1；<bookmark mark='c'/>沿着另一个，始终等于负1。<bookmark mark='d'/>所以它在0处没有极限，不管在0处给它定义什么值，都没法让它在那里连续。"
+  },
+  "fbf49057a59d": {
+   "scene": "Continuity",
+   "en": "Now the reformulation that changed mathematics. <bookmark mark='t'/> A function is continuous exactly when the preimage of every open set is open. <bookmark mark='a'/> Pick an open interval V of values. <bookmark mark='b'/> The points whose values land in V form a union of open intervals: each is open because, by continuity, a point whose value is strictly inside V has neighbors whose values are too. <bookmark mark='c'/> A jump breaks this. Here a small open interval around the value at the jump pulls back to an interval that includes its left endpoint: not open.",
+   "zh": "接下来，是一个改变了数学的重新表述。<bookmark mark='t'/>一个函数连续，当且仅当每个开集的原像都是开集。<bookmark mark='a'/>在函数值里取一个开区间V。<bookmark mark='b'/>函数值落在V里的那些点，构成若干开区间的并集：每一段都是开的，因为由连续性，一个函数值严格落在V内部的点，它附近的点的函数值也都在V里。<bookmark mark='c'/>跳跃会破坏这一点。这里，在跳跃处的函数值周围取一个小开区间，拉回来得到的区间包含了它的左端点：不是开集。"
+  },
+  "85fd1a2d349c": {
+   "scene": "Continuity",
+   "en": "<bookmark mark='w'/> This version never mentions a distance, only which sets are open. That's why it became the definition of continuity in topology, and in Part 8 we'll need it in spaces where no distance describes the convergence we care about.",
+   "zh": "<bookmark mark='w'/>这个版本完全不提距离，只关心哪些集合是开的。正因为如此，它成了拓扑学里连续性的定义；而在第8部分，我们会在一些空间里用到它：在那里，没有任何距离能描述我们关心的那种收敛。"
+  },
+  "cfa9aaaf0b9e": {
+   "scene": "Continuity",
+   "en": "The open-set version makes some proofs one line. <bookmark mark='a'/> A composition of continuous functions is continuous, because the preimage under g of f is the preimage under f of the preimage under g. <bookmark mark='b'/> Sums and products are continuous by the epsilon over two trick, so polynomials and rational functions are continuous wherever they're defined.",
+   "zh": "开集版本让一些证明只需要一行。<bookmark mark='a'/>连续函数的复合是连续的，因为在g复合f下的原像，就是先取g下的原像，再取f下的原像。<bookmark mark='b'/>由二分之ε技巧，连续函数的和与积都是连续的，所以多项式和有理函数在有定义的地方都连续。"
+  },
+  "7a7971e25b7f": {
+   "scene": "Compactness",
+   "en": "Chapter ten. On a compact set, continuous functions behave far better than they have to anywhere else. Three of the most used theorems in analysis come from one fact.",
+   "zh": "第十章。在紧集上，连续函数的表现，比在别处好得多。分析学里最常用的三个定理，都出自同一个事实。"
+  },
+  "467095377726": {
+   "scene": "Compactness",
+   "en": "<bookmark mark='t'/> The fact: a continuous function maps compact sets to compact sets. <bookmark mark='a'/> Here the domain is a closed interval, and its image is the set of values on the vertical axis. <bookmark mark='b'/> Cover the image with open sets. <bookmark mark='c'/> Pull each one back: by continuity, the preimages are open, and together they cover the domain. <bookmark mark='d'/> The domain is compact, so finitely many of them already cover it, <bookmark mark='e'/> and then the matching finitely many open sets cover the image. Open covers, pulled back, are exactly what continuity and compactness were designed to share.",
+   "zh": "<bookmark mark='t'/>这个事实是：连续函数把紧集映成紧集。<bookmark mark='a'/>这里定义域是一个闭区间，它的像是纵轴上的函数值构成的集合。<bookmark mark='b'/>用开集覆盖这个像。<bookmark mark='c'/>把每个开集都拉回去：由连续性，这些原像都是开的，而且合起来覆盖了定义域。<bookmark mark='d'/>定义域是紧的，所以其中有限多个就已经覆盖了它，<bookmark mark='e'/>于是对应的那有限多个开集，就覆盖了像。拉回开覆盖，正是连续性和紧性在设计上的共同语言。"
+  },
+  "9b473a716432": {
+   "scene": "Compactness",
+   "en": "<bookmark mark='t'/> Consequence one: on a compact set, a continuous real function attains a largest and a smallest value. The image is compact, so closed and bounded, so it contains its supremum and infimum. <bookmark mark='m'/> Here they are. <bookmark mark='f'/> Drop any hypothesis and it fails. On the half-open interval, one over x is unbounded. On the open interval, x gets arbitrarily close to one but never reaches it. <bookmark mark='g'/> And on a closed interval, a single jump can remove the top.",
+   "zh": "<bookmark mark='t'/>推论一：在紧集上，连续的实函数一定能取到最大值和最小值。像是紧的，所以闭且有界，于是它包含自己的上确界和下确界。<bookmark mark='m'/>就是这两个点。<bookmark mark='f'/>去掉任何一个假设，结论都会失效。在半开区间上，x分之1无界。在开区间上，x可以任意接近1，却永远到不了1。<bookmark mark='g'/>而在闭区间上，只要一个跳跃，就能把最高点去掉。"
+  },
+  "1985d94d39e1": {
+   "scene": "Compactness",
+   "en": "<bookmark mark='t'/> Consequence two: a continuous bijection from a compact space has a continuous inverse. Compactness is needed. <bookmark mark='a'/> Wrap the half-open interval from zero to two pi around the circle. It's continuous, one to one, and onto. <bookmark mark='b'/> But take points near the point one comma zero: those just above it come from near zero, <bookmark mark='c'/> and those just below come from near two pi. <bookmark mark='d'/> Close together on the circle, far apart on the line: the inverse is not continuous. The interval isn't compact, and that's the whole problem.",
+   "zh": "<bookmark mark='t'/>推论二：从紧空间出发的连续双射，它的逆也是连续的。紧性是必需的。<bookmark mark='a'/>把从0到2π的半开区间绕到圆周上。这个映射连续、一对一，而且是满射。<bookmark mark='b'/>但在点（1，0）附近取一些点：紧挨在它上方的点，来自0附近，<bookmark mark='c'/>紧挨在它下方的点，来自2π附近。<bookmark mark='d'/>在圆周上挨得很近，在直线上却离得很远：逆映射不连续。这个区间不是紧的，问题全出在这里。"
+  },
+  "4373c6cb0518": {
+   "scene": "Compactness",
+   "en": "Consequence three needs a stronger kind of continuity. <bookmark mark='d'/> In ordinary continuity, delta may depend on the point. Uniform continuity demands one delta that works at every point at once: the second player must answer before knowing where the game is played. <bookmark mark='a'/> Picture it as a box of fixed size sliding along the graph: <bookmark mark='b'/> the graph must leave through the sides, never the top or bottom. For the square root on zero to one, a box with delta equal to epsilon squared slides all the way to zero. <bookmark mark='c'/> For one over x on the open interval, any fixed box fails once it gets close enough to zero, where the graph is too steep.",
+   "zh": "推论三需要一种更强的连续性。<bookmark mark='d'/>在普通的连续性里，δ可以依赖于点。一致连续则要求有一个δ，在所有点上同时管用：第二个玩家必须在知道游戏在哪里进行之前，就给出回答。<bookmark mark='a'/>可以把它想成一个固定大小的盒子，沿着图像滑动：<bookmark mark='b'/>图像必须从盒子的两侧穿出，绝不能从顶部或底部穿出。对于区间0到1上的平方根函数，δ等于ε的平方的盒子，可以一路滑到0。<bookmark mark='c'/>对于开区间上的x分之1，任何固定的盒子，一旦离0足够近就会失败，因为那里的图像太陡了。"
+  },
+  "9536274b0420": {
+   "scene": "Compactness",
+   "en": "<bookmark mark='a'/> Here are the best deltas for one over x at a tolerance of a tenth, computed at seven points. <bookmark mark='b'/> They shrink to zero as x approaches zero, so no single positive delta works everywhere: one over x is continuous on the open interval, but not uniformly.",
+   "zh": "<bookmark mark='a'/>这是x分之1在容许误差为十分之一时，在7个点上算出的最佳δ。<bookmark mark='b'/>x趋于0时，它们缩到0，所以没有哪一个正的δ能处处管用：x分之1在开区间上连续，但不一致连续。"
+  },
+  "910519c307d4": {
+   "scene": "Compactness",
+   "en": "<bookmark mark='t'/> And now the theorem: on a compact space, continuous implies uniformly continuous. <bookmark mark='a'/> Each point has its own delta, for epsilon over two. <bookmark mark='b'/> The intervals of half those widths cover the space, so finitely many of them cover it. <bookmark mark='c'/> Take delta to be the smallest of those finitely many half-widths. A minimum of finitely many positive numbers is positive, and a short triangle-inequality argument shows this one delta works everywhere. With infinitely many, the infimum could be zero, which is exactly what happened to one over x.",
+   "zh": "<bookmark mark='t'/>现在来看定理：在紧空间上，连续推出一致连续。<bookmark mark='a'/>对二分之ε，每个点都有自己的δ。<bookmark mark='b'/>宽度减半之后的这些区间，仍然覆盖整个空间，所以其中有限多个就能覆盖它。<bookmark mark='c'/>取δ为这有限多个半宽中最小的那个。有限多个正数的最小值是正的，再用三角不等式简短地论证一下，就知道这一个δ处处管用。如果是无穷多个，下确界可能是0，x分之1遇到的正是这种情况。"
+  },
+  "3babc3999eeb": {
+   "scene": "Connectedness",
+   "en": "Chapter eleven. Bolzano's 1817 paper set out to prove that a continuous function can't get from below a value to above it without passing through it. The proof needs exactly what Part 1 built.",
+   "zh": "第十一章。波尔查诺1817年的论文，想要证明：一个连续函数从某个值的下方到达上方，不可能不经过这个值。证明需要的，恰好就是第1部分造出来的东西。"
+  },
+  "f13aaf619915": {
+   "scene": "Connectedness",
+   "en": "<bookmark mark='t'/> Continuous functions carry connected sets to connected sets: if the image split into two separated pieces, their preimages would split the domain. <bookmark mark='a'/> On an interval, that's the intermediate value theorem. <bookmark mark='b'/> The image of the interval is connected, so by Part 1 it's an interval, <bookmark mark='c'/> and an interval containing f of a and f of b contains everything in between: here the level c is crossed three times.",
+   "zh": "<bookmark mark='t'/>连续函数把连通集映成连通集：如果像能拆成两个分离的部分，它们的原像就会把定义域拆开。<bookmark mark='a'/>在区间上，这就是介值定理。<bookmark mark='b'/>区间的像是连通的，所以由第1部分，它是一个区间，<bookmark mark='c'/>而一个包含f(a)和f(b)的区间，一定包含它们之间的一切：这里，水平线c被穿过了三次。"
+  },
+  "4fa52e72b4a1": {
+   "scene": "Connectedness",
+   "en": "Without completeness the theorem fails. <bookmark mark='a'/> Take x squared minus 2, but only at rational points between one and two. It's continuous there, negative at one and positive at two. <bookmark mark='b'/> But it's never zero: the only place it could be is root two, and that's not a rational. The rationals aren't connected, so their image needn't be an interval.",
+   "zh": "没有完备性，这个定理就不成立。<bookmark mark='a'/>取x的平方减2，但只在1和2之间的有理点上取值。它在那里是连续的，在1处为负，在2处为正。<bookmark mark='b'/>可它从来不等于0：唯一可能的位置是根号2，而那不是有理数。有理数不连通，所以它的像不一定是区间。"
+  },
+  "992ddb985350": {
+   "scene": "Connectedness",
+   "en": "When continuity fails, it fails in one of two ways. <bookmark mark='a'/> If the limits from the left and the right both exist, the discontinuity is of the first kind, or simple: either the two limits agree and only the value is wrong, <bookmark mark='b'/> or they disagree, and the graph jumps. <bookmark mark='c'/> Otherwise it's of the second kind, like sine of one over x, which has no one-sided limits at zero.",
+   "zh": "连续性失效时，只有两种可能的方式。<bookmark mark='a'/>如果左极限和右极限都存在，这个间断就是第一类的，也叫简单间断：要么两个极限相等，只是函数值不对，<bookmark mark='b'/>要么两个极限不相等，图像发生跳跃。<bookmark mark='c'/>否则就是第二类间断，比如sin（x分之1），它在0处没有单侧极限。"
+  },
+  "b4e8cc2d9733": {
+   "scene": "Connectedness",
+   "en": "Monotone functions are much tamer. <bookmark mark='t'/> An increasing function has one-sided limits everywhere, so its only discontinuities are jumps. <bookmark mark='a'/> And there can only be countably many: each jump opens a gap in the values, <bookmark mark='b'/> the gaps don't overlap, and each contains a rational number, which it can claim as its own. Different jumps claim different rationals, and there are only countably many rationals. <bookmark mark='c'/> Countably many can still be a lot: Rudin builds an increasing function that jumps at every single rational. Here it is, with jumps at fractions of denominator up to forty, each sized by its denominator.",
+   "zh": "单调函数要温顺得多。<bookmark mark='t'/>递增函数处处都有单侧极限，所以它唯一可能的间断就是跳跃。<bookmark mark='a'/>而且这样的跳跃至多只有可数多个：每次跳跃都在函数值里打开一个缺口，<bookmark mark='b'/>这些缺口互不重叠，每个缺口里都有一个有理数，可以认领为自己的。不同的跳跃认领不同的有理数，而有理数只有可数多个。<bookmark mark='c'/>可数多个仍然可以很多：鲁丁构造了一个递增函数，在每一个有理数处都有跳跃。就是这个，图中画出了分母不超过40的分数处的跳跃，每次跳跃的大小由分母决定。"
+  },
+  "af3e1e869f81": {
+   "scene": "Connectedness",
+   "en": "And the strangest example. <bookmark mark='a'/> Give each fraction p over q in lowest terms the value one over q, and each irrational the value zero. <bookmark mark='b'/> If this picture looks familiar, it's because it's the rational ruler we've used since Part 1, with each tick's height set to one over its denominator.",
+   "zh": "还有最奇怪的一个例子。<bookmark mark='a'/>给每个最简分数q分之p赋值q分之1，给每个无理数赋值0。<bookmark mark='b'/>如果这张图看着眼熟，那是因为它就是我们从第1部分起一直在用的有理数尺子，只是每个刻度的高度，都定成了它的分母分之1。"
+  },
+  "76327f1be39a": {
+   "scene": "Connectedness",
+   "en": "<bookmark mark='a'/> It's continuous at every irrational. Take one over root two, and epsilon equal to a tenth. <bookmark mark='b'/> Only the fractions with denominator at most ten reach the band's top edge, and there are finitely many of them. <bookmark mark='c'/> So a small enough strip avoids them all: here the nearest is seven tenths, and delta is about seven thousandths. Inside the strip every value is below epsilon. <bookmark mark='d'/> At a rational, though, the value is positive while irrationals arbitrarily close have value zero. So this function is continuous exactly at the irrationals.",
+   "zh": "<bookmark mark='a'/>它在每个无理数处都连续。取根号2分之1，ε等于十分之一。<bookmark mark='b'/>只有分母不超过10的分数，才够得着带子的上边缘，而这样的分数只有有限多个。<bookmark mark='c'/>所以足够窄的竖带能把它们全部避开：这里最近的是十分之七，δ大约是千分之七。在竖带里，每个函数值都小于ε。<bookmark mark='d'/>可是在有理数处，函数值是正的，而任意靠近它的无理数处，函数值都是0。所以这个函数恰好在无理数处连续。"
+  },
+  "aad83d627a53": {
+   "scene": "Connectedness",
+   "en": "Into the museum it goes. And the reverse, a function continuous exactly at the rationals, is impossible, though proving that needs Baire's theorem, in Part 8.",
+   "zh": "把它收进我们的博物馆。反过来，恰好在有理数处连续的函数是不可能存在的，不过证明这一点需要贝尔纲定理，要等到第8部分。"
+  },
+  "cee347bee99e": {
+   "scene": "Derivative",
+   "en": "Chapter twelve: the derivative, defined as a limit, the way Cauchy did in the 1820s, and looked at under a microscope.",
+   "zh": "第十二章：导数。像柯西在19世纪20年代那样，把它定义为一个极限，再放到显微镜下看一看。"
+  },
+  "5bc9a2ce32e0": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> The derivative of f at x is the limit of the difference quotient: the slope of the line through the point at x and a second point at t, <bookmark mark='b'/> as t slides toward x. <bookmark mark='c'/> The secants settle on a limiting slope, the tangent's.",
+   "zh": "<bookmark mark='a'/>f在x处的导数，是差商的极限：差商是一条直线的斜率，这条直线穿过x处的点和t处的第二个点，<bookmark mark='b'/>让t朝x滑过去。<bookmark mark='c'/>割线的斜率稳定到一个极限，那就是切线的斜率。"
+  },
+  "bc12f0b27d3f": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> Here's what the definition means geometrically. Put three graphs under a microscope and zoom in, a thousandfold. <bookmark mark='b'/> A differentiable function straightens out into a line, whose slope is the derivative. The absolute value at zero stays a corner at every scale. <bookmark mark='c'/> And the third is a function Rudin builds in chapter seven: continuous everywhere, but every zoom shows new wrinkles. It has a derivative nowhere.",
+   "zh": "<bookmark mark='a'/>这个定义在几何上是什么意思？把三个图像放到显微镜下，放大一千倍。<bookmark mark='b'/>可导函数会被拉直成一条直线，直线的斜率就是导数。绝对值函数在0处，不管放大多少倍，都还是一个尖角。<bookmark mark='c'/>第三个，是鲁丁在第7章构造的一个函数：它处处连续，但每次放大都会冒出新的褶皱。它处处不可导。"
+  },
+  "d58ecd4ada5b": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> Straightening has an algebraic form: f of x plus h is f of x, plus the derivative times h, plus an error that's small even compared with h. <bookmark mark='b'/> That's the version that survives in many dimensions, where the derivative becomes a linear map. <bookmark mark='c'/> One consequence: differentiable functions are continuous, since the difference f of t minus f of x is the difference quotient times t minus x, which goes to zero. <bookmark mark='d'/> The converse fails, spectacularly.",
+   "zh": "<bookmark mark='a'/>拉直也有一个代数形式：f（x加h）等于f(x)，加上导数乘以h，再加上一个误差，这个误差即使和h相比也很小。<bookmark mark='b'/>在多维空间里留存下来的，正是这个版本，那时导数变成了一个线性映射。<bookmark mark='c'/>一个推论：可导函数是连续的，因为差f(t)减f(x)，等于差商乘以（t减x），而它趋于0。<bookmark mark='d'/>反过来就不成立了，而且错得非常彻底。"
+  },
+  "d168feddc62d": {
+   "scene": "Derivative",
+   "en": "The chain rule is two zooms composed. <bookmark mark='a'/> A tiny interval around x is stretched by f prime of x, then the result is stretched by g prime at f of x: the stretch factors multiply. <bookmark mark='b'/> Rudin's proof makes this precise without a classic trap. Write f of t minus f of x as t minus x times f prime of x plus an error u that goes to zero. <bookmark mark='c'/> Do the same for g. <bookmark mark='d'/> Substitute, divide by t minus x, and let t go to x. <bookmark mark='e'/> The tempting shortcut, multiplying and dividing by f of t minus f of x, fails when that difference is zero for t arbitrarily close to x.",
+   "zh": "链式法则就是两次放大的复合。<bookmark mark='a'/>x周围的一个小区间，先被f在x处的导数拉伸，结果再被g在f(x)处的导数拉伸：两个伸缩因子相乘。<bookmark mark='b'/>鲁丁的证明把这一点说得很严格，而且避开了一个经典的陷阱。把f(t)减f(x)，写成（t减x）乘以（f在x处的导数，加上一个趋于0的误差u）。<bookmark mark='c'/>对g也这样做。<bookmark mark='d'/>代入，除以t减x，再让t趋于x。<bookmark mark='e'/>那条诱人的捷径，是同乘同除f(t)减f(x)，可是只要有离x任意近的t，让这个差等于0，捷径就走不通了。"
+  },
+  "81603be78560": {
+   "scene": "Derivative",
+   "en": "And the museum piece. <bookmark mark='a'/> x squared times sine of one over x, set to zero at zero. It oscillates infinitely often, but squeezed between x squared and minus x squared. <bookmark mark='b'/> At zero, the difference quotient is h times sine of one over h, which goes to zero: so f prime of zero exists, and it's zero. <bookmark mark='c'/> Everywhere else the derivative is two x sine of one over x minus cosine of one over x, and near zero that keeps swinging between about minus one and one. So the derivative exists at every point, and it's not continuous at zero.",
+   "zh": "再来看一件博物馆藏品。<bookmark mark='a'/>x的平方乘以sin（x分之1），在0处定义为0。它振荡无穷多次，但被夹在x的平方和负x的平方之间。<bookmark mark='b'/>在0处，差商是h乘以sin（h分之1），它趋于0：所以f在0处的导数存在，而且等于0。<bookmark mark='c'/>在其他地方，导数是2x乘sin（x分之1），减去cos（x分之1），在0附近，它不停地在大约负1和1之间摆动。所以导数在每一点都存在，但在0处不连续。"
+  },
+  "456039cbfb31": {
+   "scene": "MeanValue",
+   "en": "Chapter thirteen. If a trip averaged sixty miles an hour, at some instant the speedometer read exactly sixty. That's the mean value theorem, and its proof runs on compactness.",
+   "zh": "第十三章。如果一趟旅程的平均速度是每小时60英里，那么在某个时刻，速度表恰好指在60。这就是中值定理，而它的证明靠的是紧性。"
+  },
+  "e5780be85488": {
+   "scene": "MeanValue",
+   "en": "First, a lemma. <bookmark mark='a'/> At a local maximum the derivative is zero. <bookmark mark='b'/> Approaching from the left, f of t is at most f of x and t minus x is negative, so the difference quotients are at least zero; <bookmark mark='c'/> from the right they're at most zero. <bookmark mark='d'/> The limit has to be both.",
+   "zh": "先证一个引理。<bookmark mark='a'/>在局部极大值点，导数等于0。<bookmark mark='b'/>从左边逼近时，f(t)小于等于f(x)，而t减x是负的，所以差商大于等于0；<bookmark mark='c'/>从右边逼近时，差商小于等于0。<bookmark mark='d'/>极限必须同时满足这两点。"
+  },
+  "a289259e86e4": {
+   "scene": "MeanValue",
+   "en": "<bookmark mark='a'/> The theorem: the chord from a to b has the same slope as the tangent at some point in between. <bookmark mark='b'/> Here's a proof you can watch. Subtract the chord from the function: a vertical shear, not a rotation, so vertical lines stay vertical. <bookmark mark='c'/> Now the two ends are level. The sheared function is continuous on a compact interval, so it has a maximum, and since the ends are level, we can take it in the interior. <bookmark mark='d'/> There, the slope is zero. <bookmark mark='e'/> Shear back: slopes all increase by the chord's slope, so the horizontal tangent becomes a tangent parallel to the chord. <bookmark mark='f'/> Rudin proves a version with two functions, which we'll need for L'Hôpital's rule.",
+   "zh": "<bookmark mark='a'/>定理是：从a到b的弦，和中间某一点处的切线斜率相同。<bookmark mark='b'/>这里有一个看得见的证明。从函数里减去这条弦：这是竖直方向的错切，不是旋转，所以竖直的线仍然是竖直的。<bookmark mark='c'/>现在两个端点一样高了。错切后的函数在一个紧区间上连续，所以它有最大值，又因为两端一样高，可以把最大值点取在区间内部。<bookmark mark='d'/>在那里，斜率是0。<bookmark mark='e'/>再错切回去：所有斜率都加上弦的斜率，于是水平的切线，变成了一条平行于弦的切线。<bookmark mark='f'/>鲁丁证明了一个涉及两个函数的版本，我们在洛必达法则里会用到它。"
+  },
+  "5ab844bbd73f": {
+   "scene": "MeanValue",
+   "en": "<bookmark mark='a'/> The theorem's main job is to turn facts about the derivative into facts about the function. <bookmark mark='b'/> If the derivative is never negative, then for any two points the difference f of x two minus f of x one is x two minus x one times some derivative, so it's never negative: f increases. <bookmark mark='c'/> A zero derivative means a constant function.",
+   "zh": "<bookmark mark='a'/>这个定理的主要用处，是把关于导数的事实，变成关于函数本身的事实。<bookmark mark='b'/>如果导数从不为负，那么对任意两点，差f(x_2)减f(x_1)，等于（x_2减x_1）乘以某处的导数，所以它从不为负：f是递增的。<bookmark mark='c'/>导数恒为0，就意味着函数是常数。"
+  },
+  "43665e9ff38a": {
+   "scene": "MeanValue",
+   "en": "<bookmark mark='t'/> Darboux noticed something surprising: a derivative always has the intermediate value property, continuous or not. <bookmark mark='p'/> To hit a value lambda, subtract lambda t from f: the result slopes down at a and up at b, so its minimum is inside, where its derivative is zero. <bookmark mark='a'/> Remember the museum piece: its derivative is discontinuous at zero, <bookmark mark='b'/> yet on every interval next to zero it takes every value between about minus one and one, again and again. <bookmark mark='c'/> So a derivative can never have a simple jump: if it's discontinuous, it's wildly so.",
+   "zh": "<bookmark mark='t'/>达布注意到一件令人意外的事：导数不管连不连续，总有介值性质。<bookmark mark='p'/>要取到某个值λ，就从f(t)里减去λ乘t：得到的函数在a处向下倾斜，在b处向上倾斜，所以它的最小值在内部，而那里的导数等于0。<bookmark mark='a'/>还记得那件博物馆藏品吗？它的导数在0处不连续，<bookmark mark='b'/>可是在紧挨着0的每个区间上，它都一遍又一遍地取遍大约负1到1之间的每一个值。<bookmark mark='c'/>所以导数永远不可能有简单的跳跃：如果它不连续，那一定是剧烈地不连续。"
+  },
+  "e5635042f56e": {
+   "scene": "MeanValue",
+   "en": "Finally L'Hôpital's rule, which follows from the two-function mean value theorem. <bookmark mark='a'/> Draw the curve whose coordinates are g of x and f of x; it starts at the origin, because both go to zero. <bookmark mark='b'/> The ratio f over g is the slope of the chord from the origin. <bookmark mark='c'/> The ratio of derivatives is the slope of the curve itself. <bookmark mark='d'/> The generalized mean value theorem says some point of the curve between has a tangent parallel to the chord. So if the tangent slopes approach A, the chord slopes are dragged along.",
+   "zh": "最后是洛必达法则，它由双函数的中值定理推出。<bookmark mark='a'/>画出一条曲线，它的坐标是g(x)和f(x)；它从原点出发，因为两个函数都趋于0。<bookmark mark='b'/>比值f除以g，就是从原点出发的弦的斜率。<bookmark mark='c'/>导数之比，是曲线本身的斜率。<bookmark mark='d'/>广义中值定理说，曲线上中间某一点的切线，平行于这条弦。所以，如果切线斜率趋于A，弦的斜率也会被一起拖过去。"
+  },
+  "aa06a0a8dd2b": {
+   "scene": "Taylor",
+   "en": "Chapter fourteen. The derivative is the best line. Higher derivatives give the best parabola, the best cubic, and so on, and Taylor's theorem says exactly how good they are.",
+   "zh": "第十四章。导数给出最好的直线。高阶导数给出最好的抛物线、最好的三次曲线，等等，而泰勒定理精确地告诉我们，它们到底有多好。"
+  },
+  "8d245f59f964": {
+   "scene": "Taylor",
+   "en": "The Taylor polynomial of degree n matches the value and the first n derivatives at a point. <bookmark mark='a'/> For the sine, adding terms makes the polynomials hug the curve over a wider and wider range. <bookmark mark='b'/> For the logarithm of one plus x, they improve inside the interval from minus one to one, and flail outside it, however many terms you take. Same story as the last power series puzzle: the series has radius one.",
+   "zh": "n次泰勒多项式，在一点处与函数的值以及前n阶导数都相同。<bookmark mark='a'/>对正弦函数，项加得越多，多项式就在越来越大的范围内贴住曲线。<bookmark mark='b'/>对ln（1加x），多项式在负1到1的区间内越来越好，在区间外却乱甩一气，不管取多少项都一样。这和上次那个幂级数谜题是同一个故事：这个级数的收敛半径是1。"
+  },
+  "c675aab038f4": {
+   "scene": "Taylor",
+   "en": "<bookmark mark='t'/> Taylor's theorem, in Lagrange's form: f of beta equals the degree n minus one polynomial, plus one more term with the n-th derivative evaluated at some unknown point x between alpha and beta. It's the mean value theorem, one level up, and the proof is the mean value theorem applied n times. <bookmark mark='a'/> Subtract the polynomial and a multiple M of t minus alpha to the n, choosing M so the difference g vanishes at beta. <bookmark mark='b'/> It also vanishes at alpha, along with its first n minus one derivatives. <bookmark mark='c'/> So g' has a zero x one between alpha and beta; then g'' has a zero x two between alpha and x one; and so on, n times. <bookmark mark='d'/> At the last point the n-th derivative of g is zero, which says M is the n-th derivative of f over n factorial.",
+   "zh": "<bookmark mark='t'/>拉格朗日形式的泰勒定理：f(β)等于n减1次的多项式，再加上一项，这一项里的n阶导数，取在α和β之间某个未知的点x处。它是高了一阶的中值定理，而证明就是把中值定理用n次。<bookmark mark='a'/>从f里减去这个多项式，再减去（t减α）的n次方的M倍，选取M，使得差g在β处等于0。<bookmark mark='b'/>g在α处也等于0，它的前n减1阶导数在α处也都等于0。<bookmark mark='c'/>所以g的一阶导数在α和β之间有一个零点x_1；然后g的二阶导数在α和x_1之间有一个零点x_2；依此类推，一共n次。<bookmark mark='d'/>在最后一个点，g的n阶导数等于0，这就说明M等于f的n阶导数除以n的阶乘。"
+  },
+  "67091ca7339a": {
+   "scene": "Taylor",
+   "en": "The unknown point is the price, but a bound on the n-th derivative turns the theorem into an error estimate. <bookmark mark='a'/> For e to the x between zero and one, every derivative is at most e, so the error of the degree n polynomial at one is at most e over n plus one factorial. <bookmark mark='b'/> On a log scale, the actual errors sit just under the bound, all the way down.",
+   "zh": "这个未知的点是要付出的代价，但只要n阶导数有个界，定理就变成了一个误差估计。<bookmark mark='a'/>对e的x次方，在0和1之间，每一阶导数都不超过e，所以n次多项式在1处的误差，至多是e除以（n加1）的阶乘。<bookmark mark='b'/>在对数刻度上，实际误差一路都紧贴在这个界的下方。"
+  },
+  "3d6d2ec3733c": {
+   "scene": "Taylor",
+   "en": "And the payoff museum piece. <bookmark mark='a'/> e to the minus one over x squared, with value zero at zero. It's infinitely differentiable, and it's so flat at zero that every derivative there is zero. <bookmark mark='b'/> So every Taylor polynomial at zero is the zero polynomial, and the Taylor series converges everywhere, to zero, which is the wrong function at every point but one. <bookmark mark='c'/> On a log scale, near zero it lies below x to the tenth, and below any other power you choose.",
+   "zh": "最后，是一件压轴的博物馆藏品。<bookmark mark='a'/>e的（负x的平方分之1）次方，在0处取值为0。它无穷次可导，而且在0处平坦得出奇，那里的每一阶导数都等于0。<bookmark mark='b'/>所以它在0处的每个泰勒多项式都是零多项式，泰勒级数处处收敛，收敛到0，可除了一个点以外，它在每一点上给出的值都是错的。<bookmark mark='c'/>在对数刻度上，在0附近，它比x的10次方还低，也比你选的任何其他幂次都低。"
+  },
+  "ea39e2626329": {
+   "scene": "Taylor",
+   "en": "Smooth isn't the same as analytic. Cauchy pointed this function out in 1823. <bookmark mark='p'/> In the complex plane this can't happen: a function with one complex derivative has all of them and equals its Taylor series, which is Part 7's surprise. <bookmark mark='q'/> And in Part 9 this flatness becomes useful, building the smooth bump functions that distribution theory runs on.",
+   "zh": "光滑并不等于解析。柯西在1823年指出了这个函数。<bookmark mark='p'/>在复平面上，这种事不可能发生：一个函数只要复可导一次，就有任意阶的导数，而且等于它的泰勒级数，这是第7部分的惊喜。<bookmark mark='q'/>而在第9部分，这种平坦性会派上用场：用来构造光滑的鼓包函数，分布理论正是靠它们运转的。"
+  },
+  "cc442e7e1dfa": {
+   "scene": "Outro",
+   "en": "One last result, to close the part. <bookmark mark='a'/> Let a point go once around the unit circle at unit speed. <bookmark mark='b'/> It ends where it started, so the total change is zero, <bookmark mark='c'/> but the velocity always has length one, so no instant has the average velocity, which is zero. For vector-valued functions the mean value theorem fails. <bookmark mark='d'/> What survives is an inequality: the total change is at most the elapsed time times the speed at some moment. That inequality, not the equation, is the version that carries over to many dimensions and to the infinite-dimensional spaces to come.",
+   "zh": "最后一个结果，为这一部分收尾。<bookmark mark='a'/>让一个点以单位速率，沿单位圆走一圈。<bookmark mark='b'/>它回到了出发的地方，所以总变化量是0，<bookmark mark='c'/>但速度的长度始终是1，所以没有哪个时刻的速度等于平均速度，也就是0。对向量值函数，中值定理不成立。<bookmark mark='d'/>留存下来的是一个不等式：总变化量的大小，至多是经过的时间乘以某一时刻的速率。能推广到多维空间、以及后面那些无穷维空间的，正是这个不等式，而不是那个等式。"
+  },
+  "6234199acb2d": {
+   "scene": "Outro",
+   "en": "Let's take stock. Convergence is a game where epsilon moves first. Cauchy sequences let us test convergence without knowing the limit, and they converge exactly in complete spaces, which the rationals are not. Upper and lower limits describe what's left when there's no limit. For series we have comparison, condensation, and the root and ratio tests; e is irrational; power series converge in disks. Summation by parts proved that the sawtooth series converges at every point, and Riemann showed that conditionally convergent series can be rearranged to sum to anything. Continuity became a statement about open sets, and compactness and connectedness gave the extreme value theorem, uniform continuity, and intermediate values. Finally, the derivative: the mean value theorem, Darboux's theorem, Taylor's theorem, and a smooth function its Taylor series can't see.",
+   "zh": "我们来盘点一下。收敛是一个ε先走的游戏。柯西序列让我们不知道极限也能检验收敛，而它们都收敛的空间，恰好就是完备空间，有理数可不是。没有极限的时候，上极限和下极限描述了剩下的情形。对于级数，我们有比较判别法、凝聚判别法，以及根值和比值判别法；e是无理数；幂级数在圆盘里收敛。分部求和证明了锯齿波级数在每一点都收敛，而黎曼证明了，条件收敛的级数可以重排成任何和。连续性变成了一个关于开集的命题，紧性和连通性则给出了最值定理、一致连续性和介值定理。最后是导数：中值定理、达布定理、泰勒定理，还有一个泰勒级数看不见的光滑函数。"
+  },
+  "c2c7126adf1f": {
+   "scene": "Outro",
+   "en": "And the ledger gets its second row. <bookmark mark='a'/> The space: sequences and series of numbers. <bookmark mark='b'/> Complete means Cauchy sequences converge. <bookmark mark='c'/> Compactness means every sequence has a convergent subsequence. <bookmark mark='d'/> The limits we may swap: we may reorder a sum when it converges absolutely. <bookmark mark='e'/> And Fourier's series: it converges at each point, though not yet in any stronger sense, and we don't yet know to what, in general.",
+   "zh": "账本也添上了第二行。<bookmark mark='a'/>空间：数的序列和级数。<bookmark mark='b'/>完备，意味着柯西序列都收敛。<bookmark mark='c'/>紧性，意味着每个序列都有收敛的子序列。<bookmark mark='d'/>可以交换的极限：当一个和绝对收敛时，我们可以重排它。<bookmark mark='e'/>至于傅里叶级数：它在每一点都收敛，不过还谈不上任何更强意义下的收敛，而且一般来说，我们还不知道它收敛到什么。"
+  },
+  "b931c78c0d1e": {
+   "scene": "Outro",
+   "en": "Next time, in Part 3, integration, and the first real function space. <bookmark mark='a'/> It starts from Rudin's main problem. In this grid, m over m plus n, go far down a column and the entries approach one; go far along a row and they approach zero. <bookmark mark='b'/> Take the limits in one order and you get one, in the other order, zero. <bookmark mark='c'/> Integrating a Fourier series term by term is exactly such an interchange, and Part 3 is about when it's allowed.",
+   "zh": "下一次，在第3部分：积分，以及第一个真正的函数空间。<bookmark mark='a'/>它从鲁丁所说的主要问题出发。在这张网格里，m加n分之m，沿着一列往下走得足够远，数值趋于1；沿着一行走得足够远，数值趋于0。<bookmark mark='b'/>按一种次序取极限，得到1；按另一种次序，得到0。<bookmark mark='c'/>把傅里叶级数逐项积分，正是这样一种交换，而第3部分讲的，就是什么时候允许这样做。"
+  },
+  "bdaf3a2006ed": {
+   "scene": "Outro",
+   "en": "This part followed chapters three to five of Rudin's Principles of Mathematical Analysis. Thanks for watching, and see you in Part 3.",
+   "zh": "这一部分对应鲁丁《数学分析原理》的第3到第5章。感谢收看，我们第3部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 2, Limits: Sequences, Series, Continuity and the Derivative",
+ "chapters_en": {
+  "Hook": "One series, any sum you like",
+  "Sequences": "1. Sequences and their limits",
+  "Cauchy": "2. Cauchy sequences and completeness",
+  "LimSup": "3. Upper and lower limits",
+  "Series": "4. Series, and the comparison tests",
+  "NumberE": "5. The number e",
+  "Tests": "6. Root, ratio and power series",
+  "Abel": "7. Summation by parts, and multiplying series",
+  "Rearrangement": "8. Rearrangements",
+  "Continuity": "9. Continuity",
+  "Compactness": "10. Continuity and compactness",
+  "Connectedness": "11. Continuity and connectedness",
+  "Derivative": "12. The derivative",
+  "MeanValue": "13. Mean value theorems",
+  "Taylor": "14. Taylor's theorem",
+  "Outro": "Vector-valued functions, and the second row of the ledger"
+ }
+}

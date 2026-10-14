@@ -306,9 +306,11 @@ class Parseval(VoiceoverScene):
                         color=C.PATHOLOGY, stroke_width=5)
 
         wg = always_redraw(worst)
-        for n_ in (1, 10, 40):  # the worst gap sits next to a jump (x near 0 or 2 pi) and is close to pi / 2
+        for n_ in (1, 10, 40):  # the worst gap sits next to a jump (x near 0 or 2 pi) and is close to pi / 2:
+            # the sup is pi / 2 (approached at the jump); the grid starts at 0.002, where |s_N| <= 0.002 N
             e_ = np.abs(saw_partial(xw, n_) - saw(xw))
-            assert min(xw[np.argmax(e_)], 2 * np.pi - xw[np.argmax(e_)]) < 0.05 and abs(e_.max() - np.pi / 2) < 0.01
+            assert min(xw[np.argmax(e_)], 2 * np.pi - xw[np.argmax(e_)]) < 0.05
+            assert np.pi / 2 - 0.002 * n_ - 1e-3 < e_.max() <= np.pi / 2
         lg = VGroup(Line(ax.c2p(0.003, saw(np.array([0.003]))[0]), ax.c2p(2 * np.pi - 0.003,
                                                                          saw(np.array([2 * np.pi - 0.003]))[0]),
                          color=WHITE, stroke_width=3))
