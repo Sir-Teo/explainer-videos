@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import load, plain_axes, polyline, runs_in_range
+from videos.analysis2.common import load, magnifier_above, plain_axes, polyline, runs_in_range
 
 
 def bars(a, x0=-5.9, base=-2.7, w=0.34, H=3.2, color=C.SEQ, opacity=0.75) -> VGroup:
