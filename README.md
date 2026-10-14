@@ -95,6 +95,20 @@ python tools/build.py relativity2             # -> renders/relativity2.mp4
 python tools/build.py quantum2                # -> renders/quantum2.mp4
 ```
 
+The ten parts of *Analysis, Built* were made at 2160p60. To rebuild them exactly as published, after the
+one-time setup above:
+
+```bash
+for n in 1 2 3 4 5 6 7 8 9 10; do
+  python -m videos.analysis$n.compute                      # every number the part shows, computed and asserted
+  python tools/build.py analysis$n -q k --fps 60           # -> renders/analysis${n}_2160p.mp4 (+ .srt, chapters)
+done
+```
+
+Each part takes a few hours at 4K on a 4-core machine (`-q l` previews a part in minutes). Narration is
+synthesized once and cached in `.cache/tts`, and Manim caches every animation it renders, so a second build redoes
+only what changed.
+
 Iterate on a single scene:
 
 ```bash
