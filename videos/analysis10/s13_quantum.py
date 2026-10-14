@@ -107,6 +107,21 @@ class QuantumClosure(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.3, 0])
+        # the trace argument as a picture: the diagonal of a commutator AB - BA of random 12 x 12 matrices sums to 0,
+        # the diagonal of I sums to 12
+        rng = np.random.default_rng(5)
+        Am, Bm = rng.normal(size=(2, 12, 12))
+        dg = np.diag(Am @ Bm - Bm @ Am)
+        assert abs(dg.sum()) < 1e-10 and np.abs(dg).max() < 13.5
+        tx = plain_axes([0.5, 12.5, 1], [-13.5, 13.5, 4.5], 6.0, 2.2).move_to([-3.4, 0.75, 0])
+        ix = plain_axes([0.5, 12.5, 1], [0, 1.2, 1], 6.0, 0.8).move_to([-3.4, -2.05, 0])
+        tbars = VGroup(*[Line(tx.c2p(i + 1, 0), tx.c2p(i + 1, v), color=C.PATHOLOGY if v < 0 else C.OPERATOR,
+                              stroke_width=10) for i, v in enumerate(dg)])
+        ibars = VGroup(*[Line(ix.c2p(i + 1, 0), ix.c2p(i + 1, 1), color=C.EPS, stroke_width=10) for i in range(12)])
+        tlab = MathTex(rf"\text{{diagonal of }} AB - BA \ (\text{{random }} 12 \times 12): \ \text{{sum}} = {abs(dg.sum()):.0e}",
+                       font_size=22).next_to(tx, UP, buff=0.08)
+        ilab = MathTex(r"\text{diagonal of } I: \ \text{sum} = 12", font_size=22, color=C.EPS).next_to(ix, UP, buff=0.08)
+        trace_pic = VGroup(tx, tbars, tlab, ix, ibars, ilab)
         head = label(r"Why $x$ and $p$ cannot be bounded", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> The canonical commutation relation says x p minus p x is i times the identity. "
@@ -119,8 +134,11 @@ class QuantumClosure(VoiceoverScene):
             "reason the quantum videos needed this part."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(tx), FadeIn(tlab))
+            self.play(LaggedStart(*[Create(b_) for b_ in tbars], lag_ratio=0.1), run_time=2.0)
+            self.play(FadeIn(rows[1]), Create(ix), FadeIn(ilab), LaggedStart(*[Create(b_) for b_ in ibars], lag_ratio=0.05))
             vo.wait_until("b")
+            self.play(FadeOut(trace_pic), run_time=0.6)
             self.play(Create(ax), FadeIn(ticks), Create(one), FadeIn(tl))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.02), FadeIn(rows[2]), run_time=2.0)
             vo.wait_until("c")

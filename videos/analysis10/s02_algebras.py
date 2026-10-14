@@ -71,12 +71,16 @@ class BanachAlgebras(VoiceoverScene):
             "trials of each kind, the ratio piles up below one and never crosses it."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rule[0]))
+            self.play(FadeIn(head), FadeIn(rule[0]), FadeIn(panels[0][1][0]))
+            self.play(*[Create(m_) for m_ in panels[0][1][1:]], run_time=1.5)  # a product, before the list begins
             for k_, mk in enumerate(("b", "b2", "b3", "b4", "b5")):  # each algebra with its product, drawn
                 vo.wait_until(mk)
                 t_, pic_, cap_ = panels[k_]
-                self.play(FadeIn(t_), FadeIn(pic_[0]), run_time=0.5)
-                self.play(*[Create(m_) if isinstance(m_, VMobject) else FadeIn(m_) for m_ in pic_[1:]], run_time=1.3)
+                if k_ > 0:
+                    self.play(FadeIn(t_), FadeIn(pic_[0]), run_time=0.5)
+                    self.play(*[Create(m_) if isinstance(m_, VMobject) else FadeIn(m_) for m_ in pic_[1:]], run_time=1.3)
+                else:
+                    self.play(FadeIn(t_), run_time=0.5)
                 self.play(FadeIn(cap_), run_time=0.5)
             vo.wait_until("c")
             self.play(FadeOut(panels))

@@ -169,9 +169,9 @@ class Cayley(VoiceoverScene):
             "worth of them."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))
+            self.play(Create(g1b), Create(g1), FadeIn(l1))
             vo.wait_until("b")
-            self.play(Create(ax), Create(g1b), Create(g1), FadeIn(l1))
             self.play(Create(bx), Create(g2), FadeIn(l2))
             vo.wait_until("c")
             self.play(FadeIn(rows[1:3]))
