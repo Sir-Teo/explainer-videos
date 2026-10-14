@@ -201,7 +201,7 @@ class Holder(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(stmt), Create(ax), Create(gf), Create(gg), FadeIn(lfg))
             vo.wait_until("b")
             self.play(FadeIn(steps[:2]), ReplacementTransform(gf, gF), ReplacementTransform(gg, gG),
-                      ReplacementTransform(lfg, lFG))
+                      FadeTransform(lfg, lFG))
             vo.wait_until("c")
             self.play(FadeIn(steps[2:4]))
             self.play(FadeOut(gF), FadeOut(gG), FadeOut(lFG), Create(gL), FadeIn(lL), Create(gU), FadeIn(lU), run_time=1.8)
