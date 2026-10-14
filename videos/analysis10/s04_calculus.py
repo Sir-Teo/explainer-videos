@@ -108,22 +108,57 @@ class SymbolicCalculus(VoiceoverScene):
         ax = square_axes([-2.2, 2.2, 1], [-2.2, 2.2, 1], 1.15).move_to([-3.8, -0.2, 0])
         bx = square_axes([-1.5, 5.0, 1], [-3.2, 3.2, 1], 0.78).move_to([3.4, -0.2, 0])
         eA = np.exp(ev)
+
+        def inside_b(w):
+            return (w.real > -1.5) & (w.real < 5.0) & (np.abs(w.imag) < 3.2)
+
+        assert np.all(np.abs(ev.real) < 2) and np.all(np.abs(ev.imag) < 2) and np.all(inside_b(eA))
+        light = interpolate_color(ManimColor(C.SPECTRUM), WHITE, 0.4)  # sigma(e^A): the spectrum's green, lighter
         d1 = VGroup(*[Dot(ax.c2p(l_.real, l_.imag), radius=0.07, color=C.SPECTRUM) for l_ in ev])
-        d2 = VGroup(*[Dot(bx.c2p(l_.real, l_.imag), radius=0.07, color=C.FREQ) for l_ in eA])
         l1 = MathTex(r"\sigma(A)", font_size=30, color=C.SPECTRUM).next_to(ax, UP, buff=0.1)
-        l2 = MathTex(r"\sigma(e^A) = e^{\sigma(A)}", font_size=30, color=C.FREQ).next_to(bx, UP, buff=0.1)
-        # the grid lines Re = const and Im = const near the spectrum, and their images under exp
-        grid, igrid = VGroup(), VGroup()
-        s = np.linspace(-2, 2, 120)
+        l2 = MathTex(r"\sigma(e^A) = e^{\sigma(A)}", font_size=30, color=light).next_to(bx, UP, buff=0.1)
+        # the true map, animated: every point z of the grid lines Re = c, Im = c (|c| <= 2) travels along
+        # (1 - t) z + t e^z, in a frame that slides from the left plane to the right one; the pieces of a line that end
+        # outside the right window fade on the way (same points throughout, so nothing tangles)
+        Oa, Ob = ax.c2p(0, 0), bx.c2p(0, 0)
+        ua, ub = ax.c2p(1, 0)[0] - Oa[0], bx.c2p(1, 0)[0] - Ob[0]
+
+        def carry(zs, t):
+            w = (1 - t) * zs + t * np.exp(zs)
+            o, k = (1 - t) * Oa + t * Ob, (1 - t) * ua + t * ub
+            return np.c_[o[0] + k * w.real, o[1] + k * w.imag, np.zeros(len(zs))]
+
+        s = np.linspace(-2, 2, 241)
+        grid, moving, keep = VGroup(), VGroup(), []
         for c in np.linspace(-2, 2, 9):
             for z in (c + 1j * s, s + 1j * c):
-                grid.add(VMobject(stroke_color=GREY_C, stroke_width=1.2).set_points_as_corners(
-                    [ax.c2p(w.real, w.imag) for w in z]))
-                w = np.exp(z)
-                ok = (w.real > -1.5) & (w.real < 5) & (np.abs(w.imag) < 3.2)
-                if ok.sum() > 2:
-                    igrid.add(VMobject(stroke_color=C.OPERATOR, stroke_width=1.2, stroke_opacity=0.7).set_points_as_corners(
-                        [bx.c2p(v.real, v.imag) for v in w[ok]]))
+                grid.add(VMobject(stroke_color=GREY_C, stroke_width=1.2).set_points_as_corners(carry(z, 0.0)))
+                ok = inside_b(np.exp(z))
+                i = 0
+                while i < len(z):  # split the line into runs that end inside / outside the right window
+                    j = i
+                    while j < len(z) and ok[j] == ok[i]:
+                        j += 1
+                    lo, hi = (i, j) if ok[i] else (max(i - 1, 0), min(j + 1, len(z)))  # fading runs reach their neighbours
+                    if hi - lo >= 2:
+                        moving.add(VMobject(stroke_color=GREY_C, stroke_width=1.2).set_points_as_corners(carry(z[lo:hi], 0.0)))
+                        keep.append((z[lo:hi], bool(ok[i])))
+                    i = j
+        assert sum(k_ for _, k_ in keep) >= 12  # most lines keep a visible piece on the right
+
+        def bend(m, t):
+            for piece, (zs, k_) in zip(m, keep):
+                piece.set_points_as_corners(carry(zs, t))
+                piece.set_stroke(opacity=1.0 if k_ else 1.0 - t)
+
+        movd = d1.copy()
+
+        def bend_dots(m, t):
+            for dot_, l_ in zip(m, ev):
+                dot_.move_to(carry(np.array([l_]), t)[0]).set_color(interpolate_color(ManimColor(C.SPECTRUM), light, t))
+
+        final = carry(ev, 1.0)
+        assert np.allclose(final[:, 0], [bx.c2p(w.real, w.imag)[0] for w in eA])  # the dots land on e^(lambda_i)
         arr = Arrow([-1.2, 1.9, 0], [0.8, 1.9, 0], buff=0, color=GREY_B, stroke_width=4)
         al = MathTex(r"\exp", font_size=28).next_to(arr, UP, buff=0.05)
         computed = np.sort_complex(np.exp(ev))
@@ -132,8 +167,8 @@ class SymbolicCalculus(VoiceoverScene):
             label(r"\textbf{FA 10.28} \ (spectral mapping) \ $\sigma(f(A)) = f(\sigma(A))$", font_size=26, color=C.EPS),
             label(r"checked: \ the eigenvalues of the contour-built $e^A$ are $e^{\lambda_i}$ to $10^{-9}$", font_size=22,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
-        head = label(r"The spectrum moves with the function", font_size=34).to_edge(UP, buff=0.25)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+        head = label(r"The spectrum moves with the function", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> And the spectrum goes along. The eigenvalues of A, on the left, <bookmark mark='b'/> "
             "are carried by the exponential to the eigenvalues of e to the A, on the right, while the grid around "
@@ -144,7 +179,8 @@ class SymbolicCalculus(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(grid), FadeIn(d1), FadeIn(l1))
             vo.wait_until("b")
             self.play(GrowArrow(arr), FadeIn(al), Create(bx))
-            self.play(TransformFromCopy(grid, igrid), TransformFromCopy(d1, d2), FadeIn(l2), run_time=2.5)
+            self.play(UpdateFromAlphaFunc(moving, bend), UpdateFromAlphaFunc(movd, bend_dots), FadeIn(l2), run_time=2.5)
+            moving.remove(*[p_ for p_, (_, k_) in zip(list(moving), keep) if not k_])  # the faded pieces
             vo.wait_until("c")
             self.play(FadeIn(rows))
         self.wait(0.3)
