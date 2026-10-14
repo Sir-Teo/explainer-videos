@@ -58,7 +58,7 @@ class Stieltjes(VoiceoverScene):
         dens = label(r"where $\alpha$ climbs fast, a short stretch of $x$ counts for a lot", font_size=26,
                      color=C.EPS).move_to([0, -2.35, 0])
         dens2 = MathTex(r"\alpha \text{ smooth:} \quad \int f\,d\alpha = \int f\,\alpha'\,dx \quad (\text{Rudin 6.17})",
-                        font_size=32, color=C.FUNC).to_edge(DOWN, buff=0.25)
+                        font_size=32, color=C.FUNC).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "In the sums, replace the width of each piece by the increase of alpha across it. <bookmark mark='a'/> "
             "Think of alpha as a stretched ruler. Mark equal steps on the alpha scale, and pull them back to the x "

@@ -268,7 +268,7 @@ class Approximation(VoiceoverScene):
                              ).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.9, -0.9, 0])
         use = label(r"either way: \ $|x| \approx$ a polynomial on $[-a, a]$, \ which the next chapter needs", font_size=24,
-                    color=C.EPS).to_edge(DOWN, buff=0.2)
+                    color=C.EPS).to_edge(DOWN, buff=0.35)
         assert np.all(np.diff(berr) < 0)
         with self.voiceover(
             "<bookmark mark='a'/> There's a second, probabilistic proof, due to Bernstein. At x, flip n coins that "

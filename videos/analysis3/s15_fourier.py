@@ -281,7 +281,7 @@ class FourierSeries(VoiceoverScene):
         out = VGroup(label(r"so $c_n \to 0$ \ (the Riemann--Lebesgue lemma, for Riemann-integrable $f$)", font_size=26,
                            color=C.EPS),
                      label(r"whether the bar fills completely is chapter 15", font_size=24, color=GREY_A)
-                     ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
+                     ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         # Pythagoras first, on the same bar: the energy of s_3 plus the energy of the error is the energy of f
         e3 = sum(0.5 / n**2 for n in range(1, 4))
         pa = Rectangle(width=W * e3 / tot, height=0.7, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.6).move_to(
