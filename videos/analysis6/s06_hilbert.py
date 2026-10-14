@@ -257,8 +257,9 @@ class Hilbert(VoiceoverScene):
         ix.set_opacity(0.35)
         cap_y = ix.get_bottom()[1] - 0.35
 
-        def cap(tex, color=WHITE):
-            return MathTex(tex, font_size=26, color=color).move_to([ix.get_center()[0], cap_y, 0])
+        def cap(*lines, color=WHITE):  # one or two centred lines under the picture, at most 3.4 wide
+            g_ = VGroup(*[MathTex(t_, font_size=26, color=color) for t_ in lines]).arrange(DOWN, buff=0.1)
+            return g_.next_to([ix.get_center()[0], cap_y + 0.15, 0], DOWN, buff=0)
 
         def arrow(a, b, color, sw=4):
             return Arrow(ix.c2p(*a), ix.c2p(*b), buff=0, color=color, stroke_width=sw, tip_length=0.16,
@@ -273,18 +274,18 @@ class Hilbert(VoiceoverScene):
                            tag("y", yv, UP, C.APPROX))
         dot_ = float(xv @ yv)
         assert abs(dot_ - (1.2 * 0.4 + 0.5 * 1.1)) < 1e-12
-        P0 = VGroup(cap(rf"x \cdot y = {dot_:.2f}", C.INNER))
+        P0 = VGroup(cap(rf"x \cdot y = {dot_:.2f}", color=C.INNER))
         nx = float(np.linalg.norm(xv))
         P1 = VGroup(DashedVMobject(Circle(radius=nx * ix.x_length / 3.2, color=C.DIST, stroke_width=2).move_to(ix.c2p(0, 0)),
                                    num_dashes=40),
-                    cap(rf"|x| = \sqrt{{x \cdot x}} = {nx:.2f}", C.DIST))
+                    cap(rf"|x| = \sqrt{{x \cdot x}} = {nx:.2f}", color=C.DIST))
         assert abs(nx - math.sqrt(xv @ xv)) < 1e-12
         yp = 0.8 * np.array([-xv[1], xv[0]]) / nx  # perpendicular to x, length 0.8
         hyp = xv + yp
         assert abs(xv @ yp) < 1e-12 and abs(hyp @ hyp - (xv @ xv + yp @ yp)) < 1e-12
         P2 = VGroup(arrow(O, xv, C.SEQ), arrow(xv, hyp, C.APPROX), arrow(O, hyp, C.EPS),
                     right_angle(ix, xv, -xv / nx, yp / 0.8, size=0.14),
-                    cap(rf"|x + y|^2 = {hyp @ hyp:.2f} = {xv @ xv:.2f} + {yp @ yp:.2f}", C.EPS))
+                    cap(rf"|x + y|^2 = {hyp @ hyp:.2f}", rf"= |x|^2 + |y|^2 = {xv @ xv:.2f} + {yp @ yp:.2f}", color=C.EPS))
         m_ = np.array([1.0, 0.3]) / math.hypot(1.0, 0.3)
         z = np.array([-0.2, 1.3])
         pz = (z @ m_) * m_
@@ -297,13 +298,13 @@ class Hilbert(VoiceoverScene):
                     right_angle(ix, pz, m_, (z - pz) / np.linalg.norm(z - pz), size=0.14),
                     Dot(ix.c2p(*z), radius=0.07, color=WHITE), Dot(ix.c2p(*pz), radius=0.07, color=C.EPS),
                     tag("z", z, UP, WHITE), tag("Pz", pz, DR, C.EPS, 0.05),
-                    cap(rf"|z - Pz| = {np.linalg.norm(z - pz):.2f} = \min_{{w \in M}} |z - w|", C.EPS))
+                    cap(rf"|z - Pz| = {np.linalg.norm(z - pz):.2f}", r"= \min_{w \in M} |z - w|", color=C.EPS))
         gvec = np.array([0.6, 0.8])
         tg = np.array([-gvec[1], gvec[0]])
         P4 = VGroup(*[Line(ix.c2p(*(c * gvec - 1.5 * tg)), ix.c2p(*(c * gvec + 1.5 * tg)), color=C.FUNCTIONAL,
                            stroke_width=2.5).set_stroke(opacity=0.9 if c == 0 else 0.55) for c in (-1.0, -0.5, 0.0, 0.5, 1.0)],
                     arrow(O, gvec, C.INNER, 5), tag("y", gvec, RIGHT, C.INNER),
-                    cap(r"\text{level lines of } x \mapsto x \cdot y, \ \perp y", C.FUNCTIONAL))
+                    cap(r"\text{level lines of } x \mapsto x \cdot y,", r"\text{perpendicular to } y", color=C.FUNCTIONAL))
         assert abs(np.linalg.norm(gvec) - 1) < 1e-12
         th = math.radians(30)
         e1, e2 = np.array([math.cos(th), math.sin(th)]), np.array([-math.sin(th), math.cos(th)])
@@ -315,7 +316,7 @@ class Hilbert(VoiceoverScene):
                     DashedLine(ix.c2p(*v), ix.c2p(*(c1 * e1)), color=GREY_B, stroke_width=2),
                     DashedLine(ix.c2p(*v), ix.c2p(*(c2 * e2)), color=GREY_B, stroke_width=2),
                     arrow(O, v, WHITE, 3), tag("v", v, UP, WHITE),
-                    cap(rf"v = {c1:.2f}\,e_1 + {c2:.2f}\,e_2", WHITE))
+                    cap(rf"v = {c1:.2f}\,e_1 + {c2:.2f}\,e_2"))
         # compact: points of a bounded sequence (on the circle r = 0.85, angles 2.4 n) and a subsequence whose angles
         # approach 0.6 ever more closely
         nn = np.arange(1, 400)
@@ -333,7 +334,7 @@ class Hilbert(VoiceoverScene):
                     *[Dot(ix.c2p(*(0.85 * np.array([math.cos(2.4 * k_), math.sin(2.4 * k_)]))), radius=0.06,
                           color=C.EPS) for k_ in sub[-6:]],
                     Circle(radius=0.11, color=C.EPS, stroke_width=2.5).move_to(ix.c2p(*lim)),
-                    cap(r"\text{a bounded sequence: a convergent subsequence}", C.EPS).scale(0.85))
+                    cap(r"\text{a bounded sequence:}", r"\text{a convergent subsequence}", color=C.EPS))
         pics = [P0, P1, P2, P3, P4, P5, P6]
         for P in pics:
             assert P.get_left()[0] > -6.7 and P.get_right()[0] < card.get_left()[0] - 0.1
@@ -361,8 +362,8 @@ class Hilbert(VoiceoverScene):
             label(r"no subsequence is Cauchy: \ the closed unit ball is not compact", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, -0.85, 0])
         for r_ in eside:
-            if r_.width > 6.4:
-                r_.width = 6.4
+            if r_.width > 6.2:
+                r_.width = 6.2
         eside.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to([0.35, -0.85, 0], RIGHT, buff=0)
         assert eside.get_left()[0] > eax.get_right()[0] + 0.2 and eside.get_right()[0] < 6.6
         with self.voiceover(
