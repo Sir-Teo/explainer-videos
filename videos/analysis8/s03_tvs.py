@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis8.common import p_ball, plain_axes, polyline, pnorm, square_axes
+from videos.analysis8.common import p_ball_exact, plain_axes, polyline, pnorm, square_axes
 
 
 class TVS(VoiceoverScene):
@@ -25,7 +25,8 @@ class TVS(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def seminorms(self):
-        ax = plain_axes([-1, 1, 0.5], [-1.4, 1.4, 1], 5.2, 3.2).move_to([-3.6, -0.3, 0])
+        # y from -0.5 to 1.5: f and g live in [-0.03, 1.08], so they fill the panel
+        ax = plain_axes([-1, 1, 0.5], [-0.5, 1.5, 0.5], 5.2, 3.2).move_to([-3.6, -0.3, 0])
         x = np.linspace(-1, 1, 600)
         f0 = np.exp(-3 * x * x)
         f1 = f0 + 0.08 * np.sin(25 * x)  # close in sup, far in the derivative
@@ -49,8 +50,12 @@ class TVS(VoiceoverScene):
             if r_.width > 7.0:
                 r_.width = 7.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.1, -0.6, 0])
-        lab = VGroup(MathTex(r"f", font_size=28, color=C.FUNC).next_to(ax.c2p(0.0, 1.0), UP, buff=0.12),
-                     MathTex(r"g = f + 0.08\sin 25x", font_size=24, color=C.APPROX).next_to(ax, DOWN, buff=0.1))
+        assert -0.5 < min(f0.min(), f1.min()) and max(f0.max(), f1.max()) < 1.5
+        # each label beside its own curve, on the outer side of the bell (left: f, right: g), off the y-axis
+        lab = VGroup(MathTex(r"f", font_size=28, color=C.FUNC).next_to(ax.c2p(-0.5, math.exp(-0.75) + 0.08), UL,
+                                                                       buff=0.12),
+                     MathTex(r"g = f + 0.08\sin 25x", font_size=24, color=C.APPROX).next_to(
+                         ax.c2p(0.5, math.exp(-0.75) + 0.08), UR, buff=0.12))
         head = label(r"Some spaces need infinitely many norms at once", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Some important spaces have no single norm. Take the smooth functions on an interval. "
@@ -74,7 +79,7 @@ class TVS(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def locally_compact(self):
-        ax = plain_axes([0.5, 8.5, 1], [0, 1.2, 0.5], 6.0, 2.2).move_to([-3.3, 0.9, 0])
+        ax = plain_axes([0.5, 8.5, 1], [0, 1.2, 0.5], 6.0, 1.6).move_to([-3.3, 1.5, 0])
         nT = ValueTracker(1)
 
         def bar():
@@ -88,7 +93,7 @@ class TVS(VoiceoverScene):
         E = np.eye(8)
         D = np.linalg.norm(E[:, None, :] - E[None, :, :], axis=-1)
         assert np.allclose(D[~np.eye(8, dtype=bool)], math.sqrt(2))
-        bx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.1).move_to([-3.3, -2.0, 0])
+        bx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.0).move_to([-4.3, -1.55, 0])
         bx.set_opacity(0.3)
         unit = Circle(radius=bx.c2p(1, 0)[0] - bx.c2p(0, 0)[0], color=GREY_B, stroke_width=2).move_to(bx.c2p(0, 0))
         pts = [np.array([math.cos(a), math.sin(a)]) for a in (0, 2 * math.pi / 3, 4 * math.pi / 3)]
@@ -104,7 +109,7 @@ class TVS(VoiceoverScene):
             label(r"the honest end of Heine--Borel \ (Part 1's promise)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
         sch = VGroup(note(r"schematic:"), note(r"three of the $e_n$,"), note(r"in a plane")).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.06).to_corner(DL, buff=0.35)
+            DOWN, aligned_edge=LEFT, buff=0.06).next_to(bx.c2p(1.6, -1.6), UR, buff=0.0).shift(RIGHT * 0.15)
         head = label(r"The unit ball is never compact in infinite dimensions", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Part 1 promised that closed and bounded doesn't mean compact beyond R n. Here's the "
@@ -129,11 +134,14 @@ class TVS(VoiceoverScene):
     def pless(self):
         ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.7).move_to([-3.6, -0.6, 0])
         ax.set_opacity(0.3)
-        star = p_ball(ax, 0.5, C.PATHOLOGY)
+        star = p_ball_exact(ax, 0.5, C.PATHOLOGY)  # tip-exact: the four tips lie on the dashed hull's corners
         hull = Polygon(ax.c2p(1, 0), ax.c2p(0, 1), ax.c2p(-1, 0), ax.c2p(0, -1), color=C.EPS, stroke_width=2)
         hull = DashedVMobject(hull, num_dashes=40)
         u, v = np.array([1.0, 0.0]), np.array([0.0, 1.0])
         assert abs(pnorm((u + v) / 2, 0.5) - 2.0) < 1e-12
+        tips = [ax.c2p(*t_) for t_ in ((1, 0), (0, 1), (-1, 0), (0, -1))]
+        sp = star.get_points()
+        assert all(np.min(np.linalg.norm(sp - t_, axis=1)) < 1e-9 for t_ in tips)  # every tip is on the star
         rows = VGroup(
             label(r"$L^p[0, 1]$ for $0 < p < 1$: \ $d(f, g) = \int |f - g|^p$", font_size=26),
             label(r"a complete metric vector space, \ but its balls are not convex", font_size=24),
@@ -146,8 +154,8 @@ class TVS(VoiceoverScene):
                 r_.width = 7.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.0, -0.6, 0])
         lab = VGroup(MathTex(r"\{|x|^{1/2} + |y|^{1/2} \le 1\}", font_size=26, color=C.PATHOLOGY).next_to(ax, UP, buff=0.05),
-                     label(r"dashed: \ its convex hull", font_size=20, color=C.EPS).next_to(ax, DOWN, buff=0.05))
-        head = label(r"A space with no functionals at all", font_size=34).to_edge(UP, buff=0.25)
+                     label(r"dashed: \ its convex hull", font_size=22, color=C.EPS).next_to(ax, DOWN, buff=0.05))
+        head = label(r"A space with no functionals at all", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> One more warning. For p below one, L p is still a complete metric vector space, "
             "but its balls cave in, like this star. <bookmark mark='b'/> And it has no continuous linear functionals "

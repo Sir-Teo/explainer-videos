@@ -48,3 +48,28 @@ def runs_in_range(ax, x, y, lo, hi, color, stroke_width=3) -> VGroup:
                 g.add(polyline(ax, x[start:i], y[start:i], color=color, stroke_width=stroke_width))
             start = None
     return g
+
+
+def magnifier_above(src_ax, x_window, y_window, height=1.6, gap=0.3, color=GREY_B, tag=None) -> tuple:
+    """A vertical magnifier: the window x_window × y_window of ``src_ax`` redrawn directly above itself, just as wide,
+    so only heights are magnified (for small bars and thin boxes near a baseline). The guides run straight up from the
+    source frame to the inset. Returns ``(inset_ax, decor)`` like ``magnifier``: draw on ``inset_ax`` with the
+    source's coordinates."""
+    x0, x1 = x_window
+    y0, y1 = y_window
+    p0, p1 = src_ax.c2p(x0, y0), src_ax.c2p(x1, y1)
+    width = p1[0] - p0[0]
+    src = Rectangle(width=width, height=max(p1[1] - p0[1], 0.04), color=color, stroke_width=2).move_to((p0 + p1) / 2)
+    center = np.array([(p0[0] + p1[0]) / 2, src.get_top()[1] + gap + height / 2, 0.0])
+    inset = Axes(x_range=[x0, x1, x1 - x0], y_range=[y0, y1, y1 - y0], x_length=width, y_length=height, tips=False,
+                 axis_config={"stroke_opacity": 0, "include_ticks": False}).move_to(center)
+    dst = Rectangle(width=width, height=height, color=color, stroke_width=2).move_to(center)
+    dst.set_fill(BACKGROUND, opacity=1.0)
+    guides = VGroup(*[DashedLine(src.get_corner(a), dst.get_corner(b), color=color, stroke_width=1.5, dash_length=0.08)
+                      for a, b in ((UL, DL), (UR, DR))])
+    k = height / max(p1[1] - p0[1], 1e-9)
+    tag = tag if tag is not None else rf"\text{{heights}} \times {k:.0f}"
+    t = MathTex(tag, font_size=24, color=color).next_to(dst, UP, buff=0.08).align_to(dst, LEFT)
+    decor = VGroup(src, guides, dst, t)
+    decor.src, decor.guides, decor.frame, decor.tag = src, guides, dst, t
+    return inset, decor

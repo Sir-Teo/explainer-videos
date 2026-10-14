@@ -42,8 +42,8 @@ class Uniform(VoiceoverScene):
         N_ok = math.ceil(math.log(eps) / math.log(0.9))
         assert 0.9**N_ok < eps <= 0.9 ** (N_ok - 1)
         x = np.linspace(0, 1, 800)
-        ax1 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.6).move_to([-3.4, -1.3, 0])
-        ax2 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.6).move_to([3.4, -1.3, 0])
+        ax1 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.9).move_to([-3.4, -1.0, 0])
+        ax2 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.9).move_to([3.4, -1.0, 0])
         n1, n2 = ValueTracker(1.0), ValueTracker(1.0)
         band1 = Rectangle(width=ax1.c2p(0.9, 0)[0] - ax1.c2p(0, 0)[0], height=ax1.c2p(0, eps)[1] - ax1.c2p(0, -eps)[1],
                           stroke_width=0, fill_color=C.EPS, fill_opacity=0.2).move_to(ax1.c2p(0.45, 0))
@@ -166,11 +166,15 @@ class Uniform(VoiceoverScene):
             j = int(np.argmax(dif))
             dg = polyline(bx, x, dif, color=C.DIST, stroke_width=2.5)
             dd = Dot(bx.c2p(x[j], dif[j]), radius=0.06, color=C.PATHOLOGY if gaps[k] > eps else C.CONNECTED_SET)
+            return VGroup(band, gm, gn, dg, dd)
+
+        ptab = VGroup(MathTex(r"m,\ n", r"\sup|f_n - f_m|", r"\text{vs } \varepsilon = 0.06", font_size=26, color=GREY_A))
+        for k, (m, n) in enumerate(pairs):
             ok = gaps[k] < eps
-            lab = MathTex(rf"m = {m},\ n = {n}:\ \sup|f_n - f_m| = {gaps[k]:.3f}", r"\; > \varepsilon" if not ok else
-                          r"\; < \varepsilon", font_size=26, color=C.PATHOLOGY if not ok else C.CONNECTED_SET)
-            lab.next_to(ax, DOWN, buff=0.12)
-            return VGroup(band, gm, gn, dg, dd, lab)
+            ptab.add(MathTex(rf"{m},\ {n}", rf"{gaps[k]:.3f}", r"< \varepsilon" if ok else r"> \varepsilon", font_size=28,
+                             color=C.CONNECTED_SET if ok else C.PATHOLOGY))
+        ptab.arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.75, 0.2, 0])
+        regrid(ptab, gap=0.45)
 
         side = VGroup(
             label(r"($\Leftarrow$) \ for each $x$, \ $f_n(x)$ is a Cauchy", font_size=24),
@@ -200,14 +204,14 @@ class Uniform(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(tl), FadeIn(bl), Create(el), FadeIn(el_l))
             vo.wait_until("a")
             cur = frame(0)
-            self.play(FadeIn(cur))
+            self.play(FadeIn(cur), FadeIn(ptab[0]), FadeIn(ptab[1]))
             for k in range(1, len(pairs)):
                 nxt = frame(k)
-                self.play(*[ReplacementTransform(a_, b_) for a_, b_ in zip(cur[:5], nxt[:5])],
-                          FadeTransform(cur[5], nxt[5]), run_time=1.4)
+                self.play(*[ReplacementTransform(a_, b_) for a_, b_ in zip(cur, nxt)], FadeIn(ptab[k + 1]), run_time=1.4)
                 self.wait(0.6)
                 cur = nxt
             vo.wait_until("b")
+            self.play(FadeOut(ptab), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(r_) for r_ in side[:3]], lag_ratio=0.5), run_time=2.0)
             vo.wait_until("c")
             self.play(Indicate(cur[4], scale_factor=1.8, color=C.DIST))
@@ -221,15 +225,15 @@ class Uniform(VoiceoverScene):
         d = load("mtest")
         x, S, Ns, err, tail = d["x"], d["S"], d["Ns"], d["err"], d["tail"]
         ref = S[-1]
-        ax = plain_axes([0, 2 * np.pi, np.pi / 2], [-1.6, 1.6, 0.5], 8.6, 4.8).move_to([-2.0, -0.8, 0])
+        ax = plain_axes([0, 2 * np.pi, np.pi / 2], [-1.6, 1.6, 0.5], 8.0, 4.8).move_to([-2.4, -0.8, 0])
         lim = polyline(ax, x, ref, color=WHITE, stroke_width=2).set_stroke(opacity=0.6)
         terms = VGroup()
-        for n, col in zip((1, 2, 3), (C.SEQ, C.FREQ, C.CONNECTED_SET)):
+        for n, col in zip((1, 2, 3), [interpolate_color(ManimColor(C.APPROX), ManimColor(WHITE), a_) for a_ in (0.0, 0.35, 0.65)]):
             terms.add(VGroup(polyline(ax, x, np.sin(n * x) / n**2, color=col, stroke_width=2.5),
                              DashedLine(ax.c2p(0, 1 / n**2), ax.c2p(2 * np.pi, 1 / n**2), color=col, stroke_width=1.5),
                              DashedLine(ax.c2p(0, -1 / n**2), ax.c2p(2 * np.pi, -1 / n**2), color=col,
                                         stroke_width=1.5),
-                             MathTex(rf"\pm\tfrac{{1}}{{{n * n}}}", font_size=24, color=col).next_to(
+                             MathTex(rf"\pm\tfrac{{1}}{{{n * n}}}" if n > 1 else r"\pm 1", font_size=24, color=col).next_to(
                                  ax.c2p(2 * np.pi, (-1) ** (n + 1) / n**2), RIGHT, buff=0.1)))  # alternate sides
         head = VGroup(label(r"\textbf{Rudin 7.10} \ (Weierstrass M-test) \ $|f_n| \le M_n$ and $\sum M_n < \infty$ "
                             r"$\Rightarrow$ $\sum f_n$ converges uniformly", font_size=28),
@@ -248,9 +252,15 @@ class Uniform(VoiceoverScene):
             pts = [ax.c2p(a, b) for a, b in zip(x[::10], top[::10])] + [ax.c2p(a, b) for a, b in zip(x[::-10], bot[::-10])]
             band = Polygon(*pts, stroke_width=0, fill_color=C.EPS, fill_opacity=0.18)
             cur = polyline(ax, x, S[i], color=C.APPROX, stroke_width=3.5)
-            lab = MathTex(rf"N = {N}: \ \sup |s - s_N| = {err[k]:.4f} \le \sum_{{n > N}} \tfrac{{1}}{{n^2}} = {tail[k]:.4f}",
-                          font_size=28).move_to([1.2, -3.55, 0])
-            return VGroup(band, cur, lab)
+            return VGroup(band, cur)
+
+        mtab = VGroup(MathTex(r"N", r"\sup |s - s_N|", r"\le \sum_{n > N} \tfrac{1}{n^2}", font_size=26, color=GREY_A))
+        for N in shown:
+            k = int(np.nonzero(Ns == N)[0][0])
+            mtab.add(MathTex(rf"{N}", rf"{err[k]:.4f}", rf"{tail[k]:.4f}", font_size=28))
+        mtab.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.35, -0.6, 0])
+        regrid(mtab, gap=0.4)
+        mtab[0][2].set_color(C.EPS)
 
         assert np.all(err <= tail)
         with self.voiceover(
@@ -268,12 +278,12 @@ class Uniform(VoiceoverScene):
             self.play(FadeIn(head[1]), FadeOut(terms))
             self.play(Create(lim))
             cur = frame(shown[0])
-            self.play(FadeIn(cur))
+            self.play(FadeIn(cur), FadeIn(mtab[0]), FadeIn(mtab[1].set_color(C.APPROX)))
             vo.wait_until("c")
-            for N in shown[1:]:
+            for j, N in enumerate(shown[1:], start=1):
                 nxt = frame(N)
                 self.play(ReplacementTransform(cur[0], nxt[0]), ReplacementTransform(cur[1], nxt[1]),
-                          FadeTransform(cur[2], nxt[2]), run_time=1.3)
+                          mtab[j].animate.set_color(WHITE), FadeIn(mtab[j + 1].set_color(C.APPROX)), run_time=1.3)
                 cur = nxt
         self.wait(0.4)
         self.clear_scene()
