@@ -89,14 +89,15 @@ class HahnBanach(VoiceoverScene):
         obst = dense_points(VGroup(circ, mline, fan, sx))
         s_lab = VGroup(MathTex(r"M", font_size=24),
                        MathTex(r"x_0", font_size=24),
-                       MathTex(r"f = 1", font_size=24, color=C.EPS),
                        MathTex(r"\{p \le 1\}", font_size=24, color=C.DIST))
-        place_label(s_lab[0], sx.c2p(-2.4, 0), obst, dirs=(UR, DR), avoid=[])
-        place_label(s_lab[1], x0d, obst, dirs=(LEFT, UL, DL, DR), buffs=(0.1, 0.25, 0.4, 0.55), avoid=[x0d])
-        place_label(s_lab[2], fd, obst, dirs=(DR, DOWN, RIGHT, UR), avoid=[fd, s_lab[1]])
-        place_label(s_lab[3], sx.c2p(-0.71, -0.71), obst, dirs=(DL, LEFT, DOWN), avoid=list(s_lab[:3]))
-        fan_l = MathTex(r"\{F = 1\}, \ |c| \le \tfrac{\sqrt3}{2}", font_size=24, color=C.EPS)
-        place_label(fan_l, sx.c2p(-1.0, 1.6), obst, dirs=(DR, DOWN, RIGHT), buffs=(0.1, 0.2, 0.3), avoid=list(s_lab))
+        many = (0.08, 0.15, 0.25, 0.35, 0.5)
+        place_label(s_lab[0], sx.c2p(-2.4, 0), obst, dirs=(UR, DR), buffs=many)
+        place_label(s_lab[1], x0d, obst, dirs=(LEFT, UL, DL, DR, UR, RIGHT, DOWN), buffs=many, avoid=[x0d])
+        place_label(s_lab[2], sx.c2p(-0.71, -0.71), obst, dirs=(DL, LEFT, DOWN), buffs=many, avoid=list(s_lab[:2]))
+        # the fan's label above the window, where the clipped lines do not reach; (2, 0) is the yellow dot
+        fan_l = MathTex(r"\{F = 1\} \ni (2, 0), \ \ |c| \le \tfrac{\sqrt3}{2}", font_size=24, color=C.EPS)
+        place_label(fan_l, sx.c2p(-2.4, 1.6), obst, dirs=(UR,), buffs=(0.1, 0.2), avoid=list(s_lab))
+        assert fan_l.get_top()[1] < setup.get_bottom()[1] - 0.1
         setting = VGroup(sx, mline, circ, x0d, fd, s_lab)
         with self.voiceover(
             "<bookmark mark='a'/> Hahn-Banach extends a linear functional from a subspace to the whole space without "
@@ -153,29 +154,34 @@ class HahnBanach(VoiceoverScene):
         th = np.linspace(0, 2 * np.pi, 300)
         K = VMobject(color=C.CONNECTED_SET, stroke_width=3, fill_color=C.CONNECTED_SET, fill_opacity=0.2).set_points_as_corners(
             [bx.c2p(a_ * math.cos(t), b_ * math.sin(t)) for t in th])
-        g_want, phis = [0.5, 1.0, 1.5], np.radians([-55.0, 40.0, 150.0])
+        g_want, phis = [0.5, 1.0, 1.5], np.radians([100.0, 60.0, 150.0])
         pts = np.array([[g * a_ * math.cos(f_), g * b_ * math.sin(f_)] for g, f_ in zip(g_want, phis)])
         gauge = np.sqrt(pts[:, 0] ** 2 / a_**2 + pts[:, 1] ** 2 / b_**2)  # mu_K(x) for the ellipse
         assert np.allclose(gauge, g_want) and np.all(np.abs(pts) < [2.3, 1.4])
         scaled = VGroup(*[DashedVMobject(VMobject(color=GREY_B, stroke_width=1.5).set_points_as_corners(
             [bx.c2p(g * a_ * math.cos(t), g * b_ * math.sin(t)) for t in th]), num_dashes=40) for g in (0.5, 1.5)])
         pd = VGroup(*[Dot(bx.c2p(*p), radius=0.06, color=WHITE) for p in pts])
-        obst = dense_points(VGroup(K, scaled, bx))
-        pl = VGroup()
-        for p, g in zip(pts, gauge):
-            m = MathTex(rf"\mu_K = {g:.2f}", font_size=22)
-            pl.add(place_label(m, bx.c2p(*p), obst, avoid=list(pd) + list(pl), buffs=(0.06, 0.12, 0.2, 0.3),
-                               ylim=(-3.6, 2.6)))
+        # the readings in a row above the picture (the rings leave no room beside the points), each tied to its point
+        order = np.argsort(pts[:, 0])
+        pl, leads = VGroup(), VGroup()
+        for slot, i_ in enumerate(order):
+            m = MathTex(rf"\mu_K = {gauge[i_]:.2f}", font_size=22).move_to([2.05 + 1.55 * slot, 2.0, 0])
+            pl.add(m)
+            leads.add(Line(m.get_bottom() + DOWN * 0.05, pd[i_].get_center(), color=GREY_B, stroke_width=1.2,
+                           stroke_opacity=0.8))
+        top_ring = bx.c2p(0, 1.5 * b_)[1]
+        assert pl.get_bottom()[1] > top_ring + 0.15 and pl.get_right()[0] < 6.6
         g_l = VGroup(MathTex(r"\mu_K(x) = \inf\{t > 0 : x \in tK\}", font_size=26, color=C.CONNECTED_SET),
-                     label(r"the gauge: \ how far to scale $K$ to reach $x$; \ dashed: $\tfrac12 K$, $\tfrac32 K$",
-                           font_size=22, color=GREY_A),
+                     label(r"the gauge: \ how far to scale $K$ to reach $x$", font_size=22, color=GREY_A),
+                     label(r"(dashed: \ $\tfrac12 K$ and $\tfrac32 K$)", font_size=22, color=GREY_A),
                      label(r"a convex $K$ gives a sublinear $\mu_K$, \ the $p$ of the sandwich", font_size=22,
-                           color=GREY_A)).arrange(DOWN, buff=0.08).next_to(bx, DOWN, buff=0.15)
+                           color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        g_l.next_to(bx, DOWN, buff=0.15).set_x(3.6)
         assert g_l.get_right()[0] < 6.6 and all(not boxes_overlap(g_l, m, 0.05) for m in pl)
         head = label(r"Disjoint convex sets are separated by a hyperplane", font_size=34).to_edge(UP, buff=0.3)
         fa = label(r"\textbf{FA 3.4} \ one set compact, \ the other closed", font_size=22, color=GREY_A).next_to(
             head, DOWN, buff=0.15)
-        assert fa.get_bottom()[1] > max(ax.get_top()[1], bx.get_top()[1], pl.get_top()[1]) + 0.05
+        assert fa.get_bottom()[1] > max(ax.get_top()[1], pl.get_top()[1]) + 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The geometric form: two disjoint convex sets, one compact and one closed, can be "
             "separated by a closed hyperplane. <bookmark mark='b'/> For two convex polygons, the hyperplane through the "
@@ -190,8 +196,8 @@ class HahnBanach(VoiceoverScene):
             self.play(Create(seg))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.1), FadeIn(lab), run_time=2.0)
             vo.wait_until("c")
-            self.play(Create(bx), FadeIn(K), FadeIn(pd))
-            self.play(Create(scaled), FadeIn(pl), FadeIn(g_l))
+            self.play(FadeIn(K), FadeIn(pd))
+            self.play(Create(scaled), FadeIn(pl), Create(leads), FadeIn(g_l))
         self.wait(0.3)
         self.clear_scene()
 

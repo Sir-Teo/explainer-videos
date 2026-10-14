@@ -199,7 +199,7 @@ class Cauchy(VoiceoverScene):
         num, den = [int(v) for v in d["num"]], [int(v) for v in d["den"]]
         vals = [p / q for p, q in zip(num, den)]
         K = 10  # the tails E_1 ... E_K
-        win = Window(1.25, 1.1, y=-1.2)
+        win = Window(1.25, 1.1, x_left=-6.3, x_right=6.3, y=-1.2)  # the tick numbers stay inside the margin
         axis, labs = win.axis(), win.labels()
         dust = win.dust(height=0.75, target=1000)
         level = ValueTracker(0)

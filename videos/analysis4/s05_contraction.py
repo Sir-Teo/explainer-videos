@@ -261,34 +261,75 @@ class Contraction(VoiceoverScene):
     def newton(self):
         d = load("contraction")
         xn, nerr = d["xn"], d["nerr"]
-        ax = plain_axes([0.9, 2.1, 0.5], [0.9, 2.1, 0.5], 4.6, 4.6, numbers=True, font_size=20,
+        r2 = math.sqrt(2)
+        ax = plain_axes([1.0, 2.0, 0.5], [1.0, 2.0, 0.5], 4.6, 4.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.7, 0])
-        t = np.linspace(0.9, 2.1, 300)
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.75, -0.85, 0])
+        t = np.linspace(1.0, 2.0, 300)
         g = t / 2 + 1 / t
         gg = polyline(ax, t, g, color=C.FUNC, stroke_width=3.5)
         dg = polyline(ax, t, t, color=GREY_B, stroke_width=2.5)
-        tang = DashedLine(ax.c2p(1.0, math.sqrt(2)), ax.c2p(1.85, math.sqrt(2)), color=C.EPS, stroke_width=2.5)
-        head = VGroup(label(r"Newton's method is a contraction near a simple root", font_size=30),
+        tang = DashedLine(ax.c2p(1.0, r2), ax.c2p(1.75, r2), color=C.EPS, stroke_width=2.5)
+        tl_ = MathTex(r"\text{slope } 0 \text{ at } \sqrt 2", font_size=24, color=C.EPS).next_to(ax.c2p(1.75, r2), DR,
+                                                                                             buff=0.06)
+        # the cobweb from x_0 = 1: up to the graph, across to the diagonal
+        assert np.allclose(xn[:4], [1, 1.5, 17 / 12, 577 / 408])
+        web_pts = [(xn[0], xn[0])]
+        for k in range(3):
+            web_pts += [(xn[k], xn[k + 1]), (xn[k + 1], xn[k + 1])]
+        web = VGroup(*[Line(ax.c2p(*a_), ax.c2p(*b_), color=C.EPS, stroke_width=2.5)
+                       for a_, b_ in zip(web_pts[:-1], web_pts[1:])])
+        # from x_2 on the steps are a hundredth of a unit: a magnifier at (sqrt 2, sqrt 2), equal scales
+        W, H, hw = 1.9, 1.3, 0.004
+        xw, yw = (r2 - hw, r2 + hw), (r2 - hw * H / W, r2 + hw * H / W)
+        inset, mag = magnifier(ax, xw, yw, center=[-2.25, -2.4, 0], width=W, height=H, color=GREY_B)
+        sc = W / (2 * hw)
+        assert sc * (xn[2] - r2) > 0.5 and sc * (xn[3] - r2) < 0.002  # x_2 visibly off, x_3 on sqrt 2
+
+        def clip(p, q):
+            """The part of the segment p -> q inside the magnified window (Liang-Barsky), or None."""
+            p, q = np.asarray(p, float), np.asarray(q, float)
+            t0, t1, dv = 0.0, 1.0, q - p
+            for lo, hi, pc, dc in ((xw[0], xw[1], p[0], dv[0]), (yw[0], yw[1], p[1], dv[1])):
+                for num_, den_ in ((pc - lo, -dc), (hi - pc, dc)):
+                    if abs(den_) < 1e-15:
+                        if num_ < 0:
+                            return None
+                        continue
+                    t_ = num_ / den_
+                    t0, t1 = (max(t0, t_), t1) if den_ < 0 else (t0, min(t1, t_))
+            return (p + t0 * dv, p + t1 * dv) if t1 - t0 > 1e-9 else None
+
+        iweb = VGroup()
+        for a_, b_ in zip(web_pts[:-1], web_pts[1:]):
+            cp = clip(a_, b_)
+            if cp is not None:
+                iweb.add(Line(inset.c2p(*cp[0]), inset.c2p(*cp[1]), color=C.EPS, stroke_width=2.5))
+        assert len(iweb) >= 3
+        zt = np.linspace(*xw, 200)
+        igg = polyline(inset, zt, zt / 2 + 1 / zt, color=C.FUNC, stroke_width=3.5)
+        idg = polyline(inset, zt, zt, color=GREY_B, stroke_width=2.5)
+        assert np.all(np.abs(zt / 2 + 1 / zt - r2) < yw[1] - r2)  # g is flat across the whole window
+        head = VGroup(label(r"Newton's method is a contraction near a simple root", font_size=34),
                       MathTex(r"g(x) = x - \frac{f(x)}{f'(x)}, \qquad g'(x) = \frac{f(x) f''(x)}{f'(x)^2} = 0 "
-                              r"\text{ at the root}", font_size=30)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+                              r"\text{ at the root}", font_size=30)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         gl = MathTex(r"g(x) = \frac x2 + \frac1x \quad (f = x^2 - 2)", font_size=26, color=C.FUNC).next_to(ax, UP,
                                                                                                    buff=0.05)
         tab = VGroup(MathTex(r"n", r"\quad |x_n - \sqrt 2|", font_size=28, color=GREY_A))
         for n in range(5):
             tab.add(MathTex(rf"{n}", r"\quad " + (f"{nerr[n]:.4f}" if nerr[n] > 1e-3 else sci(float(nerr[n]), 1)),
                             font_size=28))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([1.5, -0.6, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         regrid(tab)
+        tab.next_to([0.9, 1.3, 0], DR, buff=0)
         side = VGroup(label(r"flat at the fixed point:", font_size=24),
                       label(r"near it, $c$ is as small as we like,", font_size=24),
-                      label(r"so each step does better than the last:", font_size=24),
+                      label(r"so each step beats the last:", font_size=24),
                       label(r"the error squares, \ the digits double", font_size=24, color=C.EPS),
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -0.7, 0])
-        for r_ in side:
-            if r_.width > 3.9:
-                r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([3.0, -0.7, 0], RIGHT, buff=0)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        side.next_to(tab, DOWN, buff=0.45, aligned_edge=LEFT)
+        assert side.get_right()[0] <= 6.6 and side.get_bottom()[1] > -3.6 and tab.get_left()[0] > tl_.get_right()[0] + 0.15
+        assert tl_.get_bottom()[1] > mag.frame.get_top()[1] + 0.05 and tab.get_top()[1] < head.get_bottom()[1] - 0.2
         assert nerr[4] < 1e-11
         with self.voiceover(
             "<bookmark mark='a'/> And Newton's method from the opening is a contraction too. Its step is the map g of "
@@ -299,12 +340,16 @@ class Contraction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), Create(dg))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1]), Create(gg), FadeIn(gl))
             vo.wait_until("b")
-            self.play(Create(gg), FadeIn(gl))
-            self.play(Create(tang))
+            self.play(Create(tang), FadeIn(tl_))
+            self.play(Create(mag.src), Create(mag.guides), FadeIn(mag.frame), FadeIn(mag.tag), Create(igg),
+                      Create(idg), run_time=1.0)
             vo.wait_until("c")
-            self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3), run_time=2.5)
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]))
+            for k in range(3):
+                self.play(Create(web[2 * k]), Create(web[2 * k + 1]), FadeIn(tab[k + 2]), run_time=0.7)
+            self.play(Create(iweb), FadeIn(tab[5]), run_time=1.0)
             self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()

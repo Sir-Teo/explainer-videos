@@ -220,7 +220,7 @@ class Orthonormal(VoiceoverScene):
         cfs = [float(np.sum(wg * xg * L.legval(xg, [0] * n + [1]) * math.sqrt((2 * n + 1) / 2))) for n in range(8)]
         assert abs(cfs[1] ** 2 - 2 / 3) < 1e-12 and all(abs(cf) < 1e-13 for i, cf in enumerate(cfs) if i != 1)
         bx = plain_axes([-1, 8, 1], [0, 1.0, 0.5], 4.0, 1.7).move_to([1.15, -2.4, 0])
-        bx.x_axis.add_numbers(*range(8), num_decimal_places=0, font_size=18)
+        bx.x_axis.add_numbers(list(range(8)), num_decimal_places=0, font_size=18)
         bnum = left_y_axis(bx, (0.5, 1.0), decimals=1)
         bt = MathTex(r"\langle x, e_n\rangle, \ n = 0, \ldots, 7", font_size=26, color=C.EPS).next_to(bx, UP, buff=0.12)
         bars = VGroup()

@@ -78,6 +78,7 @@ class AbsolutelyContinuous(VoiceoverScene):
     def definition(self):
         d = load("cantorac")
         xs, F, lens = d["xs"], d["F"], d["lens"]
+        title = label(r"Absolute continuity", font_size=34).to_edge(UP, buff=0.3)
         defn = VGroup(
             label(r"\textbf{RCA 7.17} \ $f$ is \emph{absolutely continuous} on $[a, b]$ if for every $\varepsilon > 0$ "
                   r"there is $\delta > 0$:", font_size=26),
@@ -85,7 +86,7 @@ class AbsolutelyContinuous(VoiceoverScene):
                     font_size=32, color=C.EPS),
             label(r"for disjoint intervals $(\alpha_i, \beta_i)$: \ uniform continuity, \ for many intervals at once",
                   font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        ).arrange(DOWN, buff=0.1).next_to(title, DOWN, buff=0.15)
         ax = plain_axes([0, 1, 0.5], [0, 1, 0.5], 5.0, 2.9, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.85, 0])
@@ -160,7 +161,7 @@ class AbsolutelyContinuous(VoiceoverScene):
             MathTex(r"f(x) - f(a) = \int_a^x f'\,dm \quad \text{for all } x", font_size=32, color=C.EPS),
             label(r"$\sqrt x$: \ $f' = \frac{1}{2\sqrt x}$ is unbounded, \ but $\int_0^1 f' = 1 = \sqrt 1 - \sqrt 0$",
                   font_size=24, color=C.SEQ),
-        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        ).arrange(DOWN, buff=0.1).next_to(title, DOWN, buff=0.15)
         with self.voiceover(
             "<bookmark mark='a'/> The missing condition is absolute continuity: for every epsilon there's a delta, "
             "so that any finite set of disjoint intervals with total length below delta has total rise below "
@@ -172,7 +173,7 @@ class AbsolutelyContinuous(VoiceoverScene):
             "the integral of its derivative. The square root qualifies, even though its derivative is unbounded."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(defn), Create(ax), Create(gs), FadeIn(s_l))
+            self.play(FadeIn(title), FadeIn(defn), Create(ax), Create(gs), FadeIn(s_l))
             self.play(LaggedStart(*[FadeIn(m_) for m_ in ill], lag_ratio=0.08), FadeIn(ill_t), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeOut(ill), FadeOut(ill_t))
@@ -190,7 +191,7 @@ class AbsolutelyContinuous(VoiceoverScene):
         d = load("ftc")
         eps, var = d["eps"], d["var"]
         ax = plain_axes([0, 0.6, 0.2], [-0.4, 0.4, 0.2], 6.4, 3.4, numbers=False).move_to([-3.0, 0.0, 0])
-        ax.y_axis.add_numbers(*[v for v in (-0.4, -0.2, 0.2, 0.4)], num_decimal_places=1, font_size=18)
+        ax.y_axis.add_numbers([-0.4, -0.2, 0.2, 0.4], num_decimal_places=1, font_size=18)
         # the x numbers along the bottom edge (the curve crosses the x-axis between them)
         xnums = VGroup(*[MathTex(f"{v:.1f}", font_size=18, color=GREY_B).next_to(ax.c2p(v, -0.4), DOWN, buff=0.12)
                          for v in (0.2, 0.4, 0.6)])

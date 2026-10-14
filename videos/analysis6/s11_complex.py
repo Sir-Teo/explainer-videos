@@ -29,7 +29,9 @@ class ComplexMeasures(VoiceoverScene):
         R = float(np.abs(P).max()) * 1.15
         ax = square_axes([-R, R, 0.25], [-R, R, 0.25], 2.6 / R).move_to([-3.5, -0.6, 0])
         ax.set_opacity(0.35)
-        re_l = MathTex(r"\mathrm{Re}", font_size=22, color=GREY_B).next_to(ax, RIGHT, buff=0.05).shift(DOWN * 0.0)
+        reim = VGroup(MathTex(r"\mathrm{Re}", font_size=22, color=GREY_B).next_to(ax.c2p(R, 0), UP, buff=0.08).shift(LEFT * 0.2),
+                      MathTex(r"\mathrm{Im}", font_size=22, color=GREY_B).next_to(ax.c2p(0, R), RIGHT, buff=0.08).shift(
+                          DOWN * 0.15))
         curve = VMobject(color=C.MEASURE, stroke_width=3).set_points_as_corners([ax.c2p(z.real, z.imag) for z in P])
         o = Dot(ax.c2p(0, 0), radius=0.06, color=WHITE)
         tT = ValueTracker(0.0)
@@ -43,22 +45,26 @@ class ComplexMeasures(VoiceoverScene):
             idx = np.linspace(0, len(P) - 1, k + 1).astype(int)
             polys.append(VMobject(color=cols[i], stroke_width=3).set_points_as_corners(
                 [ax.c2p(P[j].real, P[j].imag) for j in idx]))
-        reads = [MathTex(rf"{k} \text{{ pieces: }} \sum |\mu(E_i)| = {L:.4f}", font_size=28, color=cols[i]).move_to(
-            [3.6, -0.2, 0]) for i, (k, L) in enumerate(zip(ns, lengths))]
+        x0c = 0.9  # the right column's left edge
+        reads = [MathTex(rf"{k} \text{{ pieces: }} \sum |\mu(E_i)| = {L:.4f}", font_size=28, color=cols[i]).next_to(
+            [x0c, -0.2, 0], RIGHT, buff=0) for i, (k, L) in enumerate(zip(ns, lengths))]
         assert np.all(np.diff(lengths) > 0) and lengths[-1] < tv and abs(tv - 2 * math.pi) < 1e-8
         top = VGroup(
             MathTex(r"d\mu = (1 + \tfrac12 \cos x)\, e^{3ix}\, dx \ \text{ on } [0, 2\pi]", font_size=30),
             MathTex(r"\mu([0, 2\pi]) = 0", font_size=30, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.4, 1.7, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        top.next_to([x0c, 1.7, 0], RIGHT, buff=0)
         bot = VGroup(
             label(r"\textbf{RCA 6.1} \ $|\mu|(E) = \sup \sum_i |\mu(E_i)|$ \ over partitions of $E$", font_size=24),
             label(r"= the length of the path $t \mapsto \mu([0, t])$", font_size=24, color=GREY_A),
             MathTex(rf"|\mu|([0, 2\pi]) = \int_0^{{2\pi}} |h|\,dx = 2\pi = {tv:.4f}", font_size=28, color=C.EPS),
             label(r"\textbf{RCA 6.2, 6.4} \ $|\mu|$ is a positive measure, \ and $|\mu|(X) < \infty$", font_size=24,
                   color=C.MEASURE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -1.9, 0])
-        head = label(r"A complex measure as a path in $\C$: \ total mass $0$, \ total variation $2\pi$", font_size=32).to_edge(
-            UP, buff=0.25)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        bot.next_to([x0c, -1.9, 0], RIGHT, buff=0)
+        assert max(m_.get_right()[0] for m_ in (top, bot, *reads)) < 6.6
+        head = label(r"A complex measure as a path in $\C$: \ mass $0$, \ variation $2\pi$", font_size=34).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A complex measure assigns a complex number to each measurable set, countably "
             "additively. Here's one with density one plus half cosine x, times e to the three i x. "
@@ -71,11 +77,11 @@ class ComplexMeasures(VoiceoverScene):
             "always a positive measure, and always finite."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), FadeIn(o), FadeIn(top[0]))
+            self.play(FadeIn(head), Create(ax), FadeIn(reim), FadeIn(o), FadeIn(top[0]))
+            self.play(FadeIn(tip), FadeIn(tl), run_time=0.5)
+            self.play(Create(curve), tT.animate.set_value(1.0), run_time=5.0, rate_func=linear)
             vo.wait_until("b")
-            self.add(tip, tl)
-            self.play(Create(curve), tT.animate.set_value(1.0), run_time=4.0, rate_func=linear)
-            self.play(FadeIn(top[1]))
+            self.play(Indicate(o, color=C.PATHOLOGY, scale_factor=2.0), FadeIn(top[1]))
             vo.wait_until("c")
             self.remove(tip, tl)
             tip.clear_updaters()
@@ -107,6 +113,16 @@ class ComplexMeasures(VoiceoverScene):
             a, b = 2 * math.pi * k / 5, 2 * math.pi * k / 5 + math.pi / 5
             A.add(Line(ax.c2p(a, -1.55), ax.c2p(b, -1.55), color=C.MEASURE, stroke_width=8))
         A_l = MathTex(r"A", font_size=26, color=C.MEASURE).next_to(A, LEFT, buff=0.15)
+        B = VGroup()
+        for k in range(5):
+            a, b = 2 * math.pi * k / 5 + math.pi / 5, 2 * math.pi * (k + 1) / 5
+            B.add(Line(ax.c2p(a, -1.8), ax.c2p(b, -1.8), color=C.SEQ, stroke_width=8))
+        B_l = MathTex(r"B", font_size=26, color=C.SEQ).next_to(B, LEFT, buff=0.15).align_to(A_l, LEFT)
+        xm = np.linspace(0, 2 * math.pi, 100001)
+        on_A = np.zeros_like(xm, bool)
+        for k in range(5):
+            on_A |= (xm >= 2 * math.pi * k / 5) & (xm <= 2 * math.pi * k / 5 + math.pi / 5)
+        assert np.all(np.sin(5 * xm[on_A]) >= -1e-9) and np.all(np.sin(5 * xm[~on_A]) <= 1e-9)  # A and B are right
         xf = np.linspace(0, 2 * math.pi, 400001)
         Pp = trap(np.maximum(np.sin(5 * xf), 0), xf)
         assert abs(Pp - 2) < 1e-6 and abs(tv - 4) < 1e-6
@@ -126,7 +142,7 @@ class ComplexMeasures(VoiceoverScene):
             if r_.width > 5.6:
                 r_.width = 5.6
         thm.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([0.85, 0.3, 0], RIGHT, buff=0)
-        head = label(r"Real measures: \ split the space where the measure is positive", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"Real measures: \ split the space where the measure is positive", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A real measure is a special case: sine of five x, dx. Its total is zero. "
             "<bookmark mark='b'/> Hahn's theorem splits the space into a set A where the measure is positive, the "
@@ -138,7 +154,7 @@ class ComplexMeasures(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(pos), FadeIn(neg))
-            self.play(Create(A), FadeIn(A_l), FadeIn(thm[:4]))
+            self.play(Create(A), FadeIn(A_l), Create(B), FadeIn(B_l), FadeIn(thm[:4]))
             vo.wait_until("c")
             self.play(FadeIn(rows[1:]), FadeIn(thm[4]))
         self.wait(0.3)
@@ -158,7 +174,9 @@ class ComplexMeasures(VoiceoverScene):
         g2 = VGroup(Line(axes[1].c2p(0, 0), axes[1].c2p(0.5, 0), color=C.PATHOLOGY, stroke_width=4),
                     Line(axes[1].c2p(0.5, 1), axes[1].c2p(1, 1), color=C.PATHOLOGY, stroke_width=4),
                     DashedLine(axes[1].c2p(0.5, 0), axes[1].c2p(0.5, 1), color=C.PATHOLOGY, stroke_width=1.5),
-                    Dot(axes[1].c2p(0.5, 1), radius=0.06, color=C.PATHOLOGY))
+                    Dot(axes[1].c2p(0.5, 1), radius=0.06, color=C.PATHOLOGY),
+                    Circle(radius=0.06, color=C.PATHOLOGY, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(
+                        axes[1].c2p(0.5, 0)))
         g3 = polyline(axes[2], xs, F, color=C.MEASURE, stroke_width=3)
         titles = VGroup(MathTex(r"d\lambda = 2x\,dx", font_size=28, color=C.CONNECTED_SET),
                         MathTex(r"\delta_{1/2}", font_size=28, color=C.PATHOLOGY),

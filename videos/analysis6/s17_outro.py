@@ -6,6 +6,27 @@ from explainer.analysis import *  # noqa: F403
 from videos.analysis6.common import square_axes
 
 
+def bright_pole_image(F, xr, yr, width, height, px=720) -> ImageMobject:
+    """The series' domain colouring (domain_rgb), with the poles whitened much more strongly than the shared
+    default (which only starts at |f| > 8, a 3-pixel disc here): from |f| = 2 the colour fades toward white, up to
+    75% at |f| = 10, so a pole reads as a bright spot and a zero as a dark one."""
+    py = max(2, int(px * height / width))
+    X, Y = np.meshgrid(np.linspace(xr[0], xr[1], px), np.linspace(yr[1], yr[0], py))
+    with np.errstate(all="ignore"):
+        Z = F(X + 1j * Y)
+    rgb = domain_rgb(Z)
+    mag = np.where(np.isfinite(Z), np.abs(Z), 1e8)
+    big = np.clip((mag - 2) / 8, 0, 1)[..., None] * 0.75
+    rgb = rgb + (1 - rgb) * big
+    img = ImageMobject((np.clip(rgb, 0, 1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
+    img.stretch_to_fit_width(width)
+    img.stretch_to_fit_height(height)
+    img.rgb = rgb  # kept for the checks
+    img.grid = X + 1j * Y
+    return img
+
+
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
@@ -77,7 +98,7 @@ class Outro(VoiceoverScene):
         head = label(r"Next: Part 7, \ complex analysis", font_size=38).to_edge(UP, buff=0.3)
         S = 4.2
         ax = square_axes([-2, 2, 1], [-2, 2, 1], S / 4).move_to([-3.4, -0.3, 0])
-        img = domain_image(lambda Z: (Z**3 - 1) / (Z**2 + 0.5), (-2, 2), (-2, 2), S, S).move_to(ax.c2p(0, 0))
+        img = bright_pole_image(lambda Z: (Z**3 - 1) / (Z**2 + 0.5), (-2, 2), (-2, 2), S, S).move_to(ax.c2p(0, 0))
         frame = Square(side_length=S, color=GREY_C, stroke_width=2).move_to(ax.c2p(0, 0))
         f_l = MathTex(r"f(z) = \frac{z^3 - 1}{z^2 + \frac12}", font_size=30).next_to(frame, DOWN, buff=0.15)
         key = label(r"color = $\arg f$, \ brightness = $|f|$", font_size=22, color=GREY_A).next_to(f_l, DOWN, buff=0.08)
@@ -85,8 +106,17 @@ class Outro(VoiceoverScene):
         poles = [1j / np.sqrt(2), -1j / np.sqrt(2)]
         for z in zeros:
             assert abs(z**3 - 1) < 1e-12
-        zd = VGroup(*[Circle(radius=0.12, color=WHITE, stroke_width=2).move_to(ax.c2p(z.real, z.imag)) for z in zeros])
-        pd = VGroup(*[Square(side_length=0.22, color=WHITE, stroke_width=2).move_to(ax.c2p(z.real, z.imag)) for z in poles])
+        # the picture says what the narration says: bright at the poles, dark at the zeros
+        lum = img.rgb @ np.array([0.2126, 0.7152, 0.0722])
+        for z in poles:
+            near = np.abs(img.grid - z) < 0.1
+            assert lum[near].mean() > 0.75
+        for z in zeros:
+            near = np.abs(img.grid - z) < 0.1
+            assert lum[near].mean() < 0.3
+        # thin markers around the points, not over them
+        zd = VGroup(*[Circle(radius=0.17, color=WHITE, stroke_width=1.5).move_to(ax.c2p(z.real, z.imag)) for z in zeros])
+        pd = VGroup(*[Square(side_length=0.4, color=WHITE, stroke_width=1.5).move_to(ax.c2p(z.real, z.imag)) for z in poles])
         side = VGroup(
             label(r"one complex derivative \ $\Rightarrow$ \ infinitely many", font_size=26),
             label(r"a power series at every point", font_size=26),

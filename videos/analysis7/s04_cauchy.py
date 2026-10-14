@@ -210,7 +210,8 @@ class CauchyFormula(VoiceoverScene):
         # the bound M/R (M = 1) against R, with the live circle's R: it falls toward 0 as R grows
         mx = plain_axes([0, 2, 0.5], [0, 3, 1], 3.0, 2.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0.1, -0.6, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}, "numbers_to_exclude": [0]}
+                        ).move_to([0.1, -0.6, 0])
         Rs = np.linspace(1 / 3, 2, 300)
         mr = polyline(mx, Rs, 1 / Rs, color=C.FUNC, stroke_width=3)
         assert (1 / Rs).max() <= 3 + 1e-12

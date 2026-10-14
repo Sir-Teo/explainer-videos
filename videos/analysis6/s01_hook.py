@@ -150,8 +150,8 @@ class Hook(VoiceoverScene):
         rl = MathTex(r"r_n(x) = \text{clip}\big(n(x - \tfrac12) + \tfrac12,\ 0,\ 1\big)", font_size=26,
                      color=C.SEQ).next_to(ax, UP, buff=0.15)
         mapax = plain_axes([0, 0.14, 0.05], [0.35, 0.52, 0.05], 3.0, 3.0).move_to([3.6, 0.45, 0])
-        mapax.x_axis.add_numbers(0.05, 0.10, num_decimal_places=2, font_size=18)
-        mapax.y_axis.add_numbers(0.40, 0.45, num_decimal_places=2, font_size=18)
+        mapax.x_axis.add_numbers([0.05, 0.10], num_decimal_places=2, font_size=18)
+        mapax.y_axis.add_numbers([0.40, 0.45], num_decimal_places=2, font_size=18)
         u_l = MathTex(r"\int_0^{1/2} f", font_size=24, color=GREY_B).next_to(mapax, DOWN, buff=0.12)
         v_l = MathTex(r"\int_{1/2}^1 f", font_size=24, color=GREY_B).next_to(mapax, LEFT, buff=0.12)
         cam_h = label(r"the camera: \ each function is one point", font_size=24, color=GREY_A).next_to(mapax, UP,

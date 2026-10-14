@@ -215,7 +215,7 @@ class RieszHilbert(VoiceoverScene):
             bars.add(Rectangle(width=0.3, height=abs(bx.c2p(0, v)[1] - bx.c2p(0, 0)[1]), stroke_width=0,
                                fill_color=C.FUNCTIONAL, fill_opacity=0.9).move_to(bx.c2p(n, v / 2)))
         b_l = MathTex(r"\Lambda e_n, \ n = 0, 1, \ldots, 11", font_size=26, color=C.FUNCTIONAL).next_to(bx, UP, buff=0.1)
-        bx.x_axis.add_numbers(0, 5, 10, num_decimal_places=0, font_size=18)
+        bx.x_axis.add_numbers([0, 5, 10], num_decimal_places=0, font_size=18)
         bnum = left_y_axis(bx, (-0.5, 0.5, 1.0, 1.5), decimals=1)
         n_l = MathTex("n", font_size=24, color=GREY_B).next_to(bx.c2p(11.5, 0), DR, buff=0.08)
         # 'a': the black box at work on one f; 'b': its probes, the first Legendre polynomials
@@ -306,10 +306,9 @@ class RieszHilbert(VoiceoverScene):
             "continuous functions with the sup norm, evaluation is bounded, but that space has no inner product. "
             "Its functionals turn out to be measures, in chapter twelve."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(f_l))
+            self.play(FadeIn(head), Create(ax), FadeIn(f_l), FadeIn(rects[0]), FadeIn(rl[0]))
             vo.wait_until("a")
             vo.wait_until("b")
-            self.play(FadeIn(rects[0]), FadeIn(rl[0]))
             for k in range(1, 4):
                 self.play(FadeIn(rects[k]), rects[k - 1].animate.set_fill(opacity=0.06).set_stroke(opacity=0.4),
                           FadeTransform(rl[k - 1], rl[k]), run_time=0.9)

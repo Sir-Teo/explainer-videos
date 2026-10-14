@@ -123,10 +123,7 @@ class Integration(VoiceoverScene):
             MathTex(rf"\text{{{len(pts)} points, from the integral: }} |\mathrm{{Ind}} - \text{{integer}}| < 10^{{-4}}",
                     font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.9, 0])
-        for r_ in side:
-            if r_.width > 6.0:
-                r_.width = 6.0
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.9, 0])
+        assert side.get_right()[0] <= 6.6 and side.get_left()[0] > ax.get_right()[0] + 0.2
         assert set(int(k) for k in w) == {0, 1, 2} and len(pts) == 20
         head = label(r"The winding number: \ an integral that counts turns", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

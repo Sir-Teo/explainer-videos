@@ -31,7 +31,7 @@ class Hook(VoiceoverScene):
     def kernel(self):
         d = load("lebesgue")
         xs, D20 = d["xs"], d["D20"]
-        ax = plain_axes([-math.pi, math.pi, math.pi / 2], [-10, 42, 10], 6.2, 3.2).move_to([-3.3, 0.7, 0])  # D20 >= -8.92
+        ax = plain_axes([-math.pi, math.pi, math.pi / 2], [-10, 42, 10], 6.2, 3.2).move_to([-3.3, 0.8, 0])  # D20 >= -8.92
         tk = VGroup(*[MathTex(s, font_size=20).next_to(ax.c2p(v, -10), DOWN, buff=0.1)
                       for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
         g = polyline(ax, xs, D20, color=C.SEQ, stroke_width=2.5)
@@ -64,7 +64,7 @@ class Hook(VoiceoverScene):
         tab.move_to([3.6, -0.55, 0])
         L, ns, asym = d["L"], d["ns"], d["asym"]
         # ||D_n||_1 against log n: the same axes as chapter 4's plots of it (the y-axis left of the dot at n = 1)
-        bx, bt = logn_axes(6.2, 1.8, center=[-3.3, -2.6, 0])
+        bx, bt = logn_axes(6.2, 1.6, center=[-3.3, -2.5, 0])
         lg = np.log10(ns)
         pts = VGroup(*[Dot(bx.c2p(a, b), radius=0.05, color=C.OPERATOR) for a, b in zip(lg, L)])
         curve = polyline(bx, np.linspace(0.5, 6, 100), 4 / math.pi**2 * np.log(10 ** np.linspace(0.5, 6, 100)) + 1.2703,
@@ -74,6 +74,7 @@ class Hook(VoiceoverScene):
         out = MathTex(rf"n = 10^6: \ \|D_n\|_1 = {L[-1]:.4f} \ \text{{vs}} \ \tfrac{{4}}{{\pi^2}}\log n + 1.27 = {asym[-1]:.4f}",
                       font_size=24, color=GREY_A).move_to([3.6, -2.2, 0])
         assert np.all(np.abs(L[2:] - asym[2:]) / L[2:] < 0.01)
+        assert b_l.get_top()[1] < tk.get_bottom()[1] - 0.05 and bt.get_bottom()[1] > -3.6
         head = label(r"Why might a Fourier series diverge? \ The Dirichlet kernel's side lobes", font_size=34).to_edge(
             UP, buff=0.3)
         with self.voiceover(

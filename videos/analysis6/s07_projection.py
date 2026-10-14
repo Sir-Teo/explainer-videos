@@ -183,7 +183,7 @@ class Projection(VoiceoverScene):
         lf = MathTex(r"e^x", font_size=28, color=C.FUNC).next_to(ax.c2p(0.95, math.exp(0.95)), UL, buff=0.08)
         lt = MathTex(r"1 + x + \tfrac{x^2}{2}", font_size=24, color=C.APPROX).next_to(ax.c2p(1, 2.5), DOWN, buff=0.3)
         bx = plain_axes([0, 1, 0.25], [-0.02, 0.02, 0.01], 5.0, 1.6).move_to([-3.7, -2.35, 0])
-        bx.y_axis.add_numbers(-0.01, 0.01, num_decimal_places=2, font_size=18)
+        bx.y_axis.add_numbers([-0.01, 0.01], num_decimal_places=2, font_size=18)
         r = fx - px
         gr = polyline(bx, xs, r, color=C.EPS, stroke_width=3)
         zero = DashedLine(bx.c2p(0, 0), bx.c2p(1, 0), color=GREY_C, stroke_width=1.5)
