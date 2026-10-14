@@ -154,7 +154,9 @@ class Derivative(VoiceoverScene):
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.6, -1.4, 0])
         xl = MathTex(r"\log_{10}|h|", font_size=24, color=GREY_A).next_to(ax.c2p(-1.5, 0), UP, buff=0.4)
-        yl = MathTex(r"\log_{10}\text{ratio}", font_size=24, color=GREY_A).next_to(ax.c2p(0, -0.6), RIGHT, buff=0.35)
+        # set along the y-axis (it is the axes' right edge), so it stays clear of the table to its right
+        yl = MathTex(r"\log_{10}\text{ratio}", font_size=24, color=GREY_A).rotate(PI / 2).next_to(ax.c2p(0, -2), RIGHT,
+                                                                                                    buff=0.15)
         pts = VGroup(*[Dot(ax.c2p(math.log10(h), math.log10(w)), radius=0.07, color=C.EPS) for h, w in zip(hs, worst)])
         slope = DashedLine(ax.c2p(-3, math.log10(worst[-1]) - 0.0), ax.c2p(0, math.log10(worst[-1]) + 3),
                            color=GREY_B, stroke_width=2)
@@ -167,6 +169,7 @@ class Derivative(VoiceoverScene):
         regrid(tab, gap=0.5)
         tab.next_to([1.6, 0.2, 0], DR, buff=0)
         assert tab.get_right()[0] <= 6.6 and tab.get_bottom()[1] > -3.6 and ax.get_top()[1] < head.get_bottom()[1]
+        assert yl.get_right()[0] < tab.get_left()[0] - 0.2
         assert np.all(np.diff(worst) < 0)
         with self.voiceover(
             "<bookmark mark='a'/> Rudin's definition: f is differentiable at x if some linear map A approximates the "

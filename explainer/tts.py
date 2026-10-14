@@ -732,6 +732,21 @@ def _write_wav(path: Path, audio) -> None:
         wf.writeframes(pcm.tobytes())
 
 
+_profile_cache: list | None = None
+
+
+def _profile_settings() -> list:
+    """A server voice's model and settings (speaker, style prompt, sampling) for the cache key, so editing a profile
+    in tools/voices.json re-synthesizes its lines instead of reusing audio made with the old settings."""
+    global _profile_cache
+    if BACKEND in ("kokoro", "silent"):
+        return []
+    if _profile_cache is None:
+        prof = json.loads((REPO_ROOT / "tools" / "voices.json").read_text()).get(VOICE, {})
+        _profile_cache = [prof.get("model"), prof.get("voices", {}).get(lang.LANG)]
+    return _profile_cache
+
+
 def narration_credit() -> str:
     """Who reads the narration, for the credits: the server profiles name their model in tools/voices.json."""
     if BACKEND in ("kokoro", "silent"):
@@ -745,6 +760,7 @@ def synthesize(text: str) -> Utterance:
     text = lang.clean(text)
     spoken = to_spoken(text)
     key_parts = [_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
+    key_parts += _profile_settings()
     key_src = json.dumps(key_parts)
     key = hashlib.sha1(key_src.encode()).hexdigest()[:16]
     CACHE_DIR.mkdir(parents=True, exist_ok=True)

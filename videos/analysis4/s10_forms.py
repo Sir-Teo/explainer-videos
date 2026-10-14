@@ -114,7 +114,8 @@ class FormsTour(VoiceoverScene):
         assert len(cs) == 6
         bumps = VGroup(*[polyline(ax, xs, p_, color=c, stroke_width=3) for p_, c in zip(psi, cols)])
         total = polyline(ax, xs, psi.sum(axis=0), color=WHITE, stroke_width=3.5)
-        tl = MathTex(r"\sum_i \psi_i = 1", font_size=32).next_to(ax.c2p(0.5, 1.0), UP, buff=0.12)
+        # at the line's right end (centred above it, the sum sat on the subtitle)
+        tl = MathTex(r"\sum_i \psi_i = 1", font_size=32).next_to(ax.c2p(1.0, 1.0), RIGHT, buff=0.2)
         # the cover: each bump's support, the open interval where it is positive, one row each (they overlap)
         sup = [(xs[p_ > 0].min(), xs[p_ > 0].max()) for p_ in psi]
         for (lo, hi), c_ in zip(sup, cs):

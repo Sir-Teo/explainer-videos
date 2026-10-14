@@ -180,6 +180,56 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | p′ (a second point, not a derivative) | p撇 |
 | smooth / analytic; bump function | 光滑 / 解析；鼓包函数 |
 | vector-valued function | 向量值函数 |
+| partition (of an interval); refine; common refinement | 分划；加细；公共加细 (not 分割: that's the Dedekind cut) |
+| upper / lower integral; integrable | 上积分 / 下积分；可积 |
+| integrator (α in ∫f dα); integrate against α | 积分子；f关于α的积分 |
+| unit step; singular measure | 单位阶跃；奇异测度 |
+| Dirichlet's function (1 on Q, 0 off Q) | 狄利克雷函数 |
+| inscribed polygon (curve length) | 内接折线 |
+| uniformly Cauchy; Weierstrass M-test | 一致柯西；魏尔斯特拉斯M判别法 |
+| the convergence dashboard: lens, probe, energy | 仪表盘：镜头，探针，能量 |
+| the camera (functions plotted as points) | 相机 |
+| limits pass through continuity / integrals | 极限穿过连续性 / 积分 |
+| Dini's theorem / Dini's test; Lipschitz | 迪尼定理 / 迪尼判别法；利普希茨 |
+| zigzag (Rudin's φ, distance to the nearest even integer) | 之字形函数 (not 锯齿: that's the sawtooth) |
+| Peano, Schoenberg, Marshall Stone, Bernstein | 皮亚诺，舍恩伯格，马歇尔·斯通，伯恩斯坦 |
+| Brownian motion; almost surely | 布朗运动；几乎必然 |
+| pointwise / uniformly bounded | 逐点有界 / 一致有界 |
+| dyadic points | 二进有理点 |
+| Landau kernel (Rudin's bump Q_n); Dirichlet / Fejér kernel | 兰道核（鼓包）；狄利克雷核 / 费耶尔核 |
+| law of large numbers | 大数定律 |
+| algebra of functions; separates points; vanishes at no point | 函数代数；分离点；在任何一点都不全为零 |
+| uniform closure; the cap (Stone–Weierstrass, step four) | 一致闭包；帽子 |
+| complex conjugate, z bar | 复共轭，z的共轭 |
+| trigonometric polynomial | 三角多项式 |
+| Abel's theorem; Abel limit | 阿贝尔定理；阿贝尔极限 |
+| fundamental theorem of algebra | 代数基本定理 |
+| orthogonality; mean square; Pythagoras | 正交性；均方；勾股定理 |
+| Bessel's inequality; Parseval's theorem / equation | 贝塞尔不等式；帕塞瓦尔定理 / 等式 |
+| Du Bois-Reymond, Wilbraham, Gibbs | 杜布瓦–雷蒙，威尔布拉汉姆，吉布斯 |
+| overshoot (Gibbs); ringing | 冲过头；振铃 |
+| gamma function; Bohr–Mollerup; Stirling's formula | 伽马函数；玻尔–莫勒鲁普定理；斯特林公式 |
+| Rudin's theorem 8.11; Rudin's chapter 7 / this video's chapter 15 | 鲁丁的定理8.11；鲁丁书中第7章 / 第十五章 |
+| 3Blue1Brown | 3B1B (Latin runs of 4+ letters fail the check) |
+| Jacobian (matrix / determinant); gradient; level curves | 雅可比矩阵 / 雅可比行列式；梯度；等高线 |
+| directional derivative; second difference; iterated limits / integrals | 方向导数；二阶差分；累次极限 / 累次积分 |
+| contraction principle | 压缩映射原理 |
+| folium of Descartes; rank theorem | 笛卡儿叶形线；秩定理 |
+| differentiation under the integral sign | 积分号下求导 |
+| change of variables; partition of unity | 换元公式；单位分解 |
+| exterior derivative; closed / exact form; Poincaré's lemma | 外微分；闭形式 / 恰当形式；庞加莱引理 |
+| f_x, f_y, f_xy (partials, written with underscores) | f_x、f_y、f_xy (the voice reads "f x") |
+| 2g, 2 times g | 2倍的g (never "2g": read as grams) |
+| outer measure; nowhere dense | 外测度；无处稠密 |
+| Borel sets; indicator function; counting measure; Dirac mass | 博雷尔集；示性函数；计数测度；狄拉克测度 |
+| lid (an integrable dominating function) | 盖子 |
+| mass escaping; the spike / the runaway / the spreading | 质量的逃逸；尖刺 / 滑走 / 摊开 |
+| typewriter sequence; improper integral | 打字机序列；反常积分 |
+| Urysohn's lemma; plateau function; collar | 乌雷松引理；平台函数；边沿 |
+| Littlewood's three principles; Lusin; Vitali–Carathéodory | 李特尔伍德的三条原则；卢津；维塔利–卡拉泰奥多里定理 |
+| Tonelli; monotone class; sigma-finite | 托内利；单调类；σ有限 |
+| layer cake formula; Banach–Tarski | 千层蛋糕公式；巴拿赫–塔斯基悖论 |
+| Basel sum | 巴塞尔和 |
 
 ## Conventions settled while translating Part 1
 

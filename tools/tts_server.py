@@ -35,8 +35,19 @@ import numpy as np
 import soundfile as sf
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-from explainer import lang as L  # noqa: E402  (pure Python: tokenization and normalization only)
+
+
+def _load_lang():
+    """explainer/lang.py by path: importing the explainer package would pull in manim, which this env lacks."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("explainer_lang", ROOT / "explainer" / "lang.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+L = _load_lang()  # tokenization and normalization only
 
 QA_LOG = ROOT / ".cache" / "tts" / "qa.jsonl"
 ALIGNER = "mlx-community/Qwen3-ForcedAligner-0.6B-8bit"
@@ -186,6 +197,7 @@ def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: i
     pieces, tokens, t = [np.zeros(int(0.12 * sr), np.float32)], [], 0.12
     for chunk, pause in chunks:
         best, best_score, best_heard = None, -1.0, ""
+        heard_before = set()
         for attempt in range(max_tries):
             audio = trim(engine.take(chunk, lang, attempt), sr)
             dur = len(audio) / sr
@@ -195,10 +207,17 @@ def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: i
             score = similarity(comparable(chunk, lang), comparable(heard, lang))
             if per_unit > (1.2 if lang == "en" else 0.75):
                 score -= 0.5
+            print(f"    take {attempt + 1}: {score:.3f} {dur:5.1f}s  {chunk[:40]!r} -> {heard[:60]!r}", flush=True)
             if score > best_score:
                 best, best_score, best_heard = audio, score, heard
             if score >= prof.get("accept", 0.93):
                 break
+            # Two different takes heard as the same words: the gap to the script is the recognizer's spelling
+            # (a symbol, a homophone), not the voice, so more takes would not close it.
+            said = L.norm(comparable(heard, lang))
+            if said in heard_before and per_unit <= (1.2 if lang == "en" else 0.75):
+                break
+            heard_before.add(said)
         if best_score < prof.get("accept", 0.93):
             QA_LOG.parent.mkdir(parents=True, exist_ok=True)
             with open(QA_LOG, "a") as f:

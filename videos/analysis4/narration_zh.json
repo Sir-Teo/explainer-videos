@@ -1,0 +1,282 @@
+{
+ "title": "分析学，从零搭建 · 第4部分：多维空间里的微积分",
+ "chapters": {
+  "Hook": "牛顿法，以及它背后的压缩映射",
+  "LinearMaps": "1. 线性映射及其范数",
+  "Derivative": "2. 导数是一个线性映射",
+  "Partials": "3. 光有偏导数还不够",
+  "Contraction": "4. 压缩映射原理",
+  "Picard": "5. 皮卡定理：C[a, b]里的微分方程",
+  "InverseFunction": "6. 反函数定理",
+  "ImplicitFunction": "7. 隐函数定理",
+  "HigherOrder": "8. 混合偏导数，以及积分号下求导",
+  "FormsTour": "9. 多元积分导览",
+  "Outro": "账本的第四行"
+ },
+ "lines": {
+  "246bf7e1f12f": {
+   "scene": "Hook",
+   "en": "Three rows of the ledger are filled: the real line, limits, and the first space of functions. <bookmark mark='l'/> Part 4 takes calculus into many dimensions, and it runs on one idea.",
+   "zh": "账本已经填好了三行：实数轴、极限，以及第一个函数空间。<bookmark mark='l'/>第4部分要把微积分带进多维空间，而它靠的是同一个想法。"
+  },
+  "2a9c765e96dc": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Here are two equations in two unknowns: a circle and a hyperbola, and we want a point where they cross. <bookmark mark='b'/> Newton's method starts from a guess. At the guess, replace each of the two functions by its best linear approximation. Where each approximation is zero is a straight line, and two lines are easy: they cross at one point, the next guess. <bookmark mark='c'/> Repeat. <bookmark mark='d'/> After four steps F is about ten to the minus eleven away from zero. Once close, the number of correct digits doubles at every step.",
+   "zh": "<bookmark mark='a'/>这里有两个未知数的两个方程：一个圆和一条双曲线，我们要找它们的交点。<bookmark mark='b'/>牛顿法从一个猜测出发。在猜测点处，把两个函数各自换成它的最佳线性逼近。每个线性逼近等于0的地方是一条直线，而两条直线很好办：它们交于一点，那就是下一个猜测。<bookmark mark='c'/>重复这个过程。<bookmark mark='d'/>四步之后，F离0只差大约10的负11次方。一旦足够接近，每走一步，正确的位数就翻一番。"
+  },
+  "753ae4586eb5": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Behind Newton's method is a simpler picture. Take a map of the plane that shrinks every distance by a fixed factor, here 0.62, while it turns and slides. <bookmark mark='b'/> Apply it again and again, and the whole plane collapses onto one point, the only point the map leaves where it is. <bookmark mark='c'/> That's the contraction principle, and this part uses it four times: for Newton's method, for differential equations, and for the inverse and implicit function theorems. Equation after equation, the solution is the fixed point of a contraction.",
+   "zh": "<bookmark mark='a'/>牛顿法的背后，是一幅更简单的图景。取平面上的一个映射，它一边旋转、平移，一边把每段距离都按固定的比例缩小，这里的比例是0.62。<bookmark mark='b'/>一遍又一遍地作用下去，整个平面就收缩到一个点上，这是映射唯一保持不动的点。<bookmark mark='c'/>这就是压缩映射原理，这一部分要用它四次：用于牛顿法，用于微分方程，还用于反函数定理和隐函数定理。一个又一个方程，它的解都是某个压缩映射的不动点。"
+  },
+  "a86ef2f05299": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapter nine of Rudin's Principles. <bookmark mark='a'/> First the linear maps, and the derivative as a linear map, and why partial derivatives alone don't make one. <bookmark mark='b'/> Then the contraction principle, and what it builds: solutions of differential equations, and the inverse and implicit function theorems. <bookmark mark='c'/> We finish with mixed partial derivatives, one more swap of limits, and a guided tour of chapter ten.",
+   "zh": "计划是这样的，跟着鲁丁《数学分析原理》的第9章走。<bookmark mark='a'/>首先是线性映射，把导数看成线性映射，以及为什么光有偏导数还构不成导数。<bookmark mark='b'/>然后是压缩映射原理，以及用它搭起来的东西：微分方程的解，还有反函数定理和隐函数定理。<bookmark mark='c'/>最后是混合偏导数，又一次极限的交换，以及对第10章的一次导览。"
+  },
+  "a5ac970e4d34": {
+   "scene": "LinearMaps",
+   "en": "Chapter one: linear maps, the raw material of derivatives in many variables.",
+   "zh": "第一章：线性映射，多元导数的原材料。"
+  },
+  "dee5225b0e0f": {
+   "scene": "LinearMaps",
+   "en": "<bookmark mark='a'/> A linear map of the plane respects addition and scaling. Watch what it does to a square grid: <bookmark mark='b'/> lines go to lines, equally spaced lines stay equally spaced, and the origin stays put. <bookmark mark='c'/> It's determined by where it sends the two unit vectors, and those images are the columns of its matrix.",
+   "zh": "<bookmark mark='a'/>平面上的线性映射保持加法和数乘。看看它对正方形网格做了什么：<bookmark mark='b'/>直线变成直线，等距的直线仍然等距，原点保持不动。<bookmark mark='c'/>两个单位向量被送到哪里，就完全决定了这个映射，而这两个像，就是它的矩阵的两列。"
+  },
+  "0bfef3407ba0": {
+   "scene": "LinearMaps",
+   "en": "<bookmark mark='a'/> How big is a linear map? Rudin measures it by the largest stretch: the norm of A is the supremum of the length of A x over unit vectors x. <bookmark mark='b'/> Run a unit vector around the circle and watch its image: the length of A x rises and falls. <bookmark mark='c'/> The images trace an ellipse, and the norm is its longest semi-axis, here about 2.03; the shortest is about 0.73. <bookmark mark='d'/> The norm is at most the square root of the sum of the squared entries, and it behaves like a length: the triangle inequality holds, and the norm of a product is at most the product of the norms. So the linear maps form a metric space of their own.",
+   "zh": "<bookmark mark='a'/>一个线性映射有多大？鲁丁用最大的拉伸来衡量：A的范数，是在所有单位向量x上，A乘x的长度的上确界。<bookmark mark='b'/>让一个单位向量沿着圆周转一圈，看它的像：A乘x的长度忽大忽小。<bookmark mark='c'/>这些像描出一个椭圆，范数就是它最长的半轴，这里大约是2.03；最短的半轴大约是0.73。<bookmark mark='d'/>范数不超过所有元素平方和的平方根，而且它表现得就像长度：三角不等式成立，乘积的范数不超过范数的乘积。所以线性映射自己也构成一个度量空间。"
+  },
+  "ee7b9b89f64e": {
+   "scene": "LinearMaps",
+   "en": "<bookmark mark='a'/> Which linear maps can be undone? Rudin's theorem 9.8: the invertible ones form an open set. Around an invertible A there's a ball of radius one over the norm of A inverse, and every map in it is invertible. <bookmark mark='b'/> That radius is the shortest semi-axis of A's ellipse. <bookmark mark='c'/> Push A along its weakest direction and the ellipse flattens. It collapses to a segment, and the map becomes singular, exactly when the push reaches the radius: the ball is as large as it can be.",
+   "zh": "<bookmark mark='a'/>哪些线性映射可以撤销？鲁丁的定理9.8：可逆的线性映射构成一个开集。在一个可逆的A周围有一个球，半径是A的逆的范数分之1，球里的每个映射都可逆。<bookmark mark='b'/>这个半径，正是A的椭圆最短的半轴。<bookmark mark='c'/>沿着A最弱的方向推它，椭圆就被压扁。恰好在推的幅度达到这个半径时，椭圆塌成一条线段，映射变成奇异的：这个球已经大到不能再大了。"
+  },
+  "f45b15955ca0": {
+   "scene": "LinearMaps",
+   "en": "<bookmark mark='a'/> One proof is a geometric series. Write B as A times the identity minus a small map; then B inverse is the sum of the powers of that small map, times A inverse, just as one over one minus q is the sum of the powers of q. <bookmark mark='b'/> The partial sums, drawn as images of the unit circle, close in on B inverse's ellipse, <bookmark mark='c'/> with the error shrinking geometrically. <bookmark mark='d'/> This little series comes back in Part 10, where it runs the theory of the spectrum.",
+   "zh": "<bookmark mark='a'/>一种证明用的是几何级数。把B写成A乘以（恒等映射减去一个小映射）；那么B的逆，就是这个小映射各次幂的和，再乘上A的逆，正如1减q分之1，是q的各次幂之和。<bookmark mark='b'/>把部分和画成单位圆的像，它们逐渐逼近B的逆的椭圆，<bookmark mark='c'/>误差按几何级数缩小。<bookmark mark='d'/>这个小小的级数会在第10部分再次出现，在那里，整个谱理论都靠它运转。"
+  },
+  "055ffc809df2": {
+   "scene": "Derivative",
+   "en": "Chapter two: what the derivative becomes when there is more than one variable.",
+   "zh": "第二章：变量不止一个的时候，导数变成了什么。"
+  },
+  "5158848d7faa": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> Here's a function of two variables, drawn by its level curves, the way a map shows a landscape. <bookmark mark='b'/> Zoom in at a point. The curves straighten, and their spacing evens out. <bookmark mark='c'/> In the limit they become the level lines of a linear function: parallel, and equally spaced. That linear function is the derivative. In one variable, a curve under the microscope becomes a line; in two, a landscape becomes a tilted plane.",
+   "zh": "<bookmark mark='a'/>这是一个二元函数，用它的等高线画出来，就像地图画地形那样。<bookmark mark='b'/>在一点处放大。曲线变直了，间距也变得均匀。<bookmark mark='c'/>取极限，它们就成了一个线性函数的等高线：互相平行，间距相等。这个线性函数就是导数。一元的时候，显微镜下的曲线变成直线；二元的时候，地形变成一个倾斜的平面。"
+  },
+  "010cde497df9": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> Rudin's definition: f is differentiable at x if some linear map A approximates the change in f so well that the error is small even compared with the size of the step: the error divided by the length of h goes to zero. That A is unique, and it is the derivative. <bookmark mark='b'/> Check it at our point. For each step length, try two hundred directions and record the worst ratio. <bookmark mark='c'/> On a log scale the ratios fall along a line of slope one: the error is of the order of the step squared, far smaller than the step itself.",
+   "zh": "<bookmark mark='a'/>鲁丁的定义：如果某个线性映射A对f的变化逼近得足够好，使得误差即使和步长相比也很小，也就是误差除以h的长度趋于0，就说f在x处可微。这样的A是唯一的，它就是导数。<bookmark mark='b'/>在我们的点上验证一下。对每个步长，试200个方向，记下最差的比值。<bookmark mark='c'/>在对数坐标下，这些比值落在一条斜率为1的直线上：误差是步长平方的量级，比步长本身小得多。"
+  },
+  "9f6e8bffe0be": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> With derivatives as linear maps, the chain rule says: the derivative of a composition is the composition of the derivatives, which for matrices is their product. <bookmark mark='b'/> Follow a small square. The first map bends it into a curvy quadrilateral, nearly the parallelogram its derivative predicts. <bookmark mark='c'/> The second map bends it again, and the result is nearly the parallelogram of the product of the two matrices.",
+   "zh": "<bookmark mark='a'/>把导数看成线性映射，链式法则说的就是：复合映射的导数，是导数的复合，对矩阵来说就是它们的乘积。<bookmark mark='b'/>跟着一个小正方形走。第一个映射把它掰成一个弯曲的四边形，几乎就是它的导数所预言的那个平行四边形。<bookmark mark='c'/>第二个映射再把它掰弯一次，结果几乎就是两个矩阵乘积所对应的平行四边形。"
+  },
+  "49921ece45c4": {
+   "scene": "Derivative",
+   "en": "<bookmark mark='a'/> In coordinates, the matrix of the derivative is the Jacobian, the array of partial derivatives. For a real-valued function it's a single row, the gradient. <bookmark mark='b'/> On the level-curve map the gradient points uphill, perpendicular to the curves, longest where they crowd together. <bookmark mark='c'/> The rate of change in a direction u is the gradient dotted with u. As u turns, that's a pure cosine of the angle: a linear function of the direction. Remember this shape: in the next chapter, a function will fail it.",
+   "zh": "<bookmark mark='a'/>在坐标下，导数的矩阵就是雅可比矩阵，也就是由偏导数排成的阵列。对实值函数来说，它只有一行，就是梯度。<bookmark mark='b'/>在等高线地图上，梯度指向上坡，垂直于等高线，在等高线挤得最密的地方最长。<bookmark mark='c'/>沿方向u的变化率，是梯度与u的点积。当u转动时，它是角度的一个纯粹的余弦，也就是方向的线性函数。记住这个形状：下一章里，会有一个函数不符合它。"
+  },
+  "68e3c170d3ee": {
+   "scene": "Derivative",
+   "en": "So the dictionary from one variable to several: <bookmark mark='a'/> the derivative stops being a number and becomes a linear map; <bookmark mark='b'/> the tangent line becomes the best linear approximation; <bookmark mark='c'/> the chain rule multiplies matrices instead of numbers; <bookmark mark='d'/> and the mean value inequality survives on convex sets, with the norm of the derivative in place of the absolute value.",
+   "zh": "所以，从一元到多元的对照表是这样的：<bookmark mark='a'/>导数不再是一个数，而是一个线性映射；<bookmark mark='b'/>切线变成了最佳线性逼近；<bookmark mark='c'/>链式法则乘的是矩阵，而不是数；<bookmark mark='d'/>中值不等式在凸集上依然成立，只是用导数的范数代替了绝对值。"
+  },
+  "dd2a8eb3e9e0": {
+   "scene": "Partials",
+   "en": "Chapter three: two exhibits for the museum, and the theorem that repairs the damage.",
+   "zh": "第三章：博物馆的两件藏品，以及修补漏洞的那个定理。"
+  },
+  "62115ef62c16": {
+   "scene": "Partials",
+   "en": "<bookmark mark='a'/> The first exhibit: x y over x squared plus y squared, with value zero at the origin. Its colors show its values, and they depend only on the direction from the origin. <bookmark mark='b'/> Along both axes the function is identically zero, so both partial derivatives at the origin exist, and both are zero. <bookmark mark='c'/> But along the diagonal it equals one half, right up to the origin. So it isn't even continuous there, let alone differentiable. <bookmark mark='d'/> Partial derivatives only look along the axes, and a function can misbehave in every other direction.",
+   "zh": "<bookmark mark='a'/>第一件藏品：x乘y，除以x的平方加y的平方，在原点处取值为0。颜色表示它的值，而这些值只取决于从原点出发的方向。<bookmark mark='b'/>沿着两条坐标轴，这个函数恒等于0，所以它在原点的两个偏导数都存在，而且都等于0。<bookmark mark='c'/>可是沿着对角线，它一直等于二分之一，直到原点跟前。所以它在原点甚至不连续，更别说可微了。<bookmark mark='d'/>偏导数只沿着坐标轴看，而函数在其他每个方向上都可能出毛病。"
+  },
+  "4da640e786a0": {
+   "scene": "Partials",
+   "en": "<bookmark mark='a'/> The second exhibit is subtler: x squared y over x squared plus y squared. It is continuous, and at the origin it has a derivative in every direction, not just along the axes. <bookmark mark='b'/> Plot that directional derivative against the angle of the direction. If g were differentiable, this would be the gradient dotted with u, a pure cosine. The gradient is zero, so it would be flat. <bookmark mark='c'/> It isn't. Cos squared times sine is a quarter of sine theta plus a quarter of sine three theta, and the sine three theta part is not linear in the direction. <bookmark mark='d'/> No linear map fits, so there is no derivative: directional derivatives in every direction are not enough either.",
+   "zh": "<bookmark mark='a'/>第二件藏品更微妙：x的平方乘y，除以x的平方加y的平方。它是连续的，而且在原点沿每个方向都有导数，不只是沿坐标轴。<bookmark mark='b'/>把这个方向导数对方向的角度画出来。如果g可微，它应该是梯度与u的点积，一个纯粹的余弦。梯度是0，所以它应该是平的。<bookmark mark='c'/>可它不是。cos的平方乘sin，等于四分之一sin θ，加上四分之一sin 3θ，而sin 3θ这一部分不是方向的线性函数。<bookmark mark='d'/>没有哪个线性映射能吻合，所以导数不存在：每个方向都有方向导数，也还是不够。"
+  },
+  "d383f985e927": {
+   "scene": "Partials",
+   "en": "<bookmark mark='a'/> The repair is Rudin's theorem 9.21: if the partial derivatives exist and are continuous, the function is continuously differentiable. <bookmark mark='b'/> The idea: to go from x to x plus h, move one coordinate at a time. <bookmark mark='c'/> On each leg only one variable changes, so the one-variable mean value theorem gives the change as a partial derivative at some point of that leg, times the step. <bookmark mark='d'/> If the partials are continuous, their values at those points are close to their values at x, and the change is the gradient dotted with h, up to an error small compared with h. In the museum, the partials jump at the origin, and the argument breaks.",
+   "zh": "<bookmark mark='a'/>修补靠的是鲁丁的定理9.21：如果偏导数存在并且连续，那么函数是连续可微的。<bookmark mark='b'/>思路是：从x走到x加h，每次只动一个坐标。<bookmark mark='c'/>每一段路上只有一个变量在变，所以一元的中值定理告诉我们，这一段的变化，等于这段路上某一点处的偏导数乘以步长。<bookmark mark='d'/>如果偏导数连续，它们在那些点上的值就接近在x处的值，于是总的变化就是梯度与h的点积，误差和h相比很小。而在博物馆的藏品里，偏导数在原点处发生跳跃，这个论证就失效了。"
+  },
+  "5c91d198d370": {
+   "scene": "Contraction",
+   "en": "Chapter four: the contraction principle, the engine of this part.",
+   "zh": "第四章：压缩映射原理，这一部分的引擎。"
+  },
+  "e172db4aa269": {
+   "scene": "Contraction",
+   "en": "<bookmark mark='a'/> To solve cosine of x equals x, just iterate: start anywhere, apply the cosine, and apply it again. <bookmark mark='b'/> On the graph, bounce between the curve and the diagonal: the path spirals in on the crossing. <bookmark mark='c'/> Why it works: on this interval the cosine's slope is at most sine of one, about 0.84, so each application shrinks distances by that factor. The errors shrink geometrically, and the theorem we're about to prove even predicts a bound for them in advance, the last column. <bookmark mark='d'/> The solution is 0.7390851332, the only one there is.",
+   "zh": "<bookmark mark='a'/>要解cos x等于x，只要迭代：从任意一点出发，取余弦，再取一次余弦。<bookmark mark='b'/>在图上，就是在曲线和对角线之间来回弹：路径螺旋着收向交点。<bookmark mark='c'/>为什么行得通：在这个区间上，余弦的斜率至多是sin 1，大约0.84，所以每作用一次，距离都至多变为原来的0.84倍。误差按几何级数缩小，而我们马上要证明的定理，甚至能事先给出误差的上界，就是最后一列。<bookmark mark='d'/>解是0.7390851332，而且只有这一个。"
+  },
+  "dd752257264d": {
+   "scene": "Contraction",
+   "en": "<bookmark mark='a'/> The theorem, Rudin 9.23: on a complete metric space, a map that shrinks every distance by a factor c less than one has exactly one fixed point. Start anywhere and iterate. <bookmark mark='b'/> Each step is at most c times the one before, so the n-th step is at most c to the n times the first. <bookmark mark='c'/> Adding up the steps between the n-th point and any later one gives a geometric series: every later point lies in a disc of radius c to the n over one minus c times the first step. The discs shrink to nothing, so the sequence is Cauchy. <bookmark mark='d'/> The space is complete, so the points converge, and because the map is continuous, the limit is fixed. <bookmark mark='e'/> And two fixed points would have to be closer to each other than they are, so there's only one.",
+   "zh": "<bookmark mark='a'/>定理，鲁丁9.23：在完备度量空间上，如果一个映射把每段距离都至多缩小为原来的c倍，其中c小于1，那么它恰好有一个不动点。从任意一点出发迭代。<bookmark mark='b'/>每一步至多是前一步的c倍，所以第n步至多是第一步的c的n次方倍。<bookmark mark='c'/>把第n个点与之后任意一个点之间的各步加起来，得到一个几何级数：之后的每个点都落在一个圆盘里，半径是c的n次方除以（1减c），再乘以第一步。这些圆盘缩得什么都不剩，所以这个序列是柯西序列。<bookmark mark='d'/>空间是完备的，所以这些点收敛；又因为映射是连续的，极限就是不动点。<bookmark mark='e'/>而如果有两个不动点，它们之间的距离就得比它们之间的距离还小，所以只有一个。"
+  },
+  "3335860df09e": {
+   "scene": "Contraction",
+   "en": "<bookmark mark='a'/> Completeness can't be dropped. The map x over two plus one over x sends rationals to rationals, and on the interval from one to two it shrinks distances by at least half. <bookmark mark='b'/> Iterate from one: three halves, seventeen twelfths, five hundred seventy-seven over four hundred eight. <bookmark mark='c'/> The iterates form a Cauchy sequence, but the point they close in on is the square root of two, the hole in the rationals from Part 1. Among the rationals, there is no fixed point at all.",
+   "zh": "<bookmark mark='a'/>完备性不能去掉。映射“二分之x加x分之1”把有理数送到有理数，而且在1到2的区间上，它把距离至少缩小一半。<bookmark mark='b'/>从1开始迭代：二分之三，十二分之十七，四百零八分之五百七十七。<bookmark mark='c'/>这些迭代值构成一个柯西序列，可它们逼近的那个点是根号2，也就是第1部分里有理数中的那个洞。在有理数里，根本没有不动点。"
+  },
+  "33e03b4b8d38": {
+   "scene": "Contraction",
+   "en": "<bookmark mark='a'/> And Newton's method from the opening is a contraction too. Its step is the map g of x equals x minus f over f prime, and at a simple root its derivative is zero. <bookmark mark='b'/> For the square root of two, g is flat where it crosses the diagonal, so near the root it shrinks distances by a factor as small as we like. <bookmark mark='c'/> That's why Newton's method is so fast: each step contracts harder than the one before, the error squares, and the number of correct digits doubles.",
+   "zh": "<bookmark mark='a'/>开场里的牛顿法也是一个压缩映射。它的一步就是映射g(x)等于x减去f除以f的导数，而在单根处，这个映射的导数是0。<bookmark mark='b'/>对根号2来说，g在穿过对角线的地方是平的，所以在根附近，它缩小距离的比例要多小有多小。<bookmark mark='c'/>这就是牛顿法这么快的原因：每一步都比前一步压缩得更狠，误差被平方，正确的位数翻一番。"
+  },
+  "79d321e6cb5d": {
+   "scene": "Picard",
+   "en": "Chapter five: the function space of Part 3 earns its keep.",
+   "zh": "第五章：第3部分的函数空间派上用场了。"
+  },
+  "43a25182ffbb": {
+   "scene": "Picard",
+   "en": "<bookmark mark='a'/> By the fundamental theorem of calculus, a differential equation with an initial value is the same as an integral equation. <bookmark mark='b'/> Read the right side as a machine T that takes a continuous function y and returns another one. Solutions are exactly the functions T leaves unchanged. <bookmark mark='c'/> If F is Lipschitz in y with constant L, then T shrinks sup distances by the factor L times h, the length of the interval. <bookmark mark='d'/> Here are two functions and their images: the largest gap shrinks to less than half. For h small, T is a contraction of the complete space C of zero h, Part 3's space, and the contraction principle hands us a solution, and only one.",
+   "zh": "<bookmark mark='a'/>由微积分基本定理，一个带初值的微分方程，和一个积分方程是一回事。<bookmark mark='b'/>把右边看成一台机器T：送进一个连续函数y，它吐出另一个连续函数。方程的解，恰好就是T保持不变的那些函数。<bookmark mark='c'/>如果F关于y满足利普希茨条件，常数是L，那么T会把上确界距离至多缩小为原来的L乘h倍，h是区间的长度。<bookmark mark='d'/>这是两个函数和它们的像：最大的间隙缩小到不到一半。当h很小时，T是完备空间C上的压缩映射，C是0到h上的连续函数，也就是第3部分的空间，于是压缩映射原理给了我们一个解，而且只有一个。"
+  },
+  "ca1f5feb6e81": {
+   "scene": "Picard",
+   "en": "<bookmark mark='a'/> Watch it work on the simplest equation, y prime equals y, starting from y equal to one. Start the iteration from the zero function. <bookmark mark='b'/> The first iterate is the constant one, the next is one plus t, then one plus t plus t squared over two. <bookmark mark='c'/> The Picard iterates are the Taylor polynomials of e to the t, and they converge to it uniformly. <bookmark mark='d'/> On the camera, each iterate is a single point, plotted by its values at one half and one, and the points march to the point of the exponential function.",
+   "zh": "<bookmark mark='a'/>看看它在最简单的方程上怎么工作：y的导数等于y，初值y等于1。从零函数开始迭代。<bookmark mark='b'/>第一个迭代是常数1，下一个是1加t，然后是1加t，再加二分之t的平方。<bookmark mark='c'/>皮卡迭代正是e的t次方的泰勒多项式，它们一致收敛到e的t次方。<bookmark mark='d'/>在相机里，每个迭代都是一个点，按它在二分之一和1处的值画出来，这些点一步步走向指数函数对应的那个点。"
+  },
+  "f873fbf61197": {
+   "scene": "Picard",
+   "en": "<bookmark mark='a'/> Now an equation with no formula for its solution: y prime equals t plus sine y. <bookmark mark='b'/> The same iteration closes in on the solution, drawn in white from an independent numerical method. <bookmark mark='c'/> On the whole interval from zero to one, L times h is one, so T is not quite a contraction there, but a sharper estimate shows the k-th change is at most h to the k over k factorial times the first, which is even better than geometric. <bookmark mark='d'/> After twelve steps the iterate agrees with the numerical solution to about eight digits.",
+   "zh": "<bookmark mark='a'/>现在来看一个解没有公式的方程：y的导数等于t加sin y。<bookmark mark='b'/>同样的迭代逼近这个解；白色的曲线，是用另一种独立的数值方法算出来的。<bookmark mark='c'/>在0到1的整个区间上，L乘h等于1，所以T在那里还算不上压缩映射；但一个更精细的估计表明，第k次的变化至多是第一次的k的阶乘分之h的k次方倍，这比几何级数还要好。<bookmark mark='d'/>迭代12步之后，结果与数值解大约有8位数字吻合。"
+  },
+  "273afa07fb47": {
+   "scene": "Picard",
+   "en": "<bookmark mark='a'/> The Lipschitz condition is not a technicality. y prime equals twice the square root of y, starting from zero. <bookmark mark='b'/> The zero function solves it. So does t squared. So does the function that waits until any time c and then follows t minus c squared. <bookmark mark='c'/> Infinitely many solutions through one point. Peano's theorem, proved with Arzelà–Ascoli from Part 3, still gives existence for any continuous right side, but without the Lipschitz bound that makes T a contraction, uniqueness can fail.",
+   "zh": "<bookmark mark='a'/>利普希茨条件可不是技术性的规定。看方程：y的导数等于2倍根号y，初值为0。<bookmark mark='b'/>零函数是它的解。t的平方也是。还有这样的函数：先等到任意一个时刻c，然后沿着（t减c）的平方走，它也是解。<bookmark mark='c'/>经过同一个点的解有无穷多个。皮亚诺定理，用第3部分的阿尔泽拉–阿斯科利定理来证明，对任何连续的右端，仍然保证解存在；但没有让T成为压缩映射的利普希茨界，唯一性就可能失败。"
+  },
+  "fdf68679d5a4": {
+   "scene": "InverseFunction",
+   "en": "Chapter six: the inverse function theorem, built from one contraction.",
+   "zh": "第六章：反函数定理，由一个压缩映射搭起来。"
+  },
+  "5d855da5af52": {
+   "scene": "InverseFunction",
+   "en": "<bookmark mark='a'/> Here's the map that sends x, y to e to the x times cosine y, e to the x times sine y: the complex exponential, seen as a map of the plane. <bookmark mark='b'/> It wraps the strip on the left around the origin: vertical lines become circles, horizontal lines become rays. <bookmark mark='c'/> Its derivative is invertible everywhere, and near each point the map is one-to-one: a small square goes to a small curved square. <bookmark mark='d'/> But a square two pi higher lands in exactly the same place. The map can be undone near every point, and not globally. The inverse function theorem is precisely the local statement.",
+   "zh": "<bookmark mark='a'/>这个映射把（x，y）送到（e的x次方乘cos y，e的x次方乘sin y）：这是复指数函数，看成平面上的映射。<bookmark mark='b'/>它把左边的长条绕着原点卷起来：竖直线变成圆，水平线变成射线。<bookmark mark='c'/>它的导数处处可逆，而且在每一点附近，这个映射都是一对一的：一个小正方形变成一个弯曲的小正方形。<bookmark mark='d'/>可是高出2π的正方形，会落到完全相同的地方。这个映射在每一点附近都能撤销，在整体上却不能。反函数定理说的恰恰是这个局部的结论。"
+  },
+  "e441f4d4df54": {
+   "scene": "InverseFunction",
+   "en": "<bookmark mark='a'/> The theorem, Rudin 9.24: if f is continuously differentiable near a and its derivative at a is invertible, then f maps some neighborhood of a one-to-one onto a neighborhood of f of a, and the inverse is continuously differentiable too, with derivative the inverse matrix. <bookmark mark='b'/> The proof has four steps, and the first carries the weight. <bookmark mark='c'/> To solve f of x equals y, start at a and correct x by the linear guess: add A inverse times the remaining error. A fixed point of that correction is exactly a solution. <bookmark mark='d'/> Its derivative is the identity minus A inverse times f prime of x, which is zero at a and small nearby. So on a small ball it's a contraction, and the contraction principle finds the solution, and only one.",
+   "zh": "<bookmark mark='a'/>定理，鲁丁9.24：如果f在a附近连续可微，并且它在a处的导数可逆，那么f把a的某个邻域一对一地映到f(a)的一个邻域上，而且逆映射也是连续可微的，它的导数就是逆矩阵。<bookmark mark='b'/>证明分四步，第一步最吃重。<bookmark mark='c'/>要解f(x)等于y，从a出发，用线性猜测来修正x：加上A的逆乘以剩下的误差。这个修正的不动点，恰好就是解。<bookmark mark='d'/>修正映射的导数，是恒等映射减去A的逆乘f在x处的导数，它在a处为0，在附近也很小。所以在一个小球上它是压缩映射，压缩映射原理就找到了解，而且只有一个。"
+  },
+  "340a15585939": {
+   "scene": "InverseFunction",
+   "en": "<bookmark mark='a'/> Here it is, run. Choose a target y near f of a. <bookmark mark='b'/> Start at a and apply the correction again and again. On the left, the iterates in the domain; on the right, their images, closing in on y. <bookmark mark='c'/> On the green ball, which holds every iterate, the correction map shrinks distances by a factor of at most 0.42, and here each error is about a third of the one before. <bookmark mark='d'/> If we updated A at every step, using the derivative at the current point, this would be Newton's method from the opening, and it would converge even faster.",
+   "zh": "<bookmark mark='a'/>实际跑一遍。在f(a)附近选一个目标y。<bookmark mark='b'/>从a出发，一遍又一遍地做修正。左边是定义域里的迭代点；右边是它们的像，逐渐逼近y。<bookmark mark='c'/>所有迭代点都落在绿色的球里，在这个球上，修正映射把距离至多缩小为原来的0.42倍，而这里每次的误差大约是前一次的三分之一。<bookmark mark='d'/>如果每一步都更新A，改用当前点处的导数，这就是开场里的牛顿法，收敛得还要更快。"
+  },
+  "67f4f9a678a7": {
+   "scene": "ImplicitFunction",
+   "en": "Chapter seven: when an equation can be solved for some of its variables.",
+   "zh": "第七章：什么时候，一个方程能解出其中的一部分变量。"
+  },
+  "d51dca139414": {
+   "scene": "ImplicitFunction",
+   "en": "<bookmark mark='a'/> The equation x cubed plus y cubed equals three x y defines a curve, the folium of Descartes. Does it define y as a function of x? <bookmark mark='b'/> Not globally, but often locally. Near the point two thirds, four thirds, a small window contains a piece of the curve that every vertical line meets exactly once: there it's the graph of a function g. Its slope is minus the ratio of the two partial derivatives, here 0.8. <bookmark mark='c'/> At the fold, the curve turns back, and vertical lines meet it twice or not at all: there's no function of x there. That's exactly where the partial derivative in y vanishes. <bookmark mark='d'/> And at the origin both partials vanish, and two branches cross.",
+   "zh": "<bookmark mark='a'/>方程x的立方加y的立方等于3 x y，定义了一条曲线，叫笛卡儿叶形线。它能不能把y定义成x的函数？<bookmark mark='b'/>整体上不能，但在局部往往可以。在点（三分之二，三分之四）附近，一个小窗口里的那段曲线，每条竖直线都恰好与它相交一次：在那里，它是某个函数g的图像。它的斜率等于两个偏导数之比的相反数，这里是0.8。<bookmark mark='c'/>在折回的地方，曲线掉头往回走，竖直线与它相交两次，或者根本不相交：那里没有x的函数。这恰好是关于y的偏导数等于0的地方。<bookmark mark='d'/>而在原点，两个偏导数都等于0，两条分支在那里交叉。"
+  },
+  "c886eda192d5": {
+   "scene": "ImplicitFunction",
+   "en": "<bookmark mark='a'/> The theorem, Rudin 9.28, here with one variable on each side: if f vanishes at a, b, and its partial derivative in y is not zero there, then near a the equation defines y as exactly one continuously differentiable function of x. <bookmark mark='b'/> It comes straight from the inverse function theorem. Build a map of the plane that keeps x and records the value of f. Near the point, it straightens the level sets of f into horizontal lines. <bookmark mark='c'/> Its derivative is a triangular matrix: vertical lines stay vertical, <bookmark mark='d'/> and its determinant is the partial derivative in y, so the inverse function theorem inverts it near a, b. <bookmark mark='e'/> The points where f is zero are the points that map to the x-axis, so the inverse, applied to the x-axis, traces the graph. <bookmark mark='f'/> Differentiating the identity f of x, g of x equals zero gives the slope: zero point eight here, the tangent we met on the folium.",
+   "zh": "<bookmark mark='a'/>定理，鲁丁9.28，这里两边各取一个变量：如果f在（a，b）处等于0，而且它关于y的偏导数在那里不为0，那么在a附近，这个方程把y确定为x的唯一一个连续可微函数。<bookmark mark='b'/>它直接来自反函数定理。构造平面上的一个映射：保留x，同时记下f的值。在这个点附近，它把f的等值集拉直成水平线。<bookmark mark='c'/>它的导数是一个三角矩阵：竖直线仍然是竖直的，<bookmark mark='d'/>而它的行列式就是关于y的偏导数，所以反函数定理能在（a，b）附近把它反过来。<bookmark mark='e'/>f等于0的点，正是被映到x轴上的点，所以把逆映射作用在x轴上，就描出了函数的图像。<bookmark mark='f'/>对恒等式f（x，g(x)）等于0求导，就得到斜率：这里是0.8，正是我们在叶形线上见过的那条切线。"
+  },
+  "5891689465a6": {
+   "scene": "ImplicitFunction",
+   "en": "<bookmark mark='a'/> The same circle of ideas gives Rudin's rank theorem, which we'll only picture. If the derivative of a map has the same rank everywhere, then <bookmark mark='p'/> in suitable coordinates the map is just a projection, which flattens each vertical line to a point. <bookmark mark='b'/> Here is a rank-one map before the coordinates are straightened. The rank is one: a whole family of lines in the plane, each collapsed to a single point, and the plane folded onto a curve.",
+   "zh": "<bookmark mark='a'/>同样一套想法还给出了鲁丁的秩定理，我们只画图，不证明。如果一个映射的导数处处有相同的秩，那么<bookmark mark='p'/>在适当的坐标下，这个映射就只是一个投影，把每条竖直线压成一个点。<bookmark mark='b'/>这是一个秩为1的映射，坐标还没有拉直。秩为1：平面上整整一族直线，每一条都被压成一个点，而整个平面被折到一条曲线上。"
+  },
+  "e3878f150145": {
+   "scene": "HigherOrder",
+   "en": "Chapter eight: two more interchanges of limits, one that fails and one that works.",
+   "zh": "第八章：再来两次极限的交换，一次失败，一次成功。"
+  },
+  "ee274e3789c3": {
+   "scene": "HigherOrder",
+   "en": "<bookmark mark='a'/> In Rudin's Exercise 9.27, a function has two mixed partial derivatives at the origin that disagree. <bookmark mark='b'/> Both come from one quantity: the second difference across a small rectangle with corners at the origin, divided by its area. For this function that quotient depends only on the rectangle's shape. <bookmark mark='c'/> A tall, thin rectangle gives minus one: that's differentiating in x first, then in y. <bookmark mark='d'/> A short, wide one gives plus one: the other order. The two iterated limits disagree, the same way as the grid of m over m plus n from Part 3.",
+   "zh": "<bookmark mark='a'/>在鲁丁的习题9.27里，有一个函数，它在原点的两个混合偏导数不相等。<bookmark mark='b'/>两者都来自同一个量：以原点为一个角的小矩形上的二阶差分，除以矩形的面积。对这个函数来说，这个商只取决于矩形的形状。<bookmark mark='c'/>又高又窄的矩形给出负1：这对应先对x求导，再对y求导。<bookmark mark='d'/>又矮又宽的矩形给出正1：那是另一种次序。两个累次极限不相等，就像第3部分里m加n分之m的那张网格一样。"
+  },
+  "5ed1343461ad": {
+   "scene": "HigherOrder",
+   "en": "<bookmark mark='a'/> The cure is continuity again. Rudin's theorem 9.41: if f x, f y and the mixed partial f x y exist near a point, and f x y is continuous there, then the other one exists and they're equal. <bookmark mark='m'/> The reason: by the mean value theorem, used twice, the second difference over h k equals f x y at some point inside the rectangle. <bookmark mark='s'/> Shrink the rectangle, whatever its shape, and that point is squeezed into the corner; if f x y is continuous, the quotient has only one possible limit. <bookmark mark='b'/> In the museum piece, f x y depends only on the direction: plus one along the x-axis, minus one along the y-axis. <bookmark mark='w'/> A flat rectangle's quotient is near plus one, a tall one's near minus one, so the mean-value point rides a different ray for each shape, however small the rectangle. The swap fails exactly where continuity does.",
+   "zh": "<bookmark mark='a'/>解药还是连续性。鲁丁的定理9.41：如果f_x、f_y和混合偏导数f_xy在某点附近存在，并且f_xy在那里连续，那么另一个混合偏导数也存在，而且两者相等。<bookmark mark='m'/>理由是：把中值定理用两次，二阶差分除以h乘k，就等于矩形内某一点处的f_xy。<bookmark mark='s'/>不管矩形是什么形状，把它缩小，那个点就被挤进角落；如果f_xy连续，这个商就只可能有一个极限。<bookmark mark='b'/>在博物馆的这件藏品里，f_xy只取决于方向：沿x轴是正1，沿y轴是负1。<bookmark mark='w'/>扁矩形的商接近正1，高矩形的接近负1，所以不管矩形多小，中值点都随着形状的不同，沿着不同的射线走。交换恰恰在连续性失效的地方失效。"
+  },
+  "b262d0c655cf": {
+   "scene": "HigherOrder",
+   "en": "<bookmark mark='a'/> The swap that works is differentiation under the integral sign, Rudin 9.42: if phi and its partial derivative in t are continuous on a closed rectangle, <bookmark mark='p'/> the derivative of the integral is the integral of the derivative. The change in area between two nearby curves is the integral of the change in height; dividing by delta t and shrinking it is exactly the interchange. <bookmark mark='b'/> Try it on the integral of x to the t from zero to one, which is one over t plus one. <bookmark mark='c'/> Differentiating the answer gives minus one over t plus one squared; integrating the derivative of the integrand, x to the t times log x, gives the same numbers. <bookmark mark='d'/> A derivative is a limit, so this is one more interchange of limits, made legal by the uniform continuity of Part 3. It's the swap Part 4 adds to the ledger.",
+   "zh": "<bookmark mark='a'/>成功的那次交换，是积分号下求导，鲁丁9.42：如果φ和它关于t的偏导数在一个闭矩形上连续，<bookmark mark='p'/>那么积分的导数就等于导数的积分。两条相邻曲线之间面积的变化，是高度变化的积分；除以Δt再让它趋于0，恰好就是这次交换。<bookmark mark='b'/>拿x的t次方从0到1的积分来试试，它等于t加1分之1。<bookmark mark='c'/>对答案求导，得到负的（t加1）的平方分之1；而把被积函数的导数，也就是x的t次方乘log x，积分出来，得到的是同样的数。<bookmark mark='d'/>导数是一个极限，所以这又是一次极限的交换，第3部分的一致连续性让它合法。这就是第4部分添进账本的那种交换。"
+  },
+  "58ff09b8e254": {
+   "scene": "FormsTour",
+   "en": "Chapter nine is a guided tour of Rudin's tenth chapter, integration in many variables. We'll state and picture the main results, and check them numerically, but we won't prove them.",
+   "zh": "第九章是对鲁丁书中第10章的一次导览，内容是多元积分。我们会陈述主要结果，把它们画出来，并用数值验证，但不做证明。"
+  },
+  "26b53f4b9448": {
+   "scene": "FormsTour",
+   "en": "<bookmark mark='a'/> First, the change of variables formula. When a one-to-one, continuously differentiable map T, with nonzero Jacobian, reshapes a region, integrals pick up a factor: the absolute value of the determinant of T's derivative. <bookmark mark='b'/> Here's why. Cut the region into small squares; each becomes, nearly, the parallelogram of the derivative, whose area is the determinant times the square's area. <bookmark mark='c'/> Computed for all sixty-four cells, the ratio of the true area to the determinant's prediction is one, to within a few millionths.",
+   "zh": "<bookmark mark='a'/>第一站，换元公式。当一个一对一、连续可微、雅可比行列式不为0的映射T改变一个区域的形状时，积分要多乘一个因子：T的导数的行列式的绝对值。<bookmark mark='b'/>原因是这样的。把区域切成小正方形；每个小正方形差不多都变成导数对应的平行四边形，它的面积是行列式乘以小正方形的面积。<bookmark mark='c'/>对全部64个小格计算，真实面积与行列式预测值之比都是1，误差在百万分之几以内。"
+  },
+  "e9b4545c53fc": {
+   "scene": "FormsTour",
+   "en": "<bookmark mark='a'/> Second, partitions of unity: continuous bumps, each living inside one small piece of a cover, that add up to exactly one on a compact set. Smooth ones exist too. <bookmark mark='b'/> They let us cut an integral into local pieces, do each piece in convenient coordinates, and add the results.",
+   "zh": "<bookmark mark='a'/>第二站，单位分解：一组连续的鼓包函数，每个都待在覆盖的某一小块里，在紧集上加起来恰好等于1。光滑的单位分解也存在。<bookmark mark='b'/>有了它，我们就能把一个积分切成局部的小块，每一块用方便的坐标来算，再把结果加起来。"
+  },
+  "5016c11f3642": {
+   "scene": "FormsTour",
+   "en": "<bookmark mark='a'/> The summit of the chapter is Stokes' theorem: the integral of a form over the boundary of a region equals the integral of its exterior derivative over the region. <bookmark mark='b'/> Green's theorem, the divergence theorem and the classical Stokes theorem are all special cases. <bookmark mark='c'/> In the plane, with the right form, it says that the area of a region is a line integral around its edge. <bookmark mark='d'/> Walk once around the loop of the folium from chapter seven, and the line integral gives its area: exactly three halves.",
+   "zh": "<bookmark mark='a'/>这一章的顶峰是斯托克斯定理：一个微分形式在区域边界上的积分，等于它的外微分在区域上的积分。<bookmark mark='b'/>格林定理、散度定理和经典的斯托克斯公式，全都是它的特例。<bookmark mark='c'/>在平面上，选对了微分形式，它说的就是：一个区域的面积，等于沿着它边缘的一个线积分。<bookmark mark='d'/>沿着第七章里叶形线的那个圈走一周，线积分给出它的面积：恰好是二分之三。"
+  },
+  "49b069508033": {
+   "scene": "FormsTour",
+   "en": "<bookmark mark='a'/> Last stop: a form with zero exterior derivative, a closed form, need not be the derivative of a function, an exact form. The classic example is the angle form in the plane with the origin removed. <bookmark mark='b'/> A loop that misses the hole gives zero. <bookmark mark='c'/> A loop around the hole gives two pi, which no exact form could: the angle can't be defined continuously all the way around. <bookmark mark='d'/> On a convex set this can't happen, which is Poincaré's lemma. Holes are detected by integrals: the beginning of topology, and a preview of Part 7's winding numbers.",
+   "zh": "<bookmark mark='a'/>最后一站：外微分为0的形式，也就是闭形式，不一定是某个函数的微分，也就是恰当形式。经典的例子，是去掉原点的平面上的角形式。<bookmark mark='b'/>不绕着洞的圈，积分是0。<bookmark mark='c'/>绕着洞的圈，积分是2π，这是任何恰当形式都做不到的：角度没法绕一整圈都连续地定义下去。<bookmark mark='d'/>在凸集上，这种事不会发生，这就是庞加莱引理。洞可以用积分探测出来：这是拓扑学的开端，也是第7部分环绕数的预告。"
+  },
+  "c6be97bc8cab": {
+   "scene": "Outro",
+   "en": "Let's take stock. Linear maps have a norm, the largest stretch, and the invertible ones form an open set. The derivative is the linear map you see when you zoom in, and continuous partial derivatives always make one. The contraction principle solves equations by iteration in any complete space: differential equations in the space of continuous functions, and the inverse and implicit function theorems. Mixed partial derivatives commute when they're continuous, and derivatives pass through integrals. And chapter ten's tour ended at Stokes' theorem, where integrals detect holes.",
+   "zh": "我们来盘点一下。线性映射有范数，也就是最大的拉伸，而可逆的线性映射构成一个开集。导数，就是放大之后看到的那个线性映射，而连续的偏导数总能给出导数。压缩映射原理在任何完备空间里都能用迭代解方程：连续函数空间里的微分方程，还有反函数定理和隐函数定理。混合偏导数在连续时可以交换次序，导数也能穿过积分。而第10章的导览止于斯托克斯定理，在那里，积分能探测出洞。"
+  },
+  "0fe178416adb": {
+   "scene": "Outro",
+   "en": "The ledger's fourth row. <bookmark mark='a'/> The spaces: R n, and the continuous functions again. <bookmark mark='c2'/> Completeness now pays off as fixed points of contractions. <bookmark mark='c3'/> Compact sets are the same as before. <bookmark mark='c4'/> The new swap: a derivative may pass through an integral when everything is continuous on a closed box. <bookmark mark='c5'/> And Fourier's question hasn't moved; it waits for a better integral.",
+   "zh": "账本的第四行。<bookmark mark='a'/>空间：n维空间，以及再次登场的连续函数。<bookmark mark='c2'/>完备性如今以压缩映射的不动点的形式带来回报。<bookmark mark='c3'/>紧集和以前一样。<bookmark mark='c4'/>新的交换：当一切都在一个闭的长方体上连续时，导数可以穿过积分。<bookmark mark='c5'/>而傅里叶的问题还在原地，它在等一个更好的积分。"
+  },
+  "a157da12f19d": {
+   "scene": "Outro",
+   "en": "Next time, in Part 5, measure, and Lebesgue's integral. <bookmark mark='a'/> Raise cosine of m factorial pi x to a higher and higher even power, then let m grow. <bookmark mark='b'/> The functions are continuous, but in the limit they become Dirichlet's function: one at the rationals, zero elsewhere, which Part 3 showed has no Riemann integral. <bookmark mark='c'/> Lebesgue's integral handles it, and under it, limits pass through integrals without any uniformity at all.",
+   "zh": "下一次，在第5部分：测度，以及勒贝格积分。<bookmark mark='a'/>把cos（m的阶乘乘π乘x）升到越来越高的偶数次幂，然后让m增大。<bookmark mark='b'/>这些函数都是连续的，可在极限下，它们变成了狄利克雷函数：在有理数处为1，在其他地方为0，第3部分已经说明它没有黎曼积分。<bookmark mark='c'/>勒贝格积分能处理它，而在勒贝格积分之下，极限可以穿过积分，根本不需要任何一致性。"
+  },
+  "aa190953411a": {
+   "scene": "Outro",
+   "en": "This part followed chapter nine of Rudin's Principles of Mathematical Analysis, with a tour of chapter ten. Thanks for watching, and see you in Part 5.",
+   "zh": "这一部分对应鲁丁《数学分析原理》的第9章，外加第10章的导览。感谢收看，我们第5部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 4, Calculus in Many Dimensions",
+ "chapters_en": {
+  "Hook": "Newton's method, and the contraction behind it",
+  "LinearMaps": "1. Linear maps and their norms",
+  "Derivative": "2. The derivative is a linear map",
+  "Partials": "3. Partial derivatives are not enough",
+  "Contraction": "4. The contraction principle",
+  "Picard": "5. Picard: differential equations in C[a, b]",
+  "InverseFunction": "6. The inverse function theorem",
+  "ImplicitFunction": "7. The implicit function theorem",
+  "HigherOrder": "8. Mixed partials, and differentiating under the integral",
+  "FormsTour": "9. A tour of integration in many variables",
+  "Outro": "The fourth row of the ledger"
+ }
+}
