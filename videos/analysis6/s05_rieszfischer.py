@@ -185,7 +185,7 @@ class RieszFischer(VoiceoverScene):
     def dense(self):
         d = load("ramps")
         ns = d["ns"]
-        ax = plain_axes([0, 1, 0.25], [-0.6, 1.6, 0.5], 5.6, 3.6).move_to([-3.2, -0.75, 0])
+        ax = plain_axes([0, 1, 0.25], [-0.5, 1.6, 0.5], 5.6, 3.6).move_to([-3.2, -0.75, 0])  # ticks at -0.5, 0, 0.5, ...
         x = np.linspace(0, 1, 2001)
         step = (x > 0.5).astype(float)
         st = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=3),
