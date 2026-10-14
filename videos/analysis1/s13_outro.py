@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import saw_axes, saw_graph, partial_curve
+from videos.analysis1.common import partial_curve, polyline, saw_axes, saw_graph
 
 
 class Outro(VoiceoverScene):
@@ -72,6 +72,35 @@ class Outro(VoiceoverScene):
         rearr = MathTex(r"1 - \tfrac12 + \tfrac13 - \tfrac14 + \cdots = \ln 2", font_size=40)
         rearr2 = label(r"\ldots and, rearranged, $= \pi$. \ Or $-1$. \ Or anything.", font_size=32, color=C.EPS)
         bottom = VGroup(rearr, rearr2).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
+        # the alternating harmonic series, in order and rearranged (positive terms until the sum passes pi,
+        # then negative terms until it drops below, and so on): the same terms, two different sums
+        N = 250
+        alt = np.cumsum([(-1) ** (k + 1) / k for k in range(1, N + 1)])
+        pos, neg, s_, rear, used = 1, 2, 0.0, [], set()
+        for _ in range(N):
+            if s_ <= np.pi:
+                s_ += 1 / pos
+                used.add(pos)
+                pos += 2
+            else:
+                s_ -= 1 / neg
+                used.add(neg)
+                neg += 2
+            rear.append(s_)
+        rear = np.array(rear)
+        assert len(used) == N  # each term used once
+        assert abs(alt[-1] - np.log(2)) < 1 / (N + 1) and abs(rear[-1] - np.pi) < 0.05
+        pax = Axes(x_range=[0, N, 50], y_range=[0, 3.5, 1], x_length=9.0, y_length=3.2, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(UP * 0.6)
+        ns = np.arange(1, N + 1)
+        alt_c = polyline(pax, ns, alt, color=C.SEQ, stroke_width=2.5)
+        rear_c = polyline(pax, ns, rear, color=C.APPROX, stroke_width=2.5)
+        ln2 = VGroup(DashedLine(pax.c2p(0, np.log(2)), pax.c2p(N, np.log(2)), color=C.SEQ, stroke_width=1.5),
+                     MathTex(r"\ln 2", font_size=26, color=C.SEQ).next_to(pax.c2p(N, np.log(2)), RIGHT, buff=0.15))
+        pi_l = VGroup(DashedLine(pax.c2p(0, np.pi), pax.c2p(N, np.pi), color=C.APPROX, stroke_width=1.5),
+                      MathTex(r"\pi", font_size=28, color=C.APPROX).next_to(pax.c2p(N, np.pi), RIGHT, buff=0.15))
+        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(pax.c2p(N, 0), RIGHT, buff=0.15)
+        s_l = label(r"partial sums", font_size=22, color=GREY_B).next_to(pax.c2p(0, 3.5), RIGHT, buff=0.15)
         with self.voiceover(
             "Next time, in Part 2, we put the new real numbers to work: <bookmark mark='a'/> sequences, series, "
             "continuity and the derivative, the limits behind Fourier's sum. <bookmark mark='b'/> It opens with a shock: "
@@ -82,8 +111,9 @@ class Outro(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(S), run_time=1.6)
             vo.wait_until("b")
-            self.play(Write(rearr))
-            self.play(FadeIn(rearr2))
+            self.play(FadeOut(VGroup(ax, saw, S)), Create(pax), FadeIn(n_l), FadeIn(s_l), run_time=0.8)
+            self.play(Write(rearr), Create(alt_c), FadeIn(ln2), run_time=1.6)
+            self.play(FadeIn(rearr2), Create(rear_c), FadeIn(pi_l), run_time=2.0)
         self.wait(0.5)
         self.clear_scene()
 

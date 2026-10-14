@@ -48,14 +48,27 @@ class WhoIsIntegrable(VoiceoverScene):
         t = np.linspace(0, 3.0, 30001)
         lip = np.abs(np.diff(g(t))).max() / (t[1] - t[0])
         assert lip * delta < eta
-        e = np.linspace(0, 3.0, int(np.ceil(3.0 / delta)) + 1)
+        e = np.linspace(0, 3.0, int(np.ceil(3.0 / delta)) + 2)  # 16 pieces of width 0.1875 < delta
         M, m = [], []
         for a, b in zip(e[:-1], e[1:]):
             v = g(np.linspace(a, b, 200))
             M.append(v.max())
             m.append(v.min())
         M, m = np.array(M), np.array(m)
-        assert np.all(M - m < eta)
+        assert np.all(M - m < eta) and np.all(np.diff(e) < delta)
+        # the picture of the two numbers: an eta-tall bar beside the tallest box (every box is shorter), and a
+        # delta-wide brace under the first piece (every piece is narrower)
+        k = int(np.argmax(M - m))
+        xb = e[k + 1]
+        eta_bar = VGroup(Line(ax.c2p(xb, m[k]) + RIGHT * 0.12, ax.c2p(xb, m[k] + eta) + RIGHT * 0.12, color=C.EPS,
+                              stroke_width=5),
+                         Line(ax.c2p(xb, m[k]) + RIGHT * 0.04, ax.c2p(xb, m[k]) + RIGHT * 0.2, color=C.EPS, stroke_width=3),
+                         Line(ax.c2p(xb, m[k] + eta) + RIGHT * 0.04, ax.c2p(xb, m[k] + eta) + RIGHT * 0.2, color=C.EPS,
+                              stroke_width=3))
+        eta_l = MathTex(r"\eta", font_size=30, color=C.EPS).next_to(eta_bar, RIGHT, buff=0.08)
+        assert M[k] - m[k] < eta
+        d_br = BraceBetweenPoints(ax.c2p(0, 0), ax.c2p(delta, 0), direction=DOWN, buff=0.08, color=C.DELTA)
+        d_l = MathTex(r"\delta", font_size=30, color=C.DELTA).next_to(d_br, DOWN, buff=0.06)
         boxes = VGroup()
         for a, b, hi, lo in zip(e[:-1], e[1:], M, m):
             p0, p1 = ax.c2p(a, lo), ax.c2p(b, hi)
@@ -83,6 +96,7 @@ class WhoIsIntegrable(VoiceoverScene):
             self.play(FadeIn(thm))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(bx) for bx in boxes], lag_ratio=0.12), FadeIn(side[0]), run_time=2.0)
+            self.play(GrowFromCenter(d_br), FadeIn(d_l), Create(eta_bar), FadeIn(eta_l))
             vo.wait_until("c")
             self.play(FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("d")
@@ -100,6 +114,12 @@ class WhoIsIntegrable(VoiceoverScene):
             xx = np.linspace(a, b - 1e-6, 50)
             segs.add(Line(ax.c2p(a, stair(np.array([a]))[0]), ax.c2p(b, stair(np.array([b - 1e-6]))[0]), color=C.FUNC,
                           stroke_width=4))
+        jdots = VGroup()
+        for c_ in cuts[1:-1]:
+            lo_, hi_ = float(stair(np.array([c_ - 1e-9]))[0]), float(stair(np.array([c_]))[0])
+            assert hi_ > lo_ + 0.1  # a jump; f(c) is the upper value (right-continuous)
+            jdots.add(Circle(radius=0.07, color=C.FUNC, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(ax.c2p(c_, lo_)),
+                      Dot(ax.c2p(c_, hi_), radius=0.075, color=C.FUNC))
         n = 12
         e = np.linspace(0, 3.0, n + 1)
         lo_v, hi_v = stair(e[:-1]), stair(e[1:] - 1e-9)
@@ -128,7 +148,7 @@ class WhoIsIntegrable(VoiceoverScene):
             "included. <bookmark mark='c'/> Slide the slivers to one side: they stack into a single column, one piece "
             "wide and as tall as the total rise. So U minus L is the total rise divided by n, and it goes to zero."
         ) as vo:
-            self.play(Create(ax), Create(segs))
+            self.play(Create(ax), Create(segs), FadeIn(jdots))
             vo.wait_until("a")
             self.play(FadeIn(thm))
             vo.wait_until("b")
@@ -142,8 +162,9 @@ class WhoIsIntegrable(VoiceoverScene):
     # ------------------------------------------------------------------
     def dirichlet(self):
         ax = plain_axes([0, 1, 0.25], [0, 1.25, 0.5], 9.0, 3.8).move_to([-0.6, -0.9, 0])
-        top_pts = VGroup(*[Dot(ax.c2p(v, 1), radius=0.018, color=C.RATIONAL) for v in np.linspace(0, 1, 400)])
-        bottom = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=C.FUNC, stroke_width=5)
+        top_pts = VGroup(*[Dot(ax.c2p(v, 1), radius=0.025, color=C.RATIONAL) for v in np.linspace(0, 1, 400)])
+        top_pts.set_z_index(3)
+        bottom = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=C.FUNC, stroke_width=6).set_z_index(3)
         top_l = MathTex(r"1 \text{ on } \Q", font_size=28, color=C.RATIONAL).next_to(ax.c2p(1, 1), RIGHT, buff=0.15)
         bot_l = MathTex(r"0 \text{ off } \Q", font_size=28, color=C.FUNC).next_to(ax.c2p(1, 0), RIGHT, buff=0.15)
         e = np.linspace(0, 1, 9)
@@ -154,8 +175,8 @@ class WhoIsIntegrable(VoiceoverScene):
         res = MathTex(r"U(P, f) = 1, \quad L(P, f) = 0 \quad \text{for every } P", font_size=34, color=C.PATHOLOGY)
         res.next_to(ax, DOWN, buff=0.35)
         card = museum_card(r"Dirichlet's function", r"Dirichlet, 1829", r"Riemann integrability",
-                           r"Rudin, Example 4.27 and Exercise 6.4",
-                           width=4.0).scale(0.85).to_corner(UR, buff=0.3).shift(DOWN * 1.3)
+                           r"Rudin, Example 4.27 and Exercise 6.4", width=4.4)
+        card.to_edge(RIGHT, buff=0.4).set_y(1.6)
         with self.voiceover(
             "Now the function this integral can't handle. <bookmark mark='a'/> Let f be one at every rational and "
             "zero at every irrational. <bookmark mark='b'/> Every piece of every partition contains both kinds of "
@@ -185,6 +206,12 @@ class WhoIsIntegrable(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.012 + 0.035 * b, color=C.RATIONAL) for a, b in pts])
         e = np.linspace(0, 1, 17)
         up = rects(ax, e, 1.0 / q16, C.UPPER_SUM, opacity=0.35)
+        # finer drawn partitions (2^6, 2^8 pieces): heights 1/q_min, their sums equal the table's U
+        ups = {4: up}
+        for k in (6, 8):
+            qk = smallest_denominators(2**k)
+            assert abs(float(np.sum(1.0 / qk)) / 2**k - U[int(np.nonzero(ks == k)[0][0])]) < 1e-12
+            ups[k] = rects(ax, np.linspace(0, 1, 2**k + 1), 1.0 / qk, C.UPPER_SUM, opacity=0.35, stroke=0 if k > 6 else 0.6)
         head = VGroup(label(r"Thomae's function \ (Part 2): \ $f(p/q) = 1/q$, \ $0$ off $\Q$", font_size=30),
                       label(r"every lower sum is $0$; \ the upper sums on $2^k$ equal pieces:", font_size=26,
                             color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
@@ -193,6 +220,8 @@ class WhoIsIntegrable(VoiceoverScene):
             i = int(np.nonzero(ks == k)[0][0])
             tab.add(MathTex(rf"2^{{{k}}}:", rf"\ U = {U[i]:.4f}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, -0.3, 0])
+        regrid(tab, gap=0.2)
+        drawn = {4: 2, 6: 3, 8: 4}  # table rows whose partition is drawn
         concl = label(r"$U \to 0 = L$: \ integrable, \ $\int_0^1 f = 0$, \ though discontinuous at every rational",
                       font_size=26, color=C.EPS).to_edge(DOWN, buff=0.2)
         assert U[-1] < 0.01 and q16[7] == 2
@@ -212,7 +241,12 @@ class WhoIsIntegrable(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in up], lag_ratio=0.06))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r) for r in tab], lag_ratio=0.25), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in tab[:3]], lag_ratio=0.25), run_time=1.2)
+            self.play(tab[drawn[4]].animate.set_color(C.UPPER_SUM), run_time=0.4)
+            for k_prev, k in ((4, 6), (6, 8)):
+                self.play(FadeOut(ups[k_prev]), FadeIn(ups[k]), tab[drawn[k_prev]].animate.set_color(WHITE),
+                          FadeIn(tab[drawn[k]].set_color(C.UPPER_SUM)), run_time=1.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in tab[5:]], lag_ratio=0.3), run_time=1.2)
             vo.wait_until("d")
             self.play(FadeIn(concl))
         self.wait(0.4)

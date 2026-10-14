@@ -36,19 +36,21 @@ class Hook(VoiceoverScene):
         for m in range(1, M + 1):
             for n in range(1, M + 1):
                 v = m / (m + n)
-                sq = Square(side_length=cs * 0.94, stroke_width=0, fill_opacity=0.85,
-                            fill_color=interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), v))
+                # a neutral value ramp (dark near 0, light near 1); the text flips to stay legible
+                sq = Square(side_length=cs * 0.94, stroke_width=0, fill_opacity=0.9,
+                            fill_color=interpolate_color(ManimColor("#2B3442"), ManimColor(GREY_A), v))
                 sq.move_to(o + np.array([(n - 1) * cs, -(m - 1) * cs, 0]))
-                cells.add(VGroup(sq, MathTex(rf"\tfrac{{{m}}}{{{m + n}}}", font_size=20, color=BLACK).move_to(sq)))
+                cells.add(VGroup(sq, MathTex(rf"\frac{{{m}}}{{{m + n}}}", font_size=24,
+                                             color=BLACK if v > 0.45 else WHITE).move_to(sq)))
         n_l = MathTex(r"n \to", font_size=28, color=GREY_B).next_to(cells[0], UP, buff=0.2).align_to(cells[0], LEFT)
         m_l = MathTex(r"m \downarrow", font_size=28, color=GREY_B).next_to(cells[0], LEFT, buff=0.2)
         rows_to = VGroup(*[MathTex(r"\to 0", font_size=24, color=C.SEQ).next_to(cells[m * M + M - 1], RIGHT, buff=0.15)
                            for m in range(M)])
-        cols_to = VGroup(*[MathTex(r"\downarrow\!1", font_size=24, color=C.EPS).next_to(cells[(M - 1) * M + n], DOWN,
-                                                                                        buff=0.12) for n in range(M)])
+        cols_to = VGroup(*[MathTex(r"\downarrow\!1", font_size=24, color=C.LIMIT).next_to(cells[(M - 1) * M + n], DOWN,
+                                                                                          buff=0.12) for n in range(M)])
         main = VGroup(MathTex(r"s_{mn} = \frac{m}{m + n}", font_size=36),
                       MathTex(r"\lim_{m\to\infty}\,\lim_{n\to\infty} s_{mn} = 0", font_size=34, color=C.SEQ),
-                      MathTex(r"\lim_{n\to\infty}\,\lim_{m\to\infty} s_{mn} = 1", font_size=34, color=C.EPS),
+                      MathTex(r"\lim_{n\to\infty}\,\lim_{m\to\infty} s_{mn} = 1", font_size=34, color=C.LIMIT),
                       label(r"Rudin 7.1--7.2: \ when may two limits be swapped?", font_size=28, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([3.3, 0.5, 0])
         with self.voiceover(
@@ -91,7 +93,13 @@ class Hook(VoiceoverScene):
                     label(r"continuous $f_n$, discontinuous $f$", font_size=22, color=C.PATHOLOGY)
                     ).arrange(DOWN, buff=0.12).next_to(ax1, DOWN, buff=0.3)
         # 2. n^2 x (1 - x^2)^n: the integral lost (Rudin 7.6)
-        ax2 = plain_axes([0, 1, 0.5], [0, 12, 4], W, H).move_to([xs[1], y0, 0])
+        # the bump's peak n^2 x (1 - x^2)^n is at x = 1/sqrt(2n + 1); up to n = 10 it stays under 15 (no clipping)
+        peak = lambda n: n * n / np.sqrt(2 * n + 1) * (2 * n / (2 * n + 1)) ** n  # noqa: E731
+        xp = np.linspace(0, 1, 200001)
+        for n_ in (1, 5, 9, 10):
+            assert abs((n_ * n_ * xp * (1 - xp * xp) ** n_).max() - peak(n_)) < 1e-6
+        assert 13 < peak(10) < 14.5
+        ax2 = plain_axes([0, 1, 0.5], [0, 15, 5], W, H).move_to([xs[1], y0, 0])
         g2 = always_redraw(lambda: runs(ax2, x, n2.get_value() ** 2 * x * (1 - x * x) ** n2.get_value(), C.FUNC, 3.5))
         lim2 = Line(ax2.c2p(0, 0), ax2.c2p(1, 0), color=WHITE, stroke_width=3)
         t2 = MathTex(r"f_n(x) = n^2 x (1 - x^2)^n", font_size=30, color=C.FUNC).next_to(ax2, UP, buff=0.2)
@@ -108,12 +116,20 @@ class Hook(VoiceoverScene):
         lim3 = Line(ax3.c2p(0, 0), ax3.c2p(2 * np.pi, 0), color=WHITE, stroke_width=2)
         t3 = MathTex(r"f_n(x) = \frac{\sin nx}{\sqrt n}", font_size=30, color=C.FUNC).next_to(ax3, UP, buff=0.12)
         der3 = always_redraw(lambda: MathTex(
-            rf"\sup|f_n| = {1 / np.sqrt(round(n3.get_value())):.3f}, \quad f_n'(0) = \sqrt n = {np.sqrt(round(n3.get_value())):.2f}",
-            font_size=24).next_to(ax3, DOWN, buff=0.3))
+            rf"\sup|f_n| = {1 / np.sqrt(round(n3.get_value())):.3f}, \quad", rf"f_n'(0) = \sqrt n = {np.sqrt(round(n3.get_value())):.2f}",
+            font_size=24).set_color_by_tex("f_n'", C.EPS).next_to(ax3, DOWN, buff=0.3))
+        # the tangent at 0, of slope f_n'(0) = sqrt n (drawn up to height 1.05, inside the axes): it steepens
+        tan3 = always_redraw(lambda: Line(ax3.c2p(0, 0), ax3.c2p(1.05 / np.sqrt(round(n3.get_value())), 1.05),
+                                          color=C.EPS, stroke_width=3.5))
+        assert abs(np.gradient(np.sin(24 * x3) / np.sqrt(24), x3)[0] - np.sqrt(24)) < 0.05
         v3 = label(r"$f_n \to 0$ uniformly, \ $f_n'$ does not converge", font_size=22, color=C.PATHOLOGY).next_to(
             ax3, DOWN, buff=1.05)
-        nls = [always_redraw(lambda t=t, tt=tt: MathTex(rf"n = {round(t.get_value())}", font_size=28, color=C.FUNC).next_to(
-            tt, UP, buff=0.1)) for t, tt in ((n1, t1), (n2, t2), (n3, t3))]
+        # the three panels on common baselines: n-labels above the tallest title, red verdicts on one row
+        y_n = max(t_.get_top()[1] for t_ in (t1, t2, t3)) + 0.28
+        nls = [always_redraw(lambda t=t, tt=tt: MathTex(rf"n = {round(t.get_value())}", font_size=28, color=C.FUNC).move_to(
+            [tt.get_x(), y_n, 0])) for t, tt in ((n1, t1), (n2, t2), (n3, t3))]
+        v2.set_y(v1[2].get_y())
+        v3.set_y(v1[2].get_y())
         assert abs(d["bump_int"][-1] - 89**2 / 180) < 1e-3 and abs(d["sup_s"][-1] - 1 / np.sqrt(89)) < 1e-12
         with self.voiceover(
             "Here are three sequences of functions where swapping fails. <bookmark mark='a'/> First, x to the n on "
@@ -139,10 +155,10 @@ class Hook(VoiceoverScene):
             self.play(n2.animate.set_value(10), run_time=5.0, rate_func=linear)
             self.play(FadeIn(v2))
             vo.wait_until("c")
-            self.play(Create(ax3), FadeIn(t3), FadeIn(lim3), FadeIn(g3), FadeIn(der3), FadeIn(nls[2]))
+            self.play(Create(ax3), FadeIn(t3), FadeIn(lim3), FadeIn(g3), FadeIn(der3), FadeIn(nls[2]), Create(tan3))
             self.play(n3.animate.set_value(24), run_time=5.0, rate_func=linear)
             self.play(FadeIn(v3))
-        for m in (g1, g2, g3, int2, der3, *nls):
+        for m in (g1, g2, g3, int2, der3, tan3, *nls):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -152,11 +168,12 @@ class Hook(VoiceoverScene):
         ax = plain_axes([-np.pi, 3 * np.pi, np.pi], [-2.0, 2.0, 1], 10.5, 3.6).move_to([0, -0.9, 0])
         x = np.linspace(-np.pi, 3 * np.pi, 2400)
         saw_g = VGroup(*[Line(ax.c2p(a + 1e-3, saw(np.array([a + 1e-3]))[0]), ax.c2p(b - 1e-3, saw(np.array([b - 1e-3]))[0]),
-                              color=C.FUNC, stroke_width=3) for a, b in ((-np.pi, 0), (0, 2 * np.pi), (2 * np.pi, 3 * np.pi))])
-        cur = polyline(ax, x, saw_partial(x, 3), color=C.APPROX, stroke_width=3)
+                              color=WHITE, stroke_width=4) for a, b in ((-np.pi, 0), (0, 2 * np.pi), (2 * np.pi, 3 * np.pi))])
+        saw_g.set_z_index(2)
+        cur = polyline(ax, x, saw_partial(x, 3), color=C.APPROX, stroke_width=2.5)
         swap = MathTex(r"\int \sum_{k=1}^{\infty} \frac{\sin kx}{k}\,dx", r"\;\overset{?}{=}\;",
                        r"\sum_{k=1}^{\infty} \int \frac{\sin kx}{k}\,dx", font_size=40).to_edge(UP, buff=0.5)
-        swap[0].set_color(C.FUNC)
+        swap[0].set_color(WHITE)
         swap[2].set_color(C.APPROX)
         note_ = label(r"a Fourier series is a limit, so integrating it term by term is a swap of two limits",
                       font_size=28, color=C.EPS).next_to(swap, DOWN, buff=0.3)
@@ -170,7 +187,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(cur))
             for N in (8, 30):
-                self.play(Transform(cur, polyline(ax, x, saw_partial(x, N), color=C.APPROX, stroke_width=3)), run_time=0.9)
+                self.play(Transform(cur, polyline(ax, x, saw_partial(x, N), color=C.APPROX, stroke_width=2.5)), run_time=0.9)
             vo.wait_until("b")
             self.play(Write(swap))
             self.play(FadeIn(note_))

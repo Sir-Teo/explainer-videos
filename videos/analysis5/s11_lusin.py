@@ -24,15 +24,15 @@ class NearlyContinuous(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def principles(self):
-        head = label(r"Littlewood's three principles \ (1944)", font_size=34).to_edge(UP, buff=0.5)
+        head = label(r"Littlewood's three principles \ (1944)", font_size=34).to_edge(UP, buff=0.3)
         rows = VGroup(
             label(r"1. \ every measurable set is nearly a finite union of intervals", font_size=27),
             label(r"2. \ every measurable function is nearly continuous \ (Lusin)", font_size=27, color=C.EPS),
-            label(r"3. \ every convergent sequence is nearly uniformly convergent \ (Egorov, chapter 7)", font_size=27),
+            label(r"3. \ every convergent sequence is nearly uniform \ (Egorov, chapter 7)", font_size=27),
         )
-        for r_ in rows:
-            if r_.width > 9.6:
-                r_.width = 9.6
+        for r_ in rows:  # the column starts at x = -2.65: rows end by 6.35
+            if r_.width > 9.0:
+                r_.width = 9.0
         ys = [1.55, -0.2, -1.95]
         for r_, y in zip(rows, ys):
             r_.next_to([-2.65, y, 0], RIGHT, buff=0)
@@ -88,33 +88,38 @@ class NearlyContinuous(VoiceoverScene):
         # the step function, drawn as flat pieces
         idx = np.nonzero(np.diff(f) != 0)[0]
         cuts = np.concatenate([[0], idx + 1, [len(x)]])
-        fsteps = VGroup(*[Line(ax.c2p(x[a], f[a]), ax.c2p(x[b - 1], f[a]), color=C.FUNC, stroke_width=3)
-                          for a, b in zip(cuts[:-1], cuts[1:])])
-        gg = polyline(ax, x, g, color=C.APPROX, stroke_width=2)
+        # f wide and translucent under the thin g, so both stay visible where they coincide
+        fsteps = VGroup(*[Line(ax.c2p(x[a], f[a]), ax.c2p(x[b - 1], f[a]), color=C.FUNC, stroke_width=5,
+                               stroke_opacity=0.6) for a, b in zip(cuts[:-1], cuts[1:])])
+        gg = polyline(ax, x, g, color=C.APPROX, stroke_width=1.8)
         # the set {f != g} at its true width (each ramp is 2 delta = 0.0005 wide: hairlines, 5% of the line in all)
         badset = interval_band(ax, [(t - delta, t + delta) for t in jumps], ax.c2p(0, 0)[1] - 0.3, C.PATHOLOGY,
                                height=0.22, opacity=1.0, min_width=0.0)
-        bl = MathTex(r"\{f \ne g\}", font_size=26, color=C.PATHOLOGY).next_to(badset, LEFT, buff=0.15)
+        bl = MathTex(r"\{f \ne g\}", font_size=26, color=C.PATHOLOGY).next_to(badset, DOWN, buff=0.1).align_to(badset,
+                                                                                                             LEFT)
         # zoom on one isolated jump, far enough in to see the ramp
         k0 = int(np.argmin(np.abs(jumps - 0.749)))
         t0 = float(jumps[k0])
         lo, hi = t0 - 0.0015, t0 + 0.0015
         assert np.sum((jumps > lo) & (jumps < hi)) == 1 and abs(d["vals"][k0 + 1] - d["vals"][k0]) > 0.8
-        inset, decor = magnifier(ax, (lo, hi), (0.0, 1.05), center=[5.0, 1.3, 0], width=2.6, height=2.0, color=GREY_B)
+        inset, decor = magnifier(ax, (lo, hi), (0.0, 1.05), center=[5.05, 1.0, 0], width=2.6, height=2.0, color=GREY_B)
         m = (x >= lo) & (x <= hi)
         zf = VGroup(*[Line(inset.c2p(max(x[a], lo), f[a]), inset.c2p(min(x[b - 1], hi), f[a]), color=C.FUNC,
-                           stroke_width=3) for a, b in zip(cuts[:-1], cuts[1:]) if x[b - 1] >= lo and x[a] <= hi])
+                           stroke_width=5, stroke_opacity=0.6) for a, b in zip(cuts[:-1], cuts[1:])
+                      if x[b - 1] >= lo and x[a] <= hi])
         zg = polyline(inset, x[m], g[m], color=C.APPROX, stroke_width=3)
         zl = MathTex(rf"\text{{ramp width }} 2\delta = {2 * delta:.4f}", font_size=22, color=C.APPROX).next_to(
             decor.frame, DOWN, buff=0.1)
-        head = VGroup(label(r"\textbf{Lusin's theorem} \ (RCA 2.24): \ measurable $f$, \ $\varepsilon > 0$ "
-                            r"$\Rightarrow$ continuous $g$ with $\mu\{f \ne g\} < \varepsilon$", font_size=28),
-                      ).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"Lusin's theorem", font_size=34),
+                      label(r"\textbf{RCA 2.24} \ measurable $f$, \ $\varepsilon > 0$ $\Rightarrow$ continuous $g$ with "
+                            r"$\mu\{f \ne g\} < \varepsilon$", font_size=26),
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        assert decor.get_top()[1] < head.get_bottom()[1] - 0.15
         out = VGroup(MathTex(rf"\text{{a 100-step }} f: \ \ \mu\{{f \ne g\}} = {bad:.4f} < \varepsilon = {eps}",
                              font_size=30, color=C.PATHOLOGY),
                      label(r"$g$ replaces each jump by a steep ramp; \ $\sup|g| \le \sup|f|$", font_size=24,
-                           color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.25)
-        assert bad < eps
+                           color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+        assert bad < eps and bl.get_bottom()[1] > out.get_top()[1] + 0.05
         with self.voiceover(
             "<bookmark mark='a'/> Lusin's theorem makes the second principle precise: a measurable function agrees "
             "with a continuous one except on a set of measure less than epsilon. <bookmark mark='b'/> Here f is a "
@@ -122,10 +127,11 @@ class NearlyContinuous(VoiceoverScene):
             "a steep ramp; zoom in on one. <bookmark mark='d'/> The two functions differ only on the little "
             "intervals around the jumps, of total measure just under a twentieth."
         ) as vo:
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), Create(fsteps), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeIn(head[1]))
             vo.wait_until("b")
-            self.play(Create(fsteps), run_time=2.0)
+            self.play(Indicate(fsteps, color=C.FUNC, scale_factor=1.0))
             vo.wait_until("c")
             self.play(Create(gg), run_time=1.5)
             self.play(FadeIn(decor), Create(zf), Create(zg), FadeIn(zl))
@@ -141,8 +147,7 @@ class NearlyContinuous(VoiceoverScene):
         x, f, g = d["x"], d["f"], d["g"]
         diff = np.abs(f - g)
         l1 = trap(diff, x)
-        head = label(r"A consequence for Part 6: \ $C_c$ is dense in $L^1$ \ (RCA 3.14)", font_size=32).to_edge(
-            UP, buff=0.35)
+        head = label(r"A consequence for Part 6: \ $C_c$ is dense in $L^1$", font_size=34).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 1, 0.25], [0, 0.5, 0.25], 6.6, 2.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-3.05, 0.55, 0])
@@ -153,8 +158,9 @@ class NearlyContinuous(VoiceoverScene):
         side = VGroup(MathTex(rf"\int_0^1 |f - g| = {l1:.5f}", font_size=36, color=C.EPS),
                       label(r"nonzero only on the ramps:", font_size=24, color=GREY_A),
                       label(r"a set of measure $< \varepsilon$, \ where $|f - g| \le 2 \sup|f|$", font_size=24,
-                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to([0.6, 0.6, 0], RIGHT,
-                                                                                               buff=0)
+                            color=GREY_A), note(r"(RCA 3.14)")).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        side.next_to([1.0, 0.55, 0], RIGHT, buff=0)  # clear of the plot's last tick number
+        assert side.get_right()[0] < 6.6
         card = VGroup(label(r"\textbf{Vitali--Carath\'eodory} \ (RCA 2.25), \ in one line:", font_size=28),
                       label(r"every real integrable $f$ has $u \le f \le v$, \ $u$ upper and $v$ lower semicontinuous,", font_size=26),
                       label(r"whose integrals differ by less than $\varepsilon$", font_size=26)).arrange(DOWN, buff=0.12)

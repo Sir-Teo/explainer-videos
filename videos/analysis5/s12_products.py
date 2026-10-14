@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis5.common import heatmap, load, plain_axes, polyline, square_axes
+from videos.analysis5.common import heatmap, level_runs, load, plain_axes, polyline, square_axes
 from videos.analysis5.compute import trap
 
 
@@ -53,26 +53,41 @@ class Products(VoiceoverScene):
         horz = inside.sum(axis=1) * dx
         Av, Ah = trap(vert, g), trap(horz, g)
         assert abs(Av - A) < 5e-3 and abs(Ah - A) < 5e-3
-        xT = ValueTracker(0.3)
+        xT, yT = ValueTracker(0.3), ValueTracker(0.3)
+
+        def section(runs_, horizontal, c0, color):
+            # the section's pieces (one or more intervals) as one VMobject, so the redraw keeps its family shape
+            a = np.array([r_[0] for r_ in runs_])
+            b = np.array([r_[1] for r_ in runs_])
+            P0 = np.array([ax.c2p(u, c0) if horizontal else ax.c2p(c0, u) for u in a])
+            P1 = np.array([ax.c2p(u, c0) if horizontal else ax.c2p(c0, u) for u in b])
+            m = VMobject(stroke_color=color, stroke_width=5)
+            m.set_points(segments_points(P0[:, 0], P0[:, 1], P1[:, 0], P1[:, 1]))
+            return m
 
         def vsec():
             x0 = xT.get_value()
-            col = inside[:, int(round(x0 / dx))]
-            ys = g[col]
-            if len(ys) == 0:
-                return VGroup()
-            return VGroup(Line(ax.c2p(x0, ys.min()), ax.c2p(x0, ys.max()), color=C.SEQ, stroke_width=5))
+            return section(level_runs(g, inside[:, int(round(x0 / dx))]), False, x0, C.SEQ)
 
-        vs = always_redraw(vsec)
+        def hsec():
+            y0 = yT.get_value()
+            return section(level_runs(g, inside[int(round(y0 / dx)), :]), True, y0, C.APPROX)
+
+        for t_ in np.linspace(0.3, 1.85, 32):  # every swept section meets the region
+            assert inside[:, int(round(t_ / dx))].any() and inside[int(round(t_ / dx)), :].any()
+        vs, hs = always_redraw(vsec), always_redraw(hsec)
         bx = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 2.0).move_to([3.2, 0.9, 0])
         vg = polyline(bx, g, vert, color=C.SEQ, stroke_width=3)
         cx_ = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 2.0).move_to([3.2, -2.1, 0])
         hg = polyline(cx_, g, horz, color=C.APPROX, stroke_width=3)
         vl = MathTex(rf"\int \lambda(Q_x)\,dx = {Av:.4f}", font_size=28, color=C.SEQ).next_to(bx, UP, buff=0.08)
         hl = MathTex(rf"\int \mu(Q^y)\,dy = {Ah:.4f}", font_size=28, color=C.APPROX).next_to(cx_, UP, buff=0.08)
-        head = VGroup(label(r"\textbf{RCA 8.6} \ measure a set in the plane by its slices", font_size=30),
+        head = VGroup(label(r"Measure a set in the plane by its slices", font_size=34),
                       MathTex(rf"(\mu \times \lambda)(Q) = \int \lambda(Q_x)\,d\mu(x) = \int \mu(Q^y)\,d\lambda(y) = "
-                              rf"{A:.4f}", font_size=30, color=C.MEASURE)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.2)
+                              rf"{A:.4f}", r"\quad \text{\small (RCA 8.6)}", font_size=30, color=C.MEASURE)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_B)
+        assert vl.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The product of two measures gives rectangles their area, and every measurable set "
             "in the plane can be measured by slices. <bookmark mark='b'/> Slide a vertical line across the region and "
@@ -87,20 +102,24 @@ class Products(VoiceoverScene):
             self.play(Create(bx), xT.animate.set_value(1.85), Create(vg), run_time=4.0, rate_func=linear)
             self.play(FadeIn(vl))
             vo.wait_until("c")
-            self.play(Create(cx_), Create(hg), run_time=2.0)
+            vs.clear_updaters()
+            self.play(FadeOut(vs), run_time=0.4)
+            self.add(hs)
+            self.play(Create(cx_), yT.animate.set_value(1.85), Create(hg), run_time=3.0, rate_func=linear)
             self.play(FadeIn(hl))
-        vs.clear_updaters()
+        hs.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def theorem(self):
         thm = VGroup(
-            label(r"\textbf{RCA 8.8} \ (Fubini 1907, \ Tonelli 1909)", font_size=30),
-            label(r"$\mu, \lambda$ $\sigma$-finite; \ if $f \ge 0$ is measurable, \ or if $\int\!\!\int |f| < \infty$:", font_size=28),
+            label(r"Fubini (1907) and Tonelli (1909)", font_size=34),
+            label(r"\textbf{RCA 8.8} \ $\mu, \lambda$ $\sigma$-finite; \ if $f \ge 0$ is measurable, \ or if "
+                  r"$\int\!\!\int |f| < \infty$:", font_size=28),
             MathTex(r"\int_X \Big(\int_Y f\,d\lambda\Big) d\mu = \int_{X \times Y} f\,d(\mu \times \lambda) = "
                     r"\int_Y \Big(\int_X f\,d\mu\Big) d\lambda", font_size=34, color=C.EPS),
-        ).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.4)
+        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         pm = ProofMap([r"rectangles $A \times B$", r"all measurable sets \ (monotone classes)", r"simple functions",
                        r"all $f \ge 0$ \ (monotone convergence)"], font_size=22, width=3.0, buff=0.3)
         pm.next_to(thm, DOWN, buff=0.7)
@@ -155,6 +174,14 @@ class Products(VoiceoverScene):
                                    r"\textstyle\sum c_i \mathbf 1_{E_i}", r"f = \lim s_n \ge 0"))])
         assert caps.get_bottom()[1] > note_.get_top()[1] + 0.05 and frames_.get_top()[1] < pm.get_bottom()[1] - 0.1
         pics = [pic1, pic2, pic3, pic4]
+        # while the statement is read, its subject: a function f >= 0 on the square (the last rung's picture), swept by
+        # a vertical and a horizontal section, the two iterated integrals
+        sT = ValueTracker(0.0)
+        x3 = centers[3]
+        vsw = always_redraw(lambda: Line(U(x3, sT.get_value(), 0), U(x3, sT.get_value(), 1), color=WHITE,
+                                         stroke_width=3))
+        hsw = always_redraw(lambda: Line(U(x3, 0, sT.get_value()), U(x3, 1, sT.get_value()), color=WHITE,
+                                         stroke_width=3))
         with self.voiceover(
             "<bookmark mark='a'/> Fubini's theorem, with Tonelli's version, for sigma-finite measures: for a "
             "non-negative measurable function, "
@@ -166,18 +193,30 @@ class Products(VoiceoverScene):
             "<bookmark mark='c'/> The condition is not decoration."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm[0]), Create(frames_[3]), FadeIn(pic4))
+            self.play(FadeIn(thm[1:]))
+            sT.set_value(0.04)
+            self.add(vsw)
+            self.play(sT.animate.set_value(0.96), run_time=2.0, rate_func=linear)
+            self.remove(vsw)
+            sT.set_value(0.04)
+            self.add(hsw)
+            self.play(sT.animate.set_value(0.96), run_time=2.0, rate_func=linear)
+            vsw.clear_updaters()
+            hsw.clear_updaters()
+            self.play(FadeOut(hsw), run_time=0.4)
             vo.wait_until("b")
             self.play(FadeIn(pm))
             for k in range(4):
                 vo.wait_until(f"r{k + 1}")
-                anims = [*pm.light(k), Create(frames_[k]), FadeIn(caps[k])]
+                anims = [*pm.light(k), FadeIn(caps[k])]
                 if k == 1:
-                    anims += [Create(outline), LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.01)]
+                    anims += [Create(frames_[k]), Create(outline), LaggedStart(*[FadeIn(c_) for c_ in cells],
+                                                                                lag_ratio=0.01)]
                 elif k == 3:
-                    anims += [FadeIn(pic4)]
+                    anims += [Indicate(frames_[3], color=C.EPS, scale_factor=1.04)]
                 else:
-                    anims += [FadeIn(pics[k])]
+                    anims += [Create(frames_[k]), FadeIn(pics[k])]
                 self.play(*anims, run_time=1.2)
             self.play(*pm.done())
             vo.wait_until("c")
@@ -192,9 +231,10 @@ class Products(VoiceoverScene):
         S = 4.6
         ax = square_axes([0, 1, 0.25], [0, 1, 0.25], S).move_to([-3.4, -0.8, 0])
         img = heatmap(fub, (0.002, 1), (0.002, 1), S, S, -6, 6).move_to(ax.c2p(0.5, 0.5))
-        head = VGroup(MathTex(r"f(x, y) = \frac{x^2 - y^2}{(x^2 + y^2)^2} \ \text{ on } (0, 1)^2", font_size=34),
+        head = VGroup(label(r"A function whose two iterated integrals disagree", font_size=34),
+                      MathTex(r"f(x, y) = \frac{x^2 - y^2}{(x^2 + y^2)^2} \ \text{ on } (0, 1)^2", font_size=30),
                       label(r"orange: \ $f > 0$ \ (below the diagonal); \ blue: \ $f < 0$", font_size=22, color=GREY_A)
-                      ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+                      ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         xT, yT = ValueTracker(0.02), ValueTracker(0.02)
         vline = always_redraw(lambda: Line(ax.c2p(xT.get_value(), 0), ax.c2p(xT.get_value(), 1), color=WHITE,
                                            stroke_width=3))

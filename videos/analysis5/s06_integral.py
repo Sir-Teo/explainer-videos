@@ -139,8 +139,8 @@ class Integral(VoiceoverScene):
         g = always_redraw(fn)
         rd = always_redraw(lambda: MathTex(
             rf"n = {max(1, round(nT.get_value()))}: \ \int_0^1 f_n = 2 - \tfrac1n = {2 - 1 / max(1, round(nT.get_value())):.4f}",
-            font_size=30,
-            color=C.MEASURE).next_to(ax, DOWN, buff=0.15))
+            font_size=28,
+            color=C.MEASURE).next_to(ax, DOWN, buff=0.2))
         head = VGroup(label(r"Monotone convergence", font_size=34),
                       MathTex(r"0 \le f_1 \le f_2 \le \dots \to f \text{ pointwise} \ \Rightarrow \ ",
                               r"\int f_n\,d\mu \to \int f\,d\mu", r"\quad \text{\small (RCA 1.26)}", font_size=34)

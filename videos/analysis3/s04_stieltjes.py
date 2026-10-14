@@ -75,11 +75,11 @@ class Stieltjes(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def step(self):
-        ax = plain_axes([0, 1, 0.25], [0, 1.3, 0.5], 5.6, 3.2).move_to([-3.6, 0.3, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.3, 0.5], 5.6, 3.2).move_to([-3.6, 0.45, 0])
         fr = lambda t: 0.4 + 0.5 * t + 0.25 * np.sin(6 * t)  # noqa: E731
         gf = ax.plot(fr, x_range=[0, 1, 0.005], color=C.FUNC, stroke_width=4)
         s = 0.62
-        al_ax = plain_axes([0, 1, 0.25], [0, 1.2, 1], 5.6, 1.6).move_to([-3.6, -2.4, 0])
+        al_ax = plain_axes([0, 1, 0.25], [0, 1.2, 1], 5.6, 1.6).move_to([-3.6, -2.55, 0])
         step_g = VGroup(Line(al_ax.c2p(0, 0), al_ax.c2p(s, 0), color=C.EPS, stroke_width=4),
                         Line(al_ax.c2p(s, 1), al_ax.c2p(1, 1), color=C.EPS, stroke_width=4),
                         Circle(radius=0.06, color=C.EPS, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(al_ax.c2p(s, 1)),
@@ -88,12 +88,43 @@ class Stieltjes(VoiceoverScene):
         mark = VGroup(DashedLine(ax.c2p(s, 0), ax.c2p(s, fr(s)), color=C.EPS, stroke_width=2),
                       Dot(ax.c2p(s, fr(s)), radius=0.08, color=C.EPS),
                       MathTex(r"s", font_size=28).next_to(ax.c2p(s, 0), DOWN, buff=0.12))
+        # Rudin 6.16 drawn: steps c_n at s_n; the stems at s_n on f's plot are as thick as the steps are tall
+        cs_, ss_ = np.array([0.45, 0.3, 0.15, 0.1]), np.array([0.2, 0.45, 0.62, 0.85])
+        stair_sum = float(np.sum(cs_ * fr(ss_)))
+
+        def alpha_st(t):
+            return np.sum(cs_[None, :] * (np.asarray(t)[:, None] >= ss_[None, :]), axis=1)
+
+        # an independent check: upper and lower Riemann-Stieltjes sums on a fine partition squeeze the series
+        pe = np.linspace(0, 1, 20001)
+        da = np.diff(alpha_st(pe))
+        tt_ = np.linspace(0, 1, 400001)
+        ft_ = fr(tt_)
+        idx_ = np.minimum((tt_ * 20000).astype(int), 19999)
+        Mi, mi = np.full(20000, -np.inf), np.full(20000, np.inf)
+        np.maximum.at(Mi, idx_, ft_)
+        np.minimum.at(mi, idx_, ft_)
+        assert abs(float(np.sum(Mi * da)) - stair_sum) < 2e-3 and abs(float(np.sum(mi * da)) - stair_sum) < 2e-3
+        assert abs(cs_.sum() - 1) < 1e-12 and np.all(np.diff(ss_) > 0)
+        stair_pts = np.r_[0, ss_, 1]
+        stair_lv = np.r_[0, np.cumsum(cs_)]
+        stair_g = VGroup(*[Line(al_ax.c2p(a, v), al_ax.c2p(b, v), color=C.EPS, stroke_width=4)
+                           for a, b, v in zip(stair_pts[:-1], stair_pts[1:], stair_lv)])
+        for k_, (sx, lv) in enumerate(zip(ss_, stair_lv[1:])):
+            stair_g.add(Circle(radius=0.055, color=C.EPS, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(
+                al_ax.c2p(sx, stair_lv[k_])), Dot(al_ax.c2p(sx, lv), radius=0.055, color=C.EPS))
+        stems = VGroup(*[VGroup(Line(ax.c2p(sx, 0), ax.c2p(sx, fr(sx)), color=C.EPS, stroke_width=3 + 16 * c),
+                                Dot(ax.c2p(sx, fr(sx)), radius=0.06, color=C.EPS))
+                         for sx, c in zip(ss_, cs_)])
+        st_lab = MathTex(r"\alpha = \sum c_n I(x - s_n)", font_size=28, color=C.EPS).move_to(al_ax.c2p(0.05, 0.75),
+                                                                                           aligned_edge=LEFT)
         side = VGroup(
             label(r"\textbf{Rudin 6.15} \ a unit step at $s$, \ $f$ continuous at $s$:", font_size=28),
             MathTex(r"\int f\,d\alpha = f(s)", font_size=40, color=C.EPS),
             label(r"only the piece containing $s$ has $\Delta\alpha_i \ne 0$", font_size=24, color=GREY_A),
             label(r"\textbf{Rudin 6.16} \ steps $c_n \ge 0$ at $s_n$, \ $\sum c_n < \infty$, \ $f$ continuous:", font_size=28),
             MathTex(r"\int f\,d\alpha = \sum_{n} c_n f(s_n)", font_size=38, color=C.EPS),
+            MathTex(r"\text{here: } \sum_{n=1}^{4} c_n f(s_n) = " + f"{stair_sum:.4f}", font_size=30, color=C.EPS),
             label(r"an integral can be a series", font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([3.4, -0.2, 0])
         for r_ in side:
@@ -117,7 +148,10 @@ class Stieltjes(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(mark[0]), FadeIn(mark[1:]), FadeIn(side[1]))
             vo.wait_until("d")
-            self.play(FadeIn(side[3:]))
+            self.play(FadeOut(step_g), FadeIn(stair_g), FadeOut(al_lab), FadeIn(st_lab), FadeOut(mark),
+                      FadeIn(side[3:5]))
+            self.play(LaggedStart(*[GrowFromEdge(st, DOWN) for st in stems], lag_ratio=0.2), FadeIn(side[5]))
+            self.play(FadeIn(side[6]))
         self.wait(0.3)
         self.clear_scene()
 
