@@ -60,20 +60,44 @@ class Cantor(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([1.6, -1.2, 0])
         for s_ in steps:
             s_.set_max_width(8.8)
-        o = np.array([-4.8, 0.3, 0])
-        radii = [1.5, 0.95, 0.6, 0.38, 0.24]
-        centers = [o, o + np.array([0.4, -0.25, 0]), o + np.array([0.55, -0.1, 0]), o + np.array([0.48, -0.2, 0]),
-                   o + np.array([0.52, -0.16, 0])]
-        disks = VGroup(*[Circle(radius=r, color=C.COMPACT_SET, stroke_width=3).move_to(c) for r, c in zip(radii, centers)])
-        xs = [o + np.array([-0.8, 0.6, 0]), o + np.array([1.0, 0.45, 0]), o + np.array([0.1, -0.55, 0]),
-              o + np.array([0.75, -0.42, 0])]
-        xd = VGroup(*[VGroup(Dot(p, radius=0.06, color=C.PATHOLOGY),
-                             MathTex(rf"x_{i + 1}", font_size=24, color=C.PATHOLOGY).next_to(p, UP, buff=0.06))
-                      for i, p in enumerate(xs)])
-        for i, p in enumerate(xs):
-            assert np.linalg.norm(p - centers[i + 1]) > radii[i + 1]
+        # P: a perfect set in the plane, the product of the Cantor set with itself (drawn to depth 4)
+        o, S = np.array([-4.8, 0.3, 0]), 3.0
+
+        def U(u, v):
+            return o + np.array([(u - 0.5) * S, (v - 0.5) * S, 0])
+
+        iv = cantor_intervals(4)
+        Pdust = VGroup(*[Square(side_length=(b - a) * S, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.85)
+                         .move_to(U((a + b) / 2, (c + d) / 2)) for a, b in iv for c, d in iv])
+        P_l = MathTex(r"P", font_size=32, color=C.SEQ).next_to(U(0, 1), UL, buff=0.08)
+        # the nested disks and the listed points (endpoints of the depth-4 intervals, so points of P)
+        ends = np.unique(iv.ravel())
+        Ppts = np.array([(x, y) for x in ends for y in ends])
+        cen = [np.array(c) for c in ((0.5, 0.5), (0.4226, 0.6166), (0.3355, 0.6637), (0.3759, 0.6932), (0.3765, 0.6724))]
+        rad = [0.5, 0.32, 0.2, 0.127, 0.08]
+        xs_u = [np.array([55, 18]) / 81, np.array([55, 55]) / 81, np.array([18, 63]) / 81, np.array([25, 62]) / 81]
+        for i in range(4):
+            assert any(np.allclose(xs_u[i], q) for q in Ppts)                          # x_i is a point of P
+            assert np.linalg.norm(xs_u[i] - cen[i]) < rad[i]                          # inside V_i
+            assert np.linalg.norm(xs_u[i] - cen[i + 1]) > rad[i + 1]                  # avoided by V_{i+1}
+            assert np.linalg.norm(cen[i + 1] - cen[i]) + rad[i + 1] < rad[i]          # nested
+        inner = Ppts[np.linalg.norm(Ppts - cen[4], axis=1) < rad[4]]
+        assert len(inner) > 0                                                         # the last disk meets P
+        xstar = inner[np.argmin(np.linalg.norm(inner - cen[4], axis=1))]
+        disks = VGroup(*[Circle(radius=r * S, color=C.COMPACT_SET, stroke_width=3).move_to(U(*c)) for r, c in zip(rad, cen)])
+        lab_dir = [0.393, 4.32, 4.32, 5.498]  # each label where it is farthest from every ring
+        xd = VGroup()
+        for i, (p, a) in enumerate(zip(xs_u, lab_dir)):
+            dpt = Dot(U(*p), radius=0.06, color=C.PATHOLOGY)
+            t = MathTex(rf"x_{i + 1}", font_size=24, color=C.PATHOLOGY)
+            t.add_background_rectangle(color=BACKGROUND, opacity=0.8, buff=0.03)
+            t.move_to(U(*p) + 0.27 * np.array([np.cos(a), np.sin(a), 0]))
+            xd.add(VGroup(dpt, t))
+        star = Dot(U(*xstar), radius=0.06, color=WHITE)
+        star_l = MathTex(r"x^* \notin \{x_1, x_2, \ldots\}", font_size=26).move_to([-4.3, 2.35, 0])
+        star_lead = Line(star_l.get_bottom() + DOWN * 0.05, U(*xstar) + UP * 0.08, color=GREY_B, stroke_width=1.5)
         perf = label(r"\textbf{perfect}: closed, and every point is a limit point (no isolated points)", font_size=30,
-                     color=GREY_A).move_to(UP * 0.8)
+                     color=GREY_A).move_to(UP * 2.4)
         with self.voiceover(
             "Recall that a set is perfect if it's closed and every one of its points is a limit point: no isolated "
             "points. <bookmark mark='s'/> Every nonempty perfect set in k-dimensional space is uncountable. "
@@ -82,7 +106,7 @@ class Cantor(VoiceoverScene):
             "it that still meets P but avoids x one. That's possible because every point of P is a limit point, so there "
             "are other points of P nearby to aim for. Then a smaller one avoiding x two, and so on."
         ) as vo:
-            self.play(FadeIn(perf))
+            self.play(FadeIn(perf), FadeIn(Pdust, lag_ratio=0.002), FadeIn(P_l), run_time=1.5)
             vo.wait_until("s")
             self.play(FadeIn(stmt), FadeOut(perf))
             vo.wait_until("a")
@@ -102,7 +126,7 @@ class Cantor(VoiceoverScene):
             vo.wait_until("k")
             self.play(FadeIn(steps[3]))
             vo.wait_until("m")
-            self.play(FadeIn(steps[4]), Flash(centers[-1], color=C.COMPACT_SET))
+            self.play(FadeIn(steps[4]), FadeIn(star, scale=3), FadeIn(star_l), Create(star_lead))
         self.wait(0.3)
         self.clear_scene()
 

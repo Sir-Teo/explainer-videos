@@ -25,30 +25,42 @@ class SigmaAlgebras(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def sigma(self):
-        dfn = VGroup(label(r"\textbf{Rudin, RCA 1.3} \ a $\sigma$-algebra $\mathfrak M$ on $X$:", font_size=28),
-                     label(r"contains $X$; \ closed under complements; \ closed under countable unions", font_size=28,
-                           color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        head = label(r"$\sigma$-algebras: \ the sets that get a length", font_size=34).to_edge(UP, buff=0.3)
+        dfn = VGroup(label(r"\textbf{RCA 1.3} \ a $\sigma$-algebra $\mathfrak M$ on $X$:", font_size=26),
+                     Tex(r"contains $X$; \ ", r"closed under complements; \ ", r"closed under countable unions",
+                         font_size=26, color=C.EPS)).arrange(DOWN, buff=0.1).next_to(head, DOWN, buff=0.2)
         names = [(r"open sets", C.OPEN_SET), (r"closed sets, \ countable unions of them ($\mathbb Q$)", C.CLOSED_SET),
-                 (r"Borel sets: \ the smallest $\sigma$-algebra with the open sets", C.SEQ),
+                 (r"Borel sets: \ the smallest $\sigma$-algebra with the open sets", C.DELTA),
                  (r"Lebesgue measurable sets \ (Borel, plus subsets of null sets)", C.MEASURE),
                  (r"all subsets of $\R$", GREY_B)]
+        # nested families drawn concentric (not stacked on one baseline); each label sits in the band between its box
+        # and the next one inside.  Closed sets get a dashed edge: their orange is close to the measure's orange.
         boxes = VGroup()
+        cy, ring = -1.0, 0.5
         for k in range(5):
-            w, h = 3.6 + 2.0 * k, 0.9 + 0.7 * k
-            boxes.add(RoundedRectangle(corner_radius=0.2, width=w, height=h, stroke_color=names[k][1], stroke_width=2.5,
-                                       fill_color=names[k][1], fill_opacity=0.06).move_to([0, -1.85 + h / 2, 0]))
+            w, h = 3.6 + 2.0 * k, 1.0 + 2 * ring * k
+            rr = RoundedRectangle(corner_radius=0.2, width=w, height=h, stroke_color=names[k][1], stroke_width=2.5,
+                                  fill_color=names[k][1], fill_opacity=0.06).move_to([0, cy, 0])
+            if k == 1:
+                rr = VGroup(rr.copy().set_stroke(width=0), DashedVMobject(rr, num_dashes=70))
+            boxes.add(rr)
         labs = VGroup()
         for k in range(5):
             t = label(names[k][0], font_size=22, color=names[k][1])
-            t.move_to(boxes[k].get_top() + DOWN * 0.28)
+            t.move_to(boxes[k].get_top() + DOWN * ring / 2)
+            assert t.width < boxes[k].width - 0.5
             labs.add(t)
-        vit = VGroup(Dot([5.45, 1.5, 0], radius=0.08, color=C.PATHOLOGY),
-                     label(r"Vitali's set", font_size=22, color=C.PATHOLOGY).next_to([5.45, 1.5, 0], LEFT, buff=0.12))
-        cant = VGroup(Dot([-1.0, -0.75, 0], radius=0.06, color=C.CLOSED_SET),
-                      label(r"Cantor set", font_size=20, color=C.CLOSED_SET).next_to([-1.0, -0.75, 0], RIGHT, buff=0.1))
+        vy = boxes[4].get_top()[1] - ring / 2  # the band between the Lebesgue box and "all subsets"
+        vit = VGroup(Dot([4.75, vy, 0], radius=0.08, color=C.PATHOLOGY),
+                     label(r"Vitali's set", font_size=22, color=C.PATHOLOGY).next_to([4.75, vy, 0], LEFT, buff=0.12))
+        cy0 = boxes[1].get_bottom()[1] + ring / 2  # the band between the open and the closed box: closed, not open
+        cant = VGroup(Dot([-1.0, cy0, 0], radius=0.06, color=C.CLOSED_SET),
+                      label(r"Cantor set", font_size=22, color=C.CLOSED_SET).next_to([-1.0, cy0, 0], RIGHT, buff=0.1))
+        assert boxes[4].get_bottom()[1] > -3.6 and boxes[4].get_top()[1] < dfn.get_bottom()[1] - 0.25
         with self.voiceover(
-            "<bookmark mark='a'/> The sets that get a length form a sigma-algebra: a family that contains the whole "
-            "space and is closed under complements and countable unions, so countable intersections too. "
+            "<bookmark mark='a'/> The sets that get a length form a sigma-algebra: a family that <bookmark mark='a1'/> "
+            "contains the whole space and is <bookmark mark='a2'/> closed under complements and <bookmark mark='a3'/> "
+            "countable unions, so countable intersections too. "
             "<bookmark mark='b'/> Start from the open sets. Their complements are the closed sets, and countable "
             "unions of closed sets include the rationals, a union of single points. <bookmark mark='c'/> Keep going "
             "and you reach the Borel sets, the smallest sigma-algebra containing the open sets. <bookmark mark='d'/> "
@@ -56,9 +68,12 @@ class SigmaAlgebras(VoiceoverScene):
             "it, among the sets no length can handle."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(dfn))
+            self.play(FadeIn(head), FadeIn(dfn), Create(boxes[0]), FadeIn(labs[0]))
+            for i, mk in enumerate(("a1", "a2", "a3")):
+                vo.wait_until(mk)
+                self.play(Indicate(dfn[1][i], color=C.EPS, scale_factor=1.08))
             vo.wait_until("b")
-            self.play(Create(boxes[0]), FadeIn(labs[0]))
+            self.play(Indicate(VGroup(boxes[0], labs[0]), color=C.OPEN_SET, scale_factor=1.04))
             self.play(Create(boxes[1]), FadeIn(labs[1]), FadeIn(cant))
             vo.wait_until("c")
             self.play(Create(boxes[2]), FadeIn(labs[2]))
@@ -93,21 +108,23 @@ class SigmaAlgebras(VoiceoverScene):
         pl = MathTex(r"f^{-1}(V)", font_size=28, color=C.OPEN_SET).next_to(pre, DOWN, buff=0.12)
         card = dictionary_card(
             r"continuous (Part 2)", r"measurable (RCA 1.3)",
-            [(r"$f^{-1}(V)$ open for open $V$", r"$f^{-1}(V)$ measurable for open $V$"),
-             (r"limits can break it (Part 3)", r"$\sup, \inf, \limsup, \lim$ keep it (1.14)"),
+            [(r"$f^{-1}(\text{open})$ open", r"$f^{-1}(\text{open})$ measurable"),
+             (r"limits can break it (Part 3)", r"$\sup, \inf, \lim$ keep it (1.14)"),
              (r"Dirichlet's function: \ no", r"Dirichlet's function: \ yes")],
             font_size=24, width=7.4).move_to([3.3, -0.5, 0])
-        head = label(r"Measurable functions: \ the same template as continuity", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"Measurable functions: \ the same template as continuity", font_size=34).to_edge(UP, buff=0.3)
         # Dirichlet's function as a double limit of continuous functions: cos(m! pi x)^(2n) -> 1 on {k/m!} as n -> oo
         xx = np.linspace(0, 1, 24001)
-        seq = [(2, 1), (2, 6), (2, 60), (3, 60), (4, 60), (5, 60)]
+        # the approximants in APPROX (as in the opening), D itself in PATHOLOGY; the late stages take a high power so
+        # the spikes stay thin (m = 5, n = 60 would print 121 fat spikes as one solid slab, i.e. "D = 1")
+        seq = [(2, 1), (2, 6), (2, 60), (3, 60), (4, 400), (5, 2000)]
 
         def dl(m, n):
-            return polyline(ax, xx, np.cos(math.factorial(m) * np.pi * xx) ** (2 * n), color=C.PATHOLOGY,
-                            stroke_width=2.2)
+            return polyline(ax, xx, np.cos(math.factorial(m) * np.pi * xx) ** (2 * n), color=C.APPROX,
+                            stroke_width=2.2 if n < 100 else 1.2)
 
         dls = [dl(m, n) for m, n in seq]
-        dlab = [MathTex(rf"m = {m}, \ n = {n}", font_size=28, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.25)
+        dlab = [MathTex(rf"m = {m}, \ n = {n}", font_size=28, color=C.APPROX).next_to(ax, DOWN, buff=0.25)
                 for m, n in seq]
         dform = MathTex(r"D(x) = \lim_{m \to \infty} \lim_{n \to \infty} \cos(m!\,\pi x)^{2n}", font_size=30,
                         color=C.PATHOLOGY).next_to(ax, UP, buff=0.1)
@@ -115,6 +132,8 @@ class SigmaAlgebras(VoiceoverScene):
             k_ = np.arange(math.factorial(m) + 1) / math.factorial(m)
             assert np.allclose(np.cos(math.factorial(m) * np.pi * k_) ** (2 * n), 1)
         assert np.cos(math.factorial(2) * np.pi * 0.3) ** 120 < 1e-10  # off the grid the bumps have died
+        # at the last stage the spikes are hairlines: half the height within 1e-4 of each k/120
+        assert np.cos(120 * np.pi * 1e-4) ** 4000 < 0.5
         assert dform.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> Which functions can we integrate? Part 2 characterized continuity by preimages: "
@@ -162,11 +181,12 @@ class SigmaAlgebras(VoiceoverScene):
         labs = [MathTex(rf"s_{{{k + 1}}}: \ \text{{levels }} j/2^{{{k + 1}}}, \quad \sup_{{f < {k + 1}}} |s_{{{k + 1}}} - f| "
                         rf"= {errs[k]:.4f} \le 2^{{-{k + 1}}}", font_size=26, color=cols[k]).next_to(ax, DOWN, buff=0.15)
                 for k in shown]
-        head = VGroup(label(r"\textbf{Rudin, RCA 1.17} \ simple functions climb to any measurable $f \ge 0$",
-                            font_size=30),
+        head = VGroup(label(r"Simple functions climb to any measurable $f \ge 0$", font_size=34),
                       MathTex(r"s_n = \frac{j}{2^n} \text{ on } \Big\{\frac{j}{2^n} \le f < \frac{j + 1}{2^n}\Big\}, "
-                              r"\quad s_n = n \text{ where } f \ge n", font_size=30)).arrange(DOWN, buff=0.12)
-        head.to_edge(UP, buff=0.25)
+                              r"\quad s_n = n \text{ where } f \ge n", r"\qquad \text{(RCA 1.17)}", font_size=30)
+                      ).arrange(DOWN, buff=0.12)
+        head[1][1].set_color(GREY_B)
+        head.to_edge(UP, buff=0.3)
         side = VGroup(label(r"slice the \emph{range} into", font_size=26),
                       label(r"dyadic layers: \ each level set", font_size=26),
                       label(r"$\{j 2^{-n} \le f < (j + 1) 2^{-n}\}$", font_size=26),

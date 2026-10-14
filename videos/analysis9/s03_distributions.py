@@ -118,6 +118,7 @@ class Distributions(VoiceoverScene):
             label(r"each half diverges like $\log\varepsilon$; \ the halves cancel", font_size=22),
             label(r"order $1$, \ and no measure gives it", font_size=22, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.25, aligned_edge=LEFT)
+        VGroup(tab, rows).shift((min(0.0, 6.5 - VGroup(tab, rows).get_right()[0])) * RIGHT)  # right edge <= 6.5
         assert abs(vals[-1] - lim) < 1e-5
         head = label(r"The principal value of $1/x$: \ cancel the two infinities", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

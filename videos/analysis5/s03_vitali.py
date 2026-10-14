@@ -24,8 +24,8 @@ class Vitali(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def wishes(self):
-        head = label(r"What we would like: \ a length $m(E)$ for \emph{every} set $E$ on the circle", font_size=32)
-        head.to_edge(UP, buff=0.4)
+        head = label(r"What we would like: \ a length $m(E)$ for \emph{every} set $E$ on the circle", font_size=34)
+        head.to_edge(UP, buff=0.3)
         wishes = VGroup(
             label(r"1. \ countably additive: \ $m\big(\bigcup E_k\big) = \sum m(E_k)$ for disjoint $E_k$", font_size=26),
             label(r"2. \ rotation invariant: \ turning a set does not change its length", font_size=26),
@@ -38,12 +38,19 @@ class Vitali(VoiceoverScene):
         verdict = label(r"impossible \ (Vitali, 1905): \ some set must be left out", font_size=30,
                         color=C.PATHOLOGY).next_to(wishes, DOWN, buff=0.7, aligned_edge=LEFT)
         # the picture: three disjoint arcs of the unit circle, measured by angle
-        o, R = np.array([-4.6, -0.5, 0]), 1.85
+        o, R = np.array([-4.3, -0.5, 0]), 1.85
         base = Circle(radius=R, color=GREY_D, stroke_width=2).move_to(o)
         starts, lens, cols = [0.3, 1.6, 3.6], [0.6, 0.9, 0.4], [C.FUNC, C.APPROX, C.MEASURE]
         arcs = VGroup(*[Arc(radius=R, start_angle=a0, angle=ln, color=c, stroke_width=10).move_arc_center_to(o)
                         for a0, ln, c in zip(starts, lens, cols)])
         assert all(starts[k] + lens[k] < starts[k + 1] for k in range(2))  # disjoint
+        # each arc named just inside the circle, following its arc when the set is turned
+        alabs = VGroup()
+        for k, (a_, c_) in enumerate(zip(arcs, cols)):
+            t_ = MathTex(rf"E_{k + 1}", font_size=26, color=c_)
+            t_.add_updater(lambda m, a_=a_: m.move_to(o + (a_.point_from_proportion(0.5) - o) * (R - 0.42) / R),
+                           call_updater=True)
+            alabs.add(t_)
         tot = sum(lens)
         r1 = MathTex(rf"m(E_1 \cup E_2 \cup E_3) = {lens[0]} + {lens[1]} + {lens[2]} = {tot:.1f}", font_size=24).next_to(
             base, DOWN, buff=0.3)
@@ -59,10 +66,10 @@ class Vitali(VoiceoverScene):
             "showed that no length function on all subsets can do all three."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(base))
+            self.play(FadeIn(head), Create(base), LaggedStart(*[Create(a_) for a_ in arcs], lag_ratio=0.4),
+                      FadeIn(alabs))
             vo.wait_until("b")
-            self.play(FadeIn(wishes[0], shift=RIGHT * 0.15), LaggedStart(*[Create(a_) for a_ in arcs], lag_ratio=0.4),
-                      FadeIn(r1))
+            self.play(FadeIn(wishes[0], shift=RIGHT * 0.15), FadeIn(r1))
             vo.wait_until("c")
             self.play(FadeIn(wishes[1], shift=RIGHT * 0.15))
             self.play(Rotate(arcs, angle=1.2, about_point=o), FadeIn(r2), run_time=1.5)
@@ -71,6 +78,7 @@ class Vitali(VoiceoverScene):
             self.bring_to_front(arcs)
             vo.wait_until("e")
             self.play(FadeIn(verdict))
+        alabs.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -88,7 +96,7 @@ class Vitali(VoiceoverScene):
         dots = VGroup(*[Dot(pt(a), radius=0.06 if k < 50 else 0.03, color=C.SEQ) for k, a in enumerate(ang)])
         nums = VGroup(*[MathTex(str(k), font_size=20, color=C.SEQ).move_to(o + (R + 0.3) * np.array(
             [math.cos(ang[k]), math.sin(ang[k]), 0])) for k in range(7)])
-        head = VGroup(label(r"Rotate by $1$ radian, again and again", font_size=32),
+        head = VGroup(label(r"Rotate by $1$ radian, again and again", font_size=34),
                       label(r"$1$ is not a rational multiple of $2\pi$: \ the orbit never repeats", font_size=24,
                             color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         tab = VGroup(MathTex(r"N", r"\quad \text{largest gap}", font_size=28, color=GREY_A))
@@ -122,8 +130,8 @@ class Vitali(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def construction(self):
-        o = np.array([-3.4, -0.6, 0])
-        R = 2.5
+        o = np.array([-3.4, -0.55, 0])
+        R = 2.35
         circ = Circle(radius=R, color=GREY_C, stroke_width=2).move_to(o)
 
         def pt(a):
@@ -160,19 +168,21 @@ class Vitali(VoiceoverScene):
         # that the wraps stay visible): c = 0 gives nothing, any c > 0 wraps around more than once, forever
         cv = ValueTracker(1e-3)
         K = 16
-        acols = [C.SEQ, C.APPROX, C.CLOSED_SET, C.CONNECTED_SET, C.FREQ]
+        # lengths are MEASURE (the orbit colors above name classes, not copies): alternate the opacity so the copies
+        # V + k laid end to end stay distinct
 
         def arcs_():
             c = cv.get_value()
             return VGroup(*[Arc(radius=R + 0.15 + 0.035 * k, start_angle=k * c, angle=c, arc_center=o,
-                                color=acols[k % len(acols)], stroke_width=5) for k in range(K)])
+                                color=C.MEASURE, stroke_width=5, stroke_opacity=1.0 if k % 2 == 0 else 0.55)
+                            for k in range(K)])
 
         arcs = always_redraw(arcs_)
         zl = MathTex(r"m(V) = 0: \ 0 + 0 + 0 + \cdots = 0", font_size=26).move_to(o + 0.35 * UP)
         il = MathTex(r"m(V) = c > 0: \ c + c + c + \cdots = \infty", font_size=26, color=C.PATHOLOGY
                      ).move_to(o + 0.35 * DOWN)
         assert K * 0.9 > 2 * 2 * math.pi  # at c = 0.9 the 16 shown arcs already wrap around twice
-        assert (R + 0.15 + 0.035 * (K - 1)) + abs(o[0]) < 7.0 and o[1] - (R + 0.15 + 0.035 * (K - 1)) > -3.95
+        assert (R + 0.15 + 0.035 * (K - 1)) + abs(o[0]) < 6.7 and o[1] - (R + 0.15 + 0.035 * (K - 1)) > -3.6
         assert max(zl.width, il.width) < 2 * R - 0.6
         with self.voiceover(
             "<bookmark mark='a'/> Call two points equivalent if they differ by a whole number of radians. Each "

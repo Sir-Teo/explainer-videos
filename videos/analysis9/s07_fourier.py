@@ -155,7 +155,7 @@ class FourierL1(VoiceoverScene):
         assert np.allclose(SQ2PI * g_hat**2, tri_hat, atol=1e-12)
         box_h = np.where(np.isclose(np.abs(xs), 0.5), 0.5, (np.abs(xs) < 0.5).astype(float))  # midpoint at the jumps
         for t_ in (0.3, 1.0, 2.7):
-            assert abs(ft(box_h, t_) - math.sqrt(2 / math.pi) * math.sin(t_ / 2) / t_) < 1e-6
+            assert abs(ft(box_h, t_) - math.sqrt(2 / math.pi) * math.sin(t_ / 2) / t_) < 5e-5  # trapezoid, dx = 0.005
         xc = np.linspace(-3, 3, 6001)
         gc = np.where(np.abs(xc) < 0.5, 1.0, 0.0)
         assert np.abs(np.convolve(gc, gc, mode="same") * (xc[1] - xc[0]) - np.clip(1 - np.abs(xc), 0, None)).max() < 2e-3
@@ -175,7 +175,7 @@ class FourierL1(VoiceoverScene):
             envv = math.sqrt(2 / math.pi) / np.abs(np.where(tw == 0, 1e-9, tw))
         box1 = np.where(np.isclose(np.abs(xs), 1), 0.5, (np.abs(xs) < 1).astype(float))
         for t_ in (0.5, 4.0, 11.0):
-            assert abs(ft(box1, t_) - math.sqrt(2 / math.pi) * math.sin(t_) / t_) < 1e-6
+            assert abs(ft(box1, t_) - math.sqrt(2 / math.pi) * math.sin(t_) / t_) < 5e-5  # trapezoid, dx = 0.005
         assert np.all(np.abs(sinc_) <= envv + 1e-12)
         ld_box = polyline(lx, xg, np.where(np.abs(xg) <= 1, 1.0, 0.0), color=C.FUNC, stroke_width=3)
         env_g = VGroup(runs(rx2, tw, envv, GREY_B, 2), runs(rx2, tw, -envv, GREY_B, 2)).set_stroke(opacity=0.7)

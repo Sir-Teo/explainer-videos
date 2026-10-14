@@ -5,7 +5,7 @@ from fractions import Fraction
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import SQRT2, Window, pin
+from videos.analysis1.common import SQRT2, Window, endpoint, pin
 
 
 def cut_split(c):
@@ -74,10 +74,13 @@ class Cuts(VoiceoverScene):
                 self.play(FadeIn(c, shift=RIGHT * 0.2))
             self.play(FadeIn(ref))
         p_val = -0.2
-        p_dot = pin(Dot(radius=0.08, color=C.CUT_LOW), win, p_val)
-        down_arrow = always_redraw(lambda: Arrow(win.P(p_val, 1.75), [win.L - 0.1, win.y + 1.75, 0], buff=0,
-                                                 color=C.CUT_LOW, stroke_width=4, max_tip_length_to_length_ratio=0.06))
-        p_l = pin(MathTex(r"p", font_size=32, color=C.CUT_LOW), win, p_val, dy=2.1)
+        # the window does not move here: a dot p, a dashed riser from it, and the arrow "everything to the left"
+        ad = 1.15  # just above the ticks (dust height 0.85)
+        p_dot = Dot(win.P(p_val), radius=0.08, color=C.CUT_LOW)
+        riser = DashedLine(win.P(p_val, 0.12), win.P(p_val, ad), color=GREY_B, stroke_width=2)
+        down_arrow = Arrow(win.P(p_val, ad), [win.L - 0.1, win.y + ad, 0], buff=0, color=C.CUT_LOW, stroke_width=4,
+                           max_tip_length_to_length_ratio=0.06)
+        p_l = MathTex(r"p", font_size=32, color=C.CUT_LOW).next_to(win.P(p_val, ad), UP, buff=0.12)
         with self.voiceover(
             "Picture it as a way of coloring the fractions: blue for the ones in the cut, orange for the rest. "
             "<bookmark mark='e'/> This one is the cut of one half: every fraction strictly below one half. "
@@ -87,12 +90,11 @@ class Cuts(VoiceoverScene):
             vo.wait_until("e")
             self.play(Write(ex))
             vo.wait_until("d")
-            self.play(FadeIn(p_dot, scale=2), FadeIn(p_l), GrowArrow(down_arrow))
+            self.play(FadeIn(p_dot, scale=2), FadeIn(p_l), Create(riser))
+            self.play(GrowArrow(down_arrow))
         self.wait(0.3)
-        for m in (p_dot, p_l, down_arrow):
-            m.clear_updaters()
-        self.play(FadeOut(VGroup(p_dot, p_l, down_arrow)))
-        hl = pin(Circle(radius=0.12, color=C.CUT_HIGH, stroke_width=3), win, 0.5)
+        self.play(FadeOut(VGroup(p_dot, p_l, riser, down_arrow)))
+        hl = pin(endpoint(ORIGIN, False, C.CUT_HIGH, radius=0.12), win, 0.5)  # hollow: 1/2 is left out
         hl_l = pin(MathTex(r"\tfrac12 \notin \big(\tfrac12\big)^*", font_size=30, color=C.CUT_HIGH), win, 0.5, dy=-0.85)
         with self.voiceover(
             "Condition three is bookkeeping. <bookmark mark='z'/> Zoom in at one half. The fraction one half itself is "
@@ -128,7 +130,10 @@ class Cuts(VoiceoverScene):
             self.play(FadeIn(note3))
             vo.wait_until("n")
             self.play(*win.zoom_to(SQRT2, 0.002), run_time=2.5)
-        self.play(FadeOut(VGroup(conds[2], ex2, note3)))
+            seam = endpoint(win.P(SQRT2), False, C.HOLE, radius=0.12)
+            seam_l = MathTex(r"\sqrt2", font_size=32, color=C.HOLE).move_to(win.P(SQRT2, -0.85))
+            self.play(FadeIn(seam, scale=2), FadeIn(seam_l))
+        self.play(FadeOut(VGroup(conds[2], ex2, note3, seam, seam_l)))
         self.play(*win.zoom_to(1.0, 4.2), run_time=1.2)
         self.axis, self.labs, self.root = axis, labs, root
         half.clear_updaters()
@@ -171,7 +176,20 @@ class Cuts(VoiceoverScene):
         whys = [why(r"suppose $\alpha \not\subset \beta$"), why(r"if $q \ge p$, (II) would put $p$ in $\beta$"),
                 why(r"by (II) for $\alpha$; so $\beta \subset \alpha$")]
         grp = VGroup(*rows)
-        step = ladder(self, rows, whys, keep=3, top=1.4, buff=0.25, x=-2.4, align_index=None)
+        step = ladder(self, rows, whys, keep=3, top=1.95, buff=0.2, x=-2.4, align_index=None)
+        # the proof on the two rays: alpha = the cut of root 2 (lower ray), beta = the cut of 1/2 (upper ray)
+        la = MathTex(r"\alpha = \alpha_{\sqrt2}", font_size=30, color=C.CUT_LOW).next_to(b2, RIGHT, buff=0.2)
+        lb = MathTex(r"\beta = \big(\tfrac12\big)^*", font_size=30, color=C.CUT_LOW).next_to(b1, RIGHT, buff=0.2)
+        pv, qv = 1.0, 0.1
+        assert 0.5 < pv < SQRT2 and qv < 0.5  # p is in alpha but not in beta; q is in beta
+        pd = Dot([win.X(pv), -1.0, 0], radius=0.08, color=WHITE)
+        p_l = MathTex(r"p", font_size=30).next_to(pd, DOWN, buff=0.15)
+        p_up = DashedLine([win.X(pv), -0.88, 0], [win.X(pv), -0.15, 0], color=GREY_B, stroke_width=2)
+        qd = Dot([win.X(qv), -0.5, 0], radius=0.08, color=WHITE)
+        q_l = MathTex(r"q", font_size=30).next_to(qd, UP, buff=0.12)
+        q_ar = Arrow([win.X(qv), -0.75, 0], [win.X(pv) - 0.05, -0.75, 0], buff=0, color=GREY_B, stroke_width=3,
+                     max_tip_length_to_length_ratio=0.08)  # q lies left of p
+        inside = Line([win.L - 0.1, -1.0, 0], [win.X(0.5), -1.0, 0], color=C.EPS, stroke_width=8)
         with self.voiceover(
             "For this to be an order, any two cuts must be comparable: one must contain the other. The proof takes "
             "three lines. <bookmark mark='a'/> Suppose alpha is not inside beta, so some p is in alpha but not in beta. "
@@ -179,12 +197,19 @@ class Cuts(VoiceoverScene):
             "would put p in beta. <bookmark mark='c'/> And then, by condition two for alpha, every q in beta is in "
             "alpha: beta is inside alpha."
         ) as vo:
-            self.play(FadeOut(VGroup(b1, b2, l1, l2)))
+            self.play(FadeTransform(l1, lb), FadeTransform(l2, la))
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 step(i, run_time=0.9)
+                if mk == "a":
+                    self.play(FadeIn(pd, scale=2), FadeIn(p_l), Create(p_up))
+                elif mk == "b":
+                    self.play(FadeIn(qd, scale=2), FadeIn(q_l), GrowArrow(q_ar))
+                else:
+                    self.play(TransformFromCopy(b1[0], inside), run_time=1.0)
         self.wait(0.3)
-        self.play(FadeOut(VGroup(grp, *whys)), FadeOut(defs[1]), defs[0].animate.to_corner(UL, buff=0.45))
+        self.play(FadeOut(VGroup(grp, *whys, b1, b2, la, lb, pd, p_l, p_up, qd, q_l, q_ar, inside)),
+                  FadeOut(defs[1]), defs[0].animate.to_corner(UL, buff=0.45))
         self.defs0 = defs[0]
 
     # ------------------------------------------------------------------
@@ -242,41 +267,46 @@ class Cuts(VoiceoverScene):
         lines = VGroup(*[VGroup(t, r).arrange(RIGHT, buff=0.35) for t, r in zip(tag_m, rows)])
         for ln in lines:
             ln[1].shift(RIGHT * (2.0 - ln[0].width - 0.35))
-        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.6).shift(DOWN * 0.4)
-        # the proof, drawn: cuts as rays on the right (values 0.9 .. 1.8)
-        X = lambda v: 2.75 + (float(v) - 0.9) * 4.0 / 0.9  # noqa: E731
+        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.6).set_y(-0.1)
+        # the proof, drawn: cuts as rays on the right (values 0.9 .. 1.8), filling the right half
+        X = lambda v: 2.2 + (float(v) - 0.9) * 4.3 / 0.9  # noqa: E731
+        x0 = 1.9  # the rays come in from the left (toward minus infinity)
 
-        def ray(v, y, color, sw=5):
-            return VGroup(Line([2.45, y, 0], [X(v), y, 0], color=color, stroke_width=sw),
-                          Circle(radius=0.06, color=color, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to([X(v), y, 0]))
+        def ray(v, y, color, sw=6):
+            return VGroup(Line([x0, y, 0], [X(v), y, 0], color=color, stroke_width=sw),
+                          Circle(radius=0.07, color=color, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to([X(v), y, 0]))
 
-        a_vals, a_ys = (1.0, 1.4, 1.41), (2.05, 1.75, 1.45)
+        a_vals, a_ys = (1.0, 1.4, 1.41), (2.2, 1.8, 1.4)
         r_al = VGroup(*[ray(v, y, C.CUT_LOW) for v, y in zip(a_vals, a_ys)])
-        r_al_l = MathTex(r"\alpha \in \mathcal{A}", font_size=26, color=C.CUT_LOW).next_to([X(1.0), 2.05, 0], RIGHT,
+        r_al_l = MathTex(r"\alpha \in \mathcal{A}", font_size=28, color=C.CUT_LOW).next_to([X(1.0), 2.2, 0], RIGHT,
                                                                                          buff=0.2)
-        r_ga = ray(SQRT2, 0.95, C.EPS, sw=7)
-        r_ga_l = MathTex(r"\gamma", font_size=30, color=C.EPS).next_to(r_ga, RIGHT, buff=0.12)
-        r_be = ray(1.7, 0.35, GREY_A)
-        r_be_l = MathTex(r"\beta", font_size=30, color=GREY_A).next_to(r_be, RIGHT, buff=0.12)
-        nl = VGroup(Line([2.45, -0.15, 0], [6.85, -0.15, 0], color=GREY_C, stroke_width=2),
-                    *[VGroup(Line([X(v), -0.22, 0], [X(v), -0.08, 0], color=GREY_C, stroke_width=2),
-                             MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to([X(v), -0.22, 0], DOWN, buff=0.08))
+        y_ga, y_de, y_be, y_nl = 0.75, 0.2, -0.35, -1.0
+        r_ga = ray(SQRT2, y_ga, C.EPS, sw=8)
+        r_ga_l = MathTex(r"\gamma", font_size=32, color=C.EPS).next_to(r_ga, RIGHT, buff=0.12)
+        r_be = ray(1.7, y_be, GREY_A)
+        r_be_l = MathTex(r"\beta", font_size=32, color=GREY_A).next_to(r_be, RIGHT, buff=0.12)
+        nl = VGroup(Line([x0, y_nl, 0], [6.85, y_nl, 0], color=GREY_C, stroke_width=2),
+                    *[VGroup(Line([X(v), y_nl - 0.07, 0], [X(v), y_nl + 0.07, 0], color=GREY_C, stroke_width=2),
+                             MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to([X(v), y_nl - 0.07, 0], DOWN, buff=0.1))
                       for v in (1.0, 1.5)])
-        fade = Rectangle(width=0.5, height=2.6, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1.0).move_to(
-            [2.3, 1.0, 0])  # the rays run off to the left, toward minus infinity
-        pq = VGroup(Dot([X(1.2), 0.95, 0], radius=0.06, color=WHITE),
-                    MathTex(r"p", font_size=24).next_to([X(1.2), 0.95, 0], UP, buff=0.1),
-                    Arrow([X(1.2), 0.75, 0], [X(1.02), 0.75, 0], buff=0, color=C.CUT_LOW, stroke_width=3,
+        fade = Rectangle(width=0.5, height=3.4, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1.0).move_to(
+            [x0 - 0.1, (a_ys[0] + y_be) / 2, 0])  # the rays run off to the left, toward minus infinity
+        pq = VGroup(Dot([X(1.2), y_ga, 0], radius=0.07, color=WHITE),
+                    MathTex(r"p", font_size=26).next_to([X(1.2), y_ga, 0], UP, buff=0.12),
+                    Arrow([X(1.2), y_ga - 0.25, 0], [X(1.02), y_ga - 0.25, 0], buff=0, color=C.CUT_LOW, stroke_width=3,
                           tip_length=0.12),
-                    MathTex(r"q", font_size=24, color=C.CUT_LOW).next_to([X(1.0), 0.75, 0], LEFT, buff=0.06))
-        pr = VGroup(Dot([X(1.2), 1.45, 0], radius=0.06, color=WHITE),
-                    Arrow([X(1.2), 1.6, 0], [X(1.33), 1.6, 0], buff=0, color=C.EPS, stroke_width=3, tip_length=0.12),
-                    MathTex(r"r", font_size=24, color=C.EPS).next_to([X(1.35), 1.6, 0], RIGHT, buff=0.06))
-        r_de = ray(1.36, 0.65, C.PATHOLOGY)
-        r_de_l = MathTex(r"\delta", font_size=28, color=C.PATHOLOGY).next_to([X(1.36), 0.65, 0], RIGHT, buff=0.1)
-        pl_ = VGroup(Dot([X(1.39), 0.95, 0], radius=0.06, color=WHITE),
-                     MathTex(r"p", font_size=24).next_to([X(1.39), 0.95, 0], UP, buff=0.1))
-        assert 1.36 < 1.39 < 1.41 < SQRT2 < 1.7
+                    MathTex(r"q", font_size=26, color=C.CUT_LOW).next_to([X(1.0), y_ga - 0.25, 0], LEFT, buff=0.06))
+        pr = VGroup(Dot([X(1.2), a_ys[2], 0], radius=0.07, color=WHITE),
+                    Arrow([X(1.2), a_ys[2] + 0.2, 0], [X(1.33), a_ys[2] + 0.2, 0], buff=0, color=C.EPS, stroke_width=3,
+                          tip_length=0.12),
+                    MathTex(r"r", font_size=26, color=C.EPS).next_to([X(1.35), a_ys[2] + 0.2, 0], RIGHT, buff=0.06))
+        de_v, p_v = 1.36, 1.375
+        r_de = ray(de_v, y_de, C.PATHOLOGY)
+        r_de_l = MathTex(r"\delta", font_size=30, color=C.PATHOLOGY).next_to([X(de_v), y_de, 0], RIGHT, buff=0.18)
+        pl_ = VGroup(Dot([X(p_v), y_ga, 0], radius=0.07, color=WHITE),
+                     MathTex(r"p", font_size=26).next_to([X(p_v), y_ga, 0], UP, buff=0.12))
+        assert de_v < p_v < 1.41 < SQRT2 < 1.7  # p is in gamma (via the cut of 1.41) but not in delta
+        assert lines.get_right()[0] < fade.get_left()[0]
         head = label(r"Claim: for $\mathcal{A}$ nonempty and bounded above by a cut $\beta$, \ "
                      r"$\gamma = \bigcup \mathcal{A}$ is a cut, and $\gamma = \sup \mathcal{A}$.", font_size=30)
         head.to_edge(UP, buff=0.5)
@@ -311,7 +341,7 @@ class Cuts(VoiceoverScene):
             self.play(FadeIn(pl_), Indicate(r_al[2][0], color=C.CUT_LOW, scale_factor=1.0))
             vo.wait_until("q")
             box = MathTex(r"\sup \mathcal{A} = \bigcup_{\alpha \in \mathcal{A}} \alpha", font_size=42, color=C.EPS)
-            box = boxed(box, color=C.EPS).move_to([4.6, -2.3, 0])
+            box = boxed(box, color=C.EPS).move_to([4.4, -2.55, 0])
             self.play(FadeIn(box, scale=1.1))
         self.wait(0.5)
         for m in (self.axis, self.labs, self.root):
@@ -340,7 +370,7 @@ class Cuts(VoiceoverScene):
                           Circle(radius=0.07, color=color, stroke_width=3).set_fill(BACKGROUND, 1).move_to([Xa(v), y, 0]))
 
         a_, b_ = SQRT2, 0.5
-        ys_ = (-1.45, -1.8, -2.15, -2.6)
+        ys_ = (-0.95, -1.3, -1.65, -2.1)  # the rays fill the middle band, the axis under them
         rays = VGroup(aray(a_, ys_[0], C.CUT_LOW), aray(b_, ys_[1], C.APPROX), aray(a_ + b_, ys_[2], C.EPS, sw=7),
                       aray(0, ys_[3], GREY_B))
         rlabs = VGroup(MathTex(r"\alpha = (\sqrt2)^*", font_size=26, color=C.CUT_LOW),
@@ -349,9 +379,10 @@ class Cuts(VoiceoverScene):
                        MathTex(r"0^*", font_size=26, color=GREY_B))
         for l_, r_ in zip(rlabs, rays):
             l_.next_to(r_, RIGHT, buff=0.15)
-        axis_ = VGroup(Line([-6.6, -3.0, 0], [6.6, -3.0, 0], color=GREY_C, stroke_width=2),
-                       *[VGroup(Line([Xa(v), -3.07, 0], [Xa(v), -2.93, 0], color=GREY_C, stroke_width=2),
-                                MathTex(f"{v}", font_size=22, color=GREY_B).next_to([Xa(v), -3.07, 0], DOWN, buff=0.08))
+        ya = -2.55
+        axis_ = VGroup(Line([-6.6, ya, 0], [6.6, ya, 0], color=GREY_C, stroke_width=2),
+                       *[VGroup(Line([Xa(v), ya - 0.07, 0], [Xa(v), ya + 0.07, 0], color=GREY_C, stroke_width=2),
+                                MathTex(f"{v}", font_size=22, color=GREY_B).next_to([Xa(v), ya - 0.07, 0], DOWN, buff=0.1))
                          for v in (-2, -1, 0, 1, 2)])
         r_, s_ = 1.1, 0.3
         assert r_ < a_ and s_ < b_
@@ -384,30 +415,52 @@ class Cuts(VoiceoverScene):
     # ------------------------------------------------------------------
     def cauchy(self):
         thm = VGroup(
-            label(r"\textbf{Theorem} (Rudin 1.19) \ There is an ordered field $\R$ with the least-upper-bound property", font_size=28),
-            label(r"that contains $\Q$. \ (And it is unique: any two such fields are isomorphic.)", font_size=28),
-        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
+            label(r"\textbf{Theorem} (Rudin 1.19)", font_size=28, color=GREY_A),
+            label(r"There is an ordered field $\R$ with the least-upper-bound property that contains $\Q$.",
+                  font_size=28),
+            label(r"(And it is unique: any two such fields are isomorphic.)", font_size=26, color=GREY_A),
+        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.4)
         h_ = [Fraction(1), Fraction(4, 3), Fraction(7, 5), Fraction(24, 17), Fraction(41, 29), Fraction(140, 99)]
         d_ = [Fraction(1), Fraction(14, 10), Fraction(141, 100), Fraction(1414, 1000), Fraction(14142, 10000),
               Fraction(141421, 100000)]
-        a_row = MathTex(*[rf"{float(v):.5f}".rstrip("0").rstrip(".") + "," for v in d_], r"\ldots", font_size=32, color=C.SEQ)
-        b_row = MathTex(*[(rf"\tfrac{{{v.numerator}}}{{{v.denominator}}}" if v.denominator > 1 else "1") + "," for v in h_],
-                        r"\ldots", font_size=34, color=C.APPROX)
         diff = [abs(float(a - b)) for a, b in zip(d_, h_)]
-        d_row = MathTex(*[f"{x:.5f}," for x in diff], r"\ldots \to 0", font_size=32, color=C.EPS)
-        lab = VGroup(label(r"decimals", font_size=26, color=C.SEQ), label(r"hops", font_size=26, color=C.APPROX),
-                     label(r"difference", font_size=26, color=C.EPS))
-        grid = VGroup(*[VGroup(l, r).arrange(RIGHT, buff=0.5) for l, r in zip(lab, (a_row, b_row, d_row))])
-        for g in grid:
-            g[1].align_to(a_row, LEFT)
-        grid.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.3)
-        for g in grid:
-            g[1].shift(RIGHT * (2.2 - g[0].width))
-        assert diff[-1] < 1e-4
+        assert diff[-1] < 1e-4 and all(abs(float(v) - SQRT2) < 0.5 for v in d_ + h_)
+
+        def dec_s(v):
+            return f"{float(v):.5f}".rstrip("0").rstrip(".")
+
+        def frac_s(v):
+            return rf"\tfrac{{{v.numerator}}}{{{v.denominator}}}" if v.denominator > 1 else "1"
+
+        def diff_s(x):
+            return "0" if x == 0 else f"{x:.4f}"
+
+        # both sequences on one line, closing in on the same spot
+        X = lambda v: -4.3 + (float(v) - 0.95) / 0.55 * 10.4  # noqa: E731
+        yl = 1.2
+        nl = VGroup(Line([X(0.95), yl, 0], [X(1.5), yl, 0], color=GREY_C, stroke_width=2))
+        for v in (1.0, 1.1, 1.2, 1.3, 1.4, 1.5):
+            nl.add(Line([X(v), yl - 0.06, 0], [X(v), yl + 0.06, 0], color=GREY_C, stroke_width=2),
+                   MathTex(f"{v:.1f}", font_size=22, color=GREY_B).next_to([X(v), yl - 0.06, 0], DOWN, buff=0.32))
+        ring = endpoint([X(SQRT2), yl, 0], False, C.HOLE, radius=0.1)
+        ring_l = MathTex(r"\sqrt2", font_size=26, color=C.HOLE).next_to(ring, UP, buff=0.45)
+        dots_d = VGroup(*[Dot([X(v), yl + 0.22, 0], radius=0.06, color=C.SEQ) for v in d_])
+        dots_h = VGroup(*[Dot([X(v), yl - 0.22, 0], radius=0.06, color=C.APPROX) for v in h_])
+        names = VGroup(label(r"decimals", font_size=24, color=C.SEQ).next_to([X(0.95), yl + 0.22, 0], LEFT, buff=0.3),
+                       label(r"hops", font_size=24, color=C.APPROX).next_to([X(0.95), yl - 0.22, 0], LEFT, buff=0.3))
+        joins = VGroup(*[Line(dd.get_center(), hd.get_center(), color=C.EPS, stroke_width=3)
+                         for dd, hd in zip(dots_d, dots_h)])
+        # the numbers, on a real grid (one MathTex part per entry)
+        tab = VGroup(
+            MathTex(r"\text{decimals}", *[dec_s(v) + "," for v in d_], r"\ldots", font_size=30, color=C.SEQ),
+            MathTex(r"\text{hops}", *[frac_s(v) + "," for v in h_], r"\ldots", font_size=30, color=C.APPROX),
+            MathTex(r"\text{difference}", *[diff_s(x) + "," for x in diff], r"\ldots \to 0", font_size=30, color=C.EPS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([0, -0.55, 0])
+        regrid(tab, gap=0.35, center=True, max_width=12.6)
         who = label(r"M\'eray (1869) and Cantor (1872): \ a real number is a Cauchy sequence of fractions,", font_size=28)
         who2 = label(r"two sequences counting as the same number when their difference tends to $0$.", font_size=28,
                      color=GREY_A)
-        txt = VGroup(who, who2).arrange(DOWN, buff=0.12).next_to(grid, DOWN, buff=0.6)
+        txt = VGroup(who, who2).arrange(DOWN, buff=0.12).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
             "That's Rudin's theorem: <bookmark mark='t'/> there is an ordered field with the least-upper-bound property, "
             "containing the rationals. And, as Rudin remarks, it's unique: any two such fields are the same up to "
@@ -419,11 +472,15 @@ class Cuts(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(thm))
             vo.wait_until("c")
-            self.play(FadeIn(grid[0]), FadeIn(grid[1]), FadeIn(who))
+            self.play(Create(nl), FadeIn(ring), FadeIn(ring_l), FadeIn(names), FadeIn(who))
+            self.play(LaggedStart(*[FadeIn(d, scale=2) for d in dots_d], lag_ratio=0.25),
+                      LaggedStart(*[FadeIn(h, scale=2) for h in dots_h], lag_ratio=0.25),
+                      FadeIn(tab[0]), FadeIn(tab[1]), run_time=2.0)
             vo.wait_until("d")
-            self.play(FadeIn(grid[2]), FadeIn(who2))
+            self.play(LaggedStart(*[Create(j) for j in joins], lag_ratio=0.2), FadeIn(tab[2]), FadeIn(who2),
+                      run_time=1.6)
         reuse = label(r"Whenever a space has holes, we will fill them with its own Cauchy sequences.", font_size=30,
-                      color=C.EPS).to_edge(DOWN, buff=0.5)
+                      color=C.EPS).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "That second construction is the one this series will reuse. <bookmark mark='r'/> Whenever a space has holes, "
             "and the spaces of functions we meet later will, we fill them with the space's own Cauchy sequences. "
