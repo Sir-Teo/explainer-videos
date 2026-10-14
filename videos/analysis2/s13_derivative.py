@@ -135,6 +135,7 @@ class Derivative(VoiceoverScene):
                           label(r"rough at every scale: \ no slope anywhere", font_size=24, color=C.PATHOLOGY))
         for v, b in zip(verdicts, boxes):
             v.next_to(b, DOWN, buff=0.2)
+            v.shift(LEFT * max(0.0, v.get_right()[0] - 6.55))  # inside the right margin
         with self.voiceover(
             "<bookmark mark='a'/> Here's what the definition means geometrically. Put three graphs under a microscope "
             "and zoom in, a thousandfold. <bookmark mark='b'/> A differentiable function straightens out into a line, "

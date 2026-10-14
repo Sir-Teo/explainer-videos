@@ -25,9 +25,12 @@ def wavelength_color(nm: float) -> ManimColor:
     return ManimColor((max(r, 0.25), max(g, 0.1), max(b, 0.1)))
 
 
+GLOW_MAX = 12  # the glow saturates where the resolvent's norm reaches 10^12
+
+
 def pseudo_image(Z, width, height):
-    """log10 of the smallest singular value, from -12 (an eigenvalue in all but name) to 0, as a green glow."""
-    v = np.clip(-Z / 12, 0, 1)[::-1]  # row 0 of the image is the top
+    """log10 of the smallest singular value, from -GLOW_MAX (an eigenvalue in all but name) to 0, as a green glow."""
+    v = np.clip(-Z / GLOW_MAX, 0, 1)[::-1]  # row 0 of the image is the top
     bg = np.array(ManimColor(BACKGROUND).to_rgb())
     col = np.array(ManimColor(C.SPECTRUM).to_rgb())
     rgb = bg + v[..., None] ** 0.7 * (col - bg)
@@ -81,27 +84,46 @@ class Hook(VoiceoverScene):
                 a_.shift(DOWN * 0.28)
         sl = label(r"hydrogen's visible lines (nm): \ $\frac{1}{\lambda} = R\big(\frac14 - \frac{1}{n^2}\big)$, \ "
                    r"$n = 3, \ldots, 7$", font_size=24, color=GREY_A).next_to(strip, UP, buff=0.15)
-        # energy levels: E_n = -13.6 eV / n^2, and the lines are differences E_n - E_2
-        ax = plain_axes([0, 1, 1], [-14, 0.5, 2], 1.0, 3.2).move_to([-4.4, -2.0, 0])
-        lev = VGroup(*[Line(ax.c2p(0, -13.6 / n**2), ax.c2p(1, -13.6 / n**2), color=C.SPECTRUM, stroke_width=3)
-                       for n in range(1, 9)])
-        lev_l = MathTex(r"E_n = -\tfrac{13.6\ \mathrm{eV}}{n^2}", font_size=24, color=C.SPECTRUM).next_to(ax, RIGHT,
-                                                                                                     buff=0.2).shift(DOWN)
-        jumps = VGroup(*[Arrow(ax.c2p(0.2 + 0.12 * i, -13.6 / n**2), ax.c2p(0.2 + 0.12 * i, -13.6 / 4), buff=0,
-                               color=wavelength_color(l_), stroke_width=3, tip_length=0.1)
-                         for i, (n, l_) in enumerate(zip(ns, lam))])
+        # energy levels: E_n = -13.6 eV / n^2 (n = 2 up, on a true scale; n = 1 is far below), and each visible line is
+        # the jump from level n down to level 2
+        E = lambda n_: -13.6 / n_**2  # noqa: E731
+        ax = plain_axes([0, 1, 1], [-3.6, 0.2, 1], 2.2, 3.1, numbers=True, font_size=18,
+                        x_axis_config={"include_numbers": False, "include_ticks": False},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}, "numbers_to_exclude": []})
+        ax.move_to([-4.85, -1.65, 0])
+        lev = VGroup(*[Line(ax.c2p(0.04, E(n_)), ax.c2p(1, E(n_)), color=C.SPECTRUM, stroke_width=3 if n_ <= 7 else 1.5)
+                       for n_ in range(2, 21)])
+        # each line's photon energy is E_n - E_2, and h c / (E_n - E_2) is its wavelength
+        hc = 1239.84198  # eV nm
+        assert np.allclose(hc / (E(ns) - E(2)), lam, rtol=2e-3)
+        ys, last = {}, -1e9
+        for n_ in range(2, 8):  # level labels, pushed up where the levels crowd, with a leader line when moved
+            y_ = max(ax.c2p(1, E(n_))[1], last + 0.24)
+            ys[n_], last = y_, y_
+        lev_labs, leaders = VGroup(), VGroup()
+        for n_ in range(2, 8):
+            t_ = MathTex(rf"n = {n_}", font_size=22, color=C.SPECTRUM).move_to([ax.c2p(1, 0)[0] + 0.62, ys[n_], 0])
+            lev_labs.add(t_)
+            p0 = ax.c2p(1, E(n_)) + RIGHT * 0.04
+            leaders.add(Line(p0, [t_.get_left()[0] - 0.05, ys[n_], 0], color=GREY_B, stroke_width=1))
+        assert ys[7] < ax.get_top()[1] + 0.3
+        lev_l = MathTex(r"E_n = -\tfrac{13.6\ \mathrm{eV}}{n^2}", font_size=24, color=C.SPECTRUM).next_to(ax, UP, buff=0.12)
+        gnd = label(r"$n = 1$: \ $-13.6$ eV, \ off the scale below", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        jumps = VGroup(*[Arrow(ax.c2p(0.25 + 0.13 * i, E(n_)), ax.c2p(0.25 + 0.13 * i, E(2)), buff=0,
+                               color=wavelength_color(l_), stroke_width=3, tip_length=0.12,
+                               max_tip_length_to_length_ratio=0.5)
+                         for i, (n_, l_) in enumerate(zip(ns, lam))])
         rows = VGroup(
             MathTex(r"\sigma(T) = \{\lambda \in \mathbb C : T - \lambda I \text{ has no bounded inverse}\}", font_size=30,
                     color=C.SPECTRUM),
-            label(r"the energies are the spectrum of the Hamiltonian $H$; \ the lines are their differences",
-                  font_size=24),
-            label(r"the quantum videos assumed $H$ can be diagonalized; \ this part proves it", font_size=24,
-                  color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([1.8, -1.6, 0])
-        for r_ in rows:
-            if r_.width > 9.0:
-                r_.width = 9.0
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([1.8, -1.6, 0])
+            VGroup(label(r"the energies are the spectrum of the Hamiltonian $H$;", font_size=24),
+                   label(r"the lines are their differences", font_size=24)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
+            VGroup(label(r"the quantum videos assumed $H$ can be diagonalized;", font_size=24, color=C.EPS),
+                   label(r"this part proves it", font_size=24, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        rows.next_to([-1.5, -1.6, 0], RIGHT, buff=0)
+        assert rows.get_right()[0] <= 6.6 and rows.get_left()[0] > lev_labs.get_right()[0] + 0.4
+        assert lev_l.get_top()[1] < labs.get_bottom()[1] - 0.1 and gnd.get_bottom()[1] > -3.6
         head = label(r"Two meanings of ``spectrum''", font_size=36).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Spectrum is the word for the lines of light a hot gas gives off. Hydrogen's visible "
@@ -117,7 +139,8 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")
-            self.play(LaggedStart(*[Create(l_) for l_ in lev], lag_ratio=0.1), FadeIn(lev_l), FadeIn(rows[1]))
+            self.play(Create(ax), LaggedStart(*[Create(l_) for l_ in lev], lag_ratio=0.05), FadeIn(lev_l),
+                      FadeIn(lev_labs), FadeIn(leaders), FadeIn(gnd), FadeIn(rows[1]))
             self.play(LaggedStart(*[GrowArrow(j) for j in jumps], lag_ratio=0.2), run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(rows[2]))
