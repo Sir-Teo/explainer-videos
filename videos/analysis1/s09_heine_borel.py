@@ -238,10 +238,10 @@ class HeineBorel(VoiceoverScene):
             "Heine–Borel theorem says three properties are equivalent. <bookmark mark='a'/> Closed and bounded; "
             "<bookmark mark='b'/> compact; <bookmark mark='c'/> and every infinite subset has a limit point inside the set."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in (ta, tb, tc)], lag_ratio=0.3))
             for mk, m, t in zip("abc", (a, b, c), (ta, tb, tc)):
                 vo.wait_until(mk)
-                self.play(FadeIn(m), FadeIn(t, shift=UP * 0.15))
+                self.play(FadeIn(m, shift=UP * 0.1))
         with self.voiceover(
             "<bookmark mark='x'/> Closed and bounded gives compact: a bounded set sits inside some box, which is compact, "
             "and a closed subset of a compact set is compact. <bookmark mark='y'/> Compact gives the limit-point property, "

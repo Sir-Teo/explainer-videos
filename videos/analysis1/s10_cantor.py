@@ -68,8 +68,15 @@ class Cantor(VoiceoverScene):
             return o + np.array([(u - 0.5) * S, (v - 0.5) * S, 0])
 
         iv = cantor_intervals(4)
-        Pdust = VGroup(*[Square(side_length=(b - a) * S, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.85)
-                         .move_to(U((a + b) / 2, (c + d) / 2)) for a, b in iv for c, d in iv])
+        # all 256 squares as one VMobject (one closed subpath each)
+        sq_pts = []
+        for a, b in iv:
+            for c, d in iv:
+                cs_ = [U(a, c), U(b, c), U(b, d), U(a, d), U(a, c)]
+                for p0, p1 in zip(cs_, cs_[1:]):
+                    sq_pts += [p0, p0 + (p1 - p0) / 3, p0 + 2 * (p1 - p0) / 3, p1]
+        Pdust = VMobject(stroke_width=0, fill_color=C.SEQ, fill_opacity=0.85)
+        Pdust.set_points(np.array(sq_pts))
         P_l = MathTex(r"P", font_size=32, color=C.SEQ).next_to(U(0, 1), UP, buff=0.1).align_to(U(0, 1), LEFT)
         # the nested disks and the listed points (endpoints of the depth-4 intervals, so points of P)
         ends = np.unique(iv.ravel())
@@ -110,7 +117,7 @@ class Cantor(VoiceoverScene):
             "it that still meets P but avoids x one. That's possible because every point of P is a limit point, so there "
             "are other points of P nearby to aim for. Then a smaller one avoiding x two, and so on."
         ) as vo:
-            self.play(FadeIn(perf), FadeIn(Pdust, lag_ratio=0.002), FadeIn(P_l), run_time=1.5)
+            self.play(FadeIn(perf), FadeIn(Pdust), FadeIn(P_l), run_time=1.5)
             vo.wait_until("s")
             self.play(FadeIn(stmt), FadeOut(perf))
             vo.wait_until("a")

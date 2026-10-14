@@ -48,16 +48,19 @@ class RieszHilbert(VoiceoverScene):
             if k != 0:
                 seg.set_stroke(opacity=0.75)
             lines.add(seg)
-        ker_l = MathTex(r"\ker \Lambda", font_size=26, color=C.EPS).move_to(ax.c2p(-1.45, 2.0))
+        # each value just past the end of its own line, outside the window, where no line runs
+        def line_end(k, sign):
+            ts = np.linspace(0, 6, 6001) * sign
+            pts = np.array([k / ny * nrm + t * tang for t in ts])
+            ok = np.all(np.abs(pts) <= 2.2, axis=1)
+            return pts[ok][-1]
+
+        ker_l = MathTex(r"\ker \Lambda", font_size=26, color=C.EPS).next_to(ax.c2p(*line_end(0, -1)), DOWN, buff=0.12)
         lev = VGroup()
-        for k in (-2, -1, 1, 2, 3):  # each value on its own line (boxed), where the line is clear of both axes
-            for t_ in (1.75, 1.45, 1.15, 2.0, -1.45, -1.75):
-                q_ = k / ny * nrm + t_ * tang
-                if np.all(np.abs(q_) <= 1.95) and np.all(np.abs(q_) >= 0.35):
-                    break
-            else:
-                raise AssertionError(k)
-            lev.add(tagged(str(k), color=C.FUNCTIONAL, font_size=22).move_to(ax.c2p(*q_)))
+        for k in (-2, -1, 1, 2, 3):
+            e_ = line_end(k, 1)
+            assert abs(e_[1] - 2.2) < 1e-3  # these five leave through the top edge, 0.5 apart
+            lev.add(MathTex(str(k), font_size=22, color=C.FUNCTIONAL).next_to(ax.c2p(*e_), UP, buff=0.1))
         yarr = Arrow(ax.c2p(0, 0), ax.c2p(*y), buff=0, color=C.INNER, stroke_width=5, tip_length=0.2)
         y_l = MathTex(r"y = (2, 1)", font_size=26, color=C.INNER).next_to(ax.c2p(*y), RIGHT, buff=0.1)
         ra = right_angle(ax, (0, 0), nrm, tang, size=0.2, color=GREY_B)
@@ -137,7 +140,7 @@ class RieszHilbert(VoiceoverScene):
                 why(r"take the inner product with $z \perp M$"), why(r"so $y = \overline{\Lambda z}\, z$")]
         step = ladder(self, rows, whys, keep=4, top=1.3, buff=0.45, x=-1.0)
         # the picture the proof follows, small: the kernel, its parallel level sets, and the unit normal z
-        c0 = np.array([-4.55, -2.55, 0])
+        c0 = np.array([-4.25, -2.55, 0])
         sc = 1.3  # the picture sits in the free lower-left strip, below and left of the proof rows
         nrm = np.array([1.0, 2.0, 0]) / math.sqrt(5)
         tang = np.array([-nrm[1], nrm[0], 0])
@@ -148,7 +151,7 @@ class RieszHilbert(VoiceoverScene):
                           stroke_opacity=0.5 if k == 0 else 0.75))
         zarr = Arrow(c0, c0 + sc * 0.62 * nrm, buff=0, color=C.INNER, stroke_width=6, tip_length=0.2)
         mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=26, color=C.EPS).next_to(c0 + sc * 0.8 * tang, LEFT, buff=0.08),
-                        MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.62 * nrm, RIGHT, buff=0.08))
+                        MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.62 * nrm, LEFT, buff=0.1))
         # the key step drawn, with Lambda = <., z> (so Lambda z = 1): (Lambda x) z - x = -<x, t> t lies on M
         xv = 0.55 * tang + 0.6 * nrm
         lx = float(np.dot(xv, nrm))
@@ -217,7 +220,7 @@ class RieszHilbert(VoiceoverScene):
         b_l = MathTex(r"\Lambda e_n, \ n = 0, 1, \ldots, 11", font_size=26, color=C.FUNCTIONAL).next_to(bx, UP, buff=0.1)
         bx.x_axis.add_numbers([0, 5, 10], num_decimal_places=0, font_size=18)
         bnum = left_y_axis(bx, (-0.5, 0.5, 1.0, 1.5), decimals=1)
-        n_l = MathTex("n", font_size=24, color=GREY_B).next_to(bx.c2p(11.5, 0), DR, buff=0.08)
+        n_l = MathTex("n", font_size=24, color=GREY_B).next_to(bx.c2p(12, 0), RIGHT, buff=0.12)
         # 'a': the black box at work on one f; 'b': its probes, the first Legendre polynomials
         from numpy.polynomial import legendre as Lg
         xg, wg = Lg.leggauss(200)
