@@ -10,13 +10,58 @@ from explainer.style import BACKGROUND, C, GREY_D, TEX_TEMPLATE  # noqa: F401
 from manim import Tex
 
 
+def _split(s: str):
+    """Split a step's text in two at the break (a space or a TeX "\\ " outside math and braces) nearest its middle."""
+    cuts, depth, math, i = [], 0, False, 0
+    while i < len(s):
+        ch = s[i]
+        if ch == "\\" and i + 1 < len(s):
+            if s[i + 1] == " " and depth == 0 and not math:
+                cuts.append((i, i + 2))
+            i += 2
+            continue
+        if ch == "$":
+            math = not math
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif ch == " " and depth == 0 and not math:
+            cuts.append((i, i + 1))
+        i += 1
+    if not cuts:
+        return None
+    a, b = min(cuts, key=lambda c: abs(c[0] - len(s) / 2))
+    first, second = s[:a].strip(), s[b:].strip()
+    while second.startswith("\\ "):  # a TeX space at the start of the second line
+        second = second[2:].lstrip()
+    while first.endswith("\\"):
+        first = first[:-1].rstrip()
+    return (first, second) if first and second else None
+
+
+def _fit(text: str, prefix: str, font_size, inner: float):
+    """The step's Tex at its font size; too wide, it goes onto two centred lines before it is ever shrunk."""
+    t = Tex(prefix + text, font_size=font_size, tex_template=TEX_TEMPLATE)
+    if t.width <= inner:
+        return t
+    if inner / t.width < 0.85:
+        cut = _split(text)
+        if cut:
+            t2 = Tex(r"\begin{tabular}{@{}c@{}}" + prefix + cut[0] + r" \\ " + cut[1] + r"\end{tabular}",
+                     font_size=font_size, tex_template=TEX_TEMPLATE)
+            if t2.width < t.width:
+                t = t2
+    if t.width > inner:
+        t.width = inner
+    return t
+
+
 class ProofMap(VGroup):
     def __init__(self, steps, font_size=20, width=2.6, buff=0.32, direction=RIGHT, numbered=True):
         boxes = VGroup()
         for i, s in enumerate(steps):
-            t = Tex((rf"\textbf{{{i + 1}.}} " if numbered else "") + s, font_size=font_size, tex_template=TEX_TEMPLATE)
-            if t.width > width - 0.22:
-                t.width = width - 0.22
+            t = _fit(s, rf"\textbf{{{i + 1}.}} " if numbered else "", font_size, width - 0.22)
             r = RoundedRectangle(corner_radius=0.1, width=width, height=t.height + 0.28, stroke_color=GREY_D,
                                  stroke_width=2, fill_color=BACKGROUND, fill_opacity=0.0)
             boxes.add(VGroup(r, t))
