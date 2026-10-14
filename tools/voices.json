@@ -4,10 +4,25 @@
     "model": "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-bf16",
     "credit": "Qwen3-TTS (a synthetic voice)",
     "accept": 0.93,
-    "max_chars": {"en": 260, "zh": 90},
+    "max_chars": {
+      "en": 260,
+      "zh": 90
+    },
     "voices": {
-      "en": {"speaker": "Ryan", "instruct": "A warm, calm, thoughtful narrator explaining mathematics to a curious friend: clear, unhurried, gently engaged.", "params": {"temperature": 0.8}},
-      "zh": {"speaker": "Serena", "instruct": "温暖、平静、清晰的讲解语气，像一位耐心的老师给好奇的朋友讲数学，语速适中，自然不做作。", "params": {"temperature": 0.8}}
+      "en": {
+        "speaker": "Ryan",
+        "instruct": "A clear, precise science-documentary narrator: calm, measured and articulate, neutral and authoritative, with natural pacing and no dramatization.",
+        "params": {
+          "temperature": 0.8
+        }
+      },
+      "zh": {
+        "speaker": "Serena",
+        "instruct": "标准普通话的科学纪录片旁白：清晰、准确、沉稳、语速适中，语气中性专业，自然不夸张。",
+        "params": {
+          "temperature": 0.8
+        }
+      }
     }
   }
 }

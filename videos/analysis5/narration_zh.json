@@ -1,0 +1,353 @@
+{
+ "title": "分析学，从零搭建 · 第5部分：测度与勒贝格积分",
+ "chapters": {
+  "Hook": "极限穿过积分，不再需要一致性",
+  "Length": "1. 给每个集合一个长度",
+  "Vitali": "2. 一个没有长度的集合",
+  "SigmaAlgebras": "3. σ代数与可测函数",
+  "Measures": "4. 测度",
+  "Integral": "5. 积分，以及单调收敛",
+  "Fatou": "6. 法图引理",
+  "Dominated": "7. 控制收敛",
+  "RieszRepresentation": "8. 每个正泛函都是一个积分",
+  "Lebesgue": "9. 勒贝格测度，以及重访黎曼积分",
+  "NearlyContinuous": "10. 可测函数近乎连续",
+  "Products": "11. 乘积测度与富比尼定理",
+  "Convolution": "12. 卷积与千层蛋糕",
+  "Outro": "账本的第五行"
+ },
+ "lines": {
+  "f8289e890924": {
+   "scene": "Hook",
+   "en": "Four rows of the ledger, and the same column keeps asking the same question: when may a limit pass through an integral? <bookmark mark='l'/> So far the answer has been: when the convergence is uniform. This part changes the integral, and gets a far better answer.",
+   "zh": "账本已经有了四行，而同一列一直在问同一个问题：什么时候，极限可以穿过积分？<bookmark mark='l'/>到目前为止，答案都是：当收敛是一致的时候。这一部分要换掉积分本身，从而得到一个好得多的答案。"
+  },
+  "2515bc62fae6": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Here's a function from Part 3's museum, built as a limit. Take the cosine of m factorial pi x, raised to the power two n. <bookmark mark='b'/> As n grows, the curve collapses onto spikes at the points where m factorial times x is a whole number. <bookmark mark='c'/> Now let m grow too. The spikes multiply, and in the double limit we get Dirichlet's function: one at every rational, zero at every irrational. <bookmark mark='d'/> Every stage is continuous, and every limit in n has integral zero, but the final limit has no Riemann integral at all. The integral itself breaks under limits.",
+   "zh": "<bookmark mark='a'/>这是第3部分博物馆里的一个函数，我们把它当成极限来搭建。取cos（m的阶乘乘π乘x），再求它的2n次幂。<bookmark mark='b'/>随着n增大，曲线塌缩成一根根尖刺，位置就在m的阶乘乘x是整数的那些点上。<bookmark mark='c'/>现在让m也增大。尖刺越来越多，在这个二重极限下，我们得到狄利克雷函数：在每个有理数处为1，在每个无理数处为0。<bookmark mark='d'/>每一步都是连续的，对n取的每个极限积分都是0，可最终的极限根本没有黎曼积分。积分本身在极限之下崩溃了。"
+  },
+  "1fda93907cd9": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> The theme of this part is mass escaping. Here are three sequences of functions, each with integral exactly one. <bookmark mark='b'/> The first gets taller and narrower; the second slides off to the right; the third spreads thinner and thinner. <bookmark mark='c'/> At every single point, all three go to zero, so the limit has integral zero, while every function in the sequence has integral one. <bookmark mark='d'/> What would stop the escape is a lid: one integrable function lying above every function of the sequence. Here the smallest possible lids have infinite integral. Lebesgue's dominated convergence theorem will say that a lid is all you need.",
+   "zh": "<bookmark mark='a'/>这一部分的主题是质量的逃逸。这里有三个函数序列，每个函数的积分都恰好是1。<bookmark mark='b'/>第一个越来越高、越来越窄；第二个向右滑走；第三个摊得越来越薄。<bookmark mark='c'/>在每一个点上，三个序列都趋于0，所以极限的积分是0，而序列里每个函数的积分都是1。<bookmark mark='d'/>能阻止逃逸的，是一个盖子：一个可积函数，压在序列里每个函数的上方。在这里，最小的盖子积分都是无穷大。勒贝格的控制收敛定理将告诉我们：只要有一个盖子就够了。"
+  },
+  "64854d226298": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Lebesgue described his integral with a picture of counting money: rather than adding the coins in the order you meet them, sort them by value first. <bookmark mark='b'/> Riemann slices the domain into strips. <bookmark mark='c'/> Lebesgue slices the range into layers, and for each layer he needs the total length of the set where f exceeds that level. <bookmark mark='d'/> But the picture hides the real change. Here the set above one half is a few intervals. Those sets can be complicated: <bookmark mark='q'/> for Dirichlet's function, the set where it exceeds one half is the set of rationals, which is everywhere and contains no interval at all. <bookmark mark='e'/> The new idea is a way to give a length to such sets, and the first chapter is about exactly that.",
+   "zh": "<bookmark mark='a'/>勒贝格用数钱来描述他的积分：不按碰到硬币的先后顺序去加，而是先按面值把它们分好类。<bookmark mark='b'/>黎曼把定义域切成竖条。<bookmark mark='c'/>勒贝格把值域切成横层，而对每一层，他需要知道f超过这个高度的那个集合的总长度。<bookmark mark='d'/>可是这幅图掩盖了真正的变化。在这里，高于二分之一的集合只是几个区间。但这些集合可能很复杂：<bookmark mark='q'/>对狄利克雷函数来说，它超过二分之一的集合就是有理数集，它无处不在，却不包含任何区间。<bookmark mark='e'/>新的想法，是给这样的集合也赋予长度，而第一章讲的正是这件事。"
+  },
+  "b433f5112e1a": {
+   "scene": "Hook",
+   "en": "The plan follows Rudin's Real and Complex Analysis. <bookmark mark='a'/> First, which sets can have a length, and why not all of them can. <bookmark mark='b'/> Then the integral and its three great limit theorems: monotone convergence, Fatou's lemma and dominated convergence. <bookmark mark='c'/> Then where measures come from, and how the new integral compares with Riemann's. <bookmark mark='d'/> And finally, integrals in several variables, Fubini's theorem, and convolution.",
+   "zh": "计划跟着鲁丁的《实分析与复分析》走。<bookmark mark='a'/>首先，哪些集合可以有长度，以及为什么不是所有集合都可以。<bookmark mark='b'/>然后是积分，以及它的三大极限定理：单调收敛定理、法图引理和控制收敛定理。<bookmark mark='c'/>再然后，测度从哪里来，新的积分和黎曼积分比起来怎么样。<bookmark mark='d'/>最后是多元积分、富比尼定理，以及卷积。"
+  },
+  "56fdf724f6a9": {
+   "scene": "Length",
+   "en": "Chapter one: how to give a length to sets that are not intervals.",
+   "zh": "第一章：怎样给不是区间的集合赋予长度。"
+  },
+  "12429f7c43fa": {
+   "scene": "Length",
+   "en": "<bookmark mark='a'/> Lebesgue's idea, from his thesis of 1902: <bookmark mark='a1'/> cover a set by countably many intervals, <bookmark mark='a2'/> add up their lengths, <bookmark mark='a3'/> and take the smallest total you can get. That's the outer measure. <bookmark mark='b'/> Here's a set made of a few intervals and points. A crude cover, two overlapping intervals, has total length one point oh five. <bookmark mark='c'/> Tighter covers do better, <bookmark mark='d'/> and the infimum over all countable covers is the outer measure. Two properties are immediate: <bookmark mark='p1'/> bigger sets have bigger outer measure, <bookmark mark='p2'/> and the outer measure of a countable union is at most the sum of the outer measures.",
+   "zh": "<bookmark mark='a'/>勒贝格的想法，来自他1902年的博士论文：<bookmark mark='a1'/>用可数多个区间覆盖一个集合，<bookmark mark='a2'/>把它们的长度加起来，<bookmark mark='a3'/>再取你能得到的最小总和。这就是外测度。<bookmark mark='b'/>这是一个由几个区间和几个点组成的集合。一个粗糙的覆盖，两个相互重叠的区间，总长度是1.05。<bookmark mark='c'/>更紧的覆盖会更好，<bookmark mark='d'/>而对所有可数覆盖取下确界，就得到外测度。有两条性质是显然的：<bookmark mark='p1'/>集合越大，外测度越大；<bookmark mark='p2'/>可数并的外测度，不超过各个外测度之和。"
+  },
+  "8fb5b6bfc9ed": {
+   "scene": "Length",
+   "en": "<bookmark mark='a'/> The rationals between zero and one are dense, but they can be listed, as Part 1 showed. <bookmark mark='b'/> Cover the first by an interval of length epsilon over two, the second by epsilon over four, the k-th by epsilon over two to the k. <bookmark mark='c'/> Together the intervals have total length at most epsilon, and every rational is covered. Since epsilon was arbitrary, the rationals have outer measure zero: dense, but no length at all.",
+   "zh": "<bookmark mark='a'/>0和1之间的有理数是稠密的，但正如第1部分所说，它们可以排成一列。<bookmark mark='b'/>用长度为二分之ε的区间盖住第一个，用四分之ε的盖住第二个，第k个用2的k次方分之ε。<bookmark mark='c'/>这些区间的总长度至多是ε，而每个有理数都被盖住了。既然ε是任意的，有理数的外测度就是0：稠密，却根本没有长度。"
+  },
+  "5cb8dd4d8420": {
+   "scene": "Length",
+   "en": "<bookmark mark='a'/> Part 1's Cantor set is uncountable, as big as the whole interval by counting. <bookmark mark='b'/> But its stages cover it: two to the n intervals with total length two thirds to the n, which goes to zero. <bookmark mark='c'/> So the Cantor set has outer measure zero. Counting and measuring are different kinds of size.",
+   "zh": "<bookmark mark='a'/>第1部分的康托尔集是不可数的，按个数来数，它和整个区间一样大。<bookmark mark='b'/>但构造它的每一步都覆盖着它：2的n次方个区间，总长度是三分之二的n次方，趋于0。<bookmark mark='c'/>所以康托尔集的外测度是0。计数和度量，是两种不同意义上的大小。"
+  },
+  "c92816524c3c": {
+   "scene": "Length",
+   "en": "<bookmark mark='a'/> Now change the recipe. At stage n, remove from the middle of each piece an interval of length only four to the minus n. <bookmark mark='b'/> The removed lengths add up to one half, so what remains has measure one half. <bookmark mark='c'/> Yet the remaining pieces shrink to nothing: each stage more than halves the longest one. <bookmark mark='z'/> Magnify a piece sixty times and the same pattern of holes is there again. So the set contains no interval at all. It's nowhere dense, full of holes everywhere, and still has half the length of the line. Being thin and having measure zero are different things.",
+   "zh": "<bookmark mark='a'/>现在换个做法。在第n步，从每一段的正中间，只挖掉长度为4的负n次方的一个区间。<bookmark mark='b'/>挖掉的长度加起来是二分之一，所以剩下的部分测度是二分之一。<bookmark mark='c'/>可剩下的每一段都缩得越来越小：每一步都让最长的那段缩短一半以上。<bookmark mark='z'/>把其中一段放大60倍，同样的洞的图案又出现了。所以这个集合根本不包含任何区间。它是无处稠密的，处处都是洞，却仍然占了这条线一半的长度。稀薄和测度为0，是两回事。"
+  },
+  "467e70ef36dc": {
+   "scene": "Length",
+   "en": "<bookmark mark='a'/> A sanity check: does an interval get its usual length? <bookmark mark='a1'/> Covering it by itself shows the outer measure is at most b minus a. The other direction is where compactness enters. <bookmark mark='b'/> Widen each interval of a countable cover slightly to an open one, at a total cost of epsilon. By Heine–Borel, finitely many of them already cover the closed interval, <bookmark mark='c'/> and finitely many intervals that chain across it must have total length at least its length. So the outer measure of an interval is its length, as it should be.",
+   "zh": "<bookmark mark='a'/>检验一下：区间能得到它通常的长度吗？<bookmark mark='a1'/>用它自己来覆盖它，说明外测度至多是b减a。另一个方向，就要用到紧性了。<bookmark mark='b'/>把一个可数覆盖里的每个区间稍稍放宽成开区间，总共只多花ε。由海涅–博雷尔定理，其中有限多个就已经覆盖了这个闭区间，<bookmark mark='c'/>而有限多个区间要一环扣一环地横跨它，总长度就至少是它的长度。所以区间的外测度就是它的长度，理应如此。"
+  },
+  "bf36145f6709": {
+   "scene": "Vitali",
+   "en": "Chapter two: why some sets must be left without a length.",
+   "zh": "第二章：为什么有些集合注定没有长度。"
+  },
+  "d291d0d7701a": {
+   "scene": "Vitali",
+   "en": "<bookmark mark='a'/> Outer measure is defined for every set, but it isn't additive on every set. Could some cleverer definition be? We'd want three things on the circle: <bookmark mark='b'/> the length of a disjoint countable union is the sum of the lengths; <bookmark mark='c'/> turning a set doesn't change its length; <bookmark mark='d'/> and the whole circle has length two pi. <bookmark mark='e'/> In 1905 Vitali showed that no length function on all subsets can do all three.",
+   "zh": "<bookmark mark='a'/>外测度对每个集合都有定义，但它并不是在每个集合上都可加。有没有更聪明的定义能做到？在圆周上，我们想要三件事：<bookmark mark='b'/>互不相交的可数并的长度，等于各部分长度之和；<bookmark mark='c'/>转动一个集合，不改变它的长度；<bookmark mark='d'/>整个圆周的长度是2π。<bookmark mark='e'/>1905年，维塔利证明了：定义在所有子集上的长度函数，没有一个能同时做到这三点。"
+  },
+  "f030b30097f0": {
+   "scene": "Vitali",
+   "en": "<bookmark mark='a'/> The construction uses rotation of the circle by one radian. Since one radian is not a rational multiple of a full turn, the orbit of a point never comes back to it. <bookmark mark='b'/> It fills the circle densely: after two thousand steps, the largest gap is less than a hundredth of a radian.",
+   "zh": "<bookmark mark='a'/>这个构造用到把圆周旋转1弧度。因为1弧度不是整圈的有理数倍，一个点的轨道永远不会回到它自己。<bookmark mark='b'/>轨道稠密地布满圆周：走了2000步之后，最大的空隙已经不到百分之一弧度。"
+  },
+  "daa757ebec6a": {
+   "scene": "Vitali",
+   "en": "<bookmark mark='a'/> Call two points equivalent if they differ by a whole number of radians. Each class is one orbit, countable and dense; here are five of them, though there are uncountably many. <bookmark mark='b'/> Using the axiom of choice, pick one point from every class, and call the resulting set V. This step can only be drawn as a schematic. <bookmark mark='c'/> Now rotate V by one radian, by two, by minus one, and so on. These copies are disjoint, and since every point is in some class, they fill the whole circle. <bookmark mark='d'/> If V had a length, countable additivity and rotation invariance would make two pi a sum of infinitely many copies of the same number: <bookmark mark='z'/> zero if the number is zero, <bookmark mark='i'/> infinite otherwise, because copies of any positive length, laid end to end, go around the circle again and again. <bookmark mark='n'/> Neither is two pi. So V has no length, and a theory of length must restrict itself to a smaller class of sets: the measurable ones. <bookmark mark='t'/> In three dimensions the same idea gives the Banach–Tarski paradox.",
+   "zh": "<bookmark mark='a'/>如果两个点相差整数个弧度，就说它们等价。每个等价类都是一条轨道，可数而且稠密；这里画了其中五个，实际上有不可数多个。<bookmark mark='b'/>用选择公理，从每个类里挑出一个点，把得到的集合叫作V。这一步只能画成示意图。<bookmark mark='c'/>现在把V转1弧度、转2弧度、转负1弧度，依此类推。这些副本互不相交，而且因为每个点都属于某个类，它们铺满了整个圆周。<bookmark mark='d'/>如果V有长度，可数可加性和旋转不变性就会让2π等于无穷多个同样的数相加：<bookmark mark='z'/>如果这个数是0，和就是0；<bookmark mark='i'/>否则和就是无穷大，因为任何正长度的副本首尾相接，会绕着圆周一圈又一圈。<bookmark mark='n'/>两者都不是2π。所以V没有长度，而长度的理论只能局限于一个更小的集合类：可测集。<bookmark mark='t'/>在三维空间里，同样的想法给出了巴拿赫–塔斯基悖论。"
+  },
+  "db22ed467d44": {
+   "scene": "SigmaAlgebras",
+   "en": "Chapter three: the sets that get a length, and the functions we will integrate.",
+   "zh": "第三章：能得到长度的集合，以及我们要积分的函数。"
+  },
+  "1306ba7e44ce": {
+   "scene": "SigmaAlgebras",
+   "en": "<bookmark mark='a'/> The sets that get a length form a sigma-algebra: a family that <bookmark mark='a1'/> contains the whole space and is <bookmark mark='a2'/> closed under complements and <bookmark mark='a3'/> countable unions, so countable intersections too. <bookmark mark='b'/> Start from the open sets. Their complements are the closed sets, and countable unions of closed sets include the rationals, a union of single points. <bookmark mark='c'/> Keep going and you reach the Borel sets, the smallest sigma-algebra containing the open sets. <bookmark mark='d'/> Lebesgue's sigma-algebra is a little larger still, and <bookmark mark='e'/> Vitali's set lies outside it, among the sets no length can handle.",
+   "zh": "<bookmark mark='a'/>能得到长度的集合构成一个σ代数：这样一族集合，<bookmark mark='a1'/>它包含整个空间，<bookmark mark='a2'/>对取补集封闭，<bookmark mark='a3'/>对可数并也封闭，因此对可数交同样封闭。<bookmark mark='b'/>从开集出发。它们的补集是闭集，而闭集的可数并里就包括有理数集，它是单点集的并。<bookmark mark='c'/>一直做下去，就得到博雷尔集，也就是包含所有开集的最小σ代数。<bookmark mark='d'/>勒贝格的σ代数还要再大一点，<bookmark mark='e'/>而维塔利集在它之外，属于任何长度都处理不了的那些集合。"
+  },
+  "05333698ca10": {
+   "scene": "SigmaAlgebras",
+   "en": "<bookmark mark='a'/> Which functions can we integrate? Part 2 characterized continuity by preimages: the preimage of every open set is open. <bookmark mark='b'/> A function is measurable if the preimage of every open set is measurable. Same template, weaker demand. <bookmark mark='c'/> And here is the point: limits are free. The supremum, infimum, upper limit and limit of measurable functions are measurable, <bookmark mark='d'/> so Dirichlet's function, a double limit of continuous ones, is measurable, though it is nowhere continuous: raise cosine of m factorial pi x to a high power and it becomes spikes at the fractions with denominator m factorial; then let m grow.",
+   "zh": "<bookmark mark='a'/>哪些函数可以积分？第2部分用原像刻画了连续性：每个开集的原像都是开集。<bookmark mark='b'/>如果每个开集的原像都是可测集，这个函数就是可测的。同样的模板，要求更弱。<bookmark mark='c'/>关键在这里：取极限是免费的。可测函数的上确界、下确界、上极限和极限都是可测的，<bookmark mark='d'/>所以狄利克雷函数，作为连续函数的二重极限，是可测的，尽管它处处不连续：把cos（m的阶乘乘π乘x）升到很高的幂，它就变成一根根尖刺，落在分母为m的阶乘的那些分数上；然后让m增大。"
+  },
+  "a05dacc333d1": {
+   "scene": "SigmaAlgebras",
+   "en": "<bookmark mark='a'/> Every non-negative measurable function is the limit of an increasing sequence of simple functions, functions with finitely many values. <bookmark mark='b'/> The recipe slices the range: at stage n, round f down to the nearest multiple of one over two to the n. Each layer's preimage is a measurable set, so each stage is a finite combination of indicator functions. <bookmark mark='c'/> Each stage refines the last, so the sequence increases, and where f is below n, the error is at most one over two to the n. This is the honest version of Lebesgue's coins.",
+   "zh": "<bookmark mark='a'/>每个非负可测函数，都是一列递增的简单函数的极限，简单函数就是只取有限多个值的函数。<bookmark mark='b'/>做法是切分值域：在第n步，把f向下取到最近的2的n次方分之1的倍数。每一层的原像都是可测集，所以每一步都是有限个示性函数的组合。<bookmark mark='c'/>每一步都是对上一步的加细，所以这个序列递增；而在f小于n的地方，误差至多是2的n次方分之1。这就是勒贝格数硬币的严格版本。"
+  },
+  "d85b97ed6257": {
+   "scene": "Measures",
+   "en": "Chapter four: measures, the abstract notion of size.",
+   "zh": "第四章：测度，大小的抽象概念。"
+  },
+  "35ed0295d374": {
+   "scene": "Measures",
+   "en": "<bookmark mark='a'/> A measure assigns a size, possibly infinite, to each set of a sigma-algebra, so that the size of a countable disjoint union is the sum of the sizes. <bookmark mark='b'/> Counting measure counts points. <bookmark mark='c'/> A Dirac mass puts weight one at a single point and none anywhere else. <bookmark mark='d'/> And length, Lebesgue's measure, which chapter nine builds properly.",
+   "zh": "<bookmark mark='a'/>测度给σ代数里的每个集合指定一个大小，可以是无穷大，使得互不相交的可数并的大小，等于各部分大小之和。<bookmark mark='b'/>计数测度数的是点的个数。<bookmark mark='c'/>狄拉克测度在单独一个点上放权重1，别处都是0。<bookmark mark='d'/>还有长度，也就是勒贝格测度，第九章会正式把它建立起来。"
+  },
+  "75e86b127732": {
+   "scene": "Measures",
+   "en": "<bookmark mark='a'/> Countable additivity makes measures continuous along monotone sequences. <bookmark mark='b'/> If sets increase to a union, their measures increase to the measure of the union: the intervals from zero to one minus one over n fill out the half-open unit interval, and their lengths climb to one. <bookmark mark='c'/> For decreasing sets you need a finite start. The rays from n to infinity shrink to the empty set, but every one of them has infinite length.",
+   "zh": "<bookmark mark='a'/>可数可加性让测度沿着单调序列连续。<bookmark mark='b'/>如果集合递增到它们的并，它们的测度就递增到并的测度：从0到1减n分之1的区间，填满了半开的单位区间，它们的长度一路爬升到1。<bookmark mark='c'/>对递减的集合，起点的测度必须有限。从n到无穷的射线缩成空集，可它们每一条的长度都是无穷大。"
+  },
+  "9512dbf8bb98": {
+   "scene": "Measures",
+   "en": "<bookmark mark='a'/> Sets of measure zero are invisible to integrals, which gives the phrase almost everywhere: true except on a set of measure zero. <bookmark mark='b'/> Dirichlet's function is one on the rationals, here drawn up to denominator forty, and zero elsewhere. The rationals have measure zero, so the function is zero almost everywhere, <bookmark mark='c'/> and its Lebesgue integral is simply zero. The function Riemann could not integrate is, to Lebesgue, the same as zero.",
+   "zh": "<bookmark mark='a'/>测度为0的集合，在积分眼里是看不见的，于是有了“几乎处处”这个说法：除了一个测度为0的集合之外都成立。<bookmark mark='b'/>狄利克雷函数在有理数上为1，这里画到分母40为止，在其他地方为0。有理数集的测度为0，所以这个函数几乎处处为0，<bookmark mark='c'/>它的勒贝格积分就是0。黎曼积不了的这个函数，在勒贝格看来，和0没什么两样。"
+  },
+  "aec129fb1f29": {
+   "scene": "Integral",
+   "en": "Chapter five: the integral itself, and its first limit theorem.",
+   "zh": "第五章：积分本身，以及它的第一个极限定理。"
+  },
+  "bbbfbe43a490": {
+   "scene": "Integral",
+   "en": "<bookmark mark='a'/> The integral of a simple function is what it should be: <bookmark mark='s1'/> each value times the measure of the set where it's taken, added up. <bookmark mark='s2'/> The integral of a non-negative measurable function is the supremum of the integrals of the simple functions below it. <bookmark mark='b'/> With the dyadic simple functions from the last chapter, the areas climb, <bookmark mark='c'/> and close in on the area under f.",
+   "zh": "<bookmark mark='a'/>简单函数的积分，就是它理应的样子：<bookmark mark='s1'/>每个取值乘以取这个值的集合的测度，再加起来。<bookmark mark='s2'/>非负可测函数的积分，是它下方所有简单函数积分的上确界。<bookmark mark='b'/>用上一章的二进简单函数，面积一路爬升，<bookmark mark='c'/>逼近f下方的面积。"
+  },
+  "442410172123": {
+   "scene": "Integral",
+   "en": "<bookmark mark='a'/> The first limit theorem is the monotone convergence theorem: if non-negative functions increase to a limit at every point, their integrals increase to the integral of the limit. <bookmark mark='b'/> Here the functions are one over root x, cut off at height n. Each is bounded; the limit is not. <bookmark mark='c'/> Their integrals are two minus one over n, climbing to two, the integral of one over root x. <bookmark mark='d'/> No uniform convergence was needed, and no lid: only that the functions increase.",
+   "zh": "<bookmark mark='a'/>第一个极限定理是单调收敛定理：如果非负函数在每一点都递增到一个极限，那么它们的积分就递增到极限的积分。<bookmark mark='b'/>这里的函数是根号x分之1，在高度n处截断。每一个都有界；极限却无界。<bookmark mark='c'/>它们的积分是2减n分之1，一路爬升到2，也就是根号x分之1的积分。<bookmark mark='d'/>既不需要一致收敛，也不需要盖子：只要函数递增就行。"
+  },
+  "0d006f486cb6": {
+   "scene": "Integral",
+   "en": "<bookmark mark='a'/> The proof is short and worth seeing. The integrals of f n increase, so they have a limit alpha, at most the integral of f. <bookmark mark='b'/> For the other direction, fix a simple function s below f, and a number c a little less than one. <bookmark mark='c'/> Let E n be the set where f n has already climbed above c times s. Because f n increases to f, which is above c s wherever s is positive, these sets grow and swallow everything. <bookmark mark='d'/> On E n, the integral of f n is at least c times the integral of s over E n, and by continuity of the measure from below, that tends to c times the integral of s. <bookmark mark='e'/> So alpha is at least c times the integral of s, for every c less than one and every simple s below f, which by definition means alpha is at least the integral of f.",
+   "zh": "<bookmark mark='a'/>证明很短，值得一看。f_n的积分递增，所以有极限α，它至多是f的积分。<bookmark mark='b'/>另一个方向，固定f下方的一个简单函数s，再取一个比1稍小的数c。<bookmark mark='c'/>令E_n是f_n已经爬到c乘s之上的那个集合。因为f_n递增到f，而在s为正的地方，f都大于c乘s，所以这些集合越来越大，最后吞下一切。<bookmark mark='d'/>在E_n上，f_n的积分至少是c乘s在E_n上的积分，而由测度从下方的连续性，它趋于c乘s的积分。<bookmark mark='e'/>所以对每个小于1的c，以及f下方的每个简单函数s，α都至少是c乘s的积分，按定义，这就意味着α至少是f的积分。"
+  },
+  "a1e16bbf7636": {
+   "scene": "Integral",
+   "en": "<bookmark mark='a'/> A corollary: for non-negative functions, the integral of a series is the series of the integrals, always. <bookmark mark='b'/> The function minus log of one minus x, over x, is the sum of x to the k minus one over k, all non-negative. <bookmark mark='c'/> Integrate term by term: each term gives one over k squared. So the integral is pi squared over six, Part 3's Basel sum once more, and the numerical integral agrees.",
+   "zh": "<bookmark mark='a'/>一个推论：对非负函数，级数的积分永远等于积分的级数。<bookmark mark='b'/>函数“负的log（1减x），除以x”，等于x的（k减1）次方除以k之和，每一项都非负。<bookmark mark='c'/>逐项积分：每一项给出k的平方分之1。所以这个积分等于六分之π的平方，又是第3部分的巴塞尔和，而数值积分也吻合。"
+  },
+  "13627ec62993": {
+   "scene": "Fatou",
+   "en": "Chapter six: Fatou's lemma, the inequality that limits always satisfy.",
+   "zh": "第六章：法图引理，极限永远满足的那个不等式。"
+  },
+  "bb36b8bc61ec": {
+   "scene": "Fatou",
+   "en": "<bookmark mark='a'/> When functions don't increase, we still get an inequality. Fatou's lemma: the integral of the lower limit is at most the lower limit of the integrals. <bookmark mark='b'/> The proof takes the infimum of the tail, from the k-th function on. These infima increase to the lower limit. <bookmark mark='c'/> Each is below the k-th function, so its integral is smaller. <bookmark mark='d'/> Monotone convergence moves the limit through the integral, and the inequality survives.",
+   "zh": "<bookmark mark='a'/>当函数不递增时，我们仍然能得到一个不等式。法图引理：下极限的积分，至多是积分的下极限。<bookmark mark='b'/>证明取尾部的下确界，也就是从第k个函数往后的下确界。这些下确界递增到下极限。<bookmark mark='c'/>每一个都在第k个函数的下方，所以它的积分更小。<bookmark mark='d'/>单调收敛定理把极限移过积分，而不等式保留了下来。"
+  },
+  "26b635c82d74": {
+   "scene": "Fatou",
+   "en": "<bookmark mark='a'/> Here the inequality is strict. The functions one plus cosine n x all have the same integral, two pi, <bookmark mark='b'/> but they oscillate faster and faster. <bookmark mark='c'/> Their running minimum sinks toward zero: for almost every x, the multiples of x wrap densely around the circle, so cosine of n x keeps returning close to minus one. <bookmark mark='d'/> The lower limit is zero almost everywhere, with integral zero, while the integrals themselves stay at two pi.",
+   "zh": "<bookmark mark='a'/>这里的不等式是严格的。函数1加cos nx的积分都一样，是2π，<bookmark mark='b'/>但它们振荡得越来越快。<bookmark mark='c'/>它们的累计最小值沉向0：对几乎每个x，x的各个倍数稠密地绕满圆周，所以cos nx一次又一次地回到负1附近。<bookmark mark='d'/>下极限几乎处处为0，积分为0，而积分本身始终停在2π。"
+  },
+  "1d5f0c247ec4": {
+   "scene": "Fatou",
+   "en": "<bookmark mark='a'/> The opening's three escapes fit the same pattern. In every case the lower limit is zero, with integral zero, while the integrals stay at one. <bookmark mark='b'/> Fatou's inequality points one way only: in the limit, mass can escape, but it can never appear from nowhere. The next chapter shows how to stop it escaping.",
+   "zh": "<bookmark mark='a'/>开场里的三种逃逸，也符合同一个模式。每种情形下，下极限都是0，积分为0，而积分始终是1。<bookmark mark='b'/>法图不等式只指向一个方向：在极限下，质量可以逃走，却永远不会凭空出现。下一章会讲怎样阻止它逃走。"
+  },
+  "54eafba44a53": {
+   "scene": "Dominated",
+   "en": "Chapter seven: Lebesgue's dominated convergence theorem, the answer this part promised.",
+   "zh": "第七章：勒贝格控制收敛定理，这一部分承诺的那个答案。"
+  },
+  "523862729839": {
+   "scene": "Dominated",
+   "en": "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and the absolute values of all the f n lie under one integrable function g, the lid, then the integrals converge, and in fact the integral of the difference goes to zero. <bookmark mark='b'/> The proof is Fatou's lemma applied to the right functions. Two g minus the difference is non-negative, <bookmark mark='c'/> and it converges to two g, so Fatou bounds the integral of two g by the lower limit of its integrals. <bookmark mark='d'/> Pull out the integral of two g, <bookmark mark='e'/> which is finite because the lid is integrable, and the upper limit of the integral of the difference is at most zero. The lid is the whole story.",
+   "zh": "<bookmark mark='a'/>定理：如果f_n在每一点都收敛到f，而所有f_n的绝对值都在同一个可积函数g的下方，g就是那个盖子，那么积分收敛，而且事实上，差的积分趋于0。<bookmark mark='b'/>证明就是把法图引理用在合适的函数上。2倍的g减去差的绝对值是非负的，<bookmark mark='c'/>它收敛到2倍的g，所以由法图引理，2倍的g的积分不超过这些积分的下极限。<bookmark mark='d'/>把2倍的g的积分提出来，<bookmark mark='e'/>它是有限的，因为盖子可积，于是差的积分的上极限至多是0。整个故事就是这个盖子。"
+  },
+  "f2c3bb9a259f": {
+   "scene": "Dominated",
+   "en": "<bookmark mark='a'/> Compare two sequences on the half-line. On the left, the spreading sequence: it converges to zero uniformly, the strongest convergence Part 3 knew, yet every function has integral one. Part 3's theorem needed a bounded interval. <bookmark mark='b'/> On the right, one minus x over n, to the n. These lie under the single integrable lid, e to the minus x, <bookmark mark='c'/> so dominated convergence applies: the integrals, n over n plus one, converge to the integral of the limit, which is one.",
+   "zh": "<bookmark mark='a'/>在半直线上比较两个序列。左边是摊开的那个序列：它一致收敛到0，这是第3部分所知道的最强的收敛，可每个函数的积分都是1。第3部分的定理需要有界区间。<bookmark mark='b'/>右边是（1减n分之x）的n次方。它们都在同一个可积的盖子e的负x次方下方，<bookmark mark='c'/>所以控制收敛定理适用：积分n加1分之n，收敛到极限的积分，也就是1。"
+  },
+  "62f67e350703": {
+   "scene": "Dominated",
+   "en": "<bookmark mark='a'/> Convergence of integrals and convergence at points are genuinely different. The typewriter sequence sweeps an indicator across the interval, then sweeps again at half the width, and so on. <bookmark mark='b'/> Its integrals go to zero. <bookmark mark='c'/> But every point is covered once in every sweep, so at no point do the values converge: they keep returning to one. <bookmark mark='d'/> Converging in area does not imply converging at points, though, as Part 6 will show, a subsequence always does.",
+   "zh": "<bookmark mark='a'/>积分的收敛和逐点的收敛，确实是两回事。打字机序列让一个示性函数扫过整个区间，然后用一半的宽度再扫一遍，依此类推。<bookmark mark='b'/>它的积分趋于0。<bookmark mark='c'/>可每一遍扫描，每个点都会被盖住一次，所以在任何一点，函数值都不收敛：它们一次又一次地回到1。<bookmark mark='d'/>面积意义下的收敛，推不出逐点收敛；不过第6部分会说明，总有一个子序列是逐点收敛的。"
+  },
+  "5b577c6acabf": {
+   "scene": "Dominated",
+   "en": "<bookmark mark='a'/> One more bridge back to Part 3. Egorov's theorem: on a space of finite measure, convergence almost everywhere is uniform once you remove a set of arbitrarily small measure. <bookmark mark='b'/> x to the n converges to zero except at one, but not uniformly. Cut out a sliver of width epsilon at the right end, <bookmark mark='c'/> and on the rest the convergence is uniform: the largest value is one minus epsilon to the n. <bookmark mark='d'/> On an infinite measure space this fails: indicators of the rays from n to infinity converge to zero everywhere, but never uniformly.",
+   "zh": "<bookmark mark='a'/>再架一座通回第3部分的桥。叶戈罗夫定理：在测度有限的空间上，几乎处处收敛，只要去掉一个测度任意小的集合，就是一致收敛。<bookmark mark='b'/>x的n次方除了在1处以外都收敛到0，但不是一致收敛。在右端切掉一条宽度为ε的细条，<bookmark mark='c'/>在剩下的部分上收敛就是一致的：最大值是（1减ε）的n次方。<bookmark mark='d'/>在测度无穷的空间上，这就不成立了：从n到无穷的射线的示性函数处处收敛到0，却永远不是一致收敛。"
+  },
+  "bb01f705dcdc": {
+   "scene": "RieszRepresentation",
+   "en": "Chapter eight: where measures come from. The answer is the Riesz representation theorem.",
+   "zh": "第八章：测度从哪里来。答案是里斯表示定理。"
+  },
+  "3ed8de58d753": {
+   "scene": "RieszRepresentation",
+   "en": "<bookmark mark='a'/> Think of an integral as a machine: a function goes in, a number comes out, and the machine is linear and positive. <bookmark mark='b'/> The Riemann integral is one such machine. Evaluating at a point is another, and so is any positive combination of point evaluations. <bookmark mark='c'/> The Riesz representation theorem says that every such machine on the continuous functions with compact support is integration against exactly one regular measure. The measure is hidden inside the functional, and the theorem pulls it out.",
+   "zh": "<bookmark mark='a'/>把积分想成一台机器：送进去一个函数，出来一个数，而且这台机器是线性的、正的。<bookmark mark='b'/>黎曼积分就是这样一台机器。在一点处取值是另一台，各点取值的任何正组合也是。<bookmark mark='c'/>里斯表示定理说：在具有紧支集的连续函数上，每一台这样的机器，都是关于唯一一个正则测度的积分。测度就藏在泛函里面，而这个定理把它拉了出来。"
+  },
+  "c488b69c23bf": {
+   "scene": "RieszRepresentation",
+   "en": "<bookmark mark='a'/> The functional only sees continuous functions, so the proof needs continuous functions that imitate sets. Urysohn's lemma provides them: for a compact set inside an open set, <bookmark mark='b'/> there's a continuous plateau, equal to one on the compact set and fading to zero before it leaves the open set.",
+   "zh": "<bookmark mark='a'/>泛函只看得见连续函数，所以证明需要一些模仿集合的连续函数。乌雷松引理提供了它们：对于含在一个开集里的紧集，<bookmark mark='b'/>存在一个连续的平台函数，在紧集上等于1，在离开开集之前就逐渐降到0。"
+  },
+  "935417c423ea": {
+   "scene": "RieszRepresentation",
+   "en": "<bookmark mark='a'/> Now the construction. For an open set V, let mu of V be the largest value the functional gives to plateau functions living inside V. For other sets, approximate from outside by open sets. <bookmark mark='b'/> Run it for the Riemann integral. The open set is four random intervals; the plateaus have collars of width one fifth, one twentieth, one hundredth, and so on. <bookmark mark='c'/> Their integrals climb to the total length of V. The machine has produced length.",
+   "zh": "<bookmark mark='a'/>现在来构造。对一个开集V，令μ(V)是泛函在V里面的平台函数上能取到的最大值。对其他集合，就用开集从外面逼近。<bookmark mark='b'/>拿黎曼积分来跑一遍。开集是四个随机区间；平台函数的边沿宽度依次是五分之一、二十分之一、一百分之一，依此类推。<bookmark mark='c'/>它们的积分一路爬升到V的总长度。这台机器造出了长度。"
+  },
+  "7b59416cf59d": {
+   "scene": "RieszRepresentation",
+   "en": "<bookmark mark='a'/> The rest of the proof has four steps: define mu on open sets, extend it to all sets by approximating from outside, <bookmark mark='b'/> find a sigma-algebra on which it is countably additive, <bookmark mark='c'/> and finally show the functional is integration against mu. That last step slices f into horizontal layers of thickness epsilon: the functional of f is close to the sum of epsilon times the measure of each level set. <bookmark mark='d'/> Lebesgue's layer picture from the opening, now doing honest work inside the proof.",
+   "zh": "<bookmark mark='a'/>证明的其余部分有四步：在开集上定义μ，再用从外面逼近的办法把它推广到所有集合，<bookmark mark='b'/>找到一个σ代数，让μ在上面可数可加，<bookmark mark='c'/>最后证明这个泛函就是关于μ的积分。最后这一步把f切成厚度为ε的横层：f的泛函值，接近于ε乘以每个水平集的测度之和。<bookmark mark='d'/>开场里勒贝格的分层图，如今在证明里实实在在地干活了。"
+  },
+  "4ee0cd4bb6ce": {
+   "scene": "Lebesgue",
+   "en": "Chapter nine: Lebesgue measure, and how the new integral compares with Riemann's.",
+   "zh": "第九章：勒贝格测度，以及新的积分和黎曼积分比起来怎么样。"
+  },
+  "e40f6db3a0b8": {
+   "scene": "Lebesgue",
+   "en": "<bookmark mark='a'/> Feed the Riemann integral into the Riesz machine and out comes Lebesgue measure. <bookmark mark='b'/> A box gets its volume. <bookmark mark='c'/> Sliding a set doesn't change its measure. <bookmark mark='d'/> Every measurable set is squeezed between a closed set inside and an open set outside, with as little room between them as you like. <bookmark mark='e'/> And these properties pin it down: it's the only translation-invariant measure that gives the unit cube measure one.",
+   "zh": "<bookmark mark='a'/>把黎曼积分送进里斯的机器，出来的就是勒贝格测度。<bookmark mark='b'/>长方体得到它的体积。<bookmark mark='c'/>平移一个集合，不改变它的测度。<bookmark mark='d'/>每个可测集都被夹在里面的一个闭集和外面的一个开集之间，两者之间的空隙要多小有多小。<bookmark mark='e'/>而这些性质完全确定了它：它是唯一一个平移不变、并且让单位立方体测度为1的测度。"
+  },
+  "726e4b60204c": {
+   "scene": "Lebesgue",
+   "en": "<bookmark mark='a'/> Which functions could Riemann integrate? Lebesgue answered exactly: a bounded function is Riemann integrable if and only if its points of discontinuity form a set of measure zero, and then the two integrals agree. <bookmark mark='b'/> Thomae's function is discontinuous at the rationals, a null set: Riemann can integrate it, and so can Lebesgue. <bookmark mark='c'/> Dirichlet's function is discontinuous everywhere: Riemann cannot. Lebesgue can, because it is zero almost everywhere. Every Riemann-integrable function is Lebesgue integrable, with the same integral.",
+   "zh": "<bookmark mark='a'/>黎曼究竟能积哪些函数？勒贝格给出了确切的回答：一个有界函数是黎曼可积的，当且仅当它的间断点构成一个测度为0的集合，而且这时两种积分相等。<bookmark mark='b'/>托马函数在有理数处间断，那是一个零测集：黎曼能积它，勒贝格也能。<bookmark mark='c'/>狄利克雷函数处处间断：黎曼积不了。勒贝格能，因为它几乎处处为0。每个黎曼可积函数都是勒贝格可积的，而且积分相同。"
+  },
+  "3f163c377456": {
+   "scene": "Lebesgue",
+   "en": "<bookmark mark='a'/> One honest caveat. Sine x over x has an improper Riemann integral from zero to infinity: the positive and negative humps cancel more and more exactly, and the integral up to N converges to pi over two. <bookmark mark='b'/> But the humps' total area, without the cancellation, grows like the logarithm of N. <bookmark mark='c'/> A Lebesgue integral requires the absolute value to have a finite integral, so this function is not Lebesgue integrable. Conditionally convergent integrals are like conditionally convergent series in Part 2: useful, but fragile.",
+   "zh": "<bookmark mark='a'/>老实说，有一点要注意。x分之sin x从0到无穷有一个黎曼反常积分：正的和负的拱越来越精确地相互抵消，积到N的积分收敛到二分之π。<bookmark mark='b'/>可是不让它们抵消，这些拱的总面积就像N的对数那样增长。<bookmark mark='c'/>勒贝格积分要求绝对值的积分有限，所以这个函数不是勒贝格可积的。条件收敛的积分，就像第2部分里条件收敛的级数：有用，但很脆弱。"
+  },
+  "dc0e1f786acc": {
+   "scene": "NearlyContinuous",
+   "en": "Chapter ten: how wild measurable functions can be, which is: not very.",
+   "zh": "第十章：可测函数能有多野？答案是：没那么野。"
+  },
+  "c9609c3ba1db": {
+   "scene": "NearlyContinuous",
+   "en": "<bookmark mark='a'/> Littlewood summed up the theory in three principles. Every measurable set is nearly a finite union of intervals. <bookmark mark='b'/> Every measurable function is nearly continuous. <bookmark mark='c'/> And every convergent sequence of functions is nearly uniformly convergent, which was Egorov's theorem. <bookmark mark='d'/> Nearly means: except on a set of measure as small as you like.",
+   "zh": "<bookmark mark='a'/>李特尔伍德把这套理论总结成三条原则。每个可测集都近乎是有限个区间的并。<bookmark mark='b'/>每个可测函数都近乎是连续的。<bookmark mark='c'/>每个收敛的函数序列都近乎一致收敛，这就是叶戈罗夫定理。<bookmark mark='d'/>“近乎”的意思是：除去一个测度要多小有多小的集合。"
+  },
+  "ff234b0034c5": {
+   "scene": "NearlyContinuous",
+   "en": "<bookmark mark='a'/> Lusin's theorem makes the second principle precise: a measurable function agrees with a continuous one except on a set of measure less than epsilon. <bookmark mark='b'/> Here f is a step function with a hundred random steps. <bookmark mark='c'/> The continuous g replaces each jump by a steep ramp; zoom in on one. <bookmark mark='d'/> The two functions differ only on the little intervals around the jumps, of total measure just under a twentieth.",
+   "zh": "<bookmark mark='a'/>卢津定理把第二条原则说得很精确：一个可测函数，除了在一个测度小于ε的集合上，都与某个连续函数相等。<bookmark mark='b'/>这里的f是一个阶梯函数，有100个随机的台阶。<bookmark mark='c'/>连续函数g把每个跳跃换成一段陡峭的斜坡；放大其中一个看看。<bookmark mark='d'/>两个函数只在跳跃周围的小区间上不同，这些区间的总测度略小于二十分之一。"
+  },
+  "bf32d574ae95": {
+   "scene": "NearlyContinuous",
+   "en": "<bookmark mark='a'/> A consequence we'll need in Part 6: continuous functions with compact support are dense among integrable functions. For our step function, the area between f and its repair is about four thousandths. <bookmark mark='b'/> A close cousin, the Vitali–Carathéodory theorem, squeezes every real integrable function between semicontinuous ones whose integrals are as close as you like.",
+   "zh": "<bookmark mark='a'/>一个第6部分要用到的推论：具有紧支集的连续函数，在可积函数中是稠密的。对我们这个阶梯函数，f和修补后的函数之间的面积，大约是千分之四。<bookmark mark='b'/>它的一个近亲，维塔利–卡拉泰奥多里定理，把每个实值可积函数夹在两个半连续函数之间，而且它们的积分要多接近有多接近。"
+  },
+  "8fdaf5607c0f": {
+   "scene": "Products",
+   "en": "Chapter eleven: integrals over products, and the order of integration.",
+   "zh": "第十一章：乘积上的积分，以及积分的次序。"
+  },
+  "fc296cb9046c": {
+   "scene": "Products",
+   "en": "<bookmark mark='a'/> The product of two measures gives rectangles their area, and every measurable set in the plane can be measured by slices. <bookmark mark='b'/> Slide a vertical line across the region and record the length of each vertical section; the integral of those lengths is the area. <bookmark mark='c'/> Slicing horizontally instead gives the same number.",
+   "zh": "<bookmark mark='a'/>两个测度的乘积赋予矩形面积，而平面上每个可测集都可以按切片来度量。<bookmark mark='b'/>让一条竖直线扫过这个区域，记下每个竖直截面的长度；这些长度的积分就是面积。<bookmark mark='c'/>改成横着切，得到的是同一个数。"
+  },
+  "cbd505652d53": {
+   "scene": "Products",
+   "en": "<bookmark mark='a'/> Fubini's theorem, with Tonelli's version, for sigma-finite measures: for a non-negative measurable function, or for any function whose absolute value has a finite double integral, the two iterated integrals agree with the double integral. <bookmark mark='b'/> The proof climbs a ladder: <bookmark mark='r1'/> rectangles, where both sides are just length times length; <bookmark mark='r2'/> then all measurable sets, built from rectangles using monotone classes; <bookmark mark='r3'/> then simple functions, which are finite sums of sets; <bookmark mark='r4'/> then everything, by monotone convergence. <bookmark mark='c'/> The condition is not decoration.",
+   "zh": "<bookmark mark='a'/>富比尼定理，连同托内利的版本，对σ有限的测度成立：对非负可测函数，或者对绝对值的二重积分有限的任何函数，两个累次积分都等于二重积分。<bookmark mark='b'/>证明是在爬一架梯子：<bookmark mark='r1'/>先是矩形，两边都只是长度乘长度；<bookmark mark='r2'/>然后是所有可测集，用单调类从矩形搭起来；<bookmark mark='r3'/>然后是简单函数，它们是集合的有限和；<bookmark mark='r4'/>最后是一切函数，靠单调收敛定理。<bookmark mark='c'/>这个条件可不是摆设。"
+  },
+  "1c39adcad797": {
+   "scene": "Products",
+   "en": "<bookmark mark='a'/> The classic counterexample: x squared minus y squared, over the square of x squared plus y squared, on the unit square. It's positive below the diagonal and negative above, and huge near the corner. <bookmark mark='b'/> Integrate in y first: each vertical line gives one over one plus x squared, and integrating that in x gives pi over four. <bookmark mark='c'/> Integrate in x first: each horizontal line gives minus one over one plus y squared, and the total is minus pi over four. <bookmark mark='d'/> Two orders, two answers, exactly like Part 3's grid. The absolute value has infinite integral near the corner, so Fubini's hypothesis fails.",
+   "zh": "<bookmark mark='a'/>经典的反例：x的平方减y的平方，除以（x的平方加y的平方）的平方，定义在单位正方形上。它在对角线下方为正，上方为负，在角落附近大得惊人。<bookmark mark='b'/>先对y积分：每条竖直线给出1加x的平方分之1，再对x积分，得到四分之π。<bookmark mark='c'/>先对x积分：每条水平线给出负的1加y的平方分之1，总和是负四分之π。<bookmark mark='d'/>两种次序，两个答案，和第3部分的那张网格一模一样。绝对值在角落附近的积分是无穷大，所以富比尼定理的条件不满足。"
+  },
+  "a5d107a1358a": {
+   "scene": "Convolution",
+   "en": "Chapter twelve: convolution, and one last look at slicing.",
+   "zh": "第十二章：卷积，以及最后再看一次切片。"
+  },
+  "8c693f514d6f": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> Convolution averages one function against another. At each point x, weight the values of f near x by a bump g, and add. <bookmark mark='b'/> Slide the bump along: the averages trace a smoothed copy of f. This is Part 3's Landau construction, now for any integrable f.",
+   "zh": "<bookmark mark='a'/>卷积是用一个函数去平均另一个函数。在每一点x处，用鼓包g给x附近f的值加权，再加起来。<bookmark mark='b'/>让鼓包一路滑过去：这些平均值描出f的一个光滑化的副本。这就是第3部分兰道的构造，现在对任何可积的f都适用。"
+  },
+  "b82a0da4c7ea": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> Is the convolution of two integrable functions integrable? The proof is Fubini at work. Bound the integral of the absolute value by a double integral, <bookmark mark='b'/> swap the order, which Tonelli allows for non-negative functions, <bookmark mark='c'/> and the inner integral is just the integral of f, shifted. The norm of a convolution is at most the product of the norms. <bookmark mark='d'/> Checked on twenty random pairs.",
+   "zh": "<bookmark mark='a'/>两个可积函数的卷积可积吗？证明正是富比尼定理的用武之地。用一个二重积分来控制绝对值的积分，<bookmark mark='b'/>交换次序，对非负函数，托内利定理允许这样做，<bookmark mark='c'/>而里面的积分只是平移后的f的积分。卷积的范数，至多是范数的乘积。<bookmark mark='d'/>在20对随机函数上验证过。"
+  },
+  "3d2b46a871ab": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> And now the question that opened Part 3: may the sawtooth series be integrated term by term? <bookmark mark='b'/> Its partial sums never exceed the sine integral of pi, about 1.85, at any point, for any N. So on the interval from zero to one, the constant two is a lid, <bookmark mark='c'/> and dominated convergence makes the swap legal. Integrating term by term gives the sum of one minus cosine k over k squared; integrating the sawtooth itself gives pi over two minus a quarter. <bookmark mark='d'/> They agree to six decimal places. The convergence is not uniform, there's a jump, and it doesn't matter: a lid is enough.",
+   "zh": "<bookmark mark='a'/>现在回到第3部分开头的那个问题：锯齿波级数能不能逐项积分？<bookmark mark='b'/>它的部分和，在任何一点、对任何N，都不超过π处的正弦积分，大约1.85。所以在0到1的区间上，常数2就是一个盖子，<bookmark mark='c'/>控制收敛定理让这次交换合法。逐项积分得到k的平方分之（1减cos k）之和；直接积分锯齿波，得到二分之π减四分之一。<bookmark mark='d'/>两者在小数点后六位都吻合。收敛不是一致的，因为有一个跳跃，但这无关紧要：有一个盖子就够了。"
+  },
+  "94e1f0056a15": {
+   "scene": "Convolution",
+   "en": "<bookmark mark='a'/> Finally, Lebesgue's coins as a theorem: the layer cake formula. The integral of a non-negative function is the integral, over all heights t, of the measure of the set where f exceeds t. <bookmark mark='b'/> Slice the area into horizontal layers; <bookmark mark='c'/> each layer's width is the measure of a level set, and as a function of t, those widths have the same total area. It's Tonelli's theorem, applied to the region under the graph.",
+   "zh": "<bookmark mark='a'/>最后，勒贝格的硬币变成了一条定理：千层蛋糕公式。一个非负函数的积分，等于对所有高度t，把f超过t的集合的测度积分起来。<bookmark mark='b'/>把面积切成水平的层；<bookmark mark='c'/>每一层的宽度是一个水平集的测度，而把这些宽度看成t的函数，它们围出的总面积是一样的。这就是托内利定理，用在图像下方的区域上。"
+  },
+  "27d761865446": {
+   "scene": "Outro",
+   "en": "Let's take stock. Lebesgue gave lengths to sets by covering them as cheaply as possible, and Vitali showed that some sets must be left out. The sets that remain form a sigma-algebra, and measurable functions are closed under limits. The integral is a supremum over simple functions, and three limit theorems govern it: monotone convergence, Fatou's lemma, and dominated convergence, which needs only a lid. Riesz showed that measures come from positive functionals; Lebesgue measure comes from Riemann's integral, and agrees with it whenever Riemann's exists. Measurable functions are nearly continuous; Fubini lets us integrate in either order, when the absolute value is integrable; and the sawtooth can finally be integrated term by term.",
+   "zh": "我们来盘点一下。勒贝格用尽可能便宜的覆盖，给集合赋予了长度，而维塔利证明了，有些集合注定要被排除在外。剩下的集合构成一个σ代数，可测函数对取极限封闭。积分是简单函数积分的上确界，由三个极限定理掌管：单调收敛定理、法图引理，以及只需要一个盖子的控制收敛定理。里斯证明了，测度来自正泛函；勒贝格测度来自黎曼积分，而且只要黎曼积分存在，两者就相等。可测函数近乎连续；当绝对值可积时，富比尼定理让我们可以按任意次序积分；而锯齿波终于可以逐项积分了。"
+  },
+  "0fd85d412110": {
+   "scene": "Outro",
+   "en": "The ledger's fifth row. <bookmark mark='a'/> The space: a set with a sigma-algebra and a measure. <bookmark mark='c2'/> Its completeness theorem belongs to the next part. <bookmark mark='c3'/> Lebesgue measure is regular, approximated by compact sets from inside. <bookmark mark='c4'/> The swap: the limit of the integrals is the integral of the limit, under a lid. <bookmark mark='c5'/> And Fourier's series may now be integrated term by term.",
+   "zh": "账本的第五行。<bookmark mark='a'/>空间：一个带有σ代数和测度的集合。<bookmark mark='c2'/>它的完备性定理属于下一部分。<bookmark mark='c3'/>勒贝格测度是正则的，可以从里面用紧集逼近。<bookmark mark='c4'/>交换：在有盖子的情况下，积分的极限等于极限的积分。<bookmark mark='c5'/>而傅里叶级数现在可以逐项积分了。"
+  },
+  "3570cd41e2c9": {
+   "scene": "Outro",
+   "en": "Next time, in Part 6: distances between functions. <bookmark mark='a'/> The p-norms measure functions in different ways; in the plane their unit balls run from a diamond, through the circle, to a square. <bookmark mark='b'/> With Lebesgue's integral, every one of these spaces is complete. And the case p equals two has angles and projections: Pythagoras in infinitely many dimensions, which is exactly the geometry Fourier series were waiting for.",
+   "zh": "下一次，在第6部分：函数之间的距离。<bookmark mark='a'/>p范数用不同的方式度量函数；在平面上，它们的单位球从菱形，经过圆，一直变到正方形。<bookmark mark='b'/>有了勒贝格积分，这些空间个个都是完备的。而p等于2的情形有角度和投影：无穷多维空间里的勾股定理，这正是傅里叶级数一直在等的几何。"
+  },
+  "3b8e30980538": {
+   "scene": "Outro",
+   "en": "This part followed chapters one, two and eight of Rudin's Real and Complex Analysis. Thanks for watching, and see you in Part 6.",
+   "zh": "这一部分对应鲁丁《实分析与复分析》的第1、第2和第8章。感谢收看，我们第6部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 5, Measure and the Lebesgue Integral",
+ "chapters_en": {
+  "Hook": "Limits under the integral, without uniformity",
+  "Length": "1. A length for every set",
+  "Vitali": "2. A set with no length",
+  "SigmaAlgebras": "3. Sigma-algebras and measurable functions",
+  "Measures": "4. Measures",
+  "Integral": "5. The integral, and monotone convergence",
+  "Fatou": "6. Fatou's lemma",
+  "Dominated": "7. Dominated convergence",
+  "RieszRepresentation": "8. Every positive functional is an integral",
+  "Lebesgue": "9. Lebesgue measure, and Riemann revisited",
+  "NearlyContinuous": "10. Measurable is nearly continuous",
+  "Products": "11. Product measures and Fubini",
+  "Convolution": "12. Convolution and the layer cake",
+  "Outro": "The fifth row of the ledger"
+ }
+}

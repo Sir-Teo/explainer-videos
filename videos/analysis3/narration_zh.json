@@ -1,0 +1,499 @@
+{
+ "title": "分析学，从零搭建 · 第3部分：积分与第一个函数空间",
+ "chapters": {
+  "Hook": "主要问题：什么时候可以交换两个极限？",
+  "UpperLower": "1. 上和与下和",
+  "WhoIsIntegrable": "2. 哪些函数可积？",
+  "Stieltjes": "3. 以阶梯为尺的积分",
+  "FTC": "4. 微积分基本定理，以及曲线的长度",
+  "Uniform": "5. 一致收敛",
+  "UniformContinuity": "6. 一致极限，以及空间C(X)",
+  "IntegralsDerivatives": "7. 极限的积分与导数",
+  "Nowhere": "8. 处处不可导的连续函数",
+  "Equicontinuity": "9. 等度连续",
+  "ArzelaAscoli": "10. 阿尔泽拉–阿斯科利定理：C(X)中的紧性",
+  "Approximation": "11. 每个连续函数都近乎多项式",
+  "StoneWeierstrass": "12. 斯通–魏尔斯特拉斯定理",
+  "PowerSeries": "13. 幂级数、指数函数与π的诞生",
+  "FourierSeries": "14. 傅里叶级数：最佳逼近",
+  "Parseval": "15. 帕塞瓦尔、吉布斯与π²/6",
+  "Outro": "账本的第三行"
+ },
+ "lines": {
+  "46bab06a6da3": {
+   "scene": "Hook",
+   "en": "So far we have built the real numbers and learned to take limits: of sequences, of sums, of difference quotients. <bookmark mark='l'/> That's two rows of the ledger. This part is about the third row, and it starts from the question that Rudin calls the main problem of his seventh chapter.",
+   "zh": "到目前为止，我们造出了实数，也学会了取极限：序列的极限、和的极限、差商的极限。<bookmark mark='l'/>这就是账本的前两行。这一部分讲的是第三行，它的出发点，是鲁丁在他书中第7章里称为“主要问题”的那个问题。"
+  },
+  "96bbfe310191": {
+   "scene": "Hook",
+   "en": "Here is the grid from the end of Part 2: m over m plus n. <bookmark mark='r'/> Walk along any row, letting n grow, and the entries go to zero; then let m grow, and you still have zero. <bookmark mark='c'/> Walk down any column first, and the entries go to one. Same numbers, two orders, two answers. <bookmark mark='q'/> Rudin's main problem is exactly this: when may two limits be swapped? Continuity, integrals, derivatives and infinite sums are all limits, so the question comes up everywhere.",
+   "zh": "这是第2部分结尾的那张网格：m加n分之m。<bookmark mark='r'/>沿着任意一行走，让n增大，数值趋于0；然后再让m增大，得到的还是0。<bookmark mark='c'/>如果先沿着任意一列往下走，数值就趋于1。同样的数，两种次序，两个答案。<bookmark mark='q'/>鲁丁的主要问题正是这个：什么时候可以交换两个极限？连续、积分、导数和无穷和全都是极限，所以这个问题无处不在。"
+  },
+  "284a6cc72c5e": {
+   "scene": "Hook",
+   "en": "Here are three sequences of functions where swapping fails. <bookmark mark='a'/> First, x to the n on the interval from zero to one. Each one is continuous. As n grows, the graphs fall to zero everywhere except at one, where they stay at one. The limit jumps, so a limit of continuous functions need not be continuous: approaching one first and then letting n grow gives one, and the other order gives zero. <bookmark mark='b'/> Second, Rudin's example: n squared x times one minus x squared to the n. At every single x these go to zero, but the bump grows taller and narrower, and its area, n squared over two n plus two, goes to infinity. The integral of the limit is zero; the limit of the integrals is infinite. <bookmark mark='c'/> Third, sine of n x over root n. These go to zero as uniformly as you could ask, since the largest value is one over root n. But they wiggle faster and faster: the slope at zero is root n, which grows without bound. The derivatives of the limit are zero, and the limit of the derivatives doesn't exist.",
+   "zh": "下面这三个函数序列，交换次序都失败了。<bookmark mark='a'/>第一个，是从0到1的区间上的x的n次方。每一个都是连续的。随着n增大，图像除了在1处以外，处处都落到0，而在1处始终是1。极限发生了跳跃，所以连续函数的极限不一定连续：先让x趋于1，再让n增大，得到1；换一种次序，得到0。<bookmark mark='b'/>第二个，是鲁丁的例子：n的平方乘x，再乘（1减x的平方）的n次方。在每一个x处，它们都趋于0，可那个鼓包变得越来越高、越来越窄，它的面积，n的平方除以（2n加2），趋于无穷。极限的积分是0；积分的极限却是无穷大。<bookmark mark='c'/>第三个，是sin nx除以根号n。它们趋于0，一致得不能再一致了，因为最大值就是根号n分之1。但它们抖动得越来越快：在0处的斜率是根号n，无限增大。极限的导数是0，而导数的极限却不存在。"
+  },
+  "7ec2a62d5051": {
+   "scene": "Hook",
+   "en": "And this is why the question matters for Fourier's series. <bookmark mark='a'/> The sawtooth is the sum of sine k x over k. <bookmark mark='b'/> Integrating it term by term means integrating each sine and adding up, but the sum is itself a limit, so that's a swap of two limits, and we've just seen such swaps fail. This part finds conditions that make them legal.",
+   "zh": "这也正是这个问题对傅里叶级数如此要紧的原因。<bookmark mark='a'/>锯齿波是sin kx除以k的和。<bookmark mark='b'/>逐项积分，就是把每个正弦分别积分再加起来，可这个和本身就是一个极限，所以这是在交换两个极限，而我们刚刚看到，这样的交换会失败。这一部分要找出让交换合法的条件。"
+  },
+  "53f0b13cf7af": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters six to eight of Rudin's Principles. <bookmark mark='a'/> First the integral itself: Riemann's version and Stieltjes' generalization, which functions it can handle, and the fundamental theorem of calculus. <bookmark mark='b'/> Then uniform convergence, the condition that makes the swaps legal, and the first space whose points are functions. We'll meet a continuous function with no derivative anywhere, and the compactness theorem of Arzelà and Ascoli. <bookmark mark='c'/> Then approximation: every continuous function is nearly a polynomial. And finally the payoff: power series, and what we can now say about Fourier series.",
+   "zh": "计划是这样的，跟着鲁丁《数学分析原理》的第6到第8章走。<bookmark mark='a'/>首先是积分本身：黎曼的版本和斯蒂尔切斯的推广，它能处理哪些函数，以及微积分基本定理。<bookmark mark='b'/>然后是一致收敛，也就是让这些交换合法的条件，还有第一个以函数为点的空间。我们会遇到一个处处不可导的连续函数，以及阿尔泽拉和阿斯科利的紧性定理。<bookmark mark='c'/>接着是逼近：每个连续函数都近乎一个多项式。最后是收获：幂级数，以及关于傅里叶级数，我们现在能说些什么。"
+  },
+  "ccff49455cd2": {
+   "scene": "UpperLower",
+   "en": "Chapter one. Riemann defined the integral in 1854, in the same paper where he studied Fourier series. We'll use the version that Darboux streamlined, which is the one Rudin uses: trap the area between two sums.",
+   "zh": "第一章。黎曼在1854年定义了积分，就在他研究傅里叶级数的同一篇论文里。我们用的是经过达布简化的版本，也就是鲁丁用的版本：把面积夹在两个和之间。"
+  },
+  "e075982039c0": {
+   "scene": "UpperLower",
+   "en": "Take a bounded function on an interval, and ask for the area under its graph. <bookmark mark='p'/> Cut the interval into pieces with a partition: points x zero up to x n. <bookmark mark='u'/> On each piece, build a rectangle as tall as the function's supremum there: the red rectangles cover the area, and their total is the upper sum U. <bookmark mark='l'/> Build them as tall as the infimum instead, and the green rectangles fit under the graph: their total is the lower sum L. <bookmark mark='s'/> Whatever the area is, it must lie between L and U.",
+   "zh": "取区间上的一个有界函数，问它图像下方的面积是多少。<bookmark mark='p'/>用一个分划把区间切成若干小段：分点从x_0一直到x_n。<bookmark mark='u'/>在每一小段上立一个矩形，高度等于函数在这一段上的上确界：红色矩形盖住了这块面积，它们的总和就是上和U。<bookmark mark='l'/>如果改用下确界作高度，绿色矩形就都待在图像下方：它们的总和就是下和L。<bookmark mark='s'/>不管这块面积是多少，它都必须介于L和U之间。"
+  },
+  "87e30f3ea912": {
+   "scene": "UpperLower",
+   "en": "Now refine the partition by adding a point. <bookmark mark='a'/> On the piece that gets cut, the supremum over each half is at most the supremum over the whole, so the upper sum can only go down, and by the same argument the lower sum can only go up. <bookmark mark='b'/> Comparing any two partitions through their common refinement shows that every lower sum is at most every upper sum. <bookmark mark='c'/> So the best lower bound, the supremum of all lower sums, sits below the best upper bound, the infimum of all upper sums. These are the lower and upper integrals, and when they're equal the function is called integrable, and that common value is its integral.",
+   "zh": "现在加一个分点，把分划加细。<bookmark mark='a'/>在被切开的那一段上，每一半上的上确界都不超过整段上的上确界，所以上和只会变小；同样的道理，下和只会变大。<bookmark mark='b'/>任取两个分划，借助它们的公共加细来比较，就能看出：每一个下和都小于等于每一个上和。<bookmark mark='c'/>所以最好的下界，也就是所有下和的上确界，不会超过最好的上界，也就是所有上和的下确界。它们分别叫作下积分和上积分；当二者相等时，就说这个函数可积，而这个共同的值就是它的积分。"
+  },
+  "0e253bece05b": {
+   "scene": "UpperLower",
+   "en": "Here's the practical test. <bookmark mark='a'/> The difference between the upper and lower sums is the total area of these yellow slivers, the gaps between each red rectangle and its green one. <bookmark mark='b'/> The function is integrable exactly when those gaps can be made as small as you like: for every epsilon, some partition has U minus L below epsilon. <bookmark mark='c'/> For this function, doubling the number of pieces roughly halves the total gap.",
+   "zh": "实用的判别方法是这样的。<bookmark mark='a'/>上和与下和之差，就是这些黄色细条的总面积，也就是每个红色矩形和对应的绿色矩形之间的空隙。<bookmark mark='b'/>函数可积，当且仅当这些空隙可以要多小有多小：对任意ε，都有某个分划，使U减L小于ε。<bookmark mark='c'/>对这个函数来说，小段的数目加倍，总空隙大致减半。"
+  },
+  "2fcb154ebe67": {
+   "scene": "UpperLower",
+   "en": "For an increasing function the gaps have a beautiful accounting. <bookmark mark='a'/> Take x squared with n equal pieces. Each yellow sliver is one piece wide and as tall as the function's rise across that piece. <bookmark mark='b'/> Slide them all over to the last piece and they stack into a single column, one n-th wide and as tall as the whole rise, from zero to one. So U minus L is exactly one over n. <bookmark mark='c'/> With sixteen thousand pieces, both sums agree with one third to four decimal places: the integral is one third.",
+   "zh": "对递增函数，这些空隙可以算得很漂亮。<bookmark mark='a'/>取x的平方，把区间等分成n段。每个黄色细条宽一段，高度等于函数在这一段上的增量。<bookmark mark='b'/>把它们全都滑到最后一段上，就叠成了一根柱子，宽n分之1，高度等于整个增量，从0到1。所以U减L恰好是n分之1。<bookmark mark='c'/>分成一万六千多段时，两个和都与三分之一吻合到小数点后四位：积分是三分之一。"
+  },
+  "176240cfbcd3": {
+   "scene": "WhoIsIntegrable",
+   "en": "Chapter two. Which functions does this integral handle? Continuous ones, monotone ones, ones with a few jumps, and some surprisingly wild ones. And one simple function it can't handle at all.",
+   "zh": "第二章。这个积分能处理哪些函数？连续函数、单调函数、带几个跳跃的函数，还有一些野得出奇的函数。另外，有一个简单的函数，它完全处理不了。"
+  },
+  "6d08136dd8a0": {
+   "scene": "WhoIsIntegrable",
+   "en": "<bookmark mark='a'/> Continuous functions on a closed interval are integrable, and the reason is uniform continuity from Part 2. Pick a small number eta. <bookmark mark='b'/> Because the interval is compact, one delta works everywhere: points closer than delta have values closer than eta. <bookmark mark='c'/> So on a partition with pieces shorter than delta, each gap between the supremum and the infimum is less than eta, and the total gap, U minus L, is less than eta times the length of the interval. <bookmark mark='d'/> That can be made as small as we like. Other proofs in the same chapter handle monotone functions, functions with finitely many jumps, and continuous functions of integrable ones.",
+   "zh": "<bookmark mark='a'/>闭区间上的连续函数都是可积的，原因是第2部分讲过的一致连续性。取一个小正数η。<bookmark mark='b'/>因为区间是紧的，有一个δ处处管用：距离小于δ的两个点，函数值相差小于η。<bookmark mark='c'/>所以，在每一小段都短于δ的分划上，上确界和下确界之间的每个空隙都小于η，总空隙U减L就小于η乘以区间的长度。<bookmark mark='d'/>这可以要多小有多小。同一章里的其他证明，处理了单调函数、只有有限多个跳跃的函数，以及可积函数再套上一个连续函数得到的函数。"
+  },
+  "bacb5239d021": {
+   "scene": "WhoIsIntegrable",
+   "en": "<bookmark mark='a'/> Monotone functions are integrable even with jumps, by the stacking trick we saw for x squared. <bookmark mark='b'/> On each piece the gap is the function's rise across that piece, jumps included. <bookmark mark='c'/> Slide the slivers to one side: they stack into a single column, one piece wide and as tall as the total rise. So U minus L is the total rise divided by n, and it goes to zero.",
+   "zh": "<bookmark mark='a'/>单调函数即使有跳跃也是可积的，用的就是刚才在x的平方上看到的叠放技巧。<bookmark mark='b'/>在每一小段上，空隙就是函数在这一段上的增量，跳跃也算在内。<bookmark mark='c'/>把这些细条滑到一边：它们叠成一根柱子，宽一段，高度等于总增量。所以U减L等于总增量除以n，它趋于0。"
+  },
+  "845bb18ea2fe": {
+   "scene": "WhoIsIntegrable",
+   "en": "Now the function this integral can't handle. <bookmark mark='a'/> Let f be one at every rational and zero at every irrational. <bookmark mark='b'/> Every piece of every partition contains both kinds of points, so every supremum is one and every infimum is zero. <bookmark mark='c'/> The upper sum is always one, the lower sum is always zero, and no refinement ever closes the gap. Dirichlet's function has no Riemann integral. Remember it: in Part 5 a better integral will give it the value zero, because the rationals, though dense, are too few to carry any area.",
+   "zh": "现在来看这个积分处理不了的那个函数。<bookmark mark='a'/>令f在每个有理数处等于1，在每个无理数处等于0。<bookmark mark='b'/>任何分划的任何一小段，都同时包含这两种点，所以每个上确界都是1，每个下确界都是0。<bookmark mark='c'/>上和永远是1，下和永远是0，不管怎么加细，这个空隙都合不上。狄利克雷函数没有黎曼积分。记住它：在第5部分，一种更好的积分会给它赋值0，因为有理数虽然稠密，却少得撑不起任何面积。"
+  },
+  "777bdb9e2b75": {
+   "scene": "WhoIsIntegrable",
+   "en": "Compare Thomae's function from Part 2: one over q at the fraction p over q in lowest terms, and zero at irrationals. <bookmark mark='a'/> Again every infimum is zero, so every lower sum is zero. <bookmark mark='b'/> But the supremum on a short piece is one over the smallest denominator of a fraction in that piece, and short pieces only contain fractions with large denominators, apart from a few. <bookmark mark='c'/> Computed exactly on sixteen thousand equal pieces, the upper sum is below one hundredth, and it keeps falling. <bookmark mark='d'/> So this function, discontinuous at every rational, is integrable, with integral zero. Being discontinuous somewhere is harmless; the question, as Lebesgue would show, is how big the set of discontinuities is.",
+   "zh": "对比一下第2部分的托马函数：在最简分数q分之p处取值q分之1，在无理数处取值0。<bookmark mark='a'/>同样，每个下确界都是0，所以每个下和都是0。<bookmark mark='b'/>但在一小段上，上确界等于1除以这一段里分数的最小分母，而除了少数几段以外，短的小段里只有分母很大的分数。<bookmark mark='c'/>在一万六千多个等长的小段上精确计算，上和已经小于百分之一，而且还在继续下降。<bookmark mark='d'/>所以这个函数虽然在每个有理数处都不连续，却是可积的，积分是0。在某些地方不连续并没有什么害处；问题在于，正如勒贝格后来证明的，不连续点的集合有多大。"
+  },
+  "30dbf4b840b2": {
+   "scene": "Stieltjes",
+   "en": "Chapter three. Rudin's integral has an extra ingredient, an increasing function alpha that measures the pieces. Stieltjes introduced it in 1894. It looks like a technicality, but it lets one integral cover lengths, sums, and stranger things.",
+   "zh": "第三章。鲁丁的积分多了一样东西：一个递增函数α，用来度量各个小段。斯蒂尔切斯在1894年引入了它。它看起来像是一个技术性的细节，却能让一种积分同时涵盖长度、求和，以及更奇怪的东西。"
+  },
+  "c612a318ed63": {
+   "scene": "Stieltjes",
+   "en": "In the sums, replace the width of each piece by the increase of alpha across it. <bookmark mark='a'/> Think of alpha as a stretched ruler. Mark equal steps on the alpha scale, and pull them back to the x axis. <bookmark mark='b'/> Where alpha climbs fast, the marks crowd together, and a short stretch of x carries a lot of weight; where alpha is flat, a long stretch counts for little. <bookmark mark='c'/> For a smooth alpha this is just a density: the integral of f d alpha is the integral of f times alpha prime.",
+   "zh": "在这些和里，把每一小段的宽度，换成α在这一段上的增量。<bookmark mark='a'/>可以把α想成一把被拉伸过的尺子。在α的标尺上标出等距的刻度，再把它们拉回到x轴上。<bookmark mark='b'/>α爬得快的地方，刻度挤在一起，x轴上短短的一截就分量很重；α平坦的地方，长长的一截也没多少分量。<bookmark mark='c'/>对光滑的α，这不过是一个密度：f关于α的积分，就等于f乘以α的导数的积分。"
+  },
+  "4765294bf295": {
+   "scene": "Stieltjes",
+   "en": "Now the extreme case. <bookmark mark='a'/> Let alpha be a single unit step at a point s: zero before it, one after. <bookmark mark='b'/> In any partition, only the piece containing s has an increase in alpha, and as the partition is refined, that piece closes in on s. <bookmark mark='c'/> So the integral of f d alpha is simply f of s: all the weight is concentrated at one point. <bookmark mark='d'/> Stack up countably many steps, of sizes c n at points s n, and the integral becomes the series of c n times f of s n. Sums and integrals are two cases of one idea, which will grow into measures in Part 5.",
+   "zh": "现在看极端情形。<bookmark mark='a'/>令α是点s处的一个单位阶跃：在s之前是0，之后是1。<bookmark mark='b'/>在任何分划里，只有包含s的那一小段上α有增量，而随着分划不断加细，这一段向s收拢。<bookmark mark='c'/>所以f关于α的积分就是f(s)：全部分量都集中在一个点上。<bookmark mark='d'/>把可数多个阶跃叠起来，在点s_n处的大小是c_n，积分就变成了c_n乘f(s_n)构成的级数。求和与积分，是同一个想法的两种情形，这个想法在第5部分会长成测度。"
+  },
+  "5ae5b3b275f7": {
+   "scene": "Stieltjes",
+   "en": "And now something stranger. <bookmark mark='a'/> Let alpha be the Cantor function from Part 1, the devil's staircase. It's continuous, so it has no jumps, and it's flat on every gap of the Cantor set, so its derivative is zero almost everywhere. Yet it climbs from zero to one. <bookmark mark='b'/> All of its increase happens on the Cantor set. At depth d there are two to the d intervals, each of length three to the minus d, and alpha rises by two to the minus d across each. <bookmark mark='c'/> For f of x equal to x, the gap between the upper and lower sums is three to the minus d, which goes to zero, and the integral is one half, as symmetry demands. The integral of x squared is three eighths. <bookmark mark='d'/> This integral is neither a sum over jumps nor an ordinary integral with a density. It's a third kind of thing, and in Part 5 it will have a name: a singular measure.",
+   "zh": "再来看更奇怪的。<bookmark mark='a'/>令α为第1部分的康托尔函数，也就是魔鬼阶梯。它是连续的，所以没有跳跃；它在康托尔集的每个空隙上都是平的，所以它的导数几乎处处为0。可它偏偏从0爬到了1。<bookmark mark='b'/>它的全部增长，都发生在康托尔集上。在第d层，有2的d次方个区间，每个长度是3的负d次方，而α在每个区间上增加2的负d次方。<bookmark mark='c'/>取f(x)等于x，上和与下和之差是3的负d次方，它趋于0，积分是二分之一，正如对称性所要求的。x的平方的积分是八分之三。<bookmark mark='d'/>这个积分既不是对跳跃的求和，也不是带密度的普通积分。它是第三种东西，到第5部分会有一个名字：奇异测度。"
+  },
+  "c2bf26f3325a": {
+   "scene": "FTC",
+   "en": "Chapter four: why integration and differentiation undo each other, and what it means for a curve to have a length.",
+   "zh": "第四章：为什么积分和求导互为逆运算，以及一条曲线有长度是什么意思。"
+  },
+  "40d7b4a25461": {
+   "scene": "FTC",
+   "en": "Start with an integrable function f, and let capital F of x be the area under f from a up to x. <bookmark mark='a'/> As x moves right, F grows by the area swept. <bookmark mark='b'/> If f is bounded by M, a step of h changes the area by at most M times h, so F is continuous, even across a jump of f. <bookmark mark='c'/> More: wherever f is continuous, the area added over a short step is nearly f times the step, so the slope of F at that point is the value of f. <bookmark mark='d'/> At the jump, the slope changes abruptly, and F has a corner.",
+   "zh": "从一个可积函数f出发，令大写的F(x)为f的图像下方、从a到x的面积。<bookmark mark='a'/>x向右移动时，F就增加扫过的那部分面积。<bookmark mark='b'/>如果f的绝对值不超过M，走一步h，面积的变化至多是M乘h，所以F是连续的，即使在f的跳跃处也是如此。<bookmark mark='c'/>还不止于此：只要f在某点连续，走一小步新增的面积就近似于f乘以步长，所以F在那一点的斜率就是f的值。<bookmark mark='d'/>在跳跃处，斜率突然改变，F出现一个尖角。"
+  },
+  "011722c01037": {
+   "scene": "FTC",
+   "en": "<bookmark mark='t'/> The fundamental theorem goes the other way: if F has derivative f, and f is integrable, then the integral of f is F of b minus F of a. <bookmark mark='a'/> Take any partition. The total rise of F is the sum of its rises over the pieces. <bookmark mark='b'/> By the mean value theorem, each rise is f at some point t i times the width of the piece. <bookmark mark='c'/> That sum lies between the lower and upper sums, for every partition, so the total rise is the integral. <bookmark mark='d'/> Integration by parts and the change of variables formula follow from the same chapter's results.",
+   "zh": "<bookmark mark='t'/>基本定理说的是反方向：如果F的导数是f，而f可积，那么f的积分就等于F(b)减F(a)。<bookmark mark='a'/>任取一个分划。F的总增量，等于它在各小段上的增量之和。<bookmark mark='b'/>由中值定理，每一段的增量，都等于f在某个点t_i处的值，乘以这一段的宽度。<bookmark mark='c'/>对每一个分划，这个和都介于下和与上和之间，所以总增量就是积分。<bookmark mark='d'/>分部积分和换元公式，也都由同一章的结果推出。"
+  },
+  "0d551479d33f": {
+   "scene": "FTC",
+   "en": "<bookmark mark='a'/> The same circle of ideas gives curves a length. Inscribe polygons in the curve, with corners at the points of a partition. <bookmark mark='b'/> Refining the partition can only lengthen the polygon, by the triangle inequality, and the length of the curve is defined as the supremum. <bookmark mark='c'/> When the curve has a continuous derivative, that supremum is the integral of the speed.",
+   "zh": "<bookmark mark='a'/>同样这一套想法，还能给曲线定义长度。在曲线里内接折线，折点取在分划的分点上。<bookmark mark='b'/>由三角不等式，把分划加细只会让折线变长，而曲线的长度，就定义为这些长度的上确界。<bookmark mark='c'/>当曲线有连续的导数时，这个上确界就是速率的积分。"
+  },
+  "cc73af08ff9e": {
+   "scene": "FTC",
+   "en": "And a curve without a length. <bookmark mark='a'/> Start with a segment. Replace its middle third by two sides of an equilateral triangle, and repeat on every segment, forever. <bookmark mark='b'/> Each step multiplies the length by four thirds, so the polygons' lengths grow without bound: after twelve steps they're already thirty-one times the original. <bookmark mark='z'/> Zoom in on the first quarter of the curve: it is the whole curve, shrunk by a factor of three. The curve is four such copies, so its length would have to be four thirds of itself, which no finite positive number is. <bookmark mark='c'/> The polygons converge uniformly to a continuous curve, which by the definition has no finite length. Uniform convergence will reappear in a moment: it's the theme of the rest of this part.",
+   "zh": "还有一条没有长度的曲线。<bookmark mark='a'/>从一条线段开始。把它中间的三分之一，换成一个等边三角形的两条边，再对每一条线段重复这一步，永远做下去。<bookmark mark='b'/>每一步都把长度乘以三分之四，所以折线的长度无限增大：12步之后，就已经是原来的31倍了。<bookmark mark='z'/>放大曲线的前四分之一：它就是整条曲线，缩小到了三分之一。整条曲线由四个这样的副本组成，所以它的长度必须等于自身的三分之四，而没有哪个有限的正数能做到这一点。<bookmark mark='c'/>这些折线一致收敛到一条连续曲线，而按照定义，这条曲线没有有限的长度。一致收敛马上还会出现：它是这一部分余下内容的主题。"
+  },
+  "f8d75192a985": {
+   "scene": "Uniform",
+   "en": "Chapter five. The swaps in the opening failed because the functions converged at each point, but at different speeds at different points. The cure is to ask for one speed everywhere.",
+   "zh": "第五章。开场里的那些交换之所以失败，是因为这些函数虽然在每一点都收敛，但在不同的点，收敛的快慢不同。解决办法，就是要求处处都用同一个速度。"
+  },
+  "ec359a5cac11": {
+   "scene": "Uniform",
+   "en": "Put the two definitions side by side as games. <bookmark mark='p'/> Pointwise convergence: for each x and each epsilon there's an N, and N may depend on x. <bookmark mark='u'/> Uniform convergence: for each epsilon, one N that works for every x at once. Only the order of the quantifiers changed. <bookmark mark='a'/> Picture it as a band of half-width epsilon around the limit: uniform convergence means that from some N on, the entire graph lies inside the band. <bookmark mark='b'/> On the interval from zero to 0.9, x to the n does this: its largest value is 0.9 to the n, and with epsilon a tenth, N equal to 22 works everywhere. <bookmark mark='c'/> On the interval from zero up to, but not including, one, it never does: for every n, the graph climbs to near one before the end, outside any band.",
+   "zh": "把两个定义当成游戏，并排放在一起。<bookmark mark='p'/>逐点收敛：对每个x和每个ε，都有一个N，而N可以依赖于x。<bookmark mark='u'/>一致收敛：对每个ε，有一个N，对所有x同时管用。变的只是量词的次序。<bookmark mark='a'/>可以把它想成极限周围一条半宽为ε的带子：一致收敛的意思是，从某个N起，整个图像都落在带子里。<bookmark mark='b'/>在从0到0.9的区间上，x的n次方做到了这一点：它的最大值是0.9的n次方，ε取十分之一时，N等于22就处处管用。<bookmark mark='c'/>在从0到1、但不包括1的区间上，它永远做不到：对每个n，图像在到达终点之前，都会爬到接近1的地方，跑出任何一条带子。"
+  },
+  "bc50cb3db207": {
+   "scene": "Uniform",
+   "en": "From now on we'll watch sequences of functions through several lenses at once, on a dashboard. <bookmark mark='a'/> Here is x to the n again. The pointwise lens is a probe at one point, here 0.8: the distance there goes to zero. <bookmark mark='b'/> The uniform lens is the band: its half-width is the largest distance from the limit, and for x to the n it stays at one forever. <bookmark mark='c'/> Two more lenses measure the gap on average: the area between the graph and its limit, and the square root of the integral of the squared gap, which we'll call energy. Both go to zero. <bookmark mark='d'/> So this sequence converges in three senses but not uniformly. Uniform convergence is the most demanding, and this chapter shows it's the one that makes the swaps legal.",
+   "zh": "从现在起，我们会在一块仪表盘上，同时透过几个镜头来观察函数序列。<bookmark mark='a'/>还是x的n次方。逐点的镜头，是放在某一点上的探针，这里是0.8：那里的距离趋于0。<bookmark mark='b'/>一致的镜头就是那条带子：它的半宽是与极限的最大距离，对x的n次方来说，它永远停在1。<bookmark mark='c'/>另外两个镜头衡量的是平均意义下的差距：图像与极限之间的面积，以及差的平方的积分再开平方，我们把它叫作能量。这两个都趋于0。<bookmark mark='d'/>所以这个序列在三种意义下收敛，却不一致收敛。一致收敛是要求最高的一种，而这一章会说明，正是它让那些交换变得合法。"
+  },
+  "91c711b3ffaa": {
+   "scene": "Uniform",
+   "en": "As with sequences of numbers, we can test uniform convergence without knowing the limit. <bookmark mark='a'/> A sequence of functions converges uniformly exactly when it's uniformly Cauchy: one N for which any two later functions are within epsilon of each other at every point. Here are partial sums of sine k x over k squared, and epsilon is 0.06. The first and second, or the third and tenth, are still too far apart somewhere; from the tenth on, every pair stays inside the band. <bookmark mark='b'/> The proof: at each x the values form a Cauchy sequence of numbers, so they converge to something we call f of x; then letting m go to infinity in the inequality gives uniform convergence to f. <bookmark mark='c'/> Everything is measured by one number, the largest gap, the height of the dot below. That suggests giving functions a size: the sup norm.",
+   "zh": "跟数列一样，不知道极限，也能检验一致收敛。<bookmark mark='a'/>一个函数序列一致收敛，当且仅当它是一致柯西的：有一个N，使得N之后的任意两个函数，在每一点上都相差不到ε。这里是sin kx除以k的平方的部分和，ε取0.06。第1个和第2个，或者第3个和第10个，在某些地方还相差太远；从第10个起，每一对都待在带子里。<bookmark mark='b'/>证明是这样的：在每个x处，函数值都构成一个柯西序列，所以它们收敛到某个数，我们把它记作f(x)；然后在不等式里让m趋于无穷，就得到一致收敛到f。<bookmark mark='c'/>一切都用一个数来衡量：最大的差距，也就是下方那个点的高度。这提示我们给函数定义一个大小：上确界范数。"
+  },
+  "890fc1b8ea7b": {
+   "scene": "Uniform",
+   "en": "The most useful test for uniform convergence of a series is Weierstrass's M-test. <bookmark mark='a'/> If each term is bounded by a number M n, and the M n have a finite sum, the series converges uniformly. <bookmark mark='b'/> Here: sine of n x over n squared, bounded by one over n squared. <bookmark mark='c'/> After N terms, the rest of the series is at most the tail of the M n, so every partial sum lies in a band around the limit of that half-width, at every x at once, and the bands shrink to nothing. The numbers on screen are the actual largest gaps, each under its bound.",
+   "zh": "判别级数一致收敛，最有用的工具是魏尔斯特拉斯M判别法。<bookmark mark='a'/>如果每一项的绝对值都不超过一个数M_n，而这些M_n的和有限，级数就一致收敛。<bookmark mark='b'/>这里是sin nx除以n的平方，它的绝对值不超过n的平方分之1。<bookmark mark='c'/>前N项之后，级数剩下的部分至多是M_n的尾部，所以每个部分和都落在极限周围、以这个尾部为半宽的带子里，对所有x同时成立，而这些带子缩小到什么都不剩。屏幕上的数字是实际的最大差距，每一个都在自己的界之下。"
+  },
+  "c14e93026f71": {
+   "scene": "UniformContinuity",
+   "en": "Chapter six. Uniform convergence preserves continuity, and that turns the continuous functions into a space of their own, with distances, where Cauchy sequences converge.",
+   "zh": "第六章。一致收敛保持连续性，这就让连续函数自成一个空间：有距离，而且柯西序列在其中收敛。"
+  },
+  "8e9f96e35313": {
+   "scene": "UniformContinuity",
+   "en": "<bookmark mark='t'/> Suppose continuous functions f n converge uniformly to f. Why is f continuous? <bookmark mark='a'/> Pick n so large that f n lies within epsilon over three of f everywhere: the band. <bookmark mark='b'/> To compare f at x and at a nearby y, take three hops. Down from f of x to f n of x: less than epsilon over three, by uniform convergence. <bookmark mark='c'/> Along the graph of f n to f n of y: less than epsilon over three, because f n is continuous and y is close to x. <bookmark mark='d'/> Up to f of y: less than epsilon over three, by uniform convergence again, and crucially with the same n, because the convergence is uniform. Pointwise convergence would let the n needed at y be different, and the argument would collapse.",
+   "zh": "<bookmark mark='t'/>假设连续函数f_n一致收敛到f。为什么f是连续的？<bookmark mark='a'/>取n足够大，使f_n处处都在f的三分之ε范围内：也就是那条带子。<bookmark mark='b'/>要比较f在x处和在附近的y处的值，分三跳走。先从f(x)往下跳到f_n(x)：由一致收敛，距离小于三分之ε。<bookmark mark='c'/>再沿着f_n的图像走到f_n(y)：距离小于三分之ε，因为f_n连续，而y离x很近。<bookmark mark='d'/>最后往上跳到f(y)：由一致收敛，距离又小于三分之ε，关键在于，用的是同一个n，因为收敛是一致的。如果只是逐点收敛，y处需要的n可能不同，整个论证就垮了。"
+  },
+  "0b56a2134489": {
+   "scene": "UniformContinuity",
+   "en": "Sometimes pointwise convergence upgrades itself to uniform for free. <bookmark mark='a'/> Dini's theorem: on a compact set, if continuous functions converge monotonically to a continuous limit, the convergence is uniform. <bookmark mark='b'/> Here one plus x over n, to the n, increases to e to the x on the interval from zero to one. The worst gap is at x equal to one, and it shrinks steadily. <bookmark mark='c'/> Compactness matters: x to the n decreases to zero on the half-open interval, and the convergence is not uniform.",
+   "zh": "有时候，逐点收敛会自动升级成一致收敛，不用额外付出什么。<bookmark mark='a'/>迪尼定理：在紧集上，如果连续函数单调地收敛到一个连续的极限，那么这个收敛是一致的。<bookmark mark='b'/>这里，在从0到1的区间上，（1加n分之x）的n次方递增趋于e的x次方。最大的差距出现在x等于1处，而且它稳步缩小。<bookmark mark='c'/>紧性是必要的：在半开区间上，x的n次方递减趋于0，但收敛不是一致的。"
+  },
+  "ee267667f892": {
+   "scene": "UniformContinuity",
+   "en": "<bookmark mark='a'/> Now a change of viewpoint. Measure the distance between two continuous functions on a compact set by their largest gap. Then the continuous functions form a metric space, and each function is a single point in it. <bookmark mark='b'/> On the right is a camera on that space: each function is plotted by two of its values, at one half and at 0.4. <bookmark mark='c'/> Here's a sequence of polynomials closing in on the absolute value of x minus a half: their sup distances shrink, so it's a Cauchy sequence, and on the camera the dots form a trail. <bookmark mark='d'/> Once a function is within r of the limit in the sup norm, its dot lies inside a square of half-width r, and every later dot does too. <bookmark mark='e'/> The limit has a corner, so it's not a polynomial: the polynomials have a hole here. But it is continuous, and that's the theorem: by the previous result, uniform limits of continuous functions are continuous, so this space is complete. It's our first Banach space, though the name will wait for Part 8.",
+   "zh": "<bookmark mark='a'/>现在换个视角。用最大差距，来衡量紧集上两个连续函数之间的距离。这样一来，连续函数就构成一个度量空间，每个函数都是其中的一个点。<bookmark mark='b'/>右边是对准这个空间的一台相机：每个函数都用它的两个值画成一个点，一个是在二分之一处的值，一个是在0.4处的值。<bookmark mark='c'/>这是一列多项式，正在逼近x减二分之一的绝对值：它们之间的上确界距离不断缩小，所以这是一个柯西序列，在相机里，这些点连成一条轨迹。<bookmark mark='d'/>一旦某个函数与极限的上确界距离在r以内，它的点就落在一个半宽为r的正方形里，后面的每个点也都是这样。<bookmark mark='e'/>极限有一个尖角，所以它不是多项式：多项式在这里有一个洞。但它是连续的，而这正是那个定理：由上一个结果，连续函数的一致极限是连续的，所以这个空间是完备的。它是我们遇到的第一个巴拿赫空间，不过这个名字要等到第8部分再说。"
+  },
+  "6ee971c450a3": {
+   "scene": "UniformContinuity",
+   "en": "One more exhibit for the museum, from Rudin's exercises. <bookmark mark='a'/> Build a plane curve whose coordinates are series of copies of one continuous zigzag function, scaled by powers of three inside and halved outside. <bookmark mark='b'/> By the M-test both series converge uniformly, so the curve is continuous. <bookmark mark='c'/> But it passes through every point of the square: the ternary digits of the parameter become the binary digits of x and y. A continuous image of a segment can fill a square. Peano found the first such curve in 1890; this one is Schoenberg's.",
+   "zh": "博物馆再添一件藏品，来自鲁丁的习题。<bookmark mark='a'/>造一条平面曲线，它的两个坐标都是级数，每一项都是同一个连续之字形函数的副本：括号里乘上3的幂，括号外逐次减半。<bookmark mark='b'/>由M判别法，两个级数都一致收敛，所以这条曲线是连续的。<bookmark mark='c'/>可它经过正方形里的每一个点：参数的三进制数字，变成了x和y的二进制数字。一条线段的连续像，竟然可以填满一个正方形。皮亚诺在1890年找到了第一条这样的曲线；这一条是舍恩伯格的。"
+  },
+  "e2d91f36c7f6": {
+   "scene": "IntegralsDerivatives",
+   "en": "Chapter seven: the two remaining swaps from the opening, integrals and derivatives.",
+   "zh": "第七章：开场里剩下的两种交换，积分和导数。"
+  },
+  "be574d314d68": {
+   "scene": "IntegralsDerivatives",
+   "en": "<bookmark mark='a'/> Integrals first. If f n converges to f uniformly on a closed interval, then the integral of the limit is the limit of the integrals. <bookmark mark='b'/> The picture is the whole proof: the difference of the integrals is at most the area between the graphs, and that area fits inside a box as wide as the interval and as tall as the largest gap. Uniform convergence squashes the box. <bookmark mark='c'/> So a uniformly convergent series may be integrated term by term. <bookmark mark='d'/> Fourier's sawtooth series doesn't qualify, because its partial sums can't converge uniformly to a function with a jump. We'll settle it another way in chapter fifteen.",
+   "zh": "<bookmark mark='a'/>先看积分。如果f_n在闭区间上一致收敛到f，那么极限的积分就等于积分的极限。<bookmark mark='b'/>这张图就是全部的证明：积分之差至多是两个图像之间的面积，而这块面积装得进一个盒子，盒子和区间一样宽，和最大差距一样高。一致收敛把这个盒子压扁了。<bookmark mark='c'/>所以一致收敛的级数可以逐项积分。<bookmark mark='d'/>傅里叶的锯齿波级数不符合条件，因为它的部分和不可能一致收敛到一个有跳跃的函数。我们会在第十五章用别的办法解决它。"
+  },
+  "1d3e252a9d17": {
+   "scene": "IntegralsDerivatives",
+   "en": "<bookmark mark='a'/> Derivatives are more delicate: uniform convergence of the functions is not enough. Rudin's theorem asks instead for the derivatives to converge uniformly, and then the limit is differentiable with the expected derivative. <bookmark mark='b'/> Here's why the hypothesis is on the derivatives. The functions x over one plus n x squared shrink to zero uniformly: their largest value is one over two root n. <bookmark mark='c'/> But their derivatives at zero are all equal to one, while everywhere else the derivatives go to zero. The derivatives converge, but to a function that jumps at zero, and the limit of the derivatives at zero is one, while the derivative of the limit is zero. <bookmark mark='d'/> Small functions can have large slopes. Control has to come from the derivatives.",
+   "zh": "<bookmark mark='a'/>导数要微妙得多：函数本身一致收敛是不够的。鲁丁的定理改为要求导数一致收敛，这样极限就可导，而且导数正是我们期望的那个。<bookmark mark='b'/>来看看为什么假设要加在导数上。函数x除以（1加n乘x的平方），一致地缩小到0：它们的最大值是2倍根号n分之1。<bookmark mark='c'/>但它们在0处的导数全都等于1，而在其他每一点，导数都趋于0。导数确实收敛，但收敛到一个在0处跳跃的函数，于是在0处，导数的极限是1，而极限的导数是0。<bookmark mark='d'/>很小的函数，也可以有很大的斜率。控制必须来自导数。"
+  },
+  "2228102f064d": {
+   "scene": "IntegralsDerivatives",
+   "en": "So far, then: <bookmark mark='a'/> uniform convergence lets limits pass through continuity and through integrals, and for derivatives we need the derivatives to converge uniformly. <bookmark mark='b'/> Uniformity is a strong demand, and in Part 5 a better integral will let limits pass through integrals under a much weaker condition.",
+   "zh": "那么到目前为止：<bookmark mark='a'/>一致收敛让极限可以穿过连续性，也可以穿过积分；而对导数，我们需要导数本身一致收敛。<bookmark mark='b'/>一致性是一个很强的要求，而在第5部分，一种更好的积分会让极限在弱得多的条件下穿过积分。"
+  },
+  "eeb0155df3c7": {
+   "scene": "Nowhere",
+   "en": "Chapter eight: a function that is continuous everywhere and differentiable nowhere.",
+   "zh": "第八章：一个处处连续、却处处不可导的函数。"
+  },
+  "598d45c705ef": {
+   "scene": "Nowhere",
+   "en": "In 1872 Weierstrass showed the Berlin Academy such a function. Uniform convergence makes it easy to build; the hard part is the proof that it has no derivative, and Rudin's version of that proof is short. <bookmark mark='a'/> Rudin uses the zigzag phi: the distance to the nearest even integer. <bookmark mark='b'/> Add copies of it, the n-th one squeezed horizontally by four to the n and shrunk vertically by three quarters to the n. Each new term is smaller, but steeper: its slopes are plus or minus three to the n. <bookmark mark='c'/> The heights form a geometric series, so by the M-test the sum converges uniformly, and the limit is continuous. Every partial sum has corners; the limit, as we'll see, is all corners.",
+   "zh": "1872年，魏尔斯特拉斯向柏林科学院展示了这样一个函数。有了一致收敛，造出它并不难；难的是证明它没有导数，而鲁丁的证明很简短。<bookmark mark='a'/>鲁丁用的是之字形函数φ：到最近的偶数的距离。<bookmark mark='b'/>把它的副本加起来，第n个副本在水平方向压缩4的n次方倍，在竖直方向乘上四分之三的n次方。每一个新的项都更小，却更陡：它的斜率是正负3的n次方。<bookmark mark='c'/>这些高度构成一个几何级数，所以由M判别法，这个和一致收敛，极限是连续的。每个部分和都有尖角；而我们会看到，极限处处都是尖角。"
+  },
+  "3ad7014a492f": {
+   "scene": "Nowhere",
+   "en": "<bookmark mark='a'/> Zoom in at a point. A differentiable function, under enough magnification, looks like a straight line: that's what a derivative is. <bookmark mark='b'/> This one never does. Every zoom by a factor of four shrinks the vertical range by only about three, and new corners keep appearing. <bookmark mark='c'/> Brownian motion, from the stochastic calculus video, has the same property, almost surely: nature produces these functions on its own.",
+   "zh": "<bookmark mark='a'/>在一个点处放大。可导函数放大到足够的倍数，看起来就像一条直线：导数就是这个意思。<bookmark mark='b'/>这个函数永远不会这样。水平方向每放大4倍，竖直方向的范围只缩小大约3倍，而且不断冒出新的尖角。<bookmark mark='c'/>随机微积分那期视频里的布朗运动，也几乎必然地具有同样的性质：大自然自己就会造出这样的函数。"
+  },
+  "17d0dcfb7165": {
+   "scene": "Nowhere",
+   "en": "Here's Rudin's proof that there is no derivative at any x, carried out at x equal to 0.3. <bookmark mark='a'/> Step away from x by half of four to the minus m, choosing the sign so that the m-th zigzag has no corner in between. On the right, m is three, and each panel is one term over that step. <bookmark mark='b'/> Every later term repeats exactly over the step, because four to the n times the step is an even integer, the zigzag's period: those terms contribute nothing. <bookmark mark='c'/> The m-th term is a straight piece with slope three to the m, here twenty seven. <bookmark mark='d'/> The earlier terms have slopes at most three to the n, which add up to at most three to the m minus one, over two. <bookmark mark='e'/> So the difference quotient is at least three to the m plus one, over two, which grows without bound as the step shrinks. <bookmark mark='f'/> Computed for other m, the quotients are exactly as big as promised, and they never settle down. There is no derivative at x, and x was any point.",
+   "zh": "下面是鲁丁的证明：在任何x处都没有导数。我们在x等于0.3处演示。<bookmark mark='a'/>从x出发，走出4的负m次方的一半这么远，符号选得让第m个之字形在这一步之间没有尖角。右边取m等于3，每个小图是一项在这一步上的样子。<bookmark mark='b'/>后面的每一项在这一步上都恰好重复，因为4的n次方乘以步长是一个偶数，正好是之字形的周期：这些项什么也贡献不了。<bookmark mark='c'/>第m项是一段直线，斜率是3的m次方，这里是27。<bookmark mark='d'/>前面那些项的斜率至多是3的n次方，加起来至多是（3的m次方减1）再除以2。<bookmark mark='e'/>所以差商至少是（3的m次方加1）再除以2，随着步长缩小，它无限增大。<bookmark mark='f'/>对其他的m算一算，差商都和保证的一样大，而且永远稳定不下来。x处没有导数，而x是任意一点。"
+  },
+  "1d8d0a7f898d": {
+   "scene": "Nowhere",
+   "en": "Into the museum. And a teaser: in Part 8, Baire's theorem will show that in a precise sense most continuous functions are like this one, and the smooth ones are the rare exceptions.",
+   "zh": "把它收进我们的博物馆。再预告一下：在第8部分，贝尔纲定理会证明，在一种精确的意义下，大多数连续函数都像这个函数一样，光滑的反倒是罕见的例外。"
+  },
+  "b5af60f87998": {
+   "scene": "Equicontinuity",
+   "en": "Chapter nine. In R n, closed and bounded sets are compact. In the space of continuous functions, Part 1 already warned us, they are not. Here is what's missing.",
+   "zh": "第九章。在n维空间里，闭且有界的集合是紧的。而在连续函数的空间里，第1部分已经警告过我们：它们不是。下面来看缺了什么。"
+  },
+  "c9f15580f732": {
+   "scene": "Equicontinuity",
+   "en": "<bookmark mark='a'/> Take sine of n x on the interval from zero to two pi. Every one of them is bounded by one, so they all lie in the unit ball of the space. <bookmark mark='b'/> But compute their sup distances: every pair is more than one apart. No subsequence can be Cauchy, so none converges uniformly, and the closed, bounded unit ball is not compact. Rudin shows even more: no subsequence converges at every point.",
+   "zh": "<bookmark mark='a'/>取从0到2π的区间上的sin nx。每一个的绝对值都不超过1，所以它们全都落在这个空间的单位球里。<bookmark mark='b'/>但算一算它们之间的上确界距离：任意两个都相距超过1。没有哪个子序列能是柯西序列，所以没有哪个一致收敛，于是这个闭且有界的单位球不是紧的。鲁丁还证明了更多：没有哪个子序列能在每一点都收敛。"
+  },
+  "b7dee53505fd": {
+   "scene": "Equicontinuity",
+   "en": "<bookmark mark='a'/> A second example, from Rudin. These functions are bounded by one and converge to zero at every single point. <bookmark mark='b'/> But each has a bump of height exactly one, at one over n, which slides toward zero and gets narrower. No subsequence can converge uniformly, since the sup distance to zero stays one. Being bounded, even converging pointwise, is not enough. What fails is the steepness: the family gets steeper and steeper.",
+   "zh": "<bookmark mark='a'/>第二个例子，也来自鲁丁。这些函数都不超过1，而且在每一个点都收敛到0。<bookmark mark='b'/>但每个函数在n分之1处都有一个高度恰好为1的鼓包，它朝0滑去，越来越窄。没有哪个子序列能一致收敛，因为到0的上确界距离始终是1。有界是不够的，即使逐点收敛也不够。问题出在陡峭程度上：这一族函数变得越来越陡。"
+  },
+  "b663eaeb200b": {
+   "scene": "Equicontinuity",
+   "en": "<bookmark mark='a'/> The missing ingredient is equicontinuity: one delta that works not only for every pair of points, but for every function in the family at once. It's the epsilon-delta game with delta chosen before the point and before the function. <bookmark mark='b'/> On the left, sine k x over k. Every one of them has slope at most one, so a single delta, just over a tenth, keeps every function's change below a tenth, whatever k is. <bookmark mark='c'/> On the right, sine k x without the damping. With ten of them, delta must be a hundredth; with a thousand, a ten-thousandth. No delta serves the whole family: the steep members ruin it.",
+   "zh": "<bookmark mark='a'/>缺的那样东西是等度连续：有一个δ，不仅对每一对点都管用，而且对这一族里的每个函数同时管用。这就是ε-δ游戏，只不过δ要在选点之前、也在选函数之前就定下来。<bookmark mark='b'/>左边是sin kx除以k。每一个的斜率都不超过1，所以只用一个δ，比十分之一稍大一点，就能让每个函数的变化都小于十分之一，不管k是多少。<bookmark mark='c'/>右边是不带衰减的sin kx。有10个函数时，δ必须是百分之一；有1000个时，就得是万分之一。没有哪个δ能照顾整个族：那些陡峭的成员把它毁了。"
+  },
+  "6875521d05c9": {
+   "scene": "Equicontinuity",
+   "en": "<bookmark mark='a'/> And equicontinuity is necessary. If continuous functions converge uniformly on a compact set, they form an equicontinuous family. <bookmark mark='b'/> Past some N they're all within a third of epsilon of one function, f N, so they inherit its delta, up to two more thirds. <bookmark mark='c'/> The finitely many before N are each uniformly continuous, and the smallest of their finitely many deltas works for all of them. <bookmark mark='d'/> One column of that width serves the whole family. <bookmark mark='e'/> The next chapter shows the converse, which is the real prize: bounded and equicontinuous is enough for a convergent subsequence.",
+   "zh": "<bookmark mark='a'/>而且等度连续是必要的。如果连续函数在紧集上一致收敛，它们就构成一个等度连续的族。<bookmark mark='b'/>过了某个N，它们都落在同一个函数f_N的三分之ε范围内，所以它们继承了f_N的δ，代价至多是再加上两个三分之ε。<bookmark mark='c'/>N之前的有限多个函数，每一个都是一致连续的，而它们有限多个δ中最小的那个，对它们全都管用。<bookmark mark='d'/>一条这么宽的竖带，就能照顾整个族。<bookmark mark='e'/>下一章证明反方向，那才是真正的大奖：有界加上等度连续，就足以得到收敛的子序列。"
+  },
+  "33a756316525": {
+   "scene": "ArzelaAscoli",
+   "en": "Chapter ten: the theorem of Arzelà and Ascoli, the compactness theorem for spaces of functions, and one of the most used theorems in analysis.",
+   "zh": "第十章：阿尔泽拉–阿斯科利定理。它是函数空间的紧性定理，也是分析学里最常用的定理之一。"
+  },
+  "1efd8b2272cf": {
+   "scene": "ArzelaAscoli",
+   "en": "<bookmark mark='a'/> The theorem: if a sequence of continuous functions on a compact set is pointwise bounded and equicontinuous, then it has a uniformly convergent subsequence. Here's such a family: random functions, all bounded by one, with slopes at most one. <bookmark mark='b'/> The proof has two steps. First, get convergence at countably many points, densely spread, by Cantor's diagonal trick. <bookmark mark='c'/> Then use equicontinuity, and compactness, to spread that convergence to every point, uniformly.",
+   "zh": "<bookmark mark='a'/>定理是：如果紧集上的一列连续函数逐点有界，而且等度连续，那么它有一个一致收敛的子序列。这就是这样的一族：一些随机函数，绝对值都不超过1，斜率都不超过1。<bookmark mark='b'/>证明分两步。第一步，用康托尔的对角线技巧，在可数多个稠密分布的点上得到收敛。<bookmark mark='c'/>第二步，利用等度连续性和紧性，把这种收敛一致地推广到每一个点。"
+  },
+  "fdcb248eb3d9": {
+   "scene": "ArzelaAscoli",
+   "en": "<bookmark mark='a'/> Step one. List the rational points, or any countable dense set: here, the dyadic points one half, one quarter, three quarters, and so on. <bookmark mark='b'/> The values at the first point are bounded, so by Bolzano–Weierstrass some subsequence converges there: that's the first row. From it, extract a further subsequence that converges at the second point as well: the second row. And so on, each row inside the one above. <bookmark mark='c'/> Now take the diagonal: the first function of the first row, the second of the second, and so on. From the n-th place on, the diagonal is a subsequence of the n-th row, so it converges at every one of the points. These are actual indices from a computed family.",
+   "zh": "<bookmark mark='a'/>第一步。把有理点，或者任何一个可数稠密集，排成一列：这里用的是二进有理点，二分之一、四分之一、四分之三，依此类推。<bookmark mark='b'/>在第一个点上，函数值是有界的，所以由波尔查诺–魏尔斯特拉斯定理，有某个子序列在那里收敛：这就是第一行。再从中抽出一个子序列，让它在第二个点上也收敛：这是第二行。依此类推，每一行都包含在上一行里。<bookmark mark='c'/>现在取对角线：第一行的第一个函数，第二行的第二个，依此类推。从第n个位置起，对角线序列是第n行的子序列，所以它在每一个点上都收敛。这些是从一个实际算出来的函数族里得到的真实下标。"
+  },
+  "953fedb4e91a": {
+   "scene": "ArzelaAscoli",
+   "en": "<bookmark mark='a'/> Step two. Fix epsilon, and take the delta that equicontinuity provides for the whole family. <bookmark mark='b'/> Because the set is compact, finitely many of the dense points have delta neighborhoods covering all of it. <bookmark mark='c'/> Along the diagonal sequence, the values converge at those finitely many points, so past some index they're Cauchy at all of them at once. <bookmark mark='d'/> Now any x is within delta of one of them, p, and the triangle inequality through p gives three epsilons, at every x, for the same indices. The diagonal sequence is uniformly Cauchy, and since C of K is complete, it converges uniformly.",
+   "zh": "<bookmark mark='a'/>第二步。固定ε，取等度连续性为整个族提供的那个δ。<bookmark mark='b'/>因为这个集合是紧的，只要取稠密点中的有限多个，它们的δ邻域就能覆盖整个集合。<bookmark mark='c'/>沿着对角线序列，函数值在这有限多个点上都收敛，所以过了某个下标，它们在所有这些点上同时满足柯西条件。<bookmark mark='d'/>现在，任何一个x都落在其中某个点p的δ范围内，借道p用三角不等式，就得到三个ε，对每个x都成立，而且下标相同。对角线序列是一致柯西的，又因为C(K)是完备的，它一致收敛。"
+  },
+  "cd560865ba58": {
+   "scene": "ArzelaAscoli",
+   "en": "<bookmark mark='a'/> Here's the proof run on a computer. Four hundred thousand random functions, each bounded by one with slope at most one: a uniformly bounded, equicontinuous family. <bookmark mark='b'/> The diagonal process keeps, at each stage, the functions whose value at the next dyadic point falls in the most crowded small bin, a finite stand-in for converging there. <bookmark mark='c'/> The diagonal functions close in on each other: the largest gap to any later one falls from about a fifth to under three hundredths, uniformly in x.",
+   "zh": "<bookmark mark='a'/>这是在计算机上跑一遍的证明。40万个随机函数，每一个绝对值都不超过1，斜率都不超过1：一个一致有界、等度连续的族。<bookmark mark='b'/>对角线过程在每个阶段，都只保留这样一些函数：它们在下一个二进有理点上的值，落进了最拥挤的那个小格子。这是“在那一点收敛”的有限版替身。<bookmark mark='c'/>对角线上的函数彼此越靠越近：与后面任何一个函数的最大差距，从大约五分之一降到了不到百分之三，而且对x是一致的。"
+  },
+  "14c539cb4730": {
+   "scene": "ArzelaAscoli",
+   "en": "So here's the dictionary entry. <bookmark mark='a'/> In R k, bounded sequences have convergent subsequences. In the space of continuous functions on a compact set, bounded sequences need one more property, equicontinuity, and then they too have uniformly convergent subsequences. <bookmark mark='b'/> This theorem will produce solutions of differential equations in Part 4 and conformal maps in Part 7.",
+   "zh": "所以，对照表上添了这样一条。<bookmark mark='a'/>在k维空间里，有界序列都有收敛的子序列。在紧集上的连续函数空间里，有界序列还需要多一条性质，也就是等度连续，有了它，它们也会有一致收敛的子序列。<bookmark mark='b'/>这个定理会在第4部分给出微分方程的解，在第7部分给出共形映射。"
+  },
+  "694948bed8b7": {
+   "scene": "Approximation",
+   "en": "Chapter eleven. In 1885 Weierstrass proved that every continuous function on a closed interval is a uniform limit of polynomials.",
+   "zh": "第十一章。1885年，魏尔斯特拉斯证明了：闭区间上的每个连续函数，都是多项式的一致极限。"
+  },
+  "ac6f098bc762": {
+   "scene": "Approximation",
+   "en": "However wild the graph, some polynomial stays within any tolerance of it, all along the interval. <bookmark mark='a'/> Rudin's proof uses a family of polynomials that act like a narrowing bump: c n times one minus x squared, to the n, with c n chosen so the area is one. <bookmark mark='b'/> As n grows, the bump gets taller and narrower. The normalizing constant stays below root n, which is what the estimates need. <bookmark mark='c'/> And for any fixed delta, the fraction of the area outside the interval from minus delta to delta goes to zero.",
+   "zh": "不管图像多么狂野，容许误差给得再小，也总有某个多项式，在整个区间上都待在这个误差之内。<bookmark mark='a'/>鲁丁的证明用了一族多项式，它们就像一个越来越窄的鼓包：c_n乘以（1减x的平方）的n次方，选取c_n使面积等于1。<bookmark mark='b'/>随着n增大，鼓包变得越来越高、越来越窄。归一化常数始终小于根号n，后面的估计需要的正是这一点。<bookmark mark='c'/>而且对任意固定的δ，落在负δ到δ这个区间之外的面积所占的比例趋于0。"
+  },
+  "0dbc8390a4a5": {
+   "scene": "Approximation",
+   "en": "<bookmark mark='a'/> Take a continuous f on the interval from zero to one, vanishing at the ends: any continuous function can be brought to this form by subtracting a straight line. <bookmark mark='b'/> Slide the bump along, and at each x record the bump-weighted average of f near x. <bookmark mark='c'/> That average, as a function of x, is a polynomial, because the bump is a polynomial in t minus x. Where f has a corner, the average rounds it off. As n grows the bump narrows and the average hugs f more closely.",
+   "zh": "<bookmark mark='a'/>取从0到1的区间上的一个连续函数f，它在两个端点处都等于0：任何连续函数，减去一条直线，都能化成这种形式。<bookmark mark='b'/>让鼓包滑过去，在每个x处，记下f在x附近以鼓包为权重的平均值。<bookmark mark='c'/>这个平均值作为x的函数，是一个多项式，因为鼓包是t减x的多项式。在f有尖角的地方，平均会把它磨圆。随着n增大，鼓包变窄，平均值也就更紧地贴住f。"
+  },
+  "d5fcb8ebaf5a": {
+   "scene": "Approximation",
+   "en": "<bookmark mark='a'/> The estimate is the epsilon-over-two trick again. Because the bump has area one, the error at x is at most the bump-weighted average of the gaps between f near x and f at x. <bookmark mark='b'/> Split the average. Near x, within delta, the gaps are below epsilon over two, by uniform continuity. Far from x, the gaps are at most two M, but the bump has almost no mass there. <bookmark mark='c'/> With c n below root n, the far part is at most four M root n times one minus delta squared, to the n, which goes to zero. The bound doesn't depend on x, so the convergence is uniform.",
+   "zh": "<bookmark mark='a'/>估计用的又是二分之ε技巧。因为鼓包的面积是1，x处的误差，至多是f在x附近的值与f(x)之差，以鼓包为权重的平均。<bookmark mark='b'/>把这个平均拆成两部分。在x附近，也就是δ以内，由一致连续性，这些差都小于二分之ε。离x较远的地方，差至多是2M，但鼓包在那里几乎没有质量。<bookmark mark='c'/>由于c_n小于根号n，远处那部分至多是4M乘根号n，再乘（1减δ的平方）的n次方，它趋于0。这个界不依赖于x，所以收敛是一致的。"
+  },
+  "009206cedf6a": {
+   "scene": "Approximation",
+   "en": "<bookmark mark='a'/> Here's the construction carried out for a tent with two corners. <bookmark mark='b'/> With n equal to ten thousand, the polynomial, of degree twenty thousand, is within five thousandths of the tent everywhere. The error is largest at the corners, and shrinks roughly like one over root n.",
+   "zh": "<bookmark mark='a'/>这是对一个带两个尖角的帐篷函数，实际做出的构造。<bookmark mark='b'/>n等于10000时，这个多项式的次数是20000，它处处都与帐篷相差不到千分之五。误差在尖角处最大，大致像根号n分之1那样缩小。"
+  },
+  "8ab50b05c751": {
+   "scene": "Approximation",
+   "en": "<bookmark mark='a'/> There's a second, probabilistic proof, due to Bernstein. At x, flip n coins that each land heads with probability x, and average f over the fraction of heads. That average is a polynomial in x. <bookmark mark='b'/> By the law of large numbers, the fraction of heads concentrates near x, so the average approaches f of x, uniformly. <bookmark mark='c'/> Either proof gives a fact the next chapter needs: the absolute value function is a uniform limit of polynomials on any interval.",
+   "zh": "<bookmark mark='a'/>还有第二个证明，用的是概率，出自伯恩斯坦。在x处，抛n枚硬币，每枚正面朝上的概率都是x，然后把正面所占的比例代进f，求平均值。这个平均值是x的多项式。<bookmark mark='b'/>由大数定律，正面的比例集中在x附近，所以这个平均值一致地趋于f(x)。<bookmark mark='c'/>两个证明都给出下一章需要的一个事实：在任何区间上，绝对值函数都是多项式的一致极限。"
+  },
+  "37186b6d2b1e": {
+   "scene": "StoneWeierstrass",
+   "en": "Chapter twelve. In 1937 Marshall Stone asked what it is about polynomials that makes Weierstrass's theorem true.",
+   "zh": "第十二章。1937年，马歇尔·斯通问：多项式究竟凭什么，让魏尔斯特拉斯定理成立？"
+  },
+  "cb6b4eab0591": {
+   "scene": "StoneWeierstrass",
+   "en": "He found that only two properties matter. <bookmark mark='a'/> The setting is an algebra of functions: a family closed under sums, products and constant multiples, like the polynomials. <bookmark mark='b'/> Here is the first thing that can go wrong. The even polynomials on the interval from minus one to one form an algebra, but each one takes the same value at x and at minus x, so none of them can come near the function x: at plus and minus one, the error is at least one. The algebra fails to separate points. <bookmark mark='c'/> Second, the polynomials with no constant term form an algebra, but they all vanish at zero, so none comes near the constant one. <bookmark mark='d'/> All polynomials have neither defect, and they are dense: that was chapter eleven.",
+   "zh": "他发现，要紧的只有两条性质。<bookmark mark='a'/>我们讨论的是一个函数代数：一族对加法、乘法和数乘都封闭的函数，比如多项式。<bookmark mark='b'/>第一种可能出的问题是这样的。负1到1区间上的偶多项式构成一个代数，但每一个在x和负x处的值都相同，所以它们谁都没法接近函数x：在正负1这两处，误差至少是1。这个代数不能分离点。<bookmark mark='c'/>第二，没有常数项的多项式构成一个代数，但它们在0处全都为零，所以谁都没法接近常数1。<bookmark mark='d'/>全体多项式这两种缺陷都没有，而它们是稠密的：这就是第十一章的内容。"
+  },
+  "9513c03e0c8e": {
+   "scene": "StoneWeierstrass",
+   "en": "<bookmark mark='a'/> Stone's theorem says these two defects are the only obstructions. If an algebra of continuous functions on a compact set separates points and vanishes at no point, then its uniform closure is everything: every continuous function is a uniform limit of members of the algebra. <bookmark mark='b'/> So polynomials in several variables are dense on any compact set in R k, and so are sums of decaying exponentials on the unit interval. And the even polynomials, which failed on the symmetric interval, are dense on the interval from zero to one, where x squared separates points: here they close in on the function x, the very function they could not reach before.",
+   "zh": "<bookmark mark='a'/>斯通定理说，这两种缺陷就是仅有的障碍。如果紧集上的一个连续函数代数能分离点，而且在任何一点都不全为零，那么它的一致闭包就是全部：每个连续函数都是这个代数中元素的一致极限。<bookmark mark='b'/>所以，多元多项式在k维空间的任何紧集上都稠密；单位区间上衰减指数函数的和，也是如此。而偶多项式在对称区间上失败了，在从0到1的区间上却是稠密的，因为在那里，x的平方能分离点：它们在这里逼近函数x，正是先前够不着的那个函数。"
+  },
+  "6852a72abe31": {
+   "scene": "StoneWeierstrass",
+   "en": "The proof has four steps. Let B be the uniform closure of the algebra; B is itself an algebra, and we want to show it contains every continuous function. <bookmark mark='a'/> Step one: if f is in B, so is its absolute value. f is bounded, say by a, and by Weierstrass's theorem there are polynomials P n converging to the absolute value of y uniformly on the interval from minus a to a. <bookmark mark='b'/> Plug f into them. P n of f is built from f by sums, products and constants, so it lies in B, and it is within the same distance of the absolute value of f. <bookmark mark='c'/> As the degree grows, P n of f converges uniformly to the absolute value of f, and B is closed, so the absolute value is in B.",
+   "zh": "证明分四步。令B为这个代数的一致闭包；B本身也是一个代数，我们要证明它包含每一个连续函数。<bookmark mark='a'/>第一步：如果f在B里，它的绝对值也在B里。f是有界的，比如说界是a，而由魏尔斯特拉斯定理，存在多项式P_n，在负a到a的区间上一致收敛到y的绝对值。<bookmark mark='b'/>把f代进去。P_n(f)是由f通过加法、乘法和常数构造出来的，所以它在B里，而且它与f的绝对值相差的，也不超过同样的距离。<bookmark mark='c'/>随着次数增大，P_n(f)一致收敛到f的绝对值，而B是闭的，所以这个绝对值在B里。"
+  },
+  "c212cd2e5388": {
+   "scene": "StoneWeierstrass",
+   "en": "<bookmark mark='a'/> Step two. The larger of two functions is their average plus half their difference in absolute value, and the smaller is the average minus it. <bookmark mark='b'/> So by step one, B is closed under taking the maximum or the minimum of two functions, and by induction, of finitely many. <bookmark mark='c'/> Step three uses the two hypotheses. Because the algebra separates points and vanishes nowhere, it can match any two values at any two points. For polynomials that's just the line through two points, a combination of one function vanishing at x and one vanishing at y.",
+   "zh": "<bookmark mark='a'/>第二步。两个函数中较大的那个，等于它们的平均值，加上它们之差的绝对值的一半；较小的那个，等于平均值减去这一项。<bookmark mark='b'/>所以由第一步，B对取两个函数的最大值和最小值是封闭的，再用归纳法，对有限多个函数也是如此。<bookmark mark='c'/>第三步用到那两个假设。因为这个代数能分离点，而且在任何一点都不全为零，所以在任意两个点上，它都能取到任意指定的两个值。对多项式来说，这就是过两点的那条直线：它是一个在x处为零的函数和一个在y处为零的函数的组合。"
+  },
+  "839aacbfac38": {
+   "scene": "StoneWeierstrass",
+   "en": "<bookmark mark='a'/> Step four builds the approximation, here for e to the x on the interval from zero to one, with epsilon equal to a tenth, using the polynomial algebra. <bookmark mark='b'/> Fix a point x. For each other point y, step three gives a member of the algebra that agrees with f at both x and y: here, the line through the two points of the graph. <bookmark mark='c'/> Each such line exceeds f minus epsilon on an open set around y. These open sets cover the interval, so by compactness finitely many of them do: here, nine. <bookmark mark='d'/> Take the largest of those nine lines. It's in B by step two; it agrees with f at x; and it never drops below f minus epsilon. Call it the cap at x.",
+   "zh": "<bookmark mark='a'/>第四步构造逼近，这里用多项式代数，对从0到1区间上的e的x次方来做，ε取十分之一。<bookmark mark='b'/>固定一点x。对其他每一点y，第三步都给出代数中的一个元素，它在x和y两处都与f相等：这里，就是穿过图像上这两个点的直线。<bookmark mark='c'/>每条这样的直线，在y周围的一个开集上都高于f减ε。这些开集覆盖了整个区间，所以由紧性，其中有限多个就能覆盖：这里是9个。<bookmark mark='d'/>取这9条直线中的最大者。由第二步，它在B里；它在x处与f相等；而且它从不低于f减ε。把它叫作x处的帽子。"
+  },
+  "243787437635": {
+   "scene": "StoneWeierstrass",
+   "en": "<bookmark mark='a'/> Now build a cap at every point. <bookmark mark='b'/> Each cap is below f plus epsilon on an open set around its own point, because it agrees with f there. Compactness again: finitely many of these sets cover, here twenty one. <bookmark mark='c'/> Take the smallest of those caps. It is still above f minus epsilon, since every cap is, and now it's below f plus epsilon everywhere too. Computed, the minimum is within two hundredths of e to the x. <bookmark mark='d'/> Epsilon was arbitrary and B is closed, so f is in B. Separating points and vanishing nowhere were used only in step three, to make the lines exist.",
+   "zh": "<bookmark mark='a'/>现在在每一点都造一顶帽子。<bookmark mark='b'/>每顶帽子在它自己那一点周围的一个开集上，都低于f加ε，因为它在那一点与f相等。又是紧性：这些开集中有限多个就能覆盖，这里是21个。<bookmark mark='c'/>取这些帽子中的最小者。它仍然高于f减ε，因为每顶帽子都是如此；而现在它也处处低于f加ε。实际算出来，这个最小值与e的x次方相差不到百分之二。<bookmark mark='d'/>ε是任意的，而B是闭的，所以f在B里。分离点和在任何一点都不全为零，这两个条件只在第三步用到，用来保证那些直线存在。"
+  },
+  "bc933ae3f8fa": {
+   "scene": "StoneWeierstrass",
+   "en": "<bookmark mark='a'/> For complex-valued functions there's a catch. On the unit circle, the polynomials in z separate points and contain the constants, yet they can't approximate z bar, the complex conjugate, which runs around the circle the other way. <bookmark mark='b'/> Here's why. Every polynomial times z has average zero around the circle, because each power of e to the i theta integrates to zero. But z bar times z is one. <bookmark mark='c'/> So the distance from z bar to P of z is the size of one minus z P of z, and one minus z P of z averages to exactly one: the curve it traces is centered at one, so it can never stay inside the unit disk. <bookmark mark='d'/> Whatever polynomial we try, somewhere the error is at least one. <bookmark mark='e'/> The fix, Rudin 7.33, is to require the algebra to contain the conjugate of each of its members. Adding z bar gives the trigonometric polynomials, and those are dense: the key to Fourier series, three chapters from now.",
+   "zh": "<bookmark mark='a'/>对复值函数，有一个陷阱。在单位圆上，z的多项式能分离点，也包含常数，可它们却逼近不了z的共轭，也就是复共轭：它沿着圆周朝反方向转。<bookmark mark='b'/>原因是这样的。任何多项式乘以z，绕圆周一圈的平均值都是0，因为e的iθ次方的每一个幂，积分都是0。但z的共轭乘以z等于1。<bookmark mark='c'/>所以z的共轭到P(z)的距离，就是（1减z乘P(z)）的大小，而（1减z乘P(z)）的平均值恰好是1：它画出的曲线以1为中心，所以永远不可能一直待在单位圆盘里。<bookmark mark='d'/>不管我们试哪个多项式，总有某个地方，误差至少是1。<bookmark mark='e'/>补救的办法，也就是鲁丁的定理7.33，是要求这个代数包含它每个成员的共轭。加上z的共轭，就得到三角多项式，而它们是稠密的：这是再过三章、理解傅里叶级数的关键。"
+  },
+  "e0eba36910d6": {
+   "scene": "PowerSeries",
+   "en": "Chapter thirteen. Uniform convergence pays off first for power series. Rudin uses them to define the exponential function, and from it the sine, the cosine, and the number pi, without drawing a single triangle.",
+   "zh": "第十三章。一致收敛首先在幂级数上见到回报。鲁丁用幂级数来定义指数函数，再由它定义正弦、余弦和数π，一个三角形都不用画。"
+  },
+  "e2540b1641c1": {
+   "scene": "PowerSeries",
+   "en": "<bookmark mark='a'/> Rudin's theorem 8.1: a power series with radius of convergence R converges uniformly on every smaller closed interval. <bookmark mark='b'/> Here's the geometric series, whose sum is one over one minus x. On the interval up to 0.8, the largest error of the N-th partial sum is 0.8 to the N plus one, over 0.2, which goes to zero. <bookmark mark='c'/> On the whole open interval the convergence is never uniform: near one the sum is unbounded, and every partial sum is bounded. <bookmark mark='d'/> Uniform convergence on each smaller interval is all chapter seven needs. The sum is continuous, and it may be differentiated term by term, since the differentiated series has the same radius. Repeating, a power series is infinitely differentiable, and its coefficients are its Taylor coefficients.",
+   "zh": "<bookmark mark='a'/>鲁丁的定理8.1：收敛半径为R的幂级数，在每个更小的闭区间上一致收敛。<bookmark mark='b'/>这是几何级数，它的和是1减x分之1。在负0.8到0.8的区间上，第N个部分和的最大误差，是0.8的（N加1）次方除以0.2，它趋于0。<bookmark mark='c'/>在整个开区间上，收敛永远不是一致的：在1附近，和是无界的，而每个部分和都有界。<bookmark mark='d'/>在每个更小的区间上一致收敛，第七章需要的就只有这些。和函数是连续的，而且可以逐项求导，因为求导后的级数有同样的收敛半径。反复这样做，幂级数就是无穷次可导的，它的系数就是它的泰勒系数。"
+  },
+  "d55b155b569e": {
+   "scene": "PowerSeries",
+   "en": "<bookmark mark='a'/> At the edge of the interval, uniform convergence can fail, and Abel's theorem fills the gap: if the series converges at x equal to one, then its sum there is the limit of the function as x approaches one from below. <bookmark mark='b'/> The series with coefficients plus and minus one over n sums to the logarithm of one plus x inside the interval. <bookmark mark='c'/> At x equal to one it becomes the alternating harmonic series, which converges by Part 2's alternating test, slowly. <bookmark mark='d'/> Abel's theorem identifies its sum: the logarithm of two. Summing the series at x closer and closer to one gives values marching up to it. <bookmark mark='e'/> The converse is false: one minus one plus one, and so on, has an Abel limit of one half but no sum. That kind of averaged sum comes back in Part 7, for Fourier series.",
+   "zh": "<bookmark mark='a'/>在区间的端点处，一致收敛可能失效，而阿贝尔定理补上了这个缺口：如果级数在x等于1处收敛，那么它在那里的和，就等于x从下方趋于1时函数的极限。<bookmark mark='b'/>系数为正负交替的n分之1的级数，在区间内部的和是ln（1加x）。<bookmark mark='c'/>在x等于1处，它变成交错调和级数，由第2部分的交错级数判别法，它收敛，只是很慢。<bookmark mark='d'/>阿贝尔定理认出了它的和：ln 2。在越来越接近1的x处对级数求和，得到的值一步步爬向它。<bookmark mark='e'/>反过来不成立：1减1加1，依此类推，阿贝尔极限是二分之一，却没有和。这种平均意义下的和，会在第7部分为傅里叶级数再次出现。"
+  },
+  "b8a078266e31": {
+   "scene": "PowerSeries",
+   "en": "<bookmark mark='a'/> Rudin defines E of z as the sum of z to the n over n factorial, for every complex z. Multiplying two such series, by Part 2's Cauchy product, gives the law E of z times E of w equals E of z plus w, and on the real line E is the exponential function. <bookmark mark='b'/> Now put in i times t. Each term is the previous one turned by a right angle and scaled by t over n, so the partial sums spiral inward. <bookmark mark='c'/> Where do they land? E of i t times E of minus i t is E of zero, which is one, so the landing point is always on the unit circle. Its coordinates are, by definition, the cosine and the sine of t. <bookmark mark='d'/> As t grows, the spiral's endpoint runs around the circle, and since the derivative of E of i t has length one, it runs at unit speed: by chapter four, the arc it has covered has length exactly t.",
+   "zh": "<bookmark mark='a'/>鲁丁对每个复数z，把E(z)定义为z的n次方除以n的阶乘之和。用第2部分的柯西乘积把两个这样的级数相乘，就得到运算法则：E(z)乘E(w)等于E（z加w），而在实数轴上，E就是指数函数。<bookmark mark='b'/>现在代入i乘t。每一项都是前一项转过一个直角，再乘上n分之t，所以部分和螺旋着向内收拢。<bookmark mark='c'/>它们落在哪里？E(it)乘E（负it）等于E(0)，也就是1，所以落点总在单位圆上。按照定义，它的两个坐标就是t的余弦和正弦。<bookmark mark='d'/>随着t增大，螺旋的终点绕着圆周跑，又因为E(it)的导数长度是1，它以单位速率在跑：由第四章，它走过的弧长恰好是t。"
+  },
+  "ecaf7ca77a84": {
+   "scene": "PowerSeries",
+   "en": "<bookmark mark='a'/> Now pi. The cosine series starts at one, and at t equal to two it's already negative, since after the first few terms the series alternates with shrinking terms. <bookmark mark='b'/> By the intermediate value theorem the cosine has a first positive zero, and Rudin defines pi to be twice that zero. <bookmark mark='c'/> We can find it from the series alone, by bisection: halve the interval, keep the half where the sign changes, and repeat. Twice the midpoint gains a correct digit about every three steps. <bookmark mark='d'/> After sixty halvings, it agrees with pi in all fourteen decimal places shown. The rest follows from the addition law: E of i pi over two is i, E is periodic with period two pi i, and since the circle is traced at unit speed, pi is half its circumference. Not one triangle was needed.",
+   "zh": "<bookmark mark='a'/>现在来看π。余弦级数从1开始，而在t等于2处就已经是负的了，因为前几项之后，这个级数正负交替，而且各项越来越小。<bookmark mark='b'/>由介值定理，余弦有第一个正零点，鲁丁把π定义为这个零点的两倍。<bookmark mark='c'/>只用这个级数，我们就能把它找出来，办法是二分法：把区间对半分开，保留变号的那一半，如此反复。中点的两倍，大约每三步就多一位正确的数字。<bookmark mark='d'/>对半分60次之后，它和π在屏幕上显示的全部14位小数上都一致。其余的都由加法法则推出：E（iπ除以2）等于i，E以2πi为周期，而且因为圆周是以单位速率画出来的，π就是周长的一半。一个三角形都没用到。"
+  },
+  "52256c5a0933": {
+   "scene": "PowerSeries",
+   "en": "<bookmark mark='a'/> One more gift of these series: the fundamental theorem of algebra, Rudin 8.8. The size of a polynomial grows without bound far out, so it has a smallest value somewhere. <bookmark mark='b'/> Suppose that smallest value were not zero. Take a small circle around the point. Its image under P is a loop around P of z zero, <bookmark mark='c'/> and a loop around a point can't stay outside the circle through that point: part of it dips closer to zero. So the value wasn't the smallest after all. <bookmark mark='d'/> Repeat the step from the new point, and the values march down to zero, at a root. In Part 7 the same theorem will take one line.",
+   "zh": "<bookmark mark='a'/>这些级数还有一份礼物：代数基本定理，也就是鲁丁的定理8.8。多项式的大小在远处无限增大，所以它在某处有最小值。<bookmark mark='b'/>假设这个最小值不是0。在那一点周围取一个小圆。它在P下的像，是绕着P(z_0)的一个圈，<bookmark mark='c'/>而绕着一个点的圈，不可能一直待在过这个点的那个圆的外面：它总有一部分会探到离0更近的地方。所以那个值根本不是最小的。<bookmark mark='d'/>从新的点出发重复这一步，函数值就一路降到0，落在一个根上。到了第7部分，同一个定理只需要一行。"
+  },
+  "f35cd8c2281b": {
+   "scene": "FourierSeries",
+   "en": "Chapter fourteen. In 1807 Fourier claimed that every function is a sum of sines and cosines, and in 1829 Dirichlet proved it for a large class of functions.",
+   "zh": "第十四章。1807年，傅里叶断言，每个函数都是正弦和余弦的和；1829年，狄利克雷对一大类函数证明了这一点。"
+  },
+  "a15fabe87f0e": {
+   "scene": "FourierSeries",
+   "en": "Rudin starts not from convergence but from a geometric question: which trigonometric polynomial is closest to f? <bookmark mark='a'/> The key fact is orthogonality. Take two different sine waves, <bookmark mark='b'/> multiply them, and integrate over a period: the positive and negative parts cancel exactly. <bookmark mark='c'/> The same wave times itself is positive, and integrates to pi. <bookmark mark='d'/> In complex form, the exponentials e to the i n x behave like perpendicular unit vectors: the average of one times the conjugate of another is one if they're the same and zero otherwise. <bookmark mark='e'/> So the Fourier coefficient c n, the average of f times e to the minus i n x, is the coordinate of f along the n-th axis.",
+   "zh": "鲁丁的出发点不是收敛，而是一个几何问题：哪个三角多项式离f最近？<bookmark mark='a'/>关键的事实是正交性。取两条不同的正弦波，<bookmark mark='b'/>把它们相乘，在一个周期上积分：正的部分和负的部分恰好抵消。<bookmark mark='c'/>同一条波乘以它自己，是正的，积分等于π。<bookmark mark='d'/>写成复数形式，指数函数e的inx次方就像一组互相垂直的单位向量：一个乘以另一个的共轭，再取平均，两者相同就得1，否则就得0。<bookmark mark='e'/>所以傅里叶系数c_n，也就是f乘以e的负inx次方的平均值，就是f沿着第n条坐标轴的坐标。"
+  },
+  "d8e943686679": {
+   "scene": "FourierSeries",
+   "en": "<bookmark mark='a'/> Rudin's theorem 8.11: among all trigonometric polynomials of degree at most N, the one whose coefficients are f's Fourier coefficients is the closest to f in mean square. <bookmark mark='b'/> Here's the sawtooth, its Fourier partial sum of degree six, and one competitor. <bookmark mark='c'/> I tried five hundred random competitors near the partial sum: every one has a larger squared error. Even the best of them has nearly twice the squared error. <bookmark mark='d'/> The reason is Pythagoras. The error f minus s N is orthogonal to every trigonometric polynomial of degree N, so for any competitor t, the squared distance from f to t is the squared distance to s N plus the squared distance from s N to t. <bookmark mark='e'/> The Fourier partial sum is the foot of the perpendicular from f. This is the first glimpse of Hilbert space, the subject of Part 6.",
+   "zh": "<bookmark mark='a'/>鲁丁的定理8.11：在所有次数不超过N的三角多项式中，以f的傅里叶系数为系数的那一个，在均方意义下离f最近。<bookmark mark='b'/>这是锯齿波、它的6次傅里叶部分和，以及一个竞争者。<bookmark mark='c'/>我在部分和附近随机试了500个竞争者：每一个的平方误差都更大。就连其中最好的那个，平方误差也差不多是两倍。<bookmark mark='d'/>原因就是勾股定理。误差f减s_N，与每一个次数不超过N的三角多项式都正交，所以对任何竞争者t，f到t的距离的平方，等于f到s_N的距离的平方，加上s_N到t的距离的平方。<bookmark mark='e'/>傅里叶部分和，就是从f出发作垂线的垂足。这是我们第一次瞥见希尔伯特空间，它是第6部分的主题。"
+  },
+  "45e8d329cb80": {
+   "scene": "FourierSeries",
+   "en": "<bookmark mark='a'/> Take the competitor t to be zero. Pythagoras says the energy of f is the energy of its partial sum plus the energy of the error, so the partial sum has less energy than f. <bookmark mark='b'/> By orthogonality, the energy of the partial sum is the sum of the squared coefficients. That's Bessel's inequality: the sum of the squares of the Fourier coefficients never exceeds the average of f squared. <bookmark mark='c'/> For the sawtooth, the bar's length is pi squared over twelve, and the squared coefficients, one over two n squared for each pair plus and minus n, stack up inside it. <bookmark mark='d'/> In particular the coefficients go to zero. Whether they fill the bar completely is the question of the next chapter.",
+   "zh": "<bookmark mark='a'/>把竞争者t取成0。勾股定理说，f的能量，等于部分和的能量加上误差的能量，所以部分和的能量比f的小。<bookmark mark='b'/>由正交性，部分和的能量就是各个系数的平方和。这就是贝塞尔不等式：傅里叶系数的平方和，永远不超过f的平方的平均值。<bookmark mark='c'/>对锯齿波，这根长条的长度是π的平方除以12，而系数的平方，每一对正负n贡献n的平方的2倍分之1，一段段叠在长条里面。<bookmark mark='d'/>特别地，系数趋于0。它们能不能把长条完全填满，是下一章的问题。"
+  },
+  "6c25278de624": {
+   "scene": "FourierSeries",
+   "en": "<bookmark mark='a'/> To study convergence, write the partial sum as an integral: it's an average of f against the Dirichlet kernel, the sum of the exponentials up to N. <bookmark mark='b'/> Like the Landau kernel, it has total signed area two pi and a tall central peak. Unlike it, it isn't positive: its side lobes alternate in sign and don't shrink fast. <bookmark mark='c'/> The area under its absolute value, computed here, grows without bound, like the logarithm of N. <bookmark mark='d'/> That growth has a price. Du Bois-Reymond found a continuous function whose Fourier series diverges at a point; in Part 8, the uniform boundedness principle will turn this table of numbers into a proof that such functions exist.",
+   "zh": "<bookmark mark='a'/>要研究收敛，就把部分和写成一个积分：它是f以狄利克雷核为权重的平均，狄利克雷核就是指数函数一直加到N的和。<bookmark mark='b'/>和兰道核一样，它带符号的总面积是2π，中间有一个高高的尖峰。和兰道核不同的是，它不是正的：它的旁瓣正负交替，而且缩小得不快。<bookmark mark='c'/>它的绝对值下方的面积，这里已经算出来了，会无限增大，像N的对数那样增长。<bookmark mark='d'/>这种增长是有代价的。杜布瓦–雷蒙找到了一个连续函数，它的傅里叶级数在某一点发散；在第8部分，一致有界原理会把这张数表，变成这种函数存在的证明。"
+  },
+  "6b66e8eaf915": {
+   "scene": "FourierSeries",
+   "en": "<bookmark mark='a'/> Pointwise convergence needs a little regularity. Dini's test: if f is Lipschitz at x, the partial sums converge to f of x. Subtract f of x and the error becomes the integral of a function g against a sine of higher and higher frequency. <bookmark mark='b'/> Because f is Lipschitz at x, g is bounded, even near zero, where the denominator vanishes. Here it is for the sawtooth at x equal to one; its jump is harmless. <bookmark mark='c'/> As N grows, the positive and negative lobes cancel better and better, and Bessel's inequality, applied to g, shows the integral goes to zero. <bookmark mark='d'/> Computed: at pi over two and at one, the partial sums close in on the sawtooth's values. <bookmark mark='e'/> Part 2 proved that this series converges everywhere, but not to what. Now we know: pi minus x, over two.",
+   "zh": "<bookmark mark='a'/>逐点收敛需要一点正则性。迪尼判别法：如果f在x处是利普希茨的，部分和就收敛到f(x)。减去f(x)之后，误差就变成某个函数g乘以一个频率越来越高的正弦，再求积分。<bookmark mark='b'/>因为f在x处是利普希茨的，g是有界的，即使在0附近、分母为零的地方也是如此。这是锯齿波在x等于1处的g；锯齿波的跳跃并不碍事。<bookmark mark='c'/>随着N增大，正负波瓣抵消得越来越好，而把贝塞尔不等式用到g上，就能看出这个积分趋于0。<bookmark mark='d'/>实际算一下：在二分之π处和1处，部分和都逼近锯齿波的值。<bookmark mark='e'/>第2部分证明了这个级数处处收敛，却没说收敛到什么。现在我们知道了：π减x再除以2。"
+  },
+  "9e691cb94422": {
+   "scene": "Parseval",
+   "en": "Chapter fifteen, the payoff: in what sense does a Fourier series converge to its function?",
+   "zh": "第十五章，收获的时候到了：傅里叶级数到底在什么意义下收敛到它的函数？"
+  },
+  "6ba0e23caaa4": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> First, density. The trigonometric polynomials, sums of c n e to the i n x, <bookmark mark='s'/> form an algebra of functions on the circle that contains the constants, separates points, and is closed under complex conjugation. <bookmark mark='u'/> So by Stone's theorem, every continuous periodic function is a uniform limit of trigonometric polynomials. <bookmark mark='h'/> Here are such polynomials closing in on a continuous function with three corners. <bookmark mark='b'/> They are an explicit choice, found by Fejér in 1900: averages of the Fourier partial sums, which damp the high frequencies. <bookmark mark='c'/> Fejér's kernel is positive, like Landau's, and the averages converge uniformly.",
+   "zh": "<bookmark mark='a'/>首先是稠密性。三角多项式，也就是c_n乘e的inx次方的和，<bookmark mark='s'/>构成圆周上的一个函数代数，它包含常数，能分离点，而且对取复共轭封闭。<bookmark mark='u'/>所以由斯通定理，每个连续的周期函数都是三角多项式的一致极限。<bookmark mark='h'/>这是一些这样的多项式，正在逼近一个带三个尖角的连续函数。<bookmark mark='b'/>它们是一种明确的选择，由费耶尔在1900年找到：傅里叶部分和的平均，它压低了高频部分。<bookmark mark='c'/>费耶尔核和兰道核一样是正的，这些平均一致收敛。"
+  },
+  "d176f430eb1a": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> Now Parseval's theorem, Rudin 8.16. For every Riemann-integrable function, the mean square error of the partial sums goes to zero, and Bessel's inequality becomes an equality. <bookmark mark='b'/> The proof chains three approximations. f is close in mean square to a continuous function; that is uniformly close to a trigonometric polynomial; and the Fourier partial sum is at least as close as any polynomial of its degree. <bookmark mark='c'/> In the picture from last chapter, the bar now fills completely. The red gap is the energy the partial sum is still missing, which is exactly its mean square error, and it shrinks to zero.",
+   "zh": "<bookmark mark='a'/>现在来看帕塞瓦尔定理，鲁丁的定理8.16。对每个黎曼可积函数，部分和的均方误差都趋于0，贝塞尔不等式变成了等式。<bookmark mark='b'/>证明把三次逼近串在一起。f在均方意义下接近一个连续函数；这个连续函数又一致地接近一个三角多项式；而傅里叶部分和，至少和任何同次数的多项式一样接近f。<bookmark mark='c'/>在上一章的图里，长条现在被完全填满了。红色的空缺，是部分和还缺少的能量，它恰好就是均方误差，并且缩小到0。"
+  },
+  "c4d296981bf2": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> Parseval's equation, applied to the sawtooth, sums a famous series. On one side, the average of the square of pi minus x over two. <bookmark mark='b'/> That integral is pi squared over twelve. <bookmark mark='c'/> On the other side, the coefficients: from the sawtooth's series, each pair plus and minus n contributes one over two n squared. <bookmark mark='d'/> Multiply by two: the sum of one over n squared is pi squared over six. <bookmark mark='e'/> Euler found this in 1734; a 3Blue1Brown video proves it with lighthouses. Here it falls out of the geometry of Fourier series.",
+   "zh": "<bookmark mark='a'/>把帕塞瓦尔等式用到锯齿波上，就能求出一个著名级数的和。一边是（π减x再除以2）的平方的平均值。<bookmark mark='b'/>这个积分等于π的平方除以12。<bookmark mark='c'/>另一边是系数：由锯齿波的级数，每一对正负n贡献n的平方的2倍分之1。<bookmark mark='d'/>乘以2：n的平方分之1的和，等于π的平方除以6。<bookmark mark='e'/>欧拉在1734年发现了这个结果；3B1B有一期视频用灯塔证明了它。而在这里，它从傅里叶级数的几何里自然地冒了出来。"
+  },
+  "e383f4402d5f": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> Put the sawtooth's partial sums on the dashboard. <bookmark mark='b'/> The probe at one closes in, as Dini's test promised. The energy of the error goes to zero, as Parseval promised. <bookmark mark='c'/> But the uniform lens is stuck: just to the right of the jump the partial sums are near zero while the sawtooth is near pi over two. A uniform limit of continuous functions is continuous, so this convergence can never be uniform.",
+   "zh": "<bookmark mark='a'/>把锯齿波的部分和放到仪表盘上。<bookmark mark='b'/>放在1处的探针逐渐逼近，正如迪尼判别法所保证的。误差的能量趋于0，正如帕塞瓦尔所保证的。<bookmark mark='c'/>可是一致的镜头卡住了：紧挨着跳跃的右边，部分和接近0，而锯齿波接近二分之π。连续函数的一致极限是连续的，所以这里的收敛永远不可能是一致的。"
+  },
+  "fb5d29fbcfb7": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> Zoom in on the jump. Next to it, every partial sum overshoots. <bookmark mark='b'/> As N grows, the overshoot moves closer to the jump and gets narrower, but not lower: its height tends to about nine percent of the jump, precisely the integral of sine t over t from zero to pi, over pi, minus a half. <bookmark mark='c'/> Here is why it never gets lower. Stretch the picture by N near the jump, and every partial sum lands on the same curve: the integral of sine u over u, from zero to t. <bookmark mark='p'/> Its first peak, at t equals pi, is the overshoot, and stretching sideways doesn't change heights. <bookmark mark='d'/> Wilbraham noticed it in 1848 and Gibbs explained it in 1899. It's the visible face of non-uniform convergence, and it's why sharp edges in compressed images and audio come with ringing.",
+   "zh": "<bookmark mark='a'/>在跳跃处放大。紧挨着跳跃，每个部分和都会冲过头。<bookmark mark='b'/>随着N增大，冲过头的那一段离跳跃越来越近，也越来越窄，但并不会变低：它的高度趋于跳跃幅度的百分之九左右，精确地说，是sin t除以t从0到π的积分，除以π，再减去二分之一。<bookmark mark='c'/>下面来看它为什么永远不会变低。在跳跃附近，把图像横向拉伸N倍，每个部分和都落在同一条曲线上：sin u除以u从0到t的积分。<bookmark mark='p'/>它的第一个峰，在t等于π处，就是那段冲过头的部分，而横向拉伸不会改变高度。<bookmark mark='d'/>威尔布拉汉姆在1848年注意到了这一点，吉布斯在1899年给出了解释。它是非一致收敛看得见的样子，也正因为它，压缩过的图像和音频里，锐利的边缘旁总伴着振铃。"
+  },
+  "8fa3b97a7844": {
+   "scene": "Parseval",
+   "en": "<bookmark mark='a'/> Rudin's chapter ends with the gamma function, which we'll keep to one card. It interpolates the factorials, <bookmark mark='b'/> and it's the only interpolation whose logarithm is convex and which obeys the factorial's recursion: that's the theorem of Bohr and Mollerup. <bookmark mark='c'/> Stirling's formula estimates it: the ratio of n factorial to the formula goes to one, already within a hundredth of a percent at a thousand.",
+   "zh": "<bookmark mark='a'/>鲁丁这一章以伽马函数收尾，我们只用一张卡片来介绍它。它在阶乘之间插值，<bookmark mark='b'/>而且它是唯一一个对数是凸函数、又满足阶乘递推关系的插值：这就是玻尔–莫勒鲁普定理。<bookmark mark='c'/>斯特林公式给出它的估计：n的阶乘与这个公式之比趋于1，在n等于1000时，误差已经在万分之一以内。"
+  },
+  "12dbda751a23": {
+   "scene": "Outro",
+   "en": "Let's take stock. We built the Riemann integral from upper and lower sums, found which functions it can integrate, and generalized it to integrals against a staircase. The fundamental theorem tied it to derivatives, and gave curves a length, though not every curve has one. Then the main problem: limits of functions. Uniform convergence makes limits pass through continuity and integrals, and turns the continuous functions into a complete space, where Weierstrass's monster lives. Equicontinuity is what compactness costs there, by Arzelà and Ascoli. Polynomials, and any algebra that separates points and vanishes at no point, approximate everything. Power series gave us the exponential and pi, and Fourier series turned out to be best approximations: they converge in energy, which summed one over n squared, and at jumps they overshoot by nine percent.",
+   "zh": "我们来盘点一下。我们用上和与下和搭起了黎曼积分，弄清了它能积哪些函数，又把它推广成以阶梯为尺的积分。微积分基本定理把积分和导数联系起来，还给曲线定义了长度，虽然不是每条曲线都有长度。然后是主要问题：函数的极限。一致收敛让极限可以穿过连续性和积分，并把连续函数变成一个完备的空间，魏尔斯特拉斯的怪物就住在那里。由阿尔泽拉和阿斯科利的定理，在那里要得到紧性，代价就是等度连续。多项式，以及任何能分离点、在任何一点都不全为零的代数，都能逼近一切。幂级数给了我们指数函数和π，而傅里叶级数原来是最佳逼近：它们在能量意义下收敛，由此求出了n的平方分之1的和；在跳跃处，它们会冲过头百分之九。"
+  },
+  "bf40e7f276c6": {
+   "scene": "Outro",
+   "en": "And the ledger gets its third row. <bookmark mark='a'/> The space: continuous functions on a compact set, with the sup norm. <bookmark mark='b'/> It's complete, because uniform limits of continuous functions are continuous. <bookmark mark='c'/> Its compact sets are the closed, bounded, equicontinuous ones. <bookmark mark='d'/> The swap it makes legal: the limit of the integrals is the integral of the limit, when the convergence is uniform. <bookmark mark='e'/> And Fourier's series: they converge in mean square, pointwise where the function is Lipschitz, and with Gibbs' overshoot at jumps.",
+   "zh": "账本也添上了第三行。<bookmark mark='a'/>空间：紧集上的连续函数，配上上确界范数。<bookmark mark='b'/>它是完备的，因为连续函数的一致极限是连续的。<bookmark mark='c'/>它的紧集，就是那些闭的、有界的、等度连续的集合。<bookmark mark='d'/>它允许的交换：当收敛是一致的时候，积分的极限等于极限的积分。<bookmark mark='e'/>至于傅里叶级数：它们在均方意义下收敛，在函数利普希茨的地方逐点收敛，而在跳跃处，会有吉布斯现象那样的冲过头。"
+  },
+  "0cf9820ee413": {
+   "scene": "Outro",
+   "en": "Next time, in Part 4, calculus in many dimensions. <bookmark mark='a'/> A map of the plane bends a square grid. <bookmark mark='b'/> Up close, it acts like a linear map: a small square goes to almost a parallelogram, the one the derivative predicts. In many dimensions the derivative is that linear map. <bookmark mark='c'/> From it come contractions, the inverse and implicit function theorems, and Picard's theorem, which solves differential equations by iterating in the space of continuous functions we just built.",
+   "zh": "下一次，在第4部分：多维空间里的微积分。<bookmark mark='a'/>平面上的一个映射，把正方形网格掰弯了。<bookmark mark='b'/>凑近了看，它就像一个线性映射：一个小正方形，几乎被映成一个平行四边形，正是导数预言的那一个。在多维空间里，导数就是那个线性映射。<bookmark mark='c'/>由它引出压缩映射、反函数定理和隐函数定理，还有皮卡定理，它通过在我们刚刚搭建的连续函数空间里迭代，来求解微分方程。"
+  },
+  "8a5621af5c6d": {
+   "scene": "Outro",
+   "en": "This part followed chapters six to eight of Rudin's Principles of Mathematical Analysis. Thanks for watching, and see you in Part 4.",
+   "zh": "这一部分对应鲁丁《数学分析原理》的第6到第8章。感谢收看，我们第4部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 3, Integration and the First Function Space",
+ "chapters_en": {
+  "Hook": "The main problem: when may two limits be swapped?",
+  "UpperLower": "1. Upper and lower sums",
+  "WhoIsIntegrable": "2. Which functions are integrable?",
+  "Stieltjes": "3. Integrating against a staircase",
+  "FTC": "4. The fundamental theorem, and the length of a curve",
+  "Uniform": "5. Uniform convergence",
+  "UniformContinuity": "6. Uniform limits, and the space C(X)",
+  "IntegralsDerivatives": "7. Integrals and derivatives of limits",
+  "Nowhere": "8. A continuous function with no derivative",
+  "Equicontinuity": "9. Equicontinuity",
+  "ArzelaAscoli": "10. Arzelà–Ascoli: compactness in C(X)",
+  "Approximation": "11. Every continuous function is nearly a polynomial",
+  "StoneWeierstrass": "12. Stone–Weierstrass",
+  "PowerSeries": "13. Power series, exp, and the birth of π",
+  "FourierSeries": "14. Fourier series: the best approximation",
+  "Parseval": "15. Parseval, Gibbs, and π²/6",
+  "Outro": "The third row of the ledger"
+ }
+}

@@ -76,9 +76,10 @@ class Products(VoiceoverScene):
         for t_, u_ in zip(np.linspace(0.3, 1.85, 32), np.linspace(0.1, 1.65, 32)):  # every swept section meets Q
             assert inside[:, int(round(t_ / dx))].any() and inside[int(round(u_ / dx)), :].any()
         vs, hs = always_redraw(vsec), always_redraw(hsec)
-        bx = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 2.0).move_to([3.2, 0.9, 0])
+        # the two slice plots share the right column under the two-line header, each with its label above it
+        bx = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 1.8).move_to([3.2, 0.75, 0])
         vg = polyline(bx, g, vert, color=C.SEQ, stroke_width=3)
-        cx_ = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 2.0).move_to([3.2, -2.1, 0])
+        cx_ = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 1.8).move_to([3.2, -2.15, 0])
         hg = polyline(cx_, g, horz, color=C.APPROX, stroke_width=3)
         vl = MathTex(rf"\int \lambda(Q_x)\,dx = {Av:.4f}", font_size=28, color=C.SEQ).next_to(bx, UP, buff=0.08)
         hl = MathTex(rf"\int \mu(Q^y)\,dy = {Ah:.4f}", font_size=28, color=C.APPROX).next_to(cx_, UP, buff=0.08)
@@ -88,6 +89,7 @@ class Products(VoiceoverScene):
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         head[1][1].set_color(GREY_B)
         assert vl.get_top()[1] < head.get_bottom()[1] - 0.1
+        assert hl.get_top()[1] < bx.get_bottom()[1] - 0.2 and cx_.get_bottom()[1] > -3.6
         with self.voiceover(
             "<bookmark mark='a'/> The product of two measures gives rectangles their area, and every measurable set "
             "in the plane can be measured by slices. <bookmark mark='b'/> Slide a vertical line across the region and "
