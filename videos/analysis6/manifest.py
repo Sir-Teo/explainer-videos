@@ -1,6 +1,6 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "Analysis, Built: Part 6, L^p, Hilbert Space and the Geometry of Functions"
+TITLE = "Analysis, Built: Part 6, Lᵖ, Hilbert Space and the Geometry of Functions"
 
 SCENES = [
     ("s01_hook", "Hook", "Which distance between functions?"),
