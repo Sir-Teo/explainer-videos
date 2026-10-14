@@ -471,7 +471,7 @@ class Series(VoiceoverScene):
                                   stroke_width=2.5),
                     Arrow(lx.c2p(x_out, 4), lx.c2p(x_out, 4) + UP * 0.45, buff=0, color=GREY_B, stroke_width=3,
                           max_tip_length_to_length_ratio=0.4))
-        assert S1.max() < 4 and np.all(S2 < S1)
+        assert S1.max() < 4 and np.all(S2[10:] < S1[10:])  # (for n < e the 1.01 power is the larger term)
         c1 = polyline(lx, lgm, S1[idx], color=C.SEQ, stroke_width=3)
         c2 = polyline(lx, lgm, S2[idx], color=C.CUT_HIGH, stroke_width=3)
         r1 = MathTex(rf"{S1[-1]:.2f} \to \infty", font_size=28, color=C.SEQ).next_to(lx.c2p(6, S1[-1]), UR, buff=0.08)

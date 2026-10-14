@@ -5,32 +5,10 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import area_under, load, plain_axes, polyline, rho
+from videos.analysis9.common import area_under, load, plain_axes, polyline, rho, spike_halves
 
 
 TOP = 4.2  # the top of the spike panels
-
-
-def spike_halves(ax, x, y, color, stroke_width, top=TOP):
-    """The graph of a spike peaked at 0, cut where it leaves the window (never flattened), as two pieces, left and
-    right of the peak: the group keeps one shape whether or not the spike fits."""
-    out = VGroup()
-    for side in (x <= 0, x >= 0):
-        xs, ys = x[side], y[side]
-        if side[0]:  # left half: rising
-            k = np.flatnonzero(ys > top)
-            if len(k):
-                i = k[0]
-                xc = xs[i - 1] + (top - ys[i - 1]) * (xs[i] - xs[i - 1]) / (ys[i] - ys[i - 1])
-                xs, ys = np.append(xs[:i], xc), np.append(ys[:i], top)
-        else:  # right half: falling
-            k = np.flatnonzero(ys > top)
-            if len(k):
-                i = k[-1]
-                xc = xs[i] + (ys[i] - top) * (xs[i + 1] - xs[i]) / (ys[i] - ys[i + 1])
-                xs, ys = np.insert(xs[i + 1:], 0, xc), np.insert(ys[i + 1:], 0, top)
-        out.add(polyline(ax, xs, ys, color=color, stroke_width=stroke_width))
-    return out
 
 
 class Hook(VoiceoverScene):
