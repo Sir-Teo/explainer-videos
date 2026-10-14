@@ -7,6 +7,25 @@ from videos.analysis1.common import dim, endpoint, load, recolor
 from videos.analysis1.s07_open_closed import blob_pts, nbhd
 
 
+def clear_spot(cands, size, rings=(), polys=()):
+    """The first candidate position at least ``size`` away from every circle edge (centre, radius) and from every
+    polygon outline (an array of its points): where a label can sit without a stroke through it."""
+    for c in cands:
+        c = np.asarray(c, float)
+        if all(abs(np.linalg.norm(c[:2] - np.asarray(o)[:2]) - r) > size for o, r in rings) and \
+                all(np.min(np.linalg.norm(np.asarray(P)[:, :2] - c[:2], axis=1)) > size for P in polys):
+            return c
+    raise AssertionError("no clear spot for a label")
+
+
+def grid_cands(center, rx, ry, step=0.1):
+    """Candidate points on a grid around ``center``, nearest first."""
+    xs = np.arange(-rx, rx + 1e-9, step)
+    ys = np.arange(-ry, ry + 1e-9, step)
+    pts = [np.array([center[0] + dx, center[1] + dy, 0]) for dx in xs for dy in ys]
+    return sorted(pts, key=lambda q: np.hypot(q[0] - center[0], q[1] - center[1]))
+
+
 def cover_bar(a, b, y, X, color=C.OPEN_SET, sw=5, opacity=0.9):
     return VGroup(Line([X(a), y, 0], [X(b), y, 0], color=color, stroke_width=sw, stroke_opacity=opacity),
                   endpoint([X(a), y, 0], False, color, radius=0.05), endpoint([X(b), y, 0], False, color, radius=0.05))
@@ -195,7 +214,7 @@ class Compact(VoiceoverScene):
         c0 = np.array([-3.6, -0.5, 0])
         pts = blob_pts(c0, scale=0.78)
         K = Polygon(*pts, stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET, fill_opacity=0.25)
-        Kl = MathTex(r"K", font_size=38, color=C.COMPACT_SET).move_to(c0 + np.array([-0.35, 0.3, 0]))
+        Kl = MathTex(r"K", font_size=38, color=C.COMPACT_SET)
         p = np.array([-1.0, 0.35, 0])
         pd = Dot(p, radius=0.08, color=WHITE)
         pl = MathTex(r"p", font_size=36).next_to(pd, UR, buff=0.08)
@@ -209,6 +228,8 @@ class Compact(VoiceoverScene):
             V.add(DashedVMobject(Circle(radius=r, color=col, stroke_width=2).move_to(p), num_dashes=40))
             Qd.add(Dot(q, radius=0.06, color=col))
         rmin = min(np.linalg.norm(p - q) for q in qs) / 2
+        rings_ = [(q, np.linalg.norm(p - q) / 2) for q in qs] + [(p, np.linalg.norm(p - q) / 2) for q in qs] + [(p, rmin)]
+        Kl.move_to(clear_spot(grid_cands(c0 + np.array([-0.35, 0.3, 0]), 1.2, 1.2), 0.3, rings_, [pts]))
         assert all(q[0] - np.linalg.norm(p - q) / 2 > -6.6 for q in qs)  # every disk stays inside the frame
         Vmin = nbhd(p, rmin, color=WHITE, fill=0.3, width=3)
         for q in qs:  # each pair of disks is disjoint
@@ -268,8 +289,7 @@ class Compact(VoiceoverScene):
         cF = c1 + np.array([0.12, -0.05, 0])
         F = Polygon(*blob_pts(cF, scale=0.42, n=200), stroke_color=C.CLOSED_SET, stroke_width=3.5,
                     fill_color=C.CLOSED_SET, fill_opacity=0.3)
-        Fl = MathTex(r"F", font_size=30, color=C.CLOSED_SET).move_to(cF + np.array([0.0, 0.05, 0]))
-        Fl.add_background_rectangle(color=BACKGROUND, opacity=0.75, buff=0.04)
+        Fl = MathTex(r"F", font_size=30, color=C.CLOSED_SET)
         Kl1 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c1 + np.array([-1.35, 1.15, 0]))
         bp = blob_pts(cF, scale=0.42, n=8)
         keep = [(cF, 0.45)] + [(q, 0.4) for q in bp]
@@ -279,6 +299,12 @@ class Compact(VoiceoverScene):
         fpts = np.array([cF + t * (q - cF) for q in blob_pts(cF, scale=0.42, n=200) for t in np.linspace(0, 1, 12)])
         assert all(any(np.linalg.norm(x - c) < r for c, r in keep) for x in fpts)
         disks_keep = VGroup(*[nbhd(c, r, color=C.OPEN_SET, fill=0.08, width=2, dashes=24) for c, r in keep])
+        # F's name just outside the disks, on a short leader
+        f_spot = clear_spot(grid_cands(cF + np.array([0.0, -1.2, 0]), 0.9, 0.5), 0.22, list(keep) + list(extra),
+                            [blob_pts(c1, scale=0.82), blob_pts(cF, scale=0.42, n=200)])
+        Fl.move_to(f_spot)
+        F_lead = Line(Fl.get_top() + UP * 0.03, cF + 0.6 * (f_spot - cF) / np.linalg.norm(f_spot - cF) * 0.42 / 0.6,
+                      color=C.CLOSED_SET, stroke_width=1.5)
         disks_extra = VGroup(*[nbhd(c, r, color=C.OPEN_SET, fill=0.08, width=2, dashes=20) for c, r in extra])
         Fc = Difference(K1.copy(), F.copy(), stroke_width=0, fill_color=C.OPEN_SET, fill_opacity=0.28)
         Fcl = MathTex(r"F^c", font_size=28, color=C.OPEN_SET).move_to(c1 + np.array([0.95, -1.0, 0]))
@@ -286,10 +312,16 @@ class Compact(VoiceoverScene):
         c2 = np.array([xs[1], 0.15, 0])
         nested = VGroup(*[Polygon(*blob_pts(c2, scale=0.74 * 0.68 ** k, n=200), stroke_color=C.COMPACT_SET,
                                   stroke_width=2.5, fill_color=C.COMPACT_SET, fill_opacity=0.1) for k in range(7)])
-        nlabs = VGroup(*[MathTex(rf"K_{k + 1}", font_size=24, color=C.COMPACT_SET).next_to(
-            blob_pts(c2, scale=0.74 * 0.68 ** k, n=8)[1], UR, buff=0.08) for k in range(2)])
+        nest_pts = [blob_pts(c2, scale=0.74 * 0.68 ** k, n=200) for k in range(7)]
+        nlabs = VGroup()
+        for k in range(2):  # K_1 and K_2 named in the gap just outside their own outline
+            edge_pt = blob_pts(c2, scale=0.74 * 0.68 ** k, n=8)[1]
+            out = edge_pt + 0.22 * (edge_pt - c2) / np.linalg.norm(edge_pt - c2)
+            nlabs.add(MathTex(rf"K_{k + 1}", font_size=24, color=C.COMPACT_SET).move_to(
+                clear_spot(grid_cands(out, 0.3, 0.3, 0.05), 0.17, polys=nest_pts)))
         core = Dot(c2, radius=0.06, color=WHITE)
-        core_l = MathTex(r"\bigcap K_n", font_size=24).next_to(core, DOWN, buff=0.35).shift(RIGHT * 0.9)
+        core_l = MathTex(r"\bigcap K_n", font_size=24).move_to(clear_spot(grid_cands(c2 + np.array([1.3, -1.25, 0]), 0.4, 0.2, 0.05),
+                                                                      0.3, polys=nest_pts))
         core_a = Arrow(core_l.get_left(), c2 + np.array([0.05, -0.05, 0]), buff=0.05, color=WHITE, stroke_width=2,
                        tip_length=0.12)
         X = lambda v: xs[1] - 1.7 + 3.4 * v  # noqa: E731
@@ -327,9 +359,8 @@ class Compact(VoiceoverScene):
             "finite."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(heads[0]), FadeIn(K1), FadeIn(Kl1), FadeIn(F), FadeIn(Fl), Create(seps))
+            self.play(FadeIn(heads[0]), FadeIn(K1), FadeIn(Kl1), FadeIn(F), FadeIn(Fl), Create(F_lead), Create(seps))
             self.play(LaggedStart(*[FadeIn(d) for d in (*disks_keep, *disks_extra)], lag_ratio=0.12), run_time=2.0)
-            self.bring_to_front(Fl)  # F's name stays readable over the disks
             self.play(FadeIn(Fc), FadeIn(Fcl))
             self.play(disks_extra.animate.set_opacity(0.08), run_time=1.0)
             self.play(FadeOut(Fc), FadeOut(Fcl), run_time=1.0)

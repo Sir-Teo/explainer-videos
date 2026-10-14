@@ -221,7 +221,7 @@ class Convexity(VoiceoverScene):
         L = np.log(a)
         ax = plain_axes([0, 3.5, 0.5], [0, 29, 4], 5.6, 4.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.3, -0.6, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.85, -0.6, 0])
         x = np.linspace(0, 3.36, 400)
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         pts = VGroup(*[Dot(ax.c2p(z, v), radius=0.08, color=C.MEASURE) for z, v in zip(L, a)])
@@ -234,9 +234,15 @@ class Convexity(VoiceoverScene):
         assert abs(gm - 6.0) < 1e-12 and abs(am - 12.0) < 1e-12
         top, bot = Dot(ax.c2p(mx, am), radius=0.09, color=C.EPS), Dot(ax.c2p(mx, gm), radius=0.08, color=C.DELTA)
         gap = Line(ax.c2p(mx, gm), ax.c2p(mx, am), color=C.PATHOLOGY, stroke_width=5)
-        tl = MathTex(r"\tfrac{1 + 8 + 27}{3} = 12", font_size=28, color=C.EPS).next_to(top, LEFT, buff=0.2)
-        tl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.06)  # over the hull's edge
-        tl.set_z_index(2)
+        # the label sits up and left of the dot, wholly above-left of the hull's upper edge (from (0, 1) to
+        # (log 27, 27)), so no edge runs through it
+        tl = MathTex(r"\tfrac{1 + 8 + 27}{3} = 12", font_size=26, color=C.EPS)
+        uy = ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1]
+        slope = (27 - 1) / L[2]
+        y_bot = am + 1.5
+        x_r = (y_bot - 1) / slope - 0.12  # the edge passes under the label's bottom-right corner
+        tl.next_to(ax.c2p(x_r, y_bot + tl.height / uy / 2), LEFT, buff=0)
+        assert ax.p2c(tl.get_left())[0] > 0.15 and x_r < mx  # clear of the y-axis, left of the dot
         bl = MathTex(r"(1 \cdot 8 \cdot 27)^{1/3} = 6", font_size=28, color=C.DELTA).next_to(bot, RIGHT, buff=0.2).shift(
             DOWN * 0.25)
         side = VGroup(
