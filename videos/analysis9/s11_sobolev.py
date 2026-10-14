@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import bump, load, plain_axes, polyline
+from videos.analysis9.common import area_under, bump, load, plain_axes, polyline
 
 
 class Sobolev(VoiceoverScene):
@@ -138,6 +138,23 @@ class Sobolev(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(why, DOWN, buff=0.3)
         if rows.get_right()[0] > 6.9:
             rows.shift((6.9 - rows.get_right()[0]) * RIGHT)
+        # 'a': the inversion bound on an example where it is attained: f = e^{-|x|}, |f^| = sqrt(2/pi)/(1 + t^2),
+        # and (1/sqrt(2 pi)) int |f^| = 1 = f(0) = max |f|
+        tq = np.linspace(-400, 400, 800001)
+        fh_q = math.sqrt(2 / math.pi) / (1 + tq * tq)
+        bnd = float(np.sum((fh_q[1:] + fh_q[:-1]) * np.diff(tq)) / 2) / math.sqrt(2 * math.pi)
+        assert abs(bnd + 2 * math.sqrt(2 / math.pi) / 400 / math.sqrt(2 * math.pi) - 1) < 1e-6  # tail past 400: ~2/(400)
+        wax = plain_axes([-10, 10, 5], [0, 1.1, 0.5], 5.6, 3.0, numbers=True, font_size=18,
+                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to(ax.get_center())
+        tw = np.linspace(-10, 10, 801)
+        fh_w = math.sqrt(2 / math.pi) / (1 + tw * tw)
+        apic = VGroup(area_under(wax, tw, fh_w, C.FREQ, 0.35), polyline(wax, tw, fh_w, color=C.FREQ, stroke_width=3.5),
+                      MathTex(r"f = e^{-|x|}: \ \tfrac{1}{\sqrt{2\pi}}\int|\hat f| = 1 = \max|f|", font_size=24,
+                              color=C.FREQ).next_to(wax, UP, buff=0.1))
+        # 'b': the weights (1 + t^2)^{-s} for s = 0.4, 0.5, 0.6: whose tails have finite area?
+        wpic = VGroup(*[polyline(wax, tw, (1 + tw * tw) ** (-s_), color=c_, stroke_width=3.5) for s_, c_ in zip(ss, cols)],
+                      MathTex(r"\text{the weight } (1 + t^2)^{-s}, \ s = 0.4, \ 0.5, \ 0.6", font_size=24).next_to(wax, UP, buff=0.1))
         head = label(r"Sobolev's lemma, \ in three lines", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> When does a finite Sobolev norm force a function to be continuous? The inversion "
@@ -150,11 +167,14 @@ class Sobolev(VoiceoverScene):
             "Sobolev derivative buys one more continuous derivative."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(lad[0]))
+            self.play(FadeIn(head), FadeIn(lad[0]), Create(wax))
+            self.play(Create(apic[1]), FadeIn(apic[0]), FadeIn(apic[2]), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(lad[1]))
+            self.play(FadeIn(lad[1]), FadeOut(apic), LaggedStart(*[Create(g_) for g_ in wpic[:3]], lag_ratio=0.3),
+                      FadeIn(wpic[3]), run_time=2.0)
             self.play(FadeIn(lad[2]), FadeIn(why))
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(wax, wpic)), run_time=0.6)
             self.play(Create(ax), FadeIn(xl), FadeIn(rd))
             self.add(gr)
             self.play(LT.animate.set_value(6.0), run_time=5.0, rate_func=linear)

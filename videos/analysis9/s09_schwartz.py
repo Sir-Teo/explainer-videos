@@ -6,7 +6,7 @@ import numpy as np
 from numpy.polynomial.hermite import hermval
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import SQ2PI, load, plain_axes, polyline, trap
+from videos.analysis9.common import SQ2PI, area_under, load, plain_axes, polyline, trap
 
 
 def fft_hat(f, L=40.0, N=1 << 13):
@@ -147,6 +147,23 @@ class Schwartz(VoiceoverScene):
                   rf"(error ${sci(max(herr), 0)}$)", font_size=22, color=C.SPECTRUM),
         ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
         key.next_to(rows, UP, buff=0.15).to_edge(LEFT, buff=0.4)
+        # decay and smoothness trade places: e^{-|x|} has a corner and decays fast; its transform
+        # sqrt(2/pi) / (1 + t^2) is smooth and decays slowly
+        xe = np.linspace(-4, 4, 801)
+        te = np.linspace(-8, 8, 801)
+        fe, fhe = np.exp(-np.abs(xe)), math.sqrt(2 / math.pi) / (1 + te * te)
+        xq = np.linspace(-60, 60, 1200001)
+        for t_ in (0.0, 1.0, 3.5):
+            assert abs(trap(np.exp(-np.abs(xq)) * np.cos(t_ * xq), xq) / SQ2PI - math.sqrt(2 / math.pi) / (1 + t_ * t_)) < 1e-6
+        dax = plain_axes([-4, 4, 1], [0, 1.1, 0.5], 5.0, 2.0).move_to([-3.6, 0.7, 0])
+        dbx = plain_axes([-8, 8, 2], [0, 1.1, 0.5], 5.0, 2.0).move_to([3.6, 0.7, 0])
+        dpic = VGroup(dax, polyline(dax, xe, fe, color=C.FUNC, stroke_width=3.5),
+                      dbx, polyline(dbx, te, fhe, color=C.FREQ, stroke_width=3.5),
+                      Arrow([-0.8, 0.7, 0], [0.8, 0.7, 0], buff=0, color=GREY_B, stroke_width=3, tip_length=0.15),
+                      MathTex(r"\mathcal F", font_size=26, color=C.OPERATOR).move_to([0, 1.05, 0]),
+                      MathTex(r"e^{-|x|}: \ \text{a corner, fast decay}", font_size=24, color=C.FUNC).next_to(dax, UP, buff=0.1),
+                      MathTex(r"\sqrt{2/\pi}\,/(1 + t^2): \ \text{smooth, slow decay}", font_size=24,
+                              color=C.FREQ).next_to(dbx, UP, buff=0.1))
         head = label(r"The transform is a quarter turn", font_size=34).to_edge(UP, buff=0.25)
         panels.shift(UP * 0.35)
         ring.shift(UP * 0.35)
@@ -160,8 +177,11 @@ class Schwartz(VoiceoverScene):
             "roots of unity, and the eigenvectors are the Hermite functions, the quantum oscillator's states."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]))
+            self.play(FadeIn(head), FadeIn(rows[:2]), Create(dpic[0]), Create(dpic[2]))
+            self.play(Create(dpic[1]), FadeIn(dpic[6]), run_time=1.2)
+            self.play(GrowArrow(dpic[4]), FadeIn(dpic[5]), Create(dpic[3]), FadeIn(dpic[7]), run_time=1.5)
             vo.wait_until("b")
+            self.play(FadeOut(dpic), run_time=0.6)
             self.play(Create(panels[0][0]), Create(panels[0][1]), FadeIn(panels[0][2]))
             for k in range(1, 3):
                 self.play(Create(ring[k - 1]), Create(panels[k][0]), Create(panels[k][1]), FadeIn(panels[k][2]),
@@ -215,6 +235,27 @@ class Schwartz(VoiceoverScene):
             MathTex(r"\hat\delta = \tfrac{1}{\sqrt{2\pi}}, \qquad \hat 1 = \sqrt{2\pi}\,\delta, \qquad \widehat{x^n} = "
                     r"i^n\sqrt{2\pi}\,\delta^{(n)}", font_size=28, color=C.DISTRIBUTION),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
+        # 'a': polynomial growth is allowed, exponential is not
+        ax0 = plain_axes([-3, 3, 1], [0, 5.0, 1], 5.4, 2.8).move_to(ax.get_center())
+        g_poly = runs(ax0, x, x * x, C.FUNC, 3.5)
+        g_exp = runs(ax0, x, np.exp(x), C.PATHOLOGY, 3.5)
+        tl_ = VGroup(MathTex(r"x^2: \ \text{tempered}", font_size=24, color=C.FUNC).next_to(ax0.c2p(-2.2, 4.84), RIGHT, buff=0.1),
+                     MathTex(r"e^x: \ \text{too big}", font_size=24, color=C.PATHOLOGY).next_to(ax0.c2p(1.6, 4.95), LEFT, buff=0.25))
+        # 'b': int f^ g = int f g^ for f = e^{-x^2/2}, g = the box on [-1, 1], as two equal areas
+        ax1 = plain_axes([-3, 3, 1], [-0.2, 1.1, 0.5], 5.4, 2.8).move_to(ax.get_center())
+        bx1 = plain_axes([-12, 12, 4], [-0.2, 1.1, 0.5], 5.4, 2.8).move_to(bx.get_center())
+        tin = np.linspace(-1, 1, 201)
+        xg1 = np.linspace(-12, 12, 2401)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            sc1 = np.where(xg1 == 0, 1.0, np.sin(xg1) / np.where(xg1 == 0, 1, xg1))
+        prod = np.exp(-xg1 * xg1 / 2) * math.sqrt(2 / math.pi) * sc1
+        assert abs(trap(prod, xg1) - rhs) < 1e-6
+        mpic = VGroup(ax1, area_under(ax1, tin, np.exp(-tin * tin / 2), C.EPS, 0.45),
+                      polyline(ax1, x, np.exp(-x * x / 2), color=C.FREQ, stroke_width=3),
+                      bx1, area_under(bx1, xg1, prod, C.EPS, 0.45), polyline(bx1, xg1, prod, color=C.DISTRIBUTION, stroke_width=3),
+                      MathTex(rf"\int \hat f g = \int_{{-1}}^{{1}} e^{{-t^2/2}} = {lhs:.6f}", font_size=24, color=C.EPS).next_to(ax1, UP, buff=0.1),
+                      MathTex(rf"\int f \hat g = \int e^{{-x^2/2}}\sqrt{{\tfrac{{2}}{{\pi}}}}\tfrac{{\sin x}}{{x}} = {rhs:.6f}",
+                              font_size=24, color=C.EPS).next_to(bx1, UP, buff=0.1))
         head = label(r"Transforming distributions, \ by duality", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The dual of the Schwartz space is the space of tempered distributions: everything "
@@ -226,10 +267,14 @@ class Schwartz(VoiceoverScene):
             "to derivatives of delta."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(rows[2]))
+            self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(rows[2]), Create(ax0))
+            self.play(Create(g_poly), FadeIn(tl_[0]), Create(g_exp), FadeIn(tl_[1]), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]))
+            self.play(FadeOut(VGroup(ax0, g_poly, g_exp, tl_)), run_time=0.6)
+            self.play(FadeIn(rows[1]), Create(ax1), Create(mpic[2]), FadeIn(mpic[1]), FadeIn(mpic[6]))
+            self.play(Create(bx1), Create(mpic[5]), FadeIn(mpic[4]), FadeIn(mpic[7]))
             vo.wait_until("c")
+            self.play(FadeOut(mpic), run_time=0.6)
             self.play(Create(ax), Create(bx), FadeIn(pp), FadeIn(rd), FadeIn(l2), Create(flat), FadeIn(fl))
             self.play(sT.animate.set_value(0.03), run_time=4.0, rate_func=smooth)
             vo.wait_until("d")
