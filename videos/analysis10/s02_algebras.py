@@ -64,6 +64,7 @@ class BanachAlgebras(VoiceoverScene):
         assert hists.get_bottom()[1] > rule.get_top()[1] + 0.2
         head = label(r"Banach algebras: \ complete normed spaces with a product", font_size=34).to_edge(UP, buff=0.3)
         assert head.width < 12.6
+
         def show(m_):  # strokes are drawn, text and images fade in
             if isinstance(m_, VMobject) and not any(isinstance(q, SingleStringMathTex) for q in m_.get_family()):
                 return Create(m_)
@@ -92,9 +93,9 @@ class BanachAlgebras(VoiceoverScene):
                 self.play(FadeIn(cap_), run_time=0.5)
             vo.wait_until("c")
             self.play(FadeOut(panels))
-            for h_ in hists:
-                self.play(Create(h_[0]), FadeIn(h_[4]), run_time=0.6)
-                self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in h_[1]], lag_ratio=0.03), run_time=1.4)
+            for h_ in hists:  # the axes come in with their bars
+                self.play(Create(h_[0], run_time=0.6), FadeIn(h_[4], run_time=0.6),
+                          LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in h_[1]], lag_ratio=0.03, run_time=1.8))
                 self.play(Create(h_[2]), FadeIn(h_[3]), run_time=0.5)
             self.play(FadeIn(rule[1]))
         self.wait(0.3)
