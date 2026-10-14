@@ -6,7 +6,7 @@ import numpy as np
 from numpy.polynomial.hermite import hermval
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import SQ2PI, area_under, load, plain_axes, polyline, trap
+from videos.analysis9.common import SQ2PI, area_under, load, plain_axes, polyline, spike_halves, trap
 
 
 def fft_hat(f, L=40.0, N=1 << 13):
@@ -218,7 +218,8 @@ class Schwartz(VoiceoverScene):
             s = sT.get_value()
             g = np.exp(-x * x / (2 * s * s)) / (s * SQ2PI)
             gh = np.exp(-s * s * t * t / 2) / SQ2PI
-            return VGroup(runs(ax, x, g, C.DISTRIBUTION, 3.5), polyline(bx, t, gh, color=C.FREQ, stroke_width=3.5))
+            # the spike as two halves cut at the window: one family shape whether or not it fits (always_redraw)
+            return VGroup(spike_halves(ax, x, g, C.DISTRIBUTION, 3.5), polyline(bx, t, gh, color=C.FREQ, stroke_width=3.5))
 
         pp = always_redraw(pics)
         # taller than the window (rho_sigma(0) > 5 once sigma < 0.08): the Hook's up-arrow, faded in as it leaves

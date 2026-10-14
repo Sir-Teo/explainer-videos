@@ -6,6 +6,8 @@ distributions in C.DISTRIBUTION.
 
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.analysis import *  # noqa: F403
 from videos.analysis1.common import polyline  # noqa: F401
 from videos.analysis2.common import plain_axes  # noqa: F401
