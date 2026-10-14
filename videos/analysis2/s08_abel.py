@@ -63,13 +63,14 @@ class Abel(VoiceoverScene):
             r = Polygon(P(0, bot), P(A[n], bot), P(A[n], top), P(0, top), stroke_color=WHITE, stroke_width=1.5,
                         fill_color=hcols[n % 2], fill_opacity=0.5)
             hor.add(r)
-        f1 = MathTex(r"\sum_{n=1}^{N} a_n b_n", font_size=36).move_to([3.4, 2.4, 0])
+        f1 = MathTex(r"\sum_{n=1}^{N} a_n b_n", font_size=36).move_to([3.4, 2.5, 0])
         f1n = label(r"vertical strips: \ width $a_n$, height $b_n$", font_size=24, color=GREY_A).next_to(f1, DOWN, buff=0.1)
-        f2 = MathTex(r"= \sum_{n=1}^{N-1} A_n (b_n - b_{n+1}) + A_N b_N", font_size=36).next_to(f1n, DOWN, buff=0.35)
+        f2 = MathTex(r"= \sum_{n=1}^{N-1} A_n (b_n - b_{n+1}) + A_N b_N", font_size=36).next_to(f1n, DOWN, buff=0.25)
         f2n = label(r"horizontal slabs: \ width $A_n$, height $b_n - b_{n+1}$", font_size=24, color=GREY_A).next_to(
             f2, DOWN, buff=0.1)
-        ref = note(r"summation by parts, Rudin 3.41").next_to(f2n, DOWN, buff=0.3)
-        ibp = MathTex(r"\int b\, dA = A b - \int A\, db", font_size=34, color=C.EPS).next_to(ref, DOWN, buff=0.3)
+        ref = note(r"summation by parts, Rudin 3.41").next_to(f2n, DOWN, buff=0.2)
+        ibp = MathTex(r"\int b\, dA = A b - \int A\, db", font_size=34, color=C.EPS).next_to(ref, DOWN, buff=0.25)
+        assert ibp.get_bottom()[1] > P(A[3], b[4])[1] + 0.2  # clear of the slabs below it
         with self.voiceover(
             "Here's summation by parts as a picture. <bookmark mark='a'/> Lay the terms a n end to end along the "
             "horizontal axis, so the marks are the partial sums A n, and over each one stand a strip of height b n, "
