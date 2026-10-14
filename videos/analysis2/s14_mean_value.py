@@ -300,9 +300,9 @@ class MeanValue(VoiceoverScene):
             "<bookmark mark='c'/> So a derivative can never have a simple jump: if it's discontinuous, it's wildly so."
         ) as vo:
             vo.wait_until("t")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(sk), Create(gsk))
             vo.wait_until("p")
-            self.play(FadeIn(pf), Create(sk), Create(gsk), FadeIn(slabs[5]))
+            self.play(FadeIn(pf), FadeIn(slabs[5]))
             self.play(Create(slopes[:2]), FadeIn(sdots[:2]), FadeIn(slabs[:4]))
             self.play(Create(slopes[2]), FadeIn(sdots[2]), FadeIn(slabs[4]))
             vo.wait_until("a")

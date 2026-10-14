@@ -239,6 +239,12 @@ class Distance(VoiceoverScene):
         tlab = VGroup(MathTex(r"d(p,q)", font_size=24, color=C.DIST).next_to((P + Q) / 2, DOWN, buff=0.1),
                       MathTex(r"d(p,r)", font_size=24, color=C.DELTA).next_to((P + R) / 2, UL, buff=0.02),
                       MathTex(r"d(r,q)", font_size=24, color=C.DELTA).next_to((R + Q) / 2, UR, buff=0.12))
+        # a set of points, some distances between them: what the axioms talk about
+        cloud_p = [np.array(v) for v in ((2.0, 1.2, 0), (3.4, 1.7, 0), (5.2, 1.1, 0), (2.6, -0.3, 0), (4.3, 0.2, 0),
+                                         (5.6, -0.9, 0), (2.2, -1.9, 0), (3.9, -1.6, 0), (5.0, -2.4, 0))]
+        cloud = VGroup(*[Dot(v, radius=0.07, color=GREY_A) for v in cloud_p],
+                       *[DashedLine(cloud_p[i], cloud_p[j], color=C.DIST, stroke_width=2, dash_length=0.1)
+                         for i, j in ((0, 1), (1, 4), (3, 7), (4, 5), (6, 7))])
         with self.voiceover(
             "In 1906, Maurice Fréchet turned this into a definition. <bookmark mark='h'/> A metric space is a set "
             "together with a distance function d with three properties. <bookmark mark='a'/> Distances between "
@@ -247,10 +253,11 @@ class Distance(VoiceoverScene):
             "shorter. <bookmark mark='d'/> That's all. A theorem proved from these three properties alone holds in "
             "every metric space at once, and we'll be careful to say when a result needs more."
         ) as vo:
-            self.play(FadeIn(head[0]))
+            self.play(FadeIn(head[0]), FadeIn(cloud))
             vo.wait_until("h")
             self.play(FadeIn(head[1]))
             vo.wait_until("a")
+            self.play(FadeOut(cloud), run_time=0.5)
             self.play(FadeIn(ax[0], shift=RIGHT * 0.2), FadeIn(pa), FadeIn(qa))
             self.play(Create(da[0]), FadeIn(da[1]))
             vo.wait_until("b")
@@ -283,10 +290,13 @@ class Distance(VoiceoverScene):
             "whose ball is a square; <bookmark mark='d'/> and the discrete distance, where any two different points are "
             "at distance one. Its open ball of radius one contains only its center."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(panels[0], shift=UP * 0.2))
             for mk, p in zip("abcd", panels):
                 vo.wait_until(mk)
-                self.play(FadeIn(p, shift=UP * 0.2))
+                if mk == "a":
+                    self.play(Indicate(p.ball, color=C.OPEN_SET, scale_factor=1.1))
+                else:
+                    self.play(FadeIn(p, shift=UP * 0.2))
             self.play(FadeIn(disc_note))
         self.wait(0.3)
         self.play(FadeOut(VGroup(panels, disc_note, head)))

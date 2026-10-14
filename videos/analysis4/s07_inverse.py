@@ -229,7 +229,7 @@ class InverseFunction(VoiceoverScene):
         ydot = Dot(iax.c2p(*target), radius=0.09, color=C.EPS).set_z_index(2)
         al = MathTex("a", font_size=28).next_to(adot, DL, buff=0.05)
         bl = MathTex("f(a)", font_size=28).next_to(bdot, DL, buff=0.05)
-        yl = MathTex("y", font_size=30, color=C.EPS).next_to(ydot, DR, buff=0.06)
+        yl = MathTex("y", font_size=30, color=C.EPS).next_to(ydot, UP, buff=0.08)  # inside the green image, clear of the path
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), k / 7) for k in range(8)]
         xdots = [Dot(dax.c2p(*its[k]), radius=0.06, color=cols[k]).set_z_index(2) for k in range(8)]
         fdots = [Dot(iax.c2p(*f_exp(its[k])), radius=0.06, color=cols[k]).set_z_index(2) for k in range(8)]

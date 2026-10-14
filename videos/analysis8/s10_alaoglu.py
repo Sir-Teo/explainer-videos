@@ -59,8 +59,8 @@ class Alaoglu(VoiceoverScene):
                      color=C.FUNCTIONAL).move_to([-3.1, 0.75 + up_, 0])
         assert cube.get_top()[1] < thm.get_bottom()[1] - 0.2
         pm = ProofMap([r"$\Lambda \mapsto (\Lambda x)_{x \in X}$ embeds the ball in $\prod_x [-\|x\|, \|x\|]$",
-                       r"Tychonoff: \ a product of compact sets is compact", r"the image is closed \ (linearity is a "
-                       r"pointwise condition)"], font_size=20, width=5.0, buff=0.22, direction=DOWN).move_to([3.9, -0.4, 0])
+                       r"Tychonoff: \ a product of compact sets is compact", r"the image is closed: \ linearity is "
+                       r"pointwise"], font_size=20, width=5.0, buff=0.22, direction=DOWN).move_to([3.9, -0.4, 0])
         notes = label(r"for separable $X$, \ every bounded sequence in $X^*$ has a weak-$*$ convergent subsequence "
                       r"\ (FA 3.17)", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
         assert notes.get_top()[1] < min(dl.get_bottom()[1], pm.get_bottom()[1]) - 0.2
