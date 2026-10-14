@@ -32,20 +32,24 @@ class HigherOrder(VoiceoverScene):
     def mixed(self):
         d = load("mixed")
         ratios, q = d["ratios"], d["q_xy"]
-        S = 4.8
-        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.6, -0.75, 0])
-        img = heatmap(f_mix, (-1, 1), (-1, 1), S, S, -0.5, 0.5).move_to(ax.c2p(0, 0))
+        S = 4.6
         head = VGroup(label(r"Two mixed partials that disagree", font_size=34),
                       MathTex(r"f(x, y) = \frac{xy(x^2 - y^2)}{x^2 + y^2}, \quad f(0, 0) = 0",
-                              r"\quad \text{\small (Rudin, Exercise 9.27)}", font_size=32),
-                      label(r"the second difference on an $h \times k$ rectangle at the origin:", font_size=24,
-                            color=GREY_A),
-                      MathTex(r"\frac{f(h, k) - f(0, k) - f(h, 0) + f(0, 0)}{hk} = \frac{h^2 - k^2}{h^2 + k^2}",
-                              font_size=32, color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
+                              r"\quad \text{\small (Rudin, Exercise 9.27)}", font_size=32)
+                      ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         head[1][1].set_color(GREY_B)
-        bx = plain_axes([-2, 2, 1], [-1.1, 1.1, 1], 5.6, 3.0, numbers=True, font_size=18,
+        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.75, -0.85, 0])
+        img = heatmap(f_mix, (-1, 1), (-1, 1), S, S, -0.5, 0.5).move_to(ax.c2p(0, 0))
+        legend = label(r"blue: \ $f < 0$, \ \ dark: \ $0$, \ \ orange: \ $f > 0$", font_size=22,
+                       color=GREY_A).next_to(img, DOWN, buff=0.12)
+        diffq = VGroup(label(r"the second difference on an $h \times k$ rectangle at the origin:", font_size=24,
+                             color=GREY_A),
+                       MathTex(r"\frac{f(h, k) - f(0, k) - f(h, 0) + f(0, 0)}{hk} = \frac{h^2 - k^2}{h^2 + k^2}",
+                               font_size=30, color=C.EPS)).arrange(DOWN, buff=0.12)
+        diffq.next_to([3.4, head.get_bottom()[1] - 0.25, 0], DOWN, buff=0)
+        bx = plain_axes([-2, 2, 1], [-1.1, 1.1, 1], 5.6, 2.7, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.3, -1.0, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.5, -1.55, 0])
         curve = polyline(bx, np.log10(ratios), q, color=C.EPS, stroke_width=3.5)
         bl = MathTex(r"\log_{10}(h/k)", font_size=22, color=GREY_A).next_to(bx, DOWN, buff=0.1)
         rT = ValueTracker(-1.6)
@@ -70,6 +74,9 @@ class HigherOrder(VoiceoverScene):
         note_ = label(r"only the shape matters, \ not the size: \ $f(\lambda h, \lambda k) = \lambda^2 f(h, k)$",
                       font_size=22, color=GREY_A).next_to(bx, UP, buff=0.15)
         assert d["fxy"] == -1 and d["fyx"] == 1 and q[0] < -0.999 and q[-1] > 0.999
+        assert diffq.get_right()[0] <= 6.6 and diffq.get_left()[0] > img.get_right()[0] + 0.3
+        assert note_.get_top()[1] < diffq.get_bottom()[1] - 0.1 and bl.get_bottom()[1] > -3.6
+        assert legend.get_bottom()[1] > -3.65 and img.get_top()[1] < head.get_bottom()[1] - 0.2
         with self.voiceover(
             "<bookmark mark='a'/> In Rudin's Exercise 9.27, a function has two mixed partial derivatives at the origin that "
             "disagree. <bookmark mark='b'/> Both come from one quantity: the second difference across a small "
@@ -78,10 +85,11 @@ class HigherOrder(VoiceoverScene):
             "differentiating in x first, then in y. <bookmark mark='d'/> A short, wide one gives plus one: the other "
             "order. The two iterated limits disagree, the same way as the grid of m over m plus n from Part 3."
         ) as vo:
-            self.play(FadeIn(head[0]), FadeIn(img), Create(ax))
+            self.play(FadeIn(head[0]), FadeIn(img), Create(ax), FadeIn(legend))
             vo.wait_until("a")
-            self.play(FadeIn(head[1:]))
+            self.play(FadeIn(head[1]))
             vo.wait_until("b")
+            self.play(FadeIn(diffq))
             self.play(Create(bx), FadeIn(bl), Create(curve), FadeIn(rc), FadeIn(dot), FadeIn(note_))
             vo.wait_until("c")
             self.play(rT.animate.set_value(-1.9), run_time=1.0)
@@ -103,8 +111,9 @@ class HigherOrder(VoiceoverScene):
         on_x = sp.limit(fxy.subs(y, 0), x, 0)
         on_y = sp.limit(fxy.subs(x, 0), y, 0)
         assert on_x == 1 and on_y == -1  # f_xy is discontinuous at the origin
-        S = 4.8
-        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.6, -0.85, 0])
+        S = 4.6
+        title = label(r"Mixed partials commute when they are continuous", font_size=34).to_edge(UP, buff=0.3)
+        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.75, -0.85, 0])
         fn = sp.lambdify((x, y), fxy, "numpy")
 
         def F(X, Y):
@@ -115,13 +124,14 @@ class HigherOrder(VoiceoverScene):
         il = label(r"$f_{xy}$ near $0$: \ $+1$ on the $x$-axis, \ $-1$ on the $y$-axis", font_size=22,
                    color=GREY_A).next_to(ax, DOWN, buff=0.15)
         thm = VGroup(
-            label(r"\textbf{Rudin 9.41} \ if $f_x, f_y, f_{xy}$ exist near a point", font_size=28),
+            label(r"if $f_x, f_y, f_{xy}$ exist near a point \ (Rudin 9.41)", font_size=28),
             label(r"and $f_{xy}$ is continuous there, \ then $f_{yx}$ exists and", font_size=28),
             MathTex(r"f_{yx} = f_{xy}", font_size=40, color=C.EPS),
             label(r"in the museum piece $f_{xy}$ jumps at $0$:", font_size=26, color=C.PATHOLOGY),
             MathTex(r"f_{xy} = \frac{x^6 + 9x^4y^2 - 9x^2y^4 - y^6}{(x^2 + y^2)^3}", font_size=30, color=GREY_A),
             label(r"(computed symbolically, \ as are the values $\pm 1$)", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        thm.next_to([0.4, title.get_bottom()[1] - 0.3, 0], DR, buff=0)
         expected = (x**6 + 9 * x**4 * y**2 - 9 * x**2 * y**4 - y**6) / (x**2 + y**2) ** 3
         assert sp.simplify(fxy - expected) == 0
         # why 9.41 holds (Rudin 9.40): Delta(h, k)/hk = f_xy at some point (xi, eta) inside the h x k rectangle.
@@ -140,7 +150,7 @@ class HigherOrder(VoiceoverScene):
             t = 0.5 * min(h / math.cos(th), k / math.sin(th))
             return t * math.cos(th), t * math.sin(th), th
 
-        for h_, k_ in ((0.8, 0.6), (0.8, 0.05), (0.05, 0.8), (0.04, 0.03), (0.4, 0.02)):
+        for h_, k_ in ((0.8, 0.6), (0.8, 0.05), (0.05, 0.8), (0.12, 0.09), (0.03, 0.4), (0.4, 0.02)):
             a_, b_, _ = mvt(h_, k_)
             fq = float(f.subs({x: h_, y: k_})) / (h_ * k_)  # f(0, k) = f(h, 0) = f(0, 0) = 0
             assert abs(fq - quot(h_, k_)) < 1e-12 and abs(F(np.array(a_), np.array(b_)) - fq) < 1e-9
@@ -167,16 +177,13 @@ class HigherOrder(VoiceoverScene):
                                            ("-", (0.8, 0), 0.25 * DR), ("+", (0, 0), 0.25 * DL))]).set_z_index(4)
         why = VGroup(
             MathTex(r"\frac{f(h,k) - f(0,k) - f(h,0) + f(0,0)}{hk} = f_{xy}(\xi, \eta)", font_size=28),
-            label(r"for some $(\xi, \eta)$ inside the rectangle \ (mean value theorem twice, Rudin 9.40)",
+            label(r"for some $(\xi, \eta)$ in the rectangle \ (the mean value theorem twice, 9.40)",
                   font_size=22, color=GREY_A),
-            label(r"any shape, shrunk to $0$: \ $(\xi, \eta) \to 0$, \ so continuity leaves one limit",
+            label(r"any shape, shrunk: \ $(\xi, \eta) \to 0$, \ and continuity leaves one limit",
                   font_size=22, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
-        for r_ in why:
-            if r_.width > 6.5:
-                r_.width = 6.5
-        why.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(thm[2], DOWN, buff=0.35).align_to(thm, LEFT)
-        assert why.get_right()[0] < 6.95 and why.get_bottom()[1] > -3.9
+        assert why.get_right()[0] <= 6.6 and why.get_bottom()[1] > -3.6 and thm.get_right()[0] <= 6.6
+        assert thm.get_bottom()[1] > -3.6 and ax.get_top()[1] < title.get_bottom()[1] - 0.6
 
         rd = VGroup(MathTex(r"\frac{\Delta}{hk} = f_{xy}(\xi, \eta) =", font_size=30, color=C.EPS),
                     DecimalNumber(quot(0.8, 0.6), num_decimal_places=2, font_size=30, color=C.EPS)
@@ -196,8 +203,8 @@ class HigherOrder(VoiceoverScene):
             "however small the rectangle. The swap fails exactly where continuity does."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm[:3]))
-            self.play(Create(ax))
+            img.set_opacity(0.25)  # f_xy, faint until the narration turns to it
+            self.play(FadeIn(title), FadeIn(thm[:3]), FadeIn(img), Create(ax))
             vo.wait_until("m")
             self.play(Create(rect), FadeIn(sg))
             self.play(FadeIn(pt, scale=1.5), FadeIn(why[0]))
@@ -205,10 +212,10 @@ class HigherOrder(VoiceoverScene):
             vo.wait_until("s")
             self.play(FadeOut(sg), hv.animate.set_value(0.5), kv.animate.set_value(0.1), run_time=1.4)
             self.play(hv.animate.set_value(0.1), kv.animate.set_value(0.5), run_time=1.4)
-            self.play(hv.animate.set_value(0.04), kv.animate.set_value(0.03), FadeIn(why[2]), run_time=1.4)
+            self.play(hv.animate.set_value(0.12), kv.animate.set_value(0.09), FadeIn(why[2]), run_time=1.4)
             vo.wait_until("b")
             self.play(FadeOut(why), hv.animate.set_value(0.8), kv.animate.set_value(0.6))
-            self.play(FadeIn(img), FadeIn(il), FadeIn(rd), FadeIn(ray))
+            self.play(img.animate.set_opacity(1.0), FadeIn(il), FadeIn(rd), FadeIn(ray))
             vo.wait_until("w")
             self.play(hv.animate.set_value(0.8), kv.animate.set_value(0.05), run_time=1.8)
             self.play(hv.animate.set_value(0.05), kv.animate.set_value(0.8), run_time=2.2)
