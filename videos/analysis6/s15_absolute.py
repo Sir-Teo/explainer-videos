@@ -190,7 +190,7 @@ class AbsolutelyContinuous(VoiceoverScene):
     def wild(self):
         d = load("ftc")
         eps, var = d["eps"], d["var"]
-        ax = plain_axes([0, 0.6, 0.2], [-0.4, 0.4, 0.2], 6.4, 3.4, numbers=False).move_to([-3.0, 0.0, 0])
+        ax = plain_axes([0, 0.6, 0.2], [-0.4, 0.4, 0.2], 6.4, 3.4, numbers=False).move_to([-2.85, 0.0, 0])
         ax.y_axis.add_numbers([-0.4, -0.2, 0.2, 0.4], num_decimal_places=1, font_size=18)
         # the x numbers along the bottom edge (the curve crosses the x-axis between them)
         xnums = VGroup(*[MathTex(f"{v:.1f}", font_size=18, color=GREY_B).next_to(ax.c2p(v, -0.4), DOWN, buff=0.12)
@@ -227,7 +227,7 @@ class AbsolutelyContinuous(VoiceoverScene):
             label(r"but $f' \notin L^1$: \ not absolutely continuous", font_size=24, color=C.PATHOLOGY),
             label(r"\textbf{RCA 7.21} \ if $f'$ exists everywhere \emph{and} $f' \in L^1$, \ the FTC holds", font_size=24,
                   color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.35)
         head = label(r"Differentiable everywhere is not enough either", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> One more warning. x squared sine of one over x squared is differentiable at every "

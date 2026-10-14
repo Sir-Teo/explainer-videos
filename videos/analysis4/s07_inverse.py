@@ -163,11 +163,10 @@ class InverseFunction(VoiceoverScene):
                       max_tip_length_to_length_ratio=0.35)
         x1dot = Dot(dax2.c2p(*x1), radius=0.06, color=WHITE)
         fx1 = Dot(iax2.c2p(*F(x1)), radius=0.06, color=WHITE)
-        pic = VGroup(dax2, iax2, U, V, g1, g2, dots, dl, leads, fa, ga, fal, gal)
+        pic = VGroup(U, V, g1, g2, dots, dl, leads, fa, ga, fal, gal)  # (the axes only place things: never shown)
         later = VGroup(sol, ydot, yl, ylead, errv, stepv, x1dot, fx1)
         whole = VGroup(pic, later)
         assert thm.get_bottom()[1] > whole.get_top()[1] + 0.2
-        assert np.allclose(pic.copy().scale(0.8).get_center(), pic.get_center())
         # after the statement: the picture moves down and shrinks under the idea
         small = whole.copy().scale(0.8).next_to(idea, DOWN, buff=0.35)
         assert small.get_bottom()[1] > -3.65 and small.get_left()[0] > -6.6
