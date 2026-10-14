@@ -39,7 +39,7 @@ class UniformBoundedness(VoiceoverScene):
         ns, L, asym = d["ns"], d["L"], d["asym"]
         assert np.allclose(L, [lebesgue_constant(int(n)) for n in ns])
         assert np.all(np.abs(L[2:] - asym[2:]) / L[2:] < 0.01)  # n >= 10: within 1% of (4/pi^2) log n + 1.27
-        lax, ldec = logn_axes(9.0, 2.8, center=[0.3, -1.25, 0])
+        lax, ldec = logn_axes(9.0, 3.2, center=[0.3, -0.75, 0])
         lg = np.log10(ns)
         ldots = VGroup(*[Dot(lax.c2p(a, b), radius=0.06, color=C.OPERATOR) for a, b in zip(lg, L)])
         uu = np.linspace(0.5, 6, 100)
@@ -122,10 +122,10 @@ class UniformBoundedness(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(p_, scale=0.5) for p_ in ldots], lag_ratio=0.12), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeOut(lpic), run_time=0.5)
-            self.play(Create(sq), FadeIn(sch), FadeIn(steps[:2]))
+            self.play(Create(sq), FadeIn(sch), FadeIn(steps[:2]))  # the E_k drawn as they are defined
+            self.play(LaggedStart(*[Create(b_) for b_ in blobs], lag_ratio=0.25), FadeIn(e_l), run_time=2.5)
             vo.wait_until("c")
-            self.play(LaggedStart(*[Create(b_) for b_ in blobs], lag_ratio=0.25), FadeIn(e_l), FadeIn(steps[2]),
-                      run_time=2.5)
+            self.play(FadeIn(steps[2]))
             self.play(Create(ball), FadeIn(steps[3]))
             vo.wait_until("d")
             self.play(FadeIn(steps[4:]))
