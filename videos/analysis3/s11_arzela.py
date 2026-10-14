@@ -110,7 +110,7 @@ class ArzelaAscoli(VoiceoverScene):
                            VGroup(*[Dot([V_(v), y_, 0], radius=0.035, color=WHITE) for v in sv[i]]))
             plabs.add(strip)
         strip_h = label(r"their values there: \ a bin $\tfrac14 (0.55)^{k}$ wide", font_size=22, color=GREY_B)
-        strip_h.next_to(plabs[0][1], UP, buff=0.3)
+        strip_h.next_to(plabs[0][1], UP, buff=0.2)
         diag = VGroup(*[SurroundingRectangle(grid[i][i], color=C.EPS, buff=0.06, stroke_width=2.5) for i in range(rows_n)])
         side = VGroup(label(r"each row is a subsequence of the row above,", font_size=24),
                       label(r"chosen so the values at one more point converge", font_size=24),
@@ -119,7 +119,7 @@ class ArzelaAscoli(VoiceoverScene):
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         foot = label(r"actual indices, from 400{,}000 random 1-Lipschitz functions; \ `converges' = a shrinking bin",
                      font_size=20, color=GREY_B).to_corner(UR, buff=0.4)
-        dl_ = NumberLine(x_range=[0, 1, 0.25], length=8.0, include_numbers=False).move_to([-1.0, 2.5, 0])
+        dl_ = NumberLine(x_range=[0, 1, 0.25], length=8.0, include_numbers=False).move_to([-1.2, 2.5, 0])
         dl_n = VGroup(*[MathTex(t_, font_size=22, color=GREY_B).next_to(dl_.n2p(v_), DOWN, buff=0.15)
                         for v_, t_ in ((0, "0"), (0.25, r"\tfrac14"), (0.5, r"\tfrac12"), (0.75, r"\tfrac34"), (1, "1"))])
         dyad = VGroup(*[VGroup(Dot(dl_.n2p(float(p_)), radius=0.07, color=C.EPS),

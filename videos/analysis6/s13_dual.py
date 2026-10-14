@@ -143,8 +143,8 @@ class DualLp(VoiceoverScene):
         gg_ = polyline(px, xs_[2:-2], g_[2:-2], color=C.INNER, stroke_width=3)
         gw_ = DashedVMobject(polyline(px, xs_, w_at, color=WHITE, stroke_width=3), num_dashes=40).set_z_index(2)
         pl_ = VGroup(MathTex(r"\lambda([0, x]) = \Phi(\mathbf 1_{[0, x]})", font_size=24, color=C.MEASURE),
-                     MathTex(rf"g = \tfrac{{d\lambda}}{{dx}} \ \text{{vs the hidden }} w \ \text{{(dashed)}}: "
-                             rf"\ \max|g - w| = {sci(err_g, 0)}", font_size=24, color=C.INNER)
+                     MathTex(rf"g = \tfrac{{d\lambda}}{{dx}}; \ w \text{{ dashed}}: \ \max|g - w| = {sci(err_g, 0)}",
+                             font_size=24, color=C.INNER)
                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(px, UP, buff=0.1).align_to(px, LEFT)
         # notes: why p < infinity, under the plot; what fails in L^infinity, under the proof map
         nr = notes[:3].copy()

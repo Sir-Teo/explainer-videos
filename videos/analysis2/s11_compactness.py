@@ -29,7 +29,7 @@ class Compactness(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def image(self):
-        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-1.3, -0.6, 0])
+        ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.4, 4.6, numbers=False).move_to([-1.6, -0.6, 0])
         f = lambda x: 0.9 * np.sin(1.7 * x) + 0.35 * np.cos(4.3 * x)  # noqa: E731
         a, b = 0.3, 3.7
         g = ax.plot(f, x_range=[a, b, 0.005], color=C.FUNC, stroke_width=4)
@@ -52,7 +52,7 @@ class Compactness(VoiceoverScene):
             label(r"the preimages $f^{-1}(V_\alpha)$ are open (4.8) and cover $X$", font_size=24),
             label(r"$X$ compact: finitely many do", font_size=24),
             label(r"so finitely many $V_\alpha$ cover $f(X)$", font_size=24, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.0, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.8, 0.4, 0])
         # an open cover of the image by overlapping intervals, and the preimage of one of them
         centers = np.linspace(m - 0.1, M + 0.1, 7)
         cov = VGroup()
@@ -255,8 +255,8 @@ class Compactness(VoiceoverScene):
         self.clear_scene()
 
         xs, d_inv = d["xs"], d["d_inv"]
-        ax3 = plain_axes([0, 1.0, 0.25], [0, 0.1, 0.05], 8.0, 3.8, numbers=True, font_size=20,
-                         axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([0, -1.0, 0])
+        ax3 = plain_axes([0, 1.0, 0.25], [0, 0.1, 0.05], 8.0, 3.6, numbers=True, font_size=20,
+                         axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([0, -0.7, 0])
         xx = np.linspace(0.02, 1.0, 400)
         exact = polyline(ax3, xx, xx - 1 / (1 / xx + 0.1), color=C.DELTA, stroke_width=3)
         pts = VGroup(*[Dot(ax3.c2p(x, dd), radius=0.07, color=WHITE) for x, dd in zip(xs, d_inv)])
