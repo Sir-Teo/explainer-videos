@@ -230,6 +230,14 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | Tonelli; monotone class; sigma-finite | 托内利；单调类；σ有限 |
 | layer cake formula; Banach–Tarski | 千层蛋糕公式；巴拿赫–塔斯基悖论 |
 | Basel sum | 巴塞尔和 |
+| L¹, L², Lᵖ, L∞, ℓ² | write them with superscripts, L¹、L²、Lᵖ、L∞、ℓ² (explainer/tts.py respells them for the voice: "L 1", "L p", "L 无穷", "小l 2"); there is no superscript q, so L^q is said "q次可积" |
+| conjugate exponents; Young's inequality; essential supremum | 共轭指数；杨不等式；本性上确界 |
+| taxicab norm; polarization identity; the dictionary (plane ↔ Hilbert space) | 出租车范数；极化恒等式；词典 |
+| Hilbert matrix; Gram–Schmidt; Legendre polynomials | 希尔伯特矩阵；格拉姆–施密特方法；勒让德多项式 |
+| separable; Hausdorff's maximality principle | 可分；豪斯多夫极大原理 |
+| Hahn / Jordan decomposition; point mass, atom | 哈恩分解 / 若尔当分解；点质量，原子 |
+| maximal function; Hardy–Littlewood; covering lemma; Lebesgue point | 极大函数；哈代–李特尔伍德；覆盖引理；勒贝格点 |
+| absolutely continuous (function); tent function | 绝对连续；帐篷函数 |
 
 ## Conventions settled while translating Part 1
 

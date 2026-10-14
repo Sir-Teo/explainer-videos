@@ -45,7 +45,7 @@ class ComplexMeasures(VoiceoverScene):
             idx = np.linspace(0, len(P) - 1, k + 1).astype(int)
             polys.append(VMobject(color=cols[i], stroke_width=3).set_points_as_corners(
                 [ax.c2p(P[j].real, P[j].imag) for j in idx]))
-        x0c = 0.9  # the right column's left edge
+        x0c = -0.3  # the right column's left edge (the axes end at -0.9); its widest rows need the room
         reads = [MathTex(rf"{k} \text{{ pieces: }} \sum |\mu(E_i)| = {L:.4f}", font_size=28, color=cols[i]).next_to(
             [x0c, -0.2, 0], RIGHT, buff=0) for i, (k, L) in enumerate(zip(ns, lengths))]
         assert np.all(np.diff(lengths) > 0) and lengths[-1] < tv and abs(tv - 2 * math.pi) < 1e-8

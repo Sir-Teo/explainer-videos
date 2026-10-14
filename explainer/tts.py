@@ -578,6 +578,10 @@ RESPELL: dict[str, list[tuple[str, str]]] = {
         (r"(?<=[A-Za-zα-ωΑ-Ω])_(?=[A-Za-z0-9α-ω{])", " "),  # x_n -> "x n"
         (r"[{}]", ""),
         (r"(?<=[A-Za-z])\*", "星"),  # x* -> "x 星"
+        # function spaces, written with superscripts so the subtitles read L², Lᵖ, ℓ²: "L 2", "L p", "小l 2"
+        (r"ℓ", "小l"),
+        (r"(?<=[Ll])([¹²ᵖ])", lambda m: " " + {"¹": "1", "²": "2", "ᵖ": "p"}[m.group(1)]),
+        (r"(?<=[Ll])∞", " 无穷"),
     ],
 }
 

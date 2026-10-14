@@ -1,0 +1,389 @@
+{
+ "title": "分析学，从零搭建 · 第6部分：Lᵖ、希尔伯特空间与函数的几何",
+ "chapters": {
+  "Hook": "函数之间，用哪种距离？",
+  "Convexity": "1. 凸函数与詹森不等式",
+  "Holder": "2. 杨、赫尔德与闵可夫斯基",
+  "Lp": "3. 空间Lᵖ",
+  "RieszFischer": "4. Lᵖ是完备的",
+  "Hilbert": "5. 内积与平行四边形法则",
+  "Projection": "6. 最近点",
+  "RieszHilbert": "7. 每个泛函都是一个内积",
+  "Orthonormal": "8. 标准正交基、贝塞尔与帕塞瓦尔",
+  "FourierL2": "9. L²中的傅里叶级数，以及费耶尔",
+  "ComplexMeasures": "10. 复测度",
+  "RadonNikodym": "11. 拉东–尼科迪姆定理",
+  "DualLp": "12. Lᵖ的对偶",
+  "Differentiation": "13. 测度的微分",
+  "AbsolutelyContinuous": "14. 勒贝格版本的微积分基本定理",
+  "ChangeOfVariables": "15. 换元",
+  "Outro": "账本的第六行"
+ },
+ "lines": {
+  "6f40e2fdba07": {
+   "scene": "Hook",
+   "en": "Five rows of the ledger are filled. Part 5 built Lebesgue's integral. <bookmark mark='l'/> Part 6 uses it to measure distances between functions, and finds that one of those distances has the geometry of the plane: lengths, angles, and right triangles.",
+   "zh": "账本已经填好了五行。第5部分建立了勒贝格积分。<bookmark mark='l'/>第6部分用它来度量函数之间的距离，并且发现，其中有一种距离具有平面的几何：长度、角度，还有直角三角形。"
+  },
+  "91ce6e44cb48": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> How long is a vector? In the plane we have a choice. Add the sizes of the coordinates, or take the square root of the sum of squares, or just the largest coordinate. <bookmark mark='b'/> The vectors of length one form a diamond, then a circle, then a square, and in between the p-norms, for every p from one to infinity. <bookmark mark='c'/> The same vector has three different lengths. <bookmark mark='d'/> Functions have the same choice. A tall spike and a flat line have the same area, but the spike has twice the L two size and four times the height. <bookmark mark='e'/> So which distance between functions is the right one? Each answers a different question, and this part is about all of them, and about one that's special.",
+   "zh": "<bookmark mark='a'/>一个向量有多长？在平面上，我们有选择。可以把各个坐标的大小加起来，也可以取平方和的平方根，或者干脆只取最大的那个坐标。<bookmark mark='b'/>长度为1的向量依次构成菱形、圆和正方形，而在它们之间是p范数，p从1一直到无穷。<bookmark mark='c'/>同一个向量，有三种不同的长度。<bookmark mark='d'/>函数也面临同样的选择。一根高高的尖刺和一条平直的线，面积相同，可尖刺的L²大小是它的两倍，高度是它的四倍。<bookmark mark='e'/>那么，函数之间哪种距离才是对的？每一种都回答一个不同的问题，这一部分讲的是所有这些距离，以及其中特别的那一种。"
+  },
+  "c2ab78224ac6": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Here's the problem that forces Lebesgue's integral on us. Measure the distance between two continuous functions by the area between their graphs. <bookmark mark='b'/> Steeper and steeper ramps: the area between a ramp and the step is one over four n. <bookmark mark='c'/> The ramps get closer to each other too, so they form a Cauchy sequence. On the camera, each function is one point, plotted by its integrals over the two halves, and the points close in. <bookmark mark='d'/> But on what? A limit would have to be at area distance zero from the step: zero on the left half, one on the right. No continuous function does that. <bookmark mark='e'/> The continuous functions, under this distance, have a hole. Filling it takes exactly the functions Lebesgue's integral can handle, and that's the space L one.",
+   "zh": "<bookmark mark='a'/>正是下面这个问题，逼得我们非用勒贝格积分不可。用两个连续函数图像之间的面积，来度量它们的距离。<bookmark mark='b'/>越来越陡的斜坡：斜坡和阶跃之间的面积是4n分之1。<bookmark mark='c'/>这些斜坡彼此也越来越近，所以它们构成一个柯西序列。在相机里，每个函数是一个点，按它在左右两半上的积分画出来，这些点逐渐聚拢。<bookmark mark='d'/>可是聚向哪里？极限与阶跃之间的面积距离必须是0：在左半边是0，在右半边是1。没有哪个连续函数能做到。<bookmark mark='e'/>在这种距离下，连续函数里有一个洞。要把它填上，需要的恰好就是勒贝格积分能处理的那些函数，这就是空间L¹。"
+  },
+  "cf0ef0baf622": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters three, four, six and seven of Rudin's Real and Complex Analysis. <bookmark mark='a'/> First the inequalities that make the p-norms into distances, and the theorem that the spaces are complete. <bookmark mark='b'/> Then the case p equals two, a Hilbert space, where we can project, find bases, and finally answer the Fourier question. <bookmark mark='c'/> Then measures that take signs and complex values, densities, dual spaces, and the fundamental theorem of calculus, rebuilt for Lebesgue's integral.",
+   "zh": "计划是这样的，跟着鲁丁《实分析与复分析》的第3、第4、第6和第7章走。<bookmark mark='a'/>首先是让p范数成为距离的那些不等式，以及这些空间都完备的那条定理。<bookmark mark='b'/>然后是p等于2的情形，一个希尔伯特空间，在那里我们可以做投影、找基，并最终回答傅里叶的问题。<bookmark mark='c'/>再然后是取正负号和复数值的测度、密度、对偶空间，以及为勒贝格积分重建的微积分基本定理。"
+  },
+  "f3f1e4ed08fe": {
+   "scene": "Convexity",
+   "en": "Chapter one: convex functions, and the one inequality behind all the others.",
+   "zh": "第一章：凸函数，以及所有其他不等式背后的那一个不等式。"
+  },
+  "ce157c9a2051": {
+   "scene": "Convexity",
+   "en": "<bookmark mark='a'/> A function is convex if every chord lies above its graph: at each point between x and y, the straight line is at least as high as the function. <bookmark mark='b'/> Here's the exponential. Slide along the chord, and the red gap between chord and graph never goes negative. <bookmark mark='c'/> An equivalent form: take three points. The slopes of the three chords increase, from left to right. <bookmark mark='d'/> So at every point the graph is pinned between two chords, and a convex function on an open interval is automatically continuous.",
+   "zh": "<bookmark mark='a'/>如果每条弦都在图像上方，函数就是凸的：在x和y之间的每一点，直线都至少和函数一样高。<bookmark mark='b'/>这是指数函数。沿着弦滑动，弦和图像之间红色的间隙永远不会变成负的。<bookmark mark='c'/>一个等价的说法：取三个点。三条弦的斜率从左到右递增。<bookmark mark='d'/>所以在每一点，图像都被夹在两条弦之间，而开区间上的凸函数自动是连续的。"
+  },
+  "3b02534219fe": {
+   "scene": "Convexity",
+   "en": "<bookmark mark='a'/> Now put weights on several points of the curve, orange, adding up to one. Their center of mass is the yellow dot. <bookmark mark='b'/> It sits inside the shaded hull of the points, and so above the curve: the function of the average is at most the average of the function. <bookmark mark='c'/> Shift the weights around and the inequality holds every time. <bookmark mark='d'/> That's Jensen's inequality, and with a probability measure it reads: phi of the integral of f is at most the integral of phi of f. The proof is one picture: a straight line below phi, touching it at the average, integrated.",
+   "zh": "<bookmark mark='a'/>现在在曲线上的几个点放上橙色的权重，总和为1。它们的质心是那个黄点。<bookmark mark='b'/>它落在这些点围成的阴影凸包里，因此在曲线上方：平均值的函数值，至多是函数值的平均。<bookmark mark='c'/>随便挪动权重，不等式每次都成立。<bookmark mark='d'/>这就是詹森不等式，对概率测度，它写成：φ作用在f的积分上，至多是φ复合f的积分。证明只需要一幅图：一条在φ下方、在平均值处与它相切的直线，积分一下就行。"
+  },
+  "88abdf0a56fe": {
+   "scene": "Convexity",
+   "en": "<bookmark mark='a'/> One corollary you know. Put the points log one, log eight and log twenty-seven on the exponential curve, with equal weights. <bookmark mark='b'/> The center of mass is at height twelve, the average of one, eight and twenty-seven. The curve below it is at height six, the cube root of their product. <bookmark mark='c'/> The geometric mean is at most the arithmetic mean, for any positive numbers. <bookmark mark='d'/> With unequal weights, one over p and one over q, the same line says: e to the s over p plus t over q is at most e to the s over p, plus e to the t over q. That single line is the engine of the next chapter.",
+   "zh": "<bookmark mark='a'/>有一个推论你一定知道。在指数曲线上取log 1、log 8和log 27这三个点，权重相等。<bookmark mark='b'/>质心的高度是12，也就是1、8和27的平均值。它正下方的曲线高度是6，也就是它们乘积的立方根。<bookmark mark='c'/>对任意正数，几何平均都不超过算术平均。<bookmark mark='d'/>换成不相等的权重p分之1和q分之1，同一行式子说的是：e的（p分之s加q分之t）次方，至多是p分之e的s次方，加上q分之e的t次方。正是这一行，驱动着下一章。"
+  },
+  "0be1f2b3bfb6": {
+   "scene": "Holder",
+   "en": "Chapter two: three inequalities, and the pictures that prove them.",
+   "zh": "第二章：三个不等式，以及证明它们的图。"
+  },
+  "8c56e0f37e39": {
+   "scene": "Holder",
+   "en": "<bookmark mark='a'/> Pick conjugate exponents, p and q, with one over p plus one over q equal to one: here three and three halves. Young's inequality says a b is at most a to the p over p, plus b to the q over q. <bookmark mark='b'/> The proof is a picture. Draw y equals x to the p minus one. The orange area under it, up to a, is a to the p over p. <bookmark mark='c'/> The blue area to its left, up to height b, is b to the q over q, because the inverse function is y to the q minus one. <bookmark mark='d'/> Together the two areas cover the rectangle a by b, with something left over. <bookmark mark='e'/> Move b. The leftover shrinks to zero exactly when the corner of the rectangle sits on the curve, and then grows again on the other side. It never goes negative.",
+   "zh": "<bookmark mark='a'/>取一对共轭指数p和q，满足p分之1加q分之1等于1：这里是3和二分之三。杨不等式说：a乘b，至多是p分之a的p次方，加上q分之b的q次方。<bookmark mark='b'/>证明就是一幅图。画出y等于x的（p减1）次方。它下方、到a为止的橙色面积，是p分之a的p次方。<bookmark mark='c'/>它左边、到高度b为止的蓝色面积，是q分之b的q次方，因为反函数是y的（q减1）次方。<bookmark mark='d'/>两块面积合起来，盖住了a乘b的矩形，还有剩余。<bookmark mark='e'/>移动b。恰好当矩形的角落落在曲线上时，剩余缩成0，过了那一点又重新变大。它永远不会是负的。"
+  },
+  "b08231005da7": {
+   "scene": "Holder",
+   "en": "<bookmark mark='a'/> Hölder's inequality: the integral of f times g is at most the p-norm of f times the q-norm of g. With p equal to two, it's the Cauchy-Schwarz inequality. <bookmark mark='b'/> The proof is Young's inequality, applied at every point. First scale both functions so their norms are one. <bookmark mark='c'/> Then at each x, the product F G sits below the yellow curve, Young's right hand side. <bookmark mark='d'/> Integrate. The yellow curve has integral exactly one over p plus one over q, which is one, so the purple area is at most one: here 0.594. <bookmark mark='e'/> Scale back, and that's Hölder.",
+   "zh": "<bookmark mark='a'/>赫尔德不等式：f乘g的积分，至多是f的p范数乘以g的q范数。p等于2时，它就是柯西–施瓦茨不等式。<bookmark mark='b'/>证明就是在每一点上用杨不等式。先把两个函数都缩放到范数为1。<bookmark mark='c'/>然后在每个x处，乘积F乘G都在黄色曲线下方，那条曲线就是杨不等式的右边。<bookmark mark='d'/>积分。黄色曲线的积分恰好是p分之1加q分之1，也就是1，所以紫色面积至多是1：这里是0.594。<bookmark mark='e'/>再缩放回去，就得到赫尔德不等式。"
+  },
+  "e47ef922a80c": {
+   "scene": "Holder",
+   "en": "<bookmark mark='a'/> The third inequality makes the p-norm a distance: Minkowski's triangle inequality. Rudin derives it from Hölder in two lines, but here's what it means. <bookmark mark='b'/> Take two vectors on the unit sphere for p equal to three. The point halfway between them lies inside the ball. <bookmark mark='c'/> That's convexity of the ball, and it's the triangle inequality in disguise: f plus g, divided by the sum of the norms, is an average of two unit vectors, so it lies in the ball. <bookmark mark='d'/> For p below one, the formula still makes sense, but the ball caves in. The midpoint of these two unit vectors has size two, and the triangle inequality fails. That's why p runs from one to infinity.",
+   "zh": "<bookmark mark='a'/>第三个不等式让p范数成为距离：闵可夫斯基的三角不等式。鲁丁用两行就从赫尔德不等式推出了它，但我们来看看它的含义。<bookmark mark='b'/>在p等于3的单位球面上取两个向量。它们之间的中点落在球里面。<bookmark mark='c'/>这就是球的凸性，也正是换了装的三角不等式：f加g，除以两个范数之和，是两个单位向量的一个平均，所以它落在球里。<bookmark mark='d'/>当p小于1时，公式仍然有意义，可球凹陷了下去。这两个单位向量的中点，大小是2，三角不等式不成立。这就是为什么p要从1取到无穷。"
+  },
+  "bb1142e6868b": {
+   "scene": "Lp",
+   "en": "Chapter three: the spaces L p, and what their points really are.",
+   "zh": "第三章：空间Lᵖ，以及它们的点究竟是什么。"
+  },
+  "10224ec049e8": {
+   "scene": "Lp",
+   "en": "<bookmark mark='a'/> The p-norm of a function is the p-th root of the integral of its absolute value to the p. The infinity norm is the essential supremum: the smallest bound that holds almost everywhere. <bookmark mark='b'/> Take f of x equals two x, but with one wild value: five, at the single point 0.3. <bookmark mark='c'/> As p grows, the p-norm rises: one, then 1.155, then on toward two. The integral gives more and more weight to where the function is largest. <bookmark mark='d'/> The limit is two, not five. The spike sits on a set of measure zero, and no integral can see it. So the essential supremum is two.",
+   "zh": "<bookmark mark='a'/>一个函数的p范数，是它绝对值的p次方的积分，再开p次方。无穷范数是本性上确界：几乎处处成立的最小上界。<bookmark mark='b'/>取f(x)等于2乘x，但有一个离谱的值：在0.3这一个点上，它等于5。<bookmark mark='c'/>随着p增大，p范数上升：先是1，然后是1.155，再一路朝2走去。积分越来越看重函数最大的地方。<bookmark mark='d'/>极限是2，而不是5。那根尖刺落在一个测度为0的集合上，任何积分都看不见它。所以本性上确界是2。"
+  },
+  "2f180694b73a": {
+   "scene": "Lp",
+   "en": "<bookmark mark='a'/> That spike raises an honest question: what is a point of L p? <bookmark mark='b'/> Change a function at nine points, or at any set of measure zero. Every integral stays the same, so the distance between the two is zero. <bookmark mark='c'/> Then the p-norm isn't quite a norm on functions: a function with norm zero is only zero almost everywhere. The fix is to call two functions the same when they agree almost everywhere. A point of L p is such a class, and on the classes the p-norm is a genuine norm. <bookmark mark='d'/> The price: an element of L p has no value at a single point. Chapter 13 will get values back, almost everywhere.",
+   "zh": "<bookmark mark='a'/>那根尖刺引出一个实实在在的问题：Lᵖ的一个点到底是什么？<bookmark mark='b'/>在九个点上改动一个函数，或者在任意一个测度为0的集合上改动它。每个积分都保持不变，所以两者之间的距离是0。<bookmark mark='c'/>于是p范数在函数上还算不上真正的范数：范数为0的函数，只是几乎处处为0。补救的办法是：两个函数几乎处处相等时，就把它们看成同一个。Lᵖ的一个点就是这样的一个等价类，在等价类上，p范数是名副其实的范数。<bookmark mark='d'/>代价是：Lᵖ的元素在单独一点上没有值。第十三章会把值找回来，几乎处处。"
+  },
+  "e7adf059d333": {
+   "scene": "Lp",
+   "en": "<bookmark mark='a'/> Which spaces contain which? Near zero, x to the minus a half has a finite integral, two, but its square, one over x, doesn't: the integrals grow like the log of one over epsilon. So it's in L one, not in L two. Tall spikes break the higher norms. <bookmark mark='b'/> Out at infinity it's the other way. One over x has infinite integral, but its square has integral one. Long tails break the lower norms. <bookmark mark='c'/> On the whole line, neither space contains the other. On a space of finite measure there are no long tails, and Hölder gives the inclusion: the higher p, the smaller the space.",
+   "zh": "<bookmark mark='a'/>哪个空间包含哪个？在0附近，x的负二分之一次方有有限的积分，等于2，可它的平方，x分之1，没有：积分像ε分之1的对数那样增长。所以它在L¹里，不在L²里。高高的尖刺会破坏较高的范数。<bookmark mark='b'/>到了无穷远处，情况反过来。x分之1的积分是无穷大，可它的平方积分是1。长长的尾巴会破坏较低的范数。<bookmark mark='c'/>在整条实数轴上，两个空间谁也不包含谁。在测度有限的空间上没有长尾巴，赫尔德不等式给出包含关系：p越大，空间越小。"
+  },
+  "9dd2f3b09057": {
+   "scene": "RieszFischer",
+   "en": "Chapter four: the theorem of Riesz and Fischer, from 1907. L p has no holes.",
+   "zh": "第四章：里斯和费舍尔1907年的定理。Lᵖ里没有洞。"
+  },
+  "21e775fe4453": {
+   "scene": "RieszFischer",
+   "en": "<bookmark mark='a'/> Riesz-Fischer: L p is complete, for every p from one to infinity. Here's the plan of Rudin's proof. <bookmark mark='b'/> Start with a Cauchy sequence. Pick a subsequence so fast that the steps between its terms are smaller than one half, one quarter, one eighth, and so on. <bookmark mark='c'/> Add up the absolute values of those steps into one function g. By Minkowski, every partial sum has norm less than one, and monotone convergence passes to the whole sum. <bookmark mark='d'/> A function with finite norm is finite almost everywhere. So at almost every point the steps are summable, and the subsequence converges there, to a function f. <bookmark mark='e'/> Finally Fatou's lemma turns the Cauchy condition into convergence in norm. The only tools are the three limit theorems of Part 5, which is why Riemann's integral couldn't do this.",
+   "zh": "<bookmark mark='a'/>里斯–费舍尔定理：对从1到无穷的每个p，Lᵖ都是完备的。下面是鲁丁证明的思路。<bookmark mark='b'/>从一个柯西序列出发。挑出一个跑得足够快的子序列，让相邻两项之间的步长小于二分之一、四分之一、八分之一，依此类推。<bookmark mark='c'/>把这些步长的绝对值加起来，得到一个函数g。由闵可夫斯基不等式，每个部分和的范数都小于1，单调收敛定理再把这一点推到整个和上。<bookmark mark='d'/>范数有限的函数几乎处处有限。所以在几乎每一点，这些步长都可求和，子序列在那里收敛到一个函数f。<bookmark mark='e'/>最后，法图引理把柯西条件变成按范数收敛。用到的工具只有第5部分的三个极限定理，这就是为什么黎曼积分做不到这一点。"
+  },
+  "47b963a4afb8": {
+   "scene": "RieszFischer",
+   "en": "<bookmark mark='a'/> Let's run the proof on the ramps from the beginning of this part. The subsequence one, two, four, eight is fast enough: the step from ramp n to ramp two n has area one over eight n. <bookmark mark='b'/> Stack those steps on top of the first ramp. Each layer is a thin sliver near one half, and the stack grows toward a bounded function g. <bookmark mark='c'/> The areas of the layers form a geometric series, adding up to a quarter, so g has finite integral. <bookmark mark='d'/> So the telescoping series converges, at every point except one half, and its sum is the step. The hole from the hook is filled, by a function in L one.",
+   "zh": "<bookmark mark='a'/>把这个证明用在这一部分开头的那些斜坡上跑一遍。子序列1、2、4、8就足够快：从第n个斜坡到第2n个斜坡，这一步的面积是8n分之1。<bookmark mark='b'/>把这些步一层层叠在第一个斜坡上。每一层都是二分之一附近的一条细片，叠起来逐渐长成一个有界函数g。<bookmark mark='c'/>这些层的面积构成一个几何级数，加起来是四分之一，所以g的积分有限。<bookmark mark='d'/>于是这个裂项相消的级数，除了在二分之一处以外处处收敛，它的和就是阶跃函数。开场里的那个洞被填上了，填它的是L¹里的一个函数。"
+  },
+  "cdb36439c912": {
+   "scene": "RieszFischer",
+   "en": "<bookmark mark='a'/> The ramps show something else. Continuous functions with compact support are dense in L p, for every finite p: every function in L p is a limit of them, as the step is a limit of ramps. <bookmark mark='b'/> Infinity is the exception. In the sup norm, every ramp stays at distance one half from the step: the yellow tube of half-width one half. <bookmark mark='c'/> In fact any continuous function, near one half, can't be close to zero on the left and close to one on the right. And uniform limits of continuous functions are continuous, as Part 3 showed, so the continuous functions are a closed subspace of L infinity, not a dense one. Simple functions take over there.",
+   "zh": "<bookmark mark='a'/>这些斜坡还说明了另一件事。对每个有限的p，具有紧支集的连续函数在Lᵖ中稠密：Lᵖ里的每个函数都是它们的极限，就像阶跃是斜坡的极限一样。<bookmark mark='b'/>无穷是个例外。在上确界范数下，每个斜坡与阶跃的距离始终是二分之一：那根黄色的管子，半宽是二分之一。<bookmark mark='c'/>事实上，任何连续函数在二分之一附近，都不可能左边接近0、右边又接近1。而且正如第3部分所说，连续函数的一致极限是连续的，所以连续函数是L∞的一个闭子空间，而不是稠密的子空间。在那里，接替它的是简单函数。"
+  },
+  "c21e853be4d7": {
+   "scene": "Hilbert",
+   "en": "Chapter five: inner products, where distances come with angles.",
+   "zh": "第五章：内积，在这里，距离带上了角度。"
+  },
+  "a9ceb54852ff": {
+   "scene": "Hilbert",
+   "en": "<bookmark mark='a'/> An inner product is a way to multiply two vectors and get a number: symmetric, after a complex conjugate, linear, and positive. On L two, it's the integral of f times the conjugate of g, and its norm is the square root of the inner product of f with itself. <bookmark mark='b'/> The Cauchy-Schwarz inequality comes straight from positivity. Take x equals e to the t and y equals t, on the unit interval. The squared distance from x to lambda times y is a quadratic in lambda, <bookmark mark='c'/> and it can never go below zero. <bookmark mark='d'/> Its minimum, at lambda equals three, is 0.1945. A quadratic that stays positive has a negative discriminant, and that's Cauchy-Schwarz. <bookmark mark='e'/> It also means the ratio of the inner product to the two lengths is a cosine. In L two, e to the t and t meet at an angle of 14.3 degrees.",
+   "zh": "<bookmark mark='a'/>内积是把两个向量相乘、得到一个数的一种方式：它共轭对称、线性，而且是正的。在L²上，内积是f乘以g的共轭的积分，它给出的范数，是f与自身内积的平方根。<bookmark mark='b'/>柯西–施瓦茨不等式直接来自正性。在单位区间上取x等于e的t次方，y等于t。从x到λ乘y的距离的平方，是λ的一个二次函数，<bookmark mark='c'/>它永远不会低于0。<bookmark mark='d'/>它的最小值在λ等于3处，是0.1945。一个始终为正的二次函数，判别式是负的，这就是柯西–施瓦茨不等式。<bookmark mark='e'/>它还意味着，内积与两个长度之比是一个余弦。在L²里，e的t次方和t相交成14.3度的角。"
+  },
+  "4af7574e2b8a": {
+   "scene": "Hilbert",
+   "en": "<bookmark mark='a'/> Which norms come from an inner product? The test is a fact about parallelograms: the squares of the two diagonals add up to the squares of the four sides. <bookmark mark='b'/> With the ordinary length, turn the parallelogram any way you like and the two sides of the equation agree. <bookmark mark='c'/> Measure with the taxicab norm instead, and they don't. <bookmark mark='d'/> For functions: x and one minus x squared, in L p of the unit interval. For p equals one and three, the law fails; for p equals two it holds, to every digit. <bookmark mark='e'/> And the law is exactly the test: when it holds, the polarization formula defines an inner product that gives back the norm. So of all the L p spaces, only L two has angles.",
+   "zh": "<bookmark mark='a'/>哪些范数来自内积？检验办法是平行四边形的一个性质：两条对角线的平方和，等于四条边的平方和。<bookmark mark='b'/>用普通的长度，把平行四边形随便怎么转，等式两边都相等。<bookmark mark='c'/>换成出租车范数来度量，两边就不相等了。<bookmark mark='d'/>对函数来说：取单位区间上Lᵖ里的x和1减x的平方。p等于1和3时，这个法则不成立；p等于2时，它每一位数字都成立。<bookmark mark='e'/>而这个法则恰好就是检验标准：只要它成立，极化恒等式就定义出一个内积，并且这个内积给回原来的范数。所以在所有Lᵖ空间里，只有L²有角度。"
+  },
+  "f50df65dde61": {
+   "scene": "Hilbert",
+   "en": "<bookmark mark='a'/> A complete inner-product space is a Hilbert space, and almost all of the plane's geometry carries over. <bookmark mark='b'/> Dot products become integrals. <bookmark mark='b2'/> Lengths become norms, and the space is complete. <bookmark mark='b3'/> Pythagoras holds for perpendicular functions. <bookmark mark='c'/> And the next three chapters carry over three more facts: nearest points, <bookmark mark='c2'/> functionals as vectors, <bookmark mark='c3'/> and orthonormal bases. <bookmark mark='d'/> One thing does not survive. <bookmark mark='e'/> In L two of the unit interval, take e n equal to root two times sine of n pi x. Each has norm one and any two are perpendicular, so by Pythagoras they are all at distance root two from each other: no subsequence can converge, and the closed unit ball is not compact. Compactness is the price of infinitely many dimensions.",
+   "zh": "<bookmark mark='a'/>完备的内积空间就是希尔伯特空间，平面上几乎所有的几何都能搬过去。<bookmark mark='b'/>点积变成了积分。<bookmark mark='b2'/>长度变成了范数，而且空间是完备的。<bookmark mark='b3'/>对互相垂直的函数，勾股定理成立。<bookmark mark='c'/>接下来的三章还会再搬过来三件事：最近点，<bookmark mark='c2'/>把泛函看成向量，<bookmark mark='c3'/>以及标准正交基。<bookmark mark='d'/>有一样东西保留不下来。<bookmark mark='e'/>在单位区间上的L²里，取e_n等于根号2乘sin（nπx）。每一个的范数都是1，任意两个都互相垂直，所以由勾股定理，它们两两之间的距离都是根号2：没有子序列能收敛，闭单位球不是紧的。紧性，是无穷多维要付出的代价。"
+  },
+  "094494b1c370": {
+   "scene": "Projection",
+   "en": "Chapter six: nearest points, the first theorem that needs both the angle and the completeness.",
+   "zh": "第六章：最近点，第一个既需要角度、又需要完备性的定理。"
+  },
+  "407b35ce1051": {
+   "scene": "Projection",
+   "en": "<bookmark mark='a'/> The projection theorem. A closed convex set in a Hilbert space has exactly one point nearest to any given x. <bookmark mark='b'/> Let delta be the distance from x to the set. By definition there's a sequence of points in the set whose distances to x approach delta. <bookmark mark='c'/> Here's the key: the parallelogram law, applied to x minus y n and x minus y m. The midpoint of y n and y m lies in the set, because the set is convex, so it's at least delta from x. <bookmark mark='d'/> That squeezes the distance between y n and y m to zero: the minimizing sequence is Cauchy. The table shows each gap under its bound. <bookmark mark='e'/> Completeness gives a limit, and since the set is closed, the limit is in it. It's the nearest point, and the same inequality shows there's only one.",
+   "zh": "<bookmark mark='a'/>投影定理。希尔伯特空间里的闭凸集，对任意给定的x，都恰好有一个离x最近的点。<bookmark mark='b'/>令δ为x到这个集合的距离。按定义，集合里有一列点，它们到x的距离趋于δ。<bookmark mark='c'/>关键在这里：把平行四边形法则用在x减y_n和x减y_m上。y_n和y_m的中点在集合里，因为集合是凸的，所以它到x的距离至少是δ。<bookmark mark='d'/>这就把y_n和y_m之间的距离挤压到0：这个极小化序列是柯西序列。表里每个间隙都在它的上界之下。<bookmark mark='e'/>完备性给出一个极限，又因为集合是闭的，极限就在集合里。它就是最近点，而同一个不等式说明，这样的点只有一个。"
+  },
+  "68d327cc431d": {
+   "scene": "Projection",
+   "en": "<bookmark mark='a'/> Uniqueness is where the inner product earns its keep. Grow a ball around the origin until it first touches a line. <bookmark mark='b'/> The round ball touches at one point. <bookmark mark='c'/> The diamond of the one-norm can arrive flat against the line, and then every point of a whole segment is nearest. The parallelogram law is what rules this out: it makes the ball strictly round.",
+   "zh": "<bookmark mark='a'/>唯一性，正是内积大显身手的地方。让一个以原点为中心的球不断长大，直到它第一次碰到一条直线。<bookmark mark='b'/>圆的球只在一个点上相碰。<bookmark mark='c'/>1范数的菱形，可能整条边平平地贴上这条直线，这时一整条线段上的每个点都是最近点。排除这种情况的正是平行四边形法则：它让球严格地圆。"
+  },
+  "feedf6d6a9ad": {
+   "scene": "Projection",
+   "en": "<bookmark mark='a'/> When the convex set is a closed subspace, the nearest point is the orthogonal projection, and the error is perpendicular to the whole subspace. <bookmark mark='b'/> Project e to the x onto the quadratics, in L two of the unit interval. Perpendicular to one, x and x squared gives three linear equations, and their matrix is the Hilbert matrix of inner products of powers. <bookmark mark='c'/> The solution is the best quadratic in the mean-square sense, the yellow curve, almost on top of e to the x. <bookmark mark='d'/> Its error, magnified below, crosses zero three times, and its inner products with one, x and x squared vanish to rounding. <bookmark mark='e'/> For comparison, the Taylor quadratic is fifteen times worse in this norm. Taylor fits one point; projection fits the whole interval. Every vector splits uniquely into a piece in the subspace and a piece perpendicular to it.",
+   "zh": "<bookmark mark='a'/>当凸集是一个闭子空间时，最近点就是正交投影，而误差垂直于整个子空间。<bookmark mark='b'/>在单位区间上的L²里，把e的x次方投影到二次多项式上。要求误差与1、x和x的平方都垂直，得到三个线性方程，它们的矩阵就是由各次幂的内积组成的希尔伯特矩阵。<bookmark mark='c'/>解就是均方意义下最好的二次多项式，也就是那条黄色曲线，几乎和e的x次方重合。<bookmark mark='d'/>下方放大了它的误差，误差三次穿过0，而且它与1、x和x的平方的内积，在舍入误差范围内都等于0。<bookmark mark='e'/>作为对比，泰勒二次多项式在这个范数下要差十五倍。泰勒只拟合一个点；投影拟合的是整个区间。每个向量都能唯一地分成两块：一块在子空间里，一块与它垂直。"
+  },
+  "6f1319f0c27a": {
+   "scene": "RieszHilbert",
+   "en": "Chapter seven: in a Hilbert space, every bounded linear functional is an inner product with one fixed vector.",
+   "zh": "第七章：在希尔伯特空间里，每个有界线性泛函，都是与某个固定向量的内积。"
+  },
+  "9fad8838ee36": {
+   "scene": "RieszHilbert",
+   "en": "<bookmark mark='a'/> Start in the plane. A linear functional, two x one plus x two, is best drawn as a stack of parallel lines, its level sets, with the zero level, the kernel, in yellow. <bookmark mark='b'/> The value at a point counts how many lines you've crossed to get there. <bookmark mark='c'/> And there's a vector hiding in the stack: y equals two, one, perpendicular to the lines. At every point, the functional equals the inner product with y. <bookmark mark='d'/> The norm of the functional, its largest value on the unit circle, is the length of y, root five. Riesz's theorem says this picture holds in every Hilbert space.",
+   "zh": "<bookmark mark='a'/>先从平面开始。线性泛函2x_1加x_2，最好画成一叠平行线，也就是它的水平集，其中值为0的那一条，也就是核，画成黄色。<bookmark mark='b'/>泛函在一点的值，数的是你走到那里穿过了多少条线。<bookmark mark='c'/>这叠线里还藏着一个向量：y等于（2，1），它垂直于这些线。在每一点，泛函都等于与y的内积。<bookmark mark='d'/>泛函的范数，也就是它在单位圆上的最大值，等于y的长度，根号5。里斯定理说，这幅图在每个希尔伯特空间里都成立。"
+  },
+  "d7a3da84772e": {
+   "scene": "RieszHilbert",
+   "en": "<bookmark mark='a'/> The theorem: every bounded linear functional on a Hilbert space is the inner product with a unique vector y, and the norm of the functional is the length of y. <bookmark mark='b'/> The proof follows the picture. The kernel is a closed subspace. If it's not everything, the projection theorem gives a unit vector z perpendicular to it. <bookmark mark='c'/> For any x, this combination is in the kernel: apply lambda and it cancels. <bookmark mark='d'/> So it's perpendicular to z. <bookmark mark='e'/> Expand, and lambda of x is the inner product of x with the conjugate of lambda z, times z. <bookmark mark='f'/> The representing vector is the normal to the kernel, scaled.",
+   "zh": "<bookmark mark='a'/>定理：希尔伯特空间上的每个有界线性泛函，都是与唯一一个向量y的内积，而且泛函的范数等于y的长度。<bookmark mark='b'/>证明就照着那幅图来。核是一个闭子空间。如果它不是整个空间，投影定理就给出一个与它垂直的单位向量z。<bookmark mark='c'/>对任意x，这个组合都在核里：用λ作用一下，它就抵消掉了。<bookmark mark='d'/>所以它垂直于z。<bookmark mark='e'/>展开，λ(x)就是x与（λ(z)的共轭乘z）的内积。<bookmark mark='f'/>代表向量，就是核的法向量，再乘上一个倍数。"
+  },
+  "33a4e8576d18": {
+   "scene": "RieszHilbert",
+   "en": "<bookmark mark='a'/> Now a functional on L two of minus one to one: lambda of f is the integral of f times a hidden weight w. Can we find w just by testing lambda? <bookmark mark='b'/> Feed it the orthonormal Legendre polynomials, which chapter eight will build, and record the numbers lambda of e n. <bookmark mark='c'/> Then the sum of those numbers times e n converges to the representing vector. With two terms it's crude; with six it's close; with ten the largest error is ten to the minus five. <bookmark mark='d'/> And it's w, exactly as the theorem promised. The norm of the functional is the length of w, 1.7595.",
+   "zh": "<bookmark mark='a'/>现在看负1到1上的L²里的一个泛函：λ(f)是f乘一个隐藏的权重w的积分。只靠测试λ，能把w找出来吗？<bookmark mark='b'/>把第八章将要构造的标准正交勒让德多项式喂给它，记下这些数λ(e_n)。<bookmark mark='c'/>然后，这些数乘以e_n之和，收敛到代表向量。两项时很粗糙；六项时已经很接近；十项时，最大误差是10的负5次方。<bookmark mark='d'/>它就是w，正如定理所承诺的。泛函的范数就是w的长度，1.7595。"
+  },
+  "191552057de9": {
+   "scene": "RieszHilbert",
+   "en": "<bookmark mark='a'/> Boundedness matters. Evaluating at zero isn't a bounded functional on L two. <bookmark mark='b'/> The tall thin bumps, root n on an interval of length one over n, all have norm one, but their values at zero grow like root n. No vector y can represent evaluation, which is no surprise: in L two, the value at a single point isn't even defined. <bookmark mark='c'/> On the continuous functions with the sup norm, evaluation is bounded, but that space has no inner product. Its functionals turn out to be measures, in chapter twelve.",
+   "zh": "<bookmark mark='a'/>有界性很重要。在0处取值，并不是L²上的有界泛函。<bookmark mark='b'/>这些又高又窄的鼓包，在长度为n分之1的区间上取值根号n，范数全都是1，可它们在0处的值像根号n那样增长。没有哪个向量y能代表取值运算，这并不奇怪：在L²里，单独一点处的值根本没有定义。<bookmark mark='c'/>在配上上确界范数的连续函数空间上，取值是有界的，可那个空间没有内积。第十二章会看到，它的泛函原来是测度。"
+  },
+  "421233da55fe": {
+   "scene": "Orthonormal",
+   "en": "Chapter eight: orthonormal bases, and Pythagoras with infinitely many sides.",
+   "zh": "第八章：标准正交基，以及有无穷多条边的勾股定理。"
+  },
+  "86abfb7158fe": {
+   "scene": "Orthonormal",
+   "en": "<bookmark mark='a'/> To make perpendicular vectors out of any independent ones, Gram-Schmidt subtracts shadows. Take the next vector, remove its projection onto what you already have, and what's left is perpendicular. Scale it to length one. <bookmark mark='b'/> Do it to the powers one, x, x squared and so on, in L two of minus one to one. <bookmark mark='c'/> The constant becomes one over root two. x is already perpendicular to it. x squared loses its shadow on the constant, a third, and becomes a multiple of three x squared minus one. <bookmark mark='d'/> Continue, and out come the Legendre polynomials, each one perpendicular to all the others. The computed functions agree with Legendre's formulas to twelve digits.",
+   "zh": "<bookmark mark='a'/>要从任意一组线性无关的向量造出互相垂直的向量，格拉姆–施密特方法的做法是减去影子。取下一个向量，去掉它在已有向量上的投影，剩下的就是垂直的。再把它缩放到长度为1。<bookmark mark='b'/>在负1到1上的L²里，对各次幂1、x、x的平方等等这样做。<bookmark mark='c'/>常数变成根号2分之1。x本来就与它垂直。x的平方减去它在常数上的影子，也就是三分之一，变成（3乘x的平方，减1）的某个倍数。<bookmark mark='d'/>继续做下去，出来的就是勒让德多项式，每一个都与其他所有的垂直。算出来的函数与勒让德的公式在12位数字上吻合。"
+  },
+  "daab9786bd9b": {
+   "scene": "Orthonormal",
+   "en": "<bookmark mark='a'/> Now expand a function in an orthonormal set: the sign function, whose squared norm is two. Its coefficients are its inner products with the Legendre polynomials. <bookmark mark='b'/> The partial sum is the projection onto the first N of them, and the error is perpendicular to it. So we have a right triangle: f is the hypotenuse, the partial sum and the error are the legs. <bookmark mark='c'/> Pythagoras: the squares of the coefficients add up to the squared length of the partial sum, which can never exceed the hypotenuse, two. That's Bessel's inequality. <bookmark mark='d'/> Watch the bar fill: one and a half from the first coefficient, then 1.72, 1.85, 1.92, and 1.97 with forty polynomials. The red leftover is the squared error, and it keeps shrinking.",
+   "zh": "<bookmark mark='a'/>现在用一个标准正交集来展开一个函数：符号函数，它的范数平方是2。它的系数，就是它与各个勒让德多项式的内积。<bookmark mark='b'/>部分和是到前N个多项式上的投影，误差与它垂直。所以我们得到一个直角三角形：f是斜边，部分和与误差是两条直角边。<bookmark mark='c'/>勾股定理：系数的平方加起来，等于部分和长度的平方，它永远不会超过斜边的平方，也就是2。这就是贝塞尔不等式。<bookmark mark='d'/>看这根条慢慢填满：第一个系数贡献一又二分之一，然后是1.72、1.85、1.92，用到四十个多项式时是1.97。红色的剩余部分是误差的平方，它不断缩小。"
+  },
+  "c3b57b448cec": {
+   "scene": "Orthonormal",
+   "en": "<bookmark mark='a'/> When does the bar fill completely? Rudin's theorem gives four equivalent answers. The orthonormal set is maximal, or its finite combinations are dense, or Parseval's identity holds for every vector, or inner products can be computed from coefficients. Then the Hilbert space is just a copy of the space of square-summable sequences. <bookmark mark='b'/> And the other direction is free: any square-summable coefficients define a vector, because the tails of the series have small norm, and the space is complete. <bookmark mark='c'/> Without maximality, Parseval fails. Remove e one from the Legendre polynomials, and the function x is perpendicular to everything left: all its coefficients are zero, but it isn't. <bookmark mark='d'/> Every Hilbert space has a maximal orthonormal set, by Hausdorff's maximality principle; that step is pure logic, with no picture. A separable one has a countable one, from Gram-Schmidt.",
+   "zh": "<bookmark mark='a'/>这根条什么时候能完全填满？鲁丁的定理给出四个等价的回答：标准正交集是极大的；或者它的有限组合是稠密的；或者帕塞瓦尔恒等式对每个向量都成立；或者内积可以由系数算出来。这时，希尔伯特空间就只是平方可和序列空间的一个副本。<bookmark mark='b'/>而反方向是免费的：任何平方可和的系数都定义一个向量，因为级数的尾部范数很小，而空间又是完备的。<bookmark mark='c'/>没有极大性，帕塞瓦尔恒等式就不成立。从勒让德多项式里去掉e_1，函数x就与剩下的所有多项式都垂直：它的系数全是0，可它本身不是0。<bookmark mark='d'/>由豪斯多夫极大原理，每个希尔伯特空间都有一个极大的标准正交集；这一步是纯粹的逻辑，没有图可画。可分的希尔伯特空间有可数的标准正交基，用格拉姆–施密特方法就能得到。"
+  },
+  "c25b86402e74": {
+   "scene": "FourierL2",
+   "en": "Chapter nine: the Fourier question, answered in L two.",
+   "zh": "第九章：傅里叶的问题，在L²里得到解答。"
+  },
+  "eef4a64e5f09": {
+   "scene": "FourierL2",
+   "en": "<bookmark mark='a'/> The exponentials e to the i n t are orthonormal in L two of the circle. Are they maximal? If so, the last chapter's theorem answers the Fourier question at once. <bookmark mark='b'/> Rudin's proof uses a bump made from a trigonometric polynomial: one plus cosine t, over two, to the power k, scaled to have average one. As k grows it narrows onto zero. <bookmark mark='c'/> Convolving a continuous function with it averages the function over a shrinking window, and the result is a trigonometric polynomial. On the absolute value, the largest error falls from 0.93 to 0.07. <bookmark mark='d'/> So trigonometric polynomials are uniformly dense in the continuous functions, and those are dense in L two. Nothing nonzero is perpendicular to every exponential: the system is maximal.",
+   "zh": "<bookmark mark='a'/>指数函数e的i n t次方，在圆周上的L²里是标准正交的。它们是极大的吗？如果是，上一章的定理就立刻回答了傅里叶的问题。<bookmark mark='b'/>鲁丁的证明用了一个由三角多项式做成的鼓包：二分之（1加cos t）的k次方，再缩放到平均值为1。随着k增大，它收窄到0处。<bookmark mark='c'/>把一个连续函数和它做卷积，就是在一个不断缩小的窗口上对函数取平均，结果是一个三角多项式。对绝对值函数来说，最大误差从0.93降到0.07。<bookmark mark='d'/>所以三角多项式在连续函数中一致稠密，而连续函数在L²中稠密。没有哪个非零函数能与每个指数函数都垂直：这个系统是极大的。"
+  },
+  "de2de1a57e19": {
+   "scene": "FourierL2",
+   "en": "<bookmark mark='a'/> So Parseval holds for every square-integrable function, with nothing assumed about continuity or boundedness. Here's a function Riemann's integral can't handle: the absolute value of x, to the minus a quarter. It's unbounded at zero, but its square has finite integral. <bookmark mark='b'/> Its Fourier partial sums with four, sixteen and sixty-four terms climb toward the spike. <bookmark mark='c'/> The mean square error falls steadily: each fourfold increase in N multiplies it by 0.707. Slowly, but to zero. <bookmark mark='d'/> That's the Fourier thread's answer: for every function in L two, the partial sums converge to it in L two, and Parseval's identity holds. Conversely, every square-summable sequence of coefficients comes from a function. L two of the circle and little l two of the integers are the same Hilbert space.",
+   "zh": "<bookmark mark='a'/>所以帕塞瓦尔恒等式对每个平方可积函数都成立，对连续性和有界性没有任何假设。这里有一个黎曼积分处理不了的函数：x的绝对值的负四分之一次方。它在0处无界，可它的平方积分是有限的。<bookmark mark='b'/>它取4项、16项和64项的傅里叶部分和，一路朝那根尖刺爬上去。<bookmark mark='c'/>均方误差稳步下降：N每增大到4倍，误差就乘上0.707。很慢，但会趋于0。<bookmark mark='d'/>这就是傅里叶这条线索的答案：对L²里的每个函数，部分和都在L²中收敛到它，帕塞瓦尔恒等式成立。反过来，每个平方可和的系数序列都来自某个函数。圆周上的L²和整数上的ℓ²，是同一个希尔伯特空间。"
+  },
+  "142f63987615": {
+   "scene": "FourierL2",
+   "en": "<bookmark mark='a'/> In the uniform norm the story is different, and the kernels show why. The n-th partial sum is the convolution with Dirichlet's kernel, which has negative lobes, shaded red. Its absolute integral grows with N, and that's what allows Gibbs' overshoot and even divergence. <bookmark mark='b'/> Fejér averaged the partial sums. The average is a convolution with Fejér's kernel, which is never negative and has mass one, the same narrowing bump as before. <bookmark mark='c'/> On the sawtooth, the partial sums overshoot to 1.844, above pi over two. Fejér's means never do: an average with positive weights can't leave the range of the function. <bookmark mark='d'/> So the dashboard splits. Partial sums converge in L two for every square-integrable function. Fejér's means converge uniformly for every continuous one.",
+   "zh": "<bookmark mark='a'/>在一致范数下，情况就不一样了，而核说明了原因。第n个部分和，是与狄利克雷核的卷积，它有负的瓣，涂成了红色。它的绝对值积分随N增长，正是这一点使得吉布斯冲过头、甚至发散成为可能。<bookmark mark='b'/>费耶尔对部分和取了平均。这个平均是与费耶尔核的卷积，费耶尔核从不为负，质量为1，正是前面那个不断收窄的鼓包。<bookmark mark='c'/>在锯齿波上，部分和冲过头到1.844，超过了二分之π。费耶尔平均从来不会：正权重的平均，不可能跑出函数的取值范围。<bookmark mark='d'/>于是仪表盘分成了两半。对每个平方可积函数，部分和在L²中收敛；对每个连续函数，费耶尔平均一致收敛。"
+  },
+  "a08b9f1a6d3f": {
+   "scene": "ComplexMeasures",
+   "en": "Chapter ten: measures that take negative and complex values.",
+   "zh": "第十章：取负值和复数值的测度。"
+  },
+  "ea6b5a7dd3eb": {
+   "scene": "ComplexMeasures",
+   "en": "<bookmark mark='a'/> A complex measure assigns a complex number to each measurable set, countably additively. Here's one with density one plus half cosine x, times e to the three i x. <bookmark mark='b'/> Follow the measure of zero to t, as t runs from zero to two pi: it traces a loop in the complex plane, and comes back to zero. The whole interval has measure zero. <bookmark mark='c'/> But the measure isn't small. Cut the interval into pieces and add the sizes of their measures: these are the sides of a polygon inscribed in the loop. Finer cuts give longer polygons: <bookmark mark='d'/> point six eight, four, five point six six, and on toward two pi. <bookmark mark='e'/> The supremum is the total variation, the length of the loop. Rudin proves that it's always a positive measure, and always finite.",
+   "zh": "<bookmark mark='a'/>复测度给每个可测集指定一个复数，并且可数可加。这里有一个，密度是（1加二分之一cos x）乘e的3 i x次方。<bookmark mark='b'/>跟着从0到t的测度走，让t从0跑到2π：它在复平面上描出一个圈，又回到0。整个区间的测度是0。<bookmark mark='c'/>可这个测度并不小。把区间切成小段，把它们测度的大小加起来：这些就是内接于这个圈的多边形的各边。切得越细，多边形越长：<bookmark mark='d'/>0.68，4，5.66，一路朝2π走去。<bookmark mark='e'/>上确界就是全变差，也就是这个圈的长度。鲁丁证明了，它总是一个正测度，而且总是有限的。"
+  },
+  "216d9cf7ca37": {
+   "scene": "ComplexMeasures",
+   "en": "<bookmark mark='a'/> A real measure is a special case: sine of five x, dx. Its total is zero. <bookmark mark='b'/> Hahn's theorem splits the space into a set A where the measure is positive, the orange humps, and its complement B, where it's negative. <bookmark mark='c'/> Jordan's decomposition writes the measure as the difference of two positive measures, each of total mass two, and the total variation is their sum, four.",
+   "zh": "<bookmark mark='a'/>实测度是一个特例：sin 5x dx。它的总和是0。<bookmark mark='b'/>哈恩定理把空间分成两部分：一个集合A，测度在上面是正的，也就是橙色的拱；以及它的补集B，测度在上面是负的。<bookmark mark='c'/>若尔当分解把这个测度写成两个正测度之差，每个的总质量都是2，而全变差是它们的和，等于4。"
+  },
+  "0e7f698abeaa": {
+   "scene": "ComplexMeasures",
+   "en": "<bookmark mark='a'/> How can one measure relate to another? Draw three measures on the unit interval through their distribution functions, the measure of zero to x. <bookmark mark='b'/> The first has a density, two x. It's absolutely continuous with respect to length: sets of length zero get measure zero. <bookmark mark='c'/> The second is a point mass at one half, a jump. It lives on a single point, a set of length zero: it's singular. <bookmark mark='d'/> The third is the Cantor measure, Part 1's staircase seen as a measure. Its mass sits on the Cantor set: the 2 to the n intervals of the n-th stage carry everything, while their total length, two thirds to the n, goes to zero. Singular, yet with no atoms at all. The next chapter shows these are the only possibilities.",
+   "zh": "<bookmark mark='a'/>一个测度和另一个测度之间可能有什么关系？用分布函数，也就是从0到x的测度，在单位区间上画出三个测度。<bookmark mark='b'/>第一个有密度，2倍的x。它关于长度绝对连续：长度为0的集合，测度也是0。<bookmark mark='c'/>第二个是二分之一处的点质量，一个跳跃。它住在单独一个点上，那是一个长度为0的集合：它是奇异的。<bookmark mark='d'/>第三个是康托尔测度，也就是把第1部分的阶梯看成一个测度。它的质量落在康托尔集上：第n步的2的n次方个区间承载了全部质量，而它们的总长度，三分之二的n次方，趋于0。它是奇异的，却连一个原子都没有。下一章会说明，只有这几种可能。"
+  },
+  "149135472b2b": {
+   "scene": "RadonNikodym",
+   "en": "Chapter eleven: densities, and the Radon-Nikodym theorem, proved with a Hilbert space.",
+   "zh": "第十一章：密度，以及用希尔伯特空间证明的拉东–尼科迪姆定理。"
+  },
+  "8e3a8f85e0eb": {
+   "scene": "RadonNikodym",
+   "en": "<bookmark mark='a'/> Here's a measure lambda on the unit interval, drawn as orange mass. Does it have a density with respect to length? <bookmark mark='b'/> Pick a point and an interval around it, and divide the interval's lambda-mass by its length. <bookmark mark='c'/> Shrink the interval. The ratio settles. <bookmark mark='d'/> Do it at four points with radii from 0.2 down to a thousandth, and the ratios converge to the values of a function, one plus 0.8 sine four x. That function is the density, and lambda of any set is the integral of h over it.",
+   "zh": "<bookmark mark='a'/>这是单位区间上的一个测度λ，画成橙色的质量。它关于长度有密度吗？<bookmark mark='b'/>选一个点，取它周围的一个区间，用这个区间的λ质量除以它的长度。<bookmark mark='c'/>把区间缩小。比值稳定了下来。<bookmark mark='d'/>在四个点上这样做，半径从0.2一直缩到千分之一，这些比值收敛到一个函数的值：1加0.8乘sin 4x。这个函数就是密度，而任何集合的λ测度，就是h在它上面的积分。"
+  },
+  "fd758a309b69": {
+   "scene": "RadonNikodym",
+   "en": "<bookmark mark='a'/> The theorem says every measure splits into a part with a density and a singular part, uniquely. <bookmark mark='b'/> Take lambda to be the orange density plus an atom of mass 0.3 at 0.7. <bookmark mark='c'/> The atom lives on a single point, a set of length zero, so it's singular. Everything else has a density. <bookmark mark='d'/> Radon proved it in Euclidean space in 1913, and Nikodym in general in 1930. Rudin gives a proof by von Neumann, which uses a Hilbert space.",
+   "zh": "<bookmark mark='a'/>定理说，每个测度都能唯一地分成两部分：一部分有密度，另一部分是奇异的。<bookmark mark='b'/>取λ为橙色的密度，再加上0.7处一个质量为0.3的原子。<bookmark mark='c'/>这个原子只住在一个点上，那是一个长度为0的集合，所以它是奇异的。其余部分都有密度。<bookmark mark='d'/>拉东在1913年对欧几里得空间证明了它，尼科迪姆在1930年证明了一般情形。鲁丁给出的是冯·诺伊曼的证明，用到了希尔伯特空间。"
+  },
+  "676a25aa0841": {
+   "scene": "RadonNikodym",
+   "en": "<bookmark mark='a'/> Von Neumann's trick: add the two measures, phi equals lambda plus mu. Integration against lambda is a bounded linear functional on L two of phi, by Cauchy-Schwarz. <bookmark mark='b'/> So by the Riesz theorem of chapter seven, it's an inner product with some function g, and g lies between zero and one. Here g is h over one plus h. <bookmark mark='c'/> Where g equals one, mu has no mass: that set carries the singular part. At the atom, g is exactly one. <bookmark mark='d'/> Everywhere else, the density is g over one minus g, and that's h again. A theorem about measures, proved by finding a vector in a Hilbert space.",
+   "zh": "<bookmark mark='a'/>冯·诺伊曼的妙招：把两个测度加起来，φ等于λ加μ。由柯西–施瓦茨不等式，关于λ的积分，是φ的L²上的一个有界线性泛函。<bookmark mark='b'/>所以由第七章的里斯定理，它是与某个函数g的内积，而且g介于0和1之间。这里g等于1加h分之h。<bookmark mark='c'/>在g等于1的地方，μ没有质量：奇异部分就落在这个集合上。在原子处，g恰好等于1。<bookmark mark='d'/>在其他所有地方，密度是1减g分之g，那又正好是h。一条关于测度的定理，靠在希尔伯特空间里找一个向量证明了出来。"
+  },
+  "796333164c4f": {
+   "scene": "DualLp",
+   "en": "Chapter twelve: the functionals on L p, and on the continuous functions.",
+   "zh": "第十二章：Lᵖ上的泛函，以及连续函数上的泛函。"
+  },
+  "23e09e224699": {
+   "scene": "DualLp",
+   "en": "<bookmark mark='a'/> How big is a functional on L p? Start in the plane with the three-norm. The functional zero point eight x one plus a half x two has level lines. <bookmark mark='b'/> Slide one outward until it last touches the unit ball. <bookmark mark='c'/> The value there is the norm of the functional, and it's the three-halves norm of the vector g. The exponent flips to the conjugate one, q. The touching point comes from Hölder's equality case. <bookmark mark='d'/> In eight dimensions: twenty thousand random unit vectors never beat the q-norm of g, and the extremal vector hits it exactly.",
+   "zh": "<bookmark mark='a'/>Lᵖ上的一个泛函有多大？先在平面上用3范数。泛函0.8x_1加二分之一x_2有一族水平线。<bookmark mark='b'/>把其中一条往外推，直到它最后一次碰到单位球。<bookmark mark='c'/>那里的值就是泛函的范数，它等于向量g的二分之三范数。指数翻成了共轭的那一个，也就是q。相切的点来自赫尔德不等式取等号的情形。<bookmark mark='d'/>在八维空间里：两万个随机单位向量，没有一个超过g的q范数，而极值向量恰好达到它。"
+  },
+  "bb782be210b5": {
+   "scene": "DualLp",
+   "en": "<bookmark mark='a'/> The theorem: for finite p, every bounded functional on L p is integration against a function g in L q, and the norms match. <bookmark mark='b'/> The proof turns the functional into a measure. Feed it indicator functions of sets: that defines lambda of E. <bookmark mark='c'/> Lambda vanishes on null sets, <bookmark mark='d'/> so Radon-Nikodym gives a density g. <bookmark mark='e'/> Then phi of f is the integral of f g, first for simple functions, then for all. <bookmark mark='f'/> Countable additivity in step one is where p must be finite: the indicators of an increasing sequence of sets converge in L p, but not in L infinity. The dual of L infinity is bigger than L one, a story for Part 8.",
+   "zh": "<bookmark mark='a'/>定理：对有限的p，Lᵖ上的每个有界泛函，都是关于某个q次可积函数g的积分，而且范数相等。<bookmark mark='b'/>证明把泛函变成一个测度。把集合的示性函数喂给它：这就定义了λ(E)。<bookmark mark='c'/>λ在零测集上为0，<bookmark mark='d'/>所以拉东–尼科迪姆定理给出一个密度g。<bookmark mark='e'/>于是φ(f)就是f乘g的积分，先对简单函数成立，再推广到所有函数。<bookmark mark='f'/>第一步里的可数可加性，正是p必须有限的地方：递增集合序列的示性函数在Lᵖ中收敛，在L∞中却不收敛。L∞的对偶比L¹大，那是第8部分的故事。"
+  },
+  "2ea14feb862d": {
+   "scene": "DualLp",
+   "en": "<bookmark mark='a'/> On the continuous functions with the sup norm, functionals are something else. Here's one: half the value at 0.3, plus the integral of f against a weight w. Pretend we can only evaluate it. <bookmark mark='b'/> Probe it with a narrow tent at each point a, divided by the tent's area. <bookmark mark='c'/> As the tents narrow, the readings converge to the weight w, except at 0.3, where a spike grows like one over r: an atom of mass one half. <bookmark mark='d'/> That's the Riesz representation theorem: every bounded functional on the continuous functions is integration against a complex measure, and its norm is the total variation, here one and a half. The dual of C is a space of measures.",
+   "zh": "<bookmark mark='a'/>在配上上确界范数的连续函数上，泛函是另一回事。这里有一个：在0.3处取值的一半，加上f关于权重w的积分。假装我们只能对它求值。<bookmark mark='b'/>在每一点a用一个窄窄的帐篷函数去探测它，再除以帐篷的面积。<bookmark mark='c'/>随着帐篷变窄，读数收敛到权重w，只有在0.3处，一根尖刺像r分之1那样增长：那是一个质量为二分之一的原子。<bookmark mark='d'/>这就是里斯表示定理：连续函数上的每个有界泛函，都是关于某个复测度的积分，它的范数就是全变差，这里是一又二分之一。C的对偶是一个测度空间。"
+  },
+  "3b088b830ac8": {
+   "scene": "DualLp",
+   "en": "<bookmark mark='a'/> So the dictionary grows a column. In the plane and in Hilbert space, a functional is a vector. <bookmark mark='b'/> On L p, it's a function in the conjugate space. On the continuous functions, it's a measure. <bookmark mark='c'/> And on L infinity, something stranger, which needs the Hahn-Banach theorem.",
+   "zh": "<bookmark mark='a'/>于是这本词典又多了一栏。在平面上和希尔伯特空间里，泛函就是一个向量。<bookmark mark='b'/>在Lᵖ上，它是共轭空间里的一个函数。在连续函数上，它是一个测度。<bookmark mark='c'/>而在L∞上，它是某种更奇怪的东西，要用到哈恩–巴拿赫定理。"
+  },
+  "19c5454006da": {
+   "scene": "Differentiation",
+   "en": "Chapter thirteen: averages over shrinking intervals, and the Lebesgue differentiation theorem.",
+   "zh": "第十三章：在不断缩小的区间上取平均，以及勒贝格微分定理。"
+  },
+  "d0e45cb8d401": {
+   "scene": "Differentiation",
+   "en": "<bookmark mark='a'/> Average a function over a small interval around x. As the interval shrinks, do you get f of x back? <bookmark mark='b'/> Here's a step function with thirty random jumps. At a typical point, the yellow average becomes exactly f of x once the interval is inside one step. <bookmark mark='c'/> At a jump, the average tends to the midpoint of the jump instead. <bookmark mark='d'/> Over a thousand random points, the fraction that works climbs to 99.9 percent: the failures are the jumps, a set of measure zero. <bookmark mark='e'/> Lebesgue's theorem says this happens for every integrable function: almost every point is a Lebesgue point. In particular, the derivative of the integral is the function, almost everywhere.",
+   "zh": "<bookmark mark='a'/>在x周围的一个小区间上，对函数取平均。区间缩小时，能得回f(x)吗？<bookmark mark='b'/>这是一个有30个随机跳跃的阶梯函数。在一个典型的点上，一旦区间落进某一级台阶里，黄色的平均值就恰好等于f(x)。<bookmark mark='c'/>而在跳跃处，平均值趋于跳跃的中点。<bookmark mark='d'/>在一千个随机点上，成功的比例一路爬升到百分之99.9：失败的点都是跳跃点，那是一个测度为0的集合。<bookmark mark='e'/>勒贝格的定理说，每个可积函数都是这样：几乎每个点都是勒贝格点。特别地，积分的导数几乎处处等于这个函数。"
+  },
+  "3b16c204d0cd": {
+   "scene": "Differentiation",
+   "en": "<bookmark mark='a'/> The proof needs a way to control all the averages at once. The maximal function takes, at each point, the largest average over all intervals centered there. <bookmark mark='b'/> For the indicator of a short interval, it's one on the interval, and outside it decays like one over the distance. It's not integrable. <bookmark mark='c'/> But the set where it exceeds lambda is small, at most three times the integral of f over lambda. That's the Hardy-Littlewood maximal inequality, and the three comes from a covering lemma.",
+   "zh": "<bookmark mark='a'/>证明需要一种办法，同时控制所有的平均值。极大函数在每一点，取以该点为中心的所有区间上平均值的最大者。<bookmark mark='b'/>对一个短区间的示性函数来说，极大函数在区间上等于1，在区间外像距离分之1那样衰减。它不可积。<bookmark mark='c'/>但它超过λ的集合很小，至多是f的积分除以λ的三倍。这就是哈代–李特尔伍德极大不等式，而这个3来自一条覆盖引理。"
+  },
+  "52c6edf526bb": {
+   "scene": "Differentiation",
+   "en": "<bookmark mark='a'/> Here's the covering lemma, with sixty random intervals. <bookmark mark='b'/> Pick greedily: the longest interval, then the longest one disjoint from it, and so on. <bookmark mark='c'/> Every interval meets a chosen one at least as long, so it lies inside that one, enlarged three times. <bookmark mark='d'/> So the union, of measure 0.965, is at most three times the chosen total, 0.81. <bookmark mark='e'/> That gives the maximal inequality. Then approximate f by a continuous function, which has every point as a Lebesgue point. The error is small in L one, so by the maximal inequality, the set where things go wrong has measure as small as we like: zero.",
+   "zh": "<bookmark mark='a'/>这就是那条覆盖引理，这里用60个随机区间来演示。<bookmark mark='b'/>贪心地挑：先挑最长的区间，再挑与它不相交的最长的那个，依此类推。<bookmark mark='c'/>每个区间都会碰到一个至少和它一样长的被挑中的区间，所以它落在那个区间放大三倍之后的范围里。<bookmark mark='d'/>所以测度为0.965的并集，至多是被挑中区间总长0.81的三倍。<bookmark mark='e'/>这就给出了极大不等式。然后用一个连续函数来逼近f，连续函数的每一点都是勒贝格点。误差在L¹中很小，所以由极大不等式，出问题的那个集合，测度要多小有多小：也就是0。"
+  },
+  "e85d2f9b1c04": {
+   "scene": "AbsolutelyContinuous",
+   "en": "Chapter fourteen: the fundamental theorem of calculus, rebuilt for Lebesgue's integral.",
+   "zh": "第十四章：为勒贝格积分重建的微积分基本定理。"
+  },
+  "5ba295bf716f": {
+   "scene": "AbsolutelyContinuous",
+   "en": "<bookmark mark='a'/> Is a function the integral of its derivative? Here's Part 1's staircase, the Cantor function. It's continuous and increasing, and it rises from zero to one. <bookmark mark='b'/> On every removed interval it's flat, so its derivative is zero there, and the removed intervals have total length one. The derivative is zero almost everywhere. <bookmark mark='c'/> So the integral of the derivative is zero, but the function rose by one. The fundamental theorem fails, for a continuous increasing function. Something more than continuity is needed.",
+   "zh": "<bookmark mark='a'/>一个函数是它导数的积分吗？这是第1部分的阶梯，康托尔函数。它连续、递增，从0升到1。<bookmark mark='b'/>在每个被挖掉的区间上它都是平的，所以导数在那里为0，而被挖掉的区间总长度是1。导数几乎处处为0。<bookmark mark='c'/>所以导数的积分是0，可函数却升高了1。对一个连续递增的函数，微积分基本定理失效了。光有连续性还不够。"
+  },
+  "369a71cf0aea": {
+   "scene": "AbsolutelyContinuous",
+   "en": "<bookmark mark='a'/> The missing condition is absolute continuity: for every epsilon there's a delta, so that any finite set of disjoint intervals with total length below delta has total rise below epsilon. <bookmark mark='b'/> The square root passes: with epsilon a tenth, delta a hundredth works, and the worst placement is one interval at zero, where the curve is steepest. Four thousand random placements never beat a tenth. <bookmark mark='c'/> The Cantor function fails: the 2 to the n intervals of the n-th stage have total length shrinking to zero, but the function rises by one across them. <bookmark mark='d'/> And that's the whole story. A function is absolutely continuous exactly when it's the integral of its derivative. The square root qualifies, even though its derivative is unbounded.",
+   "zh": "<bookmark mark='a'/>缺少的条件是绝对连续性：对每个ε，都有一个δ，使得任意有限个互不相交、总长度小于δ的区间，总升高都小于ε。<bookmark mark='b'/>平方根函数满足它：ε取十分之一时，δ取百分之一就行，最坏的摆法是把一个区间放在0处，那里曲线最陡。四千次随机摆放，没有一次超过十分之一。<bookmark mark='c'/>康托尔函数不满足：第n步的2的n次方个区间，总长度缩到0，可函数在它们上面总共升高了1。<bookmark mark='d'/>整个故事就是这样。一个函数是绝对连续的，当且仅当它是自己导数的积分。平方根函数符合条件，尽管它的导数是无界的。"
+  },
+  "728e4e536151": {
+   "scene": "AbsolutelyContinuous",
+   "en": "<bookmark mark='a'/> One more warning. x squared sine of one over x squared is differentiable at every point, including zero, where the derivative is zero. <bookmark mark='b'/> But near zero it wiggles so fast that its derivative isn't integrable: the integral of the absolute derivative from epsilon to one grows without bound, by about 2.93 for every factor of ten. <bookmark mark='c'/> So the function isn't absolutely continuous, and the Lebesgue integral of f prime doesn't exist. Rudin's theorem asks for both: a derivative at every point, and an integrable one.",
+   "zh": "<bookmark mark='a'/>再提个醒。x的平方乘sin（x的平方分之1），在每一点都可导，包括0，那里导数为0。<bookmark mark='b'/>可在0附近，它抖得太快，导数不可积：导数绝对值从ε到1的积分无限增长，ε每缩小到十分之一，大约就增加2.93。<bookmark mark='c'/>所以这个函数不是绝对连续的，f的导数的勒贝格积分不存在。鲁丁的定理两样都要：每一点都有导数，而且导数可积。"
+  },
+  "88193033f98b": {
+   "scene": "ChangeOfVariables",
+   "en": "Chapter fifteen, a short one: changing variables in Lebesgue's integral.",
+   "zh": "第十五章，很短的一章：勒贝格积分里的换元。"
+  },
+  "1b8f5040b44f": {
+   "scene": "ChangeOfVariables",
+   "en": "<bookmark mark='a'/> Polar coordinates map a rectangle of radii and angles onto a disk. Each little rectangle becomes a curved patch. <bookmark mark='b'/> Near the center the patches are small; far out they're large. The exact area of the image patch, divided by the area of the rectangle, is r zero plus half the step, <bookmark mark='c'/> and in the limit it's r: the determinant of the derivative, the area factor from Part 4. <bookmark mark='d'/> Rudin's change of variables theorem says this local factor is all that changes: integrate over the image, or integrate over the original region with the Jacobian factor, and you get the same Lebesgue integral.",
+   "zh": "<bookmark mark='a'/>极坐标把一个由半径和角度组成的矩形，映成一个圆盘。每个小矩形都变成一块弯曲的小片。<bookmark mark='b'/>靠近中心的小片小，远处的大。像的那一小片的精确面积，除以矩形的面积，等于r_0加上步长的一半，<bookmark mark='c'/>取极限就是r：也就是导数的行列式，第4部分里的面积因子。<bookmark mark='d'/>鲁丁的换元定理说，变化的只有这个局部因子：在像上积分，或者带着雅可比因子在原来的区域上积分，得到的是同一个勒贝格积分。"
+  },
+  "a5d78a507722": {
+   "scene": "ChangeOfVariables",
+   "en": "<bookmark mark='a'/> The classic use. e to the minus x squared has no elementary antiderivative, but its square, the bell over the plane, is easy in polar coordinates. <bookmark mark='b'/> The factor r is exactly the derivative of minus a half e to the minus r squared, so the radial integral is one half, and the total is pi. <bookmark mark='c'/> By Fubini the double integral is the square of the single one, so the bell curve's integral is root pi. <bookmark mark='d'/> Checked numerically: on the square of side six, and on the disk of radius three with the factor r, both within a thousandth of pi.",
+   "zh": "<bookmark mark='a'/>经典的用法。e的负x平方次方没有初等的原函数，可它的平方，也就是平面上的那口钟，用极坐标就很好算。<bookmark mark='b'/>因子r恰好是负二分之一乘e的负r平方次方的导数，所以径向积分是二分之一，总和是π。<bookmark mark='c'/>由富比尼定理，二重积分是单个积分的平方，所以钟形曲线的积分是根号π。<bookmark mark='d'/>数值验证：在边长为6的正方形上，以及带着因子r、在半径为3的圆盘上，两者都与π相差不到千分之一。"
+  },
+  "2acce508551e": {
+   "scene": "Outro",
+   "en": "Let's take stock. Convexity gave Jensen's inequality, and Young's two areas gave Hölder and Minkowski, so the p-norms really are distances. The spaces L p consist of classes of functions, and Riesz and Fischer showed they're complete. Among them, only L two has an inner product, and with it come nearest points, the representation of functionals by vectors, and orthonormal bases with Parseval's identity. That answered the Fourier question in L two, while Fejér's means converge uniformly. Then measures with signs and complex values, the Radon-Nikodym theorem, the duals of L p and of the continuous functions, Lebesgue's differentiation theorem, the fundamental theorem of calculus for absolutely continuous functions, and the change of variables formula.",
+   "zh": "我们来盘点一下。凸性给出了詹森不等式，杨的两块面积给出了赫尔德不等式和闵可夫斯基不等式，所以p范数真的是距离。Lᵖ空间由函数的等价类组成，里斯和费舍尔证明了它们是完备的。其中只有L²有内积，随之而来的是最近点、用向量表示泛函，以及带有帕塞瓦尔恒等式的标准正交基。这在L²里回答了傅里叶的问题，而费耶尔平均一致收敛。然后是带正负号和复数值的测度、拉东–尼科迪姆定理、Lᵖ和连续函数空间的对偶、勒贝格微分定理、绝对连续函数的微积分基本定理，以及换元公式。"
+  },
+  "c5da8b5d7c55": {
+   "scene": "Outro",
+   "en": "The ledger's sixth row. <bookmark mark='a'/> The spaces: L p, and Hilbert space. <bookmark mark='c2'/> Complete, by Riesz and Fischer's summable steps. <bookmark mark='c3'/> Compactness still fails: the unit vectors stay root two apart. <bookmark mark='c4'/> The limits we may swap: the derivative of the integral is the function, almost everywhere. <bookmark mark='c5'/> And Fourier series converge in L two, for every square-integrable function, with Fejér's means converging uniformly.",
+   "zh": "账本的第六行。<bookmark mark='a'/>空间：Lᵖ，以及希尔伯特空间。<bookmark mark='c2'/>完备，靠的是里斯和费舍尔的可求和步长。<bookmark mark='c3'/>紧性仍然不成立：单位向量彼此始终相距根号2。<bookmark mark='c4'/>可以交换的极限：积分的导数几乎处处等于函数本身。<bookmark mark='c5'/>而对每个平方可积函数，傅里叶级数在L²中收敛，费耶尔平均则一致收敛。"
+  },
+  "ad75a01a2644": {
+   "scene": "Outro",
+   "en": "Next time, in Part 7: complex analysis, the part the rest of analysis needs. <bookmark mark='a'/> Here's a rational function, colored by its phase, with brightness for size. Its three zeros are dark points where every color meets; its two poles are bright. <bookmark mark='b'/> A function that's differentiable once in the complex sense is differentiable infinitely often, equals its power series, and is determined inside a region by its values on the boundary. None of that is true on the real line, and finding out why is the next part.",
+   "zh": "下一次，在第7部分：复分析，分析学其余部分都离不开的那一部分。<bookmark mark='a'/>这是一个有理函数，按它的相位着色，亮度表示大小。它的三个零点是暗点，所有颜色都在那里交汇；它的两个极点是亮的。<bookmark mark='b'/>一个在复意义下可导一次的函数，就可导无穷多次，等于它的幂级数，而且它在一个区域内部的值，由边界上的值决定。这些在实数轴上全都不成立，而弄清楚其中的原因，就是下一部分的内容。"
+  },
+  "fe53800846fe": {
+   "scene": "Outro",
+   "en": "This part followed chapters three, four, six and seven of Rudin's Real and Complex Analysis. Thanks for watching, and see you in Part 7.",
+   "zh": "这一部分对应鲁丁《实分析与复分析》的第3、第4、第6和第7章。感谢收看，我们第7部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 6, L^p, Hilbert Space and the Geometry of Functions",
+ "chapters_en": {
+  "Hook": "Which distance between functions?",
+  "Convexity": "1. Convex functions and Jensen's inequality",
+  "Holder": "2. Young, Hoelder and Minkowski",
+  "Lp": "3. The spaces L^p",
+  "RieszFischer": "4. L^p is complete",
+  "Hilbert": "5. Inner products and the parallelogram law",
+  "Projection": "6. The nearest point",
+  "RieszHilbert": "7. Every functional is an inner product",
+  "Orthonormal": "8. Orthonormal bases, Bessel and Parseval",
+  "FourierL2": "9. Fourier series in L^2, and Fejer",
+  "ComplexMeasures": "10. Complex measures",
+  "RadonNikodym": "11. The Radon-Nikodym theorem",
+  "DualLp": "12. The dual of L^p",
+  "Differentiation": "13. Differentiating measures",
+  "AbsolutelyContinuous": "14. The fundamental theorem, for Lebesgue",
+  "ChangeOfVariables": "15. Change of variables",
+  "Outro": "The sixth row of the ledger"
+ }
+}
