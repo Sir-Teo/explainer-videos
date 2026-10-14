@@ -188,7 +188,7 @@ class RieszFischer(VoiceoverScene):
         step = (x > 0.5).astype(float)
         st = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=3),
                     Line(ax.c2p(0.5, 1), ax.c2p(1, 1), color=WHITE, stroke_width=3))
-        ax.y_axis.add_numbers(-0.5, 0.5, 1.0, 1.5, num_decimal_places=1, font_size=18)
+        ax.y_axis.add_numbers([-0.5, 0.5, 1.0, 1.5], num_decimal_places=1, font_size=18)
         st.set_z_index(3)
         tube = VGroup(between(ax, x[x <= 0.5], step[x <= 0.5] + 0.5, step[x <= 0.5] - 0.5, C.EPS, 0.14),
                       between(ax, x[x > 0.5], step[x > 0.5] + 0.5, step[x > 0.5] - 0.5, C.EPS, 0.14),

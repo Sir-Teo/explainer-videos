@@ -35,7 +35,7 @@ class FourierL2(VoiceoverScene):
         ecols = [C.SEQ, C.APPROX, C.CONNECTED_SET, C.MEASURE]
         tt = np.linspace(-math.pi, math.pi, 400)
         eg = VGroup(*[polyline(ex, tt, np.cos(n * tt), color=ecols[n], stroke_width=3) for n in range(4)])
-        e_l = MathTex(r"\mathrm{Re}\, e^{int} = \cos nt, \ ", "n = 0,", "\ 1,", "\ 2,", "\ 3", font_size=26).next_to(
+        e_l = MathTex(r"\mathrm{Re}\, e^{int} = \cos nt, \ ", "n = 0,", r"\ 1,", r"\ 2,", r"\ 3", font_size=26).next_to(
             ex, UP, buff=0.1)
         for n in range(4):
             e_l[1 + n].set_color(ecols[n])
@@ -179,34 +179,37 @@ class FourierL2(VoiceoverScene):
         x, Ns, K = d["x"], d["Ns"], d["K"]
         xs, f, s200, sig200, l2, sup_err = d["xs"], d["f"], d["s200"], d["sig200"], d["l2"], d["sup_err"]
         N = 10
-        kx = plain_axes([-math.pi, math.pi, math.pi / 2], [-5, 22, 5], 5.4, 3.2, numbers=False).move_to([-3.6, 0.55, 0])
+        kx = plain_axes([-math.pi, math.pi, math.pi / 2], [-5, 22, 5], 5.4, 2.8, numbers=False).move_to([-3.6, 1.0, 0])
         with np.errstate(invalid="ignore", divide="ignore"):
             D = np.sin((N + 0.5) * x) / np.sin(x / 2)
         D[np.isclose(x, 0)] = 2 * N + 1
         assert abs(trap(D, x) / (2 * math.pi) - 1) < 1e-6
         L1 = trap(np.abs(D), x) / (2 * math.pi)
         gD = polyline(kx, x[::4], D[::4], color=C.SEQ, stroke_width=2.5)
-        neg = VGroup()
         Dn = np.minimum(D, 0)
         pts = [kx.c2p(a, 0) for a in x[::4]] + [kx.c2p(a, b) for a, b in zip(x[::-4], Dn[::-4])]
         neg = Polygon(*pts, stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.5)
         Kn = K[list(Ns).index(N)]
         gK = polyline(kx, x[::4], Kn[::4], color=C.EPS, stroke_width=3.5)
         assert Kn.min() >= -1e-12 and abs(trap(Kn, x) / (2 * math.pi) - 1) < 1e-6
-        kl = VGroup(MathTex(rf"D_{{{N}}}: \ \tfrac{{1}}{{2\pi}}\!\int |D_{{{N}}}| = {L1:.3f}", font_size=24, color=C.SEQ),
+        # the kernel captions head the right-hand column
+        x0c = 0.9
+        kl = VGroup(MathTex(rf"D_{{{N}}}: \ \tfrac{{1}}{{2\pi}}\!\int |D_{{{N}}}| = {L1:.3f} \ \text{{(negative lobes red)}}",
+                            font_size=26, color=C.SEQ),
                     MathTex(rf"K_{{{N}}} = \tfrac{{1}}{{N + 1}}\sum_{{n \le N}} D_n \ge 0, \ \tfrac{{1}}{{2\pi}}\!\int K_{{{N}}} = 1",
-                            font_size=24, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(kx, UP,
-                                                                                                    buff=0.08)
-        sx = plain_axes([0, 2 * math.pi, math.pi / 2], [-2.1, 2.1, 1], 5.4, 2.4, numbers=False).move_to([-3.6, -2.5, 0])
+                            font_size=26, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        kl.next_to([x0c, 2.45 - kl.height / 2, 0], RIGHT, buff=0)
+        sx = plain_axes([0, 2 * math.pi, math.pi / 2], [-2.1, 2.1, 1], 5.4, 2.2, numbers=False).move_to([-3.6, -2.15, 0])
         saw = VGroup(polyline(sx, xs, f, color=WHITE, stroke_width=2.5))
         gs = polyline(sx, xs[::2], s200[::2], color=C.SEQ, stroke_width=2)
         gsig = polyline(sx, xs[::2], sig200[::2], color=C.EPS, stroke_width=3)
         lvl = DashedLine(sx.c2p(0, math.pi / 2), sx.c2p(2.7, math.pi / 2), color=GREY_B, stroke_width=1.5)  # stops before the inset
-        sl = MathTex(r"s_{200}", font_size=24, color=C.SEQ).move_to(sx.c2p(0.9, -0.9))
-        sgl = MathTex(r"\sigma_{200}", font_size=24, color=C.EPS).move_to(sx.c2p(0.9, -1.55))
+        lvl_l = MathTex(r"\tfrac{\pi}{2}", font_size=22, color=GREY_B).next_to(sx.c2p(0, math.pi / 2), LEFT, buff=0.12)
+        sl = MathTex(r"s_{200}", font_size=24, color=C.SEQ).move_to(sx.c2p(0.75, 1.95))  # by the overshoot
+        sgl = MathTex(r"\sigma_{200}", font_size=24, color=C.EPS).move_to(sx.c2p(0.75, 0.7))
         # the overshoot, magnified: x in [0, 0.25], y in [1.3, 1.95], in the empty upper right of the plot
         zx0, zx1, zy0, zy1 = 0.0, 0.25, 1.3, 1.95
-        za = plain_axes([zx0, zx1, 0.05], [zy0, zy1, 0.25], 2.1, 0.95, numbers=False).move_to(sx.c2p(4.75, 1.25))
+        za = plain_axes([zx0, zx1, 0.05], [zy0, zy1, 0.25], 2.1, 0.8, numbers=False).move_to(sx.c2p(4.75, 1.2))
         zm = (xs >= zx0) & (xs <= zx1)
         zs = runs(za, xs[zm], s200[zm], C.SEQ, 2)
         zg = runs(za, xs[zm], sig200[zm], C.EPS, 3)
@@ -229,16 +232,37 @@ class FourierL2(VoiceoverScene):
             label(r"continuous $f$ (the triangle wave): \ $\sigma_N \to f$ uniformly", font_size=24),
             MathTex(r"\|f - \sigma_N\|_\infty = " + ",\\ ".join(f"{v:.3f}" for v in sup_err) + r"\ (N = 4, 16, 64)",
                     font_size=24, color=C.CONNECTED_SET),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.55, -0.75, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         for r_ in panel:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        panel.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.55, -0.75, 0])
-        panel[3].shift(DOWN * 0.15)
-        panel[4:].shift(DOWN * 0.15)
+            if r_.width > 5.6:
+                r_.width = 5.6
+        panel.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        panel[3:].shift(DOWN * 0.15)
+        panel.next_to([x0c, kl.get_bottom()[1] - 0.35 - panel.height / 2, 0], RIGHT, buff=0)
+        assert panel.get_bottom()[1] > -3.6 and panel.get_right()[0] < 6.6
         assert np.all(np.diff(sup_err) < 0)
-        head = label(r"Two kernels: \ Dirichlet's has negative lobes, \ Fej\'er's has none", font_size=32).to_edge(UP,
-                                                                                                            buff=0.2)
+        # 'd': the continuous f itself, the triangle wave, with its Fejer means sigma_4, sigma_16, sigma_64, where the
+        # kernels were; sigma_N = a_0 + sum_k (1 - k/(N+1)) c_k cos kx
+        tx = plain_axes([-math.pi, math.pi, math.pi / 2], [0, 3.4, 1], 5.4, 2.8, numbers=False).move_to(kx)
+        tt = np.linspace(-math.pi, math.pi, 1201)
+        tri = np.abs(tt)
+        tcols = [C.SEQ, C.APPROX, C.EPS]
+        tsig, terr = [], []
+        for Nf in (4, 16, 64):
+            k_ = np.arange(1, Nf + 1)
+            ck = np.where(k_ % 2 == 1, -4 / (np.pi * k_**2), 0.0)
+            sg = np.pi / 2 + np.sum(((1 - k_ / (Nf + 1)) * ck)[:, None] * np.cos(np.outer(k_, tt)), axis=0)
+            tsig.append(sg)
+            terr.append(float(np.abs(sg - tri).max()))
+        assert np.allclose(terr, sup_err, atol=1e-3)  # the same numbers as the panel's last row
+        gtri = polyline(tx, tt, tri, color=WHITE, stroke_width=3)
+        gts = [polyline(tx, tt, sg, color=c_, stroke_width=2.5) for sg, c_ in zip(tsig, tcols)]
+        t_l = VGroup(MathTex(r"f = |t|", font_size=26), *[MathTex(rf"\sigma_{{{Nf}}}", font_size=26, color=c_)
+                                                         for Nf, c_ in zip((4, 16, 64), tcols)]).arrange(RIGHT, buff=0.35)
+        t_l.next_to(tx, UP, buff=0.08)
+        head = label(r"Two kernels: \ Dirichlet's has negative lobes, \ Fej\'er's has none", font_size=34).to_edge(UP,
+                                                                                                            buff=0.3)
+        assert kx.get_top()[1] < head.get_bottom()[1] - 0.1 and kx.get_bottom()[1] > sx.get_top()[1] + 0.3
         with self.voiceover(
             "<bookmark mark='a'/> In the uniform norm the story is different, and the kernels show why. The n-th "
             "partial sum is the convolution with Dirichlet's kernel, which has negative lobes, shaded red. Its "
@@ -251,16 +275,17 @@ class FourierL2(VoiceoverScene):
             "function. Fejér's means converge uniformly for every continuous one."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(kx))
-            self.play(Create(gD), FadeIn(neg), FadeIn(kl[0]))
+            self.play(FadeIn(head), Create(kx), Create(gD), FadeIn(neg), FadeIn(kl[0]))
             vo.wait_until("b")
             self.play(Create(gK), FadeIn(kl[1]))
             vo.wait_until("c")
-            self.play(Create(sx), Create(saw), Create(lvl))
+            self.play(Create(sx), Create(saw), Create(lvl), FadeIn(lvl_l))
             self.play(Create(gs), FadeIn(sl), FadeIn(panel[:3]))
             self.play(Create(src), Create(link), Create(zf), Create(zl), Create(zs), FadeIn(zt))
             self.play(Create(gsig), Create(zg), FadeIn(sgl), FadeIn(panel[3:5]))
             vo.wait_until("d")
-            self.play(FadeIn(panel[5:]))
+            self.play(FadeOut(VGroup(kx, gD, neg, gK)), FadeIn(tx), Create(gtri), FadeIn(t_l[0]), FadeIn(panel[5:]))
+            for g_, l_ in zip(gts, t_l[1:]):
+                self.play(Create(g_), FadeIn(l_), run_time=0.7)
         self.wait(0.4)
         self.clear_scene()

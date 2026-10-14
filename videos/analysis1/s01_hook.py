@@ -224,14 +224,18 @@ class Hook(VoiceoverScene):
             "<bookmark mark='n'/> And at the bottom of it all, they had to say what a number is."
         ) as vo:
             self.play(FadeIn(strip), FadeIn(q[0]))
-            self.play(Transform(strip, timeline(lit=(1807,), width=12.5).shift(DOWN * 0.2)))
+            # each lit year gets its name on the strip (a cross-fade: the strips differ in their labels)
+            new = timeline(lit=(1807,), width=12.5).shift(DOWN * 0.2)
+            self.play(FadeTransform(strip, new))
+            strip = new
             vo.wait_until("l")
             self.play(FadeIn(lag))
             for mark, i in (("c", 1), ("d", 2), ("r", 3), ("n", 4)):
                 vo.wait_until(mark)
                 lit = tuple(y for y, _ in steps[: i + 1])
-                self.play(FadeIn(q[i], shift=RIGHT * 0.2),
-                          Transform(strip, timeline(lit=lit, width=12.5).shift(DOWN * 0.2)))
+                new = timeline(lit=lit, width=12.5).shift(DOWN * 0.2)
+                self.play(FadeIn(q[i], shift=RIGHT * 0.2), FadeTransform(strip, new))
+                strip = new
         self.wait(0.3)
         self.clear_scene()
 

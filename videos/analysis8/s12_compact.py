@@ -42,7 +42,7 @@ class Compact(VoiceoverScene):
         # inside the unit ball B
         thin_e = VMobject(color=C.OPERATOR, stroke_width=3, fill_color=C.OPERATOR, fill_opacity=0.2).set_points_as_corners(
             [ax.c2p(float(s[0]) * math.cos(t), float(s[1]) * math.sin(t)) for t in th])
-        sch = note(r"$V(B)$ in the plane of its first two axes, \ to scale").next_to(ax, DOWN, buff=0.05)
+        sch = note(r"$V(B)$: \ its first two axes, \ to scale").next_to(ax, DOWN, buff=0.05)
         assert sch.get_left()[0] > bars.get_right()[0] + 0.3
         rows = VGroup(
             label(r"\textbf{FA 4.16} \ $T$ is \emph{compact} if $T(B)$ has", font_size=26),

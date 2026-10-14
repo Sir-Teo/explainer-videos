@@ -34,7 +34,9 @@ class Uniform(VoiceoverScene):
                     r"|f_n(x) - f(x)| < \varepsilon", font_size=32),
             MathTex(r"\text{uniform:}", r"\quad \forall \varepsilon\ \exists N\ \forall x", r":\ n \ge N \Rightarrow "
                     r"|f_n(x) - f(x)| < \varepsilon", font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(UP, buff=0.3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        head = label(r"Pointwise or uniform: \ when is $N$ chosen?", font_size=34).to_edge(UP, buff=0.3)
+        dfn.next_to(head, DOWN, buff=0.3)
         dfn[0][1].set_color(C.DELTA)
         dfn[1][1].set_color(C.EPS)
         ref = note(r"Rudin 7.7: \ $N$ is chosen before $x$").next_to(dfn, DOWN, buff=0.1).align_to(dfn, RIGHT)
@@ -42,8 +44,8 @@ class Uniform(VoiceoverScene):
         N_ok = math.ceil(math.log(eps) / math.log(0.9))
         assert 0.9**N_ok < eps <= 0.9 ** (N_ok - 1)
         x = np.linspace(0, 1, 800)
-        ax1 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.9).move_to([-3.4, -1.0, 0])
-        ax2 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.9).move_to([3.4, -1.0, 0])
+        ax1 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.7).move_to([-3.4, -1.15, 0])
+        ax2 = plain_axes([0, 1, 0.25], [-0.15, 1.05, 0.5], 5.6, 3.7).move_to([3.4, -1.15, 0])
         n1, n2 = ValueTracker(1.0), ValueTracker(1.0)
         band1 = Rectangle(width=ax1.c2p(0.9, 0)[0] - ax1.c2p(0, 0)[0], height=ax1.c2p(0, eps)[1] - ax1.c2p(0, -eps)[1],
                           stroke_width=0, fill_color=C.EPS, fill_opacity=0.2).move_to(ax1.c2p(0.45, 0))
@@ -69,7 +71,7 @@ class Uniform(VoiceoverScene):
             f"equal to {N_ok} works everywhere. <bookmark mark='c'/> On the interval from zero up to, but not including, "
             "one, it never does: for every n, the graph climbs to near one before the end, outside any band."
         ) as vo:
-            self.play(Create(ax1), Create(ax2), FadeIn(t1), FadeIn(t2), Create(g1), Create(g2), FadeIn(lab1),
+            self.play(FadeIn(head), Create(ax1), Create(ax2), FadeIn(t1), FadeIn(t2), Create(g1), Create(g2), FadeIn(lab1),
                       FadeIn(lab2))
             vo.wait_until("p")
             self.play(FadeIn(dfn[0]))

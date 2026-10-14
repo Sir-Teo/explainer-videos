@@ -223,7 +223,7 @@ class WhoIsIntegrable(VoiceoverScene):
         regrid(tab, gap=0.2)
         drawn = {4: 2, 6: 3, 8: 4}  # table rows whose partition is drawn
         concl = label(r"$U \to 0 = L$: \ integrable, \ $\int_0^1 f = 0$, \ though discontinuous at every rational",
-                      font_size=26, color=C.EPS).to_edge(DOWN, buff=0.2)
+                      font_size=26, color=C.EPS).to_edge(DOWN, buff=0.35)
         assert U[-1] < 0.01 and q16[7] == 2
         with self.voiceover(
             "Compare Thomae's function from Part 2: one over q at the fraction p over q in lowest terms, and zero at "

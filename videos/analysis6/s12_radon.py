@@ -63,12 +63,16 @@ class RadonNikodym(VoiceoverScene):
             for j in range(len(rs) + 1):
                 r_[j].set_x(lefts[j] + r_[j].width / 2)
         tab.move_to([4.15, 0.5, 0])
+        assert tab.get_right()[0] < 6.6
+        # the four points of the table, marked on the axis (the window is drawn at the second)
+        pdots = VGroup(*[Dot(ax.c2p(float(p_), 0), radius=0.06, color=C.EPS) for p_ in pts])
+
         concl = VGroup(label(r"the ratios settle on a function: \ the density", font_size=24),
                        MathTex(r"h(x) = 1 + 0.8 \sin 4x \quad (\text{checked to } 10^{-5})", font_size=26,
                                color=C.MEASURE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(tab, DOWN, buff=0.3)
         assert np.allclose(ratios[:, -1], hp, atol=1e-5)
-        head = label(r"A density is a limit of ratios: \ mass over length, \ on shrinking intervals", font_size=32).to_edge(
-            UP, buff=0.25)
+        head = label(r"A density is a limit of ratios: \ mass over length, \ on shrinking intervals", font_size=34).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's a measure lambda on the unit interval, drawn as orange mass. Does it have a "
             "density with respect to length? <bookmark mark='b'/> Pick a point and an interval around it, and divide "
@@ -80,11 +84,14 @@ class RadonNikodym(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), FadeIn(area), FadeIn(lam_l))
             vo.wait_until("b")
-            self.play(FadeIn(win), FadeIn(rl))
+            # the table fills column by column as the window shrinks: first the header, the points and r = 0.2
+            self.play(FadeIn(win), FadeIn(rl), FadeIn(pdots), FadeIn(tab[0]),
+                      *[FadeIn(r_[0]) for r_ in tab[1:]], *[FadeIn(r_[1]) for r_ in tab[1:]])
             vo.wait_until("c")
-            self.play(rT.animate.set_value(0.01), run_time=3.5)
+            for j, r_target in ((2, float(rs[1])), (3, float(rs[2]))):
+                self.play(rT.animate.set_value(r_target), *[FadeIn(r_[j]) for r_ in tab[1:]], run_time=1.7)
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r_[4]) for r_ in tab[1:]], lag_ratio=0.3), run_time=1.5)
             self.play(gh.animate.set_stroke(opacity=1.0), FadeIn(gh_l), FadeIn(concl))
         for m in (win, rl):
             m.clear_updaters()
@@ -99,15 +106,18 @@ class RadonNikodym(VoiceoverScene):
             label(r"(a) \ $\lambda = \lambda_a + \lambda_s$ \ with $\lambda_a \ll \mu$ \ and $\lambda_s \perp \mu$, "
                   r"\ uniquely", font_size=28),
             label(r"(b) \ $d\lambda_a = h\,d\mu$ \ for a unique $h \in L^1(\mu)$", font_size=28, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 1, 0.25], [0, 2, 0.5], 6.0, 3.0).move_to([-3.0, -1.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        head = label(r"The Radon--Nikodym theorem", font_size=34).to_edge(UP, buff=0.3)
+        thm.next_to(head, DOWN, buff=0.2)
+        ax = plain_axes([0, 1, 0.25], [0, 2, 0.5], 6.0, 3.0).move_to([-3.0, -1.5, 0])
         x = np.linspace(0, 1, 600)
         ac = area_under(ax, x, h(x), C.MEASURE, 0.3)
-        atom = VGroup(Line(ax.c2p(0.7, 0), ax.c2p(0.7, 1.9), color=C.PATHOLOGY, stroke_width=6),
-                      Dot(ax.c2p(0.7, 1.9), radius=0.08, color=C.PATHOLOGY))
+        # the atom is a mass, not a density value: an arrow from the axis, labelled with its mass
+        atom = Arrow(ax.c2p(0.7, 0), ax.c2p(0.7, 2.0), buff=0, color=C.PATHOLOGY, stroke_width=5, tip_length=0.2)
         labs = VGroup(MathTex(r"\lambda_a = h\,dm", font_size=28, color=C.MEASURE).move_to(ax.c2p(0.25, 0.6)),
-                      MathTex(r"\lambda_s = 0.3\,\delta_{0.7}", font_size=28, color=C.PATHOLOGY).next_to(
-                          ax.c2p(0.7, 1.9), RIGHT, buff=0.15))
+                      VGroup(MathTex(r"\lambda_s = 0.3\,\delta_{0.7}", font_size=28, color=C.PATHOLOGY),
+                             label(r"mass $0.3$", font_size=22, color=C.PATHOLOGY)).arrange(
+                          DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.c2p(0.7, 1.75), RIGHT, buff=0.15))
         side = VGroup(
             label(r"$\lambda = h\,dm + 0.3\,\delta_{0.7}$:", font_size=26),
             label(r"the atom lives on $\{0.7\}$, \ length $0$:", font_size=24, color=C.PATHOLOGY),
@@ -123,10 +133,10 @@ class RadonNikodym(VoiceoverScene):
             "Nikodym in general in 1930. Rudin gives a proof by von Neumann, which uses a Hilbert space."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(head), FadeIn(thm))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(ac), FadeIn(labs[0]), FadeIn(side[0]))
-            self.play(Create(atom[0]), FadeIn(atom[1]), FadeIn(labs[1]))
+            self.play(GrowArrow(atom), FadeIn(labs[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[1:4]))
             vo.wait_until("d")
@@ -141,7 +151,9 @@ class RadonNikodym(VoiceoverScene):
         pm = ProofMap([r"$\varphi = \lambda + \mu$; \ $f \mapsto \int f\,d\lambda$ \ is bounded on $L^2(\varphi)$",
                        r"Riesz (ch.~7): \ $\int f\,d\lambda = \int f g\,d\varphi$, \ $0 \le g \le 1$",
                        r"$\{g = 1\}$ carries $\lambda_s$; \ elsewhere $h = \dfrac{g}{1 - g}$"],
-                      font_size=22, width=6.3, buff=0.14, direction=DOWN).move_to([3.6, 1.75, 0])
+                      font_size=22, width=6.3, buff=0.14, direction=DOWN).move_to([3.6, 1.25, 0])
+        head = label(r"Von Neumann's proof: \ find a vector in $L^2(\lambda + \mu)$", font_size=34).to_edge(UP, buff=0.3)
+        assert pm.get_top()[1] < head.get_bottom()[1] - 0.15
         ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 6.0, 3.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.0, -1.35, 0])
@@ -176,7 +188,7 @@ class RadonNikodym(VoiceoverScene):
             "about measures, proved by finding a vector in a Hilbert space."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(pm))
+            self.play(FadeIn(head), FadeIn(pm))
             self.play(*pm.light(0), FadeIn(bnd[:2]))
             vo.wait_until("b")
             self.play(*pm.light(1), Create(ax), Create(one), Create(gg), FadeIn(g_l))

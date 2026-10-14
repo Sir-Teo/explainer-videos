@@ -42,20 +42,20 @@ class Schwarz(VoiceoverScene):
         ims = VGroup(*[zcurve(cx, w, c, 3.5) for w, c in zip(imgs, cols)])
         f_l = MathTex(r"f(z) = z\,\frac{z - \frac12}{1 - \frac12 z}", font_size=28).next_to(cx, UP, buff=0.15)
         rows = VGroup(
-            label(r"\textbf{RCA 12.2} \ (Schwarz) \ $f: D \to D$ holomorphic, \ $f(0) = 0$:", font_size=26),
+            label(r"\textbf{RCA 12.2} \ (Schwarz)", font_size=26),
+            label(r"$f: D \to D$ holomorphic, \ $f(0) = 0$:", font_size=26),
             MathTex(r"|f(z)| \le |z|, \qquad |f'(0)| \le 1", font_size=34, color=C.EPS),
             label(r"equality anywhere only for a rotation $f(z) = \lambda z$", font_size=24, color=GREY_A),
             label(r"dashed: \ $|z| = 0.3, 0.6, 0.9$; \ solid: \ their images, \ inside", font_size=24),
             MathTex(rf"|f'(0)| = {d0:.4f}", font_size=30, color=C.EPS),
             label(r"proof: \ $g(z) = f(z)/z$ is holomorphic, \ and on $|z| = r$", font_size=22, color=GREY_A),
             label(r"$|g| \le 1/r$; \ maximum modulus, \ then $r \to 1$", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -0.5, 0])
-        for r_ in rows:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        rows[1].shift(UP * 0.06)
+        rows.align_to(np.array([6.55 - rows.width, 0, 0]), LEFT).set_y(-0.5)
+        assert rows.get_right()[0] <= 6.6 and rows.get_left()[0] > cx.get_right()[0] + 0.2
         assert np.all(np.abs(imgs) <= rs[:, None] + 1e-12) and abs(d0 - 0.5) < 1e-6
-        head = label(r"A map of the disk that fixes the center can only pull points inward", font_size=32).to_edge(UP,
+        head = label(r"A map of the disk that fixes the center can only pull points inward", font_size=34).to_edge(UP,
                                                                                                            buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Take a holomorphic map of the unit disk into itself that keeps the center fixed. "
@@ -68,11 +68,11 @@ class Schwarz(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(img), Create(unit), FadeIn(f_l))
             vo.wait_until("b")
-            self.play(FadeIn(rows[:3]), Create(rings), img.animate.set_opacity(0.35))  # the circles over a dimmed coloring
-            self.play(Create(ims), FadeIn(rows[3]), run_time=2.0)
-            self.play(FadeIn(rows[4]))
+            self.play(FadeIn(rows[:4]), Create(rings), img.animate.set_opacity(0.35))  # the circles over a dimmed coloring
+            self.play(Create(ims), FadeIn(rows[4]), run_time=2.0)
+            self.play(FadeIn(rows[5]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[5:]))
+            self.play(FadeIn(rows[6:]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -167,11 +167,8 @@ class Schwarz(VoiceoverScene):
             label(r"the payoff: \ Riesz--Thorin interpolation,", font_size=22, color=C.INNER),
             label(r"$\|T\|_{p_t} \le \|T\|_{p_0}^{1 - t}\|T\|_{p_1}^t$; \ Hausdorff--Young in Part 9", font_size=22,
                   color=C.INNER),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.75, -0.5, 0])
-        for r_ in rows:
-            if r_.width > 6.2:
-                r_.width = 6.2
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([0.75, -0.5, 0], RIGHT, buff=0)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([0.75, -0.5, 0], RIGHT, buff=0)
+        assert rows.get_right()[0] <= 6.6
         assert np.all(logM <= (1 - xs) * logM[0] + xs * logM[-1] + 1e-12)
         head = label(r"The maximum principle on a strip: \ three lines", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

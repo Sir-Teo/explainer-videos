@@ -311,12 +311,12 @@ class Integral(VoiceoverScene):
             "gives one over k squared. So the integral is pi squared over six, Part 3's Basel sum once more, and the "
             "numerical integral agrees."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), Create(full))  # the sum first; its partial sums climb to it
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l_) for l_ in layers], lag_ratio=0.25), run_time=3.0)
-            self.play(Create(full))
+            self.play(Indicate(full[0], color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(FadeIn(head[1]))
             self.play(FadeIn(side[1:]))

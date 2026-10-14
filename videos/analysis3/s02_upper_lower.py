@@ -57,13 +57,15 @@ class UpperLower(VoiceoverScene):
                                 MathTex(rf"x_{{{i}}}", font_size=24).next_to(ax.c2p(e, 0), DOWN, buff=0.15))
                          for i, e in enumerate(edges)])
         dfn = VGroup(
-            label(r"a \textbf{partition} $P$: \ $a = x_0 < x_1 < \cdots < x_n = b$", font_size=26),
+            label(r"a \textbf{partition} $P$: \ $a = x_0 < x_1 < \cdots < x_n = b$", font_size=24),
             MathTex(r"M_i = \sup_{[x_{i-1}, x_i]} f, \qquad m_i = \inf_{[x_{i-1}, x_i]} f", font_size=30),
             MathTex(r"U(P, f) = \sum M_i\, \Delta x_i", font_size=32, color=C.UPPER_SUM),
             MathTex(r"L(P, f) = \sum m_i\, \Delta x_i", font_size=32, color=C.LOWER_SUM),
             label(r"Rudin 6.1", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.15, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         dfn[-1].align_to(dfn, RIGHT)
+        dfn.move_to([6.5 - dfn.width / 2, 0.2, 0])
+        assert dfn.get_left()[0] > 1.5
         area = ax.get_area(g, x_range=[0, 3.0], color=C.FUNC, opacity=0.25)
         head = label(r"Darboux: \ trap the area between two sums", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

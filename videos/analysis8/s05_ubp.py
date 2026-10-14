@@ -181,7 +181,7 @@ class UniformBoundedness(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.0:
                 r_.width = 6.0
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, -0.5, 0])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, -0.5, 0])
         assert rows.get_right()[0] < 6.6 and rows.get_left()[0] > ax.get_right()[0] + 0.3
         head = label(r"The hook's question, answered by counting", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

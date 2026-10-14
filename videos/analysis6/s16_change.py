@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import heatmap, load, plain_axes, square_axes
+from videos.analysis6.common import area_under, heatmap, load, plain_axes, polyline, square_axes
 
 
 class ChangeOfVariables(VoiceoverScene):
@@ -27,10 +27,10 @@ class ChangeOfVariables(VoiceoverScene):
         r0s, dr, dt, exact = d["r0"], float(d["dr"]), float(d["dt"]), d["exact_area"]
         ax = plain_axes([0, 3, 1], [0, 2 * math.pi, math.pi / 2], 2.6, 4.4).move_to([-5.0, -0.6, 0])
         tl = VGroup(MathTex(r"r", font_size=26, color=GREY_B).next_to(ax.c2p(3, 0), RIGHT, buff=0.12),
-                    MathTex(r"\theta", font_size=26, color=GREY_B).next_to(ax.c2p(0, 2 * math.pi), UL, buff=0.08),
-                    *[MathTex(str(k), font_size=18, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in (1, 2, 3)],
-                    *[MathTex(t_, font_size=18, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
-                      for t_, v in ((r"\tfrac{\pi}{2}", math.pi / 2), (r"\pi", math.pi), (r"\tfrac{3\pi}{2}", 1.5 * math.pi),
+                    MathTex(r"\theta", font_size=26, color=GREY_B).next_to(ax.c2p(0, 2 * math.pi), UP, buff=0.2),
+                    *[MathTex(str(k), font_size=20, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.2) for k in (1, 2, 3)],
+                    *[MathTex(t_, font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.15)
+                      for t_, v in ((r"\pi/2", math.pi / 2), (r"\pi", math.pi), (r"3\pi/2", 1.5 * math.pi),
                                     (r"2\pi", 2 * math.pi))])
         grid1 = VGroup()
         for r_ in np.arange(0.25, 3.01, 0.25):
@@ -44,7 +44,8 @@ class ChangeOfVariables(VoiceoverScene):
             grid2.add(Circle(radius=px.c2p(r_, 0)[0] - px.c2p(0, 0)[0], color=C.SEQ, stroke_width=1.2).move_to(
                 px.c2p(0, 0)))
         for t_ in np.arange(0, 2 * math.pi - 1e-9, dt):
-            grid2.add(Line(px.c2p(0, 0), px.c2p(3 * math.cos(t_), 3 * math.sin(t_)), color=C.APPROX, stroke_width=1.2))
+            grid2.add(Line(px.c2p(0.25 * math.cos(t_), 0.25 * math.sin(t_)), px.c2p(3 * math.cos(t_), 3 * math.sin(t_)),
+                           color=C.APPROX, stroke_width=1.2))  # from the first circle: no blob at the centre
         arrow = MathTex(r"\xrightarrow{\ T(r, \theta) = (r\cos\theta,\ r\sin\theta)\ }", font_size=26).move_to([-2.85, 1.85, 0])
         kT = ValueTracker(0)
 
@@ -84,8 +85,8 @@ class ChangeOfVariables(VoiceoverScene):
             if r_.width > 4.2:
                 r_.width = 4.2
         thm.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([2.75, -1.75, 0], RIGHT, buff=0)
-        head = label(r"Polar coordinates: \ a small rectangle becomes a curved patch $r$ times as large", font_size=30).to_edge(
-            UP, buff=0.25)
+        head = label(r"Polar coordinates: \ a rectangle becomes a patch $r$ times as large", font_size=34).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Polar coordinates map a rectangle of radii and angles onto a disk. Each little "
             "rectangle becomes a curved patch. <bookmark mark='b'/> Near the center the patches are small; far out "
@@ -115,8 +116,8 @@ class ChangeOfVariables(VoiceoverScene):
     def gaussian(self):
         d = load("polar")
         R, sq, disk, cart, pol = float(d["R"]), float(d["sq"]), float(d["disk"]), float(d["cart"]), float(d["pol"])
-        S = 4.6
-        ax = square_axes([-3, 3, 1], [-3, 3, 1], S / 6).move_to([-3.6, -0.6, 0])
+        S = 3.5
+        ax = square_axes([-3, 3, 1], [-3, 3, 1], S / 6).move_to([-4.2, 0.75, 0])
         img = heatmap(lambda X, Y: np.exp(-X**2 - Y**2), (-3, 3), (-3, 3), S, S, -1, 1).move_to(ax.c2p(0, 0))
         circles = VGroup(*[Circle(radius=(ax.c2p(r_, 0)[0] - ax.c2p(0, 0)[0]), color=WHITE, stroke_width=1.2)
                            .move_to(ax.c2p(0, 0)).set_stroke(opacity=0.45) for r_ in (0.5, 1, 1.5, 2, 2.5, 3)])
@@ -136,8 +137,26 @@ class ChangeOfVariables(VoiceoverScene):
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -0.5, 0])
         assert abs(cart - sq) < 1e-6 and abs(pol - disk) < 1e-5 and disk < sq < math.pi
-        head = label(r"The integral that has no antiderivative, \ computed by changing variables", font_size=32).to_edge(
-            UP, buff=0.25)
+        head = label(r"An integral with no antiderivative, \ by changing variables", font_size=34).to_edge(UP, buff=0.3)
+        # 'b': one thin ring at r = 1 has area about 2 pi r dr; the radial integrand r e^(-r^2) has integral 1/2
+        u_ = S / 6  # scene units per unit
+        ring = Annulus(inner_radius=0.95 * u_, outer_radius=1.05 * u_, color=C.EPS, fill_opacity=0.85, stroke_width=0).move_to(
+            ax.c2p(0, 0))
+        ring_area = math.pi * (1.05**2 - 0.95**2)
+        assert abs(ring_area - 2 * math.pi * 1.0 * 0.1) < 1e-12  # exactly 2 pi r dr at the middle radius
+        ring_l = MathTex(rf"\text{{ring at }} r = 1: \ \text{{area}} = 2\pi r\,dr = {ring_area:.3f}", font_size=24,
+                         color=C.EPS).next_to(ax, DOWN, buff=0.12)
+        rx = plain_axes([0, 3, 1], [0, 0.5, 0.25], 4.4, 1.6, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([-4.0, -2.45, 0])
+        rr = np.linspace(0, 3, 300)
+        rad = rr * np.exp(-rr**2)
+        rad_area = float(np.trapezoid(rad, rr))
+        assert abs(rad_area - (1 - math.exp(-9)) / 2) < 1e-5 and rad.max() < 0.5
+        rcurve = polyline(rx, rr, rad, color=C.EPS, stroke_width=3)
+        rfill = area_under(rx, rr, rad, C.EPS, 0.3)
+        r_l = MathTex(rf"r e^{{-r^2}}: \ \int_0^3 = {rad_area:.4f} \approx \tfrac12", font_size=24, color=C.EPS).next_to(
+            rx.c2p(1.2, 0.42), RIGHT, buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> The classic use. e to the minus x squared has no elementary antiderivative, but "
             "its square, the bell over the plane, is easy in polar coordinates. <bookmark mark='b'/> The factor r is "
@@ -149,7 +168,8 @@ class ChangeOfVariables(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(img), Create(ax), FadeIn(rows[0]))
             vo.wait_until("b")
-            self.play(Create(circles), FadeIn(rows[1]))
+            self.play(Create(circles), FadeIn(ring), FadeIn(ring_l), FadeIn(rows[1]))
+            self.play(Create(rx), FadeIn(rfill), Create(rcurve), FadeIn(r_l))
             vo.wait_until("c")
             self.play(FadeIn(rows[2:4]))
             vo.wait_until("d")

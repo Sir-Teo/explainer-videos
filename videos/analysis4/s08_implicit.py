@@ -42,19 +42,23 @@ class ImplicitFunction(VoiceoverScene):
     def curve(self):
         d = load("implicit")
         fold = d["fold"]
-        ax = square_axes([-1.6, 2.4, 1], [-1.6, 2.4, 1], 1.65, numbers=True, font_size=18,
+        U_ = 1.38  # scene units per unit
+        head = VGroup(label(r"The folium of Descartes: \ where is it a graph $y = g(x)$?", font_size=34),
+                      MathTex(r"f(x, y) = x^3 + y^3 - 3xy = 0", r"\qquad \text{orange: } f > 0, \ \text{blue: } f < 0",
+                              font_size=30)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_A)
+        ax = square_axes([-1.6, 2.4, 1], [-1.6, 2.4, 1], U_, numbers=True, font_size=18,
                          x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.6, 0])
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}})
+        ax.move_to([-6.55 + 2.0 * U_, 0, 0]).align_to([0, head.get_bottom()[1] - 0.25, 0], UP)
         g = np.linspace(-1.6, 2.4, 401)
         segs = contour_segments(fol, g, g, 0.0)
         curve = contour_mobject(ax, segs, C.FUNC, 3.5)
-        img = heatmap(fol, (-1.6, 2.4), (-1.6, 2.4), 6.6, 6.6, -3, 3).move_to(ax.c2p(0.4, 0.4)).set_opacity(0.45)
-        head = VGroup(MathTex(r"f(x, y) = x^3 + y^3 - 3xy = 0", font_size=36),
-                      label(r"the folium of Descartes", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.1)
-        head.to_edge(UP, buff=0.25).shift(RIGHT * 2.6)
+        img = heatmap(fol, (-1.6, 2.4), (-1.6, 2.4), 4 * U_, 4 * U_, -3, 3).move_to(ax.c2p(0.4, 0.4)).set_opacity(0.45)
+        assert img.get_bottom()[1] > -3.65 and img.get_left()[0] > -6.6
 
         def window(c, w, color):
-            return Square(side_length=2 * w * 1.65, color=color, stroke_width=2.5).move_to(ax.c2p(*c))
+            return Square(side_length=2 * w * U_, color=color, stroke_width=2.5).move_to(ax.c2p(*c))
 
         P = np.array([2 / 3, 4 / 3])  # t = 2 in (3t, 3t^2)/(1 + t^3)
         wP, wF, w0 = 0.3, 0.4, 0.3
@@ -84,11 +88,12 @@ class ImplicitFunction(VoiceoverScene):
                   color=C.PATHOLOGY),
             label(r"vertical lines meet it twice, \ or not at all", font_size=24),
             label(r"at $(0, 0)$ both partials vanish: \ two branches cross", font_size=24, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.8, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         for r_ in side:
-            if r_.width > 6.2:
-                r_.width = 6.2
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -0.8, 0])
+            if r_.width > 5.9:
+                r_.width = 5.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to([ax.get_right()[0] + 0.4, -0.6, 0], RIGHT, buff=0)
+        assert side.get_right()[0] <= 6.6 and side.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The equation x cubed plus y cubed equals three x y defines a curve, the folium of "
             "Descartes. Does it define y as a function of x? <bookmark mark='b'/> Not globally, but often locally. Near "
