@@ -569,6 +569,8 @@ LEXICON: list[tuple[str, str]] = [
 
 # Plain-text respellings for the neural backends (which read text, not IPA).  Grown by listening:
 # tools/check_narration.py transcribes every line and diffs it against the script.
+_ZH_FUNCTION_NAMES = {"sin", "cos", "tan", "log", "ln", "exp", "sup", "inf", "lim", "max", "min", "det", "arg"}
+
 RESPELL: dict[str, list[tuple[str, str]]] = {
     "en": [
         (r"(?<=\w)–(?=\w)", " "),  # a compound name, Heine–Borel, is read straight through
@@ -586,6 +588,10 @@ RESPELL: dict[str, list[tuple[str, str]]] = {
         (r"(?<=[Ll])∞", " 无穷"),
         (r"(?<=[LlH])\^([a-z0-9])", r" \1"),  # no superscript q exists: L^q -> "L q"
         (r"(?<=[A-Za-z弱])\*", "星"),  # the weak-star topology: 弱* -> "弱星"
+        # a short run of Latin letters is a product of variables, read letter by letter (inx -> "i n x", so "it"
+        # isn't the English word), except the function names
+        (r"(?<![A-Za-z])[A-Za-z]{2,3}(?![A-Za-z])",
+         lambda m: m.group(0) if m.group(0).lower() in _ZH_FUNCTION_NAMES else " ".join(m.group(0))),
     ],
 }
 
