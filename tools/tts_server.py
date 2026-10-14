@@ -280,6 +280,9 @@ def main():
     args = ap.parse_args()
     profiles = json.loads((ROOT / "tools" / "voices.json").read_text())
     profile = dict(profiles[args.voice], name=args.voice)
+    import mlx.core as mx
+
+    mx.set_cache_limit(512 * 1024 ** 2)  # freed GPU buffers kept for reuse: shares the machine with the renders
     engine, checker = Engine(profile), Checker()
     lock = threading.Lock()
     print(f"voice {args.voice} ({profile['model']}, {engine.sr} Hz) on :{args.port}", flush=True)
@@ -301,6 +304,7 @@ def main():
                 if peak > 0.98:
                     audio = audio * (0.98 / peak)
                 sf.write(req["out"], audio, engine.sr, subtype="PCM_16", format="WAV")
+                mx.clear_cache()
                 dur = len(audio) / engine.sr
                 print(f"{dur:6.1f}s audio in {time.time() - t0:6.1f}s  {req['text'][:70]}", flush=True)
             body = json.dumps({"duration": dur, "tokens": tokens}).encode()
