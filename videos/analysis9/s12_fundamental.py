@@ -51,6 +51,23 @@ class Fundamental(VoiceoverScene):
         for r_ in rows:
             if r_.width > 6.2:
                 r_.width = 6.2
+        # 'a': the point source and the two responses to it, E = (1/2) sin|x| and E = H(x) sin x; each solves
+        # E'' + E = 0 off the source, and its slope jumps by exactly 1 there: E'' + E = delta
+        xe = np.linspace(-8, 8, 1601)
+        e_sym, e_cau = 0.5 * np.sin(np.abs(xe)), np.where(xe > 0, np.sin(xe), 0.0)
+        hh = 1e-6
+        for E_ in (lambda t: 0.5 * np.sin(np.abs(t)), lambda t: np.where(t > 0, np.sin(t), 0.0)):
+            jump = (E_(2 * hh) - E_(hh)) / hh - (E_(-hh) - E_(-2 * hh)) / hh
+            off = np.array([-5.0, -2.0, 1.5, 4.0])
+            d2 = (E_(off + 1e-4) - 2 * E_(off) + E_(off - 1e-4)) / 1e-8
+            assert abs(jump - 1) < 1e-4 and np.abs(d2 + E_(off)).max() < 1e-4
+        src = Arrow(ax.c2p(0, 0), ax.c2p(0, 0.95), buff=0, color=C.DISTRIBUTION, stroke_width=5,
+                    max_tip_length_to_length_ratio=0.25)
+        srcl = MathTex(r"\delta: \ \text{a point source}", font_size=24, color=C.DISTRIBUTION).next_to(ax, UP, buff=0.05)
+        ge1 = polyline(bx, xe, e_sym, color=C.APPROX, stroke_width=3.5)
+        ge2 = polyline(bx, xe, e_cau, color=C.EPS, stroke_width=3.5)
+        le1 = MathTex(r"E = \tfrac12\sin|x|", font_size=24, color=C.APPROX).next_to(bx.c2p(-8, 1.2), RIGHT, buff=0.1)
+        le2 = MathTex(r"E = H(x)\sin x", font_size=24, color=C.EPS).next_to(bx.c2p(-8, -1.2), RIGHT, buff=0.1)
         head = label(r"Solve once, \ for a point source", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A fundamental solution of a differential operator is a distribution E with P of D "
@@ -62,12 +79,15 @@ class Fundamental(VoiceoverScene):
             "differences."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax), Create(bx))
+            self.play(GrowArrow(src), FadeIn(srcl))
+            self.play(Create(ge1), FadeIn(le1), Create(ge2), FadeIn(le2), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(rows[1]), FadeIn(rows[2]))
             vo.wait_until("c")
-            self.play(Create(ax), Create(gf), FadeIn(lf), FadeIn(rows[3]))
-            self.play(Create(bx), Create(gu), FadeIn(lu))
+            self.play(FadeOut(VGroup(src, srcl, ge1, ge2, le1, le2)), run_time=0.6)
+            self.play(Create(gf), FadeIn(lf), FadeIn(rows[3]))
+            self.play(Create(gu), FadeIn(lu))
             self.play(Create(gc), FadeIn(lc), FadeIn(rows[4:]))
         self.wait(0.3)
         self.clear_scene()
@@ -229,13 +249,13 @@ class Fundamental(VoiceoverScene):
             "elliptic operators like the Laplacian, every solution with a smooth right side is smooth itself."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(thm))
+            self.play(FadeIn(head), FadeIn(thm), Create(cx), FadeIn(poles))  # the symbol's zeros from the start
             vo.wait_until("b")
             self.play(FadeIn(pm))
             for i in range(5):
                 self.play(*pm.light(i), run_time=0.7)
             vo.wait_until("c")
-            self.play(Create(cx), FadeIn(poles), Create(circ), FadeIn(cl))
+            self.play(Create(circ), FadeIn(cl))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.1), FadeIn(rows[:2]), run_time=2.5)
             vo.wait_until("d")
             self.play(*pm.done(), FadeIn(rows[2:]))
