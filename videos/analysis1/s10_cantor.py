@@ -70,7 +70,7 @@ class Cantor(VoiceoverScene):
         iv = cantor_intervals(4)
         Pdust = VGroup(*[Square(side_length=(b - a) * S, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.85)
                          .move_to(U((a + b) / 2, (c + d) / 2)) for a, b in iv for c, d in iv])
-        P_l = MathTex(r"P", font_size=32, color=C.SEQ).next_to(U(0, 1), UL, buff=0.08)
+        P_l = MathTex(r"P", font_size=32, color=C.SEQ).next_to(U(0, 1), UP, buff=0.1).align_to(U(0, 1), LEFT)
         # the nested disks and the listed points (endpoints of the depth-4 intervals, so points of P)
         ends = np.unique(iv.ravel())
         Ppts = np.array([(x, y) for x in ends for y in ends])
@@ -369,7 +369,7 @@ class Cantor(VoiceoverScene):
         rule = VGroup(label(r"read the base-3 digits of $x$ up to the first $1$;", font_size=26),
                       label(r"turn the $2$s into $1$s; read it in base $2$", font_size=26),
                       MathTex(r"\tfrac14 = 0.0202\ldots_3 \;\mapsto\; 0.0101\ldots_2 = \tfrac13", font_size=32, color=C.EPS)
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.2, 1.4, 0])
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.0, 1.4, 0])
         props = VGroup(label(r"continuous, nondecreasing,", font_size=26),
                        label(r"$F(0) = 0$, \ $F(1) = 1$,", font_size=26),
                        label(r"flat on every removed third:", font_size=26),

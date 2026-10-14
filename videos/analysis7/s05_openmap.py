@@ -130,8 +130,8 @@ class OpenMapping(VoiceoverScene):
         # z^3 opens each 30-degree sector to 90 degrees: sectors 1-4 cover the image disk once (sheet 1), and so do
         # sectors 5-8 and 9-12 (sheets 2 and 3, drawn small beside it). Opaque, never stacked.
         small = 0.62
-        cx2 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, 0.3, 0])
-        cx3 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, -1.75, 0])
+        cx2 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, 0.12, 0])
+        cx3 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, -1.88, 0])
         sheets = []
         for s_, axk in enumerate((bx, cx2, cx3)):
             g = VGroup(*[Polygon(*[axk.c2p(w.real, w.imag) for w in sec_pts[k] ** 3], stroke_width=0.5,

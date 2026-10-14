@@ -70,7 +70,9 @@ class Abel(VoiceoverScene):
             f2, DOWN, buff=0.1)
         ref = note(r"summation by parts, Rudin 3.41").next_to(f2n, DOWN, buff=0.2)
         ibp = MathTex(r"\int b\, dA = A b - \int A\, db", font_size=34, color=C.EPS).next_to(ref, DOWN, buff=0.25)
-        assert ibp.get_bottom()[1] > P(A[3], b[4])[1] + 0.2  # clear of the slabs below it
+        ibp.align_to(P(A[4], 0) + RIGHT * 0.12, LEFT)  # over the last, lowest strip only
+        assert ibp.get_left()[0] > P(A[4], 0)[0] and ibp.get_bottom()[1] > P(A[4], b[5])[1] + 0.15
+        assert ibp.get_right()[0] < 6.6
         with self.voiceover(
             "Here's summation by parts as a picture. <bookmark mark='a'/> Lay the terms a n end to end along the "
             "horizontal axis, so the marks are the partial sums A n, and over each one stand a strip of height b n, "
