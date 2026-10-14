@@ -164,7 +164,7 @@ def changed_parts(prev: Mobject, row: Mobject) -> list:
             if t.strip() and t.strip() not in old and t.strip() not in relations and len(part) > 0]
 
 
-def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.95, highlight=True):
+def ladder(scene, rows, whys, keep=4, top=2.9, buff=0.48, x=0.0, align_index=1, edge=6.6, highlight=True):
     """Reveal derivation rows one at a time, keeping at most ``keep`` on screen (older rows scroll off the top).
     Each row's ``align_index`` part (usually '=') is lined up at ``x``.  Returns ``step(i)``: the first row is
     written, each later one grows out of a copy of the previous one, and its grey 'why' note fades in beside it
@@ -297,22 +297,81 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
 # ---------------------------------------------------------------------------
 # The counterexample museum
 # ---------------------------------------------------------------------------
+def _tex_words(text: str):
+    """Split a Tex string into (separator, word) pairs at the spaces (plain or ``\ ``) that lie outside math and
+    braces, so a line can be broken there without breaking the TeX."""
+    out, cur, sep, depth, math, i = [], "", "", 0, False, 0
+    while i < len(text):
+        two = text[i:i + 2]
+        if two == "\\ " and depth == 0 and not math:
+            if cur:
+                out.append((sep, cur))
+                cur = ""
+            sep, i = "\\ ", i + 2
+            continue
+        if text[i] == "\\" and i + 1 < len(text):
+            cur, i = cur + two, i + 2
+            continue
+        ch = text[i]
+        if ch == "$":
+            math = not math
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        if ch == " " and depth == 0 and not math:
+            if cur:
+                out.append((sep, cur))
+                cur, sep = "", " "
+        else:
+            cur += ch
+        i += 1
+    if cur:
+        out.append((sep, cur))
+    return out
+
+
+def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex:
+    """A label broken into left-aligned lines no wider than ``max_width`` (at word boundaries outside math), rather
+    than shrunk; only a single word too wide for a line is ever scaled down."""
+    t = label(text, font_size=font_size, color=color)
+    if t.width <= max_width:
+        return t
+    words = _tex_words(text)
+    lines, cur = [], words[0][1]
+    for sep, w in words[1:]:
+        trial = cur + sep + w
+        if label(trial, font_size=font_size).width <= max_width:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = w
+    lines.append(cur)
+    if len(lines) == 1:
+        t.width = max_width
+        return t
+    t = Tex(r"\begin{tabular}{@{}l@{}}" + r"\\".join(lines) + r"\end{tabular}", color=color, font_size=font_size)
+    if t.width > max_width:
+        t.width = max_width
+    return t
+
+
 def museum_card(name: str, who: str, breaks: str, where: str = "", width=4.6, font_size=22) -> VGroup:
-    """A small card with a red corner tag: name; who and when; what it breaks; where it is in Rudin."""
-    rows = [label(name, font_size=font_size + 6), label(who, font_size=font_size, color=GREY_A),
-            label(r"\textit{breaks:} " + breaks, font_size=font_size, color=WHITE)]
+    """A small card with a red corner tag: name; who and when; what it breaks; where it is in Rudin. Long rows wrap
+    onto further lines (never shrink), and every row keeps the card's left edge."""
+    inner = width - 0.6
+    rows = [wrapped_label(name, inner, font_size + 6), wrapped_label(who, inner, font_size, GREY_A),
+            wrapped_label(r"\textit{breaks:} " + breaks, inner, font_size, WHITE)]
     if where:
-        rows.append(label(where, font_size=font_size - 2, color=GREY_B))
+        rows.append(wrapped_label(where, inner, font_size - 2, GREY_B))
     body = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-    for r in body:
-        if r.width > width - 0.4:
-            r.width = width - 0.4
-    w = max(width, body.width + 0.5)
-    box = RoundedRectangle(width=w, height=body.height + 0.5, corner_radius=0.12, stroke_color=GREY_C,
+    box = RoundedRectangle(width=width, height=body.height + 0.5, corner_radius=0.12, stroke_color=GREY_C,
                            stroke_width=2, fill_color="#151A22", fill_opacity=0.95)
     body.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.25)
     c = box.get_corner(UR)
-    tag = Polygon(c, c + LEFT * 0.55, c + DOWN * 0.55, stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=1)
+    # the tag is the corner triangle cut by the card's own rounded outline, so it never pokes past the corner
+    tri = Polygon(c, c + LEFT * 0.55, c + DOWN * 0.55)
+    tag = Intersection(tri, box.copy(), stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=1)
     card = VGroup(box, tag, body)
     card.box, card.body = box, body
     return card
