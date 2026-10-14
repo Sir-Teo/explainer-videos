@@ -145,8 +145,8 @@ class ImplicitFunction(VoiceoverScene):
         vals = fol(Xg, Yg)
         assert np.all(fy(Xg, Yg) > 0.25)  # f_y > 0 on the window: f increases up each vertical, Phi is one-to-one
         vlo, vhi = math.floor(vals.min() * 2) / 2, math.ceil(vals.max() * 2) / 2
-        A = square_axes([xr[0], xr[1], 0.3], [yr[0], yr[1], 0.3], 2.7 / (2 * h)).move_to([-5.3, -1.05, 0])
-        B = plain_axes([xr[0], xr[1], 0.3], [vlo, vhi, 1.0], 2.7, 2.7).move_to([-1.75, -1.05, 0])
+        A = square_axes([xr[0], xr[1], 0.3], [yr[0], yr[1], 0.3], 2.7 / (2 * h)).move_to([-5.15, -0.65, 0])
+        B = plain_axes([xr[0], xr[1], 0.3], [vlo, vhi, 1.0], 2.7, 2.7).move_to([-1.7, -0.65, 0])
         z0 = DashedLine(B.c2p(xr[0], 0), B.c2p(xr[1], 0), color=GREY_B, stroke_width=1.5)
         img = heatmap(fol, xr, yr, 2.7, 2.7, -1.5, 1.5, px=240).move_to(A.c2p(a, b)).set_opacity(0.45)
         levels = [-0.8, -0.4, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4]
@@ -210,8 +210,10 @@ class ImplicitFunction(VoiceoverScene):
         arr_l = MathTex(r"\Phi", font_size=30).next_to(arr, UP, buff=0.05)
         A_l = MathTex(r"(x, y) \text{ near } (\tfrac23, \tfrac43)", font_size=22, color=GREY_A).next_to(A, UP, buff=0.12)
         B_l = MathTex(r"(x,\ v = f(x, y))", font_size=22, color=GREY_A).next_to(B, UP, buff=0.12)
-        B_0 = MathTex(r"v = 0", font_size=20, color=C.FUNC).next_to(B.c2p(xr[1], 0), RIGHT, buff=0.08)
-        A_n = label(r"level sets of $f$ \ (dashed: $f < 0$)", font_size=22, color=GREY_A).next_to(A, DOWN, buff=0.15)
+        B_0 = MathTex(r"v = 0", font_size=22, color=C.FUNC).next_to(B.c2p(xr[1], 0), RIGHT, buff=0.08)
+        A_n = VGroup(label(r"level sets of $f$", font_size=22, color=GREY_A),
+                     label(r"(dashed: $f < 0$)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(
+            A, DOWN, buff=0.15)
         B_n = label(r"become horizontal lines", font_size=22, color=GREY_A).next_to(B, DOWN, buff=0.15)
         rows = [
             MathTex(r"\Phi(x, y)", r"=", r"(x,\ f(x, y))", font_size=32),
@@ -221,10 +223,12 @@ class ImplicitFunction(VoiceoverScene):
         ]
         whys = [why(r"the trick: \ keep $x$, \ record the value of $f$", 22), why(r"a triangular matrix", 22),
                 why(r"so 9.24 inverts $\Phi$ near $(a, b)$", 22), why(r"$f(x, g(x)) = 0$: \ the level set is a graph", 22)]
-        step = ladder(self, rows, whys, keep=4, top=thm.get_bottom()[1] - 0.35, buff=0.3, x=2.0)
-        out = VGroup(label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$,", font_size=28, color=C.EPS),
-                     label(r"so $g' = -f_x / f_y = 0.8$ at $a$", font_size=28, color=C.EPS)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.3).set_x(3.6)
+        step = ladder(self, rows, whys, keep=3, top=thm.get_bottom()[1] - 0.35, buff=0.3, x=2.0)
+        out = VGroup(label(r"differentiate $f(x, g(x)) = 0$: \ $f_x + f_y\, g' = 0$,", font_size=26, color=C.EPS),
+                     label(rf"so $g' = -f_x / f_y = {-fx(a, b) / fy(a, b):.1f}$ at $a$", font_size=26, color=C.EPS)
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.35)
+        out.shift(RIGHT * (0.3 - out.get_left()[0]))
+        assert out.get_right()[0] <= 6.6 and A_n.get_bottom()[1] > -3.6 and A_l.get_top()[1] < thm.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The theorem, Rudin 9.28, here with one variable on each side: if f vanishes at a, "
             "b, and its partial derivative in y is not zero there, then near a the equation defines y as exactly one "
@@ -265,50 +269,44 @@ class ImplicitFunction(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def rank(self):
-        ax = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.4).move_to([-3.6, -0.6, 0])
-        ax.set_opacity(0.5)
-        bx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.4).move_to([3.4, -0.6, 0])
-        bx.set_opacity(0.5)
-        t = np.linspace(-1.4, 1.4, 15)
-        # a rank-one map: F(x, y) = (x + y^2 ... ) ; level sets are curves, image a curve
-        F = lambda x, y: np.stack([np.tanh(x + 0.4 * y), 0.6 * np.sinh(x + 0.4 * y)], -1)  # noqa: E731
-        lvl = VGroup()
-        cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / 8) for k in range(9)]
-        for k, c in enumerate(np.linspace(-1.2, 1.2, 9)):
-            yy = np.linspace(-1.5, 1.5, 50)
-            xx = c - 0.4 * yy
-            ok = np.abs(xx) <= 1.5
-            lvl.add(VMobject(color=cols[k], stroke_width=3).set_points_as_corners(
-                [ax.c2p(a, b) for a, b in zip(xx[ok], yy[ok])]))
-        s = np.linspace(-1.2, 1.2, 200)
-        imgc = VMobject(color=C.OPERATOR, stroke_width=4).set_points_as_corners(
-            [bx.c2p(*F(v, 0.0)) for v in s])
-        dots = VGroup(*[Dot(bx.c2p(*F(c, 0.0)), radius=0.07, color=cols[k]) for k, c in
-                        enumerate(np.linspace(-1.2, 1.2, 9))])
-        for c in np.linspace(-1.2, 1.2, 9):  # each level line maps to a single point
-            yy = np.linspace(-1, 1, 7)
-            assert np.allclose(F(c - 0.4 * yy, yy), F(c, 0.0))
-        arrow = Arrow([-1.0, -0.6, 0], [0.8, -0.6, 0], buff=0, color=GREY_B, stroke_width=4)
-        head = VGroup(label(r"\textbf{Rudin 9.32} \ the rank theorem, \ in one picture", font_size=30),
+        head = VGroup(label(r"The rank theorem, \ in one picture", font_size=34),
                       label(r"if $F'$ has constant rank $r$, \ then near each point, in suitable coordinates, \ "
-                            r"$F$ is a projection onto $r$ coordinates", font_size=24, color=GREY_A)
+                            r"$F$ is a projection onto $r$ coordinates \ (Rudin 9.32)", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        ax = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.4).move_to([-3.6, -0.35, 0])
+        ax.set_opacity(0.5)
+        bx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.4).move_to([3.4, -0.35, 0])
+        bx.set_opacity(0.5)
+        # a rank-one map: F depends on u = x + 0.4 y only, so each line u = c goes to one point
+        F = lambda x, y: np.stack([np.tanh(x + 0.4 * y), 0.6 * np.sinh(x + 0.4 * y)], -1)  # noqa: E731
+        cs = np.linspace(-0.9, 0.9, 9)
+        cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / 8) for k in range(9)]
+        yy = np.linspace(-1.5, 1.5, 50)
+        assert np.all(np.abs(cs[:, None] - 0.4 * yy[None, :]) <= 1.5)  # every line drawn at full length
+        lvl = VGroup(*[VMobject(color=cols[k], stroke_width=3).set_points_as_corners(
+            [ax.c2p(c - 0.4 * y_, y_) for y_ in yy]) for k, c in enumerate(cs)])
+        s = np.linspace(cs[0], cs[-1], 200)
+        imgc = VMobject(color=C.OPERATOR, stroke_width=4).set_points_as_corners([bx.c2p(*F(v, 0.0)) for v in s])
+        dots = VGroup(*[Dot(bx.c2p(*F(c, 0.0)), radius=0.07, color=cols[k]) for k, c in enumerate(cs)])
+        for c in cs:  # each level line maps to a single point
+            y7 = np.linspace(-1, 1, 7)
+            assert np.allclose(F(c - 0.4 * y7, y7), F(c, 0.0))
+        assert np.abs(F(s, 0 * s)).max() < 1.6
+        arrow = Arrow([ax.get_right()[0] + 0.15, -0.35, 0], [bx.get_left()[0] - 0.15, -0.35, 0], buff=0, color=GREY_B,
+                      stroke_width=4)
         note_ = label(r"rank $1$: \ each colored line collapses to a point, \ the plane folds onto a curve",
-                      font_size=24, color=C.OPERATOR).to_edge(DOWN, buff=0.3)
+                      font_size=24, color=C.OPERATOR).to_edge(DOWN, buff=0.35)
         # the model first: in the right coordinates a rank-one map is the projection (x, y) -> (x, 0)
-        cs = np.linspace(-1.2, 1.2, 9)
         mlines = VGroup(*[Line(ax.c2p(c, -1.5), ax.c2p(c, 1.5), color=cols[k], stroke_width=3) for k, c in enumerate(cs)])
-        mseg = Line(bx.c2p(-1.2, 0), bx.c2p(1.2, 0), color=C.OPERATOR, stroke_width=4)
+        mseg = Line(bx.c2p(cs[0], 0), bx.c2p(cs[-1], 0), color=C.OPERATOR, stroke_width=4)
         mdots = VGroup(*[Dot(bx.c2p(c, 0), radius=0.07, color=cols[k]) for k, c in enumerate(cs)])
         ml = MathTex(r"(x, y) \mapsto (x, 0)", font_size=26).next_to(arrow, UP, buff=0.15)
-        fl = VGroup(MathTex(r"F = (\tanh u,\ 0.6 \sinh u)", font_size=24),
-                    MathTex(r"u = x + 0.4\,y", font_size=24)).arrange(DOWN, buff=0.08).next_to(arrow, UP, buff=0.15)
-        for m_ in (ml, fl):
-            if m_.width > 2.2:
-                m_.width = 2.2
-            m_.next_to(arrow, UP, buff=0.15)
+        fl = MathTex(r"F = (\tanh u,\ 0.6 \sinh u), \quad u = x + 0.4\,y", font_size=24).next_to(bx, DOWN, buff=0.15)
+        assert ml.width < arrow.get_length() + 0.6 and fl.get_right()[0] <= 6.6
+        alab = label(r"lines in the plane", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.1)
         mlab = label(r"the model: \ a projection", font_size=24, color=GREY_A).next_to(bx, UP, buff=0.1)
         flab = label(r"a rank-one map, \ before straightening", font_size=24, color=GREY_A).next_to(bx, UP, buff=0.1)
+        assert alab.get_top()[1] < head.get_bottom()[1] - 0.1 and note_.get_top()[1] < fl.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The same circle of ideas gives Rudin's rank theorem, which we'll only picture. If "
             "the derivative of a map has the same rank everywhere, then <bookmark mark='p'/> in suitable coordinates "
@@ -318,9 +316,8 @@ class ImplicitFunction(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1]), Create(ax), Create(mlines), FadeIn(alab), run_time=1.5)
             vo.wait_until("p")
-            self.play(Create(ax), Create(mlines), run_time=1.2)
             self.play(GrowArrow(arrow), Create(bx), FadeIn(ml), FadeIn(mlab))
             self.play(Create(mseg), LaggedStart(*[TransformFromCopy(l_, d_) for l_, d_ in zip(mlines, mdots)],
                                                 lag_ratio=0.12), run_time=2.0)
@@ -331,6 +328,5 @@ class ImplicitFunction(VoiceoverScene):
                       LaggedStart(*[Flash(d_, color=d_.get_color(), line_length=0.12, flash_radius=0.15) for d_ in dots],
                                   lag_ratio=0.1), run_time=2.0)
             self.play(FadeIn(note_))
-        del t
         self.wait(0.4)
         self.clear_scene()

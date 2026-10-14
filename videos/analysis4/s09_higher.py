@@ -35,11 +35,14 @@ class HigherOrder(VoiceoverScene):
         S = 4.8
         ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.6, -0.75, 0])
         img = heatmap(f_mix, (-1, 1), (-1, 1), S, S, -0.5, 0.5).move_to(ax.c2p(0, 0))
-        head = VGroup(MathTex(r"f(x, y) = \frac{xy(x^2 - y^2)}{x^2 + y^2}, \quad f(0, 0) = 0", font_size=34),
+        head = VGroup(label(r"Two mixed partials that disagree", font_size=34),
+                      MathTex(r"f(x, y) = \frac{xy(x^2 - y^2)}{x^2 + y^2}, \quad f(0, 0) = 0",
+                              r"\quad \text{\small (Rudin, Exercise 9.27)}", font_size=32),
                       label(r"the second difference on an $h \times k$ rectangle at the origin:", font_size=24,
                             color=GREY_A),
                       MathTex(r"\frac{f(h, k) - f(0, k) - f(h, 0) + f(0, 0)}{hk} = \frac{h^2 - k^2}{h^2 + k^2}",
-                              font_size=32, color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.2)
+                              font_size=32, color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_B)
         bx = plain_axes([-2, 2, 1], [-1.1, 1.1, 1], 5.6, 3.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([3.3, -1.0, 0])

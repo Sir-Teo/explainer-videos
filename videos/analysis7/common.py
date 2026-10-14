@@ -87,5 +87,5 @@ def phase_wheel(radius=0.45, n=72) -> VGroup:
     lab = VGroup(MathTex(r"0", font_size=18).next_to(g, RIGHT, buff=0.06),
                  MathTex(r"\pi", font_size=18).next_to(g, LEFT, buff=0.06),
                  MathTex(r"\tfrac{\pi}{2}", font_size=18).next_to(g, UP, buff=0.04))
-    t = label(r"$\arg f$", font_size=18, color=GREY_B).next_to(g, DOWN, buff=0.06)
+    t = label(r"$\arg f$", font_size=20, color=GREY_B).next_to(g, DOWN, buff=0.06)
     return VGroup(g, lab, t)
