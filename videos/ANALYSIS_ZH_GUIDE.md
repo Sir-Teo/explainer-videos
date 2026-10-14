@@ -238,6 +238,26 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | Hahn / Jordan decomposition; point mass, atom | 哈恩分解 / 若尔当分解；点质量，原子 |
 | maximal function; Hardy–Littlewood; covering lemma; Lebesgue point | 极大函数；哈代–李特尔伍德；覆盖引理；勒贝格点 |
 | absolutely continuous (function); tent function | 绝对连续；帐篷函数 |
+| holomorphic, entire; domain coloring; conformal | 全纯，整函数；域着色；共形 |
+| Cauchy–Riemann; Goursat; Liouville; Morera | 柯西–黎曼；古尔萨；刘维尔；莫雷拉 |
+| residue; Rouché; Schwarz lemma; three lines (Hadamard); Phragmén–Lindelöf | 留数；儒歇定理；施瓦茨引理；三线定理（阿达马）；弗拉格曼–林德勒夫 |
+| identity theorem; open mapping theorem; maximum modulus | 恒等定理；开映射定理；最大模原理 |
+| normal family; Montel; Riemann mapping; Schwarz–Christoffel | 正规族；蒙泰尔；黎曼映射；施瓦茨–克里斯托费尔 |
+| Blaschke product; monodromy; Picard's little theorem; Beurling; inner function | 布拉施克乘积；单值性定理；小皮卡定理；伯林；内函数 |
+| meager / residual; G_δ | 贫集 / 剩余集；G_δ集 |
+| uniform boundedness (Banach–Steinhaus); Carleson; Kolmogorov | 一致有界原理（巴拿赫–施泰因豪斯）；卡尔松；柯尔莫哥洛夫 |
+| weak-* topology; reflexive; gauge (Minkowski functional); sublinear | 弱*拓扑（read "弱星"）；自反；规范函数；次线性 |
+| extreme point; Krein–Milman; Tychonoff; Mazur; Haar measure | 极点；克列因–米尔曼；吉洪诺夫；马祖尔；哈尔测度 |
+| compact operator; Fredholm alternative; Volterra operator; finite rank | 紧算子；弗雷德霍姆择一定理；沃尔泰拉算子；有限秩 |
+| test function; distribution; principal value; Dirac comb; mollify | 检验函数；分布；主值；狄拉克梳；磨光 |
+| tempered distribution; Schwartz space; Hermite functions; sinc | 缓增分布；施瓦茨空间；埃尔米特函数；抽样函数 |
+| Paley–Wiener; Denjoy–Carleman; Sobolev (H^s → Hˢ); fundamental solution | 佩利–维纳；当茹瓦–卡莱曼；索伯列夫（Hˢ）；基本解 |
+| Malgrange–Ehrenpreis; elliptic; Wiener's Tauberian theorem | 马尔格朗日–埃伦普雷斯；椭圆型；维纳陶伯定理 |
+| Banach algebra; resolvent; spectral radius; Neumann series | 巴拿赫代数；预解式；谱半径；诺伊曼级数 |
+| Gelfand transform; Gelfand–Naimark (–Segal); C*-algebra | 盖尔范德变换；盖尔范德–奈马克（–西格尔）；C*代数 (read "C星代数") |
+| numerical range; projection-valued measure; ergodic theorem | 数值域；投影值测度；遍历定理 |
+| deficiency indices; self-adjoint extension; Cayley transform; Stone's theorem | 亏指数；自伴延拓；凯莱变换；斯通定理 |
+| Hamiltonian; Born rule; canonical commutation relation; Wielandt | 哈密顿量；玻恩定则；正则对易关系；维兰特 |
 
 ## Conventions settled while translating Part 1
 

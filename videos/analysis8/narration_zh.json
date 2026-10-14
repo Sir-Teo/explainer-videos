@@ -1,0 +1,298 @@
+{
+ "title": "分析学，从零搭建 · 第8部分：巴拿赫空间",
+ "chapters": {
+  "Hook": "一个傅里叶级数发散的连续函数",
+  "Banach": "1. 巴拿赫空间与有界算子",
+  "TVS": "2. 没有范数的空间",
+  "Baire": "3. 贝尔定理",
+  "UniformBoundedness": "4. 一致有界原理",
+  "OpenMapping": "5. 开映射与闭图像",
+  "HahnBanach": "6. 哈恩–巴拿赫定理",
+  "Dual": "7. 对偶空间",
+  "Weak": "8. 弱收敛",
+  "Alaoglu": "9. 巴拿赫–阿劳格鲁定理",
+  "KreinMilman": "10. 极点",
+  "Compact": "11. 紧算子",
+  "Samples": "12. 四个应用",
+  "Outro": "账本的第八行"
+ },
+ "lines": {
+  "44742417165e": {
+   "scene": "Hook",
+   "en": "Seven rows of the ledger are filled. Each part found a complete space and asked what compactness costs there. <bookmark mark='l'/> Part 8 asks those questions about every complete normed space at once.",
+   "zh": "账本已经填好了七行。每一部分都找到了一个完备的空间，并问在那里紧性要付出什么代价。<bookmark mark='l'/>第8部分要对所有完备的赋范空间，一次性地问这些问题。"
+  },
+  "ec2d53bb4e91": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> The n-th partial sum of a Fourier series at zero is the integral of f against the Dirichlet kernel. The kernel has a tall peak and many side lobes, some negative. <bookmark mark='b'/> A function bounded by one can line up its sign with the kernel's, and then its partial sum at zero is the total area under the absolute value of the kernel. Continuous functions can come within three percent of that. <bookmark mark='c'/> And that area grows without bound: like four over pi squared times the log of n, computed here out to a million. So for each n there's a bounded continuous function whose n-th partial sum at zero is large. Does a single continuous function have partial sums that grow without bound?",
+   "zh": "<bookmark mark='a'/>傅里叶级数在0处的第n个部分和，是f关于狄利克雷核的积分。这个核有一个高高的尖峰，还有许多旁瓣，其中一些是负的。<bookmark mark='b'/>一个不超过1的函数，可以让自己的符号和核的符号对齐，这时它在0处的部分和，就是核的绝对值下方的总面积。连续函数可以做到与这个值相差不到百分之三。<bookmark mark='c'/>而这个面积会无限增长：像π的平方分之4乘以n的对数那样增长，这里一直算到了一百万。所以对每个n，都有一个有界的连续函数，它在0处的第n个部分和很大。那么，是否存在同一个连续函数，它的部分和会无限增长？"
+  },
+  "1afdfbcebf78": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Du Bois-Reymond answered yes in 1873, with an explicit and delicate construction. <bookmark mark='b'/> Banach and Steinhaus answered it in three lines. The functionals that take f to its n-th partial sum at zero have norms that go to infinity. Their theorem then says the partial sums are unbounded, not just for one f, but for most continuous functions, in a precise sense due to Baire. <bookmark mark='c'/> A theorem about the existence of monsters, proved by counting. That's the spirit of this part.",
+   "zh": "<bookmark mark='a'/>杜布瓦–雷蒙在1873年回答：存在，他给出了一个明确而精巧的构造。<bookmark mark='b'/>巴拿赫和施泰因豪斯只用三行就回答了它。把f送到它在0处第n个部分和的那些泛函，范数趋于无穷。于是他们的定理说，部分和是无界的，而且不只对某一个f，而是对大多数连续函数都如此，这里的“大多数”有贝尔给出的精确含义。<bookmark mark='c'/>一条关于怪物存在的定理，靠数一数来证明。这就是这一部分的精神。"
+  },
+  "206a7ced7df3": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapter five of Real and Complex Analysis and the first five chapters of Rudin's Functional Analysis. <bookmark mark='a'/> First the spaces, and Baire's theorem with its three children: uniform boundedness, open mappings and closed graphs. <bookmark mark='b'/> Then Hahn-Banach and duality, weak convergence, and the compactness that comes back in the weak-star topology. <bookmark mark='c'/> Then extreme points, compact operators, and four applications.",
+   "zh": "计划是这样的，跟着《实分析与复分析》的第5章，以及鲁丁《泛函分析》的前5章走。<bookmark mark='a'/>首先是这些空间，以及贝尔定理和它的三个孩子：一致有界原理、开映射定理和闭图像定理。<bookmark mark='b'/>然后是哈恩–巴拿赫定理与对偶、弱收敛，以及在弱*拓扑中回归的紧性。<bookmark mark='c'/>再然后是极点、紧算子，以及四个应用。"
+  },
+  "fee2d5516b00": {
+   "scene": "Banach",
+   "en": "Chapter one: complete normed spaces, named after Stefan Banach, and the maps between them.",
+   "zh": "第一章：以斯特凡·巴拿赫命名的完备赋范空间，以及它们之间的映射。"
+  },
+  "17b20c57c84b": {
+   "scene": "Banach",
+   "en": "<bookmark mark='a'/> A Banach space is a vector space with a norm in which every Cauchy sequence converges. We've met many. <bookmark mark='b'/> The sequence spaces, with the sum, square-sum and supremum norms, whose unit balls we know as the diamond, the circle and the square. <bookmark mark='c'/> The continuous functions with the sup norm, from Part 3; the sequences that tend to zero; and the L p spaces of Part 6. Every theorem in this part holds for all of them at once.",
+   "zh": "<bookmark mark='a'/>巴拿赫空间是一个带范数的向量空间，在其中每个柯西序列都收敛。我们已经见过很多了。<bookmark mark='b'/>序列空间，配上求和、平方和以及上确界范数，它们的单位球我们认得：菱形、圆和正方形。<bookmark mark='c'/>第3部分里配上上确界范数的连续函数；趋于0的序列；以及第6部分的Lᵖ空间。这一部分的每条定理，对它们全都同时成立。"
+  },
+  "03267040a566": {
+   "scene": "Banach",
+   "en": "<bookmark mark='a'/> A linear map between normed spaces is continuous exactly when it's bounded: it stretches no vector by more than a fixed factor. And if it's continuous at one point, it's continuous everywhere, because linearity moves that point anywhere. <bookmark mark='b'/> The smallest such factor is the operator norm: the radius of the smallest ball containing the image of the unit ball. <bookmark mark='c'/> With this norm, the bounded operators themselves form a Banach space.",
+   "zh": "<bookmark mark='a'/>赋范空间之间的线性映射是连续的，当且仅当它是有界的：它对任何向量的拉伸，都不超过一个固定的倍数。而且只要它在一点连续，它就处处连续，因为线性能把那一点挪到任何地方。<bookmark mark='b'/>最小的那个倍数就是算子范数：包含单位球的像的最小球的半径。<bookmark mark='c'/>配上这个范数，有界算子本身也构成一个巴拿赫空间。"
+  },
+  "75f3901f39c8": {
+   "scene": "Banach",
+   "en": "<bookmark mark='a'/> An operator from analysis: integrate from zero to x. On L two of the unit interval, how much can it stretch a function? <bookmark mark='b'/> The answer is two over pi. The function stretched most is a quarter of a cosine wave: integrating it gives a quarter sine wave, two over pi times as long. <bookmark mark='c'/> A discretization with two thousand points agrees to six digits. <bookmark mark='d'/> The other singular values follow the same pattern, two over three pi, two over five pi, falling to zero. That makes this operator compact, which chapter eleven explains.",
+   "zh": "<bookmark mark='a'/>一个来自分析的算子：从0积分到x。在单位区间上的L²里，它能把一个函数拉伸多少？<bookmark mark='b'/>答案是π分之2。被拉伸得最多的函数是四分之一个余弦波：对它积分，得到四分之一个正弦波，长度是原来的π分之2倍。<bookmark mark='c'/>用两千个点做离散化，在六位数字上吻合。<bookmark mark='d'/>其余的奇异值也遵循同样的规律，3π分之2，5π分之2，一直降到0。这让这个算子成为紧算子，第十一章会解释这一点。"
+  },
+  "d7a790b10a72": {
+   "scene": "TVS",
+   "en": "Chapter two: why Rudin's Functional Analysis begins with spaces that have no norm at all.",
+   "zh": "第二章：为什么鲁丁的《泛函分析》要从根本没有范数的空间讲起。"
+  },
+  "a490a6ba55dd": {
+   "scene": "TVS",
+   "en": "<bookmark mark='a'/> Some important spaces have no single norm. Take the smooth functions on an interval. <bookmark mark='b'/> These two are within 0.08 of each other, but their derivatives differ by two, and their second derivatives by fifty. For smooth functions, close should mean close in every derivative. <bookmark mark='c'/> So the topology uses a whole sequence of seminorms, the sups of the k-th derivatives. Countably many seminorms still give a metric, and the space is complete: a Fréchet space. But no single norm does the job, and the test functions of Part 9 are worse still. That's why Grandpa Rudin starts with topological vector spaces.",
+   "zh": "<bookmark mark='a'/>有些重要的空间，没有哪一个范数够用。拿区间上的光滑函数来说。<bookmark mark='b'/>这两个函数彼此相差不到0.08，可它们的导数相差2，二阶导数相差50。对光滑函数来说，“接近”应该意味着每一阶导数都接近。<bookmark mark='c'/>所以这个拓扑要用一整列半范数，也就是各阶导数的上确界。可数多个半范数仍然能给出一个度量，而且空间是完备的：这就是弗雷歇空间。但没有哪一个范数能单独胜任，而第9部分的检验函数还要更糟。这就是为什么“爷爷鲁丁”，也就是他的《泛函分析》，要从拓扑向量空间讲起。"
+  },
+  "6c5de93386bd": {
+   "scene": "TVS",
+   "en": "<bookmark mark='a'/> Part 1 promised that closed and bounded doesn't mean compact beyond R n. Here's the honest end of that story. The unit vectors of l two slide off to the right, and every two of them are root two apart. <bookmark mark='b'/> A ball of radius 0.7 holds at most one of them, so no finite collection of such balls covers the unit ball. <bookmark mark='c'/> Riesz proved more: a topological vector space in which some neighborhood of zero is compact must be finite-dimensional. In infinite dimensions, compactness has to come from somewhere else.",
+   "zh": "<bookmark mark='a'/>第1部分说过，出了n维空间，闭且有界就不等于紧。这里是这个故事老老实实的结局。ℓ²的单位向量一个个向右滑走，任意两个都相距根号2。<bookmark mark='b'/>半径0.7的球至多装下其中一个，所以有限多个这样的球，盖不住单位球。<bookmark mark='c'/>里斯证明了更多：如果一个拓扑向量空间里，0的某个邻域是紧的，那它一定是有限维的。在无穷维里，紧性只能从别处来。"
+  },
+  "15d78fd8f593": {
+   "scene": "TVS",
+   "en": "<bookmark mark='a'/> One more warning. For p below one, L p is still a complete metric vector space, but its balls cave in, like this star. <bookmark mark='b'/> And it has no continuous linear functionals at all, except zero: the convex hull of any ball is the whole space. Hahn-Banach can't work there. <bookmark mark='c'/> So the theory keeps one assumption: local convexity, a base of convex neighborhoods of zero.",
+   "zh": "<bookmark mark='a'/>再提个醒。当p小于1时，Lᵖ仍然是一个完备的度量向量空间，可它的球凹陷了下去，就像这颗星星。<bookmark mark='b'/>而且除了0以外，它根本没有连续线性泛函：任何一个球的凸包都是整个空间。哈恩–巴拿赫定理在那里行不通。<bookmark mark='c'/>所以这套理论保留了一个假设：局部凸性，也就是0有一组由凸邻域构成的基。"
+  },
+  "b7ba0c6fa032": {
+   "scene": "Baire",
+   "en": "Chapter three: Baire's category theorem, the root of three of the four pillars.",
+   "zh": "第三章：贝尔纲定理，四大支柱中三根的根基。"
+  },
+  "699de846764c": {
+   "scene": "Baire",
+   "en": "<bookmark mark='a'/> List the rationals between zero and one: q one, q two, and so on. Can the list be all the real numbers? <bookmark mark='b'/> Pick a closed third of the interval that misses q one. Inside it, a closed third that misses q two. And so on: the intervals shrink by a factor of three each time, each one dodging one more rational. <bookmark mark='c'/> Because the real line is complete, the nested intervals close in on a real number, and it's none of the q n. <bookmark mark='d'/> That's Baire's theorem in miniature: a complete metric space can't be a countable union of nowhere dense sets. The proof is always this: nested closed balls, each avoiding one more thin set, and completeness to finish.",
+   "zh": "<bookmark mark='a'/>把0和1之间的有理数列出来：q_1、q_2，依此类推。这张表能是全部实数吗？<bookmark mark='b'/>在区间里挑一个避开q_1的闭的三分之一段。在它里面，再挑一个避开q_2的闭的三分之一段。依此类推：区间每次缩小到三分之一，每一个都多躲开一个有理数。<bookmark mark='c'/>因为实数轴是完备的，这些套着的区间收向一个实数，而它不是任何一个q_n。<bookmark mark='d'/>这就是缩微版的贝尔定理：完备度量空间不可能是可数多个无处稠密集的并。证明永远是这样：一串套着的闭球，每个都多避开一个稀薄的集合，最后靠完备性收尾。"
+  },
+  "a51212418a69": {
+   "scene": "Baire",
+   "en": "<bookmark mark='a'/> Baire's theorem gives a notion of size. A set is meager if it's a countable union of nowhere dense sets, and residual if its complement is meager. In a complete space, residual sets are dense: in Baire's sense, they're almost everything. <bookmark mark='b'/> It's a different notion from measure. Put a tiny open interval around each rational, of total length epsilon. The union is open and dense, but its length is at most epsilon. <bookmark mark='c'/> Intersect these sets as epsilon goes to zero. The result is a dense G delta, residual, almost everything to Baire, and it has measure zero. Two meanings of most, and they disagree.",
+   "zh": "<bookmark mark='a'/>贝尔定理给出了一种大小的概念。如果一个集合是可数多个无处稠密集的并，就说它是贫集；如果它的补集是贫集，就说它是剩余集。在完备空间里，剩余集是稠密的：在贝尔的意义下，它们几乎就是一切。<bookmark mark='b'/>这和测度是不同的概念。在每个有理数周围放一个小开区间，总长度为ε。它们的并是开的、稠密的，可长度至多是ε。<bookmark mark='c'/>让ε趋于0，把这些集合交起来。结果是一个稠密的G_δ集，是剩余集，在贝尔看来几乎是一切，可它的测度是0。“大多数”有两种含义，而它们互相矛盾。"
+  },
+  "737e268bb2b5": {
+   "scene": "UniformBoundedness",
+   "en": "Chapter four: the uniform boundedness principle of Banach and Steinhaus.",
+   "zh": "第四章：巴拿赫和施泰因豪斯的一致有界原理。"
+  },
+  "30b9ec89399e": {
+   "scene": "UniformBoundedness",
+   "en": "<bookmark mark='a'/> Banach and Steinhaus: for a family of bounded operators on a Banach space, either their norms are bounded, or they blow up on a dense G delta. <bookmark mark='b'/> The proof is Baire. Let E k be the set of points whose orbit stays within k: a closed set. <bookmark mark='c'/> If every orbit is bounded, the E k cover the whole space, and Baire says one of them must contain a ball. <bookmark mark='d'/> A ball's worth of uniform bounds, shifted to the origin by linearity, bounds every operator's norm by the same constant. Pointwise bounds become uniform bounds.",
+   "zh": "<bookmark mark='a'/>巴拿赫–施泰因豪斯定理：对巴拿赫空间上的一族有界算子，要么它们的范数有界，要么它们在一个稠密的G_δ集上爆炸。<bookmark mark='b'/>证明靠的是贝尔定理。令E_k为轨道始终不超过k的那些点组成的集合：它是闭集。<bookmark mark='c'/>如果每条轨道都有界，这些E_k就盖住了整个空间，而贝尔定理说，其中必有一个包含一个球。<bookmark mark='d'/>一整个球上的一致界，借助线性平移到原点，就用同一个常数控制了每个算子的范数。逐点的界，变成了一致的界。"
+  },
+  "2e20b475875d": {
+   "scene": "UniformBoundedness",
+   "en": "<bookmark mark='a'/> Now the hook. On the continuous functions on the circle, the functional that takes f to its n-th partial sum at zero has norm equal to the integral of the absolute Dirichlet kernel. <bookmark mark='b'/> A continuous function shaped like the sign of the kernel nearly achieves it. <bookmark mark='c'/> Those norms grow like the log of n. So the family isn't uniformly bounded, and Banach and Steinhaus say the partial sums at zero are unbounded for a dense G delta of continuous functions. Most continuous functions have Fourier series that diverge at zero. <bookmark mark='d'/> For square-integrable functions, Carleson proved in 1966 that the series converge almost everywhere; for integrable ones, Kolmogorov had found a series diverging everywhere.",
+   "zh": "<bookmark mark='a'/>现在回到开场。在圆周上的连续函数上，把f送到它在0处第n个部分和的泛函，范数等于狄利克雷核绝对值的积分。<bookmark mark='b'/>一个形状像核的符号的连续函数，几乎能达到这个范数。<bookmark mark='c'/>这些范数像n的对数那样增长。所以这一族不是一致有界的，于是巴拿赫和施泰因豪斯说：对一个稠密G_δ集里的连续函数，0处的部分和都是无界的。大多数连续函数的傅里叶级数在0处发散。<bookmark mark='d'/>对平方可积函数，卡尔松在1966年证明了级数几乎处处收敛；而对可积函数，柯尔莫哥洛夫早已找到一个处处发散的级数。"
+  },
+  "6883d7988da8": {
+   "scene": "UniformBoundedness",
+   "en": "<bookmark mark='a'/> The same kernel answers another question. The Fourier coefficients of an integrable function tend to zero, by the Riemann-Lebesgue lemma, so the Fourier transform maps L one into the sequences converging to zero. <bookmark mark='b'/> Is every such sequence a Fourier series? If so, the open mapping theorem, coming next, would bound the L one norm by the largest coefficient. <bookmark mark='c'/> The Dirichlet kernels break that bound: their coefficients are all one, and their L one norms grow without limit. So the map isn't onto, and nobody had to find the missing sequence.",
+   "zh": "<bookmark mark='a'/>同一个核还回答了另一个问题。由黎曼–勒贝格引理，可积函数的傅里叶系数趋于0，所以傅里叶变换把L¹映到趋于0的序列里。<bookmark mark='b'/>每一个这样的序列，都是某个傅里叶级数吗？如果是，接下来要讲的开映射定理，就会用最大的系数来控制L¹范数。<bookmark mark='c'/>狄利克雷核打破了这个界：它们的系数全是1，L¹范数却无限增长。所以这个映射不是满射，而且谁也不用把缺失的那个序列找出来。"
+  },
+  "29830396bf7b": {
+   "scene": "OpenMapping",
+   "en": "Chapter five: Baire's second and third children, the open mapping and closed graph theorems.",
+   "zh": "第五章：贝尔定理的第二个和第三个孩子，开映射定理和闭图像定理。"
+  },
+  "32618dc4725a": {
+   "scene": "OpenMapping",
+   "en": "<bookmark mark='a'/> The open mapping theorem: a bounded linear map of one Banach space onto another sends the unit ball to a set that contains a ball. <bookmark mark='b'/> In the plane, the image of the disk is an ellipse, and the largest disk inside it has radius one over the norm of the inverse. <bookmark mark='c'/> In infinite dimensions that's a theorem. Baire says some multiple of the image is dense in a ball; completeness, through an iteration, removes the word dense. <bookmark mark='d'/> Checked on sixty coordinates of l two: fifty random targets inside the predicted ball are all hit from inside the unit ball. The consequence: a bounded bijection between Banach spaces has a bounded inverse, for free.",
+   "zh": "<bookmark mark='a'/>开映射定理：从一个巴拿赫空间映满另一个巴拿赫空间的有界线性映射，把单位球映成一个包含某个球的集合。<bookmark mark='b'/>在平面上，圆盘的像是一个椭圆，椭圆里最大的圆盘，半径是逆映射范数分之1。<bookmark mark='c'/>在无穷维里，这是一条定理。贝尔定理说，像的某个倍数在一个球里稠密；完备性通过一次迭代，去掉了“稠密”这两个字。<bookmark mark='d'/>在ℓ²的60个坐标上验证：预测的球里的50个随机目标，全都能从单位球里打中。推论是：巴拿赫空间之间的有界双射，自动有有界的逆，不用额外付出。"
+  },
+  "6cbcf419ffd6": {
+   "scene": "OpenMapping",
+   "en": "<bookmark mark='a'/> The closed graph theorem: a linear map between Banach spaces whose graph is closed is automatically bounded. It's the open mapping theorem applied to the graph. <bookmark mark='b'/> A striking corollary, due to Hellinger and Toeplitz: a symmetric operator defined on all of a Hilbert space is bounded. <bookmark mark='c'/> i times the derivative is symmetric on periodic functions, but sine n x over root pi has norm one while its derivative has norm n. So differentiation can't be defined on all of L two. It must live on a smaller domain, and that's why Part 10 needs unbounded operators.",
+   "zh": "<bookmark mark='a'/>闭图像定理：巴拿赫空间之间的线性映射，只要图像是闭的，就自动有界。它就是把开映射定理用在图像上。<bookmark mark='b'/>一个惊人的推论，来自黑林格和特普利茨：定义在整个希尔伯特空间上的对称算子，都是有界的。<bookmark mark='c'/>i乘以求导，在周期函数上是对称的，可根号π分之sin nx的范数是1，它的导数范数却是n。所以求导不可能定义在整个L²上。它只能住在一个更小的定义域里，这就是为什么第10部分需要无界算子。"
+  },
+  "0ba164a140eb": {
+   "scene": "HahnBanach",
+   "en": "Chapter six: the Hahn-Banach theorem, the fourth pillar, and the only one not built on Baire.",
+   "zh": "第六章：哈恩–巴拿赫定理，第四根支柱，也是唯一不建立在贝尔定理上的那一根。"
+  },
+  "3ce45bf65d5d": {
+   "scene": "HahnBanach",
+   "en": "<bookmark mark='a'/> Hahn-Banach extends a linear functional from a subspace to the whole space without breaking a bound. Here's the key step, in the plane: a functional on the x-axis, bounded by the length, extended to one more direction. <bookmark mark='b'/> The new value c must sit above every blue lower bound and below every pink upper bound. <bookmark mark='c'/> And it can: the highest blue point is below the lowest pink point, by the triangle inequality. Any c in the yellow band is a valid extension. <bookmark mark='d'/> That handles one dimension. Infinitely many need Hausdorff's maximality principle: pure logic, which no picture can show.",
+   "zh": "<bookmark mark='a'/>哈恩–巴拿赫定理把一个线性泛函从子空间延拓到整个空间，而且不破坏它的界。这是平面上的关键一步：x轴上的一个泛函，被长度控制住，要再延拓一个方向。<bookmark mark='b'/>新的值c，必须在每个蓝色下界之上，在每个粉色上界之下。<bookmark mark='c'/>而这是可以做到的：由三角不等式，最高的蓝点低于最低的粉点。黄色带子里的任何c，都是合法的延拓。<bookmark mark='d'/>这解决了一个维度。无穷多个维度，要靠豪斯多夫极大原理：纯粹的逻辑，没有图能画出来。"
+  },
+  "68bd94046c8e": {
+   "scene": "HahnBanach",
+   "en": "<bookmark mark='a'/> The geometric form: two disjoint convex sets, one compact and one closed, can be separated by a closed hyperplane. <bookmark mark='b'/> For two convex polygons, the hyperplane through the midpoint of their closest points, perpendicular to the gap, does it: the functional is below the yellow level on one set and above it on the other. <bookmark mark='c'/> In general the proof feeds the sandwich a special sublinear function: the gauge of a convex set, how far you must scale the set to reach a point.",
+   "zh": "<bookmark mark='a'/>几何形式：两个不相交的凸集，一个紧、一个闭，可以被一个闭超平面分开。<bookmark mark='b'/>对两个凸多边形，经过它们最近点的中点、垂直于间隙的超平面就能做到：泛函在一个集合上低于黄色的水平，在另一个上高于它。<bookmark mark='c'/>一般情形下，证明给这个夹逼喂进一个特殊的次线性函数：凸集的规范函数，也就是要把凸集放大多少倍才能够到某一点。"
+  },
+  "961b0c022b0d": {
+   "scene": "HahnBanach",
+   "en": "<bookmark mark='a'/> The consequences are what make duality work. Every nonzero vector has a functional of norm one that measures its full length. <bookmark mark='b'/> So the norm of x is the supremum of the functionals over the dual unit ball, and functionals separate points. <bookmark mark='c'/> And a vector is outside a closed subspace exactly when some functional kills the subspace but not the vector. A normed space always has enough functionals to see everything, unlike L p for p below one.",
+   "zh": "<bookmark mark='a'/>这些推论，正是让对偶理论运转起来的东西。每个非零向量，都有一个范数为1的泛函，能量出它的全长。<bookmark mark='b'/>所以x的范数，是对偶单位球上各个泛函的上确界，而且泛函能分离点。<bookmark mark='c'/>一个向量在某个闭子空间之外，当且仅当有某个泛函把这个子空间变成0，却不把这个向量变成0。赋范空间总有足够多的泛函来看清一切，不像p小于1时的Lᵖ。"
+  },
+  "803e9e259b41": {
+   "scene": "Dual",
+   "en": "Chapter seven: dual spaces, the spaces of functionals.",
+   "zh": "第七章：对偶空间，也就是泛函组成的空间。"
+  },
+  "0b61b249a709": {
+   "scene": "Dual",
+   "en": "<bookmark mark='a'/> A functional on a normed space has its own norm: its largest value on the unit ball. So the functionals form a normed space too, the dual, with a unit ball of its own. <bookmark mark='b'/> For the one-norm, whose ball is the diamond, the dual ball is the square: the largest value of g dot x on the diamond is the largest coordinate of g. <bookmark mark='c'/> The circle is its own dual. And in general the dual of the p-norm is the q-norm, with conjugate exponents, checked here for sixty random functionals.",
+   "zh": "<bookmark mark='a'/>赋范空间上的泛函有它自己的范数：它在单位球上的最大值。所以泛函也构成一个赋范空间，即对偶空间，它也有自己的单位球。<bookmark mark='b'/>对1范数，它的球是菱形，对偶球就是正方形：g点乘x在菱形上的最大值，就是g最大的那个坐标。<bookmark mark='c'/>圆是它自己的对偶。一般地，p范数的对偶是q范数，两者是共轭指数，这里用60个随机泛函验证过。"
+  },
+  "447db620da9e": {
+   "scene": "Dual",
+   "en": "<bookmark mark='a'/> The duals we know. For p between one and infinity, the dual of l p is l q, and the dual of that is l p again: these spaces are reflexive. <bookmark mark='b'/> The sequences tending to zero have dual l one, and l one has dual l infinity, which is strictly bigger, so l one isn't reflexive. The continuous functions have the measures as their dual, as Part 6 proved. <bookmark mark='c'/> And l infinity has functionals that no sequence describes, like a limit for every bounded sequence, which only Hahn-Banach can produce. That's the promise from Part 6 kept.",
+   "zh": "<bookmark mark='a'/>我们认识的那些对偶。当p在1和无穷之间时，ℓᵖ的对偶是ℓ^q，而它的对偶又是ℓᵖ：这些空间是自反的。<bookmark mark='b'/>趋于0的序列，对偶是ℓ¹；而ℓ¹的对偶是ℓ∞，它严格更大，所以ℓ¹不是自反的。连续函数的对偶是测度，这是第6部分证明过的。<bookmark mark='c'/>而ℓ∞上有些泛函，没有任何序列能描述，比如给每个有界序列都指定一个极限的泛函，只有哈恩–巴拿赫定理才能造出来。这就兑现了第6部分的承诺。"
+  },
+  "c68dd7ede25c": {
+   "scene": "Weak",
+   "en": "Chapter eight: weak convergence, convergence as seen by every functional.",
+   "zh": "第八章：弱收敛，在每个泛函眼里的收敛。"
+  },
+  "098e157db424": {
+   "scene": "Weak",
+   "en": "<bookmark mark='a'/> The unit vectors of l two never get close to anything: each is root two from every other, and one from zero. <bookmark mark='b'/> But look at them through a fixed functional, the inner product with a vector y. That reading is just the n-th coordinate of y, which goes to zero. <bookmark mark='c'/> For fifty random y's, the largest reading falls steadily. <bookmark mark='d'/> So e n converges to zero weakly: every functional sees the sequence converge, even though its norm never shrinks.",
+   "zh": "<bookmark mark='a'/>ℓ²的单位向量从不靠近任何东西：每一个与其他每一个都相距根号2，与0相距1。<bookmark mark='b'/>可是透过一个固定的泛函来看它们，也就是与一个向量y做内积。这个读数就是y的第n个坐标，它趋于0。<bookmark mark='c'/>对50个随机的y，最大的读数稳步下降。<bookmark mark='d'/>所以e_n弱收敛到0：每个泛函都看见这个序列收敛，尽管它的范数从不缩小。"
+  },
+  "fdfc9dec6aae": {
+   "scene": "Weak",
+   "en": "<bookmark mark='a'/> In L two there are three ways to converge weakly without converging. <bookmark mark='b'/> Oscillate: sine n x wiggles faster and faster, and against any fixed function its integral fades, by the Riemann-Lebesgue lemma. <bookmark mark='c'/> Concentrate: a tall thin spike of norm one sees less and less of any fixed function. Escape: a bump sliding off to infinity. <bookmark mark='d'/> All have norm one, all converge weakly to zero. These are the bump's evil twins from Part 3, back as the standard examples.",
+   "zh": "<bookmark mark='a'/>在L²里，有三种方式能弱收敛却不收敛。<bookmark mark='b'/>振荡：sin nx抖得越来越快，由黎曼–勒贝格引理，它与任何固定函数乘积的积分都逐渐消失。<bookmark mark='c'/>集中：一根范数为1的又高又窄的尖刺，看到的任何固定函数越来越少。逃逸：一个鼓包滑向无穷远。<bookmark mark='d'/>它们的范数都是1，都弱收敛到0。这些就是第3部分那个鼓包的邪恶双胞胎，作为标准例子又回来了。"
+  },
+  "534edce95f81": {
+   "scene": "Weak",
+   "en": "<bookmark mark='a'/> Weak limits aren't far from norm limits, though. Average the first N sine waves. <bookmark mark='b'/> The averages really do shrink, in norm, like the square root of pi over N. <bookmark mark='c'/> Mazur's theorem says this always happens: a weak limit is a norm limit of convex combinations. So closed convex sets are also weakly closed. And by Banach and Steinhaus, a weakly convergent sequence is always bounded.",
+   "zh": "<bookmark mark='a'/>不过，弱极限离范数极限并不远。把前N个正弦波平均一下。<bookmark mark='b'/>这些平均值确实在范数意义下缩小，像N分之π的平方根那样。<bookmark mark='c'/>马祖尔定理说，这总会发生：弱极限是凸组合的范数极限。所以闭凸集也是弱闭的。而由巴拿赫–施泰因豪斯定理，弱收敛的序列总是有界的。"
+  },
+  "b202283e4dae": {
+   "scene": "Alaoglu",
+   "en": "Chapter nine: the compactness that infinite dimensions take away comes back, in the weak-star topology.",
+   "zh": "第九章：被无穷维夺走的紧性，在弱*拓扑中回来了。"
+  },
+  "1134d3145dc5": {
+   "scene": "Alaoglu",
+   "en": "<bookmark mark='a'/> Banach-Alaoglu: the closed unit ball of a dual space is compact in the weak-star topology, where functionals converge when their values at each point converge. <bookmark mark='b'/> For the dual of l one, a functional of norm at most one is just a choice of a number between minus one and one for each coordinate: a point of an infinite cube. <bookmark mark='c'/> In general, each functional is a point in a product of intervals, one interval for each vector. Tychonoff's theorem says the product is compact, and linearity is a closed condition. <bookmark mark='d'/> For separable spaces there's a sequential version, proved by Cantor's diagonal argument, which is how it's used most often.",
+   "zh": "<bookmark mark='a'/>巴拿赫–阿劳格鲁定理：对偶空间的闭单位球，在弱*拓扑下是紧的；在这种拓扑里，泛函收敛，就是指它们在每一点的值收敛。<bookmark mark='b'/>对ℓ¹的对偶来说，范数至多为1的泛函，就是给每个坐标选一个介于负1和1之间的数：无穷维立方体里的一个点。<bookmark mark='c'/>一般情形下，每个泛函都是一族区间乘积里的一个点，每个向量对应一个区间。吉洪诺夫定理说，这个乘积是紧的，而线性是一个闭条件。<bookmark mark='d'/>对可分空间，还有一个序列版本，用康托尔的对角线论证就能证明，人们最常用的就是它。"
+  },
+  "2cb5d43ff0c9": {
+   "scene": "Alaoglu",
+   "en": "<bookmark mark='a'/> Here's the payoff for measures. Probability measures on the unit interval are functionals on the continuous functions, all in the dual unit ball. <bookmark mark='b'/> This sequence keeps changing shape: its mean wanders forever and never settles. <bookmark mark='c'/> But Alaoglu promises a weak-star convergent subsequence. Take n equal to 6, 44, 710, 103993, nearly multiples of two pi. Along it, the histograms settle onto a limit measure, and every moment converges: the error drops to four ten-millionths. This is how analysts produce limits of measures, from Haar measure to Prokhorov's theorem in probability.",
+   "zh": "<bookmark mark='a'/>这是测度方面的回报。单位区间上的概率测度，是连续函数上的泛函，全都在对偶单位球里。<bookmark mark='b'/>这个序列不停地变换形状：它的均值永远游荡，从不安定下来。<bookmark mark='c'/>但阿劳格鲁定理保证有一个弱*收敛的子序列。取n等于6、44、710、103993，它们几乎都是2π的整数倍。沿着这个子序列，直方图稳定到一个极限测度上，每一阶矩都收敛：误差降到千万分之四。分析学家就是这样造出测度的极限的，从哈尔测度，到概率论里的普罗霍罗夫定理。"
+  },
+  "c1f94ec1d618": {
+   "scene": "KreinMilman",
+   "en": "Chapter ten: extreme points, and the Krein-Milman theorem.",
+   "zh": "第十章：极点，以及克列因–米尔曼定理。"
+  },
+  "6c86df1351ec": {
+   "scene": "KreinMilman",
+   "en": "<bookmark mark='a'/> A point of a convex set is extreme if it isn't the midpoint of two other points of the set. <bookmark mark='b'/> A point on an edge of the diamond splits along the edge, so only the four corners are extreme. <bookmark mark='c'/> On the circle, every boundary point is extreme. On the square, only the corners again. The same test in three dimensions, on random boundary points, gives none, all, and none. <bookmark mark='d'/> Krein and Milman: a compact convex set is the closed convex hull of its extreme points. The corners are enough to rebuild the whole set.",
+   "zh": "<bookmark mark='a'/>凸集里的一个点，如果不是集合里另外两点的中点，就叫极点。<bookmark mark='b'/>菱形边上的点，可以沿着边分成两点，所以只有四个角是极点。<bookmark mark='c'/>在圆上，每个边界点都是极点。在正方形上，又只有四个角。在三维里，对随机的边界点做同样的检验，结果依次是：一个都没有，全部都是，一个都没有。<bookmark mark='d'/>克列因和米尔曼：紧凸集是它的极点的闭凸包。有角就足以重建整个集合。"
+  },
+  "0f469597b3b2": {
+   "scene": "KreinMilman",
+   "en": "<bookmark mark='a'/> Now a surprise. In L one of the unit interval, take f equals two x, of norm one. <bookmark mark='b'/> Cut the interval where half the mass lies, at one over root two. Doubling f on each side gives two functions of norm one, and f is their average. <bookmark mark='c'/> Every unit vector splits like this, so the unit ball of L one has no extreme points at all. <bookmark mark='d'/> But a dual ball is weak-star compact by Alaoglu, so it has plenty of extreme points by Krein and Milman. Conclusion: L one is not the dual of any Banach space. Two compactness theorems, combined into a non-existence proof.",
+   "zh": "<bookmark mark='a'/>现在来个意外。在单位区间上的L¹里，取f等于2乘x，它的范数是1。<bookmark mark='b'/>在质量一分为二的地方，也就是根号2分之1处，把区间切开。在每一边把f加倍，得到两个范数为1的函数，而f是它们的平均。<bookmark mark='c'/>每个单位向量都能这样拆开，所以L¹的单位球根本没有极点。<bookmark mark='d'/>可是由阿劳格鲁定理，对偶球是弱*紧的，所以由克列因–米尔曼定理，它有大量的极点。结论：L¹不是任何巴拿赫空间的对偶。两条紧性定理，合成了一个不存在性的证明。"
+  },
+  "ebe217fe8154": {
+   "scene": "Compact",
+   "en": "Chapter eleven: compact operators, the ones for which linear algebra survives.",
+   "zh": "第十一章：紧算子，让线性代数得以幸存的那些算子。"
+  },
+  "bcfda1e828e2": {
+   "scene": "Compact",
+   "en": "<bookmark mark='a'/> An operator is compact if it sends the unit ball into a set with compact closure. <bookmark mark='b'/> The Volterra operator from chapter one is an example: it maps the unit ball onto an infinite-dimensional ellipsoid whose axes are two over pi, two over three pi, two over five pi, falling to zero. <bookmark mark='c'/> Thin in every direction but finitely many: so in Hilbert space a compact operator is a limit of finite-rank ones, matrices in disguise.",
+   "zh": "<bookmark mark='a'/>如果一个算子把单位球映进一个闭包是紧的集合，就说它是紧算子。<bookmark mark='b'/>第一章里的沃尔泰拉算子就是一个例子：它把单位球映成一个无穷维的椭球，各个轴依次是π分之2、3π分之2、5π分之2，一直降到0。<bookmark mark='c'/>除了有限多个方向，在每个方向上都很薄：所以在希尔伯特空间里，紧算子是有限秩算子的极限，也就是乔装打扮的矩阵。"
+  },
+  "4f50312b941c": {
+   "scene": "Compact",
+   "en": "<bookmark mark='a'/> The model compact operator is an integral operator with a continuous kernel. This one solves the equation of a string held at both ends: given a load f, it returns the displacement. <bookmark mark='b'/> Discretize it with two thousand points and diagonalize. The eigenvectors are the string's modes, sine n pi x, <bookmark mark='c'/> and the eigenvalues are one over n squared pi squared, to three digits, falling to zero. A compact operator's eigenvalues can only pile up at zero.",
+   "zh": "<bookmark mark='a'/>紧算子的典型，是带连续核的积分算子。这一个解的是两端固定的弦的方程：给定一个载荷f，它返回弦的位移。<bookmark mark='b'/>用两千个点把它离散化，再对角化。特征向量就是弦的振动模态，sin（nπx），<bookmark mark='c'/>而特征值是n的平方乘π的平方分之1，在三位数字上吻合，一直降到0。紧算子的特征值只能在0处堆积。"
+  },
+  "ee819186b900": {
+   "scene": "Compact",
+   "en": "<bookmark mark='a'/> For compact operators, almost all of finite-dimensional linear algebra survives. <bookmark mark='b'/> The nonzero spectrum consists of eigenvalues of finite multiplicity, accumulating only at zero. <bookmark mark='c'/> And Fredholm's alternative holds: T minus lambda is one-to-one exactly when it's onto, as for square matrices. <bookmark mark='d'/> The symmetric ones even have orthonormal eigenbases; that's the spectral theorem, which Part 10 proves in full.",
+   "zh": "<bookmark mark='a'/>对紧算子来说，有限维线性代数几乎全都幸存了下来。<bookmark mark='b'/>非零的谱由有限重的特征值组成，只在0处聚集。<bookmark mark='c'/>而且弗雷德霍姆择一定理成立：T减λ是一对一的，当且仅当它是满射，就像方阵一样。<bookmark mark='d'/>对称的紧算子甚至有标准正交的特征基；这就是谱定理，第10部分会完整地证明它。"
+  },
+  "c3eb0a4fb1df": {
+   "scene": "Samples",
+   "en": "Chapter twelve: four applications, one from each corner of the theory.",
+   "zh": "第十二章：四个应用，理论的每个角落各取一个。"
+  },
+  "74f9324477be": {
+   "scene": "Samples",
+   "en": "<bookmark mark='a'/> First, a limit for every bounded sequence. Hahn-Banach extends the ordinary limit to all of l infinity, keeping it linear, positive and unchanged by shifting the sequence. <bookmark mark='b'/> Shift invariance alone forces some values. Minus one to the n plus its shift is zero, so its limit is zero. <bookmark mark='c'/> The pattern one, zero, zero, plus two shifts, is the constant one, so its limit is a third: the average. <bookmark mark='d'/> For most sequences nothing forces the value, and no formula gives it. This is the functional on l infinity that's not in l one, the one Part 6 promised.",
+   "zh": "<bookmark mark='a'/>第一，给每个有界序列一个极限。哈恩–巴拿赫定理把普通的极限延拓到整个ℓ∞上，保持它是线性的、正的，并且在序列平移时不变。<bookmark mark='b'/>光靠平移不变性，就能逼出一些值。负1的n次方，加上它平移一位之后的序列，等于0，所以它的极限是0。<bookmark mark='c'/>图案1、0、0，加上它的两次平移，是常数1，所以它的极限是三分之一：也就是平均值。<bookmark mark='d'/>对大多数序列，没有什么能逼出这个值，也没有公式能给出它。这就是ℓ∞上那个不属于ℓ¹的泛函，第6部分承诺过的那一个。"
+  },
+  "0a1e833c8515": {
+   "scene": "Samples",
+   "en": "<bookmark mark='a'/> Second, a model use of the closed graph theorem, due to Grothendieck. A closed subspace of L p made entirely of bounded functions must be finite-dimensional. <bookmark mark='b'/> The closed graph theorem gives one constant C with the sup norm at most C times the L two norm, throughout the subspace. <bookmark mark='c'/> But n orthonormal functions force the constant to be at least root n. For trigonometric polynomials the ratio is exactly the square root of the dimension, so no single constant survives infinitely many dimensions.",
+   "zh": "<bookmark mark='a'/>第二，闭图像定理的一个范例式用法，来自格罗滕迪克。Lᵖ的一个闭子空间，如果全由有界函数组成，就一定是有限维的。<bookmark mark='b'/>闭图像定理给出一个常数C，使得在整个子空间里，上确界范数至多是C乘L²范数。<bookmark mark='c'/>可是n个标准正交函数，迫使这个常数至少是根号n。对三角多项式，这个比值恰好是维数的平方根，所以没有哪个常数能扛住无穷多个维度。"
+  },
+  "0a0fd28c40ff": {
+   "scene": "Samples",
+   "en": "<bookmark mark='a'/> Third, compactness builds a measure. Every compact group has exactly one probability measure unchanged by the group's motions: Haar measure. The proof finds it as a fixed point among all probability measures, which are weak-star compact by Alaoglu. <bookmark mark='b'/> For the rotations of space, it can be sampled with random unit quaternions. Apply fifteen hundred of them to the north pole, and the points spread evenly over the sphere. <bookmark mark='c'/> A test integral gives a third, and shifting the measure by a fixed rotation gives a third again.",
+   "zh": "<bookmark mark='a'/>第三，紧性造出一个测度。每个紧群都恰好有一个在群的运动下不变的概率测度：哈尔测度。证明在所有概率测度中把它找成一个不动点，而由阿劳格鲁定理，这些概率测度是弱*紧的。<bookmark mark='b'/>对空间中的旋转，可以用随机的单位四元数来采样。把其中一千五百个作用在北极点上，这些点就均匀地散布在球面上。<bookmark mark='c'/>一个测试积分给出三分之一，用一个固定的旋转平移这个测度，得到的还是三分之一。"
+  },
+  "ebe0a096fde1": {
+   "scene": "Samples",
+   "en": "<bookmark mark='a'/> Last, a warning about projections. Number the nodes of an infinite binary tree; each infinite branch is then a set of whole numbers. <bookmark mark='b'/> Two different branches part ways after finitely many steps, so they share only finitely many numbers, and there are uncountably many branches. <bookmark mark='c'/> A counting argument with this family shows that the sequences tending to zero have no bounded projection inside l infinity. In Hilbert space, every closed subspace has an orthogonal projection; in general Banach spaces, that's a luxury.",
+   "zh": "<bookmark mark='a'/>最后，关于投影的一个警告。给一棵无穷二叉树的节点编号；于是每条无穷的分支都是一个正整数集合。<bookmark mark='b'/>两条不同的分支走有限步之后就分道扬镳，所以它们只共有有限多个数，而分支有不可数多条。<bookmark mark='c'/>用这一族集合做一个计数论证，就能说明：在ℓ∞里面，趋于0的序列构成的子空间没有有界投影。在希尔伯特空间里，每个闭子空间都有正交投影；在一般的巴拿赫空间里，那是一种奢侈。"
+  },
+  "f76cefee12ae": {
+   "scene": "Outro",
+   "en": "Let's take stock. Banach spaces gathered the complete spaces of earlier parts into one family, where continuity means boundedness, and where the unit ball is never compact. Baire's theorem gave uniform boundedness, which proved that most continuous functions have divergent Fourier series; and it gave the open mapping and closed graph theorems. Hahn-Banach supplied enough functionals, and duality identified them. Weak convergence and the Banach-Alaoglu theorem brought compactness back, Krein-Milman found the corners, and compact operators kept linear algebra alive.",
+   "zh": "我们来盘点一下。巴拿赫空间把前面各部分的完备空间收进同一个家族，在那里，连续就意味着有界，而单位球从来不是紧的。贝尔定理给出了一致有界原理，它证明了大多数连续函数的傅里叶级数是发散的；贝尔定理还给出了开映射定理和闭图像定理。哈恩–巴拿赫定理提供了足够多的泛函，对偶理论认出了它们。弱收敛和巴拿赫–阿劳格鲁定理把紧性带了回来，克列因–米尔曼定理找到了角，而紧算子让线性代数继续活着。"
+  },
+  "d6b69e09123e": {
+   "scene": "Outro",
+   "en": "The ledger's eighth row. <bookmark mark='a'/> The spaces: Banach and Fréchet. <bookmark mark='c2'/> Completeness pays through Baire's theorem. <bookmark mark='c3'/> Compactness returns in the weak-star topology. <bookmark mark='c4'/> The new interchange: pointwise bounds become uniform bounds. <bookmark mark='c5'/> And the Fourier answer is now sharp: divergence for most continuous functions, and, by Carleson's theorem, convergence almost everywhere for square-integrable ones.",
+   "zh": "账本的第八行。<bookmark mark='a'/>空间：巴拿赫空间和弗雷歇空间。<bookmark mark='c2'/>完备性通过贝尔定理带来回报。<bookmark mark='c3'/>紧性在弱*拓扑中回归。<bookmark mark='c4'/>新的交换：逐点的界变成一致的界。<bookmark mark='c5'/>而傅里叶的答案现在是精确的：对大多数连续函数发散；而由卡尔松定理，对平方可积函数几乎处处收敛。"
+  },
+  "9b1b178327d7": {
+   "scene": "Outro",
+   "en": "Next time, in Part 9: distributions. <bookmark mark='a'/> The absolute value has a corner, but its derivative is the sign function. The sign function jumps, and its derivative is a spike of total mass two, twice the Dirac delta, which no function can be. <bookmark mark='b'/> Distributions make that honest: define the derivative by moving it onto smooth test functions. Then everything can be differentiated, and the Fourier transform becomes a symmetry of the whole theory.",
+   "zh": "下一次，在第9部分：分布。<bookmark mark='a'/>绝对值函数有一个尖角，可它的导数是符号函数。符号函数会跳跃，它的导数是一根总质量为2的尖刺，也就是2倍的狄拉克δ，没有哪个函数能是它。<bookmark mark='b'/>分布让这件事变得名正言顺：把导数转移到光滑的检验函数上来定义。这样一来，一切都可以求导，而傅里叶变换成了整个理论的一种对称。"
+  },
+  "20264a8d49a1": {
+   "scene": "Outro",
+   "en": "This part followed chapter five of Real and Complex Analysis and the first five chapters of Functional Analysis. Thanks for watching, and see you in Part 9.",
+   "zh": "这一部分对应《实分析与复分析》的第5章，以及《泛函分析》的前5章。感谢收看，我们第9部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 8, Banach Spaces",
+ "chapters_en": {
+  "Hook": "A continuous function whose Fourier series diverges",
+  "Banach": "1. Banach spaces and bounded operators",
+  "TVS": "2. Spaces without norms",
+  "Baire": "3. Baire's theorem",
+  "UniformBoundedness": "4. Uniform boundedness",
+  "OpenMapping": "5. Open mappings and closed graphs",
+  "HahnBanach": "6. Hahn-Banach",
+  "Dual": "7. Dual spaces",
+  "Weak": "8. Weak convergence",
+  "Alaoglu": "9. Banach-Alaoglu",
+  "KreinMilman": "10. Extreme points",
+  "Compact": "11. Compact operators",
+  "Samples": "12. Four applications",
+  "Outro": "The eighth row of the ledger"
+ }
+}
