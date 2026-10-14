@@ -50,17 +50,23 @@ class Outro(VoiceoverScene):
     def ledger_row(self):
         before = ledger(filled=3, highlight=4).scale(0.95)
         after = ledger(filled=4, highlight=4).scale(0.95)
+        row = after.rows[3]
+        assert len(row) == 6 and len(before.head) == 6
         with self.voiceover(
             "The ledger's fourth row. <bookmark mark='a'/> The spaces: R n, and the continuous functions again. "
-            "Completeness now pays off as fixed points of contractions. Compact sets are the same as before. The new "
-            "swap: a derivative may pass through an integral when everything is continuous on a closed box. And "
-            "Fourier's question hasn't moved; it waits for a better integral."
+            "<bookmark mark='c2'/> Completeness now pays off as fixed points of contractions. <bookmark mark='c3'/> "
+            "Compact sets are the same as before. <bookmark mark='c4'/> The new "
+            "swap: a derivative may pass through an integral when everything is continuous on a closed box. "
+            "<bookmark mark='c5'/> And Fourier's question hasn't moved; it waits for a better integral."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[3][i], after.rows[3][i])
-                                    for i in range(len(after.rows[3]))], lag_ratio=0.6),
-                      FadeOut(before.rows[3]), run_time=6)
+            # each cell arrives with its sentence, its column's header lit as it does
+            self.play(FadeOut(before.rows[3]), FadeIn(row[0]), FadeIn(row[1], shift=RIGHT * 0.1),
+                      Indicate(before.head[1], color=C.EPS), run_time=1.2)
+            for k_ in range(2, 6):
+                vo.wait_until(f"c{k_}")
+                self.play(FadeIn(row[k_], shift=RIGHT * 0.1), Indicate(before.head[k_], color=C.EPS), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
 
@@ -68,18 +74,24 @@ class Outro(VoiceoverScene):
     def next_time(self):
         head = label(r"Next: Part 5, \ Measure and the Lebesgue integral", font_size=38).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 6.0, 3.4).move_to([-3.75, -0.6, 0])
-        x = np.union1d(np.linspace(0, 1, 4001), np.arange(121) / 120)  # include every spike centre k / 5!
+        x = np.union1d(np.linspace(0, 1, 4001), np.arange(121) / 120)  # include every spike centre k / m!, m <= 5
 
         def g(m, n):
             return np.cos(math.factorial(m) * np.pi * x) ** (2 * n)
 
-        shown = [(1, 1), (2, 2), (3, 4), (3, 40), (4, 60), (5, 200)]
+        # up to m = 4: 24 isolated spikes. (At m = 5 the 120 spikes, 0.05 apart on screen, read as a solid block,
+        # the opposite of "zero off the rationals".)
+        shown = [(1, 1), (2, 2), (3, 4), (3, 40), (4, 60)]
         for m, n in shown:
             y = g(m, n)
             assert y.min() >= 0 and y.max() <= 1 + 1e-12
+        yl_ = g(4, 60)
+        k24 = np.arange(25) / 24
+        assert np.allclose(np.cos(24 * np.pi * k24) ** 120, 1)  # height 1 at every k / 4!
+        assert (yl_ > 0.5).mean() < 0.1 and np.all(yl_[np.abs(x * 24 - np.round(x * 24)) > 0.15] < 1e-3)
         # at a rational p/q with q | m!, cos(m! pi x) = +-1, so the limit in n is 1; otherwise it tends to 0
         assert abs(math.cos(math.factorial(4) * math.pi * (3 / 8)) ** 2 - 1) < 1e-12
-        curves = [polyline(ax, x, g(m, n), color=C.APPROX, stroke_width=2 if n < 50 else 1.4) for m, n in shown]
+        curves = [polyline(ax, x, g(m, n), color=C.APPROX, stroke_width=2 if n < 50 else 1.6) for m, n in shown]
         labs = [MathTex(rf"\cos(m!\,\pi x)^{{2n}}, \quad m = {m},\ n = {n}", font_size=28, color=C.APPROX)
                 .next_to(ax, UP, buff=0.1) for m, n in shown]
         lim = MathTex(r"\lim_{m \to \infty} \lim_{n \to \infty} \cos(m!\,\pi x)^{2n} = "
