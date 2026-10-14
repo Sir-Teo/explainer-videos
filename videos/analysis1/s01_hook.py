@@ -248,7 +248,8 @@ class Hook(VoiceoverScene):
         seq = MathTex(*[t + "," for t in approx_s], r"\ldots", font_size=40, color=C.SEQ).to_edge(UP, buff=0.7)
         hole = win.marker(SQRT2, color=C.HOLE, radius=0.12, hollow=True)
         hole_l = always_redraw(lambda: MathTex(r"\sqrt2", font_size=34, color=C.HOLE)
-                               .move_to(win.P(SQRT2, 1.95)))
+                               .move_to(win.P(SQRT2, 1.45)))
+        hole_lead = always_redraw(lambda: Line(win.P(SQRT2, 0.2), win.P(SQRT2, 1.15), color=GREY_B, stroke_width=1.5))
         width_l = always_redraw(lambda: Text(f"window width {sci_text(win.width, 1)}", font_size=22, color=GREY_B)
                                 .to_corner(DR, buff=0.45))
         why_l = label(r"Each fraction $p/q$ (in lowest terms) is a tick; smaller $q$, taller tick.", font_size=24,
@@ -304,11 +305,11 @@ class Hook(VoiceoverScene):
                           FadeIn(dots[min(i, 6)]), run_time=1.6)
             vo.wait_until("h")
             self.play(*win.zoom_to(SQRT2, 2.5e-6), FadeIn(seq[-1]), run_time=2.5)
-            self.play(FadeIn(hole, scale=3), FadeIn(hole_l))
+            self.play(FadeIn(hole, scale=3), FadeIn(hole_l), FadeIn(hole_lead))
             vo.wait_until("t")
             self.play(Indicate(hole_l, color=C.HOLE, scale_factor=1.3))
         self.wait(0.3)
-        for m in (axis, dust, labs, hole, hole_l, width_l, *dots):
+        for m in (axis, dust, labs, hole, hole_l, hole_lead, width_l, *dots):
             m.clear_updaters()
         self.clear_scene()
 

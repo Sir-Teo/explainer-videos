@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis7.common import cplot, load, phase_wheel, plain_axes, polyline, square_axes
+from videos.analysis7.common import cplot, cplot_fine, load, phase_wheel, plain_axes, polyline, square_axes
 
 
 class Hook(VoiceoverScene):
@@ -42,19 +42,29 @@ class Hook(VoiceoverScene):
                         label(r"every derivative $0$ at $0$: \ Taylor series $\equiv 0$", font_size=24, color=C.PATHOLOGY)
                         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, DOWN, buff=0.3)
         S = 4.4
-        cx = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([3.4, 0.0, 0])
-        img = cplot(cx, lambda Z: np.exp(-1 / Z**2), (-1, 1), (-1, 1))
+        cx = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([3.2, 0.0, 0])
+
+        def F(Z):  # e^(-1/z^2) with the exponent clipped (no overflow); the disk |z| < 0.18 is masked: there the
+            W = -1 / Z**2  # phase and the rings of |f| turn faster than any pixel (an essential singularity)
+            return np.exp(np.clip(W.real, -60, 40)) * np.exp(1j * W.imag)
+
+        r_hole = 0.18
+        img = cplot_fine(cx, F, (-1, 1), (-1, 1), px=960, ss=3, mask=lambda Z: np.abs(Z) > r_hole)
+        u = cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0]
+        hole = Circle(radius=r_hole * u, color=GREY_B, stroke_width=1.5).move_to(cx.c2p(0, 0))
         frame = Square(side_length=S, color=GREY_C, stroke_width=2).move_to(cx.c2p(0, 0))
         c_l = MathTex(r"e^{-1/z^2} \text{ on } |\mathrm{Re}\,z|, |\mathrm{Im}\,z| \le 1", font_size=28).next_to(frame, UP,
                                                                                                           buff=0.12)
         ys = np.array([0.5, 0.3, 0.2])
         vals = np.exp(1 / ys**2)
-        assert np.allclose(np.abs(np.exp(-1 / (1j * ys) ** 2)), vals)
+        assert np.allclose(np.abs(np.exp(-1 / (1j * ys) ** 2)), vals) and ys.min() > r_hole  # the quoted points show
+        assert np.allclose(np.abs(F(1j * ys)), vals)  # the clip never touches the picture's values (1/0.18^2 < 40)
         cplx_t = VGroup(
             MathTex(r"z = iy: \ e^{-1/(iy)^2} = e^{1/y^2}", font_size=26),
             MathTex(r"y = 0.5,\ 0.3,\ 0.2: \ " + r",\ ".join(sci(v, 1) for v in vals), font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(frame, DOWN, buff=0.15)
-        wheel = phase_wheel(0.38).move_to([6.4, 2.4, 0])
+        wheel = phase_wheel(0.3).move_to([6.05, 2.4, 0])
+        assert wheel.get_right()[0] <= 6.6 and wheel.get_left()[0] > frame.get_right()[0] + 0.05
         miracles = VGroup(
             label(r"in $\C$, \ one derivative gives:", font_size=26, color=C.EPS),
             label(r"1. \ infinitely many derivatives", font_size=26),
@@ -73,10 +83,13 @@ class Hook(VoiceoverScene):
             "the function is its own power series; and its values on any tiny arc decide it everywhere."
         ) as vo:
             vo.wait_until("a")
+            real = VGroup(ax, g, g_l, real_t)
+            real.shift(RIGHT * 3.6)  # centred while it is alone; it makes room for the complex picture at 'b'
             self.play(FadeIn(head), Create(ax), Create(g), FadeIn(g_l))
             self.play(FadeIn(real_t))
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(frame), FadeIn(c_l), FadeIn(wheel))
+            self.play(real.animate.shift(LEFT * 3.6), run_time=1.0)
+            self.play(FadeIn(img), Create(frame), Create(hole), FadeIn(c_l), FadeIn(wheel))
             self.play(FadeIn(cplx_t))
             vo.wait_until("c")
             self.play(FadeOut(ax), FadeOut(g), FadeOut(g_l), FadeOut(real_t))
@@ -89,30 +102,29 @@ class Hook(VoiceoverScene):
     def exponential(self):
         d = load("exp")
         e2pi, half_pi, partial = complex(d["e2pi"]), float(d["half_pi"]), d["partial"]
-        cx = square_axes([-2, 2, 1], [-1, 7, 1], 0.62, numbers=True, font_size=18,
-                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-4.0, -0.35, 0])
+        cx = square_axes([-2, 2, 1], [-1, 7, 1], 0.62).move_to([-4.0, -0.35, 0])
         img = cplot(cx, np.exp, (-2, 2), (-1, 7))
+        frame = Rectangle(width=4 * 0.62, height=8 * 0.62, color=GREY_C, stroke_width=2).move_to(cx.c2p(0, 3))
         per = VGroup(*[DashedLine(cx.c2p(-2, 2 * math.pi * k), cx.c2p(2, 2 * math.pi * k), color=WHITE, stroke_width=2)
                        for k in (0, 1)])
-        per_l = MathTex(r"2\pi i", font_size=26).next_to(cx.c2p(2, 2 * math.pi), RIGHT, buff=0.1)
+        per_l = VGroup(MathTex(r"0", font_size=26).next_to(cx.c2p(2, 0), RIGHT, buff=0.1),
+                       MathTex(r"2\pi i", font_size=26).next_to(cx.c2p(2, 2 * math.pi), RIGHT, buff=0.1))
         rows = VGroup(
             MathTex(r"\exp(z) = \sum_{n \ge 0} \frac{z^n}{n!}", font_size=36),
             label(r"Rudin's prologue builds everything from this series:", font_size=24, color=GREY_A),
             MathTex(r"\exp(z + w) = \exp(z)\exp(w), \quad \exp(z) \ne 0", font_size=28),
             MathTex(r"\tfrac{\pi}{2} = \text{the first zero of } \cos t = \mathrm{Re}\exp(it):", font_size=28),
             MathTex(rf"\text{{bisection on the series: }} {half_pi:.15f}", font_size=26, color=C.EPS),
-            MathTex(r"\Big|\sum_{n < N} \frac{(2\pi i)^n}{n!} - 1\Big| = " + r",\ ".join(sci(v, 1) for v in partial) +
-                    r"\ \ (N = 10, 20, 30, 40)", font_size=24),
+            VGroup(MathTex(r"\Big|\sum_{n < N} \frac{(2\pi i)^n}{n!} - 1\Big| \ \text{ for } N = 10, 20, 30, 40:",
+                           font_size=24),
+                   MathTex(r"= " + r",\ ".join(sci(v, 1) for v in partial), font_size=24)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                             buff=0.1),
             label(r"so $e^{2\pi i} = 1$: \ $\exp$ repeats every $2\pi i$", font_size=26, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
-        for r_ in rows:
-            if r_.width > 7.2:
-                r_.width = 7.2
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([2.6, -0.3, 0])
+        assert rows.width < 7.0 and rows.get_right()[0] <= 6.6 and rows.get_bottom()[1] > -3.6
         assert abs(half_pi - math.pi / 2) < 1e-14 and abs(e2pi - 1) < 1e-12
-        head = label(r"The exponential, \ the most important function in mathematics", font_size=32).to_edge(UP,
-                                                                                                         buff=0.25)
+        head = label(r"The exponential, \ the most important function in mathematics", font_size=34).to_edge(UP,
+                                                                                                         buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Rudin begins Real and Complex Analysis with one series: the exponential. "
             "<bookmark mark='b'/> On the left, its domain coloring. Moving up, the colors cycle, and the whole "
@@ -125,7 +137,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(cx))
+            self.play(FadeIn(img), Create(frame))
             self.play(Create(per), FadeIn(per_l))
             vo.wait_until("c")
             self.play(FadeIn(rows[1:3]))
@@ -147,7 +159,7 @@ class Hook(VoiceoverScene):
         items = VGroup(*[label(rf"{i + 1}.\; {t}", font_size=27) for i, t in enumerate(chapters)])
         items.arrange(DOWN, aligned_edge=LEFT, buff=0.2).shift(DOWN * 0.5)
         head = label(r"Part 7: Complex analysis", font_size=42).to_edge(UP, buff=0.4)
-        sub = label(r"Rudin, \textit{Real and Complex Analysis}, chapters 10--14 and 17, \ with highlights of 11, 15, 16",
+        sub = label(r"Rudin, \textit{Real and Complex Analysis}: the prologue and chapters 10--14, \ with tours of 11, 15--17, 19, 20",
                     font_size=24, color=GREY_B).next_to(head, DOWN, buff=0.15)
         with self.voiceover(
             "Here's the plan, following chapters ten through fourteen of Real and Complex Analysis. "

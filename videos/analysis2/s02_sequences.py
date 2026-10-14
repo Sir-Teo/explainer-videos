@@ -49,7 +49,7 @@ class Sequences(VoiceoverScene):
         assert ax.y_range[0] < a.min() and a.max() < ax.y_range[1], (a.min(), a.max())  # every dot at its true value
         board = SequenceBoard(ax, a, L=1.0, eps=0.5, N=n_max, n_max=n_max)  # N = n_max: no dot judged yet
         dfn = MathTex(r"p_n \to p", r"\iff", r"\forall \varepsilon > 0", r"\;\exists N", r"\;:\;",
-                      r"n > N \Rightarrow |p_n - p| < \varepsilon", font_size=40).to_edge(UP, buff=0.45)
+                      r"n > N \Rightarrow |p_n - p| < \varepsilon", font_size=40).to_edge(UP, buff=0.3)
         dfn[2].set_color(C.EPS)
         dfn[3].set_color(C.DELTA)
         ref = note(r"Rudin 3.1").next_to(dfn, DOWN, buff=0.12).align_to(dfn, RIGHT)
@@ -119,7 +119,7 @@ class Sequences(VoiceoverScene):
         Lmark = always_redraw(lambda: VGroup(
             DashedLine(ax.c2p(0, Lt.get_value()), ax.c2p(n_max + 1, Lt.get_value()), color=WHITE, stroke_width=2),
             MathTex(r"p\,?", font_size=30).next_to(ax.c2p(n_max + 1, Lt.get_value()), RIGHT, buff=0.12)))
-        head = MathTex(r"p_n = (-1)^n", font_size=40, color=C.SEQ).to_edge(UP, buff=0.5)
+        head = MathTex(r"p_n = (-1)^n", font_size=40, color=C.SEQ).to_edge(UP, buff=0.3)
         txt = label(r"a band of half-width $\tfrac12$ cannot hold both $1$ and $-1$: \ no limit wins", font_size=28,
                     color=C.PATHOLOGY).next_to(head, DOWN, buff=0.3)
         with self.voiceover(
@@ -170,7 +170,7 @@ class Sequences(VoiceoverScene):
                       label(r"bands of half-width $\varepsilon = \tfrac12 d(p, p')$ around two limits are disjoint;",
                             font_size=28, color=GREY_A),
                       label(r"the tail cannot lie in both.", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15)
-        stmt.to_edge(UP, buff=0.5)
+        stmt.to_edge(UP, buff=0.3)
         bnd = label(r"Also: a convergent sequence is bounded (all but finitely many terms lie in one band).",
                     font_size=26, color=GREY_B).to_edge(DOWN, buff=0.6)
         with self.voiceover(
@@ -192,7 +192,7 @@ class Sequences(VoiceoverScene):
     # ------------------------------------------------------------------
     def laws(self):
         head = label(r"\textbf{Rudin 3.3} \ If $s_n \to s$ and $t_n \to t$, then $s_n + t_n \to s + t$, \ $s_n t_n \to st$, \ldots",
-                     font_size=30).to_edge(UP, buff=0.4)
+                     font_size=30).to_edge(UP, buff=0.3)
         rows = [
             MathTex(r"|(s_n + t_n) - (s + t)|", r"\le", r"|s_n - s| + |t_n - t|", font_size=36),
             MathTex(r"|(s_n + t_n) - (s + t)|", r"<", r"\tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \varepsilon",
@@ -268,7 +268,7 @@ class Sequences(VoiceoverScene):
         od = VGroup(*[d for k, d in zip(n, dots) if k % 2 == 1])
         dfn = VGroup(label(r"A \textbf{subsequence}: $p_{n_1}, p_{n_2}, \ldots$ with $n_1 < n_2 < \cdots$", font_size=30),
                      label(r"its limits are the \textbf{subsequential limits} of $(p_n)$ \ (Rudin 3.5)", font_size=28,
-                           color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.45)
+                           color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         ex = MathTex(r"p_n = (-1)^n\big(1 + \tfrac1n\big)", font_size=34, color=C.SEQ).move_to([-3.4, 1.65, 0])
         l_ev = MathTex(r"p_{2k} \to 1", font_size=34, color=C.CONNECTED_SET).next_to(ax.c2p(n_max, 1.05), UP, buff=0.15)
         l_od = MathTex(r"p_{2k+1} \to -1", font_size=34, color=C.CLOSED_SET).next_to(ax.c2p(n_max, -1.05), DOWN, buff=0.15)

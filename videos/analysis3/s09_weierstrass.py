@@ -109,7 +109,7 @@ class Nowhere(VoiceoverScene):
         labs = [MathTex((rf"\text{{window width }} 4^{{-{k}}}" if k else r"\text{window width } 1")
                         + rf", \ \ \text{{height }} {ranges[k]:.3f}", font_size=28, color=GREY_A).next_to(box, DOWN, buff=0.15)
                 for k in range(len(widths))]
-        head = label(r"Zoom in at $x = 0.3$: \ new corners at every scale", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"Zoom in at $x = 0.3$: \ new corners at every scale", font_size=34).to_edge(UP, buff=0.3)
         side = VGroup(label(r"each zoom by $4$ shrinks the height", font_size=26),
                       label(rf"only by about $\tfrac43$ \ (measured: ${shrink:.2f}$),", font_size=26),
                       label(r"so the slopes look about $3$ times steeper:", font_size=26),
@@ -158,7 +158,7 @@ class Nowhere(VoiceoverScene):
         assert all(abs(contrib[n]) <= 3**n for n in range(m))
         total = sum(contrib)
         assert abs(float(total) - float(quot[m - 1])) < 1e-3 and abs(total) >= Fraction(3**m + 1, 2)
-        head = label(r"Why there is no derivative at $x$: \ the difference quotients blow up", font_size=32).to_edge(
+        head = label(r"Why there is no derivative at $x$: \ the difference quotients blow up", font_size=34).to_edge(
             UP, buff=0.3)
         rows = [
             MathTex(r"\delta_m = \pm \tfrac12 4^{-m}", font_size=32),

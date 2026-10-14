@@ -295,8 +295,12 @@ class Holes(VoiceoverScene):
         marks, texts = VGroup(), VGroup()
 
         def show_point(f, color, dy):
-            d = pin(Dot(radius=0.075, color=color), win, float(f))
-            t = pin(MathTex(frac(f), font_size=30, color=color), win, float(f), dy=dy)
+            v = float(f)
+            d = pin(Dot(radius=0.075, color=color), win, v)
+            lab = pin(MathTex(frac(f), font_size=30, color=color), win, v, dy=dy)
+            lead = always_redraw(lambda: Line(win.P(v, 0.15), win.P(v, dy - 0.3), color=GREY_B, stroke_width=1.5,
+                                              stroke_opacity=0.5 if win.visible(v, 0.4) else 0.0))
+            t = VGroup(lab, lead)
             marks.add(d)
             texts.add(t)
             return d, t
@@ -307,7 +311,7 @@ class Holes(VoiceoverScene):
                                tip_length=0.18)
 
         sq_tab = VGroup().to_corner(UR, buff=0.45)
-        LAB_DY = 1.1  # labels just above the ticks
+        LAB_DY = 2.3  # above the tallest tick a zoom can raise (1.6 x the dust height), on a leader to the point
         with self.voiceover(
             "Watch it run. <bookmark mark='a'/> Start at one, in A. One hops to four thirds, <bookmark mark='b'/> four "
             "thirds hops to seven fifths, <bookmark mark='c'/> then twenty-four seventeenths, <bookmark mark='d'/> then "

@@ -80,17 +80,19 @@ class Differentiation(VoiceoverScene):
         assert window_average(jumps, vals, x0 - 0.001, x0 + 0.001) == fx0
         assert abs(window_average(jumps, vals, xj - 0.001, xj + 0.001) - mid) < 1e-12
 
-        def reads():
+        def reads(keep):
             r = rT.get_value()
-            return VGroup(
+            g = VGroup(
                 MathTex(rf"r = {r:.4f}", font_size=26),
                 MathTex(rf"\text{{a typical point: average}} = {window_average(jumps, vals, x0 - r, x0 + r):.4f} \to "
                         rf"f(x) = {fx0:.4f}", font_size=26, color=C.EPS),
                 MathTex(rf"\text{{a jump: average}} = {window_average(jumps, vals, xj - r, xj + r):.4f} \to "
                         rf"\text{{the midpoint}} = {mid:.4f}", font_size=26, color=C.PATHOLOGY),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.2).align_to(ax, LEFT)
+            return VGroup(*[g[i] for i in keep])
 
-        rd = always_redraw(reads)
+        rd = always_redraw(lambda: reads((0, 1)))
+        rdj = always_redraw(lambda: reads((2,)))  # the jump's row comes in with the jump
         tab = VGroup(label(r"1000 random points:", font_size=24),
                      label(r"average $= f(x)$ exactly at", font_size=24))
         for r_, gv in zip(rs, good):
@@ -123,14 +125,14 @@ class Differentiation(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(d1), FadeIn(w1), FadeIn(rd))
             vo.wait_until("c")
-            self.play(FadeIn(d2), FadeIn(w2))
+            self.play(FadeIn(d2), FadeIn(w2), FadeIn(rdj))
             self.play(rT.animate.set_value(0.001), run_time=4.0)
             vo.wait_until("d")
             self.play(FadeIn(tab[:2]))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[2:]], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("e")
             self.play(FadeIn(thm))
-        for m in (w1, w2, rd):
+        for m in (w1, w2, rd, rdj):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -244,7 +246,9 @@ class Differentiation(VoiceoverScene):
         yu = ytop_e - 0.2 * (nerow - 1) - 0.45
         ubar = VGroup(*[Line([X(a), yu, 0], [X(b), yu, 0], color=C.MEASURE, stroke_width=8) for a, b in runs_])
         lab = VGroup(label(r"all 60 intervals", font_size=22, color=GREY_B).next_to([X(1.13), top, 0], RIGHT, buff=0.2),
-                     label(r"chosen: \ greedy, \ longest first, \ disjoint", font_size=22, color=C.EPS),
+                     VGroup(label(r"chosen: \ greedy,", font_size=22, color=C.EPS),
+                            label(r"longest first, \ disjoint", font_size=22, color=C.EPS)).arrange(
+                         DOWN, aligned_edge=LEFT, buff=0.08),
                      label(r"chosen, \ enlarged $3\times$", font_size=22, color=C.APPROX).next_to(
                          [X(1.13), ytop_e - 0.1 * (nerow - 1), 0], RIGHT, buff=0.2),
                      label(r"their union", font_size=22, color=C.MEASURE).next_to([X(1.13), yu, 0], RIGHT, buff=0.2))
@@ -256,7 +260,7 @@ class Differentiation(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.4).shift(LEFT * 2.0)
         why_ = label(r"each interval meets a chosen one at least as long, \ so it lies in that one's $3\times$ enlargement",
                      font_size=22, color=GREY_A).next_to(nums, UP, buff=0.12).align_to(nums, LEFT)
-        rca = label(r"\textbf{RCA 7.3}", font_size=24, color=GREY_A).next_to([X(1.13), 3.0 - 0.3, 0], RIGHT, buff=0.2)
+        rca = label(r"\textbf{RCA 7.3}", font_size=24, color=GREY_A).next_to(lab[0], UP, buff=0.2).align_to(lab[0], LEFT)
         pm = ProofMap([r"Vitali: \ $3\times$", r"$m\{Mf > \lambda\} \le 3\|f\|_1/\lambda$",
                        r"$f = g + (f - g)$, \ $g$ continuous", r"bad set: \ measure $\le 6\varepsilon/\lambda$, \ any $\varepsilon$"],
                       font_size=18, width=3.0, buff=0.3).to_edge(DOWN, buff=0.3)
@@ -273,7 +277,7 @@ class Differentiation(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), LaggedStart(*[Create(s_) for s_ in segs], lag_ratio=0.02), FadeIn(lab[0]),
-                      run_time=2.0)
+                      FadeIn(rca), run_time=2.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(h_) for h_ in hl], lag_ratio=0.2), FadeIn(lab[1]), run_time=2.0)
             vo.wait_until("c")

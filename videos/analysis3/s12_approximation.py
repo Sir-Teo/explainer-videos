@@ -32,7 +32,7 @@ class Approximation(VoiceoverScene):
         ax = plain_axes([-1, 1, 0.5], [0, 20, 5], 7.0, 4.4).move_to([-2.8, -0.9, 0])
         t = np.linspace(-1, 1, 2001)
         ns = [10, 100, 1000]
-        cols = [C.SEQ, C.APPROX, C.EPS]
+        cols = [interpolate_color(ManimColor(C.INNER), ManimColor(WHITE), a_) for a_ in (0.0, 0.35, 0.65)]
         ks = VGroup(*[runs(ax, t, c_landau(n) * (1 - t * t) ** n, col, 3.5) for n, col in zip(ns, cols)])
         labs = VGroup(*[MathTex(rf"n = {n}: \ c_n = {c_landau(n):.2f} < \sqrt{{n}} = {np.sqrt(n):.1f}", font_size=26,
                                 color=col) for n, col in zip(ns, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
@@ -40,7 +40,7 @@ class Approximation(VoiceoverScene):
         for n in ns:
             assert c_landau(n) < np.sqrt(n)
         head = VGroup(label(r"\textbf{Rudin 7.26} \ Rudin's proof, with the Landau kernel", font_size=30),
-                      MathTex(r"Q_n(x) = c_n (1 - x^2)^n, \qquad \int_{-1}^{1} Q_n = 1", font_size=34, color=C.FUNC)
+                      MathTex(r"Q_n(x) = c_n (1 - x^2)^n, \qquad \int_{-1}^{1} Q_n = 1", font_size=34, color=C.INNER)
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         side = label(r"all its mass crowds into any $[-\delta, \delta]$", font_size=26, color=GREY_A).next_to(labs, DOWN,
                                                                                                     buff=0.3)
@@ -52,9 +52,9 @@ class Approximation(VoiceoverScene):
             "estimates need. <bookmark mark='c'/> And for any fixed delta, the fraction of the area outside the "
             "interval from minus delta to delta goes to zero."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), Create(ks[0]), FadeIn(labs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), Create(ks[0]), FadeIn(labs[0]))
+            self.play(FadeIn(head[1]), Indicate(labs[0], color=cols[0]))
             vo.wait_until("b")
             self.play(Create(ks[1]), FadeIn(labs[1]))
             self.play(Create(ks[2]), FadeIn(labs[2]))
@@ -79,21 +79,21 @@ class Approximation(VoiceoverScene):
             x0 = xT.get_value()
             k = c * np.clip(1 - (tt - x0) ** 2, 0, None) ** n
             ks = 0.6 / c  # scale the kernel to fit the axes
-            return VGroup(polyline(ax, tt, k * ks, color=C.APPROX, stroke_width=2.5),
-                          DashedLine(ax.c2p(x0, 0), ax.c2p(x0, 0.75), color=C.APPROX, stroke_width=1.5))
+            return VGroup(polyline(ax, tt, k * ks, color=C.INNER, stroke_width=2.5),
+                          DashedLine(ax.c2p(x0, 0), ax.c2p(x0, 0.75), color=C.INNER, stroke_width=1.5))
 
         kg = always_redraw(kern)
-        trace = always_redraw(lambda: polyline(ax, xx[xx <= xT.get_value()], P[xx <= xT.get_value()], color=C.EPS,
-                                               stroke_width=4) if xT.get_value() > 0.06 else VMobject())
+        trace = always_redraw(lambda: polyline(ax, xx[xx <= max(xT.get_value(), 0.003)],
+                                               P[xx <= max(xT.get_value(), 0.003)], color=C.APPROX, stroke_width=4))
         dot = always_redraw(lambda: Dot(ax.c2p(xT.get_value(), float(np.interp(xT.get_value(), xx, P))), radius=0.07,
-                                        color=C.EPS))
+                                        color=C.APPROX))
         head = VGroup(MathTex(r"P_n(x) = \int_{-1}^{1} f(x + t)\,Q_n(t)\,dt = \int_0^1 f(t)\,Q_n(t - x)\,dt",
                               font_size=34),
                       label(r"a weighted average of $f$ near $x$; \ and a polynomial in $x$ (expand $Q_n(t - x)$)",
                             font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         side = VGroup(label(r"$f$: \ continuous, \ $f(0) = f(1) = 0$", font_size=24),
                       label(r"(subtract a line first, \ if needed)", font_size=22, color=GREY_B),
-                      label(rf"here $n = {n}$", font_size=24, color=C.APPROX)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+                      label(rf"here $n = {n}$", font_size=24, color=C.INNER)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         side.move_to([4.9, 0.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Take a continuous f on the interval from zero to one, vanishing at the ends: any "
@@ -130,14 +130,14 @@ class Approximation(VoiceoverScene):
                 why(r"$c_n < \sqrt n$; \ then $n$ large, \ the same $n$ for every $x$")]
         for r_ in rows:
             r_.scale(0.88)
-        step = ladder(self, rows, whys, keep=3, top=2.95, buff=0.3, x=-1.2)
-        head = label(r"Why it converges uniformly", font_size=30).to_edge(UP, buff=0.15)
+        step = ladder(self, rows, whys, keep=3, top=2.85, buff=0.3, x=-1.2)
+        head = label(r"Why it converges uniformly", font_size=34).to_edge(UP, buff=0.3)
         # the picture behind the split: the kernel's mass near 0 and far from it
         n, dl = 60, 0.25
         c = c_landau(n)
         tq = np.linspace(-1, 1, 4001)
         Q = c * (1 - tq**2) ** n
-        kx = plain_axes([-1, 1, 0.5], [0, 1.08, 0.5], 6.6, 1.45).move_to([-3.2, -2.85, 0])
+        kx = plain_axes([-1, 1, 0.5], [0, 1.08, 0.5], 6.0, 2.0).move_to([-3.6, -2.5, 0])
         near = tq[np.abs(tq) <= dl]
         shade_n = Polygon(*([kx.c2p(near[0], 0)] + [kx.c2p(a, b / Q.max()) for a, b in zip(near[::8], Q[np.abs(tq) <= dl][::8])]
                             + [kx.c2p(near[-1], 0)]), stroke_width=0, fill_color=C.CONNECTED_SET, fill_opacity=0.45)
@@ -146,9 +146,20 @@ class Approximation(VoiceoverScene):
             xs_, ys_ = tq[msk], Q[msk] / Q.max()
             far_parts.add(Polygon(*([kx.c2p(xs_[0], 0)] + [kx.c2p(a, b) for a, b in zip(xs_[::8], ys_[::8])]
                                     + [kx.c2p(xs_[-1], 0)]), stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.6))
-        kq = polyline(kx, tq, Q / Q.max(), color=C.APPROX, stroke_width=2.5)
-        kl = MathTex(rf"Q_{{{n}}}, \ \delta = {dl}", font_size=24, color=C.APPROX).next_to(kx, UP, buff=0.05)
+        kq = polyline(kx, tq, Q / Q.max(), color=C.INNER, stroke_width=2.5)
+        kl = MathTex(rf"Q_{{{n}}}, \ \delta = {dl}", font_size=24, color=C.INNER).next_to(kx, UP, buff=0.05)
         kl.align_to(kx, LEFT)
+        # the far tails are too thin to see at this scale: drawn again, 20 times taller
+        Z = 20
+        assert Z * (Q[np.abs(tq) > dl] / Q.max()).max() < 1.0
+        far_zoom = VGroup()
+        for msk in (tq < -dl, tq > dl):
+            xs_, ys_ = tq[msk], Z * Q[msk] / Q.max()
+            far_zoom.add(Polygon(*([kx.c2p(xs_[0], 0)] + [kx.c2p(a, b) for a, b in zip(xs_[::8], ys_[::8])]
+                                   + [kx.c2p(xs_[-1], 0)]), stroke_color=C.PATHOLOGY, stroke_width=1.5,
+                                 fill_color=C.PATHOLOGY, fill_opacity=0.25))
+        fz_l = MathTex(rf"\text{{far part}} \times {Z}", font_size=22, color=C.PATHOLOGY).next_to(
+            kx.c2p(0.62, Z * float(Q[np.argmin(np.abs(tq - dl))] / Q.max())), UR, buff=0.05)
         far_mass = trap(np.where(np.abs(tq) > dl, Q, 0.0), tq)
         bound = 2 * np.sqrt(n) * (1 - dl**2) ** n
         assert far_mass <= bound and abs(trap(Q, tq) - 1) < 1e-6
@@ -159,9 +170,11 @@ class Approximation(VoiceoverScene):
                       label(r"$\sqrt n\,(1 - \delta^2)^n \to 0$: \ exponential decay beats the square root",
                             font_size=24, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         for r_ in nums:
-            if r_.width > 6.3:
-                r_.width = 6.3
-        nums.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.55, -2.8, 0])
+            if r_.width > 6.2:
+                r_.width = 6.2
+        nums.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        nums.move_to([-0.15 + nums.width / 2, -2.55, 0])
+        assert nums.get_right()[0] < 6.6
         with self.voiceover(
             "<bookmark mark='a'/> The estimate is the epsilon-over-two trick again. Because the bump has area one, the "
             "error at x is at most the bump-weighted average of the gaps between f near x and f at x. "
@@ -176,7 +189,7 @@ class Approximation(VoiceoverScene):
             vo.wait_until("b")
             step(1)
             self.play(FadeIn(shade_n), FadeIn(nums[0]))
-            self.play(FadeIn(far_parts), FadeIn(nums[1]))
+            self.play(FadeIn(far_parts), FadeIn(nums[1]), FadeIn(far_zoom), FadeIn(fz_l))
             vo.wait_until("c")
             step(2)
             self.play(FadeIn(nums[2]))
@@ -187,16 +200,32 @@ class Approximation(VoiceoverScene):
     def results(self):
         d = load("landau")
         ns, x, P, err = d["ns"], d["x"], d["P"], d["err"]
-        ax = plain_axes([0, 1, 0.25], [0, 0.65, 0.25], 7.0, 4.4).move_to([-2.9, -0.8, 0])
-        gf = polyline(ax, x, tent(x), color=WHITE, stroke_width=3)
-        head = label(r"Computed: \ the Landau approximants of a tent", font_size=32).to_edge(UP, buff=0.35)
+        ax = plain_axes([0, 1, 0.25], [0, 0.65, 0.25], 7.0, 3.0).move_to([-2.9, 0.45, 0])
+        gf = polyline(ax, x, tent(x), color=WHITE, stroke_width=3.5).set_z_index(2)
+        head = label(r"Computed: \ the Landau approximants of a tent", font_size=34).to_edge(UP, buff=0.3)
         show = [0, 2, 4, 6]
-        cols = [C.SEQ, C.APPROX, C.CLOSED_SET, C.EPS]
-        curves = [polyline(ax, x, P[i], color=col, stroke_width=3) for i, col in zip(show, cols)]
-        tab = VGroup(MathTex(r"n", r"\quad \sup|P_n - f|", font_size=28, color=GREY_A))
+        curves = [polyline(ax, x, P[i], color=C.APPROX, stroke_width=2.5) for i in show]
+        # where the error lives: |P_n - f| scaled to its own maximum; its peaks sit at the tent's four corners
+        # (0 and 1 count: outside [0, 1] the tent is extended by 0)
+        corners = np.array([0.0, 0.55 / 1.6, 1 - 0.55 / 1.25, 1.0])
+        ex = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 7.0, 1.4).move_to([-2.9, -2.65, 0])
+        ex_l = label(r"where the error is: \ $|P_n - f|$, \ scaled to its maximum", font_size=22, color=C.DIST).next_to(
+            ex, UP, buff=0.1).align_to(ex, LEFT)
+        cmarks = VGroup(*[DashedLine(ex.c2p(c_, 0), ex.c2p(c_, 1.1), color=GREY_B, stroke_width=1.5, dash_length=0.06)
+                          for c_ in corners[1:3]])
+        errc = []
+        for i in show:
+            e_ = np.abs(P[i] - tent(x))
+            pk = [x[j] for j in range(1, len(x) - 1) if e_[j] >= e_[j - 1] and e_[j] >= e_[j + 1] and e_[j] > 0.5 * e_.max()]
+            pk += [x[0]] if e_[0] > 0.5 * e_.max() else []
+            # every big local maximum of the error is at (or right next to) a corner
+            assert all(np.abs(corners - p_).min() < 0.02 for p_ in pk) and abs(e_.max() - err[i]) < 1e-12
+            errc.append(polyline(ex, x, e_ / e_.max(), color=C.DIST, stroke_width=2.5))
+        tab = VGroup(MathTex(r"n", r"\sup|P_n - f|", font_size=28, color=GREY_A))
         for i in range(len(ns)):
-            tab.add(MathTex(rf"{int(ns[i])}", rf"\quad {err[i]:.4f}", font_size=28))
-        tab.arrange(DOWN, aligned_edge=RIGHT, buff=0.15).move_to([4.2, -0.4, 0])
+            tab.add(MathTex(rf"{fmt_int(int(ns[i]))}", rf"{err[i]:.4f}", font_size=28))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.2, -0.2, 0])
+        regrid(tab, gap=0.45)
         note_ = VGroup(label(r"the error is worst at the corners,", font_size=24, color=GREY_A),
                        label(r"and shrinks like $1/\sqrt n$", font_size=24, color=GREY_A)
                        ).arrange(DOWN, buff=0.08).next_to(tab, DOWN, buff=0.35)
@@ -209,14 +238,15 @@ class Approximation(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(gf))
             vo.wait_until("a")
-            self.play(Create(curves[0]), FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(Create(curves[0]), FadeIn(tab[0]), FadeIn(tab[1]), Create(ex), FadeIn(ex_l), FadeIn(cmarks),
+                      Create(errc[0]))
             vo.wait_until("b")
-            cur = curves[0]
+            cur, ce = curves[0], errc[0]
             for k, i in enumerate(show[1:], start=1):
-                self.play(ReplacementTransform(cur, curves[k]), LaggedStart(*[FadeIn(tab[j + 1]) for j in
-                                                                          range(show[k - 1] + 1, i + 1)], lag_ratio=0.3),
+                self.play(ReplacementTransform(cur, curves[k]), ReplacementTransform(ce, errc[k]),
+                          LaggedStart(*[FadeIn(tab[j + 1]) for j in range(show[k - 1] + 1, i + 1)], lag_ratio=0.3),
                           run_time=1.2)
-                cur = curves[k]
+                cur, ce = curves[k], errc[k]
             self.play(FadeIn(note_))
         self.wait(0.3)
         self.clear_scene()
@@ -226,11 +256,11 @@ class Approximation(VoiceoverScene):
         d = load("landau")
         bns, x, Bv, berr = d["bns"], d["x"], d["Bv"], d["berr"]
         ax = plain_axes([0, 1, 0.25], [0, 0.65, 0.25], 6.6, 3.8).move_to([-3.1, -1.1, 0])
-        gf = polyline(ax, x, tent(x), color=WHITE, stroke_width=3)
+        gf = polyline(ax, x, tent(x), color=WHITE, stroke_width=3.5).set_z_index(2)
         head = VGroup(label(r"Another route: \ Bernstein's polynomials (1912)", font_size=32),
                       MathTex(r"B_n f(x) = \sum_{k=0}^{n} f\!\left(\tfrac kn\right) \binom nk x^k (1 - x)^{n-k}",
                               font_size=34)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
-        curves = [polyline(ax, x, Bv[i], color=C.APPROX, stroke_width=3) for i in range(len(bns))]
+        curves = [polyline(ax, x, Bv[i], color=C.APPROX, stroke_width=2.5) for i in range(len(bns))]
         side = VGroup(label(r"flip $n$ coins that land heads with probability $x$;", font_size=24),
                       label(r"average $f$ at the fraction of heads", font_size=24),
                       label(r"law of large numbers: \ the fraction $\to x$", font_size=24, color=C.EPS),

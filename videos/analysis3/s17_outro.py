@@ -55,18 +55,30 @@ class Outro(VoiceoverScene):
     def ledger_row(self):
         before = ledger(filled=2, highlight=3).scale(0.95)
         after = ledger(filled=3, highlight=3).scale(0.95)
+        cells = after.rows[2]
+        assert len(cells) == 6 and len(before.rows[2]) == 2
+        assert np.allclose(before.rows[2][0].get_center(), cells[0].get_center(), atol=0.05)
+
+        def reveal(*idx):
+            self.play(*[FadeIn(cells[i], shift=RIGHT * 0.1) for i in idx], run_time=0.8)
+            self.play(*[ShowPassingFlash(Underline(cells[i], buff=0.05, stroke_width=4).set_color(C.EPS), time_width=0.6)
+                        for i in idx], run_time=0.8)
+
         with self.voiceover(
             "And the ledger gets its third row. <bookmark mark='a'/> The space: continuous functions on a compact set, "
-            "with the sup norm. It's complete, because uniform limits of continuous functions are continuous. Its "
-            "compact sets are the closed, bounded, equicontinuous ones. The swap it makes legal: the limit of the "
-            "integrals is the integral of the limit, when the convergence is uniform. And Fourier's series: they "
-            "converge in mean square, pointwise where the function is Lipschitz, and with Gibbs' overshoot at jumps."
+            "with the sup norm. <bookmark mark='b'/> It's complete, because uniform limits of continuous functions are "
+            "continuous. <bookmark mark='c'/> Its compact sets are the closed, bounded, equicontinuous ones. "
+            "<bookmark mark='d'/> The swap it makes legal: the limit of the integrals is the integral of the limit, when "
+            "the convergence is uniform. <bookmark mark='e'/> And Fourier's series: they converge in mean square, "
+            "pointwise where the function is Lipschitz, and with Gibbs' overshoot at jumps."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[2][i], after.rows[2][i])
-                                    for i in range(len(after.rows[2]))], lag_ratio=0.6),
-                      FadeOut(before.rows[2]), run_time=6)
+            self.play(FadeOut(before.rows[2]), run_time=0.4)
+            reveal(0, 1)
+            for mark, i in (("b", 2), ("c", 3), ("d", 4), ("e", 5)):
+                vo.wait_until(mark)
+                reveal(i)
         self.wait(0.5)
         self.clear_scene()
 
@@ -115,9 +127,10 @@ class Outro(VoiceoverScene):
                       label(r"in the space $C[a, b]$ of this part", font_size=24, color=GREY_A),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         for r_ in side:
-            if r_.width > 3.4:
-                r_.width = 3.4
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.15, -0.6, 0])
+            if r_.width > 3.2:
+                r_.width = 3.2
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.95, -0.6, 0])
+        assert side.get_right()[0] < 6.6
         with self.voiceover(
             "Next time, in Part 4, calculus in many dimensions. <bookmark mark='a'/> A map of the plane bends a square "
             "grid. <bookmark mark='b'/> Up close, it acts like a linear map: a small square goes to almost a "

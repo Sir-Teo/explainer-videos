@@ -33,22 +33,34 @@ class Connectedness(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 4.22} \ A continuous image of a connected set is connected.", font_size=30),
                      label(r"\textbf{Rudin 4.23} \ (intermediate values) \ $f$ continuous on $[a, b]$, \ "
                            r"$f(a) < c < f(b)$ $\Rightarrow$ $f(x) = c$ for some $x$", font_size=28)
-                     ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 4, 1], [-1.6, 1.8, 1], 7.0, 4.4, numbers=False).move_to([-1.0, -1.0, 0])
+                     ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        ax = plain_axes([0, 4, 1], [-1.6, 1.8, 1], 8.4, 4.4, numbers=False).move_to([0.6, -1.0, 0])
         f = lambda x: 0.5 * np.sin(2.2 * x) + 0.55 * (x - 2) + 0.2 * np.cos(5 * x)  # noqa: E731
         a, b = 0.3, 3.8
         g = ax.plot(f, x_range=[a, b, 0.005], color=C.FUNC, stroke_width=4)
         c = -0.3
         lev = DashedLine(ax.c2p(0, c), ax.c2p(4, c), color=C.EPS, stroke_width=2)
-        cl = MathTex(r"c", font_size=30, color=C.EPS).next_to(ax.c2p(0, c), LEFT, buff=0.35)
+        cl = MathTex(r"c", font_size=30, color=C.EPS).next_to(ax.c2p(4, c), RIGHT, buff=0.12)
+        fa, fb = float(f(a)), float(f(b))
+        assert fa < c < fb
+        ends = VGroup(Dot(ax.c2p(a, fa), radius=0.07, color=WHITE), Dot(ax.c2p(b, fb), radius=0.07, color=WHITE),
+                      MathTex(r"f(a)", font_size=26).next_to(ax.c2p(a, fa), DOWN, buff=0.15),
+                      MathTex(r"f(b)", font_size=26).next_to(ax.c2p(b, fb), RIGHT, buff=0.15),
+                      *[VGroup(Line(ax.c2p(v, 0) + DOWN * 0.08, ax.c2p(v, 0) + UP * 0.08, color=GREY_B),
+                               MathTex(t_, font_size=26, color=GREY_B).next_to(ax.c2p(v, 0), UP if v == a else DOWN,
+                                                                               buff=0.15))
+                        for v, t_ in ((a, r"a"), (b, r"b"))])
         xs = np.linspace(a, b, 40001)
         ys = f(xs)
         roots = xs[np.where(np.diff(np.sign(ys - c)) != 0)[0]]
         rd = VGroup(*[Dot(ax.c2p(r, c), radius=0.07, color=C.EPS) for r in roots])
         img = VGroup(Line(ax.c2p(0, ys.min()) + LEFT * 0.18, ax.c2p(0, ys.max()) + LEFT * 0.18, color=C.CONNECTED_SET,
                           stroke_width=8))
-        il = label(r"$f([a, b])$ is connected, \ so an interval \ (2.47): \ it contains $c$", font_size=26,
-                   color=C.CONNECTED_SET).move_to([2.2, 2.3, 0])
+        il = VGroup(label(r"$f([a, b])$ is connected,", font_size=24, color=C.CONNECTED_SET),
+                    label(r"so an interval (2.47):", font_size=24, color=C.CONNECTED_SET),
+                    label(r"it contains $c$", font_size=24, color=C.CONNECTED_SET)).arrange(DOWN, aligned_edge=RIGHT,
+                                                                                          buff=0.1)
+        il.next_to(img, LEFT, buff=0.2)
         with self.voiceover(
             "<bookmark mark='t'/> Continuous functions carry connected sets to connected sets: if the image split into "
             "two separated pieces, their preimages would split the domain. <bookmark mark='a'/> On an interval, that's "
@@ -59,6 +71,7 @@ class Connectedness(VoiceoverScene):
             vo.wait_until("t")
             self.play(FadeIn(thm[0]), Create(ax), Create(g))
             vo.wait_until("a")
+            self.play(FadeIn(ends))
             self.play(FadeIn(thm[1]))
             vo.wait_until("b")
             self.play(FadeIn(img), FadeIn(il))
@@ -71,19 +84,29 @@ class Connectedness(VoiceoverScene):
     # ------------------------------------------------------------------
     def over_q(self):
         ax = plain_axes([1, 2, 0.25], [-1.2, 2.2, 1], 9.0, 4.6, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}, y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.6, -0.9, 0])
-        head = MathTex(r"f(x) = x^2 - 2 \quad \text{on } \mathbb{Q} \cap [1, 2]", font_size=36).to_edge(UP, buff=0.4)
+                        axis_config={"decimal_number_config": {"num_decimal_places": 2}},
+                        x_axis_config={"numbers_to_exclude": [1]},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.6, -0.9, 0])
+        head = MathTex(r"f(x) = x^2 - 2 \quad \text{on } \mathbb{Q} \cap [1, 2]", font_size=36).to_edge(UP, buff=0.3)
         from math import gcd
-        pts = sorted({p / q for q in range(1, 61) for p in range(q, 2 * q + 1) if gcd(p, q) == 1})
-        pts = np.array(pts)
-        dots = VGroup(*[Dot(ax.c2p(x, x * x - 2), radius=0.02 + 0.03 * (1 if abs(x * 4 - round(x * 4)) < 1e-9 else 0),
-                            color=C.RATIONAL) for x in pts])
+        # the fractions with denominator up to 12 on the main plot; up to 60 under the magnifier at sqrt 2
+        pts = np.array(sorted({p / q for q in range(1, 13) for p in range(q, 2 * q + 1) if gcd(p, q) == 1}))
+        dots = VGroup(*[Dot(ax.c2p(x, x * x - 2), radius=0.035, color=C.RATIONAL) for x in pts])
+        fine = np.array(sorted({p / q for q in range(1, 61) for p in range(q, 2 * q + 1) if gcd(p, q) == 1}))
+        hw = 0.0178
+        mag_ax, mag = magnifier(ax, (SQRT2 - hw, SQRT2 + hw), (-0.074, 0.074), center=np.array([-3.4, 0.1, 0]),
+                                width=3.2, height=2.0)
+        sel = fine[np.abs(fine - SQRT2) < hw]
+        assert len(sel) >= 20 and np.all(np.abs(sel**2 - 2) < 0.074)
+        m_dots = VGroup(*[Dot(mag_ax.c2p(x, x * x - 2), radius=0.03, color=C.RATIONAL) for x in sel])
+        m_zero = DashedLine(mag_ax.c2p(SQRT2 - hw, 0), mag_ax.c2p(SQRT2 + hw, 0), color=GREY_B, stroke_width=1.5)
+        m_hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(mag_ax.c2p(SQRT2, 0)).set_fill(BACKGROUND, 1)
         zero = DashedLine(ax.c2p(1, 0), ax.c2p(2, 0), color=GREY_B, stroke_width=1.5)
         hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(ax.c2p(SQRT2, 0))
-        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE).next_to(hole, UL, buff=0.12)
+        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE).next_to(hole, DR, buff=0.08)
         txt = VGroup(label(r"$f(1) = -1 < 0 < 2 = f(2)$, \ $f$ is continuous on $\mathbb{Q}$,", font_size=26),
                      label(r"and $f$ is never $0$: \ $\mathbb{Q}$ is not connected (Part 1)", font_size=26,
-                           color=C.HOLE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-1.4, 1.65, 0])
+                           color=C.HOLE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-1.4, 2.4, 0])
         with self.voiceover(
             "Without completeness the theorem fails. <bookmark mark='a'/> Take x squared minus 2, but only at rational "
             "points between one and two. It's continuous there, negative at one and positive at two. "
@@ -95,6 +118,8 @@ class Connectedness(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.002), FadeIn(txt[0]), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(hole), FadeIn(hl), FadeIn(txt[1]))
+            self.play(FadeIn(mag), FadeIn(m_zero), LaggedStart(*[FadeIn(x) for x in m_dots], lag_ratio=0.02),
+                      Create(m_hole), run_time=1.5)
         assert not np.any(np.abs(pts * pts - 2) < 1e-12)
         self.wait(0.3)
         self.clear_scene()
@@ -103,19 +128,19 @@ class Connectedness(VoiceoverScene):
     def kinds(self):
         head = VGroup(label(r"\textbf{Rudin 4.26} \ Discontinuities: \ \emph{first kind} if both one-sided limits "
                             r"$f(x-)$, $f(x+)$ exist,", font_size=28),
-                      label(r"\emph{second kind} otherwise", font_size=28)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.4)
+                      label(r"\emph{second kind} otherwise", font_size=28)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
 
         def panel(x0, title, col, build):
-            ax = plain_axes([-1, 1, 1], [-1.3, 1.3, 1], 3.6, 2.8, numbers=False).move_to([x0, -0.9, 0])
+            ax = plain_axes([-1, 1, 1], [-1.3, 1.3, 1], 4.0, 3.2, numbers=False).move_to([x0, -0.3, 0])
             t = label(title, font_size=24, color=col).next_to(ax, UP, buff=0.15)
             return VGroup(ax, t, *build(ax))
 
         u = np.linspace(1, 220, 20000)
-        p1 = panel(-4.5, r"removable: \ $f(x-) = f(x+) \ne f(x)$", C.FREQ, lambda A: [
+        p1 = panel(-4.5, r"removable: \ $f(x-) = f(x+) \ne f(x)$", GREY_A, lambda A: [
             A.plot(lambda x: 0.5 * x * x, x_range=[-1, -0.03], color=C.FUNC, stroke_width=3),
             A.plot(lambda x: 0.5 * x * x, x_range=[0.03, 1], color=C.FUNC, stroke_width=3),
             endpoint(A.c2p(0, 0), False, C.FUNC), Dot(A.c2p(0, 0.8), radius=0.06, color=C.FUNC)])
-        p2 = panel(0.0, r"a jump: \ $f(x-) \ne f(x+)$", C.FREQ, lambda A: [
+        p2 = panel(0.0, r"a jump: \ $f(x-) \ne f(x+)$", GREY_A, lambda A: [
             A.plot(lambda x: 0.3 * x - 0.5, x_range=[-1, 0], color=C.FUNC, stroke_width=3),
             A.plot(lambda x: 0.3 * x + 0.6, x_range=[0, 1], color=C.FUNC, stroke_width=3),
             endpoint(A.c2p(0, -0.5), False, C.FUNC), Dot(A.c2p(0, 0.6), radius=0.06, color=C.FUNC)])
@@ -146,7 +171,7 @@ class Connectedness(VoiceoverScene):
         r, cj, grid, F = d["r"], d["c"], d["grid"], d["F"]
         thm = VGroup(label(r"\textbf{Rudin 4.29--4.30} \ A monotone function has only jump discontinuities,", font_size=28),
                      label(r"and at most countably many: \ each jump contains its own rational.", font_size=28)
-                     ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
+                     ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 6, 1], [0, 4, 1], 6.4, 4.4, numbers=False).move_to([-3.0, -1.0, 0])
         xs = [0.0, 1.0, 2.2, 3.1, 4.4, 5.2, 6.0]
         ys = [0.3, 0.9, 1.7, 2.0, 2.9, 3.3, 3.8]
@@ -162,7 +187,7 @@ class Connectedness(VoiceoverScene):
         fracs = [r"\tfrac{11}{10}", r"2", r"\tfrac{8}{3}", r"\tfrac{10}{3}", r"\tfrac{11}{3}"]
         for (xj, ylo, yhi), fr in zip(jumps, fracs):
             br = Line(ax.c2p(xj, ylo), ax.c2p(xj, yhi), color=C.EPS, stroke_width=6)
-            t = MathTex(fr, font_size=24, color=C.EPS).next_to(ax.c2p(xj, (ylo + yhi) / 2), LEFT, buff=0.12)
+            t = MathTex(fr, font_size=24, color=C.EPS).next_to(ax.c2p(xj, ylo), DR, buff=0.08)
             tags.add(VGroup(br, t))
         why_ = VGroup(label(r"the gaps $(f(x-), f(x+))$ are disjoint,", font_size=26),
                       label(r"so $x \mapsto$ (a rational in its gap) is one-to-one:", font_size=26),
@@ -202,14 +227,14 @@ class Connectedness(VoiceoverScene):
         d = load("thomae")
         x, y = d["x"], d["y"]
         x0, eps, delta = float(d["x0"]), float(d["eps"]), float(d["delta"])
-        ax = plain_axes([0, 1, 0.25], [0, 0.55, 0.1], 11.0, 4.6, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([0, -1.1, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 0.55, 0.1], 11.0, 4.3, numbers=True, font_size=20,
+                        axis_config={"decimal_number_config": {"num_decimal_places": 2}}).move_to([0, -0.85, 0])
         keep = y <= 0.55
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.012 + 0.03 * b, color=C.RATIONAL) for a, b in zip(x[keep], y[keep])])
         top = VGroup(Dot(ax.c2p(0, 0.55), radius=0.03, color=C.RATIONAL))
         head = VGroup(MathTex(r"f\big(\tfrac pq\big) = \tfrac1q, \qquad f(\text{irrational}) = 0", font_size=36),
                       label(r"Thomae's function (Rudin, Exercise 4.18)", font_size=24, color=GREY_B)
-                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ruler = label(r"the rational ruler of Part 1, \ with tick height $1/q$", font_size=26, color=C.EPS).next_to(
             head, DOWN, buff=0.2)
         with self.voiceover(
@@ -229,7 +254,7 @@ class Connectedness(VoiceoverScene):
                           height=ax.c2p(0, 0.45)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=C.DELTA,
                           fill_opacity=0.25).move_to((ax.c2p(x0 - delta, 0) + ax.c2p(x0 + delta, 0.45)) / 2)
         xm = Dot(ax.c2p(x0, 0), radius=0.07, color=WHITE)
-        xl = MathTex(r"\tfrac{1}{\sqrt2}", font_size=28).next_to(xm, DOWN, buff=0.3)
+        xl = MathTex(r"1/\sqrt2", font_size=26).next_to(xm, DOWN, buff=0.15)
         big = VGroup(*[dots[i] for i, (a, b) in enumerate(zip(x[keep], y[keep])) if b >= eps])
         near = Dot(ax.c2p(0.7, 0.1), radius=0.07, color=C.PATHOLOGY)
         nl = MathTex(r"\tfrac{7}{10}", font_size=26, color=C.PATHOLOGY).next_to(near, UL, buff=0.08)
@@ -239,10 +264,10 @@ class Connectedness(VoiceoverScene):
                            r"$\tfrac{7}{10}$)", font_size=24, color=C.DELTA),
                      label(r"so $f$ is \textbf{continuous at every irrational}, \ and discontinuous at every rational",
                            font_size=26, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        txt.move_to([0.6, 1.1, 0])
+        txt.next_to(head, DOWN, buff=0.25)  # under the heading, where the ruler caption was: clear of the dots
         # under a magnifier (horizontal only): the strip, the band, and every fraction (q <= 60) near 1/sqrt 2
         win_x, win_y = (0.68, 0.735), (0.0, 0.16)
-        mag_ax, mag = magnifier(ax, win_x, win_y, center=np.array([4.35, -0.6, 0]), width=2.3, height=1.7,
+        mag_ax, mag = magnifier(ax, win_x, win_y, center=np.array([4.35, -0.3, 0]), width=2.3, height=1.7,
                                 color=GREY_B, tag=rf"x \times {2.3 / (ax.c2p(win_x[1], 0)[0] - ax.c2p(win_x[0], 0)[0]):.0f}")
         sel = (x >= win_x[0]) & (x <= win_x[1]) & (y <= win_y[1])
         m_band = Rectangle(width=2.3, height=mag_ax.c2p(0, eps)[1] - mag_ax.c2p(0, 0)[1], stroke_width=0,
@@ -254,6 +279,10 @@ class Connectedness(VoiceoverScene):
                               color=C.PATHOLOGY if abs(a - 0.7) < 1e-12 else (C.CLOSED_SET if b >= eps else C.RATIONAL))
                           for a, b in zip(x[sel], y[sel])])
         m_x0 = Dot(mag_ax.c2p(x0, 0), radius=0.05, color=WHITE)
+        # 7/10 sits inside the magnifier's frame: its label goes outside, with a leader
+        nl.next_to(mag.src, LEFT, buff=0.12).align_to(near, DOWN)
+        nl = VGroup(nl, Line(nl.get_right() + RIGHT * 0.03, near.get_center(), color=C.PATHOLOGY, stroke_width=1.5,
+                             buff=0.08))
         assert sel.sum() >= 8 and np.all(y[sel & (np.abs(x - x0) < delta)] < eps)
         with self.voiceover(
             "<bookmark mark='a'/> It's continuous at every irrational. Take one over root two, and epsilon equal to a "
@@ -275,14 +304,20 @@ class Connectedness(VoiceoverScene):
             self.play(FadeIn(txt[2]))
         assert np.all(y[np.abs(x - x0) < delta] < eps)
         self.wait(0.3)
-        self.clear_scene()
         card = museum_card(r"Thomae's function", r"Thomae, 1875",
                            r"continuous at every irrational, discontinuous at every rational",
-                           r"Rudin, Exercise 4.18; the reverse is impossible (Baire, Part 8)")
+                           r"Rudin, Exercise 4.18; the reverse is impossible (Baire, Part 8)").move_to([3.3, -0.2, 0])
+        # the specimen stays beside its card, shrunk
+        tax = plain_axes([0, 1, 0.5], [0, 0.55, 0.5], 5.6, 3.4, numbers=False).move_to([-3.35, -0.2, 0])
+        tdots = VGroup(*[Dot(tax.c2p(a, b), radius=0.008 + 0.025 * b, color=C.RATIONAL)
+                         for a, b in zip(x[keep], y[keep])])
+        dset = {id(m) for m in dots}
+        others = [m for m in self.mobjects if id(m) not in dset and m is not dots and m is not ax]
         with self.voiceover(
             "Into the museum it goes. And the reverse, a function continuous exactly at the rationals, is impossible, "
             "though proving that needs Baire's theorem, in Part 8."
         ):
+            self.play(*[FadeOut(m) for m in others], FadeOut(ax), FadeIn(tax), Transform(dots, tdots), run_time=1.2)
             self.play(FadeIn(card, scale=0.95))
         self.wait(0.8)
         self.clear_scene()

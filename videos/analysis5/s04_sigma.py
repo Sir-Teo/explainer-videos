@@ -110,8 +110,8 @@ class SigmaAlgebras(VoiceoverScene):
         card = dictionary_card(
             r"continuous (Part 2)", r"measurable (RCA 1.3)",
             [(r"$f^{-1}(\text{open})$ open", r"$f^{-1}(\text{open})$ measurable"),
-             (r"limits can break it (Part 3)", r"$\sup, \inf, \lim$ keep it (1.14)"),
-             (r"Dirichlet's function: \ no", r"Dirichlet's function: \ yes")],
+             (r"limits can break it", r"$\sup, \lim$ keep it (1.14)"),
+             (r"Dirichlet: \ no", r"Dirichlet: \ yes")],
             font_size=24, width=7.4).move_to([3.3, -0.5, 0])
         head = label(r"Measurable functions: \ the same template as continuity", font_size=34).to_edge(UP, buff=0.3)
         # Dirichlet's function as a double limit of continuous functions: cos(m! pi x)^(2n) -> 1 on {k/m!} as n -> oo
@@ -165,7 +165,7 @@ class SigmaAlgebras(VoiceoverScene):
     def simple(self):
         d = load("simple")
         x, f, S, errs = d["x"], d["f"], d["S"], d["errs"]
-        ax = plain_axes([0, 2, 0.5], [0, 6.5, 1], 7.4, 4.6).move_to([-2.6, -0.75, 0])
+        ax = plain_axes([0, 2, 0.5], [0, 6.5, 1], 7.4, 4.3).move_to([-2.6, -0.6, 0])
         fg = polyline(ax, x, f, color=WHITE, stroke_width=3)
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.MEASURE), k / 7) for k in range(8)]
 
@@ -197,6 +197,7 @@ class SigmaAlgebras(VoiceoverScene):
                       label(r"Lebesgue's coins", font_size=24, color=GREY_A),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.5, 0])
         assert all(errs[k] <= 2.0 ** -(k + 1) for k in range(len(errs)))
+        assert min(l_.get_bottom()[1] for l_ in labs) > -3.6 and ax.get_top()[1] < head.get_bottom()[1] - 0.15
         with self.voiceover(
             "<bookmark mark='a'/> Every non-negative measurable function is the limit of an increasing sequence of "
             "simple functions, functions with finitely many values. <bookmark mark='b'/> The recipe slices the range: "

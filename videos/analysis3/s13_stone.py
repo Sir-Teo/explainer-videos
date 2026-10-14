@@ -11,8 +11,8 @@ from videos.analysis3.compute import tent
 
 def secant(t, x, y):
     """g_xy for f = e^x and the polynomial algebra: the line through (x, e^x) and (y, e^y)."""
-    if abs(x - y) < 1e-12:
-        return np.full_like(t, math.exp(x))
+    if abs(x - y) < 1e-12:  # y = x: the tangent, the limit of the secants
+        return math.exp(x) + math.exp(x) * (t - x)
     s = (math.exp(y) - math.exp(x)) / (y - x)
     return math.exp(x) + s * (t - x)
 
@@ -86,7 +86,7 @@ class StoneWeierstrass(VoiceoverScene):
             return c[0] + c[1] * x**2 + c[2] * x**4
 
         x0 = 0.7
-        tgtA = polyline(axA, xa, xa, color=WHITE, stroke_width=3)
+        tgtA = polyline(axA, xa, xa, color=WHITE, stroke_width=3.5).set_z_index(2)
         gA = always_redraw(lambda: runs(axA, xa, ev(xa), C.APPROX, 3))
 
         def pairA():
@@ -108,7 +108,7 @@ class StoneWeierstrass(VoiceoverScene):
                  lambda x: 1 - (1 - x) ** 30]
         for g in zeros:
             assert g(0.0) == 0 and np.abs(g(xb) - 1).max() >= 1 - 1e-12
-        tgtB = DashedLine(axB.c2p(0, 1), axB.c2p(1, 1), color=WHITE, stroke_width=3, dash_length=0.1)
+        tgtB = DashedLine(axB.c2p(0, 1), axB.c2p(1, 1), color=WHITE, stroke_width=4, dash_length=0.1).set_z_index(2)
         gB = runs(axB, xb, zeros[0](xb), C.APPROX, 3)
         gapB = Line(axB.c2p(0, 0), axB.c2p(0, 1), color=C.PATHOLOGY, stroke_width=5)
         tB = VGroup(label(r"polynomials with $p(0) = 0$ on $[0, 1]$", font_size=22),
@@ -118,13 +118,28 @@ class StoneWeierstrass(VoiceoverScene):
                                                                                                    buff=0.12)
         # panel C: all polynomials (chapter 11's Landau approximant of the tent)
         dl = load("landau")
-        tgtC = polyline(axC, dl["x"], tent(dl["x"]), color=WHITE, stroke_width=3)
-        gC = polyline(axC, dl["x"], dl["P"][-1], color=C.APPROX, stroke_width=3)
+        tgtC = polyline(axC, dl["x"], tent(dl["x"]), color=WHITE, stroke_width=3.5).set_z_index(2)
+        gC = polyline(axC, dl["x"], dl["P"][-1], color=C.APPROX, stroke_width=2.5)
         tC = VGroup(label(r"all polynomials on $[0, 1]$", font_size=22),
                     MathTex(r"\text{target: any continuous } f", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.06)
         tC.next_to(axC, UP, buff=0.12)
         vC = label(rf"both hold: \ dense \ (error ${float(dl['err'][-1]):.4f}$ here)", font_size=22,
                    color=C.CONNECTED_SET).next_to(axC, DOWN, buff=0.12)
+        # the algebra at work: two polynomials and their product (members of the algebra), in the panel slots
+        xp = np.linspace(0, 1, 401)
+        pp, qq = 0.2 + 0.9 * xp, 1.1 - 1.6 * xp + 1.2 * xp**2
+        assert np.allclose(pp * qq, np.polyval(np.polymul([0.9, 0.2], [1.2, -1.6, 1.1]), xp))
+        alg = VGroup()
+        for k_, (yv, tx) in enumerate(((pp, r"p(x) = 0.2 + 0.9x"), (qq, r"q(x) = 1.1 - 1.6x + 1.2x^2"),
+                                       (pp * qq, r"p(x)\,q(x)"))):
+            a_ = plain_axes([0, 1, 0.5], [0, 1.2, 0.5], W, H).move_to([cx[k_], cy, 0])
+            assert 0 <= yv.min() and yv.max() < 1.2
+            alg.add(VGroup(a_, polyline(a_, xp, yv, color=C.APPROX, stroke_width=3),
+                           MathTex(tx, font_size=26, color=C.APPROX).next_to(a_, UP, buff=0.15)))
+        ops = VGroup(MathTex(r"\times", font_size=40, color=GREY_A).move_to([(cx[0] + cx[1]) / 2, cy, 0]),
+                     MathTex(r"=", font_size=40, color=GREY_A).move_to([(cx[1] + cx[2]) / 2, cy, 0]))
+        alg_note = label(r"also $p + q$ and $c\,p$: \ the algebra never leaves itself", font_size=22, color=GREY_A).next_to(
+            alg, DOWN, buff=0.3)
         with self.voiceover(
             "He found that only two properties matter. <bookmark mark='a'/> The setting is an algebra of functions: a "
             "family closed under sums, products and "
@@ -136,10 +151,12 @@ class StoneWeierstrass(VoiceoverScene):
             "constant one. <bookmark mark='d'/> All polynomials have neither defect, and they are dense: that was "
             "chapter eleven."
         ) as vo:
-            self.play(FadeIn(defs[0]), run_time=1.2)  # no blank screen while the first sentence is read
+            self.play(FadeIn(defs[0]), FadeIn(alg[0]), FadeIn(alg[1]), run_time=1.2)
             vo.wait_until("a")
-            self.play(Indicate(defs[0], color=C.EPS, scale_factor=1.05))
+            self.play(Indicate(defs[0], color=C.EPS, scale_factor=1.05), FadeIn(ops), FadeIn(alg[2]))
+            self.play(FadeIn(alg_note))
             vo.wait_until("b")
+            self.play(FadeOut(alg), FadeOut(ops), FadeOut(alg_note), run_time=0.6)
             self.play(FadeIn(defs[1]), Create(axA), FadeIn(tA), Create(tgtA), FadeIn(gA), FadeIn(prA))
             self.play(sA.animate.set_value(3.0), run_time=4.5, rate_func=linear)
             self.play(FadeIn(vA))
@@ -186,6 +203,22 @@ class StoneWeierstrass(VoiceoverScene):
         enote = VGroup(label(r"the algebra that failed", font_size=22, color=GREY_A),
                        label(r"on $[-1, 1]$ succeeds here", font_size=22, color=GREY_A)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(eax, RIGHT, buff=0.25)
+        xi = np.linspace(0, 1, 801)
+        fi_ = 0.55 + 0.25 * np.sin(7 * xi) + 0.3 * np.abs(xi - 0.62)
+        ci = np.polynomial.chebyshev.chebfit(2 * xi - 1, fi_, 40)
+        gi = np.polynomial.chebyshev.chebval(2 * xi - 1, ci)
+        eps_i = 0.06
+        assert np.abs(gi - fi_).max() < eps_i / 2
+        iax = plain_axes([0, 1, 0.5], [0, 1.1, 0.5], 6.4, 2.4).move_to([0, -2.1, 0])
+        band_i = Polygon(*[iax.c2p(a_, b_) for a_, b_ in zip(xi[::8], fi_[::8] + eps_i)],
+                         *[iax.c2p(a_, b_) for a_, b_ in zip(xi[::-8], fi_[::-8] - eps_i)], stroke_width=0,
+                         fill_color=C.EPS, fill_opacity=0.22)
+        illus = VGroup(iax, band_i, polyline(iax, xi, gi, color=C.APPROX, stroke_width=2.5),
+                       polyline(iax, xi, fi_, color=WHITE, stroke_width=3).set_z_index(2))
+        illus_l = VGroup(MathTex(r"f \in C(K)", font_size=26), MathTex(r"f \pm \varepsilon", font_size=26, color=C.EPS),
+                         MathTex(r"g \in \mathcal A", font_size=26, color=C.APPROX)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                         buff=0.12)
+        illus_l.next_to(iax, RIGHT, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> Stone's theorem says these two defects are the only obstructions. If an algebra of "
             "continuous functions on a compact set separates points and vanishes at no point, then its uniform closure "
@@ -197,8 +230,11 @@ class StoneWeierstrass(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(thm[:3]), Create(box))
-            self.play(Write(thm[3]))
+            self.play(Write(thm[3]), Create(iax), FadeIn(illus[3]), FadeIn(illus_l[0]))
+            self.play(FadeIn(band_i), FadeIn(illus_l[1]))
+            self.play(Create(illus[2]), FadeIn(illus_l[2]), run_time=1.5)
             vo.wait_until("b")
+            self.play(FadeOut(illus), FadeOut(illus_l), run_time=0.6)
             self.play(FadeIn(ex_h), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in ex[:3]], lag_ratio=0.4),
                       run_time=2)
             self.play(FadeIn(ex[3:]), Create(eax), Create(tgt), FadeIn(etl), Create(fits[0]), FadeIn(elabs[0]))
@@ -249,10 +285,10 @@ class StoneWeierstrass(VoiceoverScene):
             "within the same distance of the absolute value of f. <bookmark mark='c'/> As the degree grows, P n of f "
             "converges uniformly to the absolute value of f, and B is closed, so the absolute value is in B."
         ) as vo:
-            self.play(FadeIn(pm))
+            self.play(FadeIn(pm), Create(axL), Create(absg))
             vo.wait_until("a")
             self.play(*pm.light(0))
-            self.play(Create(axL), Create(absg), FadeIn(tl), Create(Pl[0]), FadeIn(errs[0]))
+            self.play(FadeIn(tl), Create(Pl[0]), FadeIn(errs[0]))
             vo.wait_until("b")
             self.play(Create(axR), FadeIn(tr), Create(f1g), Create(af1), TransformFromCopy(Pl[0], Pr[0]),
                       FadeIn(why_[0]))
@@ -272,13 +308,14 @@ class StoneWeierstrass(VoiceoverScene):
         pm = self.proof_map()
         self._set_state(pm, 1)
         t = np.linspace(0, 1, 801)
-        ax = plain_axes([0, 1, 0.25], [0, 1.6, 0.5], 6.0, 3.3).move_to([-3.4, 0.1, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.6, 0.5], 6.0, 2.6).move_to([-3.4, 0.5, 0])
         g1 = 0.35 + 0.9 * t
         g2 = 1.1 - 2.6 * (t - 0.45) ** 2 + 0.3 * np.sin(9 * t)
         G1 = polyline(ax, t, g1, color=C.SEQ, stroke_width=2.5)
         G2 = polyline(ax, t, g2, color=C.APPROX, stroke_width=2.5)
-        mx = polyline(ax, t, np.maximum(g1, g2), color=C.EPS, stroke_width=6).set_stroke(opacity=0.8)
-        mn = polyline(ax, t, np.minimum(g1, g2), color=C.CONNECTED_SET, stroke_width=6).set_stroke(opacity=0.8)
+        mx = polyline(ax, t, np.maximum(g1, g2), color=C.EPS, stroke_width=10).set_stroke(opacity=0.4).set_z_index(-1)
+        mn = polyline(ax, t, np.minimum(g1, g2), color=C.CONNECTED_SET, stroke_width=10).set_stroke(opacity=0.4)
+        mn.set_z_index(-1)
         assert np.allclose(np.maximum(g1, g2), (g1 + g2) / 2 + np.abs(g1 - g2) / 2)
         lab = MathTex(r"f", r",\ g", font_size=30).next_to(ax, UP, buff=0.12)
         lab[0].set_color(C.SEQ)
@@ -289,7 +326,8 @@ class StoneWeierstrass(VoiceoverScene):
                     label(r"by induction, under the max of finitely many", font_size=26, color=GREY_A),
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 0.3, 0])
         # step 3 on the same screen, below: two-point interpolation
-        ax2 = plain_axes([0, 1, 0.25], [-0.5, 1.5, 0.5], 6.0, 2.2).move_to([-3.4, -2.6, 0])
+        ax2 = plain_axes([0, 1, 0.25], [-0.5, 1.5, 0.5], 6.0, 1.9).move_to([-3.4, -2.35, 0])
+        assert ax2.get_top()[1] < ax.get_bottom()[1] - 0.3
         xp, yp = 0.25, 0.75
         cT, dT = ValueTracker(0.4), ValueTracker(1.1)
 
@@ -429,7 +467,7 @@ class StoneWeierstrass(VoiceoverScene):
         band = VGroup(polyline(ax, t, f - eps, color=C.EPS, stroke_width=1.5),
                       polyline(ax, t, f + eps, color=C.EPS, stroke_width=1.5))
         caps = VGroup(*[runs(ax, t, h, C.CLOSED_SET, 1.8) for h in H])
-        hg = polyline(ax, t, approx, color=C.EPS, stroke_width=5)
+        hg = polyline(ax, t, approx, color=C.APPROX, stroke_width=5)
         y_top = ax.get_bottom()[1] - 0.3
         Wsets = [h < f + eps for h in H]
         assert np.any(Wsets, axis=0).all()
@@ -442,7 +480,7 @@ class StoneWeierstrass(VoiceoverScene):
             label(r"a cap $h_x$ at each $x$", font_size=24, color=C.CLOSED_SET),
             label(r"$h_x < f + \varepsilon$ on an open set around $x$", font_size=24),
             label(rf"compactness again: \ finitely many $x$ \ (here ${len(xs)}$)", font_size=24, color=C.COMPACT_SET),
-            MathTex(r"h = \min_x h_x \in \mathcal B", font_size=32, color=C.EPS),
+            MathTex(r"h = \min_x h_x \in \mathcal B", font_size=32, color=C.APPROX),
             MathTex(r"f - \varepsilon < h < f + \varepsilon", font_size=32, color=C.EPS),
             label(rf"computed: \ $\sup|h - f| = {err:.4f} < \varepsilon$", font_size=24, color=GREY_A),
         )
@@ -451,7 +489,7 @@ class StoneWeierstrass(VoiceoverScene):
                 r_.width = 5.6
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.0, -0.2, 0])
         concl = label(r"$\varepsilon$ was arbitrary and $\mathcal B$ is closed: \ $f \in \mathcal B$", font_size=26,
-                      color=C.EPS).to_edge(DOWN, buff=0.15)
+                      color=C.EPS).to_edge(DOWN, buff=0.35)
         assert err < eps
         with self.voiceover(
             "<bookmark mark='a'/> Now build a cap at every point. <bookmark mark='b'/> Each cap is below f plus "
@@ -513,7 +551,10 @@ class StoneWeierstrass(VoiceoverScene):
         disk = DashedVMobject(Circle(radius=u, color=GREY_A, stroke_width=2).move_to(po), num_dashes=40)
         disk_l = MathTex(r"|w| = 1", font_size=22, color=GREY_A).next_to(disk, DL, buff=-0.25)
         one = Dot(P2S(np.array([1.0 + 0j]))[0], radius=0.07, color=C.EPS)
-        one_l = MathTex(r"\text{mean} = 1", font_size=24, color=C.EPS).next_to(one, DOWN, buff=0.12)
+        assert all(w_.imag.min() > -1.3 for w_ in W)  # the label below stays clear of every loop
+        one_t = MathTex(r"\text{mean} = 1", font_size=24, color=C.EPS).move_to(P2S(np.array([1.75 - 1.55j]))[0])
+        one_l = VGroup(one_t, Line(one_t.get_corner(UL) + 0.05 * UP, one.get_center(), color=C.EPS, stroke_width=1.5,
+                                   buff=0.09))
         curves = [VMobject(color=C.APPROX, stroke_width=3).set_points_as_corners(P2S(w)) for w in W]
         far = []
         for w in W:
@@ -530,9 +571,9 @@ class StoneWeierstrass(VoiceoverScene):
             label(r"$1 - zP$ has mean $1$: \ $\max |1 - zP| \ge 1$", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([5.0, -0.3, 0])
         for r_ in rows:
-            if r_.width > 3.8:
-                r_.width = 3.8
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.95, -0.3, 0])
+            if r_.width > 3.6:
+                r_.width = 3.6
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.8, -0.3, 0])
         assert rows.get_left()[0] > 2.9 and rows.get_right()[0] < 6.95
         fix = label(r"add $\bar z$ (a \textbf{self-adjoint} algebra): \ the trigonometric polynomials "
                     r"$\sum c_n e^{in\theta}$ are dense in $C(\mathbb T)$", font_size=26, color=C.CONNECTED_SET)
@@ -566,7 +607,8 @@ class StoneWeierstrass(VoiceoverScene):
             vo.wait_until("d")
             cur, cf = curves[0], far[0]
             for k in range(1, len(W)):
-                self.play(ReplacementTransform(cur, curves[k]), ReplacementTransform(cf, far[k]), run_time=1.3)
+                self.play(ReplacementTransform(cur, curves[k]), ReplacementTransform(cf, far[k]),
+                          aT.animate.increment_value(np.pi), run_time=1.3, rate_func=linear)
                 cur, cf = curves[k], far[k]
             vo.wait_until("e")
             self.play(FadeIn(fix))

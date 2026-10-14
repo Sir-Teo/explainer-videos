@@ -17,8 +17,8 @@ class Outro(VoiceoverScene):
     def vector(self):
         head = VGroup(label(r"Vector-valued functions (Rudin 5.16--5.19): \ the mean value theorem fails", font_size=30),
                       MathTex(r"f(t) = e^{it} = (\cos t, \sin t), \quad 0 \le t \le 2\pi", font_size=34)
-                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
-        o = np.array([-3.2, -1.0, 0])
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        o = np.array([-3.2, -0.6, 0])
         R = 2.0
         circ = Circle(radius=R, color=GREY_D, stroke_width=2).move_to(o)
         tT = ValueTracker(0.0)
@@ -29,10 +29,10 @@ class Outro(VoiceoverScene):
         vel = always_redraw(lambda: Arrow(o + R * np.array([np.cos(tT.get_value()), np.sin(tT.get_value()), 0]),
                                           o + R * np.array([np.cos(tT.get_value()), np.sin(tT.get_value()), 0])
                                           + 1.2 * np.array([-np.sin(tT.get_value()), np.cos(tT.get_value()), 0]),
-                                          buff=0, color=C.EPS, stroke_width=4, tip_length=0.18))
+                                          buff=0, color=C.DELTA, stroke_width=4, tip_length=0.18))
         start = Dot(o + R * RIGHT, radius=0.1, color=WHITE)
-        facts = VGroup(MathTex(r"f(2\pi) - f(0) = 0", font_size=34, color=C.APPROX),
-                       MathTex(r"|f'(t)| = 1 \text{ for every } t", font_size=34, color=C.EPS),
+        facts = VGroup(MathTex(r"f(2\pi) - f(0) = 0", font_size=34, color=WHITE),
+                       MathTex(r"|f'(t)| = 1 \text{ for every } t", font_size=34, color=C.DELTA),
                        label(r"so $f(2\pi) - f(0) = 2\pi\, f'(\xi)$ is impossible", font_size=28, color=C.PATHOLOGY),
                        label(r"\textbf{Rudin 5.19}: \ the inequality survives:", font_size=28),
                        MathTex(r"|f(b) - f(a)| \le (b - a)\, |f'(\xi)| \text{ for some } \xi", font_size=32,
@@ -69,9 +69,9 @@ class Outro(VoiceoverScene):
         items = [
             (r"convergence is a game: \ $\varepsilon$ first, then $N$", C.EPS),
             (r"Cauchy sequences converge exactly in complete spaces; \ $\Q$ is not one", C.HOLE),
-            (r"lim sup and lim inf: \ the high- and low-water marks of the tail", C.CLOSED_SET),
+            (r"lim sup and lim inf: \ the high- and low-water marks of the tail", C.UPPER_SUM),
             (r"series: \ comparison, condensation, \ $\sum 1/n^p$ converges iff $p > 1$", C.SEQ),
-            (r"$e = \sum 1/n! = \lim (1 + 1/n)^n$, \ and $e$ is irrational", C.FREQ),
+            (r"$e = \sum 1/n! = \lim (1 + 1/n)^n$, \ and $e$ is irrational", C.CUT_HIGH),
             (r"root and ratio tests; \ power series converge in disks", C.EPS),
             (r"summation by parts: \ the sawtooth series converges at every $x$", C.APPROX),
             (r"conditionally convergent series can be rearranged to anything", C.PATHOLOGY),
@@ -104,17 +104,24 @@ class Outro(VoiceoverScene):
     def ledger_row(self):
         before = ledger(filled=1, highlight=2).scale(0.95)
         after = ledger(filled=2, highlight=2).scale(0.95)
+        after.shift(before.head.get_center() - after.head.get_center())  # the new row lands exactly in the old one's place
+        cells = after.rows[1]
+        assert len(cells) == 6
         with self.voiceover(
             "And the ledger gets its second row. <bookmark mark='a'/> The space: sequences and series of numbers. "
-            "Complete means Cauchy sequences converge. Compactness means every sequence has a convergent subsequence. "
-            "The limits we may swap: we may reorder a sum when it converges absolutely. And Fourier's series: it "
-            "converges at each point, though not yet in any stronger sense, and we don't yet know to what, in general."
+            "<bookmark mark='b'/> Complete means Cauchy sequences converge. <bookmark mark='c'/> Compactness means every "
+            "sequence has a convergent subsequence. <bookmark mark='d'/> The limits we may swap: we may reorder a sum "
+            "when it converges absolutely. <bookmark mark='e'/> And Fourier's series: it converges at each point, though "
+            "not yet in any stronger sense, and we don't yet know to what, in general."
         ) as vo:
             self.play(FadeIn(before))
             vo.wait_until("a")
-            self.play(LaggedStart(*[TransformFromCopy(after.rows[1][i], after.rows[1][i])
-                                    for i in range(len(after.rows[1]))], lag_ratio=0.5),
-                      FadeOut(before.rows[1]), run_time=4)
+            self.play(FadeOut(before.rows[1]), FadeIn(cells[0], shift=RIGHT * 0.1), FadeIn(cells[1], shift=RIGHT * 0.1))
+            self.play(Indicate(cells[1], color=C.EPS, scale_factor=1.06), run_time=0.6)
+            for i, mk in zip(range(2, 6), "bcde"):
+                vo.wait_until(mk)
+                self.play(FadeIn(cells[i], shift=RIGHT * 0.1), run_time=0.6)
+                self.play(Indicate(cells[i], color=C.EPS, scale_factor=1.06), run_time=0.6)
         self.wait(0.5)
         self.clear_scene()
 
@@ -123,7 +130,7 @@ class Outro(VoiceoverScene):
         head = label(r"Next: Part 3, \ Integration and the first function space", font_size=38).to_edge(UP, buff=0.35)
         M = 6
         cs = 0.72
-        o = np.array([-4.6, 1.75, 0])
+        o = np.array([-4.6, 2.05, 0])
         cells = VGroup()
         for m in range(1, M + 1):
             for n in range(1, M + 1):
@@ -134,6 +141,9 @@ class Outro(VoiceoverScene):
                 t = MathTex(rf"\tfrac{{{m}}}{{{m + n}}}", font_size=20, color=BLACK).move_to(sq)
                 cells.add(VGroup(sq, t))
         gl = MathTex(r"s_{mn} = \frac{m}{m + n}", font_size=32).next_to(cells, DOWN, buff=0.3)
+        mn = VGroup(MathTex(r"n \to", font_size=28, color=GREY_A).next_to(cells, UP, buff=0.12),
+                    MathTex(r"m", r"\downarrow", font_size=28, color=GREY_A).arrange(DOWN, buff=0.05).next_to(cells, LEFT,
+                                                                                                            buff=0.15))
         lims = VGroup(MathTex(r"\lim_{n\to\infty} \lim_{m\to\infty} s_{mn} = 1", font_size=34, color=C.EPS),
                       MathTex(r"\lim_{m\to\infty} \lim_{n\to\infty} s_{mn} = 0", font_size=34, color=C.SEQ),
                       label(r"Rudin 7.2: \ the order of two limits matters", font_size=26, color=GREY_A)
@@ -149,7 +159,7 @@ class Outro(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.02), FadeIn(gl), run_time=1.6)
+            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.02), FadeIn(gl), FadeIn(mn), run_time=1.6)
             vo.wait_until("b")
             self.play(FadeIn(lims))
             vo.wait_until("c")

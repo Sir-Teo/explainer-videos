@@ -29,7 +29,7 @@ class OpenMapping(VoiceoverScene):
     # ------------------------------------------------------------------
     def identity(self):
         S = 5.0
-        cx = square_axes([-1.5, 1.5, 0.5], [-1.5, 1.5, 0.5], S / 3).move_to([-3.4, -0.6, 0])
+        cx = square_axes([-1.5, 1.5, 0.5], [-1.5, 1.5, 0.5], S / 3).move_to([-3.75, -0.6, 0])
         frame = Square(side_length=S, color=GREY_C, stroke_width=2).move_to(cx.c2p(0, 0))
         th = np.linspace(0.2, 0.75, 60)
         arc = 0.35 * np.exp(1j * th) + 0.2
@@ -43,19 +43,41 @@ class OpenMapping(VoiceoverScene):
         masks.append(lambda Z: (np.abs(Z - c0) < 1.6) | (np.abs(Z - c1) < 2.9))
         imgs = [cplot(cx, G, (-1.5, 1.5), (-1.5, 1.5), px=600, mask=mk) for mk in masks]
         c1_d = Dot(cx.c2p(c1.real, c1.imag), radius=0.07, color=WHITE)
+        c1_l = label(r"new centre", font_size=22).next_to(c1_d, DOWN, buff=0.1)
+
+        def clipped_circle(c, r):  # the dashed edge of the disk |z - c| < r, kept inside the frame (cut, not clamped)
+            t = np.linspace(0, 2 * np.pi, 600)
+            zc = c + r * np.exp(1j * t)
+            ok = (np.abs(zc.real) <= 1.5) & (np.abs(zc.imag) <= 1.5)
+            g = VGroup()
+            start = None
+            for i in range(len(t) + 1):
+                if i < len(t) and ok[i]:
+                    start = i if start is None else start
+                elif start is not None:
+                    if i - start > 2:
+                        g.add(DashedVMobject(zcurve(cx, zc[start:i], WHITE, 1.8), num_dashes=max(4, (i - start) // 12)))
+                    start = None
+            return g
+
+        rings = [clipped_circle(c0, r) for r in (0.12, 0.45, 0.9, 1.6)]
+        assert all(len(g) for g in rings)
+        pole = Arrow(cx.c2p(1.5, 0) + RIGHT * 0.08, cx.c2p(1.5, 0) + RIGHT * 0.75, buff=0, color=C.PATHOLOGY,
+                     stroke_width=4, tip_length=0.18)  # off the frame, on the real axis: the way to the pole
+        pole_l = label(r"pole at $2.2$", font_size=22, color=C.PATHOLOGY).next_to(pole, UP, buff=0.08).align_to(pole, LEFT)
+        assert abs(G(np.array([2.2 + 1e-9]))[0]) > 1e8  # the pole of the series' function, off the frame
         g_l = MathTex(r"f(z) = \frac{z^2 + 1}{z - 2.2} + 0.3z", font_size=28).next_to(frame, UP, buff=0.1)
         rows = VGroup(
-            label(r"\textbf{RCA 10.18} \ (the identity theorem) \ if $f, g$ are holomorphic on a region $\Omega$", font_size=24),
-            label(r"and $f = g$ on a set with a limit point in $\Omega$ \ (a tiny arc is plenty),", font_size=24),
-            label(r"then $f = g$ on all of $\Omega$", font_size=26, color=C.EPS),
+            label(r"\textbf{RCA 10.18} \ (the identity theorem)", font_size=24),
+            label(r"if $f, g$ are holomorphic on a region $\Omega$", font_size=24),
+            label(r"and $f = g$ on a set with a limit point in $\Omega$", font_size=24),
+            label(r"(a tiny arc is plenty), \ then $f = g$ on all of $\Omega$", font_size=24, color=C.EPS),
             label(r"why: \ $f - g$ has non-isolated zeros, \ so it is $0$ \ (chapter 1)", font_size=22, color=GREY_A),
             label(r"on $\R$: \ $e^{-1/x^2}$ and $0$ agree on $(-\infty, 0]$, \ not on $(0, \infty)$", font_size=22,
                   color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.3, 0])
-        for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        rows.align_to(np.array([max(pole.get_right()[0], pole_l.get_right()[0]) + 0.3, 0, 0]), LEFT).set_y(-0.3)
+        assert rows.get_right()[0] <= 6.6
         head = label(r"The third miracle: \ a tiny arc decides everything", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the third miracle. Suppose you know a holomorphic function only on this "
@@ -69,38 +91,59 @@ class OpenMapping(VoiceoverScene):
             self.play(FadeIn(head), Create(frame), FadeIn(g_l), FadeIn(imgs[0]), Create(arc_m))
             vo.wait_until("b")
             cur = imgs[0]
+            self.play(Create(rings[0]), run_time=0.5)
             for k in range(1, len(imgs)):
                 if k == len(imgs) - 1:  # the first series has reached its pole: recenter inside its disk
-                    self.play(FadeIn(c1_d, scale=1.5), run_time=0.6)
-                self.play(FadeIn(imgs[k]), run_time=1.1)
+                    self.play(FadeIn(c1_d, scale=1.5), FadeIn(c1_l), GrowArrow(pole), FadeIn(pole_l), run_time=0.8)
+                    self.play(FadeIn(imgs[k]), run_time=1.1)
+                else:
+                    self.play(FadeIn(imgs[k]), Create(rings[k]), run_time=1.1)
                 self.remove(cur)
                 cur = imgs[k]
-                self.bring_to_front(arc_m, c1_d) if k == len(imgs) - 1 else self.bring_to_front(arc_m)
+                self.bring_to_front(*rings[:k + 1], arc_m)
+                if k == len(imgs) - 1:
+                    self.bring_to_front(c1_d, c1_l, pole, pole_l)
             vo.wait_until("c")
-            self.play(FadeIn(rows[:3]))
-            self.play(FadeIn(rows[3:]))
+            self.play(FadeIn(rows[:4]))
+            self.play(FadeIn(rows[4:]))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def local(self):
-        ax = square_axes([-1.2, 1.2, 1], [-1.2, 1.2, 1], 1.8).move_to([-4.0, -0.6, 0])
-        bx = square_axes([-1.2, 1.2, 1], [-1.2, 1.2, 1], 1.8).move_to([1.2, -0.6, 0])
+        ax = square_axes([-1.2, 1.2, 1], [-1.2, 1.2, 1], 1.5).move_to([-4.8, -0.6, 0])
+        bx = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], 1.4).move_to([-0.8, -0.6, 0])
         for a in (ax, bx):
             a.set_opacity(0.3)
         n = 12
         cols = [ManimColor(tuple(float(c) for c in hue_rgb(np.array(2 * np.pi * (k + 0.5) / n)))) for k in range(n)]
         r0 = 0.95
-        sectors, images = VGroup(), VGroup()
+        sectors = VGroup()
+        sec_pts = []
         for k in range(n):
             a0, a1 = 2 * np.pi * k / n, 2 * np.pi * (k + 1) / n
             t = np.linspace(a0, a1, 30)
             pts = np.concatenate([[0], r0 * np.exp(1j * t)])
+            sec_pts.append(pts)
             sectors.add(Polygon(*[ax.c2p(z.real, z.imag) for z in pts], stroke_width=0.5, stroke_color=BACKGROUND,
                                 fill_color=cols[k], fill_opacity=0.85))
-            w = pts**3
-            images.add(Polygon(*[bx.c2p(z.real, z.imag) for z in w], stroke_width=0.5, stroke_color=BACKGROUND,
-                               fill_color=cols[k], fill_opacity=0.3))
+        # z^3 opens each 30-degree sector to 90 degrees: sectors 1-4 cover the image disk once (sheet 1), and so do
+        # sectors 5-8 and 9-12 (sheets 2 and 3, drawn small beside it). Opaque, never stacked.
+        small = 0.62
+        cx2 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, 0.3, 0])
+        cx3 = square_axes([-1.0, 1.0, 1], [-1.0, 1.0, 1], small).move_to([1.7, -1.75, 0])
+        sheets = []
+        for s_, axk in enumerate((bx, cx2, cx3)):
+            g = VGroup(*[Polygon(*[axk.c2p(w.real, w.imag) for w in sec_pts[k] ** 3], stroke_width=0.5,
+                                 stroke_color=BACKGROUND, fill_color=cols[k], fill_opacity=0.85)
+                         for k in range(4 * s_, 4 * s_ + 4)])
+            sheets.append(g)
+        for s_ in range(3):  # each sheet's angles add up to one full turn: the image disk, once
+            spans = [np.ptp(np.unwrap(np.angle(sec_pts[k][1:] ** 3))) for k in range(4 * s_, 4 * s_ + 4)]
+            assert abs(sum(spans) - 2 * np.pi) < 1e-9
+        sh_l = VGroup(label(r"sheet 1", font_size=22, color=GREY_A).next_to(bx, DOWN, buff=0.12),
+                      label(r"sheet 2", font_size=22, color=GREY_A).next_to(cx2, DOWN, buff=0.08),
+                      label(r"sheet 3", font_size=22, color=GREY_A).next_to(cx3, DOWN, buff=0.08))
         # every point of the image disk (except 0) is covered exactly 3 times
         rng = np.random.default_rng(4)
         wq = 0.8 * np.sqrt(rng.uniform(0, 1, 200)) * np.exp(2j * np.pi * rng.uniform(0, 1, 200))
@@ -108,21 +151,24 @@ class OpenMapping(VoiceoverScene):
             roots = np.roots([1, 0, 0, -w])
             assert int(np.sum(np.abs(roots) < r0)) == 3
         lab = VGroup(MathTex(r"|z| < 0.95", font_size=26).next_to(ax, UP, buff=0.1),
-                     MathTex(r"f(z) = z^3: \text{ each sector opens to } 3\times \text{ its angle}", font_size=26).next_to(
-                         bx, UP, buff=0.1))
-        arrow = Arrow([-1.6, -0.6, 0], [-0.8, -0.6, 0], buff=0, color=GREY_B, stroke_width=4)
+                     VGroup(MathTex(r"f(z) = z^3:", font_size=26),
+                            MathTex(r"\text{each sector opens to } 3\times \text{ its angle}", font_size=26)
+                            ).arrange(DOWN, buff=0.08).next_to(bx, UP, buff=0.1))
+        arrow = Arrow(ax.get_right() + RIGHT * 0.1, bx.get_left() + LEFT * 0.1, buff=0, color=GREY_B, stroke_width=4)
         rows = VGroup(
             label(r"\textbf{RCA 10.32} \ near $z_0$:", font_size=24),
-            MathTex(r"f(z) - f(z_0) = (z - z_0)^m\, g(z)^m", font_size=26),
+            MathTex(r"f(z) - f(z_0)", font_size=26),
+            MathTex(r"= (z - z_0)^m\, g(z)^m", font_size=26),
             label(r"so $f$ is $m$-to-$1$ near $z_0$, \ and onto a disk", font_size=22),
             label(r"(200 random points: \ 3 preimages each)", font_size=22, color=GREY_A),
             label(r"\textbf{open mapping:} \ nonconstant $f$", font_size=22, color=C.EPS),
             label(r"maps open sets to open sets", font_size=22, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.25, -0.6, 0])
-        for r_ in rows:
-            if r_.width > 3.3:
-                r_.width = 3.3
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.3, -0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        rows[2].shift(RIGHT * 0.3)
+        rows.align_to(np.array([6.55 - rows.width, 0, 0]), LEFT).set_y(-0.6)
+        assert rows.get_right()[0] <= 6.6 and rows.get_left()[0] > cx2.get_right()[0] + 0.25
+        assert ax.get_left()[0] > -6.65 and lab[1].get_left()[0] > lab[0].get_right()[0] + 0.3
+        assert lab[1].get_right()[0] < cx2.get_left()[0] or lab[1].get_bottom()[1] > cx2.get_top()[1]
         head = label(r"Near a point, a holomorphic map looks like $z \mapsto z^m$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Near any point, a nonconstant holomorphic function looks like a power: f of z minus "
@@ -133,13 +179,16 @@ class OpenMapping(VoiceoverScene):
             "open mapping theorem: nonconstant holomorphic functions send open sets to open sets."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(rows[:2]))
+            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(rows[:3]))
             vo.wait_until("b")
             self.play(FadeIn(sectors), FadeIn(lab[0]))
-            self.play(GrowArrow(arrow), TransformFromCopy(sectors, images), FadeIn(lab[1]), run_time=2.5)
-            self.play(FadeIn(rows[2:4]))
+            self.play(GrowArrow(arrow), TransformFromCopy(sectors[0:4], sheets[0]), FadeIn(lab[1]), FadeIn(sh_l[0]),
+                      run_time=2.0)
+            self.play(TransformFromCopy(sectors[4:8], sheets[1]), FadeIn(sh_l[1]), run_time=1.2)
+            self.play(TransformFromCopy(sectors[8:12], sheets[2]), FadeIn(sh_l[2]), run_time=1.2)
+            self.play(FadeIn(rows[3:5]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[4:]))
+            self.play(FadeIn(rows[5:]))
         self.wait(0.3)
         self.clear_scene()
 

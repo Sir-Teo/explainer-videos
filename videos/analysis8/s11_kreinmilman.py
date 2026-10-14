@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis8.common import load, p_ball, plain_axes, polyline, square_axes
+from videos.analysis8.common import dense_points, load, p_ball, place_label, plain_axes, polyline, square_axes
 
 
 class KreinMilman(VoiceoverScene):
@@ -93,23 +93,27 @@ class KreinMilman(VoiceoverScene):
         G2 = VGroup(Line(ax.c2p(0, 0), ax.c2p(a, 0), color=C.APPROX, stroke_width=3),
                     polyline(ax, x[x > a], g2[x > a], color=C.APPROX, stroke_width=3))
         av = MathTex(r"f = \tfrac12(g_1 + g_2)", font_size=28).next_to(ax, UP, buff=0.1)
-        labs = VGroup(MathTex(r"f = 2x", font_size=26).next_to(ax.c2p(0.9, 1.8), DOWN, buff=0.15),
-                      MathTex(r"g_1", font_size=26, color=C.SEQ).next_to(ax.c2p(0.55, 2.2), LEFT, buff=0.1),
-                      MathTex(r"g_2", font_size=26, color=C.APPROX).next_to(ax.c2p(0.95, 3.8), LEFT, buff=0.1))
+        # each label beside its own line, on the side away from the others (placed and checked against every stroke)
+        obst = dense_points(VGroup(gf, G1, G2, ax))
+        labs = VGroup(MathTex(r"f = 2x", font_size=26), MathTex(r"g_1", font_size=26, color=C.SEQ),
+                      MathTex(r"g_2", font_size=26, color=C.APPROX))
+        place_label(labs[0], ax.c2p(0.9, 1.8), obst, dirs=(DOWN, DR, RIGHT), buffs=(0.15, 0.25))
+        place_label(labs[1], ax.c2p(0.42, 1.68), obst, dirs=(UL, LEFT, UP), buffs=(0.1, 0.15, 0.25), avoid=[labs[0]])
+        place_label(labs[2], ax.c2p(0.9, 3.6), obst, dirs=(UL, LEFT, UP), buffs=(0.1, 0.15, 0.25), avoid=list(labs[:2]))
         rows = VGroup(
-            label(r"in $L^1[0, 1]$, \ $\|f\|_1 = 1$: \ cut at $a = 1/\sqrt2$, \ where half the mass is", font_size=24),
-            label(r"$g_1 = 2f\,\mathbf 1_{[0, a]}$, \ $g_2 = 2f\,\mathbf 1_{(a, 1]}$: \ both of norm $1$", font_size=24),
-            label(r"every unit vector splits this way: \ the ball of $L^1$ has \emph{no} extreme points", font_size=24,
-                  color=C.PATHOLOGY),
-            label(r"but a dual ball is weak-$*$ compact (Alaoglu), \ so it has them (Krein--Milman)", font_size=24),
+            label(r"in $L^1[0, 1]$, \ $\|f\|_1 = 1$: \ cut at $a = 1/\sqrt2$,", font_size=24),
+            label(r"where half the mass is: \ $g_1 = 2f\,\mathbf 1_{[0, a]}$, \ $g_2 = 2f\,\mathbf 1_{(a, 1]}$", font_size=24),
+            label(r"both of norm $1$", font_size=24),
+            label(r"every unit vector splits this way:", font_size=24, color=C.PATHOLOGY),
+            label(r"the ball of $L^1$ has \emph{no} extreme points", font_size=24, color=C.PATHOLOGY),
+            label(r"but a dual ball is weak-$*$ compact (Alaoglu),", font_size=24),
+            label(r"so it has extreme points (Krein--Milman)", font_size=24),
             label(r"so $L^1[0, 1]$ is not the dual of any Banach space", font_size=26, color=C.EPS),
-            label(r"for probability measures, \ the extreme points are the point masses $\delta_x$", font_size=22,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
-        for r_ in rows:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, -0.5, 0])
+            label(r"for probability measures, \ the extreme points", font_size=22, color=GREY_A),
+            label(r"are the point masses $\delta_x$", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
+        rows.shift(np.array([-0.2, -0.5, 0]) - [rows.get_left()[0], rows.get_center()[1], 0])
+        assert rows.get_right()[0] < 6.6 and rows.get_left()[0] > ax.get_right()[0] + 0.3
         head = label(r"A ball with no corners at all", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Now a surprise. In L one of the unit interval, take f equals two x, of norm one. "
@@ -124,11 +128,11 @@ class KreinMilman(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(gf), FadeIn(labs[0]), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(Create(G1), FadeIn(labs[1]))
-            self.play(Create(G2), FadeIn(labs[2]), FadeIn(av), FadeIn(rows[1]))
+            self.play(Create(G2), FadeIn(labs[2]), FadeIn(av), FadeIn(rows[1:3]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[2]))
-            vo.wait_until("d")
             self.play(FadeIn(rows[3:5]))
-            self.play(FadeIn(rows[5]))
+            vo.wait_until("d")
+            self.play(FadeIn(rows[5:8]))
+            self.play(FadeIn(rows[8:]))
         self.wait(0.4)
         self.clear_scene()

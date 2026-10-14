@@ -73,3 +73,24 @@ def magnifier_above(src_ax, x_window, y_window, height=1.6, gap=0.3, color=GREY_
     decor = VGroup(src, guides, dst, t)
     decor.src, decor.guides, decor.frame, decor.tag = src, guides, dst, t
     return inset, decor
+
+
+def board_box(board, eps_color=C.EPS, delta_color=C.DELTA) -> VMobject:
+    """The game as a box of fixed size: the rectangle (a - delta, a + delta) x (f(a) - eps, f(a) + eps) of a
+    ``FunctionBoard``, its top and bottom in the epsilon colour and its sides in the delta colour, clipped to the axes.
+    (Used with ``board.piece()``, which colours the graph green inside the box and red where it leaves through the top
+    or bottom.)"""
+
+    def draw():
+        A = board.ax
+        a, d, e, L = board.a.get_value(), board.delta.get_value(), board.eps.get_value(), board.L
+        x0, x1 = max(a - d, A.x_range[0]), min(a + d, A.x_range[1])
+        y0, y1 = max(L - e, A.y_range[0]), min(L + e, A.y_range[1])
+        p00, p11 = A.c2p(x0, y0), A.c2p(x1, y1)
+        fill = Rectangle(width=max(0.004, p11[0] - p00[0]), height=max(0.004, p11[1] - p00[1]), stroke_width=0,
+                         fill_color=eps_color, fill_opacity=0.14).move_to((p00 + p11) / 2)
+        p01, p10 = A.c2p(x0, y1), A.c2p(x1, y0)
+        return VGroup(fill, Line(p01, p11, color=eps_color, stroke_width=3), Line(p00, p10, color=eps_color, stroke_width=3),
+                      Line(p00, p01, color=delta_color, stroke_width=3), Line(p10, p11, color=delta_color, stroke_width=3))
+
+    return always_redraw(draw)

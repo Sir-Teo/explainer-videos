@@ -148,6 +148,10 @@ def compute_swing():
             j += 1
         out[m] = s
     s_all = s
+    # the rest of the run, sampled at log-spaced term counts (so it can be drawn on a log axis out to the end)
+    rec_at = set(np.unique(np.round(np.logspace(math.log10(len(out)) + 0.01, 6.4, 500)).astype(int)).tolist())
+    lk, ls = [], []
+    cnt = len(out)
     while i < len(pos) - 1 and j < len(neg) - 1:
         if s_all <= target:
             s_all += pos[i]
@@ -155,11 +159,17 @@ def compute_swing():
         else:
             s_all += neg[j]
             j += 1
-    assert abs(s_all - target) < 1e-4 and abs(np.sum(tk) - (math.pi - 1) / 2) < 1e-5
+        cnt += 1
+        if cnt in rec_at:
+            lk.append(cnt)
+            ls.append(s_all)
+    lk.append(cnt)
+    ls.append(s_all)
+    assert cnt == i + j and abs(s_all - target) < 1e-4 and abs(np.sum(tk) - (math.pi - 1) / 2) < 1e-5
     keep = 40000
     return dict(alpha=alpha, beta=beta, sums=sums[:keep], terms=terms[:keep], peaks=np.array([k for k in peaks if k < keep]),
                 troughs=np.array([k for k in troughs if k < keep]), sin_sums=out, sin_final=s_all,
-                sin_used=np.array([i, j]))
+                sin_used=np.array([i, j]), sin_lk=np.array(lk), sin_ls=np.array(ls))
 
 
 # ---------------------------------------------------------------------------

@@ -55,8 +55,7 @@ class AbsolutelyContinuous(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, 1.4, 0])
         card = museum_card(r"The Cantor function", r"Cantor 1884; \ Lebesgue 1904", r"$F(x) - F(0) = \int_0^x F'$",
                            r"RCA 7.16 \ (and Part 1's staircase)", width=5.0).move_to([3.4, -1.15, 0])
-        head = label(r"A function that rises by $1$ with derivative $0$ almost everywhere", font_size=32).to_edge(UP,
-                                                                                                         buff=0.25)
+        head = label(r"A function that rises by $1$ with derivative $0$ a.e.", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Is a function the integral of its derivative? Here's Part 1's staircase, the Cantor "
             "function. It's continuous and increasing, and it rises from zero to one. <bookmark mark='b'/> On every "
@@ -87,17 +86,36 @@ class AbsolutelyContinuous(VoiceoverScene):
             label(r"for disjoint intervals $(\alpha_i, \beta_i)$: \ uniform continuity, \ for many intervals at once",
                   font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
-        ax = plain_axes([0, 1, 0.5], [0, 1, 0.5], 4.6, 2.5, numbers=True, font_size=16,
+        ax = plain_axes([0, 1, 0.5], [0, 1, 0.5], 5.0, 2.9, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -1.0, 0])
-        bx = plain_axes([0, 1, 0.5], [0, 1, 0.5], 4.6, 2.5, numbers=True, font_size=16,
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.85, 0])
+        bx = plain_axes([0, 1, 0.5], [0, 1, 0.5], 5.0, 2.9, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.4, -1.0, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.4, -0.85, 0])
         x = np.linspace(0, 1, 500)
         gs = polyline(ax, x, np.sqrt(x), color=C.SEQ, stroke_width=3.5)
         gc = polyline(bx, xs, F, color=C.MEASURE, stroke_width=3)
         s_l = MathTex(r"\sqrt x", font_size=28, color=C.SEQ).next_to(ax, UP, buff=0.08)
         c_l = MathTex(r"\text{Cantor } F", font_size=28, color=C.MEASURE).next_to(bx, UP, buff=0.08)
+        # the definition, drawn: three disjoint intervals (alpha_i, beta_i) on the x-axis and the rises of sqrt over
+        # them on the y-axis; the two sums are the two sides of the definition
+        al = np.array([0.10, 0.40, 0.75])
+        be = al + 0.04
+        rise3 = np.sqrt(be) - np.sqrt(al)
+        assert np.all(al[1:] > be[:-1]) and abs(rise3.sum() - 0.1121) < 5e-4
+        ill = VGroup()
+        for a_, b_ in zip(al, be):
+            tt = np.linspace(a_, b_, 20)
+            ill.add(Line(ax.c2p(a_, 0), ax.c2p(b_, 0), color=C.EPS, stroke_width=10),
+                    polyline(ax, tt, np.sqrt(tt), color=C.EPS, stroke_width=7),
+                    DashedLine(ax.c2p(a_, np.sqrt(a_)), ax.c2p(0, np.sqrt(a_)), color=C.EPS, stroke_width=1.5,
+                               dash_length=0.06).set_opacity(0.6),
+                    DashedLine(ax.c2p(b_, np.sqrt(b_)), ax.c2p(0, np.sqrt(b_)), color=C.EPS, stroke_width=1.5,
+                               dash_length=0.06).set_opacity(0.6),
+                    Line(ax.c2p(0, np.sqrt(a_)), ax.c2p(0, np.sqrt(b_)), color=C.EPS, stroke_width=10))
+        ill_t = VGroup(MathTex(rf"\textstyle\sum_i (\beta_i - \alpha_i) = {np.sum(be - al):.2f}", font_size=24, color=C.EPS),
+                       MathTex(rf"\textstyle\sum_i |f(\beta_i) - f(\alpha_i)| = {rise3.sum():.3f}", font_size=24,
+                               color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, DOWN, buff=0.15)
         # sqrt: eps = 0.1, delta = eps^2 = 0.01; the worst placement is one interval at 0
         rng = np.random.default_rng(2)
         worst = 0.0
@@ -109,8 +127,22 @@ class AbsolutelyContinuous(VoiceoverScene):
             rise = float(np.sum(np.sqrt(starts + ls) - np.sqrt(starts)))
             worst = max(worst, rise)
         assert worst <= 0.1 + 1e-12 and abs(math.sqrt(0.01) - 0.1) < 1e-15
-        sq_iv = Line(ax.c2p(0, -0.04), ax.c2p(0.01, -0.04), color=C.EPS, stroke_width=10)
-        sq_rise = Line(ax.c2p(0.01, 0), ax.c2p(0.01, 0.1), color=C.EPS, stroke_width=5)
+        # the worst placement, magnified: the interval [0, 0.01] and the rise 0.1 over it
+        xw, yw = (-0.002, 0.02), (-0.03, 0.15)
+        ins, decor = magnifier(ax, xw, yw, center=ax.c2p(0.72, 0.3), width=2.3, height=1.3)
+        p0, p1 = ax.c2p(xw[0], yw[0]), ax.c2p(xw[1], yw[1])
+        kx, ky = 2.3 / (p1[0] - p0[0]), 1.3 / (p1[1] - p0[1])
+        decor.remove(decor.tag)
+        decor.tag = MathTex(rf"x \times {kx:.0f}, \ y \times {ky:.0f}", font_size=22, color=GREY_B).next_to(
+            decor.frame, UP, buff=0.08).align_to(decor.frame, LEFT)
+        decor.add(decor.tag)
+        tz = np.linspace(0, 0.02, 200)
+        zoom = VGroup(polyline(ins, tz, np.sqrt(tz), color=C.SEQ, stroke_width=3),
+                      Line(ins.c2p(0, 0), ins.c2p(0.01, 0), color=C.EPS, stroke_width=8),
+                      Line(ins.c2p(0.01, 0), ins.c2p(0.01, 0.1), color=C.EPS, stroke_width=5))
+        zoom.add(MathTex(r"\delta", font_size=24, color=C.EPS).next_to(ins.c2p(0.005, 0), DOWN, buff=0.04),
+                 MathTex(rf"{math.sqrt(0.01):.1f}", font_size=22, color=C.EPS).next_to(ins.c2p(0.0102, 0.05), RIGHT,
+                                                                                      buff=0.08))
         sq_t = VGroup(MathTex(r"\varepsilon = 0.1:\ \delta = \varepsilon^2 = 0.01 \text{ works}", font_size=24, color=C.EPS),
                       MathTex(rf"\text{{4000 random placements: max rise }} {worst:.4f} \le 0.1", font_size=22,
                               color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, DOWN, buff=0.15)
@@ -140,10 +172,11 @@ class AbsolutelyContinuous(VoiceoverScene):
             "the integral of its derivative. The square root qualifies, even though its derivative is unbounded."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(defn))
+            self.play(FadeIn(defn), Create(ax), Create(gs), FadeIn(s_l))
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in ill], lag_ratio=0.08), FadeIn(ill_t), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(ax), Create(gs), FadeIn(s_l))
-            self.play(Create(sq_iv), Create(sq_rise), FadeIn(sq_t))
+            self.play(FadeOut(ill), FadeOut(ill_t))
+            self.play(FadeIn(decor), Create(zoom[0]), FadeIn(zoom[1:]), FadeIn(sq_t))
             vo.wait_until("c")
             self.play(Create(bx), Create(gc), FadeIn(c_l))
             self.play(LaggedStart(*[Create(c_) for c_ in cb], lag_ratio=0.05), FadeIn(ct))
@@ -155,22 +188,37 @@ class AbsolutelyContinuous(VoiceoverScene):
     # ------------------------------------------------------------------
     def wild(self):
         d = load("ftc")
-        eps, var, xs, fx = d["eps"], d["var"], d["xs"], d["fx"]
-        ax = plain_axes([0, 0.6, 0.2], [-0.4, 0.4, 0.2], 6.4, 3.4, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.0, 0.0, 0])
-        m = xs <= 0.6
-        g = polyline(ax, xs[m], fx[m], color=C.APPROX, stroke_width=2)
-        env = VGroup(polyline(ax, xs[m], xs[m] ** 2, color=GREY_C, stroke_width=1.5),
-                     polyline(ax, xs[m], -xs[m] ** 2, color=GREY_C, stroke_width=1.5))
-        f_l = MathTex(r"f(x) = x^2 \sin \frac{1}{x^2}, \quad f(0) = 0", font_size=28, color=C.APPROX).next_to(ax, UP,
-                                                                                                       buff=0.12)
+        eps, var = d["eps"], d["var"]
+        ax = plain_axes([0, 0.6, 0.2], [-0.4, 0.4, 0.2], 6.4, 3.4, numbers=False).move_to([-3.0, 0.0, 0])
+        ax.y_axis.add_numbers(*[v for v in (-0.4, -0.2, 0.2, 0.4)], num_decimal_places=1, font_size=18)
+        # the x numbers along the bottom edge (the curve crosses the x-axis between them)
+        xnums = VGroup(*[MathTex(f"{v:.1f}", font_size=18, color=GREY_B).next_to(ax.c2p(v, -0.4), DOWN, buff=0.12)
+                         for v in (0.2, 0.4, 0.6)])
+        # sampled uniformly in u = 1/x^2 (20 points per period of sin u), down to x = 0.02: every wiggle resolved
+        # (drawn from x = 0.6 in toward 0)
+        u = np.linspace(1 / 0.6**2, 1 / 0.02**2, int(20 * (1 / 0.02**2 - 1 / 0.6**2) / (2 * np.pi)) + 1)
+        xs = u ** -0.5
+        fx = xs**2 * np.sin(u)
+        assert abs(xs[0] - 0.6) < 1e-12 and abs(xs[-1] - 0.02) < 1e-12 and np.diff(u).min() > 0
+        assert np.diff(u).max() <= 2 * np.pi / 19  # at least 19 samples per oscillation everywhere
+        assert np.all(np.abs(fx) <= xs**2 + 1e-15)
+        g = polyline(ax, xs, fx, color=C.PATHOLOGY, stroke_width=2)
+        # below x = 0.02 the wiggles are finer than a pixel: the band between -x^2 and x^2
+        xb = np.linspace(0, 0.02, 30)
+        band = Polygon(*[ax.c2p(a, a * a) for a in xb], *[ax.c2p(a, -a * a) for a in xb[::-1]], stroke_width=0,
+                       fill_color=C.PATHOLOGY, fill_opacity=0.8)
+        xe = np.linspace(0, 0.6, 200)
+        env = VGroup(polyline(ax, xe, xe**2, color=GREY_C, stroke_width=1.5),
+                     polyline(ax, xe, -xe**2, color=GREY_C, stroke_width=1.5))
+        env_l = MathTex(r"\pm x^2", font_size=22, color=GREY_B).next_to(ax.c2p(0.55, 0.55**2), UL, buff=0.06)
+        f_l = MathTex(r"f(x) = x^2 \sin \frac{1}{x^2}, \quad f(0) = 0", font_size=28, color=C.PATHOLOGY).next_to(
+            ax, UP, buff=0.12)
         tab = VGroup(MathTex(r"\varepsilon", r"\quad \int_\varepsilon^1 |f'|", font_size=26, color=GREY_A))
         for e, v in zip(eps, var):
             tab.add(MathTex(f"{e}", rf"\quad {v:.3f}", font_size=26, color=C.PATHOLOGY))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.1, 1.0, 0])
         regrid(tab)
-        grow = label(r"each factor 10 in $\varepsilon$ adds $\frac{4}{\pi}\log 10 = 2.93$", font_size=22,
+        grow = label(rf"each factor 10 in $\varepsilon$ adds $\frac{{4}}{{\pi}}\log 10 = {4 / math.pi * math.log(10):.2f}$", font_size=22,
                      color=GREY_A).next_to(tab, DOWN, buff=0.15)
         assert abs((var[3] - var[1]) - 4 / math.pi * math.log(10)) < 0.1
         sm = VGroup(
@@ -179,7 +227,7 @@ class AbsolutelyContinuous(VoiceoverScene):
             label(r"\textbf{RCA 7.21} \ if $f'$ exists everywhere \emph{and} $f' \in L^1$, \ the FTC holds", font_size=24,
                   color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.3)
-        head = label(r"Differentiable everywhere is not enough either", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Differentiable everywhere is not enough either", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> One more warning. x squared sine of one over x squared is differentiable at every "
             "point, including zero, where the derivative is zero. <bookmark mark='b'/> But near zero it wiggles so "
@@ -189,8 +237,8 @@ class AbsolutelyContinuous(VoiceoverScene):
             "both: a derivative at every point, and an integrable one."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(env), FadeIn(f_l))
-            self.play(Create(g), run_time=2.5)
+            self.play(FadeIn(head), Create(ax), FadeIn(xnums), Create(env), FadeIn(env_l), FadeIn(f_l), FadeIn(band),
+                      Create(g), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(tab[0]))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4), run_time=2.0)

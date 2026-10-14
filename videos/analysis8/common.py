@@ -142,3 +142,32 @@ def dense_points(m: VMobject, per_curve: int = 12) -> np.ndarray:
                 out.append((1 - t) ** 3 * a + 3 * (1 - t) ** 2 * t * b + 3 * (1 - t) * t * t * c + t ** 3 * d)
     return np.array(out) if out else np.zeros((0, 3))
 
+
+
+def place_label(m: Mobject, anchor, pts, dirs=(UR, UL, DR, DL, RIGHT, LEFT, UP, DOWN), buffs=(0.08, 0.15, 0.25, 0.4),
+                avoid=(), pad: float = 0.04, xlim=(-6.7, 6.7), ylim=(-3.6, 3.6)) -> Mobject:
+    """Put label m next to ``anchor`` in the first direction (and buff) where no point of ``pts`` (scene points of the
+    curves to keep clear of, see dense_points) falls in its box and it overlaps none of ``avoid``; fail loudly if
+    there is no such spot."""
+    for b in buffs:
+        for d in dirs:
+            m.next_to(anchor, d, buff=b)
+            if (m.get_left()[0] < xlim[0] or m.get_right()[0] > xlim[1] or m.get_bottom()[1] < ylim[0]
+                    or m.get_top()[1] > ylim[1]):
+                continue
+            if not curve_hits_box(pts, m, pad) and all(not boxes_overlap(m, o, pad) for o in avoid):
+                return m
+    raise AssertionError(f"no free spot for {getattr(m, 'tex_string', m)}")
+
+
+def redraw_split(make, n_of, cut: int) -> VGroup:
+    """A label redrawn from an integer n whose glyph count changes at n = cut (say a subscript reaching two digits):
+    become() scrambles a family that changes shape, so there is one redrawn copy for n < cut and one for n >= cut,
+    each fixed in shape and shown only in its own range."""
+    lo = always_redraw(lambda: make(min(n_of(), cut - 1)))
+    hi = always_redraw(lambda: make(max(n_of(), cut)))
+    lo.add_updater(lambda m: m.set_opacity(1.0 if n_of() < cut else 0.0))
+    hi.add_updater(lambda m: m.set_opacity(1.0 if n_of() >= cut else 0.0))
+    lo.update()
+    hi.update()
+    return VGroup(lo, hi)

@@ -56,7 +56,7 @@ class Series(VoiceoverScene):
     # ------------------------------------------------------------------
     def criterion(self):
         dfn = MathTex(r"\sum_{n=1}^{\infty} a_n = s", r"\quad\text{means}\quad", r"s_n = a_1 + \cdots + a_n \to s",
-                      font_size=38).to_edge(UP, buff=0.35)
+                      font_size=38).to_edge(UP, buff=0.3)
         crit = VGroup(label(r"\textbf{Cauchy criterion} (Rudin 3.22): \ $\sum a_n$ converges $\iff$", font_size=28),
                       MathTex(r"\forall \varepsilon > 0 \;\exists N:\; m \ge n \ge N \Rightarrow "
                               r"\Big| a_n + a_{n+1} + \cdots + a_m \Big| \le \varepsilon", font_size=34)
@@ -138,7 +138,7 @@ class Series(VoiceoverScene):
         bs = bars(a, self.X0, self.BASE, self.W, self.H)
         base = Line([self.X0 - 0.1, self.BASE, 0], [self.bx(n_max + 1) + 0.1, self.BASE, 0], color=GREY_C,
                     stroke_width=2)
-        head = MathTex(r"1 + \tfrac12 + \tfrac13 + \tfrac14 + \cdots", font_size=42, color=C.SEQ).to_edge(UP, buff=0.45)
+        head = MathTex(r"1 + \tfrac12 + \tfrac13 + \tfrac14 + \cdots", font_size=42, color=C.SEQ).to_edge(UP, buff=0.3)
         sub = label(r"the harmonic series: \ terms $\to 0$", font_size=28, color=GREY_A).next_to(head, DOWN, buff=0.12)
         cols = [C.SEQ, C.FREQ]
         blocks = VGroup()
@@ -200,7 +200,7 @@ class Series(VoiceoverScene):
         a_l = MathTex(r"\ln n + 0.5772\ldots", font_size=30).move_to(lx.c2p(4.6, 7.8))
         end = MathTex(rf"s_{{10^6}} = {float(d['p1'][-1]):.2f}", font_size=30).next_to(lx.c2p(6, d["p1"][-1]), UP,
                                                                                     buff=0.15).shift(LEFT * 0.6)
-        head = label(r"It diverges, \ but slowly", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"It diverges, \ but slowly", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> It diverges, but slowly: on a logarithmic scale the partial sums are a straight line, "
             "hugging the natural log of n plus Euler's constant. <bookmark mark='b'/> A million terms add up to only "
@@ -221,7 +221,7 @@ class Series(VoiceoverScene):
         comp = VGroup(label(r"\textbf{Comparison} (Rudin 3.25)", font_size=32),
                       label(r"$|a_n| \le c_n$ and $\sum c_n$ converges $\Rightarrow$ $\sum a_n$ converges", font_size=28),
                       label(r"$a_n \ge d_n \ge 0$ and $\sum d_n$ diverges $\Rightarrow$ $\sum a_n$ diverges", font_size=28)
-                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.45)
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         why1 = label(r"(blocks of $\sum a_n$ are no bigger than blocks of $\sum c_n$: \ the Cauchy criterion)",
                      font_size=24, color=GREY_B).next_to(comp, DOWN, buff=0.15)
         geo = MathTex(r"\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x} \quad (0 \le x < 1)", font_size=38).move_to([0, 0.3, 0])
@@ -303,7 +303,7 @@ class Series(VoiceoverScene):
                     stroke_width=2)
         thm = VGroup(label(r"\textbf{Condensation} (Rudin 3.27) \ If $a_1 \ge a_2 \ge \cdots \ge 0$:", font_size=30),
                      MathTex(r"\sum_{n=1}^\infty a_n \text{ converges} \iff \sum_{k=0}^\infty 2^k a_{2^k}"
-                             r"\text{ converges}", font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
+                             r"\text{ converges}", font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         ex = MathTex(r"a_n = n^{-3/2}", font_size=32, color=C.SEQ).move_to([3.6, 1.2, 0])
         ups, los = VGroup(), VGroup()
         for k in range(0, 5):

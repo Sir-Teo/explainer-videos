@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import partial_curve, saw_axes, saw_graph
+from videos.analysis1.common import partial_curve, saw, saw_axes, saw_graph, saw_partial
 from videos.analysis2.common import load, plain_axes, polyline
 
 
@@ -35,32 +35,33 @@ class Abel(VoiceoverScene):
         b = np.array([2.4, 1.9, 1.5, 1.0, 0.8, 0.5])
         A = np.cumsum(a)
         N = len(a)
-        sx, sy = 1.55, 1.0
-        o = np.array([-4.6, -3.0, 0])
+        sx, sy = 1.85, 1.25
+        o = np.array([-5.4, -2.3, 0])
+        heading = label(r"Summation by parts", font_size=34).to_edge(UP, buff=0.3)
 
         def P(x, y):
             return o + np.array([sx * x, sy * y, 0])
 
         axes = VGroup(Arrow(P(0, 0), P(A[-1] + 0.5, 0), buff=0, color=GREY_C, stroke_width=2, tip_length=0.15),
                       Arrow(P(0, 0), P(0, 2.9), buff=0, color=GREY_C, stroke_width=2, tip_length=0.15))
-        xl = MathTex(r"A_n = a_1 + \cdots + a_n", font_size=26, color=GREY_B).next_to(P(A[-1] + 0.5, 0), DOWN, buff=0.5)
+        xl = MathTex(r"A_n = a_1 + \cdots + a_n", font_size=26, color=GREY_B).next_to(P(A[-1] + 0.5, 0), DOWN, buff=0.55)
         xl.align_to(P(A[-1] + 0.5, 0), RIGHT)
         yl = MathTex(r"b_n", font_size=28, color=GREY_B).next_to(P(0, 2.9), LEFT, buff=0.1)
-        ticks = VGroup(*[MathTex(rf"A_{n + 1}", font_size=22, color=GREY_B).next_to(P(A[n], 0), DOWN, buff=0.1)
-                         for n in range(N - 1)])
-        cols = [C.SEQ, C.FREQ]
+        ticks = VGroup(*[MathTex(rf"A_{n + 1}" if n < N - 1 else r"A_N", font_size=22, color=GREY_B).next_to(
+            P(A[n], 0), DOWN, buff=0.1) for n in range(N)])
+        cols = [C.SEQ, C.CUT_HIGH]
         vert = VGroup()
         for n in range(N):
             x0 = A[n - 1] if n else 0.0
             r = Polygon(P(x0, 0), P(A[n], 0), P(A[n], b[n]), P(x0, b[n]), stroke_color=WHITE, stroke_width=1.5,
-                        fill_color=cols[n % 2], fill_opacity=0.6)
+                        fill_color=cols[n % 2], fill_opacity=0.5)
             vert.add(r)
         hor = VGroup()
-        hcols = [C.EPS, C.DELTA]
+        hcols = [C.SEQ, C.CUT_HIGH]
         for n in range(N - 1, -1, -1):
             top, bot = b[n], (b[n + 1] if n + 1 < N else 0.0)
             r = Polygon(P(0, bot), P(A[n], bot), P(A[n], top), P(0, top), stroke_color=WHITE, stroke_width=1.5,
-                        fill_color=hcols[n % 2], fill_opacity=0.6)
+                        fill_color=hcols[n % 2], fill_opacity=0.5)
             hor.add(r)
         f1 = MathTex(r"\sum_{n=1}^{N} a_n b_n", font_size=36).move_to([3.4, 2.4, 0])
         f1n = label(r"vertical strips: \ width $a_n$, height $b_n$", font_size=24, color=GREY_A).next_to(f1, DOWN, buff=0.1)
@@ -77,7 +78,7 @@ class Abel(VoiceoverScene):
             "sum, and height b n minus b n plus one, the drop between consecutive heights, plus a bottom slab of width A "
             "N. <bookmark mark='d'/> Same area, two ways of adding it up: it's integration by parts, for sums."
         ) as vo:
-            self.play(Create(axes), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(heading), Create(axes), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.2) for r in vert], lag_ratio=0.2), FadeIn(ticks))
             vo.wait_until("b")
@@ -95,35 +96,41 @@ class Abel(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def dirichlet(self):
-        thm = VGroup(label(r"\textbf{Dirichlet's test} (Rudin 3.42)", font_size=32),
-                     label(r"partial sums $A_n$ of $\sum a_n$ bounded, \ $|A_n| \le M$;", font_size=28),
-                     label(r"$b_0 \ge b_1 \ge b_2 \ge \cdots$, \ $b_n \to 0$", font_size=28),
-                     label(r"$\Rightarrow$ \ $\sum a_n b_n$ converges", font_size=30, color=C.EPS)
-                     ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
+        head = label(r"\textbf{Dirichlet's test}", font_size=34).to_edge(UP, buff=0.3)
+        ref = note(r"Rudin 3.42").next_to(head, RIGHT, buff=0.3).align_to(head, DOWN)
         rows = [MathTex(r"\Big|\sum_{n=p}^{q} a_n b_n\Big|", r"\le",
                         r"M\Big(\sum_{n=p}^{q-1} (b_n - b_{n+1}) + b_q + b_p\Big)", font_size=36),
                 MathTex(r"\Big|\sum_{n=p}^{q} a_n b_n\Big|", r"\le", r"2 M b_p \to 0", font_size=36)]
         whys = [why(r"summation by parts, every $|A| \le M$"), why(r"the drops telescope: \ Cauchy criterion")]
-        step = ladder(self, rows, whys, keep=2, top=0.3, buff=0.45, x=-0.6)
+        step = ladder(self, rows, whys, keep=2, top=-0.05, buff=0.4, x=-0.6)
         alt = label(r"$a_n = (-1)^n$: \ the alternating series test (3.43)", font_size=28, color=GREY_A).to_edge(DOWN,
-                                                                                                               buff=0.5)
+                                                                                                               buff=0.4)
         # the hypotheses, for a_n = sin n (the sawtooth at x = 1) and b_n = 1/n
         K = 40
         nn = np.arange(1, K + 1)
         A = np.cumsum(np.sin(nn))
         M = 1 / math.sin(0.5)
-        assert np.abs(A).max() <= M
-        axA = plain_axes([0, K + 1, 10], [-2.4, 2.4, 1], 3.1, 1.7, numbers=False).move_to([-5.2, 2.15, 0])
-        axB = plain_axes([0, K + 1, 10], [0, 1.1, 0.5], 3.1, 1.7, numbers=False).move_to([5.2, 2.15, 0])
+        assert np.abs(A).max() <= M and M < 2.4
+        axA = plain_axes([0, K + 1, 10], [-2.4, 2.4, 1], 3.9, 2.0, numbers=False).move_to([-4.1, 1.55, 0])
+        axB = plain_axes([0, K + 1, 10], [0, 1.1, 0.5], 3.9, 2.0, numbers=False).move_to([4.25, 1.55, 0])
         bandA = Rectangle(width=axA.c2p(K + 1, 0)[0] - axA.c2p(0, 0)[0], height=axA.c2p(0, M)[1] - axA.c2p(0, -M)[1],
                           stroke_width=0, fill_color=C.EPS, fill_opacity=0.14).move_to(axA.c2p((K + 1) / 2, 0))
         edgesA = VGroup(*[DashedLine(axA.c2p(0, v), axA.c2p(K + 1, v), color=C.EPS, stroke_width=1.5) for v in (M, -M)])
-        dotsA = VGroup(*[Dot(axA.c2p(k, v), radius=0.03, color=C.SEQ) for k, v in zip(nn, A)])
-        dotsB = VGroup(*[Dot(axB.c2p(k, 1 / k), radius=0.03, color=C.FREQ) for k in nn])
-        labA = VGroup(MathTex(r"A_n = \sum_{k \le n} \sin k", font_size=22, color=C.SEQ),
-                      MathTex(r"\pm M", font_size=22, color=C.EPS)).arrange(RIGHT, buff=0.3).next_to(axA, DOWN,
-                                                                                                buff=0.1)
-        labB = MathTex(r"b_n = \tfrac1n \downarrow 0", font_size=22, color=C.FREQ).next_to(axB, DOWN, buff=0.1)
+        mlab = VGroup(*[MathTex(t_, font_size=22, color=C.EPS).next_to(axA.c2p(0, v), LEFT, buff=0.12)
+                        for t_, v in ((r"M", M), (r"-M", -M))])
+        dotsA = VGroup(*[Dot(axA.c2p(k, v), radius=0.035, color=C.SEQ) for k, v in zip(nn, A)])
+        dotsB = VGroup(*[Dot(axB.c2p(k, 1 / k), radius=0.035, color=C.CUT_HIGH) for k in nn])
+        ntA = VGroup(*[MathTex(str(k), font_size=18, color=GREY_B).next_to(axA.c2p(k, -2.4), DOWN, buff=0.15)
+                       for k in (10, 20, 30, 40)])
+        ntB = VGroup(*[MathTex(str(k), font_size=18, color=GREY_B).next_to(axB.c2p(k, 0), DOWN, buff=0.15)
+                       for k in (10, 20, 30, 40)])
+        oneB = MathTex(r"1", font_size=18, color=GREY_B).next_to(axB.c2p(0, 1), LEFT, buff=0.12)
+        capA = label(r"$|A_n| \le M$, \ $A_n = \sum_{k \le n} \sin k$", font_size=24, color=C.SEQ).next_to(axA, UP,
+                                                                                                       buff=0.12)
+        capB = label(r"$b_n = \tfrac1n$ decreases to $0$", font_size=24, color=C.CUT_HIGH).next_to(axB, UP, buff=0.12)
+        concl = VGroup(MathTex(r"\Longrightarrow", font_size=36, color=C.EPS),
+                       label(r"$\sum a_n b_n$", font_size=28, color=C.EPS),
+                       label(r"converges", font_size=28, color=C.EPS)).arrange(DOWN, buff=0.1).move_to([-0.1, 1.55, 0])
         with self.voiceover(
             "Summation by parts goes back to Abel; the test it gives is named for Dirichlet. <bookmark mark='t'/> Suppose the partial sums of the a n stay bounded, by "
             "some M, without converging, and the b n decrease to zero. Then the sum of a n b n converges. "
@@ -131,12 +138,12 @@ class Abel(VoiceoverScene):
             "and the drops in b telescope, leaving at most two M times b p, which goes to zero. That's the Cauchy "
             "criterion. <bookmark mark='c'/> With a n equal to plus and minus one, this is the alternating series test."
         ) as vo:
-            self.play(FadeIn(thm[0]))
-            self.play(FadeIn(thm[1]), Create(axA), FadeIn(bandA), Create(edgesA), FadeIn(labA))
+            self.play(FadeIn(head), FadeIn(ref))
+            self.play(FadeIn(capA), Create(axA), FadeIn(bandA), Create(edgesA), FadeIn(mlab), FadeIn(ntA))
             self.play(LaggedStart(*[FadeIn(x) for x in dotsA], lag_ratio=0.05), run_time=1.6)
-            self.play(FadeIn(thm[2]), Create(axB), FadeIn(labB))
+            self.play(FadeIn(capB), Create(axB), FadeIn(ntB), FadeIn(oneB))
             self.play(LaggedStart(*[FadeIn(x) for x in dotsB], lag_ratio=0.05), run_time=1.4)
-            self.play(FadeIn(thm[3]))
+            self.play(FadeIn(concl))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -150,7 +157,7 @@ class Abel(VoiceoverScene):
     def sawtooth(self):
         d = load("abel")
         W, c, r, S, target = d["W"], complex(d["c"]), float(d["r"]), d["S"], float(d["target"])
-        o = np.array([-4.3, -0.6, 0])
+        o = np.array([-3.9, -0.6, 0])
         u = 1.35
 
         def P(z):
@@ -162,10 +169,11 @@ class Abel(VoiceoverScene):
         plane.move_to(P(complex(-0.3, 0.7)))
         circ = Circle(radius=u * r, color=GREY_B, stroke_width=1.5).move_to(P(c))
         pts = VGroup(*[Dot(P(w), radius=0.05, color=C.FREQ) for w in W[:40]])
+        assert P(complex(-2.0, 0))[0] - 0.1 > -6.7  # the plane's left edge stays inside the margin
         path = VMobject(color=C.FREQ, stroke_width=1.5, stroke_opacity=0.6)
         path.set_points_as_corners([P(0j)] + [P(w) for w in W[:40]])
         head = MathTex(r"\sum_{k=1}^{\infty} \frac{\sin kx}{k}", r"\quad a_k = \sin kx,\ \ b_k = \tfrac1k", font_size=36)
-        head.to_edge(UP, buff=0.35)
+        head.to_edge(UP, buff=0.3)
         lab = MathTex(r"\sum_{k \le n} e^{ikx} \text{ stays on a circle}", font_size=28, color=C.FREQ).next_to(
             plane, DOWN, buff=0.15)
         bound = MathTex(r"|A_n| \le \frac{1}{|\sin(x/2)|}", font_size=30).next_to(lab, DOWN, buff=0.12)
@@ -218,12 +226,25 @@ class Abel(VoiceoverScene):
         ns = (3, 10, 40, 160)
         curves = [partial_curve(sa, n) for n in ns]
         cur = curves[0]
-        ttl = label(r"Converges at every $x$, \ to the sawtooth", font_size=34).to_edge(UP, buff=0.4)
+        ttl = label(r"Converges at every $x$, \ to the sawtooth", font_size=34).to_edge(UP, buff=0.3)
         nl = MathTex(r"N = 3", font_size=32, color=C.APPROX).next_to(ttl, DOWN, buff=0.2)
         xs = [0.6, 2.0, 4.4]
         probes = VGroup(*[DashedLine(sa.c2p(x, -2.0), sa.c2p(x, 2.0), color=GREY_B, stroke_width=1.5) for x in xs])
+        # on each probe, the partial sum S_N(x) as a dot, and the sawtooth's value (pi - x)/2 as a ring
+        tgt = saw(np.array(xs))
+        assert np.allclose(tgt, (np.pi - np.array(xs)) / 2)
+
+        def pdots(n):
+            return VGroup(*[Dot(sa.c2p(x, float(saw_partial(np.array([x]), n)[0])), radius=0.07, color=WHITE)
+                            for x in xs])
+
+        pd = pdots(ns[0])
+        rings = VGroup(*[Circle(radius=0.12, color=C.FUNC, stroke_width=2.5).move_to(sa.c2p(x, v))
+                         for x, v in zip(xs, tgt)])
+        assert np.max(np.abs(saw_partial(np.array(xs), ns[-1]) - tgt)) < 0.05
+        rd = MathTex(r"S_N(x) \to \tfrac{\pi - x}{2}", font_size=30).next_to(nl, RIGHT, buff=0.6)
         led = label(r"Ledger, row 2, Fourier column: \ \emph{converges at each $x$} \ (by Dirichlet's test)",
-                    font_size=26, color=C.EPS).to_edge(DOWN, buff=0.25)
+                    font_size=26, color=C.EPS).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The same argument works at every x except the multiples of two pi, and there every term is zero anyway. "
             "<bookmark mark='a'/> So the series converges at every single point, <bookmark mark='b'/> and the partial "
@@ -232,11 +253,11 @@ class Abel(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ttl), Create(sa), FadeIn(g))
             vo.wait_until("a")
-            self.play(Create(cur), FadeIn(nl), FadeIn(probes))
+            self.play(Create(cur), FadeIn(nl), FadeIn(probes), FadeIn(rings), FadeIn(pd), FadeIn(rd))
             vo.wait_until("b")
             for n, cv in zip(ns[1:], curves[1:]):
                 nl2 = MathTex(rf"N = {n}", font_size=32, color=C.APPROX).move_to(nl)
-                self.play(Transform(cur, cv), FadeTransform(nl, nl2), run_time=1.2)
+                self.play(Transform(cur, cv), FadeTransform(nl, nl2), Transform(pd, pdots(n)), run_time=1.2)
                 nl = nl2
             vo.wait_until("c")
             self.play(FadeIn(led))
@@ -249,7 +270,7 @@ class Abel(VoiceoverScene):
             label(r"\textbf{Absolute convergence} (Rudin 3.45): \ $\sum |a_n| < \infty \Rightarrow \sum a_n$ converges",
                   font_size=30),
             label(r"(blocks: $|a_n + \cdots + a_m| \le |a_n| + \cdots + |a_m|$)", font_size=26, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
+        ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         K = 40
         nn = np.arange(1, K + 1)
         panels = []
@@ -259,22 +280,25 @@ class Abel(VoiceoverScene):
                             axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.4 + 6.9 * i, -0.75, 0])
             s_abs, s_sgn = np.cumsum(np.abs(a)), np.cumsum(a)
             c_abs = polyline(ax, nn, s_abs, color=C.SEQ, stroke_width=3)
-            c_sgn = polyline(ax, nn, s_sgn, color=C.FREQ, stroke_width=2.5)
-            d_sgn = VGroup(*[Dot(ax.c2p(k, v), radius=0.03, color=C.FREQ) for k, v in zip(nn, s_sgn)])
+            c_sgn = polyline(ax, nn, s_sgn, color=C.CUT_HIGH, stroke_width=2.5)
+            d_sgn = VGroup(*[Dot(ax.c2p(k, v), radius=0.03, color=C.CUT_HIGH) for k, v in zip(nn, s_sgn)])
             lim = float(np.pi**2 / 12) if p == 2 else math.log(2)
             tl = DashedLine(ax.c2p(0, lim), ax.c2p(K + 1, lim), color=WHITE, stroke_width=1.2)
             l_abs = MathTex(r"\sum |a_n|" + (r" \to \infty" if p == 1 else ""), font_size=24, color=C.SEQ)
             l_abs.move_to(ax.c2p(31, 2.9 if p == 1 else 2.15))
-            l_sgn = MathTex(r"\sum a_n" + (r" \to \ln 2" if p == 1 else ""), font_size=24, color=C.FREQ)
-            l_sgn.move_to(ax.c2p(31, lim - 0.42))
+            # the signed sums' label sits over their limit line, at the right end, where they have settled
+            l_sgn = MathTex(r"\sum a_n \to " + (r"\ln 2" if p == 1 else r"\tfrac{\pi^2}{12}"), font_size=24,
+                            color=C.CUT_HIGH)
+            l_sgn.next_to(ax.c2p(K + 1, lim), UP, buff=0.1).align_to(ax.c2p(K + 1, 0), RIGHT)
+            assert np.all(np.abs(s_sgn[19:] - lim) < 0.03) and np.all(s_abs[19:] > lim + 0.75)
             ttl = MathTex(rf"a_n = \frac{{(-1)^{{n+1}}}}{{n{'^2' if p == 2 else ''}}}", font_size=28)
             verdict = label(r"absolutely convergent" if p == 2 else r"\emph{conditionally} convergent", font_size=24,
-                            color=C.CONNECTED_SET if p == 2 else C.FREQ)
+                            color=C.CONNECTED_SET if p == 2 else C.CUT_HIGH)
             VGroup(ttl, verdict).arrange(RIGHT, buff=0.3).next_to(ax, UP, buff=0.15)
             panels.append(VGroup(ax, tl, c_abs, c_sgn, d_sgn, l_abs, l_sgn, ttl, verdict))
             assert abs(s_sgn[-1] - lim) < 0.02 and (s_abs[-1] < 1.7 if p == 2 else s_abs[-1] > 4.2)
         saw = label(r"$\sum \frac{\sin kx}{k}$: \ conditionally, for $x$ not a multiple of $\pi$", font_size=28,
-                    color=C.FREQ).to_edge(DOWN, buff=0.25)
+                    color=C.FREQ).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "<bookmark mark='a'/> If the absolute values have a finite sum, the series converges: blocks can only shrink "
             "when you allow cancellation. <bookmark mark='b'/> Series that converge only thanks to cancellation, like "
@@ -336,12 +360,13 @@ class Abel(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(head[1:]))
             for n in range(K):
-                self.play(diag[n].animate.set_color(C.EPS if n % 2 == 0 else C.DELTA), run_time=0.35)
+                col = C.APPROX if n % 2 == 0 else C.SEQ
+                self.play(*[cell[0].animate.set_fill(col, opacity=0.6) for cell in diag[n]], run_time=0.35)
             vo.wait_until("c")
             self.play(FadeIn(mert))
         self.wait(0.3)
 
-        ax = plain_axes([0, 61, 10], [-3.5, 3.5, 1], 6.4, 2.6, numbers=True, font_size=18).move_to([3.3, -1.75, 0])
+        ax = plain_axes([0, 61, 10], [-3.5, 3.5, 1], 6.4, 2.6, numbers=True, font_size=18).move_to([3.1, -1.75, 0])
         # |c_n| = sum_k 1/sqrt((k+1)(n-k+1)) climbs toward pi (a Riemann sum for the Beta integral B(1/2, 1/2))
         assert np.abs(c).max() < math.pi and np.abs(c[-1]) > 2.7
         pis = VGroup(*[DashedLine(ax.c2p(0, sg * math.pi), ax.c2p(61, sg * math.pi), color=GREY_C, stroke_width=1.5,
@@ -351,6 +376,8 @@ class Abel(VoiceoverScene):
         bnd = VGroup(polyline(ax, np.arange(len(c)), bound, color=GREY_B, stroke_width=1.5),
                      polyline(ax, np.arange(len(c)), -bound, color=GREY_B, stroke_width=1.5))
         ex = MathTex(r"a_n = b_n = \frac{(-1)^n}{\sqrt{n+1}}", font_size=28).next_to(ax, UP, buff=0.12)
+        bnd_l = MathTex(r"\pm \tfrac{2(n+1)}{n+2}", font_size=24, color=GREY_B).next_to(ax.c2p(52, bound[52]), DOWN,
+                                                                                    buff=0.12)
         verdict = label(r"$|c_n| \ge \tfrac{2(n+1)}{n+2}$: \ $c_n \not\to 0$, \ so $\sum c_n$ diverges (Rudin 3.49)",
                         font_size=24, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.15)
         with self.voiceover(
@@ -363,8 +390,8 @@ class Abel(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(ex))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), Create(bnd), FadeIn(verdict),
-                      Create(pis), FadeIn(pil), run_time=2)
+            self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.02), Create(bnd), FadeIn(bnd_l),
+                      FadeIn(verdict), Create(pis), FadeIn(pil), run_time=2)
         assert np.all(np.abs(c) >= bound - 1e-12)
         self.wait(0.5)
         self.clear_scene()

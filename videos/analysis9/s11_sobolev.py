@@ -233,16 +233,13 @@ class Sobolev(VoiceoverScene):
             label(r"sharp: \ $s > \tfrac12$ would make it continuous, \ and it jumps", font_size=24, color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         x_free = max(t_.get_right()[0] for t_ in tags) + 0.25  # clear of the curve tags
-        # the right column: table and rows share a left edge, right edge at 6.5
-        tab.shift((6.5 - tab.get_right()[0]) * RIGHT)
-        if tab.get_left()[0] < x_free:
-            tab.scale((6.5 - x_free) / tab.width, about_edge=RIGHT)
+        # the right column: table and rows share a left edge just clear of the curve tags, right edge <= 6.5
+        tab.shift((x_free - tab.get_left()[0]) * RIGHT)
         for r_ in rows:
-            if r_.width > 6.5 - tab.get_left()[0]:
-                r_.width = 6.5 - tab.get_left()[0]
+            if r_.width > 6.5 - x_free:
+                r_.width = 6.5 - x_free
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35).align_to(tab, LEFT)
-        assert rows.get_left()[0] >= x_free - 1e-6 and rows.get_right()[0] <= 6.6
-        print("sawtooth column", round(tab.get_left()[0], 2), round(x_free, 2), [round(r_.width, 2) for r_ in rows])
+        assert tab.get_right()[0] <= 6.5 and rows.get_right()[0] <= 6.5 + 1e-6
         head = label(r"The sawtooth sits exactly at $s = \tfrac12$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The Fourier thread once more. The sawtooth's coefficients are one over n, so its "

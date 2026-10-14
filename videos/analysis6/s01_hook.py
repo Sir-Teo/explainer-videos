@@ -29,7 +29,7 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def balls(self):
-        ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.85).move_to([-4.3, -0.55, 0])
+        ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 1.85).move_to([-4.3, -0.3, 0])
         pT = ValueTracker(1.0)
 
         def p_now():
@@ -39,7 +39,11 @@ class Hook(VoiceoverScene):
         ball = always_redraw(lambda: p_ball(ax, p_now(), C.DIST))
         v = np.array([0.6, 0.8])
         arrow = Arrow(ax.c2p(0, 0), ax.c2p(*v), buff=0, color=WHITE, stroke_width=4, tip_length=0.18)
-        v_l = MathTex(r"v = (0.6,\ 0.8)", font_size=26).next_to(ax.c2p(*v), RIGHT, buff=0.12)
+        v_l = MathTex(r"v = (0.6,\ 0.8)", font_size=26).next_to(ax.c2p(v[0], 1.0), UP, buff=0.1)  # above every ball
+        # the other two unit balls, faint: v is outside the diamond, on the circle, inside the square
+        others = VGroup(p_ball(ax, 1.0, C.DIST, fill=0, stroke_width=2).set_stroke(opacity=0.5),
+                        p_ball(ax, 2.0, C.DIST, fill=0, stroke_width=2).set_stroke(opacity=0.5))
+        assert pnorm(v, 1) > 1 and abs(pnorm(v, 2) - 1) < 1e-12 and pnorm(v, np.inf) < 1
 
         def p_text():
             p = p_now()
@@ -91,7 +95,7 @@ class Hook(VoiceoverScene):
         rule = Line([3.0, 0.95, 0], [6.8, 0.95, 0], color=GREY_C, stroke_width=1.5)
         out = VGroup(label(r"same area, \ twice the $L^2$ size, \ four times the height:", font_size=26, color=C.EPS),
                      label(r"which distance is right?", font_size=26, color=C.EPS)).arrange(DOWN, buff=0.1).move_to(
-            [3.7, -2.75, 0])
+            [3.4, -2.75, 0])
         head = label(r"How long is a vector? \ How big is a function?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> How long is a vector? In the plane we have a choice. Add the sizes of the "
@@ -111,7 +115,7 @@ class Hook(VoiceoverScene):
             self.play(pT.animate.set_value(6.0), run_time=1.5)
             self.play(pT.animate.set_value(40.0), run_time=1.5)
             vo.wait_until("c")
-            self.play(GrowArrow(arrow), FadeIn(v_l))
+            self.play(GrowArrow(arrow), FadeIn(v_l), FadeIn(others))
             self.play(LaggedStart(*[FadeIn(m) for m in vn], lag_ratio=0.4))
             vo.wait_until("d")
             self.play(Create(fx))
@@ -134,18 +138,20 @@ class Hook(VoiceoverScene):
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.4, -0.35, 0])
         x = np.linspace(0, 1, 2001)
         step = (x > 0.5).astype(float)
-        step_g = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=3),
-                        Line(ax.c2p(0.5, 1), ax.c2p(1, 1), color=WHITE, stroke_width=3),
+        step_g = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=2.5),
+                        Line(ax.c2p(0.5, 1), ax.c2p(1, 1), color=WHITE, stroke_width=2.5),
                         Dot(ax.c2p(0.5, 0), radius=0.05, color=WHITE),
-                        Circle(radius=0.05, color=WHITE, stroke_width=2).move_to(ax.c2p(0.5, 1)))
-        step_l = MathTex(r"\mathbf 1_{(1/2, 1]}", font_size=28).next_to(ax.c2p(1, 1), UP, buff=0.1)
+                        Circle(radius=0.05, color=WHITE, stroke_width=2).move_to(ax.c2p(0.5, 1))).set_z_index(3)
+        step_l = MathTex(r"\mathbf 1_{(1/2, 1]}", font_size=28).next_to(ax.c2p(1, 1), RIGHT, buff=0.12)
         curves = [polyline(ax, x, ramp(x, n), color=C.SEQ, stroke_width=3.5) for n in ns]
         areas = [between(ax, x, ramp(x, n), step, C.MEASURE, 0.45) for n in ns]
         reads = [MathTex(rf"n = {n}: \ \ \|r_n - \mathbf 1\|_1 = \tfrac{{1}}{{4n}} = {v:.4f}", font_size=28,
                          color=C.MEASURE).next_to(ax, DOWN, buff=0.2) for n, v in zip(ns, d1)]
         rl = MathTex(r"r_n(x) = \text{clip}\big(n(x - \tfrac12) + \tfrac12,\ 0,\ 1\big)", font_size=26,
                      color=C.SEQ).next_to(ax, UP, buff=0.15)
-        mapax = plain_axes([0, 0.14, 0.05], [0.36, 0.52, 0.05], 3.0, 3.0).move_to([3.6, 0.15, 0])
+        mapax = plain_axes([0, 0.14, 0.05], [0.35, 0.52, 0.05], 3.0, 3.0).move_to([3.6, 0.45, 0])
+        mapax.x_axis.add_numbers(0.05, 0.10, num_decimal_places=2, font_size=18)
+        mapax.y_axis.add_numbers(0.40, 0.45, num_decimal_places=2, font_size=18)
         u_l = MathTex(r"\int_0^{1/2} f", font_size=24, color=GREY_B).next_to(mapax, DOWN, buff=0.12)
         v_l = MathTex(r"\int_{1/2}^1 f", font_size=24, color=GREY_B).next_to(mapax, LEFT, buff=0.12)
         cam_h = label(r"the camera: \ each function is one point", font_size=24, color=GREY_A).next_to(mapax, UP,
@@ -165,19 +171,20 @@ class Hook(VoiceoverScene):
             label(r"Cauchy in $C[0, 1]$ with $\int |f - g|$, \ but no continuous limit:", font_size=24),
             label(r"a limit $g$ would have $\int |g - \mathbf 1_{(1/2, 1]}| = 0$, \ so $g = 0$ then $1$", font_size=24,
                   color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.75, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         for r_ in side:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.75, 0])
+            if r_.width > 6.0:
+                r_.width = 6.0
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.95, 0])
+        assert side.get_right()[0] <= 6.6 and side.get_bottom()[1] >= -3.6
         # Cauchy, exactly: the ramps are nested on each side of 1/2
         for i in range(len(ns)):
             for j in range(i + 1, len(ns)):
                 dij = trap(np.abs(ramp(x, ns[i]) - ramp(x, ns[j])), x)
                 assert abs(dij - (1 / (4 * ns[i]) - 1 / (4 * ns[j]))) < 1e-5
-        head = VGroup(label(r"The scandal: \ $C[0, 1]$ with the distance $\int_0^1 |f - g|$ has a hole", font_size=32),
+        head = VGroup(label(r"The scandal: \ $C[0, 1]$ with the distance $\int_0^1 |f - g|$ has a hole", font_size=34),
                       label(r"its completion is $L^1[0, 1]$, \ Lebesgue's integrable functions \ (chapter 4)",
-                            font_size=24, color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.2)
+                            font_size=24, color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the problem that forces Lebesgue's integral on us. Measure the distance "
             "between two continuous functions by the area between their graphs. <bookmark mark='b'/> Steeper and "

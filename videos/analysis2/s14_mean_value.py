@@ -35,12 +35,24 @@ class MeanValue(VoiceoverScene):
         xm = brentq(lambda x: 1.56 * np.cos(1.2 * x) - 0.15, 0.5, 2.0)
         top = Dot(ax.c2p(xm, f(xm)), radius=0.08, color=C.EPS)
         tan = Line(ax.c2p(xm - 1.0, f(xm)), ax.c2p(xm + 1.0, f(xm)), color=C.EPS, stroke_width=3)
-        thm = VGroup(label(r"\textbf{Rudin 5.8} \ At a local maximum, \ $f'(x) = 0$:", font_size=30),
+        thm = VGroup(label(r"At a local maximum, \ $f'(x) = 0$", font_size=34),
                      label(r"from the left, \ $\dfrac{f(t) - f(x)}{t - x} \ge 0$;", font_size=28),
                      label(r"from the right, \ $\dfrac{f(t) - f(x)}{t - x} \le 0$.", font_size=28),
-                     label(r"The limit is both: \ $0$.", font_size=28, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                            buff=0.2)
-        thm.move_to([3.5, 0.2, 0])
+                     label(r"The limit is both: \ $0$.", font_size=28, color=C.EPS))
+        thm[0].to_edge(UP, buff=0.3)
+        ref = note(r"Rudin 5.8")
+        VGroup(ref, *thm[1:]).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.5, -0.3, 0])
+        # secants from the top to t = x - 0.6 and t = x + 0.6, extended a little past both points
+        sec, sec_l = VGroup(), VGroup()
+        for dt, txt_, side in ((-0.6, r"\ge 0", LEFT), (0.6, r"\le 0", RIGHT)):
+            t = xm + dt
+            q = (f(t) - f(xm)) / (t - xm)
+            assert (q > 0) if dt < 0 else (q < 0)
+            lo_, hi_ = min(t, xm) - 0.25, max(t, xm) + 0.25
+            sec.add(VGroup(Line(ax.c2p(lo_, f(xm) + q * (lo_ - xm)), ax.c2p(hi_, f(xm) + q * (hi_ - xm)), color=C.APPROX,
+                                stroke_width=3), Dot(ax.c2p(t, f(t)), radius=0.06, color=C.APPROX)))
+            sec_l.add(MathTex(r"\text{slope} " + txt_, font_size=26, color=C.APPROX).next_to(
+                ax.c2p(t, f(t)), side + DOWN * 0.6, buff=0.15))
         with self.voiceover(
             "First, a lemma. <bookmark mark='a'/> At a local maximum the derivative is zero. <bookmark mark='b'/> "
             "Approaching from the left, f of t is at most f of x and t minus x is negative, so the difference quotients "
@@ -49,11 +61,11 @@ class MeanValue(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), Create(g))
             vo.wait_until("a")
-            self.play(FadeIn(thm[0]), FadeIn(top))
+            self.play(FadeIn(thm[0]), FadeIn(ref), FadeIn(top))
             vo.wait_until("b")
-            self.play(FadeIn(thm[1]))
+            self.play(FadeIn(thm[1]), Create(sec[0]), FadeIn(sec_l[0]))
             vo.wait_until("c")
-            self.play(FadeIn(thm[2]))
+            self.play(FadeIn(thm[2]), Create(sec[1]), FadeIn(sec_l[1]))
             vo.wait_until("d")
             self.play(FadeIn(thm[3]), Create(tan))
         self.wait(0.3)
@@ -61,7 +73,7 @@ class MeanValue(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def shear(self):
-        ax = plain_axes([0, 4.2, 1], [-1.5, 3.5, 1], 8.0, 5.0, numbers=False).move_to([-1.9, -0.75, 0])
+        ax = plain_axes([0, 4.2, 1], [-1.5, 3.5, 1], 7.4, 5.0, numbers=False).move_to([-2.4, -0.75, 0])
         f = lambda x: 0.4 + 0.55 * x + 0.8 * np.sin(1.7 * x) + 0.15 * np.cos(4 * x)  # noqa: E731
         fp = lambda x: 0.55 + 1.36 * np.cos(1.7 * x) - 0.6 * np.sin(4 * x)  # noqa: E731
         a, b = 0.3, 3.9
@@ -98,19 +110,37 @@ class MeanValue(VoiceoverScene):
         tg = always_redraw(tangent)
         xi_dot = always_redraw(lambda: Dot(ax.c2p(xi, f(xi) - sT.get_value() * (L(xi) - f(a))), radius=0.08,
                                            color=C.EPS))
-        thm = VGroup(label(r"\textbf{Rudin 5.10} \ (mean value theorem)", font_size=28),
-                     MathTex(r"f(b) - f(a) = (b - a)\, f'(\xi)", font_size=32),
-                     label(r"for some $\xi \in (a, b)$", font_size=26)).arrange(DOWN, buff=0.12).move_to([4.6, 2.4, 0])
-        steps = VGroup(
-            label(r"1. \ shear vertically: \ subtract the chord", font_size=24),
-            label(r"2. \ now the ends are level; \ a continuous", font_size=24),
-            label(r"\phantom{2. \ }function on $[a, b]$ has a max (4.16)", font_size=24),
-            label(r"3. \ there the slope is $0$ \ (5.8)", font_size=24),
-            label(r"4. \ shear back: \ slope $0$ becomes", font_size=24),
-            label(r"\phantom{4. \ }the chord's slope", font_size=24, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -0.3, 0])
+        head = label(r"The mean value theorem", font_size=34).to_edge(UP, buff=0.3)
+        thm = VGroup(MathTex(r"f(b) - f(a) = (b - a)\, f'(\xi)", font_size=32),
+                     label(r"for some $\xi \in (a, b)$ \ (Rudin 5.10)", font_size=24, color=GREY_A)
+                     ).arrange(DOWN, buff=0.12).move_to([4.3, 2.25, 0])
+
+        def numbered(n, *lines, color=WHITE):
+            num = label(rf"{n}.", font_size=24)
+            body = VGroup(*[label(t_, font_size=24, color=color) for t_ in lines]).arrange(DOWN, aligned_edge=LEFT,
+                                                                                         buff=0.08)
+            body.next_to(num, RIGHT, buff=0.15, aligned_edge=UP)
+            return VGroup(num, body)
+
+        rows_ = [numbered(1, r"shear vertically: \ subtract the chord"),
+                 numbered(2, r"now the ends are level; \ a continuous", r"function on $[a, b]$ has a max (4.16)"),
+                 numbered(3, r"there the slope is $0$ \ (5.8)"),
+                 numbered(4, r"shear back: \ slope $0$ becomes", r"the chord's slope")]
+        rows_[3][1][1].set_color(C.EPS)
+        steps_g = VGroup(*rows_).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.3, -0.3, 0])
+        # the indexing the voiceover uses: 0, (1, 2), 3, (4, 5)
+        steps = [rows_[0], rows_[1][0], rows_[1][1], rows_[2], rows_[3][0], rows_[3][1]]
+        steps[1] = VGroup(rows_[1][0], rows_[1][1][0])
+        steps[2] = rows_[1][1][1]
+        steps[4] = VGroup(rows_[3][0], rows_[3][1][0])
+        steps[5] = rows_[3][1][1]
+        marks = VGroup(*[VGroup(Line(ax.c2p(v, 0) + DOWN * 0.08, ax.c2p(v, 0) + UP * 0.08, color=c_),
+                                MathTex(t_, font_size=28, color=c_).next_to(ax.c2p(v, 0), DOWN, buff=0.15))
+                         for v, t_, c_ in ((a, r"a", GREY_B), (b, r"b", GREY_B))])
+        xi_mark = VGroup(Line(ax.c2p(xi, 0) + DOWN * 0.08, ax.c2p(xi, 0) + UP * 0.08, color=C.EPS),
+                         MathTex(r"\xi", font_size=28, color=C.EPS).next_to(ax.c2p(xi, 0), DOWN, buff=0.15))
         gen = label(r"Rudin 5.9, the general form: \ $[f(b) - f(a)]\, g'(\xi) = [g(b) - g(a)]\, f'(\xi)$", font_size=24,
-                    color=GREY_B).to_edge(DOWN, buff=0.15)
+                    color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: the chord from a to b has the same slope as the tangent at some point "
             "in between. <bookmark mark='b'/> Here's a proof you can watch. Subtract the chord from the function: a "
@@ -121,7 +151,7 @@ class MeanValue(VoiceoverScene):
             "becomes a tangent parallel to the chord. <bookmark mark='f'/> Rudin proves a version with two functions, "
             "which we'll need for L'Hôpital's rule."
         ) as vo:
-            self.play(Create(ax), FadeIn(cv), FadeIn(ch), FadeIn(ends))
+            self.play(FadeIn(head), Create(ax), FadeIn(cv), FadeIn(ch), FadeIn(ends), FadeIn(marks))
             vo.wait_until("a")
             self.play(FadeIn(thm))
             vo.wait_until("b")
@@ -130,7 +160,7 @@ class MeanValue(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(steps[1]), FadeIn(steps[2]))
             vo.wait_until("d")
-            self.play(FadeIn(xi_dot), Create(tg), FadeIn(steps[3]))
+            self.play(FadeIn(xi_dot), Create(tg), FadeIn(steps[3]), FadeIn(xi_mark))
             vo.wait_until("e")
             self.play(FadeIn(steps[4]), FadeIn(steps[5]))
             self.play(sT.animate.set_value(0.0), run_time=2.5)
@@ -146,7 +176,7 @@ class MeanValue(VoiceoverScene):
         head = VGroup(label(r"\textbf{Rudin 5.11} \ On $(a, b)$:", font_size=32),
                       label(r"$f' \ge 0$ $\Rightarrow$ $f$ increasing; \quad $f' = 0$ $\Rightarrow$ $f$ constant; \quad "
                             r"$f' \le 0$ $\Rightarrow$ $f$ decreasing", font_size=28)).arrange(DOWN, buff=0.15)
-        head.to_edge(UP, buff=0.35)
+        head.to_edge(UP, buff=0.3)
         # f' is positive, then zero on [2.5, 3.3], then negative, then positive; f is its integral
         def fp(x):
             x = np.asarray(x, float)
@@ -184,16 +214,16 @@ class MeanValue(VoiceoverScene):
                                                                                                buff=0.15)
         keys.move_to([4.6, -1.9, 0])
         # the reason: a chord over [x1, x2] has the slope of the tangent at some xi between
-        x1, x2 = 0.25, 2.3
+        x1, x2 = 0.25, 1.6
         m = (f(x2) - f(x1)) / (x2 - x1)
         cand = xs[(xs > x1) & (xs < x2)]
         xi = float(cand[np.argmin(np.abs(fp(cand) - m))])
         assert abs(fp(xi) - m) < 1e-2 and m > 0
         chord = Line(axf.c2p(x1, f(x1)), axf.c2p(x2, f(x2)), color=C.APPROX, stroke_width=3)
-        tng = Line(axf.c2p(xi - 0.6, f(xi) - 0.6 * m), axf.c2p(xi + 0.6, f(xi) + 0.6 * m), color=WHITE, stroke_width=2.5)
+        tng = Line(axf.c2p(xi - 0.5, f(xi) - 0.5 * m), axf.c2p(xi + 0.5, f(xi) + 0.5 * m), color=C.EPS, stroke_width=3)
         cd = VGroup(Dot(axf.c2p(x1, f(x1)), radius=0.06, color=C.APPROX), Dot(axf.c2p(x2, f(x2)), radius=0.06,
                                                                                color=C.APPROX),
-                    Dot(axf.c2p(xi, f(xi)), radius=0.06, color=WHITE))
+                    Dot(axf.c2p(xi, f(xi)), radius=0.06, color=C.EPS))
         mvt = VGroup(MathTex(r"f(x_2) - f(x_1)", r"=", r"\underbrace{(x_2 - x_1)}_{> 0}", r"\,",
                              r"\underbrace{f'(\xi)}_{\ge 0}", font_size=32),
                      MathTex(r"\Rightarrow\ f(x_2) \ge f(x_1)", font_size=32, color=C.CONNECTED_SET)
@@ -243,10 +273,11 @@ class MeanValue(VoiceoverScene):
                                                                                           LEFT, buff=0.12))
         cor = label(r"so a derivative cannot jump: \ its discontinuities are all of the second kind", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.15)
-        sk = plain_axes([0, 1, 1], [0, 1, 1], 5.0, 2.6, numbers=False).move_to([0, -1.3, 0])
+        sk = plain_axes([0, 1, 1], [0, 1, 1], 7.0, 3.4, numbers=False).move_to([0, -0.9, 0])
         gs = lambda t: 1.8 * (t - 0.45) ** 2 + 0.12  # noqa: E731
         gsk = sk.plot(gs, x_range=[0.05, 0.95, 0.01], color=C.FUNC, stroke_width=4)
-        slopes = VGroup(*[Line(sk.c2p(t - 0.1, gs(t) - 0.1 * 3.6 * (t - 0.45)), sk.c2p(t + 0.1, gs(t) + 0.1 * 3.6 * (t - 0.45)),
+        slopes = VGroup(*[Line(sk.c2p(max(t - 0.08, 0.0), gs(t) + (max(t - 0.08, 0.0) - t) * 3.6 * (t - 0.45)),
+                               sk.c2p(min(t + 0.08, 1.0), gs(t) + (min(t + 0.08, 1.0) - t) * 3.6 * (t - 0.45)),
                                color=c, stroke_width=4) for t, c in ((0.05, C.PATHOLOGY), (0.95, C.CONNECTED_SET),
                                                                       (0.45, C.EPS))])
         sdots = VGroup(*[Dot(sk.c2p(t, gs(t)), radius=0.06, color=WHITE) for t in (0.05, 0.95, 0.45)])
@@ -293,8 +324,8 @@ class MeanValue(VoiceoverScene):
         thm = VGroup(label(r"\textbf{L'H\^opital's rule} (Rudin 5.13)", font_size=30),
                      label(r"$f, g \to 0$ as $x \to a$, \ $g' \ne 0$, \ $\dfrac{f'}{g'} \to A$ \ $\Rightarrow$ \ "
                            r"$\dfrac{f}{g} \to A$", font_size=28)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
-        o = np.array([-3.8, -2.6, 0])
-        sc = 2.6
+        o = np.array([-4.6, -2.6, 0])
+        sc = 2.9
 
         def P(gx, fx):
             return o + sc * np.array([gx, fx, 0])
@@ -312,8 +343,13 @@ class MeanValue(VoiceoverScene):
         slope = (1 - np.cos(x)) / np.sin(x)
         t = brentq(lambda s: np.sin(s) / np.cos(s) - slope, 1e-6, x)  # f'/g' = tan t equals the chord's slope
         tp = P(np.sin(t), 1 - np.cos(t))
-        tangent = Line(tp - 0.9 * sc * np.array([1, slope, 0]) / np.hypot(1, slope),
-                       tp + 0.9 * sc * np.array([1, slope, 0]) / np.hypot(1, slope), color=C.EPS, stroke_width=3)
+        tangent = Line(tp - 0.45 * sc * np.array([1, slope, 0]) / np.hypot(1, slope),
+                       tp + 0.45 * sc * np.array([1, slope, 0]) / np.hypot(1, slope), color=C.EPS, stroke_width=3)
+        assert tangent.get_bottom()[1] > o[1] - 0.05  # the tangent stays above the g-axis
+        xend = P(np.sin(x), 1 - np.cos(x))
+        xl = MathTex(r"(g(x), f(x))", font_size=26, color=C.APPROX).next_to(xend, RIGHT, buff=0.15)
+        xdot = Dot(xend, radius=0.06, color=C.APPROX)
+        tl_ = MathTex(r"t", font_size=28, color=C.EPS).next_to(tp, DR, buff=0.08)
         txt = VGroup(label(r"$\dfrac{f(x)}{g(x)}$ = slope of the chord from the origin", font_size=26, color=C.APPROX),
                      label(r"$\dfrac{f'(t)}{g'(t)}$ = slope of the curve at $t$", font_size=26, color=C.EPS),
                      label(r"5.9: \ some $t \in (a, x)$ has the chord's slope,", font_size=26),
@@ -331,9 +367,9 @@ class MeanValue(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(axes), FadeIn(al), Create(curve))
             vo.wait_until("b")
-            self.play(Create(chord), FadeIn(txt[0]))
+            self.play(Create(chord), FadeIn(xdot), FadeIn(xl), FadeIn(txt[0]))
             vo.wait_until("c")
-            self.play(Create(tangent), FadeIn(Dot(tp, radius=0.07, color=C.EPS)), FadeIn(txt[1]))
+            self.play(Create(tangent), FadeIn(Dot(tp, radius=0.07, color=C.EPS)), FadeIn(tl_), FadeIn(txt[1]))
             vo.wait_until("d")
             self.play(FadeIn(txt[2]), FadeIn(txt[3]))
         assert 0 < t < x and abs(np.tan(t) - slope) < 1e-9

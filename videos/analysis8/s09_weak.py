@@ -32,22 +32,37 @@ class Weak(VoiceoverScene):
         ydots = VGroup(*[Dot(ax.c2p(k + 1, v), radius=0.05, color=C.INNER) for k, v in enumerate(y)])
         nT = ValueTracker(1)
 
-        def bar():
-            n = int(round(nT.get_value()))
-            return VGroup(Rectangle(width=0.32, height=ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=C.EPS,
-                                    fill_opacity=0.9).move_to(ax.c2p(n, 0.5)),
-                          MathTex(rf"e_{{{n}}}", font_size=24, color=C.EPS).next_to(ax.c2p(n, 1), UP, buff=0.04))
+        def n_():
+            return int(round(nT.get_value()))
 
-        eb = always_redraw(bar)
-        rd = always_redraw(lambda: VGroup(
-            MathTex(r"\|e_n\| = 1", font_size=28),
-            MathTex(rf"\langle e_n, y\rangle = y_{{{int(round(nT.get_value()))}}} = {y[int(round(nT.get_value())) - 1]:.4f}",
-                    font_size=28, color=C.INNER)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, 1.2, 0]))
-        tab = VGroup(MathTex(r"n", r"\quad \max_{50 \text{ random } y} |\langle e_n, y\rangle|", font_size=24, color=GREY_A))
+        def by_digits(make):
+            # a redrawn label must keep one glyph count (become() scrambles a family that changes shape), and n goes
+            # from 1 to 12: one copy for n <= 9, one for n >= 10, each shown only in its own range
+            lo = always_redraw(lambda: make(min(n_(), 9)))
+            hi = always_redraw(lambda: make(max(n_(), 10)))
+            lo.add_updater(lambda m: m.set_opacity(1.0 if n_() < 10 else 0.0))
+            hi.add_updater(lambda m: m.set_opacity(1.0 if n_() >= 10 else 0.0))
+            lo.update()
+            hi.update()
+            return VGroup(lo, hi)
+
+        bar = always_redraw(lambda: Rectangle(width=0.32, height=ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1], stroke_width=0,
+                                              fill_color=C.EPS, fill_opacity=0.9).move_to(ax.c2p(n_(), 0.5)))
+        eb = VGroup(bar, by_digits(lambda n: MathTex(rf"e_{{{n}}}", font_size=24, color=C.EPS).next_to(ax.c2p(n, 1), UP,
+                                                                                                        buff=0.04)))
+        rd = VGroup(MathTex(r"\|e_n\| = 1", font_size=28),
+                    by_digits(lambda n: MathTex(rf"\langle e_n, y\rangle = y_{{{n}}} = {y[n - 1]:.4f}", font_size=28,
+                                                color=C.INNER)))
+        rd[0].next_to([1.5, 1.45, 0], RIGHT, buff=0)
+        for m in rd[1]:
+            m.add_updater(lambda m_: m_.next_to(rd[0], DOWN, buff=0.1).align_to(rd[0], LEFT))
+            m.update()
+        tab = VGroup(MathTex(r"n", r"\quad \max_y |\langle e_n, y\rangle|", font_size=24, color=GREY_A))
         for n, v in zip(ns, inner):
             tab.add(MathTex(f"{int(n)}", rf"\quad {v:.4f}", font_size=26, color=C.INNER))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.4, -1.2, 0])
         regrid(tab)
+        tnote = note(r"over 50 random unit vectors $y$").next_to(tab, DOWN, buff=0.15).align_to(tab, LEFT)
         assert np.all(np.diff(inner) < 0)
         defn = VGroup(
             label(r"$x_n \rightharpoonup x$ \ (weakly) \ if $\Lambda x_n \to \Lambda x$ for every $\Lambda \in X^*$",
@@ -61,7 +76,7 @@ class Weak(VoiceoverScene):
                 r_.width = 7.0
         defn.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-3.0, -1.6, 0])
         y_l = MathTex(r"y = c\,(1, \tfrac12, \tfrac13, \ldots)", font_size=24, color=C.INNER).next_to(ax, UP, buff=0.35)
-        head = label(r"Converging weakly: \ every functional's view converges", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Converging weakly: \ every functional's view converges", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The unit vectors of l two never get close to anything: each is root two from every "
             "other, and one from zero. <bookmark mark='b'/> But look at them through a fixed functional, the inner "
@@ -77,10 +92,10 @@ class Weak(VoiceoverScene):
             self.play(FadeIn(ydots), FadeIn(y_l), FadeIn(rd))
             self.play(nT.animate.set_value(12), run_time=4.0, rate_func=linear)
             vo.wait_until("c")
-            self.play(FadeIn(tab))
+            self.play(FadeIn(tab), FadeIn(tnote))
             vo.wait_until("d")
             self.play(FadeIn(defn))
-        for m in (eb, rd):
+        for m in (*eb.get_family(), *rd.get_family()):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -103,6 +118,9 @@ class Weak(VoiceoverScene):
             g = always_redraw(lambda ax=ax, F=F, x=x, col=col: runs(ax, x, F(x, nT.get_value()), col, 3))
             t = label(ttl, font_size=24, color=col).next_to(ax, UP, buff=0.1)
             panels.add(VGroup(ax, g, t))
+        ty = max(p_[2].get_y() for p_ in panels)
+        for p_ in panels:  # the three titles on one line
+            p_[2].set_y(ty)
         # the three are weakly null in L^2, with norm 1
         d = load("weak")
         pair, pns = d["pair"], d["pair_ns"]
@@ -111,12 +129,12 @@ class Weak(VoiceoverScene):
                   color=C.EPS),
             MathTex(r"\Big|\int_0^{2\pi} \sin(nx)\, g(x)\,dx\Big|,\ n = 1, 4, 16, 64, 256: \ " +
                     r",\ ".join(f"{v:.4f}" for v in pair), font_size=24, color=C.SEQ),
-            label(r"(Riemann--Lebesgue, \ for $g = e^{-(x - 2)^2} + 0.3x$)", font_size=20, color=GREY_A),
+            label(r"(Riemann--Lebesgue, \ for $g = e^{-(x - 2)^2} + 0.3x$)", font_size=22, color=GREY_A),
             label(r"the bump engine's evil twins: \ Part 3's dashboard lights the ``tested'' lens, \ never the norm",
                   font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
         assert np.all(np.diff(pair) < 0)
-        head = label(r"Three ways to go weakly to $0$ without going to $0$", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Three ways to go weakly to $0$ without going to $0$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> In L two there are three ways to converge weakly without converging. "
             "<bookmark mark='b'/> Oscillate: sine n x wiggles faster and faster, and against any fixed function its "
@@ -126,8 +144,8 @@ class Weak(VoiceoverScene):
             "Part 3, back as the standard examples."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), *[FadeIn(p_[0]) for p_ in panels], *[FadeIn(p_[2]) for p_ in panels])
-            self.add(*[p_[1] for p_ in panels])
+            self.play(FadeIn(head), *[FadeIn(p_[0]) for p_ in panels], *[FadeIn(p_[1]) for p_ in panels],
+                      *[FadeIn(p_[2]) for p_ in panels])
             vo.wait_until("b")
             self.play(nT.animate.set_value(3.0), run_time=2.0)
             vo.wait_until("c")

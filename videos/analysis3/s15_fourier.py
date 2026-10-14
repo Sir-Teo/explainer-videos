@@ -108,6 +108,25 @@ class FourierSeries(VoiceoverScene):
         q_l = label(r"$f$, \ and the trigonometric polynomial of degree $\le 3$ closest to it", font_size=24).next_to(
             ax, UP, buff=0.08)
         q_l[0].set_color(WHITE)
+        head = label(r"Fourier coefficients are coordinates", font_size=34).to_edge(UP, buff=0.3)
+        # the closest polynomial's coefficients: a_n = (1/pi) int tri cos nx = 8/(pi^2 n^2) for odd n, 0 for even n
+        an = np.array([trap(tri * np.cos(n * x), x) / np.pi for n in (1, 2, 3)])
+        assert np.allclose(an, [8 / np.pi**2, 0, 8 / (9 * np.pi**2)], atol=1e-4)
+        assert np.allclose(t3, sum(a_ * np.cos(n * x) for n, a_ in zip((1, 2, 3), an)), atol=1e-4)
+        cax = plain_axes([0.4, 3.6, 1], [0, 0.95, 0.5], 3.4, 2.2).move_to([3.4, 0.3, 0])
+        cbars = VGroup()
+        for n, a_ in zip((1, 2, 3), an):
+            p0, p1 = cax.c2p(n - 0.22, 0), cax.c2p(n + 0.22, max(a_, 0.004))
+            cbars.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=C.FREQ,
+                                fill_opacity=0.85).move_to((p0 + p1) / 2))
+        cnl = VGroup(*[MathTex(rf"\cos {n if n > 1 else ''}x", font_size=22, color=GREY_B).next_to(cax.c2p(n, 0), DOWN,
+                                                                                               buff=0.12)
+                       for n in (1, 2, 3)])
+        cvl = VGroup(*[MathTex(f"{a_:.3f}", font_size=22, color=C.FREQ).next_to(b_, UP, buff=0.08)
+                       for a_, b_ in zip(an, cbars)])
+        ctl = label(r"its coordinates along $\cos x, \cos 2x, \cos 3x$", font_size=24, color=C.FREQ).next_to(
+            cax, UP, buff=0.45)
+        chart = VGroup(cax, cbars, cnl, cvl, ctl)
         with self.voiceover(
             "Rudin starts not from convergence but from a geometric question: which trigonometric polynomial is "
             "closest to f? <bookmark mark='a'/> The key fact is orthogonality. Take two different sine waves, <bookmark mark='b'/> "
@@ -118,15 +137,17 @@ class FourierSeries(VoiceoverScene):
             "otherwise. <bookmark mark='e'/> So the Fourier coefficient c n, the average of f times e to the minus "
             "i n x, is the coordinate of f along the n-th axis."
         ) as vo:
-            self.play(Create(ax), Create(bx), Create(q_f), FadeIn(q_l))
-            self.play(Create(q_t))
+            self.play(FadeIn(head), Create(ax), Create(q_f), FadeIn(q_l))
+            self.play(Create(q_t), Create(cax), FadeIn(ctl), FadeIn(cnl),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in cbars], lag_ratio=0.3), FadeIn(cvl))
             vo.wait_until("a")
             self.play(FadeOut(q_f), FadeOut(q_t), FadeOut(q_l), Create(s2), Create(s3), FadeIn(lab))
             vo.wait_until("b")
-            self.play(FadeIn(pa), Create(pg), FadeIn(pl))
+            self.play(Create(bx), FadeIn(pa), Create(pg), FadeIn(pl))
             vo.wait_until("c")
             self.play(FadeOut(pa), FadeOut(pg), FadeOut(pl), FadeIn(qa), Create(qg), FadeIn(ql))
             vo.wait_until("d")
+            self.play(FadeOut(chart), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.01), FadeIn(rl), FadeIn(cl_),
                       FadeIn(gl), FadeIn(gl2), run_time=2.0)
             vo.wait_until("e")
@@ -142,7 +163,8 @@ class FourierSeries(VoiceoverScene):
         ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-2.0, 2.0, 1], 6.0, 2.5).move_to([-3.6, 1.6, 0])
         sg = saw_graph(ax, -np.pi, np.pi)
         bg = polyline(ax, x, sN, color=C.EPS, stroke_width=3)
-        tg = polyline(ax, x, samples[0], color=C.APPROX, stroke_width=2.5)
+        ti = next(i for i, t_ in enumerate(samples) if np.abs(t_).max() < 1.9)
+        tg = polyline(ax, x, samples[ti], color=C.APPROX, stroke_width=2.5)
         al = MathTex(r"f", r",\ s_6", r",\ t", font_size=28).next_to(ax, UP, buff=0.08)
         al[1].set_color(C.EPS)
         al[2].set_color(C.APPROX)
@@ -180,7 +202,7 @@ class FourierSeries(VoiceoverScene):
                       MathTex("s_N", font_size=30, color=C.EPS).next_to(S, RIGHT, buff=0.1),
                       MathTex("t", font_size=30, color=C.APPROX).next_to(T, DOWN, buff=0.08))
         tag = schematic_tag().scale(0.8).next_to(plane, UP, buff=0.1).align_to(plane, LEFT)
-        t0 = samples[0]
+        t0 = samples[ti]
         h2, l2 = trap((f - t0) ** 2, x), trap((sN - t0) ** 2, x)
         eq = VGroup(
             label(r"\textbf{Rudin 8.11}: \ $f - s_N$ is orthogonal to every $t$ of degree $\le N$, \ so", font_size=24),
@@ -228,14 +250,14 @@ class FourierSeries(VoiceoverScene):
         d = load("fourier")
         tot = float(d["tot"])
         W = 9.0
-        x0 = -W / 2 - 0.4
+        x0 = -W / 2
         y = -0.55
         outline = Rectangle(width=W, height=0.7, stroke_color=WHITE, stroke_width=2).move_to([x0 + W / 2, y, 0])
         tl = MathTex(r"\frac{1}{2\pi}\int_{-\pi}^{\pi} |f|^2 = \frac{\pi^2}{12} = " + f"{tot:.4f}", font_size=30)
         tl.next_to(outline, UP, buff=0.2)
         segs = VGroup()
         acc = 0.0
-        cols = [C.FREQ, C.CLOSED_SET, C.EPS, C.CONNECTED_SET, C.SEQ, C.INNER]
+        cols = [C.FREQ, interpolate_color(ManimColor(C.FREQ), ManimColor(WHITE), 0.45)]
         for n in range(1, 61):
             w = 0.5 / n**2  # |c_n|^2 + |c_{-n}|^2 for the sawtooth
             segs.add(Rectangle(width=W * w / tot, height=0.7, stroke_width=0.6 if n < 12 else 0,
@@ -253,8 +275,9 @@ class FourierSeries(VoiceoverScene):
         head_l = label(r"\textbf{Bessel's inequality} \ (Rudin 8.12): \ Pythagoras with $t = 0$", font_size=26,
                        color=GREY_A).next_to(rows, DOWN, buff=0.15)
         tab = VGroup(*[MathTex(rf"N = {N}: \ {v:.4f}", font_size=24) for N, v in
-                       zip((1, 2, 5, 10, 100, 1000), d["bessel"])]).arrange(RIGHT, buff=0.45)
-        tab.next_to(outline, DOWN, buff=0.7)
+                       zip((1, 2, 5, 10, 100, 1000), d["bessel"])]).arrange_in_grid(rows=2, cols=3, buff=(0.6, 0.18),
+                                                                                    flow_order="rd")
+        tab.next_to(outline, DOWN, buff=0.7).set_x(outline.get_x())
         out = VGroup(label(r"so $c_n \to 0$ \ (the Riemann--Lebesgue lemma, for Riemann-integrable $f$)", font_size=26,
                            color=C.EPS),
                      label(r"whether the bar fills completely is chapter 15", font_size=24, color=GREY_A)
@@ -311,7 +334,7 @@ class FourierSeries(VoiceoverScene):
             v[np.isclose(t, 0)] = 2 * N + 1
             return v
 
-        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-10, 42, 10], 6.8, 4.6).move_to([-3.2, -0.6, 0])
+        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-10, 42, 10], 6.0, 4.6).move_to([-3.75, -0.6, 0])
         shown = (5, 10, 20)
         curves = [VGroup(signed_area(ax, t, D(N), opacity=0.3), polyline(ax, t, D(N), color=C.FREQ, stroke_width=2.5))
                   for N in shown]
@@ -326,21 +349,26 @@ class FourierSeries(VoiceoverScene):
         for N, L_ in zip(Ns, leb):
             if N in (1, 5, 20, 100, 500):
                 tab.add(MathTex(rf"{int(N)}", rf"\quad {L_:.3f}", font_size=26))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.4, -0.55, 0])
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         regrid(tab, gap=0.3)
+        tab.move_to([-0.2 + tab.width / 2, 0.15, 0])
         asym = MathTex(r"\approx \tfrac{4}{\pi^2}\ln N + 1.27", font_size=28, color=C.FREQ).next_to(tab, DOWN, buff=0.25,
                                                                                          aligned_edge=LEFT)
         notes = VGroup(label(r"signed area: \ always $2\pi$", font_size=22, color=GREY_A),
                        label(r"area of $|D_N|$: \ grows without bound", font_size=22, color=C.PATHOLOGY),
                        label(r"unlike the Landau kernel, \ $D_N$ is not positive", font_size=22, color=GREY_A),
-                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.2, 1.25, 0])
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        notes.move_to([6.5 - notes.width / 2, 1.25, 0])
         for N in shown:
             assert abs(trap(D(N), t) - 2 * np.pi) < 1e-3
         assert np.all(np.diff(leb) > 0)
         card = museum_card(r"du Bois-Reymond's function", r"P. du Bois-Reymond, 1873",
                            r"`the Fourier series of a continuous function converges'",
-                           r"Rudin, remark after 8.14; \ Part 8: Banach--Steinhaus", width=4.6).scale(0.8)
-        card.to_corner(DR, buff=0.2)
+                           r"Rudin, remark after 8.14; \ Part 8: Banach--Steinhaus", width=4.2)
+        card.to_corner(DR, buff=0.4)
+        assert tab.get_left()[0] > ax.get_right()[0] + 0.25
+        assert asym.get_right()[0] < card.get_left()[0] - 0.1 or asym.get_bottom()[1] > card.get_top()[1] + 0.1
+        assert notes.get_bottom()[1] > tab.get_top()[1] or notes.get_left()[0] > tab.get_right()[0] + 0.2
         with self.voiceover(
             "<bookmark mark='a'/> To study convergence, write the partial sum as an integral: it's an average of f "
             "against the Dirichlet kernel, the sum of the exponentials up to N. <bookmark mark='b'/> Like the Landau "
@@ -378,7 +406,7 @@ class FourierSeries(VoiceoverScene):
             g = (ft - f0) / np.sin(t / 2)
         g[np.isclose(t, 0)] = 1.0
         g[np.isclose(t, x0, atol=1e-9)] = 0.0
-        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-6.6, 6.6, 2], 6.6, 4.0).move_to([-3.3, -0.7, 0])
+        ax = plain_axes([-np.pi, np.pi, np.pi / 2], [-6.6, 6.6, 2], 6.6, 4.0).move_to([-3.3, -0.4, 0])
         assert np.abs(g).max() < 6.6  # so g and every g sin((N + 1/2)t) stay inside the axes
         num = ft - f0
         numg = VGroup(polyline(ax, t[t < x0 - 1e-3], num[t < x0 - 1e-3], color=GREY_B, stroke_width=3),
@@ -424,7 +452,7 @@ class FourierSeries(VoiceoverScene):
             tab.add(row)
         why_.next_to(tab, UP, buff=0.2)
         out = label(r"Part 2 proved $\sum \frac{\sin nx}{n}$ converges at every $x$; \ now we know the sum: "
-                    r"$\frac{\pi - x}{2}$ on $(0, 2\pi)$", font_size=24, color=C.EPS).to_edge(DOWN, buff=0.15)
+                    r"$\frac{\pi - x}{2}$ on $(0, 2\pi)$", font_size=24, color=C.EPS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> Pointwise convergence needs a little regularity. Dini's test: if f is Lipschitz at "
             "x, the partial sums converge to f of x. Subtract f of x and the error becomes the integral of a function "

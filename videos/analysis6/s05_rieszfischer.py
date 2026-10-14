@@ -31,10 +31,9 @@ class RieszFischer(VoiceoverScene):
                        r"so $g < \infty$ a.e., \ and $f_{n_i} \to f$ a.e.",
                        r"Fatou: \ $\|f - f_m\|_p \le \varepsilon$ \ for $m \ge N$"],
                       font_size=20, width=5.6, buff=0.2, direction=DOWN).move_to([3.6, 0.55, 0])
-        head = VGroup(label(r"\textbf{RCA 3.11} \ (Riesz--Fischer) \ $L^p(\mu)$ is complete, \ $1 \le p \le \infty$",
-                            font_size=30),
-                      label(r"the idea: \ a Cauchy sequence has a subsequence whose steps are summable", font_size=24,
-                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"Riesz--Fischer: \ $L^p(\mu)$ is complete, \ $1 \le p \le \infty$", font_size=34),
+                      label(r"\textbf{RCA 3.11} \ the idea: \ a Cauchy sequence has a subsequence whose steps are "
+                            r"summable", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"every partial sum of $g$ is small:", font_size=22, color=GREY_B),
             MathTex(r"\Big\|\sum_{i \le k} |f_{n_{i+1}} - f_{n_i}|\Big\|_p \le \sum_{i \le k} 2^{-i} < 1", font_size=28),
@@ -51,13 +50,14 @@ class RieszFischer(VoiceoverScene):
         for i in range(1, 11):
             z.append(z[-1] + 2.2 * 0.5**i * np.array([math.cos(0.95 * i + 0.3), math.sin(0.95 * i + 0.3)]))
         z = np.array(z)
-        org = np.array([1.9, -3.55, 0])
-        P = [org + np.array([p_[0], p_[1], 0]) * 1.2 for p_ in z]  # height 1.49 * 1.2: clear of the proof map
+        org = np.array([0.9, -3.4, 0])
+        P = [org + np.array([p_[0], p_[1], 0]) * 1.6 for p_ in z]  # height 1.49 * 1.6: under the proof map
         walk = VGroup(*[Line(P[i], P[i + 1], color=C.SEQ, stroke_width=3) for i in range(10)])
-        wdots = VGroup(*[Dot(q, radius=0.05, color=C.SEQ) for q in P[:-1]])
-        lim = Star(n=5, outer_radius=0.12, color=C.EPS, fill_opacity=1).move_to(P[-1])
-        wl = VGroup(MathTex(r"f_{n_1}", font_size=22, color=C.SEQ).next_to(P[0], DOWN, buff=0.08),
-                    MathTex(r"f", font_size=24, color=C.EPS).next_to(P[-1], UR, buff=0.06))
+        wdots = VGroup(*[Dot(q, radius=0.04, color=C.SEQ) for q in P[:-1]])
+        lim = Star(n=5, outer_radius=0.08, color=C.EPS, fill_opacity=1).move_to(P[-1])
+        wl = VGroup(MathTex(r"f_{n_1}", font_size=24, color=C.SEQ).next_to(P[0], LEFT, buff=0.1),
+                    MathTex(r"f", font_size=26, color=C.EPS).next_to(P[-1], RIGHT, buff=0.2))
+        assert max(q_[1] for q_ in P) < pm.get_bottom()[1] - 0.15 and min(q_[1] for q_ in P) > -3.6
         seglen = np.linalg.norm(np.diff(z, axis=0), axis=1)
         assert np.allclose(seglen, 2.2 * 0.5 ** np.arange(1, 11)) and seglen.sum() < 2.2
         wt = VGroup(label(r"steps $< 2^{-i}$: \ total length $< 1$,", font_size=22, color=GREY_A),
@@ -77,11 +77,11 @@ class RieszFischer(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head[0]))
             self.play(FadeIn(pm))
-            vo.wait_until("b")
-            self.play(*pm.light(0), FadeIn(head[1]))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(d_), Create(w_)) for d_, w_ in zip(wdots, walk)], lag_ratio=0.5),
                       FadeIn(wl[0]), run_time=2.5)
             self.play(FadeIn(lim), FadeIn(wl[1]), FadeIn(wt))
+            vo.wait_until("b")
+            self.play(*pm.light(0), FadeIn(head[1]))
             vo.wait_until("c")
             self.play(*pm.light(1), FadeIn(steps[:3]))
             vo.wait_until("d")
@@ -138,7 +138,17 @@ class RieszFischer(VoiceoverScene):
         lim_t = VGroup(label(r"and the series $r_1 + \sum_k (r_{2^{k+1}} - r_{2^k})$ converges everywhere", font_size=24),
                        label(r"(except at $\tfrac12$) \ to the step $\mathbf 1_{(1/2, 1]}$", font_size=24,
                              color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.6, 2.0, 0])
-        head = label(r"The proof, run on the hook's ramps \ ($n_k = 2^k$)", font_size=32).to_edge(UP, buff=0.25)
+        head = label(r"The proof, run on the hook's ramps \ ($n_k = 2^k$)", font_size=34).to_edge(UP, buff=0.3)
+        # the partial sums of the telescoping series are the ramps r_(2^k); they close in on the step
+        part = [polyline(ax, x, ramp(x, 2**k), color=C.SEQ, stroke_width=3) for k in range(7)]
+        assert all(abs(trap(np.abs(ramp(x, 2**k) - (x > 0.5)), x) - 1 / (4 * 2**k)) < 1e-4 for k in range(7))
+        stp = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=C.EPS, stroke_width=3),
+                     Line(ax.c2p(0.5, 1), ax.c2p(1, 1), color=C.EPS, stroke_width=3),
+                     Dot(ax.c2p(0.5, 0), radius=0.06, color=C.EPS),
+                     Circle(radius=0.06, color=C.EPS, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(ax.c2p(0.5, 1)),
+                     Dot(ax.c2p(0.5, 0.5), radius=0.05, color=C.SEQ)).set_z_index(3)
+        r_k = MathTex(r"r_1, r_2, r_4, \ldots, r_{64}", font_size=26, color=C.SEQ).next_to(ax.c2p(0.62, 0.42), RIGHT,
+                                                                                         buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> Let's run the proof on the ramps from the beginning of this part. The subsequence "
             "one, two, four, eight is fast enough: the step from ramp n to ramp two n has area one over eight n. "
@@ -160,7 +170,12 @@ class RieszFischer(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in bars], lag_ratio=0.4), run_time=2.5)
             self.play(FadeIn(tot), FadeIn(gn))
             vo.wait_until("d")
-            self.play(FadeIn(lim_t))
+            stack = VGroup(*layers, *gs, g0, g_inf)
+            self.play(stack.animate.set_opacity(0.25), FadeOut(r1l), FadeIn(lim_t))
+            self.play(Create(part[0]), FadeIn(r_k), run_time=0.5)
+            for k in range(1, 7):
+                self.play(ReplacementTransform(part[k - 1], part[k]), run_time=0.45)
+            self.play(FadeIn(stp))
         self.wait(0.3)
         self.clear_scene()
 
@@ -173,8 +188,22 @@ class RieszFischer(VoiceoverScene):
         step = (x > 0.5).astype(float)
         st = VGroup(Line(ax.c2p(0, 0), ax.c2p(0.5, 0), color=WHITE, stroke_width=3),
                     Line(ax.c2p(0.5, 1), ax.c2p(1, 1), color=WHITE, stroke_width=3))
+        ax.y_axis.add_numbers(-0.5, 0.5, 1.0, 1.5, num_decimal_places=1, font_size=18)
+        st.set_z_index(3)
         tube = VGroup(between(ax, x[x <= 0.5], step[x <= 0.5] + 0.5, step[x <= 0.5] - 0.5, C.EPS, 0.14),
-                      between(ax, x[x > 0.5], step[x > 0.5] + 0.5, step[x > 0.5] - 0.5, C.EPS, 0.14))
+                      between(ax, x[x > 0.5], step[x > 0.5] + 0.5, step[x > 0.5] - 0.5, C.EPS, 0.14),
+                      *[DashedLine(ax.c2p(a_, h_), ax.c2p(b_, h_), color=C.EPS, stroke_width=2, dash_length=0.08)
+                        for a_, b_, h_ in ((0, 0.5, 0.5), (0, 0.5, -0.5), (0.5, 1, 1.5), (0.5, 1, 0.5))])
+        # a continuous g, and why it fails: near 1/2 it is close to g(1/2), which is 1/2 away from 0 or from 1
+        gfun = 0.5 + 0.5 * np.tanh(40 * (x - 0.5))
+        assert np.max(np.abs(gfun - step)) >= 0.5 - 1e-3 and abs(gfun[1000] - 0.5) < 1e-12 and x[1000] == 0.5
+        gg = polyline(ax, x, gfun, color=C.APPROX, stroke_width=3.5)
+        gg_l = MathTex(r"g", font_size=28, color=C.APPROX).next_to(ax.c2p(0.62, float(np.interp(0.62, x, gfun))), DR,
+                                                                   buff=0.08)
+        gap_ = VGroup(Line(ax.c2p(0.5, 0), ax.c2p(0.5, 0.5), color=C.PATHOLOGY, stroke_width=5),
+                      Line(ax.c2p(0.5, 0.5), ax.c2p(0.5, 1), color=C.PATHOLOGY, stroke_width=5),
+                      Dot(ax.c2p(0.5, 0.5), radius=0.06, color=C.APPROX))
+        gap_l = MathTex(r"\ge \tfrac12", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.5, 0.25), LEFT, buff=0.12)
         tube_l = label(r"the tube of half-width $\tfrac12$", font_size=22, color=C.EPS).next_to(ax, UP, buff=0.1)
         ramps_ = [polyline(ax, x, ramp(x, n), color=C.SEQ, stroke_width=3) for n in (2, 8, 64)]
         sup = [float(np.abs(ramp(x, n) - step).max()) for n in ns]
@@ -215,7 +244,8 @@ class RieszFischer(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(tube), FadeIn(tube_l), FadeIn(rows[2]))
             vo.wait_until("c")
-            self.play(FadeIn(rows[3:5]))
+            self.play(ramps_[2].animate.set_stroke(opacity=0.3), Create(gg), FadeIn(gg_l))
+            self.play(Create(gap_), FadeIn(gap_l), FadeIn(rows[3:5]))
             self.play(FadeIn(rows[5:]))
         self.wait(0.4)
         self.clear_scene()

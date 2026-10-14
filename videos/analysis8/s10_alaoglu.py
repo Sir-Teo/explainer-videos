@@ -39,7 +39,10 @@ class Alaoglu(VoiceoverScene):
                   color=C.EPS),
             label(r"weak-$*$: \ $\Lambda_\alpha \to \Lambda$ \ iff \ $\Lambda_\alpha x \to \Lambda x$ for every $x \in X$",
                   font_size=26),
-        ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        ).arrange(DOWN, buff=0.12)
+        head = label(r"Compactness comes back, \ in the weak-$*$ topology", font_size=34).to_edge(UP, buff=0.3)
+        thm.next_to(head, DOWN, buff=0.2)
+        up_ = 0.6  # the picture sits just under the statement
         # the dual ball of l^1: a point is a choice of one value in [-1, 1] for each coordinate
         intervals = VGroup()
         rng = np.random.default_rng(2)
@@ -47,18 +50,20 @@ class Alaoglu(VoiceoverScene):
         dots = VGroup()
         for k in range(10):
             x = -6.0 + 0.62 * k
-            intervals.add(Line([x, -2.2, 0], [x, 0.2, 0], color=GREY_B, stroke_width=3))
-            dots.add(Dot([x, -1.0 + 1.2 * vals[k], 0], radius=0.07, color=C.FUNCTIONAL))
-        dl = VGroup(*[MathTex(rf"\Lambda e_{{{k + 1}}}", font_size=18, color=GREY_B).move_to([-6.0 + 0.62 * k, -2.5, 0])
+            intervals.add(Line([x, -2.2 + up_, 0], [x, 0.2 + up_, 0], color=GREY_B, stroke_width=3))
+            dots.add(Dot([x, -1.0 + up_ + 1.2 * vals[k], 0], radius=0.07, color=C.FUNCTIONAL))
+        dl = VGroup(*[MathTex(rf"\Lambda e_{{{k + 1}}}", font_size=18, color=GREY_B).move_to([-6.0 + 0.62 * k, -2.5 + up_, 0])
                       for k in range(10)])
-        dl.add(MathTex(r"\cdots", font_size=30).move_to([0.5, -1.0, 0]))
+        dl.add(MathTex(r"\cdots", font_size=30).move_to([0.5, -1.0 + up_, 0]))
         cube = label(r"$X = \ell^1$: \ $\{\|\Lambda\| \le 1\} = [-1, 1]^{\N}$, \ a product of intervals", font_size=24,
-                     color=C.FUNCTIONAL).move_to([-3.1, 0.75, 0])
+                     color=C.FUNCTIONAL).move_to([-3.1, 0.75 + up_, 0])
+        assert cube.get_top()[1] < thm.get_bottom()[1] - 0.2
         pm = ProofMap([r"$\Lambda \mapsto (\Lambda x)_{x \in X}$ embeds the ball in $\prod_x [-\|x\|, \|x\|]$",
                        r"Tychonoff: \ a product of compact sets is compact", r"the image is closed \ (linearity is a "
-                       r"pointwise condition)"], font_size=20, width=5.0, buff=0.22, direction=DOWN).move_to([3.9, -1.0, 0])
+                       r"pointwise condition)"], font_size=20, width=5.0, buff=0.22, direction=DOWN).move_to([3.9, -0.4, 0])
         notes = label(r"for separable $X$, \ every bounded sequence in $X^*$ has a weak-$*$ convergent subsequence "
-                      r"\ (FA 3.17)", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25)
+                      r"\ (FA 3.17)", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
+        assert notes.get_top()[1] < min(dl.get_bottom()[1], pm.get_bottom()[1]) - 0.2
         with self.voiceover(
             "<bookmark mark='a'/> Banach-Alaoglu: the closed unit ball of a dual space is compact in the weak-star "
             "topology, where functionals converge when their values at each point converge. "
@@ -70,7 +75,7 @@ class Alaoglu(VoiceoverScene):
             "used most often."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(head), FadeIn(thm))
             # weak-*: a functional is watched through its values, one coordinate line per vector
             self.play(LaggedStart(*[Create(i_) for i_ in intervals], lag_ratio=0.1), FadeIn(dl), run_time=1.6)
             vo.wait_until("b")
@@ -92,14 +97,14 @@ class Alaoglu(VoiceoverScene):
         xc, w_first, w_sub, w_lim, sub, errs, m1 = d["xc"], d["w_first"], d["w_sub"], d["w_lim"], d["sub"], d["errs"], d["m1"]
         bins = len(xc)
         dens = lambda w: w * bins  # noqa: E731  probability -> density
-        ax = plain_axes([0, 1, 0.25], [0, 2.2, 1], 5.0, 2.4).move_to([-3.6, 0.6, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 2.2, 1], 5.0, 2.4).move_to([-3.6, 0.6, 0]).set_z_index(2)  # over the first bar
         hs = [histogram(ax, xc, dens(w), C.SEQ) for w in w_first]
         hl = [MathTex(rf"\mu_{{{n}}}", font_size=28, color=C.SEQ).next_to(ax, UP, buff=0.05) for n in (1, 2, 3, 4)]
         bx = plain_axes([0, 60, 10], [0.35, 0.65, 0.1], 5.0, 1.6).move_to([-3.6, -2.45, 0])
         mpts = VGroup(*[Dot(bx.c2p(k + 1, v), radius=0.03, color=C.SEQ) for k, v in enumerate(m1)])
         b_l = MathTex(r"\int x\,d\mu_n, \ n = 1, \ldots, 60: \text{ no limit}", font_size=22, color=C.SEQ).next_to(
             bx, UP, buff=0.05)
-        cx = plain_axes([0, 1, 0.25], [0, 2.2, 1], 5.0, 2.4).move_to([3.4, 0.6, 0])
+        cx = plain_axes([0, 1, 0.25], [0, 2.2, 1], 5.0, 2.4).move_to([3.4, 0.6, 0]).set_z_index(2)
         lim = VGroup(*[Line(cx.c2p(x - 0.5 / bins, v), cx.c2p(x + 0.5 / bins, v), color=WHITE, stroke_width=3)
                        for x, v in zip(xc, dens(w_lim))])
         hsub = [histogram(cx, xc, dens(w), C.EPS) for w in w_sub]
@@ -111,8 +116,7 @@ class Alaoglu(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.4, -2.2, 0])
         regrid(tab)
         assert np.ptp(m1) > 0.05 and np.all(np.diff(errs) < 0)
-        head = label(r"Probability measures on $[0, 1]$: \ a sequence with no limit has a convergent subsequence",
-                     font_size=28).to_edge(UP, buff=0.25)
+        head = label(r"Measures: \ no limit, \ but a convergent subsequence", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the payoff for measures. Probability measures on the unit interval are "
             "functionals on the continuous functions, all in the dual unit ball. <bookmark mark='b'/> This sequence "

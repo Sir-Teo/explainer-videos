@@ -35,10 +35,11 @@ class Holomorphic(VoiceoverScene):
                                          (lambda Z: Z + 0.4j * np.conj(Z), z0 + 0.4j * np.conj(z0),
                                           r"g(z) = z + 0.4i\,\bar z"))):
             W = 0.5
-            ax = square_axes([c.real - W, c.real + W, 0.25], [c.imag - W, c.imag + W, 0.25], 3.4).move_to(
-                [-4.6 + 4.6 * k, -0.3, 0])
+            ctr = np.array([-4.6 + 4.6 * k, -0.3, 0])
+            ax = square_axes([c.real - W, c.real + W, 0.25], [c.imag - W, c.imag + W, 0.25], 3.4)
+            ax.shift(ctr - ax.c2p(c.real, c.imag))  # the image point sits at the frame's centre, frames on one line
             ax.set_opacity(0.0)
-            frame = Square(side_length=3.4, color=GREY_D, stroke_width=1.5).move_to(ax.c2p(c.real, c.imag))
+            frame = Square(side_length=3.4, color=GREY_D, stroke_width=1.5).move_to(ctr)
             grid = zgrid(ax, F, (z0.real - h, z0.real + h), (z0.imag - h, z0.imag + h), n=5, stroke_width=2.5,
                          colors=(C.SEQ, C.APPROX))
             t = MathTex(ttl, font_size=28).next_to(frame, UP, buff=0.12)
@@ -92,11 +93,15 @@ class Holomorphic(VoiceoverScene):
     def conformal(self):
         d = load("conformal")
         angs_sq, angs_exp = d["ang_sq"], d["ang_exp"]
-        ax = square_axes([-0.2, 2.2, 1], [-0.2, 2.6, 1], 1.35).move_to([-4.05, -0.6, 0])
+        # z^2 of [0.3, 1.4] x [0.15, 0.95] has Re in [-0.81, 1.96] and Im in [0.09, 2.66]: the axes hold all of it
+        ax = square_axes([-1.0, 2.2, 1], [-0.2, 2.8, 1], 1.15).move_to([-4.66, -0.5, 0])
         ax.set_opacity(0.3)
         g1 = zgrid(ax, lambda Z: Z * Z, (0.3, 1.4), (0.15, 0.95), n=9, stroke_width=2, colors=(C.SEQ, C.APPROX))
+        corners = np.array([0.3 + 0.15j, 1.4 + 0.15j, 0.3 + 0.95j, 1.4 + 0.95j, 0.3 + 0.55j, 0.85 + 0.15j])
+        assert g1.get_left()[0] >= ax.c2p(-1.0, 0)[0] - 1e-6 and g1.get_top()[1] <= ax.c2p(0, 2.8)[1] + 1e-6
+        assert (corners**2).real.min() > -1.0 and (corners**2).imag.max() < 2.8
         l1 = MathTex(r"z^2 \text{ on } [0.3, 1.4] \times [0.15, 0.95]", font_size=26).next_to(ax, UP, buff=0.1)
-        bx = square_axes([-2.9, 2.9, 1], [-2.9, 2.9, 1], 0.7).move_to([0.6, -0.6, 0])
+        bx = square_axes([-2.9, 2.9, 1], [-2.9, 2.9, 1], 0.66).move_to([-0.39, -0.5, 0])
         bx.set_opacity(0.3)
         g2 = zgrid(bx, np.exp, (-1.0, 1.0), (-1.2, 1.2), n=9, stroke_width=2, colors=(C.SEQ, C.APPROX))
         l2 = MathTex(r"e^z \text{ on } [-1, 1] \times [-1.2, 1.2]", font_size=26).next_to(bx, UP, buff=0.1)
@@ -108,13 +113,12 @@ class Holomorphic(VoiceoverScene):
             MathTex(r"e^z:\ " + r",\ ".join(f"{a:.4f}" for a in angs_exp) + r"^\circ", font_size=22, color=C.EPS),
             label(r"holomorphic with $f' \ne 0$ $\Rightarrow$ conformal", font_size=24, color=C.CONNECTED_SET),
             label(r"at $0$, \ $(z^2)' = 0$ \ and $z^2$ doubles angles", font_size=22, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.0, -0.5, 0])
-        for r_ in side:
-            if r_.width > 3.9:
-                r_.width = 3.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([5.05, -0.5, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        side.align_to(np.array([6.6 - side.width, 0, 0]), LEFT).set_y(-0.5)
+        assert side.get_right()[0] <= 6.6 + 1e-6 and side.get_left()[0] > bx.get_right()[0] + 0.3
+        assert ax.get_left()[0] > -6.7 and bx.get_left()[0] > ax.get_right()[0] + 0.3
         assert np.allclose(angs_sq, 90, atol=1e-6) and np.allclose(angs_exp, 90, atol=1e-6)
-        head = label(r"Holomorphic maps preserve angles", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Holomorphic maps preserve angles", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Since the derivative is a rotation and a scaling, small shapes keep their angles. "
             "<bookmark mark='b'/> Here's a grid under z squared: its lines bend, but they still cross at right "

@@ -30,9 +30,11 @@ class Wiener(VoiceoverScene):
         x, tg, ag, as_ = d["x"], d["target"], d["ag"], d["as_"]
         eg, es, bound, inside = float(d["eg"]), float(d["es"]), float(d["bound"]), float(d["inside"])
         ax = plain_axes([-4, 4, 1], [-1.1, 1.1, 1], 6.2, 2.0).move_to([-3.3, 1.35, 0])
-        bx = plain_axes([-9, 9, 3], [0, 1.1, 0.5], 6.2, 2.0, numbers=True, font_size=16,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.3, -1.6, 0])
+        # x numbered where the narration points (frequencies near 5, the triangle's zero beyond 2); no y numbers on the
+        # central axis, where both kernels' transforms peak
+        bx = plain_axes([-9, 9, 1], [0, 1.1, 0.5], 6.2, 2.0, font_size=16,
+                        x_axis_config={"numbers_to_include": [-5, -2, 2, 5],
+                                       "decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.3, -1.6, 0])
         g0 = polyline(ax, x, tg, color=C.FUNC, stroke_width=5)
         g1 = polyline(ax, x, ag, color=C.APPROX, stroke_width=2.5)
         g2 = polyline(ax, x, as_, color=C.FREQ, stroke_width=3)
@@ -130,6 +132,10 @@ class Wiener(VoiceoverScene):
         ga = polyline(ax, t, kg, color=C.APPROX, stroke_width=3)
         gb = polyline(ax, t, tri, color=C.FREQ, stroke_width=3)
         zs = VGroup(*[Line(ax.c2p(a_, 0), ax.c2p(b_, 0), color=C.PATHOLOGY, stroke_width=9) for a_, b_ in ((-6, -2), (2, 6))])
+        # the two kernels' transforms, labelled as in the first section
+        lga = MathTex(r"\hat k_{\text{Gauss}}", font_size=22, color=C.APPROX).next_to(ax.c2p(-4.0, float(np.exp(-0.32))), UL,
+                                                                                    buff=0.05)
+        lgb = MathTex(r"\hat k_{\text{sinc}^2}", font_size=22, color=C.FREQ).next_to(ax.c2p(1.0, 0.5), RIGHT, buff=0.1)
         lt = label(r"each $t \in \mathbb R$ \ is a homomorphism \ $f \mapsto \hat f(t)$", font_size=22,
                    color=C.SPECTRUM).next_to(ax, DOWN, buff=0.15)
         lz = label(r"$\operatorname{sinc}^2$ lies in the ideals at $|t| \ge 2$", font_size=22, color=C.PATHOLOGY).next_to(
@@ -169,8 +175,8 @@ class Wiener(VoiceoverScene):
             self.play(FadeOut(VGroup(fax, cpic, cl_)), run_time=0.6)
             self.play(Create(ax), Create(line), FadeIn(lt), FadeIn(rows[3:5]))
             vo.wait_until("c")
-            self.play(Create(gb), Create(zs), FadeIn(lz))
-            self.play(Create(ga), FadeIn(rows[5]))
+            self.play(Create(gb), FadeIn(lgb), Create(zs), FadeIn(lz))
+            self.play(Create(ga), FadeIn(lga), FadeIn(rows[5]))
             vo.wait_until("d")
             self.play(FadeIn(rows[6]))
         self.wait(0.3)
@@ -272,6 +278,18 @@ class Wiener(VoiceoverScene):
             r"partial summation: \ $\pi(x) \sim x/\log x$",
         ], font_size=20, width=6.0, buff=0.14, direction=DOWN)
         pm.move_to([3.6, -0.4, 0])
+        # 'a': the fact being used, from the previous section: |zeta(1 + it)| stays away from 0
+        dz = load("zeta")
+        tgz, onez = dz["tg"], dz["one"]
+        assert onez.min() > 0.3
+        zax = plain_axes([0, 40, 10], [0, 3.0, 1], 6.4, 2.6, numbers=True, font_size=16,
+                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, 0.2, 0])
+        zg = polyline(zax, tgz, onez, color=C.SPECTRUM, stroke_width=3.5)
+        zfl = DashedLine(zax.c2p(0, onez.min()), zax.c2p(40, onez.min()), color=GREY_B, stroke_width=2)
+        zlab = MathTex(rf"|\zeta(1 + it)| \ge {onez.min():.3f} > 0", font_size=24, color=C.SPECTRUM).next_to(zax, UP, buff=0.1)
+        zt = MathTex(r"t", font_size=22).next_to(zax.x_axis, RIGHT, buff=0.1)
+        zpic = VGroup(zax, zfl, zg, zlab, zt)
         thm = label(r"\textbf{FA 9.12} \ the prime number theorem \ (Hadamard, de la Vall\'ee Poussin 1896; \ "
                     r"Wiener 1932)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.35)
         head = label(r"The prime number theorem, \ from Wiener", font_size=34).to_edge(UP, buff=0.3)
@@ -279,23 +297,27 @@ class Wiener(VoiceoverScene):
             "<bookmark mark='a'/> Wiener's theorem then gives the prime number theorem. The non-vanishing of zeta "
             "on the line says that a certain kernel's transform has no zeros. <bookmark mark='b'/> Wiener's "
             "Tauberian theorem moves a known average from that kernel to every other kernel, and that unlocks "
-            "Chebyshev's function psi, the sum of log p over prime powers, which is asymptotic to x. Partial summation "
-            "converts that into the count of primes. <bookmark mark='c'/> Up to ten to the eight, counted exactly: psi "
+            "<bookmark mark='p'/> Chebyshev's function psi, the sum of log p over prime powers, which is asymptotic to x. "
+            "<bookmark mark='q'/> Partial summation converts that into the count of primes. <bookmark mark='c'/> Up to ten to the eight, counted exactly: psi "
             "of x over x is within two parts in a hundred thousand of one; pi of x over x over log x is still six "
             "percent high, closing in slowly; and the logarithmic integral fits to about one part in ten thousand. "
             "<bookmark mark='d'/> That's the analytic engine behind the Riemann video's second chapter."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(pm))
-            self.play(*pm.light(0))
+            self.play(FadeIn(head), FadeIn(pm), Create(zax), FadeIn(zt), Create(zg), FadeIn(zlab))
+            self.play(*pm.light(0), Create(zfl))
             self.play(*pm.light(1))
             vo.wait_until("b")
-            for i in (2, 3, 4):
-                self.play(*pm.light(i), run_time=0.8)
+            self.play(*pm.light(2), run_time=0.8)
+            vo.wait_until("p")  # psi enters with the sentence that names it
+            self.play(FadeOut(zpic), run_time=0.6)
+            self.play(*pm.light(3), Create(ax), FadeIn(xl), Create(one), run_time=0.8)
+            self.play(Create(gs[1]), FadeIn(ds[1]), FadeIn(labs[1]), run_time=1.2)
+            vo.wait_until("q")
+            self.play(*pm.light(4), run_time=0.8)
             vo.wait_until("c")
-            self.play(Create(ax), FadeIn(xl), Create(one))
-            for g_, d_, l_ in zip(gs, ds, labs):
-                self.play(Create(g_), FadeIn(d_), FadeIn(l_), run_time=1.2)
+            for k_ in (0, 2):
+                self.play(Create(gs[k_]), FadeIn(ds[k_]), FadeIn(labs[k_]), run_time=1.2)
             self.play(FadeIn(pc))
             vo.wait_until("d")
             self.play(*pm.done(), FadeIn(thm))

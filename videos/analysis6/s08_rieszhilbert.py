@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import load, plain_axes, polyline, right_angle, square_axes
+from videos.analysis6.common import left_y_axis, load, plain_axes, polyline, right_angle, square_axes
 
 
 class RieszHilbert(VoiceoverScene):
@@ -49,8 +49,15 @@ class RieszHilbert(VoiceoverScene):
                 seg.set_stroke(opacity=0.75)
             lines.add(seg)
         ker_l = MathTex(r"\ker \Lambda", font_size=26, color=C.EPS).move_to(ax.c2p(-1.45, 2.0))
-        lev = VGroup(*[MathTex(str(k), font_size=20, color=C.FUNCTIONAL).move_to(ax.c2p(*(k / ny * nrm + 1.95 * tang)))
-                       for k in (-2, -1, 1, 2, 3)])
+        lev = VGroup()
+        for k in (-2, -1, 1, 2, 3):  # each value on its own line (boxed), where the line is clear of both axes
+            for t_ in (1.75, 1.45, 1.15, 2.0, -1.45, -1.75):
+                q_ = k / ny * nrm + t_ * tang
+                if np.all(np.abs(q_) <= 1.95) and np.all(np.abs(q_) >= 0.35):
+                    break
+            else:
+                raise AssertionError(k)
+            lev.add(tagged(str(k), color=C.FUNCTIONAL, font_size=22).move_to(ax.c2p(*q_)))
         yarr = Arrow(ax.c2p(0, 0), ax.c2p(*y), buff=0, color=C.INNER, stroke_width=5, tip_length=0.2)
         y_l = MathTex(r"y = (2, 1)", font_size=26, color=C.INNER).next_to(ax.c2p(*y), RIGHT, buff=0.1)
         ra = right_angle(ax, (0, 0), nrm, tang, size=0.2, color=GREY_B)
@@ -84,8 +91,8 @@ class RieszHilbert(VoiceoverScene):
         assert abs(vals.max() - math.sqrt(5)) < 1e-6
         unit = Circle(radius=ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0], color=GREY_B, stroke_width=2).move_to(ax.c2p(0, 0))
         best = Dot(ax.c2p(*nrm), radius=0.08, color=C.EPS)
-        head = label(r"A linear functional on $\R^2$: \ $\Lambda x = 2x_1 + x_2$, \ drawn as a stack of lines",
-                     font_size=30).to_edge(UP, buff=0.3)
+        head = label(r"A functional on $\R^2$: \ $\Lambda x = 2x_1 + x_2$, \ drawn as a stack of lines",
+                     font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Start in the plane. A linear functional, two x one plus x two, is best drawn as a "
             "stack of parallel lines, its level sets, with the zero level, the kernel, in yellow. "
@@ -115,10 +122,11 @@ class RieszHilbert(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def proof(self):
-        head = VGroup(label(r"\textbf{RCA 4.12} \ (F.~Riesz, 1907) \ if $\Lambda$ is a bounded linear functional on $H$,",
-                            font_size=28),
+        head = VGroup(label(r"Every bounded functional is an inner product", font_size=34),
+                      label(r"\textbf{RCA 4.12} \ (F.~Riesz, 1907) \ if $\Lambda$ is a bounded linear functional on $H$,",
+                            font_size=26),
                       MathTex(r"\Lambda x = \langle x, y\rangle \ \text{ for a unique } y \in H, \qquad \|\Lambda\| = \|y\|",
-                              font_size=34, color=C.EPS)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+                              font_size=30, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         rows = [
             MathTex(r"M", r"=", r"\ker \Lambda \ \text{ is closed};\ \text{pick } z \perp M,\ \|z\| = 1", font_size=32),
             MathTex(r"(\Lambda x) z - (\Lambda z) x", r"\in", r"M \quad \text{for every } x", font_size=32),
@@ -136,8 +144,8 @@ class RieszHilbert(VoiceoverScene):
         mini = VGroup()
         for k in range(-2, 3):
             mini.add(Line(c0 + sc * (0.36 * k * nrm - 0.8 * tang), c0 + sc * (0.36 * k * nrm + 0.8 * tang),
-                          color=C.EPS if k == 0 else C.FUNCTIONAL, stroke_width=3.5 if k == 0 else 1.6,
-                          stroke_opacity=1.0 if k == 0 else 0.75))
+                          color=C.EPS if k == 0 else C.FUNCTIONAL, stroke_width=3 if k == 0 else 1.6,
+                          stroke_opacity=0.5 if k == 0 else 0.75))
         zarr = Arrow(c0, c0 + sc * 0.62 * nrm, buff=0, color=C.INNER, stroke_width=6, tip_length=0.2)
         mini_l = VGroup(MathTex(r"M = \ker\Lambda", font_size=26, color=C.EPS).next_to(c0 + sc * 0.8 * tang, LEFT, buff=0.08),
                         MathTex(r"z", font_size=30, color=C.INNER).next_to(c0 + sc * 0.62 * nrm, RIGHT, buff=0.08))
@@ -150,8 +158,9 @@ class RieszHilbert(VoiceoverScene):
         xl = MathTex("x", font_size=30).next_to(c0 + sc * xv, LEFT, buff=0.08)
         shadow = DashedLine(c0 + sc * xv, c0 + sc * lx * nrm, color=GREY_B, stroke_width=2)
         lz = Dot(c0 + sc * lx * nrm, radius=0.06, color=C.INNER)
-        carr = Arrow(c0, c0 + sc * comb, buff=0, color=C.EPS, stroke_width=6, tip_length=0.18)
-        cl = MathTex(r"(\Lambda x) z - (\Lambda z) x", font_size=24, color=C.EPS).next_to(c0 + sc * comb, RIGHT, buff=0.1)
+        # the combination lies in the kernel, so it runs along the (dimmed) kernel line: drawn in its own colour
+        carr = Arrow(c0, c0 + sc * comb, buff=0, color=C.DELTA, stroke_width=6, tip_length=0.18)
+        cl = MathTex(r"(\Lambda x) z - (\Lambda z) x", font_size=24, color=C.DELTA).next_to(c0 + sc * comb, DR, buff=0.12)
         pic = VGroup(mini, zarr, mini_l, xarr, xl, shadow, lz, carr, cl)
         assert pic.get_left()[0] > -6.95 and pic.get_bottom()[1] > -3.95 and pic.get_top()[1] < -1.05
         note_ = label(r"$z$ is the normal to the kernel: \ the arrow in the stack of lines", font_size=26,
@@ -197,7 +206,7 @@ class RieszHilbert(VoiceoverScene):
         curves = [polyline(ax, xs, p, color=C.EPS, stroke_width=3) for p in partials]
         clabels = [MathTex(rf"\sum_{{n < {N}}} \overline{{\Lambda e_n}}\, e_n: \ \sup|\cdot - w| = {sci(e, 2)}",
                            font_size=26, color=C.EPS).next_to(ax, DOWN, buff=0.15) for N, e in zip(Ns, errs)]
-        bx = plain_axes([-0.5, 11.5, 1], [-0.8, 1.8, 0.5], 5.0, 2.4).move_to([3.4, 0.2, 0])
+        bx = plain_axes([-1, 12, 1], [-1.0, 2.0, 0.5], 5.0, 2.4).move_to([3.5, 0.15, 0])
         bars = VGroup()
         for n in range(12):
             v = float(coef[n])
@@ -206,6 +215,24 @@ class RieszHilbert(VoiceoverScene):
             bars.add(Rectangle(width=0.3, height=abs(bx.c2p(0, v)[1] - bx.c2p(0, 0)[1]), stroke_width=0,
                                fill_color=C.FUNCTIONAL, fill_opacity=0.9).move_to(bx.c2p(n, v / 2)))
         b_l = MathTex(r"\Lambda e_n, \ n = 0, 1, \ldots, 11", font_size=26, color=C.FUNCTIONAL).next_to(bx, UP, buff=0.1)
+        bx.x_axis.add_numbers(0, 5, 10, num_decimal_places=0, font_size=18)
+        bnum = left_y_axis(bx, (-0.5, 0.5, 1.0, 1.5), decimals=1)
+        n_l = MathTex("n", font_size=24, color=GREY_B).next_to(bx.c2p(11.5, 0), DR, buff=0.08)
+        # 'a': the black box at work on one f; 'b': its probes, the first Legendre polynomials
+        from numpy.polynomial import legendre as Lg
+        xg, wg = Lg.leggauss(200)
+        lam_f = float(np.sum(wg * (1 + xg) * (np.sin(3 * xg) + xg)))
+        gf_ = polyline(ax, xs, 1 + xs, color=C.FUNC, stroke_width=3.5)
+        gf_l = VGroup(MathTex(r"f = 1 + x", font_size=26, color=C.FUNC).next_to(ax.c2p(0.55, 1.55), LEFT, buff=0.1),
+                      MathTex(rf"\Lambda f = {lam_f:.4f}", font_size=28, color=C.FUNCTIONAL).next_to(ax, DOWN, buff=0.15))
+        En = [Lg.legval(xs, [0] * n + [1]) * math.sqrt((2 * n + 1) / 2) for n in range(4)]
+        for n in range(4):
+            en_g = Lg.legval(xg, [0] * n + [1]) * math.sqrt((2 * n + 1) / 2)
+            assert abs(np.sum(wg * en_g * en_g) - 1) < 1e-12
+            assert abs(np.sum(wg * en_g * (np.sin(3 * xg) + xg)) - coef[n]) < 1e-10  # the bars are Lambda(e_n)
+        assert max(np.abs(e_).max() for e_ in En) < 2.0
+        probes = VGroup(*[polyline(ax, xs, e_, color=GREY_B, stroke_width=2).set_stroke(opacity=0.8) for e_ in En])
+        probes_l = MathTex(r"e_0, e_1, e_2, e_3", font_size=26, color=GREY_B).next_to(ax, DOWN, buff=0.15)
         side = VGroup(
             label(r"$e_n$: \ the orthonormal Legendre polynomials \ (ch.~8)", font_size=22, color=GREY_A),
             MathTex(r"y = \sum_n \overline{\Lambda e_n}\, e_n \ \text{ represents } \Lambda", font_size=28),
@@ -214,8 +241,9 @@ class RieszHilbert(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -2.2, 0])
         assert np.all(np.diff(errs) < 0) and errs[-1] < 1e-4
         assert abs(nrm - math.sqrt(float(np.sum(coef**2)))) < 1e-10
-        head = label(r"Find the vector from the functional alone: \ $\Lambda f = \int_{-1}^1 f(x)\,w(x)\,dx$, \ $w$ hidden",
-                     font_size=30).to_edge(UP, buff=0.3)
+        head = VGroup(label(r"Find the vector from the functional alone", font_size=34),
+                      label(r"$\Lambda f = \int_{-1}^1 f(x)\,w(x)\,dx$, \ $w$ hidden", font_size=28, color=GREY_A)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Now a functional on L two of minus one to one: lambda of f is the integral of f "
             "times a hidden weight w. Can we find w just by testing lambda? <bookmark mark='b'/> Feed it the "
@@ -226,12 +254,13 @@ class RieszHilbert(VoiceoverScene):
             "length of w, 1.7595."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeIn(head), Create(ax), Create(gf_), FadeIn(gf_l))
             vo.wait_until("b")
-            self.play(Create(bx), FadeIn(b_l), FadeIn(side[0]))
+            self.play(FadeOut(gf_), FadeOut(gf_l), Create(probes), FadeIn(probes_l), Create(bx), FadeIn(bnum), FadeIn(n_l),
+                      FadeIn(b_l), FadeIn(side[0]))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(side[1]), Create(curves[0]), FadeIn(clabels[0]))
+            self.play(FadeOut(probes), FadeOut(probes_l), FadeIn(side[1]), Create(curves[0]), FadeIn(clabels[0]))
             for k in range(1, len(curves)):
                 self.play(ReplacementTransform(curves[k - 1], curves[k]), FadeTransform(clabels[k - 1], clabels[k]),
                           run_time=1.0)

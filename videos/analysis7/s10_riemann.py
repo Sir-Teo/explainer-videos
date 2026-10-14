@@ -39,17 +39,17 @@ class RiemannMapping(VoiceoverScene):
             label(r"the maximizer exists because the family is bounded: \ $|\psi| < 1$ \ (14.6)", font_size=22,
                   color=GREY_A),
             label(r"compactness again: \ an extremal problem with a solution", font_size=24, color=C.EPS),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.45)
         # the picture, computed (next section's Schwarz--Christoffel map, run backwards): Omega, z_0, the disk
         d = load("riemann")
         V, circles, rs, C0 = d["V"], d["circles"], d["rs"], complex(d["C"])
-        om = square_axes([-0.1, 2.1, 1], [-0.1, 2.1, 1], 1.15).move_to([-4.9, 0.05, 0]).set_opacity(0)
-        dk = square_axes([-1.1, 1.1, 1], [-1.1, 1.1, 1], 0.95).move_to([-1.4, 0.05, 0]).set_opacity(0)
+        om = square_axes([-0.1, 2.1, 1], [-0.1, 2.1, 1], 1.4).move_to([-4.95, 0.0, 0]).set_opacity(0)
+        dk = square_axes([-1.1, 1.1, 1], [-1.1, 1.1, 1], 1.15).move_to([-1.45, 0.0, 0]).set_opacity(0)
         region = Polygon(*[om.c2p(v.real, v.imag) for v in V], color=WHITE, stroke_width=2.5, fill_color=C.INNER,
                          fill_opacity=0.25)
         levels = VGroup(*[zcurve(om, w, C.SEQ, 1.5) for w in circles[::2]])
         z0 = VGroup(Dot(om.c2p(C0.real, C0.imag), radius=0.07, color=C.EPS),
-                    MathTex(r"z_0", font_size=24, color=C.EPS).next_to(om.c2p(C0.real, C0.imag), LEFT, buff=0.08))
+                    MathTex(r"z_0", font_size=26, color=C.EPS).next_to(om.c2p(C0.real, C0.imag), UL, buff=0.18))
         thc = np.linspace(0, 2 * np.pi, circles.shape[1])
         disk = VGroup(Circle(radius=dk.c2p(1, 0)[0] - dk.c2p(0, 0)[0], color=WHITE, stroke_width=2.5, fill_color=C.INNER,
                              fill_opacity=0.25).move_to(dk.c2p(0, 0)),
@@ -60,8 +60,10 @@ class RiemannMapping(VoiceoverScene):
         arr_l = MathTex(r"\psi", font_size=30, color=GREY_B).next_to(arr, UP, buff=0.06)
         o_l = MathTex(r"\Omega", font_size=28).next_to(om, UP, buff=0.05)
         d_l = MathTex(r"D, \ \psi(z_0) = 0", font_size=24).next_to(dk, UP, buff=0.05)
-        cap = label(r"the level curves $|\psi| = r$ of the actual map", font_size=20, color=GREY_A).next_to(
+        cap = label(r"the level curves $|\psi| = r$ of the actual map", font_size=22, color=GREY_A).next_to(
             VGroup(om, dk), DOWN, buff=0.15)
+        assert dk.get_right()[0] < pm.get_left()[0] - 0.15 and cap.get_bottom()[1] > ideas.get_top()[1] + 0.1
+        assert om.get_left()[0] > -6.65 and thm.get_bottom()[1] > o_l.get_top()[1] + 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The Riemann mapping theorem: every simply connected region of the plane, other than "
             "the plane itself, can be mapped one-to-one and conformally onto the disk. <bookmark mark='b'/> The proof "
@@ -97,7 +99,7 @@ class RiemannMapping(VoiceoverScene):
             a.set_opacity(0)
         th = np.linspace(0, 2 * np.pi, circles.shape[1])
         rr = np.linspace(0, 0.985, rays.shape[1])
-        cols_c = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.INNER), k / (len(rs) - 1)) for k in range(len(rs))]
+        cols_c = [C.SEQ] * len(rs)  # circles blue, rays pink, as in every polar grid of this part
         disk = VGroup(*[zcurve(ax, r * np.exp(1j * th), c, 2) for r, c in zip(rs, cols_c)],
                       *[zcurve(ax, rr * np.exp(1j * a), C.APPROX, 1.4) for a in angs])
         image = VGroup(*[zcurve(bx, w, c, 2) for w, c in zip(circles, cols_c)],
@@ -122,11 +124,9 @@ class RiemannMapping(VoiceoverScene):
             MathTex(rf"{sci(ang_err, 0)} \text{{ degrees (200 points)}}", font_size=24, color=C.EPS),
             label(r"$|z| = 0.9999$ lands within", font_size=22, color=GREY_A),
             MathTex(rf"{bd:.4f} \text{{ of the boundary}}", font_size=24, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.3, -0.75, 0])
-        for r_ in rows:
-            if r_.width > 3.2:
-                r_.width = 3.2
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([5.35, -0.75, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        rows.align_to(np.array([6.55 - rows.width, 0, 0]), LEFT).set_y(-0.75)
+        assert rows.get_right()[0] <= 6.6 and rows.get_left()[0] > bx.get_right()[0] + 0.3
         assert ang_err < 1e-4 and bd < 0.02
 
         # two polar cells of the disk and their images, cut from the same circle and ray arrays: small squares
@@ -141,9 +141,13 @@ class RiemannMapping(VoiceoverScene):
             return (Polygon(*[ax.c2p(z.real, z.imag) for z in zc], **kw),
                     Polygon(*[bx.c2p(w.real, w.imag) for w in wc], **kw))
 
-        cells = [cell(2, 3, C.EPS), cell(4, 18, C.PATHOLOGY)]
-        head = label(r"The disk, mapped conformally onto an L-shaped hexagon \ (Schwarz--Christoffel)", font_size=30).to_edge(
-            UP, buff=0.25)
+        cells = [cell(2, 10, C.EPS), cell(4, 18, C.PATHOLOGY)]
+        for cz, cw in cells:  # both images are visible cells, away from the corner dots
+            W_ = cw.get_points()
+            assert np.ptp(W_[:, 0]) > 0.3 and np.ptp(W_[:, 1]) > 0.15
+            assert min(np.linalg.norm(cw.get_center() - c_.get_center()) for c_ in corners) > 0.35
+        head = label(r"The disk, mapped onto an L-shaped hexagon \ (Schwarz--Christoffel)", font_size=34).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem says such a map exists; for a polygon we can compute it. Schwarz and "
             "Christoffel found its form: the derivative is a product of powers, one for each corner, with exponents "

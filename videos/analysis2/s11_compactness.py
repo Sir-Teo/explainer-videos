@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from explainer.analysis.gameboard import largest_delta
-from videos.analysis2.common import endpoint, load, plain_axes, polyline
+from videos.analysis2.common import board_box, endpoint, load, plain_axes, polyline
 
 
 class Compactness(VoiceoverScene):
@@ -44,9 +44,9 @@ class Compactness(VoiceoverScene):
                      endpoint(ax.c2p(0, m) + LEFT * 0.3, True, C.COMPACT_SET),
                      endpoint(ax.c2p(0, M) + LEFT * 0.3, True, C.COMPACT_SET))
         dl = MathTex(r"[a, b]", font_size=30, color=C.COMPACT_SET).next_to(dom, RIGHT, buff=0.2)
-        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET).next_to(img, UP, buff=0.2).shift(LEFT * 0.5)
+        il = MathTex(r"f([a, b])", font_size=30, color=C.COMPACT_SET)
         thm = label(r"\textbf{Rudin 4.14} \ A continuous image of a compact set is compact.", font_size=30)
-        thm.to_edge(UP, buff=0.4)
+        thm.to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"cover $f(X)$ by open sets $V_\alpha$", font_size=24),
             label(r"the preimages $f^{-1}(V_\alpha)$ are open (4.8) and cover $X$", font_size=24),
@@ -60,6 +60,7 @@ class Compactness(VoiceoverScene):
             h = (centers[1] - centers[0]) * 0.75
             x0 = ax.c2p(0, 0)[0] - 0.55 - 0.12 * (i % 2)
             cov.add(Line([x0, ax.c2p(0, c - h)[1], 0], [x0, ax.c2p(0, c + h)[1], 0], color=C.OPEN_SET, stroke_width=4))
+        il.next_to(VGroup(img, cov), UP, buff=0.15)  # above the image bar and every cover interval
         k = 4
         c, h = centers[k], (centers[1] - centers[0]) * 0.75
         inside = (ys > c - h) & (ys < c + h)
@@ -69,9 +70,11 @@ class Compactness(VoiceoverScene):
             if v and start is None:
                 start = i
             if (not v or i == len(inside) - 1) and start is not None:
-                pre.add(Line(ax.c2p(xs[start], -1.6) + DOWN * 0.55, ax.c2p(xs[i], -1.6) + DOWN * 0.55, color=C.OPEN_SET,
-                             stroke_width=6))
+                pa, pb = ax.c2p(xs[start], -1.6) + DOWN * 0.55, ax.c2p(xs[i], -1.6) + DOWN * 0.55
+                pre.add(VGroup(Line(pa, pb, color=C.DELTA, stroke_width=6), endpoint(pa, False, C.DELTA),
+                               endpoint(pb, False, C.DELTA)))
                 start = None
+        assert len(pre) >= 2
         with self.voiceover(
             "<bookmark mark='t'/> The fact: a continuous function maps compact sets to compact sets. "
             "<bookmark mark='a'/> Here the domain is a closed interval, and its image is the set of values on the "
@@ -89,7 +92,7 @@ class Compactness(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(steps[0]), LaggedStart(*[Create(x) for x in cov], lag_ratio=0.15))
             vo.wait_until("c")
-            self.play(cov[k].animate.set_color(C.EPS), FadeIn(steps[1]))
+            self.play(cov[k].animate.set_color(C.DELTA).set_stroke(width=6), FadeIn(steps[1]))
             self.play(LaggedStart(*[Create(p) for p in pre], lag_ratio=0.2))
             vo.wait_until("d")
             self.play(FadeIn(steps[2]))
@@ -103,7 +106,7 @@ class Compactness(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 4.16} \ A continuous real function on a compact set attains its maximum and "
                            r"minimum.", font_size=28),
                      label(r"(its image is compact: \ closed and bounded, \ so it contains its sup and inf)", font_size=24,
-                           color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
+                           color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 4, 1], [-1.6, 1.6, 1], 6.0, 3.0, numbers=False).move_to([0, 0.6, 0])
         f = lambda x: 0.9 * np.sin(1.7 * x) + 0.35 * np.cos(4.3 * x)  # noqa: E731
         a, b = 0.3, 3.7
@@ -115,14 +118,16 @@ class Compactness(VoiceoverScene):
         lmax = label(r"max", font_size=24, color=C.CONNECTED_SET).next_to(pmax, UP, buff=0.1)
         lmin = label(r"min", font_size=24, color=C.CONNECTED_SET).next_to(pmin, DOWN, buff=0.1)
 
-        def panel(x0, title, build):
-            axp = plain_axes([0, 1.05, 1], [0, 1.6, 1], 3.2, 2.0, numbers=False).move_to([x0, -2.3, 0])
-            t = label(title, font_size=22, color=C.PATHOLOGY).next_to(axp, UP, buff=0.12)
+        def panel(x0, title, build, y_max=1.6):
+            axp = plain_axes([0, 1.05, 1], [0, y_max, 1], 3.2, 2.0, numbers=False).move_to([x0, -2.3, 0])
+            t = label(title, font_size=22, color=C.PATHOLOGY).next_to(axp, UP, buff=0.25)
             return VGroup(axp, t, *build(axp))
 
+        # 1/x from x = 1/8 (height 8) up; the arrow says it keeps going
         p1 = panel(-4.4, r"$\tfrac1x$ on $(0, 1]$: \ unbounded", lambda A: [
-            A.plot(lambda x: 1 / x, x_range=[1 / 1.6, 1, 0.005], color=C.FUNC, stroke_width=3),
-            Arrow(A.c2p(0.62, 1.45), A.c2p(0.55, 1.75), buff=0, color=C.FUNC, stroke_width=3, tip_length=0.12)])
+            A.plot(lambda x: 1 / x, x_range=[1 / 8, 1, 0.002], color=C.FUNC, stroke_width=3),
+            Arrow(A.c2p(1 / 8, 8), A.c2p(0.113, 8.95), buff=0, color=C.FUNC, stroke_width=3, tip_length=0.12,
+                  max_tip_length_to_length_ratio=0.5)], y_max=9)
         p2 = panel(0.0, r"$x$ on $(0, 1)$: \ no max", lambda A: [
             A.plot(lambda x: x, x_range=[0, 1], color=C.FUNC, stroke_width=3),
             endpoint(A.c2p(1, 1), False, C.FUNC), endpoint(A.c2p(0, 0), False, C.FUNC)])
@@ -152,7 +157,7 @@ class Compactness(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 4.17} \ A continuous bijection from a compact space has a continuous "
                            r"inverse.", font_size=28),
                      label(r"\textbf{Rudin 4.21} \ Without compactness: \ $t \mapsto (\cos t, \sin t)$ on $[0, 2\pi)$",
-                           font_size=28, color=C.PATHOLOGY)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
+                           font_size=28, color=C.PATHOLOGY)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         y0 = -0.9
         X = lambda t: -6.2 + t * (4.6 / (2 * np.pi))  # noqa: E731
         seg = VGroup(Line([X(0), y0, 0], [X(2 * np.pi), y0, 0], color=C.FUNC, stroke_width=6),
@@ -165,8 +170,8 @@ class Compactness(VoiceoverScene):
         arrow = Arrow([-1.3, y0, 0], [1.4, y0, 0], buff=0, color=GREY_B, stroke_width=3)
         al = MathTex(r"t \mapsto e^{it}", font_size=30, color=GREY_B).next_to(arrow, UP, buff=0.1)
         p0 = Dot(o + R * RIGHT, radius=0.08, color=WHITE)
-        ts_hi = [0.25, 0.15, 0.07]
-        ts_lo = [2 * np.pi - 0.25, 2 * np.pi - 0.15, 2 * np.pi - 0.07]
+        ts_hi = [0.45, 0.3, 0.15]
+        ts_lo = [2 * np.pi - 0.45, 2 * np.pi - 0.3, 2 * np.pi - 0.15]
         up = VGroup(*[Dot(o + R * np.array([np.cos(t), np.sin(t), 0]), radius=0.06, color=C.CONNECTED_SET) for t in ts_hi])
         dn = VGroup(*[Dot(o + R * np.array([np.cos(t), np.sin(t), 0]), radius=0.06, color=C.CLOSED_SET) for t in ts_lo])
         up_b = VGroup(*[Dot([X(t), y0, 0], radius=0.06, color=C.CONNECTED_SET) for t in ts_hi])
@@ -209,7 +214,7 @@ class Compactness(VoiceoverScene):
         eps, dl = 0.25, 0.25**2
         aT = ValueTracker(0.9)
         board = FunctionBoard(ax, f, a=aT, eps=eps, delta=dl, domain=(0, 1.05))
-        eb, db, pc = board.eps_band(), board.delta_band(), board.piece()
+        bx, pc = board_box(board), board.piece()
         tl = MathTex(r"\sqrt{x} \text{ on } [0, 1]:\ \delta = \varepsilon^2 \text{ works everywhere}", font_size=26,
                      color=C.CONNECTED_SET).next_to(ax, UP, buff=0.15)
         ax2 = plain_axes([0, 1.05, 0.25], [0, 12, 4], 5.6, 4.0, numbers=True, font_size=18,
@@ -219,7 +224,7 @@ class Compactness(VoiceoverScene):
         bT = ValueTracker(0.9)
         d_fixed = largest_delta(lambda x: 1 / x, 0.9, 1 / 0.9, e2, 0.9, domain=(0, np.inf))
         board2 = FunctionBoard(ax2, lambda x: 1 / x, a=bT, eps=e2, delta=d_fixed, domain=(1e-6, 1.05))
-        eb2, db2, pc2 = board2.eps_band(), board2.delta_band(), board2.piece()
+        bx2, pc2 = board_box(board2), board2.piece()
         tl2 = MathTex(r"\tfrac1x \text{ on } (0, 1):\ \text{one } \delta \text{ fails near } 0", font_size=26,
                       color=C.PATHOLOGY).next_to(ax2, UP, buff=0.15)
         with self.voiceover(
@@ -233,19 +238,19 @@ class Compactness(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(dfn), Create(ax), Create(graph), FadeIn(tl))
             vo.wait_until("a")
-            self.play(FadeIn(eb), FadeIn(db), FadeIn(pc))
+            self.play(FadeIn(bx), FadeIn(pc))
             vo.wait_until("b")
             self.play(aT.animate.set_value(0.0), run_time=3.5, rate_func=linear)
             vo.wait_until("c")
             self.play(Create(ax2), Create(g2), FadeIn(tl2))
-            self.play(FadeIn(eb2), FadeIn(db2), FadeIn(pc2))
+            self.play(FadeIn(bx2), FadeIn(pc2))
             self.play(bT.animate.set_value(0.25), run_time=3.5, rate_func=linear)
         # sqrt: delta = eps^2 wins at every point of [0, 1]; 1/x: the fixed delta loses at x = 0.25
         x = np.linspace(0, 1, 2001)
         for h in np.linspace(-dl, dl, 21)[1:-1]:
             assert np.all(np.abs(np.sqrt(np.clip(x + h, 0, 1)) - np.sqrt(x)) < eps)
         assert largest_delta(lambda x: 1 / x, 0.25, 4.0, e2, 0.25, domain=(0, np.inf)) < d_fixed
-        for m in (eb, db, pc, eb2, db2, pc2):
+        for m in (bx, pc, bx2, pc2):
             m.clear_updaters()
         self.clear_scene()
 
@@ -256,7 +261,7 @@ class Compactness(VoiceoverScene):
         exact = polyline(ax3, xx, xx - 1 / (1 / xx + 0.1), color=C.DELTA, stroke_width=3)
         pts = VGroup(*[Dot(ax3.c2p(x, dd), radius=0.07, color=WHITE) for x, dd in zip(xs, d_inv)])
         head = MathTex(r"\tfrac1x,\ \varepsilon = 0.1:\ \text{the largest } \delta \text{ at each } x", font_size=34)
-        head.to_edge(UP, buff=0.5)
+        head.to_edge(UP, buff=0.3)
         f_l = MathTex(r"\delta(x) = x - \frac{1}{1/x + \varepsilon} \to 0", font_size=32, color=C.DELTA).move_to([-2.6, 1.75, 0])
         note_ = label(r"no single $\delta > 0$ is below all of them", font_size=28, color=C.PATHOLOGY).next_to(
             ax3, DOWN, buff=0.35)
@@ -277,7 +282,7 @@ class Compactness(VoiceoverScene):
     # ------------------------------------------------------------------
     def heine(self):
         thm = label(r"\textbf{Rudin 4.19} \ Continuous on a compact space $\Rightarrow$ uniformly continuous.",
-                    font_size=30).to_edge(UP, buff=0.4)
+                    font_size=30).to_edge(UP, buff=0.3)
         y0 = -0.25
         X = lambda v: -5.5 + v * 11.0  # noqa: E731
         line = Line([X(0) - 0.2, y0, 0], [X(1) + 0.2, y0, 0], color=GREY_C, stroke_width=2)
@@ -331,12 +336,11 @@ class Compactness(VoiceoverScene):
             self.play(FadeIn(steps[0]), FadeIn(pdots), FadeIn(steep),
                       LaggedStart(*[Create(b) for b in bars], lag_ratio=0.05))
             vo.wait_until("b")
-            self.play(FadeIn(steps[1]), *[bars[i].animate.set_stroke(opacity=0.25) for i in range(len(bars))
-                                          if i not in chosen])
+            self.play(FadeIn(steps[1]), *[FadeOut(bars[i]) for i in range(len(bars)) if i not in chosen])
             self.play(*[bars[i].animate.set_color(C.EPS).set_stroke(width=6) for i in chosen])
             vo.wait_until("c")
             self.play(FadeIn(steps[2]), FadeIn(ruler))
-            self.play(ruler.animate.shift(RIGHT * (X(1 - dmin) - X(0))), run_time=3.0, rate_func=linear)
+            self.play(ruler[0].animate.shift(RIGHT * (X(1 - dmin) - X(0))), run_time=3.0, rate_func=linear)
         assert dmin > 0 and reach >= 1.0
         self.wait(0.5)
         self.clear_scene()

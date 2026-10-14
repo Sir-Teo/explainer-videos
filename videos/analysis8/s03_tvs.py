@@ -41,8 +41,9 @@ class TVS(VoiceoverScene):
             MathTex(r"p_k(f) = \sup |f^{(k)}|, \quad k = 0, 1, 2, \ldots", font_size=30, color=C.EPS),
             MathTex(rf"p_0(g - f) = {d0:.3f}, \ \ p_1(g - f) = {d1:.2f}, \ \ p_2(g - f) = {d2:.1f}", font_size=26),
             label(r"neighborhoods of $0$: \ $\{f : p_0(f) < \varepsilon, \ldots, p_k(f) < \varepsilon\}$", font_size=24),
-            label(r"countably many seminorms, \ one metric (FA 1.24), \ complete: \ a \emph{Fr\'echet space}",
-                  font_size=24, color=C.INNER),
+            VGroup(label(r"countably many seminorms give one metric (FA 1.24);", font_size=24, color=C.INNER),
+                   label(r"complete, \ it is a \emph{Fr\'echet space}", font_size=24, color=C.INNER)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.08),
             label(r"no single norm gives this topology \ (Part 9's test functions need it)", font_size=24,
                   color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.0, -0.6, 0])

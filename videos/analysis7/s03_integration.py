@@ -42,9 +42,11 @@ class Integration(VoiceoverScene):
             txt = r"2\pi i" if n == -1 else "0"
             rows.add(MathTex(f"{n}", rf"\quad {txt}", font_size=30, color=C.EPS if n == -1 else WHITE))
         assert abs(vals[-1] - 2j * np.pi) < 1e-12 and all(abs(vals[n]) < 1e-12 for n in vals if n != -1)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0.6, -0.6, 0])
-        for r_ in rows[1:]:
-            r_[1].align_to(rows[0][1], LEFT)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0.25, -0.6, 0])
+        regrid(rows, gap=0.6)
+        xr = max(r_[0].get_right()[0] for r_ in rows)
+        for r_ in rows:  # n right-aligned, so -3 and 0 never read as one number
+            r_[0].align_to(np.array([xr, 0, 0]), RIGHT)
         defs = VGroup(
             MathTex(r"\int_\gamma f(z)\,dz = \int_a^b f(\gamma(t))\,\gamma'(t)\,dt", font_size=30),
             label(r"\textbf{RCA 10.8}", font_size=22, color=GREY_B),
@@ -52,11 +54,10 @@ class Integration(VoiceoverScene):
             label(r"around a closed path its integral is $0$", font_size=22, color=GREY_A),
             label(r"$\frac1z$ has none on $\C \setminus \{0\}$: \ \emph{that} is the log's $2\pi i$", font_size=22,
                   color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.6, -0.6, 0])
-        for r_ in defs:
-            if r_.width > 4.6:
-                r_.width = 4.6
-        defs.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([4.65, -0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        defs.align_to(np.array([6.55 - defs.width, 0, 0]), LEFT).set_y(-0.6)
+        assert defs.get_right()[0] <= 6.6 and defs.get_left()[0] > rows.get_right()[0] + 0.4
+        assert ax.get_right()[0] < rows.get_left()[0] - 0.3
         head = label(r"Integrate around the unit circle", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> To integrate along a path, parametrize it and integrate f of gamma times gamma "
@@ -88,8 +89,14 @@ class Integration(VoiceoverScene):
         curve = zcurve(ax, z, WHITE, 3, closed=True)
         cols = {0: GREY_B, 1: C.SEQ, 2: C.MEASURE}
         dots = VGroup(*[Dot(ax.c2p(p.real, p.imag), radius=0.07, color=cols[int(k)]) for p, k in zip(pts, w)])
-        nums = VGroup(*[MathTex(str(int(k)), font_size=22, color=cols[int(k)]).next_to(ax.c2p(p.real, p.imag), UR,
-                                                                                       buff=0.09)
+        zz0 = np.asarray(z)
+
+        def away(p):  # the unit direction from the nearest point of the curve to p: labels never sit on the curve
+            q = complex(p) - zz0[np.argmin(np.abs(zz0 - complex(p)))]
+            return np.array([q.real, q.imag, 0]) / abs(q)
+
+        nums = VGroup(*[MathTex(str(int(k)), font_size=22, color=cols[int(k)]).next_to(ax.c2p(p.real, p.imag), away(p),
+                                                                                       buff=0.1)
                         for p, k in zip(pts, w)])
         # one point, the turning arrow
         a = complex(pts[list(w).index(2)])
@@ -103,6 +110,8 @@ class Integration(VoiceoverScene):
                           Dot(ax.c2p(zz[i].real, zz[i].imag), radius=0.07, color=C.EPS))
 
         arr = always_redraw(arrow)
+        a_d = VGroup(Dot(ax.c2p(a.real, a.imag), radius=0.07, color=C.EPS),
+                     MathTex(r"a", font_size=26, color=C.EPS).next_to(ax.c2p(a.real, a.imag), away(a), buff=0.12))
         turn = always_redraw(lambda: MathTex(
             rf"\text{{turned: }} {(ang[int(tT.get_value() * (len(zz) - 1))] - ang[0]) / (2 * np.pi):.2f} \text{{ turns}}",
             font_size=28, color=C.EPS).move_to([3.4, 1.6, 0]))
@@ -131,10 +140,10 @@ class Integration(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax), Create(curve), FadeIn(side[0]))
             vo.wait_until("b")
-            self.add(arr, turn)
+            self.play(FadeIn(a_d), FadeIn(arr), FadeIn(turn), run_time=0.6)
             self.play(tT.animate.set_value(1.0), run_time=5.0, rate_func=linear)
             vo.wait_until("c")
-            self.remove(arr, turn)
+            self.play(FadeOut(arr), FadeOut(turn), FadeOut(a_d), run_time=0.5)
             arr.clear_updaters()
             turn.clear_updaters()
             self.play(LaggedStart(*[AnimationGroup(FadeIn(dt), FadeIn(n_)) for dt, n_ in zip(dots, nums)],
@@ -175,15 +184,11 @@ class Integration(VoiceoverScene):
             label(r"while bisection keeps \ $|\oint_{\Delta_n} f| \ge 4^{-n}|\oint_\Delta f|$:", font_size=22, color=GREY_A),
             label(r"so $\oint_\Delta f = 0$", font_size=26, color=C.EPS),
             label(r"$\bar z$ is not holomorphic: \ its ratio never drops", font_size=22, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.8, 0])
-        for r_ in side:
-            if r_.width > 5.3:
-                r_.width = 5.3
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0, -0.8, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([0, -0.8, 0])
         side.align_to(np.array([tab.get_right()[0] + 0.45, 0, 0]), LEFT)
         tri = VGroup(*polys)
         assert tri.get_left()[0] > -6.95 and tri.get_right()[0] < tab.get_left()[0] - 0.3
-        assert side.get_right()[0] < 6.95 and side.get_left()[0] > tab.get_right()[0] + 0.3
+        assert side.get_right()[0] <= 6.6 and side.get_left()[0] > tab.get_right()[0] + 0.3
         assert np.all(np.diff(eps) < 0) and np.allclose(ratio_bad, ratio_bad[0], rtol=1e-6)
         head = VGroup(label(r"\textbf{RCA 10.13} \ (Cauchy--Goursat) \ $\oint_{\partial\Delta} f\,dz = 0$ \ for $f$ "
                             r"holomorphic on a triangle", font_size=28),

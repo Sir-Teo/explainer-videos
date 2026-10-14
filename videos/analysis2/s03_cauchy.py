@@ -41,13 +41,13 @@ class Cauchy(VoiceoverScene):
         series = MathTex(r"s_n = 1 - \tfrac12 + \tfrac13 - \cdots \pm \tfrac1n", font_size=34, color=C.SEQ)
         series.move_to([3.6, 1.55, 0])
         q = label(r"It converges (to $\ln 2$). \ But how would we know, without knowing $\ln 2$?", font_size=30)
-        q.to_edge(UP, buff=0.45)
+        q.to_edge(UP, buff=0.3)
         dfn = MathTex(r"\forall \varepsilon > 0", r"\;\exists N", r":\;", r"n, m \ge N", r"\Rightarrow",
                       r"d(p_n, p_m) < \varepsilon", font_size=40)
         dfn[0].set_color(C.EPS)
         dfn[1].set_color(C.DELTA)
         dfn_l = label(r"\textbf{Cauchy sequence} (Rudin 3.8):", font_size=30)
-        dgrp = VGroup(dfn_l, dfn).arrange(RIGHT, buff=0.3).to_edge(UP, buff=0.45)
+        dgrp = VGroup(dfn_l, dfn).arrange(RIGHT, buff=0.3).to_edge(UP, buff=0.3)
         nolim = label(r"no limit appears: \ only the terms, compared with each other", font_size=26, color=GREY_A)
         nolim.next_to(dgrp, DOWN, buff=0.15)
         with self.voiceover(
@@ -222,7 +222,7 @@ class Cauchy(VoiceoverScene):
         marks = VGroup(*[mark(v) for v in vals])
         hole = win.marker(SQRT2, color=C.HOLE, radius=0.11, dy=0.3, hollow=True)
         head = MathTex(r"1,\ \tfrac32,\ \tfrac75,\ \tfrac{17}{12},\ \tfrac{41}{29},\ \tfrac{99}{70},\ \ldots",
-                       font_size=40, color=C.SEQ).to_edge(UP, buff=0.4)
+                       font_size=40, color=C.SEQ).to_edge(UP, buff=0.3)
         rule = label(r"$\dfrac{p}{q} \mapsto \dfrac{p + 2q}{p + q}$ \ (the convergents of $\sqrt2$; \ all rational)",
                      font_size=26, color=GREY_A).next_to(head, DOWN, buff=0.15)
 
@@ -464,7 +464,7 @@ class Cauchy(VoiceoverScene):
         board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=n_max, n_max=n_max)  # no dot judged yet
         dots = board.dots()
         thm = label(r"\textbf{Rudin 3.14} \ A monotone, bounded sequence converges: \ to its supremum.", font_size=30)
-        thm.to_edge(UP, buff=0.45)
+        thm.to_edge(UP, buff=0.3)
         ex = MathTex(r"s_n = \big(1 + \tfrac1n\big)^n", font_size=36, color=C.SEQ).move_to([-4.4, 2.45, 0])
         ex2 = label(r"increasing, and always below 3 \ (Rudin 3.30--3.31)", font_size=24, color=GREY_A)
         ex2.next_to(ex, DOWN, buff=0.12).align_to(ex, LEFT)
