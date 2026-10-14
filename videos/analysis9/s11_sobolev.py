@@ -27,17 +27,19 @@ class Sobolev(VoiceoverScene):
         d = load("decay")
         t, box, tri, bmp = d["t"], d["box"], d["tri"], d["bump"]
         lt = np.log10(t)
+        # the x-axis is the top edge of the plot (y <= 0): its numbers go above it, out of the curves' way
         ax = plain_axes([0, 2.4, 0.5], [-8, 0, 2], 6.4, 4.2, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([2.6, -0.2, 0])
-        xl = MathTex(r"\log_{10} t", font_size=22).next_to(ax.c2p(2.4, 0), UR, buff=0.08)
-        yl = MathTex(r"\log_{10} |\hat f|", font_size=22).next_to(ax.y_axis, UP, buff=0.1)
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}, "label_direction": UP},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([2.3, -0.3, 0])
+        xl = MathTex(r"\log_{10} t", font_size=22).next_to(ax.c2p(2.4, 0), RIGHT, buff=0.15)
+        # the curves are running maxima over [t, 2t] (compute_decay), hence the staircases
+        yl = MathTex(r"\log_{10} \max_{[t, 2t]} |\hat f|", font_size=22).next_to(ax.y_axis, UP, buff=0.4)
         cols = [C.PATHOLOGY, C.APPROX, C.TEST_FN]
         curves = [polyline(ax, lt, np.log10(v), color=c, stroke_width=4) for v, c in zip((box, tri, bmp), cols)]
         tags = VGroup(
             MathTex(r"\sim 1/t", font_size=24, color=cols[0]).next_to(ax.c2p(2.4, math.log10(box[-1])), RIGHT, buff=0.1),
             MathTex(r"\sim 1/t^2", font_size=24, color=cols[1]).next_to(ax.c2p(2.4, math.log10(tri[-1])), RIGHT, buff=0.1),
-            MathTex(r"\text{faster than } t^{-N}", font_size=24, color=cols[2]).next_to(ax.c2p(2.0, -7.2), RIGHT, buff=0.1),
+            MathTex(r"\text{faster than } t^{-N}", font_size=24, color=cols[2]).next_to(ax.c2p(1.75, -6.5), LEFT, buff=0.1),
         )
         slopes = [np.polyfit(lt[200:], np.log10(v[200:]), 1)[0] for v in (box, tri)]
         assert abs(slopes[0] + 1) < 0.08 and abs(slopes[1] + 2) < 0.08 and bmp[-1] < 1e-6  # running maxima wobble
@@ -60,7 +62,8 @@ class Sobolev(VoiceoverScene):
             small.add(VGroup(a, g, n_, h_))
         norm = MathTex(r"\|f\|_{H^s}^2 = \int (1 + t^2)^s\, |\hat f(t)|^2\, dt", font_size=30, color=C.EPS).to_edge(
             UP, buff=0.95).shift(RIGHT * 2.6)
-        head = label(r"Smoothness, \ read off the transform", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Smoothness, \ read off the transform", font_size=34).to_edge(UP, buff=0.3)
+        assert norm.get_bottom()[1] > yl.get_top()[1] + 0.05 or norm.get_left()[0] > yl.get_right()[0] + 0.1
         with self.voiceover(
             "<bookmark mark='a'/> Differentiating multiplies the transform by i t, so smoothness in space is decay in "
             "frequency. On a log-log plot: <bookmark mark='b'/> a box, which jumps, has a transform decaying like one "
@@ -71,11 +74,13 @@ class Sobolev(VoiceoverScene):
             "And s needn't be a whole number."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), *[m_ for k in range(3) for m_ in (Create(small[k][0]), Create(small[k][1]),
+                                                                     FadeIn(small[k][2]))], run_time=1.5)
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl))  # the three smoothness levels shown while the idea is stated
             for k, mk in enumerate(("b", "c", "d")):
                 vo.wait_until(mk)
-                self.play(Create(small[k][0]), Create(small[k][1]), FadeIn(small[k][2]), Create(curves[k]),
-                          FadeIn(tags[k]), run_time=1.5)
+                self.play(Indicate(small[k][2], color=cols[k], scale_factor=1.1), Create(curves[k]), FadeIn(tags[k]),
+                          run_time=1.5)
             vo.wait_until("e")
             self.play(Write(norm))
             self.play(LaggedStart(*[FadeIn(s_[3]) for s_ in small], lag_ratio=0.4), run_time=2.0)
@@ -86,8 +91,8 @@ class Sobolev(VoiceoverScene):
     def lemma(self):
         ax = plain_axes([0, 6, 1], [0, 40, 10], 5.6, 3.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.5, 0.5, 0])
-        xl = MathTex(r"\log_{10} T", font_size=22).next_to(ax.x_axis, DOWN, buff=0.35)
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, 1.0, 0])
+        xl = MathTex(r"\log_{10} T", font_size=22).next_to(ax.x_axis, RIGHT, buff=0.15)
         ss = [0.4, 0.5, 0.6]
         cols = [C.PATHOLOGY, C.EPS, C.TEST_FN]
 
@@ -109,14 +114,15 @@ class Sobolev(VoiceoverScene):
             return VGroup(*[runs(ax, Lg[m], vals[s][m], c, 3.5) for s, c in zip(ss, cols)])
 
         gr = always_redraw(pics)
-        rd = VGroup(*[VGroup(MathTex(rf"s = {s}: \ \int_{{-T}}^{{T}}(1 + t^2)^{{-s}}dt =", font_size=24, color=c),
-                             DecimalNumber(partial(s, 1.0), num_decimal_places=3, font_size=24, color=c)).arrange(
-            RIGHT, buff=0.15) for s, c in zip(ss, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN,
-                                                                                                    buff=0.6)
+        rd = VGroup(*[VGroup(MathTex(rf"s = {s}: \ \int_{{-T}}^{{T}}(1 + t^2)^{{-s}}dt =", font_size=22, color=c),
+                             DecimalNumber(partial(s, 1.0), num_decimal_places=3, font_size=22, color=c)).arrange(
+            RIGHT, buff=0.15) for s, c in zip(ss, cols)]).arrange(DOWN, aligned_edge=LEFT, buff=0.05).next_to(ax, DOWN,
+                                                                                                     buff=0.3)
+        assert rd.get_bottom()[1] >= -3.6
         for row, s in zip(rd, ss):  # numbers, not new TeX, on every frame
             row[1].add_updater(lambda m, s=s: m.set_value(partial(s, 10 ** LT.get_value())))
         lim = DashedLine(ax.c2p(0, lim6), ax.c2p(6, lim6), color=C.TEST_FN, stroke_width=2)
-        liml = MathTex(rf"\sqrt\pi\,\Gamma(0.1)/\Gamma(0.6) = {lim6:.3f}", font_size=20, color=C.TEST_FN).next_to(
+        liml = MathTex(rf"\sqrt\pi\,\Gamma(0.1)/\Gamma(0.6) = {lim6:.3f}", font_size=22, color=C.TEST_FN).next_to(
             ax.c2p(5.9, lim6), UP, buff=0.08).align_to(ax.c2p(5.9, 0), RIGHT)
         lad = VGroup(
             MathTex(r"|f(x)| \le \tfrac{1}{\sqrt{2\pi}}\int |\hat f(t)|\,dt", font_size=28),
@@ -133,20 +139,22 @@ class Sobolev(VoiceoverScene):
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
+            if r_.width > 6.0:
+                r_.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(why, DOWN, buff=0.3)
-        if rows.get_right()[0] > 6.9:
-            rows.shift((6.9 - rows.get_right()[0]) * RIGHT)
+        if rows.get_right()[0] > 6.5:
+            rows.shift((6.5 - rows.get_right()[0]) * RIGHT)
         # 'a': the inversion bound on an example where it is attained: f = e^{-|x|}, |f^| = sqrt(2/pi)/(1 + t^2),
         # and (1/sqrt(2 pi)) int |f^| = 1 = f(0) = max |f|
         tq = np.linspace(-400, 400, 800001)
         fh_q = math.sqrt(2 / math.pi) / (1 + tq * tq)
         bnd = float(np.sum((fh_q[1:] + fh_q[:-1]) * np.diff(tq)) / 2) / math.sqrt(2 * math.pi)
         assert abs(bnd + 2 * math.sqrt(2 / math.pi) / 400 / math.sqrt(2 * math.pi) - 1) < 1e-6  # tail past 400: ~2/(400)
+        # x numbered; no y numbers on the central axis, where all the curves peak: the peak height 1 labelled beside it
         wax = plain_axes([-10, 10, 5], [0, 1.1, 0.5], 5.6, 3.0, numbers=True, font_size=18,
                          x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to(ax.get_center())
+                         y_axis_config={"include_numbers": False}).move_to(ax.get_center())
+        one_w = MathTex(r"1", font_size=20).next_to(wax.c2p(0, 1), UR, buff=0.08)
         tw = np.linspace(-10, 10, 801)
         fh_w = math.sqrt(2 / math.pi) / (1 + tw * tw)
         apic = VGroup(area_under(wax, tw, fh_w, C.FREQ, 0.35), polyline(wax, tw, fh_w, color=C.FREQ, stroke_width=3.5),
@@ -154,7 +162,10 @@ class Sobolev(VoiceoverScene):
                               color=C.FREQ).next_to(wax, UP, buff=0.1))
         # 'b': the weights (1 + t^2)^{-s} for s = 0.4, 0.5, 0.6: whose tails have finite area?
         wpic = VGroup(*[polyline(wax, tw, (1 + tw * tw) ** (-s_), color=c_, stroke_width=3.5) for s_, c_ in zip(ss, cols)],
-                      MathTex(r"\text{the weight } (1 + t^2)^{-s}, \ s = 0.4, \ 0.5, \ 0.6", font_size=24).next_to(wax, UP, buff=0.1))
+                      MathTex(r"\text{the weight } (1 + t^2)^{-s}, \ s =", r"0.4", r",\ ", r"0.5", r",\ ", r"0.6",
+                              font_size=24).next_to(wax, UP, buff=0.1))
+        for j, c_ in zip((1, 3, 5), cols):  # each s coloured like its curve: the key
+            wpic[3][j].set_color(c_)
         head = label(r"Sobolev's lemma, \ in three lines", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> When does a finite Sobolev norm force a function to be continuous? The inversion "
@@ -167,14 +178,14 @@ class Sobolev(VoiceoverScene):
             "Sobolev derivative buys one more continuous derivative."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(lad[0]), Create(wax))
+            self.play(FadeIn(head), FadeIn(lad[0]), Create(wax), FadeIn(one_w))
             self.play(Create(apic[1]), FadeIn(apic[0]), FadeIn(apic[2]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(lad[1]), FadeOut(apic), LaggedStart(*[Create(g_) for g_ in wpic[:3]], lag_ratio=0.3),
                       FadeIn(wpic[3]), run_time=2.0)
             self.play(FadeIn(lad[2]), FadeIn(why))
             vo.wait_until("c")
-            self.play(FadeOut(VGroup(wax, wpic)), run_time=0.6)
+            self.play(FadeOut(VGroup(wax, wpic, one_w)), run_time=0.6)
             self.play(Create(ax), FadeIn(xl), FadeIn(rd))
             self.add(gr)
             self.play(LT.animate.set_value(6.0), run_time=5.0, rate_func=linear)
@@ -220,12 +231,13 @@ class Sobolev(VoiceoverScene):
                   color=C.EPS),
             label(r"at $s = \tfrac12$ each decade adds $\log 10 = 2.3026$: \ a logarithm", font_size=22, color=GREY_A),
             label(r"sharp: \ $s > \tfrac12$ would make it continuous, \ and it jumps", font_size=24, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        for r_ in rows:
+            if r_.width > 5.4:
+                r_.width = 5.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.35).align_to(tab, LEFT)
         x_free = max(t_.get_right()[0] for t_ in tags) + 0.25  # clear of the curve tags
-        if rows.get_left()[0] < x_free:
-            if rows.width > 6.9 - x_free:
-                rows.width = 6.9 - x_free
-            rows.shift((x_free - rows.get_left()[0]) * RIGHT)
+        assert rows.get_left()[0] >= x_free and rows.get_right()[0] <= 6.6
         head = label(r"The sawtooth sits exactly at $s = \tfrac12$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The Fourier thread once more. The sawtooth's coefficients are one over n, so its "
@@ -235,11 +247,13 @@ class Sobolev(VoiceoverScene):
             "exactly for s below one half. And that's sharp, because above one half, Sobolev's lemma would make it "
             "continuous, and it jumps."
         ) as vo:
+            half = [i for i, s_ in enumerate(ss) if abs(s_ - 0.5) < 1e-9][0]  # the s = 1/2 the heading is about
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(top), FadeIn(rows[0]))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(top), FadeIn(rows[0]), Create(curves[half]),
+                      FadeIn(tags[half]), run_time=1.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(c_) for c_ in curves], lag_ratio=0.3), run_time=3.0)
-            self.play(LaggedStart(*[FadeIn(t_) for t_ in tags], lag_ratio=0.2), FadeIn(tab))
+            self.play(LaggedStart(*[Create(c_) for i, c_ in enumerate(curves) if i != half], lag_ratio=0.3), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(t_) for i, t_ in enumerate(tags) if i != half], lag_ratio=0.2), FadeIn(tab))
             vo.wait_until("c")
             self.play(FadeIn(rows[1:3]))
             self.play(FadeIn(rows[3]))

@@ -24,20 +24,61 @@ class Structure(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def support(self):
+        from videos.analysis9.common import bump
         line = NumberLine(x_range=[-2, 2, 0.5], length=11, include_numbers=True, font_size=22,
                           decimal_number_config={"num_decimal_places": 1}).move_to([0, 0.6, 0])
-        f_reg = Rectangle(width=line.n2p(1.6)[0] - line.n2p(0.8)[0], height=0.5, stroke_width=0, fill_color=C.FUNC,
-                          fill_opacity=0.4).move_to([(line.n2p(0.8)[0] + line.n2p(1.6)[0]) / 2, 0.85, 0])  # sits on the line
-        d_pt = VGroup(Arrow(line.n2p(-0.9) + DOWN * 0.0, line.n2p(-0.9) + UP * 1.3, buff=0, color=C.DISTRIBUTION,
+        y0 = line.n2p(0)[1]  # the axis itself (move_to centred the line together with its numbers)
+
+        def X(v):
+            return line.n2p(v)[0]
+
+        f_reg = Rectangle(width=X(1.6) - X(0.8), height=0.5, stroke_width=0, fill_color=C.FUNC,
+                          fill_opacity=0.4).move_to([(X(0.8) + X(1.6)) / 2, y0 + 0.25, 0])  # sits on the axis
+        d_pt = VGroup(Arrow([X(-0.9), y0, 0], [X(-0.9), y0 + 1.3, 0], buff=0, color=C.DISTRIBUTION,
                             stroke_width=5, tip_length=0.18),
-                      MathTex(r"\delta'_{-0.9}", font_size=26, color=C.DISTRIBUTION).next_to(line.n2p(-0.9) + UP * 1.3, UP,
+                      MathTex(r"\delta'_{-0.9}", font_size=26, color=C.DISTRIBUTION).next_to([X(-0.9), y0 + 1.3, 0], UP,
                                                                                           buff=0.05))
-        f_l = MathTex(r"f = \mathbf 1_{[0.8, 1.6]}", font_size=26, color=C.FUNC).next_to(f_reg, UP, buff=0.15)
-        supp = VGroup(Line(line.n2p(-0.9) + DOWN * 0.45, line.n2p(-0.9) + DOWN * 0.45, color=C.EPS, stroke_width=8),
-                      Dot(line.n2p(-0.9) + DOWN * 0.45, radius=0.08, color=C.EPS),
-                      Line(line.n2p(0.8) + DOWN * 0.45, line.n2p(1.6) + DOWN * 0.45, color=C.EPS, stroke_width=8))
+        f_l = MathTex(r"f = \mathbf 1_{[0.8, 1.6]}", font_size=26, color=C.FUNC).next_to(f_reg, UP, buff=0.6)  # over phi
+        # the support, marked on the axis itself (clear of the numbers under it)
+        supp = VGroup(Dot([X(-0.9), y0, 0], radius=0.1, color=C.EPS),
+                      Line([X(0.8), y0, 0], [X(1.6), y0, 0], color=C.EPS, stroke_width=9))
         s_l = label(r"support of $T = \delta'_{-0.9} + f$: \ $\{-0.9\} \cup [0.8, 1.6]$", font_size=24, color=C.EPS).next_to(
-            line, DOWN, buff=0.8)
+            line, DOWN, buff=0.5)
+        # a test function slid along the line: <T, phi_c> = -phi_c'(-0.9) + int_0.8^1.6 phi_c, zero while phi_c lives in
+        # the gap (-0.9, 0.8) where T vanishes
+        w = 0.35
+        xg = np.linspace(-2, 2, 2001)
+        cT = ValueTracker(0.0)
+
+        def phi_c(v, c):
+            return bump((np.asarray(v, float) - c) / w) * math.e  # peak 1
+
+        def dphi_c(v, c):
+            u = (v - c) / w
+            return 0.0 if abs(u) >= 1 else math.exp(-1 / (1 - u * u)) * math.e * (-2 * u / (1 - u * u) ** 2) / w
+
+        xi = np.linspace(0.8, 1.6, 4001)
+
+        def act(c):
+            yv = phi_c(xi, c)
+            return -dphi_c(-0.9, c) + float(np.sum((yv[1:] + yv[:-1]) * np.diff(xi)) / 2)
+
+        assert act(0.0) == 0.0 and act(1.2) > 0.4  # in the gap: exactly 0; over the block: its area
+        h_ = 1e-6
+        assert abs(dphi_c(-0.9, -0.7) - (phi_c(-0.9 + h_, -0.7) - phi_c(-0.9 - h_, -0.7)) / (2 * h_)) < 1e-6
+
+        def phi_pts():
+            c = cT.get_value()
+            m = np.abs(xg - c) <= w
+            return VMobject(color=C.TEST_FN, stroke_width=4).set_points_as_corners(
+                np.array([[X(v), y0 + 0.9 * yv, 0] for v, yv in zip(xg[m], phi_c(xg[m], c))]))
+
+        phi_g = always_redraw(phi_pts)
+        rd = VGroup(MathTex(r"\langle T,", r"\varphi", r"\rangle =", font_size=30),
+                    DecimalNumber(0.0, num_decimal_places=3, font_size=30, color=C.EPS)).arrange(RIGHT, buff=0.15)
+        rd[0][1].set_color(C.TEST_FN)  # phi: the green bump
+        rd.move_to([-4.3, y0 + 2.0, 0])
+        rd[1].add_updater(lambda m: m.set_value(act(cT.get_value())))
         rows = VGroup(
             label(r"\textbf{FA 6.20} \ $T$ vanishes on an open set $\omega$ if $\langle T, \varphi\rangle = 0$ whenever "
                   r"$\operatorname{supp}\varphi \subset \omega$", font_size=22),
@@ -46,7 +87,7 @@ class Structure(VoiceoverScene):
                   r"\partial^\alpha\delta$", font_size=24, color=C.EPS),
             label(r"\textbf{FA 6.24} \ compactly supported distributions are exactly the dual of $C^\infty$", font_size=22,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         head = label(r"Where a distribution lives", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A distribution vanishes on an open set if it gives zero on every test function "
@@ -56,12 +97,18 @@ class Structure(VoiceoverScene):
             "finite combination of delta and its derivatives. There's nothing else that small."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(line), FadeIn(rows[:2]))
+            self.play(FadeIn(head), Create(line), GrowArrow(d_pt[0]), FadeIn(d_pt[1]), FadeIn(f_reg), FadeIn(f_l),
+                      FadeIn(rows[0]))
+            self.play(FadeIn(phi_g), FadeIn(rd))
+            self.play(cT.animate.set_value(1.2), run_time=2.0)  # over the block: T acts
+            self.play(cT.animate.set_value(-0.7), FadeIn(rows[1]), run_time=2.2)  # over the point: delta' reads the slope
+            self.play(cT.animate.set_value(0.0), run_time=1.5)  # back in the gap: 0
             vo.wait_until("b")
-            self.play(GrowArrow(d_pt[0]), FadeIn(d_pt[1]), FadeIn(f_reg), FadeIn(f_l))
             self.play(FadeIn(supp), FadeIn(s_l))
             vo.wait_until("c")
             self.play(FadeIn(rows[2:]))
+        for m_ in (phi_g, rd[1]):
+            m_.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -69,9 +116,10 @@ class Structure(VoiceoverScene):
     def local(self):
         d = load("structure")
         x, F, lhs, rhs = d["x"], d["F"], float(d["lhs"]), float(d["rhs"])
+        # x numbered (the narration places the singularities at 0.3 and -0.4); no y numbers: the arrows carry no height
         ax = plain_axes([-3, 3, 1], [-0.2, 3.2, 1], 6.2, 3.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.6, 0])
+                        y_axis_config={"include_numbers": False}).move_to([-3.2, -0.6, 0])
         g = runs(ax, x, F, C.FUNC, 3.5)  # cut where it leaves the window (clamping would draw a false plateau)
         kinks = VGroup(*[Dot(ax.c2p(a, float(np.interp(a, x, F))), radius=0.06, color=C.EPS) for a in (-0.4, 0.3, 1.0)])
         f_l = MathTex(r"F(x) = (x - 0.3)_+ + \tfrac{2}{3!}(x + 0.4)_+^3 + \tfrac{1}{5!}(x - 1)_+^5", font_size=24,
@@ -125,8 +173,8 @@ class Structure(VoiceoverScene):
         stages = [stage(k) for k in range(6)]
         slabs = [MathTex(r"F" + ("" if k == 0 else rf"^{{({k})}}"), font_size=30, color=C.DISTRIBUTION).move_to(
             ax.c2p(-2.4, 2.7)) for k in range(6)]
-        head = label(r"Every distribution is locally a derivative of a continuous function", font_size=32).to_edge(UP,
-                                                                                                              buff=0.25)
+        head = label(r"Every distribution is locally a derivative of a continuous function", font_size=34).to_edge(UP,
+                                                                                                              buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's the deepest structure theorem. Take this continuous function F, with a few "
             "kinks. <bookmark mark='b'/> Differentiate it five times, as a distribution. Each kink sharpens step by "
