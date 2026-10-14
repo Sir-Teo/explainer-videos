@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import endpoint, load
+from videos.analysis1.common import dim, endpoint, load, recolor
 from videos.analysis1.s07_open_closed import blob_pts, nbhd
 
 
@@ -35,17 +35,18 @@ class Compact(VoiceoverScene):
     def finite(self):
         vals = [0.6, 1.4, 0.9, 2.1, 1.2, 0.4]
         xs = np.linspace(-5.6, -1.4, len(vals))
+        y0 = -0.7  # both pictures stand on this line; the quote goes under them
         bars = VGroup(*[Rectangle(width=0.45, height=v, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.7)
-                        .move_to([x, -1.5 + v / 2, 0]) for x, v in zip(xs, vals)])
+                        .move_to([x, y0 + v / 2, 0]) for x, v in zip(xs, vals)])
         top = bars[3].copy().set_fill(C.EPS, 0.9)
         l1 = label(r"a function on a finite set\\has a largest value", font_size=28).next_to(bars, UP, buff=0.5)
         seq_vals = [0, 2, 1, 2, 0, 2, 2, 1, 2, 0, 2, 2]
-        pts = VGroup(*[Dot([1.0 + 0.45 * i, -1.5 + 0.8 * v, 0], radius=0.08, color=C.EPS if v == 2 else C.SEQ)
+        pts = VGroup(*[Dot([1.0 + 0.45 * i, y0 + 0.8 * v, 0], radius=0.08, color=C.EPS if v == 2 else C.SEQ)
                        for i, v in enumerate(seq_vals)])
         l2 = label(r"a sequence in a finite set\\repeats some value forever", font_size=28).next_to(pts, UP, buff=0.5)
         dots = MathTex(r"\cdots", font_size=36).next_to(pts, RIGHT, buff=0.2)
         quote = label(r"Compactness: the next best thing to being finite", font_size=32, color=C.COMPACT_SET)
-        quote.to_edge(UP, buff=0.5)
+        quote.move_to([0, -2.4, 0])
         with self.voiceover(
             "Finite sets are pleasant. <bookmark mark='a'/> A function on a finite set always has a largest value: just "
             "check them all. <bookmark mark='b'/> And a sequence that stays inside a finite set has to repeat some value "
@@ -93,6 +94,13 @@ class Compact(VoiceoverScene):
         dy = 0.32
         bars = {i: cover_bar(max(a[i], -0.03), min(b[i], 1.03), base_y + 0.45 + dy * ypos[i], X) for i in range(len(a))}
         all_bars = VGroup(*[bars[i] for i in range(len(a))])
+        # a first open cover: five open intervals whose union contains [0, 1]; the middle one is not needed
+        small = [(-0.1, 0.35), (0.25, 0.6), (0.3, 0.5), (0.55, 0.8), (0.75, 1.1)]
+        grid_ = np.linspace(0, 1, 2001)
+        assert all(any(a_ < t < b_ for a_, b_ in small) for t in grid_)
+        assert all(any(a_ < t < b_ for j, (a_, b_) in enumerate(small) if j != 2) for t in grid_)
+        first = VGroup(*[cover_bar(max(a_, -0.05), min(b_, 1.05), base_y + 0.5 + 0.38 * (j % 2) + (0.76 if j == 2 else 0),
+                                   X, sw=6) for j, (a_, b_) in enumerate(small)])
         with self.voiceover(
             "Here's the definition. <bookmark mark='c'/> An open cover of a set K is any collection of open sets whose "
             "union contains K. <bookmark mark='k'/> K is compact if every open cover has a finite subcover: finitely "
@@ -102,10 +110,11 @@ class Compact(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(seg), FadeIn(ticks))
             vo.wait_until("c")
-            self.play(FadeIn(defs[0]))
+            self.play(FadeIn(defs[0]), LaggedStart(*[FadeIn(f_, shift=DOWN * 0.2) for f_ in first], lag_ratio=0.2))
             vo.wait_until("k")
-            self.play(FadeIn(defs[1]))
+            self.play(FadeIn(defs[1]), ApplyFunction(lambda m_: dim(m_, 0.15), first[2]))
             vo.wait_until("m")
+            self.play(FadeOut(first), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(bars[i], shift=DOWN * 0.3) for i in np.random.default_rng(1).permutation(len(a))],
                                   lag_ratio=0.03), run_time=3)
         walker = Dot([X(0), base_y, 0], radius=0.11, color=C.EPS)
@@ -120,12 +129,12 @@ class Compact(VoiceoverScene):
             self.play(FadeIn(walker, scale=2))
             for j in chosen:
                 bar = bars[j]
-                self.play(bar.animate.set_color(C.COMPACT_SET), run_time=0.35)
+                self.play(ApplyFunction(lambda m_: recolor(m_, C.COMPACT_SET), bar), run_time=0.35)  # rings stay open
                 picked.add(bar)
                 self.play(walker.animate.move_to([X(min(b[j], 1.0)), base_y, 0]), run_time=0.45)
             vo.wait_until("n")
             rest = VGroup(*[bars[i] for i in range(len(a)) if i not in chosen])
-            self.play(rest.animate.set_opacity(0.12))
+            self.play(ApplyFunction(lambda m_: dim(m_, 0.12), rest))
         assert len(chosen) == 9
         claim = label(r"For $[0, 1]$ this always works. \ Why it can't get stuck is chapter 8.", font_size=28,
                       color=GREY_A).to_edge(UP, buff=1.45)
@@ -142,7 +151,7 @@ class Compact(VoiceoverScene):
         lab = MathTex(r"(0, 1)", font_size=36).next_to(seg, DOWN, buff=0.3)
         cov = MathTex(r"G_n = \Big(\frac1n,\ 1\Big), \quad n = 2, 3, 4, \ldots", font_size=38, color=C.OPEN_SET)
         cov.to_edge(UP, buff=0.5)
-        bars = VGroup(*[cover_bar(1 / n, 1.0, base_y + 0.4 + 0.3 * (n - 2), X) for n in range(2, 16)])
+        bars = VGroup(*[cover_bar(1 / n, 1.0, base_y + 0.4 + 0.22 * (n - 2), X) for n in range(2, 16)])
         with self.voiceover(
             "Not every set lets me win. <bookmark mark='a'/> Cover the open interval from zero to one by the intervals "
             "from one over n up to one. <bookmark mark='b'/> Together they cover everything, since every point x is bigger "
@@ -156,7 +165,8 @@ class Compact(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(b_, shift=DOWN * 0.2) for b_ in bars], lag_ratio=0.12), run_time=2.5)
             vo.wait_until("c")
             keep = VGroup(*bars[:5])
-            self.play(VGroup(*bars[5:]).animate.set_opacity(0.1), keep.animate.set_color(C.COMPACT_SET))
+            self.play(ApplyFunction(lambda m_: dim(m_, 0.1), VGroup(*bars[5:])),
+                      ApplyFunction(lambda m_: recolor(m_, C.COMPACT_SET), keep))
             gap = Line([X(0), base_y, 0], [X(1 / 6), base_y, 0], color=C.PATHOLOGY, stroke_width=11)
             gap_l = label(r"uncovered: $(0, \tfrac16]$", font_size=28, color=C.PATHOLOGY).next_to(gap, DOWN, buff=0.55)
             self.play(Create(gap), FadeIn(gap_l))
@@ -182,11 +192,11 @@ class Compact(VoiceoverScene):
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.34)", font_size=28, color=GREY_A),
                       label(r"Compact subsets of a metric space are closed.", font_size=32)).arrange(DOWN, buff=0.12)
         stmt.to_edge(UP, buff=0.4)
-        c0 = np.array([-4.3, -0.5, 0])
+        c0 = np.array([-3.6, -0.5, 0])
         pts = blob_pts(c0, scale=0.78)
         K = Polygon(*pts, stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET, fill_opacity=0.25)
         Kl = MathTex(r"K", font_size=38, color=C.COMPACT_SET).move_to(c0 + np.array([-0.35, 0.3, 0]))
-        p = np.array([-1.2, 0.35, 0])
+        p = np.array([-1.0, 0.35, 0])
         pd = Dot(p, radius=0.08, color=WHITE)
         pl = MathTex(r"p", font_size=36).next_to(pd, UR, buff=0.08)
         qs = [c0 + np.array(v) for v in ((0.9, 0.35, 0), (0.55, -0.6, 0), (-0.1, 0.75, 0), (-0.7, -0.35, 0), (0.15, -0.05, 0),
@@ -199,6 +209,7 @@ class Compact(VoiceoverScene):
             V.add(DashedVMobject(Circle(radius=r, color=col, stroke_width=2).move_to(p), num_dashes=40))
             Qd.add(Dot(q, radius=0.06, color=col))
         rmin = min(np.linalg.norm(p - q) for q in qs) / 2
+        assert all(q[0] - np.linalg.norm(p - q) / 2 > -6.6 for q in qs)  # every disk stays inside the frame
         Vmin = nbhd(p, rmin, color=WHITE, fill=0.3, width=3)
         for q in qs:  # each pair of disks is disjoint
             r = np.linalg.norm(p - q) / 2
@@ -258,7 +269,8 @@ class Compact(VoiceoverScene):
         F = Polygon(*blob_pts(cF, scale=0.42, n=200), stroke_color=C.CLOSED_SET, stroke_width=3.5,
                     fill_color=C.CLOSED_SET, fill_opacity=0.3)
         Fl = MathTex(r"F", font_size=30, color=C.CLOSED_SET).move_to(cF + np.array([0.0, 0.05, 0]))
-        Kl1 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c1 + np.array([-1.05, 0.95, 0]))
+        Fl.add_background_rectangle(color=BACKGROUND, opacity=0.75, buff=0.04)
+        Kl1 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c1 + np.array([-1.35, 1.15, 0]))
         bp = blob_pts(cF, scale=0.42, n=8)
         keep = [(cF, 0.45)] + [(q, 0.4) for q in bp]
         rng = np.random.default_rng(7)
@@ -275,7 +287,7 @@ class Compact(VoiceoverScene):
         nested = VGroup(*[Polygon(*blob_pts(c2, scale=0.74 * 0.68 ** k, n=200), stroke_color=C.COMPACT_SET,
                                   stroke_width=2.5, fill_color=C.COMPACT_SET, fill_opacity=0.1) for k in range(7)])
         nlabs = VGroup(*[MathTex(rf"K_{k + 1}", font_size=24, color=C.COMPACT_SET).next_to(
-            blob_pts(c2, scale=0.74 * 0.68 ** k, n=8)[1], UR, buff=0.02) for k in range(2)])
+            blob_pts(c2, scale=0.74 * 0.68 ** k, n=8)[1], UR, buff=0.08) for k in range(2)])
         core = Dot(c2, radius=0.06, color=WHITE)
         core_l = MathTex(r"\bigcap K_n", font_size=24).next_to(core, DOWN, buff=0.35).shift(RIGHT * 0.9)
         core_a = Arrow(core_l.get_left(), c2 + np.array([0.05, -0.05, 0]), buff=0.05, color=WHITE, stroke_width=2,
@@ -293,7 +305,7 @@ class Compact(VoiceoverScene):
         c3 = np.array([xs[2], -0.45, 0])
         K3 = Polygon(*blob_pts(c3, scale=0.82), stroke_color=C.COMPACT_SET, stroke_width=3, fill_color=C.COMPACT_SET,
                      fill_opacity=0.12)
-        Kl3 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c3 + np.array([-1.05, 0.95, 0]))
+        Kl3 = MathTex(r"K", font_size=30, color=C.COMPACT_SET).move_to(c3 + np.array([-1.35, 1.15, 0]))
         pp = c3 + np.array([0.3, -0.15, 0])
         E = VGroup(*[Dot(pp + 1.0 * 0.83 ** k * np.array([np.cos(2.4 * k), np.sin(2.4 * k), 0]), radius=0.045,
                          color=C.SEQ) for k in range(30)])
@@ -317,6 +329,7 @@ class Compact(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(heads[0]), FadeIn(K1), FadeIn(Kl1), FadeIn(F), FadeIn(Fl), Create(seps))
             self.play(LaggedStart(*[FadeIn(d) for d in (*disks_keep, *disks_extra)], lag_ratio=0.12), run_time=2.0)
+            self.bring_to_front(Fl)  # F's name stays readable over the disks
             self.play(FadeIn(Fc), FadeIn(Fcl))
             self.play(disks_extra.animate.set_opacity(0.08), run_time=1.0)
             self.play(FadeOut(Fc), FadeOut(Fcl), run_time=1.0)

@@ -5,7 +5,9 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis5.common import area_under, interval_band, plain_axes, polyline
+from videos.analysis5.common import (area_under, cut_graph, escape_arrow, interval_band, layer_cake, plain_axes,
+                                     polyline, rationals_upto)
+from videos.analysis5.compute import trap
 
 
 class Hook(VoiceoverScene):
@@ -31,7 +33,7 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def dirichlet(self):
-        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 9.0, 3.3).move_to([-1.4, -0.45, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 11.0, 3.4).move_to([0, -0.25, 0])
         x = np.union1d(np.linspace(0, 1, 6001), np.arange(121) / 120)  # include every spike centre k / 5!
 
         def g(m, n):
@@ -40,7 +42,7 @@ class Hook(VoiceoverScene):
         frames = [(1, 1), (1, 6), (1, 60), (2, 60), (3, 60), (3, 400), (4, 400), (5, 2000)]
         curves = [polyline(ax, x, g(m, n), color=C.APPROX, stroke_width=2.5 if n < 100 else 1.4) for m, n in frames]
         labs = [MathTex(rf"\cos(m!\,\pi x)^{{2n}}: \quad m = {m},\ n = {n}", font_size=30, color=C.APPROX)
-                .next_to(ax, UP, buff=0.1) for m, n in frames]
+                .next_to(ax, UP, buff=0.15) for m, n in frames]
         # where the limit in n is 1: x = k / m!
         spikes = {m: [k / math.factorial(m) for k in range(math.factorial(m) + 1)] for m in (1, 2, 3)}
         for m in (1, 2, 3):
@@ -51,8 +53,19 @@ class Hook(VoiceoverScene):
             label(r"each limit in $n$ has integral $0$; \ the double limit has no Riemann integral", font_size=26,
                   color=C.PATHOLOGY),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)
-        head = label(r"Dirichlet's function as a double limit of continuous functions", font_size=32).to_edge(UP,
+        head = label(r"Dirichlet's function as a double limit of continuous functions", font_size=34).to_edge(UP,
                                                                                                          buff=0.3)
+        # the limit D has upper sums 1 and lower sums 0 on every partition: each piece holds a rational (D = 1 there)
+        # and an irrational (D = 0)
+        cuts = np.linspace(0, 1, 13)
+        fr = rationals_upto(40)
+        assert all(any(a_ < p_ / q_ < b_ for p_, q_ in fr) for a_, b_ in zip(cuts[:-1], cuts[1:]))
+        upper = VGroup(Rectangle(width=ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0], height=ax.c2p(0, 1)[1] - ax.c2p(0, 0)[1],
+                                 stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.14).move_to(ax.c2p(0.5, 0.5)),
+                       DashedLine(ax.c2p(0, 1), ax.c2p(1, 1), color=C.PATHOLOGY, stroke_width=2.5))
+        lower = Line(ax.c2p(0, 0), ax.c2p(1, 0), color=C.PATHOLOGY, stroke_width=5)
+        ul = VGroup(MathTex(r"U = 1", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(1, 1), RIGHT, buff=0.15),
+                    MathTex(r"L = 0", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(1, 0), RIGHT, buff=0.15))
         with self.voiceover(
             "<bookmark mark='a'/> Here's a function from Part 3's museum, built as a limit. Take the cosine of m "
             "factorial pi x, raised to the power two n. <bookmark mark='b'/> As n grows, the curve collapses onto "
@@ -77,25 +90,27 @@ class Hook(VoiceoverScene):
                 cur, cl = curves[k], labs[k]
             self.play(FadeIn(side[1]))
             vo.wait_until("d")
-            self.play(FadeIn(side[2]))
+            self.play(FadeIn(side[2]), FadeIn(upper), Create(lower), FadeIn(ul))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def escapes(self):
-        W, H = 3.9, 2.6
-        cx = (-4.55, 0.0, 4.55)
+        W, H = 3.6, 2.6
+        cx = (-4.4, 0.1, 4.6)
         cy = 0.15
-        axs = [plain_axes([0, 4, 1], yr, W, H).move_to([c, cy, 0]) for c, yr in
-               zip(cx, ([0, 8.4, 2], [0, 1.2, 0.5], [0, 1.2, 0.5]))]
+        # y numbered on all three (they share a width, not a height scale): the spike's 8 next to the others' 1
+        axs = [plain_axes([0, 4, 1], yr, W, H, y_axis_config={
+            "include_numbers": True, "numbers_to_include": nums, "font_size": 18,
+            "decimal_number_config": {"num_decimal_places": 0}}).move_to([c, cy, 0]) for c, yr, nums in
+               zip(cx, ([0, 8.4, 2], [0, 1.2, 0.5], [0, 1.2, 0.5]), ([0, 4, 8], [0, 1], [0, 1]))]
         n1, n2, n3 = ValueTracker(1.0), ValueTracker(1.0), ValueTracker(1.0)
         x = np.linspace(0.0005, 4, 4000)
 
         def spike():
             n = n1.get_value()
-            y = np.where(x <= 1 / n, n, 0.0)
-            return VGroup(area_under(axs[0], x, np.minimum(y, 8.4), C.MEASURE, 0.45),
-                          polyline(axs[0], x, np.minimum(y, 8.4), color=C.FUNC, stroke_width=3))
+            y = np.where(x <= 1 / n, n, 0.0)  # n <= 8 stays inside the window (top 8.4)
+            return VGroup(area_under(axs[0], x, y, C.MEASURE, 0.45), polyline(axs[0], x, y, color=C.FUNC, stroke_width=3))
 
         def run():
             n = n2.get_value() - 1
@@ -122,11 +137,14 @@ class Hook(VoiceoverScene):
         head = label(r"Three ways for mass to escape", font_size=34).to_edge(UP, buff=0.3)
         # the envelopes sup_n f_n: none is integrable
         xe = np.linspace(0.02, 4, 800)
-        env1 = np.minimum(np.floor(1 / xe), 8.4)  # sup_n n 1_(0, 1/n](x) = floor(1/x)
+        env1 = np.floor(1 / xe)  # sup_n n 1_(0, 1/n](x) = floor(1/x): unbounded, cut where it leaves the window
         env2 = np.ones_like(xe)
         env3 = 1 / np.maximum(np.ceil(xe), 1)
-        envs = VGroup(*[polyline(a, xe, e, color=C.EPS, stroke_width=3).set_stroke(opacity=0.9) for a, e in
-                        zip(axs, (env1, env2, env3))])
+        e1 = cut_graph(axs[0], xe, env1, C.EPS, 3)
+        assert len(e1) == 1 and e1[0].get_top()[1] <= axs[0].c2p(0, 8.4)[1] + 1e-6
+        envs = VGroup(e1[0], *[polyline(a, xe, e, color=C.EPS, stroke_width=3) for a, e in zip(axs[1:], (env2, env3))])
+        envs.set_stroke(opacity=0.9)
+        up1 = escape_arrow(axs[0], 1 / 9, C.EPS)  # floor(1/x) >= 9 > 8.4 for x <= 1/9
         lid = label(r"a lid $g \ge |f_n|$ for all $n$ \ (yellow: the smallest) \ has $\int g = \infty$ in all three",
                     font_size=26, color=C.EPS).to_edge(DOWN, buff=0.3)
         # floor(1/x) >= 1/x - 1, whose integral diverges; 1 on [0, inf) diverges; 1/ceil(x) >= 1/(x + 1) diverges
@@ -143,7 +161,7 @@ class Hook(VoiceoverScene):
                     n = (n2 if i == 1 else n3).get_value()
                     y = np.ones_like(xe) if i == 1 else np.maximum(1 / np.maximum(np.ceil(xe), 1), 1 / n)
                     m = xe <= n
-                return polyline(axs[i], xe[m], np.minimum(y[m], 8.4), color=C.EPS, stroke_width=3)
+                return polyline(axs[i], xe[m], y[m], color=C.EPS, stroke_width=3)  # at most max(n, 1) <= 8
             return always_redraw(f_)
         with self.voiceover(
             "<bookmark mark='a'/> The theme of this part is mass escaping. Here are three sequences of functions, each "
@@ -171,7 +189,8 @@ class Hook(VoiceoverScene):
                       rate_func=linear)
             for l_ in lids:
                 l_.clear_updaters()
-            self.play(*[ReplacementTransform(l_, e_) for l_, e_ in zip(lids, envs)], FadeIn(lid), run_time=1.2)
+            self.play(*[ReplacementTransform(l_, e_) for l_, e_ in zip(lids, envs)], GrowArrow(up1), FadeIn(lid),
+                      run_time=1.2)
         for m in (g1, g2, g3):
             m.clear_updaters()
         self.wait(0.3)
@@ -190,43 +209,30 @@ class Hook(VoiceoverScene):
         vstrips = VGroup(*[Rectangle(width=ax.c2p(b, 0)[0] - ax.c2p(a, 0)[0], height=ax.c2p(0, h)[1] - ax.c2p(0, 0)[1],
                                      stroke_color=C.FUNC, stroke_width=1.2, fill_color=C.FUNC, fill_opacity=0.35)
                            .move_to(ax.c2p((a + b) / 2, h / 2)) for a, b, h in zip(edges[:-1], edges[1:], hts)])
-        levels = np.arange(0.1, 1.05, 0.1)
-        hbands = VGroup()
-        sets = VGroup()
-        cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.MEASURE), k / len(levels)) for k in range(len(levels))]
-        for k, t in enumerate(levels):
-            on = f > t
-            runs_, start = [], None
-            for i in range(len(x) + 1):
-                o = i < len(x) and on[i]
-                if o and start is None:
-                    start = i
-                elif not o and start is not None:
-                    runs_.append((x[start], x[i - 1]))
-                    start = None
-            band = VGroup(*[Rectangle(width=bx.c2p(b, 0)[0] - bx.c2p(a, 0)[0], height=bx.c2p(0, 0.1)[1] - bx.c2p(0, 0)[1],
-                                      stroke_width=0, fill_color=cols[k], fill_opacity=0.55)
-                            .move_to(bx.c2p((a + b) / 2, t - 0.05)) for a, b in runs_])
-            hbands.add(band)
-            sets.add(interval_band(bx, runs_, bx.c2p(0, 0)[1] - 0.35 - 0.11 * k, cols[k], height=0.07))
+        # layers 0.1 thick centred on the levels t = 0, 0.1, ..., 0.8 (the first one cut at 0), each over its level set
+        # {f > t}: midpoint slicing, so the layers hug the graph (f > 0.37 everywhere, so the lowest four are full)
+        hbands = layer_cake(bx, x, f, 0.1, t0=-0.05, n=9)
+        assert abs(hbands.area - trap(f, x)) < 0.005 * trap(f, x)
+        sets = VGroup(*[interval_band(bx, rr, bx.c2p(0, 0)[1] - 0.35 - 0.11 * k, c_, height=0.07)
+                        for k, (rr, c_) in enumerate(zip(hbands.runs, hbands.cols))])
         tl = VGroup(label(r"Riemann: \ slice the domain", font_size=26).next_to(ax, UP, buff=0.12),
                     label(r"Lebesgue: \ slice the range", font_size=26).next_to(bx, UP, buff=0.12))
         quote = label(r"``I have to pay a certain sum; I count the coins by value'' \ (Lebesgue, 1926)", font_size=24,
-                      color=GREY_A).to_edge(UP, buff=0.25)
+                      color=GREY_A).to_edge(UP, buff=0.3)
         honest = VGroup(label(r"the honest difference: \ each slice needs the length of $\{x : f(x) > t\}$,", font_size=26),
                         label(r"which can be any set at all \ (for Dirichlet's function: \ the rationals)", font_size=26,
-                              color=C.EPS)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.15)
+                              color=C.PATHOLOGY)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.35)
         # Dirichlet's level set {D > 1/2} = Q in [0, 1], drawn as ticks of height 1/q (q <= 40) on the left panel
-        fr = sorted({(p_ // math.gcd(p_, q_), q_ // math.gcd(p_, q_)) for q_ in range(1, 41) for p_ in range(q_ + 1)})
-        ticks = VGroup(*[Line(ax.c2p(p_ / q_, 0), ax.c2p(p_ / q_, 1.0 / q_), color=C.EPS,
+        fr = rationals_upto(40)
+        ticks = VGroup(*[Line(ax.c2p(p_ / q_, 0), ax.c2p(p_ / q_, 1.0 / q_), color=C.PATHOLOGY,
                               stroke_width=2.2 if q_ < 8 else 1.2) for p_, q_ in fr])
         ql = label(r"Dirichlet: \ $\{x : D(x) > \tfrac12\} = \mathbb{Q} \cap [0, 1]$", font_size=26,
-                   color=C.EPS).next_to(ax, UP, buff=0.12)
+                   color=C.PATHOLOGY).next_to(ax, UP, buff=0.12)
         qn = label(r"dense, yet it contains no interval \ (tick height $1/q$, \ $q \le 40$)", font_size=22,
-                   color=GREY_A).next_to(ax.c2p(0.5, 1.05), UP, buff=0)
+                   color=GREY_A).next_to(ax, DOWN, buff=0.15)
         assert len(fr) == 1 + sum(sum(1 for p_ in range(1, q_ + 1) if math.gcd(p_, q_) == 1) for q_ in range(1, 41))
-        half = 4
-        assert abs(levels[half] - 0.5) < 1e-12
+        half = 5
+        assert abs(hbands.mids[half] - 0.5) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> Lebesgue described his integral with a picture of counting money: rather than adding "
             "the coins in the order you meet them, sort them by value first. <bookmark mark='b'/> Riemann slices the "
@@ -257,6 +263,8 @@ class Hook(VoiceoverScene):
             self.play(LaggedStart(*[Create(t_) for t_ in ticks], lag_ratio=0.004), FadeIn(ql), run_time=2.5)
             self.play(FadeIn(qn))
             vo.wait_until("e")
+            self.play(FadeOut(VGroup(*[s_ for i, s_ in enumerate(sets) if i != half])),
+                      sets[half].animate.set_y(bx.c2p(0, 0)[1] - 0.35))
             self.play(FadeIn(honest))
         self.wait(0.3)
         self.clear_scene()

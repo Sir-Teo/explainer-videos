@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import (SQRT2, Window, load, partial_curve, polyline, saw_axes, saw_graph,
+from videos.analysis1.common import (SQRT2, Window, load, partial_curve, polyline, saw, saw_axes, saw_graph,
                                      saw_partial)
 
 
@@ -23,11 +23,53 @@ class Hook(VoiceoverScene):
     def fourier(self):
         d = load("sawtooth")
         ax = saw_axes().shift(DOWN * 0.7)
-        xl = VGroup(*[MathTex(t, font_size=28, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.18)
-                      for t, v in ((r"0", 0), (r"\pi", np.pi), (r"2\pi", 2 * np.pi))])
+        # the axis numbers sit under the plot box, where no curve passes (the partial sums stay inside |y| < 2)
+        xl = VGroup()
+        for t, v in ((r"0", 0), (r"\pi", np.pi), (r"2\pi", 2 * np.pi)):
+            base = ax.c2p(v, -2.2)
+            xl.add(VGroup(Line(base, base + UP * 0.12, color=GREY_C, stroke_width=2),
+                          MathTex(t, font_size=28, color=GREY_B).next_to(base, DOWN, buff=0.12)))
         saw_g = saw_graph(ax)
         who = label(r"Joseph Fourier, 1807", font_size=30, color=GREY_A).to_corner(UL, buff=0.45)
         self.ax = ax
+
+        # Fourier's subject: heat in a rod whose ends are kept at 0, starting from the sawtooth profile.
+        # u(x, t) = sum_k sin(kx)/k * exp(-k^2 t) solves the heat equation; each wave decays at its own rate.
+        rx = np.linspace(0, 2 * np.pi, 161)
+        xm = (rx[:-1] + rx[1:]) / 2
+        ks = np.arange(1, 401)
+
+        def temp(t):
+            return (np.sin(np.outer(xm, ks)) / ks * np.exp(-ks ** 2 * t)).sum(1)
+
+        inner = (xm > 0.4) & (xm < 2 * np.pi - 0.4)
+        assert np.abs(temp(1e-4)[inner] - saw(xm[inner])).max() < 0.05  # it starts as the sawtooth
+        peaks = [np.abs(temp(t)).max() for t in (1e-4, 0.05, 0.2, 0.6)]
+        assert all(a > b for a, b in zip(peaks, peaks[1:]))  # and cools
+        cold, mid_c, hot = ManimColor(C.FUNC), ManimColor("#3A4250"), ManimColor(C.TEMPERATURE)
+
+        def tcolor(u):
+            s_ = float(np.clip(u / (np.pi / 2), -1, 1))
+            return interpolate_color(mid_c, hot, s_) if s_ >= 0 else interpolate_color(mid_c, cold, -s_)
+
+        rod_w, rod_y = 10.0, -0.4
+        cells = VGroup(*[Rectangle(width=rod_w / len(xm) + 0.004, height=0.7, stroke_width=0, fill_opacity=1)
+                         .move_to([-rod_w / 2 + (i + 0.5) * rod_w / len(xm), rod_y, 0]) for i in range(len(xm))])
+        rod_t = ValueTracker(1e-4)
+
+        def paint(g):
+            for c_, u in zip(g, temp(rod_t.get_value())):
+                c_.set_fill(tcolor(u), 1)
+
+        paint(cells)
+        cells.add_updater(paint)
+        rod_frame = SurroundingRectangle(cells, buff=0.0, color=GREY_C, stroke_width=1.5)
+        rod_l = VGroup(label(r"hot", font_size=24, color=C.TEMPERATURE), label(r"cold", font_size=24, color=C.FUNC))
+        rod_l[0].next_to(cells, UP, buff=0.15).set_x(-rod_w / 2 + rod_w * 0.12)
+        rod_l[1].next_to(cells, UP, buff=0.15).set_x(rod_w / 2 - rod_w * 0.12)
+        rod_cap = label(r"temperature along a rod, its ends kept at $0$: \ the heat flows and evens out",
+                        font_size=24, color=GREY_B).next_to(cells, DOWN, buff=0.35)
+        rod = VGroup(cells, rod_frame, rod_l, rod_cap)
 
         with self.voiceover(
             "In 1807, Joseph Fourier submitted a memoir on how heat flows through a solid body. Buried in it was a "
@@ -35,8 +77,12 @@ class Hook(VoiceoverScene):
             "even a jump, like this sawtooth. <bookmark mark='w'/> Fourier said that it can be written as a sum of "
             "sine waves."
         ) as vo:
-            self.play(FadeIn(who), Create(ax), FadeIn(xl))
+            self.play(FadeIn(who), FadeIn(rod))
+            self.play(rod_t.animate.set_value(0.6), run_time=max(1.0, vo.until("s") - 0.3),
+                      rate_func=lambda a: a ** 2)
             vo.wait_until("s")
+            cells.clear_updaters()
+            self.play(FadeOut(rod), Create(ax), FadeIn(xl), run_time=1.0)
             self.play(Create(saw_g[:-1]), run_time=1.6)
             self.play(FadeIn(saw_g.ends))
 
@@ -71,6 +117,7 @@ class Hook(VoiceoverScene):
             self.play(Create(wave), Write(formula[term_idx[0]]), FadeIn(n_lab), run_time=1.2)
             self.remove(wave)
             self.add(S)
+            self.bring_to_front(saw_g.ends)  # the target's open ends stay visible over the partial sums
             for k, mark in ((2, "b"), (3, "c"), (4, "d"), (5, None)):
                 if mark:
                     vo.wait_until(mark)
@@ -184,7 +231,7 @@ class Hook(VoiceoverScene):
                 vo.wait_until(mark)
                 lit = tuple(y for y, _ in steps[: i + 1])
                 self.play(FadeIn(q[i], shift=RIGHT * 0.2),
-                          Transform(strip, timeline(lit=lit, width=12.5, show_labels=False).shift(DOWN * 0.2)))
+                          Transform(strip, timeline(lit=lit, width=12.5).shift(DOWN * 0.2)))
         self.wait(0.3)
         self.clear_scene()
 
@@ -192,14 +239,18 @@ class Hook(VoiceoverScene):
     def holes(self):
         win = Window(1.5, 1.2, y=-0.6)
         axis, dust, labs = win.axis(), win.dust(height=1.4), win.labels()
-        approx = [1.0, 1.4, 1.41, 1.414, 1.4142, 1.41421, 1.414213]
+        dec = str(load("sqrt2")["dec"])
+        approx_s = ["1"] + [dec[: k + 2] for k in range(1, 7)]  # sqrt 2 cut off after k digits
+        approx = [float(t) for t in approx_s]
+        assert approx_s == ["1", "1.4", "1.41", "1.414", "1.4142", "1.41421", "1.414213"]
+        assert all(a < b <= SQRT2 for a, b in zip(approx, approx[1:])) and len(set(approx_s)) == 7
         dots = VGroup(*[win.marker(v, color=C.SEQ, radius=0.075) for v in approx])
-        seq = MathTex(*[rf"{v:g}," for v in approx], r"\ldots", font_size=40, color=C.SEQ).to_edge(UP, buff=0.7)
+        seq = MathTex(*[t + "," for t in approx_s], r"\ldots", font_size=40, color=C.SEQ).to_edge(UP, buff=0.7)
         hole = win.marker(SQRT2, color=C.HOLE, radius=0.12, hollow=True)
         hole_l = always_redraw(lambda: MathTex(r"\sqrt2", font_size=34, color=C.HOLE)
                                .move_to(win.P(SQRT2, 1.95)))
-        width_l = always_redraw(lambda: Text(f"window width {sci_text(win.width, 1)}", font_size=20, color=GREY_B)
-                                .to_corner(DR, buff=0.3))
+        width_l = always_redraw(lambda: Text(f"window width {sci_text(win.width, 1)}", font_size=22, color=GREY_B)
+                                .to_corner(DR, buff=0.45))
         why_l = label(r"Each fraction $p/q$ (in lowest terms) is a tick; smaller $q$, taller tick.", font_size=24,
                       color=GREY_B).to_edge(DOWN, buff=0.35)
 
@@ -253,17 +304,20 @@ class Hook(VoiceoverScene):
         season_col = [C.SEQ] * 4 + [C.MEASURE] * 3 + [C.OPERATOR] * 3
         boxes = VGroup()
         for i, (nm, col) in enumerate(zip(names, season_col)):
-            b = RoundedRectangle(width=1.12, height=0.82, corner_radius=0.1, stroke_color=col, stroke_width=2.5,
+            b = RoundedRectangle(width=1.05, height=0.82, corner_radius=0.1, stroke_color=col, stroke_width=2.5,
                                  fill_color=col, fill_opacity=0.12)
             t = label(str(i + 1), font_size=34, color=col).move_to(b)
-            n = Tex(r"\begin{tabular}{c}" + nm.replace(r"\\", r"\\") + r"\end{tabular}", font_size=20,
-                    color=GREY_A).next_to(b, DOWN, buff=0.15)
+            n = Tex(r"\begin{tabular}{c}" + nm + r"\end{tabular}", font_size=22, color=GREY_A)
             boxes.add(VGroup(b, t, n))
-        boxes.arrange(RIGHT, buff=0.18).move_to(DOWN * 0.9)
+        # line up the boxes themselves (not box + caption), then hang each caption from its box, tops aligned
+        frames = VGroup(*[bx[0] for bx in boxes]).arrange(RIGHT, buff=0.15)
         for i, gap in ((3, 0.35), (6, 0.35)):
-            for b in boxes[i + 1:]:
-                b.shift(RIGHT * gap)
-        boxes.move_to(DOWN * 0.9)
+            for f_ in frames[i + 1:]:
+                f_.shift(RIGHT * gap)
+        frames.move_to(DOWN * 0.6)
+        for bx in boxes:
+            bx[1].move_to(bx[0])
+            bx[2].next_to(bx[0], DOWN, buff=0.15)
         groups = [(0, 4, r"\textit{Principles of Mathematical Analysis}"), (4, 7, r"\textit{Real and Complex Analysis}"),
                   (7, 10, r"\textit{Functional Analysis}")]
         heads = VGroup()
@@ -313,20 +367,21 @@ class Hook(VoiceoverScene):
                                                                                                   ManimColor(C.EPS), v),
                             fill_opacity=1)
                 sq.move_to(origin + np.array([(n - 1) * size, -(m - 1) * size, 0]))
-                t = MathTex(rf"\tfrac{{{m}}}{{{m + n}}}", font_size=24, color=BLACK if v > 0.55 else WHITE).move_to(sq)
+                t = MathTex(rf"\frac{{{m}}}{{{m + n}}}", font_size=28, color=BLACK if v > 0.45 else WHITE).move_to(sq)
                 cells.add(VGroup(sq, t))
         corner = cells[0][0].get_corner(UL)
         n_lab = MathTex(r"n \to", font_size=30, color=GREY_B).next_to(cells[m_max - 1], RIGHT, buff=0.25).shift(UP * size)
         m_lab = MathTex(r"m \downarrow", font_size=30, color=GREY_B).next_to(cells[0], LEFT, buff=0.3)
         a_mn = MathTex(r"a_{mn} = \frac{m}{m+n}", font_size=40).move_to(corner + np.array([1.9, 1.2, 0]))
-        rows_lim = VGroup(*[MathTex(r"\to 0", font_size=28, color=C.LOWER_SUM).next_to(cells[(m - 1) * m_max + m_max - 1],
-                                                                                      RIGHT, buff=0.2)
+        # n first (along each row) in the sequence colour; m first (down each column) in the "response" colour
+        rows_lim = VGroup(*[MathTex(r"\to 0", font_size=28, color=C.SEQ).next_to(cells[(m - 1) * m_max + m_max - 1],
+                                                                                RIGHT, buff=0.2)
                             for m in range(1, m_max + 1)])
-        cols_lim = VGroup(*[MathTex(r"\downarrow 1", font_size=28, color=C.UPPER_SUM).next_to(cells[(m_max - 1) * m_max + n - 1],
-                                                                                            DOWN, buff=0.2)
+        cols_lim = VGroup(*[MathTex(r"\downarrow 1", font_size=28, color=C.DELTA).next_to(cells[(m_max - 1) * m_max + n - 1],
+                                                                                        DOWN, buff=0.2)
                             for n in range(1, m_max + 1)])
-        r1 = MathTex(r"\lim_{m\to\infty}\,\lim_{n\to\infty} a_{mn} = 0", font_size=40, color=C.LOWER_SUM)
-        r2 = MathTex(r"\lim_{n\to\infty}\,\lim_{m\to\infty} a_{mn} = 1", font_size=40, color=C.UPPER_SUM)
+        r1 = MathTex(r"\lim_{m\to\infty}\,\lim_{n\to\infty} a_{mn} = 0", font_size=40, color=C.SEQ)
+        r2 = MathTex(r"\lim_{n\to\infty}\,\lim_{m\to\infty} a_{mn} = 1", font_size=40, color=C.DELTA)
         res = VGroup(r1, r2).arrange(DOWN, buff=0.5).move_to([3.6, 0.3, 0])
         tag = label(r"Rudin, \textit{Principles}, 7.2", font_size=22, color=GREY_B).next_to(res, DOWN, buff=0.5)
         kinds = VGroup(
@@ -334,10 +389,12 @@ class Hook(VoiceoverScene):
             MathTex(r"\text{derivative:}", r"\;\lim_{h\to 0} \frac{f(x+h) - f(x)}{h}", font_size=36),
             MathTex(r"\text{integral:}", r"\;\lim_{n\to\infty} \sum_{i=1}^{n} f(x_i)\,\Delta x", font_size=36),
             MathTex(r"\text{infinite sum:}", r"\;\lim_{n\to\infty} \sum_{k=1}^{n} a_k", font_size=36),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.2)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.25)
+        kinds.to_edge(LEFT, buff=0.9)
         for k in kinds:
             k[0].set_color(GREY_A)
             k[1].set_color(C.EPS)
+        thumbs = VGroup(*[self.thumb(i).move_to([3.9, k.get_y(), 0]) for i, k in enumerate(kinds)])
         q_swap = label(r"When may we swap the order of two limits?", font_size=38, color=C.EPS).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "One idea runs through the whole series. <bookmark mark='k'/> Continuity, derivatives, integrals and "
@@ -348,11 +405,12 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> Send m to infinity first, and every column goes to one. Same numbers, different "
             "order, different answer."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(k_, shift=RIGHT * 0.2) for k_ in kinds], lag_ratio=0.35), run_time=2.2)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(k_, shift=RIGHT * 0.2), FadeIn(t_, shift=LEFT * 0.2))
+                                    for k_, t_ in zip(kinds, thumbs)], lag_ratio=0.35), run_time=2.2)
             vo.wait_until("w")
             self.play(FadeIn(q_swap, shift=UP * 0.2))
             vo.wait_until("g")
-            self.play(FadeOut(kinds), FadeOut(q_swap))
+            self.play(FadeOut(kinds), FadeOut(thumbs), FadeOut(q_swap))
             self.play(FadeIn(a_mn), LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.03), FadeIn(n_lab),
                       FadeIn(m_lab), run_time=1.6)
             vo.wait_until("r")
@@ -364,14 +422,70 @@ class Hook(VoiceoverScene):
                        font_size=42).to_edge(DOWN, buff=0.55)
         swap[0].set_color(C.FUNC)
         swap[2].set_color(C.APPROX)
+        grid_g = VGroup(cells, rows_lim, cols_lim, n_lab, m_lab, a_mn)
         with self.voiceover(
             "Fourier's sum is exactly this kind of question. <bookmark mark='s'/> Is the integral of the sum the sum of "
             "the integrals? Each new space in this series is invented to make one more swap like this legal."
         ) as vo:
+            # make room under the grid for the swap
+            self.play(grid_g.animate.scale(0.78, about_edge=UL), run_time=0.8)
             vo.wait_until("s")
             self.play(Write(swap))
         self.wait(0.4)
         self.clear_scene()
+
+    @staticmethod
+    def thumb(kind: int) -> VGroup:
+        """A 1.8 x 1.0 picture of each kind of limit: continuity, derivative, integral, infinite sum."""
+        W, H = 1.8, 1.0
+
+        def P(u, v):  # u, v in [0, 1]
+            return np.array([(u - 0.5) * W, (v - 0.5) * H, 0])
+
+        base = Line(P(0, 0), P(1, 0), color=GREY_C, stroke_width=1.5)
+        g = VGroup(base)
+        if kind == 0:  # f(y) -> f(x) as y -> x
+            f = lambda u: 0.25 + 0.5 * u + 0.12 * np.sin(5 * u)  # noqa: E731
+            us = np.linspace(0, 1, 100)
+            g.add(VMobject(color=C.FUNC, stroke_width=3).set_points_smoothly([P(u, f(u)) for u in us]))
+            x0 = 0.35
+            for k, du in enumerate((0.55, 0.32, 0.16)):
+                g.add(Dot(P(x0 + du, f(x0 + du)), radius=0.045, color=C.EPS).set_opacity(0.45 + 0.25 * k))
+            g.add(Dot(P(x0, f(x0)), radius=0.06, color=WHITE))
+        elif kind == 1:  # secants turning into the tangent of sin at x0
+            sx = lambda u: 0.15 + 0.7 * np.sin(np.pi * u)  # noqa: E731  (sin on [0, pi], scaled)
+            us = np.linspace(0, 1, 100)
+            g.add(VMobject(color=C.FUNC, stroke_width=3).set_points_smoothly([P(u, sx(u)) for u in us]))
+            x0 = 0.22
+            slope = 0.7 * np.pi * np.cos(np.pi * x0)
+            secs = [(sx(x0 + h) - sx(x0)) / h for h in (0.45, 0.25, 0.1)]
+            assert all(abs(a - slope) > abs(b - slope) for a, b in zip(secs, secs[1:]))  # secants -> tangent
+            for k, m_ in enumerate(secs):
+                g.add(Line(P(x0 - 0.12, sx(x0) - 0.12 * m_), P(x0 + 0.5, sx(x0) + 0.5 * m_), color=GREY_B,
+                           stroke_width=1.5, stroke_opacity=0.4 + 0.2 * k))
+            g.add(Line(P(x0 - 0.15, sx(x0) - 0.15 * slope), P(x0 + 0.32, sx(x0) + 0.32 * slope), color=C.EPS,
+                       stroke_width=3), Dot(P(x0, sx(x0)), radius=0.05, color=WHITE))
+        elif kind == 2:  # six midpoint rectangles under sin on [0, pi]
+            n = 6
+            mids = (np.arange(n) + 0.5) / n
+            riemann = (np.sin(np.pi * mids) * np.pi / n).sum()
+            assert abs(riemann - 2.0) < 0.05  # the Riemann sum is already close to the integral, 2
+            for u in mids:
+                h = 0.9 * np.sin(np.pi * u)
+                g.add(Rectangle(width=W / n * 0.94, height=h * H, stroke_color=C.MEASURE, stroke_width=1,
+                                fill_color=C.MEASURE, fill_opacity=0.35).move_to(P(u, h / 2)))
+            us = np.linspace(0, 1, 100)
+            g.add(VMobject(color=C.FUNC, stroke_width=3).set_points_smoothly([P(u, 0.9 * np.sin(np.pi * u)) for u in us]))
+        else:  # partial sums of 1/2 + 1/4 + ... climbing to 1
+            sums = np.cumsum(0.5 ** np.arange(1, 8))
+            assert np.allclose(sums, 1 - 0.5 ** np.arange(1, 8))
+            g.add(DashedLine(P(0, 0.9), P(1, 0.9), color=GREY_B, stroke_width=1.5, dash_length=0.06))
+            pts = []
+            for i, v in enumerate(sums):
+                u0, u1 = i / len(sums), (i + 1) / len(sums)
+                pts += [P(u0, 0.9 * v), P(u1, 0.9 * v)]
+            g.add(VMobject(color=C.APPROX, stroke_width=3).set_points_as_corners(pts))
+        return g
 
     # ------------------------------------------------------------------
     def plan(self):
@@ -384,7 +498,7 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(led.head), LaggedStart(*[FadeIn(r) for r in led.rows], lag_ratio=0.08), FadeIn(led[-1]),
                       run_time=2)
             vo.wait_until("r")
-            self.play(FadeIn(led[0]))
+            self.play(FadeIn(led[0]), led.rows[0].animate.set_color(WHITE))  # today's row, readable
         self.clear_scene()
         chapters = [
             r"Holes in the rational line", r"Filling the holes: Dedekind cuts", r"Archimedes, density and decimals",

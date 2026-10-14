@@ -155,6 +155,39 @@ def endpoint(p, closed: bool, color, radius=0.075) -> VMobject:
     return Circle(radius=radius, color=color, stroke_width=3).set_fill(BACKGROUND, 1).move_to(p)
 
 
+def is_ring(m: Mobject) -> bool:
+    """True for a hollow endpoint ring (a circle filled with the background color, see :func:`endpoint`)."""
+    return (isinstance(m, VMobject) and m.get_fill_opacity() > 0.5
+            and ManimColor(m.get_fill_color()).to_hex().upper() == ManimColor(BACKGROUND).to_hex().upper())
+
+
+def recolor(m: Mobject, color) -> Mobject:
+    """Recolor a group that may hold hollow endpoint rings: lines and dots take the color, rings only their stroke,
+    so an open endpoint stays open (``set_color`` on the group would fill the rings). In place; returns ``m``.
+    Animate it with ``ApplyFunction(lambda g: recolor(g, color), m)``."""
+    for sm in m.get_family():
+        if not isinstance(sm, VMobject) or not len(sm.points):
+            continue
+        if is_ring(sm):
+            sm.set_stroke(color=color)
+        else:
+            sm.set_color(color)
+    return m
+
+
+def dim(m: Mobject, opacity: float) -> Mobject:
+    """Fade a group that may hold hollow endpoint rings: rings fade only their stroke (their background fill keeps
+    them hollow), everything else fades stroke and fill. In place; returns ``m`` (use with ApplyFunction)."""
+    for sm in m.get_family():
+        if not isinstance(sm, VMobject) or not len(sm.points):
+            continue
+        if is_ring(sm):
+            sm.set_stroke(opacity=opacity)
+        else:
+            sm.set_opacity(opacity)
+    return m
+
+
 def interval_bar(x0, x1, y, color, left_closed=True, right_closed=True, stroke_width=6, ends=True) -> VGroup:
     g = VGroup(Line([x0, y, 0], [x1, y, 0], color=color, stroke_width=stroke_width))
     if ends:

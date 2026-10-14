@@ -50,7 +50,7 @@ class TestFunctions(VoiceoverScene):
         one_l = MathTex(r"1", font_size=20, color=GREY_B).next_to(bx.c2p(3, -lo), RIGHT, buff=0.1)
         dl = VGroup(*[Dot(bx.c2p(u, v - lo), radius=0.06, color=C.EPS) for u, v in zip(us[::20], lv[::20])])
         vl = VGroup(*[MathTex(rf"10^{{{v:.0f}}}", font_size=22, color=C.EPS).next_to(d_, dir_, buff=0.1)
-                      for d_, v, dir_ in zip(dl, lv[::20], (UR, RIGHT, RIGHT))])
+                      for d_, v, dir_ in zip(dl, lv[::20], (UR, DL, RIGHT))])  # each on the side away from the curve
         kl = VGroup(*[MathTex(t_, font_size=18, color=GREY_B).next_to(bx.c2p(u, 0), DOWN, buff=0.1)
                       for u, t_ in ((2, r"\delta = 10^{-2}"), (2.5, r"10^{-2.5}"), (3, r"10^{-3}"))])
         b_l = label(r"$|\rho^{(10)}(1 - \delta)|$, \ log scale: \ $\to 0$ at the edge", font_size=22,

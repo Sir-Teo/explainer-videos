@@ -35,7 +35,8 @@ class Length(VoiceoverScene):
         ax.set_opacity(0)
         E = [(0.08, 0.22), (0.31, 0.36), (0.52, 0.71), (0.83, 0.86)]
         pts = [0.42, 0.47, 0.93]
-        Eb = interval_band(ax, E, nl.get_y(), C.FUNC, height=0.16)
+        y0 = nl.n2p(0)[1]  # the line itself (nl.get_y() is the centre of line and numbers together)
+        Eb = interval_band(ax, E, y0, C.FUNC, height=0.16)
         Ep = VGroup(*[Dot(nl.n2p(p), radius=0.06, color=C.FUNC) for p in pts])
         covers = [
             [(0.0, 0.5), (0.45, 1.0)],
@@ -44,12 +45,12 @@ class Length(VoiceoverScene):
         ]
         bands, totals = [], []
         for k, cv in enumerate(covers):
-            bands.append(interval_band(ax, cv, nl.get_y() + 0.55 + 0.0 * k, C.MEASURE, height=0.22, opacity=0.5))
+            bands.append(interval_band(ax, cv, y0 + 0.55, C.MEASURE, height=0.22, opacity=0.5))
             totals.append(MathTex(rf"\sum \ell(I_k) = {sum(b - a for a, b in cv):.2f}", font_size=30, color=C.MEASURE)
                           .next_to(nl, DOWN, buff=0.7))
         lenE = sum(b - a for a, b in E)
         assert all(sum(b - a for a, b in cv) >= lenE for cv in covers)
-        head = VGroup(label(r"\textbf{Outer measure} \ (Lebesgue, 1902)", font_size=32),
+        head = VGroup(label(r"Outer measure \ (Lebesgue, 1902)", font_size=34),
                       MathTex(r"m^*(E) = \inf\Big\{", r"\sum_k \ell(I_k)", r":", r"E \subset \bigcup_k I_k",
                               r",\ I_k \text{ intervals}\Big\}", font_size=36, color=C.MEASURE)
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
@@ -69,13 +70,15 @@ class Length(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(nl))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
-            for mk, part in (("a1", 3), ("a2", 1), ("a3", 0)):
-                vo.wait_until(mk)
-                self.play(Indicate(head[1][part], color=C.EPS, scale_factor=1.1))
+            self.play(FadeIn(head[1]), FadeIn(Eb), FadeIn(Ep), FadeIn(el))
+            vo.wait_until("a1")  # cover it ...
+            self.play(Indicate(head[1][3], color=C.EPS, scale_factor=1.1), FadeIn(bands[0], shift=DOWN * 0.15))
+            vo.wait_until("a2")  # ... add up the lengths ...
+            self.play(Indicate(head[1][1], color=C.EPS, scale_factor=1.1), FadeIn(totals[0]))
+            vo.wait_until("a3")  # ... and take the smallest total
+            self.play(Indicate(head[1][0], color=C.EPS, scale_factor=1.1))
             vo.wait_until("b")
-            self.play(FadeIn(Eb), FadeIn(Ep), FadeIn(el))
-            self.play(FadeIn(bands[0]), FadeIn(totals[0]))
+            self.play(Indicate(VGroup(Eb, Ep), color=C.EPS, scale_factor=1.05), Indicate(bands[0], color=C.MEASURE))
             vo.wait_until("c")
             self.play(ReplacementTransform(bands[0], bands[1]), FadeTransform(totals[0], totals[1]))
             vo.wait_until("d")
@@ -95,18 +98,24 @@ class Length(VoiceoverScene):
         ax = plain_axes([0, 1, 1], [0, 1, 1], 11.0, 1.0).move_to(nl.get_center())
         ax.set_opacity(0)
         K = 40
-        dots = VGroup(*[Dot(nl.n2p(float(q)), radius=0.035, color=C.RATIONAL) for q in rats[:400]])
+        # the rationals with q <= 39 (the stored listing) as a ruler: the tick of p/q has height ~ q^-0.6, so the gaps
+        # between them show (dots of one size fuse into a solid bar, which reads as a whole segment)
+        qmax = 39
+        dots = rational_dust(0, 1, nl.n2p(0)[0], nl.n2p(1)[0], y=nl.n2p(0)[1], height=0.6, qmax=qmax, color=C.RATIONAL,
+                             stroke_width=2.2, hmax=1.0)
+        assert len(dots.values) == len(rats) and np.allclose(np.sort(dots.values), np.sort(rats))
         boxes = VGroup()
         for k in range(K):
             q, w = float(rats[k]), float(cover[k])
-            pa, pb = nl.n2p(q - w / 2)[0], nl.n2p(q + w / 2)[0]
+            # drawn clipped to [-0.06, 1.06], just past the line's ends (q_1 = 0's box is 0.25 wide, half of it off the line)
+            pa, pb = nl.n2p(max(q - w / 2, -0.06))[0], nl.n2p(min(q + w / 2, 1.06))[0]
             boxes.add(Rectangle(width=max(pb - pa, 0.01), height=0.5, stroke_color=C.MEASURE, stroke_width=1.5,
-                                fill_color=C.MEASURE, fill_opacity=0.35).move_to([(pa + pb) / 2, nl.get_y() + 0.45, 0]))
+                                fill_color=C.MEASURE, fill_opacity=0.35).move_to([(pa + pb) / 2, nl.n2p(0)[1] + 0.3, 0]))
         kT = ValueTracker(0)
         total = always_redraw(lambda: MathTex(
             rf"\text{{first {int(kT.get_value())} rationals: total }} = \varepsilon\,(1 - 2^{{-{int(kT.get_value())}}}) "
             rf"< \varepsilon = {eps}", font_size=30, color=C.MEASURE).next_to(nl, DOWN, buff=0.7))
-        head = VGroup(label(r"The rationals have outer measure $0$", font_size=32),
+        head = VGroup(label(r"The rationals have outer measure $0$", font_size=34),
                       MathTex(r"q_1, q_2, q_3, \dots \text{ listed (Part 1)}; \quad \text{cover } q_k \text{ by an interval "
                               r"of length } \varepsilon / 2^k", font_size=30)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         out = label(r"total $\le \varepsilon$, \ for every $\varepsilon > 0$: \ $m^*(\mathbb Q \cap [0, 1]) = 0$",
@@ -121,7 +130,7 @@ class Length(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(nl))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.003), run_time=1.5)
+            self.play(LaggedStart(*[Create(d_) for d_ in dots[::-1]], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(head[1]), FadeIn(total))
             self.play(LaggedStart(*[FadeIn(b_) for b_ in boxes], lag_ratio=0.15), kT.animate.set_value(K),
@@ -145,7 +154,7 @@ class Length(VoiceoverScene):
             rows.add(interval_band(ax, cantor_intervals(k), y, C.CLOSED_SET, height=0.2, min_width=0.008))
             labs.add(MathTex(rf"2^{{{k}}} \text{{ intervals, total }} (\tfrac23)^{{{k}}} = {tot[k]:.4f}", font_size=24,
                              color=C.MEASURE).next_to([2.95, y, 0], RIGHT, buff=0.0))
-        head = label(r"The Cantor set: \ uncountable, \ and outer measure $0$", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"The Cantor set: \ uncountable, \ and outer measure $0$", font_size=34).to_edge(UP, buff=0.3)
         out = label(r"its stage-$n$ intervals cover it with total $(2/3)^n \to 0$", font_size=26,
                     color=C.EPS).to_edge(DOWN, buff=0.35)
         assert np.allclose(tot, (2 / 3) ** depths)
@@ -170,7 +179,7 @@ class Length(VoiceoverScene):
     def fat(self):
         d = load("cantor")
         meas = d["stage_meas"]
-        ax = plain_axes([0, 1, 1], [0, 1, 1], 9.3, 1.0).move_to([-2.15, 0, 0])
+        ax = plain_axes([0, 1, 1], [0, 1, 1], 9.0, 1.0).move_to([-1.95, 0, 0])
         ax.set_opacity(0)
         rows, labs = VGroup(), VGroup()
         for k in range(6):
@@ -178,7 +187,7 @@ class Length(VoiceoverScene):
             rows.add(interval_band(ax, d[f"fat{k}"], y, C.CONNECTED_SET, height=0.2, min_width=0.008))
             labs.add(MathTex(rf"\text{{measure }} {meas[k]:.6f}", font_size=24, color=C.MEASURE).next_to([2.95, y, 0], RIGHT,
                                                                                                        buff=0))
-        head = VGroup(label(r"A fat Cantor set: \ remove middle intervals of length $4^{-n}$ at stage $n$", font_size=30),
+        head = VGroup(label(r"A fat Cantor set: \ remove middles of length $4^{-n}$ at stage $n$", font_size=34),
                       ).to_edge(UP, buff=0.3)
         out = VGroup(MathTex(rf"\text{{measure }} = 1 - \sum_{{n \ge 1}} 2^{{n-1}} 4^{{-n}} = \tfrac12", font_size=32,
                              color=C.EPS),
@@ -249,7 +258,7 @@ class Length(VoiceoverScene):
             bars.add(Rectangle(width=pb - pa, height=0.22, stroke_color=C.MEASURE, stroke_width=1.5, fill_color=C.MEASURE,
                                fill_opacity=0.4).move_to([(pa + pb) / 2, nl.get_y() + 0.45 + 0.28 * (k % 2), 0]))
         seg = Line(nl.n2p(0), nl.n2p(1), color=C.FUNC, stroke_width=8)
-        head = VGroup(label(r"Is the outer measure of $[a, b]$ really $b - a$?", font_size=32),
+        head = VGroup(label(r"Is the outer measure of $[a, b]$ really $b - a$?", font_size=34),
                       label(r"$\le$ is clear; \ $\ge$ needs compactness \ (Heine--Borel, Part 1)", font_size=26,
                             color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         rows = VGroup(
@@ -259,8 +268,13 @@ class Length(VoiceoverScene):
             MathTex(rf"\text{{here: }} {len(ends)} \text{{ intervals, total }} {total:.3f} \ge 1", font_size=30,
                     color=C.MEASURE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.3)
+        # the easy half: [0, 1] covers itself, one interval of total length 1
+        one = Rectangle(width=nl.n2p(1)[0] - nl.n2p(0)[0], height=0.22, stroke_color=C.MEASURE, stroke_width=1.5,
+                        fill_color=C.MEASURE, fill_opacity=0.4).move_to([nl.n2p(0.5)[0], nl.get_y() + 0.45, 0])
+        one_t = MathTex(rf"\text{{1 interval, total }} {1.0 - 0.0:.3f} \ \Rightarrow\ m^*([0, 1]) \le 1", font_size=28,
+                        color=C.MEASURE).next_to(one, UP, buff=0.2)
         with self.voiceover(
-            "<bookmark mark='a'/> A sanity check: does an interval get its usual length? Covering it by itself shows "
+            "<bookmark mark='a'/> A sanity check: does an interval get its usual length? <bookmark mark='a1'/> Covering it by itself shows "
             "the outer measure is at most b minus a. The other direction is where compactness enters. "
             "<bookmark mark='b'/> Widen each interval of a countable cover slightly to an open one, at a total cost "
             "of epsilon. By Heine–Borel, finitely many of them already cover the closed interval, <bookmark mark='c'/> "
@@ -268,9 +282,10 @@ class Length(VoiceoverScene):
             "outer measure of an interval is its length, as it should be."
         ) as vo:
             self.play(FadeIn(head), Create(nl), Create(seg))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            vo.wait_until("a1")
+            self.play(FadeIn(one, shift=DOWN * 0.15), FadeIn(one_t))
             vo.wait_until("b")
+            self.play(FadeOut(one), FadeOut(one_t), FadeIn(rows[0]))
             self.play(FadeIn(rows[1]), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(rows[2]), FadeIn(rows[3]))
