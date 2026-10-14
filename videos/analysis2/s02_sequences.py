@@ -224,7 +224,7 @@ class Sequences(VoiceoverScene):
         N12 = max(Ns)
         assert Ns == [6, 12] and boards[2].smallest_N() <= N12, (Ns, boards[2].smallest_N())
         trick = label(r"the $\varepsilon/2$ trick: split the error, and ask each piece for half", font_size=30,
-                      color=C.EPS).to_edge(DOWN, buff=0.2)
+                      color=C.EPS).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "And limits respect arithmetic. <bookmark mark='h'/> Take sums. <bookmark mark='a'/> The error of s n plus "
             "t n is at most the error of s n plus the error of t n, by the triangle inequality. <bookmark mark='b'/> Ask "

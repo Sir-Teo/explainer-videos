@@ -316,10 +316,35 @@ def compute_dual():
     return dict(p=p, q=q, g=g, gq=gq, xstar=xstar, best=best)
 
 
-def compute_lebdiff():
+STEP_GAP = 0.018  # the narrowest step of the Lebesgue-differentiation step function (no invisible specks)
+
+
+def step_data():
+    """The random step function of compute_lebdiff (30 jumps, seed 7): sorted uniform draws spread so that every
+    step, the first and last included, is at least STEP_GAP wide.  Returns (jumps, vals, rng) with the generator
+    positioned after these draws."""
     rng = np.random.default_rng(7)
-    jumps = np.sort(rng.uniform(0, 1, 30))
+    raw = np.sort(rng.uniform(0, 1, 30))
+    jumps = STEP_GAP * np.arange(1, 31) + raw * (1 - 31 * STEP_GAP)
     vals = rng.uniform(0, 1, 31)
+    widths = np.diff(np.concatenate([[0.0], jumps, [1.0]]))
+    assert widths.min() >= STEP_GAP - 1e-12 and abs(widths.sum() - 1) < 1e-12
+    return jumps, vals, rng
+
+
+def merged(a, b):
+    """The union of the intervals [a_i, b_i] as disjoint sorted runs (exact)."""
+    out = []
+    for s, e in sorted(zip(np.asarray(a, float), np.asarray(b, float))):
+        if out and s <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], e)
+        else:
+            out.append([s, e])
+    return np.array(out)
+
+
+def compute_lebdiff():
+    jumps, vals, rng = step_data()
 
     def f(t):
         return vals[np.searchsorted(jumps, t)]
@@ -335,24 +360,36 @@ def compute_lebdiff():
             ok += abs(avg - f(np.array([x0]))[0]) < 1e-9
         good.append(ok / len(xs))
     good = np.array(good)
-    assert good[-1] >= 0.998 and np.all(np.diff(good) >= 0)
-    # Vitali covering: random intervals; greedy disjoint subfamily by decreasing length; 3x enlargements cover
+    # exactly the points whose window contains no jump
+    exact = np.array([np.mean([not np.any(np.abs(jumps - x0) <= r) for x0 in xs]) for r in rs])
+    assert np.allclose(good, exact)
+    assert abs(good[-1] - 0.999) < 1e-12 and np.all(np.diff(good) >= 0)  # the narration: "climbs to 99.9 percent"
+    # Vitali covering: random intervals inside [0, 1] (a centre too close to an end is moved in, the length kept);
+    # greedy disjoint subfamily by decreasing length; the 3x enlargements of the chosen ones cover the union
     c = rng.uniform(0, 1, 60)
     L = rng.uniform(0.01, 0.12, 60)
+    c = np.clip(c, L / 2, 1 - L / 2)
+    assert np.all(c - L / 2 >= 0) and np.all(c + L / 2 <= 1)
     order = np.argsort(-L)
     chosen = []
     for i in order:
         if all(abs(c[i] - c[j]) >= (L[i] + L[j]) / 2 for j in chosen):
             chosen.append(i)
     chosen = np.array(chosen)
-    grid = np.linspace(0, 1, 20001)
+    # every interval meets a chosen one at least as long, so it lies in that one's 3x enlargement
+    for i in range(60):
+        js = [j for j in chosen if L[j] >= L[i] and abs(c[i] - c[j]) <= (L[i] + L[j]) / 2]
+        assert js and any(abs(c[i] - c[j]) + L[i] / 2 <= 1.5 * L[j] + 1e-12 for j in js)
+    runs = merged(c - L / 2, c + L / 2)
+    m_union = float(np.sum(runs[:, 1] - runs[:, 0]))
+    # independent check on a grid over the whole span of the intervals
+    grid = np.linspace((c - L / 2).min() - 0.01, (c + L / 2).max() + 0.01, 400001)
     union = np.any([(np.abs(grid - c[i]) <= L[i] / 2) for i in range(60)], axis=0)
-    big = np.any([(np.abs(grid - c[i]) <= 1.5 * L[i]) for i in chosen], axis=0)
-    assert np.all(big[union])
-    m_union = union.mean()
+    assert abs(union.mean() * (grid[-1] - grid[0]) - m_union) < 1e-4
     m_chosen = L[chosen].sum()
-    assert m_union <= 3 * m_chosen + 1e-3
-    return dict(rs=rs, good=good, c=c, L=L, chosen=chosen, m_union=m_union, m_chosen=m_chosen)
+    assert m_union <= 3 * m_chosen
+    assert f"{m_union:.3f}" == "0.965" and f"{m_chosen:.2f}" == "0.81"  # the narration's numbers
+    return dict(rs=rs, good=good, c=c, L=L, chosen=chosen, m_union=m_union, m_chosen=m_chosen, runs=runs)
 
 
 def compute_cantorac():

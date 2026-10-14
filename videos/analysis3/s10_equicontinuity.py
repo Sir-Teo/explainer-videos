@@ -33,19 +33,26 @@ class Equicontinuity(VoiceoverScene):
         gs = VGroup(*[polyline(ax, x, np.sin((k + 1) * x), color=cols[k], stroke_width=2) for k in range(K)])
         D = np.array([[np.abs(np.sin(j * x) - np.sin(k * x)).max() for k in range(1, K + 1)] for j in range(1, K + 1)])
         off = D[~np.eye(K, dtype=bool)]
-        assert off.min() > 1.0
+        assert off.min() > 1.0 and off.max() < 2.0
+        lo_, hi_ = float(off.min()), float(off.max())
         cs = 0.42
         cells = VGroup()
         for j in range(K):
             for k in range(K):
                 v = D[j, k]
+                a_ = (v - lo_) / (hi_ - lo_)
                 sq = Square(side_length=cs * 0.92, stroke_width=0, fill_opacity=0.9,
-                            fill_color=GREY_E if j == k else interpolate_color(ManimColor(C.DIST), ManimColor(C.EPS),
-                                                                               (v - 1) / 1.0))
+                            fill_color=GREY_E if j == k else interpolate_color(ManimColor("#6B5A2E"), ManimColor(C.EPS), a_))
                 sq.move_to([2.2 + k * cs, 1.2 - j * cs, 0])
-                t = MathTex(f"{v:.1f}" if j != k else "0", font_size=15, color=BLACK).move_to(sq)
+                t = MathTex(f"{v:.1f}" if j != k else "0", font_size=16,
+                            color=BLACK if (j != k and a_ > 0.45) else WHITE).move_to(sq)
                 cells.add(VGroup(sq, t))
-        mlab = MathTex(r"\sup|\sin jx - \sin kx|", font_size=26).next_to(cells, UP, buff=0.15)
+        jl = VGroup(*[MathTex(str(j + 1), font_size=18, color=GREY_B).next_to(cells[j * K], LEFT, buff=0.1)
+                      for j in range(K)], MathTex(r"j", font_size=22, color=GREY_A).next_to(cells[0], UL, buff=0.12))
+        kl = VGroup(*[MathTex(str(k + 1), font_size=18, color=GREY_B).next_to(cells[k], UP, buff=0.08) for k in range(K)])
+        mlab = MathTex(r"\sup|\sin jx - \sin kx|", r"\ \ (k \to)", font_size=26).next_to(kl, UP, buff=0.1)
+        mlab[1].set_color(GREY_A)
+        mmin = MathTex(rf"\min_{{j \ne k}} = {lo_:.2f} > 1", font_size=26, color=C.EPS).next_to(cells, DOWN, buff=0.2)
         head = VGroup(label(r"$\sin nx$: \ all in the unit ball of $C[0, 2\pi]$, \ all far apart", font_size=30),
                       label(r"every pair is at sup distance $> 1$: \ no subsequence converges uniformly", font_size=24,
                             color=C.PATHOLOGY)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
@@ -62,7 +69,9 @@ class Equicontinuity(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(g_) for g_ in gs], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.01), FadeIn(mlab), run_time=1.5)
+            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.01), FadeIn(mlab), FadeIn(jl), FadeIn(kl),
+                      run_time=1.5)
+            self.play(FadeIn(mmin))
             self.play(FadeIn(head[1]), FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
@@ -71,7 +80,7 @@ class Equicontinuity(VoiceoverScene):
     def bump(self):
         d = load("equi")
         ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 7.6, 4.0).move_to([-2.4, -0.8, 0])
-        x = np.linspace(0, 1, 4001)
+        x = np.unique(np.r_[np.linspace(0, 1, 2001), np.linspace(0, 0.1, 4001)])  # dense where the bump lives
         nT = ValueTracker(1.0)
         g = always_redraw(lambda: polyline(ax, x, x**2 / (x**2 + (1 - nT.get_value() * x) ** 2), color=C.FUNC,
                                            stroke_width=3.5))
@@ -87,6 +96,18 @@ class Equicontinuity(VoiceoverScene):
         nl = always_redraw(lambda: MathTex(rf"n = {nT.get_value():.0f}", font_size=28, color=C.FUNC).next_to(ax, DOWN,
                                                                                                     buff=0.15))
         assert np.allclose(d["sups"], 1.0)
+        inset, decor = magnifier(ax, (0, 0.1), (0, 1.1), center=[-2.05, -0.35, 0], width=3.8, height=2.0, color=GREY_B,
+                                 tag=r"x\text{ stretched } \times 5")
+        assert abs(3.8 / (ax.c2p(0.1, 0)[0] - ax.c2p(0, 0)[0]) - 5) < 1e-6
+        xz = np.linspace(0, 0.1, 4001)
+        gz = always_redraw(lambda: polyline(inset, xz, xz**2 / (xz**2 + (1 - nT.get_value() * xz) ** 2), color=C.FUNC,
+                                            stroke_width=3))
+        pz = always_redraw(lambda: Dot(inset.c2p(1 / nT.get_value(), 1), radius=0.07, color=C.PATHOLOGY))
+        one_z = VGroup(DashedLine(inset.c2p(0, 1), inset.c2p(0.1, 1), color=GREY_B, stroke_width=1.5, dash_length=0.06),
+                       MathTex(r"1", font_size=22, color=GREY_B).next_to(inset.c2p(0.1, 1), RIGHT, buff=0.08))
+        for n_ in (30, 60):  # sampled finely enough that the drawn bump still reaches 1 at 1/n
+            assert abs((xz**2 / (xz**2 + (1 - n_ * xz) ** 2)).max() - 1) < 1e-2
+            assert abs((x**2 / (x**2 + (1 - n_ * x) ** 2)).max() - 1) < 1e-2
         with self.voiceover(
             "<bookmark mark='a'/> A second example, from Rudin. These functions are bounded by one and converge to zero "
             "at every single point. <bookmark mark='b'/> But each has a bump of height exactly one, at one over n, "
@@ -99,8 +120,10 @@ class Equicontinuity(VoiceoverScene):
             self.play(FadeIn(head[1]))
             vo.wait_until("b")
             self.play(nT.animate.set_value(30), run_time=4.0, rate_func=rate_functions.ease_in_quad)
+            self.play(FadeIn(decor), FadeIn(gz), FadeIn(pz), FadeIn(one_z))
             self.play(FadeIn(side))
-        for m in (g, peak, nl):
+            self.play(nT.animate.set_value(60), run_time=4.0, rate_func=linear)
+        for m in (g, peak, nl, gz, pz):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -186,15 +209,16 @@ class Equicontinuity(VoiceoverScene):
         kd = min(ks)
         delta = kd * dx
         assert all(np.abs(f[kd:] - f[:-kd]).max() < eps for f in fs)  # one delta for the whole family
-        ax = plain_axes([0, 2 * np.pi, np.pi], [-2.2, 2.2, 1], 6.2, 4.4).move_to([-3.5, -0.7, 0])
+        assert max(np.abs(f_).max() for f_ in fs) < 1.85
+        ax = plain_axes([0, 2 * np.pi, np.pi], [-1.9, 1.9, 1], 6.2, 4.4).move_to([-3.3, -0.7, 0])
         early = VGroup(*[polyline(ax, x, fs[n - 1], color=C.SEQ, stroke_width=1.6) for n in range(1, N)])
         late = VGroup(*[polyline(ax, x, fs[n - 1], color=C.APPROX, stroke_width=1.2) for n in range(N + 1, 25)])
-        fN = polyline(ax, x, fs[N - 1], color=C.EPS, stroke_width=3.5)
+        fN = polyline(ax, x, fs[N - 1], color=C.EPS, stroke_width=3.5).set_z_index(2)
         pts = ([ax.c2p(a, b) for a, b in zip(x[::6], fs[N - 1][::6] + eps / 3)] +
                [ax.c2p(a, b) for a, b in zip(x[::-6], fs[N - 1][::-6] - eps / 3)])
-        band = Polygon(*pts, stroke_width=0, fill_color=C.EPS, fill_opacity=0.18)
+        band = Polygon(*pts, stroke_width=0, fill_color=C.EPS, fill_opacity=0.18).set_z_index(1)
         x0 = 2.4
-        p0, p1 = ax.c2p(x0, -2.2), ax.c2p(x0 + delta, 2.2)
+        p0, p1 = ax.c2p(x0, -1.9), ax.c2p(x0 + delta, 1.9)
         col = Rectangle(width=max(p1[0] - p0[0], 0.02), height=p1[1] - p0[1], stroke_width=1.5, stroke_color=C.DELTA,
                         fill_color=C.DELTA, fill_opacity=0.35).move_to((p0 + p1) / 2)
         tl = MathTex(r"f_n(x) = \sin x + \frac{0.8\,\sin 3nx}{n}, \ n \le 24", font_size=28).next_to(ax, UP, buff=0.1)
@@ -227,7 +251,8 @@ class Equicontinuity(VoiceoverScene):
             vo.wait_until("c")
             self.play(early.animate.set_stroke(opacity=1.0), late.animate.set_stroke(opacity=0.3), FadeIn(rows[3]))
             vo.wait_until("d")
-            self.play(late.animate.set_stroke(opacity=1.0), FadeIn(col), FadeIn(rows[4]))
+            self.play(late.animate.set_stroke(opacity=0.3), early.animate.set_stroke(opacity=0.6), FadeIn(col),
+                      FadeIn(rows[4]))
             self.play(col.animate.shift(RIGHT * (ax.c2p(4.6, 0)[0] - ax.c2p(x0, 0)[0])), run_time=1.5)
             vo.wait_until("e")
             self.play(FadeIn(rows[5:]))

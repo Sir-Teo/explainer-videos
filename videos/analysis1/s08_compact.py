@@ -23,7 +23,7 @@ class Compact(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(7, r"Compactness", r"What is the next best thing to being finite?", part=1)
+        card = chapter_card(7, r"Compactness", r"What is the next best thing to being finite?", lit=(1906,), part=1)
         with self.voiceover(
             "Chapter seven: compactness, the single most useful idea in this video, and the hardest to see the point "
             "of at first."
@@ -249,8 +249,8 @@ class Compact(VoiceoverScene):
     # ------------------------------------------------------------------
     def consequences(self):
         def head(num, lines):
-            return VGroup(label(rf"\textbf{{Rudin {num}}}", font_size=28),
-                          *[label(t, font_size=24, color=GREY_A) for t in lines]).arrange(DOWN, buff=0.08)
+            return VGroup(label(rf"\textbf{{Rudin {num}}}", font_size=28, color=GREY_A),
+                          *[label(t, font_size=24) for t in lines]).arrange(DOWN, buff=0.1)
 
         xs = (-4.6, 0.0, 4.6)
         heads = VGroup(head("2.35", [r"$F$ closed, \ $F \subset K$ compact", r"$\Rightarrow$ $F$ is compact"]),
@@ -344,7 +344,7 @@ class Compact(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(e_, scale=1.5) for e_ in E], lag_ratio=0.12), FadeIn(El), run_time=3.0)
             self.play(FadeIn(pd), FadeIn(pnm), FadeIn(disk), FadeIn(pl))
         moral = label(r"An infinite set inside a compact set cannot spread out without piling up somewhere.",
-                      font_size=28, color=C.COMPACT_SET).to_edge(DOWN, buff=0.2)
+                      font_size=28, color=C.COMPACT_SET).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "That last one is the finiteness we were after: <bookmark mark='m'/> inside a compact set, infinitely many "
             "points can't spread out without piling up somewhere. Which sets are compact? For subsets of the real line, "

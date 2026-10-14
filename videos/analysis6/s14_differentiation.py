@@ -3,15 +3,16 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import area_under, load, plain_axes, polyline
+from videos.analysis6.common import load, plain_axes, polyline
+from videos.analysis6.compute import STEP_GAP, step_data
 
 
-def step_data():
-    """The same random step function as compute.lebdiff (30 jumps, seed 7)."""
-    rng = np.random.default_rng(7)
-    jumps = np.sort(rng.uniform(0, 1, 30))
-    vals = rng.uniform(0, 1, 31)
-    return jumps, vals
+def window_average(jumps, vals, a, b):
+    """The exact average of the step function over [a, b] (each step's overlap times its value)."""
+    edges = np.concatenate([[0.0], jumps, [1.0]])
+    a, b = max(a, 0.0), min(b, 1.0)
+    ov = np.clip(np.minimum(edges[1:], b) - np.maximum(edges[:-1], a), 0, None)
+    return float(ov @ vals / (b - a))
 
 
 class Differentiation(VoiceoverScene):
@@ -34,7 +35,9 @@ class Differentiation(VoiceoverScene):
     def averages(self):
         d = load("lebdiff")
         rs, good = d["rs"], d["good"]
-        jumps, vals = step_data()
+        jumps, vals, _ = step_data()
+        edges = np.concatenate([[0], jumps, [1]])
+        assert np.diff(edges).min() >= STEP_GAP - 1e-12  # every step visible (>= 0.13 units wide)
 
         def f(t):
             return vals[np.searchsorted(jumps, t)]
@@ -42,52 +45,58 @@ class Differentiation(VoiceoverScene):
         ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.5], 7.2, 3.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-2.5, 0.2, 0])
-        edges = np.concatenate([[0], jumps, [1]])
         graph = VGroup(*[Line(ax.c2p(a, v), ax.c2p(b, v), color=C.FUNC, stroke_width=3.5)
                          for a, b, v in zip(edges[:-1], edges[1:], vals)])
-        k = 12
+        # a typical point inside a wide step, and a jump with wide steps on both sides, far apart
+        k = 20
         x0 = float((jumps[k] + jumps[k + 1]) / 2 + 0.3 * (jumps[k + 1] - jumps[k]) / 2)
-        xj = float(jumps[20])
+        jx = 3
+        xj = float(jumps[jx])
+        lo_v, hi_v = float(vals[jx]), float(vals[jx + 1])
+        mid = 0.5 * (lo_v + hi_v)
+        assert min(jumps[k + 1] - jumps[k], jumps[jx] - jumps[jx - 1], jumps[jx + 1] - jumps[jx]) > 0.04
+        assert abs(hi_v - lo_v) > 0.4 and abs(x0 - xj) > 2 * 0.12 + 0.05  # the two windows never overlap
         rT = ValueTracker(0.12)
 
         def window(xc, col):
             def draw():
                 r = rT.get_value()
-                t = np.linspace(max(0, xc - r), min(1, xc + r), 600)
-                avg = float(np.mean(f(t)))
-                return VGroup(Rectangle(width=ax.c2p(t[-1], 0)[0] - ax.c2p(t[0], 0)[0], height=3.4, stroke_width=0,
-                                        fill_color=col, fill_opacity=0.12).move_to([ax.c2p((t[0] + t[-1]) / 2, 0)[0],
-                                                                                   ax.get_center()[1], 0]),
-                              Line(ax.c2p(t[0], avg), ax.c2p(t[-1], avg), color=col, stroke_width=5))
+                a, b = max(0.0, xc - r), min(1.0, xc + r)
+                avg = window_average(jumps, vals, a, b)
+                p0, p1 = ax.c2p(a, 0), ax.c2p(b, 1.1)
+                return VGroup(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=col,
+                                        fill_opacity=0.12).move_to((p0 + p1) / 2),
+                              Line(ax.c2p(a, avg), ax.c2p(b, avg), color=col, stroke_width=5))
             return draw
 
         w1 = always_redraw(window(x0, C.EPS))
         w2 = always_redraw(window(xj, C.PATHOLOGY))
-        d1 = Dot(ax.c2p(x0, float(f(np.array([x0]))[0])), radius=0.07, color=C.EPS)
-        d2 = Dot(ax.c2p(xj, float(f(np.array([xj]))[0])), radius=0.07, color=C.PATHOLOGY)
+        fx0 = float(f(np.array([x0]))[0])
+        d1 = Dot(ax.c2p(x0, fx0), radius=0.07, color=C.EPS)
+        # the jump: its two values joined by a dashed red line, the midpoint marked
+        jline = DashedLine(ax.c2p(xj, lo_v), ax.c2p(xj, hi_v), color=C.PATHOLOGY, stroke_width=2.5, dash_length=0.06)
+        d2 = VGroup(jline, Dot(ax.c2p(xj, mid), radius=0.07, color=C.PATHOLOGY))
+        # the readouts, checked: at the smallest r the typical point gives f(x) exactly, the jump its midpoint
+        assert window_average(jumps, vals, x0 - 0.001, x0 + 0.001) == fx0
+        assert abs(window_average(jumps, vals, xj - 0.001, xj + 0.001) - mid) < 1e-12
 
         def reads():
             r = rT.get_value()
-            t1 = np.linspace(x0 - r, x0 + r, 2001)
-            t2 = np.linspace(xj - r, xj + r, 2001)
             return VGroup(
                 MathTex(rf"r = {r:.4f}", font_size=26),
-                MathTex(rf"\text{{a typical point: average}} = {float(np.mean(f(t1))):.4f} \to f(x) = "
-                        rf"{float(f(np.array([x0]))[0]):.4f}", font_size=26, color=C.EPS),
-                MathTex(rf"\text{{a jump: average}} = {float(np.mean(f(t2))):.4f} \to \text{{the midpoint}}", font_size=26,
-                        color=C.PATHOLOGY),
+                MathTex(rf"\text{{a typical point: average}} = {window_average(jumps, vals, x0 - r, x0 + r):.4f} \to "
+                        rf"f(x) = {fx0:.4f}", font_size=26, color=C.EPS),
+                MathTex(rf"\text{{a jump: average}} = {window_average(jumps, vals, xj - r, xj + r):.4f} \to "
+                        rf"\text{{the midpoint}} = {mid:.4f}", font_size=26, color=C.PATHOLOGY),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.2).align_to(ax, LEFT)
 
         rd = always_redraw(reads)
-        mid = 0.5 * (vals[20] + vals[21])
-        t2 = np.linspace(xj - 1e-6, xj + 1e-6, 2001)
-        assert abs(np.mean(f(t2)) - mid) < 1e-3
         tab = VGroup(label(r"1000 random points:", font_size=24),
                      label(r"average $= f(x)$ exactly at", font_size=24))
         for r_, gv in zip(rs, good):
             tab.add(MathTex(rf"r = {sci(r_, 0)}: \ {100 * gv:.1f}\%", font_size=26, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.8, 0.6, 0])
-        assert good[-1] >= 0.998 and np.all(np.diff(good) >= 0)
+        assert abs(good[-1] - 0.999) < 1e-12 and np.all(np.diff(good) >= 0)
         thm = VGroup(
             label(r"\textbf{RCA 7.7} \ for $f \in L^1(\R^k)$,", font_size=26),
             label(r"almost every $x$ is a Lebesgue point:", font_size=26),
@@ -98,7 +107,7 @@ class Differentiation(VoiceoverScene):
             if r_.width > 4.2:
                 r_.width = 4.2
         thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.65, -1.15, 0], DR, buff=0)  # right column, below the readouts
-        head = label(r"Average $f$ over a shrinking interval: \ do you get $f(x)$ back?", font_size=32).to_edge(UP, buff=0.25)
+        head = label(r"Average $f$ over a shrinking interval: \ do you get $f(x)$ back?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Average a function over a small interval around x. As the interval shrinks, do "
             "you get f of x back? <bookmark mark='b'/> Here's a step function with thirty random jumps. At a typical "
@@ -110,9 +119,8 @@ class Differentiation(VoiceoverScene):
             "derivative of the integral is the function, almost everywhere."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeIn(head), Create(ax), LaggedStart(*[Create(s_) for s_ in graph], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(s_) for s_ in graph], lag_ratio=0.05), run_time=1.5)
             self.play(FadeIn(d1), FadeIn(w1), FadeIn(rd))
             vo.wait_until("c")
             self.play(FadeIn(d2), FadeIn(w2))

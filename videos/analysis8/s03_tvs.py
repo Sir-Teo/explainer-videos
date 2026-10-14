@@ -51,11 +51,12 @@ class TVS(VoiceoverScene):
                 r_.width = 7.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.1, -0.6, 0])
         assert -0.5 < min(f0.min(), f1.min()) and max(f0.max(), f1.max()) < 1.5
-        # each label beside its own curve, on the outer side of the bell (left: f, right: g), off the y-axis
+        # f beside its own curve, on the outer side of the bell and off the y-axis; g's formula in the free corner
+        # under the right tail (the text column begins just right of the panel)
         lab = VGroup(MathTex(r"f", font_size=28, color=C.FUNC).next_to(ax.c2p(-0.5, math.exp(-0.75) + 0.08), UL,
                                                                        buff=0.12),
                      MathTex(r"g = f + 0.08\sin 25x", font_size=24, color=C.APPROX).next_to(
-                         ax.c2p(0.5, math.exp(-0.75) + 0.08), UR, buff=0.12))
+                         ax.c2p(1.0, -0.1), DL, buff=0.0))
         head = label(r"Some spaces need infinitely many norms at once", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Some important spaces have no single norm. Take the smooth functions on an interval. "

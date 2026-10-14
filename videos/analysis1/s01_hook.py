@@ -160,7 +160,7 @@ class Hook(VoiceoverScene):
         def curve(n):
             return polyline(ax, xs, saw_partial(xs, n), color=C.APPROX, stroke_width=3)
 
-        mag = note(r"magnified: $|x - 2\pi| < 0.7$").to_corner(UL, buff=0.4)
+        mag = note(r"magnified: $|x - 2\pi| < 0.7$").to_corner(UL, buff=0.45)
         S = curve(20)
         n_t = MathTex(r"n = 20", font_size=32, color=C.APPROX).to_corner(UR, buff=0.5)
         with self.voiceover(
@@ -259,6 +259,20 @@ class Hook(VoiceoverScene):
         lim[0].set_color(C.APPROX)
         lim[3].set_color(C.APPROX)
         land = label(r"a limit needs a place to land", font_size=32, color=C.EPS).next_to(lim, DOWN, buff=0.5)
+        # the partial sums at x = 1, landing on (pi - 1)/2
+        Ls = (np.pi - 1) / 2
+        sn = np.cumsum(np.sin(np.arange(1, 41)) / np.arange(1, 41))
+        assert abs(sn[-1] - Ls) < 0.03 and abs(saw(np.array([1.0]))[0] - Ls) < 1e-12
+        Xl = lambda v: (v - 1.05) * 10.0  # noqa: E731
+        yl_ = -1.9
+        lline = Line([Xl(0.6), yl_, 0], [Xl(1.5), yl_, 0], color=GREY_C, stroke_width=2)
+        target = VGroup(Line([Xl(Ls), yl_ - 0.25, 0], [Xl(Ls), yl_ + 0.25, 0], color=C.EPS, stroke_width=3),
+                        MathTex(r"\tfrac{\pi - 1}{2}", font_size=28, color=C.EPS).next_to([Xl(Ls), yl_ - 0.25, 0], DOWN,
+                                                                                         buff=0.12))
+        sdots = VGroup(*[Dot([Xl(v), yl_ + 0.0, 0], radius=0.06, color=C.APPROX).set_opacity(0.35 + 0.65 * (k + 1) / len(sn))
+                         for k, v in enumerate(sn)])
+        s_cap = MathTex(r"\sum_{k=1}^{n} \frac{\sin k}{k}, \ n = 1, \ldots, 40", font_size=28, color=C.APPROX)
+        s_cap.next_to(lline, UP, buff=0.35).set_x(Xl(0.62) + 1.6)
         with self.voiceover(
             "Here's why. <bookmark mark='i'/> An infinite sum is a limit: we add terms, and ask what the partial sums "
             "approach. <bookmark mark='l'/> But a limit needs a place to land. <bookmark mark='q'/> These are the "
@@ -269,9 +283,10 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(Write(lim))
             vo.wait_until("l")
-            self.play(FadeIn(land, shift=UP * 0.2))
+            self.play(FadeIn(land, shift=UP * 0.2), Create(lline), FadeIn(s_cap))
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in sdots], lag_ratio=0.15), FadeIn(target), run_time=2.4)
             vo.wait_until("q")
-            self.play(FadeOut(lim), FadeOut(land))
+            self.play(FadeOut(lim), FadeOut(land), FadeOut(VGroup(lline, target, sdots, s_cap)))
             self.play(Create(axis), FadeIn(dust), FadeIn(labs), FadeIn(why_l))
             vo.wait_until("s")
             for i in range(4):

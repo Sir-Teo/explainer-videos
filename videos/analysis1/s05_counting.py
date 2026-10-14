@@ -36,7 +36,7 @@ class Counting(VoiceoverScene):
     def pairing(self):
         n = 9
         top = VGroup(*[MathTex(str(k), font_size=36, color=C.SEQ) for k in range(1, n + 1)]).arrange(RIGHT, buff=0.85)
-        bot = VGroup(*[MathTex(str(2 * k), font_size=36, color=C.APPROX) for k in range(1, n + 1)]).arrange(RIGHT, buff=0.85)
+        bot = VGroup(*[MathTex(str(2 * k), font_size=36, color=C.DELTA) for k in range(1, n + 1)]).arrange(RIGHT, buff=0.85)
         for t, b in zip(top, bot):
             b.set_x(t.get_x())
         top.move_to(UP * 0.9)
@@ -48,7 +48,7 @@ class Counting(VoiceoverScene):
         links = VGroup(*[Line(t.get_bottom() + DOWN * 0.08, b.get_top() + UP * 0.08, color=GREY_B, stroke_width=2)
                          for t, b in zip(top, bot)])
         lt = label(r"$\N$", font_size=34, color=C.SEQ).next_to(top, LEFT, buff=0.6)
-        lb = label(r"even numbers", font_size=28, color=C.APPROX).next_to(bot, LEFT, buff=0.4)
+        lb = label(r"even numbers", font_size=28, color=C.DELTA).next_to(bot, LEFT, buff=0.4)
         rule = label(r"Same size $=$ a one-to-one pairing with nothing left over", font_size=34).to_edge(UP, buff=0.6)
         defs = VGroup(
             label(r"\textbf{countable}: \ can be paired with $\N = \{1, 2, 3, \ldots\}$, \ i.e.\ listed", font_size=30),
@@ -321,7 +321,7 @@ class Counting(VoiceoverScene):
             return g, a
 
         s1, x1 = path((1, 0, 0, 1), C.SEQ)
-        s2, x2 = path((1, 1), C.APPROX)
+        s2, x2 = path((1, 1), C.DELTA)
         land = Dot([X(Fraction(2, 3) + Fraction(2, 81) + Fraction(2, 243)), lev_y[4] - 0.22, 0], radius=0.06,
                    color=C.SEQ)
         gap_a, gap_b = Fraction(7, 9), Fraction(8, 9)  # s and s' first differ at place 2: a gap of 1/9 between
@@ -330,7 +330,7 @@ class Counting(VoiceoverScene):
                      MathTex(r"\ge \tfrac{1}{3^n}", font_size=24, color=C.EPS).next_to(
                          [X((gap_a + gap_b) / 2), lev_y[2], 0], DOWN, buff=0.08))
         slabs = VGroup(MathTex(r"s", font_size=26, color=C.SEQ).next_to(s1[-1], DOWN, buff=0.08),
-                       MathTex(r"s'", font_size=26, color=C.APPROX).next_to(s2[-1], RIGHT, buff=0.12))
+                       MathTex(r"s'", font_size=26, color=C.DELTA).next_to(s2[-1], RIGHT, buff=0.12))
         ends = VGroup(MathTex(r"0", font_size=24, color=GREY_B).next_to([X(0), lev_y[0], 0], LEFT, buff=0.15),
                       MathTex(r"1", font_size=24, color=GREY_B).next_to([X(1), lev_y[0], 0], RIGHT, buff=0.15))
         assert gap_b - gap_a == Fraction(1, 9) and x1 == Fraction(56, 81) and x2 == Fraction(8, 9)

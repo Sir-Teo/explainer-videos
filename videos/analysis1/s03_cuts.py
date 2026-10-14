@@ -371,10 +371,10 @@ class Cuts(VoiceoverScene):
 
         a_, b_ = SQRT2, 0.5
         ys_ = (-0.95, -1.3, -1.65, -2.1)  # the rays fill the middle band, the axis under them
-        rays = VGroup(aray(a_, ys_[0], C.CUT_LOW), aray(b_, ys_[1], C.APPROX), aray(a_ + b_, ys_[2], C.EPS, sw=7),
+        rays = VGroup(aray(a_, ys_[0], C.CUT_LOW), aray(b_, ys_[1], C.DELTA), aray(a_ + b_, ys_[2], C.EPS, sw=7),
                       aray(0, ys_[3], GREY_B))
         rlabs = VGroup(MathTex(r"\alpha = (\sqrt2)^*", font_size=26, color=C.CUT_LOW),
-                       MathTex(r"\beta = (\tfrac12)^*", font_size=26, color=C.APPROX),
+                       MathTex(r"\beta = (\tfrac12)^*", font_size=26, color=C.DELTA),
                        MathTex(r"\alpha + \beta", font_size=26, color=C.EPS),
                        MathTex(r"0^*", font_size=26, color=GREY_B))
         for l_, r_ in zip(rlabs, rays):

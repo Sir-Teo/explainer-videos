@@ -31,7 +31,7 @@ class OpenClosed(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(6, r"Open and closed sets", r"Which points have wiggle room?", part=1)
+        card = chapter_card(6, r"Open and closed sets", r"Which points have wiggle room?", lit=(1906,), part=1)
         with self.voiceover(
             "Chapter six. With a distance in hand, we can describe the shape of a set in terms of which points have "
             "wiggle room."
@@ -166,9 +166,11 @@ class OpenClosed(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-        lim = VGroup(label(r"\textbf{Theorem} (Rudin 2.20) \ If $p$ is a limit point of $E$, every neighborhood", font_size=28),
-                     label(r"of $p$ contains \emph{infinitely many} points of $E$. \ So finite sets have no limit points.",
-                           font_size=28)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
+        lim = VGroup(label(r"\textbf{Theorem} (Rudin 2.20)", font_size=28, color=GREY_A),
+                     label(r"If $p$ is a limit point of $E$, every neighborhood of $p$ contains \emph{infinitely many}",
+                           font_size=30),
+                     label(r"points of $E$. \ So finite sets have no limit points.", font_size=30)
+                     ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.45)
         p = np.array([0, -0.8, 0])
         pd = Dot(p, radius=0.07)
         pts = [p + 1.9 * np.array([np.cos(a), np.sin(a), 0]) * s for a, s in ((0.3, 0.8), (2.0, 0.55), (4.2, 0.7), (5.4, 0.4))]
@@ -411,7 +413,7 @@ class OpenClosed(VoiceoverScene):
         sup = VGroup(label(r"\textbf{Rudin 2.28} \ If $E \subset \R$ is nonempty and bounded above, $\sup E \in \overline{E}$.",
                            font_size=28),
                      label(r"(If $\sup E$ were not a limit point, a slightly smaller number would be an upper bound.)",
-                           font_size=24, color=GREY_B)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
+                           font_size=24, color=GREY_B)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Adding the limit points to a set gives its closure, <bookmark mark='c'/> the smallest closed set containing "
             "it. <bookmark mark='q'/> The closure of the rationals is the whole real line: every real number is a limit "

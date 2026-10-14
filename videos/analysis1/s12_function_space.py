@@ -17,7 +17,7 @@ class FunctionSpace(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(11, r"A first space of functions", r"Is every closed and bounded set compact?", part=1)
+        card = chapter_card(11, r"A first space of functions", r"Is every closed and bounded set compact?", lit=(1906,), part=1)
         with self.voiceover(
             "Chapter eleven. We end where the series is headed: a space whose points are functions. And it comes with a "
             "warning."
@@ -115,7 +115,7 @@ class FunctionSpace(VoiceoverScene):
         concl = VGroup(label(r"every two tents are at distance exactly $1$, so a ball of radius $\tfrac12$", font_size=27),
                        label(r"holds at most one: \ $\{f_n\}$ has no limit point \ (2.20)", font_size=27),
                        label(r"$\Rightarrow$ \ $B$ is closed and bounded, but \textbf{not compact} \ (2.37)", font_size=29,
-                             color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.25)
+                             color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Now measure distances. <bookmark mark='d'/> Where one tent reaches height one, every other tent is zero, so "
             "the distance between any two of them is exactly one. <bookmark mark='g'/> Here's the whole table: zeros on "

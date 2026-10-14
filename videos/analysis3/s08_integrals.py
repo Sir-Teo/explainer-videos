@@ -111,18 +111,18 @@ class IntegralsDerivatives(VoiceoverScene):
                            r"$\Rightarrow$", font_size=28),
                      MathTex(r"f_n \to f \text{ uniformly, and } f' = \lim f_n'", font_size=32, color=C.EPS)
                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
-        ax = plain_axes([-1, 1, 0.5], [-0.55, 0.55, 0.5], 5.2, 2.7).move_to([-4.0, 0.6, 0])
-        bx = plain_axes([-1, 1, 0.5], [-0.3, 1.1, 0.5], 5.2, 2.7).move_to([-4.0, -2.35, 0])
+        ax = plain_axes([-1, 1, 0.5], [-0.55, 0.55, 0.5], 5.4, 2.3).move_to([-3.65, 0.8, 0])
+        bx = plain_axes([-1, 1, 0.5], [-0.3, 1.1, 0.5], 5.4, 2.3).move_to([-3.65, -2.5, 0])
         x = np.linspace(-1, 1, 1601)
         nT = ValueTracker(1.0)
         fseq = lambda n, t: t / (1 + n * t * t)  # noqa: E731
         dseq = lambda n, t: (1 - n * t * t) / (1 + n * t * t) ** 2  # noqa: E731
         gf = always_redraw(lambda: polyline(ax, x, fseq(nT.get_value(), x), color=C.FUNC, stroke_width=3.5))
-        gd = always_redraw(lambda: polyline(bx, x, np.clip(dseq(nT.get_value(), x), -0.3, 1.1), color=C.APPROX,
-                                            stroke_width=3))
-        fl = MathTex(r"f_n(x) = \frac{x}{1 + n x^2}", font_size=28, color=C.FUNC).next_to(ax, RIGHT, buff=0.15)
-        dl = MathTex(r"f_n'(x) = \frac{1 - n x^2}{(1 + n x^2)^2}", font_size=28, color=C.APPROX).next_to(bx, RIGHT,
-                                                                                                buff=0.15)
+        # f_n' ranges over [-1/8, 1] (min at n x^2 = 3), inside the axes: no clipping needed
+        assert all(-0.13 < dseq(n, x).min() and dseq(n, x).max() <= 1 for n in (1, 10, 150))
+        gd = always_redraw(lambda: polyline(bx, x, dseq(nT.get_value(), x), color=C.APPROX, stroke_width=3))
+        fl = MathTex(r"f_n(x) = \frac{x}{1 + n x^2}", font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.1)
+        dl = MathTex(r"f_n'(x) = \frac{1 - n x^2}{(1 + n x^2)^2}", font_size=28, color=C.APPROX).next_to(bx, UP, buff=0.1)
         facts = VGroup(
             MathTex(r"\sup |f_n| = \frac{1}{2\sqrt n} \to 0", font_size=30),
             VGroup(MathTex(r"f_n'(0) = 1 \text{ for every } n,", font_size=30),
@@ -134,8 +134,11 @@ class IntegralsDerivatives(VoiceoverScene):
             VGroup(label(r"and $\sin(nx)/\sqrt n$ from the opening:", font_size=24, color=GREY_A),
                    label(r"$f_n \to 0$ uniformly, \ $f_n'$ does not converge", font_size=24, color=GREY_A)
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.3, -0.75, 0])
-        n_l = always_redraw(lambda: MathTex(rf"n = {round(nT.get_value())}", font_size=28).next_to(ax, UP, buff=0.05))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        facts.move_to([0.4 + facts.width / 2, -0.75, 0])
+        assert facts.get_right()[0] < 6.6
+        n_l = always_redraw(lambda: MathTex(rf"n = {round(nT.get_value())}", font_size=28, color=C.FUNC).next_to(
+            fl, RIGHT, buff=0.5))
         t = np.linspace(-1, 1, 200001)
         for n in (1, 4, 25, 100):
             assert abs(np.abs(fseq(n, t)).max() - 1 / (2 * np.sqrt(n))) < 1e-6 and dseq(n, np.array([0.0]))[0] == 1
@@ -167,7 +170,7 @@ class IntegralsDerivatives(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def summary(self):
-        head = label(r"Which swap needs what \ (so far)", font_size=36).to_edge(UP, buff=0.5)
+        head = label(r"Which swap needs what \ (so far)", font_size=34).to_edge(UP, buff=0.3)
         rows = [
             (r"$\lim_n$ and continuity", r"uniform convergence", r"7.12"),
             (r"$\lim_n$ and $\int$", r"uniform convergence", r"7.16"),
@@ -177,13 +180,60 @@ class IntegralsDerivatives(VoiceoverScene):
         tab = VGroup()
         for i, (a, b_, c) in enumerate(rows):
             col = C.EPS if i < 3 else GREY_B
-            tab.add(VGroup(label(a, font_size=28), label(b_, font_size=28, color=col),
+            tab.add(VGroup(label(a, font_size=26), label(b_, font_size=26, color=col),
                            label(c, font_size=24, color=GREY_B)))
-        for r_ in tab:
-            r_[0].move_to([-3.6, 0, 0])
-            r_[1].move_to([1.6, 0, 0])
-            r_[2].move_to([5.6, 0, 0])
-        tab.arrange(DOWN, buff=0.45).move_to([0, -0.3, 0])
+        # columns: thumbnail | swap | what it needs | where; rows 1.3 apart, every column left-aligned
+        TW, TH = 1.6, 0.95
+        x_t = -6.55 + TW / 2
+        x0 = -6.55 + TW + 0.35
+        x1 = x0 + max(r_[0].width for r_ in tab) + 0.45
+        x2 = x1 + max(r_[1].width for r_ in tab) + 0.45
+        assert x2 + max(r_[2].width for r_ in tab) < 6.6
+        ys = [1.75 - 1.35 * i for i in range(4)]
+        for r_, y_ in zip(tab, ys):
+            r_[0].move_to([x0 + r_[0].width / 2, y_, 0])
+            r_[1].move_to([x1 + r_[1].width / 2, y_, 0])
+            r_[2].move_to([x2 + r_[2].width / 2, y_, 0])
+        thumbs = VGroup()
+        u = np.linspace(0, 3, 300)
+        # 1. continuity: f_n inside the uniform band around f
+        f1, g1 = 0.5 + 0.3 * np.sin(2.5 * u), 0.5 + 0.3 * np.sin(2.5 * u) + 0.11 * np.sin(9 * u)
+        a1 = plain_axes([0, 3, 1], [0, 1, 0.5], TW, TH, axis_config={"include_ticks": False})
+        band1 = Polygon(*[a1.c2p(p_, q_) for p_, q_ in zip(u[::6], f1[::6] + 0.14)],
+                        *[a1.c2p(p_, q_) for p_, q_ in zip(u[::-6], f1[::-6] - 0.14)], stroke_width=0, fill_color=C.EPS,
+                        fill_opacity=0.25)
+        assert np.abs(g1 - f1).max() < 0.14
+        thumbs.add(VGroup(a1, band1, polyline(a1, u, f1, color=WHITE, stroke_width=2),
+                          polyline(a1, u, g1, color=C.FUNC, stroke_width=2)))
+        # 2. integrals: the area between f_n and f fits in the box (b - a) x sup|f_n - f|
+        f2, g2 = base(u) * 0.45, base(u) * 0.45 + np.sin(5 * 3 * u + 1) / (1.5 * 3) * 0.45
+        a2 = plain_axes([0, 3, 1], [0, 1.0, 0.5], TW, TH, axis_config={"include_ticks": False})
+        M2 = float(np.abs(g2 - f2).max())
+        assert trap(np.abs(g2 - f2), u) <= 3 * M2
+        gap2 = Polygon(*[a2.c2p(p_, q_) for p_, q_ in zip(u[::3], g2[::3])], *[a2.c2p(p_, q_) for p_, q_ in
+                                                                              zip(u[::-3], f2[::-3])],
+                       stroke_width=0, fill_color=C.MEASURE, fill_opacity=0.5)
+        p0_, p1_ = a2.c2p(0, 0), a2.c2p(3, M2)
+        box2 = Rectangle(width=p1_[0] - p0_[0], height=p1_[1] - p0_[1], stroke_color=C.EPS, stroke_width=1.5,
+                         fill_color=C.EPS, fill_opacity=0.15).move_to((p0_ + p1_) / 2)
+        thumbs.add(VGroup(a2, gap2, box2, polyline(a2, u, f2, color=WHITE, stroke_width=2),
+                          polyline(a2, u, g2, color=C.FUNC, stroke_width=2)))
+        # 3. derivatives: x / (1 + 25 x^2) is small, but its slope at 0 is 1
+        v = np.linspace(-1, 1, 400)
+        a3 = plain_axes([-1, 1, 1], [-0.55, 0.55, 0.5], TW, TH, axis_config={"include_ticks": False})
+        f3 = v / (1 + 25 * v * v)
+        assert abs(np.abs(f3).max() - 0.1) < 1e-3 and abs(np.gradient(f3, v)[200] - 1) < 0.02
+        thumbs.add(VGroup(a3, polyline(a3, v, f3, color=C.FUNC, stroke_width=2),
+                          Line(a3.c2p(-0.5, -0.5), a3.c2p(0.5, 0.5), color=C.EPS, stroke_width=2)))
+        # 4. without uniformity: x^n under the lid 1; the integrals 1/(n + 1) still go to 0 (Part 5)
+        a4 = plain_axes([0, 1, 1], [0, 1.15, 1], TW, TH, axis_config={"include_ticks": False})
+        w = np.linspace(0, 1, 300)
+        fam4 = VGroup(*[polyline(a4, w, w**n, color=interpolate_color(ManimColor(GREY_D), ManimColor(GREY_A), k / 4),
+                                 stroke_width=1.6) for k, n in enumerate((1, 2, 4, 8, 16))])
+        assert all(abs(trap(w**n, w) - 1 / (n + 1)) < 1e-3 for n in (1, 2, 4, 8, 16))
+        thumbs.add(VGroup(a4, DashedLine(a4.c2p(0, 1), a4.c2p(1, 1), color=GREY_B, stroke_width=1.5), fam4))
+        for th_, y_ in zip(thumbs, ys):
+            th_.move_to([x_t, y_, 0])
         with self.voiceover(
             "So far, then: <bookmark mark='a'/> uniform convergence lets limits pass through continuity and through "
             "integrals, and for derivatives we need the derivatives to converge uniformly. <bookmark mark='b'/> "
@@ -192,8 +242,9 @@ class IntegralsDerivatives(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab[:3]], lag_ratio=0.4))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(t_), FadeIn(r_, shift=RIGHT * 0.2)) for t_, r_ in
+                                    zip(thumbs[:3], tab[:3])], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(tab[3], shift=RIGHT * 0.2))
+            self.play(FadeIn(thumbs[3]), FadeIn(tab[3], shift=RIGHT * 0.2))
         self.wait(0.4)
         self.clear_scene()
