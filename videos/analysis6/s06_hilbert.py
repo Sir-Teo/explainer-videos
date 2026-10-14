@@ -301,8 +301,14 @@ class Hilbert(VoiceoverScene):
                     cap(rf"|z - Pz| = {np.linalg.norm(z - pz):.2f}", r"= \min_{w \in M} |z - w|", color=C.EPS))
         gvec = np.array([0.6, 0.8])
         tg = np.array([-gvec[1], gvec[0]])
-        P4 = VGroup(*[Line(ix.c2p(*(c * gvec - 1.5 * tg)), ix.c2p(*(c * gvec + 1.5 * tg)), color=C.FUNCTIONAL,
-                           stroke_width=2.5).set_stroke(opacity=0.9 if c == 0 else 0.55) for c in (-1.0, -0.5, 0.0, 0.5, 1.0)],
+        def level_seg(c):  # the level line {x . y = c}, cut to the inset's square
+            ts_ = np.linspace(-3, 3, 1201)
+            pts_ = c * gvec[None, :] + ts_[:, None] * tg[None, :]
+            ok_ = np.all(np.abs(pts_) <= 1.5, axis=1)
+            return Line(ix.c2p(*pts_[ok_][0]), ix.c2p(*pts_[ok_][-1]), color=C.FUNCTIONAL, stroke_width=2.5).set_stroke(
+                opacity=0.9 if c == 0 else 0.55)
+
+        P4 = VGroup(*[level_seg(c) for c in (-1.0, -0.5, 0.0, 0.5, 1.0)],
                     arrow(O, gvec, C.INNER, 5), tag("y", gvec, RIGHT, C.INNER),
                     cap(r"\text{level lines of } x \mapsto x \cdot y,", r"\text{perpendicular to } y", color=C.FUNCTIONAL))
         assert abs(np.linalg.norm(gvec) - 1) < 1e-12

@@ -63,8 +63,15 @@ class Counting(VoiceoverScene):
             "the same as saying its elements can be listed, first, second, third, forever. "
             "<bookmark mark='u'/> An infinite set that can't be listed is uncountable."
         ) as vo:
-            self.play(FadeIn(rule))
+            fa = VGroup(*[Dot([-2.0 + 1.0 * k, 0.9, 0], radius=0.1, color=C.SEQ) for k in range(5)])
+            fb = VGroup(*[Square(side_length=0.2, stroke_width=0, fill_color=C.DELTA, fill_opacity=1)
+                          .move_to([-2.0 + 1.0 * k + 0.25 * np.sin(1.7 * k), -0.6, 0]) for k in range(5)])
+            flinks = VGroup(*[Line(a_.get_center(), b_.get_center(), buff=0.14, color=GREY_B, stroke_width=2)
+                              for a_, b_ in zip(fa, fb)])
+            self.play(FadeIn(rule), FadeIn(fa), FadeIn(fb))
+            self.play(LaggedStart(*[Create(l_) for l_ in flinks], lag_ratio=0.2), run_time=1.2)
             vo.wait_until("p")
+            self.play(FadeOut(VGroup(fa, fb, flinks)), run_time=0.5)
             self.play(FadeIn(top), FadeIn(dots_t), FadeIn(lt))
             self.play(FadeIn(bot), FadeIn(dots_b), FadeIn(lb), LaggedStart(*[Create(l) for l in links], lag_ratio=0.15))
             vo.wait_until("d")
@@ -119,6 +126,9 @@ class Counting(VoiceoverScene):
                 c = origin + np.array([(p - 1) * cell * 1.25, -(q - 1) * cell, 0])
                 pos[(p, q)] = c
                 grid.add(MathTex(rf"\tfrac{{{p}}}{{{q}}}", font_size=34).move_to(c))
+        cells_bg = VGroup(*[RoundedRectangle(width=cell * 1.25 - 0.1, height=cell - 0.1, corner_radius=0.08, stroke_width=1,
+                                             stroke_color=GREY_D, fill_color=C.RATIONAL, fill_opacity=0.08).move_to(c)
+                            for c in pos.values()])
         ph = MathTex(r"p \to", font_size=28, color=GREY_B).next_to(grid, UP, buff=0.2).align_to(grid, LEFT)
         qh = MathTex(r"q \downarrow", font_size=28, color=GREY_B).next_to(grid, LEFT, buff=0.25).align_to(grid, UP)
         cell_of = {}
@@ -156,7 +166,8 @@ class Counting(VoiceoverScene):
             "<bookmark mark='s'/> and number each fraction as you reach it, skipping any you've already counted, like two "
             "over two, which is one."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.01), FadeIn(ph), FadeIn(qh), run_time=1.5)
+            self.play(FadeIn(cells_bg), LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.01), FadeIn(ph), FadeIn(qh),
+                      run_time=1.5)
             vo.wait_until("z")
             self.play(LaggedStart(*[Create(sg) for sg in path], lag_ratio=1.0), run_time=3.0, rate_func=linear)
             vo.wait_until("s")
@@ -193,6 +204,9 @@ class Counting(VoiceoverScene):
                 m.move_to([-4.2 + 1.25 * k, 1.6 - 0.85 * (i - 1), 0])
             rows.add(row)
         rows.add(MathTex(r"\vdots", font_size=36).move_to([-4.2 + 1.25, 1.6 - 0.85 * 4 + 0.15, 0]))
+        bands = VGroup(*[RoundedRectangle(width=1.25 * 6.2, height=0.62, corner_radius=0.12, stroke_width=0,
+                                          fill_color=col, fill_opacity=0.12).move_to([-4.2 + 1.25 * 3.1, 1.6 - 0.85 * i, 0])
+                         for i, col in enumerate((C.SEQ, C.DELTA, C.EPS, C.CLOSED_SET))])
         visit = []  # diagonal by diagonal, alternating direction, so each step goes to a neighbor
         for s in range(2, 8):
             diag = [(i, s - i) for i in range(1, s) if i <= 4 and s - i <= 5]
@@ -214,7 +228,7 @@ class Counting(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(stmt))
             vo.wait_until("t")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.2))
+            self.play(LaggedStart(*[FadeIn(VGroup(b_, r)) for b_, r in zip(bands, rows)], lag_ratio=0.2), FadeIn(rows[-1]))
             vo.wait_until("z")
             self.play(FadeIn(order[0]), run_time=0.3)
             self.play(LaggedStart(*[AnimationGroup(Create(sg), FadeIn(o_)) for sg, o_ in zip(path, order[1:])],

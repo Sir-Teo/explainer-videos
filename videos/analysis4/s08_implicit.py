@@ -270,7 +270,7 @@ class ImplicitFunction(VoiceoverScene):
     # ------------------------------------------------------------------
     def rank(self):
         head = VGroup(label(r"The rank theorem, \ in one picture", font_size=34),
-                      label(r"if $F'$ has constant rank $r$, \ then near each point, in suitable coordinates, \ "
+                      label(r"$F'$ of constant rank $r$ $\Rightarrow$ near each point, in suitable coordinates, \ "
                             r"$F$ is a projection onto $r$ coordinates \ (Rudin 9.32)", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ax = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.4).move_to([-3.6, -0.35, 0])

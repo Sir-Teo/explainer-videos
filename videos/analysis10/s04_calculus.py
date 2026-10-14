@@ -210,10 +210,12 @@ class SymbolicCalculus(VoiceoverScene):
             MathTex(rf"\big\|(\sqrt B)^2 - B\big\| = {sci(err, 1)}", font_size=26, color=C.OPERATOR),
             label(r"logarithms, \ fractional powers, \ resolvents: \ the same way", font_size=22, color=GREY_A),
             label(r"Part 7's Runge: \ rational functions are enough", font_size=22, color=GREY_A),
-            label(r"\textbf{FA 10.35} (Lomonosov 1973): \ $T \ne \lambda I$ commuting with compact $K \ne 0$",
-                  font_size=22),
+            label(r"\textbf{FA 10.35} (Lomonosov 1973):", font_size=22),
+            label(r"$T \ne \lambda I$ commuting with a compact $K \ne 0$", font_size=22),
             label(r"has a nontrivial closed invariant subspace \ (Schauder)", font_size=22),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        for r_ in rows[7:]:
+            r_.shift(UP * 0.06 * (list(rows).index(r_) - 6))  # the three lines of the theorem read as one block
         rows.next_to([0.2, -0.3, 0], RIGHT, buff=0)
         assert max(r_.width for r_ in rows) <= 6.0 and rows.get_right()[0] <= 6.6 and rows.get_left()[0] > cx.get_right()[0]
         head = label(r"Square roots of operators", font_size=34).to_edge(UP, buff=0.3)

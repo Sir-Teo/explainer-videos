@@ -50,8 +50,14 @@ class DualLp(VoiceoverScene):
 
         lv = always_redraw(level)
         # as in chapter 7: the functional is a stack of parallel level lines, with the vector g as their normal
-        stack = VGroup(*[Line(ax.c2p(*(c_ / np.linalg.norm(g) * gu - 1.6 * tg)), ax.c2p(*(c_ / np.linalg.norm(g) * gu + 1.6 * tg)),
-                              color=C.FUNCTIONAL, stroke_width=1.5).set_stroke(opacity=0.35) for c_ in (-0.8, -0.4, 0.4, 0.8)])
+        def faint(c_):  # the level line {g . x = c_}, cut to the axes' square
+            ts_ = np.linspace(-3, 3, 1201)
+            pts_ = c_ / np.linalg.norm(g) * gu[None, :] + ts_[:, None] * tg[None, :]
+            ok_ = np.all(np.abs(pts_) <= 1.35, axis=1)
+            return Line(ax.c2p(*pts_[ok_][0]), ax.c2p(*pts_[ok_][-1]), color=C.FUNCTIONAL, stroke_width=1.5).set_stroke(
+                opacity=0.35)
+
+        stack = VGroup(*[faint(c_) for c_ in (-0.8, -0.4, 0.4, 0.8)])
         garr = Arrow(ax.c2p(0, 0), ax.c2p(*g), buff=0, color=C.INNER, stroke_width=5, tip_length=0.18)
         g_l = MathTex("g", font_size=28, color=C.INNER).next_to(ax.c2p(*g), DOWN, buff=0.1).shift(RIGHT * 0.1)
         lv_l = always_redraw(lambda: MathTex(rf"\{{x : 0.8x_1 + 0.5x_2 = {cT.get_value():.4f}\}}", font_size=26,
@@ -59,6 +65,8 @@ class DualLp(VoiceoverScene):
         xd = Dot(ax.c2p(*xstar), radius=0.09, color=C.EPS)
         x_l = MathTex(r"x^*", font_size=28, color=C.EPS).next_to(xd, UR, buff=0.05)
         b_l = MathTex(r"\|x\|_3 \le 1", font_size=28, color=C.DIST).move_to(ax.c2p(-0.5, -0.45))
+        b_l.add_background_rectangle(color=BACKGROUND, opacity=0.8, buff=0.05)  # over the faint level lines
+        b_l.set_z_index(2)
         side = VGroup(
             MathTex(r"\Lambda x = g \cdot x, \quad g = (0.8,\ 0.5)", font_size=30),
             MathTex(rf"\|\Lambda\| = \max_{{\|x\|_3 \le 1}} \Lambda x = \|g\|_{{3/2}} = {nq:.4f}", font_size=30,
@@ -227,7 +235,7 @@ class DualLp(VoiceoverScene):
         for r_ in side:
             if r_.width > 4.9:
                 r_.width = 4.9
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.4, -0.4, 0])
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([4.1, -0.4, 0])
         xf = np.linspace(0, 1, 100001)
         wf = 1 + 0.5 * np.sin(2 * math.pi * xf)
         assert wf.min() > 0 and abs(float(np.sum((wf[1:] + wf[:-1]) / 2) * (xf[1] - xf[0])) - 1) < 1e-9

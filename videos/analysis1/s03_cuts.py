@@ -470,9 +470,9 @@ class Cuts(VoiceoverScene):
             "sequences counting as the same number when their difference goes to zero, like the decimals and the hops "
             "for root two."
         ) as vo:
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(nl), FadeIn(ring), FadeIn(ring_l))
             vo.wait_until("c")
-            self.play(Create(nl), FadeIn(ring), FadeIn(ring_l), FadeIn(names), FadeIn(who))
+            self.play(FadeIn(names), FadeIn(who))
             self.play(LaggedStart(*[FadeIn(d, scale=2) for d in dots_d], lag_ratio=0.25),
                       LaggedStart(*[FadeIn(h, scale=2) for h in dots_h], lag_ratio=0.25),
                       FadeIn(tab[0]), FadeIn(tab[1]), run_time=2.0)

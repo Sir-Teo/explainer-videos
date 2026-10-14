@@ -106,7 +106,7 @@ class Picard(VoiceoverScene):
         head = label(r"$y' = y$, \ $y(0) = 1$: \ iterate $T$ from $y_0 = 0$", font_size=34).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 1, 0.25], [0, 3, 1], 6.0, 5.0, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, -0.65, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.25, -0.65, 0])
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), k / 8) for k in range(9)]
         its = [polyline(ax, t, Y[k], color=cols[k], stroke_width=3) for k in range(9)]
         assert np.allclose(Y[0], 0)
@@ -165,7 +165,7 @@ class Picard(VoiceoverScene):
                       ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.3)
         ax = plain_axes([0, 1, 0.25], [0, 2.0, 0.5], 6.0, 4.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.6, -0.75, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.25, -0.75, 0])
         assert Z.min() > 0.2 and Z.max() < 2.0 and ref.max() < 2.0
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), k / 6) for k in range(7)]
         its = [polyline(ax, t, Z[k], color=cols[k], stroke_width=3) for k in range(7)]
@@ -214,7 +214,7 @@ class Picard(VoiceoverScene):
         head[1][1].set_color(GREY_A)
         ax = plain_axes([0, 3, 1], [0, 4, 1], 6.0, 4.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, -0.85, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.25, -0.85, 0])
         t = np.linspace(0, 3, 601)
         cs = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
         zero = Line(ax.c2p(0, 0), ax.c2p(3, 0), color=C.SEQ, stroke_width=4).set_z_index(3)

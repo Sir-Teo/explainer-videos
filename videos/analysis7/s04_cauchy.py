@@ -137,9 +137,9 @@ class CauchyFormula(VoiceoverScene):
             "series, and so derivatives of every order."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(coef[0]))
+            self.play(FadeIn(head), FadeIn(coef[0]), FadeIn(img), Create(frame), Create(c05))  # the circle |z| = 1/2
             vo.wait_until("b")
-            self.play(FadeIn(img), Create(frame), FadeIn(f_l), Create(c05), Create(poles))
+            self.play(FadeIn(f_l), Create(poles), Indicate(c05, color=WHITE, scale_factor=1.05))
             vo.wait_until("c")
             self.play(FadeIn(coef[1]))
             self.play(FadeIn(coef[2:4]))
