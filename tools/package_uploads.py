@@ -147,12 +147,62 @@ def hero_frame(video: str, t480: float) -> Image.Image:
     return Image.open(tmp).convert("RGB")
 
 
-def _wrap(draw, text: str, font, width: int, cjk: bool) -> list[str]:
+SUP = {"ᵖ": "p", "ˢ": "s", "²": "2", "¹": "1"}  # superscripts the title fonts lack, drawn as raised small letters
+
+
+def _segments_sup(text: str) -> list[tuple[str, bool]]:
+    out: list[tuple[str, bool]] = []
+    for ch in text:
+        sup = ch in SUP
+        ch = SUP.get(ch, ch)
+        if out and out[-1][1] == sup:
+            out[-1] = (out[-1][0] + ch, sup)
+        else:
+            out.append((ch, sup))
+    return out
+
+
+def _width(draw, text: str, font, sup_font) -> float:
+    return sum(draw.textlength(t, font=sup_font if sup else font) for t, sup in _segments_sup(text))
+
+
+def _draw_centred(draw, cx: float, y: float, text: str, font, sup_font, size: int, fill) -> None:
+    x = cx - _width(draw, text, font, sup_font) / 2
+    base = y + font.getmetrics()[0]
+    for t, sup in _segments_sup(text):
+        f = sup_font if sup else font
+        draw.text((x, base - (0.42 * size if sup else 0)), t, font=f, fill=fill, anchor="ls")
+        x += draw.textlength(t, font=f)
+
+
+def _wrap(draw, text: str, font, sup_font, width: int, cjk: bool) -> list[str]:
+    """One line if it fits; else the most balanced two lines, breaking after a comma or colon in English, and at
+    punctuation or before 与 in Chinese (never inside a word); else greedy lines."""
+    w = lambda t: _width(draw, t, font, sup_font)  # noqa: E731
+    if w(text) <= width:
+        return [text]
+    best, best_cost = None, float("inf")
+    for i in range(1, len(text)):
+        if cjk:
+            if text[i - 1] in "、，：；" or (text[i - 1] == "—" and text[i] != "—") or text[i] == "与":
+                a, b, bonus = text[:i], text[i:], 0.0
+            else:
+                continue
+        else:
+            if text[i] != " ":
+                continue
+            a, b = text[:i], text[i + 1:]
+            bonus = -0.08 * width if a[-1] in ",:;" else 0.0
+        m = max(w(a), w(b))
+        if m <= width and m + bonus < best_cost:
+            best, best_cost = [a, b], m + bonus
+    if best:
+        return best
     units = list(text) if cjk else text.split(" ")
     lines, cur = [], ""
     for u in units:
         cand = cur + u if cjk or not cur else f"{cur} {u}"
-        if draw.textlength(cand, font=font) <= width or not cur:
+        if w(cand) <= width or not cur:
             cur = cand
         else:
             lines.append(cur)
@@ -174,8 +224,8 @@ def thumbnail(video: str, lang: str, hero: Image.Image, crop: list[float], dst: 
     kf = ImageFont.truetype(font_path, 58)
     size = 112
     while True:
-        tf = ImageFont.truetype(font_path, size)
-        lines = _wrap(d, title, tf, 1380, cjk)
+        tf, sf = ImageFont.truetype(font_path, size), ImageFont.truetype(FONT_EN, int(size * 0.62))
+        lines = _wrap(d, title, tf, sf, 1380, cjk)
         if len(lines) <= 2 or size <= 72:
             break
         size -= 8
@@ -183,7 +233,7 @@ def thumbnail(video: str, lang: str, hero: Image.Image, crop: list[float], dst: 
     d.text((W / 2, y), kicker, font=kf, fill=YELLOW, anchor="mt")
     y += 58 + 34
     for ln in lines:
-        d.text((W / 2, y), ln, font=tf, fill=WHITE, anchor="mt")
+        _draw_centred(d, W / 2, y, ln, tf, sf, size, WHITE)
         y += int(size * 1.18)
     # the hero picture fills the rest, letterboxed on the videos' own background
     x0, y0, x1, y1 = crop
