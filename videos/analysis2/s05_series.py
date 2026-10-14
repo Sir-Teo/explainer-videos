@@ -401,7 +401,7 @@ class Series(VoiceoverScene):
         assert 0.0015 < gap15 < 0.0025, gap15
         # the last stretch of p = 3/2, magnified: a million terms in, still about 0.002 below its limit
         mx, my = (5.3, 6.4), (2.600, 2.6135)
-        ins, deco = magnifier(lx, mx, my, center=(4.4, 0.55), width=3.4, height=1.3,
+        ins, deco = magnifier(lx, mx, my, center=np.array([4.4, 0.55, 0]), width=3.4, height=1.3,
                               tag=rf"\text{{heights}} \times {1.3 / (lx.c2p(0, my[1])[1] - lx.c2p(0, my[0])[1]):.0f}")
         last = lg >= mx[0]
         assert np.all((d["p15"][last] > my[0]) & (d["p15"][last] < my[1]))
