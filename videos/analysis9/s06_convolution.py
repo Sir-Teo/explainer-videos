@@ -26,15 +26,29 @@ class Convolution(VoiceoverScene):
     def dipole(self):
         d = load("mollify")
         eps, sups = d["eps"], d["sups"]
-        ax = plain_axes([-1, 1, 0.5], [-120, 120, 60], 6.2, 3.8, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.2, -0.6, 0])
+        # x numbered; no y numbers on the central axis (the dipole runs up it): the current sup is a dashed guide,
+        # labelled at its right end. The first dipole (sup 7.2) gets a scale of its own, then the axes rescale to
+        # +-120 for the narrower ones (same tick count, so the axes transform tick to tick)
+        def axes_(ymax):
+            return plain_axes([-1, 1, 0.5], [-ymax, ymax, ymax / 2], 6.2, 3.8, numbers=True, font_size=18,
+                              x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                              y_axis_config={"include_numbers": False}).move_to([-3.2, -0.6, 0])
+
+        ax0, ax = axes_(10), axes_(120)
         x = np.linspace(-1, 1, 4001)
         cols = [C.SEQ, C.APPROX, C.EPS]
-        curves = []
-        for e, c in zip(eps[:3], cols):
-            y = np.gradient(rho(x / e) / e, x)
-            curves.append(runs(ax, x, y, c, 3))
+        ys = [np.gradient(rho(x / e) / e, x) for e in eps[:3]]
+        assert ys[0].max() < 10 and ys[2].max() < 120
+        assert np.allclose([y_.max() for y_ in ys], sups[:3], rtol=2e-3)  # the drawn peaks are the tabulated sups
+        curve0 = runs(ax0, x, ys[0], cols[0], 3)
+        curves = [runs(ax, x, y_, c, 3) for y_, c in zip(ys, cols)]
+
+        def guide(a_, s_, c_):
+            ln = DashedLine(a_.c2p(-1, s_), a_.c2p(1, s_), color=c_, stroke_width=2, dash_length=0.08)
+            return VGroup(ln, MathTex(f"{s_:.1f}", font_size=22, color=c_).next_to(a_.c2p(1, s_), RIGHT, buff=0.1))
+
+        guide0 = guide(ax0, sups[0], cols[0])
+        guides = [guide(ax, s_, c_) for s_, c_ in zip(sups[:3], cols)]
         labs = [MathTex(rf"\varepsilon = {e}: \ \sup|\delta' * \rho_\varepsilon| = {s:.1f}", font_size=26, color=c).next_to(
             ax, UP, buff=0.1) for e, s, c in zip(eps[:3], sups[:3], cols)]
         tab = VGroup(MathTex(r"\varepsilon", r"\quad \sup|(\rho_\varepsilon)'|", r"\quad \times\varepsilon^2", font_size=24,
@@ -61,11 +75,13 @@ class Convolution(VoiceoverScene):
             "distributions. Every distribution is a limit of test functions."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(curves[0]), FadeIn(labs[0]), FadeIn(rows[0]))
+            self.play(FadeIn(head), Create(ax0), Create(curve0), FadeIn(guide0), FadeIn(labs[0]), FadeIn(rows[0]))
             vo.wait_until("b")
+            self.play(ReplacementTransform(ax0, ax), ReplacementTransform(curve0, curves[0]),
+                      ReplacementTransform(guide0, guides[0]), run_time=1.2)
             for k in (1, 2):
                 self.play(curves[k - 1].animate.set_stroke(opacity=0.3), Create(curves[k]),
-                          FadeTransform(labs[k - 1], labs[k]), run_time=1.2)
+                          FadeTransform(labs[k - 1], labs[k]), ReplacementTransform(guides[k - 1], guides[k]), run_time=1.2)
             self.play(FadeIn(tab))
             vo.wait_until("c")
             self.play(FadeIn(rows[1:]))

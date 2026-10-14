@@ -27,31 +27,38 @@ class FourierL1(VoiceoverScene):
         d = load("pairs")
         t, bh, gh, th = d["t"], d["box_hat"], d["g_hat"], d["tri_hat"]
         eb, eg, et = float(d["eb"]), float(d["eg"]), float(d["et"])
-        x = np.linspace(-3, 3, 1201)
+        # all six panels on one scale (x and t in [-8, 8], same size), so "the same Gaussian" looks the same
+        x = np.linspace(-8, 8, 3201)
+        mt_ = np.abs(t) <= 8 + 1e-9
         rows = []
         specs = [
             (np.where(np.abs(x) <= 1, 1.0, 0.0), bh, r"\mathbf 1_{[-1, 1]}", r"\sqrt{\tfrac{2}{\pi}}\,\frac{\sin t}{t}", eb),
             (np.exp(-x * x / 2), gh, r"e^{-x^2/2}", r"e^{-t^2/2}", eg),
             (np.clip(1 - np.abs(x), 0, None), th, r"(1 - |x|)_+", r"\frac{2 - 2\cos t}{\sqrt{2\pi}\, t^2}", et),
         ]
+
+        def panel():
+            return plain_axes([-8, 8, 2], [-0.3, 1.2, 1], 3.5, 1.35,
+                              x_axis_config={"numbers_to_include": [-6, 6], "font_size": 16})
+
         for k, (fx, fh, nx, nt, err) in enumerate(specs):
-            y = 1.35 - 2.05 * k
-            ax = plain_axes([-3, 3, 1], [-0.3, 1.2, 1], 3.6, 1.35).move_to([-4.2, y - 0.2, 0])
-            bx = plain_axes([-12, 12, 4], [-0.3, 1.15, 1], 4.4, 1.35).move_to([1.0, y - 0.2, 0])
+            y = 1.6 - 2.05 * k
+            ax = panel().move_to([-3.55, y - 0.2, 0])
+            bx = panel().move_to([0.95, y - 0.2, 0])
             g1 = polyline(ax, x, fx, color=C.FUNC, stroke_width=3)
-            g2 = polyline(bx, t, fh, color=C.FREQ, stroke_width=3)
-            l1 = MathTex(nx, font_size=26, color=C.FUNC).next_to(ax, LEFT, buff=0.1)
-            l2 = MathTex(nt, font_size=24, color=C.FREQ).next_to(bx, RIGHT, buff=0.1)
-            ar = Arrow([-2.15, y - 0.2, 0], [-1.35, y - 0.2, 0], buff=0, color=GREY_B, stroke_width=3, tip_length=0.15)
-            e_ = MathTex(rf"\text{{quadrature vs formula: }} {sci(err, 0)}", font_size=18, color=GREY_A).next_to(bx, DOWN,
-                                                                                                         buff=0.02)
+            g2 = polyline(bx, t[mt_], fh[mt_], color=C.FREQ, stroke_width=3)
+            l1 = MathTex(nx, font_size=26, color=C.FUNC)
+            l1.move_to([-5.45 - l1.width / 2, y - 0.2, 0])  # the left labels share a right edge
+            l2 = MathTex(nt, font_size=26, color=C.FREQ).next_to(bx, RIGHT, buff=0.15)
+            ar = Arrow([-1.65, y - 0.2, 0], [-0.95, y - 0.2, 0], buff=0, color=GREY_B, stroke_width=3, tip_length=0.15)
+            e_ = MathTex(rf"\text{{quadrature vs formula: }} {sci(err, 0)}", font_size=22, color=GREY_A).next_to(
+                l2, DOWN, buff=0.12, aligned_edge=LEFT)
             row = VGroup(ax, g1, l1, ar, bx, g2, l2, e_)
-            if row.get_left()[0] < -6.95:  # a wide label on the left: move the whole row in
-                row.shift((-6.95 - row.get_left()[0]) * RIGHT)
+            assert row.get_left()[0] >= -6.65 and row.get_right()[0] <= 6.65
             rows.append(row)
-        conv = MathTex(r"\hat f(t) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} f(x)\,e^{-ixt}\,dx", font_size=32).to_edge(
-            UP, buff=0.2)
-        tag = label(r"Rudin's convention, \ used from here on", font_size=20, color=GREY_A).next_to(conv, RIGHT, buff=0.3)
+        conv = MathTex(r"\hat f(t) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} f(x)\,e^{-ixt}\,dx", font_size=32)
+        tag = label(r"Rudin's convention, \ used from here on", font_size=22, color=GREY_A)
+        VGroup(conv, tag).arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.3)
         assert eb < 1e-6 and eg < 1e-8 and et < 1e-6
         # what the transform measures: f = e^{-x^2/8}(cos 2x + 0.6 cos 5x) is made of frequencies 2 and 5, and its
         # transform is bumps at +-2 and +-5 (e^{-x^2/8} -> 2 e^{-2t^2}; cos(wx) g -> (g^(t - w) + g^(t + w))/2)
@@ -102,10 +109,13 @@ class FourierL1(VoiceoverScene):
             (r"modulate: \ $e^{iax} f(x)$", r"translate: \ $\hat f(t - a)$"),
             (r"differentiate: \ $f'$", r"multiply: \ $it\,\hat f$"),
             (r"convolve: \ $f * g$", r"multiply: \ $\sqrt{2\pi}\,\hat f\,\hat g$"),
-            (r"$f \in L^1$", r"$\hat f$ continuous, \ $\to 0$ at $\pm\infty$ \ (Riemann--Lebesgue)"),
+            (r"$f \in L^1$", r"$\hat f$ continuous, $\to 0$ \ (Riemann--Lebesgue)"),  # fits unshrunk
         ], font_size=26)
         card.scale(0.78).move_to(UP * 1.05)
-        head = label(r"\textbf{RCA 9.2--9.6} \ the dictionary of the transform", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"The dictionary of the transform", font_size=34).to_edge(UP, buff=0.3)
+        thm = label(r"\textbf{RCA 9.2--9.6}", font_size=22, color=GREY_A)
+        thm.move_to([-6.65 + thm.width / 2, card.titles.get_y(), 0])
+        assert thm.get_right()[0] < card.get_left()[0] - 0.2
         # the first rules, live, on f = e^{-x^2/2} (whose transform is e^{-t^2/2}): translating by a multiplies the
         # transform by e^{-iat}, so Re f^ = cos(at) e^{-t^2/2} oscillates inside the fixed envelope |f^|
         xs = np.linspace(-14, 14, 5601)
@@ -137,6 +147,43 @@ class FourierL1(VoiceoverScene):
         rd_ = MathTex(r"\widehat{f'}(t) = i t\,e^{-t^2/2} \ \text{(imaginary part shown)}", font_size=24,
                       color=C.FREQ).next_to(rx, UP, buff=0.05)
         assert card.get_bottom()[1] > rl.get_top()[1] + 0.05 and rl.get_right()[0] < 6.95
+        # 'c': convolution -> multiplication, on g = 1_[-1/2, 1/2]: g * g = (1 - |x|)_+ (the triangle of the pairs) and
+        # (g * g)^ = sqrt(2 pi) g^^2, with g^(t) = sqrt(2/pi) sin(t/2) / t
+        with np.errstate(invalid="ignore", divide="ignore"):
+            g_hat = np.where(xg == 0, 1 / SQ2PI, math.sqrt(2 / math.pi) * np.sin(xg / 2) / np.where(xg == 0, 1, xg))
+            tri_hat = np.where(xg == 0, 1 / SQ2PI, (2 - 2 * np.cos(xg)) / (SQ2PI * np.where(xg == 0, 1, xg) ** 2))
+        assert np.allclose(SQ2PI * g_hat**2, tri_hat, atol=1e-12)
+        box_h = np.where(np.isclose(np.abs(xs), 0.5), 0.5, (np.abs(xs) < 0.5).astype(float))  # midpoint at the jumps
+        for t_ in (0.3, 1.0, 2.7):
+            assert abs(ft(box_h, t_) - math.sqrt(2 / math.pi) * math.sin(t_ / 2) / t_) < 1e-6
+        xc = np.linspace(-3, 3, 6001)
+        gc = np.where(np.abs(xc) < 0.5, 1.0, 0.0)
+        assert np.abs(np.convolve(gc, gc, mode="same") * (xc[1] - xc[0]) - np.clip(1 - np.abs(xc), 0, None)).max() < 2e-3
+        lc0 = polyline(lx, xg, np.where(np.abs(xg) <= 0.5, 1.0, 0.0), color=GREY_B, stroke_width=2).set_stroke(opacity=0.6)
+        lc = polyline(lx, xg, np.clip(1 - np.abs(xg), 0, None), color=C.FUNC, stroke_width=3)
+        rc0 = polyline(rx, xg, g_hat, color=GREY_B, stroke_width=2).set_stroke(opacity=0.6)
+        rc = polyline(rx, xg, tri_hat, color=C.FREQ, stroke_width=3)
+        lcl = MathTex(r"g = \mathbf 1_{[-\frac12, \frac12]} \text{ (grey)}, \ \ g * g = (1 - |x|)_+", font_size=24,
+                      color=C.FUNC).next_to(lx, UP, buff=0.05)
+        rcl = MathTex(r"\widehat{g * g} = \sqrt{2\pi}\,\hat g^{\,2}, \ \ \hat g \text{ (grey)}", font_size=24,
+                      color=C.FREQ).next_to(rx, UP, buff=0.05)
+        # 'd': Riemann-Lebesgue on the box 1_[-1, 1]: f^ = sqrt(2/pi) sin t / t, inside the envelopes +-sqrt(2/pi)/|t|
+        rx2 = plain_axes([-16, 16, 4], [-1.1, 1.1, 1], 5.6, 2.0).move_to(rx.get_center())
+        tw = np.linspace(-16, 16, 3201)
+        with np.errstate(invalid="ignore", divide="ignore"):
+            sinc_ = np.where(tw == 0, math.sqrt(2 / math.pi), math.sqrt(2 / math.pi) * np.sin(tw) / np.where(tw == 0, 1, tw))
+            envv = math.sqrt(2 / math.pi) / np.abs(np.where(tw == 0, 1e-9, tw))
+        box1 = np.where(np.isclose(np.abs(xs), 1), 0.5, (np.abs(xs) < 1).astype(float))
+        for t_ in (0.5, 4.0, 11.0):
+            assert abs(ft(box1, t_) - math.sqrt(2 / math.pi) * math.sin(t_) / t_) < 1e-6
+        assert np.all(np.abs(sinc_) <= envv + 1e-12)
+        ld_box = polyline(lx, xg, np.where(np.abs(xg) <= 1, 1.0, 0.0), color=C.FUNC, stroke_width=3)
+        env_g = VGroup(runs(rx2, tw, envv, GREY_B, 2), runs(rx2, tw, -envv, GREY_B, 2)).set_stroke(opacity=0.7)
+        rsinc = polyline(rx2, tw, sinc_, color=C.FREQ, stroke_width=3)
+        ldl = MathTex(r"f = \mathbf 1_{[-1, 1]} \in L^1", font_size=24, color=C.FUNC).next_to(lx, UP, buff=0.05)
+        rdl = MathTex(r"\hat f = \sqrt{2/\pi}\,\tfrac{\sin t}{t} \to 0, \ \ \text{inside } \pm\sqrt{2/\pi}\,/|t|",
+                      font_size=24, color=C.FREQ).next_to(rx2, UP, buff=0.05)
+        assert max(lcl.get_right()[0], ldl.get_right()[0]) < rcl.get_left()[0] - 0.2 and rdl.get_right()[0] < 6.65
         with self.voiceover(
             "<bookmark mark='a'/> The transform turns one kind of operation into another. Shifting a function "
             "multiplies its transform by a phase, and multiplying by a phase shifts the transform. "
@@ -146,7 +193,7 @@ class FourierL1(VoiceoverScene):
             "the Riemann-Lebesgue lemma again."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(card.titles))
+            self.play(FadeIn(head), FadeIn(card.titles), FadeIn(thm))
             self.play(FadeIn(card.rows[0]), FadeIn(card.arrows[0]), Create(lx), Create(rx), FadeIn(fcur), FadeIn(fre),
                       FadeIn(env), FadeIn(ll), FadeIn(rl))
             self.play(av.animate.set_value(2.5), run_time=3.0, rate_func=smooth)
@@ -158,16 +205,23 @@ class FourierL1(VoiceoverScene):
             self.play(FadeIn(card.rows[2]), FadeIn(card.arrows[2]), ReplacementTransform(fcur, fd),
                       ReplacementTransform(fre, fdh), FadeOut(env), FadeTransform(ll, ld), FadeTransform(rl, rd_))
             vo.wait_until("c")
-            self.play(FadeIn(card.rows[3]), FadeIn(card.arrows[3]))
+            self.play(FadeIn(card.rows[3]), FadeIn(card.arrows[3]), ReplacementTransform(fd, lc), FadeIn(lc0),
+                      ReplacementTransform(fdh, rc), FadeIn(rc0), FadeTransform(ld, lcl), FadeTransform(rd_, rcl))
             vo.wait_until("d")
-            self.play(FadeIn(card.rows[4]), FadeIn(card.arrows[4]))
+            self.play(FadeIn(card.rows[4]), FadeIn(card.arrows[4]), FadeOut(lc0), ReplacementTransform(lc, ld_box),
+                      FadeOut(VGroup(rc, rc0)), FadeTransform(rx, rx2), FadeTransform(lcl, ldl), FadeTransform(rcl, rdl))
+            self.play(Create(env_g), Create(rsinc), run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def uncertainty(self):
-        ax = plain_axes([-4, 4, 1], [0, 1.2, 0.5], 5.6, 2.8).move_to([-3.5, 0.2, 0])
-        bx = plain_axes([-4, 4, 1], [0, 3.2, 1], 5.6, 2.8).move_to([3.0, 0.2, 0])
+        # one scale for both panels: at sigma = 1 the two pictures are identical (e^{-x^2/2} is its own transform)
+        ax = plain_axes([-4, 4, 1], [0, 2.6, 1], 5.6, 2.8).move_to([-3.5, 0.2, 0])
+        bx = plain_axes([-4, 4, 1], [0, 2.6, 1], 5.6, 2.8).move_to([3.0, 0.2, 0])
+        ones = VGroup(*[VGroup(DashedLine(a_.c2p(-4, 1), a_.c2p(4, 1), color=GREY_B, stroke_width=2),
+                               MathTex(r"1", font_size=22, color=GREY_B).next_to(a_.c2p(4, 1), RIGHT, buff=0.1))
+                        for a_ in (ax, bx)])
         sT = ValueTracker(1.0)
         x = np.linspace(-4, 4, 801)
 
@@ -205,7 +259,8 @@ class FourierL1(VoiceoverScene):
             "position against momentum."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(pp), FadeIn(l1), FadeIn(l2), FadeIn(rows[0]))
+            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(ones), FadeIn(pp), FadeIn(l1), FadeIn(l2),
+                      FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rd))
             self.play(sT.animate.set_value(0.35), run_time=2.5)

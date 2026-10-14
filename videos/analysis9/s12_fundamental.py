@@ -5,7 +5,14 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis9.common import load, plain_axes, polyline, trap
+from videos.analysis9.common import SQ2PI, load, plain_axes, polyline, trap
+
+
+def pole_mark(point, size=0.13, color=C.PATHOLOGY) -> VGroup:
+    """A cross drawn with two strokes (not a text glyph) marking a zero of the symbol on the real axis."""
+    p = np.asarray(point)
+    return VGroup(Line(p + size * (LEFT + DOWN), p + size * (RIGHT + UP), color=color, stroke_width=4),
+                  Line(p + size * (LEFT + UP), p + size * (RIGHT + DOWN), color=color, stroke_width=4))
 
 
 class Fundamental(VoiceoverScene):
@@ -45,12 +52,13 @@ class Fundamental(VoiceoverScene):
             label(r"one convolution solves $P(D)u = f$ \ for every $f$", font_size=24, color=C.EPS),
             MathTex(r"u'' + u = f: \ \ E = \tfrac12\sin|x| \ \text{ or } \ H(x)\sin x", font_size=26),
             MathTex(rf"\text{{checked: }} \max|u'' + u - f| = {sci(res, 1)}", font_size=24, color=GREY_A),
-            label(r"(Part 8's string had its Green's function; \ this is the general version)", font_size=20,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.16).move_to([3.7, 0.0, 0])
+            VGroup(label(r"(Part 8's string had its Green's function;", font_size=22, color=GREY_A),
+                   label(r"this is the general version)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08),
+        ).arrange(DOWN, buff=0.16).move_to([3.5, 0.0, 0])
         for r_ in rows:
-            if r_.width > 6.2:
-                r_.width = 6.2
+            if r_.width > 6.0:
+                r_.width = 6.0
+        rows.arrange(DOWN, buff=0.16).move_to([3.5, 0.0, 0])
         # 'a': the point source and the two responses to it, E = (1/2) sin|x| and E = H(x) sin x; each solves
         # E'' + E = 0 off the source, and its slope jumps by exactly 1 there: E'' + E = delta
         xe = np.linspace(-8, 8, 1601)
@@ -111,14 +119,27 @@ class Fundamental(VoiceoverScene):
                      font_size=26, color=C.MEASURE).next_to(ax, DOWN, buff=0.2)
         for t_ in (0.01, 0.1, 1.0, 2.0):
             assert abs(trap(K(t_, xx), xx) - 1) < 1e-8
-        card = dictionary_card(r"operator", r"fundamental solution", [
-            (r"$\frac{d}{dx}$", r"$H$ \ (the step)"),
-            (r"$\frac{d^2}{dx^2} + 1$", r"$\tfrac12\sin|x|$"),
-            (r"$\Delta$ in $\mathbb R^2$", r"$\tfrac{1}{2\pi}\log|x|$"),
-            (r"$\Delta$ in $\mathbb R^3$", r"$-\tfrac{1}{4\pi|x|}$"),
-            (r"$\partial_t - \Delta$", r"$H(t)\,(4\pi t)^{-n/2} e^{-|x|^2/4t}$"),
-        ], font_size=22)
-        card.scale_to_fit_width(6.4).move_to([3.6, 0.9, 0])
+        # the table of classics, at a readable size (a dictionary card scaled into half the frame would be ~11 pt)
+        pairs = [(r"\frac{d}{dx}", r"H \ \text{(the step)}"),
+                 (r"\frac{d^2}{dx^2} + 1", r"\tfrac12\sin|x|"),
+                 (r"\Delta \text{ in } \mathbb R^2", r"\tfrac{1}{2\pi}\log|x|"),
+                 (r"\Delta \text{ in } \mathbb R^3", r"-\tfrac{1}{4\pi|x|}"),
+                 (r"\partial_t - \Delta", r"H(t)\,(4\pi t)^{-n/2} e^{-|x|^2/4t}")]
+        trows = VGroup(*[VGroup(MathTex(a_, font_size=26), MathTex(r"\longleftrightarrow", font_size=26, color=GREY_C),
+                                MathTex(b_, font_size=26)) for a_, b_ in pairs])
+        thead = VGroup(label(r"operator", font_size=24, color=GREY_A), VGroup(),
+                       label(r"fundamental solution", font_size=24, color=GREY_A))
+        w0 = max(r_[0].width for r_ in trows)
+        x0 = 0.6
+        xa, xb = x0 + w0 + 0.35, x0 + w0 + 0.35 + trows[0][1].width + 0.35
+        for i_, r_ in enumerate(trows):
+            y_ = 1.85 - 0.66 * i_
+            r_[0].move_to([x0 + r_[0].width / 2, y_, 0])
+            r_[1].move_to([xa + r_[1].width / 2, y_, 0])
+            r_[2].move_to([xb + r_[2].width / 2, y_, 0])
+        thead[0].move_to([x0 + thead[0].width / 2, 2.55, 0])
+        thead[2].move_to([xb + thead[2].width / 2, 2.55, 0])
+        assert max(r_[2].get_right()[0] for r_ in trows) <= 6.6 and thead[2].get_right()[0] <= 6.6
         checks = VGroup(
             MathTex(rf"\Big\langle -\tfrac{{1}}{{4\pi|x|}}, \Delta\varphi\Big\rangle = {newton:.10f} = \varphi(0)",
                     font_size=24, color=C.EPS),
@@ -140,9 +161,8 @@ class Fundamental(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), FadeIn(g), FadeIn(rd), FadeIn(kl))
             self.play(tT.animate.set_value(2.0), run_time=4.0, rate_func=lambda u: u**2)
             vo.wait_until("b")
-            self.play(FadeIn(card.titles))
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
-                                  lag_ratio=0.4), run_time=3.0)
+            self.play(FadeIn(thead[0]), FadeIn(thead[2]))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in trows], lag_ratio=0.4), run_time=3.0)
             vo.wait_until("c")
             self.play(FadeIn(checks))
         for m in (g, rd):
@@ -156,13 +176,24 @@ class Fundamental(VoiceoverScene):
         xs, below, above = d["xs"], d["below"], d["above"]
         eb, ea, ec = float(d["eb"]), float(d["ea"]), float(d["ec"])
         cx = plain_axes([-3, 3, 1], [-1.5, 1.5, 0.5], 5.2, 2.6).move_to([-3.6, 0.9, 0])
-        poles = VGroup(*[MathTex(r"\times", font_size=40, color=C.PATHOLOGY).move_to(cx.c2p(p, 0)) for p in (-1, 1)])
+        poles = VGroup(*[pole_mark(cx.c2p(p, 0)) for p in (-1, 1)])
         pl = MathTex(r"1 - \zeta^2 = 0", font_size=22, color=C.PATHOLOGY).next_to(cx.c2p(1, 0), UR, buff=0.08)
         sT = ValueTracker(-0.5)
         line = always_redraw(lambda: Arrow(cx.c2p(-3, sT.get_value()), cx.c2p(3, sT.get_value()), buff=0,
                                            color=C.EPS if sT.get_value() < 0 else C.APPROX, stroke_width=4,
                                            tip_length=0.15))
         zl = MathTex(r"\zeta \in \mathbb C", font_size=22, color=GREY_B).next_to(cx, UP, buff=0.05).align_to(cx, LEFT)
+        # 'a': the trouble, drawn on the real axis: E^(t) = 1 / (sqrt(2 pi) (1 - t^2)) blows up at t = +-1 (cut at the
+        # window), and its integral near 1 grows like a logarithm: not integrable
+        tr = np.linspace(-3, 3, 6001)
+        tr = tr[np.abs(np.abs(tr) - 1) > 1e-6]
+        Eh = 1 / (SQ2PI * (1 - tr * tr))
+        for k_ in (3, 6):
+            u_ = 1 - np.geomspace(1, 10.0**-k_, 200001)  # graded towards the singularity
+            assert abs(trap(1 / (SQ2PI * (1 - u_ * u_)), u_) - math.atanh(1 - 10.0**-k_) / SQ2PI) < 1e-3
+        assert math.atanh(1 - 1e-6) / SQ2PI - math.atanh(1 - 1e-3) / SQ2PI > 1.3  # +log(10^3)/(2 sqrt(2 pi)): unbounded
+        gE = runs(cx, tr, Eh, C.FREQ, 3)
+        gEl = MathTex(r"\hat E(t), \ t \in \mathbb R", font_size=22, color=C.FREQ).move_to(cx.c2p(-2.1, 0.55))
         bx = plain_axes([-6, 6, 2], [-1.2, 1.2, 1], 6.0, 2.6).move_to([3.4, 0.9, 0])
         gb = polyline(bx, xs, below, color=C.EPS, stroke_width=3.5)
         ga = polyline(bx, xs, above, color=C.APPROX, stroke_width=3.5)
@@ -182,8 +213,8 @@ class Fundamental(VoiceoverScene):
                     r"\ (\text{Cauchy})", font_size=22, color=GREY_A),
             label(r"crossing the poles adds the residues: \ $\sin x$, \ a solution of $u'' + u = 0$", font_size=22,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
-        head = label(r"Dodging the zeros of the symbol", font_size=34).to_edge(UP, buff=0.25)
+        ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
+        head = label(r"Dodging the zeros of the symbol", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Where do fundamental solutions come from? Transform the equation: one minus t "
             "squared times E hat must be constant. But one minus t squared vanishes at plus and minus one, and one "
@@ -197,8 +228,9 @@ class Fundamental(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rows[0]), Create(cx), FadeIn(poles), FadeIn(pl), FadeIn(zl))
+            self.play(Create(gE), FadeIn(gEl), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(line), FadeIn(rows[1]))
+            self.play(FadeOut(VGroup(gE, gEl)), FadeIn(line), FadeIn(rows[1]))
             self.play(Create(bx), Create(gb), FadeIn(lb), FadeIn(rows[2]))
             vo.wait_until("c")
             self.play(sT.animate.set_value(0.5), run_time=2.0)
@@ -223,12 +255,12 @@ class Fundamental(VoiceoverScene):
                     r"coefficients has a fundamental solution", font_size=24, color=C.EPS).to_edge(UP, buff=1.0)
         # a picture of the averaging: lines Im zeta = sin(theta) sweep the strip; half pass below the zeros, half above
         cx = plain_axes([-2.5, 2.5, 1], [-1.4, 1.4, 0.5], 5.0, 2.8).move_to([3.6, 0.6, 0])
-        poles = VGroup(*[MathTex(r"\times", font_size=36, color=C.PATHOLOGY).move_to(cx.c2p(p, 0)) for p in (-1, 1)])
+        poles = VGroup(*[pole_mark(cx.c2p(p, 0), size=0.11) for p in (-1, 1)])
         th = np.linspace(0, 2 * np.pi, 25)[:-1] + np.pi / 24
         lines = VGroup(*[Line(cx.c2p(-2.5, math.sin(a)), cx.c2p(2.5, math.sin(a)), stroke_width=2,
                               color=C.EPS if math.sin(a) < 0 else C.APPROX, stroke_opacity=0.6) for a in th])
         circ = Circle(radius=cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0], color=GREY_B, stroke_width=2).move_to(cx.c2p(0, 0))
-        cl = MathTex(r"\lambda = e^{i\theta}", font_size=22, color=GREY_B).next_to(circ, UP, buff=0.05)
+        cl = MathTex(r"\lambda = e^{i\theta}", font_size=22, color=GREY_B).next_to(cx.c2p(0.05, 1.0), UR, buff=0.05)  # off the axis
         rows = VGroup(
             label(r"shifts by $\lambda = e^{i\theta}$: \ the lines $\mathrm{Im}\,\zeta = \sin\theta$", font_size=22),
             label(r"in the example: \ half below, \ half above, \ average $= \tfrac12\sin|x|$", font_size=22,

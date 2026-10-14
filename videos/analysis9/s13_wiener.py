@@ -62,12 +62,13 @@ class Wiener(VoiceoverScene):
                     color=GREY_A),
             label(r"\textbf{Wiener} (1932): \ the translates of $k \in L^1$ span a dense subspace", font_size=24, color=C.EPS),
             label(r"$\iff$ \ $\hat k$ never vanishes", font_size=24, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.3, 0])
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, -0.3, 0])
-        head = label(r"Which kernels can build everything?", font_size=34).to_edge(UP, buff=0.25)
+            if r_.width > 6.0:
+                r_.width = 6.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.3, 0])
+        assert rows.get_right()[0] <= 6.6
+        head = label(r"Which kernels can build everything?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here's a question that sounds like linear algebra. Take one integrable kernel k. "
             "Can sums of its translates approximate every integrable function? Try a target with frequencies near "
@@ -146,9 +147,10 @@ class Wiener(VoiceoverScene):
             label(r"Part 10: \ Gelfand's theory of exactly this", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.2, 0])
         for r_ in rows:
-            if r_.width > 6.6:
-                r_.width = 6.6
+            if r_.width > 6.0:
+                r_.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -0.2, 0])
+        assert rows.get_right()[0] <= 6.6
         head = label(r"The algebra behind Wiener's theorem", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Why is it true? Integrable functions under convolution form an algebra, with the L "
@@ -218,7 +220,7 @@ class Wiener(VoiceoverScene):
             if r_.width > 7.6:
                 r_.width = 7.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.0, -2.2, 0])
-        head = label(r"$\zeta$ has no zeros on the line $\mathrm{Re}\,s = 1$", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"$\zeta$ has no zeros on the line $\mathrm{Re}\,s = 1$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The road to the primes needs one fact about the zeta function from the Riemann "
             "video: it has no zeros on the line where the real part is one. On that line, over this stretch, its size stays above a third, "
@@ -271,8 +273,8 @@ class Wiener(VoiceoverScene):
         ], font_size=20, width=6.0, buff=0.14, direction=DOWN)
         pm.move_to([3.6, -0.4, 0])
         thm = label(r"\textbf{FA 9.12} \ the prime number theorem \ (Hadamard, de la Vall\'ee Poussin 1896; \ "
-                    r"Wiener 1932)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.2)
-        head = label(r"The prime number theorem, \ from Wiener", font_size=34).to_edge(UP, buff=0.25)
+                    r"Wiener 1932)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.35)
+        head = label(r"The prime number theorem, \ from Wiener", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Wiener's theorem then gives the prime number theorem. The non-vanishing of zeta "
             "on the line says that a certain kernel's transform has no zeros. <bookmark mark='b'/> Wiener's "

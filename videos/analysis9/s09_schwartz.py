@@ -37,30 +37,39 @@ class Schwartz(VoiceoverScene):
         ax = plain_axes([-6, 6, 2], [0, 1.3, 0.5], 6.0, 2.6).move_to([-3.3, 1.1, 0])
         bx = plain_axes([-6, 6, 2], [0, 4.2, 1], 6.0, 2.6).move_to([3.4, 1.1, 0])
         x = np.linspace(-6, 6, 1201)
-        cols = [C.FUNC, C.SEQ, C.APPROX, C.EPS]
+        cols = [C.FUNC, C.TEST_FN, C.APPROX, C.EPS]  # one blue only: k = 0, 1, 2, 3
         ga = VGroup(*[polyline(ax, x, np.abs(x) ** k * np.exp(-x * x / 2), color=c, stroke_width=3)
                       for k, c in zip(range(4), cols)])
         gb = VGroup(*[runs(bx, x, np.abs(x) ** k / (1 + x * x), c, 3) for k, c in zip(range(4), cols)])
-        la = MathTex(r"|x|^k e^{-x^2/2}, \ \ k = 0, 1, 2, 3", font_size=26).next_to(ax, UP, buff=0.12)
-        lb = MathTex(r"|x|^k \big/ (1 + x^2), \ \ k = 0, 1, 2, 3", font_size=26).next_to(bx, UP, buff=0.12)
+        def keyed(tex):  # the formula with its k values coloured like the curves: the key
+            m_ = MathTex(tex, r"\ \ k =", r"0", r",", r"1", r",", r"2", r",", r"3", font_size=26)
+            for j, c in zip((2, 4, 6, 8), cols):
+                m_[j].set_color(c)
+            return m_
+
+        la = keyed(r"|x|^k e^{-x^2/2},").next_to(ax, UP, buff=0.12)
+        lb = keyed(r"|x|^k \big/ (1 + x^2),").next_to(bx, UP, buff=0.12)
         ok = label(r"in $\mathcal S$: \ every $x^k f$ stays bounded", font_size=22, color=C.TEST_FN).next_to(ax, DOWN,
                                                                                                            buff=0.12)
         no = label(r"smooth and integrable, \ but not in $\mathcal S$", font_size=22, color=C.PATHOLOGY).next_to(
             bx, DOWN, buff=0.12)
         # the seminorms of the Gaussian: sup |x^k e^(-x^2/2)| = (k/e)^(k/2), attained at x = sqrt k
         xx = np.linspace(0, 12, 1200001)
-        sups = [float(np.max(xx**k * np.exp(-xx * xx / 2))) for k in range(0, 9, 2)]
-        exact = [(k / math.e) ** (k / 2) if k else 1.0 for k in range(0, 9, 2)]
+        sups = [float(np.max(xx**k * np.exp(-xx * xx / 2))) for k in range(4)]  # the four curves drawn
+        exact = [(k / math.e) ** (k / 2) if k else 1.0 for k in range(4)]
         assert np.allclose(sups, exact, rtol=1e-9)
-        semis = MathTex(r"\sup_x |x^k e^{-x^2/2}| = (k/e)^{k/2}: \ \ " + r",\ ".join(f"{s:.3f}" for s in sups) +
-                        r" \ \ (k = 0, 2, \ldots, 8)", font_size=24)
+        parts = [r"\sup_x |x^k e^{-x^2/2}| = (k/e)^{k/2}: \ \ "]
+        for j, v in enumerate(sups):
+            parts += ([r",\ "] if j else []) + [f"{v:.3f}"]
+        semis = MathTex(*parts, r" \ \ (k = 0, \ldots, 3)", font_size=24)
+        for j, c in enumerate(cols):
+            semis[1 + 2 * j].set_color(c)
         rows = VGroup(
             label(r"\textbf{FA 7.3} \ $\mathcal S$: \ smooth $f$ with $\sup_x (1 + x^2)^N |f^{(m)}(x)| < \infty$ "
                   r"for all $N, m$", font_size=24),
             semis,
             label(r"countably many seminorms: \ a Fr\'echet space \ (Part 8)", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
-        rows[1].set_color(C.EPS)
         head = label(r"Rapidly decreasing functions", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Test functions with compact support are too few for the Fourier transform, because "
@@ -123,14 +132,14 @@ class Schwartz(VoiceoverScene):
         for k in range(4):
             a0 = panels[k][0].get_center()
             a1 = panels[(k + 1) % 4][0].get_center()
-            arc = ArcBetweenPoints(a0 + (a1 - a0) * 0.32, a0 + (a1 - a0) * 0.68, angle=PI / 4, color=C.OPERATOR,
+            arc = ArcBetweenPoints(a0 + (a1 - a0) * 0.36, a0 + (a1 - a0) * 0.64, angle=PI / 4, color=C.OPERATOR,
                                    stroke_width=3)
             arc.add_tip(tip_length=0.15)
             ring.add(VGroup(arc, MathTex(r"\mathcal F", font_size=26, color=C.OPERATOR).move_to(
                 arc.point_from_proportion(0.5) + 0.32 * normalize(arc.point_from_proportion(0.5) - DOWN * 0.25))))
-        key = label(r"solid: real part, \ dashed: imaginary part", font_size=18, color=GREY_B)
+        key = label(r"solid: real part, \ dashed: imaginary part", font_size=22, color=GREY_B)
         mid = VGroup(MathTex(r"\mathcal F^2 f = f(-x)", font_size=28), MathTex(r"\mathcal F^4 = I", font_size=28),
-                     MathTex(rf"\text{{DFT check: }} {sci(max(e2, e4), 0)}", font_size=20, color=GREY_A)).arrange(
+                     MathTex(rf"\text{{DFT check: }} {sci(max(e2, e4), 0)}", font_size=22, color=GREY_A)).arrange(
             DOWN, buff=0.12).move_to(DOWN * 0.25)
         # Hermite functions are the eigenvectors: F h_n = (-i)^n h_n
         herr = []
@@ -145,8 +154,8 @@ class Schwartz(VoiceoverScene):
                   r"smoothness", font_size=22, color=GREY_A),
             label(r"eigenvalues $1, -i, -1, i$: \ the Hermite functions, \ $\mathcal F h_n = (-i)^n h_n$ \ "
                   rf"(error ${sci(max(herr), 0)}$)", font_size=22, color=C.SPECTRUM),
-        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
-        key.next_to(rows, UP, buff=0.15).to_edge(LEFT, buff=0.4)
+        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.35)
+        key.next_to(rows, UP, buff=0.15).to_edge(LEFT, buff=0.45)
         # decay and smoothness trade places: e^{-|x|} has a corner and decays fast; its transform
         # sqrt(2/pi) / (1 + t^2) is smooth and decays slowly
         xe = np.linspace(-4, 4, 801)
@@ -164,7 +173,7 @@ class Schwartz(VoiceoverScene):
                       MathTex(r"e^{-|x|}: \ \text{a corner, fast decay}", font_size=24, color=C.FUNC).next_to(dax, UP, buff=0.1),
                       MathTex(r"\sqrt{2/\pi}\,/(1 + t^2): \ \text{smooth, slow decay}", font_size=24,
                               color=C.FREQ).next_to(dbx, UP, buff=0.1))
-        head = label(r"The transform is a quarter turn", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"The transform is a quarter turn", font_size=34).to_edge(UP, buff=0.3)
         panels.shift(UP * 0.35)
         ring.shift(UP * 0.35)
         mid.shift(UP * 0.35)
@@ -198,9 +207,9 @@ class Schwartz(VoiceoverScene):
     # ------------------------------------------------------------------
     def tempered(self):
         ax = plain_axes([-3, 3, 1], [0, 5.0, 1], 5.4, 2.8).move_to([-3.5, 0.7, 0])
-        bx = plain_axes([-12, 12, 4], [0, 0.6, 0.2], 5.4, 2.8, numbers=True, font_size=16,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.4, 0.7, 0])
+        # neither panel numbered (the y numbers would sit on the central axis, where both curves pass): the one height
+        # that matters, 1/sqrt(2 pi), is the dashed guide labelled at its right end
+        bx = plain_axes([-12, 12, 4], [0, 0.6, 0.2], 5.4, 2.8).move_to([3.4, 0.7, 0])
         sT = ValueTracker(0.8)
         x = np.linspace(-3, 3, 1201)
         t = np.linspace(-12, 12, 1201)
@@ -212,6 +221,10 @@ class Schwartz(VoiceoverScene):
             return VGroup(runs(ax, x, g, C.DISTRIBUTION, 3.5), polyline(bx, t, gh, color=C.FREQ, stroke_width=3.5))
 
         pp = always_redraw(pics)
+        # taller than the window (rho_sigma(0) > 5 once sigma < 0.08): the Hook's up-arrow, faded in as it leaves
+        up = Arrow(ax.c2p(0, 4.3), ax.c2p(0, 5.6), buff=0, color=C.DISTRIBUTION, stroke_width=3,
+                   max_tip_length_to_length_ratio=0.3)
+        up.add_updater(lambda m: m.set_opacity(float(np.clip((1 / (sT.get_value() * SQ2PI) - 5.0) / 1.0, 0, 1))))
         flat = DashedLine(bx.c2p(-12, 1 / SQ2PI), bx.c2p(12, 1 / SQ2PI), color=GREY_B, stroke_width=2)
         fl = MathTex(r"\tfrac{1}{\sqrt{2\pi}}", font_size=24, color=GREY_B).next_to(bx.c2p(12, 1 / SQ2PI), UP, buff=0.08)
         rd = always_redraw(lambda: MathTex(rf"\rho_\sigma = \tfrac{{1}}{{\sigma\sqrt{{2\pi}}}}e^{{-x^2/2\sigma^2}}, \ \ "
@@ -236,11 +249,17 @@ class Schwartz(VoiceoverScene):
                     r"i^n\sqrt{2\pi}\,\delta^{(n)}", font_size=28, color=C.DISTRIBUTION),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
         # 'a': polynomial growth is allowed, exponential is not
-        ax0 = plain_axes([-3, 3, 1], [0, 5.0, 1], 5.4, 2.8).move_to(ax.get_center())
-        g_poly = runs(ax0, x, x * x, C.FUNC, 3.5)
-        g_exp = runs(ax0, x, np.exp(x), C.PATHOLOGY, 3.5)
-        tl_ = VGroup(MathTex(r"x^2: \ \text{tempered}", font_size=24, color=C.FUNC).next_to(ax0.c2p(-2.2, 4.84), RIGHT, buff=0.1),
-                     MathTex(r"e^x: \ \text{too big}", font_size=24, color=C.PATHOLOGY).next_to(ax0.c2p(1.6, 4.95), LEFT, buff=0.25))
+        # on [0, 12] x [0, 150], full width: x^2 stays inside (144 at 12), e^x leaves at x = log 150 = 5.01
+        ax0 = plain_axes([0, 12, 2], [0, 150, 50], 11.0, 2.8, numbers=True, font_size=18,
+                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                         y_axis_config={"include_numbers": False}).move_to([0, 0.7, 0])
+        x0 = np.linspace(0, 12, 2401)
+        assert (x0 * x0).max() <= 150 and abs(math.log(150) - 5.01) < 0.01
+        g_poly = runs(ax0, x0, x0 * x0, C.FUNC, 3.5)
+        g_exp = runs(ax0, x0, np.exp(x0), C.PATHOLOGY, 3.5)
+        tl_ = VGroup(MathTex(r"x^2: \ \text{tempered}", font_size=26, color=C.FUNC).move_to(ax0.c2p(10.4, 62)),  # under it
+                     MathTex(r"e^x: \ \text{too big}", font_size=26, color=C.PATHOLOGY).next_to(ax0.c2p(math.log(150), 150),
+                                                                                                RIGHT, buff=0.2))
         # 'b': int f^ g = int f g^ for f = e^{-x^2/2}, g = the box on [-1, 1], as two equal areas
         ax1 = plain_axes([-3, 3, 1], [-0.2, 1.1, 0.5], 5.4, 2.8).move_to(ax.get_center())
         bx1 = plain_axes([-12, 12, 4], [-0.2, 1.1, 0.5], 5.4, 2.8).move_to(bx.get_center())
@@ -276,10 +295,11 @@ class Schwartz(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeOut(mpic), run_time=0.6)
             self.play(Create(ax), Create(bx), FadeIn(pp), FadeIn(rd), FadeIn(l2), Create(flat), FadeIn(fl))
+            self.add(up.update())
             self.play(sT.animate.set_value(0.03), run_time=4.0, rate_func=smooth)
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
-        for m in (pp, rd):
+        for m in (pp, rd, up):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -310,26 +330,34 @@ class Schwartz(VoiceoverScene):
                      color=C.DISTRIBUTION).next_to(ax, UP, buff=0.1)
         l2 = MathTex(r"\text{its transform: \ the same comb}", font_size=24, color=C.FREQ).next_to(bx, UP, buff=0.1)
         # the theta identity as two curves
-        cx = plain_axes([0, 3, 0.5], [0.8, 3.4, 1], 5.4, 2.2, numbers=True, font_size=16,
+        # y from 0.5 (a multiple of the step: Manim starts the ticks at y_min when 0 is outside the range)
+        cx = plain_axes([0, 3, 0.5], [0.5, 3.5, 0.5], 5.4, 2.2, numbers=True, font_size=16,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.4, -2.05, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0},
+                                       "numbers_to_include": [1, 2, 3]}).move_to([-3.4, -2.05, 0])
         tt = np.linspace(0.1, 3, 300)
         n = np.arange(-60, 61)
         th1 = np.array([np.sum(np.exp(-math.pi * n * n * s)) for s in tt])
         th2 = np.array([np.sum(np.exp(-math.pi * n * n / s)) for s in tt]) / np.sqrt(tt)
-        assert np.allclose(th1, th2, rtol=1e-12)
-        c1 = polyline(cx, tt, np.minimum(th1, 3.4), color=C.FUNC, stroke_width=4)
-        c2 = DashedVMobject(polyline(cx, tt, np.minimum(th2, 3.4), color=C.FREQ, stroke_width=3), num_dashes=50)
-        dots = VGroup(*[Dot(cx.c2p(s, v), radius=0.05, color=C.EPS) for s, v in zip(ts, lhs) if s <= 3 and v <= 3.4])
+        assert np.allclose(th1, th2, rtol=1e-12) and th1.max() < 3.5  # all of it fits: nothing clamped
+        c1 = polyline(cx, tt, th1, color=C.FUNC, stroke_width=4)
+        c2 = DashedVMobject(polyline(cx, tt, th2, color=C.FREQ, stroke_width=3), num_dashes=50)
+        dots = VGroup(*[Dot(cx.c2p(s, v), radius=0.05, color=C.EPS) for s, v in zip(ts, lhs) if s <= 3 and v <= 3.5])
         tab = VGroup(MathTex(r"t", r"\quad \textstyle\sum_n e^{-\pi n^2 t}", r"\quad t^{-1/2}\sum_n e^{-\pi n^2/t}",
                              font_size=22, color=GREY_A))
         for s, l_, r_ in zip(ts, lhs, rhs):
             tab.add(MathTex(f"{s:g}", rf"\quad {l_:.12f}", rf"\quad {r_:.12f}", font_size=22))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.5, -2.0, 0])
         regrid(tab)
-        rule = MathTex(r"\textstyle\sum_k f(2\pi k) = \frac{1}{\sqrt{2\pi}}\sum_n \hat f(n)", font_size=30,
+        # the rule in the self-dual form of the pictured comb (spacing sqrt(2 pi) on both sides); checked on a
+        # Gaussian of width 0.7, whose transform is 0.7 e^{-0.49 t^2/2}
+        kk = np.arange(-40, 41)
+        lhs_ = np.sum(np.exp(-((kk * a) ** 2) / (2 * 0.49)))
+        rhs_ = np.sum(0.7 * np.exp(-0.49 * (kk * a) ** 2 / 2))
+        assert abs(lhs_ - rhs_) < 1e-12
+        rule = MathTex(r"\textstyle\sum_k f(k\sqrt{2\pi}) = \sum_n \hat f(n\sqrt{2\pi})", font_size=30,
                        color=C.EPS).move_to([3.5, -0.35, 0])
-        head = label(r"The comb is its own transform: \ Poisson summation", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"The comb is its own transform: \ Poisson summation", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The Dirac comb, a delta at every multiple of root two pi, is tempered. Smooth it "
             "slightly and window it, and transform: the result is the same comb. In the limit the comb is exactly "

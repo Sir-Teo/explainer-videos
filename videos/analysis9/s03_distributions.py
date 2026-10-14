@@ -30,41 +30,40 @@ class Distributions(VoiceoverScene):
     def definition(self):
         d = load("pv")
         dphi0 = float(d["dphi0"])
-        ax = plain_axes([-2.5, 2.5, 1], [-0.4, 1.4, 0.5], 6.0, 2.6).move_to([-3.2, 0.6, 0])
+        ax = plain_axes([-2.5, 2.5, 1], [-0.4, 1.5, 0.5], 6.4, 3.2).move_to([-3.4, -0.3, 0])
         x = np.linspace(-2.5, 2.5, 2001)
         ph = phi_pv(x)
+        phi0 = float(phi_pv(np.array([0.0]))[0])
         g = polyline(ax, x, ph, color=C.TEST_FN, stroke_width=3.5)
         f = 0.6 + 0.3 * np.sign(x - 0.8)
         gf = polyline(ax, x, f, color=C.FUNC, stroke_width=2.5)
         prod = area_under(ax, x, f * ph, C.FUNC, 0.25)
-        tang = Line(ax.c2p(-0.6, phi_pv(np.array([0.0]))[0] - 0.6 * dphi0), ax.c2p(0.6, phi_pv(np.array([0.0]))[0] + 0.6 * dphi0),
-                    color=C.DISTRIBUTION, stroke_width=3)
-        dot0 = Dot(ax.c2p(0, phi_pv(np.array([0.0]))[0]), radius=0.08, color=C.DISTRIBUTION)
+        tang = Line(ax.c2p(-0.6, phi0 - 0.6 * dphi0), ax.c2p(0.6, phi0 + 0.6 * dphi0), color=C.DISTRIBUTION, stroke_width=3)
+        dot0 = Dot(ax.c2p(0, phi0), radius=0.08, color=C.DISTRIBUTION)
         l_phi = MathTex(r"\varphi", font_size=28, color=C.TEST_FN).next_to(ax.c2p(1.5, phi_pv(np.array([1.5]))[0]), UR,
                                                                          buff=0.05)
-        rows = VGroup(
-            label(r"\textbf{FA 6.7} \ a \emph{distribution} is a continuous linear functional on $\mathcal D(\Omega)$",
-                  font_size=24),
+        l_f = MathTex(r"f", font_size=28, color=C.FUNC).next_to(ax.c2p(2.2, 0.9), UP, buff=0.1)
+        l_d = MathTex(r"\delta", font_size=28, color=C.DISTRIBUTION).next_to(dot0, UL, buff=0.05)
+        l_dp = MathTex(r"\delta'", font_size=28, color=C.DISTRIBUTION).next_to(ax.c2p(0.6, phi0 + 0.6 * dphi0), UP,
+                                                                              buff=0.08)
+        rest = VGroup(
+            label(r"\textbf{FA 6.7} \ a \emph{distribution} is a continuous", font_size=24),
+            label(r"linear functional on $\mathcal D(\Omega)$:", font_size=24),
             MathTex(r"\text{a function } f: \quad \langle f, \varphi\rangle = \int f\varphi", font_size=28, color=C.FUNC),
-            MathTex(rf"\delta: \quad \langle \delta, \varphi\rangle = \varphi(0) = {phi_pv(np.array([0.0]))[0]:.4f}",
+            MathTex(rf"\delta: \quad \langle \delta, \varphi\rangle = \varphi(0) = {phi0:.4f}",
                     font_size=28, color=C.DISTRIBUTION),
             MathTex(rf"\delta': \quad \langle \delta', \varphi\rangle = -\varphi'(0) = {-dphi0:.4f}", font_size=28,
                     color=C.DISTRIBUTION),
-            label(r"\textbf{FA 6.8} \ on each compact $K$: \ $|\langle T, \varphi\rangle| \le C\sum_{|\alpha| \le N} "
-                  r"\sup|\partial^\alpha\varphi|$", font_size=22),
-            label(r"the least such $N$ is the \emph{order}: \ $f$ and $\delta$ have order $0$, \ $\delta'$ order $1$",
-                  font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([0.0, -2.0, 0])
-        for r_ in rows:
-            if r_.width > 12.6:
-                r_.width = 12.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([0.0, -2.0, 0])
-        rows[0].to_edge(UP, buff=0.3)
-        rest = VGroup(*rows[1:]).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, 0.2, 0])
+            label(r"\textbf{FA 6.8} \ on each compact $K$:", font_size=24),
+            MathTex(r"|\langle T, \varphi\rangle| \le C\sum_{|\alpha| \le N} \sup|\partial^\alpha\varphi|", font_size=26),
+            label(r"the least such $N$ is the \emph{order}:", font_size=22, color=GREY_A),
+            label(r"$f$ and $\delta$ have order $0$, \ $\delta'$ order $1$", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         for r_ in rest:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        rest.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.5, 0.0, 0])
+            assert r_.width <= 6.0
+        rest.move_to([3.5, -0.3, 0])
+        assert rest.get_right()[0] <= 6.6 and rest.get_top()[1] < 3.1
+        head = label(r"What is a distribution?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A distribution is a continuous linear functional on the test functions. "
             "<bookmark mark='b'/> Every locally integrable function is one: it acts by integrating against phi. "
@@ -74,15 +73,15 @@ class Distributions(VoiceoverScene):
             "is the order: zero for functions and delta, one for delta prime."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), Create(ax), Create(g), FadeIn(l_phi))
+            self.play(FadeIn(head), FadeIn(rest[:2]), Create(ax), Create(g), FadeIn(l_phi))
             vo.wait_until("b")
-            self.play(Create(gf), FadeIn(prod), FadeIn(rest[0]))
+            self.play(Create(gf), FadeIn(prod), FadeIn(l_f), FadeIn(rest[2]))
             vo.wait_until("c")
-            self.play(FadeIn(dot0, scale=2), FadeIn(rest[1]))
+            self.play(FadeIn(dot0, scale=2), FadeIn(l_d), FadeIn(rest[3]))
             vo.wait_until("d")
-            self.play(Create(tang), FadeIn(rest[2]))
+            self.play(Create(tang), FadeIn(l_dp), FadeIn(rest[4]))
             vo.wait_until("e")
-            self.play(FadeIn(rest[3:]))
+            self.play(FadeIn(rest[5:]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -112,11 +111,13 @@ class Distributions(VoiceoverScene):
             tab.add(MathTex(sci(float(e), 0), rf"\quad {v:.6f}", font_size=24))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.4, 0.8, 0])
         regrid(tab)
+        for k, r_ in enumerate(tab[1:]):  # one row pitch for every data row
+            r_.set_y(tab[0].get_bottom()[1] - 0.28 - 0.42 * k)
         rows = VGroup(
             MathTex(rf"\to \int_0^\infty \frac{{\varphi(x) - \varphi(-x)}}{{x}}\,dx = {lim:.6f}", font_size=26, color=C.EPS),
             label(r"each half diverges like $\log\varepsilon$; \ the halves cancel", font_size=22),
             label(r"order $1$, \ and no measure gives it", font_size=22, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.25)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tab, DOWN, buff=0.25, aligned_edge=LEFT)
         assert abs(vals[-1] - lim) < 1e-5
         head = label(r"The principal value of $1/x$: \ cancel the two infinities", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -143,6 +144,7 @@ class Distributions(VoiceoverScene):
     # ------------------------------------------------------------------
     def comb(self):
         ax = plain_axes([-14, 14, 2 * math.pi], [-0.3, 1.6, 0.5], 12.0, 2.6).move_to([0, 0.3, 0])
+        ax.y_axis.set_opacity(0)  # the comb has no y-scale (and the axis would run through the 0 label)
         ks = np.arange(-2, 3)
         spikes = VGroup(*[Arrow(ax.c2p(2 * math.pi * k, 0), ax.c2p(2 * math.pi * k, 1.5), buff=0, color=C.DISTRIBUTION,
                                 stroke_width=5, tip_length=0.2) for k in ks])
@@ -152,6 +154,13 @@ class Distributions(VoiceoverScene):
         ph = np.exp(-((x - 1.5) ** 2) / 30)
         gp = polyline(ax, x, ph, color=C.TEST_FN, stroke_width=3)
         val = float(np.sum(np.exp(-((2 * math.pi * np.arange(-50, 51) - 1.5) ** 2) / 30)))
+        # the samples phi(2 pi k) that the comb adds up
+        samp = np.exp(-((2 * math.pi * ks - 1.5) ** 2) / 30)
+        assert abs(val - samp.sum()) < 1e-4  # the lattice points outside k = -2..2 add less than 10^-4
+        sdots = VGroup(*[Dot(ax.c2p(2 * math.pi * k, v), radius=0.07, color=C.EPS) for k, v in zip(ks, samp)])
+        sl = VGroup(*[MathTex(f"{v:.3f}", font_size=22, color=C.EPS).next_to(d_, UR if k > 0 else (DR if k == 0 else UL),
+                                                                          buff=0.08)
+                      for k, v, d_ in zip(ks, samp, sdots)])
         rows = VGroup(
             MathTex(r"\text{the Dirac comb } \ \mathrm{III} = \sum_{k \in \Z} \delta_{2\pi k}: \quad \langle \mathrm{III}, \varphi\rangle "
                     r"= \sum_k \varphi(2\pi k)", font_size=30),
@@ -171,7 +180,8 @@ class Distributions(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), LaggedStart(*[GrowArrow(s_) for s_ in spikes], lag_ratio=0.15), FadeIn(lab))
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
-            self.play(Create(gp), FadeIn(rows[1]))
+            self.play(Create(gp))
+            self.play(LaggedStart(*[FadeIn(d_, scale=2) for d_ in sdots], lag_ratio=0.15), FadeIn(sl), FadeIn(rows[1]))
             vo.wait_until("c")
             self.play(FadeIn(rows[2]))
         self.wait(0.4)

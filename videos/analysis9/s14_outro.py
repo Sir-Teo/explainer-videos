@@ -104,9 +104,10 @@ class Outro(VoiceoverScene):
             label(r"and the spectral theorem: \ diagonalizing self-adjoint operators", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.3, 0])
         for r_ in side:
-            if r_.width > 6.6:
-                r_.width = 6.6
+            if r_.width > 6.0:
+                r_.width = 6.0
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.5, -0.3, 0])
+        assert side.get_right()[0] <= 6.6
         with self.voiceover(
             "Next time, in Part 10: operators, and their spectra. <bookmark mark='a'/> Part 8's Volterra operator, "
             "integration from zero, has norm two over pi. Its powers shrink, and the n-th root of the norm of the n-th "
