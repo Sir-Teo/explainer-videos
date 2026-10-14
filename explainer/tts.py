@@ -728,11 +728,22 @@ def _synth_server(spoken: str, out: Path) -> tuple[float, list]:
     the duration and the forced-aligned word (Chinese: character) timings."""
     import urllib.request
 
+    import time
+    import urllib.error
+
     body = json.dumps({"text": spoken, "lang": lang.LANG, "voice": VOICE, "speed": SPEED, "out": str(out)})
     req = urllib.request.Request(f"{SERVER}/synth", data=body.encode(), headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=24 * 3600) as resp:
-        meta = json.loads(resp.read())
-    return meta["duration"], meta["tokens"]
+    for attempt in range(180):  # a server being restarted (it takes a minute to load) is waited for, up to 30 min
+        try:
+            with urllib.request.urlopen(req, timeout=24 * 3600) as resp:
+                meta = json.loads(resp.read())
+            return meta["duration"], meta["tokens"]
+        except urllib.error.HTTPError:
+            raise  # the server answered: a real error
+        except (urllib.error.URLError, ConnectionError, OSError):
+            if attempt == 179:
+                raise
+            time.sleep(10)
 
 
 def _write_wav(path: Path, audio) -> None:

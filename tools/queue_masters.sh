@@ -2,7 +2,8 @@
 # Build queue for the series: run one line of renders/qa/render_queue.txt at a time, either
 #   preview <video> [build args]   a 480p QA build, or
 #   master <video> <lang>          a 2160p60 CRF 16 upload master, started once tools/queue_narration.sh has logged
-#                                  that video's narration in that language as done (exit 0).
+#                                  that video's narration in that language as done (exit 0). One scene at a
+#                                  time: narration sets the pace, and two 4K scenes beside the TTS server swap.
 # Append lines to the queue to add work; a line "stop" ends the runner.
 cd "${0:A:h}/.."
 source .venv/bin/activate
@@ -24,7 +25,7 @@ while true; do
     rc=$?; log=renders/qa/build_$2.log
   else
     EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator nice -n 5 \
-      python -u tools/build.py $2 -q k --fps 60 --crf 16 -j 2 --lang $3 > renders/qa/master_$2_$3.log 2>&1
+      python -u tools/build.py $2 -q k --fps 60 --crf 16 -j 1 --lang $3 > renders/qa/master_$2_$3.log 2>&1
     rc=$?; log=renders/qa/master_$2_$3.log
   fi
   echo "$(date +%H:%M) done  $item (exit $rc): $(grep -E 'Wrote|Failed|Missing' $log | tail -1)" >> renders/qa/render_queue.log
