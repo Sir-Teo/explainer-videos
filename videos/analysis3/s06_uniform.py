@@ -152,7 +152,8 @@ class Uniform(VoiceoverScene):
         bx = plain_axes([0, 2 * np.pi, np.pi / 2], [0, 0.3, 0.1], 6.4, 1.5).move_to([-3.3, -2.55, 0])
         tl = MathTex(r"f_n = \sum_{k \le n} \frac{\sin kx}{k^2}", font_size=26, color=GREY_A).next_to(ax, UP, buff=0.05)
         tl.align_to(ax, RIGHT)
-        bl = MathTex(r"|f_n - f_m|", font_size=24, color=C.DIST).move_to(bx.c2p(5.3, 0.25))
+        # right of the plot: the first pair's arches reach 0.25 across the whole width
+        bl = MathTex(r"|f_n - f_m|", font_size=24, color=C.DIST).next_to(bx.c2p(2 * np.pi, 0.25), RIGHT, buff=0.25)
         el = DashedLine(bx.c2p(0, eps), bx.c2p(2 * np.pi, eps), color=C.EPS, stroke_width=2)
         el_l = MathTex(r"\varepsilon = 0.06", font_size=22, color=C.EPS).next_to(el, RIGHT, buff=0.08)
 

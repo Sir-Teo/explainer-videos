@@ -109,7 +109,7 @@ class Series(VoiceoverScene):
 
         with self.voiceover(
             "A series converges to s when its partial sums do. <bookmark mark='c'/> So the Cauchy criterion carries "
-            "over: the series converges exactly when every long enough block of consecutive terms, far enough out, adds "
+            "over: the series converges exactly when every block of consecutive terms far enough out, however long, adds "
             "up to something small. <bookmark mark='n'/> A block can be a single term, so the terms must go to zero. "
             "<bookmark mark='p'/> That's necessary, but it's not enough, and the classic example is seven centuries old."
         ) as vo:

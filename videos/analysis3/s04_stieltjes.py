@@ -120,7 +120,8 @@ class Stieltjes(VoiceoverScene):
         stems = VGroup(*[VGroup(Line(ax.c2p(sx, 0), ax.c2p(sx, fr(sx)), color=C.EPS, stroke_width=3 + 16 * c),
                                 Dot(ax.c2p(sx, fr(sx)), radius=0.06, color=C.EPS))
                          for sx, c in zip(ss_, cs_)])
-        st_lab = MathTex(r"\alpha = \sum c_n I(x - s_n)", font_size=28, color=C.EPS).move_to(al_ax.c2p(0.05, 0.75),
+        # above the staircase (it reaches 0.75 before x = 0.62), not across its steps
+        st_lab = MathTex(r"\alpha = \sum c_n I(x - s_n)", font_size=28, color=C.EPS).move_to(al_ax.c2p(0.05, 1.12),
                                                                                            aligned_edge=LEFT)
         side = VGroup(
             label(r"\textbf{Rudin 6.15} \ a unit step at $s$, \ $f$ continuous at $s$:", font_size=28),
