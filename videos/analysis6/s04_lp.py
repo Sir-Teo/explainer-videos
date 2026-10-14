@@ -175,10 +175,10 @@ class Lp(VoiceoverScene):
         eps, half, one, R, two = d["eps"], d["half"], d["one"], d["R"], d["two"]
         ax = plain_axes([0, 1, 0.5], [0, 6, 2], 4.6, 2.9, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, 0.25, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, 0.5, 0])
         bx = plain_axes([0, 8, 2], [0, 1.1, 0.5], 4.6, 2.9, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.0, 0.25, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([3.0, 0.5, 0])
         x0 = np.linspace(1 / 36, 1, 400)
         f1 = polyline(ax, x0, x0**-0.5, color=C.CONNECTED_SET, stroke_width=4)
         a1 = area_under(ax, x0, x0**-0.5, C.CONNECTED_SET, 0.25)

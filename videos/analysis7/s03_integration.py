@@ -90,14 +90,35 @@ class Integration(VoiceoverScene):
         cols = {0: GREY_B, 1: C.SEQ, 2: C.MEASURE}
         dots = VGroup(*[Dot(ax.c2p(p.real, p.imag), radius=0.07, color=cols[int(k)]) for p, k in zip(pts, w)])
         zz0 = np.asarray(z)
+        cpts = np.array([ax.c2p(v.real, v.imag) for v in zz0])[:, :2]
+        org = ax.c2p(0, 0)
 
-        def away(p):  # the unit direction from the nearest point of the curve to p: labels never sit on the curve
+        def away(p):  # the unit direction from the nearest point of the curve to p
             q = complex(p) - zz0[np.argmin(np.abs(zz0 - complex(p)))]
             return np.array([q.real, q.imag, 0]) / abs(q)
 
-        nums = VGroup(*[MathTex(str(int(k)), font_size=22, color=cols[int(k)]).next_to(ax.c2p(p.real, p.imag), away(p),
-                                                                                       buff=0.1)
-                        for p, k in zip(pts, w)])
+        def tag(p, tex, color, fs=22):
+            """The label of the point p, on the side (tried from 'away from the curve' round the compass) where it
+            clears the curve and the faint axes with their ticks."""
+            P = ax.c2p(p.real, p.imag)
+            m = MathTex(tex, font_size=fs, color=color)
+            d0 = away(p)
+            best, best_gap = None, -1.0
+            for k in (0, 1, -1, 2, -2, 3, -3, 4):
+                a_ = k * np.pi / 4
+                dv = np.array([d0[0] * np.cos(a_) - d0[1] * np.sin(a_), d0[0] * np.sin(a_) + d0[1] * np.cos(a_), 0])
+                m.next_to(P, dv, buff=0.1)
+                c, hw, hh = m.get_center(), m.width / 2, m.height / 2
+                gap = np.hypot(np.maximum(np.abs(cpts[:, 0] - c[0]) - hw, 0),
+                               np.maximum(np.abs(cpts[:, 1] - c[1]) - hh, 0)).min()
+                axes_ok = abs(c[0] - org[0]) > hw + 0.12 and abs(c[1] - org[1]) > hh + 0.12
+                if axes_ok and gap > 0.06:
+                    return m
+                if gap > best_gap:
+                    best, best_gap = dv, gap
+            return m.next_to(P, best, buff=0.1)
+
+        nums = VGroup(*[tag(complex(p), str(int(k)), cols[int(k)]) for p, k in zip(pts, w)])
         # one point, the turning arrow
         a = complex(pts[list(w).index(2)])
         tT = ValueTracker(0.0)
@@ -111,7 +132,7 @@ class Integration(VoiceoverScene):
 
         arr = always_redraw(arrow)
         a_d = VGroup(Dot(ax.c2p(a.real, a.imag), radius=0.07, color=C.EPS),
-                     MathTex(r"a", font_size=26, color=C.EPS).next_to(ax.c2p(a.real, a.imag), away(a), buff=0.12))
+                     tag(a, r"a", C.EPS, 26))
         turn = always_redraw(lambda: MathTex(
             rf"\text{{turned: }} {(ang[int(tT.get_value() * (len(zz) - 1))] - ang[0]) / (2 * np.pi):.2f} \text{{ turns}}",
             font_size=28, color=C.EPS).move_to([3.4, 1.6, 0]))
