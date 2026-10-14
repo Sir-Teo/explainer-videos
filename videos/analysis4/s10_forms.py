@@ -256,7 +256,7 @@ class FormsTour(VoiceoverScene):
         d = load("forms")
         wa, wo = float(d["w_around"]), float(d["w_off"])
         ax = square_axes([-1.8, 2.6, 1], [-1.6, 1.8, 1], 1.45).move_to([-3.25, -0.7, 0])
-        ax.set_opacity(0.5)
+        ax.set_opacity(0)  # no axes: the field, the hole and the two loops are the picture
         hole = VGroup(Circle(radius=0.1, color=C.HOLE, stroke_width=3).move_to(ax.c2p(0, 0)),
                       MathTex(r"0", font_size=24, color=C.HOLE).next_to(ax.c2p(0, 0), DL, buff=0.1))
         c1 = Circle(radius=1.45 * 1.0, color=C.EPS, stroke_width=3).move_to(ax.c2p(0.2, -0.1))
@@ -321,7 +321,7 @@ class FormsTour(VoiceoverScene):
             "the way around. <bookmark mark='d'/> On a convex set this can't happen, which is Poincaré's lemma. "
             "Holes are detected by integrals: the beginning of topology, and a preview of Part 7's winding numbers."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax), FadeIn(hole))
+            self.play(FadeIn(head[0]), FadeIn(hole))
             vo.wait_until("a")
             self.play(FadeIn(head[1]), LaggedStart(*[GrowArrow(a_) for a_ in field], lag_ratio=0.02), FadeIn(fl_),
                       run_time=2.0)
