@@ -114,9 +114,9 @@ class Outro(VoiceoverScene):
             "which Part 3 showed has no Riemann integral. <bookmark mark='c'/> Lebesgue's integral handles it, and "
             "under it, limits pass through integrals without any uniformity at all."
         ) as vo:
-            self.play(FadeIn(head), Create(ax))
+            self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(curves[0]), FadeIn(labs[0]))
+            self.play(Create(ax), Create(curves[0]), FadeIn(labs[0]))  # the axes arrive with their first curve
             cur, cl = curves[0], labs[0]
             for k in range(1, len(shown)):
                 self.play(ReplacementTransform(cur, curves[k]), FadeTransform(cl, labs[k]), run_time=1.0)

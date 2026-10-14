@@ -212,7 +212,7 @@ class ImplicitFunction(VoiceoverScene):
         B_l = MathTex(r"(x,\ v = f(x, y))", font_size=22, color=GREY_A).next_to(B, UP, buff=0.12)
         B_0 = MathTex(r"v = 0", font_size=22, color=C.FUNC).next_to(B.c2p(xr[1], 0), RIGHT, buff=0.08)
         A_n = VGroup(label(r"level sets of $f$", font_size=22, color=GREY_A),
-                     label(r"(dashed: $f < 0$)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(
+                     label(r"(dashed, on blue: \ $f < 0$)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(
             A, DOWN, buff=0.15)
         B_n = label(r"become horizontal lines", font_size=22, color=GREY_A).next_to(B, DOWN, buff=0.15)
         rows = [

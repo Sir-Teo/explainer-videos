@@ -232,6 +232,7 @@ class Picard(VoiceoverScene):
                                                      atol=1e-2)
         walk_path = polyline(ax, tw, yw, color=WHITE, stroke_width=0)
         walker = Dot(ax.c2p(0, 0), radius=0.09, color=WHITE).set_z_index(4)
+        start = Dot(ax.c2p(0, 0), radius=0.09, color=WHITE).set_z_index(4)  # the initial condition y(0) = 0
         side = VGroup(
             VGroup(MathTex(r"y = 0", font_size=30, color=C.SEQ), MathTex(r"\text{and}", font_size=28, color=GREY_A),
                    MathTex(r"y = \begin{cases} 0 & t \le c \\ (t - c)^2 & t > c \end{cases}", font_size=30,
@@ -253,13 +254,14 @@ class Picard(VoiceoverScene):
             "still gives existence for any continuous right side, but without the Lipschitz bound that makes T a "
             "contraction, uniqueness can fail."
         ) as vo:
-            self.play(FadeIn(head[0]), FadeIn(head[1][0]), Create(ax), FadeIn(tl_))
+            self.play(FadeIn(head[0]), FadeIn(head[1][0]), Create(ax), FadeIn(tl_), FadeIn(start, scale=1.5))
             vo.wait_until("a")
             self.play(FadeIn(head[1][1]))
             vo.wait_until("b")
             self.play(Create(zero), FadeIn(side[0][0]))
             self.play(LaggedStart(*[Create(s_) for s_ in pink], lag_ratio=0.3), FadeIn(side[0][1:]), run_time=2.5)
-            self.play(FadeIn(walker), run_time=0.5)
+            self.remove(start)
+            self.add(walker)  # (the same dot, at the same place: it now walks)
             self.play(MoveAlongPath(walker, walk_path), run_time=3.0, rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(side[1:]), FadeOut(walker))

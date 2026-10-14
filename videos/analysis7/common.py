@@ -27,6 +27,8 @@ def cplot_fine(ax: Axes, F, xr, yr, px=960, ss=3, rings=True, mask=None) -> Imag
     """Like ``cplot``, but each pixel is the average of ss x ss samples (computed a band of rows at a time), so
     rings and phases that turn faster than a pixel blend to their mean instead of aliasing into speckle; ``mask``
     gets the same treatment, so its edge is anti-aliased. For essential singularities (Hook, Beurling)."""
+    if config.dry_run:  # layout checks never look at the pixels: same size and place, a quarter of the work
+        px, ss = max(64, px // 4), 1
     p0, p1 = ax.c2p(xr[0], yr[0]), ax.c2p(xr[1], yr[1])
     w, h = p1[0] - p0[0], p1[1] - p0[1]
     py = max(2, int(px * h / w))

@@ -181,8 +181,8 @@ class Tests(VoiceoverScene):
                 s_in, out = s[: keep[0]], s[keep[0]]
                 m.set_points_as_corners([P(z) for z in s_in])
                 ar = Arrow(P(s_in[-1]), P(out), buff=0, color=color, stroke_width=3, max_tip_length_to_length_ratio=0.15)
-                lab = MathTex(r"\to \infty", font_size=28, color=color).next_to(ar.get_end(), LEFT, buff=0.1).shift(
-                    UP * 0.18)
+                # left of the last step, inside one grid cell (clear of the grid lines and of the path)
+                lab = MathTex(r"\to \infty", font_size=28, color=color).next_to(ar.get_center(), LEFT, buff=0.12)
                 return VGroup(m, ar, lab)
             m.set_points_as_corners([P(z) for z in s])
             return m
