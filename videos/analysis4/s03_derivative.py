@@ -120,7 +120,7 @@ class Derivative(VoiceoverScene):
         chg = f_surf(p[0] + tt * u[0], p[1] + tt * u[1]) - f_surf(*p)
         lin = tt * (A @ u)
         lo, hi = math.floor(min(chg.min(), lin.min()) * 2) / 2, math.ceil(max(chg.max(), lin.max()) * 2) / 2
-        cax = plain_axes([-1, 1, 0.5], [lo, hi, 0.5], 6.0, 3.3).move_to([-2.6, -1.75, 0])
+        cax = plain_axes([-1, 1, 0.5], [lo, hi, 0.5], 6.0, 3.3).move_to([-2.6, -1.4, 0])
         c_chg = polyline(cax, tt, chg, color=C.FUNC, stroke_width=3.5)
         c_lin = polyline(cax, tt, lin, color=C.APPROX, stroke_width=3)
         t1 = 0.8
@@ -152,7 +152,7 @@ class Derivative(VoiceoverScene):
         sec = VGroup(cax, c_chg, c_lin, err, cl, tlab, ro)
         ax = plain_axes([-3, 0, 1], [-4, 0, 1], 6.0, 3.3, numbers=True, font_size=20,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.6, -1.75, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-2.6, -1.4, 0])
         xl = MathTex(r"\log_{10}|h|", font_size=24, color=GREY_A).next_to(ax.c2p(-1.5, 0), UP, buff=0.4)
         yl = MathTex(r"\log_{10}\text{ratio}", font_size=24, color=GREY_A).next_to(ax.c2p(0, -0.6), RIGHT, buff=0.35)
         pts = VGroup(*[Dot(ax.c2p(math.log10(h), math.log10(w)), radius=0.07, color=C.EPS) for h, w in zip(hs, worst)])
@@ -354,12 +354,12 @@ class Derivative(VoiceoverScene):
         uu = np.linspace(-w, w, 81)
         f0 = float(f_surf(*p))
         step = float(np.linalg.norm(A)) * 2 * w / 7
-        lvls = [f0 + k * step for k in range(-4, 5)]
+        lvls = [f0 + k * step for k in range(-3, 4)]  # all inside the window's range of values
         lin_l = VGroup(*[contour_mobject(rax, contour_segments(lambda U, V: f0 + A[0] * U + A[1] * V, uu, uu, lv),
                                          C.APPROX, 2.5) for lv in lvls])
         f_l = VGroup(*[contour_mobject(rax, contour_segments(lambda U, V: f_surf(p[0] + U, p[1] + V), uu, uu, lv),
                                        C.FUNC, 2.0) for lv in lvls])
-        assert all(len(m_.points) for m_ in lin_l)
+        assert all(len(m_.points) for m_ in lin_l) and all(len(m_.points) for m_ in f_l)
         garr = Arrow(rax.c2p(0, 0), rax.c2p(*(0.25 * A / np.linalg.norm(A))), buff=0, color=C.EPS, stroke_width=5,
                      tip_length=0.15)
         rdot = Dot(rax.c2p(0, 0), radius=0.06, color=WHITE)

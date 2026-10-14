@@ -123,7 +123,7 @@ class Integral(VoiceoverScene):
     def mct(self):
         d = load("mct")
         ns, ints = d["ns"], d["ints"]
-        ax = plain_axes([0, 1, 0.25], [0, 8.5, 2], 7.0, 4.1).move_to([-2.9, -0.55, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 8.5, 2], 6.5, 4.1).move_to([-3.2, -0.55, 0])
         x = np.linspace(1e-4, 1, 3000)
         # the limit x^(-1/2) is unbounded: cut where it leaves the window, with an arrow (no false plateau at the top)
         full = cut_graph(ax, x, x**-0.5, WHITE, 3)
