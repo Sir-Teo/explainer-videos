@@ -76,9 +76,12 @@ def render_scene(video: str, module: str, cls: str, quality: str, fps: int, medi
     # texts dir race on the .svg files of identical Text strings (one unlinks what another reads).
     cfg = media / "cfg" / f"{cls}.cfg"
     cfg.parent.mkdir(parents=True, exist_ok=True)
-    (media / "Tex").mkdir(exist_ok=True)  # manim creates tex_dir without parents=True
-    (media / "texts").mkdir(exist_ok=True)
-    cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\ntext_dir = {media / 'texts' / cls}\n")
+    # The typeset SVGs depend on neither the resolution nor the narration language, so every build of a video
+    # (previews, masters, translations) shares one cache: a 4K or Chinese master reuses the preview's LaTeX.
+    cache = ROOT / "media" / video
+    (cache / "Tex").mkdir(parents=True, exist_ok=True)  # manim creates tex_dir without parents=True
+    (cache / "texts").mkdir(exist_ok=True)
+    cfg.write_text(f"[CLI]\ntex_dir = {cache / 'Tex' / cls}\ntext_dir = {cache / 'texts' / cls}\n")
     cmd = [
         sys.executable, "-m", "manim", "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
         "--media_dir", str(media), "--progress_bar", "none", str(src), cls,

@@ -117,7 +117,7 @@ class ZerosProducts(VoiceoverScene):
         assert np.allclose(np.abs(B(np.exp(1j * th))), 1, atol=1e-9)  # each factor has size 1 on the circle
         head = label(r"How many zeros can a bounded function on the disk have?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> In the disk, zeros can pile up toward the edge, but not too fast. Here's a Blaschke "
+            "<bookmark mark='a'/> In the disk, zeros can pile up toward the edge, but not too densely. Here's a Blaschke "
             "product, built from forty zeros spiraling outward. Each factor has size one on the circle, so the "
             "product stays bounded. <bookmark mark='b'/> What makes it converge is that the zeros approach the "
             "boundary quickly enough: the distances to the circle have a finite sum. For a bounded function, that's "

@@ -133,8 +133,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Next time, in Part 9: distributions. <bookmark mark='a'/> The absolute value has a corner, but its "
             "derivative is the sign function. The sign function jumps, and its derivative is a spike of total mass "
-            "two, the Dirac delta, which no function can be. <bookmark mark='b'/> Distributions make that honest: "
-            "define the derivative by moving it onto smooth test functions. Then everything can be differentiated, "
+            "two, twice the Dirac delta, which no function can be. <bookmark mark='b'/> Distributions make that "
+            "honest: define the derivative by moving it onto smooth test functions. Then everything can be differentiated, "
             "and the Fourier transform becomes a symmetry of the whole theory."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(g_abs), FadeIn(lab[0]))
