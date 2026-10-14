@@ -32,6 +32,18 @@ class UniformBoundedness(VoiceoverScene):
             label(r"either \ $\sup_\alpha \|\Lambda_\alpha\| < \infty$, \ or \ $\sup_\alpha \|\Lambda_\alpha x\| = \infty$ "
                   r"for all $x$ in a dense $G_\delta$", font_size=26, color=C.EPS),
         ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        # the family this part is about: the Fourier partial sums S_n on C(T), whose norms (the Lebesgue constants)
+        # are unbounded, so Banach-Steinhaus puts us in its second case
+        ln_ = np.array([lebesgue_constant(n) for n in range(41)])
+        assert abs(ln_[0] - 1) < 1e-6 and abs(ln_[1] - (1 / 3 + 2 * math.sqrt(3) / math.pi)) < 1e-6
+        assert np.all(np.diff(ln_) > 0) and ln_[-1] > 2.7
+        lax = plain_axes([-0.5, 40.5, 10], [0, 3, 1], 4.4, 3.0, numbers=True, font_size=16,
+                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
+                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.6, -1.4, 0])
+        lbars = VGroup(*[Line(lax.c2p(n, 0), lax.c2p(n, v), color=C.OPERATOR, stroke_width=4) for n, v in enumerate(ln_)])
+        llab = MathTex(r"\|S_n\| \text{ on } C(\mathbb T) = \tfrac{1}{2\pi}\int|D_n| \ \approx \tfrac{4}{\pi^2}\log n \to \infty",
+                       font_size=24, color=C.OPERATOR).next_to(lax, UP, buff=0.15)
+        lpic = VGroup(lax, lbars, llab)
         sq = Square(side_length=4.4, color=GREY_C, stroke_width=1.5).move_to([-3.6, -1.1, 0])
         rng = np.random.default_rng(5)
         blobs = VGroup()
@@ -68,8 +80,10 @@ class UniformBoundedness(VoiceoverScene):
             "operator's norm by the same constant. Pointwise bounds become uniform bounds."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(lax), FadeIn(llab))
+            self.play(LaggedStart(*[Create(b_) for b_ in lbars], lag_ratio=0.05), run_time=2.5)
             vo.wait_until("b")
+            self.play(FadeOut(lpic), run_time=0.5)
             self.play(Create(sq), FadeIn(sch), FadeIn(steps[:2]))
             vo.wait_until("c")
             self.play(LaggedStart(*[Create(b_) for b_ in blobs], lag_ratio=0.25), FadeIn(e_l), FadeIn(steps[2]),
