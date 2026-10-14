@@ -571,9 +571,11 @@ LEXICON: list[tuple[str, str]] = [
 # tools/check_narration.py transcribes every line and diffs it against the script.
 RESPELL: dict[str, list[tuple[str, str]]] = {
     "en": [
-        (r"–|—", ", "),
+        (r"(?<=\w)–(?=\w)", " "),  # a compound name, Heine–Borel, is read straight through
+        (r"\s*[–—]\s*", ", "),
     ],
     "zh": [
+        (r"(?<=\w)–(?=\w)", ""),  # 海涅–博雷尔 -> 海涅博雷尔
         (r"—", "，"),
         (r"(?<=[A-Za-zα-ωΑ-Ω])_(?=[A-Za-z0-9α-ω{])", " "),  # x_n -> "x n"
         (r"[{}]", ""),
