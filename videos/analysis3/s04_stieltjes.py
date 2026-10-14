@@ -51,6 +51,10 @@ class Stieltjes(VoiceoverScene):
         ticks_x = VGroup(*[Line([Xx(v), yx - 0.1, 0], [Xx(v), yx + 0.1, 0], color=C.EPS, stroke_width=2.5) for v in xs])
         links = VGroup(*[Line([Xx(v), yx + 0.12, 0], [Xa(a), ya - 0.12, 0], color=C.EPS, stroke_width=1, stroke_opacity=0.4)
                          for v, a in zip(xs, avals)])
+        # Riemann's ruler first: equal pieces of x, each counted by its width
+        ticks_r = VGroup(*[Line([Xx(v), yx - 0.1, 0], [Xx(v), yx + 0.1, 0], color=GREY_B, stroke_width=2)
+                           for v in np.linspace(0, 3, 25)])
+        rl = label(r"Riemann: \ equal widths $\Delta x_i$", font_size=24, color=GREY_B).next_to(xline, DOWN, buff=0.3)
         dens = label(r"where $\alpha$ climbs fast, a short stretch of $x$ counts for a lot", font_size=26,
                      color=C.EPS).move_to([0, -2.35, 0])
         dens2 = MathTex(r"\alpha \text{ smooth:} \quad \int f\,d\alpha = \int f\,\alpha'\,dx \quad (\text{Rudin 6.17})",
@@ -62,10 +66,10 @@ class Stieltjes(VoiceoverScene):
             "carries a lot of weight; where alpha is flat, a long stretch counts for little. <bookmark mark='c'/> For "
             "a smooth alpha this is just a density: the integral of f d alpha is the integral of f times alpha prime."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(xline), FadeIn(xl), FadeIn(ticks_r), FadeIn(rl))
             vo.wait_until("a")
-            self.play(Create(xline), Create(aline), FadeIn(xl), FadeIn(al), FadeIn(ticks_a))
-            self.play(TransformFromCopy(ticks_a, ticks_x), Create(links), run_time=2.0)
+            self.play(Create(aline), FadeIn(al), FadeIn(ticks_a), FadeOut(rl))
+            self.play(TransformFromCopy(ticks_a, ticks_x), FadeOut(ticks_r), Create(links), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(dens))
             vo.wait_until("c")

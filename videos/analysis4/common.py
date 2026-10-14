@@ -63,3 +63,15 @@ def heatmap(F, xr, yr, width, height, vmin, vmax, px=360, neg=C.SEQ, pos=C.CLOSE
     img.stretch_to_fit_width(width)
     img.stretch_to_fit_height(height)
     return img
+
+
+def angle_ticks(ax: Axes, font_size=20, color=GREY_B, name=r"\theta") -> VGroup:
+    """Labels 0, pi/2, pi, 3pi/2, 2pi under the bottom edge of an angle axis (outside the plot, so no curve runs
+    through them), and the axis name at the right end of that row."""
+    y0 = ax.y_range[0]
+    texts = [r"0", r"\tfrac{\pi}{2}", r"\pi", r"\tfrac{3\pi}{2}", r"2\pi"]
+    g = VGroup()
+    for k, t in enumerate(texts):
+        g.add(MathTex(t, font_size=font_size, color=color).next_to(ax.c2p(k * np.pi / 2, y0), DOWN, buff=0.12))
+    g.add(MathTex(name, font_size=font_size + 4, color=color).next_to(g[-1], RIGHT, buff=0.25))
+    return g

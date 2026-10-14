@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis7.common import cplot, load, square_axes, zcurve
+from videos.analysis7.common import cplot, load, plain_axes, polyline, square_axes, zcurve
 from videos.analysis7.compute import contour
 
 
@@ -55,8 +55,14 @@ class CauchyFormula(VoiceoverScene):
                 MathTex(rf"\tfrac{{1}}{{2\pi i}}\oint \tfrac{{f(z)}}{{z - a}}dz = {nz(v.real, 5):+.5f} {nz(v.imag, 5):+.5f}i", font_size=28,
                         color=C.EPS),
                 MathTex(rf"f(a) = {nz(fa.real, 5):+.5f} {nz(fa.imag, 5):+.5f}i", font_size=28, color=C.EPS),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, 0.7, 0])
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.3, 0.7, 0]).align_to(np.array([x_left, 0, 0]), LEFT)
 
+        notes = VGroup(
+            MathTex(rf"\text{{30 random points: largest error }} {sci(err, 1)}", font_size=26, color=GREY_A),
+            label(r"at the center: \ $f(0) = \frac{1}{2\pi}\int_0^{2\pi} f(e^{i\theta})\,d\theta$, \ an average", font_size=24),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -1.5, 0])
+        x_left = notes.get_left()[0]
+        assert notes.get_right()[0] <= 6.6
         rd = always_redraw(reads)
         dots = VGroup(*[Dot(cx.c2p(a.real, a.imag), radius=0.045, color=WHITE) for a in a_pts])
         thm = VGroup(
@@ -65,10 +71,6 @@ class CauchyFormula(VoiceoverScene):
             MathTex(r"f(a)\,\mathrm{Ind}_\gamma(a) = \frac{1}{2\pi i}\oint_\gamma \frac{f(z)}{z - a}\,dz", font_size=34,
                     color=C.EPS),
         ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
-        notes = VGroup(
-            MathTex(rf"\text{{30 random points: largest error }} {sci(err, 1)}", font_size=26, color=GREY_A),
-            label(r"at the center: \ $f(0) = \frac{1}{2\pi}\int_0^{2\pi} f(e^{i\theta})\,d\theta$, \ an average", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -1.5, 0])
         assert err < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> Cauchy's formula: for a holomorphic function, the value at any point inside a "
@@ -113,18 +115,18 @@ class CauchyFormula(VoiceoverScene):
             MathTex(r"= " + r",\ ".join(f"{v:.6f}" for v in fib[:5]) + r",\ \ldots", font_size=24, color=C.EPS),
             MathTex(r"= " + r",\ ".join(str(int(round(v))) for v in fib[:14]) + r",\ \ldots", font_size=26, color=C.EPS),
             label(r"Fibonacci! \ ($f = \sum F_{n+1} z^n$)", font_size=24, color=GREY_A),
-            label(r"\textbf{RCA 10.16} \ holomorphic $\Rightarrow$ a power series in every disk inside $\Omega$:",
-                  font_size=24),
+            VGroup(label(r"\textbf{RCA 10.16} \ holomorphic $\Rightarrow$ a power series", font_size=24),
+                   label(r"in every disk inside $\Omega$:", font_size=24)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
             label(r"here it converges for $|z| < \frac{\sqrt5 - 1}{2} = 0.618$, \ the nearest pole", font_size=24,
                   color=C.EPS),
-            label(r"so $f$ has derivatives of every order \ (and Morera: the converse)", font_size=24, color=GREY_A),
+            VGroup(label(r"so $f$ has derivatives of every order", font_size=24, color=GREY_A),
+                   label(r"(and Morera: the converse)", font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                         buff=0.1),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
-        for r_ in coef:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        coef.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -0.5, 0])
-        head = label(r"The first miracle: \ every holomorphic function is a power series", font_size=32).to_edge(UP,
-                                                                                                          buff=0.25)
+        coef.align_to(np.array([max(frame.get_right()[0] + 0.5, 6.55 - coef.width), 0, 0]), LEFT)
+        assert coef.get_right()[0] <= 6.6 and coef.get_left()[0] >= frame.get_right()[0] + 0.4
+        head = label(r"The first miracle: \ every holomorphic function is a power series", font_size=34).to_edge(UP,
+                                                                                                          buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Expand the Cauchy kernel, one over z minus a, as a geometric series, and the "
             "formula turns into a power series. The coefficients are integrals over a circle. "
@@ -158,14 +160,23 @@ class CauchyFormula(VoiceoverScene):
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / 4) for k in range(5)]
         u = ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]
         circs = [Circle(radius=r * u, color=c, stroke_width=2.5).move_to(ax.c2p(0, 0)) for r, c in zip(rs, cols)]
-        bx = square_axes([-2.6, 2.6, 1], [-2.6, 2.6, 1], 0.62).move_to([0.2, -0.75, 0])
+        bx = square_axes([-2.6, 2.6, 1], [-2.6, 2.6, 1], 0.62).move_to([0.0, -0.75, 0])
         bx.set_opacity(0.35)
         th = np.linspace(0, 2 * np.pi, 1500)
+
+        def tip_at(P, i, color):  # a small arrowhead on a polyline, pointing along it (the direction of travel)
+            dv = P[min(i + 6, len(P) - 1)] - P[max(i - 6, 0)]
+            dv = dv / np.linalg.norm(dv)
+            nv = np.array([-dv[1], dv[0], 0])
+            return Polygon(P[i] + 0.13 * dv, P[i] - 0.07 * dv + 0.08 * nv, P[i] - 0.07 * dv - 0.08 * nv, stroke_width=0,
+                           fill_color=color, fill_opacity=1)
+
         imgs = []
         for r, c in zip(rs, cols):
             w = p(r * np.exp(1j * th))
             w = w / np.abs(w) ** 0.7  # compress the size, keep the angle
-            imgs.append(zcurve(bx, w, c, 2.5))
+            P = np.array([bx.c2p(v.real, v.imag) for v in w])
+            imgs.append(VGroup(zcurve(bx, w, c, 2.5), tip_at(P, int(np.argmax(np.abs(w))), c)))
         o = Dot(bx.c2p(0, 0), radius=0.07, color=WHITE)
         b_l = label(r"$p(\text{circle})$, \ size compressed", font_size=22, color=GREY_A).next_to(bx, UP, buff=0.1)
         tab = VGroup(MathTex(r"r", r"\quad \tfrac{1}{2\pi i}\oint \tfrac{p'}{p}", r"\quad \#\text{roots}", font_size=26,
@@ -178,22 +189,35 @@ class CauchyFormula(VoiceoverScene):
             row.set_color(cols[i])
         notes = VGroup(
             label(r"Cauchy: \ $|f^{(n)}(a)| \le n!\,M / R^n$", font_size=24),
-            label(r"\textbf{10.23} \ Liouville: \ bounded entire $\Rightarrow$ constant", font_size=24, color=C.EPS),
+            label(r"\textbf{10.23} \ Liouville:", font_size=24, color=C.EPS),
+            label(r"bounded entire $\Rightarrow$ constant", font_size=24, color=C.EPS),
             label(r"\textbf{10.25} \ no roots $\Rightarrow$ $1/p$ bounded entire:", font_size=24),
             label(r"so every $p$ has a root \ (Part 3's promise)", font_size=24, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.6, -2.0, 0])
-        for r_ in notes:
-            if r_.width > 4.4:
-                r_.width = 4.4
-        notes.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.65, -2.0, 0])
-        head = label(r"Counting roots with integrals: \ $p(z) = z^5 - 2z^3 + 0.3z^2 + 1.1z - 0.4$", font_size=30).to_edge(
-            UP, buff=0.25)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        notes.align_to(np.array([6.55 - notes.width, 0, 0]), LEFT).set_y(-2.05)
+        assert notes.get_right()[0] <= 6.6 and notes.get_left()[0] > bx.get_right()[0] + 0.2
+        assert notes.get_bottom()[1] > -3.65 and tab.get_right()[0] <= 6.6
+        head0 = label(r"Cauchy's estimate $\Rightarrow$ Liouville $\Rightarrow$ every polynomial has a root",
+                      font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Counting roots with integrals: \ $p(z) = z^5 - 2z^3 + 0.3z^2 + 1.1z - 0.4$", font_size=34).to_edge(
+            UP, buff=0.3)
         # Cauchy's estimate, live: a circle of radius R about 0 where |f| <= M = 1 bounds |f'(0)| by M/R
         Rv = ValueTracker(0.4)
         cR = always_redraw(lambda: Circle(radius=Rv.get_value() * u, color=C.FUNC, stroke_width=3).move_to(ax.c2p(0, 0)))
         c0 = Dot(ax.c2p(0, 0), radius=0.06, color=WHITE)
         cb = always_redraw(lambda: MathTex(rf"R = {Rv.get_value():.2f}: \ \ |f'(0)| \le M/R = {1 / Rv.get_value():.3f}",
                                            font_size=26, color=C.FUNC).next_to(ax, UP, buff=0.12))
+        # the bound M/R (M = 1) against R, with the live circle's R: it falls toward 0 as R grows
+        mx = plain_axes([0, 2, 0.5], [0, 3, 1], 3.0, 2.4, numbers=True, font_size=18,
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0.1, -0.6, 0])
+        Rs = np.linspace(1 / 3, 2, 300)
+        mr = polyline(mx, Rs, 1 / Rs, color=C.FUNC, stroke_width=3)
+        assert (1 / Rs).max() <= 3 + 1e-12
+        mr_l = VGroup(MathTex(r"M/R", font_size=26, color=C.FUNC).next_to(mx.c2p(1.25, 1 / 1.25), UR, buff=0.12),
+                      MathTex(r"R", font_size=24, color=GREY_B).next_to(mx.c2p(2, 0), RIGHT, buff=0.12))
+        mdot = always_redraw(lambda: Dot(mx.c2p(Rv.get_value(), 1 / Rv.get_value()), radius=0.07, color=C.FUNC))
+        mplot = VGroup(mx, mr, mr_l)
         # 1/p, domain-colored: it blows up at the five roots, so it is not bounded; a root-free p would make it so
         inv = cplot(ax, lambda z: 1 / p(z), (-1.7, 1.7), (-1.7, 1.7), px=480).set_opacity(0.85)
         inv_l = label(r"$1/p$: \ it blows up exactly at the roots", font_size=24, color=C.EPS).next_to(ax, UP, buff=0.12)
@@ -209,19 +233,23 @@ class CauchyFormula(VoiceoverScene):
             "zero, one, two, three and five roots, exactly the roots inside."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(notes[:1]), Create(ax), FadeIn(c0), FadeIn(cR), FadeIn(cb))
+            self.play(FadeIn(head0), FadeIn(notes[:1]), Create(ax), FadeIn(c0), FadeIn(cR), FadeIn(cb), Create(mx),
+                      Create(mr), FadeIn(mr_l), FadeIn(mdot))
             self.play(Rv.animate.set_value(1.6), run_time=4.0, rate_func=smooth)
-            self.play(FadeIn(notes[1]))
-            for m_ in (cR, cb):
+            self.play(FadeIn(notes[1:3]))
+            for m_ in (cR, cb, mdot):
                 m_.clear_updaters()
             vo.wait_until("b")
-            self.play(FadeOut(cR), FadeOut(cb), FadeOut(c0), FadeIn(inv), FadeIn(inv_l), FadeIn(notes[2:]))
+            self.play(FadeOut(cR), FadeOut(cb), FadeOut(c0), FadeOut(mplot), FadeOut(mdot), FadeIn(inv), FadeIn(inv_l),
+                      FadeIn(notes[3:]))
             self.add(ax)
             vo.wait_until("c")
-            self.play(inv.animate.set_opacity(0.25), FadeOut(inv_l), FadeIn(rd), Create(bx), FadeIn(o), FadeIn(b_l),
-                      FadeIn(tab[0]))
+            self.play(FadeTransform(head0, head), inv.animate.set_opacity(0.25), FadeOut(inv_l), FadeIn(rd), Create(bx),
+                      FadeIn(o), FadeIn(b_l), FadeIn(tab[0]))
             vo.wait_until("d")
             for k in range(len(rs)):
-                self.play(Create(circs[k]), Create(imgs[k]), FadeIn(tab[k + 1]), run_time=1.1)
+                dim = [imgs[k - 1][0].animate.set_stroke(opacity=0.3), imgs[k - 1][1].animate.set_fill(opacity=0.3)] if k else []
+                self.play(Create(circs[k]), Create(imgs[k][0]), FadeIn(imgs[k][1]), FadeIn(tab[k + 1]), *dim,
+                          run_time=1.1)
         self.wait(0.4)
         self.clear_scene()

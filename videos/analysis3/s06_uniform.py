@@ -101,7 +101,7 @@ class Uniform(VoiceoverScene):
                      Circle(radius=0.06, color=WHITE, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(ax.c2p(1, 0)),
                      Dot(ax.c2p(1, 1), radius=0.07, color=WHITE))
         panel = dash.panel(font_size=26, width=4.8).move_to([3.9, -0.4, 0])
-        head = label(r"The convergence dashboard: \ one sequence, four lenses", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"The convergence dashboard: \ one sequence, four lenses", font_size=34).to_edge(UP, buff=0.3)
         nl = always_redraw(lambda: MathTex(rf"f_n = x^n,\ \ n = {round(dash.n.get_value())}", font_size=30,
                                            color=C.FUNC).next_to(ax, UP, buff=0.1))
         verdict = label(r"uniform convergence is the strictest lens", font_size=26, color=C.EPS).next_to(panel, DOWN, buff=0.4)
@@ -201,10 +201,10 @@ class Uniform(VoiceoverScene):
             "f. <bookmark mark='c'/> Everything is measured by one number, the largest gap, the height of the dot "
             "below. That suggests giving functions a size: the sup norm."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(tl), FadeIn(bl), Create(el), FadeIn(el_l))
-            vo.wait_until("a")
             cur = frame(0)
-            self.play(FadeIn(cur), FadeIn(ptab[0]), FadeIn(ptab[1]))
+            self.play(FadeIn(head), Create(ax), Create(bx), FadeIn(tl), FadeIn(bl), Create(el), FadeIn(el_l), FadeIn(cur))
+            vo.wait_until("a")
+            self.play(FadeIn(ptab[0]), FadeIn(ptab[1]))
             for k in range(1, len(pairs)):
                 nxt = frame(k)
                 self.play(*[ReplacementTransform(a_, b_) for a_, b_ in zip(cur, nxt)], FadeIn(ptab[k + 1]), run_time=1.4)
@@ -271,9 +271,10 @@ class Uniform(VoiceoverScene):
             "partial sum lies in a band around the limit of that half-width, at every x at once, and the bands shrink "
             "to nothing. The numbers on screen are the actual largest gaps, each under its bound."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), LaggedStart(*[Create(t_) for t_ in terms], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(t_) for t_ in terms], lag_ratio=0.4), run_time=2.5)
+            self.play(*[ShowPassingFlash(VGroup(t_[1], t_[2]).copy().set_stroke(width=4), time_width=0.6) for t_ in terms],
+                      run_time=1.2)
             vo.wait_until("b")
             self.play(FadeIn(head[1]), FadeOut(terms))
             self.play(Create(lim))

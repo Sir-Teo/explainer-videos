@@ -26,8 +26,8 @@ class Dual(VoiceoverScene):
         pairs = [(1.0, np.inf, r"\ell^1", r"\ell^\infty"), (2.0, 2.0, r"\ell^2", r"\ell^2"), (3.0, 1.5, r"\ell^3", r"\ell^{3/2}")]
         groups = VGroup()
         for k, (p, q, n1, n2) in enumerate(pairs):
-            ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, 1.05, 0])
-            bx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, -1.6, 0])
+            ax = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, 1.25, 0])
+            bx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.85).move_to([-4.6 + 4.6 * k, -1.4, 0])
             for a in (ax, bx):
                 a.set_opacity(0.3)
             b1 = p_ball(ax, p, C.DIST)
@@ -56,13 +56,13 @@ class Dual(VoiceoverScene):
                     color=C.EPS),
             MathTex(r"\text{checked: 60 random } g \text{ in } \R^2: \ \text{rel. error} < 10^{-6}", font_size=22,
                     color=GREY_A),
-        ).arrange(DOWN, buff=0.08).to_edge(DOWN, buff=0.12)
+        ).arrange(DOWN, buff=0.08).to_edge(DOWN, buff=0.35)
         # 'a': a functional's norm is its largest value on the unit ball: level lines of g . x over the disc, the top
         # one touching at g / |g|
-        gv = np.array([0.9, 0.45])
+        gv = np.array([1.2, 0.6])  # |g| = 1.3416: the arrow reaches past the circle, beyond the contact point g/|g|
         gn = float(np.linalg.norm(gv))
-        assert abs((circ @ gv).max() - gn) < 1e-6
-        fx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.0).move_to([0, -0.5, 0])
+        assert abs((circ @ gv).max() - gn) < 1e-6 and gn > 1.25
+        fx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.6).move_to([-2.4, -0.5, 0])
         fx.set_opacity(0.35)
 
         def level(c_):
@@ -75,14 +75,15 @@ class Dual(VoiceoverScene):
             return DashedLine(fx.c2p(*a_), fx.c2p(*b_), color=C.FUNCTIONAL, stroke_width=2,
                               stroke_opacity=1.0 if abs(c_ - gn) < 1e-9 else 0.45)
 
-        fpic = VGroup(fx, Circle(radius=1.0, color=C.DIST, stroke_width=3).move_to(fx.c2p(0, 0)),
+        fpic = VGroup(fx, Circle(radius=fx.c2p(1, 0)[0] - fx.c2p(0, 0)[0], color=C.DIST, stroke_width=3).move_to(fx.c2p(0, 0)),
                       *[level(c_) for c_ in (-1.0, -0.5, 0.0, 0.5, gn)],
                       Arrow(fx.c2p(0, 0), fx.c2p(*gv), buff=0, color=C.FUNCTIONAL, stroke_width=4,
                             max_tip_length_to_length_ratio=0.15),
                       Dot(fx.c2p(*(gv / gn)), radius=0.07, color=C.EPS))
         fl_ = MathTex(rf"\|g\| = \max_{{\|x\| \le 1}} g \cdot x = {gn:.4f}", font_size=28, color=C.EPS).next_to(fx, RIGHT, buff=0.4)
-        head = label(r"Each unit ball has a dual ball: \ the functionals of norm at most $1$", font_size=32).to_edge(UP,
-                                                                                                          buff=0.25)
+        head = label(r"Each unit ball has a dual ball: \ the functionals of norm at most $1$", font_size=34).to_edge(UP,
+                                                                                                          buff=0.3)
+        assert note_.get_top()[1] < groups.get_bottom()[1] - 0.1 and groups.get_top()[1] < head.get_bottom()[1] - 0.15
         with self.voiceover(
             "<bookmark mark='a'/> A functional on a normed space has its own norm: its largest value on the unit "
             "ball. So the functionals form a normed space too, the dual, with a unit ball of its own. "
@@ -114,8 +115,9 @@ class Dual(VoiceoverScene):
             (r"$\ell^\infty$", r"much more than $\ell^1$: \ Banach limits"),
             (r"a row vector", r"a functional \ (the dictionary)"),
         ], font_size=24)
-        card.scale(0.8)
-        card.move_to([-6.85 + card.width / 2, -0.35, 0])
+        card.scale(0.85)
+        card.move_to([-6.45 + card.width / 2, -0.35, 0])
+        fa = note(r"\textbf{FA 4.1--4.7, \ RCA 6.16, 6.19}").next_to(card, DOWN, buff=0.35).align_to(card, LEFT)
         # 'a': reflexive: the dual of the dual is the space again, l^3 -> l^{3/2} -> l^3
         rpic = VGroup()
         for i_, (pp_, nm_, col_) in enumerate(((3.0, r"\ell^3", C.DIST), (1.5, r"(\ell^3)^* = \ell^{3/2}", C.FUNCTIONAL),
@@ -126,12 +128,12 @@ class Dual(VoiceoverScene):
         rarr = VGroup(*[Arrow(rpic[i_][0].get_right(), rpic[i_ + 1][0].get_left(), buff=0.05, color=GREY_B, stroke_width=3,
                               max_tip_length_to_length_ratio=0.3) for i_ in range(2)])
         rpic.add(rarr, label(r"reflexive: \ $X^{**} = X$", font_size=24, color=C.EPS).next_to(rpic[1], UP, buff=0.35))
-        head = label(r"\textbf{FA 4.1--4.7, RCA 6.16, 6.19} \ the duals, computed", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"The duals, computed", font_size=34).to_edge(UP, buff=0.3)
         # why c_0* = l^1: against y in l^1, the best x in the unit ball of c_0 is sign(y) cut off at N, and the
         # pairing climbs to sum |y_n| = ||y||_1 (here y_n = (-0.75)^n, ||y||_1 = 4, partial sums 4(1 - 0.75^N))
         nn = np.arange(20)
         yv = (-0.75) ** nn
-        cxp, W_, H_ = 4.0, 5.4, 1.6
+        cxp, W_, H_ = 4.2, 4.8, 1.6
         x0p = cxp - W_ / 2
 
         def bars(vals, yc, color, scale):
@@ -155,7 +157,8 @@ class Dual(VoiceoverScene):
                        color=C.EPS).move_to([cxp, -2.35, 0]) for N, v in zip(Ns, pair)]
         pnote = label(r"$\to \|y\|_1$: \ the norm of $y$ as a functional on $c_0$", font_size=22, color=GREY_A
                       ).move_to([cxp, -2.95, 0])
-        assert card.get_right()[0] < x0p - 0.2 and x0p + W_ < 6.95 and max(m.width for m in prd) < 6.0
+        assert card.get_right()[0] < x0p - 0.2 and x0p + W_ < 6.65 and max(m.width for m in prd + [xl, yl, pnote]) < 4.8
+        assert fa.get_bottom()[1] > -3.6
         with self.voiceover(
             "<bookmark mark='a'/> The duals we know. For p between one and infinity, the dual of l p is l q, and the "
             "dual of that is l p again: these spaces are reflexive. <bookmark mark='b'/> The sequences tending to "
@@ -165,7 +168,8 @@ class Dual(VoiceoverScene):
             "only Hahn-Banach can produce. That's the promise from Part 6 kept."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]), FadeIn(rpic[0]))
+            self.play(FadeIn(head), FadeIn(fa), FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]),
+                      FadeIn(rpic[0]))
             self.play(GrowArrow(rarr[0]), FadeIn(rpic[1]), run_time=0.8)
             self.play(GrowArrow(rarr[1]), FadeIn(rpic[2]), FadeIn(rpic[4]), run_time=0.8)
             vo.wait_until("b")

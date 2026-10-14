@@ -28,7 +28,7 @@ class Lp(VoiceoverScene):
         ps, nv = d["ps"], d["norms"]
         ax = plain_axes([0, 1, 0.25], [0, 5.4, 1], 4.6, 3.8, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-4.0, -0.75, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.3, -0.75, 0])
         x = np.linspace(0, 1, 300)
         g = polyline(ax, x, 2 * x, color=C.FUNC, stroke_width=4)
         hole = Circle(radius=0.05, color=C.FUNC, stroke_width=2).move_to(ax.c2p(0.3, 0.6))
@@ -58,18 +58,21 @@ class Lp(VoiceoverScene):
             p = pnow()
             v = 2 / (p + 1) ** (1 / p)
             return VGroup(Dot(nax.c2p(pT.get_value(), v), radius=0.07, color=C.DIST),
-                          DashedLine(ax.c2p(0, v), ax.c2p(1, v), color=C.DIST, stroke_width=2))
+                          DashedLine(ax.c2p(0, v), ax.c2p(1, v), color=C.DIST, stroke_width=2),
+                          MathTex(r"\|f\|_p", font_size=24, color=C.DIST).next_to(ax.c2p(1, v), RIGHT, buff=0.1))
 
         mk = always_redraw(marker)
         rd = always_redraw(lambda: MathTex(rf"p = {pnow():.3g}: \ \|f\|_p = \frac{{2}}{{(p + 1)^{{1/p}}}} = "
                                            rf"{2 / (pnow() + 1) ** (1 / pnow()):.4f}", font_size=28,
                                            color=C.DIST).next_to(nax, UP, buff=0.55))
         assert np.allclose(nv, 2 / (ps + 1) ** (1 / ps), rtol=1e-6)
-        head = VGroup(MathTex(r"\|f\|_p = \Big(\int |f|^p\,d\mu\Big)^{1/p}", font_size=34),
-                      MathTex(r"\|f\|_\infty = \inf\{M : |f| \le M \text{ a.e.}\}", font_size=34)
-                      ).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.3)
+        title = label(r"The $p$-norm, \ and the essential supremum", font_size=34).to_edge(UP, buff=0.3)
+        head = VGroup(title, VGroup(MathTex(r"\|f\|_p = \Big(\int |f|^p\,d\mu\Big)^{1/p}", font_size=30),
+                                    MathTex(r"\|f\|_\infty = \inf\{M : |f| \le M \text{ a.e.}\}", font_size=30)
+                                    ).arrange(RIGHT, buff=0.8).next_to(title, DOWN, buff=0.12))
+        left_grp = VGroup(ax, g, hole, spike, sp_l, f_l)  # alone at first, centred; slides left when p starts moving
         tab = MathTex(r"\|f\|_1, \|f\|_2, \|f\|_4, \|f\|_{10}, \|f\|_{100} = " +
-                      r",\ ".join(f"{v:.3f}" for v in nv), font_size=24, color=GREY_A).to_edge(DOWN, buff=0.2)
+                      r",\ ".join(f"{v:.3f}" for v in nv), font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='a'/> The p-norm of a function is the p-th root of the integral of its absolute value to "
             "the p. The infinity norm is the essential supremum: the smallest bound that holds almost everywhere. "
@@ -85,6 +88,7 @@ class Lp(VoiceoverScene):
             self.play(FadeIn(f_l), Indicate(g, color=C.FUNC))
             self.play(FadeIn(hole), FadeIn(spike), FadeIn(sp_l))
             vo.wait_until("c")
+            self.play(left_grp.animate.shift(LEFT * 3.7), run_time=0.8)
             self.play(Create(nax), FadeIn(ticks), FadeIn(yt), FadeIn(p_l), FadeIn(mk), FadeIn(rd))
             self.play(Create(ncur), pT.animate.set_value(2.0), run_time=5.0, rate_func=linear)
             self.play(FadeIn(tab))
@@ -105,16 +109,34 @@ class Lp(VoiceoverScene):
         rng = np.random.default_rng(5)
         pts = np.sort(rng.uniform(0.03, 0.97, 9))
         twin = VGroup()
+        dot_y = []
         for t in pts:
             ft = 0.55 + 0.35 * math.sin(2 * math.pi * t) * math.exp(-t)
             twin.add(Circle(radius=0.045, color=C.APPROX, stroke_width=2).move_to(ax.c2p(t, ft)))
-            twin.add(Dot(ax.c2p(t, ft + rng.choice([-1, 1]) * rng.uniform(0.25, 0.45)), radius=0.06, color=C.APPROX))
+            dot_y.append(ft + rng.choice([-1, 1]) * rng.uniform(0.25, 0.45))
+            twin.add(Dot(ax.c2p(t, dot_y[-1]), radius=0.06, color=C.APPROX))
+        assert all(0 < y_ < 1.3 for y_ in dot_y)
         t_l = label(r"$\tilde f$: \ $f$ changed at nine points", font_size=24, color=C.APPROX).next_to(ax, UP, buff=0.1)
-        mapax = plain_axes([-1, 1, 1], [-1, 1, 1], 3.0, 3.0).move_to([3.6, 0.4, 0])
-        mapax.set_opacity(0.4)
-        dotf = Dot(mapax.c2p(0.2, 0.1), radius=0.09, color=C.FUNC)
+        # two functions, one point of L^p: thumbnails of f and f~, both sent to the class [f]
+        thumbs = VGroup()
+        for k_, with_dots in enumerate((False, True)):
+            tx_ = plain_axes([0, 1, 0.5], [0, 1.3, 0.5], 1.9, 1.15).move_to([2.35 + 2.5 * k_, 1.55, 0])
+            tx_.set_opacity(0.45)
+            th_ = VGroup(tx_, polyline(tx_, x, f, color=C.FUNC, stroke_width=2.5))
+            if with_dots:
+                for t_, y_ in zip(pts, dot_y):
+                    th_.add(Dot(tx_.c2p(t_, y_), radius=0.035, color=C.APPROX))
+            th_.add(MathTex(r"\tilde f" if with_dots else "f", font_size=28,
+                            color=C.APPROX if with_dots else C.FUNC).next_to(tx_, UP, buff=0.06))
+            thumbs.add(th_)
+        dotf = Dot([3.35, -0.15, 0], radius=0.09, color=C.FUNC)
         ring = Circle(radius=0.16, color=C.APPROX, stroke_width=3).move_to(dotf)
-        m_l = label(r"in $L^p$: \ one point", font_size=24, color=GREY_A).next_to(mapax, UP, buff=0.12)
+        arrs = VGroup(*[Arrow(th_[0].get_bottom() + DOWN * 0.05, dotf.get_center() + 0.22 * (th_[0].get_bottom() - dotf.get_center())
+                              / np.linalg.norm(th_[0].get_bottom() - dotf.get_center()), buff=0, color=GREY_B,
+                              stroke_width=3, tip_length=0.15) for th_ in thumbs])
+        m_l = VGroup(MathTex(r"[f]", font_size=30, color=C.FUNC).next_to(ring, RIGHT, buff=0.12),
+                     label(r"in $L^p$: \ one point", font_size=24, color=GREY_A)).arrange(RIGHT, buff=0.3).next_to(
+            ring, RIGHT, buff=0.12)
         facts = VGroup(
             MathTex(r"\|f - \tilde f\|_p = 0", font_size=32, color=C.EPS),
             label(r"$\|\cdot\|_p$ on functions: \ $\|f\| = 0$ only says $f = 0$ a.e.", font_size=24),
@@ -122,8 +144,9 @@ class Lp(VoiceoverScene):
             label(r"a class has no value at a single point; \ chapter 13 recovers", font_size=22, color=GREY_A),
             label(r"values almost everywhere \ (Lebesgue points)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -2.35, 0])
-        head = label(r"\textbf{RCA 3.10} \ functions equal almost everywhere are the same element of $L^p$",
-                     font_size=30).to_edge(UP, buff=0.3)
+        head = VGroup(label(r"What is a point of $L^p$?", font_size=34),
+                      label(r"\textbf{RCA 3.10} \ functions equal almost everywhere are the same element of $L^p$",
+                            font_size=26)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> That spike raises an honest question: what is a point of L p? "
             "<bookmark mark='b'/> Change a function at nine points, or at any set of measure zero. Every integral "
@@ -139,7 +162,7 @@ class Lp(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(m) for m in twin], lag_ratio=0.1), FadeIn(t_l), run_time=2.0)
             self.play(FadeIn(facts[0]))
             vo.wait_until("c")
-            self.play(Create(mapax), FadeIn(m_l), FadeIn(dotf), Create(ring))
+            self.play(FadeIn(thumbs), GrowArrow(arrs[0]), GrowArrow(arrs[1]), FadeIn(dotf), Create(ring), FadeIn(m_l))
             self.play(FadeIn(facts[1:3]))
             vo.wait_until("d")
             self.play(FadeIn(facts[3:]))
@@ -164,10 +187,15 @@ class Lp(VoiceoverScene):
         l1 = MathTex(r"x^{-1/2}", font_size=28, color=C.CONNECTED_SET).next_to(ax.c2p(0.45, 5.2), RIGHT, buff=0)
         l2 = MathTex(r"(x^{-1/2})^2 = \tfrac1x", font_size=28, color=C.PATHOLOGY).next_to(ax.c2p(0.45, 4.2), RIGHT, buff=0)
         x1 = np.linspace(1, 8, 300)
-        g1 = polyline(bx, x1, 1 / x1, color=C.CONNECTED_SET, stroke_width=4)
-        g2 = polyline(bx, x1, 1 / x1**2, color=C.PATHOLOGY, stroke_width=3)
-        k1 = MathTex(r"\tfrac1x", font_size=28, color=C.CONNECTED_SET).next_to(bx.c2p(5.0, 0.9), RIGHT, buff=0)
-        k2 = MathTex(r"(\tfrac1x)^2", font_size=28, color=C.PATHOLOGY).next_to(bx.c2p(5.0, 0.62), RIGHT, buff=0)
+        # finite integral green, infinite red, as on the left: here 1/x is the one whose integral diverges
+        g1 = polyline(bx, x1, 1 / x1, color=C.PATHOLOGY, stroke_width=3)
+        g2 = polyline(bx, x1, 1 / x1**2, color=C.CONNECTED_SET, stroke_width=4)
+        a2 = area_under(bx, x1, 1 / x1**2, C.CONNECTED_SET, 0.25)
+        k1 = VGroup(Line(ORIGIN, RIGHT * 0.4, color=C.PATHOLOGY, stroke_width=3),
+                    MathTex(r"\tfrac1x", font_size=28, color=C.PATHOLOGY)).arrange(RIGHT, buff=0.12)
+        k2 = VGroup(Line(ORIGIN, RIGHT * 0.4, color=C.CONNECTED_SET, stroke_width=4),
+                    MathTex(r"(\tfrac1x)^2", font_size=28, color=C.CONNECTED_SET)).arrange(RIGHT, buff=0.12)
+        VGroup(k1, k2).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(bx.c2p(4.6, 1.0), DR, buff=0)
         t1 = VGroup(
             MathTex(r"\varepsilon:\ " + r",\ ".join(sci(e, 0) for e in eps), font_size=24, color=GREY_A),
             MathTex(r"\int_\varepsilon^1 x^{-1/2} = " + r",\ ".join(f"{v:.4f}" for v in half) + r" \to 2",
@@ -179,13 +207,14 @@ class Lp(VoiceoverScene):
         t2 = VGroup(
             MathTex(r"R:\ " + r",\ ".join(sci(r_, 0) for r_ in R), font_size=24, color=GREY_A),
             MathTex(r"\int_1^R x^{-1} = " + r",\ ".join(f"{math.log(r_):.1f}" for r_ in R) + r" \to \infty",
-                    font_size=24, color=C.CONNECTED_SET),
-            MathTex(r"\int_1^R x^{-2} = " + r",\ ".join(f"1 - {sci(1 - v, 0)}" for v in two) + r" \to 1",
                     font_size=24, color=C.PATHOLOGY),
+            MathTex(r"\int_1^R x^{-2} = " + r",\ ".join(f"1 - {sci(1 - v, 0)}" for v in two) + r" \to 1",
+                    font_size=24, color=C.CONNECTED_SET),
             label(r"on $[1, \infty)$: \ in $L^2$, \ not in $L^1$", font_size=24, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(bx, DOWN, buff=0.2)
         assert np.allclose(one, np.log(1 / eps)) and np.all(half < 2)
-        head = VGroup(label(r"Is $L^2$ inside $L^1$, \ or the other way around?", font_size=32),
+        assert np.allclose(two, 1 - 1 / R) and np.all(np.diff(np.log(R)) > 0)
+        head = VGroup(label(r"Is $L^2$ inside $L^1$, \ or the other way around?", font_size=34),
                       label(r"on a space of finite measure: \ $\|f\|_p \le \mu(X)^{1/p - 1/q}\,\|f\|_q$ \ for $p < q$ "
                             r"\ (H\"older), \ so $L^q \subset L^p$", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.2)
@@ -205,7 +234,7 @@ class Lp(VoiceoverScene):
             self.play(FadeIn(t1[:3]))
             self.play(FadeIn(t1[3]))
             vo.wait_until("b")
-            self.play(Create(bx), Create(g1), FadeIn(k1), Create(g2), FadeIn(k2))
+            self.play(Create(bx), Create(g1), FadeIn(k1), FadeIn(a2), Create(g2), FadeIn(k2))
             self.play(FadeIn(t2[:3]))
             self.play(FadeIn(t2[3]))
             vo.wait_until("c")

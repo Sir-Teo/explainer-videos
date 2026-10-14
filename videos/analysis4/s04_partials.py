@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis4.common import heatmap, load, plain_axes, square_axes
+from videos.analysis4.common import angle_ticks, heatmap, load, plain_axes, square_axes
 
 
 def f_bad(X, Y):
@@ -35,15 +35,19 @@ class Partials(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def discontinuous(self):
-        S = 5.0
-        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-3.3, -0.6, 0])
+        S = 4.4
+        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-4.3, -0.75, 0])
         img = heatmap(f_bad, (-1, 1), (-1, 1), S, S, -0.5, 0.5).move_to(ax.c2p(0, 0))
-        head = VGroup(MathTex(r"f(x, y) = \frac{xy}{x^2 + y^2}, \qquad f(0, 0) = 0", font_size=36),
-                      label(r"blue: \ $-\tfrac12$, \ \ dark: \ $0$, \ \ orange: \ $+\tfrac12$", font_size=22,
-                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"First exhibit: \ both partials, \ and no continuity", font_size=34),
+                      MathTex(r"f(x, y) = \frac{xy}{x^2 + y^2}, \qquad f(0, 0) = 0", font_size=34)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        legend = label(r"blue: \ $-\tfrac12$, \ \ dark: \ $0$, \ \ orange: \ $+\tfrac12$", font_size=22,
+                       color=GREY_A).next_to(img, DOWN, buff=0.15)
         axes_hl = VGroup(Line(ax.c2p(-1, 0), ax.c2p(1, 0), color=WHITE, stroke_width=4),
                          Line(ax.c2p(0, -1), ax.c2p(0, 1), color=WHITE, stroke_width=4))
-        diag = Line(ax.c2p(-1, -1), ax.c2p(1, 1), color=C.EPS, stroke_width=4)
+        # the diagonal over a dark under-stroke, so the yellow separates from the orange it crosses
+        diag = VGroup(Line(ax.c2p(-1, -1), ax.c2p(1, 1), color=BACKGROUND, stroke_width=10),
+                      Line(ax.c2p(-1, -1), ax.c2p(1, 1), color=C.EPS, stroke_width=4))
         rays = VGroup()
         for deg in (30, 60, 120, 150):
             t = math.radians(deg)
@@ -51,6 +55,18 @@ class Partials(VoiceoverScene):
         tv = np.linspace(-1, 1, 9)
         assert np.allclose(f_bad(tv, 0 * tv), 0) and np.allclose(f_bad(0 * tv, tv), 0)
         assert np.allclose(f_bad(tv[tv != 0], tv[tv != 0]), 0.5)
+        # "right up to 0": a magnifier on a window 100 times smaller sees exactly the same picture, because
+        # f(lambda x, lambda y) = f(x, y). Inside one pixel of the origin f still takes every value in [-1/2, 1/2].
+        w, W = 0.01, 2.0
+        inset, mag = magnifier(ax, (-w, w), (-w, w), center=[-0.85, 0.45, 0], width=W, height=W, color=GREY_B)
+        Xg, Yg = np.meshgrid(np.linspace(-1, 1, 101), np.linspace(-1, 1, 101))
+        assert np.allclose(f_bad(w * Xg, w * Yg), f_bad(Xg, Yg))
+        assert abs(W / (2 * w) / (S / 2) - 45.45) < 0.01 and mag.tag.tex_string.strip() == r"\times 45"
+        iimg = heatmap(f_bad, (-w, w), (-w, w), W, W, -0.5, 0.5).move_to(inset.c2p(0, 0))
+        idiag = VGroup(Line(inset.c2p(-w, -w), inset.c2p(w, w), color=BACKGROUND, stroke_width=10),
+                       Line(inset.c2p(-w, -w), inset.c2p(w, w), color=C.EPS, stroke_width=4))
+        iaxes = VGroup(Line(inset.c2p(-w, 0), inset.c2p(w, 0), color=WHITE, stroke_width=4),
+                       Line(inset.c2p(0, -w), inset.c2p(0, w), color=WHITE, stroke_width=4))
         side = VGroup(
             label(r"on both axes $f = 0$, \ so", font_size=26),
             MathTex(r"\frac{\partial f}{\partial x}(0, 0) = \frac{\partial f}{\partial y}(0, 0) = 0", font_size=32),
@@ -58,7 +74,11 @@ class Partials(VoiceoverScene):
             label(r"$f$ is not even continuous at $0$", font_size=26, color=C.PATHOLOGY),
             MathTex(r"f(r\cos\theta, r\sin\theta) = \tfrac12 \sin 2\theta", font_size=30, color=GREY_A),
             label(r"constant on each ray", font_size=24, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -0.6, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        side.next_to([0.75, -0.75, 0], RIGHT, buff=0)
+        assert side.get_right()[0] <= 6.6 and mag.frame.get_right()[0] < side.get_left()[0] - 0.3
+        assert img.get_top()[1] < head.get_bottom()[1] - 0.15 and legend.get_bottom()[1] > -3.6
+        assert mag.tag.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The first exhibit: x y over x squared plus y squared, with value zero at the origin. "
             "Its colors show its values, and they depend only on the direction from the origin. "
@@ -67,17 +87,19 @@ class Partials(VoiceoverScene):
             "to the origin. So it isn't even continuous there, let alone differentiable. <bookmark mark='d'/> Partial "
             "derivatives only look along the axes, and a function can misbehave in every other direction."
         ) as vo:
-            self.play(FadeIn(head[0]), FadeIn(img), Create(ax))
+            self.play(FadeIn(head[0]), FadeIn(head[1]), FadeIn(img), Create(ax))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), Create(rays))
+            self.play(FadeIn(legend), Create(rays))
             self.play(FadeIn(side[4:]))
             vo.wait_until("b")
             self.play(Create(axes_hl), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("c")
             self.play(Create(diag), FadeIn(side[2]))
+            self.play(Create(mag.src), Create(mag.guides), FadeIn(mag.frame), FadeIn(mag.tag), FadeIn(iimg),
+                      FadeIn(iaxes), FadeIn(idiag), run_time=1.2)
             self.play(FadeIn(side[3]))
             vo.wait_until("d")
-            self.play(Indicate(axes_hl, color=C.EPS))
+            self.play(Indicate(axes_hl, color=C.EPS), Indicate(iaxes, color=C.EPS))
         self.wait(0.3)
         self.clear_scene()
 
@@ -85,34 +107,34 @@ class Partials(VoiceoverScene):
     def not_linear(self):
         d = load("museum")
         th, Du = d["th"], d["Du"]
-        S = 3.6
-        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2).move_to([-4.5, -1.35, 0])
+        S = 2.8
+        head = VGroup(label(r"Second exhibit: \ a derivative in every direction, \ and none", font_size=34),
+                      MathTex(r"g(x, y) = \frac{x^2 y}{x^2 + y^2}, \qquad g(0, 0) = 0", r"\qquad |g| \le |y|:"
+                              r"\ \text{continuous}", font_size=34)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_A)
+        ax = square_axes([-1, 1, 0.5], [-1, 1, 0.5], S / 2)
+        ax.move_to([-6.6 + S / 2, 0, 0]).align_to([0, head.get_bottom()[1] - 0.25, 0], UP)
         img = heatmap(g_bad, (-1, 1), (-1, 1), S, S, -0.6, 0.6).move_to(ax.c2p(0, 0))
-        head = VGroup(MathTex(r"g(x, y) = \frac{x^2 y}{x^2 + y^2}, \qquad g(0, 0) = 0", font_size=36),
-                      label(r"continuous \ ($|g| \le |y|$), \ and differentiable in every direction at $0$",
-                            font_size=24, color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
-        bx = plain_axes([0, 2 * np.pi, np.pi / 2], [-0.5, 0.5, 0.25], 6.6, 3.0).move_to([2.9, -0.2, 0])
+        bx = plain_axes([0, 2 * np.pi, np.pi / 2], [-0.5, 0.5, 0.25], 6.3, 2.7).move_to([3.05, -0.05, 0])
+        bx.align_to([0, head.get_bottom()[1] - 0.75, 0], UP)
+        bt = angle_ticks(bx)
         actual = VMobject(color=C.APPROX, stroke_width=3.5).set_points_as_corners([bx.c2p(t, v) for t, v in zip(th, Du)])
         pred = Line(bx.c2p(0, 0), bx.c2p(2 * np.pi, 0), color=WHITE, stroke_width=3)
         part1 = VMobject(color=C.EPS, stroke_width=2.5).set_points_as_corners(
             [bx.c2p(t, 0.25 * math.sin(t)) for t in th])
         assert np.allclose(Du, 0.25 * np.sin(th) + 0.25 * np.sin(3 * th), atol=1e-12)
+        assert np.abs(Du).max() < 0.45  # clear of the angle labels under the plot
         bl = VGroup(MathTex(r"D_u g(0) = \cos^2\theta \sin\theta", font_size=30, color=C.APPROX),
                     MathTex(r"\nabla g(0) \cdot u = 0", font_size=30)).arrange(RIGHT, buff=0.6).next_to(bx, UP, buff=0.15)
+        p1l = MathTex(r"\tfrac14 \sin\theta", font_size=26, color=C.EPS).next_to(bx.c2p(np.pi / 2, 0.25), UP, buff=0.1)
         side = VGroup(
             MathTex(r"\cos^2\theta \sin\theta = \tfrac14 \sin\theta + \tfrac14 \sin 3\theta", font_size=32),
             label(r"a derivative would force $D_u g(0) = a\cos\theta + b\sin\theta$:", font_size=24, color=GREY_A),
-            label(r"the $\sin 3\theta$ part is not linear in $u$, \ so $g$ is not differentiable at $0$", font_size=24,
+            label(r"the $\sin 3\theta$ part is not linear in $u$: \ no derivative at $0$", font_size=24,
                   color=C.PATHOLOGY),
-        ).arrange(DOWN, buff=0.15).next_to(bx, DOWN, buff=0.3)
-        for r_ in side:
-            if r_.width > 7.2:
-                r_.width = 7.2
-        side.arrange(DOWN, buff=0.15).next_to(bx, DOWN, buff=0.3)
-        card = museum_card(r"$x^2y/(x^2 + y^2)$", r"a classical example", r"`all directional derivatives make a "
-                           r"derivative'", r"Rudin 9.21 is the repair", width=4.0).scale(0.8)
-        card.next_to(img, UP, buff=0.15)
-        assert card.get_top()[1] < head.get_bottom()[1] - 0.1
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(bt, DOWN, buff=0.3).align_to(bx, LEFT)
+        card = museum_card(r"$x^2y/(x^2 + y^2)$", r"a classical example", r"`directional derivatives make a "
+                           r"derivative'", r"Rudin 9.21 is the repair", width=5.0)
         # the direction u = (cos t, sin t) as a ray on the heatmap; along it g(su) = s cos^2 t sin t is linear in s
         tt = ValueTracker(0.9)
         o = ax.c2p(0, 0)
@@ -128,10 +150,14 @@ class Partials(VoiceoverScene):
             o + 0.48 * np.array([math.cos(tt.get_value() / 2), math.sin(tt.get_value() / 2), 0])))
         dot = always_redraw(lambda: Dot(bx.c2p(tt.get_value(), math.cos(tt.get_value()) ** 2 * math.sin(tt.get_value())),
                                         radius=0.06, color=C.APPROX))
-        along = MathTex(r"g(s u) = s\,\cos^2\theta\,\sin\theta", r"\ \Rightarrow\ D_u g(0) = \cos^2\theta\sin\theta",
-                        font_size=26).next_to(img, DOWN, buff=0.15)
-        along.set_x(-6.75 + along.width / 2)
-        assert along.get_left()[0] > -6.95 and along.get_bottom()[1] > -3.95
+        along = VGroup(MathTex(r"g(s u) = s\,\cos^2\theta\,\sin\theta", font_size=26),
+                       MathTex(r"\Rightarrow\ D_u g(0) = \cos^2\theta\sin\theta", font_size=26)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(img, DOWN, buff=0.2).align_to(img, LEFT)
+        card.next_to(img, DOWN, buff=0.2).align_to(img, LEFT)
+        legend = label(r"blue $< 0 <$ orange", font_size=22, color=GREY_A).next_to(img, RIGHT, buff=0.2).align_to(img, UP)
+        assert along.get_right()[0] < bx.get_left()[0] - 0.2 and card.get_right()[0] < bx.get_left()[0] - 0.2
+        assert card.get_bottom()[1] > -3.65 and side.get_bottom()[1] > -3.6 and bt.get_right()[0] <= 6.6
+        assert legend.get_right()[0] < bl.get_left()[0] - 0.2 or legend.get_bottom()[1] > bl.get_top()[1]
         with self.voiceover(
             "<bookmark mark='a'/> The second exhibit is subtler: x squared y over x squared plus y squared. It is "
             "continuous, and at the origin it has a derivative in every direction, not just along the axes. "
@@ -142,14 +168,13 @@ class Partials(VoiceoverScene):
             "<bookmark mark='d'/> No linear map fits, so there is no derivative: directional derivatives in every "
             "direction are not enough either."
         ) as vo:
-            self.play(FadeIn(head[0]), FadeIn(img), Create(ax))
+            self.play(FadeIn(head[0]), FadeIn(head[1][0]), FadeIn(img), Create(ax), FadeIn(legend))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]), Create(bx))
-            self.play(FadeIn(ray), FadeIn(th_l))
+            self.play(FadeIn(head[1][1]), FadeIn(ray), FadeIn(th_l))
             self.play(FadeIn(along[0]))
             self.play(FadeIn(along[1]))
             vo.wait_until("b")
-            self.play(Create(pred), FadeIn(bl[1]))
+            self.play(Create(bx), FadeIn(bt), Create(pred), FadeIn(bl[1]))
             tt.set_value(0)
             self.add(dot)
             self.play(Create(actual), tt.animate.set_value(2 * np.pi), FadeIn(bl[0]), run_time=4.0, rate_func=linear)
@@ -158,20 +183,26 @@ class Partials(VoiceoverScene):
             dot.clear_updaters()
             self.play(FadeOut(ray[1]), FadeOut(th_l), run_time=0.5)
             vo.wait_until("c")
-            self.play(FadeIn(side[0]), Create(part1))
+            self.play(FadeIn(side[0]), Create(part1), FadeIn(p1l))
             self.play(FadeIn(side[1]))
             vo.wait_until("d")
-            self.play(FadeIn(side[2]), FadeIn(card, scale=0.95))
+            self.play(FadeIn(side[2]), FadeOut(along), FadeIn(card, scale=0.95))
         self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def repair(self):
-        S = 5.0
-        ax = square_axes([-0.2, 1.2, 0.5], [-0.2, 1.2, 0.5], S / 1.4).move_to([-3.4, -0.7, 0])
+        S = 4.8
+        ax = square_axes([-0.2, 1.2, 0.5], [-0.2, 1.2, 0.5], S / 1.4).move_to([-3.75, -0.85, 0])
         ax.set_opacity(0.5)
         F = lambda X, Y: np.sin(2 * X) * np.cos(Y) + 0.5 * X * Y  # noqa: E731
-        img = heatmap(F, (-0.2, 1.2), (-0.2, 1.2), S, S, -1.2, 1.2).move_to(ax.c2p(0.5, 0.5)).set_opacity(0.8)
+        Xg, Yg = np.meshgrid(np.linspace(-0.2, 1.2, 141), np.linspace(-0.2, 1.2, 141))
+        vlo, vhi = float(F(Xg, Yg).min()), float(F(Xg, Yg).max())
+        # the colors span the values actually taken on the window (dark = smallest, orange = largest)
+        img = heatmap(lambda X, Y: F(X, Y) - vlo, (-0.2, 1.2), (-0.2, 1.2), S, S, -(vhi - vlo), vhi - vlo)
+        img.move_to(ax.c2p(0.5, 0.5)).set_opacity(0.6)
+        bg = label(rf"$f = \sin 2x \cos y + \tfrac12 xy$: \ dark ${vlo:.2f}$, \ orange ${vhi:.2f}$",
+                   font_size=22, color=GREY_A).next_to(img, DOWN, buff=0.15).align_to(img, LEFT)
         x = np.array([0.2, 0.25])
         h = np.array([0.7, 0.6])
         P0, P1, P2 = x, x + np.array([h[0], 0]), x + h
@@ -190,12 +221,17 @@ class Partials(VoiceoverScene):
         eta = ty[np.argmin(np.abs(fy - sy))]
         assert abs(-math.sin(2 * P1[0]) * math.sin(eta) + 0.5 * P1[0] - sy) < 1e-3
         mv = VGroup(Dot(ax.c2p(xi, P0[1]), radius=0.08, color=C.SEQ), Dot(ax.c2p(P1[0], eta), radius=0.08, color=C.APPROX))
+        mvl = VGroup(MathTex(r"\xi", font_size=30, color=C.SEQ).next_to(mv[0], DOWN, buff=0.12),
+                     MathTex(r"\eta", font_size=30, color=C.APPROX).next_to(mv[1], RIGHT, buff=0.12))
         dots = VGroup(Dot(ax.c2p(*P0), radius=0.08, color=WHITE), Dot(ax.c2p(*P2), radius=0.08, color=WHITE))
         dl = VGroup(MathTex("x", font_size=30).next_to(dots[0], DL, buff=0.05),
                     MathTex("x + h", font_size=30).next_to(dots[1], UR, buff=0.05))
-        head = VGroup(label(r"\textbf{Rudin 9.21} \ the repair: \ \emph{continuous} partial derivatives", font_size=30),
+        head = VGroup(label(r"The repair: \ \emph{continuous} partial derivatives", font_size=34),
                       MathTex(r"f \in \mathcal C^1(E) \iff \text{every } \partial f_i / \partial x_j \text{ exists and is "
-                              r"continuous}", font_size=32, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+                              r"continuous}", r"\quad \text{\small (Rudin 9.21)}", font_size=32)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][0].set_color(C.EPS)
+        head[1][1].set_color(GREY_B)
         rows = VGroup(
             label(r"go from $x$ to $x + h$ one coordinate at a time:", font_size=24),
             MathTex(r"f(x + h) - f(x) = ", r"D_1 f(\xi)\, h_1", r" + ", r"D_2 f(\eta)\, h_2", font_size=30),
@@ -203,13 +239,15 @@ class Partials(VoiceoverScene):
             label(r"continuity: \ $D_1 f(\xi) \approx D_1 f(x)$, \ $D_2 f(\eta) \approx D_2 f(x)$", font_size=24),
             MathTex(r"f(x + h) - f(x) = \nabla f(x) \cdot h + o(|h|)", font_size=30, color=C.EPS),
             label(r"in the museum pieces the partials jump at $0$", font_size=24, color=C.PATHOLOGY),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.75, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         rows[1][1].set_color(C.SEQ)
         rows[1][3].set_color(C.APPROX)
         for r_ in rows:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.3, -0.75, 0])
+            if r_.width > 6.0:
+                r_.width = 6.0
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to([0.6, -0.85, 0], RIGHT, buff=0)
+        assert rows.get_right()[0] <= 6.6 and img.get_top()[1] < head.get_bottom()[1] - 0.15
+        assert bg.get_bottom()[1] > -3.6 and bg.get_left()[0] > -6.6
         with self.voiceover(
             "<bookmark mark='a'/> The repair is Rudin's theorem 9.21: if the partial derivatives exist and are "
             "continuous, the function is continuously differentiable. <bookmark mark='b'/> The idea: to go from x to x "
@@ -220,14 +258,14 @@ class Partials(VoiceoverScene):
             "In the museum, the partials jump at the origin, and the argument breaks."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(img), Create(ax))
+            self.play(FadeIn(head), FadeIn(img), Create(ax), FadeIn(bg))
             self.play(FadeIn(dots), FadeIn(dl), Create(direct))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             self.play(GrowArrow(leg1))
             self.play(GrowArrow(leg2))
             vo.wait_until("c")
-            self.play(FadeIn(mv, scale=1.5), FadeIn(rows[1]), FadeIn(rows[2]))
+            self.play(FadeIn(mv, scale=1.5), FadeIn(mvl), FadeIn(rows[1]), FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
             self.play(FadeIn(rows[4]))

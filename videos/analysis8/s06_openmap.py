@@ -28,7 +28,8 @@ class OpenMapping(VoiceoverScene):
         d = load("openmap")
         T, s, r_in, img = d["T"], d["s"], float(d["r_in"]), d["img"]
         s2_min, s2_max = float(d["s2_min"]), float(d["s2_max"])
-        ax = square_axes([-1.8, 1.8, 1], [-1.8, 1.8, 1], 1.35).move_to([-4.2, -0.8, 0])
+        ax = square_axes([-1.55, 1.55, 1], [-1.55, 1.55, 1], 1.3).move_to([-4.3, -0.55, 0])
+        assert np.abs(img).max() < 1.5  # T(B) inside the drawn window
         ax.set_opacity(0.35)
         u = ax.c2p(1, 0)[0] - ax.c2p(0, 0)[0]
         unit = Circle(radius=u, color=GREY_B, stroke_width=2.5).move_to(ax.c2p(0, 0))
@@ -36,11 +37,11 @@ class OpenMapping(VoiceoverScene):
             [ax.c2p(*p) for p in img])
         inner = Circle(radius=r_in * u, color=C.EPS, stroke_width=3).move_to(ax.c2p(0, 0))
         l_ = VGroup(MathTex(r"T(B)", font_size=26, color=C.OPERATOR).next_to(ax.c2p(1.2, 1.0), UR, buff=0.0),
-                    MathTex(rf"\text{{radius }} 1/\|T^{{-1}}\| = {r_in:.3f}", font_size=24, color=C.EPS).next_to(ax, DOWN,
-                                                                                                         buff=0.1))
+                    MathTex(rf"\text{{yellow: radius }} 1/\|T^{{-1}}\| = {r_in:.3f}", font_size=24, color=C.EPS).next_to(
+                        ax, DOWN, buff=0.12))
         pm = ProofMap([r"Baire: \ some $\overline{T(nB)}$ has interior", r"so $\overline{T(B)} \supset \delta B_Y$",
                        r"completeness: \ drop the bar \ (an iteration)"], font_size=20, width=3.6, buff=0.22,
-                      direction=DOWN).move_to([0.5, -0.9, 0])
+                      direction=DOWN).move_to([0.3, -0.6, 0])
         rows = VGroup(
             label(r"$\ell^2$, \ 60 coordinates: \ $T = I + K$", font_size=22),
             MathTex(rf"\|T\| = {s2_max:.3f}, \ \ 1/\|T^{{-1}}\| = {s2_min:.3f}", font_size=24),
@@ -48,15 +49,19 @@ class OpenMapping(VoiceoverScene):
             label(r"each is $Tx$ with $\|x\| \le 1$", font_size=22, color=C.EPS),
             label(r"\textbf{RCA 5.10} \ a bounded bijection", font_size=22),
             label(r"has a bounded inverse", font_size=22, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.0, -0.8, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([4.85, -0.6, 0])
         for r_ in rows:
-            if r_.width > 3.6:
-                r_.width = 3.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([5.1, -0.8, 0])
+            if r_.width > 3.4:
+                r_.width = 3.4
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.13).move_to([4.85, -0.6, 0])
+        assert rows.get_right()[0] < 6.6 and rows.get_left()[0] > pm.get_right()[0] + 0.3
         thm = VGroup(label(r"\textbf{RCA 5.9} \ (open mapping) \ $X, Y$ Banach, \ $T: X \to Y$ bounded, linear and onto:",
                            font_size=26),
                      MathTex(r"T(B_X) \supset \delta\, B_Y \ \text{ for some } \delta > 0", font_size=32, color=C.EPS)
-                     ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+                     ).arrange(DOWN, buff=0.1)
+        head = label(r"The open mapping theorem", font_size=34).to_edge(UP, buff=0.3)
+        thm.next_to(head, DOWN, buff=0.2)
+        assert thm.get_bottom()[1] > max(ax.get_top()[1], l_[0].get_top()[1]) + 0.1
         with self.voiceover(
             "<bookmark mark='a'/> The open mapping theorem: a bounded linear map of one Banach space onto another "
             "sends the unit ball to a set that contains a ball. <bookmark mark='b'/> In the plane, the image of the "
@@ -68,7 +73,7 @@ class OpenMapping(VoiceoverScene):
             "has a bounded inverse, for free."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm), Create(ax), Create(unit))  # the unit ball under the statement
+            self.play(FadeIn(head), FadeIn(thm), Create(ax), Create(unit))  # the unit ball under the statement
             vo.wait_until("b")
             self.play(TransformFromCopy(unit, ell), FadeIn(l_[0]), run_time=1.5)
             self.play(Create(inner), FadeIn(l_[1]))
@@ -85,7 +90,7 @@ class OpenMapping(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def closed_graph(self):
-        ax = plain_axes([0, 2 * math.pi, math.pi / 2], [-4.5, 4.5, 2], 5.6, 3.2).move_to([-3.4, -0.7, 0])
+        ax = plain_axes([0, 2 * math.pi, math.pi / 2], [-2.6, 2.6, 1], 5.6, 3.2).move_to([-3.4, -0.7, 0])
         x = np.linspace(0, 2 * math.pi, 1200)
         ns = (1, 2, 4)
         cols = [C.SEQ, C.APPROX, C.EPS]
@@ -95,7 +100,12 @@ class OpenMapping(VoiceoverScene):
         for n in ns:
             nf = math.sqrt(np.sum((np.sin(n * x[:-1]) / math.sqrt(math.pi)) ** 2) * (x[1] - x[0]))
             assert abs(nf - 1) < 1e-3
-        lab = VGroup(MathTex(r"f_n = \frac{\sin nx}{\sqrt\pi}: \ \|f_n\|_2 = 1", font_size=24).next_to(ax, UP, buff=0.05),
+        assert max(n for n in ns) / math.sqrt(math.pi) < 2.6  # the tallest derivative fits the window
+        key = MathTex(r"f_n = \frac{\sin nx}{\sqrt\pi}: \ \|f_n\|_2 = 1, \quad n = ", "1", r",\ ", "2", r",\ ", "4",
+                      font_size=24)
+        for i_, c_ in zip((1, 3, 5), cols):
+            key[i_].set_color(c_)
+        lab = VGroup(key.next_to(ax, UP, buff=0.05),
                      MathTex(r"\text{dashed: } f_n' = \frac{n\cos nx}{\sqrt\pi}: \ \|f_n'\|_2 = n", font_size=24).next_to(
                          ax, DOWN, buff=0.1))
         rows = VGroup(
@@ -123,7 +133,9 @@ class OpenMapping(VoiceoverScene):
                           gx, UP, buff=0.08),
                       MathTex(r"(x_n, Tx_n) \to (x, y) \Rightarrow y = Tx", font_size=24, color=C.EPS).next_to(gx, DOWN, buff=0.1),
                       MathTex("X", font_size=22, color=GREY_B).next_to(gx.c2p(3, 0), DOWN, buff=0.08),
-                      MathTex("Y", font_size=22, color=GREY_B).next_to(gx.c2p(0, 2), LEFT, buff=0.08))
+                      MathTex("Y", font_size=22, color=GREY_B).next_to(gx.c2p(0, 2), RIGHT, buff=0.1))
+        glab[0].next_to(gx, UP, buff=0.3)
+        assert glab[0].get_bottom()[1] > glab[3].get_top()[1] + 0.05
         gpic = VGroup(gx, gline, gdots, glim, glab)
         head = label(r"The closed graph theorem, \ and why derivatives need domains", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(

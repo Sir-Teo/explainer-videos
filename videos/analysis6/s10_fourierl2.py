@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import load, plain_axes, polyline, trap
+from videos.analysis6.common import left_y_axis, load, plain_axes, polyline, trap
 
 
 class FourierL2(VoiceoverScene):
@@ -28,6 +28,24 @@ class FourierL2(VoiceoverScene):
         d = load("trigdense")
         t, ks, errs, kerns, smooths, f = d["t"], d["ks"], d["errs"], d["kerns"], d["smooths"], d["f"]
         kx = plain_axes([-math.pi, math.pi, math.pi / 2], [0, 30, 10], 5.0, 3.4, numbers=False).move_to([-3.6, -0.8, 0])
+        kyn = left_y_axis(kx, (10, 20, 30))  # numbered at -pi: the narrowing bump never crosses a number
+        assert 25 < float(kerns[-1].max()) < 30
+        # 'a': the exponentials themselves, real parts cos nt, on the same window
+        ex = plain_axes([-math.pi, math.pi, math.pi / 2], [-1.3, 1.3, 1], 5.0, 3.4, numbers=False).move_to(kx)
+        ecols = [C.SEQ, C.APPROX, C.CONNECTED_SET, C.MEASURE]
+        tt = np.linspace(-math.pi, math.pi, 400)
+        eg = VGroup(*[polyline(ex, tt, np.cos(n * tt), color=ecols[n], stroke_width=3) for n in range(4)])
+        e_l = MathTex(r"\mathrm{Re}\, e^{int} = \cos nt, \ ", "n = 0,", "\ 1,", "\ 2,", "\ 3", font_size=26).next_to(
+            ex, UP, buff=0.1)
+        for n in range(4):
+            e_l[1 + n].set_color(ecols[n])
+        # orthonormal in L^2(T) with <f, g> = (1/2pi) int f conj(g): check on the grid
+        tq = np.linspace(-math.pi, math.pi, 4001)
+        gram_ = np.array([[trap(np.exp(1j * m * tq) * np.exp(-1j * n * tq), tq) / (2 * math.pi) for n in range(4)]
+                          for m in range(4)])
+        assert np.allclose(gram_, np.eye(4), atol=1e-6)
+        on_l = MathTex(r"\tfrac{1}{2\pi}\int_{-\pi}^{\pi} e^{imt}\,\overline{e^{int}}\,dt = \delta_{mn}", font_size=28,
+                       color=C.INNER).move_to([2.6, -0.8, 0])
         kt = VGroup(*[MathTex(s, font_size=20).next_to(kx.c2p(v, 0), DOWN, buff=0.1)
                       for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.EPS), i / (len(ks) - 1)) for i in range(len(ks))]
@@ -38,7 +56,7 @@ class FourierL2(VoiceoverScene):
         ft = VGroup(*[MathTex(s, font_size=20).next_to(fx.c2p(v, 0), DOWN, buff=0.1)
                       for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
         gf = polyline(fx, t, f, color=WHITE, stroke_width=4)
-        f_l = MathTex(r"f(t) = |t|", font_size=26).next_to(fx.c2p(-math.pi, math.pi), RIGHT, buff=0.15).shift(DOWN * 0.1)
+        f_l = MathTex(r"f(t) = |t|", font_size=26).next_to(fx.c2p(0.2, 3.1), RIGHT, buff=0)  # inside the V
         sc = [polyline(fx, t, smooths[i], color=cols[i], stroke_width=3) for i in range(len(ks))]
         s_l = [MathTex(rf"\|Q_{{{k}}} * f - f\|_\infty = {e:.4f}", font_size=26, color=cols[i]).next_to(fx, UP, buff=0.1)
                for i, (k, e) in enumerate(zip(ks, errs))]
@@ -48,8 +66,8 @@ class FourierL2(VoiceoverScene):
                   font_size=24),
             label(r"$C(T)$ is dense in $L^2(T)$ \ $\Rightarrow$ \ trigonometric polynomials are dense in $L^2(T)$ "
                   r"\ $\Rightarrow$ \ $\{e^{int}\}$ is maximal", font_size=24, color=C.EPS),
-        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
-        head = label(r"Is $\{e^{int} : n \in \Z\}$ a maximal orthonormal set in $L^2(T)$?", font_size=32).to_edge(UP,
+        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.35)
+        head = label(r"Is $\{e^{int} : n \in \Z\}$ a maximal orthonormal set in $L^2(T)$?", font_size=34).to_edge(UP,
                                                                                                              buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The exponentials e to the i n t are orthonormal in L two of the circle. Are they "
@@ -63,9 +81,12 @@ class FourierL2(VoiceoverScene):
             "exponential: the system is maximal."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ex), LaggedStart(*[Create(g_) for g_ in eg], lag_ratio=0.3), FadeIn(e_l),
+                      run_time=2.0)
+            self.play(FadeIn(on_l))
             vo.wait_until("b")
-            self.play(Create(kx), FadeIn(kt), Create(kc[0]), FadeIn(k_l[0]))
+            self.play(FadeOut(ex), FadeOut(eg), FadeOut(e_l), FadeOut(on_l), Create(kx), FadeIn(kyn), FadeIn(kt),
+                      Create(kc[0]), FadeIn(k_l[0]))
             for i in range(1, len(ks)):
                 self.play(kc[i - 1].animate.set_stroke(opacity=0.3, width=1.5), Create(kc[i]),
                           FadeTransform(k_l[i - 1], k_l[i]), run_time=0.8)
@@ -87,7 +108,8 @@ class FourierL2(VoiceoverScene):
         ax = plain_axes([-math.pi, math.pi, math.pi / 2], [0, 4.2, 1], 6.0, 3.8, numbers=False).move_to([-3.0, -0.4, 0])
         tk = VGroup(*[MathTex(s, font_size=20).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                       for s, v in ((r"-\pi", -math.pi), ("0", 0), (r"\pi", math.pi))])
-        yk = VGroup(*[MathTex(str(v), font_size=20).next_to(ax.c2p(-math.pi, v), LEFT, buff=0.1) for v in (1, 2, 3, 4)])
+        ax.y_axis.set_opacity(0)  # the y-axis at x = 0 would run under the spike: it stands at -pi instead
+        yk = left_y_axis(ax, (1, 2, 3, 4), font_size=20)
         xr = np.concatenate([np.linspace(-math.pi, -0.0037, 600), np.linspace(0.0037, math.pi, 600)])
         fr = np.abs(xr) ** -0.25
         gf = VGroup(polyline(ax, xr[:600], fr[:600], color=WHITE, stroke_width=4),
@@ -119,9 +141,9 @@ class FourierL2(VoiceoverScene):
                   r"$\sum_{n \in \Z} |\hat f(n)|^2 = \|f\|_2^2$", font_size=26, color=C.EPS),
             label(r"and every square-summable $(c_n)$ is the Fourier series of some $f \in L^2$: \ $L^2(T) \cong \ell^2(\Z)$",
                   font_size=24, color=C.INNER),
-        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.2)
-        head = label(r"The answer in $L^2$, \ even for functions Riemann could not integrate", font_size=32).to_edge(UP,
-                                                                                                                 buff=0.25)
+        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.35)
+        head = label(r"The answer in $L^2$, \ even for functions Riemann could not integrate", font_size=34).to_edge(UP,
+                                                                                                                 buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> So Parseval holds for every square-integrable function, with nothing assumed "
             "about continuity or boundedness. Here's a function Riemann's integral can't handle: the absolute value "

@@ -39,7 +39,7 @@ class WhoIsIntegrable(VoiceoverScene):
     # ------------------------------------------------------------------
     def continuous(self):
         ax = plain_axes([0, 3.2, 1], [0, 2.0, 0.5], 8.4, 4.4).move_to([-2.2, -0.9, 0])
-        gr = ax.plot(g, x_range=[0, 3.0, 0.005], color=C.FUNC, stroke_width=4)
+        gr = ax.plot(g, x_range=[0, 3.0, 0.005], color=C.FUNC, stroke_width=4).set_z_index(3)
         thm = VGroup(label(r"\textbf{Rudin 6.8} \ continuous on $[a, b]$ $\Rightarrow$ integrable", font_size=30),
                      label(r"(uniform continuity: \ one $\delta$ for the whole interval)", font_size=24, color=GREY_A)
                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)

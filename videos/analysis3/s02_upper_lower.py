@@ -212,7 +212,7 @@ class UpperLower(VoiceoverScene):
         for a, b in zip(e[:-1], e[1:]):
             p0, p1 = ax.c2p(1 - 1 / n, a * a), ax.c2p(1, b * b)
             targets.append((p0 + p1) / 2)
-        head = MathTex(r"f(x) = x^2 \text{ on } [0, 1], \quad n \text{ equal pieces}", font_size=32).to_edge(UP, buff=0.35)
+        head = MathTex(r"f(x) = x^2 \text{ on } [0, 1], \quad n \text{ equal pieces}", font_size=34).to_edge(UP, buff=0.3)
         tele = VGroup(MathTex(r"U - L = \sum_{i=1}^{n} \big(f(x_i) - f(x_{i-1})\big)\frac1n", font_size=32),
                       MathTex(r"= \frac{f(1) - f(0)}{n} = \frac1n", font_size=32, color=C.EPS)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                     buff=0.15)

@@ -56,7 +56,7 @@ class Schwarz(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         assert np.all(np.abs(imgs) <= rs[:, None] + 1e-12) and abs(d0 - 0.5) < 1e-6
         head = label(r"A map of the disk that fixes the center can only pull points inward", font_size=32).to_edge(UP,
-                                                                                                           buff=0.25)
+                                                                                                           buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Take a holomorphic map of the unit disk into itself that keeps the center fixed. "
             "<bookmark mark='b'/> The Schwarz lemma: it can't move any point farther from the center. Here, three "
@@ -68,7 +68,7 @@ class Schwarz(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(img), Create(unit), FadeIn(f_l))
             vo.wait_until("b")
-            self.play(FadeIn(rows[:3]), Create(rings))
+            self.play(FadeIn(rows[:3]), Create(rings), img.animate.set_opacity(0.35))  # the circles over a dimmed coloring
             self.play(Create(ims), FadeIn(rows[3]), run_time=2.0)
             self.play(FadeIn(rows[4]))
             vo.wait_until("c")
@@ -95,6 +95,17 @@ class Schwarz(VoiceoverScene):
             grid_b.add(zcurve(bx, phi(z), C.APPROX, 1.6))
         assert np.allclose(np.abs(phi(np.exp(1j * th))), 1) and abs(phi(a)) < 1e-15
         arrow = Arrow([-2.75, -0.75, 0], [-2.05, -0.75, 0], buff=0, color=GREY_B, stroke_width=4)
+        def tag(axk, z, tex, color, fs=28):  # a point's name under the disk, with a dashed leader up to the point
+            t = MathTex(tex, font_size=fs, color=color).next_to(axk.c2p(z.real, -1.05), DOWN, buff=0.12)
+            return VGroup(DashedLine(axk.c2p(z.real, z.imag) + DOWN * 0.1, t.get_top() + UP * 0.05, color=color,
+                                     stroke_width=1.5, dash_length=0.06), t)
+
+        al = VGroup(Dot(ax.c2p(a, 0), radius=0.08, color=C.EPS), tag(ax, a + 0j, r"\alpha = 0.5", C.EPS))
+        al_img = VGroup(Dot(bx.c2p(phi(a).real, phi(a).imag), radius=0.08, color=C.EPS),
+                        tag(bx, phi(a), r"\varphi_\alpha(\alpha) = 0", C.EPS, 26))
+        zero = VGroup(Dot(ax.c2p(0, 0), radius=0.06, color=WHITE))
+        zero_img = VGroup(Dot(bx.c2p(phi(0j).real, phi(0j).imag), radius=0.06, color=WHITE))
+        assert abs(phi(0j) + a) < 1e-15
         a_l = MathTex(r"\varphi_\alpha(z) = \frac{z - \alpha}{1 - \bar\alpha z}, \ \alpha = 0.5", font_size=28).move_to(
             [-2.4, 1.55, 0])
         rows = VGroup(
@@ -117,7 +128,10 @@ class Schwarz(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(grid_a))
             vo.wait_until("b")
-            self.play(GrowArrow(arrow), FadeIn(a_l), TransformFromCopy(grid_a, grid_b), run_time=2.5)
+            self.play(FadeIn(al), FadeIn(zero))
+            self.play(GrowArrow(arrow), FadeIn(a_l), TransformFromCopy(grid_a, grid_b), TransformFromCopy(al[0], al_img[0]),
+                      TransformFromCopy(zero[0], zero_img[0]), run_time=2.5)
+            self.play(FadeIn(al_img[1]))
             vo.wait_until("c")
             self.play(FadeIn(rows))
         self.wait(0.3)
@@ -140,7 +154,9 @@ class Schwarz(VoiceoverScene):
         g = polyline(bx, xs, logM, color=C.EPS, stroke_width=3.5)
         chord = DashedLine(bx.c2p(0, logM[0]), bx.c2p(1, logM[-1]), color=WHITE, stroke_width=2)
         b_l = MathTex(r"\log M(x), \ \ M(x) = \sup_y |f(x + iy)|", font_size=26, color=C.EPS).next_to(bx, UP, buff=0.12)
-        mid = Dot(bx.c2p(0.5, logM[50]), radius=0.07, color=C.EPS)
+        assert abs(xs[50] - 0.5) < 1e-12 and xs[0] == 0 and xs[-1] == 1
+        mid = VGroup(Dot(bx.c2p(0, logM[0]), radius=0.07, color=C.SEQ), Dot(bx.c2p(0.5, logM[50]), radius=0.07, color=C.EPS),
+                     Dot(bx.c2p(1, logM[-1]), radius=0.07, color=C.APPROX))
         rows = VGroup(
             label(r"\textbf{RCA 12.8} \ (three lines) \ $f$ bounded and", font_size=24),
             label(r"holomorphic on the strip: \ $\log M(x)$ is convex", font_size=24),

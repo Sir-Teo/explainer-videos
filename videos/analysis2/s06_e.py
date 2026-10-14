@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import load, plain_axes
+from videos.analysis2.common import load, plain_axes, polyline
 
 
 class NumberE(VoiceoverScene):
@@ -105,7 +105,7 @@ class NumberE(VoiceoverScene):
             return g
 
         head = MathTex(r"\Big(1 + \frac1n\Big)^n", r"=", r"\sum_{k=0}^{n} \frac{1}{k!}\Big(1 - \frac1n\Big)"
-                       r"\Big(1 - \frac2n\Big) \cdots \Big(1 - \frac{k-1}{n}\Big)", font_size=36).to_edge(UP, buff=0.4)
+                       r"\Big(1 - \frac2n\Big) \cdots \Big(1 - \frac{k-1}{n}\Big)", font_size=36).to_edge(UP, buff=0.3)
         head[0].set_color(C.CUT_HIGH)
         ref = note(r"binomial theorem; \ Rudin 3.31").next_to(head, DOWN, buff=0.1).align_to(head, RIGHT)
 

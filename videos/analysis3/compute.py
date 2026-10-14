@@ -472,8 +472,8 @@ def compute_stone():
     f = np.exp(t)
 
     def line(x, y):
-        if abs(x - y) < 1e-12:
-            return np.full_like(t, math.exp(x))
+        if abs(x - y) < 1e-12:  # y = x: the tangent (the limit of the secants), not a constant
+            return math.exp(x) + math.exp(x) * (t - x)
         s = (math.exp(y) - math.exp(x)) / (y - x)
         return math.exp(x) + s * (t - x)
 
@@ -487,7 +487,9 @@ def compute_stone():
     H = np.array(H)
     approx = H.min(axis=0)
     err = np.abs(approx - f).max()
-    assert err < eps
+    assert err < eps / 5  # "within two hundredths"
+    # no cap is flat: each has slope at least e^0 = 1 on both sides of its point
+    assert np.all(np.diff(H, axis=1) > 0)
     # step 1 of 7.32: |y| on [-1, 1] by polynomials (Bernstein's, in u = (y + 1)/2), then |f| = lim P(f)
     y = np.linspace(-1, 1, 1201)
     absdeg = np.array([4, 16, 64])
@@ -682,7 +684,10 @@ def compute_parseval():
     # 8.15: trigonometric polynomials are dense in C(T).  One explicit choice: Fejer's averages
     # sigma_N = sum_{|n| <= N} (1 - |n|/(N + 1)) c_n e^{inx}, whose kernel is positive (like Landau's)
     xf = np.linspace(-np.pi, np.pi, 4001)
-    ff = np.maximum(0.0, 1 - np.abs(xf) / 1.2) + 0.35 * np.maximum(0.0, 1 - np.abs(xf - 2.2) / 0.5)
+    ff = np.maximum(0.0, 1 - np.abs(xf) / 1.2)  # a tent: continuous on the circle, with exactly three corners
+    slope = np.diff(ff) / np.diff(xf)
+    kinks = np.nonzero(np.abs(np.diff(slope)) > 0.1)[0]
+    assert len(kinks) == 3 and np.allclose(xf[kinks + 1], [-1.2, 0.0, 1.2], atol=2e-3)
     FN = np.array([1, 2, 4, 8, 16, 32, 64])
     nmax = int(FN.max())
     cn = np.array([trap(ff * np.cos(n * xf), xf) / (2 * np.pi) for n in range(nmax + 1)]) + 0j

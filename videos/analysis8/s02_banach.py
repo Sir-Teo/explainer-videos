@@ -56,17 +56,21 @@ class Banach(VoiceoverScene):
         zlim = 1 / (1 - q)
         assert abs(zs[-1] - zlim) < 1e-3
         assert np.all(np.diff(np.abs(zs - zlim)) < 0)  # each step closer
-        sq = square_axes([-0.6, 2.2, 1], [-0.4, 2.4, 1], 1.2).move_to([0, -0.7, 0])
+        sq = square_axes([-0.6, 2.2, 1], [-0.4, 2.4, 1], 1.75).move_to([-2.4, -0.75, 0])
         sq.set_opacity(0.35)
-        cpts = VGroup(*[Dot(sq.c2p(z.real, z.imag), radius=0.05, color=C.SEQ) for z in zs])
+        cpts = VGroup(*[Dot(sq.c2p(z.real, z.imag), radius=0.06, color=C.SEQ) for z in zs])
         cpath = VMobject(color=C.SEQ, stroke_width=1.5, stroke_opacity=0.5).set_points_as_corners(
             [sq.c2p(z.real, z.imag) for z in zs])
-        cl_ = Dot(sq.c2p(zlim.real, zlim.imag), radius=0.08, color=C.EPS)
-        cll = MathTex(r"\text{a Cauchy sequence and its limit}", font_size=24, color=C.EPS).next_to(sq, RIGHT, buff=0.3)
+        cl_ = Dot(sq.c2p(zlim.real, zlim.imag), radius=0.09, color=C.EPS)
+        cll = VGroup(MathTex(r"\text{a Cauchy sequence and its limit}", font_size=28, color=C.EPS),
+                     MathTex(r"z_n = \sum_{k < n} q^k \ \to \ \frac{1}{1 - q}, \quad q = 0.8\,e^{0.9i}", font_size=26,
+                             color=C.SEQ)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(sq, RIGHT, buff=0.4)
+        assert cll.get_right()[0] < 6.6
         cauchy = VGroup(sq, cpath, cpts, cl_, cll)
-        head = VGroup(label(r"\textbf{RCA 5.1--5.3} \ a Banach space: \ a vector space with a norm, \ complete", font_size=30),
-                      label(r"the spaces of Parts 3, 5 and 6, \ now in one family", font_size=24, color=GREY_A)
-                      ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.2)
+        head = label(r"A Banach space: \ a vector space with a norm, \ complete", font_size=34).to_edge(UP, buff=0.3)
+        sub = label(r"\textbf{RCA 5.1--5.3} \ the spaces of Parts 3, 5 and 6, \ now in one family", font_size=24,
+                    color=GREY_A).next_to(head, DOWN, buff=0.15)
+        assert sub.get_bottom()[1] > sq.get_top()[1] + 0.15 and sub.get_bottom()[1] > icons[0][2].get_top()[1] + 0.15
         with self.voiceover(
             "<bookmark mark='a'/> A Banach space is a vector space with a norm in which every Cauchy sequence "
             "converges. We've met many. <bookmark mark='b'/> The sequence spaces, with the sum, square-sum and "
@@ -75,7 +79,7 @@ class Banach(VoiceoverScene):
             "zero; and the L p spaces of Part 6. Every theorem in this part holds for all of them at once."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(sq))
+            self.play(FadeIn(head), FadeIn(sub), Create(sq))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in cpts], lag_ratio=0.08), Create(cpath), run_time=3.0)
             self.play(FadeIn(cl_, scale=2), FadeIn(cll))
             vo.wait_until("b")
@@ -113,8 +117,27 @@ class Banach(VoiceoverScene):
             if r_.width > 6.6:
                 r_.width = 6.6
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.1, -0.5, 0])
-        lab = VGroup(MathTex(r"\|x\| \le 1", font_size=24, color=GREY_B).next_to(ax.c2p(0.5, -0.9), DOWN, buff=0.05),
-                     MathTex(rf"\|T\| = {s[0]:.3f}", font_size=26, color=C.EPS).next_to(ax, UP, buff=0.05))
+        # "||x|| <= 1" in the ring between the unit circle and the dashed circle, clear of the ellipse T(B) and the axes
+        xl_ = MathTex(r"\|x\| \le 1", font_size=24, color=GREY_B)
+        Ti = np.linalg.inv(T)
+
+        def free(m):
+            P = np.array([ax.p2c(m.get_corner(v_) + 0.04 * v_) for v_ in (UL, UR, DL, DR, UP, DOWN, LEFT, RIGHT)])
+            r_ = np.hypot(P[:, 0], P[:, 1])
+            return (r_.min() > 1.0 and r_.max() < s[0] and np.all(np.linalg.norm(P @ Ti.T, axis=1) > 1.0)
+                    and (P[:, 0].min() > 0 or P[:, 0].max() < 0) and (P[:, 1].min() > 0 or P[:, 1].max() < 0))
+
+        spot = None
+        for a_ in np.radians(np.arange(95, 360, 2.5)):
+            for rr in np.linspace(1.1, 1.45, 8):
+                xl_.move_to(ax.c2p(rr * math.cos(a_), rr * math.sin(a_)))
+                if free(xl_):
+                    spot = (a_, rr)
+                    break
+            if spot:
+                break
+        assert spot is not None
+        lab = VGroup(xl_, MathTex(rf"\|\Lambda\| = {s[0]:.3f}", font_size=26, color=C.EPS).next_to(ax, UP, buff=0.05))
         head = label(r"For linear maps, \ continuous means bounded", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A linear map between normed spaces is continuous exactly when it's bounded: it "
@@ -139,7 +162,7 @@ class Banach(VoiceoverScene):
         s, exact, nrm = d["s"], d["exact"], float(d["norm"])
         ax = plain_axes([0, 1, 0.25], [0, 1.5, 0.5], 5.4, 2.8, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, 0.55, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, 0.95, 0])
         x = np.linspace(0, 1, 400)
         f = math.sqrt(2) * np.cos(math.pi * x / 2)
         Vf = math.sqrt(2) * (2 / math.pi) * np.sin(math.pi * x / 2)
@@ -147,23 +170,26 @@ class Banach(VoiceoverScene):
         gV = polyline(ax, x, Vf, color=C.OPERATOR, stroke_width=3.5)
         lf = MathTex(r"f = \sqrt2\cos\tfrac{\pi x}{2}, \ \|f\|_2 = 1", font_size=24, color=C.SEQ).next_to(ax.c2p(0.28, 1.45),
                                                                                                     RIGHT, buff=0.05)
-        lV = MathTex(r"Vf = \tfrac{2}{\pi}\sqrt2\sin\tfrac{\pi x}{2}", font_size=24, color=C.OPERATOR).next_to(
-            ax.c2p(0.55, 0.55), DOWN, buff=0.1)
+        # under both curves, between them and the x-axis: Vf >= 0.409 and f >= 0.479 over x in [0.3, 0.78]
+        lV = MathTex(r"Vf = \tfrac{2}{\pi}\sqrt2\sin\tfrac{\pi x}{2}", font_size=24, color=C.OPERATOR).move_to(
+            ax.c2p(0.54, 0.19))
+        lv_box = [ax.p2c(lV.get_corner(v_)) for v_ in (UL, UR, DL)]
+        assert lv_box[0][0] > 0.28 and lv_box[1][0] < 0.8 and lv_box[0][1] < 0.40 and lv_box[2][1] > 0.03
         xx = np.linspace(0, 1, 100001)
         fx = math.sqrt(2) * np.cos(math.pi * xx / 2)
         cumf = np.concatenate([[0], np.cumsum((fx[1:] + fx[:-1]) / 2 * np.diff(xx))])
         assert np.abs(cumf - math.sqrt(2) * (2 / math.pi) * np.sin(math.pi * xx / 2)).max() < 1e-8
         bx = plain_axes([0.5, 8.5, 1], [0, 0.7, 0.2], 5.4, 1.9, numbers=True, font_size=18,
                         x_axis_config={"include_numbers": False},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, -2.75, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, -2.2, 0])
         kl = VGroup(*[MathTex(str(k), font_size=18).next_to(bx.c2p(k, 0), DOWN, buff=0.1) for k in range(1, 9)],
                     MathTex("k", font_size=20, color=GREY_A).next_to(bx.c2p(8.5, 0), DOWN, buff=0.1).shift(RIGHT * 0.2))
         bars = VGroup(*[Rectangle(width=0.35, height=bx.c2p(0, v)[1] - bx.c2p(0, 0)[1], stroke_width=0, fill_color=C.OPERATOR,
                                   fill_opacity=0.85).move_to(bx.c2p(k + 1, v / 2)) for k, v in enumerate(s[:8])])
         ticks = VGroup(*[Line(bx.c2p(k + 1 - 0.3, 2 / ((2 * k + 1) * math.pi)), bx.c2p(k + 1 + 0.3, 2 / ((2 * k + 1) * math.pi)),
                               color=C.EPS, stroke_width=3) for k in range(8)])
-        b_l = VGroup(label(r"singular values (bars)", font_size=20, color=GREY_A),
-                     label(r"$\frac{2}{(2k - 1)\pi}$ (ticks)", font_size=20, color=C.EPS)).arrange(
+        b_l = VGroup(label(r"singular values (bars)", font_size=22, color=GREY_A),
+                     label(r"$2/((2k - 1)\pi)$ (ticks)", font_size=22, color=C.EPS)).arrange(
             DOWN, aligned_edge=RIGHT, buff=0.08).next_to(bx.c2p(8.5, 0.62), DL, buff=0)
         rows = VGroup(
             MathTex(r"(Vf)(x) = \int_0^x f(t)\,dt \ \text{ on } L^2[0, 1]", font_size=30),
@@ -184,9 +210,9 @@ class Banach(VoiceoverScene):
             "pi, falling to zero. That makes this operator compact, which chapter eleven explains."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax))
+            self.play(FadeIn(head), FadeIn(rows[0]), Create(ax), Create(gf))  # a function of norm 1 to stretch
             vo.wait_until("b")
-            self.play(Create(gf), FadeIn(lf))
+            self.play(FadeIn(lf))
             self.play(TransformFromCopy(gf, gV), FadeIn(lV), FadeIn(rows[1]), run_time=1.8)
             vo.wait_until("c")
             self.play(FadeIn(rows[2:5]))

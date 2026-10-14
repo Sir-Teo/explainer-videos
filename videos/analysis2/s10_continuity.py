@@ -151,7 +151,7 @@ class Continuity(VoiceoverScene):
     def sequences(self):
         thm = VGroup(label(r"\textbf{Rudin 4.2 and 4.6} \ $f$ is continuous at $p$ $\iff$", font_size=32),
                      label(r"$f(p_n) \to f(p)$ for every sequence $p_n \to p$", font_size=32)).arrange(DOWN, buff=0.15)
-        thm.to_edge(UP, buff=0.5)
+        thm.to_edge(UP, buff=0.3)
         # the criterion: a sequence p_n -> p (from both sides) and its images f(p_n) -> f(p)
         ax0 = plain_axes([0, 4, 1], [0, 3, 1], 6.4, 3.8, numbers=False).move_to([0.3, -1.25, 0])
         f0 = lambda x: 1.3 + 0.8 * np.sin(1.1 * x - 1.0) + 0.12 * x  # noqa: E731
@@ -231,8 +231,8 @@ class Continuity(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 4.8} \ $f$ is continuous $\iff$ $f^{-1}(V)$ is open for every open $V$",
                            font_size=30),
                      label(r"(no epsilons: \ only open sets)", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.12)
-        thm.to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 6.3, 1], [-1.6, 1.6, 1], 7.6, 3.8, numbers=False).move_to([-2.2, -0.55, 0])
+        thm.to_edge(UP, buff=0.3)
+        ax = plain_axes([0, 6.3, 1], [-1.6, 1.6, 1], 7.6, 3.8, numbers=False).move_to([-2.2, -0.35, 0])
         f = lambda x: np.sin(1.6 * x) * 0.8 + 0.25 * np.sin(4.1 * x)  # noqa: E731
         graph = ax.plot(f, x_range=[0, 6.3, 0.005], color=C.FUNC, stroke_width=3.5)
         lo, hi = 0.3, 0.75
@@ -264,10 +264,9 @@ class Continuity(VoiceoverScene):
         drops = VGroup(*[DashedLine(ax.c2p(a, f(a)), [ax.c2p(a, 0)[0], y_dom, 0], color=C.OPEN_SET, stroke_width=1.2)
                          for a, b in runs] + [DashedLine(ax.c2p(b, f(b)), [ax.c2p(b, 0)[0], y_dom, 0], color=C.OPEN_SET,
                                                          stroke_width=1.2) for a, b in runs])
-        pl = MathTex(r"f^{-1}(V)", font_size=30, color=C.OPEN_SET).next_to([ax.c2p(6.3, 0)[0], y_dom, 0], RIGHT,
-                                                                           buff=0.2)
+        pl = MathTex(r"f^{-1}(V)", font_size=30, color=C.OPEN_SET).next_to(pre, DOWN, buff=0.15)
         # a jump: the preimage of a small open interval around the value at the jump is not open
-        ax2 = plain_axes([0, 2, 1], [0, 2, 1], 3.6, 3.2, numbers=False).move_to([4.6, -0.6, 0])
+        ax2 = plain_axes([0, 2, 1], [0, 2, 1], 3.6, 3.2, numbers=False).move_to([4.3, -0.4, 0])
         s1 = Line(ax2.c2p(0, 0.6), ax2.c2p(1, 0.6), color=C.FUNC, stroke_width=4)
         s2 = Line(ax2.c2p(1, 1.4), ax2.c2p(2, 1.4), color=C.FUNC, stroke_width=4)
         e1 = endpoint(ax2.c2p(1, 0.6), False, C.FUNC)
@@ -281,6 +280,7 @@ class Continuity(VoiceoverScene):
         p2l = VGroup(label(r"contains $1$, but no", font_size=22, color=C.PATHOLOGY),
                      label(r"interval around $1$: \ not open", font_size=22, color=C.PATHOLOGY)
                      ).arrange(DOWN, buff=0.06).next_to(p2, DOWN, buff=0.15)
+        p2l.shift(RIGHT * min(0.0, 6.55 - p2l.get_right()[0]))  # inside the right margin
         with self.voiceover(
             "Now the reformulation that changed mathematics. <bookmark mark='t'/> A function is continuous exactly "
             "when the preimage of every open set is open. <bookmark mark='a'/> Pick an open interval V of values. "
@@ -301,7 +301,7 @@ class Continuity(VoiceoverScene):
             self.play(FadeIn(v2), FadeIn(p2), FadeIn(p2l))
         assert len(runs) >= 3
         why_ = label(r"Topology's definition: \ it survives in spaces with no distance at all (Part 8).", font_size=28,
-                     color=C.EPS).to_edge(DOWN, buff=0.15)
+                     color=C.EPS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='w'/> This version never mentions a distance, only which sets are open. That's why it "
             "became the definition of continuity in topology, and in Part 8 we'll need it in spaces where no distance "
@@ -315,7 +315,7 @@ class Continuity(VoiceoverScene):
     # ------------------------------------------------------------------
     def algebra(self):
         head = label(r"\textbf{Rudin 4.7} \ compositions of continuous functions are continuous", font_size=30)
-        head.to_edge(UP, buff=0.35)
+        head.to_edge(UP, buff=0.3)
         rule = MathTex(r"(g \circ f)^{-1}(V)", r"=", r"f^{-1}\big(g^{-1}(V)\big)", font_size=36).next_to(head, DOWN,
                                                                                                      buff=0.25)
         f = lambda x: x * x - 1  # noqa: E731

@@ -31,9 +31,9 @@ class Projection(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def nearest(self):
-        ax = square_axes([-1.6, 2.8, 1], [-1.3, 1.9, 1], 1.4).move_to([-3.6, -0.75, 0])
+        ax = square_axes([-1.6, 2.8, 1], [-1.3, 1.9, 1], 1.25).move_to([-3.3, -0.55, 0])
         ax.set_opacity(0.3)
-        x = np.array([-1.1, -0.9])
+        x = np.array([-0.8, -0.7])
         th = np.linspace(0, 2 * np.pi, 20001)
         P = ellipse(th)
         dist = np.linalg.norm(P - x, axis=1)
@@ -45,9 +45,10 @@ class Projection(VoiceoverScene):
         E_l = MathTex(r"E", font_size=34, color=C.CONNECTED_SET).move_to(ax.c2p(1.5, 0.75))
         xd = Dot(ax.c2p(*x), radius=0.08, color=WHITE)
         x_l = MathTex(r"x", font_size=32).next_to(xd, DL, buff=0.08)
-        circ = Circle(radius=delta * 1.4, color=C.DIST, stroke_width=2).move_to(ax.c2p(*x))
+        circ = Circle(radius=delta * 1.25, color=C.DIST, stroke_width=2).move_to(ax.c2p(*x))
+        assert circ.get_left()[0] > -7.0 and circ.get_bottom()[1] > -3.9  # the whole delta-circle on screen
         y_d = Dot(ax.c2p(*y0), radius=0.09, color=C.EPS)
-        y_l = MathTex(r"y_0", font_size=30, color=C.EPS).next_to(y_d, DOWN, buff=0.12).shift(RIGHT * 0.15)
+        y_l = MathTex(r"y_0", font_size=30, color=C.EPS).next_to(y_d, LEFT, buff=0.15).shift(DOWN * 0.1)
         seg = Line(ax.c2p(*x), ax.c2p(*y0), color=C.DIST, stroke_width=3)
         # a minimizing sequence on the boundary, from alternating sides
         ths = np.array([th0 + (-1) ** n * 1.4 * 0.62**n for n in range(8)])
@@ -55,8 +56,8 @@ class Projection(VoiceoverScene):
         dn = np.linalg.norm(Y - x, axis=1)
         assert np.all(dn >= delta - 1e-9) and np.all(np.diff(dn[1:]) < 0)
         seq = VGroup(*[Dot(ax.c2p(*p), radius=0.06, color=C.SEQ) for p in Y])
-        seq_l = VGroup(*[MathTex(rf"y_{{{n + 1}}}", font_size=22, color=C.SEQ).next_to(seq[n], UL if n % 2 == 0 else DR,
-                                                                                    buff=0.04) for n in range(3)])
+        seq_l = VGroup(*[MathTex(rf"y_{{{n + 1}}}", font_size=24, color=C.SEQ).next_to(seq[n], UL if n % 2 == 0 else DR,
+                                                                                    buff=0.04) for n in range(2)])
         # parallelogram law bound for consecutive pairs (the midpoint is in E, so its distance is at least delta)
         rows = []
         for n in range(1, 6):
@@ -87,9 +88,9 @@ class Projection(VoiceoverScene):
         regrid(tab)
         concl = label(r"Cauchy, \ so it converges \ (completeness), \ and the limit is in $E$ \ (closed)", font_size=24,
                       color=C.EPS).to_edge(DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
-        head = VGroup(label(r"\textbf{RCA 4.10} \ a nonempty closed convex set $E$ in a Hilbert space", font_size=28),
-                      label(r"has exactly one point nearest to $x$", font_size=28)).arrange(DOWN, buff=0.08).to_edge(
-            UP, buff=0.2)
+        head = VGroup(label(r"The nearest point of a closed convex set", font_size=34),
+                      label(r"\textbf{RCA 4.10} \ a nonempty closed convex set $E$ in a Hilbert space has exactly one "
+                            r"point nearest to $x$", font_size=26)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         d_l = MathTex(rf"\delta = \inf_{{y \in E}} \|x - y\| = {delta:.4f}", font_size=26, color=C.DIST).next_to(
             ax, UP, buff=0.1).align_to(ax, LEFT)
         with self.voiceover(
@@ -143,10 +144,10 @@ class Projection(VoiceoverScene):
             assert abs(abs(a_) + abs(1.5 - a_) - 1.5) < 1e-12
         lab = VGroup(MathTex(r"E = \{x + y = 1.5\}", font_size=26, color=C.CONNECTED_SET).next_to(ax.c2p(1.4, 0.3), RIGHT,
                                                                                                    buff=0.05),
-                     MathTex(r"E", font_size=26, color=C.CONNECTED_SET).next_to(bx.c2p(1.6, -0.1), RIGHT, buff=0.1))
-        head = VGroup(label(r"Why the angle matters: \ grow a ball around $0$ until it touches $E$", font_size=30),
-                      label(r"round balls touch once; \ the $L^1$ ball can touch along an edge", font_size=24,
-                            color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+                     MathTex(r"E", font_size=26, color=C.CONNECTED_SET).next_to(bx.c2p(1.9, -0.4), RIGHT, buff=0.1))
+        head = VGroup(label(r"Why the angle matters: \ grow a ball until it touches $E$", font_size=34),
+                      label(r"round balls touch once; \ the $L^1$ ball can touch along an edge", font_size=26,
+                            color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Uniqueness is where the inner product earns its keep. Grow a ball around the "
             "origin until it first touches a line. <bookmark mark='b'/> The round ball touches at one point. "
@@ -181,17 +182,19 @@ class Projection(VoiceoverScene):
         gt = DashedVMobject(polyline(ax, xs, tx, color=C.APPROX, stroke_width=3), num_dashes=40)
         lf = MathTex(r"e^x", font_size=28, color=C.FUNC).next_to(ax.c2p(0.95, math.exp(0.95)), UL, buff=0.08)
         lt = MathTex(r"1 + x + \tfrac{x^2}{2}", font_size=24, color=C.APPROX).next_to(ax.c2p(1, 2.5), DOWN, buff=0.3)
-        bx = plain_axes([0, 1, 0.25], [-0.016, 0.016, 0.008], 5.0, 1.6).move_to([-3.7, -2.35, 0])
+        bx = plain_axes([0, 1, 0.25], [-0.02, 0.02, 0.01], 5.0, 1.6).move_to([-3.7, -2.35, 0])
+        bx.y_axis.add_numbers(-0.01, 0.01, num_decimal_places=2, font_size=18)
         r = fx - px
         gr = polyline(bx, xs, r, color=C.EPS, stroke_width=3)
         zero = DashedLine(bx.c2p(0, 0), bx.c2p(1, 0), color=GREY_C, stroke_width=1.5)
-        r_l = MathTex(r"e^x - Pe^x \ \ (\pm 0.016)", font_size=22, color=C.EPS).next_to(bx, UP, buff=0.05).align_to(bx, LEFT)
+        r_l = MathTex(r"e^x - Pe^x, \ \text{magnified}", font_size=24, color=C.EPS).next_to(bx, UP, buff=0.05).align_to(
+            bx, LEFT).shift(RIGHT * 0.5)
         sign_changes = int(np.sum(np.diff(np.sign(r)) != 0))
-        assert sign_changes >= 3 and np.abs(r).max() < 0.016
+        assert sign_changes >= 3 and np.abs(r).max() < 0.02
         right = VGroup(
             label(r"$M = \mathrm{span}\{1, x, x^2\}$ in $L^2[0, 1]$: \ nearest point $Pe^x = c_0 + c_1 x + c_2 x^2$",
                   font_size=24),
-            MathTex(r"\begin{pmatrix} 1 & \tfrac12 & \tfrac13 \\ \tfrac12 & \tfrac13 & \tfrac14 \\ \tfrac13 & \tfrac14 & "
+            MathTex(r"\renewcommand{\arraystretch}{1.35}\begin{pmatrix} 1 & \tfrac12 & \tfrac13 \\ \tfrac12 & \tfrac13 & \tfrac14 \\ \tfrac13 & \tfrac14 & "
                     r"\tfrac15 \end{pmatrix} \begin{pmatrix} c_0 \\ c_1 \\ c_2 \end{pmatrix} = "
                     r"\begin{pmatrix} \langle e^x, 1\rangle \\ \langle e^x, x\rangle \\ \langle e^x, x^2\rangle "
                     r"\end{pmatrix}", font_size=26),
@@ -207,8 +210,8 @@ class Projection(VoiceoverScene):
                 r_.width = 6.5
         right.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.3, -0.4, 0])
         assert np.all(np.abs(ip) < 1e-15) and terr > 10 * err
-        head = label(r"Projection onto a subspace: \ the error is perpendicular to it", font_size=32).to_edge(UP,
-                                                                                                           buff=0.25)
+        head = label(r"Projection onto a subspace: \ the error is perpendicular to it", font_size=34).to_edge(UP,
+                                                                                                           buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> When the convex set is a closed subspace, the nearest point is the orthogonal "
             "projection, and the error is perpendicular to the whole subspace. <bookmark mark='b'/> Project e to the "

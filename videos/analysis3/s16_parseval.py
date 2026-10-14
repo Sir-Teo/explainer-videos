@@ -93,7 +93,7 @@ class Parseval(VoiceoverScene):
         outline = Rectangle(width=W, height=0.7, stroke_color=WHITE, stroke_width=2).move_to([0, y, 0])
         tl = MathTex(r"\frac{1}{2\pi}\int |f|^2 = \frac{\pi^2}{12}", font_size=30).next_to(outline, UP, buff=0.15)
         tl.align_to(outline, RIGHT)
-        cols = [C.FREQ, C.CLOSED_SET, C.EPS, C.CONNECTED_SET, C.SEQ, C.INNER]
+        cols = [C.FREQ, interpolate_color(ManimColor(C.FREQ), ManimColor(WHITE), 0.45)]
 
         def filled(N):
             acc = 0.5 * sum(1.0 / k**2 for k in range(1, N + 1))
@@ -149,17 +149,17 @@ class Parseval(VoiceoverScene):
 
         e_fh, e_hP, e_fP, e_fs = l2(fx - hx), float(np.abs(hx - Px).max()), l2(fx - Px), l2(fx - sN)
         assert e_fs <= e_fP <= e_fh + e_hP and e_fs < 0.12
-        pax = plain_axes([-math.pi, math.pi, math.pi / 2], [-1.8, 1.8, 1], 7.0, 1.6).move_to([-2.8, -2.25, 0])
+        pax = plain_axes([-math.pi, math.pi, math.pi / 2], [-1.8, 1.8, 1], 7.0, 2.8).move_to([-2.8, -1.65, 0])
         m_ = xs > 0
-        pf = VGroup(polyline(pax, xs[m_][::10], fx[m_][::10], color=WHITE, stroke_width=3),
-                    polyline(pax, xs[~m_][::10], fx[~m_][::10], color=WHITE, stroke_width=3))
-        ph = polyline(pax, xs[::10], hx[::10], color=C.SEQ, stroke_width=2.5)
-        pP = polyline(pax, xs[::10], Px[::10], color=C.APPROX, stroke_width=2.5)
+        pf = VGroup(polyline(pax, xs[m_][::10], fx[m_][::10], color=WHITE, stroke_width=4.5),
+                    polyline(pax, xs[~m_][::10], fx[~m_][::10], color=WHITE, stroke_width=4.5))
+        ph = polyline(pax, xs[::10], hx[::10], color=C.SEQ, stroke_width=3)
+        pP = polyline(pax, xs[::10], Px[::10], color=C.APPROX, stroke_width=2)
         pn = VGroup(MathTex(r"f", r",\ h", r",\ P", font_size=26),
                     MathTex(rf"\|f - h\|_2 = {e_fh:.3f}", font_size=24, color=C.SEQ),
                     MathTex(rf"\sup |h - P| = {e_hP:.3f}", font_size=24, color=C.APPROX),
                     MathTex(rf"\|f - s_{{{NN}}}\|_2 = {e_fs:.3f} \le \|f - P\|_2 = {e_fP:.3f}", font_size=24,
-                            color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([1.1, -2.25, 0], RIGHT,
+                            color=C.EPS)).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([1.1, -1.65, 0], RIGHT,
                                                                                                buff=0)
         pn[0][1].set_color(C.SEQ)
         pn[0][2].set_color(C.APPROX)
@@ -206,19 +206,53 @@ class Parseval(VoiceoverScene):
                                                       r"\frac{1}{8\pi}\cdot\frac{2\pi^3}{3}$"),
                 why(r"$\frac{\pi - x}{2} = \sum \frac{\sin nx}{n}$: \ $c_{\pm n} = \mp\frac{i}{2n}$"),
                 why(r"multiply by $2$")]
-        head = label(r"The payoff: \ $\sum 1/n^2$, \ from Parseval \ (Rudin, Exercise 8.13)", font_size=32).to_edge(
-            UP, buff=0.35)
-        step = ladder(self, rows, whys, keep=4, top=2.65, buff=0.3, x=-1.6)
+        head = label(r"The payoff: \ $\sum 1/n^2$, \ from Parseval \ (Rudin, Exercise 8.13)", font_size=34).to_edge(
+            UP, buff=0.3)
+        step = ladder(self, rows, whys, keep=3, top=2.7, buff=0.3, x=-1.6)
+        # the picture: Parseval's bar (the energy pi^2/12, cut into the pairs +-n: 1/(2n^2) each), then doubled
+        tot = math.pi**2 / 12
+        sc_ = 4.0 / tot
+        xL, yb1, yb2, hb = -5.6, -1.2, -2.15, 0.42
+        two_shades = [C.FREQ, interpolate_color(ManimColor(C.FREQ), ManimColor(WHITE), 0.45)]
+
+        def bar(y_, k_):
+            segs_, acc_ = VGroup(), 0.0
+            for n_ in range(1, 61):
+                w_ = k_ * 0.5 / n_**2
+                segs_.add(Rectangle(width=sc_ * w_, height=hb, stroke_width=0.5 if n_ < 12 else 0, stroke_color=BLACK,
+                                    fill_color=two_shades[(n_ - 1) % 2], fill_opacity=0.85)
+                          .move_to([xL + sc_ * (acc_ + w_ / 2), y_, 0]))
+                acc_ += w_
+            rest_ = k_ * tot - acc_
+            assert 0 < rest_ < k_ * 0.5 / 60
+            segs_.add(Rectangle(width=sc_ * rest_, height=hb, stroke_width=0, fill_color=GREY_B, fill_opacity=0.85)
+                      .move_to([xL + sc_ * (acc_ + rest_ / 2), y_, 0]))
+            return segs_
+
+        b1 = bar(yb1, 1)
+        b2 = bar(yb2, 2)
+        o1 = Rectangle(width=sc_ * tot, height=hb, stroke_color=WHITE, stroke_width=2).move_to([xL + sc_ * tot / 2, yb1, 0])
+        o2 = Rectangle(width=sc_ * 2 * tot, height=hb, stroke_color=WHITE, stroke_width=2).move_to(
+            [xL + sc_ * tot, yb2, 0])
+        assert abs(b1.width - o1.width) < 1e-6 and abs(b2.width - 2 * b1.width) < 1e-6
+        l1 = MathTex(r"\tfrac{1}{2\pi}\textstyle\int |f|^2 = \tfrac{\pi^2}{12}", font_size=28).next_to(o1, RIGHT, buff=0.3)
+        pl = VGroup(*[MathTex(t_, font_size=22, color=two_shades[i]).next_to(b1[i], DOWN, buff=0.1)
+                      for i, t_ in enumerate((r"\pm1: \tfrac12", r"\pm2: \tfrac18"))])
+        assert pl[0].get_right()[0] < pl[1].get_left()[0]
+        l2 = MathTex(r"\sum \tfrac{1}{n^2} = \tfrac{\pi^2}{6} = " + f"{2 * tot:.4f}", font_size=30, color=C.EPS).next_to(
+            o2, RIGHT, buff=0.3)
+        x2 = MathTex(r"\times 2", font_size=30, color=C.EPS).next_to(o2, LEFT, buff=0.2)
+        assert l2.get_right()[0] < 6.6 and x2.get_left()[0] > -6.7 and abs(2 * tot - 1.6449) < 1e-4
         n = np.arange(1, 10**6 + 1)
         ps = np.cumsum(1.0 / n**2)
         nums = VGroup(*[MathTex(rf"\sum_{{n \le {k}}} \tfrac{{1}}{{n^2}} = {ps[k - 1]:.8f}", font_size=26)
                         for k in (10, 1000, 10**6)],
                       MathTex(rf"\tfrac{{\pi^2}}{{6}} = {math.pi**2 / 6:.8f}", font_size=26, color=C.EPS)
-                      ).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.7)
+                      ).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.85)
         if nums.width > 13.4:
             nums.width = 13.4
         nod = label(r"Euler, 1734 (the Basel problem); \ 3Blue1Brown proved it with lighthouses: \ this is "
-                    r"another way in", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.2)
+                    r"another way in", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.35)
         assert abs(lhs - math.pi**2 / 12) < 1e-6 and abs(2 * rhs - math.pi**2 / 6) < 2e-6
         with self.voiceover(
             "<bookmark mark='a'/> Parseval's equation, applied to the sawtooth, sums a famous series. On one side, the "
@@ -228,16 +262,19 @@ class Parseval(VoiceoverScene):
             "over n squared is pi squared over six. <bookmark mark='e'/> Euler found this in 1734; a 3Blue1Brown video "
             "proves it with lighthouses. Here it falls out of the geometry of Fourier series."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(o1))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1)
+            self.play(FadeIn(l1))
             vo.wait_until("c")
             step(2)
+            self.play(LaggedStart(*[GrowFromEdge(b_, LEFT) for b_ in b1], lag_ratio=0.05), FadeIn(pl), run_time=2.0)
             vo.wait_until("d")
             step(3)
-            self.play(Circumscribe(rows[3], color=C.EPS))
+            self.play(Create(o2), TransformFromCopy(b1, b2), FadeIn(x2), run_time=1.5)
+            self.play(FadeIn(l2), Circumscribe(rows[3], color=C.EPS))
             vo.wait_until("e")
             self.play(LaggedStart(*[FadeIn(m_) for m_ in nums], lag_ratio=0.3), FadeIn(nod), run_time=2.0)
         self.wait(0.4)
@@ -258,6 +295,20 @@ class Parseval(VoiceoverScene):
                                               "L2": lambda n: math.sqrt(math.pi * (math.pi**2 / 6 - sum(
                                                   1.0 / k**2 for k in range(1, max(1, round(n)) + 1))))})
         g = dash.graph(color=C.APPROX, stroke_width=3)
+        tube = dash.tube(opacity=0.11)
+        xw = np.linspace(0.002, 2 * np.pi - 0.002, 4000)
+
+        def worst():
+            n_ = max(1, round(dash.n.get_value()))
+            e_ = np.abs(saw_partial(xw, n_) - saw(xw))
+            j_ = int(np.argmax(e_))
+            return Line(ax.c2p(xw[j_], saw_partial(xw[j_:j_ + 1], n_)[0]), ax.c2p(xw[j_], saw(xw[j_:j_ + 1])[0]),
+                        color=C.PATHOLOGY, stroke_width=5)
+
+        wg = always_redraw(worst)
+        for n_ in (1, 10, 40):  # the worst gap sits next to a jump (x near 0 or 2 pi) and is close to pi / 2
+            e_ = np.abs(saw_partial(xw, n_) - saw(xw))
+            assert min(xw[np.argmax(e_)], 2 * np.pi - xw[np.argmax(e_)]) < 0.05 and abs(e_.max() - np.pi / 2) < 0.01
         lg = VGroup(Line(ax.c2p(0.003, saw(np.array([0.003]))[0]), ax.c2p(2 * np.pi - 0.003,
                                                                          saw(np.array([2 * np.pi - 0.003]))[0]),
                          color=WHITE, stroke_width=3))
@@ -265,7 +316,7 @@ class Parseval(VoiceoverScene):
         panel = dash.panel(font_size=26, width=4.6).move_to([3.9, 0.0, 0])
         nl = always_redraw(lambda: MathTex(rf"s_N, \ N = {max(1, round(dash.n.get_value()))}", font_size=30,
                                            color=C.APPROX).next_to(ax, UP, buff=0.1))
-        head = label(r"The sawtooth on the dashboard", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"The sawtooth on the dashboard", font_size=34).to_edge(UP, buff=0.3)
         verdict = VGroup(label(r"in energy: \ yes \ (Parseval)", font_size=24, color=C.CONNECTED_SET),
                          label(r"at each point: \ yes \ (Dini; \ $0$ at the jumps, the midpoint)", font_size=24,
                                color=C.CONNECTED_SET),
@@ -273,9 +324,10 @@ class Parseval(VoiceoverScene):
                                color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(panel, DOWN,
                                                                                                      buff=0.45)
         for r_ in verdict:
-            if r_.width > 6.0:
-                r_.width = 6.0
+            if r_.width > 5.4:
+                r_.width = 5.4
         verdict.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(panel, DOWN, buff=0.45)
+        verdict.shift((6.5 - verdict.get_right()[0]) * RIGHT if verdict.get_right()[0] > 6.5 else 0 * RIGHT)
         with self.voiceover(
             "<bookmark mark='a'/> Put the sawtooth's partial sums on the dashboard. <bookmark mark='b'/> The probe at "
             "one closes in, as Dini's test promised. The energy of the error goes to zero, as Parseval promised. "
@@ -289,10 +341,11 @@ class Parseval(VoiceoverScene):
             vo.wait_until("b")
             self.play(dash.n.animate.set_value(40), run_time=5.0, rate_func=linear)
             vo.wait_until("c")
+            self.play(FadeIn(tube), FadeIn(wg))
             self.play(*dash.light({"point": True, "sup": False, "L2": True}))
             self.play(FadeIn(verdict))
         dash.freeze()
-        for m in (g, probe, nl):
+        for m in (g, probe, nl, tube, wg):
             m.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
@@ -301,15 +354,17 @@ class Parseval(VoiceoverScene):
     def gibbs(self):
         d = load("parseval")
         GNs, gibbs, limit = d["GNs"], d["gibbs"], float(d["limit"])
-        ax = plain_axes([-0.3, 1.5, 0.5], [-0.2, 2.0, 0.5], 7.4, 4.6).move_to([-2.6, -0.8, 0])
-        x = np.concatenate([np.linspace(-0.3, -1e-4, 1200), np.linspace(1e-4, 1.5, 7000)])
+        ax = plain_axes([0, 1.5, 0.5], [0, 2.0, 0.5], 7.4, 4.6).move_to([-2.6, -0.8, 0])
+        x = np.linspace(1e-4, 1.5, 7000)
         fpos = Line(ax.c2p(1e-3, math.pi / 2), ax.c2p(1.5, (math.pi - 1.5) / 2), color=WHITE, stroke_width=3)
-        fneg = Line(ax.c2p(-0.3, (-math.pi + 0.3) / 2), ax.c2p(-1e-3, -math.pi / 2), color=WHITE, stroke_width=3)
+        jump = VGroup(Dot(ax.c2p(0, 0), radius=0.07, color=WHITE),
+                      Circle(radius=0.07, color=WHITE, stroke_width=2.5).set_fill(BACKGROUND, 1).move_to(
+                          ax.c2p(0, math.pi / 2)))  # f(0) = 0 (the midpoint of the jump); the limit from the right is pi/2
         top = math.pi / 2 + limit * math.pi
-        lvl = DashedLine(ax.c2p(-0.3, top), ax.c2p(1.5, top), color=C.PATHOLOGY, stroke_width=2)
+        lvl = DashedLine(ax.c2p(0, top), ax.c2p(1.5, top), color=C.PATHOLOGY, stroke_width=2)
         lvl_l = MathTex(r"\tfrac{\pi}{2} + 0.0895\,\pi", font_size=24, color=C.PATHOLOGY).next_to(lvl, UP, buff=0.05)
         lvl_l.align_to(lvl, RIGHT)
-        half = DashedLine(ax.c2p(-0.3, math.pi / 2), ax.c2p(1.5, math.pi / 2), color=GREY_B, stroke_width=1.5)
+        half = DashedLine(ax.c2p(0, math.pi / 2), ax.c2p(1.5, math.pi / 2), color=GREY_B, stroke_width=1.5)
         half_l = MathTex(r"\tfrac{\pi}{2}", font_size=24, color=GREY_B).next_to(half, LEFT, buff=0.1)
         shown = [10, 30, 100, 300]
         curves = [runs(ax, x, saw_partial(x, N), C.APPROX, 2.5) for N in shown]
@@ -341,7 +396,8 @@ class Parseval(VoiceoverScene):
         si_c = DashedVMobject(polyline(ia, tt_, si, color=WHITE, stroke_width=2.5), num_dashes=70)
         rc = [polyline(ia, tt_, r_, color=C.APPROX, stroke_width=2.5) for r_ in resc]
         ihalf = DashedLine(ia.c2p(0, math.pi / 2), ia.c2p(10, math.pi / 2), color=GREY_B, stroke_width=1.5)
-        ihead = label(r"stretch $x$ by $N$: \ every $s_N$ lands on one curve", font_size=24).next_to(ia, UP, buff=0.2)
+        ihead = label(r"stretch $x$ by $N$: \ every $s_N$ lands on one curve", font_size=22).next_to(ia, UP, buff=0.2)
+        ihalf_l = MathTex(r"\tfrac{\pi}{2}", font_size=22, color=GREY_B).next_to(ia.c2p(0, math.pi / 2), LEFT, buff=0.1)
         iform = MathTex(r"s_N(t/N) \;\to\; \mathrm{Si}(t) = \int_0^t \frac{\sin u}{u}\,du", font_size=26
                         ).next_to(ia, DOWN, buff=0.2)
         pk = Dot(ia.c2p(math.pi, si_pi), radius=0.07, color=C.PATHOLOGY)
@@ -364,7 +420,7 @@ class Parseval(VoiceoverScene):
             "1899. It's the visible face of non-uniform convergence, and it's why sharp edges in compressed images "
             "and audio come with ringing."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax), Create(fpos), Create(fneg), Create(half), FadeIn(half_l))
+            self.play(FadeIn(head[0]), Create(ax), Create(fpos), FadeIn(jump), Create(half), FadeIn(half_l))
             vo.wait_until("a")
             self.play(Create(curves[0]), FadeIn(nls[0]), FadeIn(tab[0]), FadeIn(tab[1]))
             vo.wait_until("b")
@@ -377,7 +433,7 @@ class Parseval(VoiceoverScene):
             self.play(FadeIn(tab[len(shown) + 1:]), FadeIn(note_))
             vo.wait_until("c")
             self.play(FadeOut(tab), FadeOut(note_))
-            self.play(Create(ia), Create(ihalf), FadeIn(ihead))
+            self.play(Create(ia), Create(ihalf), FadeIn(ihalf_l), FadeIn(ihead))
             self.play(Create(rc[0]), run_time=0.8)
             for k in range(1, len(rc)):
                 self.play(rc[k - 1].animate.set_stroke(opacity=0.3), Create(rc[k]), run_time=0.8)
@@ -411,7 +467,7 @@ class Parseval(VoiceoverScene):
             label(r"$\log$-convex $f$ with $f(x + 1) = x f(x)$, $f(1) = 1$", font_size=24),
             label(r"\textbf{Stirling} (8.22): \ $n! \approx (n/e)^n \sqrt{2\pi n}$", font_size=24, color=C.EPS),
             VGroup(*[MathTex(rf"n = {int(n)}: \ \text{{ratio}} \ {r:.5f}", font_size=24) for n, r in zip(sn, st)]
-                   ).arrange(DOWN, aligned_edge=LEFT, buff=0.06),
+                   ).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, -0.7, 0])
         assert all(abs(G(k + 1) - math.factorial(k)) < 1e-9 for k in range(5))
         assert abs(float(st[list(sn).index(1000)]) - 1) < 1e-4  # "within a hundredth of a percent at a thousand"

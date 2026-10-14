@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import load, plain_axes, polyline
+from videos.analysis6.common import left_y_axis, load, plain_axes, polyline
 
 
 class Convexity(VoiceoverScene):
@@ -27,9 +27,10 @@ class Convexity(VoiceoverScene):
     def definition(self):
         d = load("jensen")
         a, b = float(d["a"]), float(d["b"])
-        ax = plain_axes([-1.6, 2.0, 0.5], [0, 5.4, 1], 6.0, 4.6, numbers=True, font_size=18,
+        ax = plain_axes([-1.6, 2.0, 0.5], [0, 5.4, 1], 6.0, 4.2, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.0, -0.6, 0])
+                        y_axis_config={"include_numbers": False}).move_to([-3.0, -0.95, 0])
+        ynum = left_y_axis(ax, (1, 2, 3, 4, 5))  # numbered at the left edge: no chord runs through a number
         x = np.linspace(-1.6, 1.69, 600)
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         g_l = MathTex(r"\varphi(x) = e^x", font_size=30, color=C.FUNC).next_to(ax.c2p(1.69, math.exp(1.69)), LEFT,
@@ -54,16 +55,18 @@ class Convexity(VoiceoverScene):
             t = tT.get_value()
             g = (1 - t) * math.exp(a) + t * math.exp(b) - math.exp((1 - t) * a + t * b)
             return MathTex(rf"t = {t:.2f}: \ \text{{chord}} - \text{{graph}} = {g:.3f} \ge 0", font_size=28,
-                           color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.2)
+                           color=C.PATHOLOGY).next_to([0.9, 1.0, 0], RIGHT, buff=0)  # the right column
 
         gt = always_redraw(gap_text)
         for t in np.linspace(0, 1, 101):
             assert (1 - t) * math.exp(a) + t * math.exp(b) >= math.exp((1 - t) * a + t * b) - 1e-12
-        defn = VGroup(label(r"\textbf{RCA 3.1} \ $\varphi$ is convex on $(a, b)$ when", font_size=28),
-                      MathTex(r"\varphi\big((1 - t)x + ty\big) \le (1 - t)\varphi(x) + t\,\varphi(y)", font_size=32,
-                              color=C.EPS),
-                      label(r"for all $x, y$ and $0 \le t \le 1$: \ chords lie above the graph", font_size=24,
-                            color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
+        title = label(r"Convex functions: \ chords lie above the graph", font_size=34).to_edge(UP, buff=0.3)
+        defn = VGroup(title,
+                      VGroup(label(r"\textbf{RCA 3.1} \ $\varphi$ is convex on $(a, b)$ when", font_size=26),
+                             MathTex(r"\varphi\big((1 - t)x + ty\big) \le (1 - t)\varphi(x) + t\,\varphi(y)",
+                                     font_size=30, color=C.EPS)).arrange(RIGHT, buff=0.3),
+                      label(r"for all $x, y$ and $0 \le t \le 1$", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12)
+        defn.to_edge(UP, buff=0.3)
         # slopes of chords increase (RCA 3.2): s < t < u
         s_, t_, u_ = -1.0, 0.3, 1.4
         P = [np.array([z, math.exp(z)]) for z in (s_, t_, u_)]
@@ -78,7 +81,7 @@ class Convexity(VoiceoverScene):
             MathTex(rf"{sl[0]:.3f}", r"\ \le\ ", rf"{sl[1]:.3f}", r"\ \le\ ", rf"{sl[2]:.3f}", font_size=32),
             label(r"so a convex $\varphi$ is continuous on an open interval:", font_size=22, color=GREY_A),
             label(r"its graph is pinned between two chords at every point", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.95, -1.1, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to([0.9, -0.6, 0], RIGHT, buff=0)
         for i, c in zip((0, 2, 4), (C.CONNECTED_SET, C.APPROX, C.CLOSED_SET)):
             slopes[1][i].set_color(c)
         with self.voiceover(
@@ -90,9 +93,9 @@ class Convexity(VoiceoverScene):
             "a convex function on an open interval is automatically continuous."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(defn), Create(ax), Create(graph), FadeIn(g_l))
-            vo.wait_until("b")
+            self.play(FadeIn(defn), Create(ax), FadeIn(ynum), Create(graph), FadeIn(g_l))
             self.play(Create(chord), FadeIn(ends))
+            vo.wait_until("b")
             self.play(FadeIn(gp), FadeIn(gt))
             self.play(tT.animate.set_value(0.85), run_time=3.0)
             self.play(tT.animate.set_value(0.5), run_time=1.5)
@@ -110,9 +113,8 @@ class Convexity(VoiceoverScene):
     def jensen(self):
         d = load("jensen")
         worst = float(d["worst"])
-        ax = plain_axes([-1.4, 1.8, 0.5], [0, 6.2, 1], 6.0, 4.4, numbers=True, font_size=18,
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-3.0, -0.75, 0])
+        ax = plain_axes([-1.4, 1.8, 0.5], [0, 6.2, 1], 6.0, 4.4).move_to([-3.0, -0.45, 0])
+        ynum = left_y_axis(ax, (1, 2, 3, 4, 5, 6))  # numbered at the left edge, clear of the hull
         x = np.linspace(-1.4, 1.8, 600)
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         xs = np.array([-1.1, -0.4, 0.3, 1.0, 1.65])
@@ -133,9 +135,10 @@ class Convexity(VoiceoverScene):
             w = weights()
             g = VGroup()
             for z, wi in zip(xs, w):
-                g.add(Dot(ax.c2p(z, math.exp(z)), radius=0.04 + 0.22 * math.sqrt(wi), color=C.MEASURE,
+                g.add(Dot(ax.c2p(z, math.exp(z)), radius=0.04 + 0.12 * math.sqrt(wi), color=C.MEASURE,
                           fill_opacity=0.85))
-                g.add(Line(ax.c2p(z, 0), ax.c2p(z, 0.0) + UP * (1.6 * wi), color=C.MEASURE, stroke_width=8))
+                # the weight as a bar hanging below the axis, clear of the curve and its dots
+                g.add(Line(ax.c2p(z, 0), ax.c2p(z, 0.0) + DOWN * (1.0 * wi + 0.01), color=C.MEASURE, stroke_width=8))
             mx, my = float(w @ xs), float(w @ np.exp(xs))
             g.add(Line(ax.c2p(mx, math.exp(mx)), ax.c2p(mx, my), color=C.PATHOLOGY, stroke_width=4))
             g.add(Dot(ax.c2p(mx, my), radius=0.08, color=C.EPS))
@@ -182,10 +185,10 @@ class Convexity(VoiceoverScene):
                     color=GREY_A),
         )
         for r_ in thm:
-            if r_.width > 6.3:
-                r_.width = 6.3
+            if r_.width > 6.0:
+                r_.width = 6.0
         thm.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([0.55, -1.55, 0], RIGHT, buff=0)
-        head = label(r"Weights on a convex curve: \ the center of mass lies above the curve", font_size=32).to_edge(
+        head = label(r"Weights on a convex curve: \ the center of mass lies above it", font_size=34).to_edge(
             UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Now put weights on several points of the curve, orange, adding up to one. Their "
@@ -196,7 +199,7 @@ class Convexity(VoiceoverScene):
             "integral of f is at most the integral of phi of f. The proof is one picture: a straight line below phi, "
             "touching it at the average, integrated."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), Create(graph))
+            self.play(FadeIn(head), Create(ax), FadeIn(ynum), Create(graph))
             vo.wait_until("a")
             self.play(FadeIn(hull), FadeIn(pts))
             vo.wait_until("b")
@@ -223,7 +226,7 @@ class Convexity(VoiceoverScene):
         graph = polyline(ax, x, np.exp(x), color=C.FUNC, stroke_width=4)
         pts = VGroup(*[Dot(ax.c2p(z, v), radius=0.08, color=C.MEASURE) for z, v in zip(L, a)])
         plabels = VGroup(*[MathTex(rf"(\log {int(v)},\ {int(v)})", font_size=22, color=C.MEASURE).next_to(
-            ax.c2p(z, v), (UR, RIGHT, LEFT)[i], buff=0.15) for i, (z, v) in enumerate(zip(L, a))])  # (log 1, 1) above the axis
+            ax.c2p(z, v), (LEFT, RIGHT, LEFT)[i], buff=0.15) for i, (z, v) in enumerate(zip(L, a))])  # (log 1, 1) left of the axis
         tri = Polygon(*[ax.c2p(z, v) for z, v in zip(L, a)], stroke_color=GREY_C, stroke_width=1.5,
                       fill_color=GREY_C, fill_opacity=0.12)
         mx, am = float(L.mean()), float(a.mean())
@@ -232,6 +235,8 @@ class Convexity(VoiceoverScene):
         top, bot = Dot(ax.c2p(mx, am), radius=0.09, color=C.EPS), Dot(ax.c2p(mx, gm), radius=0.08, color=C.DELTA)
         gap = Line(ax.c2p(mx, gm), ax.c2p(mx, am), color=C.PATHOLOGY, stroke_width=5)
         tl = MathTex(r"\tfrac{1 + 8 + 27}{3} = 12", font_size=28, color=C.EPS).next_to(top, LEFT, buff=0.2)
+        tl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.06)  # over the hull's edge
+        tl.set_z_index(2)
         bl = MathTex(r"(1 \cdot 8 \cdot 27)^{1/3} = 6", font_size=28, color=C.DELTA).next_to(bot, RIGHT, buff=0.2).shift(
             DOWN * 0.25)
         side = VGroup(

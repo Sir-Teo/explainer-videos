@@ -74,7 +74,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def failures(self):
         d = load("failures")
-        head = label(r"Three sequences of functions $f_n \to f$, \ and three swaps that fail", font_size=32)
+        head = label(r"Three sequences of functions $f_n \to f$, \ and three swaps that fail", font_size=34)
         head.to_edge(UP, buff=0.3)
         W, H = 3.9, 2.9
         xs = (-4.55, 0.0, 4.55)

@@ -23,6 +23,36 @@ def cplot(ax: Axes, F, xr, yr, px=720, rings=True, mask=None) -> ImageMobject:
     return img.move_to((p0 + p1) / 2)
 
 
+def cplot_fine(ax: Axes, F, xr, yr, px=960, ss=3, rings=True, mask=None) -> ImageMobject:
+    """Like ``cplot``, but each pixel is the average of ss x ss samples (computed a band of rows at a time), so
+    rings and phases that turn faster than a pixel blend to their mean instead of aliasing into speckle; ``mask``
+    gets the same treatment, so its edge is anti-aliased. For essential singularities (Hook, Beurling)."""
+    p0, p1 = ax.c2p(xr[0], yr[0]), ax.c2p(xr[1], yr[1])
+    w, h = p1[0] - p0[0], p1[1] - p0[1]
+    py = max(2, int(px * h / w))
+    xs = xr[0] + (np.arange(px * ss) + 0.5) / (px * ss) * (xr[1] - xr[0])
+    ys = yr[1] - (np.arange(py * ss) + 0.5) / (py * ss) * (yr[1] - yr[0])
+    out = np.zeros((py, px, 4))
+    band = 32
+    for r0 in range(0, py, band):
+        r1 = min(py, r0 + band)
+        X, Y = np.meshgrid(xs, ys[r0 * ss:r1 * ss])
+        Z = X + 1j * Y
+        with np.errstate(all="ignore"):
+            rgb = domain_rgb(F(Z), rings=rings)
+        a = np.ones(Z.shape) if mask is None else mask(Z).astype(float)
+        nr = r1 - r0
+        A = a.reshape(nr, ss, px, ss).sum(axis=(1, 3))
+        RGB = (rgb * a[..., None]).reshape(nr, ss, px, ss, 3).sum(axis=(1, 3))
+        out[r0:r1, :, :3] = RGB / np.maximum(A, 1e-12)[..., None]
+        out[r0:r1, :, 3] = A / ss**2
+    img = ImageMobject((np.clip(out, 0, 1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
+    img.stretch_to_fit_width(w)
+    img.stretch_to_fit_height(h)
+    return img.move_to((p0 + p1) / 2)
+
+
 def zcurve(ax: Axes, z, color, stroke_width=3.0, closed=False) -> VMobject:
     """A polyline through the complex points z on ax."""
     z = np.asarray(z)

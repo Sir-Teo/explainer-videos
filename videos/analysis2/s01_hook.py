@@ -130,8 +130,8 @@ class Hook(VoiceoverScene):
         K = len(s)
         ax = plain_axes([0, K, 1000], [2.5, 3.7, 0.5], 9.8, 2.8, numbers=False).move_to(DOWN * 1.35 + LEFT * 0.6)
         tgt = DashedLine(ax.c2p(0, math.pi), ax.c2p(K, math.pi), color=C.EPS, stroke_width=2)
-        # the first 25 partial sums (1 ... 2.48) lie below the window: the curve enters through its floor
-        assert int((s < 2.5).sum()) == 25 and s.max() < 3.7
+        # the first 20 partial sums (1 ... 2.49) lie below the window: the curve enters through its floor
+        assert int((s < 2.5).sum()) == 20 and np.all(s[20:] >= 2.5) and s.max() < 3.7
         curve = runs_in_range(ax, np.arange(1, K + 1), s, 2.5, 3.7, color=C.SEQ, stroke_width=2)
         kl = label(r"terms used $\to$", font_size=22, color=GREY_B).next_to(ax.x_axis.get_end(), DOWN, buff=0.15).shift(LEFT * 0.7)
         pl = MathTex(r"\pi", font_size=30, color=C.EPS).next_to(ax.c2p(K, math.pi), RIGHT, buff=0.1)

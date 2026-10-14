@@ -150,8 +150,10 @@ class Integral(VoiceoverScene):
         side = VGroup(MathTex(r"f_n = \min\big(x^{-1/2}, n\big) \nearrow x^{-1/2}", font_size=30, color=C.FUNC),
                       MathTex(r"\int_0^1 x^{-1/2}\,dx = 2", font_size=32),
                       label(r"no uniformity, \ no lid: \ only monotonicity", font_size=26, color=C.EPS),
-                      label(r"(the limit is unbounded: \ for Riemann an improper integral)", font_size=22,
-                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.0, -0.6, 0])
+                      label(r"(the limit is unbounded: \ an improper Riemann integral)", font_size=22,
+                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        side.next_to([ax.get_right()[0] + 0.35, -0.6, 0], RIGHT, buff=0)
+        assert side.get_right()[0] < 6.6
         assert np.all(np.diff(ints) > 0) and abs(ints[-1] - (2 - 1 / 40)) < 1e-12
         with self.voiceover(
             "<bookmark mark='a'/> The first limit theorem is the monotone convergence theorem: if non-negative "
@@ -178,7 +180,7 @@ class Integral(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def proof(self):
-        ax = plain_axes([0, 2, 0.5], [0, 2.0, 0.5], 7.2, 4.0).move_to([-2.8, -0.55, 0])
+        ax = plain_axes([0, 2, 0.5], [0, 2.0, 0.5], 6.6, 3.8).move_to([-3.15, -0.4, 0])
         x = np.linspace(0, 2, 1601)
         f = 1.1 + 0.45 * np.sin(4 * x) + 0.15 * x
         edges = np.linspace(0, 2, 9)
@@ -241,10 +243,10 @@ class Integral(VoiceoverScene):
                       MathTex("s", font_size=30, color=C.MEASURE).next_to(ax.c2p(2, svals[-1]), RIGHT, buff=0.1),
                       MathTex("cs", font_size=26, color=C.MEASURE).next_to(ax.c2p(2, c * svals[-1]), RIGHT, buff=0.1))
         x_free = max(l_.get_right()[0] for l_ in labs) + 0.25  # the text column starts right of the curve labels
-        if rows.get_left()[0] < x_free:
-            if rows.width > 6.95 - x_free:
-                rows.width = 6.95 - x_free
-            rows.shift((x_free - rows.get_left()[0]) * RIGHT)
+        if rows.width > 6.55 - x_free:  # the column fits between the curve labels and the right margin
+            rows.width = 6.55 - x_free
+        rows.shift((x_free - rows.get_left()[0]) * RIGHT)
+        assert rows.get_right()[0] <= 6.56
         with self.voiceover(
             "<bookmark mark='a'/> The proof is short and worth seeing. The integrals of f n increase, so they have a "
             "limit alpha, at most the integral of f. <bookmark mark='b'/> For the other direction, fix a simple "

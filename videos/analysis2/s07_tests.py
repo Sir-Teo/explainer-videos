@@ -43,9 +43,9 @@ class Tests(VoiceoverScene):
         n_max = 30
         thm = VGroup(label(r"\textbf{Root test} (Rudin 3.33) \ Let $\alpha = \limsup \sqrt[n]{|a_n|}$.", font_size=30),
                      label(r"$\alpha < 1$: \ converges; \qquad $\alpha > 1$: \ diverges; \qquad $\alpha = 1$: \ no "
-                           r"information", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
+                           r"information", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ax, ticks = self._log_axes(n_max)
-        VGroup(ax, ticks).shift(UP * 0.35)  # room for the comparison line along the bottom
+        VGroup(ax, ticks).shift(UP * 0.45)  # room for the comparison line along the bottom
         n = np.arange(1, n_max + 1)
         dots = VGroup(*[Dot(ax.c2p(k, math.log10(a[k - 1]) + 8), radius=0.055, color=C.SEQ if k % 2 else C.CUT_HIGH)
                         for k in n])
@@ -62,7 +62,7 @@ class Tests(VoiceoverScene):
         env_l = MathTex(r"\beta^n,\ \beta = 0.75", font_size=28, color=C.EPS).next_to(
             ax.c2p(n_max * 0.62, 8 + n_max * 0.62 * math.log10(beta)), UR, buff=0.08)
         why_ = label(r"$\alpha < \beta < 1$: \ eventually $\sqrt[n]{|a_n|} < \beta$, \ i.e.\ $|a_n| < \beta^n$: "
-                     r"\ compare with the geometric series", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.2)
+                     r"\ compare with the geometric series", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The root test. <bookmark mark='t'/> Take the upper limit of the n-th roots of the terms, and call it "
             "alpha. If alpha is less than one, the series converges; if it's bigger than one, it diverges; if it's "
@@ -91,10 +91,10 @@ class Tests(VoiceoverScene):
         n_max = 30
         thm = VGroup(label(r"\textbf{Ratio test} (Rudin 3.34) \ $\limsup \left|\tfrac{a_{n+1}}{a_n}\right| < 1$: "
                            r"converges; \ \ $\left|\tfrac{a_{n+1}}{a_n}\right| \ge 1$ from some $n$ on: diverges",
-                           font_size=28),).to_edge(UP, buff=0.35)
+                           font_size=28),).to_edge(UP, buff=0.3)
         # left: log10 of the ratio, shifted up by 3 so the horizontal axis sits at 10^-3, along the bottom
-        axl = plain_axes([0, n_max + 1, 10], [0, 6, 1], 5.6, 3.6, numbers=False).move_to([-3.4, -0.55, 0])
-        axr = plain_axes([0, n_max + 1, 10], [0, 1.2, 0.5], 5.6, 3.6, numbers=False).move_to([3.4, -0.55, 0])
+        axl = plain_axes([0, n_max + 1, 10], [0, 6, 1], 5.6, 3.6, numbers=False).move_to([-3.4, -0.3, 0])
+        axr = plain_axes([0, n_max + 1, 10], [0, 1.2, 0.5], 5.6, 3.6, numbers=False).move_to([3.4, -0.3, 0])
         lr = np.log10(ratios[:n_max])
         assert -3 < lr.min() and lr.max() < 3  # every ratio inside the window
         lt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=20, color=GREY_B).next_to(axl.c2p(0, k + 3), LEFT, buff=0.15)
@@ -110,9 +110,9 @@ class Tests(VoiceoverScene):
         tl = MathTex(r"\left|\tfrac{a_{n+1}}{a_n}\right|", font_size=30, color=C.PATHOLOGY).next_to(axl, UP, buff=0.1)
         tr = MathTex(r"\sqrt[n]{|a_n|}", font_size=30, color=C.CONNECTED_SET).next_to(axr, UP, buff=0.1)
         vl = label(r"$\to 0$ and $\to \infty$: \ the ratio test is silent", font_size=24, color=C.PATHOLOGY).next_to(
-            axl, DOWN, buff=0.2)
+            axl, DOWN, buff=0.5)
         vr = label(r"$\limsup = 1/\sqrt2 < 1$: \ the root test proves convergence", font_size=24,
-                   color=C.CONNECTED_SET).next_to(axr, DOWN, buff=0.2)
+                   color=C.CONNECTED_SET).next_to(axr, DOWN, buff=0.5)
         with self.voiceover(
             "The ratio test compares consecutive terms instead. <bookmark mark='t'/> If the ratios are eventually below "
             "something less than one, the series converges. <bookmark mark='a'/> For the same series, the ratios jump "
@@ -128,7 +128,7 @@ class Tests(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(x) for x in od], lag_ratio=0.04), FadeIn(vr))
         chain = MathTex(r"\liminf \left|\tfrac{a_{n+1}}{a_n}\right| \le \liminf \sqrt[n]{|a_n|} \le \limsup "
                         r"\sqrt[n]{|a_n|} \le \limsup \left|\tfrac{a_{n+1}}{a_n}\right|", font_size=32, color=C.EPS)
-        chain.to_edge(DOWN, buff=0.25)
+        chain.to_edge(DOWN, buff=0.4)
         chain_n = note(r"Rudin 3.37: \ whenever the ratio test decides, the root test does too").next_to(chain, UP,
                                                                                                         buff=0.1)
         with self.voiceover(
@@ -155,7 +155,8 @@ class Tests(VoiceoverScene):
                             background_line_style={"stroke_color": GREY_D, "stroke_width": 1, "stroke_opacity": 0.5},
                             axis_config={"stroke_color": GREY_C}).move_to(o)
         disk = Circle(radius=u, stroke_color=C.EPS, stroke_width=3, fill_color=C.EPS, fill_opacity=0.1).move_to(o)
-        disk_l = MathTex(r"|z| = R = 1", font_size=26, color=C.EPS).move_to(P(-1.75 + 2.0j))
+        # the disk's label sits above the plane (off the grid), with a leader down to the circle
+        disk_l = MathTex(r"|z| = R = 1", font_size=26, color=C.EPS).move_to([-5.0, 2.95, 0])
         disk_lead = Line(disk_l.get_bottom() + DOWN * 0.05, P(np.exp(0.7j * np.pi)), color=C.EPS, stroke_width=1.5)
         disk_l = VGroup(disk_l, disk_lead)
         thm = VGroup(label(r"\textbf{Power series} (Rudin 3.39)", font_size=30),
@@ -180,7 +181,8 @@ class Tests(VoiceoverScene):
                 s_in, out = s[: keep[0]], s[keep[0]]
                 m.set_points_as_corners([P(z) for z in s_in])
                 ar = Arrow(P(s_in[-1]), P(out), buff=0, color=color, stroke_width=3, max_tip_length_to_length_ratio=0.15)
-                lab = MathTex(r"\to \infty", font_size=28, color=color).next_to(ar.get_end(), UR, buff=0.05)
+                lab = MathTex(r"\to \infty", font_size=28, color=color).next_to(ar.get_end(), LEFT, buff=0.1).shift(
+                    UP * 0.18)
                 return VGroup(m, ar, lab)
             m.set_points_as_corners([P(z) for z in s])
             return m
@@ -257,7 +259,7 @@ class Tests(VoiceoverScene):
         wall = VGroup(DashedLine(ax.c2p(-1, 0), ax.c2p(-1, 2), color=C.PATHOLOGY, stroke_width=2),
                       DashedLine(ax.c2p(1, 0), ax.c2p(1, 2), color=C.PATHOLOGY, stroke_width=2))
         q = label(r"smooth on all of $\R$, \ so why stop at $|x| = 1$?", font_size=28).move_to([3.4, 2.7, 0])
-        o = np.array([3.4, -0.7, 0])
+        o = np.array([3.4, -0.45, 0])
         u = 1.3
         plane = NumberPlane(x_range=[-2, 2, 1], y_range=[-2, 2, 1], x_length=4 * u, y_length=4 * u,
                             background_line_style={"stroke_color": GREY_D, "stroke_width": 1, "stroke_opacity": 0.5},
@@ -265,7 +267,8 @@ class Tests(VoiceoverScene):
         disk = Circle(radius=u, stroke_color=C.EPS, stroke_width=3, fill_color=C.EPS, fill_opacity=0.1).move_to(o)
         poles = VGroup(*[VGroup(Cross(stroke_color=C.PATHOLOGY, stroke_width=5).scale_to_fit_width(0.26).move_to(
                                     o + u * s * UP),
-                                MathTex(t, font_size=28, color=C.PATHOLOGY).next_to(o + u * s * UP, RIGHT, buff=0.3))
+                                MathTex(t, font_size=28, color=C.PATHOLOGY).next_to(o + u * s * UP, UR if s > 0 else DR,
+                                                                                    buff=0.14))
                          for s, t in ((1, r"i"), (-1, r"-i"))])
         real = Line(o + LEFT * 2 * u, o + RIGHT * 2 * u, color=C.FUNC, stroke_width=5)
         ans = label(r"$1 + z^2 = 0$ at $z = \pm i$: \ the disk can't reach past them", font_size=26,

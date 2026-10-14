@@ -9,6 +9,23 @@ from videos.analysis2.common import load, plain_axes, polyline
 from videos.analysis2.compute import rough
 
 
+def zoom_view(f, x0, center, S, w, rescale, color, stroke_width=3) -> VMobject:
+    """The graph of f near x0 in a square of side S at ``center``, showing [x0 - w, x0 + w]: at the same scale both
+    ways, or (``rescale``) stretched vertically to fill the square."""
+    x = np.linspace(x0 - w, x0 + w, 700)
+    y = f(x)
+    if rescale:
+        lo, hi = y.min(), y.max()
+        mid, half = (lo + hi) / 2, max((hi - lo) / 2, 1e-12) * 1.15
+    else:
+        mid, half = f(np.array([x0]))[0], w
+    X = center[0] + (x - x0) / w * S / 2
+    Y = center[1] + np.clip((y - mid) / half, -1, 1) * S / 2
+    m = VMobject(color=color, stroke_width=stroke_width)
+    m.set_points_as_corners(np.c_[X, Y, np.zeros_like(X)])
+    return m
+
+
 class Derivative(VoiceoverScene):
     def construct(self):
         self.card()
@@ -52,9 +69,29 @@ class Derivative(VoiceoverScene):
         dfn = VGroup(label(r"\textbf{Rudin 5.1}", font_size=30),
                      MathTex(r"f'(x) = \lim_{t \to x} \frac{f(t) - f(x)}{t - x}", font_size=38)).arrange(DOWN, buff=0.2)
         dfn.move_to([3.9, 1.6, 0])
-        slope = always_redraw(lambda: Text(f"secant slope = {(f(tT.get_value()) - f(x0)) / (tT.get_value() - x0):.3f}",
-                                           font_size=26, color=C.APPROX).move_to([3.9, 0.1, 0]))
-        lim = MathTex(rf"f'(x) = {fp(x0):.3f}", font_size=30, color=C.EPS).move_to([3.9, -0.6, 0])
+        def cur_slope():
+            return (f(tT.get_value()) - f(x0)) / (tT.get_value() - x0)
+
+        s_lab = MathTex(r"\text{secant slope} =", font_size=32, color=C.APPROX)
+        s_val = DecimalNumber(cur_slope(), num_decimal_places=3, font_size=32, color=C.APPROX)
+        slope = VGroup(s_lab, s_val).arrange(RIGHT, buff=0.15).move_to([3.9, 0.1, 0])
+        s_val.add_updater(lambda m: m.set_value(cur_slope()).next_to(s_lab, RIGHT, buff=0.15))
+        # x fixed, t sliding, marked on the horizontal axis (t's label fades as it reaches x)
+        xmark = VGroup(Line(ax.c2p(x0, 0) + DOWN * 0.08, ax.c2p(x0, 0) + UP * 0.08, color=WHITE),
+                       MathTex(r"x", font_size=28).next_to(ax.c2p(x0, 0), DOWN, buff=0.15))
+        tmark = VGroup(Line(DOWN * 0.08, UP * 0.08, color=C.APPROX), MathTex(r"t", font_size=28, color=C.APPROX))
+        tmark[1].next_to(tmark[0], DOWN, buff=0.15)
+
+        def move_t(m):
+            t = tT.get_value()
+            m.shift(ax.c2p(t, 0) - m[0].get_center())
+            m.set_opacity(float(np.clip((t - x0 - 0.1) / 0.35, 0, 1)))
+
+        tmark.add_updater(move_t)
+        move_t(tmark)
+        lim = MathTex(rf"f'(x) = {fp(x0):.3f}", font_size=32, color=C.EPS).next_to(slope, DOWN, buff=0.3).align_to(slope,
+                                                                                                          LEFT)
+        assert abs((f(x0 + 0.02) - f(x0)) / 0.02 - fp(x0)) < 0.01
         with self.voiceover(
             "<bookmark mark='a'/> The derivative of f at x is the limit of the difference quotient: the slope of the "
             "line through the point at x and a second point at t, <bookmark mark='b'/> as t slides toward x. "
@@ -62,12 +99,12 @@ class Derivative(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), Create(g))
             vo.wait_until("a")
-            self.play(FadeIn(dfn), FadeIn(p), FadeIn(q), Create(sec), FadeIn(slope))
+            self.play(FadeIn(dfn), FadeIn(p), FadeIn(q), Create(sec), FadeIn(slope), FadeIn(xmark), FadeIn(tmark))
             vo.wait_until("b")
             self.play(tT.animate.set_value(x0 + 0.02), run_time=3.5, rate_func=smooth)
             vo.wait_until("c")
             self.play(Create(tan), FadeIn(lim))
-        for m in (sec, q, slope):
+        for m in (sec, q, s_val, tmark):
             m.clear_updaters()
         self.clear_scene()
 
@@ -79,36 +116,22 @@ class Derivative(VoiceoverScene):
         smooth_f = lambda x: 0.6 * np.sin(2 * x) + 0.2 * x * x  # noqa: E731
         fs = (smooth_f, np.abs, lambda x: rough(x) * 0.5)
         titles = (r"a smooth function", r"$|x|$ at $0$", r"Rudin 7.18 \ (rescaled vertically)")
-        cols = (C.CONNECTED_SET, C.FREQ, C.PATHOLOGY)
+        cols = (C.CONNECTED_SET, C.CUT_HIGH, C.PATHOLOGY)
         centers = (np.array([-4.5, -0.6, 0]), np.array([0.0, -0.6, 0]), np.array([4.5, -0.6, 0]))
 
         def view(i):
-            def draw():
-                w = 10 ** lw.get_value()
-                f, x0, c = fs[i], x0s[i], centers[i]
-                x = np.linspace(x0 - w, x0 + w, 700)
-                y = f(x)
-                if i == 2:
-                    lo, hi = y.min(), y.max()
-                    mid, half = (lo + hi) / 2, max((hi - lo) / 2, 1e-12) * 1.15
-                else:
-                    mid, half = f(np.array([x0]))[0], w
-                X = c[0] + (x - x0) / w * S / 2
-                Y = c[1] + np.clip((y - mid) / half, -1, 1) * S / 2
-                m = VMobject(color=cols[i], stroke_width=3)
-                m.set_points_as_corners(np.c_[X, Y, np.zeros_like(X)])
-                return m
-
-            return always_redraw(draw)
+            return always_redraw(lambda: zoom_view(fs[i], x0s[i], centers[i], S, 10 ** lw.get_value(), i == 2, cols[i]))
 
         boxes = VGroup(*[Square(side_length=S, color=GREY_C, stroke_width=2).move_to(c) for c in centers])
         tl = VGroup(*[label(t, font_size=24, color=c).next_to(b, UP, buff=0.15) for t, c, b in zip(titles, cols, boxes)])
         views = [view(i) for i in range(3)]
-        wl = always_redraw(lambda: Text(f"view width 2 \u00d7 {sci_text(10 ** lw.get_value(), 1)}", font_size=24,
-                                        color=GREY_B).to_edge(DOWN, buff=0.5))
-        head = label(r"Zoom in, and a differentiable function looks straight", font_size=34).to_edge(UP, buff=0.45)
+        w_lab = MathTex(r"\text{magnification} \times", font_size=30, color=GREY_B)
+        w_val = Integer(1, font_size=30, color=GREY_B)
+        wl = VGroup(w_lab, w_val).arrange(RIGHT, buff=0.12).to_edge(DOWN, buff=0.5)
+        w_val.add_updater(lambda m: m.set_value(int(round(10 ** -lw.get_value()))).next_to(w_lab, RIGHT, buff=0.12))
+        head = label(r"Zoom in, and a differentiable function looks straight", font_size=34).to_edge(UP, buff=0.3)
         verdicts = VGroup(label(r"a line: \ slope $f'(x)$", font_size=24, color=C.CONNECTED_SET),
-                          label(r"a corner at every scale", font_size=24, color=C.FREQ),
+                          label(r"a corner at every scale", font_size=24, color=C.CUT_HIGH),
                           label(r"rough at every scale: \ no slope anywhere", font_size=24, color=C.PATHOLOGY))
         for v, b in zip(verdicts, boxes):
             v.next_to(b, DOWN, buff=0.2)
@@ -128,7 +151,8 @@ class Derivative(VoiceoverScene):
             self.play(FadeIn(verdicts[2]))
         d = load("wiggle")
         assert np.all(np.abs(d["rough_quot"]) >= (3.0 ** np.arange(1, 9) + 1) / 2 - 1e-6)
-        for m in (*views, wl):
+        assert w_val.get_value() == 1000
+        for m in (*views, w_val):
             m.clear_updaters()
         self.clear_scene()
 
@@ -144,10 +168,25 @@ class Derivative(VoiceoverScene):
             label(r"the converse fails: $|x|$, \ and Rudin's function, continuous everywhere, differentiable nowhere",
                   font_size=26, color=C.PATHOLOGY),
         )
-        rows[0].to_edge(UP, buff=0.35)
+        rows[0].to_edge(UP, buff=0.3)
         rows[1].next_to(rows[0], DOWN, buff=0.25)
-        rows[2].to_edge(DOWN, buff=0.3)
-        VGroup(rows[3], rows[4], rows[5]).arrange(DOWN, buff=0.35).move_to([0, -0.6, 0])
+        rows[2].to_edge(DOWN, buff=0.35)
+        # Rudin 5.2 in the right column, its one line split in two
+        r4 = VGroup(MathTex(r"f(t) - f(x) = \frac{f(t) - f(x)}{t - x}\,(t - x)", font_size=32),
+                    MathTex(r"\to f'(x) \cdot 0 = 0", font_size=32)).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        rows.submobjects[4] = r4
+        VGroup(rows[3], rows[4]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.55, 0.3, 0])
+        rows[5].to_edge(DOWN, buff=0.4)
+        # the converse fails: |x| at 0 and Rudin's nowhere-differentiable function, both still unstraightened at x1000
+        zS, zc = 2.5, (np.array([-4.7, -0.95, 0]), np.array([-1.6, -0.95, 0]))
+        zb = VGroup(*[Square(side_length=zS, color=GREY_C, stroke_width=2).move_to(c) for c in zc])
+        zc_curves = VGroup(zoom_view(np.abs, 0.0, zc[0], zS, 1e-3, False, C.CUT_HIGH),
+                           zoom_view(lambda x: rough(x) * 0.5, 0.3, zc[1], zS, 1e-3, True, C.PATHOLOGY))
+        zt = VGroup(label(r"$|x|$ at $0$", font_size=24, color=C.CUT_HIGH).next_to(zb[0], UP, buff=0.12),
+                    label(r"Rudin 7.18", font_size=24, color=C.PATHOLOGY).next_to(zb[1], UP, buff=0.12),
+                    label(r"both at $\times 1000$: \ continuous, not straight", font_size=24, color=GREY_A).next_to(
+                        zb, DOWN, buff=0.15))
+        zpic = VGroup(zb, zc_curves, zt)
         # the picture: tangent line at x, and the error r(h) between it and the curve, as h shrinks (a convex
         # curve, so the error sits on top of the tangent's rise instead of overlapping it)
         f = lambda x: 0.35 + 0.12 * x**2 + 0.03 * x**3  # noqa: E731
@@ -209,10 +248,12 @@ class Derivative(VoiceoverScene):
             vo.wait_until("c")
             for m in (pc, trace, bdot):
                 m.clear_updaters()
-            self.play(FadeOut(VGroup(pic, pc, trace, bdot, rows[2])), run_time=0.6)
+            # the tangent picture stays (near x the curve hugs the line, so f(t) -> f(x)); the r(h)/h plot goes
+            self.play(FadeOut(VGroup(bx, blab, trace, bdot, rows[2])), run_time=0.6)
             self.play(FadeIn(rows[3]), FadeIn(rows[4]))
             vo.wait_until("d")
-            self.play(FadeIn(rows[5]))
+            self.play(FadeOut(VGroup(ax, g, tan, P, pc, tags[3])), run_time=0.5)
+            self.play(FadeIn(zb), Create(zc_curves), FadeIn(zt), FadeIn(rows[5]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -221,7 +262,7 @@ class Derivative(VoiceoverScene):
         head = VGroup(label(r"\textbf{Chain rule} (Rudin 5.5): \ $h = g \circ f$, \ $h'(x) = g'(f(x))\, f'(x)$",
                             font_size=30),
                       label(r"two zooms composed: \ stretch by $f'(x)$, then by $g'(f(x))$", font_size=26,
-                            color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.35)
+                            color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         ys = (1.2, -0.3, -1.8)
         lines = VGroup(*[Line([-6, y, 0], [-0.6, y, 0], color=GREY_C, stroke_width=2) for y in ys])
         names = VGroup(*[MathTex(t, font_size=30).next_to(l, LEFT, buff=0.2) for t, l in zip((r"x", r"y", r"z"), lines)])
@@ -238,7 +279,7 @@ class Derivative(VoiceoverScene):
                         font_size=32)]
         whys = [why(r"$u(t) \to 0$ as $t \to x$", font_size=22), why(r"$v(s) \to 0$ as $s \to y$", font_size=22),
                 why(r"$s = f(t)$; \ let $t \to x$", font_size=22)]
-        step = ladder(self, rows, whys, keep=3, top=1.3, buff=0.5, x=2.3, edge=6.95)
+        step = ladder(self, rows, whys, keep=3, top=1.3, buff=0.5, x=2.0, edge=6.6)
         trick = label(r"Rudin's trick avoids dividing by $f(t) - f(x)$, which can be $0$", font_size=24,
                       color=C.EPS).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -270,15 +311,15 @@ class Derivative(VoiceoverScene):
     def wiggle(self):
         d = load("wiggle")
         h, q = d["h"], d["q"]
-        ax = plain_axes([-0.4, 0.4, 0.2], [-0.12, 0.12, 0.1], 6.2, 4.2, numbers=False).move_to([-3.3, -0.9, 0])
+        ax = plain_axes([-0.4, 0.4, 0.2], [-0.12, 0.12, 0.1], 6.2, 4.2, numbers=False).move_to([-3.3, -0.65, 0])
         u = np.linspace(1 / 0.4, 400, 60000)
         x = np.r_[-1 / u, 1 / u[::-1]]  # left to right through 0
         y = x * x * np.sin(1 / x)
         g = polyline(ax, x, y, color=C.FUNC, stroke_width=2.5)
-        env = VGroup(ax.plot(lambda t: t * t, x_range=[-0.35, 0.35], color=GREY_B, stroke_width=1.5),
-                     ax.plot(lambda t: -t * t, x_range=[-0.35, 0.35], color=GREY_B, stroke_width=1.5))
+        env = VGroup(ax.plot(lambda t: t * t, x_range=[-0.32, 0.32], color=GREY_B, stroke_width=1.5),
+                     ax.plot(lambda t: -t * t, x_range=[-0.32, 0.32], color=GREY_B, stroke_width=1.5))
         fl = MathTex(r"f(x) = x^2 \sin\tfrac1x,\ \ f(0) = 0", font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.15)
-        ax2 = plain_axes([-0.4, 0.4, 0.2], [-1.4, 1.4, 1], 6.2, 4.2, numbers=False).move_to([3.4, -0.9, 0])
+        ax2 = plain_axes([-0.4, 0.4, 0.2], [-1.4, 1.4, 1], 6.2, 4.2, numbers=False).move_to([3.4, -0.65, 0])
         u2 = np.linspace(1 / 0.4, 160, 60000)
         x2 = np.r_[-1 / u2, 1 / u2[::-1]]
         y2 = 2 * x2 * np.sin(1 / x2) - np.cos(1 / x2)

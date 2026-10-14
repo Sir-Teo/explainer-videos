@@ -79,17 +79,38 @@ class Outro(VoiceoverScene):
                        Line(ax.c2p(0, 1), ax.c2p(2, 1), color=C.APPROX, stroke_width=3.5))
         epsT = ValueTracker(0.5)
 
+        top = ax.y_range[1]
+
+        def halves(y):
+            # the spike cut where it leaves the window (never flattened against the top), as two pieces, left and right
+            # of the peak, so the redrawn curve keeps one shape whether or not it fits
+            out = VGroup()
+            for side in (x <= 0, x >= 0):
+                xs, ys = x[side], y[side]
+                k = np.flatnonzero(ys > top)
+                if len(k) and side[0]:  # left half, rising: stop at the crossing
+                    i = k[0]
+                    xc = xs[i - 1] + (top - ys[i - 1]) * (xs[i] - xs[i - 1]) / (ys[i] - ys[i - 1])
+                    xs, ys = np.append(xs[:i], xc), np.append(ys[:i], top)
+                elif len(k):  # right half, falling: start at the crossing
+                    i = k[-1]
+                    xc = xs[i] + (ys[i] - top) * (xs[i + 1] - xs[i]) / (ys[i] - ys[i + 1])
+                    xs, ys = np.insert(xs[i + 1:], 0, xc), np.insert(ys[i + 1:], 0, top)
+                out.add(polyline(ax, xs, ys, color=C.DISTRIBUTION, stroke_width=3))
+            return out
+
         def bump():  # the derivative of the smoothed sign erf(x / (e sqrt 2)): a Gaussian of total mass 2
             e = epsT.get_value()
-            y = 2 * np.exp(-x * x / (2 * e * e)) / (e * math.sqrt(2 * math.pi))
-            return polyline(ax, x, np.minimum(y, 2.2), color=C.EPS, stroke_width=3)
+            return halves(2 * np.exp(-x * x / (2 * e * e)) / (e * math.sqrt(2 * math.pi)))
 
         # off the top of the axes: say so. A separate mobject, so the redrawn curve keeps one shape throughout
-        # (a group that grows a member mid-animation makes become() scramble the points)
+        # (a group that grows a member mid-animation makes become() scramble the points); it fades in as the peak
+        # passes the top
         peak = lambda: 2 / (epsT.get_value() * math.sqrt(2 * math.pi))  # noqa: E731
-        up = Arrow(ax.c2p(0, 1.75), ax.c2p(0, 2.55), buff=0, color=C.EPS, stroke_width=3,
+        assert peak() < top  # eps = 0.5: the whole bump fits at first
+        up = Arrow(ax.c2p(0, 1.75), ax.c2p(0, 2.55), buff=0, color=C.DISTRIBUTION, stroke_width=3,
                    max_tip_length_to_length_ratio=0.35)
-        up.add_updater(lambda m: m.set_opacity(1.0 if peak() > 2.2 else 0.0))
+        up.add_updater(lambda m: m.set_opacity(float(np.clip((peak() - top) / 0.4, 0, 1))))
 
         xx_ = np.linspace(-2, 2, 200001)
         for e_ in (0.5, 0.08):
@@ -100,8 +121,8 @@ class Outro(VoiceoverScene):
         lab = VGroup(MathTex(r"|x|", font_size=28, color=C.FUNC).next_to(ax.c2p(1.5, 1.5), DR, buff=0.1),
                      MathTex(r"|x|' = \operatorname{sign} x", font_size=26, color=C.APPROX).next_to(ax.c2p(1.0, -0.9), RIGHT,
                                                                                                 buff=0.1),
-                     MathTex(r"(\operatorname{sign} x)' = 2\delta", font_size=26, color=C.EPS).next_to(ax.c2p(0.2, 1.9),
-                                                                                                    RIGHT, buff=0.1))
+                     MathTex(r"(\operatorname{sign} x)' = 2\delta", font_size=26, color=C.DISTRIBUTION).next_to(
+                         ax.c2p(0.2, 1.9), RIGHT, buff=0.1))
         side = VGroup(
             label(r"differentiate anything: \ $f' $ is defined by", font_size=26),
             MathTex(r"\langle f', \varphi\rangle = -\langle f, \varphi'\rangle", font_size=32, color=C.EPS),
@@ -119,7 +140,8 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(head), Create(ax), Create(g_abs), FadeIn(lab[0]))
             vo.wait_until("a")
             self.play(Create(g_sgn), FadeIn(lab[1]))
-            self.add(bp, up.update())
+            self.play(Create(bp), run_time=0.8)  # the wide bump first, then it narrows into the spike
+            self.add(up.update())
             self.play(epsT.animate.set_value(0.08), FadeIn(lab[2]), run_time=3.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in side], lag_ratio=0.4), run_time=3.0)

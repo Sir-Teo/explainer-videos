@@ -42,7 +42,7 @@ class LimSup(VoiceoverScene):
         ex = MathTex(r"s_n = (-1)^n\big(1 + \tfrac1n\big)", font_size=34, color=C.SEQ).move_to([-4.3, 1.45, 0])
         dfn = VGroup(label(r"$E$ = the set of subsequential limits (in $[-\infty, +\infty]$)", font_size=28),
                      MathTex(r"\limsup_{n\to\infty} s_n = \sup E, \qquad \liminf_{n\to\infty} s_n = \inf E",
-                             font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
+                             font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         ref = note(r"Rudin 3.16").next_to(dfn, RIGHT, buff=0.3).align_to(dfn, DOWN)
         e_here = MathTex(r"E = \{-1, 1\}", font_size=34).next_to(ex, RIGHT, buff=0.6)
         dots.set_z_index(1)  # the dots stay above the water marks drawn later
@@ -112,7 +112,7 @@ class LimSup(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 3.17} \ $s^* = \limsup s_n$ is the only number with:", font_size=28),
                      label(r"(a) \ some subsequence converges to $s^*$;", font_size=26, color=GREY_A),
                      label(r"(b) \ for every $x > s^*$, only finitely many $s_n$ exceed $x$.", font_size=26,
-                           color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.35)
+                           color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.3)
 
         def count(x):
             return int((a > x).sum())
@@ -145,7 +145,7 @@ class LimSup(VoiceoverScene):
             m.clear_updaters()
         self.play(FadeOut(VGroup(lev, x_l, cnt_l)), dots.animate.set_color(C.SEQ))
         conv = label(r"$s_n$ converges $\iff \limsup s_n = \liminf s_n$ \ (then both equal the limit)", font_size=30,
-                     color=C.EPS).to_edge(DOWN, buff=0.25)
+                     color=C.EPS).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "<bookmark mark='c'/> And a sequence converges exactly when its upper and lower limits agree: the "
             "high-water and low-water marks squeeze together, onto the limit."
@@ -165,7 +165,7 @@ class LimSup(VoiceoverScene):
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([0, -1.2, 0])
         dots = VGroup(*[Dot(ax.c2p(k, v), radius=0.022, color=C.RATIONAL) for k, v in enumerate(r, start=1)])
         head = MathTex(r"0,\ 1,\ \tfrac12,\ \tfrac13,\ \tfrac23,\ \tfrac14,\ \tfrac34,\ \tfrac15,\ \ldots", font_size=38,
-                       color=C.RATIONAL).to_edge(UP, buff=0.4)
+                       color=C.RATIONAL).to_edge(UP, buff=0.3)
         sub = label(r"every rational in $[0, 1]$, listed by denominator", font_size=26, color=GREY_A).next_to(head, DOWN,
                                                                                                            buff=0.15)
         target = 1 / math.sqrt(2)
@@ -203,7 +203,7 @@ class LimSup(VoiceoverScene):
     def special(self):
         d = load("sequences")
         n, rr = d["n"], d["r"]
-        head = label(r"\textbf{Rudin 3.20} \ Five limits worth knowing", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"\textbf{Rudin 3.20} \ Five limits worth knowing", font_size=34).to_edge(UP, buff=0.3)
         mains = [r"\tfrac{1}{n^p} \to 0", r"\sqrt[n]{p} \to 1", r"\sqrt[n]{n} \to 1", r"\tfrac{n^\alpha}{(1 + p)^n} \to 0",
                  r"x^n \to 0"]
         conds = [r"$p > 0$", r"$p > 0$", r"\phantom{$p$}", r"$p > 0$", r"$|x| < 1$"]
@@ -301,8 +301,8 @@ class LimSup(VoiceoverScene):
         ylab = MathTex(r"\log_{10} \frac{n^{10}}{1.1^n}", font_size=26).next_to(ax.c2p(0, 12), LEFT, buff=0.6)
         curve = polyline(ax, k, lgv, color=C.SEQ, stroke_width=3.5)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(1000, 0), color=GREY_B, stroke_width=1.5)
-        head = label(r"$\dfrac{n^\alpha}{(1+p)^n} \to 0$: \ exponentials beat powers, eventually", font_size=32)
-        head.to_edge(UP, buff=0.35)
+        head = label(r"$\dfrac{n^\alpha}{(1+p)^n} \to 0$: \ exponentials beat powers, eventually", font_size=34)
+        head.to_edge(UP, buff=0.3)
         pk = Dot(ax.c2p(peak, lg_max), radius=0.07, color=WHITE)
         val = 10 ** lg_max
         pk_l = MathTex(rf"n = {peak}:\ \ \frac{{n^{{10}}}}{{1.1^n}} \approx {sci(val, 1)}", font_size=28).next_to(pk, UR,
