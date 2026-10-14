@@ -1,0 +1,323 @@
+{
+ "title": "分析学，从零搭建 · 第10部分：巴拿赫代数与谱定理",
+ "chapters": {
+  "Hook": "谱的两种含义",
+  "BanachAlgebras": "1. 巴拿赫代数",
+  "Spectrum": "2. 谱",
+  "SymbolicCalculus": "3. 算子的函数",
+  "Gelfand": "4. 盖尔范德理论",
+  "HilbertOperators": "5. 希尔伯特空间上的算子",
+  "CompactSelfAdjoint": "6. 紧自伴算子",
+  "NoEigenvectors": "7. 没有特征向量的谱",
+  "SpectralTheorem": "8. 谱定理",
+  "Unbounded": "9. 无界算子",
+  "Cayley": "10. 凯莱变换",
+  "Stone": "11. 斯通定理",
+  "QuantumClosure": "12. 这对量子力学证明了什么",
+  "Outro": "账本的最后一行"
+ },
+ "lines": {
+  "45674ac38f23": {
+   "scene": "Hook",
+   "en": "Nine rows of the ledger are filled. The last part is about operators, <bookmark mark='l'/> and what it means to diagonalize one.",
+   "zh": "账本已经填好了九行。最后这一部分讲的是算子，<bookmark mark='l'/>以及把一个算子对角化是什么意思。"
+  },
+  "148800fdb1d0": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Spectrum is the word for the lines of light a hot gas gives off. Hydrogen's visible lines sit at these wavelengths, computed from Rydberg's formula. <bookmark mark='b'/> And spectrum is the word for the set of complex numbers lambda where T minus lambda has no inverse. <bookmark mark='c'/> It's the same word for a reason: the energy levels of the atom are the spectrum of an operator, the Hamiltonian, and each line is a jump between two levels. <bookmark mark='d'/> The quantum videos assumed that such operators can be diagonalized. This part proves it.",
+   "zh": "<bookmark mark='a'/>“光谱”这个词，原本指炽热气体发出的一条条谱线。氢的可见谱线就在这些波长上，由里德伯公式算出。<bookmark mark='b'/>而“谱”这个词也指这样一些复数λ构成的集合：在这些λ处，T减λ没有逆。<bookmark mark='c'/>用同一个词并非巧合：原子的能级，就是一个算子，也就是哈密顿量的谱，而每条谱线都是两个能级之间的一次跃迁。<bookmark mark='d'/>量子那几期视频假定了这样的算子可以对角化。这一部分要证明它。"
+  },
+  "16514a424aec": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Here's the first surprise. The shift on square-summable sequences moves every entry one slot to the right. <bookmark mark='b'/> It has no eigenvalues: S x equal to lambda x forces the first entry to vanish, then the next, then all of them. <bookmark mark='c'/> Its adjoint, the backward shift, drops the first entry, and for every lambda inside the unit disc the geometric sequence one, lambda, lambda squared is an eigenvector. Two hundred of them, checked. <bookmark mark='d'/> So the spectrum of the shift is the whole closed disc, though it has not a single eigenvalue.",
+   "zh": "<bookmark mark='a'/>第一个意外是这样的。平方可和序列上的移位算子，把每一项都往右挪一格。<bookmark mark='b'/>它没有特征值：S x等于λ x，迫使第一项为0，接着是下一项，然后是所有项。<bookmark mark='c'/>它的伴随，也就是向后移位，丢掉第一项，而对单位圆盘内的每个λ，几何序列1、λ、λ的平方……都是一个特征向量。这里验证了两百个。<bookmark mark='d'/>所以移位算子的谱是整个闭圆盘，尽管它连一个特征值都没有。"
+  },
+  "d41f74e9d463": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> A computer can only hold a finite piece of the shift: an N by N block whose only eigenvalue is zero. <bookmark mark='b'/> But measure how close T minus lambda is to failing to be invertible: the glow is the size of the inverse. Inside the disc it's astronomically large, like one over lambda to the N, and the contours spread outward as N grows. <bookmark mark='c'/> The eigenvalues lie, but the resolvent tells the truth. That's why the spectrum is defined by invertibility, not by eigenvectors.",
+   "zh": "<bookmark mark='a'/>计算机只能装下移位算子的有限一块：一个N乘N的块，它唯一的特征值是0。<bookmark mark='b'/>但是来度量一下，T减λ离不可逆有多近：光晕表示逆的大小。在圆盘内部，它大得惊人，像λ的N次方分之1那样，而且随着N增大，等值线向外扩展。<bookmark mark='c'/>特征值会说谎，预解式却说真话。这就是为什么谱要用可逆性来定义，而不是用特征向量。"
+  },
+  "b2f930efa401": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters ten to thirteen of Functional Analysis. <bookmark mark='a'/> First the algebra: Banach algebras, the spectrum, functions of an operator, and Gelfand's theory. <bookmark mark='b'/> Then Hilbert space, where the spectral theorem diagonalizes compact operators, then operators with no eigenvectors at all, then every normal operator. <bookmark mark='c'/> Then the unbounded operators of physics, and what all of it proves about quantum mechanics.",
+   "zh": "计划是这样的，跟着《泛函分析》的第10到第13章走。<bookmark mark='a'/>首先是代数：巴拿赫代数、谱、算子的函数，以及盖尔范德的理论。<bookmark mark='b'/>然后是希尔伯特空间，谱定理在那里先对角化紧算子，再对角化根本没有特征向量的算子，最后是每一个正规算子。<bookmark mark='c'/>再然后是物理学里的无界算子，以及这一切对量子力学证明了什么。"
+  },
+  "3d0d24c2f975": {
+   "scene": "BanachAlgebras",
+   "en": "Chapter one: Banach algebras, where elements can be multiplied as well as added.",
+   "zh": "第一章：巴拿赫代数，元素在其中既能相加，也能相乘。"
+  },
+  "7fd420b355af": {
+   "scene": "BanachAlgebras",
+   "en": "<bookmark mark='a'/> A Banach algebra is a complete normed space where you can also multiply, with the norm of a product at most the product of the norms. <bookmark mark='b'/> The continuous functions on a compact set, with the pointwise product. <bookmark mark='b2'/> The bounded operators on a Banach space, with composition: the main example. <bookmark mark='b3'/> The integrable functions with convolution, from Part 9, <bookmark mark='b4'/> and summable sequences with convolution, <bookmark mark='b5'/> and the disc algebra of Part 7. <bookmark mark='c'/> Test the rule: in two thousand random trials of each kind, the ratio piles up below one and never crosses it.",
+   "zh": "<bookmark mark='a'/>巴拿赫代数是一个也能做乘法的完备赋范空间，乘积的范数不超过范数的乘积。<bookmark mark='b'/>紧集上的连续函数，配上逐点乘积。<bookmark mark='b2'/>巴拿赫空间上的有界算子，配上复合：这是最主要的例子。<bookmark mark='b3'/>第9部分里配上卷积的可积函数，<bookmark mark='b4'/>配上卷积的可和序列，<bookmark mark='b5'/>还有第7部分的圆盘代数。<bookmark mark='c'/>检验一下这条规则：每一类各做两千次随机试验，比值都堆在1以下，从来没有越过1。"
+  },
+  "39cddb4871cd": {
+   "scene": "BanachAlgebras",
+   "en": "<bookmark mark='a'/> The first tool is the oldest series there is. Multiply I minus A by one plus A plus up to A to the n, and everything telescopes to I minus A to the n plus one. <bookmark mark='b'/> If the norm of A is below one, that last term dies, so I minus A is invertible, and its inverse is the geometric series: the Neumann series. <bookmark mark='c'/> For a random matrix of norm 0.8, the partial sums close in on the inverse, always under the geometric bound.",
+   "zh": "<bookmark mark='a'/>第一件工具，是最古老的那个级数。用I减A乘以（1加A，一直加到A的n次方），一切都裂项相消，只剩下I减A的n加1次方。<bookmark mark='b'/>如果A的范数小于1，最后这一项就消失了，所以I减A可逆，它的逆就是几何级数：诺伊曼级数。<bookmark mark='c'/>对一个范数为0.8的随机矩阵，部分和逐渐逼近它的逆，始终在几何级数的界之下。"
+  },
+  "4c7159467fb4": {
+   "scene": "BanachAlgebras",
+   "en": "<bookmark mark='a'/> Here's a slice through the two by two matrices, around the identity. The red circle is where the determinant vanishes. <bookmark mark='b'/> The Neumann series says: if x is invertible, anything closer to x than one over the norm of x inverse is invertible too. Around the identity that's a disc of radius one, and around this matrix A, radius 0.6. <bookmark mark='c'/> Both discs touch the singular circle exactly, so the bound is sharp. The invertible elements form an open set, and inversion is continuous: the lemma from Part 4, in its final home.",
+   "zh": "<bookmark mark='a'/>这是二乘二矩阵空间在单位矩阵附近的一个切片。红色的圆是行列式为0的地方。<bookmark mark='b'/>诺伊曼级数说：如果x可逆，那么任何离x比x的逆的范数分之1还近的东西，也都可逆。在单位矩阵周围，这是一个半径为1的圆盘；在这个矩阵A周围，半径是0.6。<bookmark mark='c'/>两个圆盘都恰好碰到奇异的圆，所以这个界是精确的。可逆元构成一个开集，求逆是连续的：这就是第4部分的那条引理，找到了它最终的归宿。"
+  },
+  "222548794986": {
+   "scene": "Spectrum",
+   "en": "Chapter two: the spectrum, which is never empty, and how big it is.",
+   "zh": "第二章：谱，它从不为空，以及它有多大。"
+  },
+  "693f54c4833a": {
+   "scene": "Spectrum",
+   "en": "<bookmark mark='a'/> For a six by six matrix, here's the trace of the resolvent, lambda minus A inverse, colored by phase. It's holomorphic except at the eigenvalues, where it has poles. <bookmark mark='b'/> In any Banach algebra the same is true. Outside the circle of radius the norm of x, the Neumann series inverts x minus lambda, and the invertibles are open, so the spectrum is closed and bounded. <bookmark mark='c'/> And it's never empty: if it were, every functional of the resolvent would be an entire function going to zero at infinity, so zero, by Liouville's theorem, and then Hahn-Banach makes the resolvent itself zero, which is absurd. <bookmark mark='d'/> A corollary: a Banach algebra where every nonzero element is invertible is just the complex numbers.",
+   "zh": "<bookmark mark='a'/>对一个六乘六的矩阵，这是预解式的迹，也就是（λ减A）的逆的迹，按相位着色。除了在特征值处有极点以外，它处处全纯。<bookmark mark='b'/>在任何巴拿赫代数里，情况都一样。在半径为x的范数的圆外，诺伊曼级数能求出x减λ的逆，而可逆元构成开集，所以谱是有界闭集。<bookmark mark='c'/>而且它从不为空：如果为空，预解式的每个泛函都会是一个在无穷远处趋于0的整函数，由刘维尔定理，它就是0，于是由哈恩–巴拿赫定理，预解式本身为0，这是荒谬的。<bookmark mark='d'/>一个推论：每个非零元都可逆的巴拿赫代数，就只是复数域。"
+  },
+  "c99b3ea14026": {
+   "scene": "Spectrum",
+   "en": "<bookmark mark='a'/> Expand the resolvent in powers of one over lambda. That's a Laurent series, Part 7's tool, and it converges exactly outside the smallest circle that contains the spectrum. <bookmark mark='b'/> By the root test from Part 2, its radius is the limit of the n-th root of the norm of x to the n. That's Gelfand's spectral radius formula: a purely algebraic, metric quantity equals the size of the spectrum. <bookmark mark='c'/> For ten random matrices, the n-th roots start well above the largest eigenvalue, and settle onto it, within a tenth of a percent by n equal to a thousand.",
+   "zh": "<bookmark mark='a'/>把预解式按λ分之1的幂展开。这是一个洛朗级数，第7部分的工具，它恰好在包含谱的最小圆之外收敛。<bookmark mark='b'/>由第2部分的根值判别法，它的半径就是x的n次方的范数开n次方的极限。这就是盖尔范德的谱半径公式：一个纯粹由代数和度量给出的量，等于谱的大小。<bookmark mark='c'/>对十个随机矩阵，n次方根一开始远高于最大的特征值，然后稳定到它上面，到n等于1000时，误差已在千分之一以内。"
+  },
+  "cb8acea3ae48": {
+   "scene": "Spectrum",
+   "en": "<bookmark mark='a'/> Part 8's Volterra operator integrates from zero. Its norm is two over pi. <bookmark mark='b'/> Its powers are repeated integrals, with kernel x minus t to the n minus one over n minus one factorial, and their norms collapse like one over n factorial: n factorial times the norm tends to one half. <bookmark mark='c'/> So the n-th roots go to zero, and by Gelfand's formula the spectrum is the single point zero. <bookmark mark='d'/> Yet zero isn't an eigenvalue, because if V f vanishes, so does its derivative, which is f. A nonzero operator, a one-point spectrum, and no eigenvector at all.",
+   "zh": "<bookmark mark='a'/>第8部分的沃尔泰拉算子从0开始积分。它的范数是π分之2。<bookmark mark='b'/>它的各次幂是重复的积分，核是（x减t）的（n减1）次方，再除以（n减1）的阶乘，它们的范数像n的阶乘分之1那样崩塌：n的阶乘乘以范数，趋于二分之一。<bookmark mark='c'/>所以n次方根趋于0，而由盖尔范德公式，谱就是单独一个点0。<bookmark mark='d'/>可0并不是特征值，因为如果V f等于0，它的导数也等于0，而那个导数就是f。一个非零算子，谱只有一个点，而且根本没有特征向量。"
+  },
+  "d3d7df36690e": {
+   "scene": "SymbolicCalculus",
+   "en": "Chapter three: applying functions to operators, with Cauchy's formula.",
+   "zh": "第三章：用柯西公式，把函数作用到算子上。"
+  },
+  "fd10c56a07f1": {
+   "scene": "SymbolicCalculus",
+   "en": "<bookmark mark='a'/> How do you take the exponential of a matrix, or of any element of a Banach algebra? Part 7 already answered it. Cauchy's formula recovers a holomorphic function from its values on a circle, through the kernel one over lambda minus z. <bookmark mark='b'/> Put the operator in place of z: the kernel becomes the resolvent. Integrate around a contour enclosing the spectrum, and you get f of A. <bookmark mark='c'/> For a random matrix, with the exponential and a hundred twenty-eight points on the circle, the result matches the exponential computed the usual way, to rounding error.",
+   "zh": "<bookmark mark='a'/>怎样求一个矩阵的指数，或者巴拿赫代数里任何元素的指数？第7部分已经回答了。柯西公式通过核λ减z分之1，从一个全纯函数在圆周上的值恢复出这个函数。<bookmark mark='b'/>把算子放到z的位置上：核就变成了预解式。沿着一条围住谱的围道积分，就得到f(A)。<bookmark mark='c'/>对一个随机矩阵，取指数函数，在圆周上取128个点，结果与用通常方法算出的矩阵指数，在舍入误差范围内吻合。"
+  },
+  "3df2a4ab283c": {
+   "scene": "SymbolicCalculus",
+   "en": "<bookmark mark='a'/> And the spectrum goes along. The eigenvalues of A, on the left, <bookmark mark='b'/> are carried by the exponential to the eigenvalues of e to the A, on the right, while the grid around them is bent by the same map. <bookmark mark='c'/> That's the spectral mapping theorem: the spectrum of f of A is f of the spectrum of A, for every holomorphic f, in every Banach algebra.",
+   "zh": "<bookmark mark='a'/>而谱也跟着走。左边是A的特征值，<bookmark mark='b'/>它们被指数函数送到右边，成为e的A次方的特征值，而它们周围的网格，也被同一个映射掰弯了。<bookmark mark='c'/>这就是谱映射定理：对每个全纯函数f，在每个巴拿赫代数里，f(A)的谱，就是f作用在A的谱上。"
+  },
+  "4b398856d4ab": {
+   "scene": "SymbolicCalculus",
+   "en": "<bookmark mark='a'/> Square roots need care, because the square root isn't holomorphic across its branch cut. <bookmark mark='a2'/> Shift the matrix so its spectrum sits in the right half-plane, <bookmark mark='b'/> and take a contour that encloses the spectrum without touching the cut. The same formula, with the square root in it, gives a matrix whose square is B, to rounding error. <bookmark mark='c'/> Logarithms and fractional powers work the same way, and Runge's theorem from Part 7 explains why rational functions are enough. One famous consequence of this circle of ideas, Lomonosov's theorem, finds nontrivial invariant subspaces with a fixed-point argument.",
+   "zh": "<bookmark mark='a'/>平方根需要小心，因为平方根在它的割线两侧不是全纯的。<bookmark mark='a2'/>平移这个矩阵，让它的谱落在右半平面，<bookmark mark='b'/>再取一条围住谱、又不碰到割线的围道。同一个公式，把平方根放进去，就得到一个平方等于B的矩阵，误差在舍入范围内。<bookmark mark='c'/>对数和分数次幂也是同样的做法，而第7部分的龙格定理解释了为什么有理函数就够用。这一套想法有一个著名的推论，洛莫诺索夫定理，它用一个不动点论证找到了非平凡的不变子空间。"
+  },
+  "f3a2558c150c": {
+   "scene": "Gelfand",
+   "en": "Chapter four: Gelfand's theory, which turns every commutative Banach algebra into functions.",
+   "zh": "第四章：盖尔范德的理论，它把每个交换的巴拿赫代数都变成函数。"
+  },
+  "28e23ef09546": {
+   "scene": "Gelfand",
+   "en": "<bookmark mark='a'/> In a commutative Banach algebra, the maximal ideals are exactly the kernels of the homomorphisms to the complex numbers. Gelfand's idea: evaluate x at every homomorphism. That turns x into a continuous function on the space of homomorphisms, which is compact, by Alaoglu's theorem. <bookmark mark='b'/> In summable sequences under convolution, the homomorphisms are indexed by an angle theta: sum a n times e to the i n theta. <bookmark mark='c'/> So the Gelfand transform of a sequence is its Fourier series, a closed curve in the plane. <bookmark mark='d'/> And the spectrum of x is the range of its transform: here, the curve itself.",
+   "zh": "<bookmark mark='a'/>在交换的巴拿赫代数里，极大理想恰好就是到复数的同态的核。盖尔范德的想法是：在每个同态处对x取值。这就把x变成同态空间上的一个连续函数，而由阿劳格鲁定理，这个空间是紧的。<bookmark mark='b'/>在配上卷积的可和序列里，同态由一个角度θ来标记：a_n乘e的i nθ次方之和。<bookmark mark='c'/>所以一个序列的盖尔范德变换，就是它的傅里叶级数，平面上的一条闭曲线。<bookmark mark='d'/>而x的谱，就是它的变换的值域：在这里，就是这条曲线本身。"
+  },
+  "14ae78023169": {
+   "scene": "Gelfand",
+   "en": "<bookmark mark='a'/> Here's what that buys. Our curve never passes through zero. Wiener asked: does one over it also have absolutely summable Fourier coefficients? <bookmark mark='b'/> Computed by fast Fourier transform: the coefficients of one over f decay like one over n squared, and their absolute sums settle at 2.65427. <bookmark mark='c'/> Gelfand's proof is three lines. The transform never vanishes, so the sequence lies in no maximal ideal. So it's invertible in the algebra, and the inverse transforms to one over f. Wiener's original proof took pages.",
+   "zh": "<bookmark mark='a'/>这带来了什么，看下面。我们的曲线从不经过0。维纳问过：它的倒数，傅里叶系数也绝对可和吗？<bookmark mark='b'/>用快速傅里叶变换来算：f分之1的系数像n的平方分之1那样衰减，它们的绝对值之和稳定在2.65427。<bookmark mark='c'/>盖尔范德的证明只有三行。变换从不为0，所以这个序列不落在任何极大理想里。因此它在这个代数里可逆，而它的逆变换之后就是f分之1。维纳原来的证明写了好几页。"
+  },
+  "142f357fd004": {
+   "scene": "Gelfand",
+   "en": "<bookmark mark='a'/> Add an adjoint, with the norm of x star x equal to the norm of x squared, the identity that holds for operators on Hilbert space. Then Gelfand-Naimark says: a commutative such algebra is exactly an algebra of continuous functions, with nothing lost. <bookmark mark='b'/> The dictionary: a normal element becomes the coordinate z on its spectrum, its adjoint becomes z bar, and any continuous f of it becomes f composed with z. <bookmark mark='c'/> For a normal matrix this is concrete. Its adjoint is a polynomial in the matrix, the one that interpolates z bar at the eigenvalues, and a square root computed two ways agrees to rounding error. <bookmark mark='d'/> And by the Gelfand-Naimark-Segal construction, every C-star algebra, commutative or not, is an algebra of operators.",
+   "zh": "<bookmark mark='a'/>再加上一个伴随运算，满足x*x的范数等于x的范数的平方，这正是希尔伯特空间上的算子满足的恒等式。于是盖尔范德–奈马克定理说：这样一个交换代数，恰好就是一个连续函数代数，什么也没有丢失。<bookmark mark='b'/>对照表是：一个正规元，变成它的谱上的坐标z；它的伴随变成z的共轭；而它的任何连续函数f，变成f复合z。<bookmark mark='c'/>对一个正规矩阵，这很具体。它的伴随是这个矩阵的一个多项式，也就是在特征值处插值z的共轭的那个多项式，而用两种方法算出的平方根，在舍入误差范围内一致。<bookmark mark='d'/>而由盖尔范德–奈马克–西格尔构造，每个C*代数，不管交换与否，都是一个算子代数。"
+  },
+  "a8aa00d45394": {
+   "scene": "HilbertOperators",
+   "en": "Chapter five: operators on Hilbert space, where every operator has an adjoint.",
+   "zh": "第五章：希尔伯特空间上的算子，在那里每个算子都有伴随。"
+  },
+  "31f2e2b4cb4e": {
+   "scene": "HilbertOperators",
+   "en": "<bookmark mark='a'/> On a Hilbert space every bounded operator has an adjoint, defined by moving it across the inner product. The matrix words all survive: self-adjoint, unitary, normal, projection. <bookmark mark='b'/> And one identity makes everything work: the norm of T star T is the square of the norm of T, because the size of T x squared is the inner product of T star T x with x. <bookmark mark='c'/> So the bounded operators form a C-star algebra, and Gelfand's theory applies to the algebra generated by any normal operator.",
+   "zh": "<bookmark mark='a'/>在希尔伯特空间上，每个有界算子都有伴随，把它挪到内积的另一边来定义。矩阵的那些说法全都保留了下来：自伴、酉、正规、投影。<bookmark mark='b'/>而有一个恒等式让一切都运转起来：T*T的范数，等于T的范数的平方，因为T x的大小的平方，就是T*T x与x的内积。<bookmark mark='c'/>所以有界算子构成一个C*代数，而盖尔范德的理论，适用于任何正规算子生成的代数。"
+  },
+  "bf4fbec9e922": {
+   "scene": "HilbertOperators",
+   "en": "<bookmark mark='a'/> The simplest self-adjoint operators are the projections. Each point drops perpendicularly onto a closed subspace, its nearest point there, from Part 6. <bookmark mark='b'/> Projecting twice changes nothing, and the leftover is perpendicular, so Pythagoras splits the length. <bookmark mark='c'/> Projections will be the bricks of the spectral theorem: diagonalizing an operator will mean writing it as a sum, or an integral, of numbers times projections.",
+   "zh": "<bookmark mark='a'/>最简单的自伴算子是投影。每个点都垂直地落到一个闭子空间上，落到它在那里的最近点，这是第6部分讲的。<bookmark mark='b'/>投影两次不改变任何东西，剩下的部分是垂直的，所以勾股定理把长度分开。<bookmark mark='c'/>投影将是谱定理的砖块：把一个算子对角化，就意味着把它写成数乘以投影的和，或者积分。"
+  },
+  "32db98408794": {
+   "scene": "HilbertOperators",
+   "en": "<bookmark mark='a'/> The numerical range collects the values of T x against x, for unit vectors x. For this non-normal matrix it's a convex region, traced by its supporting lines, and it contains the eigenvalues, but it's much bigger than they are. <bookmark mark='b'/> For a normal matrix, it's exactly the convex hull of the eigenvalues: T x against x is just an average of eigenvalues, weighted by the squared coordinates of x. <bookmark mark='c'/> And for a self-adjoint operator it's a real interval. Normal operators are the ones whose geometry is controlled by their spectrum.",
+   "zh": "<bookmark mark='a'/>数值域收集的是：对单位向量x，T x与x的内积的所有值。对这个非正规矩阵，它是一个凸区域，由它的支撑线描出，它包含特征值，但比特征值大得多。<bookmark mark='b'/>对正规矩阵，它恰好是特征值的凸包：T x与x的内积，只是特征值的一个平均，权重是x各个坐标的平方。<bookmark mark='c'/>而对自伴算子，它是实轴上的一个区间。正规算子，就是那些几何由谱来掌控的算子。"
+  },
+  "fef187823853": {
+   "scene": "CompactSelfAdjoint",
+   "en": "Chapter six: the spectral theorem for compact self-adjoint operators, and the vibrating string.",
+   "zh": "第六章：紧自伴算子的谱定理，以及振动的弦。"
+  },
+  "2536ddd92c86": {
+   "scene": "CompactSelfAdjoint",
+   "en": "<bookmark mark='a'/> Here's the operator behind Part 8's string: integrate against this kernel, and you solve minus u double prime equals f with the ends held fixed. It's compact and self-adjoint. <bookmark mark='b'/> For such operators the finite-dimensional proof works. Maximize T x against x over unit vectors. A maximizing sequence has a weakly convergent subsequence, and compactness upgrades that to norm convergence, so the maximum is attained, at an eigenvector. <bookmark mark='c'/> Then restrict to the orthogonal complement and repeat. The eigenvalues shrink to zero and the eigenvectors span everything T can reach. <bookmark mark='d'/> T is diagonal in that basis.",
+   "zh": "<bookmark mark='a'/>这是第8部分那根弦背后的算子：用这个核来积分，就解出了两端固定时的方程，负的u的二阶导数等于f。它是紧的，也是自伴的。<bookmark mark='b'/>对这样的算子，有限维的证明照样管用。在单位向量上让T x与x的内积取最大。一个极大化序列有一个弱收敛的子序列，而紧性把它升级为按范数收敛，所以最大值能取到，而且是在一个特征向量上取到。<bookmark mark='c'/>然后限制到正交补上，重复这个过程。特征值缩向0，而特征向量张成了T能到达的一切。<bookmark mark='d'/>在这组基下，T是对角的。"
+  },
+  "f6cbb93b3cb3": {
+   "scene": "CompactSelfAdjoint",
+   "en": "<bookmark mark='a'/> Watch the proof run. Start with a lopsided function and apply G again and again, normalizing each time. The largest mode wins: the curve settles into a half sine, and the Rayleigh quotient into one over pi squared. <bookmark mark='b'/> Now remove that mode and repeat: the next survivor is a full sine, with one over four pi squared. Then the third. <bookmark mark='c'/> With two thousand points, the eigenvalues match one over n pi squared to six digits. So minus the second derivative, the inverse of G, has eigenvalues n pi squared and eigenfunctions the sines: the Fourier sine series is the spectral theorem for this operator.",
+   "zh": "<bookmark mark='a'/>看着证明跑起来。从一个歪斜的函数出发，一遍又一遍地作用G，每次都归一化。最大的模态胜出：曲线稳定成半个正弦波，瑞利商稳定到π的平方分之1。<bookmark mark='b'/>现在去掉这个模态，重复：下一个幸存者是一整个正弦波，对应4π的平方分之1。然后是第三个。<bookmark mark='c'/>用两千个点，特征值与（nπ）的平方分之1，在六位数字上吻合。所以负的二阶导数，也就是G的逆，特征值是（nπ）的平方，特征函数是正弦：傅里叶正弦级数，就是这个算子的谱定理。"
+  },
+  "de8a36db4d1b": {
+   "scene": "CompactSelfAdjoint",
+   "en": "<bookmark mark='a'/> Diagonalizing solves equations. For the heat equation on the string, expand the initial temperature in the sines; each mode just decays, at a rate set by its eigenvalue. <bookmark mark='b'/> Here's a block of heat spreading out, from the eigen-expansion, <bookmark mark='c'/> with an independent finite-difference solver as dots, agreeing to about one part in a hundred thousand. <bookmark mark='d'/> In the quantum videos, the same modes rotate instead of decaying: that's the particle in a box.",
+   "zh": "<bookmark mark='a'/>对角化能解方程。对弦上的热方程，把初始温度按正弦展开；每个模态只是在衰减，衰减速率由它的特征值决定。<bookmark mark='b'/>这是一块热量在散开，由特征展开算出，<bookmark mark='c'/>再用一个独立的有限差分求解器画成圆点，两者大约在十万分之一的程度上吻合。<bookmark mark='d'/>在量子那几期视频里，同样的模态不是衰减，而是旋转：那就是箱中粒子。"
+  },
+  "7cb4b14022e7": {
+   "scene": "NoEigenvectors",
+   "en": "Chapter seven: an operator with a whole interval of spectrum and not one eigenvector.",
+   "zh": "第七章：一个谱是整个区间、却连一个特征向量都没有的算子。"
+  },
+  "3bc987c226b6": {
+   "scene": "NoEigenvectors",
+   "en": "<bookmark mark='a'/> Multiply every function by x. That's a bounded self-adjoint operator on L two of zero to one, and it's quantum mechanics' position operator. <bookmark mark='b'/> Its resolvent is multiplication by one over x minus lambda, which is bounded exactly when lambda is outside the interval. So the spectrum is the whole interval from zero to one. <bookmark mark='c'/> But it has no eigenvectors: x minus lambda times f vanishing almost everywhere forces f itself to vanish almost everywhere. A full interval of spectrum, and nothing to diagonalize.",
+   "zh": "<bookmark mark='a'/>把每个函数都乘以x。这是0到1上的L²里的一个有界自伴算子，它就是量子力学里的位置算子。<bookmark mark='b'/>它的预解式是乘以x减λ分之1，这恰好在λ落在区间之外时有界。所以谱是从0到1的整个区间。<bookmark mark='c'/>可它没有特征向量：（x减λ）乘f几乎处处为0，迫使f本身几乎处处为0。整整一个区间的谱，却没有任何东西可以对角化。"
+  },
+  "340a6b031df8": {
+   "scene": "NoEigenvectors",
+   "en": "<bookmark mark='a'/> What makes 0.4 part of the spectrum, then? Take a bump centered at 0.4 and squeeze it. <bookmark mark='b'/> M minus 0.4 makes it small relative to its size, by a factor proportional to the width, so the ratio goes to zero. <bookmark mark='c'/> These are approximate eigenvectors: they show that M minus lambda can't have a bounded inverse, even though nothing is ever mapped exactly to lambda times itself.",
+   "zh": "<bookmark mark='a'/>那么，是什么让0.4属于谱呢？取一个以0.4为中心的鼓包，把它挤压。<bookmark mark='b'/>M减0.4把它相对于自身的大小变小，缩小的比例与宽度成正比，所以这个比值趋于0。<bookmark mark='c'/>这些是近似特征向量：它们说明M减λ不可能有有界的逆，尽管从来没有什么东西被恰好映成λ乘它自己。"
+  },
+  "0dee5c9f7827": {
+   "scene": "NoEigenvectors",
+   "en": "<bookmark mark='a'/> So what can diagonalizing mean here? M is already diagonal, in a continuous sense: any function of M is just multiplication by that function. <bookmark mark='b'/> And each state psi spreads a unit of mass over the spectrum: the measure of a set omega is the integral of psi squared over omega. <bookmark mark='c'/> That's the Born rule: the probability that the particle's position lies in omega. The total is one, and the average of x is the expected position. <bookmark mark='d'/> The spectral theorem will say every self-adjoint operator looks like this.",
+   "zh": "<bookmark mark='a'/>那么在这里，对角化能是什么意思？M在一种连续的意义下已经是对角的了：M的任何函数，都只是乘以那个函数。<bookmark mark='b'/>而每个态ψ都在谱上铺开一个单位的质量：集合ω的测度，就是ψ的平方在ω上的积分。<bookmark mark='c'/>这就是玻恩定则：粒子的位置落在ω里的概率。总和是1，而x的平均值就是位置的期望值。<bookmark mark='d'/>谱定理将会说，每个自伴算子看起来都是这个样子。"
+  },
+  "9fede7c7d542": {
+   "scene": "SpectralTheorem",
+   "en": "Chapter eight: the spectral theorem, the proof that uses every part of the series.",
+   "zh": "第八章：谱定理，一个用到了本系列每一部分的证明。"
+  },
+  "ccdbf7456044": {
+   "scene": "SpectralTheorem",
+   "en": "<bookmark mark='a'/> Diagonalizing a symmetric matrix means splitting space into eigenspaces. Here are the fifty eigenvalues of a random symmetric matrix, on its spectrum. <bookmark mark='b'/> Pick a vector x. Its squared coordinates in the eigenbasis put a mass on each eigenvalue, and the masses add up to the squared length of x. <bookmark mark='c'/> For any set omega, the projection onto the eigenvectors with eigenvalues in omega, E of omega, carries exactly the mass over omega. That assignment of a projection to every set is a projection-valued measure. <bookmark mark='d'/> And H is the integral of lambda against it. For the multiplication operator, E of omega multiplies by the indicator of omega: no eigenvectors needed.",
+   "zh": "<bookmark mark='a'/>对角化一个对称矩阵，意味着把空间拆成特征子空间。这里是一个随机对称矩阵的五十个特征值，画在它的谱上。<bookmark mark='b'/>取一个向量x。它在特征基下各个坐标的平方，在每个特征值上放下一份质量，这些质量加起来等于x的长度的平方。<bookmark mark='c'/>对任何集合ω，到特征值落在ω里的那些特征向量上的投影，记作E(ω)，恰好承载着ω上的质量。给每个集合指定一个投影，这种指定就是一个投影值测度。<bookmark mark='d'/>而H就是λ关于它的积分。对乘法算子，E(ω)就是乘以ω的示性函数：根本不需要特征向量。"
+  },
+  "e7faf35d73be": {
+   "scene": "SpectralTheorem",
+   "en": "<bookmark mark='a'/> Rudin's proof of the spectral theorem for a normal operator T uses the whole series. <bookmark mark='b'/> Take the algebra generated by T and its adjoint: commutative, and a C-star algebra. Its spectrum is compact and nonempty by Liouville, from Part 7, and its maximal ideal space is compact by Alaoglu, from Part 8. <bookmark mark='c'/> Gelfand-Naimark identifies it with the continuous functions on the spectrum, which needs Stone-Weierstrass, from Part 3. <bookmark mark='d'/> For two vectors x and y, f maps to f of T x against y: a bounded linear functional on continuous functions. By the Riesz representation theorem, from Part 5, it's integration against a measure. <bookmark mark='e'/> Those measures define the projections E of omega, in Hilbert space, from Part 6. And T is the integral of lambda d E.",
+   "zh": "<bookmark mark='a'/>鲁丁对正规算子T的谱定理的证明，用到了整个系列。<bookmark mark='b'/>取由T和它的伴随生成的代数：它是交换的，而且是一个C*代数。由第7部分的刘维尔定理，它的谱是紧的、非空的；由第8部分的阿劳格鲁定理，它的极大理想空间是紧的。<bookmark mark='c'/>盖尔范德–奈马克定理把它等同于谱上的连续函数，这需要第3部分的斯通–魏尔斯特拉斯定理。<bookmark mark='d'/>对两个向量x和y，f被映到f(T)x与y的内积：这是连续函数上的一个有界线性泛函。由第5部分的里斯表示定理，它是关于某个测度的积分。<bookmark mark='e'/>这些测度在第6部分的希尔伯特空间里定义出投影E(ω)。而T就是λ关于d E的积分。"
+  },
+  "6e35bacc6c7b": {
+   "scene": "SpectralTheorem",
+   "en": "<bookmark mark='a'/> One payoff. Average the powers of a unitary operator applied to a vector. <bookmark mark='b'/> In the spectral picture, that averages lambda to the k over the spectrum, which lies on the unit circle; the averages die everywhere except at lambda equal to one. So the averages converge to the projection onto the fixed vectors: von Neumann's ergodic theorem. <bookmark mark='c'/> For an eight by eight unitary with two fixed directions, the error falls like one over n.",
+   "zh": "<bookmark mark='a'/>一个回报。把一个酉算子的各次幂作用在一个向量上，取平均。<bookmark mark='b'/>在谱的图景里，这就是把λ的k次方在谱上取平均，而谱落在单位圆上；除了λ等于1的地方，这些平均处处消失。所以平均值收敛到在不动向量上的投影：这就是冯·诺伊曼的遍历定理。<bookmark mark='c'/>对一个有两个不动方向的八乘八酉矩阵，误差像n分之1那样下降。"
+  },
+  "a81352229f91": {
+   "scene": "Unbounded",
+   "en": "Chapter nine: unbounded operators, where the domain is part of the operator.",
+   "zh": "第九章：无界算子，定义域是算子的一部分。"
+  },
+  "c91a06920ee5": {
+   "scene": "Unbounded",
+   "en": "<bookmark mark='a'/> Momentum is a derivative, and derivatives are not bounded: sine n x has the same size for every n, but its derivative is n times bigger. <bookmark mark='b'/> And Part 8's Hellinger-Toeplitz theorem says a symmetric operator defined on all of Hilbert space is automatically bounded. <bookmark mark='c'/> So the operators of physics can't be defined everywhere. They come with a domain, a dense subspace, and the domain is part of the operator.",
+   "zh": "<bookmark mark='a'/>动量是一个导数，而导数是无界的：对每个n，sin nx的大小都一样，可它的导数要大n倍。<bookmark mark='b'/>而第8部分的黑林格–特普利茨定理说，定义在整个希尔伯特空间上的对称算子自动有界。<bookmark mark='c'/>所以物理学里的算子不可能处处有定义。它们自带一个定义域，一个稠密的子空间，而这个定义域是算子的一部分。"
+  },
+  "929311c11a0c": {
+   "scene": "Unbounded",
+   "en": "<bookmark mark='a'/> Here's the cautionary example. Take i times the derivative on the interval from zero to one, defined on smooth functions that vanish near both ends. Integration by parts gives a boundary term, which vanishes, so the operator is symmetric. <bookmark mark='b'/> But its adjoint has no boundary conditions at all, so it's much bigger. The equations D star f equals plus or minus i f have solutions, e to the x and e to the minus x: one dimension each. <bookmark mark='c'/> Symmetric is not self-adjoint, and only self-adjoint operators get a spectral theorem.",
+   "zh": "<bookmark mark='a'/>这里有一个警示性的例子。在0到1的区间上取i乘以求导，定义在两端附近都为0的光滑函数上。分部积分给出一个边界项，它为0，所以这个算子是对称的。<bookmark mark='b'/>但它的伴随根本没有边界条件，所以要大得多。方程D*f等于正负i f有解，e的x次方和e的负x次方：各一维。<bookmark mark='c'/>对称不等于自伴，而只有自伴算子才有谱定理。"
+  },
+  "4d594fa4596a": {
+   "scene": "Unbounded",
+   "en": "<bookmark mark='a'/> To make it self-adjoint, impose a boundary condition: f at one equals e to the i theta times f at zero, one condition for each point on a circle. <bookmark mark='b'/> Each gives a self-adjoint operator, with eigenfunctions e to the minus i lambda x, and the condition forces lambda into the ladder two pi n minus theta. Computed numerically for three values of theta, the eigenvalues match to many digits. <bookmark mark='c'/> Now turn theta around the circle. The whole ladder slides down, and after a full turn it lands on itself. The same differential expression, a circle of different operators, each with its own spectrum.",
+   "zh": "<bookmark mark='a'/>要让它自伴，就加一个边界条件：f(1)等于e的iθ次方乘f(0)，圆周上的每个点对应一个条件。<bookmark mark='b'/>每一个都给出一个自伴算子，特征函数是e的负iλx次方，而边界条件把λ逼进梯子2πn减θ上。对三个θ值做数值计算，特征值在很多位上都吻合。<bookmark mark='c'/>现在让θ绕着圆周转。整架梯子往下滑，转完一整圈之后，它落回到自己身上。同一个微分表达式，一整圈不同的算子，每一个都有自己的谱。"
+  },
+  "e6c9c0c91481": {
+   "scene": "Cayley",
+   "en": "Chapter ten: the Cayley transform, which turns unbounded self-adjoint operators into unitary ones.",
+   "zh": "第十章：凯莱变换，它把无界自伴算子变成酉算子。"
+  },
+  "a3f818afe463": {
+   "scene": "Cayley",
+   "en": "<bookmark mark='a'/> A self-adjoint operator's spectrum lies on the real line, and for an unbounded one it runs off to infinity, like the ladder of the last chapter. <bookmark mark='b'/> The Cayley map, lambda minus i over lambda plus i, bends the real line onto the unit circle, because a real number is equally far from i and minus i. Zero goes to minus one, and both ends of the line go to one. <bookmark mark='c'/> The ladder lands on the circle, piling up at one from both sides: a bounded picture of an unbounded spectrum.",
+   "zh": "<bookmark mark='a'/>自伴算子的谱落在实轴上，而对无界的自伴算子，谱一直跑到无穷远，就像上一章的那架梯子。<bookmark mark='b'/>凯莱映射，（λ减i）除以（λ加i），把实轴弯到单位圆上，因为一个实数到i和到负i的距离相等。0被送到负1，而实轴的两端都被送到1。<bookmark mark='c'/>梯子落到圆周上，从两边堆向1：这是一个无界谱的有界图像。"
+  },
+  "153878b59ad0": {
+   "scene": "Cayley",
+   "en": "<bookmark mark='a'/> Von Neumann applied the same map to operators. If T is self-adjoint, T minus i times the inverse of T plus i is unitary, and bounded. <bookmark mark='b'/> Diagonalize that unitary with the bounded spectral theorem, then carry its spectral measure back along the inverse map, and you have T as the integral of lambda against a projection-valued measure on the real line. <bookmark mark='c'/> For merely symmetric operators the transform is only an isometry, and the dimensions it misses are the deficiency indices. Self-adjoint extensions correspond to unitary maps between those gaps: in our example, a circle of them, the circle of theta.",
+   "zh": "<bookmark mark='a'/>冯·诺伊曼把同一个映射用到了算子上。如果T是自伴的，那么（T减i）乘（T加i）的逆，就是酉算子，而且有界。<bookmark mark='b'/>用有界的谱定理把这个酉算子对角化，再沿着逆映射把它的谱测度搬回来，就得到T是λ关于实轴上一个投影值测度的积分。<bookmark mark='c'/>对仅仅是对称的算子，这个变换只是一个等距，而它漏掉的维数就是亏指数。自伴延拓，对应于这些缺口之间的酉映射：在我们的例子里，有一整圈，也就是θ的那一圈。"
+  },
+  "9cdfe1720640": {
+   "scene": "Cayley",
+   "en": "<bookmark mark='a'/> The momentum operator, minus i d d x on the whole line, is the leading example. <bookmark mark='b'/> Here's a packet with two components, and its Fourier transform, two bumps at the two momenta. <bookmark mark='c'/> Conjugating by the Fourier transform turns momentum into multiplication by xi, checked here to ten digits. So Plancherel's theorem from Part 9 is the spectral theorem for momentum: the Fourier transform is the change of basis that diagonalizes it. <bookmark mark='d'/> The dictionary's last card: eigenvalues become the spectrum, a whole measure's worth of them.",
+   "zh": "<bookmark mark='a'/>动量算子，也就是整条实轴上的负i乘对x求导，是最主要的例子。<bookmark mark='b'/>这是一个有两个分量的波包，以及它的傅里叶变换，在两个动量处各有一个鼓包。<bookmark mark='c'/>用傅里叶变换做共轭，就把动量变成乘以ξ，这里在十位数字上验证过。所以第9部分的普朗歇尔定理，就是动量的谱定理：傅里叶变换就是对角化它的那个基变换。<bookmark mark='d'/>这本词典的最后一张卡片：特征值变成了谱，一整个测度那么多。"
+  },
+  "f5562aa0d1a6": {
+   "scene": "Stone",
+   "en": "Chapter eleven: Stone's theorem, and time evolution in quantum mechanics.",
+   "zh": "第十一章：斯通定理，以及量子力学里的时间演化。"
+  },
+  "240ec9bd8ee1": {
+   "scene": "Stone",
+   "en": "<bookmark mark='a'/> In the quantum videos, a state evolves by e to the minus i t H. Here's a packet in a harmonic well, sliding back and forth. <bookmark mark='b'/> Expand it in the eigenstates of H, with energies one half, three halves, and so on. Each coefficient is a clock hand that turns at its own rate, its energy. The sizes, the spectral measure of the state, never change: a Poisson distribution here. <bookmark mark='c'/> Computed both ways, by splitting the evolution into small steps and by the spectral decomposition, the states agree to eight digits, and the norm stays one.",
+   "zh": "<bookmark mark='a'/>在量子那几期视频里，一个态按e的负i t H次方演化。这是谐振子势阱里的一个波包，来回滑动。<bookmark mark='b'/>把它按H的本征态展开，能量依次是二分之一、二分之三，依此类推。每个系数都是一根钟表指针，按自己的速率转动，那个速率就是它的能量。它们的大小，也就是这个态的谱测度，从不改变：这里是一个泊松分布。<bookmark mark='c'/>用两种方法计算，一种把演化切成小步，一种用谱分解，两个态在八位数字上吻合，而且范数始终是1。"
+  },
+  "ff628e590f0f": {
+   "scene": "Stone",
+   "en": "<bookmark mark='a'/> Stone's theorem says this is the only way it can go. Any self-adjoint operator generates a continuous group of unitaries, e to the i t A, through its spectral measure. <bookmark mark='b'/> And conversely, every continuous one-parameter group of unitaries has a generator, the derivative at time zero, which is densely defined and self-adjoint. <bookmark mark='c'/> So if time evolution preserves probability, it's e to the minus i t H for a self-adjoint H: the assumption the quantum videos made is forced. Drop unitarity, keep contraction, and you get semigroups like the heat flow.",
+   "zh": "<bookmark mark='a'/>斯通定理说，事情只能这样发展。任何自伴算子都通过它的谱测度，生成一个连续的酉算子群，e的i t A次方。<bookmark mark='b'/>反过来，每个连续的单参数酉算子群都有一个生成元，也就是它在时刻0的导数，这个生成元是稠定的、自伴的。<bookmark mark='c'/>所以，如果时间演化保持概率，它就是e的负i t H次方，其中H是自伴的：量子那几期视频所做的假设，是被迫如此的。放弃酉性，保留压缩性，就得到热流那样的半群。"
+  },
+  "b08bc023de80": {
+   "scene": "QuantumClosure",
+   "en": "Chapter twelve: what the series has proved about quantum mechanics.",
+   "zh": "第十二章：这个系列对量子力学证明了什么。"
+  },
+  "aee26b609b6e": {
+   "scene": "QuantumClosure",
+   "en": "<bookmark mark='a'/> Back to the hook. Hydrogen's Hamiltonian, for states without angular momentum, is this unbounded self-adjoint operator. <bookmark mark='b'/> Discretized and diagonalized, its lowest eigenvalues are minus one half over n squared, to five decimal places: the energy levels whose differences are the spectral lines. They pile up at zero. <bookmark mark='c'/> Above zero, the spectrum is continuous: the electron flies free. In a finite box that shows up as a dense ladder. A state's spectral measure has point masses at the bound states and a continuous part above.",
+   "zh": "<bookmark mark='a'/>回到开场。对于没有角动量的态，氢的哈密顿量就是这个无界自伴算子。<bookmark mark='b'/>把它离散化再对角化，最低的几个特征值是负的2n平方分之1，精确到小数点后五位：它们就是能级，能级之差就是谱线。它们在0处堆积。<bookmark mark='c'/>0以上，谱是连续的：电子自由地飞走了。在一个有限的盒子里，这表现为一架很密的梯子。一个态的谱测度，在束缚态上有点质量，在0以上有连续的部分。"
+  },
+  "1848d3b0bf0b": {
+   "scene": "QuantumClosure",
+   "en": "<bookmark mark='a'/> The canonical commutation relation says x p minus p x is i times the identity. For matrices that's impossible: the trace of a commutator is zero, the trace of i I is not. <bookmark mark='b'/> Discretize x and p on sixty-four points and look at the eigenvalues of the commutator divided by i. Fifty-five of them sit near one, as the relation wants, and a few run off to plus and minus a hundred to make the trace zero. <bookmark mark='c'/> For bounded operators, Wielandt's argument rules it out too: commuting through powers gives n times the norm of B to the n minus one at most a fixed constant times it. So position and momentum must be unbounded: the honest reason the quantum videos needed this part.",
+   "zh": "<bookmark mark='a'/>正则对易关系说，x p减p x等于i乘单位算子。对矩阵来说这是不可能的：对易子的迹是0，而i乘单位矩阵的迹不是0。<bookmark mark='b'/>在64个点上把x和p离散化，看对易子除以i的特征值。其中55个落在1附近，正如对易关系所要求的，还有几个跑到正负100附近，好让迹为0。<bookmark mark='c'/>对有界算子，维兰特的论证同样排除了它：把对易关系穿过各次幂推下去，得到n乘B的n减1次方的范数，至多是某个固定常数乘以它。所以位置和动量必须是无界的：这就是量子那几期视频需要这一部分的真正原因。"
+  },
+  "310e3374748d": {
+   "scene": "QuantumClosure",
+   "en": "So here's what's been proved. Observables are self-adjoint operators, so each has a spectral measure, and the Born rule is that measure. Position and momentum have continuous spectra and no eigenvectors, and their commutation relation forces them to be unbounded. Time evolution is e to the minus i t H, and by Stone's theorem it has to be. And hydrogen's spectrum is points below zero, continuum above.",
+   "zh": "所以，这里证明了什么。可观测量是自伴算子，所以每个可观测量都有一个谱测度，而玻恩定则就是这个测度。位置和动量有连续谱、没有特征向量，它们的对易关系迫使它们是无界的。时间演化是e的负i t H次方，而由斯通定理，它只能如此。氢的谱，是0以下的一些点，加上0以上的连续谱。"
+  },
+  "05026858966f": {
+   "scene": "Outro",
+   "en": "Let's take stock one last time. Banach algebras gave operators an arithmetic, with the Neumann series and an open set of invertibles. The spectrum is compact and never empty, and Gelfand's formula measures it. Cauchy's formula gave functions of operators, and Gelfand's transform turned commutative algebras into functions. In Hilbert space, compact self-adjoint operators have eigenbases, multiplication by x has none and is still diagonal, and the spectral theorem handles every normal operator, then every self-adjoint one, through the Cayley transform. Stone's theorem closed the loop with quantum mechanics.",
+   "zh": "我们最后一次盘点。巴拿赫代数给了算子一套算术，有诺伊曼级数，还有由可逆元构成的开集。谱是紧的，从不为空，而盖尔范德公式度量了它的大小。柯西公式给出了算子的函数，盖尔范德变换把交换代数变成了函数。在希尔伯特空间里，紧自伴算子有特征基，乘以x的算子没有特征基却依然是对角的，而谱定理处理了每一个正规算子，再通过凯莱变换处理了每一个自伴算子。斯通定理让这一切与量子力学首尾相接。"
+  },
+  "240117cee680": {
+   "scene": "Outro",
+   "en": "The ledger's last row. <bookmark mark='a'/> The space: bounded operators, and the C-star algebras they generate. <bookmark mark='c2'/> Completeness: they're closed in norm, and Gelfand-Naimark makes them function algebras. <bookmark mark='c3'/> Compactness: Alaoglu again, behind the maximal ideal space. <bookmark mark='c4'/> The interchange: f of T for every Borel function f, so limits of functions become limits of operators. <bookmark mark='c5'/> And the Fourier answer: the Fourier transform is the spectral theorem, for momentum. <bookmark mark='b'/> And that's the whole ledger: ten rows, from the least upper bound property to the spectral theorem.",
+   "zh": "账本的最后一行。<bookmark mark='a'/>空间：有界算子，以及它们生成的C*代数。<bookmark mark='c2'/>完备性：它们按范数是闭的，而盖尔范德–奈马克定理把它们变成函数代数。<bookmark mark='c3'/>紧性：又是阿劳格鲁定理，藏在极大理想空间的背后。<bookmark mark='c4'/>交换：对每个博雷尔函数f，都有f(T)，所以函数的极限变成了算子的极限。<bookmark mark='c5'/>而傅里叶的答案：傅里叶变换，就是动量的谱定理。<bookmark mark='b'/>这就是整本账本：十行，从最小上界性质，一直到谱定理。"
+  },
+  "675e558d55cb": {
+   "scene": "Outro",
+   "en": "And the timeline is complete: from Fourier's claim in 1807 that every function is a sum of sines, through Dirichlet and Riemann; <bookmark mark='z'/> then forty crowded years: Dedekind and Cantor, Heine and Borel, Lebesgue, Fréchet, Riesz and Fischer; <bookmark mark='l'/> then Banach and Schwartz, to Carleson's theorem in 1966. Every idea in the series was invented to answer a question about Fourier series.",
+   "zh": "时间线也完整了：从1807年傅里叶断言每个函数都是正弦之和，经过狄利克雷和黎曼；<bookmark mark='z'/>然后是拥挤的四十年：戴德金和康托尔，海涅和博雷尔，勒贝格，弗雷歇，里斯和费舍尔；<bookmark mark='l'/>再然后是巴拿赫和施瓦茨，一直到1966年的卡尔松定理。这个系列里的每一个想法，都是为了回答一个关于傅里叶级数的问题而发明的。"
+  },
+  "e1399f17b650": {
+   "scene": "Outro",
+   "en": "From here the road divides. Operator algebras and noncommutative geometry. Index theory. Nonlinear analysis, where Sobolev spaces do their real work. Partial differential equations, which use all of it. And harmonic analysis, which is still answering Fourier's question.",
+   "zh": "从这里开始，道路分岔了。算子代数与非交换几何。指标理论。非线性分析，索伯列夫空间在那里大显身手。偏微分方程，它用到所有这一切。还有调和分析，它至今仍在回答傅里叶的问题。"
+  },
+  "cf27cbc5a299": {
+   "scene": "Outro",
+   "en": "This part followed chapters ten to thirteen of Functional Analysis and chapter eighteen of Real and Complex Analysis. That's the end of the series. Thanks for watching all of it.",
+   "zh": "这一部分对应《泛函分析》的第10到第13章，以及《实分析与复分析》的第18章。这个系列到此结束。感谢你从头看到尾。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 10, Banach Algebras and the Spectral Theorem",
+ "chapters_en": {
+  "Hook": "Two meanings of spectrum",
+  "BanachAlgebras": "1. Banach algebras",
+  "Spectrum": "2. The spectrum",
+  "SymbolicCalculus": "3. Functions of an operator",
+  "Gelfand": "4. Gelfand theory",
+  "HilbertOperators": "5. Operators on Hilbert space",
+  "CompactSelfAdjoint": "6. Compact self-adjoint operators",
+  "NoEigenvectors": "7. A spectrum with no eigenvectors",
+  "SpectralTheorem": "8. The spectral theorem",
+  "Unbounded": "9. Unbounded operators",
+  "Cayley": "10. The Cayley transform",
+  "Stone": "11. Stone's theorem",
+  "QuantumClosure": "12. What this proves about quantum mechanics",
+  "Outro": "The last row of the ledger"
+ }
+}
