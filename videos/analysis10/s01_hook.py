@@ -108,7 +108,7 @@ class Hook(VoiceoverScene):
             leaders.add(Line(p0, [t_.get_left()[0] - 0.05, ys[n_], 0], color=GREY_B, stroke_width=1))
         assert ys[7] < ax.get_top()[1] + 0.3
         lev_l = MathTex(r"E_n = -\tfrac{13.6\ \mathrm{eV}}{n^2}", font_size=24, color=C.SPECTRUM).next_to(ax, UP, buff=0.12)
-        gnd = label(r"$n = 1$: \ $-13.6$ eV, \ off the scale below", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        gnd = label(r"$n = 1$ at $-13.6$ eV, \ far below", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
         jumps = VGroup(*[Arrow(ax.c2p(0.25 + 0.13 * i, E(n_)), ax.c2p(0.25 + 0.13 * i, E(2)), buff=0,
                                color=wavelength_color(l_), stroke_width=3, tip_length=0.12,
                                max_tip_length_to_length_ratio=0.5)

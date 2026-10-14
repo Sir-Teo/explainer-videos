@@ -130,8 +130,9 @@ class Taylor(VoiceoverScene):
         assert gfun(tt_).min() > -0.18
         gcurve = polyline(gx, tt_, gfun(tt_), color=C.FUNC, stroke_width=3.5)
         g_l = MathTex(r"g", font_size=30, color=C.FUNC).next_to(gx.c2p(0.55, gfun(0.55)), DOWN, buff=0.12)
-        ab = VGroup(*[VGroup(Dot(gx.c2p(v, 0), radius=0.07), MathTex(t_, font_size=28).next_to(gx.c2p(v, 0), UP, buff=0.15))
-                      for v, t_ in ((al, r"\alpha"), (be, r"\beta"))])
+        ab = VGroup(*[VGroup(Dot(gx.c2p(v, 0), radius=0.07),
+                             MathTex(t_, font_size=28).next_to(gx.c2p(v, 0), UL if v == al else UP, buff=0.12))
+                      for v, t_ in ((al, r"\alpha"), (be, r"\beta"))])  # alpha beside the vertical axis, not on it
         pts = VGroup(*[VGroup(Dot(gx.c2p(v, 0), radius=0.07, color=C.EPS),
                               MathTex(rf"x_{i + 1}", font_size=28, color=C.EPS).next_to(gx.c2p(v, 0), UP, buff=0.15))
                        for i, v in enumerate((x1, x2, x3))])

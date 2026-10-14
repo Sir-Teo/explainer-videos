@@ -41,7 +41,7 @@ class FourierL2(VoiceoverScene):
             e_l[1 + n].set_color(ecols[n])
         # orthonormal in L^2(T) with <f, g> = (1/2pi) int f conj(g): check on the grid
         tq = np.linspace(-math.pi, math.pi, 4001)
-        gram_ = np.array([[trap(np.exp(1j * m * tq) * np.exp(-1j * n * tq), tq) / (2 * math.pi) for n in range(4)]
+        gram_ = np.array([[np.trapezoid(np.exp(1j * m * tq) * np.exp(-1j * n * tq), tq) / (2 * math.pi) for n in range(4)]
                           for m in range(4)])
         assert np.allclose(gram_, np.eye(4), atol=1e-6)
         on_l = MathTex(r"\tfrac{1}{2\pi}\int_{-\pi}^{\pi} e^{imt}\,\overline{e^{int}}\,dt = \delta_{mn}", font_size=28,

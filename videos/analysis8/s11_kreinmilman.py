@@ -53,7 +53,8 @@ class KreinMilman(VoiceoverScene):
             label(r"\textbf{FA 3.23} \ (Krein--Milman) \ a compact convex set in a locally convex space", font_size=26,
                   color=C.EPS),
             label(r"is the closed convex hull of its extreme points", font_size=26, color=C.EPS),
-        ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.25)
+        ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
+        assert tests.get_top()[1] < min(g[0].get_bottom()[1] for g in groups) - 0.1
         head = label(r"The corners of a convex set", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> A point of a convex set is extreme if it isn't the midpoint of two other points of "

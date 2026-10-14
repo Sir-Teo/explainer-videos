@@ -45,7 +45,9 @@ class OpenMapping(VoiceoverScene):
         rows = VGroup(
             label(r"$\ell^2$, \ 60 coordinates: \ $T = I + K$", font_size=22),
             MathTex(rf"\|T\| = {s2_max:.3f}, \ \ 1/\|T^{{-1}}\| = {s2_min:.3f}", font_size=24),
-            label(r"50 random $y$ with $\|y\| < 0.99/\|T^{-1}\|$:", font_size=22, color=GREY_A),
+            VGroup(label(r"50 random $y$ with", font_size=22, color=GREY_A),
+                   label(r"$\|y\| < 0.99/\|T^{-1}\|$:", font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                            buff=0.08),
             label(r"each is $Tx$ with $\|x\| \le 1$", font_size=22, color=C.EPS),
             label(r"\textbf{RCA 5.10} \ a bounded bijection", font_size=22),
             label(r"has a bounded inverse", font_size=22, color=C.EPS),
@@ -115,7 +117,9 @@ class OpenMapping(VoiceoverScene):
             label(r"\textbf{Hellinger--Toeplitz} \ a symmetric operator", font_size=24),
             label(r"defined on \emph{all} of a Hilbert space is bounded", font_size=24, color=C.EPS),
             label(r"$i\frac{d}{dx}$ is symmetric on $L^2$ (periodic $f$), \ and unbounded:", font_size=24),
-            label(r"so it can only live on a domain: \ Part 10's unbounded operators", font_size=24, color=C.PATHOLOGY),
+            VGroup(label(r"so it can only live on a domain:", font_size=24, color=C.PATHOLOGY),
+                   label(r"Part 10's unbounded operators", font_size=24, color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                    buff=0.08),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.5, 0])
         for r_ in rows:
             if r_.width > 6.2:
