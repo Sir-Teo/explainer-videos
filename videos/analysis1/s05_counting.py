@@ -204,8 +204,8 @@ class Counting(VoiceoverScene):
                 m.move_to([-4.2 + 1.25 * k, 1.6 - 0.85 * (i - 1), 0])
             rows.add(row)
         rows.add(MathTex(r"\vdots", font_size=36).move_to([-4.2 + 1.25, 1.6 - 0.85 * 4 + 0.15, 0]))
-        bands = VGroup(*[RoundedRectangle(width=1.25 * 6.2, height=0.62, corner_radius=0.12, stroke_width=0,
-                                          fill_color=col, fill_opacity=0.12).move_to([-4.2 + 1.25 * 3.1, 1.6 - 0.85 * i, 0])
+        bands = VGroup(*[RoundedRectangle(width=1.25 * 5.6, height=0.62, corner_radius=0.12, stroke_width=0,
+                                          fill_color=col, fill_opacity=0.12).move_to([-4.2 + 1.25 * 3.5, 1.6 - 0.85 * i, 0])
                          for i, col in enumerate((C.SEQ, C.DELTA, C.EPS, C.CLOSED_SET))])
         visit = []  # diagonal by diagonal, alternating direction, so each step goes to a neighbor
         for s in range(2, 8):
@@ -246,12 +246,16 @@ class Counting(VoiceoverScene):
         cells = [[None] * nc for _ in range(nr)]
         table = VGroup()
         names = VGroup()
+        ones = VGroup()  # the 1s as filled cells, so the list reads as a picture
         for i in range(nr):
             names.add(MathTex(rf"s_{{{i + 1}}}", font_size=28, color=GREY_A).move_to([x0 - 0.75, y0 - i * ch, 0]))
             for j in range(nc):
                 t = Text(str(int(R[i, j])), font_size=24, font=MONO).move_to([x0 + j * cw, y0 - i * ch, 0])
                 cells[i][j] = t
                 table.add(t)
+                if int(R[i, j]) == 1:
+                    ones.add(Square(side_length=cw * 0.92, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.3)
+                             .move_to([x0 + j * cw, y0 - i * ch, 0]))
         more = MathTex(r"\vdots", font_size=30, color=GREY_B).move_to([x0 + 4 * cw, y0 - nr * ch + 0.05, 0])
         dots_r = MathTex(r"\cdots", font_size=30, color=GREY_B).move_to([x0 + nc * cw + 0.1, y0 - 2 * ch, 0])
         diag_boxes = VGroup(*[SurroundingRectangle(cells[i][i], color=C.COMPACT_SET, buff=0.07, stroke_width=2.5)
@@ -274,7 +278,7 @@ class Counting(VoiceoverScene):
             "so on, claiming it contains every such sequence. <bookmark mark='d'/> Look at the diagonal: the first digit "
             "of the first sequence, the second digit of the second, and so on."
         ) as vo:
-            self.play(FadeIn(names), LaggedStart(*[FadeIn(t) for t in table], lag_ratio=0.004), FadeIn(more),
+            self.play(FadeIn(names), FadeIn(ones), LaggedStart(*[FadeIn(t) for t in table], lag_ratio=0.004), FadeIn(more),
                       FadeIn(dots_r), run_time=2)
             vo.wait_until("d")
             self.play(LaggedStart(*[Create(b) for b in diag_boxes], lag_ratio=0.12), run_time=2)
