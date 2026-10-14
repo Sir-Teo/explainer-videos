@@ -194,11 +194,9 @@ class Compact(VoiceoverScene):
             u = np.array([math.cos(t), math.sin(t), 0])
             for k, (m, e_) in enumerate(zip(rlabs, eps_)):
                 m.move_to(ctr + (rho(e_) + Rr / 8) * u)
-                cs = np.array([m.get_corner(v_) for v_ in (UL, UR, DL, DR)])
-                dist = np.linalg.norm(cs - ctr, axis=1)
-                lo, hi = dist.min() - 0.04, dist.max() + 0.04
-                if (abs(m.get_x() - ctr[0]) < m.width / 2 + 0.04 or abs(m.get_y() - ctr[1]) < m.height / 2 + 0.04):
-                    lo = min(lo, np.linalg.norm(m.get_center() - ctr) - max(m.width, m.height) / 2 - 0.04)
+                dx_, dy_ = abs(m.get_x() - ctr[0]), abs(m.get_y() - ctr[1])
+                lo = math.hypot(max(0.0, dx_ - m.width / 2), max(0.0, dy_ - m.height / 2)) - 0.04  # nearest point
+                hi = math.hypot(dx_ + m.width / 2, dy_ + m.height / 2) + 0.04  # farthest corner
                 if any(lo < rho(r_) < hi for r_ in eps_):
                     return False
                 if any(boxes_overlap(m, d_, 0.04) for d_ in sdots):

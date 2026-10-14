@@ -131,8 +131,8 @@ class Vitali(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def construction(self):
-        o = np.array([-3.4, -0.55, 0])
-        R = 2.35
+        o = np.array([-3.4, -0.5, 0])
+        R = 2.4
         circ = Circle(radius=R, color=GREY_C, stroke_width=2).move_to(o)
 
         def pt(a):
@@ -179,8 +179,8 @@ class Vitali(VoiceoverScene):
                             for k in range(K)])
 
         arcs = always_redraw(arcs_)
-        zl = MathTex(r"m(V) = 0: \ 0 + 0 + 0 + \cdots = 0", font_size=26).move_to(o + 0.35 * UP)
-        il = MathTex(r"m(V) = c > 0: \ c + c + c + \cdots = \infty", font_size=26, color=C.PATHOLOGY
+        zl = MathTex(r"m(V) = 0: \ 0 + 0 + 0 + \cdots = 0", font_size=24).move_to(o + 0.35 * UP)
+        il = MathTex(r"m(V) = c > 0: \ c + c + c + \cdots = \infty", font_size=24, color=C.PATHOLOGY
                      ).move_to(o + 0.35 * DOWN)
         assert K * 0.9 > 2 * 2 * math.pi  # at c = 0.9 the 16 shown arcs already wrap around twice
         assert (R + 0.15 + 0.035 * (K - 1)) + abs(o[0]) < 6.7 and o[1] - (R + 0.15 + 0.035 * (K - 1)) > -3.6

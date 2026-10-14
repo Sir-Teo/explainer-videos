@@ -96,6 +96,7 @@ class Holomorphic(VoiceoverScene):
         # z^2 of [0.3, 1.4] x [0.15, 0.95] has Re in [-0.81, 1.96] and Im in [0.09, 2.66]: the axes hold all of it
         ax = square_axes([-1.0, 2.2, 1], [-0.2, 2.8, 1], 1.15).move_to([-4.66, -0.5, 0])
         ax.set_opacity(0.3)
+        g0 = zgrid(ax, lambda Z: Z, (0.3, 1.4), (0.15, 0.95), n=9, stroke_width=2, colors=(C.SEQ, C.APPROX))
         g1 = zgrid(ax, lambda Z: Z * Z, (0.3, 1.4), (0.15, 0.95), n=9, stroke_width=2, colors=(C.SEQ, C.APPROX))
         corners = np.array([0.3 + 0.15j, 1.4 + 0.15j, 0.3 + 0.95j, 1.4 + 0.95j, 0.3 + 0.55j, 0.85 + 0.15j])
         assert g1.get_left()[0] >= ax.c2p(-1.0, 0)[0] - 1e-6 and g1.get_top()[1] <= ax.c2p(0, 2.8)[1] + 1e-6
@@ -128,9 +129,9 @@ class Holomorphic(VoiceoverScene):
             "conformal; at a zero of the derivative, like z squared at the origin, angles get multiplied."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), Create(bx))
+            self.play(FadeIn(head), Create(ax), Create(bx), Create(g0))  # the grid itself, then its image under z^2
             vo.wait_until("b")
-            self.play(Create(g1), FadeIn(l1), run_time=2.5)
+            self.play(Transform(g0, g1), FadeIn(l1), run_time=2.5)
             vo.wait_until("c")
             self.play(Create(g2), FadeIn(l2), run_time=2.5)
             vo.wait_until("d")
@@ -155,7 +156,7 @@ class Holomorphic(VoiceoverScene):
         img = cplot(cx, lambda Z: np.sin(np.pi * Z), (-2.6, 2.6), (-1.3, 1.3))
         frame = Rectangle(width=5.2 * 1.15, height=2.6 * 1.15, color=GREY_C, stroke_width=2).move_to(cx.c2p(0, 0))
         zl = VGroup(*[Circle(radius=0.13, color=WHITE, stroke_width=2).move_to(cx.c2p(k, 0)) for k in (-2, -1, 0, 1, 2)])
-        c_l = VGroup(MathTex(r"\sin \pi z \ \text{on } \C", font_size=28),
+        c_l = VGroup(MathTex(r"\sin \pi z = \sum_{k \ge 0} \frac{(-1)^k (\pi z)^{2k+1}}{(2k+1)!} \ \text{on } \C", font_size=28),
                      label(r"zeros at the integers, \ each one isolated", font_size=22, color=C.EPS)
                      ).arrange(DOWN, buff=0.08).next_to(frame, DOWN, buff=0.15)
         thm = VGroup(
@@ -164,6 +165,9 @@ class Holomorphic(VoiceoverScene):
                   font_size=24, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(UP, buff=0.3)
         assert np.all(np.abs(np.sin(np.pi * np.arange(-2, 3))) < 1e-12)
+        zt = 1.3 + 0.7j  # the series in the caption is sin(pi z)
+        assert abs(sum((-1) ** k * (np.pi * zt) ** (2 * k + 1) / math.factorial(2 * k + 1) for k in range(40))
+                   - np.sin(np.pi * zt)) < 1e-9
         with self.voiceover(
             "<bookmark mark='a'/> Two first consequences. A power series is holomorphic inside its disk of "
             "convergence, and you can differentiate it term by term: one more interchange of limits, made legal. "
@@ -173,12 +177,12 @@ class Holomorphic(VoiceoverScene):
             "color around it once."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm[0]))
+            self.play(FadeIn(thm[0]), FadeIn(img), Create(frame), FadeIn(c_l[0]))  # a power series: sin(pi z)
             vo.wait_until("b")
             self.play(Create(ax), Create(g), FadeIn(g_l))
             self.play(LaggedStart(*[FadeIn(z_) for z_ in zd], lag_ratio=0.02), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(img), Create(frame), FadeIn(c_l), FadeIn(thm[1]))
+            self.play(FadeIn(c_l[1]), FadeIn(thm[1]))
             self.play(Create(zl))
         self.wait(0.4)
         self.clear_scene()
