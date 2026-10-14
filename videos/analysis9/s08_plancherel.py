@@ -28,9 +28,9 @@ class Plancherel(VoiceoverScene):
         xs, Ts, curves, over = d["xs"], d["Ts"], d["curves"], d["over"]
         ax = plain_axes([-3, 3, 1], [-0.25, 1.25, 0.5], 6.4, 3.6, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1},
-                                       "numbers_to_exclude": [1.0]}).move_to([-3.0, -0.6, 0])
-        # the box top and every reconstruction pass the height 1 just left of the y-axis: label it beside the box
+                        y_axis_config={"include_numbers": False}).move_to([-3.0, -0.6, 0])
+        # no y numbers on the central axis (the box top and every reconstruction pass 1 there, the first Poisson
+        # curve 0.5): the one height that matters, 1, is labelled beside the box
         one_l = MathTex(r"1", font_size=18).next_to(ax.c2p(1.05, 1), RIGHT, buff=0.08)
         box = VGroup(Line(ax.c2p(-3, 0), ax.c2p(-1, 0), color=WHITE, stroke_width=2.5),
                      Line(ax.c2p(-1, 1), ax.c2p(1, 1), color=WHITE, stroke_width=2.5),

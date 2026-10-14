@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import hop, load, plain_axes, polyline
+from videos.analysis2.common import hop, load, plain_axes, polyline, runs_in_range
 
 
 class Hook(VoiceoverScene):
@@ -37,7 +37,7 @@ class Hook(VoiceoverScene):
         y0 = -0.6
         line = Line([X(-0.05), y0, 0], [X(1.25), y0, 0], color=GREY_C, stroke_width=2)
         ticks = VGroup(*[VGroup(Line([X(v), y0 - 0.07, 0], [X(v), y0 + 0.07, 0], color=GREY_C),
-                                Text(f"{v:g}", font_size=22, color=GREY_B).move_to([X(v), y0 - 0.35, 0]))
+                                MathTex(f"{v:g}", font_size=24, color=GREY_B).move_to([X(v), y0 - 0.35, 0]))
                          for v in (0, 0.5, 1.0)])
         ln2 = VGroup(DashedLine([X(math.log(2)), y0 - 0.5, 0], [X(math.log(2)), y0 + 1.9, 0], color=WHITE, stroke_width=2),
                      MathTex(r"\ln 2", font_size=32).move_to([X(math.log(2)), y0 + 2.15, 0]))
@@ -78,18 +78,23 @@ class Hook(VoiceoverScene):
         t, s = d["t_pi"], d["s_pi"]
         ratio = float(d["ratio_pi"])
         X = lambda v: -6.0 + (v + 0.2) * 3.0  # noqa: E731  values -0.2 .. 3.8
-        y0 = 1.0
+        y0 = 0.2
         line = Line([X(-0.2), y0, 0], [X(3.85), y0, 0], color=GREY_C, stroke_width=2)
         ticks = VGroup(*[VGroup(Line([X(v), y0 - 0.07, 0], [X(v), y0 + 0.07, 0], color=GREY_C),
-                                Text(f"{v:g}", font_size=22, color=GREY_B).move_to([X(v), y0 - 0.35, 0]))
+                                MathTex(f"{v:g}", font_size=24, color=GREY_B).move_to([X(v), y0 - 0.42, 0]))
                          for v in (0, 1, 2, 3)])
-        pi_l = VGroup(DashedLine([X(math.pi), y0 - 0.45, 0], [X(math.pi), y0 + 0.9, 0], color=C.EPS, stroke_width=2.5),
-                      MathTex(r"\pi", font_size=36, color=C.EPS).move_to([X(math.pi), y0 + 1.15, 0]))
+        pi_l = VGroup(DashedLine([X(math.pi), y0 - 0.45, 0], [X(math.pi), y0 + 1.3, 0], color=C.EPS, stroke_width=2.5),
+                      MathTex(r"\pi", font_size=36, color=C.EPS).move_to([X(math.pi), y0 + 1.55, 0]))
         rule = VGroup(label(r"Same terms, new order:", font_size=28, color=GREY_A),
                       label(r"take positive terms ($1, \tfrac13, \tfrac15, \ldots$) until the total passes $\pi$,", font_size=26),
                       label(r"then negative ones ($-\tfrac12, -\tfrac14, \ldots$) until it drops below; repeat.", font_size=26)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         dot = Dot([X(0), y0, 0], radius=0.08, color=WHITE)
+        # the first crossing: 76 positive terms take the total past pi, then one negative term (-1/2) brings it back
+        k_up = int(np.argmax(s > math.pi))
+        assert k_up == 75 and t[k_up + 1] == -0.5 and s[k_up + 1] < math.pi < s[k_up], (k_up, s[k_up:k_up + 2])
+        K_dots = 90
+        arrows = VGroup()
         with self.voiceover(
             "Now take exactly the same terms, and add them in a different order. <bookmark mark='r'/> Use positive terms, "
             "one, a third, a fifth, and so on, until the total passes pi. Then use negative terms until it drops back "
@@ -100,14 +105,34 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rule))
             vo.wait_until("g")
             self.play(FadeIn(dot))
-            for k in range(0, 60):
-                self.play(dot.animate.move_to([X(float(s[k])), y0, 0]), run_time=0.07 if k > 8 else 0.25,
-                          rate_func=linear)
+            prev = 0.0
+            for k in range(0, 8):  # the first positive terms, one arc each
+                v = float(s[k])
+                ar = hop([X(prev), y0, 0], [X(v), y0, 0], C.SEQ, up=True)
+                arrows.add(ar)
+                self.play(Create(ar), dot.animate.move_to([X(v), y0, 0]), run_time=0.45 if k < 3 else 0.3)
+                prev = v
+            # then the dot runs through the partial sums s_8 ... s_76 (just past pi), term by term
+            kv = ValueTracker(7)
+            dot.add_updater(lambda m: m.move_to([X(float(s[int(round(kv.get_value()))])), y0, 0]))
+            self.play(kv.animate.set_value(k_up), run_time=2.4, rate_func=linear)
+            dot.clear_updaters()
+            # one negative term, -1/2, drops it back below pi; then positive terms again
+            ar = CurvedArrow([X(float(s[k_up])), y0 - 0.08, 0], [X(float(s[k_up + 1])), y0 - 0.08, 0], angle=-TAU / 8,
+                             color=C.CUT_HIGH, stroke_width=3, tip_length=0.14)  # a shallow arc under the line
+            arrows.add(ar)
+            self.play(Create(ar), dot.animate.move_to([X(float(s[k_up + 1])), y0, 0]), run_time=0.6)
+            kv.set_value(k_up + 1)
+            dot.add_updater(lambda m: m.move_to([X(float(s[int(round(kv.get_value()))])), y0, 0]))
+            self.play(kv.animate.set_value(K_dots), run_time=1.0, rate_func=linear)
+            dot.clear_updaters()
         # the long run, as a graph of the partial sums against the number of terms used
         K = len(s)
-        ax = plain_axes([0, K, 1000], [2.6, 3.7, 0.5], 9.8, 2.8, numbers=False).move_to(DOWN * 1.35 + LEFT * 0.6)
+        ax = plain_axes([0, K, 1000], [2.5, 3.7, 0.5], 9.8, 2.8, numbers=False).move_to(DOWN * 1.35 + LEFT * 0.6)
         tgt = DashedLine(ax.c2p(0, math.pi), ax.c2p(K, math.pi), color=C.EPS, stroke_width=2)
-        curve = polyline(ax, np.arange(1, K + 1), np.clip(s, 2.6, 3.7), color=C.SEQ, stroke_width=2)
+        # the first 25 partial sums (1 ... 2.48) lie below the window: the curve enters through its floor
+        assert int((s < 2.5).sum()) == 25 and s.max() < 3.7
+        curve = runs_in_range(ax, np.arange(1, K + 1), s, 2.5, 3.7, color=C.SEQ, stroke_width=2)
         kl = label(r"terms used $\to$", font_size=22, color=GREY_B).next_to(ax.x_axis.get_end(), DOWN, buff=0.15).shift(LEFT * 0.7)
         pl = MathTex(r"\pi", font_size=30, color=C.EPS).next_to(ax.c2p(K, math.pi), RIGHT, buff=0.1)
         fin = VGroup(MathTex(rf"\text{{after }} 10^6 \text{{ terms: }} {float(d['final_pi']):.6f}", font_size=34),
@@ -121,14 +146,14 @@ class Hook(VoiceoverScene):
             "takes about a hundred and thirty-four positive terms for every negative one, but every term of the original "
             "series gets used, exactly once."
         ) as vo:
-            self.play(FadeOut(rule), FadeOut(dot))
+            self.play(FadeOut(rule), FadeOut(dot), FadeOut(arrows))
             vo.wait_until("p")
-            self.play(Create(ax), Create(tgt), FadeIn(pl), FadeIn(kl))
+            self.play(FadeOut(VGroup(line, ticks, pi_l)), Create(ax), Create(tgt), FadeIn(pl), FadeIn(kl))
             self.play(Create(curve), run_time=3, rate_func=linear)
             vo.wait_until("m")
             self.play(FadeIn(fin))
         self.wait(0.3)
-        self.play(FadeOut(VGroup(ax, tgt, curve, pl, kl, fin, line, ticks, pi_l)))
+        self.play(FadeOut(VGroup(ax, tgt, curve, pl, kl, fin)))
 
     # ------------------------------------------------------------------
     def anything(self):
@@ -138,14 +163,19 @@ class Hook(VoiceoverScene):
                         axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 0.7)
         c_pi = polyline(ax, np.arange(1, K + 1), d["s_pi"][:K], color=C.SEQ, stroke_width=2)
         c_m1 = polyline(ax, np.arange(1, K + 1), d["s_m1"][:K], color=C.CUT_HIGH, stroke_width=2)
-        c_inf = polyline(ax, np.arange(1, K + 1), np.clip(d["s_inf"][:K], -1.6, 3.8), color=C.APPROX, stroke_width=2)
+        # the total aimed at ever higher targets leaves the window through its top (at k = 280) and keeps rising
+        k_out = int(np.argmax(d["s_inf"][:K] >= 3.8)) + 1
+        assert k_out == 281 and np.all(d["s_inf"][k_out - 1:K] >= 3.8) and float(d["s_inf"][K - 1]) > 5
+        c_inf = VGroup(runs_in_range(ax, np.arange(1, K + 1), d["s_inf"][:K], -1.6, 3.8, C.APPROX, stroke_width=2),
+                       Arrow(ax.c2p(k_out, 3.8), ax.c2p(k_out, 3.8) + UP * 0.55, buff=0, color=C.APPROX,
+                             stroke_width=3, max_tip_length_to_length_ratio=0.4))
         c_nat = polyline(ax, np.arange(1, K + 1), d["s_nat"][:K], color=WHITE, stroke_width=2)
         labs = VGroup(MathTex(r"\to \pi", font_size=30, color=C.SEQ).next_to(ax.c2p(K, math.pi), RIGHT, buff=0.1),
                       MathTex(r"\to -1", font_size=30, color=C.CUT_HIGH).next_to(ax.c2p(K, -1), RIGHT, buff=0.1),
-                      MathTex(r"\to \infty", font_size=30, color=C.APPROX).next_to(ax.c2p(K, float(np.clip(d["s_inf"][K - 1], -1.6, 3.8))), RIGHT, buff=0.1),
+                      MathTex(r"\to \infty", font_size=30, color=C.APPROX).next_to(c_inf[1].get_end(), RIGHT, buff=0.12),
                       MathTex(r"\ln 2", font_size=30).next_to(ax.c2p(K, math.log(2)), RIGHT, buff=0.1))
         assert abs(float(d["final_m1"]) + 1) < 1e-5 and float(d["s_inf"][K - 1]) > 3.5
-        head = label(r"Four orders of the same terms", font_size=36).to_edge(UP, buff=0.45)
+        head = label(r"Four orders of the same terms", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "And pi isn't special. <bookmark mark='a'/> Aim at minus one instead, and the same recipe lands on minus one. "
             "<bookmark mark='b'/> Keep raising the target and the total runs off to infinity. Same terms, every time; "

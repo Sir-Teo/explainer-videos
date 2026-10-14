@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis5.common import area_under, interval_band, load, plain_axes, polyline
+from videos.analysis5.common import area_under, cut_graph, escape_arrow, interval_band, load, plain_axes, polyline
 from videos.analysis5.compute import trap
 
 
@@ -37,10 +37,12 @@ class Integral(VoiceoverScene):
         shown = [0, 1, 3, 7]
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.MEASURE), k / 7) for k in range(8)]
         areas = [area_under(ax, x[::2], S[k][::2], cols[k], 0.5) for k in shown]
-        head = VGroup(label(r"\textbf{RCA 1.23} \ the integral of $f \ge 0$:", font_size=30),
+        head = VGroup(label(r"The integral of $f \ge 0$", font_size=34),
                       MathTex(r"\int s\,d\mu = \sum_i \alpha_i\, \mu(A_i), \qquad \int f\,d\mu = \sup\Big\{\int s\,d\mu : "
-                              r"0 \le s \le f,\ s \text{ simple}\Big\}", font_size=32, color=C.MEASURE)
-                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
+                              r"0 \le s \le f,\ s \text{ simple}\Big\}", r"\quad \text{\small (RCA 1.23)}", font_size=32,
+                              color=C.MEASURE)
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_B)
         tab = VGroup(MathTex(r"n", r"\quad \int s_n", font_size=28, color=GREY_A))
         for k in range(8):
             tab.add(MathTex(rf"{k + 1}", rf"\quad {ints[k]:.5f}", font_size=28))
@@ -123,24 +125,28 @@ class Integral(VoiceoverScene):
         ns, ints = d["ns"], d["ints"]
         ax = plain_axes([0, 1, 0.25], [0, 8.5, 2], 7.0, 4.1).move_to([-2.9, -0.55, 0])
         x = np.linspace(1e-4, 1, 3000)
-        full = polyline(ax, x, np.minimum(x**-0.5, 8.5), color=WHITE, stroke_width=3)
+        # the limit x^(-1/2) is unbounded: cut where it leaves the window, with an arrow (no false plateau at the top)
+        full = cut_graph(ax, x, x**-0.5, WHITE, 3)
+        assert len(full) == 1
+        up = escape_arrow(ax, 8.5**-2, WHITE)
         nT = ValueTracker(1.0)
 
         def fn():
             n = max(1, round(nT.get_value()))  # a sequence: n steps through the integers
-            y = np.minimum(x**-0.5, n)
-            return VGroup(area_under(ax, x, np.minimum(y, 8.5), C.MEASURE, 0.45),
-                          polyline(ax, x, np.minimum(y, 8.5), color=C.FUNC, stroke_width=3))
+            y = np.minimum(x**-0.5, n)  # f_n itself (n <= 8 stays inside the window, top 8.5)
+            return VGroup(area_under(ax, x, y, C.MEASURE, 0.45), polyline(ax, x, y, color=C.FUNC, stroke_width=3))
 
         g = always_redraw(fn)
         rd = always_redraw(lambda: MathTex(
             rf"n = {max(1, round(nT.get_value()))}: \ \int_0^1 f_n = 2 - \tfrac1n = {2 - 1 / max(1, round(nT.get_value())):.4f}",
             font_size=30,
             color=C.MEASURE).next_to(ax, DOWN, buff=0.15))
-        head = VGroup(label(r"\textbf{RCA 1.26} \ (monotone convergence) \ $0 \le f_1 \le f_2 \le \dots \to f$ "
-                            r"pointwise $\Rightarrow$", font_size=28),
-                      MathTex(r"\int f_n\,d\mu \to \int f\,d\mu", font_size=38, color=C.EPS)
-                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"Monotone convergence", font_size=34),
+                      MathTex(r"0 \le f_1 \le f_2 \le \dots \to f \text{ pointwise} \ \Rightarrow \ ",
+                              r"\int f_n\,d\mu \to \int f\,d\mu", r"\quad \text{\small (RCA 1.26)}", font_size=34)
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        head[1][1].set_color(C.EPS)
+        head[1][2].set_color(GREY_B)
         side = VGroup(MathTex(r"f_n = \min\big(x^{-1/2}, n\big) \nearrow x^{-1/2}", font_size=30, color=C.FUNC),
                       MathTex(r"\int_0^1 x^{-1/2}\,dx = 2", font_size=32),
                       label(r"no uniformity, \ no lid: \ only monotonicity", font_size=26, color=C.EPS),
@@ -155,7 +161,7 @@ class Integral(VoiceoverScene):
             "integral of one over root x. <bookmark mark='d'/> No uniform convergence was needed, and no lid: only "
             "that the functions increase."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax), Create(full))
+            self.play(FadeIn(head[0]), Create(ax), Create(full), GrowArrow(up))
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
             vo.wait_until("b")
@@ -230,7 +236,7 @@ class Integral(VoiceoverScene):
             if r_.width > 6.2:
                 r_.width = 6.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([3.7, -0.4, 0])
-        head = label(r"Rudin's proof: \ the sets $E_n$ swallow the whole space", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"Rudin's proof: \ the sets $E_n$ swallow the whole space", font_size=34).to_edge(UP, buff=0.3)
         labs = VGroup(MathTex("f", font_size=30).next_to(ax.c2p(2, f[-1]), RIGHT, buff=0.1),
                       MathTex("s", font_size=30, color=C.MEASURE).next_to(ax.c2p(2, svals[-1]), RIGHT, buff=0.1),
                       MathTex("cs", font_size=26, color=C.MEASURE).next_to(ax.c2p(2, c * svals[-1]), RIGHT, buff=0.1))
@@ -277,13 +283,20 @@ class Integral(VoiceoverScene):
         xs = np.linspace(0, 0.995, 800)
         cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.APPROX), k / 7) for k in range(8)]
         partial = [sum(xs ** (k - 1) / k for k in range(1, K + 1)) for K in range(1, 9)]
-        layers = [polyline(ax, xs, np.minimum(p_, 5.0), color=cols[k], stroke_width=2.5) for k, p_ in enumerate(partial)]
-        full = polyline(ax, xs, np.minimum(-np.log1p(-xs) / np.where(xs == 0, 1, xs), 5.0), color=WHITE,
-                        stroke_width=3.5)
-        head = VGroup(label(r"\textbf{RCA 1.27} \ for $f_k \ge 0$: \ $\int \sum_k f_k = \sum_k \int f_k$", font_size=30),
+        assert max(p_.max() for p_ in partial) < 5.0  # the partial sums stay inside the window
+        layers = [polyline(ax, xs, p_, color=cols[k], stroke_width=2.5) for k, p_ in enumerate(partial)]
+        # the limit, with its value 1 at x = 0 (the guard must give the limit, not 0), cut where it leaves the window
+        gs = np.where(xs == 0, 1.0, -np.log1p(-xs) / np.where(xs == 0, 1, xs))
+        assert gs[0] == 1.0 and np.all(np.diff(gs) > 0) and np.allclose(gs[1:6], 1 + xs[1:6] / 2, atol=1e-4)
+        fullc = cut_graph(ax, xs, gs, WHITE, 3.5)
+        assert len(fullc) == 1
+        full = VGroup(fullc[0], escape_arrow(ax, float(np.interp(5.0, gs, xs)), WHITE))
+        head = VGroup(label(r"For $f_k \ge 0$: \ $\int \sum_k f_k = \sum_k \int f_k$", font_size=34),
                       MathTex(r"\int_0^1 \frac{-\log(1 - x)}{x}\,dx = \int_0^1 \sum_{k \ge 1} \frac{x^{k-1}}{k}\,dx = "
-                              r"\sum_{k \ge 1} \frac{1}{k^2} = \frac{\pi^2}{6}", font_size=32, color=C.EPS)
-                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.25)
+                              r"\sum_{k \ge 1} \frac{1}{k^2} = \frac{\pi^2}{6}", r"\quad \text{\small (RCA 1.27)}",
+                              font_size=32, color=C.EPS)
+                      ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_B)
         side = VGroup(label(r"every term is $\ge 0$: \ no conditions to check", font_size=26),
                       MathTex(rf"\text{{computed: }} \int_0^1 \frac{{-\log(1 - x)}}{{x}}\,dx = {I:.4f}", font_size=30),
                       MathTex(rf"\pi^2 / 6 = {math.pi**2 / 6:.4f}", font_size=30, color=C.EPS),

@@ -28,10 +28,11 @@ class Dominated(VoiceoverScene):
     # ------------------------------------------------------------------
     def theorem(self):
         head = VGroup(
+            label(r"Dominated convergence", font_size=34),
             label(r"\textbf{RCA 1.34} \ $f_n \to f$ pointwise, \ $|f_n| \le g$ for all $n$, \ $\int g < \infty$ "
-                  r"$\Rightarrow$", font_size=30),
-            MathTex(r"\int |f_n - f|\,d\mu \to 0, \qquad \text{so} \quad \int f_n\,d\mu \to \int f\,d\mu", font_size=38,
-                    color=C.EPS)).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.3)
+                  r"$\Rightarrow$", font_size=26),
+            MathTex(r"\int |f_n - f|\,d\mu \to 0, \qquad \text{so} \quad \int f_n\,d\mu \to \int f\,d\mu", font_size=34,
+                    color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         rows = [
             MathTex(r"2g - |f_n - f|", r"\ge", r"0", font_size=30),
             MathTex(r"\int 2g", r"\le", r"\liminf \int \big(2g - |f_n - f|\big)", font_size=30),
@@ -40,7 +41,7 @@ class Dominated(VoiceoverScene):
         ]
         whys = [why(r"$|f_n - f| \le |f_n| + |f| \le 2g$", 22), why(r"Fatou, \ with $2g - |f_n - f| \to 2g$", 22),
                 why(r"linearity", 22), why(r"subtract $\int 2g < \infty$", 22)]
-        step = ladder(self, rows, whys, keep=3, top=1.25, buff=0.35, x=3.3, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=1.25, buff=0.35, x=3.0, edge=6.55)
         # the picture: f_n = f + n x e^(-nx) on [0, 4]; the bump keeps height 1/e (no uniform convergence) under the
         # lid g = f + 1/e, and its area (1 - (1 + 4n) e^(-4n)) / n goes to 0
         x = np.linspace(0, 4, 1601)
@@ -59,7 +60,7 @@ class Dominated(VoiceoverScene):
             assert b_.max() <= 1 / math.e + 1e-12 and abs(trap(b_, xf) - area(n)) < 1e-7
         ax = plain_axes([0, 4, 1], [0, 1.0, 0.5], 5.8, 3.1, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 0}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.85, -0.95, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, -0.95, 0])
         lid_ = polyline(ax, x, g, color=C.EPS, stroke_width=3)
         lid_l = MathTex(r"g = f + \tfrac1e", font_size=24, color=C.EPS).next_to(ax.c2p(2.6, g[1040]), UP, buff=0.1)
         f_ = DashedVMobject(polyline(ax, x, f, color=WHITE, stroke_width=2.5), num_dashes=50)
@@ -78,7 +79,7 @@ class Dominated(VoiceoverScene):
         rd = always_redraw(lambda: MathTex(
             rf"n = {max(1, round(nT.get_value()))}: \ \int_0^4 |f_n - f| = {area(max(1, round(nT.get_value()))):.4f}",
             font_size=26, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.35))
-        key = MathTex(r"f_n = f + n x e^{-nx}", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        key = MathTex(r"f_n = f + n x e^{-nx}", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.1).align_to(ax, RIGHT)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and the absolute values of all the f n "
             "lie under one integrable function g, the lid, then the integrals converge, and in fact the integral of the "
@@ -91,6 +92,7 @@ class Dominated(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(head), Create(ax))
             self.play(Create(lid_), FadeIn(lid_l), Create(f_), FadeIn(f_l), FadeIn(fn), FadeIn(rd), FadeIn(key))
+            self.bring_to_front(f_, f_l)  # the dashed limit stays visible over the blue f_n
             self.play(nT.animate.set_value(12), run_time=4.0, rate_func=linear)
             for i, mk in enumerate("bcde"):
                 vo.wait_until(mk)
@@ -109,13 +111,16 @@ class Dominated(VoiceoverScene):
         bx = plain_axes([0, 8, 2], [0, 1.1, 0.5], W, H).move_to([3.5, 0.0, 0])
         nT = ValueTracker(1.0)
 
+        def n_():  # a sequence: n steps through the integers
+            return max(1, round(nT.get_value()))
+
         def spread():
-            n = nT.get_value()
+            n = n_()
             y = np.where(x <= n, 1 / n, 0.0)
             return VGroup(area_under(ax, x, y, C.MEASURE, 0.4), polyline(ax, x, y, color=C.FUNC, stroke_width=3))
 
         def good():
-            n = nT.get_value()
+            n = n_()
             y = np.where(x <= n, np.clip(1 - x / n, 0, None) ** n, 0.0)
             return VGroup(area_under(bx, x, y, C.MEASURE, 0.4), polyline(bx, x, y, color=C.FUNC, stroke_width=3))
 
@@ -124,17 +129,17 @@ class Dominated(VoiceoverScene):
         lidl = MathTex(r"g = e^{-x}", font_size=28, color=C.EPS).next_to(bx.c2p(1.2, 0.55), RIGHT, buff=0.1)
         t1 = MathTex(r"\tfrac1n \mathbf 1_{[0, n]}", font_size=30).next_to(ax, UP, buff=0.1)
         t2 = MathTex(r"\big(1 - \tfrac xn\big)^n \mathbf 1_{[0, n]}", font_size=30).next_to(bx, UP, buff=0.1)
-        r1 = always_redraw(lambda: MathTex(rf"\sup|f_n| = {1 / nT.get_value():.3f} \to 0, \quad \int f_n = 1",
+        r1 = always_redraw(lambda: MathTex(rf"n = {n_()}: \ \sup|f_n| = {1 / n_():.3f} \to 0, \quad \int f_n = 1",
                                            font_size=28, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.2))
         r2 = always_redraw(lambda: MathTex(
-            rf"\int f_n = \tfrac{{n}}{{n + 1}} = {nT.get_value() / (nT.get_value() + 1):.3f} \to 1 = \int e^{{-x}}",
+            rf"\int f_n = \tfrac{{n}}{{n + 1}} = {n_() / (n_() + 1):.3f} \to 1 = \int e^{{-x}}",
             font_size=28, color=C.CONNECTED_SET).next_to(bx, DOWN, buff=0.2))
         xs = np.linspace(0, 50, 20001)
         for n in (1, 2, 5, 20):
             fn = np.where(xs <= n, np.clip(1 - xs / n, 0, None) ** n, 0.0)
             assert np.all(fn <= np.exp(-xs) + 1e-12)
             assert abs(np.sum((fn[1:] + fn[:-1]) * np.diff(xs)) / 2 - n / (n + 1)) < 1e-3
-        head = label(r"On an infinite interval, \ uniform convergence is not enough; \ a lid is", font_size=30)
+        head = label(r"On a half-line, \ uniform convergence is not enough; \ a lid is", font_size=34)
         head.to_edge(UP, buff=0.3)
         verdicts = VGroup(label(r"uniformly to $0$, \ no integrable lid: \ the swap fails", font_size=24,
                                 color=C.PATHOLOGY).next_to(ax, DOWN, buff=1.0),
@@ -199,7 +204,7 @@ class Dominated(VoiceoverScene):
         for row in lamps:
             row.arrange(RIGHT, buff=0.3)
         lamps.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([0.0, -2.6, 0])
-        head = label(r"The typewriter: \ converges in area, \ at no point", font_size=32).to_edge(UP, buff=0.2)
+        head = label(r"The typewriter: \ converges in area, \ at no point", font_size=34).to_edge(UP, buff=0.3)
         side = VGroup(label(r"a subsequence does converge", font_size=24, color=GREY_A),
                       label(r"a.e. \ (Part 6: Riesz--Fischer)", font_size=24, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([5.3, 0.1, 0])
@@ -240,10 +245,11 @@ class Dominated(VoiceoverScene):
                           stroke_width=0, fill_color=C.PATHOLOGY, fill_opacity=0.18).move_to(ax.c2p(1 - eps / 2, 0.525))
         sl = MathTex(rf"[1 - \varepsilon, 1], \ \varepsilon = {eps}", font_size=24, color=C.PATHOLOGY).next_to(
             strip, UP, buff=0.05).shift(LEFT * 0.5)
-        head = VGroup(label(r"Egorov (RCA, Exercise 3.16): \ on a finite measure space, \ a.e. convergence is",
-                            font_size=28),
-                      label(r"uniform off a set of measure as small as you like", font_size=28, color=C.EPS)
-                      ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"Egorov's theorem", font_size=34),
+                      VGroup(label(r"\textbf{RCA, Exercise 3.16} \ on a finite measure space, \ a.e.\ convergence is",
+                                   font_size=26),
+                             label(r"uniform off a set of measure as small as you like", font_size=26, color=C.EPS)
+                             ).arrange(DOWN, buff=0.1)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
         tab = VGroup(MathTex(r"n", r"\quad \sup_{[0, 1 - \varepsilon]} x^n", font_size=28, color=GREY_A))
         for n, v in zip((10, 50, 100, 200), eg):
             tab.add(MathTex(rf"{n}", r"\quad " + (f"{v:.4f}" if v > 1e-3 else sci(float(v), 1)), font_size=28))
@@ -261,11 +267,12 @@ class Dominated(VoiceoverScene):
             "largest value is one minus epsilon to the n. <bookmark mark='d'/> On an infinite measure space this "
             "fails: indicators of the rays from n to infinity converge to zero everywhere, but never uniformly."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), LaggedStart(*[Create(c_) for c_ in curves], lag_ratio=0.2),
+                      run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[Create(c_) for c_ in curves], lag_ratio=0.2), run_time=2.5)
+            self.play(Indicate(curves[-1], color=C.APPROX, scale_factor=1.0))
             self.play(FadeIn(strip), FadeIn(sl))
             vo.wait_until("c")
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))

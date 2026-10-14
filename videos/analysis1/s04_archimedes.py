@@ -44,9 +44,9 @@ class Archimedes(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def archimedean(self):
-        stmt = VGroup(label(r"\textbf{Archimedean property} (Rudin 1.20)", font_size=30, color=GREY_A),
+        stmt = VGroup(label(r"\textbf{Archimedean property} (Rudin 1.20)", font_size=28, color=GREY_A),
                       label(r"If $x > 0$ and $y \in \R$, then $nx > y$ for some whole number $n$.", font_size=32))
-        stmt.arrange(DOWN, buff=0.15).to_edge(UP, buff=0.5)
+        stmt.arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
         nl = number_line(0, 10, y=-0.6, step=1)
         X = nl.X
         x, y = 0.83, 8.6
@@ -62,6 +62,7 @@ class Archimedes(VoiceoverScene):
         n_win = next(k for k in range(1, 100) if k * x > y)
         assert n_win == 11
         win_l = MathTex(rf"{n_win}x > y", font_size=34, color=C.EPS).next_to(steps[n_win - 1], UP, buff=0.15)
+        win_l.shift(RIGHT * (X(y) + 0.2 - win_l.get_left()[0]))  # clear of the y marker
         with self.voiceover(
             "First, the Archimedean property. <bookmark mark='s'/> Pick any positive x, however tiny, and any y, "
             "however large. <bookmark mark='m'/> Then some whole-number multiple of x passes y."
@@ -78,20 +79,21 @@ class Archimedes(VoiceoverScene):
         # schematic of the contradiction: if every multiple were <= y, alpha = sup would satisfy alpha <= y
         xs_, alpha, y_s = 1.5, 7.0, 8.0
         assert alpha <= y_s and (alpha - xs_) < 4 * xs_ <= alpha < 5 * xs_
-        y_m2 = VGroup(Line([X(y_s), -1.0, 0], [X(y_s), 0.4, 0], color=WHITE, stroke_width=3),
+        y_m2 = VGroup(Line([X(y_s), -0.72, 0], [X(y_s), 0.4, 0], color=WHITE, stroke_width=3),  # above the "8"
                       MathTex(r"y", font_size=34).move_to([X(y_s), 0.65, 0]))
-        a_line = DashedLine([X(alpha), -1.0, 0], [X(alpha), 0.9, 0], color=C.UPPER_SUM, stroke_width=3)
+        a_line = DashedLine([X(alpha), -0.72, 0], [X(alpha), 0.9, 0], color=C.UPPER_SUM, stroke_width=3)
         a_l = MathTex(r"\alpha = \sup\{x, 2x, 3x, \ldots\} \le y", font_size=30, color=C.UPPER_SUM)
         a_l.move_to([X(alpha) - 1.0, 1.25, 0])
         am = DashedLine([X(alpha - xs_), -1.0, 0], [X(alpha - xs_), 0.2, 0], color=GREY_B, stroke_width=2)
         am_l = MathTex(r"\alpha - x", font_size=28, color=GREY_B).move_to([X(alpha - xs_), -1.45, 0])
         mx = Dot([X(4 * xs_), -0.6, 0], radius=0.09, color=C.DELTA)
-        mx_l = MathTex(r"mx", font_size=30, color=C.DELTA).move_to([X(4 * xs_) - 0.4, -0.2, 0])
+        mx_l = MathTex(r"mx", font_size=30, color=C.DELTA).next_to(mx, UP, buff=0.12)
         nxt = Dot([X(5 * xs_), -0.6, 0], radius=0.09, color=C.PATHOLOGY)
         nxt_l = MathTex(r"(m+1)x > \alpha", font_size=30, color=C.PATHOLOGY).move_to([X(5 * xs_) + 1.6, -1.45, 0])
-        arr = CurvedArrow(mx.get_center() + UP * 0.1, nxt.get_center() + UP * 0.1, angle=-TAU / 5, color=C.DELTA)
+        arr = CurvedArrow(mx.get_center() + UP * 0.1, nxt.get_center() + UP * 0.1, angle=-TAU / 5, color=C.DELTA,
+                          tip_length=0.15)
         hyp = label(r"suppose not: then $nx \le y$ for every $n$", font_size=28, color=GREY_A).next_to(stmt, DOWN, buff=0.35)
-        sch = schematic_tag(corner=DR)
+        sch = schematic_tag(corner=DR).to_corner(DR, buff=0.45)
         self.play(FadeOut(y_m), FadeIn(y_m2), FadeIn(sch))
         with self.voiceover(
             "It sounds obvious, but it's a consequence of having no holes. <bookmark mark='s'/> Suppose it failed: every "
@@ -125,11 +127,11 @@ class Archimedes(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def density(self):
-        stmt = VGroup(label(r"\textbf{$\Q$ is dense in $\R$} (Rudin 1.20)", font_size=30, color=GREY_A),
+        stmt = VGroup(label(r"\textbf{$\Q$ is dense in $\R$} (Rudin 1.20)", font_size=28, color=GREY_A),
                       label(r"If $x < y$, then $x < p < y$ for some $p \in \Q$.", font_size=32))
-        stmt.arrange(DOWN, buff=0.15).to_edge(UP, buff=0.5)
-        a, b = 0.3, 0.6
-        nl = number_line(a, b, y=-1.4, step=0.05)
+        stmt.arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
+        a, b = 0.2, 0.8  # wide enough that the quarter ruler shows several ticks around the gap
+        nl = number_line(a, b, y=-1.4, step=0.1)
         X = nl.X
         x, y = SQRT2 - 1, 0.45
         gap = VGroup(Line([X(x), -1.4, 0], [X(y), -1.4, 0], color=C.EPS, stroke_width=10))
@@ -178,7 +180,8 @@ class Archimedes(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def root(self):
-        stmt = label(r"\textbf{Theorem} (Rudin 1.21, for $n = 2$): \ some $y \in \R$, $y > 0$, has $y^2 = 2$.", font_size=30)
+        stmt = VGroup(label(r"\textbf{Theorem} (Rudin 1.21, for $n = 2$)", font_size=28, color=GREY_A),
+                      label(r"Some $y \in \R$, $y > 0$, has $y^2 = 2$.", font_size=32)).arrange(DOWN, buff=0.12)
         stmt.to_edge(UP, buff=0.5)
         nl = number_line(1.0, 1.8, y=-0.9, step=0.1)
         X = nl.X
@@ -227,7 +230,7 @@ class Archimedes(VoiceoverScene):
         d = load("sqrt2")
         dec = str(d["dec"])
         lo = [int(v) for v in d["lo"]]
-        win = Window(1.5, 1.2, y=-0.8)
+        win = Window(1.5, 1.2, x_left=-6.2, x_right=6.2, y=-0.8)  # labels stay 0.4 inside the frame
         axis, labs = win.axis(), win.labels()
         dust = win.dust(height=0.7, target=900)
         band = always_redraw(lambda: VGroup())
@@ -284,35 +287,59 @@ class Archimedes(VoiceoverScene):
         assert dec.startswith("1.41421356237")
         for m in (axis, labs, dust, band, digits):
             m.clear_updaters()
-        self.play(FadeOut(VGroup(axis, labs, dust, band, ivl)), digits.animate.scale(0.8).to_corner(UL, buff=0.4))
+        self.play(FadeOut(VGroup(axis, labs, dust, band, ivl)), digits.animate.scale(0.8).to_corner(UL, buff=0.5))
 
         stmt = VGroup(label(r"\textbf{Nested intervals.} If $[a_1, b_1] \supset [a_2, b_2] \supset \cdots$,", font_size=32),
                       label(r"then some $x$ lies in every $[a_n, b_n]$.", font_size=32)).arrange(DOWN, buff=0.15)
-        stmt.move_to(UP * 1.6)
+        stmt.move_to(UP * 2.35)
         pf = VGroup(MathTex(r"x = \sup\{a_1, a_2, a_3, \ldots\}", font_size=36),
                     label(r"exists: every $b_m$ is an upper bound of the $a_n$; \ and $a_n \le x \le b_n$ for all $n$.",
-                          font_size=28, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(stmt, DOWN, buff=0.45)
+                          font_size=28, color=GREY_A)).arrange(DOWN, buff=0.2).next_to(stmt, DOWN, buff=0.4)
+        # five nested closed intervals on [0, 1]: left ends climb, right ends fall, both toward x = sup a_n
+        nl1 = number_line(0, 1, y=-2.75, step=0.25)
+        X1 = nl1.X
+        x_star = 0.58
+        an = [x_star - 0.5 * 0.55 ** k for k in range(5)]
+        bn = [x_star + 0.4 * 0.6 ** k for k in range(5)]
+        assert all(a1 < a2 for a1, a2 in zip(an, an[1:])) and all(b1 > b2 for b1, b2 in zip(bn, bn[1:]))
+        assert all(a < x_star < b for a, b in zip(an, bn)) and an[0] >= 0 and bn[0] <= 1
+        nest = VGroup()
+        for k, (a, b) in enumerate(zip(an, bn)):
+            yk = -0.55 - 0.38 * k
+            nest.add(VGroup(Line([X1(a), yk, 0], [X1(b), yk, 0], color=C.COMPACT_SET, stroke_width=6),
+                            endpoint([X1(a), yk, 0], True, C.COMPACT_SET), endpoint([X1(b), yk, 0], True, C.COMPACT_SET)))
+        nest_l = MathTex(r"[a_1, b_1] \supset [a_2, b_2] \supset \cdots", font_size=26, color=C.COMPACT_SET)
+        nest_l.next_to([X1(an[0]), -0.55, 0], UP, buff=0.12).align_to([X1(an[0]) - 0.1, 0, 0], LEFT)
+        x_line = DashedLine([X1(x_star), -0.3, 0], [X1(x_star), -2.68, 0], color=C.EPS, stroke_width=3)
+        x_l = MathTex(r"x", font_size=32, color=C.EPS).next_to([X1(x_star), -0.3, 0], UP, buff=0.08)
         with self.voiceover(
             "That a point is actually there is, again, the least-upper-bound property. <bookmark mark='s'/> If closed "
             "intervals are nested, each inside the last, <bookmark mark='p'/> then the left endpoints are bounded above "
             "by every right endpoint, so they have a supremum x, and x lies in every interval."
         ) as vo:
             vo.wait_until("s")
-            self.play(FadeIn(stmt))
+            self.play(FadeIn(stmt), Create(nl1))
+            self.play(LaggedStart(*[FadeIn(n_, shift=DOWN * 0.1) for n_ in nest], lag_ratio=0.3), FadeIn(nest_l),
+                      run_time=1.8)
             vo.wait_until("p")
-            self.play(FadeIn(pf))
+            self.play(FadeIn(pf), Create(x_line), FadeIn(x_l))
+        self.wait(0.2)
+        self.play(FadeOut(VGroup(nest, nest_l, x_line, x_l, nl1)))
         nl = number_line(0, 1, y=-3.0, step=0.25)
         X = nl.X
+        # (0, 1/n), stacked: nested, never empty, and nothing is in all of them
         bars = VGroup()
-        for k in range(1, 7):
-            bar = VGroup(Line([X(0), 0, 0], [X(1 / k), 0, 0], color=C.OPEN_SET, stroke_width=6),
-                         endpoint([X(0), 0, 0], False, C.OPEN_SET), endpoint([X(1 / k), 0, 0], False, C.OPEN_SET))
-            bar.shift(UP * -2.45)
-            bars.add(bar)
-        bars_g = VGroup(*bars)
+        for k in range(6):
+            yk = -2.5 + 0.2 * k
+            bars.add(VGroup(Line([X(0), yk, 0], [X(1 / (k + 1)), yk, 0], color=C.OPEN_SET, stroke_width=6),
+                            endpoint([X(0), yk, 0], False, C.OPEN_SET, radius=0.06),
+                            endpoint([X(1 / (k + 1)), yk, 0], False, C.OPEN_SET, radius=0.06)))
+        zero_ring = endpoint([X(0), -3.0, 0], False, C.PATHOLOGY, radius=0.1)
+        zero_l = label(r"$0 \notin$ any of them", font_size=24, color=C.PATHOLOGY)
+        zero_l.move_to([0, -3.35, 0]).align_to([X(0) + 0.3, 0, 0], LEFT)  # on the tick-label row, right of "0"
         warn = VGroup(label(r"Both words matter: \ $(0, \tfrac1n)$ are nested and never empty, but", font_size=28),
                       MathTex(r"\bigcap_{n} \big(0, \tfrac1n\big) = \emptyset", font_size=36, color=C.PATHOLOGY)).arrange(DOWN, buff=0.2)
-        warn.next_to(pf, DOWN, buff=0.45)
+        warn.next_to(pf, DOWN, buff=0.35)
         with self.voiceover(
             "Both hypotheses matter. <bookmark mark='o'/> The open intervals from zero to one over n are nested and "
             "never empty, but no number lies in all of them: zero is excluded from each, and anything positive is "
@@ -321,25 +348,24 @@ class Archimedes(VoiceoverScene):
         ) as vo:
             vo.wait_until("o")
             self.play(Create(nl), FadeIn(warn))
-            for k in range(6):
-                self.play(Transform(bars_g[0], bars[k]) if k else FadeIn(bars_g[0]), run_time=0.4)
+            self.play(LaggedStart(*[FadeIn(b_, shift=DOWN * 0.1) for b_ in bars], lag_ratio=0.4), run_time=2.4)
+            self.play(FadeIn(zero_ring, scale=2), FadeIn(zero_l))
             vo.wait_until("q")
             self.play(Indicate(digits, color=C.HOLE))
         self.wait(0.3)
-        bars_g[0].clear_updaters()
         self.clear_scene()
 
         d2 = load("sqrt2")
         A, B = d2["bis_a"], d2["bis_b"]
-        nl = number_line(1.0, 2.0, y=-0.2, step=0.25)
+        nl = number_line(1.0, 2.0, y=1.0, step=0.25)
         X = nl.X
-        title = label(r"The bisection engine", font_size=40).to_edge(UP, buff=0.5)
+        title = label(r"The bisection engine", font_size=34).to_edge(UP, buff=0.3)
         sub = label(r"halve the interval; keep the half where $t^2 - 2$ changes sign", font_size=28, color=GREY_A)
         sub.next_to(title, DOWN, buff=0.2)
         rows = VGroup()
         bars = VGroup()
         for k in range(7):
-            yb = -0.75 - 0.32 * k
+            yb = 0.3 - 0.36 * k
             bars.add(VGroup(Line([X(A[k]), yb, 0], [X(B[k]), yb, 0], color=C.COMPACT_SET, stroke_width=7),
                             Dot([X(A[k]), yb, 0], radius=0.05, color=C.COMPACT_SET),
                             Dot([X(B[k]), yb, 0], radius=0.05, color=C.COMPACT_SET)))
