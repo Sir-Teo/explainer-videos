@@ -40,8 +40,8 @@ class FTC(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def running(self):
-        ax = plain_axes([0, 3, 1], [0, 1.6, 0.5], 6.2, 2.6).move_to([-3.3, 1.35, 0])
-        bx = plain_axes([0, 3, 1], [0, 2.6, 1], 6.2, 2.6).move_to([-3.3, -2.0, 0])
+        ax = plain_axes([0, 3, 1], [0, 1.6, 0.5], 6.2, 2.5).move_to([-3.3, 1.45, 0])
+        bx = plain_axes([0, 3, 1], [0, 2.6, 1], 6.2, 2.4).move_to([-3.3, -2.15, 0])
         gf = VGroup(ax.plot(fstep, x_range=[0, 1.499, 0.005], color=C.FUNC, stroke_width=4),
                     ax.plot(fstep, x_range=[1.5, 3, 0.005], color=C.FUNC, stroke_width=4))
         fl = MathTex(r"f", font_size=32, color=C.FUNC).next_to(ax.c2p(0.2, fstep(0.2)), UP, buff=0.15)
@@ -60,10 +60,13 @@ class FTC(VoiceoverScene):
             x0 = xT.get_value()
             s = float(fstep(np.array([x0]))[0])
             y0 = float(Fstep(np.array([x0]))[0])
-            return Line(bx.c2p(x0 - 0.35, y0 - 0.35 * s), bx.c2p(x0 + 0.35, y0 + 0.35 * s), color=WHITE, stroke_width=2.5)
+            lo, hi = max(0.0, x0 - 0.35), min(3.0, x0 + 0.35)  # kept inside the axes
+            return Line(bx.c2p(lo, y0 + (lo - x0) * s), bx.c2p(hi, y0 + (hi - x0) * s), color=WHITE, stroke_width=2.5)
 
         tan = always_redraw(tangent)
-        Fl = MathTex(r"F(x) = \int_a^x f(t)\,dt", font_size=32, color=C.EPS).next_to(bx, UP, buff=0.05).shift(RIGHT * 1.3)
+        Fl = label(r"The area so far: \ $F(x) = \int_a^x f(t)\,dt$", font_size=34).to_edge(UP, buff=0.3)
+        Fin = MathTex(r"F", font_size=32, color=C.EPS).move_to(bx.c2p(0.3, 2.0))
+        assert float(Fstep(np.array([0.6]))[0]) < 1.4 and ax.get_top()[1] < Fl.get_bottom()[1] - 0.1
         side = VGroup(
             label(r"\textbf{Rudin 6.20}", font_size=28),
             MathTex(r"|F(y) - F(x)| \le M\,|y - x|", font_size=32),
@@ -81,10 +84,10 @@ class FTC(VoiceoverScene):
             "the step, so the slope of F at that point is the value of f. <bookmark mark='d'/> At the jump, the slope "
             "changes abruptly, and F has a corner."
         ) as vo:
-            self.play(Create(ax), Create(gf), FadeIn(fl), Create(bx))
+            self.play(FadeIn(Fl), Create(ax), Create(gf), FadeIn(fl), Create(bx))
             vo.wait_until("a")
             self.add(area, Fg, Fdot)
-            self.play(FadeIn(Fl), xT.animate.set_value(1.2), run_time=3.0, rate_func=linear)
+            self.play(FadeIn(Fin), xT.animate.set_value(1.2), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(side[:3]))
             vo.wait_until("c")
@@ -102,7 +105,7 @@ class FTC(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Rudin 6.21} \ (fundamental theorem of calculus)", font_size=30),
                      MathTex(r"F' = f \text{ on } [a, b],\ f \text{ integrable} \;\Rightarrow\; \int_a^b f\,dx = F(b) - F(a)",
                              font_size=34)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 3, 1], [0, 2.4, 1], 6.6, 3.8).move_to([-3.55, -1.2, 0])
+        ax = plain_axes([0, 3, 1], [0, 2.4, 1], 6.0, 3.8).move_to([-3.4, -1.2, 0])
         Fn = lambda t: 0.3 + 0.5 * t + 0.25 * np.sin(2.2 * t)  # noqa: E731
         fn = lambda t: 0.5 + 0.55 * np.cos(2.2 * t)  # noqa: E731
         gF = ax.plot(Fn, x_range=[0, 3, 0.01], color=C.EPS, stroke_width=4)
@@ -125,9 +128,10 @@ class FTC(VoiceoverScene):
         ]
         whys = [why(r"telescoping: \ the rises add up"), why(r"mean value theorem on each piece"),
                 why(r"$m_i \le f(t_i) \le M_i$; \ refine")]
-        step = ladder(self, rows, whys, keep=3, top=1.95, buff=0.38, x=3.3, edge=6.95)
+        step = ladder(self, rows, whys, keep=3, top=1.95, buff=0.38, x=3.0, edge=6.6)
         extra = label(r"also: integration by parts (6.22), \ change of variables (6.19)", font_size=24, color=GREY_B)
-        extra.to_edge(DOWN, buff=0.2).shift(RIGHT * 3.0)
+        extra.to_edge(DOWN, buff=0.35).align_to(np.array([6.5, 0, 0]), RIGHT)
+        F_l = MathTex(r"F", font_size=32, color=C.EPS).next_to(ax.c2p(3, Fn(3)), RIGHT, buff=0.12)
         with self.voiceover(
             "<bookmark mark='t'/> The fundamental theorem goes the other way: if F has derivative f, and f is "
             "integrable, then the integral of f is F of b minus F of a. <bookmark mark='a'/> Take any partition. The "
@@ -138,7 +142,7 @@ class FTC(VoiceoverScene):
             "chapter's results."
         ) as vo:
             vo.wait_until("t")
-            self.play(FadeIn(thm), Create(ax), Create(gF))
+            self.play(FadeIn(thm), Create(ax), Create(gF), FadeIn(F_l))
             vo.wait_until("a")
             step(0)
             self.play(LaggedStart(*[Create(r) for r in rises], lag_ratio=0.15))
@@ -165,7 +169,8 @@ class FTC(VoiceoverScene):
             return np.c_[1.9 * np.cos(t) + 0.45 * np.cos(3 * t), 1.4 * np.sin(t) - 0.3 * np.sin(2 * t)]
 
         P = gam(t)
-        curve = VMobject(color=C.FUNC, stroke_width=4).set_points_as_corners([o + np.array([p[0], p[1], 0]) for p in P])
+        curve = VMobject(color=C.FUNC, stroke_width=7, stroke_opacity=0.55).set_points_as_corners(
+            [o + np.array([p[0], p[1], 0]) for p in P])
         curve.set_fill(opacity=0)
         true_len = float(np.sum(np.linalg.norm(np.diff(P, axis=0), axis=1)))
         polys, lens = [], []
@@ -173,7 +178,7 @@ class FTC(VoiceoverScene):
             tt = np.linspace(0, 2 * np.pi, n + 1)
             Q = gam(tt)
             lens.append(float(np.sum(np.linalg.norm(np.diff(Q, axis=0), axis=1))))
-            pm = VMobject(color=C.EPS, stroke_width=3).set_points_as_corners([o + np.array([q[0], q[1], 0]) for q in Q])
+            pm = VMobject(color=C.EPS, stroke_width=2).set_points_as_corners([o + np.array([q[0], q[1], 0]) for q in Q])
             pm.set_fill(opacity=0)
             polys.append(VGroup(pm, *[Dot(o + np.array([q[0], q[1], 0]), radius=0.045, color=C.EPS) for q in Q[:-1]]))
         assert all(a < b for a, b in zip(lens, lens[1:])) and lens[-1] < true_len
@@ -203,33 +208,48 @@ class FTC(VoiceoverScene):
     def koch(self):
         d = load("koch")
         lengths = d["lengths"]
-        sc = 10.0
-        o = np.array([-6.3, -1.75, 0])
+        # the curve on top, and below it the first quarter magnified exactly 3 times: it is the whole curve again
+        sc = 7.0
+        o = np.array([-4.25, 0.75, 0])
         curves = []
         for k in range(0, 7):
             P = d[f"p{k}"]
             m = VMobject(color=C.PATHOLOGY if k else C.FUNC, stroke_width=3 if k < 5 else 2)
             m.set_points_as_corners([o + sc * np.array([p[0], p[1], 0]) for p in P])
             curves.append(m)
-        head = label(r"The Koch curve: \ continuous, \ but no length", font_size=34).to_edge(UP, buff=0.35)
+        head = label(r"The Koch curve: \ continuous, \ but no length", font_size=34).to_edge(UP, buff=0.3)
         tab = VGroup(*[MathTex(rf"\text{{depth }} {k}: \ ({{\tfrac43}})^{{{k}}} = {lengths[k]:.3f}", font_size=26)
-                       for k in (1, 2, 3, 6, 9, 12)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.9, 1.7, 0])
+                       for k in (1, 2, 3, 6, 9, 12)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.95, 1.75, 0])
         card = museum_card(r"the Koch curve", r"H. von Koch, 1904", r"finite length", r"Rudin 6.26: not rectifiable",
-                           width=3.8).scale(0.85).to_corner(DR, buff=0.3)
-        # self-similarity: the first quarter of the curve (over [0, 1/3]) is the whole curve shrunk by 3
+                           width=4.0).to_corner(DR, buff=0.4)
         src = Axes(x_range=[0, 1, 1], y_range=[0, 0.3, 0.3], x_length=sc, y_length=0.3 * sc, tips=False,
                    axis_config={"stroke_opacity": 0, "include_ticks": False})
         src.shift(o - src.c2p(0, 0))
-        inset, decor = magnifier(src, (-0.004, 0.3373), (-0.006, 0.1025), center=[-3.6, 2.3, 0], width=4.2,
-                                 height=4.2 * 0.1085 / 0.3413, color=GREY_B, tag=r"\times 3")
+        wx, wy = (-0.003, 0.3363), (-0.006, 0.1025)
+        src_c = (src.c2p(wx[0], 0) + src.c2p(wx[1], 0)) / 2
+        W3, H3 = 3 * sc * (wx[1] - wx[0]), 3 * sc * (wy[1] - wy[0])
+        # the inset straight below its source (the curve lies above its base line, so the guides cannot cross it)
+        inset, decor = magnifier(src, wx, wy, center=[src_c[0], o[1] - 0.6 - H3 / 2, 0], width=W3, height=H3,
+                                 color=GREY_B)
+        assert decor.tag.tex_string.strip() == r"\times 3"
+        sf, df = decor.src, decor.frame
+        guides = VGroup(*[DashedLine(a_, b_, color=GREY_B, stroke_width=1.5, dash_length=0.08) for a_, b_ in
+                          ((sf.get_corner(DL), df.get_corner(UL)), (sf.get_corner(DR), df.get_corner(UR)))])
+        decor.tag.next_to(df, DOWN, buff=0.1).align_to(df, LEFT)
+        decor = VGroup(sf, guides, df, decor.tag)
+        decor.frame = df
         P6 = d["p6"]
+        assert (o[1] + sc * P6[:, 1]).min() > sf.get_bottom()[1] - 1e-9  # the whole curve is above the guides' start
+        assert df.get_left()[0] > -6.75 and df.get_right()[0] < tab.get_left()[0]
         q = P6[: (len(P6) - 1) // 4 + 1]
         assert np.allclose(q * 3, P6[::4]) and np.allclose(q[-1], [1 / 3, 0])
         zoomed = VMobject(color=C.PATHOLOGY, stroke_width=2).set_points_as_corners([inset.c2p(a, b) for a, b in q])
+        # the magnified quarter has the same size as the whole curve drawn above it
+        assert abs(zoomed.width - curves[6].width) < 0.02 and abs(zoomed.height - curves[6].height) < 0.02
         piece = VMobject(color=C.EPS, stroke_width=3).set_points_as_corners([o + sc * np.array([a, b, 0]) for a, b in q])
         selfsim = VGroup(MathTex(r"\text{length} = 4 \times \tfrac13\,\text{length}", font_size=30, color=C.PATHOLOGY),
                          label(r"so it is $0$ or $\infty$; \ and it is not $0$", font_size=24, color=GREY_A)
-                         ).arrange(DOWN, buff=0.1).next_to(decor.frame, RIGHT, buff=0.35).shift(DOWN * 0.1)
+                         ).arrange(DOWN, buff=0.1).next_to(df, RIGHT, buff=0.4)
         with self.voiceover(
             "And a curve without a length. <bookmark mark='a'/> Start with a segment. Replace its middle third by two "
             "sides of an equilateral triangle, and repeat on every segment, forever. <bookmark mark='b'/> Each step "

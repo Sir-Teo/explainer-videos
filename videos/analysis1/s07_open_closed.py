@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import endpoint
+from videos.analysis1.common import dim, endpoint
 
 
 def blob_pts(center, scale=1.0, n=400):
@@ -44,7 +44,11 @@ class OpenClosed(VoiceoverScene):
         c0 = np.array([-3.6, -0.3, 0])
         pts = blob_pts(c0)
         E = Polygon(*pts, stroke_width=0, fill_color=C.SEQ, fill_opacity=0.28)
-        edge = Polygon(*pts, color=C.SEQ, stroke_width=2.5)
+        # E keeps the upper half of its edge (solid) and misses the lower half (dashed): neither open nor closed
+        upper = pts[:201]
+        lower = np.concatenate([pts[200:], pts[:1]])
+        edge = VGroup(VMobject(color=C.SEQ, stroke_width=2.5).set_points_as_corners(upper),
+                      DashedVMobject(VMobject(color=C.SEQ, stroke_width=2.5).set_points_as_corners(lower), num_dashes=45))
         iso = Dot(c0 + np.array([2.55, 1.85, 0]), radius=0.07, color=C.SEQ)
         El = MathTex(r"E", font_size=40, color=C.SEQ).move_to(c0 + np.array([0.75, -0.45, 0]))
         defs = VGroup(
@@ -67,8 +71,9 @@ class OpenClosed(VoiceoverScene):
         p_in = c0 + np.array([-0.35, 0.45, 0])
         n_in = nbhd(p_in, 0.55)
         d_in = Dot(p_in, radius=0.06)
-        ok = label(r"interior", font_size=26, color=C.CONNECTED_SET).next_to(n_in, DOWN, buff=0.1)
-        b_idx = 300  # the bottom of the blob
+        ok = label(r"interior", font_size=26, color=C.OPEN_SET).next_to(n_in, DOWN, buff=0.1)
+        b_idx = 300  # the bottom of the blob, on the dashed half: a limit point that E does not contain
+        assert 200 < b_idx < 400
         p_b = pts[b_idx]
         d_b = Dot(p_b, radius=0.07, color=C.CLOSED_SET)
         n_bs = [nbhd(p_b, r) for r in (0.6, 0.35, 0.18)]
@@ -126,7 +131,7 @@ class OpenClosed(VoiceoverScene):
         small = nbhd(q, h, color=C.EPS, fill=0.15, dashes=30)
         s = q + h * 0.7 * np.array([np.cos(0.4), np.sin(0.4), 0])
         sd = Dot(s, radius=0.06, color=C.EPS)
-        sl = MathTex(r"s", font_size=32, color=C.EPS).next_to(sd, UR, buff=0.05)
+        sl = MathTex(r"s", font_size=32, color=C.EPS).next_to(sd, DOWN, buff=0.08)
         pq = Line(p, q, color=GREY_B, stroke_width=2)
         qs = Line(q, s, color=C.EPS, stroke_width=2)
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.19)", font_size=28, color=GREY_A),
@@ -190,7 +195,7 @@ class OpenClosed(VoiceoverScene):
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.23)", font_size=28, color=GREY_A),
                       label(r"$E$ is open \ $\iff$ \ its complement $E^c$ is closed.", font_size=34))
         stmt.arrange(DOWN, buff=0.15).to_edge(UP, buff=0.5)
-        frame = Rectangle(width=12.0, height=5.4, color=GREY_C, stroke_width=1.5).shift(DOWN * 0.75)
+        frame = Rectangle(width=12.0, height=5.0, color=GREY_C, stroke_width=1.5).shift(DOWN * 0.55)
         frame.set_fill(C.CLOSED_SET, 0.12)
         pts = blob_pts(np.array([-0.8, -0.75, 0]), scale=1.05)
         E = Polygon(*pts, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1)
@@ -202,7 +207,7 @@ class OpenClosed(VoiceoverScene):
         xd = Dot(x, radius=0.07)
         nx = nbhd(x, 0.45)
         txt = label(r"$x \in E$: a disk around $x$ misses $E^c$, so $x$ is not a limit point of $E^c$", font_size=26)
-        txt.to_edge(DOWN, buff=0.25)
+        txt.to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Open and closed are related through complements. <bookmark mark='s'/> E is open exactly when everything "
             "outside it, its complement, is closed. <bookmark mark='p'/> If E is open, every x in E has a disk around it "
@@ -220,16 +225,26 @@ class OpenClosed(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def unions(self):
-        stmt = VGroup(
-            label(r"\textbf{Rudin 2.24} \ Any union of open sets is open. \ A \emph{finite} intersection of open sets is open.",
-                  font_size=28),
-        ).to_edge(UP, buff=0.5)
+        stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.24)", font_size=28, color=GREY_A),
+                      label(r"Any union of open sets is open. \ A \emph{finite} intersection of open sets is open.",
+                            font_size=30)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.5)
         cs = [np.array([-4.3, 0.1, 0]), np.array([-3.2, 0.35, 0]), np.array([-3.8, -0.75, 0])]
         rs = [1.35, 1.25, 1.2]
         disks = VGroup(*[nbhd(c, r, color=C.OPEN_SET, fill=0.12) for c, r in zip(cs, rs)])
+        # the union, filled, with its dashed outer edge
+        union = Union(*[Circle(radius=r).move_to(c) for c, r in zip(cs, rs)])
+        union.set_stroke(width=0).set_fill(C.OPEN_SET, 0.18)
+        union_e = DashedVMobject(union.copy().set_fill(opacity=0).set_stroke(C.OPEN_SET, width=3.5), num_dashes=80)
+        # a point of the union that lies in only one of the sets: that set alone gives it room
+        yp = np.array([-5.2, 0.6, 0])
+        dists = [np.linalg.norm(yp - c) for c in cs]
+        assert dists[0] < rs[0] and dists[1] > rs[1] and dists[2] > rs[2]
+        yd = Dot(yp, radius=0.06)
+        y_room = nbhd(yp, 0.8 * (rs[0] - dists[0]), color=C.EPS, fill=0.25, dashes=16)
         x = np.array([-3.75, -0.1, 0])
         xd = Dot(x, radius=0.06)
         radii = [r - np.linalg.norm(x - c) for c, r in zip(cs, rs)]
+        assert min(radii) > 0  # x is in all three
         rm = min(radii)
         small = nbhd(x, rm, color=C.EPS, fill=0.25, dashes=24)
         sl = label(r"radius $= \min(r_1, r_2, r_3)$", font_size=26, color=C.EPS).next_to(disks, DOWN, buff=0.3)
@@ -239,23 +254,27 @@ class OpenClosed(VoiceoverScene):
             "open sets is also open: <bookmark mark='m'/> a point in all of them has a disk inside each, and the "
             "smallest of those finitely many disks fits inside all of them."
         ) as vo:
-            self.play(FadeIn(stmt))
+            self.play(FadeIn(stmt), LaggedStart(*[FadeIn(d_) for d_ in disks], lag_ratio=0.3))
+            vo.wait_until("u")
+            self.play(FadeIn(union), Create(union_e))
+            self.play(FadeIn(yd, scale=2), FadeIn(y_room, scale=0.5))
             vo.wait_until("i")
-            self.play(LaggedStart(*[FadeIn(d_) for d_ in disks], lag_ratio=0.3), FadeIn(xd))
+            self.play(FadeOut(union), FadeOut(union_e), FadeOut(yd), FadeOut(y_room), FadeIn(xd, scale=2))
             vo.wait_until("m")
             self.play(FadeIn(small, scale=0.5), FadeIn(sl))
 
         X = lambda v: 2.5 + v * 3.5  # noqa: E731
-        line = Line([X(-1.15), -0.4, 0], [X(1.15), -0.4, 0], color=GREY_C, stroke_width=2)
-        zero = VGroup(Line([X(0), -0.5, 0], [X(0), -0.3, 0], color=GREY_B), Text("0", font_size=22, color=GREY_B)
-                      .move_to([X(0), -0.75, 0]))
-        bars = []
-        for n in (1, 2, 3, 5, 10, 30):
-            bars.append(VGroup(Line([X(-1 / n), 0.1, 0], [X(1 / n), 0.1, 0], color=C.OPEN_SET, stroke_width=7),
-                               endpoint([X(-1 / n), 0.1, 0], False, C.OPEN_SET), endpoint([X(1 / n), 0.1, 0], False, C.OPEN_SET)))
+        y_ax = -0.4
+        line = Line([X(-1.15), y_ax, 0], [X(1.15), y_ax, 0], color=GREY_C, stroke_width=2)
+        zero = VGroup(Line([X(0), y_ax - 0.1, 0], [X(0), y_ax + 0.1, 0], color=GREY_B),
+                      MathTex("0", font_size=24, color=GREY_B).move_to([X(0), y_ax - 0.4, 0]))
+        ns = (1, 2, 3, 5, 10)
+        bars = [VGroup(Line([X(-1 / n), y_ax, 0], [X(1 / n), y_ax, 0], color=C.OPEN_SET, stroke_width=7),
+                       endpoint([X(-1 / n), y_ax, 0], False, C.OPEN_SET, radius=0.06),
+                       endpoint([X(1 / n), y_ax, 0], False, C.OPEN_SET, radius=0.06)) for n in ns]
         lab = MathTex(r"\bigcap_{n=1}^{\infty} \Big(-\frac1n, \frac1n\Big) = \{0\}", font_size=38).move_to([X(0), 1.6, 0])
         notopen = label(r"not open", font_size=30, color=C.PATHOLOGY).next_to(lab, DOWN, buff=0.15)
-        dot0 = Dot([X(0), 0.1, 0], radius=0.08, color=C.PATHOLOGY)
+        dot0 = Dot([X(0), y_ax, 0], radius=0.08, color=C.PATHOLOGY)
         with self.voiceover(
             "But only finitely many. <bookmark mark='a'/> The intervals from minus one over n to one over n are all open, "
             "and they shrink down onto a single point, zero. <bookmark mark='b'/> Their intersection is just zero, which "
@@ -264,14 +283,13 @@ class OpenClosed(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(Create(line), FadeIn(zero), FadeIn(bars[0]))
-            for b in bars[1:]:
-                self.play(Transform(bars[0], b), run_time=0.5)
+            # each new interval lands on the axis; the earlier ones step up, dimmed, so the nesting stays visible
+            for k in range(1, len(bars)):
+                self.play(*[ApplyFunction(lambda m_: dim(m_.shift(UP * 0.2), 0.35), b_) for b_ in bars[:k]],
+                          FadeIn(bars[k]), run_time=0.5)
             vo.wait_until("b")
             self.play(Write(lab), FadeIn(dot0, scale=2), FadeIn(notopen))
-        dual = label(r"Dually: any intersection of closed sets is closed; finite unions of closed sets are closed;"
-                     r" \ $\bigcup [\tfrac1n, 1] = (0, 1]$ is not.", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
-        self.play(FadeIn(dual))
-        self.wait(1.5)
+        self.wait(0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -295,14 +313,18 @@ class OpenClosed(VoiceoverScene):
         for i, (name, vals) in enumerate(rows):
             y = y0 - 0.62 * (i + 1)
             r = VGroup(label(name, font_size=26).move_to([xs[0], y, 0]))
+            base = r[0][0][1].get_bottom()[1]  # the baseline of the row name (bottom of its letter a, b, ...)
             for v, x in zip(vals, xs[1:]):
-                r.add(label(v, font_size=26, color=C.CONNECTED_SET if v == "yes" else GREY_C).move_to([x, y, 0]))
+                t = label(v, font_size=26, color=WHITE if v == "yes" else GREY_C).move_to([x, y, 0])
+                t.shift(UP * (base - t[0][-1].get_bottom()[1]))  # "yes" and "no" share that baseline
+                r.add(t)
             r[0].align_to([-5.4, 0, 0], LEFT)
             r.add(self.icon(i).move_to([-6.25, y, 0]))  # a thumbnail of the set, last in the row
             body.add(r)
         g.add(body)
         rule = Line([-5.5, y0 - 0.3, 0], [4.6, y0 - 0.3, 0], color=GREY_C, stroke_width=1.5)
-        title = label(r"Subsets of the plane \ (Rudin 2.21--2.22)", font_size=32).to_edge(UP, buff=0.4)
+        title = label(r"Subsets of the plane", font_size=34).to_edge(UP, buff=0.3)
+        ref = note(r"Rudin 2.21--2.22").to_corner(DR, buff=0.45)
         perfect = label(r"\textbf{perfect} = closed, and every point is a limit point", font_size=26, color=GREY_A)
         perfect.to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -313,7 +335,7 @@ class OpenClosed(VoiceoverScene):
             "isolated points. Perfect sets will give us the Cantor set. <bookmark mark='g'/> And look at the last row: a "
             "segment of the x-axis is not open in the plane."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(hd), Create(rule))
+            self.play(FadeIn(title), FadeIn(ref), FadeIn(hd), Create(rule))
             vo.wait_until("a")
             self.play(FadeIn(body[0]), FadeIn(body[1]))
             self.play(FadeIn(body[2]), FadeIn(body[3]))
@@ -377,8 +399,10 @@ class OpenClosed(VoiceoverScene):
         E_l = MathTex(r"E = \{1, \tfrac12, \tfrac13, \ldots\} \cup (1.3,\, 2)", font_size=26, color=C.SEQ).next_to(
             [X(1.0), y1, 0], UP, buff=0.25)
         added = VGroup(*[Dot([X(v), y1, 0], radius=0.07, color=C.CLOSED_SET) for v in (0.0, 1.3, 2.0)])
-        added_l = label(r"$\overline{E}$ adds $0$, \ $1.3$, \ $2$", font_size=24, color=C.CLOSED_SET).next_to(
-            [X(0.0), y1, 0], DOWN, buff=0.2).shift(RIGHT * 0.9)
+        added_l = VGroup(*[MathTex(t, font_size=24, color=C.CLOSED_SET).next_to([X(v), y1, 0], DOWN, buff=0.15)
+                           for t, v in (("0", 0.0), ("1.3", 1.3), ("2", 2.0))],
+                         label(r"added by\\the closure", font_size=22, color=C.CLOSED_SET).next_to([X(2.1), y1, 0], RIGHT,
+                                                                                                  buff=0.25))
         l2 = Line([X(-0.08), y2, 0], [X(2.1), y2, 0], color=GREY_C, stroke_width=1.5)
         dust = rational_dust(0.0, 2.1, X(0.0), X(2.1), y=y2, height=0.45, target=900)
         Qbar = VGroup(Line([X(0.0), y2 - 0.12, 0], [X(2.1), y2 - 0.12, 0], color=C.CLOSED_SET, stroke_width=4),

@@ -104,9 +104,10 @@ class Vitali(VoiceoverScene):
             tab.add(MathTex(rf"{int(n)}", rf"\quad {g:.4f}", font_size=28))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.6, 0.0, 0])
         regrid(tab)
-        out = label(r"the orbit is dense: \ it comes within $0.0044$ of every point", font_size=26, color=C.EPS).next_to(
-            tab, DOWN, buff=0.35)
-        assert maxgap[-1] < 0.0088 + 1e-4
+        # every point of the circle is within half the largest gap of the orbit
+        out = label(rf"the orbit is dense: \ within ${maxgap[-1] / 2:.4f}$ of every point", font_size=26,
+                    color=C.EPS).next_to(tab, DOWN, buff=0.35)
+        assert maxgap[-1] < 0.0088 + 1e-4 and out.get_right()[0] < 6.6
         with self.voiceover(
             "<bookmark mark='a'/> The construction uses rotation of the circle by one radian. Since one radian is not "
             "a rational multiple of a full turn, the orbit of a point never comes back to it. <bookmark mark='b'/> "

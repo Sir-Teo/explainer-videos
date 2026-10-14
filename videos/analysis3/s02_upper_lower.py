@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis3.common import int_axes, load, plain_axes, rects
+from videos.analysis3.common import load, plain_axes, rects
 
 
 def f(x):
@@ -40,8 +40,9 @@ class UpperLower(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def _axes(self):
-        ax = plain_axes([0, 3.2, 1], [0, 2.0, 0.5], 8.0, 4.4).move_to([-2.4, -0.9, 0])
+        ax = plain_axes([0, 3.2, 1], [0, 2.0, 0.5], 8.0, 4.0).move_to([-2.4, -1.1, 0])
         g = ax.plot(f, x_range=[0, 3.0, 0.01], color=C.FUNC, stroke_width=4)
+        g.set_z_index(3)  # the graph stays on top of the translucent rectangles
         return ax, g
 
     def sums(self):
@@ -64,6 +65,7 @@ class UpperLower(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.15, 0.2, 0])
         dfn[-1].align_to(dfn, RIGHT)
         area = ax.get_area(g, x_range=[0, 3.0], color=C.FUNC, opacity=0.25)
+        head = label(r"Darboux: \ trap the area between two sums", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Take a bounded function on an interval, and ask for the area under its graph. <bookmark mark='p'/> Cut "
             "the interval into pieces with a partition: points x zero up to x n. <bookmark mark='u'/> On each piece, "
@@ -72,7 +74,7 @@ class UpperLower(VoiceoverScene):
             "rectangles fit under the graph: their total is the lower sum L. <bookmark mark='s'/> Whatever the area "
             "is, it must lie between L and U."
         ) as vo:
-            self.play(Create(ax), Create(g))
+            self.play(FadeIn(head), Create(ax), Create(g))
             self.play(FadeIn(area))
             vo.wait_until("p")
             self.play(FadeOut(area), FadeIn(ticks), FadeIn(dfn[0]))
@@ -82,7 +84,7 @@ class UpperLower(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in lo], lag_ratio=0.15), FadeIn(dfn[3]), FadeIn(dfn[4]))
             vo.wait_until("s")
             self.play(Indicate(VGroup(dfn[2], dfn[3]), color=C.EPS, scale_factor=1.03))
-        self.up, self.lo, self.ticks, self.dfn, self.edges = up, lo, ticks, dfn, edges
+        self.up, self.lo, self.ticks, self.dfn, self.edges, self.head = up, lo, ticks, dfn, edges, head
 
     # ------------------------------------------------------------------
     def refine(self):
@@ -94,7 +96,8 @@ class UpperLower(VoiceoverScene):
         M2, m2 = sup_inf(f, e2)
         up2 = rects(ax, e2, M2, C.UPPER_SUM, opacity=0.35)
         lo2 = rects(ax, e2, m2, C.LOWER_SUM, opacity=0.6)
-        tick = VGroup(Line(ax.c2p(new_pt, 0) + DOWN * 0.08, ax.c2p(new_pt, 2.0), color=C.EPS, stroke_width=2.5))
+        tick = VGroup(Line(ax.c2p(new_pt, 0) + DOWN * 0.08, ax.c2p(new_pt, 2.0), color=C.EPS, stroke_width=2.5),
+                      MathTex(r"x^*", font_size=26, color=C.EPS).next_to(ax.c2p(new_pt, 0), DOWN, buff=0.15))
         M1, m1 = sup_inf(f, edges)
         U1, L1 = float(np.sum(M1 * np.diff(edges))), float(np.sum(m1 * np.diff(edges)))
         U2, L2 = float(np.sum(M2 * np.diff(e2))), float(np.sum(m2 * np.diff(e2)))
@@ -107,12 +110,13 @@ class UpperLower(VoiceoverScene):
         for r_, w in zip(rows, whys):
             w.next_to(r_, DOWN, buff=0.1)
         block = VGroup(*[VGroup(r_, w) for r_, w in zip(rows, whys)]).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        block.move_to([0, 2.65, 0])
-        vals = VGroup(MathTex(rf"U = {U1:.3f} \to {U2:.3f}", font_size=28, color=C.UPPER_SUM),
-                      MathTex(rf"L = {L1:.3f} \to {L2:.3f}", font_size=28, color=C.LOWER_SUM)).arrange(DOWN, buff=0.1)
-        vals.move_to([4.6, -2.4, 0])
-        eq = label(r"$f$ is \textbf{integrable} when the two agree (Rudin 6.1)", font_size=28, color=C.EPS)
-        eq.to_edge(DOWN, buff=0.2).shift(LEFT * 2.0)
+        block.move_to([0, 2.55, 0])
+        vals = VGroup(MathTex(rf"U = {U1:.3f} \to {U2:.3f}", font_size=32, color=C.UPPER_SUM),
+                      MathTex(rf"L = {L1:.3f} \to {L2:.3f}", font_size=32, color=C.LOWER_SUM)).arrange(DOWN, buff=0.15)
+        vals.move_to([4.4, 0.2, 0])
+        eq = VGroup(label(r"$f$ is \textbf{integrable}", font_size=28, color=C.EPS),
+                    label(r"when the two agree (Rudin 6.1)", font_size=28, color=C.EPS)).arrange(DOWN, buff=0.1)
+        eq.next_to(vals, DOWN, buff=0.6)
         with self.voiceover(
             "Now refine the partition by adding a point. <bookmark mark='a'/> On the piece that gets cut, the supremum "
             "over each half is at most the supremum over the whole, so the upper sum can only go down, and by the "
@@ -122,7 +126,7 @@ class UpperLower(VoiceoverScene):
             "bound, the infimum of all upper sums. These are the lower and upper integrals, and when they're equal the "
             "function is called integrable, and that common value is its integral."
         ) as vo:
-            self.play(FadeOut(self.dfn), FadeIn(block[0][0]))
+            self.play(FadeOut(self.dfn), FadeOut(self.head), FadeIn(block[0][0]))
             vo.wait_until("a")
             self.play(Create(tick))
             self.play(ReplacementTransform(self.up, up2), ReplacementTransform(self.lo, lo2), FadeIn(vals), run_time=1.5)
@@ -156,8 +160,14 @@ class UpperLower(VoiceoverScene):
                                       fill_color=C.EPS, fill_opacity=0.75).move_to((p0 + p1) / 2))
             gap_groups.append(slivers)
         assert all(a > b for a, b in zip(gaps, gaps[1:]))
-        readouts = [MathTex(rf"n = {n}: \quad U - L = {gp:.4f}", font_size=30, color=C.EPS).move_to([4.6, 0.6, 0])
-                    for n, gp in zip(ns, gaps)]
+        ratios = [gaps[k] / gaps[k - 1] for k in range(1, len(gaps))]
+        assert all(0.45 < r_ < 0.55 for r_ in ratios)  # "doubling the pieces roughly halves the gap"
+        tab = VGroup(MathTex(r"n", r"U - L", r"\text{ratio}", font_size=30, color=GREY_A))
+        for k, (n, gp) in enumerate(zip(ns, gaps)):
+            tab.add(MathTex(rf"{n}", rf"{gp:.4f}", rf"{ratios[k - 1]:.3f}" if k else r"\text{--}", font_size=30))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.5, -0.6, 0])
+        regrid(tab, gap=0.5)
+        tab[1][2].set_x(tab[2][2].get_x())
         with self.voiceover(
             "Here's the practical test. <bookmark mark='a'/> The difference between the upper and lower sums is the "
             "total area of these yellow slivers, the gaps between each red rectangle and its green one. "
@@ -167,13 +177,14 @@ class UpperLower(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(crit[0]))
             vo.wait_until("a")
-            self.play(FadeOut(self.up), FadeOut(self.lo), FadeIn(gap_groups[0]), FadeIn(readouts[0]))
+            self.play(FadeOut(self.up), FadeOut(self.lo), FadeOut(self.ticks), FadeIn(gap_groups[0]), FadeIn(tab[0]),
+                      FadeIn(tab[1].set_color(C.EPS)))
             vo.wait_until("b")
             self.play(FadeIn(crit[1]))
             vo.wait_until("c")
             for k in range(1, len(ns)):
-                self.play(ReplacementTransform(gap_groups[k - 1], gap_groups[k]), FadeTransform(readouts[k - 1], readouts[k]),
-                          run_time=1.0)
+                self.play(ReplacementTransform(gap_groups[k - 1], gap_groups[k]), tab[k].animate.set_color(WHITE),
+                          FadeIn(tab[k + 1].set_color(C.EPS)), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -181,8 +192,12 @@ class UpperLower(VoiceoverScene):
     def square(self):
         d = load("riemann")
         ns, U, L = d["ns"], d["U"], d["L"]
-        ax = int_axes([0, 1, 0.25], [0, 1, 0.25], 5.6, 5.0, x_dec=2, y_dec=2).move_to([-3.4, -0.4, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1, 0.25], 5.6, 5.0).move_to([-3.4, -0.4, 0])
+        ax_n = VGroup(MathTex(r"0", font_size=24, color=GREY_B).next_to(ax.c2p(0, 0), DL, buff=0.08),
+                      MathTex(r"1", font_size=24, color=GREY_B).next_to(ax.c2p(1, 0), DOWN, buff=0.12),
+                      MathTex(r"1", font_size=24, color=GREY_B).next_to(ax.c2p(0, 1), LEFT, buff=0.12))
         g = ax.plot(lambda t: t * t, x_range=[0, 1, 0.005], color=C.FUNC, stroke_width=4)
+        g.set_z_index(3)
         n = 8
         e = np.linspace(0, 1, n + 1)
         up = rects(ax, e, e[1:] ** 2, C.UPPER_SUM, opacity=0.35)
@@ -203,11 +218,14 @@ class UpperLower(VoiceoverScene):
                                                                                                     buff=0.15)
         tele.move_to([3.4, 1.6, 0])
         rows = [(16, 3), (1024, 9), (16384, 13)]
-        table = VGroup(MathTex(r"n", r"\quad L", r"\quad U", font_size=28, color=GREY_A))
+        table = VGroup(MathTex(r"n", r"L", r"U", font_size=28, color=GREY_A))
         for nn, i in rows:
             assert ns[i] == nn and abs(U[i] - L[i] - 1 / nn) < 1e-12
-            table.add(MathTex(rf"{nn}", rf"\quad {L[i]:.5f}", rf"\quad {U[i]:.5f}", font_size=28))
-        table.arrange(DOWN, aligned_edge=RIGHT, buff=0.18).move_to([3.4, -1.2, 0])
+            table.add(MathTex(rf"{fmt_int(nn)}", rf"{L[i]:.5f}", rf"{U[i]:.5f}", font_size=28))
+        table[0][1].set_color(C.LOWER_SUM)
+        table[0][2].set_color(C.UPPER_SUM)
+        table.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, -1.2, 0])
+        regrid(table, gap=0.5)
         third = MathTex(r"\int_0^1 x^2\,dx = \tfrac13", font_size=36, color=C.FUNC).next_to(table, DOWN, buff=0.35)
         with self.voiceover(
             "For an increasing function the gaps have a beautiful accounting. <bookmark mark='a'/> Take x squared with "
@@ -217,7 +235,7 @@ class UpperLower(VoiceoverScene):
             "<bookmark mark='c'/> With sixteen thousand pieces, both sums agree with one third to four decimal "
             "places: the integral is one third."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), Create(g))
+            self.play(FadeIn(head), Create(ax), FadeIn(ax_n), Create(g))
             vo.wait_until("a")
             self.play(FadeIn(up), FadeIn(lo))
             self.play(FadeIn(slivers), up.animate.set_opacity(0.08), lo.animate.set_opacity(0.15))

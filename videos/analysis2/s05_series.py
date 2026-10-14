@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis2.common import load, plain_axes, polyline
+from videos.analysis2.common import load, plain_axes, polyline, runs_in_range
 
 
 def bars(a, x0=-5.9, base=-2.7, w=0.34, H=3.2, color=C.SEQ, opacity=0.75) -> VGroup:
@@ -15,6 +15,12 @@ def bars(a, x0=-5.9, base=-2.7, w=0.34, H=3.2, color=C.SEQ, opacity=0.75) -> VGr
         g.add(Rectangle(width=w * 0.86, height=max(0.004, H * v), stroke_width=0, fill_color=color,
                         fill_opacity=opacity).move_to([x0 + w * (i + 0.5), base + H * v / 2, 0]))
     return g
+
+
+def box_on(ax, x0, x1, y0, y1, color, stroke_width=2.5, fill_opacity=0.15) -> Polygon:
+    """The rectangle [x0, x1] x [y0, y1] in the coordinates of ``ax``."""
+    return Polygon(ax.c2p(x0, y0), ax.c2p(x1, y0), ax.c2p(x1, y1), ax.c2p(x0, y1), color=color,
+                   stroke_width=stroke_width, fill_color=color, fill_opacity=fill_opacity)
 
 
 class Series(VoiceoverScene):
@@ -147,9 +153,13 @@ class Series(VoiceoverScene):
                            fill_color=C.EPS, fill_opacity=0.25)
             fl.move_to([(self.bx(lo) + self.bx(hi + 1)) / 2, self.BASE + self.H * h / 2, 0])
             floors.add(fl)
-            t = MathTex(r"\ge \tfrac12", font_size=28, color=C.EPS)
-            t.move_to([(self.bx(lo) + self.bx(hi + 1)) / 2, self.BASE + self.H / lo + 0.3, 0])
-            tags.add(t)
+            top = self.BASE + self.H / lo  # the block's first, tallest bar
+            br = Brace(Line([self.bx(lo) + 0.02, top, 0], [self.bx(hi + 1) - 0.02, top, 0]), direction=UP, buff=0.06,
+                       color=C.EPS)
+            t = MathTex(r"\ge \tfrac12", font_size=28, color=C.EPS).next_to(br, UP, buff=0.06)
+            if k == 0:
+                t.shift(RIGHT * 0.2)  # clear of the first bar, a_1
+            tags.add(VGroup(br, t))
         oresme = label(r"Oresme, about 1350: \ block $k$ is at least $2^k \cdot \tfrac{1}{2^{k+1}} = \tfrac12$", font_size=30).move_to([2.5, 1.2, 0])
         res = MathTex(r"s_{2^k} \ge 1 + \tfrac{k}{2} \to \infty", font_size=38, color=C.PATHOLOGY).next_to(oresme, DOWN,
                                                                                                          buff=0.3)
@@ -181,10 +191,13 @@ class Series(VoiceoverScene):
         ylab = VGroup(*[MathTex(f"{v}", font_size=22, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.1)
                         for v in (5, 10, 15)])
         lg = np.log10(d["n"])
-        curve = polyline(lx, lg, d["p1"], color=C.SEQ, stroke_width=3.5)
-        approx = polyline(lx, lg, np.log(d["n"]) + float(d["gamma"]), color=C.EPS, stroke_width=2).set_opacity(0.8)
+        curve = polyline(lx, lg, d["p1"], color=C.SEQ, stroke_width=4)
+        # ln n + gamma, dashed over the partial sums so both stay visible where they coincide
+        approx = DashedVMobject(polyline(lx, lg, np.log(d["n"]) + float(d["gamma"]), color=WHITE, stroke_width=2),
+                                num_dashes=90).set_z_index(1)
+        assert np.max(np.abs(d["p1"] - np.log(d["n"]) - float(d["gamma"]))[d["n"] >= 10]) < 0.05
         c_l = MathTex(r"s_n = 1 + \tfrac12 + \cdots + \tfrac1n", font_size=30, color=C.SEQ).move_to(lx.c2p(1.6, 11))
-        a_l = MathTex(r"\ln n + 0.5772\ldots", font_size=30, color=C.EPS).move_to(lx.c2p(4.6, 7.8))
+        a_l = MathTex(r"\ln n + 0.5772\ldots", font_size=30).move_to(lx.c2p(4.6, 7.8))
         end = MathTex(rf"s_{{10^6}} = {float(d['p1'][-1]):.2f}", font_size=30).next_to(lx.c2p(6, d["p1"][-1]), UP,
                                                                                     buff=0.15).shift(LEFT * 0.6)
         head = label(r"It diverges, \ but slowly", font_size=34).to_edge(UP, buff=0.4)
@@ -213,6 +226,36 @@ class Series(VoiceoverScene):
                      font_size=24, color=GREY_B).next_to(comp, DOWN, buff=0.15)
         geo = MathTex(r"\sum_{n=0}^{\infty} x^n = \frac{1}{1 - x} \quad (0 \le x < 1)", font_size=38).move_to([0, 0.3, 0])
         geo_r = note(r"Rudin 3.26; \ the standard thing to compare with").next_to(geo, DOWN, buff=0.12)
+        # the comparison test, pictured: a_n (filled) inside the bars of a convergent c_n (outlined)
+        nb, Hc, wb, xb0, yb = 10, 6.0, 0.62, -6.2, -2.75
+        nn = np.arange(1, nb + 1)
+        cv = 0.5**nn
+        av = cv * (0.4 + 0.5 * np.abs(np.sin(nn)))
+        assert np.all((0 < av) & (av < cv))
+        outl = VGroup(*[Rectangle(width=wb * 0.86, height=Hc * c_, stroke_color=C.UPPER_SUM, stroke_width=2.5)
+                        .move_to([xb0 + wb * (i + 0.5), yb + Hc * c_ / 2, 0]) for i, c_ in enumerate(cv)])
+        fills = bars(av, xb0, yb, wb, Hc, color=C.SEQ, opacity=0.8)
+        cbase = Line([xb0 - 0.1, yb, 0], [3.0, yb, 0], color=GREY_C, stroke_width=2)
+        c_lab = MathTex(r"c_n = 2^{-n}", font_size=30, color=C.UPPER_SUM).next_to(outl[0], RIGHT, buff=0.3).align_to(
+            outl[0], UP)
+        a_lab = MathTex(r"|a_n| \le c_n", font_size=30, color=C.SEQ).next_to(c_lab, DOWN, buff=0.15).align_to(c_lab, LEFT)
+        # one block, n = 3..6: its terms stacked into towers, a's inside c's
+        b0, b1, tx = 3, 6, 1.6
+        blk = BraceBetweenPoints([xb0 + wb * (b0 - 1), yb - 0.08, 0], [xb0 + wb * b1, yb - 0.08, 0], direction=DOWN,
+                                 color=WHITE)
+        ct, at_, y_c, y_a = VGroup(), VGroup(), yb, yb
+        for j in range(b0, b1 + 1):
+            hc, ha = Hc * cv[j - 1], Hc * av[j - 1]
+            ct.add(Rectangle(width=0.9, height=hc, stroke_color=C.UPPER_SUM, stroke_width=2.5).move_to([tx, y_c + hc / 2, 0]))
+            at_.add(Rectangle(width=0.6, height=ha, stroke_width=0.8, stroke_color=BACKGROUND, fill_color=C.SEQ,
+                              fill_opacity=0.85).move_to([tx, y_a + ha / 2, 0]))
+            y_c += hc
+            y_a += ha
+        assert av[b0 - 1:b1].sum() < cv[b0 - 1:b1].sum()
+        t_lab = MathTex(r"a_3 + \cdots + a_6", r"\le", r"c_3 + \cdots + c_6", font_size=30).next_to(ct, RIGHT, buff=0.35)
+        t_lab[0].set_color(C.SEQ)
+        t_lab[2].set_color(C.UPPER_SUM)
+        cmp_pic = VGroup(outl, fills, cbase, c_lab, a_lab, blk, ct, at_, t_lab)
         nl_y = -2.0
         X = lambda v: -5.5 + v * 5.5  # noqa: E731
         line = Line([X(0) - 0.2, nl_y, 0], [X(2) + 0.3, nl_y, 0], color=GREY_C, stroke_width=2)
@@ -236,9 +279,14 @@ class Series(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(comp[0]))
             vo.wait_until("a")
-            self.play(FadeIn(comp[1:]), FadeIn(why1))
+            self.play(FadeIn(comp[1:]), FadeIn(why1), Create(cbase), Create(outl), FadeIn(c_lab), run_time=1.2)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in fills], lag_ratio=0.1), FadeIn(a_lab), run_time=1.2)
+            self.play(GrowFromCenter(blk), run_time=0.5)
+            self.play(TransformFromCopy(VGroup(*outl[b0 - 1:b1]), ct), TransformFromCopy(VGroup(*fills[b0 - 1:b1]), at_),
+                      run_time=1.4)
+            self.play(FadeIn(t_lab))
             vo.wait_until("g")
-            self.play(FadeIn(geo), FadeIn(geo_r))
+            self.play(FadeOut(cmp_pic), FadeIn(geo), FadeIn(geo_r))
             vo.wait_until("h")
             self.play(Create(line), FadeIn(lab), FadeIn(gap))
             self.play(LaggedStart(*[Create(x) for x in segs], lag_ratio=0.5), run_time=3.0)
@@ -271,14 +319,30 @@ class Series(VoiceoverScene):
                            stroke_width=3, fill_color=C.LOWER_SUM, fill_opacity=0.25)
             lw.move_to([(self.bx(lo2) + self.bx(hi2 + 1)) / 2, self.BASE + self.H * h2 / 2, 0])
             los.add(lw)
-        up_t = VGroup(label(r"over each block $[2^k, 2^{k+1})$, a box of height $a_{2^k}$:", font_size=26,
-                            color=C.UPPER_SUM),
+        up_t = VGroup(label(r"over each block $[2^k, 2^{k+1})$,", font_size=26, color=C.UPPER_SUM),
+                      label(r"a box of height $a_{2^k}$:", font_size=26, color=C.UPPER_SUM),
                       MathTex(r"s_n \le \sum_k 2^k a_{2^k}", font_size=34, color=C.UPPER_SUM)
-                      ).arrange(DOWN, buff=0.12).move_to([2.9, 0.0, 0])
-        lo_t = VGroup(label(r"under each block $(2^k, 2^{k+1}]$, a box of height $a_{2^{k+1}}$:", font_size=26,
-                            color=C.LOWER_SUM),
+                      ).arrange(DOWN, buff=0.12).move_to([-1.3, 0.8, 0])
+        lo_t = VGroup(label(r"under each block $(2^k, 2^{k+1}]$,", font_size=26, color=C.LOWER_SUM),
+                      label(r"a box of height $a_{2^{k+1}}$:", font_size=26, color=C.LOWER_SUM),
                       MathTex(r"s_{2^{k}} \ge \tfrac12 \sum_{j \le k} 2^j a_{2^j}", font_size=34, color=C.LOWER_SUM)
-                      ).arrange(DOWN, buff=0.12).next_to(up_t, DOWN, buff=0.35)
+                      ).arrange(DOWN, buff=0.12).move_to([3.6, 0.8, 0])
+        # the bars as a plot (bar n over [n - 1, n]), and a vertical magnifier on n = 8 .. 32, where the boxes are thin
+        src = Axes(x_range=[0, n_max, 1], y_range=[0, 1, 1], x_length=n_max * self.W, y_length=self.H, tips=False,
+                   axis_config={"stroke_opacity": 0, "include_ticks": False})
+        src.shift(np.array([self.X0, self.BASE, 0]) - src.c2p(0, 0))
+        mx, my = (7, n_max), (0.0, 0.05)
+        ins, deco = magnifier_above(src, mx, my, height=1.75, gap=0.3)
+        assert a[7] < my[1]  # the tallest bar in the window, a_8, fits
+        ibars = VGroup(*[box_on(ins, j - 1 + 0.07, j - 0.07, 0, a[j - 1], C.SEQ, stroke_width=0, fill_opacity=0.7)
+                         for j in range(8, n_max + 1)])
+
+        def clip_box(x0, x1, h, color, fill):
+            x0, x1 = max(x0, mx[0]), min(x1, mx[1])
+            return box_on(ins, x0, x1, 0, h, color, stroke_width=3, fill_opacity=fill)
+
+        iups = VGroup(*[clip_box(2**k - 1, 2 ** (k + 1) - 1, a[2**k - 1], C.UPPER_SUM, 0.12) for k in (3, 4)])
+        ilos = VGroup(*[clip_box(2**k, 2 ** (k + 1), a[2 ** (k + 1) - 1], C.LOWER_SUM, 0.25) for k in (2, 3, 4)])
         with self.voiceover(
             "Cauchy's condensation test turns a slowly decreasing series into a fast one. <bookmark mark='t'/> If the "
             "terms decrease to zero, the series converges exactly when the condensed series, two to the k times the "
@@ -294,9 +358,10 @@ class Series(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(ex))
             vo.wait_until("u")
-            self.play(LaggedStart(*[FadeIn(u) for u in ups], lag_ratio=0.25), FadeIn(up_t), run_time=2.0)
+            self.play(FadeIn(deco), FadeIn(ibars), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(u) for u in ups], lag_ratio=0.25), FadeIn(iups), FadeIn(up_t), run_time=2.0)
             vo.wait_until("l")
-            self.play(LaggedStart(*[FadeIn(x) for x in los], lag_ratio=0.25), FadeIn(lo_t), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(x) for x in los], lag_ratio=0.25), FadeIn(ilos), FadeIn(lo_t), run_time=2.0)
         self.wait(0.4)
         self.clear_scene()
 

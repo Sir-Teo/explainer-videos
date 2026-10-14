@@ -78,7 +78,7 @@ class Dominated(VoiceoverScene):
         fn = always_redraw(pic)
         rd = always_redraw(lambda: MathTex(
             rf"n = {max(1, round(nT.get_value()))}: \ \int_0^4 |f_n - f| = {area(max(1, round(nT.get_value()))):.4f}",
-            font_size=26, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.35))
+            font_size=28, color=C.PATHOLOGY).next_to(ax, DOWN, buff=0.2))
         key = MathTex(r"f_n = f + n x e^{-nx}", font_size=24, color=C.FUNC).next_to(ax, UP, buff=0.1).align_to(ax, RIGHT)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem: if f n converges to f at every point, and the absolute values of all the f n "

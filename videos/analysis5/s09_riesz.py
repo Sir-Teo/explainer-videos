@@ -162,7 +162,7 @@ class RieszRepresentation(VoiceoverScene):
             frames.append(VGroup(area_under(ax, x, y, C.MEASURE, 0.4), polyline(ax, x, y, color=C.FUNC, stroke_width=3)))
         head = VGroup(label(r"Rudin's construction, \ run for $\Lambda f = \int_0^1 f$", font_size=34),
                       MathTex(r"\mu(V) = \sup\{\Lambda f : f \prec V\}, \qquad \mu(E) = \inf\{\mu(V) : E \subset V "
-                              r"\text{ open}\}", font_size=32, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+                              r"\text{ open}\}", font_size=32, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         tab = VGroup(MathTex(r"\text{collar}", r"\quad \Lambda f", font_size=28, color=GREY_A))
         for k, v in zip(ks, trials[0, 1:]):
             tab.add(MathTex(rf"1/{int(k)}" if k < 10**6 else r"10^{-8}", rf"\quad {v:.7f}", font_size=28))

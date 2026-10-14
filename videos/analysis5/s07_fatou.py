@@ -117,7 +117,7 @@ class Fatou(VoiceoverScene):
             envs.append(e)
         env_g = [polyline(ax, x, e, color=C.CONNECTED_SET, stroke_width=3.5) for e in envs]
         env_l = [MathTex(rf"\int_0^{{2\pi}} \min_{{1 \le i \le {K}}} f_i = {trap(e, x):.3f}", font_size=28,
-                         color=C.CONNECTED_SET).next_to(ax, DOWN, buff=0.15)
+                         color=C.CONNECTED_SET).next_to(ax, DOWN, buff=0.2)
                  for (k, K), e in zip(((1, 3), (1, 10), (1, 40), (1, 200)), envs)]
         ints = [trap(e, x) for e in envs]
         assert all(a >= b - 1e-12 for a, b in zip(ints, ints[1:])) and ints[-1] < 0.1

@@ -36,7 +36,7 @@ class Cauchy(VoiceoverScene):
         n_max = 40
         ax = plain_axes([0, n_max + 1, 5], [0.4, 1.05, 0.1], 11.0, 3.3, numbers=True, font_size=20,
                         axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.35, -1.95, 0])
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.35, -1.75, 0])
         dots = VGroup(*[Dot(ax.c2p(k, s[k - 1]), radius=0.045, color=C.SEQ) for k in range(1, n_max + 1)])
         series = MathTex(r"s_n = 1 - \tfrac12 + \tfrac13 - \cdots \pm \tfrac1n", font_size=34, color=C.SEQ)
         series.move_to([3.6, 1.55, 0])
@@ -72,13 +72,28 @@ class Cauchy(VoiceoverScene):
             N = int(round(Nv.get_value()))
             lo, hi = sorted((s[N - 1], s[N]))
             dm = hi - lo
-            col = C.CONNECTED_SET if dm < eps.get_value() - 1e-12 else C.EPS
+            # the tail's height against epsilon: red while it is too tall, green once it fits
+            col = C.CONNECTED_SET if dm < eps.get_value() - 1e-12 else C.PATHOLOGY
             p0, p1 = ax.c2p(N - 0.4, lo), ax.c2p(n_max + 0.6, hi)
             band = Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=col,
                              fill_opacity=0.22).move_to((p0 + p1) / 2)
             br = BraceBetweenPoints(ax.c2p(n_max + 0.8, hi), ax.c2p(n_max + 0.8, lo), direction=RIGHT, color=col)
             thr = DashedLine(ax.c2p(N - 0.4, 0.4), ax.c2p(N - 0.4, 1.05), color=C.DELTA, stroke_width=2.5)
             return VGroup(band, br, thr)
+
+        def ruler():
+            # a bar of length epsilon standing on the tail's floor, beside the brace
+            N = int(round(Nv.get_value()))
+            lo = min(s[N - 1], s[N])
+            x = n_max + 2.4
+            e = eps.get_value()
+            return VGroup(Line(ax.c2p(x, lo), ax.c2p(x, lo + e), color=C.EPS, stroke_width=5),
+                          Line(ax.c2p(x - 0.35, lo + e), ax.c2p(x + 0.35, lo + e), color=C.EPS, stroke_width=3),
+                          Line(ax.c2p(x - 0.35, lo), ax.c2p(x + 0.35, lo), color=C.EPS, stroke_width=3),
+                          MathTex(r"\varepsilon", font_size=30, color=C.EPS).next_to(ax.c2p(x, lo + e / 2), RIGHT,
+                                                                                   buff=0.12))
+
+        epsbar = always_redraw(ruler)
 
         band = always_redraw(tail_band)
         tail_def = MathTex(r"E_N = \{p_N, p_{N+1}, p_{N+2}, \ldots\}", font_size=34).move_to([-3.6, 1.55, 0])
@@ -105,7 +120,7 @@ class Cauchy(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(band), FadeIn(dl), FadeIn(crit))
             vo.wait_until("g")
-            self.play(FadeIn(eps_l))
+            self.play(FadeIn(eps_l), FadeIn(epsbar))
             vo.wait_until("w")
             for N in range(2, 11):
                 dl2 = dlab(N)
@@ -122,11 +137,12 @@ class Cauchy(VoiceoverScene):
         assert abs(d["diam"][9] - 1 / 11) < 1e-12 and d["diam"][8] >= 0.1 - 1e-12 and d["diam"][19] < 0.05
         self.wait(0.3)
         band.clear_updaters()
+        epsbar.clear_updaters()
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def easy_half(self):
-        head = label(r"\textbf{Rudin 3.11(a)} \ Every convergent sequence is Cauchy.", font_size=34).to_edge(UP, buff=0.6)
+        head = label(r"\textbf{Rudin 3.11(a)} \ Every convergent sequence is Cauchy.", font_size=34).to_edge(UP, buff=0.3)
         rows = [MathTex(r"d(p_n, p_m)", r"\le", r"d(p_n, p) + d(p, p_m)", font_size=40),
                 MathTex(r"d(p_n, p_m)", r"<", r"\tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \varepsilon",
                         font_size=40)]
@@ -134,18 +150,44 @@ class Cauchy(VoiceoverScene):
                 why(r"once $n, m \ge N$, where $N$ answers $\tfrac{\varepsilon}{2}$ for $p_n \to p$")]
         step = ladder(self, rows, whys, keep=2, top=1.8, buff=0.55, x=0.2)
         conv = label(r"The converse, \emph{Cauchy $\Rightarrow$ convergent}, depends on the space.", font_size=32,
-                     color=C.EPS).to_edge(DOWN, buff=1.0)
+                     color=C.EPS).to_edge(DOWN, buff=0.4)
+        # the picture: p, the band of radius eps/2 around it, and two late terms p_n, p_m inside the band
+        yl, unit = -1.25, 1.0  # the line's height; screen units per unit of distance
+        half = 1.9  # eps/2, in those units
+        pv, pn, pm = 0.0, -1.25, 1.05
+        assert abs(pn - pv) < half and abs(pm - pv) < half and abs(pm - pn) < 2 * half
+        nl = Line([-5.6, yl, 0], [5.6, yl, 0], color=GREY_C, stroke_width=2)
+        ball = Rectangle(width=2 * half * unit, height=0.5, stroke_width=0, fill_color=C.EPS, fill_opacity=0.18
+                         ).move_to([pv, yl, 0])
+        ball_e = VGroup(*[DashedLine([pv + sg * half, yl - 0.25, 0], [pv + sg * half, yl + 0.25, 0], color=C.EPS,
+                                     stroke_width=2) for sg in (-1, 1)])
+        ball_l = MathTex(r"\text{radius } \tfrac{\varepsilon}{2} \text{ around } p", font_size=26, color=C.EPS
+                         ).next_to([pv + half, yl + 0.25, 0], UR, buff=0.1)
+        pts = VGroup(Dot([pv, yl, 0], radius=0.08, color=WHITE), Dot([pn, yl, 0], radius=0.075, color=C.SEQ),
+                     Dot([pm, yl, 0], radius=0.075, color=C.SEQ))
+        pls = VGroup(MathTex(r"p", font_size=32).next_to(pts[0], DOWN, buff=0.2),
+                     MathTex(r"p_n", font_size=32, color=C.SEQ).next_to(pts[1], DOWN, buff=0.2),
+                     MathTex(r"p_m", font_size=32, color=C.SEQ).next_to(pts[2], DOWN, buff=0.2))
+        arcs = VGroup(ArcBetweenPoints([pn, yl + 0.1, 0], [pv, yl + 0.1, 0], angle=-TAU / 5, color=C.EPS, stroke_width=3),
+                      ArcBetweenPoints([pv, yl + 0.1, 0], [pm, yl + 0.1, 0], angle=-TAU / 5, color=C.EPS, stroke_width=3))
+        arc_l = VGroup(*[MathTex(r"< \tfrac{\varepsilon}{2}", font_size=28, color=C.EPS).next_to(a_, UP, buff=0.08)
+                         for a_ in arcs])
+        br = BraceBetweenPoints([pn, yl - 0.65, 0], [pm, yl - 0.65, 0], direction=DOWN, color=WHITE)
+        br_l = MathTex(r"d(p_n, p_m) < \varepsilon", font_size=30).next_to(br, DOWN, buff=0.1)
         with self.voiceover(
             "One direction is easy. <bookmark mark='h'/> If p n converges to p, then any two late terms are close to "
             "each other, <bookmark mark='a'/> because each is close to p: the triangle inequality, routed through the "
             "limit, <bookmark mark='b'/> with the epsilon over two trick. <bookmark mark='c'/> The converse is the "
             "interesting direction, and whether it holds depends on the space you're in."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(nl), FadeIn(ball), FadeIn(ball_e), FadeIn(ball_l), FadeIn(pts),
+                      FadeIn(pls))
             vo.wait_until("a")
             step(0)
+            self.play(Create(arcs), FadeIn(arc_l))
             vo.wait_until("b")
             step(1)
+            self.play(GrowFromCenter(br), FadeIn(br_l))
             vo.wait_until("c")
             self.play(FadeIn(conv))
         self.wait(0.3)
@@ -212,16 +254,25 @@ class Cauchy(VoiceoverScene):
             self.play(FadeIn(band), FadeIn(inf), *win.zoom_to(*wnd(0)), run_time=1.2)
             vo.wait_until("z")
             for k in range(1, 4):
-                self.play(level.animate.set_value(k), *win.zoom_to(*wnd(k)), Transform(inf, info(k)), run_time=1.2)
+                nxt = info(k)
+                self.play(level.animate.set_value(k), *win.zoom_to(*wnd(k)), FadeTransform(inf, nxt), run_time=1.2)
+                inf = nxt
         with self.voiceover(
             "The tails shrink by a factor of nearly six each time. <bookmark mark='h'/> And they're closing in on a "
             "point that isn't there: root two, which Part 1 proved is not a fraction. In the rationals this sequence is "
             "Cauchy, and it has no limit."
         ) as vo:
             for k in range(4, K):
-                self.play(level.animate.set_value(k), *win.zoom_to(*wnd(k)), Transform(inf, info(k)), run_time=0.8)
+                nxt = info(k)
+                self.play(level.animate.set_value(k), *win.zoom_to(*wnd(k)), FadeTransform(inf, nxt), run_time=0.8)
+                inf = nxt
             vo.wait_until("h")
-            self.play(FadeIn(hole, scale=1.6))
+            hole.set_z_index(2)
+            hole_l = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=32, color=C.HOLE).move_to(win.P(SQRT2, 1.0))
+            # the later terms (inside the last tail) step aside so the empty point itself shows
+            for m in marks[K + 1:]:
+                m.clear_updaters()
+            self.play(FadeIn(hole, scale=1.6), FadeIn(hole_l), *[FadeOut(m) for m in marks[K + 1:]])
             self.play(Indicate(hole, color=C.HOLE, scale_factor=1.6))
         for i in range(K):
             assert abs(1 / (den[i] * den[i + 1]) - abs(vals[i] - vals[i + 1])) < 1e-15
@@ -260,8 +311,10 @@ class Cauchy(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(thm, DOWN, buff=0.4).align_to(thm, LEFT)
         for r in rows:
             r.set_color(GREY_A)
-        pdot = Dot(P((0, 0)), radius=0.08, color=WHITE)
-        plab = MathTex(r"p", font_size=34).next_to(pdot, DR, buff=0.08)
+        pdot = Dot(P((0, 0)), radius=0.08, color=WHITE).set_z_index(3)
+        plab = MathTex(r"p", font_size=34).move_to(P((1.1, -1.0)))
+        plead = Line(plab.get_corner(UL) + 0.05 * (UL), pdot.get_center(), color=GREY_B, stroke_width=1.5, buff=0.1)
+        plab = VGroup(plab, plead)
         note_h = label(r"(the yellow polygon: the convex hull of $E_N$, \ which has the same diameter)", font_size=22,
                        color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
@@ -307,13 +360,14 @@ class Cauchy(VoiceoverScene):
             self.play(FadeIn(rk[0]), FadeIn(rk[1]))
             vo.wait_until("b")
             self.play(Create(box), FadeIn(rk[2]))
+            self.play(FadeIn(rk[3]))
         self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def complete_spaces(self):
-        head = label(r"\textbf{Complete} metric space: \ every Cauchy sequence converges \ (Rudin 3.12)", font_size=32)
-        head.to_edge(UP, buff=0.45)
+        head = label(r"\textbf{Complete}: every Cauchy sequence converges", font_size=34).to_edge(UP, buff=0.3)
+        ref = note(r"Rudin 3.12").next_to(head, DOWN, buff=0.1).align_to(head, RIGHT)
         Y, N_ = r"\checkmark", r"\times"
         data = [
             (r"$\R^k$", Y, r"3.11(c)"),
@@ -331,19 +385,43 @@ class Cauchy(VoiceoverScene):
                        label(why_, font_size=24, color=GREY_B))
             rows.add(r)
         xs = (-6.3, 0.3, 1.1)
-        for i, r in enumerate(rows):
-            y = 2.3 - 0.62 * i
+        ys = [2.45 - 0.5 * i for i in range(5)] + [-0.25, -0.75]
+        for r, y in zip(rows, ys):
             r[0].move_to([xs[0], y, 0], aligned_edge=LEFT)
             r[1].move_to([xs[1], y, 0])
             r[2].move_to([xs[2], y, 0], aligned_edge=LEFT)
-        sep = DashedLine([-6.4, 2.3 - 0.62 * 4.5, 0], [6.4, 2.3 - 0.62 * 4.5, 0], color=GREY_D, stroke_width=1.5)
-        later = label(r"function spaces, later:", font_size=22, color=GREY_B).next_to(sep, DOWN, buff=0.08).to_edge(
-            RIGHT, buff=0.6)
+        later = label(r"function spaces, later:", font_size=22, color=GREY_B).move_to([xs[0], 0.12, 0], aligned_edge=LEFT)
+        sep = DashedLine([later.get_right()[0] + 0.2, 0.12, 0], [6.4, 0.12, 0], color=GREY_D, stroke_width=1.5)
         foot = VGroup(label(r"Banach and Hilbert spaces are \emph{required} to be complete.", font_size=28,
                             color=C.EPS),
                       label(r"Every metric space has a completion; completing $\mathbb{Q}$ is one way to build $\R$ "
                             r"(Cantor--M\'eray, Part 1).", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.15)
         foot.to_edge(DOWN, buff=0.35)
+
+        # three small number lines: a Cauchy sequence in [0, 1] (complete), in Q, and in (0, 1] (not complete)
+        def strip(x0, a, b, vals, target, title, closed):
+            w = 3.6
+            X = lambda v: x0 - w / 2 + (v - a) / (b - a) * w  # noqa: E731
+            y = -1.95
+            ln = Line([X(a), y, 0], [X(b), y, 0], color=GREY_C, stroke_width=2)
+            ds = VGroup(*[Dot([X(v), y, 0], radius=0.045, color=C.SEQ) for v in vals])
+            if closed:
+                end = Dot([X(target), y, 0], radius=0.075, color=WHITE)
+            else:
+                end = Circle(radius=0.085, color=C.HOLE, stroke_width=3).move_to([X(target), y, 0])
+                end.set_fill(BACKGROUND, opacity=1)
+            end.set_z_index(2)
+            ttl = label(title, font_size=24, color=GREY_A).move_to([x0, y + 0.5, 0])
+            return VGroup(ln, ds, end, ttl), X, y
+
+        inv = [1 / n for n in range(1, 21)]
+        cf = [p_ / q_ for p_, q_ in zip(*[[int(v) for v in load("cauchy")[k]] for k in ("num", "den")])]
+        assert abs(cf[-1] - SQRT2) < 1e-9 and all(abs(cf[i + 1] - SQRT2) < abs(cf[i] - SQRT2) for i in range(len(cf) - 1))
+        s01, _, _ = strip(-4.3, 0.0, 1.0, inv, 0.0, r"in $[0, 1]$: \ $\tfrac1n \to 0$", True)
+        sq, Xq, yq = strip(0.0, 0.9, 1.6, cf, SQRT2, r"in $\mathbb{Q}$: \ a hole at $\sqrt2$", False)
+        s0, X0, y0_ = strip(4.3, 0.0, 1.0, inv, 0.0, r"in $(0, 1]$: \ a hole at $0$", False)
+        fills = VGroup(Dot([Xq(SQRT2), yq, 0], radius=0.075, color=WHITE), Dot([X0(0.0), y0_, 0], radius=0.075,
+                                                                                color=WHITE)).set_z_index(3)
         with self.voiceover(
             "A space where every Cauchy sequence converges is called complete. <bookmark mark='a'/> R k is complete, "
             "and so is every compact space, and every closed subset of a complete space. <bookmark mark='b'/> The "
@@ -354,15 +432,22 @@ class Cauchy(VoiceoverScene):
             "spaces are defined to have it. And every metric space can be completed, by adding the missing limits: "
             "that's how Cantor and Méray built the reals from the rationals."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ref))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.3), FadeIn(s01[0]), FadeIn(s01[3]),
+                      LaggedStart(*[FadeIn(x) for x in s01[1]], lag_ratio=0.05), FadeIn(s01[2]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[3:5]], lag_ratio=0.3))
+            self.play(FadeIn(rows[3]), FadeIn(sq[0]), FadeIn(sq[3]), FadeIn(sq[2]),
+                      LaggedStart(*[FadeIn(x) for x in sq[1]], lag_ratio=0.1))
+            self.play(FadeIn(rows[4]), FadeIn(s0[0]), FadeIn(s0[3]), FadeIn(s0[2]),
+                      LaggedStart(*[FadeIn(x) for x in s0[1]], lag_ratio=0.05))
+            self.play(Indicate(sq[2], color=C.HOLE, scale_factor=1.8), Indicate(s0[2], color=C.HOLE, scale_factor=1.8))
             vo.wait_until("c")
-            self.play(Create(sep), FadeIn(later), LaggedStart(*[FadeIn(r) for r in rows[5:]], lag_ratio=0.3))
+            self.play(FadeIn(later), Create(sep), LaggedStart(*[FadeIn(r) for r in rows[5:]], lag_ratio=0.3))
             vo.wait_until("d")
-            self.play(FadeIn(foot))
+            self.play(FadeIn(foot[0]))
+            # completing: the missing limits are added
+            self.play(FadeIn(foot[1]), FadeIn(fills, scale=1.5))
         self.wait(0.4)
         self.clear_scene()
 
@@ -372,9 +457,10 @@ class Cauchy(VoiceoverScene):
         e_seq = d["e_seq"]
         e_N = int(d["e_N"])
         n_max = 40
-        ax = plain_axes([0, n_max + 1, 5], [1.9, 3.1, 0.25], 11.0, 3.4, numbers=True, font_size=20,
+        ax = plain_axes([0, n_max + 1, 5], [1.75, 3.1, 0.25], 9.9, 3.2, numbers=True, font_size=20,
                         axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-0.3, -1.95, 0])
+                        x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to([-1.0, -1.75, 0])
+        assert ax.y_range[0] < e_seq[:n_max].min() and e_seq[:n_max].max() < math.e
         board = SequenceBoard(ax, e_seq[:n_max], L=math.e, eps=0.1, N=n_max, n_max=n_max)  # no dot judged yet
         dots = board.dots()
         thm = label(r"\textbf{Rudin 3.14} \ A monotone, bounded sequence converges: \ to its supremum.", font_size=30)
@@ -403,8 +489,7 @@ class Cauchy(VoiceoverScene):
             self.play(FadeIn(roof))
             self.play(ceil.animate.set_value(math.e), run_time=2.0)
         roof.clear_updaters()
-        sup_l = MathTex(r"s^* = \sup_n s_n", font_size=32).next_to(ax.c2p(n_max + 1, math.e), UP, buff=0.06).shift(
-            LEFT * 1.0)
+        sup_l = MathTex(r"s^* = \sup_n s_n", font_size=32).next_to(ax.c2p(n_max + 1, math.e), RIGHT, buff=0.15)
         band, thr = board.eps_band(), board.threshold()
         pf = VGroup(label(r"$s^* - \varepsilon$ is not an upper bound, \ so some $s_N > s^* - \varepsilon$;", font_size=26),
                     label(r"increasing: \ $s^* - \varepsilon < s_N \le s_n \le s^*$ \ for every $n \ge N$.", font_size=26)

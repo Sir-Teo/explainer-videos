@@ -120,6 +120,9 @@ class Distance(VoiceoverScene):
             vo.wait_until("s")
             self.play(FadeIn(stmt))
             vo.wait_until("p")
+            # the grid steps back: this is geometry now, not coordinates
+            self.play(plane.background_lines.animate.set_stroke(opacity=0.15),
+                      plane.faded_lines.animate.set_stroke(opacity=0.08), run_time=0.6)
             self.play(Create(drop), Create(shadow), FadeIn(sh_l), Create(ra))
             vo.wait_until("g")
             self.play(GrowArrow(gap), FadeIn(gap_l))
@@ -132,12 +135,14 @@ class Distance(VoiceoverScene):
         ]
         whys = [why(r"a squared length is never negative"), why(r"expand"),
                 why(r"$\mathbf x\cdot\mathbf y = C$ and $|\mathbf y|^2 = B$"), why(r"factor"), why(r"divide by $B > 0$")]
-        for r_ in rows:
-            r_.scale(1.1)
         grp = VGroup(*rows)
         bc = MathTex(r"B = |\mathbf y|^2, \quad C = \mathbf x\cdot\mathbf y, \quad B\mathbf x - C\mathbf y = B\,(\text{the gap})",
-                     font_size=36, color=GREY_A).to_edge(UP, buff=0.4)
-        step = ladder(self, rows, whys, keep=5, top=2.6, buff=0.4, x=-1.2, edge=6.95)
+                     font_size=34, color=GREY_A).to_corner(UL, buff=0.45)
+        step = ladder(self, rows, whys, keep=5, top=2.55, buff=0.36, x=-2.3, edge=6.6)
+        pic = VGroup(plane, x, y, shadow, drop, gap, ra)
+        gap2 = MathTex(r"\mathbf x - \tfrac{C}{B}\,\mathbf y", font_size=26, color=C.EPS)
+        xl2 = MathTex(r"\mathbf{x}", font_size=28, color=C.SEQ)
+        yl2 = MathTex(r"\mathbf{y}", font_size=28, color=C.APPROX)
         with self.voiceover(
             "Call the length of y squared B, and the inner product C. <bookmark mark='a'/> Then B x minus C y is B "
             "times the gap, so its length squared is at least zero. <bookmark mark='b'/> Expand it. "
@@ -145,8 +150,13 @@ class Distance(VoiceoverScene):
             "<bookmark mark='d'/> and factor out B. <bookmark mark='e'/> Since B is positive, the inner product squared "
             "is at most the product of the squared lengths. That's Cauchy–Schwarz."
         ) as vo:
-            self.play(FadeOut(stmt), FadeOut(VGroup(plane, x, y, self.xl, self.yl, shadow, drop, gap, ra, sh_l, gap_l)))
-            self.play(FadeIn(bc))
+            # the picture stays, smaller, in the corner: the ladder is about its gap vector
+            self.play(FadeOut(stmt), FadeOut(sh_l), FadeOut(gap_l), FadeOut(self.xl), FadeOut(self.yl),
+                      pic.animate.scale(0.5).to_corner(DR, buff=0.35))
+            gap2.next_to(gap, RIGHT, buff=0.1)
+            xl2.next_to(x.get_end(), UP, buff=0.08)
+            yl2.next_to(y.get_end(), RIGHT, buff=0.08)
+            self.play(FadeIn(bc), FadeIn(gap2), FadeIn(xl2), FadeIn(yl2))
             for i, mk in enumerate("abcde"):
                 vo.wait_until(mk)
                 step(i, run_time=1.0)
@@ -198,7 +208,7 @@ class Distance(VoiceoverScene):
             MathTex(r"\text{(b)}\quad d(p,q) = d(q,p)", font_size=34),
             MathTex(r"\text{(c)}\quad d(p,q) \le d(p,r) + d(r,q)", font_size=34),
         )
-        rows_y = (1.45, -0.05, -1.65)
+        rows_y = (1.6, 0.0, -1.75)
         for a_, y in zip(ax, rows_y):
             a_.move_to([0, y, 0]).to_edge(LEFT, buff=0.7)
         coda = label(r"A theorem that uses only (a), (b), (c) holds in every metric space.", font_size=30, color=C.EPS)
@@ -228,7 +238,7 @@ class Distance(VoiceoverScene):
                      MathTex(r"r", font_size=28).next_to(R, UP, buff=0.12))
         tlab = VGroup(MathTex(r"d(p,q)", font_size=24, color=C.DIST).next_to((P + Q) / 2, DOWN, buff=0.1),
                       MathTex(r"d(p,r)", font_size=24, color=C.APPROX).next_to((P + R) / 2, UL, buff=0.02),
-                      MathTex(r"d(r,q)", font_size=24, color=C.APPROX).next_to((R + Q) / 2, UR, buff=0.02))
+                      MathTex(r"d(r,q)", font_size=24, color=C.APPROX).next_to((R + Q) / 2, UR, buff=0.12))
         with self.voiceover(
             "In 1906, Maurice Fréchet turned this into a definition. <bookmark mark='h'/> A metric space is a set "
             "together with a distance function d with three properties. <bookmark mark='a'/> Distances between "
@@ -259,13 +269,13 @@ class Distance(VoiceoverScene):
     # ------------------------------------------------------------------
     def gallery(self):
         kinds = ["2", "1", "inf", "disc"]
-        xs = [-5.3, -1.8, 1.8, 5.3]
+        xs = [-5.0, -1.7, 1.7, 5.0]
         panels = VGroup(*[ball_panel(k, center=[x, 0.2, 0], unit=0.95, font_size=28) for k, x in zip(kinds, xs)])
         for p in panels:
             p[2].set_width(min(p[2].width, 3.2))
-        head = label(r"Four distances on the same plane, and their balls of radius 1", font_size=32).to_edge(UP, buff=0.4)
+        head = label(r"Four distances on one plane, and their balls of radius 1", font_size=34).to_edge(UP, buff=0.3)
         disc_note = label(r"ball of radius $1$: just the center", font_size=22, color=C.OPEN_SET)
-        disc_note.next_to(panels[3][0], DOWN, buff=0.1).shift(UP * 0.55)
+        disc_note.next_to(panels[3][2], DOWN, buff=0.25)
         with self.voiceover(
             "The same set can carry many distances. <bookmark mark='a'/> On the plane: the Euclidean distance, whose "
             "ball of radius one is a disk; <bookmark mark='b'/> the taxicab distance, adding the horizontal and vertical "
@@ -281,16 +291,25 @@ class Distance(VoiceoverScene):
         self.wait(0.3)
         self.play(FadeOut(VGroup(panels, disc_note, head)))
 
-        unit = 1.6
-        circ = Circle(radius=unit, color=C.OPEN_SET, stroke_width=3)
-        dia = Polygon(RIGHT * unit, UP * unit, LEFT * unit, DOWN * unit, color=C.CONNECTED_SET, stroke_width=3)
-        sq = Square(side_length=2 * unit, color=C.CLOSED_SET, stroke_width=3)
-        sm = Square(side_length=2 * unit / np.sqrt(2), color=C.CLOSED_SET, stroke_width=2, stroke_opacity=0.6)
-        grp = VGroup(sq, circ, dia, sm).shift(LEFT * 3.2)
-        lbls = VGroup(MathTex(r"d_\infty < 1", font_size=30, color=C.CLOSED_SET),
+        unit = 1.05
+        # the three unit balls, and the taxicab ball of radius 2 (dashed, like every open ball)
+        def dashed(m, color, width=3, n=48):
+            return DashedVMobject(m.set_stroke(color, width=width).set_fill(opacity=0), num_dashes=n)
+
+        circ = dashed(Circle(radius=unit), C.OPEN_SET)
+        dia = dashed(Polygon(RIGHT * unit, UP * unit, LEFT * unit, DOWN * unit), C.DELTA)
+        sq = dashed(Square(side_length=2 * unit), C.DIST)
+        big = dashed(Polygon(RIGHT * 2 * unit, UP * 2 * unit, LEFT * 2 * unit, DOWN * 2 * unit), C.DELTA, width=2.5, n=64)
+        grp = VGroup(big, sq, circ, dia).shift(LEFT * 3.4 + UP * 0.35)
+        lbls = VGroup(MathTex(r"d_1 < 1", font_size=30, color=C.DELTA),
                       MathTex(r"d_2 < 1", font_size=30, color=C.OPEN_SET),
-                      MathTex(r"d_1 < 1", font_size=30, color=C.CONNECTED_SET)).arrange(RIGHT, buff=0.6)
-        lbls.next_to(sq, DOWN, buff=0.35)
+                      MathTex(r"d_\infty < 1", font_size=30, color=C.DIST),
+                      MathTex(r"d_1 < 2", font_size=30, color=C.DELTA)).arrange(RIGHT, buff=0.45)
+        lbls.next_to(big, DOWN, buff=0.3)
+        # each ball sits inside the next: check on a grid of points
+        g_ = np.stack(np.meshgrid(np.linspace(-2.5, 2.5, 201), np.linspace(-2.5, 2.5, 201)), -1).reshape(-1, 2)
+        d1, d2, dinf = np.abs(g_).sum(1), np.hypot(g_[:, 0], g_[:, 1]), np.abs(g_).max(1)
+        assert np.all(d2[d1 < 1] < 1) and np.all(dinf[d2 < 1] < 1) and np.all(d1[dinf < 1] < 2)
         txt = VGroup(
             MathTex(r"d_\infty \le d_2 \le d_1 \le 2\,d_\infty", font_size=40),
             label(r"so every ball of one metric contains", font_size=30),
@@ -304,10 +323,11 @@ class Distance(VoiceoverScene):
             "point. We'll see in the next chapter that this means they agree about which sets are open, and about which "
             "sequences converge. The discrete distance agrees with none of them."
         ) as vo:
-            self.play(Create(dia), FadeIn(lbls[2]))
+            self.play(Create(dia), FadeIn(lbls[0]))
             vo.wait_until("n")
             self.play(Create(circ), FadeIn(lbls[1]))
-            self.play(Create(sq), FadeIn(lbls[0]))
+            self.play(Create(sq), FadeIn(lbls[2]))
+            self.play(Create(big), FadeIn(lbls[3]))
             vo.wait_until("t")
             self.play(FadeIn(txt, shift=LEFT * 0.2))
         self.wait(0.3)
@@ -318,8 +338,11 @@ class Distance(VoiceoverScene):
         sd = load("supdist")
         xs_, ds = float(sd["x_star"]), float(sd["d_star"])
         ax = Axes(x_range=[0, 1, 0.25], y_range=[0, 1.1, 0.5], x_length=8.6, y_length=5.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_numbers": True, "font_size": 22,
-                               "decimal_number_config": {"num_decimal_places": 2}}).shift(LEFT * 1.8 + DOWN * 0.5)
+                  axis_config={"stroke_color": GREY_C}).shift(LEFT * 1.8 + DOWN * 0.5)
+        ax_nums = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.15)
+                           for t, v in (("0", 0), (r"\tfrac12", 0.5), ("1", 1))],
+                         *[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.15)
+                           for t, v in (("0.5", 0.5), ("1", 1))])
         x = np.linspace(0, 1, 600)
         F = polyline(ax, x, sd_f(x), color=C.FUNC, stroke_width=4)
         G = polyline(ax, x, sd_g(x), color=C.APPROX, stroke_width=4)
@@ -345,7 +368,7 @@ class Distance(VoiceoverScene):
             "from zero to one. <bookmark mark='d'/> The distance between two of them, f and g, is the biggest vertical "
             "gap between their graphs: the supremum of f of x minus g of x, in absolute value, over all x."
         ) as vo:
-            self.play(Create(ax), FadeIn(space))
+            self.play(Create(ax), FadeIn(ax_nums), FadeIn(space))
             self.play(Create(F), Create(G), FadeIn(fl), FadeIn(gl))
             vo.wait_until("d")
             self.play(Write(dfn))
@@ -387,7 +410,9 @@ class Distance(VoiceoverScene):
                            bounded_graph=ax.plot(lambda v: sd_f(v) - r, x_range=[0, 1]), color=C.DIST, opacity=0.22)
         inside = VGroup(*[polyline(ax, x, sd_f(x) + 0.07 * np.sin(k * 6 * x + k), color=C.CONNECTED_SET, stroke_width=2.5)
                           for k in (1, 2, 3)])
-        outside = polyline(ax, x, sd_f(x) + 0.2 * np.exp(-((x - 0.7) / 0.05) ** 2), color=C.PATHOLOGY, stroke_width=2.5)
+        xo = np.linspace(0.58, 0.82, 200)  # only where the bump lifts it off f (elsewhere it is f itself)
+        outside = polyline(ax, xo, sd_f(xo) + 0.2 * np.exp(-((xo - 0.7) / 0.05) ** 2), color=C.PATHOLOGY, stroke_width=2.5)
+        assert 0.2 * np.exp(-((0.58 - 0.7) / 0.05) ** 2) < 1e-2
         assert all(np.max(np.abs(0.07 * np.sin(k * 6 * x + k))) < r for k in (1, 2, 3))
         assert np.max(0.2 * np.exp(-((x - 0.7) / 0.05) ** 2)) > r
         tl = label(r"the ball of radius $0.12$\\around $f$ is a \textbf{tube}", font_size=28, color=C.DIST).move_to([4.85, 1.1, 0])

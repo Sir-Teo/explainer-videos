@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from videos.analysis1.common import endpoint
-from videos.analysis1.s07_open_closed import nbhd
+from videos.analysis1.s07_open_closed import blob_pts, nbhd
 
 
 class HeineBorel(VoiceoverScene):
@@ -50,7 +50,13 @@ class HeineBorel(VoiceoverScene):
         for s_ in steps:
             s_.set_max_width(6.0)
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.75, -0.6, 0])
-        tag = schematic_tag(corner=DL)
+        tag = schematic_tag(corner=UL).to_corner(UL, buff=0.45)
+        # "some open cover": a 5 x 5 grid of open disks, each a little bigger than its grid cell
+        cov_c = [((i + 0.5) / 5, (j + 0.5) / 5) for i in range(5) for j in range(5)]
+        cov_r = 0.8 / 5
+        samp = np.random.default_rng(0).uniform(0, 1, (4000, 2))
+        assert all(any(np.hypot(*(q - np.array(c))) < cov_r for c in cov_c) for q in samp)  # it covers the square
+        cover = VGroup(*[nbhd(P(*c), cov_r * S, color=C.OPEN_SET, fill=0.06, width=2, dashes=24) for c in cov_c])
         with self.voiceover(
             "The basic compact set is a box: a product of closed intervals, which Rudin calls a k-cell. <bookmark mark='t'/> "
             "Every k-cell is compact. Here's the square, with k equal to two. <bookmark mark='s'/> Suppose, to get a "
@@ -62,12 +68,16 @@ class HeineBorel(VoiceoverScene):
             vo.wait_until("t")
             self.play(FadeIn(stmt))
             vo.wait_until("s")
-            self.play(FadeIn(steps[0]))
+            self.play(FadeIn(steps[0]), LaggedStart(*[FadeIn(d_) for d_ in cover], lag_ratio=0.04), run_time=1.6)
             vo.wait_until("c")
-            self.play(FadeIn(steps[1:3]))
+            self.play(FadeIn(steps[1:3]), cover.animate.set_opacity(0.3))
         lo, hi = np.array([0.0, 0.0]), np.array([1.0, 1.0])
         cells = VGroup()
         bad = None
+        # after the fourth cut the cell is too small to follow: an inset magnifies it (x 8) in the empty upper half
+        mag, K_IN = 8, 3
+        in_c = np.array([-3.6, 1.1, 0])
+        inset = None
         with self.voiceover(
             "<bookmark mark='a'/> Keep that bad quarter, and cut it into four again. One of those has no finite "
             "subcover either. And so on. <bookmark mark='p'/> We get nested squares, each half the width of the last, "
@@ -83,22 +93,52 @@ class HeineBorel(VoiceoverScene):
                 nhi = np.where(q, hi, mid)
                 sq = Polygon(P(nlo[0], nlo[1]), P(nhi[0], nlo[1]), P(nhi[0], nhi[1]), P(nlo[0], nhi[1]),
                              stroke_color=C.PATHOLOGY, stroke_width=3, fill_color=C.PATHOLOGY, fill_opacity=0.18)
-                self.play(Create(lines), run_time=0.35 if k > 2 else 0.6)
+                anims = [Create(lines)]
+                if inset is not None:
+                    # the same cut, magnified
+                    def M(u, v):
+                        return in_c + (np.array([u, v, 0]) - w_mid) * S * mag
+                    anims.append(Create(VGroup(Line(M(mid[0], lo[1]), M(mid[0], hi[1]), color=GREY_B, stroke_width=2),
+                                               Line(M(lo[0], mid[1]), M(hi[0], mid[1]), color=GREY_B, stroke_width=2))))
+                self.play(*anims, run_time=0.35 if k > 2 else 0.6)
                 if bad is None:
                     bad = sq
                     self.play(FadeIn(bad), run_time=0.4)
                 else:
-                    self.play(Transform(bad, sq), run_time=0.4)
+                    anims = [Transform(bad, sq)]
+                    if inset is not None:
+                        anims.append(Transform(in_bad, Polygon(M(nlo[0], nlo[1]), M(nhi[0], nlo[1]), M(nhi[0], nhi[1]),
+                                                               M(nlo[0], nhi[1]), stroke_color=C.PATHOLOGY, stroke_width=3,
+                                                               fill_color=C.PATHOLOGY, fill_opacity=0.18)))
+                    self.play(*anims, run_time=0.4)
                 cells.add(lines)
                 lo, hi = nlo, nhi
+                if k == K_IN:
+                    w_lo, w_hi = lo.copy(), hi.copy()
+                    w_mid = (w_lo + w_hi) / 2
+                    side_in = (w_hi[0] - w_lo[0]) * S * mag
+                    assert abs(side_in - S / 16 * mag) < 1e-9 and abs(side_in - 2.8) < 1e-9
+                    src = Square(side_length=(w_hi[0] - w_lo[0]) * S, color=GREY_B, stroke_width=2).move_to(P(*w_mid))
+                    frame = Square(side_length=side_in, color=GREY_B, stroke_width=2).move_to(in_c)
+                    frame.set_fill(BACKGROUND, 1)
+                    links = VGroup(Line(src.get_corner(UL), frame.get_corner(UL), color=GREY_B, stroke_width=1.5),
+                                   Line(src.get_corner(UR), frame.get_corner(UR), color=GREY_B, stroke_width=1.5))
+                    in_bad = Square(side_length=side_in, stroke_color=C.PATHOLOGY, stroke_width=3,
+                                    fill_color=C.PATHOLOGY, fill_opacity=0.18).move_to(in_c)
+                    in_tag = MathTex(rf"\times {mag}", font_size=24, color=GREY_B).next_to(frame, UP, buff=0.08)
+                    in_tag.align_to(frame, RIGHT)
+                    inset = VGroup(links, frame, in_bad, in_tag)
+                    self.play(Create(src), FadeIn(frame), Create(links), FadeIn(in_bad), FadeIn(in_tag), run_time=0.8)
             vo.wait_until("p")
             self.play(FadeIn(steps[3:]))
         xs = Dot(P(*target), radius=0.07, color=WHITE)
-        xsl = MathTex(r"x^*", font_size=34).next_to(xs, UR, buff=0.05)
+        xsl = MathTex(r"x^*", font_size=34).next_to(xs, DR, buff=0.05)
+        xs_in = Dot(in_c + (np.array([*target, 0]) - np.array([*w_mid, 0])) * S * mag, radius=0.07, color=WHITE)
+        assert np.all(np.abs(xs_in.get_center() - in_c)[:2] < side_in / 2)  # x* is inside the magnified cell
         disk = nbhd(P(*target), 0.55, color=C.OPEN_SET, fill=0.2, width=3)
         dl = MathTex(r"G_\alpha \supset N_r(x^*)", font_size=30, color=C.OPEN_SET).next_to(disk, DOWN, buff=0.12)
         fin = label(r"once $\delta / 2^n < r$, the $n$-th cell lies in the single set $G_\alpha$: \ contradiction",
-                    font_size=26, color=C.PATHOLOGY).to_edge(DOWN, buff=0.3)
+                    font_size=26, color=C.PATHOLOGY).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "<bookmark mark='x'/> x star is in the square, so it's in one of the open sets of the cover, call it G "
             "alpha, <bookmark mark='g'/> and since G alpha is open, it contains a whole disk around x star. <bookmark mark='f'/> "
@@ -106,11 +146,11 @@ class HeineBorel(VoiceoverScene):
             "single open set covers it. That's a finite subcover of a square that supposedly had none. Contradiction."
         ) as vo:
             vo.wait_until("x")
-            self.play(FadeIn(xs, scale=2), FadeIn(xsl))
+            self.play(FadeIn(xs, scale=2), FadeIn(xsl), FadeIn(xs_in, scale=2))
             vo.wait_until("g")
-            self.play(FadeIn(disk, scale=0.3), FadeIn(dl))
+            self.play(FadeIn(disk, scale=0.3), FadeIn(dl), FadeOut(cover))
             vo.wait_until("f")
-            self.play(Indicate(bad, color=C.PATHOLOGY, scale_factor=1.8), FadeIn(fin))
+            self.play(Indicate(in_bad, color=C.PATHOLOGY, scale_factor=1.15), FadeIn(fin))
         self.wait(0.4)
         self.clear_scene()
 
@@ -130,10 +170,10 @@ class HeineBorel(VoiceoverScene):
             mid = (lo + hi) / 2
             y = y0 + 0.55 + 0.38 * k
             left = VGroup(Line([X(lo), y, 0], [X(mid), y, 0], color=C.PATHOLOGY, stroke_width=6))
-            right = VGroup(Line([X(mid), y, 0], [X(hi), y, 0], color=C.CONNECTED_SET, stroke_width=6))
+            right = VGroup(Line([X(mid), y, 0], [X(hi), y, 0], color=C.COMPACT_SET, stroke_width=6))
             rows.add(VGroup(left, right))
             hi = mid
-        notes = VGroup(label(r"right half: finitely many $(\tfrac1n, 2)$ cover it", font_size=26, color=C.CONNECTED_SET),
+        notes = VGroup(label(r"right half: finitely many $(\tfrac1n, 2)$ cover it", font_size=26, color=C.COMPACT_SET),
                        label(r"left half: no finite subcover \ $\Rightarrow$ keep hunting", font_size=26, color=C.PATHOLOGY)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35).shift(RIGHT * 2.5)
         zero = VGroup(Circle(radius=0.14, color=C.HOLE, stroke_width=4).move_to([X(0), y0, 0]),
@@ -162,31 +202,46 @@ class HeineBorel(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def theorem(self):
-        head = VGroup(label(r"\textbf{Heine--Borel} (Rudin 2.41) \ For $E \subset \R^k$, these are equivalent:", font_size=30))
-        head.to_edge(UP, buff=0.45)
+        head = VGroup(label(r"\textbf{Heine--Borel} (Rudin 2.41)", font_size=28, color=GREY_A),
+                      label(r"For $E \subset \R^k$, these are equivalent:", font_size=32)).arrange(DOWN, buff=0.12)
+        head.to_edge(UP, buff=0.4)
         a = label(r"(a) \ $E$ is closed and bounded", font_size=30)
         b = label(r"(b) \ $E$ is compact", font_size=30, color=C.COMPACT_SET)
-        c = label(r"(c) \ every infinite subset of $E$ has a limit point in $E$", font_size=30)
-        a.move_to([-3.8, 1.2, 0])
-        b.move_to([3.8, 1.2, 0])
-        c.move_to([0, -1.2, 0])
+        c = VGroup(label(r"(c) \ every infinite subset of $E$", font_size=30),
+                   label(r"has a limit point in $E$", font_size=30)).arrange(DOWN, buff=0.1)
+        a.move_to([-3.8, 1.75, 0])
+        b.move_to([3.8, 1.75, 0])
+        c.move_to([0, -0.85, 0])
+        ta, tb, tc = self.thumb("a").move_to([-3.8, 0.62, 0]), self.thumb("b").move_to([3.8, 0.62, 0]), \
+            self.thumb("c").move_to([0, -2.05, 0])
         ab = Arrow(a.get_right(), b.get_left(), buff=0.25, color=GREY_B)
-        bc = Arrow(b.get_bottom(), c.get_top() + RIGHT * 2.0, buff=0.25, color=GREY_B)
-        ca = Arrow(c.get_top() + LEFT * 2.0, a.get_bottom(), buff=0.25, color=GREY_B)
-        ab_l = label(r"inside a $k$-cell; closed subset of compact (2.35)", font_size=22, color=GREY_A).next_to(ab, UP, buff=0.1)
+        bc = Arrow(tb.get_bottom(), c.get_top() + RIGHT * 2.0, buff=0.15, color=GREY_B)
+        ca = Arrow(c.get_top() + LEFT * 2.0, ta.get_bottom(), buff=0.15, color=GREY_B)
+        ab_l = VGroup(label(r"inside a $k$-cell;", font_size=22, color=GREY_A),
+                      label(r"closed subset of compact (2.35)", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.06)
+        ab_l.next_to(ab, UP, buff=0.1)
         bc_l = label(r"2.37", font_size=24, color=GREY_A).next_to(bc, RIGHT, buff=0.1)
-        ca_l = VGroup(label(r"not bounded: $|x_n| > n$ escapes", font_size=22, color=GREY_A),
-                      label(r"not closed: $x_n \to x_0 \notin E$", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08)
-        ca_l.next_to(ca, LEFT, buff=0.1)
+        # (c) forces (a): the two ways a set can fail it, drawn small beside their captions
+        esc = VGroup(*[Dot([0.08 * 1.6 ** k, 0, 0], radius=0.04, color=C.SEQ) for k in range(5)])
+        esc.add(Arrow(esc[-1].get_center(), esc[-1].get_center() + RIGHT * 0.3, buff=0.06, color=C.SEQ,
+                      stroke_width=2.5, tip_length=0.1))
+        crowd_ring = endpoint(ORIGIN, False, C.HOLE, radius=0.06)
+        crowd = VGroup(*[Dot(LEFT * 0.75 * 0.55 ** k, radius=0.035, color=C.SEQ) for k in range(6)], crowd_ring)
+        cap1 = label(r"not bounded: they escape", font_size=22, color=GREY_A)
+        cap2 = label(r"not closed: $x_n \to x_0 \notin E$", font_size=22, color=GREY_A)
+        ca_l = VGroup(VGroup(esc, cap1).arrange(RIGHT, buff=0.25), VGroup(crowd, cap2).arrange(RIGHT, buff=0.25))
+        ca_l.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        ca_l.move_to([0, -1.95, 0]).align_to([-2.45, 0, 0], RIGHT)
+        assert ca_l.get_left()[0] > -6.7
         with self.voiceover(
             "Now we can say exactly which subsets of k-dimensional space are compact. <bookmark mark='h'/> The "
             "Heine–Borel theorem says three properties are equivalent. <bookmark mark='a'/> Closed and bounded; "
             "<bookmark mark='b'/> compact; <bookmark mark='c'/> and every infinite subset has a limit point inside the set."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, m in zip("abc", (a, b, c)):
+            for mk, m, t in zip("abc", (a, b, c), (ta, tb, tc)):
                 vo.wait_until(mk)
-                self.play(FadeIn(m))
+                self.play(FadeIn(m), FadeIn(t, shift=UP * 0.15))
         with self.voiceover(
             "<bookmark mark='x'/> Closed and bounded gives compact: a bounded set sits inside some box, which is compact, "
             "and a closed subset of a compact set is compact. <bookmark mark='y'/> Compact gives the limit-point property, "
@@ -200,10 +255,11 @@ class HeineBorel(VoiceoverScene):
             vo.wait_until("y")
             self.play(GrowArrow(bc), FadeIn(bc_l))
             vo.wait_until("z")
-            self.play(GrowArrow(ca), FadeIn(ca_l))
+            self.play(GrowArrow(ca), FadeIn(ca_l[0]))
+            self.play(FadeIn(ca_l[1]))
         warn = VGroup(label(r"(b) $\iff$ (c) holds in every metric space.", font_size=28, color=GREY_A),
                       label(r"(a) $\Rightarrow$ (b) is special to $\R^k$: \ chapter 11 breaks it.", font_size=28,
-                            color=C.PATHOLOGY)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
+                            color=C.PATHOLOGY)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "One warning, which will matter at the end of this video. <bookmark mark='w'/> Compact and the limit-point "
             "property are equivalent in every metric space. But closed and bounded implies compact only in k-dimensional "
@@ -214,12 +270,35 @@ class HeineBorel(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
+    @staticmethod
+    def thumb(kind: str) -> VGroup:
+        """1.8 x 1.1 pictures of (a) closed and bounded, (b) compact (covered by finitely many disks),
+        (c) an infinite subset piling up at a point of the set."""
+        pts = blob_pts(ORIGIN, scale=0.27, n=200)
+        if kind == "a":
+            blob = Polygon(*pts, stroke_color=C.CLOSED_SET, stroke_width=2.5, fill_color=C.CLOSED_SET, fill_opacity=0.2)
+            frame = DashedVMobject(SurroundingRectangle(blob, buff=0.12, stroke_width=2, color=GREY_B), num_dashes=30)
+            return VGroup(blob, frame)
+        blob = Polygon(*pts, stroke_color=C.COMPACT_SET, stroke_width=2.5, fill_color=C.COMPACT_SET, fill_opacity=0.2)
+        if kind == "b":
+            cs = [np.array([np.cos(t), np.sin(t), 0]) * 0.3 for t in np.linspace(0, 2 * np.pi, 5, endpoint=False)]
+            r = 0.32
+            fill = np.array([t * p for p in pts for t in np.linspace(0, 1, 8)])
+            assert all(any(np.linalg.norm(q - c) < r for c in cs) for q in fill)  # five disks cover the blob
+            disks = VGroup(*[DashedVMobject(Circle(radius=r, color=C.OPEN_SET, stroke_width=2).move_to(c), num_dashes=16)
+                             for c in cs])
+            return VGroup(blob, disks)
+        lim = np.array([0.12, -0.05, 0])
+        dots = VGroup(*[Dot(lim + 0.4 * 0.75 ** k * np.array([np.cos(2.3 * k), np.sin(2.3 * k), 0]), radius=0.03,
+                            color=C.SEQ) for k in range(14)])
+        return VGroup(blob, dots, Dot(lim, radius=0.05, color=WHITE))
+
     # ------------------------------------------------------------------
     def weierstrass(self):
         n = np.arange(1, 100001)
         pts = np.stack([np.cos(n), np.sin(np.sqrt(2) * n)], 1)
-        side = 5.6
-        o = np.array([-3.4, -0.4, 0])
+        side = 5.3
+        o = np.array([-3.4, -0.1, 0])
 
         def make_view(lo, hi, cnt=100000):
             sel = np.all((pts[:cnt] >= lo) & (pts[:cnt] <= hi), axis=1)
@@ -241,6 +320,13 @@ class HeineBorel(VoiceoverScene):
         of = label(r"(of the first $100{,}000$ points; at most $1{,}500$ drawn)", font_size=22, color=GREY_B)
         of.move_to([3.6, -1.5, 0])
         zl = MathTex(r"\text{zoom } \times 1", font_size=30, color=GREY_A).move_to([3.6, -0.9, 0])
+        # a locator: where the current view sits in the original square
+        loc_s, loc_c = 1.1, np.array([6.0, -0.6, 0])
+        loc = Square(side_length=loc_s, color=GREY_B, stroke_width=2).move_to(loc_c)
+
+        def loc_box(lo_, hi_):
+            c_ = loc_c + np.array([((lo_ + hi_) / 2 + 1)[0] / 2 - 0.5, ((lo_ + hi_) / 2 + 1)[1] / 2 - 0.5, 0]) * loc_s
+            return Square(side_length=(hi_ - lo_)[0] / 2 * loc_s, color=C.EPS, stroke_width=2).move_to(c_)
         with self.voiceover(
             "A corollary that we'll use constantly in Part 2. <bookmark mark='s'/> Every bounded infinite set in "
             "k-dimensional space has a limit point. <bookmark mark='e'/> Here are points of the sequence cosine "
@@ -252,7 +338,7 @@ class HeineBorel(VoiceoverScene):
             self.play(FadeIn(stmt))
             vo.wait_until("e")
             self.play(FadeIn(seqn), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.0005), FadeIn(count), FadeIn(zl), FadeIn(of),
-                      run_time=2)
+                      Create(loc), run_time=2)
         with self.voiceover(
             "The proof is bisection once more. <bookmark mark='q'/> Cut the square into quarters; at least one contains "
             "infinitely many of the points. Zoom into it, and repeat. The quarters shrink to a point, and every disk "
@@ -279,13 +365,35 @@ class HeineBorel(VoiceoverScene):
                 count2 = MathTex(rf"\text{{in view: }} {fmt_int(cnt)}", font_size=30).move_to([3.6, -0.3, 0])
                 zl2 = MathTex(rf"\text{{zoom }} \times {2 ** (k + 1)}", font_size=30, color=GREY_A).move_to([3.6, -0.9, 0])
                 self.play(FadeOut(quarter), FadeOut(dots), FadeIn(nd), FadeTransform(count, count2),
-                          FadeTransform(zl, zl2), run_time=0.8)
+                          FadeTransform(zl, zl2), Create(loc_box(nlo, nhi)), run_time=0.8)
                 count, zl = count2, zl2
                 dots = nd
                 assert cnt > 0
+            # where the quarters close in: keep halving (with a million points) and mark the point they pin down
+            many = np.stack([np.cos(np.arange(1, 1000001)), np.sin(np.sqrt(2) * np.arange(1, 1000001))], 1)
+            plo, phi = lo.copy(), hi.copy()
+            for _ in range(5):
+                pm = (plo + phi) / 2
+                cand = []
+                for qx in (0, 1):
+                    for qy in (0, 1):
+                        nlo_ = np.array([plo[0] if qx == 0 else pm[0], plo[1] if qy == 0 else pm[1]])
+                        nhi_ = np.array([pm[0] if qx == 0 else phi[0], pm[1] if qy == 0 else phi[1]])
+                        cand.append((np.all((many >= nlo_) & (many <= nhi_), axis=1).sum(), nlo_, nhi_))
+                cnt_, plo, phi = max(cand, key=lambda t: t[0])
+                assert cnt_ > 0
+            lp = (plo + phi) / 2
+            u_ = (lp - lo) / (hi - lo)
+            assert np.all((u_ > 0) & (u_ < 1))  # the point lies inside the current view
+            lp_s = o + np.array([(u_[0] - 0.5) * side, (u_[1] - 0.5) * side, 0])
+            lp_d = Dot(lp_s, radius=0.07, color=WHITE)
+            lp_disk = DashedVMobject(Circle(radius=0.45, color=WHITE, stroke_width=2.5).move_to(lp_s), num_dashes=28)
+            lp_l = label(r"limit point", font_size=26).next_to(lp_disk, UP if u_[1] < 0.7 else DOWN, buff=0.08)
+            lp_l.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.05)
+            self.play(FadeIn(lp_d, scale=2), Create(lp_disk), FadeIn(lp_l))
             vo.wait_until("c")
             cor = label(r"Every bounded sequence in $\R^k$ has a convergent subsequence.", font_size=28, color=C.EPS)
-            cor.to_edge(DOWN, buff=0.45)
+            cor.to_edge(DOWN, buff=0.4)
             self.play(FadeIn(cor))
         self.wait(0.5)
         self.clear_scene()

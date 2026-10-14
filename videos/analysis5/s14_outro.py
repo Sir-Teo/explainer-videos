@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
@@ -95,6 +97,23 @@ class Outro(VoiceoverScene):
             label(r"in infinitely many dimensions", font_size=26, color=C.INNER),
             label(r"and Fourier series converge in $L^2$, for every $f \in L^2$", font_size=26, color=C.EPS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.0, -0.6, 0])
+        # the case p = 2: a vector, its orthogonal projection onto a line through 0, the right angle (Pythagoras)
+        u = np.array([math.cos(0.35), math.sin(0.35)])
+        v = np.array([0.45, 1.05])
+        P = float(v @ u) * u
+        assert abs(float((v - P) @ u)) < 1e-12 and abs(v @ v - P @ P - (v - P) @ (v - P)) < 1e-12
+
+        def pt(w):
+            return ax.c2p(float(w[0]), float(w[1]))
+
+        ell = Line(pt(-1.35 * u), pt(1.35 * u), color=C.INNER, stroke_width=2, stroke_opacity=0.7)
+        va = Arrow(pt([0, 0]), pt(v), buff=0, color=WHITE, stroke_width=4, tip_length=0.2)
+        pa = Arrow(pt([0, 0]), pt(P), buff=0, color=C.INNER, stroke_width=5, tip_length=0.2)
+        drop = DashedLine(pt(v), pt(P), color=GREY_B, stroke_width=2.5)
+        ra = RightAngle(Line(pt(P), pt(P - 0.5 * u)), Line(pt(P), pt(v)), length=0.18, color=GREY_B, stroke_width=2)
+        vl = MathTex("f", font_size=28).next_to(pt(v), UP, buff=0.08)
+        pl_ = MathTex(r"Pf", font_size=28, color=C.INNER).next_to(pt(P), DOWN + RIGHT, buff=0.08)
+        proj = VGroup(ell, va, pa, drop, ra, vl, pl_)
         with self.voiceover(
             "Next time, in Part 6: distances between functions. <bookmark mark='a'/> The p-norms measure functions "
             "in different ways; in the plane their unit balls run from a diamond, through the circle, to a square. "
@@ -108,8 +127,9 @@ class Outro(VoiceoverScene):
             self.play(pT.animate.set_value(12.0), run_time=2.5)
             self.play(FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(FadeIn(side[2]))
-            self.play(FadeIn(side[3:5]))
+            self.play(FadeIn(side[2]), pT.animate.set_value(2.0), run_time=1.5)
+            self.play(FadeIn(side[3:5]), Create(ell), GrowArrow(va), FadeIn(vl))
+            self.play(Create(drop), GrowArrow(pa), FadeIn(pl_), Create(ra))
             self.play(FadeIn(side[5]))
         for m in (b, pl):
             m.clear_updaters()

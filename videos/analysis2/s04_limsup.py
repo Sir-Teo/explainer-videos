@@ -44,7 +44,8 @@ class LimSup(VoiceoverScene):
                      MathTex(r"\limsup_{n\to\infty} s_n = \sup E, \qquad \liminf_{n\to\infty} s_n = \inf E",
                              font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
         ref = note(r"Rudin 3.16").next_to(dfn, RIGHT, buff=0.3).align_to(dfn, DOWN)
-        e_here = MathTex(r"E = \{-1, 1\}", font_size=34).next_to(ex, DOWN, buff=0.2).align_to(ex, LEFT)
+        e_here = MathTex(r"E = \{-1, 1\}", font_size=34).next_to(ex, RIGHT, buff=0.6)
+        dots.set_z_index(1)  # the dots stay above the water marks drawn later
         with self.voiceover(
             "Take the sequence that alternates near one and minus one, approaching each from outside. "
             "<bookmark mark='d'/> Collect every subsequential limit into a set E, allowing plus and minus infinity. "
@@ -57,13 +58,13 @@ class LimSup(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(e_here))
 
-        hi = VGroup(*[Line(ax.c2p(N - 0.5, sup_t[N - 1]), ax.c2p(N + 0.5, sup_t[N - 1]), color=C.EPS, stroke_width=4)
-                      for N in range(1, n_max + 1)])
-        lo = VGroup(*[Line(ax.c2p(N - 0.5, inf_t[N - 1]), ax.c2p(N + 0.5, inf_t[N - 1]), color=C.CLOSED_SET,
+        hi = VGroup(*[Line(ax.c2p(N - 0.5, sup_t[N - 1]), ax.c2p(N + 0.5, sup_t[N - 1]), color=C.UPPER_SUM,
                            stroke_width=4) for N in range(1, n_max + 1)])
-        hi_l = MathTex(r"\sup_{n \ge N} s_n", font_size=30, color=C.EPS).next_to(ax.c2p(n_max, 1.15), UP, buff=0.12)
-        lo_l = MathTex(r"\inf_{n \ge N} s_n", font_size=30, color=C.CLOSED_SET).next_to(ax.c2p(n_max, -1.15), DOWN,
-                                                                                        buff=0.12)
+        lo = VGroup(*[Line(ax.c2p(N - 0.5, inf_t[N - 1]), ax.c2p(N + 0.5, inf_t[N - 1]), color=C.LOWER_SUM,
+                           stroke_width=4) for N in range(1, n_max + 1)])
+        hi_l = MathTex(r"\sup_{n \ge N} s_n", font_size=30, color=C.UPPER_SUM).next_to(ax.c2p(n_max, 1.15), UP, buff=0.12)
+        lo_l = MathTex(r"\inf_{n \ge N} s_n", font_size=30, color=C.LOWER_SUM).next_to(ax.c2p(n_max, -1.15), DOWN,
+                                                                                       buff=0.12)
         hi_l.shift(LEFT * 0.4)
         lo_l.shift(LEFT * 0.4)
         eq = MathTex(r"\limsup s_n = \lim_{N \to \infty} \, \sup_{n \ge N} s_n", font_size=34).move_to([3.4, 1.45, 0])
@@ -105,6 +106,8 @@ class LimSup(VoiceoverScene):
             for k, dot in enumerate(dots, start=1):
                 dot.set_color(C.PATHOLOGY if a[k - 1] > x else C.SEQ)
 
+        self.remove(*dots)
+        self.add(dots)  # the group itself must be in the scene for its updater to run
         dots.add_updater(lambda m: recolor())
         thm = VGroup(label(r"\textbf{Rudin 3.17} \ $s^* = \limsup s_n$ is the only number with:", font_size=28),
                      label(r"(a) \ some subsequence converges to $s^*$;", font_size=26, color=GREY_A),
@@ -135,6 +138,7 @@ class LimSup(VoiceoverScene):
             vo.wait_until("z")
             self.play(xv.animate.set_value(0.9), run_time=1.5)
         assert count(1.2) == 2 and count(1.05) == 9 and count(0.9) == 20
+        assert sum(d_.get_color() == ManimColor(C.PATHOLOGY) for d_ in dots) == count(0.9)  # the red dots are those
         dots.clear_updaters()
         cnt.clear_updaters()
         for m in (lev, x_l):
@@ -200,29 +204,36 @@ class LimSup(VoiceoverScene):
         d = load("sequences")
         n, rr = d["n"], d["r"]
         head = label(r"\textbf{Rudin 3.20} \ Five limits worth knowing", font_size=34).to_edge(UP, buff=0.4)
-        facts = VGroup(
-            MathTex(r"\tfrac{1}{n^p} \to 0 \ (p > 0)", font_size=32),
-            MathTex(r"\sqrt[n]{p} \to 1 \ (p > 0)", font_size=32),
-            MathTex(r"\sqrt[n]{n} \to 1", font_size=32, color=C.EPS),
-            MathTex(r"\tfrac{n^\alpha}{(1 + p)^n} \to 0 \ (p > 0)", font_size=32),
-            MathTex(r"x^n \to 0 \ (|x| < 1)", font_size=32),
-        ).arrange(RIGHT, buff=0.55).next_to(head, DOWN, buff=0.35)
+        mains = [r"\tfrac{1}{n^p} \to 0", r"\sqrt[n]{p} \to 1", r"\sqrt[n]{n} \to 1", r"\tfrac{n^\alpha}{(1 + p)^n} \to 0",
+                 r"x^n \to 0"]
+        conds = [r"$p > 0$", r"$p > 0$", r"\phantom{$p$}", r"$p > 0$", r"$|x| < 1$"]
+        cols = [-5.2, -2.6, 0.0, 2.6, 5.2]
+        facts = VGroup(*[VGroup(MathTex(m_, font_size=32, color=C.SEQ if i == 2 else WHITE),
+                                note(c_)).arrange(DOWN, buff=0.08)
+                         for i, (m_, c_) in enumerate(zip(mains, conds))])
+        for f_, x_ in zip(facts, cols):
+            f_.move_to([x_, 2.35, 0])
         # a sparkline under each: the first 30 terms and the limit
         k = np.arange(1, 31, dtype=float)
         seqs = [([1 / k], (0, 1.05), 0.0), ([4 ** (1 / k), 0.25 ** (1 / k)], (0, 4.2), 1.0),
                 ([k ** (1 / k)], (0.9, 1.5), 1.0), ([k**3 / 1.5**k], (0, 21), 0.0), ([(-0.8) ** k], (-0.85, 0.85), 0.0)]
         sparks = VGroup()
-        for f_, (ys_list, yr, lim) in zip(facts, seqs):
+        for x_, (ys_list, yr, lim) in zip(cols, seqs):
             sa = Axes(x_range=[0, 31, 10], y_range=[yr[0], yr[1], (yr[1] - yr[0]) / 2], x_length=1.95, y_length=2.6,
                       tips=False, axis_config={"stroke_color": GREY_D, "stroke_width": 1.5, "include_ticks": False})
-            sa.move_to([f_.get_x(), -0.5, 0])
+            sa.move_to([x_ - 0.15, -0.5, 0])
             ll = DashedLine(sa.c2p(0, lim), sa.c2p(31, lim), color=WHITE, stroke_width=1.2, stroke_opacity=0.7)
+            lim_l = MathTex(f"{lim:g}", font_size=22, color=GREY_B).next_to(sa.c2p(31, lim), RIGHT, buff=0.08)
             dd = VGroup(*[Dot(sa.c2p(a, b), radius=0.03, color=c_) for ys_, c_ in zip(ys_list, (C.SEQ, C.APPROX))
                           for a, b in zip(k, ys_)])
-            sparks.add(VGroup(sa, ll, dd))
+            sparks.add(VGroup(sa, VGroup(ll, lim_l), dd))
+            assert all(yr[0] <= v <= yr[1] for ys_ in ys_list for v in ys_)  # every dot inside its window
+        # the two families on the second sparkline, labelled
+        sp1 = sparks[1][0]
+        sparks[1].add(MathTex(r"p = 4", font_size=22, color=C.SEQ).next_to(sp1.c2p(2, 4 ** 0.5), RIGHT, buff=0.15),
+                      MathTex(r"p = \tfrac14", font_size=22, color=C.APPROX).next_to(sp1.c2p(2, 0.25 ** 0.5), RIGHT,
+                                                                                     buff=0.15))
         assert abs((k**3 / 1.5**k).max() - 20.0) < 0.2 and np.argmax(k ** (1 / k)) == 2
-        xs_ = [sp[0].get_x() for sp in sparks]
-        assert min(b - a for a, b in zip(xs_, xs_[1:])) > 2.1, xs_  # the sparklines do not touch
         with self.voiceover(
             "Rudin collects five limits that the convergence tests will lean on: <bookmark mark='a'/> one over n to "
             "a positive power goes to zero; the n-th root of a positive number goes to one; the n-th root of n goes to "
@@ -232,9 +243,11 @@ class LimSup(VoiceoverScene):
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(f, shift=UP * 0.15), Create(sp[0]), Create(sp[1]),
-                                                   LaggedStart(*[FadeIn(x) for x in sp[2]], lag_ratio=0.03))
+                                                   LaggedStart(*[FadeIn(x) for x in sp[2]], lag_ratio=0.03),
+                                                   *[FadeIn(x) for x in sp[3:]])
                                     for f, sp in zip(facts, sparks)], lag_ratio=0.4), run_time=6.0)
-        self.play(FadeOut(head), FadeOut(sparks), facts.animate.scale(0.8).to_edge(UP, buff=0.3))
+        self.play(FadeOut(head), FadeOut(sparks), FadeOut(VGroup(*[f_[1] for f_ in facts])),
+                  VGroup(*[f_[0] for f_ in facts]).animate.scale(0.8).arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.3))
 
         rows = [MathTex(r"n", r"=", r"(1 + x_n)^n", font_size=38),
                 MathTex(r"n", r"\ge", r"\binom{n}{2} x_n^2 = \frac{n(n-1)}{2}\, x_n^2", font_size=38),
@@ -242,19 +255,21 @@ class LimSup(VoiceoverScene):
         whys = [why(r"write $\sqrt[n]{n} = 1 + x_n$, \ $x_n \ge 0$"),
                 why(r"binomial theorem: keep one term"),
                 why(r"rearrange")]
-        step = ladder(self, rows, whys, keep=3, top=2.2, buff=0.38, x=-1.2)
-        lx = plain_axes([0, 6.2, 1], [0.9, 1.6, 0.1], 10.4, 2.6, numbers=False).move_to([0.2, -2.5, 0])
+        step = ladder(self, rows, whys, keep=3, top=2.35, buff=0.38, x=-1.2)
+        lx = plain_axes([0, 6.2, 1], [0.9, 1.6, 0.1], 10.4, 2.2, numbers=False).move_to([0.2, -2.15, 0])
         ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(lx.c2p(k, 0.9), DOWN, buff=0.12)
                          for k in range(0, 7)])
-        ylab = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.1)
+        ylab = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(lx.c2p(0, v), LEFT, buff=0.25)
                         for v in (1.0, 1.2, 1.4)])
         lg = np.log10(n)
-        curve = polyline(lx, lg, rr, color=C.EPS, stroke_width=3)
+        assert rr.max() < 1.6 and rr.min() > 0.9
+        curve = polyline(lx, lg, rr, color=C.SEQ, stroke_width=3)
         m = n[n >= 9]
-        bound = polyline(lx, np.log10(m), 1 + np.sqrt(2 / (m - 1)), color=C.DELTA, stroke_width=2.5)
+        assert np.all(1 + np.sqrt(2 / (m - 1)) < 1.6)
+        bound = polyline(lx, np.log10(m), 1 + np.sqrt(2 / (m - 1)), color=C.UPPER_SUM, stroke_width=2.5)
         one = DashedLine(lx.c2p(0, 1), lx.c2p(6.2, 1), color=GREY_B, stroke_width=1.5)
-        c_l = MathTex(r"\sqrt[n]{n}", font_size=28, color=C.EPS).next_to(lx.c2p(0.6, 1.44), UP, buff=0.05)
-        b_l = MathTex(r"1 + \sqrt{2/(n-1)}", font_size=26, color=C.DELTA).next_to(lx.c2p(2.0, 1.15), UR, buff=0.05)
+        c_l = MathTex(r"\sqrt[n]{n}", font_size=28, color=C.SEQ).next_to(lx.c2p(0.6, 1.44), UP, buff=0.05)
+        b_l = MathTex(r"1 + \sqrt{2/(n-1)}", font_size=26, color=C.UPPER_SUM).next_to(lx.c2p(2.0, 1.15), UR, buff=0.05)
         with self.voiceover(
             "The n-th root of n is the subtle one: n grows, but the root shrinks the exponent. Who wins? "
             "<bookmark mark='a'/> Write the root as one plus x n. <bookmark mark='b'/> By the binomial theorem, n is at "
@@ -281,9 +296,10 @@ class LimSup(VoiceoverScene):
         d = load("limsup")
         lgv, peak, lg_max, cross = d["lg"], int(d["peak"]), float(d["lg_max"]), int(d["cross"])
         k = np.arange(1, len(lgv) + 1)
-        ax = plain_axes([0, 1000, 100], [-6, 18, 3], 10.0, 4.6, numbers=True, font_size=20).move_to([0.8, -0.9, 0])
+        ax = plain_axes([0, 1000, 100], [-12, 18, 6], 10.0, 4.6, numbers=True, font_size=20).move_to([0.8, -0.9, 0])
+        assert -12 < lgv.min() and lgv.max() < 18  # the whole curve lies inside the window
         ylab = MathTex(r"\log_{10} \frac{n^{10}}{1.1^n}", font_size=26).next_to(ax.c2p(0, 12), LEFT, buff=0.6)
-        curve = polyline(ax, k, lgv, color=C.FREQ, stroke_width=3.5)
+        curve = polyline(ax, k, lgv, color=C.SEQ, stroke_width=3.5)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(1000, 0), color=GREY_B, stroke_width=1.5)
         head = label(r"$\dfrac{n^\alpha}{(1+p)^n} \to 0$: \ exponentials beat powers, eventually", font_size=32)
         head.to_edge(UP, buff=0.35)

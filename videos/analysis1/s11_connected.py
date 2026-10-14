@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis1.common import SQRT2, Window, endpoint, polyline
+from videos.analysis1.common import SQRT2, Window, dim, endpoint, polyline
 from videos.analysis1.s02_holes import below_sqrt2
 
 
@@ -38,14 +38,19 @@ class Connected(VoiceoverScene):
         ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.5)
         y1, y2 = 0.4, -1.4
         r1 = VGroup(bar(X(0), X(1), y1, C.SEQ, True, False), bar(X(1), X(2), y1, C.APPROX, True, True))
-        r1[1].shift(UP * 0.0)
         l1 = MathTex(r"[0,1) \text{ and } [1,2]", font_size=32).move_to([X(1), y1 + 0.6, 0])
-        v1 = label(r"disjoint, but $1 \in \overline{[0,1)}$: \ they touch", font_size=28, color=C.PATHOLOGY)
-        v1.move_to([3.75, y1, 0])
+        v1 = VGroup(label(r"disjoint, but $1 \in \overline{[0,1)}$:", font_size=28, color=C.PATHOLOGY),
+                    label(r"they touch", font_size=28, color=C.PATHOLOGY)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        v1.next_to(r1, RIGHT, buff=0.5)
         r2 = VGroup(bar(X(0), X(1), y2, C.SEQ, False, False), bar(X(1), X(2), y2, C.APPROX, False, False))
         l2 = MathTex(r"(0,1) \text{ and } (1,2)", font_size=32).move_to([X(1), y2 + 0.6, 0])
-        v2 = label(r"separated: no point of either is a limit of the other", font_size=28, color=C.CONNECTED_SET)
-        v2.move_to([3.75, y2, 0])
+        v2 = VGroup(label(r"separated: no point of either", font_size=28, color=C.CONNECTED_SET),
+                    label(r"is a limit of the other", font_size=28, color=C.CONNECTED_SET)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                             buff=0.1)
+        v2.next_to(r2, RIGHT, buff=0.5)
+        # around the point 1, where the open intervals meet without touching
+        gap = DashedVMobject(Circle(radius=0.38, color=C.EPS, stroke_width=2.5).move_to([X(1), y2, 0]), num_dashes=24)
+        gap_l = label(r"$1$ is in neither", font_size=24, color=C.EPS).next_to(gap, DOWN, buff=0.12)
         with self.voiceover(
             "Rudin's definition is careful. <bookmark mark='s'/> Two sets are separated if neither one contains a point "
             "of the other's closure: they don't touch, even at a limit point. <bookmark mark='c'/> A set is connected if "
@@ -54,14 +59,16 @@ class Connected(VoiceoverScene):
             "of the first. Not separated. <bookmark mark='b'/> Remove the point one, and the two open intervals are "
             "separated."
         ) as vo:
-            self.play(FadeIn(defs[0]))
+            self.play(FadeIn(defs[0]), FadeIn(dim(r1, 0.3)), FadeIn(dim(r2, 0.3)))
+            vo.wait_until("s")
+            self.play(ApplyFunction(lambda m_: dim(m_, 1.0), r2), Create(gap), FadeIn(gap_l))
             vo.wait_until("c")
-            self.play(FadeIn(defs[1]))
+            self.play(FadeIn(defs[1]), ApplyFunction(lambda m_: dim(m_, 0.3), r2), FadeOut(gap), FadeOut(gap_l))
             vo.wait_until("a")
-            self.play(FadeIn(r1), FadeIn(l1))
+            self.play(ApplyFunction(lambda m_: dim(m_, 1.0), r1), FadeIn(l1))
             self.play(FadeIn(v1))
             vo.wait_until("b")
-            self.play(FadeIn(r2), FadeIn(l2))
+            self.play(ApplyFunction(lambda m_: dim(m_, 1.0), r2), FadeIn(l2))
             self.play(FadeIn(v2))
         self.wait(0.3)
         self.clear_scene()
@@ -74,6 +81,18 @@ class Connected(VoiceoverScene):
         sub = label(r"The connected subsets of the line are exactly the intervals.", font_size=28, color=C.CONNECTED_SET)
         sub.next_to(stmt, DOWN, buff=0.2)
         X = lambda v: -5.6 + v * 3.6  # noqa: E731
+        # three sets first: two intervals, and one with a gap
+        ye1, ye2 = 0.6, -1.1
+        exa = VGroup(bar(X(0), X(1), ye1, C.CONNECTED_SET), bar(X(2), X(2.5), ye1, C.CONNECTED_SET, lc=False),
+                     Dot([X(0.5), ye2, 0], radius=0.075, color=C.PATHOLOGY), bar(X(1), X(1.5), ye2, C.PATHOLOGY))
+        exa_l = VGroup(MathTex(r"[0, 1]", font_size=30, color=C.CONNECTED_SET).next_to([X(0.5), ye1, 0], UP, buff=0.2),
+                       MathTex(r"(2, 2.5]", font_size=30, color=C.CONNECTED_SET).next_to([X(2.25), ye1, 0], UP, buff=0.2),
+                       MathTex(r"\{0.5\} \cup [1, 1.5]", font_size=30, color=C.PATHOLOGY).next_to([X(1.0), ye2, 0], UP,
+                                                                                                 buff=0.2))
+        exa_v = VGroup(label(r"interval", font_size=24, color=C.CONNECTED_SET).next_to([X(0.5), ye1, 0], DOWN, buff=0.2),
+                       label(r"interval", font_size=24, color=C.CONNECTED_SET).next_to([X(2.25), ye1, 0], DOWN, buff=0.2),
+                       label(r"not an interval: $0.7$ is skipped", font_size=24, color=C.PATHOLOGY).next_to(
+                           [X(1.0), ye2, 0], DOWN, buff=0.2))
         y0 = 0.2
         E = VGroup(bar(X(0), X(1), y0, C.SEQ), bar(X(2), X(3), y0, C.APPROX))
         zx = X(1.5)
@@ -87,8 +106,11 @@ class Connected(VoiceoverScene):
             "easy. If a set skips some z between two of its points, then the part below z and the part above z are "
             "nonempty and separated, since nothing in either piece is a limit of the other."
         ) as vo:
-            self.play(FadeIn(stmt), FadeIn(sub))
+            self.play(FadeIn(stmt), FadeIn(sub), FadeIn(exa), FadeIn(exa_l))
+            vo.wait_until("s")
+            self.play(FadeIn(exa_v))
             vo.wait_until("g")
+            self.play(FadeOut(VGroup(exa, exa_l, exa_v)))
             self.play(FadeIn(E))
             self.play(Create(z[0]), FadeIn(z[1]))
             self.play(FadeIn(cut), E[0].animate.shift(LEFT * 0.4), E[1].animate.shift(RIGHT * 0.4))
@@ -160,8 +182,17 @@ class Connected(VoiceoverScene):
             vo.wait_until("h")
             for m in (axis, labs, dust):
                 m.clear_updaters()
+            # split the line itself at root 2 and pull the halves apart sideways, each with its fractions
+            xs2 = win.X(SQRT2)
+            half_l = Line([win.L - 0.15, win.y, 0], [xs2, win.y, 0], color=GREY_C, stroke_width=2)
+            half_r = Line([xs2, win.y, 0], [win.R + 0.15, win.y, 0], color=GREY_C, stroke_width=2)
+            seam = endpoint([xs2, win.y, 0], False, C.HOLE, radius=0.1)
+            self.remove(axis)
+            self.add(half_l, half_r)
+            self.play(FadeOut(labs), run_time=0.5)
             lo_g, hi_g = dust[0], dust[1]
-            self.play(lo_g.animate.shift(LEFT * 0.5 + DOWN * 0.25), hi_g.animate.shift(RIGHT * 0.5 + UP * 0.25), run_time=1.5)
+            self.play(VGroup(lo_g, half_l).animate.shift(LEFT * 0.35), VGroup(hi_g, half_r).animate.shift(RIGHT * 0.35),
+                      FadeIn(seam, scale=2), run_time=1.5)
         tot = label(r"In fact any subset of $\Q$ with two points splits this way: $\Q$ is \textbf{totally disconnected}.",
                     font_size=28, color=GREY_A).to_edge(DOWN, buff=0.5)
         nxt = label(r"Part 2: continuous images of connected sets are connected $\Rightarrow$ the intermediate value theorem",
@@ -179,21 +210,26 @@ class Connected(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def sine_curve(self):
-        ax = Axes(x_range=[-0.05, 0.55, 0.1], y_range=[-1.3, 1.3, 1], x_length=8.4, y_length=5.0, tips=False,
-                  axis_config={"stroke_color": GREY_C}).shift(LEFT * 2.0 + DOWN * 0.4)
-        # sample sin(1/x) with points spaced evenly in phase, so the oscillations near 0 are resolved
-        u = np.linspace(1 / 0.55, 1 / 0.0012, 60000)
+        ax = Axes(x_range=[-0.1, 1.05, 0.5], y_range=[-1.3, 1.3, 1], x_length=7.8, y_length=5.0, tips=False,
+                  axis_config={"stroke_color": GREY_C}).shift(LEFT * 2.6 + DOWN * 0.4)
+        # sample sin(1/x) on (0, 1] with points spaced evenly in phase, so the oscillations near 0 are resolved
+        u = np.linspace(1.0, 1 / 0.0012, 60000)
         x = 1 / u
         y = np.sin(u)
+        assert abs(x.max() - 1.0) < 1e-12
         curve = polyline(ax, x[::-1], y[::-1], color=C.CONNECTED_SET, stroke_width=1.6)
-        seg = Line(ax.c2p(0, -1), ax.c2p(0, 1), color=C.CONNECTED_SET, stroke_width=4)
+        seg = Line(ax.c2p(0, -1), ax.c2p(0, 1), color=C.EPS, stroke_width=6)  # the segment {0} x [-1, 1]
+        nums = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, -1.3), DOWN, buff=0.12)
+                        for t, v in (("0", 0), ("0.5", 0.5), ("1", 1))],
+                      *[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.15)
+                        for t, v in (("-1", -1), ("1", 1))])
         lab = MathTex(r"\{(x, \sin\tfrac1x) : 0 < x \le 1\} \;\cup\; \{0\} \times [-1, 1]", font_size=32)
         lab.to_edge(UP, buff=0.45)
         txt = VGroup(label(r"connected: the segment is", font_size=26),
                      label(r"in the closure of the curve", font_size=26),
                      label(r"but no continuous path", font_size=26, color=C.PATHOLOGY),
                      label(r"reaches the segment from the curve", font_size=26, color=C.PATHOLOGY)
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.4, 0.2, 0])
+                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.3, 0.6, 0])
         card = museum_card(r"The topologist's sine curve", r"a standard example (not in Rudin; Munkres \S 24)",
                            r"``connected means path-connected''").scale(0.8).to_corner(DR, buff=0.25)
         with self.voiceover(
@@ -204,11 +240,12 @@ class Connected(VoiceoverScene):
             "walk from the segment onto the curve along a continuous path: the curve wiggles infinitely often before "
             "reaching it. Connected, but not path-connected."
         ) as vo:
-            self.play(Create(ax), FadeIn(lab))
+            self.play(Create(ax), FadeIn(nums), FadeIn(lab))
             vo.wait_until("c")
             self.play(Create(curve), run_time=3)
             vo.wait_until("s")
             self.play(Create(seg))
+            self.bring_to_front(seg)
             vo.wait_until("t")
             self.play(FadeIn(txt[:2]))
             vo.wait_until("p")

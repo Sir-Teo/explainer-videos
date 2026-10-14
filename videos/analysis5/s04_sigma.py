@@ -42,7 +42,8 @@ class SigmaAlgebras(VoiceoverScene):
             rr = RoundedRectangle(corner_radius=0.2, width=w, height=h, stroke_color=names[k][1], stroke_width=2.5,
                                   fill_color=names[k][1], fill_opacity=0.06).move_to([0, cy, 0])
             if k == 1:
-                rr = VGroup(rr.copy().set_stroke(width=0), DashedVMobject(rr, num_dashes=70))
+                rr = VGroup(rr.copy().set_stroke(width=0),
+                            DashedVMobject(rr.copy().set_fill(opacity=0), num_dashes=70))
             boxes.add(rr)
         labs = VGroup()
         for k in range(5):
@@ -124,7 +125,7 @@ class SigmaAlgebras(VoiceoverScene):
                             stroke_width=2.2 if n < 100 else 1.2)
 
         dls = [dl(m, n) for m, n in seq]
-        dlab = [MathTex(rf"m = {m}, \ n = {n}", font_size=28, color=C.APPROX).next_to(ax, DOWN, buff=0.25)
+        dlab = [MathTex(rf"m = {m}, \ n = {n}", font_size=28, color=C.APPROX).next_to(ax, DOWN, buff=0.2)
                 for m, n in seq]
         dform = MathTex(r"D(x) = \lim_{m \to \infty} \lim_{n \to \infty} \cos(m!\,\pi x)^{2n}", font_size=30,
                         color=C.PATHOLOGY).next_to(ax, UP, buff=0.1)
@@ -183,7 +184,7 @@ class SigmaAlgebras(VoiceoverScene):
                 for k in shown]
         head = VGroup(label(r"Simple functions climb to any measurable $f \ge 0$", font_size=34),
                       MathTex(r"s_n = \frac{j}{2^n} \text{ on } \Big\{\frac{j}{2^n} \le f < \frac{j + 1}{2^n}\Big\}, "
-                              r"\quad s_n = n \text{ where } f \ge n", r"\qquad \text{(RCA 1.17)}", font_size=30)
+                              r"\quad s_n = n \text{ where } f \ge n", r"\quad \text{\small (RCA 1.17)}", font_size=30)
                       ).arrange(DOWN, buff=0.12)
         head[1][1].set_color(GREY_B)
         head.to_edge(UP, buff=0.3)
