@@ -112,6 +112,16 @@ class Wiener(VoiceoverScene):
         errs = [abs(hat(fg, t_) - SQ2PI * hat(f, t_) * hat(g, t_)) for t_ in tt]
         assert n1 <= n2 and max(errs) < 1e-3
         ax = plain_axes([-6, 6, 2], [0, 1.1, 0.5], 6.2, 2.0).move_to([-3.3, 0.9, 0])
+        # 'a': the f, g and f * g of the inequality, drawn
+        win = np.abs(x) <= 5
+        assert max(np.abs(f[win]).max(), np.abs(g[win]).max(), np.abs(fg[win]).max()) < 1.2
+        fax = plain_axes([-5, 5, 1], [-1.2, 1.2, 1], 6.2, 2.4).move_to([-3.3, 0.9, 0])
+        cpic = VGroup(polyline(fax, x[win], f[win], color=C.FUNC, stroke_width=3),
+                      polyline(fax, x[win], g[win], color=C.APPROX, stroke_width=3),
+                      polyline(fax, x[win], fg[win], color=C.EPS, stroke_width=4))
+        cl_ = MathTex("f", r",\ ", "g", r",\ ", "f * g", font_size=26).next_to(fax, UP, buff=0.1)
+        for i_, c_ in ((0, C.FUNC), (2, C.APPROX), (4, C.EPS)):
+            cl_[i_].set_color(c_)
         t = np.linspace(-6, 6, 1201)
         tri = np.clip(1 - np.abs(t) / 2, 0, None)
         kg = np.exp(-0.02 * t * t)
@@ -151,8 +161,10 @@ class Wiener(VoiceoverScene):
             "theory, which is Part 10."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:3]))
+            self.play(FadeIn(head), FadeIn(rows[:3]), Create(fax), FadeIn(cl_))
+            self.play(LaggedStart(*[Create(c_) for c_ in cpic], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(fax, cpic, cl_)), run_time=0.6)
             self.play(Create(ax), Create(line), FadeIn(lt), FadeIn(rows[3:5]))
             vo.wait_until("c")
             self.play(Create(gb), Create(zs), FadeIn(lz))
