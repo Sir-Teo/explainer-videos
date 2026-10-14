@@ -96,12 +96,12 @@ python tools/build.py quantum2                # -> renders/quantum2.mp4
 ```
 
 The ten parts of *Analysis, Built* are made at 2160p60 in English and in Chinese (Chinese narration and subtitles,
-same picture), narrated by a local neural voice, Qwen3-TTS 1.7B (`tools/voices.json`, profile `qwen3-narrator`), on
+same picture), narrated by a local neural voice, Qwen3-TTS 1.7B (`tools/voices.json`, profile `qwen3-calm-a`: each voice cloned from a calm reference line, so the delivery stays even), on
 Apple Silicon. Its server runs in its own environment:
 
 ```bash
 uv venv --python 3.12 .venv-tts && uv pip install --python .venv-tts/bin/python mlx-audio soundfile pypinyin
-.venv-tts/bin/python tools/tts_server.py --voice qwen3-narrator     # serves http://127.0.0.1:8765
+.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a       # serves http://127.0.0.1:8765
 ```
 
 The server takes every sentence until speech recognition hears the script, then forced-aligns it (per word in
@@ -109,7 +109,7 @@ English, per character in Chinese) so the animation keeps its timing. A part's n
 render, so build a quick preview first, then the narration, then the master:
 
 ```bash
-export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator
+export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a
 python -m videos.analysis1.compute                         # every number the part shows, computed and asserted
 python tools/build.py analysis1 -q l                       # 480p preview (any voice): the script, as rendered
 python tools/narrate.py analysis1 --lang en                # synthesize, check and align every line (GPU)

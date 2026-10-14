@@ -4,17 +4,35 @@
    "name": "Analysis, Built",
    "playlist_title": "Analysis, Built: Real, Complex and Functional Analysis from Scratch",
    "playlist_description": "A ten-part series that builds mathematical analysis from scratch, from the holes in the rational numbers to the spectral theorem, following Walter Rudin's three textbooks: Principles of Mathematical Analysis, Real and Complex Analysis, and Functional Analysis. Every theorem is proved on screen, and every number shown is computed and checked. The thread through all ten parts is Fourier's question: when is a function the sum of its Fourier series?",
-   "credits": "Animations: Manim Community Edition.\nNarration: Qwen3-TTS (synthetic text-to-speech voice).\nVisual style inspired by 3Blue1Brown.",
+   "credits": "Animations: Manim Community Edition.\nNarration: Qwen3-TTS (synthetic text-to-speech voices; the English voice is cloned from Kokoro-82M's af_heart).\nVisual style inspired by 3Blue1Brown.",
    "computed": "Every number on screen is computed and checked; the pictures marked schematic are the exceptions.",
-   "tags": ["mathematics", "math", "mathematical analysis", "real analysis", "functional analysis", "Rudin", "proof", "math visualization", "Manim"]
+   "tags": [
+    "mathematics",
+    "math",
+    "mathematical analysis",
+    "real analysis",
+    "functional analysis",
+    "Rudin",
+    "proof",
+    "math visualization",
+    "Manim"
+   ]
   },
   "zh": {
    "name": "分析学，从零搭建",
    "playlist_title": "分析学，从零搭建 | Analysis, Built",
    "playlist_description": "十集系列，从有理数里的洞一直讲到谱定理，从零搭建数学分析。内容依次跟随鲁丁的三本教材：《数学分析原理》《实分析与复分析》《泛函分析》。每条定理都在屏幕上证明，画面上的每个数字都经过计算和核对。贯穿十集的主线是傅里叶的问题：一个函数什么时候等于它的傅里叶级数之和？中文配音、中文字幕，原创动画。",
-   "credits": "动画：Manim Community Edition。\n旁白：Qwen3-TTS 合成语音（AI生成）。\n视觉风格致敬 3Blue1Brown。",
+   "credits": "动画：Manim Community Edition。\n旁白：Qwen3-TTS 合成语音（AI生成；英文版声音克隆自 Kokoro-82M 的 af_heart）。\n视觉风格致敬 3Blue1Brown。",
    "computed": "画面上的每个数字都经过计算和核对；标注为示意图的画面除外。",
-   "tags": ["数学", "数学分析", "实分析", "泛函分析", "鲁丁", "数学可视化", "Manim"]
+   "tags": [
+    "数学",
+    "数学分析",
+    "实分析",
+    "泛函分析",
+    "鲁丁",
+    "数学可视化",
+    "Manim"
+   ]
   }
  },
  "parts": {
@@ -23,90 +41,260 @@
    "short_zh": "实数与空间的形状",
    "summary_en": "Part 1 of a ten-part series that builds mathematical analysis from scratch, following Walter Rudin's three textbooks. Fourier's claim that every function is a sum of sine waves forced mathematicians to say exactly what a limit is, and that starts with the real numbers. We find the holes in the rational numbers and fill them with Dedekind cuts, count infinities with Cantor's diagonal argument, define distance in metric spaces, and meet open and closed sets, compactness, the Heine–Borel theorem by bisection, the Cantor set, connectedness, and a closed, bounded set of functions that is not compact.",
    "summary_zh": "十集系列的第1部分：跟着鲁丁的三本教材，从零搭建数学分析。傅里叶断言每个函数都是正弦波之和，这逼着数学家说清楚极限到底是什么，而这要从实数讲起。我们找出有理数里的洞，用戴德金分割把它们填上；用康托尔的对角线论证数一数无穷；在度量空间里定义距离；然后认识开集与闭集、紧性、用二分法证明的海涅–博雷尔定理、康托尔集、连通性，以及一个闭且有界、却不紧的函数集合。",
-   "tags_en": ["real numbers", "Dedekind cuts", "metric spaces", "compactness"],
-   "tags_zh": ["实数", "戴德金分割", "紧性"],
-   "thumb": {"t480": 33.5, "crop": [0.03, 0.06, 0.97, 0.9]}
+   "tags_en": [
+    "real numbers",
+    "Dedekind cuts",
+    "metric spaces",
+    "compactness"
+   ],
+   "tags_zh": [
+    "实数",
+    "戴德金分割",
+    "紧性"
+   ],
+   "thumb": {
+    "t480": 33.5,
+    "crop": [
+     0.03,
+     0.06,
+     0.97,
+     0.9
+    ]
+   }
   },
   "analysis2": {
    "short_en": "Limits: Sequences, Series, Continuity and the Derivative",
    "short_zh": "极限——序列、级数、连续性与导数",
    "summary_en": "Part 2 of Analysis, Built, following chapters 3–5 of Rudin's Principles of Mathematical Analysis. The same series can be made to add up to any number you like, so an infinite sum is a limit, and limits need care. Convergence as an ε–N game, Cauchy sequences and completeness, lim sup and lim inf, the convergence tests, the number e, power series, summation by parts, Riemann's rearrangement theorem, continuity as an ε–δ game, compactness and uniform continuity, connectedness and the intermediate value theorem, the mean value theorem, Darboux, L'Hôpital and Taylor.",
    "summary_zh": "《分析学，从零搭建》第2部分，对应鲁丁《数学分析原理》第3到第5章。同一个级数，只要换个顺序，就能加出你想要的任何数：无穷和是一个极限，而极限需要小心对待。内容包括：把收敛看成ε–N游戏、柯西序列与完备性、上极限与下极限、各种收敛判别法、数e、幂级数、分部求和、黎曼重排定理、把连续性看成ε–δ游戏、紧性与一致连续、连通性与介值定理、中值定理、达布定理、洛必达法则和泰勒定理。",
-   "tags_en": ["limits", "series", "epsilon delta", "Riemann rearrangement theorem"],
-   "tags_zh": ["极限", "级数", "黎曼重排定理"],
-   "thumb": {"t480": 108.8, "crop": [0.08, 0.1, 0.98, 0.98]}
+   "tags_en": [
+    "limits",
+    "series",
+    "epsilon delta",
+    "Riemann rearrangement theorem"
+   ],
+   "tags_zh": [
+    "极限",
+    "级数",
+    "黎曼重排定理"
+   ],
+   "thumb": {
+    "t480": 108.8,
+    "crop": [
+     0.08,
+     0.1,
+     0.98,
+     0.98
+    ]
+   }
   },
   "analysis3": {
    "short_en": "Integration and the First Function Space",
    "short_zh": "积分与第一个函数空间",
    "summary_en": "Part 3 of Analysis, Built, following chapters 6–8 of Rudin's Principles, organized around his main question: when may two limits be swapped? Upper and lower sums, which functions are integrable, integrals against a staircase (Stieltjes), the fundamental theorem of calculus and the length of curves, uniform convergence, Weierstrass's continuous nowhere-differentiable function, equicontinuity and the Arzelà–Ascoli theorem, the Weierstrass and Stone–Weierstrass approximation theorems, power series and the birth of π, and Fourier series through Parseval and the Gibbs phenomenon.",
    "summary_zh": "《分析学，从零搭建》第3部分，对应鲁丁《数学分析原理》第6到第8章，围绕他的“主要问题”展开：什么时候可以交换两个极限？内容包括：上和与下和、哪些函数可积、以阶梯为尺的积分（斯蒂尔切斯积分）、微积分基本定理与曲线的长度、一致收敛、魏尔斯特拉斯处处不可导的连续函数、等度连续与阿尔泽拉–阿斯科利定理、魏尔斯特拉斯与斯通–魏尔斯特拉斯逼近定理、幂级数与π的诞生，以及傅里叶级数、帕塞瓦尔定理和吉布斯现象。",
-   "tags_en": ["Riemann integral", "uniform convergence", "Arzela-Ascoli", "Fourier series"],
-   "tags_zh": ["黎曼积分", "一致收敛", "傅里叶级数"],
-   "thumb": {"t480": 105.7, "crop": [0.0, 0.17, 1.0, 0.95]}
+   "tags_en": [
+    "Riemann integral",
+    "uniform convergence",
+    "Arzela-Ascoli",
+    "Fourier series"
+   ],
+   "tags_zh": [
+    "黎曼积分",
+    "一致收敛",
+    "傅里叶级数"
+   ],
+   "thumb": {
+    "t480": 105.7,
+    "crop": [
+     0.0,
+     0.17,
+     1.0,
+     0.95
+    ]
+   }
   },
   "analysis4": {
    "short_en": "Calculus in Many Dimensions",
    "short_zh": "多维空间里的微积分",
    "summary_en": "Part 4 of Analysis, Built, following chapter 9 of Rudin's Principles with a tour of chapter 10. The derivative becomes a linear map, and one idea, the contraction principle, solves equation after equation. Linear maps and their norms, the derivative as a linear map, why partial derivatives are not enough, Newton's method, Picard's theorem for differential equations, the inverse and implicit function theorems, mixed partials and differentiating under the integral sign, and a guided tour of change of variables and Stokes' theorem.",
    "summary_zh": "《分析学，从零搭建》第4部分，对应鲁丁《数学分析原理》第9章，外加第10章的导览。导数变成了线性映射，而同一个想法，也就是压缩映射原理，解出了一个又一个方程。内容包括：线性映射及其范数、导数作为线性映射、为什么光有偏导数还不够、牛顿法、微分方程的皮卡定理、反函数定理与隐函数定理、混合偏导数与积分号下求导，以及换元公式和斯托克斯定理的导览。",
-   "tags_en": ["multivariable calculus", "contraction mapping", "inverse function theorem", "implicit function theorem"],
-   "tags_zh": ["多元微积分", "压缩映射", "反函数定理"],
-   "thumb": {"t480": 62.5, "crop": [0.02, 0.12, 0.62, 0.98]}
+   "tags_en": [
+    "multivariable calculus",
+    "contraction mapping",
+    "inverse function theorem",
+    "implicit function theorem"
+   ],
+   "tags_zh": [
+    "多元微积分",
+    "压缩映射",
+    "反函数定理"
+   ],
+   "thumb": {
+    "t480": 62.5,
+    "crop": [
+     0.02,
+     0.12,
+     0.62,
+     0.98
+    ]
+   }
   },
   "analysis5": {
    "short_en": "Measure and the Lebesgue Integral",
    "short_zh": "测度与勒贝格积分",
    "summary_en": "Part 5 of Analysis, Built, following chapters 1, 2 and 8 of Rudin's Real and Complex Analysis. Riemann slices the domain; Lebesgue slices the range, and limits pass through his integral under a single lid. Three ways mass escapes, outer measure and the fat Cantor set, Vitali's set with no length, σ-algebras and measurable functions, the monotone convergence theorem, Fatou's lemma, dominated convergence, Egorov and Lusin, the Riesz representation theorem, Lebesgue measure versus Riemann's integral, Fubini's theorem and its counterexample, convolution and the layer cake formula.",
    "summary_zh": "《分析学，从零搭建》第5部分，对应鲁丁《实分析与复分析》第1、第2和第8章。黎曼切分定义域，勒贝格切分值域，而在勒贝格积分之下，只要有一个“盖子”，极限就能穿过积分。内容包括：质量逃逸的三种方式、外测度与胖康托尔集、没有长度的维塔利集、σ代数与可测函数、单调收敛定理、法图引理、控制收敛定理、叶戈罗夫定理与卢津定理、里斯表示定理、勒贝格测度与黎曼积分的比较、富比尼定理及其反例、卷积与千层蛋糕公式。",
-   "tags_en": ["measure theory", "Lebesgue integral", "dominated convergence", "Fubini"],
-   "tags_zh": ["测度论", "勒贝格积分", "控制收敛定理"],
-   "thumb": {"t480": 111.8, "crop": [0.0, 0.2, 1.0, 0.99]}
+   "tags_en": [
+    "measure theory",
+    "Lebesgue integral",
+    "dominated convergence",
+    "Fubini"
+   ],
+   "tags_zh": [
+    "测度论",
+    "勒贝格积分",
+    "控制收敛定理"
+   ],
+   "thumb": {
+    "t480": 111.8,
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     0.99
+    ]
+   }
   },
   "analysis6": {
    "short_en": "Lᵖ, Hilbert Space and the Geometry of Functions",
    "short_zh": "Lᵖ、希尔伯特空间与函数的几何",
    "summary_en": "Part 6 of Analysis, Built, following chapters 3, 4, 6 and 7 of Rudin's Real and Complex Analysis. Distances between functions, and the one distance that has angles: Jensen, Young, Hölder and Minkowski as pictures, the completeness of Lᵖ (Riesz–Fischer), inner products and the parallelogram law, nearest points and projections, every functional as an inner product, orthonormal bases, Bessel and Parseval, Fourier series in L² and Fejér's means, complex measures, the Radon–Nikodym theorem, the dual of Lᵖ, Lebesgue's differentiation theorem, and the fundamental theorem of calculus rebuilt for Lebesgue's integral.",
    "summary_zh": "《分析学，从零搭建》第6部分，对应鲁丁《实分析与复分析》第3、第4、第6和第7章。函数之间的距离，以及其中唯一带有角度的那一种：用图来看詹森、杨、赫尔德和闵可夫斯基不等式，Lᵖ的完备性（里斯–费舍尔定理），内积与平行四边形法则，最近点与投影，每个泛函都是一个内积，标准正交基、贝塞尔不等式与帕塞瓦尔等式，L²中的傅里叶级数与费耶尔平均，复测度，拉东–尼科迪姆定理，Lᵖ的对偶，勒贝格微分定理，以及为勒贝格积分重建的微积分基本定理。",
-   "tags_en": ["Lp spaces", "Hilbert space", "Fourier series", "Radon-Nikodym"],
-   "tags_zh": ["希尔伯特空间", "Lp空间", "傅里叶级数"],
-   "thumb": {"t480": 48.5, "crop": [0.0, 0.17, 0.6, 0.98]}
+   "tags_en": [
+    "Lp spaces",
+    "Hilbert space",
+    "Fourier series",
+    "Radon-Nikodym"
+   ],
+   "tags_zh": [
+    "希尔伯特空间",
+    "Lp空间",
+    "傅里叶级数"
+   ],
+   "thumb": {
+    "t480": 48.5,
+    "crop": [
+     0.0,
+     0.17,
+     0.6,
+     0.98
+    ]
+   }
   },
   "analysis7": {
    "short_en": "Complex Analysis",
    "short_zh": "复分析",
    "summary_en": "Part 7 of Analysis, Built, following chapters 10–14 of Rudin's Real and Complex Analysis, with tours of later chapters. In the complex plane one derivative buys three miracles. Complex derivatives as rotations, path integrals and winding numbers, Goursat's bisection and Cauchy's formula, zeros, open maps and the maximum modulus, residues and Rouché's theorem, the Schwarz lemma, Runge's theorem, Montel's normal families, a computed Riemann map (Schwarz–Christoffel), harmonic functions, products and analytic continuation, and Hardy spaces with the shift operator.",
    "summary_zh": "《分析学，从零搭建》第7部分，对应鲁丁《实分析与复分析》第10到第14章，并导览后面几章。在复平面上，可导一次就换来三个奇迹。内容包括：复导数就是旋转、路径积分与环绕数、古尔萨的二分法与柯西积分公式、零点、开映射与最大模原理、留数与儒歇定理、施瓦茨引理、龙格定理、蒙泰尔正规族、一个真正算出来的黎曼映射（施瓦茨–克里斯托费尔）、调和函数、乘积与解析延拓，以及哈代空间与移位算子。",
-   "tags_en": ["complex analysis", "Cauchy integral formula", "residues", "Riemann mapping theorem"],
-   "tags_zh": ["复分析", "柯西积分公式", "留数"],
-   "thumb": {"t480": 47.4, "crop": [0.55, 0.13, 0.96, 0.785]}
+   "tags_en": [
+    "complex analysis",
+    "Cauchy integral formula",
+    "residues",
+    "Riemann mapping theorem"
+   ],
+   "tags_zh": [
+    "复分析",
+    "柯西积分公式",
+    "留数"
+   ],
+   "thumb": {
+    "t480": 47.4,
+    "crop": [
+     0.55,
+     0.13,
+     0.96,
+     0.785
+    ]
+   }
   },
   "analysis8": {
    "short_en": "Banach Spaces",
    "short_zh": "巴拿赫空间",
    "summary_en": "Part 8 of Analysis, Built, following chapter 5 of Rudin's Real and Complex Analysis and chapters 1–5 of his Functional Analysis. A theorem about the existence of monsters, proved by counting: most continuous functions have Fourier series that diverge. Banach spaces and bounded operators, spaces without norms, Baire's theorem, uniform boundedness, open mappings and closed graphs, Hahn–Banach, dual spaces, weak convergence and Mazur, Banach–Alaoglu, Krein–Milman, compact operators and the Fredholm alternative, and four applications.",
    "summary_zh": "《分析学，从零搭建》第8部分，对应鲁丁《实分析与复分析》第5章和《泛函分析》第1到第5章。一条靠“数一数”证明的怪物存在定理：大多数连续函数的傅里叶级数是发散的。内容包括：巴拿赫空间与有界算子、没有范数的空间、贝尔纲定理、一致有界原理、开映射定理与闭图像定理、哈恩–巴拿赫定理、对偶空间、弱收敛与马祖尔定理、巴拿赫–阿劳格鲁定理、克列因–米尔曼定理、紧算子与弗雷德霍姆择一定理，以及四个应用。",
-   "tags_en": ["Banach spaces", "Baire category theorem", "Hahn-Banach", "weak convergence"],
-   "tags_zh": ["巴拿赫空间", "贝尔纲定理", "哈恩巴拿赫定理"],
-   "thumb": {"t480": 71.3, "crop": [0.0, 0.08, 1.0, 0.62]}
+   "tags_en": [
+    "Banach spaces",
+    "Baire category theorem",
+    "Hahn-Banach",
+    "weak convergence"
+   ],
+   "tags_zh": [
+    "巴拿赫空间",
+    "贝尔纲定理",
+    "哈恩巴拿赫定理"
+   ],
+   "thumb": {
+    "t480": 71.3,
+    "crop": [
+     0.0,
+     0.08,
+     1.0,
+     0.62
+    ]
+   }
   },
   "analysis9": {
    "short_en": "Distributions and the Fourier Transform",
    "short_zh": "分布与傅里叶变换",
    "summary_en": "Part 9 of Analysis, Built, following chapters 6–9 of Rudin's Functional Analysis and chapter 9 of Real and Complex Analysis. How to differentiate anything, and why the Fourier transform becomes a perfect symmetry: test functions and distributions, the Dirac delta, supports and local structure, mollifiers, the Fourier transform from L¹ to tempered distributions, inversion and Plancherel, Poisson summation, Paley–Wiener, Denjoy–Carleman, Sobolev spaces, fundamental solutions, and Wiener's Tauberian theorem with the prime number theorem.",
    "summary_zh": "《分析学，从零搭建》第9部分，对应鲁丁《泛函分析》第6到第9章和《实分析与复分析》第9章。怎样对任何东西求导，以及为什么傅里叶变换会成为一种完美的对称：检验函数与分布、狄拉克δ函数、支集与局部结构、磨光、从L¹到缓增分布的傅里叶变换、反演公式与普朗歇尔定理、泊松求和公式、佩利–维纳定理、当茹瓦–卡莱曼定理、索伯列夫空间、基本解，以及维纳陶伯定理与素数定理。",
-   "tags_en": ["distributions", "Dirac delta", "Fourier transform", "Sobolev spaces"],
-   "tags_zh": ["广义函数", "傅里叶变换", "狄拉克函数"],
-   "thumb": {"t480": 46.4, "crop": [0.0, 0.2, 1.0, 0.88]}
+   "tags_en": [
+    "distributions",
+    "Dirac delta",
+    "Fourier transform",
+    "Sobolev spaces"
+   ],
+   "tags_zh": [
+    "广义函数",
+    "傅里叶变换",
+    "狄拉克函数"
+   ],
+   "thumb": {
+    "t480": 46.4,
+    "crop": [
+     0.0,
+     0.2,
+     1.0,
+     0.88
+    ]
+   }
   },
   "analysis10": {
    "short_en": "Banach Algebras and the Spectral Theorem",
    "short_zh": "巴拿赫代数与谱定理",
    "summary_en": "Part 10, the finale of Analysis, Built, following chapters 10–13 of Rudin's Functional Analysis and chapter 18 of Real and Complex Analysis. How to diagonalize an operator that has no eigenvectors: the shift's disc of spectrum, the spectral radius and the Volterra operator, functions of operators by Cauchy's formula, Gelfand theory and Wiener's 1/f theorem, compact self-adjoint operators and the vibrating string, multiplication by x and the Born rule, the spectral theorem proved with the whole series, unbounded operators, the Cayley transform, Stone's theorem, and what it all proves about quantum mechanics.",
    "summary_zh": "《分析学，从零搭建》第10部分，也是最后一集，对应鲁丁《泛函分析》第10到第13章和《实分析与复分析》第18章。怎样把一个没有特征向量的算子对角化：移位算子整整一个圆盘的谱、谱半径与沃尔泰拉算子、用柯西公式定义算子的函数、盖尔范德理论与维纳的1/f定理、紧自伴算子与振动的弦、乘以x的算子与玻恩定则、用整个系列证明的谱定理、无界算子、凯莱变换、斯通定理，以及这一切对量子力学证明了什么。",
-   "tags_en": ["spectral theorem", "operator theory", "Banach algebras", "quantum mechanics"],
-   "tags_zh": ["谱定理", "算子理论", "量子力学"],
-   "thumb": {"t480": 91.9, "crop": [0.08, 0.18, 0.95, 0.75]}
+   "tags_en": [
+    "spectral theorem",
+    "operator theory",
+    "Banach algebras",
+    "quantum mechanics"
+   ],
+   "tags_zh": [
+    "谱定理",
+    "算子理论",
+    "量子力学"
+   ],
+   "thumb": {
+    "t480": 91.9,
+    "crop": [
+     0.08,
+     0.18,
+     0.95,
+     0.75
+    ]
+   }
   }
  }
 }

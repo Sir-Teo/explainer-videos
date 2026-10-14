@@ -24,7 +24,7 @@ while true; do
     nice -n 10 python -u tools/build.py $2 -q l -j 3 ${@:3} > renders/qa/build_$2.log 2>&1
     rc=$?; log=renders/qa/build_$2.log
   else
-    EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator nice -n 5 \
+    EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a nice -n 5 \
       python -u tools/build.py $2 -q k --fps 60 --crf 16 -j 1 --lang $3 > renders/qa/master_$2_$3.log 2>&1
     rc=$?; log=renders/qa/master_$2_$3.log
     # verify it and add it to the upload kit (renders/upload/analysis-built)
