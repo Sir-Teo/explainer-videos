@@ -134,13 +134,13 @@ class Measures(VoiceoverScene):
             "climb to one. <bookmark mark='c'/> For decreasing sets you need a finite start. The rays from n to "
             "infinity shrink to the empty set, but every one of them has infinite length."
         ) as vo:
-            self.play(FadeIn(head), Create(nl), Create(nl2), Create(one))
+            self.play(FadeIn(head), Create(nl), Create(one))
             vo.wait_until("a")
             self.play(FadeIn(bl), FadeIn(blab))
             vo.wait_until("b")
             self.play(nT.animate.set_value(40), run_time=4.0, rate_func=rate_functions.ease_out_cubic)
             vo.wait_until("c")
-            self.play(FadeIn(ab), FadeIn(alab))
+            self.play(Create(nl2), FadeIn(ab), FadeIn(alab))  # the rays' line arrives with the rays
             self.play(mT.animate.set_value(5.0), run_time=3.0, rate_func=linear)
             self.play(FadeIn(note_))
         for m in (bl, blab, ab, alab):

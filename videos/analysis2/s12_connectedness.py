@@ -101,9 +101,12 @@ class Connectedness(VoiceoverScene):
         m_dots = VGroup(*[Dot(mag_ax.c2p(x, x * x - 2), radius=0.03, color=C.RATIONAL) for x in sel])
         m_zero = DashedLine(mag_ax.c2p(SQRT2 - hw, 0), mag_ax.c2p(SQRT2 + hw, 0), color=GREY_B, stroke_width=1.5)
         m_hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(mag_ax.c2p(SQRT2, 0)).set_fill(BACKGROUND, 1)
+        # the hole's label inside the inset, above-left of it, where the (gently rising) curve is not
+        hl.move_to(mag_ax.c2p(SQRT2 - 0.009, 0.045))
+        assert hl.get_bottom()[1] > mag_ax.c2p(SQRT2, 0)[1] + 0.2
         zero = DashedLine(ax.c2p(1, 0), ax.c2p(2, 0), color=GREY_B, stroke_width=1.5)
         hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(ax.c2p(SQRT2, 0))
-        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE).next_to(hole, DR, buff=0.08)
+        hl = MathTex(r"\sqrt2 \notin \mathbb{Q}", font_size=30, color=C.HOLE)  # placed in the magnifier, below
         txt = VGroup(label(r"$f(1) = -1 < 0 < 2 = f(2)$, \ $f$ is continuous on $\mathbb{Q}$,", font_size=26),
                      label(r"and $f$ is never $0$: \ $\mathbb{Q}$ is not connected (Part 1)", font_size=26,
                            color=C.HOLE)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([-1.4, 2.4, 0])
@@ -117,9 +120,9 @@ class Connectedness(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.002), FadeIn(txt[0]), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(hole), FadeIn(hl), FadeIn(txt[1]))
+            self.play(Create(hole), FadeIn(txt[1]))
             self.play(FadeIn(mag), FadeIn(m_zero), LaggedStart(*[FadeIn(x) for x in m_dots], lag_ratio=0.02),
-                      Create(m_hole), run_time=1.5)
+                      Create(m_hole), FadeIn(hl), run_time=1.5)
         assert not np.any(np.abs(pts * pts - 2) < 1e-12)
         self.wait(0.3)
         self.clear_scene()
@@ -280,7 +283,7 @@ class Connectedness(VoiceoverScene):
                           for a, b in zip(x[sel], y[sel])])
         m_x0 = Dot(mag_ax.c2p(x0, 0), radius=0.05, color=WHITE)
         # 7/10 sits inside the magnifier's frame: its label goes outside, with a leader
-        nl.next_to(mag.src, LEFT, buff=0.12).align_to(near, DOWN)
+        nl.next_to(mag.src, LEFT, buff=0.12).set_y(ax.c2p(0, eps)[1] + 0.1 + nl.height / 2)  # above the band's edge
         nl = VGroup(nl, Line(nl.get_right() + RIGHT * 0.03, near.get_center(), color=C.PATHOLOGY, stroke_width=1.5,
                              buff=0.08))
         assert sel.sum() >= 8 and np.all(y[sel & (np.abs(x - x0) < delta)] < eps)

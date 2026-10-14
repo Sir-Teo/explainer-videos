@@ -13,3 +13,13 @@ from videos.analysis4.common import heatmap, square_axes  # noqa: F401
 from videos.analysis7.common import cplot, phase_wheel, zcurve  # noqa: F401
 
 from .compute import load, trap  # noqa: F401
+
+
+def phase_key(radius=0.3, font_size=20) -> VGroup:
+    """Part 7's phase wheel (the legend of a domain coloring) with its labels at a legible size."""
+    w = phase_wheel(radius)
+    ring, labs, t = w
+    for m_, side in zip(labs, (RIGHT, LEFT, UP)):
+        m_.scale(font_size / 18).next_to(ring, side, buff=0.06 if side is not UP else 0.04)
+    t.scale(font_size / 20).next_to(ring, DOWN, buff=0.06)
+    return w

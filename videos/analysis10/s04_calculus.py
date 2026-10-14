@@ -189,17 +189,19 @@ class SymbolicCalculus(VoiceoverScene):
     # ------------------------------------------------------------------
     def roots(self):
         d = load("calculus")
-        evb, c, rb, err = d["evb"], float(d["c"]), float(d["rb"]), float(d["err_sq"])
-        cx = square_axes([-2.5, 6.5, 1], [-3.2, 3.2, 1], 0.72).move_to([-3.2, -0.3, 0])
+        ev, evb, c, rb, err = d["ev"], d["evb"], float(d["c"]), float(d["rb"]), float(d["err_sq"])
+        cx = square_axes([-2.5, 6.5, 1], [-3.2, 3.2, 1], 0.66).move_to([-3.4, -0.3, 0])
         u = cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0]
         cut = Line(cx.c2p(-2.5, 0), cx.c2p(0, 0), color=C.PATHOLOGY, stroke_width=6)
-        cutl = label(r"branch cut of $\sqrt{\lambda}$", font_size=20, color=C.PATHOLOGY).next_to(cx.c2p(-1.25, 0), DOWN,
-                                                                                               buff=0.15)
-        evd = VGroup(*[Dot(cx.c2p(l_.real, l_.imag), radius=0.06, color=C.SPECTRUM) for l_ in evb])
-        circ = Circle(radius=rb * u, color=C.EPS, stroke_width=3).move_to(cx.c2p(c, 0))
-        circ.add_tip(tip_length=0.16)
-        assert c - rb > 0.2 and err < 1e-9
-        shift = float((evb - d["ev"]).real.mean())
+        cutl = VGroup(label(r"branch cut", font_size=22, color=C.PATHOLOGY),
+                      label(r"of $\sqrt{\lambda}$", font_size=22, color=C.PATHOLOGY)).arrange(DOWN, buff=0.08)
+        cutl.next_to(cx.c2p(-1.25, 0), DOWN, buff=0.2)
+        assert cutl.get_right()[0] < cx.c2p(0, 0)[0] - 0.05  # clear of the imaginary axis
+        shift = float((evb - ev).real.mean())
+        assert np.allclose(np.sort_complex(evb), np.sort_complex(ev + shift)) and np.all(evb.real > 0)
+        evd = VGroup(*[Dot(cx.c2p(l_.real, l_.imag), radius=0.06, color=C.SPECTRUM) for l_ in ev])
+        circ = oriented_circle(cx.c2p(c, 0), rb * u, gap_at=-PI / 4, tip_length=0.18)
+        assert c - rb > 0.2 and err < 1e-9 and np.all(np.abs(evb - c) < rb - 0.5)  # around sigma(B), clear of the cut
         rows = VGroup(
             label(rf"$B = A + {shift:.2f}\,I$: \ spectrum in the right half-plane", font_size=24),
             label(r"a contour around $\sigma(B)$ that avoids the cut:", font_size=24),
@@ -207,18 +209,18 @@ class SymbolicCalculus(VoiceoverScene):
                     color=C.EPS),
             MathTex(rf"\big\|(\sqrt B)^2 - B\big\| = {sci(err, 1)}", font_size=26, color=C.OPERATOR),
             label(r"logarithms, \ fractional powers, \ resolvents: \ the same way", font_size=22, color=GREY_A),
-            label(r"Part 7's Runge: \ rational functions suffice to approximate on $\sigma$", font_size=22, color=GREY_A),
-            label(r"\textbf{FA 10.35} \ (Lomonosov, 1973) \ an operator $T \ne \lambda I$ commuting with a compact $K \ne 0$", font_size=22),
-            label(r"has a nontrivial closed invariant subspace: \ by Schauder's fixed-point theorem", font_size=22),
-        )
-        for r_ in rows:
-            if r_.width > 6.4:
-                r_.width = 6.4
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to([0.5, -0.3, 0], RIGHT, buff=0)
-        head = label(r"Square roots of operators", font_size=34).to_edge(UP, buff=0.25)
+            label(r"Part 7's Runge: \ rational functions are enough", font_size=22, color=GREY_A),
+            label(r"\textbf{FA 10.35} (Lomonosov 1973): \ $T \ne \lambda I$ commuting with compact $K \ne 0$",
+                  font_size=22),
+            label(r"has a nontrivial closed invariant subspace \ (Schauder)", font_size=22),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        rows.next_to([0.2, -0.3, 0], RIGHT, buff=0)
+        assert max(r_.width for r_ in rows) <= 6.0 and rows.get_right()[0] <= 6.6 and rows.get_left()[0] > cx.get_right()[0]
+        head = label(r"Square roots of operators", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Square roots need care, because the square root isn't holomorphic across its "
-            "branch cut. Shift the matrix so its spectrum sits in the right half-plane, <bookmark mark='b'/> and take "
+            "branch cut. <bookmark mark='a2'/> Shift the matrix so its spectrum sits in the right half-plane, "
+            "<bookmark mark='b'/> and take "
             "a contour that encloses the spectrum without touching the cut. The same formula, with the square root "
             "in it, gives a matrix whose square is B, to rounding error. <bookmark mark='c'/> Logarithms and "
             "fractional powers work the same way, and Runge's theorem from Part 7 explains why rational functions "
@@ -226,7 +228,9 @@ class SymbolicCalculus(VoiceoverScene):
             "subspaces with a fixed-point argument."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(cx), Create(cut), FadeIn(cutl), FadeIn(evd), FadeIn(rows[0]))
+            self.play(FadeIn(head), Create(cx), Create(cut), FadeIn(cutl), FadeIn(evd))
+            vo.wait_until("a2")
+            self.play(evd.animate.shift(RIGHT * shift * u), FadeIn(rows[0]), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(circ), FadeIn(rows[1:3]))
             self.play(FadeIn(rows[3]))
