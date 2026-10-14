@@ -154,19 +154,41 @@ class FormsTour(VoiceoverScene):
     def green(self):
         d = load("forms")
         area = float(d["area"])
-        imp = load("implicit")
-        pts = imp["pts"]
-        ax = square_axes([-0.3, 1.8, 0.5], [-0.3, 1.8, 0.5], 2.7).move_to([-3.6, -0.75, 0])
+        head = VGroup(label(r"Stokes' theorem", font_size=34),
+                      MathTex(r"\int_{\partial \Omega} \omega = \int_\Omega d\omega", r"\quad \text{\small (Rudin 10.33)}",
+                              font_size=40)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][0].set_color(C.EPS)
+        head[1][1].set_color(GREY_B)
+        ax = square_axes([-0.3, 1.8, 0.5], [-0.3, 1.8, 0.5], 2.6)
+        ax.move_to([-3.75, 0, 0]).align_to([0, head.get_bottom()[1] - 0.25, 0], UP)
         ax.set_opacity(0.5)
+
+        # the folium's loop in polar form: r = 3 sin t cos t / (sin^3 t + cos^3 t), t in [0, pi/2]. It leaves the
+        # origin along the x-axis and comes back along the y-axis (the right-angle corner there is real).
+        # (1/2)(x dy - y dx) is the area swept by the radius from the origin: A(t) = (3/2) sin^3 t / (sin^3 + cos^3)
+        def rpol(t_):
+            return 3 * np.sin(t_) * np.cos(t_) / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
+
+        def A_(t_):
+            return 1.5 * np.sin(t_) ** 3 / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
+
+        def P_(t_):
+            return np.array([rpol(t_) * np.cos(t_), rpol(t_) * np.sin(t_)])
+
+        tl_ = np.linspace(0, math.pi / 2, 721)
+        lp = np.array([P_(t_) for t_ in tl_])
+        assert np.abs(lp[:, 0] ** 3 + lp[:, 1] ** 3 - 3 * lp[:, 0] * lp[:, 1]).max() < 1e-12  # on the folium
+        assert np.linalg.norm(lp[0]) < 1e-12 and np.linalg.norm(lp[-1]) < 1e-12
         loop = VMobject(color=C.FUNC, stroke_width=3.5, fill_color=C.FUNC, fill_opacity=0.25).set_points_as_corners(
-            [ax.c2p(*p) for p in np.vstack([pts, pts[:1], [[0, 0]]])])
+            [ax.c2p(*p) for p in lp])
         arrows = VGroup()
-        for k in (30, 90, 150, 210):
-            a, b = pts[k], pts[k + 6]
-            arrows.add(Arrow(ax.c2p(*a), ax.c2p(*b), buff=0, color=C.EPS, stroke_width=4, tip_length=0.16))
-        head = VGroup(label(r"\textbf{Rudin 10.33} \ Stokes' theorem", font_size=30),
-                      MathTex(r"\int_{\partial \Omega} \omega = \int_\Omega d\omega", font_size=40, color=C.EPS)
-                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        for t_ in (0.35, 0.785, 1.22):  # the walking direction (counterclockwise), as short arrows on the loop
+            p0 = P_(t_)
+            tng = P_(t_ + 1e-5) - P_(t_ - 1e-5)
+            tng = tng / np.linalg.norm(tng)
+            L = 0.5 / 2.6  # half an arrow is 0.25 scene units
+            arrows.add(Arrow(ax.c2p(*(p0 - L * tng)), ax.c2p(*(p0 + L * tng)), buff=0, color=C.FUNC, stroke_width=5,
+                             tip_length=0.2, max_tip_length_to_length_ratio=0.5))
         faces = VGroup(
             label(r"its faces: \ Green (the plane), \ Gauss (divergence),", font_size=24, color=GREY_A),
             label(r"and the classical Stokes (surfaces in $\R^3$)", font_size=24, color=GREY_A),
@@ -174,24 +196,14 @@ class FormsTour(VoiceoverScene):
             MathTex(r"\text{area of } \Omega = \frac12 \oint_{\partial\Omega} (x\,dy - y\,dx)", font_size=32),
             label(r"the folium's loop (chapter 7):", font_size=26),
             MathTex(rf"\frac12 \oint (x\,dy - y\,dx) = {area:.6f} \approx \tfrac32", font_size=32, color=C.EPS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -0.85, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
         for r_ in faces:
-            if r_.width > 6.6:
-                r_.width = 6.6
-        faces.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.3, -0.85, 0])
-        assert abs(area - 1.5) < 1e-3
+            if r_.width > 6.0:
+                r_.width = 6.0
+        faces.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to([0.35, -0.6, 0], RIGHT, buff=0)
+        assert abs(area - 1.5) < 1e-3 and faces.get_right()[0] <= 6.6 and faces.get_bottom()[1] > -3.6
         om = MathTex(r"\Omega", font_size=34, color=C.FUNC).move_to(ax.c2p(0.85, 0.85))
-        bom = MathTex(r"\partial\Omega", font_size=30, color=C.EPS).next_to(ax.c2p(1.56, 0.95), RIGHT, buff=0.1)
-
-        # walking the loop: (1/2)(x dy - y dx) is the area swept by the radius from the origin. In polar form the
-        # loop is r = 3 sin t cos t / (sin^3 t + cos^3 t), t in [0, pi/2], and the swept area has the closed form
-        # A(t) = (3/2) sin^3 t / (sin^3 t + cos^3 t), which reaches 3/2 at t = pi/2
-        def rpol(t_):
-            return 3 * np.sin(t_) * np.cos(t_) / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
-
-        def A_(t_):
-            return 1.5 * np.sin(t_) ** 3 / (np.sin(t_) ** 3 + np.cos(t_) ** 3)
-
+        bom = MathTex(r"\partial\Omega", font_size=30, color=C.FUNC).next_to(ax.c2p(1.56, 0.95), RIGHT, buff=0.1)
         gg = np.linspace(0, math.pi / 2, 20001)
         num = np.concatenate([[0], np.cumsum(0.5 * (rpol(gg[1:]) ** 2 + rpol(gg[:-1]) ** 2) / 2 * np.diff(gg))])
         assert np.abs(num - A_(gg)).max() < 1e-6 and abs(A_(math.pi / 2) - 1.5) < 1e-12
@@ -221,11 +233,10 @@ class FormsTour(VoiceoverScene):
             "is a line integral around its edge. <bookmark mark='d'/> Walk once around the loop of the folium from "
             "chapter seven, and the line integral gives its area: exactly three halves."
         ) as vo:
-            self.play(FadeIn(head[0]), Create(ax))
+            self.play(FadeIn(head[0]), Create(ax), Create(loop), FadeIn(om), FadeIn(bom), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(head[1]))
-            self.play(Create(loop), LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.3), FadeIn(om),
-                      FadeIn(bom), run_time=2.5)
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(faces[:2]))
             vo.wait_until("c")
