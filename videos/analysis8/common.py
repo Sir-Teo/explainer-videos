@@ -54,6 +54,8 @@ def logn_axes(width: float, height: float, center=ORIGIN, y_max: float = 7.5, y_
     Returns (ax, decor): plot at ax.c2p(log10 n, value)."""
     ax = plain_axes([-0.4, k_max + 0.05, 1], [0, y_max, y_step], width, height).move_to(center)
     decor = y_axis_at(ax, -0.4, y_numbers, font_size=font_size)
+    o = ax.c2p(0, 0)  # Axes leave out the tick at 0: put it back (it is 10^0 here)
+    decor.add(Line(o + DOWN * 0.1, o + UP * 0.1, color=GREY_C, stroke_width=2.0))
     decor.add(*[MathTex(rf"10^{{{k}}}", font_size=font_size).next_to(ax.c2p(k, 0), DOWN, buff=0.12) for k in labelled])
     return ax, decor
 
