@@ -62,7 +62,7 @@ class QuantumClosure(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Back to the hook. Hydrogen's Hamiltonian, for states without angular momentum, is "
             "this unbounded self-adjoint operator. <bookmark mark='b'/> Discretized and diagonalized, its lowest "
-            "eigenvalues are minus one half over n squared, to six digits: the energy levels whose differences are "
+            "eigenvalues are minus one half over n squared, to five decimal places: the energy levels whose differences are "
             "the spectral lines. They pile up at zero. <bookmark mark='c'/> Above zero, the spectrum is continuous: "
             "the electron flies free. In a finite box that shows up as a dense ladder. A state's spectral measure has "
             "point masses at the bound states and a continuous part above."
