@@ -95,19 +95,34 @@ python tools/build.py relativity2             # -> renders/relativity2.mp4
 python tools/build.py quantum2                # -> renders/quantum2.mp4
 ```
 
-The ten parts of *Analysis, Built* were made at 2160p60. To rebuild them exactly as published, after the
-one-time setup above:
+The ten parts of *Analysis, Built* are made at 2160p60 in English and in Chinese (Chinese narration and subtitles,
+same picture), narrated by a local neural voice, Qwen3-TTS 1.7B (`tools/voices.json`, profile `qwen3-narrator`), on
+Apple Silicon. Its server runs in its own environment:
 
 ```bash
-for n in 1 2 3 4 5 6 7 8 9 10; do
-  python -m videos.analysis$n.compute                      # every number the part shows, computed and asserted
-  python tools/build.py analysis$n -q k --fps 60           # -> renders/analysis${n}_2160p.mp4 (+ .srt, chapters)
-done
+uv venv --python 3.12 .venv-tts && uv pip install --python .venv-tts/bin/python mlx-audio soundfile pypinyin
+.venv-tts/bin/python tools/tts_server.py --voice qwen3-narrator     # serves http://127.0.0.1:8765
 ```
 
-Each part takes a few hours at 4K on a 4-core machine (`-q l` previews a part in minutes). Narration is
-synthesized once and cached in `.cache/tts`, and Manim caches every animation it renders, so a second build redoes
-only what changed.
+The server takes every sentence until speech recognition hears the script, then forced-aligns it (per word in
+English, per character in Chinese) so the animation keeps its timing. A part's narration comes from its newest
+render, so build a quick preview first, then the narration, then the master:
+
+```bash
+export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator
+python -m videos.analysis1.compute                         # every number the part shows, computed and asserted
+python tools/build.py analysis1 -q l                       # 480p preview (any voice): the script, as rendered
+python tools/narrate.py analysis1 --lang en                # synthesize, check and align every line (GPU)
+python tools/narrate.py analysis1 --lang zh                # the same for videos/analysis1/narration_zh.json
+python tools/build.py analysis1 -q k --fps 60 --crf 16             # -> renders/analysis1_2160p.mp4 (+ .srt, chapters)
+python tools/build.py analysis1 -q k --fps 60 --crf 16 --lang zh   # -> renders/analysis1_2160p_zh.mp4
+```
+
+`tools/queue_narration.sh` and `tools/queue_masters.sh` run the whole series as two queues, one narration and one
+build at a time, so narration (GPU) overlaps rendering (CPU). The Chinese narration follows
+`videos/ANALYSIS_ZH_GUIDE.md`, and `tools/translate_narration.py` keeps each part's translation table in step with
+its English. Narration is synthesized once and cached in `.cache/tts`, and Manim caches every animation it renders,
+so a second build redoes only what changed.
 
 Iterate on a single scene:
 
