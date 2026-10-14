@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.analysis import *  # noqa: F403
 from videos.analysis10.common import cplot, load, phase_wheel, plain_axes, square_axes
+from videos.analysis10.compute import rand_matrix
 
 
 class Spectrum(VoiceoverScene):
@@ -110,6 +111,40 @@ class Spectrum(VoiceoverScene):
             if r_.width > 6.4:
                 r_.width = 6.4
         lad.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.2, 0])
+        # the same story in the plane, for the first of the ten matrices (scaled so that rho = 1): its eigenvalues,
+        # the spectral circle, the region outside it where the series in 1/lambda converges, and the circles of
+        # radius ||A^n||^{1/n} / rho closing in on the spectral circle as n grows
+        A0 = rand_matrix(8, 100)
+        ev = np.linalg.eigvals(A0)
+        rho0 = np.abs(ev).max()
+        c0 = curves[0]  # n = 1, 6, 11, ..., 996
+        assert abs(c0[0] - np.linalg.norm(A0, 2) / rho0) < 1e-9 and c0.max() < 2.0 and abs(c0[-1] - 1) < 1e-3
+        u = 0.85
+        cx = square_axes([-2, 2, 1], [-2, 2, 1], u).move_to([-3.3, -0.6, 0])
+        o_ = cx.c2p(0, 0)
+        ext = Annulus(inner_radius=u, outer_radius=2 * u, fill_color=C.EPS, fill_opacity=0.13, stroke_width=0).move_to(o_)
+        sc = Circle(radius=u, color=C.SPECTRUM, stroke_width=3).move_to(o_)
+        evd = VGroup(*[Dot(cx.c2p(z.real / rho0, z.imag / rho0), radius=0.06, color=C.SPECTRUM) for z in ev])
+        scl = MathTex(r"|\lambda| = \rho(x)", font_size=24, color=C.SPECTRUM).next_to(cx.c2p(0.72, -0.72), DR, buff=0.05)
+        extl = label(r"$\sum x^n/\lambda^{n+1}$ converges out here", font_size=20, color=C.EPS).next_to(cx, UP, buff=0.1)
+        kT = ValueTracker(0.0)
+
+        def r_n():
+            return float(np.interp(kT.get_value(), np.arange(len(c0)), c0))
+
+        nc = always_redraw(lambda: Circle(radius=u * r_n(), color=C.OPERATOR, stroke_width=3).move_to(o_))
+        ncl = VGroup(MathTex(r"n =", font_size=24, color=C.OPERATOR), Integer(1, font_size=24, color=C.OPERATOR),
+                     MathTex(r":\ \ \|x^n\|^{1/n} =", font_size=24, color=C.OPERATOR),
+                     DecimalNumber(c0[0], num_decimal_places=3, font_size=24, color=C.OPERATOR),
+                     MathTex(r"\,\rho(x)", font_size=24, color=C.OPERATOR)).arrange(RIGHT, buff=0.1).next_to(cx, UP, buff=0.1)
+
+        def ncl_upd(m):  # values first, then re-arrange: the integer grows from 1 to 996 digits wide
+            m[1].set_value(1 + 5 * int(round(kT.get_value())))
+            m[3].set_value(r_n())
+            m.arrange(RIGHT, buff=0.1).next_to(cx, UP, buff=0.1)
+
+        ncl.add_updater(ncl_upd)
+        plane = VGroup(cx, ext, sc, evd, scl)
         head = label(r"How big is the spectrum?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Expand the resolvent in powers of one over lambda. That's a Laurent series, Part "
@@ -121,10 +156,16 @@ class Spectrum(VoiceoverScene):
             "thousand."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(lad[:2]))
+            self.play(FadeIn(head), FadeIn(lad[:2]), Create(cx))
+            self.play(LaggedStart(*[FadeIn(d_, scale=2) for d_ in evd], lag_ratio=0.1), Create(sc), FadeIn(scl))
+            self.play(FadeIn(ext), FadeIn(extl))
             vo.wait_until("b")
-            self.play(FadeIn(lad[2:5]))
+            self.play(FadeIn(lad[2:5]), FadeOut(extl), FadeIn(nc), FadeIn(ncl))
+            self.play(kT.animate.set_value(len(c0) - 1), run_time=7.0, rate_func=lambda t: t ** 3)
             vo.wait_until("c")
+            for m_ in (nc, ncl):
+                m_.clear_updaters()
+            self.play(FadeOut(plane), FadeOut(nc), FadeOut(ncl))
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(one))
             self.play(LaggedStart(*[Create(g) for g in gs], lag_ratio=0.15), run_time=3.0)
             self.play(FadeIn(lad[5]))
@@ -145,6 +186,7 @@ class Spectrum(VoiceoverScene):
         l1 = MathTex(r"\|V^n\|^{1/n} \to 0", font_size=26, color=C.OPERATOR).next_to(ax.c2p(14, 0.18), UP, buff=0.25)
         l2 = MathTex(r"n!\,\|V^n\| \to \tfrac12", font_size=26, color=C.EPS).next_to(ax.c2p(14, 0.5), UP, buff=0.12)
         assert abs(vn[0] - 2 / math.pi) < 1e-5 and abs(nf[-1] - 0.5) < 0.01 and np.all(np.diff(roots) < 0)
+        v1l = MathTex(r"\|V\| = \tfrac{2}{\pi}", font_size=26, color=C.OPERATOR).next_to(d1[0], RIGHT, buff=0.15)
         rows = VGroup(
             MathTex(r"Vf(x) = \int_0^x f(t)\,dt \ \text{ on } L^2[0, 1]", font_size=30, color=C.OPERATOR),
             MathTex(rf"\|V\| = {vn[0]:.5f} = \tfrac{{2}}{{\pi}} \ \ (\text{{Part 8}})", font_size=26),
@@ -172,12 +214,13 @@ class Spectrum(VoiceoverScene):
             "eigenvector at all."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]))
+            self.play(FadeIn(head), FadeIn(rows[:2]), Create(ax), FadeIn(xl))
+            self.play(FadeIn(d1[0], scale=2), FadeIn(v1l))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2:4]), Create(ax), FadeIn(xl), Create(half))
+            self.play(FadeIn(rows[2:4]), Create(half), FadeOut(v1l))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in d2], lag_ratio=0.15), FadeIn(l2), run_time=1.8)
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in d1], lag_ratio=0.15), FadeIn(l1), run_time=1.8)
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in d1[1:]], lag_ratio=0.15), FadeIn(l1), run_time=1.8)
             self.play(FadeIn(rows[4]))
             vo.wait_until("d")
             self.play(FadeIn(rows[5:]))

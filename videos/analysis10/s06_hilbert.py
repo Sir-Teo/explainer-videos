@@ -50,7 +50,7 @@ class HilbertOperators(VoiceoverScene):
             (r"normal: \ $A^*A = AA^*$", r"normal: \ $T^*T = TT^*$"),
             (r"orthogonal projection", r"$P = P^2 = P^*$"),
         ], font_size=24)
-        card.scale_to_fit_width(11.5).move_to(UP * 0.5)
+        card.scale_to_fit_width(10.0).move_to(UP * 1.15)
         rng = np.random.default_rng(8)
         worst = 0.0
         for _ in range(300):
@@ -102,6 +102,21 @@ class HilbertOperators(VoiceoverScene):
                               stroke_width=3, max_tip_length_to_length_ratio=0.25) for i in range(2)])
         alabs = VGroup(MathTex("T", font_size=30).next_to(arrs[0], UP, buff=0.08),
                        MathTex("T^*", font_size=30).next_to(arrs[1], UP, buff=0.08))
+        # the definition, drawn for the same T: <Tx, y> = <x, T*y> (real, so T* is the transpose)
+        xv, yv = np.array([0.9, 0.25]), np.array([0.2, 0.85])
+        lhs, rhs = float(Tm @ xv @ yv), float(xv @ (Tm.T @ yv))
+        assert abs(lhs - rhs) < 1e-12
+        dpan = VGroup()
+        for i_, (cxx, (u_, ucol, ulab), (w_, wcol, wlab), val) in enumerate((
+                (-3.2, (Tm @ xv, C.OPERATOR, r"Tx"), (yv, C.APPROX, r"y"), lhs),
+                (3.2, (xv, C.FUNC, r"x"), (Tm.T @ yv, C.OPERATOR, r"T^*y"), rhs))):
+            sq = square_axes([-0.3, 1.6, 1], [-0.3, 1.3, 1], 1.0).move_to([cxx - 0.9, -2.55, 0])
+            arr_u = Arrow(sq.c2p(0, 0), sq.c2p(*u_), buff=0, color=ucol, stroke_width=4, max_tip_length_to_length_ratio=0.15)
+            arr_w = Arrow(sq.c2p(0, 0), sq.c2p(*w_), buff=0, color=wcol, stroke_width=4, max_tip_length_to_length_ratio=0.15)
+            lu = MathTex(ulab, font_size=24, color=ucol).next_to(arr_u.get_end(), RIGHT, buff=0.08)
+            lw = MathTex(wlab, font_size=24, color=wcol).next_to(arr_w.get_end(), UP, buff=0.06)
+            ip = MathTex(rf"\langle {ulab}, {wlab}\rangle = {val:.4f}", font_size=28, color=C.EPS).next_to(sq, RIGHT, buff=0.3)
+            dpan.add(VGroup(sq, arr_u, arr_w, lu, lw, ip))
         tml = MathTex(r"T = \begin{pmatrix} 1.1 & 0.6 \\ 0.1 & 0.7 \end{pmatrix}", font_size=26).next_to(
             plabs[1], DOWN, buff=0.12)
         assert max(abs(c_) for c_ in cx) + k_ * 1.9 < 6.95 and tml.get_bottom()[1] > rows.get_top()[1] + 0.05
@@ -115,10 +130,12 @@ class HilbertOperators(VoiceoverScene):
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(card.titles))
+            self.play(Create(dpan[0][0]), GrowArrow(dpan[0][1]), GrowArrow(dpan[0][2]), FadeIn(dpan[0][3:]))
+            self.play(Create(dpan[1][0]), GrowArrow(dpan[1][1]), GrowArrow(dpan[1][2]), FadeIn(dpan[1][3:]))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
                                   lag_ratio=0.4), run_time=4.0)
             vo.wait_until("b")
-            self.play(FadeOut(VGroup(card.titles, card.rows, card.arrows)))
+            self.play(FadeOut(VGroup(card.titles, card.rows, card.arrows, dpan)))
             self.play(Create(panels[0]), FadeIn(plabs[0]))
             self.play(GrowArrow(arrs[0]), FadeIn(alabs[0]), TransformFromCopy(panels[0], panels[1]), FadeIn(tml))
             self.play(Create(ax2), FadeIn(plabs[1]))
