@@ -49,6 +49,21 @@ class Banach(VoiceoverScene):
             t = label(names[k], font_size=26).next_to(ax, UP, buff=0.05)
             n_ = label(notes_[k], font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.05)
             icons.append(VGroup(ax, pic, t, n_))
+        # completeness, pictured: the partial sums z_n = sum_{k<n} (0.8 e^{0.9i})^k, a Cauchy sequence in the plane,
+        # spiral into their limit 1 / (1 - 0.8 e^{0.9i})
+        q = 0.8 * np.exp(0.9j)
+        zs = np.cumsum(q ** np.arange(40))
+        zlim = 1 / (1 - q)
+        assert abs(zs[-1] - zlim) < 1e-3
+        assert np.all(np.diff(np.abs(zs - zlim)) < 0)  # each step closer
+        sq = square_axes([-0.6, 2.2, 1], [-0.4, 2.4, 1], 1.2).move_to([0, -0.7, 0])
+        sq.set_opacity(0.35)
+        cpts = VGroup(*[Dot(sq.c2p(z.real, z.imag), radius=0.05, color=C.SEQ) for z in zs])
+        cpath = VMobject(color=C.SEQ, stroke_width=1.5, stroke_opacity=0.5).set_points_as_corners(
+            [sq.c2p(z.real, z.imag) for z in zs])
+        cl_ = Dot(sq.c2p(zlim.real, zlim.imag), radius=0.08, color=C.EPS)
+        cll = MathTex(r"\text{a Cauchy sequence and its limit}", font_size=24, color=C.EPS).next_to(sq, RIGHT, buff=0.3)
+        cauchy = VGroup(sq, cpath, cpts, cl_, cll)
         head = VGroup(label(r"\textbf{RCA 5.1--5.3} \ a Banach space: \ a vector space with a norm, \ complete", font_size=30),
                       label(r"the spaces of Parts 3, 5 and 6, \ now in one family", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.1).to_edge(UP, buff=0.2)
@@ -60,8 +75,11 @@ class Banach(VoiceoverScene):
             "zero; and the L p spaces of Part 6. Every theorem in this part holds for all of them at once."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(sq))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in cpts], lag_ratio=0.08), Create(cpath), run_time=3.0)
+            self.play(FadeIn(cl_, scale=2), FadeIn(cll))
             vo.wait_until("b")
+            self.play(FadeOut(cauchy), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(i_) for i_ in icons[:3]], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(i_) for i_ in icons[3:]], lag_ratio=0.3), run_time=2.0)
