@@ -21,6 +21,8 @@ import wave
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from . import lang
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CACHE_DIR = Path(os.environ.get("EXPLAINER_CACHE", REPO_ROOT / ".cache")) / "tts"
 SAMPLE_RATE = 24_000
@@ -565,8 +567,24 @@ LEXICON: list[tuple[str, str]] = [
 ]
 
 
+# Plain-text respellings for the neural backends (which read text, not IPA).  Grown by listening:
+# tools/check_narration.py transcribes every line and diffs it against the script.
+RESPELL: dict[str, list[tuple[str, str]]] = {
+    "en": [
+        (r"–|—", ", "),
+    ],
+    "zh": [
+        (r"—", "，"),
+    ],
+}
+
+
 def to_spoken(text: str) -> str:
-    for pattern, repl in LEXICON:
+    if BACKEND in ("kokoro", "silent"):
+        for pattern, repl in LEXICON:
+            text = re.sub(pattern, repl, text)
+        return text
+    for pattern, repl in RESPELL.get(lang.LANG, []):
         text = re.sub(pattern, repl, text)
     return text
 
@@ -589,12 +607,11 @@ class Utterance:
 # ---------------------------------------------------------------------------
 # Word alignment: map display words onto TTS tokens via their letters.
 # ---------------------------------------------------------------------------
-def _norm(s: str) -> str:
-    return re.sub(r"[^a-z0-9]", "", s.lower())
+_norm = lang.norm
 
 
 def align_words(display_text: str, tokens: list[tuple[str, float, float]], duration: float) -> list[Word]:
-    dwords = display_text.split()
+    dwords = lang.tokens(display_text)
     if not dwords:
         return []
     d_chars, d_owner = [], []
@@ -686,6 +703,21 @@ def _synth_silent(spoken: str):
     return np.zeros(int(dur * SAMPLE_RATE), dtype="float32"), tokens
 
 
+SERVER = os.environ.get("EXPLAINER_TTS_SERVER", "http://127.0.0.1:8765")
+
+
+def _synth_server(spoken: str, out: Path) -> tuple[float, list]:
+    """Neural TTS served by tools/tts_server.py (its own environment): it writes ``out`` and returns
+    the duration and the forced-aligned word (Chinese: character) timings."""
+    import urllib.request
+
+    body = json.dumps({"text": spoken, "lang": lang.LANG, "voice": VOICE, "speed": SPEED, "out": str(out)})
+    req = urllib.request.Request(f"{SERVER}/synth", data=body.encode(), headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=24 * 3600) as resp:
+        meta = json.loads(resp.read())
+    return meta["duration"], meta["tokens"]
+
+
 def _write_wav(path: Path, audio) -> None:
     import numpy as np
 
@@ -697,11 +729,20 @@ def _write_wav(path: Path, audio) -> None:
         wf.writeframes(pcm.tobytes())
 
 
+def narration_credit() -> str:
+    """Who reads the narration, for the credits: the server profiles name their model in tools/voices.json."""
+    if BACKEND in ("kokoro", "silent"):
+        return "Kokoro-82M"
+    profiles = json.loads((REPO_ROOT / "tools" / "voices.json").read_text())
+    return profiles.get(VOICE, {}).get("credit", VOICE)
+
+
 def synthesize(text: str) -> Utterance:
     """Return audio + word timings for ``text`` (display text, no markup)."""
-    text = " ".join(text.split())
+    text = lang.clean(text)
     spoken = to_spoken(text)
-    key_src = json.dumps([_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken])
+    key_parts = [_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
+    key_src = json.dumps(key_parts)
     key = hashlib.sha1(key_src.encode()).hexdigest()[:16]
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     wav_path = CACHE_DIR / f"{key}.wav"
@@ -710,13 +751,17 @@ def synthesize(text: str) -> Utterance:
     if wav_path.exists() and meta_path.exists():
         meta = json.loads(meta_path.read_text())
     else:
-        synth = _synth_silent if BACKEND == "silent" else _synth_kokoro
-        audio, tokens = synth(spoken)
         # Atomic, process-unique temp files: parallel scene renders share this cache.
         tmp = wav_path.with_suffix(f".{os.getpid()}.tmp.wav")
-        _write_wav(tmp, audio)
+        if BACKEND in ("kokoro", "silent"):
+            synth = _synth_silent if BACKEND == "silent" else _synth_kokoro
+            audio, tokens = synth(spoken)
+            _write_wav(tmp, audio)
+            duration = len(audio) / SAMPLE_RATE
+        else:
+            duration, tokens = _synth_server(spoken, tmp)
         tmp.replace(wav_path)
-        meta = {"text": text, "spoken": spoken, "duration": len(audio) / SAMPLE_RATE, "tokens": tokens}
+        meta = {"text": text, "spoken": spoken, "duration": duration, "tokens": tokens}
         tmp_meta = meta_path.with_suffix(f".{os.getpid()}.tmp.json")
         tmp_meta.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
         tmp_meta.replace(meta_path)

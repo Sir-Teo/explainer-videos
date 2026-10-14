@@ -240,10 +240,12 @@ class Archimedes(VoiceoverScene):
             k = int(round(level.get_value()))
             a, b = lo[k] / 10**k, (lo[k] + 1) / 10**k
             xa, xb = win.X(a), win.X(b)
-            r = Rectangle(width=max(0.02, xb - xa), height=0.5, stroke_width=0, fill_color=C.COMPACT_SET,
-                          fill_opacity=0.35).move_to([(xa + xb) / 2, win.y + 0.25, 0])
-            ends = VGroup(Line([xa, win.y - 0.15, 0], [xa, win.y + 0.65, 0], color=C.COMPACT_SET, stroke_width=4),
-                          Line([xb, win.y - 0.15, 0], [xb, win.y + 0.65, 0], color=C.COMPACT_SET, stroke_width=4))
+            # clipped to the ruler: mid-zoom the interval can be far wider than the window
+            ca, cb = max(xa, win.L), min(xb, win.R)
+            r = Rectangle(width=max(0.02, cb - ca), height=0.5, stroke_width=0, fill_color=C.COMPACT_SET,
+                          fill_opacity=0.35).move_to([(ca + cb) / 2, win.y + 0.25, 0])
+            ends = VGroup(*[Line([x, win.y - 0.15, 0], [x, win.y + 0.65, 0], color=C.COMPACT_SET, stroke_width=4)
+                            for x in (xa, xb) if win.L <= x <= win.R])
             return VGroup(r, ends)
 
         band = always_redraw(band_mob)
@@ -261,7 +263,8 @@ class Archimedes(VoiceoverScene):
             b = f"{(lo[k] + 1) / 10**k:.{k}f}"
             return MathTex(rf"[\,{a},\ {b}\,]", font_size=32, color=C.COMPACT_SET)
 
-        ivl = interval_tex(0).next_to(digits, DOWN, buff=0.3)
+        # the interval changes with the digits (at the middle of each zoom), instead of morphing glyph by glyph
+        ivl = always_redraw(lambda: interval_tex(int(round(level.get_value()))).next_to(digits, DOWN, buff=0.3))
         with self.voiceover(
             "Decimal expansions are really a statement about nested intervals. <bookmark mark='a'/> Root two lies "
             "between 1 and 2; <bookmark mark='b'/> between 1.4 and 1.5; between 1.41 and 1.42, and so on: each digit "
@@ -274,18 +277,16 @@ class Archimedes(VoiceoverScene):
             for k in range(1, 4):
                 w = 1.2 / 10 ** (k - 0) if k else 1.2
                 tgt = (lo[k] + 0.5) / 10**k
-                self.play(*win.zoom_to(tgt, 12 / 10 ** (k + 1)), level.animate.set_value(k), digits_shown.animate.set_value(k),
-                          Transform(ivl, interval_tex(k).next_to(digits, DOWN, buff=0.3)), run_time=1.4)
+                self.play(*win.zoom_to(tgt, 12 / 10 ** (k + 1)), level.animate.set_value(k), digits_shown.animate.set_value(k), run_time=1.4)
         with self.voiceover(
             "Keep zooming and the intervals keep shrinking, by a factor of ten each time, <bookmark mark='c'/> pinning "
             "down a single point."
         ) as vo:
             for k in range(4, 12):
                 tgt = (lo[k] + 0.5) / 10**k
-                self.play(*win.zoom_to(tgt, 12 / 10 ** (k + 1)), level.animate.set_value(k), digits_shown.animate.set_value(k),
-                          Transform(ivl, interval_tex(k).next_to(digits, DOWN, buff=0.3)), run_time=0.7)
+                self.play(*win.zoom_to(tgt, 12 / 10 ** (k + 1)), level.animate.set_value(k), digits_shown.animate.set_value(k), run_time=0.7)
         assert dec.startswith("1.41421356237")
-        for m in (axis, labs, dust, band, digits):
+        for m in (axis, labs, dust, band, digits, ivl):
             m.clear_updaters()
         self.play(FadeOut(VGroup(axis, labs, dust, band, ivl)), digits.animate.scale(0.8).to_corner(UL, buff=0.5))
 
