@@ -25,9 +25,12 @@ class Fatou(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def statement(self):
-        head = VGroup(label(r"\textbf{RCA 1.28} \ (Fatou, 1906) \ for measurable $f_n \ge 0$:", font_size=30),
-                      MathTex(r"\int \liminf_{n \to \infty} f_n\,d\mu \;\le\; \liminf_{n \to \infty} \int f_n\,d\mu",
-                              font_size=40, color=C.EPS)).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.3)
+        head = VGroup(label(r"Fatou's lemma \ (1906)", font_size=34),
+                      MathTex(r"f_n \ge 0 \text{ measurable:} \quad ",
+                              r"\int \liminf_{n \to \infty} f_n\,d\mu \;\le\; \liminf_{n \to \infty} \int f_n\,d\mu",
+                              r"\quad \text{\small (RCA 1.28)}", font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        head[1][1].set_color(C.EPS)
+        head[1][2].set_color(GREY_B)
         rows = [
             MathTex(r"g_k", r"=", r"\inf_{i \ge k} f_i \;\nearrow\; \liminf f_n", font_size=32),
             MathTex(r"\int g_k", r"\le", r"\int f_k \quad (\text{since } g_k \le f_k)", font_size=32),
@@ -113,7 +116,7 @@ class Fatou(VoiceoverScene):
             e = np.min([1 + np.cos(i * x) for i in range(k, K + 1)], axis=0)
             envs.append(e)
         env_g = [polyline(ax, x, e, color=C.CONNECTED_SET, stroke_width=3.5) for e in envs]
-        env_l = [MathTex(rf"\min_{{1 \le i \le {K}}} f_i: \ \int = {trap(e, x):.3f}", font_size=28,
+        env_l = [MathTex(rf"\int_0^{{2\pi}} \min_{{1 \le i \le {K}}} f_i = {trap(e, x):.3f}", font_size=28,
                          color=C.CONNECTED_SET).next_to(ax, DOWN, buff=0.15)
                  for (k, K), e in zip(((1, 3), (1, 10), (1, 40), (1, 200)), envs)]
         ints = [trap(e, x) for e in envs]
@@ -122,6 +125,9 @@ class Fatou(VoiceoverScene):
             assert abs(trap(1 + np.cos(n * x), x) - 2 * np.pi) < 1e-6
         nl = always_redraw(lambda: MathTex(rf"f_n = 1 + \cos nx, \ n = {round(nT.get_value())}: \ \int_0^{{2\pi}} f_n = "
                                            r"2\pi", font_size=28, color=C.FUNC).next_to(ax, UP, buff=0.1))
+        # once the curve is gone, the readout above the plot keeps only what stays true of every f_n
+        ncap = MathTex(r"\text{every } f_n: \ \int_0^{2\pi} f_n = 2\pi", font_size=28, color=GREY_A).next_to(ax, UP,
+                                                                                                         buff=0.1)
         side = VGroup(
             label(r"for almost every $x$, \ $nx \bmod 2\pi$ is dense,", font_size=24),
             label(r"so $\cos nx$ keeps coming near $-1$:", font_size=24),
@@ -133,7 +139,7 @@ class Fatou(VoiceoverScene):
             if r_.width > 5.6:
                 r_.width = 5.6
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.0, -0.6, 0])
-        head = label(r"Fatou, strictly: \ $f_n = 1 + \cos nx$ on $[0, 2\pi]$", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"Fatou, strictly: \ $f_n = 1 + \cos nx$ on $[0, 2\pi]$", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Here the inequality is strict. The functions one plus cosine n x all have the same "
             "integral, two pi, <bookmark mark='b'/> but they oscillate faster and faster. <bookmark mark='c'/> Their "
@@ -147,7 +153,8 @@ class Fatou(VoiceoverScene):
             vo.wait_until("b")
             self.play(nT.animate.set_value(12), run_time=4.0, rate_func=linear)
             vo.wait_until("c")
-            self.play(FadeOut(g), Create(env_g[0]), FadeIn(env_l[0]), FadeIn(side[:2]))
+            nl.clear_updaters()
+            self.play(FadeOut(g), FadeOut(nl), FadeIn(ncap), Create(env_g[0]), FadeIn(env_l[0]), FadeIn(side[:2]))
             cur, cl = env_g[0], env_l[0]
             for k in range(1, 4):
                 self.play(ReplacementTransform(cur, env_g[k]), FadeTransform(cl, env_l[k]), run_time=1.2)
@@ -166,7 +173,7 @@ class Fatou(VoiceoverScene):
                    MathTex(r"\liminf \int f_n", font_size=30)),
             VGroup(label(r"the spike \ $n\mathbf 1_{(0, 1/n]}$", font_size=28), MathTex("0", font_size=32),
                    MathTex("1", font_size=32)),
-            VGroup(label(r"the runaway \ $\mathbf 1_{[n, n+1]}$", font_size=28), MathTex("0", font_size=32),
+            VGroup(label(r"the runaway \ $\mathbf 1_{[n-1, n]}$", font_size=28), MathTex("0", font_size=32),
                    MathTex("1", font_size=32)),
             VGroup(label(r"the spreading \ $\tfrac1n\mathbf 1_{[0, n]}$", font_size=28), MathTex("0", font_size=32),
                    MathTex("1", font_size=32)),
@@ -175,13 +182,16 @@ class Fatou(VoiceoverScene):
         )
         for i, row in enumerate(tab):
             y = 1.4 - 0.75 * i
-            row[0].move_to([-3.2, y, 0])
+            if i:
+                row[0].next_to([-4.6, y, 0], RIGHT, buff=0)  # left-aligned next to the icons
+            else:
+                row[0].move_to([-3.2, y, 0])
             row[1].move_to([1.2, y, 0])
             row[2].move_to([4.2, y, 0])
             if i:
                 row[1].set_color(C.CONNECTED_SET)
                 row[2].set_color(C.MEASURE)
-        head = label(r"Mass can escape in the limit; \ it can never appear", font_size=34).to_edge(UP, buff=0.4)
+        head = label(r"Mass can escape in the limit; \ it can never appear", font_size=34).to_edge(UP, buff=0.3)
         # a thumbnail of each sequence, animated as n grows: the shaded area stays put while the mass moves off
         sv = ValueTracker(0.0)
         IW, IH, IX = 1.8, 0.62, -5.75

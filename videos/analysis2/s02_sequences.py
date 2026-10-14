@@ -6,6 +6,19 @@ from explainer.analysis import *  # noqa: F403
 from videos.analysis2.common import plain_axes
 
 
+def threshold_from_axis(board, color=C.DELTA, label_tex=r"N", font_size=30) -> VMobject:
+    """The board's dashed N line, drawn from the x-axis (y = 0) up, so it never runs through the n tick numbers."""
+
+    def draw():
+        A = board.ax
+        N = board.N.get_value()
+        return VGroup(DashedLine(A.c2p(N + 0.5, 0), A.c2p(N + 0.5, A.y_range[1]), color=color, stroke_width=3),
+                      MathTex(label_tex, font_size=font_size, color=color).next_to(A.c2p(N + 0.5, A.y_range[1]), UP,
+                                                                                  buff=0.08))
+
+    return always_redraw(draw)
+
+
 class Sequences(VoiceoverScene):
     def construct(self):
         self.card()
@@ -31,8 +44,9 @@ class Sequences(VoiceoverScene):
         n_max = 40
         n = np.arange(1, n_max + 1)
         a = 1 + (-1.0) ** n * 1.5 / n
-        ax = plain_axes([0, n_max + 1, 5], [-0.2, 2.2, 0.5], 11.5, 4.4, numbers=True, font_size=20,
-                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 1.0)
+        ax = plain_axes([0, n_max + 1, 5], [-0.6, 2.0, 0.5], 11.5, 4.0, numbers=True, font_size=20,
+                        axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 1.3)
+        assert ax.y_range[0] < a.min() and a.max() < ax.y_range[1], (a.min(), a.max())  # every dot at its true value
         board = SequenceBoard(ax, a, L=1.0, eps=0.5, N=n_max, n_max=n_max)  # N = n_max: no dot judged yet
         dfn = MathTex(r"p_n \to p", r"\iff", r"\forall \varepsilon > 0", r"\;\exists N", r"\;:\;",
                       r"n > N \Rightarrow |p_n - p| < \varepsilon", font_size=40).to_edge(UP, buff=0.45)
@@ -52,7 +66,7 @@ class Sequences(VoiceoverScene):
             vo.wait_until("d")
             self.play(Write(dfn), FadeIn(ref))
             vo.wait_until("g")
-        band, thr = board.eps_band(), board.threshold()
+        band, thr = board.eps_band(), threshold_from_axis(board)
         Ns = []
         with self.voiceover(
             "<bookmark mark='e'/> The first player, epsilon, picks a band around the limit: here, half-width a half. "
@@ -77,7 +91,7 @@ class Sequences(VoiceoverScene):
                     self.play(board.N.animate.set_value(N), run_time=1.0)
         assert Ns == [3, 7, 30], Ns
         order = label(r"The order of the moves is the content: $N$ may depend on $\varepsilon$.", font_size=28,
-                      color=GREY_A).move_to([0.2, 1.2, 0])
+                      color=GREY_A).move_to([-1.0, 1.5, 0])
         with self.voiceover(
             "Notice the order of the moves. <bookmark mark='o'/> Epsilon goes first, and N is allowed to depend on it. "
             "Swapping the order would demand one N that works for every epsilon at once, which only an eventually "
@@ -100,6 +114,11 @@ class Sequences(VoiceoverScene):
                         axis_config={"decimal_number_config": {"num_decimal_places": 1}}, x_axis_config={"decimal_number_config": {"num_decimal_places": 0}}).move_to(DOWN * 0.8)
         board = SequenceBoard(ax, a, L=0.0, eps=0.5, N=n_max, n_max=n_max)  # N = n_max: no dot judged yet
         dots, band, thr = board.dots(), board.eps_band(), board.threshold()
+        Lt = ValueTracker(0.0)  # the proposed limit
+        sync = Mobject().add_updater(lambda m: setattr(board, "Lv", Lt.get_value()))
+        Lmark = always_redraw(lambda: VGroup(
+            DashedLine(ax.c2p(0, Lt.get_value()), ax.c2p(n_max + 1, Lt.get_value()), color=WHITE, stroke_width=2),
+            MathTex(r"p\,?", font_size=30).next_to(ax.c2p(n_max + 1, Lt.get_value()), RIGHT, buff=0.12)))
         head = MathTex(r"p_n = (-1)^n", font_size=40, color=C.SEQ).to_edge(UP, buff=0.5)
         txt = label(r"a band of half-width $\tfrac12$ cannot hold both $1$ and $-1$: \ no limit wins", font_size=28,
                     color=C.PATHOLOGY).next_to(head, DOWN, buff=0.3)
@@ -111,14 +130,16 @@ class Sequences(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(dots))
             vo.wait_until("b")
-            board.N.set_value(10)
-            self.play(FadeIn(band), FadeIn(thr), FadeIn(txt))
+            board.N.set_value(12)
+            self.add(sync)
+            self.play(FadeIn(band), FadeIn(thr), FadeIn(Lmark), FadeIn(txt))
             vo.wait_until("m")
             for L in (0.6, -0.5, 0.0):
-                board.Lv = L
-                self.play(board.N.animate.set_value(board.N.get_value() + 0.0001), run_time=0.7)
+                # every proposed limit leaves dots outside the band past N (a band of width 1 holds at most one of +-1)
+                assert np.any(np.abs(a[12:] - L) >= 0.5)
+                self.play(Lt.animate.set_value(L), run_time=1.0)
         self.wait(0.3)
-        for m in (band, thr, dots):
+        for m in (band, thr, dots, Lmark, sync):
             m.clear_updaters()
         self.clear_scene()
 
@@ -131,8 +152,11 @@ class Sequences(VoiceoverScene):
         e = 0.65
         bp = Rectangle(width=2 * e * 2.2, height=1.7, stroke_width=0, fill_color=C.EPS, fill_opacity=0.2).move_to(
             [X(p), y0 + 0.55, 0])
-        bq = Rectangle(width=2 * e * 2.2, height=1.7, stroke_width=0, fill_color=C.APPROX, fill_opacity=0.2).move_to(
+        bq = Rectangle(width=2 * e * 2.2, height=1.7, stroke_width=0, fill_color=C.EPS, fill_opacity=0.2).move_to(
             [X(q), y0 + 0.55, 0])
+        assert 2 * e < q - p  # the two bands are disjoint
+        bl = VGroup(label(r"$\varepsilon$ around $p$", font_size=24, color=C.EPS).next_to(bp, UP, buff=0.1),
+                    label(r"$\varepsilon$ around $p'$", font_size=24, color=C.EPS).next_to(bq, UP, buff=0.1))
         lp = MathTex(r"p", font_size=36).next_to([X(p), y0, 0], DOWN, buff=0.45)
         lq = MathTex(r"p'", font_size=36).next_to([X(q), y0, 0], DOWN, buff=0.45)
         dp, dq = Dot([X(p), y0, 0], radius=0.07), Dot([X(q), y0, 0], radius=0.07)
@@ -157,7 +181,7 @@ class Sequences(VoiceoverScene):
         ) as vo:
             self.play(Create(line), FadeIn(dp), FadeIn(dq), FadeIn(lp), FadeIn(lq))
             vo.wait_until("u")
-            self.play(FadeIn(stmt), FadeIn(bp), FadeIn(bq))
+            self.play(FadeIn(stmt), FadeIn(bp), FadeIn(bq), FadeIn(bl))
             self.play(LaggedStart(*[AnimationGroup(FadeIn(d, shift=DOWN * 0.2), Create(l)) for d, l in zip(tail, drops)],
                                   lag_ratio=0.3), run_time=2.5)
             vo.wait_until("b")
@@ -180,9 +204,11 @@ class Sequences(VoiceoverScene):
         n_max, e = 30, 0.4
         n = np.arange(1, n_max + 1)
         s_n, t_n = 1 + 1.25 * (-1.0) ** n / n, 0.3 + 2.4 / n
-        specs = [(s_n, 1.0, e / 2, [-0.4, 2.4], r"s_n \to s", r"\tfrac{\varepsilon}{2}", r"N_1", C.SEQ),
-                 (t_n, 0.3, e / 2, [-0.2, 2.8], r"t_n \to t", r"\tfrac{\varepsilon}{2}", r"N_2", C.SEQ),
+        specs = [(s_n, 1.0, e / 2, [-0.7, 2.7], r"s_n \to s", r"\tfrac{\varepsilon}{2}", r"N_1", C.SEQ),
+                 (t_n, 0.3, e / 2, [-0.4, 3.0], r"t_n \to t", r"\tfrac{\varepsilon}{2}", r"N_2", C.SEQ),
                  (s_n + t_n, 1.3, e, [0.0, 3.4], r"s_n + t_n \to s + t", r"\varepsilon", r"\max(N_1, N_2)", C.SEQ)]
+        for seq, _, _, yr, *_ in specs:  # same span on every board, and every dot inside it
+            assert abs(yr[1] - yr[0] - 3.4) < 1e-9 and yr[0] < seq.min() and seq.max() < yr[1]
         boards, decor, parts = [], VGroup(), []
         for i, (seq, L, ee, yr, name, etex, ntex, col) in enumerate(specs):
             ax = plain_axes([0, n_max + 1, 5], yr + [1], 3.9, 1.9, numbers=False).move_to([-4.45 + 4.45 * i, -1.55, 0])
@@ -236,22 +262,26 @@ class Sequences(VoiceoverScene):
         n_max = 30
         n = np.arange(1, n_max + 1)
         a = (-1.0) ** n * (1 + 1.0 / n)
-        ax = plain_axes([0, n_max + 1, 5], [-2.2, 2.2, 1], 11.5, 4.2, numbers=True, font_size=20).move_to(DOWN * 1.0)
+        ax = plain_axes([0, n_max + 1, 5], [-2.2, 2.2, 1], 11.5, 3.8, numbers=True, font_size=20).move_to(DOWN * 0.75)
         dots = VGroup(*[Dot(ax.c2p(k, v), radius=0.05, color=C.SEQ) for k, v in zip(n, a)])
         ev = VGroup(*[d for k, d in zip(n, dots) if k % 2 == 0])
         od = VGroup(*[d for k, d in zip(n, dots) if k % 2 == 1])
         dfn = VGroup(label(r"A \textbf{subsequence}: $p_{n_1}, p_{n_2}, \ldots$ with $n_1 < n_2 < \cdots$", font_size=30),
                      label(r"its limits are the \textbf{subsequential limits} of $(p_n)$ \ (Rudin 3.5)", font_size=28,
                            color=GREY_A)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.45)
-        ex = MathTex(r"p_n = (-1)^n\big(1 + \tfrac1n\big)", font_size=34, color=C.SEQ).move_to([-4.4, 1.3, 0])
+        ex = MathTex(r"p_n = (-1)^n\big(1 + \tfrac1n\big)", font_size=34, color=C.SEQ).move_to([-3.4, 1.65, 0])
         l_ev = MathTex(r"p_{2k} \to 1", font_size=34, color=C.CONNECTED_SET).next_to(ax.c2p(n_max, 1.05), UP, buff=0.15)
         l_od = MathTex(r"p_{2k+1} \to -1", font_size=34, color=C.CLOSED_SET).next_to(ax.c2p(n_max, -1.05), DOWN, buff=0.15)
-        thm = label(r"\textbf{Rudin 3.6} \ In a compact space, every sequence has a convergent subsequence;"
-                    r" \ so does every bounded sequence in $\R^k$.", font_size=26, color=C.COMPACT_SET).to_edge(DOWN, buff=0.3)
-        picks = [2, 3, 7, 8, 13, 19, 20, 26]
+        thm = VGroup(label(r"\textbf{Rudin 3.6} \ In a compact space, every sequence has a convergent subsequence;",
+                           font_size=26, color=C.COMPACT_SET),
+                     label(r"so does every bounded sequence in $\R^k$.", font_size=26, color=C.COMPACT_SET)
+                     ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.35)
+        picks = [2, 4, 7, 9, 13, 18, 22, 26]
+        assert all(b > a_ for a_, b in zip(picks, picks[1:]))  # n_1 < n_2 < ...
         rings = VGroup(*[Circle(radius=0.12, color=C.EPS, stroke_width=3).move_to(dots[k - 1]) for k in picks])
-        ixs = VGroup(*[MathTex(rf"n_{{{i + 1}}}", font_size=22, color=C.EPS).next_to(ax.c2p(k, 0), DOWN, buff=0.12)
-                       for i, k in enumerate(picks[:5])])
+        # each pick labelled beside its own ring, on the side away from the axis
+        ixs = VGroup(*[MathTex(rf"n_{{{i + 1}}}", font_size=24, color=C.EPS).next_to(
+            rings[i], UP if a[k - 1] > 0 else DOWN, buff=0.06) for i, k in enumerate(picks)])
         with self.voiceover(
             "Last idea for this chapter: subsequences. <bookmark mark='d'/> Keep some of the terms, in order, and you get "
             "a subsequence; its limits are called subsequential limits. <bookmark mark='e'/> This sequence has no limit, "

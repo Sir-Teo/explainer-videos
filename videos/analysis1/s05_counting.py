@@ -111,7 +111,7 @@ class Counting(VoiceoverScene):
         order = [tuple(map(int, r)) for r in d["order"]]
         P, Q = 7, 6
         cell = 0.92
-        origin = np.array([-5.6, 2.3, 0])
+        origin = np.array([-3.45, 2.3, 0])  # the grid centred
         pos = {}
         grid = VGroup()
         for q in range(1, Q + 1):
@@ -131,8 +131,10 @@ class Counting(VoiceoverScene):
             if s % 2 == 1:
                 diag = diag[::-1]
             visit += [(p, q) for (p, q) in diag if p <= P and q <= Q]
-        path = VMobject(color=C.APPROX, stroke_width=3, stroke_opacity=0.8)
-        path.set_points_as_corners([pos[v] for v in visit[:22]])
+        # the walk drawn between the fractions (never through them), behind the grid
+        path = VGroup(*[Line(pos[u], pos[v], buff=0.3, color=C.APPROX, stroke_width=3, stroke_opacity=0.6)
+                        for u, v in zip(visit[:21], visit[1:22])])
+        path.set_z_index(-1)
         listed = [v for v in order if v in pos]
         seen = set()
         counters = VGroup()
@@ -145,7 +147,7 @@ class Counting(VoiceoverScene):
             else:
                 seen.add(f)
                 k += 1
-                counters.add(MathTex(str(k), font_size=22, color=C.SEQ).next_to(cell_of[v], UR, buff=0.02))
+                counters.add(MathTex(str(k), font_size=22, color=C.SEQ).next_to(cell_of[v], UL, buff=0.02))
         assert (2, 2) in [tuple(s) for s in d["skipped"]]
         with self.voiceover(
             "The positive fractions are countable too, which is more surprising, since they're dense. <bookmark mark='g'/> "
@@ -156,7 +158,7 @@ class Counting(VoiceoverScene):
         ) as vo:
             self.play(LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.01), FadeIn(ph), FadeIn(qh), run_time=1.5)
             vo.wait_until("z")
-            self.play(Create(path), run_time=3.0, rate_func=linear)
+            self.play(LaggedStart(*[Create(sg) for sg in path], lag_ratio=1.0), run_time=3.0, rate_func=linear)
             vo.wait_until("s")
             self.play(LaggedStart(*[FadeIn(c, scale=1.5) for c in counters], lag_ratio=0.15), run_time=3)
             self.play(dims.animate.set_opacity(0.25))
@@ -199,7 +201,7 @@ class Counting(VoiceoverScene):
         # the walk, drawn between the entries (not through them), with each entry's place in the list
         cs = [rows[i - 1][j].get_center() for (i, j) in visit]
         path = VGroup(*[Line(a, b, buff=0.32, color=C.APPROX, stroke_width=3) for a, b in zip(cs, cs[1:])])
-        order = VGroup(*[MathTex(str(k + 1), font_size=20, color=C.APPROX).next_to(rows[i - 1][j], UR, buff=0.02)
+        order = VGroup(*[MathTex(str(k + 1), font_size=22, color=C.APPROX).next_to(rows[i - 1][j], UL, buff=0.02)
                          for k, (i, j) in enumerate(visit)])
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.12)", font_size=28, color=GREY_A),
                       label(r"A countable union of countable sets is countable.", font_size=32))
@@ -251,7 +253,7 @@ class Counting(VoiceoverScene):
         stmt = VGroup(label(r"\textbf{Theorem} (Rudin 2.14)", font_size=26, color=GREY_A),
                       label(r"The set of all infinite", font_size=28),
                       label(r"$0$--$1$ sequences is uncountable.", font_size=28)).arrange(DOWN, buff=0.1)
-        stmt.move_to([5.0, -0.6, 0])
+        stmt.move_to([4.75, -0.6, 0])
         with self.voiceover(
             "So is everything countable? <bookmark mark='a'/> Here's Cantor's diagonal argument, from 1891. Consider "
             "infinite sequences of zeros and ones. Suppose someone hands us a list of them, s one, s two, s three, and "
@@ -297,7 +299,7 @@ class Counting(VoiceoverScene):
         whys = [why(r"if $s$ and $s'$ first differ at place $n$"), why(r"so different sequences give different numbers")]
         step = ladder(self, rows, whys, keep=2, top=-0.75, buff=0.3, x=-1.6)
         conc = label(r"So $[0,1]$, and therefore $\R$, is uncountable. \ (The image is the Cantor set: chapter 9.)",
-                     font_size=28, color=C.EPS).to_edge(DOWN, buff=0.2)
+                     font_size=28, color=C.EPS).to_edge(DOWN, buff=0.35)
         # where the sequences land: digit 0 keeps the left third, digit 1 (written 2) the right third
         X = lambda v: -5.5 + 11.0 * float(v)  # noqa: E731
         lev_y = [1.3 - 0.36 * k for k in range(5)]
@@ -405,7 +407,7 @@ class Counting(VoiceoverScene):
         hist = VGroup(
             label(r"first explicit transcendental: Liouville, 1844", font_size=26, color=GREY_A),
             label(r"$e$: Hermite, 1873 \qquad $\pi$: Lindemann, 1882", font_size=26, color=GREY_A),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.2)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "This has a startling consequence. <bookmark mark='p'/> A number is algebraic if it solves a polynomial "
             "equation with integer coefficients, like root two, which solves x squared minus two equals zero. "
