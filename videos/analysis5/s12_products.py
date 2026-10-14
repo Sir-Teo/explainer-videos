@@ -53,7 +53,7 @@ class Products(VoiceoverScene):
         horz = inside.sum(axis=1) * dx
         Av, Ah = trap(vert, g), trap(horz, g)
         assert abs(Av - A) < 5e-3 and abs(Ah - A) < 5e-3
-        xT, yT = ValueTracker(0.3), ValueTracker(0.3)
+        xT, yT = ValueTracker(0.3), ValueTracker(0.1)  # the region spans x in [0.12, 1.88], y in [0.04, 1.70]
 
         def section(runs_, horizontal, c0, color):
             # the section's pieces (one or more intervals) as one VMobject, so the redraw keeps its family shape
@@ -73,8 +73,8 @@ class Products(VoiceoverScene):
             y0 = yT.get_value()
             return section(level_runs(g, inside[int(round(y0 / dx)), :]), True, y0, C.APPROX)
 
-        for t_ in np.linspace(0.3, 1.85, 32):  # every swept section meets the region
-            assert inside[:, int(round(t_ / dx))].any() and inside[int(round(t_ / dx)), :].any()
+        for t_, u_ in zip(np.linspace(0.3, 1.85, 32), np.linspace(0.1, 1.65, 32)):  # every swept section meets Q
+            assert inside[:, int(round(t_ / dx))].any() and inside[int(round(u_ / dx)), :].any()
         vs, hs = always_redraw(vsec), always_redraw(hsec)
         bx = plain_axes([0, 2, 0.5], [0, 2, 0.5], 4.0, 2.0).move_to([3.2, 0.9, 0])
         vg = polyline(bx, g, vert, color=C.SEQ, stroke_width=3)
@@ -105,7 +105,7 @@ class Products(VoiceoverScene):
             vs.clear_updaters()
             self.play(FadeOut(vs), run_time=0.4)
             self.add(hs)
-            self.play(Create(cx_), yT.animate.set_value(1.85), Create(hg), run_time=3.0, rate_func=linear)
+            self.play(Create(cx_), yT.animate.set_value(1.65), Create(hg), run_time=3.0, rate_func=linear)
             self.play(FadeIn(hl))
         hs.clear_updaters()
         self.wait(0.3)

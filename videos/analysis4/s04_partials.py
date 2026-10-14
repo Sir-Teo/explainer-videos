@@ -146,8 +146,6 @@ class Partials(VoiceoverScene):
                           Arc(radius=0.3, start_angle=0, angle=max(t, 1e-3), arc_center=o, color=WHITE, stroke_width=2))
 
         ray = always_redraw(ray_)
-        th_l = always_redraw(lambda: MathTex(r"\theta", font_size=24).move_to(
-            o + 0.48 * np.array([math.cos(tt.get_value() / 2), math.sin(tt.get_value() / 2), 0])))
         dot = always_redraw(lambda: Dot(bx.c2p(tt.get_value(), math.cos(tt.get_value()) ** 2 * math.sin(tt.get_value())),
                                         radius=0.06, color=C.APPROX))
         along = VGroup(MathTex(r"g(s u) = s\,\cos^2\theta\,\sin\theta", font_size=26),
@@ -171,7 +169,7 @@ class Partials(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), FadeIn(head[1][0]), FadeIn(img), Create(ax), FadeIn(legend))
             vo.wait_until("a")
-            self.play(FadeIn(head[1][1]), FadeIn(ray), FadeIn(th_l))
+            self.play(FadeIn(head[1][1]), FadeIn(ray))
             self.play(FadeIn(along[0]))
             self.play(FadeIn(along[1]))
             vo.wait_until("b")
@@ -180,9 +178,8 @@ class Partials(VoiceoverScene):
             self.add(dot)
             self.play(Create(actual), tt.animate.set_value(2 * np.pi), FadeIn(bl[0]), run_time=4.0, rate_func=linear)
             ray.clear_updaters()
-            th_l.clear_updaters()
             dot.clear_updaters()
-            self.play(FadeOut(ray[1]), FadeOut(th_l), run_time=0.5)
+            self.play(FadeOut(ray[1]), run_time=0.5)
             vo.wait_until("c")
             self.play(FadeIn(side[0]), Create(part1), FadeIn(p1l))
             self.play(FadeIn(side[1]))
@@ -193,8 +190,8 @@ class Partials(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def repair(self):
-        S = 4.8
-        ax = square_axes([-0.2, 1.2, 0.5], [-0.2, 1.2, 0.5], S / 1.4).move_to([-3.75, -0.85, 0])
+        S = 4.5
+        ax = square_axes([-0.2, 1.2, 0.5], [-0.2, 1.2, 0.5], S / 1.4).move_to([-3.75, -0.65, 0])
         ax.set_opacity(0.5)
         F = lambda X, Y: np.sin(2 * X) * np.cos(Y) + 0.5 * X * Y  # noqa: E731
         Xg, Yg = np.meshgrid(np.linspace(-0.2, 1.2, 141), np.linspace(-0.2, 1.2, 141))
@@ -248,7 +245,7 @@ class Partials(VoiceoverScene):
                 r_.width = 6.0
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to([0.6, -0.85, 0], RIGHT, buff=0)
         assert rows.get_right()[0] <= 6.6 and img.get_top()[1] < head.get_bottom()[1] - 0.15
-        assert bg.get_bottom()[1] > -3.6 and bg.get_left()[0] > -6.6
+        assert bg.get_bottom()[1] > -3.6 and bg.get_left()[0] > -6.6, (bg.get_bottom()[1], bg.get_left()[0])
         with self.voiceover(
             "<bookmark mark='a'/> The repair is Rudin's theorem 9.21: if the partial derivatives exist and are "
             "continuous, the function is continuously differentiable. <bookmark mark='b'/> The idea: to go from x to x "
