@@ -57,6 +57,30 @@ class Dual(VoiceoverScene):
             MathTex(r"\text{checked: 60 random } g \text{ in } \R^2: \ \text{rel. error} < 10^{-6}", font_size=22,
                     color=GREY_A),
         ).arrange(DOWN, buff=0.08).to_edge(DOWN, buff=0.12)
+        # 'a': a functional's norm is its largest value on the unit ball: level lines of g . x over the disc, the top
+        # one touching at g / |g|
+        gv = np.array([0.9, 0.45])
+        gn = float(np.linalg.norm(gv))
+        assert abs((circ @ gv).max() - gn) < 1e-6
+        fx = square_axes([-1.6, 1.6, 1], [-1.6, 1.6, 1], 1.0).move_to([0, -0.5, 0])
+        fx.set_opacity(0.35)
+
+        def level(c_):
+            d_ = np.array([-gv[1], gv[0]]) / gn
+            p0 = c_ * gv / gn ** 2
+            ts = np.linspace(-4, 4, 4001)
+            pts = p0[None, :] + ts[:, None] * d_[None, :]
+            ok = (np.abs(pts) <= 1.6).all(1)
+            a_, b_ = pts[ok][0], pts[ok][-1]
+            return DashedLine(fx.c2p(*a_), fx.c2p(*b_), color=C.FUNCTIONAL, stroke_width=2,
+                              stroke_opacity=1.0 if abs(c_ - gn) < 1e-9 else 0.45)
+
+        fpic = VGroup(fx, Circle(radius=1.0, color=C.DIST, stroke_width=3).move_to(fx.c2p(0, 0)),
+                      *[level(c_) for c_ in (-1.0, -0.5, 0.0, 0.5, gn)],
+                      Arrow(fx.c2p(0, 0), fx.c2p(*gv), buff=0, color=C.FUNCTIONAL, stroke_width=4,
+                            max_tip_length_to_length_ratio=0.15),
+                      Dot(fx.c2p(*(gv / gn)), radius=0.07, color=C.EPS))
+        fl_ = MathTex(rf"\|g\| = \max_{{\|x\| \le 1}} g \cdot x = {gn:.4f}", font_size=28, color=C.EPS).next_to(fx, RIGHT, buff=0.4)
         head = label(r"Each unit ball has a dual ball: \ the functionals of norm at most $1$", font_size=32).to_edge(UP,
                                                                                                           buff=0.25)
         with self.voiceover(
@@ -68,8 +92,11 @@ class Dual(VoiceoverScene):
             "here for sixty random functionals."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(fpic[0]), Create(fpic[1]))
+            self.play(LaggedStart(*[Create(l_) for l_ in fpic[2:7]], lag_ratio=0.2), GrowArrow(fpic[7]), run_time=2.0)
+            self.play(FadeIn(fpic[8], scale=2), FadeIn(fl_))
             vo.wait_until("b")
+            self.play(FadeOut(fpic), FadeOut(fl_), run_time=0.5)
             self.play(FadeIn(groups[0]))
             vo.wait_until("c")
             self.play(FadeIn(groups[1]))
@@ -89,6 +116,16 @@ class Dual(VoiceoverScene):
         ], font_size=24)
         card.scale(0.8)
         card.move_to([-6.85 + card.width / 2, -0.35, 0])
+        # 'a': reflexive: the dual of the dual is the space again, l^3 -> l^{3/2} -> l^3
+        rpic = VGroup()
+        for i_, (pp_, nm_, col_) in enumerate(((3.0, r"\ell^3", C.DIST), (1.5, r"(\ell^3)^* = \ell^{3/2}", C.FUNCTIONAL),
+                                              (3.0, r"(\ell^3)^{**} = \ell^3", C.DIST))):
+            rx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.55).move_to([2.0 + 1.95 * i_, 0.2, 0])
+            rx.set_opacity(0.3)
+            rpic.add(VGroup(rx, p_ball(rx, pp_, col_), MathTex(nm_, font_size=22, color=col_).next_to(rx, DOWN, buff=0.1)))
+        rarr = VGroup(*[Arrow(rpic[i_][0].get_right(), rpic[i_ + 1][0].get_left(), buff=0.05, color=GREY_B, stroke_width=3,
+                              max_tip_length_to_length_ratio=0.3) for i_ in range(2)])
+        rpic.add(rarr, label(r"reflexive: \ $X^{**} = X$", font_size=24, color=C.EPS).next_to(rpic[1], UP, buff=0.35))
         head = label(r"\textbf{FA 4.1--4.7, RCA 6.16, 6.19} \ the duals, computed", font_size=32).to_edge(UP, buff=0.3)
         # why c_0* = l^1: against y in l^1, the best x in the unit ball of c_0 is sign(y) cut off at N, and the
         # pairing climbs to sum |y_n| = ||y||_1 (here y_n = (-0.75)^n, ||y||_1 = 4, partial sums 4(1 - 0.75^N))
@@ -128,8 +165,11 @@ class Dual(VoiceoverScene):
             "only Hahn-Banach can produce. That's the promise from Part 6 kept."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]))
+            self.play(FadeIn(head), FadeIn(card.titles), FadeIn(card.rows[0]), FadeIn(card.arrows[0]), FadeIn(rpic[0]))
+            self.play(GrowArrow(rarr[0]), FadeIn(rpic[1]), run_time=0.8)
+            self.play(GrowArrow(rarr[1]), FadeIn(rpic[2]), FadeIn(rpic[4]), run_time=0.8)
             vo.wait_until("b")
+            self.play(FadeOut(rpic), run_time=0.5)
             self.play(FadeIn(card.rows[1]), FadeIn(card.arrows[1]), FadeIn(yb), FadeIn(yl))
             self.play(FadeIn(xbs[0]), FadeIn(xl), FadeIn(prd[0]))
             for k in range(1, len(Ns)):

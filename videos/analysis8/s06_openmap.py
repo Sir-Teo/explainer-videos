@@ -68,9 +68,8 @@ class OpenMapping(VoiceoverScene):
             "has a bounded inverse, for free."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(thm), Create(ax), Create(unit))  # the unit ball under the statement
             vo.wait_until("b")
-            self.play(Create(ax), Create(unit))
             self.play(TransformFromCopy(unit, ell), FadeIn(l_[0]), run_time=1.5)
             self.play(Create(inner), FadeIn(l_[1]))
             vo.wait_until("c")
@@ -112,6 +111,20 @@ class OpenMapping(VoiceoverScene):
             if r_.width > 6.2:
                 r_.width = 6.2
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.5, -0.5, 0])
+        # 'a': the graph of T in X x Y is closed: points (x_n, T x_n) on it converge to a point on it
+        gx = square_axes([-3, 3, 1], [-2, 2, 1], 0.8).move_to(ax.get_center())
+        gx.set_opacity(0.4)
+        xs_ = 1.5 + 1.3 * (-0.72) ** np.arange(14)
+        assert abs(xs_[-1] - 1.5) < 0.02
+        gline = Line(gx.c2p(-3, -1.8), gx.c2p(3, 1.8), color=C.OPERATOR, stroke_width=3.5)
+        gdots = VGroup(*[Dot(gx.c2p(v, 0.6 * v), radius=0.06, color=C.SEQ) for v in xs_])
+        glim = Dot(gx.c2p(1.5, 0.9), radius=0.09, color=C.EPS)
+        glab = VGroup(MathTex(r"\text{graph of } T = \{(x, Tx)\} \subset X \times Y", font_size=24, color=C.OPERATOR).next_to(
+                          gx, UP, buff=0.08),
+                      MathTex(r"(x_n, Tx_n) \to (x, y) \Rightarrow y = Tx", font_size=24, color=C.EPS).next_to(gx, DOWN, buff=0.1),
+                      MathTex("X", font_size=22, color=GREY_B).next_to(gx.c2p(3, 0), DOWN, buff=0.08),
+                      MathTex("Y", font_size=22, color=GREY_B).next_to(gx.c2p(0, 2), LEFT, buff=0.08))
+        gpic = VGroup(gx, gline, gdots, glim, glab)
         head = label(r"The closed graph theorem, \ and why derivatives need domains", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The closed graph theorem: a linear map between Banach spaces whose graph is closed is "
@@ -122,10 +135,13 @@ class OpenMapping(VoiceoverScene):
             "two. It must live on a smaller domain, and that's why Part 10 needs unbounded operators."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:3]))
+            self.play(FadeIn(head), FadeIn(rows[:3]), Create(gx), Create(gline), FadeIn(glab[0]), FadeIn(glab[2:]))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in gdots], lag_ratio=0.15), run_time=2.0)
+            self.play(FadeIn(glim, scale=2), FadeIn(glab[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[3:5]))
             vo.wait_until("c")
+            self.play(FadeOut(gpic), run_time=0.5)
             self.play(Create(ax), FadeIn(lab[0]))
             for k in range(3):
                 self.play(Create(fs[k]), Create(dfs[k]), run_time=0.9)
