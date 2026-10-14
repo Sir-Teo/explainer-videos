@@ -117,8 +117,9 @@ class SigmaAlgebras(VoiceoverScene):
         # Dirichlet's function as a double limit of continuous functions: cos(m! pi x)^(2n) -> 1 on {k/m!} as n -> oo
         xx = np.linspace(0, 1, 24001)
         # the approximants in APPROX (as in the opening), D itself in PATHOLOGY; the late stages take a high power so
-        # the spikes stay thin (m = 5, n = 60 would print 121 fat spikes as one solid slab, i.e. "D = 1")
-        seq = [(2, 1), (2, 6), (2, 60), (3, 60), (4, 400), (5, 2000)]
+        # the spikes stay thin, and the sequence stops at m = 4 (on this 6-unit plot m = 5 prints 121 spikes 7 px
+        # apart, which reads as one solid slab, i.e. "D = 1")
+        seq = [(2, 1), (2, 6), (2, 60), (3, 60), (3, 400), (4, 400)]
 
         def dl(m, n):
             return polyline(ax, xx, np.cos(math.factorial(m) * np.pi * xx) ** (2 * n), color=C.APPROX,
@@ -133,8 +134,8 @@ class SigmaAlgebras(VoiceoverScene):
             k_ = np.arange(math.factorial(m) + 1) / math.factorial(m)
             assert np.allclose(np.cos(math.factorial(m) * np.pi * k_) ** (2 * n), 1)
         assert np.cos(math.factorial(2) * np.pi * 0.3) ** 120 < 1e-10  # off the grid the bumps have died
-        # at the last stage the spikes are hairlines: half the height within 1e-4 of each k/120
-        assert np.cos(120 * np.pi * 1e-4) ** 4000 < 0.5
+        # at the last stage the spikes are thin: below half height 1e-3 away from each k/24, 24 spikes 0.25 units apart
+        assert np.cos(24 * np.pi * 1e-3) ** 800 < 0.5
         assert dform.get_top()[1] < head.get_bottom()[1] - 0.1
         with self.voiceover(
             "<bookmark mark='a'/> Which functions can we integrate? Part 2 characterized continuity by preimages: "

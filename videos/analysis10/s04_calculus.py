@@ -8,6 +8,23 @@ from explainer.analysis import *  # noqa: F403
 from videos.analysis10.common import load, square_axes
 
 
+def oriented_circle(center, radius, gap_at=-PI / 4, color=C.EPS, stroke_width=3, tip_length=0.18) -> VGroup:
+    """A closed contour run counterclockwise: an open arc with an arrowhead at its end. (Circle.add_tip collapses a
+    closed circle to a point, and Arc.add_tip rescales a nearly closed arc, so the arrowhead is placed by hand.)"""
+    center = np.asarray(center, float)
+    gap = 0.08  # the small break in the circle where the arrowhead sits, at angle gap_at
+    end = gap_at - gap / 2
+    arc = Arc(radius=radius, start_angle=gap_at + gap / 2, angle=TAU - gap - tip_length / radius, arc_center=center,
+              color=color, stroke_width=stroke_width)
+    tip = ArrowTriangleFilledTip(length=tip_length, width=tip_length, color=color)
+    tip.rotate(end + PI / 2 - tip.tip_angle)  # along the counterclockwise tangent
+    tip.shift(center + radius * np.array([math.cos(end), math.sin(end), 0.0]) - tip.tip_point)
+    g = VGroup(arc, tip)
+    assert g.width > 1.9 * radius and g.height > 1.9 * radius  # a whole circle, not the collapsed stub
+    assert np.linalg.norm(arc.get_end() - tip.base) < 0.02 and abs(np.linalg.norm(arc.get_start() - center) - radius) < 1e-6
+    return g
+
+
 class SymbolicCalculus(VoiceoverScene):
     def construct(self):
         self.card()
@@ -30,30 +47,39 @@ class SymbolicCalculus(VoiceoverScene):
         cx = square_axes([-3.2, 3.2, 1], [-3.2, 3.2, 1], 0.95).move_to([-3.6, -0.4, 0])
         u = cx.c2p(1, 0)[0] - cx.c2p(0, 0)[0]
         evd = VGroup(*[Dot(cx.c2p(l_.real, l_.imag), radius=0.06, color=C.SPECTRUM) for l_ in ev])
-        circ = Circle(radius=R * u, color=C.EPS, stroke_width=3).move_to(cx.c2p(0, 0))
-        circ.add_tip(tip_length=0.18)
+        circ = oriented_circle(cx.c2p(0, 0), R * u, gap_at=-PI / 4, tip_length=0.2)
         M = 128  # every node of the quadrature that computes f(A) below
         th = 2 * math.pi * (np.arange(M) + 0.5) / M
         nodes = VGroup(*[Dot(cx.c2p(R * math.cos(t_), R * math.sin(t_)), radius=0.025, color=C.EPS) for t_ in th])
         sl = label(r"$\sigma(A)$, \ a random $6 \times 6$", font_size=22, color=C.SPECTRUM).next_to(cx, UP, buff=0.08)
-        cl = MathTex(rf"|\lambda| = {R:.2f}", font_size=22, color=C.EPS).next_to(cx.c2p(R * 0.71, R * 0.71), UR, buff=0.05)
+        cl = MathTex(rf"|\lambda| = {R:.2f}", font_size=22, color=C.EPS).next_to(cx.c2p(R * 0.71, R * 0.71), UR, buff=0.15)
+        # Cauchy's formula for numbers first: a point z inside the circle, a point lambda on it, the kernel's 1/(lambda - z)
+        z0, lam0 = -0.8 + 0.7j, R * np.exp(2.3j)
+        assert abs(z0) < R - 1 and lam0.real < -0.5 and lam0.imag > 0.5  # z inside; the segment stays in one quadrant
+        zd = Dot(cx.c2p(z0.real, z0.imag), radius=0.07, color=WHITE)
+        zl = MathTex(r"z", font_size=28).next_to(zd, RIGHT, buff=0.1)
+        ld = Dot(cx.c2p(lam0.real, lam0.imag), radius=0.07, color=C.EPS)
+        ll = MathTex(r"\lambda", font_size=28, color=C.EPS).next_to(ld, UL, buff=0.08)
+        seg = Line(zd.get_center(), ld.get_center(), color=GREY_B, stroke_width=2.5)
+        nrm = rotate_vector(normalize(ld.get_center() - zd.get_center()), -PI / 2)
+        segl = MathTex(r"\lambda - z", font_size=26, color=GREY_A).move_to(seg.get_center() + 0.5 * nrm)
+        scalar = VGroup(zd, zl, ld, ll, seg, segl)
         rows = VGroup(
             label(r"Part 7's Cauchy formula:", font_size=24),
             MathTex(r"f(z) = \frac{1}{2\pi i}\oint \frac{f(\lambda)}{\lambda - z}\,d\lambda", font_size=30),
             label(r"put an operator in the slot:", font_size=24),
             MathTex(r"f(A) = \frac{1}{2\pi i}\oint f(\lambda)\,(\lambda I - A)^{-1}\,d\lambda", font_size=32, color=C.EPS),
-            label(r"\textbf{FA 10.26--10.27} \ a homomorphism $f \mapsto f(A)$, \ for $f$ holomorphic near $\sigma(A)$",
-                  font_size=22, color=GREY_A),
-            MathTex(rf"f = \exp, \ 128 \text{{ nodes on the circle: }} \|f(A) - e^A\| = {sci(err, 1)}", font_size=24,
+            label(r"\textbf{FA 10.26--10.27} \ for $f$ holomorphic near $\sigma(A)$,", font_size=22, color=GREY_A),
+            label(r"$f \mapsto f(A)$ is an algebra homomorphism", font_size=22, color=GREY_A),
+            MathTex(rf"f = \exp, \ 128 \text{{ nodes: }} \|f(A) - e^A\| = {sci(err, 1)}", font_size=24,
                     color=C.OPERATOR),
-            label(r"($e^A$ from scipy's series-and-squaring)", font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.3, 0])
-        for r_ in rows:
-            if r_.width > 6.8:
-                r_.width = 6.8
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.4, -0.3, 0])
+            label(r"($e^A$ from scipy: \ Pad\'e with scaling and squaring)", font_size=22, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        rows[5].shift(UP * 0.07)  # the two halves of the FA row read as one statement
+        rows.next_to([0.0, -0.3, 0], RIGHT, buff=0)
+        assert max(r_.width for r_ in rows) <= 6.0 and rows.get_right()[0] <= 6.6 and rows.get_left()[0] > cx.get_right()[0]
         assert err < 1e-10
-        head = label(r"Cauchy's formula, \ with an operator in the slot", font_size=34).to_edge(UP, buff=0.25)
+        head = label(r"Cauchy's formula, \ with an operator in the slot", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> How do you take the exponential of a matrix, or of any element of a Banach "
             "algebra? Part 7 already answered it. Cauchy's formula recovers a holomorphic function from its values on "
@@ -63,13 +89,15 @@ class SymbolicCalculus(VoiceoverScene):
             "the circle, the result matches the exponential computed the usual way, to rounding error."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]), Create(cx))  # the plane under the statement from the start
+            self.play(FadeIn(head), FadeIn(rows[:2]), Create(cx), Create(circ))
+            self.play(FadeIn(zd, scale=2), FadeIn(zl), FadeIn(ld, scale=2), FadeIn(ll))
+            self.play(Create(seg), FadeIn(segl))
             vo.wait_until("b")
-            self.play(FadeIn(sl), LaggedStart(*[FadeIn(d_, scale=2) for d_ in evd], lag_ratio=0.2))
-            self.play(FadeIn(rows[2:5]), Create(circ), FadeIn(cl))
+            self.play(FadeOut(scalar), FadeIn(sl), LaggedStart(*[FadeIn(d_, scale=2) for d_ in evd], lag_ratio=0.2))
+            self.play(FadeIn(rows[2:6]), FadeIn(cl))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(n_, scale=0.3) for n_ in nodes], lag_ratio=0.05), run_time=1.5)
-            self.play(FadeIn(rows[5:]))
+            self.play(FadeIn(rows[6:]))
         self.wait(0.3)
         self.clear_scene()
 
