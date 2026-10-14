@@ -209,7 +209,7 @@ class NormalFamilies(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Montel's theorem is Arzelà and Ascoli in the complex plane, with equicontinuity "
             "coming for free. <bookmark mark='b'/> And the limits stay holomorphic, by Morera's theorem. "
-            "<bookmark mark='c'/> In Part 3 the payoff was existence of solutions to differential equations. Here it's "
+            "<bookmark mark='c'/> In Part 4 the payoff was existence of solutions to differential equations. Here it's "
             "the Riemann mapping theorem."
         ) as vo:
             vo.wait_until("a")

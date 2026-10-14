@@ -1,0 +1,308 @@
+{
+ "title": "分析学，从零搭建 · 第7部分：复分析",
+ "chapters": {
+  "Hook": "为什么C比R规矩得多？",
+  "Holomorphic": "1. 复导数就是旋转",
+  "Integration": "2. 路径积分与环绕数",
+  "CauchyFormula": "3. 柯西公式及其奇迹",
+  "OpenMapping": "4. 零点、开映射与最大模",
+  "Residues": "5. 整体柯西定理与留数",
+  "Schwarz": "6. 施瓦茨引理与三线定理",
+  "Runge": "7. 龙格定理",
+  "NormalFamilies": "8. 正规族",
+  "RiemannMapping": "9. 黎曼映射定理",
+  "Harmonic": "10. 导览：调和函数",
+  "ZerosProducts": "11. 导览：乘积与延拓",
+  "Hp": "12. 导览：Hᵖ与移位算子",
+  "Outro": "账本的第七行"
+ },
+ "lines": {
+  "303aaf9b5c69": {
+   "scene": "Hook",
+   "en": "Six rows of the ledger are filled. Part 7 takes a step sideways, into the complex plane. <bookmark mark='l'/> It's the part the rest of the series needs: the spectral theory of Part 10 runs on Cauchy's integral formula.",
+   "zh": "账本已经填好了六行。第7部分要往旁边迈一步，走进复平面。<bookmark mark='l'/>这是整个系列后面都离不开的一部分：第10部分的谱理论，就靠柯西积分公式运转。"
+  },
+  "49c03848dd3a": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Part 2 met this function: e to the minus one over x squared. On the real line it's infinitely differentiable, and every derivative at zero vanishes, so its Taylor series is zero, and says nothing about it. <bookmark mark='b'/> Now feed it complex numbers. Here's the same formula on a square of the complex plane, colored by phase, with brightness for size. Along the imaginary axis, minus one over z squared is positive, and the function explodes: at 0.2 i it's already about seven times ten to the ten. <bookmark mark='c'/> The real line hid a catastrophe. In the complex plane a function with a derivative can't behave like this, and that buys three miracles: one derivative gives infinitely many; the function is its own power series; and its values on any tiny arc decide it everywhere.",
+   "zh": "<bookmark mark='a'/>第2部分见过这个函数：e的（负x平方分之1）次方。在实数轴上，它无穷次可导，在0处的每一阶导数都为0，所以它的泰勒级数是0，对它什么也没说。<bookmark mark='b'/>现在把复数喂给它。这是同一个公式，画在复平面的一块正方形上，按相位着色，亮度表示大小。沿着虚轴，负z平方分之1是正的，函数就爆炸了：在0.2i处，它已经大约是7乘10的10次方。<bookmark mark='c'/>实数轴藏起了一场灾难。在复平面上，一个有导数的函数不可能这样表现，而这换来了三个奇迹：可导一次就可导无穷多次；函数就是它自己的幂级数；它在任意一小段弧上的值，决定了它在各处的值。"
+  },
+  "90304d5821b0": {
+   "scene": "Hook",
+   "en": "<bookmark mark='a'/> Rudin begins Real and Complex Analysis with one series: the exponential. <bookmark mark='b'/> On the left, its domain coloring. Moving up, the colors cycle, and the whole picture repeats. <bookmark mark='c'/> From the series alone come the addition law, and the fact that exp never vanishes. Even pi comes out of it: half of pi is the first positive zero of the cosine, the real part of e to the i t. Bisection on the series pins it down to every digit. <bookmark mark='d'/> And the partial sums at two pi i converge to one: the exponential repeats every two pi i, which is the horizontal stripe pattern in the picture.",
+   "zh": "<bookmark mark='a'/>鲁丁的《实分析与复分析》从一个级数开始：指数函数。<bookmark mark='b'/>左边是它的域着色图。往上走，颜色循环往复，整幅图不断重复。<bookmark mark='c'/>光从这个级数，就能得出加法定理，以及指数函数永不为0这个事实。就连π也来自它：二分之π，是余弦的第一个正零点，而余弦是e的i t次方的实部。对级数做二分法，就能把它确定到每一位。<bookmark mark='d'/>而在2πi处，部分和收敛到1：指数函数每隔2πi重复一次，这就是图里横条纹的图案。"
+  },
+  "838571db4095": {
+   "scene": "Hook",
+   "en": "Here's the plan, following chapters ten through fourteen of Real and Complex Analysis. <bookmark mark='a'/> First the derivative, path integrals, and Cauchy's formula with its miracles. <bookmark mark='b'/> Then the global theorems: residues, the Schwarz lemma, Runge's approximation theorem. <bookmark mark='c'/> Then Arzelà and Ascoli's grandest payoff, the Riemann mapping theorem, computed for a real polygon, and a guided tour of the rest.",
+   "zh": "计划是这样的，跟着《实分析与复分析》的第10到第14章走。<bookmark mark='a'/>首先是导数、路径积分，以及柯西公式和它的奇迹。<bookmark mark='b'/>然后是整体性的定理：留数、施瓦茨引理、龙格逼近定理。<bookmark mark='c'/>再然后是阿尔泽拉–阿斯科利定理最了不起的回报：黎曼映射定理，我们会对一个真实的多边形把它算出来；最后是对其余内容的一次导览。"
+  },
+  "3a4d38ba3177": {
+   "scene": "Holomorphic",
+   "en": "Chapter one: what it means for a function of a complex variable to have a derivative.",
+   "zh": "第一章：一个复变函数有导数，是什么意思。"
+  },
+  "5acc1cce7522": {
+   "scene": "Holomorphic",
+   "en": "<bookmark mark='a'/> A complex derivative is a limit of difference quotients, where h may approach zero from any direction in the plane. That's a much stronger demand than in two real variables. <bookmark mark='b'/> Take a small square near z zero. Under z squared, it comes out as a square again, turned and enlarged: the derivative is multiplication by the complex number two z zero, which is a rotation by 33.7 degrees and a stretch by 1.44. <bookmark mark='c'/> A real-linear map that isn't complex-linear, like z plus 0.4 i times z bar, turns the square into a rhombus. <bookmark mark='d'/> In coordinates, the Jacobian must be a rotation times a scaling: the Cauchy-Riemann equations.",
+   "zh": "<bookmark mark='a'/>复导数是差商的极限，其中h可以从平面上任何方向趋于0。这比两个实变量时的要求强得多。<bookmark mark='b'/>在z_0附近取一个小正方形。经过z的平方，它出来时仍然是正方形，只是转了一下、放大了：导数就是乘以复数2倍的z_0，也就是旋转33.7度，再拉伸1.44倍。<bookmark mark='c'/>一个实线性、但不是复线性的映射，比如z加上0.4i乘z的共轭，会把正方形变成菱形。<bookmark mark='d'/>在坐标下，雅可比矩阵必须是一个旋转乘以一个缩放：这就是柯西–黎曼方程。"
+  },
+  "4309fa73d242": {
+   "scene": "Holomorphic",
+   "en": "<bookmark mark='a'/> Since the derivative is a rotation and a scaling, small shapes keep their angles. <bookmark mark='b'/> Here's a grid under z squared: its lines bend, but they still cross at right angles. <bookmark mark='c'/> Under the exponential, the vertical lines become circles and the horizontal ones become rays, still perpendicular. <bookmark mark='d'/> Measured at four points, the angles are ninety degrees to every digit shown. Wherever the derivative isn't zero, a holomorphic map is conformal; at a zero of the derivative, like z squared at the origin, angles get multiplied.",
+   "zh": "<bookmark mark='a'/>既然导数是旋转加缩放，小图形就会保持它们的角度。<bookmark mark='b'/>这是经过z的平方之后的网格：线弯了，但仍然以直角相交。<bookmark mark='c'/>经过指数函数，竖直线变成圆，水平线变成射线，仍然互相垂直。<bookmark mark='d'/>在四个点上测量，角度在显示的每一位上都是90度。只要导数不为0，全纯映射就是共形的；而在导数的零点，比如z的平方在原点处，角度会被成倍放大。"
+  },
+  "1f2dc8ef62c5": {
+   "scene": "Holomorphic",
+   "en": "<bookmark mark='a'/> Two first consequences. A power series is holomorphic inside its disk of convergence, and you can differentiate it term by term: one more interchange of limits, made legal. <bookmark mark='b'/> And zeros behave. On the real line, x squared sine one over x is differentiable, and its zeros pile up at zero. <bookmark mark='c'/> A holomorphic function can't do that unless it's zero everywhere: its zeros are isolated, like the integers for sine of pi z, each a dark point with every color around it once.",
+   "zh": "<bookmark mark='a'/>两个最初的推论。幂级数在它的收敛圆盘内是全纯的，而且可以逐项求导：又一次极限的交换，变得合法了。<bookmark mark='b'/>而且零点很规矩。在实数轴上，x的平方乘sin（x分之1）是可导的，它的零点在0处堆积。<bookmark mark='c'/>全纯函数做不到这一点，除非它恒等于0：它的零点是孤立的，就像sin（πz）的零点是整数一样，每个零点都是一个暗点，所有颜色在它周围各出现一次。"
+  },
+  "58e439f399e5": {
+   "scene": "Integration",
+   "en": "Chapter two: integrals along paths, and the number that counts turns.",
+   "zh": "第二章：沿路径的积分，以及数圈数的那个数。"
+  },
+  "68328b5444a0": {
+   "scene": "Integration",
+   "en": "<bookmark mark='a'/> To integrate along a path, parametrize it and integrate f of gamma times gamma prime. <bookmark mark='b'/> Around the unit circle, the powers of z all give zero, except one. <bookmark mark='c'/> One over z gives two pi i. <bookmark mark='d'/> Every other power has an antiderivative, and around a closed path an antiderivative returns to where it started. One over z would need a logarithm, and no single-valued logarithm exists around the origin. Those two pi i's are the whole story of this part.",
+   "zh": "<bookmark mark='a'/>要沿一条路径积分，就把它参数化，然后对f(γ)乘γ的导数积分。<bookmark mark='b'/>沿着单位圆，z的各次幂积分都是0，只有一个例外。<bookmark mark='c'/>z分之1给出2πi。<bookmark mark='d'/>其他每个幂都有原函数，而沿一条闭路径走一圈，原函数会回到出发时的值。z分之1需要一个对数，而在原点周围，不存在单值的对数。这些2πi，就是这一部分的全部故事。"
+  },
+  "f01a929a8ef9": {
+   "scene": "Integration",
+   "en": "<bookmark mark='a'/> Divide by two pi i, shift the singularity to a point a, and the integral of one over z minus a counts how many times the curve winds around a. <bookmark mark='b'/> Follow an arrow from a point inside the small loop to the moving point of the curve. By the time the curve closes, the arrow has turned exactly twice. <bookmark mark='c'/> Compute the integral at twenty points: every answer is an integer, zero, one or two, constant on each piece of the complement, and zero outside the curve.",
+   "zh": "<bookmark mark='a'/>除以2πi，把奇点挪到一点a，那么z减a分之1的积分，数的就是曲线绕a转了多少圈。<bookmark mark='b'/>从小圈里面的一点，向曲线上移动的点画一个箭头，跟着它走。等曲线闭合时，箭头恰好转了两圈。<bookmark mark='c'/>在20个点上计算这个积分：每个答案都是整数，0、1或2，在补集的每一块上是常数，在曲线外面是0。"
+  },
+  "2a9883b95eb3": {
+   "scene": "Integration",
+   "en": "<bookmark mark='a'/> Cauchy's theorem starts with triangles, and Goursat's proof is bisection, the fourth time in this series that halving has proved a theorem. <bookmark mark='b'/> Cut the triangle into four by its midpoints. The four boundary integrals add up to the whole, so one of them is at least a quarter of it. Keep that one, and repeat: the triangles shrink to a point z zero. <bookmark mark='c'/> Near z zero, f is linear plus a small error, and the linear part integrates to zero around any closed path. So the n-th integral is at most epsilon n times four to the minus n, with epsilon n going to zero, here for the exponential. <bookmark mark='d'/> But bisection kept at least four to the minus n of the original. The only way out: the original integral was zero. For z bar, which isn't holomorphic, the corresponding ratio stays fixed, and the argument fails, as it must. Rudin extends this from triangles to every convex set.",
+   "zh": "<bookmark mark='a'/>柯西定理从三角形开始，而古尔萨的证明用的是二分法，这是本系列第四次靠对半切证明一条定理。<bookmark mark='b'/>用各边中点把三角形切成四块。四条边界上的积分加起来等于整体，所以其中至少有一个不小于整体的四分之一。留下那一个，重复下去：三角形缩向一点z_0。<bookmark mark='c'/>在z_0附近，f是线性部分加上一个小误差，而线性部分沿任何闭路径的积分都是0。所以第n个积分至多是ε_n乘4的负n次方，其中ε_n趋于0，这里是对指数函数演示的。<bookmark mark='d'/>可二分法保留了原积分的至少4的负n次方。唯一的出路是：原来的积分就是0。对z的共轭来说，它不是全纯的，相应的比值始终不变，论证就失效了，这理所当然。鲁丁把这个结论从三角形推广到了每个凸集。"
+  },
+  "d31412dfed4a": {
+   "scene": "CauchyFormula",
+   "en": "Chapter three: Cauchy's integral formula, the engine of the whole subject.",
+   "zh": "第三章：柯西积分公式，整个学科的引擎。"
+  },
+  "86c27252a357": {
+   "scene": "CauchyFormula",
+   "en": "<bookmark mark='a'/> Cauchy's formula: for a holomorphic function, the value at any point inside a circle is an integral of the values on the circle. The boundary knows the inside. <bookmark mark='b'/> Move a point a around inside. The integral and the value agree, digit for digit. <bookmark mark='c'/> At thirty random points the largest disagreement is a rounding error. At the center the formula says the value is the average over the circle.",
+   "zh": "<bookmark mark='a'/>柯西公式：对全纯函数，圆内任意一点的值，都是圆上各点值的一个积分。边界知道内部。<bookmark mark='b'/>让点a在里面四处移动。积分和函数值一位一位地吻合。<bookmark mark='c'/>在30个随机点上，最大的差异只是舍入误差。在圆心处，公式说的是：函数值等于它在圆周上的平均值。"
+  },
+  "e3427d937690": {
+   "scene": "CauchyFormula",
+   "en": "<bookmark mark='a'/> Expand the Cauchy kernel, one over z minus a, as a geometric series, and the formula turns into a power series. The coefficients are integrals over a circle. <bookmark mark='b'/> Try it on one over one minus z minus z squared, integrating over the circle of radius one half. <bookmark mark='c'/> The integrals come out as one, one, two, three, five, eight: the Fibonacci numbers. <bookmark mark='d'/> The series converges out to the nearest pole, at 0.618, the golden ratio's reciprocal. That's the first miracle: one complex derivative gives a convergent power series, and so derivatives of every order.",
+   "zh": "<bookmark mark='a'/>把柯西核，也就是z减a分之1，展开成几何级数，公式就变成了一个幂级数。系数是圆周上的积分。<bookmark mark='b'/>拿（1减z减z的平方）分之1来试试，在半径为二分之一的圆上积分。<bookmark mark='c'/>积分依次是1、1、2、3、5、8：斐波那契数。<bookmark mark='d'/>这个级数一直收敛到最近的极点，在0.618处，也就是黄金分割比的倒数。这就是第一个奇迹：有一个复导数，就有一个收敛的幂级数，从而有各阶导数。"
+  },
+  "7bcd79342364": {
+   "scene": "CauchyFormula",
+   "en": "<bookmark mark='a'/> Cauchy's formula also bounds derivatives: on a circle of radius R where f is at most M, the n-th derivative is at most n factorial M over R to the n. A bounded function that's holomorphic on the whole plane can take R as large as it likes, so its derivative is zero: that's Liouville's theorem. <bookmark mark='b'/> If a polynomial had no roots, one over it would be bounded and entire, hence constant. So every polynomial has a root: the fundamental theorem of algebra, the promise from Part 3. <bookmark mark='c'/> The integral of p prime over p counts the roots inside a circle: it's the winding number of the image curve around zero. <bookmark mark='d'/> For five circles it counts zero, one, two, three and five roots, exactly the roots inside.",
+   "zh": "<bookmark mark='a'/>柯西公式还能控制导数：在半径为R、f不超过M的圆上，n阶导数至多是n的阶乘乘M，再除以R的n次方。一个在整个平面上全纯的有界函数，R想取多大就取多大，所以它的导数是0：这就是刘维尔定理。<bookmark mark='b'/>如果一个多项式没有根，它的倒数就是有界的整函数，因此是常数。所以每个多项式都有根：代数基本定理，这是第3部分许下的承诺。<bookmark mark='c'/>p的导数除以p的积分，数的是圆内根的个数：它就是像曲线绕0的环绕数。<bookmark mark='d'/>对五个圆，它数出0、1、2、3和5个根，恰好是圆内的根。"
+  },
+  "e102a84ea6e3": {
+   "scene": "OpenMapping",
+   "en": "Chapter four: what a holomorphic function's zeros and values are allowed to do.",
+   "zh": "第四章：全纯函数的零点和取值，被允许做些什么。"
+  },
+  "c2a29116b430": {
+   "scene": "OpenMapping",
+   "en": "<bookmark mark='a'/> Here's the third miracle. Suppose you know a holomorphic function only on this short white arc. <bookmark mark='b'/> Then you know it everywhere it can be continued: the power series at a point of the arc is determined by the values on the arc, and that series decides the next disk, and the next. <bookmark mark='c'/> The identity theorem: two holomorphic functions that agree on a set with a limit point agree on the whole region, because their difference has zeros that aren't isolated. Nothing like it holds on the real line.",
+   "zh": "<bookmark mark='a'/>这是第三个奇迹。假设你只知道一个全纯函数在这一小段白色弧上的值。<bookmark mark='b'/>那么在它能延拓到的每个地方，你都知道它：弧上一点处的幂级数，由弧上的值决定，而这个级数决定了下一个圆盘，再下一个。<bookmark mark='c'/>恒等定理：两个全纯函数，如果在一个有极限点的集合上相等，就在整个区域上相等，因为它们的差有不孤立的零点。实数轴上没有任何类似的事。"
+  },
+  "9252173b0566": {
+   "scene": "OpenMapping",
+   "en": "<bookmark mark='a'/> Near any point, a nonconstant holomorphic function looks like a power: f of z minus f of z zero is z minus z zero to the m, times a nonvanishing factor. <bookmark mark='b'/> For z cubed, color a small disk in twelve sectors. Each sector opens to three times its angle, and the image disk is covered three times over: every point has three preimages, checked at two hundred random points. <bookmark mark='c'/> Either way, the image of a small disk contains a disk around f of z zero. That's the open mapping theorem: nonconstant holomorphic functions send open sets to open sets.",
+   "zh": "<bookmark mark='a'/>在任何一点附近，非常数的全纯函数看起来都像一个幂：f(z)减f(z_0)，等于（z减z_0）的m次方，再乘一个不为0的因子。<bookmark mark='b'/>对z的立方，把一个小圆盘涂成12个扇区。每个扇区张开到原来角度的三倍，像的圆盘被覆盖了三遍：每个点都有三个原像，在200个随机点上验证过。<bookmark mark='c'/>不管哪种情形，小圆盘的像都包含f(z_0)周围的一个圆盘。这就是开映射定理：非常数的全纯函数把开集映成开集。"
+  },
+  "d02020347bb1": {
+   "scene": "OpenMapping",
+   "en": "<bookmark mark='a'/> Here's the size of z squared plus e to the z over the closed unit disk, bright where it's large, with level curves. <bookmark mark='b'/> The largest value is on the boundary, at z equals one, where it's one plus e. Inside, even at radius 0.98, it never gets there. <bookmark mark='c'/> That's the maximum modulus principle, and the open mapping theorem proves it: near an interior point, f covers a whole disk around f of z zero, and that disk contains values of larger size. The landscape of a holomorphic function's size has no peaks, only passes.",
+   "zh": "<bookmark mark='a'/>这是z的平方加e的z次方在闭单位圆盘上的大小，大的地方亮，还画了等值线。<bookmark mark='b'/>最大值在边界上，在z等于1处，等于1加e。在内部，即使到了半径0.98，也达不到这个值。<bookmark mark='c'/>这就是最大模原理，开映射定理证明了它：在一个内点附近，f盖住了f(z_0)周围的一整个圆盘，而这个圆盘里有更大的值。全纯函数大小的地形图上没有山峰，只有山口。"
+  },
+  "a4dee3fd34b4": {
+   "scene": "Residues",
+   "en": "Chapter five: Cauchy's theorem in its global form, and the calculus of residues.",
+   "zh": "第五章：整体形式的柯西定理，以及留数的计算。"
+  },
+  "1110614412c6": {
+   "scene": "Residues",
+   "en": "<bookmark mark='a'/> Rudin's global Cauchy theorem says a closed contour only sees what it winds around. If f is holomorphic except at isolated points, its integral is two pi i times the sum of the residues, each counted by its winding number. <bookmark mark='b'/> Use it on a real integral: one over one plus x to the fourth. In the upper half plane it has two poles. Close the interval from minus R to R with a semicircle. <bookmark mark='c'/> As R grows, the arc's contribution fades, but the total around the closed contour never changes, because the contour keeps enclosing the same two poles. <bookmark mark='d'/> Two residues, one over four z cubed at each pole, give pi over root two, and quadrature agrees to nine digits.",
+   "zh": "<bookmark mark='a'/>鲁丁的整体柯西定理说，一条闭围道只看得见它绕着的东西。如果f除了一些孤立点以外都全纯，它的积分就是2πi乘以留数之和，每个留数按它的环绕数计数。<bookmark mark='b'/>把它用在一个实积分上：1加x的4次方分之1。在上半平面，它有两个极点。用一个半圆把负R到R的区间封闭起来。<bookmark mark='c'/>随着R增大，圆弧的贡献逐渐消失，但沿闭围道的总积分始终不变，因为围道一直围住同样的两个极点。<bookmark mark='d'/>两个留数，在每个极点处都是4倍z的立方分之1，合起来给出根号2分之π，数值积分在9位数字上吻合。"
+  },
+  "624539655ba3": {
+   "scene": "Residues",
+   "en": "<bookmark mark='a'/> Two more classics. <bookmark mark='b'/> The integral of sine x over x is pi: take e to the i z over z, and let the contour step around the pole at zero with a tiny semicircle. <bookmark mark='c'/> And the Gaussian times a cosine needs no poles at all: Cauchy's theorem on a long rectangle shifts the line of integration up to height 0.7, where the integral is easy. Each answer matches quadrature to at least seven digits.",
+   "zh": "<bookmark mark='a'/>再来两个经典例子。<bookmark mark='b'/>x分之sin x的积分是π：取z分之e的i z次方，让围道用一个小半圆绕过0处的极点。<bookmark mark='c'/>而高斯函数乘余弦，根本用不着极点：在一个长矩形上用柯西定理，把积分路径往上平移到高度0.7，在那里积分很好算。每个答案都与数值积分至少在7位数字上吻合。"
+  },
+  "50143ca5afc1": {
+   "scene": "Residues",
+   "en": "<bookmark mark='a'/> How many roots does z to the fifth plus three z plus one have inside the unit circle? <bookmark mark='b'/> On the circle, it differs from three z by z to the fifth plus one, which is at most two, while three z has size three. <bookmark mark='c'/> Picture a person walking around a tree on the circle of radius three, with a dog on a leash shorter than that. The dog must go around the tree exactly as often as the person: once. <bookmark mark='d'/> So the polynomial has as many roots inside as three z: exactly one. That's Rouché's theorem.",
+   "zh": "<bookmark mark='a'/>z的5次方加3倍的z加1，在单位圆内有几个根？<bookmark mark='b'/>在圆周上，它与3倍的z相差z的5次方加1，这个差至多是2，而3倍的z大小是3。<bookmark mark='c'/>想象一个人沿着半径为3的圆，绕着一棵树走，牵着一条狗，狗绳比3短。狗绕树的圈数，必然和人一样：一圈。<bookmark mark='d'/>所以这个多项式在圆内的根，和3倍的z一样多：恰好一个。这就是儒歇定理。"
+  },
+  "5747847c3ee7": {
+   "scene": "Residues",
+   "en": "<bookmark mark='a'/> Rudin collects the region's side of the story in one theorem. For a region in the plane, nine conditions are equivalent: <bookmark mark='b'/> topological ones, like having no holes; <bookmark mark='c'/> analytic ones, like Cauchy's theorem for every closed path, or the existence of logarithms and square roots, or approximation by polynomials, which is Runge's theorem, two chapters on. The square roots will build the Riemann mapping.",
+   "zh": "<bookmark mark='a'/>鲁丁把区域这一边的故事，收进了一条定理。对平面上的一个区域，九个条件是等价的：<bookmark mark='b'/>拓扑方面的，比如没有洞；<bookmark mark='c'/>分析方面的，比如对每条闭路径柯西定理都成立，或者存在对数和平方根，或者能用多项式逼近，那就是两章之后的龙格定理。平方根将用来搭建黎曼映射。"
+  },
+  "3cb8c3b203d1": {
+   "scene": "Schwarz",
+   "en": "Chapter six: the maximum principle, used as a tool.",
+   "zh": "第六章：把最大值原理当作工具来用。"
+  },
+  "9bd84b7d4d29": {
+   "scene": "Schwarz",
+   "en": "<bookmark mark='a'/> Take a holomorphic map of the unit disk into itself that keeps the center fixed. <bookmark mark='b'/> The Schwarz lemma: it can't move any point farther from the center. Here, three circles and their images: each image stays inside its circle. And the derivative at zero is at most one in size; here it's one half. <bookmark mark='c'/> The proof is one line: f of z over z is holomorphic, and by the maximum principle it's at most one over r on the circle of radius r, so at most one in the limit. Only rotations achieve equality.",
+   "zh": "<bookmark mark='a'/>取单位圆盘到自身的一个全纯映射，它保持圆心不动。<bookmark mark='b'/>施瓦茨引理：它不能把任何一点推得离圆心更远。这里是三个圆和它们的像：每个像都待在自己的圆里面。而且在0处的导数，大小至多是1；这里是二分之一。<bookmark mark='c'/>证明只有一行：f(z)除以z是全纯的，由最大值原理，在半径为r的圆上它至多是r分之1，取极限就至多是1。只有旋转才能取到等号。"
+  },
+  "0658d1e8f2ec": {
+   "scene": "Schwarz",
+   "en": "<bookmark mark='a'/> The lemma pins down every symmetry of the disk. <bookmark mark='b'/> The map z minus alpha over one minus alpha bar z slides the point alpha to the center, keeps the circle on itself, and bends the polar grid into circles that are no longer concentric. <bookmark mark='c'/> Combined with rotations, these are all the conformal self-maps of the disk: apply Schwarz to any other and it must be a rotation.",
+   "zh": "<bookmark mark='a'/>这条引理确定了圆盘的每一种对称。<bookmark mark='b'/>映射（z减α）除以（1减α的共轭乘z），把点α滑到圆心，让圆周映回自身，并把极坐标网格弯成不再同心的圆。<bookmark mark='c'/>再配上旋转，这些就是圆盘到自身的全部共形映射：对其他任何一个用施瓦茨引理，它都必须是旋转。"
+  },
+  "9ea6ee935cda": {
+   "scene": "Schwarz",
+   "en": "<bookmark mark='a'/> The maximum principle has a quantitative cousin on a strip. Let M of x be the largest size of f on the vertical line at x. <bookmark mark='b'/> Hadamard's three lines theorem: the log of M is a convex function of x. Here it lies below its chord, so the size in the middle is at most the geometric mean of the sizes on the two edges. <bookmark mark='c'/> On an unbounded strip some growth condition is needed, which is what Phragmén and Lindelöf made precise. <bookmark mark='d'/> The payoff comes later: Riesz and Thorin turned this into interpolation of operator norms between L p spaces, and Part 9 uses it for the Fourier transform.",
+   "zh": "<bookmark mark='a'/>最大值原理在带形区域上有一个定量的近亲。令M(x)为f在x处那条竖直线上的最大大小。<bookmark mark='b'/>阿达马三线定理：M的对数是x的凸函数。这里它落在弦的下方，所以中间的大小，至多是两条边上大小的几何平均。<bookmark mark='c'/>在无界的带形上，需要某种增长条件，弗拉格曼和林德勒夫把这一点说得很精确。<bookmark mark='d'/>回报在后面：里斯和索林把它变成了Lᵖ空间之间算子范数的插值，第9部分会把它用在傅里叶变换上。"
+  },
+  "d0556e5c0afe": {
+   "scene": "Runge",
+   "en": "Chapter seven: Runge's theorem, Weierstrass's approximation theorem for the complex plane.",
+   "zh": "第七章：龙格定理，复平面上的魏尔斯特拉斯逼近定理。"
+  },
+  "6df6cbfbfc14": {
+   "scene": "Runge",
+   "en": "<bookmark mark='a'/> Can polynomials approximate one over z, uniformly on a compact set K that avoids zero? It depends on the shape of K. <bookmark mark='b'/> On a horseshoe, yes. The best fits improve steadily, from 1.5 at degree four to two ten-thousandths at degree one twenty-eight. <bookmark mark='c'/> On the full annulus, never: the error is stuck at 1.33 whatever the degree. <bookmark mark='d'/> The reason is an integral. Around the unit circle, one over z integrates to two pi i and every polynomial integrates to zero, so the difference can't be uniformly small. The pole at zero is trapped in the hole; in the horseshoe it can escape through the gap.",
+   "zh": "<bookmark mark='a'/>在一个避开0的紧集K上，多项式能一致逼近z分之1吗？这取决于K的形状。<bookmark mark='b'/>在马蹄形上，可以。最佳拟合稳步改进，从4次时的1.5，降到128次时的万分之二。<bookmark mark='c'/>在完整的圆环上，永远不行：不管次数多高，误差都卡在1.33。<bookmark mark='d'/>原因是一个积分。沿单位圆，z分之1的积分是2πi，而每个多项式的积分都是0，所以两者之差不可能一致地小。0处的极点被困在洞里；在马蹄形里，它可以从缺口逃出去。"
+  },
+  "bf16b31b1e45": {
+   "scene": "Runge",
+   "en": "<bookmark mark='a'/> That's Runge's theorem. A function holomorphic near a compact set K is a uniform limit of rational functions, with poles placed anywhere you like, one in each piece of the complement; if the complement is connected, polynomials suffice. <bookmark mark='b'/> The proof: Cauchy's formula on a cycle around K, approximated by a Riemann sum, gives a sum of simple poles. <bookmark mark='c'/> Then push each pole: a pole at a is a convergent series of poles at a nearby b, so it can hop, step by step, along a path in the complement. <bookmark mark='d'/> Out at infinity, a pole becomes a polynomial. Part 10 needs exactly this for its functional calculus.",
+   "zh": "<bookmark mark='a'/>这就是龙格定理。在紧集K附近全纯的函数，是有理函数的一致极限，极点可以随意摆放，补集的每一块里放一个；如果补集是连通的，多项式就够了。<bookmark mark='b'/>证明：在绕着K的一个闭链上用柯西公式，再用黎曼和来近似，得到一些简单极点之和。<bookmark mark='c'/>然后推动每个极点：a处的一个极点，是附近b处的一些极点组成的收敛级数，所以它可以沿着补集里的一条路径，一步一步跳过去。<bookmark mark='d'/>到了无穷远处，极点就变成了多项式。第10部分的函数演算，需要的正是这个。"
+  },
+  "bb184b97b90e": {
+   "scene": "NormalFamilies",
+   "en": "Chapter eight: Montel's theorem, where Arzelà and Ascoli pay off in the complex plane.",
+   "zh": "第八章：蒙泰尔定理，阿尔泽拉–阿斯科利定理在复平面上的回报。"
+  },
+  "0289eed170f1": {
+   "scene": "NormalFamilies",
+   "en": "<bookmark mark='a'/> On the real line, sine n x stays between minus one and one, but gets steeper and steeper: bounded, and not equicontinuous, as Part 3 showed. <bookmark mark='b'/> In the complex plane the same functions aren't even bounded: on the imaginary axis sine becomes hyperbolic sine, and on the disk of radius one half, sine of twelve z reaches two hundred. <bookmark mark='c'/> For holomorphic functions a bound is also a speed limit: Cauchy's estimate bounds the derivative on a smaller disk by the bound on the larger one. So a uniformly bounded family is automatically equicontinuous on compact sets.",
+   "zh": "<bookmark mark='a'/>在实数轴上，sin nx始终在负1和1之间，却越来越陡：有界，但不等度连续，正如第3部分所说。<bookmark mark='b'/>在复平面上，同样这些函数甚至都不有界：在虚轴上，正弦变成了双曲正弦，在半径为二分之一的圆盘上，sin 12z能达到200。<bookmark mark='c'/>对全纯函数来说，一个界同时也是一个限速：柯西估计用大圆盘上的界，控制小圆盘上的导数。所以一致有界的函数族，在紧集上自动是等度连续的。"
+  },
+  "cc857ac5cc6c": {
+   "scene": "NormalFamilies",
+   "en": "<bookmark mark='a'/> Here's a bounded family on the disk: a rotating mixture of z and z squared, plus z to the n, over two. <bookmark mark='b'/> Pick n so that n is nearly a multiple of two pi: six, forty-four, seven hundred and ten. The functions converge to z over two. <bookmark mark='c'/> Brightness shows the error. It retreats to a thinner and thinner rim: on the disk of radius 0.9 it drops to ten to the minus five, but right at the edge, z to the n keeps it at one half. Convergence is uniform on every compact subset, not on the whole disk. <bookmark mark='d'/> Montel's theorem: every uniformly bounded family of holomorphic functions has such a subsequence.",
+   "zh": "<bookmark mark='a'/>这是圆盘上的一个有界函数族：z和z的平方的一个旋转着的混合，加上z的n次方，再除以2。<bookmark mark='b'/>选n，让n几乎是2π的整数倍：6、44、710。这些函数收敛到二分之z。<bookmark mark='c'/>亮度表示误差。误差退缩到越来越窄的边缘：在半径0.9的圆盘上，它降到10的负5次方，可就在边缘上，z的n次方让它保持在二分之一。收敛在每个紧子集上都是一致的，但在整个圆盘上不是。<bookmark mark='d'/>蒙泰尔定理：每个一致有界的全纯函数族，都有这样一个子序列。"
+  },
+  "4b686ab7b406": {
+   "scene": "NormalFamilies",
+   "en": "<bookmark mark='a'/> Montel's theorem is Arzelà and Ascoli in the complex plane, with equicontinuity coming for free. <bookmark mark='b'/> And the limits stay holomorphic, by Morera's theorem. <bookmark mark='c'/> In Part 4 the payoff was existence of solutions to differential equations. Here it's the Riemann mapping theorem.",
+   "zh": "<bookmark mark='a'/>蒙泰尔定理就是复平面上的阿尔泽拉–阿斯科利定理，而等度连续性是白送的。<bookmark mark='b'/>由莫雷拉定理，极限仍然是全纯的。<bookmark mark='c'/>在第4部分，回报是微分方程解的存在性。在这里，回报是黎曼映射定理。"
+  },
+  "8cbcc65215ce": {
+   "scene": "RiemannMapping",
+   "en": "Chapter nine: the Riemann mapping theorem, computed for a real polygon.",
+   "zh": "第九章：黎曼映射定理，对一个真实的多边形算出来。"
+  },
+  "8ce0891656cf": {
+   "scene": "RiemannMapping",
+   "en": "<bookmark mark='a'/> The Riemann mapping theorem: every simply connected region of the plane, other than the plane itself, can be mapped one-to-one and conformally onto the disk. <bookmark mark='b'/> The proof is an extremal problem. Look at all one-to-one maps of the region into the disk that send a chosen point to zero. There is one, built from a square root, which exists because the region is simply connected. <bookmark mark='c'/> Among them, pick the one with the largest derivative at the point. Montel's theorem guarantees a maximizer. <bookmark mark='d'/> And it must be onto: if it missed a point, another square-root trick would produce a map with a larger derivative. Compactness solves the extremal problem, and the solution is the map.",
+   "zh": "<bookmark mark='a'/>黎曼映射定理：平面上每个单连通区域，只要不是整个平面，都可以一对一地、共形地映满单位圆盘。<bookmark mark='b'/>证明是一个极值问题。考虑把这个区域一对一地映进圆盘、并把选定的一点映到0的所有映射。这样的映射是有的，用一个平方根就能造出来，而平方根之所以存在，是因为区域是单连通的。<bookmark mark='c'/>在它们当中，挑出在那一点导数最大的那个。蒙泰尔定理保证最大者存在。<bookmark mark='d'/>而它必须是满射：如果它漏掉了某个点，再用一次平方根的技巧，就能造出导数更大的映射。紧性解决了这个极值问题，而解就是那个映射。"
+  },
+  "ecb38d8473e9": {
+   "scene": "RiemannMapping",
+   "en": "<bookmark mark='a'/> The theorem says such a map exists; for a polygon we can compute it. Schwarz and Christoffel found its form: the derivative is a product of powers, one for each corner, with exponents set by the angles. <bookmark mark='b'/> The unknowns are the six points on the circle that go to the corners, solved for numerically so that the side lengths come out right. <bookmark mark='c'/> Here's the result. The polar grid of the disk flows onto the L-shaped hexagon: circles become nested loops, rays become curves that bend around the inner corner. <bookmark mark='d'/> Every little square stays a square: the grid lines meet at ninety degrees to within ten to the minus seven, and the center goes to the point 0.8 plus 0.8 i. Nothing about the theorem's proof constructs this map, but the map is really there.",
+   "zh": "<bookmark mark='a'/>定理说这样的映射存在；对多边形，我们可以把它算出来。施瓦茨和克里斯托费尔找到了它的形式：导数是一些幂的乘积，每个角对应一个，指数由角度决定。<bookmark mark='b'/>未知数是圆周上被送到各个角的六个点，用数值方法求解，让各边的长度正好对得上。<bookmark mark='c'/>这就是结果。圆盘的极坐标网格流到这个L形的六边形上：圆变成一圈套一圈的环，射线变成绕过内角弯曲的曲线。<bookmark mark='d'/>每个小正方形都还是正方形：网格线以90度相交，误差在10的负7次方以内，而圆心被送到点0.8加0.8i。定理的证明完全没有构造出这个映射，可这个映射确实就在那里。"
+  },
+  "6b2cbe6a5e90": {
+   "scene": "Harmonic",
+   "en": "Chapter ten begins a short tour of the rest of the complex half of Rudin's book, with results stated rather than proved. First, harmonic functions.",
+   "zh": "第十章开始一次简短的导览，走过鲁丁书中复分析那一半的其余内容，只陈述结果，不做证明。首先是调和函数。"
+  },
+  "51f156c32e61": {
+   "scene": "Harmonic",
+   "en": "<bookmark mark='a'/> The real part of a holomorphic function is harmonic: its Laplacian is zero. Think of it as a steady temperature. <bookmark mark='b'/> Fix the temperature on the boundary circle, here a pattern with three warm and three cool arcs. <bookmark mark='c'/> Then there's exactly one harmonic function inside with those boundary values, given by Poisson's integral. Its Laplacian, checked at random points, is zero to within ten to the minus four, the error of the finite difference. <bookmark mark='d'/> At the center, the temperature is the average around the edge: 0.3. That's the mean value property, the harmonic version of Cauchy's formula.",
+   "zh": "<bookmark mark='a'/>全纯函数的实部是调和的：它的拉普拉斯为0。可以把它想成一个稳定的温度分布。<bookmark mark='b'/>固定边界圆上的温度，这里是三段暖弧和三段冷弧交替的图案。<bookmark mark='c'/>那么圆内恰好有一个调和函数取这些边界值，由泊松积分给出。在随机点上检验它的拉普拉斯，在10的负4次方以内都是0，那是有限差分本身的误差。<bookmark mark='d'/>在圆心，温度等于边缘一圈的平均值：0.3。这就是平均值性质，柯西公式的调和版本。"
+  },
+  "ea73362d5029": {
+   "scene": "Harmonic",
+   "en": "<bookmark mark='a'/> Poisson's kernel is an old friend: positive, average one, and narrowing as r approaches one, the same bump as the Landau and Fejér kernels. That's why the solution takes the right boundary values. <bookmark mark='b'/> And there's a probabilistic reading, due to Kakutani: the temperature at a point is the average boundary temperature where a random walk started there first hits the circle.",
+   "zh": "<bookmark mark='a'/>泊松核是一位老朋友：正的，平均值为1，并且随着r趋于1而收窄，和兰道核、费耶尔核是同一种鼓包。这就是为什么解能取到正确的边界值。<bookmark mark='b'/>它还有一种概率的解读，来自角谷静夫：一点处的温度，等于从那里出发的随机游走第一次碰到圆周时，那个位置的边界温度的平均值。"
+  },
+  "4b2141a2eaae": {
+   "scene": "ZerosProducts",
+   "en": "Chapter eleven, still on tour: functions built from their zeros, and functions continued along paths.",
+   "zh": "第十一章，导览继续：由零点搭建的函数，以及沿路径延拓的函数。"
+  },
+  "bfcaf0cd8d0a": {
+   "scene": "ZerosProducts",
+   "en": "<bookmark mark='a'/> A polynomial is a product over its roots. Euler guessed that sine of pi z should be one too, over the integers. <bookmark mark='b'/> Build the product one pair of zeros at a time: each factor plants two more dark points, and the picture fills in toward the sine. <bookmark mark='c'/> The error shrinks by a factor of ten for every factor of ten in the number of terms. <bookmark mark='d'/> Weierstrass proved that every entire function is such a product, once convergence factors are attached, and that any sequence of points going to infinity is the zero set of some entire function.",
+   "zh": "<bookmark mark='a'/>多项式是它各个根的乘积。欧拉猜想，sin（πz）也应该是这样一个乘积，取遍所有整数。<bookmark mark='b'/>每次添一对零点来搭建这个乘积：每个因子种下两个新的暗点，图像逐渐填充成正弦的样子。<bookmark mark='c'/>项数每增加到10倍，误差就缩小到十分之一。<bookmark mark='d'/>魏尔斯特拉斯证明了：只要配上收敛因子，每个整函数都是这样的乘积；而且任何趋于无穷的点列，都是某个整函数的零点集。"
+  },
+  "9ecc20bd2d62": {
+   "scene": "ZerosProducts",
+   "en": "<bookmark mark='a'/> In the disk, zeros can pile up toward the edge, but not too densely. Here's a Blaschke product, built from forty zeros spiraling outward. Each factor has size one on the circle, so the product stays bounded. <bookmark mark='b'/> What makes it converge is that the zeros approach the boundary quickly enough: the distances to the circle have a finite sum. For a bounded function, that's also necessary: by Jensen's formula, every zero costs size.",
+   "zh": "<bookmark mark='a'/>在圆盘里，零点可以朝边缘堆积，但不能太密。这是一个布拉施克乘积，由40个向外盘旋的零点搭成。每个因子在圆周上的大小都是1，所以乘积始终有界。<bookmark mark='b'/>让它收敛的原因，是零点足够快地逼近边界：它们到圆周的距离之和是有限的。对有界函数来说，这也是必要的：由詹森公式，每个零点都要付出大小的代价。"
+  },
+  "3baa5a6a3d4a": {
+   "scene": "ZerosProducts",
+   "en": "<bookmark mark='a'/> The identity theorem makes continuation unique along any path. Follow the logarithm around the origin twice. <bookmark mark='b'/> Its imaginary part, the angle, climbs without ever returning: two pi after one turn, four pi after two. The continued logarithm lives on a spiral staircase. <bookmark mark='c'/> The monodromy theorem says paths that can be deformed into each other give the same result, and the modular function proves Picard's little theorem: a nonconstant entire function takes every complex value, with at most one exception.",
+   "zh": "<bookmark mark='a'/>恒等定理让沿任何路径的延拓都是唯一的。跟着对数绕原点走两圈。<bookmark mark='b'/>它的虚部，也就是角度，一直往上爬，再也回不来：绕一圈后是2π，绕两圈后是4π。延拓出来的对数，住在一座螺旋楼梯上。<bookmark mark='c'/>单值性定理说，能连续变形成彼此的路径，给出同样的结果；而模函数证明了小皮卡定理：非常数的整函数取遍每一个复数值，至多有一个例外。"
+  },
+  "b108873512d8": {
+   "scene": "Hp",
+   "en": "Chapter twelve, the last stop of the tour: Hardy spaces, and the first operator of the series.",
+   "zh": "第十二章，导览的最后一站：哈代空间，以及本系列的第一个算子。"
+  },
+  "56a93e87e2a9": {
+   "scene": "Hp",
+   "en": "<bookmark mark='a'/> Which functions on the circle are boundary values of holomorphic functions on the disk? <bookmark mark='b'/> Expand one in a Fourier series. A power series has only nonnegative frequencies, so on the circle the negative half of the spectrum is empty. <bookmark mark='c'/> The Hardy space H two is exactly that: square-integrable functions on the circle whose negative Fourier coefficients vanish, or equivalently, power series with square-summable coefficients.",
+   "zh": "<bookmark mark='a'/>圆周上哪些函数，是圆盘上全纯函数的边界值？<bookmark mark='b'/>把一个这样的函数展开成傅里叶级数。幂级数只有非负的频率，所以在圆周上，频谱的负半边是空的。<bookmark mark='c'/>哈代空间H²正是这样：圆周上平方可积、负傅里叶系数全为0的函数，或者等价地说，系数平方可和的幂级数。"
+  },
+  "79ce20e84578": {
+   "scene": "Hp",
+   "en": "<bookmark mark='a'/> Multiply by z. On the coefficients, that moves everything one step to the right and leaves the first slot empty. <bookmark mark='b'/> Do it again, and again. Lengths never change: the shift is an isometry. <bookmark mark='c'/> But it isn't onto: nothing lands on the constant one. An isometry of a space onto a proper part of itself can't happen in finite dimensions. This operator will be the star of Part 10, where its spectrum is the whole closed disk.",
+   "zh": "<bookmark mark='a'/>乘以z。在系数上，这就是把所有东西往右挪一格，把第一格空出来。<bookmark mark='b'/>再做一次，再一次。长度从不改变：移位算子是一个等距。<bookmark mark='c'/>但它不是满射：没有任何东西落到常数1上。一个空间到它自己的真子集上的等距，在有限维里是不可能的。这个算子将是第10部分的主角，在那里，它的谱是整个闭圆盘。"
+  },
+  "e57d7ec6ebce": {
+   "scene": "Hp",
+   "en": "<bookmark mark='a'/> Which closed subspaces does the shift map into themselves? Beurling's answer: exactly the multiples of an inner function, a bounded holomorphic function with size one on the circle. <bookmark mark='b'/> This one has no zeros at all, yet it presses everything near the point one down to nothing: an essential singularity on the boundary. <bookmark mark='c'/> It's the first theorem of the series about the invariant subspaces of an operator, and the tour ends here. Part 9 will use the Paley-Wiener theorem from the same part of the book.",
+   "zh": "<bookmark mark='a'/>移位算子把哪些闭子空间映进它们自己？伯林的回答：恰好是某个内函数的倍数，内函数就是在圆周上大小为1的有界全纯函数。<bookmark mark='b'/>这一个根本没有零点，却把点1附近的一切都压成了0：这是边界上的一个本性奇点。<bookmark mark='c'/>这是本系列第一条关于算子不变子空间的定理，导览到此结束。第9部分会用到书中同一部分里的佩利–维纳定理。"
+  },
+  "3505cdc31905": {
+   "scene": "Outro",
+   "en": "Let's take stock. Everything grew from one series, the exponential. A complex derivative is a rotation and a scaling, so holomorphic maps preserve angles. Integrals around closed paths count turns, and Goursat's bisection proves Cauchy's theorem. Cauchy's formula then gives power series, Liouville's theorem, and the fundamental theorem of algebra; zeros are isolated, maps are open, and the maximum is on the boundary. Residues compute real integrals. Schwarz's lemma pins down the disk's symmetries, Runge's theorem says when polynomials approximate, and Montel's theorem gives compactness, which builds the Riemann map. Then a tour, ending with the shift operator.",
+   "zh": "我们来盘点一下。一切都从一个级数，也就是指数函数，生长出来。复导数是旋转加缩放，所以全纯映射保持角度。沿闭路径的积分数的是圈数，古尔萨的二分法证明了柯西定理。柯西公式接着给出幂级数、刘维尔定理和代数基本定理；零点是孤立的，映射是开的，最大值在边界上。留数能算实积分。施瓦茨引理确定了圆盘的对称，龙格定理说明了多项式什么时候能逼近，蒙泰尔定理给出紧性，由它搭起了黎曼映射。然后是一次导览，以移位算子收尾。"
+  },
+  "41b877327378": {
+   "scene": "Outro",
+   "en": "The ledger's seventh row. <bookmark mark='a'/> The space: holomorphic functions on a region, with locally uniform convergence. <bookmark mark='c2'/> It's complete, because locally uniform limits of holomorphic functions are holomorphic. <bookmark mark='c3'/> Its compact sets are the bounded ones, by Montel. <bookmark mark='c4'/> Power series may be differentiated term by term, and the Cauchy integral commutes with limits. <bookmark mark='c5'/> And on the Fourier side: H two, the functions with no negative frequencies.",
+   "zh": "账本的第七行。<bookmark mark='a'/>空间：区域上的全纯函数，配上局部一致收敛。<bookmark mark='c2'/>它是完备的，因为全纯函数的局部一致极限是全纯的。<bookmark mark='c3'/>由蒙泰尔定理，它的紧集就是有界闭集。<bookmark mark='c4'/>幂级数可以逐项求导，柯西积分与极限可以交换。<bookmark mark='c5'/>而在傅里叶这一边：H²，也就是没有负频率的函数。"
+  },
+  "cbff0eeedf96": {
+   "scene": "Outro",
+   "en": "Next time, in Part 8: general Banach spaces. <bookmark mark='a'/> Watch the unit vectors slide off to the right. Each has length one, so they never converge in norm; but against any fixed vector, their inner products go to zero. <bookmark mark='b'/> That's weak convergence, and Part 8 builds the topology where the unit ball becomes compact again, along with Baire's theorem and the Hahn-Banach theorem.",
+   "zh": "下一次，在第8部分：一般的巴拿赫空间。<bookmark mark='a'/>看着这些单位向量一个个向右滑走。每个的长度都是1，所以它们永远不按范数收敛；但和任何一个固定向量做内积，结果都趋于0。<bookmark mark='b'/>这就是弱收敛，第8部分会建立一种拓扑，让单位球重新变成紧的，同时还有贝尔纲定理和哈恩–巴拿赫定理。"
+  },
+  "952330b18a0c": {
+   "scene": "Outro",
+   "en": "This part followed chapters ten through fourteen of Rudin's Real and Complex Analysis. Thanks for watching, and see you in Part 8.",
+   "zh": "这一部分对应鲁丁《实分析与复分析》的第10到第14章。感谢收看，我们第8部分见。"
+  }
+ },
+ "title_en": "Analysis, Built: Part 7, Complex Analysis",
+ "chapters_en": {
+  "Hook": "Why is C so much better behaved than R?",
+  "Holomorphic": "1. Complex derivatives are rotations",
+  "Integration": "2. Path integrals and winding numbers",
+  "CauchyFormula": "3. Cauchy's formula and its miracles",
+  "OpenMapping": "4. Zeros, open maps, the maximum modulus",
+  "Residues": "5. The global Cauchy theorem and residues",
+  "Schwarz": "6. The Schwarz lemma and three lines",
+  "Runge": "7. Runge's theorem",
+  "NormalFamilies": "8. Normal families",
+  "RiemannMapping": "9. The Riemann mapping theorem",
+  "Harmonic": "10. A tour: harmonic functions",
+  "ZerosProducts": "11. A tour: products and continuation",
+  "Hp": "12. A tour: H^p and the shift",
+  "Outro": "The seventh row of the ledger"
+ }
+}
