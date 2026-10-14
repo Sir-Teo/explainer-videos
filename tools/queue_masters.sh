@@ -27,6 +27,8 @@ while true; do
     EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator nice -n 5 \
       python -u tools/build.py $2 -q k --fps 60 --crf 16 -j 1 --lang $3 > renders/qa/master_$2_$3.log 2>&1
     rc=$?; log=renders/qa/master_$2_$3.log
+    # verify it and add it to the upload kit (renders/upload/analysis-built)
+    [[ $rc == 0 && $2 == analysis* ]] && python tools/package_uploads.py --parts ${2#analysis} >> renders/qa/package.log 2>&1
   fi
   echo "$(date +%H:%M) done  $item (exit $rc): $(grep -E 'Wrote|Failed|Missing' $log | tail -1)" >> renders/qa/render_queue.log
 done
