@@ -137,6 +137,24 @@ class Engine:
         self.profile = profile
         self.model = load_model(model_path(profile["model"]))
         self.sr = self.model.sample_rate
+        self.batch = profile.get("batch", True)
+
+    def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
+        """One take of each text.  The CustomVoice model decodes them as one batch: decoding is bound by reading
+        the weights, and one read per step serves every sentence, so a line costs little more than its longest."""
+        p = self.profile["voices"][lang]
+        if self.profile["kind"] != "qwen3-custom" or not self.batch or len(texts) == 1:
+            return [self.take(t_, lang, attempt) for t_ in texts]
+        kw = dict(p.get("params", {}))
+        if attempt:
+            kw["temperature"] = max(0.5, kw.get("temperature", 0.9) - 0.1 * attempt)
+        parts: dict[int, list] = {i: [] for i in range(len(texts))}
+        for r in self.model.batch_generate(texts, voices=[p["speaker"]] * len(texts),
+                                           instructs=[p.get("instruct")] * len(texts), lang_code=LANG_NAME[lang],
+                                           **kw):
+            parts[r.sequence_idx].append(np.asarray(r.audio, dtype=np.float32).reshape(-1))
+        return [np.concatenate(parts[i]) if parts[i] else np.zeros(self.sr // 10, np.float32)
+                for i in range(len(texts))]
 
     def take(self, text: str, lang: str, attempt: int) -> np.ndarray:
         p = self.profile["voices"][lang]
@@ -193,40 +211,54 @@ def resample(audio: np.ndarray, sr: int, to: int) -> np.ndarray:
 def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: int = 4) -> tuple[np.ndarray, list]:
     sr = engine.sr
     prof = engine.profile
+    accept = prof.get("accept", 0.93)
+    runaway = 1.2 if lang == "en" else 0.75  # seconds per token: a take far longer than its text babbles or stalls
     chunks = sentences(text, lang, prof.get("max_chars", {"en": 260, "zh": 90})[lang])
-    pieces, tokens, t = [np.zeros(int(0.12 * sr), np.float32)], [], 0.12
-    for chunk, pause in chunks:
-        best, best_score, best_heard = None, -1.0, ""
-        heard_before = set()
-        for attempt in range(max_tries):
-            audio = trim(engine.take(chunk, lang, attempt), sr)
+    n = len(chunks)
+    best: list[np.ndarray | None] = [None] * n
+    best_score, best_heard = [-1.0] * n, [""] * n
+    heard_before: list[set] = [set() for _ in range(n)]
+    pending = list(range(n))
+    # Every round takes all the sentences still pending at once (one batch), checks each by ear, and keeps
+    # the ones that still fail for the next round.
+    for attempt in range(max_tries):
+        takes = engine.takes([chunks[i][0] for i in pending], lang, attempt)
+        still = []
+        for i, raw in zip(pending, takes):
+            chunk = chunks[i][0]
+            audio = trim(raw, sr)
             dur = len(audio) / sr
-            # a take far longer than the text warrants is a runaway (babbling or a long silence)
             per_unit = dur / max(len(L.tokens(chunk, lang)), 1)
             heard = checker.transcribe(audio, sr, lang)
             score = similarity(comparable(chunk, lang), comparable(heard, lang))
-            if per_unit > (1.2 if lang == "en" else 0.75):
+            if per_unit > runaway:
                 score -= 0.5
             print(f"    take {attempt + 1}: {score:.3f} {dur:5.1f}s  {chunk[:40]!r} -> {heard[:60]!r}", flush=True)
-            if score > best_score:
-                best, best_score, best_heard = audio, score, heard
-            if score >= prof.get("accept", 0.93):
-                break
+            if score > best_score[i]:
+                best[i], best_score[i], best_heard[i] = audio, score, heard
+            if score >= accept:
+                continue
             # Two different takes heard as the same words: the gap to the script is the recognizer's spelling
             # (a symbol, a homophone), not the voice, so more takes would not close it.
             said = L.norm(comparable(heard, lang))
-            if said in heard_before and per_unit <= (1.2 if lang == "en" else 0.75):
-                break
-            heard_before.add(said)
-        if best_score < prof.get("accept", 0.93):
+            if said in heard_before[i] and per_unit <= runaway:
+                continue
+            heard_before[i].add(said)
+            still.append(i)
+        pending = still
+        if not pending:
+            break
+    pieces, tokens, t = [np.zeros(int(0.12 * sr), np.float32)], [], 0.12
+    for i, (chunk, pause) in enumerate(chunks):
+        if best_score[i] < accept:
             QA_LOG.parent.mkdir(parents=True, exist_ok=True)
             with open(QA_LOG, "a") as f:
-                f.write(json.dumps({"lang": lang, "voice": prof["name"], "text": chunk, "heard": best_heard,
-                                    "score": round(best_score, 3)}, ensure_ascii=False) + "\n")
-        for w, a, b in checker.align(best, sr, chunk, lang):
+                f.write(json.dumps({"lang": lang, "voice": prof["name"], "text": chunk, "heard": best_heard[i],
+                                    "score": round(best_score[i], 3)}, ensure_ascii=False) + "\n")
+        for w, a, b in checker.align(best[i], sr, chunk, lang):
             tokens.append((w, t + a, t + b))
-        pieces.append(best)
-        t += len(best) / sr
+        pieces.append(best[i])
+        t += len(best[i]) / sr
         gap = np.zeros(int(PAUSE[pause] * sr), np.float32)
         pieces.append(gap)
         t += len(gap) / sr

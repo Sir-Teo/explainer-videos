@@ -123,7 +123,7 @@ class Hilbert(VoiceoverScene):
     def parallelogram(self):
         d = load("parallel")
         res = d["res"]
-        ax = square_axes([-0.6, 2.6, 1], [-0.4, 2.0, 1], 1.35).move_to([-4.2, 0.2, 0])
+        ax = square_axes([-0.6, 2.6, 1], [-0.4, 2.0, 1], 1.35).move_to([-3.7, 0.2, 0])
         ax.set_opacity(0.35)
         x = np.array([1.6, 0.0])
         thT = ValueTracker(math.radians(65))
@@ -160,6 +160,10 @@ class Hilbert(VoiceoverScene):
                   MathTex("x - y", font_size=24, color=C.MEASURE).move_to(beyond(A, B, 0.5)))
             return g
 
+        for th in (35, 130):  # the swing's extremes: every label stays inside the frame
+            thT.set_value(math.radians(th))
+            assert pic().get_left()[0] > -6.9, th
+        thT.set_value(math.radians(65))
         pg = always_redraw(pic)
 
         def reads():
