@@ -48,7 +48,8 @@ class Projection(VoiceoverScene):
         circ = Circle(radius=delta * 1.25, color=C.DIST, stroke_width=2).move_to(ax.c2p(*x))
         assert circ.get_left()[0] > -7.0 and circ.get_bottom()[1] > -3.9  # the whole delta-circle on screen
         y_d = Dot(ax.c2p(*y0), radius=0.09, color=C.EPS)
-        y_l = MathTex(r"y_0", font_size=30, color=C.EPS).next_to(y_d, LEFT, buff=0.15).shift(DOWN * 0.1)
+        # inside E, right of the point: off the circle, the segment, the boundary and the axis
+        y_l = MathTex(r"y_0", font_size=30, color=C.EPS).next_to(y_d, RIGHT, buff=0.12).shift(UP * 0.1)
         seg = Line(ax.c2p(*x), ax.c2p(*y0), color=C.DIST, stroke_width=3)
         # a minimizing sequence on the boundary, from alternating sides
         ths = np.array([th0 + (-1) ** n * 1.4 * 0.62**n for n in range(8)])
@@ -86,8 +87,10 @@ class Projection(VoiceoverScene):
             tab.add(MathTex(f"{n + 1}", rf"\quad {sci(lhs, 2)}", rf"\quad {sci(bound, 2)}", font_size=24))  # Y[n] is y_(n+1)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.0, -1.55, 0])
         regrid(tab)
-        concl = label(r"Cauchy, \ so it converges \ (completeness), \ and the limit is in $E$ \ (closed)", font_size=24,
-                      color=C.EPS).to_edge(DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
+        concl = VGroup(label(r"Cauchy, \ so it converges \ (completeness),", font_size=24, color=C.EPS),
+                       label(r"and the limit is in $E$ \ (closed)", font_size=24, color=C.EPS)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.4)
+        concl.next_to([0.9, concl.get_y(), 0], RIGHT, buff=0)
         head = VGroup(label(r"The nearest point of a closed convex set", font_size=34),
                       label(r"\textbf{RCA 4.10} \ a nonempty closed convex set $E$ in a Hilbert space has exactly one "
                             r"point nearest to $x$", font_size=26)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
@@ -176,13 +179,13 @@ class Projection(VoiceoverScene):
         c, err, terr, xs, fx, px, tx, ip = d["c"], float(d["err"]), float(d["terr"]), d["xs"], d["fx"], d["px"], d["tx"], d["ip"]
         ax = plain_axes([0, 1, 0.25], [0.9, 2.8, 0.5], 5.0, 2.7, numbers=True, font_size=16,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 2}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.7, 0.35, 0])
+                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-3.5, 0.35, 0])
         gf = polyline(ax, xs, fx, color=C.FUNC, stroke_width=5)
         gp = polyline(ax, xs, px, color=C.EPS, stroke_width=3)
         gt = DashedVMobject(polyline(ax, xs, tx, color=C.APPROX, stroke_width=3), num_dashes=40)
         lf = MathTex(r"e^x", font_size=28, color=C.FUNC).next_to(ax.c2p(0.95, math.exp(0.95)), UL, buff=0.08)
         lt = MathTex(r"1 + x + \tfrac{x^2}{2}", font_size=24, color=C.APPROX).next_to(ax.c2p(1, 2.5), DOWN, buff=0.3)
-        bx = plain_axes([0, 1, 0.25], [-0.02, 0.02, 0.01], 5.0, 1.6).move_to([-3.7, -2.35, 0])
+        bx = plain_axes([0, 1, 0.25], [-0.02, 0.02, 0.01], 5.0, 1.6).move_to([-3.5, -2.35, 0])
         bx.y_axis.add_numbers([-0.01, 0.01], num_decimal_places=2, font_size=18)
         r = fx - px
         gr = polyline(bx, xs, r, color=C.EPS, stroke_width=3)

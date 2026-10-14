@@ -97,7 +97,7 @@ class HeineBorel(VoiceoverScene):
                 if inset is not None:
                     # the same cut, magnified
                     def M(u, v):
-                        return in_c + (np.array([u, v, 0]) - w_mid) * S * mag
+                        return in_c + (np.array([u, v, 0]) - np.array([*w_mid, 0])) * S * mag
                     anims.append(Create(VGroup(Line(M(mid[0], lo[1]), M(mid[0], hi[1]), color=GREY_B, stroke_width=2),
                                                Line(M(lo[0], mid[1]), M(hi[0], mid[1]), color=GREY_B, stroke_width=2))))
                 self.play(*anims, run_time=0.35 if k > 2 else 0.6)

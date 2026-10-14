@@ -46,11 +46,12 @@ class ZerosProducts(VoiceoverScene):
         lps = [MathTex(rf"\pi z \prod_{{n \le {N}}}\Big(1 - \frac{{z^2}}{{n^2}}\Big)", font_size=26).next_to(f2, RIGHT,
                                                                                                       buff=0.15)
                for N in (1, 2, 3, 10)]
-        tab = VGroup(MathTex(r"N", r"\quad \text{rel. error on } |x| \le 3.2,\ |y| \le 1.2", font_size=22, color=GREY_A))
+        tab = VGroup(MathTex(r"N", r"\quad \text{rel. error on the picture}", font_size=22, color=GREY_A))
         for N, e in zip(Ns, errs):
             tab.add(MathTex(f"{N}", rf"\quad {sci(float(e), 2)}", font_size=24, color=C.EPS))
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([4.6, 0.85, 0])  # beside sin(pi z), clear of the product label
         regrid(tab)
+        tab.align_to(np.array([6.55, 0, 0]), RIGHT)
         thm = label(r"\textbf{RCA 15.10} \ (Weierstrass) \ every entire function is a product over its zeros \ (with "
                     r"convergence factors)", font_size=22, color=C.EPS).to_edge(DOWN, buff=0.4)
         head = label(r"Euler's product for $\sin \pi z$, \ one pair of zeros at a time", font_size=34).to_edge(UP, buff=0.3)
@@ -59,6 +60,7 @@ class ZerosProducts(VoiceoverScene):
         assert np.all(np.diff(np.log10(errs)) < -0.9)
         assert f2.get_bottom()[1] > thm.get_top()[1] + 0.1 and f1.get_top()[1] < head.get_bottom()[1] - 0.2
         assert tab.get_right()[0] <= 6.6 and max(l_.get_right()[0] for l_ in lps) <= 6.6
+        assert tab.get_left()[0] > l1.get_right()[0] + 0.3
         with self.voiceover(
             "<bookmark mark='a'/> A polynomial is a product over its roots. Euler guessed that sine of pi z should be "
             "one too, over the integers. <bookmark mark='b'/> Build the product one pair of zeros at a time: each "

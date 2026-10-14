@@ -182,7 +182,11 @@ class Tests(VoiceoverScene):
                 m.set_points_as_corners([P(z) for z in s_in])
                 ar = Arrow(P(s_in[-1]), P(out), buff=0, color=color, stroke_width=3, max_tip_length_to_length_ratio=0.15)
                 # left of the last step, inside one grid cell (clear of the grid lines and of the path)
-                lab = MathTex(r"\to \infty", font_size=28, color=color).next_to(ar.get_center(), LEFT, buff=0.12)
+                lab = MathTex(r"\to \infty", font_size=28, color=color)
+                if key == "p1":  # along the real axis: the label sits just above the arrow
+                    lab.next_to(ar, UP, buff=0.08)
+                else:
+                    lab.next_to(ar.get_center(), LEFT, buff=0.12)
                 return VGroup(m, ar, lab)
             m.set_points_as_corners([P(z) for z in s])
             return m
