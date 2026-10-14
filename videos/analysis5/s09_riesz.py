@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis5.common import area_under, interval_band, load, plain_axes, polyline
+from videos.analysis5.common import area_under, interval_band, layer_cake, level_runs, load, plain_axes, polyline
 from videos.analysis5.compute import trap
 
 
@@ -61,9 +61,12 @@ class RieszRepresentation(VoiceoverScene):
                         Dot(ax.c2p(a0, fv(a0)), radius=0.07, color=C.EPS)),
                  VGroup(*[VGroup(DashedLine(ax.c2p(t_, 0), ax.c2p(t_, fv(t_)), color=C.EPS, stroke_width=2),
                                  Dot(ax.c2p(t_, fv(t_)), radius=0.05 + 0.12 * c_, color=C.EPS)) for c_, t_ in zip(ck, xk)])]
-        thm = VGroup(label(r"\textbf{RCA 2.14} \ (F.~Riesz 1909, \ Markov, \ Kakutani)", font_size=28),
-                     MathTex(r"\Lambda f = \int_X f\,d\mu \quad \text{for one regular Borel measure } \mu", font_size=36,
-                             color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        thm = VGroup(label(r"The Riesz representation theorem", font_size=34),
+                     MathTex(r"\Lambda f = \int_X f\,d\mu \quad \text{for one regular Borel measure } \mu", font_size=34,
+                             color=C.EPS),
+                     note(r"\textbf{RCA 2.14} \ (F.~Riesz 1909, \ Markov, \ Kakutani)")).arrange(DOWN, buff=0.12)
+        thm.to_edge(UP, buff=0.3)
+        assert thm.get_bottom()[1] > box.get_top()[1] + 0.2
         with self.voiceover(
             "<bookmark mark='a'/> Think of an integral as a machine: a function goes in, a number comes out, and the "
             "machine is linear and positive. <bookmark mark='b'/> The Riemann integral is one such machine. "
@@ -105,11 +108,15 @@ class RieszRepresentation(VoiceoverScene):
         Kl = MathTex("K", font_size=28, color=C.COMPACT_SET).next_to(Kb, RIGHT, buff=0.1)
         Vl = MathTex("V", font_size=28, color=C.OPEN_SET).next_to(Vb, RIGHT, buff=0.1)
         assert np.all(f[(x >= K[0]) & (x <= K[1])] == 1) and np.all(f[(x <= V[0] + m) | (x >= V[1] - m)] == 0)
-        head = VGroup(label(r"\textbf{Urysohn's lemma} \ (RCA 2.12): \ compact $K \subset$ open $V$ $\Rightarrow$",
-                            font_size=30),
+        head = VGroup(label(r"Urysohn's lemma", font_size=34),
+                      label(r"\textbf{RCA 2.12} \ compact $K \subset$ open $V$ $\Rightarrow$ a continuous $f$ with",
+                            font_size=26),
                       MathTex(r"K \prec f \prec V: \quad f = 1 \text{ on } K,\ \ 0 \le f \le 1,\ \ f = 0 \text{ off a "
                               r"compact subset of } V", font_size=30, color=C.EPS)).arrange(DOWN, buff=0.12)
         head.to_edge(UP, buff=0.3)
+        # the plateau over K, picked out when the narration reaches it
+        onK = (x >= K[0]) & (x <= K[1])
+        plat = polyline(ax, x[onK], f[onK], color=C.COMPACT_SET, stroke_width=7).set_stroke(opacity=0.85)
         note_ = label(r"the tool that lets a functional ``see'' sets: \ plateaus over $K$, \ fading out inside $V$",
                       font_size=24, color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover(
@@ -120,9 +127,10 @@ class RieszRepresentation(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), FadeIn(Kb), FadeIn(Kl), FadeIn(Vb), FadeIn(Vl))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1:]), Create(fg))
             vo.wait_until("b")
-            self.play(Create(fg), FadeIn(note_))
+            self.play(Create(plat), FadeIn(note_))
+            self.play(Indicate(fg, color=C.EPS, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 
@@ -152,7 +160,7 @@ class RieszRepresentation(VoiceoverScene):
             y = trapz_f(k)
             assert abs(np.sum((y[1:] + y[:-1]) / 2) * (x[1] - x[0]) - lam) < 1e-6  # the drawn f_k has integral Lambda f_k
             frames.append(VGroup(area_under(ax, x, y, C.MEASURE, 0.4), polyline(ax, x, y, color=C.FUNC, stroke_width=3)))
-        head = VGroup(label(r"Rudin's construction, \ run for $\Lambda f = \int_0^1 f$", font_size=30),
+        head = VGroup(label(r"Rudin's construction, \ run for $\Lambda f = \int_0^1 f$", font_size=34),
                       MathTex(r"\mu(V) = \sup\{\Lambda f : f \prec V\}, \qquad \mu(E) = \inf\{\mu(V) : E \subset V "
                               r"\text{ open}\}", font_size=32, color=C.EPS)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
         tab = VGroup(MathTex(r"\text{collar}", r"\quad \Lambda f", font_size=28, color=GREY_A))
@@ -163,8 +171,8 @@ class RieszRepresentation(VoiceoverScene):
         regrid(tab)
         note_ = label(r"six random open sets: \ all within $10^{-6}$ of their length", font_size=24,
                       color=GREY_A).next_to(tab, DOWN, buff=0.3)
-        if note_.get_right()[0] > 6.9:
-            note_.shift((6.9 - note_.get_right()[0]) * RIGHT)
+        if note_.get_right()[0] > 6.6:
+            note_.shift((6.6 - note_.get_right()[0]) * RIGHT)
         assert np.all(np.abs(trials[:, -1] - trials[:, 0]) < 1e-6)
         with self.voiceover(
             "<bookmark mark='a'/> Now the construction. For an open set V, let mu of V be the largest value the "
@@ -175,9 +183,9 @@ class RieszRepresentation(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), Create(ax), FadeIn(Vb), FadeIn(Vl))
             vo.wait_until("a")
-            self.play(FadeIn(head[1]))
+            self.play(FadeIn(head[1]), FadeIn(frames[0]))  # one plateau function living inside V: f < V
             vo.wait_until("b")
-            self.play(FadeIn(frames[0]), FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(FadeIn(tab[0]), FadeIn(tab[1]))
             cur = frames[0]
             for k in range(1, 4):
                 self.play(ReplacementTransform(cur, frames[k]), FadeIn(tab[k + 1]), run_time=1.0)
@@ -192,33 +200,25 @@ class RieszRepresentation(VoiceoverScene):
         pm = ProofMap([r"$\mu$ on open sets: \ sup of $\Lambda f$", r"$\mu$ on all sets: \ outer approximation",
                        r"a $\sigma$-algebra where $\mu$ is countably additive", r"$\Lambda f = \int f\,d\mu$: \ slice "
                        r"$f$ into layers"], font_size=20, width=3.1, buff=0.28).to_edge(UP, buff=0.2)
-        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.25], 6.3, 4.0).move_to([-3.75, -1.0, 0])
+        ax = plain_axes([0, 1, 0.25], [0, 1.1, 0.25], 6.0, 4.0).move_to([-3.4, -0.75, 0])
         x = np.linspace(0, 1, 1601)
         f = 0.5 + 0.4 * np.sin(6 * x) * np.exp(-x)
-        f = np.clip(f, 0, 1)
+        assert 0 < f.min() and f.max() < 1  # inside the window: nothing to clip
         fg = polyline(ax, x, f, color=WHITE, stroke_width=3)
         eps = 0.125
-        levels = np.arange(0, 1.0, eps)
-        cols = [interpolate_color(ManimColor(C.SEQ), ManimColor(C.MEASURE), k / len(levels)) for k in range(len(levels))]
-        layers = VGroup()
-        approx = 0.0
-        for k, t in enumerate(levels):
-            on = f > t
-            runs_, start = [], None
-            for i in range(len(x) + 1):
-                o = i < len(x) and on[i]
-                if o and start is None:
-                    start = i
-                elif not o and start is not None:
-                    runs_.append((x[start], x[i - 1]))
-                    start = None
-            approx += eps * sum(b - a for a, b in runs_)
-            layers.add(VGroup(*[Rectangle(width=ax.c2p(b, 0)[0] - ax.c2p(a, 0)[0],
-                                          height=ax.c2p(0, eps)[1] - ax.c2p(0, 0)[1], stroke_width=0.5,
-                                          stroke_color=BLACK, fill_color=cols[k], fill_opacity=0.55)
-                                .move_to(ax.c2p((a + b) / 2, t + eps / 2)) for a, b in runs_]))
+        # layers of thickness eps over the level sets of their midpoints: they hug the graph
+        layers = layer_cake(ax, x, f, eps, n=int(np.ceil(f.max() / eps)))
+        approx = layers.area
         I = trap(f, x)
-        assert abs(approx - I) <= eps
+        assert abs(approx - I) < 0.005 * I
+        # step 1 of the proof in the picture: a level set {f > t} of the continuous f is open; its measure is a
+        # layer's width
+        t1 = 0.6
+        lvl = DashedLine(ax.c2p(0, t1), ax.c2p(1, t1), color=C.OPEN_SET, stroke_width=2)
+        Ob = interval_band(ax, level_runs(x, f > t1), ax.c2p(0, 0)[1] - 0.3, C.OPEN_SET, height=0.16, opacity=0.7)
+        Ol = MathTex(r"\{f > t\}: \text{ open}", font_size=24, color=C.OPEN_SET).next_to(Ob, RIGHT, buff=0.2)
+        Ol.set_x(ax.c2p(1, 0)[0] + 0.2 + Ol.width / 2)
+        tl_ = MathTex("t", font_size=26, color=C.OPEN_SET).next_to(lvl, RIGHT, buff=0.1)
         rows = VGroup(MathTex(r"\Lambda f \approx \sum_i \varepsilon\, \mu(\{f > t_i\})", font_size=32),
                       MathTex(rf"\varepsilon = \tfrac18: \ {approx:.4f} \quad \text{{vs}} \quad \Lambda f = {I:.4f}",
                               font_size=30, color=C.MEASURE),
@@ -236,13 +236,14 @@ class RieszRepresentation(VoiceoverScene):
             "times the measure of each level set. <bookmark mark='d'/> Lebesgue's layer picture from the opening, now "
             "doing honest work inside the proof."
         ) as vo:
-            self.play(FadeIn(pm), *pm.light(0))
+            self.play(FadeIn(pm), *pm.light(0), Create(ax), Create(fg))
+            self.play(Create(lvl), FadeIn(tl_), FadeIn(Ob), FadeIn(Ol))
             vo.wait_until("a")
             self.play(*pm.light(1))
             vo.wait_until("b")
             self.play(*pm.light(2))
             vo.wait_until("c")
-            self.play(*pm.light(3), Create(ax), Create(fg))
+            self.play(*pm.light(3), FadeOut(VGroup(lvl, tl_, Ob, Ol)))
             self.play(LaggedStart(*[FadeIn(l_) for l_ in layers], lag_ratio=0.15), run_time=2.0)
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("d")
