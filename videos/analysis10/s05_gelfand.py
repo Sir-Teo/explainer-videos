@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis10.common import load, plain_axes, square_axes
+from videos.analysis10.common import load, plain_axes, polyline, square_axes
 
 
 def stems(ax, ks, vals, color, stroke_width=3):
@@ -61,6 +61,24 @@ class Gelfand(VoiceoverScene):
             if r_.width > 13:
                 r_.width = 13
         assert np.abs(f).min() > 0.3
+        # the model case first: in C[0, 1] every point t gives a homomorphism h_t(g) = g(t), and they are all of them
+        ex = plain_axes([0, 1, 0.25], [0, 1.3, 0.5], 5.6, 2.0).move_to(ax.get_center())
+        xg = np.linspace(0, 1, 401)
+        gfun = lambda t_: 0.65 + 0.3 * np.sin(5 * t_) * np.exp(-t_) + 0.15 * t_  # noqa: E731
+        assert gfun(xg).min() > 0 and gfun(xg).max() < 1.3
+        gcur = polyline(ex, xg, gfun(xg), color=C.FUNC, stroke_width=3)
+        tT = ValueTracker(0.15)
+        probe = always_redraw(lambda: VGroup(
+            DashedLine(ex.c2p(tT.get_value(), 0), ex.c2p(tT.get_value(), gfun(tT.get_value())), color=C.EPS,
+                       stroke_width=2.5),
+            Dot(ex.c2p(tT.get_value(), gfun(tT.get_value())), radius=0.07, color=C.EPS)))
+        hl = VGroup(MathTex(r"\text{in } C[0, 1]: \ h_t(g) = g(t), \ \ t =", font_size=24, color=C.EPS),
+                    DecimalNumber(0.15, num_decimal_places=2, font_size=24, color=C.EPS),
+                    MathTex(r":\ \ h_t(g) =", font_size=24, color=C.EPS),
+                    DecimalNumber(float(gfun(0.15)), num_decimal_places=3, font_size=24, color=C.EPS)).arrange(
+            RIGHT, buff=0.1).next_to(ex, UP, buff=0.08)
+        hl[1].add_updater(lambda m: m.set_value(tT.get_value()))
+        hl[3].add_updater(lambda m: m.set_value(float(gfun(tT.get_value()))))
         head = label(r"Every element becomes a function", font_size=34).to_edge(UP, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> In a commutative Banach algebra, the maximal ideals are exactly the kernels of the "
@@ -72,8 +90,14 @@ class Gelfand(VoiceoverScene):
             "of its transform: here, the curve itself."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(rows[:2]))
+            self.play(FadeIn(head), FadeIn(rows[:2]), Create(ex), Create(gcur))
+            self.play(FadeIn(probe), FadeIn(hl))
+            self.play(tT.animate.set_value(0.9), run_time=7.0)
+            self.play(tT.animate.set_value(0.45), run_time=3.0)
             vo.wait_until("b")
+            for m_ in (probe, hl[1], hl[3]):
+                m_.clear_updaters()
+            self.play(FadeOut(VGroup(ex, gcur, probe, hl)), run_time=0.6)
             self.play(Create(ax), Create(st), FadeIn(tops), FadeIn(al), FadeIn(rows[3]))
             vo.wait_until("c")
             self.play(GrowArrow(arr), FadeIn(arl), Create(cx), FadeIn(zero), FadeIn(zl))

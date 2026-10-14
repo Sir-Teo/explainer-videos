@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis10.common import heatmap, load, plain_axes, square_axes
+from videos.analysis10.common import cplot, heatmap, load, plain_axes, square_axes
+from videos.analysis10.compute import rand_matrix
 
 
 class BanachAlgebras(VoiceoverScene):
@@ -25,14 +26,7 @@ class BanachAlgebras(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def examples(self):
-        card = dictionary_card(r"algebra", r"product, \ norm", [
-            (r"$C(K)$, \ $K$ compact", r"$(fg)(x) = f(x)g(x)$, \ $\sup|f|$"),
-            (r"$B(X)$, \ $X$ a Banach space", r"composition $ST$, \ operator norm"),
-            (r"$L^1(\mathbb R)$", r"convolution $f * g$, \ $\int |f|$ \ (Part 9)"),
-            (r"$\ell^1(\mathbb Z)$", r"$(a * b)_n = \sum_k a_k b_{n-k}$, \ $\sum |a_n|$"),
-            (r"the disc algebra $A(\mathbb D)$", r"products of holomorphic functions, \ sup norm"),
-        ], font_size=24)
-        card.scale_to_fit_width(12.0).move_to(UP * 0.35)
+        panels = self.algebra_panels()
         # submultiplicativity, checked on random matrices and random l^1 sequences
         rng = np.random.default_rng(2)
         rat_m, rat_l = [], []
@@ -70,19 +64,22 @@ class BanachAlgebras(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> A Banach algebra is a complete normed space where you can also multiply, with the "
             "norm of a product at most the product of the norms. <bookmark mark='b'/> The continuous functions on a "
-            "compact set, with the pointwise product. The bounded operators on a Banach space, with composition: the "
-            "main example. The integrable functions with convolution, from Part 9, and summable sequences with "
-            "convolution, and the disc algebra of Part 7. <bookmark mark='c'/> Test the rule: in two thousand random "
+            "compact set, with the pointwise product. <bookmark mark='b2'/> The bounded operators on a Banach space, "
+            "with composition: the main example. <bookmark mark='b3'/> The integrable functions with convolution, "
+            "from Part 9, <bookmark mark='b4'/> and summable sequences with convolution, <bookmark mark='b5'/> and "
+            "the disc algebra of Part 7. <bookmark mark='c'/> Test the rule: in two thousand random "
             "trials of each kind, the ratio piles up below one and never crosses it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head), FadeIn(rule[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(card.titles))
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_), FadeIn(a_)) for r_, a_ in zip(card.rows, card.arrows)],
-                                  lag_ratio=0.5), run_time=5.0)
+            for k_, mk in enumerate(("b", "b2", "b3", "b4", "b5")):  # each algebra with its product, drawn
+                vo.wait_until(mk)
+                t_, pic_, cap_ = panels[k_]
+                self.play(FadeIn(t_), FadeIn(pic_[0]), run_time=0.5)
+                self.play(*[Create(m_) if isinstance(m_, VMobject) else FadeIn(m_) for m_ in pic_[1:]], run_time=1.3)
+                self.play(FadeIn(cap_), run_time=0.5)
             vo.wait_until("c")
-            self.play(FadeOut(VGroup(card.titles, card.rows, card.arrows)))
+            self.play(FadeOut(panels))
             for h_ in hists:
                 self.play(Create(h_[0]), FadeIn(h_[4]), run_time=0.6)
                 self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in h_[1]], lag_ratio=0.03), run_time=1.4)
@@ -90,6 +87,97 @@ class BanachAlgebras(VoiceoverScene):
             self.play(FadeIn(rule[1]))
         self.wait(0.3)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def algebra_panels(self) -> Group:
+        """Five algebras, each as (title, picture, caption): the product drawn, the norm inequality computed."""
+        def panel(title, pic, cap, center):  # title: [(tex, color), ...]
+            t_ = MathTex(*[tx for tx, _ in title], font_size=22)
+            for part_, (_, col_) in zip(t_, title):
+                part_.set_color(col_)
+            t_.move_to([center[0], center[1] + 1.05, 0])
+            pic.move_to([center[0], center[1] - 0.05, 0])
+            c_ = MathTex(cap, font_size=19, color=GREY_A).move_to([center[0], center[1] - 0.95, 0])
+            for m_ in (t_, c_):
+                if m_.width > 4.1:
+                    m_.width = 4.1
+            return Group(t_, pic, c_)
+
+        out = Group()
+        # 1. C[0, 1], pointwise product, sup norm
+        x = np.linspace(0, 1, 801)
+        f, g = 0.6 + 0.4 * np.sin(2 * math.pi * x), 0.3 + 0.9 * x
+        nf, ng, nfg = f.max(), g.max(), (f * g).max()
+        assert nfg <= nf * ng
+        ax = plain_axes([0, 1, 0.5], [0, 1.3, 1], 3.2, 1.3)
+        pic = VGroup(ax, polyline_(ax, x, f, C.FUNC, 2.5), polyline_(ax, x, g, C.APPROX, 2.5),
+                     polyline_(ax, x, f * g, C.EPS, 3.5))
+        out.add(panel([(r"C[0, 1]: \ ", WHITE), ("f", C.FUNC), (r",\ ", WHITE), ("g", C.APPROX), (r",\ ", WHITE),
+                       ("fg", C.EPS)], pic,
+                      rf"\|fg\|_\infty = {nfg:.2f} \le \|f\|_\infty\|g\|_\infty = {nf * ng:.2f}", (-4.4, 1.6)))
+        # 2. B(R^2), composition, operator norm = the longest semi-axis of the image of the unit circle
+        A = np.array([[0.8, -0.3], [0.5, 0.7]])
+        B = np.array([[1.0, 0.4], [0.0, 0.6]])
+        n2 = lambda M: np.linalg.norm(M, 2)  # noqa: E731
+        nA, nB, nAB = n2(A), n2(B), n2(A @ B)
+        assert nAB <= nA * nB
+        th = np.linspace(0, 2 * math.pi, 241)
+        circ = np.stack([np.cos(th), np.sin(th)])
+        bx = square_axes([-1.3, 1.3, 1], [-1.3, 1.3, 1], 0.52)
+        u, sv, vt = np.linalg.svd(A @ B)
+        tip = u[:, 0] * sv[0]
+        assert abs(sv[0] - nAB) < 1e-12 and np.abs(A @ B @ circ).max() <= 1.3
+        pic = VGroup(bx, polyline_(bx, circ[0], circ[1], GREY_B, 2),
+                     polyline_(bx, *(B @ circ), C.APPROX, 2.5), polyline_(bx, *(A @ B @ circ), C.EPS, 3.5),
+                     Line(bx.c2p(0, 0), bx.c2p(*tip), color=C.EPS, stroke_width=3))
+        out.add(panel([(r"B(\mathbb R^2): \ ", WHITE), (r"\text{circle}", GREY_B), (r"\ \mapsto\ ", WHITE),
+                       (r"B", C.APPROX), (r",\ ", WHITE), (r"AB", C.EPS)], pic,
+                      rf"\|AB\| = {nAB:.4f} \le \|A\|\,\|B\| = {nA * nB:.4f}", (0.0, 1.6)))
+        # 3. L^1(R), convolution: a box and a signed step
+        h = 0.002
+        xx = np.arange(0, 1, h) + h / 2
+        fb, gs = np.ones_like(xx), np.where(xx < 0.5, 1.6, -0.8)
+        cv = np.convolve(fb, gs) * h
+        xc = np.arange(len(cv)) * h + h
+        n1f, n1g, n1c = np.abs(fb).sum() * h, np.abs(gs).sum() * h, np.abs(cv).sum() * h
+        assert n1c <= n1f * n1g and abs(n1c - 0.7) < 1e-3
+        cx = plain_axes([-0.2, 2.2, 1], [-1.0, 1.8, 1], 3.4, 1.3)
+        pic = VGroup(cx, polyline_(cx, [-0.2, 0, 0, 1, 1, 2.2], [0, 0, 1, 1, 0, 0], C.FUNC, 2.5),
+                     polyline_(cx, [-0.2, 0, 0, 0.5, 0.5, 1, 1, 2.2], [0, 0, 1.6, 1.6, -0.8, -0.8, 0, 0], C.APPROX, 2.5),
+                     polyline_(cx, np.concatenate([[0], xc]), np.concatenate([[0], cv]), C.EPS, 3.5))
+        out.add(panel([(r"L^1(\mathbb R): \ ", WHITE), ("f", C.FUNC), (r",\ ", WHITE), ("g", C.APPROX), (r",\ ", WHITE),
+                       ("f * g", C.EPS)], pic,
+                      rf"\|f * g\|_1 = {n1c:.2f} \le \|f\|_1\|g\|_1 = {n1f * n1g:.2f}", (4.4, 1.6)))
+        # 4. l^1(Z), convolution of sequences
+        a = np.array([1.0, -0.6, 0.3])
+        b = np.array([0.8, 0.5])
+        ab = np.convolve(a, b)
+        na, nb, nab = np.abs(a).sum(), np.abs(b).sum(), np.abs(ab).sum()
+        assert nab <= na * nb
+        sx = plain_axes([-0.5, 11.5, 1], [-0.8, 1.1, 1], 3.6, 1.3)
+        stems = VGroup()
+        for off, seq, col in ((0, a, C.FUNC), (4, b, C.APPROX), (7, ab, C.EPS)):
+            for k_, v_ in enumerate(seq):
+                stems.add(Line(sx.c2p(off + k_, 0), sx.c2p(off + k_, v_), color=col, stroke_width=5))
+        pic = VGroup(sx, stems)
+        out.add(panel([(r"\ell^1(\mathbb Z): \ ", WHITE), ("a", C.FUNC), (r",\ ", WHITE), ("b", C.APPROX), (r",\ ", WHITE),
+                       ("a * b", C.EPS)], pic,
+                      rf"\|a * b\|_1 = {nab:.2f} \le \|a\|_1\|b\|_1 = {na * nb:.2f}", (-2.2, -1.05)))
+        # 5. the disc algebra: fg on the closed disc; the sup norm is reached on the circle (maximum modulus)
+        z = np.exp(1j * np.linspace(0, 2 * math.pi, 20001))
+        F_, G_ = (lambda w: 1 + w / 2), (lambda w: 1 - w * w / 2)
+        nF, nG, nFG = np.abs(F_(z)).max(), np.abs(G_(z)).max(), np.abs(F_(z) * G_(z)).max()
+        zz = (np.linspace(-1, 1, 301)[None, :] + 1j * np.linspace(-1, 1, 301)[:, None]).ravel()
+        zz = zz[np.abs(zz) < 1]
+        assert np.abs(F_(zz) * G_(zz)).max() <= nFG + 1e-9 and nFG <= nF * nG
+        zmax = z[int(np.argmax(np.abs(F_(z) * G_(z))))]
+        dx = square_axes([-1.1, 1.1, 1], [-1.1, 1.1, 1], 0.6)
+        img = cplot(dx, lambda w: F_(w) * G_(w), (-1.0, 1.0), (-1.0, 1.0), px=300, mask=lambda w: np.abs(w) <= 1)
+        pic = Group(dx, img, Circle(radius=dx.c2p(1, 0)[0] - dx.c2p(0, 0)[0], color=GREY_B, stroke_width=2).move_to(
+            dx.c2p(0, 0)), Dot(dx.c2p(zmax.real, zmax.imag), radius=0.06, color=WHITE))
+        out.add(panel([(r"A(\mathbb D): \ fg, \ \ f = 1 + \tfrac z2, \ g = 1 - \tfrac{z^2}{2}", WHITE)], pic,
+                      rf"\max_{{|z| \le 1}}|fg| = {nFG:.3f} \le \|f\|\,\|g\| = {nF * nG:.2f}", (2.2, -1.05)))
+        return out
 
     # ------------------------------------------------------------------
     def neumann(self):
@@ -106,6 +194,22 @@ class BanachAlgebras(VoiceoverScene):
         bt = MathTex(r"\frac{0.8^{\,n+1}}{1 - 0.8}", font_size=26, color=C.PATHOLOGY).next_to(ax.c2p(30, math.log10(bound[30])),
                                                                                          UP, buff=0.15)
         assert np.all(errs <= bound * (1 + 1e-9))
+        # the leftover term of the telescoping, ||A^{n+1}||, for the same matrix (norm 0.8), and its bound 0.8^{n+1}
+        A_ = rand_matrix(6, 3)
+        A_ *= 0.8 / np.linalg.norm(A_, 2)
+        P_, pw = np.eye(6), []
+        for _ in range(40):
+            P_ = P_ @ A_
+            pw.append(np.linalg.norm(P_, 2))
+        pw = np.array(pw)
+        assert np.all(pw <= 0.8 ** (n + 1) * (1 + 1e-9)) and np.all(errs <= pw / 0.2 * (1 + 1e-9))
+        assert np.log10(pw).min() > -7
+        pdots = VGroup(*[Dot(ax.c2p(k, math.log10(v)), radius=0.04, color=GREY_B) for k, v in zip(n, pw)])
+        pline = DashedVMobject(polyline_(ax, n, (n + 1) * math.log10(0.8), C.EPS, 2.5), num_dashes=40)
+        pdl = MathTex(r"\|A^{n+1}\|", font_size=24, color=GREY_B).next_to(ax.c2p(9, math.log10(pw[9])), DL, buff=0.15)
+        pbl = MathTex(r"\|A\|^{n+1} = 0.8^{\,n+1}", font_size=24, color=C.EPS).next_to(
+            ax.c2p(20, 21 * math.log10(0.8)), DOWN, buff=0.35)
+        yl0 = MathTex(r"\log_{10} \text{ of each norm}", font_size=22).next_to(ax, UP, buff=0.1)
         lad = VGroup(
             MathTex(r"(I - A)(I + A + \cdots + A^n) = I - A^{n+1}", font_size=30),
             MathTex(r"\|A^{n+1}\| \le \|A\|^{n+1} \to 0 \quad \text{if } \|A\| < 1", font_size=30),
@@ -123,12 +227,14 @@ class BanachAlgebras(VoiceoverScene):
             "of norm 0.8, the partial sums close in on the inverse, always under the geometric bound."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(lad[0]))
+            self.play(FadeIn(head), FadeIn(lad[0]), Create(ax), FadeIn(xl), FadeIn(yl0))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in pdots], lag_ratio=0.05), FadeIn(pdl), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(lad[1]))
+            self.play(FadeIn(lad[1]), Create(pline), FadeIn(pbl))
             self.play(FadeIn(lad[2]), FadeIn(lad[3]))
             vo.wait_until("c")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(lad[4]))
+            self.play(FadeIn(lad[4]), pdots.animate.set_opacity(0.35), FadeOut(pdl), FadeOut(pbl), FadeTransform(yl0, yl),
+                      pline.animate.set_stroke(opacity=0.35))
             self.play(Create(bl), FadeIn(bt))
             self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.05), FadeIn(lad[5]), run_time=2.5)
         self.wait(0.3)
