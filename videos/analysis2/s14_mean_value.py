@@ -51,8 +51,9 @@ class MeanValue(VoiceoverScene):
             lo_, hi_ = min(t, xm) - 0.25, max(t, xm) + 0.25
             sec.add(VGroup(Line(ax.c2p(lo_, f(xm) + q * (lo_ - xm)), ax.c2p(hi_, f(xm) + q * (hi_ - xm)), color=C.APPROX,
                                 stroke_width=3), Dot(ax.c2p(t, f(t)), radius=0.06, color=C.APPROX)))
-            sec_l.add(MathTex(r"\text{slope} " + txt_, font_size=26, color=C.APPROX).next_to(
-                ax.c2p(t, f(t)), side + DOWN * 0.6, buff=0.15))
+            # the label above its secant's far point, clear of the curve and of the level tangent at the top
+            sec_l.add(MathTex(r"\text{slope} " + txt_, font_size=26, color=C.APPROX).move_to(
+                [ax.c2p(t, 0)[0], ax.c2p(0, f(xm))[1] + 0.6, 0]))
         with self.voiceover(
             "First, a lemma. <bookmark mark='a'/> At a local maximum the derivative is zero. <bookmark mark='b'/> "
             "Approaching from the left, f of t is at most f of x and t minus x is negative, so the difference quotients "
@@ -186,8 +187,8 @@ class MeanValue(VoiceoverScene):
         xs = np.linspace(0, 6.0, 3001)
         F = -1.0 + np.concatenate([[0.0], np.cumsum((fp(xs[1:]) + fp(xs[:-1])) / 2 * np.diff(xs))])
         f = lambda x: np.interp(x, xs, F)  # noqa: E731
-        axf = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 2.5, numbers=False).move_to([-2.5, 0.75, 0])
-        axd = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 1.9, numbers=False).move_to([-2.5, -2.05, 0])
+        axf = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 2.5, numbers=False).move_to([-2.2, 0.75, 0])
+        axd = plain_axes([0, 6.0, 1], [-1.3, 1.3, 1], 7.6, 1.9, numbers=False).move_to([-2.2, -2.05, 0])
         sign = np.select([xs < 2.5, xs <= 3.3, xs < 4.9], [1.0, 0.0, -1.0], 1.0)  # the sign of f', by construction
         assert np.all(np.sign(np.round(fp(xs), 9)) * sign >= 0)
         cols = {1.0: C.CONNECTED_SET, 0.0: C.EPS, -1.0: C.PATHOLOGY}
@@ -230,8 +231,8 @@ class MeanValue(VoiceoverScene):
                      ).arrange(DOWN, buff=0.25)
         mvt[0][0].set_color(C.APPROX)
         mvt.move_to([4.2, 0.9, 0])
-        note = label(r"information about $f'$ becomes information about $f$", font_size=24, color=GREY_A)
-        note.next_to(mvt, DOWN, buff=0.35).set_x(4.2)
+        note = label(r"information about $f'$ becomes information about $f$", font_size=22, color=GREY_A)
+        note.next_to(mvt, DOWN, buff=0.35).set_x(4.0)
         with self.voiceover(
             "<bookmark mark='a'/> The theorem's main job is to turn facts about the derivative into facts about the "
             "function. <bookmark mark='b'/> If the derivative is never negative, then for any two points the difference "
@@ -259,7 +260,7 @@ class MeanValue(VoiceoverScene):
                            r"even if $f'$ is not continuous", font_size=26)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         pf = label(r"proof: \ $g(t) = f(t) - \lambda t$ has $g'(a) < 0 < g'(b)$, \ so its minimum on $[a, b]$ is "
                    r"interior, \ where $g' = 0$", font_size=24, color=GREY_A).next_to(thm, DOWN, buff=0.2)
-        ax = plain_axes([0, 0.1, 0.05], [-1.4, 1.4, 1], 10.0, 3.6, numbers=False).move_to([0, -1.5, 0])
+        ax = plain_axes([0, 0.1, 0.05], [-1.4, 1.4, 1], 10.0, 3.6, numbers=False).move_to([0, -1.3, 0])
         u = np.linspace(10, 600, 60000)
         x = 1 / u
         y = 2 * x * np.sin(1 / x) - np.cos(1 / x)
@@ -272,7 +273,7 @@ class MeanValue(VoiceoverScene):
         lt = always_redraw(lambda: MathTex(r"\lambda", font_size=30, color=C.EPS).next_to(ax.c2p(0, lev.get_value()),
                                                                                           LEFT, buff=0.12))
         cor = label(r"so a derivative cannot jump: \ its discontinuities are all of the second kind", font_size=26,
-                    color=C.EPS).to_edge(DOWN, buff=0.15)
+                    color=C.EPS).to_edge(DOWN, buff=0.4)
         sk = plain_axes([0, 1, 1], [0, 1, 1], 7.0, 3.4, numbers=False).move_to([0, -0.9, 0])
         gs = lambda t: 1.8 * (t - 0.45) ** 2 + 0.12  # noqa: E731
         gsk = sk.plot(gs, x_range=[0.05, 0.95, 0.01], color=C.FUNC, stroke_width=4)

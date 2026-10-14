@@ -211,7 +211,7 @@ class CauchyFormula(VoiceoverScene):
         mx = plain_axes([0, 2, 0.5], [0, 3, 1], 3.0, 2.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
                         y_axis_config={"decimal_number_config": {"num_decimal_places": 0}, "numbers_to_exclude": [0]}
-                        ).move_to([0.1, -0.6, 0])
+                        ).move_to([-0.1, -0.35, 0])
         Rs = np.linspace(1 / 3, 2, 300)
         mr = polyline(mx, Rs, 1 / Rs, color=C.FUNC, stroke_width=3)
         assert (1 / Rs).max() <= 3 + 1e-12
@@ -219,6 +219,7 @@ class CauchyFormula(VoiceoverScene):
                       MathTex(r"R", font_size=24, color=GREY_B).next_to(mx.c2p(2, 0), RIGHT, buff=0.12))
         mdot = always_redraw(lambda: Dot(mx.c2p(Rv.get_value(), 1 / Rv.get_value()), radius=0.07, color=C.FUNC))
         mplot = VGroup(mx, mr, mr_l)
+        assert mplot.get_right()[0] < notes.get_left()[0] - 0.35 and mx.get_left()[0] > ax.get_right()[0] + 0.2
         # 1/p, domain-colored: it blows up at the five roots, so it is not bounded; a root-free p would make it so
         inv = cplot(ax, lambda z: 1 / p(z), (-1.7, 1.7), (-1.7, 1.7), px=480).set_opacity(0.85)
         inv_l = label(r"$1/p$: \ it blows up exactly at the roots", font_size=24, color=C.EPS).next_to(ax, UP, buff=0.12)
