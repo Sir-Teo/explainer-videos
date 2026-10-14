@@ -233,7 +233,7 @@ class Outro(VoiceoverScene):
                   r"classification", font_size=22, color=GREY_B),
             label(r"Every number on screen is computed and checked; \ the pictures marked schematic are the exceptions.",
                   font_size=24, color=C.EPS),
-            label(r"Animated with Manim Community; narrated by Kokoro-82M.", font_size=22, color=GREY_B),
+            label(rf"Animated with Manim Community; narrated by {narration_credit()}.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.28).move_to(UP * 0.1)
         for l_ in lines:
             if l_.width > 13.2:

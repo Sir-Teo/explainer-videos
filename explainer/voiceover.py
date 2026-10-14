@@ -18,6 +18,7 @@ next to its video; ``tools/build.py`` stitches those into the final cut.
 
 from __future__ import annotations
 
+import inspect
 import json
 import re
 from contextlib import contextmanager
@@ -28,7 +29,7 @@ from collections import OrderedDict
 import manim.mobject.svg.svg_mobject as _svg_mobject
 from manim import FadeOut, Scene
 
-from . import tts
+from . import lang, tts
 
 
 class _BoundedCache(OrderedDict):
@@ -58,17 +59,16 @@ _BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
 
 
 def _strip_bookmarks(text: str) -> tuple[str, dict[str, int]]:
-    """Return clean text and {mark: index of the word that follows it}."""
+    """Return clean text and {mark: index of the word (token) that follows it}."""
     marks: dict[str, int] = {}
     clean_parts: list[str] = []
     pos = 0
     for m in _BOOKMARK.finditer(text):
         clean_parts.append(text[pos : m.start()])
-        so_far = " ".join("".join(clean_parts).split())
-        marks[m.group(1)] = len(so_far.split()) if so_far else 0
+        marks[m.group(1)] = len(lang.tokens(lang.clean("".join(clean_parts))))
         pos = m.end()
     clean_parts.append(text[pos:])
-    clean = " ".join("".join(clean_parts).split())
+    clean = lang.clean("".join(clean_parts))
     return clean, marks
 
 
@@ -116,6 +116,8 @@ class VoiceoverScene(Scene):
 
     @contextmanager
     def voiceover(self, text: str, gain: float | None = None, pad: float = 0.15):
+        raw = text
+        text = lang.translate(text, Path(inspect.getfile(type(self))).parent, type(self).__name__)
         clean, marks = _strip_bookmarks(text)
         utt = tts.synthesize(clean)
         start = self.renderer.time
@@ -132,6 +134,7 @@ class VoiceoverScene(Scene):
                 "start": start,
                 "duration": utt.duration,
                 "text": clean,
+                "raw": " ".join(raw.split()),
                 "words": [[w.text, start + w.start, start + w.end] for w in utt.words],
             }
         )
@@ -182,20 +185,21 @@ class VoiceoverScene(Scene):
 # ---------------------------------------------------------------------------
 # Subtitle helpers (also used by tools/build.py)
 # ---------------------------------------------------------------------------
-MAX_CUE_CHARS = 84
-
-
-def subtitle_cues(lines: list[dict], offset: float = 0.0) -> list[tuple[float, float, str]]:
+def subtitle_cues(lines: list[dict], offset: float = 0.0, language: str | None = None) -> list[tuple[float, float, str]]:
     """Split narration into readable cues, breaking at sentence ends / length."""
+    language = language or lang.LANG
+    ends, max_chars = lang.SENTENCE_END[language], lang.CUE_CHARS[language]
     cues = []
     for line in lines:
         words = line["words"]
         cur: list = []
         for i, w in enumerate(words):
             cur.append(w)
-            text = " ".join(x[0] for x in cur)
-            sentence_end = w[0].endswith((".", "?", "!", ":", ";"))
-            too_long = len(text) > MAX_CUE_CHARS - 12
+            text = lang.join([x[0] for x in cur], language)
+            sentence_end = w[0].endswith(ends)
+            # Chinese: also break at a comma once the cue is more than half full
+            sentence_end |= language != "en" and w[0].endswith(("，", "、")) and len(text) > max_chars // 2
+            too_long = len(text) > max_chars
             last = i == len(words) - 1
             if sentence_end or too_long or last:
                 cues.append([offset + cur[0][1], offset + cur[-1][2], text])

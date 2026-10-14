@@ -149,7 +149,7 @@ class Outro(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(r"Every number on screen is computed and checked; \ Vitali's set is the one labeled schematic.",
                   font_size=24, color=C.EPS),
-            label(r"Animated with Manim Community; narrated by Kokoro-82M.", font_size=22, color=GREY_B),
+            label(rf"Animated with Manim Community; narrated by {narration_credit()}.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.2)
         with self.voiceover(
             "This part followed chapters one, two and eight of Rudin's Real and Complex Analysis. Thanks for "

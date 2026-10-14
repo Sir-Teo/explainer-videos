@@ -177,6 +177,8 @@ class Holes(VoiceoverScene):
         same = label(r"the same picture, with smaller numbers", font_size=22, color=GREY_A)
         same.next_to(VGroup(Q3, R2), UP, buff=0.2)
         ruler = VGroup(self.axis, self.dust, self.labs)
+        # the claim, on screen from the first word (the ladder starts only at "Suppose")
+        claim = label(r"No fraction squares to $2$", font_size=32, color=C.HOLE).to_corner(UR, buff=0.55)
         with self.voiceover(
             "First, the oldest fact in the subject: no fraction squares to two. <bookmark mark='a'/> Suppose p over q, "
             "in lowest terms, did. <bookmark mark='b'/> Then p squared is twice q squared, so p squared is even, and "
@@ -184,7 +186,7 @@ class Holes(VoiceoverScene):
             "r squared equals two q squared, <bookmark mark='e'/> so q squared is twice r squared, and q is even too. "
             "But we said the fraction was in lowest terms. So it can't exist."
         ) as vo:
-            self.play(FadeOut(ruler), run_time=0.8)  # the ruler has nothing to say here; the areas do
+            self.play(FadeOut(ruler), FadeIn(claim, shift=DOWN * 0.15), run_time=0.8)  # the areas speak here, not the ruler
             for i, mk in enumerate("abcde"):
                 vo.wait_until(mk)
                 step(i, run_time=0.9)
@@ -200,7 +202,7 @@ class Holes(VoiceoverScene):
         box = SurroundingRectangle(VGroup(rows[-1], whys[-1]), color=C.HOLE, buff=0.15, corner_radius=0.1)
         self.play(Create(box))
         self.wait(0.4)
-        self.play(FadeOut(VGroup(*rows, *whys, box, P, eq1, Q1, Q2, quarters, r_labs, Q3, eq2, R1, R2, same)))
+        self.play(FadeOut(VGroup(*rows, *whys, box, P, eq1, Q1, Q2, quarters, r_labs, Q3, eq2, R1, R2, same, claim)))
 
     # ------------------------------------------------------------------
     def rudin(self):

@@ -163,7 +163,7 @@ class Outro(VoiceoverScene):
                   r"Spaces and PDE}", font_size=22, color=GREY_A),
             label(r"Every number on screen is computed and checked; \ the pictures marked schematic are the exceptions.",
                   font_size=24, color=C.EPS),
-            label(r"Animated with Manim Community; narrated by Kokoro-82M.", font_size=22, color=GREY_B),
+            label(rf"Animated with Manim Community; narrated by {narration_credit()}.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.2)
         with self.voiceover(
             "This part followed chapter five of Real and Complex Analysis and the first five chapters of Functional "

@@ -5,9 +5,10 @@
     python tools/build.py navier_stokes -q l            # fast 480p preview
     python tools/build.py navier_stokes --only Pressure Viscosity
     python tools/build.py navier_stokes --stitch-only   # reuse rendered scenes
+    python tools/build.py analysis1 --lang zh           # Chinese narration (videos/analysis1/narration_zh.json)
 
 Outputs (in ``renders/``):
-    <video>.mp4            video + narration (loudness-normalized) + soft subtitles + chapters
+    <video>[_<quality>][_<lang>].mp4   video + narration (loudness-normalized) + soft subtitles + chapters
     <video>.srt            subtitles
     <video>.chapters.txt   YouTube-style chapter list
 """
@@ -27,6 +28,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer import lang as narration_lang  # noqa: E402
 from explainer.voiceover import subtitle_cues, to_srt  # noqa: E402
 
 QUALITY = {"l": "480p", "m": "720p", "h": "1080p", "p": "1440p", "k": "2160p"}
@@ -66,18 +68,23 @@ def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> 
     return media / "videos" / module / f"{QUALITY[quality]}{fps}" / f"{cls}.mp4"
 
 
-def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path) -> tuple[str, float, str]:
+def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path,
+                 crf: int | None = None) -> tuple[str, float, str]:
     src = ROOT / "videos" / video / f"{module}.py"
     # Each scene gets its own LaTeX and Text caches: parallel manim processes sharing one
     # Tex dir race on the .dvi files (one cleans up what another converts), and sharing one
     # texts dir race on the .svg files of identical Text strings (one unlinks what another reads).
     cfg = media / "cfg" / f"{cls}.cfg"
     cfg.parent.mkdir(parents=True, exist_ok=True)
+    (media / "Tex").mkdir(exist_ok=True)  # manim creates tex_dir without parents=True
+    (media / "texts").mkdir(exist_ok=True)
     cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\ntext_dir = {media / 'texts' / cls}\n")
     cmd = [
         sys.executable, "-m", "manim", "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
         "--media_dir", str(media), "--progress_bar", "none", str(src), cls,
     ]
+    if crf is not None:  # part of manim's segment-cache fingerprint, so masters never reuse preview segments
+        cmd[-2:-2] = ["--encoder-option", f"crf={crf}", "--encoder-option", "preset=slow"]
     t = time.time()
     env = dict(os.environ, PYTHONWARNINGS="ignore")
     proc = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, env=env)
@@ -97,19 +104,26 @@ def check_narration_audio(mp4: Path, lines: list[dict]) -> None:
         sys.exit(f"{mp4.name}: the soundtrack ends at {audio:.1f} s but the narration runs to {end:.1f} s")
 
 
-def normalize(src: Path, dst: Path) -> None:
-    """Pad/trim audio to exactly the video length so concatenation stays in sync."""
+def normalize(src: Path, dst: Path, lossless: bool = False) -> None:
+    """Pad/trim audio to exactly the video length so concatenation stays in sync.
+
+    ``lossless``: take the scene's PCM soundtrack (manim keeps ``<Scene>.wav`` next to the video) into an ALAC
+    intermediate, so the only lossy audio encode is the final master's."""
     dur = ffprobe_duration(src)
-    if has_audio(src):
-        audio_in = ["-i", str(src)]
+    wav = src.with_suffix(".wav")
+    if lossless and wav.exists():
+        audio_in, vin = ["-i", str(wav), "-i", str(src)], 1
+        amap = "[0:a]aresample=48000,aformat=channel_layouts=stereo,apad[a]"
+    elif has_audio(src):
+        audio_in, vin = ["-i", str(src)], 0
         amap = "[0:a]aresample=48000,aformat=channel_layouts=stereo,apad[a]"
     else:
-        audio_in = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-i", str(src)]
+        audio_in, vin = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-i", str(src)], 1
         amap = "[0:a]apad[a]"
-    vin = 0 if has_audio(src) else 1
+    acodec = ["-c:a", "alac"] if lossless else ["-c:a", "aac", "-b:a", "192k"]
     cmd = ["ffmpeg", "-y", "-v", "error", *audio_in]
     cmd += ["-filter_complex", amap, "-map", f"{vin}:v", "-map", "[a]", "-t", f"{dur:.3f}"]
-    cmd += ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k", str(dst)]
+    cmd += ["-c:v", "copy", *acodec, str(dst.with_suffix(".mov" if lossless else ".mp4"))]
     run(cmd)
 
 
@@ -118,21 +132,29 @@ def main():
     ap.add_argument("video")
     ap.add_argument("-q", "--quality", default="h", choices=list(QUALITY))
     ap.add_argument("--fps", type=int, default=30)
+    ap.add_argument("--crf", type=int, choices=range(52), metavar="0-51",
+                    help="master quality: H.264 CRF (lower is better; 16-18 for upload masters), lossless audio "
+                         "intermediates and a 384 kb/s AAC soundtrack")
     ap.add_argument("-j", "--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2))
     ap.add_argument("--only", nargs="*", help="render only these scene classes (still stitches all)")
     ap.add_argument("--stitch-only", action="store_true")
+    ap.add_argument("--lang", default="en", help="narration language (en, or zh from narration_zh.json)")
     args = ap.parse_args()
+    os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
 
     manifest = importlib.import_module(f"videos.{args.video}.manifest")
     scenes = manifest.SCENES
-    media = ROOT / "media" / args.video
+    media = ROOT / "media" / (args.video if args.lang == "en" else f"{args.video}_{args.lang}")
+    if args.crf is not None:
+        media = media / f"crf{args.crf}"
 
     if not args.stitch_only:
         todo = [s for s in scenes if not args.only or s[1] in args.only]
         print(f"Rendering {len(todo)} scene(s) at {QUALITY[args.quality]}{args.fps} with {args.jobs} job(s)...")
         failed = []
         with ThreadPoolExecutor(args.jobs) as pool:
-            futs = [pool.submit(render_scene, args.video, m, c, args.quality, args.fps, media) for m, c, _ in todo]
+            futs = [pool.submit(render_scene, args.video, m, c, args.quality, args.fps, media, args.crf)
+                    for m, c, _ in todo]
             for f in futs:
                 cls, dt, err = f.result()
                 print(f"  {'FAIL' if err else 'ok  '} {cls:<28} {dt:6.0f}s", flush=True)
@@ -148,6 +170,7 @@ def main():
     out_dir.mkdir(exist_ok=True)
     work.mkdir(parents=True, exist_ok=True)
     suffix = "" if args.quality == "h" else f"_{QUALITY[args.quality]}"
+    suffix += "" if args.lang == "en" else f"_{args.lang}"
     name = f"{args.video}{suffix}"
 
     parts, cues, chapters, offset = [], [], [], 0.0
@@ -155,15 +178,15 @@ def main():
         mp4 = scene_output(media, module, cls, args.quality, args.fps)
         if not mp4.exists():
             sys.exit(f"Missing render for {cls}: {mp4}")
-        norm = work / f"{cls}.mp4"
+        norm = work / f"{cls}.{'mov' if args.crf is not None else 'mp4'}"
         meta = mp4.with_suffix(".narration.json")
         lines = json.loads(meta.read_text())["lines"] if meta.exists() else []
         check_narration_audio(mp4, lines)
-        normalize(mp4, norm)
+        normalize(mp4, norm, lossless=args.crf is not None)
         dur = ffprobe_duration(norm)
-        cues += subtitle_cues(lines, offset)
+        cues += subtitle_cues(lines, offset, args.lang)
         if chapter:
-            chapters.append((offset, chapter))
+            chapters.append((offset, narration_lang.chapter_title(args.video, cls, chapter, args.lang)))
         parts.append(norm)
         offset += dur
 
@@ -173,7 +196,7 @@ def main():
     srt.write_text(to_srt(cues))
 
     ffmeta = work / "chapters.ffmeta"
-    lines = [";FFMETADATA1", f"title={manifest.TITLE}"]
+    lines = [";FFMETADATA1", f"title={narration_lang.video_title(args.video, manifest.TITLE, args.lang)}"]
     bounds = [c[0] for c in chapters] + [offset]
     for (start, title), end in zip(chapters, bounds[1:]):
         lines += ["[CHAPTER]", "TIMEBASE=1/1000", f"START={int(start * 1000)}", f"END={int(end * 1000)}", f"title={title}"]
@@ -187,8 +210,10 @@ def main():
     run([
         "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
         "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
-        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
-        "-c:s", "mov_text", "-metadata:s:s:0", "language=eng", "-movflags", "+faststart", str(final),
+        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac",
+        "-b:a", "384k" if args.crf is not None else "192k",
+        "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
+        "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart", str(final),
     ])
     yt = "\n".join(f"{int(s // 60)}:{int(s % 60):02d} {t}" for s, t in chapters)
     (out_dir / f"{name}.chapters.txt").write_text(yt + "\n")

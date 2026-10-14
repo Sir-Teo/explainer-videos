@@ -33,6 +33,9 @@ WIDE_TEX.add_to_preamble(r"\newcommand{\R}{\mathbb{R}}\newcommand{\Q}{\mathbb{Q}
                          r"\newcommand{\Z}{\mathbb{Z}}\newcommand{\C}{\mathbb{C}}")
 MathTex.set_default(tex_template=WIDE_TEX)
 Tex.set_default(tex_template=WIDE_TEX)
+# Pango's default face differs by OS (DejaVu Sans on Linux, Helvetica on macOS): name it, so plain-text readouts
+# render the same everywhere.
+Text.set_default(font="DejaVu Sans")
 MAX_TEXT_WIDTH = 13.6
 
 
@@ -298,7 +301,7 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
 # The counterexample museum
 # ---------------------------------------------------------------------------
 def _tex_words(text: str):
-    """Split a Tex string into (separator, word) pairs at the spaces (plain or ``\ ``) that lie outside math and
+    r"""Split a Tex string into (separator, word) pairs at the spaces (plain or ``\ ``) that lie outside math and
     braces, so a line can be broken there without breaking the TeX."""
     out, cur, sep, depth, math, i = [], "", "", 0, False, 0
     while i < len(text):

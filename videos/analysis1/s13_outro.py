@@ -74,7 +74,7 @@ class Outro(VoiceoverScene):
         bottom = VGroup(rearr, rearr2).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
         # the alternating harmonic series, in order and rearranged (positive terms until the sum passes pi,
         # then negative terms until it drops below, and so on): the same terms, two different sums
-        N = 250
+        N = 3000  # by then the rearranged sums dip less than 0.03 below pi
         alt = np.cumsum([(-1) ** (k + 1) / k for k in range(1, N + 1)])
         pos, neg, s_, rear, used = 1, 2, 0.0, [], set()
         for _ in range(N):
@@ -90,7 +90,7 @@ class Outro(VoiceoverScene):
         rear = np.array(rear)
         assert len(used) == N  # each term used once
         assert abs(alt[-1] - np.log(2)) < 1 / (N + 1) and abs(rear[-1] - np.pi) < 0.05
-        pax = Axes(x_range=[0, N, 50], y_range=[0, 3.5, 1], x_length=9.0, y_length=3.2, tips=False,
+        pax = Axes(x_range=[0, N, 500], y_range=[0, 3.5, 1], x_length=9.0, y_length=3.2, tips=False,
                    axis_config={"stroke_color": GREY_C, "include_ticks": False}).shift(UP * 0.6)
         ns = np.arange(1, N + 1)
         alt_c = polyline(pax, ns, alt, color=C.SEQ, stroke_width=2.5)
@@ -128,7 +128,7 @@ class Outro(VoiceoverScene):
             label(r"Companions: S.~Abbott, \textit{Understanding Analysis}; \ C.~Pugh, \textit{Real Mathematical Analysis};"
                   r" \ T.~Tao, \textit{Analysis I}", font_size=24, color=GREY_A),
             label(r"Every number on screen is computed and checked; schematics are labeled.", font_size=24, color=C.EPS),
-            label(r"Animated with Manim Community; narrated by Kokoro-82M.", font_size=22, color=GREY_B),
+            label(rf"Animated with Manim Community; narrated by {narration_credit()}.", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.2)
         with self.voiceover(
             "This part followed the first two chapters of Rudin's Principles of Mathematical Analysis. Thanks for "
