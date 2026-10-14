@@ -331,7 +331,7 @@ LEDGER_ROWS = {
         r"cannot ask yet"],
     2: [r"2", r"sequences, series", r"Cauchy $\Rightarrow$ convergent", r"subsequences converge",
         r"reorder $\sum |a_n| < \infty$", r"converges at each $x$"],
-    3: [r"3", r"$C(X)$, sup norm", r"uniform limits are continuous", r"+ equicontinuous (Arzel\`a--Ascoli)",
+    3: [r"3", r"$C(X)$, sup norm", r"uniform limits are continuous", r"+ equicontinuity (Ascoli)",
         r"$\lim \int = \int \lim$ if uniform", r"in mean square; Gibbs at jumps"],
     4: [r"4", r"$\R^n$; $C[a, b]$ again", r"so contractions have fixed points", r"(as in Parts 1 and 3)",
         r"$\frac{d}{dt}\int = \int \frac{\partial}{\partial t}$", r"(unchanged)"],
@@ -339,9 +339,9 @@ LEDGER_ROWS = {
         r"$\lim \int = \int \lim$ under a lid", r"term by term, by Fubini"],
     6: [r"6", r"$L^p(\mu)$; \ Hilbert $H$", r"Riesz--Fischer: summable increments", r"not the ball: $\|e_m - e_n\| = \sqrt 2$",
         r"$\frac{d}{dx}\int_a^x f = f$ a.e.", r"$s_N \to f$ in $L^2$; \ Fej\'er: uniform"],
-    7: [r"7", r"$H(\Omega)$, \ locally uniform", r"locally uniform limits stay holomorphic", r"bounded families: Montel",
+    7: [r"7", r"$H(\Omega)$, \ locally uniform", r"local uniform limits holomorphic", r"bounded families: Montel",
         r"$\frac{d}{dz}\sum = \sum \frac{d}{dz}$; \ $\oint$ and $\lim$", r"$H^2$: \ $\hat f(n) = 0$ for $n < 0$"],
-    8: [r"8", r"Banach; \ Fr\'echet", r"Baire: \ not a countable union of thin sets", r"weak-* compact (Alaoglu)",
+    8: [r"8", r"Banach; \ Fr\'echet", r"Baire: no countable union of thin sets", r"weak-* compact (Alaoglu)",
         r"pointwise bounds are uniform", r"diverges for most $f \in C$; \ a.e.\ for $L^2$"],
     9: [r"9", r"$\mathcal D'$, \ $\mathcal S'$", r"Fr\'echet pieces; \ weak-$*$ limits", r"(bounded sets, \ Montel-like)",
         r"$\partial$ commutes with every limit", r"every series converges in $\mathcal D'$"],
@@ -356,24 +356,28 @@ def ledger(filled=1, highlight=None, font_size=19, width=13.4) -> VGroup:
     col_w = col_w * width / col_w.sum()
     xs = -width / 2 + np.concatenate([[0], np.cumsum(col_w)[:-1]]) + col_w / 2
     row_h = 0.46
+    def cells_row(cells, y, size, color):
+        # one Tex per row, so every cell sits on the row's baseline; each cell is then moved (sideways only) to its
+        # column, and shrunk about that baseline if it is too wide
+        t = Tex(*cells, arg_separator=r"\quad ", font_size=size, color=color)
+        t.shift(UP * (y - t.get_y()))
+        base = t.get_y()
+        for part, x, w in zip(t, xs, col_w):
+            part.shift(RIGHT * (x - part.get_x()))
+            if part.width > w - 0.12:
+                part.scale((w - 0.12) / part.width, about_point=np.array([x, base, 0.0]))
+        return t
+
     g = VGroup()
-    head = VGroup(*[label(h, font_size=font_size + 1, color=GREY_A).move_to([x, 0, 0]) for h, x in zip(LEDGER_HEAD, xs)])
-    for t, w in zip(head, col_w):
-        if t.width > w - 0.12:
-            t.width = w - 0.12
+    head = cells_row(LEDGER_HEAD, 0.0, font_size + 1, GREY_A)
     g.add(head)
     rows = VGroup()
     for p in range(1, 11):
         y = -(p) * row_h
         if p <= filled and p in LEDGER_ROWS:
-            cells = LEDGER_ROWS[p]
-            row = VGroup(*[label(c, font_size=font_size).move_to([x, y, 0]) for c, x in zip(cells, xs)])
-        else:
-            row = VGroup(label(str(p), font_size=font_size, color=GREY_D).move_to([xs[0], y, 0]),
-                         label(PART_NAMES[p - 1], font_size=font_size, color=GREY_D).move_to([xs[1], y, 0]))
-        for t, w in zip(row, col_w):
-            if t.width > w - 0.12:
-                t.width = w - 0.12
+            row = cells_row(LEDGER_ROWS[p], y, font_size, WHITE)
+        else:  # the part being announced is legible; parts still to come stay dim
+            row = cells_row([str(p), PART_NAMES[p - 1]], y, font_size, WHITE if p == highlight else GREY_D)
         rows.add(row)
     g.add(rows)
     rule = Line([-width / 2, -row_h / 2, 0], [width / 2, -row_h / 2, 0], color=GREY_C, stroke_width=1.5)
