@@ -255,7 +255,7 @@ class FormsTour(VoiceoverScene):
     def closed_exact(self):
         d = load("forms")
         wa, wo = float(d["w_around"]), float(d["w_off"])
-        ax = square_axes([-1.8, 2.6, 1], [-1.6, 1.8, 1], 1.45).move_to([-3.2, -0.85, 0])
+        ax = square_axes([-1.8, 2.6, 1], [-1.6, 1.8, 1], 1.45).move_to([-3.25, -0.7, 0])
         ax.set_opacity(0.5)
         hole = VGroup(Circle(radius=0.1, color=C.HOLE, stroke_width=3).move_to(ax.c2p(0, 0)),
                       MathTex(r"0", font_size=24, color=C.HOLE).next_to(ax.c2p(0, 0), DL, buff=0.1))
@@ -263,9 +263,11 @@ class FormsTour(VoiceoverScene):
         c2 = Circle(radius=1.45 * 0.6, color=C.CONNECTED_SET, stroke_width=3).move_to(ax.c2p(1.6, 0.8))
         l1 = MathTex(rf"\oint \omega = {wa:.6f} = 2\pi", font_size=28, color=C.EPS).next_to(c1, DOWN, buff=0.1)
         l2 = MathTex(rf"\oint \omega = {abs(wo):.6f}", font_size=28, color=C.CONNECTED_SET).next_to(c2, UP, buff=0.1)
-        head = VGroup(label(r"\textbf{Rudin 10.35--10.39} \ closed is not exact, \ when there is a hole", font_size=30),
-                      MathTex(r"\omega = \frac{x\,dy - y\,dx}{x^2 + y^2} \text{ on } \R^2 \setminus \{0\}", font_size=34)
-                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.25)
+        head = VGroup(label(r"Closed is not exact, \ when there is a hole", font_size=34),
+                      MathTex(r"\omega = \frac{x\,dy - y\,dx}{x^2 + y^2} \text{ on } \R^2 \setminus \{0\}",
+                              r"\quad \text{\small (Rudin 10.35--10.39)}", font_size=34)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
+        head[1][1].set_color(GREY_B)
         side = VGroup(
             label(r"$d\omega = 0$: \ $\omega$ is \textbf{closed}", font_size=26),
             label(r"if $\omega = d\theta$ for a function $\theta$ (\textbf{exact}),", font_size=26),
@@ -274,14 +276,27 @@ class FormsTour(VoiceoverScene):
             label(r"$\omega$ is closed but not exact", font_size=26, color=C.PATHOLOGY),
             label(r"(the angle $\theta$ cannot be defined all the way around)", font_size=22, color=GREY_A),
             label(r"on a convex set, closed always means exact \ (10.39)", font_size=24, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.85, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         for r_ in side:
-            if r_.width > 6.0:
-                r_.width = 6.0
-        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.6, -0.85, 0])
+            if r_.width > 5.9:
+                r_.width = 5.9
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to([0.7, -0.85, 0], RIGHT, buff=0)
+        assert side.get_right()[0] <= 6.6 and side.get_bottom()[1] > -3.6
         assert abs(wa - 2 * math.pi) < 1e-3 and abs(wo) < 1e-3
         # the vector field dual to omega, (-y, x)/r^2: it swirls around the hole, faster near it
         field = VGroup()
+        # keep the arrows out of the two integral labels and the hole's label (each box grown by 0.1)
+        boxes = [(m_.get_left()[0] - 0.1, m_.get_right()[0] + 0.1, m_.get_bottom()[1] - 0.1, m_.get_top()[1] + 0.1)
+                 for m_ in (l1, l2, hole[1])]
+
+        def clear_of_labels(p0, p1):
+            for (x0_, x1_, y0_, y1_) in boxes:
+                for q in (p0, p1, (p0 + p1) / 2):
+                    if x0_ <= q[0] <= x1_ and y0_ <= q[1] <= y1_:
+                        return False
+            return True
+
+        skipped = 0
         for gx in np.arange(-1.5, 2.51, 0.5):
             for gy in np.arange(-1.5, 1.51, 0.5):
                 r2 = gx * gx + gy * gy
@@ -290,8 +305,13 @@ class FormsTour(VoiceoverScene):
                 v = np.array([-gy, gx]) / r2
                 L = min(0.42, 0.22 / math.sqrt(r2))
                 u = v / np.linalg.norm(v) * L / 1.45
-                field.add(Arrow(ax.c2p(gx - u[0] / 2, gy - u[1] / 2), ax.c2p(gx + u[0] / 2, gy + u[1] / 2), buff=0,
-                                color=GREY_B, stroke_width=2.5, max_tip_length_to_length_ratio=0.35).set_opacity(0.7))
+                p0_, p1_ = ax.c2p(gx - u[0] / 2, gy - u[1] / 2), ax.c2p(gx + u[0] / 2, gy + u[1] / 2)
+                if not clear_of_labels(p0_, p1_):
+                    skipped += 1
+                    continue
+                field.add(Arrow(p0_, p1_, buff=0, color=GREY_B, stroke_width=2.5,
+                                max_tip_length_to_length_ratio=0.35).set_opacity(0.7))
+        assert 0 < skipped <= 8 and len(field) > 40
         fl_ = label(r"$\omega$ measures the change of angle around $0$", font_size=22, color=GREY_B).next_to(ax, DOWN, buff=0.1)
         with self.voiceover(
             "<bookmark mark='a'/> Last stop: a form with zero exterior derivative, a closed form, need not be the "

@@ -247,9 +247,9 @@ class InverseFunction(VoiceoverScene):
         # from the second image on, the f(x_k) are within 0.02 of y: magnify a window around y, equal scales
         W, H, hw = 2.4, 1.8, 0.022
         xw, yw = (target[0] - hw, target[0] + hw), (target[1] - hw * H / W, target[1] + hw * H / W)
-        inset, mag = magnifier(iax, xw, yw, center=[iax.get_right()[0] + 0.45 + W / 2, iax.get_y() + 0.1, 0], width=W,
-                               height=H, color=GREY_B)
         sc = W / (2 * hw)
+        inset, mag = magnifier(iax, xw, yw, center=[iax.get_right()[0] + 0.45 + W / 2, iax.get_y() + 0.1, 0], width=W,
+                               height=H, color=GREY_B, tag=rf"\times {sc / ui:.0f}")
         fx = np.array([f_exp(its[k]) for k in range(8)])
         inside = [k for k in range(8) if xw[0] < fx[k, 0] < xw[1] and yw[0] < fx[k, 1] < yw[1]]
         assert inside == list(range(2, 8)), inside

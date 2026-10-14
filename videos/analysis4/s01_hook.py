@@ -71,7 +71,9 @@ class Hook(VoiceoverScene):
         W, H = 2.6, 2.0
         hw = 0.0075
         xw, yw = (root[0] - hw, root[0] + hw), (root[1] - hw * H / W, root[1] + hw * H / W)
-        inset, mag = magnifier(ax, xw, yw, center=[1.45, 0.75, 0], width=W, height=H, color=GREY_B)
+        # (the tag is given: the source frame is drawn at its 0.04 minimum, so the helper's own tag would understate)
+        inset, mag = magnifier(ax, xw, yw, center=[1.45, 0.75, 0], width=W, height=H, color=GREY_B,
+                               tag=rf"\times {W / (2 * hw * 1.75):.0f}")
         zx, zy = np.linspace(*xw, 81), np.linspace(*yw, 81)
         icirc = contour_mobject(inset, contour_segments(lambda X, Y: X**2 + Y**2 - 4, zx, zy), C.SEQ, 3.5)
         ihyp = contour_mobject(inset, contour_segments(lambda X, Y: X * Y - 1, zx, zy), C.APPROX, 3.5)
@@ -95,9 +97,9 @@ class Hook(VoiceoverScene):
                   Arrow(inset.c2p(*a2), inset.c2p(*b2), buff=0.05, color=C.EPS, stroke_width=3, tip_length=0.15)]
         idots = [Dot(inset.c2p(*its[k]), radius=0.06, color=WHITE) for k in (2, 3)]
         sc = W / (xw[1] - xw[0])  # scene units per unit in the inset
-        # p_2 sits visibly off the root in the inset; p_3 is on it (3e-6 away: a thousandth of a pixel there too)
+        # p_2 sits visibly off the root in the inset; p_3 is on it (3e-6 away: well under a pixel even there)
         assert sc * np.linalg.norm(its[2] - root) > 0.5 and sc * np.linalg.norm(its[3] - root) < 0.01
-        assert abs(sc - 99.05) < 0.1 and mag.tag.tex_string.strip() == r"\times 99"
+        assert mag.tag.tex_string.strip() == rf"\times {sc / 1.75:.0f}"  # the tag states the true magnification
         tab = VGroup(MathTex(r"k", r"\quad |F(p_k)|", font_size=28, color=GREY_A))
         for k in range(6):
             r_ = float(res[k])
@@ -109,8 +111,8 @@ class Hook(VoiceoverScene):
         rule = VGroup(label(r"each step: replace $F$ by its linearization at $p_k$:", font_size=24, color=GREY_A),
                       label(r"two lines; \ they cross at $p_{k+1}$", font_size=24, color=GREY_A),
                       label(r"correct digits double each step", font_size=24, color=C.EPS)
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(mag.frame, DOWN, buff=0.45,
-                                                                              aligned_edge=LEFT)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        rule.next_to([mag.frame.get_left()[0], min(tab.get_bottom()[1], mag.frame.get_bottom()[1]) - 0.4, 0], DR, buff=0)
         assert rule.get_right()[0] < 6.6 and rule.get_bottom()[1] > -3.6 and tab.get_bottom()[1] > rule.get_top()[1]
         assert 0.5e-11 < res[4] < 2e-11 and abs(root[0] ** 2 + root[1] ** 2 - 4) < 1e-12
         with self.voiceover(

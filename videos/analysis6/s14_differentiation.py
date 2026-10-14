@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.analysis import *  # noqa: F403
-from videos.analysis6.common import load, plain_axes, polyline
+from videos.analysis6.common import left_y_axis, load, plain_axes, polyline
 from videos.analysis6.compute import STEP_GAP, step_data
 
 
@@ -106,9 +106,10 @@ class Differentiation(VoiceoverScene):
             MathTex(r"\text{so} \quad \frac{d}{dx}\int_a^x f = f(x) \ \text{a.e.}", font_size=30, color=C.EPS),
         )
         for r_ in thm:
-            if r_.width > 4.2:
-                r_.width = 4.2
-        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.65, -1.15, 0], DR, buff=0)  # right column, below the readouts
+            if r_.width > 4.15:
+                r_.width = 4.15
+        thm.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.4, -1.15, 0], DR, buff=0)  # right column, below the readouts
+        assert thm.get_right()[0] <= 6.6
         head = label(r"Average $f$ over a shrinking interval: \ do you get $f(x)$ back?", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> Average a function over a small interval around x. As the interval shrinks, do "
@@ -143,7 +144,8 @@ class Differentiation(VoiceoverScene):
         xs, Mf, lams, level = d["xs"], d["Mf"], d["lams"], d["level"]
         ax = plain_axes([-1, 2, 0.5], [0, 1.15, 0.5], 7.4, 3.4, numbers=True, font_size=18,
                         x_axis_config={"decimal_number_config": {"num_decimal_places": 1}},
-                        y_axis_config={"decimal_number_config": {"num_decimal_places": 1}}).move_to([-2.3, 0.0, 0])
+                        y_axis_config={"include_numbers": False}).move_to([-2.0, 0.0, 0])
+        ynum = left_y_axis(ax, (0.5, 1.0), decimals=1)  # at x = -1: the level line never crosses a number
         f = VGroup(Line(ax.c2p(-1, 0), ax.c2p(0.4, 0), color=C.FUNC, stroke_width=3),
                    Line(ax.c2p(0.4, 1), ax.c2p(0.6, 1), color=C.FUNC, stroke_width=4),
                    Line(ax.c2p(0.6, 0), ax.c2p(2, 0), color=C.FUNC, stroke_width=3))
@@ -183,7 +185,7 @@ class Differentiation(VoiceoverScene):
                   font_size=24, color=C.EPS),
             label(r"$Mf \approx \frac{0.1}{|x|}$ far away: \ not integrable, \ but its level sets are controlled",
                   font_size=22, color=GREY_A),
-        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.25)
+        ).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.4)
         head = label(r"The maximal function: \ the worst average at each point", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> The proof needs a way to control all the averages at once. The maximal function "
@@ -194,7 +196,7 @@ class Differentiation(VoiceoverScene):
             "maximal inequality, and the three comes from a covering lemma."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(head), Create(ax), FadeIn(fa), Create(f), FadeIn(f_l))
+            self.play(FadeIn(head), Create(ax), FadeIn(ynum), FadeIn(fa), Create(f), FadeIn(f_l))
             self.play(FadeIn(M_l))
             vo.wait_until("b")
             self.play(Create(gM), run_time=2.0)

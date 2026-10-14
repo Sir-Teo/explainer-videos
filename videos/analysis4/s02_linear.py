@@ -283,8 +283,9 @@ class LinearMaps(VoiceoverScene):
         q0 = Binv @ np.array([math.cos(th0), math.sin(th0)])
         W, H, hw = 2.4, 1.8, 0.02
         xw, yw = (q0[0] - hw, q0[0] + hw), (q0[1] - hw * H / W, q0[1] + hw * H / W)
-        inset, mag = magnifier(ax, xw, yw, center=[-5.3, 0.75, 0], width=W, height=H, color=GREY_B)
         sc = W / (2 * hw)
+        inset, mag = magnifier(ax, xw, yw, center=[-5.3, 0.75, 0], width=W, height=H, color=GREY_B,
+                               tag=rf"\times {sc / unit:.0f}")
 
         def window_arcs(M, color, width=3.0):
             P = ellipse_pts(M, n_pts)

@@ -201,11 +201,12 @@ class Contraction(VoiceoverScene):
         r2 = math.sqrt(2)
         hole = Circle(radius=0.11, color=C.HOLE, stroke_width=3).move_to(nl.n2p(r2))
         # 17/12 is 0.0025 from sqrt 2, and 577/408 only 2.1e-6: on the line they are one blob. A magnifier
-        # x145 separates 17/12; 577/408 still sits on sqrt 2 (2.1e-6 is 0.003 units even there).
+        # (x127) separates 17/12; 577/408 still sits on sqrt 2 (2.1e-6 is 0.003 units even there).
         wx = (1.4125, 1.4175)
         W, H = 7.0, 2.0
-        inset, mag = magnifier(nax, wx, (-0.15, 0.15), center=[2.75, -0.95, 0], width=W, height=H, color=GREY_B)
         sc = W / (wx[1] - wx[0])
+        inset, mag = magnifier(nax, wx, (-0.15, 0.15), center=[2.75, -0.95, 0], width=W, height=H, color=GREY_B,
+                               tag=rf"\times {sc / L:.0f}")
         assert wx[0] < r2 < float(xs[3]) < float(xs[2]) < wx[1]
         assert sc * (float(xs[2]) - r2) > 2.0 and sc * (float(xs[3]) - r2) < 0.005
         iline = NumberLine(x_range=[1.413, 1.417, 0.001], length=sc * 0.004, include_numbers=True, font_size=18,
@@ -282,8 +283,10 @@ class Contraction(VoiceoverScene):
         # from x_2 on the steps are a hundredth of a unit: a magnifier at (sqrt 2, sqrt 2), equal scales
         W, H, hw = 1.9, 1.3, 0.004
         xw, yw = (r2 - hw, r2 + hw), (r2 - hw * H / W, r2 + hw * H / W)
-        inset, mag = magnifier(ax, xw, yw, center=[-2.25, -2.4, 0], width=W, height=H, color=GREY_B)
         sc = W / (2 * hw)
+        # (the tag is given: the source frame is drawn at its 0.04 minimum, so the helper's own tag would understate)
+        inset, mag = magnifier(ax, xw, yw, center=[-2.25, -2.4, 0], width=W, height=H, color=GREY_B,
+                               tag=rf"\times {sc / 4.6:.0f}")
         assert sc * (xn[2] - r2) > 0.5 and sc * (xn[3] - r2) < 0.002  # x_2 visibly off, x_3 on sqrt 2
 
         def clip(p, q):

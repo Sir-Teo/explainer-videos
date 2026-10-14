@@ -45,15 +45,17 @@ class NumberE(VoiceoverScene):
         err = np.array([float(mp.e - mp.fsum(1 / mp.factorial(k) for k in range(n + 1))) for n in ns])
         bnd = np.array([1 / (math.factorial(n) * n) for n in ns])
         assert np.all((0 < err) & (err < bnd)) and abs(err[9] - float(d["err_s10"])) < 1e-20
-        ax = plain_axes([0, 13, 1], [-11, 0.5, 5], 10.0, 2.1, numbers=False).move_to([-0.6, -2.45, 0])
-        ylab = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.15)
+        # heights are log10 + 10, so the horizontal axis runs along the bottom, at 10^-10
+        ax = plain_axes([0, 13, 1], [0, 10.5, 5], 10.0, 2.1, numbers=False).move_to([-0.6, -2.45, 0])
+        assert np.all(np.log10(err) + 10 > 0) and np.all(np.log10(bnd) + 10 < 10.5)
+        ylab = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v + 10), LEFT, buff=0.15)
                         for v in (0, -5, -10)])
-        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(ax.c2p(13, -11), RIGHT, buff=0.12)
-        b_curve = polyline(ax, ns, np.log10(bnd), color=C.UPPER_SUM, stroke_width=2.5)
-        e_dots = VGroup(*[Dot(ax.c2p(n, np.log10(v)), radius=0.06, color=C.SEQ) for n, v in zip(ns, err)])
-        b_l = MathTex(r"\frac{1}{n!\, n}", font_size=26, color=C.UPPER_SUM).next_to(ax.c2p(3, np.log10(bnd[2])), UR,
+        n_l = MathTex(r"n", font_size=24, color=GREY_B).next_to(ax.c2p(13, 0), RIGHT, buff=0.12)
+        b_curve = polyline(ax, ns, np.log10(bnd) + 10, color=C.UPPER_SUM, stroke_width=2.5)
+        e_dots = VGroup(*[Dot(ax.c2p(n, np.log10(v) + 10), radius=0.06, color=C.SEQ) for n, v in zip(ns, err)])
+        b_l = MathTex(r"\frac{1}{n!\, n}", font_size=26, color=C.UPPER_SUM).next_to(ax.c2p(3, np.log10(bnd[2]) + 10), UR,
                                                                                 buff=0.12)
-        e_l = MathTex(r"e - s_n", font_size=26, color=C.SEQ).next_to(ax.c2p(3, np.log10(err[2])), DL, buff=0.15)
+        e_l = MathTex(r"e - s_n", font_size=26, color=C.SEQ).next_to(ax.c2p(3, np.log10(err[2]) + 10), DL, buff=0.15)
         fast = label(rf"$s_{{10}}$ is already within ${sci(float(d['err_s10']), 1)}$ of $e$", font_size=28,
                      color=C.EPS).move_to([2.6, -1.75, 0])
         ring = Circle(radius=0.13, color=C.EPS, stroke_width=3).move_to(e_dots[9])
@@ -121,10 +123,10 @@ class NumberE(VoiceoverScene):
                      label(r"for fixed $k$, each bar fills its box as $n \to \infty$:", font_size=24),
                      label(r"the limit is at least $s_m$, for every $m$", font_size=26)).arrange(DOWN, aligned_edge=LEFT,
                                                                                             buff=0.12)
-        cmp.move_to([4.4, 0.0, 0])
+        cmp.move_to([4.0, 0.0, 0])
         for r in cmp:
             r.set_color(GREY_A)
-        res = MathTex(r"\lim_{n \to \infty} \Big(1 + \frac1n\Big)^n = e", font_size=40, color=C.EPS).move_to([4.4, -1.85, 0])
+        res = MathTex(r"\lim_{n \to \infty} \Big(1 + \frac1n\Big)^n = e", font_size=40, color=C.EPS).move_to([4.0, -1.85, 0])
         with self.voiceover(
             "The other definition of e is compound interest: one plus one over n, to the n-th power. "
             "<bookmark mark='a'/> Expand it with the binomial theorem. The k-th term is one over k factorial, "
@@ -178,7 +180,7 @@ class NumberE(VoiceoverScene):
         whys = [why(r"the tail estimate, times $q!$"), why(r"if $e = p/q$: \ both are integers"),
                 why(r"no integer lies strictly between $0$ and $1$")]
         rows[2][2].set_color(C.PATHOLOGY)
-        step = ladder(self, rows, whys, keep=3, top=2.4, buff=0.42, x=-0.4)
+        step = ladder(self, rows, whys, keep=3, top=2.75, buff=0.36, x=-0.4)
         y = -3.0
         X = lambda v: -5.6 + v * 11.2  # noqa: E731
         # a zoom strip above the line: [0, 0.15] spread over the full width, where the window and the dot get close
@@ -202,7 +204,7 @@ class NumberE(VoiceoverScene):
             q = qs[i]
             r = Rectangle(width=X(1 / q) - X(0), height=0.5, stroke_width=0, fill_color=C.EPS, fill_opacity=0.22)
             r.move_to([(X(0) + X(1 / q)) / 2, y, 0])
-            edge = Line([X(1 / q), y - 0.3, 0], [X(1 / q), y + 0.3, 0], color=C.EPS, stroke_width=3)
+            edge = Line([X(1 / q), y - 0.17, 0], [X(1 / q), y + 0.3, 0], color=C.EPS, stroke_width=3)
             dot = Dot([X(tail[i]), y, 0], radius=0.08, color=C.SEQ)
             # the same on the zoom strip (the window clipped to the strip; the dot only once it is on it)
             zr = Rectangle(width=Z(min(1 / q, zw)) - Z(0), height=0.5, stroke_width=0, fill_color=C.EPS,
@@ -246,7 +248,7 @@ class NumberE(VoiceoverScene):
         assert all(0 < t < 1 / q for t, q in zip(tail, qs))
         win.clear_updaters()
         more = label(r"Rudin adds: $e$ is not even algebraic \ (Hermite, 1873: $e$ is transcendental).", font_size=26,
-                     color=GREY_B).to_edge(DOWN, buff=0.25)
+                     color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "<bookmark mark='m'/> In fact e isn't a root of any polynomial with integer coefficients: Hermite proved "
             "that in 1873, and Rudin points to a short proof."
