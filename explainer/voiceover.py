@@ -185,25 +185,77 @@ class VoiceoverScene(Scene):
 # ---------------------------------------------------------------------------
 # Subtitle helpers (also used by tools/build.py)
 # ---------------------------------------------------------------------------
+# Where a long sentence may be cut so that each piece still reads naturally.
+_SOFT_BREAK = {"en": (",", ";", ":"), "zh": ("，", "、", "；", "：")}
+
+
+def _sentences(words: list, ends: tuple) -> list[list]:
+    out, cur = [], []
+    for w in words:
+        cur.append(w)
+        if w[0].endswith(ends):
+            out.append(cur)
+            cur = []
+    return out + [cur] if cur else out
+
+
+def _even_split(words: list, language: str, max_chars: int) -> list[list]:
+    """Cut one sentence into the fewest cues of at most ``max_chars``, as even in length as possible and preferring
+    cuts after a comma: no orphaned last word, no cue twice as long as its neighbour."""
+    n = len(words)
+    sizes = [0]
+    for w in words:
+        sizes.append(sizes[-1] + len(w[0].strip()))
+    gap = 1 if language == "en" else 0  # the joining space between English words
+
+    def width(i: int, j: int) -> int:
+        return sizes[j] - sizes[i] + gap * (j - i - 1)
+
+    total = width(0, n)
+    if total <= max_chars or n == 1:
+        return [words]
+    soft = _SOFT_BREAK.get(language, ())
+    inf = float("inf")
+    chosen, chosen_cost, first = [[w] for w in words], inf, None
+    k = -(-total // max_chars)
+    while k <= n and (first is None or k <= first + 1):  # the fewest cues, or one more if that cuts more cleanly
+        target = total / k
+        best = [[inf] * (k + 1) for _ in range(n + 1)]
+        prev = [[0] * (k + 1) for _ in range(n + 1)]
+        best[0][0] = 0.0
+        for j in range(1, n + 1):
+            for c in range(1, min(k, j) + 1):
+                for i in range(c - 1, j):
+                    w_ = width(i, j)
+                    if best[i][c - 1] == inf or (w_ > max_chars and j - i > 1):
+                        continue
+                    cost = best[i][c - 1] + (w_ - target) ** 2
+                    if j < n and not words[j - 1][0].endswith(soft):
+                        cost += (0.4 * target) ** 2  # a cut mid-clause costs as much as being 40% off the target
+                    if cost < best[j][c]:
+                        best[j][c], prev[j][c] = cost, i
+        if best[n][k] < inf:
+            first = k if first is None else first
+            cost = best[n][k] + k * (0.25 * max_chars) ** 2  # each extra cue costs a little
+            if cost < chosen_cost:
+                parts, j = [], n
+                for c in range(k, 0, -1):
+                    parts.append(words[prev[j][c]:j])
+                    j = prev[j][c]
+                chosen, chosen_cost = parts[::-1], cost
+        k += 1
+    return chosen
+
+
 def subtitle_cues(lines: list[dict], offset: float = 0.0, language: str | None = None) -> list[tuple[float, float, str]]:
-    """Split narration into readable cues, breaking at sentence ends / length."""
+    """Split narration into readable cues: one per sentence, with long sentences cut evenly (see _even_split)."""
     language = language or lang.LANG
     ends, max_chars = lang.SENTENCE_END[language], lang.CUE_CHARS[language]
     cues = []
     for line in lines:
-        words = line["words"]
-        cur: list = []
-        for i, w in enumerate(words):
-            cur.append(w)
-            text = lang.join([x[0] for x in cur], language)
-            sentence_end = w[0].endswith(ends)
-            # Chinese: also break at a comma once the cue is more than half full
-            sentence_end |= language != "en" and w[0].endswith(("，", "、")) and len(text) > max_chars // 2
-            too_long = len(text) > max_chars
-            last = i == len(words) - 1
-            if sentence_end or too_long or last:
-                cues.append([offset + cur[0][1], offset + cur[-1][2], text])
-                cur = []
+        for sentence in _sentences(line["words"], ends):
+            for part in _even_split(sentence, language, max_chars):
+                cues.append([offset + part[0][1], offset + part[-1][2], lang.join([w[0] for w in part], language)])
     # Keep each cue on screen until the next one starts (max +1.5 s).
     for a, b in zip(cues, cues[1:]):
         a[1] = max(a[1], min(b[0], a[1] + 1.5))
