@@ -18,6 +18,7 @@ Everything here is reused across parts so that a device introduced in Part 1 loo
 from __future__ import annotations
 
 import math
+import os
 from fractions import Fraction
 
 import numpy as np
@@ -33,6 +34,13 @@ WIDE_TEX.add_to_preamble(r"\newcommand{\R}{\mathbb{R}}\newcommand{\Q}{\mathbb{Q}
                          r"\newcommand{\Z}{\mathbb{Z}}\newcommand{\C}{\mathbb{C}}")
 MathTex.set_default(tex_template=WIDE_TEX)
 Tex.set_default(tex_template=WIDE_TEX)
+if os.environ.get("EXPLAINER_LANG", "en") != "en" or os.environ.get("EXPLAINER_COLLECT_TEXT"):
+    from .zh_text import install as _install_zh_text, translate as _zh
+
+    _install_zh_text(WIDE_TEX)
+else:
+    def _zh(s: str) -> str:
+        return s
 # Pango's default face differs by OS (DejaVu Sans on Linux, Helvetica on macOS): name it, so plain-text readouts
 # render the same everywhere.
 Text.set_default(font="DejaVu Sans")
@@ -286,8 +294,10 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
 
 def chapter_card(number, title: str, question: str = "", lit=(), part: int | None = None) -> VGroup:
     """Chapter title, the question it answers, and the timeline strip with this chapter's years lit."""
-    head = label(rf"{'Part ' + str(part) + r' \textperiodcentered\ ' if part else ''}Chapter {number}", font_size=28,
-                 color=GREY_B)
+    head_text = rf"{'Part ' + str(part) + r' \textperiodcentered\ ' if part else ''}Chapter {number}"
+    if os.environ.get("EXPLAINER_LANG", "en") == "zh":
+        head_text = rf"{'第' + str(part) + r'部分 \textperiodcentered\ ' if part else ''}第{number}章"
+    head = label(head_text, font_size=28, color=GREY_B)
     t = label(title, font_size=54)
     g = VGroup(head, t)
     if question:
@@ -326,6 +336,9 @@ def _tex_words(text: str):
             if cur:
                 out.append((sep, cur))
                 cur, sep = "", " "
+        elif "\u4e00" <= ch <= "\u9fff" and depth == 0 and not math:  # Chinese: a break may follow any character
+            out.append((sep, cur + ch))
+            cur, sep = "", ""
         else:
             cur += ch
         i += 1
@@ -337,6 +350,7 @@ def _tex_words(text: str):
 def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex:
     """A label broken into left-aligned lines no wider than ``max_width`` (at word boundaries outside math), rather
     than shrunk; only a single word too wide for a line is ever scaled down."""
+    text = _zh(text)
     t = label(text, font_size=font_size, color=color)
     if t.width <= max_width:
         return t

@@ -71,6 +71,10 @@ class Abel(VoiceoverScene):
         ref = note(r"summation by parts, Rudin 3.41").next_to(f2n, DOWN, buff=0.2)
         ibp = MathTex(r"\int b\, dA = A b - \int A\, db", font_size=34, color=C.EPS).next_to(ref, DOWN, buff=0.25)
         ibp.align_to(P(A[4], 0) + RIGHT * 0.12, LEFT)  # over the last, lowest strip only
+        lift = P(A[4], b[5])[1] + 0.16 - ibp.get_bottom()[1]  # taller (Chinese) captions: raise the stack to clear it
+        if lift > 0:
+            VGroup(f1, f1n, f2, f2n, ref, ibp).shift(UP * lift)
+        assert f1.get_top()[1] < heading.get_bottom()[1] - 0.15
         assert ibp.get_left()[0] > P(A[4], 0)[0] and ibp.get_bottom()[1] > P(A[4], b[5])[1] + 0.15
         assert ibp.get_right()[0] < 6.6
         with self.voiceover(

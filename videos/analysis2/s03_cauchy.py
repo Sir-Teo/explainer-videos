@@ -376,7 +376,7 @@ class Cauchy(VoiceoverScene):
             (r"$\mathbb{Q}$", N_, r"the convergents of $\sqrt2$"),
             (r"$(0, 1]$", N_, r"$\tfrac1n \to 0$, which is not there"),
             (r"$C[a, b]$, sup distance", Y, r"Part 3"),
-            (r"$L^2$, functions with $\int |f|^2 < \infty$", Y, r"Part 5 (Riesz--Fischer, 1907)"),
+            (r"$L^2$, functions with $\int |f|^2 < \infty$", Y, r"Part 6 (Riesz--Fischer, 1907)"),
         ]
         rows = VGroup()
         for i, (sp, ok, why_) in enumerate(data):
