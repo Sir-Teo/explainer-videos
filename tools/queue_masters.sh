@@ -2,8 +2,8 @@
 # Build queue for the series: run one line of renders/qa/render_queue.txt at a time, either
 #   preview <video> [build args]   a 480p QA build, or
 #   master <video> <lang>          a 2160p60 CRF 16 upload master, started once tools/queue_narration.sh has logged
-#                                  that video's narration in that language as done (exit 0). One scene at a
-#                                  time: narration sets the pace, and two 4K scenes beside the TTS server swap.
+#                                  that video's narration in that language as done (exit 0). Scenes rendered in
+#                                  parallel: renders/qa/master_jobs (default 2), re-read for each master.
 # Append lines to the queue to add work; a line "stop" ends the runner.
 cd "${0:A:h}/.."
 source .venv/bin/activate
@@ -25,7 +25,7 @@ while true; do
     rc=$?; log=renders/qa/build_$2.log
   else
     EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a nice -n 5 \
-      python -u tools/build.py $2 -q k --fps 60 --crf 16 -j 1 --lang $3 > renders/qa/master_$2_$3.log 2>&1
+      python -u tools/build.py $2 -q k --fps 60 --crf 16 -j $(cat renders/qa/master_jobs 2>/dev/null || echo 2) --lang $3 > renders/qa/master_$2_$3.log 2>&1
     rc=$?; log=renders/qa/master_$2_$3.log
     # verify it and add it to the upload kit (renders/upload/analysis-built)
     [[ $rc == 0 && $2 == analysis* ]] && python tools/package_uploads.py --parts ${2#analysis} >> renders/qa/package.log 2>&1
