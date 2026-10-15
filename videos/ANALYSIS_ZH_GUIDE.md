@@ -1,32 +1,12 @@
-# Chinese narration guide for *Analysis, Built* (分析学，从零搭建)
+# Chinese narration for *Analysis, Built*
 
-The Chinese version of each part is the same video with Chinese narration and Chinese subtitles; the on-screen
-formulas and labels are unchanged.  Each part's translation lives in `videos/analysisN/narration_zh.json`
-(maintained with `tools/translate_narration.py`).
+Translations live in `videos/analysisN/narration_zh.json`, keyed by the English line; check them with
+`python tools/translate_narration.py analysisN --check`.
 
-## How to translate a line
-
-* **Spoken Mandarin, not written Chinese.** This is a voice-over for a 3Blue1Brown-style video: warm, clear, and
-  natural to the ear, like a good lecturer talking, not a textbook.  Short sentences.  Prefer 我们 / 你 / 来看 /
-  注意.  Avoid stiff written forms (之、其、该、乃、亦、故而).  It is fine to restructure a sentence so it sounds
-  natural, as long as the mathematics and the order of ideas stay the same.
-* **Keep every bookmark** `<bookmark mark='x'/>` exactly as written, in the same order, at the place in the Chinese
-  sentence where the same idea is being said.  The animation is timed to the bookmark: put it right before the
-  Chinese words that correspond to the English words after it.  Never drop, rename, or reorder one.
-* **Same content, similar length.** Don't add explanations or drop clauses.  Chinese narration of the same content
-  runs a little shorter than English; that is fine.
-* **Punctuation**: full-width Chinese punctuation (，。；：？！“”（）、).  End every sentence with 。？or！.
-* **Numbers**: Arabic digits for numbers that appear on screen (1.414、2/3 → 三分之二 when spoken as a fraction,
-  10^6 → 10的6次方, 0.5 → 0.5).  Years as digits: 1807年.  Rudin's theorem numbers as digits: 定理2.43.
-* **Math read aloud** the way a Chinese lecturer says it:
-  * single Latin letters stay Latin: x、n、f、K、E (read as letter names); f of x → f(x) 或 f x 在 …；
-  * Greek letters as the symbol: ε、δ、π、μ、σ、λ、ω、φ、Ω (the voice reads them correctly);
-  * x squared → x的平方；square root of two → 根号2；a sub n → a_n 读作 “a n”，写成 a_n is fine;
-  * the sum of … from n = 1 to infinity → n从1到无穷的……之和；the limit as n goes to infinity → 当n趋于无穷时的极限；
-  * less than or equal to → 小于等于；if and only if → 当且仅当；for every → 对任意；there exists → 存在。
-* **Chapter titles** (`chapters`) are short; keep their numbering (“1. …”).  The part title (`title`) follows the
-  pattern `分析学，从零搭建 · 第1部分：实数与空间的形状`.
-* **Names** use the standard Chinese transliteration below; the book titles use their Chinese editions.
+- Spoken Mandarin, short sentences; same content and order as the English.
+- Keep every `<bookmark mark='x'/>`, in order, before the words it times.
+- Full-width punctuation; on-screen numbers as digits; Latin letters stay Latin (x_n, sin x, L², Lᵖ, H², 弱*).
+- Spoken math: x的平方, 根号2, n分之1, 当且仅当, 对任意, 存在.
 
 ## Glossary
 
@@ -258,11 +238,3 @@ formulas and labels are unchanged.  Each part's translation lives in `videos/ana
 | numerical range; projection-valued measure; ergodic theorem | 数值域；投影值测度；遍历定理 |
 | deficiency indices; self-adjoint extension; Cayley transform; Stone's theorem | 亏指数；自伴延拓；凯莱变换；斯通定理 |
 | Hamiltonian; Born rule; canonical commutation relation; Wielandt | 哈密顿量；玻恩定则；正则对易关系；维兰特 |
-
-## Conventions settled while translating Part 1
-
-* Subscripts as `x_1`, `E_n`, `f_n`, `G_α` (the voice reads `x_n` as "x n"); a star as `x*` (read "x 星").
-* `sin`, `cos`, `sup`, `inf`, `lim`, `ln`, `log` stay in Latin letters: sin x、cos n、sup E.
-* Spoken fractions in words (三分之一, 二十八分之十二); numbers shown on screen as digits (0.527, 1.414).
-* Function arguments that are expressions get full-width parentheses when spoken: sin（根号2乘n）、sin（x分之1）.
-* "whole numbers" in a counting context is 正整数; for p and q in p/q it is 整数.

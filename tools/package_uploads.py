@@ -1,22 +1,10 @@
 #!/usr/bin/env python
-"""Gather the Analysis, Built masters into upload-ready folders for YouTube and Bilibili, in English and Chinese.
+"""Verify the Analysis, Built masters and lay them out for upload in renders/upload/analysis-built/.
 
-    python tools/package_uploads.py                 # every part whose masters exist
-    python tools/package_uploads.py --parts 1 2     # just these parts
-    python tools/package_uploads.py --check-only    # verify the masters, write nothing
+    python tools/package_uploads.py [--parts 1 2] [--check-only]
 
-For each part and language (renders/analysisN_2160p.mp4 and renders/analysisN_2160p_zh.mp4) it writes
-renders/upload/analysis-built/NN-<slug>/<lang>/:
-
-    analysis-built-NN-<lang>.mp4    the master (a hard link: no second copy on disk)
-    analysis-built-NN-<lang>.<lang>.srt
-    thumbnail.jpg                   1920x1080, text inside the centre 4:3 so Bilibili's crop keeps it
-    youtube.txt, bilibili.txt       title, description (with chapters), tags and settings, ready to paste
-    metadata.json                   the same, plus what was verified
-
-and at the top a manifest.json of every verified master and an UPLOAD.md checklist.  Each master is checked first:
-2160p60 H.264, 48 kHz AAC, a subtitle track in its language, one chapter per scene, loudness near -16 LUFS, and
-subtitles that end inside the video.  The text comes from videos/analysis_upload.json and the masters themselves.
+Per part and language: the master (hard link), .srt, thumbnail.jpg, youtube.txt and bilibili.txt (title,
+description with chapters, tags). Text comes from videos/analysis_upload.json.
 """
 
 from __future__ import annotations
@@ -387,30 +375,14 @@ def write_checklist() -> None:
         rows.append(f"| {d.name} | {', '.join(langs) or '-'} |")
     (OUT / "UPLOAD.md").write_text(f"""# Analysis, Built: upload kit
 
-Each part has an `en` (English narration and subtitles) and a `zh` (Chinese narration and subtitles) folder. Every
-folder holds the 2160p60 master, its subtitles, a 1920x1080 thumbnail, and `youtube.txt` / `bilibili.txt` with the
-title, description (chapters included), tags and settings, ready to paste. `manifest.json` records what was
-verified for each master (resolution, frame rate, audio, loudness, subtitle cues, chapters, sha256).
-
 | part | ready |
 |---|---|
 {chr(10).join(rows)}
 
-## YouTube (English first; the Chinese versions can go up as separate videos)
-1. Upload `analysis-built-NN-en.mp4`; paste title, description and tags from `youtube.txt`; set the thumbnail.
-2. Subtitles: upload the `.srt` with the language given in `youtube.txt` (the MP4 also carries them).
-3. Audience: not made for kids. Category: Education. Add to the playlist "{en['playlist_title']}".
-   Playlist description: {en['playlist_description']}
-4. The narration is a synthetic voice; YouTube's altered-content disclosure is for realistic depictions of real
-   people or events, so it is not required here, but the description names the voice.
+Each `en` / `zh` folder: the video, its `.srt`, `thumbnail.jpg`, and `youtube.txt` / `bilibili.txt` to paste from.
 
-## Bilibili (Chinese first)
-1. 上传 `analysis-built-NN-zh.mp4`，从 `bilibili.txt` 粘贴标题、简介、标签；类型选“自制”，分区“知识 → 科学科普”。
-2. 封面：上传 `thumbnail.jpg`（文字在中间4:3区域内，裁剪不会切掉）。
-3. 字幕：上传 `.zh-Hans.srt`（视频文件里也带有字幕轨）。
-4. 勾选“内容含AI合成”的声明（旁白为合成语音）。
-5. 分段章节：按 `bilibili.txt` 末尾的时间填写。
-6. 加入合集“{zh['playlist_title']}”。合集简介：{zh['playlist_description']}
+- YouTube: Education, not made for kids; playlist "{en['playlist_title']}": {en['playlist_description']}
+- Bilibili: 自制, 知识 / 科学科普; declare the AI-synthesized voice; 合集"{zh['playlist_title']}"：{zh['playlist_description']}
 """)
 
 

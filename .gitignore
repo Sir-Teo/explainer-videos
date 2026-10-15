@@ -14,3 +14,7 @@ media/
 renders/
 published/
 *.egg-info/
+
+# Generated narration scripts (tools/export_script.py) and macOS clutter
+SCRIPT.md
+.DS_Store

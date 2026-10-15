@@ -1,22 +1,8 @@
 #!/usr/bin/env python
-"""Neural narration server: synthesize, verify, and align every narration line.
+"""Local narration server (MLX, Apple Silicon): synthesize each sentence, check it by speech recognition (re-taking
+garbled ones), and force-align words (Chinese: characters) for the animation bookmarks and subtitles.
 
-Runs in its own environment (MLX on Apple Silicon), separate from the render pipeline:
-
-    uv venv --python 3.12 .venv-tts && source .venv-tts/bin/activate && uv pip install mlx-audio soundfile pypinyin
-    python tools/tts_server.py --voice qwen3-ryan-vivian        # serves http://127.0.0.1:8765
-
-Render with ``EXPLAINER_TTS=server EXPLAINER_VOICE=<the same profile>`` (``explainer/tts.py`` caches every line,
-so the server is needed only for new or changed lines).  For each line the server
-
-1. splits it into sentences (long ones at clause boundaries) and synthesizes each,
-2. transcribes each take with an ASR model and retries (fresh sampling) when the take drops, repeats or garbles
-   words, keeping the most faithful take,
-3. trims the takes' silences and joins them with even pauses, and
-4. forced-aligns the text to the audio: per-word (English) or per-character (Chinese) timings, which drive the
-   animation bookmarks and the subtitles.
-
-Voice profiles are in ``tools/voices.json``.  Takes that never pass the check are logged to ``.cache/tts/qa.jsonl``.
+    .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # profiles in tools/voices.json
 """
 
 from __future__ import annotations
