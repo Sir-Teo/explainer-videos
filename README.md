@@ -51,12 +51,13 @@ python tools/build.py analysis1 -q k --fps 60 --crf 16 [--lang zh]
 python tools/package_uploads.py                                    # YouTube / Bilibili kits in renders/upload/
 ```
 
-Chinese narration lives in `videos/analysisN/narration_zh.json`; terms in `videos/ANALYSIS_ZH_GUIDE.md`.
+Chinese narration lives in `videos/analysisN/narration_zh.json`, on-screen text in `videos/analysis_text_zh.json`
+(`tools/collect_text.py --check`); terms in `videos/ANALYSIS_ZH_GUIDE.md`.
 
 ## Credits
 
 * Animation engine: [Manim Community Edition](https://www.manim.community/) (MIT).
-* Voices: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0), `af_heart`; *Analysis, Built*: [Qwen3-TTS](https://huggingface.co/Qwen) 1.7B (Apache-2.0), the English voice cloned from `af_heart`.
+* Voices: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0), `af_heart`; *Analysis, Built*: [Qwen3-TTS](https://huggingface.co/Qwen) 1.7B (Apache-2.0), the English voice cloned from `af_heart`, the Chinese from Qwen3's Serena.
 * Model under the microscope: [GPT-2](https://huggingface.co/openai-community/gpt2) (OpenAI, modified MIT license), via Hugging Face `transformers`.
 * Training text for the tiny model: Tiny Shakespeare from [`karpathy/char-rnn`](https://github.com/karpathy/char-rnn) (Shakespeare, public domain).
 * Market note explained: Jurrien Timmer, [*Opposing Forces*](https://www.linkedin.com/pulse/opposing-forces-week-10526-jurrien-timmer-anaac/) (Fidelity Investments, Oct 5, 2026). The video paraphrases and attributes its arguments; it is not affiliated with Fidelity.

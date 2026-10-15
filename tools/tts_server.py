@@ -121,50 +121,26 @@ def trim(audio: np.ndarray, sr: int, keep: float = 0.04) -> np.ndarray:
 # Engines
 # ---------------------------------------------------------------------------
 class Engine:
+    """Qwen3-TTS Base, cloning the profile's reference voice (a short, calm recording and its transcript)."""
+
     def __init__(self, profile: dict):
         from mlx_audio.tts.utils import load_model
 
         self.profile = profile
         self.model = load_model(model_path(profile["model"]))
         self.sr = self.model.sample_rate
-        self.batch = profile.get("batch", True)
 
     def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
-        """One take of each text.  The CustomVoice model decodes them as one batch: decoding is bound by reading
-        the weights, and one read per step serves every sentence, so a line costs little more than its longest."""
-        p = self.profile["voices"][lang]
-        if self.profile["kind"] != "qwen3-custom" or not self.batch or len(texts) == 1:
-            return [self.take(t_, lang, attempt) for t_ in texts]
-        kw = dict(p.get("params", {}))
-        if attempt:
-            kw["temperature"] = max(0.5, kw.get("temperature", 0.9) - 0.1 * attempt)
-        parts: dict[int, list] = {i: [] for i in range(len(texts))}
-        for r in self.model.batch_generate(texts, voices=[p["speaker"]] * len(texts),
-                                           instructs=[p.get("instruct")] * len(texts), lang_code=LANG_NAME[lang],
-                                           **kw):
-            parts[r.sequence_idx].append(np.asarray(r.audio, dtype=np.float32).reshape(-1))
-        return [np.concatenate(parts[i]) if parts[i] else np.zeros(self.sr // 10, np.float32)
-                for i in range(len(texts))]
+        """One take of each text."""
+        return [self.take(t_, lang, attempt) for t_ in texts]
 
     def take(self, text: str, lang: str, attempt: int) -> np.ndarray:
         p = self.profile["voices"][lang]
-        kind = self.profile["kind"]
         kw = dict(p.get("params", {}))
         if attempt:  # resample on retries; a slightly cooler temperature steadies a hard sentence
             kw["temperature"] = max(0.5, kw.get("temperature", 0.9) - 0.1 * attempt)
-        if kind == "qwen3-custom":
-            gen = self.model.generate_custom_voice(text=text, speaker=p["speaker"], language=LANG_NAME[lang],
-                                                   instruct=p.get("instruct"), **kw)
-        elif kind == "qwen3-clone":
-            gen = self.model.generate(text=text, ref_audio=str(ROOT / p["ref_audio"]), ref_text=p["ref_text"],
-                                      lang_code=LANG_NAME[lang].lower(), **kw)
-        elif kind == "voxcpm2":
-            kw.pop("temperature", None)
-            if "ref_audio" in p:
-                kw.update(prompt_audio=str(ROOT / p["ref_audio"]), prompt_text=p["ref_text"])
-            gen = self.model.generate(text=text, instruct=p.get("instruct"), **kw)
-        else:
-            raise ValueError(kind)
+        gen = self.model.generate(text=text, ref_audio=str(ROOT / p["ref_audio"]), ref_text=p["ref_text"],
+                                  lang_code=LANG_NAME[lang].lower(), **kw)
         return np.concatenate([np.asarray(r.audio, dtype=np.float32).reshape(-1) for r in gen])
 
 
