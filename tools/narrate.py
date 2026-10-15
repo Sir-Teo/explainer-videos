@@ -1,12 +1,7 @@
 #!/usr/bin/env python
-"""Synthesize a video's narration ahead of rendering, so the render finds every line in the TTS cache.
+"""Synthesize a video's narration into the TTS cache before rendering it (speech on the GPU, renders on the CPU).
 
-    EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator python tools/narrate.py analysis1
-    EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-narrator python tools/narrate.py analysis1 --lang zh
-
-The lines come from the newest render of each scene (any quality, any voice): the English text exactly as spoken,
-lines computed from data included, and for another language its entry in ``narration_<lang>.json``.  Speech runs on
-the GPU (tools/tts_server.py) and rendering on the CPU, so one video's narration can be made while another renders.
+    EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a python tools/narrate.py analysis1 [--lang zh]
 """
 
 from __future__ import annotations

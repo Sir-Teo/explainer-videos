@@ -1,268 +1,62 @@
 # Explainer Videos
 
-3Blue1Brown-style explainers of math, physics, machine learning and markets, built entirely in code with
-[Manim Community](https://www.manim.community/), narrated by an offline neural
-TTS voice, and stitched into a finished video with subtitles and chapters.
+Math, physics, ML and markets explainers in the style of 3Blue1Brown, built entirely in code with
+[Manim Community](https://www.manim.community/) and narrated by a local neural voice. Only the code is stored here;
+every video builds from source. Each `videos/<name>/README.md` has the outline and sources.
 
-| Video | Length | Source | Build (after the one-time setup below) |
-|---|---|---|---|
-| **The Navier–Stokes Equations, Derived and Visualized** | 28 min | [`videos/navier_stokes`](videos/navier_stokes) | `python -m videos.navier_stokes.simulate && python tools/build.py navier_stokes` |
-| **How Large Language Models Work: The Transformer, Visualized** | 37 min | [`videos/llm`](videos/llm) | `python -m videos.llm.analyze && python tools/build.py llm` |
-| **Opposing Forces: Booming Earnings vs. the Rising Cost of Money** (Jurrien Timmer's market note of Oct 5, 2026, explained and fact-checked) | 37 min | [`videos/opposing_forces`](videos/opposing_forces) | `python tools/build.py opposing_forces` |
-| **The Riemann Hypothesis, Visualized: Primes, Zeros, and the 2026 Quasi-Riemann Proof** (RH from scratch, then OpenAI's claimed zero-free half-plane Re s > 7/8 and how its proof works) | 39 min | [`videos/riemann`](videos/riemann) | `python -m videos.riemann.compute && python tools/build.py riemann` |
-| **Inside the Open Frontier: The Architectures of MiMo-V2.6-Pro, GLM-5.3 and Kimi K3** (the top three open-weights models on the Artificial Analysis Intelligence Index, Oct 2026: mixtures of experts, sliding windows and sinks, latent + sparse attention, delta-rule memory, attention across depth) | 33 min | [`videos/open_models`](videos/open_models) | `python tools/build.py open_models` |
-| **How Frontier AI Models Are Trained, End to End** (data, scaling laws, MoE, Muon, FP8/FP4, GPU clusters, RLHF and RL with verifiable rewards, as of Oct 2026; every chart a real miniature run on a 4-core CPU, and every key formula worked through with numbers) | 60 min | [`videos/frontier`](videos/frontier) | `python -m videos.frontier.compute && python tools/build.py frontier` |
-| **Reinforcement Learning for Language Models, Derived: From the Policy Gradient to GRPO** (REINFORCE, baselines, GAE, TRPO/PPO, Bradley–Terry, the KL-regularized optimum, DPO, GRPO and its variants, entropy, pass@k, the sampler/learner mismatch, ScaleRL; every algorithm derived on screen and run for real on a 4-core CPU) | 46 min | [`videos/rl`](videos/rl) | `python -m videos.rl.compute && python tools/build.py rl` |
-| **Stochastic Calculus, Visualized: Brownian Motion, Itô's Lemma, and Why dW² = dt** (from a coin flip to the Itô integral, Itô's lemma, SDEs, Fokker–Planck, Feynman–Kac, Black–Scholes and Girsanov, with every result derived on screen; every path, histogram and number a seeded simulation checked against the theory) | 49 min | [`videos/stochastic`](videos/stochastic) | `python -m videos.stochastic.compute && python tools/build.py stochastic` |
-| **Building a Top-Tier Real-Time Trading System** (how a Jane Street / HRT-style market maker is built, from the exchange's sequencer and the ITCH feed to kernel bypass, FPGAs, fair value, Avellaneda–Stoikov quoting, real-queue backtests and risk; every market chart from one full day of Nasdaq's feed, 846.8 million messages, and every latency measured on the rendering machine) | 43 min | [`videos/trading`](videos/trading) | `python tools/build.py trading` |
-| **Quantum Mechanics, Visualized: The Wavefunction, the Schrödinger Equation, and Why [x, p] = iħ** (from the double slit to Bell's theorem, in the Schrödinger equation's centenary year: amplitudes, the equation derived, wave packets, boxes, quantum carpets, tunneling, Hilbert space, measurement, [x, p] = iħ, the uncertainty principle derived, ladder operators, Wigner functions, hydrogen, spin and CHSH; every wave a numerical solution of the Schrödinger equation, every number asserted against theory) | 64 min | [`videos/quantum`](videos/quantum) | `python -m videos.quantum.compute && python tools/build.py quantum` |
-| **General Relativity, Derived: From a Falling Elevator to Einstein's Field Equations** (the equivalence principle, falling as maximal aging, metrics, tensors, Christoffel symbols, parallel transport, the Riemann tensor and geodesic deviation, the field equations derived two ways, Schwarzschild, Mercury's 43″, light bending, a ray-traced black hole and gravitational waves; every curvature formula computed with sympy and asserted, every orbit and light ray an integrated geodesic, and LIGO's real GW150914 strain) | 69 min | [`videos/relativity`](videos/relativity) | `python -m videos.relativity.compute && python tools/build.py relativity` |
-| **General Relativity, Part 2: Inside Black Holes, Spinning Spacetime, and the Expanding Universe** (the sequel: Eddington–Finkelstein, Kruskal and Penrose diagrams, the Einstein–Rosen bridge, Raychaudhuri's equation and Penrose's singularity theorem, frame dragging and Gravity Probe B, the Kerr metric, the ergosphere and Penrose process, the shadow of a spinning black hole, the quadrupole formula and chirp derived, Hulse–Taylor, ringdown and the area theorem, black-hole thermodynamics and Hawking radiation, Friedmann's equations and cosmic horizons; Kerr's Ricci-flatness checked exactly with sympy, ray-traced Kerr images matching Bardeen's shadow pixel for pixel, a simulated ringdown matching Leaver's frequency, and LIGO's real data) | 56 min | [`videos/relativity2`](videos/relativity2) | `python -m videos.relativity2.compute && python tools/build.py relativity2` |
-| **Quantum Mechanics, Part 2: Where the Rules Come From (Symmetry, Sums over Paths, and the Structure of Matter)** (the sequel derives what Part 1 guessed: the Schrödinger equation from time symmetry via Wigner's and Stone's theorems, [x, p] = iħ from translations, the Hamiltonian from Galilean boosts, spin from the rotation algebra, electromagnetism from local phase symmetry and a simulated Aharonov–Bohm effect; then Feynman's path integral, the Schrödinger equation derived from it, stationary phase, WKB and Gamow's alpha decay against 29 measured half-lives; perturbation theory and why its series diverge, Fermi's golden rule; identical particles, helium, the periodic table and bands; density matrices, Gleason's theorem and decoherence; the Dirac equation, g = 2, fine structure and the Lamb shift; every wave a numerical solution, every number asserted against theory or data) | 57 min | [`videos/quantum2`](videos/quantum2) | `python -m videos.quantum2.compute && python tools/build.py quantum2` |
-| **Analysis, Built — Part 1: The Real Numbers and the Shape of Space** (a ten-part series from the holes in Q to functional analysis, following Rudin's three books; Part 1 is *Principles* ch. 1–2: Dedekind cuts and the least-upper-bound property, countability and the diagonal, metric spaces, open and closed sets, compactness as a game of covers, Heine–Borel by bisection, the Cantor set, connectedness, and a closed bounded set in C[0, 1] that is not compact; the rationals drawn as an exactly enumerated zoomable ruler) | 50 min | [`videos/analysis1`](videos/analysis1) | `python -m videos.analysis1.compute && python tools/build.py analysis1` |
-| **Analysis, Built — Part 2: Limits: Sequences, Series, Continuity and the Derivative** (*Principles* ch. 3–5: convergence as an ε–N game, Cauchy sequences and completeness, lim sup, the convergence tests, e and its irrationality, power series, summation by parts and the sawtooth's convergence, Riemann's rearrangement theorem, continuity on the ε–δ game board, compactness and uniform continuity, Thomae's function, the mean value theorem by a shear, Darboux, L'Hôpital, Taylor, and e^(−1/x²); every δ, N and sum computed and asserted) | 49 min | [`videos/analysis2`](videos/analysis2) | `python -m videos.analysis2.compute && python tools/build.py analysis2` |
-| **Analysis, Built — Part 3: Integration and the First Function Space** (*Principles* ch. 6–8, organized around Rudin's main problem, when two limits may be swapped: upper and lower sums, who is integrable, Stieltjes integrals with the Cantor integrator, the fundamental theorem, uniform convergence on a convergence dashboard, Weierstrass's nowhere-differentiable function, equicontinuity and Arzelà–Ascoli, Weierstrass and Stone–Weierstrass approximation, power series, and Fourier series through Fejér, Parseval and Gibbs; every number computed and asserted) | 50 min | [`videos/analysis3`](videos/analysis3) | `python -m videos.analysis3.compute && python tools/build.py analysis3` |
-| **Analysis, Built — Part 4: Calculus in Many Dimensions** (*Principles* ch. 9 and a tour of ch. 10: the derivative as a linear map, operator norms and the Neumann series, a museum of partial-derivative failures, the contraction principle and Picard, the inverse and implicit function theorems from one contraction, mixed partials, and forms and Stokes as a labeled tour; every number computed and asserted) | 24 min | [`videos/analysis4`](videos/analysis4) | `python -m videos.analysis4.compute && python tools/build.py analysis4` |
-| **Analysis, Built — Part 5: Measure and the Lebesgue Integral** (*Principles* ch. 11, *Real and Complex* ch. 1, 2, 8: three ways mass escapes a Riemann integral, null sets and the fat Cantor set, the Vitali set, simple functions, monotone and dominated convergence, Fatou, Egorov, Lusin, the Riesz representation theorem, and Fubini with its counterexample; every number computed and asserted) | 26 min | [`videos/analysis5`](videos/analysis5) | `python -m videos.analysis5.compute && python tools/build.py analysis5` |
-| **Analysis, Built — Part 6: L^p, Hilbert Space and the Geometry of Functions** (*Real and Complex* ch. 3, 4, 6, 7: Jensen, Young, Hölder and Minkowski as pictures, Riesz–Fischer run on actual ramps, the parallelogram law, projections, Riesz representation, orthonormal bases, Fourier series in L², complex measures, Radon–Nikodym, the dual of L^p, differentiation of measures; every number computed and asserted) | 36 min | [`videos/analysis6`](videos/analysis6) | `python -m videos.analysis6.compute && python tools/build.py analysis6` |
-| **Analysis, Built — Part 7: Complex Analysis** (*Real and Complex* ch. 10–14, 17: conformal grids, winding numbers, Goursat and Cauchy, residues and the argument principle, Schwarz, Runge's horseshoe, Montel, a computed Riemann map (Schwarz–Christoffel), Poisson integrals, Weierstrass and Blaschke products, H^p; every domain coloring computed; every number computed and asserted) | 24 min | [`videos/analysis7`](videos/analysis7) | `python -m videos.analysis7.compute && python tools/build.py analysis7` |
-| **Analysis, Built — Part 8: Banach Spaces** (*Real and Complex* ch. 5, *Functional Analysis* ch. 1–5: Baire, uniform boundedness and the Lebesgue constants of divergent Fourier series, open mapping and closed graph, Hahn–Banach as separation, duals, weak convergence and Mazur, Alaoglu, Krein–Milman, compact operators and Fredholm; every number computed and asserted) | 23 min | [`videos/analysis8`](videos/analysis8) | `python -m videos.analysis8.compute && python tools/build.py analysis8` |
-| **Analysis, Built — Part 9: Distributions and the Fourier Transform** (*Functional Analysis* ch. 6–9, *Real and Complex* ch. 9: differentiating anything, the structure theorem, mollifiers, the Fourier transform from L¹ to S′, Plancherel, Poisson summation, Paley–Wiener with contour-shifted inversion, Denjoy–Carleman, Sobolev, fundamental solutions by contour shifting, Wiener's Tauberian theorem and the primes; every number computed and asserted) | — | [`videos/analysis9`](videos/analysis9) | `python -m videos.analysis9.compute && python tools/build.py analysis9` |
-| **Analysis, Built — Part 10: Banach Algebras and the Spectral Theorem** (*Functional Analysis* ch. 4, 10–13, *Real and Complex* ch. 18: the shift's disc of spectrum, the spectral radius and the Volterra operator, functions of operators by Cauchy's formula, Gelfand and Wiener's 1/f, compact self-adjoint operators, multiplication by x and the Born rule, the spectral theorem proved with the whole series, self-adjoint extensions, Cayley, Stone, and quantum mechanics' assumptions as theorems; every number computed and asserted) | — | [`videos/analysis10`](videos/analysis10) | `python -m videos.analysis10.compute && python tools/build.py analysis10` |
+| Video | Length | Build |
+|---|---|---|
+| The Navier–Stokes Equations, Derived and Visualized | 28 min | `python -m videos.navier_stokes.simulate && python tools/build.py navier_stokes` |
+| How Large Language Models Work | 37 min | `python -m videos.llm.analyze && python tools/build.py llm` |
+| Opposing Forces: Earnings vs. the Cost of Money | 37 min | `python tools/build.py opposing_forces` |
+| The Riemann Hypothesis, Visualized | 39 min | `python -m videos.riemann.compute && python tools/build.py riemann` |
+| Inside the Open Frontier (MiMo, GLM, Kimi) | 33 min | `python tools/build.py open_models` |
+| How Frontier AI Models Are Trained | 60 min | `python -m videos.frontier.compute && python tools/build.py frontier` |
+| Reinforcement Learning for LLMs, Derived | 46 min | `python -m videos.rl.compute && python tools/build.py rl` |
+| Stochastic Calculus, Visualized | 49 min | `python -m videos.stochastic.compute && python tools/build.py stochastic` |
+| Building a Real-Time Trading System | 43 min | `python tools/build.py trading` |
+| Quantum Mechanics, Visualized | 64 min | `python -m videos.quantum.compute && python tools/build.py quantum` |
+| General Relativity, Derived | 69 min | `python -m videos.relativity.compute && python tools/build.py relativity` |
+| General Relativity, Part 2 | 56 min | `python -m videos.relativity2.compute && python tools/build.py relativity2` |
+| Quantum Mechanics, Part 2 | 57 min | `python -m videos.quantum2.compute && python tools/build.py quantum2` |
+| Analysis, Built (10 parts: real, complex and functional analysis) | 6 h | `python -m videos.analysisN.compute && python tools/build.py analysisN` |
 
-The finished videos are not stored in this repository: only the code that makes
-them is. Each one is built from source with the command in its row (after the
-one-time setup in the quick start below); the first part of the command
-precomputes the video's footage, data or simulations into `.cache/` and is needed
-only once. `tools/build.py` writes `renders/<video>.mp4`: a 1080p30 MP4 (H.264,
-AAC narration mastered to -16 LUFS) with soft English subtitles and chapter
-markers, plus a sidecar `.srt` and a YouTube chapter list. Add `-q p` for 1440p
-or `-q k` for 2160p (4K), and `--fps 60` for 60 frames per second. The
-opposing-forces, open-models and trading videos need no precomputation: their
-data snapshots are committed.
-
-## Quick start
+## Setup
 
 ```bash
-# 1. System packages (Ubuntu/Debian). LaTeX is used for all math.
-sudo apt-get install ffmpeg libpango1.0-dev pkg-config espeak-ng libmagic1 \
-     texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-science dvisvgm cm-super
-
-# 2. Python env (3.10–3.12)
+brew install ffmpeg pango pkg-config espeak-ng mactex      # or the apt equivalents
 uv venv --python 3.12 .venv && source .venv/bin/activate
-uv pip install --index-url https://download.pytorch.org/whl/cpu torch
-uv pip install -e .
-
-# 3. Precompute each video's "footage" (cached in .cache/)
-python -m videos.navier_stokes.simulate      # fluid simulations (~40 min on 4 cores)
-python -m videos.llm.analyze                 # GPT-2 probes + a tiny transformer trained on Shakespeare (~20 min)
-python -m videos.riemann.compute             # real zeta zeros, prime counts, Möbius sums, domain coloring (~4 min)
-python -m videos.frontier.compute            # Common Crawl + FineWeb filters, 47 pocket-model training runs, RL (several hours)
-python -m videos.rl.compute                  # a pocket adder, 30 RL runs (GRPO, PPO, DPO, ...), Qwen3 mismatch (~3 h)
-python -m videos.stochastic.compute          # every Brownian path, particle cloud and Monte Carlo of the stochastic-calculus video (~1 min)
-python -m videos.quantum.compute             # every Schrödinger solution, Born-rule sample and orbital render of the quantum video (~15 min)
-python -m videos.relativity.compute          # Schwarzschild orbits and light rays, two black-hole ray traces, transport, tides, GW150914 (~4 min)
-python -m videos.relativity2.compute         # Kerr ray traces, infall, Penrose process, Regge-Wheeler ringdown, Hawking spectrum, cosmology (~6 min)
-python -m videos.quantum2.compute            # the quantum sequel: a 2D Aharonov-Bohm run, path-integral Monte Carlo, WKB, Gamow, helium, bands, Dirac (~25 min)
-python -m videos.analysis1.compute           # analysis Part 1: exact fractions, digits of sqrt 2, covers, the Cantor set (seconds)
-python -m videos.analysis2.compute           # analysis Part 2: rearrangements, series to 10^6 terms, deltas, Taylor (seconds)
-python -m videos.analysis3.compute           # analysis Part 3
-python -m videos.analysis4.compute           # analysis Part 4
-python -m videos.analysis5.compute           # analysis Part 5
-python -m videos.analysis6.compute           # analysis Part 6
-python -m videos.analysis7.compute           # analysis Part 7
-python -m videos.analysis8.compute           # analysis Part 8
-python -m videos.analysis9.compute           # analysis Part 9
-python -m videos.analysis10.compute          # analysis Part 10
-# (trading's derived data, videos/trading/data/*.json, is committed; `python -m videos.trading.compute` re-downloads
-#  the 11.6 GB Nasdaq ITCH day, rescans it, and re-measures this machine)
-# (opposing_forces and open_models need nothing: their data snapshots, videos/*/data.json, are committed)
-
-# 4. Render: fast preview, then the final 1080p cut
-python tools/build.py navier_stokes -q l      # -> renders/navier_stokes_480p.mp4
-python tools/build.py navier_stokes           # -> renders/navier_stokes.mp4 (+ .srt, chapters)
-python tools/build.py llm                     # -> renders/llm.mp4
-python tools/build.py opposing_forces         # -> renders/opposing_forces.mp4
-python tools/build.py riemann                 # -> renders/riemann.mp4
-python tools/build.py open_models             # -> renders/open_models.mp4
-python tools/build.py frontier                # -> renders/frontier.mp4
-python tools/build.py rl                      # -> renders/rl.mp4
-python tools/build.py stochastic              # -> renders/stochastic.mp4
-python tools/build.py trading                 # -> renders/trading.mp4
-python tools/build.py quantum                 # -> renders/quantum.mp4
-python tools/build.py relativity              # -> renders/relativity.mp4
-python tools/build.py relativity2             # -> renders/relativity2.mp4
-python tools/build.py quantum2                # -> renders/quantum2.mp4
+uv pip install --index-url https://download.pytorch.org/whl/cpu torch && uv pip install -e .
 ```
 
-The ten parts of *Analysis, Built* are made at 2160p60 in English and in Chinese (Chinese narration and subtitles,
-same picture), narrated by a local neural voice, Qwen3-TTS 1.7B (`tools/voices.json`, profile `qwen3-calm-a`: each voice cloned from a calm reference line, so the delivery stays even), on
-Apple Silicon. Its server runs in its own environment:
+## Build
+
+```bash
+python tools/build.py <video> -q l                 # 480p preview
+python tools/build.py <video>                      # 1080p30 -> renders/<video>.mp4, .srt, chapters
+python tools/build.py <video> -q k --fps 60        # 2160p60
+```
+
+Narration and animations are cached, so rebuilds redo only what changed. `EXPLAINER_TTS=silent` skips speech.
+QA: `tools/contact_sheet.py` (layout), `tools/dead_air.py` (empty screen under narration).
+
+## Analysis, Built in English and Chinese
 
 ```bash
 uv venv --python 3.12 .venv-tts && uv pip install --python .venv-tts/bin/python mlx-audio soundfile pypinyin
-.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a       # serves http://127.0.0.1:8765
-```
-
-The server takes every sentence until speech recognition hears the script, then forced-aligns it (per word in
-English, per character in Chinese) so the animation keeps its timing. A part's narration comes from its newest
-render, so build a quick preview first, then the narration, then the master:
-
-```bash
+.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # Qwen3-TTS on Apple Silicon
 export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a
-python -m videos.analysis1.compute                         # every number the part shows, computed and asserted
-python tools/build.py analysis1 -q l                       # 480p preview (any voice): the script, as rendered
-python tools/narrate.py analysis1 --lang en                # synthesize, check and align every line (GPU)
-python tools/narrate.py analysis1 --lang zh                # the same for videos/analysis1/narration_zh.json
-python tools/build.py analysis1 -q k --fps 60 --crf 16             # -> renders/analysis1_2160p.mp4 (+ .srt, chapters)
-python tools/build.py analysis1 -q k --fps 60 --crf 16 --lang zh   # -> renders/analysis1_2160p_zh.mp4
+python tools/narrate.py analysis1 --lang en                        # then --lang zh
+python tools/build.py analysis1 -q k --fps 60 --crf 16 [--lang zh]
+python tools/package_uploads.py                                    # YouTube / Bilibili kits in renders/upload/
 ```
 
-`tools/queue_narration.sh` and `tools/queue_masters.sh` run the whole series as two queues, one narration and one
-build at a time, so narration (GPU) overlaps rendering (CPU). The Chinese narration follows
-`videos/ANALYSIS_ZH_GUIDE.md`, and `tools/translate_narration.py` keeps each part's translation table in step with
-its English. Narration is synthesized once and cached in `.cache/tts`, and Manim caches every animation it renders,
-so a second build redoes only what changed.
-
-Iterate on a single scene:
-
-```bash
-manim render -ql videos/navier_stokes/s04_material_derivative.py MaterialDerivative
-manim render -ql --dry_run videos/navier_stokes/s04_material_derivative.py MaterialDerivative  # just check it runs
-python tools/contact_sheet.py media/videos/s04_material_derivative/480p15/MaterialDerivative.mp4   # visual QA
-```
-
-Set `EXPLAINER_TTS=silent` to skip speech synthesis (timing is estimated), and
-`EXPLAINER_VOICE` / `EXPLAINER_SPEED` to change the narrator.
-
-## Repository layout
-
-```
-explainer/                 shared toolkit (import with `from explainer import *`)
-  style.py                 semantic color palette, LaTeX macros, typography
-  voiceover.py             VoiceoverScene: narration-driven timing, bookmarks, subtitles
-  tts.py                   Kokoro-82M TTS backend, on-disk cache, pronunciation lexicon
-  fluids/                  numpy/numba solvers that generate "real physics" footage
-    lbm.py                 D2Q9 lattice-Boltzmann (flow past a cylinder), Smagorinsky LES
-    spectral.py            pseudo-spectral 2D vorticity solver (periodic box)
-    colormaps.py           field -> RGB maps tuned for the dark background
-  lm/                      "real model" footage for the LLM and frontier-training videos
-    gpt2.py                probes of GPT-2 (tokens, attention, residual stream, logit lens, ...)
-    tiny_gpt.py            a minimal character-level GPT, trained from scratch on CPU
-    bpe.py                 byte-pair encoding, step by step
-    pocket.py              a modern pocket GPT (RMSNorm, RoPE, SwiGLU, QK-norm, MoE) + AdamW/Muon, cosine/WSD
-  data/                    web-data footage for the frontier-training video
-    crawl.py               Common Crawl through datatrove's FineWeb filters; MinHash LSH with FineWeb's settings
-videos/<name>/
-  manifest.py              scene order + chapter titles
-  sNN_*.py                 one Scene class per chapter (narration lives in the code)
-  simulate.py / analyze.py precomputes and caches the simulations / model data for this video
-  fetch.py                 (opposing_forces) downloads public market data into a committed data.json snapshot
-  compute.py               (riemann) mpmath/NumPy: zeta zeros, prime counts, Möbius walk, Gauss sums, domain coloring
-                           (frontier) Common Crawl funnel, dedup, FineWeb-Edu scores, BPE, scaling-law / optimizer /
-                           schedule / stability / MoE sweeps, Newton-Schulz, FP8/FP4, chat template, GRPO, Epoch data
-                           (rl) a pocket adder that can show its work, REINFORCE/RLOO/GRPO/DAPO/Dr. GRPO/PPO runs,
-                           critic, KL-tilted optimum, pass@k, DPO, ScaleRL fits, Qwen3 bf16-vs-fp32 log-probs
-                           (stochastic) seeded simulations: the 2^22-step hero path, Ito sums, GBM, Ornstein-Uhlenbeck,
-                           a double well with a Fokker-Planck solve, Kakutani's walkers, delta hedging, Girsanov weights
-                           (quantum) split-operator Schrodinger solutions in 1D and 2D (double slit, packets, tunneling,
-                           coherent states), exact eigen-expansions (carpets), finite-difference spectra, Wigner functions,
-                           hydrogen orbital volume renders, Stern-Gerlach and CHSH Monte Carlo; colormap.py: phase -> hue
-  fetch.py, toys.py        (open_models) leaderboard + Hugging Face configs, tensor shapes and small learned weights
-                           read with HTTP range requests; seeded toy computations of the mechanisms
-  compute.py, native/      (trading) a full day of Nasdaq TotalView-ITCH scanned in C; order books in Python and C;
-                           a market-making backtest on real queues; latency microbenchmarks of this machine;
-                           results committed as data/*.json
-  geometry.py, compute.py (relativity) sympy curvature (Christoffel, Riemann, Ricci, Einstein, Kretschmann) asserted
-  fetch.py                 against every slide; Schwarzschild geodesics, a thin-disk black-hole ray tracer, parallel
-                           transport, tides; LIGO's GW150914 strain and the EHT image, committed in data/
-  geometry.py, compute.py (relativity2) sympy checks of Eddington-Finkelstein, Kruskal, Kerr (exactly Ricci-flat),
-  raytrace.py              Kerr thermodynamics and FLRW; a numba Kerr ray tracer in Mino time; infall, Penrose process,
-                           Regge-Wheeler ringdown vs Leaver, Hawking spectrum, LambdaCDM horizons
-  compute.py               (quantum2) a 2D Aharonov-Bohm split-operator run (gauge-twisted flux tube), imaginary-time
-                           path-integral Monte Carlo, time-slicing error, WKB/Airy, Gamow vs. NuDat 3 half-lives, a
-                           stretched drum's spectrum, exact Bender-Wu coefficients, a 601-level golden-rule decay, helium
-                           (sympy + a 2D Temkin-Poet solve), Kronig-Penney bands, dephasing, a 1+1 D Dirac packet;
-                           NuDat/AME2020 and NIST snapshots committed in data/
-  README.md                outline, color legend, sources and fact-check notes
-  SCRIPT.md                narration, generated by tools/export_script.py
-tools/
-  build.py                 parallel render -> concat -> loudness mastering -> subtitles + chapters
-  publish.py               a smaller copy (< 100 MB) of a finished video, for sharing -> published/ (not committed)
-  export_script.py         extracts the narration script from the scene code
-  contact_sheet.py         tiles frames of a render into one image for layout QA
-  dead_air.py              finds stretches where the screen is empty or nearly so while the narration runs
-  check_narration.py       Whisper "listen test": diffs what the TTS said against the script
-  score_voice.py           UTMOSv2 naturalness + Whisper word error rate for narration audio
-```
-
-## How a video is made (the workflow these tools encode)
-
-1. **Outline the argument before animating.** Each chapter answers one question
-   and ends on the idea the next chapter needs. Start from a concrete hook,
-   build intuition, *then* derive, then pay it off.
-2. **Narration is the clock.** Scenes are written as
-   `with self.voiceover("... <bookmark mark='x'/> ...") as vo:` blocks. The audio
-   is synthesized (and cached) first, and animations are timed to word-level
-   bookmarks (`vo.until("x")`, `vo.wait_until("x")`), so picture and voice can
-   never drift apart, and editing a sentence re-times only that block.
-3. **One color per concept, everywhere.** `explainer/style.py` defines semantic
-   colors (velocity is always blue, pressure red, viscosity green, ...). Scenes
-   never hard-code a hex value for a concept.
-4. **Derive on screen, step by step.** Every new line of a derivation is a
-   transform of the previous one, with the term that changes highlighted and a
-   brace or label saying *why* it changed.
-5. **Real physics, not cartoons.** Fluid footage comes from actual solvers in
-   `explainer/fluids`, precomputed once and played back with `FieldMovie`; the
-   LLM video shows a real model's internals (GPT-2) and a real training run;
-   every chart in the markets video is drawn from public data (FRED, the NY Fed,
-   Shiller, Treasury, FactSet, per-stock prices), frozen in a committed snapshot;
-   in the Riemann video every zero, prime count, Möbius walk, Gauss sum and
-   domain-coloring pixel is computed (mpmath, NumPy), and the paper being
-   explained is quoted from its own source; in the open-models video every
-   layer layout, parameter count and learned weight shown is read from the
-   published checkpoints (configs, safetensors headers, range-read tensors). Schematics are labeled as schematics, and numbers the narration states are
-   asserted against the data at render time.
-6. **QA every render.** `--dry_run` catches exceptions in seconds;
-   `tools/contact_sheet.py` catches overlaps and off-screen text;
-   `tools/dead_air.py` finds narration playing over an empty screen;
-   `tools/check_narration.py` catches mispronunciations (e.g. "dy" read as
-   "die", "m a" read as "Emma"), fixed via the lexicon in `explainer/tts.py`;
-   `tools/score_voice.py` measures how natural the narration sounds; the
-   generated `SCRIPT.md` is what gets fact-checked. Claims about recent events
-   get sources in the video's README.
-7. **Ship with accessibility and good sound.** The build emits subtitles
-   (soft-muxed and as `.srt`) and YouTube-style chapters automatically, and
-   masters the soundtrack to -16 LUFS (EBU R128, -1.5 dBTP peak ceiling) so
-   every video plays at the same comfortable level.
-
-## The narration voice, and how it was chosen
-
-The narrator is [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M), voice
-`af_heart`, chosen by measurement. Small open-weight TTS models from Hugging
-Face that run on a 4-core CPU were given the same four narration lines from
-these videos, then scored with [UTMOSv2](https://huggingface.co/sarulab-speech/UTMOSv2)
-(a predicted 1-5 naturalness MOS, VoiceMOS 2024 winner) and for intelligibility
-(word error rate of a Whisper-small transcription against the script), using
-`tools/score_voice.py`:
-
-| Voice | Naturalness (UTMOSv2) | Word error rate |
-|---|---|---|
-| **Kokoro-82M `af_heart`** (used) | **3.84** | 3.2% |
-| Kokoro-82M `am_michael` | 3.79 | 3.2% |
-| Kyutai Pocket TTS (100M) `charles` | 3.52 | 3.7% |
-| Kyutai Pocket TTS (100M) `alba` | 3.30 | 3.7% |
-| Kokoro-82M `af_bella` | 3.06 | 2.5% |
-| Qwen3-TTS 0.6B, Chatterbox-Turbo (350M) | not usable on CPU: more than 25 min for a single 15 s line | |
-
-The remaining errors were pronunciation, not voice quality, and are fixed in
-the lexicon (for example "F equals m a" was heard as "F equals Emma" from every
-voice). Set `EXPLAINER_VOICE` to try another Kokoro voice.
+Chinese narration lives in `videos/analysisN/narration_zh.json`; terms in `videos/ANALYSIS_ZH_GUIDE.md`.
 
 ## Credits
 
 * Animation engine: [Manim Community Edition](https://www.manim.community/) (MIT).
-* Voice: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0), voice `af_heart`.
+* Voices: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) (Apache-2.0), `af_heart`; *Analysis, Built*: [Qwen3-TTS](https://huggingface.co/Qwen) 1.7B (Apache-2.0), the English voice cloned from `af_heart`.
 * Model under the microscope: [GPT-2](https://huggingface.co/openai-community/gpt2) (OpenAI, modified MIT license), via Hugging Face `transformers`.
 * Training text for the tiny model: Tiny Shakespeare from [`karpathy/char-rnn`](https://github.com/karpathy/char-rnn) (Shakespeare, public domain).
 * Market note explained: Jurrien Timmer, [*Opposing Forces*](https://www.linkedin.com/pulse/opposing-forces-week-10526-jurrien-timmer-anaac/) (Fidelity Investments, Oct 5, 2026). The video paraphrases and attributes its arguments; it is not affiliated with Fidelity.
