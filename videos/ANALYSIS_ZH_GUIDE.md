@@ -1,4 +1,4 @@
-# Chinese narration for *Analysis, Built*
+# Chinese edition of *Analysis, Built*
 
 Translations live in `videos/analysisN/narration_zh.json`, keyed by the English line; check them with
 `python tools/translate_narration.py analysisN --check`.
@@ -7,6 +7,11 @@ Translations live in `videos/analysisN/narration_zh.json`, keyed by the English 
 - Keep every `<bookmark mark='x'/>`, in order, before the words it times.
 - Full-width punctuation; on-screen numbers as digits; Latin letters stay Latin (x_n, sin x, L², Lᵖ, H², 弱*).
 - Spoken math: x的平方, 根号2, n分之1, 当且仅当, 对任意, 存在.
+
+On-screen text lives in `videos/analysis_text_zh.json` (exact `strings`, `phrases` inside `\text{}` and regex
+`patterns` for computed readouts); `python tools/collect_text.py --check analysisN` lists what is still English,
+`--lang zh analysisN` dry-runs the Chinese build. Keep `$...$` math as is; Rudin → 鲁丁, *RCA* → 《实复分析》,
+*breaks:* → 打破：, full-width punctuation outside math.
 
 ## Glossary
 
