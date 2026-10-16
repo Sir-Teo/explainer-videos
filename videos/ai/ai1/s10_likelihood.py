@@ -74,7 +74,7 @@ class Likelihood(VoiceoverScene):
         c = label(r"the best $q$ is the data's own frequencies: \ counting \textit{is} maximum likelihood", font_size=32,
                   color=C.BITS)
         d = label(r"(and on new data, that's exactly what overfits: \ Chapter 7)", font_size=26, color=GREY_A)
-        g = VGroup(a, b, c, d).arrange(DOWN, buff=0.4)
+        VGroup(a, b, c, d).arrange(DOWN, buff=0.4)
         with self.voiceover(
             "If the model is allowed to be any distribution at all, <bookmark mark='a'/> the divergence is smallest, "
             "zero, when the model equals the data's frequencies. <bookmark mark='b'/> So the counting models of "
@@ -98,9 +98,7 @@ class Likelihood(VoiceoverScene):
         head = label(r"A network outputs scores; \ the \textit{softmax} turns them into probabilities", font_size=32)
         head.to_edge(UP, buff=0.35)
         f = mtex(r"q_k = \frac{e^{z_k}}{\sum_j e^{z_j}}", font_size=44).next_to(head, DOWN, buff=0.35)
-        cols = []
         xs = np.linspace(-4.8, 4.8, 5)
-        y_axis = [-0.2]
         zero = Line([-6.0, -0.4, 0], [6.0, -0.4, 0], color=GREY_D, stroke_width=1.5)
         logit_bars, exp_bars, prob_bars, toks = VGroup(), VGroup(), VGroup(), VGroup()
         for k, x in enumerate(xs):

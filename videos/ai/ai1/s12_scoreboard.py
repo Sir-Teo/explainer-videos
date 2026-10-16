@@ -37,14 +37,14 @@ class Scoreboard(VoiceoverScene):
                    font_size=22).next_to(head, DOWN, buff=0.12)
 
         def board(shown):
-            return scoreboard(rows, shown=shown, row_h=0.405, font_size=21).move_to(DOWN * 0.45)
+            return scoreboard(rows, shown=shown, row_h=0.405, font_size=21).move_to(DOWN * 0.3)
 
         b = board(1)
         legend = VGroup(*[VGroup(Square(0.18, stroke_width=0, fill_color=col, fill_opacity=0.9),
                                  label(t, font_size=20, color=col)).arrange(RIGHT, buff=0.12)
                           for t, col in ((r"counting", C.COUNTING), (r"compressors", C.COMPRESSOR),
                                          (r"neural models", C.NEURAL), (r"people", C.HUMAN))])
-        legend.arrange(RIGHT, buff=0.45).to_edge(DOWN, buff=0.15)
+        legend.arrange(RIGHT, buff=0.45).to_edge(DOWN, buff=0.12)
         self.play(FadeIn(head), FadeIn(sub), FadeIn(b), FadeIn(legend))
         state = {"b": b, "n": 1}
 

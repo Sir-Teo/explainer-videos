@@ -235,8 +235,6 @@ class Codes(VoiceoverScene):
     # ------------------------------------------------------------------
     def huffman(self):
         hf = load("huffman")
-        lt = load("letters")
-        p = lt["p"]
         codes = {ALPHA27[i]: c for i, c in enumerate(hf["codes"])}
         merges = [list(map(float, m)) for m in hf["merges"]]
         children = {int(m[2]): (int(m[0]), int(m[1])) for m in merges}
@@ -310,7 +308,7 @@ class Codes(VoiceoverScene):
             label(r"and, on average, in no fewer.", font_size=32, color=C.BITS),
         ).arrange(DOWN, buff=0.25)
         tag = label(r"entropy is the speed limit of compression", font_size=34, color=C.ENTROPY)
-        g = VGroup(body, tag).arrange(DOWN, buff=0.7).next_to(head, DOWN, buff=0.8)
+        VGroup(body, tag).arrange(DOWN, buff=0.7).next_to(head, DOWN, buff=0.8)
         box = SurroundingRectangle(body, color=GREY_C, buff=0.35, corner_radius=0.12)
         with self.voiceover(
             "Coding whole blocks of symbols at once spreads that last fraction of a bit thin. The result is "

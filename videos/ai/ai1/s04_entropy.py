@@ -247,7 +247,7 @@ class Entropy(VoiceoverScene):
         defn = mtex(r"H(Y \mid X) = \sum_x p(x)\, H(Y \mid X = x)", font_size=38).to_edge(UP, buff=0.4)
         q_i = ALPHA27.index("q")
         q_lab = label(r"after \texttt{q}: \ $0.02$ bits", font_size=22, color=C.BITS)
-        q_lab.move_to([cols[q_i].get_x() - 0.9, y0 + scale * 4.6, 0])
+        q_lab.move_to([cols[q_i].get_x() - 1.2, y0 + scale * 5.1, 0])
         q_arrow = Arrow(q_lab.get_bottom(), cols[q_i].get_top(), buff=0.05, color=C.BITS, stroke_width=2,
                         max_tip_length_to_length_ratio=0.2)
         sp_lab = label(r"after a space: \ $4.11$", font_size=22, color=C.BITS).next_to(cols[0], UP, buff=0.12)

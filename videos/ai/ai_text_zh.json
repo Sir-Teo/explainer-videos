@@ -101,7 +101,7 @@
   "\\textit{Middlemarch}": "\\textit{米德尔马契}",
   "\\ldots\\ and $20$ more": "\\ldots\\ 还有$20$部",
   "a guess $=$ a way of sharing one unit of belief among the possibilities": "一个猜测 $=$ 把一个单位的信念分给各种可能",
-  "previous": "前一个",
+  "previous": "\\shortstack{前\\\\一\\\\个}",
   "next": "下一个",
   "$P(\\text{next} \\mid \\text{previous})$ \\ for every pair of symbols": "每一对符号的 $P(\\text{下一个} \\mid \\text{前一个})$",
   "P(B \\mid A) = \\frac{P(A \\text{ and } B)}{P(A)}": "P(B \\mid A) = \\frac{P(A \\text{ 且 } B)}{P(A)}",
