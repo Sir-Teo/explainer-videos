@@ -5,7 +5,7 @@
     python tools/build.py navier_stokes -q l            # fast 480p preview
     python tools/build.py navier_stokes --only Pressure Viscosity
     python tools/build.py navier_stokes --stitch-only   # reuse rendered scenes
-    python tools/build.py analysis1 --lang zh           # Chinese narration (videos/analysis1/narration_zh.json)
+    python tools/build.py analysis1 --lang zh           # Chinese narration (videos/analysis/analysis1/narration_zh.json)
 
 Outputs (in ``renders/``):
     <video>[_<quality>][_<lang>].mp4   video + narration (loudness-normalized) + soft subtitles + chapters
@@ -27,6 +27,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
+from explainer.paths import video_dir, video_package  # noqa: E402
 
 from explainer import lang as narration_lang  # noqa: E402
 from explainer.voiceover import subtitle_cues, to_srt  # noqa: E402
@@ -70,7 +72,7 @@ def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> 
 
 def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path,
                  crf: int | None = None) -> tuple[str, float, str]:
-    src = ROOT / "videos" / video / f"{module}.py"
+    src = video_dir(video) / f"{module}.py"
     # Each scene gets its own LaTeX and Text caches: parallel manim processes sharing one
     # Tex dir race on the .dvi files (one cleans up what another converts), and sharing one
     # texts dir race on the .svg files of identical Text strings (one unlinks what another reads).
@@ -145,7 +147,7 @@ def main():
     args = ap.parse_args()
     os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
 
-    manifest = importlib.import_module(f"videos.{args.video}.manifest")
+    manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
     scenes = manifest.SCENES
     media = ROOT / "media" / (args.video if args.lang == "en" else f"{args.video}_{args.lang}")
     if args.crf is not None:

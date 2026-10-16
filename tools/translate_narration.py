@@ -23,6 +23,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer.paths import video_dir, video_package  # noqa: E402
+
 from explainer import lang as L  # noqa: E402
 
 BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
@@ -30,7 +32,7 @@ BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
 
 def english_lines(video: str) -> list[tuple[str, str]]:
     """[(scene class, English line with bookmarks)] in film order, from the newest render of each scene."""
-    manifest = importlib.import_module(f"videos.{video}.manifest")
+    manifest = importlib.import_module(f"{video_package(video)}.manifest")
     out = []
     for module, cls, _ in manifest.SCENES:
         metas = sorted((ROOT / "media" / video / "videos" / module).glob(f"*/{cls}.narration.json"),
@@ -68,14 +70,14 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--allow-latin", default="", help="comma-separated words allowed to stay in Latin script")
     args = ap.parse_args()
-    path = ROOT / "videos" / args.video / f"narration_{args.lang}.json"
+    path = video_dir(args.video) / f"narration_{args.lang}.json"
     table = json.loads(path.read_text()) if path.exists() else {}
     table.setdefault("title", "")
     table.setdefault("chapters", {})
     old = table.get("lines", {})
 
     if not args.check:
-        manifest = importlib.import_module(f"videos.{args.video}.manifest")
+        manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
         lines = {}
         for cls, en in english_lines(args.video):
             k = L.key(en)

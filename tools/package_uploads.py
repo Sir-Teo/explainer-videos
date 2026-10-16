@@ -4,7 +4,7 @@
     python tools/package_uploads.py [--parts 1 2] [--check-only]
 
 Per part and language: the master (hard link), .srt, thumbnail.jpg, youtube.txt and bilibili.txt (title,
-description with chapters, tags). Text comes from videos/analysis_upload.json.
+description with chapters, tags). Text comes from videos/analysis/analysis_upload.json.
 """
 
 from __future__ import annotations
@@ -24,8 +24,10 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer.paths import ANALYSIS_DATA, video_package  # noqa: E402
+
 OUT = ROOT / "renders" / "upload" / "analysis-built"
-DATA = json.loads((ROOT / "videos" / "analysis_upload.json").read_text())
+DATA = json.loads((ANALYSIS_DATA / "analysis_upload.json").read_text())
 REPO_URL = "https://github.com/Sir-Teo/explainer-videos"
 BG = (14, 17, 23)  # the videos' background, #0E1117
 YELLOW, WHITE, GREY = (247, 209, 84), (240, 240, 240), (150, 156, 166)
@@ -77,7 +79,7 @@ def stamp(t: float, long: bool, pad: bool = False) -> str:
 # Verification
 # ---------------------------------------------------------------------------
 def verify(video: str, lang: str, mp4: Path, srt: Path) -> dict:
-    manifest = importlib.import_module(f"videos.{video}.manifest")
+    manifest = importlib.import_module(f"{video_package(video)}.manifest")
     info = probe(mp4)
     v = next(s for s in info["streams"] if s["codec_type"] == "video")
     a = next(s for s in info["streams"] if s["codec_type"] == "audio")

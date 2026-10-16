@@ -1,4 +1,4 @@
-"""Shared visual instruments for the analysis series (videos/analysis1 ... analysis10).
+"""Shared visual instruments for the analysis series (videos/analysis/analysis1 ... analysis10).
 
     from explainer.analysis import *
 
