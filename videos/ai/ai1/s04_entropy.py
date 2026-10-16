@@ -5,27 +5,10 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, letter, load, plain_axes, polyline
+from videos.ai.ai1.common import ALPHA27, area_slivers, letter, load, plain_axes, polyline
 
 
-def area_slivers(p, W=11.0, x=0.0, y0=-2.4, scale=0.34, color=C.SURPRISE, opacity=0.8, order=None) -> VGroup:
-    """Each symbol a rectangle of width W p(x) and height scale * log2(1/p(x)): total area = W * scale * H(p).
-    The rectangles are laid out left to right in ``order`` (default: as given); ``g[i]`` is symbol i's."""
-    order = list(range(len(p))) if order is None else list(order)
-    rects, cum = {}, 0.0
-    L = x - W / 2
-    for i in order:
-        pi = p[i]
-        h = scale * (-math.log2(pi)) if pi > 0 else 0.0
-        r = Rectangle(width=max(W * pi, 0.003), height=max(h, 0.003), stroke_width=0.8, stroke_color=BACKGROUND,
-                      fill_color=color, fill_opacity=opacity)
-        r.move_to([L + (cum + pi / 2) * W, y0 + h / 2, 0])
-        rects[i] = r
-        cum += pi
-    return VGroup(*[rects[i] for i in range(len(p))])
-
-
-class Entropy(VoiceoverScene):
+class Entropy(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
         self.average()
@@ -177,29 +160,39 @@ class Entropy(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def jensen(self):
+        # every distribution on three outcomes is a point of a triangle; its entropy, a height: a dome
+        zb = -1.2  # the triangle sits low, so the dome is centred once the camera tilts
+        T = [np.array([-2.7, -2.1, zb]), np.array([2.7, -2.1, zb]), np.array([0.0, 2.55, zb])]
+        mid = sum(T) / 3
+        zs = 1.55  # height per bit
+
+        def H3(a, b, c):
+            return -sum(x * math.log2(x) for x in (a, b, c) if x > 1e-12)
+
+        def at(a, b, c, lift=0.0):
+            return a * T[0] + b * T[1] + c * T[2] + np.array([0, 0, zs * H3(a, b, c) + lift])
+
+        axes = ThreeDAxes(x_range=[-4, 4, 1], y_range=[-4, 4, 1], z_range=[0, 3, 1], x_length=8, y_length=8, z_length=3)
+        dome = Surface(lambda u, v: at(u, (1 - u) * v, (1 - u) * (1 - v)), u_range=[0, 1], v_range=[0, 1],
+                       resolution=(32, 32), fill_opacity=0.9, stroke_width=0.3, stroke_color=BACKGROUND,
+                       checkerboard_colors=False)
+        dome.set_fill_by_value(axes=axes, colorscale=list(zip(SURFACE_COLORS, np.linspace(zb, zb + zs * math.log2(3), 5))),
+                               axis=2)
+        tri = Polygon(*T, color=GREY_B, stroke_width=2)
+        edges = VGroup(*[ParametricFunction(lambda t, i=i: at(*np.roll([t, 1 - t, 0.0], i), lift=0.02),
+                                            t_range=[0.001, 0.999], color=C.ENTROPY, stroke_width=4)
+                         for i in range(3)])
+        peak = Dot3D(at(1 / 3, 1 / 3, 1 / 3, lift=0.08), radius=0.12, color=WHITE)
+        stem = DashedLine(mid, at(1 / 3, 1 / 3, 1 / 3), color=WHITE,
+                          stroke_width=2)
+        corners = VGroup(*[MathTex(t, font_size=36, color=GREY_A).move_to(T[i] + 0.4 * normalize(T[i] - mid))
+                           for i, t in enumerate((r"A", r"B", r"C"))])
         head = label(r"No distribution on $K$ outcomes beats the uniform one", font_size=34).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 8, 2], [-1, 3.2, 1], 5.6, 3.6).shift(LEFT * 3.6 + DOWN * 0.9)
-        xs = np.linspace(0.3, 8, 300)
-        curve = polyline(ax, xs, np.log2(xs), color=C.ENTROPY, stroke_width=4)
-        a_, b_ = 1.0, 7.0
-        chord = Line(ax.c2p(a_, math.log2(a_)), ax.c2p(b_, math.log2(b_)), color=C.BITS, stroke_width=3)
-        m = 0.5 * (a_ + b_)
-        pm = Dot(ax.c2p(m, math.log2(m)), radius=0.07, color=C.ENTROPY)
-        pc = Dot(ax.c2p(m, 0.5 * (math.log2(a_) + math.log2(b_))), radius=0.07, color=C.BITS)
-        lab1 = MathTex(r"\log_2 \mathbb{E}[Y]", font_size=26, color=C.ENTROPY).next_to(pm, UP, buff=0.12)
-        lab2 = MathTex(r"\mathbb{E}[\log_2 Y]", font_size=26, color=C.BITS).next_to(pc, DOWN, buff=0.15)
-        cap = label(r"$\log_2$ bends down: \ the average of logs $\le$ the log of the average", font_size=22,
-                    color=GREY_A).next_to(ax, DOWN, buff=0.3)
-        rows = [
-            mtex([r"H(p)", r"=", r"\mathbb{E}\Big[\log_2 \tfrac{1}{p(X)}\Big]"], font_size=36),
-            mtex([r"H(p)", r"\le", r"\log_2 \mathbb{E}\Big[\tfrac{1}{p(X)}\Big]"], font_size=36),
-            mtex([r"H(p)", r"\le", r"\log_2 \sum_x p(x)\,\tfrac{1}{p(x)}"], font_size=36),
-            mtex([r"H(p)", r"\le", r"\log_2 K"], font_size=40),
-        ]
-        whys = [why(r"definition"), why(r"Jensen: $\log_2$ is concave"), why(r"write out $\mathbb{E}$"),
-                why(r"$K$ terms, each $1$")]
-        step = ladder(self, rows, whys, keep=4, top=2.2, x=2.8, buff=0.55)
-        eq = label(r"equality exactly when $p$ is uniform", font_size=26, color=C.BITS)
+        top = label(r"uniform: \ $\log_2 3 = 1.58$ bits", font_size=30, color=WHITE).to_corner(UR, buff=0.5).shift(DOWN * 0.6)
+        edge_l = label(r"each edge: \ a coin", font_size=28, color=C.ENTROPY).next_to(top, DOWN, buff=0.25).align_to(top, LEFT)
+        for m in (head, top, edge_l):
+            self.add_fixed_in_frame_mobjects(m)
+            self.remove(m)
         with self.voiceover(
             "That's true in general. With K possible outcomes, the entropy is at most log two of K. "
             "<bookmark mark='a'/> The proof is one inequality. The logarithm bends downward, so the average of logs "
@@ -208,17 +201,60 @@ class Entropy(VoiceoverScene):
             "average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with "
             "equality only when every outcome is equally likely."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(tri), FadeIn(corners), FadeIn(dome), run_time=1.2)
+            self.move_camera(phi=62 * DEGREES, theta=-62 * DEGREES, added_anims=[FadeOut(corners)], run_time=2.2)
+            self.play(Create(edges), FadeIn(peak), Create(stem), FadeIn(top), FadeIn(edge_l), run_time=1.2)
+            self.begin_ambient_camera_rotation(rate=0.35)
             vo.wait_until("a")
-            self.play(Create(ax), Create(curve))
-            self.play(Create(chord), FadeIn(pm), FadeIn(pc), FadeIn(lab1), FadeIn(lab2), FadeIn(cap))
-            for k, mark in enumerate("bcde"):
-                vo.wait_until(mark)
-                step(k)
-            eq.next_to(rows[3], DOWN, buff=0.4)
-            self.play(FadeIn(eq))
+            self.stop_ambient_camera_rotation()
+            self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(dome, tri, edges, peak, stem)),
+                                                                    FadeOut(top), FadeOut(edge_l)], run_time=1.6)
+            self.jensen_2d(vo)
         self.wait(0.3)
         self.clear_scene()
+
+    def jensen_2d(self, vo):
+        ax = plain_axes([0, 8, 2], [-1, 3.2, 1], 6.0, 3.9).shift(LEFT * 3.0 + DOWN * 0.8)
+        xs = np.linspace(0.5, 8, 300)
+        curve = polyline(ax, xs, np.log2(xs), color=C.ENTROPY, stroke_width=5)
+        a_, b_ = 1.0, 7.0
+        m = 0.5 * (a_ + b_)
+        pa = glow_dot(ax.c2p(a_, math.log2(a_)), color=C.BITS, radius=0.07, layers=3)
+        pb = glow_dot(ax.c2p(b_, math.log2(b_)), color=C.BITS, radius=0.07, layers=3)
+        chord = Line(ax.c2p(a_, math.log2(a_)), ax.c2p(b_, math.log2(b_)), color=C.BITS, stroke_width=3)
+        pm = glow_dot(ax.c2p(m, math.log2(m)), color=C.ENTROPY, radius=0.08, layers=4)
+        pc = glow_dot(ax.c2p(m, 0.5 * (math.log2(a_) + math.log2(b_))), color=C.BITS, radius=0.08, layers=4)
+        gap = Line(pc.get_center(), pm.get_center(), color=WHITE, stroke_width=2.5)
+        lab1 = MathTex(r"\log_2 \mathbb{E}[Y]", font_size=32, color=C.ENTROPY).next_to(pm, UP, buff=0.15)
+        lab2 = MathTex(r"\mathbb{E}[\log_2 Y]", font_size=32, color=C.BITS).next_to(pc, DOWN, buff=0.18)
+        cap = label(r"$\log_2$ bends down: \ the average of logs $\le$ the log of the average", font_size=26,
+                    color=GREY_A).next_to(ax, DOWN, buff=0.35)
+        colors = {r"H(p)": C.ENTROPY, r"\log_2 K": C.ENTROPY}
+        steps = [
+            [r"H(p)", "=", r"\mathbb{E}\Big[\log_2 \tfrac{1}{p(X)}\Big]"],
+            [r"H(p)", r"\le", r"\log_2 \mathbb{E}\Big[\tfrac{1}{p(X)}\Big]"],
+            [r"H(p)", r"\le", r"\log_2 \sum_x p(x)\,\tfrac{1}{p(x)}"],
+            [r"H(p)", r"\le", r"\log_2 K"],
+        ]
+        eqs = [cmath(*st, colors=colors, font_size=48).move_to([3.6, 0.9, 0]) for st in steps]
+        whys = [why(r"definition"), why(r"Jensen: $\log_2$ is concave"), why(r"write out $\mathbb{E}$"),
+                why(r"$K$ terms, each $1$")]
+        for w in whys:
+            w.scale(1.2).move_to([3.6, -0.4, 0])
+        eq = label(r"equality exactly when $p$ is uniform", font_size=30, color=C.BITS).move_to([3.6, -1.6, 0])
+        self.play(Create(ax), Create(curve), run_time=1.2)
+        self.play(FadeIn(pa), FadeIn(pb), Create(chord))
+        self.play(FadeIn(pm), FadeIn(pc), Create(gap), FadeIn(lab1), FadeIn(lab2), FadeIn(cap))
+        vo.wait_until("b")
+        self.play(Write(eqs[0]), FadeIn(whys[0]))
+        prev = eqs[0]
+        for k, mark in enumerate("cde"):
+            vo.wait_until(mark)
+            self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.5)
+            morph(self, prev, eqs[k + 1], run_time=1.1)
+            prev = eqs[k + 1]
+        box = SurroundingRectangle(prev, color=C.ENTROPY, buff=0.2, corner_radius=0.1)
+        self.play(Create(box), FadeIn(eq))
 
     # ------------------------------------------------------------------
     def conditional(self):

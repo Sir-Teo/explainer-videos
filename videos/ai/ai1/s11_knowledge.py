@@ -247,10 +247,23 @@ class Knowledge(VoiceoverScene):
                                                                    color=col))
             r[1].next_to(r[0], RIGHT, buff=0.5)
             rows.add(r)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.5)
-        rows.shift(RIGHT * 0.6)
-        arrow = Arrow(rows.get_corner(UL) + LEFT * 0.5, rows.get_corner(DL) + LEFT * 0.5, buff=0, color=C.BITS,
-                      stroke_width=4)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).next_to(head, DOWN, buff=0.5)
+        rows.shift(RIGHT * 1.3)
+        # the same descent on a scale of bits per letter
+        def yb(b):
+            return -3.1 + 1.12 * b
+        x0 = -5.6
+        scale = NumberLine(x_range=[0, 5, 1], length=1.12 * 5, rotation=PI / 2, color=GREY_C, include_numbers=False)
+        scale.move_to([x0, yb(2.5), 0])
+        nums = VGroup(*[MathTex(str(v), font_size=26, color=GREY_B).next_to([x0, yb(v), 0], LEFT, buff=0.18)
+                        for v in range(6)])
+        unit = label(r"bits per letter", font_size=22, color=GREY_B).next_to(scale, UP, buff=0.15)
+        band = Rectangle(width=0.7, height=1.12 * 0.7, stroke_width=0, fill_color=C.HUMAN, fill_opacity=0.35)
+        band.move_to([x0, yb(0.95), 0])
+        ball = glow_dot([x0, yb(4.75), 0], color=C.BITS, radius=0.1)
+        ticks = VGroup(*[Line([x0 - 0.25, yb(v), 0], [x0 + 0.25, yb(v), 0], color=C.COUNTING, stroke_width=4)
+                         for v in (4.1, 2.0)])
+        fall = DashedLine([x0, yb(2.0), 0], [x0, yb(1.0), 0], color=GREY_A, stroke_width=3, dash_length=0.08)
         thesis = label(r"predicting the text means modeling the world that wrote it", font_size=30, color=C.BITS)
         thesis.to_edge(DOWN, buff=0.5)
         with self.voiceover(
@@ -261,13 +274,15 @@ class Knowledge(VoiceoverScene):
             "this. It is pushed there by one number: the bits it pays for each guess. To predict the text, it has "
             "to model the world that wrote it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(scale), FadeIn(nums), FadeIn(unit), FadeIn(ball, scale=0.5))
             vo.wait_until("a")
-            self.play(GrowArrow(arrow), FadeIn(rows[0]), FadeIn(rows[1]))
+            self.play(FadeIn(rows[0]), ball.animate.move_to([x0, yb(4.1), 0]), Create(ticks[0]))
+            self.play(FadeIn(rows[1]), ball.animate.move_to([x0, yb(2.0), 0]), Create(ticks[1]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[2:5]], lag_ratio=0.5), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows[2:5]], lag_ratio=0.5), Create(fall),
+                      ball.animate.move_to([x0, yb(1.3), 0]), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(rows[5]))
+            self.play(FadeIn(rows[5]), FadeIn(band), ball.animate.move_to([x0, yb(1.0), 0]))
             vo.wait_until("d")
             self.play(FadeIn(thesis, shift=UP * 0.1))
         self.wait(0.5)

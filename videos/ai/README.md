@@ -31,6 +31,22 @@ Three devices hold it together:
    part opens by calling back to it.
 3. **The timeline strip** (`explainer.ai.timeline`, 1940–2030) on every chapter card.
 
+## How it looks
+
+The series draws in the manner of 3Blue1Brown, with the instruments in `explainer/ai/viz.py`:
+
+* **One idea per frame, drawn big.** The narration explains; the screen shows. Words on screen are few and large.
+* **Continuity.** Objects turn into the next representation instead of fading out: a heatmap becomes a mosaic of
+  the unit square, a straight line bends into the log curve, a loss landscape reshapes from one valley to two.
+  Derivations happen in place (`cmath` + `morph`): each term slides to where the next step needs it.
+* **Color is meaning.** A symbol keeps its color in every equation and in the picture it describes (`C.TRUE_P` for
+  the data's p, `C.MODEL_Q` for the model's q, `C.SURPRISE`, `C.ENTROPY`, `C.KL`, ...).
+* **The camera narrates.** Zooms (magnify a piece, keep a mini-map of the whole) and 3D surfaces with the camera
+  moving over them (`loss_surface`, `surface_path`; scenes mix in `ThreeDScene`).
+* **Live quantities.** Value trackers drive bars (`LiveBars`), dots (`glow_dot`) and readouts, so a parameter is
+  seen to change.
+* **Real numbers.** Everything plotted is computed by the part's `compute.py` and asserted in the scene.
+
 ## The parts
 
 | # | Part | Mathematics | Models, data |

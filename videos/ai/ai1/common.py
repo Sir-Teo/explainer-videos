@@ -16,6 +16,8 @@ scoreboard, payoff and reference cards).  Here:
 from __future__ import annotations
 
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -257,3 +259,20 @@ def plain_axes(x_range, y_range, x_length, y_length, **kw) -> Axes:
 def tt(s: str) -> str:
     """A string of symbols for TeX: typewriter face, spaces as a visible space (␣)."""
     return r"\texttt{" + s.replace(" ", r"\textvisiblespace{}") + "}"
+
+
+def area_slivers(p, W=11.0, x=0.0, y0=-2.4, scale=0.34, color=C.SURPRISE, opacity=0.8, order=None) -> VGroup:
+    """Each symbol a rectangle of width W p(x) and height scale * log2(1/p(x)): total area = W * scale * H(p).
+    The rectangles are laid out left to right in ``order`` (default: as given); ``g[i]`` is symbol i's."""
+    order = list(range(len(p))) if order is None else list(order)
+    rects, cum = {}, 0.0
+    L = x - W / 2
+    for i in order:
+        pi = p[i]
+        h = scale * (-math.log2(pi)) if pi > 0 else 0.0
+        r = Rectangle(width=max(W * pi, 0.003), height=max(h, 0.003), stroke_width=0.8, stroke_color=BACKGROUND,
+                      fill_color=color, fill_opacity=opacity)
+        r.move_to([L + (cum + pi / 2) * W, y0 + h / 2, 0])
+        rects[i] = r
+        cum += pi
+    return VGroup(*[rects[i] for i in range(len(p))])

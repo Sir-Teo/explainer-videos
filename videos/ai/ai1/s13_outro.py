@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import MONO, load, plain_axes
+from videos.ai.ai1.common import MONO, area_slivers, load, plain_axes
 
 
 class Outro(VoiceoverScene):
@@ -14,24 +14,107 @@ class Outro(VoiceoverScene):
         self.references()
 
     # ------------------------------------------------------------------
+    def tiles(self):
+        """Part 1 in eight pictures, each redrawn small from the part's own numbers."""
+        lt, kl, od, sm, sb = load("letters"), load("kl"), load("orders"), load("softmax"), load("scoreboard")
+        TW, TH = 3.0, 2.0  # drawing area of a tile
+
+        def frame(caption, color):
+            box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D,
+                                   stroke_width=1.5, fill_color="#121722", fill_opacity=1)
+            cap = label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
+            return box, cap
+
+        def axes_box(xr, yr):
+            return Axes(x_range=xr, y_range=yr, x_length=TW, y_length=TH - 0.2, tips=False,
+                        axis_config={"stroke_color": GREY_D, "stroke_width": 1.5, "include_ticks": False})
+
+        out = []
+        # 1. the chain rule: nested slivers
+        g = VGroup()
+        y = 0.7
+        for k, (a, b) in enumerate([(0.30, 0.45), (0.15, 0.75), (0.2, 0.9)]):
+            bar = Rectangle(width=TW, height=0.28, stroke_width=1, stroke_color=GREY_C, fill_color="#1B2638", fill_opacity=1)
+            bar.move_to([0, y - 0.62 * k, 0])
+            hi_ = Rectangle(width=TW * (b - a), height=0.28, stroke_width=0, fill_color=C.INTERVAL, fill_opacity=0.9)
+            hi_.move_to(bar.get_left() + RIGHT * TW * (a + b) / 2)
+            g.add(bar, hi_)
+            if k < 2:
+                g.add(Polygon(hi_.get_corner(DL), hi_.get_corner(DR), bar.get_corner(DR) + DOWN * 0.34,
+                              bar.get_corner(DL) + DOWN * 0.34, stroke_width=0, fill_color=C.INTERVAL, fill_opacity=0.15))
+        out.append((g, r"the chain rule", C.INTERVAL))
+        # 2. surprise
+        ax = axes_box([0, 1, 1], [0, 6, 1])
+        xs = np.linspace(2 ** -6, 1, 200)
+        g = VGroup(ax, ax.plot_line_graph(xs, -np.log2(xs), add_vertex_dots=False, line_color=C.SURPRISE,
+                                         stroke_width=3.5))
+        out.append((g, r"surprise $= \log_2 \frac1p$", C.SURPRISE))
+        # 3. entropy: the area picture
+        g = area_slivers(lt["p"], W=TW, y0=-TH / 2 + 0.1, scale=0.15, order=list(lt["order"]), color=C.ENTROPY)
+        out.append((g, rf"entropy: \ ${float(lt['H']):.2f}$ bits", C.ENTROPY))
+        # 4. cross-entropy and KL: a wrong model of two peaks
+        x, pp = np.asarray(kl["x"]), np.asarray(kl["p"])
+        ax = axes_box([float(x[0]), float(x[-1]), 1], [0, float(pp.max()) * 1.15, 1])
+        m, sd = float(kl["mean"]), float(kl["sd"])
+        qq = np.exp(-0.5 * ((x - m) / sd) ** 2) / (sd * np.sqrt(2 * np.pi))
+        g = VGroup(ax, ax.plot_line_graph(x, pp, add_vertex_dots=False, line_color=C.TRUE_P, stroke_width=3),
+                   ax.plot_line_graph(x, qq, add_vertex_dots=False, line_color=C.MODEL_Q, stroke_width=3))
+        out.append((g, r"cross-entropy, $D_{\mathrm{KL}}$", C.KL))
+        # 5. arithmetic coding: one number for the whole message
+        bits = Text("0.11001010000101111011011001110", font=MONO, font_size=16, color=C.BITS)
+        bits.width = TW
+        bar = Rectangle(width=TW, height=0.3, stroke_width=1, stroke_color=GREY_C).move_to(UP * 0.35)
+        sl = Rectangle(width=0.05, height=0.3, stroke_width=0, fill_color=C.INTERVAL, fill_opacity=1).move_to(
+            bar.get_left() + RIGHT * TW * 0.79)
+        g = VGroup(bar, sl, Line(sl.get_bottom(), bits.get_top() + UP * 0.05, color=C.INTERVAL, stroke_width=1.5),
+                   bits.move_to(DOWN * 0.45))
+        out.append((g, r"predicting $=$ compressing", C.INTERVAL))
+        # 6. generalization: the books vs new text
+        rows = od["rows"]
+        ks = np.arange(len(rows))
+        ax = axes_box([0, 14, 1], [0, 4.5, 1])
+        g = VGroup(ax, ax.plot_line_graph(ks, [r["plugin"] for r in rows], add_vertex_dots=False, line_color=C.COUNTING,
+                                          stroke_width=3),
+                   ax.plot_line_graph(ks, [r["test"] for r in rows], add_vertex_dots=False, line_color=C.SURPRISE,
+                                      stroke_width=3))
+        out.append((g, r"memorizing $\ne$ generalizing", C.COUNTING))
+        # 7. the gradient: guess minus truth
+        phat, q = np.asarray(sm["phat"]), np.asarray(sm["q"])[3]
+        g = VGroup()
+        for k in range(5):
+            xk = -TW / 2 + 0.3 + k * (TW - 0.6) / 4
+            hp, hq = 2.6 * phat[k], 2.6 * q[k]
+            g.add(Rectangle(width=0.36, height=hp, stroke_color=C.TRUE_P, stroke_width=2).move_to([xk, -0.8 + hp / 2, 0]))
+            g.add(Rectangle(width=0.24, height=hq, stroke_width=0, fill_color=C.MODEL_Q, fill_opacity=0.85)
+                  .move_to([xk, -0.8 + hq / 2, 0]))
+            if abs(hq - hp) > 0.05:
+                g.add(Arrow([xk + 0.28, -0.8 + hq, 0], [xk + 0.28, -0.8 + hp, 0], buff=0, color=C.BITS, stroke_width=2.5,
+                            max_tip_length_to_length_ratio=0.4, max_stroke_width_to_length_ratio=10))
+        out.append((g, r"the gradient: \ $q - \hat p$", C.MODEL_Q))
+        # 8. the scoreboard
+        vals = [r for r in sb["rows"] if r.get("bits") is not None]
+        kind_col = {"counting": C.COUNTING, "compressor": C.COMPRESSOR, "lm": C.NEURAL}
+        g = VGroup()
+        for k, r in enumerate(vals):
+            wdt = TW * r["bits"] / 8.0
+            g.add(Rectangle(width=wdt, height=0.11, stroke_width=0, fill_color=kind_col.get(r.get("kind"), GREY_B),
+                            fill_opacity=0.9).move_to([-TW / 2 + wdt / 2, TH / 2 - 0.15 - k * 0.15, 0]))
+        out.append((g, r"$8 \to 0.87$ bits", WHITE))
+        tiles = Group()
+        for k, (pic, cap, col) in enumerate(out):
+            box, c = frame(cap, col)
+            pic.move_to(box.get_center() + UP * 0.22)
+            if pic.width > TW:
+                pic.width = TW
+            if pic.height > TH:
+                pic.height = TH
+            tiles.add(Group(box, pic, c))
+        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        return tiles
+
     def recap(self):
-        items = [
-            (r"a guess is a probability distribution; \ the chain rule scores a whole text", C.TRUE_P),
-            (r"surprise $= \log_2 \frac1p$ bits: \ the only measure that adds up", C.SURPRISE),
-            (r"entropy $=$ average surprise; \ at most $\log_2 K$ (Jensen)", C.ENTROPY),
-            (r"prefix codes obey Kraft; \ no code beats the entropy; \ Huffman gets within a bit", C.BITS),
-            (r"cross-entropy $= H(p) + D_{\mathrm{KL}}(p \,\|\, q)$; \ $D_{\mathrm{KL}} \ge 0$; \ it isn't symmetric",
-             C.KL),
-            (r"arithmetic coding: \ any predictor is a compressor, and back", C.INTERVAL),
-            (r"counting fits the books but not new text: \ generalization", C.COUNTING),
-            (r"Shannon's game: \ people need about $1$ bit per letter", C.HUMAN),
-            (r"maximum likelihood $=$ minimum cross-entropy; \ the gradient is $q - \hat p$", C.MODEL_Q),
-            (r"to guess well: \ knowledge, and a long memory", C.CONTEXT),
-            (r"the scoreboard: \ $8$ bits $\to$ $2.32$ (counting) $\to$ $0.87$ (Qwen3-4B)", WHITE),
-        ]
-        rows = VGroup(*[label(rf"{i + 1}.\; {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to(DOWN * 0.2)
-        head = label(r"Part 1, in eleven lines", font_size=40).to_edge(UP, buff=0.35)
+        tiles = self.tiles()
+        head = label(r"Part 1, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. We wrote guesses down as probability distributions, and the chain rule turned them "
             "into a score for a whole text. We found that there's only one sensible measure of surprise, and that "
@@ -41,7 +124,7 @@ class Outro(VoiceoverScene):
             "derived the gradient that trains every language model: the guess, minus the truth."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.5),
+            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
                       run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
         self.clear_scene()

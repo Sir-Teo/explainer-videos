@@ -21,21 +21,7 @@ def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opac
     return VGroup(*[rects[i] for i in range(len(p))])
 
 
-def heat_image(Z, cmap_stops, vmin, vmax, width, height) -> ImageMobject:
-    """A heatmap of Z (rows = y from bottom to top) as an image, log-scaled between vmin and vmax."""
-    t = np.clip((np.log(Z) - math.log(vmin)) / (math.log(vmax) - math.log(vmin)), 0, 1)
-    cols = np.array([ManimColor(c).to_rgb() for c in cmap_stops])
-    pos = np.linspace(0, 1, len(cols))
-    rgb = np.stack([np.interp(t, pos, cols[:, k]) for k in range(3)], -1)
-    img = (rgb[::-1] * 255).astype(np.uint8)
-    img = np.repeat(np.repeat(img, 6, 0), 6, 1)
-    m = ImageMobject(img)
-    m.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-    m.stretch_to_fit_width(width).stretch_to_fit_height(height)
-    return m
-
-
-class CrossEntropy(VoiceoverScene):
+class CrossEntropy(VoiceoverScene, ThreeDScene):
     def construct(self):
         self.card()
         self.wrong_code()
@@ -153,23 +139,29 @@ class CrossEntropy(VoiceoverScene):
     # ------------------------------------------------------------------
     def gibbs(self):
         head = label(r"Gibbs' inequality: \ $D_{\mathrm{KL}}(p \,\|\, q) \ge 0$", font_size=38).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 3, 1], [-2.5, 2, 1], 5.0, 3.8).shift(LEFT * 3.8 + DOWN * 0.15)
+        ax = plain_axes([0, 3, 1], [-2.5, 2, 1], 5.6, 4.3).shift(LEFT * 3.5 + DOWN * 0.35)
         xs = np.linspace(0.08, 3, 300)
-        ln = polyline(ax, xs, np.log(xs), color=C.KL, stroke_width=4)
+        ln = polyline(ax, xs, np.log(xs), color=C.KL, stroke_width=5)
         tan = polyline(ax, np.linspace(0, 3, 2), np.linspace(0, 3, 2) - 1, color=GREY_A, stroke_width=3)
-        lab_ln = MathTex(r"\ln x", font_size=30, color=C.KL).next_to(ax.c2p(3, math.log(3)), RIGHT, buff=0.1)
-        lab_t = MathTex(r"x - 1", font_size=30, color=GREY_A).next_to(ax.c2p(2.9, 1.9), LEFT, buff=0.1)
-        touch = Dot(ax.c2p(1, 0), radius=0.07, color=WHITE)
-        touch_l = MathTex(r"x = 1", font_size=24, color=WHITE).next_to(touch, DOWN + RIGHT, buff=0.1)
-        rows = [
-            mtex([r"-D_{\mathrm{KL}}", r"=", r"\sum_x p(x)\, \ln \frac{q(x)}{p(x)}"], font_size=32),
-            mtex([r"-D_{\mathrm{KL}}", r"\le", r"\sum_x p(x) \Big( \frac{q(x)}{p(x)} - 1 \Big)"], font_size=32),
-            mtex([r"-D_{\mathrm{KL}}", r"\le", r"\sum_x q(x) - \sum_x p(x)"], font_size=32),
-            mtex([r"-D_{\mathrm{KL}}", r"\le", r"1 - 1 = 0"], font_size=32),
+        gap = VGroup(*[Line(ax.c2p(x, math.log(x)), ax.c2p(x, x - 1), color=C.KL, stroke_width=2, stroke_opacity=0.5)
+                       for x in np.linspace(0.25, 2.9, 16) if abs(x - 1) > 0.08])
+        lab_ln = MathTex(r"\ln x", font_size=34, color=C.KL).next_to(ax.c2p(3, math.log(3)), RIGHT, buff=0.1)
+        lab_t = MathTex(r"x - 1", font_size=34, color=GREY_A).next_to(ax.c2p(2.9, 1.9), LEFT, buff=0.1)
+        touch = glow_dot(ax.c2p(1, 0), color=WHITE, radius=0.08)
+        touch_l = MathTex(r"x = 1", font_size=28, color=WHITE).next_to(touch, DOWN + RIGHT, buff=0.05)
+        P, Q = C.TRUE_P, C.MODEL_Q
+        colors = {r"p(x)": P, r"\sum_x q(x)": Q, r"\sum_x p(x)": P}
+        steps = [
+            [r"-D_{\mathrm{KL}}", "=", r"\sum_x", r"p(x)", r"\ln", r"\frac{q(x)}{p(x)}"],
+            [r"-D_{\mathrm{KL}}", r"\le", r"\sum_x", r"p(x)", r"\Big(", r"\frac{q(x)}{p(x)}", r"- 1 \Big)"],
+            [r"-D_{\mathrm{KL}}", r"\le", r"\sum_x q(x)", r"-", r"\sum_x p(x)"],
+            [r"-D_{\mathrm{KL}}", r"\le", r"1", r"-", r"1", r"= 0"],
         ]
+        eqs = [cmath(*st, colors=colors, font_size=44).move_to([3.3, 1.0, 0]) for st in steps]
         whys = [why(r"in nats (natural logs)"), why(r"$\ln x \le x - 1$"), why(r"multiply out"),
                 why(r"both are distributions")]
-        step = ladder(self, rows, whys, keep=3, top=2.45, x=2.6, buff=0.3)
+        for w in whys:
+            w.scale(1.15).move_to([3.3, -0.05, 0])
         res = VGroup(
             label(r"equality only when $q = p$: \ the truth is the best code", font_size=28, color=C.BITS),
             label(r"so $H(p, q) \ge H(p)$, \ and $H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)p(y)\big) "
@@ -177,7 +169,7 @@ class CrossEntropy(VoiceoverScene):
         ).arrange(DOWN, buff=0.14)
         mi = label(r"(that last quantity is the \textit{mutual information} $I(X; Y)$: \ Chapter 10)", font_size=22,
                    color=GREY_B)
-        VGroup(res, mi).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.25)
+        VGroup(res, mi).arrange(DOWN, buff=0.16).move_to(DOWN * 0.9)
         with self.voiceover(
             "Is being wrong always a cost? Yes, and the proof rests on one fact: <bookmark mark='a'/> the natural "
             "log lies below its tangent line at one. ln x is at most x minus one. <bookmark mark='b'/> Write minus "
@@ -186,18 +178,27 @@ class CrossEntropy(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(ax), Create(ln), Create(tan), FadeIn(lab_ln), FadeIn(lab_t), FadeIn(touch), FadeIn(touch_l))
-            for k, mark in enumerate("bcde"):
+            self.play(Create(ax), Create(ln), FadeIn(lab_ln))
+            self.play(Create(tan), FadeIn(lab_t), FadeIn(touch), FadeIn(touch_l))
+            self.play(LaggedStart(*[Create(g) for g in gap], lag_ratio=0.08), run_time=1.0)
+            vo.wait_until("b")
+            self.play(Write(eqs[0]), FadeIn(whys[0]))
+            for k, mark in enumerate("cde"):
                 vo.wait_until(mark)
-                step(k)
+                self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.4)
+                if k == 0:
+                    self.play(Indicate(tan, color=WHITE), Indicate(ln, color=WHITE), run_time=0.6)
+                morph(self, eqs[k], eqs[k + 1], run_time=1.1)
         with self.voiceover(
             "So the divergence is never negative, and it's zero only when q equals p. <bookmark mark='a'/> The "
             "truth is the best code. And this pays the debt from chapter three: <bookmark mark='b'/> the drop in "
             "entropy from knowing X is a divergence too, so it can't be negative. Knowing more never hurts, on "
             "average."
         ) as vo:
+            self.play(FadeOut(VGroup(ax, ln, tan, gap, lab_ln, lab_t, touch, touch_l, whys[3])),
+                      eqs[3].animate.scale(1.15).move_to(UP * 1.2))
             vo.wait_until("a")
-            self.play(FadeIn(res[0]))
+            self.play(FadeIn(res[0], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(res[1]), FadeIn(mi))
         self.wait(0.3)
@@ -320,43 +321,68 @@ class CrossEntropy(VoiceoverScene):
         d = load("kl")
         ms, ss = np.asarray(d["grid_m"]), np.asarray(d["grid_s"])
         F, R = np.asarray(d["F"]), np.asarray(d["R"])
-        stops = ["#F7D154", "#FF6B8B", "#8E4E9E", "#2E4A78", "#121826"]
+
+        def height(v):  # log scale, clipped where the forward loss explodes (narrow curves far from the data)
+            return 0.55 * math.log(min(float(v), 60.0) / 0.6)
+
+        def interp(Z):
+            Z = np.vectorize(height)(Z)
+            dm, ds = ms[1] - ms[0], ss[1] - ss[0]
+
+            def f(m, y):
+                i, j = (-y - ss[0]) / ds, (m - ms[0]) / dm
+                i0 = int(np.clip(np.floor(i), 0, len(ss) - 2))
+                j0 = int(np.clip(np.floor(j), 0, len(ms) - 2))
+                a, b = float(np.clip(i - i0, 0, 1)), float(np.clip(j - j0, 0, 1))
+                return float(Z[i0, j0] * (1 - a) * (1 - b) + Z[i0 + 1, j0] * a * (1 - b) + Z[i0, j0 + 1] * (1 - a) * b
+                             + Z[i0 + 1, j0 + 1] * a * b)
+            return f
+
+        fF, fR = interp(F), interp(R)
+        axes = ThreeDAxes(x_range=[ms[0], ms[-1], 1], y_range=[-ss[-1], -ss[0], 1], z_range=[0, 2.5, 1], x_length=7.4,
+                          y_length=4.2, z_length=2.0, axis_config={"stroke_color": GREY_C, "include_ticks": False,
+                                                                   "include_tip": False}).shift(DOWN * 1.3)
+        sF = loss_surface(axes, fF, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
+        sR = loss_surface(axes, fR, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
+
+        def roll(path, f, color):
+            pts = np.asarray(path)[:, :2][::4] * np.array([1, -1])
+            trace = surface_path(axes, f, pts, color=color, lift=0.05, stroke_width=4)
+            track = surface_path(axes, f, pts, color=color, lift=0.14)
+            ball = Dot3D(track.get_start(), radius=0.12, color=color)
+            return ball, trace, track
+
+        bF = roll(d["fwd"], fF, WHITE)
+        bA, bB = roll(d["rev_a"], fR, WHITE), roll(d["rev_b"], fR, C.BITS)
         head = label(r"The two losses, over every bell curve $(\mu, \sigma)$", font_size=34).to_edge(UP, buff=0.35)
-        W, Hh = 5.6, 4.0
-        panels = Group()
-        for k, (Z, title, paths) in enumerate([
-            (F, r"$D_{\mathrm{KL}}(p \,\|\, q)$: \ one valley", [d["fwd"]]),
-            (R, r"$D_{\mathrm{KL}}(q \,\|\, p)$: \ two valleys", [d["rev_a"], d["rev_b"]]),
-        ]):
-            cx = -3.4 + 6.8 * k
-            img = heat_image(Z, stops, 0.6, 12.0, W, Hh).move_to([cx, -0.5, 0])
-            ax = Axes(x_range=[ms[0], ms[-1], 1], y_range=[ss[0], ss[-1], 1], x_length=W, y_length=Hh, tips=False,
-                      axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(img)
-            t = label(title, font_size=26, color=GREY_A).next_to(img, UP, buff=0.25)
-            xl = MathTex(r"\mu", font_size=28, color=GREY_B).next_to(img, DOWN, buff=0.15)
-            yl = MathTex(r"\sigma", font_size=28, color=GREY_B).next_to(img, LEFT, buff=0.15)
-            trails = VGroup()
-            for pth in paths:
-                pth = np.asarray(pth)
-                pts = [ax.c2p(float(m), float(s)) for m, s in pth[:, :2]]
-                trail = VMobject(stroke_color=WHITE, stroke_width=3).set_points_as_corners(pts)
-                trails.add(VGroup(trail, Dot(pts[0], radius=0.06, color=GREY_A), Dot(pts[-1], radius=0.09, color=WHITE)))
-            panels.add(Group(img, t, xl, yl, trails))
-        cap = label(r"brighter $=$ smaller divergence; \ white: gradient descent from a starting guess", font_size=22,
+        t_f = label(r"$D_{\mathrm{KL}}(p \,\|\, q)$: \ one valley", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
+        t_r = label(r"$D_{\mathrm{KL}}(q \,\|\, p)$: \ two valleys", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
+        cap = label(r"across: \ the center $\mu$; \ back: \ the width $\sigma$; \ up: \ the loss", font_size=24,
                     color=GREY_B).to_edge(DOWN, buff=0.35)
         tag = computed_tag()
+        for m in (head, t_f, t_r, cap, tag):
+            self.add_fixed_in_frame_mobjects(m)
+            self.remove(m)
+        self.set_camera_orientation(phi=58 * DEGREES, theta=-78 * DEGREES)
         with self.voiceover(
             "Here are the two losses for every possible bell curve: its center across, its width up. "
             "<bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent finds the wide "
             "curve from anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each "
             "peak, and where you end up depends on where you start."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(tag), Create(axes), run_time=1.0)
+            self.play(FadeIn(sF), run_time=1.5)
+            self.begin_ambient_camera_rotation(rate=0.05)
             vo.wait_until("a")
-            self.play(FadeIn(panels[0][:4]))
-            self.play(Create(panels[0][4]), run_time=1.5)
+            self.stop_ambient_camera_rotation()
+            self.play(FadeIn(t_f), FadeIn(bF[0]))
+            self.play(MoveAlongPath(bF[0], bF[2]), Create(bF[1]), run_time=3.0, rate_func=smooth)
             vo.wait_until("b")
-            self.play(FadeIn(panels[1][:4]))
-            self.play(Create(panels[1][4]), run_time=1.5)
+            self.play(FadeOut(bF[0]), FadeOut(bF[1]), FadeOut(t_f), FadeIn(t_r), Transform(sF, sR), run_time=2.5)
+            self.move_camera(phi=52 * DEGREES, theta=-90 * DEGREES, run_time=1.2)
+            self.play(FadeIn(bA[0]), FadeIn(bB[0]))
+            self.play(MoveAlongPath(bA[0], bA[2]), Create(bA[1]), MoveAlongPath(bB[0], bB[2]), Create(bB[1]),
+                      run_time=3.0, rate_func=smooth)
         self.wait(0.5)
         self.clear_scene()
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES)

@@ -108,9 +108,51 @@ class Probability(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    MW, MH, MX, MY = 4.6, 4.6, -6.5, 2.3  # the mosaic: width, height, top-left corner
+    PX, PW = -0.5, 1.5  # where a column is pulled out to, and how wide
+
+    def mosaic_cells(self, joint, cond):
+        """The unit square cut by the previous symbol (column widths P(A)) and then by the next (cell heights P(B|A)):
+        cell areas are the joint probabilities."""
+        p1 = joint.sum(1)
+        cells, x = VGroup(), self.MX
+        for i in range(27):
+            w = self.MW * p1[i]
+            y = self.MY
+            for j in range(27):
+                h = self.MH * cond[i, j]
+                shade = 0.35 + 0.55 * ((j * 7) % 27) / 26
+                col = interpolate_color(ManimColor("#1B2638"), ManimColor(C.TRUE_P), shade)
+                cells.add(Rectangle(width=max(w, 1e-4), height=max(h, 1e-4), stroke_width=0.5,
+                                    stroke_color=BACKGROUND, fill_color=col, fill_opacity=1)
+                          .move_to([x + w / 2, y - h / 2, 0]))
+                y -= h
+            x += w
+        return cells
+
+    def pull(self, cells, i, cond, lit=(), min_label=0.26):
+        """Column i of the mosaic, pulled out to the right and stretched: what follows symbol i."""
+        col = VGroup(*[cells[i * 27 + j] for j in range(27)])
+        out = col.copy()
+        out.stretch_to_fit_width(self.PW).move_to([self.PX, self.MY - self.MH / 2, 0])
+        for j in lit:
+            out[j].set_fill(C.BITS, opacity=1)
+        labs = VGroup(*[letter(ALPHA27[j], font_size=24, color=C.BITS if j in lit else WHITE)
+                        .next_to(out[j], RIGHT, buff=0.12) for j in range(27) if self.MH * cond[i, j] > min_label])
+        frame = SurroundingRectangle(col, buff=0.0, color=C.CONTEXT, stroke_width=2.5)
+        rays = VGroup(*[Line(frame.get_corner(a), out.get_corner(b), color=C.CONTEXT, stroke_width=1.2,
+                             stroke_opacity=0.6) for a, b in ((UR, UL), (DR, DL))])
+        return VGroup(col, out, labs, frame, rays)
+
+    def show_pull(self, pl, run_time=1.4):
+        col, out, labs, frame, rays = pl
+        self.play(Create(frame), run_time=0.5)
+        self.play(TransformFromCopy(col, out), Create(rays), run_time=run_time)
+        self.play(FadeIn(labs), run_time=0.5)
+
     def conditional(self):
         b = load("bigram")
-        cond = b["cond"]
+        cond, joint = b["cond"], b["joint"]
         cell = 0.165
         x0, y0 = -6.3, 2.35  # top-left corner of the grid
         grid = VGroup()
@@ -131,22 +173,28 @@ class Probability(VoiceoverScene):
             rl.rotate(PI / 2)
         rl.next_to(rows, LEFT, buff=0.12)
         cl = label(r"next", font_size=20, color=GREY_B).next_to(cols, UP, buff=0.1)
-        qi, ui = ALPHA27.index("q"), ALPHA27.index("u")
+        qi, ui, ti, hi = (ALPHA27.index(c) for c in "quth")
         assert b["q_u"] > 0.998
-        q_row = SurroundingRectangle(VGroup(*grid[qi * 27:(qi + 1) * 27]), color=C.CONTEXT, buff=0.02, stroke_width=2.5)
-        q_u = SurroundingRectangle(grid[qi * 27 + ui], color=C.BITS, buff=0.03, stroke_width=3)
-        sp_row = SurroundingRectangle(VGroup(*grid[0:27]), color=C.CONTEXT, buff=0.02, stroke_width=2.5)
         head = label(r"$P(\text{next} \mid \text{previous})$ \ for every pair of symbols", font_size=30)
         head.move_to([2.6, 3.3, 0])
-        f_def = mtex(r"P(B \mid A) = \frac{P(A \text{ and } B)}{P(A)}", font_size=40).move_to([2.6, 1.9, 0])
-        f_qu = mtex(r"P(" + tt("u") + r" \mid " + tt("q") + r") = \frac{18{,}469}{18{,}496} = 0.9985", font_size=36,
-                    color=WHITE).move_to([2.6, 0.4, 0])
-        n_q = int(load("letters")["counts"][qi])
-        assert n_q == 18496 and round(float(b["joint"][qi, ui]) * int(load("letters")["n"])) == 18469
-        f_qu[0].set_color(WHITE)
-        cap_q = label(r"after \texttt{q}, almost surely \texttt{u}", font_size=26, color=C.BITS).move_to([2.6, -0.5, 0])
-        cap_sp = label(r"after a space, almost anything: \ a word is starting", font_size=26, color=C.CONTEXT)
-        cap_sp.move_to([2.6, -1.5, 0])
+        # the same numbers as areas: the unit square, cut by the previous symbol, then by the next
+        cells = self.mosaic_cells(joint, cond)
+        p1 = joint.sum(1)
+        mlabs = VGroup(*[letter(ALPHA27[i], font_size=20, color=GREY_A).next_to(VGroup(*cells[i * 27:(i + 1) * 27]),
+                                                                              DOWN, buff=0.1)
+                         for i in range(27) if self.MW * p1[i] > 0.2])
+        mcap = label(r"previous symbol", font_size=22, color=GREY_B).next_to(mlabs, DOWN, buff=0.12)
+        mcap.set_x(self.MX + self.MW / 2)
+        f_def = mtex(r"P(B \mid A) = \frac{P(A \text{ and } B)}{P(A)}", font_size=40).move_to([3.7, 1.9, 0])
+        pt = self.pull(cells, ti, cond, lit=(hi,))
+        out = pt[1]
+        b_w = brace_note(out, r"$P(A) = P(\texttt{t}) = 0.072$", DOWN, color=C.CONTEXT, font_size=24)
+        b_h = Brace(out[hi], RIGHT, buff=0.42, color=C.INTERVAL)
+        b_h_l = label(r"$P(B \mid A) = 0.314$", font_size=24, color=C.INTERVAL).next_to(b_h, RIGHT, buff=0.1)
+        area = label(r"area in the square: \ $P(A \text{ and } B)$", font_size=24, color=C.BITS)
+        area.next_to(f_def, DOWN, buff=0.45)
+        assert abs(p1[ti] - 0.0724) < 0.0005 and abs(cond[ti, hi] - 0.314) < 0.001
+        lit_cell = cells[ti * 27 + hi].copy().set_fill(C.BITS, opacity=1)
         with self.voiceover(
             "But we rarely guess from nothing. Once you know the previous letter, the odds change. <bookmark mark='a'/> "
             "Here is the whole table: each row is the previous symbol, and each square shows how likely each next "
@@ -158,60 +206,126 @@ class Probability(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(grid[i * 27:(i + 1) * 27]) for i in range(27)], lag_ratio=0.08),
                       FadeIn(rows), FadeIn(cols), FadeIn(rl), FadeIn(cl), run_time=2.5)
             vo.wait_until("d")
-            self.play(Write(f_def))
+            self.play(*[ReplacementTransform(grid[k], cells[k]) for k in range(729)], FadeOut(rows), FadeOut(cols),
+                      FadeOut(rl), FadeOut(cl), run_time=2.2)
+            self.play(FadeIn(mlabs), FadeIn(mcap), FadeIn(lit_cell))
+            self.show_pull(pt)
+            self.play(Write(f_def), FadeIn(b_w), GrowFromCenter(b_h), FadeIn(b_h_l))
+            self.play(FadeIn(area), Indicate(lit_cell, color=WHITE, scale_factor=2.5))
+        f_qu = mtex(r"P(" + tt("u") + r" \mid " + tt("q") + r") = \frac{18{,}469}{18{,}496} = 0.9985", font_size=36,
+                    color=WHITE).move_to([3.7, 1.9, 0])
+        n_q = int(load("letters")["counts"][qi])
+        assert n_q == 18496 and round(float(joint[qi, ui]) * int(load("letters")["n"])) == 18469
+        cap_q = label(r"after \texttt{q}, almost surely \texttt{u}", font_size=28, color=C.BITS).next_to(f_qu, DOWN,
+                                                                                                    buff=0.4)
+        cap_sp = label(r"after a space, almost anything: \ a word is starting", font_size=28, color=C.CONTEXT)
+        cap_sp.move_to([3.7, -0.6, 0])
+        pq = self.pull(cells, qi, cond, lit=(ui,))
+        q_col = VGroup(*cells[qi * 27:(qi + 1) * 27])
+        q_arrow = Arrow(q_col.get_bottom() + DOWN * 0.9, q_col.get_bottom() + DOWN * 0.05, buff=0, color=C.CONTEXT,
+                        stroke_width=3, max_tip_length_to_length_ratio=0.25)
+        q_name = letter("q", font_size=26, color=C.CONTEXT).next_to(q_arrow, DOWN, buff=0.05)
+        ps = self.pull(cells, 0, cond, min_label=0.2)
         with self.voiceover(
             "In our books, q appears eighteen thousand, four hundred and ninety-six times, and all but twenty-seven "
             "of them are followed by u. <bookmark mark='a'/> So the probability of u, given q, is 0.9985. "
             "<bookmark mark='b'/> After a space, on the other hand, almost anything can come next: a new word is "
             "starting."
         ) as vo:
-            self.play(Create(q_row))
+            self.play(FadeOut(VGroup(pt[1:], b_w, b_h, b_h_l, f_def, area, lit_cell)), FadeOut(mlabs), FadeOut(mcap))
+            self.play(GrowArrow(q_arrow), FadeIn(q_name))
+            self.show_pull(pq, run_time=1.2)
             vo.wait_until("a")
-            self.play(Create(q_u), Write(f_qu), FadeIn(cap_q))
+            self.play(Write(f_qu), FadeIn(cap_q))
             vo.wait_until("b")
-            self.play(ReplacementTransform(q_row, sp_row), FadeIn(cap_sp))
+            self.play(FadeOut(VGroup(pq[1:], q_arrow, q_name)))
+            self.show_pull(ps, run_time=1.2)
+            self.play(FadeIn(cap_sp))
         self.wait(0.3)
-        self.clear_scene()
+        self.play(FadeOut(VGroup(ps[1:], f_qu, cap_q, cap_sp, head)))
+        self.cells, self.cond = cells, cond
 
     # ------------------------------------------------------------------
     def chain_rule(self):
-        rows = [
-            mtex([r"P(x_1, x_2)", r"=", r"P(x_1)\,", r"P(x_2 \mid x_1)"]),
-            mtex([r"P(x_1, x_2, x_3)", r"=", r"P(x_1, x_2)\,", r"P(x_3 \mid x_1, x_2)"]),
-            mtex([r"P(x_1, x_2, x_3)", r"=", r"P(x_1)\, P(x_2 \mid x_1)\,", r"P(x_3 \mid x_1, x_2)"]),
-            mtex([r"P(x_1, \dots, x_n)", r"=", r"\prod_{i=1}^{n}", r"P(x_i \mid x_1, \dots, x_{i-1})"],
-                 font_size=44),
+        cells, cond = self.cells, self.cond
+        ch = load("chain")
+        ti, hi, ei = (ALPHA27.index(c) for c in "the")
+        pt_, ph, pe = float(ch["p1"][ti]), float(ch["after_t"][hi]), float(ch["after_th"][ei])
+        assert abs(pt_ - 0.0724) < 0.0005 and abs(ph - 0.314) < 0.001 and abs(pe - 0.613) < 0.001
+        assert abs(ch["p_the"] - 0.0139) < 0.0001
+        K1, K2, K3 = C.CONTEXT, C.INTERVAL, TEAL_C
+        colors = {r"P(x_1)": K1, r"P(x_2 \mid x_1)": K2, r"P(x_1, x_2)": C.BITS, r"P(x_3 \mid x_1, x_2)": K3}
+        steps = [
+            [r"P(x_1, x_2)", "=", r"P(x_1)", r"P(x_2 \mid x_1)"],
+            [r"P(x_1, x_2, x_3)", "=", r"P(x_1, x_2)", r"P(x_3 \mid x_1, x_2)"],
+            [r"P(x_1, x_2, x_3)", "=", r"P(x_1)", r"P(x_2 \mid x_1)", r"P(x_3 \mid x_1, x_2)"],
+            [r"P(x_1, \dots, x_n)", "=", r"\prod_{i=1}^{n}", r"P(x_i \mid x_1, \dots, x_{i-1})"],
         ]
-        whys = [why(r"the definition, multiplied out"), why(r"the same, with $(x_1, x_2)$ as $A$"),
-                why(r"the first line, substituted"), why(r"and so on, one symbol at a time")]
-        step = ladder(self, rows, whys, keep=4, top=2.6)
-        head = label(r"The chain rule", font_size=40).to_edge(UP, buff=0.35)
+        eqs = [cmath(*s, colors=colors, font_size=40) for s in steps]
+        for e in eqs:
+            e.move_to([3.4, 3.2, 0])
+            if e.width > 7.0:
+                e.width = 7.0
+        eqs[3].scale(1.2).move_to(UP * 0.6)
+        head = label(r"The chain rule", font_size=36).to_corner(UL, buff=0.35)
+        pt = self.pull(cells, ti, cond, lit=(hi,))
+        out = pt[1]
+        b_w = brace_note(out, r"$P(x_1)$", DOWN, color=K1, font_size=30)
+        b_h = Brace(out[hi], RIGHT, buff=0.42, color=K2)
+        b_h_l = MathTex(r"P(x_2 \mid x_1)", font_size=30, color=K2).next_to(b_h, RIGHT, buff=0.1)
+        lit_cell = cells[ti * 27 + hi].copy().set_fill(C.BITS, opacity=1)
+        names = MathTex(r"x_1 = \texttt{t}, \ x_2 = \texttt{h}, \ x_3 = \texttt{e}", font_size=30, color=GREY_A)
+        names.next_to(eqs[0], DOWN, buff=0.3)
+        # the cell for "th", pulled out again and cut by the third letter
+        h3 = 3.4
+        cell3 = VGroup()
+        y = 1.9
+        for j in range(27):
+            h = h3 * float(ch["after_th"][j])
+            cell3.add(Rectangle(width=1.5, height=max(h, 1e-4), stroke_width=0.6, stroke_color=BACKGROUND,
+                                fill_color=K3 if j == ei else C.BITS, fill_opacity=1 if j == ei else 0.55)
+                      .move_to([3.0, y - h / 2, 0]))
+            y -= h
+        c3l = VGroup(*[letter(ALPHA27[j], font_size=24, color=K3 if j == ei else WHITE).next_to(cell3[j], RIGHT, buff=0.12)
+                       for j in range(27) if h3 * ch["after_th"][j] > 0.25])
+        rays3 = VGroup(*[Line(out[hi].get_corner(a), cell3.get_corner(b), color=C.BITS, stroke_width=1.2, stroke_opacity=0.6)
+                         for a, b in ((UR, UL), (DR, DL))])
+        b3 = Brace(cell3[ei], RIGHT, buff=0.42, color=K3)
+        b3_l = MathTex(r"P(x_3 \mid x_1, x_2)", font_size=30, color=K3).next_to(b3, RIGHT, buff=0.1)
+        num = mtex(r"P(\texttt{the}) = 0.072 \times 0.314 \times 0.613 = 0.0139", font_size=30).move_to([3.6, -2.7, 0])
         with self.voiceover(
             "Multiply that definition out, and you get a rule for whole strings. <bookmark mark='a'/> The "
             "probability of two symbols is the probability of the first, times the probability of the second given "
             "the first. <bookmark mark='b'/> For three, treat the first two as a single event, <bookmark mark='c'/> "
             "and substitute."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lit_cell))
+            self.show_pull(pt, run_time=1.0)
             vo.wait_until("a")
-            step(0)
+            self.play(Write(eqs[0]), FadeIn(names))
+            self.play(FadeIn(b_w), GrowFromCenter(b_h), FadeIn(b_h_l), Indicate(lit_cell, color=WHITE, scale_factor=2.5))
             vo.wait_until("b")
-            step(1)
+            self.play(FadeOut(names), FadeOut(b_h), FadeOut(b_h_l))
+            morph(self, eqs[0], eqs[1], run_time=1.2)
+            self.play(TransformFromCopy(out[hi], cell3), Create(rays3), run_time=1.3)
+            self.play(FadeIn(c3l), GrowFromCenter(b3), FadeIn(b3_l))
             vo.wait_until("c")
-            step(2)
-        cap = label(r"exact, for any distribution: \ no assumption has been made", font_size=28, color=C.BITS)
-        cap2 = label(r"a text's probability $=$ a product of next-symbol guesses", font_size=28, color=GREY_A)
+            morph(self, eqs[1], eqs[2], run_time=1.2)
+            self.play(Write(num))
+        cap = label(r"exact, for any distribution: \ no assumption has been made", font_size=30, color=C.BITS)
+        cap2 = label(r"a text's probability $=$ a product of next-symbol guesses", font_size=30, color=GREY_A)
+        box = SurroundingRectangle(eqs[3], color=C.BITS, buff=0.25, corner_radius=0.1)
+        cap.next_to(box, DOWN, buff=0.4)
+        cap2.next_to(cap, DOWN, buff=0.25)
         with self.voiceover(
             "And so on, one symbol at a time. <bookmark mark='a'/> The probability of a whole text is a product of "
             "next-symbol guesses, each made knowing everything before it. This is the chain rule, and it is exact: "
             "no assumption has been made. <bookmark mark='b'/> It is also why a machine that only ever guesses the "
             "next symbol can score, or write, an entire text."
         ) as vo:
-            step(3)
-            box = SurroundingRectangle(rows[3], color=C.BITS, buff=0.2, corner_radius=0.1)
-            cap.next_to(box, DOWN, buff=0.35)
-            cap2.next_to(cap, DOWN, buff=0.25)
-            self.play(FadeOut(whys[3]), Create(box))
+            self.play(FadeOut(VGroup(cells, pt[1:], lit_cell, b_w, cell3, c3l, rays3, b3, b3_l, num, head)), run_time=0.8)
+            morph(self, eqs[2], eqs[3], run_time=1.4)
+            self.play(Create(box))
             vo.wait_until("a")
             self.play(FadeIn(cap))
             vo.wait_until("b")
