@@ -25,11 +25,14 @@ LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "en"
 def run(video, module, cls, out):
     env = dict(os.environ, EXPLAINER_TTS="silent", EXPLAINER_COLLECT_TEXT=str(out), EXPLAINER_LANG=LANG,
                PYTHONWARNINGS="ignore")
-    cfg = ROOT / "media" / video / "cfg" / f"{cls}.cfg"
+    # its own LaTeX and Text caches: sharing a build's would race with a render of the same scene (see build.py)
+    media = ROOT / "media" / video / f"dry_{LANG}"
+    cfg = media / "cfg" / f"{cls}.cfg"
+    cfg.parent.mkdir(parents=True, exist_ok=True)
+    (media / "Tex").mkdir(exist_ok=True)
+    cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\ntext_dir = {media / 'texts' / cls}\n")
     cmd = [sys.executable, "-m", "manim", "render", "-ql", "--dry_run", "--progress_bar", "none",
-           "--media_dir", str(ROOT / "media" / video / f"dry_{LANG}")]
-    if cfg.exists():
-        cmd += ["-c", str(cfg)]
+           "--media_dir", str(media), "-c", str(cfg)]
     r = subprocess.run(cmd + [str(ROOT / "videos" / video / f"{module}.py"), cls], cwd=ROOT, env=env,
                        capture_output=True, text=True)
     return cls, r.returncode, r.stderr[-400:]

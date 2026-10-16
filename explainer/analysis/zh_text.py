@@ -48,6 +48,8 @@ def _scene() -> str:
 _TABLE: dict | None = None
 
 
+# xeCJK drops a space that follows a Chinese character, so "\text{ 时 } d" would set as "时d": make it a control space
+_SPACE = re.compile(r"([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]) +\}")
 _TEXT_CMD = re.compile(r"(\\text(?:bf|it|rm)?\{)((?:\\[a-z]+\s*)*)([^{}]*)\}")
 
 
@@ -60,7 +62,7 @@ def translate(s: str) -> str:
     if _TABLE is None:
         _TABLE = _table()
     if s in _TABLE.get("strings", {}):
-        return _TABLE["strings"][s]
+        return _SPACE.sub(r"\1\\ }", _TABLE["strings"][s])
     phrases = _TABLE.get("phrases", {})
 
     def phrase(m):
@@ -74,7 +76,7 @@ def translate(s: str) -> str:
     out = _TEXT_CMD.sub(phrase, s)
     for pat, rep in _TABLE.get("patterns", []):
         out = re.sub(pat, rep, out)
-    return out
+    return _SPACE.sub(r"\1\\ }", out)
 
 
 def install(base_template) -> None:
