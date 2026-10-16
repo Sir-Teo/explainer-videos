@@ -87,6 +87,18 @@ def glow_dot(point, color=YELLOW, radius=0.08, layers=5, spread=3.2, opacity=0.5
     return g
 
 
+def code_block(lines, font_size=24, color=GREY_A, font="DejaVu Sans Mono", buff=0.14) -> VGroup:
+    """Lines of code as Text, one per line, keeping their indentation (Text drops leading spaces)."""
+    em = Text("M" * 20, font=font, font_size=font_size).width / 20
+    rows = VGroup(*[Text(s.strip() or ".", font=font, font_size=font_size, color=color) for s in lines])
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+    for r, s in zip(rows, lines):
+        if not s.strip():
+            r.set_opacity(0)
+        r.shift(RIGHT * em * (len(s) - len(s.lstrip(" "))))
+    return rows
+
+
 class LiveBars(VGroup):
     """Bars whose heights follow ``ValueTracker``\\ s (``bars.trackers``), so a distribution can reshape on screen.
 
@@ -147,6 +159,12 @@ class LiveBars(VGroup):
             d.set_value(self.trackers[i].get_value())
             d.next_to(self._bars[i], UP, buff=0.08)
         return upd
+
+    def place(self, base_y: float, x: float = 0.0) -> "LiveBars":
+        """Put the baseline at height ``base_y``, centred on ``x`` (moving by the bounding box would depend on the
+        bars' current heights)."""
+        self.shift(np.array([x - self.base.get_x(), base_y - self.base.get_y(), 0]))
+        return self
 
     def bar(self, i) -> Mobject:
         return self._bars[i]

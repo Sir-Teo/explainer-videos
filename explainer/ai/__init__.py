@@ -92,6 +92,7 @@ TIMELINE = [
     (1948, r"Shannon: information theory"),
     (1951, r"Shannon's guessing game"),
     (1952, r"Huffman codes"),
+    (1953, r"Markov chain Monte Carlo"),
     (1958, r"the perceptron"),
     (1976, r"arithmetic coding"),
     (1984, r"random projections"),
