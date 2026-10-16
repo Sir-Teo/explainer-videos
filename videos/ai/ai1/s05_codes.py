@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, MONO, code_tree, letter, letter_row, load
+from videos.ai.ai1.common import ALPHA27, MONO, area_slivers, code_tree, letter, letter_row, load
 
 SMALL = {"a": "0", "b": "10", "c": "110", "d": "1110", "e": "11110", "f": "11111"}
 
@@ -192,20 +192,30 @@ class Codes(VoiceoverScene):
     # ------------------------------------------------------------------
     def bound(self):
         hf = load("huffman")
+        lt = load("letters")
+        p, order = lt["p"], list(lt["order"])
+        H = float(lt["H"])
+        W, y0, sc = 11.4, -3.25, 0.25
+        sky = area_slivers(p, W=W, y0=y0, scale=sc, order=order, color=C.SURPRISE, opacity=0.85)
+        base = Line([-W / 2, y0, 0], [W / 2, y0, 0], color=GREY_C, stroke_width=1.5)
         head = label(r"No prefix code beats the entropy", font_size=36).to_edge(UP, buff=0.35)
         setup = mtex(r"L = \sum_i p_i\, \ell_i \quad \text{(average length)}, \qquad H = \sum_i p_i \log_2 \tfrac{1}{p_i}",
                      font_size=32, color=GREY_A).next_to(head, DOWN, buff=0.3)
-        rows = [
-            mtex([r"H - L", r"=", r"\sum_i p_i \log_2 \frac{2^{-\ell_i}}{p_i}"], font_size=34),
-            mtex([r"H - L", r"\le", r"\log_2 \sum_i p_i\, \frac{2^{-\ell_i}}{p_i}"], font_size=34),
-            mtex([r"H - L", r"\le", r"\log_2 \sum_i 2^{-\ell_i}"], font_size=34),
-            mtex([r"H - L", r"\le", r"\log_2 1 = 0"], font_size=34),
+        colors = {r"p_i": C.TRUE_P, r"2^{-\ell_i}": C.BITS, "1": C.BITS}
+        steps = [
+            ["H - L", "=", r"\sum_i", r"p_i", r"\log_2", r"\frac{2^{-\ell_i}}{p_i}"],
+            ["H - L", r"\le", r"\log_2", r"\sum_i", r"p_i", r"\frac{2^{-\ell_i}}{p_i}"],
+            ["H - L", r"\le", r"\log_2", r"\sum_i", r"2^{-\ell_i}"],
+            ["H - L", r"\le", r"\log_2", "1", "= 0"],
         ]
+        eqs = [cmath(*st, colors=colors, font_size=50).move_to(UP * 1.25) for st in steps]
         whys = [why(r"combine the two sums"), why(r"Jensen, as in Chapter 3"), why(r"the $p_i$ cancel"),
                 why(r"Kraft")]
-        step = ladder(self, rows, whys, keep=4, top=1.85, buff=0.28)
-        res = label(r"$L \ge H$, \ with equality only if every $\ell_i = \log_2 \frac{1}{p_i}$", font_size=32,
-                    color=C.BITS).to_edge(DOWN, buff=0.85)
+        for w in whys:
+            w.scale(1.15).move_to(UP * 0.3)
+        res = label(r"$L \ge H$, \ with equality only if every $\ell_i = \log_2 \frac{1}{p_i}$", font_size=34,
+                    color=C.BITS).move_to(UP * 1.25)
+        h_lab = MathTex(rf"H = {H:.2f}", font_size=34, color=C.SURPRISE).move_to([-4.3, -1.6, 0])
         with self.voiceover(
             "Now we can prove a speed limit. Let L be the average codeword length, and H the entropy. "
             "<bookmark mark='a'/> Write their difference as one sum. <bookmark mark='b'/> Jensen's inequality, "
@@ -214,21 +224,40 @@ class Codes(VoiceoverScene):
             "<bookmark mark='e'/> So the average length can never be less than the entropy, and it equals the "
             "entropy only if each symbol gets exactly log one over p bits: its surprise."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(setup))
-            for k, mark in enumerate("abcd"):
+            self.play(FadeIn(head), FadeIn(setup), Create(base),
+                      LaggedStart(*[GrowFromEdge(sky[i], DOWN) for i in order], lag_ratio=0.03), run_time=1.8)
+            self.play(FadeIn(h_lab))
+            vo.wait_until("a")
+            self.play(Write(eqs[0]), FadeIn(whys[0]))
+            for k, mark in enumerate("bcd"):
                 vo.wait_until(mark)
-                step(k)
+                self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.4)
+                morph(self, eqs[k], eqs[k + 1], run_time=1.2, path_arc=-0.6 if k == 0 else 0.0)
             vo.wait_until("e")
-            self.play(FadeIn(res))
+            self.play(FadeOut(whys[3]), eqs[3].animate.scale(0.7).move_to(UP * 2.0), FadeIn(res, shift=DOWN * 0.1))
+        # rounding the surprises up to whole bits: Shannon's code
+        ell = np.ceil(-np.log2(p))
+        Ls = float((p * ell).sum())
+        assert abs(Ls - hf["L_shannon"]) < 1e-9 and abs(hf["L_shannon"] - 4.62) < 0.005
+        steps_up, cum = {}, 0.0
+        for i in order:
+            h = sc * ell[i]
+            steps_up[i] = Rectangle(width=max(W * p[i], 0.003), height=h, stroke_width=1.2, stroke_color=C.BITS,
+                                    fill_color=C.BITS, fill_opacity=0.3).move_to([-W / 2 + (cum + p[i] / 2) * W, y0 + h / 2, 0])
+            cum += p[i]
+        stair = VGroup(*[steps_up[i] for i in order])
+        l_lab = MathTex(rf"L = {Ls:.2f}", font_size=34, color=C.BITS).next_to(h_lab, UP, buff=0.2).align_to(h_lab, LEFT)
         sh = label(rf"round up, $\ell_i = \lceil \log_2 \frac{{1}}{{p_i}} \rceil$: \ still within Kraft, \ "
                    rf"$H \le L < H + 1$. \ Letters: ${hf['L_shannon']:.2f}$ bits", font_size=28, color=GREY_A)
-        sh.next_to(res, DOWN, buff=0.2)
-        assert abs(hf["L_shannon"] - 4.62) < 0.005
+        sh.next_to(res, DOWN, buff=0.35)
         with self.voiceover(
             "Codeword lengths must be whole numbers, so round the surprises up. That still fits Kraft's budget, "
             "and it costs less than one extra bit per symbol. For our letters, 4.62 bits."
         ) as vo:
-            self.play(FadeIn(sh))
+            self.add(stair)
+            self.bring_to_front(sky)
+            self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in stair], lag_ratio=0.04), run_time=2.0)
+            self.play(FadeIn(l_lab), FadeIn(sh))
         self.wait(0.3)
         self.clear_scene()
 

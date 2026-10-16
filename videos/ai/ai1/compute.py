@@ -337,6 +337,31 @@ def compute_bigram():
                 q_u=float(after_q[ALPHA27.index("u")]))
 
 
+def compute_chain():
+    """The chain rule on the books' own counts, for the string "the": P(t), P(h | t) and P(next | th)."""
+    a = codes27(text("train27"))
+    t, h, e = (ALPHA27.index(c) for c in "the")
+    p1 = np.bincount(a, minlength=27) / len(a)
+    after_t = np.bincount(a[1:][a[:-1] == t], minlength=27).astype(float)
+    after_t /= after_t.sum()
+    after_th = np.bincount(a[2:][(a[:-2] == t) & (a[1:-1] == h)], minlength=27).astype(float)
+    after_th /= after_th.sum()
+    assert after_t[h] == after_t.max() and after_th[e] == after_th.max()  # "th" and "the" are the likeliest
+    return dict(p1=p1, after_t=after_t, after_th=after_th, p_the=float(p1[t] * after_t[h] * after_th[e]))
+
+
+def compute_ctxgrid():
+    """Which 2- and 4-letter contexts occur in the books.  The 4-letter grid is indexed so that the 27 x 27 block at
+    (c1, c2) holds the contexts c1 c2 c3 c4 (rows c3, columns c4): each 2-letter cell zooms into its own block."""
+    a = codes27(text("train27"))
+    seen2 = (np.bincount(a[:-1] * 27 + a[1:], minlength=729) > 0).reshape(27, 27)
+    idx = ((a[:-3] * 27 + a[1:-2]) * 27 + a[2:-1]) * 27 + a[3:]
+    seen4 = (np.bincount(idx, minlength=27 ** 4) > 0).reshape(27, 27, 27, 27)  # [c1, c2, c3, c4]
+    grid4 = seen4.transpose(0, 2, 1, 3).reshape(729, 729)  # row c1*27 + c3, column c2*27 + c4
+    return dict(seen2=seen2.astype(np.uint8), grid4=grid4.astype(np.uint8), frac2=float(seen2.mean()),
+                frac4=float(seen4.mean()), n4=int(seen4.sum()))
+
+
 def compute_orders():
     tr, va, te = codes27(text("train27")), codes27(text("valid27")), codes27(text("passage27"))
     rows = fit_orders(tr, va, te, 27, range(0, 15))
@@ -877,6 +902,8 @@ ITEMS = {
     "corpus": compute_corpus,
     "letters": compute_letters,
     "bigram": compute_bigram,
+    "chain": compute_chain,
+    "ctxgrid": compute_ctxgrid,
     "orders": compute_orders,
     "samples": compute_samples,
     "huffman": compute_huffman,

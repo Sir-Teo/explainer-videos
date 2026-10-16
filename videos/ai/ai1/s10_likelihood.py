@@ -28,25 +28,70 @@ class Likelihood(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
+    BIN_X = np.linspace(-4.8, 4.8, 5)
+    BIN_Y = -2.95  # the stacks' base
+    SQ, GAP, PER_ROW = 0.13, 0.025, 4  # unit squares: 4 to a row
+
+    def stack_pos(self, k, n):
+        """Where the n-th observation of token k sits in its stack."""
+        r, c = divmod(n, self.PER_ROW)
+        step = self.SQ + self.GAP
+        return np.array([self.BIN_X[k] + (c - (self.PER_ROW - 1) / 2) * step, self.BIN_Y + step / 2 + r * step, 0])
+
+    def freq_height(self, f):
+        """The height of a stack holding a fraction f of the 100 observations."""
+        return 100 * f / self.PER_ROW * (self.SQ + self.GAP)
+
     def mle(self):
+        d = load("softmax")
+        counts, phat = np.asarray(d["counts"]).astype(int), np.asarray(d["phat"])
+        assert list(counts) == [40, 25, 18, 12, 5]
         head = label(r"Maximum likelihood $=$ minimum cross-entropy", font_size=36).to_edge(UP, buff=0.35)
         setup = label(r"data $x_1, \dots, x_N$; \ a model $q_\theta$ with adjustable parameters $\theta$", font_size=26,
                       color=GREY_A).next_to(head, DOWN, buff=0.25)
-        rows = [
-            mtex([r"-\tfrac1N \log_2 \prod_t q_\theta(x_t)", r"=", r"\tfrac1N \sum_t \log_2 \frac{1}{q_\theta(x_t)}"],
-                 font_size=36),
-            mtex([r"-\tfrac1N \log_2 \prod_t q_\theta(x_t)", r"=", r"\sum_x \hat p(x) \log_2 \frac{1}{q_\theta(x)}"],
-                 font_size=36),
-            mtex([r"-\tfrac1N \log_2 \prod_t q_\theta(x_t)", r"=", r"H(\hat p) + D_{\mathrm{KL}}(\hat p \,\|\, q_\theta)"],
-                 font_size=36),
+        P, Q = C.TRUE_P, C.MODEL_Q
+        colors = {r"\hat p(x)": P, r"H(\hat p)": C.ENTROPY, r"D_{\mathrm{KL}}(\hat p \,\|\, q_\theta)": C.KL}
+        L = r"-\tfrac1N \log_2 \prod_t q_\theta(x_t)"
+        steps = [
+            [L, "=", r"\tfrac1N \sum_t \log_2 \frac{1}{q_\theta(x_t)}"],
+            [L, "=", r"\sum_x", r"\hat p(x)", r"\log_2 \frac{1}{q_\theta(x)}"],
+            [L, "=", r"H(\hat p)", "+", r"D_{\mathrm{KL}}(\hat p \,\|\, q_\theta)"],
         ]
+        eqs = [cmath(*st, colors=colors, font_size=42).move_to(UP * 1.7) for st in steps]
         whys = [why(r"log of a product: \ the average surprise"),
                 why(r"group equal outcomes: \ $\hat p(x)$ $=$ the fraction of the data equal to $x$"),
                 why(r"Chapter 5")]
-        step = ladder(self, rows, whys, keep=3, top=1.7, buff=0.45)
-        cap = label(r"maximizing the likelihood $\prod_t q_\theta(x_t)$ \ $=$ \ minimizing the surprise \ $=$ \ "
-                    r"pulling $q_\theta$ toward the data", font_size=26, color=C.BITS).to_edge(DOWN, buff=1.0)
+        for w in whys:
+            w.scale(1.1).move_to(UP * 0.85)
         src = cite(r"R.~A.~Fisher, \textit{On the Mathematical Foundations of Theoretical Statistics} (1922)", corner=DR)
+        # the data: 100 observations, in the order they came
+        palette = [C.TRUE_P, TEAL_C, GREEN_C, GOLD_C, MAROON_C]
+        seq = np.random.default_rng(1922).permutation(np.repeat(np.arange(5), counts))
+        tape = VGroup(*[Square(side_length=self.SQ, stroke_width=0, fill_color=palette[k], fill_opacity=0.95)
+                        for k in seq]).arrange(RIGHT, buff=0.0).move_to(DOWN * 0.15)
+        tape.width = 12.4
+        seen = [0] * 5
+        homes = []
+        for k in seq:
+            homes.append(self.stack_pos(k, seen[k]))
+            seen[k] += 1
+        toks = VGroup(*[Text(TOKENS[k], font=MONO, font_size=26, color=palette[k]).move_to([self.BIN_X[k], self.BIN_Y - 0.35, 0])
+                        for k in range(5)])
+        base = Line([-6.2, self.BIN_Y, 0], [6.2, self.BIN_Y, 0], color=GREY_D, stroke_width=1.5)
+        fr = VGroup(*[MathTex(f"{v:.2f}", font_size=28, color=palette[k]).move_to(
+            [self.BIN_X[k] + 0.75, self.BIN_Y + self.freq_height(v) / 2, 0]) for k, v in enumerate(phat)])
+        q_t = [ValueTracker(0.2) for _ in range(5)]
+
+        def q_bars():
+            g = VGroup()
+            for k in range(5):
+                h = self.freq_height(q_t[k].get_value())
+                g.add(Rectangle(width=self.PER_ROW * (self.SQ + self.GAP) + 0.14, height=h, stroke_color=Q, stroke_width=3,
+                                fill_opacity=0).move_to([self.BIN_X[k], self.BIN_Y + h / 2, 0]))
+            return g
+
+        qb = always_redraw(q_bars)
+        q_lab = label(r"$q_\theta$: the model", font_size=26, color=Q).move_to([-4.6, -0.6, 0])
         with self.voiceover(
             "Learning starts from a principle stated by Ronald Fisher in 1922: choose the model under which the data "
             "you actually saw were most likely. That's the likelihood: the product of the model's probabilities for "
@@ -56,37 +101,67 @@ class Likelihood(VoiceoverScene):
             "plus the divergence of the model from the data."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup), FadeIn(src))
-            for k, mark in enumerate("abc"):
-                vo.wait_until(mark)
-                step(k)
+            self.play(LaggedStart(*[FadeIn(sq, shift=DOWN * 0.2) for sq in tape], lag_ratio=0.015), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Write(eqs[0]), FadeIn(whys[0]))
+            vo.wait_until("b")
+            self.play(FadeOut(whys[0]), FadeIn(whys[1]), run_time=0.4)
+            morph(self, eqs[0], eqs[1], run_time=1.0)
+            self.play(Create(base), FadeIn(toks), LaggedStart(*[sq.animate.move_to(h) for sq, h in zip(tape, homes)],
+                                                             lag_ratio=0.01), run_time=2.2)
+            self.play(FadeIn(fr))
+            vo.wait_until("c")
+            self.play(FadeOut(whys[1]), FadeIn(whys[2]), run_time=0.4)
+            morph(self, eqs[1], eqs[2], run_time=1.0)
+            self.add(qb)
+            self.play(FadeIn(q_lab), *[t.animate.set_value(0.2) for t in q_t])
+        cap = label(r"maximizing the likelihood $\prod_t q_\theta(x_t)$ \ $=$ \ minimizing the surprise \ $=$ \ "
+                    r"pulling $q_\theta$ toward the data", font_size=26, color=C.BITS).move_to(UP * 0.85)
         with self.voiceover(
             "So maximum likelihood, minimum cross-entropy, and minimum divergence from the data are one and the "
             "same goal. It's the loss from chapter five, seen from the other side."
         ) as vo:
-            self.play(FadeIn(cap))
+            self.play(FadeOut(whys[2]), FadeIn(cap))
         self.wait(0.3)
-        self.clear_scene()
+        self.data_view = dict(eq=eqs[2], cap=cap, head=head, setup=setup, src=src, q_t=q_t, qb=qb, phat=phat,
+                              q_lab=q_lab, fr=fr)
 
     # ------------------------------------------------------------------
     def counting_is_mle(self):
+        v = self.data_view
+        q_t, phat = v["q_t"], v["phat"]
         a = label(r"If $q$ may be \textit{any} distribution:", font_size=34)
         b = mtex(r"D_{\mathrm{KL}}(\hat p \,\|\, q) \ge 0, \ \text{with equality only when } q = \hat p", font_size=38)
         c = label(r"the best $q$ is the data's own frequencies: \ counting \textit{is} maximum likelihood", font_size=32,
                   color=C.BITS)
         d = label(r"(and on new data, that's exactly what overfits: \ Chapter 7)", font_size=26, color=GREY_A)
-        VGroup(a, b, c, d).arrange(DOWN, buff=0.4)
+        VGroup(a, b).arrange(DOWN, buff=0.3).move_to(UP * 2.6)
+        VGroup(c, d).arrange(DOWN, buff=0.2).move_to(UP * 1.05)
+
+        def kl():
+            q = np.array([t.get_value() for t in q_t])
+            q = q / q.sum()
+            return float(np.sum(phat * np.log2(phat / q)))
+
+        kl_l = MathTex(r"D_{\mathrm{KL}}(\hat p \,\|\, q) =", font_size=34, color=C.KL)
+        kl_n = DecimalNumber(kl(), num_decimal_places=3, font_size=34, color=C.KL)
+        kl_g = VGroup(kl_l, kl_n).arrange(RIGHT, buff=0.15).move_to([3.6, -0.6, 0])
+        kl_n.add_updater(lambda m: m.set_value(kl()))
         with self.voiceover(
             "If the model is allowed to be any distribution at all, <bookmark mark='a'/> the divergence is smallest, "
             "zero, when the model equals the data's frequencies. <bookmark mark='b'/> So the counting models of "
             "chapter seven were maximum likelihood models. And that's exactly why they overfit: they fit the "
             "books perfectly, and nothing pulled them toward anything more general."
         ) as vo:
-            self.play(FadeIn(a))
+            self.play(FadeOut(VGroup(v["eq"], v["cap"], v["head"], v["setup"], v["src"])), FadeIn(a), FadeIn(kl_g))
             vo.wait_until("a")
             self.play(Write(b))
+            self.play(*[t.animate.set_value(f) for t, f in zip(q_t, phat)], run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(c))
             self.play(FadeIn(d))
+        kl_n.clear_updaters()
+        v["qb"].clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 
@@ -148,14 +223,19 @@ class Likelihood(VoiceoverScene):
         head = label(r"The most important derivative in AI", font_size=36).to_edge(UP, buff=0.35)
         setup = label(r"the next token was $y$; \ its surprise, in nats: \ $-\ln q_y$", font_size=28, color=GREY_A)
         setup.next_to(head, DOWN, buff=0.25)
-        rows = [
-            mtex([r"-\ln q_y", r"=", r"-z_y + \ln \sum_j e^{z_j}"], font_size=38),
-            mtex([r"\frac{\partial}{\partial z_k} \big(-\ln q_y\big)", r"=", r"-[k = y] + \frac{e^{z_k}}{\sum_j e^{z_j}}"],
-                 font_size=38),
-            mtex([r"\frac{\partial}{\partial z_k} \big(-\ln q_y\big)", r"=", r"q_k - [k = y]"], font_size=44),
+        P, Q = C.TRUE_P, C.MODEL_Q
+        colors = {r"-z_y": Q, r"\ln \sum_j e^{z_j}": Q, r"\frac{e^{z_k}}{\sum_j e^{z_j}}": Q, r"q_k": Q,
+                  r"-[k = y]": P, r"- [k = y]": P}
+        D = r"\frac{\partial}{\partial z_k} \big(-\ln q_y\big)"
+        steps = [
+            [r"-\ln q_y", "=", r"-z_y", "+", r"\ln \sum_j e^{z_j}"],
+            [D, "=", r"-[k = y]", "+", r"\frac{e^{z_k}}{\sum_j e^{z_j}}"],
+            [D, "=", r"q_k", r"- [k = y]"],
         ]
+        eqs = [cmath(*st, colors=colors, font_size=50).move_to(UP * 0.9) for st in steps]
         whys = [why(r"the softmax, logged"), why(r"differentiate each term"), why(r"the softmax again")]
-        step = ladder(self, rows, whys, keep=3, top=1.6, buff=0.5)
+        for w in whys:
+            w.scale(1.15).move_to(DOWN * 0.35)
         res = VGroup(
             label(r"the model's guess, minus the truth", font_size=32, color=C.BITS),
             mtex(r"\text{averaged over the data:} \quad \nabla_z \mathcal{L} = q - \hat p", font_size=34, color=GREY_A),
@@ -168,9 +248,12 @@ class Likelihood(VoiceoverScene):
             "one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup))
-            for k, mark in enumerate("abc"):
+            vo.wait_until("a")
+            self.play(Write(eqs[0]), FadeIn(whys[0]))
+            for k, mark in enumerate("bc"):
                 vo.wait_until(mark)
-                step(k)
+                self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.4)
+                morph(self, eqs[k], eqs[k + 1], run_time=1.2)
         with self.voiceover(
             "In words: the model's guess, minus the truth. <bookmark mark='a'/> Averaged over a dataset, the "
             "gradient is q minus p hat. Push up the scores of what happened more often than the model expected; "

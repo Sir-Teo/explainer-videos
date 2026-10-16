@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import MONO, load, plain_axes, polyline
+from videos.ai.ai1.common import ALPHA27, MONO, load, plain_axes, polyline
 
 
 class Counting(VoiceoverScene):
@@ -193,6 +193,34 @@ class Counting(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).move_to(RIGHT * 3.4 + DOWN * 0.2)
         if facts.width > 6.8:
             facts.width = 6.8
+        # contexts multiply: every 2-letter context, then the 4-letter contexts inside one of them, then all of those
+        g = load("ctxgrid")
+        seen2, grid4 = np.asarray(g["seen2"]), np.asarray(g["grid4"])
+        assert abs(g["frac2"] - 0.894) < 0.001 and abs(g["frac4"] - 0.112) < 0.001
+        G, cx, cy = 4.0, 3.5, -0.55
+        cell = G / 27
+        dark, lit = ManimColor("#1A2030"), ManimColor(C.CONTEXT)
+
+        def grid27(mask, size, center):
+            c = size / 27
+            return VGroup(*[Square(side_length=c, stroke_width=0, fill_color=lit if mask[i, j] else dark, fill_opacity=1)
+                            .move_to([center[0] - size / 2 + (j + 0.5) * c, center[1] + size / 2 - (i + 0.5) * c, 0])
+                            for i in range(27) for j in range(27)])
+
+        g2 = grid27(seen2, G, (cx, cy))
+        ti, hi = ALPHA27.index("t"), ALPHA27.index("h")
+        th = g2[ti * 27 + hi]
+        sub = grid27(grid4[ti * 27:(ti + 1) * 27, hi * 27:(hi + 1) * 27], G, (cx, cy))
+        dens = grid4.reshape(243, 3, 243, 3).mean(axis=(1, 3))[..., None] ** 0.6  # 3 x 3 pooling, shaded by how many are seen
+        rgb = (dens * np.array(lit.to_rgb()) + (1 - dens) * np.array(dark.to_rgb())) * 255
+        img = ImageMobject(rgb.astype(np.uint8)).set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
+        img.height = G
+        img.move_to([cx, cy, 0])
+        home = np.array([cx - G / 2 + (hi + 0.5) * cell, cy + G / 2 - (ti + 0.5) * cell, 0])
+        l2 = label(r"$2$ letters: \ $27^2 = 729$ contexts", font_size=26, color=C.CONTEXT).next_to(g2, UP, buff=0.2)
+        lth = label(r"\texttt{th} then $2$ more: \ $27^2$ again", font_size=26, color=C.CONTEXT).next_to(g2, UP, buff=0.2)
+        l4 = label(rf"$4$ letters: \ $27^4 = 531{{,}}441$; \ the books have ${100 * g['frac4']:.0f}\%$", font_size=26,
+                   color=C.CONTEXT).next_to(g2, UP, buff=0.2)
         with self.voiceover(
             "The reason is that contexts multiply. <bookmark mark='a'/> Of all the five-letter contexts in the Falcon "
             "passage, ninety-nine percent appear somewhere in the books. Of the fourteen-letter contexts, only about "
@@ -202,13 +230,19 @@ class Counting(VoiceoverScene):
             "infinite surprise. <bookmark mark='d'/> The patch is called smoothing: pretend every letter was seen a "
             "few extra times. That's what keeps these curves finite."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(t), FadeIn(xlab))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(t), FadeIn(xlab),
+                      LaggedStart(*[FadeIn(q) for q in g2], lag_ratio=0.002), FadeIn(l2), run_time=1.6)
             vo.wait_until("a")
             self.play(Create(c), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(facts[0]), FadeIn(facts[1]))
+            others = VGroup(*[q for q in g2 if q is not th])
+            self.play(FadeOut(others), th.animate.scale(27).move_to([cx, cy, 0]), ReplacementTransform(l2, lth),
+                      run_time=1.4)
+            self.play(FadeIn(sub, lag_ratio=0.002), FadeOut(th), run_time=1.0)
+            self.play(sub.animate.scale(1 / 27).move_to(home), FadeIn(img), ReplacementTransform(lth, l4), run_time=1.6)
+            self.remove(sub)
             vo.wait_until("c")
-            self.play(FadeIn(facts[2]))
+            self.play(FadeOut(img), FadeOut(l4), FadeIn(facts[0]), FadeIn(facts[1]), FadeIn(facts[2]))
             vo.wait_until("d")
             self.play(Write(facts[3]), FadeIn(facts[4]))
         assert 16e6 < nctx[14] < 17e6
