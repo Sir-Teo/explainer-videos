@@ -1,0 +1,178 @@
+{
+ "title": "人工智能，从零搭建 · 第6部分：统计机器学习",
+ "chapters": {
+  "Hook": "没人标注的结构",
+  "PCA": "1. 主成分",
+  "EM": "2. 隐藏的来源：混合模型与EM算法",
+  "HMM": "3. 隐马尔可夫模型",
+  "Graphs": "4. 把模型画成图",
+  "GP": "5. 高斯过程",
+  "VI": "6. 变分推断",
+  "KneserNey": "7. Kneser–Ney：最好的计数方法",
+  "Outro": "回顾，以及这些想法会在哪里再现"
+ },
+ "lines": {
+  "535cafc39b8b": {
+   "scene": "Hook",
+   "en": "Here are part five's six hundred and thirty-nine pages again, each a point in seventy dimensions, seen along the three directions in which they vary most. But this time, nobody tells us who wrote which. <bookmark mark='a'/> Can the data reveal its own hidden structure? <bookmark mark='b'/> A model that assumes there are two hidden sources, and fits them with no labels at all, finds two groups. <bookmark mark='c'/> And they're the two authors: 97 percent of the pages land with the right one.",
+   "zh": "这又是第5部分的那639页，每一页都是70维空间里的一个点，这里是沿着它们变化最大的三个方向看过去的样子。不过这一次，没有人告诉我们哪一页是谁写的。<bookmark mark='a'/>数据能自己揭示出隐藏的结构吗？<bookmark mark='b'/>有一个模型，假设背后有两个隐藏的来源，在完全没有标签的情况下去拟合它们，结果找出了两组。<bookmark mark='c'/>而这两组，正是那两位作者：97%的书页，都落到了正确的作者那一组。"
+  },
+  "790b20d337e6": {
+   "scene": "Hook",
+   "en": "This part is about models with hidden parts: directions, sources, states and functions that we never observe, only infer. <bookmark mark='a'/> Principal components, mixtures, hidden Markov models, Gaussian processes, and variational inference, plus a new row for the scoreboard.",
+   "zh": "这一部分讲的是带有隐藏部分的模型：方向、来源、状态和函数，我们从来观测不到它们，只能推断。<bookmark mark='a'/>主成分、混合模型、隐马尔可夫模型、高斯过程，还有变分推断，外加记分牌上新的一行。"
+  },
+  "ac54529cb8d8": {
+   "scene": "PCA",
+   "en": "Chapter one. Principal components.",
+   "zh": "第1章。主成分。"
+  },
+  "bedb7df1cc94": {
+   "scene": "PCA",
+   "en": "Principal components find the directions in which data varies the most. Start with the covariance matrix: seventy by seventy, how each pair of word rates moves together. <bookmark mark='a'/> It's symmetric, so, from part two, its eigenvectors are perpendicular, and each eigenvalue says how much of the variation lies along its eigenvector. <bookmark mark='b'/> The first direction holds 12.6 percent of all the variation, the next 9.1, and then they fall away.",
+   "zh": "主成分找的是数据变化最大的那些方向。先从协方差矩阵开始：它是70乘70的，记录着每一对词频是怎样一起变动的。<bookmark mark='a'/>它是对称的，所以按第2部分讲的，它的特征向量互相垂直，而每个特征值都说明，有多少变化落在它那个特征向量的方向上。<bookmark mark='b'/>第一个方向占了全部变化的12.6%，下一个占9.1%，然后就一路降下去了。"
+  },
+  "df268576e85e": {
+   "scene": "PCA",
+   "en": "What are these directions? Each one is a recipe for mixing the seventy word rates. <bookmark mark='a'/> The first weighs 'not', 'be', 'very' and 'she' against 'the', 'and' and 'out'. That's Austen against Dickens, found without ever being told who wrote what. <bookmark mark='b'/> The second weighs 'I', 'me', 'you', 'said' and 'my' against 'of' and 'their'. That's dialogue against narration: the other big difference between pages.",
+   "zh": "这些方向是什么？每个方向都是一份配方，说明怎样把70个词频混合起来。<bookmark mark='a'/>第一个方向，一边是“not”、“be”、“very”和“she”，另一边是“the”、“and”和“out”。这就是奥斯汀对狄更斯，而且从来没有人告诉过它，哪一页是谁写的。<bookmark mark='b'/>第二个方向，一边是“I”、“me”、“you”、“said”和“my”，另一边是“of”和“their”。这是对话对叙述：书页之间另一个大的差别。"
+  },
+  "9f8d811b6bac": {
+   "scene": "PCA",
+   "en": "Seen along the first three directions, the authors already sit apart. <bookmark mark='a'/> A single cut along the first direction sorts 88 percent of the pages correctly. PCA is part two's eigenvectors, put to work: the cheapest way to see a cloud of high-dimensional data.",
+   "zh": "沿着前三个方向看，两位作者已经各占一边了。<bookmark mark='a'/>只沿第一个方向切一刀，就能把88%的书页分对。主成分分析，简称PCA，正是让第2部分的特征向量派上了用场：要看清一团高维数据，这是最省事的办法。"
+  },
+  "4cab56363b67": {
+   "scene": "EM",
+   "en": "Chapter two. Mixtures, and the EM algorithm.",
+   "zh": "第2章。混合模型，以及EM算法。"
+  },
+  "2516c3813c24": {
+   "scene": "EM",
+   "en": "PCA finds directions. A mixture model goes further: it supposes that each point was made by one of several hidden sources, each a bell curve of its own, and tries to recover them. Here are the pages along the first two directions, with no colours: we don't know who wrote what. <bookmark mark='a'/> Start with two guessed bells, badly placed. The expectation-maximization algorithm, EM, alternates two steps. <bookmark mark='b'/> E: for each page, how likely is each bell to have made it? That gives every page a soft colour. <bookmark mark='c'/> M: refit each bell to the pages, weighted by those colours.",
+   "zh": "主成分分析找的是方向。混合模型更进一步：它假设每个点都出自几个隐藏来源中的一个，每个来源都是自己的一条钟形曲线，然后设法把这些来源找回来。这是沿前两个方向排开的书页，没有颜色：我们不知道哪一页是谁写的。<bookmark mark='a'/>先猜两条钟形曲线，位置放得很差。期望最大化算法，简称EM算法，在两个步骤之间交替进行。<bookmark mark='b'/>E步：对每一页，每条钟形曲线生成它的可能性有多大？这就给每一页涂上了一种介于两色之间的颜色。<bookmark mark='c'/>M步：按这些颜色加权，把每条钟形曲线重新拟合到书页上。"
+  },
+  "08624bbdc5bb": {
+   "scene": "EM",
+   "en": "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells creep toward a fit. <bookmark mark='b'/> After forty rounds they've settled, and the pages each one claims match the true authors 97 percent of the time. Nobody told it there were authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too.",
+   "zh": "然后再来：E、M、E、M。<bookmark mark='a'/>每一轮，似然都只升不降，所以这两条钟形曲线一点一点地向拟合靠拢。<bookmark mark='b'/>40轮之后，它们稳定了下来，每条曲线认领的书页，有97%与真实的作者一致。根本没有人告诉过它，这些书页还有作者之分。EM算法能拟合任何带有隐藏部分的模型，它也是下一章的引擎。"
+  },
+  "5c7f9fb8adae": {
+   "scene": "HMM",
+   "en": "Chapter three. Hidden Markov models.",
+   "zh": "第3章。隐马尔可夫模型。"
+  },
+  "a52bd7746022": {
+   "scene": "HMM",
+   "en": "Hidden states can also unfold in time. A hidden Markov model says there's a state we can't see, moving like part four's Markov chain, and each state emits a letter from its own table of chances. We see only the letters. <bookmark mark='a'/> Give it two hidden states, two hundred thousand letters of the books, and random first guesses. <bookmark mark='b'/> Fit it with EM again, which for this model is called Baum–Welch, and watch what each state learns to emit.",
+   "zh": "隐藏的状态，也可以随时间展开。隐马尔可夫模型是这样说的：有一个我们看不见的状态，像第4部分的马尔可夫链那样跳来跳去，而每个状态都按照自己的一张概率表，发射出一个字母。我们只看得到这些字母。<bookmark mark='a'/>给它两个隐状态、书里的20万个字母，再加上随机的初始猜测。<bookmark mark='b'/>还是用EM算法来拟合，用在这个模型上，它叫鲍姆–韦尔奇算法。看看每个状态学会了发射什么。"
+  },
+  "47da133f350f": {
+   "scene": "HMM",
+   "en": "One state ends up with the space, and a, e, i, o and u. The other takes every consonant. <bookmark mark='a'/> And they take turns: after one, the other, about 72 percent of the time. Nobody mentioned vowels. Cave and Neuwirth found exactly this in 1980.",
+   "zh": "最后，一个状态拿到了空格，还有a、e、i、o和u。另一个拿走了所有的辅音。<bookmark mark='a'/>而且它们轮流出现：一个状态之后接另一个，大约72%的时候是这样。没有人提过元音。1980年，凯夫与诺伊维尔特发现的正是这一点。"
+  },
+  "c5550cb4950a": {
+   "scene": "HMM",
+   "en": "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi algorithm answers exactly, in one pass. <bookmark mark='a'/> Here's Shannon's sentence from part one, every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like this for thirty years.",
+   "zh": "现在来解码：给定一个句子，它背后最可能的隐状态序列是什么？维特比算法只要过一遍，就能给出精确的答案。<bookmark mark='a'/>这是第1部分香农的那个句子，每个字母都标上了它的隐状态。<bookmark mark='b'/>语音识别靠这样的模型，运转了30年。"
+  },
+  "3d8092581975": {
+   "scene": "Graphs",
+   "en": "Chapter four. Models as pictures.",
+   "zh": "第4章。把模型画成图。"
+  },
+  "84192f05cfb2": {
+   "scene": "Graphs",
+   "en": "Every model in this part can be drawn the same way: a circle for each quantity, shaded if we observe it, empty if it's hidden, and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, one factor per circle, each depending only on the circles that point into it. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
+   "zh": "这一部分的每个模型，都能用同一种方式画出来：每个量画一个圆圈，观测得到的涂上阴影，隐藏的留空；只要一个量直接依赖另一个，就画一根箭头。<bookmark mark='a'/>混合模型：先是一个隐藏的选择，选哪个来源，然后是一页书，每一页都这样重复一遍。<bookmark mark='b'/>隐马尔可夫模型：一串隐状态，每个都发射出一个字母。<bookmark mark='c'/>这幅图就是一个公式。一切的概率是一个乘积，每个圆圈一个因子，每个因子只取决于指向它的那些圆圈。这就是贝叶斯网络：朱迪亚·珀尔为不确定性下的推理所创造的语言。"
+  },
+  "82133cfe9190": {
+   "scene": "Graphs",
+   "en": "Part one's language models fit the same picture, with an arrow from every earlier letter to every later one. <bookmark mark='a'/> Nothing is hidden, but nothing is simplified either: each factor is a prediction from the whole past. Counting can't fill in factors like that. A network, from part eight on, can.",
+   "zh": "第1部分的语言模型，也套得进同样的图：每个靠前的字母，都有一根箭头指向每个靠后的字母。<bookmark mark='a'/>没有什么是隐藏的，但也没有做任何简化：每个因子，都是根据全部过去做出的预测。这样的因子，靠计数是填不出来的。神经网络可以，从第8部分开始。"
+  },
+  "16837c76a590": {
+   "scene": "GP",
+   "en": "Chapter five. Gaussian processes.",
+   "zh": "第5章。高斯过程。"
+  },
+  "21b699054d14": {
+   "scene": "GP",
+   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth functions. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
+   "zh": "有时候，隐藏的东西是一整个函数。这是《远大前程》每一页用“her”的频率，从小说开头一直到结尾。随着故事在人物之间切换，它时起时落。<bookmark mark='a'/>高斯过程，是光滑函数上的一个概率分布。在看到任何数据之前，这是从中抽出的五个函数：它们弯弯曲曲，每道弯都有一个典型的宽度，叫作长度尺度。<bookmark mark='b'/>现在，以这些书页为条件。只有从数据近旁经过的函数，才能留下来。"
+  },
+  "4cdf1a34b838": {
+   "scene": "GP",
+   "en": "Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about 2 pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and beyond them the band opens wide again. A Gaussian process knows what it doesn't know, which is exactly what you want when deciding where to look next.",
+   "zh": "它们的平均就是最佳猜测，周围的那条带子表示不确定性。<bookmark mark='a'/>长度尺度大约是2页，它不是手工设定的：在这个长度尺度下，数据出现的概率最大。<bookmark mark='b'/>只给模型看前20页，过了这20页，带子又大大地张开了。高斯过程知道自己不知道什么，而当你要决定下一步该看哪里时，要的正是这一点。"
+  },
+  "92a3415c6985": {
+   "scene": "VI",
+   "en": "Chapter six. Variational inference.",
+   "zh": "第6章。变分推断。"
+  },
+  "a91a377e86af": {
+   "scene": "VI",
+   "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. Part four sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
+   "zh": "对大多数带有隐藏部分的模型来说，精确的答案，也就是隐变量的后验，是一个我们算不出来的形状。第4部分用马尔可夫链，从这样的形状中采样。变分推断换了个做法：它从一个简单的家族里，挑出最接近的形状，这里是单个高斯分布，然后用它来代替。<bookmark mark='a'/>在什么意义上最接近？用第1部分的KL散度，方向是从q到p。从一个很差的猜测出发，让这个高斯分布顺着下坡滑下去。"
+  },
+  "eb012d78ff04": {
+   "scene": "VI",
+   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. Raising the bound squeezes the KL down. Variational autoencoders, in part fifteen, are trained exactly this way.",
+   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个峰里。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。把下界往上抬，KL散度就被挤小了。第15部分的变分自编码器，正是这样训练的。"
+  },
+  "c39a970bcc94": {
+   "scene": "KneserNey",
+   "en": "Chapter seven. The best way to count.",
+   "zh": "第7章。最好的计数方法。"
+  },
+  "25a8eb3626eb": {
+   "scene": "KneserNey",
+   "en": "Back to part one's scoreboard. The best counting model there used four characters of context and reached 2.32 bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. With part one's simple smoothing, the score gets worse beyond four characters. <bookmark mark='b'/> Better smoothing keeps improving.",
+   "zh": "回到第1部分的记分牌。那里最好的计数模型，用4个字符的上下文，在测试段落上做到了每字符2.32比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长的上下文，在30部小说里只出现过寥寥几次，甚至根本没出现过。用第1部分那种简单的平滑，上下文超过4个字符之后，分数反而变差。<bookmark mark='b'/>更好的平滑，则会一直进步下去。"
+  },
+  "052302321050": {
+   "scene": "KneserNey",
+   "en": "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, take a fixed discount off every count you've seen, and hand that probability to a shorter context: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it deserves little. Count how many different contexts something follows, not how often it appears.",
+   "zh": "Kneser–Ney平滑是1995年提出的，它有两个想法。<bookmark mark='a'/>第一，从每一个见过的计数里，减掉一个固定的折扣，把省下来的概率交给更短的上下文：把两者混合起来。<bookmark mark='b'/>第二，按多样性来评判更短的上下文。教科书里的例子是：Francisco是个常见的词，但它几乎总是跟在San后面，所以在一个陌生的上下文之后，把它当作猜测，它不该分到多少概率。要数的是，一个东西跟在多少种不同的上下文后面，而不是它出现了多少次。"
+  },
+  "22d7aa1f73ff": {
+   "scene": "KneserNey",
+   "en": "With seven characters of context, Kneser–Ney reaches 2.04 bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, this was the state of the art in language modelling. It's the scoreboard's last counting row. Everything better is a neural network, and that's where we're going next.",
+   "zh": "用7个字符的上下文，Kneser–Ney在测试段落上做到了每字符2.04比特。<bookmark mark='a'/>整整20年，从语音识别到机器翻译，它都代表着语言建模的最高水平。这是记分牌上最后一行计数模型。比它更好的，全都是神经网络，而那正是我们接下来要去的地方。"
+  },
+  "15d56ffbef43": {
+   "scene": "Outro",
+   "en": "Let's take stock. Principal components are the covariance's eigenvectors, and they found Austen against Dickens without labels. A mixture of bells, fitted by EM, recovered the authors themselves. A hidden Markov model discovered vowels. Graphical models draw all of these as pictures that are also formulas. Gaussian processes put probabilities on whole functions, and variational inference swaps an impossible posterior for the closest simple one. And Kneser–Ney counting gave the scoreboard its last counting row.",
+   "zh": "我们来盘点一下。主成分是协方差矩阵的特征向量，它们在没有标签的情况下，找出了奥斯汀对狄更斯的那个方向。用EM算法拟合的钟形曲线混合模型，直接找回了作者本身。隐马尔可夫模型发现了元音。图模型把所有这些都画成图，而这些图同时也是公式。高斯过程给整个函数赋予概率，变分推断则把一个算不出来的后验，换成最接近它的简单后验。最后，Kneser–Ney计数给记分牌添上了最后一行计数模型。"
+  },
+  "f0fb73a9bf69": {
+   "scene": "Outro",
+   "en": "Hidden parts come back everywhere. Mixture-of-experts models, in part thirteen, are mixtures with a learned way of choosing. State-space models, in part twelve, carry a hidden state through time. An infinitely wide network is a Gaussian process, in part ten. The ELBO trains diffusion models and autoencoders. Directions in clouds of vectors are how we look inside models, in part twenty. And Kneser–Ney is the row the first neural language model has to beat, in part eight.",
+   "zh": "隐藏的部分，会在各处再次出现。第13部分的混合专家模型，就是混合模型，只不过选择的方式是学出来的。第12部分的状态空间模型，带着一个隐状态穿过时间。无限宽的网络，就是一个高斯过程，在第10部分。证据下界ELBO，用来训练扩散模型和自编码器。在一团团向量里找方向，是我们窥看模型内部的办法，在第20部分。而Kneser–Ney，是第一个神经语言模型必须打败的那一行，在第8部分。"
+  },
+  "c28634a3faf0": {
+   "scene": "Outro",
+   "en": "Next time: the deepest question in machine learning. A model fits its training data; why should it work on anything else? <bookmark mark='a'/> Bias and variance, the bounds of Vapnik and Chervonenkis, networks that memorize random labels, and the curve that goes down, up, and then down again.",
+   "zh": "下一次：机器学习里最深刻的问题。一个模型拟合了它的训练数据；凭什么它在别的数据上也管用？<bookmark mark='a'/>偏差与方差，瓦普尼克与切尔沃年基斯的界，能把随机标签背下来的网络，还有那条先下降、再上升、然后又下降的曲线。"
+  },
+  "087a95e20d83": {
+   "scene": "Outro",
+   "en": "Bishop's Pattern Recognition and Machine Learning covers this whole part, and Rabiner's tutorial is still the best introduction to hidden Markov models. Thanks for watching, and see you in part seven.",
+   "zh": "毕晓普的《模式识别与机器学习》涵盖了这一部分的全部内容，而拉比纳的那篇教程，至今仍是隐马尔可夫模型最好的入门。感谢观看，第7部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 6, Statistical ML",
+ "chapters_en": {
+  "Hook": "Structure nobody labelled",
+  "PCA": "1. Principal components",
+  "EM": "2. Hidden sources: mixtures and EM",
+  "HMM": "3. Hidden Markov models",
+  "Graphs": "4. Models as pictures",
+  "GP": "5. Gaussian processes",
+  "VI": "6. Variational inference",
+  "KneserNey": "7. Kneser-Ney: the best way to count",
+  "Outro": "Recap, and where this comes back"
+ }
+}
