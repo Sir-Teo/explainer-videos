@@ -208,6 +208,7 @@ class Dominated(VoiceoverScene):
         side = VGroup(label(r"a subsequence does converge", font_size=24, color=GREY_A),
                       label(r"a.e. \ (Part 6: Riesz--Fischer)", font_size=24, color=GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([5.3, 0.1, 0])
+        assert side.get_right()[0] < 6.9
         assert norms[-1] < 0.002
         with self.voiceover(
             "<bookmark mark='a'/> Convergence of integrals and convergence at points are genuinely different. The "
