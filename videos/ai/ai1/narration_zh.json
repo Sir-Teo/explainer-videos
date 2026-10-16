@@ -1,0 +1,566 @@
+{
+ "title": "人工智能，从零搭建 · 第1部分：猜字游戏",
+ "chapters": {
+  "Hook": "香农的猜字游戏",
+  "Probability": "1. 概率与链式法则",
+  "Surprise": "2. 应该有多意外",
+  "Entropy": "3. 熵：平均的意外度",
+  "Codes": "4. 编码，以及香农证明的极限",
+  "CrossEntropy": "5. 交叉熵与KL散度：错误模型的代价",
+  "Arithmetic": "6. 算术编码：预测就是压缩",
+  "Counting": "7. 靠计数来学习",
+  "Shannon1951": "8. 香农1951年的实验",
+  "Likelihood": "9. 学习：似然、softmax与梯度",
+  "Knowledge": "10. 要猜得好，需要知道什么",
+  "Scoreboard": "11. 记分牌",
+  "Outro": "回顾，以及这些想法会在哪里再现"
+ },
+ "lines": {
+  "c08fcb72ab0c": {
+   "scene": "Hook",
+   "en": "In 1951, Claude Shannon played a game with English. He took a sentence, hid it, and asked a person to guess it, one letter at a time. <bookmark mark='a'/> A wrong guess, and they guessed again, until they got it. Under each letter, he wrote down how many guesses it took.",
+   "zh": "1951年，克劳德·香农和英语玩了一个游戏。他拿来一个句子，把它遮住，请一个人一个字母一个字母地猜。<bookmark mark='a'/>猜错了，就再猜，直到猜对为止。每个字母下面，他都记下猜了几次。"
+  },
+  "4b473668d3fa": {
+   "scene": "Hook",
+   "en": "Most letters fall on the first guess. <bookmark mark='a'/> Once you've seen m, o, t, o, r, c, y, the rest of motorcycle is free. <bookmark mark='b'/> The guesses pile up at a few places, mostly where a new word begins. That is where the information is.",
+   "zh": "大多数字母，第一次就猜中了。<bookmark mark='a'/>一旦看到了m、o、t、o、r、c、y，motorcycle剩下的部分就不用猜了。<bookmark mark='b'/>猜测次数集中在少数几个地方，大多是一个新词开始的地方。信息就藏在那里。"
+  },
+  "59cff1b15c26": {
+   "scene": "Hook",
+   "en": "From counts like these, Shannon estimated how much information English really carries: about one bit per letter, somewhere between 0.6 and 1.3, <bookmark mark='a'/> when a single letter, guessed blindly, could carry 4.75. Most of what we write is predictable.",
+   "zh": "根据这样的计数，香农估算出英语到底携带多少信息：每个字母大约1比特，在0.6到1.3之间。<bookmark mark='a'/>而一个盲猜的字母，最多可以携带4.75比特。我们写下的东西，大部分是可以预测的。"
+  },
+  "72d020517b1d": {
+   "scene": "Hook",
+   "en": "Seventy-five years later, this guessing game is exactly what large language models are trained to play. Give one the start of a sentence, <bookmark mark='a'/> and it returns a probability for every possible next word. <bookmark mark='b'/> GPT-2, from 2019, gives Paris six percent. <bookmark mark='c'/> Qwen3, a 2025 model, gives it thirty-five.",
+   "zh": "75年后，这个猜字游戏，正是大型语言模型被训练去玩的游戏。给它一个句子的开头，<bookmark mark='a'/>它就为每一个可能的下一个词，给出一个概率。<bookmark mark='b'/>2019年的GPT-2，给巴黎6%。<bookmark mark='c'/>2025年的模型Qwen3，给它35%。"
+  },
+  "71b9a376c323": {
+   "scene": "Hook",
+   "en": "And it's not just text. <bookmark mark='a'/> Models that make images learn to guess the noise that was added to a picture. <bookmark mark='b'/> Speech models guess the next slice of sound. <bookmark mark='c'/> Robot controllers guess the next movement of an arm. Under the hood, nearly every frontier model plays some version of Shannon's game.",
+   "zh": "而且不只是文字。<bookmark mark='a'/>生成图像的模型，学的是去猜图片里被加进去的噪声。<bookmark mark='b'/>语音模型，猜下一小段声音。<bookmark mark='c'/>机器人控制器，猜机械臂的下一个动作。几乎每一个前沿模型，骨子里玩的都是香农游戏的某个版本。"
+  },
+  "410fa38cd482": {
+   "scene": "Hook",
+   "en": "Which raises the question this whole series is about. What do you have to know, to guess well?",
+   "zh": "这就引出了整个系列要回答的问题：要猜得好，你得知道些什么？"
+  },
+  "6bd965e6161c": {
+   "scene": "Hook",
+   "en": "Over twenty parts, we'll build the answer from the ground up. <bookmark mark='a'/> First, the foundations: probability and information, vectors, calculus, and randomness. <bookmark mark='b'/> Then learning, from classical statistics to neural networks and the mathematics of scale. <bookmark mark='c'/> Then the engines of today's models: attention, memory, sparsity, diffusion, and the many kinds of tokens. <bookmark mark='d'/> And finally, reasoning, agents, inference, and what we can see when we look inside.",
+   "zh": "在20个部分里，我们会从零开始，一步步搭建这个答案。<bookmark mark='a'/>首先是基础：概率与信息、向量、微积分，还有随机性。<bookmark mark='b'/>然后是学习：从经典统计，到神经网络，再到规模的数学。<bookmark mark='c'/>接着是当今模型的引擎：注意力、记忆、稀疏性、扩散，以及各种各样的词元。<bookmark mark='d'/>最后是推理、智能体、推断，以及打开模型往里看时，我们能看到什么。"
+  },
+  "6b1880d1b1b1": {
+   "scene": "Hook",
+   "en": "Part one starts where Shannon did: with surprise, entropy, codes and compression. By the end, we'll see why guessing well and compressing well are the same thing.",
+   "zh": "第1部分从香农起步的地方开始：意外度、熵、编码和压缩。到最后，我们会明白，为什么猜得好和压缩得好，是同一件事。"
+  },
+  "f79ec939219d": {
+   "scene": "Hook",
+   "en": "And we'll keep score. Here is a page of a novel, The Maltese Falcon, from 1930. It entered the public domain, and Project Gutenberg, on the first of January 2026, after every model in this part was trained, so none of them can have learned it by heart. <bookmark mark='a'/> Stored as plain text, it takes eight bits per character. <bookmark mark='b'/> Our job, for the whole series, is to explain how the numbers on this board come down: from eight, to below one.",
+   "zh": "我们还要记分。这是一部小说的一页：1930年的《马耳他之鹰》。它在2026年1月1日进入公有领域，同一天登上古登堡计划，那时本部分的每个模型都已经训练完毕，所以没有一个模型能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>整个系列的任务，就是解释这块记分牌上的数字，是怎样一路降下来的：从8，降到1以下。"
+  },
+  "c226dcca3f97": {
+   "scene": "Probability",
+   "en": "Chapter one. Before we can score a guess, we need a way to write one down.",
+   "zh": "第1章。在给猜测打分之前，我们得先有办法把猜测写下来。"
+  },
+  "dabb050e04ff": {
+   "scene": "Probability",
+   "en": "Take thirty novels, from Pride and Prejudice to The Great Gatsby, and count every symbol in them. We use Shannon's alphabet: twenty-six letters and the space, with capitals and punctuation dropped. That's <bookmark mark='a'/> twenty-two point eight million symbols. <bookmark mark='b'/> The space is the most common, about one symbol in five. Then e, one in ten.",
+   "zh": "拿来30部小说，从《傲慢与偏见》到《了不起的盖茨比》，数一数其中的每一个符号。我们用香农的字母表：26个字母加上空格，大写和标点都去掉。一共是<bookmark mark='a'/>2280万个符号。<bookmark mark='b'/>空格最常见，大约每5个符号里就有一个。然后是e，大约每10个里有一个。"
+  },
+  "b96e4a16b465": {
+   "scene": "Probability",
+   "en": "Sorted, the familiar order appears: space, e, t, a, o, n. <bookmark mark='z'/> At the far end, x, j, q and z, each well under one symbol in a thousand.",
+   "zh": "排一下序，熟悉的顺序就出现了：空格、e、t、a、o、n。<bookmark mark='z'/>另一头是x、j、q和z，每个都远不到千分之一。"
+  },
+  "8bc21511775b": {
+   "scene": "Probability",
+   "en": "This is a probability distribution: a number for each possibility, <bookmark mark='a'/> none of them negative, and adding up to one. <bookmark mark='b'/> Stack the bars end to end, and they fill a bar of length exactly one, with a sliver for every symbol, as wide as its probability. A guess, written down properly, is a way of sharing one unit of belief among the possibilities.",
+   "zh": "这就是一个概率分布：每种可能都有一个数，<bookmark mark='a'/>没有一个是负的，加起来等于1。<bookmark mark='b'/>把这些柱子首尾相接，它们正好填满一根长度为1的条，每个符号占一小段，宽度就是它的概率。一个规范写下的猜测，就是把一个单位的信念，分给各种可能。"
+  },
+  "29ef0ad40f8f": {
+   "scene": "Probability",
+   "en": "But we rarely guess from nothing. Once you know the previous letter, the odds change. <bookmark mark='a'/> Here is the whole table: each row is the previous symbol, and each square shows how likely each next symbol is, given that one. <bookmark mark='d'/> This is conditional probability: the probability of B given A is the probability of both, divided by the probability of A.",
+   "zh": "不过，我们很少凭空去猜。一旦知道了前一个字母，可能性就变了。<bookmark mark='a'/>这是整张表：每一行是前一个符号，每个小方格表示在它后面，各个符号出现的可能性有多大。<bookmark mark='d'/>这就是条件概率：已知A时B的概率，等于A和B同时发生的概率，除以A的概率。"
+  },
+  "ba56762698d9": {
+   "scene": "Probability",
+   "en": "In our books, q appears eighteen thousand, four hundred and ninety-six times, and all but twenty-seven of them are followed by u. <bookmark mark='a'/> So the probability of u, given q, is 0.9985. <bookmark mark='b'/> After a space, on the other hand, almost anything can come next: a new word is starting.",
+   "zh": "在我们的书里，q出现了18496次，除了27次以外，后面跟的都是u。<bookmark mark='a'/>所以已知q时u的概率是0.9985。<bookmark mark='b'/>而空格后面，几乎什么都可能出现：一个新词正要开始。"
+  },
+  "b75ed09f47f7": {
+   "scene": "Probability",
+   "en": "Multiply that definition out, and you get a rule for whole strings. <bookmark mark='a'/> The probability of two symbols is the probability of the first, times the probability of the second given the first. <bookmark mark='b'/> For three, treat the first two as a single event, <bookmark mark='c'/> and substitute.",
+   "zh": "把这个定义乘开，就得到一条关于整串符号的规则。<bookmark mark='a'/>两个符号的概率，等于第一个的概率，乘以已知第一个时第二个的概率。<bookmark mark='b'/>三个的时候，把前两个看成一个事件，<bookmark mark='c'/>再代进去。"
+  },
+  "f5e50f7636d4": {
+   "scene": "Probability",
+   "en": "And so on, one symbol at a time. <bookmark mark='a'/> The probability of a whole text is a product of next-symbol guesses, each made knowing everything before it. This is the chain rule, and it is exact: no assumption has been made. <bookmark mark='b'/> It is also why a machine that only ever guesses the next symbol can score, or write, an entire text.",
+   "zh": "依此类推，一次一个符号。<bookmark mark='a'/>一整段文本的概率，就是一连串对下一个符号的猜测的乘积，每次猜测都知道前面的一切。这就是链式法则，而且它是精确的：没有做任何假设。<bookmark mark='b'/>这也说明了，为什么一台只会猜下一个符号的机器，能给一整段文本打分，甚至写出一整段文本。"
+  },
+  "89db80491596": {
+   "scene": "Probability",
+   "en": "Here's the chain rule as a picture. Someone has just written, he said, and we want the probability that the next three letters are t, h, e. <bookmark mark='a'/> The first bar is the whole unit of belief, shared among the 27 possible next symbols, given the last three: d, i, space. t gets a sliver of width 0.155.",
+   "zh": "下面是链式法则的样子。有人刚写下he said，我们想知道接下来三个字母是t、h、e的概率。<bookmark mark='a'/>第一根条是全部的信念，根据最后三个符号d、i、空格，分给27个可能的下一个符号。t分到的一段，宽0.155。"
+  },
+  "7a2927e17e85": {
+   "scene": "Probability",
+   "en": "Now zoom into that sliver and share it out again, <bookmark mark='a'/> this time by the probabilities of the next letter after d, space, t. h takes 61 percent of it. <bookmark mark='b'/> Zoom again: after space, t, h, the letter e takes 70 percent. <bookmark mark='c'/> The final sliver is as wide as the product: 0.0666, the probability of the whole string.",
+   "zh": "现在放大这一段，再分一次，<bookmark mark='a'/>这次按照d、空格、t之后下一个字母的概率来分。h占了其中的61%。<bookmark mark='b'/>再放大：在空格、t、h之后，字母e占了70%。<bookmark mark='c'/>最后这一小段的宽度就是乘积：0.0666，也就是这整串的概率。"
+  },
+  "dcab0c40fce4": {
+   "scene": "Probability",
+   "en": "Keep this picture in mind: nested slivers, each one a guess. In chapter six, the very same picture will turn out to be a way of compressing text.",
+   "zh": "记住这幅图：层层嵌套的小段，每一段都是一次猜测。到第6章，同一幅图会变成一种压缩文本的方法。"
+  },
+  "1530771f7664": {
+   "scene": "Surprise",
+   "en": "Chapter two. How surprised should you be?",
+   "zh": "第2章。你应该有多意外？"
+  },
+  "73ec96cd8394": {
+   "scene": "Surprise",
+   "en": "If you were sure something would happen, seeing it happen tells you nothing. <bookmark mark='a'/> u after q: no news. <bookmark mark='b'/> A coin landing heads tells you a little. <bookmark mark='c'/> A letter e, a bit more. <bookmark mark='d'/> And a z, which turns up about once in two thousand symbols, tells you a lot. The less likely something was, the more you learn when it happens.",
+   "zh": "如果你确定某件事会发生，那么看到它发生，你什么也没学到。<bookmark mark='a'/>q后面的u：没有新消息。<bookmark mark='b'/>硬币正面朝上，告诉你一点点。<bookmark mark='c'/>字母e，多一点。<bookmark mark='d'/>而z，大约每两千个符号才出现一次，告诉你的就多了。一件事越不可能，它发生时你学到的就越多。"
+  },
+  "3229db7ef057": {
+   "scene": "Surprise",
+   "en": "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. What should s be? <bookmark mark='a'/> Shannon asked for a few modest things. It should depend only on p. <bookmark mark='b'/> It should go down as p goes up, and a certain event should be no surprise at all. <bookmark mark='c'/> For independent events, surprises should add: <bookmark mark='d'/> a coin landing heads and a die showing five, together, should be exactly as surprising as each one, added up. <bookmark mark='e'/> And small changes in p should make small changes in s.",
+   "zh": "我们把这个想法变成数学。把概率为p的事件的意外度记作s(p)。s应该是什么样的？<bookmark mark='a'/>香农提出了几条很朴素的要求。它应该只取决于p。<bookmark mark='b'/>p越大，它应该越小，一件必然发生的事，应该毫不意外。<bookmark mark='c'/>对独立事件，意外度应该相加：<bookmark mark='d'/>硬币正面朝上，同时骰子掷出5，这两件事一起的意外度，应该恰好等于各自的意外度之和。<bookmark mark='e'/>还有，p的微小变化，只应带来s的微小变化。"
+  },
+  "e685234be958": {
+   "scene": "Surprise",
+   "en": "Remarkably, those rules leave only one choice. Measure probabilities in halvings: <bookmark mark='a'/> write p as two to the minus x, and let g of x be the surprise of that event. <bookmark mark='b'/> Rule three says g turns sums into sums. <bookmark mark='c'/> So g of n is n times g of one, for every whole number n, <bookmark mark='d'/> and the same holds for every fraction. <bookmark mark='e'/> Continuity fills in the numbers between the fractions, so g of x is x times g of one, for every x.",
+   "zh": "了不起的是，这几条要求只留下一种选择。用对半分的次数来衡量概率：<bookmark mark='a'/>把p写成2的负x次方，令g(x)为这个事件的意外度。<bookmark mark='b'/>第3条说，g把和变成和。<bookmark mark='c'/>所以对每个正整数n，g(n)等于n乘以g(1)，<bookmark mark='d'/>对每个分数也一样成立。<bookmark mark='e'/>连续性填补了分数之间的数，所以对每个x，g(x)都等于x乘以g(1)。"
+  },
+  "6bfe92ff0f20": {
+   "scene": "Surprise",
+   "en": "Put the probability back in, and the surprise must be a constant times the log of one over p. <bookmark mark='a'/> The constant just picks a unit. Choose it so that a fair coin flip carries exactly one unit, and call that unit a bit. The surprise of an event with probability p is log, base two, of one over p, bits.",
+   "zh": "把概率代回去，意外度就必须是一个常数乘以p分之1的对数。<bookmark mark='a'/>这个常数只是选定一个单位。让一次公平的抛硬币恰好携带一个单位，这个单位就叫比特。概率为p的事件，意外度是以2为底、p分之1的对数，单位是比特。"
+  },
+  "6b955ed18e3e": {
+   "scene": "Surprise",
+   "en": "Here's that function. <bookmark mark='a'/> A coin: one bit. A face of a die: 2.58 bits. <bookmark mark='b'/> The letter e: 3.32 bits. The letter z: almost eleven. <bookmark mark='c'/> And u, right after q, carries two thousandths of a bit: almost nothing. <bookmark mark='d'/> As p heads to zero, the surprise grows without limit.",
+   "zh": "这就是这个函数。<bookmark mark='a'/>一枚硬币：1比特。骰子的一面：2.58比特。<bookmark mark='b'/>字母e：3.32比特。字母z：将近11比特。<bookmark mark='c'/>而紧跟在q后面的u，只携带千分之二比特：几乎为零。<bookmark mark='d'/>当p趋向0时，意外度会无限增大。"
+  },
+  "0d4ae3a535e7": {
+   "scene": "Surprise",
+   "en": "Bits have a concrete meaning. Take the whole range of possibilities, and halve it: <bookmark mark='a'/> left or right, zero or one. Halve what's left, and again, ten times. <bookmark mark='b'/> You've narrowed things down to one part in 1024, an event of probability two to the minus ten, and the surprise of seeing it is ten bits. Each yes-or-no answer that halves the possibilities is one bit.",
+   "zh": "比特有一个很具体的含义。把所有可能拿过来，对半分：<bookmark mark='a'/>左还是右，0还是1。把剩下的再对半分，一共分10次。<bookmark mark='b'/>你就把范围缩小到了1024分之一，这是一个概率为2的负10次方的事件，看到它的意外度就是10比特。每一个把可能性减半的是或否的回答，就是1比特。"
+  },
+  "9a56adf60cdf": {
+   "scene": "Surprise",
+   "en": "And because logs turn products into sums, the chain rule turns into something lovely. <bookmark mark='a'/> The surprise of a whole text is the sum of the surprises of its symbols, each given everything before it. <bookmark mark='b'/> Here is Shannon's sentence again, with each letter's surprise drawn as a bar, as judged by a model that knows only the previous five letters.",
+   "zh": "而因为对数把乘积变成和，链式法则就变成了一样很美的东西。<bookmark mark='a'/>一整段文本的意外度，等于其中每个符号的意外度之和，每个符号都以它前面的一切为条件。<bookmark mark='b'/>这又是香农的那个句子，每个字母的意外度画成一根柱子，评判它的是一个只知道前5个字母的模型。"
+  },
+  "38f7308d24e9": {
+   "scene": "Surprise",
+   "en": "The tall bars are where the text surprised the model: the starts of words, and words it didn't expect. <bookmark mark='a'/> Altogether, 182 bits for 101 symbols: 1.8 bits per symbol, under half of what the letter frequencies alone would give. Remember that number; it's how we'll keep score.",
+   "zh": "高高的柱子，就是文本让模型意外的地方：词的开头，还有它没料到的词。<bookmark mark='a'/>加起来，101个符号一共182比特：每个符号1.8比特，还不到只用字母频率时的一半。记住这个数字，我们就是这样记分的。"
+  },
+  "f58969e39ea7": {
+   "scene": "Entropy",
+   "en": "Chapter three. Entropy.",
+   "zh": "第3章。熵。"
+  },
+  "c6ce99125eb6": {
+   "scene": "Entropy",
+   "en": "Surprise is about one event. Before the event, we can ask a different question: on average, how surprised should we expect to be? <bookmark mark='a'/> Weight each surprise by how often it happens, and add up. That average surprise is the entropy, written H of p.",
+   "zh": "意外度说的是一个事件。在事件发生之前，我们可以问另一个问题：平均来说，我们预计会有多意外？<bookmark mark='a'/>把每个意外度按它出现的频率加权，再加起来。这个平均的意外度就是熵，记作H(p)。"
+  },
+  "2d36c6c7660b": {
+   "scene": "Entropy",
+   "en": "There's a nice picture of it. Take the unit bar from chapter one, <bookmark mark='a'/> each symbol a sliver as wide as its probability, sorted from common to rare. <bookmark mark='b'/> Now raise each sliver to the height of its surprise. Common symbols are wide and low; rare ones are thin and tall. <bookmark mark='c'/> The entropy is the total area: for English letters, 4.08 bits.",
+   "zh": "它有一幅很好的图。拿出第1章的那根单位长的条，<bookmark mark='a'/>每个符号一小段，宽度是它的概率，从常见到罕见排好。<bookmark mark='b'/>现在把每一小段，升到它意外度的高度。常见的符号又宽又矮，罕见的又细又高。<bookmark mark='c'/>熵就是总面积：对英语字母来说，是4.08比特。"
+  },
+  "28ecc38e9e76": {
+   "scene": "Entropy",
+   "en": "Compare a source where all twenty-seven symbols are equally likely. <bookmark mark='a'/> Every sliver is the same width, and the same height: log two of twenty-seven, 4.75 bits. That's the most you can be surprised, on average, by one symbol from twenty-seven. <bookmark mark='b'/> English, even counted one letter at a time, sits below it. The gap is what Shannon called redundancy: structure a good guesser can exploit.",
+   "zh": "比较一下27个符号都同样可能的情况。<bookmark mark='a'/>每一小段都一样宽，一样高：以2为底27的对数，4.75比特。这是从27个符号里取一个时，平均最多能有的意外度。<bookmark mark='b'/>英语哪怕只是一个字母一个字母地统计，也低于它。这个差距，香农称为冗余：一个好的猜测者可以利用的结构。"
+  },
+  "6baf5dcd2993": {
+   "scene": "Entropy",
+   "en": "The simplest case is a coin. <bookmark mark='a'/> If it's fair, the entropy is one bit. <bookmark mark='b'/> Bias it, and the outcome gets easier to guess. Heads ninety percent of the time, and the entropy falls to 0.47 bits. <bookmark mark='c'/> A coin that always lands heads has no entropy at all. The entropy is largest when the outcomes are equally likely.",
+   "zh": "最简单的情况是一枚硬币。<bookmark mark='a'/>如果它是公平的，熵就是1比特。<bookmark mark='b'/>让它偏一点，结果就更好猜了。90%的时候是正面，熵就降到0.47比特。<bookmark mark='c'/>一枚永远正面朝上的硬币，熵为零。结果越是同样可能，熵就越大。"
+  },
+  "a95258cc4f79": {
+   "scene": "Entropy",
+   "en": "That's true in general. With K possible outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one inequality. The logarithm bends downward, so the average of logs is at most the log of the average. That's Jensen's inequality. <bookmark mark='b'/> Entropy is an average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with equality only when every outcome is equally likely.",
+   "zh": "这一点普遍成立。有K种可能结果时，熵至多是以2为底K的对数。<bookmark mark='a'/>证明只需要一个不等式。对数函数向下弯，所以对数的平均值，至多等于平均值的对数。这就是詹森不等式。<bookmark mark='b'/>熵是对数的平均值。<bookmark mark='c'/>换成平均值的对数，<bookmark mark='d'/>而p分之1的平均值，正好就是结果的个数。<bookmark mark='e'/>所以H至多是log K，当且仅当每种结果同样可能时取等号。"
+  },
+  "89e8a378f398": {
+   "scene": "Entropy",
+   "en": "Entropy also works when we know something. For each previous letter, the next letter has its own distribution, and its own entropy. <bookmark mark='a'/> Draw a column for each previous letter, as wide as that letter is common, and as tall as the entropy of what follows it. <bookmark mark='b'/> After q, almost nothing: two hundredths of a bit. <bookmark mark='c'/> After a space, a new word begins, and the entropy is 4.11 bits.",
+   "zh": "当我们知道一些东西时，熵也同样适用。对每一个前一个字母，下一个字母都有它自己的分布，也有它自己的熵。<bookmark mark='a'/>为每个前一个字母画一列，宽度是这个字母有多常见，高度是它后面那个字母的熵。<bookmark mark='b'/>q后面，几乎为零：百分之二比特。<bookmark mark='c'/>空格后面，一个新词开始了，熵是4.11比特。"
+  },
+  "20a7498fab4b": {
+   "scene": "Entropy",
+   "en": "The total area is the conditional entropy: 3.33 bits, given the previous letter, <bookmark mark='a'/> down from 4.08 bits with no context at all. <bookmark mark='b'/> On average, knowing more never makes you more uncertain. We'll prove that in chapter five.",
+   "zh": "总面积就是条件熵：已知前一个字母时，3.33比特，<bookmark mark='a'/>比完全没有上下文时的4.08比特低。<bookmark mark='b'/>平均来说，知道得更多，永远不会让你更不确定。我们会在第5章证明这一点。"
+  },
+  "72725c72465b": {
+   "scene": "Codes",
+   "en": "Chapter four. Surprise is measured in bits. So let's spend some bits.",
+   "zh": "第4章。意外度用比特来衡量。那我们就来花一些比特。"
+  },
+  "3ba816205e99": {
+   "scene": "Codes",
+   "en": "So give common symbols short codewords, like Morse code, which gives e a single dot. But careful. <bookmark mark='a'/> If e is zero, t is one, and a is zero one, then the bits zero one could be e, t, or a. <bookmark mark='b'/> The fix is a prefix-free code: no codeword is the start of another. <bookmark mark='c'/> Then the codewords are the leaves of a binary tree. Zero goes left, one goes right, and to decode, you walk down from the top until you reach a leaf.",
+   "zh": "所以给常见的符号短码字，就像摩尔斯电码给e一个点。但要小心。<bookmark mark='a'/>如果e是0，t是1，a是01，那么比特01可能是e加t，也可能是a。<bookmark mark='b'/>解决办法是无前缀码：没有哪个码字是另一个码字的开头。<bookmark mark='c'/>这样，码字就是一棵二叉树的叶子。0往左，1往右，解码时从顶上往下走，走到叶子为止。"
+  },
+  "e1a5122b7b16": {
+   "scene": "Codes",
+   "en": "Watch it decode one, one, zero, zero, one, zero, one, one, one, one, one. Right, right, left: that's c. Start again at the top. Left: a. Right, left: b. Right five times: f. No separators needed.",
+   "zh": "看它怎么解码这一串比特：1、1、0、0、1、0、1、1、1、1、1。向右、向右、向左：这是c。回到顶端，重新开始。向左：a。向右、再向左：b。连续向右五次：f。完全不需要任何分隔符。"
+  },
+  "63268dcdf6fd": {
+   "scene": "Codes",
+   "en": "Prefix-free codes obey one budget, and there's a beautiful way to see it. Read a codeword as the start of a binary fraction. <bookmark mark='a'/> The codeword one, one, zero stands for all the numbers between zero and one whose binary expansion begins point one one zero: an interval of width two to the minus three. <bookmark mark='b'/> A codeword of length l claims an interval of width two to the minus l.",
+   "zh": "无前缀码要遵守一个预算，有一种很漂亮的方式能看出来。把码字读成一个二进制小数的开头。<bookmark mark='a'/>码字110代表0和1之间、二进制展开以0.110开头的所有数：一个宽度为2的负3次方的区间。<bookmark mark='b'/>长度为l的码字，占据宽度为2的负l次方的区间。"
+  },
+  "a10ace4f7ab2": {
+   "scene": "Codes",
+   "en": "Because no codeword starts another, these intervals never overlap, and they all fit between zero and one. So their widths add up to at most one. <bookmark mark='a'/> That's Kraft's inequality: two to the minus length, summed over the codewords, is at most one. Short codewords are expensive: one bit uses up half the budget.",
+   "zh": "因为没有哪个码字是另一个的开头，这些区间永不重叠，而且都落在0和1之间。所以它们的宽度加起来至多是1。<bookmark mark='a'/>这就是克拉夫特不等式：对所有码字，2的负长度次方求和，至多是1。短码字很贵：一个1比特的码字就用掉一半的预算。"
+  },
+  "49d12d225363": {
+   "scene": "Codes",
+   "en": "Now we can prove a speed limit. Let L be the average codeword length, and H the entropy. <bookmark mark='a'/> Write their difference as one sum. <bookmark mark='b'/> Jensen's inequality, exactly as in chapter three, moves the log outside. <bookmark mark='c'/> The probabilities cancel, <bookmark mark='d'/> and Kraft's inequality says what's left is at most log one: zero. <bookmark mark='e'/> So the average length can never be less than the entropy, and it equals the entropy only if each symbol gets exactly log one over p bits: its surprise.",
+   "zh": "现在可以证明一个速度极限了。设L是平均码长，H是熵。<bookmark mark='a'/>把两者之差写成一个和。<bookmark mark='b'/>詹森不等式，和第3章完全一样，把对数移到外面。<bookmark mark='c'/>概率约掉了，<bookmark mark='d'/>克拉夫特不等式说，剩下的至多是log 1，也就是0。<bookmark mark='e'/>所以平均码长永远不会小于熵，而且只有当每个符号恰好分到p分之1的对数那么多比特，也就是它的意外度时，两者才相等。"
+  },
+  "cea62a63d62c": {
+   "scene": "Codes",
+   "en": "Codeword lengths must be whole numbers, so round the surprises up. That still fits Kraft's budget, and it costs less than one extra bit per symbol. For our letters, 4.62 bits.",
+   "zh": "码长必须是整数，那就把意外度向上取整。这仍然符合克拉夫特的预算，而且每个符号多花不到1比特。对我们的字母来说，是4.62比特。"
+  },
+  "bf6c612e8eff": {
+   "scene": "Codes",
+   "en": "Which code gets closest? In 1952, David Huffman, then a graduate student, found the answer. <bookmark mark='a'/> Take the two least likely symbols, z and q, and join them under a new node whose probability is their sum. Then do it again with the two least likely of what's left, and again, <bookmark mark='b'/> twenty-six times, until one tree holds everything.",
+   "zh": "哪种编码最接近熵？1952年，当时还是研究生的大卫·霍夫曼找到了答案。<bookmark mark='a'/>取出最不可能的两个符号z和q，把它们挂在一个新节点下，新节点的概率是两者之和。然后对剩下的最不可能的两个再做一次，一次又一次，<bookmark mark='b'/>一共26次，直到一棵树装下所有符号。"
+  },
+  "47ebf882b425": {
+   "scene": "Codes",
+   "en": "Read off the codewords: <bookmark mark='a'/> the space gets two bits, e, t and a get four, and z gets ten. <bookmark mark='b'/> On average, 4.127 bits per symbol, just four hundredths of a bit above the entropy. The falcon now costs forty-three bits instead of fifty. Huffman proved no prefix code for single symbols does better.",
+   "zh": "读出码字：<bookmark mark='a'/>空格得到2比特，e、t和a各得4比特，z得到10比特。<bookmark mark='b'/>平均每个符号4.127比特，只比熵多百分之四比特。the falcon现在只要43比特，而不是50。霍夫曼证明了，对逐个符号编码而言，没有哪种前缀码比它更好。"
+  },
+  "0f153fa66383": {
+   "scene": "Codes",
+   "en": "Coding whole blocks of symbols at once spreads that last fraction of a bit thin. The result is Shannon's source coding theorem: <bookmark mark='a'/> a source with entropy H can be compressed to as close to H bits per symbol as you like, <bookmark mark='b'/> and, on average, no further. Entropy is the speed limit of compression.",
+   "zh": "把一整块符号一起编码，能把最后那点零头摊薄。结果就是香农的信源编码定理：<bookmark mark='a'/>熵为H的信源，可以压缩到每个符号任意接近H比特，<bookmark mark='b'/>而平均来说，不能再少了。熵就是压缩的速度极限。"
+  },
+  "beb977328dba": {
+   "scene": "CrossEntropy",
+   "en": "Chapter five. What happens when your guesses are wrong?",
+   "zh": "第5章。如果你的猜测错了，会怎样？"
+  },
+  "966067aea6c9": {
+   "scene": "CrossEntropy",
+   "en": "Codes and guesses are the same thing. A code that spends l bits on a symbol is betting that the symbol has probability two to the minus l. So what if the bets are wrong? <bookmark mark='a'/> Say the data come from p, but the code was built for a model q. Each symbol costs log of one over q bits, and on average we pay the cross-entropy: the sum of p times log one over q.",
+   "zh": "编码和猜测是同一回事。一个在某个符号上花l比特的编码，等于是在赌这个符号的概率是2的负l次方。那如果赌错了呢？<bookmark mark='a'/>假设数据来自p，编码却是为模型q设计的。每个符号要花q分之1的对数那么多比特，平均下来，我们付出的是交叉熵：p乘以q分之1的对数，再求和。"
+  },
+  "660bcd896bd3": {
+   "scene": "CrossEntropy",
+   "en": "Picture it as before. <bookmark mark='a'/> With the right probabilities, the area is the entropy, 4.08 bits. <bookmark mark='b'/> Now use a model that has e and z the wrong way round. Every e, one symbol in ten, now costs almost eleven bits. The area grows to 4.84.",
+   "zh": "还是用那幅图。<bookmark mark='a'/>概率对的时候，面积就是熵，4.08比特。<bookmark mark='b'/>现在换一个把e和z弄反了的模型。每个e，也就是每10个符号里的一个，现在要花将近11比特。面积涨到了4.84。"
+  },
+  "b73ff7bfb272": {
+   "scene": "CrossEntropy",
+   "en": "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. The first is the entropy of p: the randomness of the world itself, which no code can remove. <bookmark mark='b'/> The second is the price of being wrong: the Kullback–Leibler divergence of q from p, introduced in 1951. <bookmark mark='c'/> Swapping e and z costs three quarters of a bit per symbol. Guessing letters uniformly costs 0.69. And the letter frequencies of our thirty books, used on the Falcon passage, are wrong by less than a hundredth of a bit.",
+   "zh": "把对数拆成两半，<bookmark mark='a'/>交叉熵就分成了两笔代价。第一笔是p的熵：世界本身的随机性，任何编码都去不掉。<bookmark mark='b'/>第二笔是犯错的代价：q相对于p的KL散度，也就是库尔巴克–莱布勒散度，1951年提出。<bookmark mark='c'/>把e和z弄反，每个符号多花四分之三比特。把字母当成均匀分布，多花0.69比特。而用我们30本书的字母频率来编码《马耳他之鹰》的段落，错得还不到百分之一比特。"
+  },
+  "e857cfed503b": {
+   "scene": "CrossEntropy",
+   "en": "Is being wrong always a cost? Yes, and the proof rests on one fact: <bookmark mark='a'/> the natural log lies below its tangent line at one. ln x is at most x minus one. <bookmark mark='b'/> Write minus the divergence in natural logs, <bookmark mark='c'/> apply that inequality to each term, <bookmark mark='d'/> multiply out, <bookmark mark='e'/> and both sums are one.",
+   "zh": "犯错一定有代价吗？是的，证明只依赖一个事实：<bookmark mark='a'/>自然对数位于它在1处的切线下方。ln x至多是x减1。<bookmark mark='b'/>用自然对数写出负的散度，<bookmark mark='c'/>对每一项用这个不等式，<bookmark mark='d'/>乘开，<bookmark mark='e'/>两个和都等于1。"
+  },
+  "aada8b53ca81": {
+   "scene": "CrossEntropy",
+   "en": "So the divergence is never negative, and it's zero only when q equals p. <bookmark mark='a'/> The truth is the best code. And this pays the debt from chapter three: <bookmark mark='b'/> the drop in entropy from knowing X is a divergence too, so it can't be negative. Knowing more never hurts, on average.",
+   "zh": "所以散度永远不会是负的，而且只有q等于p时才为零。<bookmark mark='a'/>真相就是最好的编码。这也还清了第3章欠下的账：<bookmark mark='b'/>知道X之后熵的下降量，也是一个散度，所以它不可能是负的。平均来说，知道得更多，永远没有坏处。"
+  },
+  "f676560e59d7": {
+   "scene": "CrossEntropy",
+   "en": "Here is why all of this matters for AI. <bookmark mark='a'/> The loss that every large language model is trained to minimize is exactly this: the average of log one over q, for each token of real text, given the tokens before it. <bookmark mark='b'/> It's the cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the divergence part; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below.",
+   "zh": "这就是这一切对AI如此重要的原因。<bookmark mark='a'/>每个大型语言模型在训练中最小化的损失，正是这个：对真实文本中的每个词元，在已知前面词元的条件下，取q分之1的对数，再求平均。<bookmark mark='b'/>它就是世界上的文本与模型之间的交叉熵。<bookmark mark='c'/>训练只能缩小其中散度的那一部分；<bookmark mark='d'/>语言本身的熵，是任何模型都无法突破的下限。"
+  },
+  "07868ae8bdbf": {
+   "scene": "CrossEntropy",
+   "en": "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p has two peaks, and our model q can only be a single bell curve. Which bell curve is best? It depends on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the training loss we just met, <bookmark mark='b'/> pulls q wide, to cover both peaks.",
+   "zh": "还有一个性质，后面会非常重要：散度是不对称的。假设真实分布p有两个峰，而我们的模型q只能是一条钟形曲线。哪条钟形曲线最好？这取决于我们从哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚才遇到的训练损失，<bookmark mark='b'/>会把q拉宽，好盖住两个峰。"
+  },
+  "18e47e9e1242": {
+   "scene": "CrossEntropy",
+   "en": "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so it squeezes into a single peak and ignores the other. <bookmark mark='b'/> Covering everything, or committing to one thing: that choice comes back in diffusion models, in part fourteen, and in reinforcement learning, in part seventeen.",
+   "zh": "反过来，<bookmark mark='a'/>q会因为在p没有概率的地方放了概率而受罚，于是它缩进一个峰里，不管另一个。<bookmark mark='b'/>覆盖一切，还是只盯一处：这个选择会在第14部分的扩散模型，和第17部分的强化学习里再次出现。"
+  },
+  "fd086994ffbf": {
+   "scene": "CrossEntropy",
+   "en": "Here are the two losses for every possible bell curve: its center across, its width up. <bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent finds the wide curve from anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each peak, and where you end up depends on where you start.",
+   "zh": "这是对每一条可能的钟形曲线，两种损失的取值：横向是它的中心，纵向是它的宽度。<bookmark mark='a'/>按一个方向量，只有一个山谷，梯度下降从哪里出发都能找到那条宽曲线。<bookmark mark='b'/>按另一个方向量，有两个山谷，每个峰对应一个，最后落在哪里，取决于从哪里出发。"
+  },
+  "d9473976b741": {
+   "scene": "Arithmetic",
+   "en": "Chapter six. The best code for a good guesser.",
+   "zh": "第6章。为好的猜测者准备的最好的编码。"
+  },
+  "96d03e22f18b": {
+   "scene": "Arithmetic",
+   "en": "Huffman's code has one flaw. Every symbol costs a whole number of bits, at least one. <bookmark mark='a'/> u after q carries two thousandths of a bit, and still costs a full bit. <bookmark mark='b'/> That's tolerable for letter frequencies, but a model that really knows English is surprised by about one bit per symbol, or less, and a symbol code can never go below one. <bookmark mark='c'/> The fix is to stop coding symbols one at a time, and code the whole message as a single number.",
+   "zh": "霍夫曼编码有一个缺陷。每个符号都要花整数个比特，至少1比特。<bookmark mark='a'/>q后面的u只携带千分之二比特，却仍然要花整整1比特。<bookmark mark='b'/>对字母频率来说这还能忍，但一个真正懂英语的模型，每个符号的意外度大约只有1比特，甚至更少，而逐个符号的编码永远不可能低于1比特。<bookmark mark='c'/>解决办法是，不再一个一个地编码符号，而是把整条消息编成一个数。"
+  },
+  "6d611c939322": {
+   "scene": "Arithmetic",
+   "en": "Arithmetic coding, worked out by Jorma Rissanen and Richard Pasco in 1976. We've already seen its heart: the nested slivers of the chain rule. <bookmark mark='a'/> Start with the unit interval, split by the model's guesses for the first letter. t takes a sliver 0.155 wide. Now write the two ends of that sliver in binary. <bookmark mark='b'/> They agree on their first two digits, one, one. Any number in the sliver starts that way, so those two bits are already decided.",
+   "zh": "算术编码，由约尔马·里萨宁和理查德·帕斯科在1976年提出。它的核心我们已经见过了：链式法则那一层层嵌套的小段。<bookmark mark='a'/>从单位区间开始，按模型对第一个字母的猜测来分割。t分到宽0.155的一段。现在把这一段的两个端点写成二进制。<bookmark mark='b'/>它们的前两位一样，都是1、1。这一段里的任何数都这样开头，所以这两个比特已经确定了。"
+  },
+  "a66d48956c58": {
+   "scene": "Arithmetic",
+   "en": "Then zoom in and split again: h, e, space, f, a, l, c, o, n. <bookmark mark='a'/> Each letter narrows the interval by its probability, and as it narrows, more leading digits of its two ends come to agree. Those bits can be sent as soon as they're decided. <bookmark mark='b'/> A likely letter barely narrows the interval, and costs a fraction of a bit. An unlikely one, like the c in falcon, which the model gave less than one percent, costs seven bits.",
+   "zh": "然后放大，再分割：h、e、空格、f、a、l、c、o、n。<bookmark mark='a'/>每个字母都按它的概率把区间缩小，区间越窄，两个端点开头相同的位数就越多。这些比特一确定，就可以发出去。<bookmark mark='b'/>一个很可能的字母几乎不缩小区间，只花零点几个比特。一个不太可能的字母，比如falcon里的c，模型给它的概率不到1%，就要花7比特。"
+  },
+  "3162a79c5341": {
+   "scene": "Arithmetic",
+   "en": "After ten letters, the interval has width two to the minus 27.66: the probability of the whole message. <bookmark mark='a'/> To finish, find the shortest binary fraction such that every number starting with those digits lies inside the interval. <bookmark mark='b'/> Here, it takes 29 bits. <bookmark mark='c'/> Compare: fifty for the fixed code, forty-three for Huffman, twenty-nine for arithmetic coding, against an information content of 27.66. Arithmetic coding always lands within two bits of the surprise of the whole message.",
+   "zh": "10个字母之后，区间的宽度是2的负27.66次方：也就是整条消息的概率。<bookmark mark='a'/>最后，找出最短的二进制小数，使得以这些数字开头的每个数都落在区间里。<bookmark mark='b'/>这里需要29比特。<bookmark mark='c'/>比较一下：定长编码50比特，霍夫曼43比特，算术编码29比特，而信息量是27.66比特。算术编码总能做到，与整条消息的意外度相差不超过2比特。"
+  },
+  "0b84aace85ba": {
+   "scene": "Arithmetic",
+   "en": "Decoding runs the same steps. The receiver has the bits, and an identical copy of the model. <bookmark mark='a'/> The bits name a number. It falls in the t sliver of the first split, so the first letter is t. <bookmark mark='b'/> Zoom in: it falls in the h sliver of the next, then e, and so on, one letter at a time, until the message is back, exactly.",
+   "zh": "解码走的是同样的步骤。接收方有这些比特，还有一份完全相同的模型。<bookmark mark='a'/>这些比特代表一个数。它落在第一次分割中t的那一段里，所以第一个字母是t。<bookmark mark='b'/>放大：它落在下一次分割中h的那一段，然后是e，依此类推，一次一个字母，直到消息被原样还原。"
+  },
+  "a071c3686096": {
+   "scene": "Arithmetic",
+   "en": "This is the hinge of the whole part. <bookmark mark='a'/> Give arithmetic coding any model that predicts, and you get a compressor whose output is about log of one over q bits per symbol: the length of the text times the model's cross-entropy. <bookmark mark='b'/> And any compressor defines a model: a text that takes l bits is being assigned probability two to the minus l. <bookmark mark='c'/> So predicting well and compressing well are the same skill.",
+   "zh": "这是整个第1部分的枢纽。<bookmark mark='a'/>给算术编码任何一个会预测的模型，你就得到一个压缩器，每个符号的输出大约是q分之1的对数那么多比特：文本长度乘以模型的交叉熵。<bookmark mark='b'/>反过来，任何压缩器也都定义了一个模型：一段要花l比特的文本，就被赋予了2的负l次方的概率。<bookmark mark='c'/>所以，预测得好和压缩得好，是同一种本事。"
+  },
+  "92ce713e9aeb": {
+   "scene": "Arithmetic",
+   "en": "That's why, in 2006, Marcus Hutter offered a prize for compressing Wikipedia, as a test of intelligence. <bookmark mark='a'/> And it's why, in 2024, a team at DeepMind could show that a large language model, trained only on text, also compresses images and audio better than the formats made for them.",
+   "zh": "这就是为什么在2006年，马库斯·胡特设立了一个压缩维基百科的奖，作为对智能的检验。<bookmark mark='a'/>也是为什么在2024年，DeepMind的一个团队能够证明：一个只用文本训练的大型语言模型，压缩图像和音频的效果，比专门为它们设计的格式还要好。"
+  },
+  "d24998d680e5": {
+   "scene": "Counting",
+   "en": "Chapter seven. So far, our models have only counted. How far can counting go?",
+   "zh": "第7章。到目前为止，我们的模型都只是在计数。计数能走多远？"
+  },
+  "067eaae6b188": {
+   "scene": "Counting",
+   "en": "In 1948, Shannon showed what counting can do by letting counting models write. <bookmark mark='a'/> With every symbol equally likely, you get noise. <bookmark mark='b'/> With the right letter frequencies, still noise, but with the right texture. <bookmark mark='c'/> Pick each letter by what followed the previous one in our books, and syllables appear. <bookmark mark='d'/> With two letters of context, short words. <bookmark mark='e'/> With four, mostly real words. <bookmark mark='f'/> With six, phrases: mariners would be by many night. <bookmark mark='g'/> Count whole words instead, and you get something that almost scans.",
+   "zh": "1948年，香农让计数模型自己写文章，来展示计数能做到什么。<bookmark mark='a'/>每个符号同样可能时，得到的是一堆乱码。<bookmark mark='b'/>用上正确的字母频率，还是乱码，但质感对了。<bookmark mark='c'/>按照书中前一个字母后面出现过什么来挑下一个字母，音节就出现了。<bookmark mark='d'/>有两个字母的上下文，出现了短词。<bookmark mark='e'/>四个字母，大多是真正的词。<bookmark mark='f'/>六个字母，出现了词组：mariners would be by many night。<bookmark mark='g'/>改成统计整个单词，得到的东西几乎能读出节奏来。"
+  },
+  "23329cd2cdb3": {
+   "scene": "Counting",
+   "en": "The rule behind all of these is simple. <bookmark mark='a'/> The probability of the next symbol, given a context, is the number of times it followed that context in the books, divided by the number of times the context appeared. <bookmark mark='b'/> It's the most natural estimate there is, and in chapter nine we'll see why it's also the best one, for the books themselves.",
+   "zh": "所有这些背后的规则都很简单。<bookmark mark='a'/>在某个上下文之后下一个符号的概率，等于它在书中跟在这个上下文后面的次数，除以这个上下文出现的次数。<bookmark mark='b'/>这是最自然的估计，到第9章我们会看到，对书本身来说，它也是最好的估计。"
+  },
+  "08ec1729fc4e": {
+   "scene": "Counting",
+   "en": "So let's score the counting models. For each amount of context, from no letters to fourteen, measure the bits per letter. <bookmark mark='a'/> First on the very books it counted. More context, fewer bits, all the way down to a quarter of a bit per letter at fourteen letters. Our numbers for no context and one letter of context, 4.08 and 3.33, <bookmark mark='b'/> land right next to the estimates Shannon made in 1951 from printed tables.",
+   "zh": "那我们就给计数模型打打分。对每种长度的上下文，从0个字母到14个字母，测一测每个字母的比特数。<bookmark mark='a'/>先在它统计过的那些书上测。上下文越多，比特越少，到14个字母时，一直降到每个字母四分之一比特。我们在没有上下文和一个字母上下文时的数字，4.08和3.33，<bookmark mark='b'/>和香农1951年根据印刷的统计表得出的估计非常接近。"
+  },
+  "9f6cf32e45fa": {
+   "scene": "Counting",
+   "en": "But on new text, the Falcon passage, <bookmark mark='a'/> the story is different. More context helps at first: <bookmark mark='b'/> the best is five letters of context, at 2.02 bits per letter. Beyond that, it gets worse, and with fourteen letters of context it's worse than knowing nothing but letter frequencies.",
+   "zh": "但在新文本上，也就是《马耳他之鹰》的段落上，<bookmark mark='a'/>情况就不一样了。一开始，上下文越多越好：<bookmark mark='b'/>最好的是5个字母的上下文，每个字母2.02比特。再往后就变差了，到14个字母的上下文时，比只知道字母频率还要差。"
+  },
+  "5dbcb710f2fb": {
+   "scene": "Counting",
+   "en": "The reason is that contexts multiply. <bookmark mark='a'/> Of all the five-letter contexts in the Falcon passage, ninety-nine percent appear somewhere in the books. Of the fourteen-letter contexts, only about a quarter do. <bookmark mark='b'/> There are about ten to the twenty possible fourteen-letter contexts, and the books contain under seventeen million of them. <bookmark mark='c'/> A context the books never saw gives the model nothing to go on, and a letter never seen after it would get probability zero: infinite surprise. <bookmark mark='d'/> The patch is called smoothing: pretend every letter was seen a few extra times. That's what keeps these curves finite.",
+   "zh": "原因在于，上下文会成倍增长。<bookmark mark='a'/>《马耳他之鹰》段落里的所有5字母上下文中，99%在书里某个地方出现过。而14字母的上下文，只有大约四分之一出现过。<bookmark mark='b'/>可能的14字母上下文大约有10的20次方种，而书里只有不到1700万种。<bookmark mark='c'/>书里从没见过的上下文，让模型无从下手，而一个从没在它后面出现过的字母，概率会是零：意外度无穷大。<bookmark mark='d'/>补救办法叫平滑：假装每个字母都多出现了几次。正是它让这些曲线保持有限。"
+  },
+  "3aa34d0f5b12": {
+   "scene": "Counting",
+   "en": "This is the first appearance of the central problem of machine learning. <bookmark mark='a'/> A model can fit the data it learned from almost perfectly, and still guess badly on new data. The gap between the two is called generalization. <bookmark mark='b'/> And counting has a deeper limit: every context is its own island. It can't tell that the dog barked and the hound barked are alike, so it can't borrow what it learned about one for the other. <bookmark mark='c'/> Better smoothing comes in part six, generalization in part seven, and models that share what they learn between similar contexts, with vectors and networks, in parts two and eight.",
+   "zh": "这是机器学习核心问题的第一次登场。<bookmark mark='a'/>一个模型可以几乎完美地拟合它学过的数据，却仍然在新数据上猜得很差。两者之间的差距，叫作泛化。<bookmark mark='b'/>计数还有一个更深的局限：每个上下文都是一座孤岛。它分不清the dog barked和the hound barked是相似的，所以没法把从一个学到的东西借给另一个。<bookmark mark='c'/>更好的平滑在第6部分，泛化在第7部分，而能在相似上下文之间共享所学的模型，靠的是向量和网络，在第2部分和第8部分。"
+  },
+  "13cdca64a7bf": {
+   "scene": "Shannon1951",
+   "en": "Chapter eight. Back to Shannon's guessing game, now that we have the tools to read it.",
+   "zh": "第8章。有了工具，我们回到香农的猜字游戏，读懂它。"
+  },
+  "2aaa585326f9": {
+   "scene": "Shannon1951",
+   "en": "Here's Shannon's key observation. Suppose the receiver has an identical twin of the guesser: same knowledge, same habits. <bookmark mark='a'/> The sender runs the guessing game on the text, and sends only the guess counts. <bookmark mark='b'/> The receiver asks the twin for its guesses, and when the count says third guess, takes the twin's third guess. Out comes the text, exactly.",
+   "zh": "这是香农的关键洞见。假设接收方有一个和猜测者一模一样的双胞胎：同样的知识，同样的习惯。<bookmark mark='a'/>发送方在文本上玩猜字游戏，只把猜测次数发出去。<bookmark mark='b'/>接收方让双胞胎去猜，次数说第三次，就取双胞胎的第三次猜测。文本就原样出来了。"
+  },
+  "d2b45af690a2": {
+   "scene": "Shannon1951",
+   "en": "So the guess counts carry all the information in the text. <bookmark mark='a'/> The text's entropy can be no more than theirs, and that is at most the entropy of how often each guess number turns up. Count the guesses, and you have an upper bound on the information in English.",
+   "zh": "所以猜测次数携带了文本的全部信息。<bookmark mark='a'/>文本的熵不会超过猜测次数的熵，而后者又至多等于各个猜测次数出现频率的熵。数一数猜了几次，就得到了英语信息量的一个上界。"
+  },
+  "822d7b38773d": {
+   "scene": "Shannon1951",
+   "en": "Let's play the game with our counting model from the last chapter, as the guesser, on twelve thousand letters of the Falcon passage. <bookmark mark='a'/> It gets the letter on the first guess 58 percent of the time, on the second 13 percent, and the tail runs on from there.",
+   "zh": "我们用上一章的计数模型当猜测者，在《马耳他之鹰》段落的12000个字母上玩这个游戏。<bookmark mark='a'/>它有58%的时候第一次就猜中，13%的时候第二次猜中，后面还拖着一条长尾。"
+  },
+  "34d65abe16e0": {
+   "scene": "Shannon1951",
+   "en": "From those frequencies, the upper bound is 2.37 bits per letter. <bookmark mark='a'/> Shannon also proved a lower bound from the same numbers: 1.36 bits. The true information content of the passage, for a guesser like this one, lies in between.",
+   "zh": "由这些频率得出的上界，是每个字母2.37比特。<bookmark mark='a'/>香农还用同样的数字证明了一个下界：1.36比特。对这样一个猜测者来说，这段文字真正的信息量就在两者之间。"
+  },
+  "2101fa51d8b3": {
+   "scene": "Shannon1951",
+   "en": "Shannon's own subjects did far better. <bookmark mark='a'/> Given a hundred letters of context, his estimates put printed English between 0.6 and 1.3 bits per letter, <bookmark mark='b'/> against 1.4 to 2.4 for our counting guesser with six. <bookmark mark='c'/> The difference is knowledge: people know words and grammar, they know idioms, they know what the story is about, and they know how the world works.",
+   "zh": "香农自己的受试者要好得多。<bookmark mark='a'/>有100个字母的上下文时，他估计印刷英语在每个字母0.6到1.3比特之间，<bookmark mark='b'/>而我们只看6个字母的计数猜测者是1.4到2.4。<bookmark mark='c'/>差别在于知识：人懂得单词和语法，懂得习语，知道故事在讲什么，也知道这个世界是怎样运转的。"
+  },
+  "2d606fa1cbce": {
+   "scene": "Shannon1951",
+   "en": "Later estimates landed in the same place: about 1.3 bits per letter, from a version of the game where people bet on the next letter instead of guessing it. <bookmark mark='a'/> To guess like a person, a machine has to know what a person knows. That's the bar.",
+   "zh": "后来的估计也落在同一个地方：每个字母大约1.3比特，用的是让人对下一个字母下注、而不是去猜的游戏版本。<bookmark mark='a'/>要像人一样猜，机器就得知道人所知道的东西。这就是标杆。"
+  },
+  "c1d6348c2d88": {
+   "scene": "Likelihood",
+   "en": "Chapter nine. So far our models were counted. Now let's see how a model learns.",
+   "zh": "第9章。到目前为止，我们的模型都是数出来的。现在来看一个模型是怎样学习的。"
+  },
+  "3a3a0861efc9": {
+   "scene": "Likelihood",
+   "en": "Learning starts from a principle stated by Ronald Fisher in 1922: choose the model under which the data you actually saw were most likely. That's the likelihood: the product of the model's probabilities for every observation. <bookmark mark='a'/> Take minus its log, per observation, and you get the average surprise. <bookmark mark='b'/> Group the observations by value: that's the cross-entropy between the data's own frequencies, p hat, and the model. <bookmark mark='c'/> And that's the entropy of the data plus the divergence of the model from the data.",
+   "zh": "学习始于罗纳德·费希尔在1922年提出的一个原则：选择那个让你实际看到的数据最有可能出现的模型。这就是似然：模型给每一个观测的概率的乘积。<bookmark mark='a'/>对它取负对数，再除以观测数，就得到平均意外度。<bookmark mark='b'/>把观测按取值归类：这就是数据自身的频率p帽与模型之间的交叉熵。<bookmark mark='c'/>它又等于数据的熵，加上模型相对于数据的散度。"
+  },
+  "488e584d8328": {
+   "scene": "Likelihood",
+   "en": "So maximum likelihood, minimum cross-entropy, and minimum divergence from the data are one and the same goal. It's the loss from chapter five, seen from the other side.",
+   "zh": "所以，最大似然、最小交叉熵、最小化相对数据的散度，是同一个目标。这就是第5章的损失，换了个角度来看。"
+  },
+  "1288bd518820": {
+   "scene": "Likelihood",
+   "en": "If the model is allowed to be any distribution at all, <bookmark mark='a'/> the divergence is smallest, zero, when the model equals the data's frequencies. <bookmark mark='b'/> So the counting models of chapter seven were maximum likelihood models. And that's exactly why they overfit: they fit the books perfectly, and nothing pulled them toward anything more general.",
+   "zh": "如果模型可以是任意一个分布，<bookmark mark='a'/>当模型等于数据的频率时，散度最小，为零。<bookmark mark='b'/>所以第7章的计数模型，正是最大似然模型。这也正是它们过拟合的原因：它们完美地拟合了书，却没有任何东西把它们拉向更一般的规律。"
+  },
+  "21a85fa80ca2": {
+   "scene": "Likelihood",
+   "en": "Counting doesn't generalize. Neural networks do, and they produce their guesses differently. For each possible next token, the network computes a score, called a logit: <bookmark mark='a'/> any real number, positive or negative. <bookmark mark='b'/> To make probabilities, exponentiate, so every score becomes positive, <bookmark mark='c'/> and divide by the total, so they add to one. That's the softmax. Bigger score, bigger probability, and nothing ever gets probability zero.",
+   "zh": "计数不会泛化。神经网络会，而且它们给出猜测的方式不一样。对每一个可能的下一个词元，网络会算出一个分数，叫作logit：<bookmark mark='a'/>任意实数，可正可负。<bookmark mark='b'/>要变成概率，先取指数，让每个分数都变成正数，<bookmark mark='c'/>再除以总和，让它们加起来等于1。这就是softmax。分数越高，概率越大，而且没有哪个会得到零概率。"
+  },
+  "9a55c46b8e1e": {
+   "scene": "Likelihood",
+   "en": "To learn, the network needs to know which way to nudge each score. <bookmark mark='a'/> Write the surprise of the right answer, y, in terms of the scores. <bookmark mark='b'/> Differentiate with respect to the score z k. The first term gives minus one if k is y. The second is the softmax itself. <bookmark mark='c'/> So the derivative is q k minus one, for the right answer, and q k, for every wrong one.",
+   "zh": "要学习，网络需要知道每个分数该往哪边推。<bookmark mark='a'/>用这些分数写出正确答案y的意外度。<bookmark mark='b'/>对分数z k求导。第一项在k等于y时给出负1。第二项就是softmax本身。<bookmark mark='c'/>所以导数是：对正确答案，q k减1；对每个错误答案，就是q k。"
+  },
+  "4426dec5aea8": {
+   "scene": "Likelihood",
+   "en": "In words: the model's guess, minus the truth. <bookmark mark='a'/> Averaged over a dataset, the gradient is q minus p hat. Push up the scores of what happened more often than the model expected; push down the rest. Every language model, however large, ends in exactly this step.",
+   "zh": "用一句话说：模型的猜测，减去真相。<bookmark mark='a'/>在整个数据集上平均，梯度就是q减去p帽。比模型预期出现得更多的，把它的分数往上推；其余的往下推。每一个语言模型，不管多大，最后一步都正是这样。"
+  },
+  "70c247dad138": {
+   "scene": "Likelihood",
+   "en": "Here it is in action. Suppose the data are a hundred continuations of come, <bookmark mark='a'/> and the model starts with all five scores equal, so every guess is twenty percent. <bookmark mark='b'/> At each step, every score moves by minus the learning rate times q minus p hat: up where the model under-guesses, down where it over-guesses.",
+   "zh": "来看它实际运行。假设数据是come后面的100种接续，<bookmark mark='a'/>模型一开始五个分数都相等，所以每个猜测都是20%。<bookmark mark='b'/>每一步，每个分数都移动负的学习率乘以q减p帽：模型猜少了的往上，猜多了的往下。"
+  },
+  "0508d4749054": {
+   "scene": "Likelihood",
+   "en": "The guesses slide toward the data's frequencies, and the cross-entropy falls toward its floor: the entropy of the data, 2.06 bits, which no model can beat. <bookmark mark='a'/> That's all of training, in miniature. A real model has billions of parameters instead of five scores, and its scores depend on the context, but the signal that reaches them is this same difference: guess, minus truth.",
+   "zh": "猜测逐渐滑向数据的频率，交叉熵也降向它的下限：数据的熵，2.06比特，任何模型都无法超越。<bookmark mark='a'/>这就是训练的缩影。真正的模型有几十亿个参数，而不是五个分数，它的分数也取决于上下文，但传到它们那里的信号，正是这同一个差值：猜测，减去真相。"
+  },
+  "96315888f829": {
+   "scene": "Knowledge",
+   "en": "Chapter ten. What does a model have to know, to guess well?",
+   "zh": "第10章。一个模型要知道些什么，才能猜得好？"
+  },
+  "43213e15ae19": {
+   "scene": "Knowledge",
+   "en": "Let's look at what a strong model knows that a weaker one doesn't. Here is one paragraph of the Falcon passage, broken into tokens, <bookmark mark='a'/> each colored by how surprised GPT-2, from 2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under Qwen3, from 2025. Its tiles are darker almost everywhere: 350 bits instead of 446.",
+   "zh": "我们来看看，一个强模型知道哪些弱模型不知道的东西。这是《马耳他之鹰》段落里的一段话，切成了词元，<bookmark mark='a'/>每个词元按2019年的GPT-2对它有多意外来着色：意料之中是暗的，意料之外是亮的。<bookmark mark='b'/>同一段话放到2025年的Qwen3下。它的方块几乎处处更暗：350比特，而不是446比特。"
+  },
+  "08289fc56b43": {
+   "scene": "Knowledge",
+   "en": "Look where they differ. <bookmark mark='a'/> After Bull, GPT-2 doesn't expect Durham, or tobacco. Qwen3 does: Bull Durham was a real brand of tobacco, and somewhere in its training it learned that. <bookmark mark='b'/> And the telephone: GPT-2 is surprised by it, eleven bits; Qwen3 isn't, three bits, because two paragraphs earlier, a telephone bell rang. <bookmark mark='c'/> Show Qwen3 this paragraph on its own, and the telephone costs it almost thirteen bits. It remembers.",
+   "zh": "看看它们在哪里不同。<bookmark mark='a'/>在Bull这个词之后，GPT-2既没料到Durham，也没料到tobacco。而Qwen3料到了：Bull Durham是一个真实存在过的烟草品牌，它在训练数据的某个地方学到了这一点。<bookmark mark='b'/>还有telephone这个词：GPT-2对它很意外，要11比特；Qwen3却不意外，只要3比特，因为两段之前，电话铃刚刚响过。<bookmark mark='c'/>如果只给Qwen3看这一段，telephone就要花掉它将近13比特。它记住了。"
+  },
+  "bddfdda3acba": {
+   "scene": "Knowledge",
+   "en": "Facts work the same way. Ask for the city of the Eiffel Tower, <bookmark mark='a'/> the author of Pride and Prejudice, <bookmark mark='b'/> or the chemical symbol for gold, and the model that knows the answer pays far fewer bits when the answer comes. <bookmark mark='c'/> Arithmetic is harder: the 2025 model gives four 28 percent, but five 24.",
+   "zh": "事实也是一样。问埃菲尔铁塔在哪个城市，<bookmark mark='a'/>《傲慢与偏见》的作者是谁，<bookmark mark='b'/>或者金的化学符号是什么，知道答案的模型，在答案出现时付出的比特要少得多。<bookmark mark='c'/>算术更难：2025年的模型给four 28%，却给five 24%。"
+  },
+  "5b7d1b20419f": {
+   "scene": "Knowledge",
+   "en": "And the telephone points to something deep. How much does one letter tell you about a letter d places later? That's the mutual information from chapter five, measured here over all thirty books. <bookmark mark='a'/> Neighbors share three quarters of a bit. Inside a word, it falls fast. <bookmark mark='b'/> But then it doesn't vanish. It decays slowly, like a power of the distance, out to a thousand letters and beyond.",
+   "zh": "而那个telephone，指向一件很深刻的事。一个字母，能告诉你多少关于它后面第d个字母的信息？这就是第5章的互信息，这里在全部30本书上测量。<bookmark mark='a'/>相邻的两个字母共享四分之三比特。在一个词的内部，它下降得很快。<bookmark mark='b'/>但随后它并没有消失。它像距离的幂一样缓慢衰减，一直延伸到一千个字母，甚至更远。"
+  },
+  "9a5db18968ef": {
+   "scene": "Knowledge",
+   "en": "A counting model can't produce a tail like that: the influence of anything outside its few letters of context is cut off, and the dependence it models dies away exponentially. <bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way to find the parts of the past that matter. That's what attention is for, in part eleven.",
+   "zh": "计数模型产生不了这样的长尾：它那几个字母上下文之外的一切影响都被切断了，它所建模的依赖关系按指数衰减。<bookmark mark='a'/>真实的文本，在每一个距离上都会回报你记住的东西。要猜得好，模型需要长久的记忆，还需要一种办法，找到过去中真正要紧的部分。这就是注意力的用处，在第11部分。"
+  },
+  "7b47ab508f5f": {
+   "scene": "Knowledge",
+   "en": "So here's the ladder. <bookmark mark='a'/> Letter frequencies get you four bits. Spelling, a few letters of context, gets you two. <bookmark mark='b'/> Below that, a model has to learn words and grammar, facts about the world, and what has happened so far in the story, <bookmark mark='c'/> down toward the one bit or so that people need. <bookmark mark='d'/> Nobody tells the model to learn any of this. It is pushed there by one number: the bits it pays for each guess. To predict the text, it has to model the world that wrote it.",
+   "zh": "这就是那架梯子。<bookmark mark='a'/>字母频率让你到4比特。拼写，也就是几个字母的上下文，让你到2比特。<bookmark mark='b'/>再往下，模型就得学会单词和语法、关于世界的事实，以及故事到目前为止发生了什么，<bookmark mark='c'/>一直降到人所需要的大约1比特。<bookmark mark='d'/>没有人告诉模型去学这些。推动它的只有一个数：它为每次猜测付出的比特。要预测文本，它就得为写出这段文本的世界建立模型。"
+  },
+  "c88ec3f635e0": {
+   "scene": "Scoreboard",
+   "en": "Chapter eleven. Time to keep score.",
+   "zh": "第11章。该记分了。"
+  },
+  "0d4c42435aa7": {
+   "scene": "Scoreboard",
+   "en": "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. <bookmark mark='a'/> A plain text file spends eight bits on every character. <bookmark mark='b'/> The passage uses only sixty-one different symbols, so guessing blindly among them costs log two of sixty-one: 5.93 bits. <bookmark mark='c'/> Letter frequencies, counted in our thirty books, bring it to 4.55, <bookmark mark='d'/> and one character of context, to 3.58.",
+   "zh": "这就是记分牌，测的是《马耳他之鹰》原样印刷的段落：大写、标点，一个不落。<bookmark mark='a'/>一个纯文本文件，每个字符花8比特。<bookmark mark='b'/>这段文字只用了61种不同的符号，所以在它们之间盲猜，要花以2为底61的对数：5.93比特。<bookmark mark='c'/>用我们30本书统计出的字母频率，降到4.55，<bookmark mark='d'/>加上一个字符的上下文，降到3.58。"
+  },
+  "12bf0d3fe8ce": {
+   "scene": "Scoreboard",
+   "en": "Next, the compressors on your computer. <bookmark mark='a'/> gzip, 3.31 bits per character; xz, 3.20; bzip2, 2.92. They know nothing about English in advance. They learn only from the passage itself, as they go. <bookmark mark='b'/> Our best counting model, which read the thirty books first and looks at the previous four characters, gets 2.32.",
+   "zh": "接下来，是你电脑上的压缩器。<bookmark mark='a'/>gzip，每字符3.31比特；xz，3.20；bzip2，2.92。它们事先对英语一无所知，只能一边处理一边从这段文字本身学习。<bookmark mark='b'/>我们最好的计数模型，先读了那30本书，看前面4个字符，得到2.32。"
+  },
+  "0ccec5132a21": {
+   "scene": "Scoreboard",
+   "en": "And then, the neural language models. <bookmark mark='a'/> GPT-2, the smallest version, from 2019: 1.17 bits. Its largest version, 1.01. <bookmark mark='b'/> Qwen3, from 2025: the 0.6 billion parameter model already matches the largest GPT-2, <bookmark mark='c'/> and four billion parameters bring it to 0.87 bits per character. <bookmark mark='d'/> For comparison, Shannon's estimate for people, on letters alone, was 0.6 to 1.3.",
+   "zh": "然后，是神经语言模型。<bookmark mark='a'/>GPT-2最小的版本，2019年：1.17比特。它最大的版本，1.01。<bookmark mark='b'/>2025年的Qwen3：6亿参数的模型就已经追平了最大的GPT-2，<bookmark mark='c'/>而40亿参数，把它降到每字符0.87比特。<bookmark mark='d'/>作为对照，香农对人的估计，只算字母，是0.6到1.3。"
+  },
+  "ff0df22fb8c8": {
+   "scene": "Scoreboard",
+   "en": "In file sizes: the passage is 21.4 kilobytes as plain text, 8.9 with gzip, <bookmark mark='a'/> and 2.3 with Qwen3 driving an arithmetic coder. <bookmark mark='b'/> The jump from counting, at 2.3 bits, to under one, is what this series is about: what these models learned, and how.",
+   "zh": "换成文件大小：这段文字存成纯文本是21.4KB，用gzip是8.9KB，<bookmark mark='a'/>用Qwen3驱动算术编码，是2.3KB。<bookmark mark='b'/>从计数的2.3比特，跳到1比特以下，这正是本系列要讲的：这些模型学到了什么，又是怎么学到的。"
+  },
+  "05777d9a7783": {
+   "scene": "Scoreboard",
+   "en": "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: <bookmark mark='a'/> better counting in part six, <bookmark mark='b'/> a neural network in part eight, <bookmark mark='c'/> and our own small transformer in part eleven, each one trained on these same thirty books, and scored on this same page.",
+   "zh": "而且记分牌还没有填完。随着系列推进，我们会搭建自己的模型，填上它们的行：<bookmark mark='a'/>第6部分是更好的计数，<bookmark mark='b'/>第8部分是一个神经网络，<bookmark mark='c'/>第11部分是我们自己的小型Transformer，每一个都用这同样的30本书训练，在这同一页上打分。"
+  },
+  "df63dab6af6c": {
+   "scene": "Outro",
+   "en": "Let's take stock. We wrote guesses down as probability distributions, and the chain rule turned them into a score for a whole text. We found that there's only one sensible measure of surprise, and that entropy, the average surprise, is the speed limit of compression. We met the price of a wrong model, the cross-entropy, and the divergence inside it. Arithmetic coding showed that predicting and compressing are the same thing. Counting models showed us generalization, by failing at it. And we derived the gradient that trains every language model: the guess, minus the truth.",
+   "zh": "我们来盘点一下。我们把猜测写成概率分布，链式法则把它们变成对整段文本的评分。我们发现，衡量意外的合理方式只有一种，而熵，也就是平均意外度，是压缩的速度极限。我们见识了错误模型的代价，交叉熵，以及藏在它里面的散度。算术编码表明，预测和压缩是同一件事。计数模型用它的失败，让我们看到了泛化。我们还推导出了训练每一个语言模型的那个梯度：猜测，减去真相。"
+  },
+  "ef5ebb2a9065": {
+   "scene": "Outro",
+   "en": "Almost everything here comes back. The chain rule is how language models generate text, and how reasoning models think out loud. Cross-entropy is the loss we'll be minimizing for the rest of the series. The two directions of the divergence return in diffusion models and in reinforcement learning. Compression returns when we study scaling, and when we look inside the models at the end.",
+   "zh": "这里几乎所有的东西都会再次出现。链式法则是语言模型生成文本的方式，也是推理模型把思考过程写出来的方式。交叉熵是本系列接下来一直要最小化的损失。散度的两个方向，会在扩散模型和强化学习里回归。压缩会在我们研究规模时回归，也会在最后我们打开模型往里看时回归。"
+  },
+  "652befbb1d56": {
+   "scene": "Outro",
+   "en": "Next time: the problem that broke counting. A counting model can't tell that a dog and a puppy are alike. <bookmark mark='a'/> Neural models can, because they represent every word as a long list of numbers, a vector, and similar words get similar vectors. In GPT-2's own vectors, dog sits close to puppy, and far from tobacco. <bookmark mark='b'/> And high-dimensional space is strange: pick two random directions in 768 dimensions, and they're almost always at right angles. There's room for an enormous number of nearly separate meanings. Part two is the linear algebra and geometry behind that.",
+   "zh": "下一次：击垮计数的那个问题。计数模型分不清dog和puppy是相似的。<bookmark mark='a'/>神经模型分得清，因为它们把每个词表示成一长串数字，也就是一个向量，相似的词得到相似的向量。在GPT-2自己的向量里，dog离puppy很近，离tobacco很远。<bookmark mark='b'/>而高维空间很奇怪：在768维里随机取两个方向，它们几乎总是互相垂直。这给极其多的、几乎互不相干的含义留出了空间。第2部分讲的，就是这背后的线性代数和几何。"
+  },
+  "8bfb3ebdf399": {
+   "scene": "Outro",
+   "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part two.",
+   "zh": "这一部分依循的是科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推断与学习算法》的前几章，两本书都走得远得多。列出的论文都值得一读，就从香农的那两篇开始。感谢观看，第2部分见。"
+  },
+  "cf45556321bd": {
+   "scene": "Codes",
+   "en": "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough for our twenty-seven symbols, <bookmark mark='a'/> so give each one a five-bit number. <bookmark mark='b'/> The falcon, ten symbols, costs fifty bits. <bookmark mark='c'/> But that's wasteful: e is almost two hundred times more common than z, and both cost five bits.",
+   "zh": "把字母变成比特，最简单的方法是定长编码。2的5次方是32，足够容纳我们的27个符号，<bookmark mark='a'/>所以给每个符号一个5位的二进制数。<bookmark mark='b'/>the falcon有10个符号，要花50比特。<bookmark mark='c'/>可这很浪费：e比z常见将近200倍，却都要花5比特。"
+  }
+ },
+ "title_en": "AI, Built: Part 1, The Guessing Game",
+ "chapters_en": {
+  "Hook": "Shannon's guessing game",
+  "Probability": "1. Probability, and the chain rule",
+  "Surprise": "2. How surprised to be",
+  "Entropy": "3. Entropy: the average surprise",
+  "Codes": "4. Codes, and the limit Shannon proved",
+  "CrossEntropy": "5. Cross-entropy and KL: the price of a wrong model",
+  "Arithmetic": "6. Arithmetic coding: prediction is compression",
+  "Counting": "7. Learning by counting",
+  "Shannon1951": "8. Shannon's 1951 experiment",
+  "Likelihood": "9. Learning: likelihood, softmax, and the gradient",
+  "Knowledge": "10. What it takes to guess well",
+  "Scoreboard": "11. The scoreboard",
+  "Outro": "Recap, and where this comes back"
+ }
+}

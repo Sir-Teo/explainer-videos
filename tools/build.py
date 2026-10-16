@@ -61,6 +61,8 @@ def master_filter(measure_cmd: list[str]) -> str:
     """Run the first loudnorm pass and return the filter for the second (linear) pass."""
     err = subprocess.run(measure_cmd, text=True, capture_output=True, check=True).stderr
     m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
+    if m["input_i"] == "-inf":  # a silent soundtrack (EXPLAINER_TTS=silent): nothing to normalize
+        return HIGHPASS
     return (f"{HIGHPASS},{LOUDNORM}:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
             f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}"
             f":offset={m['target_offset']}:linear=true")
@@ -146,6 +148,7 @@ def main():
     ap.add_argument("--lang", default="en", help="narration language (en, or zh from narration_zh.json)")
     args = ap.parse_args()
     os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
+    os.environ["EXPLAINER_VIDEO"] = args.video  # and the video's name (explainer/zh_text.py finds its series' table)
 
     manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
     scenes = manifest.SCENES

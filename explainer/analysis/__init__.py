@@ -35,7 +35,7 @@ WIDE_TEX.add_to_preamble(r"\newcommand{\R}{\mathbb{R}}\newcommand{\Q}{\mathbb{Q}
 MathTex.set_default(tex_template=WIDE_TEX)
 Tex.set_default(tex_template=WIDE_TEX)
 if os.environ.get("EXPLAINER_LANG", "en") != "en" or os.environ.get("EXPLAINER_COLLECT_TEXT"):
-    from .zh_text import install as _install_zh_text, translate as _zh
+    from explainer.zh_text import install as _install_zh_text, translate as _zh
 
     _install_zh_text(WIDE_TEX)
 else:

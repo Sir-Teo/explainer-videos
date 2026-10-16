@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from manim import DOWN, RIGHT, Arrow, RoundedRectangle, VGroup
 
-from explainer.analysis.zh_text import translate
+from explainer.zh_text import translate
 from explainer.style import BACKGROUND, C, GREY_D, TEX_TEMPLATE  # noqa: F401
 from manim import Tex
 

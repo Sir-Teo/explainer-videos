@@ -1,7 +1,9 @@
-"""On-screen text in Chinese for the Chinese masters of the analysis series.
+"""On-screen text in Chinese for the Chinese masters of a series.
 
-Every Tex / MathTex / Text string is looked up in videos/analysis/analysis_text_zh.json (keyed by the exact English string);
-strings that come out containing Chinese are typeset with xelatex + xeCJK (Fandol Song), the rest are unchanged.
+Every Tex / MathTex / Text string is looked up in the series' table, videos/<series>/<series>_text_zh.json (keyed by
+the exact English string; e.g. videos/analysis/analysis_text_zh.json); strings that come out containing Chinese are
+typeset with xelatex + xeCJK (Fandol Song), the rest are unchanged. The series is that of the video being rendered
+(EXPLAINER_VIDEO, set by tools/build.py and tools/collect_text.py), or of the scene file on manim's command line.
 EXPLAINER_COLLECT_TEXT=<file.jsonl> records every string instead, to gather what needs translating.
 """
 
@@ -11,14 +13,14 @@ import inspect
 import json
 import os
 import re
+import sys
 from pathlib import Path
 
 from manim import MathTex, Scene, Text
 
 from explainer import lang
-from explainer.paths import ANALYSIS_DATA
+from explainer.paths import ANALYSIS_DATA, VIDEOS, video_dir
 
-TABLE_PATH = ANALYSIS_DATA / "analysis_text_zh.json"
 COLLECT = os.environ.get("EXPLAINER_COLLECT_TEXT", "")
 CJK = re.compile(r"[\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]")
 _MATH = re.compile(r"\$[^$]*\$|\\\(.*?\\\)")
@@ -34,8 +36,23 @@ def needs_translation(s: str, math_mode: bool) -> bool:
     return bool(re.search(r"[A-Za-z]{2,}", s))
 
 
+def table_path() -> Path:
+    """videos/<series>/<series>_text_zh.json for the series being rendered (the analysis series by default)."""
+    series = ANALYSIS_DATA
+    if os.environ.get("EXPLAINER_VIDEO"):
+        series = video_dir(os.environ["EXPLAINER_VIDEO"]).parent
+    else:
+        for a in sys.argv:
+            p = Path(a).resolve()
+            if a.endswith(".py") and p.parent.parent.parent == VIDEOS:
+                series = p.parent.parent
+                break
+    return series / f"{series.name}_text_zh.json"
+
+
 def _table() -> dict:
-    return json.loads(TABLE_PATH.read_text()) if TABLE_PATH.exists() else {}
+    path = table_path()
+    return json.loads(path.read_text()) if path.exists() else {}
 
 
 def _scene() -> str:

@@ -4,6 +4,8 @@
     python tools/collect_text.py analysis4 [analysis5 ...]    # -> renders/qa/text/<video>.<Scene>.jsonl
     python tools/collect_text.py --check analysis4             # strings the table leaves in English
     python tools/collect_text.py --lang zh analysis4           # dry-run the Chinese build: TeX and layout asserts
+
+Any video works: the table is its series' videos/<series>/<series>_text_zh.json (see explainer/zh_text.py).
 """
 
 import importlib
@@ -21,12 +23,17 @@ sys.path.insert(0, str(ROOT))
 from explainer.paths import video_dir, video_package  # noqa: E402
 
 
-LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "en"
+ARGS = sys.argv[1:]
+LANG = "en"
+if "--lang" in ARGS:
+    i = ARGS.index("--lang")
+    LANG = ARGS[i + 1]
+    del ARGS[i:i + 2]
 
 
 def run(video, module, cls, out):
     env = dict(os.environ, EXPLAINER_TTS="silent", EXPLAINER_COLLECT_TEXT=str(out), EXPLAINER_LANG=LANG,
-               PYTHONWARNINGS="ignore")
+               EXPLAINER_VIDEO=video, PYTHONWARNINGS="ignore")
     # its own LaTeX and Text caches: sharing a build's would race with a render of the same scene (see build.py)
     media = ROOT / "media" / video / f"dry_{LANG}"
     cfg = media / "cfg" / f"{cls}.cfg"
@@ -43,7 +50,8 @@ def run(video, module, cls, out):
 def check(video):
     """Print every collected string that still shows English words once translated."""
     os.environ["EXPLAINER_LANG"] = "zh"
-    from explainer.analysis import zh_text
+    os.environ["EXPLAINER_VIDEO"] = video
+    from explainer import zh_text
     seen = {}
     for f in sorted((ROOT / "renders" / "qa" / "text").glob(f"{video}.*.jsonl")):
         for line in f.read_text().splitlines():
@@ -58,12 +66,12 @@ def check(video):
     print(f"{video}: {len(seen)} strings to translate, {len(left)} left")
 
 
-if sys.argv[1] == "--check":
-    for video in sys.argv[2:]:
+if ARGS[0] == "--check":
+    for video in ARGS[1:]:
         check(video)
     sys.exit()
 
-for video in [a for a in sys.argv[1:] if a.startswith("analysis")]:
+for video in ARGS:
     out_dir = ROOT / "renders" / "qa" / "text"
     out_dir.mkdir(parents=True, exist_ok=True)
     m = importlib.import_module(f"{video_package(video)}.manifest")

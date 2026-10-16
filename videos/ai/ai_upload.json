@@ -1,0 +1,70 @@
+{
+ "series": {
+  "en": {
+   "name": "AI, Built",
+   "playlist_title": "AI, Built: The Mathematics of Modern AI, from Probability to Frontier Models",
+   "playlist_description": "A twenty-part series on the mathematics behind modern AI models, built from the ground up: probability and information, linear algebra, calculus and randomness; classical and statistical machine learning; neural networks, optimization and scaling; attention, memory, sparsity, diffusion and tokens for every kind of data; reasoning, agents, inference, and what we find inside the models. The thread through every part is Shannon's guessing game: what do you have to know, to guess well? Every derivation is on screen, and every number shown is computed and checked.",
+   "credits": "Animations: Manim Community Edition.\nNarration: Qwen3-TTS (synthetic text-to-speech voices; the English voice is cloned from Kokoro-82M's af_heart).\nVisual style inspired by 3Blue1Brown.",
+   "computed": "Every number on screen is computed and checked; the pictures marked schematic, and the examples marked illustrative, are the exceptions.",
+   "tags": [
+    "artificial intelligence",
+    "machine learning",
+    "deep learning",
+    "large language models",
+    "mathematics",
+    "information theory",
+    "math visualization",
+    "Manim"
+   ]
+  },
+  "zh": {
+   "name": "人工智能，从零搭建",
+   "playlist_title": "人工智能，从零搭建 | AI, Built",
+   "playlist_description": "二十集系列，从零搭建现代人工智能模型背后的数学：概率与信息、线性代数、微积分与随机性；经典与统计机器学习；神经网络、优化与规模；注意力、记忆、稀疏性、扩散，以及各种数据的词元；推理、智能体、推断，以及打开模型后我们看到的东西。贯穿每一集的主线是香农的猜字游戏：要猜得好，你得知道些什么？每一步推导都在屏幕上完成，画面上的每个数字都经过计算和核对。中文配音、中文字幕，原创动画。",
+   "credits": "动画：Manim Community Edition。\n旁白：Qwen3-TTS 合成语音（AI生成；英文版声音克隆自 Kokoro-82M 的 af_heart）。\n视觉风格致敬 3Blue1Brown。",
+   "computed": "画面上的每个数字都经过计算和核对；标注为示意图或示例的画面除外。",
+   "tags": [
+    "人工智能",
+    "机器学习",
+    "深度学习",
+    "大语言模型",
+    "信息论",
+    "数学可视化",
+    "Manim"
+   ]
+  }
+ },
+ "parts": {
+  "ai1": {
+   "short_en": "The Guessing Game",
+   "short_zh": "猜字游戏",
+   "summary_en": "Part 1 of a twenty-part series on the mathematics of modern AI. In 1951 Claude Shannon asked people to guess the next letter of English text; today every large language model is trained to play the same game. We build the mathematics of guessing from scratch: probability and the chain rule, the one sensible measure of surprise, entropy, prefix codes, Kraft's inequality and Huffman's algorithm, cross-entropy and the Kullback–Leibler divergence (and why it isn't symmetric), arithmetic coding, and why predicting and compressing are the same thing. We learn by counting on thirty novels, watch counting models fail to generalize, replay Shannon's experiment, and derive the gradient that trains every language model. Then we keep score on a page of The Maltese Falcon, which entered the public domain in 2026: from 8 bits per character as plain text, to 2.3 for counting, to 0.87 for Qwen3.",
+   "summary_zh": "二十集系列的第1部分：现代人工智能背后的数学。1951年，克劳德·香农请人猜英语文本的下一个字母；今天，每一个大语言模型都被训练去玩同一个游戏。我们从零搭建“猜”的数学：概率与链式法则、唯一合理的意外度、熵、前缀码、克拉夫特不等式与霍夫曼编码、交叉熵与KL散度（以及它为什么不对称）、算术编码，以及为什么预测与压缩是同一件事。我们在30部小说上用计数来学习，看计数模型如何无法泛化，重演香农的实验，并推导出训练每个语言模型的那个梯度。最后，在2026年进入公有领域的《马耳他之鹰》的一页上记分：纯文本每字符8比特，计数模型2.3比特，Qwen3只要0.87比特。",
+   "tags_en": [
+    "Claude Shannon",
+    "entropy",
+    "cross-entropy",
+    "KL divergence",
+    "Huffman coding",
+    "arithmetic coding",
+    "compression"
+   ],
+   "tags_zh": [
+    "香农",
+    "熵",
+    "交叉熵",
+    "KL散度",
+    "算术编码"
+   ],
+   "thumb": {
+    "t480": 40.0,
+    "crop": [
+     0.03,
+     0.12,
+     0.97,
+     0.72
+    ]
+   }
+  }
+ }
+}
