@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from manim import DOWN, RIGHT, Arrow, RoundedRectangle, VGroup
 
+from explainer.analysis.zh_text import translate
 from explainer.style import BACKGROUND, C, GREY_D, TEX_TEMPLATE  # noqa: F401
 from manim import Tex
 
@@ -42,6 +43,9 @@ def _split(s: str):
 
 def _fit(text: str, prefix: str, font_size, inner: float):
     """The step's Tex at its font size; too wide, it goes onto two centred lines before it is ever shrunk."""
+    whole = translate(prefix + text)  # a Chinese build wraps the Chinese, not the English it came from
+    if whole.startswith(prefix):
+        text = whole[len(prefix):]
     t = Tex(prefix + text, font_size=font_size, tex_template=TEX_TEMPLATE)
     if t.width <= inner:
         return t
