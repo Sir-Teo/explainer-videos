@@ -19,7 +19,7 @@ every video builds from source. Each `videos/<name>/README.md` has the outline a
 | General Relativity, Derived | 69 min | `python -m videos.relativity.compute && python tools/build.py relativity` |
 | General Relativity, Part 2 | 56 min | `python -m videos.relativity2.compute && python tools/build.py relativity2` |
 | Quantum Mechanics, Part 2 | 57 min | `python -m videos.quantum2.compute && python tools/build.py quantum2` |
-| Analysis, Built (10 parts: real, complex and functional analysis) | 6 h | `python -m videos.analysisN.compute && python tools/build.py analysisN` |
+| Analysis, Built (10 parts: real, complex and functional analysis; English and Chinese) | 5 h 20 min | `python -m videos.analysisN.compute && python tools/build.py analysisN` |
 
 ## Setup
 
