@@ -255,6 +255,8 @@ def texts(video: str, lang: str, ver: dict, rev: str) -> dict:
                      f"{part['summary_en']}\n\n章节 / Chapters\n{yt_ch}\n\n源代码：{src}\n\n{zh['credits']}")
     else:
         yt_title = f"{title_zh} | {title_en} (中文)"
+        if len(yt_title) > 100:  # a long part name: keep the Chinese whole, shorten the English
+            yt_title = f"{title_zh} | {en['name']}, Part {n} (中文)"
         yt_desc = (f"{part['summary_zh']}\n\n{zh['computed']}\n\n{part['summary_en']}\n\n章节 / Chapters\n{yt_ch}\n\n"
                    f"源代码 / Source code:\n{src}\n\n{zh['credits']}\n{en['credits']}\n")
         bili_title = title_zh
