@@ -304,7 +304,7 @@ class Series(VoiceoverScene):
         thm = VGroup(label(r"\textbf{Condensation} (Rudin 3.27) \ If $a_1 \ge a_2 \ge \cdots \ge 0$:", font_size=30),
                      MathTex(r"\sum_{n=1}^\infty a_n \text{ converges} \iff \sum_{k=0}^\infty 2^k a_{2^k}"
                              r"\text{ converges}", font_size=36)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
-        ex = MathTex(r"a_n = n^{-3/2}", font_size=32, color=C.SEQ).move_to([3.6, 1.2, 0])
+        ex = MathTex(r"a_n = n^{-3/2}", font_size=32, color=C.SEQ).move_to([-4.6, 1.2, 0])  # clear of both captions
         ups, los = VGroup(), VGroup()
         for k in range(0, 5):
             lo, hi = 2**k, 2 ** (k + 1) - 1
@@ -327,6 +327,7 @@ class Series(VoiceoverScene):
                       label(r"a box of height $a_{2^{k+1}}$:", font_size=26, color=C.LOWER_SUM),
                       MathTex(r"s_{2^{k}} \ge \tfrac12 \sum_{j \le k} 2^j a_{2^j}", font_size=34, color=C.LOWER_SUM)
                       ).arrange(DOWN, buff=0.12).move_to([3.6, 0.8, 0])
+        assert ex.get_right()[0] < up_t.get_left()[0] - 0.2 and ex.get_bottom()[1] > bs.get_top()[1] + 0.15
         # the bars as a plot (bar n over [n - 1, n]), and a vertical magnifier on n = 8 .. 32, where the boxes are thin
         src = Axes(x_range=[0, n_max, 1], y_range=[0, 1, 1], x_length=n_max * self.W, y_length=self.H, tips=False,
                    axis_config={"stroke_opacity": 0, "include_ticks": False})
