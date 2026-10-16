@@ -447,7 +447,7 @@ def compute_arith():
     for i, s in enumerate(a):
         ctx = (pad + list(a[:i]))[-3:]
         nj, nc = m.counts(np.full(27, m.key(ctx), np.int64), np.arange(27))
-        probs = [Fraction(int(nj[k]) * 100 + 1, int(nc[k]) * 100 + 27) for k in range(27)]
+        probs = [(int(nj[k]) + alpha) / (int(nc[k]) + 27 * alpha) for k in range(27)]
         assert sum(probs) == 1
         cum = sum(probs[:s], Fraction(0))
         steps.append(dict(symbol=ALPHA27[s], context="".join(ALPHA27[c] for c in ctx),
@@ -470,7 +470,7 @@ def compute_arith():
     for i in range(len(a)):
         ctx = (pad + [ALPHA27.index(c) for c in out])[-3:]
         nj, nc = m.counts(np.full(27, m.key(ctx), np.int64), np.arange(27))
-        probs = [Fraction(int(nj[k]) * 100 + 1, int(nc[k]) * 100 + 27) for k in range(27)]
+        probs = [(int(nj[k]) + alpha) / (int(nc[k]) + 27 * alpha) for k in range(27)]
         cum = Fraction(0)
         for k in range(27):
             if v < lo2 + w2 * (cum + probs[k]):

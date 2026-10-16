@@ -115,7 +115,7 @@ class CrossEntropy(VoiceoverScene):
             r[0].set_color(C.MODEL_Q)
         rows[1][2].set_color(C.ENTROPY)
         rows[1][4].set_color(C.KL)
-        g = VGroup(*rows).arrange(DOWN, buff=0.5).move_to(UP * 1.4)
+        VGroup(*rows).arrange(DOWN, buff=0.5).move_to(UP * 1.4)
         b1 = Brace(rows[1][2], DOWN, color=C.ENTROPY)
         b2 = Brace(rows[1][4], DOWN, color=C.KL)
         t1 = label(r"the price of the world's\\ own randomness", font_size=24, color=C.ENTROPY).next_to(b1, DOWN)
@@ -244,7 +244,7 @@ class CrossEntropy(VoiceoverScene):
         assert abs(fwd[-1, 0] + 0.40) < 0.01 and abs(fwd[-1, 1] - 2.15) < 0.01
         assert abs(ra[-1, 0] + 1.99) < 0.01 and abs(ra[-1, 1] - 0.66) < 0.01
         head = label(r"$D_{\mathrm{KL}}$ is not symmetric", font_size=38).to_edge(UP, buff=0.35)
-        axes, curves, qs, reads = [], [], [], []
+        axes, qs = [], []
         trackers = []
         for k, (title, path, col) in enumerate([
             (r"$\min_q D_{\mathrm{KL}}(p \,\|\, q)$: \ cover everything $p$ does", fwd, C.MODEL_Q),

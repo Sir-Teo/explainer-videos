@@ -126,9 +126,11 @@ class Probability(VoiceoverScene):
                         for i in range(27)])
         cols = VGroup(*[letter(ALPHA27[j], font_size=13, color=GREY_B).move_to([x0 + (j + 0.5) * cell, y0 + 0.15, 0])
                         for j in range(27)])
-        rl = label(r"previous", font_size=20, color=GREY_B).rotate(PI / 2).next_to(rows, LEFT, buff=0.12)
+        rl = label(r"previous", font_size=20, color=GREY_B)
+        if not zh():  # Chinese reads top to bottom unrotated (the table sets it as a vertical stack)
+            rl.rotate(PI / 2)
+        rl.next_to(rows, LEFT, buff=0.12)
         cl = label(r"next", font_size=20, color=GREY_B).next_to(cols, UP, buff=0.1)
-        heat = VGroup(grid, rows, cols, rl, cl)
         qi, ui = ALPHA27.index("q"), ALPHA27.index("u")
         assert b["q_u"] > 0.998
         q_row = SurroundingRectangle(VGroup(*grid[qi * 27:(qi + 1) * 27]), color=C.CONTEXT, buff=0.02, stroke_width=2.5)

@@ -89,7 +89,7 @@ class Surprise(VoiceoverScene):
         pair = VGroup(coin, MathTex(r"\text{and}", font_size=28, color=GREY_B), die).arrange(RIGHT, buff=0.35)
         eq = mtex(r"P = \tfrac12 \times \tfrac16 = \tfrac1{12} \qquad s\!\left(\tfrac1{12}\right) = "
                   r"s\!\left(\tfrac12\right) + s\!\left(\tfrac16\right)", font_size=34, color=C.BITS)
-        demo = VGroup(pair, eq).arrange(RIGHT, buff=0.7).to_edge(DOWN, buff=0.7)
+        VGroup(pair, eq).arrange(RIGHT, buff=0.7).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. What "
             "should s be? <bookmark mark='a'/> Shannon asked for a few modest things. It should depend only on p. "
@@ -211,7 +211,6 @@ class Surprise(VoiceoverScene):
         W = 12.0
         frame = Rectangle(width=W, height=0.5, stroke_width=1.5, stroke_color=GREY_C).move_to(UP * 1.6)
         bar = Rectangle(width=W, height=0.5, stroke_width=0, fill_color=C.BITS, fill_opacity=0.95).move_to(UP * 1.6)
-        rows, kept = VGroup(), []
         lo, w = 0.0, 1.0
         rng = np.random.default_rng(11)
         choices = rng.integers(0, 2, 10)

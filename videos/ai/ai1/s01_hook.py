@@ -200,7 +200,6 @@ class Hook(VoiceoverScene):
         ys2 = 0.45 * np.sin(9 * xs2) * np.cos(2.3 * xs2) + 0.08 * np.sin(31 * xs2)
         wave2 = DashedVMobject(VMobject(color=C.MODEL_Q, stroke_width=2.5).set_points_smoothly(
             [centers[2] + np.array([x, y, 0]) for x, y in zip(xs2, ys2)]), num_dashes=12)
-        snd_p = VGroup(wave, wave2)
         # robots: the next action
         path_pts = [centers[3] + np.array([-1.1 + 0.25 * k, -0.6 + 0.9 * np.sin(0.35 * k) ** 2, 0]) for k in range(7)]
         dots = VGroup(*[Dot(p_, radius=0.06, color=C.TRUE_P) for p_ in path_pts])

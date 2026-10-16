@@ -111,9 +111,14 @@ class Arithmetic(VoiceoverScene):
             return VGroup(g, dec)
 
         tot = ValueTracker(0.0)
-        tot_lab = always_redraw(lambda: MathTex(
-            rf"\log_2 \tfrac{{1}}{{\text{{width}}}} = {tot.get_value():.2f} \ \text{{bits}}", font_size=28,
-            color=C.INTERVAL).to_corner(UR, buff=0.35).shift(DOWN * 0.55))
+        # a fixed label and a DecimalNumber (cached digits), so the readout isn't re-typeset every frame
+        tot_head = MathTex(r"\log_2 \tfrac{1}{\text{width}} =", font_size=28, color=C.INTERVAL)
+        tot_num = DecimalNumber(0, num_decimal_places=2, font_size=28, color=C.INTERVAL)
+        tot_unit = MathTex(r"\text{bits}", font_size=28, color=C.INTERVAL)
+        tot_lab = VGroup(tot_head, tot_num, tot_unit).arrange(RIGHT, buff=0.12).to_corner(UR, buff=0.35)
+        tot_lab.shift(DOWN * 0.55 + LEFT * 0.35)  # room for the number to grow to two digits
+        tot_num.add_updater(lambda m: m.set_value(tot.get_value()).next_to(tot_head, RIGHT, buff=0.12))
+        tot_unit.add_updater(lambda m: m.next_to(tot_num, RIGHT, buff=0.12))
         shown = []  # (row, funnel, ctx, read) on screen, oldest first
         lines = None
 
@@ -179,7 +184,8 @@ class Arithmetic(VoiceoverScene):
             assert steps[7]["symbol"] == "c" and steps[7]["p"] < 0.01 and abs(steps[7]["bits"] - 7.0) < 0.05
             row_c = next(g for g in shown if g[0] is not None and g[3] is not None and "0.008" in g[3].tex_string)
             self.play(Indicate(row_c[3], color=C.SURPRISE), Indicate(row_c[0], color=C.SURPRISE, scale_factor=1.02))
-        tot_lab.clear_updaters()
+        tot_num.clear_updaters()
+        tot_unit.clear_updaters()
         self.lines = lines
         self.wait(0.3)
         self.clear_scene()

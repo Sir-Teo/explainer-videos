@@ -36,7 +36,10 @@ class Shannon1951(VoiceoverScene):
         for k, (title, col) in enumerate(((r"guesser", C.GUESS), (r"identical twin", C.GUESS))):
             b = RoundedRectangle(width=2.6, height=1.2, corner_radius=0.15, color=col, stroke_width=3)
             b.move_to([-4.6 + 9.2 * k, 0.2, 0])
-            boxes.add(VGroup(b, label(title, font_size=26, color=col).move_to(b)))
+            t = label(title, font_size=26, color=col)
+            if t.width > b.width - 0.4:
+                t.scale_to_fit_width(b.width - 0.4)
+            boxes.add(VGroup(b, t.move_to(b)))
         sender = label(r"sender", font_size=24, color=GREY_B).next_to(boxes[0], DOWN, buff=0.2)
         receiver = label(r"receiver", font_size=24, color=GREY_B).next_to(boxes[1], DOWN, buff=0.2)
         nums.move_to([0, 0.2, 0])
