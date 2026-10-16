@@ -42,6 +42,7 @@ class Integral(VoiceoverScene):
                               r"0 \le s \le f,\ s \text{ simple}\Big\}", r"\quad \text{\small (RCA 1.23)}", font_size=32,
                               color=C.MEASURE)
                       ).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
+        assert head.width < 13.4
         head[1][1].set_color(GREY_B)
         tab = VGroup(MathTex(r"n", r"\quad \int s_n", font_size=28, color=GREY_A))
         for k in range(8):

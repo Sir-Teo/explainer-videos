@@ -144,6 +144,7 @@ class Lp(VoiceoverScene):
             label(r"a class has no value at a single point; \ chapter 13 recovers", font_size=22, color=GREY_A),
             label(r"values almost everywhere \ (Lebesgue points)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([3.5, -2.35, 0])
+        assert facts.get_right()[0] < 6.9
         head = VGroup(label(r"What is a point of $L^p$?", font_size=34),
                       label(r"\textbf{RCA 3.10} \ functions equal almost everywhere are the same element of $L^p$",
                             font_size=26)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.3)
