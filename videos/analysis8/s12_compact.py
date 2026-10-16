@@ -54,6 +54,7 @@ class Compact(VoiceoverScene):
             label(r"$T$ compact $\Rightarrow$ $T^*$ compact \ (4.19)", font_size=24),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, -0.4, 0])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to([2.2, -0.4, 0], RIGHT, buff=0)
+        assert rows.get_right()[0] <= 6.6
         head = label(r"Compact operators squeeze the ball into something thin", font_size=34).to_edge(UP, buff=0.3)
         with self.voiceover(
             "<bookmark mark='a'/> An operator is compact if it sends the unit ball into a set with compact closure. "
