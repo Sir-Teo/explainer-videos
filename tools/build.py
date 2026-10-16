@@ -153,6 +153,12 @@ def main():
 
     if not args.stitch_only:
         todo = [s for s in scenes if not args.only or s[1] in args.only]
+        # longest first (by any earlier render of the scene), so the last job running alone is a short one
+        def est(s):
+            done = [p for d in (args.video, f"{args.video}_*")
+                    for p in (ROOT / "media").glob(f"{d}/**/videos/{s[0]}/*/{s[1]}.mp4")]
+            return max((ffprobe_duration(p) for p in done), default=0.0)
+        todo.sort(key=est, reverse=True)
         print(f"Rendering {len(todo)} scene(s) at {QUALITY[args.quality]}{args.fps} with {args.jobs} job(s)...")
         failed = []
         with ThreadPoolExecutor(args.jobs) as pool:
