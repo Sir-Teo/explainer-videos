@@ -1,0 +1,112 @@
+{
+ "title": "人工智能，从零搭建 · 第7部分：拟合与泛化",
+ "chapters": {
+  "Hook": "差距",
+  "BiasVariance": "1. 偏差与方差",
+  "Capacity": "2. 模型能拟合多少？",
+  "RandomLabels": "3. 记住毫无意义的东西",
+  "DoubleDescent": "4. 双下降",
+  "Outro": "回顾，以及这些想法会在哪里再现"
+ },
+ "lines": {
+  "ff87e036448d": {
+   "scene": "Hook",
+   "en": "In part five, a model that asked only its single nearest neighbour got 93 percent of its own training pages right, and only 68 percent of new ones. <bookmark mark='a'/> Let more neighbours vote, and the two error rates meet. <bookmark mark='b'/> That gap is the central question of machine learning. A model is fitted to examples. Why should it work on anything else?",
+   "zh": "在第5部分，有一个模型只问离它最近的1个邻居，它对自己的训练页能判对93%，对新的书页却只有68%。<bookmark mark='a'/>让更多的邻居来投票，两个错误率就会汇到一起。<bookmark mark='b'/>这道差距，正是机器学习的核心问题。模型是根据样本拟合出来的。凭什么它在别的东西上也管用？"
+  },
+  "c655545fba1d": {
+   "scene": "Hook",
+   "en": "This part follows that question through the classical answers, bias and variance, and the capacity of a model, <bookmark mark='a'/> and then to two experiments that broke them: networks that memorize nonsense, and a curve that comes back down.",
+   "zh": "这一部分，就顺着这个问题走下去：先看经典的回答，偏差与方差，还有模型的容量，<bookmark mark='a'/>再看推翻了它们的两个实验：能把毫无意义的东西背下来的网络，还有一条又降回来的曲线。"
+  },
+  "7fb9a5fdcff9": {
+   "scene": "BiasVariance",
+   "en": "Chapter one. Bias and variance.",
+   "zh": "第1章。偏差与方差。"
+  },
+  "f6dc3f44aa96": {
+   "scene": "BiasVariance",
+   "en": "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit again, and again: it misses the curve's shape in the same way every time. That systematic miss is bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: it threads the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree 5, the fits hug the truth.",
+   "zh": "先来看经典的回答，放在一个小到能看清一切的场景里：一条光滑的曲线，还有从它上面抽取的16个带噪声的点。<bookmark mark='a'/>拟合一条直线。再抽16个新的点，重新拟合，一次又一次：它每次都以同样的方式，抓不住曲线的形状。这种系统性的偏离，就是偏差。<bookmark mark='b'/>拟合一个12次多项式：它把这些点一个个串了起来，但每抽一批新的点，得到的曲线都大不相同。这就是方差。<bookmark mark='c'/>介于两者之间，在5次时，拟合出的曲线紧贴着真实曲线。"
+  },
+  "83bff41bc08f": {
+   "scene": "BiasVariance",
+   "en": "Averaged over many draws, the error on new data splits exactly into three parts. <bookmark mark='a'/> Bias squared: how far the average fit is from the truth. It falls as the model gets more flexible. <bookmark mark='b'/> Variance: how much the fit jumps from draw to draw. It rises. <bookmark mark='c'/> And the noise, which no model can remove. Their sum is a U, and the best model sits at its bottom: flexible enough, but no more. For thirty years, that was the textbook picture.",
+   "zh": "对许多次抽样取平均，模型在新数据上的误差，恰好能拆成三部分。<bookmark mark='a'/>偏差的平方：平均的拟合结果离真相有多远。模型越灵活，它就越小。<bookmark mark='b'/>方差：拟合结果在一次次抽样之间跳动得有多厉害。它会变大。<bookmark mark='c'/>还有噪声，任何模型都消除不了。三者之和是一个U形，最好的模型就待在U形的底部：足够灵活，但不过头。30年来，这就是教科书里的图景。"
+  },
+  "b56078039d61": {
+   "scene": "Capacity",
+   "en": "Chapter two. Measuring how much a model can fit.",
+   "zh": "第2章。衡量一个模型能拟合多少。"
+  },
+  "23a1afbf27a1": {
+   "scene": "Capacity",
+   "en": "Here's the classical way to measure what a family of models can fit. Take straight lines in the plane, and three points. <bookmark mark='a'/> Colour the points any of the eight possible ways, and some line separates the colours every time. <bookmark mark='b'/> With four points, it fails: these two labellings can't be split by any line. <bookmark mark='c'/> The largest number of points a family can split in every way is its VC dimension, after Vapnik and Chervonenkis: three, for lines in the plane. <bookmark mark='d'/> And it buys a guarantee: with n examples, the error on new data exceeds the training error by at most about the square root of d over n.",
+   "zh": "衡量一族模型能拟合什么，经典的办法是这样的。取平面上的直线，再取3个点。<bookmark mark='a'/>给这些点涂色，8种可能的涂法，无论哪一种，每次都有某条直线能把两种颜色分开。<bookmark mark='b'/>换成4个点，就不行了：这两种标注方式，哪条直线都分不开。<bookmark mark='c'/>一族模型能按所有方式分开的最大点数，就是它的VC维，以瓦普尼克与切尔沃嫩基斯命名：平面上的直线，VC维是3。<bookmark mark='d'/>它还换来了一个保证：有n个样本时，在新数据上的误差，至多比训练误差高出大约n分之d的平方根。"
+  },
+  "3861f9462219": {
+   "scene": "Capacity",
+   "en": "There's a more direct test. Give each of the training pages a random label, a coin flip, and ask a linear model to fit them. <bookmark mark='a'/> Using one word rate, it gets barely more than half. Using all seventy, it fits 68 percent of the coin flips: pure noise. <bookmark mark='b'/> The better a family can fit noise, the less a good training score proves. That's Rademacher complexity, and like the VC dimension, it grows with the number of things a model can adjust.",
+   "zh": "还有一个更直接的检验。给每一个训练页一个随机标签，也就是抛硬币，再让一个线性模型去拟合它们。<bookmark mark='a'/>只用1个词频，它只能拟合对一半多一点点。用上全部70个，它能拟合68%的抛硬币结果：而那是纯粹的噪声。<bookmark mark='b'/>一族模型越能拟合噪声，好的训练成绩就越说明不了什么。这就是拉德马赫复杂度，它和VC维一样，随着模型能调节的东西的数量而增长。"
+  },
+  "92b83c1fe1b9": {
+   "scene": "RandomLabels",
+   "en": "Chapter three. Memorizing nonsense.",
+   "zh": "第3章。记住毫无意义的东西。"
+  },
+  "043ab92a88bb": {
+   "scene": "RandomLabels",
+   "en": "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a network, here with about 300 thousand weights, and train it on the 448 training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets 99.5 percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so every label is random. Same network, same training.",
+   "zh": "2016年，张驰原和同事们做了一个实验，打破了经典的图景。拿一个网络，这里的网络大约有30万个权重，用448个训练页和它们真实的作者来训练它。<bookmark mark='a'/>它把这些全都拟合了，在新的书页上判对99.5%。<bookmark mark='b'/>现在，把作者打乱，让每个标签都是随机的。同一个网络，同样的训练。"
+  },
+  "f74f0d6de138": {
+   "scene": "RandomLabels",
+   "en": "It fits these too, every one of them, only a little more slowly. It has memorized nonsense. <bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same network can memorize anything at all. Then counting what a model could fit can't explain why, given real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers simple answers. Why, exactly, is still being worked out.",
+   "zh": "这些它也拟合了，一个不落，只是稍微慢了一点。它记住的，是毫无意义的东西。<bookmark mark='a'/>而在新的书页上，它和瞎猜一样，这也是必然的。<bookmark mark='b'/>所以，同一个网络，什么都记得住。那么，数一数模型能拟合什么，就解释不了：为什么给它真实的标签时，它找到的却是一条在新的书页上也管用的规律，而不是死记硬背。它的训练方式里，有某种东西偏爱简单的答案。确切的原因，至今仍在研究之中。"
+  },
+  "826660b4e42d": {
+   "scene": "DoubleDescent",
+   "en": "Chapter four. Double descent.",
+   "zh": "第4章。双下降。"
+  },
+  "5b9368f1310e": {
+   "scene": "DoubleDescent",
+   "en": "Here's the curve that came back. Turn each page into p random features, and fit them by least squares. When there are more features than pages, many fits match every training page exactly, so take the one with the smallest weights. <bookmark mark='a'/> With few features, the error on new pages falls, then rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly 448 features, as many as there are pages, the fit is forced through every point, and the error explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of the U.",
+   "zh": "这就是那条又降回来的曲线。把每一页变成p个随机特征，再用最小二乘法来拟合。当特征比书页还多时，有许多种拟合都能恰好对上每一个训练页，那就取权重最小的那一个。<bookmark mark='a'/>特征很少时，在新的书页上的误差先是下降，然后随着p接近书页的数量，又升了上去：这就是经典的U形。<bookmark mark='b'/>恰好在448个特征时，特征和书页一样多，拟合被迫穿过每一个点，误差一下子爆炸了。<bookmark mark='c'/>然后，过了这一点，误差又降了回来，比U形的底部还要低。"
+  },
+  "2ec81378fa11": {
+   "scene": "DoubleDescent",
+   "en": "More parameters than data, and better on new data. Belkin and colleagues named it double descent in 2019, and it turns up in deep networks too. <bookmark mark='a'/> The training error is zero all along the second descent, so it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is the simplest. Gradient descent, as part nine shows, quietly prefers fits like that.",
+   "zh": "参数比数据还多，在新数据上反而更好。2019年，贝尔金和同事们把它命名为双下降，在深度网络里，它也会出现。<bookmark mark='a'/>在整个第二次下降中，训练误差一直是零，所以起决定作用的不可能是它。起决定作用的，是你得到的是众多完全拟合中的哪一个，而权重最小的那一个，就是最简单的。梯度下降会悄悄地偏爱这样的拟合，第9部分会说明这一点。"
+  },
+  "1d5c758e47a8": {
+   "scene": "Outro",
+   "en": "Let's take stock. A model's error on new data is what matters, and it can be far from its error on the data it learned from. The classical story splits that error into bias, variance and noise, and bounds it by capacity: how many points a model can split every way, how well it can fit coin flips. Then networks memorized pure nonsense, and still generalized on real labels; and test error, past the point of fitting everything exactly, came back down.",
+   "zh": "我们来盘点一下。要紧的，是模型在新数据上的误差，而它可能和模型在自己学过的数据上的误差相差很远。经典的说法，把这个误差拆成偏差、方差和噪声，再用容量给它定一个上界：一个模型能按所有方式分开多少个点，它能把抛硬币拟合得多好。后来，网络连毫无意义的东西都能统统背下来，在真实的标签上却依然能泛化；而测试误差，过了把一切都恰好拟合的那个点之后，又降了回来。"
+  },
+  "4b04028ef404": {
+   "scene": "Outro",
+   "en": "Held-out data stays the honest score, from scaling laws in part ten to evaluating reasoning models in part seventeen. Which of the many fits training finds is the subject of part nine. Models far bigger than their data are the subject of part ten. And memorization, of facts and of text, comes back when we look inside models.",
+   "zh": "留出的数据，始终是诚实的评分，从第10部分的规模定律，到第17部分对推理模型的评估。训练会在众多拟合中找到哪一个，是第9部分的主题。比数据大得多的模型，是第10部分的主题。而记忆，对事实的记忆和对文本的记忆，会在我们打开模型往里看时再次出现。"
+  },
+  "b12ab9fff0fb": {
+   "scene": "Outro",
+   "en": "Next time: networks themselves. Why a stack of simple layers can approximate any function, how depth cuts space into pieces, how to start and keep signals alive through many layers. <bookmark mark='a'/> And the first neural language model joins the scoreboard.",
+   "zh": "下一次：网络本身。为什么把简单的层叠起来，就能逼近任何函数；深度怎样把空间切成一块一块；怎样初始化，又怎样让信号穿过许多层还不消失。<bookmark mark='a'/>而第一个神经语言模型，也会登上记分牌。"
+  },
+  "3b976054902c": {
+   "scene": "Outro",
+   "en": "Shalev-Shwartz and Ben-David's Understanding Machine Learning is the clearest book on the theory. Thanks for watching, and see you in part eight.",
+   "zh": "沙莱夫-施瓦茨与本-大卫的《深入理解机器学习》，是讲这套理论最清楚的一本书。感谢观看，第8部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 7, Fitting and Generalizing",
+ "chapters_en": {
+  "Hook": "The gap",
+  "BiasVariance": "1. Bias and variance",
+  "Capacity": "2. How much can a model fit?",
+  "RandomLabels": "3. Memorizing nonsense",
+  "DoubleDescent": "4. Double descent",
+  "Outro": "Recap, and where this comes back"
+ }
+}
