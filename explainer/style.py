@@ -281,6 +281,21 @@ C = SimpleNamespace(
     TEST_FN="#9BE37B",  # test functions (bumps)
     DISTRIBUTION="#FF6B8B",  # distributions, delta, principal values
     PATHOLOGY="#FF5C5C",  # counterexamples: the museum's red corner tag
+    # AI, Built (videos/ai/ai1-20).  One meaning per color across the series; reuses PROB (green) for predicted
+    # probabilities, ENTROPY (light pink), KL (gold), LOSS (maroon) and the LLM colors (TOKEN, QUERY, KEY, VALUE, ...).
+    TRUE_P="#58A6FF",  # p: the data, the world, the true distribution
+    MODEL_Q="#FF9F45",  # q: the model's distribution, its guesses
+    SURPRISE="#FF6B8B",  # -log p: surprise, information content
+    BITS="#F7D154",  # bits, code lengths, codewords
+    BIT0="#4FA3D9",  # the 0 branch of a code tree
+    BIT1="#F2A541",  # the 1 branch
+    INTERVAL="#5BD17A",  # the arithmetic coder's interval, chain-rule slivers
+    CONTEXT="#B39DDB",  # the context a prediction is conditioned on
+    GUESS="#E8C547",  # the guessing game: guess counts, guessers
+    COUNTING="#9BE37B",  # counting models (n-grams) on the scoreboard
+    COMPRESSOR="#94A3B8",  # general-purpose compressors (gzip, bzip2, xz)
+    NEURAL="#D4A5FF",  # neural language models on the scoreboard
+    HUMAN="#FFB070",  # people (Shannon's subjects)
     # UI
     TEXT=WHITE,
     DIM=GREY_B,

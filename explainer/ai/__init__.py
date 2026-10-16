@@ -1,0 +1,280 @@
+"""Shared instruments for the AI series (videos/ai/ai1 ... ai20), *AI, Built*.
+
+    from explainer.ai import *
+
+The text helpers and the derivation ladder are the analysis series' (``explainer.analysis``: ``label``, ``note``,
+``mtex``, ``why``, ``ladder``, ``boxed``, ``wrapped_label``, ...), so the two series typeset alike and share the
+Chinese on-screen text machinery (``explainer/zh_text.py``, with this series' own table,
+``videos/ai/ai_text_zh.json``).  Here, the devices that hold this series together:
+
+* :func:`chapter_card` with the **timeline strip**, 1940-2030, the history of the ideas lit as the series reaches them;
+* :func:`series_map`, the twenty parts in four acts, with the current part lit;
+* :func:`scoreboard`, the series' running record: bits per character on one fixed passage, one row per model, filled
+  in as the parts build the models (Part 1 computes the passage and the first rows, ``.cache/ai1/scoreboard.json``);
+* :func:`payoff_card`, "where this comes back": an idea and the later parts that use it;
+* :func:`reference_card`, the books and papers a part follows, and :func:`cite`, a source line on screen.
+"""
+
+from __future__ import annotations
+
+import os
+
+import numpy as np
+
+from explainer.analysis import *  # noqa: F401,F403
+from explainer.analysis import _zh, label, note, wrapped_label  # noqa: F401
+
+SERIES_EN = "AI, Built"
+SERIES_ZH = "人工智能，从零搭建"
+
+
+def zh() -> bool:
+    return os.environ.get("EXPLAINER_LANG", "en") == "zh"
+
+
+# ---------------------------------------------------------------------------
+# The twenty parts
+# ---------------------------------------------------------------------------
+ACTS = [
+    (r"I.\ Foundations", (1, 4)),
+    (r"II.\ Learning", (5, 10)),
+    (r"III.\ Engines", (11, 16)),
+    (r"IV.\ Agency", (17, 20)),
+]
+PARTS = {
+    1: r"The Guessing Game", 2: r"Vectors That Mean Things", 3: r"Change", 4: r"Randomness in Motion",
+    5: r"Classical ML", 6: r"Statistical ML", 7: r"Fitting and Generalizing", 8: r"Networks",
+    9: r"Going Downhill", 10: r"The Mathematics of Scale",
+    11: r"Attention as Geometry", 12: r"Memory", 13: r"Sparsity", 14: r"Diffusion and Flow",
+    15: r"Images and Video", 16: r"Every Sense Is a Token",
+    17: r"Reasoning", 18: r"Agents and Worlds", 19: r"Inference", 20: r"Inside the Model",
+}
+
+
+def series_map(current: int | None = None, done: int = 0, font_size=21, width=13.2) -> VGroup:
+    """Four columns, one per act; each part a row.  Parts up to ``done`` are white, ``current`` is lit and boxed,
+    the rest are dim."""
+    cols = VGroup()
+    for act, (a, b) in ACTS:
+        head = label(act, font_size=font_size + 5, color=GREY_A)
+        rows = VGroup()
+        for p in range(a, b + 1):
+            color = C.BITS if p == current else (WHITE if p <= done else GREY_C)
+            rows.add(label(rf"{p}.\ {PARTS[p]}", font_size=font_size, color=color))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        col = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
+        col.head, col.rows = head, rows
+        cols.add(col)
+    cols.arrange(RIGHT, aligned_edge=UP, buff=0.55)
+    if cols.width > width:
+        cols.width = width
+    g = VGroup(cols)
+    g.cols = cols
+    g.part = {}
+    for col, (_, (a, b)) in zip(cols, ACTS):
+        for p, row in zip(range(a, b + 1), col.rows):
+            g.part[p] = row
+    if current is not None:
+        box = SurroundingRectangle(g.part[current], color=C.BITS, buff=0.1, corner_radius=0.08, stroke_width=2)
+        g.add(box)
+        g.box = box
+    return g.move_to(ORIGIN)
+
+
+# ---------------------------------------------------------------------------
+# The timeline strip
+# ---------------------------------------------------------------------------
+TIMELINE = [
+    (1948, r"Shannon: information theory"),
+    (1951, r"Shannon's guessing game"),
+    (1952, r"Huffman codes"),
+    (1958, r"the perceptron"),
+    (1976, r"arithmetic coding"),
+    (1986, r"backpropagation"),
+    (1995, r"support vector machines"),
+    (1997, r"LSTM"),
+    (2003, r"a neural language model"),
+    (2012, r"AlexNet"),
+    (2013, r"word2vec"),
+    (2014, r"Adam; GANs"),
+    (2015, r"ResNet; diffusion"),
+    (2017, r"the Transformer"),
+    (2020, r"scaling laws; GPT-3"),
+    (2022, r"Chinchilla; ChatGPT"),
+    (2024, r"reasoning models"),
+    (2026, r"agents"),
+]
+T0, T1 = 1940, 2030
+
+
+def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
+    """The strip from 1940 to 2030; years in ``lit`` glow and get their names."""
+    x0 = -width / 2
+
+    def X(y):
+        return x0 + width * (y - T0) / (T1 - T0)
+
+    g = VGroup(Line([X(T0), 0, 0], [X(T1), 0, 0], color=GREY_D, stroke_width=2))
+    for yr in (1950, 1970, 1990, 2010, 2030):
+        g.add(Line([X(yr), -0.06, 0], [X(yr), 0.06, 0], color=GREY_D, stroke_width=1.5))
+        g.add(Text(str(yr), font_size=14, color=GREY_D).next_to([X(yr), 0, 0], DOWN, buff=0.12))
+    labels = VGroup()
+    side = 1
+    for yr, name in TIMELINE:
+        on = yr in lit
+        d = Dot([X(yr), 0, 0], radius=0.065 if on else 0.04, color=C.BITS if on else GREY_C)
+        g.add(d)
+        if on and show_labels:
+            t = label(rf"{yr}\; {name}", font_size=font_size, color=C.BITS)
+            t.next_to(d, UP if side > 0 else DOWN, buff=0.14 if side > 0 else 0.4)
+            side = -side
+            labels.add(t)
+    # keep the lit labels apart and inside the frame
+    for row in (1, -1):
+        same = sorted([t for t in labels if np.sign(t.get_y()) == row], key=lambda t: t.get_x())
+        for a, b in zip(same, same[1:]):
+            gap = b.get_left()[0] - a.get_right()[0]
+            if gap < 0.2:
+                b.shift(RIGHT * (0.2 - gap))
+        for t in same:
+            if t.get_right()[0] > 6.9:
+                t.shift(LEFT * (t.get_right()[0] - 6.9))
+            if t.get_left()[0] < -6.9:
+                t.shift(RIGHT * (-6.9 - t.get_left()[0]))
+    g.add(labels)
+    g.labels = labels
+    return g
+
+
+def chapter_card(number, title: str, question: str = "", lit=(), part: int | None = None) -> VGroup:
+    """Chapter title, the question it answers, and the timeline strip with this chapter's years lit."""
+    if zh():
+        head_text = (rf"第{part}部分 \textperiodcentered\ " if part else "") + f"第{number}章"
+    else:
+        head_text = (rf"Part {part} \textperiodcentered\ " if part else "") + f"Chapter {number}"
+    head = label(head_text, font_size=28, color=GREY_B)
+    t = label(title, font_size=54)
+    g = VGroup(head, t)
+    if question:
+        g.add(label(question, font_size=30, color=GREY_A))
+    g.arrange(DOWN, buff=0.3).shift(UP * 0.6)
+    strip = timeline(lit=lit).to_edge(DOWN, buff=0.9)
+    return VGroup(g, strip)
+
+
+# ---------------------------------------------------------------------------
+# The scoreboard
+# ---------------------------------------------------------------------------
+KIND_COLOR = {"baseline": GREY_B, "count": C.COUNTING, "compressor": C.COMPRESSOR, "lm": C.NEURAL,
+              "human": C.HUMAN}
+
+
+def scoreboard(rows: list[dict], shown: int | None = None, highlight=(), max_bits=8.0, bar_width=6.4,
+               row_h=0.42, font_size=22, label_width=4.4, title=True) -> VGroup:
+    """One row per model: its name, a bar as long as its bits per character, and the number.  ``rows`` are dicts
+    with ``label``, ``bits`` and ``kind`` (baseline, count, compressor, lm, human); a human row may give ``lo`` and
+    ``hi`` instead of ``bits`` and is drawn as a band, and a row with neither is one a later part will fill (a dim
+    question mark).  Only the first ``shown`` rows are filled (the rest are dim placeholders).  Returns a VGroup with ``.rows`` (each with ``.name``, ``.bar``, ``.value``) and ``.axis``."""
+    shown = len(rows) if shown is None else shown
+    x0 = -bar_width / 2 + label_width / 2 + 0.3
+    scale = bar_width / max_bits
+    g = VGroup()
+    out = VGroup()
+    for i, r in enumerate(rows):
+        y = -i * row_h
+        on = i < shown
+        color = KIND_COLOR.get(r.get("kind", "count"), WHITE)
+        name = label(r["label"], font_size=font_size, color=(WHITE if on else GREY_D))
+        if name.width > label_width:
+            name.width = label_width
+        name.move_to([x0 - 0.25 - name.width / 2, y, 0])
+        if "bits" not in r and "lo" not in r:  # a row a later part will fill: its name and a question mark
+            bar = VectorizedPoint([x0, y, 0])
+            value = MathTex(r"?", font_size=font_size + 2, color=GREY_D).move_to([x0 + 0.25, y, 0])
+        elif "bits" in r:
+            w = max(r["bits"] * scale, 0.02)
+            bar = Rectangle(width=w, height=row_h * 0.62, stroke_width=0, fill_color=color,
+                            fill_opacity=0.9 if on else 0.0).move_to([x0 + w / 2, y, 0])
+            value = MathTex(f"{r['bits']:.2f}", font_size=font_size + 2, color=(color if on else GREY_D))
+            value.next_to(bar, RIGHT, buff=0.15)
+        else:
+            a, b = r["lo"] * scale, r["hi"] * scale
+            bar = Rectangle(width=b - a, height=row_h * 0.62, stroke_width=2, stroke_color=color,
+                            fill_color=color, fill_opacity=0.35 if on else 0.0)
+            bar.move_to([x0 + (a + b) / 2, y, 0])
+            if not on:
+                bar.set_stroke(opacity=0)
+            value = MathTex(f"{r['lo']:.1f}\\text{{--}}{r['hi']:.1f}", font_size=font_size + 2,
+                            color=(color if on else GREY_D)).next_to(bar, RIGHT, buff=0.15)
+        if not on:
+            value.set_opacity(0)
+        row = VGroup(name, bar, value)
+        row.name, row.bar, row.value, row.data = name, bar, value, r
+        if i in highlight:
+            hl = Rectangle(width=label_width + bar_width + 1.6, height=row_h * 0.95, stroke_width=0,
+                           fill_color=C.BITS, fill_opacity=0.10).move_to([x0 + (bar_width - label_width) / 2 + 0.3, y, 0])
+            row.add_to_back(hl)
+        out.add(row)
+    top = 0.45
+    bottom = -(len(rows) - 1) * row_h - 0.35
+    axis = VGroup(Line([x0, top, 0], [x0, bottom, 0], color=GREY_C, stroke_width=1.5))
+    for b in range(0, int(max_bits) + 1, 2):
+        x = x0 + b * scale
+        axis.add(Line([x, bottom, 0], [x, bottom - 0.08, 0], color=GREY_C, stroke_width=1.5))
+        axis.add(MathTex(str(b), font_size=20, color=GREY_B).move_to([x, bottom - 0.28, 0]))
+    unit = label(r"bits per character", font_size=20, color=GREY_B)
+    unit.move_to([x0 + bar_width / 2, bottom - 0.65, 0])
+    axis.add(unit)
+    g.add(axis, out)
+    g.rows, g.axis, g.unit = out, axis, unit
+    g.x0, g.unit_len = x0, scale  # x of 0 bits, and the length of one bit
+    return g.move_to(ORIGIN)
+
+
+# ---------------------------------------------------------------------------
+# Payoffs and references
+# ---------------------------------------------------------------------------
+def payoff_card(items, font_size=24, title=r"Where this comes back") -> VGroup:
+    """``items``: (idea, [part numbers]).  Each row: the idea, an arrow, the parts that use it (by number and name)."""
+    head = label(title, font_size=font_size + 12)
+    rows = VGroup()
+    for idea, parts in items:
+        left = label(idea, font_size=font_size, color=C.BITS)
+        right = label(r",\ ".join(rf"{p}\ \textit{{{PARTS[p]}}}" for p in parts), font_size=font_size - 2, color=GREY_A)
+        rows.add(VGroup(left, right))
+    lw = max(r[0].width for r in rows)
+    for r in rows:
+        r[0].align_to(ORIGIN, LEFT)
+        arrow = MathTex(r"\longrightarrow", font_size=font_size + 4, color=GREY_C)
+        r.insert(1, arrow)
+        arrow.next_to(ORIGIN, RIGHT, buff=0).shift(RIGHT * (lw + 0.3))
+        r[2].next_to(arrow, RIGHT, buff=0.3)
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+    for r in rows:
+        r[1].set_y(r[0].get_y())
+        r[2].set_y(r[0].get_y())
+    g = VGroup(head, rows).arrange(DOWN, buff=0.5)
+    if g.width > 13.4:
+        g.width = 13.4
+    g.head, g.rows = head, rows
+    return g.move_to(ORIGIN)
+
+
+def reference_card(books, papers, font_size=21, width=13.2) -> VGroup:
+    """Two blocks: the books (each a Tex line) and the papers, left-aligned, wrapped to ``width``."""
+    bh = label(r"Books", font_size=font_size + 7, color=GREY_A)
+    ph = label(r"Papers", font_size=font_size + 7, color=GREY_A)
+    bl = VGroup(*[wrapped_label(b, width - 0.4, font_size) for b in books]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+    pl = VGroup(*[wrapped_label(p, width - 0.4, font_size - 1, GREY_A) for p in papers]).arrange(DOWN, aligned_edge=LEFT,
+                                                                                               buff=0.1)
+    g = VGroup(bh, bl, ph, pl).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+    g[2].shift(DOWN * 0.15)
+    g[3].shift(DOWN * 0.15)
+    if g.height > 7.4:
+        g.height = 7.4
+    return g.move_to(ORIGIN)
+
+
+def cite(text: str, corner=DL, font_size=20) -> Tex:
+    """A source line in a corner of the frame, e.g. ``cite(r"Shannon (1948)")``."""
+    return note(text, font_size=font_size).to_corner(corner, buff=0.3)

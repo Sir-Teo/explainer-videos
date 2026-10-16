@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-"""Verify the Analysis, Built masters and lay them out for upload in renders/upload/analysis-built/.
+"""Verify a series' masters and lay them out for upload in renders/upload/<series name>/ (e.g. analysis-built/).
 
-    python tools/package_uploads.py [--parts 1 2] [--check-only]
+    python tools/package_uploads.py [--series analysis] [--parts 1 2] [--check-only]
+    python tools/package_uploads.py --series ai --parts 1
 
 Per part and language: the master (hard link), .srt, thumbnail.jpg, youtube.txt and bilibili.txt (title,
-description with chapters, tags). Text comes from videos/analysis/analysis_upload.json.
+description with chapters, tags). Text comes from videos/<series>/<series>_upload.json (videos/analysis/
+analysis_upload.json for Analysis, Built); the parts are the videos <series>1, <series>2, ...
 """
 
 from __future__ import annotations
@@ -24,10 +26,18 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from explainer.paths import ANALYSIS_DATA, video_package  # noqa: E402
+from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
-OUT = ROOT / "renders" / "upload" / "analysis-built"
-DATA = json.loads((ANALYSIS_DATA / "analysis_upload.json").read_text())
+# set by configure(): the series, its upload text, its kit's folder and file-name prefix
+SERIES, DATA, OUT, KIT = "", {}, Path(), ""
+
+
+def configure(series: str) -> None:
+    global SERIES, DATA, OUT, KIT
+    SERIES = series
+    DATA = json.loads((VIDEOS / series / f"{series}_upload.json").read_text())
+    KIT = re.sub(r"[^a-z0-9]+", "-", DATA["series"]["en"]["name"].lower()).strip("-")  # "analysis-built"
+    OUT = ROOT / "renders" / "upload" / KIT
 REPO_URL = "https://github.com/Sir-Teo/explainer-videos"
 BG = (14, 17, 23)  # the videos' background, #0E1117
 YELLOW, WHITE, GREY = (247, 209, 84), (240, 240, 240), (150, 156, 166)
@@ -204,7 +214,7 @@ def thumbnail(video: str, lang: str, hero: Image.Image, crop: list[float], dst: 
     W, H = 1920, 1080
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
-    n = int(video.removeprefix("analysis"))
+    n = int(video.removeprefix(SERIES))
     part = DATA["parts"][video]
     cjk = lang == "zh"
     font_path = FONT_ZH if cjk else FONT_EN
@@ -240,12 +250,12 @@ def thumbnail(video: str, lang: str, hero: Image.Image, crop: list[float], dst: 
 # Text
 # ---------------------------------------------------------------------------
 def texts(video: str, lang: str, ver: dict, rev: str) -> dict:
-    n = int(video.removeprefix("analysis"))
+    n = int(video.removeprefix(SERIES))
     part, en, zh = DATA["parts"][video], DATA["series"]["en"], DATA["series"]["zh"]
     long = ver["duration_seconds"] >= 3600
     yt_ch = "\n".join(f"{stamp(t, long)} {title}" for t, title in ver["chapters"])
     bili_ch = "\n".join(f"{stamp(t, True, pad=True)} {title}" for t, title in ver["chapters"])
-    src = f"{REPO_URL}/tree/{rev}/videos/{video}"
+    src = f"{REPO_URL}/tree/{rev}/{video_dir(video).relative_to(ROOT)}"
     title_en = f"{en['name']}: Part {n}, {part['short_en']}"
     title_zh = ver["title"] if lang == "zh" else f"{zh['name']} · 第{n}部分：{part['short_zh']}"
     if lang == "en":
@@ -314,15 +324,18 @@ def write_txt(path: Path, platform: str, t: dict, files: dict) -> None:
 # ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--parts", type=int, nargs="*", default=list(range(1, 11)))
+    ap.add_argument("--series", default="analysis")
+    ap.add_argument("--parts", type=int, nargs="*", help="part numbers (default: every part in the upload text)")
     ap.add_argument("--check-only", action="store_true")
     args = ap.parse_args()
+    configure(args.series)
+    args.parts = args.parts or sorted(int(v.removeprefix(SERIES)) for v in DATA["parts"])
     rev = run(["git", "-C", str(ROOT), "rev-parse", "HEAD"]).strip()
     OUT.mkdir(parents=True, exist_ok=True)
     man_path = OUT / "manifest.json"
     manifest = json.loads(man_path.read_text()) if man_path.exists() else {"masters": {}}
     for n in args.parts:
-        video = f"analysis{n}"
+        video = f"{SERIES}{n}"
         part = DATA["parts"][video]
         slug = re.sub(r"[^a-z0-9]+", "-", part["short_en"].lower().replace("ᵖ", "p")).strip("-")
         hero = None
@@ -343,7 +356,7 @@ def main():
                 continue
             folder = OUT / f"{n:02d}-{slug}" / lang
             folder.mkdir(parents=True, exist_ok=True)
-            name = f"analysis-built-{n:02d}-{lang}"
+            name = f"{KIT}-{n:02d}-{lang}"
             dst = folder / f"{name}.mp4"
             if dst.exists() and not os.path.samefile(dst, mp4):
                 dst.unlink()
@@ -377,7 +390,7 @@ def write_checklist() -> None:
     for d in sorted(p for p in OUT.iterdir() if p.is_dir() and not p.name.startswith(".")):
         langs = [lang for lang in ("en", "zh") if (d / lang / "metadata.json").exists()]
         rows.append(f"| {d.name} | {', '.join(langs) or '-'} |")
-    (OUT / "UPLOAD.md").write_text(f"""# Analysis, Built: upload kit
+    (OUT / "UPLOAD.md").write_text(f"""# {en['name']}: upload kit
 
 | part | ready |
 |---|---|

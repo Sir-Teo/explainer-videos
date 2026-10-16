@@ -709,9 +709,14 @@ def _synth_silent(spoken: str):
     import numpy as np
 
     plain = re.sub(r"\[([^\]]*)\]\(/[^)]*/\)", r"\1", spoken)
-    words = plain.split()
-    # ~2.7 words/s plus punctuation pauses, roughly matching Kokoro's pacing.
-    dur = 0.4 + len(words) / 2.7 + 0.25 * len(re.findall(r"[.,;:?!]", plain))
+    if lang.LANG == "en":
+        words = plain.split()
+        # ~2.7 words/s plus punctuation pauses, roughly matching Kokoro's pacing.
+        dur = 0.4 + len(words) / 2.7 + 0.25 * len(re.findall(r"[.,;:?!]", plain))
+    else:
+        words = lang.tokens(plain)  # one per character (or run of Latin letters and digits)
+        # ~4.3 characters/s plus pauses at the punctuation, roughly Qwen3-TTS's Mandarin pacing.
+        dur = 0.4 + len(words) / 4.3 + 0.25 * len(re.findall(r"[，。、；：？！]", plain))
     tokens, t = [], 0.3
     per = (dur - 0.4) / max(len(words), 1)
     for w in words:
