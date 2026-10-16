@@ -22,6 +22,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer.paths import video_package  # noqa: E402
+
 from tools.export_script import script_lines  # noqa: E402
 
 
@@ -43,7 +45,7 @@ def main():
 
     from explainer import tts
 
-    manifest = importlib.import_module(f"videos.{args.video}.manifest")
+    manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
     asr = pipeline("automatic-speech-recognition", model=args.model, device="cpu")
     flagged = 0
     for module, cls, _ in manifest.SCENES:

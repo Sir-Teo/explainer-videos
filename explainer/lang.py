@@ -17,6 +17,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
+from explainer.paths import video_dir
+
 LANG = os.environ.get("EXPLAINER_LANG", "en")
 # Set to a .jsonl path to record every English line whose translation is missing (and narrate it in English)
 # instead of failing: how the lines to translate are gathered.
@@ -122,7 +124,7 @@ def chapter_title(video: str, cls: str, english: str, lang: str | None = None) -
     lang = lang or LANG
     if lang == "en":
         return english
-    root = Path(__file__).resolve().parents[1] / "videos" / video
+    root = video_dir(video)
     return _table(str(root), lang).get("chapters", {}).get(cls) or english
 
 
@@ -130,5 +132,5 @@ def video_title(video: str, english: str, lang: str | None = None) -> str:
     lang = lang or LANG
     if lang == "en":
         return english
-    root = Path(__file__).resolve().parents[1] / "videos" / video
+    root = video_dir(video)
     return _table(str(root), lang).get("title") or english

@@ -64,7 +64,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Pp]retraining\b", r"[\g<0>](/pɹˌitɹˈAnɪŋ/)"),  # "pree-training", not "pr'training"
     (r"\bGloucester\b", "[Gloucester](/ɡlˈɔstəɹ/)"),
     (r"\bjetliner's\b", "[jetliner's](/ʤˈɛtlˌInəɹz/)"),  # dictionary entry drops the r
-    # Markets (videos/opposing_forces)
+    # Markets (videos/markets/opposing_forces)
     (r"\bP/E\b", "[P/E](/pˌiˈi/)"),  # "pee-ee", not "pee slash ee"
     (r"\bS&P\b", "S and P"),
     (r"\bBernanke\b", "[Bernanke](/bəɹnˈæŋki/)"),
@@ -74,7 +74,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bHemingway\b", "[Hemingway](/hˈɛmɪŋwˌA/)"),
     (r"\bBloomberg\b", "[Bloomberg](/blˈumbɜɹɡ/)"),
     (r"\bselloffs\b", "sell offs"),
-    # The Riemann hypothesis (videos/riemann)
+    # The Riemann hypothesis (videos/math/riemann)
     (r"Landau[–—-]Siegel", "Landau Siegel"),  # no pause at the dash; names follow below
     (r"\bli of\b", "[li](/ˌɛlˈI/) of"),  # the logarithmic integral: "L I of x"
     (r"\bchi\b", "[chi](/kˈI/)"),
@@ -109,7 +109,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bFourier\b", "[Fourier](/fˈʊɹiˌA/)"),  # heard as "four year"
     (r"\bPoisson\b", "[Poisson](/pwɑsˈOn/)"),  # "pwah-SOHN"; heard as "poison" without this
     (r"\bquasi\b", "[quasi](/kwˈɑzi/)"),
-    # Open frontier models (videos/open_models)
+    # Open frontier models (videos/ml/open_models)
     (r"\bMiMo-V2\.6-Pro\b", "[MiMo](/mˈimO/) V two point six Pro"),
     (r"\bMiMo-V2-Flash\b", "[MiMo](/mˈimO/) V two Flash"),
     (r"\bMiMo\b", "[MiMo](/mˈimO/)"),
@@ -137,7 +137,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bWidrow\b", "[Widrow](/wˈɪdɹO/)"),
     (r"\bDeepSeek's\b", "Deep Seek's"),
     (r"\bDeepSeek\b", "Deep Seek"),
-    # Training frontier models (videos/frontier)
+    # Training frontier models (videos/ml/frontier)
     (r"\bQK-norm\b", "Q K norm"),
     (r"\bNVFP4\b", "N V F P four"),
     (r"\bFP8\b", "F P eight"),
@@ -186,7 +186,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bTrafilatura\b", "[Trafilatura](/tɹˌɑfilətˈʊɹə/)"),
     (r"\bnanochat\b", "nano chat"),
     (r"\bGopher\b", "[Gopher](/ɡˈOfəɹ/)"),
-    # Reinforcement learning, derived (videos/rl).  GRPO, DPO, KL, RL, R1, DeepSeek are handled above.
+    # Reinforcement learning, derived (videos/ml/rl).  GRPO, DPO, KL, RL, R1, DeepSeek are handled above.
     (r"\bDr\. G R P O\b", "Doctor G R P O"),
     (r"\bTRPO\b", "T R P O"),
     (r"\bPPO\b", "P P O"),
@@ -213,7 +213,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bxAI\b", "x A I"),
     (r"\bProRL\b", "Pro R L"),
     (r"\b([Rr])eweight", r"\1e-weight"),  # not in the G2P dictionary: "reweighted" came out as "related"
-    # Stochastic calculus (videos/stochastic)
+    # Stochastic calculus (videos/math/stochastic)
     (r"\bItô's\b", "[Itô's](/ˈitOz/)"),  # "EE-toh", not "eye-toe"
     (r"\bItô\b(?!')", "[Itô](/ˈitO/)"),  # (?!') / (?<!\[): don't rewrite inside a link made by an earlier rule
     (r"\bStratonovich\b", "[Stratonovich](/stɹˌætənˈOvɪʧ/)"),
@@ -235,7 +235,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bLangevin\b", "[Langevin](/lˌɑnʒəvˈæn/)"),
     (r"\bDonsker's\b", "[Donsker's](/dˈɑnskəɹz/)"),
     (r"\bKramers\b", "[Kramers](/kɹˈɑməɹz/)"),
-    # Trading systems (videos/trading)
+    # Trading systems (videos/markets/trading)
     (r"\bSPY\b", "S P Y"),
     (r"\bIVV\b", "I V V"),
     (r"\bVOO\b", "V O O"),
@@ -261,7 +261,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bExegy's\b", "[Exegy's](/ˈɛksəʤiz/)"),
     (r"\bAquilina\b", "[Aquilina](/ˌækwɪlˈinə/)"),
     (r"\bAllegheny\b", "[Allegheny](/ˌæləɡˈAni/)"),
-    # Quantum mechanics (videos/quantum)
+    # Quantum mechanics (videos/physics/quantum)
     (r"\bSchrödinger's\b", "[Schrödinger's](/ʃɹˈOdɪŋəɹz/)"),
     (r"(?<!\[)\bSchrödinger\b(?!')", "[Schrödinger](/ʃɹˈOdɪŋəɹ/)"),
     (r"\bHeisenberg's\b", "[Heisenberg's](/hˈIzənbɜɹɡz/)"),
@@ -315,7 +315,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bbetween a and b\b", "between [a](/ˈA/) and b"),
     (r"\bCHSH\b", "C H S H"),
     (r"\bh-bar\b", "[h-bar](/ˈAʧ bˈɑɹ/)"),
-    # General relativity (videos/relativity)
+    # General relativity (videos/physics/relativity)
     (r"\bSchwarzschild's\b", "[Schwarzschild's](/ʃwˈɔɹtsʃˌIldz/)"),
     (r"\bSchwarzschild\b(?!')", "[Schwarzschild](/ʃwˈɔɹtsʃˌIld/)"),
     (r"\bChristoffel\b", "[Christoffel](/kɹɪstˈɔfəl/)"),
@@ -347,7 +347,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\b[Cc]ovectors\b", r"[\g<0>](/kˈOvɛktəɹz/)"),
     (r"\b[Cc]ovector\b", r"[\g<0>](/kˈOvɛktəɹ/)"),
     (r"\bintegrands\b", "[integrands](/ˈɪntəɡɹˌændz/)"),
-    # General relativity, part 2 (videos/relativity2)
+    # General relativity, part 2 (videos/physics/relativity2)
     (r"\bSzekeres\b", "[Szekeres](/sˈɛkəɹˌɛʃ/)"),
     (r"\bRaychaudhuri's\b", "[Raychaudhuri's](/ɹˌAʧˈWdʊɹiz/)"),
     (r"\bRaychaudhuri\b(?!')", "[Raychaudhuri](/ɹˌAʧˈWdʊɹi/)"),
@@ -379,7 +379,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bquasinormal\b", "[quasinormal](/kwˌAzInˈɔɹməl/)"),
     (r"\bgravitomagnetic\b", "[gravitomagnetic](/ɡɹˌævɪtOmæɡnˈɛtɪk/)"),
     (r"\bgravitomagnetism\b", "[gravitomagnetism](/ɡɹˌævɪtOmˈæɡnətˌɪzəm/)"),
-    # Quantum mechanics, part 2 (videos/quantum2)
+    # Quantum mechanics, part 2 (videos/physics/quantum2)
     (r"Aharonov[–—-]Bohm", "[Aharonov](/ɑhɑɹˈOnɔf/) [Bohm](/bˈOm/)"),
     (r"(?<!\[)\bAharonov\b", "[Aharonov](/ɑhɑɹˈOnɔf/)"),
     (r"(?<!\[)\bBohm\b", "[Bohm](/bˈOm/)"),
@@ -401,7 +401,7 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bGurney\b", "[Gurney](/ɡˈɜɹni/)"),
     (r"\bGeiger\b", "[Geiger](/ɡˈIɡəɹ/)"),
     (r"\bsuperpositions\b", "[superpositions](/sˌupəɹpəzˈɪʃənz/)"),
-    # Analysis, from the real line to functional analysis (videos/analysis1-10)
+    # Analysis, from the real line to functional analysis (videos/analysis/analysis1-10)
     (r"Bolzano[–—-]Weierstrass", "[Bolzano](/bOltsˈɑnO/) [Weierstrass](/vˈIəɹʃtɹˌɑs/)"),
     (r"\bDedekind's\b", "[Dedekind's](/dˈAdəkˌɪnts/)"),
     (r"\bDedekind\b(?!')", "[Dedekind](/dˈAdəkˌɪnt/)"),

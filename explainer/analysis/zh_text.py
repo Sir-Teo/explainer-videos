@@ -1,6 +1,6 @@
 """On-screen text in Chinese for the Chinese masters of the analysis series.
 
-Every Tex / MathTex / Text string is looked up in videos/analysis_text_zh.json (keyed by the exact English string);
+Every Tex / MathTex / Text string is looked up in videos/analysis/analysis_text_zh.json (keyed by the exact English string);
 strings that come out containing Chinese are typeset with xelatex + xeCJK (Fandol Song), the rest are unchanged.
 EXPLAINER_COLLECT_TEXT=<file.jsonl> records every string instead, to gather what needs translating.
 """
@@ -16,8 +16,9 @@ from pathlib import Path
 from manim import MathTex, Scene, Text
 
 from explainer import lang
+from explainer.paths import ANALYSIS_DATA
 
-TABLE_PATH = Path(__file__).resolve().parents[2] / "videos" / "analysis_text_zh.json"
+TABLE_PATH = ANALYSIS_DATA / "analysis_text_zh.json"
 COLLECT = os.environ.get("EXPLAINER_COLLECT_TEXT", "")
 CJK = re.compile(r"[\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]")
 _MATH = re.compile(r"\$[^$]*\$|\\\(.*?\\\)")

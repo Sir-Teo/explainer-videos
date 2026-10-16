@@ -60,7 +60,7 @@ C = SimpleNamespace(
     DIVERGENCE=ORANGE,  # div u, incompressibility
     VORTICITY=ORANGE,  # omega (shares the "spin" family color)
     REYNOLDS=YELLOW,
-    # Language models (videos/llm)
+    # Language models (videos/ml/llm)
     TOKEN=GREY_A,  # token boxes, raw text
     EMBED=BLUE,  # token vectors, the residual stream
     POSITION=PINK,  # positional information
@@ -72,7 +72,7 @@ C = SimpleNamespace(
     PROB=GREEN,  # logits, probabilities, predictions
     LOSS=MAROON,  # training loss, -log p
     NORM=GREY_B,  # layer norm
-    # Markets and macro (videos/opposing_forces)
+    # Markets and macro (videos/markets/opposing_forces)
     EARNINGS=GREEN,  # E, earnings per share, profit growth, margins
     MULTIPLE=ORANGE,  # P/E, earnings yield, valuation
     PRICE=BLUE,  # index level P = E x P/E; the cap-weighted S&P 500
@@ -85,7 +85,7 @@ C = SimpleNamespace(
     DEBT=LIGHT_BROWN,  # government debt, deficits, interest costs
     GROWTH=GREEN_A,  # GDP growth g, potential growth
     MORTGAGE=GOLD,  # mortgage rates, MBS
-    # The Riemann hypothesis (videos/riemann)
+    # The Riemann hypothesis (videos/math/riemann)
     PRIME=BLUE,  # primes, prime staircases pi(x) and psi(x), Eisenstein primes
     SMOOTH=GREEN,  # the smooth prediction: li(x), x, R(x)
     ZERO=YELLOW,  # nontrivial zeros, the critical line, the waves they create
@@ -96,7 +96,7 @@ C = SimpleNamespace(
     GAUSS=LIGHT_PINK,  # Gauss sums
     THETA=GOLD,  # theta functions, automorphy, the "reflection"
     SIEVE=GREEN_A,  # the large sieve, near-orthogonality
-    # Open frontier models (videos/open_models).  Reuses the LLM colors above for
+    # Open frontier models (videos/ml/open_models).  Reuses the LLM colors above for
     # tokens, the residual stream, q/k/v, attention weights and FFNs.
     MIMO="#FF9F5A",  # Xiaomi MiMo-V2.6-Pro (model identity: tags, chart series)
     GLM="#6EA8FE",  # Z.ai GLM-5.3
@@ -113,7 +113,7 @@ C = SimpleNamespace(
     MEMORY=GREEN,  # linear-attention / KDA recurrent state S
     DEPTH=ORANGE,  # attention over depth (attention residuals): it is attention
     QUANT=GREY_A,  # low-precision number formats
-    # Training frontier models (videos/frontier)
+    # Training frontier models (videos/ml/frontier)
     PAGE=GREY_B,  # raw web pages, HTML, Common Crawl
     KEPT=TEAL,  # text that survives filtering, the clean corpus
     REMOVED=RED,  # pages or text dropped by a filter
@@ -125,7 +125,7 @@ C = SimpleNamespace(
     LR=GOLD_A,  # learning rate, schedules
     ADAMW=BLUE_B,  # AdamW
     MUON=PINK,  # Muon, orthogonalized updates
-    # EXPERT (PURPLE_B) is defined above, shared with videos/open_models
+    # EXPERT (PURPLE_B) is defined above, shared with videos/ml/open_models
     SIGN_BIT=RED_B,  # floating-point layouts: sign
     EXP_BIT=GREEN_B,  # exponent
     MAN_BIT=BLUE_B,  # mantissa
@@ -142,7 +142,7 @@ C = SimpleNamespace(
     REFERENCE=GREY_B,  # the frozen reference model, KL anchor
     USER=BLUE_B,  # chat: user turns
     ASSISTANT=GREEN_B,  # chat: assistant turns (the trained tokens)
-    # Reinforcement learning, derived (videos/rl).  Reuses RL_POLICY (pi_theta), REFERENCE (pi_ref),
+    # Reinforcement learning, derived (videos/ml/rl).  Reuses RL_POLICY (pi_theta), REFERENCE (pi_ref),
     # REWARD (R, correct) and PENALTY (wrong, negative) from above.
     OLD_POLICY=TEAL,  # pi_old: the policy that sampled the batch; the inference engine
     ADVANTAGE=YELLOW,  # A, advantages (individual signs use REWARD / PENALTY)
@@ -154,7 +154,7 @@ C = SimpleNamespace(
     LENGTH=LIGHT_BROWN,  # answer length |o|, token counts
     PROMPT_TOK=GREY_A,  # prompt tokens
     WORK_TOK="#9DD6F0",  # "showing the work" tokens (the scratchpad)
-    # Stochastic calculus (videos/stochastic)
+    # Stochastic calculus (videos/math/stochastic)
     BROWNIAN=BLUE,  # W_t, Brownian paths, dW, the noise term sigma dW
     CLOCK=TEAL,  # time t, dt, Delta t
     QV=YELLOW,  # (dW)^2, quadratic variation, Ito's correction 1/2 f'' dt, the "missing half"
@@ -173,7 +173,7 @@ C = SimpleNamespace(
     WEIGHT="#FF7EB6",  # Girsanov likelihood ratios, path weights
     HOT="#F2A541",  # boundary temperature 1 (Dirichlet problem)
     COLD="#3D5A98",  # boundary temperature 0
-    # Trading systems (videos/trading)
+    # Trading systems (videos/markets/trading)
     BID="#3FBF8F",  # bids: buy orders resting in the book
     ASK="#EF6A5B",  # asks (offers): sell orders resting in the book
     MID=GREY_A,  # the mid-price, between best bid and best ask
@@ -199,8 +199,8 @@ C = SimpleNamespace(
     PNL_UP=GREEN,  # profit
     PNL_DOWN=RED,  # loss, adverse selection
     RISK=RED,  # risk checks, limits, the kill switch
-    # Quantum mechanics (videos/quantum).  The amplitude psi itself has no single color: its phase is the hue
-    # (videos/quantum/colormap.py: 0 red, pi/2 yellow-green, pi cyan, 3pi/2 violet) and its size the brightness.
+    # Quantum mechanics (videos/physics/quantum).  The amplitude psi itself has no single color: its phase is the hue
+    # (videos/physics/quantum/colormap.py: 0 red, pi/2 yellow-green, pi cyan, 3pi/2 violet) and its size the brightness.
     XPOS=BLUE,  # x, position space, <x>, sigma_x
     MOMENTUM=ORANGE,  # p, k, momentum space phi(p), <p>, sigma_p
     ENERGY=GREEN,  # E, the Hamiltonian H, energy levels and eigenvalues
@@ -221,7 +221,7 @@ C = SimpleNamespace(
     WIGNER_POS="#F2A541",  # Wigner function > 0
     WIGNER_NEG="#4FA3D9",  # Wigner function < 0
     WALL=GREY_C,  # the slit plate, detector screens, apparatus
-    # Quantum mechanics, part 2 (videos/quantum2).  Reuses every part-1 color above with the same meaning.
+    # Quantum mechanics, part 2 (videos/physics/quantum2).  Reuses every part-1 color above with the same meaning.
     ACTION="#FF6B8B",  # the action S, Lagrangians, the phase S/hbar of a path
     GAUGE="#A3E635",  # the vector potential A, gauge functions chi, magnetic flux Phi
     ANGMOM="#FFB070",  # angular momentum J, L and its components (J+ / J- reuse RAISE / LOWER)
@@ -234,7 +234,7 @@ C = SimpleNamespace(
     DIRAC_POS="#FBBF24",  # positive-energy solutions of the Dirac equation (particles)
     DIRAC_NEG="#60A5FA",  # negative-energy solutions (holes, antiparticles)
     NUCLEUS="#FF6E40",  # nuclei, alpha particles
-    # General relativity (videos/relativity).  Reuses LIGHT (YELLOW) for photons, light rays and light cones.
+    # General relativity (videos/physics/relativity).  Reuses LIGHT (YELLOW) for photons, light rays and light cones.
     METRIC=BLUE,  # g_mu_nu, ds^2, lengths, rulers, the metric's unit ellipses; spatial curvature (g_rr)
     PROPER_TIME=TEAL,  # tau, clocks and their ticks; the time part of the metric (g_tt)
     GRAV_POTENTIAL=GOLD,  # Newton: Phi, the field g, Newtonian predictions
@@ -246,14 +246,14 @@ C = SimpleNamespace(
     WAVE="#FF7EB6",  # gravitational waves: h_mu_nu, h_+, h_x, strain
     LAMBDA="#7C7FE0",  # the cosmological constant, dark energy
     OBSERVED=WHITE,  # measurements and data
-    # General relativity, part 2 (videos/relativity2).  Reuses all of part 1's colors (horizons are CURVATURE, like
+    # General relativity, part 2 (videos/physics/relativity2).  Reuses all of part 1's colors (horizons are CURVATURE, like
     # part 1's r = r_s) and ENTROPY (LIGHT_PINK) for black-hole entropy.
     SINGULARITY="#FF3B5C",  # r = 0, the ring singularity: drawn as a zigzag
     SPIN="#B8F04A",  # angular momentum J, spin a, frame dragging, Omega, the ergosphere; rotation omega_ab
     EXPANSION="#FFE08A",  # the expansion theta of a congruence (a bundle of light rays or free particles)
     TEMPERATURE="#FF8A80",  # temperature, thermal (Hawking) radiation, Planck spectra
     NEG_ENERGY="#8C9EFF",  # negative-energy orbits and fragments (Penrose process)
-    # Analysis, from the real line to functional analysis (videos/analysis1-10).  One meaning per color across all
+    # Analysis, from the real line to functional analysis (videos/analysis/analysis1-10).  One meaning per color across all
     # ten parts; APPROX (magenta, quantum2) is reused for approximants: partial sums, polynomials, Fejér means.
     EPS="#F7D154",  # epsilon: a tolerance, a target band, "how close"
     DELTA="#2EC4B6",  # delta, N: the response, "how near / how far out"

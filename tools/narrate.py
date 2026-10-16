@@ -15,6 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer import paths  # noqa: E402
+
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -28,7 +30,7 @@ def main():
     from explainer.voiceover import _strip_bookmarks
     from tools.translate_narration import english_lines
 
-    video_dir = ROOT / "videos" / args.video
+    video_dir = paths.video_dir(args.video)
     lines = [(cls, raw) for cls, raw in english_lines(args.video) if not args.only or cls in args.only]
     t0, made, audio = time.time(), 0, 0.0
     for i, (cls, raw) in enumerate(lines, 1):

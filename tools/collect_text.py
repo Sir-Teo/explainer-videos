@@ -18,6 +18,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from explainer.paths import video_dir, video_package  # noqa: E402
+
 
 LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "en"
 
@@ -33,7 +35,7 @@ def run(video, module, cls, out):
     cfg.write_text(f"[CLI]\ntex_dir = {media / 'Tex' / cls}\ntext_dir = {media / 'texts' / cls}\n")
     cmd = [sys.executable, "-m", "manim", "render", "-ql", "--dry_run", "--progress_bar", "none",
            "--media_dir", str(media), "-c", str(cfg)]
-    r = subprocess.run(cmd + [str(ROOT / "videos" / video / f"{module}.py"), cls], cwd=ROOT, env=env,
+    r = subprocess.run(cmd + [str(video_dir(video) / f"{module}.py"), cls], cwd=ROOT, env=env,
                        capture_output=True, text=True)
     return cls, r.returncode, r.stderr[-400:]
 
@@ -64,7 +66,7 @@ if sys.argv[1] == "--check":
 for video in [a for a in sys.argv[1:] if a.startswith("analysis")]:
     out_dir = ROOT / "renders" / "qa" / "text"
     out_dir.mkdir(parents=True, exist_ok=True)
-    m = importlib.import_module(f"videos.{video}.manifest")
+    m = importlib.import_module(f"{video_package(video)}.manifest")
     for f in out_dir.glob(f"{video}.*.jsonl"):
         f.unlink()
     with ThreadPoolExecutor(2) as pool:
