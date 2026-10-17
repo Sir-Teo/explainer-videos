@@ -258,7 +258,15 @@ def compute_mqar():
             g = rng(N)
             steps = 1500
             sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps, pct_start=0.1)
-            for step in range(steps):
+            xe, ye = batch(rng(20_000 + N), 128, N)
+            curve = []
+            for step in range(steps + 1):
+                if step % 100 == 0:  # how it learns: recall on a fixed batch, along the way
+                    with torch.no_grad():
+                        pe, mk = m(xe).argmax(-1), ye >= 0
+                        curve.append((step, float((pe[mk] == ye[mk]).float().mean())))
+                if step == steps:
+                    break
                 x, y = batch(g, 64, N)
                 loss = F.cross_entropy(m(x).reshape(-1, VOC), y.reshape(-1), ignore_index=-100)
                 opt.zero_grad()
@@ -271,6 +279,7 @@ def compute_mqar():
                 mk = y >= 0
                 accs.append(float((p[mk] == y[mk]).float().mean()))
             print(f"    {mixer} N={N}: recall {accs[-1]:.1%}", flush=True)
+            out[f"curve_{mixer}_{N}"] = np.array(curve)
         out[mixer] = np.array(accs)
     assert out["softmax"].min() > 0.9
     assert out["linear"][-1] < 0.9  # the adding memory overflows

@@ -116,7 +116,22 @@ def compute_world():
     params = [*enc.parameters(), *dec.parameters(), *dyn.parameters()]
     opt = torch.optim.Adam(params, lr=1e-3)
     flat = data.reshape(600, 24, -1)
+    probe = torch.tensor(frames(rng(7), 50, 40), dtype=torch.float32).reshape(50, 40, -1)[:1]
+    checks, snaps, losses = [0, 100, 300, 800, 2000, 5000], [], []
+
+    def dream(n=12):  # how it learns: from the probe clip's first two frames, imagine the next n
+        with torch.no_grad():
+            z = enc(probe[:, :2])
+            z1, z2, out_ = z[:, 0], z[:, 1], []
+            for _ in range(n):
+                z3 = z2 + dyn(torch.cat([z1, z2], -1))
+                out_.append(torch.sigmoid(dec(z3))[0].numpy().reshape(S, S))
+                z1, z2 = z2, z3
+        return np.array(out_)
+
     for step in range(5000):
+        if step in checks:
+            snaps.append(dream())
         i = torch.randint(0, 600, (64,))
         x = flat[i]  # (64, 24, 256)
         z = enc(x)
@@ -129,6 +144,9 @@ def compute_world():
         opt.zero_grad()
         loss.backward()
         opt.step()
+        if step % 25 == 0:
+            losses.append((step, float(loss)))
+    snaps.append(dream())
     test = torch.tensor(frames(rng(7), 50, 40), dtype=torch.float32).reshape(50, 40, -1)
     with torch.no_grad():
         z = enc(test[:, :2])
@@ -150,7 +168,8 @@ def compute_world():
 
         pos_err = np.array([np.linalg.norm(centre(imag[:, t]) - centre(real[:, t]), axis=1).mean() for t in range(38)])
     out = dict(S=S, Z=Z, real=real[0, :24].numpy().reshape(-1, S, S), imag=imag[0, :24].numpy().reshape(-1, S, S),
-               err=err, pos_err=pos_err, first=test[0, :2].numpy().reshape(-1, S, S))
+               err=err, pos_err=pos_err, first=test[0, :2].numpy().reshape(-1, S, S),
+               checks=checks, dreams=np.array(snaps), losses=np.array(losses), probe_real=test[0, 2:14].numpy().reshape(-1, S, S))
     print(f"    position error after 1, 5, 20 imagined steps: {pos_err[0]:.2f}, {pos_err[4]:.2f}, {pos_err[19]:.2f} pixels",
           flush=True)
     assert pos_err[0] < 1.5 and pos_err[19] > pos_err[0]

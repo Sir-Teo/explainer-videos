@@ -162,7 +162,24 @@ def compute_logistic():
     b_raw = b - float(wr @ mu)
     loss = float(-np.mean(y[~test] * np.log(sigmoid(Z2tr @ w + b)) + (1 - y[~test]) * np.log(1 - sigmoid(Z2tr @ w + b))))
     assert acc70 > acc2 > 0.75
-    return dict(w=wr, b=b_raw, acc2=acc2, acc70=acc70, xs=xs, ys=ys, prob=prob, loss_bits=loss / math.log(2))
+    # how it learns: the same gradient descent, its line (in the original units) and its loss along the way
+    ytr = y[~test]
+    n = len(ytr)
+    lr = 1 / (0.25 * (np.linalg.norm(Z2tr, 2) ** 2 / n + 1))
+    wt, bt = np.zeros(2), 0.0
+    keep = {0, 1, 2, 3, 5, 8, 12, 20, 35, 60, 100, 180, 320, 600, 1200, 4000}
+    path, curve = [], []
+    for it in range(4001):
+        pz = sigmoid(Z2tr @ wt + bt)
+        ce = float(-np.mean(ytr * np.log(pz + 1e-12) + (1 - ytr) * np.log(1 - pz + 1e-12))) / math.log(2)
+        curve.append((it, ce))
+        if it in keep:
+            path.append((it, *(wt / sd), bt - float((wt / sd) @ mu), ce))
+        if it == 4000:
+            break
+        wt, bt = wt - lr * Z2tr.T @ (pz - ytr) / n, bt - lr * float((pz - ytr).mean())
+    return dict(w=wr, b=b_raw, acc2=acc2, acc70=acc70, xs=xs, ys=ys, prob=prob, loss_bits=loss / math.log(2),
+                path=np.array(path), curve=np.array(curve[::5] + [curve[-1]]))
 
 
 # ---------------------------------------------------------------------------

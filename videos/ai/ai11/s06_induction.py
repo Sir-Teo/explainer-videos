@@ -14,6 +14,7 @@ class Induction(VoiceoverScene):
         self.copying()
         self.mechanism()
         self.phase()
+        self.forming()
 
     def card(self):
         card = chapter_card(5, r"Induction heads", r"How does a model copy what it has just seen?", part=11)
@@ -165,4 +166,61 @@ class Induction(VoiceoverScene):
             self.play(FadeIn(maps), Create(frames), FadeIn(t1), FadeIn(t2), FadeIn(ax_l))
             self.play(FadeIn(stripe))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def forming(self):
+        """The two heads forming: their attention on the example, at checkpoints, beside the loss on the repeat."""
+        d = load("induction")
+        steps = [int(s_) for s_ in d["snap_steps"]]
+        L1, L2 = np.asarray(d["snap_l1"], float), np.asarray(d["snap_l2"], float)
+        hp, hi = int(d["prev_head"]), int(d["ind_head"])
+        c2 = np.asarray(d["curve2"])
+        js = int(d["jump_step"])
+        S = 2.7
+
+        def maps(k):
+            return Group(heat_image(L1[k, hp], S, S, color=K, mask_upper=True),
+                         heat_image(L2[k, hi], S, S, color=A, mask_upper=True)).arrange(RIGHT, buff=0.35).move_to([2.9, 0.5, 0])
+
+        cur = maps(0)
+        frames = VGroup(*[SurroundingRectangle(m_, buff=0, color=GREY_D, stroke_width=1.5) for m_ in cur])
+        t1 = label(r"layer 1, \ the head that will look one back", font_size=18, color=K).next_to(cur[0], UP, buff=0.12)
+        t2 = label(r"layer 2, \ the future induction head", font_size=18, color=A).next_to(cur[1], UP, buff=0.12)
+        top = float(c2[:, 1].max()) + 0.5
+        ax = Axes(x_range=[0, c2[-1, 0], 1000], y_range=[0, top, 2], x_length=5.0, y_length=3.0, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.7, -0.2, 0])
+        l2 = curve(ax, c2[:, 0], c2[:, 1], A, 3)
+        yn = label(r"bits per token on the repeat", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        t = ValueTracker(0)
+        dot = always_redraw(lambda: Dot(ax.c2p(t.get_value(), float(np.interp(t.get_value(), c2[:, 0], c2[:, 1]))), radius=0.08,
+                                        color=C.BITS))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
+                            .next_to(cur, DOWN, buff=0.3))
+        # show every checkpoint up to a little past the jump, then the end
+        show = [k for k, s_ in enumerate(steps) if s_ <= js + 750] + [len(steps) - 1]
+        show = sorted(set(show))
+        with self.voiceover(
+            "And here are those two heads forming, on the same example, at checkpoints through training, beside the "
+            "loss on the repeat. <bookmark mark='a'/> Early on, both look around vaguely, mostly at recent tokens. "
+            f"<bookmark mark='b'/> Then, around step {js:,}, within a few hundred steps of each other, the first "
+            "head snaps onto the token one back, and the second finds the stripe: the earlier copy, one ahead. "
+            "The loss falls in the same moment. Two heads that are useless alone become useful together, so they "
+            "appear together, suddenly."
+        ) as vo:
+            self.play(Create(ax), Create(l2), FadeIn(yn), FadeIn(xn), FadeIn(cur), Create(frames), FadeIn(t1), FadeIn(t2))
+            self.add(dot, cnt)
+            vo.wait_until("a")
+            half = [k for k in show if steps[k] < js - 250]
+            rest = [k for k in show if k not in half]
+            for group, mk in ((half, None), (rest, "b")):
+                if mk:
+                    vo.wait_until(mk)
+                for k in group[1:] if group is half else group:
+                    nxt = maps(k)
+                    self.play(FadeTransform(cur, nxt), t.animate.set_value(steps[k]), run_time=0.6)
+                    cur = nxt
+        self.wait(0.3)
+        self.remove(dot, cnt)
         self.clear_scene()

@@ -19,6 +19,7 @@ class World(VoiceoverScene):
     def construct(self):
         self.card()
         self.model()
+        self.learning()
         self.imagine()
 
     def card(self):
@@ -102,5 +103,44 @@ class World(VoiceoverScene):
             self.play(Create(c), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(tail))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How a world model learns: its imagined continuation of one clip, at checkpoints during training."""
+        w = load("world")
+        checks = [int(c) for c in w["checks"]]
+        dreams = np.asarray(w["dreams"])
+        real = np.asarray(w["probe_real"])
+        n = dreams.shape[1]
+        S = 0.72
+        rows = Group()
+        for k in range(len(checks)):
+            rows.add(Group(*[gray(f_, S, C.INTERVAL) for f_ in dreams[k]]).arrange(RIGHT, buff=0.04))
+        rr = Group(*[gray(f_, S, GREY_A) for f_ in real]).arrange(RIGHT, buff=0.04)
+        Group(rr, *rows).arrange(DOWN, buff=0.12).move_to([0.8, -0.3, 0])
+        ll = VGroup(label(r"what really happens", font_size=18, color=GREY_A).next_to(rr, LEFT, buff=0.25),
+                    *[MathTex(rf"\text{{step }}{c:,}".replace(",", "{,}"), font_size=22, color=C.INTERVAL).next_to(r_, LEFT, buff=0.25)
+                      for c, r_ in zip(checks, rows)])
+        head = label(rf"from the same two frames, \ the next ${n}$ imagined \ (each feeding the next)", font_size=24,
+                     color=GREY_A).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "How does a world model learn to dream? Here it is at checkpoints during training, each time given the "
+            "same two opening frames and left to imagine the next twelve, every frame built on its own last guess. "
+            "<bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> Early on, it learns "
+            "what a frame looks like, a ball somewhere, but not where the ball goes. <bookmark mark='c'/> Only later "
+            "does it learn the motion: the ball travels, and bounces, as it really does, for a while, before its "
+            "small errors add up."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rr), FadeIn(ll[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[0]), FadeIn(ll[1]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_, shift=DOWN * 0.1), FadeIn(l_)) for r_, l_ in zip(rows[1:3], ll[2:4])],
+                                  lag_ratio=0.5))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_, shift=DOWN * 0.1), FadeIn(l_)) for r_, l_ in zip(rows[3:], ll[4:])],
+                                  lag_ratio=0.5), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

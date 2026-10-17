@@ -131,6 +131,12 @@ class Grok(VoiceoverScene):
                        for i, q in enumerate(place(snaps[0]))])
         clock = VGroup(label(r"training step", font_size=24, color=GREY_A), Integer(snap_steps[0], font_size=28, color=C.BITS))
         clock.arrange(RIGHT, buff=0.2).move_to([2.8, 2.55, 0])
+        # the test accuracy at each of those moments, from the training curve (with weight decay)
+        Wc = np.asarray(g["wd"])
+        acc_at = [float(np.interp(k_, Wc[:, 0], Wc[:, 2])) for k_ in snap_steps]
+        tst = VGroup(label(r"test accuracy", font_size=22, color=GREY_A), DecimalNumber(100 * acc_at[0], num_decimal_places=0,
+                                                                                         unit=r"\%", font_size=26, color=C.TRUE_P))
+        tst.arrange(RIGHT, buff=0.2).next_to(clock, DOWN, buff=0.12)
         nums = VGroup(*[MathTex(str(i), font_size=18, color=GREY_A).next_to(place([xy[i]])[0], UR, buff=0.02) for i in (0, 1, 2, 3)])
         pl = label(r"the number vectors, \ along their final two main directions", font_size=24, color=GREY_A).to_edge(UP, buff=0.4).set_x(2.8)
         note_ = label(r"each number becomes a point on circles: \\ adding numbers turns into adding angles", font_size=26,
@@ -139,7 +145,8 @@ class Grok(VoiceoverScene):
         with self.voiceover(
             "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of "
             f"their weight sits on {nf} frequencies out of {len(F) - 1}: waves around the clock. <bookmark mark='b'/> Seen along their main "
-            "directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers "
+            "directions, the numbers lie on circles; here they are forming during training, and the circles appear "
+            "just as the test accuracy climbs. The network turns each number into an angle, and adds numbers "
             "by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first "
             "complete explanations of what a trained network computes. Part twenty takes that idea to real models."
         ) as vo:
@@ -147,10 +154,10 @@ class Grok(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01), FadeIn(bl), run_time=1.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(pl), FadeIn(clock), run_time=1.2)
-            for k, Q in zip(snap_steps[1:], snaps[1:]):  # the scatter of step 1 tightening into circles
+            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(pl), FadeIn(clock), FadeIn(tst), run_time=1.2)
+            for k, Q, a_ in zip(snap_steps[1:], snaps[1:], acc_at[1:]):  # the scatter tightening into circles, as test accuracy rises
                 self.play(*[d.animate.move_to(q) for d, q in zip(pts, place(Q))], clock[1].animate.set_value(k),
-                          run_time=0.55, rate_func=smooth)
+                          tst[1].animate.set_value(100 * a_), run_time=0.55, rate_func=smooth)
             self.play(FadeIn(nums), FadeIn(note_))
         self.wait(0.3)
         self.clear_scene()

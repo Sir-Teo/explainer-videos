@@ -232,20 +232,23 @@ class Superposition(VoiceoverScene):
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
                             .next_to(pl, UP, buff=0.2))
         on = 100 * (1 - S)
+        ang = [np.sort(np.mod(np.degrees(np.arctan2(W_[1], W_[0])), 360)) for W_ in Wt]
+        gaps = [np.diff(np.concatenate([a_, [a_[0] + 360]])) for a_ in ang]
+        settled = next((c for c, g_ in zip(checks, gaps) if g_.std() < 3), checks[-1])  # the first even spacing
         hl = label(rf"each feature on ${on:.0f}\%$ of the time", font_size=20, color=GREY_A).next_to(pl, DOWN, buff=0.2)
         with self.voiceover(
             "How does the network find that pentagon? Here is the sparse model learning, from its random start. "
-            "<bookmark mark='a'/> At first the five arrows point anywhere. The important features grow first, since "
-            "getting them wrong costs the most, <bookmark mark='b'/> and they push each other apart, because two "
-            "features pointing the same way would be read as each other. <bookmark mark='c'/> Slowly the weaker ones "
-            "find the gaps, and the arrangement settles into the most evenly spread shape there is: nobody planned "
-            "the pentagon; gradient descent found it."
+            "<bookmark mark='a'/> At first the five arrows point anywhere, some short, some long. "
+            "<bookmark mark='b'/> Within a few hundred steps they all grow, and they push each other apart: two "
+            "features pointing the same way would be read as each other. "
+            + f"<bookmark mark='c'/> By step {settled:,} the spacing is even, and the rest of training barely moves "
+            "them. Nobody planned the pentagon; gradient descent found it, fast."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(hl), Create(ax), FadeIn(yn), FadeIn(xn))
             self.add(cnt)
             self.play(FadeIn(cur))
             vo.wait_until("a")
-            marks = {3: "b", 5: "c"}
+            marks = {2: "b", 4: "c"}
             for k in range(1, len(checks)):
                 if k in marks:
                     vo.wait_until(marks[k])
