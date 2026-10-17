@@ -57,10 +57,10 @@ class Steering(VoiceoverScene):
             r_[0].move_to([-5.9, y, 0])
             r_[1].move_to([-0.2, y, 0])
             r_[2].move_to([5.5, y, 0])
+        hl = label(r"lit: \ quotes, \ apostrophes, \ ! \ and \ ?", font_size=18, color=PUSH)
         tag = note(r"three samples at each strength; \ one shown").to_corner(DR, buff=0.2)
         hl.next_to(tag, UP, buff=0.1).align_to(tag, RIGHT)
         q0, q1 = float(speech[f"{alphas[0]:g}"]), float(speech[f"{alphas[-1]:g}"])
-        hl = label(r"lit: \ quotes, \ apostrophes, \ ! \ and \ ?", font_size=18, color=PUSH)
         with self.voiceover(
             "If a feature is a direction, we can push on it. <bookmark mark='a'/> Take the feature that fires on "
             "quotation marks. <bookmark mark='b'/> While the model writes, add alpha times its direction to the "
