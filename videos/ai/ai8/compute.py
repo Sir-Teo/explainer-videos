@@ -303,9 +303,11 @@ def compute_lm():
         torch.save(dict(config=config, params=[p_.detach().clone() for p_ in params], curve=curve), saved)
     passage_bits = bits(ps)
     valid_bits = bits(va)
-    # the learned vectors of the letters, digits and common punctuation, in 2D (PCA)
-    E = emb.weight.detach().numpy()
-    show = [i for i, c in enumerate(chars) if c.isalnum() or c in " .,;:!?'\"-"]
+    # the vectors the output layer scores each character with (their directions), for the letters, digits and common
+    # punctuation, in 2D (PCA); the output vectors group far more cleanly than the input table
+    E = outl.weight.detach().numpy()
+    E = E / np.linalg.norm(E, axis=1, keepdims=True)
+    show = [i for i, c in enumerate(chars) if c.isascii() and (c.isalnum() or c in " .,;:!?'\"-")]  # rare symbols left out
     Es = E[show] - E[show].mean(0)
     u, s, vt = np.linalg.svd(Es, full_matrices=False)
     xy = Es @ vt[:2].T
@@ -356,7 +358,7 @@ def compute_lm():
     assert mix_bits < min(kn_alone, passage_bits)
     return dict(K=K, n_ctx=N_CTX, emb=EMB, hid=HID, n_params=int(n_params), steps=steps, batch=batch,
                 curve=np.array(curve), passage_bits=passage_bits, valid_bits=valid_bits, chars=[chars[i] for i in show],
-                xy=xy, samples=samples, kn=kn["best_bits"], kn_order=M, lam=lam, mix_bits=mix_bits, lam_curve=np.array(vb))
+                xy=xy, xy_chars=[chars[i] for i in show], samples=samples, kn=kn["best_bits"], kn_order=M, lam=lam, mix_bits=mix_bits, lam_curve=np.array(vb))
 
 
 ITEMS = {
