@@ -36,6 +36,16 @@ def zh() -> bool:
     return os.environ.get("EXPLAINER_LANG", "en") == "zh"
 
 
+def data_text(s: str, **kw) -> Text:
+    """Text that is data, words a model read or wrote: never translated, even when a word is in the table."""
+    if zh() or os.environ.get("EXPLAINER_COLLECT_TEXT"):
+        from explainer.zh_text import verbatim
+
+        with verbatim():
+            return Text(s, **kw)
+    return Text(s, **kw)
+
+
 # ---------------------------------------------------------------------------
 # The twenty parts
 # ---------------------------------------------------------------------------

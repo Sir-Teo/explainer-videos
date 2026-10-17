@@ -87,7 +87,7 @@ class PCA(VoiceoverScene):
                 yv = -0.38 * i
                 bar = Rectangle(width=L, height=0.26, stroke_width=0, fill_color=c_hi if v > 0 else c_lo,
                                 fill_opacity=0.85).move_to([L / 2 if v > 0 else -L / 2, yv, 0])
-                t = Text(w, font=MONO, font_size=20, color=GREY_A).next_to(bar, RIGHT if v > 0 else LEFT, buff=0.1)
+                t = data_text(w, font=MONO, font_size=20, color=GREY_A).next_to(bar, RIGHT if v > 0 else LEFT, buff=0.1)
                 rows.add(VGroup(bar, t))
             axis = Line([0, 0.25, 0], [0, -0.38 * (len(words) - 1) - 0.25, 0], color=GREY_C, stroke_width=2)
             head = label(title, font_size=30).next_to(axis, UP, buff=0.35)

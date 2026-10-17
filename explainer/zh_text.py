@@ -9,6 +9,7 @@ EXPLAINER_COLLECT_TEXT=<file.jsonl> records every string instead, to gather what
 
 from __future__ import annotations
 
+import contextlib
 import inspect
 import json
 import os
@@ -64,6 +65,16 @@ def _scene() -> str:
 
 
 _TABLE: dict | None = None
+_VERBATIM = [False]  # set by verbatim(): text that is data (words a model read or wrote) stays as it is
+
+
+@contextlib.contextmanager
+def verbatim():
+    _VERBATIM[0] = True
+    try:
+        yield
+    finally:
+        _VERBATIM[0] = False
 
 
 # xeCJK drops a space that follows a Chinese character, so "\text{ 时 } d" would set as "时d": make it a control space
@@ -126,9 +137,9 @@ def install(base_template) -> None:
     text_init = Text.__init__
 
     def patched_text(self, text, *a, **kw):
-        if COLLECT:
+        if COLLECT and not _VERBATIM[0]:
             record(text, "Text", False)
-        if lang.LANG == "zh":
+        if lang.LANG == "zh" and not _VERBATIM[0]:
             text = translate(text)
             if CJK.search(text):
                 kw["font"] = "Songti SC"

@@ -12,7 +12,7 @@ Translations live in `videos/ai/aiN/narration_zh.json`, keyed by the English lin
 - On-screen text lives in `videos/ai/ai_text_zh.json` (exact `strings`, `phrases` inside `\text{}`, regex
   `patterns`); `python tools/collect_text.py --check aiN` lists what is still English, `--lang zh aiN` dry-runs the
   Chinese build. Text the models read or wrote (the passage, Shannon's sentence, generated samples, tokens) stays in
-  English: it is data.
+  English: it is data. Draw such words with `data_text(...)` (from `explainer.ai`), never `Text(...)`: a bare `Text` of a word that happens to be in the table ("yes", "noise", "next") would be translated.
 
 ## Glossary
 
