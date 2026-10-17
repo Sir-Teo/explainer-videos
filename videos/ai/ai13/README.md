@@ -9,9 +9,11 @@ four chapters:
   DeepSeek-V3, Qwen3-235B-A22B, gpt-oss-120b, Kimi K2 and Qwen3-Next, as published.
 * **Keeping every expert busy.** A character model whose hidden layer is 8 experts (2 per character), trained here
   three ways: without balancing, with Switch's auxiliary loss, and with DeepSeek-V3's loss-free bias; each expert's
-  share of the work through training.
+  share of the work through training. Busiest expert at the end: 3.2x a fair share unbalanced (four experts starve),
+  2.8x with the auxiliary loss at Switch's strength, 1.1x with the bias. Held-out bits 2.453 / 2.410 / 2.434.
 * **What experts learn.** Where characters send their contexts; the mixture against dense models with the same
-  compute and the same parameters.
+  compute and the same parameters: 2.434 bits against 2.485 and 2.510 (after the same 3,000 steps, the eight-times-wider
+  dense model hasn't caught up).
 * **Sparse attention.** In Part 11's transformer, how much attention the top k keys hold, and the bits per character
   when each query may use only k keys, chosen by score or as a sliding window; NSA and DeepSeek Sparse Attention,
   drawn on one real query (layer 1, head 4) whose last 48 keys hold 90% of its attention: a window of 8 keeps 7%,

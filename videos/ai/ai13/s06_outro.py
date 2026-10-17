@@ -74,10 +74,13 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(r"Part 13, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        aux_even = float(load("moe")["imbalance"]["aux"]) < 1.5
+        bal = ("by a penalty or by DeepSeek's loss-free bias. " if aux_even else
+               "partly by a penalty, and fully, in our model, by DeepSeek's loss-free bias. ")
         with self.voiceover(
             "Let's take stock. A mixture of experts keeps many networks in each layer and runs only a few per token, "
             "chosen by a router: frontier models now use a few percent of their weights at a time. Routers play "
-            "favourites unless balanced, by a penalty or by DeepSeek's loss-free bias. The experts split the work by "
+            "favourites unless balanced, " + bal + "The experts split the work by "
             "themselves, and the mixture buys the knowledge of a big model at the cost of a small one. And attention "
             "is sparse too: a few keys hold most of each query's weight, and choosing keys by score beats choosing "
             "the most recent."
