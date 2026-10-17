@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai11.common import heat_image
-from videos.ai.ai12.common import ADD, DECAY, DELTA, K, Q, STATE, V, curve, load
+from videos.ai.ai12.common import ADD, DECAY, DELTA, K, Q, STATE, V, curve, load, ttt_picture, ttt_step
 
 RULES = [("add", r"add", ADD), ("decay", r"decay, then add", DECAY), ("delta", r"the delta rule", DELTA)]
 
@@ -195,6 +195,9 @@ class Rules(VoiceoverScene):
         msg.to_edge(DOWN, buff=1.2)
         fam = label(r"gated delta rule: \ Gated DeltaNet (Qwen3-Next), \ Kimi Delta Attention (Kimi Linear); \\ "
                     r"richer memories: \ test-time training, \ Titans", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
+        ttt = gloss(r"test-time training", r"the memory is a small network, \\ and its weights keep learning while the model "
+                    r"reads", ttt_picture(), width=5.4, color=STATE).move_to([0, -0.55, 0])
+        tp = ttt[1][-1]
         with self.voiceover(
             "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap "
             "between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the "
@@ -212,6 +215,12 @@ class Rules(VoiceoverScene):
             self.play(Write(f3), FadeIn(l3))
             self.play(FadeIn(msg))
             vo.wait_until("c")
-            self.play(FadeIn(fam))
+            # room for the picture: the first two lines have done their work
+            self.play(FadeOut(VGroup(f1, l1, f2)), VGroup(f3, l3).animate.move_to([0, 2.65, 0]),
+                      msg.animate.move_to([0, 1.65, 0]), FadeIn(fam))
+            self.play(FadeIn(ttt, shift=UP * 0.2))
+            for k_ in range(1, len(tp[0]) + 1):
+                w_, t_ = ttt_step(tp, k_)
+                self.play(Transform(tp[2][0], w_), Transform(tp[0], t_), run_time=0.5)
         self.wait(0.3)
         self.clear_scene()

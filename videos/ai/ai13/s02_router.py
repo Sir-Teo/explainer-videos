@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import EXPERT_COLORS, MONO, ROUTER, billions, load
+from videos.ai.ai13.common import EXPERT_COLORS, MONO, ROUTER, billions, gate_bars, gate_picture, load
 
 
 class Router(VoiceoverScene):
@@ -103,9 +103,12 @@ class Router(VoiceoverScene):
             "<bookmark mark='b'/> The model knows as much as its total size, roughly, and costs as much to run as its "
             "active size."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(tag))
+            # the models and their full sizes from the first word; what each uses per token grows in as they're named
+            self.play(FadeIn(key), FadeIn(tag), LaggedStart(*[FadeIn(VGroup(r_[0], r_[1], r_[2], r_[4]), shift=RIGHT * 0.2)
+                                                            for r_ in g], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g], lag_ratio=0.3), run_time=3.0)
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r_[3], LEFT), FadeIn(r_[5])) for r_ in g], lag_ratio=0.3),
+                      run_time=3.0)
             vo.wait_until("b")
         self.wait(0.3)
         self.clear_scene()
@@ -143,6 +146,10 @@ class Router(VoiceoverScene):
         bt = label(r"$2$ of $16$ experts", font_size=20, color=GREY_A).next_to(big, UP, buff=0.12)
         st = label(r"$8$ of $64$, \ each a quarter the size: \ the same compute", font_size=20, color=GREY_A).next_to(small, UP, buff=0.12)
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-V3} (2024); \ D.~Dai et al., \textit{DeepSeekMoE} (2024)", corner=DR)
+        gc = gloss(r"sigmoid gate", r"each expert's score squashed to between $0$ and $1$ on its own: \\ raise one, "
+                   r"and the others don't have to fall", gate_picture(), width=5.2, color=ROUTER).move_to([3.75, 1.2, 0])
+        gp = gc[1][-1]
+        tag = note(r"illustrative scores").next_to(gc, DOWN, buff=0.1).align_to(gc, RIGHT)
         with self.voiceover(
             "Here is DeepSeek-V3's router exactly, since it's become a template. <bookmark mark='a'/> Each expert "
             "gets a score from a sigmoid, its own yes-or-no, rather than a softmax that makes experts compete. "
@@ -159,7 +166,13 @@ class Router(VoiceoverScene):
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(Write(eqs[k]), FadeIn(notes[k]))
+                if k == 0:  # one expert's score rises: under a softmax the rest must give way, under sigmoids nobody does
+                    self.play(FadeIn(gc, shift=UP * 0.2), FadeIn(tag))
+                    for boost in (1.6, 0.0):
+                        b0, b1 = gate_bars(gp, boost)
+                        self.play(Transform(gp[0][0], b0), Transform(gp[1][0], b1), run_time=1.2)
             vo.wait_until("e")
+            self.play(FadeOut(gc), FadeOut(tag), run_time=0.5)
             self.play(FadeIn(big), FadeIn(bt), Write(bl))
             self.play(FadeIn(small), FadeIn(st), Write(sl))
         self.wait(0.3)

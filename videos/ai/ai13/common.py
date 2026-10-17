@@ -35,3 +35,37 @@ def load_image(L, width, height) -> ImageMobject:
     img = ImageMobject((np.concatenate([rgb, np.ones(v.shape + (1,))], -1) * 255).astype(np.uint8))
     img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
     return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
+
+
+SIG_SCORES = np.array([0.6, 0.1, -0.4, 0.3])  # illustrative router scores for four experts
+
+
+def gate_picture() -> VGroup:
+    """A jargon-card picture of softmax against sigmoid gates: VGroup(softmax panel, sigmoid panel), each
+    VGroup(bars, base, name).  ``gate_bars(pic, boost)`` rebuilds both panels' bars with expert 1's score raised by
+    ``boost``: under the softmax the others shrink (they compete), under the sigmoid they stay put (each its own)."""
+    parts = VGroup()
+    for name in (r"softmax: \ they compete", r"sigmoid: \ each its own"):
+        base = Line(LEFT * 0.95, RIGHT * 0.95, color=GREY_C, stroke_width=1.5)
+        parts.add(VGroup(Rectangle(width=1.9, height=1.0, stroke_width=0, fill_opacity=0).next_to(base, UP, buff=0), base,
+                         label(name, font_size=18, color=GREY_A).next_to(base, DOWN, buff=0.1)))
+    parts.arrange(RIGHT, buff=0.7)  # (an invisible box above each base keeps room for the tallest bars)
+    bars = gate_bars(VGroup(*[VGroup(VGroup(), p_[1]) for p_ in parts]), 0.0)
+    return VGroup(*[VGroup(b_, p_[1], p_[2], p_[0]) for b_, p_ in zip(bars, parts)])
+
+
+def gate_bars(pic: VGroup, boost: float) -> tuple[VGroup, VGroup]:
+    s = SIG_SCORES.copy()
+    s[0] += boost
+    soft = np.exp(s) / np.exp(s).sum()
+    sig = 1 / (1 + np.exp(-s))
+    out = []
+    for panel, vals in zip(pic, (soft, sig)):
+        base = panel[1]
+        unit = base.get_length() / 2.2  # the bars' height scale follows the picture's size
+        x0 = base.get_left()[0] + 0.25 * unit
+        out.append(VGroup(*[Rectangle(width=0.3 * unit, height=max(1.2 * unit * float(v), 0.01), stroke_width=0,
+                                      fill_color=EXPERT_COLORS[i], fill_opacity=0.9)
+                            .move_to([x0 + (0.15 + 0.5 * i) * unit, base.get_y() + 0.6 * unit * float(v), 0])
+                            for i, v in enumerate(vals)]))
+    return tuple(out)

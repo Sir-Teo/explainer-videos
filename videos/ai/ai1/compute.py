@@ -393,6 +393,41 @@ def compute_seen():
     return out
 
 
+COPY_LEN = 20
+
+
+def compute_writing():
+    """What a counting model writes as it reads: samples from the 5-letter-context model after counting the first
+    n letters of the books (backing off to shorter contexts it has not met), the same seed and dice for each n."""
+    tr = codes27(text("train27"))
+    amounts = [int(a) for a in (1e3, 1e4, 1e5, 1e6)] + [len(tr)]
+    seed = list(codes27("it was the "))
+    N, out, copied, mask = 5, {}, {}, {}
+    for n in amounts:
+        g = rng(1951)
+        models = {}
+        seq = list(seed)
+        for _ in range(110):
+            for M in range(N, -1, -1):
+                if M not in models:
+                    models[M] = NGram(tr[:n], M, 27)
+                ctx = np.array(seq[len(seq) - M:] if M else [], np.int64)
+                d = models[M].dist(ctx, 0.0)
+                if np.isfinite(d).all() and d.sum() > 0:
+                    break
+            seq.append(int(g.choice(27, p=d / d.sum())))
+        out[str(n)] = "".join(ALPHA27[i] for i in seq[len(seed):])
+        # how much of it is copied: the letters inside some 20-letter stretch found word for word in the text counted
+        read = "".join(ALPHA27[i] for i in tr[:n])
+        w, L = out[str(n)], COPY_LEN
+        hit = [w[i:i + L] in read for i in range(len(w) - L + 1)]
+        mask[str(n)] = "".join("1" if any(hit[max(0, i - L + 1):i + 1]) else "0" for i in range(len(w)))
+        copied[str(n)] = mask[str(n)].count("1") / len(w)
+        print(f"    {n:>9,}: copied {copied[str(n)]:.2f}  {out[str(n)][:100]}", flush=True)
+    return dict(amounts=amounts, context=N, seed="it was the ", samples=out, copied=copied, mask=mask,
+                copy_len=COPY_LEN)
+
+
 def compute_samples():
     tr = codes27(text("train27"))
     g = rng(1948)
@@ -926,6 +961,7 @@ ITEMS = {
     "orders": compute_orders,
     "seen": compute_seen,
     "samples": compute_samples,
+    "writing": compute_writing,
     "huffman": compute_huffman,
     "arith": compute_arith,
     "game": compute_game,

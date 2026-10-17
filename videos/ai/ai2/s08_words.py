@@ -12,6 +12,7 @@ class Words(VoiceoverScene):
         self.card()
         self.table()
         self.neighbours()
+        self.directions()
         self.analogy()
         self.word2vec()
         self.w2v_learning()
@@ -104,6 +105,68 @@ class Words(VoiceoverScene):
                                       lag_ratio=0.2), run_time=1.2)
             self.play(FadeIn(perez))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def directions(self):
+        """Meaning arriving direction by direction: neighbours from the first k of the 100 SVD directions."""
+        w = load("words")
+        E = np.asarray(w["E"], float)
+        vocab = list(w["vocab"])
+        idx = {x: i for i, x in enumerate(vocab)}
+        ks = [2, 5, 10, 25, 100]
+        assert E.shape[1] == ks[-1]
+
+        def near(word, k, n=5):
+            e = E[:, :k] / np.linalg.norm(E[:, :k], axis=1, keepdims=True)
+            sim = e @ e[idx[word]]
+            return [vocab[i] for i in np.argsort(-sim)[1:n + 1]]
+
+        words = ["three", "ship", "father", "monday"]
+        final = {x: set(near(x, ks[-1], 10)) for x in words}  # each word's 10 nearest, with all 100 directions
+        nb = {(x, k): near(x, k) for x in words for k in ks}
+        settle = {x: next(k for k in ks if sum(y in final[x] for y in nb[(x, k)]) >= 3) for x in words}
+        assert [settle[x] for x in words] == [5, 10, 25, 100], settle
+        assert all(sum(y in final[x] for y in nb[(x, ks[0])]) == 0 for x in words)
+        days = "monday tuesday wednesday thursday friday saturday sunday".split()
+        proper = lambda w_: w_.capitalize() if w_ in days else w_  # noqa: E731
+
+        def column(k, word):  # a fixed pitch, so the rows line up across columns
+            return VGroup(*[data_text(y, font=MONO, font_size=26, color=C.BITS if y in final[word] else GREY_B)
+                            .move_to(DOWN * 0.52 * i) for i, y in enumerate(nb[(word, k)])])
+
+        heads = VGroup(*[data_text(x, font=MONO, font_size=32, color=WHITE) for x in words]).arrange(RIGHT, buff=1.9)
+        heads.move_to([0, 1.5, 0])
+        cols = VGroup(*[column(ks[0], x).next_to(h_, DOWN, buff=0.45) for x, h_ in zip(words, heads)])
+        t = ValueTracker(ks[0])
+        cnt = always_redraw(lambda: label(rf"keeping the first ${int(round(t.get_value()))}$ of the $100$ directions",
+                                          font_size=30, color=C.CONTEXT).to_edge(UP, buff=0.45))
+        sub = label(r"each word's $5$ nearest neighbours; \ highlighted: \ among its $10$ nearest with all $100$",
+                    font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
+        if sub.width > 13.0:
+            sub.scale_to_fit_width(13.0)
+        two = lambda x, k: " and ".join(y for y in nb[(x, k)] if y in final[x])  # noqa: E731
+        fam = [y for y in nb[("father", 25)] if y in final["father"]][:3]
+        week = [proper(y) for y in nb[("monday", 100)] if y in days][:3]
+        with self.voiceover(
+            "How many directions does meaning need? Keep only the first few of the hundred, the strongest, and "
+            f"look at the neighbours again. <bookmark mark='a'/> With {ks[0]}, they're nearly random. "
+            f"<bookmark mark='b'/> With {ks[1]}, three already sits with numbers. <bookmark mark='c'/> With "
+            f"{ks[2]}, ship finds {two('ship', ks[2])}. <bookmark mark='d'/> Father needs {ks[3]}, to find "
+            f"{', '.join(fam[:-1])} and {fam[-1]}. <bookmark mark='e'/> And Monday gathers its week, "
+            f"{', '.join(week)}, only with all a hundred. The strongest directions carry the broadest patterns; the "
+            "finer meanings live further down."
+        ) as vo:
+            self.add(cnt)
+            self.play(FadeIn(heads), FadeIn(sub))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(c) for c in cols], lag_ratio=0.15))
+            for k, mark in zip(ks[1:], "bcde"):
+                vo.wait_until(mark)
+                new = VGroup(*[column(k, x).next_to(h_, DOWN, buff=0.45) for x, h_ in zip(words, heads)])
+                self.play(Transform(cols, new), t.animate.set_value(k), run_time=1.0)
+        self.wait(0.3)
+        self.remove(cnt)
         self.clear_scene()
 
     # ------------------------------------------------------------------

@@ -124,8 +124,8 @@ class Derivative(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def rules(self):
-        r1 = MathTex(r"\frac{d}{dx} e^{x} = e^{x}", font_size=42).move_to([-5.0, 2.5, 0])
-        r2 = MathTex(r"\frac{d}{dx} \ln x = \frac{1}{x}", font_size=42).move_to([-1.7, 2.5, 0])
+        r1 = MathTex(r"\frac{d}{dx} e^{x}", "=", r"e^{x}", font_size=42).move_to([-5.0, 2.5, 0])
+        r2 = MathTex(r"\frac{d}{dx} \ln x", "=", r"\frac{1}{x}", font_size=42).move_to([-1.7, 2.5, 0])
         colors = {r"f'(g(x))": GRAD, r"g'(x)": C.BITS}
         r3 = cmath(r"\frac{d}{dx} f(g(x))", "=", r"f'(g(x))", r"\,", r"g'(x)", colors=colors, font_size=42).move_to([3.6, 2.5, 0])
         if r3.get_right()[0] > 6.9:
@@ -149,6 +149,8 @@ class Derivative(VoiceoverScene):
                          color=GREY_A).move_to([0.4, 1.7, 0])
         conn = VGroup(*[Line(ivs[k].get_center(), ivs[k + 1].get_center(), color=GREY_B, stroke_width=1.5,
                              stroke_opacity=0.6) for k in range(2)])
+        # the questions first: each left-hand side, waiting for its answer
+        qs = [MathTex(r"?", font_size=46, color=GREY_B).next_to(r[1], RIGHT, buff=0.25) for r in (r1, r2, r3)]
         with self.voiceover(
             "A few derivatives come up over and over. <bookmark mark='a'/> The exponential is its own derivative. "
             "<bookmark mark='b'/> The logarithm's derivative is one over x. That's why the surprise climbs so steeply "
@@ -156,12 +158,11 @@ class Derivative(VoiceoverScene):
             "first, then f. Writing f prime for the slope of f, the derivative of f of g of x is f prime at g of x, "
             "times g prime at x. Change flows through a composition, multiplying as it goes."
         ) as vo:
-            vo.wait_until("a")
-            self.play(Write(r1))
-            vo.wait_until("b")
-            self.play(Write(r2))
-            vo.wait_until("c")
-            self.play(Write(r3))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), FadeIn(r[1]), FadeIn(q)) for r, q in zip((r1, r2, r3), qs)],
+                                  lag_ratio=0.3), run_time=1.5)
+            for r, q, mark in zip((r1, r2, r3), qs, "abc"):
+                vo.wait_until(mark)
+                self.play(FadeOut(q, scale=0.5), Write(VGroup(*r[2:])))
             self.play(FadeIn(notation))
             self.play(Create(lines), FadeIn(names), FadeIn(scale_note))
             self.play(Create(ivs[0]))

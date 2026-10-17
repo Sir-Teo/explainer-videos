@@ -64,9 +64,24 @@ class Graphs(VoiceoverScene):
                         for a in range(4) for b in range(a + 1, 4)])
         lm_l = label(r"a language model: \ every earlier letter points at every later one", font_size=24,
                      color=GREY_A).next_to(VGroup(*lm), DOWN, buff=0.5)
+        # the drawing rules, built big as they're named, then shrunk into the mixture's own z -> x
+        dz, dx = node(r"z", [0, 1.5, 0], r=0.62), node(r"x", [0, -1.2, 0], r=0.62)
+        for d_ in (dz, dx):
+            d_[0].set_stroke(GREY_B).set_fill(BACKGROUND, opacity=1)
+            d_[1].scale(1.5)
+        dzh = node(r"z", [0, 1.5, 0], r=0.62)
+        dzh[1].scale(1.5)
+        dxo = node(r"x", [0, -1.2, 0], hidden=False, r=0.62)
+        dxo[1].scale(1.5)
+        d_e = edge(dz, dx)
+        tq = label(r"one circle per quantity", font_size=28, color=GREY_A).next_to(VGroup(dz, dx), LEFT, buff=0.8)
+        to = label(r"shaded: \ observed", font_size=28, color=SEEN).next_to(dx, RIGHT, buff=0.6)
+        th = label(r"empty: \ hidden", font_size=28, color=HIDDEN).next_to(dz, RIGHT, buff=0.6)
+        ta = label(r"arrow: \ depends directly on", font_size=28, color=GREY_B).next_to(d_e, LEFT, buff=0.5)
         with self.voiceover(
-            "Every model in this part can be drawn the same way: a circle for each quantity, shaded if we observe "
-            "it, empty if it's hidden, and an arrow wherever one depends directly on another. "
+            "Every model in this part can be drawn the same way: <bookmark mark='q'/> a circle for each quantity, "
+            "<bookmark mark='o'/> shaded if we observe it, <bookmark mark='h'/> empty if it's hidden, "
+            "<bookmark mark='r'/> and an arrow wherever one depends directly on another. "
             "<bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. "
             "<bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. "
             "<bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big "
@@ -74,9 +89,18 @@ class Graphs(VoiceoverScene):
             "That's a Bayesian network, Judea "
             "Pearl's language for reasoning under uncertainty."
         ) as vo:
-            self.play(FadeIn(key))
+            vo.wait_until("q")
+            self.play(Create(dz[0]), Create(dx[0]), FadeIn(dz[1]), FadeIn(dx[1]), FadeIn(tq))
+            vo.wait_until("o")
+            self.play(Transform(dx, dxo), FadeIn(to))
+            vo.wait_until("h")
+            self.play(Transform(dz, dzh), FadeIn(th))
+            vo.wait_until("r")
+            self.play(GrowArrow(d_e), FadeOut(tq), FadeIn(ta))
             vo.wait_until("a")
-            self.play(FadeIn(mix), FadeIn(mix_l))
+            self.play(FadeOut(VGroup(to, th, ta)), ReplacementTransform(dz, mix[0]), ReplacementTransform(dx, mix[1]),
+                      ReplacementTransform(d_e, mix[2]), FadeIn(key), run_time=1.2)
+            self.play(FadeIn(mix[3:]), FadeIn(mix_l))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(m) for m in hmm], lag_ratio=0.05), FadeIn(hmm_l), run_time=2.0)
             vo.wait_until("c")

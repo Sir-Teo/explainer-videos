@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai12.common import A, K, MONO, Q, STATE, V, curve, gib, load, vec_column
+from videos.ai.ai12.common import A, K, MONO, Q, STATE, V, curve, gib, gqa_picture, gqa_shared, load, vec_column
 
 
 class KVCache(VoiceoverScene):
@@ -90,6 +90,9 @@ class KVCache(VoiceoverScene):
                     font_size=24, color=C.TRUE_P).to_edge(DOWN, buff=0.85)
         src = note(r"layer and head counts from each model's published configuration").to_edge(DOWN, buff=0.3)
         r1 = pt["llama_mha"] / pt["llama"]
+        gq = gloss(r"grouped-query attention", r"query heads share keys and values, a group at a time: \\ "
+                   r"fewer keys and values to keep", gqa_picture(), width=5.0, color=C.TRUE_P).move_to([3.5, -1.35, 0])
+        gqp = gq[1][-1]
         with self.voiceover(
             "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every "
             f"attention head kept its own keys and values, each token of context would cost {pt['llama_mha'] / 2**20:.1f} "
@@ -102,8 +105,11 @@ class KVCache(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(g[0], shift=RIGHT * 0.2))
             vo.wait_until("b")
-            self.play(FadeIn(g[1], shift=RIGHT * 0.2), FadeIn(gqa))
+            self.play(FadeIn(g[1], shift=RIGHT * 0.2), FadeIn(gqa), FadeIn(gq, shift=UP * 0.2))
+            sh_ = gqa_shared(gqp)
+            self.play(Transform(gqp[1], sh_[0]), Transform(gqp[2], sh_[1]), run_time=1.5)
             vo.wait_until("c")
+            self.play(FadeOut(gq), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g[2:]], lag_ratio=0.4), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

@@ -52,3 +52,16 @@ def arrows_field(grid, field, scale=0.12, max_len=0.45, color=SCORE, stroke_widt
         g.add(Arrow(s, s + L * np.array([d[0], d[1], 0]), buff=0, color=color, stroke_width=stroke_width,
                     max_tip_length_to_length_ratio=0.35, max_stroke_width_to_length_ratio=12))
     return g
+
+
+def distill_picture() -> VGroup:
+    """A jargon-card picture of distillation: VGroup(teacher's curved path, its many small steps, the student's one
+    jump, the two names, the start and the end).  Show the path and ends first, then the steps, then the jump."""
+    a, b = np.array([-1.6, -0.45, 0]), np.array([1.6, 0.25, 0])
+    path = ArcBetweenPoints(a, b, angle=-1.1, color=FM_C, stroke_width=2.5)
+    steps = VGroup(*[Dot(path.point_from_proportion(u), radius=0.045, color=FM_C) for u in np.linspace(0.08, 0.92, 11)])
+    jump = Arrow(a, b, buff=0.08, color=RF_C, stroke_width=4, max_tip_length_to_length_ratio=0.12)
+    ends = VGroup(Dot(a, radius=0.08, color=NOISE), Dot(b, radius=0.08, color=DATA))
+    names = VGroup(label(r"teacher: \ many small steps", font_size=18, color=FM_C).next_to(path, UP, buff=0.08),
+                   label(r"student: \ one jump, \ the same place", font_size=18, color=RF_C).next_to(jump, DOWN, buff=0.12))
+    return VGroup(path, steps, jump, names, ends)

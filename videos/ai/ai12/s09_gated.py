@@ -66,6 +66,10 @@ class GatedDelta(VoiceoverScene):
         def arrow(x, color, sw=5):
             return Arrow(P([0, 0]), P(x), buff=0, color=color, stroke_width=sw, max_tip_length_to_length_ratio=0.15)
 
+        def square(M, r=1.0):  # the square [-r, r]^2 carried by the map: a filled patch, so the map is seen acting
+            return Polygon(*[P(M @ c_) for c_ in ([-r, -r], [r, -r], [r, r], [-r, r])], stroke_width=0, fill_color=STATE,
+                           fill_opacity=0.28)
+
         perp = np.array([-k[1], k[0]])
         base = VGroup(*[Line(P([s, -2.5]), P([s, 2.5]), stroke_width=1, color=GREY_D) for s in np.linspace(-2.5, 2.5, 11)],
                       *[Line(P([-3.0, s]), P([3.0, s]), stroke_width=1, color=GREY_D) for s in np.linspace(-2.5, 2.5, 11)])
@@ -95,6 +99,12 @@ class GatedDelta(VoiceoverScene):
         par = gloss(r"parity", r"is the count of $1$s so far odd or even? \\ a switch that flips at every $1$: "
                     r"$\beta = 2$'s reflection is that flip", parity_picture(), width=5.6, color=DELTA)
         par.move_to([-3.4, -0.3, 0])
+        # what the memory does: a key goes in, an answer comes out (shown until the update rule takes its place)
+        mp = VGroup(label(r"the memory $S$: \ a linear map", font_size=26, color=STATE),
+                    MathTex(r"k", r"\;\longmapsto\;", r"S\,k", font_size=40),
+                    label(r"key in, \ answer out", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.2).move_to([3.4, 2.1, 0])
+        mp[1][0].set_color(K)
+        mp[1][2].set_color(STATE)
         cite_ = cite(r"S.~Yang et al., \textit{Gated Delta Networks} (2025); \ R.~Grazzi et al., \textit{Unlocking State-Tracking "
                      r"in Linear RNNs Through Negative Eigenvalues} (2025)", corner=DR)
         with self.voiceover(
@@ -111,22 +121,23 @@ class GatedDelta(VoiceoverScene):
             "<bookmark mark='f'/> Parity asks: is the count of ones so far odd or even? It's a light switch that "
             "flips at every one, and a reflection is exactly that flip."
         ) as vo:
-            gI = grid(np.eye(2))
-            self.play(FadeIn(base), Create(gI), FadeIn(cite_), run_time=1.5)
+            gI, sq = grid(np.eye(2)), square(np.eye(2))
+            self.play(FadeIn(base), FadeIn(sq), Create(gI), FadeIn(cite_), FadeIn(mp[0]), run_time=1.5)
+            self.play(FadeIn(mp[1:]))
             vo.wait_until("p")
-            self.play(ReplacementTransform(gI, gS), run_time=2.0)
+            self.play(ReplacementTransform(gI, gS), Transform(sq, square(S0)), run_time=2.0)
             vo.wait_until("a")
             self.play(GrowArrow(ak), FadeIn(kl), GrowArrow(ans), FadeIn(al))
             self.play(Create(tgt), FadeIn(tip), FadeIn(vl), GrowArrow(ap), FadeIn(pl))
             vo.wait_until("b")
-            self.play(Write(f), FadeIn(e1))
+            self.play(FadeOut(mp), Write(f), FadeIn(e1))
             vo.wait_until("c")
             cur = S0
             for i, b in enumerate((0.5, 1.0, 2.0)):
                 if i:
                     vo.wait_until("d" if b == 1.0 else "e")
                 M = Ss[b]
-                self.play(Transform(gS, grid(M)), Transform(ans, arrow(M @ k, STATE)),
+                self.play(Transform(gS, grid(M)), Transform(sq, square(M)), Transform(ans, arrow(M @ k, STATE)),
                           al.animate.next_to(P(M @ k), LEFT if b == 2.0 else RIGHT, buff=0.1), Transform(ap, arrow(M @ perp, GREY_B, 3)),
                           FadeIn(steps[i]), run_time=1.8)
                 cur = M

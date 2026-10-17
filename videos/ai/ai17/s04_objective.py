@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import CHAIN, RIGHT_C, WRONG_C, curve, load
+from videos.ai.ai17.common import CHAIN, RIGHT_C, WRONG_C, chip, curve, load, mark
 
 POLICY = C.NEURAL
 RATIO, ADV, KLC = C.TRUE_P, C.BITS, C.SURPRISE
@@ -128,6 +128,35 @@ class Objective(VoiceoverScene):
             (kp if cg[-1, 3] > cp[-1, 3] else kg).shift(DOWN * 0.18)
         cite_ = cite(r"J.~Schulman, \textit{Approximating KL Divergence} (2020)", corner=DR)
         less = cg[-1, 3] < cp[-1, 3]
+        # KL divergence, schematic: five answers; the reference's probabilities dashed, the model's in colour
+        p_ref = np.array([0.08, 0.32, 0.30, 0.18, 0.12])
+        p_mods = [np.array([0.40, 0.06, 0.10, 0.08, 0.36]), np.array([0.22, 0.20, 0.22, 0.14, 0.22]), p_ref.copy()]
+
+        def kl_bits(p_, q_):
+            return float(np.sum(p_ * np.log2(p_ / q_)))
+
+        HB, BW = 2.2, 0.42
+
+        def kl_bars(pm):
+            return VGroup(*[Rectangle(width=BW, height=max(HB * v, 0.01), stroke_width=0, fill_color=POLICY, fill_opacity=0.8)
+                            .move_to([i * 0.62, HB * v / 2, 0]) for i, v in enumerate(pm)])
+
+        def kl_read(pm):
+            return MathTex(rf"D_{{\mathrm{{KL}}}} = {kl_bits(pm, p_ref):.2f}\ \text{{bits}}", font_size=34, color=KLC).move_to([1.24, -0.45, 0])
+
+        kpic = VGroup(Line([-0.35, 0, 0], [4 * 0.62 + 0.35, 0, 0], color=GREY_C, stroke_width=1.5), kl_bars(p_mods[0]),
+                      VGroup(*[DashedVMobject(Rectangle(width=BW, height=HB * v, stroke_color=WHITE, stroke_width=2), num_dashes=16)
+                               .move_to([i * 0.62, HB * v / 2, 0]) for i, v in enumerate(p_ref)]),
+                      kl_read(p_mods[0]))
+        klc = gloss(r"KL divergence", r"how far the model's probabilities (colour) are \\ from the reference's (dashed): "
+                    r"\\ zero only when they match \ (schematic)", picture=kpic, width=4.8, color=KLC).move_to([3.6, 0.2, 0])
+        kp_ = klc[1][2]
+        kfit = kp_.copy()  # where the picture now sits: rebuild later states at the same place and scale
+
+        def kl_state(pm):
+            g_ = VGroup(kpic[0].copy(), kl_bars(pm), kpic[2].copy(), kl_read(pm))
+            g_.scale(kp_[0].width / kpic[0].width).shift(kfit[0].get_center() - g_[0].get_center())
+            return g_
         with self.voiceover(
             "That last term needs the KL divergence, part one's measure of how far one distribution is from "
             "another, and computing it exactly would mean summing over every possible answer. <bookmark mark='a'/> "
@@ -142,13 +171,17 @@ class Objective(VoiceoverScene):
                "on the policy, which has no penalty but takes smaller steps. At this weight the penalty is weak, and many recent recipes drop it.")
         ) as vo:
             self.play(J.animate.scale(0.75).to_edge(UP, buff=0.3), FadeIn(cite_))
-            self.play(Indicate(VGroup(*J[11:]), color=KLC))
+            self.play(Indicate(VGroup(*J[11:]), color=KLC), FadeIn(klc))
+            for pm in p_mods[1:]:
+                st_ = kl_state(pm)
+                self.play(Transform(kp_[1], st_[1]), Transform(kp_[3], st_[3]), run_time=1.2)
             vo.wait_until("a")
             self.play(Write(k3))
             vo.wait_until("b")
             self.play(FadeIn(kl1), Create(ax), FadeIn(xl), FadeIn(one))
             self.play(Create(fk), run_time=1.5)
             vo.wait_until("c")
+            self.play(FadeOut(klc), run_time=0.4)
             self.play(Create(bx), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(xn))
             self.play(Create(lp_), Create(lg), FadeIn(kg), FadeIn(kp), run_time=2.5)
         self.wait(0.3)
@@ -208,6 +241,25 @@ class Objective(VoiceoverScene):
         bt = gloss(r"Bradley--Terry", r"the chance one answer beats another \\ depends only on the gap between their scores",
                    picture=sg, corner=DR, width=4.4, color=C.SURPRISE)
         bt.shift(DOWN * 0.15)  # clear of the Bradley-Terry note above it
+        # a real pair: one question, two of the starting model's own answers to it, one right and one wrong
+        r = load("rl")
+        A_, B_, Vb = np.asarray(r["ex_a"]), np.asarray(r["ex_b"]), np.asarray(r["ex_before"])
+        both = [i for i in range(len(A_)) if (Vb[i] == A_[i] + B_[i]).any() and (Vb[i] != A_[i] + B_[i]).any()]
+        qi = both[0] if both else 0
+        right = int(A_[qi] + B_[qi])
+        wrong = next((int(v) for v in Vb[qi] if int(v) != right), right + 10)
+        pq = chip(f"{int(A_[qi])}+{int(B_[qi])}=", size=0.6, width=2.0, color=GREY_B, font_size=32)
+        pw = VGroup(chip(str(right), size=0.6, width=1.1, color=RIGHT_C, font_size=32, fill=0.3), mark(True, 34))
+        pl_ = VGroup(chip(str(wrong), size=0.6, width=1.1, color=WRONG_C, font_size=32, fill=0.1), mark(False, 34))
+        for g_ in (pw, pl_):
+            g_.arrange(RIGHT, buff=0.15)
+        pans = VGroup(pw, pl_).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        pair = VGroup(pq, pans).arrange(RIGHT, buff=0.5)
+        pk = VGroup(label(r"better: \ $y_w$", font_size=22, color=RIGHT_C).next_to(pw, RIGHT, buff=0.3),
+                    label(r"worse: \ $y_l$", font_size=22, color=WRONG_C).next_to(pl_, RIGHT, buff=0.3))
+        pair.add(pk)
+        ph = label(r"a preference pair: \\ two of the starting model's own answers", font_size=24, color=GREY_A)
+        pair_g = VGroup(ph, pair).arrange(DOWN, buff=0.45).move_to([0, 0.2, 0])
         with self.voiceover(
             "Before the variants, one more objective, because it explains what that KL term is really doing. "
             "<bookmark mark='i'/> The idea, in short: show the model pairs, a better and a worse answer to the same "
@@ -223,14 +275,16 @@ class Objective(VoiceoverScene):
             "push down the loser's. That's DPO, by Rafailov and colleagues: preference tuning with no reward model "
             "and no sampling during training."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(ph), FadeIn(pq), FadeIn(pans[0][0]), FadeIn(pans[1][0]))
+            self.play(FadeIn(pw[1], scale=1.4), FadeIn(pl_[1], scale=1.4), FadeIn(pk))
             vo.wait_until("i")
+            self.play(FadeOut(ph), FadeOut(pk), VGroup(pq, pans).animate.scale(0.6).move_to([-4.9, -0.5, 0]), run_time=0.8)
             self.play(FadeIn(it), FadeIn(ip), Create(base_), *[FadeIn(g_[0]) for g_ in idea], *[Create(g_[1]) for g_ in idea],
                       *[FadeIn(g_[2]) for g_ in idea], FadeIn(ik))
             self.play(*[Transform(g_[0], g_[3]) for g_ in idea], run_time=1.6)
             self.bring_to_front(*[g_[1] for g_ in idea])
             vo.wait_until("a")
-            self.play(FadeOut(VGroup(it, ip, base_, ik, *[g_[:3] for g_ in idea])), run_time=0.5)
+            self.play(FadeOut(VGroup(it, ip, base_, ik, pair, *[g_[:3] for g_ in idea])), run_time=0.5)
             for i, mk in enumerate("abcde"):
                 if mk != "a":
                     vo.wait_until(mk)
@@ -386,6 +440,18 @@ class Objective(VoiceoverScene):
         eq = MathTex(r"\hat A_i = 0 \ \text{ for every } i \ \Rightarrow\ \nabla J = 0", font_size=32).move_to([3.9, 1.6, 0])
         dl = label(rf"DAPO draws more questions \\ until each batch is full of signal: \\ "
                    rf"${extra:.2f}\times$ the questions, \ on average", font_size=22, color=C.BITS).move_to([3.9, 0.0, 0])
+        # what DAPO drew, step by step (average of 20): it rises as more and more groups carry no signal
+        Qn = int(o["Q"])
+        dd = dr / Qn
+        dds = np.array([dd[max(0, i - w + 1):i + 1].mean() for i in range(len(dd))]) if len(dr) else np.zeros(1)
+        dtop = max(2, math.ceil(float(dds.max()) - 1e-9))
+        cx = axes_box([0, steps, 100], [0, dtop + 0.3, 1], 4.2, 1.5, [4.0, -2.15, 0])
+        cyt = VGroup(*[MathTex(rf"{v}\times", font_size=18, color=GREY_B).next_to(cx.c2p(0, v), LEFT, buff=0.06) for v in (1, dtop)])
+        cyn = label(r"DAPO: \ questions drawn per step, \\ as a multiple of the $32$ it trains on", font_size=18, color=C.BITS).next_to(cx, UP, buff=0.08).align_to(cx, LEFT)
+        cxn = label(r"RL steps", font_size=18, color=GREY_A).next_to(cx, DOWN, buff=0.08)
+        cone = DashedLine(cx.c2p(0, 1), cx.c2p(steps, 1), dash_length=0.05, stroke_width=1, color=GREY_D)
+        cln = curve(cx, np.arange(1, len(dds) + 1), dds, C.BITS, 3)
+        dl.move_to([3.9, 0.35, 0])
         with self.voiceover(
             "One of DAPO's fixes is worth seeing. When all eight answers to a question are right, every advantage "
             "is zero, and so is the gradient: the question was wasted. <bookmark mark='a'/> As the model improves, "
@@ -397,7 +463,8 @@ class Objective(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(ln), run_time=2.5)
             vo.wait_until("b")
-            self.play(FadeIn(dl))
+            self.play(FadeIn(dl), Create(cx), FadeIn(cyt), FadeIn(cyn), FadeIn(cxn), Create(cone))
+            self.play(Create(cln), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
