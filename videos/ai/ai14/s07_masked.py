@@ -25,12 +25,17 @@ class Masked(VoiceoverScene):
         g = np.random.default_rng(1)
         m = g.random(len(s)) < 0.5
 
-        def row(mask):
-            return VGroup(*[Text("_" if (mk and ch != " ") else ch, font=MONO, font_size=34,
-                                 color=GREY_D if (mk and ch != " ") else WHITE) for ch, mk in zip(s, mask)]).arrange(RIGHT, buff=0.06)
+        def row(mask):  # one monospace line: the blanks keep their columns and the letters their baseline
+            t = data_text("".join("_" if (mk and ch != " ") else ch for ch, mk in zip(s, mask)), font=MONO, font_size=34,
+                          color=WHITE)
+            for glyph, mk in zip(t, [mk for ch, mk in zip(s, mask) if ch != " "]):  # Text has no glyph for a space
+                if mk:
+                    glyph.set_color(GREY_D)
+            return t
 
-        full = row(np.zeros(len(s), bool)).move_to(UP * 1.6)
-        half = row(m).move_to(UP * 0.4)
+        full, half = row(np.zeros(len(s), bool)), row(m)
+        full.move_to(UP * 1.6)
+        half.move_to(UP * 0.4).align_to(full, LEFT)
         a1 = Arrow(full.get_bottom(), half.get_top(), buff=0.1, color=GREY_B)
         noise = label(r"the noise: \ blank out characters, \ each with probability $t$", font_size=24, color=GREY_A)
         noise.next_to(a1, RIGHT, buff=0.3)
@@ -126,7 +131,7 @@ class Masked(VoiceoverScene):
         ends = label(r"block size $1$: \ an ordinary language model; \ \ one block for everything: \ this chapter's model",
                      font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
         tag = note(r"schematic").to_corner(UR, buff=0.3)
-        cite_ = cite(r"M.~Arriola et al., \textit{Block Diffusion} (2025); \ S.~Nie et al., \textit{LLaDA} (2025)", corner=DL)
+        cite_ = cite(r"M.~Arriola et al., \textit{Block Diffusion} (2025); \ S.~Nie et al., \textit{LLaDA} (2025)", corner=UL)
         with self.voiceover(
             "Writing everything at once has a cost: the length is fixed in advance, and nothing can be cached. "
             "Block diffusion splits the difference. <bookmark mark='a'/> The text is cut into blocks. Within a block, "
