@@ -28,10 +28,10 @@
    "en": "Take just two of those numbers, how often a page says 'the' and how often it says 'not', and every page becomes a point. <bookmark mark='a'/> Six hundred and thirty-nine pages from five novels. The two authors mostly sit apart, but they overlap. <bookmark mark='b'/> Telling them apart is the oldest job in machine learning: classification. Draw a line? Bend it? Ask the neighbours? This part tries them all.",
    "zh": "只取其中两个数：一页用“the”有多频繁，用“not”有多频繁，每一页就变成了一个点。<bookmark mark='a'/>这是来自5部小说的639页。两位作者大体上各占一边，但也有重叠。<bookmark mark='b'/>把它们区分开，是机器学习最古老的任务：分类。画一条直线？把它弄弯？问问邻居？这一部分把这些办法都试一遍。"
   },
-  "d7a1c7f82ce5": {
+  "61a0694c7cab": {
    "scene": "Hook",
-   "en": "These are the classics: least squares, logistic regression, nearest neighbours, support vector machines, trees and their forests. <bookmark mark='a'/> Act two of the series, learning, starts here, and every method is a few lines of numpy.",
-   "zh": "这些都是经典方法：最小二乘法、逻辑回归、最近邻、支持向量机，还有决策树和由树组成的森林。<bookmark mark='a'/>本系列的第二幕，学习，就从这里开始，而每一种方法，都只是几行numpy代码。"
+   "en": "These are the classics: least squares, logistic regression, nearest neighbours, support vector machines, trees and their forests. Regression is just the old name for fitting a formula to data. <bookmark mark='a'/> Act two of the series, learning, starts here, and every method is a few lines of numpy, Python's standard library for arrays of numbers.",
+   "zh": ""
   },
   "02aab3789b41": {
    "scene": "LeastSquares",
@@ -43,15 +43,15 @@
    "en": "The oldest method of all fits a line. Here are three points. <bookmark mark='a'/> For any line, measure how far each point misses it, straight up or down, and square each miss: literally, a square. <bookmark mark='b'/> Least squares picks the line whose squares have the smallest total area. <bookmark mark='c'/> Legendre published it in 1805. Gauss had used it four years earlier, to predict where the lost asteroid Ceres would reappear.",
    "zh": "最古老的方法，是拟合一条直线。这里有三个点。<bookmark mark='a'/>对任意一条直线，量一量每个点偏离它多远，竖直向上或向下量，再把每个偏差平方：名副其实，真的是一个正方形。<bookmark mark='b'/>最小二乘法挑出的，就是这些正方形总面积最小的那条直线。<bookmark mark='c'/>勒让德在1805年发表了它。而高斯早在4年前就用过它，用来预测失踪的小行星谷神星会在哪里重新出现。"
   },
-  "fe68ebc8952b": {
+  "aed85007d54c": {
    "scene": "LeastSquares",
-   "en": "There's a beautiful way to see the answer. Write the three heights as a single point in three dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together form a plane: everything you can reach by mixing a column of ones with the column of x's. <bookmark mark='b'/> The best line is the point of that plane closest to the data. Drop a perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at right angles to both columns. Write that down, and you have the normal equations, which give the best line directly, no searching needed.",
-   "zh": "有一种很美的方式来看这个答案。把三个高度写成三维空间里的一个点。<bookmark mark='a'/>每一条可能的直线都给出三个预测，所有这些预测合在一起，构成一个平面：也就是把一列1和一列x混合起来，所能到达的一切地方。<bookmark mark='b'/>最好的直线，就是这个平面上离数据最近的那个点。从数据向平面作一条垂线。<bookmark mark='c'/>垂直，意味着剩下的那部分，与这两列都成直角。把这一点写下来，就得到了正规方程，它直接给出最好的直线，根本不需要搜索。"
+   "en": "There's a beautiful way to see the answer. Write the three heights as a single point in three dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together form a plane: everything you can reach by mixing a column of ones, which shifts the line up and down, with the column of x's, which tilts it. <bookmark mark='b'/> The best line is the point of that plane closest to the data. Drop a perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at right angles to both columns: the misses have no shift and no tilt left in them that the line could still fix. Write that down, and you have the normal equations, which give the best line directly, no searching needed.",
+   "zh": ""
   },
-  "86588894d340": {
+  "7d92b9c6945b": {
    "scene": "LeastSquares",
-   "en": "Here's least squares on real data. Count every word in part one's books, and rank them, from the commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the line explains 99.6 percent of the variation.",
-   "zh": "这是最小二乘法用在真实数据上。把第1部分那些书里的每个词都数一遍，再从最常见的往下排名。<bookmark mark='a'/>两条坐标轴都取对数刻度，最常见的1000个词，几乎恰好落在一条直线上。<bookmark mark='b'/>最小二乘的斜率是负1.08：第r常见的词，出现的次数大约是第一名的r分之1。这就是齐普夫定律，而这条直线解释了99.6%的变化。"
+   "en": "Here's least squares on real data. Count every word in part one's books, and rank them, from the commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the line explains 99.6 percent of the variation: <bookmark mark='c'/> of all the scatter of the points around their average height, the line accounts for everything but a sliver.",
+   "zh": ""
   },
   "324293398861": {
    "scene": "Logistic",
@@ -68,10 +68,10 @@
    "en": "Over the whole plane, that makes a sheet: the probability of Dickens, rising from Austen's side to Dickens's. <bookmark mark='a'/> Lift each training page to the height of its true answer: zero for Austen, one for Dickens. The sheet should pass close to them. <bookmark mark='b'/> Fitting it means minimizing the average surprise, part one's cross-entropy, by part three's gradient descent. The best sheet leaves about half a bit of surprise per page.",
    "zh": "在整个平面上，这就形成了一张曲面：狄更斯的概率，从奥斯汀那一侧，升到狄更斯那一侧。<bookmark mark='a'/>把每一个训练页，抬到它真实答案的高度：奥斯汀是0，狄更斯是1。这张曲面应该从它们近旁经过。<bookmark mark='b'/>拟合它，就是用第3部分的梯度下降，去最小化平均意外度，也就是第1部分的交叉熵。最好的那张曲面，每页大约还剩半比特的意外度。"
   },
-  "04390e332298": {
+  "df3042e6c79e": {
    "scene": "Logistic",
-   "en": "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. A convex loss has one bottom, so where it settles doesn't depend on where it started.",
-   "zh": "那条线是怎么找到的？靠在交叉熵上做梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。凸的损失只有一个谷底，所以它停在哪里，和从哪里出发无关。"
+   "en": "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. <bookmark mark='c'/> A convex loss is shaped like a single bowl: it has one bottom, and every downhill path ends there, so where it settles doesn't depend on where it started.",
+   "zh": ""
   },
   "368316b17944": {
    "scene": "Logistic",
@@ -103,10 +103,10 @@
    "en": "In 1936, Ronald Fisher asked a different question. Along which direction do the two groups look most different? <bookmark mark='a'/> Pick a direction, and squash every page onto it. Each author becomes a pile. <bookmark mark='b'/> Turn the direction, and the piles slide together, or apart. Fisher's score is the gap between the piles' centres, squared, divided by how spread out they are.",
    "zh": "1936年，罗纳德·费希尔问了一个不同的问题：沿着哪个方向看，这两组的差别最大？<bookmark mark='a'/>选一个方向，把每一页都压到它上面。每位作者就变成了一堆。<bookmark mark='b'/>转动这个方向，两堆就会彼此靠拢，或者分开。费希尔的得分，是两堆中心之间的差距的平方，除以它们散开的程度。"
   },
-  "d11577e7d67a": {
+  "395b1a0ce5b0": {
    "scene": "LDA",
-   "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the spread within each author. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. When each group is a bell of the same shape, this cut is exactly the best one possible.",
-   "zh": "最好的方向有一个公式：两个中心之差，再用每位作者内部散布的逆来校正。<bookmark mark='a'/>在这里，它主要依靠“not”。<bookmark mark='b'/>在两堆的正中间切一刀，就得到一个分类器。它能判对82%的测试页，和逻辑回归一样。当每一组都是形状相同的钟形分布时，这一刀恰好就是可能的最好切法。"
+   "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. When each group is a bell of the same shape, this cut is exactly the best one possible.",
+   "zh": ""
   },
   "098330a93727": {
    "scene": "KNN",
@@ -133,15 +133,15 @@
    "en": "Support vector machines ask for the widest street. Many lines separate these two groups. <bookmark mark='a'/> Choose the one with the widest empty margin on both sides. <bookmark mark='b'/> The street's edges rest on just a few points, the support vectors. Move any other point, and nothing changes. <bookmark mark='c'/> Cortes and Vapnik made it practical in 1995, with a twist for groups that overlap: points may stand in the street, at a price.",
    "zh": "支持向量机要找的，是最宽的那条街道。能把这两组分开的直线有很多。<bookmark mark='a'/>选出两侧空白间隔最宽的那一条。<bookmark mark='b'/>街道的两条边，只靠在少数几个点上，这些点就是支持向量。移动其他任何一个点，什么都不会改变。<bookmark mark='c'/>1995年，科尔特斯与瓦普尼克让它变得实用，还为相互重叠的两组加了一个变通：点可以站到街道里，但要付出代价。"
   },
-  "e882ad54c768": {
+  "7322201d0c77": {
    "scene": "SVM",
-   "en": "For groups that no straight line can separate, there's a trick. <bookmark mark='a'/> Lift each point into a third dimension, at a height equal to its squared distance from the centre. <bookmark mark='b'/> Now a flat plane separates them. <bookmark mark='c'/> And seen from above, that plane cuts out a circle. <bookmark mark='d'/> The kernel trick does this without ever computing the lifted points. The method only needs dot products between them, and a kernel supplies those directly, even for infinitely many dimensions.",
-   "zh": "对于任何直线都分不开的两组，有一个技巧。<bookmark mark='a'/>把每个点抬进第三个维度，高度等于它到中心距离的平方。<bookmark mark='b'/>现在，一个平面就能把它们分开。<bookmark mark='c'/>而从正上方看，这个平面切出的是一个圆。<bookmark mark='d'/>核技巧做到这一点，却从来不用算出抬升后的点。这个方法只需要它们之间的点积，而核函数能直接给出这些点积，哪怕维数是无穷多。"
+   "en": "For groups that no straight line can separate, there's a trick. <bookmark mark='a'/> Lift each point into a third dimension, at a height equal to its squared distance from the centre. <bookmark mark='b'/> Now a flat plane separates them. <bookmark mark='c'/> And seen from above, that plane cuts out a circle. <bookmark mark='d'/> The kernel trick does this without ever computing the lifted points. The method only needs dot products between them, and a kernel, a similarity score computed straight from two original points, supplies those directly, even for infinitely many dimensions.",
+   "zh": ""
   },
-  "9ef6cf5bb891": {
+  "e498aa4a390c": {
    "scene": "SVM",
-   "en": "Back to the pages, with a Gaussian kernel. The boundary bends wherever the data asks it to. <bookmark mark='a'/> On new pages, 83 percent right with two rates. <bookmark mark='b'/> With all seventy, 99.5 percent, the same as logistic regression.",
-   "zh": "回到书页上，这次用高斯核。数据要它在哪里弯，边界就在哪里弯。<bookmark mark='a'/>在新的书页上，只用两个词频，判对83%。<bookmark mark='b'/>用全部70个，99.5%，和逻辑回归一样。"
+   "en": "Back to the pages, with a Gaussian kernel: a similarity score between two pages that's one when they're identical, and fades towards zero as they move apart. The boundary bends wherever the data asks it to. <bookmark mark='a'/> On new pages, 83 percent right with two rates. <bookmark mark='b'/> With all seventy, 99.5 percent, the same as logistic regression.",
+   "zh": ""
   },
   "dae9e1ff20bc": {
    "scene": "Trees",
@@ -158,10 +158,10 @@
    "en": "Keep asking questions, and the boxes fit the training pages better and better. <bookmark mark='a'/> But new pages tell a different story. They're best at depth 4, 83 percent right. <bookmark mark='b'/> Grown all the way down, the tree gets 94 percent of its own pages right, and only 74 percent of new ones.",
    "zh": "不停地问下去，这些方格就把训练页拟合得越来越好。<bookmark mark='a'/>但新的书页讲的是另一回事。深度为4时，它们的成绩最好，判对83%。<bookmark mark='b'/>让树一直长到底，它对自己的训练页能判对94%，对新的书页却只有74%。"
   },
-  "86247f6154cf": {
+  "e1af26efd678": {
    "scene": "Trees",
-   "en": "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in 2001: grow hundreds. Give each a random resample of the pages, and only a random handful of words to choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full tree gets 94 percent of new pages right. <bookmark mark='b'/> A forest of two hundred gets 98.",
-   "zh": "一棵树很脆弱：改动几个训练页，长出来的就是另一棵树。2001年，利奥·布雷曼给出的答案是：种几百棵。每棵树用书页的一份随机重抽样，每问一个问题时，只能从随机挑出的几个词里选，然后让它们投票。<bookmark mark='a'/>用全部70个词频，一棵长满的树，能判对94%的新的书页。<bookmark mark='b'/>一片200棵树的森林，判对98%。"
+   "en": "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in 2001: grow hundreds. Give each a random resample of the pages: <bookmark mark='r'/> draw pages from the pile at random, putting each one back, so some come twice and some not at all, and each tree sees a slightly different pile. Give each, too, only a random handful of words to choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full tree gets 94 percent of new pages right. <bookmark mark='b'/> A forest of two hundred gets 98.",
+   "zh": ""
   },
   "d7efdd56fadf": {
    "scene": "Trees",
