@@ -174,7 +174,10 @@ class SVM(VoiceoverScene, ThreeDScene):
         a2 = label(rf"Gaussian kernel, \ $2$ rates: \ ${100 * sv['acc_rbf']:.0f}\%$", font_size=30)
         a70 = label(rf"all $70$ rates: \ ${100 * sv['acc70']:.1f}\%$ \ (${round(sv['acc70'] * n_te)}$ of ${n_te}$)",
                     font_size=30, color=C.BITS)
-        VGroup(a2, a70).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.3, 0.6, 0])
+        res = VGroup(a2, a70).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.3, 0.6, 0])
+        if res.width > 4.4:  # the right-hand column beside the plot; longer in Chinese
+            res.scale_to_fit_width(4.4)
+        keep_in_frame(res)
         # the Gaussian kernel, pictured: a bump on one page; its neighbours lit by how similar they are
         kx = np.linspace(-2.0, 2.0, 80)
         bump = VMobject(stroke_color=C.BITS, stroke_width=3).set_points_smoothly(
