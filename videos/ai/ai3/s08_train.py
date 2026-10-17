@@ -114,9 +114,14 @@ class Train(VoiceoverScene):
             "better models, trains everything else in this series."
         ) as vo:
             self.add(line)
+            shown = rows_w[0]
             for k, m in enumerate(marks):
-                self.play(t.animate.set_value(min(m, n)), Transform(grids[0], grids[k + 1]),
-                          Transform(rows_w[0], rows_w[k + 1]), run_time=1.5 if k < 2 else 2.0, rate_func=linear)
+                rt = 1.5 if k < 2 else 2.0
+                # the scores change smoothly; the text it writes cross-fades, so it is never a letter-by-letter blur
+                self.play(t.animate(rate_func=linear).set_value(min(m, n)), Transform(grids[0], grids[k + 1], rate_func=linear),
+                          FadeOut(shown, rate_func=squish_rate_func(smooth, 0.0, 0.35)),
+                          FadeIn(rows_w[k + 1], rate_func=squish_rate_func(smooth, 0.4, 0.75)), run_time=rt)
+                shown = rows_w[k + 1]
             self.play(FadeIn(end))
             vo.wait_until("a")
             self.play(FadeIn(corr))
