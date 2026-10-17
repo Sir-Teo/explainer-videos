@@ -52,7 +52,7 @@ class Longer(VoiceoverScene):
         hi = min(math.ceil(allb.max() * 2) / 2, lo + 4.5)
         ax, deco = self.axes(e, lo, hi)
         edge = DashedLine(ax.c2p(ctx, lo), ax.c2p(ctx, hi), color=GREY_B, stroke_width=2)
-        el = label(rf"trained up to ${ctx}$", font_size=22, color=GREY_B).next_to(edge, UP, buff=0.08)
+        el = label(rf"trained up to ${ctx}$", font_size=22, color=GREY_B).next_to(edge.get_top(), RIGHT, buff=0.1).shift(DOWN * 0.25)
         plain = self.line(ax, e, "plain", C.SURPRISE, hi)
         win = self.line(ax, e, "window", GREY_B, hi, 2.5)
         k1 = label(r"rotations as trained", font_size=24, color=C.SURPRISE).move_to([4.7, 1.8, 0])

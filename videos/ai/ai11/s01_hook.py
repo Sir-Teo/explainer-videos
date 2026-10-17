@@ -23,7 +23,8 @@ class Hook(VoiceoverScene):
                           for h in range(H)] for l_ in range(L)])
         li = L - 1
         hi = int(np.argmax(dist[li]))
-        first, second = snip[:32], snip[32:]
+        cut = snip.rfind(" ", 0, 33) + 1 or 32  # break the line at a space
+        first, second = snip[:cut], snip[cut:]
         r1 = char_row(first, 12.6, font_size=30).move_to(UP * 0.9)
         r2 = char_row(second, 12.6, font_size=30).move_to(DOWN * 1.6)
         row = VGroup(*r1, *r2)
@@ -42,13 +43,13 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             prev = None
             for i in picks:
-                rr = r1 if i < 32 else r2
-                if i >= 32:  # second line: arcs reach back over the line break, drawn on the second line only
-                    w = maps[li, hi, i, 32:]
-                    arcs = attention_arcs(r2, i - 32, w, color=A)
+                rr = r1 if i < cut else r2
+                if i >= cut:  # second line: arcs reach back over the line break, drawn on the second line only
+                    w = maps[li, hi, i, cut:]
+                    arcs = attention_arcs(r2, i - cut, w, color=A)
                 else:
                     arcs = attention_arcs(r1, i, maps[li, hi, i], color=A)
-                hl = SurroundingRectangle(rr[i % 32], color=C.QUERY, buff=0.06)
+                hl = SurroundingRectangle(rr[i if i < cut else i - cut], color=C.QUERY, buff=0.06)
                 anims = [Create(arcs), Create(hl)]
                 if prev is not None:
                     anims += [FadeOut(prev)]
