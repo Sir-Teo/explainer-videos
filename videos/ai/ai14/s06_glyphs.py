@@ -26,8 +26,21 @@ class Glyphs(VoiceoverScene):
         grid = Group(*[gray_image(im, 0.62) for im in tr[:32]]).arrange_in_grid(rows=4, cols=8, buff=0.06).move_to([-3.4, -0.3, 0])
         tl = label(rf"training pictures: \ ${int(g['n_train']):,}$ capital letters \\ from ${int(g['n_fonts'])}$ fonts, \ "
                    rf"${n}\times{n}$ pixels".replace(",", "{,}"), font_size=24, color=GREY_A).next_to(grid, UP, buff=0.25)
-        pt = label(rf"one picture $=$ a point in ${n * n}$ dimensions", font_size=30, color=FM_C).move_to([3.4, 1.4, 0])
-        same = label(r"the same flow matching, \\ just in more dimensions", font_size=26, color=GREY_A).next_to(pt, DOWN, buff=0.4)
+        pt = label(rf"one picture $=$ a point in ${n * n}$ dimensions", font_size=30, color=FM_C).move_to([3.6, 2.6, 0])
+        # one training picture as a grid of pixel squares, which then unrolls into a list of n*n numbers
+        im = np.clip(np.asarray(tr[0], float), 0, 1)
+        px = 0.1
+        sq = VGroup(*[Square(px, stroke_width=0, fill_color=interpolate_color(ManimColor("#000000"), ManimColor(WHITE), float(v)),
+                             fill_opacity=1).move_to([3.6 + (c - (n - 1) / 2) * px, 0.9 - (r - (n - 1) / 2) * px, 0])
+                      for r, row in enumerate(im) for c, v in enumerate(row)])
+        per = 100
+        cw = 6.0 / per
+
+        def spot(k):  # where pixel k sits once unrolled: lines of 100 numbers, read like text
+            return [3.6 - 3.0 + cw * (k % per + 0.5), -0.6 - 0.24 * (k // per), 0]
+
+        vl = MathTex(rf"x \in \mathbb{{R}}^{{{n * n}}}", font_size=34, color=FM_C).move_to([3.6, -1.85, 0])
+        same = label(r"the same flow matching, \\ just in more dimensions", font_size=26, color=GREY_A).move_to([3.6, -2.9, 0])
         with self.voiceover(
             "Points in a plane were a warm-up. A picture is also a point: here, letters from many fonts, twenty by "
             f"twenty pixels. <bookmark mark='a'/> Each picture is a list of {n * n} numbers, one point in a space of "
@@ -36,7 +49,10 @@ class Glyphs(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tl), LaggedStart(*[FadeIn(i_) for i_ in grid], lag_ratio=0.03), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(pt))
+            self.play(FadeIn(pt), FadeIn(sq, lag_ratio=0.002), run_time=1.2)
+            self.play(LaggedStart(*[AnimationGroup(*[sq[r * n + c].animate.move_to(spot(r * n + c)).scale(cw * 0.9 / px)
+                                                     for c in range(n)]) for r in range(n)], lag_ratio=0.12), run_time=3.0)
+            self.play(FadeIn(vl))
             vo.wait_until("b")
             self.play(FadeIn(same))
         self.wait(0.3)
