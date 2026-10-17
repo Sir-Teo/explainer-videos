@@ -155,18 +155,19 @@ class Special(VoiceoverScene):
         with self.voiceover(
             "How did that pattern form? Here is the same picture during training. <bookmark mark='a'/> At the start "
             "the router is random and nearly uniform, so each character's contexts are spread over the experts: on "
-            f"average its favourite gets {100 * sharp[0]:.0f} percent. <bookmark mark='b'/> As the experts begin to "
-            "differ, the router learns which one helps where, and the choices sharpen; "
-            f"<bookmark mark='c'/> by the end the favourite gets {100 * sharp[-1]:.0f} percent. "
-            + (f"After step {steps[2]}, only {top_change[2]} of the {len(chars)} characters still change their "
-               "favourite: the division of labour is settled early, and the rest of training refines it."
-               if top_change[2] <= len(chars) // 4 else
-               "The favourites keep shifting well into training, as the experts and the router chase each other.")
+            f"average its favourite gets {100 * sharp[0]:.0f} percent. <bookmark mark='b'/> Within {steps[1]} steps "
+            f"the router commits hard: the favourite's share jumps to {100 * sharp[1]:.0f} percent. "
+            + (f"<bookmark mark='c'/> Then the balancing bias pushes back, lowering the bias of experts that are too "
+               f"busy, and the choices spread out again, to {100 * sharp[-1]:.0f} percent by the end. "
+               if sharp[-1] < sharp[1] - 0.1 else
+               f"<bookmark mark='c'/> It stays that decided: {100 * sharp[-1]:.0f} percent by the end. ")
+            + f"The favourites keep changing for a long time: {top_change[2]} of the {len(chars)} characters still "
+            f"switch expert after step {steps[2]}, and {top_change[3]} after step {steps[3]:,}."
         ) as vo:
             self.play(FadeIn(cur), FadeIn(names), FadeIn(el))
             self.add(cnt)
             vo.wait_until("a")
-            for k, mk in zip(range(1, len(steps)), ("b", None, "c", None)):
+            for k, mk in zip(range(1, len(steps)), ("b", "c", None, None)):
                 if mk:
                     vo.wait_until(mk)
                 nxt = grid(k)
@@ -181,16 +182,19 @@ class Special(VoiceoverScene):
         m = load("moe")
         E, k = int(m["E"]), int(m["k"])
         cs = [("dense_active", rf"dense, \ as much compute", GREY_B), ("bias", rf"mixture: \ ${k}$ of ${E}$ experts", C.INTERVAL),
-              ("dense_total", rf"dense, \ as many parameters", GREY_A)]
+              ("dense_total", rf"dense, \ as many parameters", "#7FD3FF")]
         D = {key: np.asarray(m[f"curve_{key}"]) for key, _, _ in cs}
         total = float(D["bias"][-1, 0])
-        lo = min(float(d[:, 1][2:].min()) for d in D.values()) - 0.05
+        lo = math.floor((min(float(d[:, 1][2:].min()) for d in D.values()) - 0.05) * 4) / 4  # on a tick
         hi = float(D["bias"][2, 1]) + 0.3
         ax = Axes(x_range=[0, total, 500], y_range=[lo, hi, 0.25], x_length=8.0, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.5, -0.4, 0])
         yl = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v in np.arange(np.ceil(lo * 4) / 4, hi, 0.25)])
-        xl = label(r"training steps", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        xv = VGroup(*[MathTex(f"{v:,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.1)
+                      for v in (0, int(total))])
+        yl.add(*xv)
+        xl = label(r"training steps", font_size=22, color=GREY_A).next_to(xv, DOWN, buff=0.1)
         yn = label(r"held-out bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         lines = [VMobject(color=col, stroke_width=3.5).set_points_as_corners(
             [ax.c2p(a, min(b, hi)) for a, b in D[key][1:]]) for key, _, col in cs]
@@ -208,8 +212,11 @@ class Special(VoiceoverScene):
                if when is not None and when > 0 else
                "The mixture is ahead of the dense model with the same arithmetic from the start. " if when == 0 else
                "The mixture never gets clear of the dense model with the same arithmetic. ")
-            + "<bookmark mark='b'/> The wide dense model has the most to learn; with this much training, the curves show "
-            "where it stands."
+            + "<bookmark mark='b'/> "
+            + (f"The wide dense model, {E} experts' width, trails the whole way: with this little training, all those "
+               "parameters haven't paid off yet."
+               if all(D["dense_total"][j_, 1] >= D["bias"][j_, 1] for j_ in range(1, len(D["bias"]))) else
+               f"The wide dense model, {E} experts' width, ends at {D['dense_total'][-1, 1]:.2f}.")
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
             vo.wait_until("a")
