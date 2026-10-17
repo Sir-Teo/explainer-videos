@@ -144,6 +144,8 @@ class Outro(VoiceoverScene):
             r"N.~Elhage et al., \textit{Toy Models of Superposition} (2022); \ W.~B.~Johnson \& J.~Lindenstrauss (1984)",
             r"T.~Bricken et al., \textit{Towards Monosemanticity} (2023); \ H.~Cunningham et al., \textit{Sparse Autoencoders Find "
             r"Highly Interpretable Features} (2023); \ A.~Templeton et al., \textit{Scaling Monosemanticity} (2024)",
+            r"L.~Gao et al., \textit{Scaling and Evaluating Sparse Autoencoders} (2024); \ S.~Rajamanoharan et al., "
+            r"\textit{JumpReLU SAEs} (2024)",
             r"E.~Ameisen et al., \textit{Circuit Tracing} (2025); \ J.~Lindsey et al., \textit{On the Biology of a Large Language Model} (2025)",
             r"A.~Turner et al., \textit{Steering Language Models with Activation Engineering} (2023); \ Y.~Chen et al., "
             r"\textit{Reasoning Models Don't Always Say What They Think} (2025)",
