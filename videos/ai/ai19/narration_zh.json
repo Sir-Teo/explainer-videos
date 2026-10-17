@@ -11,12 +11,12 @@
   "d5f3852185fd": {
    "scene": "Hook",
    "en": "When a big model writes, it writes one token at a time. And to write each one, it has to read every single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, stored as sixteen-bit numbers, two bytes each, that's a hundred and forty-one gigabytes, streamed from memory through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the next. <bookmark mark='c'/> How many bytes a second can flow from memory to the chip is the memory bandwidth: here, three point three five terabytes a second.",
-   "zh": ""
+   "zh": "大模型写东西的时候，一次只写一个词元。而每写一个，它都得把自己的每一个权重，统统读一遍。<bookmark mark='a'/>对一个700亿参数的模型来说，每个数按16比特存，也就是2个字节，这就是141GB的数据，从内存一路流进芯片，<bookmark mark='b'/>只为了一个词元。下一个词元，又要全部再读一遍；再下一个，还是这样。<bookmark mark='c'/>每秒能从内存流进芯片多少字节，这叫作内存带宽：在这里，是每秒3.35TB。"
   },
   "489a66bfcca3": {
    "scene": "Hook",
    "en": "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of weights: on one of today's best chips, about 24 tokens a second. <bookmark mark='a'/> And meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses a third of one percent of it. <bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called inference; it's not part six's variational inference. And inference is a problem of moving numbers, not multiplying them.",
-   "zh": ""
+   "zh": "所以，内存给速度定了一个上限。每秒能写出的词元数，超不过内存带宽除以权重的字节数：在当今最好的芯片之一上，大约是每秒24个词元。<bookmark mark='a'/>与此同时，芯片的算力几乎一直闲着。<bookmark mark='b'/>一段对话，只用掉其中1%的3分之1。<bookmark mark='c'/>拿训练好的模型来得到回答，不再学习，只是使用它，这叫作推断；它和第6部分的变分推断不是一回事。推断的难处，在于搬运数字，而不在于做乘法。"
   },
   "2dc04f232993": {
    "scene": "Hook",
@@ -51,7 +51,7 @@
   "1ac421f46122": {
    "scene": "Quant",
    "en": "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is rounded to one of fifteen evenly spaced values, the same number either side of zero. <bookmark mark='b'/> The newest chips use FP4 instead: a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale for every block of thirty-two. <bookmark mark='e'/> A float stores a power of two, plus a little detail within it, so its values are packed close near zero and spread further apart away from it. FP4's layout is called E2M1: two bits for the power, one for the detail, and one for the sign.",
-   "zh": ""
+   "zh": "减少内存读写的另一个办法：用更少的比特来存每个数。这是我们的Transformer其中一层的权重：大多数都接近0，只有少数比较大。<bookmark mark='a'/>用4个比特，每个权重都取整到15个等间距的值之一，0的两边一样多。<bookmark mark='b'/>最新的芯片改用FP4：一种很小的浮点数，在0附近的值更多，那里正是权重扎堆的地方；而且每32个数为一块，共用一个缩放因子。<bookmark mark='e'/>浮点数存的是一个2的幂，再加上这个幂之内的一点细节，所以它的值在0附近挤得很密，离0越远，就隔得越开。FP4的布局叫作E2M1：2个比特存幂，1个比特存细节，还有1个比特存符号。"
   },
   "f6d8c637e895": {
    "scene": "Quant",
@@ -61,12 +61,12 @@
   "4fc0235c4174": {
    "scene": "Quant",
    "en": "Two four-bit float formats now matter, and the difference between them is all in the scales. <bookmark mark='a'/> MXFP4, the open standard, shares one scale among thirty-two numbers, and the scale is a pure power of two: cheap to apply, but coarse, so a block's largest weight can land anywhere from four to eight on the E2M1 grid, and past six it's clipped. OpenAI's gpt-oss stores its experts this way. <bookmark mark='b'/> NVFP4, on NVIDIA's Blackwell chips, uses blocks of sixteen, and each scale is itself a small eight-bit float, so it can fit the block's largest weight to six almost exactly; one more scale for the whole weight matrix keeps everything in range. It costs 4.5 bits per weight instead of 4.25. <bookmark mark='c'/> On our transformer: MXFP4 loses 0.026 bits a character, NVFP4 0.024, and plain four-bit integers with a scale per row 0.047. The best here is NVFP4. For comparison, FP4 with an exact scale for every block of thirty-two, from before, lost 0.019: rounding the scale to a power of two is what costs MXFP4 its extra.",
-   "zh": ""
+   "zh": "如今有两种4比特浮点格式很重要，它们的区别全在缩放因子上。<bookmark mark='a'/>MXFP4是开放标准，32个数共用一个缩放因子，而且这个缩放因子只能是2的整数次幂：用起来便宜，但很粗糙，所以一个块里最大的权重，在E2M1的格子上可能落在4到8之间的任何地方，超过6的部分就被截掉了。OpenAI的gpt-oss，就是这样存储它的专家的。<bookmark mark='b'/>NVFP4用在NVIDIA的Blackwell芯片上，每块16个数，而每个缩放因子本身是一个小小的8比特浮点数，所以几乎能把块里最大的权重恰好对到6上；整个权重矩阵再配一个缩放因子，让一切都不越界。它每个权重要花4.5比特，而不是4.25。<bookmark mark='c'/>在我们的Transformer上：MXFP4每个字符损失0.026比特，NVFP4损失0.024，每行一个缩放因子的普通4比特整数损失0.047。这里最好的是NVFP4。作为对比，前面那个每32个数配一个精确缩放因子的FP4，损失是0.019：把缩放因子取整成2的幂，正是MXFP4多出来那部分损失的来源。"
   },
   "9ef90af9a910": {
    "scene": "Quant",
    "en": "Two tricks make low precision work much better than plain rounding. The first is GPTQ. <bookmark mark='a'/> Round a layer's weights one input column at a time. <bookmark mark='b'/> Each rounding leaves an error; <bookmark mark='c'/> instead of accepting it, nudge the weights on the inputs not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' second moment, measured on real text: it records which inputs tend to be big together. If two inputs move together, a rounding error on one can be cancelled by adjusting the other. <bookmark mark='d'/> On a real layer of our transformer, at three bits, the error in its output drops from 17 to 10 percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few weights and activations, the numbers flowing through the network for this particular input, which change with every token while the weights stay fixed, are huge outliers, far bigger than the rest, and one outlier forces a coarse scale on its whole row. <bookmark mark='h'/> Multiply by a Hadamard matrix first, a grid of plus and minus ones. It's orthogonal: a pure rotation, which changes no lengths and can be undone exactly. The outlier is spread evenly over the row, and the rotation is undone afterwards. Our small model has no such outliers: a row's largest weight is only about 2.8 times the typical one, before and after. <bookmark mark='f'/> On our whole transformer at three bits: plain rounding loses 0.255 bits a character, GPTQ only 0.123, and rotating first 0.327, worse: with nothing to spread, it only spreads each rounding error over every input, including the few that carry large activations. Real systems rotate the activations too, so they can be rounded as well, and pair the rotation with GPTQ.",
-   "zh": ""
+   "zh": "有两个技巧，能让低精度比简单取整好得多。第一个是GPTQ。<bookmark mark='a'/>把一层的权重，一次一列输入地取整。<bookmark mark='b'/>每次取整都会留下误差；<bookmark mark='c'/>不去接受它，而是微调那些还没取整的输入上的权重，让这一层的输出几乎不变。微调多少，由H决定，也就是输入的二阶矩，在真实文本上测出来：它记录了哪些输入往往一起变大。如果两个输入一起变化，一个输入上的取整误差，就可以靠调整另一个来抵消。<bookmark mark='d'/>在我们Transformer的一个真实层上，3比特时，它输出的误差从17%降到10%。<bookmark mark='e'/>第二个技巧是旋转。在大模型里，有少数权重和激活值是巨大的离群值，比其余的数大得多。激活值，就是针对这一个具体输入、在网络里流动的那些数：权重固定不变，激活值却随每个词元而变。一个离群值，就会迫使它所在的整行用很粗的缩放因子。<bookmark mark='h'/>先乘上一个哈达玛矩阵，也就是一个由正负1排成的方阵。它是正交的：一个纯粹的旋转，不改变任何长度，而且能精确地转回来。离群值就被均匀地摊到整行上，事后再把旋转转回来。我们的小模型没有这样的离群值：一行里最大的权重，只是典型权重的2.8倍左右，旋转前后都一样。<bookmark mark='f'/>在3比特下的整个Transformer上：简单取整每个字符损失0.255比特，GPTQ只损失0.123，而先旋转再取整损失0.327，反而更差：没有东西可摊，它只是把每个取整误差摊到所有输入上，包括那几个携带大激活值的输入。真实系统也会旋转激活值，这样激活值也能取整，并且把旋转和GPTQ配合起来用。"
   },
   "b3f5ede7783c": {
    "scene": "Memory",
@@ -81,7 +81,7 @@
   "7dfe3ee9843e": {
    "scene": "Memory",
    "en": "Attention has its own memory problem: the table of scores grows with the square of the length. FlashAttention never stores it. <bookmark mark='a'/> It takes a block of queries, streams the keys and values through in tiles, small enough to stay in the chip's fastest memory, <bookmark mark='b'/> and keeps a running maximum and a running sum: it remembers the biggest score so far, so the exponentials never blow up, and rescales its partial sum whenever a bigger one arrives. So the softmax comes out exactly right at the end. We checked it: the same numbers as the plain formula, to rounding error, without ever holding the table.",
-   "zh": ""
+   "zh": "注意力也有它自己的内存问题：分数表的大小，随长度的平方增长。FlashAttention从来不把这张表存下来。<bookmark mark='a'/>它取一块查询，让键和值切成小块依次流过，每一小块都小到能待在芯片最快的内存里，<bookmark mark='b'/>同时一路记着当前的最大值和累计的和：它记住到目前为止最大的分数，这样指数就永远不会爆掉；每当来了一个更大的分数，就把已经累计的部分和重新缩放一下。这样到最后，softmax算出来分毫不差。我们验证过：和直接按公式算出来的数一样，只差舍入误差，而整张表一次也没有存下来过。"
   },
   "1eedb7524aed": {
    "scene": "Memory",

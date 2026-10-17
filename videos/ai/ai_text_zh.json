@@ -2828,7 +2828,14 @@
     "Relative": "Relative（相对）",
     "Policy Optimization": "Policy Optimization（策略优化）",
     "baseline: \\ the score you'd expect anyway. \\ Older methods train a second network, \\\\ a critic, to predict it; \\ GRPO uses the group's average instead": "基线：\\ 本来就预期能拿到的分数。\\ 以前的方法另外训练一个网络，\\\\ 即评价模型，来预测它；\\ GRPO改用这一组的平均值",
-    "baseline": "基线"
+    "baseline": "基线",
+    "a partially observable Markov decision process: \\\\ you choose actions, \\\\ but only get clues about where you are": "部分可观测马尔可夫决策过程：\\\\ 行动由你来选，\\\\ 可你只能得到关于自己位置的线索",
+    "horizon": "时程",
+    "how many steps a task takes, \\\\ from start to finish": "一个任务从头到尾 \\\\ 要走多少步",
+    "\\text{tokens} = \\operatorname{BPE}\\big(\\operatorname{round}(\\gamma \\cdot \\operatorname{DCT}(a))\\big)": "\\text{词元} = \\operatorname{BPE}\\big(\\operatorname{round}(\\gamma \\cdot \\operatorname{DCT}(a))\\big)",
+    "action expert": "动作专家",
+    "a small extra network on the vision-language model, \\\\ whose only job is smooth arm motion \\\\ (not Part 13's mixture-of-experts experts)": "挂在视觉–语言模型上的一个额外小网络，\\\\ 唯一的任务是输出平滑的机械臂动作 \\\\ （不是第13部分混合专家模型里的专家）",
+    "the slowest cosine wave": "最慢的余弦波"
   },
   "phrases": {
     "width": "宽度",
@@ -3225,6 +3232,10 @@
     [
       "^distance from the real data \\\\ \\(noise itself: \\\\ \\$([\\d.]+)\\$\\)$",
       "与真实数据的距离 \\\\ （噪声本身：\\\\ $\\1$）"
+    ],
+    [
+      "^the first \\$(\\d+)\\$ cosine waves, \\\\ added up$",
+      "最前面$\\1$个余弦波，\\\\ 叠加起来"
     ]
   ]
 }
