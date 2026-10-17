@@ -2731,7 +2731,80 @@
     "weak, \\ $\\beta$: \\ keeps $z$ near its code": "弱，\\ $\\beta$：\\ 让$z$留在它的码字附近",
     "commitment loss": "承诺损失",
     "a small penalty that stops the encoder's output \\\\ drifting far from the code it was snapped to": "一个小惩罚，不让编码器的输出\\\\ 离它被吸附到的码字跑得太远",
-    "the codebook is just this grid": "码本就只是这张网格"
+    "the codebook is just this grid": "码本就只是这张网格",
+    "Gaussian": "高斯",
+    "bell-shaped: \\ the value is uncertain, \\\\ most likely near the middle": "钟形：\\ 取值不确定，\\\\ 最可能落在中间附近",
+    "kernel $k(x, x')$": "核函数$k(x, x')$",
+    "how strongly two pages' values move together: \\\\ strongly when close, \\ hardly when far apart": "两页的取值有多同步：\\\\ 离得近就很同步，\\ 离得远就几乎无关",
+    "$\\prod$: \\ multiply one probability per circle, \\ each given the circles that point into it": "$\\prod$：\\ 每个圆圈乘上一个概率，\\ 各自以指向它的圆圈为条件",
+    "keep only the best path into each state": "对每个状态，只保留通向它的最佳路径",
+    "then trace back from the end": "然后从末尾往回追溯",
+    "counts after $h$": "$h$之后的计数",
+    "to $h'$": "交给$h'$",
+    "after the data": "看到数据之后",
+    "posterior": "后验",
+    "what we believe about the hidden things \\\\ after seeing the data": "看到数据之后，\\\\ 我们对隐藏的东西的信念",
+    "the ELBO: \\ computable, \\ always below $\\log p(x)$": "证据下界ELBO：\\ 算得出来，\\ 永远低于$\\log p(x)$",
+    "Learning to denoise": "学会去噪",
+    "How does a network learn the score?": "网络怎样学会分数函数？",
+    "add noise, \\ any amount": "加噪声，\\ 多少都行",
+    "train a network to guess the noise": "训练一个网络去猜噪声",
+    "and the guess \\emph{is} the score, \\ Part 4's arrows": "而这个猜测\\emph{就是}分数函数，\\ 也就是第4部分的箭头",
+    "J.~Ho, A.~Jain \\& P.~Abbeel, \\textit{DDPM} (2020); \\ Y.~Song et al., \\textit{Score-Based SDEs} (2021)": "J.~Ho、A.~Jain \\& P.~Abbeel，\\textit{DDPM}（2020）；\\ Y.~Song等，\\textit{Score-Based SDEs}（2021）",
+    "height: \\ the density of the noised data \\ (square-rooted, \\ each level scaled to fit)": "高度：\\ 加噪数据的密度 \\ （取了平方根，\\ 每个水平各自缩放到合适大小）",
+    "the learned score: \\ the trained network's arrows, \\ on a grid": "学到的分数函数：\\ 训练好的网络画出的箭头，\\ 画在网格上",
+    "follow the arrows, \\ noise level falling": "顺着箭头走，\\ 噪声水平逐渐降低",
+    "the loss: \\ how wrong its noise guesses are": "损失：\\ 它对噪声的猜测错得有多厉害",
+    "training steps \\ ($512$ noisy points each)": "训练步数 \\ （每步$512$个带噪声的点）",
+    "$600$ points from the same noise, \\\\ drawn with $50$ steps at each checkpoint": "从同一份噪声出发的$600$个点，\\\\ 在每个检查点用$50$步画出",
+    "Walking back from noise": "从噪声走回来",
+    "How many steps does it take?": "需要走多少步？",
+    "DDPM: \\ $200$ steps, \\ each with fresh noise": "DDPM：\\ $200$步，\\ 每步都加新的噪声",
+    "DDIM: \\ $50$ steps, \\ no noise added": "DDIM：\\ $50$步，\\ 不加噪声",
+    "J.~Ho et al., \\textit{DDPM} (2020); \\ J.~Song, C.~Meng \\& S.~Ermon, \\textit{DDIM} (2021)": "J.~Ho等，\\textit{DDPM}（2020）；\\ J.~Song、C.~Meng \\& S.~Ermon，\\textit{DDIM}（2021）",
+    "distance from the real data \\ (sliced Wasserstein)": "与真实数据的距离 \\ （切片Wasserstein距离）",
+    "the floor: \\\\ two samples \\\\ of the data itself": "下限：\\\\ 数据本身的 \\\\ 两份样本之间",
+    "DDPM, $200$ steps": "DDPM，$200$步",
+    "real data": "真实数据",
+    "samples": "样本",
+    "matched in order along the line": "沿着直线按顺序配对",
+    "sliced Wasserstein": "切片Wasserstein距离",
+    "drop both clouds onto many random lines, \\\\ and compare where the points fall": "把两团点都投到许多条随机直线上，\\\\ 比较点落在哪里",
+    "Flow matching": "流匹配",
+    "Why not go in a straight line?": "为什么不走直线？",
+    "pair a noise point with a data point": "把一个噪声点和一个数据点配成一对",
+    "learn the velocity of the straight line": "学习沿这条直线的速度",
+    "to sample: \\ follow the learned velocity": "采样：\\ 沿着学到的速度走",
+    "Y.~Lipman et al., \\textit{Flow Matching} (2023); \\ X.~Liu et al., \\textit{Rectified Flow} (2023)": "Y.~Lipman等，\\textit{Flow Matching}（2023）；\\ X.~Liu等，\\textit{Rectified Flow}（2023）",
+    "each training line is straight, \\\\ but the learned paths bend: \\\\ a noise point could belong \\\\ to many data points": "每条训练用的线都是直的，\\\\ 但学到的路径会弯：\\\\ 一个噪声点可能属于 \\\\ 许多个数据点",
+    "sampling steps": "采样步数",
+    "distance from the real data": "与真实数据的距离",
+    "flow matching": "流匹配",
+    "after reflow": "重流之后",
+    "$v$: \\\\ the speedometer, \\\\ velocity at each moment": "$v$：\\\\ 速度表，\\\\ 每一刻的速度",
+    "$(t - s)\\,u$: \\\\ one jump, \\\\ at the average velocity": "$(t - s)\\,u$：\\\\ 一跳，\\\\ 按平均速度",
+    "the average velocity from $s$ to $t$": "从$s$到$t$的平均速度",
+    "so one jump does it": "所以一跳就够了",
+    "differentiate $(t-s)\\,u = z_t - z_s$ in $s$": "把$(t-s)\\,u = z_t - z_s$对$s$求导",
+    "one Jacobian-vector product: \\ about one extra pass": "一次雅可比–向量积：\\ 大约多运行一次网络",
+    "sg: \\ stop-gradient, \\ the target is held fixed, \\ a constant": "sg：\\ 停止梯度，\\ 目标保持固定，\\ 当作常数",
+    "MeanFlow: \\ learn the average velocity": "MeanFlow：\\ 学习平均速度",
+    "Z.~Geng et al., \\textit{Mean Flows for One-step Generative Modeling} (2025)": "Z.~Geng等，\\textit{Mean Flows for One-step Generative Modeling}（2025）",
+    "shortcut model": "捷径模型",
+    "one step from noise": "从噪声出发，只走一步",
+    "shortcut models: \\ one jump of $2d$ must equal two of $d$": "捷径模型：\\ 跳一次$2d$，必须等于跳两次$d$",
+    "K.~Frans et al., \\textit{One Step Diffusion via Shortcut Models} (2024)": "K.~Frans等，\\textit{One Step Diffusion via Shortcut Models}（2024）",
+    "Guidance": "引导",
+    "How do you ask for something specific?": "怎样要它画出特定的东西？",
+    "\\quad\\text{or}\\quad": "\\quad\\text{或}\\quad",
+    "told the letter, \\ or (one time in five) \\ told nothing": "告诉它字母，\\ 或者（每5次里有1次）\\ 什么也不告诉",
+    "conditional": "有条件",
+    "unconditional": "无条件",
+    "J.~Ho \\& T.~Salimans, \\textit{Classifier-Free Diffusion Guidance} (2022)": "J.~Ho \\& T.~Salimans，\\textit{Classifier-Free Diffusion Guidance}（2022）",
+    "the same $500$ starting points in every panel": "每个面板都用同样的$500$个起点",
+    "stronger guidance: \\ more on target, \\ less variety": "引导越强：\\ 越切题，\\ 越少变化",
+    "told nothing \\ ($\\varnothing$): \\ unconditional": "什么也不告诉 \\ （$\\varnothing$）：\\ 无条件",
+    "told ``A'': \\ conditional": "告诉它“A”：\\ 有条件"
   },
   "phrases": {
     "width": "宽度",
@@ -3100,6 +3173,34 @@
     [
       "^answers right, \\\\ lists of \\$(\\d+)\\$ pairs, \\\\ during training$",
       "答对的比例，\\\\ $\\1$对的列表，\\\\ 训练途中"
+    ],
+    [
+      "^noise level \\$t = ([\\d.]+)\\$$",
+      "噪声水平 $t = \\1$"
+    ],
+    [
+      "^distance from the data: \\\\ \\$([\\d.]+)\\$$",
+      "与数据的距离：\\\\ $\\1$"
+    ],
+    [
+      "^\\$(\\d+)\\$ steps?$",
+      "$\\1$步"
+    ],
+    [
+      "^\\$(\\d+)\\\\%\\$ on the A; \\\\ spread \\$([\\d.]+)\\$$",
+      "$\\1\\\\%$落在A上；\\\\ 散布$\\2$"
+    ],
+    [
+      "^\\$w = ([\\d.]+)\\$: \\\\ the difference, \\\\ stretched$",
+      "$w = \\1$：\\\\ 把差拉长"
+    ],
+    [
+      "^straightness: \\\\ \\$([\\d.]+)\\$ \\\\\\\\ \\(\\$1\\$ = a straight line\\)$",
+      "直度：\\\\ $\\1$ \\\\\\\\ （$1$ = 一条直线）"
+    ],
+    [
+      "^distance from the real data \\\\ \\(noise itself: \\\\ \\$([\\d.]+)\\$\\)$",
+      "与真实数据的距离 \\\\ （噪声本身：\\\\ $\\1$）"
     ]
   ]
 }
