@@ -160,18 +160,32 @@ class VLA(VoiceoverScene):
                    colors=colors, font_size=30)
         f2 = cmath(r"\mathcal{L} = \big\|", r"v_\theta", r"(", r"A", r"^{\tau}, o_t) - (", r"A", r"-", r"\varepsilon", r")\big\|^2",
                    colors=colors, font_size=30)
-        top = VGroup(f1, f2).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([-2.4, 2.5, 0])
+        top = VGroup(f1, f2).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_corner(UL, buff=0.5)
         tl = label(r"$\pi_0$: \ a chunk of $H = 50$ actions \ ($1$ s at $50$ Hz), \ flow-matched given the observation $o_t$; "
                    r"\ $10$ steps to draw", font_size=18, color=C.INTERVAL).next_to(top, DOWN, buff=0.12).align_to(top, LEFT)
         keep_in_frame(tl)
+        # the flow-matching path on this chunk: noise at tau = 0, the chunk at tau = 1
+        eps = np.clip(np.random.default_rng(3).normal(0, 0.45, H), -1, 1)
+        px = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=3.6, y_length=1.7, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.2, 2.0, 0])
+        tau = ValueTracker(0.0)
+
+        def mix():
+            v = (1 - tau.get_value()) * eps + tau.get_value() * a
+            return VGroup(VMobject(color=C.INTERVAL, stroke_width=2, stroke_opacity=0.5).set_points_as_corners(
+                [px.c2p(i, x) for i, x in enumerate(v)]), *[Dot(px.c2p(i, x), radius=0.025, color=C.INTERVAL) for i, x in enumerate(v)])
+
+        path = always_redraw(mix)
+        pl = always_redraw(lambda: MathTex(rf"A^{{\tau}}, \ \tau = {tau.get_value():.2f}", font_size=24, color=C.INTERVAL)
+                           .next_to(px, UP, buff=0.08))
         # FAST on one chunk, computed here
-        ax = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=4.2, y_length=2.2, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.3, -1.3, 0])
+        ax = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=4.4, y_length=2.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.2, -1.3, 0])
         sig = VMobject(color=C.INTERVAL, stroke_width=3).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(a)])
         rs = VMobject(color=C.BITS, stroke_width=2).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(rec)])
         al = label(r"one joint over one chunk \ (illustrative)", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1)
-        bx = CornerAxes(x_range=[0, H, 10], y_range=[0, float(np.abs(c).max()) * 1.1, 1], x_length=4.2, y_length=2.2, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.6, -1.3, 0])
+        bx = CornerAxes(x_range=[0, H, 10], y_range=[0, float(np.abs(c).max()) * 1.1, 1], x_length=4.4, y_length=2.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.7, -1.3, 0])
         bars = VGroup(*[Line(bx.c2p(i + 0.5, 0), bx.c2p(i + 0.5, abs(float(v))), stroke_width=4,
                              color=C.BITS if q[i] != 0 else GREY_D) for i, v in enumerate(c)])
         bl = label(r"its cosine transform: \ smooth motion \\ lives in the first few numbers", font_size=18, color=GREY_A).next_to(bx, UP, buff=0.1)
@@ -194,7 +208,9 @@ class VLA(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(cite_))
             vo.wait_until("a")
-            self.play(Write(f1), Write(f2), FadeIn(tl), run_time=2.0)
+            self.play(Write(f1), Write(f2), FadeIn(tl), Create(px), run_time=2.0)
+            self.add(path, pl)
+            self.play(tau.animate.set_value(1.0), run_time=4.0, rate_func=smooth)
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(al), Create(sig))
             vo.wait_until("c")
