@@ -75,12 +75,16 @@ class Quant(VoiceoverScene):
             g.add(VGroup(nm, bar, val))
         head = label(rf"bits per character on the passage \ (axis from ${lo:.2f}$)", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
         d8, d4 = vals[modes.index("int8")] - base, vals[modes.index("int4")] - base
+        d3, df = vals[modes.index("int3")] - base, vals[modes.index("fp4")] - base
         foot = label(r"real models add tricks: \ GPTQ corrects each rounding error using the next weights; \\ "
                      r"training in low precision from the start (FP8, \ FP4)", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "What does it cost? <bookmark mark='a'/> Rounded to eight bits, our transformer is "
             f"{'no worse' if d8 < 0.005 else f'{d8:.3f} bits worse'}. At four bits, {d4:.3f} bits worse per character, "
-            "for an eighth of the memory. Below that, it starts to break. <bookmark mark='b'/> Big models tolerate "
+            f"for an eighth of the memory; at three, {d3:.2f} worse: it starts to break. "
+            + (f"FP4, with its scale for every block of thirty-two, loses only {df:.3f}: better than plain four bits, "
+               "for the same memory. " if df < d4 else f"FP4 loses {df:.3f}. ")
+            + "<bookmark mark='b'/> Big models tolerate "
             "rounding even better, and methods like GPTQ correct each rounding error using the weights still to come; "
             "the newest models are trained in eight or even four bits from the start."
         ) as vo:
