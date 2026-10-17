@@ -2582,7 +2582,12 @@
     "C.~Zheng et al., \\textit{GSPO} (2025); \\ Y.~Yue et al., \\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity\\ldots?} (2025)": "C.~Zheng等，\\textit{GSPO}（2025）；\\ Y.~Yue等，\\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity\\ldots?}（2025）",
     "\\hat A = r - \\bar r, \\quad \\textstyle\\sum_t \\text{ not } \\frac{1}{|o_i|}\\sum_t": "\\hat A = r - \\bar r, \\quad \\textstyle\\sum_t \\text{ 而不是 } \\frac{1}{|o_i|}\\sum_t",
     "\\hat A_i = 0 \\ \\text{ for every } i \\ \\Rightarrow\\ \\nabla J = 0": "\\hat A_i = 0 \\ \\text{ 对所有 } i \\ \\Rightarrow\\ \\nabla J = 0",
-    "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{-ratio}\\big)": "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{比值}\\big)"
+    "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{-ratio}\\big)": "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{比值}\\big)",
+    "dense, \\ as much compute": "稠密模型，\\ 计算量相同",
+    "dense, \\ as many parameters": "稠密模型，\\ 参数量相同",
+    "steps \\ (log scale)": "步数 \\ （对数刻度）",
+    "share right: \\ true-by-chance pages": "答对的比例：\\ 碰巧正确的页",
+    "share right: \\ the others": "答对的比例：\\ 其余的页"
   },
   "phrases": {
     "width": "宽度",
@@ -2930,6 +2935,18 @@
     [
       "^DAPO draws more questions \\\\\\\\ until each batch is full of signal: \\\\\\\\ \\$([\\d.]+)\\\\times\\$ the questions, \\\\ on average$",
       "DAPO会多抽题目，\\\\\\\\ 直到每个批次都满是信号：\\\\\\\\ 平均要$\\1\\\\times$的题目"
+    ],
+    [
+      "^\\\\text\\{training step \\}([\\d{},]+)$",
+      "\\\\text{训练第}\\1\\\\text{步}"
+    ],
+    [
+      "^\\$(\\d+)\\$ pages whose shuffled author \\\\\\\\ happens to be the true one$",
+      "$\\1$页，打乱后的作者 \\\\\\\\ 碰巧是真的"
+    ],
+    [
+      "^\\$(\\d+)\\$ pages whose shuffled author \\\\\\\\ is wrong$",
+      "$\\1$页，打乱后的作者 \\\\\\\\ 是错的"
     ]
   ]
 }
