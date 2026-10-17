@@ -128,10 +128,10 @@
    "en": "Chapter seven. Training.",
    "zh": "第7章。训练。"
   },
-  "b3627cdc7c3c": {
+  "110b846fd78c": {
    "scene": "Train",
-   "en": "Now let's use it. In part one, counting letter pairs got us to 3.33 bits per letter. <bookmark mark='a'/> This time, nothing is counted. The model has 729 adjustable scores, one for every pair of letters, all starting at zero, and our library trains them by gradient descent on the books.",
-   "zh": "现在来用它。在第1部分，统计字母对，让我们做到了每个字母3.33比特。<bookmark mark='a'/>这一次，什么都不数。模型有729个可调的分数，每一对字母一个，全都从0开始，由我们的库在那些书上，用梯度下降来训练。"
+   "en": "Now let's use it. In part one, counting letter pairs got us to 3.33 bits per letter. <bookmark mark='a'/> This time, nothing is counted. The model has 729 adjustable scores, one for every pair of letters, all starting at zero, and our library trains them by gradient descent on the books. <bookmark mark='w'/> Underneath, the text the scores write, drawn with the same dice at every step: for now, noise.",
+   "zh": "现在来用它。在第1部分，统计字母对，让我们做到了每个字母3.33比特。<bookmark mark='a'/>这一次，什么都不数。模型有729个可调的分数，每一对字母一个，全都从0开始，由我们的库在那些书上，用梯度下降来训练。<bookmark mark='w'/>下方是这些分数写出的文字，每一步都用同样的骰子来抽：眼下，还只是噪声。"
   },
   "bf64301d3f9b": {
    "scene": "Train",
