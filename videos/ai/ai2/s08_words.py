@@ -316,7 +316,9 @@ class Words(VoiceoverScene):
                 if k == 2:
                     self.play(FadeOut(step_card), run_time=0.4)
                 new = VGroup(*[column(k, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
-                self.play(Transform(cols, new), t.animate.set_value(steps[k]), run_time=0.9)
+                self.play(FadeOut(cols, rate_func=squish_rate_func(smooth, 0.0, 0.45)),
+                          FadeIn(new, rate_func=squish_rate_func(smooth, 0.5, 1.0)), t.animate.set_value(steps[k]), run_time=0.9)
+                cols = new  # the neighbour words cross-fade, never morph letter by letter
         self.wait(0.3)
         self.remove(cnt)
         self.clear_scene()
