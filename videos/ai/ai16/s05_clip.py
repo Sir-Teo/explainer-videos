@@ -10,6 +10,7 @@ class Clip(VoiceoverScene):
     def construct(self):
         self.card()
         self.pairs()
+        self.learning()
         self.losses()
 
     def card(self):
@@ -108,4 +109,57 @@ class Clip(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(res), FadeIn(rl))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How contrastive training finds the diagonal: the same twelve pairs, scored at checkpoints."""
+        c = load("clip")
+        snaps = np.asarray(c["snaps_clip"])
+        checks = [int(x) for x in c["checks_clip"]]
+        L = np.asarray(c["losses_clip"])
+        n = snaps.shape[1]
+        S = 4.2
+
+        def grid(k):
+            return heat(snaps[k], S, S, signed=True).move_to([-2.6, -0.3, 0])
+
+        cur = grid(0)
+        frame = SurroundingRectangle(cur, buff=0, color=GREY_D, stroke_width=1.5)
+        cell = S / n
+        diag = VGroup(*[Square(cell, stroke_color=WHITE, stroke_width=1.2).move_to(
+            [cur.get_left()[0] + cell * (i + 0.5), cur.get_top()[1] - cell * (i + 0.5), 0]) for i in range(n)])
+        gl = label(r"rows: \ $12$ pictures; \ columns: \ their $12$ captions", font_size=20, color=GREY_A).next_to(cur, UP, buff=0.15)
+        ax = CornerAxes(x_range=[0, checks[-1], 1000], y_range=[0, float(L[:, 1].max()) * 1.05, 1], x_length=4.6, y_length=2.8,
+                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -0.3, 0])
+        yn = label(r"CLIP's loss on each batch of $128$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
+                            .next_to(gl, UP, buff=0.15))
+        dg = np.array([np.mean(np.diag(s_)) - np.mean(s_[~np.eye(n, dtype=bool)]) for s_ in snaps])
+        with self.voiceover(
+            "How does training find that diagonal? Here is the same table of twelve pictures and their captions, "
+            "scored at checkpoints while the two encoders learn. <bookmark mark='a'/> At the start, every score is "
+            "noise. <bookmark mark='b'/> Each batch pulls the matching pairs' vectors together and pushes every other "
+            "pair apart, and the diagonal lights up: "
+            f"matching pairs end up {dg[-1]:.2f} more similar, on average, than mismatched ones. Pairs that share a "
+            "letter or a style stay partly lit: they really are alike."
+        ) as vo:
+            self.play(FadeIn(cur), Create(frame), FadeIn(gl), Create(ax), FadeIn(yn), FadeIn(xn))
+            self.add(cnt)
+            vo.wait_until("a")
+            self.play(Create(diag))
+            vo.wait_until("b")
+            for k in range(1, len(checks)):
+                nxt = grid(k)
+                seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]
+                anims = [FadeTransform(cur, nxt), t.animate.set_value(checks[k])]
+                if len(seg) > 1:
+                    anims.append(Create(VMobject(color=TEXT_C, stroke_width=2.5).set_points_as_corners(seg)))
+                self.play(*anims, run_time=1.1)
+                cur = nxt
+                self.bring_to_front(diag)
+        self.wait(0.3)
+        self.remove(cnt)
         self.clear_scene()

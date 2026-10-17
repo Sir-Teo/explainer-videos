@@ -304,7 +304,17 @@ def compute_clip():
         b_ = nn.Parameter(torch.tensor(-10.0))
         opt = torch.optim.Adam([*img_enc.parameters(), *txt_enc.parameters(), t_, b_], lr=2e-3)
         g = torch.Generator().manual_seed(0)
+        sel = torch.tensor(rng(3).choice(len(X), 12, replace=False))
+        snaps, losses = [], []
+
+        def snap():  # how it learns: the twelve pictures against their captions, at checkpoints
+            with torch.no_grad():
+                return (F.normalize(img_enc(X[sel]), dim=-1) @ F.normalize(txt_enc(T[sel]), dim=-1).T).numpy()
+
+        checks = [0, 20, 60, 150, 400, 1000, 3000]
         for step in range(3000):
+            if step in checks:
+                snaps.append(snap())
             i = torch.randint(0, len(X), (128,), generator=g)
             zi = F.normalize(img_enc(X[i] + 0.05 * torch.randn(128, 400, generator=g)), dim=-1)
             zt = F.normalize(txt_enc(T[i]), dim=-1)
@@ -318,6 +328,10 @@ def compute_clip():
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if step % 20 == 0:
+                losses.append((step, float(loss)))
+        snaps.append(snap())
+        out[f"snaps_{loss_name}"], out[f"checks_{loss_name}"], out[f"losses_{loss_name}"] = np.array(snaps), checks, np.array(losses)
         with torch.no_grad():
             zi = F.normalize(img_enc(X), dim=-1)
             zu = F.normalize(txt_enc(U), dim=-1)
@@ -326,7 +340,6 @@ def compute_clip():
             letter_right = torch.tensor([uniq[p].split()[-1] == caps[k][-1] for k, p in enumerate(pick.tolist())])
             out[f"acc_{loss_name}"] = float(right.float().mean())
             out[f"letter_{loss_name}"] = float(letter_right.float().mean())
-            sel = torch.tensor(rng(3).choice(len(X), 12, replace=False))
             out[f"sim_{loss_name}"] = (zi[sel] @ F.normalize(txt_enc(T[sel]), dim=-1).T).numpy()
             if loss_name == "clip":
                 out["batch_imgs"] = imgs[sel.numpy()]
