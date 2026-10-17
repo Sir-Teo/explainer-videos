@@ -59,7 +59,7 @@ class Outro(VoiceoverScene):
                        .shift(RIGHT * 0.14 * i + UP * 0.1 * i) for i in range(6)])
         out.append((vid, r"rotations in $f, h, w$", GREY_A))
         cl = load("clips")
-        out.append((Group(*[gray_image(f_, 0.4) for f_ in np.asarray(cl["joint_clips"])[0][:6]]).arrange(RIGHT, buff=0.04),
+        out.append((Group(*[gray_image(f_, 0.4) for f_ in np.asarray(cl["joint_clips"])[0][1:7]]).arrange(RIGHT, buff=0.04),
                     r"frames that agree", C.INTERVAL))
         out.append((Group(*[gray_image(f_, 0.4) for f_ in np.asarray(cl["forcing_rollout"])[0][::5][:6]]).arrange(RIGHT, buff=0.04),
                     r"diffusion forcing", C.INTERVAL))
@@ -77,6 +77,8 @@ class Outro(VoiceoverScene):
 
     def recap(self):
         tiles = self.tiles()
+        cl = load("clips")
+        held = float(cl["forcing_late_right"]) > float(cl["teacher_late_right"]) + 0.05  # did noisy pasts pay off here?
         head = label(r"Part 15, in twelve pictures", font_size=36).to_edge(UP, buff=0.25)
         with self.voiceover(
             "Let's take stock. Cut a picture into patches and a transformer reads it like a sentence, learning the "
@@ -85,7 +87,8 @@ class Outro(VoiceoverScene):
             "identity, train it most on the middle noise levels, shift them as pictures grow, and give text and "
             "picture one sequence: that's today's image models. Coarse to fine is another road entirely. Video is "
             "the same with time: a causal autoencoder, rotations in three directions, frames drawn together, and "
-            "noisy pasts in training, so a model can roll forward on its own work."
+            + ("noisy pasts in training, so a model can roll forward on its own work." if held else
+               "noisy pasts in training, meant to let a model roll forward on its own work.")
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
