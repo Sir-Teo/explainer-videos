@@ -292,7 +292,7 @@ class Objective(VoiceoverScene):
         best = max(rl, key=lambda v: acc[v])
         spread = 100 * (max(acc[v] for v in rl) - min(acc[v] for v in rl))
         cite_ = cite(r"Z.~Liu et al., \textit{Dr.~GRPO} (2025); \ Q.~Yu et al., \textit{DAPO} (2025); \ C.~Zheng et al., "
-                     r"\textit{GSPO} (2025)", corner=DR)
+                     r"\textit{GSPO} (2025)", corner=UR)  # the bars' names sit along the bottom
         with self.voiceover(
             "Since DeepSeek-R1, a small industry has tuned this objective. <bookmark mark='a'/> Doctor GRPO drops two "
             "normalizations: dividing by the group's spread overweights questions that are nearly always right or "
@@ -461,12 +461,17 @@ class Objective(VoiceoverScene):
         e0, e1 = float(np.asarray(o["grpo_curve"])[0, 2]), float(np.asarray(o["grpo_curve"])[-1, 2])
         pr0 = float(p_right[0, qs].mean())
         pr1 = float(p_right[-1, qs].mean())
+        # big single-checkpoint falls of a right answer on the way (learning from 8 samples a step is noisy)
+        falls = int(sum((p_right[k, q_] < p_right[k - 1, q_] - 0.3) for k in range(1, n_ck) for q_ in qs))
         with self.voiceover(
             "Here is what that objective does to the model, step by step. Three questions it was unsure of, and the "
             "probability it gives each candidate answer, the right one in green. <bookmark mark='a'/> Each step, "
             "answers that beat their group's average get pushed up and the rest pushed down; the clip keeps each "
             f"push small. <bookmark mark='b'/> The right answers' probability climbs from {100 * pr0:.0f} percent on "
-            f"average to {100 * pr1:.0f}, and the wrong ones drain away. That's also why the entropy falls, from "
+            f"average to {100 * pr1:.0f}, and the wrong ones drain away"
+            + (". Not smoothly: each step learns from just eight sampled answers a question, so a right answer can "
+               "drop sharply and be pulled back later" if falls >= 2 else "")
+            + f". That's also why the entropy falls, from "
             f"{e0:.2f} to {e1:.2f} bits a digit: the model stops spreading its bets."
         ) as vo:
             self.play(FadeIn(panels), FadeIn(cur), FadeIn(yl))
