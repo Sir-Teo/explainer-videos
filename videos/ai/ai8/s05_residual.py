@@ -120,7 +120,7 @@ class Residual(VoiceoverScene):
         nets = ("plain", "residual")
         cols = {"plain": PLAIN, "residual": RES}
         probs = {n: np.asarray(r[f"probs_{n}"]) for n in nets}
-        gn = {n: np.log10(np.maximum(np.asarray(r[f"gnorm_{n}"]), 1e-12)) for n in nets}
+        gn = {n: np.log10(np.maximum(np.asarray(r[f"gnorm_{n}"]), 1e-30)) for n in nets}
         lo = float(min(g.min() for g in gn.values())) - 0.3
         hi = float(max(g.max() for g in gn.values())) + 0.1
         S, span = 3.4, 6.8

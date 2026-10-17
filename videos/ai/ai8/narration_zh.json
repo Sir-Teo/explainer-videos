@@ -85,6 +85,11 @@
    "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size, and training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
    "zh": "在那两条螺旋上试一试，网络有40层。普通的层叠，什么也学不会：一直停在抛硬币的水平。<bookmark mark='a'/>同样的40层，加上残差连接，几百步之内，就把螺旋完全学会了。<bookmark mark='b'/>再加上层归一化，它把每一层的向量重新缩放到一个标准的大小，训练就更平稳了。残差流和归一化：每一个现代模型内部，都少不了这两段管道。"
   },
+  "2111c4b872b3": {
+   "scene": "Residual",
+   "en": "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> First, normalize what goes into each layer, not the stream itself: the stream stays a clean running sum. <bookmark mark='b'/> Second, RMSNorm: divide by the root mean square and drop the mean and the shift. It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. Two projections of the input, one passed through SiLU, a smooth cousin of the ReLU, multiplied number by number with the other. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's paper tested it, and ended, famously, by attributing its success to divine benevolence. <bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block.",
+   "zh": "三个小改进，把它变成了今天语言模型里的那种块。<bookmark mark='a'/>第一，对进入每一层的东西做归一化，而不是对残差流本身：残差流始终是一个干净的累加和。<bookmark mark='b'/>第二，RMSNorm：除以均方根，去掉均值和平移。它更便宜，效果一样好。<bookmark mark='c'/>第三，带门控的MLP。对输入做两个投影，一个经过SiLU，也就是ReLU的一个平滑表亲，再和另一个逐个数相乘。<bookmark mark='d'/>这是三个矩阵而不是两个，所以隐藏层宽度从模型宽度的4倍缩到3分之8倍，权重总数正好一样。Noam Shazeer的论文测试了它，并且出了名地在结尾把它的成功归功于“神的恩典”。<bookmark mark='e'/>Llama、Qwen、DeepSeek和gpt-oss，用的都是这种块。"
+  },
   "c3c1de97e5db": {
    "scene": "NeuralLM",
    "en": "Chapter five. A neural language model.",
@@ -139,6 +144,11 @@
    "scene": "Outro",
    "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in part nine.",
    "zh": "西蒙·普林斯的《理解深度学习》，是最清楚的一本现代教科书，而且可以免费阅读。感谢观看，第9部分见。"
+  },
+  "25da207cbb5f": {
+   "scene": "Residual",
+   "en": "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says about every point of the plane; below, how much gradient reaches each of its forty layers, on a log scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the way down: the first layer gets more than a hundred trillion times less than the last. The residual stack's gradients are all about the same size, within a factor of 2, because each block adds to a stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of a hundred thousand, as there is less and less left to fix. The plain stack's answer stays one flat colour, the same everywhere, and its gradients only fade further.",
+   "zh": "为什么普通的堆叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通堆叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过一百万亿倍。残差堆叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差堆叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通堆叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
   }
  },
  "title_en": "AI, Built: Part 8, Networks",

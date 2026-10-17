@@ -59,6 +59,11 @@
    "en": "To plan, an agent needs to predict what its actions will do. A world model learns that from experience. <bookmark mark='a'/> Ours watches a ball bouncing in a box. It squeezes each frame into eight numbers, learns how those numbers change from one frame to the next, and can turn numbers back into a picture.",
    "zh": "要做计划，智能体就得预测自己的行动会带来什么。世界模型，就是从经验中学会这一点。<bookmark mark='a'/>我们的世界模型，看的是一个在盒子里弹来弹去的球。它把每一帧压缩成8个数，学会这些数从一帧到下一帧怎样变化，还能把这些数重新变回一幅画面。"
   },
+  "111ce3d07eeb": {
+   "scene": "World",
+   "en": "How does a world model learn to dream? Here it is at checkpoints during training, each time given the same two opening frames and left to imagine the next twelve, every frame built on its own last guess. <bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> After 100 steps it has learned the safest guess: a dark, empty frame, the average of all frames, with no ball at all. <bookmark mark='c'/> By step 300 it carries the ball along for a few frames, then loses it, as each guess builds on the last one's blur. <bookmark mark='d'/> Later it carries the ball the whole way, though small errors still add up: after twelve imagined frames, the final model's ball is 2.7 pixels from the real one.",
+   "zh": "世界模型是怎么学会做梦的？这是它在训练途中的几个检查点，每次都给它同样的两帧开头，让它想象接下来的12帧，每一帧都建立在它自己上一个猜测之上。<bookmark mark='a'/>还没训练的时候，它想象出来的只有一片雾。<bookmark mark='b'/>训练100步之后，它学会了最保险的猜法：一张漆黑的空画面，也就是所有画面的平均，里面根本没有球。<bookmark mark='c'/>到第300步，它能把球带着走上几帧，然后就跟丢了，因为每个猜测都建立在上一个猜测的模糊之上。<bookmark mark='d'/>再往后，它能一路把球带到底，不过小误差还是会累积：想象了12帧之后，最终模型画出的球，离真实的球差2.7个像素。"
+  },
   "a5f021398e2f": {
    "scene": "World",
    "en": "Now let it imagine. Give it two real frames and let it run on its own predictions, step after step, <bookmark mark='a'/> while the real ball keeps going. For a while, imagination and reality move together: one step ahead it's 0.1 pixels off. <bookmark mark='b'/> Then small errors compound, like the long tasks of the last chapter: 5.3 pixels off after twenty steps. <bookmark mark='c'/> Agents like Dreamer learn by practising inside such imagined worlds, and Genie generates whole playable worlds from video.",
@@ -78,6 +83,11 @@
    "scene": "VLA",
    "en": "And it doesn't act one tiny step at a time. It plans a chunk of motion, a second or so, then looks at the world again and plans the next: <bookmark mark='a'/> the belief and the world model of the earlier chapters, folded into one network that sees, thinks and moves.",
    "zh": "而且，它并不是一小步一小步地行动。它一次规划一段动作，大约1秒，然后再看一眼世界，规划下一段：<bookmark mark='a'/>前面几章的信念和世界模型，都合进了同一个网络，它能看、能想、能动。"
+  },
+  "3d2d216602d1": {
+   "scene": "VLA",
+   "en": "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole chunk of fifty actions, one second of motion, by part fourteen's flow matching: mix the true chunk with noise, and train the action expert to predict the straight-line velocity between them, given what the robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a language model can write. Taking every time step as a token works badly: neighbouring steps are nearly the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first. A cosine transform puts a smooth motion's information into a few numbers; <bookmark mark='d'/> round them, and on this chunk only 7 of 50 survive, yet they rebuild the motion to within 0.044; byte-pair encoding, from part sixteen, then packs what's left into a handful of tokens.",
+   "zh": "下面是这两种答案的确切形式。<bookmark mark='a'/>Physical Intelligence公司的π0，用第14部分的流匹配，一次预测一整块50个动作，也就是1秒钟的动作：把真实的动作块和噪声混在一起，训练动作专家，在看到机器人眼前画面的条件下，预测两者之间那条直线上的速度。画出一块动作，只要10步。<bookmark mark='b'/>另一种答案，是把动作变成语言模型能写的词元。每个时间步都当成一个词元，效果很差：相邻的时间步几乎一样，所以每个词元几乎什么都没说。<bookmark mark='c'/>FAST先做压缩。余弦变换把一段平滑动作的信息，集中到少数几个数里；<bookmark mark='d'/>把它们取整，在这一块动作上，50个数只剩7个不是零，却能把动作还原到误差0.044以内；然后用第16部分讲过的字节对编码，把剩下的打包成寥寥几个词元。"
   },
   "649678677dd2": {
    "scene": "Outro",

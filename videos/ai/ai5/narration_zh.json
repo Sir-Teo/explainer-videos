@@ -68,6 +68,11 @@
    "en": "Over the whole plane, that makes a sheet: the probability of Dickens, rising from Austen's side to Dickens's. <bookmark mark='a'/> Lift each training page to the height of its true answer: zero for Austen, one for Dickens. The sheet should pass close to them. <bookmark mark='b'/> Fitting it means minimizing the average surprise, part one's cross-entropy, by part three's gradient descent. The best sheet leaves about half a bit of surprise per page.",
    "zh": "在整个平面上，这就形成了一张曲面：狄更斯的概率，从奥斯汀那一侧，升到狄更斯那一侧。<bookmark mark='a'/>把每一个训练页，抬到它真实答案的高度：奥斯汀是0，狄更斯是1。这张曲面应该从它们近旁经过。<bookmark mark='b'/>拟合它，就是用第3部分的梯度下降，去最小化平均意外度，也就是第1部分的交叉熵。最好的那张曲面，每页大约还剩半比特的意外度。"
   },
+  "04390e332298": {
+   "scene": "Logistic",
+   "en": "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. A convex loss has one bottom, so where it settles doesn't depend on where it started.",
+   "zh": "那条线是怎么找到的？靠在交叉熵上做梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。凸的损失只有一个谷底，所以它停在哪里，和从哪里出发无关。"
+  },
   "368316b17944": {
    "scene": "Logistic",
    "en": "Now the test: pages the method never saw. With two rates, the line gets 82 percent of them right. <bookmark mark='a'/> Give it all seventy rates instead, and the same method gets 190 of the 191 test pages right. A handful of small words, counted, are a fingerprint.",
