@@ -2969,7 +2969,15 @@
     "$H^{-1}$: \\ undoes the curvature's stretching, \\\\ so every direction is equally steep": "$H^{-1}$：\\ 抵消曲率造成的拉伸，\\\\ 让每个方向都一样陡",
     "optimizer: \\ the rule that turns \\\\ gradients into steps": "优化器：\\ 把梯度变成步子的\\\\ 那条规则",
     "$f'$: \\ the slope of $f$; \\quad $f(g(x))$: \\ do $g$ first, then $f$": "$f'$：\\ $f$的斜率；\\quad $f(g(x))$：\\ 先做$g$，再做$f$",
-    "$\\theta$: \\ all the adjustable numbers, the parameters \\qquad $\\mathcal{L}$: \\ the loss, one number to make small": "$\\theta$：\\ 所有可调的数，也就是参数 \\qquad $\\mathcal{L}$：\\ 损失，要尽量变小的那一个数"
+    "$\\theta$: \\ all the adjustable numbers, the parameters \\qquad $\\mathcal{L}$: \\ the loss, one number to make small": "$\\theta$：\\ 所有可调的数，也就是参数 \\qquad $\\mathcal{L}$：\\ 损失，要尽量变小的那一个数",
+    "$\\propto$: \\ equal, up to a rescaling that makes the total $1$": "$\\propto$：\\ 相等，只差一步让总和等于$1$的重新缩放",
+    "spread": "散布程度",
+    "the average squared distance from the centre:\\\\ the spread, squared": "与中心距离的平方的平均值：\\\\ 散布程度的平方",
+    "probability density": "概率密度",
+    "the curve's height: \\ how crowded the outcomes are there;\\\\ the area between two points is the probability": "曲线的高度：\\ 结果在那里有多拥挤；\\\\ 两点之间的面积就是概率",
+    "push: \\ $f(x)\\,dt$": "推力：\\ $f(x)\\,dt$",
+    "kick: \\ $g\\,dW_t$": "踢动：\\ $g\\,dW_t$",
+    "$dt$: \\ a tiny tick of time; \\ $dW_t$: \\ the tiny random kick\\\\ that Brownian motion makes in that tick": "$dt$：\\ 极短的一小段时间；\\ $dW_t$：\\ 布朗运动在这一小段时间里\\\\ 给出的微小随机踢动"
   },
   "phrases": {
     "width": "宽度",
