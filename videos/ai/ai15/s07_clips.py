@@ -51,7 +51,7 @@ class Clips(VoiceoverScene):
         S = 0.78
         jr = Group(*[strip(e, S, 0.04) for e in J[:3]]).arrange(DOWN, buff=0.12)
         ir = Group(*[strip(e, S, 0.04) for e in I[:3]]).arrange(DOWN, buff=0.12)
-        Group(jr, ir).arrange(DOWN, buff=0.9).move_to([-1.6, -0.5, 0])
+        Group(jr, ir).arrange(DOWN, buff=0.9).move_to([-1.6, -0.62, 0])
         jl = label(r"one sample: \ the rest drawn together", font_size=22, color=JOINT).next_to(jr, UP, buff=0.15).align_to(jr, LEFT)
         il = label(r"each later frame from a different sample", font_size=22, color=INDEP).next_to(ir, UP, buff=0.15).align_to(ir, LEFT)
         # the given first frame of every clip, outlined: it is real, not generated
@@ -78,7 +78,7 @@ class Clips(VoiceoverScene):
         for r_ in tab:
             for k, m_ in enumerate(r_):
                 m_.move_to([3.5 + k * 1.55, 0, 0])
-        tab.arrange(DOWN, buff=0.35).move_to([5.1, 0.4, 0])
+        tab.arrange(DOWN, buff=0.35).move_to([4.85, 0.3, 0])
         for k in range(3):
             x = tab[1][k].get_x()
             for r_ in tab:
@@ -86,26 +86,27 @@ class Clips(VoiceoverScene):
         tn = label(rf"frames $2$ to ${T}$ only: \ the given frame left out", font_size=18, color=GREY_B).next_to(tab, UP, buff=0.3)
         jn = label(r"jerkiness: \ how much the letter's centre \\ changes speed, frame to frame", font_size=18,
                    color=GREY_A).next_to(tab, DOWN, buff=0.4)
-        f = MathTex(r"p(x_2, \ldots, x_T \mid x_1) \;\neq\; \prod_{f \geq 2} p(x_f \mid x_1)", font_size=34).to_edge(UP, buff=0.35)
+        f = MathTex(r"p(x_2, \ldots, x_T \mid x_1) \;\neq\; \prod_{f \geq 2} p(x_f \mid x_1)", font_size=32).to_edge(UP, buff=0.2)
         smoother = jj < ij - 0.05
         # the letter: does each version keep it about as well as real clips do?
         keeps_j, keeps_i = ja >= ra - 0.15, ia >= ra - 0.15
         if keeps_j and keeps_i:
-            letter = (f"Each frame alone looks fine: the judge reads the right letter in {100 * ja:.0f} percent of the "
+            letter = (f"Each frame alone looks fine: the judge, our letter-reading classifier, reads the right letter "
+                      f"in {100 * ja:.0f} percent of the drawn frames of whole clips, and {100 * ia:.0f} percent of the "
+                      f"mixed ones, against {100 * ra:.0f} for real clips. ")
+        elif ja < 0.5 and ia < 0.5:
+            letter = (f"Even frame by frame, this small model struggles: the judge, our letter-reading classifier, reads "
+                      f"the right letter in only {100 * ja:.0f} percent of the drawn frames of whole clips, and "
+                      f"{100 * ia:.0f} percent of the mixed ones, against {100 * ra:.0f} for real clips. ")
+        else:
+            letter = (f"The judge, our letter-reading classifier, reads the right letter in {100 * ja:.0f} percent of the "
                       f"drawn frames of whole clips, and {100 * ia:.0f} percent of the mixed ones, against "
                       f"{100 * ra:.0f} for real clips. ")
-        elif ja < 0.5 and ia < 0.5:
-            letter = (f"Even frame by frame, this small model struggles: the judge reads the right letter in only "
-                      f"{100 * ja:.0f} percent of the drawn frames of whole clips, and {100 * ia:.0f} percent of the "
-                      f"mixed ones, against {100 * ra:.0f} for real clips. ")
-        else:
-            letter = (f"The judge reads the right letter in {100 * ja:.0f} percent of the drawn frames of whole clips, "
-                      f"and {100 * ia:.0f} percent of the mixed ones, against {100 * ra:.0f} for real clips. ")
         with self.voiceover(
-            "We trained a small diffusion transformer to continue a clip. It's given the first frame of a real clip, "
-            f"in a font it never saw, and the letter's name, and it denoises the other {T - 1} frames together, "
-            "attention running across frames as well as within them. That's image-to-video: how real video models "
-            "bring a still picture to life. <bookmark mark='a'/> Here are three of its clips; the outlined frame is "
+            "We trained a small diffusion transformer, with a little convolution at each end, to continue a clip. "
+            "It's given the first frame of a real clip, in a font it never saw, and the letter's name, and it "
+            f"denoises the other {T - 1} frames together, attention running across frames as well as within them. "
+            "That's image-to-video: how real video models bring a still picture to life. <bookmark mark='a'/> Here are three of its clips; the outlined frame is "
             "the given one. <bookmark mark='b'/> Now take the same model, but build each clip from frames of "
             "different samples: frame two from one sample, frame three from another, each continuing the same first "
             "frame, as if each frame were drawn on its own. <bookmark mark='c'/> "

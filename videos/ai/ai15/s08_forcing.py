@@ -51,8 +51,8 @@ class Forcing(VoiceoverScene):
                    font_size=20, color=GREY_A).to_edge(UP, buff=0.4)
         lt = label(r"the past clean, \ one frame noised, \ learn that frame", font_size=20, color=TEACH).next_to(teach, DOWN, buff=0.15)
         lf = label(r"every later frame its own noise level, \ learn them all", font_size=20, color=FORCE).next_to(force, DOWN, buff=0.15)
-        eq = MathTex(r"\mathcal{L} = \mathbb{E}\sum_{f=2}^{T} \big\| v_\theta\big(x_1^{t_1}, \ldots, x_T^{t_T}\big)_f - (x_f - \varepsilon_f)\big\|^2",
-                     font_size=32, color=FORCE).to_edge(DOWN, buff=0.9)
+        eq = MathTex(r"\mathcal{L} = \mathbb{E}\sum_{f=2}^{T} \big\| \hat{x}_\theta\big(x_1^{t_1}, \ldots, x_T^{t_T}\big)_f - x_f\big\|^2",
+                     font_size=32, color=FORCE).to_edge(DOWN, buff=1.2)
         el = label(r"with causal attention: \ frame $f$ sees frames $1 \ldots f$", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.15)
         cite_ = cite(r"B.~Chen et al., \textit{Diffusion Forcing: Next-token Prediction Meets Full-Sequence Diffusion} (2024)", corner=DR)
         with self.voiceover(
@@ -63,8 +63,9 @@ class Forcing(VoiceoverScene):
             "<bookmark mark='b'/> But at generation time, the past is the model's own work, slightly wrong, and it was "
             "never trained on that. <bookmark mark='c'/> Diffusion forcing, from Boyuan Chen and colleagues, gives "
             "every frame after the first its own noise level during training, so the model learns to work from a "
-            "past that's anywhere from clean to pure noise. <bookmark mark='d'/> The loss is plain flow matching, "
-            "summed over the frames after the given one, with attention that only looks back."
+            "past that's anywhere from clean to pure noise. <bookmark mark='d'/> The loss is the plain denoising one: "
+            "guess each clean frame back from its noisy version, summed over the frames after the given one, with "
+            "attention that only looks back."
         ) as vo:
             self.play(FadeIn(fl), FadeIn(cite_))
             vo.wait_until("a")
@@ -92,7 +93,7 @@ class Forcing(VoiceoverScene):
         lf = label(r"diffusion forcing", font_size=22, color=FORCE).next_to(rf, LEFT, buff=0.3)
         # the given first frame of every rollout, outlined: it is real, not generated
         given = VGroup(*[SurroundingRectangle(r_[0], buff=0.02, color=C.BITS, stroke_width=2) for r_ in (*rt, *rf)])
-        gl = label(r"outlined: \ the given first frame", font_size=16, color=C.BITS).next_to(rt, UP, buff=0.12).align_to(rt, LEFT)
+        gl = label(r"outlined: \ the given first frame, \ real", font_size=16, color=C.BITS).next_to(rf, DOWN, buff=0.15).align_to(rf, LEFT)
         edge = (T / 2) * (S + 0.03) - 0.015
         marks = VGroup(*[DashedLine(r_.get_corner(UL) + RIGHT * edge + UP * 0.1, r_.get_corner(DL) + RIGHT * edge + DOWN * 0.1,
                                     dash_length=0.05, stroke_width=2, color=C.BITS) for r_ in (rt, rf)])
