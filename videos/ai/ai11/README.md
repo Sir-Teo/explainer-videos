@@ -19,7 +19,8 @@ series' own small transformer, which joins the scoreboard. A hook and six chapte
   distance (checked to 10⁻¹⁴); the long-range decay.
 * **Longer than it was trained for.** Our model at four times its training context: as trained it breaks past 256
   characters; position interpolation, NTK-aware scaling and YaRN, with no retraining, measured position by position;
-  attention sinks in our model.
+  attention sinks: our small model has none (every head gives the first character under a third of an even share),
+  so a large model's sink head is drawn as a labeled schematic.
 * **Induction heads.** A random string shown twice: our small transformer does no better the second time (it has
   not built induction heads in its short training); the two-head mechanism
   ([a][b] … [a] → [b]); a two-layer attention-only model forming an induction head in a sudden drop of the loss, a
