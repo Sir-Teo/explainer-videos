@@ -161,6 +161,11 @@
    "en": "Induction heads can be watched as they form. Train a small model of attention alone on random tokens with a repeated stretch somewhere inside. <bookmark mark='a'/> With one layer, it can never copy: one head can't both note the previous token and search for it. <bookmark mark='b'/> With two layers, nothing happens for a while, and then, around step 2,600, the loss on the repeat falls off a cliff. <bookmark mark='c'/> Look inside: the first layer has a head that looks exactly one step back, and the second a head that looks at the earlier copy, one step ahead. In large models the same jump happens early in training, right when they get good at learning from their prompt.",
    "zh": "归纳头形成的过程，是可以亲眼看到的。训练一个只有注意力的小模型，数据是随机的词元，中间某处藏着一段重复。<bookmark mark='a'/>只有一层的话，它永远学不会照抄：一个头没法既记下前一个词元，又去搜索它。<bookmark mark='b'/>有两层的话，起初一段时间什么也没发生，然后，大约在第2600步，重复部分上的损失，一下子跌下了悬崖。<bookmark mark='c'/>看看里面：第一层有一个头，恰好往回看一步；第二层有一个头，看向更早出现的那份副本，而且错后一步。在大模型里，同样的跃变也发生在训练早期，恰好就在它们开始擅长从提示词中学习的时候。"
   },
+  "c36d0e8b020a": {
+   "scene": "Induction",
+   "en": "And here are those two heads forming, on the same example, at checkpoints through training, beside the loss on the repeat. <bookmark mark='a'/> Early on, both look around vaguely, mostly at recent tokens. <bookmark mark='b'/> Then, around step 2,600, the second head finds the stripe, the earlier copy one ahead: its attention there jumps from 0.05 to 0.74 within 500 steps, and the loss on the repeat falls from 5.7 to 2.8 bits in the same moment. The first head starts leaning on the token one back at the same time, and keeps strengthening for the rest of training, to 0.37. Two heads that are useless alone become useful together, so they appear together.",
+   "zh": "这是那两个头形成的过程，用同一个例子，在训练途中的各个检查点上，旁边是重复部分上的损失。<bookmark mark='a'/>一开始，两个头都在模模糊糊地四处看，大多看着最近的词元。<bookmark mark='b'/>然后，大约在第2600步，第二个头找到了那条斜线，也就是早先那份拷贝的下一个位置：它在那里的注意力，在500步之内从0.05跳到0.74，而重复部分上的损失，同一时刻从5.7比特降到2.8比特。第一个头也在同一时间开始倚重前一个词元，并在之后的训练中不断加强，最后到0.37。两个单独没用的头，合在一起才有用，所以它们一起出现。"
+  },
   "e1fb7cf8059d": {
    "scene": "InContext",
    "en": "Chapter six. Learning inside the prompt.",
