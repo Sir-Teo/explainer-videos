@@ -1,0 +1,154 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "Universal": "",
+  "Depth": "",
+  "Signal": "",
+  "Residual": "",
+  "NeuralLM": "",
+  "Outro": ""
+ },
+ "lines": {
+  "d8a2dbe69dee": {
+   "scene": "Hook",
+   "en": "Two spirals, wound around each other. No straight line can separate them, and no classical method in part five would find this easy. <bookmark mark='a'/> Here's a small neural network, three layers of thirty-two simple units, before any training. The thin lines cut the plane into the pieces on which the network is exactly linear. <bookmark mark='b'/> Now train it.",
+   "zh": ""
+  },
+  "9c39765865c1": {
+   "scene": "Hook",
+   "en": "The pieces swing around, and the boundary between the colours bends to follow the spirals, until nearly every point is on the right side. <bookmark mark='a'/> A network is just this: many flat pieces, glued together, placed by gradient descent. This part is about why that works, and what it takes to make it work.",
+   "zh": ""
+  },
+  "4ffb96aac7f4": {
+   "scene": "Hook",
+   "en": "We'll see why one layer of these units can approximate anything, what depth adds, how to keep signals alive through fifty layers, and the one trick that lets networks get really deep. <bookmark mark='a'/> And at the end, the first neural language model takes its place on the scoreboard.",
+   "zh": ""
+  },
+  "013d3f3cf596": {
+   "scene": "Universal",
+   "en": "Chapter one. What one layer can do.",
+   "zh": ""
+  },
+  "eb8156f6f898": {
+   "scene": "Universal",
+   "en": "A neural network is built from one kind of part. A unit takes some numbers, <bookmark mark='a'/> multiplies each by a weight and adds them up, plus a constant, exactly like part five's logistic regression, <bookmark mark='b'/> and then bends the result: below zero becomes zero. That bend is called a ReLU. <bookmark mark='c'/> Along any one input, a unit is a hinge: flat, then rising.",
+   "zh": ""
+  },
+  "16c1d13dc5f6": {
+   "scene": "Universal",
+   "en": "Add hinges together, each with its own position and slope, and you can draw any curve you like. <bookmark mark='a'/> Two hinges: a crude zigzag. <bookmark mark='b'/> Four. Eight. Sixteen. Sixty-four, and the miss is down to about one part in a thousand. <bookmark mark='c'/> That's the universal approximation theorem, from 1989: one layer of enough units can approximate any continuous function. It says a network can represent the answer. It doesn't say how many units it takes, or whether training will find them.",
+   "zh": ""
+  },
+  "1139b05c6181": {
+   "scene": "Depth",
+   "en": "Chapter two. What depth adds.",
+   "zh": ""
+  },
+  "1224ada2c975": {
+   "scene": "Depth",
+   "en": "If one layer can do anything, why stack them? Here's the answer in one picture. Two units make a tent: up from zero to one, and back down. <bookmark mark='a'/> Feed the tent into another tent: the line is folded twice, and you get four pieces. <bookmark mark='b'/> Three layers, eight pieces. Five layers, thirty-two. Each layer doubles the pieces, while a single layer would need a unit for every piece. Depth can buy complexity exponentially cheaply.",
+   "zh": ""
+  },
+  "8868b0b8c412": {
+   "scene": "Depth",
+   "en": "But that's what depth can do, with weights chosen by hand. What does a random network do? Here are forty-eight units cutting the plane, arranged in one layer, then two, three, four and six. <bookmark mark='a'/> The number of pieces barely changes, and even falls. Hanin and Rolnick showed in 2019 that typical networks have far fewer pieces than the maximum. Depth helps in subtler ways: by making useful functions easy for training to reach.",
+   "zh": ""
+  },
+  "b8b6f3f1115e": {
+   "scene": "Signal",
+   "en": "Chapter three. Keeping signals alive.",
+   "zh": ""
+  },
+  "dbd1e588e9d9": {
+   "scene": "Signal",
+   "en": "Before training, the weights are random. But random how? Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way, which is why deep networks once seemed impossible to train.",
+   "zh": ""
+  },
+  "09e43a34f81e": {
+   "scene": "Signal",
+   "en": "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each input, each weight's variance should be one over n. That's Glorot and Bengio's rule, from 2010. <bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double it: two over n. That's He initialization, and it's the steady line we just saw.",
+   "zh": ""
+  },
+  "b2c7a833ea59": {
+   "scene": "Residual",
+   "en": "Chapter four. Residual connections.",
+   "zh": ""
+  },
+  "5f7251a19aa7": {
+   "scene": "Residual",
+   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
+   "zh": ""
+  },
+  "bc4d3f6daab8": {
+   "scene": "Residual",
+   "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size, and training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
+   "zh": ""
+  },
+  "c3c1de97e5db": {
+   "scene": "NeuralLM",
+   "en": "Chapter five. A neural language model.",
+   "zh": ""
+  },
+  "4734dc07867e": {
+   "scene": "NeuralLM",
+   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer, <bookmark mark='c'/> and out comes a score for every possible next character, turned into probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from 2003, here for characters instead of words.",
+   "zh": ""
+  },
+  "d84e37ba0522": {
+   "scene": "NeuralLM",
+   "en": "Train it on part one's thirty novels, by gradient descent, with the cross-entropy of part one as the loss. <bookmark mark='a'/> The bits per character on the Maltese Falcon passage fall, and fall, <bookmark mark='b'/> to 2.23: far better than part one's counting, but not quite Kneser–Ney's 2.04. On this much computing, the best counting is a hard opponent.",
+   "zh": ""
+  },
+  "02a75afe1a4a": {
+   "scene": "NeuralLM",
+   "en": "Bengio's team found the same in 2003, and their best results came from combining the two: averaging the network's prediction with the counting model's. <bookmark mark='a'/> The weight is chosen on held-out text, never on the passage. <bookmark mark='b'/> Together, they reach 1.97 bits: better than either alone, because they make different mistakes.",
+   "zh": ""
+  },
+  "726032689108": {
+   "scene": "NeuralLM",
+   "en": "And the table of character vectors, which nobody designed, has organized itself. Seen along its two main directions, from part six, <bookmark mark='a'/> characters that behave alike sit together: vowels near vowels, capitals near capitals, digits in their own corner. It's part two's word vectors again, learned this time as a side effect of predicting.",
+   "zh": ""
+  },
+  "3d82aac2ba4a": {
+   "scene": "NeuralLM",
+   "en": "On the scoreboard, two new rows: the first network, and the network with counting, the best of everything before GPT-2. <bookmark mark='a'/> But it's still far behind GPT-2. It sees only 24 characters, and one hidden layer has to do everything. The rest of the series is about closing that gap.",
+   "zh": ""
+  },
+  "83c3becf048e": {
+   "scene": "NeuralLM",
+   "en": "Here's what it writes, starting from part four's prompt: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense.",
+   "zh": ""
+  },
+  "2867de2f62e8": {
+   "scene": "Outro",
+   "en": "Let's take stock. A unit is a weighted sum and a bend, and enough of them in one layer can approximate any curve. Depth can fold space into exponentially many pieces, though random networks don't use that power. Weights must start at the right size, two over n for ReLUs, or signals vanish or explode. Residual connections let gradients through forty layers. And a small network, trained on our books, beat every counting model on the scoreboard.",
+   "zh": ""
+  },
+  "c20228fab22c": {
+   "scene": "Outro",
+   "en": "How to set the scale of weights and learning rates as networks grow is the subject of parts nine and ten. The residual stream is the backbone of the transformer in part eleven, and what we read when we look inside models, in part twenty. And learned embeddings, of characters here, become embeddings of tokens, images and sounds.",
+   "zh": ""
+  },
+  "488be2882c15": {
+   "scene": "Outro",
+   "en": "Next time: the optimizers. Stochastic gradient descent, and why its noise helps; momentum, Adam and AdamW; the newer Muon; and the learning-rate schedules that large models are trained with. <bookmark mark='a'/> Part three's valley, revisited with everything we know now.",
+   "zh": ""
+  },
+  "0dddee23f67f": {
+   "scene": "Outro",
+   "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in part nine.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 8, Networks",
+ "chapters_en": {
+  "Hook": "Two spirals",
+  "Universal": "1. One layer can do anything",
+  "Depth": "2. What depth adds",
+  "Signal": "3. Signals through fifty layers",
+  "Residual": "4. The residual stream",
+  "NeuralLM": "5. A neural language model",
+  "Outro": "Recap, and where this comes back"
+ }
+}
