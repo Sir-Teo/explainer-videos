@@ -100,13 +100,21 @@ class ViT(VoiceoverScene):
                      color=GREY_A).move_to([3.8, 1.2, 0])
         nf = label(rf"neighbours: \ ${float(v['near']):.2f}$; \ far apart: \ ${float(v['far']):.2f}$", font_size=26,
                    color=C.TRUE_P).next_to(expl, DOWN, buff=0.5)
-        msg = label(r"nobody told it the patches \\ form a grid: \ it learned that", font_size=28, color=PATCH).next_to(nf, DOWN, buff=0.5)
+        grid = float(v["near"]) > float(v["far"]) + 0.1
+        msg = label(r"nobody told it the patches \\ form a grid: \ it learned that" if grid else
+                    r"too few pictures to learn the grid: \\ big models trained on millions do", font_size=28,
+                    color=PATCH).next_to(nf, DOWN, buff=0.5)
         with self.voiceover(
-            "One more look inside. Each patch position has a learned vector, which starts random. "
+            "One more look inside. Each patch position has a learned vector, which starts at zero. "
             "<bookmark mark='a'/> Here, for each position, is how similar its vector is to every other position's. "
-            "<bookmark mark='b'/> Each tile lights up around its own place: neighbours in the picture have similar "
-            "vectors. Nobody told the model the patches form a five by five grid. It learned the geometry of the "
-            "picture from the pictures."
+            + ("<bookmark mark='b'/> Each tile lights up around its own place: neighbours in the picture have similar "
+               "vectors. Nobody told the model the patches form a five by five grid. It learned the geometry of the "
+               "picture from the pictures."
+               if grid else
+               "<bookmark mark='b'/> In our little model, there's no clear pattern: neighbours are hardly more alike "
+               "than patches far apart. A few thousand letters weren't enough to need it. In the original vision "
+               "transformer, trained on millions of photos, each tile lights up around its own place: it learned the "
+               "picture's geometry from the pictures alone.")
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.03), FadeIn(expl), run_time=2.0)
