@@ -45,11 +45,16 @@ class BiasVariance(VoiceoverScene):
             c_.next_to(p_[0], DOWN, buff=0.25)
         head = label(r"Sixteen noisy points from one curve, \ drawn again and again \ (illustrative)", font_size=28)
         head.to_edge(UP, buff=0.3)
+        poly = gloss(r"polynomial of degree $12$", r"adds up powers of $x$: \ $a_0 + a_1 x + a_2 x^2 + \dots + a_{12} "
+                     r"x^{12}$. \ The degree is the highest power, \ roughly how many bends it can make.",
+                     corner=DOWN, width=11.0, color=VAR)
         with self.voiceover(
             "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen "
             "noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit "
             "again, and again: it misses the curve's shape in the same way every time. That systematic miss is "
-            "bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: it threads the points, but each new "
+            "bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the "
+            "twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the "
+            "points, but each new "
             "draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree "
             f"{best}, the fits hug the truth."
         ) as vo:
@@ -57,6 +62,10 @@ class BiasVariance(VoiceoverScene):
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 i = (0, 2, 1)[k]
+                if m == "b":
+                    self.play(FadeIn(poly, shift=UP * 0.2))
+                elif m == "c":
+                    self.play(FadeOut(poly))
                 self.play(FadeIn(panels[i][5]), Create(panels[i][3]))
                 self.play(LaggedStart(*[Create(f) for f in panels[i][4]], lag_ratio=0.06), FadeIn(caps[i]), run_time=1.6)
         self.wait(2.0)

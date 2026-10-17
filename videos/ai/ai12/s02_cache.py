@@ -84,7 +84,7 @@ class KVCache(VoiceoverScene):
             val = MathTex(gib(v), font_size=28, color=c_).next_to(bar, RIGHT, buff=0.15)
             g.add(VGroup(name, bar, val))
         keep_in_frame(g)
-        head = label(r"memory per token of context \ (bf16, \ log scale)", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"memory per token of context \ (bf16: \ $2$ bytes a number; \ log scale)", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         L = cf["llama70"]
         gqa = label(rf"grouped queries: \ ${L['q_heads']}$ query heads share ${L['kv_heads']}$ keys and values",
                     font_size=24, color=C.TRUE_P).to_edge(DOWN, buff=0.85)
@@ -138,7 +138,8 @@ class KVCache(VoiceoverScene):
                     color=C.BITS).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.5)
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-V2} (2024): \ multi-head latent attention", corner=DL)
         with self.voiceover(
-            "DeepSeek's trick is multi-head latent attention. <bookmark mark='a'/> Each token is squeezed into a short "
+            "DeepSeek's trick is multi-head latent attention. A latent is a short hidden summary from which the "
+            "full thing can be rebuilt. <bookmark mark='a'/> Each token is squeezed into a short "
             f"latent vector, {D['kv_lora_rank']} numbers, and only that is cached. <bookmark mark='b'/> Keys and values "
             f"for all {D['q_heads']} heads are unpacked from it by two more matrices when needed. <bookmark mark='c'/> "
             "And they don't even need to be unpacked: since a query's score is a product of matrices, the key's "

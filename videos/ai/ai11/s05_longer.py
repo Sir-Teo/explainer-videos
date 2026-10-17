@@ -11,6 +11,23 @@ METHODS = [("plain", r"rotations as trained", C.SURPRISE), ("pi", r"position int
            ("ntk", r"NTK-aware", C.INTERVAL), ("yarn", r"YaRN", C.BITS)]
 
 
+def saturating_softmax() -> VGroup:
+    """The softmax of the same five scores, scaled up: the weights pile onto one key until they barely move."""
+    s = np.array([1.0, 0.7, 0.4, 0.1, -0.2])
+    panels = VGroup()
+    for k in (1, 4, 16):
+        p = np.exp(k * s) / np.exp(k * s).sum()
+        bars = VGroup(*[Rectangle(width=0.18, height=1.1 * float(v) + 0.02, stroke_width=0, fill_color=A,
+                                  fill_opacity=0.9) for v in p]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN)
+        base = Line(bars.get_corner(DL) + LEFT * 0.05, bars.get_corner(DR) + RIGHT * 0.05, color=GREY_C, stroke_width=1.5)
+        lab = label(rf"scores $\times{k}$", font_size=18, color=GREY_B).next_to(base, DOWN, buff=0.08)
+        panels.add(VGroup(bars, base, lab))
+    panels.arrange(RIGHT, buff=0.45, aligned_edge=DOWN)
+    arrows = VGroup(*[Arrow(a[1].get_right() + UP * 0.3, b[1].get_left() + UP * 0.3, buff=0.08, color=GREY_B,
+                            stroke_width=2, max_tip_length_to_length_ratio=0.3) for a, b in zip(panels[:-1], panels[1:])])
+    return VGroup(panels, arrows)
+
+
 class Longer(VoiceoverScene):
     def construct(self):
         self.card()
@@ -107,8 +124,9 @@ class Longer(VoiceoverScene):
         with self.voiceover(
             "So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same "
             f"factor, {s}, so the longer text spans only the angles seen in training; but the fast hands lose the "
-            "fine detail of which character is next to which. <bookmark mark='b'/> The NTK-aware trick slows the "
-            "slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands "
+            "fine detail of which character is next to which. <bookmark mark='b'/> The NTK-aware trick, named after "
+            "part ten's neural tangent kernel, the theory of very wide networks, needs none of that theory here: it "
+            "slows the slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands "
             "alone, slows the slow ones fully, ramps in between, and sharpens the attention slightly to make up for "
             f"the longer context. <bookmark mark='d'/> On our model, with no retraining at all, the best here is "
             f"{names[best]}: {b[best]:.2f} bits at the far end, against {b['plain']:.1f} for doing nothing"
@@ -363,6 +381,9 @@ class Longer(VoiceoverScene):
                                    stroke_opacity=0.6) for v in (cap, -cap)])
         l4 = MathTex(rf"\pm{cap:.0f}", font_size=18, color=CAP).next_to(ax4.c2p(-150, cap), UP, buff=0.05) \
             .align_to(ax4.c2p(-150, cap), LEFT)
+        sat = gloss(r"the softmax saturates", r"huge scores put nearly all the weight on one key, \\ and small "
+                    r"changes stop moving it: learning stalls", saturating_softmax(), corner=UR, width=5.4, color=A)
+        sat.move_to(cs[1] + UP * 0.05)
         with self.voiceover(
             "Sinks are one of several small changes that frontier models make to the attention we built. Here are "
             "four of them, exactly. <bookmark mark='a'/> gpt-oss gives every head one extra learned number, b, that "
@@ -372,7 +393,8 @@ class Longer(VoiceoverScene):
             "head's output by a gate, a sigmoid of the input. A head with nothing to add can shut itself, and the "
             "sinks largely disappear. <bookmark mark='d'/> QK-norm rescales every query and key to a fixed size "
             "before the dot product. Without it, weights that grow make the scores grow with the square of their "
-            "size, until the softmax saturates and training stalls; with it, the scores stay bounded. "
+            "size, until the softmax saturates: <bookmark mark='s'/> nearly all the weight lands on one key, small "
+            "changes to the scores no longer move it, and training stalls. With QK-norm, the scores stay bounded. "
             "<bookmark mark='e'/> Gemma 2 caps the scores softly instead: c times tanh of s over c. Small scores pass "
             f"unchanged, and none can pass {cap:.0f}. Gemma 3 dropped the cap for QK-norm."
         ) as vo:
@@ -386,7 +408,10 @@ class Longer(VoiceoverScene):
             vo.wait_until("d")
             self.play(Create(box3), FadeIn(t3), FadeIn(e3), Create(ax3), FadeIn(x3), FadeIn(y3))
             self.play(Create(raw3), Create(nrm3), FadeIn(l3), run_time=1.5)
+            vo.wait_until("s")
+            self.play(FadeIn(sat, shift=UP * 0.2))
             vo.wait_until("e")
+            self.play(FadeOut(sat))
             self.play(Create(box4), FadeIn(t4), FadeIn(e4), FadeIn(c4), Create(ax4), Create(id4))
             self.play(Create(cp4), Create(lim4), FadeIn(l4), run_time=1.5)
         self.wait(0.5)

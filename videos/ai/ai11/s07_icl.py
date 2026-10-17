@@ -6,6 +6,32 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai11.common import A, K, Q, V, load, signed_image
 
 
+def forward_pass_picture() -> VGroup:
+    """One run of a network: a column of numbers goes in, passes each layer once, a guess comes out; the weights stay
+    locked."""
+    g = np.random.default_rng(2)
+    col = VGroup(*[Square(0.26, stroke_width=0.8, stroke_color=GREY_D, fill_color=C.EMBED,
+                          fill_opacity=float(0.25 + 0.6 * abs(v) / 2)) for v in np.clip(g.normal(size=4), -2, 2)])
+    col.arrange(DOWN, buff=0)
+    layers = VGroup(*[RoundedRectangle(width=0.55, height=1.15, corner_radius=0.08, stroke_color=C.BITS,
+                                       stroke_width=2.5, fill_color=C.BITS, fill_opacity=0.12) for _ in range(3)])
+    probs = [0.15, 0.6, 0.25]
+    bars = VGroup(*[Rectangle(width=0.16, height=0.9 * p + 0.02, stroke_width=0, fill_color=C.PROB, fill_opacity=0.9)
+                    for p in probs]).arrange(RIGHT, buff=0.06, aligned_edge=DOWN)
+    row = VGroup(col, *layers, bars).arrange(RIGHT, buff=0.5)
+    arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5,
+                            max_tip_length_to_length_ratio=0.35) for a, b in zip(row[:-1], row[1:])])
+    names = VGroup(label(r"numbers in", font_size=18, color=C.EMBED).next_to(col, DOWN, buff=0.12),
+                   label(r"each layer, once", font_size=18, color=C.BITS).next_to(layers, DOWN, buff=0.12),
+                   label(r"a guess", font_size=18, color=C.PROB).next_to(bars, DOWN, buff=0.12))
+    names[2].align_to(names[0], DOWN)
+    body = Rectangle(width=0.26, height=0.2, stroke_width=0, fill_color=GREY_B, fill_opacity=1)
+    shackle = Arc(radius=0.09, start_angle=0, angle=PI, color=GREY_B, stroke_width=3).next_to(body, UP, buff=0)
+    lock = VGroup(shackle, body).next_to(layers, UP, buff=0.12)
+    lock_l = label(r"weights locked", font_size=18, color=GREY_B).next_to(lock, RIGHT, buff=0.1)
+    return VGroup(row, arrows, names, lock, lock_l)
+
+
 class InContext(VoiceoverScene):
     def construct(self):
         self.card()
@@ -48,16 +74,24 @@ class InContext(VoiceoverScene):
         hidden = label(r"a different hidden $w$ in every prompt", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.7)
         cite_ = cite(r"S.~Garg, D.~Tsipras, P.~Liang \& G.~Valiant, \textit{What Can Transformers Learn In-Context?} (2022)",
                      corner=UR)
+        fp = gloss(r"forward pass", r"one run of the network: numbers go in, flow through \\ each layer once, "
+                   r"and a guess comes out. \ No weight changes.", forward_pass_picture(), width=6.2,
+                   color=C.BITS).move_to(DOWN * 0.3)
         with self.voiceover(
             "Large models learn from examples in their prompt, without changing a single weight. Show one a few "
-            "translations, and it translates the next. How can a forward pass learn? Here's a case small enough to "
+            "translations, and it translates the next. How can a forward pass learn? <bookmark mark='f'/> A forward "
+            "pass is one run of the network: numbers go in, flow through each layer once, and a guess comes out. "
+            "Nothing in it changes a weight. Here's a case small enough to "
             "take apart completely. <bookmark mark='a'/> Each prompt is a list of examples: four numbers x, and an "
             "answer y, which is a fixed weighted sum of them. Then a question: a new x, with the answer missing. "
             "<bookmark mark='b'/> The catch: every prompt uses different hidden weights, so nothing can be "
             "memorized. To answer, the model has to work out the rule from the examples in front of it."
         ) as vo:
             self.play(FadeIn(cite_))
+            vo.wait_until("f")
+            self.play(FadeIn(fp, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(fp))
             self.play(LaggedStart(*[FadeIn(c_, shift=DOWN * 0.1) for c_ in row], lag_ratio=0.12), FadeIn(xl), FadeIn(yl),
                       run_time=2.0)
             self.play(FadeIn(qm), FadeIn(br), FadeIn(bl), FadeIn(ql))
@@ -133,17 +167,22 @@ class InContext(VoiceoverScene):
         expl = label(r"on $4{,}000$ new prompts: \\ the forward pass \emph{is} \\ a step of learning", font_size=28,
                      color=GREY_A).next_to(rl, DOWN, buff=0.5)
         cite_ = cite(r"J.~von Oswald et al., \textit{Transformers Learn In-Context by Gradient Descent} (2023)", corner=DR)
+        dl = label(r"same answer", font_size=20, color=GREY_B).next_to(ax.c2p(lim, lim), RIGHT, buff=0.1)
+        corr = gloss(r"correlation", r"how closely the dots hug a straight line: \\ $1$ means exactly on it, "
+                     r"$0$ means no line at all", width=4.6, color=GREY_A).move_to([3.2, -1.75, 0])
         assert r_ > 0.99
         with self.voiceover(
             "Check it on four thousand new prompts. Each dot is one question: across, the answer from one step of "
             "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> They lie on a line. "
-            f"The correlation is {r_:.3f}. The forward pass of this network is a step of learning, run on the "
+            f"The correlation is {r_:.3f}. Correlation measures how closely the dots hug a straight line, and one "
+            "would mean exactly on it. The forward pass of this network is a step of learning, run on the "
             "examples in its prompt. Johannes von Oswald and colleagues showed this in 2023."
         ) as vo:
-            self.play(Create(ax), Create(diag), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
+            self.play(Create(ax), Create(diag), FadeIn(dl), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.005), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(rl), FadeIn(expl))
+            self.play(FadeIn(corr, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

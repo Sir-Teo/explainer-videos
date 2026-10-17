@@ -164,14 +164,30 @@ class Codes(VoiceoverScene):
         kn.align_to(kr, LEFT)
         with self.voiceover(
             "Prefix-free codes obey one budget, and there's a beautiful way to see it. Read a codeword as the start "
-            "of a binary fraction. <bookmark mark='a'/> The codeword one, one, zero stands for all the numbers "
+            "of a binary fraction: a number between zero and one, written in halves, where each digit says whether "
+            "to keep the left half of what's left, for zero, or the right half, for one. <bookmark mark='a'/> The "
+            "codeword one, one, zero: right half, right half again, then left. It stands for all the numbers "
             "between zero and one whose binary expansion begins point one one zero: an interval of width two to "
             "the minus three. <bookmark mark='b'/> A codeword of length l claims an interval of width two to the "
             "minus l."
         ) as vo:
             self.play(Create(edges), FadeIn(nodes), FadeIn(leaves), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(drops[2]), FadeIn(ivs[2]), FadeIn(wl[2]), FadeIn(ends))
+            # halving [0, 1] three times: 1 = the right half, 1 = its right half, 0 = that one's left half
+            unit = Rectangle(width=W, height=0.45, stroke_width=1.5, stroke_color=GREY_B).move_to([0, y_bar, 0])
+            half = Rectangle(width=W, height=0.45, stroke_width=3, stroke_color=C.BITS, fill_color=C.BITS,
+                             fill_opacity=0.18).move_to([0, y_bar, 0])
+            self.play(Create(unit), FadeIn(half), FadeIn(ends), run_time=0.6)
+            halv = mtex(r"0.110_2 = \tfrac12 + \tfrac14 + 0 \cdot \tfrac18", font_size=30, color=C.BITS)
+            halv.to_edge(DOWN, buff=0.2)
+            lo, w = 0.0, 1.0
+            for bit in "110":
+                w /= 2
+                lo += w if bit == "1" else 0.0
+                self.play(half.animate.stretch_to_fit_width(W * w).move_to([L + W * (lo + w / 2), y_bar, 0]),
+                          run_time=0.5)
+            self.play(FadeIn(halv), run_time=0.4)
+            self.play(FadeOut(half), Create(drops[2]), FadeIn(ivs[2]), FadeIn(wl[2]))
             vo.wait_until("b")
             self.play(*[Create(d) for i, d in enumerate(drops) if i != 2],
                       *[FadeIn(r) for i, r in enumerate(ivs) if i != 2],

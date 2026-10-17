@@ -62,7 +62,8 @@ class Transformer(VoiceoverScene):
         at_l = label(r"attention: \ moves information \\ between positions", font_size=26, color=A).move_to([3.6, 1.6, 0])
         mlp = VGroup(*[RoundedRectangle(width=0.5, height=0.5, corner_radius=0.08, stroke_color=C.BITS, stroke_width=2.5)
                        .move_to(c_.get_center()) for c_ in cols])
-        ml_l = label(r"MLP: \ works on each position \\ on its own \ (Part 8)", font_size=26, color=C.BITS).move_to([3.6, -0.1, 0])
+        ml_l = label(r"MLP \ (multilayer perceptron): \\ Part 8's small network, \\ on each position on its own", font_size=26,
+                     color=C.BITS).move_to([3.6, -0.1, 0])
         colors = {r"\mathrm{Attn}": A, r"\mathrm{MLP}": C.BITS}
         eqs = VGroup(cmath(r"x \leftarrow x +", r"\mathrm{Attn}", r"(\mathrm{LN}(x))", colors=colors, font_size=34),
                      cmath(r"x \leftarrow x +", r"\mathrm{MLP}", r"(\mathrm{LN}(x))", colors=colors, font_size=34))
@@ -73,8 +74,9 @@ class Transformer(VoiceoverScene):
             f"Now build one. Each character enters as a vector, part two's idea, {t['d']} numbers here. "
             "The column of vectors is the residual stream from part eight: every layer reads from it and adds back "
             "to it. <bookmark mark='a'/> A transformer block has two halves. Attention moves information between "
-            "positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, part "
-            "eight's network, works on each position on its own, like thinking over what was gathered. "
+            "positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, a "
+            "multilayer perceptron: part eight's small network of weighted sums and bends, applied to each position "
+            "on its own, like thinking over what was gathered. "
             "<bookmark mark='c'/> Each half normalizes its input, and adds its output back to the stream. Stack four "
             "blocks, read off a guess for the next character, and that's the whole machine."
         ) as vo:

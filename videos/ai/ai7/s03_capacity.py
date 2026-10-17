@@ -84,6 +84,8 @@ class Capacity(VoiceoverScene):
         bound = cmath(r"\text{error}_{\text{new}}", r"\le", r"\text{error}_{\text{train}}", "+",
                       r"\sqrt{\frac{d\,(\ln(2n/d) + 1) + \ln(4/\delta)}{n}}", colors=colors, font_size=32)
         bound.to_edge(DOWN, buff=0.3)
+        gap = label(r"the gap shrinks \\ as the examples $n$ \\ outnumber the capacity $d$", font_size=22, color=GREY_A)
+        gap.next_to(bound, RIGHT, buff=0.35)
         cite_ = cite(r"V.~Vapnik \& A.~Chervonenkis (1971)", corner=UR)
         with self.voiceover(
             "Here's the classical way to measure what a family of models can fit. Take straight lines in the plane, "
@@ -92,7 +94,8 @@ class Capacity(VoiceoverScene):
             "can't be split by any line. <bookmark mark='c'/> The largest number of points a family can split in "
             "every way is its VC dimension, after Vapnik and Chervonenkis: three, for lines in the plane. "
             "<bookmark mark='d'/> And it buys a guarantee: with n examples, the error on new data exceeds the "
-            "training error by at most about the square root of d over n."
+            "training error by at most about the square root of d over n. In plain words: the gap between training "
+            "and new error shrinks as the examples outnumber the capacity."
         ) as vo:
             self.play(FadeIn(t3), FadeIn(cite_))
             vo.wait_until("a")
@@ -103,6 +106,7 @@ class Capacity(VoiceoverScene):
             self.play(FadeIn(vc))
             vo.wait_until("d")
             self.play(Write(bound))
+            self.play(FadeIn(gap))
         self.wait(0.3)
         self.clear_scene()
 

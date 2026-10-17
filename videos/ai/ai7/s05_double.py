@@ -56,17 +56,29 @@ class DoubleDescent(VoiceoverScene):
                    font_size=32).to_corner(UR, buff=0.4)
         cite_ = cite(r"M.~Belkin, D.~Hsu, S.~Ma \& S.~Mandal (2019); \ P.~Nakkiran et al.\ (2020)", corner=UL)
         assert te[-1] < te[k_min1] and te[k_n] > 10 * te[k_min1]
+        feats, fits = self.features_picture(), self.min_norm_picture()
         with self.voiceover(
-            "Here's the curve that came back. Turn each page into p random features, and fit them by least squares. "
-            "When there are more features than pages, many fits match every training page exactly, so take the one "
-            "with the smallest weights. <bookmark mark='a'/> With few features, the error on new pages falls, then "
+            "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random "
+            "mix of the seventy word rates, passed through a bend that zeroes anything negative. Only the weights on "
+            "the features are learned, by least squares. <bookmark mark='m'/> When there are more features than "
+            "pages, many fits match every training page exactly, so take the one with the smallest weights: of all "
+            "the curves through the points, the calmest. <bookmark mark='a'/> With few features, the error on new "
+            "pages falls, then "
             "rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly "
             f"{n} features, as many as there are pages, the fit is forced through every point, and the error "
             "explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of "
             "the U."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn), FadeIn(mn), FadeIn(cite_))
+            self.play(FadeIn(feats[0]), FadeIn(feats[2]), FadeIn(cite_))
+            self.play(Create(feats[1]), FadeIn(feats[3]), run_time=1.5)
+            self.play(Create(feats[4]), FadeIn(feats[5]))
+            vo.wait_until("m")
+            self.play(FadeIn(fits[0]), FadeIn(mn))
+            self.play(Create(fits[1]), FadeIn(fits[3]))
+            self.play(Create(fits[2]), FadeIn(fits[4]))
             vo.wait_until("a")
+            self.play(FadeOut(feats), FadeOut(fits))
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(Create(part1), run_time=2.0)
             self.play(FadeIn(low), FadeIn(classic))
             vo.wait_until("b")
@@ -85,3 +97,43 @@ class DoubleDescent(VoiceoverScene):
             self.play(Create(trc), FadeIn(trl))
         self.wait(0.3)
         self.clear_scene()
+
+    @staticmethod
+    def features_picture() -> VGroup:
+        """What a random feature is: the 70 word rates, mixed by fixed random weights and bent (ReLU) into p features;
+        only the weights from the features to the prediction are learned. Parts: inputs, fixed lines, features,
+        their labels, learned lines, their label."""
+        def column(n, x, color, r=0.11):
+            dots = VGroup(*[Circle(radius=r, color=color, stroke_width=2.5) for _ in range(n)])
+            dots.arrange(DOWN, buff=0.16)
+            dots.insert(n // 2, MathTex(r"\vdots", font_size=26, color=color))
+            return dots.arrange(DOWN, buff=0.12).move_to([x, 0.1, 0])
+
+        ins, fs = column(6, -6.0, GREY_B), column(8, -3.6, C.BITS)
+        out = Circle(radius=0.16, color=C.MODEL_Q, stroke_width=3).move_to([-1.5, 0.1, 0])
+        ci = [m for m in ins if isinstance(m, Circle)]
+        cf = [m for m in fs if isinstance(m, Circle)]
+        fixed = VGroup(*[Line(a.get_right(), b.get_left(), color=GREY_D, stroke_width=1.2) for a in ci for b in cf])
+        learned = VGroup(*[Line(b.get_right(), out.get_left(), color=C.MODEL_Q, stroke_width=2.5) for b in cf])
+        li = label(r"$70$ word rates", font_size=22, color=GREY_B).next_to(ins, DOWN, buff=0.25)
+        lf = label(r"$p$ random features", font_size=22, color=C.BITS).next_to(fs, DOWN, buff=0.25)
+        lm = label(r"fixed random mix, \\ then a bend", font_size=20, color=GREY_B).next_to(fixed, UP, buff=0.2)
+        ll = label(r"learned weights", font_size=20, color=C.MODEL_Q).next_to(learned, UP, buff=0.2)
+        return VGroup(ins, fixed, fs, VGroup(li, lf, lm), VGroup(learned, out), ll)
+
+    @staticmethod
+    def min_norm_picture() -> VGroup:
+        """Two curves through the same four points: one with big weights, wild; the smallest-weight one, calm.
+        Parts: axes and points, the wild fit, the calm fit, their two labels."""
+        xs_, ys_ = np.array([-1.5, -0.5, 0.5, 1.5]), np.array([0.3, -0.25, 0.35, 0.05])
+        calm_c = np.polyfit(xs_, ys_, 3)
+        ax = Axes(x_range=[-1.8, 1.8, 1], y_range=[-1.3, 1.3, 1], x_length=4.6, y_length=2.8, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([3.7, 0.1, 0])
+        calm = ax.plot(lambda t: np.polyval(calm_c, t), x_range=[-1.8, 1.8], color=C.MODEL_Q, stroke_width=4)
+        wild = ax.plot(lambda t: np.polyval(calm_c, t) + 0.9 * math.sin(2 * math.pi * (t + 1.5)), x_range=[-1.8, 1.8],
+                       color=C.SURPRISE, stroke_width=2.5)
+        pts = VGroup(*[Dot(ax.c2p(a, b), radius=0.07, color=WHITE) for a, b in zip(xs_, ys_)])
+        lw = label(r"exact fit, \ big weights", font_size=22, color=C.SURPRISE)
+        lc = label(r"exact fit, \ smallest weights", font_size=22, color=C.MODEL_Q)
+        VGroup(lw, lc).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, DOWN, buff=0.2)
+        return VGroup(VGroup(ax, pts), wild, calm, lw, lc)
