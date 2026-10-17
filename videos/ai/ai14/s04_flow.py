@@ -14,6 +14,8 @@ class Flow(VoiceoverScene):
         self.straight()
         self.paths()
         self.reflow()
+        self.average()
+        self.onestep()
 
     def card(self):
         card = chapter_card(3, r"Flow matching", r"Why not go in a straight line?", part=14)
@@ -124,5 +126,129 @@ class Flow(VoiceoverScene):
             self.play(Create(cr[0]), FadeIn(cr[1:]), FadeIn(k2), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(one), FadeIn(ol))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def average(self):
+        f = load("flow")
+        P = np.asarray(f["fm_path"])  # (steps + 1, particles, 2): the learned flow, 100 small steps
+        n = len(P) - 1
+        L = np.linalg.norm(np.diff(P, axis=0), axis=-1).sum(0)
+        chord = np.linalg.norm(P[-1] - P[0], axis=-1)
+        st = chord / np.maximum(L, 1e-9)
+        cand = [i for i in np.argsort(st) if 2.0 < L[i] < 4.5]
+        i = int(cand[0]) if cand else int(np.argmin(st))
+        S, O = 1.1, np.array([-3.6, -0.7, 0])
+        pts = [O + S * np.array([x, y, 0]) for x, y in P[:, i]]
+        path = VMobject(color=FM_C, stroke_width=3.5).set_points_smoothly(pts[::2] + [pts[-1]])
+        a, b = int(0.2 * n), int(0.85 * n)
+        zs, zt = Dot(pts[a], radius=0.08, color=NOISE), Dot(pts[b], radius=0.08, color=DATA)
+        zsl = MathTex(r"z_s", font_size=30, color=NOISE).next_to(zs, LEFT, buff=0.1)
+        ztl = MathTex(r"z_t", font_size=30, color=DATA).next_to(zt, RIGHT, buff=0.1)
+        tang = VGroup()
+        for k in range(a, b + 1, max(1, (b - a) // 5)):
+            d = pts[min(k + 1, n)] - pts[k]
+            d = d / max(np.linalg.norm(d), 1e-9) * 0.55
+            tang.add(Arrow(pts[k], pts[k] + d, buff=0, color=SCORE, stroke_width=3, max_tip_length_to_length_ratio=0.3))
+        avg = Arrow(pts[a], pts[b], buff=0.08, color=C.SURPRISE, stroke_width=5, max_tip_length_to_length_ratio=0.08)
+        vl = label(r"$v$: \\ the velocity \\ at each moment", font_size=20, color=SCORE).next_to(tang, UP, buff=0.2)
+        ul = label(r"$(t - s)\,u$: \\ one jump", font_size=20, color=C.SURPRISE).next_to(avg.get_center(), DOWN, buff=0.35)
+        keep_in_frame(vl)
+        colors = {r"u": C.SURPRISE, r"v": SCORE, r"z_s": NOISE, r"z_t": DATA}
+        eqs = VGroup(
+            cmath(r"u", r"(z_s, s, t) = \frac{1}{t - s}\int_s^t", r"v", r"(z_\tau, \tau)\, d\tau", colors=colors, font_size=32),
+            cmath(r"z_t", r"=", r"z_s", r"+ (t - s)\,", r"u", r"(z_s, s, t)", colors=colors, font_size=32),
+            cmath(r"u", r"=", r"v", r"+ (t - s)\, \frac{d}{ds}", r"u", colors=colors, font_size=32),
+            cmath(r"\frac{d}{ds}", r"u", r"=", r"v", r"\cdot \nabla_z", r"u", r"+ \partial_s", r"u", colors=colors, font_size=32),
+            cmath(r"\mathcal{L} = \big\|\,", r"u", r"_\theta - \operatorname{sg}\big(", r"v", r"+ (t - s)\tfrac{d}{ds}", r"u",
+                  r"_\theta\big)\big\|^2", colors=colors, font_size=32),
+        ).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to([3.3, 0.15, 0])
+        notes = VGroup(label(r"the average velocity from $s$ to $t$", font_size=18, color=GREY_A),
+                       label(r"so one jump does it", font_size=18, color=GREY_A),
+                       label(r"differentiate $(t-s)\,u = z_t - z_s$ in $s$", font_size=18, color=GREY_A),
+                       label(r"one Jacobian-vector product", font_size=18, color=GREY_A),
+                       label(r"sg: \ the target is held fixed", font_size=18, color=GREY_A))
+        for n_, e_ in zip(notes, eqs):
+            n_.next_to(e_, DOWN, buff=0.06).align_to(e_, LEFT)
+        for k in range(1, len(eqs)):
+            eqs[k:].shift(DOWN * 0.2)
+            notes[k:].shift(DOWN * 0.2)
+        head = label(r"MeanFlow: \ learn the average velocity", font_size=26).to_edge(UP, buff=0.35)
+        keep_in_frame(VGroup(eqs, notes))
+        cite_ = cite(r"Z.~Geng et al., \textit{Mean Flows for One-step Generative Modeling} (2025)", corner=DR)
+        with self.voiceover(
+            "Reflow needs a second model and a second round of training. In 2025, MeanFlow found a more direct "
+            "route. <bookmark mark='a'/> Here is one point's path under our flow model: it bends. Flow matching "
+            "learns v, the velocity at each moment, so it has to take many small steps. <bookmark mark='b'/> "
+            "MeanFlow learns u instead: the average velocity between two times s and t. <bookmark mark='c'/> With "
+            "it, a single jump from s to t lands on the path, however much it bends. <bookmark mark='d'/> But we "
+            "can't compute that integral to train on. The trick: write t minus s times u as z t minus z s, and "
+            "differentiate in s. Out comes an identity: the average velocity is the velocity now, plus t minus s "
+            "times how fast u changes along the path. <bookmark mark='e'/> And that rate of change costs one "
+            "Jacobian-vector product, a single forward pass. <bookmark mark='f'/> So the network is trained to "
+            "match the right-hand side, held fixed, with no integral and no teacher model."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Create(path), run_time=2.0)
+            self.play(FadeIn(zs), FadeIn(zsl), FadeIn(zt), FadeIn(ztl), LaggedStart(*[GrowArrow(t_) for t_ in tang], lag_ratio=0.15),
+                      FadeIn(vl))
+            vo.wait_until("b")
+            self.play(Write(eqs[0]), FadeIn(notes[0]))
+            vo.wait_until("c")
+            self.play(GrowArrow(avg), FadeIn(ul), Write(eqs[1]), FadeIn(notes[1]))
+            vo.wait_until("d")
+            self.play(Write(eqs[2]), FadeIn(notes[2]))
+            vo.wait_until("e")
+            self.play(Write(eqs[3]), FadeIn(notes[3]))
+            vo.wait_until("f")
+            self.play(Write(eqs[4]), FadeIn(notes[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def onestep(self):
+        f, m = load("flow"), load("fewstep")
+        S = 0.36
+        sets = [("fm", r"flow matching", FM_C, np.asarray(f["fm1"]), float(f["sw_fm1"])),
+                ("rf", r"after reflow", RF_C, np.asarray(f["rf1"]), float(f["sw_rf1"])),
+                ("meanflow", r"MeanFlow", C.SURPRISE, np.asarray(m["meanflow1"]), float(m["sw_meanflow1"])),
+                ("shortcut", r"shortcut model", C.TRUE_P, np.asarray(m["shortcut1"]), float(m["sw_shortcut1"]))]
+        panels = VGroup()
+        for i, (k, name, col, X, d) in enumerate(sets):
+            cx = -5.1 + i * 3.4
+            c_ = cloud(X[:400], col, radius=0.016, scale=S, shift=[cx, 0.2, 0])
+            box = RoundedRectangle(width=3.1, height=2.6, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5).move_to([cx, 0.2, 0])
+            t_ = label(name, font_size=22, color=col).next_to(box, UP, buff=0.12)
+            d_ = MathTex(rf"{d:.3f}", font_size=28, color=col).next_to(box, DOWN, buff=0.15)
+            panels.add(VGroup(box, c_, t_, d_))
+        head = label(r"one step from noise", font_size=30).to_edge(UP, buff=0.35)
+        dl = label(r"distance from the real data \ (noise itself: \ $" + f"{float(f['sw_noise']):.2f}" + r"$)", font_size=20,
+                   color=GREY_A).next_to(panels, DOWN, buff=0.5)
+        sc = cmath(r"u(z, s, s + 2d) = \tfrac12\big[\,u(z, s, s + d) + u(z', s + d, s + 2d)\,\big]", font_size=28)
+        sc.to_edge(DOWN, buff=0.35)
+        scl = label(r"shortcut models: \ one jump of $2d$ must equal two of $d$", font_size=20, color=C.TRUE_P).next_to(sc, UP, buff=0.1)
+        best = min(sets, key=lambda s_: s_[4])
+        mf1, mf2 = float(m["sw_meanflow1"]), float(m["sw_meanflow2"])
+        cite_ = cite(r"K.~Frans et al., \textit{One Step Diffusion via Shortcut Models} (2024)", corner=UR)
+        with self.voiceover(
+            "Here are all four after a single step from the same noise. <bookmark mark='a'/> Plain flow matching "
+            "lands everything near the middle: one step along the starting velocity is a blur. Reflow does much "
+            "better. <bookmark mark='b'/> MeanFlow, one jump, "
+            + (f"is the closest of all, at {mf1:.3f}. " if best[0] == "meanflow" else f"reaches {mf1:.3f}; two jumps, {mf2:.3f}. ")
+            + "<bookmark mark='c'/> Shortcut models, from 2024, get there another way: they're told the size of "
+            "the jump, and trained so that one jump of size two d equals two jumps of size d. "
+            + (f"Here the best single step is the {best[1].replace('after reflow', 'reflowed model')}'s. " if best[0] != "meanflow" else "")
+            + "Few-step samplers like these are why image models can now draw in one to four steps."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(panels[0]), FadeIn(panels[1]))
+            vo.wait_until("a")
+            self.play(Indicate(panels[0][3]), Indicate(panels[1][3]))
+            vo.wait_until("b")
+            self.play(FadeIn(panels[2]), FadeIn(dl))
+            vo.wait_until("c")
+            self.play(FadeIn(panels[3]), FadeIn(scl), Write(sc))
         self.wait(0.3)
         self.clear_scene()

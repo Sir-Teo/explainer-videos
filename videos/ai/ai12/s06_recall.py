@@ -36,7 +36,7 @@ class Recall(VoiceoverScene):
         bl = label(r"pairs: \ a key, then its value", font_size=24, color=GREY_A).next_to(boxes, DOWN, buff=0.5)
         ql = label(r"then keys again: \ answer with their values", font_size=24, color=C.BITS).next_to(ans, DOWN, buff=0.3)
         m = load("mqar")
-        rule = label(rf"tiny one-layer models, \ each with a memory of ${int(m['d'])}$ numbers per token, \\ "
+        rule = label(rf"tiny one-layer models, \ keys of ${int(m['d'])}$ numbers, \\ "
                      r"trained on this game with up to $48$ pairs", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.7)
         cite_ = cite(r"S.~Arora et al., \textit{Zoology: Measuring and Improving Recall in Efficient Language Models} (2023)",
                      corner=UR)

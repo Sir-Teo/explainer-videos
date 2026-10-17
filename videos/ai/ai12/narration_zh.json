@@ -32,11 +32,6 @@
    "en": "Chapter one. The cache.",
    "zh": "第1章。缓存。"
   },
-  "1aa9e6ea2ade": {
-   "scene": "KVCache",
-   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. For a long conversation, this memory, not the model's weights, is what fills the graphics card.",
-   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。对一段长对话来说，把显卡塞满的，正是这份记忆，而不是模型的权重。"
-  },
   "cf64e31a2cf2": {
    "scene": "KVCache",
    "en": "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every attention head kept its own keys and values, each token of context would cost 2.5 megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and each group shares one key and one value. That's 8 times less, 320 kilobytes a token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the hybrid Qwen3-Next. Let's see how.",
@@ -122,10 +117,10 @@
    "en": "Chapter five. The gated delta rule.",
    "zh": "第5章。门控δ规则。"
   },
-  "1866d1f56de0": {
+  "0315602d02ee": {
    "scene": "GatedDelta",
-   "en": "Let's look at the delta rule as geometry. The memory S is a linear map: give it a key, and it gives back an answer. Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, but the value we want stored is v. <bookmark mark='b'/> The update multiplies S by I minus beta k k transpose, then adds beta v k transpose. That first matrix only touches the direction k: it shrinks it by one minus beta, and leaves every direction at right angles alone. <bookmark mark='c'/> With beta a half, the answer for k moves halfway to v, and the answer for the perpendicular direction doesn't move at all. <bookmark mark='d'/> With beta one, the old answer is erased exactly and replaced by v: a projection. <bookmark mark='e'/> And with beta up to two, it overshoots into a reflection, a matrix with eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets these memories track parity, the very problem part seventeen's transformer could not solve in one go.",
-   "zh": "我们从几何的角度来看δ规则。记忆S是一个线性映射：给它一个键，它就还你一个答案。这里，它作用在一个平面上。<bookmark mark='a'/>把键k喂给它，它答出S k，可我们想存的值是v。<bookmark mark='b'/>更新时，先把S乘以I减去β乘k乘k转置，再加上β乘v乘k转置。前面那个矩阵只碰k这一个方向：把它缩短为原来的1减β倍，而和k垂直的每个方向，都原封不动。<bookmark mark='c'/>β等于2分之1时，k对应的答案朝v走了一半，而垂直方向的答案一点都不动。<bookmark mark='d'/>β等于1时，旧的答案被彻底擦掉，正好换成v：这是一个投影。<bookmark mark='e'/>而β最大可以到2，这时它会冲过头，变成一个反射，也就是一个特征值为负1的矩阵。听起来像是个毛病，其实是个优点：格拉齐和同事们证明了，有了它，这些记忆就能追踪奇偶性，而这正是第17部分的Transformer没法一步解决的问题。"
+   "en": "Let's look at the delta rule as geometry. The memory S is a linear map: give it a key, and it gives back an answer. <bookmark mark='p'/> Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, but the value we want stored is v. <bookmark mark='b'/> The update multiplies S by I minus beta k k transpose, then adds beta v k transpose. That first matrix only touches the direction k: it shrinks it by one minus beta, and leaves every direction at right angles alone. <bookmark mark='c'/> With beta a half, the answer for k moves halfway to v, and the answer for the perpendicular direction doesn't move at all. <bookmark mark='d'/> With beta one, the old answer is erased exactly and replaced by v: a projection. <bookmark mark='e'/> And with beta up to two, it overshoots into a reflection, a matrix with eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets these memories track parity, the very problem part seventeen's transformer could not solve in one go.",
+   "zh": "我们从几何的角度来看δ规则。记忆S是一个线性映射：给它一个键，它就还你一个答案。<bookmark mark='p'/>这里，它作用在一个平面上。<bookmark mark='a'/>把键k喂给它，它答出S k，可我们想存的值是v。<bookmark mark='b'/>更新时，先把S乘以I减去β乘k乘k转置，再加上β乘v乘k转置。前面那个矩阵只碰k这一个方向：把它缩短为原来的1减β倍，而和k垂直的每个方向，都原封不动。<bookmark mark='c'/>β等于2分之1时，k对应的答案朝v走了一半，而垂直方向的答案一点都不动。<bookmark mark='d'/>β等于1时，旧的答案被彻底擦掉，正好换成v：这是一个投影。<bookmark mark='e'/>而β最大可以到2，这时它会冲过头，变成一个反射，也就是一个特征值为负1的矩阵。听起来像是个毛病，其实是个优点：格拉齐和同事们证明了，有了它，这些记忆就能追踪奇偶性，而这正是第17部分的Transformer没法一步解决的问题。"
   },
   "201470427c78": {
    "scene": "GatedDelta",
@@ -201,6 +196,11 @@
    "scene": "Outro",
    "en": "Songlin Yang's papers and blog on linear attention and the delta rule are the best way in. Thanks for watching, and see you in part thirteen.",
    "zh": "关于线性注意力和δ规则，杨松琳的论文和博客，是最好的入门读物。感谢观看，我们第13部分再见。"
+  },
+  "b8da75598c41": {
+   "scene": "KVCache",
+   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. Serve many long conversations at once, and this memory, not the model's weights, is what fills the graphics cards.",
+   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。同时服务许多段长对话时，把显卡塞满的，正是这份记忆，而不是模型的权重。"
   }
  },
  "title_en": "AI, Built: Part 12, Memory",
