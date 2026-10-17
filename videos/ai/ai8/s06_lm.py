@@ -54,11 +54,24 @@ class NeuralLM(VoiceoverScene):
         keep_in_frame(notes)
         cite_ = cite(r"Y.~Bengio, R.~Ducharme, P.~Vincent \& C.~Jauvin, \textit{A Neural Probabilistic Language Model} (2003)",
                      corner=DR)
+        tax = Axes(x_range=[-3, 3, 1], y_range=[-1.2, 3, 1], x_length=2.6, y_length=1.3, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        tpic = VGroup(tax, tax.plot(lambda x: max(x, 0.0), x_range=[-3, 3, 0.02], color=GREY_B, stroke_width=2.5),
+                      tax.plot(np.tanh, x_range=[-3, 3, 0.02], color=NEURON, stroke_width=3.5),
+                      *[DashedLine(tax.c2p(-3, v), tax.c2p(3, v), color=GREY_D, stroke_width=1, dash_length=0.05)
+                        for v in (1, -1)])
+        tpic.add(label(r"tanh", font_size=20, color=NEURON).next_to(tax.c2p(3, 1), RIGHT, buff=0.1),
+                 label(r"ReLU", font_size=20, color=GREY_B).next_to(tax.c2p(3, 3), RIGHT, buff=0.1))
+        tcard = gloss(r"a hidden layer of tanh units", r"hidden: \ in the middle, \ neither input nor output \\ "
+                      r"tanh: \ a smooth S-shaped bend into $-1$ to $1$", tpic, corner=DR, color=NEURON)
+        tcard.shift(UP * 0.45)
         with self.voiceover(
             f"Now let's use a network for the task that runs through this whole series: guess the next character. "
             f"Take the last {n} characters. <bookmark mark='a'/> Each character becomes a vector of {e} numbers, "
             "looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden "
-            "layer, <bookmark mark='c'/> and out comes a score for every possible next character, turned into "
+            "layer. Hidden just means in the middle, neither input nor output. Its units are tanh units: tanh is a "
+            "smooth S-shaped bend that squashes any number into the range from minus one to one. "
+            "<bookmark mark='c'/> And out comes a score for every possible next character, turned into "
             "probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from "
             "2003, here for characters instead of words."
         ) as vo:
@@ -68,7 +81,9 @@ class NeuralLM(VoiceoverScene):
                       FadeIn(notes[0]), run_time=1.6)
             vo.wait_until("b")
             self.play(Create(lines1), FadeIn(hid), FadeIn(notes[1]))
+            self.play(FadeIn(tcard, shift=UP * 0.2))
             vo.wait_until("c")
+            self.play(FadeOut(tcard))
             self.play(Create(lines2), LaggedStart(*[GrowFromEdge(o, DOWN) for o in outs], lag_ratio=0.05), FadeIn(ol),
                       FadeIn(notes[2]))
             self.play(FadeIn(notes[3]))

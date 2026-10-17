@@ -58,6 +58,17 @@ class Signal(VoiceoverScene):
         grad = label(r"gradients flowing back do the same, \\ so the first layers can't learn", font_size=24,
                      color=GREY_A).next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
         head = label(r"$50$ layers of $256$ ReLU units, \ random weights", font_size=30).to_edge(UP, buff=0.35)
+        # the three spreads of starting weights, as bells of equal area (sd 0.7, 1 and 1.4 times the right one)
+        bells = VGroup()
+        for k, (f, col) in enumerate(((0.7, SMALL), (1.0, HE), (1.4, BIG))):
+            x0 = 3.0 + 1.35 * k
+            base = Line([x0 - 0.6, 1.55, 0], [x0 + 0.6, 1.55, 0], color=GREY_C, stroke_width=1.5)
+            bell = FunctionGraph(lambda t, f=f: 0.5 / f * np.exp(-0.5 * (t / (0.22 * f)) ** 2), x_range=[-0.6, 0.6],
+                                 color=col, stroke_width=3).shift([x0, 1.55, 0])
+            bells.add(VGroup(base, bell))
+        bells = VGroup(bells[0], bells[2], bells[1])  # in the order the narration shows them
+        spread = label(r"the spread of the random starting weights", font_size=22, color=GREY_A)
+        spread.next_to(VGroup(*bells), UP, buff=0.2)
         shrink = float(g["sd_small"][0] / g["sd_small"][-1])
         grow = float(g["sd_big"][-1])
         assert 1e7 < shrink < 1e8 and 1e7 < grow < 1e8
@@ -66,20 +77,24 @@ class Signal(VoiceoverScene):
             return f"{round(v / 1e7) * 10} million"
 
         with self.voiceover(
-            "Before training, the weights are random. But random how? Send a signal through fifty layers and track "
+            "Before training, the weights are random. But random how? What matters is their spread: how far the "
+            "random starting weights stray from zero. Send a signal through fifty layers and track "
             "its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal "
             f"by a fixed factor. After fifty layers, it's about {millions(shrink)} times smaller: gone. "
             f"<bookmark mark='b'/> A little too big, and it explodes, to about {millions(grow)}. <bookmark mark='c'/> "
             "Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode "
             "the same way, which is why deep networks once seemed impossible to train."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
+            self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(spread))
             vo.wait_until("a")
-            self.play(Create(c_small), ride("sd_small", SMALL), FadeIn(names[0]), run_time=3.0, rate_func=linear)
+            self.play(Create(c_small), ride("sd_small", SMALL), FadeIn(names[0]), Create(bells[0]), run_time=3.0,
+                      rate_func=linear)
             vo.wait_until("b")
-            self.play(Create(c_big), ride("sd_big", BIG), FadeIn(names[2]), run_time=3.0, rate_func=linear)
+            self.play(Create(c_big), ride("sd_big", BIG), FadeIn(names[2]), Create(bells[1]), run_time=3.0,
+                      rate_func=linear)
             vo.wait_until("c")
-            self.play(Create(c_he), ride("sd_he", HE), FadeIn(names[1]), run_time=3.0, rate_func=linear)
+            self.play(Create(c_he), ride("sd_he", HE), FadeIn(names[1]), Create(bells[2]), run_time=3.0,
+                      rate_func=linear)
             self.play(FadeIn(grad))
         self.wait(0.3)
         self.clear_scene()
@@ -117,7 +132,8 @@ class Signal(VoiceoverScene):
         cites.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -2.9, 0])
         with self.voiceover(
             "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each "
-            "input, each weight's variance should be one over n. That's Glorot and Bengio's rule, from 2010. "
+            "input, each weight's variance, its spread, should be one over n. That's Glorot and Bengio's rule, from "
+            "2010, worked out for tanh, a smooth S-shaped bend. "
             "<bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double "
             "it: two over n. That's He initialization, and it's the steady line we just saw."
         ) as vo:

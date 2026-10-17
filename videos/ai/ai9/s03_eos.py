@@ -84,22 +84,32 @@ class EdgeOfStability(VoiceoverScene):
         names.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, 1.8, 0])
         note_ = label(r"training raises the curvature \\ until it reaches $2/\eta$, \\ and then stays at the edge", font_size=26,
                       color=C.BITS).next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
-        how = label(r"measured by power iteration \\ on Hessian-vector products \ (Part 3)", font_size=22,
-                    color=GREY_A).next_to(note_, DOWN, buff=0.35).align_to(names, LEFT)
+        how = label(r"measured numerically, \ as in Part 3", font_size=22, color=GREY_A).next_to(note_, DOWN, buff=0.35).align_to(names, LEFT)
         col = VGroup(names, note_, how)
         if col.get_right()[0] > 6.8:  # keep the column inside the frame
             col.shift(LEFT * (col.get_right()[0] - 6.8))
         cite_ = cite(r"J.~Cohen, S.~Kaur, Y.~Li, J.~Z.~Kolter \& A.~Talwalkar (2021)", corner=DR)
+        # sharpness in a picture: a tightly curved valley and a gently curved one
+        bowls = VGroup(*[FunctionGraph(lambda x, k=k: 0.5 * k * x * x, x_range=[-(2 / k) ** 0.5, (2 / k) ** 0.5],
+                                       color=col, stroke_width=3) for k, col in ((6.0, C.SURPRISE), (1.0, C.INTERVAL))])
+        bowls.arrange(RIGHT, buff=0.6)
+        bowls.add(label(r"large $\lambda$", font_size=22, color=C.SURPRISE).next_to(bowls[0], DOWN, buff=0.1),
+                  label(r"small $\lambda$", font_size=22, color=C.INTERVAL).next_to(bowls[1], DOWN, buff=0.1))
+        sharp = gloss(r"sharpness", r"how tightly the valley curves \\ along its steepest direction: \ the $\lambda$ of "
+                      r"the bowl", bowls, corner=UR, width=4.4, color=C.BITS)
         with self.voiceover(
             "Now a real network: the spirals from part eight, trained with the full gradient at two step sizes. "
-            "Track the sharpness, the Hessian's largest eigenvalue, from part three. <bookmark mark='a'/> It climbs, "
+            "Track the sharpness, the Hessian's largest eigenvalue, from part three: how tightly the valley curves "
+            "along its steepest direction, the lambda of that bowl. <bookmark mark='a'/> It climbs, "
             "and climbs, until it hits two over eta, and then it stays there, hovering at the edge, while the loss "
             "keeps going down. <bookmark mark='b'/> Double the step size, and the network settles at half the "
             "sharpness. Training doesn't avoid the edge of stability: it seeks it out. Cohen and colleagues found "
             "this in 2021, and nobody had expected it."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yn), FadeIn(cite_), FadeIn(how))
+            self.play(FadeIn(sharp, shift=DOWN * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(sharp))
             self.play(Create(groups[0][0]), Create(groups[0][1]), FadeIn(groups[0][2]), FadeIn(names[0]), run_time=3.0)
             vo.wait_until("b")
             self.play(Create(groups[1][0]), Create(groups[1][1]), FadeIn(groups[1][2]), FadeIn(names[1]), run_time=3.0)

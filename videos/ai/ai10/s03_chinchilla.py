@@ -77,8 +77,9 @@ class Chinchilla(VoiceoverScene):
             "parameter per training token, so a budget fixes the product of model size and data. You can have a "
             "big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the "
             f"experiment, on our character model. For each budget, try {len(d['widths'])} sizes, each trained on exactly the data "
-            "the budget allows. <bookmark mark='b'/> Each budget gives a valley: too small a model can't hold what "
-            "it sees; too big a model barely gets to see anything. <bookmark mark='c'/> And the bigger the budget, "
+            "the budget allows. <bookmark mark='b'/> Each budget gives a valley. Too small a model can't hold the "
+            "patterns it sees: it underfits. Too big a model barely gets to see anything, so it can't finish "
+            "learning: it's undertrained. <bookmark mark='c'/> And the bigger the budget, "
             "the further right the best size moves."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yt), FadeIn(xn), FadeIn(yn), Write(rule), FadeIn(rl))
@@ -223,8 +224,11 @@ class Chinchilla(VoiceoverScene):
         f1.move_to([-3.4, 2.4, 0])
         vals = label(rf"fit to our ${len(L)}$ runs: \ $E = {E:.2f}$, \ $\alpha = {al:.2f}$, \ $\beta = {be:.2f}$ \\ "
                      rf"(off by ${err:.2f}$ bits on average)", font_size=20, color=GREY_A).next_to(f1, DOWN, buff=0.15)
+        ab = VGroup(label(r"$\alpha$: \ how fast more parameters help", font_size=20, color=C.BITS),
+                    label(r"$\beta$: \ how fast more data helps", font_size=20, color=C.TRUE_P)).arrange(RIGHT, buff=0.4)
+        ab.next_to(vals, DOWN, buff=0.15)
         f2 = MathTex(r"\min_{N}\ L\big(N, \tfrac{C}{6N}\big) \;\Rightarrow\; N_{\text{opt}} \propto C^{\,\beta / (\alpha + \beta)}",
-                     font_size=32).next_to(vals, DOWN, buff=0.45)
+                     font_size=32).next_to(ab, DOWN, buff=0.35)
         f3 = MathTex(rf"\beta / (\alpha + \beta) = {ex:.2f}", font_size=32, color=C.BITS).next_to(f2, DOWN, buff=0.25)
         f3l = label(rf"the parabolas gave about the same; \\ the best split here: \ ${Dopt / Nopt:.0f}$ characters per parameter",
                     font_size=20, color=GREY_A).next_to(f3, DOWN, buff=0.12)
@@ -256,10 +260,11 @@ class Chinchilla(VoiceoverScene):
         c75, c50 = cost(0.75), cost(0.5)
         with self.voiceover(
             "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, "
-            "plus a term that shrinks with the parameters, plus one that shrinks with the data. Fit to our eighteen "
+            "plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, "
+            "at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen "
             f"runs, it's off by only {err:.2f} bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, "
             f"and the best size grows as the budget to the power beta over alpha plus beta: {ex:.2f} here, close to "
-            "what the parabolas said. <bookmark mark='c'/> The same formula prices over-training. To match the best "
+            "what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best "
             f"model's loss with a model three quarters its size costs {100 * (c75 - 1):.0f} percent more training; "
             f"with half the size, {100 * (c50 - 1):.0f} percent more; and below about {kmin:.2f} of the size, no amount "
             "of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, "
@@ -268,7 +273,7 @@ class Chinchilla(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(cite_))
             vo.wait_until("a")
-            self.play(Write(f1), FadeIn(vals))
+            self.play(Write(f1), FadeIn(vals), FadeIn(ab))
             vo.wait_until("b")
             self.play(Write(f2))
             self.play(Write(f3), FadeIn(f3l))

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -54,15 +56,18 @@ class Residual(VoiceoverScene):
                     colors=colors, font_size=38).move_to([4.8, 1.2, 0])
         jl = label(r"the identity always gets through: \\ gradients reach the first layers", font_size=24, color=GREY_A)
         jl.next_to(jac, DOWN, buff=0.3)
+        wl = label(r"the skip path: \ a plain wire \\ for the gradient", font_size=24, color=RES).next_to(jl, DOWN, buff=0.45)
         cite_ = cite(r"K.~He, X.~Zhang, S.~Ren \& J.~Sun, \textit{Deep Residual Learning for Image Recognition} (2015)",
                      corner=DR)
+        pulse = glow_dot(res[0].get_end(), color=WHITE, radius=0.1)
         with self.voiceover(
             "Good initialization gets a signal through at the start, but training can still go wrong in a deep "
             "stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. "
             "<bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers "
             "become small corrections to a stream of numbers flowing straight through: the residual stream. "
             "<bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little "
-            "extra, so gradients always have a clear path back to the first layer. Every transformer in this "
+            "extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so "
+            "gradients always have a clear path back to the first layer. Every transformer in this "
             "series is built this way."
         ) as vo:
             self.play(FadeIn(plain), FadeIn(pt), FadeIn(cite_))
@@ -70,6 +75,10 @@ class Residual(VoiceoverScene):
             self.play(FadeIn(res), FadeIn(rt))
             vo.wait_until("b")
             self.play(Write(jac), FadeIn(jl))
+            vo.wait_until("w")
+            self.play(FadeIn(pulse), FadeIn(wl))
+            self.play(pulse.animate.move_to(res[0].get_start()), run_time=2.0, rate_func=linear)
+            self.play(FadeOut(pulse))
         self.wait(0.3)
         self.clear_scene()
 
@@ -93,11 +102,28 @@ class Residual(VoiceoverScene):
         ln.next_to(names, DOWN, buff=0.5).align_to(names, LEFT)
         lnl = label(r"rescale each vector to a standard size", font_size=22, color=GREY_A).next_to(ln, DOWN, buff=0.12)
         lnl.align_to(names, LEFT)
+        # what LayerNorm does to one vector (illustrative numbers): shift to mean 0, then squash to spread 1
+        vec = np.array([4.2, 1.0, 5.0, 0.6, 3.4, 1.8])
+        U, y0, x0 = 0.22, -2.45, lnl.get_left()[0] + 0.55
+
+        def vbars(v, col):
+            return VGroup(*[Rectangle(width=0.32, height=max(abs(u) * U, 0.01), stroke_width=0, fill_color=col,
+                                      fill_opacity=0.85).move_to([x0 + 0.5 * i, y0 + u * U / 2, 0]) for i, u in enumerate(v)])
+
+        b_raw, b_mid = vbars(vec, NEURON), vbars(vec - vec.mean(), NORM)
+        b_end = vbars((vec - vec.mean()) / vec.std(), NORM)
+        zl = DashedLine([x0 - 0.35, y0, 0], [x0 + 2.85, y0, 0], color=GREY_B, stroke_width=1.5)
+        band = VGroup(*[DashedLine([x0 - 0.35, y0 + sgn * U, 0], [x0 + 2.85, y0 + sgn * U, 0], color=NORM, stroke_width=1,
+                                   dash_length=0.06) for sgn in (1, -1)])
+        s1 = label(r"1. \ shift: \ average $0$", font_size=20, color=NORM).move_to([0, -3.25, 0]).align_to(zl, LEFT)
+        s2 = label(r"2. \ squash: \ spread $1$", font_size=20, color=NORM).next_to(s1, DOWN, buff=0.12).align_to(s1, LEFT)
         with self.voiceover(
             "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a "
             "coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals "
             "completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales "
-            "each layer's vector to a standard size, and training is steadier still. Residual streams and "
+            "each layer's vector to a standard size. <bookmark mark='c'/> Take the vector's numbers, shift them so "
+            "they average zero, <bookmark mark='d'/> then squash them so their spread is one. With that, training is "
+            "steadier still. Residual streams and "
             "normalization: the two pieces of plumbing inside every modern model."
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
@@ -106,6 +132,11 @@ class Residual(VoiceoverScene):
             self.play(Create(cr), FadeIn(names[1]), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(cn), FadeIn(names[2]), Write(ln), FadeIn(lnl), run_time=2.0)
+            self.play(Create(zl), FadeIn(b_raw))
+            vo.wait_until("c")
+            self.play(Transform(b_raw, b_mid), FadeIn(s1), run_time=1.2)
+            vo.wait_until("d")
+            self.play(Transform(b_raw, b_end), Create(band), FadeIn(s2), run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -195,6 +226,71 @@ class Residual(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    @staticmethod
+    def box(tex, pos, color=NEURON, w=0.9):
+        b = RoundedRectangle(width=w, height=0.48, corner_radius=0.1, stroke_color=color, stroke_width=2.5,
+                             fill_color="#121722", fill_opacity=1).move_to(pos)
+        return VGroup(b, MathTex(tex, font_size=24).move_to(pos))
+
+    @staticmethod
+    def wire(*pts, color=GREY_B, tip=True):
+        """A polyline from point to point, with an arrow tip on its last leg."""
+        pts = [np.array(p_, float) for p_ in pts]
+        g = VGroup(*[Line(a, b, color=color, stroke_width=2.5) for a, b in zip(pts[:-2], pts[1:-1])])
+        last = Arrow(pts[-2], pts[-1], buff=0, color=color, stroke_width=2.5, max_tip_length_to_length_ratio=0.25,
+                     tip_length=0.14) if tip else Line(pts[-2], pts[-1], color=color, stroke_width=2.5)
+        return g.add(last)
+
+    def prenorm_picture(self) -> VGroup:
+        """The residual stream as a line, with the layer on a branch: Norm, then the layer, then added back."""
+        y, yb = 1.75, 2.85
+        stream = Arrow([1.2, y, 0], [6.8, y, 0], buff=0, color=RES, stroke_width=5, max_tip_length_to_length_ratio=0.04)
+        plus = VGroup(Circle(radius=0.2, color=RES, stroke_width=3, fill_color=BACKGROUND, fill_opacity=1),
+                      MathTex(r"+", font_size=30, color=RES)).move_to([5.6, y, 0])
+        nb, fb = self.box(r"\operatorname{Norm}", [3.0, yb, 0], NORM, 1.2), self.box(r"F", [4.4, yb, 0])
+        branch = VGroup(self.wire([2.0, y, 0], [2.0, yb, 0], nb.get_left()), self.wire(nb.get_right(), fb.get_left()),
+                        self.wire(fb.get_right(), [5.6, yb, 0], plus.get_top()))
+        hl = MathTex(r"h_l", font_size=26, color=RES).next_to(stream.get_start(), DOWN, buff=0.12)
+        return VGroup(stream, branch, nb, fb, plus, hl)
+
+    @staticmethod
+    def rms_picture() -> VGroup:
+        """Vectors of different lengths, and the same vectors divided by their typical size: one circle.
+        Parts: the circle, the arrows before, the arrows after, the caption."""
+        o, R = np.array([2.4, 2.3, 0]), 0.75
+        ring = DashedVMobject(Circle(radius=R, color=NORM, stroke_width=2), num_dashes=30).move_to(o)
+        angs, lens = (0.35, 1.75, 3.5, 5.2), (1.25, 0.45, 1.05, 0.3)
+        dirs = [np.array([math.cos(a), math.sin(a), 0]) for a in angs]
+        cols = (C.BITS, NEURON, C.MODEL_Q, C.SURPRISE)
+        before = VGroup(*[Arrow(o, o + L * d, buff=0, color=c, stroke_width=4, max_tip_length_to_length_ratio=0.3,
+                                tip_length=0.16) for L, d, c in zip(lens, dirs, cols)])
+        after = VGroup(*[Arrow(o, o + R * d, buff=0, color=c, stroke_width=4, max_tip_length_to_length_ratio=0.3,
+                               tip_length=0.16) for d, c in zip(dirs, cols)])
+        cap = label(r"divide by the typical size: \\ every vector comes out \\ the same length", font_size=20,
+                    color=GREY_A).move_to([5.1, 2.3, 0])
+        return VGroup(ring, before, after, cap)
+
+    def glu_picture(self) -> VGroup:
+        """The gated MLP as a block diagram: x into two projections, one bent by SiLU, multiplied number by number,
+        then projected back. Parts: the diagram, the hidden width label (4d, to become 8/3 d)."""
+        x0, yu, yl, ym = 1.35, 2.95, 1.75, 2.35
+        xin = MathTex(r"x", font_size=30).move_to([x0, ym, 0])
+        w1, sl = self.box(r"W_1", [2.6, yu, 0]), self.box(r"\operatorname{SiLU}", [3.85, yu, 0], C.BITS, 1.1)
+        w3 = self.box(r"W_3", [2.6, yl, 0])
+        mul = VGroup(Circle(radius=0.22, color=C.BITS, stroke_width=3, fill_color=BACKGROUND, fill_opacity=1),
+                     MathTex(r"\times", font_size=28, color=C.BITS)).move_to([5.0, ym, 0])
+        w2 = self.box(r"W_2", [6.0, ym, 0])
+        wires = VGroup(self.wire(xin.get_right(), [1.75, ym, 0], [1.75, yu, 0], w1.get_left()),
+                       self.wire([1.75, ym, 0], [1.75, yl, 0], w3.get_left()),
+                       self.wire(w1.get_right(), sl.get_left()),
+                       self.wire(sl.get_right(), [5.0, yu, 0], mul.get_top()),
+                       self.wire(w3.get_right(), [5.0, yl, 0], mul.get_bottom()),
+                       self.wire(mul.get_right(), w2.get_left()),
+                       self.wire(w2.get_right(), [6.85, ym, 0]))
+        gate = label(r"the gate: \ a dimmer", font_size=18, color=GREY_A).next_to(w3, DOWN, buff=0.08).shift(RIGHT * 0.9)
+        width = label(r"width $4d$", font_size=22, color=C.BITS).move_to([4.55, yu + 0.45, 0])
+        return VGroup(VGroup(wires, xin, w1, sl, w3, mul, w2, gate), width)
+
     def modern(self):
         """Today's block: pre-norm, RMSNorm, and a gated MLP (SwiGLU), with the parameter count that keeps it fair."""
         import math
@@ -213,40 +309,52 @@ class Residual(VoiceoverScene):
         glul = label(r"SwiGLU: \ one branch gates the other, \ number by number", font_size=20, color=GREY_A).next_to(glu, DOWN, buff=0.1)
         cnt = MathTex(r"3 \cdot d \cdot \tfrac{8}{3}d = 8d^2 = 2 \cdot d \cdot 4d", font_size=30, color=C.BITS).move_to([-3.4, -1.9, 0])
         cntl = label(r"a width of $\tfrac83 d$ instead of $4d$: \ the same number of weights", font_size=20, color=C.BITS).next_to(cnt, DOWN, buff=0.1)
-        # right: the activations, computed
-        ax = CornerAxes(x_range=[-4, 4, 2], y_range=[-1, 4, 1], x_length=4.6, y_length=3.4, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, 0.6, 0])
+        # right, top: a picture of each refinement in turn
+        pn, rp, gp = self.prenorm_picture(), self.rms_picture(), self.glu_picture()
+        width2 = label(r"width $\tfrac{8}{3}d$", font_size=22, color=C.BITS).move_to(gp[1])
+        # right, below: the activations, computed
+        ax = CornerAxes(x_range=[-4, 4, 2], y_range=[-1, 4, 1], x_length=3.9, y_length=2.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.0, -1.0, 0])
         zero = DashedLine(ax.c2p(-4, 0), ax.c2p(4, 0), dash_length=0.05, stroke_width=1, color=GREY_D)
         relu = ax.plot(lambda x: max(x, 0.0), x_range=[-4, 4, 0.02], color=GREY_B, stroke_width=3)
         silu = ax.plot(lambda x: x / (1 + math.exp(-x)), x_range=[-4, 4, 0.02], color=C.BITS, stroke_width=3.5)
         kl = VGroup(label(r"ReLU", font_size=20, color=GREY_B), label(r"SiLU: \ $x\,\sigma(x)$", font_size=20, color=C.BITS))
         kl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax.c2p(-4, 4), DR, buff=0.1)
         used = label(r"Llama, \ Qwen, \ DeepSeek, \ Mistral, \ gpt-oss: \\ pre-norm, \ RMSNorm, \ a gated MLP \ (as published)",
-                     font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.45)
+                     font_size=20, color=GREY_A).move_to(ax)
         cite_ = cite(r"B.~Zhang \& R.~Sennrich, \textit{RMSNorm} (2019); \ N.~Shazeer, \textit{GLU Variants Improve Transformer} (2020)",
                      corner=DR)
         with self.voiceover(
             "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> "
-            "First, normalize what goes into each layer, not the stream itself: the stream stays a clean running sum. "
-            "<bookmark mark='b'/> Second, RMSNorm: divide by the root mean square and drop the mean and the shift. "
-            "It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. Two projections of "
-            "the input, one passed through SiLU, a smooth cousin of the ReLU, multiplied number by number with the "
-            "other. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four "
+            "First, normalize what goes into each layer, not the stream itself: the layer sits on a branch, takes a "
+            "normalized copy, and adds its answer back, so the stream stays a clean running sum. That's pre-norm. "
+            "<bookmark mark='b'/> Second, RMSNorm: divide the vector by its typical size, the root mean square, so "
+            "its length always comes out the same, and drop the mean and the shift. "
+            "It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. The MLP, or "
+            "feed-forward network, is the layer's small two-step network: spread the vector wide, bend it, and bring it back. Gated means two "
+            "projections of the input, two different weighted mixes. <bookmark mark='s'/> One is passed through "
+            "SiLU, a smooth cousin of the ReLU; the other acts as a dimmer, multiplying it number by number. "
+            "<bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four "
             "times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's "
             "paper tested it, and ended, famously, by attributing its success to divine benevolence. "
             "<bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block."
         ) as vo:
             self.play(FadeIn(cite_))
             vo.wait_until("a")
-            self.play(Write(pre), FadeIn(prel))
+            self.play(Write(pre), FadeIn(prel), FadeIn(pn[0]), FadeIn(pn[5]))
+            self.play(Create(pn[1]), FadeIn(pn[2]), FadeIn(pn[3]), FadeIn(pn[4]), run_time=1.5)
             vo.wait_until("b")
-            self.play(Write(rms), FadeIn(rmsl))
+            self.play(Write(rms), FadeIn(rmsl), FadeOut(pn), FadeIn(rp[0]), GrowArrow(rp[1][0]), GrowArrow(rp[1][1]),
+                      GrowArrow(rp[1][2]), GrowArrow(rp[1][3]))
+            self.play(ReplacementTransform(rp[1], rp[2]), FadeIn(rp[3]), run_time=1.5)
             vo.wait_until("c")
-            self.play(Write(glu), FadeIn(glul), Create(ax), Create(zero), Create(relu), FadeIn(kl[0]))
+            self.play(Write(glu), FadeIn(glul), FadeOut(VGroup(rp[0], rp[2], rp[3])), FadeIn(gp[0]), FadeIn(gp[1]))
+            vo.wait_until("s")
+            self.play(Create(ax), Create(zero), Create(relu), FadeIn(kl[0]))
             self.play(Create(silu), FadeIn(kl[1]))
             vo.wait_until("d")
-            self.play(Write(cnt), FadeIn(cntl))
+            self.play(Write(cnt), FadeIn(cntl), ReplacementTransform(gp[1], width2))
             vo.wait_until("e")
-            self.play(FadeIn(used))
+            self.play(FadeOut(VGroup(ax, zero, relu, silu, kl)), FadeIn(used))
         self.wait(0.3)
         self.clear_scene()

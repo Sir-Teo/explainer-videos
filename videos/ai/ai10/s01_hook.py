@@ -34,8 +34,9 @@ class Hook(VoiceoverScene):
         colors = {r"N": C.BITS, r"\alpha": C.MODEL_Q}
         f = cmath(r"L(N)", "=", r"E", "+", r"A", r"\,N^{-", r"\alpha", r"}", colors=colors, font_size=42).move_to([4.6, 2.0, 0])
         fl = label(rf"$\alpha = {alpha:.2f}$, \ $E = {E:.2f}$", font_size=28, color=C.MODEL_Q).next_to(f, DOWN, buff=0.3)
+        al = label(r"$\alpha$: \ how fast more parameters help", font_size=22, color=C.MODEL_Q).next_to(fl, DOWN, buff=0.15)
         nl = label(r"every $10\times$ in size: \\ the reducible loss shrinks \\ by the same factor", font_size=26, color=GREY_A)
-        nl.next_to(fl, DOWN, buff=0.5)
+        nl.next_to(al, DOWN, buff=0.4)
         tag = label(r"seven widths of Part 9's character model", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.2)
         # what's left above the floor, on a log scale: a straight line of slope -alpha
         keep = L > E
@@ -53,8 +54,8 @@ class Hook(VoiceoverScene):
             "Make a model bigger, and it gets better. That much everyone expected. The surprise was how "
             "predictably. <bookmark mark='a'/> Here are seven sizes of part nine's character model, each trained "
             "the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that "
-            "no model can go below. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the "
-            "floor by the same factor: on a log scale, a straight line. Curves like this, measured on small models, "
+            "no model can go below. The exponent, alpha, says how fast more parameters help. <bookmark mark='c'/> "
+            "Every tenfold increase in size cuts what's left above the floor, the reducible loss, by the same factor: on a log scale, a straight line. Curves like this, measured on small models, "
             "are how laboratories decide what to build next."
         ) as vo:
             self.play(Create(ax), FadeIn(labs), FadeIn(xn), FadeIn(yn), FadeIn(tag))
@@ -62,7 +63,7 @@ class Hook(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.6)
             vo.wait_until("b")
             self.play(Create(fit), Create(floor), Write(f), run_time=2.0)
-            self.play(FadeIn(fl))
+            self.play(FadeIn(fl), FadeIn(al))
             vo.wait_until("c")
             self.play(FadeIn(nl), Create(ix), FadeIn(il), LaggedStart(*[FadeIn(d, scale=0.5) for d in idots], lag_ratio=0.1))
             self.play(Create(iline), FadeIn(isl))

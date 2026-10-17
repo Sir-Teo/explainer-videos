@@ -40,17 +40,25 @@ class Adam(VoiceoverScene):
                       font_size=24, color=GREY_A).next_to(adam, RIGHT, buff=0.5)
         keep_in_frame(note_)
         cite_ = cite(r"B.~Polyak (1964); \ D.~Kingma \& J.~Ba (2014); \ I.~Loshchilov \& F.~Hutter (2017)", corner=DR)
+        legend = VGroup(label(r"$m_t$: \ the running average direction", font_size=20, color=OPT_COLORS["momentum"]),
+                        label(r"$v_t$: \ the running average squared size", font_size=20, color=OPT_COLORS["adam"]),
+                        label(r"$\beta$: \ how long the memory lasts", font_size=20, color=GREY_A),
+                        label(r"$\epsilon$: \ a tiny number, \ so we never divide by zero", font_size=20, color=GREY_A))
+        legend.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        syms = gloss(r"the symbols", r"in the formulas on the left:", legend, corner=UR, width=5.2, color=OPT_COLORS["adam"])
         with self.voiceover(
-            "Momentum keeps a running average of recent gradients and steps along that. Zigzags cancel; steady "
+            "Momentum keeps a running average of recent gradients, m, the direction they've been pointing lately, "
+            "and steps along that; beta sets how long that memory lasts. Zigzags cancel; steady "
             "directions add up. <bookmark mark='a'/> Adam, from 2014, also tracks the average squared gradient for "
-            "every weight, and divides by its square root. Each weight gets its own step size: large where the "
+            "every weight, v, its typical size, and divides by its square root, plus a tiny epsilon so it never "
+            "divides by zero. Each weight gets its own step size: large where the "
             "gradients are small, small where they're large. <bookmark mark='b'/> AdamW adds one fix: it shrinks "
             "the weights directly, separately from the gradient. That's the optimizer that trained most of today's "
             "language models."
         ) as vo:
             self.play(FadeIn(mom), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(FadeIn(adam), FadeIn(note_))
+            self.play(FadeIn(adam), FadeIn(note_), FadeIn(syms))
             vo.wait_until("b")
             self.play(FadeIn(adamw))
         self.wait(0.3)
