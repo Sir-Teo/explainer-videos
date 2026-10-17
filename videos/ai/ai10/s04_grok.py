@@ -142,9 +142,23 @@ class Grok(VoiceoverScene):
         note_ = label(r"each number becomes a point on circles: \\ adding numbers turns into adding angles", font_size=26,
                       color=C.BITS).move_to([-3.4, 2.2, 0])  # the empty space above the bars, clear of the citation
         cite_ = cite(r"N.~Nanda et al., \textit{Progress Measures for Grokking via Mechanistic Interpretability} (2023)", corner=DL)
+
+        # what one frequency is: the numbers placed evenly around a circle that goes round k times
+        def ring(freq):
+            return VGroup(*[Dot([2.8 + 1.9 * math.cos(2 * math.pi * freq * i / P), -0.2 + 1.9 * math.sin(2 * math.pi * freq * i / P), 0],
+                                radius=0.05, color=interpolate_color(ManimColor(C.TRUE_P), ManimColor(C.MODEL_Q), i / P))
+                            for i in range(P)])
+
+        ring1, ring5 = ring(1), ring(5)
+        kl1 = MathTex(r"k = 1", font_size=32, color=C.BITS).move_to([2.8, -0.2, 0])
+        kl5 = MathTex(r"k = 5", font_size=32, color=C.BITS).move_to([2.8, -0.2, 0])
+        rl = label(r"frequency $k$: \ the numbers, in order, \\ go round a circle $k$ times", font_size=22, color=GREY_A)
+        rl.move_to([2.8, 2.4, 0])
         with self.voiceover(
             "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of "
-            f"their weight sits on {nf} frequencies out of {len(F) - 1}: waves around the clock. <bookmark mark='b'/> Seen along their main "
+            f"their weight sits on {nf} frequencies out of {len(F) - 1}: waves around the clock. A frequency places "
+            f"the {P} numbers evenly around a circle, in order: <bookmark mark='w'/> at frequency one, going round "
+            "once; <bookmark mark='x'/> at frequency five, going round five times. <bookmark mark='b'/> Seen along their main "
             "directions, the numbers lie on circles; here they are forming during training, and the circles appear "
             "just as the test accuracy climbs. The network turns each number into an angle, and adds numbers "
             "by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first "
@@ -153,7 +167,12 @@ class Grok(VoiceoverScene):
             self.play(FadeIn(cite_))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01), FadeIn(bl), run_time=1.5)
+            vo.wait_until("w")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in ring1], lag_ratio=0.01), FadeIn(kl1), FadeIn(rl), run_time=1.5)
+            vo.wait_until("x")
+            self.play(Transform(ring1, ring5), Transform(kl1, kl5), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(ring1), FadeOut(kl1), FadeOut(rl))
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(pl), FadeIn(clock), FadeIn(tst), run_time=1.2)
             for k, Q, a_ in zip(snap_steps[1:], snaps[1:], acc_at[1:]):  # the scatter tightening into circles, as test accuracy rises
                 self.play(*[d.animate.move_to(q) for d, q in zip(pts, place(Q))], clock[1].animate.set_value(k),

@@ -45,10 +45,15 @@ class Schedule(VoiceoverScene):
         why = label(r"the drop comes when the steps shrink: \\ the noise cloud of Chapter 1 contracts", font_size=24,
                     color=C.BITS).next_to(rows, DOWN, buff=0.5).align_to(rows, LEFT)
         cite_ = cite(r"I.~Loshchilov \& F.~Hutter, SGDR (2016); \ S.~Hu et al., MiniCPM (2024)", corner=DR)
+        warm = gloss(r"warmup", r"start with tiny steps while the weights \\ are still random, \ so the first updates "
+                     r"don't blow up", corner=UR, width=5.4, color=SCHED_COLORS["cosine"])
+        ramp = SurroundingRectangle(Line(sax.c2p(0, 0), sax.c2p(0.04 * steps, 1.05)), color=SCHED_COLORS["cosine"], buff=0.08,
+                                    corner_radius=0.05, stroke_width=2)
         assert finals["wsd"] < finals["constant"]
         with self.voiceover(
             "The step size itself should change during training. A constant rate is the simplest. "
-            "<bookmark mark='a'/> A cosine schedule warms up briefly, then glides smoothly down to zero. "
+            "<bookmark mark='a'/> A cosine schedule warms up briefly, starting with tiny steps while the weights are "
+            "still random, so the first updates don't blow up. Then it glides smoothly down to zero. "
             "<bookmark mark='b'/> Warmup–stable–decay holds the rate flat for most of the run, and only drops it at "
             "the end. <bookmark mark='c'/> Here they are on the character model. While the rate stays high, the "
             "loss plateaus. When it falls, the loss drops sharply, as the noisy cloud from chapter one shrinks onto "
@@ -58,7 +63,9 @@ class Schedule(VoiceoverScene):
             self.play(Create(sax), FadeIn(sl), Create(shapes["constant"]), FadeIn(cite_))
             vo.wait_until("a")
             self.play(Create(shapes["cosine"]))
+            self.play(FadeIn(warm, shift=DOWN * 0.2), Create(ramp))
             vo.wait_until("b")
+            self.play(FadeOut(warm), FadeOut(ramp))
             self.play(Create(shapes["wsd"]))
             vo.wait_until("c")
             self.play(Create(ax), FadeIn(yl), FadeIn(xl))

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -81,8 +83,14 @@ class Muon(VoiceoverScene):
         lines = [curve(ax, np.asarray(o[n])[1:, 0], np.clip(np.asarray(o[n])[1:, 1], bot, top), OPT_COLORS[n], 3.5)
                  for n in names]
         better = finals["muon"] < finals["adamw"]
+        split = VGroup(label(r"Muon: \ the weight grids \\ inside the network", font_size=20, color=MU),
+                       label(r"AdamW: \ the character table, \\ the output layer, \ the biases", font_size=20,
+                             color=OPT_COLORS["adamw"]))
+        split.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(rows, DOWN, buff=0.5).align_to(rows, LEFT)
+        keep_in_frame(split)
         with self.voiceover(
-            "On the same character model, with Muon on the hidden matrices and AdamW on the rest: "
+            "On the same character model, with Muon on the hidden matrices, the weight grids inside the network, and "
+            "AdamW on the rest: the character table, the output layer and the small bias terms. "
             + (f"<bookmark mark='a'/> it reaches {finals['muon']:.2f} bits, ahead of AdamW's {finals['adamw']:.2f}. "
                if better else
                f"<bookmark mark='a'/> it reaches {finals['muon']:.2f} bits, close to AdamW's {finals['adamw']:.2f} on "
@@ -90,7 +98,8 @@ class Muon(VoiceoverScene):
             + "Muon has since been scaled up: Moonshot AI reported that it needs about half the compute of AdamW, "
             "and used a version of it to train Kimi K2."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yn), Create(lines[0]), Create(lines[1]), FadeIn(rows[:2]))
+            self.play(Create(ax), FadeIn(xl), FadeIn(yn), Create(lines[0]), Create(lines[1]), FadeIn(rows[:2]),
+                      FadeIn(split))
             vo.wait_until("a")
             self.play(Create(lines[2]), FadeIn(rows[2]), run_time=2.0)
         self.wait(0.3)
@@ -113,16 +122,44 @@ class Muon(VoiceoverScene):
             n_.next_to(e_, DOWN, buff=0.12)
         box = SurroundingRectangle(VGroup(eqs[2], notes[2]), color=MU, buff=0.15, corner_radius=0.1)
         cite_ = cite(r"J.~Bernstein \& L.~Newhouse, \textit{Old Optimizer, New Norm} (2024)", corner=DR)
+
+        def stretched(center, sx, sy, col, angle=0.45):
+            """A dashed circle of directions, and what a matrix with stretches sx, sy makes of it."""
+            c = np.array(center)
+            ring = DashedVMobject(Circle(radius=0.9, color=GREY_C, stroke_width=1.5), num_dashes=28).move_to(c)
+            shape = Ellipse(width=1.8 * sx, height=1.8 * sy, color=col, stroke_width=3.5).rotate(angle).move_to(c)
+            arrows = VGroup()
+            for t in (0.0, 0.8, 1.6, 2.4):
+                d = np.array([sx * math.cos(t), sy * math.sin(t)]) * 0.9
+                d = np.array([d[0] * math.cos(angle) - d[1] * math.sin(angle), d[0] * math.sin(angle) + d[1] * math.cos(angle), 0])
+                arrows.add(Arrow(c, c + d, buff=0, color=col, stroke_width=3, max_tip_length_to_length_ratio=0.25,
+                                 tip_length=0.14))
+            return VGroup(ring, shape, arrows)
+
+        pic_g = stretched([-5.3, 0.2, 0], 1.65, 0.3, GREY_A)
+        pic_m = stretched([5.3, 0.2, 0], 1.0, 1.0, MU)
+        cap_g = label(r"the gradient $G$: \\ a few directions dominate", font_size=20, color=GREY_A).next_to(pic_g, DOWN, buff=0.3)
+        cap_m = label(r"Muon's step: \\ every direction moved by $\eta$", font_size=20, color=MU).next_to(pic_m, DOWN, buff=0.3)
         with self.voiceover(
             "Why set the singular values to one? Because it's the steepest step under the right notion of size. "
+            "<bookmark mark='p'/> Picture what a matrix does to a circle of directions. The gradient stretches it "
+            "into a long, thin ellipse: a few directions dominate. <bookmark mark='q'/> Muon's step keeps it a "
+            "circle: every direction moved by the same amount. "
             "<bookmark mark='a'/> Ask for the step that lowers the loss fastest, to first order, among all steps "
             "that stretch no direction by more than eta: a bound on the spectral norm, which is what matters for a "
             "matrix that multiplies vectors. <bookmark mark='b'/> Write the gradient in its singular directions. Each "
             "term can be pushed down by at most eta times its singular value. <bookmark mark='c'/> And one step "
-            "achieves every bound at once: minus eta times U V transpose. Adam, in the same sense, is the steepest "
+            "achieves every bound at once: minus eta times U V transpose. If no direction may be stretched by more "
+            "than eta, the best move pushes every direction by exactly eta. Adam, in the same sense, is the steepest "
             "step when each weight is bounded separately."
         ) as vo:
             self.play(FadeIn(cite_))
+            vo.wait_until("p")
+            self.play(Create(pic_g[0]))
+            self.play(TransformFromCopy(pic_g[0], pic_g[1]), *[GrowArrow(a_) for a_ in pic_g[2]], FadeIn(cap_g))
+            vo.wait_until("q")
+            self.play(Create(pic_m[0]))
+            self.play(TransformFromCopy(pic_m[0], pic_m[1]), *[GrowArrow(a_) for a_ in pic_m[2]], FadeIn(cap_m))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(Write(eqs[k]), FadeIn(notes[k]))
@@ -224,15 +261,34 @@ class Muon(VoiceoverScene):
         res = label(r"Kimi K2: \ $\tau = 100$; \ $15.5$ trillion tokens \ with no loss spike \ (as published)", font_size=24,
                     color=C.BITS).to_edge(DOWN, buff=0.8)
         cite_ = cite(r"Kimi Team, \textit{Kimi K2: Open Agentic Intelligence} (2025): \ MuonClip", corner=DR)
+        # one head's scores, as a grid: each word (row) against itself and every earlier word; one score far too big
+        rng = np.random.default_rng(11)
+        cells = VGroup()
+        for i in range(6):
+            for j in range(i + 1):
+                hot = (i, j) == (4, 1)
+                cells.add(Square(0.26, stroke_width=0, fill_color=C.SURPRISE if hot else C.BITS,
+                                 fill_opacity=1.0 if hot else float(rng.uniform(0.15, 0.6))).move_to([0.3 * j, -0.3 * i, 0]))
+        grid = VGroup(cells, label(r"one head's scores", font_size=20, color=GREY_A).next_to(cells, RIGHT, buff=0.3))
+        att = gloss(r"attention scores and heads \ (Part 11)", r"each word scores how relevant every earlier word is. \\ "
+                    r"A head is one such scorer; \ its scores come from two weight grids, \ query and key.", grid,
+                    corner=UP, width=7.0, color=C.SURPRISE)
         with self.voiceover(
-            "Scaled up, Muon hit one problem: in some heads the attention scores kept growing until training blew up. "
-            "Moonshot's fix for Kimi K2 is QK-clip. <bookmark mark='a'/> After each step, look at each head's largest "
-            "score. <bookmark mark='b'/> If it's above a threshold tau, shrink that head's query and key weights by "
+            "Scaled up, Muon hit one problem. <bookmark mark='h'/> In attention, which part eleven builds, each word "
+            "scores how relevant every earlier word is. A head is one such scorer, and its scores come from two "
+            "weight matrices, the query and the key. In some heads the attention scores kept growing until training "
+            "blew up. Moonshot's fix for Kimi K2 is QK-clip. <bookmark mark='a'/> After each step, look at each head's largest "
+            "score. <bookmark mark='b'/> If it's above a threshold tau, shrink the two weight matrices that "
+            "make it, that head's query and key weights, by "
             "the square root of tau over the score, each, so the score lands exactly on tau. Nothing else changes. "
             "<bookmark mark='c'/> With it, Kimi K2 trained on fifteen and a half trillion tokens without a single "
             "loss spike."
         ) as vo:
             self.play(FadeIn(cite_))
+            vo.wait_until("h")
+            self.play(FadeIn(att, shift=DOWN * 0.2))
+            vo.wait_until("a")
+            self.play(FadeOut(att))
             for k, mk in enumerate("ab"):
                 vo.wait_until(mk)
                 self.play(Write(eqs[k]), FadeIn(notes[k]))

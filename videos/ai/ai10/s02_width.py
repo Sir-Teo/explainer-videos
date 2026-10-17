@@ -42,13 +42,30 @@ class Width(VoiceoverScene):
                        label(r"a model that no longer learns features", font_size=26, color=C.BITS))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.6, 0.6, 0])
         cite_ = cite(r"A.~Jacot, F.~Gabriel \& C.~Hongler, \textit{Neural Tangent Kernel} (2018)", corner=DR)
+        # the lazy picture: the hidden features frozen as they started, only the weights on them re-learned
+        ins = VGroup(*[Dot(radius=0.07, color=GREY_B) for _ in range(4)]).arrange(DOWN, buff=0.3)
+        hid = VGroup(*[Circle(radius=0.1, color=SP, stroke_width=2.5) for _ in range(6)]).arrange(DOWN, buff=0.14)
+        hid.next_to(ins, RIGHT, buff=1.2)
+        out = Circle(radius=0.13, color=C.BITS, stroke_width=3).next_to(hid, RIGHT, buff=1.2)
+        frozen = VGroup(*[DashedLine(a.get_center(), b.get_left(), color=GREY_D, stroke_width=1.2, dash_length=0.05)
+                          for a in ins for b in hid])
+        learned = VGroup(*[Line(b.get_right(), out.get_left(), color=C.BITS, stroke_width=2.2) for b in hid])
+        lazy_pic = VGroup(frozen, learned, ins, hid, out,
+                          label(r"frozen", font_size=20, color=GREY_B).next_to(frozen, DOWN, buff=0.1),
+                          label(r"re-weighted", font_size=20, color=C.BITS).next_to(learned, DOWN, buff=0.1))
+        lazy = gloss(r"the lazy regime", r"a very wide net barely changes its features: \\ it can only re-weight what it "
+                     r"started with, \\ like Part 5's kernel methods, \ with a frozen similarity rule", lazy_pic,
+                     corner=DR, width=4.3, color=SP)
+        lazy.shift(UP * 0.45)
         with self.voiceover(
             "Take part nine's character model and make it wider and wider, trained by plain gradient descent, with "
-            "step sizes that keep a wide network stable. Measure how much its hidden features, the outputs of its "
-            "hidden units, change during training. <bookmark mark='a'/> The wider the network, the less they "
+            "step sizes that keep a wide network stable. Measure how much its hidden features change during "
+            "training: a feature is what one hidden unit computes from the input, one pattern the network has "
+            "learned to look for. <bookmark mark='a'/> The wider the network, the less they "
             f"change. The slope here is about minus {abs(slope):.1f}; in theory it tends to minus a half: one over "
-            "the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all, and "
-            "the network behaves like part five's kernel methods, with a fixed kernel: the neural tangent kernel. "
+            "the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all. A very "
+            "wide net can only re-weight what it started with, like part five's kernel methods with a frozen "
+            "similarity rule: a fixed kernel, called the neural tangent kernel. This is called the lazy regime. "
             "Elegant, and exactly what we don't want: a network whose features never change learns nothing new "
             "about its data's structure."
         ) as vo:
@@ -57,7 +74,7 @@ class Width(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.5)
             self.play(Create(fit), FadeIn(sl), FadeIn(notes[0]))
             vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
+            self.play(FadeIn(notes[1]), FadeIn(lazy, shift=UP * 0.2))
             self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -97,10 +114,27 @@ class Width(VoiceoverScene):
         cite_ = cite(r"G.~Yang \& E.~Hu (2021); \ G.~Yang et al., \textit{Tensor Programs V} (2022)", corner=DR)
         bl = m["best_loss"]
         transfer = drift["sp"] >= drift["mup"] + 0.4
+        # muP in a picture: as the layer widens, its starting weights and its step size shrink
+        cols_ = VGroup()
+        for j, w_ in enumerate((1, 2, 4)):
+            layer = Rectangle(width=0.45 * w_, height=0.3, stroke_color=MUP, stroke_width=2, fill_color=MUP, fill_opacity=0.2)
+            init = Rectangle(width=0.18, height=0.9 / w_ ** 0.5, stroke_width=0, fill_color=GREY_B, fill_opacity=0.9)
+            step = Rectangle(width=0.18, height=0.9 / w_, stroke_width=0, fill_color=C.BITS, fill_opacity=0.9)
+            bars_ = VGroup(init, step).arrange(RIGHT, buff=0.08, aligned_edge=DOWN).next_to(layer, DOWN, buff=0.12)
+            cols_.add(VGroup(layer, bars_))
+        cols_.arrange(RIGHT, buff=0.5, aligned_edge=UP)
+        mkey = VGroup(label(r"layer width", font_size=20, color=MUP), label(r"starting weights", font_size=20, color=GREY_B),
+                      label(r"step size", font_size=20, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        mkey.next_to(cols_, RIGHT, buff=0.4)
+        mupc = gloss(r"$\mu$P", r"as the network widens, shrink each layer's \\ starting weights and step size, \\ so every "
+                     r"layer keeps changing by about the same amount", VGroup(cols_, mkey), width=5.6, color=MUP)
+        mupc.scale(1.25).move_to(DOWN * 0.6)  # mid-frame, before the panels: room to be larger
         with self.voiceover(
             "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His "
             "answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each "
-            "layer by the width. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way"
+            "layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's "
+            "starting weights and step size, so that every layer keeps changing by about the same amount. "
+            "<bookmark mark='a'/> Sweep the learning rate at three widths, the usual way"
             + (f": the best learning rate drifts as the model grows, by {drift['sp']:.1f} powers of ten here. "
                f"<bookmark mark='b'/> In mu-P, the curves line up: the best learning rate stays put, within "
                f"{drift['mup']:.1f}. So you can tune a small model and copy its settings to a big one."
@@ -113,7 +147,10 @@ class Width(VoiceoverScene):
                "original.")
         ) as vo:
             self.play(FadeIn(key), FadeIn(cite_), FadeIn(yn))
+            vo.wait_until("m")
+            self.play(FadeIn(mupc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(mupc))
             p = panels[0]
             self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[3]], lag_ratio=0.3),
                       run_time=2.0)
