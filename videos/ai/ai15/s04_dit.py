@@ -141,17 +141,17 @@ class DiT(VoiceoverScene):
         tag = label(r"same noise, \ same requests, \ every checkpoint", font_size=20, color=GREY_A).to_corner(UR, buff=0.3)
         with self.voiceover(
             "How does it get there? Here is the same noise, asked for the same ten letters, A to J, drawn by the model "
-            "at checkpoints along its training. <bookmark mark='a'/> At first it has learned nothing, and the noise "
-            "barely moves. <bookmark mark='b'/> Within a few hundred steps it learns the average picture: a blur in "
-            "the middle, the same for every request. <bookmark mark='c'/> Then the request starts to matter, and "
-            "rough shapes split apart; <bookmark mark='d'/> the strokes sharpen last, long after the loss has "
-            "mostly flattened. The loss measures the average error on one step's velocity; the pictures improve "
-            "on a slower clock."
+            "at checkpoints along its training. <bookmark mark='a'/> First it learns that most of a picture is dark: "
+            f"by step {steps[1]}, the noise is wiped to black, with scattered specks. <bookmark mark='b'/> By step "
+            f"{steps[2]} the request already matters: each letter gets its own rough cluster of strokes. "
+            f"<bookmark mark='c'/> By step {steps[3]:,} most of them can be read, <bookmark mark='d'/> and the strokes "
+            f"clean up last. The loss falls most in the first few hundred steps, from {L[0, 1]:.1f} to "
+            f"{float(np.interp(steps[2], L[:, 0], L[:, 1])):.1f}; the pictures improve on a slower clock."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(asked), FadeIn(r0), Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn))
             self.add(dot, cnt)
             cur = r0
-            marks = {1: "a", 2: "b", 4: "c", 5: "d"}
+            marks = {1: "a", 2: "b", 3: "c", 5: "d"}
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
