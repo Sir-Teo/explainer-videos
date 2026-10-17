@@ -1,92 +1,92 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第17部分：推理",
  "chapters": {
-  "Hook": "",
-  "Chain": "",
-  "RL": "",
-  "TestTime": "",
-  "Outro": ""
+  "Hook": "16个比特",
+  "Chain": "1. 出声思考，就是计算",
+  "RL": "2. 向检查器学习",
+  "TestTime": "3. 想得更久",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
   "db0ef4310c5c": {
    "scene": "Hook",
    "en": "Here's a puzzle for a small transformer: sixteen bits. Is the number of ones odd? <bookmark mark='a'/> Trained to answer straight away, our two-layer model is right 49 percent of the time: a coin flip. <bookmark mark='b'/> Now train the very same model to write its work first: going along the bits, is the count odd so far? Each step is easy, just the last answer and one more bit. <bookmark mark='c'/> Its final answer is right 100 percent of the time. Same model, same size. It just got to think out loud.",
-   "zh": ""
+   "zh": "给一个小Transformer出一道题：16个比特，其中1的个数是奇数吗？<bookmark mark='a'/>如果训练它直接给出答案，我们这个两层的模型，只有49%的时候答对：跟抛硬币差不多。<bookmark mark='b'/>现在，把同一个模型训练成先写出过程：沿着这些比特一路往下，到目前为止，1的个数是奇数吗？每一步都很简单，只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，100%都是对的。同样的模型，同样的大小。它只不过是可以出声思考了。"
   },
   "750b111d3225": {
    "scene": "Hook",
    "en": "This part is about reasoning: why writing a chain of thought adds computation, how models learn to reason from nothing but a checker of answers, <bookmark mark='a'/> and what you get by letting them think longer.",
-   "zh": ""
+   "zh": "这一部分讲的是推理：为什么写出一条思维链，就能增加计算；模型怎样只靠一个核对答案的检查器，学会推理；<bookmark mark='a'/>以及让它们想得更久，能换来什么。"
   },
   "65974bccad47": {
    "scene": "Chain",
    "en": "Chapter one. Thinking out loud is computing.",
-   "zh": ""
+   "zh": "第1章。出声思考，就是计算。"
   },
   "52d606e65b07": {
    "scene": "Chain",
    "en": "Why does writing help? Look at the computation. A transformer runs every token through the same fixed stack of layers. <bookmark mark='a'/> Answering at once, the longest chain of steps that happen one after another is as tall as the stack: L layers, however hard the question. <bookmark mark='b'/> But a token it writes goes back in as input. <bookmark mark='c'/> So the chain of steps can climb the stack, come back down, and climb again, once per token. With k tokens of thought, L times k plus one steps in a row. <bookmark mark='d'/> Theory backs this up: answering at once, a transformer is limited to shallow computations; given a long enough chain of thought, it can carry out any step-by-step procedure.",
-   "zh": ""
+   "zh": "写出来，为什么有用？看看其中的计算。Transformer让每个词元，都穿过同一叠固定的层。<bookmark mark='a'/>如果直接回答，一个接一个、必须先后完成的步骤，最长也只有这叠层那么高：L层，不管问题有多难。<bookmark mark='b'/>但它写下的词元，会重新作为输入送回去。<bookmark mark='c'/>于是，这条步骤链可以爬上这叠层，再回到底下，再爬上去，每个词元一次。有了k个用来思考的词元，连续的步数，就是L乘以k与1的和。<bookmark mark='d'/>理论也印证了这一点：直接回答时，Transformer只能做很浅的计算；而只要思维链足够长，它就能一步一步地执行任何程序。"
   },
   "43f92b226073": {
    "scene": "Chain",
    "en": "Here are all our runs, on strings of four, eight and sixteen bits. <bookmark mark='a'/> Answering at once is solved at four bits, a coin flip at eight, and a coin flip at sixteen: every bit flips the answer, and two layers can't learn to combine sixteen of them at once. <bookmark mark='b'/> With the running parity written first, all three are solved. <bookmark mark='c'/> And the chain is also easier to learn. At sixteen bits it's reliable after about 1,300 steps; answering at once never gets off the ground.",
-   "zh": ""
+   "zh": "这是我们全部的训练结果，比特串的长度分别是4、8和16。<bookmark mark='a'/>直接回答，在4个比特时完全解决了，8个比特时跟抛硬币差不多，16个比特时也跟抛硬币差不多：改动任何一个比特，答案都会翻转，而两层网络学不会一下子把16个比特组合起来。<bookmark mark='b'/>先把一路累计的奇偶性写出来，三种长度就全都解决了。<bookmark mark='c'/>而且，思维链也更容易学。在16个比特上，大约1300步之后，它就已经很可靠了；而直接回答，始终没能起步。"
   },
   "ac0e2bd2e923": {
    "scene": "RL",
    "en": "Chapter two. Learning from a checker.",
-   "zh": ""
+   "zh": "第2章。向检查器学习。"
   },
   "79c53ed642fb": {
    "scene": "RL",
    "en": "How do you teach a model to reason, when nobody can write down the steps for it? DeepSeek-R1 used a recipe with almost no human help: questions with checkable answers, and reinforcement learning. We do it here with a small transformer that has had a little practice at two-digit addition. <bookmark mark='a'/> Give it a question, and sample 8 answers. <bookmark mark='b'/> A checker marks each one: here 2 of 8 are right. <bookmark mark='c'/> Each answer's advantage is its reward minus the group's average, divided by the spread: right answers above the line, wrong ones below. <bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. That's GRPO. No one judges the steps, and no separate critic is needed: the group is its own baseline. And when every answer is right, or every one wrong, the advantages are all zero: nothing to learn.",
-   "zh": ""
+   "zh": "如果没有人能把推理步骤写下来教给模型，又该怎么教它推理呢？DeepSeek-R1用了一套几乎不需要人工帮助的配方：答案可以核对的题目，再加上强化学习。我们在这里，用一个小Transformer来做这件事，它已经稍微练习过两位数加法。<bookmark mark='a'/>给它一道题，采样出8个答案。<bookmark mark='b'/>检查器给每个答案判对错：这里8个里有2个是对的。<bookmark mark='c'/>每个答案的优势，就是它的奖励减去这一组的平均值，再除以这一组的离散程度：答对的在线的上方，答错的在线的下方。<bookmark mark='d'/>然后轻轻推一下模型，让好的答案更可能出现，坏的答案更少出现。这就是GRPO。没有人去评判中间的步骤，也不需要另外一个评价模型：这一组答案，本身就是基线。而当所有答案全都对，或者全都错，优势就全是0：什么也学不到。"
   },
   "48acda2c9144": {
    "scene": "RL",
    "en": "Repeat that for 300 steps of thirty-two questions. <bookmark mark='a'/> Our model starts out right 36 percent of the time, and climbs to 81 percent, taught by nothing but a checker. <bookmark mark='b'/> Here are its answers to six questions, eight tries each: 14 of 48 right before, <bookmark mark='c'/> 27 after. The probability moved onto the answers that check out.",
-   "zh": ""
+   "zh": "把这个过程重复300步，每步32道题。<bookmark mark='a'/>我们的模型一开始只有36%的时候答对，后来升到了81%，教它的，只有一个检查器。<bookmark mark='b'/>这是它对6道题的回答，每道题试8次：训练前，48个答案里对了14个，<bookmark mark='c'/>训练后对了27个。概率转移到了那些经得起核对的答案上。"
   },
   "bdcb54251ef7": {
    "scene": "RL",
    "en": "What we used is an outcome reward: only the final answer is checked. <bookmark mark='a'/> The other way is a process reward: a second model, trained on people's judgments, scores every step, so a lucky guess after a wrong step earns nothing. <bookmark mark='b'/> Process rewards catch more, but a learned grader can be fooled, and a model under pressure learns to fool it. The big reasoning models of 2025 mostly rely on checkable outcomes: math with known answers, code with tests. Trained that way, DeepSeek-R1's chains of thought grew longer on their own, and started to double-check their own work.",
-   "zh": ""
+   "zh": "我们用的是结果奖励：只检查最后的答案。<bookmark mark='a'/>另一种办法是过程奖励：用人的评判训练出第二个模型，让它给每一步打分；这样，错了一步之后再蒙对答案，就什么也得不到。<bookmark mark='b'/>过程奖励能抓出更多问题，但学出来的评分模型是可以被骗的，而一个被逼着拿高分的模型，就会学会去骗它。2025年的大型推理模型，大多依靠可以核对的结果：有标准答案的数学题，有测试的代码。这样训练出来，DeepSeek-R1的思维链自己就变长了，还开始回头检查自己的推导。"
   },
   "d2e21b079625": {
    "scene": "TestTime",
    "en": "Chapter three. Thinking longer.",
-   "zh": ""
+   "zh": "第3章。想得更久。"
   },
   "0dcbb35cb955": {
    "scene": "TestTime",
    "en": "There's another way to spend computation: at answer time. Take our addition model, before the reinforcement learning, and let it answer each of 200 questions 32 times. <bookmark mark='a'/> Green is right, red is wrong. Not one question is always right, and not one is always wrong: each of the 200 comes out right only some of the time. <bookmark mark='b'/> So trying again always has a chance of helping. <bookmark mark='c'/> If c of n samples are right, the chance that at least one of k tries is right is one minus n minus c choose k, over n choose k. It's called pass at k, and it needs a checker to tell which try was the right one.",
-   "zh": ""
+   "zh": "花费计算还有另一个时机：回答的时候。拿我们那个做加法的模型，取强化学习之前的版本，让它把200道题，每道都回答32次。<bookmark mark='a'/>绿色是对，红色是错。没有一道题总是答对，也没有一道题总是答错：这200道题，每一道都只是有时候答对。<bookmark mark='b'/>所以，再试一次，总有机会帮上忙。<bookmark mark='c'/>如果n个样本里有c个是对的，那么试k次、至少有一次答对的概率，就是1减去一个比值：n减c个里取k个的组合数，除以n个里取k个的组合数。这叫作pass@k，它需要一个检查器，来分辨哪一次尝试是对的。"
   },
   "78471cd25224": {
    "scene": "TestTime",
    "en": "So how much does trying more buy? <bookmark mark='a'/> With a checker, a lot: one try is right 33 percent of the time, and with 32 tries, 100 percent. Every doubling of the tries buys a little more. <bookmark mark='b'/> Without a checker, take a vote: the answer it gives most often. That climbs from 32 to 61 percent: less, because a vote can't recover an answer the model rarely gives. <bookmark mark='c'/> And the dashed line is the same model after reinforcement learning, with just one try: 81 percent. Training moved what used to need many tries into one. Today's reasoning models do both: trained by RL to think in long chains, and then given more time to think when the question is hard.",
-   "zh": ""
+   "zh": "那么，多试几次，能换来多少？<bookmark mark='a'/>有检查器的话，能换来很多：试1次，33%的时候答对；试32次，就是100%。尝试次数每翻一倍，就再多换来一点。<bookmark mark='b'/>没有检查器，就投票：取它给得最多的那个答案。这样从32%升到61%：少一些，因为模型很少给出的答案，投票是救不回来的。<bookmark mark='c'/>而那条虚线，是同一个模型经过强化学习之后，只试1次：81%。训练把原来要试很多次才能做到的事，压缩进了一次尝试里。今天的推理模型两者兼用：先用RL训练它们用长长的思维链来思考，遇到难题时，再给它们更多时间去想。"
   },
   "a871d4c1bc03": {
    "scene": "Outro",
    "en": "Let's take stock. Writing out its steps lets a fixed-depth model compute for longer: L layers, once per token. That's how our two-layer model learned sixteen-bit parity. Reinforcement learning from a checker, comparing each answer with its group, taught a model to add more reliably than practice alone. And at answer time, more tries buy more right answers, as long as something can tell which one is right.",
-   "zh": ""
+   "zh": "我们来盘点一下。把步骤写出来，能让一个深度固定的模型算得更久：L层，每个词元走一遍。我们那个两层的模型，就是这样学会了16个比特的奇偶性。用检查器做强化学习，把每个答案和它所在的那一组相比，教会了一个模型把加法做得更可靠，比光靠练习更好。而在回答的时候，试得越多，答对的就越多，只要有什么东西能分辨出哪一个是对的。"
   },
   "0e4db0ff8351": {
    "scene": "Outro",
    "en": "Reasoning over many steps is what agents do, in part eighteen. Every token of thought costs time to write, which is part nineteen. And whether the chain a model writes is really how it got its answer is a question for the last part.",
-   "zh": ""
+   "zh": "跨越许多步的推理，正是智能体要做的事，这是第18部分。每一个思考用的词元，都要花时间来写，这是第19部分。而模型写下的这条思维链，是不是它真正得出答案的方式，这个问题留给最后一部分。"
   },
   "6e571403cfcc": {
    "scene": "Outro",
    "en": "Next time: agents. A robot that can't see where it is keeps a belief over every place it might be, <bookmark mark='a'/> and sharpens it with each step and each glimpse of a door.",
-   "zh": ""
+   "zh": "下一次：智能体。一个看不见自己在哪里的机器人，会对它可能在的每一个位置，都保持一份信念，<bookmark mark='a'/>并且每走一步、每瞥见一扇门，就让这份信念更集中一些。"
   },
   "912a0e138777": {
    "scene": "Outro",
    "en": "Thanks for watching, and see you in part eighteen.",
-   "zh": ""
+   "zh": "感谢观看，第18部分见。"
   }
  },
  "title_en": "AI, Built: Part 17, Reasoning",
