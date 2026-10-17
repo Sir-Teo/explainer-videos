@@ -16,7 +16,7 @@ class Hook(VoiceoverScene):
     def chain(self):
         n = 30
         steps = VGroup(*[Circle(radius=0.16, stroke_color=GREY_B, stroke_width=2) for _ in range(n)]).arrange(RIGHT, buff=0.18)
-        steps.move_to(UP * 0.4)
+        steps.scale_to_fit_width(12.6).move_to(UP * 0.4)
         links = VGroup(*[Line(a.get_right(), b.get_left(), color=GREY_D, stroke_width=2) for a, b in zip(steps, steps[1:])])
         p = 0.97
         fail_at = 22  # one run, for illustration: the chance of any run getting through is computed below
@@ -43,7 +43,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def runs(self):
         h = load("horizon")
-        fails = np.asarray(h["runs_fail"])
+        fails = np.sort(np.asarray(h["runs_fail"]))[::-1]  # longest-lived runs on top: the edge traces the survival curve
         R, N = len(fails), 30
         cw, ch = 0.3, 0.075
         grid = VGroup(*[Rectangle(width=cw * 0.86, height=ch * 0.8, stroke_width=0, fill_color=GREY_D, fill_opacity=0.35)
@@ -64,7 +64,7 @@ class Hook(VoiceoverScene):
                 elif c == f:
                     sq.set_fill(bad_c, opacity=1.0)
                 else:
-                    sq.set_fill(dead_c, opacity=0.12)
+                    sq.set_fill(bad_c, opacity=0.22)
 
         xl = label(r"step $1$ \ $\longrightarrow$ \ step $30$", font_size=22, color=GREY_A).next_to(grid, UP, buff=0.2)
         yl = label(rf"${R}$ runs", font_size=22, color=GREY_A).rotate(PI / 2).next_to(grid, LEFT, buff=0.2)
@@ -82,9 +82,12 @@ class Hook(VoiceoverScene):
             self.play(front.animate.set_value(N), run_time=5.0, rate_func=linear)
             grid.remove_updater(paint)
             vo.wait_until("b")
-            ends = VGroup(*[SurroundingRectangle(grid[r * N + N - 1], color=WHITE, buff=0.01, stroke_width=1)
-                            for r in range(R) if fails[r] > N])
-            self.play(FadeIn(res), Create(ends))
+            # p^n: the expected number of runs still on track after n steps, as a curve over the grid's edge
+            top, left = grid.get_top()[1], grid.get_left()[0]
+            surv = VMobject(color=WHITE, stroke_width=3).set_points_smoothly(
+                [[left + n * cw, top - R * 0.97 ** n * ch, 0] for n in np.linspace(0, N, 61)])
+            sl = MathTex(r"0.97^{\,n}", font_size=32, color=WHITE).next_to(surv.get_end(), RIGHT, buff=0.15)
+            self.play(FadeIn(res), Create(surv), FadeIn(sl), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
 
