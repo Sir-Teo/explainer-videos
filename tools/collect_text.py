@@ -51,7 +51,8 @@ def check(video):
     """Print every collected string that still shows English words once translated."""
     os.environ["EXPLAINER_LANG"] = "zh"
     os.environ["EXPLAINER_VIDEO"] = video
-    from explainer import zh_text
+    from explainer import lang, zh_text
+    lang.LANG = "zh"  # imported earlier in English; patterns and phrases only apply in Chinese
     seen = {}
     for f in sorted((ROOT / "renders" / "qa" / "text").glob(f"{video}.*.jsonl")):
         for line in f.read_text().splitlines():

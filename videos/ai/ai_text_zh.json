@@ -2459,7 +2459,62 @@
     "mat": "mat",
     "because": "because",
     "was": "was",
-    "warm": "warm"
+    "warm": "warm",
+    "the bell at the ball's position": "球所在位置对应的钟形曲线",
+    "both continue ``It was a'' \\ with the same random draws": "两者都接着“It was a”往下写，\\ 用同样的随机数",
+    "bits per character on held-out text, \\ as they train": "训练途中，\\ 留出文本上的每字符比特数",
+    "SGD": "SGD",
+    "AdamW": "AdamW",
+    "It was a": "It was a",
+    "MMMMMMMMMM": "MMMMMMMMMM",
+    "$40$ plain layers": "$40$层普通网络",
+    "$40$ residual layers": "$40$层残差网络",
+    "layer $1$ \\ $\\longrightarrow$ \\ layer $40$": "第$1$层 \\ $\\longrightarrow$ \\ 第$40$层",
+    "how much gradient reaches each layer \\ (log scale)": "到达每一层的梯度有多大 \\ （对数刻度）",
+    "pre-norm: \\ the stream itself is never rescaled": "前置归一化：\\ 残差流本身从不被缩放",
+    "LayerNorm without the mean or the shift: \\ cheaper, \\ just as good": "去掉均值和平移的LayerNorm：\\ 更便宜，\\ 一样好",
+    "SwiGLU: \\ one branch gates the other, \\ number by number": "SwiGLU：\\ 一个分支逐个数地给另一个分支加门控",
+    "a width of $\\tfrac83 d$ instead of $4d$: \\ the same number of weights": "宽度用$\\tfrac83 d$而不是$4d$：\\ 权重数一样",
+    "ReLU": "ReLU",
+    "SiLU: \\ $x\\,\\sigma(x)$": "SiLU：\\ $x\\,\\sigma(x)$",
+    "Llama, \\ Qwen, \\ DeepSeek, \\ Mistral, \\ gpt-oss: \\\\ pre-norm, \\ RMSNorm, \\ a gated MLP \\ (as published)": "Llama、\\ Qwen、\\ DeepSeek、\\ Mistral、\\ gpt-oss：\\\\ 前置归一化，\\ RMSNorm，\\ 带门控的MLP \\ （据公开资料）",
+    "$\\pi_0$: \\ a chunk of $H = 50$ actions \\ ($1$ s at $50$ Hz), \\ flow-matched given the observation $o_t$; \\ $10$ steps to draw": "$\\pi_0$：\\ 一块$H = 50$个动作 \\ （$50$ Hz下$1$秒），\\ 在观测$o_t$的条件下做流匹配；\\ $10$步画出",
+    "one joint over one chunk \\ (illustrative)": "一个关节在一块动作里的角度 \\ （示意）",
+    "its cosine transform: \\ smooth motion \\\\ lives in the first few numbers": "它的余弦变换：\\ 平滑的动作 \\\\ 集中在前几个数里",
+    "$\\gamma = 10$: \\ $7$ of $50$ numbers \\\\ survive the rounding; \\ rebuilt to $0.044$; \\\\ byte-pair encoding packs \\\\ the zeros and repeats": "$\\gamma = 10$：\\ $50$个数里 \\\\ 取整后剩下$7$个；\\ 还原误差$0.044$；\\\\ 字节对编码再把 \\\\ 零和重复打包",
+    "what really happens": "真实发生的",
+    "from the same two frames, \\ the next $12$ imagined \\ (each feeding the next)": "从同样的两帧开始，\\ 想象接下来的$12$帧 \\ （每一帧喂给下一帧）",
+    "real models are trained in low precision from the start \\ (FP8, \\ FP4)": "真实的模型从一开始就用低精度训练 \\ （FP8，\\ FP4）",
+    "MXFP4": "MXFP4",
+    "NVFP4": "NVFP4",
+    "OCP standard; \\ gpt-oss ships its experts in it": "OCP标准；\\ gpt-oss的专家就用它存储",
+    "$32$ numbers in E2M1 \\ ($4$ bits each)": "$32$个E2M1数 \\ （每个$4$比特）",
+    "$16$ numbers in E2M1 \\ ($4$ bits each)": "$16$个E2M1数 \\ （每个$4$比特）",
+    "E8M0: \\ a power of two": "E8M0：\\ 2的整数次幂",
+    "NVIDIA Blackwell": "英伟达Blackwell",
+    "E4M3: \\ an 8-bit float": "E4M3：\\ 一个8比特浮点数",
+    "$4.25$ bits per weight": "每个权重$4.25$比特",
+    "$4.50$ bits per weight": "每个权重$4.50$比特",
+    "$4$-bit integers, \\ per row": "$4$比特整数，\\ 每行一个缩放因子",
+    "round one column of inputs": "把一列输入取整",
+    "its error, \\ weighted": "它的误差，\\ 加权",
+    "the columns still to come absorb it": "由还没取整的列来吸收",
+    "from real inputs: \\ which inputs move together": "来自真实输入：\\ 哪些输入一起变化",
+    "a layer's weights: \\ $6$ outputs, \\ $10$ inputs": "一层的权重：\\ $6$个输出，\\ $10$个输入",
+    "one real layer \\ ($512 \\times 128$), \\ $3$ bits: \\\\ output error \\ rounding $17\\%$, \\ GPTQ $10\\%$": "一个真实的层 \\ （$512 \\times 128$），\\ $3$比特：\\\\ 输出误差 \\ 直接取整$17\\%$，\\ GPTQ $10\\%$",
+    "$4$ bits, \\ rounded": "$4$比特，\\ 直接取整",
+    "$4$ bits, \\ rotated first": "$4$比特，\\ 先旋转",
+    "$4$ bits, \\ GPTQ": "$4$比特，\\ GPTQ",
+    "$3$ bits, \\ rounded": "$3$比特，\\ 直接取整",
+    "$3$ bits, \\ rotated first": "$3$比特，\\ 先旋转",
+    "$3$ bits, \\ GPTQ": "$3$比特，\\ GPTQ",
+    "our transformer: \\ bits per character lost": "我们的Transformer：\\ 每字符损失的比特数",
+    "a row with one outlier": "一行里有一个离群值",
+    "after a Hadamard rotation": "哈达玛旋转之后",
+    "letters of the books counted \\ (log scale)": "数过的书中字母数 \\ （对数刻度）",
+    "bits per letter on the Falcon passage": "《马耳他之鹰》测试段落上的每字母比特数",
+    "steps of gradient descent \\ (log scale)": "梯度下降的步数 \\ （对数刻度）",
+    "cross-entropy on the training pages, \\ bits": "训练页上的交叉熵，\\ 比特"
   },
   "phrases": {
     "width": "宽度",
@@ -2468,7 +2523,8 @@
     "text": "文本",
     "area": "面积",
     "finite differences: \\ worst gap": "有限差分：\\ 最大差距",
-    "PyTorch: \\ worst gap": "PyTorch：\\ 最大差距"
+    "PyTorch: \\ worst gap": "PyTorch：\\ 最大差距",
+    "bits/char": "比特/字符"
   },
   "patterns": [
     [
@@ -2778,6 +2834,18 @@
     [
       "^cached per token and layer: \\\\ \\$(\\d+)\\$ \\\\ \\$\\+\\$ \\\\ \\$(\\d+)\\$ numbers$",
       "每个词元、每一层缓存：\\\\ $\\1$ \\\\ $+$ \\\\ $\\2$个数"
+    ],
+    [
+      "^\\\\text\\{step \\}([\\d{},]+)$",
+      "\\\\text{第}\\1\\\\text{步}"
+    ],
+    [
+      "^\\$(\\d+)\\$ letters? of context$",
+      "$\\1$个字母的上下文"
+    ],
+    [
+      "^bits per character \\\\ \\(axis from \\$([\\d.]+)\\$\\)$",
+      "每字符比特数 \\\\ （坐标轴从$\\1$开始）"
     ]
   ]
 }
