@@ -207,16 +207,17 @@ class Score(VoiceoverScene, ThreeDScene):
                     color=GREY_A).next_to(ax, DOWN, buff=0.9)
         with self.voiceover(
             "How does a denoiser learn this? Here is ours being trained. At each checkpoint, we stop, and use it to "
-            "draw six hundred points from the same noise. <bookmark mark='a'/> Untrained, it moves the noise "
-            "nowhere useful. <bookmark mark='b'/> Within a few dozen steps it learns the crudest fact about the data, "
-            "where its centre is, and everything collapses toward it. <bookmark mark='c'/> Then the two letters "
-            "separate, and the strokes thin out and sharpen. Each step only ever asked it to guess the noise in "
-            "one blurred point; the shape emerges from millions of those guesses."
+            "draw six hundred points from the same noise. <bookmark mark='a'/> Untrained, it flings them all over "
+            f"the place. <bookmark mark='b'/> Within {checks[1]} steps it already has the rough shape: the loss "
+            "plunges in the first hundred steps. <bookmark mark='c'/> The rest of training is refinement. The loss "
+            f"barely moves, but the strokes keep sharpening: the distance from the data goes from {sw[1]:.2f} to "
+            f"{sw[-1]:.2f}, not smoothly, but on the whole. Each step only ever asked it to guess the noise in one "
+            "blurred point; the shape emerges from millions of those guesses."
         ) as vo:
             self.play(Create(frame), FadeIn(pts), Create(ax), FadeIn(yn), FadeIn(xn), FadeIn(tag))
             self.add(dot, cnt, swl)
             vo.wait_until("a")
-            marks = {2: "b", 4: "c"}
+            marks = {1: "b", 2: "c"}
             for k in range(1, len(checks)):
                 if k in marks:
                     vo.wait_until(marks[k])
