@@ -2523,7 +2523,66 @@
     "rebuild, \\ \\ pull codes to the outputs, \\ \\ keep outputs near their codes": "重建，\\ \\ 把码字拉向输出，\\ \\ 让输出靠近自己的码字",
     "FSQ: \\ round each number to $L$ levels: \\\\ a fixed grid of $L^d$ codes, \\ nothing to collapse": "FSQ：\\ 每个数取整到$L$个档位：\\\\ 一张固定的$L^d$个码字的网格，\\ 没有什么会塌缩",
     "schematic: \\ $7$ codes in $2$ dimensions": "示意：\\ 二维空间里的$7$个码字",
-    "A.~van den Oord et al., \\textit{VQ-VAE} (2017); \\ F.~Mentzer et al., \\textit{FSQ} (2023)": "A.~van den Oord等，\\textit{VQ-VAE}（2017）；\\ F.~Mentzer等，\\textit{FSQ}（2023）"
+    "A.~van den Oord et al., \\textit{VQ-VAE} (2017); \\ F.~Mentzer et al., \\textit{FSQ} (2023)": "A.~van den Oord等，\\textit{VQ-VAE}（2017）；\\ F.~Mentzer等，\\textit{FSQ}（2023）",
+    "The objective, exactly": "目标函数，精确地写出来",
+    "What do GRPO and its successors optimize?": "GRPO和它的后继者，到底在优化什么？",
+    "how much likelier the token is now \\\\ than when the answer was sampled": "这个词元现在的概率 \\\\ 是采样时的多少倍",
+    "the group's own baseline \\ (chapter two)": "组内自己的基准 \\ （第2章）",
+    "a good answer: \\ $\\hat A > 0$": "好回答：\\ $\\hat A > 0$",
+    "a bad answer: \\ $\\hat A < 0$": "坏回答：\\ $\\hat A < 0$",
+    "outside the band: \\\\ no more push": "出了这条带：\\\\ 不再推动",
+    "J.~Schulman et al., \\textit{PPO} (2017); \\ Z.~Shao et al., \\textit{DeepSeekMath} (2024)": "J.~Schulman等，\\textit{PPO}（2017）；\\ Z.~Shao等，\\textit{DeepSeekMath}（2024）",
+    "never negative; \\ zero only where nothing moved; \\\\ on average, exactly the KL": "从不为负；\\ 只有什么都没变时才是0；\\\\ 平均起来恰好是KL",
+    "how far from the start: \\ KL, \\ bits per answer": "离出发点多远：\\ KL，\\ 每个回答的比特数",
+    "RL steps": "强化学习步数",
+    "GRPO, \\ $\\beta = 0.04$": "GRPO，\\ $\\beta = 0.04$",
+    "no penalty": "没有惩罚",
+    "J.~Schulman, \\textit{Approximating KL Divergence} (2020)": "J.~Schulman，\\textit{Approximating KL Divergence}（2020）",
+    "the model's probability for each answer \\ (the right one in green)": "模型给每个答案的概率 \\ （正确的是绿色）",
+    "the goal: \\ reward, \\ but stay near the start": "目标：\\ 奖励，\\ 但留在出发点附近",
+    "its exact solution": "它的精确解",
+    "so the reward is hidden \\\\ in the best model itself": "所以奖励就藏在 \\\\ 最优模型自身里",
+    "people pick between pairs \\ (Bradley \\& Terry): \\\\ $Z$ cancels": "人在两个之间挑一个 \\ （Bradley \\& Terry）：\\\\ $Z$消掉了",
+    "no reward model, \\ no sampling: \\\\ just pairs, \\ right and wrong": "没有奖励模型，\\ 不用采样：\\\\ 只要成对的对和错",
+    "R.~Rafailov et al., \\textit{Direct Preference Optimization} (2023)": "R.~Rafailov等，\\textit{Direct Preference Optimization}（2023）",
+    "change in $\\log_2 p$, \\ on pairs held out": "$\\log_2 p$的变化，\\ 在留出的成对样本上",
+    "DPO steps": "DPO步数",
+    "the right answers \\ (winners)": "正确答案 \\ （胜者）",
+    "the wrong ones \\ (losers)": "错误答案 \\ （败者）",
+    "N.~Razin et al., \\textit{Unintentional Unalignment: Likelihood Displacement in DPO} (2024)": "N.~Razin等，\\textit{Unintentional Unalignment: Likelihood Displacement in DPO}（2024）",
+    "GRPO \\ (DeepSeekMath, 2024)": "GRPO \\ （DeepSeekMath，2024）",
+    "as above": "同上",
+    "Dr.~GRPO \\ (2025)": "Dr.~GRPO \\ （2025）",
+    "no bias toward easy questions \\\\ or long wrong answers": "不偏向简单的题 \\\\ 也不偏袒冗长的错误回答",
+    "DAPO \\ (2025)": "DAPO \\ （2025）",
+    "clip higher; \\ drop groups \\\\ with no signal": "放宽截断上限；\\ 丢掉 \\\\ 没有信号的组",
+    "GSPO \\ (Qwen3, 2025)": "GSPO \\ （Qwen3，2025）",
+    "one ratio per answer, \\\\ clipped as a whole": "每个回答一个比值，\\\\ 整体截断",
+    "DPO \\ (2023)": "DPO \\ （2023）",
+    "offline pairs": "离线的成对样本",
+    "policy \\\\ gradient": "策略 \\\\ 梯度",
+    "policy gradient": "策略梯度",
+    "GRPO": "GRPO",
+    "Dr.~GRPO": "Dr.~GRPO",
+    "DAPO": "DAPO",
+    "GSPO": "GSPO",
+    "DPO": "DPO",
+    "right after $300$ steps: \\\\ same start, \\\\ same questions": "$300$步后的正确率：\\\\ 同样的起点，\\\\ 同样的题目",
+    "Z.~Liu et al., \\textit{Dr.~GRPO} (2025); \\ Q.~Yu et al., \\textit{DAPO} (2025); \\ C.~Zheng et al., \\textit{GSPO} (2025)": "Z.~Liu等，\\textit{Dr.~GRPO}（2025）；\\ Q.~Yu等，\\textit{DAPO}（2025）；\\ C.~Zheng等，\\textit{GSPO}（2025）",
+    "groups whose $8$ answers are all right \\ (or all wrong): \\ no signal": "$8$个回答全对 \\ （或全错）的组：\\ 没有信号",
+    "RL steps \\ (plain policy gradient; \\ average of $20$)": "强化学习步数 \\ （普通策略梯度；\\ $20$步平均）",
+    "entropy of each digit, \\ bits": "每个数字的熵，\\ 比特",
+    "pass@$k$: \\ any of $k$ tries right": "pass@$k$：\\ $k$次尝试中有一次对",
+    "tries, \\ $k$": "尝试次数，\\ $k$",
+    "before RL": "强化学习之前",
+    "after GRPO": "GRPO之后",
+    "Y.~Yue et al., \\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?} (2025)": "Y.~Yue等，\\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?}（2025）",
+    "the clipped objective": "截断的目标函数",
+    "J.~Schulman et al., \\textit{PPO} (2017); \\ R.~Rafailov et al., \\textit{DPO} (2023); \\ Z.~Liu et al., \\textit{Dr.~GRPO} (2025); \\ Q.~Yu et al., \\textit{DAPO} (2025)": "J.~Schulman等，\\textit{PPO}（2017）；\\ R.~Rafailov等，\\textit{DPO}（2023）；\\ Z.~Liu等，\\textit{Dr.~GRPO}（2025）；\\ Q.~Yu等，\\textit{DAPO}（2025）",
+    "C.~Zheng et al., \\textit{GSPO} (2025); \\ Y.~Yue et al., \\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity\\ldots?} (2025)": "C.~Zheng等，\\textit{GSPO}（2025）；\\ Y.~Yue等，\\textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity\\ldots?}（2025）",
+    "\\hat A = r - \\bar r, \\quad \\textstyle\\sum_t \\text{ not } \\frac{1}{|o_i|}\\sum_t": "\\hat A = r - \\bar r, \\quad \\textstyle\\sum_t \\text{ 而不是 } \\frac{1}{|o_i|}\\sum_t",
+    "\\hat A_i = 0 \\ \\text{ for every } i \\ \\Rightarrow\\ \\nabla J = 0": "\\hat A_i = 0 \\ \\text{ 对所有 } i \\ \\Rightarrow\\ \\nabla J = 0",
+    "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{-ratio}\\big)": "-\\log\\sigma\\big(\\beta\\,\\Delta \\log\\text{比值}\\big)"
   },
   "phrases": {
     "width": "宽度",
@@ -2855,6 +2914,22 @@
     [
       "^bits per character \\\\ \\(axis from \\$([\\d.]+)\\$\\)$",
       "每字符比特数 \\\\ （坐标轴从$\\1$开始）"
+    ],
+    [
+      "^\\\\text\\{GRPO step \\}([\\d{},]+)$",
+      "\\\\text{GRPO 第}\\1\\\\text{步}"
+    ],
+    [
+      "^start: \\\\ \\$(\\d+)\\\\%\\$$",
+      "起点：\\\\ $\\1\\\\%$"
+    ],
+    [
+      "^\\$([\\d{},]+)\\$ pairs from the starting model: \\\\\\\\ right on new questions \\\\ \\$(\\d+)\\\\% \\\\to (\\d+)\\\\%\\$$",
+      "从起始模型取$\\1$对：\\\\\\\\ 新题正确率 \\\\ $\\2\\\\% \\\\to \\3\\\\%$"
+    ],
+    [
+      "^DAPO draws more questions \\\\\\\\ until each batch is full of signal: \\\\\\\\ \\$([\\d.]+)\\\\times\\$ the questions, \\\\ on average$",
+      "DAPO会多抽题目，\\\\\\\\ 直到每个批次都满是信号：\\\\\\\\ 平均要$\\1\\\\times$的题目"
     ]
   ]
 }
