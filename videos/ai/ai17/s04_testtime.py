@@ -54,9 +54,13 @@ class TestTime(VoiceoverScene):
         with self.voiceover(
             "There's another way to spend computation: at answer time. Take our addition model, before the "
             f"reinforcement learning, and let it answer each of {nq} questions {n} times. <bookmark mark='a'/> Green "
-            f"is right, red is wrong. {all_right} questions it always gets right, {never} it never does, and "
-            f"{some} it gets right only sometimes. <bookmark mark='b'/> For those, trying again helps. "
-            "<bookmark mark='c'/> If c of n samples are right, the chance that at least one of k tries is right is "
+            "is right, red is wrong. "
+            + (f"Not one question is always right, and not one is always wrong: each of the {nq} comes out right "
+               "only some of the time. <bookmark mark='b'/> So trying again always has a chance of helping. "
+               if all_right == 0 and never == 0 else
+               f"{all_right} questions it always gets right, {never} it never does, and {some} it gets right only "
+               "sometimes. <bookmark mark='b'/> For those, trying again helps. ")
+            + "<bookmark mark='c'/> If c of n samples are right, the chance that at least one of k tries is right is "
             "one minus n minus c choose k, over n choose k. It's called pass at k, and it needs a checker to tell "
             "which try was the right one."
         ) as vo:
