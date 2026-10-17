@@ -164,7 +164,8 @@ class Words(VoiceoverScene):
             for k, mark in zip(ks[1:], "bcde"):
                 vo.wait_until(mark)
                 new = VGroup(*[column(k, x).next_to(h_, DOWN, buff=0.45) for x, h_ in zip(words, heads)])
-                self.play(Transform(cols, new), t.animate.set_value(k), run_time=1.0)
+                self.play(FadeOut(cols), FadeIn(new), t.animate.set_value(k), run_time=1.0)  # words cross-fade, never morph
+                cols = new
         self.wait(0.3)
         self.remove(cnt)
         self.clear_scene()
