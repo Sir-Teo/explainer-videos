@@ -191,7 +191,7 @@ class Score(VoiceoverScene, ThreeDScene):
         L = np.asarray(d["losses"])
         sw = [float(v) for v in d["sw"]]
         S, sh = 0.85, np.array([-3.0, -0.2, 0])
-        pts = cloud(np.clip(snaps[0], -3.4, 3.4), DATA, radius=0.022, scale=S, shift=sh, opacity=0.85)
+        pts = cloud(np.clip(snaps[0], [-3.0, -2.2], [3.0, 2.2]), DATA, radius=0.022, scale=S, shift=sh, opacity=0.85)
         frame = Rectangle(width=6.0 * S, height=4.4 * S, stroke_color=GREY_D, stroke_width=1.5).move_to(sh)
         ax = CornerAxes(x_range=[0, checks[-1], checks[-1] / 4], y_range=[0, float(L[:, 1].max()) * 1.05, 0.5], x_length=4.8,
                         y_length=2.6, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, 0.4, 0])
@@ -222,7 +222,7 @@ class Score(VoiceoverScene, ThreeDScene):
                 if k in marks:
                     vo.wait_until(marks[k])
                 seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]
-                anims = [t.animate.set_value(checks[k]), *move_cloud(pts, np.clip(snaps[k], -3.4, 3.4), scale=S, shift=sh)]
+                anims = [t.animate.set_value(checks[k]), *move_cloud(pts, np.clip(snaps[k], [-3.0, -2.2], [3.0, 2.2]), scale=S, shift=sh)]
                 if len(seg) > 1:
                     anims.append(Create(VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners(seg)))
                 self.play(*anims, run_time=1.4)
