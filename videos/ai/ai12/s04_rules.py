@@ -48,7 +48,7 @@ class Rules(VoiceoverScene):
         ax, deco = self.err_axes(c, [-2.6, -1.0, 0])
         ca = curve(ax, Ns, np.minimum(np.asarray(c["err_add"]), 2.5), ADD, 4)
         th = DashedLine(ax.c2p(0, -1 / d), ax.c2p(Ns[-1], min((Ns[-1] - 1) / d, 2.5)), color=GREY_B, stroke_width=1.5)
-        thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(200, min(200 / d, 2.3)), DR, buff=0.1)
+        thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(110, 110 / d), DR, buff=0.12)
         note_ = label(rf"$d = {d}$: \ by $N = {d}$ pairs, \\ the leaks are as big \\ as the answer", font_size=26,
                       color=ADD).move_to([4.2, -0.6, 0])
         # the overlaps themselves: |k_i . k_j| for random unit keys; the diagonal is each pair's own key
@@ -64,8 +64,9 @@ class Rules(VoiceoverScene):
         gr = gram(16)
         row = SurroundingRectangle(gr[0], buff=0.02, color=WHITE, stroke_width=2).stretch_to_fit_height(3.6 / 16 * 1.1)
         row.move_to([gr[0].get_x(), gr[0].get_top()[1] - 3.6 / 16 * 2.5, 0])
-        rl = label(r"reading pair $j$: \ its own key (the bright one), \ plus a little of every other", font_size=22,
+        rl = label(r"reading pair $j$: \\ its own key (the bright one), \\ plus a little of every other", font_size=22,
                    color=GREY_A).next_to(gr[0], RIGHT, buff=0.5)
+        keep_in_frame(rl)
         with self.voiceover(
             "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its "
             "key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how "
