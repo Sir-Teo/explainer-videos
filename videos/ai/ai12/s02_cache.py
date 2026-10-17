@@ -14,6 +14,7 @@ class KVCache(VoiceoverScene):
         self.why()
         self.shrink()
         self.latent()
+        self.positions()
 
     def card(self):
         card = chapter_card(1, r"The cache", r"What does attention have to remember?", part=12)
@@ -153,5 +154,60 @@ class KVCache(VoiceoverScene):
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("d")
             self.play(FadeIn(res))
+        self.wait(0.3)
+        self.clear_scene()
+
+
+    # ------------------------------------------------------------------
+    def positions(self):
+        m = load("mla")
+        k = load("kvcache")
+        D = k["configs"]["deepseek"]
+        colors = {r"W^{UK}": K, r"c_n": C.BITS, r"q": Q, r"R_m": C.SURPRISE, r"R_n": C.SURPRISE, r"R_{n-m}": C.SURPRISE,
+                  r"k^R_n": C.SURPRISE, r"q^R": C.SURPRISE}
+
+        def sci(x):
+            a, e = f"{x:.0e}".split("e")
+            return rf"{a} \times 10^{{{int(e)}}}"
+
+        f1 = cmath(r"q^{\top}", r"W^{UK}", r"c_n", "=", r"(", r"W^{UK\top}", r"q", r")^{\top}", r"c_n", colors=colors, font_size=34)
+        f2 = cmath(r"(", r"R_m", r"q", r")^{\top}", r"(", r"R_n", r"W^{UK}", r"c_n", r")", "=", r"q^{\top}", r"R_{n-m}", r"W^{UK}",
+                   r"c_n", colors=colors, font_size=34)
+        f3 = cmath(r"q^{\top}", r"W^{UK}", r"c_n", "+", r"(", r"R_m", r"q^R", r")^{\top}", r"(", r"R_n", r"k^R_n", r")",
+                   colors=colors, font_size=34)
+        fs = VGroup(f1, f2, f3).arrange(DOWN, aligned_edge=LEFT, buff=0.75).move_to([-1.6, 0.2, 0])
+        n1 = label(rf"fold once, \ use for every key \\ checked: \ ${sci(m['diff_plain'])}$", font_size=20, color=C.INTERVAL)
+        n2 = label(rf"$R_{{n-m}}$ changes with every pair: \\ nothing to fold; \ folding anyway: \ off by "
+                   rf"${100 * float(m['rel_rope_folded']):.0f}\%$", font_size=20, color=C.SURPRISE)
+        n3 = label(rf"positions in a small extra key, \\ shared by all heads: \ ${sci(m['diff_decoupled'])}$", font_size=20,
+                   color=C.INTERVAL)
+        for f_, n_ in ((f1, n1), (f2, n2), (f3, n3)):
+            n_.next_to(f_, RIGHT, buff=0.5)
+            keep_in_frame(n_)
+        br = Brace(VGroup(*f2[11:12]), DOWN, color=C.SURPRISE)
+        head = label(r"rotary positions (Part 11) \ break the folding trick", font_size=28).to_edge(UP, buff=0.35)
+        lat = Rectangle(width=D["kv_lora_rank"] / 100, height=0.35, stroke_width=0, fill_color=C.BITS, fill_opacity=0.85)
+        rk = Rectangle(width=D["rope_dim"] / 100, height=0.35, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.85)
+        cache = VGroup(lat, rk).arrange(RIGHT, buff=0.04).to_edge(DOWN, buff=0.7)
+        cl = label(rf"cached per token and layer: \ ${D['kv_lora_rank']}$ \ $+$ \ ${D['rope_dim']}$ numbers", font_size=22,
+                   color=GREY_A).next_to(cache, UP, buff=0.12)
+        with self.voiceover(
+            "There's a catch, and it's part eleven's rotations. <bookmark mark='a'/> Without positions, the key matrix "
+            "folds into the query once, and every cached latent is scored directly. We checked it with random "
+            "weights: identical, to rounding error. <bookmark mark='b'/> But with rotary positions, the query is "
+            "rotated by its position and the key by its own, and what's left between them is a rotation by their "
+            "distance. It sits in the middle and changes with every pair, so there's no single matrix to fold. "
+            f"Folding anyway gives scores off by {100 * float(m['rel_rope_folded']):.0f} percent. <bookmark mark='c'/> "
+            "DeepSeek's answer is to decouple: the positions go into a small extra key, the same for every head, "
+            f"cached next to the latent, {D['kv_lora_rank']} numbers plus {D['rope_dim']}. The content part folds "
+            "as before, and the scores match exactly again."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(Write(f1), FadeIn(n1))
+            vo.wait_until("b")
+            self.play(Write(f2), GrowFromCenter(br), FadeIn(n2))
+            vo.wait_until("c")
+            self.play(Write(f3), FadeIn(n3), FadeIn(cache), FadeIn(cl))
         self.wait(0.3)
         self.clear_scene()

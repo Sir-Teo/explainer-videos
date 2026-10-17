@@ -18,6 +18,10 @@ Items:
                latest values
     ssm        a diagonal state-space model's memory: impulse responses for several step sizes, and a selective one
                (step size set by the input) holding a marked value through a stretch of noise
+    mla        multi-head latent attention's folding trick, checked with random weights: without positions, the score
+               computed from unpacked keys and from the latent with the key matrix folded into the query agree; with
+               rotary positions applied to the unpacked keys they don't; with DeepSeek's decoupled rotary key (a small
+               shared key that carries the positions, cached next to the latent) they agree again
     delta      the delta rule up close: the update as a rank-one change of a linear map (a 2 x 2 example, with beta
                1/2, 1 and 2); the gated delta rule run step by step and chunk by chunk (the WY form of a product of
                (I - beta k k^T), one triangular solve per chunk), agreeing to rounding error; the decaying rule as
@@ -274,6 +278,46 @@ def compute_mqar():
 
 
 # ---------------------------------------------------------------------------
+def compute_mla():
+    g = rng(2024)  # DeepSeek-V2 (2024)
+    d, dc, dh, dr, n = 64, 16, 8, 4, 12  # model width, latent, head size, rotary size, tokens
+
+    def rope(x, pos, dim):
+        th = 10000.0 ** (-np.arange(dim // 2) * 2 / dim)
+        a = pos * th
+        x1, x2 = x[: dim // 2], x[dim // 2:]
+        return np.concatenate([x1 * np.cos(a) - x2 * np.sin(a), x1 * np.sin(a) + x2 * np.cos(a)])
+
+    H = g.normal(size=(n, d))
+    W_dkv, W_uk, W_q = g.normal(size=(dc, d)) / 8, g.normal(size=(dh, dc)) / 4, g.normal(size=(dh, d)) / 8
+    C = H @ W_dkv.T  # the cached latents
+    m = n - 1  # the query's position
+    q = W_q @ H[m]
+    W_fold = W_uk.T @ q  # the key matrix folded into the query, once
+    out = {}
+    # 1. no positions: score = q . (W_uk c) = (W_uk^T q) . c
+    explicit = np.array([q @ (W_uk @ C[j]) for j in range(n)])
+    folded = C @ W_fold
+    out["diff_plain"] = float(np.abs(explicit - folded).max())
+    # 2. rotary positions on the unpacked keys and the query: R_m q . R_j W_uk c = q . R_{j-m} W_uk c; the rotation sits
+    #    between the query and W_uk, different for every pair, so no single folded matrix exists
+    explicit_r = np.array([rope(q, m, dh) @ rope(W_uk @ C[j], j, dh) for j in range(n)])
+    out["diff_rope_folded"] = float(np.abs(explicit_r - folded).max())  # what the folded shortcut would give: wrong
+    out["rel_rope_folded"] = out["diff_rope_folded"] / float(np.abs(explicit_r).max())
+    # 3. decoupled: content part without positions (folded) + a small shared rotary key computed from the token
+    W_kr, W_qr = g.normal(size=(dr, d)) / 8, g.normal(size=(dr, d)) / 8
+    Kr = np.array([rope(W_kr @ H[j], j, dr) for j in range(n)])  # cached next to the latent: dc + dr numbers a token
+    qr = rope(W_qr @ H[m], m, dr)
+    explicit_d = np.array([q @ (W_uk @ C[j]) + qr @ Kr[j] for j in range(n)])
+    folded_d = C @ W_fold + Kr @ qr
+    out["diff_decoupled"] = float(np.abs(explicit_d - folded_d).max())
+    print(f"    no positions: {out['diff_plain']:.1e}; rotary on unpacked keys, folded anyway: off by "
+          f"{100 * out['rel_rope_folded']:.0f}%; decoupled rotary key: {out['diff_decoupled']:.1e}", flush=True)
+    assert out["diff_plain"] < 1e-12 and out["diff_decoupled"] < 1e-12 and out["rel_rope_folded"] > 0.05
+    return out
+
+
+# ---------------------------------------------------------------------------
 def compute_delta():
     import time
 
@@ -376,6 +420,7 @@ ITEMS = {
     "ssm": compute_ssm,
     "mqar": compute_mqar,
     "delta": compute_delta,
+    "mla": compute_mla,
 }
 CACHE.items = ITEMS
 
