@@ -164,9 +164,10 @@ class Grok(VoiceoverScene):
             "by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first "
             "complete explanations of what a trained network computes. Part twenty takes that idea to real models."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01), FadeIn(bl), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01), FadeIn(bl), run_time=1.5)
+            self.play(Indicate(VGroup(*[bars[i] for i in range(len(bars)) if bars[i].height > 0.5 * max(b_.height for b_ in bars)]),
+                               color=C.BITS, scale_factor=1.05))  # the few frequencies that carry the weight
             vo.wait_until("w")
             self.play(LaggedStart(*[FadeIn(d_) for d_ in ring1], lag_ratio=0.01), FadeIn(kl1), FadeIn(rl), run_time=1.5)
             vo.wait_until("x")
