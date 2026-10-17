@@ -31,9 +31,13 @@ class Induction(VoiceoverScene):
         row = char_row(txt, 12.4, font_size=22).move_to(UP * 2.7)
         for i in range(half, len(txt)):
             row[i].set_color(C.BITS)
-        ax = Axes(x_range=[0, L, 10], y_range=[0, 6, 1], x_length=8.6, y_length=3.6, tips=False,
+        m1, m2 = float(b1[5:].mean()), float(b2[5:].mean())
+        copies = m2 < 0.5 * m1  # did our transformer learn to copy from its context?
+        top = float(np.ceil(max(b1.max(), b2.max(), 6) + 0.5))
+        ax = Axes(x_range=[0, L, 10], y_range=[0, top, 2], x_length=8.6, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([-1.0, -0.9, 0])
-        yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in (0, 2, 4, 6)])
+        yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
+                      for v in range(0, int(top) + 1, 2)])
         xn = label(r"position in the string", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
         yn = label(r"bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         c1 = curve(ax, np.arange(1, L), b1, GREY_B, 3)
@@ -41,18 +45,24 @@ class Induction(VoiceoverScene):
         lg = math.log2(26)
         ref = DashedLine(ax.c2p(0, lg), ax.c2p(L, lg), color=GREY_D, stroke_width=1.5)
         refl = MathTex(r"\log_2 26", font_size=24, color=GREY_B).next_to(ax.c2p(L, lg), RIGHT, buff=0.1)
-        k1 = label(rf"first time: \ ${b1[5:].mean():.1f}$ bits", font_size=26, color=GREY_B).move_to([4.6, 0.4, 0])
-        k2 = label(rf"second time: \ ${b2[5:].mean():.2f}$ bits", font_size=26, color=C.BITS).next_to(k1, DOWN, buff=0.3)
+        k1 = label(rf"first time: \ ${m1:.1f}$ bits", font_size=26, color=GREY_B).move_to([4.6, 0.4, 0])
+        k2 = label(rf"second time: \ ${m2:.1f}$ bits", font_size=26, color=C.BITS).next_to(k1, DOWN, buff=0.3)
         k2.align_to(k1, LEFT)
         tag = note(rf"averaged over $24$ random strings of ${L}$ letters, \ each shown twice").to_edge(DOWN, buff=0.25)
-        assert b1[5:].mean() > 3.5 and b2[5:].mean() < 0.5 * b1[5:].mean()
-        with self.voiceover(
-            "Here's a test no novel prepared our transformer for: random letters, then the same random letters "
-            "again. <bookmark mark='a'/> The first time through, nothing can be predicted: about four point seven "
-            "bits a letter, a guess among twenty-six. <bookmark mark='b'/> The second time, it predicts almost "
-            f"every letter: {b2[5:].mean():.1f} bits. It has never seen these strings. It copies them from its own "
-            "context, as it reads."
-        ) as vo:
+        if copies:
+            text = ("Here's a test no novel prepared our transformer for: random letters, then the same random letters "
+                    f"again. <bookmark mark='a'/> The first time through, nothing can be predicted: {m1:.1f} bits a "
+                    f"letter. <bookmark mark='b'/> The second time, it predicts almost every letter: {m2:.1f} bits. "
+                    "It has never seen these strings. It copies them from its own context, as it reads.")
+        else:
+            text = ("Here's a test no novel prepared our transformer for: random letters, then the same random letters "
+                    f"again. <bookmark mark='a'/> The first time through, it does worse than a blind guess: {m1:.1f} "
+                    "bits a letter, against four point seven for a guess among twenty-six, because random letters look "
+                    "nothing like a novel and it bets on English. <bookmark mark='b'/> And the second time, no better: "
+                    f"{m2:.1f} bits. A model that copied from its own context would predict almost every letter. Ours "
+                    "can't yet: copying needs a particular piece of machinery, and our small transformer, trained for "
+                    "an hour or two, hasn't built it. Big models build it early. Here's what it is.")
+        with self.voiceover(text) as vo:
             self.play(FadeIn(row), Create(ax), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(ref), FadeIn(refl), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(c1), FadeIn(k1), run_time=2.0)

@@ -20,7 +20,8 @@ series' own small transformer, which joins the scoreboard. A hook and six chapte
 * **Longer than it was trained for.** Our model at four times its training context: as trained it breaks past 256
   characters; position interpolation, NTK-aware scaling and YaRN, with no retraining, measured position by position;
   attention sinks in our model.
-* **Induction heads.** Our transformer copies a random string the second time it sees it; the two-head mechanism
+* **Induction heads.** A random string shown twice: our small transformer does no better the second time (it has
+  not built induction heads in its short training); the two-head mechanism
   ([a][b] … [a] → [b]); a two-layer attention-only model forming an induction head in a sudden drop of the loss, a
   one-layer model unable to, and the two heads' patterns.
 * **Learning inside the prompt.** In-context linear regression: one layer of linear attention, trained, learns the
