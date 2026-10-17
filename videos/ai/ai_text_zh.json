@@ -2514,7 +2514,16 @@
     "letters of the books counted \\ (log scale)": "数过的书中字母数 \\ （对数刻度）",
     "bits per letter on the Falcon passage": "《马耳他之鹰》测试段落上的每字母比特数",
     "steps of gradient descent \\ (log scale)": "梯度下降的步数 \\ （对数刻度）",
-    "cross-entropy on the training pages, \\ bits": "训练页上的交叉熵，\\ 比特"
+    "cross-entropy on the training pages, \\ bits": "训练页上的交叉熵，\\ 比特",
+    "rows: \\ $12$ pictures; \\ columns: \\ their $12$ captions": "行：\\ $12$张图片；\\ 列：\\ 它们的$12$条描述",
+    "CLIP's loss on each batch of $128$": "CLIP在每个$128$对批次上的损失",
+    "the gradient at $e_k$, \\\\ copied to $z$": "$e_k$处的梯度，\\\\ 照搬给$z$",
+    "the nearest code: \\ no gradient through $\\arg\\min$": "最近的码字：\\ $\\arg\\min$没有梯度",
+    "sg: \\ stop the gradient. \\ Forward: \\ $e_k$; \\ backward: \\ as if $z$": "sg：\\ 截断梯度。\\ 前向：\\ $e_k$；\\ 反向：\\ 当作$z$",
+    "rebuild, \\ \\ pull codes to the outputs, \\ \\ keep outputs near their codes": "重建，\\ \\ 把码字拉向输出，\\ \\ 让输出靠近自己的码字",
+    "FSQ: \\ round each number to $L$ levels: \\\\ a fixed grid of $L^d$ codes, \\ nothing to collapse": "FSQ：\\ 每个数取整到$L$个档位：\\\\ 一张固定的$L^d$个码字的网格，\\ 没有什么会塌缩",
+    "schematic: \\ $7$ codes in $2$ dimensions": "示意：\\ 二维空间里的$7$个码字",
+    "A.~van den Oord et al., \\textit{VQ-VAE} (2017); \\ F.~Mentzer et al., \\textit{FSQ} (2023)": "A.~van den Oord等，\\textit{VQ-VAE}（2017）；\\ F.~Mentzer等，\\textit{FSQ}（2023）"
   },
   "phrases": {
     "width": "宽度",
