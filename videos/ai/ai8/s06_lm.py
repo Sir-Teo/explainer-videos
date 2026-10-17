@@ -127,27 +127,51 @@ class NeuralLM(VoiceoverScene):
     def vectors(self):
         d = load("lm")
         xy = np.asarray(d["xy"])
-        chars = d["chars"]
-        xy = xy / np.abs(xy).max(0) * np.array([5.6, 2.8])
+        chars = d["xy_chars"]
+        xy = (xy - (xy.max(0) + xy.min(0)) / 2) / np.ptp(xy, 0) * np.array([11.0, 4.6])
+        # nudge overlapping characters apart (a few hundredths of the picture at most) so each one can be read
+        P = xy.copy()
+        for _ in range(300):
+            D = P[:, None] - P[None]
+            dist = np.linalg.norm(D, axis=-1) + np.eye(len(P))
+            close = (dist < 0.36) & ~np.eye(len(P), dtype=bool)
+            P += 0.25 * (D / dist[..., None] * ((0.36 - dist) * close)[..., None]).sum(1)
+        xy = P
+
+        def kind(ch):
+            return ("vowel" if ch in "aeiouAEIOU" and ch.islower() else "consonant" if ch.isalpha() and ch.islower() else
+                    "capital" if ch.isalpha() else "digit" if ch.isdigit() else "punct")
+
+        cols = dict(vowel=C.BITS, consonant=C.TRUE_P, capital=C.MODEL_Q, digit=C.INTERVAL, punct=GREY_B)
         pts = VGroup()
         for (x, y), ch in zip(xy, chars):
-            col = (C.BITS if ch in "aeiouAEIOU" else C.TRUE_P if ch.isalpha() and ch.islower() else
-                   C.MODEL_Q if ch.isalpha() else C.INTERVAL if ch.isdigit() else GREY_B)
-            pts.add(Text("␣" if ch == " " else ch, font=MONO, font_size=24, color=col).move_to([x, y - 0.3, 0]))
-        head = label(r"The learned character vectors, \ seen along their two main directions", font_size=30).to_edge(UP, buff=0.35)
+            col = C.BITS if ch in "aeiouAEIOU" else cols[kind(ch)]
+            pts.add(Text("␣" if ch == " " else ch, font=MONO, font_size=24, color=col).move_to([x, y - 0.1, 0]))
+        # a soft halo round each group: lower case (vowels with consonants), capitals, digits, punctuation
+        halos = VGroup()
+        for group, col in (({"vowel", "consonant"}, C.TRUE_P), ({"capital"}, C.MODEL_Q), ({"digit"}, C.INTERVAL), ({"punct"}, GREY_B)):
+            Q = np.array([[x, y - 0.1] for (x, y), ch in zip(xy, chars) if kind(ch) in group])
+            if len(Q) < 2:
+                continue
+            c, sd = Q.mean(0), Q.std(0)
+            halos.add(Ellipse(width=max(4.4 * sd[0], 0.9), height=max(4.4 * sd[1], 0.9), stroke_color=col, stroke_width=1.5,
+                              stroke_opacity=0.5, fill_color=col, fill_opacity=0.07).move_to([c[0], c[1], 0]))
+        nudge = note(r"positions nudged apart a little, \ so every character can be read").to_corner(DR, buff=0.25)
+        head = label(r"The output layer's character vectors, \ seen along their two main directions", font_size=30).to_edge(UP, buff=0.35)
+        nudge.next_to(head, DOWN, buff=0.1)
         key = VGroup(label(r"vowels", font_size=24, color=C.BITS), label(r"consonants", font_size=24, color=C.TRUE_P),
                      label(r"capitals", font_size=24, color=C.MODEL_Q), label(r"digits", font_size=24, color=C.INTERVAL),
                      label(r"punctuation", font_size=24, color=GREY_B)).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "And the table of character vectors, which nobody designed, has organized itself. Seen along its two "
-            "main directions, from part six, <bookmark mark='a'/> characters that behave alike sit together: vowels "
-            "near vowels, capitals near capitals, digits in their own corner. It's part two's word vectors again, "
-            "learned this time as a side effect of predicting."
+            "And the vectors the network scores each next character with, which nobody designed, have organized "
+            "themselves. Seen along their two main directions, from part six, <bookmark mark='a'/> characters that "
+            "behave alike sit together: vowels near vowels, capitals near capitals, digits and punctuation in their "
+            "own corners. It's part two's word vectors again, learned this time as a side effect of predicting."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.02), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.02), FadeIn(nudge), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(key))
+            self.play(FadeIn(key), LaggedStart(*[DrawBorderThenFill(h_) for h_ in halos], lag_ratio=0.3), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

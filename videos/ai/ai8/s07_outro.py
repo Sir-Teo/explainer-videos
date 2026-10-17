@@ -79,12 +79,19 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(r"Part 8, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        from videos.ai.ai8.s06_lm import load_kn
+
+        lm, kn = load("lm"), load_kn()
+        if float(lm["passage_bits"]) < float(kn["best_bits"]):
+            last = "And a small network, trained on our books, beat every counting model on the scoreboard."
+        else:
+            last = ("And a small network, trained on our books, came close to the best counting model, and mixed with "
+                    "it, beat every counting model on the scoreboard.")
         with self.voiceover(
             "Let's take stock. A unit is a weighted sum and a bend, and enough of them in one layer can approximate "
             "any curve. Depth can fold space into exponentially many pieces, though random networks don't use that "
             "power. Weights must start at the right size, two over n for ReLUs, or signals vanish or explode. "
-            "Residual connections let gradients through forty layers. And a small network, trained on our books, "
-            "beat every counting model on the scoreboard."
+            "Residual connections let gradients through forty layers. " + last
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),

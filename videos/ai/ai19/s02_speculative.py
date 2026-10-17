@@ -32,7 +32,12 @@ class Speculative(VoiceoverScene):
         draft.move_to(UP * 1.0)
         dl = label(r"a small, fast model drafts $5$ characters, one by one", font_size=24, color=DRAFT).next_to(draft, UP, buff=0.3)
         big = RoundedRectangle(width=6.0, height=1.0, corner_radius=0.15, stroke_color=TARGET, stroke_width=2.5).move_to(DOWN * 0.6)
+        bl0 = label(r"the big model: \ one run per character", font_size=24, color=TARGET).move_to(big)
         bl = label(r"the big model scores all $5$ positions in one run", font_size=24, color=TARGET).move_to(big)
+        wl = label(r"every run reads all of its weights from memory", font_size=22, color=GREY_A).next_to(big, DOWN, buff=0.3)
+        slow = VGroup(*[Text(c if c != " " else "·", font="DejaVu Sans Mono", font_size=30, color=TARGET).move_to(d)
+                        for c, d in zip(word[:3], draft)])
+        runs = [label(rf"runs: \ ${i + 1}$", font_size=24, color=TARGET).next_to(big, RIGHT, buff=0.3) for i in range(3)]
         verdict = ["ok", "ok", "ok", "no", ""]
         marks = VGroup(*[MathTex(r"\checkmark" if v == "ok" else r"\times" if v == "no" else r"", font_size=36,
                                  color=C.INTERVAL if v == "ok" else C.SURPRISE).move_to([d.get_x(), -1.5, 0])
@@ -47,11 +52,18 @@ class Speculative(VoiceoverScene):
             "since it can score every position at once, the way it does in training. <bookmark mark='c'/> Keep the "
             "drafts it agrees with; at the first disagreement, take the big model's choice and start again."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Create(big), FadeIn(bl0), FadeIn(wl))
+            for i in range(3):
+                self.play(big.animate.set_fill(TARGET, 0.35), run_time=0.35)
+                self.play(big.animate.set_fill(TARGET, 0.0), FadeIn(slow[i], shift=UP * 0.3),
+                          FadeIn(runs[i]) if i == 0 else Transform(runs[0], runs[i]), run_time=0.45)
             vo.wait_until("a")
+            self.play(FadeOut(slow), FadeOut(runs[0]), FadeOut(wl))
             self.play(FadeIn(dl), LaggedStart(*[FadeIn(d, shift=RIGHT * 0.2) for d in draft], lag_ratio=0.25), run_time=1.6)
             vo.wait_until("b")
-            self.play(Create(big), FadeIn(bl))
+            self.play(ReplacementTransform(bl0, bl), big.animate.set_fill(TARGET, 0.25),
+                      *[Indicate(d, color=TARGET, scale_factor=1.08) for d in draft])
+            self.play(big.animate.set_fill(TARGET, 0.0))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(m) for m in marks], lag_ratio=0.25), FadeIn(fix))
         self.wait(0.3)
@@ -74,32 +86,48 @@ class Speculative(VoiceoverScene):
         base = Line([-5.2, -2.0, 0], [-4.6 + 1.05 * k, -2.0, 0], color=GREY_C, stroke_width=2)
         xl = VGroup(*[Text(n, font="DejaVu Sans Mono", font_size=24, color=GREY_A).move_to([-4.6 + 1.05 * i, -2.35, 0])
                       for i, n in enumerate(names)])
+        # the rule on the bars: where the draft guesses too often, the excess is rejected; where too rarely, p's leftover
+        def part(lo, hi, i, dx, col):
+            return Rectangle(width=bw, height=3.0 * (hi - lo) / top, stroke_width=0, fill_color=col, fill_opacity=0.75).move_to(
+                [-4.6 + 1.05 * i + dx, -2.0 + 1.5 * (lo + hi) / top, 0])
+
+        excess = VGroup(*[part(p[i], q[i], i, -0.3, C.SURPRISE) for i in range(k) if q[i] > p[i]])
+        left = VGroup(*[part(q[i], p[i], i, 0.0, C.INTERVAL) for i in range(k) if p[i] > q[i]])
         key = VGroup(label(r"the draft's guess, $q$", font_size=22, color=DRAFT), label(r"the big model, $p$", font_size=22, color=TARGET),
+                     label(r"the draft's excess: \\ rejected", font_size=22, color=C.SURPRISE),
+                     label(r"$p$'s leftover: \\ where rejections resample", font_size=22, color=C.INTERVAL),
                      label(rf"what the rule actually outputs \\ (${int(s['N']):,}$ samples)".replace(",", "{,}"), font_size=22,
                            color=C.BITS))
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.8, 0])
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 1.5, 0])
         colors = {r"p(x)": TARGET, r"q(x)": DRAFT}
         f = cmath(r"\text{accept } x \text{ with probability } \min\!\Big(1, \frac{", r"p(x)", r"}{", r"q(x)", r"}\Big)",
                   colors=colors, font_size=32).to_edge(UP, buff=0.4).shift(LEFT * 1.5)
         f2 = label(r"if rejected: \ sample from what $p$ has left over, \ $\max(0, p - q)$", font_size=22, color=GREY_A)
         f2.next_to(f, DOWN, buff=0.15).align_to(f, LEFT)
         tv = float(s["tv"])
-        res = label(rf"distance from $p$: \ ${tv:.4f}$ \\ (sampling noise alone)", font_size=24, color=C.BITS).next_to(key, DOWN, buff=0.5)
+        res = label(rf"distance from $p$: \ ${tv:.4f}$ \\ (sampling noise alone)", font_size=24, color=C.BITS).next_to(key, DOWN, buff=0.4)
         cite_ = cite(r"Y.~Leviathan, M.~Kalman \& Y.~Matias (2023); \ C.~Chen et al.\ (2023)", corner=DR)
         with self.voiceover(
-            "The clever part is that nothing changes about what the big model says. Accept a drafted token with "
-            "probability p over q, capped at one; if it's rejected, sample from what's left of p after taking q "
-            "away. <bookmark mark='a'/> Here it is on our own models: part eleven's transformer as the big one, a "
-            "small counting model as the draft. <bookmark mark='b'/> Run the rule two hundred thousand times, and the "
+            "The clever part is that nothing changes about what the big model says. <bookmark mark='a'/> Here are "
+            "both guesses for the next character, on our own models: part eleven's transformer as the big one, a "
+            "small counting model as the draft. <bookmark mark='b'/> Accept a drafted character with probability p "
+            "over q, capped at one: where the draft guesses a character too often, the excess gets thrown out. "
+            "<bookmark mark='c'/> If it's rejected, sample from what's left of p after taking q away: exactly the "
+            "part the draft guessed too rarely. <bookmark mark='d'/> Run the rule two hundred thousand times, and the "
             "characters it outputs follow the big model's probabilities exactly, not the draft's: speculative "
             "decoding is faster with no change in quality."
         ) as vo:
-            self.play(Write(f), FadeIn(f2), FadeIn(cite_))
+            self.play(FadeIn(cite_))
             vo.wait_until("a")
             self.play(Create(base), FadeIn(xl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bq], lag_ratio=0.05),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in bp], lag_ratio=0.05), FadeIn(key[:2]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in be], lag_ratio=0.05), FadeIn(key[2]), FadeIn(res))
+            self.play(Write(f))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in excess], lag_ratio=0.1), FadeIn(key[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(f2), LaggedStart(*[FadeIn(r_) for r_ in left], lag_ratio=0.1), FadeIn(key[3]))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in be], lag_ratio=0.05), FadeIn(key[4]), FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
 
@@ -113,6 +141,10 @@ class Speculative(VoiceoverScene):
         xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in ks])
         xn = label(r"characters drafted per round", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"characters written per run of the big model", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
+                      for v in np.arange(0, max(pr) * 1.2, 0.5)])
+        one = DashedLine(ax.c2p(0, 1), ax.c2p(9, 1), color=GREY_B, stroke_width=1.5)
+        onel = label(r"no draft: \ $1$", font_size=20, color=GREY_B).next_to(ax.c2p(9, 1), UR, buff=0.05)
         dots = VGroup(*[Dot(ax.c2p(k, v), radius=0.07, color=C.BITS) for k, v in zip(ks, pr)])
         line = VMobject(color=C.BITS, stroke_width=3).set_points_smoothly([ax.c2p(k, v) for k, v in zip(ks, pr)])
         f = cmath(r"\frac{1 - \alpha^{k+1}}{1 - \alpha}", font_size=40).move_to([4.2, 0.6, 0])
@@ -123,7 +155,7 @@ class Speculative(VoiceoverScene):
             f"per run: {pr[ks.index(4)]:.1f} with four drafted. Real systems reach two to three times the speed this "
             "way, and some models, like DeepSeek-V3, are trained to draft for themselves."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(one), FadeIn(onel))
             vo.wait_until("a")
             self.play(Create(line), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.1), Write(f), FadeIn(fl))
         self.wait(0.3)
