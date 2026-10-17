@@ -52,7 +52,7 @@ class Omni(VoiceoverScene):
             vo.wait_until("a")
             self.play(GrowArrow(a1), Create(thinker), FadeIn(tl))
             q_ = seq[3][2]  # a sound token, attending back across the senses
-            arcs = VGroup(*[ArcBetweenPoints(q_.get_top(), k_.get_top(), angle=-PI / 2.5, stroke_width=1.5 + 3 * w_, color=C.ATTN)
+            arcs = VGroup(*[ArcBetweenPoints(q_.get_top(), k_.get_top(), angle=PI / 2.5, stroke_width=1.5 + 3 * w_, color=C.ATTN)
                             .set_stroke(opacity=0.35 + 0.6 * w_)
                             for k_, w_ in ((seq[0][1], 0.5), (seq[1][2], 0.9), (seq[1][4], 0.7), (seq[2][0], 0.4), (seq[3][0], 0.6))])
             self.play(LaggedStart(*[Create(a_) for a_ in arcs], lag_ratio=0.15), run_time=1.2)
