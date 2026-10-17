@@ -2598,7 +2598,16 @@
     "the same as the matrix iteration's singular values, \\ to $2 \\times 10^{-6}$": "和矩阵迭代得到的奇异值一致，\\ 误差在$2 \\times 10^{-6}$以内",
     "too large: \\ shrink that head's query and key weights, \\ so the score is exactly $\\tau$": "太大了：\\ 缩小这个头的查询和键权重，\\ 让分数正好等于$\\tau$",
     "Kimi K2: \\ $\\tau = 100$; \\ $15.5$ trillion tokens \\ with no loss spike \\ (as published)": "Kimi K2：\\ $\\tau = 100$；\\ $15.5$万亿个词元 \\ 没有一次损失尖峰 \\ （据公开资料）",
-    "Kimi Team, \\textit{Kimi K2: Open Agentic Intelligence} (2025): \\ MuonClip": "Kimi团队，\\textit{Kimi K2: Open Agentic Intelligence}（2025）：\\ MuonClip"
+    "Kimi Team, \\textit{Kimi K2: Open Agentic Intelligence} (2025): \\ MuonClip": "Kimi团队，\\textit{Kimi K2: Open Agentic Intelligence}（2025）：\\ MuonClip",
+    "fit to our $18$ runs: \\ $E = 1.92$, \\ $\\alpha = 0.72$, \\ $\\beta = 0.55$ \\\\ (off by $0.02$ bits on average)": "拟合我们的$18$次训练：\\ $E = 1.92$，\\ $\\alpha = 0.72$，\\ $\\beta = 0.55$ \\\\ （平均误差$0.02$比特）",
+    "\\min_{N}\\ L\\big(N, \\tfrac{C}{6N}\\big) \\;\\Rightarrow\\; N_{\\text{opt}} \\propto C^{\\,\\beta / (\\alpha + \\beta)}": "\\min_{N}\\ L\\big(N, \\tfrac{C}{6N}\\big) \\;\\Rightarrow\\; N_{\\text{opt}} \\propto C^{\\,\\beta / (\\alpha + \\beta)}",
+    "the parabolas gave about the same; \\\\ the best split here: \\ $40$ characters per parameter": "抛物线给出的差不多；\\\\ 这里最好的分配：\\ 每个参数$40$个字符",
+    "model size, \\ relative to the best for the budget": "模型大小，\\ 相对于该预算下的最佳",
+    "training compute for the same loss": "达到同样损失所需的训练计算量",
+    "below this size: \\\\ never, \\ at any budget": "小于这个大小：\\\\ 多少预算 \\ 都达不到",
+    "Llama 3, $8$ billion parameters: \\ $15$ trillion tokens, \\ about $1{,}900$ per parameter \\ (as published)": "Llama 3，$80$亿参数：\\ $15$万亿个词元，\\ 每个参数约$1{,}900$个 \\ （据公开资料）",
+    "J.~Hoffmann et al.\\ (2022), \\ approach 3; \\ N.~Sardana \\& J.~Frankle, \\textit{Beyond Chinchilla-Optimal} (2023)": "J.~Hoffmann等（2022），\\ 方法3；\\ N.~Sardana \\& J.~Frankle，\\textit{Beyond Chinchilla-Optimal}（2023）",
+    "test accuracy": "测试准确率"
   },
   "phrases": {
     "width": "宽度",
