@@ -19,7 +19,7 @@ Items:
                at weights 0, 1 and 4, how many samples land on the right letter and how spread out they are
     glyphs     a small image model: 20 x 20 pictures of capital letters from many fonts, generated from noise by flow
                matching; samples, and one sample's journey from noise
-    masked     text by masked diffusion (as in LLaDA): a small two-way transformer trained to fill in masked characters
+    masked     text by masked diffusion (as in LLaDA): a small two-way transformer, rotary positions, trained to fill in masked characters
                of the novels, then writing 64 characters by unmasking a few at a time, most confident first
 """
 
@@ -393,6 +393,14 @@ def compute_masked():
     K = len(chars)
     MASK = K  # one extra token: the blank
     T, D, L, H = 64, 128, 4, 4
+    # rotary positions (Part 11): with learned absolute positions alone, the model never found its neighbours
+    th = torch.tensor(c11.rope_freqs(D // H), dtype=torch.float32)
+    ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+    cos, sin = torch.cos(ang), torch.sin(ang)
+
+    def rot(t):
+        a, b = t[..., : D // H // 2], t[..., D // H // 2:]
+        return torch.cat([a * cos - b * sin, a * sin + b * cos], -1)
 
     class Block(nn.Module):
         def __init__(self):
@@ -405,7 +413,7 @@ def compute_masked():
         def forward(self, x):
             B = x.shape[0]
             q, k, v = self.qkv(self.n1(x)).view(B, T, 3, H, D // H).permute(2, 0, 3, 1, 4)
-            a = F.scaled_dot_product_attention(q, k, v)  # no mask: every position sees every other
+            a = F.scaled_dot_product_attention(rot(q), rot(k), v)  # no mask: every position sees every other
             x = x + self.o(a.transpose(1, 2).reshape(B, T, D))
             return x + self.f2(F.gelu(self.f1(self.n2(x))))
 
@@ -413,13 +421,12 @@ def compute_masked():
         def __init__(self):
             super().__init__()
             self.emb = nn.Embedding(K + 1, D)
-            self.pos = nn.Parameter(torch.randn(T, D) * 0.02)
             self.blocks = nn.ModuleList([Block() for _ in range(L)])
             self.nf = nn.LayerNorm(D)
             self.out = nn.Linear(D, K)
 
         def forward(self, x):
-            h = self.emb(x) + self.pos[None]
+            h = self.emb(x)
             for b in self.blocks:
                 h = b(h)
             return self.out(self.nf(h))
