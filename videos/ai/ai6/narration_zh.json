@@ -82,10 +82,10 @@
    "en": "Chapter four. Models as pictures.",
    "zh": "第4章。把模型画成图。"
   },
-  "487084c32218": {
+  "cc24a1b8ae0a": {
    "scene": "Graphs",
-   "en": "Every model in this part can be drawn the same way: a circle for each quantity, shaded if we observe it, empty if it's hidden, and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big pi: multiply one probability per circle, each given only the circles that point into it, its parents. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
-   "zh": "这一部分的每个模型，都能用同一种方式画出来：每个量画一个圆圈，观测得到的涂上阴影，隐藏的留空；只要一个量直接依赖另一个，就画一根箭头。<bookmark mark='a'/>混合模型：先是一个隐藏的选择，选哪个来源，然后是一页书，每一页都这样重复一遍。<bookmark mark='b'/>隐马尔可夫模型：一串隐状态，每个都发射出一个字母。<bookmark mark='c'/>这幅图就是一个公式。一切的概率是一个乘积，也就是那个大大的π：每个圆圈乘上一个概率，每个概率只以指向它的那些圆圈为条件，也就是它的父节点。这就是贝叶斯网络：朱迪亚·珀尔为不确定性下的推理所创造的语言。"
+   "en": "Every model in this part can be drawn the same way: <bookmark mark='q'/> a circle for each quantity, <bookmark mark='o'/> shaded if we observe it, <bookmark mark='h'/> empty if it's hidden, <bookmark mark='r'/> and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big pi: multiply one probability per circle, each given only the circles that point into it, its parents. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
+   "zh": "这一部分的每个模型，都能用同一种方式画出来：<bookmark mark='q'/>每个量画一个圆圈，<bookmark mark='o'/>观测得到的涂上阴影，<bookmark mark='h'/>隐藏的留空，<bookmark mark='r'/>只要一个量直接依赖另一个，就画一根箭头。<bookmark mark='a'/>混合模型：先是一个隐藏的选择，选哪个来源，然后是一页书，每一页都这样重复一遍。<bookmark mark='b'/>隐马尔可夫模型：一串隐状态，每个都发射出一个字母。<bookmark mark='c'/>这幅图就是一个公式。一切的概率是一个乘积，也就是那个大大的π：每个圆圈乘上一个概率，每个概率只以指向它的那些圆圈为条件，也就是它的父节点。这就是贝叶斯网络：朱迪亚·珀尔为不确定性下的推理所创造的语言。"
   },
   "82133cfe9190": {
    "scene": "Graphs",
