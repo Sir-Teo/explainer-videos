@@ -224,7 +224,7 @@ class Words(VoiceoverScene):
             self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub))
             self.add(cnt)
             vo.wait_until("a")
-            marks = {1: "b", 4: "c", len(steps) - 1: "d"}
+            marks = {1: "b", 2: "c", len(steps) - 1: "d"}  # hold on step 36 while it is described
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
