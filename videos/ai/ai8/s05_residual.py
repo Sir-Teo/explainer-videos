@@ -119,7 +119,9 @@ class Residual(VoiceoverScene):
         rms = cmath(r"\operatorname{RMSNorm}(h) = ", r"g", r"\odot \frac{h}{", r"\operatorname{RMS}", r"(h)}, \quad",
                     r"\operatorname{RMS}", r"(h) = \sqrt{\tfrac{1}{d}\textstyle\sum_i h_i^2}", colors=colors, font_size=30)
         rms.move_to([-3.4, 1.1, 0])
+        keep_in_frame(rms, margin=0.4)
         rmsl = label(r"LayerNorm without the mean or the shift: \ cheaper, \ just as good", font_size=20, color=GREY_A).next_to(rms, DOWN, buff=0.1)
+        keep_in_frame(rmsl, margin=0.4)
         glu = cmath(r"\operatorname{FFN}(x) = W_2\big(\operatorname{SiLU}(W_1 x)", r"\odot", r"W_3 x\big)", colors=colors, font_size=30)
         glu.move_to([-3.4, -0.4, 0])
         glul = label(r"SwiGLU: \ one branch gates the other, \ number by number", font_size=20, color=GREY_A).next_to(glu, DOWN, buff=0.1)
@@ -131,7 +133,7 @@ class Residual(VoiceoverScene):
         zero = DashedLine(ax.c2p(-4, 0), ax.c2p(4, 0), dash_length=0.05, stroke_width=1, color=GREY_D)
         relu = ax.plot(lambda x: max(x, 0.0), x_range=[-4, 4, 0.02], color=GREY_B, stroke_width=3)
         silu = ax.plot(lambda x: x / (1 + math.exp(-x)), x_range=[-4, 4, 0.02], color=C.BITS, stroke_width=3.5)
-        kl = VGroup(label(r"ReLU \ (Part 8)", font_size=20, color=GREY_B), label(r"SiLU: \ $x\,\sigma(x)$", font_size=20, color=C.BITS))
+        kl = VGroup(label(r"ReLU", font_size=20, color=GREY_B), label(r"SiLU: \ $x\,\sigma(x)$", font_size=20, color=C.BITS))
         kl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax.c2p(-4, 4), DR, buff=0.1)
         used = label(r"Llama, \ Qwen, \ DeepSeek, \ Mistral, \ gpt-oss: \\ pre-norm, \ RMSNorm, \ a gated MLP \ (as published)",
                      font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.45)
