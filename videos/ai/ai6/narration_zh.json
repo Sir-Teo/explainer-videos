@@ -72,20 +72,20 @@
    "en": "One state ends up with the space, and a, e, i, o and u. The other takes every consonant. <bookmark mark='a'/> And they take turns: after one, the other, about 72 percent of the time. Nobody mentioned vowels. Cave and Neuwirth found exactly this in 1980.",
    "zh": "最后，一个状态拿到了空格，还有a、e、i、o和u。另一个拿走了所有的辅音。<bookmark mark='a'/>而且它们轮流出现：一个状态之后接另一个，大约72%的时候是这样。没有人提过元音。1980年，凯夫与诺伊维尔特发现的正是这一点。"
   },
-  "c5550cb4950a": {
+  "b9a969ed002c": {
    "scene": "HMM",
-   "en": "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi algorithm answers exactly, in one pass. <bookmark mark='a'/> Here's Shannon's sentence from part one, every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like this for thirty years.",
-   "zh": "现在来解码：给定一个句子，它背后最可能的隐状态序列是什么？维特比算法只要过一遍，就能给出精确的答案。<bookmark mark='a'/>这是第1部分香农的那个句子，每个字母都标上了它的隐状态。<bookmark mark='b'/>语音识别靠这样的模型，运转了30年。"
+   "en": "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi algorithm answers exactly, in one pass. <bookmark mark='v'/> Walk along the letters, and at each step keep only the best path into each state. <bookmark mark='w'/> At the end, trace the winner back. <bookmark mark='a'/> Here's Shannon's sentence from part one, every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like this for thirty years.",
+   "zh": ""
   },
   "3d8092581975": {
    "scene": "Graphs",
    "en": "Chapter four. Models as pictures.",
    "zh": "第4章。把模型画成图。"
   },
-  "84192f05cfb2": {
+  "487084c32218": {
    "scene": "Graphs",
-   "en": "Every model in this part can be drawn the same way: a circle for each quantity, shaded if we observe it, empty if it's hidden, and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, one factor per circle, each depending only on the circles that point into it. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
-   "zh": "这一部分的每个模型，都能用同一种方式画出来：每个量画一个圆圈，观测得到的涂上阴影，隐藏的留空；只要一个量直接依赖另一个，就画一根箭头。<bookmark mark='a'/>混合模型：先是一个隐藏的选择，选哪个来源，然后是一页书，每一页都这样重复一遍。<bookmark mark='b'/>隐马尔可夫模型：一串隐状态，每个都发射出一个字母。<bookmark mark='c'/>这幅图就是一个公式。一切的概率是一个乘积，每个圆圈一个因子，每个因子只取决于指向它的那些圆圈。这就是贝叶斯网络：朱迪亚·珀尔为不确定性下的推理所创造的语言。"
+   "en": "Every model in this part can be drawn the same way: a circle for each quantity, shaded if we observe it, empty if it's hidden, and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big pi: multiply one probability per circle, each given only the circles that point into it, its parents. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
+   "zh": ""
   },
   "82133cfe9190": {
    "scene": "Graphs",
@@ -97,10 +97,10 @@
    "en": "Chapter five. Gaussian processes.",
    "zh": "第5章。高斯过程。"
   },
-  "21b699054d14": {
+  "613f144ee9dc": {
    "scene": "GP",
-   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth functions. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
-   "zh": "有时候，隐藏的东西是一整个函数。这是《远大前程》每一页用“her”的频率，从小说开头一直到结尾。随着故事在人物之间切换，它时起时落。<bookmark mark='a'/>高斯过程，是光滑函数上的一个概率分布。在看到任何数据之前，这是从中抽出的五个函数：它们弯弯曲曲，每道弯都有一个典型的宽度，叫作长度尺度。<bookmark mark='b'/>现在，以这些书页为条件。只有从数据近旁经过的函数，才能留下来。"
+   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth functions. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
+   "zh": ""
   },
   "4cdf1a34b838": {
    "scene": "GP",
@@ -112,15 +112,15 @@
    "en": "Chapter six. Variational inference.",
    "zh": "第6章。变分推断。"
   },
-  "a91a377e86af": {
+  "b1fe1bc9fc49": {
    "scene": "VI",
-   "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. Part four sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
-   "zh": "对大多数带有隐藏部分的模型来说，精确的答案，也就是隐变量的后验，是一个我们算不出来的形状。第4部分用马尔可夫链，从这样的形状中采样。变分推断换了个做法：它从一个简单的家族里，挑出最接近的形状，这里是单个高斯分布，然后用它来代替。<bookmark mark='a'/>在什么意义上最接近？用第1部分的KL散度，方向是从q到p。从一个很差的猜测出发，让这个高斯分布顺着下坡滑下去。"
+   "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. <bookmark mark='p'/> The posterior is what we believe about the hidden things after seeing the data: part four's updated belief. Part four sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
+   "zh": ""
   },
-  "eb012d78ff04": {
+  "0b84f7cbb4ff": {
    "scene": "VI",
-   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. Raising the bound squeezes the KL down. Variational autoencoders, in part fifteen, are trained exactly this way.",
-   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个峰里。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。把下界往上抬，KL散度就被挤小了。第15部分的变分自编码器，正是这样训练的。"
+   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part fifteen, are trained exactly this way.",
+   "zh": ""
   },
   "c39a970bcc94": {
    "scene": "KneserNey",
@@ -132,10 +132,10 @@
    "en": "Back to part one's scoreboard. The best counting model there used four characters of context and reached 2.32 bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. With part one's simple smoothing, the score gets worse beyond four characters. <bookmark mark='b'/> Better smoothing keeps improving.",
    "zh": "回到第1部分的记分牌。那里最好的计数模型，用4个字符的上下文，在测试段落上做到了每字符2.32比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长的上下文，在30部小说里只出现过寥寥几次，甚至根本没出现过。用第1部分那种简单的平滑，上下文超过4个字符之后，分数反而变差。<bookmark mark='b'/>更好的平滑，则会一直进步下去。"
   },
-  "052302321050": {
+  "24fe8e92cb4b": {
    "scene": "KneserNey",
-   "en": "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, take a fixed discount off every count you've seen, and hand that probability to a shorter context: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it deserves little. Count how many different contexts something follows, not how often it appears.",
-   "zh": "Kneser–Ney平滑是1995年提出的，它有两个想法。<bookmark mark='a'/>第一，从每一个见过的计数里，减掉一个固定的折扣，把省下来的概率交给更短的上下文：把两者混合起来。<bookmark mark='b'/>第二，按多样性来评判更短的上下文。教科书里的例子是：Francisco是个常见的词，但它几乎总是跟在San后面，所以在一个陌生的上下文之后，把它当作猜测，它不该分到多少概率。要数的是，一个东西跟在多少种不同的上下文后面，而不是它出现了多少次。"
+   "en": "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, shave a fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it deserves little. Count how many different contexts something follows, not how often it appears.",
+   "zh": ""
   },
   "22d7aa1f73ff": {
    "scene": "KneserNey",
