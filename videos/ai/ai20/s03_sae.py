@@ -45,13 +45,10 @@ class SAE(VoiceoverScene):
         bf.shift([x0 - bf.get_x(), -0.6 - bf.get_bottom()[1], 0])
         bh = vec_bars(Xh[k], W, 1.3, RESID).move_to([x0, -2.5, 0])
         bh.set_fill(opacity=0.55)
-        lx = label(r"$x$: \ $128$ numbers", font_size=22, color=RESID).next_to(bx, LEFT, buff=0.2)
+        lx = label(r"$x$: \ $128$ numbers", font_size=22, color=RESID).next_to(bx, UP, buff=0.1).align_to(bx, LEFT)
         lf = label(rf"$f$: \ $512$ features, \ ${int((Fz[k] > 0).sum())}$ on", font_size=22, color=FEAT).next_to(bf, UP, buff=0.1)
         lf.align_to(bf, LEFT)
-        lh = label(r"$\hat x$: \ rebuilt", font_size=22, color=RESID).next_to(bh, LEFT, buff=0.2)
-        for l_ in (lx, lh):
-            if l_.get_left()[0] < -6.9:
-                l_.shift(RIGHT * (-6.9 - l_.get_left()[0]))
+        lh = label(r"$\hat x$: \ rebuilt", font_size=22, color=RESID).next_to(bh, UP, buff=0.1).align_to(bh, LEFT)
         a1 = Arrow(bx.get_bottom() + DOWN * 0.05, bf.get_top() + UP * 0.45, buff=0, stroke_width=3, color=GREY_B,
                    max_tip_length_to_length_ratio=0.2)
         a2 = Arrow(bf.get_bottom() + DOWN * 0.05, bh.get_top() + UP * 0.05, buff=0, stroke_width=3, color=GREY_B,
