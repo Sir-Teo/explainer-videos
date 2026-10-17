@@ -59,10 +59,11 @@ class Clips(VoiceoverScene):
                          for w_, r_ in zip(want, jr)])
         asked2 = VGroup(*[Text(w_, font="DejaVu Sans Mono", font_size=22, color=C.BITS).next_to(r_, LEFT, buff=0.2)
                           for w_, r_ in zip(want, ir)])
-        ja, ia, ra = float(c["joint_all_right"]), float(c["indep_all_right"]), float(c["real_all_right"])
+        # the share of frames the judge reads as the letter asked for (every frame of a clip at once is too strict a bar)
+        ja, ia, ra = (float(c[f"{k}_frames_right"]) for k in ("joint", "indep", "real"))
         jj, ij, rj = float(c["joint_jerk"]), float(c["indep_jerk"]), float(c["real_jerk"])
         tab = VGroup(
-            VGroup(Dot(radius=0.01, fill_opacity=0), label(r"every frame \\ the right letter", font_size=20, color=GREY_A),
+            VGroup(Dot(radius=0.01, fill_opacity=0), label(r"frames showing \\ the right letter", font_size=20, color=GREY_A),
                    label(r"jerkiness, \\ pixels", font_size=20, color=GREY_A)),
             VGroup(label(r"real clips", font_size=20, color=GREY_B), MathTex(rf"{100 * ra:.0f}\%", font_size=28, color=GREY_B),
                    MathTex(rf"{rj:.2f}", font_size=28, color=GREY_B)),
