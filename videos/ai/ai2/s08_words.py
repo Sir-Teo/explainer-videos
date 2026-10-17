@@ -35,7 +35,7 @@ class Words(VoiceoverScene):
         img.height = 4.6
         img.move_to([-3.3, -0.5, 0])
         vocab = list(w["vocab"])
-        ticks = VGroup(Text(" ".join(vocab[:4]) + " …", font=MONO, font_size=20, color=GREY_A).next_to(img, UP, buff=0.12))
+        ticks = VGroup(data_text(" ".join(vocab[:4]) + " …", font=MONO, font_size=20, color=GREY_A).next_to(img, UP, buff=0.12))
         cap = label(r"the $300$ commonest words, \\ of the $10{,}000$", font_size=24, color=GREY_B).next_to(img, DOWN, buff=0.15)
         P = C.CONTEXT
         pmi = cmath(r"\mathrm{PMI}(w, c)", "=", r"\log \frac{P(w, c)}{P(w)\,P(c)}", colors={r"\mathrm{PMI}(w, c)": P},
@@ -75,11 +75,11 @@ class Words(VoiceoverScene):
         head.to_edge(UP, buff=0.4)
         cols = VGroup()
         for word in show:
-            title = Text(word, font=MONO, font_size=30, color=C.BITS)
+            title = data_text(word, font=MONO, font_size=30, color=C.BITS)
             rows = VGroup()
             for x, sim in nb[word][:5]:
                 bar = Rectangle(width=1.6 * sim, height=0.22, stroke_width=0, fill_color=C.CONTEXT, fill_opacity=0.85)
-                rows.add(VGroup(Text(x, font=MONO, font_size=22, color=WHITE), bar).arrange(RIGHT, buff=0.12))
+                rows.add(VGroup(data_text(x, font=MONO, font_size=22, color=WHITE), bar).arrange(RIGHT, buff=0.12))
             rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
             cols.add(VGroup(title, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3))
         cols.arrange(RIGHT, buff=0.55, aligned_edge=UP).next_to(head, DOWN, buff=0.6)
@@ -116,7 +116,7 @@ class Words(VoiceoverScene):
         names = ["france", "paris", "england", "london"]
         cols = [C.TRUE_P, C.BITS, C.TRUE_P, C.BITS]
         dots = VGroup(*[glow_dot(p, color=c, radius=0.09) for p, c in zip(pts, cols)])
-        labs = VGroup(*[Text(n, font=MONO, font_size=28, color=c).next_to(p, UP if k % 2 else DOWN, buff=0.18)
+        labs = VGroup(*[data_text(n, font=MONO, font_size=28, color=c).next_to(p, UP if k % 2 else DOWN, buff=0.18)
                         for k, (n, p, c) in enumerate(zip(names, pts, cols))])
         step = Arrow(pts[0], pts[1], buff=0.12, color=C.BITS, stroke_width=5)
         again = Arrow(pts[2], pts[2] + (pts[1] - pts[0]), buff=0.12, color=C.BITS, stroke_width=5)
@@ -124,7 +124,7 @@ class Words(VoiceoverScene):
         head = label(r"Directions mean something too", font_size=34).to_edge(UP, buff=0.4)
         near = an["france:paris::england"][:5]
         res = VGroup(label(r"the words nearest to where you land:", font_size=24, color=GREY_A),
-                     *[Text(f"{k + 1}. {wd}", font=MONO, font_size=24, color=C.BITS if k == 0 else WHITE)
+                     *[data_text(f"{k + 1}. {wd}", font=MONO, font_size=24, color=C.BITS if k == 0 else WHITE)
                        for k, wd in enumerate(near)]).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.5)
         k2 = label(r"\texttt{man} : \texttt{king} :: \texttt{woman} : \ \texttt{duke}, \ \texttt{queen}, \ \ldots",
                    font_size=28, color=GREY_A).to_corner(DL, buff=0.6)
@@ -165,9 +165,9 @@ class Words(VoiceoverScene):
         al = label(r"training loss", font_size=22, color=C.LOSS).next_to(ax, UP, buff=0.1)
         tabs = VGroup()
         for word in common:
-            a = VGroup(*[Text(x, font=MONO, font_size=20, color=WHITE) for x, _ in w["neighbours"][word][:3]]).arrange(DOWN, buff=0.08)
-            b = VGroup(*[Text(x, font=MONO, font_size=20, color=WHITE) for x, _ in sg["neighbours"][word][:3]]).arrange(DOWN, buff=0.08)
-            t = Text(word, font=MONO, font_size=24, color=C.BITS)
+            a = VGroup(*[data_text(x, font=MONO, font_size=20, color=WHITE) for x, _ in w["neighbours"][word][:3]]).arrange(DOWN, buff=0.08)
+            b = VGroup(*[data_text(x, font=MONO, font_size=20, color=WHITE) for x, _ in sg["neighbours"][word][:3]]).arrange(DOWN, buff=0.08)
+            t = data_text(word, font=MONO, font_size=24, color=C.BITS)
             tabs.add(VGroup(t, VGroup(a, b).arrange(RIGHT, buff=0.35, aligned_edge=UP)).arrange(DOWN, buff=0.15))
         tabs.arrange(RIGHT, buff=0.5, aligned_edge=UP).move_to([2.6, -1.5, 0])
         hdr = label(r"counting $+$ SVD \quad\quad word2vec", font_size=22, color=GREY_B).next_to(tabs, UP, buff=0.2)
@@ -201,9 +201,9 @@ class Words(VoiceoverScene):
         total = int(sg["steps"])
 
         def column(k, word):
-            return VGroup(*[Text(x, font=MONO, font_size=20, color=WHITE) for x in snaps[k][word][:5]]).arrange(DOWN, buff=0.1)
+            return VGroup(*[data_text(x, font=MONO, font_size=20, color=WHITE) for x in snaps[k][word][:5]]).arrange(DOWN, buff=0.1)
 
-        heads = VGroup(*[Text(w_, font=MONO, font_size=26, color=C.BITS) for w_ in words]).arrange(RIGHT, buff=1.6).move_to([0, 1.8, 0])
+        heads = VGroup(*[data_text(w_, font=MONO, font_size=26, color=C.BITS) for w_ in words]).arrange(RIGHT, buff=1.6).move_to([0, 1.8, 0])
         cols = VGroup(*[column(0, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
         t = ValueTracker(0)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}\ \text{{of}}\ {total:,}".replace(",", "{,}"),
