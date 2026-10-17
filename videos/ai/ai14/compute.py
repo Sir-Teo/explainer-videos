@@ -15,6 +15,8 @@ Items:
     flow       flow matching on the same points: straight-line training paths, Euler sampling with 1 to 100 steps,
                the learned paths; then reflow (a second model trained on the first one's noise-to-sample pairs), whose
                paths are straighter, so that one or two steps suffice
+    fewstep    (fewstep.py) one-step generation: MeanFlow (the average velocity, trained through its identity with a
+               Jacobian-vector product) and shortcut models (one jump of 2d = two jumps of d); 1, 2 and 4 jumps
     guidance   a model of two letters, A and I, told which to draw (or not, one time in five): classifier-free guidance
                at weights 0, 1 and 4, how many samples land on the right letter and how spread out they are
     glyphs     a small image model: 20 x 20 pictures of capital letters from many fonts, generated from noise by flow
@@ -493,9 +495,12 @@ def compute_masked():
     return out
 
 
+from videos.ai.ai14.fewstep import compute_fewstep  # noqa: E402
+
 ITEMS = {
     "toy": compute_toy,
     "flow": compute_flow,
+    "fewstep": compute_fewstep,
     "guidance": compute_guidance,
     "glyphs": compute_glyphs,
     "masked": compute_masked,

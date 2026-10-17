@@ -2226,7 +2226,6 @@
     "$4.77\\,\\mathrm{MiB}$ $\\to$ $68.6\\,\\mathrm{KiB}$ a token: \\ $71\\times$ less": "每个词元$4.77\\,\\mathrm{MiB}$ $\\to$ $68.6\\,\\mathrm{KiB}$：\\ 少了$71$倍",
     "computed both ways on $200$ tokens: \\\\ they agree to $10^{-15}$": "在$200$个词元上用两种方式计算：\\\\ 结果相差不到$10^{-15}$",
     "at a million tokens: \\ $3{,}906\\times$ fewer": "到了$100$万个词元：\\ 少了$3{,}906$倍",
-    "tiny one-layer models, \\ each with a memory of $16$ numbers per token, \\\\ trained on this game with up to $48$ pairs": "几个只有一层的小模型，\\ 每个词元的记忆都是$16$个数，\\\\ 用这个游戏训练，最多$48$对键值",
     "$8$ pairs": "$8$对",
     "$16$ pairs": "$16$对",
     "$32$ pairs": "$32$对",
@@ -2368,7 +2367,8 @@
     "fold once, \\ use for every key \\\\ checked: \\ $9 \\times 10^{-16}$": "并一次，\\ 每个键都能用 \\\\ 验证：\\ $9 \\times 10^{-16}$",
     "$R_{n-m}$ changes with every pair: \\\\ nothing to fold; \\ folding anyway: \\ off by $18\\%$": "$R_{n-m}$每一对都不同：\\\\ 没有可并的；\\ 硬要并：\\ 偏差$18\\%$",
     "positions in a small extra key, \\\\ shared by all heads: \\ $9 \\times 10^{-16}$": "位置放进一个额外的小键，\\\\ 所有头共用：\\ $9 \\times 10^{-16}$",
-    "cached per token and layer: \\ $512$ \\ $+$ \\ $64$ numbers": "每个词元、每一层缓存：\\ $512$ \\ $+$ \\ $64$个数"
+    "cached per token and layer: \\ $512$ \\ $+$ \\ $64$ numbers": "每个词元、每一层缓存：\\ $512$ \\ $+$ \\ $64$个数",
+    "tiny one-layer models, \\ keys of $16$ numbers, \\\\ trained on this game with up to $48$ pairs": "几个只有一层的小模型，\\ 键长$16$个数，\\\\ 用这个游戏训练，最多$48$对键值"
   },
   "phrases": {
     "width": "宽度",
@@ -2617,8 +2617,8 @@
       "$\\1$个键，\\\\ 重写$\\2$次：\\\\\\\\ 读取\\\\emph{最新}值的误差 \\\\ （对数刻度）"
     ],
     [
-      "^tiny one-layer models, \\\\ each with a memory of \\$(\\d+)\\$ numbers per token, \\\\\\\\ trained on this game with up to \\$(\\d+)\\$ pairs$",
-      "几个只有一层的小模型，\\\\ 每个词元的记忆都是$\\1$个数，\\\\\\\\ 用这个游戏训练，最多$\\2$对键值"
+      "^tiny one-layer models, \\\\ keys of \\$(\\d+)\\$ numbers, \\\\\\\\ trained on this game with up to \\$(\\d+)\\$ pairs$",
+      "几个只有一层的小模型，\\\\ 键长$\\1$个数，\\\\\\\\ 用这个游戏训练，最多$\\2$对键值"
     ],
     [
       "^\\$(\\d+)\\$ pairs$",

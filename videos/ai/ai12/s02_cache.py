@@ -50,8 +50,8 @@ class KVCache(VoiceoverScene):
             "When a model writes, it makes one token at a time, and each new token's query looks at every earlier "
             "token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be "
             "wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, "
-            "and every new token has to read all of it. For a long conversation, this memory, not the model's "
-            "weights, is what fills the graphics card."
+            "and every new token has to read all of it. Serve many long conversations at once, and this memory, "
+            "not the model's weights, is what fills the graphics cards."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in cols], lag_ratio=0.2), FadeIn(toks), FadeIn(kl),
                       FadeIn(vl), run_time=1.6)
