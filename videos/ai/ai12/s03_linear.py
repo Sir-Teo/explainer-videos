@@ -184,7 +184,6 @@ class Linear(VoiceoverScene, ThreeDScene):
             "memory forward, updating it at each step. Katharopoulos and colleagues showed this in 2020."
         ) as vo:
             self.play(Create(base), FadeIn(cur), FadeIn(sl), FadeIn(toks))
-            self.begin_ambient_camera_rotation(rate=0.06)
             vo.wait_until("a")
             self.play(Write(f1))
             vo.wait_until("o")
@@ -196,7 +195,6 @@ class Linear(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(rnn), FadeIn(chk))
             vo.wait_until("r")
             self.play(FadeIn(rc, shift=UP * 0.2))
-            self.stop_ambient_camera_rotation()
         self.wait(0.3)
         self.clear_scene()
         self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
