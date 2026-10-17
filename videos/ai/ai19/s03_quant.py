@@ -26,7 +26,7 @@ class Quant(VoiceoverScene):
         q = load("quant")
         h, e = np.asarray(q["hist_w"], float), np.asarray(q["hist_edges"])
         lo, hi = float(e[0]), float(e[-1])
-        ax = Axes(x_range=[lo, hi, (hi - lo) / 4], y_range=[0, 1.05, 0.5], x_length=9.0, y_length=2.6, tips=False,
+        ax = CornerAxes(x_range=[lo, hi, (hi - lo) / 4], y_range=[0, 1.05, 0.5], x_length=9.0, y_length=2.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(UP * 0.9)
         bars = VGroup(*[Rectangle(width=9.0 / len(h) * 0.9, height=max(2.6 * v / h.max(), 0.005), stroke_width=0, fill_color=GREY_B,
                                   fill_opacity=0.8).move_to(ax.c2p((e[i] + e[i + 1]) / 2, 0) + UP * 1.3 * v / h.max())

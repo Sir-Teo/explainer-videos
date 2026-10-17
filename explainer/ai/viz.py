@@ -64,6 +64,35 @@ def term(m: MathTex, tex: str) -> VMobject:
     raise KeyError(tex)
 
 
+class CornerAxes(Axes):
+    """Axes whose two lines meet at the bottom-left corner whatever the ranges.  Manim draws each axis through the
+    other's zero, so a log-scale range that crosses or excludes zero puts an axis mid-chart or on the far side;
+    here the ranges are shifted to start at 0 internally, and ``c2p`` takes the original coordinates."""
+
+    def __init__(self, x_range, y_range, **kw):
+        self._off = (0.0, 0.0)  # Axes.__init__ itself calls coords_to_point with internal coordinates
+        super().__init__(x_range=[0, x_range[1] - x_range[0], *x_range[2:]],
+                         y_range=[0, y_range[1] - y_range[0], *y_range[2:]], **kw)
+        self._off = (float(x_range[0]), float(y_range[0]))
+
+    def coords_to_point(self, *coords):
+        ox, oy = self._off
+        if len(coords) == 1:
+            a = np.array(coords[0], float)
+            if a.ndim == 1:
+                a[0] -= ox
+                if len(a) > 1:
+                    a[1] -= oy
+            else:
+                a[:, 0] -= ox
+                a[:, 1] -= oy
+            return super().coords_to_point(a)
+        c = [np.asarray(v, float) for v in coords]
+        c[0] = c[0] - ox
+        c[1] = c[1] - oy
+        return super().coords_to_point(*c)
+
+
 def keep_in_frame(mob: Mobject, margin: float = 0.3) -> Mobject:
     """Shift ``mob`` just enough to keep it inside the frame, ``margin`` from every edge."""
     hw, hh = config.frame_width / 2 - margin, config.frame_height / 2 - margin

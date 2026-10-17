@@ -65,7 +65,7 @@ class Horizon(VoiceoverScene):
         h = load("horizon")
         pr, hl = np.asarray(h["p_range"]), np.asarray(h["half_len"])
         err = 1 - pr
-        ax = Axes(x_range=[-4, -0.3, 1], y_range=[0, 4, 1], x_length=7.6, y_length=4.2, tips=False,
+        ax = CornerAxes(x_range=[-4, -0.3, 1], y_range=[0, 4, 1], x_length=7.6, y_length=4.2, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.8, -0.4, 0])
         xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                       for t, v in ((r"0.01\%", -4), (r"0.1\%", -3), (r"1\%", -2), (r"10\%", -1))])

@@ -72,7 +72,7 @@ class Width(VoiceoverScene):
         lo, hi = float(np.floor(allv.min() * 10) / 10), float(min(np.ceil(np.percentile(allv, 85) * 10) / 10, allv.min() + 1.2))
         panels = VGroup()
         for k, (mode, title, col) in enumerate((("sp", r"the usual parametrization", SP), ("mup", r"$\mu$P", MUP))):
-            ax = Axes(x_range=[lrs[0], lrs[-1], 0.5], y_range=[lo, hi, 0.2], x_length=5.6, y_length=3.8, tips=False,
+            ax = CornerAxes(x_range=[lrs[0], lrs[-1], 0.5], y_range=[lo, hi, 0.2], x_length=5.6, y_length=3.8, tips=False,
                       axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04})
             ax.move_to([-3.4 + 6.8 * k, -0.6, 0])
             lines, bests = VGroup(), VGroup()
