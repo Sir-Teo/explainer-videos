@@ -3014,7 +3014,21 @@
     "teacher: \\ many small steps": "教师模型：\\ 许多小步",
     "student: \\ one jump, \\ the same place": "学生模型：\\ 一步跳过去，\\ 落在同一个地方",
     "distillation": "蒸馏",
-    "a slow teacher model's results become the targets \\\\ a fast student learns to hit in one go": "慢的教师模型算出的结果成为目标，\\\\ 快的学生模型学着一步就命中"
+    "a slow teacher model's results become the targets \\\\ a fast student learns to hit in one go": "慢的教师模型算出的结果成为目标，\\\\ 快的学生模型学着一步就命中",
+    "pull the matching pairs together, \\ push the rest apart \\\\ (squares: \\ pictures; \\ dots: \\ captions)": "把配对的拉近，\\ 把其余的推开 \\\\ （方块：\\ 图片；\\ 圆点：\\ 描述）",
+    "trained with CLIP's loss": "用CLIP的损失训练",
+    "trained with SigLIP's loss": "用SigLIP的损失训练",
+    "codes nobody picks: \\\\ no gradient reaches them, \\\\ so they never move": "没人选的码字：\\\\ 梯度到不了它们，\\\\ 所以它们一动不动",
+    "KL divergence": "KL散度",
+    "how far the model's probabilities (colour) are \\\\ from the reference's (dashed): \\\\ zero only when they match \\ (schematic)": "模型的概率（彩色）\\\\ 离参考模型的概率（虚线）有多远：\\\\ 只有两者一致时才为零 \\ （示意图）",
+    "better: \\ $y_w$": "较好：\\ $y_w$",
+    "worse: \\ $y_l$": "较差：\\ $y_l$",
+    "a preference pair: \\\\ two of the starting model's own answers": "一个偏好对：\\\\ 起始模型自己的两个回答",
+    "DAPO: \\ questions drawn per step, \\\\ as a multiple of the $32$ it trains on": "DAPO：\\ 每步抽取的题目数，\\\\ 是它训练所用$32$道题的几倍",
+    "start": "开始",
+    "finish": "完成",
+    "the table of scores, \\ one head, \\ $16$-bit numbers": "分数表，\\ 一个头，\\ $16$位数字",
+    "the passage so far: \\ which character comes next?": "目前为止的段落：\\ 下一个字符是什么？"
   },
   "phrases": {
     "width": "宽度",
@@ -3431,6 +3445,14 @@
     [
       "^\\\\text\\{(\\d+) numbers\\}$",
       "\\\\text{\\1个数}"
+    ],
+    [
+      "^\\$(\\d+)\\$ conversations: \\\\\\\\ the cache each one needs \\\\ \\(\\$([\\d{},]+)\\$ to \\$([\\d{},]+)\\$ tokens\\)$",
+      "$\\1$个对话：\\\\\\\\ 每个对话需要的缓存 \\\\ （$\\2$到$\\3$个词元）"
+    ],
+    [
+      "^chance of acceptance, \\\\ at \\$(\\d+)\\$ places in the passage$",
+      "被接受的概率，\\\\ 在段落中的$\\1$个位置"
     ]
   ]
 }
