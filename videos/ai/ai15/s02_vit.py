@@ -77,11 +77,11 @@ class ViT(VoiceoverScene):
             "<bookmark mark='b'/> And here's where its summary token looks, in the last layer: at the strokes that "
             "tell letters apart."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(Group(p[0], p[2])) for p in pairs], lag_ratio=0.2), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(res))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(p) for p in pairs], lag_ratio=0.2), FadeIn(hl), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(p[1]) for p in pairs], lag_ratio=0.25), FadeIn(hl), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -90,13 +90,15 @@ class ViT(VoiceoverScene):
         v = load("vit")
         sim = np.asarray(v["pos_sim"])
         n = int(round(np.sqrt(sim.shape[0])))
-        S = 0.62
+        S = 0.92
         tiles = Group()
         for i in range(n * n):
-            tiles.add(heat_image(sim[i].reshape(n, n), S, color=C.TRUE_P, gamma=1.0))
-        tiles.arrange_in_grid(rows=n, cols=n, buff=0.06).move_to([-2.4, -0.3, 0])
+            row = np.clip(sim[i].reshape(n, n), 0, None)
+            row[i // n, i % n] = 0  # leave out each patch's similarity to itself, which is always 1
+            tiles.add(heat_image(row, S, color=C.TRUE_P, gamma=0.7))
+        tiles.arrange_in_grid(rows=n, cols=n, buff=0.07).move_to([-2.6, -0.3, 0])
         frame = SurroundingRectangle(tiles[n + 1], color=PATCH, buff=0.02, stroke_width=2.5)
-        expl = label(r"tile $(r, c)$: \ how alike the position vector \\ of patch $(r, c)$ is to every other", font_size=24,
+        expl = label(r"tile $(r, c)$: \ how alike the position vector \\ of patch $(r, c)$ is to every other \\ (itself left out)", font_size=24,
                      color=GREY_A).move_to([3.8, 1.2, 0])
         nf = label(rf"neighbours: \ ${float(v['near']):.2f}$; \ far apart: \ ${float(v['far']):.2f}$", font_size=26,
                    color=C.TRUE_P).next_to(expl, DOWN, buff=0.5)

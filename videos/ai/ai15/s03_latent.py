@@ -57,24 +57,47 @@ class Latent(VoiceoverScene):
     # ------------------------------------------------------------------
     def space(self):
         d = load("latent")
-        xy, lb = np.asarray(d["xy"]), np.asarray(d["xy_labels"])
-        xy = xy / np.abs(xy).max() * 3.0
-        cols = [C.TRUE_P, C.BITS, C.SURPRISE, C.INTERVAL, C.NEURAL, C.MODEL_Q]
-        pick = [0, 8, 14, 18]  # A, I, O, S
-        dots = VGroup(*[Dot([p[0] - 1.0, p[1] - 0.3, 0], radius=0.03, color=cols[pick.index(l_)] if l_ in pick else GREY_D)
-                        for p, l_ in zip(xy, lb)])
-        key = VGroup(*[label(rf"``{LETTERS[i]}''", font_size=26, color=cols[k]) for k, i in enumerate(pick)])
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([5.0, 0.6, 0])
-        head = label(r"every picture's $16$ numbers, \ seen along their two main directions", font_size=24, color=GREY_A)
+        Q, N = np.asarray(d["nn_query"]), np.asarray(d["nn_imgs"])
+        ql, nl = [int(x) for x in d["nn_qlabels"]], np.asarray(d["nn_labels"])
+        same, chance = float(d["nn_same"]), float(d["nn_chance"])
+        S = 0.8
+        rows = Group()
+        for q, ns, lq, lns in zip(Q, N, ql, nl):
+            qi = gray_image(q, S)
+            box = SurroundingRectangle(qi, color=C.BITS, buff=0.03, stroke_width=2.5)
+            arrow = MathTex(r"\rightarrow", font_size=36, color=GREY_B)
+            nbrs = Group(*[Group(gray_image(n_, S), SurroundingRectangle(gray_image(n_, S), buff=0.03, stroke_width=2,
+                                                                         color=C.INTERVAL if int(l_) == lq else C.SURPRISE))
+                           for n_, l_ in zip(ns, lns)]).arrange(RIGHT, buff=0.12)
+            rows.add(Group(Group(qi, box), arrow, nbrs).arrange(RIGHT, buff=0.3))
+        rows.arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to([-1.0, -0.4, 0])
+        head = label(r"each picture, \ and the $6$ pictures nearest to it in the $16$ numbers", font_size=24, color=GREY_A)
         head.to_edge(UP, buff=0.4)
+        key = VGroup(label(r"green: \ the same letter", font_size=22, color=C.INTERVAL),
+                     label(r"red: \ a different one", font_size=22, color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        key.move_to([5.2, 1.2, 0])
+        res = label(rf"over all the pictures: \\ ${100 * same:.0f}\%$ of neighbours \\ are the same letter \\ "
+                    rf"(by chance: \ ${100 * chance:.0f}\%$)", font_size=24, color=C.INTERVAL).next_to(key, DOWN, buff=0.5)
+        res.align_to(key, LEFT)
+        good = same > 5 * chance
         with self.voiceover(
-            "And the space of those few numbers has structure. <bookmark mark='a'/> Pictures of the same letter land "
-            "near each other, whatever the font. Denoising in this space is cheaper, and each step is about shapes, "
-            "not pixels."
+            "And the space of those few numbers has structure. <bookmark mark='a'/> Take a picture, and find the "
+            "pictures whose sixteen numbers are closest to its own. "
+            + (f"<bookmark mark='b'/> Mostly, they're the same letter, in other fonts: {100 * same:.0f} percent of the "
+               f"time, against {100 * chance:.0f} by chance. "
+               if good else
+               f"<bookmark mark='b'/> Often they're the same letter, {100 * same:.0f} percent of the time against "
+               f"{100 * chance:.0f} by chance, but just as often only something of a similar shape. ")
+            + "Denoising in this space is cheaper, and each step is about shapes, not pixels."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.001), FadeIn(key), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.2))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_[1]), LaggedStart(*[FadeIn(n_, shift=RIGHT * 0.1) for n_ in r_[2]],
+                                                                              lag_ratio=0.1)) for r_ in rows], lag_ratio=0.25),
+                      FadeIn(key), run_time=2.5)
+            self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
 
