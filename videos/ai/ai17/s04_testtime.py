@@ -17,8 +17,8 @@ class TestTime(VoiceoverScene):
         self.curves()
 
     def card(self):
-        card = chapter_card(3, r"Thinking longer", r"What does more computation at answer time buy?", lit=(2024,), part=17)
-        with self.voiceover("Chapter three. Thinking longer."):
+        card = chapter_card(4, r"Thinking longer", r"What does more computation at answer time buy?", lit=(2024,), part=17)
+        with self.voiceover("Chapter four. Thinking longer."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

@@ -6,6 +6,7 @@ SCENES = [
     ("s01_hook", "Hook", "Sixteen bits"),
     ("s02_chain", "Chain", "1. Thinking out loud is computing"),
     ("s03_rl", "RL", "2. Learning from a checker"),
-    ("s04_testtime", "TestTime", "3. Thinking longer"),
+    ("s04_objective", "Objective", "3. The objective, exactly"),
+    ("s04_testtime", "TestTime", "4. Thinking longer"),
     ("s05_outro", "Outro", "Recap, and where this comes back"),
 ]

@@ -179,6 +179,11 @@ def compute_vae():
 
 
 # ---------------------------------------------------------------------------
+def nearest(x, cb):
+    """Index of the nearest entry of a sorted 1-D codebook, for every number in x."""
+    return np.searchsorted((cb[1:] + cb[:-1]) / 2, x)
+
+
 def compute_var():
     """Next-scale prediction's tokens: the residual at each scale, quantized to one of 16 levels."""
     from videos.ai.ai15.compute import dataset
@@ -194,9 +199,11 @@ def compute_var():
         vals = target[~test].ravel()
         cb = np.quantile(vals, np.linspace(0.02, 0.98, 16))  # 16 levels, then a few rounds of k-means
         for _ in range(12):
-            idx = np.abs(vals[:, None] - cb[None]).argmin(1)
-            cb = np.array([vals[idx == j].mean() if (idx == j).any() else cb[j] for j in range(16)])
-        q = cb[np.abs(target[..., None] - cb).argmin(-1)]
+            idx = nearest(vals, cb)
+            n_ = np.bincount(idx, minlength=16)
+            cb = np.where(n_ > 0, np.bincount(idx, weights=vals, minlength=16) / np.maximum(n_, 1), cb)
+            cb = np.sort(cb)
+        q = cb[nearest(target, cb)]
         recon = recon + np.kron(q, np.ones((1, k, k)))
         errs.append(float(np.sqrt(((recon - imgs)[test] ** 2).mean())))
         books.append(cb)
@@ -207,7 +214,7 @@ def compute_var():
     for s, cb in zip(sizes, books):
         k = GL // s
         target = (imgs[ex] - rec).reshape(s, k, s, k).mean((1, 3))
-        rec = rec + np.kron(cb[np.abs(target[..., None] - cb).argmin(-1)], np.ones((k, k)))
+        rec = rec + np.kron(cb[nearest(target, cb)], np.ones((k, k)))
         steps_shown.append(rec.copy())
     out = dict(sizes=sizes, errs=errs, tokens=toks, total=int(sum(toks)), example=np.array(steps_shown), image=imgs[ex])
     print(f"    rebuild error after each scale: {np.round(errs, 3)}; {sum(toks)} tokens in {len(sizes)} steps", flush=True)
