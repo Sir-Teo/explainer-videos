@@ -426,9 +426,9 @@ def compute_masked():
 
     net = Net()
     tr, va = data["train"], data["valid"]
-    opt = torch.optim.AdamW(net.parameters(), lr=2e-3, weight_decay=0.1, betas=(0.9, 0.95))
-    steps, B = 3000, 48
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=2e-3, total_steps=steps, pct_start=0.05)
+    opt = torch.optim.AdamW(net.parameters(), lr=1e-3, weight_decay=0.1, betas=(0.9, 0.95))
+    steps, B = 6000, 64
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-3, total_steps=steps, pct_start=0.05)
     g = rng(2025)
 
     def masked_batch(seq, n, gen):
@@ -442,14 +442,16 @@ def compute_masked():
     for step in range(1, steps + 1):
         x, xm, m, t = masked_batch(tr, B, g)
         ce = F.cross_entropy(net(xm).reshape(-1, K), x.reshape(-1), reduction="none").view(B, T)
-        loss = ((ce * m).sum(1) / t).mean() / T  # the masked-diffusion bound: masked positions, weighted by 1/t
+        # trained on the plain cross-entropy of the blanks: the 1/t weighting of the bound (below) multiplies the
+        # loss by up to 50 at small t, too noisy for batches this small; the bound itself is what we report
+        loss = (ce * m).sum() / m.sum()
         opt.zero_grad()
         loss.backward()
         opt.step()
         sched.step()
         if step % 500 == 0:
             curve.append((step, float(loss) / math.log(2)))
-            print(f"    step {step}: bound {curve[-1][1]:.3f} bits/char", flush=True)
+            print(f"    step {step}: masked cross-entropy {curve[-1][1]:.3f} bits/char", flush=True)
     # held-out: the bound, in bits per character
     with torch.no_grad():
         gv = rng(7)
