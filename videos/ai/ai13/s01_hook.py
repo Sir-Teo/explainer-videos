@@ -24,14 +24,14 @@ class Hook(VoiceoverScene):
         words = ["Spade", "looked", "at", "the", "girl", "for", "a", "long", "moment", "and", "then", "smiled"]
         g = np.random.default_rng(3)
         head = VGroup(label(rf"DeepSeek-V3: \ ${billions(ds['total'])}$ parameters, \ "
-                            rf"${n}$ experts in every layer", font_size=30),
+                            rf"${n}$ experts in each expert layer", font_size=30),
                       label(rf"each token uses ${k}$ of them, \ and one shared: \ ${billions(ds['active'])}$ "
                             rf"\ (${100 * ds['frac']:.1f}\%$)", font_size=28, color=C.BITS)).arrange(DOWN, buff=0.15)
         head.to_edge(UP, buff=0.35)
         tok = Text("", font=MONO, font_size=30)
         with self.voiceover(
             "DeepSeek-V3 has six hundred and seventy-one billion parameters. <bookmark mark='a'/> But for each "
-            f"token it reads, it uses only {ds['active'] / 1e9:.0f} billion of them. Every layer "
+            f"token it reads, it uses only {ds['active'] / 1e9:.0f} billion of them. Each of its expert layers "
             f"holds {n} small networks, called experts, and a router sends each token to just {k} of them, plus one "
             "that everyone shares. <bookmark mark='b'/> Watch: every word lights up a different few."
         ) as vo:

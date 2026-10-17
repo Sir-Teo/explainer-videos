@@ -1,113 +1,113 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第13部分：稀疏性",
  "chapters": {
-  "Hook": "",
-  "Router": "",
-  "Balance": "",
-  "Special": "",
-  "SparseAttention": "",
-  "Outro": ""
+  "Hook": "每次只用几个专家",
+  "Router": "1. 混合专家",
+  "Balance": "2. 让每个专家都有活干",
+  "Special": "3. 专家学到了什么",
+  "SparseAttention": "4. 稀疏注意力",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
-  "a7fc7c0ce828": {
+  "d0b144510bf2": {
    "scene": "Hook",
-   "en": "DeepSeek-V3 has six hundred and seventy-one billion parameters. <bookmark mark='a'/> But for each token it reads, it uses only 37 billion of them. Every layer holds 256 small networks, called experts, and a router sends each token to just 8 of them, plus one that everyone shares. <bookmark mark='b'/> Watch: every word lights up a different few.",
-   "zh": ""
+   "en": "DeepSeek-V3 has six hundred and seventy-one billion parameters. <bookmark mark='a'/> But for each token it reads, it uses only 37 billion of them. Each of its expert layers holds 256 small networks, called experts, and a router sends each token to just 8 of them, plus one that everyone shares. <bookmark mark='b'/> Watch: every word lights up a different few.",
+   "zh": "DeepSeek-V3有6710亿个参数。<bookmark mark='a'/>可是它每读一个词元，只用到其中的370亿个。它的每个专家层里都有256个小网络，叫作专家；一个路由器把每个词元只送到其中8个那里，再加上一个所有词元都共用的专家。<bookmark mark='b'/>看：每个词点亮的，都是不同的那几个。"
   },
   "1a64200449f8": {
    "scene": "Hook",
    "en": "This part is about using only some of a model at a time: how a router chooses, how to keep every expert busy, what the experts learn, <bookmark mark='a'/> and how attention, too, can look at only what matters.",
-   "zh": ""
+   "zh": "这一部分讲的是，每次只动用模型的一部分：路由器怎样做选择，怎样让每个专家都有活干，专家们学到了什么，<bookmark mark='a'/>以及注意力怎样也能只看要紧的东西。"
   },
   "28b743605d12": {
    "scene": "Router",
    "en": "Chapter one. A mixture of experts.",
-   "zh": ""
+   "zh": "第1章。混合专家。"
   },
   "27e2e22c45fe": {
    "scene": "Router",
    "en": "Here's one layer. Instead of one big network, it holds several smaller ones, the experts. <bookmark mark='a'/> A router, just one more matrix, scores the token against every expert, and a softmax turns the scores into probabilities. <bookmark mark='b'/> Only the top k experts run: here, two of eight. <bookmark mark='c'/> Their outputs are mixed, weighted by the router's probabilities. The idea is from 1991; Noam Shazeer and colleagues made it sparse, and huge, in 2017.",
-   "zh": ""
+   "zh": "这是其中的一层。它装的不是一个大网络，而是几个小一些的网络，也就是专家。<bookmark mark='a'/>路由器只不过是又一个矩阵：它让这个词元和每个专家都比一比，打出分数，再由softmax把分数变成概率。<bookmark mark='b'/>只有得分最高的k个专家会运行：这里是8个里的2个。<bookmark mark='c'/>它们的输出按路由器给的概率加权，混合起来。这个想法早在1991年就有了；2017年，诺姆·沙泽尔和同事们让它变得稀疏，也让它变得极其庞大。"
   },
   "626c49cde5aa": {
    "scene": "Router",
    "en": "Almost every frontier model now works this way. <bookmark mark='a'/> Mixtral used two experts of eight. DeepSeek-V3 uses 8 of 256; Kimi K2 has a trillion parameters and uses thirty-two billion; Qwen3-Next, 10 of 512, under four percent of its weights per token. <bookmark mark='b'/> The model knows as much as its total size, roughly, and costs as much to run as its active size.",
-   "zh": ""
+   "zh": "如今，几乎每一个前沿模型都是这样工作的。<bookmark mark='a'/>Mixtral用的是8个专家里的2个。DeepSeek-V3用256个里的8个；Kimi K2有1万亿个参数，用到的是320亿个；Qwen3-Next是512个里的10个，每个词元用到的权重不到4%。<bookmark mark='b'/>大致说来，模型懂得多少，和它的总规模相当；运行起来花多少，却只和它激活的那部分相当。"
   },
   "c08319811eeb": {
    "scene": "Balance",
    "en": "Chapter two. Keeping every expert busy.",
-   "zh": ""
+   "zh": "第2章。让每个专家都有活干。"
   },
   "014a1b2c2ee3": {
    "scene": "Balance",
    "en": "We built one: Part ten's character model, with its hidden layer split into 8 experts and 2 used for each character. Train it, and watch how the characters are shared out. <bookmark mark='a'/> Left alone, the router plays favourites: the busiest expert ends up with 3.2 times its fair share, while others starve. <bookmark mark='b'/> It's a rich-get-richer loop: a favoured expert gets more practice, gets better, and gets chosen even more. Starved experts are wasted parameters.",
-   "zh": ""
+   "zh": "我们自己搭了一个：就是第10部分的那个字符模型，把它的隐藏层拆成8个专家，每个字符用其中2个。训练它，看看字符是怎样分下去的。<bookmark mark='a'/>放任不管的话，路由器就会偏心：最忙的那个专家，最后分到了公平份额的3.2倍，而另一些专家却在挨饿。<bookmark mark='b'/>这是一个富者愈富的循环：受偏爱的专家练得更多，变得更好，于是被选中得更多。挨饿的专家，就是白白浪费的参数。"
   },
   "dd7b039c6a5d": {
    "scene": "Balance",
    "en": "Two fixes. <bookmark mark='a'/> The classic one adds a penalty to the loss: the share of characters each expert gets, times its average router probability, summed. It's smallest when every expert gets an equal share. But it's a second goal competing with the first. <bookmark mark='b'/> DeepSeek-V3's fix adds no loss at all. Each expert gets a bias, used only for choosing, never for mixing: after every step, busy experts' biases go down a notch and idle experts' go up. <bookmark mark='c'/> At Switch's strength, the penalty only partly evens it out: its busiest expert still gets 2.8 times a fair share, while the bias holds every expert within 1.1. Held-out bits: 2.453 unbalanced, 2.410 with the penalty, 2.434 with the bias.",
-   "zh": ""
+   "zh": "有两种办法。<bookmark mark='a'/>经典的办法，是在损失里加一个惩罚项：每个专家分到的字符份额，乘以它的平均路由概率，再全部加起来。每个专家分得一样多时，它最小。可是，这是第二个目标，会和第一个目标相互竞争。<bookmark mark='b'/>DeepSeek-V3的办法，完全不加损失。每个专家都有一个偏置，只用来做选择，从不用来混合：每走一步，忙的专家，偏置就调低一格；闲的专家，偏置就调高一格。<bookmark mark='c'/>按Switch用的强度，惩罚项只能把负载拉平一部分：它最忙的专家，仍然分到公平份额的2.8倍；而偏置让每个专家都保持在1.1倍以内。留出文本上的比特数：不做均衡是2.453，加惩罚项是2.410，用偏置是2.434。"
   },
   "50e0d45f7a71": {
    "scene": "Balance",
    "en": "Here is all of training, replayed: each bar is one expert's share of the characters, under each of the three rules. <bookmark mark='a'/> Watch the left: shares drift apart as some experts win. In the middle, the penalty pulls them only part of the way back; on the right, the bias keeps every expert close to its fair share.",
-   "zh": ""
+   "zh": "这是整个训练过程的回放：在三种规则下，每根柱子都是一个专家分到的字符份额。<bookmark mark='a'/>看左边：随着一些专家胜出，份额越拉越开。中间，惩罚项只把它们往回拉了一部分；右边，偏置让每个专家都贴近它的公平份额。"
   },
   "05934f6dbfe1": {
    "scene": "Special",
    "en": "Chapter three. What experts learn.",
-   "zh": ""
+   "zh": "第3章。专家学到了什么。"
   },
   "cc52842f5897": {
    "scene": "Special",
    "en": "What do the experts learn? Here's where our balanced model sends each character's context: one column per character just read, one row per expert. <bookmark mark='a'/> Some patterns appear: 3 of the 5 vowels go first to expert 5, and 6 of the 8 spaces and punctuation marks to experts 3 and 8. Nobody told it to. But it isn't a tidy division by meaning: in large models too, experts tend to split the work along surface patterns like these.",
-   "zh": ""
+   "zh": "专家们学到了什么？这里是我们那个均衡过的模型，把每个字符的上下文送到了哪里：每一列是刚读到的一个字符，每一行是一个专家。<bookmark mark='a'/>能看出一些规律：5个元音里，有3个首先送往5号专家；8个空格和标点里，有6个送往3号和8号专家。没有人这样教过它。可这并不是按含义整整齐齐的分工：在大模型里也一样，专家往往是沿着这类表面的模式来分工的。"
   },
   "dd96b869b310": {
    "scene": "Special",
    "en": "Is it worth it? Compare three models. <bookmark mark='a'/> A dense one doing as much arithmetic per character as the mixture; the mixture; and a dense one with as many parameters in total. <bookmark mark='b'/> The mixture, 2.434, beats the dense model with the same arithmetic, 2.485. And with the same short training, the dense model with all the parameters does no better, 2.510: eight times the width is more to learn, and it hasn't caught up. At scale, that's the trade the biggest models make: knowledge in the total, cost in the active.",
-   "zh": ""
+   "zh": "这样做值得吗？比较三个模型。<bookmark mark='a'/>一个稠密模型，每个字符做的运算和混合模型一样多；混合模型本身；再加一个稠密模型，参数总数和混合模型一样多。<bookmark mark='b'/>混合模型是2.434，胜过了运算量相同的稠密模型，2.485。而在同样短的训练下，拥有全部参数的那个稠密模型，也没有更好，是2.510：宽了8倍，要学的东西就更多，它还没有赶上来。到了大规模，这正是最大的那些模型所做的交换：知识看总参数，开销看激活参数。"
   },
   "dc2dad8aef1d": {
    "scene": "SparseAttention",
    "en": "Chapter four. Sparse attention.",
-   "zh": ""
+   "zh": "第4章。稀疏注意力。"
   },
-  "c30e97a4fb66": {
+  "a120617306c8": {
    "scene": "SparseAttention",
-   "en": "Attention looks at every earlier token, but how much of that does it use? Take part eleven's transformer and, for each query, rank its keys by weight. <bookmark mark='a'/> Each line is one head: how much of the attention its top k keys hold. On average, the top sixteen keys out of a few hundred hold 92 percent. Most of the attention goes to a few keys.",
-   "zh": ""
+   "en": "Attention looks at every earlier token, but how much of that does it use? Take part eleven's transformer and, for each query, rank its keys by weight. <bookmark mark='a'/> Each line is one head: how much of the attention its top k keys hold. On average, the top sixteen keys, out of between a hundred and twenty-eight and two hundred and fifty-six, hold 92 percent. Most of the attention goes to a few keys.",
+   "zh": "注意力会看前面的每一个词元，可是它真正用上了多少？拿第11部分的Transformer来说，对每个查询，把它的键按权重排个序。<bookmark mark='a'/>每条线是一个头：它权重最高的k个键，占了多少注意力。平均来说，在128到256个键里，权重最高的16个，就占了92%。大部分注意力，都落在少数几个键上。"
   },
-  "ec45fe3673b9": {
+  "a17b43f41914": {
    "scene": "SparseAttention",
-   "en": "So let each query use only k keys. Which k? <bookmark mark='a'/> The simplest choice is the most recent ones, a sliding window: with 8 keys, 1.85 bits a character. <bookmark mark='b'/> Better, take the 8 keys it would weight most: 1.80. With 64, it's within 0.000 bits of using everything.",
-   "zh": ""
+   "en": "So let each query use only k keys. Which k? <bookmark mark='a'/> The simplest choice is the most recent ones, a sliding window: with 8 keys, 1.85 bits a character. <bookmark mark='b'/> Better, take the 8 keys it would weight most: 1.80. With 64, it's within a thousandth of a bit of using everything.",
+   "zh": "那就让每个查询只用k个键。用哪k个？<bookmark mark='a'/>最简单的选法，是最近的那几个，也就是滑动窗口：用8个键，每字符1.85比特。<bookmark mark='b'/>更好的办法，是取它本来会给出最高权重的那8个键：1.80。用64个键时，和用上全部的键相比，差距不到千分之一比特。"
   },
   "6b0c8758e652": {
    "scene": "SparseAttention",
    "en": "Choosing by score is what real models now do. <bookmark mark='a'/> Here's one query in our transformer, and how it weighs its last forty-eight keys. Together they hold 90 percent of its attention, and most of it lands on a handful of characters well back from the end. <bookmark mark='b'/> A sliding window keeps only the last eight keys: they hold just 7 percent. <bookmark mark='c'/> DeepSeek's native sparse attention cuts the past into blocks and squeezes each one into a summary. <bookmark mark='d'/> The query scores the summaries, reads the best blocks in full, and keeps a window of recent tokens too: 75 percent, from 16 keys. <bookmark mark='e'/> In DeepSeek-V3.2, a tiny, fast indexer gives every past token a score, and the query attends to the top ones only: two thousand and forty-eight in the real model, eight here, holding 76 percent. <bookmark mark='f'/> The trick in both is that finding the important keys must be much cheaper than attending to all of them.",
-   "zh": ""
+   "zh": "按分数来选，正是如今真实的模型在做的事。<bookmark mark='a'/>这是我们Transformer里的一个查询，以及它怎样给最后48个键分配权重。这48个键加起来，占了它90%的注意力，而且大部分落在离末尾相当远的少数几个字符上。<bookmark mark='b'/>滑动窗口只留下最后8个键：它们只占7%。<bookmark mark='c'/>DeepSeek的原生稀疏注意力，把过去切成一块一块，再把每一块压缩成一个摘要。<bookmark mark='d'/>查询先给这些摘要打分，把最好的几块完整地读一遍，同时也保留一个最近词元的窗口：75%，用了16个键。<bookmark mark='e'/>在DeepSeek-V3.2里，一个又小又快的索引器，给过去的每个词元打一个分，查询只关注得分最高的那些：真实模型里是2048个，这里是8个，占了76%。<bookmark mark='f'/>两者的诀窍都在于：找出重要的键，必须比对所有的键都做一遍注意力，便宜得多。"
   },
   "149c1536e75f": {
    "scene": "Outro",
    "en": "Let's take stock. A mixture of experts keeps many networks in each layer and runs only a few per token, chosen by a router: frontier models now use a few percent of their weights at a time. Routers play favourites unless balanced, partly by a penalty, and fully, in our model, by DeepSeek's loss-free bias. The experts split the work by themselves, and the mixture buys the knowledge of a big model at the cost of a small one. And attention is sparse too: a few keys hold most of each query's weight, and choosing keys by score beats choosing the most recent.",
-   "zh": ""
+   "zh": "我们来盘点一下。混合专家在每一层里放许多个网络，每个词元只运行其中几个，由路由器来挑：如今的前沿模型，每次只用到百分之几的权重。路由器会偏心，除非加以均衡：惩罚项能做到一部分；而在我们的模型里，DeepSeek那个不加损失的偏置，能完全做到。专家们会自己分工，而混合模型用小模型的开销，换来了大模型的知识。注意力也是稀疏的：少数几个键，就占了每个查询的大部分权重；按分数来选键，胜过选最近的键。"
   },
   "ba4dc39722e6": {
    "scene": "Outro",
    "en": "Image and video models route by experts too, in part fifteen. Spreading hundreds of experts across many chips is a serving problem, in part nineteen. And sparsity returns in part twenty, inside the network's own activity: features that light up only rarely.",
-   "zh": ""
+   "zh": "图像和视频模型也会按专家来路由，这在第15部分。把几百个专家分散到许多块芯片上，是部署服务的问题，这在第19部分。稀疏性还会在第20部分回来，就在网络自身的活动里：那些很少才亮起来的特征。"
   },
   "26c43630b624": {
    "scene": "Outro",
    "en": "Next time, act three turns from text to everything else. Diffusion and flow models start from pure noise <bookmark mark='a'/> and, guessing one small step at a time, carry it to a picture: part four's Brownian motion, run backwards.",
-   "zh": ""
+   "zh": "下一次，第三幕从文本转向其他一切。扩散模型和流模型，从纯粹的噪声出发，<bookmark mark='a'/>每次猜一小步，一步步把它带成一幅图像：这就是第4部分的布朗运动，倒过来运行。"
   },
   "38e4891cda3b": {
    "scene": "Outro",
    "en": "The Switch Transformer paper is the clearest introduction. Thanks for watching, and see you in part fourteen.",
-   "zh": ""
+   "zh": "要入门，Switch Transformer那篇论文讲得最清楚。感谢观看，我们第14部分再见。"
   }
  },
  "title_en": "AI, Built: Part 13, Sparsity",
