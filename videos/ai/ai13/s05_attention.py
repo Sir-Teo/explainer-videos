@@ -83,7 +83,7 @@ class SparseAttention(VoiceoverScene):
             f"ones, a sliding window: with {kk[i8]} keys, {wn[i8]:.2f} bits a character. <bookmark mark='b'/> Better, "
             f"take the {kk[i8]} keys it would weight most: {tk[i8]:.2f}. With {kk[-1]}, "
             + (f"it's within {tk[-1] - full:.3f} bits of using everything."
-               if tk[-1] - full >= 0.0005 else "it's within a thousandth of a bit of using everything."))
+               if tk[-1] - full >= 0.0005 else "it's within a thousandth of a bit of using everything.")
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll))
             vo.wait_until("a")
