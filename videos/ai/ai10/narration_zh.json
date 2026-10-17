@@ -1,0 +1,100 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "Width": "",
+  "Chinchilla": "",
+  "Grok": "",
+  "Outro": ""
+ },
+ "lines": {
+  "87f8d4a8f219": {
+   "scene": "Hook",
+   "en": "Make a model bigger, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are seven sizes of part nine's character model, each trained the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that no model can go below. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the floor by the same factor: on a log scale, a straight line. Curves like this, measured on small models, are how laboratories decide what to build next.",
+   "zh": ""
+  },
+  "55c7ab931d0c": {
+   "scene": "Hook",
+   "en": "This part is about what happens as networks grow: why very wide networks stop learning features, how to set a learning rate once and keep it as the model grows, how to split a budget between size and data, <bookmark mark='a'/> and a strange delay between memorizing and understanding.",
+   "zh": ""
+  },
+  "7a29094e7140": {
+   "scene": "Width",
+   "en": "Chapter one. Wider and wider.",
+   "zh": ""
+  },
+  "74a5aea8137f": {
+   "scene": "Width",
+   "en": "Take part nine's character model and make it wider and wider, trained by plain gradient descent, with step sizes that keep a wide network stable. Measure how much its hidden features, the outputs of its hidden units, change during training. <bookmark mark='a'/> The wider the network, the less they change. The slope here is about minus 0.4; in theory it tends to minus a half: one over the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all, and the network behaves like part five's kernel methods, with a fixed kernel: the neural tangent kernel. Elegant, and exactly what we don't want: a network whose features never change learns nothing new about its data's structure.",
+   "zh": ""
+  },
+  "65ad96f3326c": {
+   "scene": "Width",
+   "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
+   "zh": ""
+  },
+  "e8723b973d84": {
+   "scene": "Chinchilla",
+   "en": "Chapter two. Spending a compute budget.",
+   "zh": ""
+  },
+  "053b0be754de": {
+   "scene": "Chinchilla",
+   "en": "Suppose you can afford a fixed amount of computation. Training costs about six operations per parameter per training token, so a budget fixes the product of model size and data. You can have a big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the experiment, on our character model. For each budget, try 6 sizes, each trained on exactly the data the budget allows. <bookmark mark='b'/> Each budget gives a valley: too small a model can't hold what it sees; too big a model barely gets to see anything. <bookmark mark='c'/> And the bigger the budget, the further right the best size moves.",
+   "zh": ""
+  },
+  "181f74ba73cb": {
+   "scene": "Chinchilla",
+   "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.47, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
+   "zh": ""
+  },
+  "3b1eb489e761": {
+   "scene": "Grok",
+   "en": "Chapter three. Grokking.",
+   "zh": ""
+  },
+  "805a00c6177c": {
+   "scene": "Grok",
+   "en": "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with 97 hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a network forty percent of the addition table, and ask it to fill in the rest.",
+   "zh": ""
+  },
+  "489396023824": {
+   "scene": "Grok",
+   "en": "It memorizes the entries it was shown within about 100 steps, and for a long time, it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of steps later, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Weight decay is what drives it: it keeps squeezing the weights, and the memorized lookup table is more expensive than the rule.",
+   "zh": ""
+  },
+  "eaf12426f1f0": {
+   "scene": "Grok",
+   "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> They're built from a few pure frequencies, waves around the clock. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part twenty takes that idea to real models.",
+   "zh": ""
+  },
+  "58cbcf30d35c": {
+   "scene": "Outro",
+   "en": "Let's take stock. Loss falls with size along a power law, predictably enough to plan by. Very wide networks, scaled the usual way, go lazy and stop learning features; mu-P keeps every layer learning, and lets a learning rate tuned on a small model carry over to a big one. A fixed budget should be split between size and data, about twenty tokens per parameter by Chinchilla's count. And a network can memorize first and understand much later, by turning clock arithmetic into rotations.",
+   "zh": ""
+  },
+  "647a933c34c1": {
+   "scene": "Outro",
+   "en": "Act two ends here. Scaling laws return with mixtures of experts, and with reasoning models that scale the thinking done at test time. And grokking's circuits are a first taste of looking inside models, in part twenty.",
+   "zh": ""
+  },
+  "e3118642c8f2": {
+   "scene": "Outro",
+   "en": "Next time, act three begins: the engines inside today's models. First, attention: how every word looks back at every earlier word and decides which ones matter, as geometry. <bookmark mark='a'/> And we'll build a small transformer of our own.",
+   "zh": ""
+  },
+  "22b8ad590a00": {
+   "scene": "Outro",
+   "en": "The Chinchilla paper is very readable, and Roberts, Yaida and Hanin's book is the deep end on wide networks. Thanks for watching, and see you in part eleven.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 10, The Mathematics of Scale",
+ "chapters_en": {
+  "Hook": "A power law",
+  "Width": "1. Wider and wider",
+  "Chinchilla": "2. Size or data?",
+  "Grok": "3. Grokking",
+  "Outro": "Recap, and where this comes back"
+ }
+}
