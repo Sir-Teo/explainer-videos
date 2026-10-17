@@ -12,6 +12,7 @@ class Superposition(VoiceoverScene):
     def construct(self):
         self.card()
         self.toy()
+        self.learning()
         self.interference()
         self.highdim()
 
@@ -201,4 +202,58 @@ class Superposition(VoiceoverScene):
             self.play(Transform(h, hist(dims[3])), Transform(lab, dl(dims[3])), run_time=1.5)
             self.play(Write(f), FadeIn(note_), FadeIn(cite_))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How the pentagon forms: the sparse model's five feature arrows, from random to the pentagon, as it trains."""
+        s = load("superposition")
+        Ss = [float(v) for v in s["sparsities"]]
+        S = Ss[-1]
+        Wt = np.asarray(s[f"Wtrain{S:g}"])
+        checks = [int(c) for c in s["checks"]]
+        L = np.asarray(s[f"losses{S:g}"])
+        c0, R = np.array([-3.0, -0.4, 0]), 2.2
+        sc = R / max(np.linalg.norm(Wt[-1], axis=0).max(), 1e-9)
+
+        def arrows(k):
+            W = Wt[k]
+            return VGroup(*[arrow2d(c0, W[:, i], COLS[i], sc) if np.linalg.norm(W[:, i]) * sc > 0.08 else
+                            Dot(c0, radius=0.06, color=COLS[i]) for i in range(W.shape[1])])
+
+        pl = self.plane(c0, R)
+        cur = arrows(0)
+        ax = CornerAxes(x_range=[0, checks[-1], 2000], y_range=[0, float(L[:, 1].max()) * 1.05, float(L[:, 1].max()) / 2],
+                        x_length=4.6, y_length=2.6, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}
+                        ).move_to([3.6, -0.4, 0])
+        yn = label(r"the weighted rebuild error", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
+                            .next_to(pl, UP, buff=0.2))
+        on = 100 * (1 - S)
+        hl = label(rf"each feature on ${on:.0f}\%$ of the time", font_size=20, color=GREY_A).next_to(pl, DOWN, buff=0.2)
+        with self.voiceover(
+            "How does the network find that pentagon? Here is the sparse model learning, from its random start. "
+            "<bookmark mark='a'/> At first the five arrows point anywhere. The important features grow first, since "
+            "getting them wrong costs the most, <bookmark mark='b'/> and they push each other apart, because two "
+            "features pointing the same way would be read as each other. <bookmark mark='c'/> Slowly the weaker ones "
+            "find the gaps, and the arrangement settles into the most evenly spread shape there is: nobody planned "
+            "the pentagon; gradient descent found it."
+        ) as vo:
+            self.play(FadeIn(pl), FadeIn(hl), Create(ax), FadeIn(yn), FadeIn(xn))
+            self.add(cnt)
+            self.play(FadeIn(cur))
+            vo.wait_until("a")
+            marks = {3: "b", 5: "c"}
+            for k in range(1, len(checks)):
+                if k in marks:
+                    vo.wait_until(marks[k])
+                seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]
+                anims = [Transform(cur, arrows(k)), t.animate.set_value(checks[k])]
+                if len(seg) > 1:
+                    anims.append(Create(VMobject(color=C.BITS, stroke_width=2.5).set_points_as_corners(seg)))
+                self.play(*anims, run_time=1.2)
+        self.wait(0.3)
+        self.remove(cnt)
         self.clear_scene()

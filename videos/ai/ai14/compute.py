@@ -12,6 +12,7 @@ Items:
     toy        a denoiser (an MLP) trained on Part 4's "AI" points: the learned score field at four noise levels,
                samples by DDPM (stochastic, 200 steps) and DDIM (deterministic, 5 to 100 steps), the paths, and how
                far each set of samples is from the data
+    toytrain   (training.py) the toy denoiser's training again, with samples drawn at checkpoints and the loss
     flow       flow matching on the same points: straight-line training paths, Euler sampling with 1 to 100 steps,
                the learned paths; then reflow (a second model trained on the first one's noise-to-sample pairs), whose
                paths are straighter, so that one or two steps suffice
@@ -496,9 +497,11 @@ def compute_masked():
 
 
 from videos.ai.ai14.fewstep import compute_fewstep  # noqa: E402
+from videos.ai.ai14.training import compute_toytrain  # noqa: E402
 
 ITEMS = {
     "toy": compute_toy,
+    "toytrain": compute_toytrain,
     "flow": compute_flow,
     "fewstep": compute_fewstep,
     "guidance": compute_guidance,

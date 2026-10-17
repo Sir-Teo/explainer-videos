@@ -51,13 +51,21 @@ def compute_superposition():
         opt = torch.optim.Adam([W, b], lr=1e-2)
         I = torch.tensor(imp, dtype=torch.float32)
         g = torch.Generator().manual_seed(0)
+        checks = [0, 30, 100, 250, 600, 1500, 3000, 6000]
+        snaps, losses = [], []
         for step in range(6000):
+            if step in checks:
+                snaps.append(W.detach().numpy().copy())
             x = torch.rand(1024, n, generator=g) * (torch.rand(1024, n, generator=g) > S).float()
             xh = torch.relu(x @ W.T @ W + b)
             loss = (I * (xh - x) ** 2).mean()
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if step % 30 == 0:
+                losses.append((step, float(loss)))
+        snaps.append(W.detach().numpy().copy())
+        out[f"Wtrain{S:g}"], out[f"losses{S:g}"], out["checks"] = np.array(snaps), np.array(losses), checks  # how it learns
         Wn = W.detach().numpy()
         out[f"W{S:g}"] = Wn  # each column: where a feature points in the 2D hidden space
         out[f"b{S:g}"] = b.detach().numpy()

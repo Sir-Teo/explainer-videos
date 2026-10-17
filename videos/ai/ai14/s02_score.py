@@ -12,6 +12,7 @@ class Score(VoiceoverScene, ThreeDScene):
         self.objective()
         self.landscape()
         self.field()
+        self.learning()
 
     def card(self):
         card = chapter_card(1, r"Learning to denoise", r"How does a network learn the score?", part=14, lit=(2015,))
@@ -175,4 +176,55 @@ class Score(VoiceoverScene, ThreeDScene):
         self.play(*[MoveAlongPath(m, tr) for m, tr in zip(movers, trails)], *[Create(tr) for tr in trails], run_time=4.0,
                   rate_func=linear)
         self.wait(0.6)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How the denoiser learns: the same noise, sampled at checkpoints during training, beside the loss."""
+        import numpy as np
+
+        from videos.ai.ai14.common import curve, move_cloud
+
+        d = load("toytrain")
+        checks = [int(c) for c in d["checks"]]
+        snaps = np.asarray(d["snaps"])
+        L = np.asarray(d["losses"])
+        sw = [float(v) for v in d["sw"]]
+        S, sh = 0.85, np.array([-3.0, -0.2, 0])
+        pts = cloud(np.clip(snaps[0], -3.4, 3.4), DATA, radius=0.022, scale=S, shift=sh, opacity=0.85)
+        frame = Rectangle(width=6.0 * S, height=4.4 * S, stroke_color=GREY_D, stroke_width=1.5).move_to(sh)
+        ax = CornerAxes(x_range=[0, checks[-1], checks[-1] / 4], y_range=[0, float(L[:, 1].max()) * 1.05, 0.5], x_length=4.8,
+                        y_length=2.6, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.7, 0.4, 0])
+        yn = label(r"the loss: \ how wrong its noise guesses are", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"training steps \ ($512$ noisy points each)", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        t = ValueTracker(0)
+        dot = always_redraw(lambda: Dot(ax.c2p(t.get_value(), float(np.interp(t.get_value(), L[:, 0], L[:, 1]))), radius=0.07, color=C.BITS))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
+                            .next_to(frame, UP, buff=0.15))
+        swl = always_redraw(lambda: label(rf"distance from the data: \ ${np.interp(t.get_value(), checks, sw):.2f}$", font_size=20,
+                                          color=DATA).next_to(frame, DOWN, buff=0.15))
+        tag = label(r"$600$ points from the same noise, \\ drawn with $50$ steps at each checkpoint", font_size=18,
+                    color=GREY_A).next_to(ax, DOWN, buff=0.9)
+        with self.voiceover(
+            "How does a denoiser learn this? Here is ours being trained. At each checkpoint, we stop, and use it to "
+            "draw six hundred points from the same noise. <bookmark mark='a'/> Untrained, it moves the noise "
+            "nowhere useful. <bookmark mark='b'/> Within a few dozen steps it learns the crudest fact about the data, "
+            "where its centre is, and everything collapses toward it. <bookmark mark='c'/> Then the two letters "
+            "separate, and the strokes thin out and sharpen. Each step only ever asked it to guess the noise in "
+            "one blurred point; the shape emerges from millions of those guesses."
+        ) as vo:
+            self.play(Create(frame), FadeIn(pts), Create(ax), FadeIn(yn), FadeIn(xn), FadeIn(tag))
+            self.add(dot, cnt, swl)
+            vo.wait_until("a")
+            marks = {2: "b", 4: "c"}
+            for k in range(1, len(checks)):
+                if k in marks:
+                    vo.wait_until(marks[k])
+                seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]
+                anims = [t.animate.set_value(checks[k]), *move_cloud(pts, np.clip(snaps[k], -3.4, 3.4), scale=S, shift=sh)]
+                if len(seg) > 1:
+                    anims.append(Create(VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners(seg)))
+                self.play(*anims, run_time=1.4)
+        self.wait(0.3)
+        self.remove(dot, cnt, swl)
         self.clear_scene()
