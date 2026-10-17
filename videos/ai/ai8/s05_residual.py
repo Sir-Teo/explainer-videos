@@ -180,9 +180,10 @@ class Residual(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(frames_), FadeIn(cur_m), FadeIn(dots), FadeIn(heads))
             self.add(cnt)
-            vo.wait_until("a")
             self.play(Create(base), FadeIn(bl), FadeIn(gl), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in cur_b], lag_ratio=0.01),
                       run_time=2.0)
+            vo.wait_until("a")
+            self.play(Indicate(VGroup(*cur_b[:len(cur_b) // 2]), color=PLAIN, scale_factor=1.05), run_time=1.5)
             vo.wait_until("b")
             for k in range(1, len(steps)):
                 nm, nb = maps(k), bars(k)
