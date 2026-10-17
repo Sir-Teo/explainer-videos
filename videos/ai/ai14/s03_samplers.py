@@ -63,7 +63,8 @@ class Samplers(VoiceoverScene):
         noise, floor, ddpm = float(t["sw_noise"]), float(t["sw_floor"]), float(t["sw_ddpm"])
         lx = np.log10(ks)
         hi = max(sw.max(), ddpm) * 1.15
-        ax = Axes(x_range=[0.6, 2.1, 0.5], y_range=[0, hi, hi / 4], x_length=6.6, y_length=4.0, tips=False,
+        ystep = next(v for v in (0.05, 0.1, 0.2, 0.25, 0.5, 1.0) if v >= hi / 5)  # round tick values
+        ax = Axes(x_range=[0.6, 2.1, 0.5], y_range=[0, hi, ystep], x_length=6.6, y_length=4.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.6, -0.6, 0])
         xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(math.log10(k), 0), DOWN, buff=0.1) for k in ks])
         xn = label(r"sampling steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
@@ -72,8 +73,8 @@ class Samplers(VoiceoverScene):
         c = VGroup(curve(ax, lx, sw, DDIM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=DDIM_C) for a, b in zip(lx, sw)])
         fl = DashedLine(ax.c2p(0.6, floor), ax.c2p(2.1, floor), color=GREY_B, stroke_width=1.5)
         fll = label(r"the floor: \\ two samples \\ of the data itself", font_size=20, color=GREY_B).next_to(fl.get_end(), RIGHT, buff=0.12)
-        yt = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0.6, v), LEFT, buff=0.08)
-                      for v in np.linspace(0, hi, 5)[1:]])
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(0.6, v), LEFT, buff=0.08)
+                      for v in np.arange(ystep, hi + 1e-9, ystep)])
         dp = DashedLine(ax.c2p(0.6, ddpm), ax.c2p(2.1, ddpm), color=DDPM_C, stroke_width=1.5)
         dpl = label(r"DDPM, $200$ steps", font_size=20, color=DDPM_C).next_to(dp, UP, buff=0.05).align_to(dp, LEFT)
         S = 0.42

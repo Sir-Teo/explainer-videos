@@ -94,13 +94,14 @@ class Flow(VoiceoverScene):
         rf = np.array([float(f[f"sw_rf{k}"]) for k in ks])
         lx = np.log10(ks)
         hi = max(fm.max(), rf.max()) * 1.1
-        ax = Axes(x_range=[-0.1, 2.1, 0.5], y_range=[0, hi, hi / 4], x_length=6.4, y_length=3.8, tips=False,
+        ystep = next(v for v in (0.05, 0.1, 0.2, 0.25, 0.5, 1.0) if v >= hi / 5)  # round tick values
+        ax = Axes(x_range=[-0.1, 2.1, 0.5], y_range=[0, hi, ystep], x_length=6.4, y_length=3.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-3.0, -0.8, 0])
         xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(math.log10(k), 0), DOWN, buff=0.1) for k in ks])
         xn = label(r"sampling steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"distance from the real data", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        yt = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(-0.1, v), LEFT, buff=0.08)
-                      for v in np.linspace(0, hi, 5)[1:]])
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(ax.c2p(-0.1, v), LEFT, buff=0.08)
+                      for v in np.arange(ystep, hi + 1e-9, ystep)])
         cf = VGroup(curve(ax, lx, fm, FM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=FM_C) for a, b in zip(lx, fm)])
         cr = VGroup(curve(ax, lx, rf, RF_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=RF_C) for a, b in zip(lx, rf)])
         k1 = label(r"flow matching", font_size=24, color=FM_C).move_to([3.0, 2.4, 0])
