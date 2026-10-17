@@ -18,6 +18,10 @@ Items:
                latest values
     ssm        a diagonal state-space model's memory: impulse responses for several step sizes, and a selective one
                (step size set by the input) holding a marked value through a stretch of noise
+    delta      the delta rule up close: the update as a rank-one change of a linear map (a 2 x 2 example, with beta
+               1/2, 1 and 2); the gated delta rule run step by step and chunk by chunk (the WY form of a product of
+               (I - beta k k^T), one triangular solve per chunk), agreeing to rounding error; the decaying rule as
+               masked attention, (L o QK^T)V, with its semiseparable mask (Mamba-2's state-space duality)
     mqar       multi-query associative recall (Arora et al., Zoology): tiny one-layer models with softmax attention,
                linear attention and the delta rule (keys of 16 numbers), trained to answer "what value went with this
                key?" after N pairs; accuracy as N grows past the key size
@@ -269,12 +273,109 @@ def compute_mqar():
     return out
 
 
+# ---------------------------------------------------------------------------
+def compute_delta():
+    import time
+
+    from scipy.linalg import solve_triangular
+
+    g = rng(2024)  # Yang et al., Parallelizing Linear Transformers with the Delta Rule over Sequence Length (2024)
+    # 1. the update on a 2 x 2 memory: S <- S (I - beta k k^T) + beta v k^T moves S's answer for k towards v, and
+    #    leaves its answer for every direction at right angles to k alone
+    S0 = np.array([[0.9, 0.3], [-0.2, 0.7]])
+    th = np.deg2rad(30.0)
+    k2 = np.array([np.cos(th), np.sin(th)])
+    v2 = np.array([-0.3, 0.8])
+    geo = {}
+    for b in (0.5, 1.0, 2.0):
+        S1 = S0 @ (np.eye(2) - b * np.outer(k2, k2)) + b * np.outer(v2, k2)
+        geo[f"S{b:g}"] = S1
+        perp = np.array([-k2[1], k2[0]])
+        assert np.allclose(S1 @ perp, S0 @ perp)  # nothing changes at right angles to the key
+        assert np.allclose(S1 @ k2, (1 - b) * S0 @ k2 + b * v2)
+    # 2. the gated delta rule, step by step and chunk by chunk
+    T, d, Cn = 2048, 64, 64
+
+    def unit(x):
+        return x / np.linalg.norm(x, axis=1, keepdims=True)
+
+    Kx, Qx, Vx = unit(g.normal(size=(T, d))), unit(g.normal(size=(T, d))), g.normal(size=(T, d))
+    beta = 1 / (1 + np.exp(-g.normal(size=T)))
+    alpha = np.exp(-np.exp(g.normal(-3.0, 1.0, size=T)))  # decays near one, as a gate would learn
+
+    def recurrent(gated):
+        S = np.zeros((d, d))  # S @ k is the memory's answer for key k
+        O = np.empty((T, d))
+        for t in range(T):
+            a = alpha[t] if gated else 1.0
+            S = a * S
+            S = S - beta[t] * np.outer(S @ Kx[t] - Vx[t], Kx[t])
+            O[t] = S @ Qx[t]
+        return O, S
+
+    def chunked(gated):
+        S = np.zeros((d, d))
+        O = np.empty((T, d))
+        for c0 in range(0, T, Cn):
+            k, q, v, b = Kx[c0:c0 + Cn], Qx[c0:c0 + Cn], Vx[c0:c0 + Cn], beta[c0:c0 + Cn]
+            la = np.log(alpha[c0:c0 + Cn]) if gated else np.zeros(Cn)
+            G = np.exp(np.cumsum(la))  # decay from the chunk's start to each step
+            D = np.exp(np.cumsum(la)[:, None] - np.cumsum(la)[None, :])  # decay from step j to step i
+            # WY / UT transform: one triangular solve gives the chunk's product of (I - beta k k^T), decays included
+            A = np.tril(D * (k @ k.T), -1) * b[:, None]
+            M = np.eye(len(b)) + A
+            W = solve_triangular(M, (b * G)[:, None] * k, lower=True)
+            U = solve_triangular(M, b[:, None] * v, lower=True)
+            Un = U - W @ S.T  # each step's correction, after what the chunk's starting state already says
+            O[c0:c0 + Cn] = G[:, None] * (q @ S.T) + (np.tril(D * (q @ k.T))) @ Un
+            S = G[-1] * S + (Un * D[-1][:, None]).T @ k
+        return O, S
+
+    out = dict(geo_S0=S0, geo_k=k2, geo_v=v2, **{f"geo_{n}": m for n, m in geo.items()}, T=T, d=d, chunk=Cn)
+    for gated in (False, True):
+        t0 = time.perf_counter()
+        Or, Sr = recurrent(gated)
+        t1 = time.perf_counter()
+        Oc, Sc = chunked(gated)
+        t2 = time.perf_counter()
+        tag = "gated" if gated else "plain"
+        out[f"diff_{tag}"] = float(max(np.abs(Or - Oc).max(), np.abs(Sr - Sc).max()))
+        out[f"t_rec_{tag}"], out[f"t_chunk_{tag}"] = t1 - t0, t2 - t1
+        print(f"    {tag} delta rule: step by step {t1 - t0:.3f}s, by chunks {t2 - t1:.3f}s; largest difference "
+              f"{out[f'diff_{tag}']:.1e}", flush=True)
+        assert out[f"diff_{tag}"] < 1e-9
+    # 3. the decaying rule as masked attention: O = (L o Q K^T) V, L[i, j] = a_{j+1} ... a_i for j <= i
+    n = 32
+    a = np.exp(-np.exp(g.normal(-2.0, 0.8, size=n)))
+    a[[9, 22]] = 0.05  # two moments where the gate forgets almost everything
+    cs = np.cumsum(np.log(a))
+    L = np.tril(np.exp(cs[:, None] - cs[None, :]))
+    q, k, v = Qx[:n], Kx[:n], Vx[:n]
+    S = np.zeros((d, d))
+    Orec = np.empty((n, d))
+    for t in range(n):
+        S = a[t] * S + np.outer(v[t], k[t])
+        Orec[t] = S @ q[t]
+    Omask = (L * (q @ k.T)) @ v
+    out["ssd_L"], out["ssd_a"] = L, a
+    out["ssd_diff"] = float(np.abs(Orec - Omask).max())
+    # every block below the diagonal has rank one (the mask is 1-semiseparable)
+    blk = L[16:, :16]
+    sv = np.linalg.svd(blk, compute_uv=False)
+    out["ssd_rank_ratio"] = float(sv[1] / sv[0])
+    print(f"    masked form vs recurrence: {out['ssd_diff']:.1e}; a lower block's 2nd/1st singular value "
+          f"{out['ssd_rank_ratio']:.1e}", flush=True)
+    assert out["ssd_diff"] < 1e-9 and out["ssd_rank_ratio"] < 1e-9
+    return out
+
+
 ITEMS = {
     "kvcache": compute_kvcache,
     "linear": compute_linear,
     "capacity": compute_capacity,
     "ssm": compute_ssm,
     "mqar": compute_mqar,
+    "delta": compute_delta,
 }
 CACHE.items = ITEMS
 

@@ -16,6 +16,14 @@ fixed-size matrix memory, written by better and better rules. A hook and six cha
   rewritten 256 times; the delta rule as one step of gradient descent; the gated delta rule.
 * **State-space models.** A continuous-time state, read in steps of Δ; memory set by the step size; Mamba's selective
   steps holding a marked value through noise; Mamba-2: the same family as linear attention.
+* **The gated delta rule.** The delta update as a rank-one change of a linear map, drawn on the plane: I - βkkᵀ shrinks
+  only the key's direction (β = ½), erases it (β = 1, a projection) or reflects it (β = 2, eigenvalue -1, which lets
+  linear RNNs track parity); the family of write rules (linear attention, decay, DeltaNet, Gated DeltaNet in
+  Qwen3-Next, Kimi Delta Attention's per-channel gate) as S_t = S_{t-1}M_t + write; chunkwise training through the WY
+  form of a product of (I - βkkᵀ), one triangular solve per chunk (the UT transform), checked against the recurrence on
+  2,048 tokens (agreement 3e-15, gated 9e-16; 32 sequential steps instead of 2,048); Mamba-2's state-space duality,
+  the decaying rule as masked attention (L ∘ QKᵀ)V with a semiseparable mask (every block below the diagonal rank one),
+  checked to 9e-16.
 * **A recall test.** Multi-query associative recall: tiny one-layer models with softmax attention, linear attention
   and the delta rule (keys of 16 numbers), trained here, as the number of key-value pairs grows: at 8 / 16 / 32 / 48
   pairs, softmax 100% throughout, adding 96 / 86 / 55 / 38%, the delta rule 100 / 99 / 95 / 88%.

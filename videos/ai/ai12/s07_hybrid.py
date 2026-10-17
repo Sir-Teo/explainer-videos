@@ -24,8 +24,8 @@ class Hybrid(VoiceoverScene):
         self.memory()
 
     def card(self):
-        card = chapter_card(6, r"Hybrids", r"Why not have both?", part=12)
-        with self.voiceover("Chapter six. Hybrids."):
+        card = chapter_card(7, r"Hybrids", r"Why not have both?", part=12)
+        with self.voiceover("Chapter seven. Hybrids."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 

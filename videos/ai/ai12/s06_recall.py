@@ -16,8 +16,8 @@ class Recall(VoiceoverScene):
         self.results()
 
     def card(self):
-        card = chapter_card(5, r"A recall test", r"Which memory can look things up?", part=12)
-        with self.voiceover("Chapter five. A recall test."):
+        card = chapter_card(6, r"A recall test", r"Which memory can look things up?", part=12)
+        with self.voiceover("Chapter six. A recall test."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
