@@ -22,8 +22,8 @@ class Hook(VoiceoverScene):
         # answering at once: every bit flows into a fixed stack of two layers
         stack = VGroup(*[RoundedRectangle(width=2.6, height=0.5, corner_radius=0.1, stroke_color=DIRECT, stroke_width=2,
                                           fill_color=DIRECT, fill_opacity=0.12) for _ in range(2)]).arrange(UP, buff=0.12)
-        stack.move_to([-3.6, -0.6, 0])
-        st = label(r"$2$ layers, \ then answer", font_size=22, color=DIRECT).next_to(stack, LEFT, buff=0.25)
+        stack.move_to([-2.2, -0.6, 0])
+        st = label(r"$2$ layers, \\ then answer", font_size=22, color=DIRECT).next_to(stack, LEFT, buff=0.25)
         feeds = VGroup(*[Line(b.get_bottom(), stack.get_top(), stroke_width=1.2, color=DIRECT).set_stroke(opacity=0.35) for b in row])
         out1 = chip("?", size=0.55, color=DIRECT).next_to(stack, DOWN, buff=0.45)
         a1 = Arrow(stack.get_bottom(), out1.get_top(), buff=0.06, stroke_width=3, color=DIRECT, max_tip_length_to_length_ratio=0.3)
