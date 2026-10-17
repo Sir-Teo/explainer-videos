@@ -113,6 +113,7 @@ class Grok(VoiceoverScene):
         F = np.asarray(g["fourier"])
         xy = np.asarray(g["emb_xy"])
         k = int(np.argmax(F[1:])) + 1
+        nf = int((F[1:] >= 0.5 * F[1:].max()).sum())  # the frequencies at least half as strong as the strongest
         bars = VGroup(*[Rectangle(width=0.08, height=max(2.6 * f / F[1:].max(), 0.01), stroke_width=0,
                                   fill_color=C.BITS if i == k else GREY_B, fill_opacity=0.9)
                         .move_to([-6.0 + 0.1 * i, -2.2 + 1.3 * f / F[1:].max(), 0]) for i, f in enumerate(F[1:], start=1)])
@@ -136,8 +137,8 @@ class Grok(VoiceoverScene):
                       color=C.BITS).move_to([-3.4, 2.2, 0])  # the empty space above the bars, clear of the citation
         cite_ = cite(r"N.~Nanda et al., \textit{Progress Measures for Grokking via Mechanistic Interpretability} (2023)", corner=DL)
         with self.voiceover(
-            "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> They're "
-            "built from a few pure frequencies, waves around the clock. <bookmark mark='b'/> Seen along their main "
+            "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of "
+            f"their weight sits on {nf} frequencies out of {len(F) - 1}: waves around the clock. <bookmark mark='b'/> Seen along their main "
             "directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers "
             "by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first "
             "complete explanations of what a trained network computes. Part twenty takes that idea to real models."
