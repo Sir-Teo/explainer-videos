@@ -21,10 +21,11 @@ result. A hook and eight chapters:
   one coding what the coarser ones missed; the block-causal mask between scales.
 * **Squeezing time.** Spacetime patches and their count; a causal 3D autoencoder trained here on moving letters (the
   first frame coded alone, so a still image is a one-frame video); 3D rotary positions over time, height and width.
-* **Frames that agree.** Clips of moving letters generated jointly, every frame attending to every other: how often
-  each frame is recognized, and how smoothly the letter moves.
+* **Frames that agree.** Image-to-video: given a real first frame, the rest of a clip of a moving letter generated
+  jointly, every frame attending to every other, against frames taken from different samples: how often each
+  generated frame is recognized, and how smoothly the letter moves.
 * **Rolling forward.** Diffusion forcing: a separate noise level per frame, so the model can extend a clip past the
-  length it trained on; teacher forcing against rollouts; self forcing.
+  length it trained on; teacher forcing against rollouts from a real first frame; self forcing.
 * **Recap**, where it comes back, Part 16's teaser, references.
 
 Run from the repo root:
