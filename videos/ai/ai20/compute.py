@@ -12,6 +12,8 @@ Items:
     sae            a sparse autoencoder on Part 11's transformer: the vectors of its residual stream after block 2, for
                    200,000 characters of the novels, rewritten as sparse combinations of 512 learned features; how many
                    are active per character, how well they rebuild the vector, and the text where some features fire
+    frontier       (frontier.py) the same vectors, taken apart by sparse autoencoders trained with an L1 penalty at four
+                   strengths and with TopK at k = 4 to 32: features per vector, variance left, dead features, shrinkage
     steering       adding one feature's direction to the residual stream while the model writes: its text with and
                    without the push
     attribution    an attribution graph for one prediction: which features (and which input characters behind them)
@@ -334,9 +336,12 @@ def compute_attribution():
     return out
 
 
+from videos.ai.ai20.frontier import compute_frontier  # noqa: E402
+
 ITEMS = {
     "superposition": compute_superposition,
     "sae": compute_sae,
+    "frontier": compute_frontier,
     "steering": compute_steering,
     "attribution": compute_attribution,
 }

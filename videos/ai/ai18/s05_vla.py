@@ -10,6 +10,7 @@ class VLA(VoiceoverScene):
         self.card()
         self.pipeline()
         self.chunks()
+        self.exact()
 
     def card(self):
         card = chapter_card(4, r"Acting in the physical world", r"How does a language model move a robot arm?", part=18)
@@ -137,5 +138,68 @@ class VLA(VoiceoverScene):
         live.clear_updaters()
         cursor.clear_updaters()
         dot.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def exact(self):
+        """The two ways to write actions, exactly: pi-zero's flow-matched chunks, and FAST's compressed tokens."""
+        from scipy.fft import dct, idct
+
+        H = 50
+        t = np.linspace(0, 1, H)
+        a = 0.6 * np.sin(2.2 * t + 0.3) + 0.25 * t ** 2 + 0.08 * np.sin(9 * t)  # an illustrative joint angle over one chunk
+        c = dct(a, norm="ortho")
+        gam = 10.0
+        q = np.round(gam * c)
+        rec = idct(q / gam, norm="ortho")
+        nz = int((q != 0).sum())
+        err = float(np.abs(rec - a).max())
+        colors = {r"A": C.INTERVAL, r"\varepsilon": C.TRUE_P, r"v_\theta": C.BITS}
+        f1 = cmath(r"A", r"= (a_t, \ldots, a_{t+H-1}), \quad", r"A", r"^{\tau} = (1 - \tau)\,", r"\varepsilon", r"+ \tau\,", r"A",
+                   colors=colors, font_size=30)
+        f2 = cmath(r"\mathcal{L} = \big\|", r"v_\theta", r"(", r"A", r"^{\tau}, o_t) - (", r"A", r"-", r"\varepsilon", r")\big\|^2",
+                   colors=colors, font_size=30)
+        top = VGroup(f1, f2).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([-2.4, 2.5, 0])
+        tl = label(r"$\pi_0$: \ a chunk of $H = 50$ actions \ ($1$ s at $50$ Hz), \ flow-matched given the observation $o_t$; "
+                   r"\ $10$ steps to draw", font_size=18, color=C.INTERVAL).next_to(top, DOWN, buff=0.12).align_to(top, LEFT)
+        keep_in_frame(tl)
+        # FAST on one chunk, computed here
+        ax = CornerAxes(x_range=[0, H, 10], y_range=[-1, 1, 0.5], x_length=4.2, y_length=2.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.3, -1.3, 0])
+        sig = VMobject(color=C.INTERVAL, stroke_width=3).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(a)])
+        rs = VMobject(color=C.BITS, stroke_width=2).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(rec)])
+        al = label(r"one joint over one chunk \ (illustrative)", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1)
+        bx = CornerAxes(x_range=[0, H, 10], y_range=[0, float(np.abs(c).max()) * 1.1, 1], x_length=4.2, y_length=2.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.6, -1.3, 0])
+        bars = VGroup(*[Line(bx.c2p(i + 0.5, 0), bx.c2p(i + 0.5, abs(float(v))), stroke_width=4,
+                             color=C.BITS if q[i] != 0 else GREY_D) for i, v in enumerate(c)])
+        bl = label(r"its cosine transform: \ smooth motion \\ lives in the first few numbers", font_size=18, color=GREY_A).next_to(bx, UP, buff=0.1)
+        toks = MathTex(r"\text{tokens} = \operatorname{BPE}\big(\operatorname{round}(\gamma \cdot \operatorname{DCT}(a))\big)",
+                       font_size=28, color=C.BITS).move_to([4.6, -0.6, 0])
+        tk = label(rf"$\gamma = {gam:.0f}$: \ ${nz}$ of ${H}$ numbers \\ survive the rounding; \ rebuilt to ${err:.3f}$; \\ "
+                   r"byte-pair encoding packs \\ the zeros and repeats", font_size=18, color=GREY_A).next_to(toks, DOWN, buff=0.2)
+        keep_in_frame(VGroup(toks, tk))
+        cite_ = cite(r"K.~Black et al., \textit{$\pi_0$} (2024); \ K.~Pertsch et al., \textit{FAST} (2025)", corner=DR)
+        with self.voiceover(
+            "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole "
+            "chunk of fifty actions, one second of motion, by part fourteen's flow matching: mix the true chunk with "
+            "noise, and train the action expert to predict the straight-line velocity between them, given what the "
+            "robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a "
+            "language model can write. Taking every time step as a token works badly: neighbouring steps are nearly "
+            "the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first. A cosine "
+            "transform puts a smooth motion's information into a few numbers; <bookmark mark='d'/> round them, and on "
+            f"this chunk only {nz} of {H} survive, yet they rebuild the motion to within {err:.3f}; byte-pair encoding, "
+            "from part sixteen, then packs what's left into a handful of tokens."
+        ) as vo:
+            self.play(FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Write(f1), Write(f2), FadeIn(tl), run_time=2.0)
+            vo.wait_until("b")
+            self.play(Create(ax), FadeIn(al), Create(sig))
+            vo.wait_until("c")
+            self.play(Create(bx), FadeIn(bl), LaggedStart(*[Create(b_) for b_ in bars], lag_ratio=0.02), run_time=1.5)
+            vo.wait_until("d")
+            self.play(Write(toks), FadeIn(tk), Create(rs))
         self.wait(0.3)
         self.clear_scene()

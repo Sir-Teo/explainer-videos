@@ -11,6 +11,7 @@ class VQ(VoiceoverScene):
         self.card()
         self.codebook()
         self.residual()
+        self.learned()
 
     def card(self):
         card = chapter_card(2, r"Codebooks", r"How do you turn a picture into words?", part=16)
@@ -103,5 +104,74 @@ class VQ(VoiceoverScene):
                 self.play(FadeIn(st, shift=RIGHT * 0.2), FadeIn(sl[i]), *([FadeIn(plus[i - 1])] if i else []), run_time=0.8)
             vo.wait_until("b")
             self.play(FadeIn(comp), FadeIn(used))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learned(self):
+        """Training a codebook inside a network: the straight-through gradient, the two extra losses, and FSQ."""
+        g = np.random.default_rng(16)
+        codes = g.uniform(-1.6, 1.6, (7, 2))
+        O, u = np.array([-4.3, -0.4, 0]), 1.1
+
+        def P(x):
+            return O + u * np.array([x[0], x[1], 0])
+
+        # the cells of the codebook (nearest code), drawn as a coarse map of dots
+        grid = VGroup()
+        for a in np.linspace(-2, 2, 29):
+            for b in np.linspace(-2, 2, 29):
+                k = int(np.argmin(((codes - [a, b]) ** 2).sum(1)))
+                grid.add(Dot(P([a, b]), radius=0.022, color=TOKEN_COLORS[k % len(TOKEN_COLORS)], fill_opacity=0.35))
+        cdots = VGroup(*[Dot(P(c), radius=0.08, color=TOKEN_COLORS[k % len(TOKEN_COLORS)]) for k, c in enumerate(codes)])
+        z = np.array([0.35, 0.2])
+        k = int(np.argmin(((codes - z) ** 2).sum(1)))
+        zd = Dot(P(z), radius=0.08, color=WHITE)
+        zl = MathTex(r"z", font_size=30).next_to(zd, DL, buff=0.05)
+        el = MathTex(r"e_k", font_size=30, color=TOKEN_COLORS[k % len(TOKEN_COLORS)]).next_to(cdots[k], UR, buff=0.05)
+        fwd = Arrow(P(z), P(codes[k]), buff=0.1, color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.2)
+        gvec = np.array([0.55, -0.45])
+        gq = Arrow(P(codes[k]), P(codes[k] + gvec), buff=0, color=C.SURPRISE, stroke_width=4, max_tip_length_to_length_ratio=0.25)
+        gz = Arrow(P(z), P(z + gvec), buff=0, color=C.SURPRISE, stroke_width=4, max_tip_length_to_length_ratio=0.25)
+        gl = label(r"the gradient at $e_k$, \\ copied to $z$", font_size=20, color=C.SURPRISE).next_to(gz.get_end(), DR, buff=0.05)
+        colors = {r"\operatorname{sg}": C.SURPRISE, r"\beta": C.BITS}
+        eqs = VGroup(
+            MathTex(r"z_q = e_k, \quad k = \arg\min_j \|z - e_j\|", font_size=30),
+            cmath(r"z_q = z +", r"\operatorname{sg}", r"(e_k - z)", colors=colors, font_size=30),
+            cmath(r"\mathcal{L} = \|x - D(z_q)\|^2 + \|", r"\operatorname{sg}", r"(z) - e_k\|^2 +", r"\beta", r"\,\|z -",
+                  r"\operatorname{sg}", r"(e_k)\|^2", colors=colors, font_size=30),
+            MathTex(r"\hat z_i = \operatorname{round}\big(\lfloor L/2 \rfloor \tanh z_i\big)", font_size=30, color=C.INTERVAL),
+        ).arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to([3.0, 0.2, 0])
+        notes = VGroup(label(r"the nearest code: \ no gradient through $\arg\min$", font_size=18, color=GREY_A),
+                       label(r"sg: \ stop the gradient. \ Forward: \ $e_k$; \ backward: \ as if $z$", font_size=18, color=GREY_A),
+                       label(r"rebuild, \ \ pull codes to the outputs, \ \ keep outputs near their codes", font_size=18, color=GREY_A),
+                       label(r"FSQ: \ round each number to $L$ levels: \\ a fixed grid of $L^d$ codes, \ nothing to collapse",
+                             font_size=18, color=C.INTERVAL))
+        for n_, e_ in zip(notes, eqs):
+            n_.next_to(e_, DOWN, buff=0.08).align_to(e_, LEFT)
+        keep_in_frame(VGroup(eqs, notes))
+        tag = note(r"schematic: \ $7$ codes in $2$ dimensions").to_corner(DL, buff=0.3)
+        cite_ = cite(r"A.~van den Oord et al., \textit{VQ-VAE} (2017); \ F.~Mentzer et al., \textit{FSQ} (2023)", corner=UR)
+        with self.voiceover(
+            "In a real model, the codebook is learned along with the encoder and decoder, and that hits a snag. "
+            "<bookmark mark='a'/> Each encoder output z is replaced by its nearest code. Picking the nearest is a "
+            "jump, with no gradient. <bookmark mark='b'/> The fix is the straight-through trick: forward, use the "
+            "code; backward, pretend nothing happened, and hand the code's gradient straight to z. "
+            "<bookmark mark='c'/> Two more terms keep things together: one pulls each code toward the outputs that "
+            "chose it, the other, the commitment loss, keeps the outputs from wandering away from their codes. "
+            "<bookmark mark='d'/> Even so, codes that nobody picks stop learning, and many go unused. Finite scalar "
+            "quantization sidesteps all of it: squash each number, round it to a few levels, and the codebook is just "
+            "the grid. It's what several recent image and video tokenizers use."
+        ) as vo:
+            self.play(FadeIn(cite_), FadeIn(grid), FadeIn(cdots), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(zd), FadeIn(zl), GrowArrow(fwd), FadeIn(el), Write(eqs[0]), FadeIn(notes[0]))
+            vo.wait_until("b")
+            self.play(Write(eqs[1]), FadeIn(notes[1]), GrowArrow(gq))
+            self.play(TransformFromCopy(gq, gz), FadeIn(gl))
+            vo.wait_until("c")
+            self.play(Write(eqs[2]), FadeIn(notes[2]))
+            vo.wait_until("d")
+            self.play(Write(eqs[3]), FadeIn(notes[3]))
         self.wait(0.3)
         self.clear_scene()

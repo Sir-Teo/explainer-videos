@@ -173,9 +173,12 @@ class Muon(VoiceoverScene):
         cols = [interpolate_color(ManimColor(GREY_B), ManimColor(MU), k / 5) for k in range(6)]
         dots = [VGroup(*[Dot(bx.c2p(k + j, float(min(v, 1.3))), radius=0.025, color=cols[k]) for v, j in zip(its[k], jit)])
                 for k in range(6)]
-        band = Rectangle(width=bx.c2p(5.3, 0)[0] - bx.c2p(4.7, 0)[0], height=bx.c2p(0, its[-1].max())[1] - bx.c2p(0, its[-1].min())[1],
-                         stroke_color=MU, stroke_width=1.5).move_to(bx.c2p(5, (its[-1].max() + its[-1].min()) / 2))
-        bl = label(rf"all between ${its[-1].min():.2f}$ and ${its[-1].max():.2f}$", font_size=20, color=MU).next_to(band, UP, buff=0.1)
+        big = before > 0.01  # every singular value above a hundredth of the largest
+        lo_b, hi_b, n_b = float(its[-1][big].min()), float(its[-1][big].max()), int(big.sum())
+        band = Rectangle(width=bx.c2p(5.3, 0)[0] - bx.c2p(4.7, 0)[0], height=bx.c2p(0, hi_b)[1] - bx.c2p(0, lo_b)[1],
+                         stroke_color=MU, stroke_width=1.5).move_to(bx.c2p(5, (hi_b + lo_b) / 2))
+        bl = label(rf"the ${n_b}$ above $1\%$ of the largest: \\ all between ${lo_b:.2f}$ and ${hi_b:.2f}$", font_size=18,
+                   color=MU).next_to(band, UP, buff=0.1)
         keep_in_frame(bl)
         m_, e_ = f"{match:.0e}".split("e")
         chk = label(rf"the same as the matrix iteration's singular values, \ to ${m_} \times 10^{{{int(e_)}}}$", font_size=18,
@@ -186,9 +189,10 @@ class Muon(VoiceoverScene):
             "applied to each of them separately. <bookmark mark='a'/> Here it is, with Keller Jordan's coefficients. "
             "It rises steeply from zero, so small singular values grow fast, and it hovers around one. "
             "<bookmark mark='b'/> Follow one value: five rounds carry it up to about one. <bookmark mark='c'/> And "
-            "here are all two hundred and fifty-six of our gradient's singular values, round by round: from spread "
-            f"over three orders of magnitude, to a band between {its[-1].min():.2f} and {its[-1].max():.2f}. Not "
-            "exactly one, but close enough, and the coefficients were tuned to get there in five rounds."
+            "here are all two hundred and fifty-six of our gradient's singular values, round by round. Every one "
+            f"above a hundredth of the largest, {n_b} of them, ends in a band between {lo_b:.2f} and {hi_b:.2f}: not "
+            "exactly one, but close enough, and the coefficients were tuned to get there in five rounds. The tiniest "
+            "ones, mostly numerical dust, climb but don't arrive, which costs nothing."
         ) as vo:
             self.play(Create(ax), FadeIn(ticks), Create(diag), Create(one))
             vo.wait_until("a")
