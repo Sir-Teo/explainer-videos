@@ -56,24 +56,64 @@ class VLA(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def chunks(self):
-        ax = Axes(x_range=[0, 50, 10], y_range=[-1.2, 1.2, 1], x_length=10.0, y_length=3.2, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(DOWN * 0.4)
-        ts = np.linspace(0, 50, 300)
-        traj = VMobject(color=C.INTERVAL, stroke_width=4).set_points_smoothly([ax.c2p(t, 0.8 * np.sin(t / 7) * np.cos(t / 13)) for t in ts])
-        bands = VGroup(*[Rectangle(width=10.0 / 5 * 0.98, height=3.2, stroke_color=GREY_D, stroke_width=1, fill_color=C.INTERVAL,
-                                   fill_opacity=0.06 + 0.06 * (i % 2)).move_to(ax.c2p(5 + 10 * i, 0)) for i in range(5)])
+        ax = Axes(x_range=[0, 50, 10], y_range=[-1.2, 1.2, 1], x_length=10.0, y_length=2.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(DOWN * 2.0)
+
+        def f(t):
+            return 0.8 * np.sin(t / 7) * np.cos(t / 13)
+
+        segs = VGroup(*[VMobject(color=C.INTERVAL, stroke_width=4).set_points_smoothly(
+            [ax.c2p(t, f(t)) for t in np.linspace(10 * i, 10 * (i + 1), 60)]) for i in range(5)])
+        bands = VGroup(*[Rectangle(width=10.0 / 5 * 0.98, height=2.2, stroke_color=GREY_D, stroke_width=1, fill_color=C.INTERVAL,
+                                   fill_opacity=0.05).move_to(ax.c2p(5 + 10 * i, 0)) for i in range(5)])
         bl = VGroup(*[label(rf"chunk {i + 1}", font_size=20, color=GREY_B).next_to(b, UP, buff=0.08) for i, b in enumerate(bands)])
         head = label(r"action chunks: \ the model plans a short stretch of motion at once, \\ then looks again", font_size=26)
-        head.to_edge(UP, buff=0.4)
-        xn = label(r"time $\to$ \ (one joint's angle)", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        head.to_edge(UP, buff=0.3)
+        xn = label(r"time $\to$ \ (the elbow's angle)", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.12)
         tag = note(r"illustrative trajectory").to_corner(DR, buff=0.3)
+        # a two-link arm whose elbow follows the planned trajectory
+        tt = ValueTracker(0.0)
+        base = np.array([-0.8, -0.2, 0])
+
+        def arm():
+            t = tt.get_value()
+            a1 = 1.15 + 0.35 * f(t)
+            a2 = a1 - 1.1 + 1.1 * f(t)
+            p1 = base + 1.5 * np.array([np.cos(a1), np.sin(a1), 0])
+            p2 = p1 + 1.3 * np.array([np.cos(a2), np.sin(a2), 0])
+            return VGroup(Line(base, p1, color=GREY_A, stroke_width=8), Line(p1, p2, color=GREY_A, stroke_width=7),
+                          Dot(base, radius=0.1, color=GREY_B), Dot(p1, radius=0.08, color=C.INTERVAL), Dot(p2, radius=0.11, color=WHITE))
+
+        plinth = Rectangle(width=1.2, height=0.2, stroke_width=0, fill_color=GREY_D, fill_opacity=1).next_to(base, DOWN, buff=0.08)
+        live = always_redraw(arm)
+        cursor = always_redraw(lambda: Line(ax.c2p(tt.get_value(), -1.2), ax.c2p(tt.get_value(), 1.2), color=WHITE, stroke_width=2))
+        dot = always_redraw(lambda: Dot(ax.c2p(tt.get_value(), f(tt.get_value())), radius=0.07, color=WHITE))
+        look = label(r"look", font_size=24, color=C.BITS).move_to([3.2, 0.6, 0])
+        plan = label(r"plan a chunk", font_size=24, color=C.INTERVAL).move_to([3.2, 0.6, 0])
+        act = label(r"act", font_size=24, color=WHITE).move_to([3.2, 0.6, 0])
+
+        def chunk(i):
+            self.play(FadeIn(look, scale=1.2), bands[i].animate.set_fill(opacity=0.18), run_time=0.3)
+            self.play(FadeOut(look), FadeIn(plan), Create(segs[i]), run_time=0.5)
+            self.play(FadeOut(plan), FadeIn(act), tt.animate.set_value(10 * (i + 1)), run_time=1.0, rate_func=linear)
+            self.play(FadeOut(act), bands[i].animate.set_fill(opacity=0.05), run_time=0.2)
+
         with self.voiceover(
             "And it doesn't act one tiny step at a time. It plans a chunk of motion, a second or so, then looks at "
             "the world again and plans the next: <bookmark mark='a'/> the belief and the world model of the earlier "
             "chapters, folded into one network that sees, thinks and moves."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xn), FadeIn(tag))
-            self.play(LaggedStart(*[FadeIn(b) for b in bands], lag_ratio=0.2), FadeIn(bl), Create(traj), run_time=3.0)
+            still = arm()  # fade in a still copy; the live arm (rebuilt every frame) can't be faded in
+            self.play(FadeIn(head), Create(ax), FadeIn(xn), FadeIn(tag), FadeIn(bands), FadeIn(bl), FadeIn(plinth), FadeIn(still))
+            self.remove(still)
+            self.add(live, cursor, dot)
+            for i in range(3):
+                chunk(i)
             vo.wait_until("a")
+            for i in range(3, 5):
+                chunk(i)
+        live.clear_updaters()
+        cursor.clear_updaters()
+        dot.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
