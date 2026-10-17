@@ -1,102 +1,102 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第19部分：推断",
  "chapters": {
-  "Hook": "",
-  "Speculative": "",
-  "Quant": "",
-  "Memory": "",
-  "Outro": ""
+  "Hook": "速度上限",
+  "Speculative": "1. 先猜几步，一次核对",
+  "Quant": "2. 每个数少用几个比特",
+  "Memory": "3. 代价在于搬运数字",
+  "Outro": "回顾，以及这些想法从何而来"
  },
  "lines": {
   "4db36759ff83": {
    "scene": "Hook",
    "en": "When a big model writes, it writes one token at a time. And to write each one, it has to read every single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, that's a hundred and forty-one gigabytes, streamed from memory through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the next.",
-   "zh": ""
+   "zh": "大模型写东西的时候，一次只写一个词元。而每写一个，它都得把自己的每一个权重，统统读一遍。<bookmark mark='a'/>对一个700亿参数的模型来说，这就是141GB的数据，从内存一路流进芯片，<bookmark mark='b'/>只为了一个词元。下一个词元，又要全部再读一遍；再下一个，还是这样。"
   },
   "b53e1bb748d2": {
    "scene": "Hook",
    "en": "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of weights: on one of today's best chips, about 24 tokens a second. <bookmark mark='a'/> And meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses a third of one percent of it. Inference is a problem of moving numbers, not multiplying them.",
-   "zh": ""
+   "zh": "所以，内存给速度定了一个上限。每秒能写出的词元数，超不过内存带宽除以权重的字节数：在当今最好的芯片之一上，大约是每秒24个词元。<bookmark mark='a'/>与此同时，芯片的算力几乎一直闲着。<bookmark mark='b'/>一段对话，只用掉其中1%的3分之1。推断的难处，在于搬运数字，而不在于做乘法。"
   },
   "2dc04f232993": {
    "scene": "Hook",
    "en": "This part is about running models fast: guessing ahead and checking at once, storing numbers in fewer bits, <bookmark mark='a'/> and moving fewer bytes.",
-   "zh": ""
+   "zh": "这一部分讲的是怎样让模型跑得快：先猜几步、一次核对，用更少的比特来存数字，<bookmark mark='a'/>以及少搬运一些字节。"
   },
   "30e297332721": {
    "scene": "Speculative",
    "en": "Chapter one. Guess ahead, check at once.",
-   "zh": ""
+   "zh": "第1章。先猜几步，一次核对。"
   },
   "8ce782910fb4": {
    "scene": "Speculative",
    "en": "A big model writes one token per run, and each run has to read all its billions of weights from memory. That reading, not the arithmetic, is the bottleneck. <bookmark mark='a'/> So let a small, fast model draft a few tokens ahead. <bookmark mark='b'/> Then the big model checks all of them in a single run, since it can score every position at once, the way it does in training. <bookmark mark='c'/> Keep the drafts it agrees with; at the first disagreement, take the big model's choice and start again.",
-   "zh": ""
+   "zh": "大模型每运行一次，只能写出一个词元，而且每次都得从内存里读出它那几十亿个权重。瓶颈在于读取，而不在于运算。<bookmark mark='a'/>那就让一个又小又快的模型，先往前起草几个词元。<bookmark mark='b'/>然后，大模型只运行一次，就把它们全部核对一遍：它能同时给每个位置打分，就像训练时那样。<bookmark mark='c'/>它认可的草稿，就留下；碰到第一处分歧，就采用大模型自己的选择，然后从那里重新开始。"
   },
   "24fef77c54d5": {
    "scene": "Speculative",
    "en": "The clever part is that nothing changes about what the big model says. <bookmark mark='a'/> Here are both guesses for the next character, on our own models: part eleven's transformer as the big one, a small counting model as the draft. <bookmark mark='b'/> Accept a drafted character with probability p over q, capped at one: where the draft guesses a character too often, the excess gets thrown out. <bookmark mark='c'/> If it's rejected, sample from what's left of p after taking q away: exactly the part the draft guessed too rarely. <bookmark mark='d'/> Run the rule two hundred thousand times, and the characters it outputs follow the big model's probabilities exactly, not the draft's: speculative decoding is faster with no change in quality.",
-   "zh": ""
+   "zh": "巧妙之处在于，大模型说出的内容，一点都没有变。<bookmark mark='a'/>这是两个模型对下一个字符的猜测，用的是我们自己的模型：第11部分的Transformer当大模型，一个小小的计数模型当草稿模型。<bookmark mark='b'/>草稿里的一个字符，以q分之p的概率被接受，这个概率最大取1：草稿把哪个字符猜得太频繁，多出来的那部分就被扔掉。<bookmark mark='c'/>如果被拒绝，就从p减去q之后剩下的部分里重新采样：恰好是草稿猜得太少的那一部分。<bookmark mark='d'/>把这条规则运行20万次，它输出的字符，完全遵循大模型的概率，而不是草稿的：投机解码更快，质量却丝毫不变。"
   },
   "aeff2d7d9ff8": {
    "scene": "Speculative",
    "en": "Our little draft is accepted 62 percent of the time. <bookmark mark='a'/> Drafting k characters, the big model writes on average one minus alpha to the k plus one, over one minus alpha, per run: 2.4 with four drafted. Real systems reach two to three times the speed this way, and some models, like DeepSeek-V3, are trained to draft for themselves.",
-   "zh": ""
+   "zh": "我们这个小小的草稿模型，有62%的时候被接受。<bookmark mark='a'/>每轮起草k个字符，大模型每运行一次，平均写出的字符数，是1减去α的k加1次方，再除以1减去α：起草4个时，是2.4个。真实的系统靠这个办法，能把速度提高到2到3倍；有些模型，比如DeepSeek-V3，还被训练成自己给自己起草。"
   },
   "44bcc6e5c25b": {
    "scene": "Quant",
    "en": "Chapter two. Fewer bits per number.",
-   "zh": ""
+   "zh": "第2章。每个数少用几个比特。"
   },
   "695d55afe418": {
    "scene": "Quant",
    "en": "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is rounded to one of sixteen evenly spaced values. <bookmark mark='b'/> The newest chips use FP4 instead: a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale for every block of thirty-two.",
-   "zh": ""
+   "zh": "减少内存读写的另一个办法：用更少的比特来存每个数。这是我们的Transformer其中一层的权重：大多数都接近0，只有少数比较大。<bookmark mark='a'/>用4个比特，每个权重都取整到16个等间距的值之一。<bookmark mark='b'/>最新的芯片改用FP4：一种很小的浮点数，在0附近的值更多，那里正是权重扎堆的地方；而且每32个数为一块，共用一个缩放因子。"
   },
   "562b2081fab2": {
    "scene": "Quant",
    "en": "What does it cost? <bookmark mark='a'/> Rounded to eight bits, our transformer is no worse. At four bits, 0.047 bits worse per character, for an eighth of the memory; at three, 0.26 worse: it starts to break. FP4, with its scale for every block of thirty-two, loses only 0.019: better than plain four bits, for the same memory. <bookmark mark='b'/> Big models tolerate rounding even better, and methods like GPTQ correct each rounding error using the weights still to come; the newest models are trained in eight or even four bits from the start.",
-   "zh": ""
+   "zh": "代价是什么？<bookmark mark='a'/>取整到8个比特，我们的Transformer一点也没有变差。4个比特时，每个字符差了0.047比特，换来的是只占8分之1的内存；3个比特时，差了0.26：它开始撑不住了。FP4每32个数共用一个缩放因子，只损失0.019：比普通的4比特更好，占的内存却一样。<bookmark mark='b'/>大模型对取整的容忍度还要更高；像GPTQ这样的方法，还会用后面还没取整的那些权重，来修正每一个取整误差；最新的模型，更是从一开始就用8比特、甚至4比特来训练。"
   },
   "b3f5ede7783c": {
    "scene": "Memory",
    "en": "Chapter three. Moving numbers is the cost.",
-   "zh": ""
+   "zh": "第3章。代价在于搬运数字。"
   },
   "2245370b1754": {
    "scene": "Memory",
    "en": "Every computer has two speeds: how fast it does arithmetic, and how fast it moves numbers from memory. <bookmark mark='a'/> We measured this one. The roofline: a slope where moving data is the limit, and a flat roof where arithmetic is. <bookmark mark='b'/> Big matrix products do lots of arithmetic per number moved and reach the roof. <bookmark mark='c'/> But writing one token at a time multiplies each weight once: about one operation per byte, far down the slope. That's why the tricks of this part all move fewer bytes.",
-   "zh": ""
+   "zh": "每台计算机都有两种速度：做运算有多快，从内存里搬运数字有多快。<bookmark mark='a'/>我们测了这一台。这就是屋顶线：受限于搬运数据的地方，是一道斜坡；受限于运算的地方，是一片平平的屋顶。<bookmark mark='b'/>大的矩阵乘法，每搬运一个数，都要做很多运算，所以能碰到屋顶。<bookmark mark='c'/>可是一次写一个词元，每个权重只乘一次：大约每个字节一次运算，远远落在斜坡的下方。正因为这样，这一部分的所有技巧，都是为了少搬运一些字节。"
   },
   "927c2ab6c35c": {
    "scene": "Memory",
    "en": "Attention has its own memory problem: the table of scores grows with the square of the length. FlashAttention never stores it. <bookmark mark='a'/> It takes a block of queries, streams the keys and values through in tiles, small enough to stay in the chip's fastest memory, <bookmark mark='b'/> and keeps a running maximum and a running sum, so the softmax comes out exactly right at the end. We checked it: the same numbers as the plain formula, to rounding error, without ever holding the table.",
-   "zh": ""
+   "zh": "注意力也有它自己的内存问题：分数表的大小，随长度的平方增长。FlashAttention从来不把这张表存下来。<bookmark mark='a'/>它取一块查询，让键和值切成小块依次流过，每一小块都小到能待在芯片最快的内存里，<bookmark mark='b'/>同时一路记着当前的最大值和累计的和，这样到最后，softmax算出来分毫不差。我们验证过：和直接按公式算出来的数一样，只差舍入误差，而整张表一次也没有存下来过。"
   },
   "1eedb7524aed": {
    "scene": "Memory",
    "en": "Finally, the cache from part twelve, on a server answering many people at once. <bookmark mark='a'/> Reserve each conversation one block of memory long enough for the longest possible answer, and most of it sits empty: 79 percent wasted, for our two hundred random requests. <bookmark mark='b'/> vLLM borrowed the operating system's trick: hand out memory in small pages, as each conversation grows. Waste falls to 0.8 percent, so the same chip serves several times as many people.",
-   "zh": ""
+   "zh": "最后，是第12部分的那个缓存，放在一台同时回答很多人的服务器上。<bookmark mark='a'/>如果给每段对话预留一整块内存，长到能装下最长的回答，那么大部分都会空着：在我们这200个随机请求上，浪费了79%。<bookmark mark='b'/>vLLM借用了操作系统的老办法：随着每段对话变长，把内存一小页一小页地分给它。浪费降到了0.8%，于是同一块芯片，能服务的人多了好几倍。"
   },
   "62f2e3b06137": {
    "scene": "Outro",
    "en": "Let's take stock. Writing one token reads every weight, so memory sets the speed limit. A small model can guess ahead and the big one check its guesses at once, with exactly the same output. Numbers can be stored in eight bits, or four, for little loss. And the roofline says why all of this works: moving bytes is the cost, so FlashAttention computes in tiles and servers hand out memory in pages.",
-   "zh": ""
+   "zh": "我们来盘点一下。写一个词元，就要读一遍所有的权重，所以内存决定了速度的上限。小模型可以先往前猜，大模型再一次性核对它的猜测，输出完全不变。数字可以用8个比特、甚至4个比特来存，损失很小。而屋顶线说明了这一切为什么管用：搬运字节才是代价，所以FlashAttention分块计算，服务器按页分配内存。"
   },
   "f1bf7805c741": {
    "scene": "Outro",
    "en": "This part paid off ideas from earlier ones. The key-value cache of part twelve is what the pages hold. Mixture-of-experts, from part thirteen, is the same idea as quantization: read fewer bytes per token. And the long chains of thought of parts seventeen and eighteen are why speed matters so much.",
-   "zh": ""
+   "zh": "这一部分，兑现了前面几部分的想法。页里装的，正是第12部分的键值缓存。第13部分的混合专家，和量化是同一个想法：每个词元少读一些字节。而第17和第18部分那些长长的思维链，正是速度如此重要的原因。"
   },
   "e65239f0d5e5": {
    "scene": "Outro",
    "en": "Next time, the last part: looking inside the model. How a network packs more ideas than it has dimensions, <bookmark mark='a'/> five directions squeezed into a plane, and how to pull them back apart.",
-   "zh": ""
+   "zh": "下一次，是最后一部分：看看模型内部。一个网络，怎样装下比它的维数还多的想法，<bookmark mark='a'/>把5个方向挤进一个平面；又怎样把它们重新拆开。"
   },
   "e57177f092a2": {
    "scene": "Outro",
    "en": "Thanks for watching, and see you in the final part.",
-   "zh": ""
+   "zh": "感谢观看，最后一部分见。"
   }
  },
  "title_en": "AI, Built: Part 19, Inference",

@@ -1,200 +1,200 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第11部分：注意力的几何",
  "chapters": {
-  "Hook": "",
-  "Smoother": "",
-  "Transformer": "",
-  "Rope": "",
-  "Longer": "",
-  "Induction": "",
-  "InContext": "",
-  "Outro": ""
+  "Hook": "每个字符都在回头看",
+  "Smoother": "1. 加权平均",
+  "Transformer": "2. 我们自己的Transformer",
+  "Rope": "3. 用旋转表示位置",
+  "Longer": "4. 比训练时更长",
+  "Induction": "5. 归纳头",
+  "InContext": "6. 在提示词里学习",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
   "a0735324e7cb": {
    "scene": "Hook",
    "en": "This is a transformer reading. It's ours: we trained it on this series' thirty novels, and it's reading a sentence from the scoreboard's passage, which it has never seen. <bookmark mark='a'/> To guess each next character, every character looks back at the characters before it and decides how much each one matters. The thicker the arc, the more it looks. <bookmark mark='b'/> That look is called attention, and it is the engine of every large model today.",
-   "zh": ""
+   "zh": "这是一个正在阅读的Transformer。它是我们自己的：我们用本系列的30部小说训练了它，现在它读的，是记分牌测试段落里的一句话，这句话它从没见过。<bookmark mark='a'/>为了猜出下一个字符，每个字符都会回头看看它前面的那些字符，再决定每一个有多要紧。弧线越粗，它看得越多。<bookmark mark='b'/>这样回头一看，就叫作注意力；今天每一个大模型的引擎，就是它。"
   },
   "bb00c41c03b7": {
    "scene": "Hook",
    "en": "Our model has 16 of these looks, called heads, each its own way of weighing the past. Some look one character back, some at the start of the word, some spread out. <bookmark mark='a'/> This part is about the mathematics of that look: what it computes, how it knows where things are, and what it can learn to do.",
-   "zh": ""
+   "zh": "我们的模型有16个这样的“目光”，叫作“头”，每个头都用自己的方式，掂量过去的内容。有的往回看一个字符，有的看这个词的开头，有的则把目光摊得很开。<bookmark mark='a'/>这一部分讲的，就是这一看背后的数学：它算的是什么，它怎样知道东西在哪里，以及它能学会做些什么。"
   },
   "2deedf9d8675": {
    "scene": "Hook",
    "en": "Act three begins: the engines inside today's models. First, attention: a weighted average, built from geometry, <bookmark mark='a'/> and the strange abilities it learns on its own.",
-   "zh": ""
+   "zh": "第三幕开始了：当今模型内部的引擎。首先是注意力：一个用几何搭起来的加权平均，<bookmark mark='a'/>以及它自己学会的那些奇特本领。"
   },
   "7803f515fd77": {
    "scene": "Smoother",
    "en": "Chapter one. Attention is a weighted average.",
-   "zh": ""
+   "zh": "第1章。注意力就是加权平均。"
   },
   "e406238a9873": {
    "scene": "Smoother",
    "en": "Here's part six's data again: how often each page of Great Expectations says 'her'. Suppose you want a smooth guess for page one hundred and twenty. <bookmark mark='a'/> Take a weighted average of every page, weighting each by how close it is: a bump of weights, centered on the page you're asking about. <bookmark mark='b'/> Pages near the query count a lot, far ones not at all. The weights are positive and add up to one. <bookmark mark='c'/> Slide the query along, and the average traces a smooth curve. This is Nadaraya and Watson's kernel smoother, from 1964.",
-   "zh": ""
+   "zh": "再看一次第6部分的数据：《远大前程》每一页里，“her”出现得有多频繁。假设你想给第120页，做一个平滑的估计。<bookmark mark='a'/>把每一页都拿来取加权平均，按它离得有多近来定权重：权重排成一个鼓包，中心就在你要问的那一页上。<bookmark mark='b'/>离查询点近的页，分量很重；远的，完全不算。这些权重都是正的，加起来等于1。<bookmark mark='c'/>让查询点一路滑过去，这个平均值就描出一条平滑的曲线。这就是纳达拉亚和沃森的核平滑器，1964年提出。"
   },
   "5be05adf8831": {
    "scene": "Smoother",
    "en": "The only knob is the width of the bump. <bookmark mark='a'/> Too narrow, and the curve chases every page's noise. <bookmark mark='b'/> Too wide, and it flattens the whole story into one number.",
-   "zh": ""
+   "zh": "唯一的旋钮，是鼓包的宽度。<bookmark mark='a'/>太窄，曲线就会去追每一页的噪声。<bookmark mark='b'/>太宽，它又会把整个故事压平成一个数。"
   },
   "9495c4f91db8": {
    "scene": "Smoother",
    "en": "Write it down. The guess at the query is a sum over the pages: each page's value, times a weight. The weight is a softmax of a score: the exponential of the score, divided by the total, so the weights are positive and add up to one. Here the score is minus the squared distance. <bookmark mark='a'/> Now change one thing. Instead of a distance between page numbers, score each item by a dot product between two vectors: a query and a key. <bookmark mark='b'/> That's attention, the heart of the transformer. The query asks what am I looking for; each key says what it offers; each value is what it passes on. <bookmark mark='c'/> And all three are computed from the characters by matrices the network learns. Attention is a kernel smoother whose kernel is learned.",
-   "zh": ""
+   "zh": "把它写下来。查询点上的估计，是对所有页求和：每一页的值，乘以一个权重。权重是一个分数的softmax：分数取指数，再除以总和，所以权重都是正的，加起来等于1。这里的分数，是负的距离平方。<bookmark mark='a'/>现在，只改一处。不再用页码之间的距离，而是用两个向量的点积，给每一项打分：一个查询，一个键。<bookmark mark='b'/>这就是注意力，Transformer的核心。查询问的是：我在找什么？每个键说的是，它能提供什么；每个值，则是它要传下去的内容。<bookmark mark='c'/>而这三样，都由网络学出来的矩阵，从字符算出来。注意力，就是一个核可以学习的核平滑器。"
   },
   "08fff7d651e0": {
    "scene": "Smoother",
    "en": "Here's the geometry. Every key is an arrow; so is the query. <bookmark mark='a'/> The score of a key is its dot product with the query: how long both are, times how much they point the same way. The softmax turns the scores into weights. <bookmark mark='b'/> Turn the query, and the weights flow from key to key. A query is a direction to look in.",
-   "zh": ""
+   "zh": "来看看其中的几何。每个键都是一根箭头；查询也是。<bookmark mark='a'/>一个键的分数，就是它和查询的点积：两者各有多长，再乘以它们的方向有多一致。softmax把这些分数变成权重。<bookmark mark='b'/>转动查询，权重就从一个键流向另一个键。查询，就是一个要去看的方向。"
   },
   "424632f025b7": {
    "scene": "Smoother",
    "en": "One detail in that formula: the division by the square root of d. A query and a key each have d numbers, and a dot product of d random terms spreads out like the square root of d: here from 1.4 at d equals 2 to 23 at 512. <bookmark mark='a'/> Feed scores that spread into a softmax and it stops averaging: it picks one key and ignores the rest. Over 64 keys, the spread of the weights falls from 4.9 bits to 0.28. <bookmark mark='b'/> Divide by the square root of d, and the scores keep a spread of one: the weights stay spread out, 5.3 bits at every size, and the network can still learn which keys matter.",
-   "zh": ""
+   "zh": "那个公式里还有一个细节：除以根号d。查询和键各有d个数，而d个随机项的点积，散布会按根号d增长：这里从d等于2时的1.4，一直涨到d等于512时的23。<bookmark mark='a'/>把散得这么开的分数送进softmax，它就不再取平均了：它只挑出一个键，其余的全都不管。在64个键上，权重的散布，从4.9比特降到了0.28。<bookmark mark='b'/>除以根号d，分数的散布就一直保持在1：权重始终是摊开的，不管d多大，都是5.3比特，网络也就仍然能学会，哪些键才重要。"
   },
   "8df272036764": {
    "scene": "Transformer",
    "en": "Chapter two. Our own transformer.",
-   "zh": ""
+   "zh": "第2章。我们自己从零搭建起来的Transformer模型。"
   },
   "0b77474ba877": {
    "scene": "Transformer",
    "en": "Now build one. Each character enters as a vector, part two's idea, 128 numbers here. The column of vectors is the residual stream from part eight: every layer reads from it and adds back to it. <bookmark mark='a'/> A transformer block has two halves. Attention moves information between positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, part eight's network, works on each position on its own, like thinking over what was gathered. <bookmark mark='c'/> Each half normalizes its input, and adds its output back to the stream. Stack four blocks, read off a guess for the next character, and that's the whole machine.",
-   "zh": ""
+   "zh": "现在来搭一个。每个字符都以一个向量的形式进来，这是第2部分的想法，这里是128个数。这一列列向量，就是第8部分的残差流：每一层都从里面读取，再把结果加回去。<bookmark mark='a'/>一个Transformer模块分成两半。注意力在位置之间搬运信息：每个字符，都从它前面的字符那里收集信息。<bookmark mark='b'/>然后是一个MLP，也就是第8部分的那种网络，它在每个位置上单独工作，好比把收集来的东西琢磨一遍。<bookmark mark='c'/>每一半都先把输入归一化，再把输出加回残差流。把4个模块叠起来，最后读出对下一个字符的猜测，整台机器就是这样。"
   },
   "6dd6b37580e5": {
    "scene": "Transformer",
    "en": "Attention runs as 4 separate heads, each with its own query, key and value matrices in 32 dimensions, so each can look for something different. <bookmark mark='a'/> Here are the 4 heads of our trained model's first layer, reading a sentence of the passage: each row is a character, and the bright squares are where it looks. Some look one step back, some a few, some spread out. <bookmark mark='b'/> The upper triangle is dark: a character may only look at the past, since it's the future the model is trying to guess. <bookmark mark='c'/> The heads' outputs are stacked and mixed by one more matrix.",
-   "zh": ""
+   "zh": "注意力分成4个独立的头来运行，每个头都有自己的查询、键和值矩阵，工作在32维里，所以每个头都能去找不同的东西。<bookmark mark='a'/>这是我们训练好的模型第一层的4个头，在读测试段落里的一句话：每一行是一个字符，亮的方格，就是它看的地方。有的往回看一步，有的看几步，有的摊得很开。<bookmark mark='b'/>上三角是暗的：一个字符只能看过去，因为模型要猜的，正是未来。<bookmark mark='c'/>各个头的输出拼在一起，再由另一个矩阵混合起来。"
   },
   "14bb55acf17e": {
    "scene": "Transformer",
    "en": "Ours has 4 blocks, 4 heads and 0.8 million numbers, and reads 256 characters at a time. We trained it on the thirty novels, about 25 million characters, on the four-core processor that rendered this video. <bookmark mark='a'/> It reaches 2.00 bits a character on the passage, better than part eight's neural model, and than counting.",
-   "zh": ""
+   "zh": "我们的模型有4个模块、4个头、80万个数，一次读256个字符。我们用那30部小说训练它，大约2500万个字符，用的就是渲染这个视频的那台4核处理器。<bookmark mark='a'/>它在测试段落上达到了每字符2.00比特，比第8部分的神经模型好，也比计数模型好。"
   },
   "ef1e48bdf5bf": {
    "scene": "Transformer",
    "en": "On the scoreboard, a new row. <bookmark mark='a'/> GPT-2 small, at 1.17, is the same kind of machine: a stack of these blocks, about 150 times bigger, trained on far more text with far more computing. What separates them is mostly scale, which was part ten's story.",
-   "zh": ""
+   "zh": "记分牌上，添了新的一行。<bookmark mark='a'/>GPT-2最小的版本，1.17比特，是同一类机器：也是一叠这样的模块，只是大了大约150倍，用多得多的文本、多得多的算力训练出来。把它们分开的，主要是规模，这正是第10部分讲的故事。"
   },
   "92fbb8780aeb": {
    "scene": "Transformer",
    "en": "And here's what it writes, from part four's prompt: <bookmark mark='a'/> still not sense, but sentences, names and dialogue, held together over longer stretches than before.",
-   "zh": ""
+   "zh": "这是它写出来的东西，接着第4部分的那段前文往下写：<bookmark mark='a'/>还是说不通，但已经有了句子、人名和对话，而且能在比以前更长的篇幅里连贯下去。"
   },
   "169babe3bcec": {
    "scene": "Rope",
    "en": "Chapter three. Positions as rotations.",
-   "zh": ""
+   "zh": "第3章。用旋转表示位置。"
   },
   "a1906e165d7c": {
    "scene": "Rope",
    "en": "There's a problem. Attention averages over a set. <bookmark mark='a'/> Each word gets a weight from its key, wherever it sits. <bookmark mark='b'/> So 'dog bites man' and 'man bites dog' look exactly the same: the same weights, the same average. The order is lost. The model has to be told where each character is.",
-   "zh": ""
+   "zh": "这里有个问题。注意力是在一个集合上取平均。<bookmark mark='a'/>每个词的权重都来自它的键，不管它排在哪里。<bookmark mark='b'/>所以，“狗咬人”和“人咬狗”，看起来一模一样：同样的权重，同样的平均。顺序丢掉了。必须有人告诉模型，每个字符在哪里。"
   },
   "773360835ec0": {
    "scene": "Rope",
    "en": "The answer used by nearly every model today is to rotate. Take a query's thirty-two numbers in sixteen pairs; each pair is an arrow in a plane. <bookmark mark='a'/> At position m, turn pair j by m times an angle theta j. <bookmark mark='b'/> The first pair turns fast, a full turn every six characters; each pair after it turns more slowly, down to one turn in thirty-five thousand. <bookmark mark='c'/> Keys are turned the same way. Like the hands of a clock, fast hands tell you the position nearby, slow hands where you are in a long text. This is RoPE, rotary position embedding.",
-   "zh": ""
+   "zh": "如今几乎每个模型用的办法，都是旋转。把一个查询的32个数，两两分成16对；每一对，都是平面上的一根箭头。<bookmark mark='a'/>在位置m上，把第j对转过m倍的角度θj。<bookmark mark='b'/>第一对转得很快，每6个字符就转满一圈；后面的每一对都转得更慢，最慢的，要3.5万个字符才转一圈。<bookmark mark='c'/>键也按同样的方式转动。就像钟表的指针：快指针告诉你附近的位置，慢指针告诉你在长文本里走到了哪里。这就是RoPE，旋转位置编码。"
   },
   "c477e9162380": {
    "scene": "Rope",
    "en": "Why rotations? Look at one pair, in a query at position five and a key at position two. <bookmark mark='a'/> Their score depends on the angle between them. Now move both forward by the same amount, as if the same words appeared later in the text. <bookmark mark='b'/> Both arrows turn by the same angle, so the angle between them doesn't change, and neither does the score. <bookmark mark='c'/> A rotated query and a rotated key score according to how far apart they are, not where they are. Relative position comes for free, from the geometry of rotations.",
-   "zh": ""
+   "zh": "为什么用旋转？看其中一对：查询在位置5，键在位置2。<bookmark mark='a'/>它们的分数，取决于两者之间的夹角。现在把两者都往后挪同样的距离，就好像同样的词，出现在了文本更靠后的地方。<bookmark mark='b'/>两根箭头转过同样的角度，所以它们之间的夹角不变，分数也不变。<bookmark mark='c'/>转过之后的查询和键，打出的分数取决于它们相隔多远，而不是它们在哪里。相对位置就这样白白得来，来自旋转的几何。"
   },
   "194738e524ec": {
    "scene": "Rope",
    "en": "And a bonus. Score a query against an identical key, then move them apart. Each pair's arrows drift out of step at its own speed, so the score shrinks with distance: <bookmark mark='a'/> on average, nearby matches count more than distant ones, a gentle bias towards the recent past that nobody had to build in. <bookmark mark='b'/> Since 2021, rotary positions have become the standard: almost every open model uses them.",
-   "zh": ""
+   "zh": "还有一个额外的好处。让一个查询和一个跟它一模一样的键打分，再把它们拉开。每一对箭头都以自己的速度慢慢错开，所以分数随距离变小：<bookmark mark='a'/>平均来说，近处的匹配比远处的更有分量，这是一种偏向最近过去的温和倾向，而且没有人需要特意把它设计进去。<bookmark mark='b'/>从2021年起，旋转位置编码就成了标准：几乎每一个开源模型都在用它。"
   },
   "737f8e538687": {
    "scene": "Longer",
    "en": "Chapter four. Longer than it was trained for.",
-   "zh": ""
+   "zh": "第4章。比训练时更长。"
   },
   "fbcfb5bddcaa": {
    "scene": "Longer",
    "en": "Our model was trained on stretches of 256 characters. What if we hand it 4 times as many? <bookmark mark='a'/> Up to its training length, it does what it always did. <bookmark mark='b'/> Past it, it falls apart: from 1.8 bits a character to 4.9. The slow hands of its clocks now point at angles it never saw in training, and its queries and keys stop meaning what they meant. <bookmark mark='c'/> Doing nothing clever, just reading the last 256 characters at a time, is far better. Long context isn't free.",
-   "zh": ""
+   "zh": "我们的模型，是在一段段256个字符的文本上训练的。如果交给它4倍长的文本，会怎样？<bookmark mark='a'/>在训练长度以内，它照常发挥。<bookmark mark='b'/>一过这个长度，它就垮了：从每字符1.8比特，涨到4.9比特。它那些钟表上的慢指针，现在指向了训练时从没见过的角度，它的查询和键，也不再是原来的意思了。<bookmark mark='c'/>什么巧办法都不用，每次只读最后256个字符，反而好得多。长上下文，不是白来的。"
   },
   "2cb2697d9aa9": {
    "scene": "Longer",
    "en": "So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same factor, 4, so the longer text spans only the angles seen in training; but the fast hands lose the fine detail of which character is next to which. <bookmark mark='b'/> The NTK-aware trick slows the slow hands a lot and the fast ones hardly at all. <bookmark mark='c'/> YaRN leaves the fast hands alone, slows the slow ones fully, ramps in between, and sharpens the attention slightly to make up for the longer context. <bookmark mark='d'/> On our model, with no retraining at all, the best here is YaRN: 2.13 bits at the far end, against 4.9 for doing nothing. Real models do this and then train briefly on long texts; Qwen and DeepSeek reach a hundred and twenty-eight thousand tokens with YaRN.",
-   "zh": ""
+   "zh": "所以，人们给这些钟表重新调速。<bookmark mark='a'/>位置插值把每根指针都放慢同样的倍数，4倍，这样更长的文本，只会用到训练时见过的那些角度；可是快指针也因此丢掉了精细的信息：哪个字符紧挨着哪个字符。<bookmark mark='b'/>NTK感知的技巧，把慢指针放慢很多，快指针却几乎不动。<bookmark mark='c'/>YaRN让快指针保持原样，把慢指针彻底放慢，中间的逐渐过渡，再把注意力稍微调得尖锐一点，来弥补更长的上下文。<bookmark mark='d'/>在我们的模型上，完全不重新训练，这里最好的是YaRN：在最远端是2.13比特，什么都不做则是4.9比特。真实的模型会这样做，然后再在长文本上简短地训练一下；Qwen和DeepSeek就是靠YaRN，达到了12.8万个词元。"
   },
   "2b5ad7e0529c": {
    "scene": "Longer",
    "en": "Long contexts brought a strange discovery. Look at where heads put their attention. <bookmark mark='a'/> In our small model, nothing odd: every head gives the first character less than an even share. <bookmark mark='b'/> But in large models, many heads put most of their attention on the very first token, whatever that token is. These are attention sinks. <bookmark mark='c'/> A softmax has to hand out all of its weight, so a head that has nothing to look for parks its attention on a harmless spot. Guangxuan Xiao and colleagues found that keeping those first tokens lets a model run on and on; newer models like gpt-oss build a learnable sink into every head, and Qwen adds a gate that lets a head switch itself off instead.",
-   "zh": ""
+   "zh": "长上下文还带来了一个奇怪的发现。看看各个头把注意力放在了哪里。<bookmark mark='a'/>在我们的小模型里，没什么异常：每个头分给第一个字符的，都不到平均分配时的那一份。<bookmark mark='b'/>可是在大模型里，许多头把大部分注意力，都放在了最开头的那个词元上，不管那是什么词元。这些就是注意力汇聚点。<bookmark mark='c'/>softmax必须把权重全部分出去，所以一个没什么可找的头，就把注意力停放在一个无害的地方。肖光烜和同事们发现，只要留住开头的那几个词元，模型就能一直往下运行；更新的模型，比如gpt-oss，在每个头里都内置了一个可学习的汇聚点，而Qwen则加了一个门，让一个头可以干脆把自己关掉。"
   },
   "6330e697895d": {
    "scene": "Induction",
    "en": "Chapter five. Induction heads.",
-   "zh": ""
+   "zh": "第5章。归纳头。"
   },
   "4e66385f29d1": {
    "scene": "Induction",
    "en": "Here's a test no novel prepared our transformer for: random letters, then the same random letters again. <bookmark mark='a'/> The first time through, it does worse than a blind guess: 10.8 bits a letter, against four point seven for a guess among twenty-six, because random letters look nothing like a novel and it bets on English. <bookmark mark='b'/> And the second time, no better: 10.9 bits. A model that copied from its own context would predict almost every letter. Ours can't yet: copying needs a particular piece of machinery, and our small transformer, trained for an hour or two, hasn't built it. Big models build it early. Here's what it is.",
-   "zh": ""
+   "zh": "这里有一道题，没有哪部小说让我们的Transformer准备过：一串随机字母，然后把同一串随机字母再来一遍。<bookmark mark='a'/>第一遍读下来，它比瞎猜还差：每个字母10.8比特，而在26个字母里瞎猜，只要4.7比特，因为随机字母跟小说一点都不像，它却押注在英语上。<bookmark mark='b'/>第二遍，也没有好一点：10.9比特。一个会从自己的上下文里照抄的模型，几乎每个字母都能预测出来。我们的模型还做不到：照抄需要一套特定的机制，而我们的小Transformer，只训练了一两个小时，还没有搭出这套机制。大模型很早就会搭出来。下面就来看看，它是什么。"
   },
   "7fb1684c2009": {
    "scene": "Induction",
    "en": "How? Two heads, in two layers, working together. <bookmark mark='a'/> In an earlier layer, a head that only ever looks one step back: each character's vector now also says which character came before it. <bookmark mark='b'/> In a later layer, the second head. The character being read is an 'l'. Its query asks: which earlier character came right after an 'l'? The key of the 'c' in Falcon answers, because its note says: the one before me was an 'l'. <bookmark mark='c'/> So the head attends there and copies it: 'c'. Seen A followed by B? On seeing A again, predict B. Catherine Olsson and colleagues at Anthropic named these induction heads in 2022.",
-   "zh": ""
+   "zh": "怎么做到的？两个头，分在两层里，协同工作。<bookmark mark='a'/>在较早的一层里，有一个头永远只往回看一步：这样，每个字符的向量里，还会记下它前面是哪个字符。<bookmark mark='b'/>在较晚的一层里，是第二个头。正在读的字符是一个l。它的查询问：前面哪个字符，紧跟在一个l后面？Falcon里那个c的键作出了回应，因为它的记录上写着：我前面是一个l。<bookmark mark='c'/>于是，这个头就把注意力放到那里，把它抄过来：c。见过A后面跟着B？再看到A时，就预测B。2022年，凯瑟琳·奥尔森和她在Anthropic的同事们，把这种头命名为归纳头。"
   },
   "5658b5100805": {
    "scene": "Induction",
    "en": "Induction heads can be watched as they form. Train a small model of attention alone on random tokens with a repeated stretch somewhere inside. <bookmark mark='a'/> With one layer, it can never copy: one head can't both note the previous token and search for it. <bookmark mark='b'/> With two layers, nothing happens for a while, and then, around step 2,600, the loss on the repeat falls off a cliff. <bookmark mark='c'/> Look inside: the first layer has a head that looks exactly one step back, and the second a head that looks at the earlier copy, one step ahead. In large models the same jump happens early in training, right when they get good at learning from their prompt.",
-   "zh": ""
+   "zh": "归纳头形成的过程，是可以亲眼看到的。训练一个只有注意力的小模型，数据是随机的词元，中间某处藏着一段重复。<bookmark mark='a'/>只有一层的话，它永远学不会照抄：一个头没法既记下前一个词元，又去搜索它。<bookmark mark='b'/>有两层的话，起初一段时间什么也没发生，然后，大约在第2600步，重复部分上的损失，一下子跌下了悬崖。<bookmark mark='c'/>看看里面：第一层有一个头，恰好往回看一步；第二层有一个头，看向更早出现的那份副本，而且错后一步。在大模型里，同样的跃变也发生在训练早期，恰好就在它们开始擅长从提示词中学习的时候。"
   },
   "e1fb7cf8059d": {
    "scene": "InContext",
    "en": "Chapter six. Learning inside the prompt.",
-   "zh": ""
+   "zh": "第6章。在提示词里学习。"
   },
   "3389b7ed0d7f": {
    "scene": "InContext",
    "en": "Large models learn from examples in their prompt, without changing a single weight. Show one a few translations, and it translates the next. How can a forward pass learn? Here's a case small enough to take apart completely. <bookmark mark='a'/> Each prompt is a list of examples: four numbers x, and an answer y, which is a fixed weighted sum of them. Then a question: a new x, with the answer missing. <bookmark mark='b'/> The catch: every prompt uses different hidden weights, so nothing can be memorized. To answer, the model has to work out the rule from the examples in front of it.",
-   "zh": ""
+   "zh": "大模型能从提示词里的例子中学习，一个权重都不用改。给它看几个翻译的例子，它就会翻译下一个。一次前向传播，怎么能学习呢？这里有一个小到可以彻底拆开的例子。<bookmark mark='a'/>每个提示词都是一串例子：4个数x，再加一个答案y，y是这几个数的一个固定的加权和。然后是一个问题：一个新的x，答案空着。<bookmark mark='b'/>关键在于：每个提示词用的隐藏权重都不一样，所以没有什么可以死记硬背的。要回答，模型必须从眼前的这些例子里，推出规律。"
   },
   "efc5b61585e6": {
    "scene": "InContext",
    "en": "Take the simplest attention: one layer, with no softmax. Every token is an example's numbers and its answer, and attention adds to each token a weighted sum of the others. Train it on many prompts. <bookmark mark='a'/> Here are the two matrices it learned. Blue is positive, red negative. <bookmark mark='b'/> Now do something else: one step of gradient descent on the prompt's examples, starting from zero, for the least-squares loss of part five. The step is a sum of each answer times its x, and the prediction is a sum of each answer times how well its x matches the question: a dot product of x's, weighting the y's. <bookmark mark='c'/> That is attention, with these two matrices: an identity block that compares x's, and one entry that passes on the y's. They're the same pattern the network found by itself.",
-   "zh": ""
+   "zh": "取最简单的注意力：只有一层，没有softmax。每个词元，就是一个例子的那几个数，再加上它的答案；注意力给每个词元，加上其他词元的一个加权和。在大量提示词上训练它。<bookmark mark='a'/>这是它学到的两个矩阵。蓝色是正，红色是负。<bookmark mark='b'/>现在做另一件事：在提示词的这些例子上，从零出发，对第5部分的最小二乘损失，走一步梯度下降。这一步，是每个答案乘以它的x，再求和；而预测，是每个答案乘以它的x和问题有多匹配，再求和：用x之间的点积，给y加权。<bookmark mark='c'/>这正是注意力，用的就是这两个矩阵：一个比较x的单位矩阵块，加上一个把y传下去的元素。这跟网络自己找到的，是同一个图案。"
   },
   "303c76dc809f": {
    "scene": "InContext",
    "en": "Check it on four thousand new prompts. Each dot is one question: across, the answer from one step of gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> They lie on a line. The correlation is 0.999. The forward pass of this network is a step of learning, run on the examples in its prompt. Johannes von Oswald and colleagues showed this in 2023.",
-   "zh": ""
+   "zh": "在4000个新的提示词上检验一下。每个点是一个问题：横坐标是走一步梯度下降得到的答案；纵坐标是训练好的注意力层给出的答案。<bookmark mark='a'/>它们落在一条直线上。相关系数是0.999。这个网络的前向传播，就是一步学习，在它提示词里的例子上运行。2023年，约翰内斯·冯·奥斯瓦尔德和同事们证明了这一点。"
   },
   "31ba60c5f437": {
    "scene": "InContext",
    "en": "Stack more layers, and each can take another step. <bookmark mark='a'/> One layer matches one step of gradient descent. Two layers beat two plain steps, 0.13 against 0.31: trained, the network finds a smarter kind of step than the textbook one. <bookmark mark='b'/> Exact least squares, from part five, gets every answer right here, so there's room to grow. Real transformers, with softmax attention and many layers, are messier than this, but the lesson carries over: a forward pass can run a learning algorithm on the prompt.",
-   "zh": ""
+   "zh": "叠上更多层，每一层都能再走一步。<bookmark mark='a'/>一层，正好对应一步梯度下降。两层胜过两步普通的梯度下降，0.13对0.31：经过训练，网络找到了一种比教科书上更聪明的步子。<bookmark mark='b'/>第5部分讲的精确最小二乘，在这里每个答案都对，所以还有提升的空间。真实的Transformer，用的是softmax注意力，层数也多，比这里要乱得多，但这个道理依然成立：一次前向传播，可以在提示词上运行一个学习算法。"
   },
   "87bedbab93ca": {
    "scene": "Outro",
    "en": "Let's take stock. Attention is a weighted average, Nadaraya and Watson's smoother with a learned kernel: queries and keys decide the weights, values carry the content, and a square root keeps the softmax from collapsing. Stacked with MLPs on a residual stream, it made our own transformer. Positions are rotations, which makes scores depend on distance, and rescaling the rotations stretches a model's context. And trained heads find tricks of their own: sinks that park attention, induction heads that copy, and a layer that runs gradient descent on its prompt.",
-   "zh": ""
+   "zh": "我们来盘点一下。注意力是一个加权平均，是纳达拉亚和沃森的平滑器，只不过核是学出来的：查询和键决定权重，值承载内容，而一个平方根，让softmax不至于塌缩。把它和MLP一起叠在残差流上，就成了我们自己的Transformer。位置就是旋转，这让分数取决于距离；而给旋转重新调速，就能拉长模型的上下文。训练出来的头，还会找到自己的诀窍：停放注意力的汇聚点，负责照抄的归纳头，以及在提示词上跑梯度下降的一层注意力。"
   },
   "f42e6bf3acd2": {
    "scene": "Outro",
    "en": "This comes back everywhere. To write fast, a model keeps every past key and value: part twelve is about that memory, and part nineteen about serving it. Part thirteen attends to only some of the past. Images and sound become sequences to attend over in parts fifteen and sixteen. Learning from the prompt is where reasoning starts, in part seventeen, and part twenty opens up heads and circuits in real models.",
-   "zh": ""
+   "zh": "这些想法会处处再现。为了写得快，模型会留着过去的每一个键和值：第12部分讲的就是这份记忆，第19部分讲的是，部署服务时怎样用好它。第13部分只关注过去的一部分。在第15和第16部分，图像和声音都变成了可以施加注意力的序列。从提示词中学习，是推理的起点，这在第17部分；而第20部分，会打开真实模型里的头和回路。"
   },
   "a591cf7b0c00": {
    "scene": "Outro",
    "en": "Next time: memory. Attention makes every new character look at all the old ones, so its cost grows with every character read. <bookmark mark='a'/> Could a model instead keep a fixed-size memory, updated as it reads? That's the idea behind state-space models, linear attention and the hybrids in the newest models.",
-   "zh": ""
+   "zh": "下一次：记忆。注意力让每个新字符都去看所有旧字符，所以每多读一个字符，它的开销就多一分。<bookmark mark='a'/>模型能不能换一种方式，只保留一份固定大小的记忆，边读边更新？这正是状态空间模型、线性注意力，以及最新模型里那些混合架构背后的想法。"
   },
   "2cc21b546318": {
    "scene": "Outro",
    "en": "Anthropic's 'Mathematical Framework for Transformer Circuits' is the best next read. Thanks for watching, and see you in part twelve.",
-   "zh": ""
+   "zh": "接下来最值得一读的，是Anthropic的那篇《Transformer回路的数学框架》。感谢观看，我们第12部分再见。"
   }
  },
  "title_en": "AI, Built: Part 11, Attention as Geometry",
