@@ -75,11 +75,13 @@ class Hybrid(VoiceoverScene):
         lx = np.log10(ctx)
         ys = {key: np.log2(np.asarray(k[f"total_{key}"]) / 2 ** 30) for key, _, _ in lines}
         y0, y1 = math.floor(min(v.min() for v in ys.values())), math.ceil(max(v.max() for v in ys.values()))
-        ax = Axes(x_range=[3, 6, 1], y_range=[y0, y1, 1], x_length=7.6, y_length=4.4, tips=False,
+        # y measured from the bottom (log2 GiB minus y0), so the x axis sits at the bottom of the chart
+        ys = {key: v - y0 for key, v in ys.items()}
+        ax = Axes(x_range=[3, 6, 1], y_range=[0, y1 - y0, 1], x_length=7.6, y_length=4.4, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.8, -0.4, 0])
-        xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, y0), DOWN, buff=0.1)
+        xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                       for t, v in ((r"1{,}000", 3), (r"10{,}000", 4), (r"100{,}000", 5), (r"10^6", 6))])
-        yt = VGroup(*[MathTex(gib(2 ** (v + 30)), font_size=20, color=GREY_B).next_to(ax.c2p(3, v), LEFT, buff=0.1)
+        yt = VGroup(*[MathTex(gib(2 ** (v + 30)), font_size=20, color=GREY_B).next_to(ax.c2p(3, v - y0), LEFT, buff=0.1)
                       for v in range(y0, y1 + 1, 2)])
         xn = label(r"context, \ in tokens", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"memory for one conversation \ (bf16, \ log scale)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
@@ -89,8 +91,9 @@ class Hybrid(VoiceoverScene):
         ks = VGroup(*[label(rf"{n}: \ ${gib(float(np.asarray(k[f'total_{key}'])[i128]))}$", font_size=24, color=c_)
                       for key, n, c_ in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.6, 1.0, 0])
         kl = label(r"at $128{,}000$ tokens", font_size=22, color=GREY_A).next_to(ks, UP, buff=0.2).align_to(ks, LEFT)
-        st = label(rf"Qwen3-Next's fixed state: \ ${gib(float(k['qwen_state']))}$, \\ the same at any length", font_size=22,
+        st = label(rf"Qwen3-Next's fixed state: \\ ${gib(float(k['qwen_state']))}$, \ the same at any length", font_size=22,
                    color=LIN).next_to(ks, DOWN, buff=0.5).align_to(ks, LEFT)
+        keep_in_frame(VGroup(kl, ks, st))
         q, ll = np.asarray(k["total_qwen"])[i128], np.asarray(k["total_llama"])[i128]
         with self.voiceover(
             "The memory bill shows why. For one conversation of a hundred and twenty-eight thousand tokens, "
