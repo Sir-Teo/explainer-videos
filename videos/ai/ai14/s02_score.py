@@ -121,7 +121,7 @@ class Score(VoiceoverScene, ThreeDScene):
         ts = [float(v) for v in t["field_ts"]]
         data = np.asarray(t["data"])[:600]
         U, sh = 1.15, np.array([-0.6, -0.4])
-        pts = cloud(data, DATA, radius=0.02, scale=U, shift=sh, opacity=0.5)
+        pts = cloud(data, DATA, radius=0.022, scale=U, shift=sh, opacity=0.8)
         fields = [arrows_field(grid, t[f"field{v:g}"], unit=U, shift=sh) for v in ts]
         tl = [label(rf"noise level $t = {v:g}$", font_size=28, color=SCORE).to_corner(UR, buff=0.4) for v in ts]
         head = label(r"the learned score: \ the trained network's arrows, \ on a grid", font_size=26, color=GREY_A)
@@ -139,5 +139,40 @@ class Score(VoiceoverScene, ThreeDScene):
             self.play(ReplacementTransform(fields[1], fields[2]), ReplacementTransform(tl[1], tl[2]), run_time=1.5)
             vo.wait_until("c")
             self.play(ReplacementTransform(fields[2], fields[3]), ReplacementTransform(tl[2], tl[3]), run_time=1.5)
-        self.wait(0.3)
+        # follow the arrows: 40 particles from random places, stepping along the learned field as its noise level falls
+        xs, ys = np.unique(grid[:, 0]), np.unique(grid[:, 1])
+        idx = {(round(float(a), 6), round(float(b), 6)): k for k, (a, b) in enumerate(grid)}
+
+        def interp(F, q):  # bilinear on the grid
+            fx = np.clip((q[0] - xs[0]) / (xs[1] - xs[0]), 0, len(xs) - 1.001)
+            fy = np.clip((q[1] - ys[0]) / (ys[1] - ys[0]), 0, len(ys) - 1.001)
+            i0, j0 = int(fx), int(fy)
+            a, b = fx - i0, fy - j0
+            v = lambda i, j: F[idx[(round(float(xs[i]), 6), round(float(ys[j]), 6))]]
+            return ((1 - a) * (1 - b) * v(i0, j0) + a * (1 - b) * v(i0 + 1, j0) + (1 - a) * b * v(i0, j0 + 1)
+                    + a * b * v(i0 + 1, j0 + 1))
+
+        g = np.random.default_rng(14)
+        Q = np.column_stack([g.uniform(-2.6, 2.6, 40), g.uniform(-1.7, 1.7, 40)])
+        tracks = [Q.copy()]
+        for v_ in ts:
+            F = np.asarray(t[f"field{v_:g}"])
+            eta = 0.035 / np.median(np.linalg.norm(F, axis=1))
+            for _ in range(16):
+                Q = Q + eta * np.array([interp(F, q) for q in Q])
+                Q = np.clip(Q, [-3, -2], [3, 2])
+                tracks.append(Q.copy())
+        tracks = np.array(tracks)  # step, particle, xy
+
+        def at(q):
+            return [q[0] * U + sh[0], q[1] * U + sh[1], 0]
+
+        movers = VGroup(*[Dot(at(q), radius=0.05, color=WHITE) for q in tracks[0]])
+        trails = VGroup(*[VMobject(stroke_width=2, stroke_color=WHITE, stroke_opacity=0.6).set_points_as_corners([at(q) for q in tracks[:, i]])
+                          for i in range(tracks.shape[1])])
+        fl = label(r"follow the arrows, \ noise level falling", font_size=24, color=WHITE).to_corner(DR, buff=0.4)
+        self.play(fields[3].animate.set_opacity(0.25), FadeIn(movers), FadeIn(fl))
+        self.play(*[MoveAlongPath(m, tr) for m, tr in zip(movers, trails)], *[Create(tr) for tr in trails], run_time=4.0,
+                  rate_func=linear)
+        self.wait(0.6)
         self.clear_scene()

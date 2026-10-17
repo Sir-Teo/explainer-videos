@@ -71,7 +71,9 @@ class Samplers(VoiceoverScene):
         yn.align_to(ax, LEFT)
         c = VGroup(curve(ax, lx, sw, DDIM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=DDIM_C) for a, b in zip(lx, sw)])
         fl = DashedLine(ax.c2p(0.6, floor), ax.c2p(2.1, floor), color=GREY_B, stroke_width=1.5)
-        fll = label(r"two samples of the data itself", font_size=20, color=GREY_B).next_to(fl, UP, buff=0.05).align_to(fl, RIGHT)
+        fll = label(r"the floor: \\ two samples \\ of the data itself", font_size=20, color=GREY_B).next_to(fl.get_end(), RIGHT, buff=0.12)
+        yt = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0.6, v), LEFT, buff=0.08)
+                      for v in np.linspace(0, hi, 5)[1:]])
         dp = DashedLine(ax.c2p(0.6, ddpm), ax.c2p(2.1, ddpm), color=DDPM_C, stroke_width=1.5)
         dpl = label(r"DDPM, $200$ steps", font_size=20, color=DDPM_C).next_to(dp, UP, buff=0.05).align_to(dp, LEFT)
         S = 0.42
@@ -88,7 +90,7 @@ class Samplers(VoiceoverScene):
             "so fewer steps is faster pictures. Can we do better still? The paths are curved, and curved paths need "
             "many small steps."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll), Create(dp), FadeIn(dpl))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll), Create(dp), FadeIn(dpl))
             vo.wait_until("a")
             self.play(Create(c[0]), FadeIn(c[1:]), LaggedStart(*[FadeIn(s_) for s_ in snaps], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
