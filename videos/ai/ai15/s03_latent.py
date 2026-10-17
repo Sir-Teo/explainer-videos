@@ -220,16 +220,19 @@ class Latent(VoiceoverScene):
         kmax = max(kl[t] for t in nz)
         rmax = max(rm.values())
         xt_ = 10 ** math.ceil(math.log10(kmax)) / 4
-        ax = CornerAxes(x_range=[0, kmax * 1.1, xt_], y_range=[0, rmax * 1.15, rmax / 2], x_length=5.6, y_length=3.6, tips=False,
+        rmin = min(rm.values())
+        y0_, y1_ = rmin - 0.6 * (rmax - rmin) - 1e-3, rmax + 0.6 * (rmax - rmin) + 1e-3  # zoomed in on the dots
+        ax = CornerAxes(x_range=[0, kmax * 1.1, xt_], y_range=[y0_, y1_, (y1_ - y0_) / 2], x_length=5.6, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, -0.4, 0])
         xn = label(r"KL: \ how much the codes say, \ in nats \ ($1$ nat $\approx 1.44$ bits)", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.15)
-        yn = label(r"rebuild error \ (held-out fonts)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yn = label(r"rebuild error \ (held-out fonts; \ axis zoomed in)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         pts = [ax.c2p(kl[t], rm[t]) for t in nz]
         line = VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners(pts)
         dots = VGroup(*[Dot(p, radius=0.07, color=C.SURPRISE) for p in pts])
-        dl = VGroup(*[MathTex(rf"\beta = {t}", font_size=20, color=C.SURPRISE).next_to(p, UR, buff=0.06) for t, p in zip(nz, pts)])
+        dl = VGroup(*[MathTex(rf"\beta = {t}", font_size=20, color=C.SURPRISE).next_to(p, UP if rm[t] > rm["0"] else DR, buff=0.08)
+                      for t, p in zip(nz, pts)])  # on the far side of the dashed line from it, never across it
         ae = DashedLine(ax.c2p(0, rm["0"]), ax.c2p(kmax * 1.1, rm["0"]), dash_length=0.08, stroke_width=2, color=GREY_B)
-        ael = label(r"plain autoencoder", font_size=18, color=GREY_B).next_to(ae, UP, buff=0.05).align_to(ae, RIGHT)
+        ael = label(r"plain autoencoder \ ($\beta = 0$)", font_size=18, color=GREY_B).next_to(ae, UP, buff=0.08).align_to(ae, RIGHT)
         # right: how many generated letters the judge can read, for each beta
         bw, by, H = 0.5, -2.2, 3.0
         bars = VGroup()
@@ -277,8 +280,9 @@ class Latent(VoiceoverScene):
             "bits. " + rebuild_line + "<bookmark mark='b'/> " + gen_line
         ) as vo:
             self.play(FadeIn(cite_), Create(ax), FadeIn(xn), FadeIn(yn), Create(ae), FadeIn(ael))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.2), FadeIn(dl), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(line), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.2), FadeIn(dl), run_time=2.0)
+            self.play(Create(line), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(bh), FadeIn(bxl), LaggedStart(*[AnimationGroup(GrowFromEdge(b_[0], DOWN), FadeIn(b_[1]), FadeIn(b_[2]))
                                                              for b_ in bars], lag_ratio=0.15), run_time=2.0)

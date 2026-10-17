@@ -2991,7 +2991,9 @@
     "the pages": "这些书页",
     "one tree's resample": "一棵树的重抽样",
     "resample": "重抽样",
-    "draw pages at random, putting each one back:\\\\ some come twice, some not at all, so each tree sees a slightly different pile": "随机抽取书页，每抽一页就放回去：\\\\ 有的抽到两次，有的一次也没抽到，所以每棵树看到的那堆书页都略有不同"
+    "draw pages at random, putting each one back:\\\\ some come twice, some not at all, so each tree sees a slightly different pile": "随机抽取书页，每抽一页就放回去：\\\\ 有的抽到两次，有的一次也没抽到，所以每棵树看到的那堆书页都略有不同",
+    "rebuild error \\ (held-out fonts; \\ axis zoomed in)": "重建误差 \\ （留出的字体；\\ 坐标轴已放大）",
+    "plain autoencoder \\ ($\\beta = 0$)": "普通自编码器 \\ （$\\beta = 0$）"
   },
   "phrases": {
     "width": "宽度",
