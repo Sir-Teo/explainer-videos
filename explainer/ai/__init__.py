@@ -308,15 +308,15 @@ def gloss(term: str, plain: str, picture: Mobject | None = None, corner=DR, widt
     body = VGroup(t, p).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
     if picture is not None:
         pic = picture.copy() if hasattr(picture, "copy") else picture
-        if pic.width > width - 0.4:
-            pic.scale_to_fit_width(width - 0.4)
+        if pic.width > max(width - 0.4, VGroup(t, p).width):
+            pic.scale_to_fit_width(max(width - 0.4, VGroup(t, p).width))
         if pic.height > 1.6:
             pic.scale_to_fit_height(1.6)
         body.add(pic)
         body.arrange(DOWN, buff=0.14, aligned_edge=LEFT)
         pic.set_x(body.get_x())
-    if body.width > width - 0.3:
-        body.scale_to_fit_width(width - 0.3)
+    if body.width > 6.6:  # the box grows to the text rather than shrinking it, up to about half the frame
+        body.scale_to_fit_width(6.6)
     box = RoundedRectangle(width=max(body.width + 0.36, 2.0), height=body.height + 0.3, corner_radius=0.12,
                            stroke_color=color, stroke_width=1.5, fill_color="#0B0F17", fill_opacity=0.92)
     card = VGroup(box, body.move_to(box))
