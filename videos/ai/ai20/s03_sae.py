@@ -178,9 +178,11 @@ class SAE(VoiceoverScene):
         o = load("frontier")
         l1s, ks = [float(v) for v in o["l1s"]], [int(v) for v in o["ks"]]
         L1C, TKC = C.SURPRISE, FEAT
-        pl = [(float(o[f"l1_{p:g}_l0"]), float(o[f"l1_{p:g}_fvu"])) for p in l1s]
+        alive = [p for p in l1s if float(o[f"l1_{p:g}_l0"]) >= 1]  # the strongest penalties can switch every feature off
+        dead = len(l1s) - len(alive)
+        pl = [(float(o[f"l1_{p:g}_l0"]), float(o[f"l1_{p:g}_fvu"])) for p in alive]
         pt = [(float(o[f"topk_{k:g}_l0"]), float(o[f"topk_{k:g}_fvu"])) for k in ks]
-        sl = [float(o[f"l1_{p:g}_shrink"]) for p in l1s]
+        sl = [float(o[f"l1_{p:g}_shrink"]) for p in alive]
         st = [float(o[f"topk_{k:g}_shrink"]) for k in ks]
         lo = min(v[0] for v in pl + pt)
         hi = max(v[0] for v in pl + pt)
@@ -231,7 +233,8 @@ class SAE(VoiceoverScene):
             "<bookmark mark='c'/> DeepMind's JumpReLU gives each feature its own threshold, learned, with the count of "
             "active features as the penalty. <bookmark mark='d'/> We trained both of the first two kinds on the same "
             "vectors, at several sparsities. "
-            + (f"TopK is better at every sparsity we tried: with {l0k:.0f} features per vector it leaves "
+            + ("At the strongest L1 penalty we tried, every feature switched off for good. " if dead else "")
+            + (f"At similar sparsity TopK does better: with {l0k:.0f} features per vector it leaves "
                f"{100 * fk:.0f} percent of the variance unexplained, where the L1 model at about {near[0]:.0f} leaves "
                f"{100 * near[1]:.0f}. " if fk < near[1] else
                f"On vectors this small the two are close: about {100 * fk:.0f} against {100 * near[1]:.0f} percent "
