@@ -1,232 +1,232 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第15部分：图像与视频",
  "chapters": {
-  "Hook": "",
-  "ViT": "",
-  "Latent": "",
-  "DiT": "",
-  "SD3": "",
-  "Scales": "",
-  "Video": "",
-  "Clips": "",
-  "Forcing": "",
-  "Outro": ""
+  "Hook": "从噪声里来的字母",
+  "ViT": "1. 图像是一个序列",
+  "Latent": "2. 更小的空间",
+  "DiT": "3. Transformer做去噪器",
+  "SD3": "4. 大规模的整流",
+  "Scales": "5. 由粗到细",
+  "Video": "6. 压缩时间",
+  "Clips": "7. 彼此一致的帧",
+  "Forcing": "8. 向前滚动",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
   "009d99151b5b": {
    "scene": "Hook",
    "en": "Every letter here was drawn from pure noise by a small transformer we trained, asked for that letter. <bookmark mark='a'/> It sees each picture as a sequence of patches, just as a language model sees words.",
-   "zh": ""
+   "zh": "这里的每一个字母，都是我们训练的一个小Transformer从纯噪声里画出来的，要它画哪个字母，它就画哪个。<bookmark mark='a'/>它把每张图片看成一串图像块，就像语言模型把文字看成一串词。"
   },
   "6d979c8c6728": {
    "scene": "Hook",
    "en": "This part brings everything so far to pictures and video, in depth: how a transformer reads an image; the compressed spaces models generate in, and the trade-off in shaping them; how a transformer becomes the denoiser, and what Stable Diffusion 3 changed to scale it; writing a picture coarse to fine; <bookmark mark='a'/> and for video, squeezing time, drawing frames that agree, and rolling forward past the length a model was trained on.",
-   "zh": ""
+   "zh": "这一部分把前面的一切都带到图片和视频上，而且讲得深入：Transformer怎样读一张图像；模型在其中做生成的压缩空间，以及塑造这些空间时的取舍；Transformer怎样成为去噪器，Stable Diffusion 3又改了什么来把它做大；怎样由粗到细地画出一张图片；<bookmark mark='a'/>还有视频：压缩时间，画出彼此一致的帧，以及越过模型训练时的长度，一路向前滚动。"
   },
   "19e10a1b0f19": {
    "scene": "ViT",
    "en": "Chapter one. An image is a sequence.",
-   "zh": ""
+   "zh": "第1章。图像是一个序列。"
   },
   "ded62c560221": {
    "scene": "ViT",
    "en": "A transformer reads sequences of tokens. So cut the picture into squares, patches, and line them up: <bookmark mark='a'/> each patch becomes a token, its pixels times a matrix, plus a vector saying where it was. Then it's part eleven's machinery, unchanged. The 2020 paper's title said it: an image is worth sixteen by sixteen words.",
-   "zh": ""
+   "zh": "Transformer读的是词元序列。所以，把图片切成一个个方块，也就是图像块，再把它们排成一行：<bookmark mark='a'/>每个图像块成为一个词元，就是它的像素乘以一个矩阵，再加上一个说明它原来在哪里的向量。接下来就是第11部分的那套机制，原封不动。2020年那篇论文的标题就说明了一切：一张图像值16乘16个词。"
   },
   "7a2e266b1782": {
    "scene": "ViT",
    "en": "We trained a small one to name the letter in each picture, reading twenty-five patches and one extra summary token: <bookmark mark='s'/> a token with no picture in it, which gathers from every patch as the layers go, and whose final vector names the letter. <bookmark mark='a'/> On fonts it never saw, it's right 90 percent of the time. <bookmark mark='b'/> And here's where its summary token looks, in the last layer: at the strokes that tell letters apart.",
-   "zh": ""
+   "zh": "我们训练了一个小模型，让它说出每张图片里是哪个字母。它读25个图像块，外加一个额外的汇总词元：<bookmark mark='s'/>这个词元里没有任何图像内容，随着一层层往上，它从每个图像块收集信息，而它最终的向量说出是哪个字母。<bookmark mark='a'/>在它从没见过的字体上，它有90%的时候是对的。<bookmark mark='b'/>这是在最后一层里，它的汇总词元在看哪里：看的是那些能把字母区分开的笔画。"
   },
   "53a63649229e": {
    "scene": "ViT",
    "en": "One more look inside. Each patch position has a learned vector, which starts at zero. <bookmark mark='a'/> Here, for each position, is how similar its vector is to every other position's. <bookmark mark='b'/> Each tile lights up around its own place: neighbours in the picture have similar vectors. Nobody told the model the patches form a five by five grid. It learned the geometry of the picture from the pictures.",
-   "zh": ""
+   "zh": "再往里看一眼。每个图像块的位置都有一个学出来的向量，一开始全是0。<bookmark mark='a'/>这里显示的是，对每个位置，它的向量和其他每个位置的向量有多相似。<bookmark mark='b'/>每一小格都在它自己的位置周围亮起来：在图片里相邻的位置，向量也相似。没有人告诉过模型，这些图像块构成一个5乘5的网格。它从图片里学会了图片的几何结构。"
   },
   "a932505d0531": {
    "scene": "Latent",
    "en": "Chapter two. A smaller space.",
-   "zh": ""
+   "zh": "第2章。更小的空间。"
   },
   "184c260fa7fc": {
    "scene": "Latent",
    "en": "Real pictures have millions of pixels, and most of that detail is predictable. So first, train an autoencoder: an encoder squeezes each picture into a few numbers, here 16 instead of 400, and a decoder rebuilds the picture from them. <bookmark mark='a'/> The rebuilt letters are close to the originals: 25 times fewer numbers, little lost.",
-   "zh": ""
+   "zh": "真实的图片有几百万个像素，而其中大部分细节是可以预测的。所以，先训练一个自编码器：编码器把每张图片压成少数几个数，这里是16个，而不是400个，解码器再从这些数重建出图片。<bookmark mark='a'/>重建出的字母和原图很接近：数少了25倍，丢掉的却很少。"
   },
   "851fa52bb8bd": {
    "scene": "Latent",
    "en": "And the space of those few numbers has structure. <bookmark mark='a'/> Take a picture, and find the pictures whose sixteen numbers are closest to its own. <bookmark mark='b'/> Mostly, they're the same letter, in other fonts: 69 percent of the time, against 4 by chance. Denoising in this space is cheaper, and each step is about shapes, not pixels.",
-   "zh": ""
+   "zh": "而且这几个数所在的空间是有结构的。<bookmark mark='a'/>取一张图片，找出那些16个数和它最接近的图片。<bookmark mark='b'/>大多数时候，它们是同一个字母，只是字体不同：69%的时候是这样，而随机的话只有4%。在这个空间里去噪更便宜，而且每一步处理的是形状，而不是像素。"
   },
   "dfa3c499ff64": {
    "scene": "Latent",
    "en": "Now run part fourteen's flow matching on those 16 numbers instead of the pixels, and decode the result. <bookmark mark='a'/> Letters again, with 25 times fewer numbers to denoise. That's latent diffusion, and it's how Stable Diffusion, Flux and every video model work.",
-   "zh": ""
+   "zh": "现在，在这16个数上，而不是在像素上，运行第14部分的流匹配，再把结果解码。<bookmark mark='a'/>又是字母，而要去噪的数少了25倍。这就是潜在扩散，Stable Diffusion、Flux，还有每一个视频模型，都是这样工作的。"
   },
   "c9fbaa85a2eb": {
    "scene": "Latent",
    "en": "But a plain autoencoder's codes can sit anywhere, in any odd shape, and a generator has to learn that shape. The variational autoencoder, from Kingma and Welling, shapes the space on purpose. <bookmark mark='a'/> It maximizes a lower bound on the probability of the data: rebuild each picture well, while keeping its code close to a plain Gaussian. <bookmark mark='b'/> The encoder gives a small cloud instead of a point, mean mu and spread sigma, and the decoder must rebuild from any sample in it. <bookmark mark='r'/> But you can't take a slope through a roll of the dice. So roll the dice off to the side, as fresh noise epsilon, then stretch it by sigma and shift it by mu: the gradient flows back through the stretch and the shift, and never needs to enter the dice. That's the reparameterization trick. <bookmark mark='c'/> For Gaussians, the KL term has a closed form: an exact formula, with no sampling needed. <bookmark mark='d'/> In practice, its weight, beta, sets the balance.",
-   "zh": ""
+   "zh": "但普通自编码器的编码可以落在任何地方，形状也可以千奇百怪，而生成器就得去学这个形状。变分自编码器，出自Kingma和Welling，是有意地塑造这个空间。<bookmark mark='a'/>它最大化数据概率的一个下界：把每张图片重建好，同时让它的编码贴近一个普通的高斯分布。<bookmark mark='b'/>编码器给出的不是一个点，而是一小团云，均值是mu，散布是sigma，解码器必须能从其中任意一个样本重建出图片。<bookmark mark='r'/>可是，掷骰子这一步是没法求斜率的。所以，把骰子放到一边去掷，作为新的噪声epsilon，再用sigma把它拉伸，用mu把它平移：梯度沿着拉伸和平移往回传，根本不需要进入骰子。这就是重参数化技巧。<bookmark mark='c'/>对高斯分布来说，KL项有闭式解：一个精确的公式，不需要采样。<bookmark mark='d'/>实践中，它的权重beta决定了两者之间的平衡。"
   },
   "108253afe55b": {
    "scene": "Latent",
    "en": "We trained the same small autoencoder with 5 values of beta, then ran flow matching in each code space and asked a judge, a classifier trained on the real letters, how many of the generated letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less: from 61 nats down to 18. A nat is a bit measured with the natural log, about one point four four bits. Yet the rebuilds hardly change: the error stays between 0.108 and 0.127, and the plain autoencoder, with no KL at all, rebuilds no better, at 0.125. <bookmark mark='b'/> And generation barely moves either: from 80 to 86 percent of the samples are readable, at every beta, the plain autoencoder included. Letters this simple are easy to generate in any of these spaces. In large image models the trade-off is real: a space that's easy to rebuild from isn't always easy to generate in, and it's one of the live questions in image models; 2025's VA-VAE aligns the codes with a vision model's features to get both.",
-   "zh": ""
+   "zh": "我们用5个不同的beta值，训练了同一个小自编码器，然后在每个编码空间里运行流匹配，再请一位裁判，也就是一个在真实字母上训练出来的分类器，看看生成的字母里有多少它能认出来。<bookmark mark='a'/>beta越大，编码携带的信息越少：从61奈特降到18奈特。奈特就是用自然对数来度量的比特，大约等于1.44比特。可是重建几乎没有变化：误差保持在0.108到0.127之间，而那个完全没有KL项的普通自编码器，重建得也不更好，是0.125。<bookmark mark='b'/>生成的结果也几乎没动：在每一个beta下，能认出的样本都在80%到86%之间，普通自编码器也一样。这么简单的字母，在这些空间里随便哪一个都很容易生成。而在大型图像模型里，这个取舍是真实存在的：一个容易重建的空间，不一定容易在其中生成，这也是图像模型里仍在研究的问题之一；2025年的VA-VAE把编码和一个视觉模型的特征对齐，两者兼得。"
   },
   "5914df7bbddb": {
    "scene": "Latent",
    "en": "Here are the pictures behind those numbers, at beta 0, 0.01 and 0.1: rebuilds on the left, generated letters on the right. <bookmark mark='a'/> They look much alike. What beta changed here is how much each code says, not how the letters look.",
-   "zh": ""
+   "zh": "这是那些数字背后的图片，beta分别为0、0.01和0.1：左边是重建，右边是生成的字母。<bookmark mark='a'/>它们看起来很像。在这里，beta改变的是每个编码说了多少，而不是字母看起来什么样。"
   },
   "a822da78b3fd": {
    "scene": "Latent",
    "en": "And here is one of them learning, the one with beta 0.01. <bookmark mark='a'/> These six letters are from fonts it never trains on, rebuilt from their codes at checkpoints. At first, every letter comes out as the same grey smudge: the average letter. <bookmark mark='b'/> Then the broad shape of each one appears, and the details last. <bookmark mark='c'/> The two terms of the loss pull against each other. The rebuild error falls fast; the KL, how much information the codes carry, climbs as the encoder learns to say more, peaking around step 650, then settles as the penalty trims what isn't worth its cost.",
-   "zh": ""
+   "zh": "这是其中一个模型学习的过程，就是beta为0.01的那个。<bookmark mark='a'/>这6个字母来自它从不拿来训练的字体，在各个检查点上从它们的编码重建出来。一开始，每个字母出来都是同一团灰色的污迹：平均的字母。<bookmark mark='b'/>然后，每个字母的大致形状出现了，细节最后才出来。<bookmark mark='c'/>损失的两项互相拉扯。重建误差下降得很快；而KL，也就是编码携带了多少信息，随着编码器学会说得更多而上升，在第650步左右达到峰值，然后随着惩罚项削掉那些不值这个代价的信息，又稳定下来。"
   },
   "5bb54df8a36c": {
    "scene": "DiT",
    "en": "Chapter three. Transformers as denoisers.",
-   "zh": ""
+   "zh": "第3章。Transformer做去噪器。"
   },
   "a20aed5ce4f2": {
    "scene": "DiT",
    "en": "Who does the denoising? Early diffusion models used convolutional networks. <bookmark mark='v'/> A convolution slides one small learned stencil over the picture, computing the same weighted sum at every little neighbourhood. In 2023, Peebles and Xie showed a plain transformer does it better, and scales like a language model. <bookmark mark='a'/> The noisy picture is cut into patch tokens, part eleven's blocks process them, and out come velocities, patch by patch. <bookmark mark='b'/> The noise level and the request come in through every layer's normalization: they set its scale and shift. We trained one, with 1.2 million numbers, on our letters, told which letter to draw.",
-   "zh": ""
+   "zh": "谁来做去噪？早期的扩散模型用的是卷积网络。<bookmark mark='v'/>卷积就是把一个学出来的小模板在图片上滑过，在每一小片邻域上算同样的加权和。2023年，Peebles和Xie证明，一个普通的Transformer做得更好，而且能像语言模型一样扩展规模。<bookmark mark='a'/>带噪声的图片被切成图像块词元，由第11部分的那些模块来处理，输出的是速度，一个图像块一个图像块地给出。<bookmark mark='b'/>噪声水平和要求，从每一层的归一化进入：它们设定归一化的缩放和平移。我们在我们的字母上训练了一个，有120万个参数，告诉它要画哪个字母。"
   },
   "0e1d762725bc": {
    "scene": "DiT",
    "en": "Here is that block exactly; Peebles and Xie call it adaLN-Zero. <bookmark mark='a'/> The condition, c, sets a scale gamma and a shift beta for each normalization, and also a gate, alpha, on each block's output. <bookmark mark='b'/> All six come from one linear map of c, and that map starts at zero. <bookmark mark='c'/> So at the start of training, every gate is closed and every block passes its input straight through: a deep network that begins as the identity, and opens up only as it learns. Of the ways they tried to feed in the condition, this one trained best. Ours has 4 such blocks.",
-   "zh": ""
+   "zh": "这就是那个模块的确切样子；Peebles和Xie把它叫作adaLN-Zero。<bookmark mark='a'/>条件c，为每一次归一化设定一个缩放gamma和一个平移beta，还为每个模块的输出设定一个门控alpha。<bookmark mark='b'/>这6个量全都来自c的同一个线性映射，而这个映射一开始是0。<bookmark mark='c'/>所以训练刚开始时，每个门都是关着的，每个模块都把输入原样传过去：一个深层网络，开始时是恒等映射，只随着学习才慢慢打开。在他们试过的各种输入条件的方式里，这一种训练得最好。我们的模型有4个这样的模块。"
   },
   "2070d5e6bbd0": {
    "scene": "DiT",
    "en": "How does it get there? Here is the same noise, asked for the same ten letters, A to J, drawn by the model at checkpoints along its training. <bookmark mark='a'/> First it learns that most of a picture is dark: by step 150, the noise is wiped to black, with scattered specks. <bookmark mark='b'/> By step 400 the request already matters: each letter gets its own rough cluster of strokes. <bookmark mark='c'/> By step 1,000 most of them can be read, <bookmark mark='d'/> and the strokes clean up last. The loss falls most in the first few hundred steps, from 1.9 to 0.3; the pictures improve on a slower clock.",
-   "zh": ""
+   "zh": "它是怎样学到这一步的？这是同一份噪声，要求画同样的10个字母，A到J，由模型在训练过程中的各个检查点画出来。<bookmark mark='a'/>它先学到的是，一张图片大部分是黑的：到第150步，噪声被抹成一片黑色，零星有些斑点。<bookmark mark='b'/>到第400步，要求已经起作用了：每个字母都有了自己的一团粗略的笔画。<bookmark mark='c'/>到第1000步，大多数字母都能认出来了，<bookmark mark='d'/>笔画最后才变干净。损失在最初几百步里下降得最多，从1.9降到0.3；而图片的进步，走的是一个更慢的钟。"
   },
   "f363dc4b2295": {
    "scene": "DiT",
    "en": "Here it is, asked for each letter of the alphabet, with part fourteen's guidance. <bookmark mark='a'/> Asked again from different noise, it draws the same letters in different styles: the request fixes what, the noise picks how.",
-   "zh": ""
+   "zh": "这是它画出的整个字母表，用上了第14部分的引导。<bookmark mark='a'/>从不同的噪声再要一次，它画出同样的字母，风格却不同：要求决定画什么，噪声挑选怎么画。"
   },
   "92cdff02e53e": {
    "scene": "SD3",
    "en": "Chapter four. Rectified flow at scale.",
-   "zh": ""
+   "zh": "第4章。大规模的整流。"
   },
   "78c537f93be4": {
    "scene": "SD3",
    "en": "Rectified flow, in this chapter's title, is part fourteen's flow matching: straight lines from noise to data. <bookmark mark='r'/> Our model was told which letter to draw by one number. A real model is told by a prompt, a sentence of tokens. Stable Diffusion 3 put the prompt's tokens and the picture's patches into one sequence. <bookmark mark='a'/> Each kind keeps its own weights for queries, keys and values, since words and patches are different things; <bookmark mark='b'/> then a single attention runs over the joined sequence. <bookmark mark='c'/> So every patch can look at every word, every word at every patch, and the text is updated by the picture as the picture is drawn. Scaled up, that's Stable Diffusion 3, and FLUX, with twelve billion parameters.",
-   "zh": ""
+   "zh": "整流，也就是这一章标题里的那个词，就是第14部分的流匹配：从噪声到数据的直线。<bookmark mark='r'/>我们的模型是靠一个数，知道要画哪个字母的。真正的模型靠的是提示词，一句由词元组成的话。Stable Diffusion 3把提示词的词元和图片的图像块放进同一个序列。<bookmark mark='a'/>每一类都保留自己的查询、键和值的权重，因为词和图像块是不同的东西；<bookmark mark='b'/>然后，一次注意力运行在拼接起来的整个序列上。<bookmark mark='c'/>这样，每个图像块都能看每个词，每个词也能看每个图像块，图片被画出的同时，文本也被图片更新。把它放大，就是Stable Diffusion 3，还有FLUX，有120亿个参数。"
   },
   "16740e998964": {
    "scene": "SD3",
    "en": "Stable Diffusion 3 also changed which noise levels it trains on. <bookmark mark='a'/> Part fourteen drew the time t uniformly. But near pure noise, the best guess is just the average picture, and near the data there's almost nothing left to fix. The hard part is the middle. <bookmark mark='b'/> So draw a normal number and squash it with a sigmoid: the logit-normal, which trains most in the middle. <bookmark mark='c'/> We trained our latent letters both ways. The logit-normal model reads better, by 4 points on average, most at 1 steps.",
-   "zh": ""
+   "zh": "Stable Diffusion 3还改变了训练时用哪些噪声水平。<bookmark mark='a'/>第14部分是均匀地抽取时间t。可是在接近纯噪声时，最好的猜测就是平均的图片；而接近数据时，几乎没剩什么要修的。难的是中间。<bookmark mark='b'/>所以，抽一个正态分布的数，再用sigmoid把它压扁：这就是logit正态分布，它在中间训练得最多。<bookmark mark='c'/>我们用两种方式训练了我们的潜空间字母模型。logit正态的模型画的字母更容易认出来，平均高4个百分点，只走1步时差距最大。"
   },
   "648afee9c16a": {
    "scene": "SD3",
    "en": "One more thing changes with size. <bookmark mark='a'/> Add the same noise to a small picture and to the same picture with sixteen times the pixels. <bookmark mark='b'/> The big one looks clearer, and it is: average each four by four block, and the noise falls from 0.75 to 0.19, about a quarter, while the letter stays. Neighbouring pixels share their information, so at high resolution a given noise level destroys less, and a model trained on small pictures spends its time on noise levels that are too easy. <bookmark mark='c'/> So Stable Diffusion 3 shifts the noise schedule, the plan of how much noise there is at each time t, toward noise, by a factor alpha that grows like the square root of the pixel count.",
-   "zh": ""
+   "zh": "随着尺寸变大，还有一件事会变。<bookmark mark='a'/>给一张小图片，和同一张图片像素多16倍的版本，加上同样的噪声。<bookmark mark='b'/>大的那张看起来更清楚，事实也确实如此：把每个4乘4的块平均一下，噪声就从0.75降到0.19，大约四分之一，而字母还在。相邻的像素共享它们的信息，所以在高分辨率下，同样的噪声水平破坏得更少，而一个在小图片上训练的模型，会把时间花在太容易的噪声水平上。<bookmark mark='c'/>所以Stable Diffusion 3把噪声调度，也就是每个时间t有多少噪声的那个计划，往噪声那边移，移动的倍数alpha随像素数的平方根增长。"
   },
   "cbf7bc1ebe28": {
    "scene": "Scales",
    "en": "Chapter five. Coarse to fine.",
-   "zh": ""
+   "zh": "第5章。由粗到细。"
   },
   "b9792190cbe2": {
    "scene": "Scales",
    "en": "Diffusion isn't the only way to make pictures. <bookmark mark='t'/> Language models write one token at a time, so why not pictures? <bookmark mark='a'/> Read the pixels, or patches, left to right and top to bottom, and predict each from the ones before: here, 400 steps. <bookmark mark='b'/> It works, and models like Parti did it at scale. But it's slow, and it's an odd order for a picture: the top rows are fixed before anything below them exists.",
-   "zh": ""
+   "zh": "扩散不是生成图片的唯一方法。<bookmark mark='t'/>语言模型一次写一个词元，那为什么不这样写图片呢？<bookmark mark='a'/>把像素或图像块从左到右、从上到下读一遍，根据前面的预测每一个：这里要400步。<bookmark mark='b'/>这是行得通的，像Parti这样的模型就大规模地这样做过。但它很慢，而且对图片来说，这是个别扭的顺序：下面的一切都还不存在，最上面几行就已经定下来了。"
   },
   "1fa092d32885": {
    "scene": "Scales",
    "en": "VAR, the NeurIPS best paper of 2024, writes in a better order: coarse to fine. <bookmark mark='a'/> First one token for the whole picture: its average brightness. <bookmark mark='b'/> Then two by two, four by four, and so on: at each scale, take what the picture still lacks, shrink it to that size, and round each number to one of sixteen levels; those are the tokens. <bookmark mark='q'/> The sixteen levels are a codebook: a fixed list of allowed values. Each number snaps to its nearest entry, and that entry's place in the list is the token. <bookmark mark='c'/> Add them, enlarged, to the picture so far. <bookmark mark='d'/> And the model's job is to predict each scale's tokens given all the coarser ones: 6 steps, 546 tokens in all.",
-   "zh": ""
+   "zh": "VAR，2024年NeurIPS的最佳论文，用一个更好的顺序来写：由粗到细。<bookmark mark='a'/>先用1个词元代表整张图片：它的平均亮度。<bookmark mark='b'/>然后是2乘2，4乘4，依此类推：在每个尺度上，取出图片还缺的部分，缩小到这个尺寸，再把每个数取整到16个档位中的一个；这些就是词元。<bookmark mark='q'/>这16个档位就是一个码本：一张固定的、列出允许取值的表。每个数都对齐到离它最近的那一项，而那一项在表里的位置，就是词元。<bookmark mark='c'/>把它们放大，加到目前为止的图片上。<bookmark mark='d'/>模型的任务，就是在给定所有更粗尺度的情况下，预测每个尺度的词元：6步，总共546个词元。"
   },
   "0c9304c7a11a": {
    "scene": "Scales",
    "en": "Measured on fonts the codebook never saw, the error falls from 0.26 with one token to 0.022 with all 546. The two-by-two scale adds almost nothing on letters, which are mostly about their middle; the big drops come from the finer scales, where the strokes are.",
-   "zh": ""
+   "zh": "在码本从没见过的字体上测量，误差从只用1个词元时的0.26，降到用全部546个时的0.022。2乘2这个尺度对字母几乎没有帮助，因为字母主要看中间；大的下降来自更细的尺度，笔画就在那里。"
   },
   "4d03b33a7664": {
    "scene": "Scales",
    "en": "Inside the transformer, that's a block-shaped mask: each token sees every token of its own scale and all the coarser ones. <bookmark mark='a'/> The finest scale, four hundred tokens here, is predicted in a single pass. <bookmark mark='b'/> So the picture takes 6 steps instead of 400, and every step sees the whole picture, roughly. In the real model the tokens come from a learned codebook rather than our sixteen levels, and the paper showed it scaling like a language model.",
-   "zh": ""
+   "zh": "在Transformer内部，这就是一个块状的掩码：每个词元能看到它自己这个尺度的所有词元，以及所有更粗的尺度。<bookmark mark='a'/>最细的尺度，这里是400个词元，一次前向计算就预测出来。<bookmark mark='b'/>所以这张图片只要6步，而不是400步，而且每一步都能大致看到整张图片。在真正的模型里，词元来自一个学出来的码本，而不是我们这16个档位，论文还表明它能像语言模型一样扩展规模。"
   },
   "15c9dd45cacf": {
    "scene": "Video",
    "en": "Chapter six. Squeezing time.",
-   "zh": ""
+   "zh": "第6章。压缩时间。"
   },
   "91162b057dc5": {
    "scene": "Video",
    "en": "Video is pictures in time. The autoencoder now squeezes time as well as space, and a token is a little block of both. <bookmark mark='a'/> With a typical squeeze, five seconds of 720p video at sixteen frames a second is about 76,000 tokens, and attention between every pair of them is part twelve's cost problem all over again. That's why video models need every trick from parts twelve and thirteen.",
-   "zh": ""
+   "zh": "视频就是时间里的图片。自编码器现在既压缩空间，也压缩时间，一个词元就是两者合起来的一小块。<bookmark mark='a'/>用典型的压缩比例，5秒钟、每秒16帧的720p视频，大约是76000个词元，而在每一对词元之间做注意力，又是第12部分的那个代价问题。这就是为什么视频模型需要第12和第13部分的每一个技巧。"
   },
   "1412d11119cc": {
    "scene": "Video",
    "en": "Where does that squeeze come from? A video autoencoder, with convolutions that run in time as well as space. <bookmark mark='v'/> The little stencil that a convolution slides over a picture becomes a small cube, sliding through the frames too, and looking only backward. We trained a small one on clips of a bouncing letter. <bookmark mark='a'/> The first frame is squeezed on its own; <bookmark mark='b'/> after that, every four frames become one latent frame, and each is only allowed to see frames up to its own. Each latent frame is a stack of channels: every latent pixel holds several numbers, the way a colour pixel holds three. It's causal, like a language model. <bookmark mark='c'/> That has two payoffs: a single picture is just a one-frame video, so the same model handles both, and a clip can be encoded as it streams in. <bookmark mark='d'/> Here, 3,600 pixels become 300 numbers, 12 times fewer. Real video models squeeze four times in time and eight in each direction of space, the same recipe.",
-   "zh": ""
+   "zh": "这种压缩从哪里来？来自一个视频自编码器，它的卷积既在空间里运行，也在时间里运行。<bookmark mark='v'/>卷积在图片上滑动的那个小模板，变成了一个小立方体，也沿着帧滑动，而且只往回看。我们在一个字母弹来弹去的视频片段上，训练了一个小的视频自编码器。<bookmark mark='a'/>第一帧单独压缩；<bookmark mark='b'/>之后，每4帧变成1个潜在帧，而且每一个都只能看到它自己以及之前的帧。每个潜在帧是一叠通道：每个潜在像素里存着好几个数，就像一个彩色像素存着3个数一样。它是因果的，就像语言模型。<bookmark mark='c'/>这有两个好处：一张图片就只是一帧的视频，所以同一个模型两者都能处理；而且一段视频可以边流进来边编码。<bookmark mark='d'/>这里，3600个像素变成了300个数，少了12倍。真正的视频模型在时间上压缩4倍，在空间的每个方向上压缩8倍，是同样的配方。"
   },
   "b8909d0642d2": {
    "scene": "Video",
    "en": "A token now has three coordinates: which frame, which row, which column. Part eleven's rotary positions extend naturally. <bookmark mark='a'/> Split each head's pairs of numbers three ways: some are turned by the frame number, some by the row, some by the column, each group with its own frequencies. <bookmark mark='b'/> Since each group is a rotation, the score between two tokens depends only on how far apart they are in time, height and width, exactly as in one dimension. <bookmark mark='c'/> What doesn't extend gracefully is the cost. Five seconds of 720p is about 76,000 tokens, and attention compares every pair: 5.7 billion of them, in every layer, at every denoising step. Double the length and the pairs quadruple. That's why video models lean on every trick from parts twelve and thirteen.",
-   "zh": ""
+   "zh": "现在一个词元有3个坐标：哪一帧，哪一行，哪一列。第11部分的旋转位置编码可以很自然地推广。<bookmark mark='a'/>把每个注意力头里的数对分成三组：一些按帧号旋转，一些按行号，一些按列号，每组有自己的频率。<bookmark mark='b'/>因为每一组都是一次旋转，两个词元之间的分数只取决于它们在时间、高度和宽度上相隔多远，和一维时完全一样。<bookmark mark='c'/>推广得不那么优雅的，是代价。5秒钟的720p视频大约是76000个词元，而注意力要比较每一对：57亿对，每一层都要，每个去噪步骤都要。长度加倍，对数就变成4倍。这就是为什么视频模型要依靠第12和第13部分的每一个技巧。"
   },
   "8e444ded0eaa": {
    "scene": "Clips",
    "en": "Chapter seven. Frames that agree.",
-   "zh": ""
+   "zh": "第7章。彼此一致的帧。"
   },
   "3571b5eaf7fb": {
    "scene": "Clips",
    "en": "To see what video adds, we need videos we can check. Ours are tiny: a letter from part fourteen's fonts, bouncing around a twenty by twenty frame, 8 frames long. <bookmark mark='a'/> A good video model has to get two things right that a picture model never faces: the letter must stay the same letter, and it must move smoothly.",
-   "zh": ""
+   "zh": "要看清视频多出了什么，我们需要能检验的视频。我们的视频非常小：一个来自第14部分那些字体的字母，在一个20乘20的画面里弹来弹去，共8帧。<bookmark mark='a'/>一个好的视频模型，必须做对两件图片模型从来不用面对的事：字母必须始终是同一个字母，而且它必须平滑地移动。"
   },
   "3e33083a33d2": {
    "scene": "Clips",
    "en": "We trained a small diffusion transformer, with a little convolution at each end, to continue a clip. It's given the first frame of a real clip, in a font it never saw, and the letter's name, <bookmark mark='g'/> and it denoises the other 7 frames together, attention running across frames as well as within them. That's image-to-video: how real video models bring a still picture to life. <bookmark mark='a'/> Here are three of its clips; the outlined frame is the given one. <bookmark mark='b'/> Now take the same model, but build each clip from frames of different samples: frame two from one sample, frame three from another, each continuing the same first frame, as if each frame were drawn on its own. <bookmark mark='c'/> Each frame alone looks fine: the judge, our letter-reading classifier, reads the right letter in 76 percent of the drawn frames of whole clips, and 81 percent of the mixed ones, against 87 for real clips. But together, the motion falls apart. <bookmark mark='j'/> Jerkiness, how much the letter's centre changes speed from frame to frame, is 5.67 pixels for the mixed clips, against 0.94 for whole clips and 0.40 for real ones. The first frame doesn't say which way the letter is heading, so each sample picks its own direction. <bookmark mark='d'/> A video is a joint distribution: the probability of the whole clip at once, where each frame depends on the others. The frames have to be drawn together, or conditioned on each other. That's the whole difficulty, and the rest of this part is about it.",
-   "zh": ""
+   "zh": "我们训练了一个小的扩散Transformer，两端各有一个小卷积，用来续写一段视频。给它一段真实视频的第一帧，字体是它从没见过的，再告诉它字母的名字，<bookmark mark='g'/>它就把其余7帧一起去噪，注意力既在帧内运行，也跨帧运行。这就是图生视频：真正的视频模型就是这样让一张静止的图片动起来的。<bookmark mark='a'/>这是它画出的3段视频；加了边框的那一帧是给定的。<bookmark mark='b'/>现在用同一个模型，但每段视频都由不同样本的帧拼成：第2帧来自一个样本，第3帧来自另一个，每个样本都续写同一个第一帧，就好像每一帧都是单独画出来的。<bookmark mark='c'/>每一帧单独看都没问题：裁判，也就是我们那个认字母的分类器，在完整视频画出的帧里，有76%认出了正确的字母，在拼接视频里是81%，而真实视频是87%。可是合在一起，运动就散架了。<bookmark mark='j'/>抖动程度，也就是字母中心的速度从一帧到下一帧变化了多少，拼接视频是5.67像素，而完整视频是0.94，真实视频是0.40。第一帧并没有说明字母正往哪个方向走，所以每个样本都挑了自己的方向。<bookmark mark='d'/>视频是一个联合分布：整段视频同时出现的概率，其中每一帧都依赖于其他帧。这些帧必须一起画出来，或者以彼此为条件。这就是全部的难点，而这一部分剩下的内容都围绕着它。"
   },
   "a61c6a12c8ab": {
    "scene": "Forcing",
    "en": "Chapter eight. Rolling forward.",
-   "zh": ""
+   "zh": "第8章。向前滚动。"
   },
   "e5bb1f2502b6": {
    "scene": "Forcing",
    "en": "A whole-clip model makes a clip of a fixed length, here 8 frames. <bookmark mark='m'/> For longer videos, and for worlds you can walk around in, a model has to write frame after frame, like a language model writes tokens. <bookmark mark='a'/> The obvious way to train that is teacher forcing: give the model the real past frames, clean, starting from the given first frame, and teach it to denoise the next one. <bookmark mark='b'/> But at generation time, the past is the model's own work, slightly wrong, and it was never trained on that. <bookmark mark='c'/> Diffusion forcing, from Boyuan Chen and colleagues, gives every frame after the first its own noise level during training, so the model learns to work from a past that's anywhere from clean to pure noise. <bookmark mark='d'/> The loss is the plain denoising one: guess each clean frame back from its noisy version, summed over the frames after the given one, with attention that only looks back.",
-   "zh": ""
+   "zh": "一个整段视频模型，做出的是固定长度的视频，这里是8帧。<bookmark mark='m'/>对于更长的视频，以及可以在里面四处走动的世界，模型就得一帧接一帧地写，就像语言模型一个接一个地写词元。<bookmark mark='a'/>训练它最显然的方法是教师强制：把真实的、干净的过去帧给模型，从给定的第一帧开始，教它去噪下一帧。<bookmark mark='b'/>可是在生成时，过去是模型自己的作品，多少有些错，而它从没在这种情况下训练过。<bookmark mark='c'/>扩散强制，出自Boyuan Chen和同事们，在训练时给第一帧之后的每一帧各自的噪声水平，这样模型就学会了从一个干净程度不定的过去出发去做，从完全干净到纯噪声都有。<bookmark mark='d'/>损失就是普通的去噪损失：从每一帧的带噪版本猜回干净的帧，对给定那一帧之后的所有帧求和，而注意力只往回看。"
   },
   "f800ceb19b70": {
    "scene": "Forcing",
    "en": "We trained both on 8-frame clips, with the same network and the same number of steps, the first frame always given. <bookmark mark='r'/> Then we gave each the first frame of a real clip and asked for 31 more, one at a time, looking back at most 7 frames. <bookmark mark='a'/> Teacher forcing: in its first 8 new frames the judge reads the right letter 41 percent of the time; in the last 8, 21. <bookmark mark='b'/> Diffusion forcing: 86 percent, then 79. Teacher forcing is behind from its first few frames, and keeps sliding. Small errors feed on themselves when a model has only ever seen a perfect past; training on noisy pasts makes it more robust to its own mistakes. <bookmark mark='c'/> And the motion: jerkiness goes from 0.76 to 1.05 pixels with teacher forcing, and from 0.75 to 0.72 with diffusion forcing, against 0.40 for real clips; diffusion forcing's motion stays the smoother of the two.",
-   "zh": ""
+   "zh": "我们用8帧的视频把两种方法都训练了，网络相同，步数也相同，第一帧总是给定的。<bookmark mark='r'/>然后我们给每个模型一段真实视频的第一帧，让它再生成31帧，一次一帧，最多往回看7帧。<bookmark mark='a'/>教师强制：在它最初的8个新帧里，裁判有41%的时候认出了正确的字母；在最后8帧里，是21%。<bookmark mark='b'/>扩散强制：86%，然后是79%。教师强制从最初几帧就落后了，而且一路下滑。当一个模型只见过完美的过去，小错误就会自我放大；在带噪声的过去上训练，让它对自己的错误更稳健。<bookmark mark='c'/>再看运动：教师强制的抖动程度从0.76像素升到1.05像素，扩散强制则从0.75降到0.72，而真实视频是0.40；扩散强制的运动始终是两者中更平滑的。"
   },
   "1ce217668a10": {
    "scene": "Forcing",
    "en": "This is where video generation is heading. Self Forcing, in 2025, trains the model on its own rollouts, videos it generates itself, frame after frame, scoring whole generated videos, to close the gap between training and use entirely. <bookmark mark='b'/> Condition each frame on an action as well, and you have a world model: DeepMind's Genie 3 generates a world you can move through, frame by frame, in real time. <bookmark mark='c'/> And some models now do text and pictures in one transformer, predicting tokens for one and denoising patches for the other.",
-   "zh": ""
+   "zh": "这就是视频生成正在前进的方向。2025年的Self Forcing，在模型自己的展开结果上训练它，也就是它一帧接一帧自己生成的视频，并给整段生成的视频打分，彻底弥合训练和使用之间的差距。<bookmark mark='b'/>再让每一帧也以一个动作为条件，你就有了一个世界模型：DeepMind的Genie 3能实时地、一帧一帧地生成一个你可以在其中移动的世界。<bookmark mark='c'/>还有些模型如今在同一个Transformer里同时处理文本和图片，对文本预测词元，对图片给图像块去噪。"
   },
   "3245d95ac2fe": {
    "scene": "Outro",
    "en": "Let's take stock. Cut a picture into patches and a transformer reads it like a sentence, learning the grid by itself. Squeeze pictures into a few numbers, and diffusion gets cheaper, as long as the space is shaped for generating, not just for rebuilding. Make the denoiser a transformer that starts as the identity, train it most on the middle noise levels, shift them as pictures grow, and give text and picture one sequence: that's today's image models. Coarse to fine is another road entirely. Video is the same with time: a causal autoencoder, rotations in three directions, frames drawn together, and noisy pasts in training, so a model can roll forward on its own work.",
-   "zh": ""
+   "zh": "我们来盘点一下。把一张图片切成图像块，Transformer就能像读句子一样读它，还能自己学会网格。把图片压成少数几个数，扩散就更便宜，只要这个空间是为生成而塑造的，而不只是为重建。让去噪器成为一个从恒等映射开始的Transformer，在中间的噪声水平上训练得最多，随着图片变大调整这些噪声水平，再让文本和图片共用一个序列：这就是今天的图像模型。由粗到细，则是另一条完全不同的路。视频也是一样，只是多了时间：一个因果的自编码器，三个方向上的旋转，一起画出的帧，以及训练时带噪声的过去，这样模型就能在自己的作品上一路向前滚动。"
   },
   "c35d3c69f49d": {
    "scene": "Outro",
    "en": "Next, every sense becomes a token for one model, in part sixteen. World models in part eighteen predict the next frame of video, and part nineteen is about running all of this fast.",
-   "zh": ""
+   "zh": "接下来，在第16部分，每一种感官都变成同一个模型的词元。第18部分的世界模型预测视频的下一帧，而第19部分讲的，是怎样让这一切跑得快。"
   },
   "2d463b2fb454": {
    "scene": "Outro",
    "en": "Next time: how text, pictures and sound all become tokens, <bookmark mark='a'/> so one model can read, see, listen and speak, including the voice you're hearing now.",
-   "zh": ""
+   "zh": "下一次：文本、图片和声音怎样全都变成词元，<bookmark mark='a'/>这样一个模型就能读、能看、能听、能说，包括你现在听到的这个声音。"
   },
   "5df4c46c0053": {
    "scene": "Outro",
    "en": "The DiT paper is short and clear. Thanks for watching, and see you in part sixteen.",
-   "zh": ""
+   "zh": "DiT那篇论文简短而清楚。感谢观看，我们第16部分再见。"
   }
  },
  "title_en": "AI, Built: Part 15, Images and Video",
