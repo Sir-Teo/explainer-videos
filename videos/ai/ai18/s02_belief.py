@@ -37,7 +37,7 @@ class Belief(VoiceoverScene):
         robot = VGroup(Circle(radius=0.16, color=WHITE, fill_opacity=1, fill_color=GREY_D), Dot(radius=0.04, color=C.BITS))
         robot.move_to([x0 + cw * (pos[0] + 0.5), -0.95, 0])
         sense = Text("door!", font="DejaVu Sans Mono", font_size=22, color=C.BITS)
-        bl = label(r"its belief: \ how likely each cell is", font_size=22, color=C.TRUE_P).move_to([0, 3.35, 0])
+        bl = label(r"its belief: \ how likely each cell is", font_size=22, color=C.TRUE_P).move_to([3.4, 3.35, 0])  # clear of the citation at the top left
         er = VGroup(label(r"uncertainty:", font_size=24, color=GREY_A), DecimalNumber(float(ent[0]), num_decimal_places=2,
                                                                                        font_size=28, color=C.SURPRISE),
                     label(r"bits", font_size=24, color=GREY_A)).arrange(RIGHT, buff=0.15).to_corner(DL, buff=0.4)

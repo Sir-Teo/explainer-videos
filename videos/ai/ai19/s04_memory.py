@@ -61,9 +61,9 @@ class Memory(VoiceoverScene):
             "Every computer has two speeds: how fast it does arithmetic, and how fast it moves numbers from memory. "
             "<bookmark mark='a'/> We measured this one. The roofline: a slope where moving data is the limit, and a "
             "flat roof where arithmetic is. <bookmark mark='b'/> Big matrix products do lots of arithmetic per number "
-            "moved and reach the roof. <bookmark mark='c'/> But writing one token at a time multiplies each weight "
-            "once: about one operation per byte, far down the slope. That's why the tricks of this part all move "
-            "fewer bytes."
+            "moved, and the fastest of them sets the roof. <bookmark mark='c'/> But writing one token at a time "
+            "multiplies each weight once: about one operation per byte, down on the slope, well below the roof. "
+            "That's why the tricks of this part all move fewer bytes."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
             vo.wait_until("a")
