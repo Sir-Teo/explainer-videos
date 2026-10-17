@@ -217,7 +217,7 @@ class SAE(VoiceoverScene):
         shr = label(rf"rebuilds too small by: \ L1 ${100 * (np.mean(sl) - 1):.0f}\%$ \ on average, \ TopK ${100 * (np.mean(st) - 1):.0f}\%$",
                     font_size=20, color=GREY_A).move_to([-3.6, -1.6, 0])
         more = label(r"newer still: \ transcoders predict a layer's output from its input; \\ crosscoders share one dictionary "
-                     r"across layers, \ or across a model before and after fine-tuning", font_size=18, color=GREY_A).move_to([-3.4, -2.6, 0])
+                     r"across layers, \ or across a model before and after fine-tuning", font_size=17, color=GREY_A).move_to([-3.7, -2.75, 0])
         keep_in_frame(more)
         cite_ = cite(r"L.~Gao et al., \textit{Scaling and Evaluating Sparse Autoencoders} (2024); \ S.~Rajamanoharan et al., "
                      r"\textit{JumpReLU SAEs} (2024)", corner=UR)
