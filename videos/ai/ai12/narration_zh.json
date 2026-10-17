@@ -15,7 +15,7 @@
   "6996a4d8ec78": {
    "scene": "Hook",
    "en": "Every token a transformer reads, it keeps: a key and a value, in every layer. <bookmark mark='a'/> For Llama 3.1 with seventy billion parameters, each number stored in bf16, sixteen bits or two bytes, that's 320 kilobytes a token. <bookmark mark='b'/> A long conversation, a hundred and twenty-eight thousand tokens, needs 39 gigabytes of memory, just to remember what it has read.",
-   "zh": ""
+   "zh": "Transformer每读一个词元，都会把它留下来：在每一层里，留下一个键和一个值。<bookmark mark='a'/>对700亿参数的Llama 3.1来说，每个数都用bf16存储，也就是16比特、2个字节，这样每个词元要占320KB。<bookmark mark='b'/>一段长对话，12.8万个词元，就需要39GB的内存，只为了记住它读过的东西。"
   },
   "75f8ed3fff3e": {
    "scene": "Hook",
@@ -45,7 +45,7 @@
   "d75ba5b6ae9c": {
    "scene": "KVCache",
    "en": "DeepSeek's trick is multi-head latent attention. A latent is a short hidden summary from which the full thing can be rebuilt. <bookmark mark='a'/> Each token is squeezed into a short latent vector, 512 numbers, and only that is cached. <bookmark mark='b'/> Keys and values for all 128 heads are unpacked from it by two more matrices when needed. <bookmark mark='c'/> And they don't even need to be unpacked: since a query's score is a product of matrices, the key's matrix can be folded into the query, part two's linear algebra, so attention reads the latent directly. <bookmark mark='d'/> Against full attention of the same shape, that's 71 times less memory.",
-   "zh": ""
+   "zh": "DeepSeek的诀窍，是多头潜在注意力。所谓潜在向量，就是一份简短的隐藏摘要，完整的东西可以从它重建出来。<bookmark mark='a'/>每个词元都被压缩成一个很短的潜在向量，只有512个数，缓存里存的就只有它。<bookmark mark='b'/>需要的时候，再用另外两个矩阵，从它解压出全部128个头的键和值。<bookmark mark='c'/>其实连解压都不用：一个查询的分数，是几个矩阵的乘积，所以可以把键的那个矩阵并进查询里，这是第2部分的线性代数，于是注意力直接读取潜在向量。<bookmark mark='d'/>和同样形状的完整注意力相比，内存少了71倍。"
   },
   "6b33625fdeaa": {
    "scene": "KVCache",
@@ -60,12 +60,12 @@
   "a4fde6598f4e": {
    "scene": "Linear",
    "en": "Here's attention for a whole text of T tokens: queries times keys, then times values. <bookmark mark='a'/> The product of queries and keys is a T by T table of scores: it grows with the square of the length. <bookmark mark='b'/> But matrix products can be grouped either way. Multiply keys and values first, and the table in the middle is only d by d, however long the text. <bookmark mark='c'/> The catch is the softmax: it sits between Q K and V, and blocks the regrouping. Replace it with simple positive features of the queries and keys: pass each one through a fixed function, phi, that makes every number positive, so that their dot product can stand in for the softmax's exponential. Then you're allowed: that's linear attention.",
-   "zh": ""
+   "zh": "这是对一整段T个词元的文本做注意力：查询乘以键，再乘以值。<bookmark mark='a'/>查询和键的乘积，是一张T乘T的分数表：它随长度的平方增长。<bookmark mark='b'/>可是一串矩阵相乘，先乘哪两个都可以。先把键和值乘起来，中间那张表就只有d乘d，不管文本有多长。<bookmark mark='c'/>麻烦在于softmax：它夹在QK和V之间，挡住了这种重新组合。把它换成查询和键的一些简单的正值特征：让每一个都经过一个固定的函数φ，把每个数都变成正的，这样它们的点积，就能顶替softmax里的指数。这样就可以重新组合了：这就是线性注意力。"
   },
   "0c706d1bb999": {
    "scene": "Linear",
    "en": "Now read the text one token at a time. With the product regrouped, everything the model needs from the past is one d by d matrix, the state. <bookmark mark='a'/> Each new token writes into it: its value times its key, an outer product, <bookmark mark='o'/> which multiplies every number of the value by every number of the key: a whole grid, like a times table, added on. <bookmark mark='b'/> To read, multiply the state by the query. The memory never grows: a transformer without the softmax is a recurrent network, <bookmark mark='r'/> one that reads a token at a time and carries a fixed-size memory forward, updating it at each step. Katharopoulos and colleagues showed this in 2020.",
-   "zh": ""
+   "zh": "现在，一次读一个词元。乘法重新组合之后，模型需要从过去得到的一切，就是一个d乘d的矩阵，也就是状态。<bookmark mark='a'/>每个新词元都往里面写：它的值乘以它的键，也就是一个外积，<bookmark mark='o'/>它把值的每一个数，和键的每一个数都乘一遍：得到一整张网格，就像一张乘法表，再加上去。<bookmark mark='b'/>要读取，就用状态乘以查询。这份记忆永远不会变大：去掉softmax的Transformer，就是一个循环网络，<bookmark mark='r'/>也就是一次读一个词元、带着一份固定大小的记忆往前走、每一步都更新它的网络。这是卡塔罗普洛斯和同事们在2020年证明的。"
   },
   "7649065f094b": {
    "scene": "Linear",
@@ -95,7 +95,7 @@
   "374d3acfef0e": {
    "scene": "Rules",
    "en": "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule. So the memory is a little model, trained by part nine's gradient descent on the text as it's being read; part eleven's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a whole network, and you have test-time training: a small network whose weights keep learning while the model reads.",
-   "zh": ""
+   "zh": "δ规则为什么管用，原因在这里。量一量记忆在一对键值上错得有多远：用这个键读出来的东西，和那个值之间差距的平方。<bookmark mark='a'/>它的梯度，就是这个差距乘以键。<bookmark mark='b'/>在它上面走一步梯度下降，恰好就是δ规则。所以，这份记忆是一个小模型，一边读文本，一边用第9部分的梯度下降，在这段文本上训练；第11部分那个在上下文中学习的注意力层，做的也是同一件事。<bookmark mark='c'/>给δ规则加上衰减，就得到了Qwen3-Next和Kimi Linear里的门控δ规则；把记忆换成一整个网络，就得到了测试时训练：一个小网络，模型一边读，它的权重一边继续学习。"
   },
   "9dfa4fa9da4a": {
    "scene": "SSM",
@@ -105,7 +105,7 @@
   "84ca63ea6b20": {
    "scene": "SSM",
    "en": "A different road to the same place started in control theory. A state-space model is a differential equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='l'/> Picture a leaky bucket: the input pours in, the level slowly leaks away, and the level is what you read. <bookmark mark='a'/> Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. <bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; large steps, and it's gone in a few tokens.",
-   "zh": ""
+   "zh": "通往同一个地方的另一条路，起点在控制理论。状态空间模型是一个微分方程：一个隐状态h随时间演化，由输入x推动，读出来就是y。<bookmark mark='l'/>可以想象一个漏水的桶：输入不断倒进来，水位慢慢漏掉，而你读到的，就是水位。<bookmark mark='a'/>以Δ为步长去读一段文本，它就变成了一个递推：先把状态缩小，再加上输入。<bookmark mark='b'/>步长决定了记忆。步子小，一个输入会停留很久；步子大，几个词元之后它就没了。"
   },
   "2f33d5ae8dd0": {
    "scene": "SSM",
@@ -125,22 +125,22 @@
   "5d697c37ed94": {
    "scene": "GatedDelta",
    "en": "Let's look at the delta rule as geometry. The memory S is a linear map: give it a key, and it gives back an answer. <bookmark mark='p'/> Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, but the value we want stored is v. <bookmark mark='b'/> The update multiplies S by I minus beta k k transpose, then adds beta v k transpose. That first matrix only touches the direction k: it shrinks it by one minus beta, and leaves every direction at right angles alone. <bookmark mark='c'/> With beta a half, the answer for k moves halfway to v, and the answer for the perpendicular direction doesn't move at all. <bookmark mark='d'/> With beta one, the old answer is erased exactly and replaced by v: a projection. <bookmark mark='e'/> And with beta up to two, it overshoots into a reflection, a matrix with eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets these memories track parity, the very problem part seventeen's transformer could not solve in one go. <bookmark mark='f'/> Parity asks: is the count of ones so far odd or even? It's a light switch that flips at every one, and a reflection is exactly that flip.",
-   "zh": ""
+   "zh": "我们从几何的角度来看δ规则。记忆S是一个线性映射：给它一个键，它就还你一个答案。<bookmark mark='p'/>这里，它作用在一个平面上。<bookmark mark='a'/>把键k喂给它，它答出S k，可我们想存的值是v。<bookmark mark='b'/>更新时，先把S乘以I减去β乘k乘k转置，再加上β乘v乘k转置。前面那个矩阵只碰k这一个方向：把它缩短为原来的1减β倍，而和k垂直的每个方向，都原封不动。<bookmark mark='c'/>β等于2分之1时，k对应的答案朝v走了一半，而垂直方向的答案一点都不动。<bookmark mark='d'/>β等于1时，旧的答案被彻底擦掉，正好换成v：这是一个投影。<bookmark mark='e'/>而β最大可以到2，这时它会冲过头，变成一个反射，也就是一个特征值为负1的矩阵。听起来像是个毛病，其实是个优点：格拉齐和同事们证明了，有了它，这些记忆就能追踪奇偶性，而这正是第17部分的Transformer没法一步解决的问题。<bookmark mark='f'/>奇偶性问的是：到目前为止，1的个数是奇数还是偶数？它就像一个电灯开关，每遇到一个1就拨一下，而反射，恰好就是这一拨。"
   },
   "e864eea56fc3": {
    "scene": "GatedDelta",
    "en": "Now the whole family side by side. <bookmark mark='a'/> Linear attention only adds. Decay, as in Mamba-2 and gated linear attention, shrinks the whole memory by alpha before each write: everything fades a little. <bookmark mark='b'/> The delta rule edits only the direction of the current key. <bookmark mark='c'/> The gated delta rule does both: a decay alpha to clear the memory out when the topic changes, and a delta step to correct one fact at a time. That's the rule in three of every four layers of Qwen3-Next. <bookmark mark='d'/> Kimi Linear's version gives each channel of the memory, each of its feature dimensions, its own decay, a diagonal matrix instead of one number, so some features fade fast and others hold for thousands of tokens. <bookmark mark='e'/> Written this way, every member is the same shape: the old memory times a transition matrix, plus a write, and the transition is always a diagonal plus a low-rank part. That shape is what makes them fast to train.",
-   "zh": ""
+   "zh": "现在，把整个家族并排放在一起。<bookmark mark='a'/>线性注意力只做加法。衰减，比如Mamba-2和门控线性注意力，在每次写入之前，把整个记忆乘以α缩小一点：所有东西都淡去一些。<bookmark mark='b'/>δ规则只修改当前这个键的方向。<bookmark mark='c'/>门控δ规则两样都做：用衰减α在话题变化时清空记忆，再用δ那一步，一次纠正一个事实。Qwen3-Next每4层里有3层，用的就是这条规则。<bookmark mark='d'/>Kimi Linear的版本，给记忆的每个通道，也就是它的每个特征维度，都配上自己的衰减，用一个对角矩阵代替一个数，这样，有的特征很快淡去，有的则能保持几千个词元。<bookmark mark='e'/>这样写出来，每个成员都是同一个形状：旧的记忆乘以一个转移矩阵，再加上一次写入，而转移矩阵总是一个对角矩阵加上一个低秩部分。正是这个形状，让它们训练起来很快。"
   },
   "d7edace0018a": {
    "scene": "GatedDelta",
    "en": "But a rule that updates the memory one token at a time looks hopeless to train: thousands of steps, each waiting for the last, while the hardware wants big matrix products. <bookmark mark='a'/> The way out is to cut the text into chunks of sixty-four and handle each chunk at once. <bookmark mark='b'/> Within a chunk, the memory gets multiplied by sixty-four of those I minus beta k k transpose matrices: sixty-four small corrections, one after another. <bookmark mark='w'/> Multiplied out, they collapse into one: the identity minus a sum of sixty-four rank-one terms, w times k transpose. Numerical analysts call it the WY form; they found it decades ago for products of Householder reflections, matrices just like these. <bookmark mark='c'/> And all the w's come from one triangular solve, the UT transform: each w depends only on the ones before it, and the hardware works them all out with a few big matrix products instead of sixty-four waits in a row. With them, a chunk's outputs and its final memory are just matrix products, and the decay of the gated version folds into the same form. <bookmark mark='d'/> We checked it on our computer: for 2048 random tokens, step by step and chunk by chunk agree to rounding error, with 32 sequential steps instead of 2048. On this little processor the plain loop is still quicker; on a GPU, the matrix products win by far, and that's how Qwen3-Next and Kimi Linear were trained.",
-   "zh": ""
+   "zh": "可是，一条一次只按一个词元更新记忆的规则，看起来根本没法训练：几千步，每一步都得等上一步，而硬件想要的，是大块的矩阵乘法。<bookmark mark='a'/>出路是把文本切成64个词元一块，每一块一次处理完。<bookmark mark='b'/>在一块之内，记忆要连乘64个那种I减去β乘k乘k转置的矩阵：64个小小的修正，一个接一个。<bookmark mark='w'/>把它们乘出来，就合并成了一个：单位矩阵，减去64个秩为1的项之和，每一项是w乘k转置。数值分析学家把它叫作WY形式；几十年前，他们在豪斯霍尔德反射的乘积里就找到了它，而那些矩阵，和这里的这些如出一辙。<bookmark mark='c'/>而所有的w，只要解一次三角方程组就能得到，这叫UT变换：每个w只依赖于它前面的那些，硬件用几次大块的矩阵乘法，就能把它们全部算出来，而不用一个接一个地等上64次。有了它们，一块的输出和它最后的记忆，就都只是矩阵乘法；门控版本里的衰减，也能并进同样的形式。<bookmark mark='d'/>我们在自己的电脑上验证过：对2048个随机词元，一步一步算，和一块一块算，结果只差舍入误差，而顺序执行的步数，从2048步变成了32步。在这台小处理器上，普通的循环还是更快；可是在GPU上，矩阵乘法远远胜出，Qwen3-Next和Kimi Linear就是这样训练出来的。"
   },
   "d70d217576c8": {
    "scene": "GatedDelta",
    "en": "For the decaying rule there's an even neater view, Mamba-2's state-space duality: one layer with two faces, a state-space recurrence and an attention. <bookmark mark='a'/> Unroll the recurrence, and every output is a weighted sum of earlier values: exactly attention, with the query-key scores multiplied by a mask L. <bookmark mark='b'/> Entry i, j of the mask is the product of the gates between token j and token i: how much of token j survives until step i. Where the gate forgets, the mask goes dark below that row. <bookmark mark='c'/> That mask is semiseparable, which just means: every block below the diagonal has rank one, because each entry is a number for its row times a number for its column. <bookmark mark='d'/> We checked: masked attention and the recurrence agree to rounding error. So the same layer can run as a recurrence while it writes, using constant memory, and as masked attention while it trains, using big matrix products.",
-   "zh": ""
+   "zh": "对于带衰减的规则，还有一个更漂亮的看法，那就是Mamba-2的状态空间对偶性：同一个层，有两副面孔，一副是状态空间的递推，一副是注意力。<bookmark mark='a'/>把递推展开，每个输出都是前面那些值的加权和：这正是注意力，只不过查询和键的分数，要再乘上一个掩码L。<bookmark mark='b'/>掩码的第i行第j列，是词元j和词元i之间所有门的乘积：也就是词元j有多少能留到第i步。在门遗忘的地方，从那一行往下，掩码都暗了下去。<bookmark mark='c'/>这个掩码是半可分的，意思不过是：对角线以下的每一块，秩都是1，因为每个元素，都是它所在行的一个数，乘以它所在列的一个数。<bookmark mark='d'/>我们验证过：带掩码的注意力和递推，结果只差舍入误差。所以，同一个层，写的时候可以作为递推来运行，只用固定大小的内存；训练的时候，又可以作为带掩码的注意力来运行，用上大块的矩阵乘法。"
   },
   "ae98573b280a": {
    "scene": "Recall",
