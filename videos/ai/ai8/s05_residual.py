@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai8.common import NEURON, curve, load
+from videos.ai.ai8.common import CLS_A, CLS_B, NEURON, curve, load, region_image
 
 PLAIN, RES, NORM = C.SURPRISE, C.BITS, C.INTERVAL
 
@@ -13,6 +13,7 @@ class Residual(VoiceoverScene):
         self.card()
         self.block()
         self.curves()
+        self.inside()
         self.modern()
 
     def card(self):
@@ -106,6 +107,90 @@ class Residual(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(cn), FadeIn(names[2]), Write(ln), FadeIn(lnl), run_time=2.0)
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def inside(self):
+        """Why: the two forty-layer stacks as they train, their answers everywhere and the gradient reaching each layer."""
+        r = load("residual")
+        sp = load("spiral")
+        X, y = np.asarray(sp["X"]), np.asarray(sp["y"])
+        steps = [int(s_) for s_ in r["snap_steps"]]
+        xs = np.asarray(r["xs"])
+        nets = ("plain", "residual")
+        cols = {"plain": PLAIN, "residual": RES}
+        probs = {n: np.asarray(r[f"probs_{n}"]) for n in nets}
+        gn = {n: np.log10(np.maximum(np.asarray(r[f"gnorm_{n}"]), 1e-12)) for n in nets}
+        lo = float(min(g.min() for g in gn.values())) - 0.3
+        hi = float(max(g.max() for g in gn.values())) + 0.1
+        S, span = 3.4, 6.8
+        cx = {"plain": -3.4, "residual": 3.4}
+        cy = 1.05
+        frames_ = Group()
+        dots = VGroup()
+        for n in nets:
+            c = np.array([cx[n], cy, 0])
+            frames_.add(Square(S, stroke_color=GREY_D, stroke_width=1.5).move_to(c))
+            dots.add(*[Dot(c + np.array([p[0] * S / span, p[1] * S / span, 0]), radius=0.018,
+                           color=CLS_A if v == 0 else CLS_B, fill_opacity=0.8) for p, v in zip(X, y)])
+
+        def maps(k):
+            return Group(*[region_image(probs[n][k], np.zeros_like(probs[n][k]), xs, S, S, boundary=False)
+                           .move_to([cx[n], cy, 0]) for n in nets])
+
+        BW, BH, by = 5.6, 1.5, -2.95  # the gradient bars: width of the forty, height of the range, baseline
+
+        def bars(k):
+            g = VGroup()
+            for n in nets:
+                for i, v in enumerate(gn[n][k]):
+                    h = max(BH * (v - lo) / (hi - lo), 0.01)
+                    x = cx[n] - BW / 2 + (i + 0.5) * BW / len(gn[n][k])
+                    g.add(Rectangle(width=BW / len(gn[n][k]) * 0.7, height=h, stroke_width=0, fill_color=cols[n],
+                                    fill_opacity=0.85).move_to([x, by + h / 2, 0]))
+            return g
+
+        base = VGroup(*[Line([cx[n] - BW / 2 - 0.1, by, 0], [cx[n] + BW / 2 + 0.1, by, 0], color=GREY_C, stroke_width=1.5)
+                        for n in nets])
+        heads = VGroup(*[label(rf"$40$ {'plain' if n == 'plain' else 'residual'} layers", font_size=24, color=cols[n])
+                         .next_to(frames_[j], UP, buff=0.12) for j, n in enumerate(nets)])
+        bl = VGroup(*[label(r"layer $1$ \ $\longrightarrow$ \ layer $40$", font_size=18, color=GREY_B)
+                      .next_to(b_, DOWN, buff=0.1) for b_ in base])
+        gl = label(r"how much gradient reaches each layer \ (log scale)", font_size=20, color=GREY_A).move_to([0, by + BH + 0.25, 0])
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=30,
+                                            color=WHITE).move_to([0, cy + 0.6, 0]))
+        cur_m, cur_b = maps(0), bars(0)
+        e = int(np.floor(gn["plain"][0, -1] - gn["plain"][0, 0]))  # the last layer's gradient over the first's, in powers of 10
+        big = {9: "a billion", 10: "ten billion", 11: "a hundred billion", 12: "a trillion", 13: "ten trillion",
+               14: "a hundred trillion", 15: "a quadrillion"}.get(e, f"ten to the {e}")
+        rr = 10 ** float(gn["residual"][0].max() - gn["residual"][0].min())
+        fade = float(gn["residual"][0].mean() - gn["residual"][-1].mean())
+        with self.voiceover(
+            "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says "
+            "about every point of the plane; below, how much gradient reaches each of its forty layers, on a log "
+            f"scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the "
+            f"way down: the first layer gets more than {big} times less than the last. The residual stack's "
+            f"gradients are all about the same size, within a factor of {rr:.0f}, because each block adds to a "
+            "stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual "
+            "stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of "
+            f"{'ten' if round(fade) == 1 else ['a hundred', 'a thousand', 'ten thousand', 'a hundred thousand', 'a million'][min(round(fade), 6) - 2]}"
+            ", as there is less and less left to fix. The plain stack's answer stays one flat colour, the same "
+            "everywhere, and its gradients only fade further."
+        ) as vo:
+            self.play(FadeIn(frames_), FadeIn(cur_m), FadeIn(dots), FadeIn(heads))
+            self.add(cnt)
+            vo.wait_until("a")
+            self.play(Create(base), FadeIn(bl), FadeIn(gl), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in cur_b], lag_ratio=0.01),
+                      run_time=2.0)
+            vo.wait_until("b")
+            for k in range(1, len(steps)):
+                nm, nb = maps(k), bars(k)
+                self.play(FadeOut(cur_m), FadeIn(nm), Transform(cur_b, nb), t.animate.set_value(steps[k]), run_time=1.6)
+                cur_m = nm
+                self.bring_to_front(dots)
+        self.wait(0.4)
+        self.remove(cnt)
         self.clear_scene()
 
     # ------------------------------------------------------------------
