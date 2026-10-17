@@ -262,6 +262,24 @@ def compute_dit():
     steps = 6000
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-3, total_steps=steps, pct_start=0.05)
     g = torch.Generator().manual_seed(0)
+    # how it learns: the same noise and the same requests (A to J), drawn at checkpoints along the way
+    snap_at = [0, 150, 400, 1000, 2000, 4000, steps]
+    snaps, losses, run = [], [], []
+    z_snap = torch.randn(10, GL, GL, generator=torch.Generator().manual_seed(11))
+
+    def snapshot():
+        m.eval()
+        x = z_snap.clone()
+        y_ = torch.arange(10)
+        with torch.no_grad():
+            for k in range(20):
+                t = torch.full((10,), k / 20)
+                vc, vu = m(x, t, y_), m(x, t, torch.full_like(y_, 26))
+                x = x + (vu + 2.0 * (vc - vu)) / 20
+        m.train()
+        return ((x.numpy() + 1) / 2).clip(0, 1)
+
+    snaps.append(snapshot())
     for step in range(1, steps + 1):
         i = torch.randint(0, len(X), (128,), generator=g)
         x1, y = X[i], Y[i]
@@ -274,6 +292,12 @@ def compute_dit():
         loss.backward()
         opt.step()
         sched.step()
+        run.append(float(loss))
+        if step % 50 == 0:
+            losses.append((step, float(np.mean(run))))
+            run = []
+        if step in snap_at:
+            snaps.append(snapshot())
         if step % 1000 == 0:
             print(f"    step {step}: loss {float(loss):.4f}", flush=True)
     m.eval()
@@ -299,6 +323,7 @@ def compute_dit():
     out = dict(alphabet_path=np.array(frames)[:, :26], alphabet=alphabet, n_params=int(sum(p.numel() for p in m.parameters())), steps=steps, D=D, L=L)
     a_only = draw([0] * 8, w=2.0, seed=3)
     out["many_a"] = a_only
+    out["snap_steps"], out["snaps"], out["losses"] = snap_at, np.array(snaps), np.array(losses)
     print(f"    {out['n_params']:,} parameters", flush=True)
     assert alphabet.std() > 0.2
     return out

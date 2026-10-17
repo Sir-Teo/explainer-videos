@@ -130,7 +130,16 @@ def compute_vae():
         opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=2e-3)
         g = torch.Generator().manual_seed(0)
         tr = torch.tensor(np.where(~test)[0])
-        for _ in range(steps(5000)):
+        n_st = steps(5000)
+        snap_at = {0, n_st // 50, n_st // 15, n_st // 5, n_st // 2, n_st}
+        watch = torch.tensor(np.where(test)[0][::40][:6])
+        curve, snaps = [], []
+        for st in range(n_st + 1):
+            if st in snap_at:  # how it learns: six held-out letters rebuilt along the way
+                with torch.no_grad():
+                    snaps.append((st, torch.sigmoid(dec(enc(X[watch]).chunk(2, 1)[0])).numpy().reshape(-1, GL, GL)))
+            if st == n_st:
+                break
             x = X[tr[torch.randint(0, len(tr), (256,), generator=g)]]
             mu, logv = enc(x).chunk(2, 1)
             z = mu + torch.exp(0.5 * logv) * torch.randn(mu.shape, generator=g) if b > 0 else mu
@@ -140,6 +149,8 @@ def compute_vae():
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if st % 50 == 0:
+                curve.append((st, float(rec), float(kl)))
         with torch.no_grad():
             mu, logv = enc(X).chunk(2, 1)
             xh = torch.sigmoid(dec(mu))
@@ -154,6 +165,9 @@ def compute_vae():
         tag = f"{b:g}"
         out[f"rmse_{tag}"], out[f"kl_{tag}"], out[f"clear_{tag}"], out[f"letters_{tag}"] = rmse, kl, q["clear"], q["letters"]
         out[f"samples_{tag}"] = smp[:24]
+        out[f"curve_{tag}"] = np.array(curve)  # step, rebuild error (summed squares), KL (nats)
+        out[f"snap_steps_{tag}"] = [s_ for s_, _ in snaps]
+        out[f"snaps_{tag}"] = np.array([im for _, im in snaps])
         out[f"recon_{tag}"] = xh.numpy().reshape(-1, GL, GL)[np.where(test)[0][::40][:8]]
         print(f"    beta {tag}: rebuild error {rmse:.3f}, KL {kl:.1f} nats; samples clear {100 * q['clear']:.0f}%, "
               f"{q['letters']} letters", flush=True)

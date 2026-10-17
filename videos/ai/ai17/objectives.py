@@ -81,6 +81,24 @@ def digit_logp(m, x):
     return lp.gather(2, x[:, 6:9, None])[..., 0], lp
 
 
+def answer_dist(m, a, b):
+    """The model's probability for every 3-digit answer (0 to 999) to each question: (questions, 1000)."""
+    import torch
+
+    from videos.ai.ai17.compute import encode
+
+    vals = np.arange(1000)
+    digits = np.stack([vals % 10, (vals // 10) % 10, vals // 100], 1)
+    out = []
+    with torch.no_grad():
+        for ai, bi in zip(a, b):
+            pre = np.repeat(encode(np.array([ai]), np.array([bi])), 1000, 0)
+            x = torch.tensor(np.concatenate([pre, digits], 1))
+            lp, _ = digit_logp(m, x)
+            out.append(lp.sum(1).exp().numpy())
+    return np.array(out)
+
+
 def evaluate(m, ref, ta, tb, gen):
     """Accuracy (one try each), mean entropy of a digit (bits), and KL(model || start) per answer (bits)."""
     import torch
@@ -111,6 +129,7 @@ def run(variant, base, ta, tb):
     mu = 1 if variant == "pg" else 4  # updates per batch of samples
     beta_kl = 0.04 if variant == "grpo" else 0.0
     curve, zero, clipped, drawn = [(0, *evaluate(m, ref, ta, tb, egen))], [], [], []
+    dists = [answer_dist(m, ta[:6], tb[:6])] if variant == "grpo" else []  # how it learns: probability over answers
     pairs = None
     if variant == "dpo":  # preference pairs, drawn once from the starting model
         pa, pb = add_problems(rng(12), STEPS * Q * 2)
@@ -193,6 +212,8 @@ def run(variant, base, ta, tb):
             clipped.append(float(np.mean(cl)) if cl else 0.0)
         if step % 20 == 0:
             curve.append((step, *evaluate(m, ref, ta, tb, egen)))
+            if variant == "grpo":
+                dists.append(answer_dist(m, ta[:6], tb[:6]))
             if variant == "dpo":
                 with torch.no_grad():
                     dw = float((digit_logp(m, hold[0])[0].sum(1) - hw0).mean()) / math.log(2)
@@ -201,6 +222,9 @@ def run(variant, base, ta, tb):
             print(f"    {variant} step {step}: acc {curve[-1][1]:.1%}, entropy {curve[-1][2]:.3f} bits, "
                   f"KL {curve[-1][3]:.3f}, no-signal groups {np.nanmean(zero[-20:]):.0%}", flush=True)
     out = dict(curve=np.array(curve), zero=np.array(zero), clipped=np.array(clipped))
+    if dists:
+        out["dists"] = np.array(dists, dtype=np.float32)  # (evaluations, 6 questions, 1000 answers)
+        out["dist_a"], out["dist_b"] = ta[:6], tb[:6]
     if drawn:
         out["drawn"] = np.array(drawn)
     if pairs is not None:
