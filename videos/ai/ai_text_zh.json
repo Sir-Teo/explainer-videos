@@ -3270,7 +3270,29 @@
     "R.~Rombach et al., \\textit{High-Resolution Image Synthesis with Latent Diffusion Models} (2022)": "R.~Rombach等，\\textit{High-Resolution Image Synthesis with Latent Diffusion Models}（2022）",
     "D.~P.~Kingma \\& M.~Welling, \\textit{VAE} (2013); \\ J.~Yao et al., \\textit{VA-VAE} (2025)": "D.~P.~Kingma \\& M.~Welling，\\textit{VAE}（2013）；\\ J.~Yao等，\\textit{VA-VAE}（2025）",
     "B.~Chen et al., \\textit{Diffusion Forcing} (2024); \\ X.~Huang et al., \\textit{Self Forcing} (2025)": "B.~Chen等，\\textit{Diffusion Forcing}（2024）；\\ X.~Huang等，\\textit{Self Forcing}（2025）",
-    "Letters drawn from the system's fonts; \\ every model here is trained on this video's CPU; \\ model sizes as published.": "字母取自系统自带的字体；\\ 这里的每个模型都在制作本视频的CPU上训练；\\ 模型规模按已发表的数据给出。"
+    "Letters drawn from the system's fonts; \\ every model here is trained on this video's CPU; \\ model sizes as published.": "字母取自系统自带的字体；\\ 这里的每个模型都在制作本视频的CPU上训练；\\ 模型规模按已发表的数据给出。",
+    "each word's $5$ nearest neighbours; \\ highlighted: \\ among its $10$ nearest with all $100$": "每个词最近的$5$个邻居；\\ 高亮：\\ 用全部$100$个方向时，也在它最近的$10$个之内",
+    "the loss, \\ meanwhile \\ (log scale)": "损失，\\ 与此同时 \\ （对数刻度）",
+    "the gradient $G$": "梯度$G$",
+    "Muon's step: \\ $U V^{\\top}$": "Muon的一步：\\ $U V^{\\top}$",
+    "every singular value set to $1$: \\ why?": "每个奇异值都设成$1$：\\ 为什么？",
+    "radius $1$": "半径$1$",
+    "the largest:": "最大的：",
+    "a middling one:": "一个中等的：",
+    "the size of all the weights": "全部权重的大小",
+    "with weight decay: \\ shrinks": "有权重衰减：\\ 变小",
+    "without: \\ grows": "没有：\\ 变大",
+    "our transformer, reading the novel: \\ the vector $x$ at the lit character": "我们的Transformer，正在读这部小说：\\ 亮起的字符处的向量$x$",
+    "the L1 penalty, \\ $\\lambda\\|f\\|_1$": "L1惩罚，\\ $\\lambda\\|f\\|_1$",
+    "raise $\\lambda$, \\ and fewer features stay on \\ (trained here)": "调大$\\lambda$，\\ 保持打开的特征就更少 \\ （在这里训练所得）",
+    "our transformer is given this, \\ and writes on": "把这段开头交给我们的Transformer，\\ 它接着往下写",
+    "$\\ldots$ which answer is right?": "$\\ldots$ 哪个答案是对的？",
+    "hint: \\ ``a professor says (C)''": "提示：\\ “一位教授说是(C)”",
+    "its chain of thought": "它的思维链",
+    "$\\ldots$ let me check each option $\\ldots$": "$\\ldots$ 我来逐个检查选项 $\\ldots$",
+    "$\\ldots$ so (C) fits best $\\ldots$": "$\\ldots$ 所以(C)最合适 $\\ldots$",
+    "no word of the hint": "只字未提那条提示",
+    "its answer": "它的答案"
   },
   "phrases": {
     "width": "宽度",
@@ -3715,6 +3737,14 @@
     [
       "^token \\$(\\d+)\\$ of \\$(\\d+)\\$, \\\\ one at a time$",
       "第$\\1$个词元，共$\\2$个，\\\\ 一次一个"
+    ],
+    [
+      "^keeping the first \\$(\\d+)\\$ of the \\$100\\$ directions$",
+      "只保留$100$个方向中的前$\\1$个"
+    ],
+    [
+      "^step \\$([\\d{},]+)\\$\\{,\\} \\\\ it writes:$",
+      "第$\\1$步，\\\\ 它写出："
     ]
   ]
 }
