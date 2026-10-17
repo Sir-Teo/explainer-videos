@@ -41,7 +41,7 @@
   "439dac813427": {
    "scene": "Derivative",
    "en": "A few derivatives come up over and over. <bookmark mark='a'/> The exponential is its own derivative. <bookmark mark='b'/> The logarithm's derivative is one over x. That's why the surprise climbs so steeply as p shrinks. <bookmark mark='c'/> And the chain rule, for a composition: f of g of x means do g first, then f. Writing f prime for the slope of f, the derivative of f of g of x is f prime at g of x, times g prime at x. Change flows through a composition, multiplying as it goes.",
-   "zh": ""
+   "zh": "有几个导数会一再出现。<bookmark mark='a'/>指数函数的导数就是它自己。<bookmark mark='b'/>对数的导数是x分之1。正因为这样，p变小时，意外度才会升得那么陡。<bookmark mark='c'/>还有链式法则，用于复合函数：f(g(x))的意思是，先做g，再做f。把f的斜率记作f撇，那么f(g(x))的导数，就等于f撇在g(x)处的值，乘以g撇在x处的值。变化穿过一层层复合，一路相乘。"
   },
   "3b1fb3e434d0": {
    "scene": "Gradient",
@@ -81,12 +81,12 @@
   "98229a1daebc": {
    "scene": "Reverse",
    "en": "A network is a long chain of maps, from its parameters, theta, all its adjustable numbers, to a single number at the end: the loss, script L. <bookmark mark='a'/> By the chain rule, the gradient is a product of Jacobians, one for each link. <bookmark mark='b'/> The product is the same whichever end you start multiplying from. The cost is not.",
-   "zh": ""
+   "zh": "一个网络就是一长串映射，从它的参数θ，也就是它所有可调的数，一直到末端的一个数：损失，花体的L。<bookmark mark='a'/>按照链式法则，梯度就是一串雅可比矩阵的乘积，每一环一个。<bookmark mark='b'/>不管从哪一头开始乘，乘积都一样。花的力气却不一样。"
   },
   "70d1bb76542b": {
    "scene": "Reverse",
    "en": "Start from the parameters, and you carry a whole matrix along, with a column for every parameter: in effect, you redo the chain once for every knob. <bookmark mark='a'/> Start from the loss, and you carry a single row: one number for each value in the layer you've reached, and one pass backwards tells every knob its effect at once. <bookmark mark='b'/> With one loss and a hundred million parameters, going backwards is a hundred million times less work. That's reverse-mode differentiation. Applied to neural networks, it's called backpropagation: described by Seppo Linnainmaa in 1970, and made famous by Rumelhart, Hinton and Williams in 1986.",
-   "zh": ""
+   "zh": "从参数那头开始，你得一路带着一整个矩阵，每个参数占一列：实际上，每有一个旋钮，你就得把整条链重走一遍。<bookmark mark='a'/>从损失那头开始，你只需带着一行：你走到的那一层里，每个值对应一个数；倒着走一遍，就能同时告诉每个旋钮它的影响。<bookmark mark='b'/>只有一个损失，却有1亿个参数时，倒着算的工作量，只有正着算的1亿分之一。这就是反向模式求导。用在神经网络上，它叫作反向传播：1970年，塞波·林纳因马描述了它；1986年，鲁梅尔哈特、辛顿和威廉姆斯让它广为人知。"
   },
   "9652f6c2ccc1": {
    "scene": "Backprop",
@@ -96,7 +96,7 @@
   "a62fea8e393f": {
    "scene": "Backprop",
    "en": "Let's run it by hand, on the smallest network there is, drawn as a flowchart of operations called a computation graph, each circle a node. One input, x, times one weight, plus one bias, a shift; <bookmark mark='s'/> then a squashing function, the sigmoid, an S-curve that presses any number into the range zero to one; and a squared error: the miss from the target y, squared. <bookmark mark='a'/> Forwards first: the values flow from left to right, and end in the loss, 0.854.",
-   "zh": ""
+   "zh": "我们来手算一遍，用的是最小的网络，画成一张由运算组成的流程图，叫作计算图，每个圆圈是一个节点。一个输入x，乘以一个权重，加上一个偏置，也就是一个平移；<bookmark mark='s'/>接着是一个挤压函数，sigmoid，一条S形曲线，能把任何数压进0到1之间；最后是一个平方误差：与目标y的差距，再取平方。<bookmark mark='a'/>先向前算：数值从左往右流动，最后得到损失，0.854。"
   },
   "9df46440a916": {
    "scene": "Backprop",
@@ -151,7 +151,7 @@
   "e706d2e2f3e3": {
    "scene": "Curvature",
    "en": "Curvature explains why plain gradient descent can be slow. <bookmark mark='a'/> In a long, narrow valley, bent twenty-five times more sharply across than along, the steepest way down points mostly at the opposite wall. So the steps zigzag from wall to wall, and crawl along the floor. <bookmark mark='b'/> Momentum, carrying some speed from step to step, does better. <bookmark mark='c'/> Newton's method uses the curvature itself to rescale the step: multiplying by H inverse undoes the curvature's stretching, so every direction is equally steep, and in a bowl like this it lands at the bottom in one jump. <bookmark mark='d'/> For a model with billions of numbers the full Hessian is far too big to use, but the problem it reveals shapes every modern optimizer, the rule that turns gradients into steps, in part nine.",
-   "zh": ""
+   "zh": "曲率解释了，为什么单纯的梯度下降可能很慢。<bookmark mark='a'/>在一条又长又窄的山谷里，横向的弯曲程度是纵向的25倍，最陡的下坡方向，大多指向对面的谷壁。于是每一步都在两边谷壁之间来回折返，沿着谷底慢慢往前爬。<bookmark mark='b'/>动量，也就是把一部分速度从这一步带到下一步，效果更好。<bookmark mark='c'/>牛顿法直接用曲率本身来重新缩放每一步：乘以H的逆矩阵，就抵消了曲率造成的拉伸，于是每个方向都一样陡，在这样一个碗里，一步就跳到谷底。<bookmark mark='d'/>对一个有几十亿个数的模型来说，完整的黑塞矩阵太大了，根本用不上；但它揭示的问题，塑造了每一个现代优化器，也就是把梯度变成步子的那条规则，这些到第9部分再讲。"
   },
   "677ddfc14125": {
    "scene": "Outro",
