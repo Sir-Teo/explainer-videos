@@ -2680,7 +2680,17 @@
     "sharp": "尖锐",
     "wide": "宽阔",
     "warmup": "预热",
-    "start with tiny steps while the weights \\\\ are still random, \\ so the first updates don't blow up": "权重还是随机的时候，\\\\ 先迈很小的步子，\\ 免得最初的更新就发散"
+    "start with tiny steps while the weights \\\\ are still random, \\ so the first updates don't blow up": "权重还是随机的时候，\\\\ 先迈很小的步子，\\ 免得最初的更新就发散",
+    "polynomial of degree $12$": "$12$次多项式",
+    "adds up powers of $x$: \\ $a_0 + a_1 x + a_2 x^2 + \\dots + a_{12} x^{12}$. \\\\ The degree is the highest power, \\ roughly how many bends it can make.": "把$x$的各次幂加起来：\\ $a_0 + a_1 x + a_2 x^2 + \\dots + a_{12} x^{12}$。\\\\ 次数就是最高的幂，\\ 大致是它能拐几个弯。",
+    "the gap shrinks \\\\ as the examples $n$ \\\\ outnumber the capacity $d$": "样本数$n$ \\\\ 比容量$d$多得越多，\\\\ 差距就越小",
+    "$70$ word rates": "$70$个词频",
+    "$p$ random features": "$p$个随机特征",
+    "fixed random mix, \\\\ then a bend": "固定的随机组合，\\\\ 再经过一道弯折",
+    "learned weights": "学出来的权重",
+    "exact fit, \\ big weights": "完全拟合，\\ 权重很大",
+    "exact fit, \\ smallest weights": "完全拟合，\\ 权重最小",
+    "layers of simple units: \\ $70$ word rates in, \\\\ two layers of $512$, \\ $2$ outputs \\ (one per author)": "一层层简单的单元：\\ 输入$70$个词频，\\\\ 两层各$512$个单元，\\ $2$个输出 \\ （每位作者一个）"
   },
   "phrases": {
     "width": "宽度",
