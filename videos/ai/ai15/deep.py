@@ -316,7 +316,7 @@ class ClipNet:
     level through adaptive layer norm; attention across frames either full or causal (each frame sees itself and
     the past)."""
 
-    def __new__(cls, T=8, D=96, L=4, H=4, causal=False):
+    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False):
         import torch
         import torch.nn as nn
 
@@ -343,7 +343,8 @@ class ClipNet:
             def __init__(self):
                 super().__init__()
                 self.T = T
-                self.embed = nn.Linear(P * P, D)
+                self.concat = concat
+                self.embed = nn.Linear(P * P * (2 if concat else 1), D)
                 self.pos_s = nn.Parameter(torch.randn(1, 1, NP, D) * 0.02)
                 self.pos_t = nn.Parameter(torch.randn(1, T, 1, D) * 0.02)
                 self.freq = nn.Parameter(torch.randn(D // 2) * 4.0, requires_grad=False)
@@ -359,6 +360,8 @@ class ClipNet:
                 """x (B, F, 20, 20) with F <= T frames; t (B, F) each frame's noise level; y (B,) the letter."""
                 B, Fr = x.shape[:2]
                 p = x.reshape(B, Fr, 5, P, 5, P).permute(0, 1, 2, 4, 3, 5).reshape(B, Fr, NP, P * P)
+                if self.concat:  # the oldest frame in view (the given one), fed in beside every frame's own patch
+                    p = torch.cat([p, p[:, :1].expand_as(p)], -1)
                 h = self.embed(p) + self.pos_s + self.pos_t[:, :Fr]
                 a = t[..., None] * self.freq * 2 * math.pi
                 c = self.tmlp(torch.cat([torch.sin(a), torch.cos(a)], -1)) + self.lab(y)[:, None]
@@ -393,7 +396,7 @@ def clip_levels(mode, B, T, g):
     return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True):
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False):
     """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
     frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
     In every mode the first frame is given clean and never learned."""
@@ -403,7 +406,7 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True):
 
     torch.manual_seed(seed)
     T = clips.shape[1]
-    m = ClipNet(T=T, causal=mode != "clip")
+    m = ClipNet(T=T, causal=mode != "clip", concat=concat)
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=0.0)
     n = steps(n_steps)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=n, pct_start=0.3 if QUICK else 0.05)
