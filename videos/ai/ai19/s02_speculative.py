@@ -35,7 +35,8 @@ class Speculative(VoiceoverScene):
         bl = label(r"the big model scores all $5$ positions in one run", font_size=24, color=TARGET).move_to(big)
         verdict = ["ok", "ok", "ok", "no", ""]
         marks = VGroup(*[MathTex(r"\checkmark" if v == "ok" else r"\times" if v == "no" else r"", font_size=36,
-                                 color=C.INTERVAL if v == "ok" else C.SURPRISE).next_to(d, DOWN, buff=1.1) for v, d in zip(verdict, draft)])
+                                 color=C.INTERVAL if v == "ok" else C.SURPRISE).move_to([d.get_x(), -1.5, 0])
+                     for v, d in zip(verdict, draft)])  # below the big model's box
         fix = label(r"keep the agreed ones; \ at the first disagreement, \ take the big model's own choice", font_size=24,
                     color=GREY_A).to_edge(DOWN, buff=0.6)
         tag = note(r"schematic").to_corner(DR, buff=0.3)
