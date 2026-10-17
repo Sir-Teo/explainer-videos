@@ -29,6 +29,11 @@ class Video(VoiceoverScene):
         frames = VGroup(*[Rectangle(width=2.0, height=1.13, stroke_color=GREY_B, stroke_width=1.5, fill_color="#121722",
                                     fill_opacity=1).shift(RIGHT * 0.22 * i + UP * 0.16 * i) for i in range(8)])
         frames.move_to([-4.0, 0.8, 0])
+        # the frames are real: a clip of our bouncing letter (the video autoencoder's test clip), one frame per sheet
+        clip = np.asarray(load("vae3d")["orig"])[0]
+        shots = Group(*[gray_image(clip[i], 1.0).move_to(f_) for i, f_ in zip(range(len(frames)), frames)])
+        sheets = Group(*[Group(f_, im) for f_, im in zip(frames, shots)])
+        cap0 = label(rf"a clip: \ ${len(frames)}$ frames", font_size=22, color=GREY_A).next_to(frames, DOWN, buff=0.35)
         cube = VGroup(*[Rectangle(width=0.5, height=0.5, stroke_color=PATCH, stroke_width=2, fill_color=PATCH, fill_opacity=0.2)
                         .shift(RIGHT * 0.1 * i + UP * 0.08 * i) for i in range(3)]).move_to([4.6, 0.9, 0])
         cl = label(r"a token: \ a little block \\ of space and time", font_size=22, color=PATCH).next_to(cube, DOWN, buff=0.2)
@@ -51,11 +56,12 @@ class Video(VoiceoverScene):
             "is part twelve's cost problem all over again. That's why video models need every trick from parts twelve "
             "and thirteen."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(f_) for f_ in frames], lag_ratio=0.1), FadeIn(comp), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(sh_) for sh_ in sheets], lag_ratio=0.15), FadeIn(cap0), FadeIn(comp), FadeIn(tag),
+                      run_time=1.6)
             # the squeeze, step by step: 4x fewer frames, 8x smaller each way, then cut into blocks
             two = VGroup(*[f_.copy() for f_ in frames[:2]]).move_to(frames)
             s1 = label(r"$4\times$ fewer in time", font_size=22, color=GREY_A).next_to(frames, DOWN, buff=0.35)
-            self.play(Transform(frames, two), FadeIn(s1), run_time=1.0)
+            self.play(FadeOut(shots), Transform(frames, two), ReplacementTransform(cap0, s1), run_time=1.0)
             small = frames.copy().scale(0.45).move_to(frames)
             s2 = label(r"$8\times$ smaller each way", font_size=22, color=GREY_A).next_to(small, DOWN, buff=0.35)
             self.play(Transform(frames, small), ReplacementTransform(s1, s2), run_time=1.0)

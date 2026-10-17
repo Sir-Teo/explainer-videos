@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import LETTERS, PATCH, conv_picture, gray_image, load, slide_window
+from videos.ai.ai15.common import LETTERS, PATCH, conv_picture, gray_image, load, patch_grid, slide_window
 
 
 class DiT(VoiceoverScene):
@@ -23,8 +23,18 @@ class DiT(VoiceoverScene):
     # ------------------------------------------------------------------
     def design(self):
         d = load("dit")
-        toks = VGroup(*[Square(0.34, stroke_color=PATCH, stroke_width=1.5, fill_color=PATCH, fill_opacity=0.18) for _ in range(10)])
+        # a real noisy picture, halfway from noise to an A (the trained model's own path), cut into patch tokens
+        path = np.asarray(d["alphabet_path"])
+        half = path[len(path) // 2][0]
+        k = 4
+        noisy = gray_image(half, 1.7).move_to([-5.6, -1.6, 0])
+        ngrid = patch_grid(noisy, half.shape[0] // k, stroke_width=1)
+        toks = Group(*[Group(gray_image(half[r * k:(r + 1) * k, c * k:(c + 1) * k], 0.34),
+                             Square(0.34, stroke_color=PATCH, stroke_width=1.2))
+                       for r in range(half.shape[0] // k) for c in range(half.shape[0] // k)][:10])
         toks.arrange(RIGHT, buff=0.08).move_to([-1.5, -1.6, 0])
+        more = MathTex(r"\cdots", font_size=28, color=PATCH).next_to(toks, RIGHT, buff=0.12)
+        feed = Arrow(noisy.get_right(), toks.get_left(), buff=0.15, color=PATCH, stroke_width=2.5, max_tip_length_to_length_ratio=0.15)
         tl = label(r"noisy patches, \ as tokens", font_size=22, color=PATCH).next_to(toks, DOWN, buff=0.15)
         blocks = VGroup(*[RoundedRectangle(width=4.4, height=0.5, corner_radius=0.1, stroke_color=GREY_B, stroke_width=2)
                           for _ in range(int(d["L"]))]).arrange(UP, buff=0.18).next_to(toks, UP, buff=0.5)
@@ -51,7 +61,9 @@ class DiT(VoiceoverScene):
             "normalization: they set its scale and shift. We trained one, with "
             f"{int(d['n_params']) / 1e6:.1f} million numbers, on our letters, told which letter to draw."
         ) as vo:
-            self.play(FadeIn(cite_), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.05), FadeIn(tl))
+            self.play(FadeIn(cite_), FadeIn(noisy), Create(ngrid))
+            self.play(GrowArrow(feed), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.1) for t_ in toks], lag_ratio=0.08), FadeIn(more),
+                      FadeIn(tl))
             vo.wait_until("v")
             self.play(FadeIn(conv, shift=UP * 0.2))
             slide_window(self, conv[1][2])

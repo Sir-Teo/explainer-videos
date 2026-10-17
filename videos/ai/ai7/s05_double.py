@@ -88,15 +88,35 @@ class DoubleDescent(VoiceoverScene):
             vo.wait_until("c")
             self.play(Create(part3), run_time=2.0)
             self.play(Create(floor), FadeIn(final), FadeIn(modern))
+        # the size of the fitted weights against p (computed with the curve): it peaks where the fit is forced
+        nm = np.asarray(d["norms"])
+        ny0, ny1 = math.floor(np.log10(nm.min()) * 2) / 2, math.ceil(np.log10(nm.max()) * 2) / 2
+        nax = CornerAxes(x_range=[1, 3.8, 1], y_range=[ny0, ny1, 0.5], x_length=2.9, y_length=1.9, tips=False,
+                         axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        ncap = label(r"the size of the fitted weights \\ (log scale)", font_size=20, color=C.MODEL_Q)
+        ninset = VGroup(ncap, nax).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([5.3, 0.3, 0])
+        keep_in_frame(ninset, margin=0.2)
+        ncurve = curve(nax, lx, np.log10(nm), C.MODEL_Q, 3)
+        nn_ = DashedLine(nax.c2p(math.log10(n), ny0), nax.c2p(math.log10(n), ny1), color=WHITE, stroke_width=1.5)
+        peak_at_n = abs(int(np.argmax(nm)) - k_n) <= 1
+        below_u = nm[-1] < nm[k_min1]
         with self.voiceover(
             "More parameters than data, and better on new data. Belkin and colleagues named it double descent in "
             "2019, and it turns up in deep networks too. <bookmark mark='a'/> The training error is zero all along "
             "the second descent, so it can't be what decides. What decides is which of the many exact fits you "
-            "get, and the smallest one is the simplest. Gradient descent, as part nine shows, quietly prefers fits "
-            "like that."
+            "get, and the smallest one is the simplest. "
+            + ("<bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is "
+               "forced, then shrink as features are added"
+               + (", ending smaller than at the bottom of the U. " if below_u else ". ")
+               if peak_at_n else
+               "<bookmark mark='n'/> Past the peak, the smallest fit's weights shrink as features are added. ")
+            + "Gradient descent, as part nine shows, quietly prefers fits like that."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(trc), FadeIn(trl))
+            vo.wait_until("n")
+            self.play(FadeIn(ncap), Create(nax), Create(nn_))
+            self.play(Create(ncurve), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

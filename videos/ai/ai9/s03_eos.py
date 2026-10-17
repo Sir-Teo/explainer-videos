@@ -97,6 +97,23 @@ class EdgeOfStability(VoiceoverScene):
                   label(r"small $\lambda$", font_size=22, color=C.INTERVAL).next_to(bowls[1], DOWN, buff=0.1))
         sharp = gloss(r"sharpness", r"how tightly the valley curves \\ along its steepest direction: \ the $\lambda$ of "
                       r"the bowl", bowls, corner=UR, width=4.4, color=C.BITS)
+        # the loss meanwhile, small, drawn step for step with the sharpness, and a step counter
+        lc = {eta: np.asarray(e[f"curve{eta}"]) for eta in etas}
+        lmin = float(np.floor(min(np.log10(c[:, 1].min()) for c in lc.values()) * 2) / 2)
+        lmax = float(np.ceil(max(np.log10(c[:, 1].max()) for c in lc.values()) * 2) / 2)
+        lax = CornerAxes(x_range=[0, 4000, 1000], y_range=[lmin, lmax, 0.5], x_length=3.0, y_length=1.5, tips=False,
+                         axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([5.0, -2.45, 0])
+        lax_l = label(r"the loss, \ meanwhile \ (log scale)", font_size=20, color=GREY_A).next_to(lax, UP, buff=0.12)
+        VGroup(lax, lax_l).shift(DOWN * max(0.0, lax_l.get_top()[1] - (how.get_bottom()[1] - 0.25)))
+        t = ValueTracker(0)
+
+        def upto(axes_, eta, col, k, f=lambda v: v, sw=3.5):
+            c = lc[eta]
+            n = max(2, int(np.searchsorted(c[:, 0], t.get_value(), side="right")))
+            return VMobject(color=col, stroke_width=sw).set_points_as_corners([axes_.c2p(x, f(y)) for x, y in zip(c[:n, 0], c[:n, k])])
+
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
+                                            color=WHITE).next_to(ax.get_corner(UR), UL, buff=0.1))
         with self.voiceover(
             "Now a real network: the spirals from part eight, trained with the full gradient at two step sizes. "
             "Track the sharpness, the Hessian's largest eigenvalue, from part three: how tightly the valley curves "
@@ -110,9 +127,20 @@ class EdgeOfStability(VoiceoverScene):
             self.play(FadeIn(sharp, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(FadeOut(sharp))
-            self.play(Create(groups[0][0]), Create(groups[0][1]), FadeIn(groups[0][2]), FadeIn(names[0]), run_time=3.0)
-            vo.wait_until("b")
-            self.play(Create(groups[1][0]), Create(groups[1][1]), FadeIn(groups[1][2]), FadeIn(names[1]), run_time=3.0)
+            self.play(Create(lax), FadeIn(lax_l), run_time=0.8)
+            self.add(cnt)
+            for k, (eta, col) in enumerate(zip(etas, ETA_COLORS)):
+                if k:
+                    vo.wait_until("b")
+                t.set_value(0)
+                live = [always_redraw(lambda eta=eta, col=col: upto(ax, eta, col, 2)),
+                        always_redraw(lambda eta=eta, col=col: upto(lax, eta, col, 1, lambda v: float(np.log10(v)), 2.5))]
+                self.add(*live)
+                self.play(t.animate.set_value(4000), Create(groups[k][1]), FadeIn(groups[k][2]), FadeIn(names[k]),
+                          run_time=4.0, rate_func=linear)
+                for m_ in live:
+                    m_.clear_updaters()
             self.play(FadeIn(note_))
+        cnt.clear_updaters()
         self.wait(0.3)
         self.clear_scene()

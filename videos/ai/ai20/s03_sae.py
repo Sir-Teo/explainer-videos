@@ -68,6 +68,28 @@ class SAE(VoiceoverScene):
                      label(rf"trained on ${int(s['n_vectors']):,}$ vectors".replace(",", "{,}"), font_size=20, color=GREY_B))
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(why, DOWN, buff=0.45).align_to(eqs, LEFT)
         cite_ = cite(r"T.~Bricken et al., \textit{Towards Monosemanticity} (2023); \ H.~Cunningham et al.\ (2023)", corner=DR)
+        # where x comes from: the novel, read by our transformer, up to the lit character
+        a0 = max(0, k - 22)
+        win = text[a0:k + 12]
+        rd = context_line(win, 10.0, font_size=30, color=RESID, at=k - a0).move_to([0, 0.3, 0])
+        rdl = label(r"our transformer, reading the novel: \ the vector $x$ at the lit character", font_size=26,
+                    color=GREY_A).next_to(rd, UP, buff=0.45)
+        # the L1 penalty in action: the same autoencoder trained at four strengths (chapter's end), features on per character
+        fo = load("frontier")
+        lams = [float(v) for v in fo["l1s"]]
+        l0s = [float(fo[f"l1_{v:g}_l0"]) for v in lams]
+        lb = VGroup()
+        for i, (lm, v) in enumerate(zip(lams, l0s)):
+            h = max(0.9 * v / max(l0s), 0.02)
+            b_ = Rectangle(width=0.5, height=h, stroke_width=0, fill_color=FEAT, fill_opacity=0.85).move_to([1.4 * i, h / 2, 0])
+            lb.add(VGroup(b_, MathTex(f"{v:.1f}" if v >= 0.1 else f"{v:.3f}", font_size=24, color=FEAT).next_to(b_, UP, buff=0.06),
+                          MathTex(f"{lm:g}", font_size=24, color=C.SURPRISE).next_to([1.4 * i, 0, 0], DOWN, buff=0.12)))
+        lbase = Line([-0.4, 0, 0], [4.6, 0, 0], color=GREY_C, stroke_width=1.5)
+        lxl = MathTex(r"\lambda", font_size=28, color=C.SURPRISE).next_to(lbase, LEFT, buff=0.15).shift(DOWN * 0.3)
+        l1c = gloss(r"the L1 penalty, \ $\lambda\|f\|_1$", r"raise $\lambda$, \ and fewer features stay on \ (trained here)",
+                    picture=VGroup(lbase, lb, lxl),
+                    corner=DR, width=4.6, color=C.SURPRISE).shift(UP * 0.62)
+        l1p = l1c[1][2]
         with self.voiceover(
             "If the model stores features as directions, can we find them? The tool is a sparse autoencoder. "
             "<bookmark mark='a'/> Take the model's vector x at some character, <bookmark mark='b'/> and encode it into "
@@ -80,8 +102,9 @@ class SAE(VoiceoverScene):
             f"{100 * (1 - float(s['fvu'])):.0f} percent of the variance: of all the ways these vectors differ from "
             f"their average, the rebuild captures {100 * (1 - float(s['fvu'])):.0f} percent."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(rdl), LaggedStart(*[FadeIn(m_) for m_ in rd], lag_ratio=0.02), run_time=1.6)
             vo.wait_until("a")
+            self.play(FadeOut(rdl), rd.animate.scale_to_fit_width(5.6).move_to([3.9, 3.3, 0]), run_time=0.8)
             self.play(FadeIn(bx), FadeIn(lx))
             vo.wait_until("b")
             self.play(GrowArrow(a1), FadeIn(el), FadeIn(eqs[0]), ReplacementTransform(bx.copy(), bf), FadeIn(lf), run_time=1.5)
@@ -89,7 +112,11 @@ class SAE(VoiceoverScene):
             self.play(GrowArrow(a2), FadeIn(dl), FadeIn(eqs[1]), ReplacementTransform(bf.copy(), bh), FadeIn(lh), run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(eqs[2]), FadeIn(why))
+            self.play(FadeIn(l1c[0]), FadeIn(l1c[1][:2]), Create(l1p[0]), FadeIn(l1p[2]))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(g_[2]), GrowFromEdge(g_[0], DOWN), FadeIn(g_[1])) for g_ in l1p[1]],
+                                  lag_ratio=0.5), run_time=2.4)
             vo.wait_until("e")
+            self.play(FadeOut(l1c), run_time=0.4)
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in res], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()

@@ -79,6 +79,7 @@ class Memory(VoiceoverScene):
     # ------------------------------------------------------------------
     def flash(self):
         f = load("flash")
+        Ts, plain, tiled = np.asarray(f["Ts"]), np.asarray(f["plain"]), np.asarray(f["tiled"])
         n = 8
         cell = 0.42
         grid = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=C.ATTN, fill_opacity=0.08)
@@ -94,11 +95,25 @@ class Memory(VoiceoverScene):
         el = label(r"an online softmax: \ a running max and a running sum", font_size=22, color=GREY_A).next_to(eqs, UP, buff=0.2)
         chk = label(rf"computed tile by tile on ${int(f['T'])}$ positions: \\ equal to the plain formula within "
                     rf"$10^{{{math.ceil(math.log10(max(float(f['dev']), 1e-17)))}}}$", font_size=22, color=GREY_B).next_to(eqs, DOWN, buff=0.4)
-        Ts, plain, tiled = np.asarray(f["Ts"]), np.asarray(f["plain"]), np.asarray(f["tiled"])
         i = list(Ts).index(131072)
         mem = label(rf"at ${Ts[i]:,}$ positions, \ one head: \ ${plain[i] / 2**30:.0f}$ GiB of scores, \ "
                     rf"or ${tiled[i] / 2**20:.0f}$ MiB without them".replace(",", "{,}"), font_size=22, color=C.BITS).to_edge(DOWN, buff=0.5)
         cite_ = cite(r"T.~Dao et al., \textit{FlashAttention} (2022)", corner=UR)
+        # the table's own size, for one head in 16-bit numbers: the plain way's memory less the tiled way's
+        def size_txt(b):
+            return rf"{b / 2**30:.0f}\ \text{{GiB}}" if b >= 2**30 else rf"{b / 2**20:.0f}\ \text{{MiB}}"
+
+        table = (plain - tiled)
+        sz = VGroup(*[VGroup(MathTex(rf"T = {int(T_):,}".replace(",", "{,}"), font_size=28, color=GREY_A),
+                             MathTex(size_txt(float(b)), font_size=28, color=C.ATTN)) for T_, b in zip(Ts, table)])
+        for r_ in sz:
+            r_[1].move_to([1.9, 0, 0], aligned_edge=LEFT)
+            r_[0].move_to([1.5, 0, 0], aligned_edge=RIGHT)
+        for k_, r_ in enumerate(sz):
+            r_.shift(DOWN * 0.6 * k_)
+        sz.move_to([3.4, -0.3, 0])
+        szl = label(r"the table of scores, \ one head, \ $16$-bit numbers", font_size=22, color=C.ATTN).next_to(sz, UP, buff=0.3)
+        ring = sorted(range(n * n), key=lambda q: max(q // n, q % n))  # cells by distance from the corner: the square grows
         with self.voiceover(
             "Attention has its own memory problem: the table of scores grows with the square of the length. "
             "FlashAttention never stores it. <bookmark mark='a'/> It takes a block of queries, streams the keys and "
@@ -108,8 +123,13 @@ class Memory(VoiceoverScene):
             "exactly right at the end. We checked "
             "it: the same numbers as the plain formula, to rounding error, without ever holding the table."
         ) as vo:
-            self.play(FadeIn(grid), FadeIn(gl), FadeIn(cite_))
+            for c_ in grid:
+                c_.set_fill(opacity=0.55)
+            self.play(FadeIn(gl), FadeIn(cite_), FadeIn(szl),
+                      LaggedStart(*[FadeIn(grid[q], scale=0.6) for q in ring], lag_ratio=0.03),
+                      LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in sz], lag_ratio=0.35), run_time=3.0)
             vo.wait_until("a")
+            self.play(FadeOut(sz), FadeOut(szl), grid.animate.set_fill(opacity=0.08), run_time=0.6)
             self.play(Create(qb), Create(tile))
             for j in range(1, n):
                 self.play(tile.animate.move_to(grid[j]), grid[j - 1].animate.set_fill(opacity=0.5), run_time=0.25)
@@ -159,6 +179,8 @@ class Memory(VoiceoverScene):
         wl = label(rf"wasted: \ ${100 * float(p['waste_reserved']):.0f}\%$", font_size=28, color=C.SURPRISE).move_to([-3.6, -2.9, 0])
         wr = label(rf"wasted: \ ${100 * float(p['waste_paged']):.1f}\%$", font_size=28, color=C.INTERVAL).move_to([3.6, -2.9, 0])
         tag = note(rf"${int(p['n'])}$ requests of random lengths \ ($24$ drawn); \ pages of ${page}$ tokens").to_edge(DOWN, buff=0.15)
+        ul = label(rf"$24$ conversations: \\ the cache each one needs \ (${int(lens.min())}$ to ${int(lens.max()):,}$ tokens)".replace(",", "{,}"),
+                   font_size=22, color=C.TRUE_P).move_to([-3.6, 2.85, 0])
         cite_ = cite(r"W.~Kwon et al., \textit{vLLM: PagedAttention} (2023)", corner=UR)
         with self.voiceover(
             "Finally, the cache from part twelve, on a server answering many people at once. <bookmark mark='a'/> "
@@ -168,9 +190,10 @@ class Memory(VoiceoverScene):
             f"pages, as each conversation grows. Waste falls to {100 * float(p['waste_paged']):.1f} percent, so the "
             "same chip serves several times as many people."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(cite_))
+            self.play(FadeIn(tag), FadeIn(cite_), FadeIn(ul),
+                      LaggedStart(*[GrowFromEdge(m, LEFT) for m in left[1::2]], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(ll), LaggedStart(*[FadeIn(m) for m in left], lag_ratio=0.01), run_time=1.5)
+            self.play(FadeOut(ul), FadeIn(ll), LaggedStart(*[Create(m) for m in left[0::2]], lag_ratio=0.03), run_time=1.5)
             self.play(FadeIn(wl))
             vo.wait_until("b")
             self.play(FadeIn(rl), Create(pool), LaggedStart(*[FadeIn(m) for m in right], lag_ratio=0.005), run_time=1.5)

@@ -114,8 +114,8 @@ def softmax_picture(unit=0.5) -> VGroup:
     (bars, caption) for stage k: 0 the raw scores, 1 their exponentials, 2 those divided by their total."""
     zl = Line([-0.3, 0, 0], [0.45 * len(SM_SCORES) - 0.15, 0, 0], color=GREY_C, stroke_width=1.5)
     bars = _sm_bars(SM_SCORES, [0.45 * i for i in range(len(SM_SCORES))], 0.0, unit, 0.3, A)
-    cap = label(SM_STAGES[0], font_size=18, color=GREY_A).next_to(zl, DOWN, buff=0.75)
-    box = Rectangle(width=zl.get_length(), height=1.9 * unit, stroke_width=0, fill_opacity=0).next_to(zl, UP, buff=0)
+    cap = label(SM_STAGES[0], font_size=18, color=GREY_A).next_to(zl, DOWN, buff=0.6)
+    box = Rectangle(width=zl.get_length(), height=1.75 * unit, stroke_width=0, fill_opacity=0).next_to(zl, UP, buff=0)
     return VGroup(zl, bars, cap, box)  # (an invisible box keeps room for the tallest bars)
 
 
@@ -127,7 +127,7 @@ def _sm_bars(vals, xs, y0, unit, w, color):
 
 def softmax_stage(pic: VGroup, k: int) -> tuple[VGroup, Mobject]:
     zl, bars, cap, box = pic
-    unit = box.height / 1.9
+    unit = box.height / 1.75
     e = np.exp(SM_SCORES)
     vals = SM_SCORES if k == 0 else 0.5 * e if k == 1 else 3.0 * e / e.sum()
     nb = _sm_bars(vals, [b.get_x() for b in bars], zl.get_y(), unit, bars[0].width, A)

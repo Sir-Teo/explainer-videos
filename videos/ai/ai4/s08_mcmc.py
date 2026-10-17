@@ -102,25 +102,37 @@ class MCMC(VoiceoverScene):
         # many steps: the visits pile up like the density
         pts = chain[17::3]
         visits = VGroup(*[Dot(ax.c2p(*p), radius=0.028, color=WHITE, fill_opacity=0.75) for p in pts])
-        left = float(d["left"])
+        assert abs(float(d["left"]) - 2 / 3) < 0.05
+        # a running count, as the walk goes: the share of the visits drawn so far that are in the left bump
+        in_left = np.cumsum(pts[:, 0] < 0) / np.arange(1, len(pts) + 1)
+        left = float(in_left[-1])
         assert abs(left - 2 / 3) < 0.05
         share = label(rf"time in the left bump: \ ${100 * left:.0f}\%$ \\ its share of the density: \ $67\%$",
                       font_size=24, color=WHITE)
         share.next_to(cancel, DOWN, buff=0.4).align_to(cancel, LEFT)
+        j = ValueTracker(0)
+        run_v = DecimalNumber(100 * in_left[0], num_decimal_places=0, unit=r"\%", font_size=30, color=WALK)
+        run_l = label(r"time in the left bump, so far:", font_size=24, color=WALK)
+        running = VGroup(run_l, run_v).arrange(RIGHT, buff=0.15)
+        running.next_to(cancel, DOWN, buff=0.4).align_to(cancel, LEFT)
+        keep_in_frame(running)
         with self.voiceover(
             "Only the ratio appears, so the unknown constant cancels out. <bookmark mark='a'/> Keep walking. The "
             "places the walker visits pile up exactly like the density: it's a Markov chain whose stationary "
             "distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the "
-            "probability, and the walker spends sixty-five percent of its time there. Markov chain Monte Carlo made "
-            "Bayesian statistics practical, and it's still how physicists sample molecules."
+            f"probability, and the walker spends {100 * left:.0f} percent of its time there. Markov chain Monte "
+            "Carlo made Bayesian statistics practical, and it's still how physicists sample molecules."
         ) as vo:
             self.play(FadeIn(cancel))
             vo.wait_until("a")
+            self.play(FadeIn(running), run_time=0.4)
+            run_v.add_updater(lambda m: m.set_value(100 * in_left[min(int(j.get_value()), len(pts) - 1)]))
             self.play(FadeOut(trail), FadeOut(tag),
                       LaggedStart(*[FadeIn(v) for v in visits], lag_ratio=0.0015),
                       MoveAlongPath(walker, VMobject().set_points_as_corners([ax.c2p(*p) for p in chain[17::3]])),
-                      run_time=7.0, rate_func=linear)
+                      j.animate.set_value(len(pts) - 1), run_time=7.0, rate_func=linear)
+            run_v.clear_updaters()
             vo.wait_until("b")
-            self.play(FadeIn(share))
+            self.play(FadeTransform(running, share))
         self.wait(0.3)
         self.clear_scene()

@@ -8,7 +8,7 @@ Results are cached in ``.cache/ai19/<name>.json`` (+ ``.npz``); scenes call ``lo
 Items:
     speculative  speculative decoding with Part 11's transformer as the target and a small counting model as the draft:
                  how often a drafted character is accepted, the characters per target run for drafts of 1 to 8, and a
-                 check that the output distribution is exactly the target's
+                 check that the output distribution is exactly the target's, at one place in the passage (its text kept)
     quant        Part 11's transformer with its weights rounded to 8, 4 and 3 bits (per row, round to nearest), and to
                  FP4 (E2M1) with a scale per block of 32: bits per character on the passage, and the weight histogram
     formats      (formats.py) MXFP4 and NVFP4 exactly, against 4-bit integers; GPTQ's error-compensating rounding and a
@@ -43,7 +43,7 @@ def compute_speculative():
 
     from videos.ai.ai11 import compute as c11
 
-    torch.set_num_threads(3)
+    torch.set_num_threads(2)
     c11.load("tf")
     model, chars, enc, data = c11.load_tf()
     K = len(chars)
@@ -90,7 +90,8 @@ def compute_speculative():
     tv = 0.5 * float(np.abs(draws - p).sum())
     top = np.argsort(-p)[:8]
     out = dict(alpha=alpha, ks=ks, per_run=per_run, accept=np.array(accept), tv=tv, N=N, p_top=p[top], q_top=q[top],
-               emp_top=draws[top], top_chars=[chars[int(i)] for i in top], draft_order=n)
+               emp_top=draws[top], top_chars=[chars[int(i)] for i in top], draft_order=n,
+               context="".join(chars[int(i)] for i in ctx[-60:]))  # the text before the compared character
     print(f"    acceptance {alpha:.2f}; total variation of the speculative samples from the target {tv:.4f}", flush=True)
     assert tv < 0.01 and 0.2 < alpha < 0.95
     return out
@@ -121,7 +122,7 @@ def compute_quant():
 
     from videos.ai.ai11 import compute as c11
 
-    torch.set_num_threads(3)
+    torch.set_num_threads(2)
     c11.load("tf")
     model, chars, enc, data = c11.load_tf()
     orig = {k: v.clone() for k, v in model.state_dict().items()}

@@ -127,6 +127,18 @@ class Capacity(VoiceoverScene):
         note_ = label(r"the better a family fits pure noise, \\ the less its training score proves", font_size=28,
                       color=C.BITS).move_to([4.4, 1.4, 0])
         rad = label(r"Rademacher complexity", font_size=26, color=GREY_A).next_to(note_, DOWN, buff=0.25)
+        # the experiment's own first draw of coin flips, one per training page (the same generator as the compute)
+        from videos.ai.ai7.compute import rng
+
+        n = int(r["n"])
+        flips = rng(1960).choice([-1.0, 1.0], size=n)
+        cells = VGroup(*[Square(0.11, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9) for _ in range(n)])
+        cells.arrange_in_grid(cols=56, buff=0.02).move_to([-1.4, 3.25, 0])
+        if cells.width > 7.6:
+            cells.scale_to_fit_width(7.6)
+        cl = label(rf"the ${n}$ training pages, \\ each given a coin flip", font_size=22, color=GREY_A)
+        cl.next_to(cells, RIGHT, buff=0.35)
+        keep_in_frame(cl)
         with self.voiceover(
             "There's a more direct test. Give each of the training pages a random label, a coin flip, and ask a "
             "linear model to fit them. <bookmark mark='a'/> Using one word rate, it gets barely more than half. "
@@ -134,6 +146,9 @@ class Capacity(VoiceoverScene):
             "<bookmark mark='b'/> The better a family can fit noise, the less a good training score proves. That's "
             "Rademacher complexity, and like the VC dimension, it grows with the number of things a model can adjust."
         ) as vo:
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.002), FadeIn(cl), run_time=1.2)
+            self.play(LaggedStart(*[c_.animate.set_fill(POS if f > 0 else NEG) for c_, f in zip(cells, flips)], lag_ratio=0.003),
+                      run_time=2.0)
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), Create(half), FadeIn(hl))
             vo.wait_until("a")
             self.play(Create(c), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.1), run_time=2.0)

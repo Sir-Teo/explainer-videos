@@ -324,6 +324,15 @@ class Residual(VoiceoverScene):
                      font_size=20, color=GREY_A).move_to(ax)
         cite_ = cite(r"B.~Zhang \& R.~Sennrich, \textit{RMSNorm} (2019); \ N.~Shazeer, \textit{GLU Variants Improve Transformer} (2020)",
                      corner=DR)
+        # the starting point, on screen from the first word: the residual block as built so far, the layer F on a branch
+        # of the stream with nothing in front of it (pre-norm then puts the Norm box on that branch)
+        base_f = MathTex(r"h_{l+1} = h_l + F(h_l)", font_size=32).move_to(pre)
+        base_l = label(r"the residual block so far", font_size=20, color=GREY_A).next_to(base_f, DOWN, buff=0.1)
+        y_s, y_b = pn[0].get_y(), pn[3].get_y()
+        bare = self.wire([2.0, y_s, 0], [2.0, y_b, 0], pn[3].get_left())
+        todo = VGroup(*[label(t_, font_size=24, color=c_) for t_, c_ in ((r"1. \ pre-norm", NORM), (r"2. \ RMSNorm", NORM),
+                                                                         (r"3. \ a gated MLP", C.BITS))])
+        todo.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-3.4, -0.2, 0])
         with self.voiceover(
             "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> "
             "First, normalize what goes into each layer, not the stream itself: the layer sits on a branch, takes a "
@@ -339,10 +348,12 @@ class Residual(VoiceoverScene):
             "paper tested it, and ended, famously, by attributing its success to divine benevolence. "
             "<bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), Write(base_f), FadeIn(base_l), FadeIn(pn[0]), FadeIn(pn[5]), FadeIn(pn[3]),
+                      FadeIn(pn[4]), Create(bare), Create(pn[1][2]))
+            self.play(LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.2) for t_ in todo], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("a")
-            self.play(Write(pre), FadeIn(prel), FadeIn(pn[0]), FadeIn(pn[5]))
-            self.play(Create(pn[1]), FadeIn(pn[2]), FadeIn(pn[3]), FadeIn(pn[4]), run_time=1.5)
+            self.play(FadeOut(todo), FadeOut(base_l), ReplacementTransform(base_f, pre), FadeIn(prel))
+            self.play(FadeOut(bare), Create(pn[1][:2]), FadeIn(pn[2]), run_time=1.5)
             vo.wait_until("b")
             self.play(Write(rms), FadeIn(rmsl), FadeOut(pn), FadeIn(rp[0]), GrowArrow(rp[1][0]), GrowArrow(rp[1][1]),
                       GrowArrow(rp[1][2]), GrowArrow(rp[1][3]))

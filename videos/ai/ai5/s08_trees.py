@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai5.common import AUSTEN, DICKENS, X_RANGE, Y_RANGE, load, page_dots, page_plane
+from videos.ai.ai5.common import (AUSTEN, DICKENS, X_RANGE, Y_RANGE, crop_to_axes, load, page_dots, page_plane,
+                                  region_image)
 
 NAMES = ("the", "not")
 
@@ -115,9 +116,16 @@ class Trees(VoiceoverScene):
         xs = list(range(1, 7)) + [7]
         tr_acc = [t[f"train{d}"] for d in range(1, 7)] + [t["train_deep2"]]
         te_acc = [t[f"acc{d}"] for d in range(1, 7)] + [t["acc_deep2"]]
-        l_tr = VMobject(color=GREY_A, stroke_width=3).set_points_as_corners([cax.c2p(x, v) for x, v in zip(xs, tr_acc)])
-        l_te = VMobject(color=C.BITS, stroke_width=4).set_points_as_corners([cax.c2p(x, v) for x, v in zip(xs, te_acc)])
+        # the training score grows with the tree, one depth at a time; the new pages' score is revealed after
+        s_tr = [Line(cax.c2p(xs[k], tr_acc[k]), cax.c2p(xs[k + 1], tr_acc[k + 1]), color=GREY_A, stroke_width=3)
+                for k in range(6)]
+        d_tr = VGroup(*[Dot(cax.c2p(x, v), radius=0.045, color=GREY_A) for x, v in zip(xs, tr_acc)])
+        l_te = VMobject(color=C.BITS, stroke_width=4).set_points_as_corners([cax.c2p(x, v) for x, v in zip(xs[:6], te_acc[:6])])
+        l_te7 = Line(cax.c2p(xs[5], te_acc[5]), cax.c2p(xs[6], te_acc[6]), color=C.BITS, stroke_width=4)
         d_te = VGroup(*[Dot(cax.c2p(x, v), radius=0.05, color=C.BITS) for x, v in zip(xs, te_acc)])
+        dv = ValueTracker(1)
+        dl = always_redraw(lambda: label(rf"depth ${int(round(dv.get_value()))}$", font_size=28, color=WHITE)
+                           .next_to(ax, UP, buff=0.15).align_to(ax, RIGHT))
         xl = VGroup(*[MathTex(str(d) if d < 7 else r"\infty", font_size=22, color=GREY_B).next_to(cax.c2p(d, 0.7), DOWN, buff=0.1)
                       for d in xs])
         yl = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(cax.c2p(1, v), LEFT, buff=0.1)
@@ -134,16 +142,19 @@ class Trees(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), FadeIn(dots), FadeIn(R[0]))
             self.bring_to_front(dots)
-            self.play(Create(cax), FadeIn(xl), FadeIn(yl), FadeIn(cn), FadeIn(key))
+            self.play(Create(cax), FadeIn(xl), FadeIn(yl), FadeIn(cn), FadeIn(key), FadeIn(d_tr[0]), FadeIn(dl))
             cur = R[0]
             for d in range(2, 7):
-                self.play(FadeOut(cur), FadeIn(R[d - 1]), run_time=0.5)
+                self.play(FadeOut(cur), FadeIn(R[d - 1]), Create(s_tr[d - 2]), FadeIn(d_tr[d - 1]),
+                          dv.animate.set_value(d), run_time=0.7)
                 self.bring_to_front(dots)
                 cur = R[d - 1]
             vo.wait_until("a")
-            self.play(Create(l_tr), Create(l_te), FadeIn(d_te[:6]), run_time=1.5)
+            self.play(Create(l_te), FadeIn(d_te[:6]), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeOut(cur), FadeIn(deep), FadeIn(d_te[6]))
+            dl.clear_updaters()
+            self.play(FadeOut(cur), FadeIn(deep), Create(s_tr[5]), FadeIn(d_tr[6]), Create(l_te7), FadeIn(d_te[6]),
+                      Transform(dl, label(r"depth $\infty$", font_size=28, color=WHITE).move_to(dl, aligned_edge=RIGHT)))
             self.bring_to_front(dots)
         self.wait(0.3)
         self.clear_scene()
@@ -214,6 +225,83 @@ class Trees(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+    def boost_plane(self, f, fn, cite_):
+        """Boosting as it learns, on the two plotted rates: the committee's vote at checkpoints, and its scores."""
+        import math
+
+        b = load("boost2")
+        p = load("pages")
+        X2, y, test = np.asarray(p["X2"]), np.asarray(p["y"]), np.asarray(p["test"], bool)
+        snaps = [int(k) for k in b["snaps"]]
+        acc, train = np.asarray(b["acc"]), np.asarray(b["train"])
+        n = len(acc)
+        assert snaps[-1] == n and snaps[:4] == [1, 3, 10, 30]
+        plane = page_plane(x_length=6.6, y_length=4.6, center=[-3.4, -0.4, 0])
+        ax = plane[0]
+        tr = np.nonzero(~test)[0]
+        dots = page_dots(ax, X2, y, idx=tr, jitter=0.35, radius=0.04, opacity=0.9)
+        imgs = {}
+        for k in snaps:
+            v, xs, ys = crop_to_axes(b[f"region{k}"], b["xs"], b["ys"])
+            imgs[k] = region_image(v, xs, ys, ax, lo=0.25, hi=0.75, opacity=0.5).set_z_index(-1)  # pale: unsure
+        r = ValueTracker(1)
+        cur = lambda: min(n, max(1, int(round(r.get_value()))))  # noqa: E731
+        cnt = always_redraw(lambda: MathTex(rf"\text{{round }} {cur()}", font_size=36, color=C.BITS)
+                            .move_to([3.6, 1.15, 0]))
+        tv = DecimalNumber(100 * train[0], num_decimal_places=0, unit=r"\%", font_size=28, color=GREY_A)
+        av = DecimalNumber(100 * acc[0], num_decimal_places=0, unit=r"\%", font_size=28, color=C.BITS)
+        tv.add_updater(lambda m: m.set_value(100 * train[cur() - 1]))
+        av.add_updater(lambda m: m.set_value(100 * acc[cur() - 1]))
+        reads = VGroup(VGroup(label(r"training pages:", font_size=24, color=GREY_A), tv).arrange(RIGHT, buff=0.15),
+                       VGroup(label(r"new pages:", font_size=24, color=C.BITS), av).arrange(RIGHT, buff=0.15))
+        reads.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(cnt, DOWN, buff=0.25)
+        keep_in_frame(reads)
+        bx = CornerAxes(x_range=[0, math.log10(n), 1], y_range=[0.78, 0.88, 0.05], x_length=4.2, y_length=1.7,
+                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.0, -2.1, 0])
+        bt = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(bx.c2p(math.log10(v), 0.78), DOWN, buff=0.08)
+                      for v, t_ in ((1, "1"), (10, "10"), (100, "100"))])
+        bn = label(r"rounds \ (log scale)", font_size=20, color=GREY_A).next_to(bt, DOWN, buff=0.08).set_x(bx.get_x())
+        bn.add(*[MathTex(rf"{v}\%", font_size=20, color=GREY_B).next_to(bx.c2p(0, v / 100), LEFT, buff=0.08)
+                 for v in (80, 85)])
+        rr = np.arange(1, n + 1)
+
+        def upto(vals, col, sw):
+            m_ = cur()
+            if m_ < 2:
+                return VGroup()
+            return VMobject(color=col, stroke_width=sw).set_points_as_corners(
+                [bx.c2p(math.log10(k), float(np.clip(v, 0.78, 0.88))) for k, v in zip(rr[:m_], vals[:m_])])
+
+        c_tr = always_redraw(lambda: upto(train, GREY_A, 2.5))
+        c_te = always_redraw(lambda: upto(acc, C.BITS, 3.5))
+        best = int(np.argmax(acc)) + 1
+        slips = acc[-1] < acc[best - 1]
+        end_ = (f"and ends at {100 * acc[-1]:.0f}: past a point, the extra detail fits the training pages, not the "
+                "authors." if slips else "and holds there.")
+        with self.voiceover(
+            "Boosting builds the committee another way: one small tree at a time, each trained on the mistakes of "
+            "all the trees before it. <bookmark mark='a'/> Watch it learn on the two rates. After one round, the "
+            "committee is a single small tree: a few boxes. <bookmark mark='b'/> Each new tree corrects what the "
+            "others still get wrong, and the boundary grows more detailed: ten rounds, <bookmark mark='c'/> thirty, "
+            f"<bookmark mark='d'/> three hundred. On new pages it's best after {best} rounds, at "
+            f"{100 * acc[best - 1]:.0f} percent, {end_}"
+        ) as vo:
+            self.play(Write(f), FadeIn(fn), FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Create(ax), FadeIn(plane[1:]), FadeIn(dots), FadeIn(imgs[1]), FadeIn(cnt), FadeIn(reads),
+                      Create(bx), FadeIn(bt), FadeIn(bn))
+            self.add(c_tr, c_te)
+            shown = imgs[1]
+            for k, mark in ((3, "b"), (10, None), (30, "c"), (100, "d"), (300, None)):
+                if mark:
+                    vo.wait_until(mark)
+                self.play(r.animate.set_value(k), FadeOut(shown), FadeIn(imgs[k]), run_time=1.2, rate_func=linear)
+                shown = imgs[k]
+        for m in (cnt, tv, av, c_tr, c_te):
+            m.clear_updaters()
+        self.wait(0.3)
+        self.play(FadeOut(VGroup(plane, dots, cnt, reads, bx, bt, bn, c_tr, c_te)), FadeOut(shown))
+
     def boosting(self):
         t = load("trees")
         ba, bt = np.asarray(t["boost_acc"]), np.asarray(t["boost_train"])
@@ -231,15 +319,14 @@ class Trees(VoiceoverScene):
         tables = label(r"on tables of numbers, \\ boosted trees are still hard to beat", font_size=24, color=GREY_A)
         tables.next_to(res, DOWN, buff=0.3).align_to(key, LEFT)
         cite_ = cite(r"J.~H.~Friedman, \textit{Greedy Function Approximation: A Gradient Boosting Machine} (2001)", corner=DR)
+        self.boost_plane(f, fn, cite_)
         with self.voiceover(
-            "Boosting builds the committee another way: one small tree at a time, each trained on the mistakes of "
-            "all the trees before it. <bookmark mark='a'/> The training pages are soon all right. The new pages "
-            f"climb to {100 * ba[-1]:.0f} percent. <bookmark mark='b'/> On tables of numbers like these, boosted "
-            "trees are still, today, among the hardest methods to beat."
+            "With all seventy rates, it learns the same way. <bookmark mark='a'/> The training pages are soon all "
+            f"right. The new pages climb to {100 * ba[-1]:.0f} percent. <bookmark mark='b'/> On tables of numbers "
+            "like these, boosted trees are still, today, among the hardest methods to beat."
         ) as vo:
-            self.play(Write(f), FadeIn(fn), FadeIn(cite_))
-            vo.wait_until("a")
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(key))
+            vo.wait_until("a")
             self.play(Create(c_tr), Create(c_te), run_time=3.0, rate_func=linear)
             self.play(FadeIn(res))
             vo.wait_until("b")

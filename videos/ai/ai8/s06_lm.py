@@ -111,6 +111,27 @@ class NeuralLM(VoiceoverScene):
         ml = label(rf"$\lambda = {lam:.2f}$, \ chosen on held-out text", font_size=22, color=GREY_A).next_to(mf, DOWN, buff=0.15)
         mres = label(rf"together: \ ${mix:.2f}$", font_size=30, color=WHITE).next_to(ml, DOWN, buff=0.35)
         beat = nn < kn
+        # the curve drawn by a clock: a dot riding it, the step and the bits so far
+        t = ValueTracker(float(cv[0, 0]))
+
+        def upto():
+            n_ = max(2, int(np.searchsorted(cv[:, 0], t.get_value(), side="right")))
+            pts = [ax.c2p(x, float(np.clip(y, 1.6, 4.6))) for x, y in cv[:n_, [0, 2]]]
+            if n_ < len(cv):  # the last stretch, interpolated up to the clock
+                x = t.get_value()
+                pts.append(ax.c2p(x, float(np.clip(np.interp(x, cv[:, 0], cv[:, 2]), 1.6, 4.6))))
+            return VMobject(color=C.NEURAL, stroke_width=4).set_points_as_corners(pts)
+
+        def bits_now():
+            return float(np.interp(t.get_value(), cv[:, 0], cv[:, 2]))
+
+        live = always_redraw(upto)
+        rider = always_redraw(lambda: glow_dot(ax.c2p(t.get_value(), float(np.clip(bits_now(), 1.6, 4.6))), color=C.NEURAL,
+                                               radius=0.08))
+        clock = always_redraw(lambda: VGroup(
+            MathTex(rf"\text{{step }}{int(round(t.get_value(), -2)):,}".replace(",", "{,}"), font_size=28, color=WHITE),
+            MathTex(rf"{bits_now():.2f}\ \text{{bits/char}}", font_size=28, color=C.NEURAL)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            .move_to([4.6, 0.6, 0]))
         with self.voiceover(
             "Train it on part one's thirty novels, by gradient descent, with the cross-entropy of part one as the "
             "loss. <bookmark mark='a'/> The bits per character on the Maltese Falcon passage fall, and fall, "
@@ -121,9 +142,13 @@ class NeuralLM(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), Create(knl), FadeIn(knt))
             vo.wait_until("a")
-            self.play(Create(c), run_time=4.0, rate_func=linear)
+            self.add(live, rider, clock)
+            self.play(t.animate.set_value(float(cv[-1, 0])), run_time=5.0, rate_func=lambda a: smooth(a) ** 0.7)
+            for m_ in (live, rider, clock):
+                m_.clear_updaters()
+            self.remove(rider)
             vo.wait_until("b")
-            self.play(FadeIn(fin))
+            self.play(FadeOut(clock), FadeIn(fin))
         with self.voiceover(
             "Bengio's team found the same in 2003, and their best results came from combining the two: averaging "
             "the network's prediction with the counting model's. <bookmark mark='a'/> The weight is chosen on "

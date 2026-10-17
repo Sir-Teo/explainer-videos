@@ -140,6 +140,25 @@ class Muon(VoiceoverScene):
         pic_m = stretched([5.3, 0.2, 0], 1.0, 1.0, MU)
         cap_g = label(r"the gradient $G$: \\ a few directions dominate", font_size=20, color=GREY_A).next_to(pic_g, DOWN, buff=0.3)
         cap_m = label(r"Muon's step: \\ every direction moved by $\eta$", font_size=20, color=MU).next_to(pic_m, DOWN, buff=0.3)
+        # the question, on the real gradient from the last section: its singular values, and Muon's
+        m = load("muon")
+        sv_b = np.asarray(m["before"], float)
+        sv_a = np.ones_like(sv_b)  # U V^T: every singular value exactly 1 (Newton-Schulz gets close, as shown below)
+        top = float(max(sv_b.max(), 1.0))
+
+        def mini(vals, col, cap):
+            W, H = 2.5, 1.5
+            base = Line([-W / 2, 0, 0], [W / 2, 0, 0], color=GREY_C, stroke_width=1.5)
+            bars = VGroup(*[Line([-W / 2 + (i + 0.5) * W / len(vals), 0, 0], [-W / 2 + (i + 0.5) * W / len(vals), H * v / top, 0],
+                                 color=col, stroke_width=1.2) for i, v in enumerate(vals)])
+            return VGroup(base, bars, label(cap, font_size=20, color=col).next_to(base, DOWN, buff=0.12))
+
+        recap = VGroup(mini(sv_b, GREY_B, r"the gradient $G$"), mini(sv_a, MU, r"Muon's step: \ $U V^{\top}$"))
+        recap.arrange(RIGHT, buff=1.0, aligned_edge=DOWN).move_to([0, 0.9, 0])
+        recap.add(Arrow(recap[0][0].get_right() + UP * 0.6, recap[1][0].get_left() + UP * 0.6, buff=0.15, color=GREY_B,
+                        stroke_width=3, max_tip_length_to_length_ratio=0.25))
+        why = label(r"every singular value set to $1$: \ why?", font_size=30, color=WHITE).next_to(recap, UP, buff=0.35)
+        recap.add(why)
         with self.voiceover(
             "Why set the singular values to one? Because it's the steepest step under the right notion of size. "
             "<bookmark mark='p'/> Picture what a matrix does to a circle of directions. The gradient stretches it "
@@ -153,7 +172,9 @@ class Muon(VoiceoverScene):
             "than eta, the best move pushes every direction by exactly eta. Adam, in the same sense, is the steepest "
             "step when each weight is bounded separately."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(recap[0]), FadeIn(why))
+            self.play(TransformFromCopy(recap[0][1], recap[1][1]), FadeIn(recap[1][0]), FadeIn(recap[1][2]),
+                      GrowArrow(recap[2]), run_time=1.5)
             vo.wait_until("p")
             self.play(Create(pic_g[0]))
             self.play(TransformFromCopy(pic_g[0], pic_g[1]), *[GrowArrow(a_) for a_ in pic_g[2]], FadeIn(cap_g))
@@ -162,6 +183,8 @@ class Muon(VoiceoverScene):
             self.play(TransformFromCopy(pic_m[0], pic_m[1]), *[GrowArrow(a_) for a_ in pic_m[2]], FadeIn(cap_m))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
+                if mk == "a":
+                    self.play(FadeOut(recap))
                 self.play(Write(eqs[k]), FadeIn(notes[k]))
             self.play(Create(box))
         self.wait(0.3)
@@ -220,6 +243,33 @@ class Muon(VoiceoverScene):
         m_, e_ = f"{match:.0e}".split("e")
         chk = label(rf"the same as the matrix iteration's singular values, \ to ${m_} \times 10^{{{int(e_)}}}$", font_size=18,
                     color=GREY_A).to_edge(DOWN, buff=0.3)
+        # the iteration acting, from the first word: what the matrix does to a circle of directions, round by round,
+        # along its largest singular direction and a middling one (computed: the same five rounds of p as below)
+        ns = MathTex(r"X \leftarrow aX + b\,(XX^{\top})X + c\,(XX^{\top})^2 X", font_size=32).to_edge(UP, buff=0.3)
+        i2 = n_b // 2  # the middle one of those above a hundredth of the largest
+        oc, R = np.array([2.3, -0.4, 0]), 1.55
+        unit = DashedVMobject(Circle(radius=R, color=GREY_C, stroke_width=1.5), num_dashes=40).move_to(oc)
+        ul = label(r"radius $1$", font_size=18, color=GREY_B).next_to(unit, DOWN, buff=0.1)
+
+        def shape(k):
+            s1, s2 = float(its[k][0]), float(its[k][i2])
+            u = np.array([math.cos(0.45), math.sin(0.45), 0])
+            v = np.array([-u[1], u[0], 0])
+            e = Ellipse(width=2 * R * s1, height=max(2 * R * s2, 0.02), color=MU, stroke_width=3.5).rotate(0.45).move_to(oc)
+            return VGroup(e, Line(oc, oc + R * s1 * u, color=C.BITS, stroke_width=3),
+                          Line(oc, oc + R * s2 * v, color=C.MODEL_Q, stroke_width=3))
+
+        ell = shape(0)
+        rk = Integer(0, font_size=30, color=WHITE)
+        rl_ = VGroup(label(r"round", font_size=24, color=GREY_A), rk).arrange(RIGHT, buff=0.15)
+        v1 = DecimalNumber(its[0][0], num_decimal_places=2, font_size=26, color=C.BITS)
+        v2 = DecimalNumber(its[0][i2], num_decimal_places=2, font_size=26, color=C.MODEL_Q)
+        vals = VGroup(VGroup(label(r"the largest:", font_size=20, color=C.BITS), v1).arrange(RIGHT, buff=0.12),
+                      VGroup(label(r"a middling one:", font_size=20, color=C.MODEL_Q), v2).arrange(RIGHT, buff=0.12))
+        side = VGroup(rl_, vals.arrange(DOWN, aligned_edge=LEFT, buff=0.12)).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        side.move_to([5.6, 1.3, 0])
+        keep_in_frame(side)
+        demo = VGroup(unit, ul, ell, side)
         with self.voiceover(
             "How does Newton–Schulz do it without an SVD? Each round, X becomes a times X, plus b times X X "
             "transpose X, plus c times X X transpose squared X. On the singular values, that's just one polynomial, "
@@ -231,12 +281,17 @@ class Muon(VoiceoverScene):
             "exactly one, but close enough, and the coefficients were tuned to get there in five rounds. The tiniest "
             "ones, mostly numerical dust, climb but don't arrive, which costs nothing."
         ) as vo:
+            self.play(Write(ns), Create(unit), FadeIn(ul), Create(ell), FadeIn(side), run_time=1.5)
+            for k in range(1, 6):
+                self.play(Transform(ell, shape(k)), ChangeDecimalToValue(rk, k), ChangeDecimalToValue(v1, its[k][0]),
+                          ChangeDecimalToValue(v2, its[k][i2]), run_time=1.1)
             self.play(Create(ax), FadeIn(ticks), Create(diag), Create(one))
             vo.wait_until("a")
             self.play(Write(f), Create(pc), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(web), run_time=2.5)
             vo.wait_until("c")
+            self.play(FadeOut(demo))
             self.play(Create(bx), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(dots[0]))
             for k in range(1, 6):
                 self.play(TransformFromCopy(dots[k - 1], dots[k]), run_time=0.8)
@@ -284,9 +339,9 @@ class Muon(VoiceoverScene):
             "<bookmark mark='c'/> With it, Kimi K2 trained on fifteen and a half trillion tokens without a single "
             "loss spike."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(att, shift=DOWN * 0.2))  # the picture from the first word
             vo.wait_until("h")
-            self.play(FadeIn(att, shift=DOWN * 0.2))
+            self.play(Indicate(att[1][2][0], color=C.BITS, scale_factor=1.1), run_time=1.2)  # the card's copy of the grid
             vo.wait_until("a")
             self.play(FadeOut(att))
             for k, mk in enumerate("ab"):

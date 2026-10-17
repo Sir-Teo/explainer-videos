@@ -45,6 +45,7 @@ class Steering(VoiceoverScene):
         pr = Text(prompt, font="DejaVu Serif", font_size=20, color=GREY_B).move_to([0, 0.75, 0])
         if pr.width > 12.5:
             pr.scale_to_fit_width(12.5)
+        prl = label(r"our transformer is given this, \ and writes on", font_size=22, color=GREY_A).next_to(pr, UP, buff=0.35)
         rows = VGroup()
         for a in alphas:
             key = f"{a:g}"
@@ -71,10 +72,11 @@ class Steering(VoiceoverScene):
             "Anthropic did the same to Claude with a Golden Gate Bridge feature, and for a day it would bring every "
             "conversation round to the bridge."
         ) as vo:
+            self.play(FadeIn(pr, shift=UP * 0.1), FadeIn(prl))  # the prompt the model will continue, from the first words
             vo.wait_until("a")
             self.play(FadeIn(fbox))
             vo.wait_until("b")
-            self.play(Write(f), FadeIn(fl), FadeIn(pr))
+            self.play(Write(f), FadeIn(fl), FadeOut(prl))
             vo.wait_until("c")
             self.play(FadeIn(rows[0][0]), FadeIn(rows[0][1], lag_ratio=0.02), FadeIn(rows[0][2]), FadeIn(tag), FadeIn(hl), run_time=1.5)
             vo.wait_until("d")
