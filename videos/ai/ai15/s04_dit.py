@@ -158,7 +158,7 @@ class DiT(VoiceoverScene):
                 nxt = row(k)
                 self.play(t.animate.set_value(steps[k]), Create(VMobject(color=PATCH, stroke_width=3).set_points_as_corners(
                     [ax.c2p(a, b) for a, b in L if steps[k - 1] <= a <= steps[k]] or [ax.c2p(steps[k], L[-1, 1])] * 2)),
-                    FadeTransform(cur, nxt), run_time=1.2)
+                    FadeOut(cur), FadeIn(nxt), run_time=1.2)  # a cross-fade: FadeTransform can't restore images
                 cur = nxt
         self.wait(0.3)
         self.remove(dot, cnt)
