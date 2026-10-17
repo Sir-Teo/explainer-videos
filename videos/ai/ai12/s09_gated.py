@@ -79,7 +79,7 @@ class GatedDelta(VoiceoverScene):
                      r"in Linear RNNs Through Negative Eigenvalues} (2025)", corner=DR)
         with self.voiceover(
             "Let's look at the delta rule as geometry. The memory S is a linear map: give it a key, and it gives back "
-            "an answer. Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, "
+            "an answer. <bookmark mark='p'/> Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, "
             "but the value we want stored is v. <bookmark mark='b'/> The update multiplies S by I minus beta k k "
             "transpose, then adds beta v k transpose. That first matrix only touches the direction k: it shrinks it "
             "by one minus beta, and leaves every direction at right angles alone. <bookmark mark='c'/> With beta a "
@@ -89,7 +89,10 @@ class GatedDelta(VoiceoverScene):
             "eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets "
             "these memories track parity, the very problem part seventeen's transformer could not solve in one go."
         ) as vo:
-            self.play(FadeIn(base), Create(gS), FadeIn(cite_), run_time=1.5)
+            gI = grid(np.eye(2))
+            self.play(FadeIn(base), Create(gI), FadeIn(cite_), run_time=1.5)
+            vo.wait_until("p")
+            self.play(ReplacementTransform(gI, gS), run_time=2.0)
             vo.wait_until("a")
             self.play(GrowArrow(ak), FadeIn(kl), GrowArrow(ans), FadeIn(al))
             self.play(Create(tgt), FadeIn(tip), FadeIn(vl), GrowArrow(ap), FadeIn(pl))

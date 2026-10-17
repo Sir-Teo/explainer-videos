@@ -170,16 +170,16 @@ class KVCache(VoiceoverScene):
             a, e = f"{x:.0e}".split("e")
             return rf"{a} \times 10^{{{int(e)}}}"
 
-        f1 = cmath(r"q^{\top}", r"W^{UK}", r"c_n", "=", r"(", r"W^{UK\top}", r"q", r")^{\top}", r"c_n", colors=colors, font_size=34)
+        f1 = cmath(r"q^{\top}", r"W^{UK}", r"c_n", "=", r"(", r"W^{UK\top}", r"q", r")^{\top}", r"c_n", colors=colors, font_size=40)
         f2 = cmath(r"(", r"R_m", r"q", r")^{\top}", r"(", r"R_n", r"W^{UK}", r"c_n", r")", "=", r"q^{\top}", r"R_{n-m}", r"W^{UK}",
-                   r"c_n", colors=colors, font_size=34)
+                   r"c_n", colors=colors, font_size=40)
         f3 = cmath(r"q^{\top}", r"W^{UK}", r"c_n", "+", r"(", r"R_m", r"q^R", r")^{\top}", r"(", r"R_n", r"k^R_n", r")",
-                   colors=colors, font_size=34)
-        fs = VGroup(f1, f2, f3).arrange(DOWN, aligned_edge=LEFT, buff=0.75).move_to([-1.6, 0.2, 0])
-        n1 = label(rf"fold once, \ use for every key \\ checked: \ ${sci(m['diff_plain'])}$", font_size=20, color=C.INTERVAL)
+                   colors=colors, font_size=40)
+        fs = VGroup(f1, f2, f3).arrange(DOWN, aligned_edge=LEFT, buff=0.85).move_to([-2.0, 0.3, 0])
+        n1 = label(rf"fold once, \ use for every key \\ checked: \ ${sci(m['diff_plain'])}$", font_size=22, color=C.INTERVAL)
         n2 = label(rf"$R_{{n-m}}$ changes with every pair: \\ nothing to fold; \ folding anyway: \ off by "
-                   rf"${100 * float(m['rel_rope_folded']):.0f}\%$", font_size=20, color=C.SURPRISE)
-        n3 = label(rf"positions in a small extra key, \\ shared by all heads: \ ${sci(m['diff_decoupled'])}$", font_size=20,
+                   rf"${100 * float(m['rel_rope_folded']):.0f}\%$", font_size=22, color=C.SURPRISE)
+        n3 = label(rf"positions in a small extra key, \\ shared by all heads: \ ${sci(m['diff_decoupled'])}$", font_size=22,
                    color=C.INTERVAL)
         for f_, n_ in ((f1, n1), (f2, n2), (f3, n3)):
             n_.next_to(f_, RIGHT, buff=0.5)

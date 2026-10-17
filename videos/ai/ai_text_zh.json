@@ -2363,7 +2363,12 @@
     "sequential steps: \\ $2{,}048$ \\ vs \\ $32$ \\ (each chunk is matrix products)": "顺序执行的步数：\\ 逐步$2{,}048$，\\ 分块$32$ \\ （每一块内都是矩阵乘法）",
     "every block below the diagonal has rank one \\\\ (second singular value $/$ first: $6 \\times 10^{-17}$)": "对角线以下的每一块，秩都是1 \\\\ （第二个奇异值$/$第一个：$6 \\times 10^{-17}$）",
     "masked attention vs the recurrence: \\\\ largest difference $9 \\times 10^{-16}$": "带掩码的注意力与递推：\\\\ 最大差异$9 \\times 10^{-16}$",
-    "DeepSeek-V3: \\ $671\\,\\mathrm{B}$ parameters, \\ $256$ experts in each expert layer": "DeepSeek-V3：\\ $671\\,\\mathrm{B}$参数，\\ 每个专家层$256$个专家"
+    "DeepSeek-V3: \\ $671\\,\\mathrm{B}$ parameters, \\ $256$ experts in each expert layer": "DeepSeek-V3：\\ $671\\,\\mathrm{B}$参数，\\ 每个专家层$256$个专家",
+    "rotary positions (Part 11) \\ break the folding trick": "旋转位置编码（第11部分）\\ 让并矩阵的技巧失效",
+    "fold once, \\ use for every key \\\\ checked: \\ $9 \\times 10^{-16}$": "并一次，\\ 每个键都能用 \\\\ 验证：\\ $9 \\times 10^{-16}$",
+    "$R_{n-m}$ changes with every pair: \\\\ nothing to fold; \\ folding anyway: \\ off by $18\\%$": "$R_{n-m}$每一对都不同：\\\\ 没有可并的；\\ 硬要并：\\ 偏差$18\\%$",
+    "positions in a small extra key, \\\\ shared by all heads: \\ $9 \\times 10^{-16}$": "位置放进一个额外的小键，\\\\ 所有头共用：\\ $9 \\times 10^{-16}$",
+    "cached per token and layer: \\ $512$ \\ $+$ \\ $64$ numbers": "每个词元、每一层缓存：\\ $512$ \\ $+$ \\ $64$个数"
   },
   "phrases": {
     "width": "宽度",
@@ -2666,6 +2671,22 @@
     [
       "^masked attention vs the recurrence: \\\\\\\\ largest difference \\$([^$]+)\\$$",
       "带掩码的注意力与递推：\\\\\\\\ 最大差异$\\1$"
+    ],
+    [
+      "^fold once, \\\\ use for every key \\\\\\\\ checked: \\\\ \\$([^$]+)\\$$",
+      "并一次，\\\\ 每个键都能用 \\\\\\\\ 验证：\\\\ $\\1$"
+    ],
+    [
+      "^\\$R_\\{n-m\\}\\$ changes with every pair: \\\\\\\\ nothing to fold; \\\\ folding anyway: \\\\ off by \\$(\\d+)\\\\%\\$$",
+      "$R_{n-m}$每一对都不同：\\\\\\\\ 没有可并的；\\\\ 硬要并：\\\\ 偏差$\\1\\\\%$"
+    ],
+    [
+      "^positions in a small extra key, \\\\\\\\ shared by all heads: \\\\ \\$([^$]+)\\$$",
+      "位置放进一个额外的小键，\\\\\\\\ 所有头共用：\\\\ $\\1$"
+    ],
+    [
+      "^cached per token and layer: \\\\ \\$(\\d+)\\$ \\\\ \\$\\+\\$ \\\\ \\$(\\d+)\\$ numbers$",
+      "每个词元、每一层缓存：\\\\ $\\1$ \\\\ $+$ \\\\ $\\2$个数"
     ]
   ]
 }
