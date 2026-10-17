@@ -13,6 +13,7 @@ class Words(VoiceoverScene):
         self.neighbours()
         self.analogy()
         self.word2vec()
+        self.w2v_learning()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -188,4 +189,42 @@ class Words(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(lg, shift=UP * 0.1))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def w2v_learning(self):
+        """How word2vec learns: the nearest neighbours of four words, at checkpoints through training."""
+        sg = load("sgns")
+        steps = [int(s_) for s_ in sg["snap_steps"]]
+        snaps = sg["snap_neighbours"]
+        words = ["monday", "three", "father", "eyes"]
+        total = int(sg["steps"])
+
+        def column(k, word):
+            return VGroup(*[Text(x, font=MONO, font_size=20, color=WHITE) for x in snaps[k][word][:5]]).arrange(DOWN, buff=0.1)
+
+        heads = VGroup(*[Text(w_, font=MONO, font_size=26, color=C.BITS) for w_ in words]).arrange(RIGHT, buff=1.6).move_to([0, 1.8, 0])
+        cols = VGroup(*[column(0, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}\ \text{{of}}\ {total:,}".replace(",", "{,}"),
+                                            font_size=30, color=C.BITS).to_edge(UP, buff=0.5))
+        sub = label(r"each word's $5$ nearest neighbours, \ by the cosine of their vectors", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during "
+            "training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
+            "<bookmark mark='b'/> After a few thousand guesses, frequent words pull together first. "
+            "<bookmark mark='c'/> By the end, Monday sits with the other days, three with the numbers, father with "
+            "family: nothing told it what a day or a number is; only which words keep company."
+        ) as vo:
+            self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub))
+            self.add(cnt)
+            vo.wait_until("a")
+            marks = {2: "b", len(steps) - 1: "c"}
+            for k in range(1, len(steps)):
+                if k in marks:
+                    vo.wait_until(marks[k])
+                new = VGroup(*[column(k, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
+                self.play(Transform(cols, new), t.animate.set_value(steps[k]), run_time=0.9)
+        self.wait(0.3)
+        self.remove(cnt)
         self.clear_scene()
