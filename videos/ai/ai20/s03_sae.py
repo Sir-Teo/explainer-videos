@@ -233,7 +233,8 @@ class SAE(VoiceoverScene):
             "<bookmark mark='c'/> DeepMind's JumpReLU gives each feature its own threshold, learned, with the count of "
             "active features as the penalty. <bookmark mark='d'/> We trained both of the first two kinds on the same "
             "vectors, at several sparsities. "
-            + ("At the strongest L1 penalty we tried, every feature switched off for good. " if dead else "")
+            + (f"At the strongest {'two L1 penalties' if dead == 2 else 'L1 penalty' if dead == 1 else f'{dead} L1 penalties'} "
+               "we tried, every feature switched off for good. " if dead else "")
             + (f"At similar sparsity TopK does better: with {l0k:.0f} features per vector it leaves "
                f"{100 * fk:.0f} percent of the variance unexplained, where the L1 model at about {near[0]:.0f} leaves "
                f"{100 * near[1]:.0f}. " if fk < near[1] else
