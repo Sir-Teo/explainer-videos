@@ -58,7 +58,6 @@ class Balance(VoiceoverScene):
             "gets chosen even more. Starved experts are wasted parameters."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             # training, replayed: the picture fills in from the left, a column every 50 steps, as a counter runs
             img, frame, t_, el_, tl_, st_ = p
             n_cols = len(np.asarray(m["load_none"]))
@@ -73,6 +72,7 @@ class Balance(VoiceoverScene):
             self.play(FadeIn(t_), FadeIn(el_), FadeIn(tl_), Create(frame), FadeIn(expl))
             self.add(cnt)
             self.play(u.animate.set_value(1.0), run_time=3.5, rate_func=linear)
+            vo.wait_until("a")
             cover.clear_updaters()
             cnt.clear_updaters()
             self.remove(cover)
