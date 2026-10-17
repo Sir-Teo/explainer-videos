@@ -61,10 +61,10 @@
    "en": "Chapter two. Our own transformer.",
    "zh": "第2章。我们自己从零搭建起来的Transformer模型。"
   },
-  "75860da018a3": {
+  "7d641a9d7457": {
    "scene": "Transformer",
-   "en": "Now build one. Each character enters as a vector, part two's idea, 128 numbers here. The column of vectors is the residual stream from part eight: every layer reads from it and adds back to it. <bookmark mark='a'/> A transformer block has two halves. Attention moves information between positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, a multilayer perceptron: part eight's small network of weighted sums and bends, applied to each position on its own, like thinking over what was gathered. <bookmark mark='c'/> Each half normalizes its input, and adds its output back to the stream. Stack four blocks, read off a guess for the next character, and that's the whole machine.",
-   "zh": "现在来搭一个。每个字符进来时都是一个向量，这是第2部分的想法，这里用128个数。这一列向量就是第8部分的残差流：每一层都从它读取，再把结果加回去。<bookmark mark='a'/>一个Transformer模块分成两半。注意力在不同位置之间搬运信息：每个字符从它前面的字符那里收集信息。<bookmark mark='b'/>然后是一个MLP，也就是多层感知机：第8部分那种由加权求和和弯折组成的小网络，对每个位置单独使用，就像在琢磨刚收集来的东西。<bookmark mark='c'/>每一半都先把输入归一化，再把输出加回残差流。叠上4个模块，最后读出对下一个字符的猜测，这就是整台机器。"
+   "en": "Now build one. Each character enters as a vector, part two's idea, 128 numbers here. The column of vectors is the residual stream from part eight: every layer reads from it and adds back to it. <bookmark mark='a'/> A transformer block has two halves. Attention moves information between positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, a multilayer perceptron: part eight's small network of weighted sums and bends, applied to each position on its own, like thinking over what was gathered. <bookmark mark='c'/> Each half first normalizes its input, with part eight's layer norm: <bookmark mark='n'/> it shifts the vector's numbers to an average of zero, and rescales them to a standard size. Then the half adds its output back to the stream. Stack four blocks, read off a guess for the next character, and that's the whole machine.",
+   "zh": "现在来搭一个。每个字符进来时都是一个向量，这是第2部分的想法，这里用128个数。这一列向量就是第8部分的残差流：每一层都从它读取，再把结果加回去。<bookmark mark='a'/>一个Transformer模块分成两半。注意力在不同位置之间搬运信息：每个字符从它前面的字符那里收集信息。<bookmark mark='b'/>然后是一个MLP，也就是多层感知机：第8部分那种由加权求和和弯折组成的小网络，对每个位置单独使用，就像在琢磨刚收集来的东西。<bookmark mark='c'/>每一半都先用第8部分的层归一化处理它的输入：<bookmark mark='n'/>把向量里的数平移到平均为0，再缩放到一个标准的大小。然后这一半把它的输出加回残差流。叠上4个模块，最后读出对下一个字符的猜测，这就是整台机器。"
   },
   "6dd6b37580e5": {
    "scene": "Transformer",
