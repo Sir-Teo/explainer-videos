@@ -29,7 +29,7 @@ class Video(VoiceoverScene):
                                     fill_opacity=1).shift(RIGHT * 0.22 * i + UP * 0.16 * i) for i in range(8)])
         frames.move_to([-4.0, 0.8, 0])
         cube = VGroup(*[Rectangle(width=0.5, height=0.5, stroke_color=PATCH, stroke_width=2, fill_color=PATCH, fill_opacity=0.2)
-                        .shift(RIGHT * 0.1 * i + UP * 0.08 * i) for i in range(3)]).next_to(frames, RIGHT, buff=1.0)
+                        .shift(RIGHT * 0.1 * i + UP * 0.08 * i) for i in range(3)]).move_to([4.6, 0.9, 0])
         cl = label(r"a token: \ a little block \\ of space and time", font_size=22, color=PATCH).next_to(cube, DOWN, buff=0.2)
         comp = label(r"compressed $8\times$ in each direction of space, \ $4\times$ in time, \ then $2\times2$ patches",
                      font_size=22, color=GREY_A).to_edge(UP, buff=0.35)
@@ -51,6 +51,23 @@ class Video(VoiceoverScene):
             "and thirteen."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(f_) for f_ in frames], lag_ratio=0.1), FadeIn(comp), FadeIn(tag))
+            # the squeeze, step by step: 4x fewer frames, 8x smaller each way, then cut into blocks
+            two = VGroup(*[f_.copy() for f_ in frames[:2]]).move_to(frames)
+            s1 = label(r"$4\times$ fewer in time", font_size=22, color=GREY_A).next_to(frames, DOWN, buff=0.35)
+            self.play(Transform(frames, two), FadeIn(s1), run_time=1.0)
+            small = frames.copy().scale(0.45).move_to(frames)
+            s2 = label(r"$8\times$ smaller each way", font_size=22, color=GREY_A).next_to(small, DOWN, buff=0.35)
+            self.play(Transform(frames, small), ReplacementTransform(s1, s2), run_time=1.0)
+            grid = VGroup()
+            for layer in range(2):
+                for r_ in range(3):
+                    for c_ in range(4):
+                        grid.add(Square(0.2, stroke_color=PATCH, stroke_width=1.2, fill_color=PATCH, fill_opacity=0.25)
+                                 .move_to(frames[layer].get_center() + np.array([(c_ - 1.5) * 0.22, (1 - r_) * 0.22, 0])))
+            s3 = label(r"cut into blocks: \ tokens", font_size=22, color=PATCH).move_to(s2)
+            self.play(FadeIn(grid, lag_ratio=0.03), ReplacementTransform(s2, s3), run_time=1.0)
+            line = grid.copy().arrange(RIGHT, buff=0.05).move_to([0.6, 0.8, 0])
+            self.play(TransformFromCopy(grid, line), run_time=1.2)
             self.play(FadeIn(cube), FadeIn(cl))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=LEFT * 0.2) for r_ in tab], lag_ratio=0.3))
