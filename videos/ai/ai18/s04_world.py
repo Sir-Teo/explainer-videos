@@ -45,7 +45,7 @@ class World(VoiceoverScene):
         arrows = VGroup(Arrow(f2.get_right(), enc.get_left(), buff=0.1, color=GREY_B), Arrow(enc.get_right(), zc.get_left(), buff=0.1, color=GREY_B),
                         Arrow(zc.get_right(), dyn.get_left(), buff=0.1, color=GREY_B), Arrow(dyn.get_right(), zn.get_left(), buff=0.1, color=GREY_B),
                         Arrow(zn.get_right(), dec.get_left(), buff=0.1, color=GREY_B))
-        labs = VGroup(label(rf"two frames, \ ${S}\times{S}$", font_size=20, color=GREY_A).next_to(VGroup(f1, f2), DOWN, buff=0.15),
+        labs = VGroup(label(rf"two frames, \ ${S}\times{S}$", font_size=20, color=GREY_A).next_to(Group(f1, f2), DOWN, buff=0.15),
                       label(rf"${Z}$ numbers", font_size=20, color=C.EMBED).next_to(zc, DOWN, buff=0.15),
                       label(r"the next frame's \\ numbers", font_size=20, color=C.EMBED).next_to(zn, DOWN, buff=0.15))
         foot = label(r"a small world model, \ trained here on bouncing balls", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.8)

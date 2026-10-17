@@ -85,7 +85,7 @@ class InContext(VoiceoverScene):
         theory = Group(signed_image(theory_kq, S, S), signed_image(theory_pv, S, S)).arrange(RIGHT, buff=0.8)
         theory.move_to([3.3, -0.9, 0])
         for grp in (learned, theory):
-            for img in grp:
+            for img in list(grp):  # a copy: adding to the group while walking it never ends
                 grp.add(SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1.5))
         names = VGroup(*[MathTex(t, font_size=32, color=c_).next_to(img, UP, buff=0.12)
                          for t, c_, img in ((r"W_{KQ}", A, learned[0]), (r"W_{PV}", V, learned[1]),
