@@ -17,7 +17,8 @@ fixed-size matrix memory, written by better and better rules. A hook and six cha
 * **State-space models.** A continuous-time state, read in steps of Δ; memory set by the step size; Mamba's selective
   steps holding a marked value through noise; Mamba-2: the same family as linear attention.
 * **A recall test.** Multi-query associative recall: tiny one-layer models with softmax attention, linear attention
-  and the delta rule, trained here, as the number of key-value pairs grows.
+  and the delta rule (keys of 16 numbers), trained here, as the number of key-value pairs grows: at 8 / 16 / 32 / 48
+  pairs, softmax 100% throughout, adding 96 / 86 / 55 / 38%, the delta rule 100 / 99 / 95 / 88%.
 * **Hybrids.** Jamba, MiniMax-01, Qwen3-Next and Kimi Linear: a few attention layers among many linear-time ones;
   the memory bill at 128,000 tokens.
 * **Recap**, where it comes back, Part 13's teaser, references.
