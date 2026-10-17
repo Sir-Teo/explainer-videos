@@ -296,3 +296,28 @@ def reference_card(books, papers, font_size=21, width=13.2) -> VGroup:
 def cite(text: str, corner=DL, font_size=20) -> Tex:
     """A source line in a corner of the frame, e.g. ``cite(r"Shannon (1948)")``."""
     return note(text, font_size=font_size).to_corner(corner, buff=0.3)
+
+
+def gloss(term: str, plain: str, picture: Mobject | None = None, corner=DR, width: float = 4.6,
+          color=None) -> VGroup:
+    """A jargon card for a term's first appearance: the term, what it means in plain words, and a small picture of
+    it (any mobject, scaled to fit). Put it in a free corner, FadeIn when the narration names the term."""
+    color = color or C.BITS
+    t = label(term, font_size=24, color=color)
+    p = label(plain, font_size=18, color=GREY_A)
+    body = VGroup(t, p).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
+    if picture is not None:
+        pic = picture.copy() if hasattr(picture, "copy") else picture
+        if pic.width > width - 0.4:
+            pic.scale_to_fit_width(width - 0.4)
+        if pic.height > 1.6:
+            pic.scale_to_fit_height(1.6)
+        body.add(pic)
+        body.arrange(DOWN, buff=0.14, aligned_edge=LEFT)
+        pic.set_x(body.get_x())
+    if body.width > width - 0.3:
+        body.scale_to_fit_width(width - 0.3)
+    box = RoundedRectangle(width=max(body.width + 0.36, 2.0), height=body.height + 0.3, corner_radius=0.12,
+                           stroke_color=color, stroke_width=1.5, fill_color="#0B0F17", fill_opacity=0.92)
+    card = VGroup(box, body.move_to(box))
+    return card.to_corner(corner, buff=0.3)
