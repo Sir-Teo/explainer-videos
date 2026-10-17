@@ -5,6 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
+from videos.ai.ai11.common import heat_image
 from videos.ai.ai12.common import ADD, DECAY, DELTA, K, Q, STATE, V, curve, load
 
 RULES = [("add", r"add", ADD), ("decay", r"decay, then add", DECAY), ("delta", r"the delta rule", DELTA)]
@@ -47,9 +48,24 @@ class Rules(VoiceoverScene):
         ax, deco = self.err_axes(c, [-2.6, -1.0, 0])
         ca = curve(ax, Ns, np.minimum(np.asarray(c["err_add"]), 2.5), ADD, 4)
         th = DashedLine(ax.c2p(0, -1 / d), ax.c2p(Ns[-1], min((Ns[-1] - 1) / d, 2.5)), color=GREY_B, stroke_width=1.5)
-        thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(150, 150 / d), UL, buff=0.1)
+        thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(200, min(200 / d, 2.3)), DR, buff=0.1)
         note_ = label(rf"$d = {d}$: \ by $N = {d}$ pairs, \\ the leaks are as big \\ as the answer", font_size=26,
                       color=ADD).move_to([4.2, -0.6, 0])
+        # the overlaps themselves: |k_i . k_j| for random unit keys; the diagonal is each pair's own key
+        g = np.random.default_rng(12)
+        keys = g.normal(size=(128, d))
+        keys /= np.linalg.norm(keys, axis=1, keepdims=True)
+
+        def gram(n):
+            img = heat_image(np.abs(keys[:n] @ keys[:n].T), 3.6, 3.6, color=ADD, gamma=0.5).move_to([-1.6, -1.1, 0])
+            lab = label(rf"$|k_i \cdot k_j|$ \ for ${n}$ random keys, \ $d = {d}$", font_size=22, color=GREY_A)
+            return Group(img, lab.next_to(img, UP, buff=0.15))
+
+        gr = gram(16)
+        row = SurroundingRectangle(gr[0], buff=0.02, color=WHITE, stroke_width=2).stretch_to_fit_height(3.6 / 16 * 1.1)
+        row.move_to([gr[0].get_x(), gr[0].get_top()[1] - 3.6 / 16 * 2.5, 0])
+        rl = label(r"reading pair $j$: \ its own key (the bright one), \ plus a little of every other", font_size=22,
+                   color=GREY_A).next_to(gr[0], RIGHT, buff=0.5)
         with self.voiceover(
             "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its "
             "key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how "
@@ -58,9 +74,15 @@ class Rules(VoiceoverScene):
             f"{d}, by {d} pairs the noise is as big as the answer. Adding can never erase: the memory just fills up."
         ) as vo:
             self.play(Write(f))
+            self.play(FadeIn(gr))
             vo.wait_until("a")
-            self.play(GrowFromCenter(b), FadeIn(bl))
+            self.play(GrowFromCenter(b), FadeIn(bl), Create(row), FadeIn(rl))
+            g48, g128 = gram(48), gram(128)
+            self.play(FadeOut(row), FadeTransform(gr, g48), run_time=1.0)
+            self.wait(0.3)
+            self.play(FadeTransform(g48, g128), run_time=1.0)
             vo.wait_until("b")
+            self.play(*[FadeOut(m_) for m_ in self.mobjects if m_ not in (f, b, bl)])
             self.play(Create(ax), FadeIn(deco), Create(th), FadeIn(thl))
             self.play(Create(ca), FadeIn(note_), run_time=2.0)
         self.wait(0.3)
