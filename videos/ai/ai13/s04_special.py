@@ -24,7 +24,7 @@ class Special(VoiceoverScene):
         chars = [str(c_) for c_ in m["route_chars"]]
         M = np.asarray(m["route"])
         E = M.shape[1]
-        cell = 0.2
+        cell = min(0.36, 11.5 / len(chars))
         grid = VGroup()
         for i in range(len(chars)):
             for j in range(E):
@@ -32,35 +32,48 @@ class Special(VoiceoverScene):
                 grid.add(Square(cell, stroke_width=0.4, stroke_color=GREY_D, fill_color=EXPERT_COLORS[j],
                                 fill_opacity=0.05 + 0.9 * v).move_to([i * cell, -j * cell, 0]))
         grid.center().move_to(DOWN * 0.2)
-        names = VGroup(*[(Text(c_ if c_ != " " else "␣", font=MONO, font_size=16, color=GREY_A)).next_to(grid[i * E], UP, buff=0.08)
+        names = VGroup(*[(Text(c_ if c_ != " " else "␣", font=MONO, font_size=22, color=C.BITS if c_ in "aeiou" else GREY_A)).next_to(grid[i * E], UP, buff=0.08)
                          for i, c_ in enumerate(chars)])
-        el = VGroup(*[MathTex(rf"E_{j + 1}", font_size=18, color=EXPERT_COLORS[j]).next_to(grid[j], LEFT, buff=0.1) for j in range(E)])
+        el = VGroup(*[MathTex(rf"E_{j + 1}", font_size=24, color=EXPERT_COLORS[j]).next_to(grid[j], LEFT, buff=0.1) for j in range(E)])
         head = label(r"where each character sends its context \ (the expert chosen first, \ trained with the bias)",
                      font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
         top1 = M.argmax(1)
         vow = [i for i, c_ in enumerate(chars) if c_ in "aeiou"]
         punct = [i for i, c_ in enumerate(chars) if c_ in " .,;\"'?!"]
-        shared_v = np.bincount(top1[vow], minlength=E).max() / max(len(vow), 1)
-        shared_p = np.bincount(top1[punct], minlength=E).max() / max(len(punct), 1)
+        bv = np.bincount(top1[vow], minlength=E)
+        ev, cv = int(bv.argmax()), int(bv.max())  # the expert most vowels go to first, and how many
+        bp = np.bincount(top1[punct], minlength=E)
+        ep = [int(e) for e in np.argsort(-bp)[:2]]
+        cp = int(bp[ep].sum())  # how many marks go to the two most popular experts
+        pattern = cv * 2 > len(vow) or cp * 4 >= 3 * len(punct)
         note_ = label(r"columns: \ the last character read; \ rows: \ experts; \ bright: \ often chosen", font_size=20,
                       color=GREY_B).next_to(grid, DOWN, buff=0.3)
-        verdict = label((r"some experts take the vowels, \ others the spaces and punctuation: \\ "
-                         r"the kinds of character Part 8's vectors grouped together")
-                        if max(shared_v, shared_p) >= 0.5 else
+        verdict = label((rf"${cv}$ of the ${len(vow)}$ vowels go first to $E_{ev + 1}$; \ "
+                         rf"${cp}$ of the ${len(punct)}$ spaces and marks to $E_{ep[0] + 1}$ or $E_{ep[1] + 1}$")
+                        if pattern else
                         r"no neat specialties: \ experts split the work in ways \\ that don't map onto our categories",
                         font_size=26, color=C.BITS).to_edge(DOWN, buff=0.4)
+        boxes = VGroup()
+        if pattern:
+            for idx, es in ((vow, (ev,)), (punct, tuple(ep))):
+                for i in idx:
+                    if top1[i] in es:
+                        e = int(top1[i])
+                        boxes.add(SurroundingRectangle(grid[i * E + e], color=WHITE, buff=0.0, stroke_width=2))
         with self.voiceover(
             "What do the experts learn? Here's where our balanced model sends each character's context: one column "
             "per character just read, one row per expert. <bookmark mark='a'/> "
-            + ("Clear patterns appear: some experts take most contexts ending in a vowel, others those ending in a "
-               "space or punctuation, the same groups the character vectors found in part eight. Nobody told it to."
-               if max(shared_v, shared_p) >= 0.5 else
+            + (f"Some patterns appear: {cv} of the {len(vow)} vowels go first to expert {ev + 1}, and {cp} of the "
+               f"{len(punct)} spaces and punctuation marks to experts {ep[0] + 1} and {ep[1] + 1}. Nobody told it to. "
+               "But it isn't a tidy division by meaning: in large models too, experts tend to split the work along "
+               "surface patterns like these."
+               if pattern else
                "There's structure, but not the neat specialties people imagine: in large models too, experts tend to "
                "split the work along surface patterns, not topics.")
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid), FadeIn(names), FadeIn(el), FadeIn(note_))
             vo.wait_until("a")
-            self.play(FadeIn(verdict))
+            self.play(FadeIn(verdict), LaggedStart(*[Create(b_) for b_ in boxes], lag_ratio=0.1))
         self.wait(0.3)
         self.clear_scene()
 
