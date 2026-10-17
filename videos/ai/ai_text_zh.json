@@ -2844,7 +2844,8 @@
     "w \\approx s_{\\text{tensor}} \\cdot s_{\\text{block}} \\cdot m": "w \\approx s_{\\text{张量}} \\cdot s_{\\text{块}} \\cdot m",
     "FP4 (E2M1): \\ a tiny float": "FP4（E2M1）：\\ 一种很小的浮点数",
     "a power of two, \\ plus a little detail within it: \\\\ $2$ bits for the power, \\ $1$ for the detail, \\ $1$ for the sign": "一个2的幂，\\ 再加上幂之内的一点细节：\\\\ $2$比特存幂，\\ $1$比特存细节，\\ $1$比特存符号",
-    "orthogonal: \\ a pure rotation, \\ lengths unchanged, \\ undone exactly": "正交：\\ 纯粹的旋转，\\ 长度不变，\\ 可以精确还原"
+    "orthogonal: \\ a pure rotation, \\ lengths unchanged, \\ undone exactly": "正交：\\ 纯粹的旋转，\\ 长度不变，\\ 可以精确还原",
+    "a prompt: \\ three examples, \\ then a question \\ (from the GPT-3 paper)": "一个提示词：\\ 三个例子，\\ 然后一道题 \\ （出自GPT-3论文）"
   },
   "phrases": {
     "width": "宽度",

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import A, K, Q, V, load, signed_image
+from videos.ai.ai11.common import A, K, MONO, Q, V, load, signed_image
 
 
 def forward_pass_picture() -> VGroup:
@@ -77,6 +77,18 @@ class InContext(VoiceoverScene):
         fp = gloss(r"forward pass", r"one run of the network: numbers go in, flow through \\ each layer once, "
                    r"and a guess comes out. \ No weight changes.", forward_pass_picture(), width=6.2,
                    color=C.BITS).move_to(DOWN * 0.3)
+        # what "learning from the prompt" looks like: the few-shot translation prompt from the GPT-3 paper
+        pairs = [("sea otter", "loutre de mer"), ("cheese", "fromage"), ("peppermint", "menthe poivr\u00e9e"), ("plush giraffe", "?")]
+        lines = VGroup()
+        for i, (en, fr) in enumerate(pairs):
+            q_ = i == len(pairs) - 1
+            lines.add(VGroup(data_text(en, font=MONO, font_size=26, color=WHITE),
+                             MathTex(r"\Rightarrow", font_size=30, color=GREY_B),
+                             data_text(fr, font=MONO, font_size=26, color=Q if q_ else V)).arrange(RIGHT, buff=0.3))
+        lines.arrange(DOWN, aligned_edge=LEFT, buff=0.28)
+        box = SurroundingRectangle(lines, color=GREY_C, buff=0.35, corner_radius=0.1, stroke_width=2)
+        shots = VGroup(box, lines, label(r"a prompt: \ three examples, \ then a question \ (from the GPT-3 paper)", font_size=22,
+                                          color=GREY_A).next_to(box, DOWN, buff=0.2)).move_to(UP * 0.2)
         with self.voiceover(
             "Large models learn from examples in their prompt, without changing a single weight. Show one a few "
             "translations, and it translates the next. How can a forward pass learn? <bookmark mark='f'/> A forward "
@@ -87,8 +99,11 @@ class InContext(VoiceoverScene):
             "<bookmark mark='b'/> The catch: every prompt uses different hidden weights, so nothing can be "
             "memorized. To answer, the model has to work out the rule from the examples in front of it."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(shots[0]), FadeIn(shots[2]),
+                      LaggedStart(*[FadeIn(l_, shift=RIGHT * 0.1) for l_ in lines[:-1]], lag_ratio=0.5), run_time=2.5)
+            self.play(FadeIn(lines[-1], shift=RIGHT * 0.1))
             vo.wait_until("f")
+            self.play(FadeOut(shots))
             self.play(FadeIn(fp, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeOut(fp))
