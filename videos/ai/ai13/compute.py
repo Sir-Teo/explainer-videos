@@ -14,6 +14,8 @@ Items:
     topk       sparse attention in Part 11's transformer: how much of each query's attention its top k keys hold, and
                the bits per character when every query may attend only to k keys, chosen by score (as DeepSeek's
                sparse attention does) or as the last k (a sliding window)
+    row        one query of that transformer (one head) and its weights over the last 48 keys, for the picture of what
+               a window, NSA's blocks and DSA's top k each keep
 """
 
 from __future__ import annotations
@@ -220,10 +222,84 @@ def compute_topk():
     return out
 
 
+# ---------------------------------------------------------------------------
+NROW, KEEP, BLOCK = 48, 8, 8
+
+
+def compute_row():
+    import torch
+    import torch.nn.functional as F
+
+    from videos.ai.ai11 import compute as c11
+
+    torch.set_num_threads(2)
+    c11.load("tf")
+    model, chars, enc, data = c11.load_tf()
+    va = data["valid"]
+    T = c11.CTX
+    starts = rng(13).integers(0, len(va) - T - 1, 48)
+    x = torch.stack([va[s:s + T] for s in starts])
+    th = torch.tensor(c11.rope_freqs(), dtype=torch.float32)
+    ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+    cos, sin = torch.cos(ang), torch.sin(ang)
+
+    def rot(t):
+        a, b = t[..., : c11.DH // 2], t[..., c11.DH // 2:]
+        return torch.cat([a * cos - b * sin, a * sin + b * cos], -1)
+
+    rows = []  # layer, batch, head: the last query's weights over all T keys
+    with torch.no_grad():
+        h = model.emb(x)
+        B = len(x)
+        causal = torch.ones(T, T, dtype=torch.bool).tril()
+        for blk in model.blocks:
+            q, k, v = blk.qkv(blk.n1(h)).view(B, T, 3, c11.HEADS, c11.DH).permute(2, 0, 3, 1, 4)
+            q, k = rot(q), rot(k)
+            s = ((q @ k.transpose(-1, -2)) / math.sqrt(c11.DH)).masked_fill(~causal, float("-inf"))
+            p = torch.softmax(s, -1)
+            rows.append(p[:, :, -1].numpy())
+            h = h + blk.o((p @ v).transpose(1, 2).reshape(B, T, -1))
+            h = h + blk.f2(F.gelu(blk.f1(blk.n2(h))))
+    best = None
+    for li, P in enumerate(rows):
+        for b in range(P.shape[0]):
+            for hh in range(P.shape[1]):
+                r = P[b, hh]
+                strip = r[-NROW:]
+                if strip.sum() < 0.85:  # the picture shows only the last 48 keys: they must hold nearly all of it
+                    continue
+                top, win = np.sort(strip)[-KEEP:].sum(), strip[-KEEP:].sum()
+                if strip.max() > 0.4 or top < 0.6:  # spread over several keys, most of it in a few
+                    continue
+                far = int((np.argsort(-strip)[:KEEP] < NROW - KEEP).sum())
+                score = top - win + 0.02 * far
+                if best is None or score > best[0]:
+                    best = (score, li, b, hh)
+    _, li, b, hh = best
+    r = rows[li][b, hh].astype(float)
+    strip = r[-NROW:]
+    text = "".join(chars[i] for i in x[b, -NROW:].tolist())  # the last 48 keys; the last one is the query's own character
+    top = np.argsort(-strip)[:KEEP]
+    blocks = strip.reshape(-1, BLOCK).sum(1)
+    chosen = np.argsort(-blocks)[:2]
+    nsa = np.zeros(NROW, bool)
+    for c in chosen:
+        nsa[c * BLOCK:(c + 1) * BLOCK] = True
+    nsa[-KEEP:] = True
+    out = dict(layer=li, head=hh, text=text, weights=strip, strip_mass=float(strip.sum()),
+               window=float(strip[-KEEP:].sum()), topk=float(strip[top].sum()), top=np.sort(top),
+               blocks=blocks, chosen=np.sort(chosen), nsa=float(strip[nsa].sum()), nsa_keys=int(nsa.sum()))
+    print("    layer {} head {}: strip {:.2f}; window {:.2f}, NSA {:.2f} ({} keys), top-{} {:.2f}; {!r}".format(
+        li + 1, hh + 1, out["strip_mass"], out["window"], out["nsa"], out["nsa_keys"], KEEP, out["topk"], text))
+    assert out["topk"] > out["window"]
+    return out
+
+
 ITEMS = {
     "configs": compute_configs,
     "moe": compute_moe,
     "topk": compute_topk,
+    "row": compute_row,
 }
 CACHE.items = ITEMS
 

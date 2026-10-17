@@ -13,7 +13,9 @@ four chapters:
 * **What experts learn.** Where characters send their contexts; the mixture against dense models with the same
   compute and the same parameters.
 * **Sparse attention.** In Part 11's transformer, how much attention the top k keys hold, and the bits per character
-  when each query may use only k keys, chosen by score or as a sliding window; NSA and DeepSeek Sparse Attention.
+  when each query may use only k keys, chosen by score or as a sliding window; NSA and DeepSeek Sparse Attention,
+  drawn on one real query (layer 1, head 4) whose last 48 keys hold 90% of its attention: a window of 8 keeps 7%,
+  NSA's two best blocks plus the window 75% (16 keys), the top 8 by score 76%.
 * **Recap**, where it comes back, Part 14's teaser, references.
 
 Run from the repo root:
