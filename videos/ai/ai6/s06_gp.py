@@ -64,7 +64,7 @@ class GP(VoiceoverScene):
         k_card = gloss(r"kernel $k(x, x')$", r"how strongly two pages' values move together: \\ strongly when "
                        r"close, \ hardly when far apart", mini_bell(r"x - x'"), corner=UL, width=5.0, color=FN)
         for card in (g_card, k_card):  # top middle, between the axis label and the formulas
-            card.move_to([-0.4, 0, 0]).to_edge(UP, buff=0.12)
+            card.move_to([0.9, 0, 0]).to_edge(UP, buff=0.12)
         with self.voiceover(
             "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says "
             "'her', from the start of the novel to the end. It rises and falls as the story moves between "
