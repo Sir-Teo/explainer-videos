@@ -1,0 +1,245 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "ViT": "",
+  "Latent": "",
+  "DiT": "",
+  "SD3": "",
+  "Scales": "",
+  "Video": "",
+  "Clips": "",
+  "Forcing": "",
+  "Outro": ""
+ },
+ "lines": {
+  "009d99151b5b": {
+   "scene": "Hook",
+   "en": "Every letter here was drawn from pure noise by a small transformer we trained, asked for that letter. <bookmark mark='a'/> It sees each picture as a sequence of patches, just as a language model sees words.",
+   "zh": ""
+  },
+  "6d979c8c6728": {
+   "scene": "Hook",
+   "en": "This part brings everything so far to pictures and video, in depth: how a transformer reads an image; the compressed spaces models generate in, and the trade-off in shaping them; how a transformer becomes the denoiser, and what Stable Diffusion 3 changed to scale it; writing a picture coarse to fine; <bookmark mark='a'/> and for video, squeezing time, drawing frames that agree, and rolling forward past the length a model was trained on.",
+   "zh": ""
+  },
+  "19e10a1b0f19": {
+   "scene": "ViT",
+   "en": "Chapter one. An image is a sequence.",
+   "zh": ""
+  },
+  "ded62c560221": {
+   "scene": "ViT",
+   "en": "A transformer reads sequences of tokens. So cut the picture into squares, patches, and line them up: <bookmark mark='a'/> each patch becomes a token, its pixels times a matrix, plus a vector saying where it was. Then it's part eleven's machinery, unchanged. The 2020 paper's title said it: an image is worth sixteen by sixteen words.",
+   "zh": ""
+  },
+  "7a2e266b1782": {
+   "scene": "ViT",
+   "en": "We trained a small one to name the letter in each picture, reading twenty-five patches and one extra summary token: <bookmark mark='s'/> a token with no picture in it, which gathers from every patch as the layers go, and whose final vector names the letter. <bookmark mark='a'/> On fonts it never saw, it's right 90 percent of the time. <bookmark mark='b'/> And here's where its summary token looks, in the last layer: at the strokes that tell letters apart.",
+   "zh": ""
+  },
+  "53a63649229e": {
+   "scene": "ViT",
+   "en": "One more look inside. Each patch position has a learned vector, which starts at zero. <bookmark mark='a'/> Here, for each position, is how similar its vector is to every other position's. <bookmark mark='b'/> Each tile lights up around its own place: neighbours in the picture have similar vectors. Nobody told the model the patches form a five by five grid. It learned the geometry of the picture from the pictures.",
+   "zh": ""
+  },
+  "a932505d0531": {
+   "scene": "Latent",
+   "en": "Chapter two. A smaller space.",
+   "zh": ""
+  },
+  "184c260fa7fc": {
+   "scene": "Latent",
+   "en": "Real pictures have millions of pixels, and most of that detail is predictable. So first, train an autoencoder: an encoder squeezes each picture into a few numbers, here 16 instead of 400, and a decoder rebuilds the picture from them. <bookmark mark='a'/> The rebuilt letters are close to the originals: 25 times fewer numbers, little lost.",
+   "zh": ""
+  },
+  "851fa52bb8bd": {
+   "scene": "Latent",
+   "en": "And the space of those few numbers has structure. <bookmark mark='a'/> Take a picture, and find the pictures whose sixteen numbers are closest to its own. <bookmark mark='b'/> Mostly, they're the same letter, in other fonts: 69 percent of the time, against 4 by chance. Denoising in this space is cheaper, and each step is about shapes, not pixels.",
+   "zh": ""
+  },
+  "dfa3c499ff64": {
+   "scene": "Latent",
+   "en": "Now run part fourteen's flow matching on those 16 numbers instead of the pixels, and decode the result. <bookmark mark='a'/> Letters again, with 25 times fewer numbers to denoise. That's latent diffusion, and it's how Stable Diffusion, Flux and every video model work.",
+   "zh": ""
+  },
+  "c9fbaa85a2eb": {
+   "scene": "Latent",
+   "en": "But a plain autoencoder's codes can sit anywhere, in any odd shape, and a generator has to learn that shape. The variational autoencoder, from Kingma and Welling, shapes the space on purpose. <bookmark mark='a'/> It maximizes a lower bound on the probability of the data: rebuild each picture well, while keeping its code close to a plain Gaussian. <bookmark mark='b'/> The encoder gives a small cloud instead of a point, mean mu and spread sigma, and the decoder must rebuild from any sample in it. <bookmark mark='r'/> But you can't take a slope through a roll of the dice. So roll the dice off to the side, as fresh noise epsilon, then stretch it by sigma and shift it by mu: the gradient flows back through the stretch and the shift, and never needs to enter the dice. That's the reparameterization trick. <bookmark mark='c'/> For Gaussians, the KL term has a closed form: an exact formula, with no sampling needed. <bookmark mark='d'/> In practice, its weight, beta, sets the balance.",
+   "zh": ""
+  },
+  "108253afe55b": {
+   "scene": "Latent",
+   "en": "We trained the same small autoencoder with 5 values of beta, then ran flow matching in each code space and asked a judge, a classifier trained on the real letters, how many of the generated letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less: from 61 nats down to 18. A nat is a bit measured with the natural log, about one point four four bits. Yet the rebuilds hardly change: the error stays between 0.108 and 0.127, and the plain autoencoder, with no KL at all, rebuilds no better, at 0.125. <bookmark mark='b'/> And generation barely moves either: from 80 to 86 percent of the samples are readable, at every beta, the plain autoencoder included. Letters this simple are easy to generate in any of these spaces. In large image models the trade-off is real: a space that's easy to rebuild from isn't always easy to generate in, and it's one of the live questions in image models; 2025's VA-VAE aligns the codes with a vision model's features to get both.",
+   "zh": ""
+  },
+  "5914df7bbddb": {
+   "scene": "Latent",
+   "en": "Here are the pictures behind those numbers, at beta 0, 0.01 and 0.1: rebuilds on the left, generated letters on the right. <bookmark mark='a'/> They look much alike. What beta changed here is how much each code says, not how the letters look.",
+   "zh": ""
+  },
+  "a822da78b3fd": {
+   "scene": "Latent",
+   "en": "And here is one of them learning, the one with beta 0.01. <bookmark mark='a'/> These six letters are from fonts it never trains on, rebuilt from their codes at checkpoints. At first, every letter comes out as the same grey smudge: the average letter. <bookmark mark='b'/> Then the broad shape of each one appears, and the details last. <bookmark mark='c'/> The two terms of the loss pull against each other. The rebuild error falls fast; the KL, how much information the codes carry, climbs as the encoder learns to say more, peaking around step 650, then settles as the penalty trims what isn't worth its cost.",
+   "zh": ""
+  },
+  "5bb54df8a36c": {
+   "scene": "DiT",
+   "en": "Chapter three. Transformers as denoisers.",
+   "zh": ""
+  },
+  "a20aed5ce4f2": {
+   "scene": "DiT",
+   "en": "Who does the denoising? Early diffusion models used convolutional networks. <bookmark mark='v'/> A convolution slides one small learned stencil over the picture, computing the same weighted sum at every little neighbourhood. In 2023, Peebles and Xie showed a plain transformer does it better, and scales like a language model. <bookmark mark='a'/> The noisy picture is cut into patch tokens, part eleven's blocks process them, and out come velocities, patch by patch. <bookmark mark='b'/> The noise level and the request come in through every layer's normalization: they set its scale and shift. We trained one, with 1.2 million numbers, on our letters, told which letter to draw.",
+   "zh": ""
+  },
+  "0e1d762725bc": {
+   "scene": "DiT",
+   "en": "Here is that block exactly; Peebles and Xie call it adaLN-Zero. <bookmark mark='a'/> The condition, c, sets a scale gamma and a shift beta for each normalization, and also a gate, alpha, on each block's output. <bookmark mark='b'/> All six come from one linear map of c, and that map starts at zero. <bookmark mark='c'/> So at the start of training, every gate is closed and every block passes its input straight through: a deep network that begins as the identity, and opens up only as it learns. Of the ways they tried to feed in the condition, this one trained best. Ours has 4 such blocks.",
+   "zh": ""
+  },
+  "2070d5e6bbd0": {
+   "scene": "DiT",
+   "en": "How does it get there? Here is the same noise, asked for the same ten letters, A to J, drawn by the model at checkpoints along its training. <bookmark mark='a'/> First it learns that most of a picture is dark: by step 150, the noise is wiped to black, with scattered specks. <bookmark mark='b'/> By step 400 the request already matters: each letter gets its own rough cluster of strokes. <bookmark mark='c'/> By step 1,000 most of them can be read, <bookmark mark='d'/> and the strokes clean up last. The loss falls most in the first few hundred steps, from 1.9 to 0.3; the pictures improve on a slower clock.",
+   "zh": ""
+  },
+  "f363dc4b2295": {
+   "scene": "DiT",
+   "en": "Here it is, asked for each letter of the alphabet, with part fourteen's guidance. <bookmark mark='a'/> Asked again from different noise, it draws the same letters in different styles: the request fixes what, the noise picks how.",
+   "zh": ""
+  },
+  "92cdff02e53e": {
+   "scene": "SD3",
+   "en": "Chapter four. Rectified flow at scale.",
+   "zh": ""
+  },
+  "78c537f93be4": {
+   "scene": "SD3",
+   "en": "Rectified flow, in this chapter's title, is part fourteen's flow matching: straight lines from noise to data. <bookmark mark='r'/> Our model was told which letter to draw by one number. A real model is told by a prompt, a sentence of tokens. Stable Diffusion 3 put the prompt's tokens and the picture's patches into one sequence. <bookmark mark='a'/> Each kind keeps its own weights for queries, keys and values, since words and patches are different things; <bookmark mark='b'/> then a single attention runs over the joined sequence. <bookmark mark='c'/> So every patch can look at every word, every word at every patch, and the text is updated by the picture as the picture is drawn. Scaled up, that's Stable Diffusion 3, and FLUX, with twelve billion parameters.",
+   "zh": ""
+  },
+  "16740e998964": {
+   "scene": "SD3",
+   "en": "Stable Diffusion 3 also changed which noise levels it trains on. <bookmark mark='a'/> Part fourteen drew the time t uniformly. But near pure noise, the best guess is just the average picture, and near the data there's almost nothing left to fix. The hard part is the middle. <bookmark mark='b'/> So draw a normal number and squash it with a sigmoid: the logit-normal, which trains most in the middle. <bookmark mark='c'/> We trained our latent letters both ways. The logit-normal model reads better, by 4 points on average, most at 1 steps.",
+   "zh": ""
+  },
+  "648afee9c16a": {
+   "scene": "SD3",
+   "en": "One more thing changes with size. <bookmark mark='a'/> Add the same noise to a small picture and to the same picture with sixteen times the pixels. <bookmark mark='b'/> The big one looks clearer, and it is: average each four by four block, and the noise falls from 0.75 to 0.19, about a quarter, while the letter stays. Neighbouring pixels share their information, so at high resolution a given noise level destroys less, and a model trained on small pictures spends its time on noise levels that are too easy. <bookmark mark='c'/> So Stable Diffusion 3 shifts the noise schedule, the plan of how much noise there is at each time t, toward noise, by a factor alpha that grows like the square root of the pixel count.",
+   "zh": ""
+  },
+  "cbf7bc1ebe28": {
+   "scene": "Scales",
+   "en": "Chapter five. Coarse to fine.",
+   "zh": ""
+  },
+  "b9792190cbe2": {
+   "scene": "Scales",
+   "en": "Diffusion isn't the only way to make pictures. <bookmark mark='t'/> Language models write one token at a time, so why not pictures? <bookmark mark='a'/> Read the pixels, or patches, left to right and top to bottom, and predict each from the ones before: here, 400 steps. <bookmark mark='b'/> It works, and models like Parti did it at scale. But it's slow, and it's an odd order for a picture: the top rows are fixed before anything below them exists.",
+   "zh": ""
+  },
+  "1fa092d32885": {
+   "scene": "Scales",
+   "en": "VAR, the NeurIPS best paper of 2024, writes in a better order: coarse to fine. <bookmark mark='a'/> First one token for the whole picture: its average brightness. <bookmark mark='b'/> Then two by two, four by four, and so on: at each scale, take what the picture still lacks, shrink it to that size, and round each number to one of sixteen levels; those are the tokens. <bookmark mark='q'/> The sixteen levels are a codebook: a fixed list of allowed values. Each number snaps to its nearest entry, and that entry's place in the list is the token. <bookmark mark='c'/> Add them, enlarged, to the picture so far. <bookmark mark='d'/> And the model's job is to predict each scale's tokens given all the coarser ones: 6 steps, 546 tokens in all.",
+   "zh": ""
+  },
+  "0c9304c7a11a": {
+   "scene": "Scales",
+   "en": "Measured on fonts the codebook never saw, the error falls from 0.26 with one token to 0.022 with all 546. The two-by-two scale adds almost nothing on letters, which are mostly about their middle; the big drops come from the finer scales, where the strokes are.",
+   "zh": ""
+  },
+  "4d03b33a7664": {
+   "scene": "Scales",
+   "en": "Inside the transformer, that's a block-shaped mask: each token sees every token of its own scale and all the coarser ones. <bookmark mark='a'/> The finest scale, four hundred tokens here, is predicted in a single pass. <bookmark mark='b'/> So the picture takes 6 steps instead of 400, and every step sees the whole picture, roughly. In the real model the tokens come from a learned codebook rather than our sixteen levels, and the paper showed it scaling like a language model.",
+   "zh": ""
+  },
+  "15c9dd45cacf": {
+   "scene": "Video",
+   "en": "Chapter six. Squeezing time.",
+   "zh": ""
+  },
+  "91162b057dc5": {
+   "scene": "Video",
+   "en": "Video is pictures in time. The autoencoder now squeezes time as well as space, and a token is a little block of both. <bookmark mark='a'/> With a typical squeeze, five seconds of 720p video at sixteen frames a second is about 76,000 tokens, and attention between every pair of them is part twelve's cost problem all over again. That's why video models need every trick from parts twelve and thirteen.",
+   "zh": ""
+  },
+  "1412d11119cc": {
+   "scene": "Video",
+   "en": "Where does that squeeze come from? A video autoencoder, with convolutions that run in time as well as space. <bookmark mark='v'/> The little stencil that a convolution slides over a picture becomes a small cube, sliding through the frames too, and looking only backward. We trained a small one on clips of a bouncing letter. <bookmark mark='a'/> The first frame is squeezed on its own; <bookmark mark='b'/> after that, every four frames become one latent frame, and each is only allowed to see frames up to its own. Each latent frame is a stack of channels: every latent pixel holds several numbers, the way a colour pixel holds three. It's causal, like a language model. <bookmark mark='c'/> That has two payoffs: a single picture is just a one-frame video, so the same model handles both, and a clip can be encoded as it streams in. <bookmark mark='d'/> Here, 3,600 pixels become 300 numbers, 12 times fewer. Real video models squeeze four times in time and eight in each direction of space, the same recipe.",
+   "zh": ""
+  },
+  "b8909d0642d2": {
+   "scene": "Video",
+   "en": "A token now has three coordinates: which frame, which row, which column. Part eleven's rotary positions extend naturally. <bookmark mark='a'/> Split each head's pairs of numbers three ways: some are turned by the frame number, some by the row, some by the column, each group with its own frequencies. <bookmark mark='b'/> Since each group is a rotation, the score between two tokens depends only on how far apart they are in time, height and width, exactly as in one dimension. <bookmark mark='c'/> What doesn't extend gracefully is the cost. Five seconds of 720p is about 76,000 tokens, and attention compares every pair: 5.7 billion of them, in every layer, at every denoising step. Double the length and the pairs quadruple. That's why video models lean on every trick from parts twelve and thirteen.",
+   "zh": ""
+  },
+  "8e444ded0eaa": {
+   "scene": "Clips",
+   "en": "Chapter seven. Frames that agree.",
+   "zh": ""
+  },
+  "3571b5eaf7fb": {
+   "scene": "Clips",
+   "en": "To see what video adds, we need videos we can check. Ours are tiny: a letter from part fourteen's fonts, bouncing around a twenty by twenty frame, 8 frames long. <bookmark mark='a'/> A good video model has to get two things right that a picture model never faces: the letter must stay the same letter, and it must move smoothly.",
+   "zh": ""
+  },
+  "3e33083a33d2": {
+   "scene": "Clips",
+   "en": "We trained a small diffusion transformer, with a little convolution at each end, to continue a clip. It's given the first frame of a real clip, in a font it never saw, and the letter's name, <bookmark mark='g'/> and it denoises the other 7 frames together, attention running across frames as well as within them. That's image-to-video: how real video models bring a still picture to life. <bookmark mark='a'/> Here are three of its clips; the outlined frame is the given one. <bookmark mark='b'/> Now take the same model, but build each clip from frames of different samples: frame two from one sample, frame three from another, each continuing the same first frame, as if each frame were drawn on its own. <bookmark mark='c'/> Each frame alone looks fine: the judge, our letter-reading classifier, reads the right letter in 76 percent of the drawn frames of whole clips, and 81 percent of the mixed ones, against 87 for real clips. But together, the motion falls apart. <bookmark mark='j'/> Jerkiness, how much the letter's centre changes speed from frame to frame, is 5.67 pixels for the mixed clips, against 0.94 for whole clips and 0.40 for real ones. The first frame doesn't say which way the letter is heading, so each sample picks its own direction. <bookmark mark='d'/> A video is a joint distribution: the probability of the whole clip at once, where each frame depends on the others. The frames have to be drawn together, or conditioned on each other. That's the whole difficulty, and the rest of this part is about it.",
+   "zh": ""
+  },
+  "a61c6a12c8ab": {
+   "scene": "Forcing",
+   "en": "Chapter eight. Rolling forward.",
+   "zh": ""
+  },
+  "e5bb1f2502b6": {
+   "scene": "Forcing",
+   "en": "A whole-clip model makes a clip of a fixed length, here 8 frames. <bookmark mark='m'/> For longer videos, and for worlds you can walk around in, a model has to write frame after frame, like a language model writes tokens. <bookmark mark='a'/> The obvious way to train that is teacher forcing: give the model the real past frames, clean, starting from the given first frame, and teach it to denoise the next one. <bookmark mark='b'/> But at generation time, the past is the model's own work, slightly wrong, and it was never trained on that. <bookmark mark='c'/> Diffusion forcing, from Boyuan Chen and colleagues, gives every frame after the first its own noise level during training, so the model learns to work from a past that's anywhere from clean to pure noise. <bookmark mark='d'/> The loss is the plain denoising one: guess each clean frame back from its noisy version, summed over the frames after the given one, with attention that only looks back.",
+   "zh": ""
+  },
+  "f800ceb19b70": {
+   "scene": "Forcing",
+   "en": "We trained both on 8-frame clips, with the same network and the same number of steps, the first frame always given. <bookmark mark='r'/> Then we gave each the first frame of a real clip and asked for 31 more, one at a time, looking back at most 7 frames. <bookmark mark='a'/> Teacher forcing: in its first 8 new frames the judge reads the right letter 41 percent of the time; in the last 8, 21. <bookmark mark='b'/> Diffusion forcing: 86 percent, then 79. Teacher forcing is behind from its first few frames, and keeps sliding. Small errors feed on themselves when a model has only ever seen a perfect past; training on noisy pasts makes it more robust to its own mistakes. <bookmark mark='c'/> And the motion: jerkiness goes from 0.76 to 1.05 pixels with teacher forcing, and from 0.75 to 0.72 with diffusion forcing, against 0.40 for real clips; diffusion forcing's motion stays the smoother of the two.",
+   "zh": ""
+  },
+  "1ce217668a10": {
+   "scene": "Forcing",
+   "en": "This is where video generation is heading. Self Forcing, in 2025, trains the model on its own rollouts, videos it generates itself, frame after frame, scoring whole generated videos, to close the gap between training and use entirely. <bookmark mark='b'/> Condition each frame on an action as well, and you have a world model: DeepMind's Genie 3 generates a world you can move through, frame by frame, in real time. <bookmark mark='c'/> And some models now do text and pictures in one transformer, predicting tokens for one and denoising patches for the other.",
+   "zh": ""
+  },
+  "3245d95ac2fe": {
+   "scene": "Outro",
+   "en": "Let's take stock. Cut a picture into patches and a transformer reads it like a sentence, learning the grid by itself. Squeeze pictures into a few numbers, and diffusion gets cheaper, as long as the space is shaped for generating, not just for rebuilding. Make the denoiser a transformer that starts as the identity, train it most on the middle noise levels, shift them as pictures grow, and give text and picture one sequence: that's today's image models. Coarse to fine is another road entirely. Video is the same with time: a causal autoencoder, rotations in three directions, frames drawn together, and noisy pasts in training, so a model can roll forward on its own work.",
+   "zh": ""
+  },
+  "c35d3c69f49d": {
+   "scene": "Outro",
+   "en": "Next, every sense becomes a token for one model, in part sixteen. World models in part eighteen predict the next frame of video, and part nineteen is about running all of this fast.",
+   "zh": ""
+  },
+  "2d463b2fb454": {
+   "scene": "Outro",
+   "en": "Next time: how text, pictures and sound all become tokens, <bookmark mark='a'/> so one model can read, see, listen and speak, including the voice you're hearing now.",
+   "zh": ""
+  },
+  "5df4c46c0053": {
+   "scene": "Outro",
+   "en": "The DiT paper is short and clear. Thanks for watching, and see you in part sixteen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 15, Images and Video",
+ "chapters_en": {
+  "Hook": "Letters from noise",
+  "ViT": "1. An image is a sequence",
+  "Latent": "2. A smaller space",
+  "DiT": "3. Transformers as denoisers",
+  "SD3": "4. Rectified flow at scale",
+  "Scales": "5. Coarse to fine",
+  "Video": "6. Squeezing time",
+  "Clips": "7. Frames that agree",
+  "Forcing": "8. Rolling forward",
+  "Outro": "Recap, and where this comes back"
+ }
+}
