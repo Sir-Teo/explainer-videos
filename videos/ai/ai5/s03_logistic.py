@@ -140,7 +140,10 @@ class Logistic(VoiceoverScene, ThreeDScene):
         a2 = label(rf"held-out pages, \ $2$ rates: \ ${100 * lg['acc2']:.1f}\%$ right", font_size=30, color=WHITE)
         a70 = label(rf"all $70$ rates: \ ${round(lg['acc70'] * n_te)}$ of ${n_te}$, \ ${100 * lg['acc70']:.1f}\%$",
                     font_size=30, color=C.BITS)
-        VGroup(a2, a70).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.0, 0.6, 0])
+        res = VGroup(a2, a70).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.0, 0.6, 0])
+        if res.width > 4.4:  # the right-hand column beside the plot; longer in Chinese
+            res.scale_to_fit_width(4.4)
+        keep_in_frame(res)
         note_ = label(r"seventy small words \\ are a fingerprint", font_size=28, color=GREY_A).next_to(a70, DOWN, buff=0.6)
         note_.align_to(a70, LEFT)
         with self.voiceover(
