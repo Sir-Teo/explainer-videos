@@ -125,21 +125,29 @@ class World(VoiceoverScene):
                       for c, r_ in zip(checks, rows)])
         head = label(rf"from the same two frames, \ the next ${n}$ imagined \ (each feeding the next)", font_size=24,
                      color=GREY_A).to_edge(UP, buff=0.4)
+        def centre(f):
+            f = np.clip(np.asarray(f, float), 0, None)
+            ys_, xs_ = np.indices(f.shape)
+            return np.array([(f * ys_).sum(), (f * xs_).sum()]) / max(f.sum(), 1e-9)
+
+        miss = float(np.linalg.norm(centre(dreams[-1, -1]) - centre(real[-1])))  # the last checkpoint's last frame
         with self.voiceover(
             "How does a world model learn to dream? Here it is at checkpoints during training, each time given the "
             "same two opening frames and left to imagine the next twelve, every frame built on its own last guess. "
-            "<bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> Early on, it learns "
-            "what a frame looks like, a ball somewhere, but not where the ball goes. <bookmark mark='c'/> Only later "
-            "does it learn the motion: the ball travels, and bounces, as it really does, for a while, before its "
-            "small errors add up."
+            "<bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> After "
+            f"{checks[1]} steps it has learned the safest guess: a dark, empty frame, the average of all frames, with "
+            f"no ball at all. <bookmark mark='c'/> By step {checks[2]} it carries the ball along for a few frames, "
+            "then loses it, as each guess builds on the last one's blur. <bookmark mark='d'/> Later it carries the "
+            "ball the whole way, though small errors still add up: after twelve imagined frames, the final model's "
+            f"ball is {miss:.1f} pixels from the real one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rr), FadeIn(ll[0]))
             vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(ll[1]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r_, shift=DOWN * 0.1), FadeIn(l_)) for r_, l_ in zip(rows[1:3], ll[2:4])],
-                                  lag_ratio=0.5))
-            vo.wait_until("c")
+            for mk, k in (("b", 1), ("c", 2)):
+                vo.wait_until(mk)
+                self.play(FadeIn(rows[k], shift=DOWN * 0.1), FadeIn(ll[k + 1]))
+            vo.wait_until("d")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r_, shift=DOWN * 0.1), FadeIn(l_)) for r_, l_ in zip(rows[3:], ll[4:])],
                                   lag_ratio=0.5), run_time=2.0)
         self.wait(0.3)
