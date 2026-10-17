@@ -13,6 +13,7 @@ class Counting(VoiceoverScene):
         self.rule()
         self.curves()
         self.sparsity()
+        self.reading()
         self.lesson()
 
     # ------------------------------------------------------------------
@@ -247,6 +248,81 @@ class Counting(VoiceoverScene):
             self.play(Write(facts[3]), FadeIn(facts[4]))
         assert 16e6 < nctx[14] < 17e6
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def reading(self):
+        """Learning by counting, as it reads: four context lengths scored on the Falcon passage against text counted."""
+        d = load("seen")
+        A = np.asarray(d["amounts"], float)
+        orders = [int(o) for o in d["orders"]]
+        B = {o: np.asarray(d[f"bits_{o}"]) for o in orders}
+        cols = dict(zip(orders, (GREY_B, C.COUNTING, C.SURPRISE, C.BITS)))
+        lx = np.log10(A)
+        ax = plain_axes([3, 7.5, 1], [2, 5, 1], 8.4, 4.6).shift(DOWN * 0.4 + LEFT * 1.3)
+        xl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 2), DOWN, buff=0.12)
+                      for t, v in ((r"10^3", 3), (r"10^4", 4), (r"10^5", 5), (r"10^6", 6), (r"10^7", 7))])
+        yl = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(3, v), LEFT, buff=0.12) for v in (2, 3, 4, 5)])
+        axl = VGroup(label(r"letters of the books counted \ (log scale)", font_size=22, color=GREY_A).next_to(xl, DOWN, buff=0.15),
+                     label(r"bits per letter on the Falcon passage", font_size=22, color=GREY_A).next_to(ax.c2p(3, 5), UP, buff=0.15)
+                     .align_to(ax, LEFT))
+        uni = DashedLine(ax.c2p(3, 4.755), ax.c2p(7.5, 4.755), color=GREY_C, stroke_width=1.5)
+        uni_l = label(r"$\log_2 27$: \ no knowledge", font_size=20, color=GREY_B).next_to(ax.c2p(7.5, 4.755), UP, buff=0.08)
+        uni_l.align_to(uni, RIGHT)
+        t = ValueTracker(float(lx[0]))
+
+        def upto(o):
+            x_ = t.get_value()
+            pts = [(a_, b_) for a_, b_ in zip(lx, B[o]) if a_ <= x_ + 1e-9]
+            if x_ > pts[-1][0] and len(pts) < len(lx):
+                i = len(pts)
+                f_ = (x_ - lx[i - 1]) / (lx[i] - lx[i - 1])
+                pts.append((x_, B[o][i - 1] + f_ * (B[o][i] - B[o][i - 1])))
+            pts = pts if len(pts) > 1 else pts * 2
+            return VMobject(color=cols[o], stroke_width=4).set_points_as_corners([ax.c2p(a_, b_) for a_, b_ in pts])
+
+        lines = VGroup(*[always_redraw(lambda o=o: upto(o)) for o in orders])
+        names = VGroup(*[label(rf"${o}$ letter{'s' if o > 1 else ''} of context", font_size=22, color=cols[o]) for o in orders])
+        names.arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.5).shift(DOWN * 0.7)
+
+        def best_at(i):
+            return min(orders, key=lambda o: B[o][i])
+
+        lead = [best_at(i) for i in range(len(A))]
+        takes = [(i, lead[i]) for i in range(1, len(A)) if lead[i] != lead[i - 1]]  # where the lead changes hands
+        crown = always_redraw(lambda: Star(n=5, outer_radius=0.1, color=WHITE, fill_opacity=1).move_to(  # on the best curve
+            ax.c2p(t.get_value(), min(float(np.interp(t.get_value(), lx, B[o])) for o in orders))))
+        o_long = orders[-1]
+        words = {3: "three", 5: "five", 8: "eight"}
+
+        def amount(n):
+            return {1000: "a thousand", 3000: "three thousand", 10_000: "ten thousand", 30_000: "thirty thousand",
+                    100_000: "a hundred thousand", 300_000: "three hundred thousand", 1_000_000: "a million",
+                    3_000_000: "three million"}.get(int(n), f"{n:,.0f}")
+
+        story = " ".join(f"<bookmark mark='m{j}'/> At {amount(A[i])} letters, {words.get(o, str(o))} letters of context take "
+                         "the lead." for j, (i, o) in enumerate(takes))
+        with self.voiceover(
+            "And how does a counting model learn? It reads, and counts. Here are four of them, with one, three, five "
+            "and eight letters of context, scored on the Falcon passage as they count more and more of the books. "
+            f"<bookmark mark='a'/> After a thousand letters, one letter of context is best, {B[orders[0]][0]:.2f} bits: "
+            "a short context is seen often enough to count quickly, while longer ones have hardly met any of their "
+            f"contexts. {story} <bookmark mark='z'/> With all {A[-1] / 1e6:.0f} million letters, "
+            + (f"{words[o_long]} letters is still behind, at {B[o_long][-1]:.2f}: it would need far more text than "
+               "we have." if lead[-1] != o_long else f"{words[o_long]} letters finally leads.")
+            + " The more you can count, the longer the context worth using."
+        ) as vo:
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(uni), FadeIn(uni_l), FadeIn(names))
+            self.add(lines, crown)
+            vo.wait_until("a")
+            for j, (i, o) in enumerate(takes):
+                vo.wait_until(f"m{j}")
+                self.play(t.animate.set_value(float(lx[i])), run_time=2.5, rate_func=linear)
+                self.play(Indicate(names[orders.index(o)], color=cols[o]))
+            vo.wait_until("z")
+            self.play(t.animate.set_value(float(lx[-1])), run_time=2.5, rate_func=linear)
+        self.wait(0.5)
+        self.remove(lines, crown)
         self.clear_scene()
 
     # ------------------------------------------------------------------
