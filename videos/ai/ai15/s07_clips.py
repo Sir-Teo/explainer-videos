@@ -52,14 +52,17 @@ class Clips(VoiceoverScene):
         jr = Group(*[strip(e, S, 0.04) for e in J[:3]]).arrange(DOWN, buff=0.12)
         ir = Group(*[strip(e, S, 0.04) for e in I[:3]]).arrange(DOWN, buff=0.12)
         Group(jr, ir).arrange(DOWN, buff=0.9).move_to([-1.6, -0.5, 0])
-        jl = label(r"one sample of the whole clip", font_size=22, color=JOINT).next_to(jr, UP, buff=0.15).align_to(jr, LEFT)
-        il = label(r"each frame from a different sample", font_size=22, color=INDEP).next_to(ir, UP, buff=0.15).align_to(ir, LEFT)
-        want = [LETTERS[k % 26] for k in range(3)]
+        jl = label(r"one sample: \ the rest drawn together", font_size=22, color=JOINT).next_to(jr, UP, buff=0.15).align_to(jr, LEFT)
+        il = label(r"each later frame from a different sample", font_size=22, color=INDEP).next_to(ir, UP, buff=0.15).align_to(ir, LEFT)
+        # the given first frame of every clip, outlined: it is real, not generated
+        given = VGroup(*[SurroundingRectangle(r_[0], buff=0.03, color=C.BITS, stroke_width=2.5) for r_ in (*jr, *ir)])
+        gl = label(r"outlined: \ the given first frame, \ real", font_size=18, color=C.BITS).next_to(jl, RIGHT, buff=0.4)
+        want = [LETTERS[int(k)] for k in np.asarray(c["given_labels"])[:3]]
         asked = VGroup(*[Text(w_, font="DejaVu Sans Mono", font_size=22, color=C.BITS).next_to(r_, LEFT, buff=0.2)
                          for w_, r_ in zip(want, jr)])
         asked2 = VGroup(*[Text(w_, font="DejaVu Sans Mono", font_size=22, color=C.BITS).next_to(r_, LEFT, buff=0.2)
                           for w_, r_ in zip(want, ir)])
-        # the share of frames the judge reads as the letter asked for (every frame of a clip at once is too strict a bar)
+        # scored on the generated frames only (the given first frame left out); the real clips on the same frames
         ja, ia, ra = (float(c[f"{k}_frames_right"]) for k in ("joint", "indep", "real"))
         jj, ij, rj = float(c["joint_jerk"]), float(c["indep_jerk"]), float(c["real_jerk"])
         tab = VGroup(
@@ -80,20 +83,40 @@ class Clips(VoiceoverScene):
             x = tab[1][k].get_x()
             for r_ in tab:
                 r_[k].set_x(x)
+        tn = label(rf"frames $2$ to ${T}$ only: \ the given frame left out", font_size=18, color=GREY_B).next_to(tab, UP, buff=0.3)
         jn = label(r"jerkiness: \ how much the letter's centre \\ changes speed, frame to frame", font_size=18,
                    color=GREY_A).next_to(tab, DOWN, buff=0.4)
-        f = MathTex(r"p(x_1, \ldots, x_T) \;\neq\; \prod_f p(x_f)", font_size=34).to_edge(UP, buff=0.35)
+        f = MathTex(r"p(x_2, \ldots, x_T \mid x_1) \;\neq\; \prod_{f \geq 2} p(x_f \mid x_1)", font_size=34).to_edge(UP, buff=0.35)
         smoother = jj < ij - 0.05
+        # the letter: does each version keep it about as well as real clips do?
+        keeps_j, keeps_i = ja >= ra - 0.15, ia >= ra - 0.15
+        if keeps_j and keeps_i:
+            letter = (f"Each frame alone looks fine: the judge reads the right letter in {100 * ja:.0f} percent of the "
+                      f"drawn frames of whole clips, and {100 * ia:.0f} percent of the mixed ones, against "
+                      f"{100 * ra:.0f} for real clips. ")
+        elif ja < 0.5 and ia < 0.5:
+            letter = (f"Even frame by frame, this small model struggles: the judge reads the right letter in only "
+                      f"{100 * ja:.0f} percent of the drawn frames of whole clips, and {100 * ia:.0f} percent of the "
+                      f"mixed ones, against {100 * ra:.0f} for real clips. ")
+        else:
+            letter = (f"The judge reads the right letter in {100 * ja:.0f} percent of the drawn frames of whole clips, "
+                      f"and {100 * ia:.0f} percent of the mixed ones, against {100 * ra:.0f} for real clips. ")
         with self.voiceover(
-            f"We trained a small diffusion transformer on whole clips, all {T} frames denoised together, attention "
-            "running across frames as well as within them. <bookmark mark='a'/> Asked for a letter, it draws a whole "
-            "clip at once. <bookmark mark='b'/> Now take the same model, but build each clip from frames of different "
-            "samples: frame one from one sample, frame two from another, as if each frame were drawn on its own. "
-            "<bookmark mark='c'/> Each frame alone looks fine. Together, "
-            + (f"the motion falls apart: jerkiness {ij:.2f} pixels against {jj:.2f} for whole clips, and {rj:.2f} for "
-               "real ones. " if smoother else
-               f"the numbers are close here, {ij:.2f} against {jj:.2f} pixels of jerkiness, but the letter jumps from "
-               "place to place. ")
+            "We trained a small diffusion transformer to continue a clip. It's given the first frame of a real clip, "
+            f"in a font it never saw, and the letter's name, and it denoises the other {T - 1} frames together, "
+            "attention running across frames as well as within them. That's image-to-video: how real video models "
+            "bring a still picture to life. <bookmark mark='a'/> Here are three of its clips; the outlined frame is "
+            "the given one. <bookmark mark='b'/> Now take the same model, but build each clip from frames of "
+            "different samples: frame two from one sample, frame three from another, each continuing the same first "
+            "frame, as if each frame were drawn on its own. <bookmark mark='c'/> "
+            + letter
+            + (f"But together, the motion falls apart. Jerkiness, how much the letter's centre changes speed from "
+               f"frame to frame, is {ij:.2f} pixels for the mixed clips, against {jj:.2f} for whole clips and "
+               f"{rj:.2f} for real ones. The first frame doesn't say which way the letter is heading, so each sample "
+               "picks its own direction. " if smoother else
+               f"And the motion is no smoother for drawing the frames together: jerkiness, how much the letter's "
+               f"centre changes speed from frame to frame, is {jj:.2f} pixels for whole clips and {ij:.2f} for the "
+               f"mixed ones, against {rj:.2f} for real clips. ")
             + "<bookmark mark='d'/> A video is a joint distribution: the probability of the whole clip at once, "
             "where each frame depends on the others. The frames have to be drawn together, or conditioned on each "
             "other. That's the whole difficulty, and the rest of this part is about it."
@@ -101,10 +124,12 @@ class Clips(VoiceoverScene):
             self.play(FadeIn(jl), FadeIn(asked))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for r_ in jr], lag_ratio=0.25), run_time=1.5)
+            self.play(Create(given[:3]), FadeIn(gl))
             vo.wait_until("b")
-            self.play(FadeIn(il), FadeIn(asked2), LaggedStart(*[FadeIn(r_) for r_ in ir], lag_ratio=0.25), run_time=1.5)
+            self.play(FadeIn(il), FadeIn(asked2), LaggedStart(*[FadeIn(r_) for r_ in ir], lag_ratio=0.25), Create(given[3:]),
+                      run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(tab[0]), FadeIn(tab[1]))
+            self.play(FadeIn(tn), FadeIn(tab[0]), FadeIn(tab[1]))
             self.play(FadeIn(tab[2]), FadeIn(tab[3]), FadeIn(jn))
             vo.wait_until("d")
             self.play(Write(f))

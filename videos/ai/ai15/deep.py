@@ -316,7 +316,7 @@ class ClipNet:
     level through adaptive layer norm; attention across frames either full or causal (each frame sees itself and
     the past)."""
 
-    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False, pred="v"):
+    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False, pred="v", conv=False):
         import torch
         import torch.nn as nn
 
@@ -345,7 +345,16 @@ class ClipNet:
                 self.T = T
                 self.pred = pred
                 self.concat = concat
-                self.embed = nn.Linear(P * P * (2 if concat else 1), D)
+                cin = 2 if concat else 1
+                self.conv = conv
+                if conv:  # a small convolution before cutting into patches, and two after putting them back
+                    CS, CH = 16, 8
+                    self.stem = nn.Sequential(nn.Conv2d(cin, CS, 3, padding=1), nn.GELU())
+                    self.embed = nn.Linear(P * P * CS, D)
+                    self.head = nn.Sequential(nn.Conv2d(CH + cin, 32, 3, padding=1), nn.GELU(), nn.Conv2d(32, 1, 3, padding=1))
+                    self.CH = CH
+                else:
+                    self.embed = nn.Linear(P * P * cin, D)
                 self.pos_s = nn.Parameter(torch.randn(1, 1, NP, D) * 0.02)
                 self.pos_t = nn.Parameter(torch.randn(1, T, 1, D) * 0.02)
                 self.freq = nn.Parameter(torch.randn(D // 2) * 4.0, requires_grad=False)
@@ -353,19 +362,25 @@ class ClipNet:
                 self.lab = nn.Embedding(26, D)
                 self.blocks = nn.ModuleList([Block() for _ in range(L)])
                 self.nf = nn.LayerNorm(D, elementwise_affine=False)
-                self.out = nn.Linear(D, P * P)
+                self.out = nn.Linear(D, P * P * (self.CH if conv else 1))
                 if pred == "dx":  # starts out predicting a plain copy of the given frame
-                    nn.init.zeros_(self.out.weight)
-                    nn.init.zeros_(self.out.bias)
+                    last = self.head[-1] if conv else self.out
+                    nn.init.zeros_(last.weight)
+                    nn.init.zeros_(last.bias)
                 fr = torch.arange(T).repeat_interleave(NP)
                 self.register_buffer("mask", (fr[None, :] > fr[:, None]) if causal else torch.zeros(T * NP, T * NP, dtype=torch.bool))
 
             def forward(self, x, t, y):
                 """x (B, F, 20, 20) with F <= T frames; t (B, F) each frame's noise level; y (B,) the letter."""
                 B, Fr = x.shape[:2]
-                p = x.reshape(B, Fr, 5, P, 5, P).permute(0, 1, 2, 4, 3, 5).reshape(B, Fr, NP, P * P)
-                if self.concat:  # the oldest frame in view (the given one), fed in beside every frame's own patch
-                    p = torch.cat([p, p[:, :1].expand_as(p)], -1)
+                xin = x[:, :, None]
+                if self.concat:  # the oldest frame in view (the given one), fed in beside every frame
+                    xin = torch.cat([xin, x[:, :1, None].expand_as(xin)], 2)
+                cin = xin.shape[2]
+                if self.conv:
+                    xin = self.stem(xin.reshape(B * Fr, cin, GL, GL)).reshape(B, Fr, -1, GL, GL)
+                C_ = xin.shape[2]
+                p = xin.reshape(B, Fr, C_, 5, P, 5, P).permute(0, 1, 3, 5, 2, 4, 6).reshape(B, Fr, NP, C_ * P * P)
                 h = self.embed(p) + self.pos_s + self.pos_t[:, :Fr]
                 a = t[..., None] * self.freq * 2 * math.pi
                 c = self.tmlp(torch.cat([torch.sin(a), torch.cos(a)], -1)) + self.lab(y)[:, None]
@@ -374,21 +389,34 @@ class ClipNet:
                 m = self.mask[:Fr * NP, :Fr * NP]
                 for b in self.blocks:
                     h = b(h, c, m)
-                o = self.out(self.nf(h)).reshape(B, Fr, 5, 5, P, P).permute(0, 1, 2, 4, 3, 5).reshape(B, Fr, GL, GL)
-                return o
+                if not self.conv:
+                    return self.out(self.nf(h)).reshape(B, Fr, 5, 5, P, P).permute(0, 1, 2, 4, 3, 5).reshape(B, Fr, GL, GL)
+                o = self.out(self.nf(h)).reshape(B, Fr, 5, 5, self.CH, P, P).permute(0, 1, 4, 2, 5, 3, 6).reshape(B * Fr, self.CH, GL, GL)
+                skip = x[:, :, None]
+                if self.concat:
+                    skip = torch.cat([skip, x[:, :1, None].expand_as(skip)], 2)
+                o = torch.cat([o, skip.reshape(B * Fr, cin, GL, GL)], 1)
+                return self.head(o).reshape(B, Fr, GL, GL)
 
         return Net()
 
 
-def velocity(m, x, t, y):
-    """The flow's velocity at x (B, F, 20, 20), noise levels t (B, F). A model that predicts the clean frames ('x')
-    has its velocity read off as (x_clean - x_t) / (1 - t), with 1 - t kept above 0.05."""
+def clean_estimate(m, x, t, y):
+    """The model's guess at the clean frames, from x (B, F, 20, 20) at noise levels t (B, F)."""
     o = m(x, t, y)
-    if m.pred == "dx":  # the clean frames predicted as a change to the oldest frame in view (the given one)
-        o = o + x[:, :1]
-    if m.pred in ("x", "dx"):
-        return (o - x) / (1 - t).clamp(min=0.05)[..., None, None]
-    return o
+    if m.pred == "dx":  # predicted as a change to the oldest frame in view (the given one)
+        return o + x[:, :1]
+    if m.pred == "x":
+        return o
+    return x + (1 - t)[..., None, None] * o  # velocity prediction
+
+
+def velocity(m, x, t, y):
+    """The flow's velocity at x: for a model that predicts the clean frames, (x_clean - x_t) / (1 - t), with 1 - t
+    kept above 0.05."""
+    if m.pred == "v":
+        return m(x, t, y)
+    return (clean_estimate(m, x, t, y) - x) / (1 - t).clamp(min=0.05)[..., None, None]
 
 
 def clip_levels(mode, B, T, g):
@@ -411,7 +439,7 @@ def clip_levels(mode, B, T, g):
     return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v", hook=None):
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v", hook=None, xloss=False, conv=False):
     """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
     frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
     In every mode the first frame is given clean and never learned."""
@@ -421,7 +449,7 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, co
 
     torch.manual_seed(seed)
     T = clips.shape[1]
-    m = ClipNet(T=T, causal=mode != "clip", concat=concat, pred=pred)
+    m = ClipNet(T=T, causal=mode != "clip", concat=concat, pred=pred, conv=conv)
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=0.0)
     n = steps(n_steps)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=n, pct_start=0.3 if QUICK else 0.05)
@@ -435,7 +463,10 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, co
         x0 = torch.randn(x1.shape, generator=g)
         t, w = clip_levels(mode, B, T, g)
         xt = (1 - t[..., None, None]) * x0 + t[..., None, None] * x1
-        err = ((velocity(m, xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
+        if xloss:  # squared error of the clean frames themselves
+            err = ((clean_estimate(m, xt, t, y) - x1) ** 2).mean((-1, -2))
+        else:  # squared error of the velocity
+            err = ((velocity(m, xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
         loss = (err * w).sum() / w.sum()
         opt.zero_grad()
         loss.backward()
