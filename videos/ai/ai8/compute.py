@@ -184,6 +184,9 @@ def compute_signal():
 
 
 # ---------------------------------------------------------------------------
+SNAP_RES = (0, 50, 150, 400, 1500)
+
+
 def compute_residual():
     import torch
 
@@ -211,21 +214,29 @@ def compute_residual():
                 h = h + f if self.residual else f
             return self.out(torch.relu(h))
 
-    out = {}
+    out = dict(snap_steps=list(SNAP_RES))
+    xs = np.linspace(-3.4, 3.4, 90)
+    G = torch.tensor(np.stack(np.meshgrid(xs, xs), -1).reshape(-1, 2), dtype=torch.float32)
+    out["xs"] = xs
     for name, kw in (("plain", {}), ("residual", dict(residual=True)), ("residual_norm", dict(residual=True, norm=True))):
         torch.manual_seed(1)
         net = Net(**kw)
         opt = torch.optim.Adam(net.parameters(), lr=1e-3)
-        curve = []
+        curve, probs, gnorms = [], [], []
         for step in range(1501):
             opt.zero_grad()
             loss = torch.nn.functional.cross_entropy(net(Xt), yt)
             loss.backward()
+            if step in SNAP_RES:  # what the net says everywhere, and how much gradient reaches each layer
+                with torch.no_grad():
+                    probs.append(torch.softmax(net(G), 1)[:, 1].numpy().reshape(len(xs), len(xs)))
+                gnorms.append([float(lay.weight.grad.norm()) for lay in net.layers])
             opt.step()
             if step % 20 == 0:
                 with torch.no_grad():
                     curve.append((step, float(loss), float((net(Xt).argmax(1) == yt).float().mean())))
         out[name] = np.array(curve)
+        out[f"probs_{name}"], out[f"gnorm_{name}"] = np.array(probs), np.array(gnorms)
     assert out["residual"][-1, 2] > 0.95 and out["plain"][-1, 2] < out["residual"][-1, 2] - 0.1
     return out
 
