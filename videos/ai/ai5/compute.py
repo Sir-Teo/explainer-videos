@@ -427,6 +427,31 @@ def compute_trees():
     return out
 
 
+BOOST_SNAPS = (1, 3, 10, 30, 100, 300)
+
+
+def compute_boost2():
+    """Gradient boosting on the two plotted rates, as it learns: the committee's vote over the plane after 1, 3, 10,
+    30, 100 and 300 rounds (the same recipe as the 70-rate boosting in `trees`), and its accuracy every round."""
+    X, y, test, X2 = split()
+    xs, ys, G = grid2(X2)
+    Xtr, Xte, ytr = X2[~test], X2[test], y[~test]
+    F_tr, F_te, F_g = np.zeros(len(ytr)), np.zeros(len(Xte)), np.zeros(len(G))
+    out, acc, train = dict(xs=xs, ys=ys, snaps=list(BOOST_SNAPS)), [], []
+    for k in range(1, BOOST_SNAPS[-1] + 1):
+        t = Tree(depth=2, min_leaf=5, regression=True).fit(Xtr, ytr - sigmoid(F_tr))
+        F_tr += 0.2 * 4 * t.predict(Xtr)
+        F_te += 0.2 * 4 * t.predict(Xte)
+        F_g += 0.2 * 4 * t.predict(G)
+        acc.append(float(((F_te > 0) == y[test]).mean()))
+        train.append(float(((F_tr > 0) == ytr).mean()))
+        if k in BOOST_SNAPS:
+            out[f"region{k}"] = sigmoid(F_g).reshape(len(ys), len(xs))
+            print(f"    round {k}: train {train[-1]:.3f}, new pages {acc[-1]:.3f}", flush=True)
+    out["acc"], out["train"] = np.array(acc), np.array(train)
+    return out
+
+
 # ---------------------------------------------------------------------------
 def compute_board():
     lg, la, ld, kn, sv, tr = (load(k) for k in ("logistic", "lasso", "lda", "knn", "svm", "trees"))
@@ -453,6 +478,7 @@ ITEMS = {
     "knn": compute_knn,
     "svm": compute_svm,
     "trees": compute_trees,
+    "boost2": compute_boost2,
     "board": compute_board,
 }
 CACHE.items = ITEMS

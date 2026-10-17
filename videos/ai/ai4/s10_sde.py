@@ -204,12 +204,12 @@ class SDE(VoiceoverScene):
         # the slide from data into noise: the noised letters and their score, at three noise levels
         fwd, T = np.asarray(s["fwd"]), float(s["T"])
 
-        def arrows_for(F_, opacity=0.7):
+        def arrows_for(F_, opacity=0.9):
             m_ = np.linalg.norm(F_, axis=1) + 1e-9
             r_ = np.percentile(m_, 90)
             return VGroup(*[Arrow([p[0], p[1], 0], [p[0] + 0.42 * min(1.0, mm / r_) * v[0] / mm,
                                                      p[1] + 0.42 * min(1.0, mm / r_) * v[1] / mm, 0], buff=0,
-                                  color=SCORE, stroke_width=2.5, max_tip_length_to_length_ratio=0.35,
+                                  color=SCORE, stroke_width=3, max_tip_length_to_length_ratio=0.35,
                                   stroke_opacity=opacity) for p, v, mm in zip(G * K, F_, m_)])
 
         levels = (0.1, 0.5, 2.0)
@@ -217,13 +217,15 @@ class SDE(VoiceoverScene):
         for lv in levels:
             k_ = int(round(lv / T * (len(fwd) - 1)))
             assert abs(k_ * T / (len(fwd) - 1) - lv) < 1e-9
-            pts = swarm(fwd[k_][::2] * K, [DATA] * len(fwd[k_][::2]), radius=0.045, opacity=0.8)
+            P_ = fwd[k_][(np.abs(fwd[k_][:, 0]) < 3.4) & (np.abs(fwd[k_][:, 1]) < 2.0)]  # those inside the frame
+            pts = swarm(P_ * K, [DATA] * len(P_), radius=0.05, opacity=0.8)
             box = Rectangle(width=2 * 3.4 * K, height=2 * 2.0 * K, stroke_color=GREY_D, stroke_width=2)
             panels.add(VGroup(box, pts, arrows_for(np.asarray(s[f"field{lv}"]))))
-        panels.scale(0.3).arrange(RIGHT, buff=0.45).move_to(UP * 0.4)
-        p_lab = VGroup(*[label(rf"$t = {lv:g}$", font_size=24, color=GREY_A).next_to(pn, DOWN, buff=0.15)
+        panels.scale(0.37).arrange(RIGHT, buff=0.4).move_to(UP * 0.5)
+        p_lab = VGroup(*[label(rf"$t = {lv:g}$", font_size=26, color=GREY_A).next_to(pn, DOWN, buff=0.15)
                          for lv, pn in zip(levels, panels)])
-        slide = Arrow(panels[0].get_left() + DOWN * 1.65, panels[-1].get_right() + DOWN * 1.65, buff=0, color=NOISE,
+        y_s = p_lab.get_bottom()[1] - 0.35
+        slide = Arrow([panels.get_left()[0], y_s, 0], [panels.get_right()[0], y_s, 0], buff=0, color=NOISE,
                       stroke_width=3, max_tip_length_to_length_ratio=0.03)
         s_lab = VGroup(label(r"data", font_size=24, color=DATA).next_to(slide, DOWN, buff=0.12).align_to(slide, LEFT),
                        label(r"noise", font_size=24, color=NOISE).next_to(slide, DOWN, buff=0.12).align_to(slide, RIGHT))

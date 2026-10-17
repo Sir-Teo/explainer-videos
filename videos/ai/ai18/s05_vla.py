@@ -223,10 +223,10 @@ class VLA(VoiceoverScene):
             f"this chunk only {nz} of {H} survive, yet they rebuild the motion to within {err:.3f}; byte-pair encoding, "
             "from part sixteen, then packs what's left into a handful of tokens."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), Write(f1), Create(px), run_time=1.5)
+            self.add(path, pl)  # the chunk's noise, at tau = 0, from the first words
             vo.wait_until("a")
-            self.play(Write(f1), Write(f2), FadeIn(tl), Create(px), run_time=2.0)
-            self.add(path, pl)
+            self.play(Write(f2), FadeIn(tl), run_time=1.5)
             self.play(tau.animate.set_value(1.0), run_time=4.0, rate_func=smooth)
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(al), Create(sig))

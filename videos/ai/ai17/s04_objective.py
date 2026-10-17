@@ -284,7 +284,7 @@ class Objective(VoiceoverScene):
             self.play(*[Transform(g_[0], g_[3]) for g_ in idea], run_time=1.6)
             self.bring_to_front(*[g_[1] for g_ in idea])
             vo.wait_until("a")
-            self.play(FadeOut(VGroup(it, ip, base_, ik, pair, *[g_[:3] for g_ in idea])), run_time=0.5)
+            self.play(FadeOut(VGroup(it, ip, base_, ik, pq, pans, *[g_[:3] for g_ in idea])), run_time=0.5)
             for i, mk in enumerate("abcde"):
                 if mk != "a":
                     vo.wait_until(mk)
@@ -447,7 +447,7 @@ class Objective(VoiceoverScene):
         dtop = max(2, math.ceil(float(dds.max()) - 1e-9))
         cx = axes_box([0, steps, 100], [0, dtop + 0.3, 1], 4.2, 1.5, [4.0, -2.15, 0])
         cyt = VGroup(*[MathTex(rf"{v}\times", font_size=18, color=GREY_B).next_to(cx.c2p(0, v), LEFT, buff=0.06) for v in (1, dtop)])
-        cyn = label(r"DAPO: \ questions drawn per step, \\ as a multiple of the $32$ it trains on", font_size=18, color=C.BITS).next_to(cx, UP, buff=0.08).align_to(cx, LEFT)
+        cyn = label(rf"DAPO: \ questions drawn per step, \\ as a multiple of the ${Qn}$ it trains on", font_size=18, color=C.BITS).next_to(cx, UP, buff=0.08).align_to(cx, LEFT)
         cxn = label(r"RL steps", font_size=18, color=GREY_A).next_to(cx, DOWN, buff=0.08)
         cone = DashedLine(cx.c2p(0, 1), cx.c2p(steps, 1), dash_length=0.05, stroke_width=1, color=GREY_D)
         cln = curve(cx, np.arange(1, len(dds) + 1), dds, C.BITS, 3)

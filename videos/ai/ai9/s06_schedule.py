@@ -50,6 +50,24 @@ class Schedule(VoiceoverScene):
         ramp = SurroundingRectangle(Line(sax.c2p(0, 0), sax.c2p(0.04 * steps, 1.05)), color=SCHED_COLORS["cosine"], buff=0.08,
                                     corner_radius=0.05, stroke_width=2)
         assert finals["wsd"] < finals["constant"]
+        # one clock for both charts: a cursor on the schedules, the losses drawn up to it
+        t = ValueTracker(0.5 * steps)
+
+        def loss_upto(k):
+            c = late[k]
+            n = max(2, int(np.searchsorted(c[:, 0], t.get_value(), side="right")))
+            return VMobject(color=SCHED_COLORS[k], stroke_width=3.5).set_points_as_corners([ax.c2p(x, y) for x, y in c[:n]])
+
+        def cursor():
+            x = t.get_value()
+            g = VGroup(DashedLine(sax.c2p(x, 0), sax.c2p(x, 1.1), color=GREY_B, stroke_width=2, dash_length=0.06))
+            for k in keys:
+                lr = np.asarray(s[f"lr_{k}"])
+                g.add(Dot(sax.c2p(x, float(np.interp(x, np.arange(len(lr)) * 20, lr))), radius=0.06, color=SCHED_COLORS[k]))
+            return g
+
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
+                                            color=WHITE).next_to(sax, RIGHT, buff=0.5))
         with self.voiceover(
             "The step size itself should change during training. A constant rate is the simplest. "
             "<bookmark mark='a'/> A cosine schedule warms up briefly, starting with tiny steps while the weights are "
@@ -69,7 +87,11 @@ class Schedule(VoiceoverScene):
             self.play(Create(shapes["wsd"]))
             vo.wait_until("c")
             self.play(Create(ax), FadeIn(yl), FadeIn(xl))
-            self.play(*[Create(losses[k]) for k in keys], run_time=3.0, rate_func=linear)
+            live = [always_redraw(lambda k=k: loss_upto(k)) for k in keys] + [always_redraw(cursor), cnt]
+            self.add(*live)
+            self.play(t.animate.set_value(steps), run_time=6.0, rate_func=linear)
+            for m_ in live:
+                m_.clear_updaters()
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3))
             vo.wait_until("d")
             self.play(FadeIn(why))

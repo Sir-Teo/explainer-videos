@@ -88,6 +88,36 @@ class Grok(VoiceoverScene):
         nowd = label(r"without weight decay (dashed): \\ it never generalizes" if g["t_test_nowd"] is None else
                      rf"without weight decay (dashed): \\ much later, \ step ${int(g['t_test_nowd']):,}$".replace(",", "{,}"),
                      font_size=24, color=C.SURPRISE).next_to(lag, DOWN, buff=0.4).align_to(key, LEFT)
+        # the run as it happens: both curves drawn up to a clock (log steps), with a step counter and the two accuracies
+        lt = ValueTracker(0.0)
+        lxw = np.log10(W[:, 0])
+
+        def upto(k, col):
+            n_ = max(2, int(np.searchsorted(lxw, lt.get_value(), side="right")))
+            return curve(ax, lxw[:n_], W[:n_, k], col, 3.5)
+
+        def acc(k):
+            return 100 * float(np.interp(lt.get_value(), lxw, W[:, k]))
+
+        live = [always_redraw(lambda: upto(1, TR)), always_redraw(lambda: upto(2, TE))]
+        nums = always_redraw(lambda: VGroup(
+            MathTex(rf"{acc(1):.0f}\%", font_size=26, color=TR).next_to(key[0], RIGHT, buff=0.25),
+            MathTex(rf"{acc(2):.0f}\%", font_size=26, color=TE).next_to(key[1], RIGHT, buff=0.25)))
+        clk = always_redraw(lambda: MathTex(rf"\text{{step }}{int(round(10 ** lt.get_value())):,}".replace(",", "{,}"),
+                                            font_size=28, color=WHITE).next_to(ax.c2p(0, 1), UR, buff=0.15).shift(RIGHT * 0.2))
+        # what weight decay does, measured: the size of all the weights through both runs
+        wn = np.concatenate([W[:, 3], N[:, 3]])
+        wax = CornerAxes(x_range=[0, 4.1, 1], y_range=[0, float(np.ceil(wn.max() / 50) * 50), 50], x_length=3.0, y_length=1.3,
+                         tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        shrinks, grows = W[-1, 3] < W[0, 3], N[-1, 3] > N[0, 3]
+        wcap = label(r"the size of all the weights", font_size=20, color=GREY_A)
+        wl1 = label(r"with weight decay: \ shrinks" if shrinks else r"with weight decay", font_size=18, color=TE)
+        wl2 = label(r"without: \ grows" if grows else r"without", font_size=18, color=C.SURPRISE)
+        winset = VGroup(wcap, wax, VGroup(wl1, wl2).arrange(DOWN, aligned_edge=LEFT, buff=0.06)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        winset.next_to(nowd, DOWN, buff=0.35).align_to(key, LEFT)
+        keep_in_frame(winset, margin=0.2)
+        wlines = VGroup(curve(wax, np.log10(W[:, 0]), W[:, 3], TE, 3), DashedVMobject(curve(wax, np.log10(N[:, 0]), N[:, 3], C.SURPRISE, 3),
+                                                                                     num_dashes=40))
         with self.voiceover(
             f"It memorizes the entries it was shown within about {t_tr:,} steps, and for a long time, it gets the "
             "unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of "
@@ -96,13 +126,17 @@ class Grok(VoiceoverScene):
             "squeezing the weights, and the memorized lookup table is more expensive than the rule."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(key))
-            self.play(Create(wtr), run_time=2.0)
+            self.add(*live, nums, clk)
+            self.play(lt.animate.set_value(3.0), run_time=4.0, rate_func=linear)  # to step 1,000: memorized, nothing more
             self.play(Create(m1))
             vo.wait_until("a")
-            self.play(Create(wte), run_time=3.0)
+            self.play(lt.animate.set_value(float(lxw[-1])), run_time=4.0, rate_func=linear)
+            for m_ in (*live, nums, clk):
+                m_.clear_updaters()
             self.play(Create(m2), FadeIn(lag))
             vo.wait_until("b")
             self.play(Create(ntr), Create(nte), FadeIn(nowd), run_time=2.0)
+            self.play(FadeIn(winset), Create(wlines), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

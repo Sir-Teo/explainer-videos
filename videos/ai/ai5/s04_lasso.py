@@ -164,6 +164,20 @@ class Lasso(VoiceoverScene):
         sign.to_corner(UR, buff=0.45).shift(DOWN * 0.7)
         cite_ = cite(r"R.~Tibshirani, \textit{Regression Shrinkage and Selection via the Lasso} (1996)", corner=DR)
         assert set(order[:8]) == set(words5)
+        # the sweep, live: a cursor at the current penalty, and how many words it uses, and how well it does
+        acc = np.asarray(d["acc"])
+        u = ValueTracker(0)
+        cur = lambda: min(n - 1, int(u.get_value() + 1e-6))  # noqa: E731
+        cursor = always_redraw(lambda: Line(ax.c2p(u.get_value(), -top), ax.c2p(u.get_value(), top), color=GREY_B,
+                                            stroke_width=1.5, stroke_opacity=0.7))
+        nw = Integer(int(np.count_nonzero(path[0])), font_size=30, color=C.BITS)
+        nw.add_updater(lambda m: m.set_value(int(np.count_nonzero(path[cur()]))))
+        av = DecimalNumber(100 * acc[0], num_decimal_places=0, unit=r"\%", font_size=30, color=WHITE)
+        av.add_updater(lambda m: m.set_value(100 * acc[cur()]))
+        live = VGroup(VGroup(label(r"words in use:", font_size=24, color=C.BITS), nw).arrange(RIGHT, buff=0.15),
+                      VGroup(label(r"test pages right:", font_size=24, color=GREY_A), av).arrange(RIGHT, buff=0.15))
+        live.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(sign, DOWN, buff=0.4).align_to(sign, LEFT)
+        keep_in_frame(live)
         with self.voiceover(
             "That corner is the lasso's gift: it chooses. Here are all seventy weights of the authorship model, as "
             "the penalty relaxes from total to gentle. <bookmark mark='a'/> The first words to come alive are 'not', "
@@ -171,8 +185,12 @@ class Lasso(VoiceoverScene):
             f"the classifier gets {100 * d['acc5']:.0f} percent of the test pages right. Ridge, by contrast, keeps "
             "every word, only smaller."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(sign), FadeIn(cite_))
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.02), run_time=3.0)
+            self.play(Create(ax), FadeIn(xl), FadeIn(sign), FadeIn(cite_), FadeIn(live))
+            self.add(cursor)
+            self.play(*[Create(l_) for l_ in lines], u.animate.set_value(n - 1), run_time=4.0, rate_func=linear)
+            for m in (cursor, nw, av):
+                m.clear_updaters()
+            self.play(FadeOut(cursor), run_time=0.3)
             vo.wait_until("a")
             self.play(FadeIn(first), LaggedStart(*[FadeIn(t) for t in tags], lag_ratio=0.15))
             vo.wait_until("b")

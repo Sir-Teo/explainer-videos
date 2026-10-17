@@ -6,6 +6,7 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai15.common import PATCH, gray_image, load
 
 TEACH, FORCE = C.SURPRISE, C.INTERVAL
+WHOLE, ROLL = GREY_A, WHITE
 CLEAN, NOISY = GREY_A, C.TRUE_P
 
 
@@ -55,8 +56,20 @@ class Forcing(VoiceoverScene):
                      font_size=32, color=FORCE).to_edge(DOWN, buff=1.2)
         el = label(r"with causal attention: \ frame $f$ sees frames $1 \ldots f$", font_size=20, color=GREY_A).next_to(eq, DOWN, buff=0.15)
         cite_ = cite(r"B.~Chen et al., \textit{Diffusion Forcing: Next-token Prediction Meets Full-Sequence Diffusion} (2024)", corner=DR)
+        # the opening picture: a whole clip, all at once, then frames written one after another (real samples)
+        Lg = int(c["long"])
+        n_roll = min(Lg, 14)
+        whole = strip(np.asarray(c["joint_clips"])[0], 0.62, 0.05)
+        roll = strip(np.asarray(c["forcing_rollout"])[0][:n_roll], 0.62, 0.05)
+        Group(whole, roll).arrange(DOWN, buff=1.25, aligned_edge=LEFT).move_to([0, 0.2, 0])
+        wb = Brace(whole, DOWN, buff=0.08, color=WHOLE)
+        wl = label(rf"a whole-clip model: \ ${T}$ frames, \ all at once, \ never more", font_size=20,
+                   color=WHOLE).next_to(wb, DOWN, buff=0.06)
+        rl = label(r"frame after frame, \ like tokens: \ as long as you like", font_size=20, color=ROLL).next_to(roll, DOWN, buff=0.15)
+        intro_given = VGroup(*[SurroundingRectangle(r_[0], buff=0.02, color=C.BITS, stroke_width=2) for r_ in (whole, roll)])
+        intro = Group(whole, wb, wl, roll, rl, intro_given)
         with self.voiceover(
-            f"A whole-clip model makes a clip of a fixed length, here {T} frames. For longer videos, and for worlds you "
+            f"A whole-clip model makes a clip of a fixed length, here {T} frames. <bookmark mark='m'/> For longer videos, and for worlds you "
             "can walk around in, a model has to write frame after frame, like a language model writes tokens. "
             "<bookmark mark='a'/> The obvious way to train that is teacher forcing: give the model the real past "
             "frames, clean, starting from the given first frame, and teach it to denoise the next one. "
@@ -67,9 +80,15 @@ class Forcing(VoiceoverScene):
             "guess each clean frame back from its noisy version, summed over the frames after the given one, with "
             "attention that only looks back."
         ) as vo:
-            self.play(FadeIn(fl), FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(whole), Create(intro_given[0]))
+            self.play(GrowFromCenter(wb), FadeIn(wl))
+            vo.wait_until("m")
+            self.play(FadeIn(roll[0]), Create(intro_given[1]), FadeIn(rl))
+            for f_ in roll[1:]:  # written one at a time
+                self.play(FadeIn(f_, shift=RIGHT * 0.15), run_time=0.22)
             vo.wait_until("a")
-            self.play(FadeIn(teach), FadeIn(lt))
+            self.play(FadeOut(intro))
+            self.play(FadeIn(fl), FadeIn(teach), FadeIn(lt))
             vo.wait_until("b")
             self.play(Indicate(teach[0][:5], color=TEACH))
             vo.wait_until("c")
@@ -152,17 +171,57 @@ class Forcing(VoiceoverScene):
             f"forcing, and from {ej_f:.2f} to {lj_f:.2f} with diffusion forcing, against {rj:.2f} for real clips; "
             + motion
         ) as vo:
-            self.play(FadeIn(lt), LaggedStart(*[FadeIn(r_) for r_ in rt], lag_ratio=0.3), Create(given[:2]), FadeIn(gl),
-                      Create(marks[0]), FadeIn(ml), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), Create(vt))
+            # rolling forward, live: the frames appear as they're written, the curve drawing beside them
+            self.play(FadeIn(lt), *[FadeIn(r_[0]) for r_ in rt], Create(given[:2]), FadeIn(gl), Create(marks[0]), FadeIn(ml),
+                      Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), Create(vt))
             vo.wait_until("a")
-            self.play(Create(ct), run_time=2.0)
+            self.roll(rt, ct, tf, TEACH, ax, cols, Lg)
             vo.wait_until("b")
-            self.play(FadeIn(lf), LaggedStart(*[FadeIn(r_) for r_ in rf], lag_ratio=0.3), Create(given[2:]), Create(marks[1]))
-            self.play(Create(cf), run_time=2.0)
+            self.play(FadeIn(lf), *[FadeIn(r_[0]) for r_ in rf], Create(given[2:]), Create(marks[1]))
+            self.roll(rf, cf, ff, FORCE, ax, cols, Lg)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(j_) for j_ in jt], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()
+
+    def roll(self, rows_, final, vals, col, ax, cols, Lg, run_time=3.5):
+        """Reveal a rollout frame by frame (the first frame already shown), with its curve drawing up to the same frame
+        and a frame counter; then leave the finished curve."""
+        t = ValueTracker(1.0)
+        for r_ in rows_:
+            for f_ in r_[1:]:
+                f_.set_opacity(0)
+            self.add(*r_[1:])
+
+        def shower(j):
+            return lambda f_: f_.set_opacity(1.0 if cols[j] + 1 <= t.get_value() else 0.0)
+
+        def curve():
+            x_ = t.get_value()
+            pts = [ax.c2p(x, y) for x, y in zip(range(2, Lg + 1), vals) if x <= x_]
+            if not pts:
+                pts = [ax.c2p(2, vals[0])]
+            return VMobject(color=col, stroke_width=3.5).set_points_as_corners(pts + [pts[-1]] if len(pts) < 2 else pts)
+
+        for r_ in rows_:
+            for j, f_ in enumerate(r_):
+                if j:
+                    f_.add_updater(shower(j))
+        live = always_redraw(curve)
+        num = Integer(1, font_size=26, color=col).add_updater(lambda m: m.set_value(int(t.get_value())))
+        cnt = VGroup(label(r"frame", font_size=20, color=col), num).arrange(RIGHT, buff=0.12)
+        cnt.next_to(ax.c2p(Lg, 1), UP, buff=0.15).align_to(ax.c2p(Lg, 1), RIGHT)
+        num.add_updater(lambda m: m.next_to(cnt[0], RIGHT, buff=0.12))
+        self.add(live, cnt)
+        self.play(t.animate.set_value(Lg), run_time=run_time, rate_func=linear)
+        for r_ in rows_:
+            for f_ in r_:
+                f_.clear_updaters()
+                f_.set_opacity(1)
+        num.clear_updaters()
+        self.remove(live)
+        self.add(final)
+        self.play(FadeOut(cnt), run_time=0.4)
 
     # ------------------------------------------------------------------
     def frontier(self):
@@ -183,12 +242,27 @@ class Forcing(VoiceoverScene):
         rows.arrange(DOWN, buff=0.7, aligned_edge=LEFT).move_to([0, 0, 0])
         for r_ in rows:
             r_[0].set_x(-6.2 + r_[0].width / 2)
-            r_[1].set_x(0.4 + r_[1].width / 2)
+            r_[1].set_x(1.4 + r_[1].width / 2)
+            keep_in_frame(r_[1])
+        # a small schematic beside each: its own frames fed back; an action per frame; words and patches in one row
+        def boxes(n, col=GREY_B, u=0.36):
+            return VGroup(*[Square(u, stroke_color=col, stroke_width=1.5, fill_color=col, fill_opacity=0.15) for _ in range(n)]).arrange(RIGHT, buff=0.08)
+
+        sf = boxes(4, FORCE)
+        sf.add(CurvedArrow(sf[-1].get_bottom() + DOWN * 0.04, sf[0].get_bottom() + DOWN * 0.04, angle=-PI / 3, color=FORCE,
+                           stroke_width=2, tip_length=0.12))
+        wm = boxes(4, PATCH)
+        wm.add(*[MathTex(a_, font_size=24, color=PATCH).next_to(b_, UP, buff=0.06)
+                 for a_, b_ in zip((r"\leftarrow", r"\uparrow", r"\uparrow", r"\rightarrow"), wm[:4])])
+        tf = VGroup(boxes(3, C.TRUE_P), boxes(3, C.BITS)).arrange(RIGHT, buff=0.15)
+        pics = VGroup(sf, wm, tf)
+        for p_, r_ in zip(pics, rows):
+            p_.move_to([-0.35, r_.get_y(), 0])
         note_ = note(r"as published; \ not reproduced here").to_corner(DR, buff=0.3)
         cite_ = cite(r"X.~Huang et al., \textit{Self Forcing} (2025); \ Google DeepMind, \textit{Genie 3} (2025); \ C.~Zhou et al., "
                      r"\textit{Transfusion} (2024)", corner=UL)
         with self.voiceover(
-            "This is where video generation is heading. <bookmark mark='a'/> Self Forcing, in 2025, trains the "
+            "This is where video generation is heading. Self Forcing, in 2025, trains the "
             "model on its own rollouts, videos it generates itself, frame after frame, scoring whole generated "
             "videos, to close the gap between training and use "
             "entirely. <bookmark mark='b'/> Condition each frame on an action as well, and you have a world model: "
@@ -196,9 +270,10 @@ class Forcing(VoiceoverScene):
             "<bookmark mark='c'/> And some models now do text and pictures in one transformer, predicting tokens "
             "for one and denoising patches for the other."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(note_))
-            for k, mk in enumerate("abc"):
+            self.play(FadeIn(cite_), FadeIn(note_), FadeIn(rows[0], shift=RIGHT * 0.2), FadeIn(pics[0][:4]))
+            self.play(Create(pics[0][4]))
+            for k, mk in enumerate("bc", start=1):
                 vo.wait_until(mk)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
+                self.play(FadeIn(rows[k], shift=RIGHT * 0.2), LaggedStart(*[FadeIn(m_) for m_ in pics[k]], lag_ratio=0.15))
         self.wait(0.3)
         self.clear_scene()

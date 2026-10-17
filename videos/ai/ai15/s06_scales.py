@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import PATCH, codebook_picture, gray_image, heat_image, load
+from videos.ai.ai1.compute import load as load1
+from videos.ai.ai15.common import MONO, PATCH, codebook_picture, gray_image, heat_image, load
 
 ADD, SUB = C.BITS, C.TRUE_P  # what a scale adds (brighter) or takes away (darker)
 
@@ -52,16 +53,35 @@ class Scales(VoiceoverScene):
         cur = Square(px, stroke_color=C.BITS, stroke_width=3).move_to(cover[upto])
         cnt = label(rf"token ${upto + 1}$ of ${n * n}$, \ one at a time", font_size=24, color=GREY_A).next_to(img, DOWN, buff=0.25)
         note_ = label(r"the top rows are written \\ before anything below exists", font_size=24, color=GREY_A).move_to([3.6, 0.6, 0])
+        # a language model's way: a real line of text, cut the way GPT-2 cuts it, written one token at a time
+        toks = load1("lms")["surprise"]["GPT-2 small"]["tokens"][22:31]
+        tiles = VGroup()
+        for k, tk in enumerate(toks):
+            t_ = data_text(tk.replace(" ", "\u2423"), font=MONO, font_size=24, color=WHITE)
+            r_ = RoundedRectangle(width=t_.width + 0.22, height=0.46, corner_radius=0.06, stroke_width=0,
+                                  fill_color=[C.EMBED, C.MLP, C.KEY][k % 3], fill_opacity=0.5).move_to(t_)
+            tiles.add(VGroup(r_, t_))
+        tiles.arrange(RIGHT, buff=0.08).move_to([0, 2.95, 0])
+        tcap = label(r"text: \ one token at a time \ (a real line, \ cut into GPT-2's tokens)", font_size=20,
+                     color=GREY_A).next_to(tiles, DOWN, buff=0.12)
+        canvas = SurroundingRectangle(img, buff=0, color=GREY_C, stroke_width=1.5)
+        pcap = label(r"a picture: \ the same, \ pixel by pixel?", font_size=24, color=GREY_A).move_to([3.6, 0.6, 0])
         with self.voiceover(
-            "Diffusion isn't the only way to make pictures. Language models write one token at a time, so why not "
+            "Diffusion isn't the only way to make pictures. <bookmark mark='t'/> Language models write one token at a time, so why not "
             "pictures? <bookmark mark='a'/> Read the pixels, or patches, left to right and top to bottom, and "
             f"predict each from the ones before: here, {n * n} steps. <bookmark mark='b'/> It works, and models like "
             "Parti did it at scale. But it's slow, and it's an odd order for a picture: the top rows are fixed "
             "before anything below them exists."
         ) as vo:
             self.add(img, cover)
+            self.play(Create(canvas))
+            vo.wait_until("t")
+            self.play(FadeIn(tcap))
+            for t_ in tiles:
+                self.play(FadeIn(t_, shift=RIGHT * 0.15), run_time=0.25)
+            self.play(FadeIn(pcap))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeOut(c_) for c_ in cover[:upto]], lag_ratio=0.02), Create(cur), run_time=3.0)
+            self.play(FadeOut(pcap), LaggedStart(*[FadeOut(c_) for c_ in cover[:upto]], lag_ratio=0.02), Create(cur), run_time=3.0)
             self.play(FadeIn(cnt))
             vo.wait_until("b")
             self.play(FadeIn(note_))

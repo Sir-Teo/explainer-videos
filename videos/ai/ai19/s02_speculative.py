@@ -107,6 +107,16 @@ class Speculative(VoiceoverScene):
         tv = float(s["tv"])
         res = label(rf"distance from $p$: \ ${tv:.4f}$ \\ (sampling noise alone)", font_size=24, color=C.BITS).next_to(key, DOWN, buff=0.4)
         cite_ = cite(r"Y.~Leviathan, M.~Kalman \& Y.~Matias (2023); \ C.~Chen et al.\ (2023)", corner=DR)
+        # where in the passage: the text so far, and the character both models are guessing
+        ctx = data_text(str(s["context"])[-34:], font="DejaVu Sans Mono", font_size=30, color=GREY_A)
+        qbox = VGroup(Square(0.5, stroke_color=C.BITS, stroke_width=2.5, fill_color=C.BITS, fill_opacity=0.15),
+                      Text("?", font="DejaVu Sans Mono", font_size=30, color=C.BITS))
+        qbox.next_to(ctx, RIGHT, buff=0.12)
+        line_ = VGroup(ctx, qbox)
+        if line_.width > 12.4:
+            line_.scale_to_fit_width(12.4)
+        line_.move_to([0, 0.4, 0])
+        cl_ = label(r"the passage so far: \ which character comes next?", font_size=26, color=GREY_A).next_to(line_, UP, buff=0.4)
         with self.voiceover(
             "The clever part is that nothing changes about what the big model says. <bookmark mark='a'/> Here are "
             "both guesses for the next character, on our own models: part eleven's transformer as the big one, a "
@@ -117,8 +127,10 @@ class Speculative(VoiceoverScene):
             "characters it outputs follow the big model's probabilities exactly, not the draft's: speculative "
             "decoding is faster with no change in quality."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(cl_), FadeIn(ctx), run_time=1.0)
+            self.play(FadeIn(qbox, scale=1.3))
             vo.wait_until("a")
+            self.play(FadeOut(cl_), line_.animate.scale_to_fit_width(7.6).move_to([-1.6, 1.85, 0]), run_time=0.8)
             self.play(Create(base), FadeIn(xl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bq], lag_ratio=0.05),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in bp], lag_ratio=0.05), FadeIn(key[:2]))
             vo.wait_until("b")
@@ -149,13 +161,31 @@ class Speculative(VoiceoverScene):
         line = VMobject(color=C.BITS, stroke_width=3).set_points_smoothly([ax.c2p(k, v) for k, v in zip(ks, pr)])
         f = cmath(r"\frac{1 - \alpha^{k+1}}{1 - \alpha}", font_size=40).move_to([4.2, 0.6, 0])
         fl = label(rf"$\alpha = {a:.2f}$: \ how often our draft's \\ character is accepted", font_size=24, color=GREY_A).next_to(f, DOWN, buff=0.3)
+        # the acceptance chance at each of the 300 places in the passage it was measured: a spread, not one number
+        acc = np.asarray(s["accept"], float)
+        nb = 10
+        hc = np.histogram(acc, bins=nb, range=(0, 1))[0]
+        HW, HH, hx0, hy0 = 3.8, 1.0, 2.4, 2.05
+        hbars = VGroup(*[Rectangle(width=HW / nb * 0.85, height=max(HH * c_ / hc.max(), 0.01), stroke_width=0, fill_color=C.BITS,
+                                   fill_opacity=0.75).move_to([hx0 + HW * (i + 0.5) / nb, hy0 + HH * c_ / hc.max() / 2, 0])
+                         for i, c_ in enumerate(hc)])
+        hbase = Line([hx0, hy0, 0], [hx0 + HW, hy0, 0], color=GREY_C, stroke_width=1.5)
+        hticks = VGroup(MathTex(r"0", font_size=20, color=GREY_B).next_to([hx0, hy0, 0], DOWN, buff=0.08),
+                        MathTex(r"100\%", font_size=20, color=GREY_B).next_to([hx0 + HW, hy0, 0], DOWN, buff=0.08))
+        hmean = DashedLine([hx0 + HW * a, hy0, 0], [hx0 + HW * a, hy0 + HH + 0.1, 0], dash_length=0.06, stroke_width=2, color=WHITE)
+        hml = MathTex(rf"\alpha = {a:.2f}", font_size=22, color=WHITE).next_to(hmean, UP, buff=0.05)
+        hl = label(rf"chance of acceptance, \ at ${len(acc)}$ places in the passage", font_size=18, color=GREY_A)
+        hl.next_to(hbase, DOWN, buff=0.38)
+        hist = VGroup(hbars, hbase, hticks, hmean, hml, hl)
         with self.voiceover(
             f"Our little draft is accepted {100 * a:.0f} percent of the time. <bookmark mark='a'/> Drafting k "
             "characters, the big model writes on average one minus alpha to the k plus one, over one minus alpha, "
             f"per run: {pr[ks.index(4)]:.1f} with four drafted. Real systems reach two to three times the speed this "
             "way, and some models, like DeepSeek-V3, are trained to draft for themselves."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(one), FadeIn(onel))
+            self.play(Create(hbase), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in hbars], lag_ratio=0.08), FadeIn(hticks),
+                      FadeIn(hl), run_time=1.2)
+            self.play(Create(hmean), FadeIn(hml), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(one), FadeIn(onel))
             vo.wait_until("a")
             self.play(Create(line), LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.1), Write(f), FadeIn(fl))
         self.wait(0.3)

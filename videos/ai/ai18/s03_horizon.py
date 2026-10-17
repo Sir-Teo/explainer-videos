@@ -45,7 +45,16 @@ class Horizon(VoiceoverScene):
         f = cmath(r"P(\text{done})", "=", r"p", r"^{\,", r"n", r"}", colors=colors, font_size=44).move_to([4.4, -0.4, 0])
         half = DashedLine(ax.c2p(0, 0.5), ax.c2p(4, 0.5), color=GREY_D, stroke_width=1.5)
         v99 = 0.99 ** 100
-        hz = gloss(r"horizon", r"how many steps a task takes, \\ from start to finish", corner=DR, width=4.0, color=C.TRUE_P)
+        # a task as a chain of steps, schematic: each must go right; one slip and the rest never happen
+        n_st = 9
+        st_d = VGroup(*[Dot([0.38 * i, 0, 0], radius=0.09, color=GREY_C) for i in range(n_st)])
+        st_l = Line(st_d[0].get_center(), st_d[-1].get_center(), color=GREY_D, stroke_width=2)
+        st_t = VGroup(label(r"start", font_size=18, color=GREY_B).next_to(st_d[0], DOWN, buff=0.15),
+                      label(r"finish", font_size=18, color=GREY_B).next_to(st_d[-1], DOWN, buff=0.15))
+        hz = gloss(r"horizon", r"how many steps a task takes, \\ from start to finish", picture=VGroup(st_l, st_d, st_t),
+                   corner=DR, width=3.6, color=C.TRUE_P)
+        hz_d = hz[1][2][1]
+        slip = 6  # schematic: the step that goes wrong
         with self.voiceover(
             "Agents work in long chains of steps: read a page, click, write code, run it, read the error. "
             "<bookmark mark='h'/> How many steps a task takes, from start to finish, is its horizon, and every "
@@ -57,6 +66,9 @@ class Horizon(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(half))
             vo.wait_until("h")
             self.play(FadeIn(hz))
+            self.play(LaggedStart(*[d_.animate.set_color(P_COLORS[2]) for d_ in hz_d[:slip]], lag_ratio=0.25), run_time=1.5)
+            self.play(hz_d[slip].animate.set_color(C.SURPRISE).scale(1.5), *[d_.animate.set_opacity(0.25) for d_ in hz_d[slip + 1:]],
+                      run_time=0.6)
             vo.wait_until("a")
             self.play(Write(f))
             vo.wait_until("b")

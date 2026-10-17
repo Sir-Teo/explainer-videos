@@ -141,8 +141,8 @@ class Smoother(VoiceoverScene):
         pl = label(r"three learned matrices, applied to every character's vector", font_size=24, color=GREY_A)
         pl.next_to(proj, UP, buff=0.15)
         cite_ = cite(r"A.~Vaswani et al., \textit{Attention Is All You Need} (2017)", corner=UR)
-        smc = gloss(r"softmax", r"exponentiate every score, then divide by the total: \\ positive weights that add up to one",
-                    softmax_picture(), width=5.0, color=A).move_to([0, -1.75, 0])
+        smc = gloss(r"softmax", r"make every score positive with $e^{\,s}$, \\ then divide by their total",
+                    softmax_picture(), width=5.0, color=A).move_to([0, -2.0, 0])
         smp = smc[1][-1]
         with self.voiceover(
             "Write it down. The guess at the query is a sum over the pages: each page's value, times a weight. The "

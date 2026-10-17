@@ -6,6 +6,29 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai15.common import LETTERS, PATCH, gray_image, heat_image, load, patch_grid
 
 
+def summary_picture(answer: str) -> VGroup:
+    """The summary token: an extra token at the front of the patch sequence; attention gathers from every patch into
+    it, and its final vector alone names the letter. ``.toks``, ``.gather``, ``.out``, ``.answer`` and ``.names`` let a
+    scene build it in order."""
+    u = 0.36
+    cls = Square(u, stroke_color=C.BITS, stroke_width=2.5, fill_color=C.BITS, fill_opacity=0.5)
+    pts = VGroup(*[Square(u, stroke_color=PATCH, stroke_width=1.5, fill_color=PATCH, fill_opacity=0.15) for _ in range(7)])
+    dots_ = MathTex(r"\cdots", font_size=26, color=PATCH)
+    toks = VGroup(cls, pts, dots_)
+    pts.arrange(RIGHT, buff=0.08)
+    toks.arrange(RIGHT, buff=0.22)
+    gather = VGroup(*[CurvedArrow(p_.get_top() + UP * 0.03, cls.get_top() + UP * 0.03 + RIGHT * 0.04 * k, angle=PI / 3,
+                                  color=C.ATTN, stroke_width=1.6, tip_length=0.1) for k, p_ in enumerate(pts)])
+    ans = data_text(f"\u201c{answer}\u201d", font="DejaVu Sans Mono", font_size=24, color=WHITE).next_to(cls, LEFT, buff=0.6)
+    out = Arrow(cls.get_left(), ans.get_right(), buff=0.06, color=C.BITS, stroke_width=2.5, max_tip_length_to_length_ratio=0.25)
+    names = VGroup(label(r"summary", font_size=16, color=C.BITS).next_to(cls, DOWN, buff=0.1),
+                   label(r"the $25$ patch tokens", font_size=16, color=PATCH).next_to(pts, DOWN, buff=0.1))
+    names[1].match_y(names[0])
+    g = VGroup(toks, gather, out, ans, names)
+    g.toks, g.gather, g.out, g.answer, g.names = toks, gather, out, ans, names
+    return g
+
+
 class ViT(VoiceoverScene):
     def construct(self):
         self.card()
@@ -71,14 +94,25 @@ class ViT(VoiceoverScene):
         res = label(rf"${100 * acc:.0f}\%$ right on ${int(v['n_test_fonts'])}$ fonts it never saw", font_size=30, color=PATCH)
         res.to_edge(DOWN, buff=0.9)
         hl = label(r"orange: \ where its summary token looks, \ last layer", font_size=22, color=C.ATTN).next_to(pairs, DOWN, buff=0.3)
+        st = gloss(r"summary token", r"one extra token with no picture in it: \\ it gathers from every patch, \ and "
+                   r"its final vector names the letter", summary_picture(LETTERS[labs[0]]), corner=DOWN, width=5.6, color=C.BITS)
+        st.to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "We trained a small one to name the letter in each picture, reading twenty-five patches and one extra "
-            f"summary token. <bookmark mark='a'/> On fonts it never saw, it's right {100 * acc:.0f} percent of the time. "
+            "summary token: <bookmark mark='s'/> a token with no picture in it, which gathers from every patch as the "
+            "layers go, and whose final vector names the letter. "
+            f"<bookmark mark='a'/> On fonts it never saw, it's right {100 * acc:.0f} percent of the time. "
             "<bookmark mark='b'/> And here's where its summary token looks, in the last layer: at the strokes that "
             "tell letters apart."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(Group(p[0], p[2])) for p in pairs], lag_ratio=0.2), run_time=1.5)
+            vo.wait_until("s")
+            sp = st[1][2]
+            self.play(FadeIn(st[0]), FadeIn(st[1][:2]), FadeIn(sp.toks), FadeIn(sp.names))
+            self.play(LaggedStart(*[Create(a_) for a_ in sp.gather], lag_ratio=0.12), run_time=1.5)
+            self.play(GrowArrow(sp.out), FadeIn(sp.answer))
             vo.wait_until("a")
+            self.play(FadeOut(st))
             self.play(FadeIn(res))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p[1]) for p in pairs], lag_ratio=0.25), FadeIn(hl), run_time=2.0)
@@ -106,6 +140,21 @@ class ViT(VoiceoverScene):
         msg = label(r"nobody told it the patches \\ form a grid: \ it learned that" if grid else
                     r"too few pictures to learn the grid: \\ big models trained on millions do", font_size=28,
                     color=PATCH).next_to(nf, DOWN, buff=0.5)
+        # first, what a position vector is: the letter cut into patches, and one patch's vector, all zeros at the start
+        im = np.asarray(v["ex_imgs"])[0]
+        big = gray_image(im, 3.4).move_to([-2.6, -0.3, 0])
+        cuts = patch_grid(big, n)
+        cell = Square(big.width / n, stroke_color=PATCH, stroke_width=3.5).move_to(
+            big.get_corner(UL) + (RIGHT + DOWN) * big.width / n * 1.5)
+        vec = VGroup(*[VGroup(Square(0.42, stroke_color=C.TRUE_P, stroke_width=1.5),
+                              MathTex("0", font_size=24, color=C.TRUE_P)) for _ in range(8)]).arrange(RIGHT, buff=0)
+        for b_ in vec:
+            b_[1].move_to(b_[0])
+        dots_ = MathTex(r"\cdots", font_size=28, color=C.TRUE_P).next_to(vec, RIGHT, buff=0.1)
+        vec = VGroup(vec, dots_).move_to([3.4, -0.3, 0])
+        vl = label(r"patch $(2, 2)$'s position vector: \\ learned, \ and all zeros at the start", font_size=22,
+                   color=C.TRUE_P).next_to(vec, UP, buff=0.25)
+        link = Arrow(cell.get_right(), vec.get_left(), buff=0.15, color=PATCH, stroke_width=2.5, max_tip_length_to_length_ratio=0.08)
         with self.voiceover(
             "One more look inside. Each patch position has a learned vector, which starts at zero. "
             "<bookmark mark='a'/> Here, for each position, is how similar its vector is to every other position's. "
@@ -118,9 +167,12 @@ class ViT(VoiceoverScene):
                "transformer, trained on millions of photos, each tile lights up around its own place: it learned the "
                "picture's geometry from the pictures alone.")
         ) as vo:
+            self.play(FadeIn(big), Create(cuts), run_time=1.0)
+            self.play(Create(cell), GrowArrow(link), FadeIn(vec), FadeIn(vl))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.03), FadeIn(expl), run_time=2.0)
-            self.play(Create(frame))
+            self.play(FadeOut(VGroup(link, vec, vl)), FadeOut(big), FadeOut(cuts),
+                      LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.03), FadeIn(expl), run_time=2.0)
+            self.play(ReplacementTransform(cell, frame))
             vo.wait_until("b")
             self.play(FadeIn(nf), FadeIn(msg))
         self.wait(0.3)
