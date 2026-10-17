@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai14.common import DATA, FM_C, NOISE, RF_C, cloud, curve, load, move_cloud
+from videos.ai.ai14.common import DATA, FM_C, NOISE, RF_C, SCORE, cloud, curve, load, move_cloud
 
 
 class Flow(VoiceoverScene):
@@ -139,8 +139,11 @@ class Flow(VoiceoverScene):
         st = chord / np.maximum(L, 1e-9)
         cand = [i for i in np.argsort(st) if 2.0 < L[i] < 4.5]
         i = int(cand[0]) if cand else int(np.argmin(st))
-        S, O = 1.1, np.array([-3.6, -0.7, 0])
-        pts = [O + S * np.array([x, y, 0]) for x, y in P[:, i]]
+        q = P[:, i]
+        lo_, hi_ = q.min(0), q.max(0)
+        S = 4.4 / max(float((hi_ - lo_).max()), 1e-9)  # the one path, filling the left of the frame
+        O = np.array([-3.7, -0.4, 0]) - S * np.array([*(lo_ + hi_) / 2, 0])
+        pts = [O + S * np.array([x, y, 0]) for x, y in q]
         path = VMobject(color=FM_C, stroke_width=3.5).set_points_smoothly(pts[::2] + [pts[-1]])
         a, b = int(0.2 * n), int(0.85 * n)
         zs, zt = Dot(pts[a], radius=0.08, color=NOISE), Dot(pts[b], radius=0.08, color=DATA)
@@ -152,8 +155,10 @@ class Flow(VoiceoverScene):
             d = d / max(np.linalg.norm(d), 1e-9) * 0.55
             tang.add(Arrow(pts[k], pts[k] + d, buff=0, color=SCORE, stroke_width=3, max_tip_length_to_length_ratio=0.3))
         avg = Arrow(pts[a], pts[b], buff=0.08, color=C.SURPRISE, stroke_width=5, max_tip_length_to_length_ratio=0.08)
-        vl = label(r"$v$: \\ the velocity \\ at each moment", font_size=20, color=SCORE).next_to(tang, UP, buff=0.2)
-        ul = label(r"$(t - s)\,u$: \\ one jump", font_size=20, color=C.SURPRISE).next_to(avg.get_center(), DOWN, buff=0.35)
+        side = np.array([-(pts[b] - pts[a])[1], (pts[b] - pts[a])[0], 0])
+        side = side / max(np.linalg.norm(side), 1e-9)  # perpendicular to the jump
+        vl = label(r"$v$: \\ the velocity \\ at each moment", font_size=20, color=SCORE).move_to(tang.get_center() + 1.3 * side)
+        ul = label(r"$(t - s)\,u$: \\ one jump", font_size=20, color=C.SURPRISE).move_to(avg.get_center() - 1.1 * side)
         keep_in_frame(vl)
         colors = {r"u": C.SURPRISE, r"v": SCORE, r"z_s": NOISE, r"z_t": DATA}
         eqs = VGroup(
