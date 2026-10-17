@@ -45,7 +45,7 @@ class Router(VoiceoverScene):
         outs = VGroup(*[Arrow(experts[i].get_right(), out.get_left(), buff=0.1, color=EXPERT_COLORS[i], stroke_width=3) for i in top])
         colors = {r"g_i": ROUTER, r"E_i": C.BITS}
         f = cmath(r"y", "=", r"\sum_{i \,\in\, \mathrm{top}\,k}", r"g_i", r"\,", r"E_i", r"(x)", colors=colors,
-                  font_size=38).to_edge(DOWN, buff=0.45)
+                  font_size=38).to_edge(DOWN, buff=0.45).shift(LEFT * 2.6)
         fl = label(r"$g$: \ the chosen experts' router probabilities, \ rescaled to add to one", font_size=22,
                    color=GREY_A).next_to(f, UP, buff=0.12)
         tag = note(r"illustrative router scores").to_corner(UR, buff=0.3)
