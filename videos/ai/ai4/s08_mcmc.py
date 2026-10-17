@@ -72,6 +72,7 @@ class MCMC(VoiceoverScene):
         cancel = label(r"only a ratio: \ the unknown total cancels", font_size=26, color=C.BITS)
         cancel.next_to(steps_t, DOWN, buff=0.45)
         tag = label(r"a density known only up to a constant", font_size=24, color=GREY_A).next_to(img, DOWN, buff=0.15)
+        tag.align_to(img, LEFT)  # flush left under the picture, clear of the citation in the corner
         cite_ = cite(r"N.~Metropolis, A.~Rosenbluth, M.~Rosenbluth, A.~Teller \& E.~Teller (1953)", corner=DR)
         with self.voiceover(
             "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how "
