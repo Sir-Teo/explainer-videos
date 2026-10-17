@@ -8,6 +8,26 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai14.common import DATA, DDIM_C, DDPM_C, NOISE, cloud, curve, load, move_cloud
 
 
+def sliced_picture() -> VGroup:
+    """One slice of the sliced Wasserstein distance: two small clouds dropped onto one line, and the points matched
+    in order along it."""
+    a = np.array([[-1.5, 0.85], [-1.1, 1.15], [-0.6, 0.9], [-0.2, 1.2], [0.3, 0.95]])
+    b = np.array([[-0.9, 0.45], [-0.3, 0.65], [0.4, 0.5], [0.9, 0.7], [1.5, 0.55]])
+    line = Line([-2.0, 0, 0], [2.0, 0, 0], color=GREY_B, stroke_width=2)
+    g = VGroup(line)
+    for pts, col, side in ((a, DATA, 1), (b, DDIM_C, -1)):
+        for x, y in pts:
+            g.add(Dot([x, y, 0], radius=0.07, color=col),
+                  DashedLine([x, y - 0.08, 0], [x, 0.0, 0], color=col, stroke_width=1.2, dash_length=0.05).set_opacity(0.6),
+                  Line([x, 0, 0], [x, 0.16 * side, 0], color=col, stroke_width=4))
+    for xa, xb in zip(sorted(a[:, 0]), sorted(b[:, 0])):
+        g.add(ArcBetweenPoints([xa, -0.3, 0], [xb, -0.3, 0], angle=PI / 2, color=GREY_A, stroke_width=1.5))
+    g.add(label(r"real data", font_size=20, color=DATA).next_to(Dot([-1.5, 0.85, 0]), LEFT, buff=0.15),
+          label(r"samples", font_size=20, color=DDIM_C).next_to(Dot([1.5, 0.55, 0]), RIGHT, buff=0.1),
+          label(r"matched in order along the line", font_size=18, color=GREY_A).move_to([0, -0.7, 0]))
+    return g
+
+
 class Samplers(VoiceoverScene):
     def construct(self):
         self.card()
@@ -84,15 +104,22 @@ class Samplers(VoiceoverScene):
             box = VGroup(pts, label(rf"${k}$ steps", font_size=20, color=GREY_A).next_to(pts, DOWN, buff=0.1))
             snaps.add(box)
         snaps.arrange(DOWN, buff=0.25).move_to([4.4, -0.3, 0])
+        swc = gloss(r"sliced Wasserstein", r"drop both clouds onto many random lines, \\ and compare where the points fall",
+                    sliced_picture(), width=4.6, color=GREY_A).move_to([4.4, 0.4, 0])
         with self.voiceover(
-            "How few steps can you take? Measure how far the samples land from the real data. "
+            "How few steps can you take? Measure how far the samples land from the real data, <bookmark mark='w'/> "
+            "with the sliced Wasserstein distance: drop both clouds onto many random lines, and compare where "
+            "their points fall. "
             f"<bookmark mark='a'/> With five DDIM steps, the letters are blurred; by twenty, they're nearly as good as "
             "DDPM's two hundred; beyond that, little changes. <bookmark mark='b'/> Each step is one run of the network, "
             "so fewer steps is faster pictures. Can we do better still? The paths are curved, and curved paths need "
             "many small steps."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll), Create(dp), FadeIn(dpl))
+            vo.wait_until("w")
+            self.play(FadeIn(swc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(swc))
             self.play(Create(c[0]), FadeIn(c[1:]), LaggedStart(*[FadeIn(s_) for s_ in snaps], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
         self.wait(0.3)

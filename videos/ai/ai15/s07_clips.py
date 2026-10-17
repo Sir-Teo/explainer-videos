@@ -94,8 +94,9 @@ class Clips(VoiceoverScene):
                "real ones. " if smoother else
                f"the numbers are close here, {ij:.2f} against {jj:.2f} pixels of jerkiness, but the letter jumps from "
                "place to place. ")
-            + "<bookmark mark='d'/> A video is a joint distribution: the frames have to be drawn together, or "
-            "conditioned on each other. That's the whole difficulty, and the rest of this part is about it."
+            + "<bookmark mark='d'/> A video is a joint distribution: the probability of the whole clip at once, "
+            "where each frame depends on the others. The frames have to be drawn together, or conditioned on each "
+            "other. That's the whole difficulty, and the rest of this part is about it."
         ) as vo:
             self.play(FadeIn(jl), FadeIn(asked))
             vo.wait_until("a")

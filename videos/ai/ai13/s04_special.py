@@ -6,6 +6,20 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai13.common import EXPERT_COLORS, MONO, load
 
 
+def dense_vs_sparse(E: int, k: int) -> VGroup:
+    """A dense layer, every weight lit for every token, beside a mixture with only k of its E experts lit."""
+    dense = Rectangle(width=1.5, height=1.0, stroke_color=GREY_B, stroke_width=2, fill_color=GREY_B, fill_opacity=0.7)
+    dl = label(r"dense: \ every weight \\ works on every token", font_size=18, color=GREY_B).next_to(dense, DOWN, buff=0.12)
+    lit = set(np.linspace(1, E - 2, k).round().astype(int)) if k < E else set(range(E))
+    boxes = VGroup(*[Square(0.4, stroke_color=C.INTERVAL, stroke_width=1.5, fill_color=C.INTERVAL,
+                            fill_opacity=0.85 if i in lit else 0.05) for i in range(E)])
+    boxes.arrange_in_grid(rows=2, buff=0.08).match_height(dense)
+    ml = label(r"mixture: \ only a few \\ experts run", font_size=18, color=C.INTERVAL).next_to(boxes, DOWN, buff=0.12)
+    left, right = VGroup(dense, dl), VGroup(boxes, ml)
+    VGroup(left, right).arrange(RIGHT, buff=0.7, aligned_edge=UP)
+    return VGroup(left, right)
+
+
 class Special(VoiceoverScene):
     def construct(self):
         self.card()
@@ -205,8 +219,12 @@ class Special(VoiceoverScene):
         a_, b_ = D["dense_active"], D["bias"]
         ahead = [i for i in range(len(b_)) if all(b_[j, 1] < a_[j, 1] for j in range(i, len(b_)))]
         when = int(b_[ahead[0], 0]) if ahead else None
+        dz = gloss(r"dense model", r"an ordinary layer: every weight works on every token", dense_vs_sparse(E, k),
+                   corner=UR, width=4.2, color=GREY_B)
         with self.voiceover(
-            "And here are the three models of that comparison as they train, held-out bits per character every "
+            "And here are the three models of that comparison as they train. <bookmark mark='w'/> Two are dense: "
+            "ordinary layers, where every weight works on every token. The third is the mixture, where each token "
+            "uses only a few experts. Held-out bits per character every "
             f"{int(D['bias'][1, 0])} steps. <bookmark mark='a'/> "
             + (f"The mixture pulls ahead of the dense model with the same arithmetic by step {when:,} and stays ahead. "
                if when is not None and when > 0 else
@@ -219,9 +237,11 @@ class Special(VoiceoverScene):
                f"The wide dense model, {E} experts' width, ends at {D['dense_total'][-1, 1]:.2f}.")
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
+            vo.wait_until("w")
+            self.play(FadeIn(dz, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(Create(lines[0]), Create(lines[1]), FadeIn(names[0]), FadeIn(names[1]), run_time=3.0)
             vo.wait_until("b")
-            self.play(Create(lines[2]), FadeIn(names[2]), run_time=2.0)
+            self.play(FadeOut(dz), Create(lines[2]), FadeIn(names[2]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

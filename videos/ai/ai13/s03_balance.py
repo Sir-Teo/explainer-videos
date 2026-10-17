@@ -84,7 +84,7 @@ class Balance(VoiceoverScene):
         bn, ba, bb = (float(m[f"bits_{k_}"]) for k_ in ("none", "aux", "bias"))
         ia, ib = float(m["imbalance"]["aux"]), float(m["imbalance"]["bias"])
         even = ("Both spread the work evenly here. " if ia < 1.5 else
-                f"At Switch's strength, the penalty only partly evens it out: its busiest expert still gets {ia:.1f} times a "
+                f"At the strength Google's Switch Transformer used in 2021, the penalty only partly evens it out: its busiest expert still gets {ia:.1f} times a "
                 f"fair share, while the bias holds every expert within {ib:.1f}. ")
         with self.voiceover(
             "Two fixes. <bookmark mark='a'/> The classic one adds a penalty to the loss: the share of characters each "

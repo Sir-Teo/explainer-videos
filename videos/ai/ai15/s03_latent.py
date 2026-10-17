@@ -8,6 +8,34 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai15.common import LETTERS, PATCH, gray_image, load
 
 
+def reparam_picture() -> VGroup:
+    """The reparameterization trick: roll the dice off to the side, then stretch by sigma and shift by mu; the
+    gradient flows back through the stretch and the shift, never into the dice."""
+    die = RoundedRectangle(width=0.6, height=0.6, corner_radius=0.1, stroke_color=C.TRUE_P, stroke_width=2.5)
+    for p in (UL, UR, ORIGIN, DL, DR):
+        die.add(Dot(die.get_center() + p * 0.16, radius=0.045, color=C.TRUE_P))
+    el = MathTex(r"\varepsilon", font_size=28, color=C.TRUE_P).next_to(die, DOWN, buff=0.1)
+
+    def op(tex):
+        return VGroup(RoundedRectangle(width=0.8, height=0.5, corner_radius=0.1, stroke_color=C.EMBED, stroke_width=2.5),
+                      MathTex(tex, font_size=28, color=C.EMBED))
+
+    mul, add = op(r"\times\sigma"), op(r"+\mu")
+    z = MathTex(r"z", font_size=34, color=WHITE)
+    chain = VGroup(die, mul, add, z).arrange(RIGHT, buff=0.4)
+    for o in (mul, add):
+        o[1].move_to(o[0])
+    el.next_to(die, DOWN, buff=0.1)
+    fwd = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5,
+                         max_tip_length_to_length_ratio=0.3) for a, b in zip(chain[:-1], chain[1:])])
+    back = VGroup(*[CurvedArrow(b.get_top() + UP * 0.05, a.get_top() + UP * 0.05, angle=PI / 3, color=C.SURPRISE,
+                                stroke_width=2.5, tip_length=0.12) for a, b in ((mul, add), (add, z))])
+    gl = label(r"slope flows back", font_size=18, color=C.SURPRISE).next_to(back, UP, buff=0.05)
+    cross = Cross(scale_factor=0.12, stroke_color=C.SURPRISE, stroke_width=3).move_to(fwd[0].get_center() + UP * 0.32)
+    nl = label(r"not into the dice", font_size=18, color=GREY_B).next_to(el, RIGHT, buff=0.15).shift(DOWN * 0.02)
+    return VGroup(chain, el, fwd, back, gl, cross, nl)
+
+
 class Latent(VoiceoverScene):
     def construct(self):
         self.card()
@@ -145,14 +173,23 @@ class Latent(VoiceoverScene):
         ll = label(r"$\beta$: \ how hard to pull toward the Gaussian", font_size=22, color=C.SURPRISE).next_to(loss, DOWN, buff=0.15)
         # one code cloud, drawn: a point for the plain autoencoder, a blob for the VAE
         cite_ = cite(r"D.~P.~Kingma \& M.~Welling, \textit{Auto-Encoding Variational Bayes} (2013)", corner=DR)
+        rp = gloss(r"reparameterization", r"no slope through a dice roll: \ roll it \\ off to the side, then "
+                   r"stretch by $\sigma$, shift by $\mu$", reparam_picture(), width=4.0, color=C.EMBED)
+        rp.move_to([4.95, 0.35, 0])
+        kl_l = label(r"closed form: \ an exact formula, \\ no sampling needed", font_size=20, color=GREY_A)
+        kl_l.next_to(kl, LEFT, buff=0.35)
+        keep_in_frame(kl_l)
         with self.voiceover(
             "But a plain autoencoder's codes can sit anywhere, in any odd shape, and a generator has to learn that "
             "shape. The variational autoencoder, from Kingma and Welling, shapes the space on purpose. "
             "<bookmark mark='a'/> It maximizes a lower bound on the probability of the data: rebuild each picture "
             "well, while keeping its code close to a plain Gaussian. <bookmark mark='b'/> The encoder gives a small "
             "cloud instead of a point, mean mu and spread sigma, and the decoder must rebuild from any sample in it. "
-            "Writing the sample as mu plus sigma times fresh noise lets the gradient flow through. "
-            "<bookmark mark='c'/> For Gaussians, the KL term has a closed form. <bookmark mark='d'/> In practice, "
+            "<bookmark mark='r'/> But you can't take a slope through a roll of the dice. So roll the dice off to the "
+            "side, as fresh noise epsilon, then stretch it by sigma and shift it by mu: the gradient flows back "
+            "through the stretch and the shift, and never needs to enter the dice. That's the reparameterization "
+            "trick. <bookmark mark='c'/> For Gaussians, the KL term has a closed form: an exact formula, with no "
+            "sampling needed. <bookmark mark='d'/> In practice, "
             "its weight, beta, sets the balance."
         ) as vo:
             self.play(FadeIn(cite_), Write(elbo), run_time=2.0)
@@ -161,10 +198,12 @@ class Latent(VoiceoverScene):
             self.play(FadeIn(el[1]), Indicate(elbo[2], color=C.SURPRISE))
             vo.wait_until("b")
             self.play(Write(rep), FadeIn(rl))
+            vo.wait_until("r")
+            self.play(FadeIn(rp, shift=UP * 0.2))
             vo.wait_until("c")
-            self.play(Write(kl))
+            self.play(Write(kl), FadeIn(kl_l))
             vo.wait_until("d")
-            self.play(Write(loss), FadeIn(ll))
+            self.play(FadeOut(rp), Write(loss), FadeIn(ll))
         self.wait(0.3)
         self.clear_scene()
 
@@ -183,7 +222,7 @@ class Latent(VoiceoverScene):
         xt_ = 10 ** math.ceil(math.log10(kmax)) / 4
         ax = CornerAxes(x_range=[0, kmax * 1.1, xt_], y_range=[0, rmax * 1.15, rmax / 2], x_length=5.6, y_length=3.6, tips=False,
                         axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, -0.4, 0])
-        xn = label(r"KL: \ how much the codes say, \ nats", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        xn = label(r"KL: \ how much the codes say, \ in nats \ ($1$ nat $\approx 1.44$ bits)", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.15)
         yn = label(r"rebuild error \ (held-out fonts)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         pts = [ax.c2p(kl[t], rm[t]) for t in nz]
         line = VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners(pts)
@@ -210,7 +249,8 @@ class Latent(VoiceoverScene):
         with self.voiceover(
             f"We trained the same small autoencoder with {len(betas)} values of beta, then ran flow matching in each "
             "code space and asked a judge, a classifier trained on the real letters, how many of the generated "
-            "letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less, fewer nats, and the "
+            "letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less, fewer nats, "
+            "which are bits measured with the natural log, one nat being about one point four four bits, and the "
             f"rebuilds get worse: from {rm[nz[0]]:.3f} to {rm[nz[-1]]:.3f}. <bookmark mark='b'/> But generation "
             + (f"peaks in between: at beta {best}, {100 * cl[best]:.0f} percent of the samples are readable, against "
                f"{100 * cl['0']:.0f} for the plain autoencoder. " if best != "0" else

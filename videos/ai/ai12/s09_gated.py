@@ -15,6 +15,23 @@ def sci(x: float) -> str:
     return rf"{m} \times 10^{{{int(e)}}}"
 
 
+def parity_picture() -> VGroup:
+    """Parity as a light switch: the bits so far, and a lamp that flips at every 1 (lit = odd)."""
+    bits = [1, 0, 1, 1, 0, 1]
+    cols = VGroup()
+    on = 0
+    for b in bits:
+        on ^= b
+        lamp = Circle(radius=0.17, stroke_color=C.BITS, stroke_width=2, fill_color=C.BITS, fill_opacity=0.9 if on else 0.0)
+        cols.add(VGroup(MathTex(str(b), font_size=30, color=WHITE), lamp,
+                        label(r"odd" if on else r"even", font_size=18, color=C.BITS if on else GREY_B)).arrange(DOWN, buff=0.12))
+    cols.arrange(RIGHT, buff=0.35)
+    flips = VGroup(*[Arrow(a[1].get_right(), b_[1].get_left(), buff=0.05, color=DELTA if bits[i + 1] else GREY_D,
+                           stroke_width=2.5, max_tip_length_to_length_ratio=0.35)
+                     for i, (a, b_) in enumerate(zip(cols[:-1], cols[1:]))])
+    return VGroup(cols, flips)
+
+
 class GatedDelta(VoiceoverScene):
     def construct(self):
         self.card()
@@ -75,6 +92,9 @@ class GatedDelta(VoiceoverScene):
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.4, -0.5, 0])
         neg = label(r"with $\beta$ up to $2$, \ the memory can flip signs: \\ enough to track parity, \ as in Part 17",
                     font_size=20, color=GREY_A).next_to(steps, DOWN, buff=0.3).align_to(steps, LEFT)
+        par = gloss(r"parity", r"is the count of $1$s so far odd or even? \\ a switch that flips at every $1$: "
+                    r"$\beta = 2$'s reflection is that flip", parity_picture(), width=5.6, color=DELTA)
+        par.move_to([-3.4, -0.3, 0])
         cite_ = cite(r"S.~Yang et al., \textit{Gated Delta Networks} (2025); \ R.~Grazzi et al., \textit{Unlocking State-Tracking "
                      r"in Linear RNNs Through Negative Eigenvalues} (2025)", corner=DR)
         with self.voiceover(
@@ -87,7 +107,9 @@ class GatedDelta(VoiceoverScene):
             "at all. <bookmark mark='d'/> With beta one, the old answer is erased exactly and replaced by v: a "
             "projection. <bookmark mark='e'/> And with beta up to two, it overshoots into a reflection, a matrix with "
             "eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets "
-            "these memories track parity, the very problem part seventeen's transformer could not solve in one go."
+            "these memories track parity, the very problem part seventeen's transformer could not solve in one go. "
+            "<bookmark mark='f'/> Parity asks: is the count of ones so far odd or even? It's a light switch that "
+            "flips at every one, and a reflection is exactly that flip."
         ) as vo:
             gI = grid(np.eye(2))
             self.play(FadeIn(base), Create(gI), FadeIn(cite_), run_time=1.5)
@@ -109,6 +131,8 @@ class GatedDelta(VoiceoverScene):
                           FadeIn(steps[i]), run_time=1.8)
                 cur = M
             self.play(FadeIn(neg))
+            vo.wait_until("f")
+            self.play(FadeIn(par, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -145,8 +169,8 @@ class GatedDelta(VoiceoverScene):
             "fades a little. <bookmark mark='b'/> The delta rule edits only the direction of the current key. "
             "<bookmark mark='c'/> The gated delta rule does both: a decay alpha to clear the memory out when the "
             "topic changes, and a delta step to correct one fact at a time. That's the rule in three of every four "
-            "layers of Qwen3-Next. <bookmark mark='d'/> Kimi Linear's version gives each channel of the memory its "
-            "own decay, a diagonal matrix instead of one number, so some features fade fast and others hold for "
+            "layers of Qwen3-Next. <bookmark mark='d'/> Kimi Linear's version gives each channel of the memory, each of its feature "
+            "dimensions, its own decay, a diagonal matrix instead of one number, so some features fade fast and others hold for "
             "thousands of tokens. <bookmark mark='e'/> Written this way, every member is the same shape: the old "
             "memory times a transition matrix, plus a write, and the transition is always a diagonal plus a "
             "low-rank part. That shape is what makes them fast to train."
@@ -189,6 +213,16 @@ class GatedDelta(VoiceoverScene):
         l2 = label(r"one triangular solve gives every $w_i$: \\ the UT transform", font_size=20, color=GREY_A).next_to(f2, RIGHT, buff=0.4)
         for l_ in (l1, l2):
             keep_in_frame(l_)
+        # sixty-four corrections in a row, collapsing into one matrix
+        chain = VGroup(*[Square(0.32, stroke_color=DELTA, stroke_width=1.5, fill_color=DELTA, fill_opacity=0.15)
+                         for _ in range(8)], MathTex(r"\cdots", font_size=30, color=GREY_B),
+                       *[Square(0.32, stroke_color=DELTA, stroke_width=1.5, fill_color=DELTA, fill_opacity=0.15)
+                         for _ in range(3)]).arrange(RIGHT, buff=0.1).move_to([-3.2, 1.2, 0])
+        chain_l = label(r"$64$ corrections, \\ one after another", font_size=20, color=DELTA).next_to(chain, RIGHT, buff=0.3)
+        one = VGroup(Rectangle(width=1.6, height=0.5, stroke_color=C.BITS, stroke_width=2, fill_color=C.BITS, fill_opacity=0.15),
+                     MathTex(r"I - \sum w_i k_i^{\top}", font_size=24, color=C.BITS)).move_to([-3.2, 1.2, 0])
+        one[1].move_to(one[0])
+        one_l = label(r"one matrix, \\ the same result", font_size=20, color=C.BITS).next_to(one, RIGHT, buff=0.3)
         dp, dg = float(d["diff_plain"]), float(d["diff_gated"])
 
         res = VGroup(label(rf"step by step \ vs \ by chunks, \ on these ${T:,}$ tokens: \ largest difference "
@@ -201,10 +235,13 @@ class GatedDelta(VoiceoverScene):
             "But a rule that updates the memory one token at a time looks hopeless to train: thousands of steps, "
             "each waiting for the last, while the hardware wants big matrix products. <bookmark mark='a'/> The way "
             "out is to cut the text into chunks of sixty-four and handle each chunk at once. <bookmark mark='b'/> "
-            "Within a chunk, the memory gets multiplied by sixty-four of those I minus beta k k transpose matrices. "
-            "Their product has a compact form, found by Householder-era numerical analysts: the identity minus a sum "
-            "of sixty-four rank-one terms, w times k transpose. <bookmark mark='c'/> And all the w's come from one "
-            "triangular solve. With them, a chunk's outputs and its final memory are just matrix products, and the "
+            "Within a chunk, the memory gets multiplied by sixty-four of those I minus beta k k transpose matrices: "
+            "sixty-four small corrections, one after another. <bookmark mark='w'/> Multiplied out, they collapse "
+            "into one: the identity minus a sum of sixty-four rank-one terms, w times k transpose. Numerical "
+            "analysts call it the WY form; they found it decades ago for products of Householder reflections, "
+            "matrices just like these. <bookmark mark='c'/> And all the w's come from one triangular solve, the UT "
+            "transform: each w depends only on the ones before it, and the hardware works them all out with a few "
+            "big matrix products instead of sixty-four waits in a row. With them, a chunk's outputs and its final memory are just matrix products, and the "
             "decay of the gated version folds into the same form. <bookmark mark='d'/> We checked it on our "
             f"computer: for {T} random tokens, step by step and chunk by chunk agree to rounding error, with "
             f"{nC} sequential steps instead of {T}. On this little processor the plain loop is still quicker; on a "
@@ -217,6 +254,9 @@ class GatedDelta(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[c_.animate.set_fill(STATE, 0.55) for c_ in chunks], lag_ratio=0.03), run_time=1.5)
             vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(m_, shift=RIGHT * 0.1) for m_ in chain], lag_ratio=0.08), FadeIn(chain_l))
+            vo.wait_until("w")
+            self.play(ReplacementTransform(chain, one), FadeTransform(chain_l, one_l))
             self.play(Write(f1), FadeIn(l1))
             vo.wait_until("c")
             self.play(Write(f2), FadeIn(l2))
@@ -256,13 +296,14 @@ class GatedDelta(VoiceoverScene):
         cite_ = cite(r"T.~Dao \& A.~Gu, \textit{Transformers are SSMs: \ Generalized Models and Efficient Algorithms Through "
                      r"Structured State Space Duality} (2024)", corner=DR)
         with self.voiceover(
-            "For the decaying rule there's an even neater view, Mamba-2's state-space duality. <bookmark mark='a'/> "
+            "For the decaying rule there's an even neater view, Mamba-2's state-space duality: one layer with two "
+            "faces, a state-space recurrence and an attention. <bookmark mark='a'/> "
             "Unroll the recurrence, and every output is a weighted sum of earlier values: exactly attention, with "
             "the query-key scores multiplied by a mask L. <bookmark mark='b'/> Entry i, j of the mask is the "
             "product of the gates between token j and token i: how much of token j survives until step i. Where "
-            "the gate forgets, the mask goes dark below that row. <bookmark mark='c'/> That mask is semiseparable: "
-            "every block below the diagonal has rank one, because each entry is a product of two numbers, one for "
-            "the row and one for the column. <bookmark mark='d'/> We checked: masked attention and the recurrence "
+            "the gate forgets, the mask goes dark below that row. <bookmark mark='c'/> That mask is semiseparable, which "
+            "just means: every block below the diagonal has rank one, because each entry is a number for its row "
+            "times a number for its column. <bookmark mark='d'/> We checked: masked attention and the recurrence "
             "agree to rounding error. So the same layer can run as a recurrence while it writes, using constant "
             "memory, and as masked attention while it trains, using big matrix products."
         ) as vo:

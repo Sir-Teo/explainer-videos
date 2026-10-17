@@ -118,7 +118,8 @@ class Flow(VoiceoverScene):
             "The fix is called reflow. Run the trained model to pair each noise point with the sample it actually "
             "leads to, and train a second model on those pairs. <bookmark mark='a'/> Now the pairs agree with each "
             f"other, and the paths straighten: from {s1:.3f} to {s2:.3f}. <bookmark mark='b'/> On a straight path, "
-            "one big step lands where a hundred small ones would. Distilled this way, image models now make a "
+            "one big step lands where a hundred small ones would. That's distillation: a slow teacher model's results "
+            "become the targets a fast student learns to hit in one go. Distilled this way, image models now make a "
             "picture in one to four steps."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(cf[0]), FadeIn(cf[1:]), FadeIn(k1))
@@ -157,8 +158,8 @@ class Flow(VoiceoverScene):
         avg = Arrow(pts[a], pts[b], buff=0.08, color=C.SURPRISE, stroke_width=5, max_tip_length_to_length_ratio=0.08)
         side = np.array([-(pts[b] - pts[a])[1], (pts[b] - pts[a])[0], 0])
         side = side / max(np.linalg.norm(side), 1e-9)  # perpendicular to the jump
-        vl = label(r"$v$: \\ the velocity \\ at each moment", font_size=20, color=SCORE).move_to(tang.get_center() + 1.3 * side)
-        ul = label(r"$(t - s)\,u$: \\ one jump", font_size=20, color=C.SURPRISE).move_to(avg.get_center() - 1.1 * side)
+        vl = label(r"$v$: \\ the speedometer, \\ velocity at each moment", font_size=20, color=SCORE).move_to(tang.get_center() + 1.3 * side)
+        ul = label(r"$(t - s)\,u$: \\ one jump, \\ at the average velocity", font_size=20, color=C.SURPRISE).move_to(avg.get_center() - 1.1 * side)
         keep_in_frame(vl)
         colors = {r"u": C.SURPRISE, r"v": SCORE, r"z_s": NOISE, r"z_t": DATA}
         eqs = VGroup(
@@ -172,8 +173,8 @@ class Flow(VoiceoverScene):
         notes = VGroup(label(r"the average velocity from $s$ to $t$", font_size=18, color=GREY_A),
                        label(r"so one jump does it", font_size=18, color=GREY_A),
                        label(r"differentiate $(t-s)\,u = z_t - z_s$ in $s$", font_size=18, color=GREY_A),
-                       label(r"one Jacobian-vector product", font_size=18, color=GREY_A),
-                       label(r"sg: \ the target is held fixed", font_size=18, color=GREY_A))
+                       label(r"one Jacobian-vector product: \ about one extra pass", font_size=18, color=GREY_A),
+                       label(r"sg: \ stop-gradient, \ the target is held fixed, \ a constant", font_size=18, color=GREY_A))
         for n_, e_ in zip(notes, eqs):
             n_.next_to(e_, DOWN, buff=0.06).align_to(e_, LEFT)
         for k in range(1, len(eqs)):
@@ -186,13 +187,17 @@ class Flow(VoiceoverScene):
             "Reflow needs a second model and a second round of training. In 2025, MeanFlow found a more direct "
             "route. <bookmark mark='a'/> Here is one point's path under our flow model: it bends. Flow matching "
             "learns v, the velocity at each moment, so it has to take many small steps. <bookmark mark='b'/> "
-            "MeanFlow learns u instead: the average velocity between two times s and t. <bookmark mark='c'/> With "
-            "it, a single jump from s to t lands on the path, however much it bends. <bookmark mark='d'/> But we "
-            "can't compute that integral to train on. The trick: write t minus s times u as z t minus z s, and "
-            "differentiate in s. Out comes an identity: the average velocity is the velocity now, plus t minus s "
-            "times how fast u changes along the path. <bookmark mark='e'/> And that rate of change costs one "
-            "Jacobian-vector product, a single forward pass. <bookmark mark='f'/> So the network is trained to "
-            "match the right-hand side, held fixed, with no integral and no teacher model."
+            "MeanFlow learns u instead: the average velocity between two times s and t, like the average speed over "
+            "a whole trip rather than the speedometer's reading at each moment. <bookmark mark='c'/> With "
+            "it, a single jump from s to t lands on the path, however much it bends. <bookmark mark='d'/> But "
+            "to get u exactly we'd have to add up the velocity all along the path, that integral, which is the slow "
+            "work we wanted to avoid. The trick: write t minus s times u as z t minus z s, and "
+            "differentiate in s. Out comes an identity: the average velocity is the velocity now, plus a "
+            "correction, t minus s times how fast the average shifts as the starting point moves along the path. "
+            "<bookmark mark='e'/> And that correction costs one Jacobian-vector product: how the network's output "
+            "changes when its input moves in one direction, which costs about one extra run of the network. "
+            "<bookmark mark='f'/> So the network is trained to match the right-hand side, held fixed, that is "
+            "treated as a constant target, with no integral and no teacher model."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")

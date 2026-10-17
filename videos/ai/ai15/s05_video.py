@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import PATCH, gray_image, load
+from videos.ai.ai15.common import PATCH, causal_conv_picture, gray_image, load
 
 
 class Video(VoiceoverScene):
@@ -109,23 +109,34 @@ class Video(VoiceoverScene):
         num = label(rf"${int(d['pixels']):,}$ pixels $\to$ ${int(d['numbers'])}$ numbers \ (${ratio:.0f}\times$); \ "
                     rf"rebuild error ${float(d['rmse']):.3f}$".replace(",", "{,}"), font_size=22, color=PATCH).to_edge(DOWN, buff=0.2)
         cite_ = cite(r"e.g.\ Wan~2.1, \ HunyuanVideo, \ Cosmos (2024--25): \ causal 3D autoencoders", corner=UL)
+        cc = gloss(r"a convolution in time", r"the sliding stencil becomes a small cube \\ through the frames, "
+                   r"looking only backward", causal_conv_picture(), width=6.4, color=PATCH).move_to([0, 0.15, 0])
+        chn = label(r"channels: \ several numbers per \\ latent pixel, \ like a colour pixel's $3$", font_size=18,
+                    color=PATCH).next_to(size, UP, buff=0.2).align_to(size, LEFT)
+        keep_in_frame(chn)
         with self.voiceover(
             "Where does that squeeze come from? A video autoencoder, with convolutions that run in time as well as "
-            "space. We trained a small one on clips of a bouncing letter. <bookmark mark='a'/> The first frame is "
+            "space. <bookmark mark='v'/> The little stencil that a convolution slides over a picture becomes a "
+            "small cube, sliding through the frames too, and looking only backward. We trained a small one on clips "
+            "of a bouncing letter. <bookmark mark='a'/> The first frame is "
             "squeezed on its own; <bookmark mark='b'/> after that, every four frames become one latent frame, and "
-            "each is only allowed to see frames up to its own. It's causal, like a language model. "
+            "each is only allowed to see frames up to its own. Each latent frame is a stack of channels: every "
+            "latent pixel holds several numbers, the way a colour pixel holds three. It's causal, like a language model. "
             "<bookmark mark='c'/> That has two payoffs: a single picture is just a one-frame video, so the same model "
             "handles both, and a clip can be encoded as it streams in. <bookmark mark='d'/> "
             f"Here, {int(d['pixels']):,} pixels become {int(d['numbers'])} numbers, {ratio:.0f} times fewer. Real "
             "video models squeeze four times in time and eight in each direction of space, the same recipe."
         ) as vo:
             self.play(FadeIn(top), FadeIn(tl), FadeIn(cite_))
+            vo.wait_until("v")
+            self.play(FadeIn(cc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(cc))
             self.play(GrowFromCenter(braces[0]), FadeIn(lats[0]), FadeIn(ll[0]))
             vo.wait_until("b")
             self.play(GrowFromCenter(braces[1]), FadeIn(lats[1]), FadeIn(ll[1]), GrowFromCenter(braces[2]), FadeIn(lats[2]),
                       FadeIn(ll[2]), FadeIn(size))
-            self.play(FadeIn(rule))
+            self.play(FadeIn(rule), FadeIn(chn))
             vo.wait_until("c")
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in down], lag_ratio=0.2), FadeIn(bot), FadeIn(bl))
             vo.wait_until("d")
