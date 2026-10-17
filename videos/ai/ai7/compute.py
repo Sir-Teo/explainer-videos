@@ -168,7 +168,7 @@ def compute_random():
                                   torch.nn.ReLU(), torch.nn.Linear(512, 2))
         opt = torch.optim.Adam(net.parameters(), lr=1e-3)
         t = torch.tensor(labels, dtype=torch.long)
-        curve = []
+        curve, fits = [], []
         for step in range(1, 1501):
             opt.zero_grad()
             loss = torch.nn.functional.cross_entropy(net(Xtr), t)
@@ -176,14 +176,19 @@ def compute_random():
             opt.step()
             if step % 10 == 0 or step < 10:
                 with torch.no_grad():
-                    tr = float((net(Xtr).argmax(1) == t).float().mean())
+                    hit = (net(Xtr).argmax(1) == t).numpy()
+                    tr = float(hit.mean())
                     te = float((net(Xte).argmax(1).numpy() == yte).mean())
                 curve.append((step, tr, te, float(loss)))
+                fits.append(hit)
         out[name] = np.array(curve)
+        # which training pages it gets right at each logged step (the order things are memorized in)
+        out[f"fits_{name}"] = np.array(fits, dtype=np.uint8)
+        out[f"labels_{name}"] = np.asarray(labels)
     n_params = sum(p.numel() for p in net.parameters())
     assert out["shuffled"][-1, 1] == 1.0 and abs(out["shuffled"][-1, 2] - 0.5) < 0.1 and out["true"][-1, 2] > 0.95
-    first = {k: int(v[np.argmax(v[:, 1] >= 1.0), 0]) for k, v in out.items()}
-    return dict(true=out["true"], shuffled=out["shuffled"], n_params=int(n_params), n=len(ytr), first100=first)
+    first = {k: int(out[k][np.argmax(out[k][:, 1] >= 1.0), 0]) for k in ("true", "shuffled")}
+    return dict(**out, n_params=int(n_params), n=len(ytr), first100=first, ytrue=np.asarray(ytr))
 
 
 # ---------------------------------------------------------------------------
