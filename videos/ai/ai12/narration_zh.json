@@ -32,6 +32,11 @@
    "en": "Chapter one. The cache.",
    "zh": "第1章。缓存。"
   },
+  "b8da75598c41": {
+   "scene": "KVCache",
+   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. Serve many long conversations at once, and this memory, not the model's weights, is what fills the graphics cards.",
+   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。同时服务许多段长对话时，把显卡塞满的，正是这份记忆，而不是模型的权重。"
+  },
   "cf64e31a2cf2": {
    "scene": "KVCache",
    "en": "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every attention head kept its own keys and values, each token of context would cost 2.5 megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and each group shares one key and one value. That's 8 times less, 320 kilobytes a token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the hybrid Qwen3-Next. Let's see how.",
@@ -142,11 +147,6 @@
    "en": "Chapter six. A recall test.",
    "zh": "第6章。回忆测试。"
   },
-  "b232599de434": {
-   "scene": "Recall",
-   "en": "Chapter five. A recall test.",
-   "zh": "第5章。回忆测试。"
-  },
   "e81f3ddaabb6": {
    "scene": "Recall",
    "en": "How much does forgetting cost? Here's a test of pure memory: a list of keys, each followed by its value; <bookmark mark='a'/> then some of the keys again, and the model must answer with their values. It's the skill a model needs to quote a name or a number from far back in a document. <bookmark mark='b'/> We trained tiny one-layer models to play it, with three kinds of memory: softmax attention, linear attention that only adds, and the delta rule.",
@@ -157,15 +157,15 @@
    "en": "With 8 pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls apart: 38 percent right at 48 pairs, as its crosstalk swamps the answers, worst once there are more pairs than each key has numbers, 16 here. The delta rule holds on much longer: 88 percent. And softmax attention, which simply keeps every pair, gets 100. <bookmark mark='b'/> Exact recall is what attention buys with its growing cache, and what a fixed memory has to approximate.",
    "zh": "只有8对的时候，三种都能应付。<bookmark mark='a'/>随着列表变长，只做加法的记忆就垮了：到48对时，只答对38%，因为串扰淹没了答案；一旦键值对的数目，超过了每个键里数的个数，也就是这里的16，情况就最糟。δ规则撑得久得多：88%。而softmax注意力，干脆把每一对都留着，得到100%。<bookmark mark='b'/>精确的回忆，是注意力用不断变大的缓存换来的，也是固定大小的记忆只能去逼近的。"
   },
+  "31afb51e388a": {
+   "scene": "Recall",
+   "en": "Here is how each one learns the game, on the longest lists, 48 pairs, step by step through training. <bookmark mark='a'/> For a long time, all three are guessing. The delta rule starts first, half the answers right by step 500, and climbs towards its ceiling, 88 percent. Softmax attention gets it later, but in a rush: half right by step 700, and every answer right soon after. Once it learns to match a query to the same key, the cache does the rest. <bookmark mark='b'/> The adding memory never gets halfway: it stalls at 38 percent, where its crosstalk drowns the answers.",
+   "zh": "这是它们各自在训练中学这个游戏的过程，用的是最长的列表，48对，一步一步看。<bookmark mark='a'/>很长一段时间里，三个都在瞎猜。delta规则最先开窍，到第500步答对一半，然后朝它的上限爬升，88%。softmax注意力学得晚，但一下子就会了：到第700步答对一半，很快就全部答对。一旦它学会把查询和同样的键配上，剩下的交给缓存就行。<bookmark mark='b'/>只做加法的记忆连一半都没到：它停在38%，串扰淹没了答案。"
+  },
   "b278c5bb0db1": {
    "scene": "Hybrid",
    "en": "Chapter seven. Hybrids.",
    "zh": "第7章。混合架构。"
-  },
-  "6eba0da36312": {
-   "scene": "Hybrid",
-   "en": "Chapter six. Hybrids.",
-   "zh": "第6章。混合架构。"
   },
   "459dfb8b3681": {
    "scene": "Hybrid",
@@ -196,11 +196,6 @@
    "scene": "Outro",
    "en": "Songlin Yang's papers and blog on linear attention and the delta rule are the best way in. Thanks for watching, and see you in part thirteen.",
    "zh": "关于线性注意力和δ规则，杨松琳的论文和博客，是最好的入门读物。感谢观看，我们第13部分再见。"
-  },
-  "b8da75598c41": {
-   "scene": "KVCache",
-   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. Serve many long conversations at once, and this memory, not the model's weights, is what fills the graphics cards.",
-   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。同时服务许多段长对话时，把显卡塞满的，正是这份记忆，而不是模型的权重。"
   }
  },
  "title_en": "AI, Built: Part 12, Memory",
@@ -210,8 +205,9 @@
   "Linear": "2. Attention without the softmax",
   "Rules": "3. How to write to memory",
   "SSM": "4. State-space models",
-  "Recall": "5. A recall test",
-  "Hybrid": "6. Hybrids",
+  "GatedDelta": "5. The gated delta rule",
+  "Recall": "6. A recall test",
+  "Hybrid": "7. Hybrids",
   "Outro": "Recap, and where this comes back"
  }
 }

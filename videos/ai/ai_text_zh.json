@@ -2971,6 +2971,10 @@
     [
       "^\\$(\\d+)\\$ pages whose shuffled author \\\\\\\\ is wrong$",
       "$\\1$页，打乱后的作者 \\\\\\\\ 是错的"
+    ],
+    [
+      "^answers right, \\\\ lists of \\$(\\d+)\\$ pairs, \\\\ during training$",
+      "答对的比例，\\\\ $\\1$对的列表，\\\\ 训练途中"
     ]
   ]
 }
