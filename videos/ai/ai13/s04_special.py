@@ -84,13 +84,22 @@ class Special(VoiceoverScene):
             g.add(VGroup(nm, bar, val))
         head = label(r"held-out bits per character \ (shorter is better; \ axis starts at "
                      + f"${lo:.2f}$)", font_size=24, color=GREY_A).to_edge(UP, buff=0.5)
-        gain = (rows[0][1] - rows[1][1]) / max(rows[0][1] - rows[2][1], 1e-9)
+        da, mx, dt = rows[0][1], rows[1][1], rows[2][1]
+        if dt < da and mx < da:  # the usual picture: the big dense model is best, the mixture gets part of the way
+            gain = (da - mx) / (da - dt)
+            verdict = (f"<bookmark mark='b'/> The mixture gets {100 * min(gain, 1):.0f} percent of the way from the first "
+                       "to the third, for the cost of the first. ")
+        elif mx < da:
+            verdict = (f"<bookmark mark='b'/> The mixture, {mx:.3f}, beats the dense model with the same arithmetic, "
+                       f"{da:.3f}. And with the same short training, the dense model with all the parameters does no "
+                       f"better, {dt:.3f}: eight times the width is more to learn, and it hasn't caught up. ")
+        else:
+            verdict = (f"<bookmark mark='b'/> At our tiny scale the mixture doesn't pay off: {mx:.3f}, against {da:.3f} "
+                       "for the dense model with the same arithmetic. ")
         with self.voiceover(
             "Is it worth it? Compare three models. <bookmark mark='a'/> A dense one doing as much arithmetic per "
             "character as the mixture; the mixture; and a dense one with as many parameters in total. "
-            f"<bookmark mark='b'/> The mixture gets {100 * min(max(gain, 0), 1):.0f} percent of the way from the first "
-            "to the third, for the cost of the first. That's the trade the biggest models make: knowledge in the "
-            "total, cost in the active."
+            + verdict + "At scale, that's the trade the biggest models make: knowledge in the total, cost in the active."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
