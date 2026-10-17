@@ -59,7 +59,24 @@ class Balance(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(p), FadeIn(expl))
+            # training, replayed: the picture fills in from the left, a column every 50 steps, as a counter runs
+            img, frame, t_, el_, tl_, st_ = p
+            n_cols = len(np.asarray(m["load_none"]))
+            cover = Rectangle(width=img.width + 0.02, height=img.height + 0.02, stroke_width=0, fill_color="#121722",
+                              fill_opacity=1).move_to(img)
+            u = ValueTracker(0.0)
+            cover.add_updater(lambda c_: c_.stretch_to_fit_width(max((img.width + 0.02) * (1 - u.get_value()), 1e-3))
+                              .move_to(img.get_right() + RIGHT * 0.01, aligned_edge=RIGHT))
+            cnt = always_redraw(lambda: MathTex(rf"\text{{training step }}{50 * int(round(u.get_value() * n_cols)):,}"
+                                                .replace(",", "{,}"), font_size=26, color=C.BITS).next_to(st_, DOWN, buff=0.25))
+            self.add(img, cover, frame)
+            self.play(FadeIn(t_), FadeIn(el_), FadeIn(tl_), Create(frame), FadeIn(expl))
+            self.add(cnt)
+            self.play(u.animate.set_value(1.0), run_time=3.5, rate_func=linear)
+            cover.clear_updaters()
+            cnt.clear_updaters()
+            self.remove(cover)
+            self.play(FadeIn(st_))
             vo.wait_until("b")
             self.play(FadeIn(why))
         self.wait(0.3)

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import A, K, Q, V, curve, load
+from videos.ai.ai11.common import A, K, Q, V, curve, load, softmax_picture, softmax_stage
 
 
 class Smoother(VoiceoverScene):
@@ -141,6 +141,9 @@ class Smoother(VoiceoverScene):
         pl = label(r"three learned matrices, applied to every character's vector", font_size=24, color=GREY_A)
         pl.next_to(proj, UP, buff=0.15)
         cite_ = cite(r"A.~Vaswani et al., \textit{Attention Is All You Need} (2017)", corner=UR)
+        smc = gloss(r"softmax", r"exponentiate every score, then divide by the total: \\ positive weights that add up to one",
+                    softmax_picture(), width=5.0, color=A).move_to([0, -1.75, 0])
+        smp = smc[1][-1]
         with self.voiceover(
             "Write it down. The guess at the query is a sum over the pages: each page's value, times a weight. The "
             "weight is a softmax of a score: the exponential of the score, divided by the total, so the weights are "
@@ -152,9 +155,13 @@ class Smoother(VoiceoverScene):
             "Attention is a kernel smoother whose kernel is learned."
         ) as vo:
             self.play(Write(f1), run_time=2.0)
-            self.play(FadeIn(sm), FadeIn(sml))
+            self.play(FadeIn(sm), FadeIn(sml), FadeIn(smc, shift=UP * 0.2))
+            self.wait(1.5)  # until the narration reaches the softmax
+            for k_ in (1, 2):  # the scores, then their exponentials, then those over their total
+                b_, c_ = softmax_stage(smp, k_)
+                self.play(Transform(smp[1], b_), Transform(smp[2], c_), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeOut(sm), FadeOut(sml))
+            self.play(FadeOut(sm), FadeOut(sml), FadeOut(smc))
             morph(self, f1, f2, run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(cite_), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in roles], lag_ratio=0.5),

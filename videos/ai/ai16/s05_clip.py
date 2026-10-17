@@ -85,16 +85,35 @@ class Clip(VoiceoverScene):
         colors = {r"s_{ij}": GREY_A}
         f1 = cmath(r"\text{CLIP:}\quad -\log \frac{e^{s_{ii}}}{\sum_j e^{s_{ij}}}", font_size=34, color=TEXT_C)
         f2 = cmath(r"\text{SigLIP:}\quad -\sum_{j} \log \sigma\big(\pm(s_{ij} + b)\big)", font_size=34, color=IMG_C)
-        fs = VGroup(f1, f2).arrange(DOWN, aligned_edge=LEFT, buff=0.6).move_to([-2.6, 0.8, 0])
+        fs = VGroup(f1, f2).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([-2.6, 2.05, 0])
         l1 = label(r"each picture picks its caption \\ out of the whole batch", font_size=22, color=GREY_A).next_to(f1, RIGHT, buff=0.5)
         l2 = label(r"every pair on its own: \\ match, \ or not?", font_size=22, color=GREY_A).next_to(f2, RIGHT, buff=0.5)
         res = VGroup(label(rf"CLIP's loss: \ right caption ${100 * float(c['acc_clip']):.0f}\%$, \ right letter "
                            rf"${100 * float(c['letter_clip']):.0f}\%$", font_size=24, color=TEXT_C),
                      label(rf"SigLIP's loss: \ right caption ${100 * float(c['acc_siglip']):.0f}\%$, \ right letter "
                            rf"${100 * float(c['letter_siglip']):.0f}\%$", font_size=24, color=IMG_C))
-        res.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.8)
+        # the two runs, side by side: the same twelve pairs scored at the same checkpoints
+        checks = [int(x) for x in c["checks_clip"]]
+        assert checks == [int(x) for x in c["checks_siglip"]]
+        S2 = 2.3
+        snaps = {m: np.asarray(c[f"snaps_{m}"]) for m in ("clip", "siglip")}
+        gx = {"clip": -3.0, "siglip": 3.0}
+
+        def tbl(m, k):
+            return heat(snaps[m][k], S2, S2, signed=True).move_to([gx[m], -0.75, 0])
+
+        cur = {m: tbl(m, 0) for m in snaps}
+        frames = VGroup(*[SurroundingRectangle(cur[m], buff=0, color=GREY_D, stroke_width=1.5) for m in snaps])
+        names = VGroup(label(r"trained with CLIP's loss", font_size=22, color=TEXT_C).next_to(cur["clip"], UP, buff=0.12),
+                       label(r"trained with SigLIP's loss", font_size=22, color=IMG_C).next_to(cur["siglip"], UP, buff=0.12))
+        for r_, m in zip(res, snaps):
+            r_.scale(0.85).next_to(cur[m], DOWN, buff=0.15)
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
+                                            color=C.BITS).move_to([0, -0.75, 0]))
         rl = label(rf"choosing among all ${int(c['n_captions'])}$ captions, \ for all ${int(c['n_images']):,}$ pictures".replace(",", "{,}"),
-                   font_size=20, color=GREY_B).next_to(res, DOWN, buff=0.12)
+                   font_size=20, color=GREY_B).to_edge(DOWN, buff=0.25)
+        key_ = label(r"blue: \ high score; \ red: \ low", font_size=20, color=GREY_B).move_to([0, -2.55, 0])
         cite_ = cite(r"X.~Zhai et al., \textit{Sigmoid Loss for Language Image Pre-Training} (2023)", corner=UR)
         with self.voiceover(
             "There are two ways to train this. CLIP's: each picture must pick its own caption out of the whole batch, "
@@ -107,8 +126,16 @@ class Clip(VoiceoverScene):
             vo.wait_until("a")
             self.play(Write(f2), FadeIn(l2))
             vo.wait_until("b")
+            self.play(*[FadeIn(cur[m]) for m in cur], Create(frames), FadeIn(names), FadeIn(key_))
+            self.add(cnt)
+            for k in range(1, len(checks)):
+                nxt = {m: tbl(m, k) for m in cur}
+                self.play(*[FadeTransform(cur[m], nxt[m]) for m in cur], t.animate.set_value(checks[k]), run_time=0.7)
+                cur = nxt
+                self.bring_to_front(frames)
             self.play(FadeIn(res), FadeIn(rl))
         self.wait(0.3)
+        self.remove(cnt)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -131,14 +158,32 @@ class Clip(VoiceoverScene):
             [cur.get_left()[0] + cell * (i + 0.5), cur.get_top()[1] - cell * (i + 0.5), 0]) for i in range(n)])
         gl = label(r"rows: \ $12$ pictures; \ columns: \ their $12$ captions", font_size=20, color=GREY_A).next_to(cur, UP, buff=0.15)
         ax = CornerAxes(x_range=[0, checks[-1], 1000], y_range=[0, float(L[:, 1].max()) * 1.05, 1], x_length=4.6, y_length=2.8,
-                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -0.3, 0])
+                        tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, 0.25, 0])
         yn = label(r"CLIP's loss on each batch of $128$", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         xn = label(r"training steps", font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.12)
         t = ValueTracker(0)
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
                             .next_to(gl, UP, buff=0.15))
         dg = np.array([np.mean(np.diag(s_)) - np.mean(s_[~np.eye(n, dtype=bool)]) for s_ in snaps])
-        con = gloss(r"contrastive training", r"pull the matching pairs together, \ push the rest apart", corner=DR, color=TEXT_C)
+        # contrastive training, schematic: three pictures (squares) and their captions (dots), scattered; then each pair
+        # pulled together and the pairs pushed apart
+        pair_c = [TEXT_C, IMG_C, C.SURPRISE]
+        before = [((-1.3, 0.25), (0.9, -0.3)), ((0.2, 0.35), (-0.6, -0.35)), ((1.4, 0.2), (-1.6, -0.3))]
+        after = [((-1.75, 0.0), (-1.4, 0.0)), ((-0.18, 0.0), (0.18, 0.0)), ((1.4, 0.0), (1.75, 0.0))]
+
+        def pairs_pic(pos):
+            fr = Rectangle(width=4.0, height=0.9, stroke_width=0, fill_opacity=0)  # a fixed frame: both states line up
+            g_ = VGroup(fr)
+            for col, (pi, ci) in zip(pair_c, pos):
+                g_.add(Square(0.22, stroke_width=0, fill_color=col, fill_opacity=0.9).move_to([*pi, 0]),
+                       Dot([*ci, 0], radius=0.11, color=col))
+            return g_
+
+        con = gloss(r"contrastive training", r"pull the matching pairs together, \ push the rest apart \\ "
+                    r"(squares: \ pictures; \ dots: \ captions)", picture=pairs_pic(before), corner=DR, width=4.6, color=TEXT_C)
+        pic = con[1][2]
+        tgt = pairs_pic(after)
+        tgt.scale(pic[0].width / tgt[0].width).shift(pic[0].get_center() - tgt[0].get_center())
         with self.voiceover(
             "How does training find that diagonal? Here is the same table of twelve pictures and their captions, "
             "scored at checkpoints while the two encoders learn. <bookmark mark='a'/> At the start, every score is "
@@ -153,6 +198,7 @@ class Clip(VoiceoverScene):
             self.play(Create(diag))
             vo.wait_until("b")
             self.play(FadeIn(con), run_time=0.5)
+            self.play(*[m_.animate.move_to(t_) for m_, t_ in zip(pic[1:], tgt[1:])], run_time=1.2)
             for k in range(1, len(checks)):
                 nxt = grid(k)
                 seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]

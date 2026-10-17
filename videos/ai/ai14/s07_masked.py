@@ -67,14 +67,21 @@ class Masked(VoiceoverScene):
 
         step = 12.0 / half
 
-        def cell(ch, i, fresh=False):  # fixed character cells, so that every round lines up with the next
+        def at(i):
             row, col = divmod(i, half)
-            if ch == " ":
-                m = Dot(radius=0.02, color=GREY_D)
-            else:
-                m = Text(ch, font=MONO, font_size=28, color=GREY_D if ch == "_" else C.BITS if fresh else WHITE)
-            return m.move_to([-6.0 + step * (col + 0.5), 0.9 - 1.0 * row, 0])
+            return np.array([-6.0 + step * (col + 0.5), 0.9 - 1.0 * row, 0])
 
+        def cell(ch, i, fresh=False):  # fixed character cells, so that every round lines up with the next
+            if ch == " ":
+                m = Dot(radius=0.025, color=GREY_B)
+            elif ch == "_":  # a blank: an empty slot, its line at the foot of the cell
+                return Line(LEFT * step * 0.3, RIGHT * step * 0.3, color=GREY_B, stroke_width=2.5).move_to(at(i) + DOWN * 0.2)
+            else:
+                m = Text(ch, font=MONO, font_size=28, color=C.BITS if fresh else WHITE)
+            return m.move_to(at(i))
+
+        slots = VGroup(*[RoundedRectangle(width=step * 0.84, height=0.62, corner_radius=0.05, stroke_color=GREY_C, stroke_width=1.2,
+                                          fill_color="#151B27", fill_opacity=1).move_to(at(i)) for i in range(T)])
         cur = VGroup(*[cell(ch, i) for i, ch in enumerate(frames[0])])
         counter = VGroup(label(r"round", font_size=26, color=GREY_A), Integer(0, font_size=30, color=C.BITS)).arrange(RIGHT, buff=0.2)
         counter.to_edge(UP, buff=0.5)
@@ -90,7 +97,8 @@ class Masked(VoiceoverScene):
             "confident first, and the rest fills in around them. It's a different way to write: all at once, "
             "then refined, rather than left to right."
         ) as vo:
-            self.play(FadeIn(cur), FadeIn(counter), FadeIn(info))
+            self.play(LaggedStart(*[FadeIn(VGroup(b_, c_)) for b_, c_ in zip(slots, cur)], lag_ratio=0.01), FadeIn(counter),
+                      FadeIn(info), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(rule))
             vo.wait_until("b")

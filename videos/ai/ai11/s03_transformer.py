@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import A, K, MONO, OURS, Q, V, curve, heat_image, load
+from videos.ai.ai11.common import A, K, MONO, OURS, Q, V, curve, heat_image, layernorm_picture, layernorm_stage, load
 
 
 def board_rows():
@@ -70,6 +70,9 @@ class Transformer(VoiceoverScene):
         eqs.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -1.9, 0])
         rep = label(rf"one block; \ ours stacks ${t['layers']}$", font_size=24, color=GREY_A).next_to(eqs, DOWN, buff=0.2)
         cite_ = cite(r"A.~Vaswani et al., \textit{Attention Is All You Need} (2017)", corner=DL)
+        lnc = gloss(r"LN, \ layer normalization", r"shift a vector's numbers to average $0$, \\ then rescale them to a "
+                    r"standard spread of $1$ \ (Part 8)", layernorm_picture(), width=4.6, color=C.TRUE_P).move_to([3.6, 0.85, 0])
+        lnp = lnc[1][-1]
         with self.voiceover(
             f"Now build one. Each character enters as a vector, part two's idea, {t['d']} numbers here. "
             "The column of vectors is the residual stream from part eight: every layer reads from it and adds back "
@@ -77,8 +80,10 @@ class Transformer(VoiceoverScene):
             "positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, a "
             "multilayer perceptron: part eight's small network of weighted sums and bends, applied to each position "
             "on its own, like thinking over what was gathered. "
-            "<bookmark mark='c'/> Each half normalizes its input, and adds its output back to the stream. Stack four "
-            "blocks, read off a guess for the next character, and that's the whole machine."
+            "<bookmark mark='c'/> Each half first normalizes its input, with part eight's layer norm: "
+            "<bookmark mark='n'/> it shifts the vector's numbers to an average of zero, and rescales them to a standard "
+            "size. Then the half adds its output back to the stream. Stack four blocks, read off a guess for the next "
+            "character, and that's the whole machine."
         ) as vo:
             self.play(FadeIn(stream), LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cols], lag_ratio=0.15),
                       FadeIn(chars), FadeIn(cite_))
@@ -88,7 +93,11 @@ class Transformer(VoiceoverScene):
             self.play(FadeOut(att), LaggedStart(*[Create(m) for m in mlp], lag_ratio=0.1), FadeIn(ml_l))
             self.play(*[Indicate(c_, color=C.BITS, scale_factor=1.05) for c_ in cols])
             vo.wait_until("c")
-            self.play(FadeOut(mlp), Write(eqs), FadeIn(rep))
+            self.play(FadeOut(mlp), FadeOut(at_l), FadeOut(ml_l), Write(eqs), FadeIn(rep))
+            self.play(FadeIn(lnc, shift=UP * 0.2))
+            vo.wait_until("n")
+            self.play(Transform(lnp[2], layernorm_stage(lnp, 1)), run_time=1.2)
+            self.play(Transform(lnp[2], layernorm_stage(lnp, 2)), run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -147,8 +156,6 @@ class Transformer(VoiceoverScene):
         xn = label(r"training steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         steps = cv[:, 0]
-        cvv = curve(ax, steps, np.minimum(cv[:, 1], hi), GREY_B, 3)
-        cps = curve(ax, steps, np.minimum(cv[:, 2], hi), OURS, 4)
         refs = VGroup()
         for val, txt, col in ((k["best_bits"], r"Kneser--Ney (Part 6)", C.TRUE_P), (n["mix_bits"], r"Part 8's best", C.NEURAL)):
             refs.add(VGroup(DashedLine(ax.c2p(0, val), ax.c2p(float(t["steps"]), val), color=col, stroke_width=1.5),
@@ -179,9 +186,35 @@ class Transformer(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(facts))
             self.play(FadeIn(refs), FadeIn(key))
-            self.play(Create(cvv), Create(cps), run_time=4.0)
+            # training, replayed: both curves draw as a step counter runs, the passage's bits riding on its curve
+            tk = ValueTracker(float(steps[0]))
+
+            def upto(col, color, sw):
+                def build():
+                    s_ = tk.get_value()
+                    xs_ = [float(steps[0])] + [x_ for x_ in steps[1:] if x_ < s_] + [max(s_, float(steps[0]) + 1.0)]
+                    ys_ = np.minimum(np.interp(xs_, steps, cv[:, col]), hi)
+                    return VMobject(color=color, stroke_width=sw).set_points_as_corners([ax.c2p(a_, b_) for a_, b_ in zip(xs_, ys_)])
+                return always_redraw(build)
+
+            def head_at(col):
+                return ax.c2p(tk.get_value(), min(float(np.interp(tk.get_value(), steps, cv[:, col])), hi))
+
+            lv, lp = upto(1, GREY_B, 3), upto(2, OURS, 4)
+            hd = always_redraw(lambda: Dot(head_at(2), radius=0.08, color=OURS))
+            sc = always_redraw(lambda: MathTex(rf"\text{{step }}{int(round(tk.get_value())):,}".replace(",", "{,}"), font_size=30,
+                                               color=OURS).move_to(ax.c2p(0.72 * float(t["steps"]), hi - 0.2)))
+            rl = label(r"the passage", font_size=24, color=OURS).move_to(ax.c2p(0.72 * float(t["steps"]), hi - 0.2) + DOWN * 0.45)
+            rl.shift(LEFT * 0.35)
+            rd = always_redraw(lambda: DecimalNumber(float(np.interp(tk.get_value(), steps, cv[:, 2])), num_decimal_places=2,
+                                                     font_size=28, color=OURS).next_to(rl, RIGHT, buff=0.15))
+            self.add(lv, lp, hd, sc, rl, rd)
+            self.play(tk.animate.set_value(float(steps[-1])), run_time=5.0, rate_func=linear)
+            for m_ in (lv, lp, hd, rd, sc):
+                m_.clear_updaters()
+            self.remove(hd)
             vo.wait_until("a")
-            end = glow_dot(cps.get_end(), color=OURS, radius=0.09)
+            end = glow_dot(lp.get_end(), color=OURS, radius=0.09)
             self.play(FadeIn(end, scale=0.5), Indicate(key[1], color=OURS))
         self.wait(0.3)
         self.clear_scene()

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai6.common import AUSTEN, DICKENS, MONO, load
+from videos.ai.ai6.common import AUSTEN, DICKENS, MONO, load, pca_picture, spin_pca
 
 
 class PCA(VoiceoverScene):
@@ -54,6 +54,18 @@ class PCA(VoiceoverScene):
                        for i in range(3)])
         bl = label(r"share of all the variation, \ direction by direction", font_size=24, color=GREY_A)
         bl.next_to(base, DOWN, buff=0.2).align_to(base, LEFT)
+        # a principal component in a picture: the pages on two word rates, and the line along which they spread most
+        vocab = list(pg["vocab"])
+        words = ("the", "not")
+        Z2 = Z[:, [vocab.index(w) for w in words]]
+        cov2 = Z2.T @ Z2 / len(Z2)
+        th_best = float(np.arctan2(*np.linalg.eigh(cov2)[1][:, -1][::-1]))
+        th = ValueTracker(th_best - 0.5 * np.pi)
+        pcard = gloss(r"a principal component", r"the direction along which the data spreads most \\ "
+                      rf"(shown here with two of the ${n}$ word rates)", pca_picture(Z2, words), corner=RIGHT, width=5.0,
+                      color=C.MODEL_Q)
+        pcard.move_to([3.6, 0.3, 0])
+        spin_pca(pcard[1][2], cov2, th)
         with self.voiceover(
             "Principal components find the directions in which data varies the most. Start with the covariance "
             "matrix: seventy by seventy, how each pair of word rates moves together. <bookmark mark='a'/> It's "
@@ -62,10 +74,15 @@ class PCA(VoiceoverScene):
             f"{100 * share[0]:.1f} percent of all the variation, the next {100 * share[1]:.1f}, and then they "
             "fall away."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(s) for s in heat], lag_ratio=0.0002), FadeIn(hl), run_time=2.0)
+            self.play(FadeIn(pcard, shift=UP * 0.2))
+            self.play(th.animate.set_value(th_best), LaggedStart(*[FadeIn(s) for s in heat], lag_ratio=0.0002), FadeIn(hl),
+                      run_time=3.0)
             vo.wait_until("a")
             self.play(Write(eig), FadeIn(en))
             vo.wait_until("b")
+            for m_ in pcard[1][2]:
+                m_.clear_updaters()
+            self.play(FadeOut(pcard))
             self.play(Create(base), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.08), FadeIn(bl),
                       run_time=1.5)
             self.play(FadeIn(pct))
@@ -94,8 +111,19 @@ class PCA(VoiceoverScene):
             ends = VGroup(label(lo, font_size=24, color=c_lo).next_to(axis, DOWN, buff=0.3).shift(LEFT * 1.3),
                           label(hi, font_size=24, color=c_hi).next_to(axis, DOWN, buff=0.3).shift(RIGHT * 1.3))
             panels.add(VGroup(head, axis, rows, ends))
-        panels[0].move_to([-3.4, 0.0, 0])
-        panels[1].move_to([3.4, 0.0, 0])
+        panels[0].move_to([-3.4, -0.2, 0])
+        panels[1].move_to([3.4, -0.2, 0])
+        # a direction is a recipe: a weight for each of the word rates (the first direction's largest three, computed)
+        d1 = sorted(top["0"], key=lambda t: -abs(t[1]))[:3]
+        parts = [label(r"direction 1 $=$", font_size=28, color=GREY_A)]
+        for i, (w, v) in enumerate(d1):
+            sgn = "-" if v < 0 else ("+" if i else "")
+            parts += [MathTex(rf"{sgn}{abs(v):.2f}\times", font_size=30, color=C.MODEL_Q),
+                      data_text(w, font=MONO, font_size=24, color=WHITE)]
+        parts += [MathTex(r"+\;\cdots", font_size=30, color=C.MODEL_Q),
+                  label(rf"(all ${p['d']}$ word rates)", font_size=24, color=GREY_A)]
+        recipe = VGroup(*parts).arrange(RIGHT, buff=0.14).to_edge(UP, buff=0.35)
+        keep_in_frame(recipe)
         with self.voiceover(
             "What are these directions? Each one is a recipe for mixing the seventy word rates. "
             "<bookmark mark='a'/> The first weighs 'not', 'be', 'very' and 'she' against 'the', 'and' and 'out'. "
@@ -103,6 +131,7 @@ class PCA(VoiceoverScene):
             "second weighs 'I', 'me', 'you', 'said' and 'my' against 'of' and 'their'. That's dialogue against "
             "narration: the other big difference between pages."
         ) as vo:
+            self.play(LaggedStart(*[FadeIn(m_, shift=RIGHT * 0.1) for m_ in recipe], lag_ratio=0.12), run_time=2.0)
             for k, m in enumerate("ab"):
                 vo.wait_until(m)
                 head, axis, rows, ends = panels[k]

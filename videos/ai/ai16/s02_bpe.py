@@ -122,8 +122,10 @@ class BPE(VoiceoverScene):
             "square. The price is a bigger table of token vectors. Today's models use between a hundred and fifty "
             "thousand and a quarter of a million tokens."
         ) as vo:
+            self.play(FadeIn(rows[0], shift=RIGHT * 0.2), run_time=1.0)  # the sentence, one character a token, from the start
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.4), run_time=3.0)
+            self.play(Indicate(rows[0][1], color=TEXT_C, scale_factor=1.03), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[1:]], lag_ratio=0.4), run_time=2.4)
             vo.wait_until("b")
             self.play(FadeIn(cl), FadeIn(cpt), FadeIn(trade))
         self.wait(0.3)

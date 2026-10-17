@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai14.common import DATA, FM_C, NOISE, RF_C, SCORE, cloud, curve, load, move_cloud
+from videos.ai.ai14.common import DATA, FM_C, NOISE, RF_C, SCORE, cloud, curve, distill_picture, load, move_cloud
 
 
 class Flow(VoiceoverScene):
@@ -106,14 +106,19 @@ class Flow(VoiceoverScene):
                       for v in np.arange(ystep, hi + 1e-9, ystep)])
         cf = VGroup(curve(ax, lx, fm, FM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=FM_C) for a, b in zip(lx, fm)])
         cr = VGroup(curve(ax, lx, rf, RF_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=RF_C) for a, b in zip(lx, rf)])
-        k1 = label(r"flow matching", font_size=24, color=FM_C).move_to([3.0, 2.4, 0])
-        k2 = label(r"after reflow", font_size=24, color=RF_C).next_to(k1, DOWN, buff=0.2).align_to(k1, LEFT)
+        k1 = label(r"flow matching", font_size=24, color=FM_C).move_to(ax.c2p(1.2, 0.86 * hi), aligned_edge=LEFT)
+        k2 = label(r"after reflow", font_size=24, color=RF_C).next_to(k1, DOWN, buff=0.2).align_to(k1, LEFT)  # (the right: a card)
         S = 0.42
         one = VGroup(cloud(np.asarray(f["fm1"])[:400], FM_C, radius=0.018, scale=S),
                      cloud(np.asarray(f["rf1"])[:400], RF_C, radius=0.018, scale=S)).arrange(DOWN, buff=0.5).move_to([4.2, -1.0, 0])
         ol = VGroup(label(r"$1$ step", font_size=20, color=FM_C).next_to(one[0], LEFT, buff=0.15),
                     label(r"$1$ step", font_size=20, color=RF_C).next_to(one[1], LEFT, buff=0.15))
         s1, s2 = float(f["straight_fm"]), float(f["straight_rf"])
+        dc = gloss(r"distillation", r"a slow teacher model's results become the targets \\ a fast student learns to hit in one go",
+                   distill_picture(), width=5.4, color=RF_C).to_corner(UR, buff=0.3)
+        dp = dc[1][-1]
+        for m_ in (dp[1], dp[2], dp[3][1]):  # the steps, then the jump, come in as the narration gets to them
+            m_.set_opacity(0)
         with self.voiceover(
             "The fix is called reflow. Run the trained model to pair each noise point with the sample it actually "
             "leads to, and train a second model on those pairs. <bookmark mark='a'/> Now the pairs agree with each "
@@ -127,6 +132,9 @@ class Flow(VoiceoverScene):
             self.play(Create(cr[0]), FadeIn(cr[1:]), FadeIn(k2), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(one), FadeIn(ol))
+            self.play(FadeIn(dc, shift=UP * 0.2))
+            self.play(LaggedStart(*[d_.animate.set_opacity(1) for d_ in dp[1]], lag_ratio=0.15), run_time=1.5)
+            self.play(dp[2].animate.set_opacity(1), dp[3][1].animate.set_opacity(1), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -225,10 +233,14 @@ class Flow(VoiceoverScene):
                 ("rf", r"after reflow", RF_C, np.asarray(f["rf1"]), float(f["sw_rf1"])),
                 ("meanflow", r"MeanFlow", C.SURPRISE, np.asarray(m["meanflow1"]), float(m["sw_meanflow1"])),
                 ("shortcut", r"shortcut model", C.TRUE_P, np.asarray(m["shortcut1"]), float(m["sw_shortcut1"]))]
+        # MeanFlow and the shortcut model are shown learning: their one jump, from the same noise, at checkpoints
+        lim = np.array([4.0, 3.3])  # the panel's half-size, in the data's units
+        snaps = {k: np.clip(np.asarray(m[f"{k}_snaps"]), -lim, lim) for k in ("meanflow", "shortcut")}
+        snap_steps = {k: [int(v) for v in m[f"{k}_snap_steps"]] for k in ("meanflow", "shortcut")}
         panels = VGroup()
         for i, (k, name, col, X, d) in enumerate(sets):
             cx = -5.1 + i * 3.4
-            c_ = cloud(X[:400], col, radius=0.016, scale=S, shift=[cx, 0.2, 0])
+            c_ = cloud((snaps[k][0] if k in snaps else X)[:400], col, radius=0.016, scale=S, shift=[cx, 0.2, 0])
             box = RoundedRectangle(width=3.1, height=2.6, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5).move_to([cx, 0.2, 0])
             t_ = label(name, font_size=22, color=col).next_to(box, UP, buff=0.12)
             d_ = MathTex(rf"{d:.3f}", font_size=28, color=col).next_to(box, DOWN, buff=0.15)
@@ -256,9 +268,21 @@ class Flow(VoiceoverScene):
             self.play(FadeIn(panels[0]), FadeIn(panels[1]))
             vo.wait_until("a")
             self.play(Indicate(panels[0][3]), Indicate(panels[1][3]))
+            def learn(i, k):  # panel i fades in untrained, then its cloud steps through the checkpoints
+                box, c_, t_, d_ = panels[i]
+                cx = box.get_x()
+                cnt = MathTex(rf"\text{{step }}{snap_steps[k][0]:,}".replace(",", "{,}"), font_size=26, color=GREY_A).move_to(d_)
+                self.play(FadeIn(box), FadeIn(c_), FadeIn(t_), FadeIn(cnt), run_time=0.6)
+                for j in range(1, len(snap_steps[k])):
+                    c2 = MathTex(rf"\text{{step }}{snap_steps[k][j]:,}".replace(",", "{,}"), font_size=26, color=GREY_A).move_to(d_)
+                    self.play(*move_cloud(c_, snaps[k][j], S, [cx, 0.2, 0]), Transform(cnt, c2), run_time=0.5)
+                self.play(FadeOut(cnt), FadeIn(d_), run_time=0.4)
+
             vo.wait_until("b")
-            self.play(FadeIn(panels[2]), FadeIn(dl))
+            self.play(FadeIn(dl), run_time=0.4)
+            learn(2, "meanflow")
             vo.wait_until("c")
-            self.play(FadeIn(panels[3]), FadeIn(scl), Write(sc))
+            self.play(FadeIn(scl), Write(sc))
+            learn(3, "shortcut")
         self.wait(0.3)
         self.clear_scene()

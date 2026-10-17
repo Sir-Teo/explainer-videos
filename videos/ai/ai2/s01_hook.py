@@ -58,14 +58,40 @@ class Hook(VoiceoverScene):
         legend.to_corner(UL, buff=0.5)
         src = note(r"GPT-2 (2019): \\ each word's vector, on the three directions these words vary most").to_edge(DOWN, buff=0.3)
         dog = words.index("dog")
+        # the words themselves first, in a shuffled list: then each one flies to its place
+        order = np.random.default_rng(2019).permutation(len(words))
+        lines_, cur = [], []
+        for k in order:  # lines of about 60 characters, so the words share one baseline
+            if cur and len("  ".join(words[i] for i in cur + [k])) > 60:
+                lines_.append(cur)
+                cur = []
+            cur.append(k)
+        lines_.append(cur)
+        vocab, word_of = VGroup(), {}
+        for ks in lines_:
+            t_ = data_text("  ".join(words[i] for i in ks), font=MONO, font_size=22, color=GREY_A)
+            j = 0
+            for i in ks:
+                n_ = len(words[i])
+                word_of[i] = VGroup(*t_.submobjects[j:j + n_])
+                j += n_
+            assert j == len(t_.submobjects)
+            vocab.add(t_)
+        vocab.arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(DOWN * 0.1)
+        if vocab.width > 13.0:
+            vocab.scale_to_fit_width(13.0)
         with self.voiceover(
             "Every modern model fixes this the same way. It gives each word a place, <bookmark mark='a'/> a point in "
             "a space, chosen so that words used alike end up close together. <bookmark mark='b'/> Here are a hundred "
             "and two words, where GPT-2 puts them: animals in one region, colors in another, then numbers, places, "
             "family, the body, and verbs."
         ) as vo:
+            self.play(LaggedStart(*[FadeIn(m, shift=DOWN * 0.1) for m in vocab], lag_ratio=0.1), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d, scale=0.3) for d in cl.dots], lag_ratio=0.01), run_time=1.5)
+            targets = [cl.dots[k].copy().clear_updaters() for k in range(len(words))]
+            self.play(LaggedStart(*[Transform(word_of[k], targets[k]) for k in range(len(words))], lag_ratio=0.01),
+                      run_time=2.0)
+            self.remove(vocab)
             self.add(cl)
             vo.wait_until("b")
             self.play(FadeIn(overview), FadeIn(legend), FadeIn(src))

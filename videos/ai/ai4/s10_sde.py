@@ -201,6 +201,33 @@ class SDE(VoiceoverScene):
                             stroke_width=2.5, max_tip_length_to_length_ratio=0.35, stroke_opacity=0.7))
         cols = ramp(bwd[-1][:, 0] + 0.35 * bwd[-1][:, 1], DATA, C.BITS)
         dots = swarm(bwd[0] * K, cols)
+        # the slide from data into noise: the noised letters and their score, at three noise levels
+        fwd, T = np.asarray(s["fwd"]), float(s["T"])
+
+        def arrows_for(F_, opacity=0.7):
+            m_ = np.linalg.norm(F_, axis=1) + 1e-9
+            r_ = np.percentile(m_, 90)
+            return VGroup(*[Arrow([p[0], p[1], 0], [p[0] + 0.42 * min(1.0, mm / r_) * v[0] / mm,
+                                                     p[1] + 0.42 * min(1.0, mm / r_) * v[1] / mm, 0], buff=0,
+                                  color=SCORE, stroke_width=2.5, max_tip_length_to_length_ratio=0.35,
+                                  stroke_opacity=opacity) for p, v, mm in zip(G * K, F_, m_)])
+
+        levels = (0.1, 0.5, 2.0)
+        panels = VGroup()
+        for lv in levels:
+            k_ = int(round(lv / T * (len(fwd) - 1)))
+            assert abs(k_ * T / (len(fwd) - 1) - lv) < 1e-9
+            pts = swarm(fwd[k_][::2] * K, [DATA] * len(fwd[k_][::2]), radius=0.045, opacity=0.8)
+            box = Rectangle(width=2 * 3.4 * K, height=2 * 2.0 * K, stroke_color=GREY_D, stroke_width=2)
+            panels.add(VGroup(box, pts, arrows_for(np.asarray(s[f"field{lv}"]))))
+        panels.scale(0.3).arrange(RIGHT, buff=0.45).move_to(UP * 0.4)
+        p_lab = VGroup(*[label(rf"$t = {lv:g}$", font_size=24, color=GREY_A).next_to(pn, DOWN, buff=0.15)
+                         for lv, pn in zip(levels, panels)])
+        slide = Arrow(panels[0].get_left() + DOWN * 1.65, panels[-1].get_right() + DOWN * 1.65, buff=0, color=NOISE,
+                      stroke_width=3, max_tip_length_to_length_ratio=0.03)
+        s_lab = VGroup(label(r"data", font_size=24, color=DATA).next_to(slide, DOWN, buff=0.12).align_to(slide, LEFT),
+                       label(r"noise", font_size=24, color=NOISE).next_to(slide, DOWN, buff=0.12).align_to(slide, RIGHT))
+        p_head = label(r"the score, \ at every noise level", font_size=30, color=SCORE).next_to(panels, UP, buff=0.4)
         t = ValueTracker(0.0)
         cap = label(r"the score of the noised letters, \ halfway to noise", font_size=26, color=SCORE).to_edge(DOWN, buff=0.3)
         nxt = label(r"Part 14: \ a network learns the score from millions of images", font_size=28, color=C.BITS)
@@ -212,8 +239,13 @@ class SDE(VoiceoverScene):
             "the letters. A diffusion model learns it from millions of images, with a network, and that's part "
             "fourteen."
         ) as vo:
+            self.play(LaggedStart(*[FadeIn(pn) for pn in panels], lag_ratio=0.25), FadeIn(p_lab), FadeIn(p_head),
+                      run_time=1.5)
+            self.play(GrowArrow(slide), FadeIn(s_lab))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowArrow(a) for a in field], lag_ratio=0.004), FadeIn(cap), run_time=1.5)
+            mid = panels[1][2]
+            self.play(FadeOut(VGroup(panels[0], panels[2], panels[1][:2], p_lab, p_head, slide, s_lab)),
+                      ReplacementTransform(mid, field), FadeIn(cap), run_time=1.5)
             self.play(FadeIn(dots))
             dots.add_updater(follow(dots, bwd, t, scale=K))
             vo.wait_until("b")

@@ -159,10 +159,11 @@ class VQ(VoiceoverScene):
             return O + u * np.array([x[0], x[1], 0])
 
         # the cells of the codebook (nearest code), drawn as a coarse map of dots
-        grid = VGroup()
+        grid, owner = VGroup(), []
         for a in np.linspace(-2, 2, 29):
             for b in np.linspace(-2, 2, 29):
                 k = int(np.argmin(((codes - [a, b]) ** 2).sum(1)))
+                owner.append(k)
                 grid.add(Dot(P([a, b]), radius=0.022, color=TOKEN_COLORS[k % len(TOKEN_COLORS)], fill_opacity=0.35))
         cdots = VGroup(*[Dot(P(c), radius=0.08, color=TOKEN_COLORS[k % len(TOKEN_COLORS)]) for k, c in enumerate(codes)])
         z = np.array([0.35, 0.2])
@@ -241,8 +242,15 @@ class VQ(VoiceoverScene):
             self.play(FadeIn(commit))
             vo.wait_until("d")
             self.play(FadeOut(commit), run_time=0.5)
+            # codes nobody picks (schematic: the three farthest out) get no gradient, and fade from use
+            far = [int(i) for i in np.argsort(-np.linalg.norm(codes, axis=1))[:3] if int(i) != k]
+            dead_l = label(r"codes nobody picks: \\ no gradient reaches them, \\ so they never move", font_size=20,
+                           color=GREY_B).move_to([O[0], 2.45, 0])
+            self.play(*[cdots[i].animate.set_color(GREY_D).scale(0.7) for i in far],
+                      *[d_.animate.set_fill(GREY_D, opacity=0.15) for d_, o_ in zip(grid, owner) if o_ in far],
+                      FadeIn(dead_l), run_time=1.0)
             vo.wait_until("e")
-            self.play(FadeOut(VGroup(grid, cdots, zd, zl, el, fwd, gq, gz, gl, tag)), Write(eqs[3]), FadeIn(notes[3]))
+            self.play(FadeOut(VGroup(grid, cdots, zd, zl, el, fwd, gq, gz, gl, tag, dead_l)), Write(eqs[3]), FadeIn(notes[3]))
             self.play(FadeIn(fbox), FadeIn(fgrid), FadeIn(fpts), FadeIn(fl_))
             self.play(*[d_.animate.move_to(P(2 * np.tanh(x))) for d_, x in zip(fpts, fz)], run_time=1.0)
             self.play(*[d_.animate.move_to(P(np.round(2 * np.tanh(x)))) for d_, x in zip(fpts, fz)], run_time=0.8)

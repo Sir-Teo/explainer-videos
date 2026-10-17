@@ -69,16 +69,42 @@ class Train(VoiceoverScene):
                     color=GRAD).move_to([2.6, -2.15, 0])
         cnt = score_grid(logc, center=[-4.2, 0.2, 0])
         corr = label(rf"the scores become the log of the counts: \ correlation ${d['corr']:.3f}$", font_size=26,
-                     color=WHITE).to_edge(DOWN, buff=0.35)
+                     color=WHITE).to_edge(DOWN, buff=0.2)
         assert abs(curve[0, 1] - np.log2(27)) < 0.01
+        # what the scores write: letters sampled from them, with the same dice at every checkpoint
+        dice = np.random.default_rng(1500).random(52)
+
+        def writes(z):
+            p_ = np.exp(z - z.max(1, keepdims=True))
+            c_ = np.cumsum(p_ / p_.sum(1, keepdims=True), 1)
+            i, out = 0, ""
+            for u in dice:
+                i = int(min(np.searchsorted(c_[i], u), 26))
+                out += LETTERS[i]
+            return out
+
+        snap_steps = (1, 50, 200, int(d["steps"]))
+
+        def write_row(k):
+            head_ = label(rf"step ${snap_steps[k]:,}$, \ it writes:".replace(",", "{,}"), font_size=24, color=GRAD)
+            body_ = data_text(writes(snaps[k]), font=MONO, font_size=22, color=WHITE)
+            return VGroup(head_, body_).arrange(RIGHT, buff=0.3).move_to([0, -2.8, 0])
+
+        rows_w = [write_row(k) for k in range(len(snaps))]
+        for r_ in rows_w:
+            if r_.width > 13.2:
+                r_.scale_to_fit_width(13.2)
         with self.voiceover(
             "Now let's use it. In part one, counting letter pairs got us to 3.33 bits per letter. <bookmark mark='a'/> "
             "This time, nothing is counted. The model has 729 adjustable scores, one for every pair of letters, all "
-            "starting at zero, and our library trains them by gradient descent on the books."
+            "starting at zero, and our library trains them by gradient descent on the books. <bookmark mark='w'/> "
+            "Underneath, the text the scores write, drawn with the same dice at every step: for now, noise."
         ) as vo:
             self.play(FadeIn(grids[0]), FadeIn(gl), FadeIn(rows))
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(bl), Create(floor), FadeIn(fl), FadeIn(start))
+            vo.wait_until("w")
+            self.play(FadeIn(rows_w[0]))
         n = len(curve)
         marks = [int(np.searchsorted(curve[:, 0], s)) + 1 for s in (50, 200, 1500)]
         with self.voiceover(
@@ -90,7 +116,7 @@ class Train(VoiceoverScene):
             self.add(line)
             for k, m in enumerate(marks):
                 self.play(t.animate.set_value(min(m, n)), Transform(grids[0], grids[k + 1]),
-                          run_time=1.5 if k < 2 else 2.0, rate_func=linear)
+                          Transform(rows_w[0], rows_w[k + 1]), run_time=1.5 if k < 2 else 2.0, rate_func=linear)
             self.play(FadeIn(end))
             vo.wait_until("a")
             self.play(FadeIn(corr))
