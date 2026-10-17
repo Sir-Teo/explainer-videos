@@ -138,16 +138,21 @@ class Recall(VoiceoverScene):
         say = lambda v: f"by step {v:,}" if v is not None else "never, in this run"  # noqa: E731
         with self.voiceover(
             f"Here is how each one learns the game, on the longest lists, {N} pairs, step by step through "
-            "training. <bookmark mark='a'/> For a long time, all three are guessing. Then softmax attention gets it "
-            f"in a rush, half the answers right {say(fs)}: once it learns to match a query to the same key, the "
-            "cache does the rest. <bookmark mark='b'/> The delta rule takes longer, half right "
-            f"{say(fd)}, and climbs to its ceiling; the adding memory reaches half {say(fl)}, and stalls where "
-            "its crosstalk drowns the answers."
+            "training. <bookmark mark='a'/> For a long time, all three are guessing. "
+            + (f"The delta rule starts first, half the answers right {say(fd)}, and climbs towards its ceiling, "
+               f"{100 * curves['delta'][-1, 1]:.0f} percent. " if fd is not None and (fs is None or fd < fs) else "")
+            + f"Softmax attention gets it {'later, but ' if fd is not None and fs is not None and fd < fs else ''}"
+            f"in a rush: half right {say(fs)}, and every answer right soon after. Once it learns to match a query "
+            "to the same key, the cache does the rest. <bookmark mark='b'/> "
+            + (f"The delta rule ends at {100 * curves['delta'][-1, 1]:.0f} percent. " if not (fd is not None and (fs is None or fd < fs)) else "")
+            + (f"The adding memory reaches half {say(fl)}" if fl is not None else
+               f"The adding memory never gets halfway: it stalls at {100 * curves['linear'][-1, 1]:.0f} percent")
+            + ", where its crosstalk drowns the answers."
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(keys))
             vo.wait_until("a")
-            self.play(Create(lines["softmax"]), run_time=2.5, rate_func=linear)
+            self.play(Create(lines["delta"]), Create(lines["softmax"]), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
-            self.play(Create(lines["delta"]), Create(lines["linear"]), run_time=3.0, rate_func=linear)
+            self.play(Create(lines["linear"]), run_time=2.5, rate_func=linear)
         self.wait(0.3)
         self.clear_scene()
