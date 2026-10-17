@@ -39,6 +39,21 @@ class SSM(VoiceoverScene):
         ks = VGroup(*[label(rf"$\Delta = {dt:g}$", font_size=24, color=c_) for dt, c_ in zip(sorted(deltas, reverse=True), cols)])
         ks.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, -1.4, 0])
         cite_ = cite(r"A.~Gu, K.~Goel \& C.~R\'e, \textit{S4} (2022)", corner=DR)
+        # the equation at work: a leaky state, pushed by two pulses of input (A = -1, B = C = 1)
+        tt = np.linspace(0, 10, 400)
+        xin = ((tt > 1) & (tt < 1.6)).astype(float) + 0.7 * ((tt > 4.5) & (tt < 5.1))
+        hh = np.zeros_like(tt)
+        for i in range(1, len(tt)):
+            hh[i] = hh[i - 1] + (tt[i] - tt[i - 1]) * (-hh[i - 1] + 1.6 * xin[i - 1])
+        bx = Axes(x_range=[0, 10, 2], y_range=[0, 1.1, 0.5], x_length=8.0, y_length=2.8, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-0.6, -1.0, 0])
+        lx = VMobject(color=K, stroke_width=3).set_points_as_corners([bx.c2p(a_, b_) for a_, b_ in zip(tt, xin)])
+        lh = VMobject(color=STATE, stroke_width=4).set_points_smoothly([bx.c2p(a_, b_) for a_, b_ in zip(tt[::4], hh[::4])])
+        kx = label(r"input $x(t)$", font_size=24, color=K)
+        kh = label(r"state $h(t)$: \ rises, then leaks away", font_size=24, color=STATE)
+        VGroup(kx, kh).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bx, RIGHT, buff=0.4)
+        bl = note(r"illustrative: \ $A = -1$").next_to(bx, DOWN, buff=0.15).align_to(bx, LEFT)
+        dot = glow_dot(bx.c2p(0, 0), color=STATE, radius=0.08)
         with self.voiceover(
             "A different road to the same place started in control theory. A state-space model is a differential "
             "equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='a'/> "
@@ -47,9 +62,12 @@ class SSM(VoiceoverScene):
             "large steps, and it's gone in a few tokens."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_))
+            self.play(Create(bx), Create(lx), FadeIn(kx), FadeIn(bl), run_time=1.2)
+            self.play(Create(lh), MoveAlongPath(dot, lh.copy()), FadeIn(kh), run_time=3.0, rate_func=linear)
             vo.wait_until("a")
             self.play(Write(f2), FadeIn(f2l))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(bx, lx, lh, kx, kh, bl, dot)))
             self.play(Create(ax), FadeIn(xn), FadeIn(yn))
             self.play(LaggedStart(*[Create(c_) for c_ in cs], lag_ratio=0.4), FadeIn(ks), run_time=2.5)
         self.wait(0.3)
@@ -98,13 +116,14 @@ class SSM(VoiceoverScene):
             (r"linear attention", r"S_t = S_{t-1} + v_t k_t^{\top}", C.SURPRISE),
             (r"Mamba-2, \ RetNet, \ GLA", r"S_t = a_t\,S_{t-1} + v_t k_t^{\top}", DECAY),
             (r"DeltaNet", r"S_t = S_{t-1} + \beta_t (v_t - S_{t-1}k_t)\,k_t^{\top}", C.INTERVAL),
-            (r"Gated DeltaNet, \ Kimi Delta Attention", r"S_t = a_t\,S_{t-1} + \beta_t (v_t - a_t S_{t-1}k_t)\,k_t^{\top}", C.BITS),
+            (r"Gated DeltaNet, \\ Kimi Delta Attention", r"S_t = a_t\,S_{t-1} + \beta_t (v_t - a_t S_{t-1}k_t)\,k_t^{\top}", C.BITS),
         ]
         g = VGroup()
         for i, (n, f, c_) in enumerate(rows):
             y = 1.6 - i * 1.05
-            g.add(VGroup(label(n, font_size=26, color=c_).move_to([-3.4, y, 0], aligned_edge=RIGHT),
-                         MathTex(f, font_size=32).move_to([-3.0, y, 0], aligned_edge=LEFT)))
+            g.add(VGroup(label(n, font_size=26, color=c_).move_to([-2.4, y, 0], aligned_edge=RIGHT),
+                         MathTex(f, font_size=32).move_to([-2.1, y, 0], aligned_edge=LEFT)))
+        keep_in_frame(g)
         head = label(r"one matrix memory, \ four ways to write to it \ (read: \ $\mathrm{out}_t = S_t\,q_t$)", font_size=28)
         head.to_edge(UP, buff=0.4)
         foot = label(r"Mamba-2: \ a selective state-space model \emph{is} linear attention with a decay", font_size=24,
