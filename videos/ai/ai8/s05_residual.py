@@ -13,6 +13,7 @@ class Residual(VoiceoverScene):
         self.card()
         self.block()
         self.curves()
+        self.modern()
 
     def card(self):
         card = chapter_card(4, r"The residual stream", r"How do you train forty layers?", part=8, lit=(2015,))
@@ -104,5 +105,60 @@ class Residual(VoiceoverScene):
             self.play(Create(cr), FadeIn(names[1]), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(cn), FadeIn(names[2]), Write(ln), FadeIn(lnl), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def modern(self):
+        """Today's block: pre-norm, RMSNorm, and a gated MLP (SwiGLU), with the parameter count that keeps it fair."""
+        import math
+
+        colors = {r"\operatorname{RMS}": NORM, r"g": NORM, r"\odot": C.BITS}
+        pre = MathTex(r"h_{l+1} = h_l + F\big(\operatorname{Norm}(h_l)\big)", font_size=32).move_to([-3.4, 2.5, 0])
+        prel = label(r"pre-norm: \ the stream itself is never rescaled", font_size=20, color=GREY_A).next_to(pre, DOWN, buff=0.1)
+        rms = cmath(r"\operatorname{RMSNorm}(h) = ", r"g", r"\odot \frac{h}{", r"\operatorname{RMS}", r"(h)}, \quad",
+                    r"\operatorname{RMS}", r"(h) = \sqrt{\tfrac{1}{d}\textstyle\sum_i h_i^2}", colors=colors, font_size=30)
+        rms.move_to([-3.4, 1.1, 0])
+        rmsl = label(r"LayerNorm without the mean or the shift: \ cheaper, \ just as good", font_size=20, color=GREY_A).next_to(rms, DOWN, buff=0.1)
+        glu = cmath(r"\operatorname{FFN}(x) = W_2\big(\operatorname{SiLU}(W_1 x)", r"\odot", r"W_3 x\big)", colors=colors, font_size=30)
+        glu.move_to([-3.4, -0.4, 0])
+        glul = label(r"SwiGLU: \ one branch gates the other, \ number by number", font_size=20, color=GREY_A).next_to(glu, DOWN, buff=0.1)
+        cnt = MathTex(r"3 \cdot d \cdot \tfrac{8}{3}d = 8d^2 = 2 \cdot d \cdot 4d", font_size=30, color=C.BITS).move_to([-3.4, -1.9, 0])
+        cntl = label(r"a width of $\tfrac83 d$ instead of $4d$: \ the same number of weights", font_size=20, color=C.BITS).next_to(cnt, DOWN, buff=0.1)
+        # right: the activations, computed
+        ax = CornerAxes(x_range=[-4, 4, 2], y_range=[-1, 4, 1], x_length=4.6, y_length=3.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, 0.6, 0])
+        zero = DashedLine(ax.c2p(-4, 0), ax.c2p(4, 0), dash_length=0.05, stroke_width=1, color=GREY_D)
+        relu = ax.plot(lambda x: max(x, 0.0), x_range=[-4, 4, 0.02], color=GREY_B, stroke_width=3)
+        silu = ax.plot(lambda x: x / (1 + math.exp(-x)), x_range=[-4, 4, 0.02], color=C.BITS, stroke_width=3.5)
+        kl = VGroup(label(r"ReLU \ (Part 8)", font_size=20, color=GREY_B), label(r"SiLU: \ $x\,\sigma(x)$", font_size=20, color=C.BITS))
+        kl.arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax.c2p(-4, 4), DR, buff=0.1)
+        used = label(r"Llama, \ Qwen, \ DeepSeek, \ Mistral, \ gpt-oss: \\ pre-norm, \ RMSNorm, \ a gated MLP \ (as published)",
+                     font_size=20, color=GREY_A).next_to(ax, DOWN, buff=0.45)
+        cite_ = cite(r"B.~Zhang \& R.~Sennrich, \textit{RMSNorm} (2019); \ N.~Shazeer, \textit{GLU Variants Improve Transformer} (2020)",
+                     corner=DR)
+        with self.voiceover(
+            "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> "
+            "First, normalize what goes into each layer, not the stream itself: the stream stays a clean running sum. "
+            "<bookmark mark='b'/> Second, RMSNorm: divide by the root mean square and drop the mean and the shift. "
+            "It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. Two projections of "
+            "the input, one passed through SiLU, a smooth cousin of the ReLU, multiplied number by number with the "
+            "other. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four "
+            "times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's "
+            "paper tested it, and ended, famously, by attributing its success to divine benevolence. "
+            "<bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block."
+        ) as vo:
+            self.play(FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Write(pre), FadeIn(prel))
+            vo.wait_until("b")
+            self.play(Write(rms), FadeIn(rmsl))
+            vo.wait_until("c")
+            self.play(Write(glu), FadeIn(glul), Create(ax), Create(zero), Create(relu), FadeIn(kl[0]))
+            self.play(Create(silu), FadeIn(kl[1]))
+            vo.wait_until("d")
+            self.play(Write(cnt), FadeIn(cntl))
+            vo.wait_until("e")
+            self.play(FadeIn(used))
         self.wait(0.3)
         self.clear_scene()
