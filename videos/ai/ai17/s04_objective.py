@@ -25,6 +25,7 @@ class Objective(VoiceoverScene):
         self.clip()
         self.kl()
         self.dpo()
+        self.dpo_result()
         self.variants()
         self.signal()
         self.sharpen()
@@ -181,9 +182,6 @@ class Objective(VoiceoverScene):
             keep_in_frame(n_)
         arrows = VGroup(*[MathTex(r"\Downarrow", font_size=26, color=GREY_C).move_to((a.get_bottom() + b.get_top()) / 2).set_x(-6.4)
                           for a, b in zip(steps_, steps_[1:])])
-        acc0, acc = float(np.asarray(o["dpo_curve"])[0, 1]), float(np.asarray(o["dpo_curve"])[-1, 1])
-        res = label(rf"on our addition: \ ${int(o['dpo_n_pairs']):,}$ pairs from the starting model, \ "
-                    rf"${100 * acc0:.0f}\% \to {100 * acc:.0f}\%$ right".replace(",", "{,}"), font_size=22, color=C.SURPRISE).to_edge(DOWN, buff=0.35)
         cite_ = cite(r"R.~Rafailov et al., \textit{Direct Preference Optimization} (2023)", corner=UR)
         with self.voiceover(
             "Before the variants, one more objective, because it explains what that KL term is really doing. "
@@ -194,15 +192,61 @@ class Objective(VoiceoverScene):
             "is better than that one, with Bradley and Terry's model of preferences. The constant cancels. "
             "<bookmark mark='e'/> What's left is a plain loss on the model itself: push up the winner's log-ratio, "
             "push down the loser's. That's DPO, by Rafailov and colleagues: preference tuning with no reward model "
-            "and no sampling during training. <bookmark mark='f'/> On our addition, with pairs of one right and one "
-            f"wrong answer drawn once from the starting model, it went from {100 * acc0:.0f} to {100 * acc:.0f} percent."
+            "and no sampling during training."
         ) as vo:
             self.play(FadeIn(cite_))
             for i, mk in enumerate("abcde"):
                 vo.wait_until(mk)
                 self.play(*([FadeIn(arrows[i - 1])] if i else []), Write(steps_[i]), FadeIn(notes[i]), run_time=1.3)
-            vo.wait_until("f")
-            self.play(FadeIn(res))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def dpo_result(self):
+        o = load("objectives")
+        cv = np.asarray(o["dpo_curve"])
+        mv = np.asarray(o["dpo_moves"])
+        acc0, acc = float(cv[0, 1]), float(cv[-1, 1])
+        steps = int(o["steps"])
+        lo = math.floor(min(mv[:, 1].min(), mv[:, 2].min()))
+        hi = max(1, math.ceil(max(mv[:, 1].max(), mv[:, 2].max())))
+        ax = CornerAxes(x_range=[0, steps, 100], y_range=[lo, hi, 1], x_length=5.6, y_length=3.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.8, -0.4, 0])
+        zero = DashedLine(ax.c2p(0, 0), ax.c2p(steps, 0), dash_length=0.06, stroke_width=1.5, color=GREY_B)
+        yt = VGroup(*[MathTex(f"{v:+d}" if v else "0", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
+                      for v in range(lo, hi + 1)])
+        xt = VGroup(*[MathTex(str(v), font_size=20, color=GREY_B).next_to(ax.c2p(v, lo), DOWN, buff=0.08) for v in (0, steps)])
+        yn = label(r"change in $\log_2 p$, \ on pairs held out", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        xn = label(r"DPO steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.05)
+        cw = curve(ax, mv[:, 0], mv[:, 1], RIGHT_C, 3.5)
+        cl = curve(ax, mv[:, 0], mv[:, 2], WRONG_C, 3.5)
+        kw = label(r"the right answers \ (winners)", font_size=20, color=RIGHT_C).next_to(ax.c2p(steps, float(mv[-1, 1])), RIGHT, buff=0.1)
+        kl_ = label(r"the wrong ones \ (losers)", font_size=20, color=WRONG_C).next_to(ax.c2p(steps, float(mv[-1, 2])), RIGHT, buff=0.1)
+        if abs(kw.get_y() - kl_.get_y()) < 0.6:
+            (kw if mv[-1, 1] > mv[-1, 2] else kl_).shift(UP * 0.3)
+            (kl_ if mv[-1, 1] > mv[-1, 2] else kw).shift(DOWN * 0.3)
+        res = label(rf"${int(o['dpo_n_pairs']):,}$ pairs from the starting model: \\ right on new questions \ "
+                    rf"${100 * acc0:.0f}\% \to {100 * acc:.0f}\%$".replace(",", "{,}"), font_size=22, color=C.SURPRISE).move_to([4.2, 2.3, 0])
+        both_down = mv[-1, 1] < -0.1 and mv[-1, 2] < mv[-1, 1]
+        cite_ = cite(r"N.~Razin et al., \textit{Unintentional Unalignment: Likelihood Displacement in DPO} (2024)", corner=DR)
+        with self.voiceover(
+            "We tried it on our addition, with pairs of one right and one wrong answer, drawn once from the starting "
+            "model. <bookmark mark='a'/> "
+            + (f"It got worse: from {100 * acc0:.0f} to {100 * acc:.0f} percent right. " if acc < acc0 - 0.02 else
+               f"It went from {100 * acc0:.0f} to {100 * acc:.0f} percent right. ")
+            + "<bookmark mark='b'/> Watch the two log-probabilities on pairs it never trained on. "
+            + ("The loss only asks the winner to rise relative to the loser, and the easiest way there was to push "
+               "both down, the loser faster. The probability went somewhere, mostly to other wrong answers. This is "
+               "known as likelihood displacement. " if both_down else
+               "The winners rise and the losers fall, as the loss asks. ")
+            + "Offline pairs from a weak model teach less than they seem to; the on-policy methods, which keep "
+            "sampling from the model they're improving, kept getting better."
+        ) as vo:
+            self.play(FadeIn(cite_), FadeIn(res))
+            vo.wait_until("a")
+            self.play(Create(ax), Create(zero), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(xn))
+            vo.wait_until("b")
+            self.play(Create(cw), Create(cl), FadeIn(kw), FadeIn(kl_), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -243,8 +287,9 @@ class Objective(VoiceoverScene):
         sl = label(rf"start: \ ${100 * acc0:.0f}\%$", font_size=18, color=GREY_B).next_to(start, RIGHT, buff=0.1)
         bl = label(r"right after $300$ steps: \\ same start, \\ same questions", font_size=20, color=GREY_A) \
             .move_to([-6.6, base_y + Hh / 2, 0], aligned_edge=LEFT)
-        best = max(V, key=lambda v: acc[v])
-        spread = 100 * (max(acc.values()) - min(acc.values()))
+        rl = [v for v in V if v != "dpo"]
+        best = max(rl, key=lambda v: acc[v])
+        spread = 100 * (max(acc[v] for v in rl) - min(acc[v] for v in rl))
         cite_ = cite(r"Z.~Liu et al., \textit{Dr.~GRPO} (2025); \ Q.~Yu et al., \textit{DAPO} (2025); \ C.~Zheng et al., "
                      r"\textit{GSPO} (2025)", corner=DR)
         with self.voiceover(
@@ -256,9 +301,11 @@ class Objective(VoiceoverScene):
             "Qwen3, takes one ratio per answer instead of per token: the geometric mean of its tokens' ratios. "
             "<bookmark mark='d'/> We ran all of them, and DPO, from the same start on the same questions. "
             f"<bookmark mark='e'/> The best here is {SAY[best]}, at {100 * acc[best]:.0f} percent; "
-            + (f"but the spread is only {spread:.0f} points. On a problem this small they mostly agree; the "
-               "differences matter at scale, over long answers and thousands of steps." if spread < 10 else
-               f"the spread is {spread:.0f} points, from the same start. ")
+            + (f"the reinforcement learners are within {spread:.0f} points of each other. On a problem this small "
+               "they mostly agree; the differences matter at scale, over long answers and thousands of steps. "
+               if spread < 10 else
+               f"the reinforcement learners span {spread:.0f} points, from the same start. ")
+            + f"DPO, as we saw, ends at {100 * acc['dpo']:.0f}."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tab[0]))
             for i, mk in enumerate("abc"):

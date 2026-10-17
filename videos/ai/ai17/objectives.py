@@ -125,8 +125,12 @@ def run(variant, base, ta, tb):
                     win.append(xs[i, int(np.argmax(ok[i]))])
                     lose.append(xs[i, int(np.argmin(ok[i]))])
         pairs = torch.stack(win), torch.stack(lose)
+        hold = (pairs[0][-512:], pairs[1][-512:])  # held out: how the winners' and losers' log-probabilities move
+        pairs = (pairs[0][:-512], pairs[1][:-512])
         with torch.no_grad():
             ref_w, ref_l = digit_logp(ref, pairs[0])[0].sum(1), digit_logp(ref, pairs[1])[0].sum(1)
+            hw0, hl0 = digit_logp(ref, hold[0])[0].sum(1), digit_logp(ref, hold[1])[0].sum(1)
+        moves = [(0, 0.0, 0.0)]
     for step in range(1, STEPS + 1):
         if variant == "dpo":
             i = torch.arange((step - 1) * Q, step * Q) % len(pairs[0])
@@ -189,6 +193,11 @@ def run(variant, base, ta, tb):
             clipped.append(float(np.mean(cl)) if cl else 0.0)
         if step % 20 == 0:
             curve.append((step, *evaluate(m, ref, ta, tb, egen)))
+            if variant == "dpo":
+                with torch.no_grad():
+                    dw = float((digit_logp(m, hold[0])[0].sum(1) - hw0).mean()) / math.log(2)
+                    dl = float((digit_logp(m, hold[1])[0].sum(1) - hl0).mean()) / math.log(2)
+                moves.append((step, dw, dl))
             print(f"    {variant} step {step}: acc {curve[-1][1]:.1%}, entropy {curve[-1][2]:.3f} bits, "
                   f"KL {curve[-1][3]:.3f}, no-signal groups {np.nanmean(zero[-20:]):.0%}", flush=True)
     out = dict(curve=np.array(curve), zero=np.array(zero), clipped=np.array(clipped))
@@ -196,6 +205,7 @@ def run(variant, base, ta, tb):
         out["drawn"] = np.array(drawn)
     if pairs is not None:
         out["n_pairs"] = len(pairs[0])
+        out["moves"] = np.array(moves)  # step, change in log2 p(winner), change in log2 p(loser), held-out pairs
     return out, m
 
 
@@ -233,5 +243,5 @@ def compute_objectives():
         print(f"    pass@k {name}: " + " ".join(f"{p:.2f}" for p in out[f"passk_{name}"]), flush=True)
     out["ks"] = ks
     acc = {v: float(out[f"{v}_curve"][-1][1]) for v in VARIANTS}
-    assert all(acc[v] > float(out[f"{v}_curve"][0][1]) for v in VARIANTS)
+    assert all(acc[v] > float(out[f"{v}_curve"][0][1]) for v in VARIANTS if v != "dpo")  # DPO may not improve: see moves
     return out

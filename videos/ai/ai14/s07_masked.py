@@ -11,6 +11,7 @@ class Masked(VoiceoverScene):
         self.card()
         self.idea()
         self.writing()
+        self.blocks()
 
     def card(self):
         card = chapter_card(6, r"Diffusion for text", r"Can text be written all at once?", part=14)
@@ -100,4 +101,54 @@ class Masked(VoiceoverScene):
             if last:
                 self.play(*last, run_time=0.3)
         self.wait(0.6)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def blocks(self):
+        """Block diffusion: left to right across blocks, diffusion inside each one."""
+        n, B = 24, 8
+        cw = 0.42
+        cells = VGroup(*[Square(cw, stroke_color=GREY_C, stroke_width=1.5, fill_color="#121722", fill_opacity=1) for _ in range(n)])
+        cells.arrange(RIGHT, buff=0.06).move_to([0, 1.3, 0])
+        for b in range(1, n // B):
+            cells[b * B:].shift(RIGHT * 0.25)
+        cells.move_to([0, 1.3, 0])
+        masks = VGroup(*[MathTex(r"\cdot", font_size=30, color=GREY_B).move_to(c) for c in cells])
+        g = np.random.default_rng(14)
+        order = [list(g.permutation(B)) for _ in range(n // B)]
+        braces = VGroup(*[Brace(VGroup(*cells[b * B:(b + 1) * B]), DOWN, buff=0.1, color=GREY_B) for b in range(n // B)])
+        bl = VGroup(*[label(rf"block {b + 1}", font_size=18, color=GREY_B).next_to(braces[b], DOWN, buff=0.08) for b in range(n // B)])
+        ar = VGroup(*[CurvedArrow(bl[b].get_bottom() + DOWN * 0.1, bl[b + 1].get_bottom() + DOWN * 0.1, angle=0.6,
+                                  color=C.TRUE_P, stroke_width=2.5) for b in range(n // B - 1)])
+        al = label(r"left to right, \ block by block \ (with a key-value cache)", font_size=20, color=C.TRUE_P).next_to(ar, DOWN, buff=0.15)
+        f = MathTex(r"\log p(x) = \sum_{b} \log p\big(x^{(b)} \mid x^{(<b)}\big)", font_size=34).move_to([0, -1.6, 0])
+        fl = label(r"each factor: \ masked diffusion inside the block, \ a few tokens per step", font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.15)
+        ends = label(r"block size $1$: \ an ordinary language model; \ \ one block for everything: \ this chapter's model",
+                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
+        tag = note(r"schematic").to_corner(UR, buff=0.3)
+        cite_ = cite(r"M.~Arriola et al., \textit{Block Diffusion} (2025); \ S.~Nie et al., \textit{LLaDA} (2025)", corner=DL)
+        with self.voiceover(
+            "Writing everything at once has a cost: the length is fixed in advance, and nothing can be cached. "
+            "Block diffusion splits the difference. <bookmark mark='a'/> The text is cut into blocks. Within a block, "
+            "tokens are unmasked a few at a time, as here; <bookmark mark='b'/> across blocks, it goes left to right, "
+            "like an ordinary language model, so finished blocks can be cached and the text can run as long as it "
+            "likes. <bookmark mark='c'/> With blocks of one token, it is an ordinary language model; with a single "
+            "block, it's this chapter's. Commercial diffusion language models, Google's Gemini Diffusion and "
+            "Inception's Mercury, report writing over a thousand tokens a second."
+        ) as vo:
+            self.play(FadeIn(tag), FadeIn(cite_), FadeIn(cells), FadeIn(masks), LaggedStart(*[GrowFromCenter(b_) for b_ in braces], lag_ratio=0.2),
+                      FadeIn(bl))
+            vo.wait_until("a")
+            for b in range(n // B):
+                for step in range(0, B, 3):
+                    idx = [b * B + i for i in order[b][step:step + 3]]
+                    self.play(*[masks[i].animate.become(MathTex(r"\bullet", font_size=30, color=C.BITS).move_to(cells[i])) for i in idx],
+                              *[cells[i].animate.set_fill(C.BITS, 0.3) for i in idx], run_time=0.35)
+                if b == 0:
+                    vo.wait_until("b")
+                    self.play(Create(ar), FadeIn(al))
+            vo.wait_until("c")
+            self.play(Write(f), FadeIn(fl))
+            self.play(FadeIn(ends))
+        self.wait(0.3)
         self.clear_scene()
