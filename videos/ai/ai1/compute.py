@@ -374,6 +374,25 @@ def compute_orders():
     return dict(rows=rows, best=best, best_bits=test[best], shannon_27=[4.76, 4.03, 3.32, 3.1])
 
 
+SEEN_ORDERS = (1, 3, 5, 8)
+
+
+def compute_seen():
+    """Learning by counting, as it reads: bits per letter on the Falcon passage against how much text was counted."""
+    tr, va, te = codes27(text("train27")), codes27(text("valid27")), codes27(text("passage27"))
+    amounts = [int(a) for a in (1e3, 3e3, 1e4, 3e4, 1e5, 3e5, 1e6, 3e6) if a < len(tr)] + [len(tr)]
+    out = dict(amounts=amounts, orders=list(SEEN_ORDERS))
+    for N in SEEN_ORDERS:
+        row = []
+        for n in amounts:
+            m = NGram(tr[:n], N, 27)
+            a = min(ALPHAS, key=lambda a_: float(m.bits(va, a_).mean()))
+            row.append(float(m.bits(te, a).mean()))
+        out[f"bits_{N}"] = row
+        print(f"    order {N}: " + " ".join(f"{b:.2f}" for b in row), flush=True)
+    return out
+
+
 def compute_samples():
     tr = codes27(text("train27"))
     g = rng(1948)
@@ -905,6 +924,7 @@ ITEMS = {
     "chain": compute_chain,
     "ctxgrid": compute_ctxgrid,
     "orders": compute_orders,
+    "seen": compute_seen,
     "samples": compute_samples,
     "huffman": compute_huffman,
     "arith": compute_arith,

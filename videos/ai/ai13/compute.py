@@ -55,6 +55,9 @@ def compute_configs():
 CTX, EMB, E, TOPK, HID = 8, 16, 8, 2, 96
 
 
+CURVE_EVERY, ROUTE_AT = 150, (100, 300, 1000, 3000)
+
+
 def compute_moe():
     import torch
     import torch.nn.functional as F
@@ -104,12 +107,28 @@ def compute_moe():
             z, _, _ = m(windows(va_t, pos))
             return float(F.cross_entropy(z, va_t[pos])) / math.log(2)
 
-    def train(mode, n_exp=E, hid=HID, steps=3000):
+    show = [c for c in "etaoinshrdlcumwfgypbvk .,;\"'?!" if c in chars]
+
+    def route(m):
+        """Where the characters go: the expert chosen first, by the last character of the context."""
+        with torch.no_grad():
+            pos = torch.arange(CTX, 60_000)
+            _, probs, top = m(windows(va_t, pos))
+            last = va_t[pos - 1].numpy()
+            first = top[:, 0].numpy()
+        M = np.zeros((len(show), E))
+        for i, ch in enumerate(show):
+            sel = last == chars.index(ch)
+            M[i] = np.bincount(first[sel], minlength=E) / max(sel.sum(), 1)
+        return M
+
+    def train(mode, n_exp=E, hid=HID, steps=3000, watch=False):
         torch.manual_seed(2021)  # Fedus, Zoph & Shazeer, Switch Transformers
         m = Model(n_exp, hid)
         opt = torch.optim.Adam([p for p in m.parameters()], lr=3e-3)
         g = rng(2021)
         loads = []
+        curve, routes = [(0, bits(m, 20_000))], [route(m)] if watch and n_exp > 1 else []
         for step in range(1, steps + 1):
             pos = torch.tensor(g.integers(CTX, len(tr), 256))
             z, probs, top = m(windows(tr_t, pos))
@@ -126,29 +145,26 @@ def compute_moe():
             opt.zero_grad()
             loss.backward()
             opt.step()
+            if watch and step % CURVE_EVERY == 0:  # held-out bits on a shorter stretch, as it trains
+                curve.append((step, bits(m, 20_000)))
+            if watch and n_exp > 1 and step in ROUTE_AT:
+                routes.append(route(m))
+        if watch:
+            out[f"curve_{mode if n_exp > 1 else ('dense_active' if hid == HID * TOPK else 'dense_total')}"] = np.array(curve)
+            if routes:
+                out["route_steps"], out["routes"] = [0, *ROUTE_AT], np.array(routes)
         return m, bits(m), np.array(loads)
 
     out = dict(E=E, k=TOPK, hid=HID)
     for mode in ("none", "aux", "bias"):
-        m, b, loads = train(mode)
+        m, b, loads = train(mode, watch=mode == "bias")
         out[f"bits_{mode}"], out[f"load_{mode}"] = b, loads
         print(f"    {mode}: {b:.3f} bits, final loads " + " ".join(f"{v:.2f}" for v in loads[-1]), flush=True)
         if mode == "bias":
-            # where the characters go: the expert chosen first, by the last character of the context
-            with torch.no_grad():
-                pos = torch.arange(CTX, 60_000)
-                _, probs, top = m(windows(va_t, pos))
-                last = va_t[pos - 1].numpy()
-                first = top[:, 0].numpy()
-            show = [c for c in "etaoinshrdlcumwfgypbvk .,;\"'?!" if c in chars]
-            M = np.zeros((len(show), E))
-            for i, ch in enumerate(show):
-                sel = last == chars.index(ch)
-                M[i] = np.bincount(first[sel], minlength=E) / max(sel.sum(), 1)
-            out["route_chars"], out["route"] = show, M
+            out["route_chars"], out["route"] = show, route(m)
     # dense models: as many active numbers as the MoE uses per character (2 experts' worth), and as many in total (8)
-    _, out["bits_dense_active"], _ = train("none", n_exp=1, hid=HID * TOPK)
-    _, out["bits_dense_total"], _ = train("none", n_exp=1, hid=HID * E)
+    _, out["bits_dense_active"], _ = train("none", n_exp=1, hid=HID * TOPK, watch=True)
+    _, out["bits_dense_total"], _ = train("none", n_exp=1, hid=HID * E, watch=True)
     print("    dense: active-matched {:.3f}, total-matched {:.3f}".format(out["bits_dense_active"], out["bits_dense_total"]))
     imb = {mde: float(out[f"load_{mde}"][-10:].mean(0).max() * E) for mde in ("none", "aux", "bias")}
     out["imbalance"] = imb  # the busiest expert's share, in multiples of a fair share

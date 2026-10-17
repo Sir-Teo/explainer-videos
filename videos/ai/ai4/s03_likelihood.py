@@ -112,8 +112,20 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             path.append(p.copy())
         assert np.abs(path[-1] - [m, s_hat]).max() < 0.01
         ball = surface_ball(axes, f, *path[0], color=WHITE, radius=0.1)
-        trail = surface_path(axes, f, path, color=WHITE, lift=0.05, stroke_width=4)
-        track = surface_path(axes, f, path, color=WHITE, lift=0.12)
+        cuts = [0, 2, 5, 10, 20, 40, 80, len(path) - 1]  # the climb in pieces: fast at first, then creeping to the top
+        trails = [surface_path(axes, f, path[a:b + 1], color=WHITE, lift=0.05, stroke_width=4) for a, b in zip(cuts, cuts[1:])]
+        tracks = [surface_path(axes, f, path[a:b + 1], color=WHITE, lift=0.12) for a, b in zip(cuts, cuts[1:])]
+        # the bell each point of the climb stands for, over the balls, in a corner
+        bx = Axes(x_range=[-0.5, 12.5, 1], y_range=[0, 0.4, 0.1], x_length=3.6, y_length=1.5, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DL, buff=0.5).shift(UP * 0.55)
+        bh = hist_shape(bx, np.arange(14) - 0.5, self.counts / self.counts.sum(), color=DATA, opacity=0.45)
+        xs = np.linspace(-0.5, 12.5, 160)
+
+        def bell_at(q):
+            return curve(bx, xs, np.minimum(normal_pdf(xs, q[0], q[1]), 0.4), color=MODEL, stroke_width=3)
+
+        bell = bell_at(path[0])
+        bl = label(r"the bell at the ball's position", font_size=18, color=MODEL).next_to(bx, UP, buff=0.08)
         head = label(r"The score of every bell", font_size=34).to_edge(UP, buff=0.35)
         legend = label(r"across: \ the centre $\mu$; \ back: \ the width $\sigma$; \ up: \ $e^{\text{score}}$, "
                        r"relative to the best", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.3)
@@ -124,7 +136,7 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         res.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UL, buff=0.45).shift(DOWN * 0.5)
         resn = label(r"the average, \ and the average squared spread", font_size=24, color=GREY_A)
         resn.next_to(res, DOWN, buff=0.2).align_to(res, LEFT)
-        for mob in (head, res, resn, legend):
+        for mob in (head, res, resn, legend, bx, bh, bell, bl):
             self.add_fixed_in_frame_mobjects(mob)
             self.remove(mob)
         self.set_camera_orientation(phi=60 * DEGREES, theta=-62 * DEGREES, zoom=0.8)
@@ -136,9 +148,11 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             "comes out as the two most natural summaries of the data."
         ) as vo:
             self.play(Create(axes), FadeIn(surf), FadeIn(head), FadeIn(legend), run_time=1.6)
-            self.play(FadeIn(ball))
+            self.play(FadeIn(ball), FadeIn(bx), FadeIn(bh), FadeIn(bell), FadeIn(bl))
             vo.wait_until("a")
-            self.play(MoveAlongPath(ball, track), Create(trail), run_time=4.0, rate_func=smooth)
+            for tr_, tk_, b in zip(trails, tracks, cuts[1:]):
+                self.play(MoveAlongPath(ball, tk_), Create(tr_), Transform(bell, bell_at(path[b])), run_time=0.6,
+                          rate_func=linear)
             vo.wait_until("b")
             self.play(Write(res[0]))
             self.play(Write(res[1]), FadeIn(resn))
