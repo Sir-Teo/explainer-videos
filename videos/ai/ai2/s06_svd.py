@@ -154,19 +154,30 @@ class SVD(VoiceoverScene):
             tags.add(MathTex(rf"\text{{gain }} {gain:g}: \ " + txt.replace(",", "{,}"), font_size=30, color=cols[gain])
                      .next_to(ax.c2p(L, float(ys[-1])), RIGHT, buff=0.15))
         head = label(r"A vector through $40$ layers of random matrices", font_size=34).to_edge(UP, buff=0.35)
+        chain = VGroup(Dot(radius=0.07, color=C.TRUE_P))
+        for _ in range(4):
+            chain.add(MathTex(r"\rightarrow", font_size=26, color=GREY_B),
+                      Square(0.36, stroke_color=C.BITS, stroke_width=2, fill_color=C.BITS, fill_opacity=0.25))
+        chain.add(MathTex(r"\rightarrow \cdots", font_size=26, color=GREY_B))
+        chain.arrange(RIGHT, buff=0.1)
+        layer = gloss(r"layer", r"one matrix step;\\ a \textit{deep} network chains many", picture=chain, corner=UR,
+                      width=3.4)
+        layer.shift(DOWN * 0.75)
         with self.voiceover(
             "Why care how much a matrix stretches? <bookmark mark='a'/> A deep network applies one matrix after "
-            "another. Push a vector through forty layers of random matrices. <bookmark mark='b'/> If each layer "
+            "another. Each of those steps is called a layer, and deep just means many layers. Push a vector "
+            "through forty layers of random matrices. <bookmark mark='b'/> If each layer "
             "stretches a typical vector by 1.2, after forty layers its length has grown two thousand times. "
             "<bookmark mark='c'/> At 0.8, it shrinks to almost nothing. Only near one does the signal survive. That "
             "knife edge is the subject of part eight."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn), FadeIn(layer))
             self.play(Create(lines[1]), run_time=1.5)
             self.play(FadeIn(tags[1]))
             vo.wait_until("b")
+            self.play(FadeOut(layer), run_time=0.4)
             self.play(Create(lines[2]), run_time=2.0)
             self.play(FadeIn(tags[2]))
             vo.wait_until("c")

@@ -103,7 +103,9 @@ class Memory(VoiceoverScene):
             "Attention has its own memory problem: the table of scores grows with the square of the length. "
             "FlashAttention never stores it. <bookmark mark='a'/> It takes a block of queries, streams the keys and "
             "values through in tiles, small enough to stay in the chip's fastest memory, <bookmark mark='b'/> and "
-            "keeps a running maximum and a running sum, so the softmax comes out exactly right at the end. We checked "
+            "keeps a running maximum and a running sum: it remembers the biggest score so far, so the exponentials "
+            "never blow up, and rescales its partial sum whenever a bigger one arrives. So the softmax comes out "
+            "exactly right at the end. We checked "
             "it: the same numbers as the plain formula, to rounding error, without ever holding the table."
         ) as vo:
             self.play(FadeIn(grid), FadeIn(gl), FadeIn(cite_))

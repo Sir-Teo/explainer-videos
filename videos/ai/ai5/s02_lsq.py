@@ -147,10 +147,11 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "There's a beautiful way to see the answer. Write the three heights as a single point in three "
             "dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together "
-            "form a plane: everything you can reach by mixing a column of ones with the column of x's. "
-            "<bookmark mark='b'/> The best line is the point of that plane closest to the data. Drop a "
-            "perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at right angles to both "
-            "columns. Write that down, and you have the normal equations, which give the best line directly, no "
+            "form a plane: everything you can reach by mixing a column of ones, which shifts the line up and down, "
+            "with the column of x's, which tilts it. <bookmark mark='b'/> The best line is the point of that plane "
+            "closest to the data. Drop a perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at "
+            "right angles to both columns: the misses have no shift and no tilt left in them that the line could "
+            "still fix. Write that down, and you have the normal equations, which give the best line directly, no "
             "searching needed."
         ) as vo:
             self.play(Create(axes), GrowFromPoint(vy, o), FadeIn(ly), FadeIn(ycap))
@@ -192,12 +193,22 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
                        label(rf"${z['n_words'] / 1e6:.2f}$ million words of Part 1's books", font_size=24, color=GREY_B))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(law, DOWN, buff=0.5).set_x(4.4)
         cite_ = cite(r"G.~K.~Zipf, \textit{Human Behavior and the Principle of Least Effort} (1949)", corner=DR)
+        # "explains 99.6% of the variation": the scatter around the average, and what the line leaves over
+        BW = 3.6
+        tot = Rectangle(width=BW, height=0.28, stroke_width=0, fill_color=GREY_B, fill_opacity=0.8)
+        left = Rectangle(width=max(BW * (1 - z["r2"]), 0.02), height=0.28, stroke_width=0, fill_color=RES, fill_opacity=0.95)
+        r2_bars = VGroup(VGroup(label(r"the scatter around the average", font_size=20, color=GREY_A), tot),
+                         VGroup(label(r"what the line leaves over", font_size=20, color=RES), left))
+        for row in r2_bars:
+            row.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        r2_bars.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(notes, DOWN, buff=0.35).align_to(notes, LEFT)
         with self.voiceover(
             "Here's least squares on real data. Count every word in part one's books, and rank them, from the "
             "commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest "
             "words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the "
             "r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the "
-            "line explains 99.6 percent of the variation."
+            "line explains 99.6 percent of the variation: <bookmark mark='c'/> of all the scatter of the points "
+            "around their average height, the line accounts for everything but a sliver."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             vo.wait_until("a")
@@ -205,5 +216,8 @@ class LeastSquares(VoiceoverScene, ThreeDScene):
             vo.wait_until("b")
             self.play(Create(fit), Write(law))
             self.play(LaggedStart(*[FadeIn(n_) for n_ in notes], lag_ratio=0.3), FadeIn(cite_))
+            vo.wait_until("c")
+            self.play(FadeIn(r2_bars[0]))
+            self.play(FadeIn(r2_bars[1][0]), GrowFromEdge(r2_bars[1][1], LEFT))
         self.wait(0.3)
         self.clear_scene()

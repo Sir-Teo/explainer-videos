@@ -77,7 +77,7 @@ class Circuits(VoiceoverScene):
                    color=GREY_A).to_corner(UR, buff=0.3)
         cite_ = cite(r"E.~Ameisen et al., \textit{Circuit Tracing} (2025); \ J.~Lindsey et al., \textit{On the Biology of a Large "
                      r"Language Model} (2025)", corner=DL)
-        tag = note(r"to first order: \ activation $\times$ gradient").next_to(el, DOWN, buff=0.12).align_to(el, RIGHT)
+        tag = note(r"how strongly it's on $\times$ how much the answer cares").next_to(el, DOWN, buff=0.12).align_to(el, RIGHT)
         with self.voiceover(
             "With features in hand, we can trace a single decision. <bookmark mark='a'/> Our transformer reads: she "
             f"sai, and writes {a['target']}, with {100 * float(a['p_target']):.0f} percent confidence. "
@@ -121,16 +121,34 @@ class Circuits(VoiceoverScene):
         edges = VGroup(arr(q, f1), arr(q, f3), arr(f1, f2), arr(f2, o), arr(f3, o))
         tag = note(r"published result, redrawn: \ Claude 3.5 Haiku").to_corner(DR, buff=0.25)
         cite_ = cite(r"J.~Lindsey et al., \textit{On the Biology of a Large Language Model} (2025)", corner=DL)
+        # the replacement: each MLP swapped for a transcoder, a stand-in that does its job with a few readable features
+        g = np.random.default_rng(20)
+        mlp_b = RoundedRectangle(width=2.6, height=1.5, corner_radius=0.15, stroke_color=GREY_B, stroke_width=2.5).move_to([-2.4, 1.2, 0])
+        mlp_in = VGroup(*[Line(mlp_b.get_left() + RIGHT * 0.3 + UP * (a_ - 0.5), mlp_b.get_right() + LEFT * 0.3 + UP * (b_ - 0.5),
+                               stroke_width=1, color=GREY_C).set_stroke(opacity=0.7) for a_, b_ in g.uniform(0.1, 0.9, (18, 2))])
+        mlp = VGroup(mlp_b, mlp_in, label(r"an MLP: \ tangled", font_size=22, color=GREY_B).next_to(mlp_b, UP, buff=0.12))
+        lit = {1, 4, 6}
+        tc_b = RoundedRectangle(width=2.6, height=1.5, corner_radius=0.15, stroke_color=FEAT, stroke_width=2.5).move_to([2.4, 1.2, 0])
+        tc_d = VGroup(*[Dot(radius=0.11, color=FEAT if i in lit else GREY_D).set_opacity(1 if i in lit else 0.5) for i in range(8)])
+        tc_d.arrange_in_grid(rows=2, cols=4, buff=0.35).move_to(tc_b)
+        tc = VGroup(tc_b, tc_d, label(r"a transcoder: \ a few readable features", font_size=22, color=FEAT).next_to(tc_b, UP, buff=0.12))
+        sw = Arrow(mlp_b.get_right(), tc_b.get_left(), buff=0.15, stroke_width=3, color=GREY_B, max_tip_length_to_length_ratio=0.15)
+        swl = label(r"same job", font_size=20, color=GREY_A).next_to(sw, DOWN, buff=0.1)
         with self.voiceover(
             "In big models this gets striking. Researchers at Anthropic replaced each layer's MLP with a sparse "
-            "transcoder, so the graph is exact for that replacement, and traced Claude 3.5 Haiku. "
+            "transcoder: <bookmark mark='t'/> a stand-in that does the MLP's job with a few readable features. The "
+            "graph is exact for that replacement model, and they traced Claude 3.5 Haiku. "
             "<bookmark mark='a'/> Asked for the capital of the state containing Dallas, it doesn't jump straight "
             "there: one feature represents Dallas, which activates Texas, and Texas together with a "
             "say-a-capital feature produces Austin. Two steps of reasoning, inside one forward pass. When writing a "
             "rhyming poem, it picks the rhyme before it writes the line that leads to it."
         ) as vo:
-            self.play(FadeIn(q), FadeIn(tag), FadeIn(cite_))
+            self.play(FadeIn(q), FadeIn(tag), FadeIn(cite_), FadeIn(mlp))
+            vo.wait_until("t")
+            self.play(GrowArrow(sw), FadeIn(swl), FadeIn(tc_b), FadeIn(tc[2]), FadeIn(tc_d, lag_ratio=0.1))
+            self.play(LaggedStart(*[Indicate(tc_d[i], color=FEAT, scale_factor=1.6) for i in sorted(lit)], lag_ratio=0.3))
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(mlp, sw, swl, tc)), run_time=0.5)
             self.play(GrowArrow(edges[0]), FadeIn(f1))
             self.play(GrowArrow(edges[2]), FadeIn(f2))
             self.play(GrowArrow(edges[1]), FadeIn(f3))

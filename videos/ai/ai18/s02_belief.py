@@ -49,14 +49,19 @@ class Belief(VoiceoverScene):
         tag = note(rf"a corridor of ${n}$ cells and ${len(doors)}$ doors; \ it sees a door ${int(100 * b['p_hit'])}\%$ "
                    rf"of the time it's at one, \ and imagines one ${int(100 * b['p_false'])}\%$ of the time it isn't").to_edge(DOWN, buff=0.15)
         cite_ = cite(r"S.~Thrun, W.~Burgard \& D.~Fox, \textit{Probabilistic Robotics} (2005)", corner=UL)
+        pomdp = gloss(r"POMDP", r"a partially observable Markov decision process: \\ you choose actions, \\ "
+                      r"but only get clues about where you are", corner=DR, width=5.4, color=C.TRUE_P)
+        pomdp.align_to(f, DOWN).shift(UP * 0.15)
         with self.voiceover(
             "An agent acts in a world it can only partly see. Here's the classic example: a robot in a corridor with "
             "a few doors, which doesn't know where it is. Its knowledge is a belief: a probability for every cell, "
             "spread evenly at first. <bookmark mark='a'/> Each step it moves right, sometimes slipping, so the belief "
             "shifts and blurs. Then it senses: door, or no door, and Bayes' rule from part four multiplies the "
             "belief by how well each cell explains what it saw. <bookmark mark='b'/> Watch the uncertainty fall as "
-            "the pattern of doors gives the place away. This is part six's hidden Markov model, run forward: an "
-            "agent in a partly observed world, a POMDP, acts on its belief, not on the truth."
+            "the pattern of doors gives the place away. This is part six's hidden Markov model, run forward. "
+            "<bookmark mark='c'/> With actions added, it's called a POMDP, a partially observable Markov decision "
+            "process: you choose actions, but only get clues about where you are. The agent acts on its belief, not "
+            "on the truth."
         ) as vo:
             self.play(Create(floor), FadeIn(door_m), FadeIn(bars), FadeIn(robot), FadeIn(bl), FadeIn(er), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
@@ -87,6 +92,8 @@ class Belief(VoiceoverScene):
                 else:
                     self.play(*anims, run_time=0.32)
             self.play(Indicate(bars.bar(int(B[-1].argmax())), color=WHITE))
+            vo.wait_until("c")
+            self.play(FadeOut(f), FadeOut(fl), FadeIn(pomdp))
         bars.freeze()
         self.wait(0.3)
         self.clear_scene()

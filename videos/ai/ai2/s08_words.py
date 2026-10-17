@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai2.common import MONO, load
+from videos.ai.ai2.compute import DIM
 
 
 class Words(VoiceoverScene):
@@ -173,12 +174,26 @@ class Words(VoiceoverScene):
         hdr = label(r"counting $+$ SVD \quad\quad word2vec", font_size=22, color=GREY_B).next_to(tabs, UP, buff=0.2)
         lg = label(r"O.~Levy \& Y.~Goldberg (2014): \ word2vec factorizes the same PMI table, shifted",
                    font_size=26, color=C.BITS).to_edge(DOWN, buff=0.35)
+        # factorizing: the big table as the product of two thin ones
+        nv, nd = len(w["vocab"]), DIM
+        big = Square(1.3, stroke_color=C.CONTEXT, stroke_width=2, fill_color=C.CONTEXT, fill_opacity=0.3)
+        tall = Rectangle(width=0.16, height=1.3, stroke_color=C.TRUE_P, stroke_width=2, fill_color=C.TRUE_P, fill_opacity=0.4)
+        wide = Rectangle(width=1.3, height=0.16, stroke_color=C.BITS, stroke_width=2, fill_color=C.BITS, fill_opacity=0.4)
+        shapes = VGroup(big, MathTex(r"\approx", font_size=34), tall, MathTex(r"\times", font_size=30), wide).arrange(RIGHT, buff=0.22)
+        dims_ = VGroup(*[MathTex(t, font_size=20, color=GREY_A).next_to(m, DOWN, buff=0.12) for t, m in (
+            (rf"{nv:,} \times {nv:,}".replace(",", "{,}"), big), (rf"{nv:,} \times {nd}".replace(",", "{,}"), tall),
+            (rf"{nd} \times {nv:,}".replace(",", "{,}"), wide))])
+        dims_[1].shift(DOWN * 0.3)
+        fac_card = gloss(r"factorizing a table", r"writing a big table as the product\\ of two thin ones", picture=VGroup(
+            shapes, dims_), corner=DL, width=4.4, color=C.CONTEXT)
+        fac_card.move_to([-4.3, -1.55, 0])
         with self.voiceover(
             "In 2013, Tomas Mikolov and his colleagues at Google trained word vectors another way: with a guessing "
             "game. From each word, guess the words around it. <bookmark mark='a'/> That's word2vec. We trained it on "
             "the same books, for three passes. <bookmark mark='b'/> For common words, its neighbours agree with the "
             "counting method's. <bookmark mark='c'/> And in 2014, Omer Levy and Yoav Goldberg showed why: word2vec is "
-            "quietly factorizing the very same table of mutual information. Guessing and counting meet again."
+            "quietly factorizing the very same table of mutual information, writing that huge table as the product "
+            "of two thin ones, a hundred numbers per word. Guessing and counting meet again."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -187,7 +202,7 @@ class Words(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(hdr), LaggedStart(*[FadeIn(t) for t in tabs], lag_ratio=0.3))
             vo.wait_until("c")
-            self.play(FadeIn(lg, shift=UP * 0.1))
+            self.play(FadeIn(lg, shift=UP * 0.1), FadeOut(VGroup(ax, al, curve)), FadeIn(fac_card))
         self.wait(0.3)
         self.clear_scene()
 
@@ -211,9 +226,12 @@ class Words(VoiceoverScene):
         sub = label(r"each word's $5$ nearest neighbours, \ by the cosine of their vectors", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
         days = "monday tuesday wednesday thursday friday saturday sunday january february march april may june july august"
         proper = lambda w_: w_.capitalize() if w_ in days.split() else w_  # noqa: E731
+        step_card = gloss(r"training step, \ batch", r"each step looks at a small batch of examples\\ and nudges the "
+                          r"vectors once", corner=UR, width=4.4)
         with self.voiceover(
             "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during "
-            "training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
+            "training. Training goes in steps: each step looks at a small batch of examples, and nudges the vectors "
+            "once. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
             f"<bookmark mark='b'/> After only {steps[1]} steps, most words' neighbours are the commonest words in "
             "the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. "
             f"<bookmark mark='c'/> By step {steps[4]:,}, meaning appears: three sits with "
@@ -225,11 +243,14 @@ class Words(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub))
             self.add(cnt)
+            self.play(FadeIn(step_card))
             vo.wait_until("a")
             marks = {1: "b", 2: "c", len(steps) - 1: "d"}  # hold on step 36 while it is described
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
+                if k == 2:
+                    self.play(FadeOut(step_card), run_time=0.4)
                 new = VGroup(*[column(k, w_).next_to(h_, DOWN, buff=0.35) for w_, h_ in zip(words, heads)])
                 self.play(Transform(cols, new), t.animate.set_value(steps[k]), run_time=0.9)
         self.wait(0.3)

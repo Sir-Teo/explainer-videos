@@ -126,7 +126,8 @@ class Chain(VoiceoverScene):
             "Here are all our runs, on strings of four, eight and sixteen bits. <bookmark mark='a'/> Answering at "
             f"once is {verdict(d[0])} at four bits, {verdict(d[1])} at eight, and {verdict(d[2])} at sixteen: every "
             "bit flips the answer, and two layers can't learn to combine sixteen of them at once. "
-            "<bookmark mark='b'/> With the running parity written first, all three are "
+            "<bookmark mark='b'/> With the running parity written first, that is, whether the count of ones so far "
+            "is odd or even, all three are "
             f"{'solved' if min(c) > 0.95 else 'much better'}. <bookmark mark='c'/> And the chain is also easier to "
             "learn. " + (f"At sixteen bits it's reliable after about {first:,} steps; " if first else "")
             + "answering at once never gets off the ground."

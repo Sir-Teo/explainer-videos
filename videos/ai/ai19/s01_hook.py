@@ -72,11 +72,15 @@ class Hook(VoiceoverScene):
         count = Integer(0, font_size=34, color=C.BITS).next_to(cl, LEFT, buff=0.18)
         count.add_updater(lambda m: m.set_value(int(round(141 * n_tok.get_value()))).next_to(cl, LEFT, buff=0.18))
         tag = note(r"schematic: \ one square stands for $400$ million weights").to_corner(DR, buff=0.25)
+        bytes_l = label(r"each weight: \ $16$ bits $=$ $2$ bytes", font_size=20, color=C.NEURAL).next_to(wl, DOWN, buff=0.1)
+        pl2 = label(r"memory bandwidth: \\ $3.35$ TB a second", font_size=20, color=GREY_A).next_to(pipe, DOWN, buff=0.15)
         with self.voiceover(
             "When a big model writes, it writes one token at a time. And to write each one, it has to read every "
-            "single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, that's a hundred "
-            "and forty-one gigabytes, streamed from memory through to the chip, <bookmark mark='b'/> for one token. "
-            "Then all of it again for the next one, and the next."
+            "single one of its weights. <bookmark mark='a'/> For a seventy-billion-parameter model, stored as "
+            "sixteen-bit numbers, two bytes each, that's a hundred and forty-one gigabytes, streamed from memory "
+            "through to the chip, <bookmark mark='b'/> for one token. Then all of it again for the next one, and the "
+            "next. <bookmark mark='c'/> How many bytes a second can flow from memory to the chip is the memory "
+            "bandwidth: here, three point three five terabytes a second."
         ) as vo:
             self.play(FadeIn(wall, lag_ratio=0.01), FadeIn(wl), FadeIn(lay), GrowArrow(lay_a), FadeIn(tag), run_time=1.5)
             self.play(FadeIn(chip_), Create(chip_box), FadeIn(cl_), Create(pipe), FadeIn(pl))
@@ -84,7 +88,7 @@ class Hook(VoiceoverScene):
             wall.add_updater(light)
             dots.add_updater(flow)
             self.add(dots)
-            self.play(FadeIn(out_l), FadeIn(cl), FadeIn(count))
+            self.play(FadeIn(out_l), FadeIn(cl), FadeIn(count), FadeIn(bytes_l))
             self.play(sweep.animate.set_value(x1 + 0.6), n_tok.animate.set_value(1), run_time=2.6, rate_func=linear)
             self.play(FadeIn(chips[0], shift=DOWN * 0.2), chip_.animate.set_fill(opacity=0.5), run_time=0.4)
             self.play(chip_.animate.set_fill(opacity=0.15), run_time=0.3)
@@ -98,6 +102,8 @@ class Hook(VoiceoverScene):
             dots.clear_updaters()
             count.clear_updaters()
             self.remove(dots)
+            vo.wait_until("c")
+            self.play(FadeTransform(pl, pl2), Indicate(pipe, color=WHITE, scale_factor=1.0))
         self.wait(0.3)
         self.clear_scene()
 
@@ -130,12 +136,31 @@ class Hook(VoiceoverScene):
         ul = label(rf"used, \ writing ${TOKENS_S:.0f}$ tokens a second: \ ${100 * USE:.2f}\%$", font_size=28,
                    color=C.SURPRISE).next_to(inset, DOWN, buff=0.3).align_to(inset, LEFT)
         cite_ = cite(r"NVIDIA, \textit{H100 Tensor Core GPU} datasheet; \ Meta, \textit{Llama 3.1} (2024)", corner=DR)
+        # training vs inference: the same weights, changing in one, frozen in the other
+        g = np.random.default_rng(7)
+        panels = VGroup()
+        for k, (head, col) in enumerate(((r"training: \ the weights change", C.SURPRISE),
+                                         (r"inference: \ the weights frozen, \ tokens out", C.BITS))):
+            box = RoundedRectangle(width=5.8, height=2.5, corner_radius=0.15, stroke_color=col, stroke_width=2).move_to([-3.2 + 6.4 * k, -1.3, 0])
+            grid = VGroup(*[Square(0.3, stroke_width=0, fill_color=C.NEURAL, fill_opacity=float(o)) for o in g.uniform(0.2, 0.8, 18)])
+            grid.arrange_in_grid(rows=3, cols=6, buff=0.05).move_to(box.get_center() + LEFT * 1.2 + DOWN * 0.2)
+            hl_ = label(head, font_size=22, color=col).next_to(box.get_top(), DOWN, buff=0.2)
+            panels.add(VGroup(box, grid, hl_))
+        upd = CurvedArrow(panels[0][1].get_right() + RIGHT * 0.2 + DOWN * 0.3, panels[0][1].get_right() + RIGHT * 0.2 + UP * 0.3,
+                          angle=PI * 0.9, color=C.SURPRISE, stroke_width=2.5, tip_length=0.15)
+        upl = label(r"learn from \\ each example", font_size=18, color=C.SURPRISE).next_to(upd, RIGHT, buff=0.2)
+        out_a = Arrow(panels[1][1].get_right(), panels[1][1].get_right() + RIGHT * 1.0, buff=0.15, color=GREY_B, stroke_width=2.5,
+                      max_tip_length_to_length_ratio=0.25)
+        out_t = VGroup(*[data_text(w_, font="DejaVu Sans Mono", font_size=24, color=WHITE) for w_ in ("the", "girl", "ran")])
+        out_t.arrange(DOWN, buff=0.08, aligned_edge=LEFT).next_to(out_a, RIGHT, buff=0.15)
         with self.voiceover(
             "So memory sets a speed limit. Tokens per second can't beat the memory bandwidth divided by the bytes of "
             f"weights: on one of today's best chips, about {TOKENS_S:.0f} tokens a second. <bookmark mark='a'/> And "
             "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses "
             f"{'a third of one percent' if 0.25 < 100 * USE < 0.42 else f'{100 * USE:.2f} percent'} of it. "
-            "Inference is a problem of moving numbers, not multiplying them."
+            "<bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called "
+            "inference; it's not part six's variational inference. And inference is a problem "
+            "of moving numbers, not multiplying them."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_))
             self.play(FadeIn(f2, shift=LEFT * 0.1), FadeIn(src))
@@ -145,6 +170,14 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(zoom_src), Create(rays), Create(inset), FadeIn(il))
             self.play(GrowFromEdge(big, LEFT), FadeIn(ul), run_time=1.2)
+            vo.wait_until("c")
+            self.play(FadeOut(VGroup(full, used, fl, zoom_src, rays, inset, big, il, ul)), run_time=0.5)
+            self.play(FadeIn(panels), Create(upd), FadeIn(upl))
+            for _ in range(2):
+                self.play(*[sq.animate.set_fill(opacity=float(o)) for sq, o in zip(panels[0][1], g.uniform(0.2, 0.8, 18))],
+                          GrowArrow(out_a) if _ == 0 else Wait(0), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(w_, shift=RIGHT * 0.15) for w_ in out_t], lag_ratio=0.4),
+                      *[sq.animate.set_fill(opacity=float(o)) for sq, o in zip(panels[0][1], g.uniform(0.2, 0.8, 18))], run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 

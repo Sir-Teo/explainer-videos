@@ -76,7 +76,7 @@ class MCMC(VoiceoverScene):
         with self.voiceover(
             "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how "
             "likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the "
-            "rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, with two bumps. In "
+            "rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, bright where points crowd together, with two bumps. In "
             "1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a "
             "random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. "
             "<bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio "

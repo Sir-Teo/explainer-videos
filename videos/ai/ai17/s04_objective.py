@@ -129,7 +129,7 @@ class Objective(VoiceoverScene):
         cite_ = cite(r"J.~Schulman, \textit{Approximating KL Divergence} (2020)", corner=DR)
         less = cg[-1, 3] < cp[-1, 3]
         with self.voiceover(
-            "That last term needs the KL divergence, part three's measure of how far one distribution is from "
+            "That last term needs the KL divergence, part one's measure of how far one distribution is from "
             "another, and computing it exactly would mean summing over every possible answer. <bookmark mark='a'/> "
             "Instead, GRPO uses an estimate from the sampled tokens alone, John Schulman's k three: the ratio of the "
             "starting model's probability to the current one's, minus its log, minus one. <bookmark mark='b'/> It's "
@@ -138,8 +138,8 @@ class Objective(VoiceoverScene):
             + (f"the penalty kept GRPO closer to where it started: {float(cg[-1, 3]):.2f} bits per answer, against "
                f"{float(cp[-1, 3]):.2f} without it." if less else
                f"the penalty, at weight 0.04, didn't keep GRPO closer: it ended {float(cg[-1, 3]):.2f} bits per answer "
-               f"from the start, against {float(cp[-1, 3]):.2f} for the plain gradient, which has no penalty but takes "
-               "smaller steps. At this weight the penalty is weak, and many recent recipes drop it.")
+               f"from the start, against {float(cp[-1, 3]):.2f} for the plain policy gradient, chapter two's simple push "
+               "on the policy, which has no penalty but takes smaller steps. At this weight the penalty is weak, and many recent recipes drop it.")
         ) as vo:
             self.play(J.animate.scale(0.75).to_edge(UP, buff=0.3), FadeIn(cite_))
             self.play(Indicate(VGroup(*J[11:]), color=KLC))
@@ -185,21 +185,60 @@ class Objective(VoiceoverScene):
         arrows = VGroup(*[MathTex(r"\Downarrow", font_size=26, color=GREY_C).move_to((a.get_bottom() + b.get_top()) / 2).set_x(-6.4)
                           for a, b in zip(steps_, steps_[1:])])
         cite_ = cite(r"R.~Rafailov et al., \textit{Direct Preference Optimization} (2023)", corner=UR)
+        # the idea first: a better and a worse answer; raise the better one, relative to the start, more than the worse
+        idea = VGroup()
+        for k, (col, h1, txt) in enumerate(((RIGHT_C, 1.9, r"a better answer, \ $y_w$"), (WRONG_C, 0.8, r"a worse answer, \ $y_l$"))):
+            x = -1.3 + 2.6 * k
+            ghost = DashedVMobject(Rectangle(width=0.9, height=1.3, stroke_color=GREY_B, stroke_width=2), num_dashes=24)
+            ghost.move_to([x, -1.6 + 0.65, 0])
+            bar = Rectangle(width=0.9, height=1.3, stroke_width=0, fill_color=col, fill_opacity=0.8).move_to([x, -1.6 + 0.65, 0])
+            target = Rectangle(width=0.9, height=h1, stroke_width=0, fill_color=col, fill_opacity=0.8).move_to([x, -1.6 + h1 / 2, 0])
+            idea.add(VGroup(bar, ghost, label(txt, font_size=22, color=col).next_to([x, -1.6, 0], DOWN, buff=0.2), target))
+        base_ = Line([-2.4, -1.6, 0], [2.4, -1.6, 0], color=GREY_C, stroke_width=1.5)
+        it = label(r"DPO, \ the idea", font_size=28, color=C.SURPRISE).move_to([0, 2.3, 0])
+        ip = label(r"raise the better answer's probability, \ relative to the starting model, \\ more than the worse one's",
+                   font_size=22, color=GREY_A).next_to(it, DOWN, buff=0.2)
+        ik = label(r"dashed: \ the starting model", font_size=20, color=GREY_B).move_to([4.3, -0.4, 0])
+        # Bradley and Terry: the chance one answer beats another depends only on the gap between their scores
+        sax = Axes(x_range=[-4, 4, 2], y_range=[0, 1, 0.5], x_length=3.0, y_length=0.85, tips=False,
+                   axis_config={"stroke_color": GREY_C, "include_ticks": False})
+        sg = VGroup(sax, sax.plot(lambda x: 1 / (1 + math.exp(-x)), color=C.SURPRISE, stroke_width=3),
+                    label(r"score gap", font_size=20, color=GREY_B).next_to(sax, DOWN, buff=0.08),
+                    label(r"chance \\ $y_w$ wins", font_size=20, color=GREY_B).next_to(sax, LEFT, buff=0.1))
+        bt = gloss(r"Bradley--Terry", r"the chance one answer beats another \\ depends only on the gap between their scores",
+                   picture=sg, corner=DR, width=4.4, color=C.SURPRISE)
+        bt.shift(DOWN * 0.15)  # clear of the Bradley-Terry note above it
         with self.voiceover(
             "Before the variants, one more objective, because it explains what that KL term is really doing. "
+            "<bookmark mark='i'/> The idea, in short: show the model pairs, a better and a worse answer to the same "
+            "question, and raise the better one's probability, relative to the starting model, more than the worse "
+            "one's. Here is where that comes from. "
             "<bookmark mark='a'/> Maximize reward while staying near the starting model. <bookmark mark='b'/> This "
             "has an exact solution: the starting model, reweighted by e to the reward over beta. <bookmark mark='c'/> "
             "Turn it around, and the reward is hidden in the best model itself: beta times the log of how much it "
             "raised each answer, plus a constant. <bookmark mark='d'/> Now suppose all we have is pairs: this answer "
-            "is better than that one, with Bradley and Terry's model of preferences. The constant cancels. "
+            "is better than that one, with Bradley and Terry's model of preferences: the chance that one answer beats "
+            "another depends only on the gap between their scores, through a sigmoid. The constant cancels. "
             "<bookmark mark='e'/> What's left is a plain loss on the model itself: push up the winner's log-ratio, "
             "push down the loser's. That's DPO, by Rafailov and colleagues: preference tuning with no reward model "
             "and no sampling during training."
         ) as vo:
             self.play(FadeIn(cite_))
+            vo.wait_until("i")
+            self.play(FadeIn(it), FadeIn(ip), Create(base_), *[FadeIn(g_[0]) for g_ in idea], *[Create(g_[1]) for g_ in idea],
+                      *[FadeIn(g_[2]) for g_ in idea], FadeIn(ik))
+            self.play(*[Transform(g_[0], g_[3]) for g_ in idea], run_time=1.6)
+            self.bring_to_front(*[g_[1] for g_ in idea])
+            vo.wait_until("a")
+            self.play(FadeOut(VGroup(it, ip, base_, ik, *[g_[:3] for g_ in idea])), run_time=0.5)
             for i, mk in enumerate("abcde"):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
+                if mk == "e":
+                    self.play(FadeOut(bt), run_time=0.4)
                 self.play(*([FadeIn(arrows[i - 1])] if i else []), Write(steps_[i]), FadeIn(notes[i]), run_time=1.3)
+                if mk == "d":
+                    self.play(FadeIn(bt))
         self.wait(0.3)
         self.clear_scene()
 
@@ -292,6 +331,9 @@ class Objective(VoiceoverScene):
         rl = [v for v in V if v != "dpo"]
         best = max(rl, key=lambda v: acc[v])
         spread = 100 * (max(acc[v] for v in rl) - min(acc[v] for v in rl))
+        gm = MathTex(r"\sqrt[3]{2 \times \tfrac{1}{2} \times 1} = 1", font_size=34, color=C.ATTN)
+        gmc = gloss(r"geometric mean", r"multiply the $n$ ratios, \ take the $n$-th root: \\ a doubling and a halving cancel",
+                    picture=gm, corner=DR, width=4.2, color=C.ATTN)
         cite_ = cite(r"Z.~Liu et al., \textit{Dr.~GRPO} (2025); \ Q.~Yu et al., \textit{DAPO} (2025); \ C.~Zheng et al., "
                      r"\textit{GSPO} (2025)", corner=UR)  # the bars' names sit along the bottom
         with self.voiceover(
@@ -301,7 +343,8 @@ class Objective(VoiceoverScene):
             "<bookmark mark='b'/> DAPO, from ByteDance, lets the clip go higher above than below, so unlikely good "
             "tokens can grow, and throws away groups that carry no signal. <bookmark mark='c'/> GSPO, used for "
             "Qwen3, takes one ratio per answer instead of per token: the geometric mean of its tokens' ratios. "
-            "<bookmark mark='d'/> We ran all of them, and DPO, from the same start on the same questions. "
+            "<bookmark mark='g'/> Multiply the ratios together and take the root, one per token, so a token that "
+            "doubled and one that halved cancel out. <bookmark mark='d'/> We ran all of them, and DPO, from the same start on the same questions. "
             f"<bookmark mark='e'/> The best here is {SAY[best]}, at {100 * acc[best]:.0f} percent; "
             + (f"the reinforcement learners are within {spread:.0f} points of each other. On a problem this small "
                "they mostly agree; the differences matter at scale, over long answers and thousands of steps. "
@@ -313,7 +356,10 @@ class Objective(VoiceoverScene):
             for i, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(tab[i + 1], shift=RIGHT * 0.2))
+            vo.wait_until("g")
+            self.play(FadeIn(gmc))
             vo.wait_until("d")
+            self.play(FadeOut(gmc), run_time=0.4)
             self.play(FadeIn(tab[4], shift=RIGHT * 0.2), Create(start), FadeIn(sl), FadeIn(bl))
             vo.wait_until("e")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b_[0], DOWN), FadeIn(b_[1]), FadeIn(b_[2])) for b_ in bars],
@@ -390,13 +436,17 @@ class Objective(VoiceoverScene):
         VGroup(ka, kb).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(bx.c2p(math.log2(ks[-1]) * 0.62, 0.22))
         # a real crossover: the model before RL clearly ahead at the most tries
         cross = [k for k, a, b in zip(ks, pa, pb) if b > a + 0.01] if pb[-1] > pa[-1] + 0.02 else []
+        eb = gloss(r"clip-higher, \ entropy bonus", r"clip-higher: \ DAPO's lopsided clip, \ $0.8$ to $1.28$ \\ "
+                   r"entropy bonus: \ a small reward \\ for keeping options open", corner=UR, width=4.6, color=C.BITS)
+        eb.shift(DOWN * 0.6)
         cite_ = cite(r"Y.~Yue et al., \textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs "
                      r"Beyond the Base Model?} (2025)", corner=DR)
         with self.voiceover(
             "Every one of these objectives does something else, too. <bookmark mark='a'/> It sharpens the model. The "
             f"entropy of its digits falls from {e0:.2f} bits to about {e1:.2f}: it stops considering alternatives. "
-            "Too fast, and exploration dies; that's the entropy collapse that recent papers fight with the "
-            "clip-higher trick and entropy bonuses. <bookmark mark='b'/> So does RL teach a model new answers, or "
+            "Too fast, and exploration dies; that's the entropy collapse that recent papers fight with "
+            "<bookmark mark='h'/> DAPO's clip-higher trick from a moment ago, the lopsided clip that lets unlikely good "
+            "tokens grow, and with entropy bonuses: a small reward for keeping options open. <bookmark mark='b'/> So does RL teach a model new answers, or "
             "just make it pick the ones it could already find? Yue and colleagues compared pass at k before and "
             "after RL. <bookmark mark='c'/> "
             + (f"On ours, one try is much better after RL. But with {cross[0]} tries or more, the model before RL "
@@ -412,7 +462,10 @@ class Objective(VoiceoverScene):
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(xn))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), FadeIn(key_), run_time=2.5)
+            vo.wait_until("h")
+            self.play(FadeIn(eb))
             vo.wait_until("b")
+            self.play(FadeOut(eb), run_time=0.4)
             self.play(FadeIn(cite_), Create(bx), FadeIn(bxt), FadeIn(byt), FadeIn(byn), FadeIn(bxn))
             vo.wait_until("c")
             self.play(Create(cb), FadeIn(db), FadeIn(kb), run_time=1.5)

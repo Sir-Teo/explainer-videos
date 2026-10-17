@@ -263,7 +263,7 @@ class Likelihood(VoiceoverScene):
             label(r"moves by\\ slope $\times$ nudge", font_size=20, color=C.BITS).move_to([2.05, 1.1, 0]),
         )
         deriv = gloss(r"derivative \ $\partial / \partial z_k$", r"how much the output moves\\ when you nudge one "
-                      r"input a tiny bit", picture=nudge_pic, width=4.4)
+                      r"input a tiny bit", picture=nudge_pic, width=5.0)
         deriv.to_edge(DOWN, buff=0.25).set_x(0)
         dp = deriv[1][-1]
         dp[6].set_opacity(0)
@@ -359,12 +359,12 @@ class Likelihood(VoiceoverScene):
         # the learning rate, pictured: too small, about right, too large
         rates = VGroup()
         for eta, n, cap_ in ((0.04, 6, r"too small: \ crawls"), (0.3, 5, r"about right"),
-                             (0.95, 4, r"too large: \ overshoots")):
-            v_ = valley_steps(eta, x0=-1.2, n=n, width=1.7, height=1.0, color=C.LR)
-            rates.add(VGroup(v_, label(cap_, font_size=20, color=GREY_A).next_to(v_, DOWN, buff=0.12)))
+                             (0.95, 3, r"too large: \ overshoots")):
+            v_ = valley_steps(eta, x0=-1.2, n=n, width=2.0, height=1.1, color=C.LR)
+            rates.add(VGroup(v_, label(cap_, font_size=24, color=GREY_A).next_to(v_, DOWN, buff=0.12)))
         rates.arrange(RIGHT, buff=0.35, aligned_edge=DOWN)
-        lr_card = gloss(r"learning rate \ $\eta$", r"how big each step is", picture=rates, width=5.4, color=C.LR)
-        lr_card.move_to([3.4, -0.9, 0])
+        lr_card = gloss(r"learning rate \ $\eta$", r"how big each step is", picture=rates, width=6.0, color=C.LR)
+        lr_card.scale(1.15).move_to([3.3, -0.9, 0])
         with self.voiceover(
             "Here is gradient descent in action. Suppose the data are a hundred continuations of come, "
             "<bookmark mark='a'/> and the model starts with all five scores equal, so every guess is twenty percent. "

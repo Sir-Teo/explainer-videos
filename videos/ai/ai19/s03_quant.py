@@ -43,19 +43,40 @@ class Quant(VoiceoverScene):
         ticksf = VGroup(*[Line(ax.c2p(x, 0), ax.c2p(x, 1.05), color=C.BITS, stroke_width=1.5).set_stroke(opacity=0.8) for x in levelsf])
         tf = label(r"FP4: \ $\pm\{0, \tfrac12, 1, \tfrac32, 2, 3, 4, 6\}$ \ times a scale: \\ dense near zero, \ where the weights are",
                    font_size=24, color=C.BITS).next_to(t4, DOWN, buff=0.3).align_to(t4, LEFT)
+        # E2M1: the eight non-negative FP4 values on a line, coloured by their power of two; the gaps double
+        nl = NumberLine(x_range=[0, 6, 1], length=4.8, include_numbers=False, color=GREY_C, tick_size=0.05)
+        band_c = [GREY_B, C.TRUE_P, C.INTERVAL, C.BITS]  # below 1; [1, 2); [2, 4); [4, 6]
+        vals_ = [0, 0.5, 1, 1.5, 2, 3, 4, 6]
+        bands_ = [0, 0, 1, 1, 2, 2, 3, 3]
+        fdots = VGroup(*[Dot(nl.n2p(v_), radius=0.08, color=band_c[b_]) for v_, b_ in zip(vals_, bands_)])
+        fnum = VGroup(*[MathTex(t_, font_size=22, color=band_c[b_]).next_to(nl.n2p(v_), DOWN, buff=0.12)
+                        for t_, v_, b_ in zip(("0", r"\tfrac12", "1", r"\tfrac32", "2", "3", "4", "6"), vals_, bands_)])
+        gaps = VGroup(*[label(t_, font_size=18, color=band_c[b_]).next_to(nl.n2p(m_), UP, buff=0.2)
+                        for t_, m_, b_ in ((r"gap $\tfrac12$", 1.0, 1), (r"gap $1$", 2.5, 2), (r"gap $2$", 5.0, 3))])
+        e2m1 = gloss(r"FP4 (E2M1): \ a tiny float", r"a power of two, \ plus a little detail within it: \\ "
+                     r"$2$ bits for the power, \ $1$ for the detail, \ $1$ for the sign", picture=VGroup(nl, fdots, fnum, gaps),
+                     corner=DR, width=5.6, color=C.BITS)
         with self.voiceover(
             "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer "
             "of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is "
             "rounded to one of fifteen evenly spaced values, the same number either side of zero. <bookmark mark='b'/> "
             "The newest chips use FP4 instead: "
             "a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale "
-            "for every block of thirty-two."
+            "for every block of thirty-two. <bookmark mark='e'/> A float stores a power of two, plus a little detail "
+            "within it, so its values are packed close near zero and spread further apart away from it. FP4's layout "
+            "is called E2M1: two bits for the power, one for the detail, and one for the sign."
         ) as vo:
             self.play(FadeIn(hl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.01), run_time=1.5)
             vo.wait_until("a")
             self.play(Create(ticks4), FadeIn(t4))
             vo.wait_until("b")
             self.play(FadeOut(ticks4), Create(ticksf), FadeIn(tf))
+            vo.wait_until("e")
+            pic_ = e2m1[1][2]
+            self.play(FadeIn(e2m1[0]), FadeIn(e2m1[1][:2]), Create(pic_[0]))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(d_, scale=1.5), FadeIn(n_)) for d_, n_ in zip(pic_[1], pic_[2])], lag_ratio=0.15),
+                      run_time=1.6)
+            self.play(LaggedStart(*[FadeIn(g_) for g_ in pic_[3]], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()
 
@@ -149,7 +170,7 @@ class Quant(VoiceoverScene):
             "four to eight on the E2M1 grid, and past six it's clipped. OpenAI's gpt-oss stores its experts this way. "
             "<bookmark mark='b'/> NVFP4, on NVIDIA's Blackwell chips, uses blocks of sixteen, and each scale is itself "
             "a small eight-bit float, so it can fit the block's largest weight to six almost exactly; one more scale "
-            f"for the whole tensor keeps everything in range. It costs {float(bpw['nvfp4']):.1f} bits per weight "
+            f"for the whole weight matrix keeps everything in range. It costs {float(bpw['nvfp4']):.1f} bits per weight "
             f"instead of {float(bpw['mxfp4']):.2f}. <bookmark mark='c'/> On our transformer: "
             f"{say['mxfp4']} loses {d['mxfp4']:.3f} bits a character, {say['nvfp4']} {d['nvfp4']:.3f}, and plain "
             f"four-bit integers with a scale per row {d['int4']:.3f}. The best here is {say[best]}. For comparison, "
@@ -262,17 +283,28 @@ class Quant(VoiceoverScene):
         rbl = label(r"a row with one outlier", font_size=16, color=C.INTERVAL).next_to(rb, RIGHT, buff=0.2)
         ral = label(r"after a Hadamard rotation", font_size=16, color=C.BITS).next_to(ra, RIGHT, buff=0.2)
         spread = crest_r < 0.8 * crest
+        hm = hadamard(4)
+        hgrid = VGroup(*[MathTex("+" if hm[i, j] > 0 else "-", font_size=20, color=C.BITS if hm[i, j] > 0 else C.SURPRISE)
+                         .move_to([0.2 * j, -0.2 * i, 0]) for i in range(4) for j in range(4)])
+        hbox = SurroundingRectangle(hgrid, buff=0.06, color=GREY_B, stroke_width=1.2, corner_radius=0.04)
+        hmat = VGroup(hbox, hgrid, MathTex(r"\times H", font_size=22, color=C.BITS).next_to(hbox, UP, buff=0.06))
+        hmat.move_to([-6.35, (rb.get_y() + ra.get_y()) / 2 - 0.1, 0])
+        orth = label(r"orthogonal: \ a pure rotation, \ lengths unchanged, \ undone exactly", font_size=16,
+                     color=GREY_A).next_to(ra, DOWN, buff=0.15).align_to(ra, LEFT)
         with self.voiceover(
             "Two tricks make low precision work much better than plain rounding. The first is GPTQ. "
             "<bookmark mark='a'/> Round a layer's weights one input column at a time. <bookmark mark='b'/> Each "
             "rounding leaves an error; <bookmark mark='c'/> instead of accepting it, nudge the weights on the inputs "
             "not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' "
-            "second moment, measured on real text: inputs that move together can cover for each other. "
+            "second moment, measured on real text: it records which inputs tend to be big together. If two inputs "
+            "move together, a rounding error on one can be cancelled by adjusting the other. "
             f"<bookmark mark='d'/> On a real layer of our transformer, at three bits, the error in its output drops from "
             f"{100 * er:.0f} to {100 * eg:.0f} percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few "
-            "weights and activations are huge outliers, and one outlier forces a coarse scale on its whole row. "
-            "Multiply by a Hadamard matrix first, an orthogonal matrix of plus and minus ones, and the outlier is "
-            "spread evenly over the row; the rotation is undone exactly afterwards. "
+            "weights and activations, the numbers flowing through the network for this particular input, which "
+            "change with every token while the weights stay fixed, are huge outliers, far bigger than the rest, and "
+            "one outlier forces a coarse scale on its whole row. <bookmark mark='h'/> Multiply by a Hadamard matrix "
+            "first, a grid of plus and minus ones. It's orthogonal: a pure rotation, which changes no lengths and can "
+            "be undone exactly. The outlier is spread evenly over the row, and the rotation is undone afterwards. "
             + (f"In one of our layers, the largest weight drops from {crest:.1f} to {crest_r:.1f} times the typical one. "
                if spread else
                f"Our small model has no such outliers: a row's largest weight is only about {crest:.1f} times the "
@@ -298,7 +330,9 @@ class Quant(VoiceoverScene):
             self.play(FadeIn(res), FadeOut(colbox))
             vo.wait_until("e")
             self.play(FadeIn(rb), FadeIn(rbl))
-            self.play(TransformFromCopy(rb, ra), FadeIn(ral))
+            vo.wait_until("h")
+            self.play(FadeIn(hmat))
+            self.play(TransformFromCopy(rb, ra), FadeIn(ral), FadeIn(orth))
             self.play(FadeIn(tl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab[:3]], lag_ratio=0.2))
             vo.wait_until("f")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab[3:]], lag_ratio=0.2))

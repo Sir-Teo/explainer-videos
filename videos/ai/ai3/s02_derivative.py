@@ -145,13 +145,16 @@ class Derivative(VoiceoverScene):
         stretch = VGroup(MathTex(r"\times g'(1) = 2", font_size=34, color=C.BITS).move_to([5.2, 0.15, 0]),
                          MathTex(r"\times f'(1) = e", font_size=34, color=GRAD).move_to([5.2, -1.35, 0]))
         scale_note = label(r"(the last line is drawn $6$ times smaller)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
+        notation = label(r"$f'$: \ the slope of $f$; \quad $f(g(x))$: \ do $g$ first, then $f$", font_size=28,
+                         color=GREY_A).move_to([0.4, 1.7, 0])
         conn = VGroup(*[Line(ivs[k].get_center(), ivs[k + 1].get_center(), color=GREY_B, stroke_width=1.5,
                              stroke_opacity=0.6) for k in range(2)])
         with self.voiceover(
             "A few derivatives come up over and over. <bookmark mark='a'/> The exponential is its own derivative. "
             "<bookmark mark='b'/> The logarithm's derivative is one over x. That's why the surprise climbs so steeply "
-            "as p shrinks. <bookmark mark='c'/> And the chain rule: the derivative of f of g of x is f prime at g of "
-            "x, times g prime at x. Change flows through a composition, multiplying as it goes."
+            "as p shrinks. <bookmark mark='c'/> And the chain rule, for a composition: f of g of x means do g "
+            "first, then f. Writing f prime for the slope of f, the derivative of f of g of x is f prime at g of x, "
+            "times g prime at x. Change flows through a composition, multiplying as it goes."
         ) as vo:
             vo.wait_until("a")
             self.play(Write(r1))
@@ -159,6 +162,7 @@ class Derivative(VoiceoverScene):
             self.play(Write(r2))
             vo.wait_until("c")
             self.play(Write(r3))
+            self.play(FadeIn(notation))
             self.play(Create(lines), FadeIn(names), FadeIn(scale_note))
             self.play(Create(ivs[0]))
             self.play(TransformFromCopy(ivs[0], ivs[1]), Create(conn[0]), FadeIn(stretch[0]))

@@ -45,7 +45,8 @@ class Dot(VoiceoverScene):
         with self.voiceover(
             "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate, and add it all "
             "up. That's the dot product. <bookmark mark='b'/> It has a second meaning: the length of one, times the "
-            "length of the other, times the cosine of the angle between them."
+            "length of the other, times the cosine of the angle between them. The cosine is one when the arrows "
+            "point the same way, zero at a right angle, and minus one when they point in opposite directions."
         ) as vo:
             self.play(FadeIn(pl), GrowArrow(aa), GrowArrow(ab), FadeIn(la), FadeIn(lb))
             vo.wait_until("a")
