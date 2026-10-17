@@ -354,6 +354,9 @@ class ClipNet:
                 self.blocks = nn.ModuleList([Block() for _ in range(L)])
                 self.nf = nn.LayerNorm(D, elementwise_affine=False)
                 self.out = nn.Linear(D, P * P)
+                if pred == "dx":  # starts out predicting a plain copy of the given frame
+                    nn.init.zeros_(self.out.weight)
+                    nn.init.zeros_(self.out.bias)
                 fr = torch.arange(T).repeat_interleave(NP)
                 self.register_buffer("mask", (fr[None, :] > fr[:, None]) if causal else torch.zeros(T * NP, T * NP, dtype=torch.bool))
 
@@ -381,7 +384,9 @@ def velocity(m, x, t, y):
     """The flow's velocity at x (B, F, 20, 20), noise levels t (B, F). A model that predicts the clean frames ('x')
     has its velocity read off as (x_clean - x_t) / (1 - t), with 1 - t kept above 0.05."""
     o = m(x, t, y)
-    if m.pred == "x":
+    if m.pred == "dx":  # the clean frames predicted as a change to the oldest frame in view (the given one)
+        o = o + x[:, :1]
+    if m.pred in ("x", "dx"):
         return (o - x) / (1 - t).clamp(min=0.05)[..., None, None]
     return o
 
