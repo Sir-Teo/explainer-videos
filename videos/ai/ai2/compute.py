@@ -280,6 +280,16 @@ def compute_sgns():
     centre = np.concatenate([seq[:-d] for d in range(1, WINDOW + 1)] + [seq[d:] for d in range(1, WINDOW + 1)])
     context = np.concatenate([seq[d:] for d in range(1, WINDOW + 1)] + [seq[:-d] for d in range(1, WINDOW + 1)])
     B, K, losses = 4096, 5, []
+    total = 3 * math.ceil(len(centre) / B)
+    checks = sorted({0, max(1, total // 300), total // 100, total // 30, total // 10, total // 3, total})
+    snaps = []
+
+    def snap():  # how it learns: the nearest neighbours of the chosen words, along the way
+        E_ = E_in.weight.detach().numpy()
+        E_ = E_ / np.linalg.norm(E_, axis=1, keepdims=True)
+        return {w: [x for x, _ in neighbours(E_, vocab, idx, w)][:5] for w in BOOK_WORDS}
+
+    snaps.append(snap())
     for epoch in range(3):
         perm = g.permutation(len(centre))
         for s0 in range(0, len(perm), B):
@@ -295,6 +305,8 @@ def compute_sgns():
             loss.backward()
             opt.step()
             losses.append(float(loss))
+            if len(losses) in checks:
+                snaps.append(snap())
     E = E_in.weight.detach().numpy()
     E = E / np.linalg.norm(E, axis=1, keepdims=True)
     nb = {w: neighbours(E, vocab, idx, w) for w in BOOK_WORDS}
@@ -304,7 +316,7 @@ def compute_sgns():
     overlap = {w: len({x for x, _ in nb[w]} & {x for x, _ in neighbours(Es, vocab, idx, w)}) for w in BOOK_WORDS}
     assert losses[-1] < losses[0] - 1.0
     return dict(neighbours=nb, analogies=an, loss=np.array(losses[::200]), pairs=int(len(centre) * 2), overlap=overlap,
-                steps=len(losses))
+                steps=len(losses), snap_steps=checks[:len(snaps)], snap_neighbours=snaps)
 
 
 # ---------------------------------------------------------------------------

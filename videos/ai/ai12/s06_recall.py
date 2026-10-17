@@ -14,6 +14,7 @@ class Recall(VoiceoverScene):
         self.card()
         self.task()
         self.results()
+        self.learning()
 
     def card(self):
         card = chapter_card(6, r"A recall test", r"Which memory can look things up?", part=12)
@@ -106,5 +107,47 @@ class Recall(VoiceoverScene):
             if cut is not None:
                 self.play(Create(cut[0]), FadeIn(cut[1]))
             vo.wait_until("b")
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How they learn the game: recall on a fixed test batch during training, for the longest lists."""
+        m = load("mqar")
+        Ns = [int(n) for n in m["Ns"]]
+        N = Ns[-1]
+        curves = {k: np.asarray(m[f"curve_{k}_{N}"]) for k, _, _ in MIXERS}
+        total = float(curves["softmax"][-1, 0])
+        ax = Axes(x_range=[0, total, 500], y_range=[0, 1, 0.25], x_length=8.0, y_length=4.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-1.0, -0.4, 0])
+        yt = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (0, 0.5, 1)])
+        xt = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for v in (0, total / 2, total)])
+        xn = label(r"training steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(rf"answers right, \ lists of ${N}$ pairs, \ during training", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        lines = {k: VMobject(color=c_, stroke_width=3.5).set_points_as_corners([ax.c2p(a, b) for a, b in curves[k]]) for k, _, c_ in MIXERS}
+        keys = VGroup(*[label(t_, font_size=22, color=c_) for _, t_, c_ in MIXERS]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        keys.move_to([5.2, 0.6, 0])
+
+        def first(k, lvl=0.5):
+            c = curves[k]
+            hit = np.where(c[:, 1] >= lvl)[0]
+            return int(c[hit[0], 0]) if len(hit) else None
+
+        fs, fl, fd = first("softmax"), first("linear"), first("delta")
+        say = lambda v: f"by step {v:,}" if v is not None else "never, in this run"  # noqa: E731
+        with self.voiceover(
+            f"Here is how each one learns the game, on the longest lists, {N} pairs, step by step through "
+            "training. <bookmark mark='a'/> For a long time, all three are guessing. Then softmax attention gets it "
+            f"in a rush, half the answers right {say(fs)}: once it learns to match a query to the same key, the "
+            "cache does the rest. <bookmark mark='b'/> The delta rule takes longer, half right "
+            f"{say(fd)}, and climbs to its ceiling; the adding memory reaches half {say(fl)}, and stalls where "
+            "its crosstalk drowns the answers."
+        ) as vo:
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(keys))
+            vo.wait_until("a")
+            self.play(Create(lines["softmax"]), run_time=2.5, rate_func=linear)
+            vo.wait_until("b")
+            self.play(Create(lines["delta"]), Create(lines["linear"]), run_time=3.0, rate_func=linear)
         self.wait(0.3)
         self.clear_scene()
