@@ -2010,7 +2010,91 @@
     "bump width: \\ $2.5$ pages": "鼓包宽度：\\ $2.5$页",
     "bump width: \\ $0.6$ pages": "鼓包宽度：\\ $0.6$页",
     "bump width: \\ $10$ pages": "鼓包宽度：\\ $10$页",
-    "$4$ bits: \\ $15$ evenly spaced values, \\ symmetric about $0$": "$4$比特：\\ $15$个等间距的值，\\ 关于$0$对称"
+    "$4$ bits: \\ $15$ evenly spaced values, \\ symmetric about $0$": "$4$比特：\\ $15$个等间距的值，\\ 关于$0$对称",
+    "parameters": "参数量",
+    "every $10\\times$ in size: \\\\ the reducible loss shrinks \\\\ by the same factor": "规模每扩大$10$倍：\\\\ 可约的那部分损失 \\\\ 都缩小同样的倍数",
+    "seven widths of Part 9's character model": "第9部分那个字符模型的$7$种宽度",
+    "$L - E$ \\ on a log scale: \\ a straight line": "$L - E$ \\ 放到对数刻度上：\\ 一条直线",
+    "Part 10: \\ The Mathematics of Scale": "第10部分：\\ 规模的数学",
+    "lazy networks, \\ muP, \\ scaling laws, \\ Chinchilla, \\ grokking": "惰性网络，\\ $\\mu$P，\\ 规模定律，\\ Chinchilla，\\ 顿悟",
+    "Wider and wider": "越来越宽",
+    "What changes when a network gets very wide?": "网络变得非常宽时，会有什么变化？",
+    "width of the hidden layers": "隐藏层的宽度",
+    "how much the hidden features changed in training": "隐藏特征在训练中变了多少",
+    "the features change less and less": "特征的变化越来越小",
+    "in the limit: \\ a fixed kernel, \\\\ the neural tangent kernel": "在极限下：\\ 一个固定的核，\\\\ 神经正切核",
+    "a model that no longer learns features": "一个不再学习特征的模型",
+    "A.~Jacot, F.~Gabriel \\& C.~Hongler, \\textit{Neural Tangent Kernel} (2018)": "A.~Jacot、F.~Gabriel \\& C.~Hongler，\\textit{Neural Tangent Kernel}（2018）",
+    "learning rate (log)": "学习率（对数）",
+    "the usual parametrization": "通常的参数化",
+    "held-out bits after $800$ steps \\ (lower is better)": "训练$800$步后，留出文本上的比特数 \\ （越低越好）",
+    "\\text{hidden learning rate}": "\\text{隐藏层学习率}",
+    "G.~Yang \\& E.~Hu (2021); \\ G.~Yang et al., \\textit{Tensor Programs V} (2022)": "杨格 \\& E.~Hu（2021）；\\ 杨格等，\\textit{Tensor Programs V}（2022）",
+    "Size or data?": "规模还是数据？",
+    "How should a fixed budget be spent?": "一笔固定的预算，该怎么花？",
+    "held-out bits per character": "留出文本上的每字符比特数",
+    "$N$ parameters, \\ $D$ training tokens": "$N$个参数，\\ $D$个训练词元",
+    "too small: \\ underfits; \\\\ too big: \\ undertrained": "太小：\\ 欠拟合；\\\\ 太大：\\ 训练不足",
+    "one budget: \\\\ the same area": "同一笔预算：\\\\ 同样的面积",
+    "compute budget \\ (operations)": "算力预算 \\ （运算次数）",
+    "the best number of parameters": "最好的参数量",
+    "Kaplan (2020): \\ $N \\propto C^{0.73}$": "卡普兰（2020）：\\ $N \\propto C^{0.73}$",
+    "Chinchilla (2022): \\ $N \\propto C^{0.5}$": "Chinchilla（2022）：\\ $N \\propto C^{0.5}$",
+    "Kaplan: \\ grow the model \\\\ faster than the data": "卡普兰：\\ 让模型增长得 \\\\ 比数据更快",
+    "Chinchilla: \\ grow both together, \\\\ about $20$ tokens per parameter": "Chinchilla：\\ 两者一起增长，\\\\ 每个参数大约$20$个词元",
+    "Chinchilla, $70$ billion parameters, \\\\ beat Gopher, $280$ billion, \\\\ on the same budget": "Chinchilla，$700$亿参数，\\\\ 胜过了$2800$亿参数的Gopher，\\\\ 用的是同样的预算",
+    "today: \\ far more tokens than that, \\\\ because a model is trained once \\\\ and then used billions of times": "如今：\\ 词元比这还多得多，\\\\ 因为模型只训练一次，\\\\ 却要用上几十亿次",
+    "best size per budget: \\ a parabola through each curve's lowest points": "每笔预算的最佳规模：\\ 用抛物线拟合每条曲线最低处的几个点",
+    "Grokking": "顿悟",
+    "Can understanding arrive long after memorizing?": "理解，能在记住很久之后才到来吗？",
+    "$(a + b) \\bmod 97$: \\ a $97 \\times 97$ table \\ (a corner shown)": "$(a + b) \\bmod 97$：\\ 一张$97 \\times 97$的表 \\ （只画出一角）",
+    "clock arithmetic, \\ on a clock with $97$ hours": "钟面算术，\\ 在一个有$97$个钟点的钟上",
+    "A.~Power, Y.~Burda, H.~Edwards, I.~Babuschkin \\& V.~Misra, \\textit{Grokking} (2022)": "A.~Power、Y.~Burda、H.~Edwards、I.~Babuschkin \\& V.~Misra，\\textit{Grokking}（2022）",
+    "training steps \\ (log scale)": "训练步数 \\ （对数刻度）",
+    "the $40\\%$ it has seen": "它看过的$40\\%$",
+    "the $60\\%$ it hasn't": "它没看过的$60\\%$",
+    "without weight decay (dashed): \\\\ it never generalizes": "没有权重衰减（虚线）：\\\\ 它始终没有泛化",
+    "the learned number vectors, \\ by frequency": "学到的数向量，\\ 按频率分解",
+    "the number vectors, \\ along their final two main directions": "数向量，\\ 沿着它们最终的两个主方向",
+    "each number becomes a point on circles: \\\\ adding numbers turns into adding angles": "每个数都变成圆上的一个点：\\\\ 数相加，就变成角度相加",
+    "N.~Nanda et al., \\textit{Progress Measures for Grokking via Mechanistic Interpretability} (2023)": "N.~南达等，\\textit{Progress Measures for Grokking via Mechanistic Interpretability}（2023）",
+    "a power law": "一条幂律",
+    "wide nets: \\ lazy": "宽网络：\\ 惰性",
+    "learning rates, \\ the usual way": "学习率，\\ 通常的方式",
+    "learning rates, \\ $\\mu$P": "学习率，\\ $\\mu$P",
+    "size or data": "规模还是数据",
+    "Chinchilla": "Chinchilla",
+    "grokking": "顿悟",
+    "addition on circles": "圆上的加法",
+    "Part 10, in eight pictures": "第10部分，八幅图",
+    "scaling laws": "规模定律",
+    "13\\ \\textit{Sparsity},\\ 17\\ \\textit{Reasoning}": "13\\ \\textit{稀疏性}，\\ 17\\ \\textit{推理}",
+    "tokens per parameter, \\ data": "每个参数的词元数，\\ 数据",
+    "16\\ \\textit{Every Sense Is a Token},\\ 19\\ \\textit{Inference}": "16\\ \\textit{万物皆词元}，\\ 19\\ \\textit{推断}",
+    "$\\mu$P and hyperparameter transfer": "$\\mu$P与超参数迁移",
+    "11\\ \\textit{Attention as Geometry},\\ 13\\ \\textit{Sparsity}": "11\\ \\textit{注意力的几何}，\\ 13\\ \\textit{稀疏性}",
+    "circuits inside networks": "网络内部的回路",
+    "Next: \\ Part 11, \\ Attention as Geometry \\ (Act III: Engines)": "下一集：\\ 第11部分，\\ 注意力的几何 \\ （第三幕：引擎）",
+    "which earlier words does ``it'' look at? \\ (illustrative)": "“it”会看向前面的哪些词？\\ （示例）",
+    "S.~J.~D.~Prince, \\textit{Understanding Deep Learning} (2023), chapters 8 and 20": "S.~J.~D.~Prince，\\textit{Understanding Deep Learning}（《理解深度学习》，2023），第8、20章",
+    "G.~Yang \\& E.~J.~Hu, \\textit{Feature Learning in Infinite-Width Neural Networks} (2021)": "杨格 \\& E.~J.~Hu，\\textit{Feature Learning in Infinite-Width Neural Networks}（2021）",
+    "G.~Yang et al., \\textit{Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer} (2022)": "杨格等，\\textit{Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer}（2022）",
+    "J.~Kaplan et al., \\textit{Scaling Laws for Neural Language Models} (2020)": "J.~卡普兰等，\\textit{Scaling Laws for Neural Language Models}（2020）",
+    "J.~Hoffmann et al., \\textit{Training Compute-Optimal Large Language Models} (2022)": "J.~Hoffmann等，\\textit{Training Compute-Optimal Large Language Models}（2022）",
+    "A.~Power et al., \\textit{Grokking} (2022); \\ N.~Nanda et al., \\textit{Progress Measures for Grokking} (2023)": "A.~Power等，\\textit{Grokking}（2022）；\\ N.~南达~\\mbox{等，}\\textit{Progress Measures for Grokking}（2023）",
+    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every run is computed here; \\ every number on screen is computed and checked; \\ illustrations are labeled.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 每一次训练都在这里实际运行；\\ 画面上的每个数字都经过计算和核对；\\ 示例均已标注。",
+    "budget $0.3\\times10^{12}$ operations": "预算：$0.3\\times10^{12}$次运算",
+    "budget $1\\times10^{12}$ operations": "预算：$1\\times10^{12}$次运算",
+    "budget $3\\times10^{12}$ operations": "预算：$3\\times10^{12}$次运算",
+    "ours: \\ $N \\propto C^{0.47}$": "我们的：\\ $N \\propto C^{0.47}$",
+    "ours: \\ about $34$ characters \\\\ per parameter": "我们的：\\ 每个参数 \\\\ 大约$34$个字符",
+    "the network sees $3{,}763$ entries ($40\\%$) \\\\ and must fill in the other $5{,}646$": "网络看到其中$3{,}763$个格子（$40\\%$），\\\\ 要填出另外的$5{,}646$个",
+    "memorized by step $100$; \\\\ understood by step $3{,}650$": "第$100$步时已经记住；\\\\ 第$3{,}650$步时才理解",
+    "slope $-0.75$": "斜率$-0.75$",
+    "slope $-0.36$": "斜率$-0.36$",
+    "width $32$": "宽度$32$",
+    "width $256$": "宽度$256$",
+    "width $2{,}048$": "宽度$2{,}048$"
   },
   "phrases": {
     "width": "宽度",
@@ -2173,6 +2257,38 @@
     [
       "^computed for a real 32-number pair of vectors: \\\\\\\\ shifting both changes the score by under \\$10\\^\\{(-?\\d+)\\}\\$$",
       "用一对真实的32维向量计算：\\\\\\\\ 两者一起平移，分数的变化不到$10^{\\1}$"
+    ],
+    [
+      "^slope \\$(-?[\\d.]+)\\$$",
+      "斜率$\\1$"
+    ],
+    [
+      "^width \\$([\\d{},]+)\\$$",
+      "宽度$\\1$"
+    ],
+    [
+      "^budget \\$([^$]+)\\$ operations$",
+      "预算：$\\1$次运算"
+    ],
+    [
+      "^ours: \\\\ \\$N \\\\propto C\\^\\{(-?[\\d.]+)\\}\\$$",
+      "我们的：\\\\ $N \\\\propto C^{\\1}$"
+    ],
+    [
+      "^ours: \\\\ about \\$([\\d{},.]+)\\$ characters \\\\\\\\ per parameter$",
+      "我们的：\\\\ 每个参数 \\\\\\\\ 大约$\\1$个字符"
+    ],
+    [
+      "^the network sees \\$([\\d{},]+)\\$ entries \\(\\$40\\\\%\\$\\) \\\\\\\\ and must fill in the other \\$([\\d{},]+)\\$$",
+      "网络看到其中$\\1$个格子（$40\\\\%$），\\\\\\\\ 要填出另外的$\\2$个"
+    ],
+    [
+      "^memorized by step \\$([\\d{},]+)\\$; \\\\\\\\ understood by step \\$([\\d{},]+)\\$$",
+      "第$\\1$步时已经记住；\\\\\\\\ 第$\\2$步时才理解"
+    ],
+    [
+      "^without weight decay \\(dashed\\): \\\\\\\\ much later, \\\\ step \\$([\\d{},]+)\\$$",
+      "没有权重衰减（虚线）：\\\\\\\\ 晚得多，\\\\ 第$\\1$步"
     ]
   ]
 }
