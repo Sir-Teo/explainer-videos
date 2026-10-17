@@ -2701,7 +2701,17 @@
     "layer width": "层宽",
     "starting weights": "初始权重",
     "step size": "步长",
-    "as the network widens, shrink each layer's \\\\ starting weights and step size, \\\\ so every layer keeps changing by about the same amount": "网络变宽时，把每一层的 \\\\ 初始权重和步长都缩小，\\\\ 让每一层的变化量都保持大致相同"
+    "as the network widens, shrink each layer's \\\\ starting weights and step size, \\\\ so every layer keeps changing by about the same amount": "网络变宽时，把每一层的 \\\\ 初始权重和步长都缩小，\\\\ 让每一层的变化量都保持大致相同",
+    "a hidden layer of tanh units": "一个由tanh单元组成的隐藏层",
+    "hidden: \\ in the middle, \\ neither input nor output \\\\ tanh: \\ a smooth S-shaped bend into $-1$ to $1$": "隐藏：\\ 在中间，\\ 既不是输入，也不是输出 \\\\ tanh：\\ 一种平滑的S形弯折，压进$-1$到$1$",
+    "the skip path: \\ a plain wire \\\\ for the gradient": "跳跃连接：\\ 一根普通的导线 \\\\ 供梯度通过",
+    "1. \\ shift: \\ average $0$": "1. \\ 平移：\\ 平均值为$0$",
+    "2. \\ squash: \\ spread $1$": "2. \\ 压缩：\\ 散布为$1$",
+    "divide by the typical size: \\\\ every vector comes out \\\\ the same length": "除以典型大小：\\\\ 每个向量出来 \\\\ 都一样长",
+    "the gate: \\ a dimmer": "门控：\\ 一个调光器",
+    "width $4d$": "宽度$4d$",
+    "width $\\tfrac{8}{3}d$": "宽度$\\tfrac{8}{3}d$",
+    "the spread of the random starting weights": "随机初始权重的散布"
   },
   "phrases": {
     "width": "宽度",
