@@ -163,10 +163,15 @@
    "en": "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in 2001: grow hundreds. Give each a random resample of the pages: <bookmark mark='r'/> draw pages from the pile at random, putting each one back, so some come twice and some not at all, and each tree sees a slightly different pile. Give each, too, only a random handful of words to choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full tree gets 94 percent of new pages right. <bookmark mark='b'/> A forest of two hundred gets 98.",
    "zh": "一棵树很脆弱：改动几个训练页，长出来的就是另一棵树。2001年，利奥·布雷曼给出的答案是：种几百棵。每棵树用书页的一份随机重抽样：<bookmark mark='r'/>从这堆书页里随机抽，每抽一页就放回去，所以有的页会抽到两次，有的一次也抽不到，每棵树看到的那堆书页都略有不同。另外，每问一个问题时，每棵树也只能从随机挑出的几个词里选，然后让它们投票。<bookmark mark='a'/>用全部70个词频，一棵长满的树，能判对94%的新的书页。<bookmark mark='b'/>一片200棵树的森林，判对98%。"
   },
-  "d7efdd56fadf": {
+  "fdc9bf1554d0": {
    "scene": "Trees",
-   "en": "Boosting builds the committee another way: one small tree at a time, each trained on the mistakes of all the trees before it. <bookmark mark='a'/> The training pages are soon all right. The new pages climb to 99 percent. <bookmark mark='b'/> On tables of numbers like these, boosted trees are still, today, among the hardest methods to beat.",
-   "zh": "提升法用另一种方式组建委员会：一次只加一棵小树，每一棵都针对前面所有树犯下的错误来训练。<bookmark mark='a'/>训练页很快就全对了。新的书页则一路升到99%。<bookmark mark='b'/>在像这样的数字表格上，提升树直到今天，仍然是最难打败的方法之一。"
+   "en": "Boosting builds the committee another way: one small tree at a time, each trained on the mistakes of all the trees before it. <bookmark mark='a'/> Watch it learn on the two rates. After one round, the committee is a single small tree: a few boxes. <bookmark mark='b'/> Each new tree corrects what the others still get wrong, and the boundary grows more detailed: ten rounds, <bookmark mark='c'/> thirty, <bookmark mark='d'/> three hundred. On new pages it's best after 16 rounds, at 83 percent, and ends at 81: past a point, the extra detail fits the training pages, not the authors.",
+   "zh": "提升法用另一种方式组建这个委员会：一次一棵小树，每棵树都针对前面所有树犯下的错误来训练。<bookmark mark='a'/>看它在这两个词频上学习。一轮之后，委员会只有一棵小树：几个方框。<bookmark mark='b'/>每棵新树都去纠正其他树仍然弄错的地方，边界也越来越精细：10轮，<bookmark mark='c'/>30轮，<bookmark mark='d'/>300轮。在新的书页上，它在16轮之后最好，判对83%，最后停在81%：过了某个点，多出来的细节拟合的是训练页，而不是作者。"
+  },
+  "5a63717d1c1a": {
+   "scene": "Trees",
+   "en": "With all seventy rates, it learns the same way. <bookmark mark='a'/> The training pages are soon all right. The new pages climb to 99 percent. <bookmark mark='b'/> On tables of numbers like these, boosted trees are still, today, among the hardest methods to beat.",
+   "zh": "用全部70个词频，它也是这样学习的。<bookmark mark='a'/>训练页很快就全都判对了。新的书页一路升到99%。<bookmark mark='b'/>在这样的数字表格上，提升树直到今天，仍然是最难打败的方法之一。"
   },
   "cadcf91da412": {
    "scene": "Board",

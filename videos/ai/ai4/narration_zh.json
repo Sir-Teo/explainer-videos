@@ -184,10 +184,10 @@
    "en": "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, bright where points crowd together, with two bumps. In 1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio of the heights. Otherwise, stay where you are.",
    "zh": "蒙特卡洛需要样本。但很多时候，没有直接抽取样本的办法。我们能做的，只是算出每个点有多大可能，而且常常还差着一个未知的常数因子。贝叶斯法则正是这样：难的就是重新缩放那一步。<bookmark mark='a'/>这是平面上的一个密度，点越密集的地方越亮，它有两个鼓包。1953年，在洛斯阿拉莫斯，梅特罗波利斯和他的同事找到了一种办法，能对任何这样的分布采样。做一次随机游走。<bookmark mark='b'/>随机地提议迈一小步。如果是上坡，就迈出去。<bookmark mark='c'/>如果是下坡，就只是有时候迈出去，概率等于两处高度之比。否则，就留在原地。"
   },
-  "bcf2235a58b4": {
+  "7c2841f1dad0": {
    "scene": "MCMC",
-   "en": "Only the ratio appears, so the unknown constant cancels out. <bookmark mark='a'/> Keep walking. The places the walker visits pile up exactly like the density: it's a Markov chain whose stationary distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends sixty-five percent of its time there. Markov chain Monte Carlo made Bayesian statistics practical, and it's still how physicists sample molecules.",
-   "zh": "式子里只出现比值，所以那个未知常数就约掉了。<bookmark mark='a'/>一直走下去。行走者到过的地方，堆积起来的样子和这个密度一模一样：它是一条马尔可夫链，而它的平稳分布，正是我们想要的那个分布。<bookmark mark='b'/>左边的鼓包占了三分之二的概率，行走者也有65%的时间待在那里。马尔可夫链蒙特卡洛让贝叶斯统计变得切实可行，物理学家至今仍用它来对分子采样。"
+   "en": "Only the ratio appears, so the unknown constant cancels out. <bookmark mark='a'/> Keep walking. The places the walker visits pile up exactly like the density: it's a Markov chain whose stationary distribution is the one we wanted. <bookmark mark='b'/> The left bump holds two thirds of the probability, and the walker spends 66 percent of its time there. Markov chain Monte Carlo made Bayesian statistics practical, and it's still how physicists sample molecules.",
+   "zh": "式子里只出现比值，所以那个未知的常数就约掉了。<bookmark mark='a'/>一直走下去。游走者到过的地方，堆积起来恰好就像这个密度：这是一条马尔可夫链，它的平稳分布正是我们想要的那个。<bookmark mark='b'/>左边的鼓包占了三分之二的概率，而游走者有66%的时间待在那里。马尔可夫链蒙特卡洛让贝叶斯统计变得切实可行，物理学家至今仍用它来对分子采样。"
   },
   "f01c7c420119": {
    "scene": "Brownian",
