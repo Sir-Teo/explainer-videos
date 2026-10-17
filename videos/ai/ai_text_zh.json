@@ -2587,7 +2587,18 @@
     "dense, \\ as many parameters": "稠密模型，\\ 参数量相同",
     "steps \\ (log scale)": "步数 \\ （对数刻度）",
     "share right: \\ true-by-chance pages": "答对的比例：\\ 碰巧正确的页",
-    "share right: \\ the others": "答对的比例：\\ 其余的页"
+    "share right: \\ the others": "答对的比例：\\ 其余的页",
+    "the best step that changes no direction by more than $\\eta$": "在不把任何方向改变超过$\\eta$的步子里，最好的那一步",
+    "each term is at least $-\\eta\\,\\sigma_i$, \\ since $|u^{\\top} \\Delta W v| \\le \\|\\Delta W\\|_2$": "每一项至少是$-\\eta\\,\\sigma_i$，\\ 因为$|u^{\\top} \\Delta W v| \\le \\|\\Delta W\\|_2$",
+    "equality for every $i$ at once: \\ Muon's step": "所有$i$同时取等号：\\ Muon的那一步",
+    "J.~Bernstein \\& L.~Newhouse, \\textit{Old Optimizer, New Norm} (2024)": "J.~Bernstein \\& L.~Newhouse，\\textit{Old Optimizer, New Norm}（2024）",
+    "rounds of $p$": "$p$的轮数",
+    "the gradient's $256$ singular values, \\ scaled": "梯度的$256$个奇异值，\\ 已缩放",
+    "the $104$ above \\\\ $1\\%$ of the largest: \\\\ $0.68$ to $1.13$": "大于最大值$1\\%$的 \\\\ $104$个：\\\\ $0.68$到$1.13$",
+    "the same as the matrix iteration's singular values, \\ to $2 \\times 10^{-6}$": "和矩阵迭代得到的奇异值一致，\\ 误差在$2 \\times 10^{-6}$以内",
+    "too large: \\ shrink that head's query and key weights, \\ so the score is exactly $\\tau$": "太大了：\\ 缩小这个头的查询和键权重，\\ 让分数正好等于$\\tau$",
+    "Kimi K2: \\ $\\tau = 100$; \\ $15.5$ trillion tokens \\ with no loss spike \\ (as published)": "Kimi K2：\\ $\\tau = 100$；\\ $15.5$万亿个词元 \\ 没有一次损失尖峰 \\ （据公开资料）",
+    "Kimi Team, \\textit{Kimi K2: Open Agentic Intelligence} (2025): \\ MuonClip": "Kimi团队，\\textit{Kimi K2: Open Agentic Intelligence}（2025）：\\ MuonClip"
   },
   "phrases": {
     "width": "宽度",
@@ -2597,7 +2608,8 @@
     "area": "面积",
     "finite differences: \\ worst gap": "有限差分：\\ 最大差距",
     "PyTorch: \\ worst gap": "PyTorch：\\ 最大差距",
-    "bits/char": "比特/字符"
+    "bits/char": "比特/字符",
+    "if": "若"
   },
   "patterns": [
     [
