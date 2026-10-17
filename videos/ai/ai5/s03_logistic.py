@@ -165,6 +165,8 @@ class Logistic(VoiceoverScene, ThreeDScene):
         lg = self.lg
         P = np.asarray(lg["path"])  # iteration, w1, w2, b (original units), loss in bits
         cv = np.asarray(lg["curve"])
+        # the loss at every step the picture shows, and every fifth one besides: the fall is in the first few steps
+        cv = np.array(sorted({**{float(a): float(b) for a, b in cv if a >= 1}, **{float(r[0]): float(r[4]) for r in P if r[0] >= 1}}.items()))
         plane = page_plane(x_length=6.4, y_length=4.4, center=[-3.0, -0.3, 0])
         ax = plane[0]
         tr = np.nonzero(~self.test)[0]
@@ -197,7 +199,7 @@ class Logistic(VoiceoverScene, ThreeDScene):
             self.play(Create(cur))
             vo.wait_until("b")
             for k in range(2, len(P)):
-                seg = [bx.c2p(math.log10(max(a, 1)), b) for a, b in cv if P[k - 1, 0] <= a <= P[k, 0]]
+                seg = [bx.c2p(math.log10(a), b) for a, b in cv if P[k - 1, 0] <= a <= P[k, 0]]
                 anims = [Transform(cur, lines[k - 1]), t.animate.set_value(P[k, 0])]
                 if len(seg) > 1:
                     anims.append(Create(VMobject(color=SIG, stroke_width=3).set_points_as_corners(seg)))
