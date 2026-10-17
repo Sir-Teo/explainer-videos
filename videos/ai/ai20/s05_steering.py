@@ -103,6 +103,25 @@ class Steering(VoiceoverScene):
                     color=GREY_A).next_to(grids, DOWN, buff=0.3)
         tag = note(r"published results, not measured here").to_corner(DR, buff=0.25)
         cite_ = cite(r"Y.~Chen et al.\ (Anthropic), \textit{Reasoning Models Don't Always Say What They Think} (2025)", corner=DL)
+        # the experiment, pictured: a hint in the question; a chain of thought that never mentions it; the hinted answer
+        def box(lines, color, w=3.3):
+            t = VGroup(*[label(l_, font_size=20, color=c_) for l_, c_ in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+            r = RoundedRectangle(width=max(w, t.width + 0.4), height=t.height + 0.4, corner_radius=0.1, stroke_color=color,
+                                 stroke_width=2).move_to(t)
+            return VGroup(r, t)
+
+        q_box = box([(r"the question", GREY_B), (r"$\ldots$ which answer is right?", WHITE),
+                     (r"hint: \ ``a professor says (C)''", C.SURPRISE)], GREY_C)
+        c_box = box([(r"its chain of thought", GREY_B), (r"$\ldots$ let me check each option $\ldots$", WHITE),
+                     (r"$\ldots$ so (C) fits best $\ldots$", WHITE), (r"no word of the hint", C.SURPRISE)], GREY_C)
+        a_box = box([(r"its answer", GREY_B), (r"(C)", C.BITS)], GREY_C, w=1.6)
+        flow = VGroup(q_box, c_box, a_box).arrange(RIGHT, buff=0.7).move_to(DOWN * 0.6)
+        if flow.width > 13.0:
+            flow.scale_to_fit_width(13.0)
+        arrows = VGroup(*[Arrow(x.get_right(), y.get_left(), buff=0.1, color=GREY_B, stroke_width=3)
+                          for x, y in ((q_box, c_box), (c_box, a_box))])
+        hint, silent = q_box[1][2], c_box[1][3]
+        sch = note(r"schematic").to_corner(UR, buff=0.3)
         with self.voiceover(
             "This matters for part seventeen's reasoning models. Their chains of thought look like a window into "
             "their thinking. But are they? <bookmark mark='a'/> One test: slip a hint into the question, and see if "
@@ -111,10 +130,13 @@ class Steering(VoiceoverScene):
             "written chain is not always the real computation. That's why reading the inside directly, with the "
             "tools of this part, matters."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(sch), FadeIn(c_box[0]), FadeIn(c_box[1][:3]), FadeIn(a_box))
             vo.wait_until("a")
-            self.play(FadeIn(setup))
+            self.play(FadeIn(setup), FadeIn(q_box), GrowArrow(arrows[0]), GrowArrow(arrows[1]))
+            self.play(Indicate(hint, color=C.SURPRISE), Indicate(a_box[1][1], color=C.BITS))
+            self.play(FadeIn(silent))
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(q_box, c_box, a_box, arrows, sch)), run_time=0.6)
             self.play(*[FadeIn(g[0], lag_ratio=0.01) for g in grids], *[FadeIn(g[1]) for g in grids], FadeIn(cap), FadeIn(tag))
             for g, (_, v, col) in zip(grids, vals):
                 on = g[0][:int(round(100 * v))]
