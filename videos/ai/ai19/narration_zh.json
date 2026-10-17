@@ -48,10 +48,10 @@
    "en": "Chapter two. Fewer bits per number.",
    "zh": "第2章。每个数少用几个比特。"
   },
-  "695d55afe418": {
+  "01dc6c40ffb4": {
    "scene": "Quant",
-   "en": "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is rounded to one of sixteen evenly spaced values. <bookmark mark='b'/> The newest chips use FP4 instead: a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale for every block of thirty-two.",
-   "zh": "减少内存读写的另一个办法：用更少的比特来存每个数。这是我们的Transformer其中一层的权重：大多数都接近0，只有少数比较大。<bookmark mark='a'/>用4个比特，每个权重都取整到16个等间距的值之一。<bookmark mark='b'/>最新的芯片改用FP4：一种很小的浮点数，在0附近的值更多，那里正是权重扎堆的地方；而且每32个数为一块，共用一个缩放因子。"
+   "en": "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is rounded to one of fifteen evenly spaced values, the same number either side of zero. <bookmark mark='b'/> The newest chips use FP4 instead: a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale for every block of thirty-two.",
+   "zh": "减少内存读写的另一个办法：用更少的比特来存每个数。这是我们的Transformer其中一层的权重：大多数都接近0，只有少数比较大。<bookmark mark='a'/>用4个比特，每个权重都取整到15个等间距的值之一，0的两边一样多。<bookmark mark='b'/>最新的芯片改用FP4：一种很小的浮点数，在0附近的值更多，那里正是权重扎堆的地方；而且每32个数为一块，共用一个缩放因子。"
   },
   "562b2081fab2": {
    "scene": "Quant",
@@ -63,10 +63,10 @@
    "en": "Chapter three. Moving numbers is the cost.",
    "zh": "第3章。代价在于搬运数字。"
   },
-  "2245370b1754": {
+  "03a1224b5402": {
    "scene": "Memory",
-   "en": "Every computer has two speeds: how fast it does arithmetic, and how fast it moves numbers from memory. <bookmark mark='a'/> We measured this one. The roofline: a slope where moving data is the limit, and a flat roof where arithmetic is. <bookmark mark='b'/> Big matrix products do lots of arithmetic per number moved and reach the roof. <bookmark mark='c'/> But writing one token at a time multiplies each weight once: about one operation per byte, far down the slope. That's why the tricks of this part all move fewer bytes.",
-   "zh": "每台计算机都有两种速度：做运算有多快，从内存里搬运数字有多快。<bookmark mark='a'/>我们测了这一台。这就是屋顶线：受限于搬运数据的地方，是一道斜坡；受限于运算的地方，是一片平平的屋顶。<bookmark mark='b'/>大的矩阵乘法，每搬运一个数，都要做很多运算，所以能碰到屋顶。<bookmark mark='c'/>可是一次写一个词元，每个权重只乘一次：大约每个字节一次运算，远远落在斜坡的下方。正因为这样，这一部分的所有技巧，都是为了少搬运一些字节。"
+   "en": "Every computer has two speeds: how fast it does arithmetic, and how fast it moves numbers from memory. <bookmark mark='a'/> We measured this one. The roofline: a slope where moving data is the limit, and a flat roof where arithmetic is. <bookmark mark='b'/> Big matrix products do lots of arithmetic per number moved, and the fastest of them sets the roof. <bookmark mark='c'/> But writing one token at a time multiplies each weight once: about one operation per byte, down on the slope, well below the roof. That's why the tricks of this part all move fewer bytes.",
+   "zh": "每台计算机都有两种速度：做运算有多快，从内存里搬运数字有多快。<bookmark mark='a'/>我们测了这一台。这就是屋顶线：受限于搬运数据的地方，是一道斜坡；受限于运算的地方，是一片平平的屋顶。<bookmark mark='b'/>大的矩阵乘法，每搬运一个数，都要做很多运算，其中最快的那一个，就定下了屋顶的高度。<bookmark mark='c'/>可是一次写一个词元，每个权重只乘一次：大约每个字节一次运算，落在斜坡上，远在屋顶之下。正因为这样，这一部分的所有技巧，都是为了少搬运一些字节。"
   },
   "927c2ab6c35c": {
    "scene": "Memory",

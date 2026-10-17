@@ -35,7 +35,7 @@ class Quant(VoiceoverScene):
         m = max(abs(lo), abs(hi))
         levels4 = np.linspace(-m, m, 15)
         ticks4 = VGroup(*[Line(ax.c2p(x, 0), ax.c2p(x, 1.05), color=C.INTERVAL, stroke_width=1.5).set_stroke(opacity=0.8) for x in levels4])
-        t4 = label(r"$4$ bits: \ $16$ evenly spaced values", font_size=24, color=C.INTERVAL).to_edge(LEFT, buff=0.6).shift(DOWN * 1.4)
+        t4 = label(r"$4$ bits: \ $15$ evenly spaced values, \ symmetric about $0$", font_size=24, color=C.INTERVAL).to_edge(LEFT, buff=0.6).shift(DOWN * 1.4)
         s = m / 6
         levelsf = np.concatenate([-FP4[::-1][:-1], FP4]) * s
         ticksf = VGroup(*[Line(ax.c2p(x, 0), ax.c2p(x, 1.05), color=C.BITS, stroke_width=1.5).set_stroke(opacity=0.8) for x in levelsf])
@@ -44,7 +44,8 @@ class Quant(VoiceoverScene):
         with self.voiceover(
             "The other way to cut memory traffic: store each number in fewer bits. Here are the weights of one layer "
             "of our transformer: most near zero, a few larger. <bookmark mark='a'/> With four bits, each weight is "
-            "rounded to one of sixteen evenly spaced values. <bookmark mark='b'/> The newest chips use FP4 instead: "
+            "rounded to one of fifteen evenly spaced values, the same number either side of zero. <bookmark mark='b'/> "
+            "The newest chips use FP4 instead: "
             "a tiny floating-point number, with more values near zero where the weights crowd, and a shared scale "
             "for every block of thirty-two."
         ) as vo:

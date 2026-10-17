@@ -2009,7 +2009,8 @@
     "computed for a real 32-number pair of vectors: \\\\ shifting both changes the score by under $10^{-14}$": "用一对真实的32维向量计算：\\\\ 两者一起平移，分数的变化不到$10^{-14}$",
     "bump width: \\ $2.5$ pages": "鼓包宽度：\\ $2.5$页",
     "bump width: \\ $0.6$ pages": "鼓包宽度：\\ $0.6$页",
-    "bump width: \\ $10$ pages": "鼓包宽度：\\ $10$页"
+    "bump width: \\ $10$ pages": "鼓包宽度：\\ $10$页",
+    "$4$ bits: \\ $15$ evenly spaced values, \\ symmetric about $0$": "$4$比特：\\ $15$个等间距的值，\\ 关于$0$对称"
   },
   "phrases": {
     "width": "宽度",
