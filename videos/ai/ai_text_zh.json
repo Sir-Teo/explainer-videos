@@ -1276,7 +1276,84 @@
     "J.~Cohen et al., \\textit{Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability} (2021)": "J.~科恩等，\\textit{Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability}（2021）",
     "D.~Kingma \\& J.~Ba, \\textit{Adam} (2014); \\ I.~Loshchilov \\& F.~Hutter, \\textit{Decoupled Weight Decay} (2017)": "D.~Kingma \\& J.~Ba，\\textit{Adam}（2014）；\\ I.~Loshchilov \\& F.~Hutter，\\textit{Decoupled Weight Decay}（2017）",
     "S.~Hu et al., \\textit{MiniCPM} (2024); \\ A.~H\\\"agele et al., \\textit{Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations} (2024)": "S.~Hu等，\\textit{MiniCPM}（2024）；\\ A.~H\\\"agele等，\\textit{Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations}（2024）",
-    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every run is computed here; \\ every number on screen is computed and checked; \\ schematics are labeled.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 每一次训练都在这里实际运行；\\ 画面上的每个数字都经过计算和核对；\\ 示意图均已标注。"
+    "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every run is computed here; \\ every number on screen is computed and checked; \\ schematics are labeled.": "文本：古登堡计划（第1部分的$30$部小说）。\\ 每一次训练都在这里实际运行；\\ 画面上的每个数字都经过计算和核对；\\ 示意图均已标注。",
+    "text": "文本",
+    "a picture": "图片",
+    "sound": "声音",
+    "one sequence of tokens": "同一个词元序列",
+    "Part 16: \\ Every Sense Is a Token": "第16部分：\\ 万物皆词元",
+    "byte-pair encoding, \\ codebooks, \\ sound codes, \\ CLIP and SigLIP, \\ omni models": "字节对编码，\\ 码本，\\ 声音编码，\\ CLIP与SigLIP，\\ 全模态模型",
+    "Cutting text into tokens": "把文本切成词元",
+    "What is a word, to a model?": "对模型来说，什么是一个词？",
+    "start from single characters; \\\\ again and again, \\ merge the pair that occurs most often": "从单个字符开始；\\\\ 一遍又一遍，\\ 把出现次数最多的那一对合并起来",
+    "the first merges, \\ learned from two million characters of the novels \\ ($\\cdot$ = a space)": "最先学到的几次合并，\\ 来自小说里的$200$万个字符 \\ （$\\cdot$ = 空格）",
+    "P.~Gage (1994); \\ R.~Sennrich, B.~Haddow \\& A.~Birch (2016)": "P.~Gage（1994）；\\ R.~Sennrich、B.~Haddow \\& A.~Birch（2016）",
+    "characters": "字符",
+    "on the scoreboard's passage": "在记分牌的测试段落上",
+    "bigger vocabulary: \\\\ shorter sequences, \\\\ bigger tables": "词表越大：\\\\ 序列越短，\\\\ 表也越大",
+    "Codebooks": "码本",
+    "How do you turn a picture into words?": "怎样把一张图片变成词？",
+    "a codebook: \\ $16$ typical $4\\times4$ patches \\ (k-means on the letters)": "码本：\\ $16$个典型的$4\\times4$小块 \\ （在字母上做k均值聚类）",
+    "a letter, \\ cut into $4\\times4$ patches": "一个字母，\\ 切成$4\\times4$的小块",
+    "the picture, \\ as $25$ tokens": "这张图片，\\ 变成$25$个词元",
+    "A.~van den Oord, O.~Vinyals \\& K.~Kavukcuoglu, \\textit{VQ-VAE} (2017)": "A.~van den Oord、O.~Vinyals \\& K.~Kavukcuoglu，\\textit{VQ-VAE}（2017）",
+    "each stage codes what the earlier ones missed": "每一级都去编码前面几级漏掉的部分",
+    "$4$ stages of $16$: \\ $0.082$, \\ like one codebook of $256$ ($0.083$) \\\\ finite scalar quantization, \\ rounding $4$ numbers to $5$ levels each: \\ $0.143$": "$4$级、每级$16$个码字：\\ $0.082$，\\ 和一个$256$码字的码本相当（$0.083$） \\\\ 有限标量量化，\\ 把$4$个数各取整到$5$个档位：\\ $0.143$",
+    "sound codecs: \\ SoundStream, \\ EnCodec, \\ Mimi": "声音编解码器：\\ SoundStream，\\ EnCodec，\\ Mimi",
+    "Sound as tokens": "把声音变成词元",
+    "How does a voice become a sequence?": "一段人声，怎样变成一个序列？",
+    "frequency $\\uparrow$": "频率 $\\uparrow$",
+    "time $\\to$: \\ one column every $10$ ms": "时间 $\\to$：\\ 每$10$毫秒一列",
+    "a synthesized voice: \\ a pulse train through each vowel's formant resonances": "合成的声音：\\ 让一串脉冲通过每个元音的共振峰",
+    "the frames": "各帧",
+    "each frame's code, \\ stage $1$ of $4$ \\ ($32$ codes)": "每一帧的码字，\\ $4$级中的第$1$级 \\ （$32$个码字）",
+    "rebuilt from $4$ codes a frame: \\ error $0.049$ \\ (one stage: \\ $0.134$)": "每帧用$4$个码字重建：\\ 误差$0.049$ \\ （只用一级：\\ $0.134$）",
+    "Matching senses": "匹配不同的感官",
+    "How do pictures and words meet?": "图片和文字，怎样对上号？",
+    "picture encoder": "图片编码器",
+    "caption encoder": "文字编码器",
+    "score $= u \\cdot v = 1.36$": "得分 $= u \\cdot v = 1.36$",
+    "blue: \\ high score; \\ red: \\ low": "蓝：\\ 得分高；\\ 红：\\ 得分低",
+    "A.~Radford et al., \\textit{CLIP} (2021)": "A.~Radford等，\\textit{CLIP}（2021）",
+    "each picture picks its caption \\\\ out of the whole batch": "每张图片从整个批次里\\\\ 挑出自己的描述",
+    "every pair on its own: \\\\ match, \\ or not?": "每一对单独判断：\\\\ 配，\\ 还是不配？",
+    "choosing among all $520$ captions{,} \\ for all $1{,}040$ pictures": "在全部$520$条描述中挑选，\\ 共$1{,}040$张图片",
+    "X.~Zhai et al., \\textit{Sigmoid Loss for Language Image Pre-Training} (2023)": "X.~Zhai等，\\textit{Sigmoid Loss for Language Image Pre-Training}（2023）",
+    "One model, every sense": "一个模型，所有感官",
+    "Can one model read, see, listen and speak?": "一个模型，能读、能看、能听，还能说吗？",
+    "one sequence: \\ text, \\ picture codes, \\ text, \\ sound codes": "同一个序列：\\ 文本，\\ 图片编码，\\ 文本，\\ 声音编码",
+    "the Thinker: \\ a language model \\\\ reading every kind of token": "Thinker：\\ 一个语言模型，\\\\ 读入各种词元",
+    "the Talker: \\\\ writes sound codes": "Talker：\\\\ 写出声音编码",
+    "Qwen Team, \\textit{Qwen2.5-Omni} (2025), \\textit{Qwen3-Omni} (2025)": "Qwen团队，\\textit{Qwen2.5-Omni}（2025），\\textit{Qwen3-Omni}（2025）",
+    "you": "你",
+    "the model": "模型",
+    "time $\\to$, \\ in frames of sound": "时间 $\\to$，\\ 以声音帧为单位",
+    "full duplex: \\ listening and speaking at once, \\ two streams": "全双工：\\ 边听边说，\\ 两路声音流",
+    "it can be interrupted, \\ and it can say ``mm-hm'' while you talk": "它可以被打断，\\ 也能在你说话时应一声“嗯嗯”",
+    "A.~D\\'efossez et al., \\textit{Moshi} (2024)": "A.~D\\'efossez等，\\textit{Moshi}（2024）",
+    "Part 16, in eight pictures": "第16部分，八幅图",
+    "byte-pair merges": "字节对合并",
+    "a sentence in tokens": "切成词元的句子",
+    "a codebook": "码本",
+    "residual stages": "逐级残差",
+    "a spectrogram": "频谱图",
+    "rebuilt from codes": "用码字重建",
+    "matching pictures and words": "匹配图片和文字",
+    "one sequence": "同一个序列",
+    "thinking in tokens": "用词元思考",
+    "acting: \\ robot actions as tokens": "行动：\\ 把机器人的动作变成词元",
+    "fewer bits per number": "每个数用更少的比特",
+    "17\\ \\textit{Reasoning}": "17\\ \\textit{推理}",
+    "18\\ \\textit{Agents and Worlds}": "18\\ \\textit{智能体与世界}",
+    "19\\ \\textit{Inference}": "19\\ \\textit{推断}",
+    "Next: \\ Part 17, \\ Reasoning \\ (Act IV: Agency)": "下一集：\\ 第17部分，\\ 推理 \\ （第四幕：智能体）",
+    "D.~Jurafsky \\& J.~H.~Martin, \\textit{Speech and Language Processing} (3rd ed.\\ draft), chapters 2 and 16": "D.~Jurafsky \\& J.~H.~Martin，\\textit{Speech and Language Processing}（《自然语言处理综论》，第3版草稿），第2章与第16章",
+    "P.~Gage (1994); \\ R.~Sennrich, B.~Haddow \\& A.~Birch, \\textit{Neural Machine Translation of Rare Words} (2016)": "P.~Gage（1994）；\\ R.~Sennrich、B.~Haddow \\& A.~Birch，\\textit{Neural Machine Translation of Rare Words}（2016）",
+    "A.~van den Oord et al., \\textit{VQ-VAE} (2017); \\ F.~Mentzer et al., \\textit{Finite Scalar Quantization} (2023)": "A.~van den Oord等，\\textit{VQ-VAE}（2017）；\\ F.~Mentzer等，\\textit{Finite Scalar Quantization}（2023）",
+    "N.~Zeghidour et al., \\textit{SoundStream} (2021); \\ A.~D\\'efossez et al., \\textit{EnCodec} (2022), \\textit{Moshi} (2024)": "N.~Zeghidour等，\\textit{SoundStream}（2021）；\\ A.~D\\'efossez等，\\textit{EnCodec}（2022），\\textit{Moshi}（2024）",
+    "A.~Radford et al., \\textit{CLIP} (2021); \\ X.~Zhai et al., \\textit{SigLIP} (2023)": "A.~Radford等，\\textit{CLIP}（2021）；\\ X.~Zhai等，\\textit{SigLIP}（2023）",
+    "G.~E.~Peterson \\& H.~L.~Barney, \\textit{Control Methods Used in a Study of the Vowels} (1952); \\ Qwen Team, \\textit{Qwen3-Omni} (2025)": "G.~E.~Peterson \\& H.~L.~Barney，\\textit{Control Methods Used in a Study of the Vowels}（1952）；\\ Qwen团队，\\textit{Qwen3-Omni}（2025）",
+    "Text: Part 1's novels; \\ letters from the system's fonts; \\ a synthesized voice. \\ Every number here is computed and checked; \\ illustrations are labeled.": "文本：第1部分的小说；\\ 字母：系统自带的字体；\\ 声音：合成的人声。\\ 这里的每个数字都经过计算和核对；\\ 示例均已标注。"
   },
   "phrases": {
     "width": "宽度",
@@ -1307,6 +1384,34 @@
     [
       "^a small ReLU network cuts the plane into \\$(\\d+)\\$ flat pieces \\\\ \\(illustrative\\)$",
       "一个小小的ReLU网络，把平面切成$\\1$个线性小块 \\\\ （示例）"
+    ],
+    [
+      "^merge \\$(\\d+)\\$: \\\\ ``(.*)''$",
+      "第$\\1$次合并：\\\\ “\\2”"
+    ],
+    [
+      "^\\$(\\d+)\\$ tokens$",
+      "$\\1$个词元"
+    ],
+    [
+      "^\\$([\\d{},]+)\\$ merges$",
+      "$\\1$次合并"
+    ],
+    [
+      "^\\$([\\d{},]+)\\$ merges: \\\\ \\$([\\d.]+)\\$ characters a token$",
+      "$\\1$次合并：\\\\ 每个词元$\\2$个字符"
+    ],
+    [
+      "^\\$(\\d+)\\$ codes: \\\\ \\$([\\d.]+)\\$$",
+      "$\\1$个码字：\\\\ $\\2$"
+    ],
+    [
+      "^\\$(\\d+)\\$ stages?: \\\\ \\$([\\d.]+)\\$$",
+      "$\\1$级：\\\\ $\\2$"
+    ],
+    [
+      "^(CLIP|SigLIP)'s loss: \\\\ right caption \\$(\\d+)\\\\%\\$, \\\\ right letter \\$(\\d+)\\\\%\\$$",
+      "\\1的损失：\\\\ 选对描述 $\\2\\\\%$，\\\\ 选对字母 $\\3\\\\%$"
     ]
   ]
 }
