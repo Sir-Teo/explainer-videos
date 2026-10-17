@@ -22,6 +22,7 @@ class Logistic(VoiceoverScene, ThreeDScene):
         self.card()
         self.score()
         self.sheet()
+        self.descend()
         self.result()
 
     # ------------------------------------------------------------------
@@ -154,4 +155,53 @@ class Logistic(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(a70))
             self.play(FadeIn(note_))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def descend(self):
+        """How it is fitted: gradient descent, the line swinging into place as the loss falls."""
+        import math
+
+        lg = self.lg
+        P = np.asarray(lg["path"])  # iteration, w1, w2, b (original units), loss in bits
+        cv = np.asarray(lg["curve"])
+        plane = page_plane(x_length=6.4, y_length=4.4, center=[-3.0, -0.3, 0])
+        ax = plane[0]
+        tr = np.nonzero(~self.test)[0]
+        dots = page_dots(ax, self.X2, self.y, idx=tr, jitter=0.4, radius=0.045)
+        lines = [line_in_box(ax, P[k, 1:3], float(P[k, 3])) for k in range(1, len(P))]
+        bx = CornerAxes(x_range=[0, math.log10(cv[-1, 0]), 1], y_range=[0, 1.05, 0.5], x_length=4.4, y_length=2.8, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.9, -0.3, 0])
+        xt = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(bx.c2p(math.log10(v), 0), DOWN, buff=0.08)
+                      for v, t_ in ((1, "1"), (10, "10"), (100, "100"), (1000, "1{,}000"))])
+        xn = label(r"steps of gradient descent \ (log scale)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(r"cross-entropy on the training pages, \ bits", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.12).align_to(bx, LEFT)
+        t = ValueTracker(1)
+        dot = always_redraw(lambda: Dot(bx.c2p(math.log10(t.get_value()), float(np.interp(t.get_value(), cv[:, 0], cv[:, 1]))),
+                                        radius=0.07, color=C.BITS))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(round(t.get_value())):,}".replace(",", "{,}"), font_size=28,
+                                            color=C.BITS).next_to(ax, UP, buff=0.2))
+        settle = int(next((P[k, 0] for k in range(1, len(P)) if abs(P[k, 4] - P[-1, 4]) < 0.005), P[-1, 0]))
+        with self.voiceover(
+            "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in "
+            "this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. "
+            "Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap "
+            f"between the two authors, the loss falls, and by about step {settle} it has settled. A convex loss has "
+            "one bottom, so where it settles doesn't depend on where it started."
+        ) as vo:
+            self.play(Create(ax), FadeIn(plane[1:]), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.005),
+                      Create(bx), FadeIn(xt), FadeIn(xn), FadeIn(yn), run_time=1.5)
+            self.add(dot, cnt)
+            vo.wait_until("a")
+            cur = lines[0]
+            self.play(Create(cur))
+            vo.wait_until("b")
+            for k in range(2, len(P)):
+                seg = [bx.c2p(math.log10(max(a, 1)), b) for a, b in cv if P[k - 1, 0] <= a <= P[k, 0]]
+                anims = [Transform(cur, lines[k - 1]), t.animate.set_value(P[k, 0])]
+                if len(seg) > 1:
+                    anims.append(Create(VMobject(color=SIG, stroke_width=3).set_points_as_corners(seg)))
+                self.play(*anims, run_time=0.5 if P[k, 0] < 200 else 0.35)
+        self.wait(0.3)
+        self.remove(dot, cnt)
         self.clear_scene()

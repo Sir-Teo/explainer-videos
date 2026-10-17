@@ -492,7 +492,14 @@ def compute_induction():
         opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
         g = rng(2022)
         steps, curve = 5000, []
+        ex_ = torch.tensor(rng(7).integers(0, V, T))
+        ex_[60:80] = ex_[10:30]
+        snaps = []
         for step in range(steps + 1):
+            if layers == 2 and step % 250 == 0:  # how it learns: both layers' attention on the example, along the way
+                with torch.no_grad():
+                    _, mp = m(ex_[None], keep=True)
+                snaps.append((step, mp[0][0].numpy().astype(np.float16), mp[1][0].numpy().astype(np.float16)))
             if step % 100 == 0:
                 with torch.no_grad():
                     z = m(test_x)
@@ -509,6 +516,10 @@ def compute_induction():
             loss.backward()
             opt.step()
         out[f"curve{layers}"] = np.array(curve)
+        if snaps:
+            out["snap_steps"] = [a for a, _, _ in snaps]
+            out["snap_l1"] = np.array([b for _, b, _ in snaps])  # (checkpoints, heads, query, key)
+            out["snap_l2"] = np.array([c for _, _, c in snaps])
         print(f"    {layers} layer(s): repeat {curve[0][1]:.2f} -> {curve[-1][1]:.2f} bits", flush=True)
         if layers == 2:
             # the two heads, scored over 64 examples: the previous-token head in layer 1, the induction head in layer 2
