@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import unicodedata
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -11,6 +13,7 @@ class Adam(VoiceoverScene):
         self.card()
         self.rules()
         self.race()
+        self.reading()
 
     def card(self):
         card = chapter_card(3, r"Momentum and Adam", r"How should each step be shaped?", part=9, lit=(2014,))
@@ -89,4 +92,82 @@ class Adam(VoiceoverScene):
             for n, r_ in zip(names[2:], rows[2:]):
                 self.play(Create(lines[n]), FadeIn(r_), run_time=1.6)
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def reading(self):
+        """What the race's numbers read like: SGD and AdamW continuing the same prompt at checkpoints."""
+        w, o = load("writing"), load("optim")
+        steps = [int(s_) for s_ in w["steps"]]
+
+        def clean(t):
+            t = "".join(ch for ch in t if unicodedata.category(ch) not in ("Cc", "Cf", "Mn") or ch == "\n")
+            return t.replace("\n", "↵")
+
+        def block(name, k):
+            """The prompt in white, then the model's continuation, in two lines of a monospaced font."""
+            t = clean(w[f"text_{name}"][k])
+            kw = dict(font="DejaVu Sans Mono", font_size=24)
+            p_ = Text(w["prompt"], color=WHITE, **kw)
+            cw = Text("MMMMMMMMMM", **kw).width / 10  # one character's width
+            n1 = (len(w["prompt"]) + len(t)) // 2 - len(w["prompt"])
+            n1 = t.rfind(" ", 0, n1 + 1) if t.rfind(" ", 0, n1 + 1) > n1 - 10 else n1  # break at a space if one is near
+            l1 = Text(t[:n1].strip(), color=OPT_COLORS[name], **kw)
+            l1.next_to(p_, RIGHT, buff=cw * (1 + len(t[:n1]) - len(t[:n1].lstrip())) - cw)
+            l1.align_to(p_, DOWN) if not any(ch in "gjpqy," for ch in t[:n1]) else l1.match_y(p_)
+            l2 = Text(t[n1:].strip(), color=OPT_COLORS[name], **kw).next_to(VGroup(p_, l1), DOWN, buff=0.16).align_to(p_, LEFT)
+            l2.shift(RIGHT * cw * (len(t[n1:]) - len(t[n1:].lstrip())))
+            return VGroup(p_, l1, l2)
+
+        heads = {n: label(rf"{OPT_NAMES[n]}", font_size=26, color=OPT_COLORS[n]) for n in ("sgd", "adamw")}
+        ys = {"sgd": 2.1, "adamw": 0.45}
+
+        def place(name, k):
+            g = block(name, k)
+            return g.shift([-3.9 - g[0].get_left()[0], ys[name] - g.get_center()[1], 0])
+
+        for n in heads:
+            heads[n].move_to([-5.6, ys[n], 0])
+        t = ValueTracker(0)
+        bits = {n: always_redraw(lambda n=n: MathTex(
+            rf"{float(np.interp(t.get_value(), steps, w[f'bits_{n}'])):.2f}\ \text{{bits/char}}", font_size=24,
+            color=OPT_COLORS[n]).next_to(heads[n], DOWN, buff=0.12)) for n in heads}
+        prompt = label(rf"both continue ``{w['prompt']}'' \ with the same random draws", font_size=22, color=GREY_A)
+        prompt.to_edge(UP, buff=0.25)
+        # the race again, small, with a marker at each checkpoint
+        top = float(np.asarray(o["sgd"])[1, 1]) + 0.2
+        ax = CornerAxes(x_range=[0, steps[-1], 500], y_range=[2.4, top, 0.5], x_length=7.0, y_length=2.0, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.6, -2.4, 0])
+        lines = VGroup(*[curve(ax, np.asarray(o[n])[1:, 0], np.asarray(o[n])[1:, 1], OPT_COLORS[n], 3) for n in heads])
+        vline = always_redraw(lambda: DashedLine(ax.c2p(t.get_value(), 2.4), ax.c2p(t.get_value(), top), color=GREY_B,
+                                                 stroke_width=2))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28,
+                                            color=WHITE).next_to(ax, LEFT, buff=0.5))
+        xl = label(r"bits per character on held-out text, \ as they train", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.1)
+        cur = {n: place(n, 0) for n in heads}
+        b = {k: w["bits_sgd"][k] for k in range(len(steps))}
+        with self.voiceover(
+            "What does a number like that read like? Here both models continue the same few words, with the same "
+            "random draws, at checkpoints during training. <bookmark mark='a'/> Before any training, every character "
+            f"of the books is equally likely: {b[0]:.1f} bits each, and the text is noise from the whole alphabet. "
+            f"<bookmark mark='b'/> After {steps[1]} steps they have spaces, and short words like 'the', 'to' "
+            f"and 'and'. <bookmark mark='c'/> By step {steps[3]:,}, most of what they write is word-shaped, and "
+            f"<bookmark mark='d'/> by the end, at about {w['bits_adamw'][-1]:.1f} bits, there's punctuation, a line "
+            "break, even the start of dialogue. AdamW is ahead at every checkpoint. Since both draw the same random "
+            "numbers, their texts rhyme; the difference is how far each one has come down the hill."
+        ) as vo:
+            self.play(FadeIn(prompt), *[FadeIn(h) for h in heads.values()], Create(ax), FadeIn(xl))
+            self.add(*bits.values(), vline, cnt)
+            self.play(Create(lines), run_time=1.2)
+            vo.wait_until("a")
+            self.play(*[FadeIn(cur[n][0]) for n in heads])
+            self.play(*[AddTextLetterByLetter(line_) for n in heads for line_ in cur[n][1:]], run_time=1.5)
+            for k, mk in zip(range(1, len(steps)), ("b", None, "c", "d")):
+                if mk:
+                    vo.wait_until(mk)
+                nxt = {n: place(n, k) for n in heads}
+                self.play(*[FadeTransform(cur[n], nxt[n]) for n in heads], t.animate.set_value(steps[k]), run_time=1.4)
+                cur = nxt
+        self.wait(0.5)
+        self.remove(*bits.values(), vline, cnt)
         self.clear_scene()
