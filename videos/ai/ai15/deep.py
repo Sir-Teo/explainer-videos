@@ -406,7 +406,7 @@ def clip_levels(mode, B, T, g):
     return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v"):
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v", hook=None):
     """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
     frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
     In every mode the first frame is given clean and never learned."""
@@ -440,6 +440,8 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, co
         if log and st % 500 == 0:
             print(f"      {mode} step {st}: loss {np.mean(run):.4f} ({time.time() - t0:.0f}s)", flush=True)
             run = []
+        if hook is not None:
+            hook(m, st)
     m.eval()
     return m
 
