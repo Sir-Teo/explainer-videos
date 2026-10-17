@@ -47,7 +47,7 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(text), FadeIn(patches), FadeIn(slices), FadeIn(labs), run_time=1.5)
             vo.wait_until("a")
-            self.play(text.animate.arrange(RIGHT, buff=0.22).move_to(text),
+            self.play(text.animate.arrange(RIGHT, buff=0.22).align_to(text, LEFT),
                       *[p_.animate.shift((p_.get_center() - c_pic) * 0.35) for p_ in patches],
                       *[q_.animate.shift((q_.get_center() - c_snd) * 0.3) for q_ in slices], run_time=1.5)
             vo.wait_until("b")

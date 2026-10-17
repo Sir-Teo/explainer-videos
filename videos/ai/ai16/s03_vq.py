@@ -35,7 +35,8 @@ class VQ(VoiceoverScene):
         pats = [img[4 * r:4 * r + 4, 4 * c:4 * c + 4] for r in range(n) for c in range(n)]
         code = [int(np.argmin(((book - p_[None]) ** 2).sum((1, 2)))) for p_ in pats]
         tiles = Group(*[gray_image(p_, P).move_to(x) for p_, x in zip(pats, pos)])
-        ol = label(r"a letter, \ cut into $4\times4$ patches", font_size=22, color=GREY_A).next_to(tiles, UP, buff=0.2)
+        ol = label(r"a letter, \ cut into $4\times4$ patches", font_size=22, color=GREY_A)
+        ol.move_to([c0[0], c0[1] + 2 * P * 1.3 + P / 2 + 0.3, 0])  # above the patches once they are spread apart
         spread = [c0 + (x - c0) * 1.3 for x in pos]
         coded = Group(*[gray_image(book[k], P).move_to(x) for k, x in zip(code, spread)])
         nums = VGroup(*[MathTex(str(k), font_size=26, color=TOKEN_COLORS[k % 8]).move_to(x) for k, x in zip(code, spread)])
