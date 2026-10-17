@@ -209,6 +209,8 @@ class Words(VoiceoverScene):
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}\ \text{{of}}\ {total:,}".replace(",", "{,}"),
                                             font_size=30, color=C.BITS).to_edge(UP, buff=0.5))
         sub = label(r"each word's $5$ nearest neighbours, \ by the cosine of their vectors", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
+        days = "monday tuesday wednesday thursday friday saturday sunday january february march april may june july august"
+        proper = lambda w_: w_.capitalize() if w_ in days.split() else w_  # noqa: E731
         with self.voiceover(
             "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during "
             "training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
@@ -217,7 +219,7 @@ class Words(VoiceoverScene):
             f"<bookmark mark='c'/> By step {steps[4]:,}, meaning appears: three sits with "
             f"{', '.join(snaps[4]['three'][:3])}, eyes with {', '.join(snaps[4]['eyes'][:3])}. "
             "<bookmark mark='d'/> By the end, Monday sits with "
-            f"{snaps[-1]['monday'][0]}, three with {', '.join(snaps[-1]['three'][:3])}, father with "
+            f"{proper(snaps[-1]['monday'][0])}, three with {', '.join(snaps[-1]['three'][:3])}, father with "
             f"{snaps[-1]['father'][0]} and {snaps[-1]['father'][1]}: nothing told it what a day or a number is; only "
             "which words keep company."
         ) as vo:
