@@ -26,6 +26,7 @@ import numpy as np
 
 
 STEPS, G, Q = 300, 8, 32  # RL steps, answers per question, questions per step
+DPO_LR, DPO_BETA = 2e-5, 0.1  # Adam ignores the loss scale, so DPO needs a far smaller step than the RL runs
 VARIANTS = ("pg", "grpo", "dr", "dapo", "gspo", "dpo")
 
 
@@ -104,7 +105,7 @@ def run(variant, base, ta, tb):
     torch.manual_seed(7)
     m, ref = copy.deepcopy(base), copy.deepcopy(base)
     ref.eval()
-    opt = torch.optim.AdamW(m.parameters(), lr=5e-4)
+    opt = torch.optim.AdamW(m.parameters(), lr=DPO_LR if variant == "dpo" else 5e-4)
     g, gen, egen = rng(11), torch.Generator().manual_seed(3), torch.Generator().manual_seed(4)
     eps_lo, eps_hi = 0.2, (0.28 if variant == "dapo" else 0.2)
     mu = 1 if variant == "pg" else 4  # updates per batch of samples
@@ -130,7 +131,7 @@ def run(variant, base, ta, tb):
         if variant == "dpo":
             i = torch.arange((step - 1) * Q, step * Q) % len(pairs[0])
             lw, ll = digit_logp(m, pairs[0][i])[0].sum(1), digit_logp(m, pairs[1][i])[0].sum(1)
-            margin = 0.1 * ((lw - ref_w[i]) - (ll - ref_l[i]))
+            margin = DPO_BETA * ((lw - ref_w[i]) - (ll - ref_l[i]))
             loss = -F.logsigmoid(margin).mean()
             opt.zero_grad()
             loss.backward()

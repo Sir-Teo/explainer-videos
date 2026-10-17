@@ -26,6 +26,7 @@ class SAE(VoiceoverScene):
         self.idea()
         self.gallery()
         self.neurons()
+        self.frontier()
 
     def card(self):
         card = chapter_card(2, r"Pulling the features apart", r"Can we find the directions the model uses?", part=20)
@@ -167,5 +168,90 @@ class SAE(VoiceoverScene):
             self.play(Create(ax), FadeIn(xt), FadeIn(xn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bn], lag_ratio=0.08), FadeIn(kn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bf], lag_ratio=0.08), FadeIn(kf))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def frontier(self):
+        import math
+
+        o = load("frontier")
+        l1s, ks = [float(v) for v in o["l1s"]], [int(v) for v in o["ks"]]
+        L1C, TKC = C.SURPRISE, FEAT
+        pl = [(float(o[f"l1_{p:g}_l0"]), float(o[f"l1_{p:g}_fvu"])) for p in l1s]
+        pt = [(float(o[f"topk_{k:g}_l0"]), float(o[f"topk_{k:g}_fvu"])) for k in ks]
+        sl = [float(o[f"l1_{p:g}_shrink"]) for p in l1s]
+        st = [float(o[f"topk_{k:g}_shrink"]) for k in ks]
+        lo = min(v[0] for v in pl + pt)
+        hi = max(v[0] for v in pl + pt)
+        x0, x1 = math.floor(math.log2(max(lo, 1))), math.ceil(math.log2(hi))
+        ytop = math.ceil(max(v[1] for v in pl + pt) * 10) / 10
+        ax = CornerAxes(x_range=[x0, x1, 1], y_range=[0, ytop, 0.1], x_length=5.4, y_length=3.8, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.3, -0.5, 0])
+        xt = VGroup(*[MathTex(str(2 ** e), font_size=20, color=GREY_B).next_to(ax.c2p(e, 0), DOWN, buff=0.08) for e in range(x0, x1 + 1)])
+        yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(x0, v), LEFT, buff=0.08)
+                      for v in np.arange(0, ytop + 1e-9, 0.1)])
+        xn = label(r"features active per vector \ (log scale)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(r"variance left unexplained", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+
+        def path(pts, col):
+            q = [ax.c2p(math.log2(a), b) for a, b in sorted(pts)]
+            return VGroup(VMobject(color=col, stroke_width=3.5).set_points_as_corners(q), *[Dot(p, radius=0.06, color=col) for p in q])
+
+        cl, ct = path(pl, L1C), path(pt, TKC)
+        kl = VGroup(label(r"L1 penalty", font_size=22, color=L1C), label(r"TopK", font_size=22, color=TKC)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        kl.next_to(ax.c2p(x1, ytop), DL, buff=0.2)
+        colors = {r"\operatorname{TopK}_k": TKC, r"\theta": C.BITS, r"\lambda": L1C}
+        eqs = VGroup(
+            cmath(r"f = \operatorname{ReLU}(W_e x + b_e), \quad \text{loss} + ", r"\lambda", r"\|f\|_1", colors=colors, font_size=28),
+            cmath(r"f = ", r"\operatorname{TopK}_k", r"\big(W_e x + b_e\big)", colors=colors, font_size=28),
+            cmath(r"f_i = z_i \cdot \mathbf{1}[z_i >", r"\theta", r"_i], \quad \text{loss} + ", r"\lambda", r"\|f\|_0", colors=colors, font_size=28),
+        ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to([-3.6, 1.2, 0])
+        names = VGroup(label(r"chapter two's: \ the penalty also shrinks every activation", font_size=18, color=L1C),
+                       label(r"TopK \ (OpenAI, 2024): \ exactly $k$ features, \ no penalty", font_size=18, color=TKC),
+                       label(r"JumpReLU \ (Gemma Scope, 2024): \ a learned threshold per feature", font_size=18, color=C.BITS))
+        for n_, e_ in zip(names, eqs):
+            n_.next_to(e_, DOWN, buff=0.08).align_to(e_, LEFT)
+        shr = label(rf"rebuilds too small by: \ L1 ${100 * (np.mean(sl) - 1):.0f}\%$ \ on average, \ TopK ${100 * (np.mean(st) - 1):.0f}\%$",
+                    font_size=20, color=GREY_A).move_to([-3.6, -1.6, 0])
+        more = label(r"newer still: \ transcoders predict a layer's output from its input; \\ crosscoders share one dictionary "
+                     r"across layers, \ or across a model before and after fine-tuning", font_size=18, color=GREY_A).move_to([-3.4, -2.6, 0])
+        keep_in_frame(more)
+        cite_ = cite(r"L.~Gao et al., \textit{Scaling and Evaluating Sparse Autoencoders} (2024); \ S.~Rajamanoharan et al., "
+                     r"\textit{JumpReLU SAEs} (2024)", corner=UR)
+        mid = [k for k in ks if 6 <= k <= 20]
+        kk = mid[0] if mid else ks[1]
+        l0k, fk = float(o[f"topk_{kk:g}_l0"]), float(o[f"topk_{kk:g}_fvu"])
+        near = min(pl, key=lambda v: abs(math.log2(v[0]) - math.log2(l0k)))
+        with self.voiceover(
+            "Sparse autoencoders have moved on since the first ones, and ours used the first recipe. "
+            "<bookmark mark='a'/> An L1 penalty buys sparsity, but it also pulls every active feature toward zero, so "
+            "the rebuilt vector comes out too short. <bookmark mark='b'/> OpenAI's TopK autoencoders simply keep the k "
+            "strongest features and zero the rest: sparsity is set directly, and nothing is shrunk. "
+            "<bookmark mark='c'/> DeepMind's JumpReLU gives each feature its own threshold, learned, with the count of "
+            "active features as the penalty. <bookmark mark='d'/> We trained both of the first two kinds on the same "
+            "vectors, at several sparsities. "
+            + (f"TopK is better at every sparsity we tried: with {l0k:.0f} features per vector it leaves "
+               f"{100 * fk:.0f} percent of the variance unexplained, where the L1 model at about {near[0]:.0f} leaves "
+               f"{100 * near[1]:.0f}. " if fk < near[1] else
+               f"On vectors this small the two are close: about {100 * fk:.0f} against {100 * near[1]:.0f} percent "
+               "unexplained at similar sparsity. ")
+            + f"<bookmark mark='e'/> And the L1 rebuilds come out {100 * (np.mean(sl) - 1):.0f} percent too short on "
+            "average. <bookmark mark='f'/> The newest tools go further: transcoders, which replace a whole MLP with "
+            "sparse features, are what Anthropic's circuit tracing uses, and crosscoders compare two models feature "
+            "by feature."
+        ) as vo:
+            self.play(FadeIn(cite_))
+            for k, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                self.play(Write(eqs[k]), FadeIn(names[k]))
+            vo.wait_until("d")
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(cl[0]), FadeIn(cl[1:]), FadeIn(kl[0]), run_time=1.5)
+            self.play(Create(ct[0]), FadeIn(ct[1:]), FadeIn(kl[1]), run_time=1.5)
+            vo.wait_until("e")
+            self.play(FadeIn(shr))
+            vo.wait_until("f")
+            self.play(FadeIn(more))
         self.wait(0.3)
         self.clear_scene()

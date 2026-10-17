@@ -243,6 +243,22 @@ class Quant(VoiceoverScene):
         g3 = float(f["gptq3"]) - base
         r3 = float(f["int3"]) - base
         h3 = float(f["had3"]) - base
+        g4, r4, h4 = (float(f[k]) - base for k in ("gptq4", "int4", "had4"))
+        # a row with one outlier, before and after a 16 x 16 Hadamard rotation (computed here)
+        from videos.ai.ai19.formats import hadamard
+
+        v = np.random.default_rng(5).normal(0, 0.25, 16)
+        v[6] = 3.0
+        vr = hadamard(16) @ v
+
+        def bars(x, y, col):
+            return VGroup(*[Rectangle(width=0.16, height=max(abs(float(z)) * 0.32, 0.01), stroke_width=0, fill_color=col, fill_opacity=0.85)
+                            .move_to([-5.6 + 0.2 * i, y + float(z) * 0.16, 0]) for i, z in enumerate(x)])
+
+        rb, ra = bars(v, -2.0, C.INTERVAL), bars(vr, -3.25, C.BITS)
+        rbl = label(r"a row with one outlier", font_size=16, color=C.INTERVAL).next_to(rb, RIGHT, buff=0.2)
+        ral = label(r"after a Hadamard rotation", font_size=16, color=C.BITS).next_to(ra, RIGHT, buff=0.2)
+        spread = crest_r < 0.8 * crest
         with self.voiceover(
             "Two tricks make low precision work much better than plain rounding. The first is GPTQ. "
             "<bookmark mark='a'/> Round a layer's weights one input column at a time. <bookmark mark='b'/> Each "
@@ -250,12 +266,20 @@ class Quant(VoiceoverScene):
             "not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' "
             "second moment, measured on real text: inputs that move together can cover for each other. "
             f"<bookmark mark='d'/> On this small layer, at three bits, the output error drops from {100 * er:.0f} to "
-            f"{100 * eg:.0f} percent. <bookmark mark='e'/> The second trick is a rotation. A few large weights force "
-            "a coarse scale on their whole row; multiply by a Hadamard matrix first, an orthogonal matrix of plus "
-            "and minus ones, and the large values spread out evenly: in one of our layers, the largest weight drops "
-            f"from {crest:.1f} to {crest_r:.1f} times the typical one. The rotation is undone exactly afterwards. "
-            f"<bookmark mark='f'/> On our whole transformer at three bits: plain rounding loses {r3:.3f} bits a "
-            f"character, rotating first {h3:.3f}, GPTQ {g3:.3f}. Real systems combine both."
+            f"{100 * eg:.0f} percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few "
+            "weights and activations are huge outliers, and one outlier forces a coarse scale on its whole row. "
+            "Multiply by a Hadamard matrix first, an orthogonal matrix of plus and minus ones, and the outlier is "
+            "spread evenly over the row; the rotation is undone exactly afterwards. "
+            + (f"In one of our layers, the largest weight drops from {crest:.1f} to {crest_r:.1f} times the typical one. "
+               if spread else
+               f"Our small model has no such outliers: a row's largest weight is only about {crest:.1f} times the "
+               f"typical one, before and after. ")
+            + f"<bookmark mark='f'/> On our whole transformer at three bits: plain rounding loses {r3:.3f} bits a "
+            f"character, GPTQ only {g3:.3f}, "
+            + (f"and rotating first {h3:.3f}. " if h3 < r3 else
+               f"and rotating first {h3:.3f}, worse: with nothing to spread, it only spreads each rounding error over "
+               "every input, including the few that carry large activations. ")
+            + "Real systems rotate the activations too, so they can be rounded as well, and pair the rotation with GPTQ."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(gW), FadeIn(gl))
             vo.wait_until("a")
@@ -270,6 +294,8 @@ class Quant(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(res), FadeOut(colbox))
             vo.wait_until("e")
+            self.play(FadeIn(rb), FadeIn(rbl))
+            self.play(TransformFromCopy(rb, ra), FadeIn(ral))
             self.play(FadeIn(tl), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab[:3]], lag_ratio=0.2))
             vo.wait_until("f")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in tab[3:]], lag_ratio=0.2))

@@ -337,7 +337,8 @@ class Objective(VoiceoverScene):
         kb = label(r"before RL", font_size=20, color=GREY_B)
         ka = label(r"after GRPO", font_size=20, color=CHAIN)
         VGroup(ka, kb).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(bx.c2p(math.log2(ks[-1]) * 0.62, 0.22))
-        cross = [k for k, a, b in zip(ks, pa, pb) if b > a + 0.005]
+        # a real crossover: the model before RL clearly ahead at the most tries
+        cross = [k for k, a, b in zip(ks, pa, pb) if b > a + 0.01] if pb[-1] > pa[-1] + 0.02 else []
         cite_ = cite(r"Y.~Yue et al., \textit{Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs "
                      r"Beyond the Base Model?} (2025)", corner=DR)
         with self.voiceover(
@@ -351,7 +352,8 @@ class Objective(VoiceoverScene):
                f"wins: {100 * pb[-1]:.0f} percent at {ks[-1]} tries, against {100 * pa[-1]:.0f}. The same crossover "
                "they found: RL concentrates probability on answers the model already had, and loses some of the rest."
                if cross else
-               f"On ours, RL helps at one try and costs nothing at {ks[-1]}: both reach {100 * pa[-1]:.0f} percent. "
+               f"On ours, RL lifts one try from {100 * pb[0]:.0f} to {100 * pa[0]:.0f} percent, but with enough tries "
+               f"the two meet: both reach about {100 * pa[-1]:.0f} percent at {ks[-1]}. "
                "A problem this small has no answers the model can't find by chance; on hard problems, Yue and "
                "colleagues found that with enough tries the model before RL wins. RL mostly concentrates probability "
                "on answers the model already had.")
