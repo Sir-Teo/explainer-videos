@@ -39,7 +39,9 @@ class Glyphs(VoiceoverScene):
         def spot(k):  # where pixel k sits once unrolled: lines of 100 numbers, read like text
             return [3.6 - 3.0 + cw * (k % per + 0.5), -0.6 - 0.24 * (k // per), 0]
 
-        vl = MathTex(rf"x \in \mathbb{{R}}^{{{n * n}}}", font_size=34, color=FM_C).move_to([3.6, -1.85, 0])
+        rows = VGroup(*[Rectangle(width=6.0, height=0.2, stroke_color=GREY_C, stroke_width=1).move_to([3.6, -0.6 - 0.24 * k, 0])
+                        for k in range(n * n // per)])
+        vl = MathTex(rf"x \in \mathbb{{R}}^{{{n * n}}}", font_size=34, color=FM_C).move_to([3.6, -1.75, 0])
         same = label(r"the same flow matching, \\ just in more dimensions", font_size=26, color=GREY_A).move_to([3.6, -2.9, 0])
         with self.voiceover(
             "Points in a plane were a warm-up. A picture is also a point: here, letters from many fonts, twenty by "
@@ -50,9 +52,10 @@ class Glyphs(VoiceoverScene):
             self.play(FadeIn(tl), LaggedStart(*[FadeIn(i_) for i_ in grid], lag_ratio=0.03), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(pt), FadeIn(sq, lag_ratio=0.002), run_time=1.2)
-            self.play(LaggedStart(*[AnimationGroup(*[sq[r * n + c].animate.move_to(spot(r * n + c)).scale(cw * 0.9 / px)
-                                                     for c in range(n)]) for r in range(n)], lag_ratio=0.12), run_time=3.0)
-            self.play(FadeIn(vl))
+            self.play(LaggedStart(*[AnimationGroup(*[sq[r * n + c].animate.move_to(spot(r * n + c)).stretch_to_fit_width(cw * 0.92)
+                                                     .stretch_to_fit_height(0.17) for c in range(n)]) for r in range(n)],
+                                  lag_ratio=0.12), run_time=3.0)
+            self.play(Create(rows), FadeIn(vl))
             vo.wait_until("b")
             self.play(FadeIn(same))
         self.wait(0.3)
