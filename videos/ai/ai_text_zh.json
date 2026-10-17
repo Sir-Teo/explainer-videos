@@ -2977,7 +2977,21 @@
     "the curve's height: \\ how crowded the outcomes are there;\\\\ the area between two points is the probability": "曲线的高度：\\ 结果在那里有多拥挤；\\\\ 两点之间的面积就是概率",
     "push: \\ $f(x)\\,dt$": "推力：\\ $f(x)\\,dt$",
     "kick: \\ $g\\,dW_t$": "踢动：\\ $g\\,dW_t$",
-    "$dt$: \\ a tiny tick of time; \\ $dW_t$: \\ the tiny random kick\\\\ that Brownian motion makes in that tick": "$dt$：\\ 极短的一小段时间；\\ $dW_t$：\\ 布朗运动在这一小段时间里\\\\ 给出的微小随机踢动"
+    "$dt$: \\ a tiny tick of time; \\ $dW_t$: \\ the tiny random kick\\\\ that Brownian motion makes in that tick": "$dt$：\\ 极短的一小段时间；\\ $dW_t$：\\ 布朗运动在这一小段时间里\\\\ 给出的微小随机踢动",
+    "stretch the space until each author's cloud is round,\\\\ then point from one centre to the other": "把空间拉伸，直到每位作者的点云都变圆，\\\\ 再从一个中心指向另一个中心",
+    "the scatter around the average": "围绕平均值的散布",
+    "what the line leaves over": "直线剩下没解释的部分",
+    "convex: \\ one bottom": "凸：\\ 一个谷底",
+    "not convex: \\ many bottoms": "非凸：\\ 许多谷底",
+    "convex": "凸",
+    "shaped like one bowl:\\\\ every downhill path ends at the same bottom": "形状像一只碗：\\\\ 每条下坡路都通向同一个谷底",
+    "a page": "一页",
+    "Gaussian kernel": "高斯核",
+    "a similarity score between two points:\\\\ $1$ for identical points, fading towards $0$ with distance": "两点之间的相似度：\\\\ 两点相同时为$1$，随距离增大逐渐趋近于$0$",
+    "the pages": "这些书页",
+    "one tree's resample": "一棵树的重抽样",
+    "resample": "重抽样",
+    "draw pages at random, putting each one back:\\\\ some come twice, some not at all, so each tree sees a slightly different pile": "随机抽取书页，每抽一页就放回去：\\\\ 有的抽到两次，有的一次也没抽到，所以每棵树看到的那堆书页都略有不同"
   },
   "phrases": {
     "width": "宽度",
