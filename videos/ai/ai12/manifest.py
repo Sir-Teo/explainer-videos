@@ -8,7 +8,8 @@ SCENES = [
     ("s03_linear", "Linear", "2. Attention without the softmax"),
     ("s04_rules", "Rules", "3. How to write to memory"),
     ("s05_ssm", "SSM", "4. State-space models"),
-    ("s06_recall", "Recall", "5. A recall test"),
-    ("s07_hybrid", "Hybrid", "6. Hybrids"),
+    ("s09_gated", "GatedDelta", "5. The gated delta rule"),
+    ("s06_recall", "Recall", "6. A recall test"),
+    ("s07_hybrid", "Hybrid", "7. Hybrids"),
     ("s08_outro", "Outro", "Recap, and where this comes back"),
 ]

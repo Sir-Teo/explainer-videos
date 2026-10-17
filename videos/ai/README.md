@@ -65,7 +65,7 @@ The series draws in the manner of 3Blue1Brown, with the instruments in `explaine
 | 10 | The Mathematics of Scale | NTK vs μP, hyperparameter transfer, scaling laws, Chinchilla, grokking | |
 | **III** | **Engines** | | |
 | 11 | Attention as Geometry | attention as a kernel smoother, RoPE, YaRN, attention sinks, induction heads, in-context learning | our own small transformer |
-| 12 | Memory | KV caches, GQA and MLA, linear attention, SSMs (Mamba-2), the delta rule, test-time training, hybrids | DeepSeek, Qwen3-Next, Kimi Linear |
+| 12 | Memory | KV caches, GQA and MLA, linear attention, SSMs (Mamba-2 and state-space duality), the delta rule and gated delta rule (Householder geometry, WY/UT chunkwise training), test-time training, hybrids | DeepSeek, Qwen3-Next, Kimi Linear |
 | 13 | Sparsity | mixture-of-experts routing and balancing, sparse attention (NSA, DSA) | DeepSeek-V3.x, GLM, Kimi |
 | 14 | Diffusion and Flow | score matching, the reverse SDE, DDPM/DDIM, flow matching, guidance, consistency, discrete diffusion | LLaDA |
 | 15 | Images and Video | ViT, latent autoencoders, DiT, MM-DiT, spatiotemporal latents, next-scale prediction | SD3/Flux, video models |
