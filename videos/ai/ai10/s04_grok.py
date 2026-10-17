@@ -75,18 +75,19 @@ class Grok(VoiceoverScene):
             return curve(ax, lx, D[:, 1], TR, sw), curve(ax, lx, D[:, 2], TE, sw)
 
         wtr, wte = lines(W)
-        ntr, nte = lines(N, 2.5)
-        nte.set_stroke(opacity=0.6)
+        ntr, _ = lines(N, 2.5)
         ntr.set_stroke(opacity=0.6)
+        # without weight decay the unseen entries stay at chance: dashed red, drawn over the axis so it can be seen
+        nte = DashedVMobject(curve(ax, np.log10(N[:, 0]), N[:, 2], C.SURPRISE, 4), num_dashes=90)
         key = VGroup(label(r"the $40\%$ it has seen", font_size=26, color=TR), label(r"the $60\%$ it hasn't", font_size=26, color=TE))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.6, 1.6, 0])
         m1 = DashedLine(ax.c2p(math.log10(t_tr), 0), ax.c2p(math.log10(t_tr), 1), color=TR, stroke_width=2)
         m2 = DashedLine(ax.c2p(math.log10(t_te), 0), ax.c2p(math.log10(t_te), 1), color=TE, stroke_width=2)
         lag = label(rf"memorized by step ${t_tr:,}$; \\ understood by step ${t_te:,}$".replace(",", "{,}"), font_size=26,
                     color=WHITE).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
-        nowd = label(r"without weight decay: \\ it never generalizes" if g["t_test_nowd"] is None else
-                     rf"without weight decay: \\ much later, \ step ${int(g['t_test_nowd']):,}$".replace(",", "{,}"),
-                     font_size=24, color=GREY_A).next_to(lag, DOWN, buff=0.4).align_to(key, LEFT)
+        nowd = label(r"without weight decay (dashed): \\ it never generalizes" if g["t_test_nowd"] is None else
+                     rf"without weight decay (dashed): \\ much later, \ step ${int(g['t_test_nowd']):,}$".replace(",", "{,}"),
+                     font_size=24, color=C.SURPRISE).next_to(lag, DOWN, buff=0.4).align_to(key, LEFT)
         with self.voiceover(
             f"It memorizes the entries it was shown within about {t_tr:,} steps, and for a long time, it gets the "
             "unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of "
@@ -132,7 +133,7 @@ class Grok(VoiceoverScene):
         nums = VGroup(*[MathTex(str(i), font_size=18, color=GREY_A).next_to(place([xy[i]])[0], UR, buff=0.02) for i in (0, 1, 2, 3)])
         pl = label(r"the number vectors, \ along their final two main directions", font_size=24, color=GREY_A).to_edge(UP, buff=0.4).set_x(2.8)
         note_ = label(r"each number becomes a point on circles: \\ adding numbers turns into adding angles", font_size=26,
-                      color=C.BITS).to_edge(DOWN, buff=0.35).set_x(2.0)
+                      color=C.BITS).move_to([-3.4, 2.2, 0])  # the empty space above the bars, clear of the citation
         cite_ = cite(r"N.~Nanda et al., \textit{Progress Measures for Grokking via Mechanistic Interpretability} (2023)", corner=DL)
         with self.voiceover(
             "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> They're "

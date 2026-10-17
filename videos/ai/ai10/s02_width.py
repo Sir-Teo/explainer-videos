@@ -84,10 +84,12 @@ class Width(VoiceoverScene):
                 bests.add(Dot(ax.c2p(lrs[i], v[i]), radius=0.08, color=wc))
             xl = label(r"learning rate (log)", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
             t = label(title, font_size=30, color=col).next_to(ax, UP, buff=0.2)
-            panels.add(VGroup(ax, xl, t, lines, bests))
+            yt = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(lrs[0], v), LEFT, buff=0.08)
+                          for v in np.arange(lo, hi + 1e-9, 0.2)])
+            panels.add(VGroup(ax, xl, t, lines, bests, yt))
         key = VGroup(*[label(rf"width ${w:,}$".replace(",", "{,}"), font_size=24, color=c) for w, c in zip(widths, WIDTH_COLORS)])
         key.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.3)
-        yn = label(r"held-out bits after $800$ steps", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.25)
+        yn = label(r"held-out bits after $800$ steps \ (lower is better)", font_size=22, color=GREY_A).next_to(key, DOWN, buff=0.15)
         drift = m["drift"]
         colors = {r"\tfrac{1}{n}": MUP}
         rule = cmath(r"\text{hidden learning rate}", r"\;\propto\;", r"\tfrac{1}{n}", colors=colors, font_size=30)
@@ -113,12 +115,12 @@ class Width(VoiceoverScene):
             self.play(FadeIn(key), FadeIn(cite_), FadeIn(yn))
             vo.wait_until("a")
             p = panels[0]
-            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), LaggedStart(*[Create(l_) for l_ in p[3]], lag_ratio=0.3),
+            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[3]], lag_ratio=0.3),
                       run_time=2.0)
             self.play(FadeIn(p[4]))
             vo.wait_until("b")
             p = panels[1]
-            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), LaggedStart(*[Create(l_) for l_ in p[3]], lag_ratio=0.3),
+            self.play(Create(p[0]), FadeIn(p[1]), FadeIn(p[2]), FadeIn(p[5]), LaggedStart(*[Create(l_) for l_ in p[3]], lag_ratio=0.3),
                       run_time=2.0)
             self.play(FadeIn(p[4]), FadeIn(rule))
         self.wait(0.3)

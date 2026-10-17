@@ -75,33 +75,84 @@ class Chinchilla(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def history(self):
+        # our compute-optimal sizes: each budget's curve fitted by a parabola in log N near its lowest point (as
+        # Chinchilla's second method does); its vertex is the best size for that budget
+        d = load("isoflop")
+        budgets = [float(b) for b in d["budgets"]]
+        lc, ln = [], []
+        for b in budgets:
+            N, L = np.log10(np.asarray(d[f"params{b:.0e}"], float)), np.asarray(d[f"finals{b:.0e}"])
+            i = int(np.argmin(L))
+            sl = slice(max(0, i - 2), min(len(L), i + 3))
+            a2, a1, _ = np.polyfit(N[sl], L[sl], 2)
+            lc.append(math.log10(b))
+            ln.append(-a1 / (2 * a2))
+        lc, ln = np.array(lc), np.array(ln)
+        slope, icept = np.polyfit(lc, ln, 1)
+        tpp = float(np.mean([b / 6 / 10 ** v / 10 ** v for b, v in zip(budgets, ln)]))  # characters per parameter
+        xm, ym = float(lc.mean()), float(ln.mean())
+        x0, x1 = lc[0] - 0.3, lc[-1] + 0.3
+        y0, y1 = math.floor((ym - 0.6) * 4) / 4, math.ceil((ym + 0.6) * 4) / 4
+        ax = CornerAxes(x_range=[x0, x1, 0.5], y_range=[y0, y1, 0.25], x_length=5.6, y_length=4.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.9, -0.4, 0])
+        xt = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, y0), DOWN, buff=0.1)
+                      for t, v in ((r"3\times10^{11}", math.log10(3e11)), (r"10^{12}", 12.0), (r"3\times10^{12}", math.log10(3e12)))
+                      if x0 <= v <= x1])
+        yv = [v for v in (1e4, 3e4, 1e5, 3e5, 1e6) if y0 <= math.log10(v) <= y1]
+        yt = VGroup(*[MathTex(f"{int(v):,}".replace(",", "{,}"), font_size=22, color=GREY_B).next_to(ax.c2p(x0, math.log10(v)), LEFT,
+                                                                                                buff=0.1) for v in yv])
+        xn = label(r"compute budget \ (operations)", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
+        yn = label(r"the best number of parameters", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+
+        def through(k, col, dashed=True):
+            a_, b_ = ax.c2p(x0, ym + k * (x0 - xm)), ax.c2p(x1, ym + k * (x1 - xm))
+            return (DashedLine(a_, b_, dash_length=0.1, color=col, stroke_width=2.5) if dashed else
+                    Line(a_, b_, color=col, stroke_width=3.5))
+
+        kap, chi = through(0.73, GREY_B), through(0.5, C.TRUE_P)
+        ours = Line(ax.c2p(x0, icept + slope * x0), ax.c2p(x1, icept + slope * x1), color=C.BITS, stroke_width=3.5)
+        stars = VGroup(*[Star(n=5, outer_radius=0.14, color=c, fill_opacity=1, stroke_width=0).move_to(ax.c2p(x, y))
+                         for x, y, c in zip(lc, ln, BUDGET_COLORS)])
+        def entry(line, text, col):
+            return VGroup(line.copy().set_length(0.5).set_angle(0), label(text, font_size=22, color=col)).arrange(RIGHT, buff=0.15)
+
+        kl = entry(kap, r"Kaplan (2020): \ $N \propto C^{0.73}$", GREY_B)
+        cl = entry(chi, r"Chinchilla (2022): \ $N \propto C^{0.5}$", C.TRUE_P)
+        ol = entry(ours, rf"ours: \ $N \propto C^{{{slope:.2f}}}$", C.BITS)
+        legend = VGroup(kl, cl, ol).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        legend.move_to(ax.c2p(x0, y1) + np.array([0.25, -0.2, 0]), aligned_edge=UL)
         rows = VGroup(
-            label(r"Kaplan et al.\ (2020): \ grow the model faster than the data", font_size=28, color=GREY_A),
-            label(r"Hoffmann et al.\ (2022), \textit{Chinchilla}: \ grow both equally, \\ about $20$ tokens per parameter",
-                  font_size=28, color=C.BITS),
-            label(r"Chinchilla, $70$ billion parameters, beat Gopher, $280$ billion, \\ on the same budget", font_size=26,
+            label(r"Kaplan: \ grow the model \\ faster than the data", font_size=22, color=GREY_B),
+            label(r"Chinchilla: \ grow both together, \\ about $20$ tokens per parameter", font_size=22, color=C.TRUE_P),
+            label(rf"ours: \ about ${tpp:.0f}$ characters \\ per parameter", font_size=22, color=C.BITS),
+            label(r"Chinchilla, $70$ billion parameters, \\ beat Gopher, $280$ billion, \\ on the same budget", font_size=22,
                   color=WHITE),
-            label(r"today: \ far more tokens than that, \ because a model is \\ trained once and then used billions of times",
-                  font_size=26, color=GREY_A))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(UP * 0.2)
-        colors = {r"N_{\mathrm{opt}}": C.BITS, r"D_{\mathrm{opt}}": C.TRUE_P}
-        f = cmath(r"N_{\mathrm{opt}} \propto C^{0.5}", r",\qquad", r"D_{\mathrm{opt}} \propto C^{0.5}", colors=colors,
-                  font_size=40).to_edge(DOWN, buff=0.6)
+            label(r"today: \ far more tokens than that, \\ because a model is trained once \\ and then used billions of times",
+                  font_size=22, color=GREY_A))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.5, 0.0, 0])
+        keep_in_frame(rows)
+        tag = note(r"best size per budget: \ a parabola through each curve's lowest points").to_corner(DL, buff=0.25)
         with self.voiceover(
             "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues "
             "concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's "
             "Chinchilla paper redid it more carefully and found that size and data should grow together: about "
-            "twenty training tokens for every parameter. <bookmark mark='b'/> Their seventy-billion-parameter "
-            "Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. "
+            "twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to "
+            f"Chinchilla: the best size grows as the budget to the power {slope:.2f}, with about {tpp:.0f} "
+            "characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla "
+            "beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. "
             "<bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained "
             "once and then run billions of times, so a smaller, longer-trained model is cheaper to use."
         ) as vo:
-            self.play(FadeIn(rows[0]))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(kap), FadeIn(kl), FadeIn(rows[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]), Write(f))
+            self.play(Create(chi), FadeIn(cl), FadeIn(rows[1]))
+            vo.wait_until("o")
+            self.play(LaggedStart(*[GrowFromCenter(st) for st in stars], lag_ratio=0.3), FadeIn(tag))
+            self.play(Create(ours), FadeIn(ol), FadeIn(rows[2]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]))
-            vo.wait_until("c")
             self.play(FadeIn(rows[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[4]))
         self.wait(0.3)
         self.clear_scene()
