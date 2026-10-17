@@ -124,42 +124,42 @@
   "fb5b774580b9": {
    "scene": "Masked",
    "en": "Chapter six. Diffusion for text.",
-   "zh": ""
+   "zh": "第6章。用于文本的扩散。"
   },
   "a6f42f835ceb": {
    "scene": "Masked",
    "en": "Text isn't made of continuous numbers, so what's the noise? Blanks. Blank out each character with probability t; at t equal to one, everything is blank. <bookmark mark='a'/> The model sees the rest, on both sides, and guesses every blank. Weighted by one over t, that's a bound on the bits per character: a guaranteed ceiling, so the true figure can only be lower. It's the same quantity as on our scoreboard. LLaDA, in 2025, trained an eight-billion-parameter language model this way.",
-   "zh": ""
+   "zh": "文本不是由连续的数构成的，那噪声是什么？是空白。把每个字符以概率t涂成空白；t等于1时，全部都是空白。<bookmark mark='a'/>模型看着剩下的字符，两边的都看，猜出每一个空白。按t分之1加权，这就给出了每字符比特数的一个上界：一个有保证的上限，所以真实的数值只会更低。它和我们记分牌上的是同一个量。2025年，LLaDA就用这种方法，训练了一个80亿参数的语言模型。"
   },
   "95adc77e5f43": {
    "scene": "Masked",
    "en": "Here's our own small text diffuser writing 64 characters. It starts with all blanks. <bookmark mark='a'/> Each round it guesses every blank, keeps only the guesses it's surest of, and blanks the rest again. <bookmark mark='b'/> Words appear in no particular order, wherever the model is confident first, and the rest fills in around them. It's a different way to write: all at once, then refined, rather than left to right.",
-   "zh": ""
+   "zh": "这是我们自己的小文本扩散模型，正在写64个字符。它从全是空白开始。<bookmark mark='a'/>每一轮，它猜出每一个空白，只保留它最有把握的那些猜测，把其余的重新涂成空白。<bookmark mark='b'/>词语出现的顺序没有什么规律，模型先对哪里有把握，哪里就先出现，其余的再围绕着它们填上。这是一种不同的写法：先一下子全部写出，再慢慢修改，而不是从左往右写。"
   },
   "185f67b69abc": {
    "scene": "Masked",
    "en": "Writing everything at once has a cost: the length is fixed in advance, and nothing can be cached. Block diffusion splits the difference. <bookmark mark='a'/> The text is cut into blocks. Within a block, tokens are unmasked a few at a time, as here; <bookmark mark='b'/> across blocks, it goes left to right, like an ordinary language model, so finished blocks can be cached and the text can run as long as it likes. <bookmark mark='c'/> With blocks of one token, it is an ordinary language model; with a single block, it's this chapter's. Commercial diffusion language models, Google's Gemini Diffusion and Inception's Mercury, report writing over a thousand tokens a second.",
-   "zh": ""
+   "zh": "一下子写出全部内容是有代价的：长度得事先定好，而且什么都没法缓存。块扩散取了个折中。<bookmark mark='a'/>文本被切成一个个块。在一个块之内，词元一次揭开几个，就像这里这样；<bookmark mark='b'/>在块与块之间，则从左往右走，就像普通的语言模型，所以写完的块可以缓存起来，文本想写多长就写多长。<bookmark mark='c'/>如果每块只有1个词元，它就是普通的语言模型；如果只有1个块，它就是这一章的模型。商用的扩散语言模型，Google的Gemini Diffusion和Inception的Mercury，据报告每秒能写出1000多个词元。"
   },
   "107ee4394201": {
    "scene": "Outro",
    "en": "Let's take stock. A diffusion model learns to guess the noise in a noisy example, and that guess is the score. DDPM walks back from noise with a little randomness at every step; DDIM walks a fixed path in far fewer. Flow matching learns straight-line velocities, and reflow straightens the paths until one step will do. Guidance turns a request into a push. The same machinery makes pictures, and, with blanks for noise, text.",
-   "zh": ""
+   "zh": "我们来盘点一下。扩散模型学的是猜出带噪声的例子里的噪声，而这个猜测就是分数函数。DDPM从噪声往回走，每一步都带一点随机性；DDIM走的是一条固定的路径，步数少得多。流匹配学的是沿直线的速度，而重流把路径拉直，直到一步就够。引导把一个要求变成一股推力。同一套机制能画出图片，而用空白当作噪声，还能写出文本。"
   },
   "47746251d536": {
    "scene": "Outro",
    "en": "Next time this machinery meets real images and video, in a compressed space and with transformers as the denoisers. Speech generators use it too, in part sixteen; world models imagine the next frame with it, in part eighteen; and part nineteen is about making it fast.",
-   "zh": ""
+   "zh": "下一次，这套机制要面对真实的图像和视频，在一个压缩的空间里进行，并用Transformer来做去噪器。语音生成器也用它，那是第16部分；世界模型用它来想象下一帧画面，那是第18部分；而第19部分讲的，是怎样让它变快。"
   },
   "b665073ab106": {
    "scene": "Outro",
    "en": "Next time: images and video. A picture is cut into patches, and the patches become tokens, <bookmark mark='a'/> so the transformers of part eleven can look at pictures, and denoise them.",
-   "zh": ""
+   "zh": "下一次：图像和视频。一张图片被切成一个个图像块，这些图像块变成词元，<bookmark mark='a'/>这样，第11部分的Transformer就能看图片，并给它们去噪。"
   },
   "9291418c735f": {
    "scene": "Outro",
    "en": "Sander Dieleman's blog posts on diffusion are a wonderful companion. Thanks for watching, and see you in part fifteen.",
-   "zh": ""
+   "zh": "Sander Dieleman写的那些关于扩散的博客文章，是绝佳的参考读物。感谢观看，我们第15部分再见。"
   }
  },
  "title_en": "AI, Built: Part 14, Diffusion and Flow",
