@@ -52,6 +52,19 @@ class Chinchilla(VoiceoverScene):
         rule = cmath(r"C", r"\approx", r"6", r"\,N", r"\,D", colors=colors, font_size=40).next_to(key, DOWN, buff=0.5)
         rl = label(r"$N$ parameters, \ $D$ training tokens", font_size=24, color=GREY_A).next_to(rule, DOWN, buff=0.15)
         best = label(r"too small: \ underfits; \\ too big: \ undertrained", font_size=26, color=GREY_A).next_to(rl, DOWN, buff=0.4)
+        # a budget is an area: N wide, D tall; the same area can be a wide, short block or a narrow, tall one
+        area, corner = 2.0, np.array([3.2, -3.3, 0])
+        wv = ValueTracker(1.4)
+
+        def block():
+            w = wv.get_value()
+            r_ = Rectangle(width=w, height=area / w, stroke_color=WHITE, stroke_width=2, fill_color=C.BITS, fill_opacity=0.25)
+            r_.move_to(corner, aligned_edge=DL)
+            return VGroup(r_, MathTex(r"N", font_size=30, color=C.BITS).next_to(r_, DOWN, buff=0.08),
+                          MathTex(r"D", font_size=30, color=C.TRUE_P).next_to(r_, LEFT, buff=0.08))
+
+        still = block()
+        bl_ = label(r"one budget: \\ the same area", font_size=22, color=GREY_A).move_to([5.6, -1.3, 0])
         with self.voiceover(
             "Suppose you can afford a fixed amount of computation. Training costs about six operations per "
             "parameter per training token, so a budget fixes the product of model size and data. You can have a "
@@ -62,8 +75,16 @@ class Chinchilla(VoiceoverScene):
             "the further right the best size moves."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yt), FadeIn(xn), FadeIn(yn), Write(rule), FadeIn(rl))
+            self.play(FadeIn(still), FadeIn(bl_))
+            self.remove(still)
+            live = always_redraw(block)  # added only after the fade-in: a self-rebuilding group can't be faded in
+            self.add(live)
+            self.play(wv.animate.set_value(3.0), run_time=2.0)  # a big model, little data
+            self.play(wv.animate.set_value(0.8), run_time=2.5)  # a small model, lots of data
+            self.play(wv.animate.set_value(1.4), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(key))
+            live.clear_updaters()
+            self.play(FadeOut(live), FadeOut(bl_), FadeIn(key))
             vo.wait_until("b")
             for g_ in groups:
                 self.play(Create(g_), run_time=1.2)
