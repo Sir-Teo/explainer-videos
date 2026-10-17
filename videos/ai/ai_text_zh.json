@@ -2450,7 +2450,16 @@
     "\\text{CLIP:}\\quad -\\log \\frac{e^{s_{ii}}}{\\sum_j e^{s_{ij}}}": "\\text{CLIP:}\\quad -\\log \\frac{e^{s_{ii}}}{\\sum_j e^{s_{ij}}}",
     "\\text{SigLIP:}\\quad -\\sum_{j} \\log \\sigma\\big(\\pm(s_{ij} + b)\\big)": "\\text{SigLIP:}\\quad -\\sum_{j} \\log \\sigma\\big(\\pm(s_{ij} + b)\\big)",
     "7 + 9 = 16, write 6, carry 1": "7 + 9 = 16，写 6，进 1",
-    "4 + 8 + 1 = 13, write 3, carry 1": "4 + 8 + 1 = 13，写 3，进 1"
+    "4 + 8 + 1 = 13, write 3, carry 1": "4 + 8 + 1 = 13，写 3，进 1",
+    "The": "The",
+    "cat": "cat",
+    "sat": "sat",
+    "on": "on",
+    "the": "the",
+    "mat": "mat",
+    "because": "because",
+    "was": "was",
+    "warm": "warm"
   },
   "phrases": {
     "width": "宽度",
