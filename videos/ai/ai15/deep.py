@@ -423,7 +423,7 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True):
         loss.backward()
         opt.step()
         sched.step()
-        run.append(float(loss))
+        run.append(loss.item())
         if log and st % 500 == 0:
             print(f"      {mode} step {st}: loss {np.mean(run):.4f} ({time.time() - t0:.0f}s)", flush=True)
             run = []
