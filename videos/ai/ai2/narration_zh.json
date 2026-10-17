@@ -64,10 +64,10 @@
    "en": "Chapter two. How alike are two vectors?",
    "zh": "第2章。两个向量有多相似？"
   },
-  "c7e6100bc92f": {
+  "b107d567ea5a": {
    "scene": "Dot",
-   "en": "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate, and add it all up. That's the dot product. <bookmark mark='b'/> It has a second meaning: the length of one, times the length of the other, times the cosine of the angle between them.",
-   "zh": "两个向量有多相似？<bookmark mark='a'/>把它们一个坐标一个坐标地相乘，再全部加起来。这就是点积。<bookmark mark='b'/>它还有第二层含义：一个的长度，乘以另一个的长度，再乘以它们夹角的余弦。"
+   "en": "How alike are two vectors? <bookmark mark='a'/> Multiply them coordinate by coordinate, and add it all up. That's the dot product. <bookmark mark='b'/> It has a second meaning: the length of one, times the length of the other, times the cosine of the angle between them. The cosine is one when the arrows point the same way, zero at a right angle, and minus one when they point in opposite directions.",
+   "zh": ""
   },
   "869bec6cce5d": {
    "scene": "Dot",
@@ -119,15 +119,15 @@
    "en": "Most vectors are knocked off their line by a matrix. <bookmark mark='a'/> But some aren't: they stay on their own line, and are only stretched or shrunk. <bookmark mark='b'/> Those are the eigenvectors, and the stretch factor is the eigenvalue.",
    "zh": "大多数向量，都会被矩阵撞离它原来所在的那条直线。<bookmark mark='a'/>但有些不会：它们留在自己的直线上，只被拉长或缩短。<bookmark mark='b'/>这些就是特征向量，拉伸的倍数就是特征值。"
   },
-  "7d3a6914d4ad": {
+  "d7a5f218f2b8": {
    "scene": "Eigen",
-   "en": "Symmetric matrices, the ones that equal their own mirror image across the diagonal, behave best of all. <bookmark mark='a'/> Their eigenvalues are real numbers, and their eigenvectors are perpendicular. <bookmark mark='b'/> So the map is: turn, so the eigenvectors line up with the axes; stretch along each axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. That's the spectral theorem.",
-   "zh": "对称矩阵，也就是沿对角线翻过来和自己一模一样的矩阵，性质最好。<bookmark mark='a'/>它们的特征值都是实数，特征向量互相垂直。<bookmark mark='b'/>所以这个映射就是：先旋转，让特征向量对准坐标轴；再沿每条轴，按各自的特征值拉伸；最后转回去。<bookmark mark='c'/>A等于Q、Λ、Q转置。这就是谱定理。"
+   "en": "Symmetric matrices, the ones that equal their own mirror image across the diagonal, behave best of all. <bookmark mark='a'/> Their eigenvalues are real numbers, and their eigenvectors are perpendicular. <bookmark mark='b'/> So the map is: turn, so the eigenvectors line up with the axes; stretch along each axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. The transpose flips a matrix across its diagonal, and for a turn like Q, that's the same turn, undone. That's the spectral theorem.",
+   "zh": ""
   },
-  "2912912b833d": {
+  "55c2ef520ff6": {
    "scene": "Eigen",
-   "en": "Covariance matrices, which describe how data spreads out, are symmetric, and their eigenvectors point along the directions in which the data spreads the most. <bookmark mark='a'/> These are the principal components. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's 768-dimensional words in three dimensions at the start of this part.",
-   "zh": "协方差矩阵描述数据是怎样散开的，它是对称的，它的特征向量指向数据散得最开的那些方向。<bookmark mark='a'/>这些就是主成分。<bookmark mark='b'/>只留下最靠前的几个，其余的丢掉：这一部分开头，我们就是这样把GPT-2的768维的词画到三维里的。"
+   "en": "Covariance matrices describe how data spreads out: <bookmark mark='c'/> a table of how much each coordinate varies, on the diagonal, and how much each pair rises and falls together, off it. They are symmetric, and their eigenvectors point along the directions in which the data spreads the most. <bookmark mark='a'/> These are the principal components. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's 768-dimensional words in three dimensions at the start of this part.",
+   "zh": ""
   },
   "dbc7ad85bef6": {
    "scene": "SVD",
@@ -144,30 +144,30 @@
    "en": "The stretches are the singular values. <bookmark mark='a'/> The unit circle always becomes an ellipse, and the singular values are its half-axes. <bookmark mark='b'/> Sweep a unit vector all the way around, and watch how long its image is. The longest it ever gets is sigma one: the most the matrix can stretch any vector. It's called the spectral norm.",
    "zh": "这些拉伸的倍数就是奇异值。<bookmark mark='a'/>单位圆总会变成一个椭圆，奇异值就是它的半轴长。<bookmark mark='b'/>让一个单位向量转上一整圈，看它的像有多长。最长的时候是σ1：也就是这个矩阵能把任何向量拉伸的最大倍数。它叫作谱范数。"
   },
-  "84014fdcae09": {
+  "5d1a8f737abb": {
    "scene": "SVD",
-   "en": "Why care how much a matrix stretches? <bookmark mark='a'/> A deep network applies one matrix after another. Push a vector through forty layers of random matrices. <bookmark mark='b'/> If each layer stretches a typical vector by 1.2, after forty layers its length has grown two thousand times. <bookmark mark='c'/> At 0.8, it shrinks to almost nothing. Only near one does the signal survive. That knife edge is the subject of part eight.",
-   "zh": "为什么要关心矩阵拉伸多少？<bookmark mark='a'/>深度网络就是一个矩阵接着一个矩阵地作用。让一个向量穿过40层随机矩阵。<bookmark mark='b'/>如果每一层都把一个典型的向量拉长到1.2倍，40层之后，它的长度会变成原来的大约2000倍。<bookmark mark='c'/>如果是0.8，它就缩到几乎没有了。只有在1附近，信号才能活下来。这道刀锋，就是第8部分的主题。"
+   "en": "Why care how much a matrix stretches? <bookmark mark='a'/> A deep network applies one matrix after another. Each of those steps is called a layer, and deep just means many layers. Push a vector through forty layers of random matrices. <bookmark mark='b'/> If each layer stretches a typical vector by 1.2, after forty layers its length has grown two thousand times. <bookmark mark='c'/> At 0.8, it shrinks to almost nothing. Only near one does the signal survive. That knife edge is the subject of part eight.",
+   "zh": ""
   },
   "bbb5f62a252d": {
    "scene": "LowRank",
    "en": "Chapter six. Keeping what matters.",
    "zh": "第6章。留下要紧的部分。"
   },
-  "5126432ab535": {
+  "666b70e3fbd6": {
    "scene": "LowRank",
-   "en": "There's more. Written out, the decomposition says that any matrix is a sum of simple pieces, <bookmark mark='a'/> each one a column times a row, weighted by a singular value. <bookmark mark='b'/> Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k pieces. No other choice comes closer. That's the Eckart–Young theorem, from 1936.",
-   "zh": "还不止这些。把这个分解展开来写，它说的是：任何矩阵都是一些简单小块之和，<bookmark mark='a'/>每一块都是一列乘以一行，再以一个奇异值作为权重。<bookmark mark='b'/>留下最大的k块，丢掉其余的，就得到只用k块拼成的、最接近原矩阵的矩阵。没有别的选法能更接近。这就是埃卡特–扬定理，1936年提出。"
+   "en": "There's more. Written out, the decomposition says that any matrix is a sum of simple pieces, <bookmark mark='a'/> each one a column times a row, weighted by a singular value. How many pieces a table needs is its rank, and a low-rank table is one that a few pieces build. <bookmark mark='b'/> Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k pieces. No other choice comes closer. That's the Eckart–Young theorem, from 1936.",
+   "zh": ""
   },
   "6f5416e0575d": {
    "scene": "LowRank",
    "en": "Here's a real matrix: part one's table of letter pairs, twenty-six letters by twenty-six. <bookmark mark='a'/> The first piece alone already has the broad shape: it's the table you'd get if the next letter didn't care what came before. <bookmark mark='b'/> Add the second piece, the third, the fifth, the tenth, <bookmark mark='c'/> and the error falls by exactly the singular values left out: 0.56 of the whole after one piece, 0.40 after two.",
    "zh": "来看一个真实的矩阵：第1部分的字母对表，26个字母乘26个字母。<bookmark mark='a'/>光是第一块，就已经有了大致的轮廓：如果下一个字母根本不在乎前面是什么，得到的就是这张表。<bookmark mark='b'/>加上第二块、第三块、第五块、第十块，<bookmark mark='c'/>误差随之下降，剩下多少，恰好由被丢掉的那些奇异值决定：只留一块时，是整体的0.56，留两块时，是0.40。"
   },
-  "560e2c5eea31": {
+  "7439ec1b09d5": {
    "scene": "LowRank",
-   "en": "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence, and spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants take turns.",
-   "zh": "这些小块也有含义。<bookmark mark='a'/>取出这张表偏离独立性的那部分，把字母沿着它最强的方向排开。<bookmark mark='b'/>一端是：i、a、o、u、e。没有人告诉计算机什么是元音。光凭计数，它就发现了元音和辅音是轮流出现的。"
+   "en": "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence: compare each count with what you'd expect if letters ignored their neighbours, and keep only the surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants take turns.",
+   "zh": ""
   },
   "987f09a089ec": {
    "scene": "Words",
@@ -189,10 +189,15 @@
    "en": "Directions mean something too. <bookmark mark='a'/> Start at France, and step to Paris. Then take the same step, starting from England. <bookmark mark='b'/> The nearest word to where you land is London. Man is to king as woman is to: duke first, then queen. Novels from the nineteenth century had their own ideas.",
    "zh": "方向也有含义。<bookmark mark='a'/>从france出发，走到paris。再从england出发，迈出同样的一步。<bookmark mark='b'/>离落脚点最近的词，是london。man之于king，正如woman之于什么？排第一的是duke，公爵；然后才是queen，女王。19世纪的小说，自有它们的想法。"
   },
-  "213ccb730862": {
+  "637499f3fa01": {
    "scene": "Words",
-   "en": "In 2013, Tomas Mikolov and his colleagues at Google trained word vectors another way: with a guessing game. From each word, guess the words around it. <bookmark mark='a'/> That's word2vec. We trained it on the same books, for three passes. <bookmark mark='b'/> For common words, its neighbours agree with the counting method's. <bookmark mark='c'/> And in 2014, Omer Levy and Yoav Goldberg showed why: word2vec is quietly factorizing the very same table of mutual information. Guessing and counting meet again.",
-   "zh": "2013年，托马斯·米科洛夫和他在谷歌的同事，用另一种办法训练词向量：一个猜词游戏。从每个词出发，猜它周围的词。<bookmark mark='a'/>这就是word2vec。我们在同样的书上训练了它，过了3遍。<bookmark mark='b'/>对常见的词，它找到的近邻，和计数方法找到的一致。<bookmark mark='c'/>2014年，奥默·列维与约阿夫·戈德堡说明了原因：word2vec其实是在悄悄分解同一张互信息表。猜测和计数，又一次相遇了。"
+   "en": "In 2013, Tomas Mikolov and his colleagues at Google trained word vectors another way: with a guessing game. From each word, guess the words around it. <bookmark mark='a'/> That's word2vec. We trained it on the same books, for three passes. <bookmark mark='b'/> For common words, its neighbours agree with the counting method's. <bookmark mark='c'/> And in 2014, Omer Levy and Yoav Goldberg showed why: word2vec is quietly factorizing the very same table of mutual information, writing that huge table as the product of two thin ones, a hundred numbers per word. Guessing and counting meet again.",
+   "zh": ""
+  },
+  "e677bf3bd53b": {
+   "scene": "Words",
+   "en": "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during training. Training goes in steps: each step looks at a small batch of examples, and nudges the vectors once. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. <bookmark mark='b'/> After only 36 steps, most words' neighbours are the commonest words in the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four, eyes with face, cheek, lips. <bookmark mark='d'/> By the end, Monday sits with Tuesday, three with two, four, five, father with son and mother: nothing told it what a day or a number is; only which words keep company.",
+   "zh": ""
   },
   "54c4910e5cc0": {
    "scene": "HighDim",
@@ -204,10 +209,10 @@
    "en": "Our intuition comes from three dimensions, and in seven hundred and sixty-eight it misleads us. <bookmark mark='a'/> Pick two directions at random. In two dimensions, the angle between them could be anything. <bookmark mark='b'/> In three, angles near a right angle are already the most common. <bookmark mark='c'/> In a hundred, it's almost always within ten degrees of one, <bookmark mark='d'/> and in 768, within about four.",
    "zh": "我们的直觉来自三维，到了768维，它会误导我们。<bookmark mark='a'/>随机取两个方向。在二维里，它们的夹角可以是任何值。<bookmark mark='b'/>在三维里，接近直角的夹角已经是最常见的了。<bookmark mark='c'/>在100维里，夹角几乎总是和直角相差不到10度，<bookmark mark='d'/>而在768维里，相差大约不到4度。"
   },
-  "9128d53a5a36": {
+  "9e74ad9fd378": {
    "scene": "HighDim",
-   "en": "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 dimensions: every pair of them lies between seventy-nine and a hundred and one degrees apart. <bookmark mark='b'/> A model can keep far more features than it has dimensions, as long as they only need to be nearly perpendicular. That idea, superposition, is how we'll read the inside of a model in part twenty.",
-   "zh": "所以，高维空间里有的是地方。<bookmark mark='a'/>768维里的1万个随机方向：任意两个之间的夹角，都在79度到101度之间。<bookmark mark='b'/>模型能存下的特征，可以远远多于它的维数，只要这些特征彼此只需近似垂直。这个想法叫叠加，到第20部分，我们就靠它来读懂模型的内部。"
+   "en": "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 dimensions: every pair of them lies between seventy-nine and a hundred and one degrees apart. <bookmark mark='b'/> A feature is one idea a model keeps track of, stored as a direction. A model can keep far more features than it has dimensions, as long as their directions only need to be nearly perpendicular. Packing in more directions than dimensions this way is called superposition, and it's how we'll read the inside of a model in part twenty.",
+   "zh": ""
   },
   "b08dc1b99bcb": {
    "scene": "HighDim",
@@ -229,10 +234,10 @@
    "en": "Here's a consequence that sounds impossible. <bookmark mark='a'/> Take a thousand of GPT-2's vectors, and multiply them all by the same random matrix, crushing 768 numbers down to a few. <bookmark mark='b'/> Down to two, distances are scrambled. Five, twenty: better. <bookmark mark='c'/> At a hundred, 84 percent of the distances move by less than ten percent, and at four hundred, almost all of them.",
    "zh": "有一个推论，听起来简直不可能。<bookmark mark='a'/>取GPT-2的1000个向量，全都乘以同一个随机矩阵，把768个数压到只剩几个。<bookmark mark='b'/>压到2个，距离全乱了。5个、20个：好一些。<bookmark mark='c'/>到100个时，84%的距离变化不到10%，到400个时，几乎全部都是这样。"
   },
-  "a10df273923a": {
+  "ceee9f335cd3": {
    "scene": "JL",
-   "en": "That's the Johnson–Lindenstrauss lemma, from 1984. <bookmark mark='a'/> To keep the distances among n points within a factor of one plus or minus epsilon, a random projection to about the log of n over epsilon squared dimensions is enough, whatever dimension you started from. <bookmark mark='b'/> The guarantee is cautious: for our thousand points it asks for five and a half thousand, and four hundred already did the job. <bookmark mark='c'/> The reason it works is the concentration we just saw: a random projection of a vector has nearly the same length, every time.",
-   "zh": "这就是约翰逊–林登施特劳斯引理，1984年提出。<bookmark mark='a'/>要让n个点之间的距离，都保持在1加减ε倍的范围内，只要随机投影到大约n的对数除以ε的平方那么多维就够了，不管一开始是多少维。<bookmark mark='b'/>这个保证很保守：对我们这1000个点，它要求5500维，而400维就已经做到了。<bookmark mark='c'/>它之所以管用，靠的正是我们刚才看到的集中现象：一个向量的随机投影，每次的长度都几乎一样。"
+   "en": "That's the Johnson–Lindenstrauss lemma, from 1984. <bookmark mark='a'/> To keep the distances among n points within a factor of one plus or minus epsilon, the error we allow, say ten percent, a random projection to about the log of n over epsilon squared dimensions is enough, whatever dimension you started from. <bookmark mark='b'/> The guarantee is cautious: for our thousand points it asks for five and a half thousand, and four hundred already did the job. <bookmark mark='c'/> The reason it works is the concentration we just saw: a random projection of a vector has nearly the same length, every time.",
+   "zh": ""
   },
   "a3ee7f23966c": {
    "scene": "Outro",
@@ -253,11 +258,6 @@
    "scene": "Outro",
    "en": "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, and Roman Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. The papers are on screen. Thanks for watching, and see you in part three.",
    "zh": "想了解更多，吉尔伯特·斯特朗的《线性代数与数据学习》是一本亲切的读物，罗曼·韦尔希宁的《高维概率》则解释了大空间为什么会有这样的表现。论文都列在屏幕上。感谢观看，第3部分见。"
-  },
-  "545747be41f0": {
-   "scene": "Words",
-   "en": "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. <bookmark mark='b'/> After only 36 steps, most words' neighbours are the commonest words in the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four, eyes with face, cheek, lips. <bookmark mark='d'/> By the end, Monday sits with Tuesday, three with two, four, five, father with son and mother: nothing told it what a day or a number is; only which words keep company.",
-   "zh": "看看word2vec是怎么学的。这是四个词和它们最近的五个邻居，在训练途中的几个检查点上。<bookmark mark='a'/>一开始，向量是随机的，邻居也是随机的。<bookmark mark='b'/>才过了36步，大多数词的邻居就成了书里最常见的词，比如they、is和all：每个批次都在推这些高频词，所以它们最先动起来。<bookmark mark='c'/>到第1089步，意义出现了：three和thirty、fifty、four在一起，eyes和face、cheek、lips在一起。<bookmark mark='d'/>到最后，Monday和Tuesday在一起，three和two、four、five在一起，father和son、mother在一起：没有任何东西告诉它什么是一天、什么是一个数；它知道的只是哪些词常常结伴出现。"
   }
  },
  "title_en": "AI, Built: Part 2, Vectors That Mean Things",

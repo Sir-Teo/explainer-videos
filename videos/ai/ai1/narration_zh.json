@@ -29,17 +29,17 @@
   "9b1c4fb41067": {
    "scene": "Hook",
    "en": "From counts like these, Shannon estimated how much information English really carries: about one bit per letter, a bit being the answer to one yes-or-no question, somewhere between 0.6 and 1.3, <bookmark mark='a'/> when a single letter, guessed blindly, could carry 4.75. Most of what we write is predictable.",
-   "zh": ""
+   "zh": "根据这样的计数，香农估算出英语到底携带多少信息：每个字母大约1比特，所谓1比特，就是一个是或否问题的答案，在0.6到1.3之间。<bookmark mark='a'/>而一个盲猜的字母，最多可以携带4.75比特。我们写下的东西，大部分是可以预测的。"
   },
   "f2116d87d5cd": {
    "scene": "Hook",
    "en": "Seventy-five years later, this guessing game is exactly what large language models are trained to play. Give one the start of a sentence, <bookmark mark='a'/> and it returns a probability for every possible next word. <bookmark mark='b'/> GPT-2, from 2019, with a hundred and twenty-four million parameters, the adjustable numbers inside it, gives Paris six percent. <bookmark mark='c'/> Qwen3, a 2025 model with four billion, gives it thirty-five.",
-   "zh": ""
+   "zh": "75年后，这个猜字游戏，正是大型语言模型被训练去玩的游戏。给它一个句子的开头，<bookmark mark='a'/>它就为每一个可能的下一个词，给出一个概率。<bookmark mark='b'/>2019年的GPT-2，有1.24亿个参数，也就是它内部那些可以调节的数，它给巴黎6%。<bookmark mark='c'/>2025年的模型Qwen3，有40亿个参数，给它35%。"
   },
   "f2454f1acc1a": {
    "scene": "Hook",
    "en": "Strictly, what a model guesses is the next token. <bookmark mark='a'/> A token is the chunk of text a model guesses at one time: a whole word, a piece of a word, or a punctuation mark. Here is a line of a 1930 novel, cut the way GPT-2 cuts it. Paris, with the space in front of it, is a single token.",
-   "zh": ""
+   "zh": "严格地说，模型猜的是下一个词元。<bookmark mark='a'/>词元，就是模型一次猜出的一小块文本：可以是一个完整的词，一个词的一部分，或者一个标点符号。这是一部1930年小说里的一行，按GPT-2的方式切开。Paris，连同它前面的空格，是单独一个词元。"
   },
   "71b9a376c323": {
    "scene": "Hook",
@@ -134,7 +134,7 @@
   "dcfbd6f6ab1c": {
    "scene": "Surprise",
    "en": "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. What should s be? <bookmark mark='a'/> Shannon asked for a few modest things. It should depend only on p. <bookmark mark='b'/> It should go down as p goes up, and a certain event should be no surprise at all. <bookmark mark='c'/> For independent events, where learning one tells you nothing about the other, so their probabilities multiply, surprises should add: <bookmark mark='d'/> a coin landing heads and a die showing five, together, should be exactly as surprising as each one, added up. <bookmark mark='e'/> And small changes in p should make small changes in s.",
-   "zh": ""
+   "zh": "我们把这个想法变成数学。把概率为p的事件的意外度记作s(p)。s应该是什么样的？<bookmark mark='a'/>香农提出了几条很朴素的要求。它应该只取决于p。<bookmark mark='b'/>p越大，它应该越小，一件必然发生的事，应该毫不意外。<bookmark mark='c'/>对独立事件，也就是知道其中一个，对另一个毫无帮助，所以它们的概率相乘，意外度应该相加：<bookmark mark='d'/>硬币正面朝上，同时骰子掷出5，这两件事一起的意外度，应该恰好等于各自的意外度之和。<bookmark mark='e'/>还有，p的微小变化，只应带来s的微小变化。"
   },
   "e685234be958": {
    "scene": "Surprise",
@@ -229,7 +229,7 @@
   "0d98cfc9f5a2": {
    "scene": "Codes",
    "en": "Prefix-free codes obey one budget, and there's a beautiful way to see it. Read a codeword as the start of a binary fraction: a number between zero and one, written in halves, where each digit says whether to keep the left half of what's left, for zero, or the right half, for one. <bookmark mark='a'/> The codeword one, one, zero: right half, right half again, then left. It stands for all the numbers between zero and one whose binary expansion begins point one one zero: an interval of width two to the minus three. <bookmark mark='b'/> A codeword of length l claims an interval of width two to the minus l.",
-   "zh": ""
+   "zh": "无前缀码要遵守一个预算，有一种很漂亮的方式能看出来。把码字读成一个二进制小数的开头：这是0和1之间的一个数，按一半一半来写，每一位数字告诉你，在剩下的范围里，是保留左半边，记作0，还是保留右半边，记作1。<bookmark mark='a'/>码字1、1、0：右半边，再右半边，然后左半边。它代表0和1之间、二进制展开以0.110开头的所有数：一个宽度为2的负3次方的区间。<bookmark mark='b'/>长度为l的码字，占据宽度为2的负l次方的区间。"
   },
   "a10ace4f7ab2": {
    "scene": "Codes",
@@ -284,12 +284,12 @@
   "f8d77bd85428": {
    "scene": "CrossEntropy",
    "en": "Is being wrong always a cost? Yes, and the proof rests on one fact: <bookmark mark='a'/> the natural log, ln, the logarithm to base e, about 2.718, lies below its tangent line at one. ln x is at most x minus one. <bookmark mark='b'/> Write minus the divergence in natural logs, so it's counted in nats instead of bits, one nat being about 1.44 bits; <bookmark mark='c'/> apply that inequality to each term, <bookmark mark='d'/> multiply out, <bookmark mark='e'/> and both sums are one.",
-   "zh": ""
+   "zh": "犯错一定有代价吗？是的，证明只依赖一个事实：<bookmark mark='a'/>自然对数ln，也就是以e为底的对数，e约等于2.718，它的曲线位于它在1处的切线下方。ln x至多是x减1。<bookmark mark='b'/>用自然对数写出负的散度，这样它就以奈特而不是比特为单位，1奈特约等于1.44比特；<bookmark mark='c'/>对每一项用这个不等式，<bookmark mark='d'/>乘开，<bookmark mark='e'/>两个和都等于1。"
   },
   "d82c0e6cb1ea": {
    "scene": "CrossEntropy",
    "en": "So the divergence is never negative, and it's zero only when q equals p. <bookmark mark='a'/> The truth is the best code. And this pays the debt from chapter three: <bookmark mark='b'/> the drop in entropy from knowing X is a divergence too, so it can't be negative. Knowing more never hurts, on average. <bookmark mark='c'/> That drop has a name, the mutual information: how many bits knowing X saves you when guessing Y, the overlap of what the two carry. It comes back in chapter ten.",
-   "zh": ""
+   "zh": "所以散度永远不会是负的，而且只有q等于p时才为零。<bookmark mark='a'/>真相就是最好的编码。这也还清了第3章欠下的账：<bookmark mark='b'/>知道X之后熵的下降量，也是一个散度，所以它不可能是负的。平均来说，知道得更多，永远没有坏处。<bookmark mark='c'/>这个下降量有个名字，叫互信息：猜Y的时候，知道X能帮你省下多少比特，也就是两者所携带信息的重叠部分。它会在第10章再次出现。"
   },
   "f676560e59d7": {
    "scene": "CrossEntropy",
@@ -299,7 +299,7 @@
   "72a984d94a43": {
    "scene": "CrossEntropy",
    "en": "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center is and how wide it is. Which bell curve is best? It depends on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the training loss we just met, <bookmark mark='b'/> pulls q wide, to cover both peaks.",
-   "zh": ""
+   "zh": "还有一个性质，后面会非常重要：散度是不对称的。假设真实分布p有两个峰，而我们的模型q只能是一条钟形曲线：一个平滑的鼓包，由它的中心在哪里、有多宽来决定。哪条钟形曲线最好？这取决于我们从哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚才遇到的训练损失，<bookmark mark='b'/>会把q拉宽，好盖住两个峰。"
   },
   "18e47e9e1242": {
    "scene": "CrossEntropy",
@@ -309,7 +309,7 @@
   "f8714561f437": {
    "scene": "CrossEntropy",
    "en": "Here are the two losses for every possible bell curve: its center across, its width up. <bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent, which again and again takes a small step in whichever direction lowers the loss fastest, finds the wide curve from anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each peak, and where you end up depends on where you start.",
-   "zh": ""
+   "zh": "这是对每一条可能的钟形曲线，两种损失的取值：横向是它的中心，纵向是它的宽度。<bookmark mark='a'/>按一个方向量，只有一个山谷。梯度下降一次又一次地朝着让损失下降最快的方向迈出一小步，从哪里出发都能找到那条宽曲线。<bookmark mark='b'/>按另一个方向量，有两个山谷，每个峰对应一个，最后落在哪里，取决于从哪里出发。"
   },
   "d9473976b741": {
    "scene": "Arithmetic",
@@ -449,12 +449,12 @@
   "a7b1c5a1a3c8": {
    "scene": "Likelihood",
    "en": "Counting doesn't generalize. Neural networks do. <bookmark mark='n'/> A neural network is a stack of simple steps: multiply by a table of numbers, then bend the result, and repeat, with all the numbers in the tables tuned until its guesses are good. Its guesses come out differently. For each possible next token, its last step computes a score, called a logit: <bookmark mark='a'/> any real number, positive or negative. <bookmark mark='b'/> To make probabilities, exponentiate: e to the z turns any number positive, and each step of one up multiplies it by about 2.7. <bookmark mark='c'/> Then divide by the total, so they add to one. That's the softmax. Bigger score, bigger probability, and nothing ever gets probability zero.",
-   "zh": ""
+   "zh": "计数不会泛化。神经网络会。<bookmark mark='n'/>神经网络是一叠简单的步骤：乘以一张数表，再把结果弯一弯，然后重复；表里所有的数都要不断调整，直到它猜得好为止。它给出猜测的方式不一样。对每一个可能的下一个词元，它的最后一步会算出一个分数，叫作logit：<bookmark mark='a'/>任意实数，可正可负。<bookmark mark='b'/>要变成概率，先取指数：e的z次方能把任何数变成正数，z每增加1，它就大约乘以2.7。<bookmark mark='c'/>再除以总和，让它们加起来等于1。这就是softmax。分数越高，概率越大，而且没有哪个会得到零概率。"
   },
   "1b6028f02f71": {
    "scene": "Likelihood",
    "en": "To learn, the network needs to know which way to nudge each score. <bookmark mark='n'/> That's what a derivative measures: how much the output moves when you nudge one input a tiny bit, holding the others still. <bookmark mark='a'/> Write the surprise of the right answer, y, in terms of the scores. <bookmark mark='b'/> Differentiate with respect to the score z k. The first term gives minus one if k is y. The second is the softmax itself. <bookmark mark='c'/> So the derivative is q k minus one, for the right answer, and q k, for every wrong one.",
-   "zh": ""
+   "zh": "要学习，网络需要知道每个分数该往哪边推。<bookmark mark='n'/>这正是导数衡量的东西：把一个输入轻轻推一点点，其他输入保持不动，输出会变化多少。<bookmark mark='a'/>用这些分数写出正确答案y的意外度。<bookmark mark='b'/>对分数z k求导。第一项在k等于y时给出负1。第二项就是softmax本身。<bookmark mark='c'/>所以导数是：对正确答案，q k减1；对每个错误答案，就是q k。"
   },
   "4426dec5aea8": {
    "scene": "Likelihood",
@@ -464,7 +464,7 @@
   "c19d45fa1f88": {
    "scene": "Likelihood",
    "en": "Here is gradient descent in action. Suppose the data are a hundred continuations of come, <bookmark mark='a'/> and the model starts with all five scores equal, so every guess is twenty percent. At each step, every score moves by minus eta times q minus p hat: up where the model under-guesses, down where it over-guesses. <bookmark mark='l'/> Eta is the learning rate, the size of each step: too small, and learning crawls; too large, and it overshoots the bottom. <bookmark mark='b'/> Let's run it.",
-   "zh": ""
+   "zh": "来看梯度下降的实际运行。假设数据是come后面的100种接续，<bookmark mark='a'/>模型一开始五个分数都相等，所以每个猜测都是20%。每一步，每个分数都移动负的η乘以q减p帽：模型猜少了的往上，猜多了的往下。<bookmark mark='l'/>η就是学习率，也就是每一步的大小：太小，学习就慢得像在爬；太大，又会冲过谷底。<bookmark mark='b'/>我们来运行一下。"
   },
   "0508d4749054": {
    "scene": "Likelihood",
@@ -479,7 +479,7 @@
   "da6b034b9a5b": {
    "scene": "Knowledge",
    "en": "Let's look at what a strong model knows that a weaker one doesn't. Here is one paragraph of the Falcon passage, broken into tokens, the chunks a model reads and guesses one at a time, <bookmark mark='a'/> each colored by how surprised GPT-2, from 2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under Qwen3, from 2025. Its tiles are darker almost everywhere: 350 bits instead of 446.",
-   "zh": ""
+   "zh": "我们来看看，一个强模型知道哪些弱模型不知道的东西。这是《马耳他之鹰》段落里的一段话，切成了词元，也就是模型一块一块读入、一块一块去猜的文本片段，<bookmark mark='a'/>每个词元按2019年的GPT-2对它有多意外来着色：意料之中是暗的，意料之外是亮的。<bookmark mark='b'/>同一段话放到2025年的Qwen3下。它的方块几乎处处更暗：350比特，而不是446比特。"
   },
   "08289fc56b43": {
    "scene": "Knowledge",
@@ -494,12 +494,12 @@
   "3d0a04368ce6": {
    "scene": "Knowledge",
    "en": "And the telephone points to something deep. How much does one letter tell you about a letter d places later? That's the mutual information from chapter five, measured here over all thirty books. <bookmark mark='a'/> Neighbors share three quarters of a bit. Inside a word, it falls fast. <bookmark mark='b'/> But then it doesn't vanish. It decays slowly, like a power of the distance, out to a thousand letters and beyond. On these axes, each tick is ten times the last, both across and up, so a power law shows up as a straight line.",
-   "zh": ""
+   "zh": "而那个telephone，指向一件很深刻的事。一个字母，能告诉你多少关于它后面第d个字母的信息？这就是第5章的互信息，这里在全部30本书上测量。<bookmark mark='a'/>相邻的两个字母共享四分之三比特。在一个词的内部，它下降得很快。<bookmark mark='b'/>但随后它并没有消失。它像距离的幂一样缓慢衰减，一直延伸到一千个字母，甚至更远。在这两条坐标轴上，横向和纵向的每一格刻度，都是上一格的10倍，所以幂律会显示成一条直线。"
   },
   "88ed49b977aa": {
    "scene": "Knowledge",
    "en": "A counting model can't produce a tail like that: the influence of anything outside its few letters of context is cut off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking by the same factor with every letter, which on these axes plunges straight off the bottom. <bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way to find the parts of the past that matter. That's what attention is for, in part eleven.",
-   "zh": ""
+   "zh": "计数模型产生不了这样的长尾：它那几个字母上下文之外的一切影响都被切断了，它所建模的依赖关系按指数衰减，<bookmark mark='x'/>每多隔一个字母，就按同样的倍数缩小，在这两条坐标轴上，它会直直地掉出图的底部。<bookmark mark='a'/>真实的文本，在每一个距离上都会回报你记住的东西。要猜得好，模型需要长久的记忆，还需要一种办法，找到过去中真正要紧的部分。这就是注意力的用处，在第11部分。"
   },
   "7b47ab508f5f": {
    "scene": "Knowledge",
