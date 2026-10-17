@@ -293,15 +293,22 @@ def centers(frames):
     return np.stack([(f * yy).sum((-1, -2)) / w, (f * xx).sum((-1, -2)) / w], -1)
 
 
-def coherence(judge, clips, want):
-    """Per clip: does every frame show the letter asked for, and how jerky is the motion (mean |second difference|)."""
+def jerk_of(clips):
+    """Median over clips of the mean |second difference| of the letter's centre (pixels, both axes summed)."""
+    c = np.stack([centers(cl) for cl in clips])
+    return float(np.median(np.abs(np.diff(c, 2, axis=1)).sum(-1).mean(1)))
+
+
+def coherence(judge, clips, want, skip=1):
+    """Scores on frames ``skip`` onward (frame 0 is the given, real one): per frame, the share of clips whose frame
+    the judge reads as the right letter; whether every scored frame of a clip is right; and how jerky the motion of
+    the scored frames is (median over clips of the mean |second difference| of the letter's centre)."""
+    clips = np.asarray(clips)[:, skip:]
     T = clips.shape[1]
     s = judge_scores(judge, clips.reshape(-1, GL, GL))
     pred, conf = s["pred"].reshape(-1, T), s["conf"].reshape(-1, T)
     right = (pred == np.asarray(want)[:, None]) & (conf > 0.5)
-    c = np.stack([centers(cl) for cl in clips])
-    jerk = np.abs(np.diff(c, 2, axis=1)).sum(-1).mean(1)
-    return dict(all_right=float(right.all(1).mean()), frame_right=right.mean(0), jerk=float(np.median(jerk)))
+    return dict(all_right=float(right.all(1).mean()), frame_right=right.mean(0), jerk=jerk_of(clips))
 
 
 class ClipNet:
@@ -366,35 +373,49 @@ class ClipNet:
         return Net()
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0):
-    """mode: 'clip' (full attention, one noise level for the clip), 'teacher' (causal; earlier frames clean, one frame
-    noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all)."""
+def clip_levels(mode, B, T, g):
+    """Each training clip's noise levels t (B, T) and loss weights w (B, T). Frame 0 is always given clean (t = 1, the
+    data end of x_t = (1 - t) noise + t data) and is never a target: image-to-video."""
+    import torch
+
+    ar = torch.arange(T)[None]
+    first = ar == 0
+    if mode == "clip":  # the frames after the first share one noise level
+        t = torch.rand(B, 1, generator=g).expand(B, T)
+        w = torch.ones(B, T)
+    elif mode == "forcing":  # every frame after the first its own level
+        t = torch.rand(B, T, generator=g)
+        w = torch.ones(B, T)
+    else:  # teacher: frames before f clean (frame 0 always among them), frame f noised and learned
+        f = torch.randint(1, T, (B,), generator=g)
+        t = torch.where(ar < f[:, None], torch.ones(B, T), torch.rand(B, 1, generator=g).expand(B, T))
+        w = (ar == f[:, None]).float()
+    return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
+
+
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True):
+    """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
+    frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
+    In every mode the first frame is given clean and never learned."""
+    import time
+
     import torch
 
     torch.manual_seed(seed)
     T = clips.shape[1]
     m = ClipNet(T=T, causal=mode != "clip")
-    opt = torch.optim.AdamW(m.parameters(), lr=1e-3, weight_decay=0.0)
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-3, total_steps=steps(n_steps), pct_start=0.3 if QUICK else 0.05)
+    opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=0.0)
+    n = steps(n_steps)
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=n, pct_start=0.3 if QUICK else 0.05)
     X = torch.tensor(clips * 2 - 1)
     Yl = torch.tensor(lab)
     g = torch.Generator().manual_seed(seed)
-    B = 24
-    for _ in range(steps(n_steps)):
+    t0, run = time.time(), []
+    for st in range(1, n + 1):
         i = torch.randint(0, len(X), (B,), generator=g)
         x1, y = X[i], Yl[i]
         x0 = torch.randn(x1.shape, generator=g)
-        if mode == "clip":
-            t = torch.rand(B, 1, generator=g).expand(B, T)
-            w = torch.ones(B, T)
-        elif mode == "forcing":
-            t = torch.rand(B, T, generator=g)
-            w = torch.ones(B, T)
-        else:
-            f = torch.randint(0, T, (B,), generator=g)
-            ar = torch.arange(T)[None]
-            t = torch.where(ar < f[:, None], torch.ones(B, T), torch.rand(B, 1, generator=g).expand(B, T))
-            w = (ar == f[:, None]).float()
+        t, w = clip_levels(mode, B, T, g)
         xt = (1 - t[..., None, None]) * x0 + t[..., None, None] * x1
         err = ((m(xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
         loss = (err * w).sum() / w.sum()
@@ -402,34 +423,45 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0):
         loss.backward()
         opt.step()
         sched.step()
+        run.append(float(loss))
+        if log and st % 500 == 0:
+            print(f"      {mode} step {st}: loss {np.mean(run):.4f} ({time.time() - t0:.0f}s)", flush=True)
+            run = []
     m.eval()
     return m
 
 
-def sample_clip(m, y, T, n_steps=30, seed=0):
+def sample_clip(m, first, y, n_steps=30, seed=0):
+    """Image-to-video: frame 0 held at the given real frame (clean, t = 1); frames 1 .. T-1 denoised together from
+    noise. ``first`` (B, 20, 20) in [0, 1]."""
     import torch
 
     gen = torch.Generator().manual_seed(seed)
-    B = len(y)
+    B, T = len(y), m.T
+    f0 = torch.tensor(np.asarray(first, np.float32) * 2 - 1)
     x = torch.randn(B, T, GL, GL, generator=gen)
-    yy = torch.tensor(y)
+    x[:, 0] = f0
+    yy = torch.tensor(np.asarray(y))
     with torch.no_grad():
         for k in range(n_steps):
             t = torch.full((B, T), k / n_steps)
+            t[:, 0] = 1.0
             x = x + m(x, t, yy) / n_steps
+            x[:, 0] = f0
     return ((x.numpy() + 1) / 2).clip(0, 1)
 
 
-def rollout(m, y, n_frames, window, n_steps=24, seed=0):
-    """Write frames one after another: the earlier frames (at most window - 1 of them) clean, the new one denoised."""
+def rollout(m, first, y, n_frames, window, n_steps=24, seed=0):
+    """Start from the given real frame and write frames 1 .. n_frames-1 one after another: the earlier frames (at most
+    window - 1 of them) clean, the new one denoised."""
     import torch
 
     gen = torch.Generator().manual_seed(seed)
     B = len(y)
-    yy = torch.tensor(y)
-    done = []
+    yy = torch.tensor(np.asarray(y))
+    done = [torch.tensor(np.asarray(first, np.float32) * 2 - 1)[:, None]]
     with torch.no_grad():
-        for f in range(n_frames):
+        for f in range(1, n_frames):
             ctx = done[-(window - 1):]
             new = torch.randn(B, 1, GL, GL, generator=gen)
             for k in range(n_steps):
@@ -441,36 +473,53 @@ def rollout(m, y, n_frames, window, n_steps=24, seed=0):
 
 
 def compute_clips():
+    """Image-to-video on the bouncing letters: every model is given a real first frame (from a held-out font) and
+    draws what follows. Every score below is on the generated frames only; the given first frame is left out."""
+    import time
+
     import torch
 
     torch.set_num_threads(3)
-    T = 8
+    T, n_test = 8, 48
     clips, lab = make_clips(6000 if not QUICK else 64, T, seed=0)
-    test_clips, test_lab = make_clips(8, T, seed=1, split="test")
+    test_clips, test_lab = make_clips(n_test, T, seed=1, split="test")  # unseen fonts: their first frames are given
+    first = test_clips[:, 0]
     judge = clip_judge()
-    real = coherence(judge, make_clips(200, T, seed=2, split="test")[0], make_clips(200, T, seed=2, split="test")[1])
-    out = dict(T=T, real_all_right=real["all_right"], real_frames_right=float(real["frame_right"].mean()), real_jerk=real["jerk"],
-               examples=test_clips[:4])
-    print(f"    real clips: every frame recognized {100 * real['all_right']:.0f}%, jerk {real['jerk']:.2f}px", flush=True)
-    want = np.arange(16) % 26
-    # 1. the clip model, against the same model's frames taken from 8 different samples (frame by frame, independently)
-    m = train_clipnet("clip", clips, lab, 3500, seed=0)
-    S = sample_clip(m, want, T, seed=3)
-    indep = np.stack([sample_clip(m, want, T, seed=10 + f)[:, f] for f in range(T)], 1)
+    rc, rl = make_clips(200, T, seed=2, split="test")
+    real = coherence(judge, rc, rl)
+    out = dict(T=T, n_test=n_test, real_all_right=real["all_right"], real_frames_right=float(real["frame_right"].mean()),
+               real_jerk=real["jerk"], examples=test_clips[:4], given=test_clips[:6], given_labels=test_lab[:6])
+    print(f"    real clips (frames 1-{T - 1}): letter right {100 * out['real_frames_right']:.0f}% of frames, "
+          f"jerk {real['jerk']:.2f}px", flush=True)
+    # 1. the clip model, against the same model's frames taken from different samples (each frame drawn on its own)
+    t0 = time.time()
+    m = train_clipnet("clip", clips, lab, 4000, seed=0)
+    print(f"    clip model trained in {time.time() - t0:.0f}s", flush=True)
+    S = sample_clip(m, first, test_lab, seed=3)
+    indep = S.copy()
+    for f in range(1, T):
+        indep[:, f] = sample_clip(m, first, test_lab, seed=10 + f)[:, f]
     for name, c in (("joint", S), ("indep", indep)):
-        r = coherence(judge, c, want)
+        r = coherence(judge, c, test_lab)
         out[f"{name}_all_right"], out[f"{name}_jerk"], out[f"{name}_clips"] = r["all_right"], r["jerk"], c[:6]
         out[f"{name}_frames_right"] = float(r["frame_right"].mean())
-        print(f"    {name}: every frame right {100 * r['all_right']:.0f}%, jerk {r['jerk']:.2f}px", flush=True)
-    # 2. frame after frame, trained 8 frames long, rolled out to 32: teacher forcing against diffusion forcing
+        print(f"    {name}: letter right {100 * out[f'{name}_frames_right']:.0f}% of frames, every frame right "
+              f"{100 * r['all_right']:.0f}%, jerk {r['jerk']:.2f}px", flush=True)
+    # 2. frame after frame, trained 8 frames long, rolled out to 32 from the given frame: teacher against diffusion forcing
     long = 4 * T
     for mode in ("teacher", "forcing"):
-        mm = train_clipnet(mode, clips, lab, 3500, seed=1)
-        R = rollout(mm, want, long, window=T, seed=4)
-        r = coherence(judge, R, want)
-        out[f"{mode}_frame_right"], out[f"{mode}_jerk"], out[f"{mode}_rollout"] = r["frame_right"], r["jerk"], R[:6]
-        print(f"    {mode}: recognized in the first 8 frames {100 * r['frame_right'][:T].mean():.0f}%, "
-              f"in the last 8 {100 * r['frame_right'][-T:].mean():.0f}%; jerk {r['jerk']:.2f}px", flush=True)
+        t0 = time.time()
+        mm = train_clipnet(mode, clips, lab, 4000, seed=1)
+        print(f"    {mode} model trained in {time.time() - t0:.0f}s", flush=True)
+        R = rollout(mm, first, test_lab, long, window=T, seed=4)
+        r = coherence(judge, R, test_lab)
+        fr = r["frame_right"]  # generated frames 1 .. long-1
+        out[f"{mode}_frame_right"], out[f"{mode}_jerk"], out[f"{mode}_rollout"] = fr, r["jerk"], R[:6]
+        out[f"{mode}_early_right"], out[f"{mode}_late_right"] = float(fr[:T].mean()), float(fr[-T:].mean())
+        out[f"{mode}_early_jerk"], out[f"{mode}_late_jerk"] = jerk_of(R[:, 1:T + 1]), jerk_of(R[:, -T:])
+        print(f"    {mode}: letter right in generated frames 1-{T} {100 * out[f'{mode}_early_right']:.0f}%, "
+              f"in {long - T}-{long - 1} {100 * out[f'{mode}_late_right']:.0f}%; jerk {out[f'{mode}_early_jerk']:.2f}px, "
+              f"then {out[f'{mode}_late_jerk']:.2f}px (all {r['jerk']:.2f}px)", flush=True)
     out["long"] = long
     return out
 

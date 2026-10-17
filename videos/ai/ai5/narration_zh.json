@@ -31,7 +31,7 @@
   "61a0694c7cab": {
    "scene": "Hook",
    "en": "These are the classics: least squares, logistic regression, nearest neighbours, support vector machines, trees and their forests. Regression is just the old name for fitting a formula to data. <bookmark mark='a'/> Act two of the series, learning, starts here, and every method is a few lines of numpy, Python's standard library for arrays of numbers.",
-   "zh": ""
+   "zh": "这些都是经典方法：最小二乘法、逻辑回归、最近邻、支持向量机，还有决策树和由树组成的森林。回归，不过是“用一个公式去拟合数据”的老叫法。<bookmark mark='a'/>本系列的第二幕，学习，就从这里开始，而每一种方法，都只是几行numpy代码；numpy是Python处理数值数组的标准库。"
   },
   "02aab3789b41": {
    "scene": "LeastSquares",
@@ -46,12 +46,12 @@
   "aed85007d54c": {
    "scene": "LeastSquares",
    "en": "There's a beautiful way to see the answer. Write the three heights as a single point in three dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together form a plane: everything you can reach by mixing a column of ones, which shifts the line up and down, with the column of x's, which tilts it. <bookmark mark='b'/> The best line is the point of that plane closest to the data. Drop a perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at right angles to both columns: the misses have no shift and no tilt left in them that the line could still fix. Write that down, and you have the normal equations, which give the best line directly, no searching needed.",
-   "zh": ""
+   "zh": "有一种很美的方式来看这个答案。把三个高度写成三维空间里的一个点。<bookmark mark='a'/>每一条可能的直线都给出三个预测，所有这些预测合在一起，构成一个平面：也就是把一列1和一列x混合起来，所能到达的一切地方；那一列1让直线上下平移，那一列x让它倾斜。<bookmark mark='b'/>最好的直线，就是这个平面上离数据最近的那个点。从数据向平面作一条垂线。<bookmark mark='c'/>垂直，意味着剩下的那部分，与这两列都成直角：这些偏差里，已经没有直线还能修正的平移或倾斜了。把这一点写下来，就得到了正规方程，它直接给出最好的直线，根本不需要搜索。"
   },
   "7d92b9c6945b": {
    "scene": "LeastSquares",
    "en": "Here's least squares on real data. Count every word in part one's books, and rank them, from the commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the line explains 99.6 percent of the variation: <bookmark mark='c'/> of all the scatter of the points around their average height, the line accounts for everything but a sliver.",
-   "zh": ""
+   "zh": "这是最小二乘法用在真实数据上。把第1部分那些书里的每个词都数一遍，再从最常见的往下排名。<bookmark mark='a'/>两条坐标轴都取对数刻度，最常见的1000个词，几乎恰好落在一条直线上。<bookmark mark='b'/>最小二乘的斜率是负1.08：第r常见的词，出现的次数大约是第一名的r分之1。这就是齐普夫定律，而这条直线解释了99.6%的变化：<bookmark mark='c'/>这些点围绕它们平均高度的所有散布里，这条直线解释了几乎全部，只剩下薄薄的一丝。"
   },
   "324293398861": {
    "scene": "Logistic",
@@ -71,7 +71,7 @@
   "df3042e6c79e": {
    "scene": "Logistic",
    "en": "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. <bookmark mark='c'/> A convex loss is shaped like a single bowl: it has one bottom, and every downhill path ends there, so where it settles doesn't depend on where it started.",
-   "zh": ""
+   "zh": "那条线是怎么找到的？靠在交叉熵上做梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。<bookmark mark='c'/>凸的损失，形状就像一只碗：它只有一个谷底，每一条下坡路都通向那里，所以它停在哪里，和从哪里出发无关。"
   },
   "368316b17944": {
    "scene": "Logistic",
@@ -106,7 +106,7 @@
   "395b1a0ce5b0": {
    "scene": "LDA",
    "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. When each group is a bell of the same shape, this cut is exactly the best one possible.",
-   "zh": ""
+   "zh": "最好的方向有一个公式：两个中心之差，再用每位作者内部散布的逆来校正。<bookmark mark='w'/>这个校正的意思是：把空间拉伸，直到每位作者的点云都变成圆的，再从一个中心指向另一个中心。<bookmark mark='a'/>在这里，它主要依靠“not”。<bookmark mark='b'/>在两堆的正中间切一刀，就得到一个分类器。它能判对82%的测试页，和逻辑回归一样。当每一组都是形状相同的钟形分布时，这一刀恰好就是可能的最好切法。"
   },
   "098330a93727": {
    "scene": "KNN",
@@ -136,12 +136,12 @@
   "7322201d0c77": {
    "scene": "SVM",
    "en": "For groups that no straight line can separate, there's a trick. <bookmark mark='a'/> Lift each point into a third dimension, at a height equal to its squared distance from the centre. <bookmark mark='b'/> Now a flat plane separates them. <bookmark mark='c'/> And seen from above, that plane cuts out a circle. <bookmark mark='d'/> The kernel trick does this without ever computing the lifted points. The method only needs dot products between them, and a kernel, a similarity score computed straight from two original points, supplies those directly, even for infinitely many dimensions.",
-   "zh": ""
+   "zh": "对于任何直线都分不开的两组，有一个技巧。<bookmark mark='a'/>把每个点抬进第三个维度，高度等于它到中心距离的平方。<bookmark mark='b'/>现在，一个平面就能把它们分开。<bookmark mark='c'/>而从正上方看，这个平面切出的是一个圆。<bookmark mark='d'/>核技巧做到这一点，却从来不用算出抬升后的点。这个方法只需要它们之间的点积，而核函数，一种直接由两个原始点算出的相似度，能直接给出这些点积，哪怕维数是无穷多。"
   },
   "e498aa4a390c": {
    "scene": "SVM",
    "en": "Back to the pages, with a Gaussian kernel: a similarity score between two pages that's one when they're identical, and fades towards zero as they move apart. The boundary bends wherever the data asks it to. <bookmark mark='a'/> On new pages, 83 percent right with two rates. <bookmark mark='b'/> With all seventy, 99.5 percent, the same as logistic regression.",
-   "zh": ""
+   "zh": "回到书页上，这次用高斯核：它给两页打一个相似度，两页完全相同时是1，离得越远，就越趋近于0。数据要它在哪里弯，边界就在哪里弯。<bookmark mark='a'/>在新的书页上，只用两个词频，判对83%。<bookmark mark='b'/>用全部70个，99.5%，和逻辑回归一样。"
   },
   "dae9e1ff20bc": {
    "scene": "Trees",
@@ -161,7 +161,7 @@
   "e1af26efd678": {
    "scene": "Trees",
    "en": "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in 2001: grow hundreds. Give each a random resample of the pages: <bookmark mark='r'/> draw pages from the pile at random, putting each one back, so some come twice and some not at all, and each tree sees a slightly different pile. Give each, too, only a random handful of words to choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full tree gets 94 percent of new pages right. <bookmark mark='b'/> A forest of two hundred gets 98.",
-   "zh": ""
+   "zh": "一棵树很脆弱：改动几个训练页，长出来的就是另一棵树。2001年，利奥·布雷曼给出的答案是：种几百棵。每棵树用书页的一份随机重抽样：<bookmark mark='r'/>从这堆书页里随机抽，每抽一页就放回去，所以有的页会抽到两次，有的一次也抽不到，每棵树看到的那堆书页都略有不同。另外，每问一个问题时，每棵树也只能从随机挑出的几个词里选，然后让它们投票。<bookmark mark='a'/>用全部70个词频，一棵长满的树，能判对94%的新的书页。<bookmark mark='b'/>一片200棵树的森林，判对98%。"
   },
   "d7efdd56fadf": {
    "scene": "Trees",
