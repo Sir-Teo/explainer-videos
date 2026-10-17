@@ -26,6 +26,7 @@ class Hook(VoiceoverScene):
 
         def upd_int(m):
             m.set_value(int(n.get_value()))
+            counter[2].next_to(m, RIGHT, buff=0.4)  # the number grows wider: keep the next label clear of it
 
         def upd_mem(m):
             m.become(MathTex(gib(max(n.get_value(), 1) * per), font_size=36, color=C.SURPRISE).next_to(counter[2], RIGHT, buff=0.25))

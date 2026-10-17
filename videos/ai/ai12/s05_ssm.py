@@ -47,11 +47,13 @@ class SSM(VoiceoverScene):
             hh[i] = hh[i - 1] + (tt[i] - tt[i - 1]) * (-hh[i - 1] + 1.6 * xin[i - 1])
         bx = Axes(x_range=[0, 10, 2], y_range=[0, 1.1, 0.5], x_length=8.0, y_length=2.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-0.6, -1.0, 0])
+        kx = label(r"input $x(t)$", font_size=24, color=K)
+        kh = label(r"state $h(t)$: \\ rises, then leaks away", font_size=24, color=STATE)
+        bx.shift(LEFT * 0.8)
+        VGroup(kx, kh).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bx, RIGHT, buff=0.4)
+        keep_in_frame(VGroup(kx, kh))
         lx = VMobject(color=K, stroke_width=3).set_points_as_corners([bx.c2p(a_, b_) for a_, b_ in zip(tt, xin)])
         lh = VMobject(color=STATE, stroke_width=4).set_points_smoothly([bx.c2p(a_, b_) for a_, b_ in zip(tt[::4], hh[::4])])
-        kx = label(r"input $x(t)$", font_size=24, color=K)
-        kh = label(r"state $h(t)$: \ rises, then leaks away", font_size=24, color=STATE)
-        VGroup(kx, kh).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bx, RIGHT, buff=0.4)
         bl = note(r"illustrative: \ $A = -1$").next_to(bx, DOWN, buff=0.15).align_to(bx, LEFT)
         dot = glow_dot(bx.c2p(0, 0), color=STATE, radius=0.08)
         with self.voiceover(
