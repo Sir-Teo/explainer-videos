@@ -104,7 +104,7 @@
   "c477e9162380": {
    "scene": "Rope",
    "en": "Why rotations? Look at one pair, in a query at position five and a key at position two. <bookmark mark='a'/> Their score depends on the angle between them. Now move both forward by the same amount, as if the same words appeared later in the text. <bookmark mark='b'/> Both arrows turn by the same angle, so the angle between them doesn't change, and neither does the score. <bookmark mark='c'/> A rotated query and a rotated key score according to how far apart they are, not where they are. Relative position comes for free, from the geometry of rotations.",
-   "zh": "为什么用旋转？看其中一对：查询在位置5，键在位置2。<bookmark mark='a'/>它们的分数，取决于两者之间的夹角。现在把两者都往后挪同样的距离，就好像同样的词，出现在了文本更靠后的地方。<bookmark mark='b'/>两根箭头转过同样的角度，所以它们之间的夹角不变，分数也不变。<bookmark mark='c'/>转过之后的查询和键，打出的分数取决于它们相隔多远，而不是它们在哪里。相对位置就这样白白得来，来自旋转的几何。"
+   "zh": "为什么用旋转？看其中一对：查询在位置5，键在位置2。<bookmark mark='a'/>它们的分数，取决于两者之间的夹角。现在把两者都往后挪同样的距离，就好像同样的词，出现在了文本更靠后的地方。<bookmark mark='b'/>两根箭头转过同样的角度，所以它们之间的夹角不变，分数也不变。<bookmark mark='c'/>转过之后的查询和键，打出的分数取决于它们相隔多远，而不是它们在哪里。相对位置就这样白白得来，全靠旋转的几何。"
   },
   "194738e524ec": {
    "scene": "Rope",

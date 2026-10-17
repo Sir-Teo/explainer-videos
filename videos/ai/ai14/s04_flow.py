@@ -99,6 +99,8 @@ class Flow(VoiceoverScene):
         xt = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(ax.c2p(math.log10(k), 0), DOWN, buff=0.1) for k in ks])
         xn = label(r"sampling steps", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"distance from the real data", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yt = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(-0.1, v), LEFT, buff=0.08)
+                      for v in np.linspace(0, hi, 5)[1:]])
         cf = VGroup(curve(ax, lx, fm, FM_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=FM_C) for a, b in zip(lx, fm)])
         cr = VGroup(curve(ax, lx, rf, RF_C, 3.5), *[Dot(ax.c2p(a, b), radius=0.06, color=RF_C) for a, b in zip(lx, rf)])
         k1 = label(r"flow matching", font_size=24, color=FM_C).move_to([3.0, 2.4, 0])
@@ -116,7 +118,7 @@ class Flow(VoiceoverScene):
             "one big step lands where a hundred small ones would. Distilled this way, image models now make a "
             "picture in one to four steps."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn), Create(cf[0]), FadeIn(cf[1:]), FadeIn(k1))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(cf[0]), FadeIn(cf[1:]), FadeIn(k1))
             vo.wait_until("a")
             self.play(Create(cr[0]), FadeIn(cr[1:]), FadeIn(k2), run_time=1.5)
             vo.wait_until("b")
