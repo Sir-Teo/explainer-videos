@@ -27,7 +27,7 @@ class Width(VoiceoverScene):
         slope = float(z["slope"])
         lx, ly = np.log10(W), np.log10(M)
         y0, y1 = math.floor(ly.min() * 2) / 2 - 0.25, math.ceil(ly.max() * 2) / 2 + 0.25
-        ax, labs = log_axes((1, 3.5), (y0, y1), center=[-1.6, -0.5, 0],
+        ax, labs = log_axes((1, 3.5), (y0, y1), center=[-2.1, -0.5, 0],
                             x_ticks=[("10", 1), ("100", 2), ("1{,}000", 3)],
                             y_ticks=list(np.arange(math.ceil(y0), y1, 1)), y_fmt=r"10^{{{:.0f}}}")
         xn = label(r"width of the hidden layers", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.45)
@@ -40,7 +40,7 @@ class Width(VoiceoverScene):
         notes = VGroup(label(r"the features change less and less", font_size=26, color=SP),
                        label(r"in the limit: \ a fixed kernel, \\ the neural tangent kernel", font_size=26, color=GREY_A),
                        label(r"a model that no longer learns features", font_size=26, color=C.BITS))
-        notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.6, 0.6, 0])
+        notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.5, 1.7, 0])  # above the card
         cite_ = cite(r"A.~Jacot, F.~Gabriel \& C.~Hongler, \textit{Neural Tangent Kernel} (2018)", corner=DR)
         # the lazy picture: the hidden features frozen as they started, only the weights on them re-learned
         ins = VGroup(*[Dot(radius=0.07, color=GREY_B) for _ in range(4)]).arrange(DOWN, buff=0.3)
@@ -146,9 +146,7 @@ class Width(VoiceoverScene):
                "parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the "
                "original.")
         ) as vo:
-            self.play(FadeIn(key), FadeIn(cite_), FadeIn(yn))
-            vo.wait_until("m")
-            self.play(FadeIn(mupc, shift=UP * 0.2))
+            self.play(FadeIn(key), FadeIn(cite_), FadeIn(yn), FadeIn(mupc, shift=UP * 0.2))  # the picture from the first word
             vo.wait_until("a")
             self.play(FadeOut(mupc))
             p = panels[0]
