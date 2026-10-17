@@ -80,9 +80,13 @@ class Recall(VoiceoverScene):
         sm, li, de = (np.asarray(m[k_]) for k_, _, _ in MIXERS)
         with self.voiceover(
             f"With {Ns[0]} pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls "
-            f"apart: {100 * li[-1]:.0f} percent right at {Ns[-1]} pairs, as its crosstalk swamps the answers. The "
-            f"delta rule holds on much longer: {100 * de[-1]:.0f} percent. And softmax attention, which simply keeps "
-            f"every pair, gets {100 * sm[-1]:.0f}. <bookmark mark='b'/> Exact recall is what attention buys with its "
+            f"apart: {100 * li[-1]:.0f} percent right at {Ns[-1]} pairs, as its crosstalk swamps the answers. "
+            + (f"The delta rule holds on much longer: {100 * de[-1]:.0f} percent. " if de[-1] > li[-1] + 0.1 else
+               f"The delta rule does a little better, {100 * de[-1]:.0f} percent: it can overwrite, but its state is just "
+               "as small. " if de[-1] > li[-1] else
+               f"The delta rule's state is just as small, and here it fares no better: {100 * de[-1]:.0f} percent. ")
+            + f"And softmax attention, which simply keeps every pair, gets {100 * sm[-1]:.0f}. "
+            "<bookmark mark='b'/> Exact recall is what attention buys with its "
             "growing cache, and what a fixed memory has to approximate."
         ) as vo:
             self.play(FadeIn(key), Create(axis), FadeIn(yl), FadeIn(groups[0]))

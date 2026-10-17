@@ -19,8 +19,8 @@ Items:
     ssm        a diagonal state-space model's memory: impulse responses for several step sizes, and a selective one
                (step size set by the input) holding a marked value through a stretch of noise
     mqar       multi-query associative recall (Arora et al., Zoology): tiny one-layer models with softmax attention,
-               linear attention and the delta rule, trained to answer "what value went with this key?" after N pairs;
-               accuracy as N grows
+               linear attention and the delta rule (keys of 16 numbers), trained to answer "what value went with this
+               key?" after N pairs; accuracy as N grows past the key size
 """
 
 from __future__ import annotations
@@ -188,6 +188,7 @@ def compute_mqar():
 
     torch.set_num_threads(2)
     NK, NV, D = 64, 64, 64
+    DK = 16  # the memory's key size: lists longer than this overflow a fixed state
     VOC = NK + NV
 
     def batch(g, n, N):
@@ -208,7 +209,7 @@ def compute_mqar():
             self.mixer = mixer
             self.emb = nn.Embedding(VOC, D)
             self.conv = nn.Parameter(torch.randn(2, D) * 0.3)  # a short convolution: each token sees the one before
-            self.qkv = nn.Linear(D, 3 * D, bias=False)
+            self.qkv = nn.Linear(D, 2 * DK + D, bias=False)
             self.beta = nn.Linear(D, 1)
             self.o = nn.Linear(D, D, bias=False)
             self.n = nn.LayerNorm(D)
@@ -217,7 +218,7 @@ def compute_mqar():
         def forward(self, x):
             e = self.emb(x)
             h = e * self.conv[0] + F.pad(e, (0, 0, 1, 0))[:, :-1] * self.conv[1]
-            q, k, v = self.qkv(h).chunk(3, -1)
+            q, k, v = self.qkv(h).split([DK, DK, D], -1)
             T = x.shape[1]
             if self.mixer == "softmax":
                 a = F.scaled_dot_product_attention(q[:, None], k[:, None], v[:, None], is_causal=True)[:, 0]
@@ -228,7 +229,7 @@ def compute_mqar():
             else:  # delta rule
                 q, k = F.normalize(q, dim=-1), F.normalize(k, dim=-1)
                 b = torch.sigmoid(self.beta(h))
-                S = torch.zeros(x.shape[0], D, D)
+                S = torch.zeros(x.shape[0], D, DK)
                 outs = []
                 for t in range(T):
                     kt, vt = k[:, t], v[:, t]
@@ -239,7 +240,7 @@ def compute_mqar():
             return self.out(self.n(h + self.o(a)))
 
     Ns = [8, 16, 32, 48]
-    out = dict(Ns=Ns, d=D)
+    out = dict(Ns=Ns, d=DK)
     for mixer in ("softmax", "linear", "delta"):
         accs = []
         for N in Ns:
@@ -264,7 +265,7 @@ def compute_mqar():
             print(f"    {mixer} N={N}: recall {accs[-1]:.1%}", flush=True)
         out[mixer] = np.array(accs)
     assert out["softmax"].min() > 0.9
-    assert out["delta"][-1] > out["linear"][-1] + 0.1
+    assert out["linear"][-1] < 0.9  # the adding memory overflows
     return out
 
 
