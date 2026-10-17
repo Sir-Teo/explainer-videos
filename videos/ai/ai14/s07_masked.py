@@ -42,8 +42,8 @@ class Masked(VoiceoverScene):
         with self.voiceover(
             "Text isn't made of continuous numbers, so what's the noise? Blanks. Blank out each character with "
             "probability t; at t equal to one, everything is blank. <bookmark mark='a'/> The model sees the rest, on "
-            "both sides, and guesses every blank. Weighted by one over t, that's a bound on the bits per character, "
-            "the same quantity as on our scoreboard. LLaDA, in 2025, trained an eight-billion-parameter language "
+            "both sides, and guesses every blank. Weighted by one over t, that's a bound on the bits per character: "
+            "a guaranteed ceiling, so the true figure can only be lower. It's the same quantity as on our scoreboard. LLaDA, in 2025, trained an eight-billion-parameter language "
             "model this way."
         ) as vo:
             self.play(FadeIn(full), FadeIn(cite_))

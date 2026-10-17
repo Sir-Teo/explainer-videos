@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import LETTERS, PATCH, gray_image, load
+from videos.ai.ai15.common import LETTERS, PATCH, conv_picture, gray_image, load, slide_window
 
 
 class DiT(VoiceoverScene):
@@ -39,8 +39,12 @@ class DiT(VoiceoverScene):
         fl = label(r"the condition sets each layer's scale and shift", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.12)
         out = label(r"out: \ the velocity, \ patch by patch", font_size=22, color=GREY_A).next_to(blocks, UP, buff=0.2)
         cite_ = cite(r"W.~Peebles \& S.~Xie, \textit{Scalable Diffusion Models with Transformers} (2023)", corner=DR)
+        conv = gloss(r"convolution", r"one small learned stencil slid over the picture: \\ the same weighted sum at "
+                     r"every little neighbourhood", conv_picture(), corner=UL, width=5.4, color=PATCH)
         with self.voiceover(
-            "Who does the denoising? Early diffusion models used convolutional networks. In 2023, Peebles and Xie "
+            "Who does the denoising? Early diffusion models used convolutional networks. <bookmark mark='v'/> A "
+            "convolution slides one small learned stencil over the picture, computing the same weighted sum at "
+            "every little neighbourhood. In 2023, Peebles and Xie "
             "showed a plain transformer does it better, and scales like a language model. <bookmark mark='a'/> The "
             "noisy picture is cut into patch tokens, part eleven's blocks process them, and out come velocities, "
             "patch by patch. <bookmark mark='b'/> The noise level and the request come in through every layer's "
@@ -48,7 +52,11 @@ class DiT(VoiceoverScene):
             f"{int(d['n_params']) / 1e6:.1f} million numbers, on our letters, told which letter to draw."
         ) as vo:
             self.play(FadeIn(cite_), LaggedStart(*[FadeIn(t_) for t_ in toks], lag_ratio=0.05), FadeIn(tl))
+            vo.wait_until("v")
+            self.play(FadeIn(conv, shift=UP * 0.2))
+            slide_window(self, conv[1][2])
             vo.wait_until("a")
+            self.play(FadeOut(conv))
             self.play(LaggedStart(*[FadeIn(b) for b in blocks], lag_ratio=0.2), FadeIn(bl), FadeIn(out))
             vo.wait_until("b")
             self.play(FadeIn(cond), LaggedStart(*[GrowArrow(a_) for a_ in ada], lag_ratio=0.15), Write(f), FadeIn(fl))

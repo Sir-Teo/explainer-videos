@@ -11,6 +11,19 @@ TXT = C.TRUE_P
 UNI, LN = GREY_B, C.SURPRISE  # uniform and logit-normal noise levels
 
 
+def straight_lines() -> VGroup:
+    """Rectified flow: each noise point joined to a data point by a straight line, followed at a steady speed."""
+    noise = np.array([[-1.7, 0.8], [-1.35, 0.35], [-1.9, -0.05], [-1.5, -0.45], [-1.8, -0.85]])
+    data = np.array([[1.3, 0.75], [1.75, 0.3], [1.2, -0.1], [1.9, -0.4], [1.4, -0.8]])
+    out = VGroup()
+    for a, b in zip(noise, data):
+        out.add(Line([*a, 0], [*b, 0], color=GREY_B, stroke_width=1.5),
+                Dot([*a, 0], radius=0.06, color=C.TRUE_P), Dot([*b, 0], radius=0.06, color=C.BITS))
+    out.add(label(r"noise", font_size=20, color=C.TRUE_P).next_to(out, LEFT, buff=0.15),
+            label(r"data", font_size=20, color=C.BITS).next_to(out, RIGHT, buff=0.15))
+    return out
+
+
 class SD3(VoiceoverScene):
     def construct(self):
         self.card()
@@ -62,8 +75,11 @@ class SD3(VoiceoverScene):
         sizes = label(r"Stable Diffusion 3: \ $2$ and $8$ billion parameters; \ FLUX.1: \ $12$ billion \ (as published)",
                       font_size=22, color=GREY_A).to_edge(DOWN, buff=0.45)
         cite_ = cite(r"P.~Esser et al., \textit{Scaling Rectified Flow Transformers for High-Resolution Image Synthesis} (2024)", corner=UR)
+        rf = gloss(r"rectified flow", r"Part 14's flow matching: \ straight lines \\ from noise to data",
+                   straight_lines(), corner=DR, width=4.4, color=C.BITS)
         with self.voiceover(
-            "Our model was told which letter to draw by one number. A real model is told by a prompt, a sentence of "
+            "Rectified flow, in this chapter's title, is part fourteen's flow matching: straight lines from noise "
+            "to data. <bookmark mark='r'/> Our model was told which letter to draw by one number. A real model is told by a prompt, a sentence of "
             "tokens. Stable Diffusion 3 put the prompt's tokens and the picture's patches into one sequence. "
             "<bookmark mark='a'/> Each kind keeps its own weights for queries, keys and values, since words and "
             "patches are different things; <bookmark mark='b'/> then a single attention runs over the joined "
@@ -71,7 +87,9 @@ class SD3(VoiceoverScene):
             "the text is updated by the picture as the picture is drawn. Scaled up, that's Stable Diffusion 3, and "
             "FLUX, with twelve billion parameters."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(seq), FadeIn(tl), FadeIn(il))
+            self.play(FadeIn(rf, shift=UP * 0.2))
+            vo.wait_until("r")
+            self.play(FadeOut(rf), FadeIn(cite_), FadeIn(seq), FadeIn(tl), FadeIn(il))
             vo.wait_until("a")
             self.play(FadeIn(wq))
             vo.wait_until("b")
@@ -185,7 +203,8 @@ class SD3(VoiceoverScene):
             f"average each four by four block, and the noise falls from {sig} to {left:.2f}, about a quarter, while "
             "the letter stays. Neighbouring pixels share their information, so at high resolution a given noise "
             "level destroys less, and a model trained on small pictures spends its time on noise levels that are "
-            "too easy. <bookmark mark='c'/> So Stable Diffusion 3 shifts the schedule toward noise, by a factor alpha "
+            "too easy. <bookmark mark='c'/> So Stable Diffusion 3 shifts the noise schedule, the plan of how much noise there is at each "
+            "time t, toward noise, by a factor alpha "
             "that grows like the square root of the pixel count."
         ) as vo:
             self.play(FadeIn(ims[0]), FadeIn(cap[0]))

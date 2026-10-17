@@ -202,7 +202,8 @@ class Rules(VoiceoverScene):
             "is a little model, trained by part nine's gradient descent on the text as it's being read; part "
             "eleven's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to "
             "the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a "
-            "whole network, and you have test-time training."
+            "whole network, and you have test-time training: a small network whose weights keep learning while "
+            "the model reads."
         ) as vo:
             self.play(Write(f1), FadeIn(l1))
             vo.wait_until("a")

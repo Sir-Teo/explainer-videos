@@ -152,7 +152,8 @@ class Forcing(VoiceoverScene):
                      r"\textit{Transfusion} (2024)", corner=UL)
         with self.voiceover(
             "This is where video generation is heading. <bookmark mark='a'/> Self Forcing, in 2025, trains the "
-            "model on its own rollouts, scoring whole generated videos, to close the gap between training and use "
+            "model on its own rollouts, videos it generates itself, frame after frame, scoring whole generated "
+            "videos, to close the gap between training and use "
             "entirely. <bookmark mark='b'/> Condition each frame on an action as well, and you have a world model: "
             "DeepMind's Genie 3 generates a world you can move through, frame by frame, in real time. "
             "<bookmark mark='c'/> And some models now do text and pictures in one transformer, predicting tokens "

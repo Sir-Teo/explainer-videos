@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai15.common import PATCH, gray_image, heat_image, load
+from videos.ai.ai15.common import PATCH, codebook_picture, gray_image, heat_image, load
 
 ADD, SUB = C.BITS, C.TRUE_P  # what a scale adds (brighter) or takes away (darker)
 
@@ -103,11 +103,16 @@ class Scales(VoiceoverScene):
                    color=GREY_A).next_to(eqs, DOWN, buff=0.12)
         cite_ = cite(r"K.~Tian et al., \textit{Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale "
                      r"Prediction} (2024)", corner=UR)
+        cb = gloss(r"codebook", r"a fixed list of allowed values: \ each number is replaced \\ by its nearest entry, "
+                   r"and that entry's index is the token", codebook_picture(), width=6.4, color=PATCH)
+        cb.to_edge(DOWN, buff=0.2).set_x(0)
         with self.voiceover(
             "VAR, the NeurIPS best paper of 2024, writes in a better order: coarse to fine. <bookmark mark='a'/> "
             "First one token for the whole picture: its average brightness. <bookmark mark='b'/> Then two by two, "
             "four by four, and so on: at each scale, take what the picture still lacks, shrink it to that size, and "
-            "round each number to one of sixteen levels; those are the tokens. <bookmark mark='c'/> Add them, "
+            "round each number to one of sixteen levels; those are the tokens. <bookmark mark='q'/> The sixteen "
+            "levels are a codebook: a fixed list of allowed values. Each number snaps to its nearest entry, and "
+            "that entry's place in the list is the token. <bookmark mark='c'/> Add them, "
             "enlarged, to the picture so far. <bookmark mark='d'/> And the model's job is to predict each scale's "
             f"tokens given all the coarser ones: {K} steps, {sum(toks)} tokens in all."
         ) as vo:
@@ -117,7 +122,10 @@ class Scales(VoiceoverScene):
             vo.wait_until("b")
             for k in range(1, K):
                 self.play(FadeIn(adds[k]), FadeIn(al[k]), FadeIn(sl[k]), TransformFromCopy(so_far[k - 1], so_far[k]), run_time=0.8)
+            vo.wait_until("q")
+            self.play(FadeIn(cb, shift=UP * 0.2))
             vo.wait_until("c")
+            self.play(FadeOut(cb))
             self.play(Write(eqs[0]), FadeIn(ql))
             vo.wait_until("d")
             self.play(Write(eqs[1]))

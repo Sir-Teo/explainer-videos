@@ -123,7 +123,8 @@ class Router(VoiceoverScene):
         notes = VGroup(label(r"a sigmoid score per expert, \ not a softmax", font_size=18, color=GREY_A),
                        label(r"the balancing bias picks the experts \ (chapter two)...", font_size=18, color=C.SURPRISE),
                        label(r"...but the weights ignore it", font_size=18, color=C.BITS),
-                       label(r"one shared expert for every token", font_size=18, color=GREY_A))
+                       label(r"one shared expert for every token; \ FFN: \ a feed-forward network, \ Part 11's MLP",
+                             font_size=18, color=GREY_A))
         for n_, e_ in zip(notes, eqs):
             n_.next_to(e_, DOWN, buff=0.06).align_to(e_, LEFT)
         for k in range(1, len(eqs)):
@@ -148,7 +149,8 @@ class Router(VoiceoverScene):
             "<bookmark mark='b'/> The top k are chosen by score plus a bias, the balancing bias of the next chapter. "
             "<bookmark mark='c'/> But the weights that mix the chosen experts use the scores alone, rescaled to add to "
             "one, so balancing never distorts what the model computes. <bookmark mark='d'/> And one shared expert "
-            "sees every token, to hold what everything needs. <bookmark mark='e'/> Why so many small experts? Count "
+            "sees every token, to hold what everything needs. Each expert is an FFN, a feed-forward network: the "
+            "same thing as part eleven's MLP. <bookmark mark='e'/> Why so many small experts? Count "
             f"the combinations. Two of sixteen experts can be paired {c1} ways. Cut each expert into four and choose "
             f"eight of sixty-four, for the same compute, and there are {c2 / 1e9:.1f} billion ways: far more room "
             "for each token to get its own specialized mixture."

@@ -6,6 +6,27 @@ from explainer.ai import *  # noqa: F403
 from videos.ai.ai12.common import DECAY, K, Q, STATE, V, curve, load
 
 
+def bucket_picture() -> VGroup:
+    """A state-space model as a leaky bucket: the input pours in, the level leaks slowly away, the level is read."""
+    w_top, w_bot, h = 1.3, 1.0, 1.3
+    wall = VMobject(color=GREY_A, stroke_width=3).set_points_as_corners(
+        [[-w_top / 2, h / 2, 0], [-w_bot / 2, -h / 2, 0], [w_bot / 2, -h / 2, 0], [w_top / 2, h / 2, 0]])
+    lvl = 0.15  # the water's top, in the bucket's coordinates
+    f = (lvl + h / 2) / h
+    w_lvl = w_bot + (w_top - w_bot) * f
+    water = Polygon([-w_bot / 2, -h / 2, 0], [w_bot / 2, -h / 2, 0], [w_lvl / 2, lvl, 0], [-w_lvl / 2, lvl, 0],
+                    stroke_width=0, fill_color=STATE, fill_opacity=0.7)
+    pour = Arrow([-0.15, h / 2 + 0.7, 0], [-0.15, lvl + 0.05, 0], buff=0, color=K, stroke_width=4,
+                 max_tip_length_to_length_ratio=0.15)
+    pl = label(r"input $x$ pours in", font_size=20, color=K).next_to(pour, RIGHT, buff=0.12).shift(UP * 0.35)
+    leak = Arrow([w_bot / 2 - 0.05, -h / 2 + 0.12, 0], [w_bot / 2 + 0.6, -h / 2 - 0.15, 0], buff=0, color=DECAY,
+                 stroke_width=3, max_tip_length_to_length_ratio=0.25)
+    ll = label(r"slowly leaks", font_size=20, color=DECAY).next_to(leak, RIGHT, buff=0.1)
+    tick = DashedLine([-w_lvl / 2 - 0.35, lvl, 0], [-w_lvl / 2 - 0.05, lvl, 0], color=STATE, stroke_width=2)
+    hl = label(r"the level $h$: \\ what you read", font_size=20, color=STATE).next_to(tick, LEFT, buff=0.1)
+    return VGroup(water, wall, pour, pl, leak, ll, tick, hl)
+
+
 class SSM(VoiceoverScene):
     def construct(self):
         self.card()
@@ -56,18 +77,25 @@ class SSM(VoiceoverScene):
         lh = VMobject(color=STATE, stroke_width=4).set_points_smoothly([bx.c2p(a_, b_) for a_, b_ in zip(tt[::4], hh[::4])])
         bl = note(r"illustrative: \ $A = -1$").next_to(bx, DOWN, buff=0.15).align_to(bx, LEFT)
         dot = glow_dot(bx.c2p(0, 0), color=STATE, radius=0.08)
+        bucket = gloss(r"state-space model", r"a leaky bucket: input pours in, the level slowly \\ leaks away, "
+                       r"and you read the level", bucket_picture(), width=4.6, color=STATE).to_corner(UR, buff=0.3)
+        bucket.shift(DOWN * 1.0)
         with self.voiceover(
             "A different road to the same place started in control theory. A state-space model is a differential "
-            "equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='a'/> "
+            "equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='l'/> "
+            "Picture a leaky bucket: the input pours in, the level slowly leaks away, and the level is what you "
+            "read. <bookmark mark='a'/> "
             "Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. "
             "<bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; "
             "large steps, and it's gone in a few tokens."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_))
+            vo.wait_until("l")
+            self.play(FadeIn(bucket, shift=UP * 0.2))
             self.play(Create(bx), Create(lx), FadeIn(kx), FadeIn(bl), run_time=1.2)
             self.play(Create(lh), MoveAlongPath(dot, lh.copy()), FadeIn(kh), run_time=3.0, rate_func=linear)
             vo.wait_until("a")
-            self.play(Write(f2), FadeIn(f2l))
+            self.play(FadeOut(bucket), Write(f2), FadeIn(f2l))
             vo.wait_until("b")
             self.play(FadeOut(VGroup(bx, lx, lh, kx, kh, bl, dot)))
             self.play(Create(ax), FadeIn(xn), FadeIn(yn))
