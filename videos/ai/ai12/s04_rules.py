@@ -78,9 +78,9 @@ class Rules(VoiceoverScene):
             vo.wait_until("a")
             self.play(GrowFromCenter(b), FadeIn(bl), Create(row), FadeIn(rl))
             g48, g128 = gram(48), gram(128)
-            self.play(FadeOut(row), FadeTransform(gr, g48), run_time=1.0)
+            self.play(FadeOut(row), FadeOut(gr), FadeIn(g48), run_time=1.0)  # a cross-fade: FadeTransform can't restore images
             self.wait(0.3)
-            self.play(FadeTransform(g48, g128), run_time=1.0)
+            self.play(FadeOut(g48), FadeIn(g128), run_time=1.0)
             vo.wait_until("b")
             self.play(*[FadeOut(m_) for m_ in self.mobjects if m_ not in (f, b, bl)])
             self.play(Create(ax), FadeIn(deco), Create(th), FadeIn(thl))
