@@ -182,8 +182,18 @@ def compute_latent():
         samples = torch.sigmoid(dec(z * sd + mu)).numpy().reshape(-1, GL, GL)
     u, s_, vt = np.linalg.svd(Zn.numpy() - Zn.numpy().mean(0), full_matrices=False)
     xy = (Zn.numpy() @ vt[:2].T)[::5]
+    # neighbours in the 16 numbers: for every picture, its 6 nearest others; how often they are the same letter
+    Zq = Zn.numpy()
+    d2 = (Zq ** 2).sum(1)[:, None] + (Zq ** 2).sum(1)[None] - 2 * Zq @ Zq.T
+    np.fill_diagonal(d2, np.inf)
+    nn6 = np.argsort(d2, 1)[:, :6]
+    same = float((labels[nn6] == labels[:, None]).mean())
+    chance = float(np.mean([(labels == l_).sum() - 1 for l_ in labels]) / (len(labels) - 1))
+    queries = [int(np.where(labels == L_)[0][len(np.where(labels == L_)[0]) // 2]) for L_ in (0, 6, 14, 18)]  # A G O S
     out = dict(Z=Z, ratio=GL * GL / Z, rec=rec[::97][:12], orig=imgs[::97][:12], rec_err=rec_err, samples=samples,
-               xy=xy, xy_labels=labels[::5])
+               xy=xy, xy_labels=labels[::5], nn_same=same, nn_chance=chance, nn_query=imgs[queries],
+               nn_imgs=imgs[nn6[queries]], nn_labels=labels[nn6[queries]], nn_qlabels=labels[queries])
+    print(f"    nearest 6 in the 16 numbers: same letter {same:.0%} (chance {chance:.0%})", flush=True)
     print(f"    {GL * GL} -> {Z} numbers; reconstruction error {rec_err:.3f}", flush=True)
     assert rec_err < 0.2 and samples.std() > 0.2
     return out
