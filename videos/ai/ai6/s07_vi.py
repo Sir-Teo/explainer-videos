@@ -29,7 +29,9 @@ def before_after() -> VGroup:
     after = panel(lambda t: 0.75 * np.exp(-(t + 0.42) ** 2 / 0.03) + 0.5 * np.exp(-(t - 0.45) ** 2 / 0.03), P,
                   r"after the data")
     g = VGroup(before, after).arrange(RIGHT, buff=0.9, aligned_edge=DOWN)
-    return g.add(Arrow(before.get_right(), after.get_left(), buff=0.1, color=GREY_B, stroke_width=3))
+    y = after[:2].get_y()
+    return g.add(Arrow([before.get_right()[0], y, 0], [after.get_left()[0], y, 0], buff=0.1, color=GREY_B,
+                       stroke_width=3))
 
 
 class VI(VoiceoverScene):
@@ -97,7 +99,7 @@ class VI(VoiceoverScene):
         bar_top = Line([bx0, -0.89, 0], [bx0 + BW, -0.89, 0])
         bar_b = VGroup(Brace(bar_top, UP, buff=0.05, color=GREY_B))
         bar_b.add(MathTex(r"\log p(x)", font_size=28).next_to(bar_b[0], UP, buff=0.06))
-        bar_n = label(r"the ELBO can be computed, \ and always sits below $\log p(x)$", font_size=22, color=GREY_A)
+        bar_n = label(r"the ELBO: \ computable, \ always below $\log p(x)$", font_size=22, color=GREY_A)
         bar_n.move_to([4.3, -1.95, 0])
         with self.voiceover(
             "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape "

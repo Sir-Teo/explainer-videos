@@ -100,7 +100,7 @@ class Hook(VoiceoverScene):
         vs.next_to(est, DOWN, buff=0.18)
         with self.voiceover(
             "From counts like these, Shannon estimated how much information English really carries: about one "
-            "bit per letter, somewhere between 0.6 and 1.3, <bookmark mark='a'/> when a single letter, guessed "
+            "bit per letter, a bit being the answer to one yes-or-no question, somewhere between 0.6 and 1.3, <bookmark mark='a'/> when a single letter, guessed "
             "blindly, could carry 4.75. Most of what we write is predictable."
         ) as vo:
             self.play(FadeOut(tag), FadeIn(est))
@@ -144,8 +144,9 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Seventy-five years later, this guessing game is exactly what large language models are trained to "
             "play. Give one the start of a sentence, <bookmark mark='a'/> and it returns a probability for every "
-            "possible next word. <bookmark mark='b'/> GPT-2, from 2019, gives Paris six percent. <bookmark mark='c'/> "
-            "Qwen3, a 2025 model, gives it thirty-five."
+            "possible next word. <bookmark mark='b'/> GPT-2, from 2019, with a hundred and twenty-four million "
+            "parameters, the adjustable numbers inside it, gives Paris six percent. <bookmark mark='c'/> Qwen3, a "
+            "2025 model with four billion, gives it thirty-five."
         ) as vo:
             self.play(FadeIn(ptext), Create(blank), FadeIn(q))
             vo.wait_until("a")
@@ -155,6 +156,29 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(right[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in right[1]], lag_ratio=0.15))
         self.play(Indicate(left[1][0], color=C.PROB), Indicate(right[1][0], color=C.PROB), run_time=1.5)
+        # what a token is: a line of the Falcon passage, cut the way GPT-2 cuts it
+        toks = load("lms")["surprise"]["GPT-2 small"]["tokens"][22:31]
+        assert toks == [" light", ".", " Sp", "ade", ",", " bare", "footed", " in", " green"]
+        kinds = [r"word", r"mark", r"piece", r"piece", r"mark", r"piece", r"piece", r"word", r"word"]
+        tiles = VGroup()
+        for k, (tk, kind) in enumerate(zip(toks, kinds)):
+            t = data_text(tk.replace(" ", "␣"), font=MONO, font_size=26, color=WHITE)
+            r = RoundedRectangle(width=t.width + 0.24, height=0.5, corner_radius=0.06, stroke_width=0,
+                                 fill_color=[C.EMBED, C.MLP, C.KEY][k % 3], fill_opacity=0.5).move_to(t)
+            kl = label(kind, font_size=22, color=GREY_B).next_to(r, DOWN, buff=0.12)
+            tiles.add(VGroup(r, t, kl))
+        tiles.arrange(RIGHT, buff=0.08, aligned_edge=UP)
+        tok_card = gloss(r"token", r"the chunk of text a model guesses at one time:\\ a whole word, a piece of a word, "
+                         r"or a punctuation mark", picture=tiles, width=8.4, color=C.NEURAL)
+        tok_card.scale(1.35).move_to(DOWN * 0.6)
+        with self.voiceover(
+            "Strictly, what a model guesses is the next token. <bookmark mark='a'/> A token is the chunk of text a "
+            "model guesses at one time: a whole word, a piece of a word, or a punctuation mark. Here is a line of a "
+            "1930 novel, cut the way GPT-2 cuts it. Paris, with the space in front of it, is a single token."
+        ) as vo:
+            self.play(FadeOut(left), FadeOut(right), FadeOut(cap), FadeOut(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(tok_card, shift=UP * 0.2))
         self.wait(0.5)
         self.clear_scene()
 

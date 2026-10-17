@@ -76,16 +76,37 @@ class KneserNey(VoiceoverScene):
         cont.next_to(idea2, DOWN, buff=0.3).align_to(idea2, LEFT).shift(RIGHT * 0.5)
         ex.move_to([4.2, -3.0, 0])
         cite_ = cite(r"R.~Kneser \& H.~Ney (1995); \ S.~Chen \& J.~Goodman (1998)", corner=DR)
+        # the discount in a picture (schematic counts): a slice D off each seen count, poured into the shorter context
+        U, dh = 0.32, 0.32
+        counts = [6, 4, 3, 2]
+        cbars = VGroup(*[Rectangle(width=0.45, height=c * U - dh, stroke_width=0, fill_color=KN, fill_opacity=0.85)
+                         .move_to([2.6 + 0.65 * i, -1.5 + (c * U - dh) / 2, 0]) for i, c in enumerate(counts)])
+        slices = VGroup(*[Rectangle(width=0.45, height=dh, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.9)
+                          .next_to(b, UP, buff=0) for b in cbars])
+        base = Line([2.25, -1.5, 0], [6.9, -1.5, 0], color=GREY_C, stroke_width=2)
+        pile = Rectangle(width=0.55, height=dh * len(counts), stroke_color=C.SURPRISE, stroke_width=2)
+        pile.move_to([6.2, -1.5 + dh * len(counts) / 2, 0])
+        dl = MathTex(r"D", font_size=30, color=C.SURPRISE).next_to(slices[0], LEFT, buff=0.12)
+        cl = label(r"counts after $h$", font_size=22, color=KN).next_to(cbars, DOWN, buff=0.12)
+        pl = label(r"to $h'$", font_size=22, color=C.SURPRISE).next_to(pile, DOWN, buff=0.12)
+        moved = VGroup(*[s.copy().move_to([6.2, -1.5 + dh * (j + 0.5), 0]).set(width=0.55)
+                         for j, s in enumerate(slices)])
         with self.voiceover(
-            "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, take a fixed discount "
-            "off every count you've seen, and hand that probability to a shorter context: blend the two. "
+            "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, shave a fixed "
+            "discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter "
+            "context, one character fewer: blend the two. "
             "<bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: "
             "Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it "
             "deserves little. Count how many different contexts something follows, not how often it appears."
         ) as vo:
             self.play(Write(f), FadeIn(n1), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(FadeIn(idea1), Indicate(term(f, r"D"), color=C.SURPRISE))
+            self.play(FadeIn(idea1), Indicate(term(f, r"D"), color=C.SURPRISE), Create(base), FadeIn(cbars),
+                      FadeIn(slices), FadeIn(cl))
+            self.play(FadeIn(dl))
+            vo.wait_until("c")
+            self.play(Create(pile), FadeIn(pl), *[ReplacementTransform(s, m) for s, m in zip(slices, moved)],
+                      run_time=1.6)
             vo.wait_until("b")
             self.play(FadeIn(idea2), FadeIn(cont), FadeIn(ex))
         self.wait(0.3)

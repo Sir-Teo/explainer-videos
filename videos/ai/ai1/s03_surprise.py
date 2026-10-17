@@ -135,7 +135,8 @@ class Surprise(VoiceoverScene):
             "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. What "
             "should s be? <bookmark mark='a'/> Shannon asked for a few modest things. It should depend only on p. "
             "<bookmark mark='b'/> It should go down as p goes up, and a certain event should be no surprise at all. "
-            "<bookmark mark='c'/> For independent events, surprises should add: <bookmark mark='d'/> a coin landing "
+            "<bookmark mark='c'/> For independent events, where learning one tells you nothing about the other, "
+            "so their probabilities multiply, surprises should add: <bookmark mark='d'/> a coin landing "
             "heads and a die showing five, together, should be exactly as surprising as each one, added up. "
             "<bookmark mark='e'/> And small changes in p should make small changes in s."
         ) as vo:

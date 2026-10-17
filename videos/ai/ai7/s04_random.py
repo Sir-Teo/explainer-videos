@@ -56,22 +56,36 @@ class RandomLabels(VoiceoverScene):
         key.next_to(panels, DOWN, buff=0.2)
         key.add(label(r"(training steps on a log scale)", font_size=20, color=GREY_B)).arrange(RIGHT, buff=0.5)
         key.next_to(panels, DOWN, buff=0.2)
+        # the network as four boxes, as tall as their layers are wide (on a square-root scale, so 2 still shows)
+        widths = (70, 512, 512, 2)
+        boxes = VGroup(*[VGroup(Rectangle(width=0.5, height=0.08 * w ** 0.5, stroke_color=C.NEURAL, stroke_width=2,
+                                          fill_color=C.NEURAL, fill_opacity=0.25),
+                                MathTex(str(w), font_size=26, color=WHITE)) for w in widths]).arrange(RIGHT, buff=0.7)
+        for b in boxes:
+            b[1].next_to(b[0], DOWN, buff=0.1).set_y(boxes[1][0].get_bottom()[1] - 0.25)
+        boxes.add(*[Arrow(boxes[i][0].get_right(), boxes[i + 1][0].get_left(), buff=0.08, color=GREY_B,
+                          stroke_width=2.5, max_tip_length_to_length_ratio=0.3) for i in range(3)])
+        arch = gloss(r"$70 \to 512 \to 512 \to 2$", r"layers of simple units: \ $70$ word rates in, \\ two layers "
+                     r"of $512$, \ $2$ outputs \ (one per author)", boxes, width=4.6, color=C.NEURAL)
+        arch.move_to([3.4, -1.45, 0])
         cite_ = cite(r"C.~Zhang, S.~Bengio, M.~Hardt, B.~Recht \& O.~Vinyals, \textit{Understanding Deep Learning Requires "
                      r"Rethinking Generalization} (2017)", corner=UR)
         with self.voiceover(
             "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a "
-            f"network, here with about {round(n_params, -3) // 1000} thousand weights, and train it on the "
-            f"{n} training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets "
+            "network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve "
+            f"units, and two outputs, one per author. That's about {round(n_params, -3) // 1000} thousand weights. "
+            f"Train it on the {n} training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets "
             f"{100 * T[-1, 2]:.1f} percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so "
             "every label is random. Same network, same training."
         ) as vo:
             self.play(FadeIn(cl), LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.002), FadeIn(net), FadeIn(cite_),
                       run_time=1.8)
-            self.play(*[FadeIn(m) for m in panels[0][:4]], FadeIn(key))
+            self.play(*[FadeIn(m) for m in panels[0][:4]], FadeIn(key), FadeIn(arch))
             vo.wait_until("a")
             self.play(Create(panels[0][4]), Create(panels[0][5]), run_time=2.0)
             self.play(FadeIn(panels[0][6]))
             vo.wait_until("b")
+            self.play(FadeOut(arch))
             self.play(*[c.animate.set_fill(AUSTEN if y[perm[i]] == 0 else DICKENS) for i, c in enumerate(cells)],
                       run_time=1.5)
         with self.voiceover(

@@ -114,14 +114,45 @@ class HMM(VoiceoverScene):
         key.arrange(RIGHT, buff=0.6).next_to(marks, DOWN, buff=0.5)
         note_ = label(r"the same alternation Part 4's three-state chain had, \ but here the states were never named",
                       font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
+        # Viterbi in miniature: a two-row lattice over the first five letters; keep the best arrow into each state,
+        # then trace back from the end (the traced path is the decoded one; the other kept arrows are illustrative)
+        T = 5
+        lat_p = [[np.array([-4.4 + 1.4 * t, 2.3 - 1.1 * s, 0]) for s in (0, 1)] for t in range(T)]
+        lat_n = VGroup(*[Circle(radius=0.17, color=VOWEL if s == 0 else CONSONANT, stroke_width=3).move_to(lat_p[t][s])
+                         for t in range(T) for s in (0, 1)])
+
+        def lat_edge(t, a, b, **kw):
+            return Line(lat_p[t][a], lat_p[t + 1][b], buff=0.19, **kw)
+
+        lat_all = VGroup(*[lat_edge(t, a, b, color=GREY_D, stroke_width=1.5) for t in range(T - 1) for a in (0, 1)
+                           for b in (0, 1)])
+        best_in = [[st[t] if s == st[t + 1] else s for s in (0, 1)] for t in range(T - 1)]
+        lat_best = VGroup(*[lat_edge(t, best_in[t][b], b, color=GREY_A, stroke_width=3) for t in range(T - 1)
+                            for b in (0, 1)])
+        lat_path = VGroup(*[Line(lat_p[t + 1][st[t + 1]], lat_p[t][st[t]], buff=0.19, color=C.BITS, stroke_width=6)
+                            for t in reversed(range(T - 1))])
+        lat_rows = VGroup(*[MathTex(rf"s_{s + 1}", font_size=28, color=VOWEL if s == 0 else CONSONANT)
+                            .next_to(lat_p[0][s], LEFT, buff=0.35) for s in (0, 1)])
+        lat_n1 = label(r"keep only the best path into each state", font_size=22, color=GREY_A)
+        lat_n2 = label(r"then trace back from the end", font_size=22, color=C.BITS)
+        VGroup(lat_n1, lat_n2).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(lat_n, RIGHT, buff=0.5)
+        lattice = VGroup(lat_n, lat_all, lat_best, lat_path, lat_rows, lat_n1, lat_n2)
         with self.voiceover(
             "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi "
-            "algorithm answers exactly, in one pass. <bookmark mark='a'/> Here's Shannon's sentence from part one, "
+            "algorithm answers exactly, in one pass. <bookmark mark='v'/> Walk along the letters, and at each step "
+            "keep only the best path into each state. <bookmark mark='w'/> At the end, trace the winner back. "
+            "<bookmark mark='a'/> Here's Shannon's sentence from part one, "
             "every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like "
             "this for thirty years."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(l_) for l_ in letters], lag_ratio=0.03), run_time=1.5)
+            self.play(FadeIn(lat_n), FadeIn(lat_rows), Create(lat_all))
+            vo.wait_until("v")
+            self.play(LaggedStart(*[Create(e) for e in lat_best], lag_ratio=0.15), FadeIn(lat_n1), run_time=2.0)
+            vo.wait_until("w")
+            self.play(LaggedStart(*[Create(e) for e in lat_path], lag_ratio=0.3), FadeIn(lat_n2), run_time=1.6)
             vo.wait_until("a")
+            self.play(FadeOut(lattice))
             self.play(LaggedStart(*[GrowFromCenter(m) for m in marks], lag_ratio=0.04), Create(links),
                       *[l_.animate.set_color(VOWEL if s == 0 else CONSONANT) for l_, s in zip(letters, st)],
                       FadeIn(key), run_time=2.5)

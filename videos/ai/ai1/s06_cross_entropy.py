@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, letter, load, plain_axes, polyline
+from videos.ai.ai1.common import ALPHA27, letter, load, plain_axes, polyline, valley_steps
 
 
 def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opacity=0.8) -> VGroup:
@@ -167,18 +167,33 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             label(r"so $H(p, q) \ge H(p)$, \ and $H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)p(y)\big) "
                   r"\ge 0$", font_size=26, color=GREY_A),
         ).arrange(DOWN, buff=0.14)
-        mi = label(r"(that last quantity is the \textit{mutual information} $I(X; Y)$: \ Chapter 10)", font_size=22,
+        mi = label(r"that drop is the \textit{mutual information} $I(X; Y)$ \ (it returns in Chapter 10)", font_size=22,
                    color=GREY_B)
-        VGroup(res, mi).arrange(DOWN, buff=0.16).move_to(DOWN * 0.9)
+        VGroup(res, mi).arrange(DOWN, buff=0.16).move_to(DOWN * 0.45)
+        ln_card = gloss(r"$\ln$, \ and nats", r"$\ln x = \log_e x$, \ the log to base $e \approx 2.718$\\"
+                        r"surprise measured with $\ln$ is in nats: \ $1$ nat $\approx 1.44$ bits", corner=DR, width=4.8,
+                        color=C.KL)
+        venn = VGroup(Circle(radius=0.8, stroke_color=C.ENTROPY, stroke_width=3, fill_color=C.ENTROPY,
+                             fill_opacity=0.15).shift(LEFT * 0.55),
+                      Circle(radius=0.8, stroke_color=C.TRUE_P, stroke_width=3, fill_color=C.TRUE_P,
+                             fill_opacity=0.15).shift(RIGHT * 0.55))
+        venn.add(MathTex(r"H(X)", font_size=26, color=C.ENTROPY).move_to(LEFT * 0.95),
+                 MathTex(r"H(Y)", font_size=26, color=C.TRUE_P).move_to(RIGHT * 0.95))
+        ov = MathTex(r"I(X; Y)", font_size=26, color=C.BITS).next_to(venn, DOWN, buff=0.22)
+        venn.add(ov, Line(ov.get_top(), ORIGIN + DOWN * 0.15, color=C.BITS, stroke_width=2))
+        mi_card = gloss(r"mutual information \ $I(X; Y)$", r"how many bits knowing $X$ saves you\\ when guessing $Y$: "
+                        r"\ the overlap", picture=venn, width=4.6, color=C.BITS)
+        mi_card.to_edge(DOWN, buff=0.2).set_x(0)
         with self.voiceover(
             "Is being wrong always a cost? Yes, and the proof rests on one fact: <bookmark mark='a'/> the natural "
-            "log lies below its tangent line at one. ln x is at most x minus one. <bookmark mark='b'/> Write minus "
-            "the divergence in natural logs, <bookmark mark='c'/> apply that inequality to each term, "
+            "log, ln, the logarithm to base e, about 2.718, lies below its tangent line at one. ln x is at most x "
+            "minus one. <bookmark mark='b'/> Write minus the divergence in natural logs, so it's counted in nats "
+            "instead of bits, one nat being about 1.44 bits; <bookmark mark='c'/> apply that inequality to each term, "
             "<bookmark mark='d'/> multiply out, <bookmark mark='e'/> and both sums are one."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(ax), Create(ln), FadeIn(lab_ln))
+            self.play(Create(ax), Create(ln), FadeIn(lab_ln), FadeIn(ln_card))
             self.play(Create(tan), FadeIn(lab_t), FadeIn(touch), FadeIn(touch_l))
             self.play(LaggedStart(*[Create(g) for g in gap], lag_ratio=0.08), run_time=1.0)
             vo.wait_until("b")
@@ -189,18 +204,23 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
                 if k == 0:
                     self.play(Indicate(tan, color=WHITE), Indicate(ln, color=WHITE), run_time=0.6)
                 morph(self, eqs[k], eqs[k + 1], run_time=1.1)
+                if k == 0:
+                    self.play(FadeOut(ln_card), run_time=0.5)
         with self.voiceover(
             "So the divergence is never negative, and it's zero only when q equals p. <bookmark mark='a'/> The "
             "truth is the best code. And this pays the debt from chapter three: <bookmark mark='b'/> the drop in "
             "entropy from knowing X is a divergence too, so it can't be negative. Knowing more never hurts, on "
-            "average."
+            "average. <bookmark mark='c'/> That drop has a name, the mutual information: how many bits knowing X "
+            "saves you when guessing Y, the overlap of what the two carry. It comes back in chapter ten."
         ) as vo:
             self.play(FadeOut(VGroup(ax, ln, tan, gap, lab_ln, lab_t, touch, touch_l, whys[3])),
                       eqs[3].animate.scale(1.15).move_to(UP * 1.2))
             vo.wait_until("a")
             self.play(FadeIn(res[0], shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(res[1]), FadeIn(mi))
+            self.play(FadeIn(res[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(mi), FadeIn(mi_card))
         self.wait(0.3)
         self.clear_scene()
 
@@ -283,7 +303,8 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         why_[1].next_to(res[1], DOWN, buff=0.15)
         with self.voiceover(
             "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p "
-            "has two peaks, and our model q can only be a single bell curve. Which bell curve is best? It depends "
+            "has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center "
+            "is and how wide it is. Which bell curve is best? It depends "
             "on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the "
             "training loss we just met, <bookmark mark='b'/> pulls q wide, to cover both peaks."
         ) as vo:
@@ -360,25 +381,30 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         cap = label(r"across: \ the center $\mu$; \ back: \ the width $\sigma$; \ up: \ the loss", font_size=24,
                     color=GREY_B).to_edge(DOWN, buff=0.35)
         tag = computed_tag()
-        for m in (head, t_f, t_r, cap, tag):
+        gd_card = gloss(r"gradient descent", r"again and again, take a small step\\ in whichever direction lowers "
+                        r"the loss fastest", picture=valley_steps(0.15, x0=-1.3, n=6), corner=UL, width=4.0)
+        gd_card.shift(DOWN * 0.75)
+        for m in (head, t_f, t_r, cap, tag, gd_card):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         self.set_camera_orientation(phi=58 * DEGREES, theta=-78 * DEGREES)
         with self.voiceover(
             "Here are the two losses for every possible bell curve: its center across, its width up. "
-            "<bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent finds the wide "
-            "curve from anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each "
-            "peak, and where you end up depends on where you start."
+            "<bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent, which again and "
+            "again takes a small step in whichever direction lowers the loss fastest, finds the wide curve from "
+            "anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each peak, and "
+            "where you end up depends on where you start."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(tag), Create(axes), run_time=1.0)
             self.play(FadeIn(sF), run_time=1.5)
             self.begin_ambient_camera_rotation(rate=0.05)
             vo.wait_until("a")
             self.stop_ambient_camera_rotation()
-            self.play(FadeIn(t_f), FadeIn(bF[0]))
+            self.play(FadeIn(t_f), FadeIn(bF[0]), FadeIn(gd_card))
             self.play(MoveAlongPath(bF[0], bF[2]), Create(bF[1]), run_time=3.0, rate_func=smooth)
             vo.wait_until("b")
-            self.play(FadeOut(bF[0]), FadeOut(bF[1]), FadeOut(t_f), FadeIn(t_r), Transform(sF, sR), run_time=2.5)
+            self.play(FadeOut(bF[0]), FadeOut(bF[1]), FadeOut(t_f), FadeOut(gd_card), FadeIn(t_r), Transform(sF, sR),
+                      run_time=2.5)
             self.move_camera(phi=52 * DEGREES, theta=-90 * DEGREES, run_time=1.2)
             self.play(FadeIn(bA[0]), FadeIn(bB[0]))
             self.play(MoveAlongPath(bA[0], bA[2]), Create(bA[1]), MoveAlongPath(bB[0], bB[2]), Create(bB[1]),

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import MONO, load, plain_axes, polyline
+from videos.ai.ai1.common import MONO, load, net_sketch, plain_axes, polyline, valley_steps
 
 TOKENS = ["in", "on", "here", "back", "home"]  # illustrative continuations of "Come"
 
@@ -194,19 +194,30 @@ class Likelihood(VoiceoverScene):
         lq = VGroup(*[MathTex(f"{v:.3f}", font_size=24, color=C.PROB).next_to(b, UP, buff=0.08)
                       for v, b in zip(q, prob_bars)])
         stage = label(r"logits $z_k$: \ any real numbers", font_size=26, color=C.MODEL_Q).to_corner(DL, buff=0.4)
-        stage2 = label(r"$e^{z_k}$: \ all positive", font_size=26, color=C.MODEL_Q).to_corner(DL, buff=0.4)
+        stage2 = label(r"$e^{z_k}$: \ all positive; \ each $+1$ in $z$ multiplies it by $e \approx 2.7$", font_size=26,
+                       color=C.MODEL_Q).to_corner(DL, buff=0.4)
         stage3 = label(r"divide by the total: \ they sum to $1$", font_size=26, color=C.PROB).to_corner(DL, buff=0.4)
         ctx = label(r"after \texttt{Come}\ \ldots \ \ (illustrative)", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
         assert abs(q.sum() - 1) < 1e-12
+        net = gloss(r"neural network", r"a stack of simple steps: \ multiply by a table of numbers, then bend, "
+                    r"and repeat;\\ the numbers in the tables are tuned until the guesses are good",
+                    picture=net_sketch(), width=6.6, color=C.NEURAL)
+        net.scale(1.15).move_to(DOWN * 0.3)
         with self.voiceover(
-            "Counting doesn't generalize. Neural networks do, and they produce their guesses differently. For each "
-            "possible next token, the network computes a score, called a logit: <bookmark mark='a'/> any real "
-            "number, positive or negative. <bookmark mark='b'/> To make probabilities, exponentiate, so every score "
-            "becomes positive, <bookmark mark='c'/> and divide by the total, so they add to one. That's the softmax. "
-            "Bigger score, bigger probability, and nothing ever gets probability zero."
+            "Counting doesn't generalize. Neural networks do. <bookmark mark='n'/> A neural network is a stack of "
+            "simple steps: multiply by a table of numbers, then bend the result, and repeat, with all the numbers "
+            "in the tables tuned until its guesses are good. Its guesses come out differently. For each possible "
+            "next token, its last step computes a score, called a logit: <bookmark mark='a'/> any real number, "
+            "positive or negative. <bookmark mark='b'/> To make probabilities, exponentiate: e to the z turns any "
+            "number positive, and each step of one up multiplies it by about 2.7. <bookmark mark='c'/> Then divide "
+            "by the total, so they add to one. That's the softmax. Bigger score, bigger probability, and nothing "
+            "ever gets probability zero."
         ) as vo:
             self.play(FadeIn(head), Write(f), FadeIn(toks), FadeIn(ctx), Create(zero))
+            vo.wait_until("n")
+            self.play(FadeIn(net, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeOut(net), run_time=0.5)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN if v > 0 else UP) for b, v in zip(logit_bars, z)],
                                   lag_ratio=0.15), FadeIn(lz), FadeIn(stage))
             vo.wait_until("b")
@@ -240,20 +251,44 @@ class Likelihood(VoiceoverScene):
             label(r"the model's guess, minus the truth", font_size=32, color=C.BITS),
             mtex(r"\text{averaged over the data:} \quad \nabla_z \mathcal{L} = q - \hat p", font_size=34, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.55)
+        # a derivative, pictured: nudge one score up a little, and the loss moves by (slope) x (nudge)
+        zb = Rectangle(width=0.5, height=0.9, stroke_width=0, fill_color=Q, fill_opacity=0.9).move_to([-0.8, 0.45, 0])
+        lb = Rectangle(width=0.5, height=1.2, stroke_width=0, fill_color=C.LOSS, fill_opacity=0.9).move_to([0.8, 0.6, 0])
+        ghosts = VGroup(zb.copy().set_fill(opacity=0).set_stroke(Q, 1.5), lb.copy().set_fill(opacity=0).set_stroke(C.LOSS, 1.5))
+        nudge_pic = VGroup(
+            Line([-1.4, 0, 0], [1.4, 0, 0], color=GREY_D, stroke_width=1.5), zb, lb, ghosts,
+            label(r"one score", font_size=20, color=Q).next_to(zb, DOWN, buff=0.12),
+            label(r"the loss", font_size=20, color=C.LOSS).next_to(lb, DOWN, buff=0.12),
+            label(r"nudge", font_size=20, color=C.BITS).move_to([-1.75, 1.0, 0]),
+            label(r"moves by\\ slope $\times$ nudge", font_size=20, color=C.BITS).move_to([2.05, 1.1, 0]),
+        )
+        deriv = gloss(r"derivative \ $\partial / \partial z_k$", r"how much the output moves\\ when you nudge one "
+                      r"input a tiny bit", picture=nudge_pic, width=4.4)
+        deriv.to_edge(DOWN, buff=0.25).set_x(0)
+        dp = deriv[1][-1]
+        dp[6].set_opacity(0)
+        dp[7].set_opacity(0)
         with self.voiceover(
-            "To learn, the network needs to know which way to nudge each score. <bookmark mark='a'/> Write the "
-            "surprise of the right answer, y, in terms of the scores. <bookmark mark='b'/> Differentiate with "
-            "respect to the score z k. The first term gives minus one if k is y. The second is the softmax itself. "
-            "<bookmark mark='c'/> So the derivative is q k minus one, for the right answer, and q k, for every wrong "
-            "one."
+            "To learn, the network needs to know which way to nudge each score. <bookmark mark='n'/> That's what a "
+            "derivative measures: how much the output moves when you nudge one input a tiny bit, holding the others "
+            "still. <bookmark mark='a'/> Write the surprise of the right answer, y, in terms of the scores. "
+            "<bookmark mark='b'/> Differentiate with respect to the score z k. The first term gives minus one if k "
+            "is y. The second is the softmax itself. <bookmark mark='c'/> So the derivative is q k minus one, for "
+            "the right answer, and q k, for every wrong one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup))
+            vo.wait_until("n")
+            self.play(FadeIn(deriv, shift=UP * 0.2))
+            self.play(dp[1].animate.stretch_to_fit_height(dp[1].height * 1.3, about_edge=DOWN),
+                      dp[2].animate.stretch_to_fit_height(dp[2].height * 0.88, about_edge=DOWN),
+                      dp[6].animate.set_opacity(1), dp[7].animate.set_opacity(1), run_time=1.2)
             vo.wait_until("a")
             self.play(Write(eqs[0]), FadeIn(whys[0]))
             for k, mark in enumerate("bc"):
                 vo.wait_until(mark)
                 self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.4)
                 morph(self, eqs[k], eqs[k + 1], run_time=1.2)
+            self.play(FadeOut(deriv))
         with self.voiceover(
             "In words: the model's guess, minus the truth. <bookmark mark='a'/> Averaged over a dataset, the "
             "gradient is q minus p hat. Push up the scores of what happened more often than the model expected; "
@@ -321,18 +356,31 @@ class Likelihood(VoiceoverScene):
                                                color=C.LOSS, stroke_width=4) if t.get_value() >= 1 else VGroup())
         assert ces[0] > 2.3 and abs(ces[0] - math.log2(5)) < 1e-9  # starts from uniform guesses: log2 5
         tag = computed_tag()
+        # the learning rate, pictured: too small, about right, too large
+        rates = VGroup()
+        for eta, n, cap_ in ((0.04, 6, r"too small: \ crawls"), (0.3, 5, r"about right"),
+                             (0.95, 4, r"too large: \ overshoots")):
+            v_ = valley_steps(eta, x0=-1.2, n=n, width=1.7, height=1.0, color=C.LR)
+            rates.add(VGroup(v_, label(cap_, font_size=20, color=GREY_A).next_to(v_, DOWN, buff=0.12)))
+        rates.arrange(RIGHT, buff=0.35, aligned_edge=DOWN)
+        lr_card = gloss(r"learning rate \ $\eta$", r"how big each step is", picture=rates, width=5.4, color=C.LR)
+        lr_card.move_to([3.4, -0.9, 0])
         with self.voiceover(
-            "Here it is in action. Suppose the data are a hundred continuations of come, <bookmark mark='a'/> and the "
-            "model starts with all five scores equal, so every guess is twenty percent. <bookmark mark='b'/> At each "
-            "step, every score moves by minus the learning rate times q minus p hat: up where the model "
-            "under-guesses, down where it over-guesses."
+            "Here is gradient descent in action. Suppose the data are a hundred continuations of come, "
+            "<bookmark mark='a'/> and the model starts with all five scores equal, so every guess is twenty percent. "
+            "At each step, every score moves by minus eta times q minus p hat: up where the model under-guesses, "
+            "down where it over-guesses. <bookmark mark='l'/> Eta is the learning rate, the size of each step: too "
+            "small, and learning crawls; too large, and it overshoots the bottom. <bookmark mark='b'/> Let's run it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(data), FadeIn(upd), FadeIn(toks), FadeIn(targets), FadeIn(leg), FadeIn(tag))
             vo.wait_until("a")
             self.add(bar_m)
+            vo.wait_until("l")
+            self.play(FadeIn(lr_card, shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeOut(lr_card), run_time=0.5)
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(floor), FadeIn(fl))
             self.add(curve)
-            vo.wait_until("b")
             self.play(t.animate.set_value(12), run_time=3.0, rate_func=linear)
         with self.voiceover(
             "The guesses slide toward the data's frequencies, and the cross-entropy falls toward its floor: the "

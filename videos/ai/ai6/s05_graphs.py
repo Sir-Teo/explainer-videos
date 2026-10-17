@@ -53,7 +53,8 @@ class Graphs(VoiceoverScene):
         colors = {r"\mathrm{parents}(v)": HIDDEN}
         f = cmath(r"p(\text{everything})", "=", r"\prod_{v}", r"\,p\big(v \mid", r"\mathrm{parents}(v)", r"\big)",
                   colors=colors, font_size=40).to_edge(DOWN, buff=1.15)
-        fn = label(r"one factor per circle, \ given the circles that point into it", font_size=24, color=GREY_A)
+        fn = label(r"$\prod$: \ multiply one probability per circle, \ each given the circles that point into it",
+                   font_size=24, color=GREY_A)
         fn.next_to(f, DOWN, buff=0.15)
         cite_ = cite(r"J.~Pearl, \textit{Probabilistic Reasoning in Intelligent Systems} (1988)", corner=DR)
         # a language model: every earlier letter points at every later one
@@ -68,8 +69,9 @@ class Graphs(VoiceoverScene):
             "it, empty if it's hidden, and an arrow wherever one depends directly on another. "
             "<bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. "
             "<bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. "
-            "<bookmark mark='c'/> The picture is a formula. The probability of everything is a product, one factor "
-            "per circle, each depending only on the circles that point into it. That's a Bayesian network, Judea "
+            "<bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big "
+            "pi: multiply one probability per circle, each given only the circles that point into it, its parents. "
+            "That's a Bayesian network, Judea "
             "Pearl's language for reasoning under uncertainty."
         ) as vo:
             self.play(FadeIn(key))

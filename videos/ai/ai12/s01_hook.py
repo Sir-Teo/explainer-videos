@@ -31,10 +31,11 @@ class Hook(VoiceoverScene):
         def upd_mem(m):
             m.become(MathTex(gib(max(n.get_value(), 1) * per), font_size=36, color=C.SURPRISE).next_to(counter[2], RIGHT, buff=0.25))
 
-        tag = note(r"Llama 3.1 70B's cache: \ $80$ layers, \ $8$ key and value heads of $128$ numbers, \ bf16").to_edge(DOWN, buff=0.3)
+        tag = note(r"Llama 3.1 70B's cache: \ $80$ layers, \ $8$ key and value heads of $128$ numbers, \ bf16: \ $16$ bits $= 2$ bytes a number").to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Every token a transformer reads, it keeps: a key and a value, in every layer. <bookmark mark='a'/> For "
-            f"Llama 3.1 with seventy billion parameters, that's {per / 2**10:.0f} kilobytes a token. "
+            "Llama 3.1 with seventy billion parameters, each number stored in bf16, sixteen bits or two bytes, "
+            f"that's {per / 2**10:.0f} kilobytes a token. "
             "<bookmark mark='b'/> A long conversation, a hundred and twenty-eight thousand tokens, needs "
             f"{128e3 * per / 2**30:.0f} gigabytes of memory, just to remember what it has read."
         ) as vo:

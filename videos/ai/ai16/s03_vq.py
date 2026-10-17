@@ -51,19 +51,39 @@ class VQ(VoiceoverScene):
         rl = VGroup(*[label(rf"${int(k)}$ codes: \ ${float(v[f'err_vq{k}']):.3f}$", font_size=20, color=IMG_C)
                       .next_to(r, DOWN, buff=0.1) for k, r in zip(v["sizes"], recs)])
         cite_ = cite(r"A.~van den Oord, O.~Vinyals \& K.~Kavukcuoglu, \textit{VQ-VAE} (2017)", corner=UR)
+        # k-means, schematic: three guesses find three clusters in three rounds
+        km_g = np.random.default_rng(6)
+        km_pts = np.concatenate([m + km_g.normal(0, 0.32, (8, 2)) for m in ([-1.3, 0.6], [1.2, 0.9], [0.1, -0.9])])
+        km_dots = VGroup(*[Dot([x, y, 0], radius=0.07, color=GREY_B) for x, y in km_pts])
+        km_cols = [TOKEN_COLORS[0], TOKEN_COLORS[1], TOKEN_COLORS[2]]
+        km_cent = VGroup(*[Star(5, outer_radius=0.17, color=c_, fill_opacity=1, stroke_width=1.5, stroke_color=WHITE).move_to([x, y, 0])
+                           for c_, (x, y) in zip(km_cols, [[-0.4, 1.2], [0.0, 1.0], [0.4, 0.6]])])
+        km = gloss(r"k-means", r"start with guesses; \ give each patch to its nearest; \\ move each guess to the average of its patches; \ repeat",
+                   picture=VGroup(km_dots, km_cent), corner=DR, width=5.0, color=IMG_C)
+        km_d, km_c = km[1][2][0], km[1][2][1]
         with self.voiceover(
             "Text comes in pieces. Pictures and sound are continuous, so to make tokens of them, we need a "
             "vocabulary of shapes: a codebook. <bookmark mark='a'/> Cut every letter picture into four by four "
-            "patches and find sixteen typical ones: that's k-means clustering, which part six's mixtures "
-            "generalize. <bookmark mark='b'/> Now any picture becomes a sequence of numbers from zero to fifteen: "
-            "replace each patch by its nearest code. <bookmark mark='c'/> With more codes, the copy gets closer: "
-            "sixteen, sixty-four, two hundred and fifty-six."
+            "patches and find sixteen typical ones by k-means clustering: <bookmark mark='k'/> start with sixteen "
+            "guesses, give each patch to its nearest guess, move each guess to the average of its patches, and "
+            "repeat. Part six's mixtures generalize it. <bookmark mark='b'/> Now any picture becomes a sequence of "
+            "numbers from zero to fifteen: replace each patch by its nearest code. <bookmark mark='c'/> With more "
+            "codes, the copy gets closer: sixteen, sixty-four, two hundred and fifty-six."
         ) as vo:
             self.play(FadeIn(tiles), FadeIn(ol))
             self.play(*[t_.animate.move_to(x) for t_, x in zip(tiles, spread)], run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(cbl), LaggedStart(*[FadeIn(c, scale=0.6) for c in cb], lag_ratio=0.06), FadeIn(ids), run_time=2.0)
+            vo.wait_until("k")
+            self.play(FadeIn(km))
+            for _ in range(3):
+                near = [int(np.argmin([np.linalg.norm(d_.get_center() - s_.get_center()) for s_ in km_c])) for d_ in km_d]
+                self.play(*[d_.animate.set_color(km_cols[j]) for d_, j in zip(km_d, near)], run_time=0.6)
+                means = [np.mean([d_.get_center() for d_, j in zip(km_d, near) if j == i] or [s_.get_center()], axis=0)
+                         for i, s_ in enumerate(km_c)]
+                self.play(*[s_.animate.move_to(m_) for s_, m_ in zip(km_c, means)], run_time=0.8)
             vo.wait_until("b")
+            self.play(FadeOut(km), run_time=0.5)
             self.play(LaggedStart(*[FadeTransform(t_, c_) for t_, c_ in zip(tiles, coded)], lag_ratio=0.04), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(m_) for m_ in nums], lag_ratio=0.03), *[c_.animate.set_opacity(0.35) for c_ in coded])
             self.play(LaggedStart(*[TransformFromCopy(m_, q_) for m_, q_ in zip(nums, seq)], lag_ratio=0.04), FadeIn(sql), run_time=2.0)
@@ -90,16 +110,37 @@ class VQ(VoiceoverScene):
                      rf"finite scalar quantization, \ rounding $4$ numbers to $5$ levels each: \ ${float(v['err_fsq']):.3f}$",
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
         used = label(r"sound codecs: \ SoundStream, \ EnCodec, \ Mimi", font_size=22, color=C.INTERVAL).next_to(comp, UP, buff=0.25)
+        # to quantize: a value slides along a menu of 16 points, snaps to the nearest, and sends its number
+        ql = NumberLine(x_range=[0, 15, 1], length=9.0, include_numbers=False, color=GREY_C, tick_size=0.12).move_to(UP * 0.4)
+        qn = VGroup(*[MathTex(str(i), font_size=22, color=GREY_B).next_to(ql.n2p(i), DOWN, buff=0.15) for i in range(16)])
+        qm = VGroup(*[Dot(ql.n2p(i), radius=0.06, color=TOKEN_COLORS[i % 8]) for i in range(16)])
+        qt = label(r"quantize: \ snap a value to the nearest point on a fixed menu, \ and send that point's number",
+                   font_size=24, color=IMG_C).next_to(ql, UP, buff=0.9)
+        qv = ValueTracker(2.3)
+        qd = always_redraw(lambda: Dot(ql.n2p(qv.get_value()), radius=0.11, color=WHITE).shift(UP * 0.35))
         with self.voiceover(
-            "One codebook can only be so fine. The trick sound models use is to quantize in stages. "
+            "One codebook can only be so fine. <bookmark mark='q'/> What we just did has a name: to quantize is to "
+            "snap a value to the nearest item on a fixed menu, so it can be sent as a small whole number. The trick "
+            "sound models use is to quantize in stages. "
             "<bookmark mark='a'/> The first stage codes the patch roughly; the second codes what the first missed; "
             "then the third, and the fourth. <bookmark mark='b'/> Four stages of sixteen codes do as well here as one "
             "codebook of two hundred and fifty-six, and each token stays a small number. That's residual vector "
-            "quantization, inside every neural audio codec. A simpler cousin, finite scalar quantization, just rounds "
-            "a few numbers to a few levels, with no codebook at all."
+            "quantization, inside every neural audio codec, the coder and decoder pair that turns sound into codes "
+            "and back. A simpler cousin, finite scalar quantization, just rounds a few numbers to a few levels, with "
+            "no codebook at all."
         ) as vo:
             self.play(Write(f), FadeIn(fl))
+            vo.wait_until("q")
+            self.play(Create(ql), FadeIn(qm), FadeIn(qn), FadeIn(qt))
+            self.add(qd)
+            self.play(qv.animate.set_value(9.37), run_time=1.6, rate_func=smooth)
+            self.play(qv.animate.set_value(9), run_time=0.4)
+            sent = MathTex("9", font_size=40, color=TOKEN_COLORS[9 % 8]).move_to(qd.get_center())
+            sl_ = label(r"sent:", font_size=24, color=GREY_A).move_to(ql.n2p(9) + DOWN * 1.1 + LEFT * 0.4)
+            self.play(Indicate(qm[9], scale_factor=1.6), sent.animate.next_to(sl_, RIGHT, buff=0.15), FadeIn(sl_))
             vo.wait_until("a")
+            self.remove(qd)
+            self.play(FadeOut(VGroup(ql, qm, qn, qt, sent, sl_)), run_time=0.5)
             for i, st in enumerate(stages):
                 self.play(FadeIn(st, shift=RIGHT * 0.2), FadeIn(sl[i]), *([FadeIn(plus[i - 1])] if i else []), run_time=0.8)
             vo.wait_until("b")
@@ -127,8 +168,8 @@ class VQ(VoiceoverScene):
         z = np.array([0.35, 0.2])
         k = int(np.argmin(((codes - z) ** 2).sum(1)))
         zd = Dot(P(z), radius=0.08, color=WHITE)
-        zl = MathTex(r"z", font_size=30).next_to(zd, DL, buff=0.05)
-        el = MathTex(r"e_k", font_size=30, color=TOKEN_COLORS[k % len(TOKEN_COLORS)]).next_to(cdots[k], UR, buff=0.05)
+        zl = MathTex(r"z", font_size=30).next_to(zd, UL, buff=0.05)
+        el = MathTex(r"e_k", font_size=30, color=TOKEN_COLORS[k % len(TOKEN_COLORS)]).next_to(cdots[k], DL, buff=0.05)
         fwd = Arrow(P(z), P(codes[k]), buff=0.1, color=GREY_A, stroke_width=3, max_tip_length_to_length_ratio=0.2)
         gvec = np.array([0.55, -0.45])
         gq = Arrow(P(codes[k]), P(codes[k] + gvec), buff=0, color=C.SURPRISE, stroke_width=4, max_tip_length_to_length_ratio=0.25)
@@ -152,16 +193,42 @@ class VQ(VoiceoverScene):
         keep_in_frame(VGroup(eqs, notes))
         tag = note(r"schematic: \ $7$ codes in $2$ dimensions").to_corner(DL, buff=0.3)
         cite_ = cite(r"A.~van den Oord et al., \textit{VQ-VAE} (2017); \ F.~Mentzer et al., \textit{FSQ} (2023)", corner=UR)
+
+        # the two extra terms as two springs between z and its code: a strong one moves the code, a weak one (beta) z
+        def spring(a, b, width, color, n=9, amp=0.12):
+            d = (b - a) / np.linalg.norm(b - a)
+            nrm = np.array([-d[1], d[0], 0])
+            pts = [a + (b - a) * (i / (2 * n)) + (nrm * amp * (1 if i % 2 else -1) if 0 < i < 2 * n else 0) for i in range(2 * n + 1)]
+            return VMobject(stroke_color=color, stroke_width=width).set_points_as_corners(pts)
+
+        sa, sb = np.array([-1.6, 0, 0]), np.array([1.6, 0, 0])
+        kc = TOKEN_COLORS[k % len(TOKEN_COLORS)]
+        springs = VGroup(spring(sa + UP * 0.35, sb + UP * 0.35, 5, kc), spring(sa + DOWN * 0.35, sb + DOWN * 0.35, 1.8, C.BITS),
+                         Dot(sa, radius=0.12, color=WHITE), Dot(sb, radius=0.12, color=kc))
+        springs.add(MathTex("z", font_size=32).next_to(springs[2], LEFT, buff=0.12),
+                    MathTex("e_k", font_size=32, color=kc).next_to(springs[3], RIGHT, buff=0.12),
+                    label(r"strong: \ moves the code to $z$", font_size=20, color=kc).next_to(springs[0], UP, buff=0.08),
+                    label(r"weak, \ $\beta$: \ keeps $z$ near its code", font_size=20, color=C.BITS).next_to(springs[1], DOWN, buff=0.08))
+        commit = gloss(r"commitment loss", r"a small penalty that stops the encoder's output \\ drifting far from the code it was snapped to",
+                       picture=springs, corner=DR, width=5.4, color=C.BITS)
+        # FSQ: squash each number into a box, round to the nearest of L = 5 levels: the codebook is the grid
+        lv = np.arange(-2, 3)
+        fgrid = VGroup(*[Dot(P([a, b]), radius=0.06, color=C.INTERVAL) for a in lv for b in lv])
+        fbox = Square(4 * u, stroke_color=C.INTERVAL, stroke_width=1.5).move_to(P([0, 0]))
+        fz = g.normal(0, 1.6, (12, 2))
+        fpts = VGroup(*[Dot(P(np.clip(x, -2.5, 2.5)), radius=0.07, color=WHITE) for x in fz])
+        fl_ = label(r"the codebook is just this grid", font_size=22, color=C.INTERVAL).next_to(fbox, UP, buff=0.15)
         with self.voiceover(
             "In a real model, the codebook is learned along with the encoder and decoder, and that hits a snag. "
             "<bookmark mark='a'/> Each encoder output z is replaced by its nearest code. Picking the nearest is a "
             "jump, with no gradient. <bookmark mark='b'/> The fix is the straight-through trick: forward, use the "
             "code; backward, pretend nothing happened, and hand the code's gradient straight to z. "
             "<bookmark mark='c'/> Two more terms keep things together: one pulls each code toward the outputs that "
-            "chose it, the other, the commitment loss, keeps the outputs from wandering away from their codes. "
-            "<bookmark mark='d'/> Even so, codes that nobody picks stop learning, and many go unused. Finite scalar "
-            "quantization sidesteps all of it: squash each number, round it to a few levels, and the codebook is just "
-            "the grid. It's what several recent image and video tokenizers use."
+            "chose it; the other, the commitment loss, is a small penalty, weighted by beta, that stops each output "
+            "drifting far from the code it was snapped to. "
+            "<bookmark mark='d'/> Even so, codes that nobody picks stop learning, and many go unused. "
+            "<bookmark mark='e'/> Finite scalar quantization, FSQ, sidesteps all of it: squash each number, round it "
+            "to a few levels, and the codebook is just the grid. It's what several recent image and video tokenizers use."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(grid), FadeIn(cdots), FadeIn(tag))
             vo.wait_until("a")
@@ -171,7 +238,13 @@ class VQ(VoiceoverScene):
             self.play(TransformFromCopy(gq, gz), FadeIn(gl))
             vo.wait_until("c")
             self.play(Write(eqs[2]), FadeIn(notes[2]))
+            self.play(FadeIn(commit))
             vo.wait_until("d")
-            self.play(Write(eqs[3]), FadeIn(notes[3]))
+            self.play(FadeOut(commit), run_time=0.5)
+            vo.wait_until("e")
+            self.play(FadeOut(VGroup(grid, cdots, zd, zl, el, fwd, gq, gz, gl, tag)), Write(eqs[3]), FadeIn(notes[3]))
+            self.play(FadeIn(fbox), FadeIn(fgrid), FadeIn(fpts), FadeIn(fl_))
+            self.play(*[d_.animate.move_to(P(2 * np.tanh(x))) for d_, x in zip(fpts, fz)], run_time=1.0)
+            self.play(*[d_.animate.move_to(P(np.round(2 * np.tanh(x)))) for d_, x in zip(fpts, fz)], run_time=0.8)
         self.wait(0.3)
         self.clear_scene()

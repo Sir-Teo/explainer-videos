@@ -138,11 +138,12 @@ class Clip(VoiceoverScene):
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
                             .next_to(gl, UP, buff=0.15))
         dg = np.array([np.mean(np.diag(s_)) - np.mean(s_[~np.eye(n, dtype=bool)]) for s_ in snaps])
+        con = gloss(r"contrastive training", r"pull the matching pairs together, \ push the rest apart", corner=DR, color=TEXT_C)
         with self.voiceover(
             "How does training find that diagonal? Here is the same table of twelve pictures and their captions, "
             "scored at checkpoints while the two encoders learn. <bookmark mark='a'/> At the start, every score is "
-            "noise. <bookmark mark='b'/> Each batch pulls the matching pairs' vectors together and pushes every other "
-            "pair apart, and the diagonal lights up: "
+            "noise. <bookmark mark='b'/> This is contrastive training: each batch pulls the matching pairs' vectors "
+            "together and pushes every other pair apart, and the diagonal lights up: "
             f"matching pairs end up {dg[-1]:.2f} more similar, on average, than mismatched ones. Pairs that share a "
             "letter or a style stay partly lit: they really are alike."
         ) as vo:
@@ -151,6 +152,7 @@ class Clip(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(diag))
             vo.wait_until("b")
+            self.play(FadeIn(con), run_time=0.5)
             for k in range(1, len(checks)):
                 nxt = grid(k)
                 seg = [ax.c2p(a, b) for a, b in L if checks[k - 1] <= a <= checks[k]]

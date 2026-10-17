@@ -256,6 +256,55 @@ def plain_axes(x_range, y_range, x_length, y_length, **kw) -> Axes:
                 axis_config=cfg, **kw)
 
 
+def valley_steps(eta: float, x0: float = -1.0, n: int = 5, width: float = 1.8, height: float = 1.1,
+                 color=C.BITS) -> VGroup:
+    """Gradient descent on the valley y = x^2, drawn small: the curve, and n steps x <- x - eta * 2x from x0, each a
+    dot joined to the next by an arrow (a jargon-card picture: small steps downhill, or overshooting ones)."""
+    sx, sy = width / 3.0, height / 2.25  # x in [-1.5, 1.5], y in [0, 2.25]
+    curve = VMobject(stroke_color=GREY_B, stroke_width=2.5).set_points_smoothly(
+        [np.array([x * sx, x * x * sy, 0]) for x in np.linspace(-1.5, 1.5, 31)])
+    xs = [x0]
+    for _ in range(n):
+        xs.append(xs[-1] - eta * 2 * xs[-1])
+    pts = [np.array([float(np.clip(x, -1.5, 1.5)) * sx, min(x * x, 2.25) * sy, 0]) for x in xs]
+    dots = VGroup(*[Dot(p_, radius=0.065, color=color) for p_ in pts])
+    dots[0].set_color(WHITE)
+    arrows = VGroup(*[Arrow(a, b, buff=0.06, color=color, stroke_width=2.5, max_tip_length_to_length_ratio=0.3,
+                            max_stroke_width_to_length_ratio=10) for a, b in zip(pts, pts[1:])
+                      if np.linalg.norm(b - a) > 0.12])
+    return VGroup(curve, arrows, dots)
+
+
+def net_sketch(seed: int = 8) -> VGroup:
+    """A neural network, drawn small: input -> table of numbers -> bend -> table of numbers -> scores.  The tables'
+    cells are the adjustable numbers (lit by how large each is); the bend is a kinked curve (a jargon-card picture)."""
+    rng = np.random.default_rng(seed)
+
+    def table(rows, cols):
+        return VGroup(*[Square(0.2, stroke_width=0.8, stroke_color=GREY_D, fill_color=C.BITS,
+                               fill_opacity=float(rng.uniform(0.15, 0.95))) for _ in range(rows * cols)]
+                      ).arrange_in_grid(rows, cols, buff=0.03)
+
+    inp = VGroup(*[Square(0.2, stroke_width=1, stroke_color=GREY_B, fill_color=C.TOKEN, fill_opacity=0.5)
+                   for _ in range(4)]).arrange(DOWN, buff=0.03)
+    t1, t2 = table(4, 5), table(5, 4)
+    frame = Square(0.9, stroke_width=1.2, stroke_color=GREY_C)
+    kink = VMobject(stroke_color=C.MLP, stroke_width=3.5).set_points_as_corners(
+        [frame.get_left() + DOWN * 0.15, frame.get_center() + DOWN * 0.15, frame.get_corner(UR) + LEFT * 0.08])
+    bend = VGroup(frame, kink)
+    hs = [0.75, 0.3, 0.55, 0.15]
+    out = VGroup(*[Rectangle(width=0.16, height=h, stroke_width=0, fill_color=C.MODEL_Q, fill_opacity=0.9)
+                   for h in hs]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN)
+    parts = VGroup(inp, t1, bend, t2, out).arrange(RIGHT, buff=0.55)
+    arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5,
+                            max_tip_length_to_length_ratio=0.35) for a, b in zip(parts, parts[1:])])
+    names = [r"input", r"$\times$ a table", r"bend", r"$\times$ a table", r"scores"]
+    labs = VGroup(*[label(t, font_size=20, color=GREY_A) for t in names])
+    for lb, p_ in zip(labs, parts):
+        lb.move_to([p_.get_x(), parts.get_bottom()[1] - 0.28, 0])
+    return VGroup(parts, arrows, labs)
+
+
 def tt(s: str) -> str:
     """A string of symbols for TeX: typewriter face, spaces as a visible space (␣)."""
     return r"\texttt{" + s.replace(" ", r"\textvisiblespace{}") + "}"
