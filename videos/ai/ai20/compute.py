@@ -197,12 +197,13 @@ def compute_sae():
         h = residuals(model, ps, 1, [s0 - 192], c11)[-64:]
         Xd = (h - mu) / scale
         Fd = torch.relu(Xd @ We + be)
+        Rd = Fd @ dec + bd
     f_pur = np.array([f_["purity"] for f_ in feats])
     out = dict(D=int(D), F=F_, l0=l0, fvu=fvu, n_vectors=int(len(X)), lam=lam, features=feats,
                dead=int((alive == 0).sum()), mu=mu.numpy(), scale=float(scale), dirs=(dec * scale).numpy(),
                neuron_purity=n_pur, feature_purity=f_pur, neuron=med, neuron_contexts=neuron_ctx,
                demo_text="".join(chars[int(c)] for c in ps[s0:s0 + 64]), demo_resid=Xd.numpy(),
-               demo_feats=Fd.numpy(), demo_rec=(Fd @ dec + bd).numpy())
+               demo_feats=Fd.numpy(), demo_rec=Rd.numpy())
     print(f"    {len(X)} vectors; {l0:.1f} features active per character; unexplained variance {fvu:.3f}; "
           f"{out['dead']} dead; purity: neurons {n_pur.mean():.2f}, features {f_pur.mean():.2f}", flush=True)
     assert l0 < 0.1 * F_ and fvu < 0.35
