@@ -11,7 +11,10 @@ running a model is a problem of moving numbers, and three ways to move fewer. A 
   200,000 samples to reproduce the big model's probabilities exactly; the characters per run, (1 − αᵏ⁺¹)/(1 − α).
 * **Fewer bits per number.** Part 11's transformer rounded to 8, 4 and 3 bits, and to FP4 (E2M1) with a scale per
   block of 32: the weight histogram against the levels, and the bits per character lost; GPTQ and low-precision
-  training.
+  training; MXFP4 (E2M1, a power-of-two scale per 32: 4.25 bits a weight) and NVFP4 (E2M1, an E4M3 scale per 16 and
+  one per tensor: 4.5 bits) exactly: 2.022 and 2.020 bits a character against 2.043 for 4-bit integers (1.996
+  unrounded); GPTQ's column-by-column error compensation (at 3 bits: 2.119 against 2.251), animated on a small layer;
+  and a Hadamard rotation, which our outlier-free model doesn't need (2.323 at 3 bits).
 * **Moving numbers is the cost.** This computer's own roofline (matrix products of growing size against its memory
   bandwidth); FlashAttention's tiles and online softmax, checked against the plain formula; vLLM's pages against
   blocks reserved at the maximum length, for 200 requests of random lengths.

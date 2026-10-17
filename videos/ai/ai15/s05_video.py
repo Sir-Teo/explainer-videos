@@ -103,8 +103,8 @@ class Video(VoiceoverScene):
                               max_tip_length_to_length_ratio=0.2) for l_ in lats])
         size = label(rf"each: \ ${lat[0]}$ channels $\times\,{lat[2]} \times {lat[3]}$", font_size=20, color=PATCH)
         size.next_to(lats[2], RIGHT, buff=0.3)
-        rule = label(r"latent frame $k$ sees only frames up to $4k$: \\ the first frame alone, \ then four at a time",
-                     font_size=20, color=GREY_A).next_to(lats[0], RIGHT, buff=0.35).shift(UP * 0.1)
+        rule = label(r"latent frame $k$ sees \\ only frames up to $4k$: \\ the first alone, \ then four at a time",
+                     font_size=20, color=GREY_A).next_to(size, DOWN, buff=0.25).align_to(size, LEFT)
         ratio = int(d["pixels"]) / int(d["numbers"])
         num = label(rf"${int(d['pixels']):,}$ pixels $\to$ ${int(d['numbers'])}$ numbers \ (${ratio:.0f}\times$); \ "
                     rf"rebuild error ${float(d['rmse']):.3f}$".replace(",", "{,}"), font_size=22, color=PATCH).to_edge(DOWN, buff=0.2)
@@ -142,20 +142,22 @@ class Video(VoiceoverScene):
         # a little block of tokens: frames x rows x columns
         cube = VGroup()
         nf, nh, nw, u = 3, 4, 5, 0.42
-        q = (1, 2, 3)
-        for f in range(nf):
+        q = (0, 2, 3)  # the query token, in the front frame
+        for f in reversed(range(nf)):  # back frames first, so the front one is drawn on top
             for h in range(nh):
                 for w in range(nw):
-                    sq = Square(u * 0.9, stroke_color=PATCH, stroke_width=1.2, fill_color=PATCH,
-                                fill_opacity=0.6 if (f, h, w) == q else 0.12)
-                    cube.add(sq.move_to([w * u + f * 0.55, -h * u + f * 0.4, 0]))
+                    on = (f, h, w) == q
+                    sq = Square(u * 0.9, stroke_color=C.BITS if on else PATCH, stroke_width=2.5 if on else 1.2,
+                                fill_color=C.BITS if on else "#121722", fill_opacity=0.95)
+                    sq.set_stroke(opacity=1.0 if on else 0.9 - 0.25 * f)
+                    cube.add(sq.move_to([w * u + f * 0.8, -h * u + f * 0.62, 0]))
         cube.move_to([-3.8, 0.4, 0])
-        qi = (q[0] * nh + q[1]) * nw + q[2]
-        axes_ = VGroup(Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + RIGHT * 1.2, buff=0, stroke_width=2.5,
+        qi = ((nf - 1 - q[0]) * nh + q[1]) * nw + q[2]  # the cube was drawn back to front
+        axes_ = VGroup(Arrow(cube.get_corner(DL) + DL * 0.3, cube.get_corner(DL) + DL * 0.3 + RIGHT * 1.2, buff=0, stroke_width=2.5,
                              color=C.TRUE_P, max_tip_length_to_length_ratio=0.2),
-                       Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + UP * 1.0, buff=0, stroke_width=2.5,
+                       Arrow(cube.get_corner(DL) + DL * 0.3, cube.get_corner(DL) + DL * 0.3 + UP * 1.0, buff=0, stroke_width=2.5,
                              color=C.INTERVAL, max_tip_length_to_length_ratio=0.2),
-                       Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + np.array([0.7, 0.5, 0]), buff=0,
+                       Arrow(cube.get_corner(DL) + DL * 0.3, cube.get_corner(DL) + DL * 0.3 + np.array([0.7, 0.5, 0]), buff=0,
                              stroke_width=2.5, color=C.SURPRISE, max_tip_length_to_length_ratio=0.2))
         al = VGroup(MathTex(r"w", font_size=24, color=C.TRUE_P).next_to(axes_[0].get_end(), RIGHT, buff=0.05),
                     MathTex(r"h", font_size=24, color=C.INTERVAL).next_to(axes_[1].get_end(), UP, buff=0.05),

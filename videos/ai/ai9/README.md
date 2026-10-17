@@ -15,7 +15,10 @@ books and scored in bits per character on held-out text. A hook and five chapter
   up to 2/η, where it stays (Cohen et al.).
 * **Momentum and Adam.** The update rules (momentum, Adam, AdamW); five optimizers on the character model.
 * **Muon.** The singular values of a real gradient matrix before and after Newton–Schulz orthogonalization; Muon on
-  the hidden matrices against AdamW.
+  the hidden matrices against AdamW; Muon as steepest descent under the spectral norm (ΔW = −ηUVᵀ); Newton–Schulz's
+  quintic p(σ) = 3.4445σ − 4.7750σ³ + 2.0315σ⁵ applied to the gradient's singular values round by round (every one
+  above 1% of the largest ends between 0.68 and 1.13; the scalar iteration matches the matrix one to 10⁻⁶); Kimi K2's
+  QK-clip.
 * **Learning-rate schedules.** Constant, cosine and warmup–stable–decay on the character model; the drop when the
   learning rate falls.
 * **Recap**, where it comes back, Part 10's teaser, references.

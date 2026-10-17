@@ -7,7 +7,8 @@ pictures and sound become tokens for one model, and how pictures and words are m
 * **Cutting text into tokens.** Byte-pair encoding learned on two million characters of the novels: the first
   merges; one sentence at 0, 500, 2,000 and 8,000 merges; characters per token on the passage.
 * **Codebooks.** 4 × 4 patches of letter pictures quantized by codebooks of 16, 64 and 256 codes (k-means); residual
-  quantization in four stages of 16; finite scalar quantization.
+  quantization in four stages of 16; finite scalar quantization; learning a codebook inside a network: the
+  straight-through gradient z_q = z + sg(e_k − z), the codebook and commitment losses, and FSQ's round(⌊L/2⌋ tanh z).
 * **Sound as tokens.** A synthesized voice saying five vowels (pulses through Peterson and Barney's formants); its
   spectrogram; the frames as residual-quantized codes, and the spectrogram rebuilt from them.
 * **Matching senses.** A small contrastive model pairing letter pictures with captions such as "bold serif A",

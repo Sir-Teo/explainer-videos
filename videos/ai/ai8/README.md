@@ -15,7 +15,8 @@ five chapters:
   thirty million times, 1.4× too big it grows about ten million times, and at Var(w) = 2/n it stays steady (He et al.);
   gradients likewise.
 * **The residual stream.** h + f(h); the identity in every block's Jacobian; 40 plain layers stuck at 50% on the
-  spirals, 40 residual layers at 100%; LayerNorm.
+  spirals, 40 residual layers at 100%; LayerNorm; then today's block: pre-norm, RMSNorm (g ⊙ h / RMS(h)) and SwiGLU
+  (W₂(SiLU(W₁x) ⊙ W₃x)), whose hidden width of 8d/3 keeps the weights at 3·d·(8/3)d = 8d², as with 4d.
 * **A neural language model.** Bengio et al.'s design for characters (24 characters of context, learned 32-number
   vectors, 1,024 tanh units), trained on Part 1's books: its bits per character on the passage, its mixture with
   Part 6's Kneser–Ney (the scoreboard's new rows), the learned character vectors, and its writing.
