@@ -163,8 +163,8 @@ class Muon(VoiceoverScene):
                     Line(ax.c2p(xx, y), ax.c2p(min(y, 1.2), y), stroke_width=2, color=C.BITS))
             xx = y
         # right: all 256 singular values, round by round
-        bx = CornerAxes(x_range=[0, 5, 1], y_range=[0, 1.3, 0.5], x_length=5.0, y_length=4.2, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.0, -0.2, 0])
+        bx = CornerAxes(x_range=[0, 5, 1], y_range=[0, 1.3, 0.5], x_length=4.2, y_length=4.2, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([2.3, -0.2, 0])
         xt = VGroup(*[MathTex(str(k), font_size=20, color=GREY_B).next_to(bx.c2p(k, 0), DOWN, buff=0.08) for k in range(6)])
         xn = label(r"rounds of $p$", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
         yn = label(r"the gradient's $256$ singular values, \ scaled", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.2)
@@ -177,8 +177,8 @@ class Muon(VoiceoverScene):
         lo_b, hi_b, n_b = float(its[-1][big].min()), float(its[-1][big].max()), int(big.sum())
         band = Rectangle(width=bx.c2p(5.3, 0)[0] - bx.c2p(4.7, 0)[0], height=bx.c2p(0, hi_b)[1] - bx.c2p(0, lo_b)[1],
                          stroke_color=MU, stroke_width=1.5).move_to(bx.c2p(5, (hi_b + lo_b) / 2))
-        bl = label(rf"the ${n_b}$ above $1\%$ of the largest: \\ all between ${lo_b:.2f}$ and ${hi_b:.2f}$", font_size=18,
-                   color=MU).next_to(band, UP, buff=0.1)
+        bl = label(rf"the ${n_b}$ above \\ $1\%$ of the largest: \\ ${lo_b:.2f}$ to ${hi_b:.2f}$", font_size=18,
+                   color=MU).next_to(band, RIGHT, buff=0.2)
         keep_in_frame(bl)
         m_, e_ = f"{match:.0e}".split("e")
         chk = label(rf"the same as the matrix iteration's singular values, \ to ${m_} \times 10^{{{int(e_)}}}$", font_size=18,
