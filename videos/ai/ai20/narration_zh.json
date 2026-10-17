@@ -9,15 +9,15 @@
   "Outro": "回顾，以及整个系列"
  },
  "lines": {
-  "b0e4e312be6b": {
+  "d295f59e33b5": {
    "scene": "Hook",
-   "en": "Over twenty parts, we've built every piece of these models ourselves. We know every number in them. And yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the passage: for each character, the hundred and twenty-eight numbers it carries after its second block. Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture changes: only a handful of features are on at each character, and each one turns out to mean something.",
-   "zh": "在这20个部分里，这些模型的每一个部件，都是我们亲手搭出来的。它们里面的每一个数，我们都知道。可是，我们还是说不出它们在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：每个字符经过第二个模块之后，都带着128个数。每一个数都很忙，一刻不停；可没有一个数，单独拿出来有什么含义。<bookmark mark='b'/>这一部分，讲的就是怎样读懂它们。<bookmark mark='c'/>换一组合适的基，重新写一遍，画面就变了：在每个字符上，只有少数几个特征是打开的，而每一个特征，原来都有自己的含义。"
+   "en": "Over twenty parts, we've built every piece of these models ourselves. We know every number in them. And yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the passage: for each character, the hundred and twenty-eight numbers it carries after its second block. Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture changes: only a handful of features, ideas the model tracks, are on at each character, and each one turns out to mean something.",
+   "zh": "在这20个部分里，这些模型的每一个部件，都是我们亲手搭出来的。它们里面的每一个数，我们都知道。可是，我们还是说不出它们在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：每个字符经过第二个模块之后，都带着128个数。每一个数都很忙，一刻不停；可没有一个数，单独拿出来有什么含义。<bookmark mark='b'/>这一部分，讲的就是怎样读懂它们。<bookmark mark='c'/>换一组合适的基，重新写一遍，画面就变了：在每个字符上，只有少数几个特征，也就是模型追踪的想法，是打开的，而每一个特征，原来都有自己的含义。"
   },
-  "2049632e9780": {
+  "617a9da6b839": {
    "scene": "Hook",
-   "en": "Take one character. <bookmark mark='a'/> Its hundred and twenty-eight numbers, tangled together, become 2 features out of five hundred and twelve.",
-   "zh": "拿出一个字符。<bookmark mark='a'/>它那128个缠在一起的数，变成了512个特征里的2个。"
+   "en": "Take one character. <bookmark mark='a'/> Its hundred and twenty-eight numbers, tangled together, become 2 features out of five hundred and twelve. <bookmark mark='f'/> A feature is one idea the model tracks, like 'inside a quotation', stored as a direction among those numbers. How far the vector points that way, its shadow on that direction, is how strongly the feature is on.",
+   "zh": "拿出一个字符。<bookmark mark='a'/>它那128个缠在一起的数，变成了512个特征里的2个。<bookmark mark='f'/>所谓特征，就是模型追踪的一个想法，比如“在引号里面”，它以一个方向的形式，存在这些数当中。向量朝这个方向指得有多远，也就是它在这个方向上的影子，就表示这个特征打开得有多强。"
   },
   "73b840ffe98a": {
    "scene": "Hook",
@@ -29,10 +29,15 @@
    "en": "Chapter one. More ideas than dimensions.",
    "zh": "第1章。想法比维数还多。"
   },
-  "a7925fe56ff0": {
+  "57fb8b6d3c52": {
    "scene": "Superposition",
-   "en": "Here's the smallest model that shows why. Five features go in, squeezed through just two numbers, and the network must give all five back: x hat equals ReLU of W transpose W x, plus b. The features matter unequally, the brighter ones more. <bookmark mark='a'/> Each column of W says where a feature points in the two-dimensional middle. <bookmark mark='b'/> When every feature is on all the time, the trained network keeps just the 2 most important, at right angles, and drops the rest. <bookmark mark='c'/> Make the features rarer, and it starts to cheat: 4 features, in opposite pairs. <bookmark mark='d'/> Rarer still, and all 5 fit, as a pentagon. Five ideas in two dimensions. That's superposition.",
-   "zh": "下面是能说明原因的最小的模型。5个特征输入进来，被挤过区区2个数，网络还必须把这5个全都还原出来：x帽，等于W转置乘W乘x、再加上b，然后取ReLU。这些特征的重要程度不一样，越亮的越重要。<bookmark mark='a'/>W的每一列，说明一个特征在中间这个二维空间里指向哪里。<bookmark mark='b'/>如果每个特征一直都是打开的，训练好的网络只保留最重要的2个，彼此成直角，其余的都扔掉。<bookmark mark='c'/>让特征变得少见一些，它就开始耍花招了：4个特征，两两方向相反。<bookmark mark='d'/>再少见一些，5个就全都装下了，排成一个五边形。二维空间里的5个想法。这就是叠加。"
+   "en": "Here's the smallest model that shows why. Five features go in, squeezed through just two numbers, and the network must give all five back: x hat equals ReLU of W transpose W x, plus b. <bookmark mark='w'/> In words: W squeezes the five numbers into two, the same W run backwards spreads them out to five again, and the ReLU cuts off anything negative. The features matter unequally, the brighter ones more. <bookmark mark='a'/> Each column of W says where a feature points in the two-dimensional middle. <bookmark mark='b'/> When every feature is on all the time, the trained network keeps just the 2 most important, at right angles, and drops the rest. <bookmark mark='c'/> Make the features rarer, and it starts to cheat: 4 features, in opposite pairs. <bookmark mark='d'/> Rarer still, and all 5 fit, as a pentagon. Five ideas in two dimensions. That's superposition.",
+   "zh": "下面是能说明原因的最小的模型。5个特征输入进来，被挤过区区2个数，网络还必须把这5个全都还原出来：x帽，等于W转置乘W乘x、再加上b，然后取ReLU。<bookmark mark='w'/>换句话说：W把这5个数挤成2个，同一个W反过来用，又把它们摊开，变回5个，ReLU再把负的部分统统切掉。这些特征的重要程度不一样，越亮的越重要。<bookmark mark='a'/>W的每一列，说明一个特征在中间这个二维空间里指向哪里。<bookmark mark='b'/>如果每个特征一直都是打开的，训练好的网络只保留最重要的2个，彼此成直角，其余的都扔掉。<bookmark mark='c'/>让特征变得少见一些，它就开始耍花招了：4个特征，两两方向相反。<bookmark mark='d'/>再少见一些，5个就全都装下了，排成一个五边形。二维空间里的5个想法。这就是叠加。"
+  },
+  "42c3b439b66d": {
+   "scene": "Superposition",
+   "en": "How does the network find that pentagon? Here is the sparse model learning, from its random start. <bookmark mark='a'/> At first the five arrows point anywhere, some short, some long. <bookmark mark='b'/> Within a few hundred steps they all grow, and they push each other apart: two features pointing the same way would be read as each other. <bookmark mark='c'/> By step 250 the spacing is even, and the rest of training barely moves them. Nobody planned the pentagon; gradient descent found it, fast.",
+   "zh": "网络是怎样找到这个五边形的？下面是这个稀疏模型从随机的起点开始学习的过程。<bookmark mark='a'/>一开始，5个箭头随便乱指，有的短，有的长。<bookmark mark='b'/>短短几百步之内，它们全都变长了，而且互相推开：两个指向同一方向的特征，会被误读成对方。<bookmark mark='c'/>到第250步，间隔已经很均匀了，剩下的训练几乎不再挪动它们。没有人设计过这个五边形；是梯度下降找到了它，而且找得很快。"
   },
   "b80e9830e308": {
    "scene": "Superposition",
@@ -49,20 +54,25 @@
    "en": "Chapter two. Pulling the features apart.",
    "zh": "第2章。把特征拆开。"
   },
-  "8b5b539240f9": {
+  "8cbd741c498f": {
    "scene": "SAE",
-   "en": "If the model stores features as directions, can we find them? The tool is a sparse autoencoder. <bookmark mark='a'/> Take the model's vector x at some character, <bookmark mark='b'/> and encode it into many more numbers, five hundred and twelve, with a ReLU so they're never negative. <bookmark mark='c'/> Then rebuild x as a sum of directions, one per feature, weighted by how strongly each is on. <bookmark mark='d'/> Train it to rebuild well, while paying for every feature it uses. That penalty is the whole trick: it forces the code to be sparse, so each vector is explained by a few directions. <bookmark mark='e'/> Trained on 211 thousand vectors from our transformer, it uses about 3 features per character and rebuilds 82 percent of the variance.",
-   "zh": "如果模型把特征存成方向，我们能把它们找出来吗？用的工具，是稀疏自编码器。<bookmark mark='a'/>取模型在某个字符上的向量x，<bookmark mark='b'/>把它编码成多得多的数，512个，再经过一个ReLU，让它们永远不会是负的。<bookmark mark='c'/>然后，把x重建成一些方向之和，每个特征一个方向，按每个特征打开得有多强来加权。<bookmark mark='d'/>训练它把x重建好，同时它每用一个特征，都要付出代价。这个惩罚就是全部的诀窍：它逼着编码变得稀疏，于是每个向量，都只用少数几个方向来解释。<bookmark mark='e'/>用我们的Transformer的21.1万个向量训练之后，它平均每个字符只用大约3个特征，就能重建82%的方差。"
+   "en": "If the model stores features as directions, can we find them? The tool is a sparse autoencoder. <bookmark mark='a'/> Take the model's vector x at some character, <bookmark mark='b'/> and encode it into many more numbers, five hundred and twelve, with a ReLU so they're never negative. <bookmark mark='c'/> Then rebuild x as a sum of directions, one per feature, weighted by how strongly each is on. <bookmark mark='d'/> Train it to rebuild well, while paying for every feature it uses. That penalty is the whole trick: it forces the code to be sparse, so each vector is explained by a few directions. <bookmark mark='e'/> Trained on 211 thousand vectors from our transformer, it uses about 3 features per character and rebuilds 82 percent of the variance: of all the ways these vectors differ from their average, the rebuild captures 82 percent.",
+   "zh": "如果模型把特征存成方向，我们能把它们找出来吗？用的工具，是稀疏自编码器。<bookmark mark='a'/>取模型在某个字符上的向量x，<bookmark mark='b'/>把它编码成多得多的数，512个，再经过一个ReLU，让它们永远不会是负的。<bookmark mark='c'/>然后，把x重建成一些方向之和，每个特征一个方向，按每个特征打开得有多强来加权。<bookmark mark='d'/>训练它把x重建好，同时它每用一个特征，都要付出代价。这个惩罚就是全部的诀窍：它逼着编码变得稀疏，于是每个向量，都只用少数几个方向来解释。<bookmark mark='e'/>用我们的Transformer的21.1万个向量训练之后，它平均每个字符只用大约3个特征，就能重建82%的方差：这些向量偏离平均值的种种方式里，重建抓住了其中的82%。"
   },
   "52776fb1e1c6": {
    "scene": "SAE",
    "en": "So what are the features? For each one, find where in the novels it fires hardest, and look. <bookmark mark='a'/> Here are four. Each lights up on the same kind of moment, again and again. Of the 502 features that ever fire, 485 put at least six of their eight strongest moments on the same character. They're not all this clean, and in a model this small they're mostly about spelling and punctuation. In big models, the same method finds features for cities, for code bugs, for flattery, for the Golden Gate Bridge.",
    "zh": "那么，这些特征都是什么？对每一个特征，找出它在小说里激活得最强的地方，看一看。<bookmark mark='a'/>这里有4个。每一个都在同一类时刻亮起来，一次又一次。在502个激活过的特征里，有485个，在它们最强的8个时刻中，至少有6个落在同一个字符上。并不是每个特征都这么干净，而且在这么小的模型里，它们大多跟拼写和标点有关。在大模型里，同样的方法能找到表示城市的特征、表示代码漏洞的特征、表示奉承的特征，还有表示金门大桥的特征。"
   },
-  "e3a3223a9210": {
+  "a04916588947": {
    "scene": "SAE",
-   "en": "Why not just read the model's own neurons? <bookmark mark='a'/> Here's a typical one, from the second block, at its strongest moments: a mix of unrelated things. Neurons are polysemantic, because features are packed in superposition across them. <bookmark mark='b'/> Count it up: of each unit's eight strongest moments, how many share one character? For neurons, 5.9 on average; for the features, 7.8. The autoencoder has pulled the tangle apart.",
-   "zh": "为什么不直接去读模型自己的神经元呢？<bookmark mark='a'/>这是一个典型的神经元，来自第二个模块，这是它最强的几个时刻：一堆互不相干的东西混在一起。神经元是多义的，因为特征以叠加的方式，分散挤在了它们身上。<bookmark mark='b'/>数一数：每个单元最强的8个时刻里，有几个落在同一个字符上？神经元平均是5.9个；特征是7.8个。自编码器把这团乱麻解开了。"
+   "en": "Why not just read the model's own neurons, the numbers in each MLP's hidden layer, part eight's units? <bookmark mark='a'/> Here's a typical one, from the second block, at its strongest moments: a mix of unrelated things. Neurons are polysemantic, because features are packed in superposition across them. <bookmark mark='b'/> Count it up: of each unit's eight strongest moments, how many share one character? For neurons, 5.9 on average; for the features, 7.8. The autoencoder has pulled the tangle apart.",
+   "zh": "为什么不直接去读模型自己的神经元呢？也就是每个MLP隐藏层里的那些数，第8部分里的那些单元。<bookmark mark='a'/>这是一个典型的神经元，来自第二个模块，这是它最强的几个时刻：一堆互不相干的东西混在一起。神经元是多义的，因为特征以叠加的方式，分散挤在了它们身上。<bookmark mark='b'/>数一数：每个单元最强的8个时刻里，有几个落在同一个字符上？神经元平均是5.9个；特征是7.8个。自编码器把这团乱麻解开了。"
+  },
+  "5f5ec65d6e56": {
+   "scene": "SAE",
+   "en": "Sparse autoencoders have moved on since the first ones, and ours used the first recipe. <bookmark mark='a'/> An L1 penalty buys sparsity, but it also pulls every active feature toward zero, so the rebuilt vector comes out too short. <bookmark mark='b'/> OpenAI's TopK autoencoders simply keep the k strongest features and zero the rest: sparsity is set directly, and nothing is shrunk. <bookmark mark='c'/> DeepMind's JumpReLU gives each feature its own threshold, learned, with the count of active features as the penalty. <bookmark mark='d'/> We trained both of the first two kinds on the same vectors, at several sparsities. At the strongest two L1 penalties we tried, every feature switched off for good. At similar sparsity TopK does better: with 8 features per vector it leaves 7 percent of the variance unexplained, where the L1 model at about 13 leaves 9. <bookmark mark='e'/> And the L1 rebuilds come out 22 percent too short on average. <bookmark mark='f'/> The newest tools go further: transcoders, which replace a whole MLP with sparse features, are what Anthropic's circuit tracing uses, and crosscoders compare two models feature by feature.",
+   "zh": "从最早的那一批到现在，稀疏自编码器已经有了不少进展，而我们用的是最初的配方。<bookmark mark='a'/>L1惩罚换来了稀疏，但它也把每个活跃的特征都往0拉，所以重建出来的向量会偏短。<bookmark mark='b'/>OpenAI的TopK自编码器干脆只保留最强的k个特征，其余的全部置0：稀疏程度直接设定，什么也不会被压缩变小。<bookmark mark='c'/>DeepMind的JumpReLU给每个特征一个自己的阈值，这个阈值是学出来的，惩罚的则是活跃特征的个数。<bookmark mark='d'/>前两种，我们都在同样的向量上训练过，试了好几种稀疏程度。在我们试过的最强的两个L1惩罚下，所有特征都永久关掉了。在差不多的稀疏程度下，TopK更好：每个向量用8个特征，它有7%的方差没能解释；而L1模型用大约13个，没能解释的是9%。<bookmark mark='e'/>而且L1的重建，平均短了22%。<bookmark mark='f'/>最新的工具走得更远：转码器把整个MLP换成稀疏特征，Anthropic的回路追踪用的就是它；交叉编码器则逐个特征地比较两个模型。"
   },
   "84c1b4d90c35": {
    "scene": "Circuits",
@@ -74,10 +84,10 @@
    "en": "With features in hand, we can trace a single decision. <bookmark mark='a'/> Our transformer reads: she sai, and writes d, with 99 percent confidence. <bookmark mark='b'/> Which features pushed it there? For each one, multiply how strongly it's on by how much the output's score moves when it changes: its attribution. Here are the six strongest. <bookmark mark='c'/> And for each feature, the same question one step back: which input characters switched it on? <bookmark mark='d'/> The result is an attribution graph: a map of the computation, from the text, through features, to the answer.",
    "zh": "有了特征，我们就能追踪单独的一次决定。<bookmark mark='a'/>我们的Transformer读到she sai，写出了d，把握是99%。<bookmark mark='b'/>是哪些特征把它推到这里的？对每个特征，把它打开的强度，乘以它变化时输出的分数会变动多少：这就是它的归因。这里是最强的6个。<bookmark mark='c'/>再对每个特征往回退一步，问同样的问题：是哪些输入字符把它打开的？<bookmark mark='d'/>结果就是一张归因图：一张计算的地图，从文本出发，经过特征，到达答案。"
   },
-  "c3fd9060958d": {
+  "2e21d1d79d06": {
    "scene": "Circuits",
-   "en": "In big models this gets striking. Researchers at Anthropic replaced each layer's MLP with a sparse transcoder, so the graph is exact for that replacement, and traced Claude 3.5 Haiku. <bookmark mark='a'/> Asked for the capital of the state containing Dallas, it doesn't jump straight there: one feature represents Dallas, which activates Texas, and Texas together with a say-a-capital feature produces Austin. Two steps of reasoning, inside one forward pass. When writing a rhyming poem, it picks the rhyme before it writes the line that leads to it.",
-   "zh": "在大模型里，结果相当惊人。Anthropic的研究人员把每一层的MLP，都换成了一个稀疏的转码器，这样，对这个替换后的模型来说，这张图就是精确的；他们就这样追踪了Claude 3.5 Haiku。<bookmark mark='a'/>问它达拉斯所在的那个州，首府是哪里，它并不是一步跳到答案的：有一个特征表示达拉斯，它激活了得克萨斯；而得克萨斯，再加上一个“说出首府”的特征，一起得出了奥斯汀。两步推理，就发生在一次前向传播之内。写押韵的诗时，它会先选好韵脚，再写出通向这个韵脚的那一行。"
+   "en": "In big models this gets striking. Researchers at Anthropic replaced each layer's MLP with a sparse transcoder: <bookmark mark='t'/> a stand-in that does the MLP's job with a few readable features. The graph is exact for that replacement model, and they traced Claude 3.5 Haiku. <bookmark mark='a'/> Asked for the capital of the state containing Dallas, it doesn't jump straight there: one feature represents Dallas, which activates Texas, and Texas together with a say-a-capital feature produces Austin. Two steps of reasoning, inside one forward pass. When writing a rhyming poem, it picks the rhyme before it writes the line that leads to it.",
+   "zh": "在大模型里，结果相当惊人。Anthropic的研究人员把每一层的MLP，都换成了一个稀疏的转码器：<bookmark mark='t'/>一个替身，用少数几个读得懂的特征，完成MLP的工作。对这个替换后的模型来说，这张图是精确的；他们就这样追踪了Claude 3.5 Haiku。<bookmark mark='a'/>问它达拉斯所在的那个州，首府是哪里，它并不是一步跳到答案的：有一个特征表示达拉斯，它激活了得克萨斯；而得克萨斯，再加上一个“说出首府”的特征，一起得出了奥斯汀。两步推理，就发生在一次前向传播之内。写押韵的诗时，它会先选好韵脚，再写出通向这个韵脚的那一行。"
   },
   "37e403258057": {
    "scene": "Steering",
