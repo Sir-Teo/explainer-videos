@@ -8,7 +8,9 @@ fixed-size matrix memory, written by better and better rules. A hook and six cha
   memory as the alternative.
 * **The cache.** Why attention keeps every key and value; the memory per token from published configurations: full
   attention, grouped-query attention (Llama 3.1), multi-head latent attention (DeepSeek-V3, 71 times smaller than
-  full attention of the same shape) and a hybrid (Qwen3-Next).
+  full attention of the same shape) and a hybrid (Qwen3-Next); why rotary positions break MLA's folding of the key
+  matrix into the query (folding anyway is 18% off, with random weights) and how DeepSeek's decoupled rotary key, 64
+  numbers shared by the heads and cached next to the 512-number latent, restores it exactly.
 * **Attention without the softmax.** (QKᵀ)V = Q(KᵀV): a T × T table or a d × d one; causal linear attention as a
   recurrence on a d × d state (checked against the parallel form to rounding error); the operation counts.
 * **How to write to memory.** A matrix as an associative memory: adding (crosstalk growing like (N − 1)/d), decaying
