@@ -157,6 +157,7 @@ def compute_rademacher():
 def compute_random():
     import torch
 
+    torch.set_num_threads(1)  # small matrices: one thread is fastest, and leaves the other cores free
     Ztr, ytr, Zte, yte, _ = pages()
     torch.manual_seed(2016)  # Zhang et al. trained in 2016 (published 2017)
     g = rng(2017)

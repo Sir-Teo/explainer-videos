@@ -10,6 +10,7 @@ class RandomLabels(VoiceoverScene):
     def construct(self):
         self.card()
         self.experiment()
+        self.order()
 
     def card(self):
         card = chapter_card(3, r"Memorizing nonsense", r"Can a network fit random labels?", part=7)
@@ -87,4 +88,88 @@ class RandomLabels(VoiceoverScene):
             self.play(FadeIn(panels[1][6]))
             vo.wait_until("b")
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def order(self):
+        """The order of memorizing: which shuffled pages the network gets right, step by step, split by whether the
+        shuffled author happens to be the true one."""
+        r = load("random")
+        F = np.asarray(r["fits_shuffled"]).astype(bool)  # (logged steps, pages)
+        lab, yt = np.asarray(r["labels_shuffled"]), np.asarray(r["ytrue"])
+        steps = np.asarray(r["shuffled"])[:, 0]
+        agree = lab == yt
+        n = len(lab)
+        # pages sorted into two blocks: shuffled label = true author (left), and not (right)
+        cols = 16
+        ia, idis = np.where(agree)[0], np.where(~agree)[0]
+
+        def block(idx, x0):
+            g = VGroup(*[Square(0.14, stroke_width=0, fill_color=AUSTEN if lab[i] == 0 else DICKENS, fill_opacity=0.15)
+                         for i in idx])
+            g.arrange_in_grid(cols=cols, buff=0.03)
+            return g.move_to([x0, 1.2, 0]).align_to([0, 2.9, 0], UP)
+
+        ga, gd = block(ia, -3.4), block(idis, 3.4)
+        ha = label(rf"${len(ia)}$ pages whose shuffled author \\ happens to be the true one", font_size=22, color=GREY_A)
+        hd = label(rf"${len(idis)}$ pages whose shuffled author \\ is wrong", font_size=22, color=GREY_A)
+        ha.next_to(ga, UP, buff=0.15)
+        hd.next_to(gd, UP, buff=0.15)
+        # the share of each block fit, against steps (log scale)
+        ax = Axes(x_range=[0, 3.2, 1], y_range=[0, 1.0, 0.25], x_length=7.4, y_length=2.2, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, -2.35, 0])
+        lx = np.log10(steps)
+        ya, yd = F[:, agree].mean(1), F[:, ~agree].mean(1)
+        xt = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for t_, v in (("1", 0), ("10", 1), ("100", 2), ("1{,}000", 3))])
+        yt_ = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
+                       for v in (0, 0.5, 1.0)])
+        t = ValueTracker(0)
+
+        def part(ys, col):
+            k = int(t.get_value())
+            pts = [ax.c2p(lx[i], ys[i]) for i in range(k + 1)]
+            return VMobject(color=col, stroke_width=3.5).set_points_as_corners(pts if len(pts) > 1 else pts * 2)
+
+        ca = always_redraw(lambda: part(ya, TRAIN))
+        cd = always_redraw(lambda: part(yd, C.SURPRISE))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(steps[int(t.get_value())]):,}".replace(",", "{,}"),
+                                            font_size=26, color=WHITE).next_to(ax, RIGHT, buff=0.3).shift(UP * 0.6))
+
+        def fill(k):
+            anims = []
+            for g, idx in ((ga, ia), (gd, idis)):
+                for sq, i in zip(g, idx):
+                    anims.append(sq.animate.set_fill(opacity=0.95 if F[k, i] else 0.15))
+            return anims
+
+        def first_at(frac, ys):  # the first logged step by which this share of the block is fit
+            i = int(np.argmax(ys >= frac))
+            return int(steps[i]) if ys[i] >= frac else None
+
+        ha_s, hd_s = first_at(0.5, ya), first_at(0.5, yd)
+        early = ha_s is not None and hd_s is not None and ha_s * 2 <= hd_s
+        ks = sorted(set(np.unique(np.round(np.geomspace(1, len(steps) - 1, 14)).astype(int)).tolist()))
+        with self.voiceover(
+            "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true "
+            "author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its "
+            "shuffled label right. "
+            + (f"<bookmark mark='b'/> The pages whose label happens to be true go first: half of them are right by "
+               f"step {ha_s:,}, while half of the others take until step {hd_s:,}. Even on nonsense, the network "
+               "first learns what can be learned, the real difference between the authors, and only then memorizes "
+               "the exceptions one by one."
+               if early else
+               f"<bookmark mark='b'/> Both kinds are learned at much the same pace: half of the first by step "
+               f"{ha_s or steps[-1]:,.0f}, half of the others by step {hd_s or steps[-1]:,.0f}. On this task the "
+               "network memorizes without first picking up the real pattern.")
+        ) as vo:
+            self.play(FadeIn(ga), FadeIn(gd), FadeIn(ha), FadeIn(hd), Create(ax), FadeIn(xt), FadeIn(yt_))
+            self.add(ca, cd, cnt)
+            vo.wait_until("a")
+            for j, k in enumerate(ks):
+                if j == len(ks) // 3:
+                    vo.wait_until("b")
+                self.play(*fill(k), t.animate.set_value(k), run_time=0.7, rate_func=linear)
+        self.wait(0.5)
+        self.remove(ca, cd, cnt)
         self.clear_scene()
