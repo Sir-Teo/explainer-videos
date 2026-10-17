@@ -60,45 +60,50 @@
    "en": "Chapter three. Keeping signals alive.",
    "zh": "第3章。别让信号消失。"
   },
-  "dbd1e588e9d9": {
+  "3f0f3dfeea73": {
    "scene": "Signal",
-   "en": "Before training, the weights are random. But random how? Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way, which is why deep networks once seemed impossible to train.",
-   "zh": "训练开始之前，权重是随机的。可是，怎么个随机法？让一个信号穿过50层，盯住它的大小。<bookmark mark='a'/>如果抽出的权重稍微小了一点，每一层都会把信号缩小固定的倍数。穿过50层之后，它缩小到大约原来的3000万分之1：消失了。<bookmark mark='b'/>如果稍微大了一点，它就会爆炸，涨到大约1000万。<bookmark mark='c'/>只有一种大小，能让它一层又一层地保持平稳。而梯度往回流的时候，也会以同样的方式消失或者爆炸，这就是为什么，深层网络一度看起来根本没法训练。"
+   "en": "Before training, the weights are random. But random how? What matters is their spread: how far the random starting weights stray from zero. Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way, which is why deep networks once seemed impossible to train.",
+   "zh": "训练开始之前，权重是随机的。可是，怎么个随机法？关键在于它们的分散程度：这些随机的初始权重，离0有多远。让一个信号穿过50层，盯住它的大小。<bookmark mark='a'/>如果抽出的权重稍微小了一点，每一层都会把信号缩小固定的倍数。穿过50层之后，它缩小到大约原来的3000万分之1：消失了。<bookmark mark='b'/>如果稍微大了一点，它就会爆炸，涨到大约1000万。<bookmark mark='c'/>只有一种大小，能让它一层又一层地保持平稳。而梯度往回流的时候，也会以同样的方式消失或者爆炸，这就是为什么，深层网络一度看起来根本没法训练。"
   },
-  "09e43a34f81e": {
+  "9831bcbb189a": {
    "scene": "Signal",
-   "en": "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each input, each weight's variance should be one over n. That's Glorot and Bengio's rule, from 2010. <bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double it: two over n. That's He initialization, and it's the steady line we just saw.",
-   "zh": "合适的大小，有一条简单的规则。一个单元要把n个输入加起来，所以，要让这个和跟每个输入一样大，每个权重的方差就应该是n分之1。这是格洛罗和本吉奥2010年提出的规则。<bookmark mark='a'/>ReLU会扔掉输入里为负的那一半，所以对ReLU网络来说，要把它加倍：n分之2。这就是何恺明初始化，也就是我们刚才看到的那条平稳的线。"
+   "en": "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each input, each weight's variance, its spread, should be one over n. That's Glorot and Bengio's rule, from 2010, worked out for tanh, a smooth S-shaped bend. <bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double it: two over n. That's He initialization, and it's the steady line we just saw.",
+   "zh": "合适的大小，有一条简单的规则。一个单元要把n个输入加起来，所以，要让这个和跟每个输入一样大，每个权重的方差，也就是它的分散程度，就应该是n分之1。这是格洛罗和本吉奥2010年提出的规则，是针对tanh推导出来的，tanh是一种平滑的S形弯折。<bookmark mark='a'/>ReLU会扔掉输入里为负的那一半，所以对ReLU网络来说，要把它加倍：n分之2。这就是何恺明初始化，也就是我们刚才看到的那条平稳的线。"
   },
   "b2c7a833ea59": {
    "scene": "Residual",
    "en": "Chapter four. Residual connections.",
    "zh": "第4章。残差连接。"
   },
-  "5f7251a19aa7": {
+  "762c97abc172": {
    "scene": "Residual",
-   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
-   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年，何恺明和同事们找到了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
+   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
+   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年，何恺明和同事们找到了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分。<bookmark mark='w'/>跳跃连接这条路，把梯度原封不动地传回去，就像一根普通的导线，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
   },
-  "bc4d3f6daab8": {
+  "ab4a70cb7299": {
    "scene": "Residual",
-   "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size, and training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
-   "zh": "在那两条螺旋上试一试，网络有40层。普通的层叠，什么也学不会：一直停在抛硬币的水平。<bookmark mark='a'/>同样的40层，加上残差连接，几百步之内，就把螺旋完全学会了。<bookmark mark='b'/>再加上层归一化，它把每一层的向量重新缩放到一个标准的大小，训练就更平稳了。残差流和归一化：每一个现代模型内部，都少不了这两段管道。"
+   "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size. <bookmark mark='c'/> Take the vector's numbers, shift them so they average zero, <bookmark mark='d'/> then squash them so their spread is one. With that, training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
+   "zh": "在那两条螺旋上试一试，网络有40层。普通的层叠，什么也学不会：一直停在抛硬币的水平。<bookmark mark='a'/>同样的40层，加上残差连接，几百步之内，就把螺旋完全学会了。<bookmark mark='b'/>再加上层归一化，它把每一层的向量重新缩放到一个标准的大小。<bookmark mark='c'/>取出向量里的这些数，把它们平移，让平均值变成0，<bookmark mark='d'/>再把它们压缩，让分散程度变成1。这样一来，训练就更平稳了。残差流和归一化：每一个现代模型内部，都少不了这两段管道。"
   },
-  "2111c4b872b3": {
+  "25da207cbb5f": {
    "scene": "Residual",
-   "en": "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> First, normalize what goes into each layer, not the stream itself: the stream stays a clean running sum. <bookmark mark='b'/> Second, RMSNorm: divide by the root mean square and drop the mean and the shift. It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. Two projections of the input, one passed through SiLU, a smooth cousin of the ReLU, multiplied number by number with the other. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's paper tested it, and ended, famously, by attributing its success to divine benevolence. <bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block.",
-   "zh": "三个小改进，把它变成了今天语言模型里的那种块。<bookmark mark='a'/>第一，对进入每一层的东西做归一化，而不是对残差流本身：残差流始终是一个干净的累加和。<bookmark mark='b'/>第二，RMSNorm：除以均方根，去掉均值和平移。它更便宜，效果一样好。<bookmark mark='c'/>第三，带门控的MLP。对输入做两个投影，一个经过SiLU，也就是ReLU的一个平滑表亲，再和另一个逐个数相乘。<bookmark mark='d'/>这是三个矩阵而不是两个，所以隐藏层宽度从模型宽度的4倍缩到3分之8倍，权重总数正好一样。Noam Shazeer的论文测试了它，并且出了名地在结尾把它的成功归功于“神的恩典”。<bookmark mark='e'/>Llama、Qwen、DeepSeek和gpt-oss，用的都是这种块。"
+   "en": "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says about every point of the plane; below, how much gradient reaches each of its forty layers, on a log scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the way down: the first layer gets more than a hundred trillion times less than the last. The residual stack's gradients are all about the same size, within a factor of 2, because each block adds to a stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of a hundred thousand, as there is less and less left to fix. The plain stack's answer stays one flat colour, the same everywhere, and its gradients only fade further.",
+   "zh": "为什么普通的堆叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通堆叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过一百万亿倍。残差堆叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差堆叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通堆叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
+  },
+  "be2f784f7f37": {
+   "scene": "Residual",
+   "en": "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> First, normalize what goes into each layer, not the stream itself: the layer sits on a branch, takes a normalized copy, and adds its answer back, so the stream stays a clean running sum. That's pre-norm. <bookmark mark='b'/> Second, RMSNorm: divide the vector by its typical size, the root mean square, so its length always comes out the same, and drop the mean and the shift. It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. The MLP, or feed-forward network, is the layer's small two-step network: spread the vector wide, bend it, and bring it back. Gated means two projections of the input, two different weighted mixes. <bookmark mark='s'/> One is passed through SiLU, a smooth cousin of the ReLU; the other acts as a dimmer, multiplying it number by number. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's paper tested it, and ended, famously, by attributing its success to divine benevolence. <bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block.",
+   "zh": "三个小改进，把它变成了今天语言模型里的那种块。<bookmark mark='a'/>第一，对进入每一层的东西做归一化，而不是对残差流本身：这一层放在一条支路上，拿到一份归一化过的副本，再把自己的答案加回去，这样残差流始终是一个干净的累加和。这叫作前置归一化。<bookmark mark='b'/>第二，RMSNorm：把向量除以它的典型大小，也就是均方根，这样它的长度总是一样的，同时去掉均值和平移。它更便宜，效果一样好。<bookmark mark='c'/>第三，带门控的MLP。MLP，也叫前馈网络，是这一层里那个两步的小网络：把向量铺宽，弯折一下，再收回来。带门控的意思是，对输入做两个投影，也就是两种不同的加权混合。<bookmark mark='s'/>一个经过SiLU，也就是ReLU的一个平滑表亲；另一个像调光器一样，和它逐个数相乘。<bookmark mark='d'/>这是三个矩阵而不是两个，所以隐藏层宽度从模型宽度的4倍缩到3分之8倍，权重总数正好一样。Noam Shazeer的论文测试了它，并且出了名地在结尾把它的成功归功于“神的恩典”。<bookmark mark='e'/>Llama、Qwen、DeepSeek和gpt-oss，用的都是这种块。"
   },
   "c3c1de97e5db": {
    "scene": "NeuralLM",
    "en": "Chapter five. A neural language model.",
    "zh": "第5章。神经语言模型。"
   },
-  "4734dc07867e": {
+  "b74ff3f81fc4": {
    "scene": "NeuralLM",
-   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer, <bookmark mark='c'/> and out comes a score for every possible next character, turned into probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from 2003, here for characters instead of words.",
-   "zh": "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。取最后24个字符。<bookmark mark='a'/>每个字符都变成一个由32个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个隐藏层，<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。这就是约书亚·本吉奥2003年提出的神经语言模型的设计，只不过这里用的是字符，而不是单词。"
+   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer. Hidden just means in the middle, neither input nor output. Its units are tanh units: tanh is a smooth S-shaped bend that squashes any number into the range from minus one to one. <bookmark mark='c'/> And out comes a score for every possible next character, turned into probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from 2003, here for characters instead of words.",
+   "zh": "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。取最后24个字符。<bookmark mark='a'/>每个字符都变成一个由32个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个隐藏层。隐藏，只是说它在中间，既不是输入，也不是输出。它的单元是tanh单元：tanh是一种平滑的S形弯折，能把任何数压进负1到1的范围里。<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。这就是约书亚·本吉奥2003年提出的神经语言模型的设计，只不过这里用的是字符，而不是单词。"
   },
   "d84e37ba0522": {
    "scene": "NeuralLM",
@@ -144,11 +149,6 @@
    "scene": "Outro",
    "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in part nine.",
    "zh": "西蒙·普林斯的《理解深度学习》，是最清楚的一本现代教科书，而且可以免费阅读。感谢观看，第9部分见。"
-  },
-  "25da207cbb5f": {
-   "scene": "Residual",
-   "en": "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says about every point of the plane; below, how much gradient reaches each of its forty layers, on a log scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the way down: the first layer gets more than a hundred trillion times less than the last. The residual stack's gradients are all about the same size, within a factor of 2, because each block adds to a stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of a hundred thousand, as there is less and less left to fix. The plain stack's answer stays one flat colour, the same everywhere, and its gradients only fade further.",
-   "zh": "为什么普通的堆叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通堆叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过一百万亿倍。残差堆叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差堆叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通堆叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
   }
  },
  "title_en": "AI, Built: Part 8, Networks",
