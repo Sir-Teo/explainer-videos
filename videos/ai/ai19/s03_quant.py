@@ -105,9 +105,9 @@ class Quant(VoiceoverScene):
         bpw = f["bpw"]
 
         def card(x, name, sub, n, scale_name, scale_bits, col):
-            cells = VGroup(*[Rectangle(width=0.16, height=0.42, stroke_color=col, stroke_width=1, fill_color=col, fill_opacity=0.35)
+            cells = VGroup(*[Rectangle(width=0.1, height=0.42, stroke_color=col, stroke_width=1, fill_color=col, fill_opacity=0.35)
                              for _ in range(n)]).arrange(RIGHT, buff=0.02)
-            sc = Rectangle(width=0.16 * scale_bits / 4, height=0.42, stroke_color=C.SURPRISE, stroke_width=1.5, fill_color=C.SURPRISE,
+            sc = Rectangle(width=0.1 * scale_bits / 4, height=0.42, stroke_color=C.SURPRISE, stroke_width=1.5, fill_color=C.SURPRISE,
                            fill_opacity=0.5)
             row = VGroup(cells, sc).arrange(RIGHT, buff=0.1)
             t = VGroup(label(name, font_size=28, color=col), label(sub, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.08)
@@ -173,23 +173,21 @@ class Quant(VoiceoverScene):
         X = g.normal(size=(400, 10)) @ (np.eye(10) + 0.8 * g.normal(size=(10, 10)) / np.sqrt(10))
         H = X.T @ X / len(X)
         W = g.normal(size=(6, 10))
-        Qr, Qg = rtn(W, 3), gptq(W, H, 3)
-        er = float(np.linalg.norm((W - Qr) @ X.T) / np.linalg.norm(W @ X.T))
-        eg = float(np.linalg.norm((W - Qg) @ X.T) / np.linalg.norm(W @ X.T))
         colors = {r"q_j": C.INTERVAL, r"\delta": C.SURPRISE, r"H": C.TRUE_P}
         eqs = VGroup(
             cmath(r"q_j", r"= \operatorname{round}(w_j)", colors=colors, font_size=30),
             cmath(r"\delta", r"= \frac{w_j -", r"q_j", r"}{[", r"H", r"^{-1}]_{jj}}", colors=colors, font_size=30),
             cmath(r"w_{k} \;\leftarrow\; w_{k} -", r"\delta", r"\, [", r"H", r"^{-1}]_{jk}, \quad k > j", colors=colors, font_size=30),
             cmath(r"H", r"= \mathbb{E}\big[x\,x^{\top}\big]", colors=colors, font_size=30),
-        ).arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to([3.4, 1.3, 0])
+        ).arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to([3.4, 1.9, 0])
         notes = VGroup(label(r"round one column of inputs", font_size=18, color=GREY_A),
                        label(r"its error, \ weighted", font_size=18, color=GREY_A),
                        label(r"the columns still to come absorb it", font_size=18, color=GREY_A),
                        label(r"from real inputs: \ which inputs move together", font_size=18, color=GREY_A))
         for n_, e_ in zip(notes, eqs):
-            n_.next_to(e_, RIGHT, buff=0.25)
-            keep_in_frame(n_)
+            n_.next_to(e_, DOWN, buff=0.06).align_to(e_, LEFT)
+        for k in range(1, len(eqs)):
+            VGroup(*eqs[k:], *notes[k:]).shift(DOWN * 0.15)
         cell = 0.42
 
         def grid(M, top):
@@ -220,8 +218,9 @@ class Quant(VoiceoverScene):
         cur = Square(cell * 1.06, stroke_color=C.INTERVAL, stroke_width=3)
         colbox = Rectangle(width=cell * 1.05, height=cell * 6.05, stroke_color=C.INTERVAL, stroke_width=3).move_to(
             VGroup(*[gW[i * 10] for i in range(6)]))
-        res = VGroup(label(rf"output error, \ $3$ bits: \ rounding ${100 * er:.0f}\%$, \ GPTQ ${100 * eg:.0f}\%$", font_size=20,
-                           color=C.INTERVAL)).next_to(gW, DOWN, buff=0.3)
+        er, eg = float(f["layer_err_rtn3"]), float(f["layer_err_gptq3"])  # a real layer of our transformer, real inputs
+        res = VGroup(label(rf"one real layer \ ($512 \times 128$), \ $3$ bits: \\ output error \ rounding ${100 * er:.0f}\%$, "
+                           rf"\ GPTQ ${100 * eg:.0f}\%$", font_size=20, color=C.INTERVAL)).next_to(gW, DOWN, buff=0.3)
         # the model: 4 and 3 bits, three ways
         rows = [("int4", r"$4$ bits, \ rounded", C.INTERVAL), ("had4", r"$4$ bits, \ rotated first", C.BITS),
                 ("gptq4", r"$4$ bits, \ GPTQ", C.TRUE_P),
@@ -232,7 +231,7 @@ class Quant(VoiceoverScene):
         hi = max(vals)
         tab = VGroup()
         for i, ((k, nm, col), v) in enumerate(zip(rows, vals)):
-            y = -1.2 - i * 0.42 - (0.2 if i >= 3 else 0)
+            y = -1.05 - i * 0.36 - (0.15 if i >= 3 else 0)
             w = max((v - base) / (hi - base) * 3.6, 0.02)
             b = Rectangle(width=w, height=0.28, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to([2.0 + w / 2, y, 0])
             tab.add(VGroup(label(nm, font_size=18, color=col).move_to([1.8, y, 0], aligned_edge=RIGHT), b,
@@ -265,8 +264,8 @@ class Quant(VoiceoverScene):
             "rounding leaves an error; <bookmark mark='c'/> instead of accepting it, nudge the weights on the inputs "
             "not yet rounded, so the layer's output barely changes. How much to nudge comes from H, the inputs' "
             "second moment, measured on real text: inputs that move together can cover for each other. "
-            f"<bookmark mark='d'/> On this small layer, at three bits, the output error drops from {100 * er:.0f} to "
-            f"{100 * eg:.0f} percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few "
+            f"<bookmark mark='d'/> On a real layer of our transformer, at three bits, the error in its output drops from "
+            f"{100 * er:.0f} to {100 * eg:.0f} percent. <bookmark mark='e'/> The second trick is a rotation. In large models a few "
             "weights and activations are huge outliers, and one outlier forces a coarse scale on its whole row. "
             "Multiply by a Hadamard matrix first, an orthogonal matrix of plus and minus ones, and the outlier is "
             "spread evenly over the row; the rotation is undone exactly afterwards. "
