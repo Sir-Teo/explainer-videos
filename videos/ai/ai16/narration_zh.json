@@ -1,0 +1,129 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "BPE": "",
+  "VQ": "",
+  "Sound": "",
+  "Clip": "",
+  "Omni": "",
+  "Outro": ""
+ },
+ "lines": {
+  "97ce39c139e2": {
+   "scene": "Hook",
+   "en": "A transformer reads tokens. So how does a model look at a picture, or listen to a voice? <bookmark mark='a'/> Everything is turned into tokens first: text into pieces of words, pictures into codes for patches, sound into codes for slices of time. <bookmark mark='b'/> Then it's all one sequence, and one model can read it.",
+   "zh": ""
+  },
+  "48625b37c168": {
+   "scene": "Hook",
+   "en": "This part is about how the senses become tokens, how pictures and words are matched, <bookmark mark='a'/> and how one model can see, listen and speak.",
+   "zh": ""
+  },
+  "50c6a5b5fbaf": {
+   "scene": "BPE",
+   "en": "Chapter one. Cutting text into tokens.",
+   "zh": ""
+  },
+  "381de9c916f0": {
+   "scene": "BPE",
+   "en": "This series' models read one character at a time. Real ones read tokens: common chunks of text. The chunks are learned by byte-pair encoding, a compression trick from 1994. Start from single characters. Find the pair that occurs most often, and make it a new symbol. Repeat. <bookmark mark='a'/> Here are the first merges on our novels: common pairs of letters first, then the starts and ends of words, and soon whole words. Each new symbol is a token.",
+   "zh": ""
+  },
+  "c6e231be10af": {
+   "scene": "BPE",
+   "en": "The more merges, the bigger the tokens. <bookmark mark='a'/> Here's one sentence, cut by the raw characters, then after five hundred, two thousand and eight thousand merges. <bookmark mark='b'/> With eight thousand, a token covers 3.9 characters of the passage on average, so a transformer reading tokens sees the same text in a fraction of the steps, and part twelve's attention cost shrinks with the square. The price is a bigger table of token vectors. Today's models use between a hundred and fifty thousand and a quarter of a million tokens.",
+   "zh": ""
+  },
+  "3b9cda166461": {
+   "scene": "VQ",
+   "en": "Chapter two. Codebooks.",
+   "zh": ""
+  },
+  "40d9fe859fe6": {
+   "scene": "VQ",
+   "en": "Text comes in pieces. Pictures and sound are continuous, so to make tokens of them, we need a vocabulary of shapes: a codebook. <bookmark mark='a'/> Cut every letter picture into four by four patches and find sixteen typical ones: that's k-means clustering, which part six's mixtures generalize. <bookmark mark='b'/> Now any picture becomes a sequence of numbers from zero to fifteen: replace each patch by its nearest code. <bookmark mark='c'/> With more codes, the copy gets closer: sixteen, sixty-four, two hundred and fifty-six.",
+   "zh": ""
+  },
+  "e105b5c739d8": {
+   "scene": "VQ",
+   "en": "One codebook can only be so fine. The trick sound models use is to quantize in stages. <bookmark mark='a'/> The first stage codes the patch roughly; the second codes what the first missed; then the third, and the fourth. <bookmark mark='b'/> Four stages of sixteen codes do as well here as one codebook of two hundred and fifty-six, and each token stays a small number. That's residual vector quantization, inside every neural audio codec. A simpler cousin, finite scalar quantization, just rounds a few numbers to a few levels, with no codebook at all.",
+   "zh": ""
+  },
+  "ee68e9e504a6": {
+   "scene": "Sound",
+   "en": "Chapter three. Sound as tokens.",
+   "zh": ""
+  },
+  "bdf69a6ca966": {
+   "scene": "Sound",
+   "en": "Sound is a wave: air pressure, sampled sixteen thousand times a second. Here's a synthetic voice saying five vowels. <bookmark mark='a'/> A wave is hard to read, so cut it into short frames, ten milliseconds apart, and measure how much of each frequency each frame has: a spectrogram. <bookmark mark='b'/> Now the vowels are visible: each has its own bright bands, the formants, which is how your ear tells a from e.",
+   "zh": ""
+  },
+  "dae92ba47d48": {
+   "scene": "Sound",
+   "en": "Then the same trick as for pictures. <bookmark mark='a'/> Each frame becomes a few code numbers, from residual quantization in four stages. <bookmark mark='b'/> From those codes alone, the spectrogram comes back nearly intact. Real speech models use a neural codec trained for this, and a vocoder to turn the result back into a wave; but in the end, a voice is a stream of small integers, a few dozen a second per stage, that a transformer can predict like text.",
+   "zh": ""
+  },
+  "bf9bcce08b10": {
+   "scene": "Clip",
+   "en": "Chapter four. Matching senses.",
+   "zh": ""
+  },
+  "a392c1bd3514": {
+   "scene": "Clip",
+   "en": "How does a model know a picture of an A and the word A mean the same thing? Train two encoders, one for pictures and one for captions, so that matching pairs get similar vectors. <bookmark mark='a'/> We trained a small pair on our letters, with captions like 'bold serif A'. Here's a batch: every picture scored against every caption. <bookmark mark='b'/> The bright diagonal is the right pairs. Trained on four hundred million pictures from the web, this is CLIP, and its picture encoder is how most models see.",
+   "zh": ""
+  },
+  "fba92baf5f67": {
+   "scene": "Clip",
+   "en": "There are two ways to train this. CLIP's: each picture must pick its own caption out of the whole batch, a softmax, which ties every pair's loss to every other. <bookmark mark='a'/> SigLIP's: treat every picture-caption pair as its own yes-or-no question, with a sigmoid. No batch-wide sum, so it scales to huge batches across many chips. <bookmark mark='b'/> On our letters the two end up close; at scale, SigLIP's encoders are what many of today's open models see with.",
+   "zh": ""
+  },
+  "8054ada72111": {
+   "scene": "Omni",
+   "en": "Chapter five. One model, every sense.",
+   "zh": ""
+  },
+  "433a1f3293ee": {
+   "scene": "Omni",
+   "en": "Once everything is tokens, one model can take them all. <bookmark mark='a'/> Text, picture codes and sound codes go into one sequence, and one transformer reads them all, part eleven's attention looking across senses. <bookmark mark='b'/> To answer out loud, Qwen's omni models add a second, smaller transformer, the Talker, which turns the first one's thoughts into sound codes, and a decoder turns those into a wave. This video's narrator, Kokoro-82M, is a speech model too: text in, sound out.",
+   "zh": ""
+  },
+  "62f1f9d4cf49": {
+   "scene": "Omni",
+   "en": "Conversation is harder than speech. People interrupt, overlap and murmur agreement. <bookmark mark='a'/> Moshi, in 2024, models two streams of sound at once, the user's and its own, every eighty milliseconds, so it's always listening, even while it talks.",
+   "zh": ""
+  },
+  "bd0d2a77f087": {
+   "scene": "Outro",
+   "en": "Let's take stock. Text is cut into tokens by merging the commonest pairs, again and again. Pictures and sound become tokens through codebooks, refined in stages. Contrastive training puts pictures and words in one space, with a softmax or a sigmoid. And with everything as tokens, one model reads, sees, listens and speaks.",
+   "zh": ""
+  },
+  "5c8ce898d6c0": {
+   "scene": "Outro",
+   "en": "Act four begins next. Reasoning models think in tokens, in part seventeen. Robots read the world and write actions as tokens, in part eighteen. And part nineteen squeezes the numbers themselves into fewer bits.",
+   "zh": ""
+  },
+  "e1b5cfbb8ce2": {
+   "scene": "Outro",
+   "en": "Next time, act four, agency, begins with reasoning: <bookmark mark='a'/> why writing the steps out makes a model smarter, and how models learn to do it by trial and error.",
+   "zh": ""
+  },
+  "be92bad66c07": {
+   "scene": "Outro",
+   "en": "Thanks for watching, and see you in part seventeen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 16, Every Sense Is a Token",
+ "chapters_en": {
+  "Hook": "One sequence",
+  "BPE": "1. Cutting text into tokens",
+  "VQ": "2. Codebooks",
+  "Sound": "3. Sound as tokens",
+  "Clip": "4. Matching senses",
+  "Omni": "5. One model, every sense",
+  "Outro": "Recap, and where this comes back"
+ }
+}
