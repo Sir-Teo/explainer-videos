@@ -2690,7 +2690,18 @@
     "learned weights": "学出来的权重",
     "exact fit, \\ big weights": "完全拟合，\\ 权重很大",
     "exact fit, \\ smallest weights": "完全拟合，\\ 权重最小",
-    "layers of simple units: \\ $70$ word rates in, \\\\ two layers of $512$, \\ $2$ outputs \\ (one per author)": "一层层简单的单元：\\ 输入$70$个词频，\\\\ 两层各$512$个单元，\\ $2$个输出 \\ （每位作者一个）"
+    "layers of simple units: \\ $70$ word rates in, \\\\ two layers of $512$, \\ $2$ outputs \\ (one per author)": "一层层简单的单元：\\ 输入$70$个词频，\\\\ 两层各$512$个单元，\\ $2$个输出 \\ （每位作者一个）",
+    "$\\alpha$: \\ how fast more parameters help": "$\\alpha$：\\ 增加参数能多快地带来改进",
+    "$\\beta$: \\ how fast more data helps": "$\\beta$：\\ 增加数据能多快地带来改进",
+    "frequency $k$: \\ the numbers, in order, \\\\ go round a circle $k$ times": "频率$k$：\\ 这些数按顺序 \\\\ 绕圆转$k$圈",
+    "frozen": "冻结",
+    "re-weighted": "重新加权",
+    "the lazy regime": "惰性区",
+    "a very wide net barely changes its features: \\\\ it can only re-weight what it started with, \\\\ like Part 5's kernel methods, \\ with a frozen similarity rule": "非常宽的网络几乎不改变它的特征：\\\\ 它只能给一开始就有的东西重新加权，\\\\ 就像第5部分的核方法，\\ 用的是一条冻结的相似度规则",
+    "layer width": "层宽",
+    "starting weights": "初始权重",
+    "step size": "步长",
+    "as the network widens, shrink each layer's \\\\ starting weights and step size, \\\\ so every layer keeps changing by about the same amount": "网络变宽时，把每一层的 \\\\ 初始权重和步长都缩小，\\\\ 让每一层的变化量都保持大致相同"
   },
   "phrases": {
     "width": "宽度",
