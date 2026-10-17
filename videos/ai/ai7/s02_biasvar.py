@@ -46,7 +46,7 @@ class BiasVariance(VoiceoverScene):
         head = label(r"Sixteen noisy points from one curve, \ drawn again and again \ (illustrative)", font_size=28)
         head.to_edge(UP, buff=0.3)
         poly = gloss(r"polynomial of degree $12$", r"adds up powers of $x$: \ $a_0 + a_1 x + a_2 x^2 + \dots + a_{12} "
-                     r"x^{12}$. \ The degree is the highest power, \ roughly how many bends it can make.",
+                     r"x^{12}$. \\ The degree is the highest power, \ roughly how many bends it can make.",
                      corner=DOWN, width=11.0, color=VAR)
         with self.voiceover(
             "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen "
