@@ -109,7 +109,8 @@ class Rules(VoiceoverScene):
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.8, -1.2, 0])
         xt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1) for v in range(0, n + 1, 32)])
         xn = label(rf"age: \ how many pairs ago it was written \ (${n}$ in all)", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
-        yn = label(r"error reading it back", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yn = label(r"error reading it back \ (relative)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in (0, 1, 2)])
         ca = curve(ax, np.arange(n), np.minimum(age["add"], 2.5), ADD, 3)
         cd = curve(ax, np.arange(n), np.minimum(age["decay"], 2.5), DECAY, 3.5)
         k1 = label(r"add: \ everything equally blurred", font_size=24, color=ADD).move_to([4.6, 0.2, 0])
@@ -125,7 +126,7 @@ class Rules(VoiceoverScene):
         ) as vo:
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("a")
-            self.play(Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             self.play(Create(ca), FadeIn(k1), run_time=1.5)
             self.play(Create(cd), FadeIn(k2), run_time=1.5)
             vo.wait_until("b")
