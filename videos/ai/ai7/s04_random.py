@@ -99,6 +99,10 @@ class RandomLabels(VoiceoverScene):
         lab, yt = np.asarray(r["labels_shuffled"]), np.asarray(r["ytrue"])
         steps = np.asarray(r["shuffled"])[:, 0]
         agree = lab == yt
+        ya, yd = F[:, agree].mean(1), F[:, ~agree].mean(1)
+        full = int(np.argmax((ya >= 1) & (yd >= 1)))  # the first logged step with every page fit
+        kmax = min(full + 2, len(steps) - 1)  # all the action is in the first few dozen steps
+        lmax = float(np.log10(steps[kmax]))
         n = len(lab)
         # pages sorted into two blocks: shuffled label = true author (left), and not (right)
         cols = 16
@@ -116,14 +120,17 @@ class RandomLabels(VoiceoverScene):
         ha.next_to(ga, UP, buff=0.15)
         hd.next_to(gd, UP, buff=0.15)
         # the share of each block fit, against steps (log scale)
-        ax = Axes(x_range=[0, 3.2, 1], y_range=[0, 1.0, 0.25], x_length=7.4, y_length=2.2, tips=False,
+        ax = Axes(x_range=[0, lmax, 1], y_range=[0, 1.0, 0.25], x_length=7.4, y_length=2.2, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04}).move_to([0, -2.35, 0])
         lx = np.log10(steps)
-        ya, yd = F[:, agree].mean(1), F[:, ~agree].mean(1)
         xt = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
-                      for t_, v in (("1", 0), ("10", 1), ("100", 2), ("1{,}000", 3))])
+                      for t_, v in (("1", 0), ("10", 1), ("100", 2), ("1{,}000", 3)) if v <= lmax])
+        xt.add(label(r"steps \ (log scale)", font_size=18, color=GREY_B).next_to(ax.c2p(lmax, 0), DOWN, buff=0.3))
         yt_ = VGroup(*[MathTex(rf"{int(100 * v)}\%", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
                        for v in (0, 0.5, 1.0)])
+        key_ = VGroup(label(r"share right: \ true-by-chance pages", font_size=18, color=TRAIN),
+                      label(r"share right: \ the others", font_size=18, color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        key_.next_to(ax, RIGHT, buff=0.3).align_to(ax, UP)
         t = ValueTracker(0)
 
         def part(ys, col):
@@ -134,7 +141,7 @@ class RandomLabels(VoiceoverScene):
         ca = always_redraw(lambda: part(ya, TRAIN))
         cd = always_redraw(lambda: part(yd, C.SURPRISE))
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(steps[int(t.get_value())]):,}".replace(",", "{,}"),
-                                            font_size=26, color=WHITE).next_to(ax, RIGHT, buff=0.3).shift(UP * 0.6))
+                                            font_size=26, color=WHITE).next_to(ax, RIGHT, buff=0.3).shift(DOWN * 0.3))
 
         def fill(k):
             anims = []
@@ -143,33 +150,30 @@ class RandomLabels(VoiceoverScene):
                     anims.append(sq.animate.set_fill(opacity=0.95 if F[k, i] else 0.15))
             return anims
 
-        def first_at(frac, ys):  # the first logged step by which this share of the block is fit
-            i = int(np.argmax(ys >= frac))
-            return int(steps[i]) if ys[i] >= frac else None
-
-        ha_s, hd_s = first_at(0.5, ya), first_at(0.5, yd)
-        early = ha_s is not None and hd_s is not None and ha_s * 2 <= hd_s
-        ks = sorted(set(np.unique(np.round(np.geomspace(1, len(steps) - 1, 14)).astype(int)).tolist()))
+        gap = [float(ya[k] - yd[k]) for k in range(full + 1)]
+        kg = int(np.argmax(gap))  # where the pages with a true label lead the most
+        early = gap[kg] > 0.08
+        ks = list(range(1, kmax + 1))
         with self.voiceover(
             "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true "
             "author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its "
             "shuffled label right. "
-            + (f"<bookmark mark='b'/> The pages whose label happens to be true go first: half of them are right by "
-               f"step {ha_s:,}, while half of the others take until step {hd_s:,}. Even on nonsense, the network "
-               "first learns what can be learned, the real difference between the authors, and only then memorizes "
-               "the exceptions one by one."
+            + (f"<bookmark mark='b'/> In the first few steps, the pages whose label happens to be true pull ahead: by "
+               f"step {int(steps[kg])}, {100 * ya[kg]:.0f} percent of them are right, against {100 * yd[kg]:.0f} percent "
+               "of the others. The network starts by learning the real difference between the authors. Then it "
+               f"memorizes the rest, and by step {int(steps[full])} every page, true or not, is fit. "
                if early else
-               f"<bookmark mark='b'/> Both kinds are learned at much the same pace: half of the first by step "
-               f"{ha_s or steps[-1]:,.0f}, half of the others by step {hd_s or steps[-1]:,.0f}. On this task the "
-               "network memorizes without first picking up the real pattern.")
+               f"<bookmark mark='b'/> Both halves are fit at much the same pace, every page by step "
+               f"{int(steps[full])}: here the network memorizes without first picking up the real pattern. ")
+            + f"With {int(r['n_params']):,} weights for {len(lab)} pages, memorizing is quick."
         ) as vo:
-            self.play(FadeIn(ga), FadeIn(gd), FadeIn(ha), FadeIn(hd), Create(ax), FadeIn(xt), FadeIn(yt_))
+            self.play(FadeIn(ga), FadeIn(gd), FadeIn(ha), FadeIn(hd), Create(ax), FadeIn(xt), FadeIn(yt_), FadeIn(key_))
             self.add(ca, cd, cnt)
             vo.wait_until("a")
-            for j, k in enumerate(ks):
-                if j == len(ks) // 3:
-                    vo.wait_until("b")
-                self.play(*fill(k), t.animate.set_value(k), run_time=0.7, rate_func=linear)
+            self.play(*fill(0))
+            vo.wait_until("b")
+            for k in ks:
+                self.play(*fill(k), t.animate.set_value(k), run_time=0.9, rate_func=linear)
         self.wait(0.5)
         self.remove(ca, cd, cnt)
         self.clear_scene()
