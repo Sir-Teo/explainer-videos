@@ -34,6 +34,11 @@
    "en": "Almost every frontier model now works this way. <bookmark mark='a'/> Mixtral used two experts of eight. DeepSeek-V3 uses 8 of 256; Kimi K2 has a trillion parameters and uses thirty-two billion; Qwen3-Next, 10 of 512, under four percent of its weights per token. <bookmark mark='b'/> The model knows as much as its total size, roughly, and costs as much to run as its active size.",
    "zh": "如今，几乎每一个前沿模型都是这样工作的。<bookmark mark='a'/>Mixtral用的是8个专家里的2个。DeepSeek-V3用256个里的8个；Kimi K2有1万亿个参数，用到的是320亿个；Qwen3-Next是512个里的10个，每个词元用到的权重不到4%。<bookmark mark='b'/>大致说来，模型懂得多少，和它的总规模相当；运行起来花多少，却只和它激活的那部分相当。"
   },
+  "c6e2d01666bc": {
+   "scene": "Router",
+   "en": "Here is DeepSeek-V3's router exactly, since it's become a template. <bookmark mark='a'/> Each expert gets a score from a sigmoid, its own yes-or-no, rather than a softmax that makes experts compete. <bookmark mark='b'/> The top k are chosen by score plus a bias, the balancing bias of the next chapter. <bookmark mark='c'/> But the weights that mix the chosen experts use the scores alone, rescaled to add to one, so balancing never distorts what the model computes. <bookmark mark='d'/> And one shared expert sees every token, to hold what everything needs. <bookmark mark='e'/> Why so many small experts? Count the combinations. Two of sixteen experts can be paired 120 ways. Cut each expert into four and choose eight of sixty-four, for the same compute, and there are 4.4 billion ways: far more room for each token to get its own specialized mixture.",
+   "zh": "下面是DeepSeek-V3路由器的具体做法，因为它已经成了一个模板。<bookmark mark='a'/>每个专家的分数来自一个sigmoid，是它自己的“要不要”，而不是让专家们彼此竞争的softmax。<bookmark mark='b'/>前k个专家，按分数加上一个偏置来挑选，就是下一章那个用来均衡的偏置。<bookmark mark='c'/>可是，混合被选中专家的权重只用分数本身，重新缩放、使总和为一，所以均衡永远不会扭曲模型算出的结果。<bookmark mark='d'/>另外还有一个共享专家，每个词元都会经过它，用来承载所有词元都需要的东西。<bookmark mark='e'/>为什么要这么多小专家？数一数组合就知道了。从16个专家里选2个，有120种搭配。把每个专家切成四份，在同样的计算量下从64个里选8个，就有44亿种：每个词元都有大得多的余地，得到属于自己的专门组合。"
+  },
   "c08319811eeb": {
    "scene": "Balance",
    "en": "Chapter two. Keeping every expert busy.",
@@ -88,6 +93,11 @@
    "scene": "SparseAttention",
    "en": "Choosing by score is what real models now do. <bookmark mark='a'/> Here's one query in our transformer, and how it weighs its last forty-eight keys. Together they hold 90 percent of its attention, and most of it lands on a handful of characters well back from the end. <bookmark mark='b'/> A sliding window keeps only the last eight keys: they hold just 7 percent. <bookmark mark='c'/> DeepSeek's native sparse attention cuts the past into blocks and squeezes each one into a summary. <bookmark mark='d'/> The query scores the summaries, reads the best blocks in full, and keeps a window of recent tokens too: 75 percent, from 16 keys. <bookmark mark='e'/> In DeepSeek-V3.2, a tiny, fast indexer gives every past token a score, and the query attends to the top ones only: two thousand and forty-eight in the real model, eight here, holding 76 percent. <bookmark mark='f'/> The trick in both is that finding the important keys must be much cheaper than attending to all of them.",
    "zh": "按分数来选，正是如今真实的模型在做的事。<bookmark mark='a'/>这是我们Transformer里的一个查询，以及它怎样给最后48个键分配权重。这48个键加起来，占了它90%的注意力，而且大部分落在离末尾相当远的少数几个字符上。<bookmark mark='b'/>滑动窗口只留下最后8个键：它们只占7%。<bookmark mark='c'/>DeepSeek的原生稀疏注意力，把过去切成一块一块，再把每一块压缩成一个摘要。<bookmark mark='d'/>查询先给这些摘要打分，把最好的几块完整地读一遍，同时也保留一个最近词元的窗口：75%，用了16个键。<bookmark mark='e'/>在DeepSeek-V3.2里，一个又小又快的索引器，给过去的每个词元打一个分，查询只关注得分最高的那些：真实模型里是2048个，这里是8个，占了76%。<bookmark mark='f'/>两者的诀窍都在于：找出重要的键，必须比对所有的键都做一遍注意力，便宜得多。"
+  },
+  "4cdfa8a0b120": {
+   "scene": "SparseAttention",
+   "en": "In equations: <bookmark mark='a'/> NSA's output is a gated sum of three attentions, over the block summaries, over the chosen blocks in full, and over a recent window, with gates the model learns. <bookmark mark='b'/> DSA's indexer scores each past token with a few small heads: a weighted sum of rectified dot products, computed in eight-bit numbers. <bookmark mark='c'/> Then real attention runs over the top two thousand and forty-eight. <bookmark mark='d'/> The indexer still looks at every pair, but it's so small that the expensive part now grows with the length times two thousand, not the length squared.",
+   "zh": "写成公式：<bookmark mark='a'/>NSA的输出，是三种注意力的门控加权和：对块摘要的注意力，对选中的块完整读取的注意力，以及对最近一段窗口的注意力，门由模型自己学。<bookmark mark='b'/>DSA的索引器，用几个小小的头给过去的每个词元打分：一组经过ReLU的点积的加权和，用8位数来算。<bookmark mark='c'/>然后，真正的注意力只在得分最高的2048个词元上进行。<bookmark mark='d'/>索引器仍然要看每一对，但它小到这种程度，昂贵的那部分就变成随长度乘以两千增长，而不是随长度的平方增长。"
   },
   "149c1536e75f": {
    "scene": "Outro",
