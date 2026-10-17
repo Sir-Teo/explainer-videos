@@ -138,44 +138,60 @@ class Longer(VoiceoverScene):
         frame = SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1.5)
         il = label(rf"layer {li + 1}, head {hi_ + 1}, \ on the passage", font_size=22, color=GREY_A).next_to(img, UP, buff=0.12)
         col = Rectangle(width=4.2 / maps.shape[-1] * 1.5, height=4.2, stroke_color=POS, stroke_width=2.5).move_to(img.get_left(), aligned_edge=LEFT)
-        # bars: share of attention on the first position, every head
-        bw = 0.2
+        # bars: share of attention on the first position, every head; the dashed line is an even share
+        ratio = float(sink.max() / uni)
+        strong = ratio > 5
+        bw, sy = 0.2, 1.6 / max(uni, float(sink.max()))
         bars = VGroup()
         for l_ in range(L):
             for h in range(H):
                 v = float(sink[l_, h])
-                bars.add(Rectangle(width=bw * 0.8, height=max(3.2 * v, 0.01), stroke_width=0,
-                                   fill_color=POS if (l_, h) == (li, hi_) else A, fill_opacity=0.85)
-                         .move_to([0.9 + (l_ * (H + 1) + h) * bw, -2.2 + 1.6 * v, 0]))
+                bars.add(Rectangle(width=bw * 0.8, height=max(sy * v, 0.01), stroke_width=0,
+                                   fill_color=POS if (l_, h) == (li, hi_) and strong else A, fill_opacity=0.85)
+                         .move_to([0.9 + (l_ * (H + 1) + h) * bw, -2.2 + sy * v / 2, 0]))
         base = Line([0.8, -2.2, 0], [0.9 + (L * (H + 1)) * bw, -2.2, 0], color=GREY_C, stroke_width=2)
-        ul = DashedLine([0.8, -2.2 + 3.2 * uni, 0], [0.9 + (L * (H + 1)) * bw, -2.2 + 3.2 * uni, 0], color=GREY_B, stroke_width=1.5)
+        ul = DashedLine([0.8, -2.2 + sy * uni, 0], [0.9 + (L * (H + 1)) * bw, -2.2 + sy * uni, 0], color=GREY_B, stroke_width=1.5)
         bl = label(r"every head's attention on the first character", font_size=22, color=GREY_A).next_to(base, DOWN, buff=0.15)
         ulab = label(r"if attention were spread evenly", font_size=20, color=GREY_B).next_to(ul, UP, buff=0.05).align_to(base, RIGHT)
         lyr = VGroup(*[label(rf"layer {l_ + 1}", font_size=18, color=GREY_B).move_to([0.9 + (l_ * (H + 1) + (H - 1) / 2) * bw,
                                                                                        -2.85, 0]) for l_ in range(L)])
         bl.next_to(lyr, DOWN, buff=0.1)
-        ratio = float(sink.max() / uni)
-        strong = ratio > 5
         why = label(r"softmax weights must add to one: \\ a head with nothing to find \\ parks its attention somewhere",
                     font_size=24, color=GREY_A).move_to([3.4, 2.0, 0])
         cite_ = cite(r"G.~Xiao et al., \textit{Efficient Streaming Language Models with Attention Sinks} (2023)", corner=DR)
+        # what a sink head looks like in a large model (a sketch): most of each row's weight on the first token
+        n = 48
+        g = np.random.default_rng(3)
+        sk = np.tril(np.exp(-np.abs(np.subtract.outer(np.arange(n), np.arange(n))) / 2.0) * 0.3 + g.random((n, n)) * 0.05)
+        sk[:, 0] += 2.0
+        sk = np.tril(sk) / np.tril(sk).sum(1, keepdims=True)
+        simg = heat_image(sk, 4.2, 4.2, color=A, mask_upper=True).move_to(img)
+        sframe = SurroundingRectangle(simg, buff=0, color=GREY_D, stroke_width=1.5)
+        sl = label(r"a sink head in a large model \ (schematic)", font_size=22, color=GREY_A).next_to(simg, UP, buff=0.12)
+        scol = Rectangle(width=4.2 / n * 1.5, height=4.2, stroke_color=POS, stroke_width=2.5).move_to(simg.get_left(), aligned_edge=LEFT)
         with self.voiceover(
             "Long contexts brought a strange discovery. Look at where heads put their attention. "
             + (f"<bookmark mark='a'/> Some heads in our model put a large share of it, up to {sink.max():.0%}, on the "
                f"very first character, whatever that character is: about {ratio:.0f} times what an even spread "
-               "would give it. " if strong else
-               f"<bookmark mark='a'/> In our small model, the first character gets a little extra attention, up to "
-               f"{ratio:.1f} times an even share; in large models, some heads give it most of their attention. ")
-            + "<bookmark mark='b'/> These are attention sinks. A softmax has to hand out all of its weight, so a "
-            "head that has nothing to look for parks its attention on a harmless spot. Guangxuan Xiao and colleagues "
-            "found that keeping those first tokens lets a model run on and on; newer models like gpt-oss build a "
-            "learnable sink into every head, and Qwen adds a gate that lets a head switch itself off instead."
+               "would give it. <bookmark mark='b'/> These are attention sinks. " if strong else
+               "<bookmark mark='a'/> In our small model, nothing odd: every head gives the first character less than "
+               "an even share. <bookmark mark='b'/> But in large models, many heads put most of their attention on "
+               "the very first token, whatever that token is. These are attention sinks. ")
+            + "<bookmark mark='c'/> A softmax has to hand out all of its weight, so a head that has nothing to look "
+            "for parks its attention on a harmless spot. Guangxuan Xiao and colleagues found that keeping those first "
+            "tokens lets a model run on and on; newer models like gpt-oss build a learnable sink into every head, and "
+            "Qwen adds a gate that lets a head switch itself off instead."
         ) as vo:
             self.play(FadeIn(img), Create(frame), FadeIn(il), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(Create(col), Create(base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03),
+            self.play(*([Create(col)] if strong else []), Create(base),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03),
                       Create(ul), FadeIn(ulab), FadeIn(lyr), FadeIn(bl), run_time=2.0)
             vo.wait_until("b")
+            if not strong:
+                self.play(FadeOut(Group(img, frame, il)), FadeIn(Group(simg, sframe, sl)))
+                self.play(Create(scol))
+            vo.wait_until("c")
             self.play(FadeIn(why))
         self.wait(0.3)
         self.clear_scene()

@@ -161,7 +161,8 @@ class Transformer(VoiceoverScene):
                        label(rf"${t['tokens'] / 1e6:.0f}$ million characters of training", font_size=26, color=WHITE),
                        label(rf"${t['ctx']}$ characters of context", font_size=26, color=WHITE),
                        label(r"on this video's $4$-core CPU", font_size=24, color=GREY_B))
-        facts.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.6, -1.4, 0])
+        facts.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        keep_in_frame(facts)  # clear of the reference lines' names, which sit at the end of the curves
         pb = float(t["passage_bits"])
         beat_kn, beat_mix = pb < k["best_bits"], pb < n["mix_bits"]
         verdict = (f"It reaches {pb:.2f} bits a character on the passage"
