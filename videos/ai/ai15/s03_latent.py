@@ -16,6 +16,7 @@ class Latent(VoiceoverScene):
         self.diffuse()
         self.vae()
         self.tradeoff()
+        self.training()
 
     def card(self):
         card = chapter_card(2, r"A smaller space", r"Why denoise every pixel?", part=15)
@@ -246,5 +247,56 @@ class Latent(VoiceoverScene):
             self.play(FadeIn(o_row), FadeIn(h1), FadeIn(h2))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def training(self):
+        """How a VAE trains: rebuilds of six held-out letters at checkpoints, and the two terms of the loss."""
+        v = load("vae")
+        tag = "0.01" if "curve_0.01" in v else [f"{float(b):g}" for b in v["betas"]][2]
+        cv = np.asarray(v[f"curve_{tag}"])
+        steps = [int(s_) for s_ in v[f"snap_steps_{tag}"]]
+        snaps = np.asarray(v[f"snaps_{tag}"])
+        orig = np.asarray(v["orig"])[:6]
+        S = 0.62
+        cols = Group(*[Group(*[gray_image(im, S) for im in snaps[k]]).arrange(DOWN, buff=0.05) for k in range(len(steps))])
+        ocol = Group(*[gray_image(im, S) for im in orig]).arrange(DOWN, buff=0.05)
+        Group(ocol, cols).arrange(RIGHT, buff=0.35).move_to([-2.6, 0.2, 0])
+        cols.shift(RIGHT * 0.25)
+        ol = label(r"the letters", font_size=18, color=GREY_A).next_to(ocol, UP, buff=0.12)
+        sl = VGroup(*[MathTex(f"{s_:,}".replace(",", "{,}"), font_size=20, color=PATCH).next_to(c_, UP, buff=0.12)
+                      for s_, c_ in zip(steps, cols)])
+        hl = label(r"rebuilt after this many steps \ (held-out fonts)", font_size=20, color=GREY_A).next_to(sl, UP, buff=0.15)
+        # the two terms of the loss as it trains
+        total = float(cv[-1, 0])
+        rmax, kmax = float(cv[:, 1].max()), float(cv[:, 2].max())
+        ax = CornerAxes(x_range=[0, total, total / 2], y_range=[0, 1.05, 0.5], x_length=3.6, y_length=3.0, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.6, 0.0, 0])
+        rc = VMobject(color=PATCH, stroke_width=3).set_points_as_corners([ax.c2p(a, b / rmax) for a, b, _ in cv])
+        kc = VMobject(color=C.SURPRISE, stroke_width=3).set_points_as_corners([ax.c2p(a, c / kmax) for a, _, c in cv])
+        kl = VGroup(label(r"rebuild error", font_size=18, color=PATCH), label(r"KL: \ what the codes say", font_size=18, color=C.SURPRISE))
+        kl.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, UP, buff=0.15)
+        xn = label(r"training steps \ (each scaled to its peak)", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+        k_peak_at = float(cv[int(np.argmax(cv[:, 2])), 0])
+        with self.voiceover(
+            f"And here is one of them learning, the one with beta {tag}. <bookmark mark='a'/> These six letters are "
+            "from fonts it never trains on, rebuilt from their codes at checkpoints. At first, every letter "
+            "comes out as the same grey smudge: the average letter. <bookmark mark='b'/> Then the broad shape of "
+            "each one appears, and the details last. <bookmark mark='c'/> The two terms of the loss pull against "
+            "each other. The rebuild error falls fast; the KL, how much information the codes carry, "
+            + (f"climbs as the encoder learns to say more, peaking around step {k_peak_at:,.0f}, then settles as the "
+               "penalty trims what isn't worth its cost." if k_peak_at < 0.8 * total else
+               "climbs all the way, as the encoder learns to say more about each letter.")
+        ) as vo:
+            self.play(FadeIn(ocol), FadeIn(ol), FadeIn(hl))
+            vo.wait_until("a")
+            self.play(FadeIn(cols[0]), FadeIn(sl[0]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(c_, shift=RIGHT * 0.1), FadeIn(s_)) for c_, s_ in zip(cols[1:], sl[1:])],
+                                  lag_ratio=0.5), run_time=3.0)
+            vo.wait_until("c")
+            self.play(Create(ax), FadeIn(kl), FadeIn(xn))
+            self.play(Create(rc), Create(kc), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()

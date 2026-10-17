@@ -11,6 +11,7 @@ class DiT(VoiceoverScene):
         self.card()
         self.design()
         self.zero()
+        self.learning()
         self.alphabet()
 
     def card(self):
@@ -105,4 +106,60 @@ class DiT(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(g_) for g_ in second], lag_ratio=0.03), FadeIn(sl), run_time=2.0)
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How it learns: the same noise and the same ten requests, drawn at checkpoints, beside the loss."""
+        d = load("dit")
+        steps = [int(s_) for s_ in d["snap_steps"]]
+        snaps = np.asarray(d["snaps"])
+        L = np.asarray(d["losses"])
+        total = steps[-1]
+        S = 0.95
+
+        def row(k):
+            return Group(*[gray_image(im, S) for im in snaps[k]]).arrange(RIGHT, buff=0.08).move_to([0, 2.0, 0])
+
+        asked = VGroup(*[Text(c, font="DejaVu Sans Mono", font_size=20, color=C.BITS) for c in LETTERS[:10]])
+        r0 = row(0)
+        for a_, im in zip(asked, r0):
+            a_.next_to(im, UP, buff=0.08)
+        lo, hi = float(L[:, 1].min()), float(L[:, 1].max())
+        ax = CornerAxes(x_range=[0, total, total / 4], y_range=[0, hi * 1.05, hi / 2], x_length=8.0, y_length=2.6, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0, -1.6, 0])
+        ln = VMobject(color=PATCH, stroke_width=3).set_points_as_corners([ax.c2p(a, b) for a, b in L])
+        xt = VGroup(*[MathTex(f"{v:,}".replace(",", "{,}"), font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for v in (0, total // 2, total)])
+        xn = label(r"training steps \ ($128$ noisy letters each)", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(r"flow-matching loss \ (average of $50$ steps)", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        t = ValueTracker(0)
+        dot = always_redraw(lambda: Dot(ax.c2p(t.get_value(), float(np.interp(t.get_value(), L[:, 0], L[:, 1]))), radius=0.07,
+                                        color=C.BITS))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=28, color=C.BITS)
+                            .next_to(r0, DOWN, buff=0.25))
+        tag = label(r"same noise, \ same requests, \ every checkpoint", font_size=20, color=GREY_A).to_corner(UR, buff=0.3)
+        with self.voiceover(
+            "How does it get there? Here is the same noise, asked for the same ten letters, A to J, drawn by the model "
+            "at checkpoints along its training. <bookmark mark='a'/> At first it has learned nothing, and the noise "
+            "barely moves. <bookmark mark='b'/> Within a few hundred steps it learns the average picture: a blur in "
+            "the middle, the same for every request. <bookmark mark='c'/> Then the request starts to matter, and "
+            "rough shapes split apart; <bookmark mark='d'/> the strokes sharpen last, long after the loss has "
+            "mostly flattened. The loss measures the average error on one step's velocity; the pictures improve "
+            "on a slower clock."
+        ) as vo:
+            self.play(FadeIn(tag), FadeIn(asked), FadeIn(r0), Create(ax), FadeIn(xt), FadeIn(xn), FadeIn(yn))
+            self.add(dot, cnt)
+            cur = r0
+            marks = {1: "a", 2: "b", 4: "c", 5: "d"}
+            for k in range(1, len(steps)):
+                if k in marks:
+                    vo.wait_until(marks[k])
+                nxt = row(k)
+                self.play(t.animate.set_value(steps[k]), Create(VMobject(color=PATCH, stroke_width=3).set_points_as_corners(
+                    [ax.c2p(a, b) for a, b in L if steps[k - 1] <= a <= steps[k]] or [ax.c2p(steps[k], L[-1, 1])] * 2)),
+                    FadeTransform(cur, nxt), run_time=1.2)
+                cur = nxt
+        self.wait(0.3)
+        self.remove(dot, cnt)
         self.clear_scene()

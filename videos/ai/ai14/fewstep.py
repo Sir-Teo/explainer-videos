@@ -44,7 +44,7 @@ def uvnet(width=256, tdim=32):
     return Net()
 
 
-def train(kind, X, seed=2025):
+def train(kind, X, seed=2025, z_watch=None, snaps=None):
     import torch
 
     torch.manual_seed(seed)
@@ -91,6 +91,8 @@ def train(kind, X, seed=2025):
         loss.backward()
         opt.step()
         sched.step()
+        if snaps is not None and (step + 1) in (250, 500, 1000, 2000, 4000, STEPS):  # how it learns: one jump, as training goes
+            snaps.append((step + 1, jump(net, z_watch, 1)[0]))
         if (step + 1) % 2000 == 0:
             print(f"    {kind} step {step + 1}: loss {float(loss):.4f}", flush=True)
     return net
@@ -120,7 +122,10 @@ def compute_fewstep():
     z = rng(1).normal(size=(1500, 2))  # the same noise as the flow item
     out = dict(jumps=JUMPS, steps=STEPS)
     for kind in ("meanflow", "shortcut"):
-        net = train(kind, X)
+        sn = []
+        net = train(kind, X, z_watch=z[:400], snaps=sn)
+        out[f"{kind}_snap_steps"] = [s_ for s_, _ in sn]
+        out[f"{kind}_snaps"] = np.array([x_ for _, x_ in sn])
         for n in JUMPS:
             xs, p = jump(net, z, n)
             out[f"{kind}{n}"] = xs[:600]

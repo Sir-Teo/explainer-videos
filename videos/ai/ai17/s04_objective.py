@@ -24,6 +24,7 @@ class Objective(VoiceoverScene):
         self.card()
         self.clip()
         self.kl()
+        self.learning()
         self.dpo()
         self.dpo_result()
         self.variants()
@@ -414,4 +415,68 @@ class Objective(VoiceoverScene):
             self.play(Create(cb), FadeIn(db), FadeIn(kb), run_time=1.5)
             self.play(Create(ca), FadeIn(da), FadeIn(ka), run_time=1.5)
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learning(self):
+        """How GRPO moves the model: its probability over answers to three questions, step by step."""
+        o = load("objectives")
+        D = np.asarray(o["grpo_dists"], float)  # (checkpoints, 6 questions, 1000 answers)
+        A, B = np.asarray(o["grpo_dist_a"]), np.asarray(o["grpo_dist_b"])
+        truth = A + B
+        n_ck = D.shape[0]
+        steps = np.arange(n_ck) * 20
+        p_right = D[:, np.arange(len(truth)), truth]
+        order = np.argsort(p_right[0])  # the three questions it is least sure of at the start
+        qs = [int(i) for i in order[:3]]
+        panels, sets = VGroup(), []
+        H = 2.4
+        for j, qi in enumerate(qs):
+            cand = set(np.argsort(-D[0, qi])[:5].tolist()) | set(np.argsort(-D[-1, qi])[:3].tolist()) | {int(truth[qi])}
+            ans = sorted(cand, key=lambda a_: -D[0, qi, a_])[:7]
+            if int(truth[qi]) not in ans:
+                ans[-1] = int(truth[qi])
+            sets.append(ans)
+            x0 = -5.4 + j * 4.3
+            base = Line([x0 - 0.3, -1.2, 0], [x0 + 0.48 * len(ans) - 0.1, -1.2, 0], color=GREY_C, stroke_width=1.5)
+            labs = VGroup(*[Text(str(a_), font="DejaVu Sans Mono", font_size=16, color=RIGHT_C if a_ == truth[qi] else GREY_B)
+                            .move_to([x0 + 0.48 * k, -1.45, 0]) for k, a_ in enumerate(ans)])
+            q = Text(f"{int(A[qi])}+{int(B[qi])}=", font="DejaVu Sans Mono", font_size=24, color=GREY_A).move_to([x0 + 1.3, 1.9, 0])
+            panels.add(VGroup(base, labs, q))
+
+        def bars(k):
+            g = VGroup()
+            for j, qi in enumerate(qs):
+                x0 = -5.4 + j * 4.3
+                for kk, a_ in enumerate(sets[j]):
+                    h = max(H * float(D[k, qi, a_]), 0.01)
+                    g.add(Rectangle(width=0.36, height=h, stroke_width=0, fill_color=RIGHT_C if a_ == truth[qi] else WRONG_C,
+                                    fill_opacity=0.85).move_to([x0 + 0.48 * kk, -1.2 + h / 2, 0]))
+            return g
+
+        cur = bars(0)
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{GRPO step }}{int(t.get_value())}", font_size=30, color=C.BITS).to_edge(UP, buff=0.4))
+        yl = label(r"the model's probability for each answer \ (the right one in green)", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
+        e0, e1 = float(np.asarray(o["grpo_curve"])[0, 2]), float(np.asarray(o["grpo_curve"])[-1, 2])
+        pr0 = float(p_right[0, qs].mean())
+        pr1 = float(p_right[-1, qs].mean())
+        with self.voiceover(
+            "Here is what that objective does to the model, step by step. Three questions it was unsure of, and the "
+            "probability it gives each candidate answer, the right one in green. <bookmark mark='a'/> Each step, "
+            "answers that beat their group's average get pushed up and the rest pushed down; the clip keeps each "
+            f"push small. <bookmark mark='b'/> The right answers' probability climbs from {100 * pr0:.0f} percent on "
+            f"average to {100 * pr1:.0f}, and the wrong ones drain away. That's also why the entropy falls, from "
+            f"{e0:.2f} to {e1:.2f} bits a digit: the model stops spreading its bets."
+        ) as vo:
+            self.play(FadeIn(panels), FadeIn(cur), FadeIn(yl))
+            self.add(cnt)
+            vo.wait_until("a")
+            for k in range(1, n_ck):
+                if k == n_ck // 2:
+                    vo.wait_until("b")
+                nxt = bars(k)
+                self.play(Transform(cur, nxt), t.animate.set_value(steps[k]), run_time=0.45, rate_func=linear)
+        self.wait(0.5)
+        self.remove(cnt)
         self.clear_scene()
