@@ -10,6 +10,8 @@ class Special(VoiceoverScene):
     def construct(self):
         self.card()
         self.routes()
+        self.forming()
+        self.race()
         self.worth()
 
     def card(self):
@@ -119,5 +121,100 @@ class Special(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
             self.play(Indicate(g[1], color=C.INTERVAL))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def forming(self):
+        """How the routing forms: the same picture at checkpoints during training."""
+        m = load("moe")
+        chars = [str(c_) for c_ in m["route_chars"]]
+        R = np.asarray(m["routes"])
+        steps = [int(s_) for s_ in m["route_steps"]]
+        E = R.shape[2]
+        cell = min(0.36, 11.5 / len(chars))
+
+        def grid(k):
+            g = VGroup()
+            for i in range(len(chars)):
+                for j in range(E):
+                    g.add(Square(cell, stroke_width=0.4, stroke_color=GREY_D, fill_color=EXPERT_COLORS[j],
+                                 fill_opacity=0.05 + 0.9 * float(R[k, i, j])).move_to([i * cell, -j * cell, 0]))
+            return g.center().move_to(DOWN * 0.2)
+
+        cur = grid(0)
+        names = VGroup(*[(Text(c_ if c_ != " " else "␣", font=MONO, font_size=22, color=C.BITS if c_ in "aeiou" else GREY_A))
+                         .next_to(cur[i * E], UP, buff=0.08) for i, c_ in enumerate(chars)])
+        el = VGroup(*[MathTex(rf"E_{j + 1}", font_size=24, color=EXPERT_COLORS[j]).next_to(cur[j], LEFT, buff=0.1) for j in range(E)])
+        t = ValueTracker(0)
+        cnt = always_redraw(lambda: MathTex(rf"\text{{training step }}{int(t.get_value()):,}".replace(",", "{,}"), font_size=30,
+                                            color=WHITE).to_edge(UP, buff=0.45))
+        # how decided the choices are: the average share of a character's contexts that go to its favourite expert
+        sharp = [float(R[k].max(1).mean()) for k in range(len(steps))]
+        top_change = [int((R[k].argmax(1) != R[-1].argmax(1)).sum()) for k in range(len(steps))]
+        with self.voiceover(
+            "How did that pattern form? Here is the same picture during training. <bookmark mark='a'/> At the start "
+            "the router is random and nearly uniform, so each character's contexts are spread over the experts: on "
+            f"average its favourite gets {100 * sharp[0]:.0f} percent. <bookmark mark='b'/> As the experts begin to "
+            "differ, the router learns which one helps where, and the choices sharpen; "
+            f"<bookmark mark='c'/> by the end the favourite gets {100 * sharp[-1]:.0f} percent. "
+            + (f"After step {steps[2]}, only {top_change[2]} of the {len(chars)} characters still change their "
+               "favourite: the division of labour is settled early, and the rest of training refines it."
+               if top_change[2] <= len(chars) // 4 else
+               "The favourites keep shifting well into training, as the experts and the router chase each other.")
+        ) as vo:
+            self.play(FadeIn(cur), FadeIn(names), FadeIn(el))
+            self.add(cnt)
+            vo.wait_until("a")
+            for k, mk in zip(range(1, len(steps)), ("b", None, "c", None)):
+                if mk:
+                    vo.wait_until(mk)
+                nxt = grid(k)
+                self.play(Transform(cur, nxt), t.animate.set_value(steps[k]), run_time=1.5)
+        self.wait(0.4)
+        self.remove(cnt)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def race(self):
+        """The three models of the comparison, as they train."""
+        m = load("moe")
+        E, k = int(m["E"]), int(m["k"])
+        cs = [("dense_active", rf"dense, \ as much compute", GREY_B), ("bias", rf"mixture: \ ${k}$ of ${E}$ experts", C.INTERVAL),
+              ("dense_total", rf"dense, \ as many parameters", GREY_A)]
+        D = {key: np.asarray(m[f"curve_{key}"]) for key, _, _ in cs}
+        total = float(D["bias"][-1, 0])
+        lo = min(float(d[:, 1][2:].min()) for d in D.values()) - 0.05
+        hi = float(D["bias"][2, 1]) + 0.3
+        ax = Axes(x_range=[0, total, 500], y_range=[lo, hi, 0.25], x_length=8.0, y_length=4.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-1.5, -0.4, 0])
+        yl = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
+                      for v in np.arange(np.ceil(lo * 4) / 4, hi, 0.25)])
+        xl = label(r"training steps", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        yn = label(r"held-out bits per character", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        lines = [VMobject(color=col, stroke_width=3.5).set_points_as_corners(
+            [ax.c2p(a, min(b, hi)) for a, b in D[key][1:]]) for key, _, col in cs]
+        names = VGroup(*[label(nm, font_size=22, color=col) for _, nm, col in cs]).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        names.move_to([4.7, 0.9, 0])
+        keep_in_frame(names)
+        # where the mixture pulls ahead of the dense model with the same compute, if it does, and stays ahead
+        a_, b_ = D["dense_active"], D["bias"]
+        ahead = [i for i in range(len(b_)) if all(b_[j, 1] < a_[j, 1] for j in range(i, len(b_)))]
+        when = int(b_[ahead[0], 0]) if ahead else None
+        with self.voiceover(
+            "And here are the three models of that comparison as they train, held-out bits per character every "
+            f"{int(D['bias'][1, 0])} steps. <bookmark mark='a'/> "
+            + (f"The mixture pulls ahead of the dense model with the same arithmetic by step {when:,} and stays ahead. "
+               if when is not None and when > 0 else
+               "The mixture is ahead of the dense model with the same arithmetic from the start. " if when == 0 else
+               "The mixture never gets clear of the dense model with the same arithmetic. ")
+            + "<bookmark mark='b'/> The wide dense model has the most to learn; with this much training, the curves show "
+            "where it stands."
+        ) as vo:
+            self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn))
+            vo.wait_until("a")
+            self.play(Create(lines[0]), Create(lines[1]), FadeIn(names[0]), FadeIn(names[1]), run_time=3.0)
+            vo.wait_until("b")
+            self.play(Create(lines[2]), FadeIn(names[2]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
