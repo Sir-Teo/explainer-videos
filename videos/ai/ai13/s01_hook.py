@@ -21,7 +21,7 @@ class Hook(VoiceoverScene):
         shared = Square(0.5, stroke_color=C.INTERVAL, stroke_width=2, fill_color=C.INTERVAL, fill_opacity=0.5)
         shared.next_to(cells, LEFT, buff=0.35)
         sl = label(r"shared", font_size=18, color=C.INTERVAL).next_to(shared, DOWN, buff=0.08)
-        words = ["Spade", "looked", "at", "the", "girl"]
+        words = ["Spade", "looked", "at", "the", "girl", "for", "a", "long", "moment", "and", "then", "smiled"]
         g = np.random.default_rng(3)
         head = VGroup(label(rf"DeepSeek-V3: \ ${billions(ds['total'])}$ parameters, \ "
                             rf"${n}$ experts in every layer", font_size=30),
@@ -37,17 +37,26 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head[0]), LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.003), FadeIn(shared),
                       FadeIn(sl), run_time=2.0)
-            vo.wait_until("a")
-            self.play(FadeIn(head[1]))
-            vo.wait_until("b")
-            for w in words:
+
+            def route(w, rt=1.0):
+                nonlocal tok
                 pick = g.choice(n, k, replace=False)
                 t = Text(w, font=MONO, font_size=34, color=C.BITS).next_to(cells, DOWN, buff=0.45)
                 self.play(FadeOut(tok), FadeIn(t), *[cells[i].animate.set_fill(C.BITS, opacity=0.9) for i in pick],
-                          shared.animate.set_fill(opacity=0.9), run_time=0.45)
+                          shared.animate.set_fill(opacity=0.9), run_time=0.45 * rt)
                 self.play(*[cells[i].animate.set_fill(GREY_D, opacity=0.25) for i in pick],
-                          shared.animate.set_fill(opacity=0.5), run_time=0.35)
+                          shared.animate.set_fill(opacity=0.5), run_time=0.35 * rt)
                 tok = t
+
+            for w in words[:3]:  # the first few slowly, while the numbers are read
+                route(w, 1.6)
+            vo.wait_until("a")
+            self.play(FadeIn(head[1]))
+            for w in words[3:6]:
+                route(w, 1.3)
+            vo.wait_until("b")
+            for w in words[6:]:
+                route(w)
         self.wait(0.3)
         self.clear_scene()
 
