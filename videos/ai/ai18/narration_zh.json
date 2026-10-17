@@ -1,0 +1,112 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "Belief": "",
+  "Horizon": "",
+  "World": "",
+  "VLA": "",
+  "Outro": ""
+ },
+ "lines": {
+  "a93b3bdf846b": {
+   "scene": "Hook",
+   "en": "A chatbot answers one question. <bookmark mark='j'/> An agent has to do a whole job: thirty steps, a hundred, a thousand, each depending on the last. <bookmark mark='a'/> Even at ninety-seven percent per step, thirty steps in a row succeed only 40 percent of the time.",
+   "zh": ""
+  },
+  "b83817c7897d": {
+   "scene": "Hook",
+   "en": "Here are 60 attempts at once. <bookmark mark='a'/> Each step, a few more runs go wrong, and a run that has gone wrong stays wrong. <bookmark mark='b'/> By step thirty, 27 of 60 are still on track.",
+   "zh": ""
+  },
+  "d6697af147db": {
+   "scene": "Hook",
+   "en": "This part is about agents: acting on a belief, surviving long chains of steps, imagining the future, <bookmark mark='a'/> and moving in the physical world.",
+   "zh": ""
+  },
+  "58b8d5087b18": {
+   "scene": "Belief",
+   "en": "Chapter one. Acting without seeing everything.",
+   "zh": ""
+  },
+  "0d6d6ef660aa": {
+   "scene": "Belief",
+   "en": "An agent acts in a world it can only partly see. Here's the classic example: a robot in a corridor with a few doors, which doesn't know where it is. Its knowledge is a belief: a probability for every cell, spread evenly at first. <bookmark mark='a'/> Each step it moves right, sometimes slipping, so the belief shifts and blurs. Then it senses: door, or no door, and Bayes' rule from part four multiplies the belief by how well each cell explains what it saw. <bookmark mark='b'/> Watch the uncertainty fall as the pattern of doors gives the place away. This is part six's hidden Markov model, run forward: an agent in a partly observed world, a POMDP, acts on its belief, not on the truth.",
+   "zh": ""
+  },
+  "3a8e3535f101": {
+   "scene": "Horizon",
+   "en": "Chapter two. Long horizons.",
+   "zh": ""
+  },
+  "ed79b55f8459": {
+   "scene": "Horizon",
+   "en": "Agents work in long chains of steps: read a page, click, write code, run it, read the error. Every step has to go right. <bookmark mark='a'/> If each step succeeds with probability p, a task of n steps succeeds with p to the n. <bookmark mark='b'/> At ninety percent per step, a ten-step task already fails two times in three. At ninety-nine percent, a hundred-step task succeeds only 37 percent of the time. Small errors compound.",
+   "zh": ""
+  },
+  "3af607d81344": {
+   "scene": "Horizon",
+   "en": "Turn it around: how long a task can an agent finish half the time? <bookmark mark='a'/> It's about zero point seven divided by the error rate per step. Halve the errors, and the reachable task length doubles. <bookmark mark='b'/> METR measured exactly this for real AI agents, on tasks timed by how long they take people: the length agents finish half the time has doubled about every seven months, for six years. Reliability per step is what buys long horizons.",
+   "zh": ""
+  },
+  "4e700aefe6e8": {
+   "scene": "World",
+   "en": "Chapter three. World models.",
+   "zh": ""
+  },
+  "b3cdd81d82c6": {
+   "scene": "World",
+   "en": "To plan, an agent needs to predict what its actions will do. A world model learns that from experience. <bookmark mark='a'/> Ours watches a ball bouncing in a box. It squeezes each frame into eight numbers, learns how those numbers change from one frame to the next, and can turn numbers back into a picture.",
+   "zh": ""
+  },
+  "a5f021398e2f": {
+   "scene": "World",
+   "en": "Now let it imagine. Give it two real frames and let it run on its own predictions, step after step, <bookmark mark='a'/> while the real ball keeps going. For a while, imagination and reality move together: one step ahead it's 0.1 pixels off. <bookmark mark='b'/> Then small errors compound, like the long tasks of the last chapter: 5.3 pixels off after twenty steps. <bookmark mark='c'/> Agents like Dreamer learn by practising inside such imagined worlds, and Genie generates whole playable worlds from video.",
+   "zh": ""
+  },
+  "fb95bf572eed": {
+   "scene": "VLA",
+   "en": "Chapter four. Acting in the physical world.",
+   "zh": ""
+  },
+  "05fda875de91": {
+   "scene": "VLA",
+   "en": "Robots are where agents meet physics. A vision-language-action model starts from a model that already reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert that generates smooth motions by flow matching, part fourteen's machinery, now drawing trajectories instead of pictures.",
+   "zh": ""
+  },
+  "4fe1507d7c70": {
+   "scene": "VLA",
+   "en": "And it doesn't act one tiny step at a time. It plans a chunk of motion, a second or so, then looks at the world again and plans the next: <bookmark mark='a'/> the belief and the world model of the earlier chapters, folded into one network that sees, thinks and moves.",
+   "zh": ""
+  },
+  "649678677dd2": {
+   "scene": "Outro",
+   "en": "Let's take stock. An agent acts on a belief, updated by Bayes' rule as it moves and senses. Over long tasks, small errors compound, so reliability per step sets how far it can go, and that reach has been doubling every seven months. A world model lets it imagine before it acts, until its own errors catch up with it. And robots now run on models that see, read and move.",
+   "zh": ""
+  },
+  "a0638fefdc58": {
+   "scene": "Outro",
+   "en": "Agents run models many times per task, so the next part, on inference, is about making each run fast. And the last part looks inside the model, to see what it actually knows.",
+   "zh": ""
+  },
+  "6a6052455904": {
+   "scene": "Outro",
+   "en": "Next time: inference. How a small model can guess ahead and a big one check its guesses all at once, <bookmark mark='a'/> with exactly the same output; and how to store numbers in four bits.",
+   "zh": ""
+  },
+  "fb98d0696e50": {
+   "scene": "Outro",
+   "en": "Thanks for watching, and see you in part nineteen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 18, Agents and Worlds",
+ "chapters_en": {
+  "Hook": "Many steps in a row",
+  "Belief": "1. Acting without seeing everything",
+  "Horizon": "2. Long horizons",
+  "World": "3. World models",
+  "VLA": "4. Acting in the physical world",
+  "Outro": "Recap, and where this comes back"
+ }
+}
