@@ -316,7 +316,7 @@ class ClipNet:
     level through adaptive layer norm; attention across frames either full or causal (each frame sees itself and
     the past)."""
 
-    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False):
+    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False, pred="v"):
         import torch
         import torch.nn as nn
 
@@ -343,6 +343,7 @@ class ClipNet:
             def __init__(self):
                 super().__init__()
                 self.T = T
+                self.pred = pred
                 self.concat = concat
                 self.embed = nn.Linear(P * P * (2 if concat else 1), D)
                 self.pos_s = nn.Parameter(torch.randn(1, 1, NP, D) * 0.02)
@@ -376,6 +377,15 @@ class ClipNet:
         return Net()
 
 
+def velocity(m, x, t, y):
+    """The flow's velocity at x (B, F, 20, 20), noise levels t (B, F). A model that predicts the clean frames ('x')
+    has its velocity read off as (x_clean - x_t) / (1 - t), with 1 - t kept above 0.05."""
+    o = m(x, t, y)
+    if m.pred == "x":
+        return (o - x) / (1 - t).clamp(min=0.05)[..., None, None]
+    return o
+
+
 def clip_levels(mode, B, T, g):
     """Each training clip's noise levels t (B, T) and loss weights w (B, T). Frame 0 is always given clean (t = 1, the
     data end of x_t = (1 - t) noise + t data) and is never a target: image-to-video."""
@@ -396,7 +406,7 @@ def clip_levels(mode, B, T, g):
     return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False):
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v"):
     """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
     frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
     In every mode the first frame is given clean and never learned."""
@@ -406,7 +416,7 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, co
 
     torch.manual_seed(seed)
     T = clips.shape[1]
-    m = ClipNet(T=T, causal=mode != "clip", concat=concat)
+    m = ClipNet(T=T, causal=mode != "clip", concat=concat, pred=pred)
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=0.0)
     n = steps(n_steps)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=n, pct_start=0.3 if QUICK else 0.05)
@@ -420,7 +430,7 @@ def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, co
         x0 = torch.randn(x1.shape, generator=g)
         t, w = clip_levels(mode, B, T, g)
         xt = (1 - t[..., None, None]) * x0 + t[..., None, None] * x1
-        err = ((m(xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
+        err = ((velocity(m, xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
         loss = (err * w).sum() / w.sum()
         opt.zero_grad()
         loss.backward()
@@ -449,7 +459,7 @@ def sample_clip(m, first, y, n_steps=30, seed=0):
         for k in range(n_steps):
             t = torch.full((B, T), k / n_steps)
             t[:, 0] = 1.0
-            x = x + m(x, t, yy) / n_steps
+            x = x + velocity(m, x, t, yy) / n_steps
             x[:, 0] = f0
     return ((x.numpy() + 1) / 2).clip(0, 1)
 
@@ -470,7 +480,7 @@ def rollout(m, first, y, n_frames, window, n_steps=24, seed=0):
             for k in range(n_steps):
                 x = torch.cat(ctx + [new], 1)
                 t = torch.cat([torch.ones(B, len(ctx)), torch.full((B, 1), k / n_steps)], 1)
-                new = new + m(x, t, yy)[:, -1:] / n_steps
+                new = new + velocity(m, x, t, yy)[:, -1:] / n_steps
             done.append(new.clamp(-1, 1))
     return ((torch.cat(done, 1).numpy() + 1) / 2).clip(0, 1)
 
