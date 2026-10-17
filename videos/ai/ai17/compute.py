@@ -15,6 +15,9 @@ Items:
                accuracy along the way, and the model's samples before and after
     sampling   test-time compute from the same model before RL: pass@k (any of k samples right, with a checker) and
                majority voting over k samples, as k grows
+    objectives (objectives.py) the same start trained by six RL objectives: plain group-relative policy gradient,
+               GRPO with clipping and a KL penalty, Dr. GRPO, DAPO, GSPO and DPO; accuracy, entropy, KL from the start,
+               groups with no signal, clipped tokens; pass@k before and after RL
 """
 
 from __future__ import annotations
@@ -254,10 +257,13 @@ def compute_sampling():
     return out
 
 
+from videos.ai.ai17.objectives import compute_objectives  # noqa: E402
+
 ITEMS = {
     "parity": compute_parity,
     "rl": compute_rl,
     "sampling": compute_sampling,
+    "objectives": compute_objectives,
 }
 CACHE.items = ITEMS
 

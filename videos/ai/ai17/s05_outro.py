@@ -45,7 +45,11 @@ class Outro(VoiceoverScene):
                 v = float(p[f"acc_{key}{n}"])
                 bars.add(Rectangle(width=0.3, height=max(1.6 * v, 0.01), stroke_width=0, fill_color=col, fill_opacity=0.9)
                          .move_to([i * 0.9 + j * 0.34, 0.8 * v, 0]))
-        grpo = MathTex(r"A_i = \frac{r_i - \bar r}{\sigma_r}", font_size=40, color=C.BITS)
+        cax = Axes(x_range=[0, 2, 1], y_range=[0, 1.5, 1], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
+                   axis_config={"stroke_color": GREY_D, "include_ticks": False})
+        band = Rectangle(width=cax.c2p(1.2, 0)[0] - cax.c2p(0.8, 0)[0], height=TH * 0.85, stroke_width=0, fill_color=C.TRUE_P,
+                         fill_opacity=0.15).move_to(cax.c2p(1, 0.75))
+        clipped = VGroup(cax, band, cax.plot(lambda x: min(x, 1.2), x_range=[0, 2, 0.01], color=RIGHT_C, stroke_width=3))
         cv = np.asarray(r["curve"])
         ax = Axes(x_range=[0, float(cv[:, 0].max()), 100], y_range=[0, 1, 0.5], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False})
@@ -66,8 +70,8 @@ class Outro(VoiceoverScene):
             (par, r"thinking out loud", CHAIN),
             (snake, r"$L(k+1)$ steps in a row", C.BITS),
             (bars, r"parity: \ at once vs.\ chain", CHAIN),
-            (grpo, r"better than its group?", C.BITS),
             (climb, r"learning from a checker", CHAIN),
+            (clipped, r"the clipped objective", C.TRUE_P),
             (img, r"$200$ questions, \ $32$ tries", RIGHT_C),
             (tries, r"pass@$k$ and the vote", C.BITS),
             (proc, r"outcome or process", WRONG_C),
@@ -90,7 +94,9 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Let's take stock. Writing out its steps lets a fixed-depth model compute for longer: L layers, once per "
             "token. That's how our two-layer model learned sixteen-bit parity. Reinforcement learning from a checker, "
-            "comparing each answer with its group, taught a model to add more reliably than practice alone. And at "
+            "comparing each answer with its group, taught a model to add more reliably than practice alone; the objective "
+            "clips each update and keeps the model near where it started, and DPO turns the same idea into a loss "
+            "on pairs. RL mostly sharpens what the model could already do. And at "
             "answer time, more tries buy more right answers, as long as something can tell which one is right."
         ) as vo:
             self.play(FadeIn(head))
@@ -151,6 +157,10 @@ class Outro(VoiceoverScene):
             r"Z.~Shao et al., \textit{DeepSeekMath} (GRPO, 2024); \ DeepSeek-AI, \textit{DeepSeek-R1} (2025)",
             r"H.~Lightman et al., \textit{Let's Verify Step by Step} (2023); \ M.~Chen et al., \textit{Codex} (pass@$k$, 2021)",
             r"X.~Wang et al., \textit{Self-Consistency} (2023); \ C.~Snell et al., \textit{Scaling LLM Test-Time Compute} (2024)",
+            r"J.~Schulman et al., \textit{PPO} (2017); \ R.~Rafailov et al., \textit{DPO} (2023); \ Z.~Liu et al., "
+            r"\textit{Dr.~GRPO} (2025); \ Q.~Yu et al., \textit{DAPO} (2025)",
+            r"C.~Zheng et al., \textit{GSPO} (2025); \ Y.~Yue et al., \textit{Does Reinforcement Learning Really Incentivize "
+            r"Reasoning Capacity\ldots?} (2025)",
         ]
         card = reference_card(books, papers)
         data = note(r"Every number here is computed and checked: \ tiny transformers trained on this computer; \ "
