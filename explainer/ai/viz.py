@@ -64,6 +64,14 @@ def term(m: MathTex, tex: str) -> VMobject:
     raise KeyError(tex)
 
 
+def keep_in_frame(mob: Mobject, margin: float = 0.3) -> Mobject:
+    """Shift ``mob`` just enough to keep it inside the frame, ``margin`` from every edge."""
+    hw, hh = config.frame_width / 2 - margin, config.frame_height / 2 - margin
+    dx = min(0.0, hw - mob.get_right()[0]) + max(0.0, -hw - mob.get_left()[0])
+    dy = min(0.0, hh - mob.get_top()[1]) + max(0.0, -hh - mob.get_bottom()[1])
+    return mob.shift(RIGHT * dx + UP * dy)
+
+
 def brace_note(mob: Mobject, text: str, direction=DOWN, color=GREY_A, font_size=26, buff=0.1) -> VGroup:
     """A brace under (or over) ``mob`` with a short colored note."""
     from explainer.analysis import label

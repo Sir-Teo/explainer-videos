@@ -1,0 +1,124 @@
+{
+ "title": "人工智能，从零搭建 · 第9部分：一路下山",
+ "chapters": {
+  "Hook": "下山的三种走法",
+  "SGD": "1. 随机梯度下降",
+  "EdgeOfStability": "2. 稳定性边缘",
+  "Adam": "3. 动量与Adam",
+  "Muon": "4. Muon",
+  "Schedule": "5. 学习率调度",
+  "Outro": "回顾，以及这些想法会在哪里再现"
+ },
+ "lines": {
+  "92302512cc93": {
+   "scene": "Hook",
+   "en": "Every model in this series is trained by walking downhill. But how you walk matters enormously. <bookmark mark='a'/> Here's part three's narrow valley again, and three walkers starting from the same place. <bookmark mark='b'/> Plain gradient descent zigzags across the valley. Momentum builds up speed along it. Adam rescales each direction separately, and heads almost straight for the bottom.",
+   "zh": "本系列的每一个模型，都是靠一路下山训练出来的。但怎么走，差别非常大。<bookmark mark='a'/>这又是第3部分那条狭窄的山谷，三个下山的人，从同一个地方出发。<bookmark mark='b'/>单纯的梯度下降，在山谷两壁之间来回折返。动量沿着山谷越走越快。Adam把每个方向分别重新缩放，几乎径直奔向谷底。"
+  },
+  "f3a37af7f2a8": {
+   "scene": "Hook",
+   "en": "This part is about the optimizers that train real models: why the noise of small batches helps, why training lives at the edge of instability, how Adam and the newer Muon reshape each step, <bookmark mark='a'/> and how the learning rate should change over a training run.",
+   "zh": "这一部分讲的是训练真实模型的那些优化器：为什么小批量带来的噪声反而有帮助，为什么训练总在失稳的边缘徘徊，Adam和更新的Muon怎样重新塑造每一步，<bookmark mark='a'/>以及在一次训练过程中，学习率应该怎样变化。"
+  },
+  "ca7b8b32c4ef": {
+   "scene": "SGD",
+   "en": "Chapter one. Stochastic gradient descent.",
+   "zh": "第1章。随机梯度下降。"
+  },
+  "62dc67556145": {
+   "scene": "SGD",
+   "en": "Computing the exact gradient means going through all the training data, for every single step. Real models train on trillions of words; nobody can afford that. <bookmark mark='a'/> Here's a real loss with two weights: part five's logistic regression on two word rates. With the whole dataset, each step goes straight downhill. <bookmark mark='b'/> Instead, estimate the gradient from a small random batch. Sixteen pages: the path wobbles, but it's twenty-eight times cheaper per step. <bookmark mark='c'/> One page at a time: wild, but still it gets there.",
+   "zh": "要算出精确的梯度，每走一步，都得把全部训练数据过一遍。真实的模型要在几万亿个词上训练，这样做谁也负担不起。<bookmark mark='a'/>这是一个真实的损失，只有两个权重：第5部分的逻辑回归，用的是两个词频。用上整个数据集，每一步都径直朝下坡走。<bookmark mark='b'/>换个办法：随机抽一小批样本，用它们来估计梯度。用16页：路径摇摇晃晃，但每一步的代价只有原来的28分之1。<bookmark mark='c'/>一次只用1页：走得歪歪扭扭，但最后还是能走到。"
+  },
+  "e5257b42f516": {
+   "scene": "SGD",
+   "en": "Keep going, and the walker never quite stops. It jiggles around the bottom forever, in a cloud. <bookmark mark='a'/> That's part four's stochastic differential equation: a push downhill, plus random kicks whose size grows with the learning rate and shrinks with the batch. <bookmark mark='b'/> Sixteen times the batch, and the cloud is about 4 times narrower: one over the square root of sixteen. <bookmark mark='c'/> The noise isn't only a cost. A jiggling walker can't stay in a narrow hole, so it tends to settle where the valley is wide, and wide minima tend to work better on new data.",
+   "zh": "一直走下去，它也永远不会真正停下来，而是在谷底附近没完没了地抖动，散成一团云。<bookmark mark='a'/>这正是第4部分的随机微分方程：一股往下坡的推力，加上随机的踢动；学习率越大，踢得越猛，批量越大，踢得越轻。<bookmark mark='b'/>批量变成16倍，这团云的宽度就缩小到大约4分之1：正是16的平方根分之1。<bookmark mark='c'/>噪声不只是代价。不停抖动的它，在狭窄的坑里待不住，所以往往会停在山谷宽阔的地方，而宽的极小值，在新数据上往往表现更好。"
+  },
+  "f6f77fec6849": {
+   "scene": "EdgeOfStability",
+   "en": "Chapter two. The edge of stability.",
+   "zh": "第2章。稳定性边缘。"
+  },
+  "a5c64344e27b": {
+   "scene": "EdgeOfStability",
+   "en": "Start with the simplest possible case: a bowl with curvature lambda, and a step of size eta. Each step multiplies the distance from the bottom by one minus eta times lambda. <bookmark mark='a'/> If that's between minus one and one, the steps shrink and settle. <bookmark mark='b'/> If eta times lambda is more than two, each step overshoots further than the last, and it blows up. So for a given step size, gradient descent can only live where the curvature is below two over eta.",
+   "zh": "先从最简单的情形说起：一个曲率为λ的碗，步长为η。每走一步，到碗底的距离都要乘上1减去η乘以λ。<bookmark mark='a'/>如果这个数在负1和1之间，步子就会越来越小，最后稳定下来。<bookmark mark='b'/>如果η乘以λ大于2，每一步都比上一步冲得更远，最后彻底发散。所以，给定步长，梯度下降只能待在曲率小于η分之2的地方。"
+  },
+  "28639b2b506c": {
+   "scene": "EdgeOfStability",
+   "en": "Now a real network: the spirals from part eight, trained with the full gradient at two step sizes. Track the sharpness, the Hessian's largest eigenvalue, from part three. <bookmark mark='a'/> It climbs, and climbs, until it hits two over eta, and then it stays there, hovering at the edge, while the loss keeps going down. <bookmark mark='b'/> Double the step size, and the network settles at half the sharpness. Training doesn't avoid the edge of stability: it seeks it out. Cohen and colleagues found this in 2021, and nobody had expected it.",
+   "zh": "现在换成一个真实的网络：第8部分的那两条螺旋，用完整的梯度，分别以两种步长来训练。盯住它的锐度，也就是第3部分讲过的黑塞矩阵的最大特征值。<bookmark mark='a'/>它一路往上爬，爬了又爬，直到碰上η分之2，然后就停在那里，悬在边缘上，而损失还在继续下降。<bookmark mark='b'/>步长加倍，网络就稳定在一半的锐度上。训练并没有躲开稳定性边缘：它是主动去找它的。2021年，科恩和同事们发现了这一点，在此之前，谁都没有料到。"
+  },
+  "708fefe7fca6": {
+   "scene": "Adam",
+   "en": "Chapter three. Momentum, and Adam.",
+   "zh": "第3章。动量，以及Adam优化器。"
+  },
+  "6b6059dfb451": {
+   "scene": "Adam",
+   "en": "Momentum keeps a running average of recent gradients and steps along that. Zigzags cancel; steady directions add up. <bookmark mark='a'/> Adam, from 2014, also tracks the average squared gradient for every weight, and divides by its square root. Each weight gets its own step size: large where the gradients are small, small where they're large. <bookmark mark='b'/> AdamW adds one fix: it shrinks the weights directly, separately from the gradient. That's the optimizer that trained most of today's language models.",
+   "zh": "动量记下最近那些梯度的滑动平均，然后沿着这个平均走。来回折返的部分互相抵消，方向稳定的部分不断累加。<bookmark mark='a'/>Adam是2014年提出的，它还为每一个权重记下梯度平方的平均，再除以它的平方根。这样，每个权重都有了自己的步长：梯度小的地方，步子大；梯度大的地方，步子小。<bookmark mark='b'/>AdamW只多了一处修正：它直接把权重缩小，和梯度分开来做。今天的大多数语言模型，就是用这个优化器训练出来的。"
+  },
+  "61fd0f0fb888": {
+   "scene": "Adam",
+   "en": "Here they are on a real task: a small character model, like part eight's, trained on the books for two and a half thousand steps, each optimizer at a good learning rate. <bookmark mark='a'/> Plain SGD is slowest. Momentum helps. <bookmark mark='b'/> Adam and AdamW are far ahead after the same number of steps.",
+   "zh": "把它们放到一个真实的任务上：一个小型的字符模型，和第8部分的类似，在那些书上训练2500步，每个优化器都用一个合适的学习率。<bookmark mark='a'/>单纯的SGD最慢。加上动量，有所帮助。<bookmark mark='b'/>走了同样多的步数，Adam和AdamW遥遥领先。"
+  },
+  "cd0d0dc9d8e5": {
+   "scene": "Muon",
+   "en": "Chapter four. Muon.",
+   "zh": "第4章。Muon，一种新的优化器。"
+  },
+  "1bff52e35916": {
+   "scene": "Muon",
+   "en": "Adam treats every weight separately. But the weights of a layer form a matrix, and a matrix has structure: part two's singular values. <bookmark mark='a'/> Here's a real gradient matrix from the character model. A few directions dominate; most are tiny. A step along it mostly pushes the few big directions further. <bookmark mark='b'/> Muon, from 2024, takes the gradient's singular value decomposition and sets every singular value to one: the same push in every direction. <bookmark mark='c'/> It doesn't even compute the SVD. Five rounds of a matrix polynomial, Newton–Schulz, do it approximately and fast.",
+   "zh": "Adam把每个权重分开对待。可是一层的权重组成一个矩阵，而矩阵是有结构的：也就是第2部分讲的奇异值。<bookmark mark='a'/>这是字符模型里一个真实的梯度矩阵。少数几个方向占了主导，大多数方向都微乎其微。沿着它走一步，主要是把那几个大方向推得更远。<bookmark mark='b'/>Muon是2024年提出的，它对梯度做奇异值分解，再把每个奇异值都设成1：每个方向都得到同样大小的推力。<bookmark mark='c'/>它甚至不用真的去算奇异值分解。一个矩阵多项式，叫作牛顿–舒尔茨迭代，迭代5轮，就能又快又近似地做到这一点。"
+  },
+  "0284493b70fd": {
+   "scene": "Muon",
+   "en": "On the same character model, with Muon on the hidden matrices and AdamW on the rest: <bookmark mark='a'/> it reaches 2.50 bits, ahead of AdamW's 2.61. Muon has since been scaled up: Moonshot AI reported that it needs about half the compute of AdamW, and used a version of it to train Kimi K2.",
+   "zh": "还是同一个字符模型，隐藏层的矩阵用Muon，其余的用AdamW：<bookmark mark='a'/>它达到了2.50比特，领先于AdamW的2.61。此后，Muon被推广到了大得多的规模：月之暗面报告说，它只需要AdamW大约一半的算力，还用它的一个变体训练了Kimi K2。"
+  },
+  "48c102480607": {
+   "scene": "Schedule",
+   "en": "Chapter five. Learning-rate schedules.",
+   "zh": "第5章。学习率调度。"
+  },
+  "62c6f26b74e1": {
+   "scene": "Schedule",
+   "en": "The step size itself should change during training. A constant rate is the simplest. <bookmark mark='a'/> A cosine schedule warms up briefly, then glides smoothly down to zero. <bookmark mark='b'/> Warmup–stable–decay holds the rate flat for most of the run, and only drops it at the end. <bookmark mark='c'/> Here they are on the character model. While the rate stays high, the loss plateaus. When it falls, the loss drops sharply, as the noisy cloud from chapter one shrinks onto the bottom. <bookmark mark='d'/> Warmup–stable–decay is popular for a practical reason: you can stop at any point, decay briefly, and get a finished model, without knowing in advance how long you'll train.",
+   "zh": "步长本身，在训练过程中也应该变化。恒定的学习率最简单。<bookmark mark='a'/>余弦调度先短暂地预热，然后平滑地一路降到0。<bookmark mark='b'/>预热–稳定–衰减，在大部分时间里让学习率保持不变，只在最后才把它降下来。<bookmark mark='c'/>把它们放到字符模型上看。学习率一直很高时，损失停在一个平台上。学习率一降，损失就陡然下降，因为第1章那团带噪声的云，收缩到了谷底。<bookmark mark='d'/>预热–稳定–衰减很受欢迎，原因很实际：你可以在任何时候停下来，短暂地衰减一下，就得到一个训练完成的模型，不用事先知道要训练多久。"
+  },
+  "2c28442a284d": {
+   "scene": "Outro",
+   "en": "Let's take stock. How you walk downhill matters as much as the hill. Small random batches make each step cheap and noisy, and the noise settles into a cloud whose size is set by the step and the batch. Training pushes the sharpness up to two over the learning rate, and lives at that edge. Momentum and Adam reshape each step, and Muon makes a matrix's step push equally in every direction. And the schedule decides when the cloud finally contracts onto a good answer.",
+   "zh": "我们来盘点一下。怎样下山，和山本身一样要紧。随机的小批量让每一步又便宜又带噪声，而噪声最终化作一团云，云有多大，由步长和批量决定。训练会把锐度推高到学习率分之2，并且就待在那道边缘上。动量和Adam重新塑造每一步，Muon则让矩阵的每一步，在每个方向上都推得一样多。而学习率调度，决定了这团云什么时候最终收缩到一个好的答案上。"
+  },
+  "fd9f9ef75ff7": {
+   "scene": "Outro",
+   "en": "Next, we scale up. How should the learning rate change when the model gets wider? How big should the batch be, and how long should we train? That's part ten. And these optimizers return whenever a model in this series is actually trained.",
+   "zh": "接下来，我们要扩大规模。模型变宽时，学习率应该怎样变？批量应该多大，又该训练多久？这是第10部分的内容。而每当本系列真正训练一个模型，这些优化器都会再次登场。"
+  },
+  "3c44a6267e2b": {
+   "scene": "Outro",
+   "en": "Next time: the mathematics of scale. Why bigger models predictably get better, how to split a budget between parameters and data, and how to set a learning rate once and keep it as the model grows. <bookmark mark='a'/> Straight lines on log–log plots, and what they promise.",
+   "zh": "下一次：规模的数学。为什么模型越大越好，而且好多少是可以预测的；怎样在参数和数据之间分配预算；以及怎样只设定一次学习率，在模型变大时一直沿用。<bookmark mark='a'/>双对数坐标图上的直线，以及它们许下的承诺。"
+  },
+  "f2b363663553": {
+   "scene": "Outro",
+   "en": "Bottou, Curtis and Nocedal's survey is the best single account of stochastic optimization. Thanks for watching, and see you in part ten.",
+   "zh": "博图、柯蒂斯和诺塞达尔的那篇综述，是讲随机优化最好的一篇文献。感谢观看，第10部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 9, Going Downhill",
+ "chapters_en": {
+  "Hook": "Three ways down",
+  "SGD": "1. Stochastic gradient descent",
+  "EdgeOfStability": "2. The edge of stability",
+  "Adam": "3. Momentum and Adam",
+  "Muon": "4. Muon",
+  "Schedule": "5. Learning-rate schedules",
+  "Outro": "Recap, and where this comes back"
+ }
+}
