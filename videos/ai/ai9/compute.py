@@ -205,7 +205,16 @@ def newton_schulz(G, steps=5):
     return X.T if tall else X
 
 
-def train_char(opt_name, steps=2500, schedule="constant", lr=None, seed=0, log_every=100, grab=None):
+def char_vocab():
+    from videos.ai.ai1 import compute as c1
+
+    return sorted(set("".join(c1.text(k) for k in ("train", "valid"))))
+
+
+WRITE_PROMPT, WRITE_LEN, WRITE_AT = "It was a", 72, (0, 100, 300, 1000, 2500)
+
+
+def train_char(opt_name, steps=2500, schedule="constant", lr=None, seed=0, log_every=100, grab=None, write_at=()):
     import torch
 
     torch.set_num_threads(1)
@@ -255,8 +264,20 @@ def train_char(opt_name, steps=2500, schedule="constant", lr=None, seed=0, log_e
         w = min(1.0, k / (0.02 * steps))  # warmup, stable, then a linear decay over the last 20%
         return w * min(1.0, (steps - k) / (0.2 * steps))
 
+    def write():
+        """Continue the same prompt with the same random draws (temperature 0.8), so checkpoints differ only by the model."""
+        chars = char_vocab()
+        seq = [chars.index(c) for c in WRITE_PROMPT]
+        gen = torch.Generator().manual_seed(1234)
+        with torch.no_grad():
+            for _ in range(WRITE_LEN):
+                p = torch.softmax(logits(torch.tensor([seq[-CTX:]])) / 0.8, -1)
+                seq.append(int(torch.multinomial(p[0], 1, generator=gen)))
+        return "".join(chars[i] for i in seq[CTX:])
+
     g = rng(seed + 1)
     curve, grabbed = [(0, bits())], None
+    writes = {0: write()} if 0 in write_at else {}
     for k in range(1, steps + 1):
         f = lr_at(k)
         lrs.append(f)
@@ -284,6 +305,10 @@ def train_char(opt_name, steps=2500, schedule="constant", lr=None, seed=0, log_e
             o.step()
         if k % log_every == 0:
             curve.append((k, bits()))
+        if k in write_at:
+            writes[k] = write()
+    if write_at:
+        return np.array(curve), writes
     return np.array(curve), np.array(lrs), grabbed
 
 
@@ -296,6 +321,18 @@ def compute_optim():
     finals = {k: float(v[-1, 1]) for k, v in out.items()}
     assert finals["adam"] < finals["sgd"] and finals["muon"] < finals["sgd"]
     return dict(**out, finals=finals, names=list(out))
+
+
+def compute_writing():
+    """What the race's numbers read like: SGD and AdamW continuing the same prompt at checkpoints."""
+    out = dict(steps=list(WRITE_AT), prompt=WRITE_PROMPT)
+    for name in ("sgd", "adamw"):
+        curve, writes = train_char(name, write_at=WRITE_AT)
+        out[f"text_{name}"] = [writes[k] for k in WRITE_AT]
+        out[f"bits_{name}"] = [float(np.interp(k, curve[:, 0], curve[:, 1])) for k in WRITE_AT]
+        for k in WRITE_AT:
+            print(f"    {name} {k}: {writes[k]!r}", flush=True)
+    return out
 
 
 def compute_muon():
@@ -326,6 +363,7 @@ ITEMS = {
     "eos": compute_eos,
     "optim": compute_optim,
     "muon": compute_muon,
+    "writing": compute_writing,
     "schedule": compute_schedule,
 }
 CACHE.items = ITEMS
