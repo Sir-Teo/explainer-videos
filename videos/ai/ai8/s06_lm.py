@@ -51,6 +51,7 @@ class NeuralLM(VoiceoverScene):
                        label(r"softmax: \ Part 1's scores into probabilities", font_size=24, color=C.MODEL_Q),
                        label(rf"${d['n_params']:,}$ numbers to learn".replace(",", "{,}"), font_size=26, color=WHITE))
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.5, 0.2, 0])
+        keep_in_frame(notes)
         cite_ = cite(r"Y.~Bengio, R.~Ducharme, P.~Vincent \& C.~Jauvin, \textit{A Neural Probabilistic Language Model} (2003)",
                      corner=DR)
         with self.voiceover(
@@ -86,7 +87,7 @@ class NeuralLM(VoiceoverScene):
         yn = label(r"bits per character on the passage", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         c = curve(ax, cv[:, 0], np.clip(cv[:, 2], 1.6, 4.6), C.NEURAL, 4)
         knl = DashedLine(ax.c2p(0, kn), ax.c2p(cv[-1, 0], kn), color=C.COUNTING, stroke_width=2.5)
-        knt = label(rf"Part 6's Kneser--Ney: \ ${kn:.2f}$", font_size=24, color=C.COUNTING).next_to(knl, UP, buff=0.08)
+        knt = label(rf"Part 6's Kneser--Ney: \ ${kn:.2f}$", font_size=24, color=C.COUNTING).next_to(knl, DOWN, buff=0.1)  # below the line: the curve ends above it
         knt.align_to(knl, RIGHT)
         fin = label(rf"the network: \ ${nn:.2f}$", font_size=30, color=C.NEURAL).move_to([4.6, 1.8, 0])
         colors = {r"\lambda": C.NEURAL, r"q_{\text{net}}": C.NEURAL, r"q_{\text{KN}}": C.COUNTING}
