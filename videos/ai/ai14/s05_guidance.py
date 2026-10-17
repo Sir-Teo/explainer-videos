@@ -47,17 +47,21 @@ class Guidance(VoiceoverScene):
     def guide(self):
         g = load("guidance")
         ws = [float(w) for w in g["ws"]]
-        S = 0.5
+        Xs = {w: np.asarray(g[f"w{w:g}"])[:500] for w in ws}
+        allx = np.concatenate(list(Xs.values()))
+        S = min(1.95 / np.percentile(np.abs(allx[:, 0]), 99.5), 1.35 / np.percentile(np.abs(allx[:, 1]), 99.5))
         panels = VGroup()
         for i, w in enumerate(ws):
-            pts = cloud(np.asarray(g[f"w{w:g}"])[:500], FM_C, radius=0.018, scale=S)
-            frame = Rectangle(width=4.0, height=2.6, stroke_color=GREY_D, stroke_width=1.2).move_to(pts.get_center())
+            c = np.array([-4.45 + 4.45 * i, -0.3])  # one fixed origin per panel, so a sample's move is its own
+            pts = cloud(Xs[w], FM_C, radius=0.018, scale=S, shift=c)
+            frame = Rectangle(width=4.2, height=3.0, stroke_color=GREY_D, stroke_width=1.2).move_to([c[0], c[1], 0])
             t = label(rf"$w = {w:g}$", font_size=28, color=C.BITS).next_to(frame, UP, buff=0.15)
             on = float(g[f"onA{w:g}"])
             sp = float(g[f"spread{w:g}"])
             st = label(rf"${100 * on:.0f}\%$ on the A; \ spread ${sp:.2f}$", font_size=20, color=GREY_A).next_to(frame, DOWN, buff=0.1)
             panels.add(VGroup(frame, pts, t, st))
-        panels.arrange(RIGHT, buff=0.35).move_to(DOWN * 0.2)
+        sub = label(r"the same $500$ starting points in every panel", font_size=20, color=GREY_B)
+        sub.next_to(panels, UP, buff=0.3)
         colors = {r"w": C.BITS, r"v_\theta(x,t,c)": FM_C, r"v_\theta(x,t,\varnothing)": GREY_B}
         f = cmath(r"v", "=", r"v_\theta(x,t,\varnothing)", "+", r"w", r"\,\big(", r"v_\theta(x,t,c)", "-",
                   r"v_\theta(x,t,\varnothing)", r"\big)", colors=colors, font_size=34).to_edge(UP, buff=0.4)
@@ -75,10 +79,13 @@ class Guidance(VoiceoverScene):
         ) as vo:
             self.play(Write(f))
             vo.wait_until("a")
-            self.play(FadeIn(panels[0]))
+            self.play(FadeIn(panels[0]), FadeIn(sub))
+            # the same starting noise at every w: each sample slides from where it landed to where it lands now
             vo.wait_until("b")
-            self.play(FadeIn(panels[1]))
+            self.play(FadeIn(VGroup(panels[1][0], panels[1][2], panels[1][3])), TransformFromCopy(panels[0][1], panels[1][1]),
+                      run_time=1.6)
             vo.wait_until("c")
-            self.play(FadeIn(panels[2]), FadeIn(tail))
+            self.play(FadeIn(VGroup(panels[2][0], panels[2][2], panels[2][3])), TransformFromCopy(panels[1][1], panels[2][1]),
+                      FadeIn(tail), run_time=1.6)
         self.wait(0.3)
         self.clear_scene()
