@@ -59,10 +59,10 @@
    "en": "Chapter two. Fitting a bell to data.",
    "zh": "第2章。用钟形曲线拟合数据。"
   },
-  "0ebfe3cf60c2": {
+  "96918acd66a4": {
    "scene": "Likelihood",
-   "en": "Here are the thousand balls again. Which bell describes them best? <bookmark mark='a'/> Try one. Score it like this: at each ball, read off the bell's height, take the log, and average over all the balls. That's the log-likelihood: how well this bell predicted where the balls actually went. <bookmark mark='b'/> A bell in the wrong place scores badly. <bookmark mark='c'/> So does one that's too narrow, <bookmark mark='d'/> or too wide. <bookmark mark='e'/> The best bell, the maximum likelihood fit, is the one under which the data was least surprising.",
-   "zh": "还是那1000个球。哪条钟形曲线最能描述它们？<bookmark mark='a'/>先试一条。这样给它打分：在每个球的位置，读出钟形曲线的高度，取对数，再对所有球求平均。这就是对数似然：这条钟形曲线，把球的实际落点预测得有多好。<bookmark mark='b'/>位置放错的钟形曲线，得分很低。<bookmark mark='c'/>太窄的也一样，<bookmark mark='d'/>太宽的也一样。<bookmark mark='e'/>最好的那一条，也就是最大似然拟合，是让数据显得最不意外的那一条。"
+   "en": "Here are the thousand balls again. Which bell describes them best? <bookmark mark='a'/> Try one. Score it like this: at each ball, read off the bell's height. <bookmark mark='p'/> That height is a probability density: how crowded the outcomes are there. Make a histogram's bars narrower and narrower, and it becomes a smooth curve like this one; <bookmark mark='q'/> the area under it between two points is the probability of landing between them. Take the log of the height, and average over all the balls. That's the log-likelihood: how well this bell predicted where the balls actually went. <bookmark mark='b'/> A bell in the wrong place scores badly. <bookmark mark='c'/> So does one that's too narrow, <bookmark mark='d'/> or too wide. <bookmark mark='e'/> The best bell, the maximum likelihood fit, is the one under which the data was least surprising.",
+   "zh": ""
   },
   "3fe0a32b1dda": {
    "scene": "Likelihood",
@@ -79,10 +79,10 @@
    "en": "Chapter three. Belief as a distribution.",
    "zh": "第3章。用分布表达信念。"
   },
-  "d267e7fb7895": {
+  "86b175a5bbd6": {
    "scene": "Bayes",
-   "en": "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every possibility. <bookmark mark='a'/> Bayes's rule says how to update a belief when evidence arrives. Multiply what you believed by how well each possibility explains the evidence, then rescale, so the total is one again.",
-   "zh": "一个字母是e的频率有多高？在读任何东西之前，我们毫无头绪：从0到1之间的任何比例，看起来都同样可信。这就是一种信念，我们可以把它画出来：横跨所有可能性的一条平线。<bookmark mark='a'/>贝叶斯法则告诉我们，证据到来时，该怎样更新信念。把你原来的信念，乘以每种可能对证据解释得有多好，再重新缩放，让总和重新等于1。"
+   "en": "How often is a letter an e? Before reading anything, we have no idea: any fraction from zero to one seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every possibility. <bookmark mark='a'/> Bayes's rule says how to update a belief when evidence arrives. Multiply what you believed by how well each possibility explains the evidence, then rescale, so the total is one again. <bookmark mark='b'/> That's what the sign, proportional to, means: equal, up to that rescaling.",
+   "zh": ""
   },
   "8c1bc93289c8": {
    "scene": "Bayes",
@@ -104,10 +104,10 @@
    "en": "A model never hands us a letter or a word. It hands us a distribution, and to write anything we have to roll the dice. <bookmark mark='a'/> Here's how a computer rolls loaded dice. Lay the probabilities end to end, from zero to one, so each letter owns a stretch exactly as long as its probability. <bookmark mark='b'/> Pick a uniformly random point, and take the letter it lands in. Each letter wins exactly as often as its probability says. <bookmark mark='c'/> These letters are drawn from part one's letter frequencies.",
    "zh": "模型从来不会直接交给我们一个字母或一个词。它交给我们的是一个分布，要写出任何东西，我们都得掷骰子。<bookmark mark='a'/>计算机是这样掷灌铅骰子的。把各个概率首尾相接，从0排到1，让每个字母占据一段，长度正好等于它的概率。<bookmark mark='b'/>均匀随机地取一个点，看它落在哪个字母那一段里。每个字母被选中的频率，正好等于它的概率。<bookmark mark='c'/>这些字母，是按第1部分的字母频率抽出来的。"
   },
-  "57747f3085c8": {
+  "d92dd8e9d92b": {
    "scene": "Sampling",
-   "en": "Language models do the same with words, with one dial added. <bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, and. Its favourite, I, gets only four percent; the other fifty thousand words share the rest. <bookmark mark='b'/> The dial is the temperature: divide the scores by T before the softmax.",
-   "zh": "语言模型对词也做同样的事，只是多了一个旋钮。<bookmark mark='a'/>这是GPT-2给出的下一个词的分布，前文是：“斯佩德在扶手椅上坐下，然后”。它最看好的词是I，也就是“我”，却只得到4%；其余大约5万个词，分掉剩下的部分。<bookmark mark='b'/>这个旋钮就是温度：在softmax之前，先把分数除以T。"
+   "en": "Language models do the same with words, with one dial added. <bookmark mark='a'/> Here's GPT-2's distribution for the word after: Spade sat down in the armchair, and. Its favourite, I, gets only four percent; the other fifty thousand words share the rest. <bookmark mark='b'/> The dial is the temperature: divide the scores by T before the softmax, the exponentiate-and-rescale of part one.",
+   "zh": ""
   },
   "7f59cb437f95": {
    "scene": "Sampling",
@@ -159,15 +159,15 @@
    "en": "After four thousand darts: 3.158. <bookmark mark='a'/> The shaded band is how far off a run like this typically is, and it narrows like one over the square root of the number of darts.",
    "zh": "扔了4000支飞镖之后：3.158。<bookmark mark='a'/>阴影带表示这样一次实验通常会偏差多少，它与飞镖数的平方根成反比地收窄。"
   },
-  "395b31f3816f": {
+  "498dd73cd765": {
    "scene": "MonteCarlo",
-   "en": "Repeat the experiment many times at each size, and measure the typical error. On log scales, it falls on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the square root of the number of samples: every extra digit of accuracy costs a hundred times more samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random samples works the same in a million dimensions, where any grid would be hopeless. That's why Monte Carlo, named by Ulam and Metropolis after the casino, is everywhere in machine learning.",
-   "zh": "在每种规模下把实验重复很多次，测出典型误差。在对数坐标上，它们落在一条斜率为负二分之一的直线上。<bookmark mark='a'/>误差与样本数的平方根成反比：精度每多一位数字，就要多花100倍的样本。<bookmark mark='b'/>这很慢。但这个速度与维数无关：对随机样本求平均，在100万维里也一样管用，而在那里，任何网格都毫无希望。正因为这样，蒙特卡洛方法在机器学习里无处不在；这个名字，是乌拉姆和梅特罗波利斯借那座赌场起的。"
+   "en": "Repeat the experiment many times at each size, and measure the typical error. On log scales, where each tick is ten times the last, it falls on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the square root of the number of samples: every extra digit of accuracy costs a hundred times more samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random samples works the same in a million dimensions, where any grid would be hopeless. That's why Monte Carlo, named by Ulam and Metropolis after the casino, is everywhere in machine learning.",
+   "zh": ""
   },
-  "69183c97aaa4": {
+  "ec14753f8ace": {
    "scene": "MonteCarlo",
-   "en": "Monte Carlo has one weakness: rare events. How often does a standard bell curve land above four? Exactly, about three times in a hundred thousand. <bookmark mark='a'/> Draw ten thousand samples, and only two land there. The estimate is off by a factor of six.",
-   "zh": "蒙特卡洛有一个弱点：罕见事件。一条标准钟形曲线，取值落在4以上的频率有多高？精确地说，大约10万次里有3次。<bookmark mark='a'/>抽1万个样本，只有2个落在那里。估计值差了6倍。"
+   "en": "Monte Carlo has one weakness: rare events. How often does a standard bell curve, the one centred at zero with a width of one, land above four? Exactly, about three times in a hundred thousand. <bookmark mark='a'/> Draw ten thousand samples, and only two land there. The estimate is off by a factor of six.",
+   "zh": ""
   },
   "573d04129617": {
    "scene": "MonteCarlo",
@@ -179,10 +179,10 @@
    "en": "Chapter seven. Markov chain Monte Carlo.",
    "zh": "第7章。马尔可夫链蒙特卡洛。"
   },
-  "633fe3480949": {
+  "e6b94a377cc8": {
    "scene": "MCMC",
-   "en": "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, with two bumps. In 1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio of the heights. Otherwise, stay where you are.",
-   "zh": "蒙特卡洛需要样本。但很多时候，没有直接抽取样本的办法。我们能做的，只是算出每个点有多大可能，而且常常还差着一个未知的常数因子。贝叶斯法则正是这样：难的就是重新缩放那一步。<bookmark mark='a'/>这是平面上的一个密度，有两个鼓包。1953年，在洛斯阿拉莫斯，梅特罗波利斯和他的同事找到了一种办法，能对任何这样的分布采样。做一次随机游走。<bookmark mark='b'/>随机地提议迈一小步。如果是上坡，就迈出去。<bookmark mark='c'/>如果是下坡，就只是有时候迈出去，概率等于两处高度之比。否则，就留在原地。"
+   "en": "Monte Carlo needs samples. But often there's no direct way to draw them. All we can do is evaluate how likely each point is, and often only up to an unknown constant. That's exactly Bayes's rule, where the rescaling is the hard part. <bookmark mark='a'/> Here's a density in the plane, bright where points crowd together, with two bumps. In 1953, at Los Alamos, Metropolis and his colleagues found a way to sample anything like it. Take a random walk. <bookmark mark='b'/> Propose a small random step. If it goes uphill, take it. <bookmark mark='c'/> If it goes downhill, take it only sometimes, with probability equal to the ratio of the heights. Otherwise, stay where you are.",
+   "zh": ""
   },
   "bcf2235a58b4": {
    "scene": "MCMC",
@@ -194,50 +194,50 @@
    "en": "Chapter eight. Brownian motion.",
    "zh": "第8章。布朗运动。"
   },
-  "24a2578f8654": {
+  "751ae409a8f5": {
    "scene": "Brownian",
-   "en": "In 1827, the botanist Robert Brown watched pollen in water under a microscope, and saw it jiggle, endlessly, for no visible reason. <bookmark mark='a'/> Here's a model: a walk that steps up or down at random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the spread after any time stays the same, and the walks settle into a single random object: Brownian motion. It's continuous everywhere, and so jagged it has no slope anywhere.",
-   "zh": "1827年，植物学家罗伯特·布朗在显微镜下观察水中的花粉微粒，看到它们不停地抖动，永不停歇，却看不出任何原因。<bookmark mark='a'/>这是一个模型：随机地向上或向下迈步的游走。走8步。<bookmark mark='b'/>64步，每步更小。1024步，每步还要更小。<bookmark mark='c'/>让每一步的大小与步数的平方根成反比，这样任何时刻的散布程度都保持不变，这些游走就会收敛成一个单一的随机对象：布朗运动。它处处连续，却又曲折得处处没有斜率。"
+   "en": "In 1827, the botanist Robert Brown watched pollen in water under a microscope, and saw it jiggle, endlessly, for no visible reason. <bookmark mark='a'/> Here's a model: a walk that steps up or down at random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the spread after any time stays the same: the variance, the average squared distance from the start, comes out at exactly t, and the walks settle into a single random object: Brownian motion. It's continuous everywhere, and so jagged it has no slope anywhere.",
+   "zh": ""
   },
-  "69ad638add1a": {
+  "78ee89d0c4d7": {
    "scene": "Brownian",
-   "en": "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell curve, centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 times the spread, not twice. Randomness spreads slowly. It's the central limit theorem again: the position at time t is a sum of many tiny independent kicks. <bookmark mark='c'/> Measured on twenty thousand paths, the variances come out at a quarter, a half, three quarters and one: exactly t.",
-   "zh": "现在画出60条。<bookmark mark='a'/>在任何时刻，它们走到的位置都服从一条钟形曲线，中心在0，散布程度是根号t。<bookmark mark='b'/>时间加倍，散布只变成大约1.4倍，而不是2倍。随机性扩散得很慢。这又是中心极限定理：t时刻的位置，是许多微小而独立的踢动之和。<bookmark mark='c'/>在2万条路径上测量，方差分别是四分之一、二分之一、四分之三和1：正好就是t。"
+   "en": "Now draw sixty of them. <bookmark mark='a'/> At any moment, where they've got to follows a bell curve, centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 times the spread, not twice. Randomness spreads slowly. It's the central limit theorem again: the position at time t is a sum of many tiny independent kicks. <bookmark mark='c'/> Measured on twenty thousand paths, the variances, the spreads squared, come out at a quarter, a half, three quarters and one: exactly t.",
+   "zh": ""
   },
-  "1d2b676859ed": {
+  "42f9566d6c92": {
    "scene": "Brownian",
-   "en": "In two dimensions, a cloud of particles released at one point spreads into a widening bell. <bookmark mark='a'/> Follow the density instead of the particles, and it obeys an equation with no randomness in it at all: the heat equation. The jiggling of each particle becomes the smooth spreading of the whole. <bookmark mark='b'/> Einstein worked this out in 1905, and used it to argue that molecules are real. A few years later, Jean Perrin measured the jiggling, and counted them.",
-   "zh": "在二维平面上，从一点释放的一团粒子，会扩散成一个越来越宽的钟形。<bookmark mark='a'/>不跟踪粒子，而是跟踪密度，它服从的方程里完全没有随机性：热方程。每个粒子的抖动，变成了整体的平滑扩散。<bookmark mark='b'/>1905年，爱因斯坦算出了这一点，并用它来论证分子真实存在。几年后，让·佩兰测量了这种抖动，数出了分子的数目。"
+   "en": "In two dimensions, a cloud of particles released at one point spreads into a widening bell. <bookmark mark='a'/> Follow the density instead of the particles, and it obeys a rule that says exactly how the cloud's shape changes from one moment to the next, an equation with no randomness in it at all: the heat equation. The jiggling of each particle becomes the smooth spreading of the whole. <bookmark mark='b'/> Einstein worked this out in 1905, and used it to argue that molecules are real. A few years later, Jean Perrin measured the jiggling, and counted them.",
+   "zh": ""
   },
   "f808bb3b6ab2": {
    "scene": "SDE",
    "en": "Chapter nine. Stochastic differential equations.",
    "zh": "第9章。随机微分方程。"
   },
-  "cc00fcde36a3": {
+  "de1ec32ac1d9": {
    "scene": "SDE",
-   "en": "Brownian motion is pure jiggle. Add a push, and you have a stochastic differential equation. At each instant, the change in x is a push, f of x times dt, <bookmark mark='a'/> plus a random kick: g times a small piece of Brownian motion. <bookmark mark='b'/> To simulate one, take small steps: push, then kick, with a kick the size of the square root of the step.",
-   "zh": "布朗运动是纯粹的抖动。加上一股推力，就得到一个随机微分方程。在每一瞬间，x的变化等于一股推力，f(x)乘以dt，<bookmark mark='a'/>再加上一次随机踢动：g乘以一小段布朗运动。<bookmark mark='b'/>要模拟它，就迈小步：先推，再踢，踢动的大小是步长的平方根。"
+   "en": "Brownian motion is pure jiggle. Add a push, and you have a stochastic differential equation. At each instant, the change in x is a push, f of x times dt, where dt is a tiny tick of time, <bookmark mark='a'/> plus a random kick: g times dW, the tiny piece of Brownian motion in that tick. <bookmark mark='b'/> To simulate one, take small steps: push, then kick, with a kick the size of the square root of the step.",
+   "zh": ""
   },
   "ed8931d469db": {
    "scene": "SDE",
    "en": "The simplest interesting one is a spring pulling back toward zero, plus noise. Forty particles start at 2.5. <bookmark mark='a'/> The push pulls them home, the noise keeps them stirred, <bookmark mark='b'/> and they settle into a bell around zero, its width set by the balance between the two. It's called the Ornstein–Uhlenbeck process, and it's the one diffusion models use.",
    "zh": "最简单又有意思的一个，是一根把东西拉回0的弹簧，再加上噪声。40个粒子从2.5出发。<bookmark mark='a'/>推力把它们拉回家，噪声让它们不停地翻搅，<bookmark mark='b'/>最后它们稳定成0附近的一个钟形，宽度由两者之间的平衡决定。它叫作奥恩斯坦–乌伦贝克过程，扩散模型用的正是它。"
   },
-  "e72193c18219": {
+  "f6f82646760b": {
    "scene": "SDE",
-   "en": "And again, follow the density instead of the particles. <bookmark mark='a'/> Start with data that has two peaks, and let every point drift toward zero and jiggle, the way the Ornstein–Uhlenbeck process says. <bookmark mark='b'/> Twenty thousand random particles, and the solution of one deterministic equation, the Fokker–Planck equation, move together. <bookmark mark='c'/> Wait long enough, and every trace of the data is gone: what's left is a plain standard bell. That's exactly what a diffusion model does to its training images.",
-   "zh": "同样，不跟踪粒子，而是跟踪密度。<bookmark mark='a'/>从有两个峰的数据出发，让每个点都按奥恩斯坦–乌伦贝克过程说的那样，向0漂移，同时抖动。<bookmark mark='b'/>2万个随机粒子，和一个确定性方程的解，也就是福克–普朗克方程的解，步调一致地移动。<bookmark mark='c'/>等得足够久，数据的痕迹就全都消失了：剩下的只是一条普通的标准钟形曲线。扩散模型对它的训练图像做的，正是这件事。"
+   "en": "And again, follow the density instead of the particles. <bookmark mark='a'/> Start with data that has two peaks, and let every point drift toward zero and jiggle, the way the Ornstein–Uhlenbeck process says. <bookmark mark='b'/> Twenty thousand random particles, and the solution of one deterministic equation, the Fokker–Planck equation, a rule that says exactly how the cloud's shape changes next, with no dice involved, move together. <bookmark mark='c'/> Wait long enough, and every trace of the data is gone: what's left is a plain standard bell. That's exactly what a diffusion model does to its training images.",
+   "zh": ""
   },
-  "9101e1c0a1d0": {
+  "f2bb47fc7166": {
    "scene": "SDE",
-   "en": "Can the film run backwards, from the bell back to the data? In 1982, Brian Anderson showed that reversed in time, it's another stochastic differential equation, with one extra term: <bookmark mark='a'/> the score, the slope of the log of the density at that moment. <bookmark mark='b'/> The score points uphill, toward where the data is more likely.",
-   "zh": "这部影片能倒着放吗，从钟形曲线回到数据？1982年，布赖恩·安德森证明了：时间反向之后，它是另一个随机微分方程，只多了一项：<bookmark mark='a'/>分数函数，也就是那一刻密度的对数的斜率。<bookmark mark='b'/>分数函数指向上坡，指向数据更可能出现的地方。"
+   "en": "Can the film run backwards, from the bell back to the data? In 1982, Brian Anderson showed that reversed in time, it's another stochastic differential equation, with one extra term: <bookmark mark='a'/> the score. Here the word means something new: at each point, an arrow saying which way the data gets more likely, and how strongly. Exactly, it's the slope of the log of the density at that moment. <bookmark mark='b'/> The score points uphill, toward where the data is more likely.",
+   "zh": ""
   },
-  "66e78464130d": {
+  "84cdbac08362": {
    "scene": "SDE",
-   "en": "Know the score at every noise level, and you can turn noise into data. <bookmark mark='a'/> It's the field of arrows from the start of this part. <bookmark mark='b'/> There, it was computed exactly from the letters. A diffusion model learns it from millions of images, with a network, and that's part fourteen.",
-   "zh": "知道了每个噪声水平下的分数函数，就能把噪声变成数据。<bookmark mark='a'/>它就是这一部分开头的那片箭头场。<bookmark mark='b'/>在那里，它是直接从那些字母精确算出来的。扩散模型则用一个网络，从数百万张图像中把它学出来，这是第14部分的内容。"
+   "en": "Know the score at every noise level, every point on the slide from data into noise, and you can turn noise into data. <bookmark mark='a'/> It's the field of arrows from the start of this part. <bookmark mark='b'/> There, it was computed exactly from the letters. A diffusion model learns it from millions of images, with a network, and that's part fourteen.",
+   "zh": ""
   },
   "6dc8b1bbf04a": {
    "scene": "Outro",
