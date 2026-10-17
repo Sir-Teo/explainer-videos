@@ -115,7 +115,7 @@ class Objective(VoiceoverScene):
         top = max(float(cg[:, 3].max()), float(cp[:, 3].max()))
         top = math.ceil(top * 2) / 2
         steps = int(o["steps"])
-        bx = axes_box([0, steps, 100], [0, top, 0.5], 5.2, 3.2, [3.5, -0.6, 0])
+        bx = axes_box([0, steps, 100], [0, top, 0.5], 4.6, 3.2, [2.8, -0.6, 0])  # room for the end labels
         yt = VGroup(*[MathTex(f"{v:g}", font_size=20, color=GREY_B).next_to(bx.c2p(0, v), LEFT, buff=0.08) for v in (0, top / 2, top)])
         xt = VGroup(*[MathTex(f"{v}", font_size=20, color=GREY_B).next_to(bx.c2p(v, 0), DOWN, buff=0.08) for v in (0, steps)])
         yn = label(r"how far from the start: \ KL, \ bits per answer", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.12)
@@ -137,8 +137,9 @@ class Objective(VoiceoverScene):
             "<bookmark mark='c'/> In our runs, "
             + (f"the penalty kept GRPO closer to where it started: {float(cg[-1, 3]):.2f} bits per answer, against "
                f"{float(cp[-1, 3]):.2f} without it." if less else
-               f"the penalty, at weight 0.04, barely held GRPO back: {float(cg[-1, 3]):.2f} bits per answer from "
-               f"the start, against {float(cp[-1, 3]):.2f} for the plain gradient. Many recent recipes drop it.")
+               f"the penalty, at weight 0.04, didn't keep GRPO closer: it ended {float(cg[-1, 3]):.2f} bits per answer "
+               f"from the start, against {float(cp[-1, 3]):.2f} for the plain gradient, which has no penalty but takes "
+               "smaller steps. At this weight the penalty is weak, and many recent recipes drop it.")
         ) as vo:
             self.play(J.animate.scale(0.75).to_edge(UP, buff=0.3), FadeIn(cite_))
             self.play(Indicate(VGroup(*J[11:]), color=KLC))
@@ -358,7 +359,7 @@ class Objective(VoiceoverScene):
     def sharpen(self):
         o = load("objectives")
         steps = int(o["steps"])
-        V = [v for v in o["variants"]]
+        V = [v for v in o["variants"] if v != "dpo"]  # DPO samples nothing, and its entropy barely moves
         # left: the entropy of the model's digits as RL goes on
         top = max(float(np.asarray(o[f"{v}_curve"])[:, 2].max()) for v in V)
         top = math.ceil(top * 4) / 4
@@ -368,6 +369,8 @@ class Objective(VoiceoverScene):
         yn = label(r"entropy of each digit, \ bits", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         xn = label(r"RL steps", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.05)
         lines = VGroup(*[curve(ax, np.asarray(o[f"{v}_curve"])[:, 0], np.asarray(o[f"{v}_curve"])[:, 2], COLS[v], 2.5) for v in V])
+        key_ = VGroup(*[label(NAMES[v].replace(r" \\ ", " "), font_size=16, color=COLS[v]) for v in V])
+        key_.arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, RIGHT, buff=0.2).align_to(ax, UP)
         e0 = float(np.asarray(o["pg_curve"])[0, 2])
         e1 = float(np.mean([np.asarray(o[f"{v}_curve"])[-1, 2] for v in V]))
         # right: pass@k before and after RL
@@ -408,7 +411,7 @@ class Objective(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(xn))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), run_time=2.5)
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), FadeIn(key_), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(cite_), Create(bx), FadeIn(bxt), FadeIn(byt), FadeIn(byn), FadeIn(bxn))
             vo.wait_until("c")
