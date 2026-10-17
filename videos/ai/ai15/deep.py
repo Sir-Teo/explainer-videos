@@ -314,9 +314,15 @@ def coherence(judge, clips, want, skip=1):
 class ClipNet:
     """A small diffusion transformer over (frame, patch) tokens, conditioned on the letter and on each frame's noise
     level through adaptive layer norm; attention across frames either full or causal (each frame sees itself and
-    the past)."""
+    the past).
 
-    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=False, pred="v", conv=False):
+    Image-to-video options (all on by default; without them, 3,500 steps gave speckle, not letters):
+    ``concat`` feeds the oldest frame in view (the given first frame) in beside every frame, as Stable Video Diffusion
+    does; ``conv`` adds a 3 x 3 convolution before cutting frames into patches and two after putting them back, for
+    the one-pixel detail of these small letters; ``pred`` is what the network outputs: 'v' the velocity, 'x' the
+    clean frames, 'dx' the clean frames as a change to that oldest frame (so it starts out copying it)."""
+
+    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=True, pred="dx", conv=True):
         import torch
         import torch.nn as nn
 
@@ -439,10 +445,13 @@ def clip_levels(mode, B, T, g):
     return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
 
 
-def train_clipnet(mode, clips, lab, n_steps, seed=0, B=24, lr=1e-3, log=True, concat=False, pred="v", hook=None, xloss=False, conv=False):
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=48, lr=2e-3, log=True, concat=True, pred="dx", conv=True, xloss=True,
+                  hook=None):
     """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
     frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
-    In every mode the first frame is given clean and never learned."""
+    In every mode the first frame is given clean and never learned. ``xloss``: the squared error of the clean frames
+    (weighting every noise level alike) rather than of the velocity (which weights the nearly clean end heavily: there
+    the model learned to clean up noise but never to keep the letter's shape). ``hook(m, step)`` is called each step."""
     import time
 
     import torch
@@ -523,6 +532,9 @@ def rollout(m, first, y, n_frames, window, n_steps=24, seed=0):
     return ((torch.cat(done, 1).numpy() + 1) / 2).clip(0, 1)
 
 
+N_CLIP_STEPS = 7000  # batch 48; a 3,000-step pilot read 55% of whole-clip frames right (real clips about 87%)
+
+
 def compute_clips():
     """Image-to-video on the bouncing letters: every model is given a real first frame (from a held-out font) and
     draws what follows. Every score below is on the generated frames only; the given first frame is left out."""
@@ -544,7 +556,7 @@ def compute_clips():
           f"jerk {real['jerk']:.2f}px", flush=True)
     # 1. the clip model, against the same model's frames taken from different samples (each frame drawn on its own)
     t0 = time.time()
-    m = train_clipnet("clip", clips, lab, 4000, seed=0)
+    m = train_clipnet("clip", clips, lab, N_CLIP_STEPS, seed=0)
     print(f"    clip model trained in {time.time() - t0:.0f}s", flush=True)
     S = sample_clip(m, first, test_lab, seed=3)
     indep = S.copy()
@@ -560,7 +572,7 @@ def compute_clips():
     long = 4 * T
     for mode in ("teacher", "forcing"):
         t0 = time.time()
-        mm = train_clipnet(mode, clips, lab, 4000, seed=1)
+        mm = train_clipnet(mode, clips, lab, N_CLIP_STEPS, seed=1)
         print(f"    {mode} model trained in {time.time() - t0:.0f}s", flush=True)
         R = rollout(mm, first, test_lab, long, window=T, seed=4)
         r = coherence(judge, R, test_lab)
@@ -571,7 +583,7 @@ def compute_clips():
         print(f"    {mode}: letter right in generated frames 1-{T} {100 * out[f'{mode}_early_right']:.0f}%, "
               f"in {long - T}-{long - 1} {100 * out[f'{mode}_late_right']:.0f}%; jerk {out[f'{mode}_early_jerk']:.2f}px, "
               f"then {out[f'{mode}_late_jerk']:.2f}px (all {r['jerk']:.2f}px)", flush=True)
-    out["long"] = long
+    out["long"], out["steps"] = long, steps(N_CLIP_STEPS)
     return out
 
 
