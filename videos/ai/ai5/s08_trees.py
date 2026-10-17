@@ -306,7 +306,7 @@ class Trees(VoiceoverScene):
         t = load("trees")
         ba, bt = np.asarray(t["boost_acc"]), np.asarray(t["boost_train"])
         n = len(ba)
-        ax, yl, xl = self.committee_axes(n, r"rounds of boosting: \ one small tree each")
+        ax, yl, xl = self.committee_axes(n, r"rounds of boosting: \ one small tree each \ (all $70$ rates)")
         c_te = VMobject(color=C.BITS, stroke_width=4).set_points_as_corners([ax.c2p(k + 1, v) for k, v in enumerate(ba)])
         c_tr = VMobject(color=GREY_A, stroke_width=2.5).set_points_as_corners([ax.c2p(k + 1, v) for k, v in enumerate(bt)])
         key = VGroup(label(r"training pages", font_size=24, color=GREY_A), label(r"new pages", font_size=24, color=C.BITS))
