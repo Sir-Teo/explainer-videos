@@ -65,6 +65,11 @@
    "en": "Here they are on a real task: a small character model, like part eight's, trained on the books for two and a half thousand steps, each optimizer at a good learning rate. <bookmark mark='a'/> Plain SGD is slowest. Momentum helps. <bookmark mark='b'/> Adam and AdamW are far ahead after the same number of steps.",
    "zh": "把它们放到一个真实的任务上：一个小型的字符模型，和第8部分的类似，在那些书上训练2500步，每个优化器都用一个合适的学习率。<bookmark mark='a'/>单纯的SGD最慢。加上动量，有所帮助。<bookmark mark='b'/>走了同样多的步数，Adam和AdamW遥遥领先。"
   },
+  "50542f76c7e5": {
+   "scene": "Adam",
+   "en": "What does a number like that read like? Here both models continue the same few words, with the same random draws, at checkpoints during training. <bookmark mark='a'/> Before any training, every character of the books is equally likely: 7.5 bits each, and the text is noise from the whole alphabet. <bookmark mark='b'/> After 100 steps they have spaces, and short words like 'the', 'to' and 'and'. <bookmark mark='c'/> By step 1,000, most of what they write is word-shaped, and <bookmark mark='d'/> by the end, at about 2.6 bits, there's punctuation, a line break, even the start of dialogue. AdamW is ahead at every checkpoint. Since both draw the same random numbers, their texts rhyme; the difference is how far each one has come down the hill.",
+   "zh": "这样一个数字，读起来是什么样？这里两个模型接着同样的几个词往下写，用同样的随机数，在训练途中的几个检查点上。<bookmark mark='a'/>训练开始之前，书里的每个字符都一样可能：每个7.5比特，写出来的是整个字母表里的噪声。<bookmark mark='b'/>训练100步之后，它们有了空格，还有the、to、and这样的短词。<bookmark mark='c'/>到第1000步，它们写出的大部分东西都像单词了，<bookmark mark='d'/>到最后，大约2.6比特的时候，有了标点、换行，甚至对话的开头。每个检查点上，AdamW都领先。因为两者抽到的是同样的随机数，它们写出的文字彼此押韵；区别只在于，各自在山坡上走下来了多远。"
+  },
   "cd0d0dc9d8e5": {
    "scene": "Muon",
    "en": "Chapter four. Muon.",
@@ -75,10 +80,25 @@
    "en": "Adam treats every weight separately. But the weights of a layer form a matrix, and a matrix has structure: part two's singular values. <bookmark mark='a'/> Here's a real gradient matrix from the character model. A few directions dominate; most are tiny. A step along it mostly pushes the few big directions further. <bookmark mark='b'/> Muon, from 2024, takes the gradient's singular value decomposition and sets every singular value to one: the same push in every direction. <bookmark mark='c'/> It doesn't even compute the SVD. Five rounds of a matrix polynomial, Newton–Schulz, do it approximately and fast.",
    "zh": "Adam把每个权重分开对待。可是一层的权重组成一个矩阵，而矩阵是有结构的：也就是第2部分讲的奇异值。<bookmark mark='a'/>这是字符模型里一个真实的梯度矩阵。少数几个方向占了主导，大多数方向都微乎其微。沿着它走一步，主要是把那几个大方向推得更远。<bookmark mark='b'/>Muon是2024年提出的，它对梯度做奇异值分解，再把每个奇异值都设成1：每个方向都得到同样大小的推力。<bookmark mark='c'/>它甚至不用真的去算奇异值分解。一个矩阵多项式，叫作牛顿–舒尔茨迭代，迭代5轮，就能又快又近似地做到这一点。"
   },
+  "0838537d04de": {
+   "scene": "Muon",
+   "en": "Why set the singular values to one? Because it's the steepest step under the right notion of size. <bookmark mark='a'/> Ask for the step that lowers the loss fastest, to first order, among all steps that stretch no direction by more than eta: a bound on the spectral norm, which is what matters for a matrix that multiplies vectors. <bookmark mark='b'/> Write the gradient in its singular directions. Each term can be pushed down by at most eta times its singular value. <bookmark mark='c'/> And one step achieves every bound at once: minus eta times U V transpose. Adam, in the same sense, is the steepest step when each weight is bounded separately.",
+   "zh": "为什么要把奇异值都设成1？因为在正确的“大小”概念下，这是最陡的一步。<bookmark mark='a'/>在所有不把任何方向拉长超过η的步子里，找出一阶近似下让损失下降最快的那一步：这是对谱范数的约束，而对一个要去乘向量的矩阵来说，谱范数才是要紧的大小。<bookmark mark='b'/>把梯度写成它的奇异方向之和。每一项最多只能被压低η乘以它的奇异值。<bookmark mark='c'/>而有一步能同时达到所有这些界：负η乘以U乘V转置。同样的意义上，Adam是在每个权重各自受限时最陡的那一步。"
+  },
+  "5407318c503c": {
+   "scene": "Muon",
+   "en": "How does Newton–Schulz do it without an SVD? Each round, X becomes a times X, plus b times X X transpose X, plus c times X X transpose squared X. On the singular values, that's just one polynomial, applied to each of them separately. <bookmark mark='a'/> Here it is, with Keller Jordan's coefficients. It rises steeply from zero, so small singular values grow fast, and it hovers around one. <bookmark mark='b'/> Follow one value: five rounds carry it up to about one. <bookmark mark='c'/> And here are all two hundred and fifty-six of our gradient's singular values, round by round. Every one above a hundredth of the largest, 104 of them, ends in a band between 0.68 and 1.13: not exactly one, but close enough, and the coefficients were tuned to get there in five rounds. The tiniest ones, mostly numerical dust, climb but don't arrive, which costs nothing.",
+   "zh": "牛顿–舒尔茨迭代是怎么不用SVD就做到的？每一轮，X变成a乘X，加上b乘X X转置 X，再加上c乘X X转置的平方 X。落到奇异值上，这只是一个多项式，分别作用在每个奇异值上。<bookmark mark='a'/>这就是它，用的是Keller Jordan的系数。它从0开始陡峭地上升，所以小的奇异值长得很快，然后在1附近徘徊。<bookmark mark='b'/>跟着一个值走：5轮把它带到1左右。<bookmark mark='c'/>这是我们梯度的全部256个奇异值，一轮一轮地变化。凡是大于最大值百分之一的，一共104个，最后都落在0.68到1.13之间：不正好是1，但足够接近，而这些系数正是为了5轮就到这里而调出来的。最小的那些，大多是数值上的尘埃，会往上爬但到不了，这没有任何代价。"
+  },
   "0284493b70fd": {
    "scene": "Muon",
    "en": "On the same character model, with Muon on the hidden matrices and AdamW on the rest: <bookmark mark='a'/> it reaches 2.50 bits, ahead of AdamW's 2.61. Muon has since been scaled up: Moonshot AI reported that it needs about half the compute of AdamW, and used a version of it to train Kimi K2.",
    "zh": "还是同一个字符模型，隐藏层的矩阵用Muon，其余的用AdamW：<bookmark mark='a'/>它达到了2.50比特，领先于AdamW的2.61。此后，Muon被推广到了大得多的规模：月之暗面报告说，它只需要AdamW大约一半的算力，还用它的一个变体训练了Kimi K2。"
+  },
+  "d6e5839ccf20": {
+   "scene": "Muon",
+   "en": "Scaled up, Muon hit one problem: in some heads the attention scores kept growing until training blew up. Moonshot's fix for Kimi K2 is QK-clip. <bookmark mark='a'/> After each step, look at each head's largest score. <bookmark mark='b'/> If it's above a threshold tau, shrink that head's query and key weights by the square root of tau over the score, each, so the score lands exactly on tau. Nothing else changes. <bookmark mark='c'/> With it, Kimi K2 trained on fifteen and a half trillion tokens without a single loss spike.",
+   "zh": "规模一大，Muon碰到了一个问题：有些注意力头的注意力分数一直变大，直到训练崩掉。月之暗面为Kimi K2给出的解决办法是QK-clip。<bookmark mark='a'/>每一步之后，看看每个头最大的那个分数。<bookmark mark='b'/>如果它超过阈值τ，就把这个头的查询权重和键权重，各自乘上τ除以这个分数的平方根，让分数正好落在τ上。别的都不变。<bookmark mark='c'/>有了它，Kimi K2在15.5万亿个词元上训练，一次损失尖峰都没有出现。"
   },
   "48c102480607": {
    "scene": "Schedule",
