@@ -29,20 +29,20 @@
    "en": "Chapter one. Acting without seeing everything.",
    "zh": "第1章。看不全，也要行动。"
   },
-  "0d6d6ef660aa": {
+  "719b77908259": {
    "scene": "Belief",
-   "en": "An agent acts in a world it can only partly see. Here's the classic example: a robot in a corridor with a few doors, which doesn't know where it is. Its knowledge is a belief: a probability for every cell, spread evenly at first. <bookmark mark='a'/> Each step it moves right, sometimes slipping, so the belief shifts and blurs. Then it senses: door, or no door, and Bayes' rule from part four multiplies the belief by how well each cell explains what it saw. <bookmark mark='b'/> Watch the uncertainty fall as the pattern of doors gives the place away. This is part six's hidden Markov model, run forward: an agent in a partly observed world, a POMDP, acts on its belief, not on the truth.",
-   "zh": "智能体所在的世界，它只能看到一部分。这里有一个经典的例子：一条走廊，有几扇门，走廊里有一个机器人，它不知道自己在哪里。它所知道的，是一份信念：每个格子一个概率，一开始平均分布。<bookmark mark='a'/>每一步，它都往右走一格，有时会打滑，于是信念跟着往右挪，也变得更模糊。然后它感知一下：有门，还是没有门；第4部分的贝叶斯法则，把每个格子的信念，乘以这个格子能多好地解释它看到的东西。<bookmark mark='b'/>看，门的排列方式渐渐暴露出它的位置，不确定性也随之下降。这就是第6部分的隐马尔可夫模型，向前运行：在一个只能部分观测的世界里，也就是POMDP里，智能体依据的是自己的信念，而不是真相。"
+   "en": "An agent acts in a world it can only partly see. Here's the classic example: a robot in a corridor with a few doors, which doesn't know where it is. Its knowledge is a belief: a probability for every cell, spread evenly at first. <bookmark mark='a'/> Each step it moves right, sometimes slipping, so the belief shifts and blurs. Then it senses: door, or no door, and Bayes' rule from part four multiplies the belief by how well each cell explains what it saw. <bookmark mark='b'/> Watch the uncertainty fall as the pattern of doors gives the place away. This is part six's hidden Markov model, run forward. <bookmark mark='c'/> With actions added, it's called a POMDP, a partially observable Markov decision process: you choose actions, but only get clues about where you are. The agent acts on its belief, not on the truth.",
+   "zh": ""
   },
   "3a8e3535f101": {
    "scene": "Horizon",
    "en": "Chapter two. Long horizons.",
    "zh": "第2章。长时程任务。"
   },
-  "ed79b55f8459": {
+  "f3ad9af6269e": {
    "scene": "Horizon",
-   "en": "Agents work in long chains of steps: read a page, click, write code, run it, read the error. Every step has to go right. <bookmark mark='a'/> If each step succeeds with probability p, a task of n steps succeeds with p to the n. <bookmark mark='b'/> At ninety percent per step, a ten-step task already fails two times in three. At ninety-nine percent, a hundred-step task succeeds only 37 percent of the time. Small errors compound.",
-   "zh": "智能体干活，靠的是一长串步骤：读一个网页，点一下，写代码，运行，再读报错信息。每一步都必须做对。<bookmark mark='a'/>如果每一步成功的概率是p，那么n步的任务，成功的概率就是p的n次方。<bookmark mark='b'/>每一步有90%的把握，10步的任务，就已经是三次里有两次失败。每一步有99%的把握，100步的任务，也只有37%的时候能完成。小错误会层层累积。"
+   "en": "Agents work in long chains of steps: read a page, click, write code, run it, read the error. <bookmark mark='h'/> How many steps a task takes, from start to finish, is its horizon, and every step has to go right. <bookmark mark='a'/> If each step succeeds with probability p, a task of n steps succeeds with p to the n. <bookmark mark='b'/> At ninety percent per step, a ten-step task already fails two times in three. At ninety-nine percent, a hundred-step task succeeds only 37 percent of the time. Small errors compound.",
+   "zh": ""
   },
   "3af607d81344": {
    "scene": "Horizon",
@@ -74,20 +74,20 @@
    "en": "Chapter four. Acting in the physical world.",
    "zh": "第4章。在物理世界中行动。"
   },
-  "05fda875de91": {
+  "4ac6b1d43288": {
    "scene": "VLA",
-   "en": "Robots are where agents meet physics. A vision-language-action model starts from a model that already reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert that generates smooth motions by flow matching, part fourteen's machinery, now drawing trajectories instead of pictures.",
-   "zh": "机器人，是智能体和物理世界相遇的地方。视觉–语言–动作模型的起点，是一个已经能读懂图像和文字的模型，它是在网络数据上训练出来的。<bookmark mark='a'/>给它摄像头拍到的画面和一条指令，再给它加上一种输出动作的办法。<bookmark mark='r'/>2023年的RT-2，把动作写成词元，就像写词一样。<bookmark mark='b'/>2024年的π0，加上了一个动作专家，用流匹配来生成平滑的动作；这正是第14部分的那套机制，只不过现在画出来的不是图像，而是运动轨迹。"
+   "en": "Robots are where agents meet physics. A vision-language-action model starts from a model that already reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert: a small extra network attached to the vision-language model, whose only job is to output smooth arm motions. It's not one of part thirteen's mixture-of-experts experts. It generates those motions by flow matching, part fourteen's machinery, now drawing trajectories instead of pictures.",
+   "zh": ""
   },
   "4fe1507d7c70": {
    "scene": "VLA",
    "en": "And it doesn't act one tiny step at a time. It plans a chunk of motion, a second or so, then looks at the world again and plans the next: <bookmark mark='a'/> the belief and the world model of the earlier chapters, folded into one network that sees, thinks and moves.",
    "zh": "而且，它并不是一小步一小步地行动。它一次规划一段动作，大约1秒，然后再看一眼世界，规划下一段：<bookmark mark='a'/>前面几章的信念和世界模型，都合进了同一个网络，它能看、能想、能动。"
   },
-  "3d2d216602d1": {
+  "4e822eafc0d3": {
    "scene": "VLA",
-   "en": "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole chunk of fifty actions, one second of motion, by part fourteen's flow matching: mix the true chunk with noise, and train the action expert to predict the straight-line velocity between them, given what the robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a language model can write. Taking every time step as a token works badly: neighbouring steps are nearly the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first. A cosine transform puts a smooth motion's information into a few numbers; <bookmark mark='d'/> round them, and on this chunk only 7 of 50 survive, yet they rebuild the motion to within 0.044; byte-pair encoding, from part sixteen, then packs what's left into a handful of tokens.",
-   "zh": "下面是这两种答案的确切形式。<bookmark mark='a'/>Physical Intelligence公司的π0，用第14部分的流匹配，一次预测一整块50个动作，也就是1秒钟的动作：把真实的动作块和噪声混在一起，训练动作专家，在看到机器人眼前画面的条件下，预测两者之间那条直线上的速度。画出一块动作，只要10步。<bookmark mark='b'/>另一种答案，是把动作变成语言模型能写的词元。每个时间步都当成一个词元，效果很差：相邻的时间步几乎一样，所以每个词元几乎什么都没说。<bookmark mark='c'/>FAST先做压缩。余弦变换把一段平滑动作的信息，集中到少数几个数里；<bookmark mark='d'/>把它们取整，在这一块动作上，50个数只剩7个不是零，却能把动作还原到误差0.044以内；然后用第16部分讲过的字节对编码，把剩下的打包成寥寥几个词元。"
+   "en": "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole chunk of fifty actions, one second of motion, by part fourteen's flow matching: mix the true chunk with noise, and train the action expert to predict the straight-line velocity between them, given what the robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a language model can write. Taking every time step as a token works badly: neighbouring steps are nearly the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first, with a cosine transform. <bookmark mark='k'/> Any smooth motion is a sum of cosine waves, slow ones first; the transform lists how much of each wave you need, and a smooth motion needs only the first few. <bookmark mark='d'/> Round those amounts, and on this chunk only 7 of 50 survive, yet they rebuild the motion to within 0.044; byte-pair encoding, from part sixteen, then packs what's left into a handful of tokens.",
+   "zh": ""
   },
   "649678677dd2": {
    "scene": "Outro",
