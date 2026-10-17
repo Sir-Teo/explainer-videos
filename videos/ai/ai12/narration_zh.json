@@ -1,0 +1,176 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "KVCache": "",
+  "Linear": "",
+  "Rules": "",
+  "SSM": "",
+  "Recall": "",
+  "Hybrid": "",
+  "Outro": ""
+ },
+ "lines": {
+  "d0d039de84d2": {
+   "scene": "Hook",
+   "en": "Every token a transformer reads, it keeps: a key and a value, in every layer. <bookmark mark='a'/> For Llama 3.1 with seventy billion parameters, that's 320 kilobytes a token. <bookmark mark='b'/> A long conversation, a hundred and twenty-eight thousand tokens, needs 39 gigabytes of memory, just to remember what it has read.",
+   "zh": ""
+  },
+  "75f8ed3fff3e": {
+   "scene": "Hook",
+   "en": "The alternative is to read like we do: keep a memory of a fixed size, and update it as each word arrives. <bookmark mark='a'/> Then the question is what to keep, and what to forget.",
+   "zh": ""
+  },
+  "b99b645196fe": {
+   "scene": "Hook",
+   "en": "This part is about memory: how attention's cache is shrunk, how a fixed memory can stand in for it, <bookmark mark='a'/> and why the newest models use both.",
+   "zh": ""
+  },
+  "cd94920d2c23": {
+   "scene": "KVCache",
+   "en": "Chapter one. The cache.",
+   "zh": ""
+  },
+  "1aa9e6ea2ade": {
+   "scene": "KVCache",
+   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. For a long conversation, this memory, not the model's weights, is what fills the graphics card.",
+   "zh": ""
+  },
+  "cf64e31a2cf2": {
+   "scene": "KVCache",
+   "en": "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every attention head kept its own keys and values, each token of context would cost 2.5 megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and each group shares one key and one value. That's 8 times less, 320 kilobytes a token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the hybrid Qwen3-Next. Let's see how.",
+   "zh": ""
+  },
+  "14dfe715d5d5": {
+   "scene": "KVCache",
+   "en": "DeepSeek's trick is multi-head latent attention. <bookmark mark='a'/> Each token is squeezed into a short latent vector, 512 numbers, and only that is cached. <bookmark mark='b'/> Keys and values for all 128 heads are unpacked from it by two more matrices when needed. <bookmark mark='c'/> And they don't even need to be unpacked: since a query's score is a product of matrices, the key's matrix can be folded into the query, part two's linear algebra, so attention reads the latent directly. <bookmark mark='d'/> Against full attention of the same shape, that's 71 times less memory.",
+   "zh": ""
+  },
+  "5b1be20ded2b": {
+   "scene": "Linear",
+   "en": "Chapter two. Attention without the softmax.",
+   "zh": ""
+  },
+  "4389cd853bd7": {
+   "scene": "Linear",
+   "en": "Here's attention for a whole text of T tokens: queries times keys, then times values. <bookmark mark='a'/> The product of queries and keys is a T by T table of scores: it grows with the square of the length. <bookmark mark='b'/> But matrix products can be grouped either way. Multiply keys and values first, and the table in the middle is only d by d, however long the text. <bookmark mark='c'/> The catch is the softmax: it sits between Q K and V, and blocks the regrouping. Replace it with simple positive features of the queries and keys, and you're allowed: that's linear attention.",
+   "zh": ""
+  },
+  "ab1db9ff954b": {
+   "scene": "Linear",
+   "en": "Now read the text one token at a time. With the product regrouped, everything the model needs from the past is one d by d matrix, the state. <bookmark mark='a'/> Each new token writes into it: its value times its key, an outer product, added on. <bookmark mark='b'/> To read, multiply the state by the query. The memory never grows: a transformer without the softmax is a recurrent network, Katharopoulos and colleagues showed in 2020.",
+   "zh": ""
+  },
+  "7649065f094b": {
+   "scene": "Linear",
+   "en": "The payoff grows with length. Softmax attention's work grows with the square of the text; the recurrence's grows in a straight line. <bookmark mark='a'/> At a million tokens, that's 3,906 times fewer multiplications. So why doesn't everyone use it? Because a fixed-size memory has to forget, and how it writes decides what it forgets.",
+   "zh": ""
+  },
+  "0ed511e71c50": {
+   "scene": "Rules",
+   "en": "Chapter three. How to write to memory.",
+   "zh": ""
+  },
+  "d13c6e6777b7": {
+   "scene": "Rules",
+   "en": "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how much their keys overlap. Random keys in d dimensions overlap by about one over the square root of d, <bookmark mark='b'/> so the leaks add up like N over d. With d equals 64, by 64 pairs the noise is as big as the answer. Adding can never erase: the memory just fills up.",
+   "zh": ""
+  },
+  "ba14acae3a0d": {
+   "scene": "Rules",
+   "en": "The first fix is to forget on purpose. Before each write, shrink the whole memory a little. <bookmark mark='a'/> Here are 128 pairs, read back by age. Adding blurs every pair the same. Decaying keeps the recent pairs sharp, and lets the old ones go. <bookmark mark='b'/> RetNet, gated linear attention and Mamba-2 all decay, and the best let each token choose how much: forget a lot at the start of a new topic, almost nothing in the middle of a sentence.",
+   "zh": ""
+  },
+  "2fff185a4992": {
+   "scene": "Rules",
+   "en": "The second fix is smarter. Before writing, read what the memory already says for this key, and write only the difference: what should be there, minus what is there. That's the delta rule, Widrow and Hoff's learning rule from 1960. <bookmark mark='a'/> It matters when the world changes. The door is open; later, the door is closed. Adding stores both, and answers with a mixture. The delta rule replaces the old value with the new. <bookmark mark='b'/> Here are 16 keys, rewritten 256 times with new values, then asked for the latest. Adding: an error of 19, it remembers every value ever written. Decaying: 0.92. The delta rule: 0.23.",
+   "zh": ""
+  },
+  "fc12a0569bdc": {
+   "scene": "Rules",
+   "en": "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule. So the memory is a little model, trained by part nine's gradient descent on the text as it's being read; part eleven's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a whole network, and you have test-time training.",
+   "zh": ""
+  },
+  "9dfa4fa9da4a": {
+   "scene": "SSM",
+   "en": "Chapter four. State-space models.",
+   "zh": ""
+  },
+  "1cb1021927fe": {
+   "scene": "SSM",
+   "en": "A different road to the same place started in control theory. A state-space model is a differential equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='a'/> Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. <bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; large steps, and it's gone in a few tokens.",
+   "zh": ""
+  },
+  "2f33d5ae8dd0": {
+   "scene": "SSM",
+   "en": "But a fixed step size can't tell what matters. Here's an input stream of noise with two marked values worth remembering. <bookmark mark='a'/> With a fixed step, each marked value washes out in the noise that follows. <bookmark mark='b'/> Mamba's idea, in 2023, was to let each input choose its own step size: a big step to take in something important, almost no step at all for noise, so the state holds still. Now the state keeps the marked value until the next one replaces it. A memory that chooses.",
+   "zh": ""
+  },
+  "f3772039483d": {
+   "scene": "SSM",
+   "en": "In 2024, Mamba-2 showed the two roads meet. A selective state-space model is linear attention with a decay: its input matrix plays the key, its output matrix the query. <bookmark mark='a'/> So today's fast memories are one family: a matrix that's read with a query, and written by one of a few rules. Add; decay then add; correct with the delta rule; or decay and correct, the gated delta rule of Qwen3-Next and Kimi Linear.",
+   "zh": ""
+  },
+  "b232599de434": {
+   "scene": "Recall",
+   "en": "Chapter five. A recall test.",
+   "zh": ""
+  },
+  "e81f3ddaabb6": {
+   "scene": "Recall",
+   "en": "How much does forgetting cost? Here's a test of pure memory: a list of keys, each followed by its value; <bookmark mark='a'/> then some of the keys again, and the model must answer with their values. It's the skill a model needs to quote a name or a number from far back in a document. <bookmark mark='b'/> We trained tiny one-layer models to play it, with three kinds of memory: softmax attention, linear attention that only adds, and the delta rule.",
+   "zh": ""
+  },
+  "b6b2a4f6de2e": {
+   "scene": "Recall",
+   "en": "With 8 pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls apart: 38 percent right at 48 pairs, as its crosstalk swamps the answers, worst once there are more pairs than each key has numbers, 16 here. The delta rule holds on much longer: 88 percent. And softmax attention, which simply keeps every pair, gets 100. <bookmark mark='b'/> Exact recall is what attention buys with its growing cache, and what a fixed memory has to approximate.",
+   "zh": ""
+  },
+  "6eba0da36312": {
+   "scene": "Hybrid",
+   "en": "Chapter six. Hybrids.",
+   "zh": ""
+  },
+  "459dfb8b3681": {
+   "scene": "Hybrid",
+   "en": "Fixed-size memories are cheap, but they forget; attention remembers everything exactly, at a price. So the newest models mix them. <bookmark mark='a'/> Jamba, in 2024, put one attention layer among every eight, the rest Mamba. MiniMax-01 does the same with lightning attention. Qwen3-Next and Kimi Linear, in 2025, use one attention layer in four, the other three running the gated delta rule. <bookmark mark='b'/> The fast layers carry the gist of a long text cheaply; the few attention layers look up exact details when they're needed.",
+   "zh": ""
+  },
+  "e860ada0cccc": {
+   "scene": "Hybrid",
+   "en": "The memory bill shows why. For one conversation of a hundred and twenty-eight thousand tokens, <bookmark mark='a'/> Llama 3.1's grouped-query cache takes 39 gigabytes; DeepSeek-V3's latent cache, 8.4; Qwen3-Next, with attention in only a quarter of its layers, 3.0, about 13 times less than Llama. Its delta-rule layers add just 36 megabytes of state, the same at any length.",
+   "zh": ""
+  },
+  "a67a8115f2e4": {
+   "scene": "Outro",
+   "en": "Let's take stock. Attention's memory is its cache, and models shrink it by sharing keys and values, or squeezing them into a latent. Drop the softmax, regroup the product, and attention becomes a recurrence on a fixed matrix memory. Written by adding, that memory blurs; with decay, it forgets the old; with the delta rule, one step of gradient descent per token, it corrects itself. State-space models, made selective, turned out to be the same family. And the newest models mix a few attention layers with many fast ones.",
+   "zh": ""
+  },
+  "70662cc9b7fb": {
+   "scene": "Outro",
+   "en": "Next comes sparsity: attending to only some of the past, and using only some of the model. Agents, in part eighteen, need memory over very long horizons. Part nineteen is about serving the cache fast, and part twenty looks for memories inside a trained model.",
+   "zh": ""
+  },
+  "81d800cfbf29": {
+   "scene": "Outro",
+   "en": "Next time: sparsity. The biggest models today don't use all their weights for every token: a router sends each token to a few experts among hundreds. <bookmark mark='a'/> How do you route, and how do you keep every expert busy?",
+   "zh": ""
+  },
+  "96731c77efcb": {
+   "scene": "Outro",
+   "en": "Songlin Yang's papers and blog on linear attention and the delta rule are the best way in. Thanks for watching, and see you in part thirteen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 12, Memory",
+ "chapters_en": {
+  "Hook": "Everything it has read",
+  "KVCache": "1. The cache",
+  "Linear": "2. Attention without the softmax",
+  "Rules": "3. How to write to memory",
+  "SSM": "4. State-space models",
+  "Recall": "5. A recall test",
+  "Hybrid": "6. Hybrids",
+  "Outro": "Recap, and where this comes back"
+ }
+}
