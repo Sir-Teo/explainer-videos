@@ -212,14 +212,19 @@ class Words(VoiceoverScene):
         with self.voiceover(
             "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during "
             "training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. "
-            "<bookmark mark='b'/> After a few thousand guesses, frequent words pull together first. "
-            "<bookmark mark='c'/> By the end, Monday sits with the other days, three with the numbers, father with "
-            "family: nothing told it what a day or a number is; only which words keep company."
+            f"<bookmark mark='b'/> After only {steps[1]} steps, most words' neighbours are the commonest words in "
+            "the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. "
+            f"<bookmark mark='c'/> By step {steps[4]:,}, meaning appears: three sits with "
+            f"{', '.join(snaps[4]['three'][:3])}, eyes with {', '.join(snaps[4]['eyes'][:3])}. "
+            "<bookmark mark='d'/> By the end, Monday sits with "
+            f"{snaps[-1]['monday'][0]}, three with {', '.join(snaps[-1]['three'][:3])}, father with "
+            f"{snaps[-1]['father'][0]} and {snaps[-1]['father'][1]}: nothing told it what a day or a number is; only "
+            "which words keep company."
         ) as vo:
             self.play(FadeIn(heads), FadeIn(cols), FadeIn(sub))
             self.add(cnt)
             vo.wait_until("a")
-            marks = {2: "b", len(steps) - 1: "c"}
+            marks = {1: "b", 4: "c", len(steps) - 1: "d"}
             for k in range(1, len(steps)):
                 if k in marks:
                     vo.wait_until(marks[k])
