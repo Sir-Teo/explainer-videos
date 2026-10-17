@@ -69,6 +69,16 @@
    "en": "What do the experts learn? Here's where our balanced model sends each character's context: one column per character just read, one row per expert. <bookmark mark='a'/> Some patterns appear: 3 of the 5 vowels go first to expert 5, and 6 of the 8 spaces and punctuation marks to experts 3 and 8. Nobody told it to. But it isn't a tidy division by meaning: in large models too, experts tend to split the work along surface patterns like these.",
    "zh": "专家们学到了什么？这里是我们那个均衡过的模型，把每个字符的上下文送到了哪里：每一列是刚读到的一个字符，每一行是一个专家。<bookmark mark='a'/>能看出一些规律：5个元音里，有3个首先送往5号专家；8个空格和标点里，有6个送往3号和8号专家。没有人这样教过它。可这并不是按含义整整齐齐的分工：在大模型里也一样，专家往往是沿着这类表面的模式来分工的。"
   },
+  "cb63a0b4b3ce": {
+   "scene": "Special",
+   "en": "How did that pattern form? Here is the same picture during training. <bookmark mark='a'/> At the start the router is random and nearly uniform, so each character's contexts are spread over the experts: on average its favourite gets 41 percent. <bookmark mark='b'/> Within 100 steps the router commits hard: the favourite's share jumps to 82 percent. <bookmark mark='c'/> Then the balancing bias pushes back, lowering the bias of experts that are too busy, and the choices spread out again, to 58 percent by the end. The favourites keep changing for a long time: 17 of the 30 characters still switch expert after step 300, and 8 after step 1,000.",
+   "zh": "那个规律是怎么形成的？这是训练途中的同一张图。<bookmark mark='a'/>一开始，路由器是随机的，几乎均匀，所以每个字符的上下文都分散在各个专家上：它最常去的那个专家平均只拿到41%。<bookmark mark='b'/>100步之内，路由器就下了重注：最常去的专家的份额跳到82%。<bookmark mark='c'/>然后负载均衡的偏置开始反推，降低那些太忙的专家的偏置，选择又分散开来，到最后是58%。最常去的专家会变很久：30个字符里，有17个在第300步之后还会换专家，第1000步之后还有8个。"
+  },
+  "7dcecc899180": {
+   "scene": "Special",
+   "en": "And here are the three models of that comparison as they train, held-out bits per character every 150 steps. <bookmark mark='a'/> The mixture pulls ahead of the dense model with the same arithmetic by step 1,800 and stays ahead. <bookmark mark='b'/> The wide dense model, 8 experts' width, trails the whole way: with this little training, all those parameters haven't paid off yet.",
+   "zh": "这是那组比较里的三个模型在训练中的样子，每150步测一次留出文本上的每字符比特数。<bookmark mark='a'/>混合专家模型在第1800步时超过了计算量相同的稠密模型，并且一直领先。<bookmark mark='b'/>那个宽的稠密模型，有8个专家那么宽，一路落后：训练这么少，那么多参数还没来得及发挥作用。"
+  },
   "dd96b869b310": {
    "scene": "Special",
    "en": "Is it worth it? Compare three models. <bookmark mark='a'/> A dense one doing as much arithmetic per character as the mixture; the mixture; and a dense one with as many parameters in total. <bookmark mark='b'/> The mixture, 2.434, beats the dense model with the same arithmetic, 2.485. And with the same short training, the dense model with all the parameters does no better, 2.510: eight times the width is more to learn, and it hasn't caught up. At scale, that's the trade the biggest models make: knowledge in the total, cost in the active.",

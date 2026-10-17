@@ -64,6 +64,11 @@
    "en": "It fits these too, every one of them, only a little more slowly. It has memorized nonsense. <bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same network can memorize anything at all. Then counting what a model could fit can't explain why, given real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers simple answers. Why, exactly, is still being worked out.",
    "zh": "这些它也拟合了，一个不落，只是稍微慢了一点。它记住的，是毫无意义的东西。<bookmark mark='a'/>而在新的书页上，它和瞎猜一样，这也是必然的。<bookmark mark='b'/>所以，同一个网络，什么都记得住。那么，数一数模型能拟合什么，就解释不了：为什么给它真实的标签时，它找到的却是一条在新的书页上也管用的规律，而不是死记硬背。它的训练方式里，有某种东西偏爱简单的答案。确切的原因，至今仍在研究之中。"
   },
+  "49dc3f4f0de4": {
+   "scene": "RandomLabels",
+   "en": "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its shuffled label right. <bookmark mark='b'/> In the first few steps, the pages whose label happens to be true pull ahead: by step 3, 76 percent of them are right, against 57 percent of the others. The network starts by learning the real difference between the authors. Then it memorizes the rest, and by step 30 every page, true or not, is fit. With 300,034 weights for 448 pages, memorizing is quick.",
+   "zh": "它是按什么顺序记住的？把打乱后的页面分成两半：碰巧有大约一半拿回了自己真正的作者，其余的拿到的是错的。<bookmark mark='a'/>网络答对一页的打乱标签时，这一页就亮起来。<bookmark mark='b'/>最初几步，标签碰巧正确的那些页领先：到第3步，它们有76%答对了，其余的只有57%。网络先学到的，是两位作者之间真实的区别。然后它再把剩下的记住，到第30步，每一页，不管标签真假，都拟合上了。448页、300034个权重，记住它们很快。"
+  },
   "826660b4e42d": {
    "scene": "DoubleDescent",
    "en": "Chapter four. Double descent.",
