@@ -161,7 +161,7 @@ class Forcing(VoiceoverScene):
             motion = "by the end, the two move about equally smoothly."
         with self.voiceover(
             f"We trained both on {T}-frame clips, with the same network and the same number of steps, the first frame "
-            f"always given. Then we gave each the first frame of a real clip and asked for {Lg - 1} more, one at a "
+            f"always given. <bookmark mark='r'/> Then we gave each the first frame of a real clip and asked for {Lg - 1} more, one at a "
             f"time, looking back at most {T - 1} frames. <bookmark mark='a'/> Teacher forcing: in its first {T} new "
             f"frames the judge reads the right letter {100 * early_t:.0f} percent of the time; in the last {T}, "
             f"{100 * late_t:.0f}. <bookmark mark='b'/> Diffusion forcing: {100 * early_f:.0f} percent, then "
@@ -174,8 +174,10 @@ class Forcing(VoiceoverScene):
             # rolling forward, live: the frames appear as they're written, the curve drawing beside them
             self.play(FadeIn(lt), *[FadeIn(r_[0]) for r_ in rt], Create(given[:2]), FadeIn(gl), Create(marks[0]), FadeIn(ml),
                       Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), Create(vt))
+            vo.wait_until("r")
+            self.roll(rt, ct, tf, TEACH, ax, cols, Lg)  # written while the narration describes the rollout
             vo.wait_until("a")
-            self.roll(rt, ct, tf, TEACH, ax, cols, Lg)
+            self.play(Indicate(ct, color=TEACH, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(lf), *[FadeIn(r_[0]) for r_ in rf], Create(given[2:]), Create(marks[1]))
             self.roll(rf, cf, ff, FORCE, ax, cols, Lg)
