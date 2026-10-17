@@ -3028,7 +3028,36 @@
     "start": "开始",
     "finish": "完成",
     "the table of scores, \\ one head, \\ $16$-bit numbers": "分数表，\\ 一个头，\\ $16$位数字",
-    "the passage so far: \\ which character comes next?": "目前为止的段落：\\ 下一个字符是什么？"
+    "the passage so far: \\ which character comes next?": "目前为止的段落：\\ 下一个字符是什么？",
+    "The $5$-letter model, writing as it reads": "5字母模型，边读边写",
+    "letters read": "已读字母",
+    "what it writes": "它写出的内容",
+    "copied": "照抄",
+    "red: \\ inside a stretch of $20$ letters or more, copied word for word from what it read; \\ bits: \\ on the Falcon passage": "红色：\\ 属于从读过的文字里逐字照抄、长达$20$个字母以上的片段；\\ 比特：\\ 在《马耳他之鹰》段落上",
+    "time in the left bump: \\ $66\\%$ \\\\ its share of the density: \\ $67\\%$": "待在左边鼓包的时间：\\ $66\\%$ \\\\ 它在密度中所占的份额：\\ $67\\%$",
+    "time in the left bump, so far:": "目前待在左边鼓包的时间：",
+    "data": "数据",
+    "the score, \\ at every noise level": "分数函数，\\ 在每个噪声水平上",
+    "words in use:": "在用的词：",
+    "test pages right:": "判对的测试页：",
+    "rounds of boosting: \\ one small tree each \\ (all $70$ rates)": "提升的轮数：\\ 每轮一棵小树 \\ （全部$70$个词频）",
+    "training pages:": "训练页：",
+    "new pages:": "新的书页：",
+    "rounds \\ (log scale)": "轮数 \\ （对数刻度）",
+    "spread of the \\\\ pages along \\\\ the line": "书页沿 \\\\ 这条直线的 \\\\ 散布",
+    "a principal component": "一个主成分",
+    "the direction along which the data spreads most \\\\ (shown here with two of the $70$ word rates)": "数据散布得最开的那个方向 \\\\ （这里只用$70$个词频中的两个来展示）",
+    "direction 1 $=$": "方向1 $=$",
+    "(all $70$ word rates)": "（全部$70$个词频）",
+    "one circle per quantity": "每个量一个圆圈",
+    "shaded: \\ observed": "涂阴影：\\ 观测到的",
+    "empty: \\ hidden": "留空：\\ 隐藏的",
+    "arrow: \\ depends directly on": "箭头：\\ 直接依赖于",
+    "the $448$ training pages, \\\\ each given a coin flip": "$448$个训练页，\\\\ 每页配一个抛硬币的结果",
+    "the size of the fitted weights \\\\ (log scale)": "拟合出的权重的大小 \\\\ （对数刻度）",
+    "the residual block so far": "目前为止的残差块",
+    "1. \\ pre-norm": "1. \\ 前置归一化",
+    "3. \\ a gated MLP": "3. \\ 带门控的MLP"
   },
   "phrases": {
     "width": "宽度",
@@ -3453,6 +3482,14 @@
     [
       "^chance of acceptance, \\\\ at \\$(\\d+)\\$ places in the passage$",
       "被接受的概率，\\\\ 在段落中的$\\1$个位置"
+    ],
+    [
+      "^depth \\$([^$]+)\\$$",
+      "深度$\\1$"
+    ],
+    [
+      "^\\\\text\\{round \\} ?([\\d{},]+)$",
+      "\\\\text{第}\\1\\\\text{轮}"
     ]
   ]
 }
