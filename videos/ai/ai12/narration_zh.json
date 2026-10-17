@@ -84,7 +84,7 @@
   "2fff185a4992": {
    "scene": "Rules",
    "en": "The second fix is smarter. Before writing, read what the memory already says for this key, and write only the difference: what should be there, minus what is there. That's the delta rule, Widrow and Hoff's learning rule from 1960. <bookmark mark='a'/> It matters when the world changes. The door is open; later, the door is closed. Adding stores both, and answers with a mixture. The delta rule replaces the old value with the new. <bookmark mark='b'/> Here are 16 keys, rewritten 256 times with new values, then asked for the latest. Adding: an error of 19, it remembers every value ever written. Decaying: 0.92. The delta rule: 0.23.",
-   "zh": "第二个办法更聪明。写入之前，先读一读记忆里这个键现在对应着什么，然后只写入差值：应该有的，减去已经有的。这就是δ规则，威德罗和霍夫在1960年提出的学习规则。<bookmark mark='a'/>当世界在变化时，这一点就很要紧。门开着；后来，门关上了。只做加法，两条都会存下来，回答的时候给出一个混合。δ规则则用新值替换旧值。<bookmark mark='b'/>这里有16个键，用新的值重写了256次，然后问它们最新的值。只做加法：误差是19，它记住了写进去过的每一个值。加上衰减：0.92。δ规则：0.23。"
+   "zh": "第二个办法更聪明。写入之前，先读一读记忆里这个键现在对应着什么，然后只写入差值：应该有的，减去已经有的。这就是δ规则，威德罗和霍夫在1960年提出的学习规则。<bookmark mark='a'/>当世界在变化时，这一点就很要紧。门开着；后来，门关上了。只做加法，两条都会存下来，答出来的是两者的混合。δ规则则用新值替换旧值。<bookmark mark='b'/>这里有16个键，用新的值重写了256次，然后问它们最新的值。只做加法：误差是19，它记住了写进去过的每一个值。加上衰减：0.92。δ规则：0.23。"
   },
   "fc12a0569bdc": {
    "scene": "Rules",
@@ -99,7 +99,7 @@
   "1cb1021927fe": {
    "scene": "SSM",
    "en": "A different road to the same place started in control theory. A state-space model is a differential equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='a'/> Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. <bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; large steps, and it's gone in a few tokens.",
-   "zh": "通往同一个地方的另一条路，起点在控制理论。状态空间模型是一个微分方程：一个隐状态h随时间演化，由输入x推动，再读出为y。<bookmark mark='a'/>以Δ为步长去读一段文本，它就变成了一个递推：先把状态缩小，再加上输入。<bookmark mark='b'/>步长决定了记忆。步子小，一个输入会停留很久；步子大，几个词元之后它就没了。"
+   "zh": "通往同一个地方的另一条路，起点在控制理论。状态空间模型是一个微分方程：一个隐状态h随时间演化，由输入x推动，读出来就是y。<bookmark mark='a'/>以Δ为步长去读一段文本，它就变成了一个递推：先把状态缩小，再加上输入。<bookmark mark='b'/>步长决定了记忆。步子小，一个输入会停留很久；步子大，几个词元之后它就没了。"
   },
   "2f33d5ae8dd0": {
    "scene": "SSM",
