@@ -2835,7 +2835,16 @@
     "\\text{tokens} = \\operatorname{BPE}\\big(\\operatorname{round}(\\gamma \\cdot \\operatorname{DCT}(a))\\big)": "\\text{词元} = \\operatorname{BPE}\\big(\\operatorname{round}(\\gamma \\cdot \\operatorname{DCT}(a))\\big)",
     "action expert": "动作专家",
     "a small extra network on the vision-language model, \\\\ whose only job is smooth arm motion \\\\ (not Part 13's mixture-of-experts experts)": "挂在视觉–语言模型上的一个额外小网络，\\\\ 唯一的任务是输出平滑的机械臂动作 \\\\ （不是第13部分混合专家模型里的专家）",
-    "the slowest cosine wave": "最慢的余弦波"
+    "the slowest cosine wave": "最慢的余弦波",
+    "each weight: \\ $16$ bits $=$ $2$ bytes": "每个权重：\\ $16$比特 $=$ $2$字节",
+    "memory bandwidth: \\\\ $3.35$ TB a second": "内存带宽：\\\\ 每秒$3.35$ TB",
+    "training: \\ the weights change": "训练：\\ 权重在变",
+    "inference: \\ the weights frozen, \\ tokens out": "推断：\\ 权重冻结，\\ 输出词元",
+    "learn from \\\\ each example": "从每个样本 \\\\ 中学习",
+    "w \\approx s_{\\text{tensor}} \\cdot s_{\\text{block}} \\cdot m": "w \\approx s_{\\text{张量}} \\cdot s_{\\text{块}} \\cdot m",
+    "FP4 (E2M1): \\ a tiny float": "FP4（E2M1）：\\ 一种很小的浮点数",
+    "a power of two, \\ plus a little detail within it: \\\\ $2$ bits for the power, \\ $1$ for the detail, \\ $1$ for the sign": "一个2的幂，\\ 再加上幂之内的一点细节：\\\\ $2$比特存幂，\\ $1$比特存细节，\\ $1$比特存符号",
+    "orthogonal: \\ a pure rotation, \\ lengths unchanged, \\ undone exactly": "正交：\\ 纯粹的旋转，\\ 长度不变，\\ 可以精确还原"
   },
   "phrases": {
     "width": "宽度",
@@ -3236,6 +3245,10 @@
     [
       "^the first \\$(\\d+)\\$ cosine waves, \\\\ added up$",
       "最前面$\\1$个余弦波，\\\\ 叠加起来"
+    ],
+    [
+      "^gap (\\$[^$]+\\$)$",
+      "间距 \\1"
     ]
   ]
 }
