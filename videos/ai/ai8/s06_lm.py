@@ -207,6 +207,7 @@ class NeuralLM(VoiceoverScene):
         board = scoreboard(rows, highlight=(i + 1, i + 2), max_bits=8.0)
         board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
         glow = SurroundingRectangle(VGroup(board.rows[i + 1], board.rows[i + 2]), color=C.NEURAL, buff=0.08, corner_radius=0.08)
+        gpt = [j for j, r in enumerate(rows) if "GPT-2" in r["label"]]
         samples = d["samples"]
         txt = VGroup(Text(samples[0][0], font="DejaVu Serif", font_size=20, color=GREY_B),
                      Text(" ".join(samples[0][1].split())[:90] + " …", font="DejaVu Serif", font_size=20, color=WHITE))
@@ -222,7 +223,10 @@ class NeuralLM(VoiceoverScene):
             self.play(FadeIn(board))
             self.play(Create(glow))
             vo.wait_until("a")
-            self.play(FadeOut(board), FadeOut(glow))
+            if gpt:  # the gap the rest of the series closes
+                self.play(Transform(glow, SurroundingRectangle(VGroup(*[board.rows[j] for j in gpt]), color=GREY_A, buff=0.08,
+                                                               corner_radius=0.08)))
+        self.play(FadeOut(board), FadeOut(glow))
         with self.voiceover(
             "Here's what it writes, starting from part four's prompt: <bookmark mark='a'/> English-shaped, "
             "word-shaped, and not yet making sense."
