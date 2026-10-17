@@ -2845,7 +2845,32 @@
     "FP4 (E2M1): \\ a tiny float": "FP4（E2M1）：\\ 一种很小的浮点数",
     "a power of two, \\ plus a little detail within it: \\\\ $2$ bits for the power, \\ $1$ for the detail, \\ $1$ for the sign": "一个2的幂，\\ 再加上幂之内的一点细节：\\\\ $2$比特存幂，\\ $1$比特存细节，\\ $1$比特存符号",
     "orthogonal: \\ a pure rotation, \\ lengths unchanged, \\ undone exactly": "正交：\\ 纯粹的旋转，\\ 长度不变，\\ 可以精确还原",
-    "a prompt: \\ three examples, \\ then a question \\ (from the GPT-3 paper)": "一个提示词：\\ 三个例子，\\ 然后一道题 \\ （出自GPT-3论文）"
+    "a prompt: \\ three examples, \\ then a question \\ (from the GPT-3 paper)": "一个提示词：\\ 三个例子，\\ 然后一道题 \\ （出自GPT-3论文）",
+    "how strongly it's on $\\times$ how much the answer cares": "打开的强度 $\\times$ 答案对它有多在意",
+    "an MLP: \\ tangled": "MLP：\\ 缠在一起",
+    "a transcoder: \\ a few readable features": "转码器：\\ 少数几个读得懂的特征",
+    "same job": "同样的工作",
+    "a feature: \\\\ ``inside a quotation''": "一个特征：\\\\ “在引号里面”",
+    "its shadow on the feature: \\\\ how strongly the feature is on": "它在这个特征上的影子：\\\\ 这个特征打开得有多强",
+    "a feature is a direction": "特征就是一个方向",
+    "neuron": "神经元",
+    "one number in an MLP's hidden layer: \\\\ Part 8's units": "MLP隐藏层里的一个数：\\\\ 第8部分的单元",
+    "features active per vector \\ (log scale)": "每个向量里活跃的特征数 \\ （对数刻度）",
+    "variance left unexplained": "未被解释的方差",
+    "L1 penalty": "L1惩罚",
+    "f = \\operatorname{ReLU}(W_e x + b_e), \\quad \\text{loss} + ": "f = \\operatorname{ReLU}(W_e x + b_e), \\quad \\text{损失} + ",
+    "_i], \\quad \\text{loss} + ": "_i], \\quad \\text{损失} + ",
+    "chapter two's: \\ the penalty also shrinks every activation": "第2章的做法：\\ 惩罚也会压小每一个激活值",
+    "TopK \\ (OpenAI, 2024): \\ exactly $k$ features, \\ no penalty": "TopK \\ （OpenAI，2024）：\\ 恰好$k$个特征，\\ 没有惩罚",
+    "JumpReLU \\ (Gemma Scope, 2024): \\ a learned threshold per feature": "JumpReLU \\ （Gemma Scope，2024）：\\ 每个特征一个学出来的阈值",
+    "rebuilds too small by: \\ L1 $22\\%$ \\ on average, \\ TopK $0\\%$": "重建平均偏小：\\ L1 $22\\%$，\\ TopK $0\\%$",
+    "newer still: \\ transcoders predict a layer's output from its input; \\\\ crosscoders share one dictionary across layers, \\ or across a model before and after fine-tuning": "更新的方法：\\ 转码器根据一层的输入预测它的输出；\\\\ 交叉编码器让多个层共用一本字典，\\ 或让一个模型微调前后共用一本",
+    "L.~Gao et al., \\textit{Scaling and Evaluating Sparse Autoencoders} (2024); \\ S.~Rajamanoharan et al., \\textit{JumpReLU SAEs} (2024)": "L.~Gao等，\\textit{Scaling and Evaluating Sparse Autoencoders}（2024）；\\ S.~Rajamanoharan等，\\textit{JumpReLU SAEs}（2024）",
+    "one vector's $12$ candidate features \\ (schematic)": "一个向量的$12$个候选特征 \\ （示意图）",
+    "TopK, \\ $k = 3$: \\ keep the $3$ biggest": "TopK，\\ $k = 3$：\\ 保留最大的$3$个",
+    "JumpReLU: \\ a threshold line per feature": "JumpReLU：\\ 每个特征一条阈值线",
+    "$W$: \\ squeeze $5$ numbers into $2$; \\\\ $W^{\\top}$: \\ spread them back out to $5$; \\\\ ReLU: \\ cut off negatives": "$W$：\\ 把$5$个数挤成$2$个；\\\\ $W^{\\top}$：\\ 再摊开回$5$个；\\\\ ReLU：\\ 切掉负值",
+    "the weighted rebuild error": "加权重建误差"
   },
   "phrases": {
     "width": "宽度",
@@ -3250,6 +3275,10 @@
     [
       "^gap (\\$[^$]+\\$)$",
       "间距 \\1"
+    ],
+    [
+      "^each feature on \\$(\\d+)\\\\%\\$ of the time$",
+      "每个特征在$\\1\\\\%$的时间里打开"
     ]
   ]
 }
