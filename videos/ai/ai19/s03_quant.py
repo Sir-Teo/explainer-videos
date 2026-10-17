@@ -125,13 +125,14 @@ class Quant(VoiceoverScene):
         b_nv = label(rf"${float(bpw['nvfp4']):.2f}$ bits per weight", font_size=20, color=GREY_A).next_to(f_nv, DOWN, buff=0.12)
         mset = MathTex(r"m \in \pm\{0, \tfrac12, 1, \tfrac32, 2, 3, 4, 6\}", font_size=28).move_to([0, -0.85, 0])
         # results
-        rows = [("fp32", r"32-bit floats", GREY_B), ("int4", r"$4$-bit integers, \ per row", C.INTERVAL), ("mxfp4", r"MXFP4", C.BITS),
-                ("nvfp4", r"NVFP4", C.TRUE_P)]
+        rows = [("fp32", r"32-bit floats", GREY_B), ("int4", r"$4$-bit integers, \ per row", C.INTERVAL),
+                ("fp4", MODE_NAMES["fp4"], GREY_A), ("mxfp4", r"MXFP4", C.BITS), ("nvfp4", r"NVFP4", C.TRUE_P)]
+        f = dict(f, fp4=float(load("quant")["bits_fp4"]))  # FP4 with an exact (fp32) scale per block, from the first section
         vals = [float(f[k]) for k, _, _ in rows]
         lo, hi = vals[0] - 0.03, max(vals) + 0.02
         bars = VGroup()
         for i, ((k, nm, col), v) in enumerate(zip(rows, vals)):
-            y = -1.75 - i * 0.48
+            y = -1.6 - i * 0.44
             w = max((v - lo) / (hi - lo) * 5.0, 0.02)
             b = Rectangle(width=w, height=0.32, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to([-0.6 + w / 2, y, 0])
             bars.add(VGroup(label(nm, font_size=20, color=col).move_to([-0.85, y, 0], aligned_edge=RIGHT), b,
@@ -139,7 +140,7 @@ class Quant(VoiceoverScene):
         bl = label(rf"bits per character \ (axis from ${lo:.2f}$)", font_size=18, color=GREY_A).next_to(bars, LEFT, buff=0.4).shift(UP * 0.5)
         keep_in_frame(bl)
         best = min(("int4", "mxfp4", "nvfp4"), key=lambda k: float(f[k]))
-        d = {k: float(f[k]) - vals[0] for k in ("int4", "mxfp4", "nvfp4")}
+        d = {k: float(f[k]) - vals[0] for k in ("int4", "fp4", "mxfp4", "nvfp4")}
         say = {"int4": "plain four-bit integers", "mxfp4": "MXFP4", "nvfp4": "NVFP4"}
         with self.voiceover(
             "Two four-bit float formats now matter, and the difference between them is all in the scales. "
@@ -151,7 +152,10 @@ class Quant(VoiceoverScene):
             f"for the whole tensor keeps everything in range. It costs {float(bpw['nvfp4']):.1f} bits per weight "
             f"instead of {float(bpw['mxfp4']):.2f}. <bookmark mark='c'/> On our transformer: "
             f"{say['mxfp4']} loses {d['mxfp4']:.3f} bits a character, {say['nvfp4']} {d['nvfp4']:.3f}, and plain "
-            f"four-bit integers with a scale per row {d['int4']:.3f}. The best here is {say[best]}."
+            f"four-bit integers with a scale per row {d['int4']:.3f}. The best here is {say[best]}. For comparison, "
+            f"FP4 with an exact scale for every block of thirty-two, from before, lost {d['fp4']:.3f}: "
+            + ("rounding the scale to a power of two is what costs MXFP4 its extra."
+               if d["mxfp4"] > d["fp4"] + 0.003 else "the rounded scales cost almost nothing.")
         ) as vo:
             self.play(FadeIn(mx[0]), FadeIn(mx[1]), FadeIn(mx[2]), FadeIn(mx[3]), FadeIn(mset))
             vo.wait_until("a")
