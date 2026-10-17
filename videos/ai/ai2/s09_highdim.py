@@ -74,19 +74,32 @@ class HighDim(VoiceoverScene):
         sup = label(r"more features than dimensions, if they need only be \textit{nearly} perpendicular: \\ "
                     r"\textit{superposition} \ (Part 20)", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.4)
         tag = label(r"schematic", font_size=22, color=GREY_B).next_to(fan, RIGHT, buff=0.3)
+        # a feature: a direction; how far a vector reaches along it says how strongly the idea is present
+        fdir = Arrow(ORIGIN, [2.2, 0.6, 0], buff=0, color=C.BITS, stroke_width=4, max_tip_length_to_length_ratio=0.12)
+        vec = Arrow(ORIGIN, [1.0, 1.4, 0], buff=0, color=C.TRUE_P, stroke_width=4, max_tip_length_to_length_ratio=0.15)
+        u_ = np.array([2.2, 0.6, 0]) / np.linalg.norm([2.2, 0.6])
+        foot = (np.array([1.0, 1.4, 0]) @ u_) * u_
+        feat_pic = VGroup(fdir, vec, DashedLine([1.0, 1.4, 0], foot, color=GREY_B, stroke_width=2),
+                          Line(ORIGIN, foot, color=C.BITS, stroke_width=9, stroke_opacity=0.6),
+                          label(r"a feature's direction", font_size=20, color=C.BITS).next_to(fdir, DOWN, buff=0.12).align_to(fdir, RIGHT),
+                          label(r"a word's vector", font_size=20, color=C.TRUE_P).next_to(vec.get_end(), UP, buff=0.08))
+        feat = gloss(r"feature", r"one idea a model keeps track of, stored as a direction:\\ how far a vector reaches "
+                     r"along it says how strongly the idea is there", picture=feat_pic, width=4.6)
+        feat.to_edge(LEFT, buff=0.3).set_y(-0.6)
         with self.voiceover(
             "So a high-dimensional space is full of room. <bookmark mark='a'/> Ten thousand random directions in 768 "
             "dimensions: every pair of them lies between seventy-nine and a hundred and one degrees apart. "
-            "<bookmark mark='b'/> A model can keep far more features than it has dimensions, as long as they only "
-            "need to be nearly perpendicular. That idea, superposition, is how we'll read the inside of a model in "
-            "part twenty."
+            "<bookmark mark='b'/> A feature is one idea a model keeps track of, stored as a direction. A model can "
+            "keep far more features than it has dimensions, as long as their directions only need to be nearly "
+            "perpendicular. Packing in more directions than dimensions this way is called superposition, and it's "
+            "how we'll read the inside of a model in part twenty."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(l) for l in fan], lag_ratio=0.03), FadeIn(tag), run_time=1.8)
             self.play(FadeIn(line1))
             vo.wait_until("b")
-            self.play(FadeIn(sup))
+            self.play(FadeIn(sup), FadeIn(feat))
         self.wait(0.3)
         self.clear_scene()
 

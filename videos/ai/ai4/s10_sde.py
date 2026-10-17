@@ -62,16 +62,30 @@ class SDE(VoiceoverScene):
         VGroup(ou, ou_n).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, 1.0, 0])
         settle = label(rf"settles to a bell: \ width $\sigma / \sqrt{{2\theta}} = {s_inf:.2f}$", font_size=24,
                        color=MODEL).next_to(ou_n, DOWN, buff=0.3).align_to(ou_n, LEFT)
+        # dt and dW, pictured: one tiny step is a push along f, then a random kick
+        p0 = np.array([-1.2, -0.2, 0])
+        p1 = p0 + np.array([1.3, 0.35, 0])
+        p2 = p1 + np.array([0.35, -0.55, 0])
+        step_pic = VGroup(Dot(p0, radius=0.07, color=WHITE),
+                          Arrow(p0, p1, buff=0.05, color=DRIFT, stroke_width=4, max_tip_length_to_length_ratio=0.2),
+                          Arrow(p1, p2, buff=0.05, color=NOISE, stroke_width=4, max_tip_length_to_length_ratio=0.3),
+                          Dot(p2, radius=0.07, color=WHITE))
+        step_pic.add(label(r"push: \ $f(x)\,dt$", font_size=22, color=DRIFT).next_to(step_pic[1], UP, buff=0.08),
+                     label(r"kick: \ $g\,dW_t$", font_size=22, color=NOISE).next_to(step_pic[2], RIGHT, buff=0.1))
+        dd = gloss(r"$dt$, \ $dW_t$", r"$dt$: \ a tiny tick of time; \ $dW_t$: \ the tiny random kick\\ that "
+                   r"Brownian motion makes in that tick", picture=step_pic, width=4.8, color=NOISE)
+        dd.to_edge(DOWN, buff=0.3).set_x(0)
         with self.voiceover(
             "Brownian motion is pure jiggle. Add a push, and you have a stochastic differential equation. At each "
-            "instant, the change in x is a push, f of x times dt, <bookmark mark='a'/> plus a random kick: g times a "
-            "small piece of Brownian motion. <bookmark mark='b'/> To simulate one, take small steps: push, then "
+            "instant, the change in x is a push, f of x times dt, where dt is a tiny tick of time, "
+            "<bookmark mark='a'/> plus a random kick: g times dW, the tiny piece of Brownian motion in that tick. "
+            "<bookmark mark='b'/> To simulate one, take small steps: push, then "
             "kick, with a kick the size of the square root of the step."
         ) as vo:
             self.play(Write(sde))
             self.play(FadeIn(b1))
             vo.wait_until("a")
-            self.play(FadeIn(b2))
+            self.play(FadeIn(b2), FadeIn(dd))
             vo.wait_until("b")
             self.play(Write(em), FadeIn(em_n))
         with self.voiceover(
@@ -80,7 +94,7 @@ class SDE(VoiceoverScene):
             "and they settle into a bell around zero, its width set by the balance between the two. It's called the "
             "Ornstein–Uhlenbeck process, and it's the one diffusion models use."
         ) as vo:
-            self.play(FadeOut(em), FadeOut(em_n), Create(ax), FadeIn(xl), FadeIn(ou), FadeIn(ou_n))
+            self.play(FadeOut(em), FadeOut(em_n), FadeOut(dd), Create(ax), FadeIn(xl), FadeIn(ou), FadeIn(ou_n))
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.02), run_time=3.0, rate_func=linear)
             vo.wait_until("a")
             self.play(FadeIn(band), Create(mline))
@@ -116,7 +130,8 @@ class SDE(VoiceoverScene):
             "And again, follow the density instead of the particles. <bookmark mark='a'/> Start with data that has "
             "two peaks, and let every point drift toward zero and jiggle, the way the Ornstein–Uhlenbeck process "
             "says. <bookmark mark='b'/> Twenty thousand random particles, and the solution of one deterministic "
-            "equation, the Fokker–Planck equation, move together. <bookmark mark='c'/> Wait long enough, and every "
+            "equation, the Fokker–Planck equation, a rule that says exactly how the cloud's shape changes next, with "
+            "no dice involved, move together. <bookmark mark='c'/> Wait long enough, and every "
             "trace of the data is gone: what's left is a plain standard bell. That's exactly what a diffusion model "
             "does to its training images."
         ) as vo:
@@ -160,8 +175,9 @@ class SDE(VoiceoverScene):
         with self.voiceover(
             "Can the film run backwards, from the bell back to the data? In 1982, Brian Anderson showed that "
             "reversed in time, it's another stochastic differential equation, with one extra term: "
-            "<bookmark mark='a'/> the score, the slope of the log of the density at that moment. "
-            "<bookmark mark='b'/> The score points uphill, toward where the data is more likely."
+            "<bookmark mark='a'/> the score. Here the word means something new: at each point, an arrow saying which "
+            "way the data gets more likely, and how strongly. Exactly, it's the slope of the log of the density at "
+            "that moment. <bookmark mark='b'/> The score points uphill, toward where the data is more likely."
         ) as vo:
             self.play(Write(rev), FadeIn(rn))
             vo.wait_until("a")
@@ -190,7 +206,8 @@ class SDE(VoiceoverScene):
         nxt = label(r"Part 14: \ a network learns the score from millions of images", font_size=28, color=C.BITS)
         nxt.to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Know the score at every noise level, and you can turn noise into data. <bookmark mark='a'/> It's the "
+            "Know the score at every noise level, every point on the slide from data into noise, and you can turn "
+            "noise into data. <bookmark mark='a'/> It's the "
             "field of arrows from the start of this part. <bookmark mark='b'/> There, it was computed exactly from "
             "the letters. A diffusion model learns it from millions of images, with a network, and that's part "
             "fourteen."

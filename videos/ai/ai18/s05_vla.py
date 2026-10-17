@@ -56,12 +56,16 @@ class VLA(VoiceoverScene):
         fml = label(r"noise $\to$ a smooth motion", font_size=20, color=C.INTERVAL).next_to(smooth, DOWN, buff=0.35)
         cite_ = cite(r"A.~Brohan et al., \textit{RT-2} (2023); \ K.~Black et al., \textit{$\pi_0$} (2024)", corner=DR)
         tag = note(r"schematic").to_corner(DL, buff=0.3)
+        ae = gloss(r"action expert", r"a small extra network on the vision-language model, \\ whose only job is smooth arm motion \\ "
+                   r"(not Part 13's mixture-of-experts experts)", corner=UR, width=5.6, color=C.INTERVAL)
         with self.voiceover(
             "Robots are where agents meet physics. A vision-language-action model starts from a model that already "
             "reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an "
             "instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as "
-            "tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert that generates smooth "
-            "motions by flow matching, part fourteen's machinery, now drawing trajectories instead of pictures."
+            "tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert: a small extra network "
+            "attached to the vision-language model, whose only job is to output smooth arm motions. It's not one of "
+            "part thirteen's mixture-of-experts experts. It generates those motions by flow matching, part fourteen's "
+            "machinery, now drawing trajectories instead of pictures."
         ) as vo:
             self.play(Create(vlm), FadeIn(vl), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
@@ -71,6 +75,7 @@ class VLA(VoiceoverScene):
             self.play(GrowArrow(ta), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.15) for t_ in toks], lag_ratio=0.2), FadeIn(tkl))
             vo.wait_until("b")
             self.play(FadeOut(VGroup(toks, tkl, ta)), GrowArrow(arrows[2]), Create(act), FadeIn(al))
+            self.play(FadeIn(ae))
             self.play(FadeIn(noisy, lag_ratio=0.05), FadeIn(fml))
             self.play(Transform(noisy, smooth), run_time=1.5)
             self.play(Create(path), GrowArrow(arrows[3]), FadeIn(arm))
@@ -194,6 +199,16 @@ class VLA(VoiceoverScene):
         tk = label(rf"$\gamma = {gam:.0f}$: \ ${nz}$ of ${H}$ numbers \\ survive the rounding; \ rebuilt to ${err:.3f}$; \\ "
                    r"byte-pair encoding packs \\ the zeros and repeats", font_size=18, color=GREY_A).next_to(toks, DOWN, buff=0.2)
         keep_in_frame(VGroup(toks, tk))
+        # any smooth motion is a sum of cosine waves, slow ones first: the first 1, 2, 3, 7 of them, added up
+        def partial(k):
+            ck = c.copy()
+            ck[k:] = 0
+            return VMobject(color=WHITE, stroke_width=2.5).set_points_smoothly([ax.c2p(i, v) for i, v in enumerate(idct(ck, norm="ortho"))])
+
+        ks_ = (1, 2, 3, 7)
+        kl_ = [label(t_, font_size=18, color=WHITE).next_to(ax, DOWN, buff=0.15) for t_ in (
+            r"the slowest cosine wave", r"the first $2$ cosine waves, \ added up", r"the first $3$ cosine waves, \ added up",
+            r"the first $7$ cosine waves, \ added up")]
         cite_ = cite(r"K.~Black et al., \textit{$\pi_0$} (2024); \ K.~Pertsch et al., \textit{FAST} (2025)", corner=DR)
         with self.voiceover(
             "Here are the two answers, exactly. <bookmark mark='a'/> Physical Intelligence's pi zero predicts a whole "
@@ -201,8 +216,10 @@ class VLA(VoiceoverScene):
             "noise, and train the action expert to predict the straight-line velocity between them, given what the "
             "robot sees. Ten steps draw a chunk. <bookmark mark='b'/> The other answer turns actions into tokens a "
             "language model can write. Taking every time step as a token works badly: neighbouring steps are nearly "
-            "the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first. A cosine "
-            "transform puts a smooth motion's information into a few numbers; <bookmark mark='d'/> round them, and on "
+            "the same, so each token says almost nothing. <bookmark mark='c'/> FAST compresses first, with a cosine "
+            "transform. <bookmark mark='k'/> Any smooth motion is a sum of cosine waves, slow ones first; the "
+            "transform lists how much of each wave you need, and a smooth motion needs only the first few. "
+            "<bookmark mark='d'/> Round those amounts, and on "
             f"this chunk only {nz} of {H} survive, yet they rebuild the motion to within {err:.3f}; byte-pair encoding, "
             "from part sixteen, then packs what's left into a handful of tokens."
         ) as vo:
@@ -215,7 +232,15 @@ class VLA(VoiceoverScene):
             self.play(Create(ax), FadeIn(al), Create(sig))
             vo.wait_until("c")
             self.play(Create(bx), FadeIn(bl), LaggedStart(*[Create(b_) for b_ in bars], lag_ratio=0.02), run_time=1.5)
+            vo.wait_until("k")
+            ps_ = partial(ks_[0])
+            self.play(sig.animate.set_stroke(opacity=0.35), Create(ps_), FadeIn(kl_[0]), bars[0].animate.set_color(WHITE))
+            for j in range(1, len(ks_)):
+                self.play(Transform(ps_, partial(ks_[j])), FadeTransform(kl_[j - 1], kl_[j]),
+                          *[b_.animate.set_color(WHITE) for b_ in bars[ks_[j - 1]:ks_[j]]], run_time=1.0)
             vo.wait_until("d")
+            self.play(FadeOut(ps_), FadeOut(kl_[-1]), sig.animate.set_stroke(opacity=1),
+                      *[b_.animate.set_color(C.BITS if q[i] != 0 else GREY_D) for i, b_ in enumerate(bars[:ks_[-1]])], run_time=0.5)
             self.play(Write(toks), FadeIn(tk), Create(rs))
         self.wait(0.3)
         self.clear_scene()

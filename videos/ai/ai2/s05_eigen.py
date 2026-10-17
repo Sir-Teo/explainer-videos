@@ -79,14 +79,19 @@ class Eigen(VoiceoverScene):
                  label(r"$Q$: \ turn back", font_size=30, color=C.TRUE_P)]
         for st in steps:
             st.to_edge(DOWN, buff=0.5).add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.1)
+        tr = MathTex(r"\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{\top} = \begin{bmatrix} a & c \\ b & d \end{bmatrix}",
+                     font_size=34)
+        tr_card = gloss(r"transpose \ $Q^{\top}$", r"flip a matrix across its diagonal;\\ for a turn like $Q$, "
+                        r"it is the same turn, undone", picture=tr, corner=DR, width=4.4, color=C.TRUE_P)
         Lm = np.diag(lam[::-1])  # 3 on the first axis, 1 on the second
         Qr = rot(-PI / 4)  # turns (1, 1) onto the x axis
         with self.voiceover(
             "Symmetric matrices, the ones that equal their own mirror image across the diagonal, behave best of "
             "all. <bookmark mark='a'/> Their eigenvalues are real numbers, and their eigenvectors are perpendicular. "
             "<bookmark mark='b'/> So the map is: turn, so the eigenvectors line up with the axes; stretch along each "
-            "axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. That's "
-            "the spectral theorem."
+            "axis by its eigenvalue; and turn back. <bookmark mark='c'/> A equals Q, Lambda, Q transpose. The "
+            "transpose flips a matrix across its diagonal, and for a turn like Q, that's the same turn, undone. "
+            "That's the spectral theorem."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(sb), FadeIn(sym), Create(circ))
             vo.wait_until("a")
@@ -98,6 +103,7 @@ class Eigen(VoiceoverScene):
                 self.play(FadeOut(steps[k]), run_time=0.3)
             vo.wait_until("c")
             self.play(FadeIn(fb), Write(f))
+            self.play(FadeIn(tr_card))
         assert np.allclose(Qr.T @ Lm @ Qr, S)
         self.wait(0.3)
         self.clear_scene()
@@ -120,18 +126,29 @@ class Eigen(VoiceoverScene):
         tag = label(r"illustrative data", font_size=22, color=GREY_B).to_corner(DR, buff=0.4)
         head = label(r"covariance: \ symmetric; \ its eigenvectors: \ the \textit{principal components}", font_size=30)
         head.to_edge(UP, buff=0.4)
+        cv = MathTex(r"\begin{bmatrix} " + rf"{cov[0, 0]:.2f} & {cov[0, 1]:.2f} \\ {cov[1, 0]:.2f} & {cov[1, 1]:.2f}"
+                     + r" \end{bmatrix}", font_size=34)
+        cv_note = VGroup(label(r"diagonal: \ how much $x$, and $y$, vary", font_size=20, color=GREY_A),
+                         label(r"off the diagonal: \ how much they rise and fall together", font_size=20,
+                               color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+        cov_card = gloss(r"covariance matrix", r"a table of how the data spreads out", picture=VGroup(cv, cv_note).arrange(
+            DOWN, buff=0.15), corner=UL, width=4.6, color=C.BITS)
+        cov_card.shift(DOWN * 0.7)
         with self.voiceover(
-            "Covariance matrices, which describe how data spreads out, are symmetric, and their eigenvectors point "
-            "along the directions in which the data spreads the most. <bookmark mark='a'/> These are the principal "
-            "components. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's "
+            "Covariance matrices describe how data spreads out: <bookmark mark='c'/> a table of how much each "
+            "coordinate varies, on the diagonal, and how much each pair rises and falls together, off it. They are "
+            "symmetric, and their eigenvectors point along the directions in which the data spreads the most. "
+            "<bookmark mark='a'/> These are the principal components. <bookmark mark='b'/> Keeping only the top few, and dropping the rest, is how we drew GPT-2's "
             "768-dimensional words in three dimensions at the start of this part."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.004), FadeIn(tag),
                       run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(cov_card))
             vo.wait_until("a")
             self.play(Create(ell), GrowArrow(pc1), GrowArrow(pc2))
             vo.wait_until("b")
-            self.play(Create(line), FadeOut(pc2))
+            self.play(Create(line), FadeOut(pc2), FadeOut(cov_card))
             self.play(*[ReplacementTransform(d, p) for d, p in zip(dots, proj)], run_time=2.0)
         self.wait(0.3)
         self.clear_scene()

@@ -61,9 +61,14 @@ class LowRank(VoiceoverScene):
         ey = label(r"the $k$ biggest pieces: \ the closest matrix of rank $k$", font_size=34, color=C.BITS)
         ey.move_to([0, -2.9, 0])
         cite_ = cite(r"C.~Eckart \& G.~Young, \textit{Psychometrika} (1936)", corner=DR)
+        rk = MathTex(r"\text{rank } 2: \quad \mathbf{u}_1 \mathbf{v}_1^{\top} + \mathbf{u}_2 \mathbf{v}_2^{\top}", font_size=34)
+        rk_card = gloss(r"rank", r"how many column-times-row pieces\\ it takes to build the table; \ "
+                        r"\textit{low rank}: \ a few do", picture=rk, width=4.6)
+        rk_card.move_to([3.7, 0.4, 0])
         with self.voiceover(
             "There's more. Written out, the decomposition says that any matrix is a sum of simple pieces, "
-            "<bookmark mark='a'/> each one a column times a row, weighted by a singular value. <bookmark mark='b'/> "
+            "<bookmark mark='a'/> each one a column times a row, weighted by a singular value. How many pieces a "
+            "table needs is its rank, and a low-rank table is one that a few pieces build. <bookmark mark='b'/> "
             "Keep the k biggest pieces, drop the rest, and you get the closest possible matrix built from only k "
             "pieces. No other choice comes closer. That's the Eckart–Young theorem, from 1936."
         ) as vo:
@@ -71,6 +76,7 @@ class LowRank(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(col), FadeIn(row), FadeIn(times))
             self.play(LaggedStart(*[FadeIn(s) for s in grid], lag_ratio=0.01), FadeIn(cap), run_time=1.5)
+            self.play(FadeIn(rk_card))
             vo.wait_until("b")
             self.play(FadeIn(ey), FadeIn(cite_))
         self.wait(0.3)
@@ -151,19 +157,23 @@ class LowRank(VoiceoverScene):
         tag = label(r"correspondence analysis: \ the SVD of $\dfrac{P(x, y) - P(x)P(y)}{\sqrt{P(x)P(y)}}$", font_size=26,
                     color=GREY_A).to_edge(DOWN, buff=0.5)
         found = label(r"vowels and consonants take turns", font_size=34, color=C.BITS).move_to(DOWN * 2.0)
+        dep = gloss(r"departure from independence", r"each pair's count, minus the count you'd expect\\ if letters "
+                    r"ignored each other: \ only the surprise is kept", width=6.0)
+        dep.move_to(UP * 1.75)
         with self.voiceover(
-            "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence, "
-            "and spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, o, u, "
-            "e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants "
+            "The pieces mean something, too. <bookmark mark='a'/> Take the way the table departs from independence: "
+            "compare each count with what you'd expect if letters ignored their neighbours, and keep only the "
+            "surprise. Spread the letters out along its strongest direction. <bookmark mark='b'/> At one end: i, a, "
+            "o, u, e. No one told the computer what a vowel is. From counts alone, it found that vowels and consonants "
             "take turns."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(axis), FadeIn(tag))
+            self.play(Create(axis), FadeIn(tag), FadeIn(dep))
             self.play(LaggedStart(*[AnimationGroup(Create(m), FadeIn(t, shift=DOWN * 0.1)) for m, t in zip(marks, labs)],
                                   lag_ratio=0.06), run_time=2.5)
             vo.wait_until("b")
-            self.play(Create(vow_box), *[Indicate(labs[k], color=C.BITS, scale_factor=1.4) for k in range(5)])
+            self.play(FadeOut(dep), Create(vow_box), *[Indicate(labs[k], color=C.BITS, scale_factor=1.4) for k in range(5)])
             self.play(FadeIn(found))
         self.wait(0.3)
         self.clear_scene()

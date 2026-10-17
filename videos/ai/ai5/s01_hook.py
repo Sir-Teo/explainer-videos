@@ -124,8 +124,9 @@ class Hook(VoiceoverScene):
         smap = series_map(current=5, done=4).scale(0.85).move_to(DOWN * 0.9)
         with self.voiceover(
             "These are the classics: least squares, logistic regression, nearest neighbours, support vector machines, "
-            "trees and their forests. <bookmark mark='a'/> Act two of the series, learning, starts here, and every "
-            "method is a few lines of numpy."
+            "trees and their forests. Regression is just the old name for fitting a formula to data. "
+            "<bookmark mark='a'/> Act two of the series, learning, starts here, and every method is a few lines of "
+            "numpy, Python's standard library for arrays of numbers."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub))
             vo.wait_until("a")

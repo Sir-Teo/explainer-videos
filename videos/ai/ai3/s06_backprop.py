@@ -60,13 +60,31 @@ class Backprop(VoiceoverScene):
                         label(r"each step's own derivative", font_size=24, color=GREY_A))
         legend.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(DR, buff=0.45)
         head = label(r"one input, one weight, one bias, a sigmoid, a squared error", font_size=30).to_edge(UP, buff=0.35)
+        # the squash, drawn under its node: an S-curve from 0 up to 1
+        sx = np.linspace(-3, 3, 40)
+        s_ax = VGroup(DashedLine([-0.55, 0, 0], [0.55, 0, 0], color=GREY_D, stroke_width=1.5, dash_length=0.05),
+                      DashedLine([-0.55, 0.5, 0], [0.55, 0.5, 0], color=GREY_D, stroke_width=1.5, dash_length=0.05))
+        s_curve = VMobject(stroke_color=C.MLP, stroke_width=3).set_points_smoothly(
+            [np.array([u / 3 * 0.55, 0.5 / (1 + np.exp(-2 * u)), 0]) for u in sx])
+        s_lab = VGroup(MathTex("0", font_size=18, color=GREY_B).next_to(s_ax[0], LEFT, buff=0.06),
+                       MathTex("1", font_size=18, color=GREY_B).next_to(s_ax[1], LEFT, buff=0.06))
+        squash = VGroup(s_ax, s_curve, s_lab).next_to(opn[2], DOWN, buff=0.35)
+        parts = gloss(r"weight, \ bias, \ sigmoid, \ squared error",
+                      r"$z = w\,x + b$: \ the input times a weight, plus a bias (a shift)\\"
+                      r"$a = \sigma(z)$: \ an S-curve squashes $z$ into $0$ to $1$\\"
+                      r"$\mathcal{L} = (a - y)^2$: \ the miss from the target $y$, squared", corner=DL, width=5.6, color=VALUE)
         with self.voiceover(
-            "Let's run it by hand, on the smallest network there is: one input, one weight, one bias, a squashing "
-            "function, and a squared error. <bookmark mark='a'/> Forwards first: the values flow from left to right, "
-            "and end in the loss, 0.854."
+            "Let's run it by hand, on the smallest network there is, drawn as a flowchart of operations called a "
+            "computation graph, each circle a node. One input, x, times one weight, plus one bias, a shift; "
+            "<bookmark mark='s'/> then a squashing function, the sigmoid, an S-curve that presses any number into "
+            "the range zero to one; and a squared error: the miss from the target y, squared. <bookmark mark='a'/> "
+            "Forwards first: the values flow from left to right, and end in the loss, 0.854."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(m) for m in ins + opn + [L_end]], lag_ratio=0.08),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.08), run_time=2.0)
+            self.play(FadeIn(parts))
+            vo.wait_until("s")
+            self.play(Create(s_curve), FadeIn(s_ax), FadeIn(s_lab))
             vo.wait_until("a")
             for k in range(8):
                 self.play(FadeIn(fwd[k], shift=RIGHT * 0.1), arrows[k].animate.set_color(VALUE), run_time=0.45)

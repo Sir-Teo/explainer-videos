@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai4.common import DATA, MODEL, curve, hist_shape, load, normal_pdf
+from videos.ai.ai4.common import DATA, MODEL, curve, density_picture, hist_shape, load, narrow_hist, normal_pdf
 
 
 
@@ -65,10 +65,17 @@ class Likelihood(VoiceoverScene, ThreeDScene):
         sv.add_updater(lambda m: m.set_value(self.ll(mu.get_value(), sg.get_value())))
         read = VGroup(MathTex(r"\text{score} =", font_size=40), sv).arrange(RIGHT, buff=0.2).move_to([4.6, 0.6, 0])
         best = label(r"the best: \ maximum likelihood", font_size=30, color=C.BITS).next_to(read, DOWN, buff=0.4)
+        dcard = gloss(r"probability density", r"the curve's height: \ how crowded the outcomes are there;\\ the area "
+                      r"between two points is the probability", picture=density_picture(), corner=DR, width=4.4,
+                      color=MODEL)
+        dp = dcard[1][-1]
         with self.voiceover(
             "Here are the thousand balls again. Which bell describes them best? <bookmark mark='a'/> Try one. Score "
-            "it like this: at each ball, read off the bell's height, take the log, and average over all the balls. "
-            "That's the log-likelihood: how well this bell predicted where the balls actually went. "
+            "it like this: at each ball, read off the bell's height. <bookmark mark='p'/> That height is a "
+            "probability density: how crowded the outcomes are there. Make a histogram's bars narrower and "
+            "narrower, and it becomes a smooth curve like this one; <bookmark mark='q'/> the area under it between "
+            "two points is the probability of landing between them. Take the log of the height, and average over "
+            "all the balls. That's the log-likelihood: how well this bell predicted where the balls actually went. "
             "<bookmark mark='b'/> A bell in the wrong place scores badly. <bookmark mark='c'/> So does one that's too "
             "narrow, <bookmark mark='d'/> or too wide. <bookmark mark='e'/> The best bell, the maximum likelihood "
             "fit, is the one under which the data was least surprising."
@@ -76,6 +83,11 @@ class Likelihood(VoiceoverScene, ThreeDScene):
             self.play(Create(ax), FadeIn(hist), FadeIn(hl))
             vo.wait_until("a")
             self.play(Create(bell), FadeIn(st), Write(f), FadeIn(fn), FadeIn(read))
+            vo.wait_until("p")
+            self.play(FadeIn(dcard))
+            self.play(Transform(dp[1], narrow_hist(dp)), run_time=1.5)
+            vo.wait_until("q")
+            self.play(dp[3].animate.set_fill(opacity=0.6), dp[4].animate.set_opacity(1))
             vo.wait_until("b")
             self.play(mu.animate.set_value(self.m), run_time=2.0)
             vo.wait_until("c")

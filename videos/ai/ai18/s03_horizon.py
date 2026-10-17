@@ -45,14 +45,18 @@ class Horizon(VoiceoverScene):
         f = cmath(r"P(\text{done})", "=", r"p", r"^{\,", r"n", r"}", colors=colors, font_size=44).move_to([4.4, -0.4, 0])
         half = DashedLine(ax.c2p(0, 0.5), ax.c2p(4, 0.5), color=GREY_D, stroke_width=1.5)
         v99 = 0.99 ** 100
+        hz = gloss(r"horizon", r"how many steps a task takes, \\ from start to finish", corner=DR, width=4.0, color=C.TRUE_P)
         with self.voiceover(
-            "Agents work in long chains of steps: read a page, click, write code, run it, read the error. Every "
+            "Agents work in long chains of steps: read a page, click, write code, run it, read the error. "
+            "<bookmark mark='h'/> How many steps a task takes, from start to finish, is its horizon, and every "
             "step has to go right. <bookmark mark='a'/> If each step succeeds with probability p, a task of n steps "
             "succeeds with p to the n. <bookmark mark='b'/> At ninety percent per step, a ten-step task already "
             f"fails two times in three. At ninety-nine percent, a hundred-step task succeeds only {100 * v99:.0f} "
             "percent of the time. Small errors compound."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(half))
+            vo.wait_until("h")
+            self.play(FadeIn(hz))
             vo.wait_until("a")
             self.play(Write(f))
             vo.wait_until("b")

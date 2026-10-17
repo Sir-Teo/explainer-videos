@@ -55,6 +55,16 @@ class Brownian(VoiceoverScene):
         nd = label(r"continuous everywhere, \ smooth nowhere", font_size=26, color=GREY_A).next_to(bm, DOWN, buff=0.15)
         nd.align_to(nl, RIGHT)
         cite_ = cite(r"R.~Brown (1827); \ N.~Wiener (1923)", corner=DR)
+        vx = np.linspace(-3, 3, 80)
+        vbell = VMobject(stroke_color=MODEL, stroke_width=3).set_points_smoothly(
+            [np.array([0.6 * x, 1.1 * math.exp(-x * x / 2), 0]) for x in vx])
+        vpic = VGroup(Line([-1.9, 0, 0], [1.9, 0, 0], color=GREY_C, stroke_width=1.5), vbell,
+                      DashedLine([0, 0, 0], [0, 1.15, 0], color=GREY_B, stroke_width=1.5),
+                      DoubleArrow([0, 0.45, 0], [0.6, 0.45, 0], buff=0, color=C.BITS, stroke_width=3, tip_length=0.12),
+                      label(r"spread", font_size=20, color=C.BITS).move_to([0.95, 0.75, 0]))
+        var_card = gloss(r"variance", r"the average squared distance from the centre:\\ the spread, squared",
+                         picture=vpic, corner=DR, width=4.4, color=C.BITS)
+        var_card.shift(UP * 0.5)
         g = np.random.default_rng(1827)
         jig = np.cumsum(g.normal(scale=0.07, size=(160, 2)), 0)
         jig -= jig.mean(0)
@@ -68,7 +78,8 @@ class Brownian(VoiceoverScene):
             "endlessly, for no visible reason. <bookmark mark='a'/> Here's a model: a walk that steps up or down at "
             "random. Eight steps. <bookmark mark='b'/> Sixty-four smaller steps. A thousand and twenty-four, smaller "
             "still. <bookmark mark='c'/> Shrink each step like one over the square root of their number, so the "
-            "spread after any time stays the same, and the walks settle into a single random object: Brownian "
+            "spread after any time stays the same: the variance, the average squared distance from the start, comes "
+            "out at exactly t, and the walks settle into a single random object: Brownian "
             "motion. It's continuous everywhere, and so jagged it has no slope anywhere."
         ) as vo:
             self.play(FadeIn(lens), FadeIn(grain), FadeIn(mic))
@@ -81,7 +92,7 @@ class Brownian(VoiceoverScene):
             self.play(Transform(w8, w64), ChangeDecimalToValue(nv, 64), run_time=1.5)
             self.play(Transform(w8, w1024), ChangeDecimalToValue(nv, 1024), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(why))
+            self.play(FadeIn(why), FadeIn(var_card))
             self.play(FadeIn(bm), FadeIn(nd), FadeIn(cite_))
         nv.clear_updaters()
         self.wait(0.3)
@@ -131,7 +142,8 @@ class Brownian(VoiceoverScene):
             "centred at zero, with spread the square root of t. <bookmark mark='b'/> Twice the time gives about 1.4 "
             "times the spread, not twice. Randomness spreads slowly. It's the central limit theorem again: the "
             "position at time t is a sum of many tiny independent kicks. <bookmark mark='c'/> Measured on twenty "
-            "thousand paths, the variances come out at a quarter, a half, three quarters and one: exactly t."
+            "thousand paths, the variances, the spreads squared, come out at a quarter, a half, three quarters and "
+            "one: exactly t."
         ) as vo:
             self.play(Create(ax), FadeIn(xl))
             self.play(LaggedStart(*[Create(p) for p in fan], lag_ratio=0.03), run_time=3.0)
@@ -170,7 +182,8 @@ class Brownian(VoiceoverScene):
                      color=WHITE).next_to(hl, DOWN, buff=0.6)
         with self.voiceover(
             "In two dimensions, a cloud of particles released at one point spreads into a widening bell. "
-            "<bookmark mark='a'/> Follow the density instead of the particles, and it obeys an equation with no "
+            "<bookmark mark='a'/> Follow the density instead of the particles, and it obeys a rule that says exactly "
+            "how the cloud's shape changes from one moment to the next, an equation with no "
             "randomness in it at all: the heat equation. The jiggling of each particle becomes the smooth spreading "
             "of the whole. <bookmark mark='b'/> Einstein worked this out in 1905, and used it to argue that "
             "molecules are real. A few years later, Jean Perrin measured the jiggling, and counted them."

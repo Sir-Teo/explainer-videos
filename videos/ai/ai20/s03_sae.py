@@ -77,7 +77,8 @@ class SAE(VoiceoverScene):
             "the whole trick: it forces the code to be sparse, so each vector is explained by a few directions. "
             f"<bookmark mark='e'/> Trained on {int(s['n_vectors']) // 1000} thousand vectors from our transformer, "
             f"it uses about {float(s['l0']):.0f} features per character and rebuilds "
-            f"{100 * (1 - float(s['fvu'])):.0f} percent of the variance."
+            f"{100 * (1 - float(s['fvu'])):.0f} percent of the variance: of all the ways these vectors differ from "
+            f"their average, the rebuild captures {100 * (1 - float(s['fvu'])):.0f} percent."
         ) as vo:
             self.play(FadeIn(cite_))
             vo.wait_until("a")
@@ -153,18 +154,29 @@ class SAE(VoiceoverScene):
         nh = label(rf"neuron {int(s['neuron'])}, \ a typical one: \\ its strongest moments", font_size=22, color=NEURON)
         nh.next_to(nl, UP, buff=0.2)
         better = fpur.mean() > npur.mean()
+        # a neuron: one number in an MLP's hidden layer
+        lay = VGroup(*[Circle(radius=0.13, stroke_color=NEURON, stroke_width=2, fill_color=NEURON if i == 3 else "#0B0F17", fill_opacity=1)
+                       for i in range(7)]).arrange(RIGHT, buff=0.16)
+        ins = VGroup(*[Dot(radius=0.05, color=GREY_B) for _ in range(4)]).arrange(RIGHT, buff=0.45).next_to(lay, DOWN, buff=0.55)
+        outs = ins.copy().next_to(lay, UP, buff=0.55)
+        wires = VGroup(*[Line(a_.get_center(), b_.get_center(), stroke_width=0.6, color=GREY_D) for a_ in ins for b_ in lay],
+                       *[Line(a_.get_center(), b_.get_center(), stroke_width=0.6, color=GREY_D) for a_ in lay for b_ in outs])
+        ncard = gloss(r"neuron", r"one number in an MLP's hidden layer: \\ Part 8's units", picture=VGroup(wires, ins, outs, lay),
+                      corner=LEFT, width=4.6, color=NEURON).shift(UP * 0.3)
         with self.voiceover(
-            "Why not just read the model's own neurons? <bookmark mark='a'/> Here's a typical one, from the second "
+            "Why not just read the model's own neurons, the numbers in each MLP's hidden layer, part eight's units? "
+            "<bookmark mark='a'/> Here's a typical one, from the second "
             "block, at its strongest moments: a mix of unrelated things. Neurons are polysemantic, because features are "
             "packed in superposition across them. <bookmark mark='b'/> Count it up: of each unit's eight strongest "
             f"moments, how many share one character? For neurons, {8 * npur.mean():.1f} on average; for the features, "
             f"{8 * fpur.mean():.1f}." + (" The autoencoder has pulled the tangle apart." if better else
                                          " In a model this small, the gap is narrow.")
         ) as vo:
-            self.play(FadeIn(nh), LaggedStart(*[FadeIn(l_) for l_ in nl], lag_ratio=0.15))
+            self.play(FadeIn(nh), LaggedStart(*[FadeIn(l_) for l_ in nl], lag_ratio=0.15), FadeIn(ncard))
             vo.wait_until("a")
             self.play(Indicate(nl, color=NEURON, scale_factor=1.03))
             vo.wait_until("b")
+            self.play(FadeOut(ncard), run_time=0.4)
             self.play(Create(ax), FadeIn(xt), FadeIn(xn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bn], lag_ratio=0.08), FadeIn(kn))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bf], lag_ratio=0.08), FadeIn(kf))
@@ -221,6 +233,19 @@ class SAE(VoiceoverScene):
         keep_in_frame(more)
         cite_ = cite(r"L.~Gao et al., \textit{Scaling and Evaluating Sparse Autoencoders} (2024); \ S.~Rajamanoharan et al., "
                      r"\textit{JumpReLU SAEs} (2024)", corner=UR)
+        # one vector's pre-activations, cut two ways: keep the top k, or a threshold per feature (schematic)
+        zv = [0.3, 1.4, 0.2, 0.9, 0.1, 1.8, 0.5, 0.7, 0.15, 1.1, 0.4, 0.25]
+        th = [0.5, 1.0, 0.1, 1.2, 0.3, 0.6, 0.4, 0.9, 0.4, 0.6, 0.6, 0.2]
+        base_y, hs = -1.4, 1.2
+        zb = VGroup(*[Rectangle(width=0.3, height=v * hs, stroke_width=0, fill_color=GREY_B, fill_opacity=0.85)
+                      .move_to([0.55 + 0.46 * i, base_y + v * hs / 2, 0]) for i, v in enumerate(zv)])
+        zbase = Line([0.25, base_y, 0], [0.55 + 0.46 * 11 + 0.3, base_y, 0], color=GREY_C, stroke_width=1.5)
+        zl = label(r"one vector's $12$ candidate features \ (schematic)", font_size=20, color=GREY_A).next_to(zbase, DOWN, buff=0.15)
+        top3 = set(np.argsort(zv)[-3:].tolist())
+        tkl = label(r"TopK, \ $k = 3$: \ keep the $3$ biggest", font_size=22, color=TKC).move_to([3.1, 1.5, 0])
+        thl = VGroup(*[Line([b_.get_x() - 0.2, base_y + t_ * hs, 0], [b_.get_x() + 0.2, base_y + t_ * hs, 0], color=C.BITS, stroke_width=3)
+                       for b_, t_ in zip(zb, th)])
+        jrl = label(r"JumpReLU: \ a threshold line per feature", font_size=22, color=C.BITS).move_to([3.1, 1.5, 0])
         mid = [k for k in ks if 6 <= k <= 20]
         kk = mid[0] if mid else ks[1]
         l0k, fk = float(o[f"topk_{kk:g}_l0"]), float(o[f"topk_{kk:g}_fvu"])
@@ -249,7 +274,16 @@ class SAE(VoiceoverScene):
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(Write(eqs[k]), FadeIn(names[k]))
+                if mk == "b":
+                    self.play(Create(zbase), FadeIn(zb), FadeIn(zl), FadeIn(tkl))
+                    self.play(*[b_.animate.set_fill(TKC if i in top3 else GREY_D, opacity=0.9 if i in top3 else 0.3)
+                                for i, b_ in enumerate(zb)])
+                if mk == "c":
+                    self.play(*[b_.animate.set_fill(GREY_B, opacity=0.85) for b_ in zb], FadeOut(tkl), FadeIn(jrl), Create(thl))
+                    self.play(*[b_.animate.set_fill(C.BITS if v > t_ else GREY_D, opacity=0.9 if v > t_ else 0.3)
+                                for b_, v, t_ in zip(zb, zv, th)])
             vo.wait_until("d")
+            self.play(FadeOut(VGroup(zb, zbase, zl, jrl, thl)), run_time=0.5)
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
             self.play(Create(cl[0]), FadeIn(cl[1:]), FadeIn(kl[0]), run_time=1.5)
             self.play(Create(ct[0]), FadeIn(ct[1:]), FadeIn(kl[1]), run_time=1.5)

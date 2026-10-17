@@ -184,12 +184,26 @@ class Logistic(VoiceoverScene, ThreeDScene):
         cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(round(t.get_value())):,}".replace(",", "{,}"), font_size=28,
                                             color=C.BITS).next_to(ax, UP, buff=0.2))
         settle = int(next((P[k, 0] for k in range(1, len(P)) if abs(P[k, 4] - P[-1, 4]) < 0.005), P[-1, 0]))
+        # convex: one bowl, one bottom; an egg-crate has many, and where you stop depends on where you start
+        bx_ = np.linspace(-1.0, 1.0, 60)
+        bowl_c = VMobject(stroke_color=GREY_B, stroke_width=3).set_points_smoothly(
+            [np.array([u, 0.6 * u * u, 0]) for u in bx_])
+        crate_c = VMobject(stroke_color=GREY_B, stroke_width=3).set_points_smoothly(
+            [np.array([u, 0.3 * u * u + 0.15 * math.cos(9.5 * u), 0]) for u in bx_])
+        bowl_g = VGroup(bowl_c, Dot([0, 0, 0], radius=0.07, color=C.BITS),
+                        label(r"convex: \ one bottom", font_size=24, color=C.BITS).next_to(bowl_c, DOWN, buff=0.12))
+        lows = [k * 2 * math.pi / 9.5 + math.pi / 9.5 for k in (-2, -1, 0, 1)]  # the crate's dips, near cos = -1
+        crate_g = VGroup(crate_c, *[Dot([u, 0.3 * u * u - 0.15, 0], radius=0.06, color=C.PENALTY) for u in lows],
+                         label(r"not convex: \ many bottoms", font_size=24, color=C.PENALTY).next_to(crate_c, DOWN, buff=0.12))
+        convex = gloss(r"convex", r"shaped like one bowl:\\ every downhill path ends at the same bottom",
+                       picture=VGroup(bowl_g, crate_g).arrange(RIGHT, buff=0.5, aligned_edge=DOWN), corner=UR, width=4.4)
         with self.voiceover(
             "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in "
             "this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. "
             "Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap "
-            f"between the two authors, the loss falls, and by about step {settle} it has settled. A convex loss has "
-            "one bottom, so where it settles doesn't depend on where it started."
+            f"between the two authors, the loss falls, and by about step {settle} it has settled. "
+            "<bookmark mark='c'/> A convex loss is shaped like a single bowl: it has one bottom, and every downhill "
+            "path ends there, so where it settles doesn't depend on where it started."
         ) as vo:
             self.play(Create(ax), FadeIn(plane[1:]), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.005),
                       Create(bx), FadeIn(xt), FadeIn(xn), FadeIn(yn), run_time=1.5)
@@ -204,6 +218,8 @@ class Logistic(VoiceoverScene, ThreeDScene):
                 if len(seg) > 1:
                     anims.append(Create(VMobject(color=SIG, stroke_width=3).set_points_as_corners(seg)))
                 self.play(*anims, run_time=0.5 if P[k, 0] < 200 else 0.35)
+            vo.wait_until("c")
+            self.play(FadeIn(convex))
         self.wait(0.3)
         self.remove(dot, cnt)
         self.clear_scene()

@@ -114,6 +114,8 @@ class Bayes(VoiceoverScene):
                        label(r"how well $\theta$ explains the data $D$", font_size=24, color=MODEL),
                        MathTex(r"\times", font_size=28), label(r"belief before", font_size=24, color=DATA))
         names.arrange(RIGHT, buff=0.15).next_to(rule, DOWN, buff=0.2).align_to(rule, LEFT)
+        prop = label(r"$\propto$: \ equal, up to a rescaling that makes the total $1$", font_size=24, color=GREY_A)
+        prop.next_to(names, DOWN, buff=0.15).align_to(names, LEFT)
         flat = label(r"before any letters: \ every fraction equally believable", font_size=26, color=DATA)
         flat.move_to([0, YB + YH * (1 / 1.5) + 0.35, 0])
         ci = d["ci10000"]
@@ -130,11 +132,14 @@ class Bayes(VoiceoverScene):
             "seems as plausible as any other. That's a belief, and we can draw it, as a flat line over every "
             "possibility. <bookmark mark='a'/> Bayes's rule says how to update a belief when evidence arrives. "
             "Multiply what you believed by how well each possibility explains the evidence, then rescale, so the "
-            "total is one again."
+            "total is one again. <bookmark mark='b'/> That's what the sign, proportional to, means: equal, up to that "
+            "rescaling."
         ) as vo:
             self.play(FadeIn(pic), FadeIn(xl), FadeIn(flat), FadeIn(cells), FadeIn(cnt))
             vo.wait_until("a")
             self.play(Write(rule), FadeIn(names))
+            vo.wait_until("b")
+            self.play(FadeIn(prop))
         with self.voiceover(
             "Read the first ten letters: three e's. <bookmark mark='a'/> The belief leans toward a third, but it's "
             "still wide. <bookmark mark='b'/> After a hundred letters, it's narrower. <bookmark mark='c'/> After a "

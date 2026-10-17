@@ -136,8 +136,9 @@ class SVM(VoiceoverScene, ThreeDScene):
             "into a third dimension, at a height equal to its squared distance from the centre. "
             "<bookmark mark='b'/> Now a flat plane separates them. <bookmark mark='c'/> And seen from above, that "
             "plane cuts out a circle. <bookmark mark='d'/> The kernel trick does this without ever computing the "
-            "lifted points. The method only needs dot products between them, and a kernel supplies those directly, "
-            "even for infinitely many dimensions."
+            "lifted points. The method only needs dot products between them, and a kernel, a similarity score "
+            "computed straight from two original points, supplies those directly, even for infinitely many "
+            "dimensions."
         ) as vo:
             self.play(FadeIn(flat), FadeIn(no_line), FadeIn(tag))
             vo.wait_until("a")
@@ -174,12 +175,25 @@ class SVM(VoiceoverScene, ThreeDScene):
         a70 = label(rf"all $70$ rates: \ ${100 * sv['acc70']:.1f}\%$ \ (${round(sv['acc70'] * n_te)}$ of ${n_te}$)",
                     font_size=30, color=C.BITS)
         VGroup(a2, a70).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.3, 0.6, 0])
+        # the Gaussian kernel, pictured: a bump on one page; its neighbours lit by how similar they are
+        kx = np.linspace(-2.0, 2.0, 80)
+        bump = VMobject(stroke_color=C.BITS, stroke_width=3).set_points_smoothly(
+            [np.array([u, 1.0 * math.exp(-u * u), 0]) for u in kx])
+        nbrs = VGroup(*[Dot([u, 0, 0], radius=0.08, color=C.BITS).set_opacity(0.15 + 0.85 * math.exp(-u * u))
+                        for u in (-1.8, -1.2, -0.6, 0.6, 1.2, 1.8)])
+        kpic = VGroup(Line([-2.1, 0, 0], [2.1, 0, 0], color=GREY_C, stroke_width=1.5), bump, nbrs,
+                      Dot([0, 0, 0], radius=0.1, color=WHITE),
+                      MathTex("1", font_size=22, color=C.BITS).next_to([0, 1.0, 0], UP, buff=0.06),
+                      label(r"a page", font_size=20, color=WHITE).next_to([0, 0, 0], DOWN, buff=0.15))
+        kcard = gloss(r"Gaussian kernel", r"a similarity score between two points:\\ $1$ for identical points, "
+                      r"fading towards $0$ with distance", picture=kpic, corner=DR, width=4.4)
         with self.voiceover(
-            "Back to the pages, with a Gaussian kernel. The boundary bends wherever the data asks it to. "
+            "Back to the pages, with a Gaussian kernel: a similarity score between two pages that's one when they're "
+            "identical, and fades towards zero as they move apart. The boundary bends wherever the data asks it to. "
             f"<bookmark mark='a'/> On new pages, {100 * sv['acc_rbf']:.0f} percent right with two rates. "
             "<bookmark mark='b'/> With all seventy, 99.5 percent, the same as logistic regression."
         ) as vo:
-            self.play(Create(ax), FadeIn(plane[1:]), FadeIn(img))
+            self.play(Create(ax), FadeIn(plane[1:]), FadeIn(img), FadeIn(kcard))
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.01), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(a2))

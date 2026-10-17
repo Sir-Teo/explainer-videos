@@ -99,6 +99,8 @@ class MonteCarlo(VoiceoverScene):
         yl = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=24, color=GREY_B).next_to(ax.c2p(1, v), LEFT, buff=0.12)
                       for v in range(-3, 1)])
         xn = label(r"darts", font_size=24, color=GREY_A).next_to(ax, DOWN, buff=0.55)
+        x10 = VGroup(*[label(r"$\times 10$", font_size=18, color=GREY_C).move_to([ax.c2p(v + 0.5, -3)[0], xl[0].get_y(), 0])
+                       for v in range(1, 5)])
         yn = label(r"typical error", font_size=24, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         dots = VGroup(*[Dot(ax.c2p(math.log10(n), math.log10(r)), radius=0.07, color=C.BITS) for n, r in zip(Ns, rms)])
         b = np.polyfit(np.log10(Ns), np.log10(rms), 1)
@@ -111,14 +113,14 @@ class MonteCarlo(VoiceoverScene):
         notes.arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(f, DOWN, buff=0.5).set_x(4.4)
         cite_ = cite(r"N.~Metropolis \& S.~Ulam, \textit{The Monte Carlo Method} (1949)", corner=DR)
         with self.voiceover(
-            "Repeat the experiment many times at each size, and measure the typical error. On log scales, it falls "
-            "on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the "
+            "Repeat the experiment many times at each size, and measure the typical error. On log scales, where each "
+            "tick is ten times the last, it falls on a straight line with slope minus a half. <bookmark mark='a'/> The error shrinks like one over the "
             "square root of the number of samples: every extra digit of accuracy costs a hundred times more "
             "samples. <bookmark mark='b'/> That's slow. But the rate doesn't care about dimension: averaging random "
             "samples works the same in a million dimensions, where any grid would be hopeless. That's why "
             "Monte Carlo, named by Ulam and Metropolis after the casino, is everywhere in machine learning."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xn), FadeIn(yn))
+            self.play(Create(ax), FadeIn(xl), FadeIn(x10), FadeIn(yl), FadeIn(xn), FadeIn(yn))
             self.play(LaggedStart(*[FadeIn(x, scale=0.5) for x in dots], lag_ratio=0.15), run_time=1.5)
             self.play(Create(fit), FadeIn(sl))
             vo.wait_until("a")
@@ -164,7 +166,8 @@ class MonteCarlo(VoiceoverScene):
         f = cmath(r"\mathbb{E}_p", r"[f(x)]", "=", r"\mathbb{E}_q", r"\Big[f(x)\,", r"\frac{p(x)}{q(x)}", r"\Big]",
                   colors=colors, font_size=40).move_to([3.6, 2.0, 0])
         with self.voiceover(
-            "Monte Carlo has one weakness: rare events. How often does a standard bell curve land above four? "
+            "Monte Carlo has one weakness: rare events. How often does a standard bell curve, the one centred at "
+            "zero with a width of one, land above four? "
             "Exactly, about three times in a hundred thousand. <bookmark mark='a'/> Draw ten thousand samples, and "
             "only two land there. The estimate is off by a factor of six."
         ) as vo:

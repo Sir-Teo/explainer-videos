@@ -177,16 +177,36 @@ class Trees(VoiceoverScene):
             tri.scale(0.22).move_to([-5.6 + 0.62 * k, 2.85, 0])
             icons.add(VGroup(tri, Line(tri.get_bottom(), tri.get_bottom() + DOWN * 0.15, color=GREY_B, stroke_width=2)))
         cite_ = cite(r"L.~Breiman, \textit{Random Forests} (2001)", corner=DR)
+        # a resample, pictured: draw pages from the pile at random, putting each back, so some come twice
+        pile = [1, 2, 3, 4, 5, 6, 7, 8]
+        draw = [3, 1, 7, 3, 8, 5, 1, 6]  # an illustrative draw: 1 and 3 twice, 2 and 4 not at all
+        def page_row(nums, hot=()):
+            return VGroup(*[VGroup(Square(0.42, stroke_width=1.5, stroke_color=GREY_B,
+                                          fill_color=C.INTERVAL if k in hot else BACKGROUND, fill_opacity=0.45),
+                                   MathTex(str(k), font_size=24)) for k in nums]).arrange(RIGHT, buff=0.08)
+        r0, r1 = page_row(pile), page_row(draw, hot=(1, 3))
+        rs_pic = VGroup(VGroup(label(r"the pages", font_size=20, color=GREY_A), r0).arrange(DOWN, buff=0.1),
+                        MathTex(r"\downarrow", font_size=30, color=GREY_B),
+                        VGroup(label(r"one tree's resample", font_size=20, color=C.INTERVAL), r1).arrange(DOWN, buff=0.1)
+                        ).arrange(DOWN, buff=0.12)
+        rs_card = gloss(r"resample", r"draw pages at random, putting each one back:\\ some come twice, some not at "
+                        r"all, so each tree sees a slightly different pile", picture=rs_pic, width=5.6, color=C.INTERVAL)
+        rs_card.move_to([-1.4, -0.6, 0])
         with self.voiceover(
             "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in "
-            "2001: grow hundreds. Give each a random resample of the pages, and only a random handful of words to "
-            "choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full "
+            "2001: grow hundreds. Give each a random resample of the pages: <bookmark mark='r'/> draw pages from the "
+            "pile at random, putting each one back, so some come twice and some not at all, and each tree sees a "
+            "slightly different pile. Give each, too, only a random handful of words to choose from at each "
+            "question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full "
             f"tree gets {100 * t['acc_tree70']:.0f} percent of new pages right. <bookmark mark='b'/> A forest of two "
             f"hundred gets {100 * fa[-1]:.0f}."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(i, shift=UP * 0.1) for i in icons], lag_ratio=0.08), FadeIn(cite_), run_time=1.5)
             self.play(FadeIn(how))
+            vo.wait_until("r")
+            self.play(FadeIn(rs_card))
             vo.wait_until("a")
+            self.play(FadeOut(rs_card), run_time=0.5)
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), Create(one), FadeIn(ol))
             vo.wait_until("b")
             self.play(Create(curve), run_time=2.5, rate_func=linear)

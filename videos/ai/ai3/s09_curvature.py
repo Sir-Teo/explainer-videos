@@ -92,14 +92,20 @@ class Curvature(VoiceoverScene, ThreeDScene):
                "newton": label(r"Newton: \ $\Delta = -H^{-1} \nabla f$, \ one step", font_size=26, color=C.BITS)}
         VGroup(*lab.values()).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UL, buff=0.45)
         curv = label(r"curvatures $1$ and $25$: \ a long, narrow valley", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.35)
+        hinv = label(r"$H^{-1}$: \ undoes the curvature's stretching, \\ so every direction is equally steep", font_size=24,
+                     color=C.BITS)
+        opt = label(r"optimizer: \ the rule that turns \\ gradients into steps", font_size=24, color=GREY_A)
+        side = VGroup(hinv, opt).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_corner(UR, buff=0.45)
         with self.voiceover(
             "Curvature explains why plain gradient descent can be slow. <bookmark mark='a'/> In a long, narrow valley, "
             "bent twenty-five times more sharply across than along, the steepest way down points mostly at the "
             "opposite wall. So the steps zigzag from wall to wall, and crawl along the floor. <bookmark mark='b'/> "
             "Momentum, carrying some speed from step to step, does better. <bookmark mark='c'/> Newton's method uses "
-            "the curvature itself to rescale the step, and in a bowl like this lands at the bottom in one jump. "
+            "the curvature itself to rescale the step: multiplying by H inverse undoes the curvature's stretching, "
+            "so every direction is equally steep, and in a bowl like this it lands at the bottom in one jump. "
             "<bookmark mark='d'/> For a model with billions of numbers the full Hessian is far too big to use, but the "
-            "problem it reveals shapes every modern optimizer, in part nine."
+            "problem it reveals shapes every modern optimizer, the rule that turns gradients into steps, in part "
+            "nine."
         ) as vo:
             self.play(Create(ax), LaggedStart(*[Create(c) for c in cont], lag_ratio=0.1), FadeIn(curv), run_time=1.5)
             vo.wait_until("a")
@@ -112,5 +118,8 @@ class Curvature(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(dots["newton"]), FadeIn(lab["newton"]))
             self.play(Create(paths["newton"]), MoveAlongPath(dots["newton"], paths["newton"]), run_time=1.0)
+            self.play(FadeIn(hinv))
+            vo.wait_until("d")
+            self.play(FadeIn(opt))
         self.wait(0.3)
         self.clear_scene()

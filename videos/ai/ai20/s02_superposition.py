@@ -59,6 +59,9 @@ class Superposition(VoiceoverScene):
                   font_size=36).move_to([-3.9, 2.4, 0])
         imp_l = label(r"brighter: \ more important to get right", font_size=20, color=GREY_B).next_to(nl, DOWN, buff=0.3)
         imp_l.set_x(-3.9)
+        fw = label(r"$W$: \ squeeze $5$ numbers into $2$; \\ $W^{\top}$: \ spread them back out to $5$; \\ "
+                   r"ReLU: \ cut off negatives", font_size=18, color=GREY_A).next_to(f, DOWN, buff=0.15)
+        keep_in_frame(fw)
         tracker = ValueTracker(Ss[0])
 
         def freq_label():
@@ -71,8 +74,10 @@ class Superposition(VoiceoverScene):
         n_kept = [int((np.asarray(s[f"norms{S:g}"]) > 0.5).sum()) for S in Ss]
         with self.voiceover(
             "Here's the smallest model that shows why. Five features go in, squeezed through just two numbers, and "
-            "the network must give all five back: x hat equals ReLU of W transpose W x, plus b. The features matter "
-            "unequally, the brighter ones more. <bookmark mark='a'/> Each column of W says where a feature points in "
+            "the network must give all five back: x hat equals ReLU of W transpose W x, plus b. <bookmark mark='w'/> "
+            "In words: W squeezes the five numbers into two, the same W run backwards spreads them out to five again, "
+            "and the ReLU cuts off anything negative. The features matter unequally, the brighter ones more. "
+            "<bookmark mark='a'/> Each column of W says where a feature points in "
             "the two-dimensional middle. <bookmark mark='b'/> When every feature is on all the time, the trained "
             f"network keeps just the {n_kept[0]} most important, at right angles, and drops the rest. "
             f"<bookmark mark='c'/> Make the features rarer, and it starts to cheat: {n_kept[1]} features, in opposite "
@@ -81,6 +86,8 @@ class Superposition(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(xin), FadeIn(hid), FadeIn(xout), Create(e1), Create(e2), FadeIn(nl), FadeIn(cite_), run_time=1.5)
             self.play(Write(f), FadeIn(imp_l))
+            vo.wait_until("w")
+            self.play(FadeIn(fw, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(pl), FadeIn(hl))
             vo.wait_until("b")

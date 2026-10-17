@@ -62,19 +62,63 @@ class RL(VoiceoverScene):
             avl.next_to(model, DOWN, buff=0.9).align_to(model, LEFT)
         cite_ = cite(r"Z.~Shao et al., \textit{DeepSeekMath} (GRPO, 2024); \ DeepSeek-AI, \textit{DeepSeek-R1} (2025)", corner=UR)
         n_right = int(rew.sum())
+        # reinforcement learning, the loop: the model answers, a checker scores, the score nudges the model
+        def node(text, col):
+            t_ = label(text, font_size=22, color=col)
+            return VGroup(RoundedRectangle(width=t_.width + 0.4, height=0.6, corner_radius=0.1, stroke_color=col, stroke_width=2), t_)
+
+        nodes = VGroup(node(r"the model, \ $\pi$", POLICY), node(r"answers", GREY_A), node(r"checker", GREY_A),
+                       node(r"reward", C.BITS))
+        for n_, xy in zip(nodes, [(-1.7, 0.7), (1.7, 0.7), (1.7, -0.7), (-1.7, -0.7)]):
+            n_.move_to([xy[0], xy[1], 0])
+        ends = [(RIGHT, LEFT), (DOWN, UP), (LEFT, RIGHT), (UP, DOWN)]
+        loop = VGroup(nodes, *[Arrow(a_.get_edge_center(s_), b_.get_edge_center(e_), buff=0.1, stroke_width=2.5, color=GREY_B,
+                                     max_tip_length_to_length_ratio=0.15)
+                               for (s_, e_), a_, b_ in zip(ends, nodes, list(nodes[1:]) + [nodes[0]])])
+        rlc = gloss(r"reinforcement learning", r"try, \ get a score, \\ do more of what scored well: \\ trial and error, \\ not worked examples",
+                    picture=loop, width=5.6, color=POLICY)
+        rlc.move_to([1.6, -0.2, 0])
+        loop = rlc[1][2]
+        pol = label(r"the policy, \ $\pi$", font_size=22, color=POLICY).next_to(model, DOWN, buff=0.15)
+        # GRPO, spelled out, and the baseline it uses in place of a critic
+        gw = VGroup(label(r"GRPO:", font_size=22, color=WHITE), label(r"Group", font_size=22, color=C.BITS),
+                    label(r"Relative", font_size=22, color=C.BITS), label(r"Policy Optimization", font_size=22, color=GREY_A))
+        gw.arrange(RIGHT, buff=0.15, aligned_edge=UP)
+        gp = label(r"baseline: \ the score you'd expect anyway. \ Older methods train a second network, \\ a critic, to predict it; "
+                   r"\ GRPO uses the group's average instead", font_size=17, color=GREY_A)
+        gb = VGroup(gw, gp).arrange(DOWN, buff=0.12, aligned_edge=LEFT)
+        gcard = VGroup(RoundedRectangle(width=gb.width + 0.36, height=gb.height + 0.3, corner_radius=0.12, stroke_color=C.BITS,
+                                        stroke_width=1.5, fill_color="#0B0F17", fill_opacity=0.92), gb)
+        gb.move_to(gcard[0])
+        gcard.move_to([2.4, -2.12, 0])
+        dash = DashedLine(zero.get_start(), zero.get_end(), color=C.BITS, stroke_width=2.5, dash_length=0.12)
+        bl_ = label(r"baseline", font_size=20, color=C.BITS).next_to(zero.get_end(), DOWN, buff=0.12).shift(LEFT * 0.45)
         with self.voiceover(
             "How do you teach a model to reason, when nobody can write down the steps for it? DeepSeek-R1 used "
             "a recipe with almost no human help: questions with checkable answers, and reinforcement learning. "
+            "<bookmark mark='r'/> The model tries, gets a score, and is nudged to do more of what scored well: trial "
+            "and error, not worked examples. <bookmark mark='p'/> In this game the model is called the policy, pi: "
+            "the rule that gives a probability to every answer it might write. "
             "We do it here with a small transformer that has had a little practice at two-digit addition. "
             f"<bookmark mark='a'/> Give it a question, and sample {G} answers. <bookmark mark='b'/> A checker marks "
             f"each one: here {n_right} of {G} are right. <bookmark mark='c'/> Each answer's advantage is its reward "
             "minus the group's average, divided by the spread: right answers above the line, wrong ones below. "
             "<bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. "
-            "That's GRPO. No one judges the steps, and no separate critic is needed: the group is its own baseline. "
+            "<bookmark mark='e'/> That's GRPO, group relative policy optimization: each answer is judged relative to "
+            "its own group. No one judges the steps. <bookmark mark='f'/> Older methods compare each reward with a "
+            "baseline, the score you'd expect anyway, and train a second network, a critic, to predict it. GRPO needs "
+            "no critic: the group's average is its baseline. "
             "And when every answer is right, or every one wrong, the advantages are all zero: nothing to learn."
         ) as vo:
             self.play(FadeIn(q), FadeIn(ql), FadeIn(model), FadeIn(ml), GrowArrow(qa), FadeIn(cite_))
+            vo.wait_until("r")
+            self.play(FadeIn(rlc[0]), FadeIn(rlc[1][:2]), FadeIn(loop[0][0]))
+            self.play(Succession(*[AnimationGroup(GrowArrow(a_), *([FadeIn(loop[0][k + 1])] if k < 3 else []))
+                                   for k, a_ in enumerate(loop[1:])]), run_time=2.4)
+            vo.wait_until("p")
+            self.play(FadeIn(pol), Indicate(loop[0][0], color=POLICY))
             vo.wait_until("a")
+            self.play(FadeOut(rlc), run_time=0.5)
             self.play(LaggedStart(*[Create(f_) for f_ in fan], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in ans], lag_ratio=0.1), FadeIn(al), run_time=1.6)
             vo.wait_until("b")
@@ -87,6 +131,10 @@ class RL(VoiceoverScene):
             self.play(Write(f2))
             self.play(*[c_.animate.scale(1.2) for v, c_ in zip(rew, ans) if v],
                       *[c_.animate.scale(0.8).set_opacity(0.4) for v, c_ in zip(rew, ans) if not v], run_time=1.2)
+            vo.wait_until("e")
+            self.play(FadeIn(gcard[0]), FadeIn(gw))
+            vo.wait_until("f")
+            self.play(FadeIn(gp), Create(dash), FadeIn(bl_))
         self.wait(0.3)
         self.clear_scene()
 

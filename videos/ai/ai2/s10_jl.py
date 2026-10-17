@@ -98,9 +98,12 @@ class JL(VoiceoverScene):
         head = label(r"The Johnson--Lindenstrauss lemma (1984)", font_size=36).to_edge(UP, buff=0.4)
         why_ = label(r"why: \ a random projection of a vector has nearly the same length every time", font_size=28,
                      color=C.TRUE_P).to_edge(DOWN, buff=0.5)
+        eps = gloss(r"$\varepsilon$", r"the error allowed in each distance:\\ $\varepsilon = 0.1$ means within $10\%$",
+                    corner=DR, width=4.0)
         with self.voiceover(
             "That's the Johnson–Lindenstrauss lemma, from 1984. <bookmark mark='a'/> To keep the distances among n "
-            "points within a factor of one plus or minus epsilon, a random projection to about the log of n over "
+            "points within a factor of one plus or minus epsilon, the error we allow, say ten percent, a random "
+            "projection to about the log of n over "
             "epsilon squared dimensions is enough, whatever dimension you started from. <bookmark mark='b'/> The "
             "guarantee is cautious: for our thousand points it asks for five and a half thousand, and four hundred "
             "already did the job. <bookmark mark='c'/> The reason it works is the concentration we just saw: a random "
@@ -109,9 +112,10 @@ class JL(VoiceoverScene):
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(Write(f), FadeIn(what))
+            self.play(FadeIn(eps))
             vo.wait_until("b")
             self.play(FadeIn(num), FadeIn(cons))
             vo.wait_until("c")
-            self.play(FadeIn(why_))
+            self.play(FadeOut(eps), FadeIn(why_))
         self.wait(0.3)
         self.clear_scene()

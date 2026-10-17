@@ -44,13 +44,16 @@ class Reverse(VoiceoverScene):
         shapes = VGroup(block(1, 4, color=C.LOSS, label_tex=r"J_4"), block(4, 4, color=GRAD, label_tex=r"J_3"),
                         block(4, 4, color=GRAD, label_tex=r"J_2"), block(4, 6, color=GRAD, label_tex=r"J_1"))
         shapes.arrange(RIGHT, buff=0.25, aligned_edge=UP).move_to(DOWN * 2.4)
+        key = label(r"$\theta$: \ all the adjustable numbers, the parameters \qquad $\mathcal{L}$: \ the loss, "
+                    r"one number to make small", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "A network is a long chain of maps, from its parameters to a single number at the end: the loss. "
+            "A network is a long chain of maps, from its parameters, theta, all its adjustable numbers, to a single "
+            "number at the end: the loss, script L. "
             "<bookmark mark='a'/> By the chain rule, the gradient is a product of Jacobians, one for each link. "
             "<bookmark mark='b'/> The product is the same whichever end you start multiplying from. The cost is not."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(n) for n in nodes], lag_ratio=0.2), LaggedStart(*[GrowArrow(a) for a in arrows],
-                                                                                         lag_ratio=0.2), run_time=2.0)
+                                                                                         lag_ratio=0.2), FadeIn(key), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(jl), Write(prod))
             vo.wait_until("b")
@@ -85,9 +88,10 @@ class Reverse(VoiceoverScene):
         hist = cite(r"S.~Linnainmaa (1970); \ D.~E.~Rumelhart, G.~E.~Hinton \& R.~J.~Williams, \textit{Nature} (1986)",
                     corner=UR)
         with self.voiceover(
-            "Start from the parameters, and you carry a whole matrix along, with a column for every parameter. "
-            "<bookmark mark='a'/> Start from the loss, and you carry a single row: one number for each value in the "
-            "layer you've reached. <bookmark mark='b'/> With one loss and a hundred million parameters, going "
+            "Start from the parameters, and you carry a whole matrix along, with a column for every parameter: in "
+            "effect, you redo the chain once for every knob. <bookmark mark='a'/> Start from the loss, and you carry "
+            "a single row: one number for each value in the layer you've reached, and one pass backwards tells "
+            "every knob its effect at once. <bookmark mark='b'/> With one loss and a hundred million parameters, going "
             "backwards is a hundred million times less work. That's reverse-mode differentiation. Applied to neural "
             "networks, it's called backpropagation: described by Seppo Linnainmaa in 1970, and made famous by "
             "Rumelhart, Hinton and Williams in 1986."

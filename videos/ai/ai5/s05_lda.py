@@ -105,6 +105,29 @@ class LDA(VoiceoverScene):
         cite_ = cite(r"R.~A.~Fisher, \textit{The Use of Multiple Measurements in Taxonomic Problems} (1936)", corner=UL)
         pl = always_redraw(piles)
         dl = always_redraw(direction)
+        # S_W^-1, pictured: stretch the space until each author's cloud is round, then point from centre to centre
+        frame_ = Rectangle(width=3.6, height=1.7, stroke_opacity=0)
+
+        def two_clouds(round_):
+            if round_:
+                ca, cd = np.array([-1.0, -0.15, 0]), np.array([1.0, 0.15, 0])
+                shapes = [Circle(radius=0.42).move_to(c_) for c_ in (ca, cd)]
+            else:
+                ca, cd = np.array([-0.35, -0.3, 0]), np.array([0.35, 0.3, 0])
+                shapes = [Ellipse(width=2.2, height=0.42).rotate(-20 * DEGREES).move_to(c_) for c_ in (ca, cd)]
+            for sh, col in zip(shapes, (AUSTEN, DICKENS)):
+                sh.set_stroke(col, 2.5).set_fill(col, 0.25)
+            return VGroup(*shapes, Dot(ca, radius=0.06, color=AUSTEN), Dot(cd, radius=0.06, color=DICKENS),
+                          Arrow(ca, cd, buff=0.08, color=WHITE, stroke_width=4, max_tip_length_to_length_ratio=0.2))
+
+        before = two_clouds(False)
+        before[4].set_opacity(0)
+        swc = gloss(r"$S_W^{-1}$", r"stretch the space until each author's cloud is round,\\ then point from one "
+                    r"centre to the other", picture=VGroup(frame_, before), width=4.6)
+        swc.move_to([3.9, -1.3, 0])
+        sp = swc[1][-1]  # the card's copy of (frame, clouds)
+        after = VGroup(frame_.copy(), two_clouds(True))
+        after.scale(sp[0].width / frame_.width).move_to(sp[0])
         with self.voiceover(
             "In 1936, Ronald Fisher asked a different question. Along which direction do the two groups look most "
             "different? <bookmark mark='a'/> Pick a direction, and squash every page onto it. Each author becomes a "
@@ -120,15 +143,19 @@ class LDA(VoiceoverScene):
             self.play(th.animate.set_value(math.pi * 0.97), run_time=5.0, rate_func=smooth)
         with self.voiceover(
             "The best direction has a formula: the difference between the two centres, corrected by the inverse of "
-            "the spread within each author. <bookmark mark='a'/> Here, it leans mostly on 'not'. "
+            "the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each "
+            "author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. "
             "<bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets "
             f"{100 * acc:.0f} percent of the test pages right, the same as logistic regression. When each group is a "
             "bell of the same shape, this cut is exactly the best one possible."
         ) as vo:
             self.play(th.animate.set_value(best), run_time=2.0)
             self.play(FadeOut(jf), FadeOut(jax), FadeOut(jcurve), FadeOut(jdot), FadeOut(jl), FadeIn(wf), FadeIn(wn))
+            vo.wait_until("w")
+            self.play(FadeIn(swc))
+            self.play(Transform(sp[1], after[1]), run_time=1.6)
             vo.wait_until("a")
-            self.play(Indicate(dl, color=C.BITS))
+            self.play(FadeOut(swc), Indicate(dl, color=C.BITS))
             vo.wait_until("b")
             ub = u_b
             perp = np.array([-ub[1], ub[0]])

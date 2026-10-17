@@ -153,7 +153,7 @@ class Sampling(VoiceoverScene):
             "Language models do the same with words, with one dial added. <bookmark mark='a'/> Here's GPT-2's "
             "distribution for the word after: Spade sat down in the armchair, and. Its favourite, I, gets only four "
             "percent; the other fifty thousand words share the rest. <bookmark mark='b'/> The dial is the "
-            "temperature: divide the scores by T before the softmax."
+            "temperature: divide the scores by T before the softmax, the exponentiate-and-rescale of part one."
         ) as vo:
             self.play(FadeIn(prompt), FadeIn(sub))
             vo.wait_until("a")

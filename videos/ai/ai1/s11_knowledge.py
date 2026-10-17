@@ -68,7 +68,7 @@ class Knowledge(VoiceoverScene):
         tag = note(r"computed: \ the Falcon passage, chapter 2, third paragraph").to_corner(DL, buff=0.3)
         with self.voiceover(
             "Let's look at what a strong model knows that a weaker one doesn't. Here is one paragraph of the "
-            "Falcon passage, broken into tokens, <bookmark mark='a'/> each colored by how surprised GPT-2, from "
+            "Falcon passage, broken into tokens, the chunks a model reads and guesses one at a time, <bookmark mark='a'/> each colored by how surprised GPT-2, from "
             "2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under "
             "Qwen3, from 2025. Its tiles are darker almost everywhere: 350 bits instead of 446."
         ) as vo:
@@ -204,14 +204,28 @@ class Knowledge(VoiceoverScene):
             label(r"(Lin \& Tegmark, 2017)", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.9, 0.9, 0])
         tag = computed_tag(r"computed: $22.8$ million letters of the $30$ books")
+        # log-log axes: every tick is ten times the last, so a power law is a straight line
+        x10 = VGroup(*[label(r"$\times 10$", font_size=18, color=GREY_C).move_to(
+            [ax.c2p(v + 0.5, 0)[0], xl[0].get_y(), 0]) for v in range(3)])
+        # an exponential decay through the data at d = 1 and d = 10, for shape: past that it plunges off these axes
+        rate = math.log(mi[0] / mi[list(ds).index(10)]) / 9
+        de = np.linspace(1, 40, 240)
+        ye = mi[0] * np.exp(-rate * (de - 1))
+        ok_e = np.log10(ye) + 6 > 0
+        expo = DashedVMobject(VMobject(stroke_color=GREY_A, stroke_width=3).set_points_as_corners(
+            [ax.c2p(math.log10(x), math.log10(y) + 6) for x, y in zip(de[ok_e], ye[ok_e])]), num_dashes=30)
+        expo_l = label(r"exponential decay \ (shape only)", font_size=20, color=GREY_A).next_to(
+            ax.c2p(1.33, 0.7), RIGHT, buff=0.1)
         with self.voiceover(
             "And the telephone points to something deep. How much does one letter tell you about a letter d places "
             "later? That's the mutual information from chapter five, measured here over all thirty books. "
             "<bookmark mark='a'/> Neighbors share three quarters of a bit. Inside a word, it falls fast. "
             "<bookmark mark='b'/> But then it doesn't vanish. It decays slowly, like a power of the distance, out to a "
-            "thousand letters and beyond."
+            "thousand letters and beyond. On these axes, each tick is ten times the last, both across and up, so a "
+            "power law shows up as a straight line."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(defn), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(defn), Create(ax), FadeIn(xl), FadeIn(x10), FadeIn(yl), FadeIn(axl),
+                      FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(curve), FadeIn(dots), run_time=2.5)
             self.play(FadeIn(a1))
@@ -219,12 +233,15 @@ class Knowledge(VoiceoverScene):
             self.play(Create(fit), FadeIn(fit_l))
         with self.voiceover(
             "A counting model can't produce a tail like that: the influence of anything outside its few letters of "
-            "context is cut off, and the dependence it models dies away exponentially. <bookmark mark='a'/> Real "
-            "text keeps paying back what you remember, at every distance. To guess well, a model needs a long "
-            "memory, and a way to find the parts of the past that matter. That's what attention is for, in part "
-            "eleven."
+            "context is cut off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking "
+            "by the same factor with every letter, which on these axes plunges straight off the bottom. "
+            "<bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a "
+            "model needs a long memory, and a way to find the parts of the past that matter. That's what attention "
+            "is for, in part eleven."
         ) as vo:
             self.play(FadeIn(side[:2]))
+            vo.wait_until("x")
+            self.play(Create(expo), FadeIn(expo_l), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(side[2:]))
         self.wait(0.3)

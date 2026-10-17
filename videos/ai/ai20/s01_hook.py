@@ -41,7 +41,8 @@ class Hook(VoiceoverScene):
             "passage: for each character, the hundred and twenty-eight numbers it carries after its second block. "
             "Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> "
             "This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture "
-            "changes: only a handful of features are on at each character, and each one turns out to mean something."
+            "changes: only a handful of features, ideas the model tracks, are on at each character, and each one "
+            "turns out to mean something."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c) for c in chars], lag_ratio=0.02), run_time=1.2)
             vo.wait_until("a")
@@ -63,13 +64,44 @@ class Hook(VoiceoverScene):
         ch = Text(f"“{show(text[k])}”", font=MONO, font_size=36, color=WHITE).to_edge(UP, buff=0.3)
         l1 = label(r"$128$ numbers, \\ all busy", font_size=24, color=RESID).move_to([-4.9, 1.3, 0])
         l2 = label(rf"$512$ features, \\ ${int((f > 0).sum())}$ on", font_size=24, color=FEAT).move_to([-4.9, -1.8, 0])
+        # what a feature is: a direction; how far the vector points along it is how strongly the feature is on
+        O = np.array([-3.0, -1.6, 0])
+        u = np.array([np.cos(0.35), np.sin(0.35), 0])
+        fa = Arrow(O, O + 6.6 * u, buff=0, color=FEAT, stroke_width=5, max_tip_length_to_length_ratio=0.05)
+        fl = label(r"a feature: \\ ``inside a quotation''", font_size=24, color=FEAT).next_to(fa.get_end(), RIGHT, buff=0.2)
+        ang = ValueTracker(1.45)
+
+        def xv():
+            return 3.4 * np.array([np.cos(ang.get_value()), np.sin(ang.get_value()), 0])
+
+        def shadow():
+            v = xv()
+            p_ = O + max(float(v @ u), 0) * u
+            return VGroup(Arrow(O, O + v, buff=0, color=WHITE, stroke_width=5, max_tip_length_to_length_ratio=0.1),
+                          DashedLine(O + v, p_, dash_length=0.08, stroke_width=1.5, color=GREY_B),
+                          Line(O, p_, color=C.TRUE_P, stroke_width=10),
+                          MathTex("x", font_size=34, color=WHITE).next_to(O + v, UP, buff=0.1))
+
+        sh = always_redraw(shadow)
+        hl = label(r"its shadow on the feature: \\ how strongly the feature is on", font_size=22, color=C.TRUE_P).move_to([3.0, 2.3, 0])
+        fh = label(r"a feature is a direction", font_size=30, color=FEAT).to_edge(UP, buff=0.35)
         with self.voiceover(
             f"Take one character. <bookmark mark='a'/> Its hundred and twenty-eight numbers, tangled together, "
-            f"become {int((f > 0).sum())} features out of five hundred and twelve."
+            f"become {int((f > 0).sum())} features out of five hundred and twelve. <bookmark mark='f'/> A feature is "
+            "one idea the model tracks, like 'inside a quotation', stored as a direction among those numbers. How far "
+            "the vector points that way, its shadow on that direction, is how strongly the feature is on."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(b1), FadeIn(l1))
             vo.wait_until("a")
             self.play(ReplacementTransform(b1.copy(), b2), FadeIn(l2), run_time=2.0)
+            vo.wait_until("f")
+            self.play(FadeOut(Group(*self.mobjects)), run_time=0.5)
+            self.play(FadeIn(fh), GrowArrow(fa), FadeIn(fl))
+            self.add(sh)
+            self.play(FadeIn(hl))
+            self.play(ang.animate.set_value(0.75), run_time=2.0)
+            self.play(ang.animate.set_value(1.2), run_time=1.2)
+        sh.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
 

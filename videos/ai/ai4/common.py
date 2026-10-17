@@ -65,3 +65,29 @@ def ramp(values, c0=DATA, c1=C.BITS):
 def printable(s: str) -> str:
     """GPT-2's samples, keeping only what a font can draw (it sometimes emits half of a multi-byte character)."""
     return " ".join("".join(c for c in s if c.isprintable() and ord(c) < 0x2000).split())
+
+
+def density_picture(width=3.6, height=1.4, lo=0.3, hi=1.3) -> VGroup:
+    """A jargon-card picture of a probability density: VGroup(axes, a coarse histogram of the standard bell, the
+    bell, the area between ``lo`` and ``hi`` shaded, its label P), the last two hidden at first.  ``narrow_hist(pic)``
+    is the same histogram with bars four times narrower, on the picture's axes wherever they now are."""
+    ax = Axes(x_range=[-3, 3, 1], y_range=[0, 0.45, 0.1], x_length=width, y_length=height, tips=False,
+              axis_config={"stroke_color": GREY_C, "include_ticks": False})
+    ax.y_axis.set_stroke(opacity=0)
+    edges = np.linspace(-3, 3, 7)
+    hist = hist_shape(ax, edges, [float(normal_pdf((a + b) / 2)) for a, b in zip(edges, edges[1:])], color=DATA,
+                      opacity=0.35, stroke_width=1.5)
+    xs = np.linspace(-3, 3, 120)
+    bell = curve(ax, xs, normal_pdf(xs), color=MODEL, stroke_width=3)
+    xa = np.linspace(lo, hi, 40)
+    shade = Polygon(ax.c2p(lo, 0), *[ax.c2p(x, float(normal_pdf(x))) for x in xa], ax.c2p(hi, 0), stroke_width=0,
+                    fill_color=C.BITS, fill_opacity=0)
+    p = MathTex(r"P", font_size=30, color=C.BITS).move_to(ax.c2p((lo + hi) / 2, 0.14)).set_opacity(0)
+    return VGroup(ax, hist, bell, shade, p)
+
+
+def narrow_hist(pic: VGroup) -> VMobject:
+    ax = pic[0]
+    edges = np.linspace(-3, 3, 25)
+    return hist_shape(ax, edges, [float(normal_pdf((a + b) / 2)) for a, b in zip(edges, edges[1:])], color=DATA,
+                      opacity=0.35, stroke_width=1.5)
