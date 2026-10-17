@@ -124,7 +124,9 @@ class Forcing(VoiceoverScene):
             label(rf"real clips: \ ${rj:.2f}$", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(ax, RIGHT, buff=0.45).shift(UP * 0.2)
         if holds:
-            verdict = ("Small errors feed on themselves when a model has only ever seen a perfect past; training on "
+            verdict = ("Teacher forcing is behind from its first few frames, and "
+                       + ("keeps sliding. " if late_t < early_t - 0.05 else "stays behind. ") if early_f > early_t + 0.15 else "")
+            verdict += ("Small errors feed on themselves when a model has only ever seen a perfect past; training on "
                        "noisy pasts makes it more robust to its own mistakes. ")
         elif loses:
             verdict = ("Here it's teacher forcing that holds up better: on clips this simple, training on noisy pasts "
