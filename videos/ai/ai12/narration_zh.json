@@ -1,165 +1,165 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第12部分：记忆",
  "chapters": {
-  "Hook": "",
-  "KVCache": "",
-  "Linear": "",
-  "Rules": "",
-  "SSM": "",
-  "Recall": "",
-  "Hybrid": "",
-  "Outro": ""
+  "Hook": "它读过的一切",
+  "KVCache": "1. 缓存",
+  "Linear": "2. 去掉softmax的注意力",
+  "Rules": "3. 怎样写入记忆",
+  "SSM": "4. 状态空间模型",
+  "Recall": "5. 回忆测试",
+  "Hybrid": "6. 混合架构",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
   "d0d039de84d2": {
    "scene": "Hook",
    "en": "Every token a transformer reads, it keeps: a key and a value, in every layer. <bookmark mark='a'/> For Llama 3.1 with seventy billion parameters, that's 320 kilobytes a token. <bookmark mark='b'/> A long conversation, a hundred and twenty-eight thousand tokens, needs 39 gigabytes of memory, just to remember what it has read.",
-   "zh": ""
+   "zh": "Transformer每读一个词元，都会把它留下来：在每一层里，留下一个键和一个值。<bookmark mark='a'/>对700亿参数的Llama 3.1来说，每个词元要占320KB。<bookmark mark='b'/>一段长对话，12.8万个词元，就需要39GB的内存，只为了记住它读过的东西。"
   },
   "75f8ed3fff3e": {
    "scene": "Hook",
    "en": "The alternative is to read like we do: keep a memory of a fixed size, and update it as each word arrives. <bookmark mark='a'/> Then the question is what to keep, and what to forget.",
-   "zh": ""
+   "zh": "另一种办法，是像我们人一样阅读：只保留一份固定大小的记忆，每读到一个词，就更新它一次。<bookmark mark='a'/>这样一来，问题就变成了：该留下什么，又该忘掉什么。"
   },
   "b99b645196fe": {
    "scene": "Hook",
    "en": "This part is about memory: how attention's cache is shrunk, how a fixed memory can stand in for it, <bookmark mark='a'/> and why the newest models use both.",
-   "zh": ""
+   "zh": "这一部分讲的是记忆：注意力的缓存怎样缩小，一份固定大小的记忆怎样顶替它，<bookmark mark='a'/>以及为什么最新的模型两样都用。"
   },
   "cd94920d2c23": {
    "scene": "KVCache",
    "en": "Chapter one. The cache.",
-   "zh": ""
+   "zh": "第1章。缓存。"
   },
   "1aa9e6ea2ade": {
    "scene": "KVCache",
    "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. For a long conversation, this memory, not the model's weights, is what fills the graphics card.",
-   "zh": ""
+   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。对一段长对话来说，把显卡塞满的，正是这份记忆，而不是模型的权重。"
   },
   "cf64e31a2cf2": {
    "scene": "KVCache",
    "en": "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every attention head kept its own keys and values, each token of context would cost 2.5 megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and each group shares one key and one value. That's 8 times less, 320 kilobytes a token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the hybrid Qwen3-Next. Let's see how.",
-   "zh": ""
+   "zh": "它有多大？就拿Llama 3.1来说：700亿参数，80层。<bookmark mark='a'/>如果每个注意力头都各存各的键和值，上下文里的每个词元，就要占2.5MB。<bookmark mark='b'/>Llama让它们共用：64个查询头分成8组，每一组共用一个键和一个值。这样就少了8倍，每个词元320KB，而质量几乎不变。<bookmark mark='c'/>DeepSeek-V3走得更远，混合架构的Qwen3-Next也是。我们来看看它们是怎么做的。"
   },
   "14dfe715d5d5": {
    "scene": "KVCache",
    "en": "DeepSeek's trick is multi-head latent attention. <bookmark mark='a'/> Each token is squeezed into a short latent vector, 512 numbers, and only that is cached. <bookmark mark='b'/> Keys and values for all 128 heads are unpacked from it by two more matrices when needed. <bookmark mark='c'/> And they don't even need to be unpacked: since a query's score is a product of matrices, the key's matrix can be folded into the query, part two's linear algebra, so attention reads the latent directly. <bookmark mark='d'/> Against full attention of the same shape, that's 71 times less memory.",
-   "zh": ""
+   "zh": "DeepSeek的诀窍，是多头潜在注意力。<bookmark mark='a'/>每个词元都被压缩成一个很短的潜在向量，只有512个数，缓存里存的就只有它。<bookmark mark='b'/>需要的时候，再用另外两个矩阵，从它解压出全部128个头的键和值。<bookmark mark='c'/>其实连解压都不用：一个查询的分数，是几个矩阵的乘积，所以可以把键的那个矩阵并进查询里，这是第2部分的线性代数，于是注意力直接读取潜在向量。<bookmark mark='d'/>和同样形状的完整注意力相比，内存少了71倍。"
   },
   "5b1be20ded2b": {
    "scene": "Linear",
    "en": "Chapter two. Attention without the softmax.",
-   "zh": ""
+   "zh": "第2章。去掉softmax之后的注意力。"
   },
   "4389cd853bd7": {
    "scene": "Linear",
    "en": "Here's attention for a whole text of T tokens: queries times keys, then times values. <bookmark mark='a'/> The product of queries and keys is a T by T table of scores: it grows with the square of the length. <bookmark mark='b'/> But matrix products can be grouped either way. Multiply keys and values first, and the table in the middle is only d by d, however long the text. <bookmark mark='c'/> The catch is the softmax: it sits between Q K and V, and blocks the regrouping. Replace it with simple positive features of the queries and keys, and you're allowed: that's linear attention.",
-   "zh": ""
+   "zh": "这是对一整段T个词元的文本做注意力：查询乘以键，再乘以值。<bookmark mark='a'/>查询和键的乘积，是一张T乘T的分数表：它随长度的平方增长。<bookmark mark='b'/>可是一串矩阵相乘，先乘哪两个都可以。先把键和值乘起来，中间那张表就只有d乘d，不管文本有多长。<bookmark mark='c'/>麻烦在于softmax：它夹在QK和V之间，挡住了这种重新组合。把它换成查询和键的一些简单的正值特征，就可以重新组合了：这就是线性注意力。"
   },
   "ab1db9ff954b": {
    "scene": "Linear",
    "en": "Now read the text one token at a time. With the product regrouped, everything the model needs from the past is one d by d matrix, the state. <bookmark mark='a'/> Each new token writes into it: its value times its key, an outer product, added on. <bookmark mark='b'/> To read, multiply the state by the query. The memory never grows: a transformer without the softmax is a recurrent network, Katharopoulos and colleagues showed in 2020.",
-   "zh": ""
+   "zh": "现在，一次读一个词元。乘法重新组合之后，模型需要从过去得到的一切，就是一个d乘d的矩阵，也就是状态。<bookmark mark='a'/>每个新词元都往里面写：它的值乘以它的键，也就是一个外积，加上去。<bookmark mark='b'/>要读取，就用状态乘以查询。这份记忆永远不会变大：2020年，卡塔罗普洛斯和同事们证明了，去掉softmax的Transformer，就是一个循环网络。"
   },
   "7649065f094b": {
    "scene": "Linear",
    "en": "The payoff grows with length. Softmax attention's work grows with the square of the text; the recurrence's grows in a straight line. <bookmark mark='a'/> At a million tokens, that's 3,906 times fewer multiplications. So why doesn't everyone use it? Because a fixed-size memory has to forget, and how it writes decides what it forgets.",
-   "zh": ""
+   "zh": "文本越长，好处越大。softmax注意力的计算量，随文本长度的平方增长；递推的计算量，则沿一条直线增长。<bookmark mark='a'/>到了100万个词元，乘法次数少了3906倍。那为什么不是人人都用它？因为固定大小的记忆，必须遗忘，而它怎样写入，决定了它会忘掉什么。"
   },
   "0ed511e71c50": {
    "scene": "Rules",
    "en": "Chapter three. How to write to memory.",
-   "zh": ""
+   "zh": "第3章。怎样写入记忆。"
   },
   "d13c6e6777b7": {
    "scene": "Rules",
    "en": "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how much their keys overlap. Random keys in d dimensions overlap by about one over the square root of d, <bookmark mark='b'/> so the leaks add up like N over d. With d equals 64, by 64 pairs the noise is as big as the answer. Adding can never erase: the memory just fills up.",
-   "zh": ""
+   "zh": "把状态当作一份记忆来用。写进去几对键值，每一对都是值乘以它的键，然后用其中一个键，把它的值读回来。<bookmark mark='a'/>你得到的，是它的值，再加上其他每一个值的一点点，多少取决于它们的键重叠了多少。在d维空间里，随机的键彼此重叠大约根号d分之1，<bookmark mark='b'/>所以这些泄漏加起来，大约是d分之N。d等于64时，到了64对，噪声就和答案一样大了。只做加法，永远擦不掉东西：记忆只会越填越满。"
   },
   "ba14acae3a0d": {
    "scene": "Rules",
    "en": "The first fix is to forget on purpose. Before each write, shrink the whole memory a little. <bookmark mark='a'/> Here are 128 pairs, read back by age. Adding blurs every pair the same. Decaying keeps the recent pairs sharp, and lets the old ones go. <bookmark mark='b'/> RetNet, gated linear attention and Mamba-2 all decay, and the best let each token choose how much: forget a lot at the start of a new topic, almost nothing in the middle of a sentence.",
-   "zh": ""
+   "zh": "第一个办法，是有意地遗忘。每次写入之前，先把整个记忆缩小一点。<bookmark mark='a'/>这里是128对键值，按它们写进去的早晚，依次读回来。只做加法，每一对都同样模糊。加上衰减，最近的几对保持清晰，旧的就随它去。<bookmark mark='b'/>RetNet、门控线性注意力和Mamba-2都会衰减，而其中最好的，让每个词元自己决定衰减多少：换到一个新话题的开头，就多忘一些；在一句话的中间，几乎什么都不忘。"
   },
   "2fff185a4992": {
    "scene": "Rules",
    "en": "The second fix is smarter. Before writing, read what the memory already says for this key, and write only the difference: what should be there, minus what is there. That's the delta rule, Widrow and Hoff's learning rule from 1960. <bookmark mark='a'/> It matters when the world changes. The door is open; later, the door is closed. Adding stores both, and answers with a mixture. The delta rule replaces the old value with the new. <bookmark mark='b'/> Here are 16 keys, rewritten 256 times with new values, then asked for the latest. Adding: an error of 19, it remembers every value ever written. Decaying: 0.92. The delta rule: 0.23.",
-   "zh": ""
+   "zh": "第二个办法更聪明。写入之前，先读一读记忆里这个键现在对应着什么，然后只写入差值：应该有的，减去已经有的。这就是δ规则，威德罗和霍夫在1960年提出的学习规则。<bookmark mark='a'/>当世界在变化时，这一点就很要紧。门开着；后来，门关上了。只做加法，两条都会存下来，回答的时候给出一个混合。δ规则则用新值替换旧值。<bookmark mark='b'/>这里有16个键，用新的值重写了256次，然后问它们最新的值。只做加法：误差是19，它记住了写进去过的每一个值。加上衰减：0.92。δ规则：0.23。"
   },
   "fc12a0569bdc": {
    "scene": "Rules",
    "en": "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule. So the memory is a little model, trained by part nine's gradient descent on the text as it's being read; part eleven's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a whole network, and you have test-time training.",
-   "zh": ""
+   "zh": "δ规则为什么管用，原因在这里。量一量记忆在一对键值上错得有多远：用这个键读出来的东西，和那个值之间差距的平方。<bookmark mark='a'/>它的梯度，就是这个差距乘以键。<bookmark mark='b'/>在它上面走一步梯度下降，恰好就是δ规则。所以，这份记忆是一个小模型，一边读文本，一边用第9部分的梯度下降，在这段文本上训练；第11部分那个在上下文中学习的注意力层，做的也是同一件事。<bookmark mark='c'/>给δ规则加上衰减，就得到了Qwen3-Next和Kimi Linear里的门控δ规则；把记忆换成一整个网络，就得到了测试时训练。"
   },
   "9dfa4fa9da4a": {
    "scene": "SSM",
    "en": "Chapter four. State-space models.",
-   "zh": ""
+   "zh": "第4章。状态空间模型。"
   },
   "1cb1021927fe": {
    "scene": "SSM",
    "en": "A different road to the same place started in control theory. A state-space model is a differential equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='a'/> Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. <bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; large steps, and it's gone in a few tokens.",
-   "zh": ""
+   "zh": "通往同一个地方的另一条路，起点在控制理论。状态空间模型是一个微分方程：一个隐状态h随时间演化，由输入x推动，再读出为y。<bookmark mark='a'/>以Δ为步长去读一段文本，它就变成了一个递推：先把状态缩小，再加上输入。<bookmark mark='b'/>步长决定了记忆。步子小，一个输入会停留很久；步子大，几个词元之后它就没了。"
   },
   "2f33d5ae8dd0": {
    "scene": "SSM",
    "en": "But a fixed step size can't tell what matters. Here's an input stream of noise with two marked values worth remembering. <bookmark mark='a'/> With a fixed step, each marked value washes out in the noise that follows. <bookmark mark='b'/> Mamba's idea, in 2023, was to let each input choose its own step size: a big step to take in something important, almost no step at all for noise, so the state holds still. Now the state keeps the marked value until the next one replaces it. A memory that chooses.",
-   "zh": ""
+   "zh": "可是，固定的步长分不清什么要紧。这里有一串输入，全是噪声，只夹着两个值得记住的标记值。<bookmark mark='a'/>步长固定的话，每个标记值都会被后面的噪声冲淡。<bookmark mark='b'/>2023年，Mamba的想法是：让每个输入自己选步长。遇到重要的东西，就迈一大步把它收进来；遇到噪声，几乎一步都不迈，状态就保持不动。现在，状态会一直留着那个标记值，直到下一个标记值把它替换掉。这是一份会选择的记忆。"
   },
   "f3772039483d": {
    "scene": "SSM",
    "en": "In 2024, Mamba-2 showed the two roads meet. A selective state-space model is linear attention with a decay: its input matrix plays the key, its output matrix the query. <bookmark mark='a'/> So today's fast memories are one family: a matrix that's read with a query, and written by one of a few rules. Add; decay then add; correct with the delta rule; or decay and correct, the gated delta rule of Qwen3-Next and Kimi Linear.",
-   "zh": ""
+   "zh": "2024年，Mamba-2表明，这两条路汇合了。一个选择性的状态空间模型，就是带衰减的线性注意力：它的输入矩阵扮演键，输出矩阵扮演查询。<bookmark mark='a'/>所以，今天这些快速的记忆，是同一个家族：一个用查询来读的矩阵，用少数几种规则之一来写。只做加法；先衰减再加；用δ规则来纠正；或者既衰减又纠正，也就是Qwen3-Next和Kimi Linear的门控δ规则。"
   },
   "b232599de434": {
    "scene": "Recall",
    "en": "Chapter five. A recall test.",
-   "zh": ""
+   "zh": "第5章。回忆测试。"
   },
   "e81f3ddaabb6": {
    "scene": "Recall",
    "en": "How much does forgetting cost? Here's a test of pure memory: a list of keys, each followed by its value; <bookmark mark='a'/> then some of the keys again, and the model must answer with their values. It's the skill a model needs to quote a name or a number from far back in a document. <bookmark mark='b'/> We trained tiny one-layer models to play it, with three kinds of memory: softmax attention, linear attention that only adds, and the delta rule.",
-   "zh": ""
+   "zh": "遗忘的代价有多大？这里有一道纯考记忆的题：一串键，每个键后面跟着它的值；<bookmark mark='a'/>然后，其中一些键再出现一次，模型必须答出它们的值。要从一篇文档很靠前的地方，引用一个名字或一个数字，模型需要的就是这种本领。<bookmark mark='b'/>我们训练了几个只有一层的小模型来做这道题，用了三种记忆：softmax注意力，只做加法的线性注意力，以及δ规则。"
   },
   "b6b2a4f6de2e": {
    "scene": "Recall",
    "en": "With 8 pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls apart: 38 percent right at 48 pairs, as its crosstalk swamps the answers, worst once there are more pairs than each key has numbers, 16 here. The delta rule holds on much longer: 88 percent. And softmax attention, which simply keeps every pair, gets 100. <bookmark mark='b'/> Exact recall is what attention buys with its growing cache, and what a fixed memory has to approximate.",
-   "zh": ""
+   "zh": "只有8对的时候，三种都能应付。<bookmark mark='a'/>随着列表变长，只做加法的记忆就垮了：到48对时，只答对38%，因为串扰淹没了答案；一旦键值对的数目，超过了每个键里数的个数，也就是这里的16，情况就最糟。δ规则撑得久得多：88%。而softmax注意力，干脆把每一对都留着，得到100%。<bookmark mark='b'/>精确的回忆，是注意力用不断变大的缓存换来的，也是固定大小的记忆只能去逼近的。"
   },
   "6eba0da36312": {
    "scene": "Hybrid",
    "en": "Chapter six. Hybrids.",
-   "zh": ""
+   "zh": "第6章。混合架构。"
   },
   "459dfb8b3681": {
    "scene": "Hybrid",
    "en": "Fixed-size memories are cheap, but they forget; attention remembers everything exactly, at a price. So the newest models mix them. <bookmark mark='a'/> Jamba, in 2024, put one attention layer among every eight, the rest Mamba. MiniMax-01 does the same with lightning attention. Qwen3-Next and Kimi Linear, in 2025, use one attention layer in four, the other three running the gated delta rule. <bookmark mark='b'/> The fast layers carry the gist of a long text cheaply; the few attention layers look up exact details when they're needed.",
-   "zh": ""
+   "zh": "固定大小的记忆很便宜，但会遗忘；注意力能把一切都记得分毫不差，只是要付出代价。所以，最新的模型把两者混在一起。<bookmark mark='a'/>2024年的Jamba，每8层里放1层注意力，其余都是Mamba。MiniMax-01也是这样，用的是闪电注意力。2025年的Qwen3-Next和Kimi Linear，每4层里用1层注意力，另外3层跑的是门控δ规则。<bookmark mark='b'/>快速的那些层，花很小的代价，记住长文本的大意；少数几层注意力，在需要的时候，去查找精确的细节。"
   },
   "e860ada0cccc": {
    "scene": "Hybrid",
    "en": "The memory bill shows why. For one conversation of a hundred and twenty-eight thousand tokens, <bookmark mark='a'/> Llama 3.1's grouped-query cache takes 39 gigabytes; DeepSeek-V3's latent cache, 8.4; Qwen3-Next, with attention in only a quarter of its layers, 3.0, about 13 times less than Llama. Its delta-rule layers add just 36 megabytes of state, the same at any length.",
-   "zh": ""
+   "zh": "看一看这份内存账单，就明白为什么了。拿一段12.8万个词元的对话来说，<bookmark mark='a'/>Llama 3.1的分组查询缓存，要占39GB；DeepSeek-V3的潜在缓存，是8.4GB；Qwen3-Next只在4分之1的层里用注意力，只要3.0GB，大约比Llama少13倍。它那些δ规则层，只多出36MB的状态，而且不管对话有多长，都是这么多。"
   },
   "a67a8115f2e4": {
    "scene": "Outro",
    "en": "Let's take stock. Attention's memory is its cache, and models shrink it by sharing keys and values, or squeezing them into a latent. Drop the softmax, regroup the product, and attention becomes a recurrence on a fixed matrix memory. Written by adding, that memory blurs; with decay, it forgets the old; with the delta rule, one step of gradient descent per token, it corrects itself. State-space models, made selective, turned out to be the same family. And the newest models mix a few attention layers with many fast ones.",
-   "zh": ""
+   "zh": "我们来盘点一下。注意力的记忆，就是它的缓存；模型让键和值共用，或者把它们压进一个潜在向量，来缩小这份缓存。去掉softmax，把乘法重新组合，注意力就变成了在一份固定大小的矩阵记忆上的递推。只用加法写入，这份记忆会变得模糊；加上衰减，它会忘掉旧的；用δ规则，每个词元走一步梯度下降，它就会自我纠正。状态空间模型变得有选择性之后，原来也属于同一个家族。而最新的模型，把少数几层注意力，和许多快速的层混在一起。"
   },
   "70662cc9b7fb": {
    "scene": "Outro",
    "en": "Next comes sparsity: attending to only some of the past, and using only some of the model. Agents, in part eighteen, need memory over very long horizons. Part nineteen is about serving the cache fast, and part twenty looks for memories inside a trained model.",
-   "zh": ""
+   "zh": "接下来是稀疏性：只关注过去的一部分，只动用模型的一部分。第18部分的智能体，需要在非常长的时间跨度上保持记忆。第19部分讲的是，部署服务时怎样快速地用好缓存；第20部分，则会到训练好的模型内部，去寻找记忆。"
   },
   "81d800cfbf29": {
    "scene": "Outro",
    "en": "Next time: sparsity. The biggest models today don't use all their weights for every token: a router sends each token to a few experts among hundreds. <bookmark mark='a'/> How do you route, and how do you keep every expert busy?",
-   "zh": ""
+   "zh": "下一次：稀疏性。如今最大的模型，并不是每个词元都用上全部的权重：一个路由器，把每个词元送到几百个专家中的少数几个那里。<bookmark mark='a'/>该怎样路由，又怎样让每个专家都有活干？"
   },
   "96731c77efcb": {
    "scene": "Outro",
    "en": "Songlin Yang's papers and blog on linear attention and the delta rule are the best way in. Thanks for watching, and see you in part thirteen.",
-   "zh": ""
+   "zh": "关于线性注意力和δ规则，杨松琳的论文和博客，是最好的入门读物。感谢观看，我们第13部分再见。"
   }
  },
  "title_en": "AI, Built: Part 12, Memory",
