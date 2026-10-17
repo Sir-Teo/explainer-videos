@@ -33,10 +33,10 @@
    "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
    "zh": "杨格问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.67，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：杨格和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
   },
-  "e8723b973d84": {
+  "723d9a9ea482": {
    "scene": "Chinchilla",
-   "en": "Chapter two. Spending a compute budget.",
-   "zh": "第2章。怎样花一笔算力预算。"
+   "en": "Chapter two. Size or data?",
+   "zh": "第2章。规模还是数据？"
   },
   "053b0be754de": {
    "scene": "Chinchilla",
@@ -63,10 +63,10 @@
    "en": "It memorizes the entries it was shown within about 100 steps, and for a long time, it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of steps later, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Weight decay is what drives it: it keeps squeezing the weights, and the memorized lookup table is more expensive than the rule.",
    "zh": "大约100步之内，它就记住了给它看过的那些格子；而在很长一段时间里，没看过的那些，它答对的机会并不比瞎猜高。<bookmark mark='a'/>不管它，接着训练。然后，几千步之后，在没看过的格子上，准确率猛地蹿升到接近100%。网络找到了规则。他们把这种现象叫作顿悟。<bookmark mark='b'/>推动它的，是权重衰减：它不停地挤压权重，而背下来的那张查找表，代价比规则更高。"
   },
-  "eaf12426f1f0": {
+  "7f55512795c4": {
    "scene": "Grok",
-   "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> They're built from a few pure frequencies, waves around the clock. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part twenty takes that idea to real models.",
-   "zh": "它找到的规则是什么？看看它给每个数学到的向量。<bookmark mark='a'/>它们由少数几个纯粹的频率组成，是绕着钟面转的波。<bookmark mark='b'/>沿着它们的主方向看，这些数落在一个个圆上。网络把每个数变成一个角度，把数相加，就是把角度相加，就像钟表那样。2023年，尼尔·南达和同事们弄清了这一点，这是最早完整解释一个训练好的网络在计算什么的工作之一。第20部分会把这个想法，带到真实的模型上。"
+   "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of their weight sits on 9 frequencies out of 48: waves around the clock. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part twenty takes that idea to real models.",
+   "zh": "它找到的规则是什么？看看它给每个数学到的向量。<bookmark mark='a'/>它们的分量大多集中在48个频率中的9个上：都是绕着钟面转的波。<bookmark mark='b'/>沿着它们的主方向看，这些数落在一个个圆上。网络把每个数变成一个角度，把数相加，就是把角度相加，就像钟表那样。2023年，尼尔·南达和同事们弄清了这一点，这是最早完整解释一个训练好的网络在计算什么的工作之一。第20部分会把这个想法，带到真实的模型上。"
   },
   "58cbcf30d35c": {
    "scene": "Outro",

@@ -72,7 +72,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def plan(self):
         title = label(r"Part 10: \ The Mathematics of Scale", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"lazy networks, \ muP, \ scaling laws, \ Chinchilla, \ grokking", font_size=30, color=C.BITS)
+        sub = label(r"lazy networks, \ $\mu$P, \ scaling laws, \ Chinchilla, \ grokking", font_size=30, color=C.BITS)
         sub.next_to(title, DOWN, buff=0.25)
         smap = series_map(current=10, done=9).scale(0.85).move_to(DOWN * 0.9)
         with self.voiceover(

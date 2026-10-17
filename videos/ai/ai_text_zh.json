@@ -2094,7 +2094,9 @@
     "slope $-0.36$": "斜率$-0.36$",
     "width $32$": "宽度$32$",
     "width $256$": "宽度$256$",
-    "width $2{,}048$": "宽度$2{,}048$"
+    "width $2{,}048$": "宽度$2{,}048$",
+    "lazy networks, \\ $\\mu$P, \\ scaling laws, \\ Chinchilla, \\ grokking": "惰性网络，\\ $\\mu$P，\\ 规模定律，\\ Chinchilla，\\ 顿悟",
+    "stars: \\ each valley's bottom, \\\\ a parabola fitted through it": "星号：\\ 每个山谷的谷底，\\\\ 用一条抛物线拟合出来"
   },
   "phrases": {
     "width": "宽度",

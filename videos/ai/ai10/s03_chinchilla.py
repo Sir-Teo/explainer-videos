@@ -16,7 +16,7 @@ class Chinchilla(VoiceoverScene):
 
     def card(self):
         card = chapter_card(2, r"Size or data?", r"How should a fixed budget be spent?", part=10, lit=(2020, 2022))
-        with self.voiceover("Chapter two. Spending a compute budget."):
+        with self.voiceover("Chapter two. Size or data?"):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -43,8 +43,13 @@ class Chinchilla(VoiceoverScene):
             ok = np.isfinite(f)
             groups.add(VGroup(curve(ax, np.log10(p[ok]), f[ok], col, 3.5),
                               *[Dot(ax.c2p(math.log10(pp), ff), radius=0.06, color=col) for pp, ff in zip(p[ok], f[ok])]))
-            i = int(np.nanargmin(f))
-            mins.add(Star(n=5, outer_radius=0.13, color=WHITE, fill_opacity=1).move_to(ax.c2p(math.log10(p[i]), f[i])))
+            # the valley's bottom: a parabola in log N through the lowest points (the same fit as the chart that follows)
+            lp, ff = np.log10(p[ok]), f[ok]
+            i = int(np.argmin(ff))
+            sl = slice(max(0, i - 2), min(len(ff), i + 3))
+            a2, a1, a0 = np.polyfit(lp[sl], ff[sl], 2)
+            xv = -a1 / (2 * a2)
+            mins.add(Star(n=5, outer_radius=0.13, color=WHITE, fill_opacity=1).move_to(ax.c2p(xv, np.polyval([a2, a1, a0], xv))))
         key = VGroup(*[label(rf"budget ${b / 1e12:g}\times10^{{12}}$ operations", font_size=24, color=c)
                        for b, c in zip(budgets, BUDGET_COLORS)])
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.5, 1.6, 0])
@@ -52,6 +57,7 @@ class Chinchilla(VoiceoverScene):
         rule = cmath(r"C", r"\approx", r"6", r"\,N", r"\,D", colors=colors, font_size=40).next_to(key, DOWN, buff=0.5)
         rl = label(r"$N$ parameters, \ $D$ training tokens", font_size=24, color=GREY_A).next_to(rule, DOWN, buff=0.15)
         best = label(r"too small: \ underfits; \\ too big: \ undertrained", font_size=26, color=GREY_A).next_to(rl, DOWN, buff=0.4)
+        starl = label(r"stars: \ each valley's bottom, \\ a parabola fitted through it", font_size=20, color=GREY_B)
         # a budget is an area: N wide, D tall; the same area can be a wide, short block or a narrow, tall one
         area, corner = 2.0, np.array([3.2, -3.3, 0])
         wv = ValueTracker(1.4)
@@ -90,7 +96,8 @@ class Chinchilla(VoiceoverScene):
                 self.play(Create(g_), run_time=1.2)
             self.play(FadeIn(best))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(s_, scale=0.4) for s_ in mins], lag_ratio=0.3))
+            starl.next_to(best, DOWN, buff=0.35)
+            self.play(LaggedStart(*[FadeIn(s_, scale=0.4) for s_ in mins], lag_ratio=0.3), FadeIn(starl))
         self.wait(0.3)
         self.clear_scene()
 

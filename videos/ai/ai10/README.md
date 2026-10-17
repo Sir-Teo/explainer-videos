@@ -7,7 +7,7 @@ and three chapters:
 
 * **A power law.** Held-out loss at seven widths, fitted by L(N) = E + A·N^(−α).
 * **Wider and wider.** How far the hidden weights move in training falls with width (about 1/√width): the lazy,
-  neural-tangent-kernel regime. Learning-rate sweeps at widths 64, 256 and 1,024: the best rate drifts with width in
+  neural-tangent-kernel regime. Learning-rate sweeps at widths 32, 256 and 2,048: the best rate drifts with width in
   the usual parametrization and stays put in μP (Yang & Hu; Tensor Programs V).
 * **Size or data?** C ≈ 6ND; three compute budgets, each split five ways between model size and training tokens: a
   valley per budget, the best size growing with the budget; Kaplan et al. (2020) and Chinchilla (2022).
