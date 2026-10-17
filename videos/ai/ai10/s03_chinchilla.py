@@ -13,6 +13,7 @@ class Chinchilla(VoiceoverScene):
         self.card()
         self.isoflop()
         self.history()
+        self.twoterm()
 
     def card(self):
         card = chapter_card(2, r"Size or data?", r"How should a fixed budget be spent?", part=10, lit=(2020, 2022))
@@ -182,5 +183,100 @@ class Chinchilla(VoiceoverScene):
             self.play(FadeIn(rows[3]))
             vo.wait_until("c")
             self.play(FadeIn(rows[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def twoterm(self):
+        from scipy.optimize import least_squares
+
+        d = load("isoflop")
+        N, D, L = [], [], []
+        for b in d["budgets"]:
+            n, t, f = (np.asarray(d[f"{k}{float(b):.0e}"], float) for k in ("params", "tokens", "finals"))
+            ok = np.isfinite(f)
+            N, D, L = N + list(n[ok]), D + list(t[ok]), L + list(f[ok])
+        N, D, L = np.array(N), np.array(D), np.array(L)
+
+        def res(p):
+            return p[0] + np.exp(p[1]) * N ** -p[2] + np.exp(p[3]) * D ** -p[4] - L
+
+        fits = [least_squares(res, [1.5, 3, a0, 3, b0], loss="huber", f_scale=0.02,
+                              bounds=([0, -10, 0.01, -10, 0.01], [3, 30, 2, 30, 2])) for a0 in (0.2, 0.4, 0.7) for b0 in (0.2, 0.4, 0.7)]
+        fit = min(fits, key=lambda r: r.cost)
+        E, A, al, B, be = fit.x[0], math.exp(fit.x[1]), fit.x[2], math.exp(fit.x[3]), fit.x[4]
+        err = float(np.sqrt(np.mean(res(fit.x) ** 2)))
+        ex = be / (al + be)
+        # the best split of the largest budget, and what a smaller model must pay to match it
+        C0 = float(max(d["budgets"]))
+        Nopt = (al * A / (be * B)) ** (1 / (al + be)) * (C0 / 6) ** ex
+        Dopt = C0 / 6 / Nopt
+        Lstar = E + A * Nopt ** -al + B * Dopt ** -be
+        kmin = (A / (Lstar - E)) ** (1 / al) / Nopt
+
+        def cost(k):  # training compute, relative, for a model k times the best size to reach the same loss
+            r = Lstar - E - A * (k * Nopt) ** -al
+            return 6 * k * Nopt * (B / r) ** (1 / be) / C0
+
+        colors = {r"E": GREY_A, r"\alpha": C.BITS, r"\beta": C.TRUE_P}
+        f1 = cmath(r"L(N, D) = ", r"E", r"+ \frac{A}{N^{", r"\alpha", r"}} + \frac{B}{D^{", r"\beta", r"}}", colors=colors, font_size=36)
+        f1.move_to([-3.4, 2.4, 0])
+        vals = label(rf"fit to our ${len(L)}$ runs: \ $E = {E:.2f}$, \ $\alpha = {al:.2f}$, \ $\beta = {be:.2f}$ \\ "
+                     rf"(off by ${err:.2f}$ bits on average)", font_size=20, color=GREY_A).next_to(f1, DOWN, buff=0.15)
+        f2 = MathTex(r"\min_{N}\ L\big(N, \tfrac{C}{6N}\big) \;\Rightarrow\; N_{\text{opt}} \propto C^{\,\beta / (\alpha + \beta)}",
+                     font_size=32).next_to(vals, DOWN, buff=0.45)
+        f3 = MathTex(rf"\beta / (\alpha + \beta) = {ex:.2f}", font_size=32, color=C.BITS).next_to(f2, DOWN, buff=0.25)
+        f3l = label(rf"the parabolas gave about the same; \\ the best split here: \ ${Dopt / Nopt:.0f}$ characters per parameter",
+                    font_size=20, color=GREY_A).next_to(f3, DOWN, buff=0.12)
+        # right: the price of a smaller model
+        ks = np.linspace(max(kmin * 1.04, 0.2), 1.0, 120)
+        cs = np.array([cost(k) for k in ks])
+        top = 16.0
+        ax = CornerAxes(x_range=[0.2, 1.0, 0.2], y_range=[0, math.log10(top), 0.5], x_length=5.0, y_length=3.8, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([3.6, -0.2, 0])
+        ok = cs <= top
+        line = VMobject(color=C.SURPRISE, stroke_width=3.5).set_points_smoothly([ax.c2p(k, math.log10(c)) for k, c in zip(ks[ok], cs[ok])])
+        yt = VGroup(*[MathTex(rf"{v}\times", font_size=20, color=GREY_B).next_to(ax.c2p(0.2, math.log10(v)), LEFT, buff=0.08)
+                      for v in (1, 2, 4, 8, 16)])
+        xt = VGroup(*[MathTex(t_, font_size=20, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
+                      for v, t_ in ((0.25, r"\tfrac14"), (0.5, r"\tfrac12"), (0.75, r"\tfrac34"), (1.0, r"1"))])
+        xn = label(r"model size, \ relative to the best for the budget", font_size=20, color=GREY_A).next_to(xt, DOWN, buff=0.08)
+        yn = label(r"training compute for the same loss", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.15)
+        marks = VGroup()
+        for k in (0.75, 0.5):
+            c = cost(k)
+            marks.add(VGroup(Dot(ax.c2p(k, math.log10(c)), radius=0.07, color=C.BITS),
+                             MathTex(rf"+{100 * (c - 1):.0f}\%", font_size=24, color=C.BITS).next_to(ax.c2p(k, math.log10(c)), UR, buff=0.08)))
+        wall = DashedLine(ax.c2p(kmin, 0), ax.c2p(kmin, math.log10(top)), dash_length=0.06, stroke_width=2, color=GREY_B)
+        wl = label(r"below this size: \\ never, \ at any budget", font_size=18, color=GREY_B).next_to(wall, RIGHT, buff=0.08).shift(UP * 1.2)
+        foot = label(r"Llama 3, $8$ billion parameters: \ $15$ trillion tokens, \ about $1{,}900$ per parameter \ (as published)",
+                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
+        cite_ = cite(r"J.~Hoffmann et al.\ (2022), \ approach 3; \ N.~Sardana \& J.~Frankle, \textit{Beyond Chinchilla-Optimal} (2023)",
+                     corner=UR)
+        c75, c50 = cost(0.75), cost(0.5)
+        with self.voiceover(
+            "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, "
+            "plus a term that shrinks with the parameters, plus one that shrinks with the data. Fit to our eighteen "
+            f"runs, it's off by only {err:.2f} bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, "
+            f"and the best size grows as the budget to the power beta over alpha plus beta: {ex:.2f} here, close to "
+            "what the parabolas said. <bookmark mark='c'/> The same formula prices over-training. To match the best "
+            f"model's loss with a model three quarters its size costs {100 * (c75 - 1):.0f} percent more training; "
+            f"with half the size, {100 * (c50 - 1):.0f} percent more; and below about {kmin:.2f} of the size, no amount "
+            "of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, "
+            "that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred "
+            "tokens per parameter, a hundred times Chinchilla's ratio."
+        ) as vo:
+            self.play(FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Write(f1), FadeIn(vals))
+            vo.wait_until("b")
+            self.play(Write(f2))
+            self.play(Write(f3), FadeIn(f3l))
+            vo.wait_until("c")
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn))
+            self.play(Create(line), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.4), Create(wall), FadeIn(wl))
+            vo.wait_until("d")
+            self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
