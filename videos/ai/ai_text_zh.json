@@ -2607,7 +2607,10 @@
     "below this size: \\\\ never, \\ at any budget": "小于这个大小：\\\\ 多少预算 \\ 都达不到",
     "Llama 3, $8$ billion parameters: \\ $15$ trillion tokens, \\ about $1{,}900$ per parameter \\ (as published)": "Llama 3，$80$亿参数：\\ $15$万亿个词元，\\ 每个参数约$1{,}900$个 \\ （据公开资料）",
     "J.~Hoffmann et al.\\ (2022), \\ approach 3; \\ N.~Sardana \\& J.~Frankle, \\textit{Beyond Chinchilla-Optimal} (2023)": "J.~Hoffmann等（2022），\\ 方法3；\\ N.~Sardana \\& J.~Frankle，\\textit{Beyond Chinchilla-Optimal}（2023）",
-    "test accuracy": "测试准确率"
+    "test accuracy": "测试准确率",
+    "E.~Frantar et al., \\textit{GPTQ} (2022); \\ S.~Ashkboos et al., \\textit{QuaRot} (2024)": "E.~Frantar等，\\textit{GPTQ}（2022）；\\ S.~Ashkboos等，\\textit{QuaRot}（2024）",
+    "K.~Black et al., \\textit{$\\pi_0$} (2024); \\ K.~Pertsch et al., \\textit{FAST} (2025)": "K.~Black等，\\textit{$\\pi_0$}（2024）；\\ K.~Pertsch等，\\textit{FAST}（2025）",
+    "B.~Zhang \\& R.~Sennrich, \\textit{RMSNorm} (2019); \\ N.~Shazeer, \\textit{GLU Variants Improve Transformer} (2020)": "B.~Zhang \\& R.~Sennrich，\\textit{RMSNorm}（2019）；\\ N.~Shazeer，\\textit{GLU Variants Improve Transformer}（2020）"
   },
   "phrases": {
     "width": "宽度",
