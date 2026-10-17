@@ -1,0 +1,100 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "Chain": "",
+  "RL": "",
+  "TestTime": "",
+  "Outro": ""
+ },
+ "lines": {
+  "db0ef4310c5c": {
+   "scene": "Hook",
+   "en": "Here's a puzzle for a small transformer: sixteen bits. Is the number of ones odd? <bookmark mark='a'/> Trained to answer straight away, our two-layer model is right 49 percent of the time: a coin flip. <bookmark mark='b'/> Now train the very same model to write its work first: going along the bits, is the count odd so far? Each step is easy, just the last answer and one more bit. <bookmark mark='c'/> Its final answer is right 100 percent of the time. Same model, same size. It just got to think out loud.",
+   "zh": ""
+  },
+  "750b111d3225": {
+   "scene": "Hook",
+   "en": "This part is about reasoning: why writing a chain of thought adds computation, how models learn to reason from nothing but a checker of answers, <bookmark mark='a'/> and what you get by letting them think longer.",
+   "zh": ""
+  },
+  "65974bccad47": {
+   "scene": "Chain",
+   "en": "Chapter one. Thinking out loud is computing.",
+   "zh": ""
+  },
+  "52d606e65b07": {
+   "scene": "Chain",
+   "en": "Why does writing help? Look at the computation. A transformer runs every token through the same fixed stack of layers. <bookmark mark='a'/> Answering at once, the longest chain of steps that happen one after another is as tall as the stack: L layers, however hard the question. <bookmark mark='b'/> But a token it writes goes back in as input. <bookmark mark='c'/> So the chain of steps can climb the stack, come back down, and climb again, once per token. With k tokens of thought, L times k plus one steps in a row. <bookmark mark='d'/> Theory backs this up: answering at once, a transformer is limited to shallow computations; given a long enough chain of thought, it can carry out any step-by-step procedure.",
+   "zh": ""
+  },
+  "43f92b226073": {
+   "scene": "Chain",
+   "en": "Here are all our runs, on strings of four, eight and sixteen bits. <bookmark mark='a'/> Answering at once is solved at four bits, a coin flip at eight, and a coin flip at sixteen: every bit flips the answer, and two layers can't learn to combine sixteen of them at once. <bookmark mark='b'/> With the running parity written first, all three are solved. <bookmark mark='c'/> And the chain is also easier to learn. At sixteen bits it's reliable after about 1,300 steps; answering at once never gets off the ground.",
+   "zh": ""
+  },
+  "ac0e2bd2e923": {
+   "scene": "RL",
+   "en": "Chapter two. Learning from a checker.",
+   "zh": ""
+  },
+  "79c53ed642fb": {
+   "scene": "RL",
+   "en": "How do you teach a model to reason, when nobody can write down the steps for it? DeepSeek-R1 used a recipe with almost no human help: questions with checkable answers, and reinforcement learning. We do it here with a small transformer that has had a little practice at two-digit addition. <bookmark mark='a'/> Give it a question, and sample 8 answers. <bookmark mark='b'/> A checker marks each one: here 2 of 8 are right. <bookmark mark='c'/> Each answer's advantage is its reward minus the group's average, divided by the spread: right answers above the line, wrong ones below. <bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. That's GRPO. No one judges the steps, and no separate critic is needed: the group is its own baseline. And when every answer is right, or every one wrong, the advantages are all zero: nothing to learn.",
+   "zh": ""
+  },
+  "48acda2c9144": {
+   "scene": "RL",
+   "en": "Repeat that for 300 steps of thirty-two questions. <bookmark mark='a'/> Our model starts out right 36 percent of the time, and climbs to 81 percent, taught by nothing but a checker. <bookmark mark='b'/> Here are its answers to six questions, eight tries each: 14 of 48 right before, <bookmark mark='c'/> 27 after. The probability moved onto the answers that check out.",
+   "zh": ""
+  },
+  "bdcb54251ef7": {
+   "scene": "RL",
+   "en": "What we used is an outcome reward: only the final answer is checked. <bookmark mark='a'/> The other way is a process reward: a second model, trained on people's judgments, scores every step, so a lucky guess after a wrong step earns nothing. <bookmark mark='b'/> Process rewards catch more, but a learned grader can be fooled, and a model under pressure learns to fool it. The big reasoning models of 2025 mostly rely on checkable outcomes: math with known answers, code with tests. Trained that way, DeepSeek-R1's chains of thought grew longer on their own, and started to double-check their own work.",
+   "zh": ""
+  },
+  "d2e21b079625": {
+   "scene": "TestTime",
+   "en": "Chapter three. Thinking longer.",
+   "zh": ""
+  },
+  "0dcbb35cb955": {
+   "scene": "TestTime",
+   "en": "There's another way to spend computation: at answer time. Take our addition model, before the reinforcement learning, and let it answer each of 200 questions 32 times. <bookmark mark='a'/> Green is right, red is wrong. Not one question is always right, and not one is always wrong: each of the 200 comes out right only some of the time. <bookmark mark='b'/> So trying again always has a chance of helping. <bookmark mark='c'/> If c of n samples are right, the chance that at least one of k tries is right is one minus n minus c choose k, over n choose k. It's called pass at k, and it needs a checker to tell which try was the right one.",
+   "zh": ""
+  },
+  "78471cd25224": {
+   "scene": "TestTime",
+   "en": "So how much does trying more buy? <bookmark mark='a'/> With a checker, a lot: one try is right 33 percent of the time, and with 32 tries, 100 percent. Every doubling of the tries buys a little more. <bookmark mark='b'/> Without a checker, take a vote: the answer it gives most often. That climbs from 32 to 61 percent: less, because a vote can't recover an answer the model rarely gives. <bookmark mark='c'/> And the dashed line is the same model after reinforcement learning, with just one try: 81 percent. Training moved what used to need many tries into one. Today's reasoning models do both: trained by RL to think in long chains, and then given more time to think when the question is hard.",
+   "zh": ""
+  },
+  "a871d4c1bc03": {
+   "scene": "Outro",
+   "en": "Let's take stock. Writing out its steps lets a fixed-depth model compute for longer: L layers, once per token. That's how our two-layer model learned sixteen-bit parity. Reinforcement learning from a checker, comparing each answer with its group, taught a model to add more reliably than practice alone. And at answer time, more tries buy more right answers, as long as something can tell which one is right.",
+   "zh": ""
+  },
+  "0e4db0ff8351": {
+   "scene": "Outro",
+   "en": "Reasoning over many steps is what agents do, in part eighteen. Every token of thought costs time to write, which is part nineteen. And whether the chain a model writes is really how it got its answer is a question for the last part.",
+   "zh": ""
+  },
+  "6e571403cfcc": {
+   "scene": "Outro",
+   "en": "Next time: agents. A robot that can't see where it is keeps a belief over every place it might be, <bookmark mark='a'/> and sharpens it with each step and each glimpse of a door.",
+   "zh": ""
+  },
+  "912a0e138777": {
+   "scene": "Outro",
+   "en": "Thanks for watching, and see you in part eighteen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 17, Reasoning",
+ "chapters_en": {
+  "Hook": "Sixteen bits",
+  "Chain": "1. Thinking out loud is computing",
+  "RL": "2. Learning from a checker",
+  "TestTime": "3. Thinking longer",
+  "Outro": "Recap, and where this comes back"
+ }
+}
