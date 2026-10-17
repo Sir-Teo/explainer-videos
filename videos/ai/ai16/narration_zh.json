@@ -50,6 +50,11 @@
    "en": "One codebook can only be so fine. The trick sound models use is to quantize in stages. <bookmark mark='a'/> The first stage codes the patch roughly; the second codes what the first missed; then the third, and the fourth. <bookmark mark='b'/> Four stages of sixteen codes do as well here as one codebook of two hundred and fifty-six, and each token stays a small number. That's residual vector quantization, inside every neural audio codec. A simpler cousin, finite scalar quantization, just rounds a few numbers to a few levels, with no codebook at all.",
    "zh": "一个码本能做到的精细程度，总是有限的。声音模型用的诀窍，是分几级来量化。<bookmark mark='a'/>第1级粗略地给这个小块编码；第2级编码第1级漏掉的部分；然后是第3级，第4级。<bookmark mark='b'/>在这里，4级、每级16个码字，效果和一个有256个码字的码本一样好，而且每个词元都还是一个很小的数。这就是残差向量量化，每一个神经音频编解码器里都有它。它还有一个更简单的近亲，叫有限标量量化：只是把几个数各自取整到几个档位上，根本不用码本。"
   },
+  "aee951c9544c": {
+   "scene": "VQ",
+   "en": "In a real model, the codebook is learned along with the encoder and decoder, and that hits a snag. <bookmark mark='a'/> Each encoder output z is replaced by its nearest code. Picking the nearest is a jump, with no gradient. <bookmark mark='b'/> The fix is the straight-through trick: forward, use the code; backward, pretend nothing happened, and hand the code's gradient straight to z. <bookmark mark='c'/> Two more terms keep things together: one pulls each code toward the outputs that chose it, the other, the commitment loss, keeps the outputs from wandering away from their codes. <bookmark mark='d'/> Even so, codes that nobody picks stop learning, and many go unused. Finite scalar quantization sidesteps all of it: squash each number, round it to a few levels, and the codebook is just the grid. It's what several recent image and video tokenizers use.",
+   "zh": "在真实的模型里，码本是和编码器、解码器一起学出来的，而这就碰上了一个麻烦。<bookmark mark='a'/>编码器的每个输出z，都被换成离它最近的码字。挑最近的那个是一次跳变，没有梯度。<bookmark mark='b'/>解决办法是直通技巧：前向时用码字；反向时假装什么都没发生，把码字的梯度直接交给z。<bookmark mark='c'/>另外还有两项把它们拴在一起：一项把每个码字拉向选中它的那些输出，另一项叫承诺损失，让输出不要离自己的码字越走越远。<bookmark mark='d'/>即便如此，没人选的码字就不再学习，很多码字都闲着没用。有限标量量化把这些问题全绕开了：把每个数压扁，取整到几个档位上，码本就只是一张网格。最近好几个图像和视频的分词器，用的都是它。"
+  },
   "ee68e9e504a6": {
    "scene": "Sound",
    "en": "Chapter three. Sound as tokens.",
@@ -74,6 +79,11 @@
    "scene": "Clip",
    "en": "How does a model know a picture of an A and the word A mean the same thing? Train two encoders, one for pictures and one for captions, so that matching pairs get similar vectors. <bookmark mark='a'/> We trained a small pair on our letters, with captions like 'bold serif A'. Here's a batch: every picture scored against every caption. <bookmark mark='b'/> The bright diagonal is the right pairs. Trained on four hundred million pictures from the web, this is CLIP, and its picture encoder is how most models see.",
    "zh": "模型怎么知道，一张字母A的图片，和文字里的A，说的是同一个东西？训练两个编码器，一个读图片，一个读文字描述，让配对的两者得到相近的向量。<bookmark mark='a'/>我们在自己的字母上训练了一对小编码器，文字描述就像“粗体衬线A”这样。这是一个批次：每张图片都和每条描述打一个分。<bookmark mark='b'/>那条明亮的对角线，就是正确的配对。用网上的4亿张图片来训练，这就是CLIP；如今大多数模型，都是靠它的图片编码器来看东西的。"
+  },
+  "299398122ab8": {
+   "scene": "Clip",
+   "en": "How does training find that diagonal? Here is the same table of twelve pictures and their captions, scored at checkpoints while the two encoders learn. <bookmark mark='a'/> At the start, every score is noise. <bookmark mark='b'/> Each batch pulls the matching pairs' vectors together and pushes every other pair apart, and the diagonal lights up: matching pairs end up 0.93 more similar, on average, than mismatched ones. Pairs that share a letter or a style stay partly lit: they really are alike.",
+   "zh": "训练是怎么找到那条对角线的？这是同一张表，12张图片和它们的文字描述，在两个编码器学习的途中，在几个检查点上打的分。<bookmark mark='a'/>一开始，每个分数都是噪声。<bookmark mark='b'/>每个批次都把配对的向量拉近，把其他所有组合推开，对角线就亮了起来：最后，配对的平均比不配对的相似度高出0.93。字母相同或者风格相同的组合，仍然有一部分是亮的：它们确实相像。"
   },
   "fba92baf5f67": {
    "scene": "Clip",
