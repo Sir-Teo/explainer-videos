@@ -23,13 +23,19 @@ class Hook(VoiceoverScene):
         bar = VGroup(label(r"each step right $97\%$ of the time", font_size=28, color=C.BITS)).to_edge(UP, buff=0.6)
         res = label(rf"$30$ steps in a row: \ $0.97^{{30}} = {p ** n:.2f}$", font_size=34, color=WHITE).to_edge(DOWN, buff=1.0)
         tag = note(r"one illustrative run").to_corner(DR, buff=0.3)
+        cl = label(r"a chatbot: \ one answer", font_size=28, color=GREY_A).next_to(steps[0], UP, buff=0.35).align_to(steps[0], LEFT)
+        al = label(r"an agent: \ a whole job, \ each step depending on the last", font_size=28, color=GREY_A).next_to(steps, UP, buff=0.35)
         with self.voiceover(
-            "A chatbot answers one question. An agent has to do a whole job: thirty steps, a hundred, a thousand, "
-            "each depending on the last. <bookmark mark='a'/> Even at ninety-seven percent per step, thirty steps in "
-            f"a row succeed only {100 * p ** n:.0f} percent of the time."
+            "A chatbot answers one question. <bookmark mark='j'/> An agent has to do a whole job: thirty steps, a "
+            "hundred, a thousand, each depending on the last. <bookmark mark='a'/> Even at ninety-seven percent per "
+            f"step, thirty steps in a row succeed only {100 * p ** n:.0f} percent of the time."
         ) as vo:
-            self.play(FadeIn(bar), FadeIn(tag), LaggedStart(*[FadeIn(s_) for s_ in steps], lag_ratio=0.02), FadeIn(links))
+            self.play(FadeIn(steps[0], scale=1.5), FadeIn(cl))
+            vo.wait_until("j")
+            self.play(ReplacementTransform(cl, al), LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.1) for s_ in steps[1:]], lag_ratio=0.04),
+                      LaggedStart(*[Create(l_) for l_ in links], lag_ratio=0.04), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeIn(bar), FadeIn(tag))
             for i in range(n):
                 if fail_at is not None and i == fail_at:
                     self.play(steps[i].animate.set_fill(C.SURPRISE, opacity=0.9).set_stroke(C.SURPRISE), run_time=0.3)

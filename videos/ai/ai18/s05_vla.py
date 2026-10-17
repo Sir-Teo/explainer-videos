@@ -36,21 +36,43 @@ class VLA(VoiceoverScene):
                         Arrow(txt.get_right(), vlm.get_left() + DOWN * 0.5, buff=0.1, color=GREY_B),
                         Arrow(vlm.get_right(), act.get_left(), buff=0.1, color=GREY_B),
                         Arrow(act.get_right(), arm[0].get_start() + UP * 0.6 + LEFT * 0.2, buff=0.1, color=GREY_B))
+        # RT-2's way: actions written as tokens, like words
+        toks = VGroup(*[VGroup(RoundedRectangle(width=0.62, height=0.42, corner_radius=0.06, stroke_color=GREY_B, stroke_width=1.5),
+                               Text(v, font="DejaVu Sans Mono", font_size=16, color=GREY_A)) for v in ("132", "87", "201", "64")])
+        for t_ in toks:
+            t_[1].move_to(t_[0])
+        toks.arrange(RIGHT, buff=0.08).move_to([3.0, 0, 0])
+        tkl = label(r"actions as tokens, \ like words \ (RT-2)", font_size=20, color=GREY_B).next_to(toks, DOWN, buff=0.2)
+        ta = Arrow(vlm.get_right(), toks.get_left(), buff=0.1, color=GREY_B)
+        # pi-zero's way: flow matching turns noise into a smooth stretch of motion
+        xs = np.linspace(1.9, 4.1, 24)
+        g = np.random.default_rng(18)
+        y0 = -1.85 + 0.45 * g.standard_normal(len(xs))
+        y1 = -1.85 + 0.35 * np.sin((xs - 1.9) * 2.6)
+        noisy = VGroup(*[Dot([x, y, 0], radius=0.045, color=C.INTERVAL) for x, y in zip(xs, y0)])
+        smooth = VGroup(*[Dot([x, y, 0], radius=0.045, color=C.INTERVAL) for x, y in zip(xs, y1)])
+        path = VMobject(color=C.INTERVAL, stroke_width=3).set_points_smoothly([[x, y, 0] for x, y in zip(xs, y1)])
+        fml = label(r"noise $\to$ a smooth motion", font_size=20, color=C.INTERVAL).next_to(smooth, DOWN, buff=0.35)
         cite_ = cite(r"A.~Brohan et al., \textit{RT-2} (2023); \ K.~Black et al., \textit{$\pi_0$} (2024)", corner=DR)
         tag = note(r"schematic").to_corner(DL, buff=0.3)
         with self.voiceover(
             "Robots are where agents meet physics. A vision-language-action model starts from a model that already "
             "reads images and text, trained on the web. <bookmark mark='a'/> Give it camera images and an "
-            "instruction, and add a way to output motion. RT-2, in 2023, wrote actions as tokens, like words. "
-            "<bookmark mark='b'/> Pi-zero, in 2024, added an action expert that generates smooth motions by flow "
-            "matching, part fourteen's machinery, now drawing trajectories instead of pictures."
+            "instruction, and add a way to output motion. <bookmark mark='r'/> RT-2, in 2023, wrote actions as "
+            "tokens, like words. <bookmark mark='b'/> Pi-zero, in 2024, added an action expert that generates smooth "
+            "motions by flow matching, part fourteen's machinery, now drawing trajectories instead of pictures."
         ) as vo:
-            self.play(FadeIn(cam), FadeIn(cl), FadeIn(txt), FadeIn(tl), FadeIn(tag), FadeIn(cite_))
+            self.play(Create(vlm), FadeIn(vl), FadeIn(tag), FadeIn(cite_))
             vo.wait_until("a")
-            self.play(GrowArrow(arrows[0]), GrowArrow(arrows[1]), Create(vlm), FadeIn(vl))
+            self.play(FadeIn(cam, shift=RIGHT * 0.2), FadeIn(cl), FadeIn(txt, shift=RIGHT * 0.2), FadeIn(tl))
+            self.play(GrowArrow(arrows[0]), GrowArrow(arrows[1]), Indicate(vlm, color=WHITE, scale_factor=1.03))
+            vo.wait_until("r")
+            self.play(GrowArrow(ta), LaggedStart(*[FadeIn(t_, shift=RIGHT * 0.15) for t_ in toks], lag_ratio=0.2), FadeIn(tkl))
             vo.wait_until("b")
-            self.play(GrowArrow(arrows[2]), Create(act), FadeIn(al))
-            self.play(GrowArrow(arrows[3]), FadeIn(arm))
+            self.play(FadeOut(VGroup(toks, tkl, ta)), GrowArrow(arrows[2]), Create(act), FadeIn(al))
+            self.play(FadeIn(noisy, lag_ratio=0.05), FadeIn(fml))
+            self.play(Transform(noisy, smooth), run_time=1.5)
+            self.play(Create(path), GrowArrow(arrows[3]), FadeIn(arm))
         self.wait(0.3)
         self.clear_scene()
 
