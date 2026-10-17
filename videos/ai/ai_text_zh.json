@@ -2610,7 +2610,8 @@
     "test accuracy": "测试准确率",
     "E.~Frantar et al., \\textit{GPTQ} (2022); \\ S.~Ashkboos et al., \\textit{QuaRot} (2024)": "E.~Frantar等，\\textit{GPTQ}（2022）；\\ S.~Ashkboos等，\\textit{QuaRot}（2024）",
     "K.~Black et al., \\textit{$\\pi_0$} (2024); \\ K.~Pertsch et al., \\textit{FAST} (2025)": "K.~Black等，\\textit{$\\pi_0$}（2024）；\\ K.~Pertsch等，\\textit{FAST}（2025）",
-    "B.~Zhang \\& R.~Sennrich, \\textit{RMSNorm} (2019); \\ N.~Shazeer, \\textit{GLU Variants Improve Transformer} (2020)": "B.~Zhang \\& R.~Sennrich，\\textit{RMSNorm}（2019）；\\ N.~Shazeer，\\textit{GLU Variants Improve Transformer}（2020）"
+    "B.~Zhang \\& R.~Sennrich, \\textit{RMSNorm} (2019); \\ N.~Shazeer, \\textit{GLU Variants Improve Transformer} (2020)": "B.~Zhang \\& R.~Sennrich，\\textit{RMSNorm}（2019）；\\ N.~Shazeer，\\textit{GLU Variants Improve Transformer}（2020）",
+    "each word's $5$ nearest neighbours, \\ by the cosine of their vectors": "每个词最近的$5$个邻居，\\ 按向量的余弦相似度"
   },
   "phrases": {
     "width": "宽度",
@@ -2624,6 +2625,10 @@
     "if": "若"
   },
   "patterns": [
+    [
+      "^\\\\text\\{step \\}([\\d{},]+)\\\\ \\\\text\\{of\\}\\\\ ([\\d{},]+)$",
+      "\\\\text{第}\\1\\\\text{步，共}\\2\\\\text{步}"
+    ],
     [
       "^\\$(\\d+)\\$ bits decided$",
       "已确定 $\\1$ 比特"
