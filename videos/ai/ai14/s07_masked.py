@@ -61,18 +61,15 @@ class Masked(VoiceoverScene):
 
         step = 12.0 / half
 
-        def lines(text):  # fixed character cells, so that every frame lines up with the next
-            g = VGroup()
-            for row, part in enumerate((text[:half], text[half:])):
-                for i, ch in enumerate(part):
-                    if ch == " ":
-                        m = Dot(radius=0.02, color=GREY_D)
-                    else:
-                        m = Text(ch, font=MONO, font_size=28, color=GREY_D if ch == "_" else WHITE)
-                    g.add(m.move_to([-6.0 + step * (i + 0.5), 0.9 - 1.0 * row, 0]))
-            return g
+        def cell(ch, i, fresh=False):  # fixed character cells, so that every round lines up with the next
+            row, col = divmod(i, half)
+            if ch == " ":
+                m = Dot(radius=0.02, color=GREY_D)
+            else:
+                m = Text(ch, font=MONO, font_size=28, color=GREY_D if ch == "_" else C.BITS if fresh else WHITE)
+            return m.move_to([-6.0 + step * (col + 0.5), 0.9 - 1.0 * row, 0])
 
-        cur = lines(frames[0])
+        cur = VGroup(*[cell(ch, i) for i, ch in enumerate(frames[0])])
         counter = VGroup(label(r"round", font_size=26, color=GREY_A), Integer(0, font_size=30, color=C.BITS)).arrange(RIGHT, buff=0.2)
         counter.to_edge(UP, buff=0.5)
         info = label(rf"our model: \ ${d['n_params'] / 1e6:.1f}$ million numbers, \ two-way attention, \ "
@@ -91,9 +88,16 @@ class Masked(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(rule))
             vo.wait_until("b")
-            for r, fr in enumerate(frames[1:], start=1):
-                new = lines(fr)
-                self.play(FadeOut(cur), FadeIn(new), counter[1].animate.set_value(r), run_time=0.45)
-                cur = new
+            fresh = []
+            for r, fr in enumerate(frames[1:], start=1):  # only what this round reveals moves; it lights up, then settles
+                prev = frames[r - 1]
+                changed = [i for i in range(T) if prev[i] != fr[i]]
+                anims = [Transform(cur[i], cell(fr[i], i, fresh=True)) for i in changed]
+                anims += [cur[i].animate.set_color(WHITE) for i in fresh if i not in changed and fr[i] != " "]
+                self.play(*anims, counter[1].animate.set_value(r), run_time=0.45)  # the counter keeps the list non-empty
+                fresh = changed
+            last = [cur[i].animate.set_color(WHITE) for i in fresh if frames[-1][i] != " "]
+            if last:
+                self.play(*last, run_time=0.3)
         self.wait(0.6)
         self.clear_scene()
