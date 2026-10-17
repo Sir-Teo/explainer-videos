@@ -2870,7 +2870,41 @@
     "TopK, \\ $k = 3$: \\ keep the $3$ biggest": "TopK，\\ $k = 3$：\\ 保留最大的$3$个",
     "JumpReLU: \\ a threshold line per feature": "JumpReLU：\\ 每个特征一条阈值线",
     "$W$: \\ squeeze $5$ numbers into $2$; \\\\ $W^{\\top}$: \\ spread them back out to $5$; \\\\ ReLU: \\ cut off negatives": "$W$：\\ 把$5$个数挤成$2$个；\\\\ $W^{\\top}$：\\ 再摊开回$5$个；\\\\ ReLU：\\ 切掉负值",
-    "the weighted rebuild error": "加权重建误差"
+    "the weighted rebuild error": "加权重建误差",
+    "Diffusion for text": "用于文本的扩散",
+    "Can text be written all at once?": "文本能一下子全部写出来吗？",
+    "the noise: \\ blank out characters, \\ each with probability $t$": "噪声：\\ 把字符涂成空白，\\ 每个字符的概率都是$t$",
+    "\\sum_{\\text{blanked } i}": "\\sum_{\\text{空白处 } i}",
+    "-\\log q_\\theta(x_i \\mid \\text{the rest})": "-\\log q_\\theta(x_i \\mid \\text{其余部分})",
+    "guess every blank from everything else, \\ both sides": "根据其余的一切猜出每个空白，\\ 两边都看",
+    "S.~Nie et al., \\textit{LLaDA: Large Language Diffusion Models} (2025)": "S.~Nie等，\\textit{LLaDA: Large Language Diffusion Models}（2025）",
+    "our model: \\ $0.8$ million numbers, \\ two-way attention, \\ trained on the novels; \\ bound on held-out text: \\ $2.69$ bits per character": "我们的模型：\\ $80$万个数，\\ 双向注意力，\\ 在那些小说上训练；\\ 留出文本上的上界：\\ 每字符$2.69$比特",
+    "each round: \\ fill every blank, \\ keep only the surest guesses": "每一轮：\\ 填上每个空白，\\ 只保留最有把握的猜测",
+    "left to right, \\ block by block \\ (with a key-value cache)": "从左到右，\\ 一块接一块 \\ （配合键值缓存）",
+    "each factor: \\ masked diffusion inside the block, \\ a few tokens per step": "每个因子：\\ 块内做掩码扩散，\\ 每步揭开几个词元",
+    "block size $1$: \\ an ordinary language model; \\ \\ one block for everything: \\ this chapter's model": "块大小为$1$：\\ 普通的语言模型；\\ \\ 全部放进一个块：\\ 本章的模型",
+    "M.~Arriola et al., \\textit{Block Diffusion} (2025); \\ S.~Nie et al., \\textit{LLaDA} (2025)": "M.~Arriola等，\\textit{Block Diffusion}（2025）；\\ S.~Nie等，\\textit{LLaDA}（2025）",
+    "a learned score": "学到的分数函数",
+    "DDPM's wandering paths": "DDPM弯弯绕绕的路径",
+    "DDIM, $20$ steps": "DDIM，$20$步",
+    "reflow: straight": "重流：拉直的路径",
+    "guidance, $w = 4$": "引导，$w = 4$",
+    "letters from noise": "从噪声中生成的字母",
+    "text by unmasking": "逐步揭开空白来写文本",
+    "Part 14, in eight pictures": "第14部分，八幅图",
+    "diffusion in a compressed latent space; \\ transformers as denoisers": "在压缩的潜在空间里做扩散；\\ 用Transformer做去噪器",
+    "generating speech and sound": "生成语音和声音",
+    "world models that imagine the next frame": "能想象下一帧画面的世界模型",
+    "fewer steps, \\ faster serving": "更少的步数，\\ 更快的推理服务",
+    "Next: \\ Part 15, \\ Images and Video": "下一集：\\ 第15部分，\\ 图像与视频",
+    "an image as a sequence of patches": "把图像看作一串图像块",
+    "S.~J.~D.~Prince, \\textit{Understanding Deep Learning} (2023), chapter 18": "S.~J.~D.~Prince，\\textit{Understanding Deep Learning}（《理解深度学习》，2023），第18章",
+    "J.~Sohl-Dickstein et al.\\ (2015); \\ J.~Ho, A.~Jain \\& P.~Abbeel, \\textit{DDPM} (2020)": "J.~Sohl-Dickstein等（2015）；\\ J.~Ho、A.~Jain \\& P.~Abbeel，\\textit{DDPM}（2020）",
+    "Y.~Song et al., \\textit{Score-Based Generative Modeling through SDEs} (2021); \\ J.~Song et al., \\textit{DDIM} (2021)": "Y.~Song等，\\textit{Score-Based Generative Modeling through SDEs}（2021）；\\ J.~Song等，\\textit{DDIM}（2021）",
+    "J.~Ho \\& T.~Salimans, \\textit{Classifier-Free Guidance} (2022); \\ P.~Esser et al., \\textit{Stable Diffusion 3} (2024)": "J.~Ho \\& T.~Salimans，\\textit{Classifier-Free Guidance}（2022）；\\ P.~Esser等，\\textit{Stable Diffusion 3}（2024）",
+    "J.~Austin et al., \\textit{D3PM} (2021); \\ S.~Sahoo et al., \\textit{MDLM} (2024); \\ S.~Nie et al., \\textit{LLaDA} (2025)": "J.~Austin等，\\textit{D3PM}（2021）；\\ S.~Sahoo等，\\textit{MDLM}（2024）；\\ S.~Nie等，\\textit{LLaDA}（2025）",
+    "Z.~Geng et al., \\textit{MeanFlow} (2025); \\ K.~Frans et al., \\textit{Shortcut Models} (2024); \\ M.~Arriola et al., \\textit{Block Diffusion} (2025)": "Z.~Geng等，\\textit{MeanFlow}（2025）；\\ K.~Frans等，\\textit{Shortcut Models}（2024）；\\ M.~Arriola等，\\textit{Block Diffusion}（2025）",
+    "Points: Part 4's ``AI''; \\ letters from the system's fonts; \\ text: Part 1's novels. \\ Every model here is trained on this video's CPU.": "点：第4部分的“AI”；\\ 字母：取自系统自带的字体；\\ 文本：第1部分的小说。\\ 这里的每个模型都在本视频的CPU上训练。"
   },
   "phrases": {
     "width": "宽度",
@@ -3279,6 +3313,10 @@
     [
       "^each feature on \\$(\\d+)\\\\%\\$ of the time$",
       "每个特征在$\\1\\\\%$的时间里打开"
+    ],
+    [
+      "^block (\\d+)$",
+      "第\\1块"
     ]
   ]
 }
