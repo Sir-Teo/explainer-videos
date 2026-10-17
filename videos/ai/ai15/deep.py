@@ -449,7 +449,8 @@ def compute_clips():
     test_clips, test_lab = make_clips(8, T, seed=1, split="test")
     judge = clip_judge()
     real = coherence(judge, make_clips(200, T, seed=2, split="test")[0], make_clips(200, T, seed=2, split="test")[1])
-    out = dict(T=T, real_all_right=real["all_right"], real_jerk=real["jerk"], examples=test_clips[:4])
+    out = dict(T=T, real_all_right=real["all_right"], real_frames_right=float(real["frame_right"].mean()), real_jerk=real["jerk"],
+               examples=test_clips[:4])
     print(f"    real clips: every frame recognized {100 * real['all_right']:.0f}%, jerk {real['jerk']:.2f}px", flush=True)
     want = np.arange(16) % 26
     # 1. the clip model, against the same model's frames taken from 8 different samples (frame by frame, independently)
@@ -459,6 +460,7 @@ def compute_clips():
     for name, c in (("joint", S), ("indep", indep)):
         r = coherence(judge, c, want)
         out[f"{name}_all_right"], out[f"{name}_jerk"], out[f"{name}_clips"] = r["all_right"], r["jerk"], c[:6]
+        out[f"{name}_frames_right"] = float(r["frame_right"].mean())
         print(f"    {name}: every frame right {100 * r['all_right']:.0f}%, jerk {r['jerk']:.2f}px", flush=True)
     # 2. frame after frame, trained 8 frames long, rolled out to 32: teacher forcing against diffusion forcing
     long = 4 * T
