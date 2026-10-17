@@ -21,7 +21,7 @@ def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
 
 def log_axes(x_range, y_range, x_length=8.0, y_length=4.6, center=ORIGIN, x_ticks=(), y_ticks=(), y_fmt="{:.1f}"):
     """Axes whose x coordinate is log10 of the quantity; tick labels written as powers of ten (or given)."""
-    ax = Axes(x_range=[*x_range, 1], y_range=[*y_range, (y_range[1] - y_range[0]) / 4], x_length=x_length,
+    ax = CornerAxes(x_range=[*x_range, 1], y_range=[*y_range, (y_range[1] - y_range[0]) / 4], x_length=x_length,
               y_length=y_length, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05})
     ax.move_to(center)
     labels = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.1)
