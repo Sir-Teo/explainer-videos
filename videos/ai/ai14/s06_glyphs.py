@@ -78,7 +78,7 @@ class Glyphs(VoiceoverScene):
         nxt.next_to(nn, DOWN, buff=0.4)
         with self.voiceover(
             "Here's one picture being born. <bookmark mark='a'/> Static, then a blur, then a shape, then a letter. "
-            "<bookmark mark='b'/> And a batch of samples: recognizable capitals, in a mixture of styles, not copies "
+            "<bookmark mark='b'/> And a batch of samples: rough, speckled, but mostly recognizable capitals, in a mix of styles, not copies "
             "of the training pictures. <bookmark mark='c'/> Real image models do the same thing at a million times "
             "the scale, in a compressed space of image patches: that's part fifteen."
         ) as vo:
