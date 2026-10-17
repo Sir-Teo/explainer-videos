@@ -92,7 +92,7 @@ class DiT(VoiceoverScene):
     def alphabet(self):
         d = load("dit")
         A = np.asarray(d["alphabet"])
-        grid = Group(*[gray_image(im, 0.85) for im in A[:26]]).arrange_in_grid(rows=2, cols=13, buff=0.08).move_to(UP * 0.6)
+        grid = Group(*[gray_image(im, 0.85) for im in A[:26]]).arrange_in_grid(rows=2, cols=13, buff=(0.08, 0.4)).move_to(UP * 0.9)  # room for the labels
         asked = VGroup(*[Text(c, font="DejaVu Sans Mono", font_size=20, color=C.BITS).next_to(grid[i], UP, buff=0.06)
                          for i, c in enumerate(LETTERS)])
         second = Group(*[gray_image(im, 0.62) for im in A[26:52]]).arrange_in_grid(rows=2, cols=13, buff=0.06).to_edge(DOWN, buff=0.5)
