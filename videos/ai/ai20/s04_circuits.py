@@ -73,10 +73,8 @@ class Circuits(VoiceoverScene):
                               color=FEATURE_COLORS[j % len(FEATURE_COLORS)]).set_stroke(opacity=0.6))
         homes = VGroup(*[DashedLine(f[0].get_bottom() + DOWN * 0.45, boxes[n["pos"] - off].get_top(), dash_length=0.06,
                                     stroke_width=1, color=GREY_D) for n, f in zip(nodes, fn) if n["pos"] >= off])
-        err = float(a["err_attr"])
-        tot = float(a["total_feature_attr"])
-        el = label(rf"all $512$ features: \ ${tot:+.1f}$ \ to the score of `{show(str(a['target']))}'; \ "
-                   rf"what they miss: \ ${err:+.1f}$", font_size=20, color=GREY_A).to_corner(UR, buff=0.3)
+        el = label(rf"line width: \ how much each feature raised \\ the score of `{show(str(a['target']))}'", font_size=20,
+                   color=GREY_A).to_corner(UR, buff=0.3)
         cite_ = cite(r"E.~Ameisen et al., \textit{Circuit Tracing} (2025); \ J.~Lindsey et al., \textit{On the Biology of a Large "
                      r"Language Model} (2025)", corner=DL)
         tag = note(r"to first order: \ activation $\times$ gradient").to_corner(DR, buff=0.25)

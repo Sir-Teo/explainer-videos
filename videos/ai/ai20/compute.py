@@ -252,13 +252,17 @@ def compute_steering():
         return "".join(out)
 
     prompt = "Spade looked at the girl for a long moment. "
-    alphas = [0.0, 1.5, 3.0]
+    # strengths in units of a typical residual vector's length: much more than half of one and the text falls apart
+    alphas = [0.0, 0.25, 0.5]
     texts = {f"{a:g}": [generate(prompt, a, seed) for seed in (1, 2, 3)] for a in alphas}
+    # the push reads as "we're inside someone's speech": count the marks of speech, quotes and apostrophes, ! and ?
+    marks = "\"'!?"
+    speech = {k: float(np.mean([sum(t.count(m) for m in marks) for t in v])) for k, v in texts.items()}
     quotes = {k: float(np.mean([t.count('"') for t in v])) for k, v in texts.items()}
     out = dict(feature=int(best_k), purity=float(best), prompt=prompt, alphas=alphas, texts=texts, quotes=quotes,
-               contexts=next(f["contexts"] for f in s["features"] if f["id"] == best_k))
-    print(f"    feature {best_k} (on a quote in {best:.0%} of its top contexts); quotes per text: {quotes}", flush=True)
-    assert best >= 0.5
+               speech=speech, marks=marks, contexts=next(f["contexts"] for f in s["features"] if f["id"] == best_k))
+    print(f"    feature {best_k} (on a quote in {best:.0%} of its top contexts); speech marks per text: {speech}", flush=True)
+    assert best >= 0.5 and speech[f"{alphas[-1]:g}"] > speech["0"] + 1
     return out
 
 
