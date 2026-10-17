@@ -82,13 +82,17 @@ class Balance(VoiceoverScene):
         c1 = cite(r"W.~Fedus, B.~Zoph \& N.~Shazeer, \textit{Switch Transformers} (2021); \ L.~Wang et al.\ (2024), DeepSeek-V3",
                   corner=DR)
         bn, ba, bb = (float(m[f"bits_{k_}"]) for k_ in ("none", "aux", "bias"))
+        ia, ib = float(m["imbalance"]["aux"]), float(m["imbalance"]["bias"])
+        even = ("Both spread the work evenly here. " if ia < 1.5 else
+                f"At Switch's strength, the penalty only partly evens it out: its busiest expert still gets {ia:.1f} times a "
+                f"fair share, while the bias holds every expert within {ib:.1f}. ")
         with self.voiceover(
             "Two fixes. <bookmark mark='a'/> The classic one adds a penalty to the loss: the share of characters each "
             "expert gets, times its average router probability, summed. It's smallest when every expert gets an equal "
             "share. But it's a second goal competing with the first. <bookmark mark='b'/> DeepSeek-V3's fix adds no "
             "loss at all. Each expert gets a bias, used only for choosing, never for mixing: after every step, busy "
-            "experts' biases go down a notch and idle experts' go up. <bookmark mark='c'/> Both spread the work "
-            f"evenly here. Held-out bits: {bn:.3f} unbalanced, {ba:.3f} with the penalty, {bb:.3f} with the bias."
+            "experts' biases go down a notch and idle experts' go up. <bookmark mark='c'/> " + even
+            + f"Held-out bits: {bn:.3f} unbalanced, {ba:.3f} with the penalty, {bb:.3f} with the bias."
         ) as vo:
             self.play(FadeIn(c1))
             vo.wait_until("a")
@@ -124,7 +128,10 @@ class Balance(VoiceoverScene):
             "three rules. <bookmark mark='a'/> "
             + ("Watch the left: shares drift apart as some experts win. " if float(m["imbalance"]["none"]) > 1.8 else
                "On the left, the shares wander further from fair than in the other two. ")
-            + "In the middle and on the right, they're pulled back towards a fair share again and again."
+            + ("In the middle and on the right, they're pulled back towards a fair share again and again."
+               if float(m["imbalance"]["aux"]) < 1.5 else
+               "In the middle, the penalty pulls them only part of the way back; on the right, the bias keeps "
+               "every expert close to its fair share.")
         ) as vo:
             self.play(FadeIn(clock), FadeIn(fl), *[FadeIn(VGroup(b, fr, t)) for b, fr, t in sets])
             vo.wait_until("a")
