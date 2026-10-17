@@ -52,7 +52,8 @@ class Hook(VoiceoverScene):
             "past the length a model was trained on."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub))
-            vo.wait_until("a")
             self.play(FadeIn(smap))
+            vo.wait_until("a")
+            self.play(Indicate(sub[0] if len(sub) > 1 else sub, color=C.BITS, scale_factor=1.03))
         self.wait(0.5)
         self.clear_scene()
