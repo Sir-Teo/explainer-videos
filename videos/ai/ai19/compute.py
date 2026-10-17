@@ -69,9 +69,13 @@ def compute_speculative():
     ks = [1, 2, 3, 4, 6, 8]
     per_run = [(1 - alpha ** (k + 1)) / (1 - alpha) for k in ks]  # expected characters per target run (i.i.d. model)
     # exactness: sample the next character many times by the speculative rule, and compare with the target
-    s0 = int(g.integers(c11.CTX, len(ps) - 10))
-    ctx = ps[s0 - c11.CTX:s0]
-    p = target_probs(ctx)[-1]
+    # a context where the big model hesitates (no character above 40%), so the comparison has something to show
+    for _ in range(200):
+        s0 = int(g.integers(c11.CTX, len(ps) - 10))
+        ctx = ps[s0 - c11.CTX:s0]
+        p = target_probs(ctx)[-1]
+        if p.max() < 0.4 and np.sort(p)[-8:].sum() > 0.7:
+            break
     q = draft_p[tuple(ctx[-2:].numpy())].astype(np.float64)
     q = q / q.sum()
     draws, N = np.zeros(K), 200_000
