@@ -120,6 +120,46 @@
    "scene": "Glyphs",
    "en": "Here's one picture being born. <bookmark mark='a'/> Static, then a blur, then a shape, then a letter. <bookmark mark='b'/> And a batch of samples: rough, speckled, but mostly recognizable capitals, in a mix of styles, not copies of the training pictures. <bookmark mark='c'/> Real image models do the same thing at a million times the scale, in a compressed space of image patches: that's part fifteen.",
    "zh": "这是一张图片诞生的过程。<bookmark mark='a'/>先是雪花噪点，然后是一片模糊，然后是一个形状，然后是一个字母。<bookmark mark='b'/>再来一批样本：粗糙、有斑点，但大多是认得出来的大写字母，风格各异，并不是训练图片的复制品。<bookmark mark='c'/>真正的图像模型做的是同样的事，规模大上100万倍，在一个由图像块构成的压缩空间里进行：这是第15部分的内容。"
+  },
+  "fb5b774580b9": {
+   "scene": "Masked",
+   "en": "Chapter six. Diffusion for text.",
+   "zh": ""
+  },
+  "a6f42f835ceb": {
+   "scene": "Masked",
+   "en": "Text isn't made of continuous numbers, so what's the noise? Blanks. Blank out each character with probability t; at t equal to one, everything is blank. <bookmark mark='a'/> The model sees the rest, on both sides, and guesses every blank. Weighted by one over t, that's a bound on the bits per character: a guaranteed ceiling, so the true figure can only be lower. It's the same quantity as on our scoreboard. LLaDA, in 2025, trained an eight-billion-parameter language model this way.",
+   "zh": ""
+  },
+  "95adc77e5f43": {
+   "scene": "Masked",
+   "en": "Here's our own small text diffuser writing 64 characters. It starts with all blanks. <bookmark mark='a'/> Each round it guesses every blank, keeps only the guesses it's surest of, and blanks the rest again. <bookmark mark='b'/> Words appear in no particular order, wherever the model is confident first, and the rest fills in around them. It's a different way to write: all at once, then refined, rather than left to right.",
+   "zh": ""
+  },
+  "185f67b69abc": {
+   "scene": "Masked",
+   "en": "Writing everything at once has a cost: the length is fixed in advance, and nothing can be cached. Block diffusion splits the difference. <bookmark mark='a'/> The text is cut into blocks. Within a block, tokens are unmasked a few at a time, as here; <bookmark mark='b'/> across blocks, it goes left to right, like an ordinary language model, so finished blocks can be cached and the text can run as long as it likes. <bookmark mark='c'/> With blocks of one token, it is an ordinary language model; with a single block, it's this chapter's. Commercial diffusion language models, Google's Gemini Diffusion and Inception's Mercury, report writing over a thousand tokens a second.",
+   "zh": ""
+  },
+  "107ee4394201": {
+   "scene": "Outro",
+   "en": "Let's take stock. A diffusion model learns to guess the noise in a noisy example, and that guess is the score. DDPM walks back from noise with a little randomness at every step; DDIM walks a fixed path in far fewer. Flow matching learns straight-line velocities, and reflow straightens the paths until one step will do. Guidance turns a request into a push. The same machinery makes pictures, and, with blanks for noise, text.",
+   "zh": ""
+  },
+  "47746251d536": {
+   "scene": "Outro",
+   "en": "Next time this machinery meets real images and video, in a compressed space and with transformers as the denoisers. Speech generators use it too, in part sixteen; world models imagine the next frame with it, in part eighteen; and part nineteen is about making it fast.",
+   "zh": ""
+  },
+  "b665073ab106": {
+   "scene": "Outro",
+   "en": "Next time: images and video. A picture is cut into patches, and the patches become tokens, <bookmark mark='a'/> so the transformers of part eleven can look at pictures, and denoise them.",
+   "zh": ""
+  },
+  "9291418c735f": {
+   "scene": "Outro",
+   "en": "Sander Dieleman's blog posts on diffusion are a wonderful companion. Thanks for watching, and see you in part fifteen.",
+   "zh": ""
   }
  },
  "title_en": "AI, Built: Part 14, Diffusion and Flow",
