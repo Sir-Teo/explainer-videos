@@ -11,6 +11,8 @@ Items:
                  check that the output distribution is exactly the target's
     quant        Part 11's transformer with its weights rounded to 8, 4 and 3 bits (per row, round to nearest), and to
                  FP4 (E2M1) with a scale per block of 32: bits per character on the passage, and the weight histogram
+    formats      (formats.py) MXFP4 and NVFP4 exactly, against 4-bit integers; GPTQ's error-compensating rounding and a
+                 Hadamard rotation, at 4 and 3 bits: bits per character on the passage
     flash        attention computed in tiles with an online softmax (FlashAttention's trick), against the plain formula;
                  the memory traffic of both for growing lengths
     roofline     this computer's own roofline: the speed of matrix products of growing size, and its memory bandwidth
@@ -217,9 +219,12 @@ def compute_paging():
     return out
 
 
+from videos.ai.ai19.formats import compute_formats  # noqa: E402
+
 ITEMS = {
     "speculative": compute_speculative,
     "quant": compute_quant,
+    "formats": compute_formats,
     "flash": compute_flash,
     "roofline": compute_roofline,
     "paging": compute_paging,

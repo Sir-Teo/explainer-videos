@@ -15,6 +15,7 @@ class SparseAttention(VoiceoverScene):
         self.mass()
         self.choose()
         self.designs()
+        self.exact()
 
     def card(self):
         card = chapter_card(4, r"Sparse attention", r"Does every query need every key?", part=13)
@@ -188,5 +189,52 @@ class SparseAttention(VoiceoverScene):
                       idx.animate.set_fill(opacity=0.25))
             vo.wait_until("f")
             self.play(FadeIn(catch))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def exact(self):
+        colors = {r"g^{c}_t": C.BITS, r"I_{t,s}": C.INTERVAL}
+        nsa = VGroup(
+            label(r"NSA:", font_size=26, color=C.BITS),
+            cmath(r"o_t = \sum_{c \,\in\, \{\text{cmp},\ \text{slc},\ \text{win}\}}", r"g^{c}_t", r"\cdot \operatorname{Attn}\big(q_t,\ "
+                  r"\tilde K^{c}_t,\ \tilde V^{c}_t\big)", colors=colors, font_size=32),
+        ).arrange(RIGHT, buff=0.4)
+        nn_ = label(r"three branches: \ block summaries, \ the chosen blocks in full, \ a recent window; \ "
+                    r"learned gates $g$ mix them", font_size=20, color=GREY_A)
+        dsa = VGroup(
+            label(r"DSA:", font_size=26, color=C.INTERVAL),
+            cmath(r"I_{t,s}", r"= \sum_{j=1}^{H^{I}} w_{t,j}\, \operatorname{ReLU}\big(q^{I}_{t,j} \cdot k^{I}_{s}\big)", colors=colors,
+                  font_size=32),
+        ).arrange(RIGHT, buff=0.4)
+        dn = label(r"a few small heads, \ in $8$-bit numbers: \ cheap to run over every past token", font_size=20, color=GREY_A)
+        dsa2 = cmath(r"o_t = \operatorname{Attn}\big(q_t,\ \{k_s, v_s : I_{t,s} \in \operatorname{top}_{2048}\}\big)", font_size=32)
+        cost = MathTex(r"\underbrace{O(L^2)}_{\text{tiny indexer}} \;+\; \underbrace{O(L \cdot 2048)}_{\text{real attention}}",
+                       font_size=32, color=GREY_A)
+        g = VGroup(nsa, nn_, dsa, dn, dsa2, cost).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to([0, -0.1, 0])
+        nn_.shift(RIGHT * 0.9)
+        dn.shift(RIGHT * 0.9)
+        dsa2.shift(RIGHT * 0.9)
+        cost.shift(RIGHT * 0.9)
+        head = label(r"the two designs, \ exactly", font_size=28).to_edge(UP, buff=0.35)
+        cite_ = cite(r"J.~Yuan et al.\ (2025); \ DeepSeek-AI, \textit{DeepSeek-V3.2-Exp} (2025)", corner=DR)
+        with self.voiceover(
+            "In equations: <bookmark mark='a'/> NSA's output is a gated sum of three attentions, over the block "
+            "summaries, over the chosen blocks in full, and over a recent window, with gates the model learns. "
+            "<bookmark mark='b'/> DSA's indexer scores each past token with a few small heads: a weighted sum of "
+            "rectified dot products, computed in eight-bit numbers. <bookmark mark='c'/> Then real attention runs "
+            "over the top two thousand and forty-eight. <bookmark mark='d'/> The indexer still looks at every pair, "
+            "but it's so small that the expensive part now grows with the length times two thousand, not the length "
+            "squared."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(Write(nsa), FadeIn(nn_))
+            vo.wait_until("b")
+            self.play(Write(dsa), FadeIn(dn))
+            vo.wait_until("c")
+            self.play(Write(dsa2))
+            vo.wait_until("d")
+            self.play(Write(cost))
         self.wait(0.3)
         self.clear_scene()

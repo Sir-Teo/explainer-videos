@@ -10,8 +10,8 @@ class DiT(VoiceoverScene):
     def construct(self):
         self.card()
         self.design()
+        self.zero()
         self.alphabet()
-        self.mmdit()
 
     def card(self):
         card = chapter_card(3, r"Transformers as denoisers", r"What should do the denoising?", part=15)
@@ -55,6 +55,39 @@ class DiT(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def zero(self):
+        d = load("dit")
+        colors = {r"\gamma": C.SURPRISE, r"\beta": C.SURPRISE, r"\alpha": C.BITS, r"c": C.SURPRISE}
+        f1 = cmath(r"h \leftarrow h +", r"\alpha", r"_1(", r"c", r") \odot \operatorname{Attn}\big((1 +", r"\gamma", r"_1(", r"c",
+                   r")) \odot \operatorname{LN}(h) +", r"\beta", r"_1(", r"c", r")\big)", colors=colors, font_size=32)
+        f2 = cmath(r"h \leftarrow h +", r"\alpha", r"_2(", r"c", r") \odot \operatorname{MLP}\big((1 +", r"\gamma", r"_2(", r"c",
+                   r")) \odot \operatorname{LN}(h) +", r"\beta", r"_2(", r"c", r")\big)", colors=colors, font_size=32)
+        f3 = cmath(r"(", r"\gamma", r"_1,", r"\beta", r"_1,", r"\alpha", r"_1,", r"\gamma", r"_2,", r"\beta", r"_2,", r"\alpha",
+                   r"_2) = W", r"c", r"+ b, \qquad W = 0,\ b = 0 \text{ at the start}", colors=colors, font_size=32)
+        fs = VGroup(f1, f2, f3).arrange(DOWN, buff=0.45).move_to(UP * 0.4)
+        n1 = label(r"$c$: \ the noise level and the letter, \ as one vector", font_size=22, color=C.SURPRISE)
+        n2 = label(r"$\alpha = 0$: \ every block starts as the identity", font_size=22, color=C.BITS)
+        VGroup(n1, n2).arrange(RIGHT, buff=1.2).next_to(fs, DOWN, buff=0.6)
+        cite_ = cite(r"W.~Peebles \& S.~Xie (2023): \ adaLN-Zero", corner=DR)
+        with self.voiceover(
+            "Here is that block exactly; Peebles and Xie call it adaLN-Zero. <bookmark mark='a'/> The condition, c, "
+            "sets a scale gamma and a shift beta for each normalization, and also a gate, alpha, on each block's "
+            "output. <bookmark mark='b'/> All six come from one linear map of c, and that map starts at zero. "
+            "<bookmark mark='c'/> So at the start of training, every gate is closed and every block passes its input "
+            "straight through: a deep network that begins as the identity, and opens up only as it learns. Of the "
+            f"ways they tried to feed in the condition, this one trained best. Ours has {int(d['L'])} such blocks."
+        ) as vo:
+            self.play(FadeIn(cite_), Write(f1), Write(f2), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(n1))
+            vo.wait_until("b")
+            self.play(Write(f3))
+            vo.wait_until("c")
+            self.play(FadeIn(n2), *[Indicate(m_, color=C.BITS) for m_ in (f1[1], f2[1])])
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def alphabet(self):
         d = load("dit")
         A = np.asarray(d["alphabet"])
@@ -71,36 +104,5 @@ class DiT(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(g_) for g_ in grid], lag_ratio=0.05), FadeIn(asked), run_time=2.5)
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(g_) for g_ in second], lag_ratio=0.03), FadeIn(sl), run_time=2.0)
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def mmdit(self):
-        txt = VGroup(*[Square(0.34, stroke_color=C.TRUE_P, stroke_width=1.5, fill_color=C.TRUE_P, fill_opacity=0.2) for _ in range(6)])
-        img = VGroup(*[Square(0.34, stroke_color=PATCH, stroke_width=1.5, fill_color=PATCH, fill_opacity=0.2) for _ in range(10)])
-        seq = VGroup(txt, img).arrange(RIGHT, buff=0.25)
-        for g_ in (txt, img):
-            g_.arrange(RIGHT, buff=0.06)
-        seq.arrange(RIGHT, buff=0.3).move_to(DOWN * 0.4)
-        tl = label(r"the prompt's tokens", font_size=22, color=C.TRUE_P).next_to(txt, DOWN, buff=0.2)
-        il = label(r"the picture's patches", font_size=22, color=PATCH).next_to(img, DOWN, buff=0.2)
-        arcs = VGroup(*[ArcBetweenPoints(a.get_top() + UP * 0.05, b.get_top() + UP * 0.05, angle=-PI / 3, color=C.ATTN,
-                                         stroke_width=1.5).set_stroke(opacity=0.6)
-                        for a in (txt[1], txt[4], img[2], img[7]) for b in (txt[2], img[0], img[5], img[9]) if a is not b])
-        head = label(r"MM-DiT: \ one sequence, \ attention across both, \ separate weights for each kind", font_size=26)
-        head.to_edge(UP, buff=0.5)
-        sizes = label(r"Stable Diffusion 3: \ $2$ and $8$ billion parameters; \ FLUX.1: \ $12$ billion \ (as published)",
-                      font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
-        cite_ = cite(r"P.~Esser et al., \textit{Scaling Rectified Flow Transformers} (2024)", corner=DR)
-        with self.voiceover(
-            "For a text prompt, Stable Diffusion 3 put the prompt's tokens and the picture's patches into one "
-            "sequence. <bookmark mark='a'/> Attention runs across both, so every patch can look at every word and "
-            "every word at every patch, while each kind keeps its own weights. Scaled up, that's Stable Diffusion 3, "
-            "and FLUX, with twelve billion parameters."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(seq), FadeIn(tl), FadeIn(il), FadeIn(cite_))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(a_) for a_ in arcs], lag_ratio=0.05), run_time=2.0)
-            self.play(FadeIn(sizes))
         self.wait(0.3)
         self.clear_scene()
