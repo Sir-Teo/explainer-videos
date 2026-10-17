@@ -1,92 +1,92 @@
 {
- "title": "",
+ "title": "人工智能，从零搭建 · 第10部分：规模的数学",
  "chapters": {
-  "Hook": "",
-  "Width": "",
-  "Chinchilla": "",
-  "Grok": "",
-  "Outro": ""
+  "Hook": "一条幂律",
+  "Width": "1. 越来越宽",
+  "Chinchilla": "2. 规模还是数据？",
+  "Grok": "3. 顿悟",
+  "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
   "87f8d4a8f219": {
    "scene": "Hook",
    "en": "Make a model bigger, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are seven sizes of part nine's character model, each trained the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that no model can go below. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the floor by the same factor: on a log scale, a straight line. Curves like this, measured on small models, are how laboratories decide what to build next.",
-   "zh": ""
+   "zh": "把模型做大，它就会变好。这一点，人人都料到了。让人意外的是，它变好得这么有规律，这么可以预测。<bookmark mark='a'/>这是第9部分那个字符模型的7种规模，每一种都用同样的方式训练。<bookmark mark='b'/>损失沿着一条光滑的曲线往下降：一个幂律，再加上一道底线，任何模型都低不过它。<bookmark mark='c'/>规模每扩大10倍，底线以上剩下的那部分，就缩小同样的倍数：放到对数坐标上，就是一条直线。各家实验室，正是靠这样在小模型上测出来的曲线，来决定下一步造什么。"
   },
   "55c7ab931d0c": {
    "scene": "Hook",
    "en": "This part is about what happens as networks grow: why very wide networks stop learning features, how to set a learning rate once and keep it as the model grows, how to split a budget between size and data, <bookmark mark='a'/> and a strange delay between memorizing and understanding.",
-   "zh": ""
+   "zh": "这一部分讲的是，网络变大时会发生什么：为什么非常宽的网络，不再学习特征；怎样只设定一次学习率，在模型变大时一直沿用；怎样在规模和数据之间分配预算；<bookmark mark='a'/>以及从记住到理解之间，一段奇怪的延迟。"
   },
   "7a29094e7140": {
    "scene": "Width",
    "en": "Chapter one. Wider and wider.",
-   "zh": ""
+   "zh": "第1章。越来越宽。"
   },
   "74a5aea8137f": {
    "scene": "Width",
    "en": "Take part nine's character model and make it wider and wider, trained by plain gradient descent, with step sizes that keep a wide network stable. Measure how much its hidden features, the outputs of its hidden units, change during training. <bookmark mark='a'/> The wider the network, the less they change. The slope here is about minus 0.4; in theory it tends to minus a half: one over the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all, and the network behaves like part five's kernel methods, with a fixed kernel: the neural tangent kernel. Elegant, and exactly what we don't want: a network whose features never change learns nothing new about its data's structure.",
-   "zh": ""
+   "zh": "拿第9部分的字符模型，把它做得越来越宽，用单纯的梯度下降来训练，步长选得能让宽网络保持稳定。测一测它的隐藏特征，也就是隐藏单元的输出，在训练中变了多少。<bookmark mark='a'/>网络越宽，它们变得越少。这里的斜率大约是负0.4；理论上，它趋向负的2分之1：也就是宽度的平方根分之1。<bookmark mark='b'/>到了极限，特征完全不动了，网络就像第5部分的核方法一样，用的是一个固定的核：神经正切核。很优雅，却恰恰不是我们想要的：一个特征从不改变的网络，对数据的结构，学不到任何新东西。"
   },
   "65ad96f3326c": {
    "scene": "Width",
    "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
-   "zh": ""
+   "zh": "杨格问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.67，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：杨格和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
   },
   "e8723b973d84": {
    "scene": "Chinchilla",
    "en": "Chapter two. Spending a compute budget.",
-   "zh": ""
+   "zh": "第2章。怎样花一笔算力预算。"
   },
   "053b0be754de": {
    "scene": "Chinchilla",
    "en": "Suppose you can afford a fixed amount of computation. Training costs about six operations per parameter per training token, so a budget fixes the product of model size and data. You can have a big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the experiment, on our character model. For each budget, try 6 sizes, each trained on exactly the data the budget allows. <bookmark mark='b'/> Each budget gives a valley: too small a model can't hold what it sees; too big a model barely gets to see anything. <bookmark mark='c'/> And the bigger the budget, the further right the best size moves.",
-   "zh": ""
+   "zh": "假设你负担得起的计算量是固定的。训练时，每个参数、每个训练词元，大约要花6次运算，所以预算一定，模型规模和数据量的乘积也就定了。你可以要一个大模型，只看很少的数据；也可以要一个小模型，看很多数据。<bookmark mark='a'/>这是我们在字符模型上做的实验。对每一笔预算，试6种规模，每种都恰好用预算允许的那么多数据来训练。<bookmark mark='b'/>每笔预算都给出一道山谷：模型太小，装不下它看到的东西；模型太大，几乎什么都来不及看。<bookmark mark='c'/>而且预算越大，最好的规模就越往右移。"
   },
   "181f74ba73cb": {
    "scene": "Chinchilla",
    "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.47, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
-   "zh": ""
+   "zh": "这个实验放到极大的规模上去做，改变了模型的造法。2020年，卡普兰和同事们得出结论：模型规模应该比数据增长得快得多。<bookmark mark='a'/>2022年，DeepMind的Chinchilla论文更仔细地重做了一遍，发现规模和数据应该一起增长：每个参数，大约配20个训练词元。<bookmark mark='o'/>我们的小实验，结果和Chinchilla很接近：最好的规模，随预算的0.47次方增长，每个参数大约训练34个字符。<bookmark mark='b'/>他们700亿参数的Chinchilla，在同样的预算下，胜过了他们自己2800亿参数的Gopher。<bookmark mark='c'/>如今的模型，训练用的数据比这还要多得多，因为一个模型只训练一次，却要运行几十亿次，所以一个更小、训练得更久的模型，用起来更便宜。"
   },
   "3b1eb489e761": {
    "scene": "Grok",
    "en": "Chapter three. Grokking.",
-   "zh": ""
+   "zh": "第3章。顿悟。"
   },
   "805a00c6177c": {
    "scene": "Grok",
    "en": "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with 97 hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a network forty percent of the addition table, and ask it to fill in the rest.",
-   "zh": ""
+   "zh": "2022年，OpenAI的一个团队注意到一件怪事。拿一个很小的任务来说：在一个有97个钟点的钟上做加法，所以50加60等于13。<bookmark mark='a'/>给一个网络看这张加法表的40%，让它把其余的填出来。"
   },
   "489396023824": {
    "scene": "Grok",
    "en": "It memorizes the entries it was shown within about 100 steps, and for a long time, it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of steps later, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Weight decay is what drives it: it keeps squeezing the weights, and the memorized lookup table is more expensive than the rule.",
-   "zh": ""
+   "zh": "大约100步之内，它就记住了给它看过的那些格子；而在很长一段时间里，没看过的那些，它答对的机会并不比瞎猜高。<bookmark mark='a'/>不管它，接着训练。然后，几千步之后，在没看过的格子上，准确率猛地蹿升到接近100%。网络找到了规则。他们把这种现象叫作顿悟。<bookmark mark='b'/>推动它的，是权重衰减：它不停地挤压权重，而背下来的那张查找表，代价比规则更高。"
   },
   "eaf12426f1f0": {
    "scene": "Grok",
    "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> They're built from a few pure frequencies, waves around the clock. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part twenty takes that idea to real models.",
-   "zh": ""
+   "zh": "它找到的规则是什么？看看它给每个数学到的向量。<bookmark mark='a'/>它们由少数几个纯粹的频率组成，是绕着钟面转的波。<bookmark mark='b'/>沿着它们的主方向看，这些数落在一个个圆上。网络把每个数变成一个角度，把数相加，就是把角度相加，就像钟表那样。2023年，尼尔·南达和同事们弄清了这一点，这是最早完整解释一个训练好的网络在计算什么的工作之一。第20部分会把这个想法，带到真实的模型上。"
   },
   "58cbcf30d35c": {
    "scene": "Outro",
    "en": "Let's take stock. Loss falls with size along a power law, predictably enough to plan by. Very wide networks, scaled the usual way, go lazy and stop learning features; mu-P keeps every layer learning, and lets a learning rate tuned on a small model carry over to a big one. A fixed budget should be split between size and data, about twenty tokens per parameter by Chinchilla's count. And a network can memorize first and understand much later, by turning clock arithmetic into rotations.",
-   "zh": ""
+   "zh": "我们来盘点一下。损失随着规模，沿一条幂律下降，可预测到足以拿来做规划。非常宽的网络，按通常的方式放大，就会变懒，不再学习特征；μP让每一层都一直在学习，还能让在小模型上调好的学习率，直接沿用到大模型上。一笔固定的预算，应该在规模和数据之间分配，按Chinchilla的算法，每个参数大约20个词元。而一个网络，可以先记住，很久以后才理解，靠的是把钟面上的算术，变成旋转。"
   },
   "647a933c34c1": {
    "scene": "Outro",
    "en": "Act two ends here. Scaling laws return with mixtures of experts, and with reasoning models that scale the thinking done at test time. And grokking's circuits are a first taste of looking inside models, in part twenty.",
-   "zh": ""
+   "zh": "第二幕到这里结束。规模定律还会再回来：在混合专家模型里，也在那些扩大测试时思考量的推理模型里。而顿悟背后的回路，让我们先尝到了一点窥看模型内部的滋味，那是第20部分的内容。"
   },
   "e3118642c8f2": {
    "scene": "Outro",
    "en": "Next time, act three begins: the engines inside today's models. First, attention: how every word looks back at every earlier word and decides which ones matter, as geometry. <bookmark mark='a'/> And we'll build a small transformer of our own.",
-   "zh": ""
+   "zh": "下一次，第三幕开始：当今模型内部的引擎。首先是注意力，从几何的角度来看：每个词怎样回头看它前面的每一个词，再决定哪些要紧。<bookmark mark='a'/>我们还会亲手搭一个自己的小Transformer。"
   },
   "22b8ad590a00": {
    "scene": "Outro",
    "en": "The Chinchilla paper is very readable, and Roberts, Yaida and Hanin's book is the deep end on wide networks. Thanks for watching, and see you in part eleven.",
-   "zh": ""
+   "zh": "Chinchilla那篇论文非常好读；要往深处钻研宽网络，就去读罗伯茨、亚伊达和哈宁的那本书。感谢观看，第11部分见。"
   }
  },
  "title_en": "AI, Built: Part 10, The Mathematics of Scale",
