@@ -206,6 +206,11 @@
    "en": "Chapter four. Surprise is measured in bits. So let's spend some bits.",
    "zh": "第4章。意外度用比特来衡量。那我们就来花一些比特。"
   },
+  "cf45556321bd": {
+   "scene": "Codes",
+   "en": "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough for our twenty-seven symbols, <bookmark mark='a'/> so give each one a five-bit number. <bookmark mark='b'/> The falcon, ten symbols, costs fifty bits. <bookmark mark='c'/> But that's wasteful: e is almost two hundred times more common than z, and both cost five bits.",
+   "zh": "把字母变成比特，最简单的方法是定长编码。2的5次方是32，足够容纳我们的27个符号，<bookmark mark='a'/>所以给每个符号一个5位的二进制数。<bookmark mark='b'/>the falcon有10个符号，要花50比特。<bookmark mark='c'/>可这很浪费：e比z常见将近200倍，却都要花5比特。"
+  },
   "3ba816205e99": {
    "scene": "Codes",
    "en": "So give common symbols short codewords, like Morse code, which gives e a single dot. But careful. <bookmark mark='a'/> If e is zero, t is one, and a is zero one, then the bits zero one could be e, t, or a. <bookmark mark='b'/> The fix is a prefix-free code: no codeword is the start of another. <bookmark mark='c'/> Then the codewords are the leaves of a binary tree. Zero goes left, one goes right, and to decode, you walk down from the top until you reach a leaf.",
@@ -370,6 +375,11 @@
    "scene": "Counting",
    "en": "The reason is that contexts multiply. <bookmark mark='a'/> Of all the five-letter contexts in the Falcon passage, ninety-nine percent appear somewhere in the books. Of the fourteen-letter contexts, only about a quarter do. <bookmark mark='b'/> There are about ten to the twenty possible fourteen-letter contexts, and the books contain under seventeen million of them. <bookmark mark='c'/> A context the books never saw gives the model nothing to go on, and a letter never seen after it would get probability zero: infinite surprise. <bookmark mark='d'/> The patch is called smoothing: pretend every letter was seen a few extra times. That's what keeps these curves finite.",
    "zh": "原因在于，上下文会成倍增长。<bookmark mark='a'/>《马耳他之鹰》段落里的所有5字母上下文中，99%在书里某个地方出现过。而14字母的上下文，只有大约四分之一出现过。<bookmark mark='b'/>可能的14字母上下文大约有10的20次方种，而书里只有不到1700万种。<bookmark mark='c'/>书里从没见过的上下文，让模型无从下手，而一个从没在它后面出现过的字母，概率会是零：意外度无穷大。<bookmark mark='d'/>补救办法叫平滑：假装每个字母都多出现了几次。正是它让这些曲线保持有限。"
+  },
+  "bb9151bfd17b": {
+   "scene": "Counting",
+   "en": "And how does a counting model learn? It reads, and counts. Here are four of them, with one, three, five and eight letters of context, scored on the Falcon passage as they count more and more of the books. <bookmark mark='a'/> After a thousand letters, one letter of context is best, 3.87 bits: a short context is seen often enough to count quickly, while longer ones have hardly met any of their contexts. <bookmark mark='m0'/> At thirty thousand letters, three letters of context take the lead. <bookmark mark='m1'/> At three million letters, five letters of context take the lead. <bookmark mark='z'/> With all 23 million letters, eight letters is still behind, at 2.44: it would need far more text than we have. The more you can count, the longer the context worth using.",
+   "zh": "那计数模型又是怎么学习的？它读，然后数。这里有四个计数模型，上下文分别是1、3、5和8个字母，随着它们数过的书越来越多，在《马耳他之鹰》的测试段落上打分。<bookmark mark='a'/>读了1000个字母之后，1个字母的上下文最好，3.87比特：短的上下文出现得够频繁，很快就能数清楚，而长的上下文几乎还没见过自己的那些上下文。<bookmark mark='m0'/>读到3万个字母，3个字母的上下文领先。<bookmark mark='m1'/>读到300万个字母，5个字母的上下文领先。<bookmark mark='z'/>读完全部2300万个字母，8个字母的上下文仍然落后，2.44比特：它需要的文本远比我们手里的多。能数的越多，值得用的上下文就越长。"
   },
   "3aa34d0f5b12": {
    "scene": "Counting",
@@ -540,11 +550,6 @@
    "scene": "Outro",
    "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part two.",
    "zh": "这一部分依循的是科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推断与学习算法》的前几章，两本书都走得远得多。列出的论文都值得一读，就从香农的那两篇开始。感谢观看，第2部分见。"
-  },
-  "cf45556321bd": {
-   "scene": "Codes",
-   "en": "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough for our twenty-seven symbols, <bookmark mark='a'/> so give each one a five-bit number. <bookmark mark='b'/> The falcon, ten symbols, costs fifty bits. <bookmark mark='c'/> But that's wasteful: e is almost two hundred times more common than z, and both cost five bits.",
-   "zh": "把字母变成比特，最简单的方法是定长编码。2的5次方是32，足够容纳我们的27个符号，<bookmark mark='a'/>所以给每个符号一个5位的二进制数。<bookmark mark='b'/>the falcon有10个符号，要花50比特。<bookmark mark='c'/>可这很浪费：e比z常见将近200倍，却都要花5比特。"
   }
  },
  "title_en": "AI, Built: Part 1, The Guessing Game",
