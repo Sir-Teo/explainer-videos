@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer import narration_credit
@@ -16,57 +18,74 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def tiles(self):
-        TW, TH = 3.0, 2.0
+        TW, TH = 2.7, 1.4
 
         def frame(caption, color):
-            box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D,
+            box = RoundedRectangle(width=TW + 0.3, height=TH + 0.65, corner_radius=0.15, stroke_color=GREY_D,
                                    stroke_width=1.5, fill_color="#121722", fill_opacity=1)
-            return box, label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
+            return box, label(caption, font_size=20, color=color).move_to(box.get_bottom() + UP * 0.25)
 
         out = []
         v = load("vit")
-        im = gray_image(np.asarray(v["ex_imgs"])[0], 1.8)
+        im = gray_image(np.asarray(v["ex_imgs"])[0], 1.3)
         out.append((Group(im, patch_grid(im, 5)), r"patches as tokens", PATCH))
-        out.append((Group(*[heat_image(a, 0.85) for a in np.asarray(v["cls_att"])]).arrange(RIGHT, buff=0.06), r"where it looks", C.ATTN))
+        out.append((Group(*[heat_image(a, 0.8) for a in np.asarray(v["cls_att"])]).arrange(RIGHT, buff=0.06), r"where it looks", C.ATTN))
         sim = np.asarray(v["pos_sim"])
-        out.append((Group(*[heat_image(sim[i].reshape(5, 5), 0.34, color=C.TRUE_P, gamma=1.0) for i in range(25)])
-                    .arrange_in_grid(rows=5, cols=5, buff=0.03), r"positions learn the grid", C.TRUE_P))
+        out.append((Group(*[heat_image(sim[i].reshape(5, 5), 0.26, color=C.TRUE_P, gamma=1.0) for i in range(25)])
+                    .arrange_in_grid(rows=5, cols=5, buff=0.02), r"positions learn the grid", C.TRUE_P))
         lt = load("latent")
-        out.append((Group(*[Group(gray_image(o, 0.5), gray_image(r, 0.5)).arrange(DOWN, buff=0.04)
+        out.append((Group(*[Group(gray_image(o, 0.45), gray_image(r, 0.45)).arrange(DOWN, buff=0.04)
                             for o, r in zip(np.asarray(lt["orig"])[:5], np.asarray(lt["rec"])[:5])]).arrange(RIGHT, buff=0.06),
                     r"$400 \to 16$ numbers", C.EMBED))
-        out.append((Group(*[gray_image(x, 0.5) for x in np.asarray(lt["samples"])[:10]]).arrange_in_grid(rows=2, cols=5, buff=0.05),
-                    r"latent diffusion", C.EMBED))
+        va = load("vae")
+        tags = [f"{float(b):g}" for b in va["betas"]]
+        best = max(tags, key=lambda t: float(va[f"clear_{t}"]))
+        out.append((Group(*[gray_image(x, 0.45) for x in np.asarray(va[f"samples_{best}"])[:10]]).arrange_in_grid(rows=2, cols=5, buff=0.05),
+                    r"rebuild or generate: \ $\beta$", C.SURPRISE))
         d = load("dit")
-        out.append((Group(*[gray_image(x, 0.42) for x in np.asarray(d["alphabet"])[:14]]).arrange_in_grid(rows=2, cols=7, buff=0.04),
-                    r"a diffusion transformer", PATCH))
-        vid = VGroup(*[Rectangle(width=1.4, height=0.8, stroke_color=GREY_B, stroke_width=1.2, fill_color="#121722", fill_opacity=1)
-                       .shift(RIGHT * 0.16 * i + UP * 0.12 * i) for i in range(6)])
-        out.append((vid, r"space and time", GREY_A))
-        s = load("scales")
-        out.append((Group(*[gray_image(p, 0.45) for p in np.asarray(s["pyramid"])]).arrange(RIGHT, buff=0.05), r"coarse to fine", PATCH))
+        out.append((Group(*[gray_image(x, 0.36) for x in np.asarray(d["alphabet"])[:14]]).arrange_in_grid(rows=2, cols=7, buff=0.04),
+                    r"adaLN-Zero transformer", PATCH))
+        ax = Axes(x_range=[0, 1, 0.5], y_range=[0, 1.8, 1], x_length=TW * 0.85, y_length=TH * 0.85, tips=False,
+                  axis_config={"stroke_color": GREY_D, "include_ticks": False})
+        lnd = ax.plot(lambda t: math.exp(-math.log(t / (1 - t)) ** 2 / 2) / (math.sqrt(2 * math.pi) * t * (1 - t)),
+                      x_range=[0.01, 0.99, 0.01], color=C.SURPRISE, stroke_width=3)
+        out.append((VGroup(ax, lnd), r"logit-normal $t$, \ shifted", C.SURPRISE))
+        vr = load("var")
+        out.append((Group(*[gray_image(p, 0.4) for p in np.asarray(vr["example"])]).arrange(RIGHT, buff=0.04), r"coarse to fine", PATCH))
+        v3 = load("vae3d")
+        out.append((Group(*[gray_image(f_, 0.42) for f_ in np.asarray(v3["rec"])[0][::2]]).arrange(RIGHT, buff=0.04),
+                    r"a causal video autoencoder", PATCH))
+        vid = VGroup(*[Rectangle(width=1.2, height=0.7, stroke_color=GREY_B, stroke_width=1.2, fill_color="#121722", fill_opacity=1)
+                       .shift(RIGHT * 0.14 * i + UP * 0.1 * i) for i in range(6)])
+        out.append((vid, r"rotations in $f, h, w$", GREY_A))
+        cl = load("clips")
+        out.append((Group(*[gray_image(f_, 0.4) for f_ in np.asarray(cl["joint_clips"])[0][:6]]).arrange(RIGHT, buff=0.04),
+                    r"frames that agree", C.INTERVAL))
+        out.append((Group(*[gray_image(f_, 0.4) for f_ in np.asarray(cl["forcing_rollout"])[0][::5][:6]]).arrange(RIGHT, buff=0.04),
+                    r"diffusion forcing", C.INTERVAL))
         tiles = Group()
         for pic, cap, col in out:
             box, c_ = frame(cap, col)
-            pic.move_to(box.get_center() + UP * 0.22)
+            pic.move_to(box.get_center() + UP * 0.2)
             if pic.width > TW:
                 pic.width = TW
             if pic.height > TH:
                 pic.height = TH
             tiles.add(Group(box, pic, c_))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        tiles.arrange_in_grid(rows=3, cols=4, buff=(0.2, 0.2)).move_to(DOWN * 0.35)
         return tiles
 
     def recap(self):
         tiles = self.tiles()
-        head = label(r"Part 15, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        head = label(r"Part 15, in twelve pictures", font_size=36).to_edge(UP, buff=0.25)
         with self.voiceover(
             "Let's take stock. Cut a picture into patches and a transformer reads it like a sentence, learning the "
-            "grid by itself. Squeeze pictures into a few numbers, and diffusion gets cheaper and cares about shapes. "
-            "Make the denoiser a transformer, feed it the noise level and the request through its normalizations, "
-            "and it draws what it's asked for; give text and picture one sequence, and you have today's image "
-            "models. Video is the same with time, at a far higher token count; and coarse to fine is another road "
-            "entirely."
+            "grid by itself. Squeeze pictures into a few numbers, and diffusion gets cheaper, as long as the space "
+            "is shaped for generating, not just for rebuilding. Make the denoiser a transformer that starts as the "
+            "identity, train it most on the middle noise levels, shift them as pictures grow, and give text and "
+            "picture one sequence: that's today's image models. Coarse to fine is another road entirely. Video is "
+            "the same with time: a causal autoencoder, rotations in three directions, frames drawn together, and "
+            "noisy pasts in training, so a model can roll forward on its own work."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -119,6 +138,8 @@ class Outro(VoiceoverScene):
             r"W.~Peebles \& S.~Xie, \textit{Scalable Diffusion Models with Transformers} (2023)",
             r"P.~Esser et al., \textit{Scaling Rectified Flow Transformers for High-Resolution Image Synthesis} (2024)",
             r"K.~Tian et al., \textit{Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction} (2024)",
+            r"D.~P.~Kingma \& M.~Welling, \textit{VAE} (2013); \ J.~Yao et al., \textit{VA-VAE} (2025)",
+            r"B.~Chen et al., \textit{Diffusion Forcing} (2024); \ X.~Huang et al., \textit{Self Forcing} (2025)",
         ]
         card = reference_card(books, papers)
         data = note(r"Letters drawn from the system's fonts; \ every model here is trained on this video's CPU; \ model "

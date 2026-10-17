@@ -39,7 +39,7 @@ class Objective(VoiceoverScene):
     def clip(self):
         o = load("objectives")
         colors = {r"\rho_{i,t}": RATIO, r"\hat A_i": ADV, r"\beta": KLC, r"\pi_\theta": POLICY, r"\pi_{\mathrm{old}}": GREY_B}
-        J = cmath(r"J(\theta) = \frac{1}{G}\sum_{i=1}^{G} \frac{1}{|o_i|}\sum_{t}", r"\min\!\Big(", r"\rho_{i,t}", r"\hat A_i", ",\ ",
+        J = cmath(r"J(\theta) = \frac{1}{G}\sum_{i=1}^{G} \frac{1}{|o_i|}\sum_{t}", r"\min\!\Big(", r"\rho_{i,t}", r"\hat A_i", r",\ ",
                   r"\operatorname{clip}(", r"\rho_{i,t}", r",\, 1-\varepsilon,\, 1+\varepsilon)", r"\hat A_i", r"\Big)", r"-", r"\beta",
                   r"\, D_{\mathrm{KL}}(\pi_\theta \,\|\, \pi_{\mathrm{ref}})", colors=colors, font_size=34).to_edge(UP, buff=0.45)
         rho = cmath(r"\rho_{i,t}", r"=", r"\frac{\pi_\theta(o_{i,t} \mid q,\, o_{i,<t})}{\pi_{\mathrm{old}}(o_{i,t} \mid q,\, o_{i,<t})}",

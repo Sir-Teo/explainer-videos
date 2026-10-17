@@ -12,11 +12,12 @@ class Video(VoiceoverScene):
     def construct(self):
         self.card()
         self.tokens()
-        self.scales()
+        self.causal()
+        self.rope3d()
 
     def card(self):
-        card = chapter_card(4, r"Video, and other orders", r"How many tokens is a clip?", part=15)
-        with self.voiceover("Chapter four. Video, and other orders."):
+        card = chapter_card(6, r"Squeezing time", r"How many tokens is a clip?", part=15)
+        with self.voiceover("Chapter six. Squeezing time."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -74,30 +75,126 @@ class Video(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+
     # ------------------------------------------------------------------
-    def scales(self):
-        s = load("scales")
-        pyr = np.asarray(s["pyramid"])
-        sizes = [int(x) for x in s["sizes"]]
-        pics = Group(*[gray_image(p, 1.5) for p in pyr]).arrange(RIGHT, buff=0.35).move_to(UP * 0.3)
-        lab = VGroup(*[MathTex(rf"{k}\times{k}", font_size=24, color=PATCH).next_to(p, DOWN, buff=0.15) for k, p in zip(sizes, pics)])
-        arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.05, color=GREY_B, stroke_width=2,
-                                max_tip_length_to_length_ratio=0.3) for a, b in zip(pics, pics[1:])])
-        head = label(r"next-scale prediction: \ first a rough picture, \ then ever finer detail", font_size=28)
-        head.to_edge(UP, buff=0.5)
-        foot = label(r"each scale's tokens are predicted all at once, \ from the coarser ones", font_size=24,
-                     color=GREY_A).to_edge(DOWN, buff=0.8)
-        cite_ = cite(r"K.~Tian et al., \textit{Visual Autoregressive Modeling} (2024)", corner=DR)
+    def causal(self):
+        d = load("vae3d")
+        orig, rec = np.asarray(d["orig"])[0], np.asarray(d["rec"])[0]
+        T, Cc = int(d["T"]), int(d["C"])
+        lat = [int(x) for x in d["latent_shape"]]  # channels, latent frames, rows, columns
+        S = 1.05
+        top = Group(*[gray_image(f_, S) for f_ in orig]).arrange(RIGHT, buff=0.12).move_to([0, 2.3, 0])
+        bot = Group(*[gray_image(f_, S) for f_ in rec]).arrange(RIGHT, buff=0.12).move_to([0, -1.9, 0])
+        tl = label(r"$9$ frames: \ a letter bouncing", font_size=20, color=GREY_A).next_to(top, UP, buff=0.12)
+        bl = label(r"rebuilt from the latent", font_size=20, color=GREY_A).next_to(bot, DOWN, buff=0.12)
+        groups = [(0, 0), (1, 4), (5, 8)]
+        braces = VGroup(*[Brace(Group(*top[a:b + 1]), DOWN, buff=0.08, color=PATCH) for a, b in groups])
+
+        def stack(cx):
+            g = VGroup()
+            for c in range(Cc):
+                g.add(Square(0.75, stroke_color=PATCH, stroke_width=1.5, fill_color="#121722", fill_opacity=1)
+                      .move_to([cx + 0.1 * c, 0.15 + 0.08 * c, 0]))
+            return g
+
+        lats = VGroup(*[stack(b_.get_center()[0] - 0.15) for b_ in braces])
+        ll = VGroup(*[MathTex(rf"z_{k}", font_size=26, color=PATCH).next_to(l_, LEFT, buff=0.12) for k, l_ in enumerate(lats)])
+        down = VGroup(*[Arrow(l_.get_bottom(), [l_.get_center()[0], -1.25, 0], buff=0.08, stroke_width=2.5, color=GREY_B,
+                              max_tip_length_to_length_ratio=0.2) for l_ in lats])
+        size = label(rf"each: \ ${lat[0]}$ channels $\times\,{lat[2]} \times {lat[3]}$", font_size=20, color=PATCH)
+        size.next_to(lats[2], RIGHT, buff=0.3)
+        rule = label(r"latent frame $k$ sees only frames up to $4k$: \\ the first frame alone, \ then four at a time",
+                     font_size=20, color=GREY_A).next_to(lats[0], RIGHT, buff=0.35).shift(UP * 0.1)
+        ratio = int(d["pixels"]) / int(d["numbers"])
+        num = label(rf"${int(d['pixels']):,}$ pixels $\to$ ${int(d['numbers'])}$ numbers \ (${ratio:.0f}\times$); \ "
+                    rf"rebuild error ${float(d['rmse']):.3f}$".replace(",", "{,}"), font_size=22, color=PATCH).to_edge(DOWN, buff=0.2)
+        cite_ = cite(r"e.g.\ Wan~2.1, \ HunyuanVideo, \ Cosmos (2024--25): \ causal 3D autoencoders", corner=UL)
         with self.voiceover(
-            "There's another way to make pictures token by token, without diffusion. Instead of left to right, go "
-            "coarse to fine: <bookmark mark='a'/> one token for the whole picture, then two by two, four by four, "
-            "and so on, each scale predicted all at once from the ones before. It's how a painter works, and it "
-            "won the NeurIPS best paper award in 2024."
+            "Where does that squeeze come from? A video autoencoder, with convolutions that run in time as well as "
+            "space. We trained a small one on clips of a bouncing letter. <bookmark mark='a'/> The first frame is "
+            "squeezed on its own; <bookmark mark='b'/> after that, every four frames become one latent frame, and "
+            "each is only allowed to see frames up to its own. It's causal, like a language model. "
+            "<bookmark mark='c'/> That has two payoffs: a single picture is just a one-frame video, so the same model "
+            "handles both, and a clip can be encoded as it streams in. <bookmark mark='d'/> "
+            f"Here, {int(d['pixels']):,} pixels become {int(d['numbers'])} numbers, {ratio:.0f} times fewer. Real "
+            "video models squeeze four times in time and eight in each direction of space, the same recipe."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(top), FadeIn(tl), FadeIn(cite_))
             vo.wait_until("a")
-            for i, p in enumerate(pics):
-                self.play(FadeIn(p), FadeIn(lab[i]), *([GrowArrow(arrows[i - 1])] if i > 0 else []), run_time=0.6)
-            self.play(FadeIn(foot))
+            self.play(GrowFromCenter(braces[0]), FadeIn(lats[0]), FadeIn(ll[0]))
+            vo.wait_until("b")
+            self.play(GrowFromCenter(braces[1]), FadeIn(lats[1]), FadeIn(ll[1]), GrowFromCenter(braces[2]), FadeIn(lats[2]),
+                      FadeIn(ll[2]), FadeIn(size))
+            self.play(FadeIn(rule))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in down], lag_ratio=0.2), FadeIn(bot), FadeIn(bl))
+            vo.wait_until("d")
+            self.play(FadeIn(num))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def rope3d(self):
+        v = load("video")
+        rows = v["rows"]
+        t720 = next(r for r in rows if r["res"] == "720p" and r["sec"] == 5)
+        t10 = next(r for r in rows if r["res"] == "720p" and r["sec"] == 10)
+        # a little block of tokens: frames x rows x columns
+        cube = VGroup()
+        nf, nh, nw, u = 3, 4, 5, 0.42
+        q = (1, 2, 3)
+        for f in range(nf):
+            for h in range(nh):
+                for w in range(nw):
+                    sq = Square(u * 0.9, stroke_color=PATCH, stroke_width=1.2, fill_color=PATCH,
+                                fill_opacity=0.6 if (f, h, w) == q else 0.12)
+                    cube.add(sq.move_to([w * u + f * 0.55, -h * u + f * 0.4, 0]))
+        cube.move_to([-3.8, 0.4, 0])
+        qi = (q[0] * nh + q[1]) * nw + q[2]
+        axes_ = VGroup(Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + RIGHT * 1.2, buff=0, stroke_width=2.5,
+                             color=C.TRUE_P, max_tip_length_to_length_ratio=0.2),
+                       Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + UP * 1.0, buff=0, stroke_width=2.5,
+                             color=C.INTERVAL, max_tip_length_to_length_ratio=0.2),
+                       Arrow(cube.get_corner(DL) + DOWN * 0.2, cube.get_corner(DL) + DOWN * 0.2 + np.array([0.7, 0.5, 0]), buff=0,
+                             stroke_width=2.5, color=C.SURPRISE, max_tip_length_to_length_ratio=0.2))
+        al = VGroup(MathTex(r"w", font_size=24, color=C.TRUE_P).next_to(axes_[0].get_end(), RIGHT, buff=0.05),
+                    MathTex(r"h", font_size=24, color=C.INTERVAL).next_to(axes_[1].get_end(), UP, buff=0.05),
+                    MathTex(r"f", font_size=24, color=C.SURPRISE).next_to(axes_[2].get_end(), UR, buff=0.02))
+        # the head's numbers, in pairs, split three ways
+        segs = VGroup(*[Rectangle(width=wd, height=0.36, stroke_width=1, stroke_color=GREY_D, fill_color=c_, fill_opacity=0.7)
+                        for wd, c_ in ((1.2, C.SURPRISE), (2.0, C.INTERVAL), (2.0, C.TRUE_P))]).arrange(RIGHT, buff=0)
+        segs.move_to([2.9, 2.2, 0])
+        sl = VGroup(*[label(t_, font_size=18, color=c_).next_to(s_, UP, buff=0.08)
+                      for t_, c_, s_ in ((r"pairs turned by $f$", C.SURPRISE, segs[0]), (r"by $h$", C.INTERVAL, segs[1]),
+                                         (r"by $w$", C.TRUE_P, segs[2]))])
+        hl = label(r"one head's query, \ in pairs of numbers", font_size=20, color=GREY_A).next_to(segs, DOWN, buff=0.12)
+        f = MathTex(r"R(f, h, w) = R_{f\,\theta^{(f)}} \oplus R_{h\,\theta^{(h)}} \oplus R_{w\,\theta^{(w)}}", font_size=32).move_to([2.9, 0.6, 0])
+        f2 = MathTex(r"\big(R(p)\,q\big)^{\top}\big(R(p')\,k\big) = q^{\top} R(p' - p)\, k", font_size=32).next_to(f, DOWN, buff=0.35)
+        f2l = label(r"scores depend only on the offset \ $(\Delta f, \Delta h, \Delta w)$", font_size=20, color=GREY_A).next_to(f2, DOWN, buff=0.12)
+        n5, n10 = int(t720["tokens"]), int(t10["tokens"])
+        cost = label(rf"$5$ s of 720p: \ ${n5:,}$ tokens, \ ${n5 * n5 / 1e9:.1f}$ billion pairs; \ "
+                     rf"$10$ s: \ ${n10 * n10 / n5 / n5:.1f}\times$ the pairs".replace(",", "{,}"), font_size=22, color=PATCH)
+        cost.to_edge(DOWN, buff=0.4)
+        cite_ = cite(r"J.~Su et al., \textit{RoFormer} (2021), \ extended to three axes in video models", corner=UR)
+        with self.voiceover(
+            "A token now has three coordinates: which frame, which row, which column. Part eleven's rotary positions "
+            "extend naturally. <bookmark mark='a'/> Split each head's pairs of numbers three ways: some are turned by "
+            "the frame number, some by the row, some by the column, each group with its own frequencies. "
+            "<bookmark mark='b'/> Since each group is a rotation, the score between two tokens depends only on how "
+            "far apart they are in time, height and width, exactly as in one dimension. <bookmark mark='c'/> What "
+            "doesn't extend gracefully is the cost. "
+            f"Five seconds of 720p is about {round(n5, -3):,.0f} tokens, and attention compares every pair: "
+            f"{n5 * n5 / 1e9:.1f} billion of them, in every layer, at every denoising step. Double the length and the "
+            "pairs quadruple. That's why video models lean on every trick from parts twelve and thirteen."
+        ) as vo:
+            self.play(FadeIn(cite_), LaggedStart(*[FadeIn(c_) for c_ in cube], lag_ratio=0.005), run_time=1.5)
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in axes_], lag_ratio=0.2), FadeIn(al), Indicate(cube[qi], color=C.BITS))
+            vo.wait_until("a")
+            self.play(FadeIn(segs), FadeIn(sl), FadeIn(hl))
+            self.play(Write(f))
+            vo.wait_until("b")
+            self.play(Write(f2), FadeIn(f2l))
+            vo.wait_until("c")
+            self.play(FadeIn(cost))
         self.wait(0.3)
         self.clear_scene()
