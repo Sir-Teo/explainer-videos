@@ -60,21 +60,21 @@ The series draws in the manner of 3Blue1Brown, with the instruments in `explaine
 | 5 | Classical ML | least squares and its geometry, ridge and lasso, logistic regression, LDA, k-NN, kernels and SVMs, trees, forests, boosting | |
 | 6 | Statistical ML | PCA, mixtures and EM, HMMs, graphical models, Gaussian processes, variational inference, Kneser–Ney n-grams | the scoreboard's KN row |
 | 7 | Fitting and Generalizing | ERM, bias–variance, VC and Rademacher, random labels, double descent | |
-| 8 | Networks | universal approximation, depth and linear regions, initialization, signal propagation, residuals, normalization | a neural n-gram model (Bengio 2003) |
-| 9 | Going Downhill | SGD as an SDE, edge of stability, Adam/AdamW, Muon, schedules (WSD) | |
-| 10 | The Mathematics of Scale | NTK vs μP, hyperparameter transfer, scaling laws, Chinchilla, grokking | |
+| 8 | Networks | universal approximation, depth and linear regions, initialization, signal propagation, residuals, normalization, pre-norm/RMSNorm/SwiGLU | a neural n-gram model (Bengio 2003) |
+| 9 | Going Downhill | SGD as an SDE, edge of stability, Adam/AdamW, Muon (spectral steepest descent, Newton–Schulz, QK-clip), schedules (WSD) | |
+| 10 | The Mathematics of Scale | NTK vs μP, hyperparameter transfer, scaling laws, Chinchilla (L(N, D) fit, over-training), grokking | |
 | **III** | **Engines** | | |
-| 11 | Attention as Geometry | attention as a kernel smoother, RoPE, YaRN, attention sinks, induction heads, in-context learning | our own small transformer |
+| 11 | Attention as Geometry | attention as a kernel smoother, RoPE, YaRN (ramp and temperature), attention sinks, sink logits, output gates, QK-norm, soft caps, induction heads, in-context learning | our own small transformer |
 | 12 | Memory | KV caches, GQA and MLA, linear attention, SSMs (Mamba-2 and state-space duality), the delta rule and gated delta rule (Householder geometry, WY/UT chunkwise training), test-time training, hybrids | DeepSeek, Qwen3-Next, Kimi Linear |
-| 13 | Sparsity | mixture-of-experts routing and balancing, sparse attention (NSA, DSA) | DeepSeek-V3.x, GLM, Kimi |
-| 14 | Diffusion and Flow | score matching, the reverse SDE, DDPM/DDIM, flow matching, guidance, consistency, discrete diffusion | LLaDA |
-| 15 | Images and Video | ViT, latent autoencoders, DiT, MM-DiT, spatiotemporal latents, next-scale prediction | SD3/Flux, video models |
-| 16 | Every Sense Is a Token | BPE, VQ/FSQ, residual vector quantization, CLIP vs SigLIP, omni models, full-duplex speech | Qwen3-TTS (the narrator) |
+| 13 | Sparsity | mixture-of-experts routing and balancing (DeepSeek-V3's sigmoid router, fine-grained experts), sparse attention (NSA, DSA) | DeepSeek-V3.x, GLM, Kimi |
+| 14 | Diffusion and Flow | score matching, the reverse SDE, DDPM/DDIM, flow matching, reflow, MeanFlow and shortcut models, guidance, discrete and block diffusion | LLaDA |
+| 15 | Images and Video | ViT, VAEs and the rebuild-vs-generate trade-off, DiT (adaLN-Zero), SD3 (MM-DiT, logit-normal t, resolution shift), next-scale prediction (VAR), causal video autoencoders, 3D RoPE, joint clips, diffusion forcing | SD3/Flux, video models |
+| 16 | Every Sense Is a Token | BPE, VQ (straight-through, commitment) and FSQ, residual vector quantization, CLIP vs SigLIP, omni models, full-duplex speech | Qwen3-TTS (the narrator) |
 | **IV** | **Agency** | | |
-| 17 | Reasoning | chain of thought as computation, process vs outcome rewards, RLVR, test-time scaling, best-of-N | o-series, R1 |
-| 18 | Agents and Worlds | POMDPs, long horizons, task-length doubling, world models, VLAs | Dreamer, Genie, π0 |
-| 19 | Inference | exact speculative decoding, quantization (GPTQ, FP4), FlashAttention, roofline, paged KV | |
-| 20 | Inside the Model | superposition, sparse autoencoders, transcoders and attribution graphs, steering, CoT faithfulness | |
+| 17 | Reasoning | chain of thought as computation, process vs outcome rewards, RLVR, GRPO's clipped objective and KL, Dr. GRPO, DAPO, GSPO, DPO, entropy collapse, pass@k, test-time scaling, best-of-N | o-series, R1 |
+| 18 | Agents and Worlds | POMDPs, long horizons, task-length doubling, world models, VLAs (π0's flow-matched chunks, FAST tokens) | Dreamer, Genie, π0 |
+| 19 | Inference | exact speculative decoding, quantization (MXFP4, NVFP4, GPTQ, rotations), FlashAttention, roofline, paged KV | |
+| 20 | Inside the Model | superposition, sparse autoencoders (L1, TopK, JumpReLU), transcoders and attribution graphs, crosscoders, steering, CoT faithfulness | |
 
 ## Shared code and the Chinese edition
 

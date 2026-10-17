@@ -40,13 +40,16 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def plan(self):
         title = label(r"Part 15: \ Images and Video", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"patches as tokens, \ latent spaces, \ diffusion transformers, \ video, \ coarse to fine",
-                    font_size=28, color=C.BITS).next_to(title, DOWN, buff=0.25)
+        sub = label(r"patches as tokens, \ latent spaces, \ diffusion transformers, \ SD3, \ coarse to fine, \\ "
+                    r"video autoencoders, \ frames that agree, \ diffusion forcing", font_size=28, color=C.BITS)
+        sub.next_to(title, DOWN, buff=0.25)
         smap = series_map(current=15, done=14).scale(0.85).move_to(DOWN * 0.9)
         with self.voiceover(
-            "This part brings everything so far to pictures and video: how a transformer reads an image, why models "
-            "work in a compressed space, how a transformer becomes the denoiser, <bookmark mark='a'/> and what "
-            "changes for video."
+            "This part brings everything so far to pictures and video, in depth: how a transformer reads an image; "
+            "the compressed spaces models generate in, and the trade-off in shaping them; how a transformer becomes "
+            "the denoiser, and what Stable Diffusion 3 changed to scale it; writing a picture coarse to fine; "
+            "<bookmark mark='a'/> and for video, squeezing time, drawing frames that agree, and rolling forward "
+            "past the length a model was trained on."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub))
             vo.wait_until("a")
