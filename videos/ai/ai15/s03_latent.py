@@ -246,18 +246,35 @@ class Latent(VoiceoverScene):
         # pictures: rebuilds and samples at three betas
         show = ["0", best, tags[-1]] if best not in ("0", tags[-1]) else ["0", tags[2], tags[-1]]
         cite_ = cite(r"J.~Yao et al., \textit{Reconstruction vs.~Generation} (VA-VAE, 2025)", corner=UR)
+        # what the numbers say, so the narration never claims a trade-off the data doesn't show
+        r_lo, r_hi = min(rm[t] for t in nz), max(rm[t] for t in nz)
+        flat_r = r_hi - r_lo < 0.2 * (r_lo + r_hi) / 2
+        worse_r = all(rm[a] <= rm[b] for a, b in zip(nz, nz[1:]))
+        c_lo, c_hi = min(cl.values()), max(cl.values())
+        flat_c = c_hi - c_lo <= 0.08
+        rebuild_line = (f"Yet the rebuilds hardly change: the error stays between {r_lo:.3f} and {r_hi:.3f}"
+                        + (f", and the plain autoencoder, with no KL at all, rebuilds no better, at {rm['0']:.3f}. "
+                           if rm["0"] >= r_lo else ". ") if flat_r else
+                        f"and the rebuilds get worse: from {rm[nz[0]]:.3f} to {rm[nz[-1]]:.3f}. " if worse_r else
+                        f"and the rebuild error moves between {r_lo:.3f} and {r_hi:.3f}, with no steady trend. ")
+        gen_line = (f"And generation barely moves either: from {100 * c_lo:.0f} to {100 * c_hi:.0f} percent of the samples "
+                    "are readable, at every beta, the plain autoencoder included. Letters this simple are easy to "
+                    "generate in any of these spaces. In large image models the trade-off is real: a space that's "
+                    "easy to rebuild from isn't always easy to generate in, and it's one of the live questions in "
+                    "image models; 2025's VA-VAE aligns the codes with a vision model's features to get both."
+                    if flat_c else
+                    (f"But generation peaks in between: at beta {best}, {100 * cl[best]:.0f} percent of the samples are "
+                     f"readable, against {100 * cl['0']:.0f} for the plain autoencoder. " if best != "0" else
+                     f"Generation is best with no KL at all here: {100 * cl['0']:.0f} percent readable. ")
+                    + "A space that's easy to rebuild from isn't the same as one that's easy to generate in. That "
+                    "trade-off is one of the live questions in image models: 2025's VA-VAE aligns the codes with a "
+                    "vision model's features to get both.")
         with self.voiceover(
             f"We trained the same small autoencoder with {len(betas)} values of beta, then ran flow matching in each "
             "code space and asked a judge, a classifier trained on the real letters, how many of the generated "
-            "letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less, fewer nats, "
-            "which are bits measured with the natural log, one nat being about one point four four bits, and the "
-            f"rebuilds get worse: from {rm[nz[0]]:.3f} to {rm[nz[-1]]:.3f}. <bookmark mark='b'/> But generation "
-            + (f"peaks in between: at beta {best}, {100 * cl[best]:.0f} percent of the samples are readable, against "
-               f"{100 * cl['0']:.0f} for the plain autoencoder. " if best != "0" else
-               f"is best with no KL at all here: {100 * cl['0']:.0f} percent readable. ")
-            + "A space that's easy to rebuild from isn't the same as one that's easy to generate in. That trade-off "
-            "is one of the live questions in image models: 2025's VA-VAE aligns the codes with a vision model's "
-            "features to get both."
+            f"letters it can read. <bookmark mark='a'/> As beta grows, the codes carry less: from {kl[nz[0]]:.0f} "
+            f"nats down to {kl[nz[-1]]:.0f}. A nat is a bit measured with the natural log, about one point four four "
+            "bits. " + rebuild_line + "<bookmark mark='b'/> " + gen_line
         ) as vo:
             self.play(FadeIn(cite_), Create(ax), FadeIn(xn), FadeIn(yn), Create(ae), FadeIn(ael))
             vo.wait_until("a")
@@ -265,7 +282,8 @@ class Latent(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(bh), FadeIn(bxl), LaggedStart(*[AnimationGroup(GrowFromEdge(b_[0], DOWN), FadeIn(b_[1]), FadeIn(b_[2]))
                                                              for b_ in bars], lag_ratio=0.15), run_time=2.0)
-            self.play(Indicate(bars[tags.index(best)], color=PATCH))
+            if not flat_c:
+                self.play(Indicate(bars[tags.index(best)], color=PATCH))
         self.wait(0.3)
         self.clear_scene()
         # the pictures behind the numbers
@@ -280,9 +298,10 @@ class Latent(VoiceoverScene):
         h1 = label(r"rebuilt \ (originals above)", font_size=20, color=GREY_A).next_to(o_row, UP, buff=0.1)
         h2 = label(r"generated", font_size=20, color=GREY_A).next_to(rows[0][2], UP, buff=0.55)
         with self.voiceover(
-            "Here are the pictures behind those numbers: rebuilds on the left, generated letters on the right. "
-            "<bookmark mark='a'/> Sharp rebuilds with muddled samples, blurry rebuilds with clean but plain "
-            "samples, and in between, the balance."
+            f"Here are the pictures behind those numbers, at beta {show[0]}, {show[1]} and {show[2]}: rebuilds on the "
+            "left, generated letters on the right. <bookmark mark='a'/> "
+            + ("They look much alike. What beta changed here is how much each code says, not how the letters look."
+               if flat_r and flat_c else "Compare the rows: the rebuilds and the samples change with beta.")
         ) as vo:
             self.play(FadeIn(o_row), FadeIn(h1), FadeIn(h2))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3), run_time=2.0)
@@ -302,6 +321,7 @@ class Latent(VoiceoverScene):
         S = 0.62
         cols = Group(*[Group(*[gray_image(im, S) for im in snaps[k]]).arrange(DOWN, buff=0.05) for k in range(len(steps))])
         ocol = Group(*[gray_image(im, S) for im in orig]).arrange(DOWN, buff=0.05)
+        cols.arrange(RIGHT, buff=0.12)  # one column per checkpoint, side by side
         Group(ocol, cols).arrange(RIGHT, buff=0.35).move_to([-2.6, 0.2, 0])
         cols.shift(RIGHT * 0.25)
         ol = label(r"the letters", font_size=18, color=GREY_A).next_to(ocol, UP, buff=0.12)
