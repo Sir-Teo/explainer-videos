@@ -223,7 +223,7 @@ class Flow(VoiceoverScene):
             t_ = label(name, font_size=22, color=col).next_to(box, UP, buff=0.12)
             d_ = MathTex(rf"{d:.3f}", font_size=28, color=col).next_to(box, DOWN, buff=0.15)
             panels.add(VGroup(box, c_, t_, d_))
-        head = label(r"one step from noise", font_size=30).to_edge(UP, buff=0.35)
+        head = label(r"one step from noise", font_size=30).to_corner(UL, buff=0.4)  # the citation takes the right
         dl = label(r"distance from the real data \ (noise itself: \ $" + f"{float(f['sw_noise']):.2f}" + r"$)", font_size=20,
                    color=GREY_A).next_to(panels, DOWN, buff=0.5)
         sc = cmath(r"u(z, s, s + 2d) = \tfrac12\big[\,u(z, s, s + d) + u(z', s + d, s + 2d)\,\big]", font_size=28)
