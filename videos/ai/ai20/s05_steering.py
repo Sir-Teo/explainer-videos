@@ -89,16 +89,16 @@ class Steering(VoiceoverScene):
         setup = label(r"slip a hint into the question; \ the model uses it to change its answer. \\ "
                       r"Does its chain of thought say so?", font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.35)
         vals = [("Claude 3.7 Sonnet", 0.25, C.BITS), ("DeepSeek-R1", 0.39, C.TRUE_P)]
-        W = 8.0
-        bars = VGroup()
+        # one square per time the hint changed the answer; lit if the chain of thought owned up to it
+        grids = VGroup()
         for i, (nm, v, col) in enumerate(vals):
-            y = -0.4 - i * 1.1
-            frame = Rectangle(width=W, height=0.55, stroke_color=GREY_C, stroke_width=1.2).move_to([0.8, y, 0])
-            bar = Rectangle(width=W * v, height=0.55, stroke_width=0, fill_color=col, fill_opacity=0.85).align_to(frame, LEFT).set_y(y)
-            n_ = label(nm, font_size=24, color=col).next_to(frame, LEFT, buff=0.3)
-            p_ = label(rf"${100 * v:.0f}\%$", font_size=26, color=col).next_to(bar, RIGHT, buff=0.15)
-            bars.add(VGroup(frame, bar, n_, p_))
-        cap = label(r"how often the chain of thought mentions the hint it used", font_size=22, color=GREY_A).next_to(bars, DOWN, buff=0.3)
+            cells = VGroup(*[Square(0.24, stroke_color=GREY_D, stroke_width=1, fill_color=col, fill_opacity=0) for _ in range(100)])
+            cells.arrange_in_grid(10, 10, buff=0.06).move_to([-3.2 + 6.4 * i, -0.4, 0])
+            n_ = label(nm, font_size=26, color=col).next_to(cells, UP, buff=0.25)
+            p_ = label(rf"${100 * v:.0f}$ \ of \ $100$", font_size=26, color=col).next_to(cells, DOWN, buff=0.2)
+            grids.add(VGroup(cells, n_, p_))
+        cap = label(r"of $100$ answers the hint changed: \ how often the chain of thought mentions the hint", font_size=22,
+                    color=GREY_A).next_to(grids, DOWN, buff=0.3)
         tag = note(r"published results, not measured here").to_corner(DR, buff=0.25)
         cite_ = cite(r"Y.~Chen et al.\ (Anthropic), \textit{Reasoning Models Don't Always Say What They Think} (2025)", corner=DL)
         with self.voiceover(
@@ -113,8 +113,10 @@ class Steering(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(setup))
             vo.wait_until("b")
-            for b_ in bars:
-                self.play(Create(b_[0]), FadeIn(b_[2]), GrowFromEdge(b_[1], LEFT), FadeIn(b_[3]))
-            self.play(FadeIn(cap), FadeIn(tag))
+            self.play(*[FadeIn(g[0], lag_ratio=0.01) for g in grids], *[FadeIn(g[1]) for g in grids], FadeIn(cap), FadeIn(tag))
+            for g, (_, v, col) in zip(grids, vals):
+                on = g[0][:int(round(100 * v))]
+                self.play(LaggedStart(*[c.animate.set_fill(col, 0.9).set_stroke(col) for c in on], lag_ratio=0.04),
+                          FadeIn(g[2]), run_time=1.6)
         self.wait(0.3)
         self.clear_scene()

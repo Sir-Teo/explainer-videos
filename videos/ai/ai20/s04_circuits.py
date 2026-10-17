@@ -51,7 +51,7 @@ class Circuits(VoiceoverScene):
                           Text(show(ctx[-2]), font=MONO, font_size=14, color=col)).arrange(RIGHT, buff=0.02)
             snip.next_to(c, DOWN, buff=0.1)
             fn.add(VGroup(c, t, snip))
-        fl = label(r"features after block $2$ \ (under each: where it fires hardest)", font_size=20, color=FEAT).next_to(fn, UP, buff=0.25)
+        fl = label(r"features after block $2$ \\ under each: \ where it fires hardest", font_size=20, color=FEAT).to_corner(UL, buff=0.3)
         out = VGroup(RoundedRectangle(width=1.0, height=0.7, corner_radius=0.1, stroke_color=OUT, stroke_width=3, fill_color=OUT,
                                       fill_opacity=0.2),
                      Text(show(str(a["target"])), font=MONO, font_size=34, color=WHITE)).move_to([0, 2.6, 0])
@@ -69,7 +69,7 @@ class Circuits(VoiceoverScene):
             for i in np.argsort(-src)[:3]:
                 if src[i] <= 0.15 * src.max():
                     continue
-                e_in.add(Line(boxes[i].get_top(), f[0].get_bottom(), stroke_width=0.8 + 5 * src[i] / src.max(),
+                e_in.add(Line(boxes[i].get_top(), f.get_bottom() + DOWN * 0.05, stroke_width=0.8 + 5 * src[i] / src.max(),
                               color=FEATURE_COLORS[j % len(FEATURE_COLORS)]).set_stroke(opacity=0.6))
         homes = VGroup(*[DashedLine(f[0].get_bottom() + DOWN * 0.45, boxes[n["pos"] - off].get_top(), dash_length=0.06,
                                     stroke_width=1, color=GREY_D) for n, f in zip(nodes, fn) if n["pos"] >= off])
@@ -77,7 +77,7 @@ class Circuits(VoiceoverScene):
                    color=GREY_A).to_corner(UR, buff=0.3)
         cite_ = cite(r"E.~Ameisen et al., \textit{Circuit Tracing} (2025); \ J.~Lindsey et al., \textit{On the Biology of a Large "
                      r"Language Model} (2025)", corner=DL)
-        tag = note(r"to first order: \ activation $\times$ gradient").to_corner(DR, buff=0.25)
+        tag = note(r"to first order: \ activation $\times$ gradient").next_to(el, DOWN, buff=0.12).align_to(el, RIGHT)
         with self.voiceover(
             "With features in hand, we can trace a single decision. <bookmark mark='a'/> Our transformer reads: she "
             f"sai, and writes {a['target']}, with {100 * float(a['p_target']):.0f} percent confidence. "
