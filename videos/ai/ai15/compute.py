@@ -24,8 +24,9 @@ Items:
     var        (deep.py) next-scale prediction's tokens: residuals at 1, 2, 4, 5, 10 and 20 pixels a side, each
                quantized to 16 levels; rebuild error after each scale
     vae3d      (deep.py) a causal video autoencoder on clips of a bouncing letter: 9 frames into 3 latent frames
-    clips      (deep.py) a clip model against frames drawn independently; frame-by-frame models trained with teacher
-               forcing or diffusion forcing, rolled out 4x longer than trained
+    clips      (deep.py) image-to-video: given a real first frame, a clip model draws the rest together, against frames
+               drawn independently; frame-by-frame models trained with teacher forcing or diffusion forcing, rolled
+               out 4x longer than trained from a real first frame
 """
 
 from __future__ import annotations
