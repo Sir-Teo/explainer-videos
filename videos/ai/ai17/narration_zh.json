@@ -11,7 +11,7 @@
   "db0ef4310c5c": {
    "scene": "Hook",
    "en": "Here's a puzzle for a small transformer: sixteen bits. Is the number of ones odd? <bookmark mark='a'/> Trained to answer straight away, our two-layer model is right 49 percent of the time: a coin flip. <bookmark mark='b'/> Now train the very same model to write its work first: going along the bits, is the count odd so far? Each step is easy, just the last answer and one more bit. <bookmark mark='c'/> Its final answer is right 100 percent of the time. Same model, same size. It just got to think out loud.",
-   "zh": "给一个小Transformer出一道题：16个比特，其中1的个数是奇数吗？<bookmark mark='a'/>如果训练它直接给出答案，我们这个两层的模型，只有49%的时候答对：跟抛硬币差不多。<bookmark mark='b'/>现在，把同一个模型训练成先写出过程：沿着这些比特一路往下，到目前为止，1的个数是奇数吗？每一步都很简单，只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，100%都是对的。同样的模型，同样的大小。它只不过是可以出声思考了。"
+   "zh": "给一个小Transformer出一道题：16个比特，其中1的个数是奇数吗？<bookmark mark='a'/>如果训练它直接给出答案，我们这个两层的模型，只有49%的时候答对：跟抛硬币差不多。<bookmark mark='b'/>现在，把同一个模型训练成先写出过程：沿着这些比特一路数过去：到目前为止，1的个数是奇数吗？每一步都很简单，只要上一步的答案，再加一个比特。<bookmark mark='c'/>它的最终答案，100%都是对的。同样的模型，同样的大小。它只不过是可以出声思考了。"
   },
   "750b111d3225": {
    "scene": "Hook",
@@ -41,7 +41,7 @@
   "79c53ed642fb": {
    "scene": "RL",
    "en": "How do you teach a model to reason, when nobody can write down the steps for it? DeepSeek-R1 used a recipe with almost no human help: questions with checkable answers, and reinforcement learning. We do it here with a small transformer that has had a little practice at two-digit addition. <bookmark mark='a'/> Give it a question, and sample 8 answers. <bookmark mark='b'/> A checker marks each one: here 2 of 8 are right. <bookmark mark='c'/> Each answer's advantage is its reward minus the group's average, divided by the spread: right answers above the line, wrong ones below. <bookmark mark='d'/> Then nudge the model to make the good answers more likely and the bad ones less. That's GRPO. No one judges the steps, and no separate critic is needed: the group is its own baseline. And when every answer is right, or every one wrong, the advantages are all zero: nothing to learn.",
-   "zh": "如果没有人能把推理步骤写下来教给模型，又该怎么教它推理呢？DeepSeek-R1用了一套几乎不需要人工帮助的配方：答案可以核对的题目，再加上强化学习。我们在这里，用一个小Transformer来做这件事，它已经稍微练习过两位数加法。<bookmark mark='a'/>给它一道题，采样出8个答案。<bookmark mark='b'/>检查器给每个答案判对错：这里8个里有2个是对的。<bookmark mark='c'/>每个答案的优势，就是它的奖励减去这一组的平均值，再除以这一组的离散程度：答对的在线的上方，答错的在线的下方。<bookmark mark='d'/>然后轻轻推一下模型，让好的答案更可能出现，坏的答案更少出现。这就是GRPO。没有人去评判中间的步骤，也不需要另外一个评价模型：这一组答案，本身就是基线。而当所有答案全都对，或者全都错，优势就全是0：什么也学不到。"
+   "zh": "如果没有人能把推理步骤写下来教给模型，又该怎么教它推理呢？DeepSeek-R1用了一套几乎不需要人工帮助的配方：答案可以核对的题目，再加上强化学习。我们在这里，用一个小Transformer来做这件事，它已经稍微练习过两位数加法。<bookmark mark='a'/>给它一道题，采样出8个答案。<bookmark mark='b'/>检查器给每个答案判对错：这里8个里有2个是对的。<bookmark mark='c'/>每个答案的优势，就是它的奖励减去这一组的平均值，再除以这一组的离散程度：答对的在横线上方，答错的在横线下方。<bookmark mark='d'/>然后轻轻推一下模型，让好的答案更可能出现，坏的答案更少出现。这就是GRPO。没有人去评判中间的步骤，也不需要另外一个评价模型：这一组答案，本身就是基线。而当所有答案全都对，或者全都错，优势就全是0：什么也学不到。"
   },
   "48acda2c9144": {
    "scene": "RL",
@@ -51,7 +51,7 @@
   "bdcb54251ef7": {
    "scene": "RL",
    "en": "What we used is an outcome reward: only the final answer is checked. <bookmark mark='a'/> The other way is a process reward: a second model, trained on people's judgments, scores every step, so a lucky guess after a wrong step earns nothing. <bookmark mark='b'/> Process rewards catch more, but a learned grader can be fooled, and a model under pressure learns to fool it. The big reasoning models of 2025 mostly rely on checkable outcomes: math with known answers, code with tests. Trained that way, DeepSeek-R1's chains of thought grew longer on their own, and started to double-check their own work.",
-   "zh": "我们用的是结果奖励：只检查最后的答案。<bookmark mark='a'/>另一种办法是过程奖励：用人的评判训练出第二个模型，让它给每一步打分；这样，错了一步之后再蒙对答案，就什么也得不到。<bookmark mark='b'/>过程奖励能抓出更多问题，但学出来的评分模型是可以被骗的，而一个被逼着拿高分的模型，就会学会去骗它。2025年的大型推理模型，大多依靠可以核对的结果：有标准答案的数学题，有测试的代码。这样训练出来，DeepSeek-R1的思维链自己就变长了，还开始回头检查自己的推导。"
+   "zh": "我们用的是结果奖励：只检查最后的答案。<bookmark mark='a'/>另一种办法是过程奖励：用人的评判训练出第二个模型，让它给每一步打分；这样，错了一步之后再蒙对答案，就什么也得不到。<bookmark mark='b'/>过程奖励能抓出更多问题，但学出来的评分模型是可以被骗的，而一个被逼着拿高分的模型，就会学会去骗它。2025年的大型推理模型，大多依靠可以核对的结果：有标准答案的数学题，带测试用例的代码。这样训练出来，DeepSeek-R1的思维链自己就变长了，还开始回头检查自己的推导。"
   },
   "d2e21b079625": {
    "scene": "TestTime",

@@ -151,6 +151,10 @@ class Transformer(VoiceoverScene):
         for val, txt, col in ((k["best_bits"], r"Kneser--Ney (Part 6)", C.TRUE_P), (n["mix_bits"], r"Part 8's best", C.NEURAL)):
             refs.add(VGroup(DashedLine(ax.c2p(0, val), ax.c2p(float(t["steps"]), val), color=col, stroke_width=1.5),
                             label(txt, font_size=20, color=col).next_to(ax.c2p(float(t["steps"]), val), RIGHT, buff=0.1)))
+        if abs(refs[0][1].get_y() - refs[1][1].get_y()) < 0.28:  # close values: keep the two names apart
+            hi_, lo_ = sorted(refs, key=lambda r_: -r_[1].get_y())
+            hi_[1].shift(UP * 0.14)
+            lo_[1].shift(DOWN * 0.14)
         key = VGroup(label(r"held-out novels", font_size=24, color=GREY_B), label(r"the passage", font_size=24, color=OURS))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.6, 2.2, 0])
         facts = VGroup(label(rf"${t['n_params'] / 1e6:.1f}$ million numbers", font_size=26, color=WHITE),
@@ -172,8 +176,10 @@ class Transformer(VoiceoverScene):
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(facts))
             self.play(FadeIn(refs), FadeIn(key))
+            self.play(Create(cvv), Create(cps), run_time=4.0)
             vo.wait_until("a")
-            self.play(Create(cvv), Create(cps), run_time=3.0)
+            end = glow_dot(cps.get_end(), color=OURS, radius=0.09)
+            self.play(FadeIn(end, scale=0.5), Indicate(key[1], color=OURS))
         self.wait(0.3)
         self.clear_scene()
 
