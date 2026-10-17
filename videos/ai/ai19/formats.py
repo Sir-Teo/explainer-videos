@@ -145,6 +145,17 @@ def compute_formats():
     crest = lambda M: float(np.mean(np.abs(M).max(1) / np.sqrt((M ** 2).mean(1))))  # noqa: E731
     out["crest"], out["crest_rot"] = crest(W), crest(Wr)
     out["row"], out["row_rot"] = W[0], Wr[0]
+    # one real layer, at 3 bits: the output error on real inputs, rounded vs GPTQ (relative, via the second moment)
+    k1 = "blocks.1.f1.weight"
+    H1 = Hs[k1]
+
+    def out_err(Q):
+        E_ = W - Q
+        return float(np.sqrt(np.trace(E_ @ H1 @ E_.T) / np.trace(W @ H1 @ W.T)))
+
+    out["layer_err_rtn3"], out["layer_err_gptq3"] = out_err(rtn(W, 3)), out_err(gptq(W, H1, 3))
+    out["layer_err_rtn4"], out["layer_err_gptq4"] = out_err(rtn(W, 4)), out_err(gptq(W, H1, 4))
+    print(f"    one layer's output error at 3 bits: rounded {out['layer_err_rtn3']:.3f}, GPTQ {out['layer_err_gptq3']:.3f}", flush=True)
     # one block of 16 weights in NVFP4, step by step, for the picture
     blk = W[0, :16]
     gs = np.abs(W).max() / (6.0 * 448.0)
