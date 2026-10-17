@@ -2963,7 +2963,13 @@
     "factorizing a table": "分解一张表",
     "writing a big table as the product\\\\ of two thin ones": "把一张大表写成\\\\ 两张细长表的乘积",
     "training step, \\ batch": "训练步，\\ 批次",
-    "each step looks at a small batch of examples\\\\ and nudges the vectors once": "每一步看一小批例子，\\\\ 把向量推动一次"
+    "each step looks at a small batch of examples\\\\ and nudges the vectors once": "每一步看一小批例子，\\\\ 把向量推动一次",
+    "weight, \\ bias, \\ sigmoid, \\ squared error": "权重，\\ 偏置，\\ S形函数，\\ 平方误差",
+    "$z = w\\,x + b$: \\ the input times a weight, plus a bias (a shift)\\\\$a = \\sigma(z)$: \\ an S-curve squashes $z$ into $0$ to $1$\\\\$\\mathcal{L} = (a - y)^2$: \\ the miss from the target $y$, squared": "$z = w\\,x + b$：\\ 输入乘以一个权重，再加上一个偏置（一个平移）\\\\$a = \\sigma(z)$：\\ 一条S形曲线把$z$压进$0$到$1$之间\\\\$\\mathcal{L} = (a - y)^2$：\\ 与目标$y$的差距，再取平方",
+    "$H^{-1}$: \\ undoes the curvature's stretching, \\\\ so every direction is equally steep": "$H^{-1}$：\\ 抵消曲率造成的拉伸，\\\\ 让每个方向都一样陡",
+    "optimizer: \\ the rule that turns \\\\ gradients into steps": "优化器：\\ 把梯度变成步子的\\\\ 那条规则",
+    "$f'$: \\ the slope of $f$; \\quad $f(g(x))$: \\ do $g$ first, then $f$": "$f'$：\\ $f$的斜率；\\quad $f(g(x))$：\\ 先做$g$，再做$f$",
+    "$\\theta$: \\ all the adjustable numbers, the parameters \\qquad $\\mathcal{L}$: \\ the loss, one number to make small": "$\\theta$：\\ 所有可调的数，也就是参数 \\qquad $\\mathcal{L}$：\\ 损失，要尽量变小的那一个数"
   },
   "phrases": {
     "width": "宽度",
@@ -3376,6 +3382,10 @@
     [
       "^block (\\d+)$",
       "第\\1块"
+    ],
+    [
+      "^\\\\text\\{(\\d+) numbers\\}$",
+      "\\\\text{\\1个数}"
     ]
   ]
 }
