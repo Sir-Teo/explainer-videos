@@ -253,6 +253,11 @@
    "scene": "Outro",
    "en": "For more, Gilbert Strang's Linear Algebra and Learning from Data is a friendly companion, and Roman Vershynin's High-Dimensional Probability explains why big spaces behave the way they do. The papers are on screen. Thanks for watching, and see you in part three.",
    "zh": "想了解更多，吉尔伯特·斯特朗的《线性代数与数据学习》是一本亲切的读物，罗曼·韦尔希宁的《高维概率》则解释了大空间为什么会有这样的表现。论文都列在屏幕上。感谢观看，第3部分见。"
+  },
+  "545747be41f0": {
+   "scene": "Words",
+   "en": "Watch word2vec learn. Here are four words and their five nearest neighbours, at checkpoints during training. <bookmark mark='a'/> At the start the vectors are random, and so are the neighbours. <bookmark mark='b'/> After only 36 steps, most words' neighbours are the commonest words in the books, like 'they', 'is' and 'all': every batch pushes the frequent words, so they move first. <bookmark mark='c'/> By step 1,089, meaning appears: three sits with thirty, fifty, four, eyes with face, cheek, lips. <bookmark mark='d'/> By the end, Monday sits with Tuesday, three with two, four, five, father with son and mother: nothing told it what a day or a number is; only which words keep company.",
+   "zh": "看看word2vec是怎么学的。这是四个词和它们最近的五个邻居，在训练途中的几个检查点上。<bookmark mark='a'/>一开始，向量是随机的，邻居也是随机的。<bookmark mark='b'/>才过了36步，大多数词的邻居就成了书里最常见的词，比如they、is和all：每个批次都在推这些高频词，所以它们最先动起来。<bookmark mark='c'/>到第1089步，意义出现了：three和thirty、fifty、four在一起，eyes和face、cheek、lips在一起。<bookmark mark='d'/>到最后，Monday和Tuesday在一起，three和two、four、five在一起，father和son、mother在一起：没有任何东西告诉它什么是一天、什么是一个数；它知道的只是哪些词常常结伴出现。"
   }
  },
  "title_en": "AI, Built: Part 2, Vectors That Mean Things",
