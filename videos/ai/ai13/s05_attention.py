@@ -45,7 +45,8 @@ class SparseAttention(VoiceoverScene):
             "Attention looks at every earlier token, but how much of that does it use? Take part eleven's "
             "transformer and, for each query, rank its keys by weight. <bookmark mark='a'/> Each line is one head: "
             "how much of the attention its top k keys hold. "
-            f"On average, the top sixteen keys out of a few hundred hold {100 * m16:.0f} percent. Most of the "
+            f"On average, the top sixteen keys, out of between a hundred and twenty-eight and two hundred and fifty-six, "
+            f"hold {100 * m16:.0f} percent. Most of the "
             "attention goes to a few keys."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn))
@@ -80,8 +81,9 @@ class SparseAttention(VoiceoverScene):
         with self.voiceover(
             "So let each query use only k keys. Which k? <bookmark mark='a'/> The simplest choice is the most recent "
             f"ones, a sliding window: with {kk[i8]} keys, {wn[i8]:.2f} bits a character. <bookmark mark='b'/> Better, "
-            f"take the {kk[i8]} keys it would weight most: {tk[i8]:.2f}. With {kk[-1]}, it's within "
-            f"{tk[-1] - full:.3f} bits of using everything."
+            f"take the {kk[i8]} keys it would weight most: {tk[i8]:.2f}. With {kk[-1]}, "
+            + (f"it's within {tk[-1] - full:.3f} bits of using everything."
+               if tk[-1] - full >= 0.0005 else "it's within a thousandth of a bit of using everything."))
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(fl), FadeIn(fll))
             vo.wait_until("a")
