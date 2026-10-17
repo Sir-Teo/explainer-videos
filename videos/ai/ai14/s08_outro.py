@@ -128,6 +128,8 @@ class Outro(VoiceoverScene):
             r"Y.~Lipman et al., \textit{Flow Matching} (2023); \ X.~Liu et al., \textit{Rectified Flow} (2023)",
             r"J.~Ho \& T.~Salimans, \textit{Classifier-Free Guidance} (2022); \ P.~Esser et al., \textit{Stable Diffusion 3} (2024)",
             r"J.~Austin et al., \textit{D3PM} (2021); \ S.~Sahoo et al., \textit{MDLM} (2024); \ S.~Nie et al., \textit{LLaDA} (2025)",
+            r"Z.~Geng et al., \textit{MeanFlow} (2025); \ K.~Frans et al., \textit{Shortcut Models} (2024); \ M.~Arriola et al., "
+            r"\textit{Block Diffusion} (2025)",
         ]
         card = reference_card(books, papers)
         data = note(r"Points: Part 4's ``AI''; \ letters from the system's fonts; \ text: Part 1's novels. \ Every model "
