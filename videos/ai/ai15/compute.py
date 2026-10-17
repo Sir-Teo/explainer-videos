@@ -18,6 +18,14 @@ Items:
                what each scale adds to the one before
     video      the token arithmetic of a video model with a typical compression (8x in space, 4x in time, 2 x 2
                patches): tokens for clips of different lengths and sizes
+    vae        (deep.py) an autoencoder against variational ones with a growing KL weight: rebuild error, KL, and the
+               quality of flow-matching samples in each latent space (scored by a judge classifier); uniform against
+               logit-normal noise levels in training, sampled with 1 to 40 steps
+    var        (deep.py) next-scale prediction's tokens: residuals at 1, 2, 4, 5, 10 and 20 pixels a side, each
+               quantized to 16 levels; rebuild error after each scale
+    vae3d      (deep.py) a causal video autoencoder on clips of a bouncing letter: 9 frames into 3 latent frames
+    clips      (deep.py) a clip model against frames drawn independently; frame-by-frame models trained with teacher
+               forcing or diffusion forcing, rolled out 4x longer than trained
 """
 
 from __future__ import annotations
@@ -329,12 +337,18 @@ def compute_video():
     return dict(rows=rows, fps=fps)
 
 
+from videos.ai.ai15.deep import compute_clips, compute_vae, compute_vae3d, compute_var  # noqa: E402
+
 ITEMS = {
     "vit": compute_vit,
     "latent": compute_latent,
     "dit": compute_dit,
     "scales": compute_scales,
     "video": compute_video,
+    "vae": compute_vae,
+    "var": compute_var,
+    "vae3d": compute_vae3d,
+    "clips": compute_clips,
 }
 CACHE.items = ITEMS
 

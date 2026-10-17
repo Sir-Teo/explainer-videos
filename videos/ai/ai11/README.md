@@ -19,8 +19,14 @@ series' own small transformer, which joins the scoreboard. A hook and six chapte
   distance (checked to 10⁻¹⁴); the long-range decay.
 * **Longer than it was trained for.** Our model at four times its training context: as trained it breaks past 256
   characters; position interpolation, NTK-aware scaling and YaRN, with no retraining, measured position by position;
+  YaRN's recipe on screen: turns per pair over the training context r = L/λ, the ramp γ = clip((r−α)/(β−α), 0, 1)
+  with α = 1, β = 32 (in our heads 1 pair kept, 6 on the ramp, 9 slowed by 4), the blended angle
+  θ′ = (1−γ)θ/s + γθ, and the temperature √(1/t) = 0.1 ln s + 1 (every score × 1.30 at s = 4);
   attention sinks: our small model has none (every head gives the first character under a third of an even share),
-  so a large model's sink head is drawn as a labeled schematic.
+  so a large model's sink head is drawn as a labeled schematic; then four changes frontier models make to attention,
+  each with its equation and a small computed plot: gpt-oss's sink logit e^b in the softmax's denominator (b = 2
+  and 8 equal scores: 48% goes nowhere), Qwen3-Next's sigmoid output gate, QK-norm (scores bounded however the
+  weights grow), and Gemma 2's soft cap c·tanh(s/c) with c = 50.
 * **Induction heads.** A random string shown twice: our small transformer does no better the second time (it has
   not built induction heads in its short training); the two-head mechanism
   ([a][b] … [a] → [b]); a two-layer attention-only model forming an induction head in a sudden drop of the loss, a
@@ -43,5 +49,6 @@ are kept in `.cache/ai11/tf.pt` for the context-extension item.
 
 References: S. J. D. Prince, *Understanding Deep Learning* (2023); Nadaraya (1964); Watson (1964); Vaswani et al.
 (2017); Su et al., RoFormer (2021); Chen et al., position interpolation (2023); bloc97, NTK-aware scaling (2023); Peng
-et al., YaRN (2023); Xiao et al., attention sinks (2023); Elhage et al., transformer circuits (2021); Olsson et al.,
+et al., YaRN (2023); Xiao et al., attention sinks (2023); Qiu et al., gated attention (2025); Dehghani et al.,
+QK-norm (2023); Gemma Team, Gemma 2 (2024); OpenAI, gpt-oss (2025); Elhage et al., transformer circuits (2021); Olsson et al.,
 induction heads (2022); Garg et al. (2022); von Oswald et al. (2023).

@@ -16,7 +16,9 @@ class Longer(VoiceoverScene):
         self.card()
         self.breaks()
         self.fixes()
+        self.yarn()
         self.sinks()
+        self.modern()
 
     def card(self):
         card = chapter_card(4, r"Longer than it was trained for", r"What happens past the end of the training context?",
@@ -127,6 +129,99 @@ class Longer(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def yarn(self):
+        """YaRN's recipe exactly: turns per pair over the training context, the ramp, the blended angle, the temperature."""
+        e, t = load("extend"), load("tf")
+        ctx, s = int(t["ctx"]), int(e["s"])
+        th, gam = np.asarray(e["theta"]), np.asarray(e["ramp"])
+        r = ctx * th / (2 * np.pi)  # full turns each pair makes over the training context
+        alpha, beta = 1.0, 32.0
+        n = len(th)
+        KEEP, SLOW = ManimColor(C.SURPRISE), ManimColor(C.TRUE_P)  # the colours of "as trained" and "position interpolation" in the last chart
+        ax = CornerAxes(x_range=[0.5, n + 0.5, 1], y_range=[-2.5, 2.0, 0.5], x_length=6.0, y_length=4.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.4, -0.5, 0])
+        yt = VGroup(*[MathTex(v, font_size=22, color=GREY_B).next_to(ax.c2p(0.5, p), LEFT, buff=0.1)
+                      for p, v in zip(range(-2, 3), ("0.01", "0.1", "1", "10", "100"))])
+        xt = VGroup(label(r"pair $1$ \ (fastest)", font_size=20, color=GREY_B).next_to(ax.c2p(1, -2.5), DOWN, buff=0.12),
+                    label(rf"pair ${n}$ \ (slowest)", font_size=20, color=GREY_B).next_to(ax.c2p(n, -2.5), DOWN, buff=0.12))
+        yn = label(rf"$r$: \ full turns in ${ctx}$ positions", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        lb, la = np.log10(beta), np.log10(alpha)
+
+        def band(y0, y1, col):
+            return Rectangle(width=ax.c2p(n + 0.5, 0)[0] - ax.c2p(0.5, 0)[0], height=ax.c2p(0, y1)[1] - ax.c2p(0, y0)[1],
+                             stroke_width=0, fill_color=col, fill_opacity=0.12).move_to(ax.c2p((n + 1) / 2, (y0 + y1) / 2))
+
+        bands = VGroup(band(lb, 2.0, KEEP), band(la, lb, interpolate_color(SLOW, KEEP, 0.5)), band(-2.5, la, SLOW))
+        lines = VGroup(*[DashedLine(ax.c2p(0.5, y), ax.c2p(n + 0.5, y), dash_length=0.08, stroke_width=2, color=GREY_B) for y in (lb, la)])
+        lline = VGroup(MathTex(r"\beta", font_size=24, color=GREY_B).next_to(lines[0], RIGHT, buff=0.08),
+                       MathTex(r"\alpha", font_size=24, color=GREY_B).next_to(lines[1], RIGHT, buff=0.08))
+        bl = VGroup(label(r"kept as trained, \ $\gamma = 1$", font_size=20, color=KEEP).next_to(ax.c2p(n + 0.5, 2.0), DL, buff=0.12),
+                    label(r"the ramp", font_size=20, color=interpolate_color(SLOW, KEEP, 0.5))
+                    .move_to(ax.c2p(n + 0.5, (la + lb) / 2), aligned_edge=RIGHT).shift(LEFT * 0.12),
+                    label(rf"slowed by $s = {s}$, \ $\gamma = 0$", font_size=20, color=SLOW)
+                    .next_to(ax.c2p(0.5, -2.5), UR, buff=0.12))
+        dots = VGroup(*[Dot(ax.c2p(i + 1, np.log10(r[i])), radius=0.065, color=GREY_A) for i in range(n)])
+        ramp_i = [i for i in range(n) if 0 < gam[i] < 1]
+        gl = VGroup(*[MathTex(f"{gam[i]:.2f}", font_size=18, color=interpolate_color(SLOW, KEEP, float(gam[i])))
+                      .next_to(dots[i], RIGHT, buff=0.1) for i in ramp_i])
+        cols = [interpolate_color(SLOW, KEEP, float(g_)) for g_ in gam]
+        # the recipe
+        eqs = VGroup(
+            MathTex(r"r_i = \frac{L}{\lambda_i} = \frac{L\,\theta_i}{2\pi}", font_size=30),
+            MathTex(r"\gamma_i = \operatorname{clip}\!\left(\frac{r_i - \alpha}{\beta - \alpha},\ 0,\ 1\right)", font_size=30),
+            MathTex(r"\theta_i' = (1 - \gamma_i)\,\frac{\theta_i}{s} + \gamma_i\,\theta_i", font_size=30),
+            MathTex(r"\operatorname{softmax}\!\left(\frac{q^{\top} k}{t\,\sqrt{d}}\right), \quad \sqrt{1/t} = 0.1\ln s + 1",
+                    font_size=30),
+        ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to([3.75, 0.15, 0])
+        ab = label(rf"$L = {ctx}, \ \alpha = {alpha:.0f}, \ \beta = {beta:.0f}$", font_size=22, color=GREY_A) \
+            .next_to(eqs[1], DOWN, buff=0.12).align_to(eqs, LEFT)
+        eqs[2:].shift(DOWN * 0.3)
+        kept, slowed = int((gam >= 1).sum()), int((gam <= 0).sum())
+        cnt = label(rf"our heads: \ ${kept}$ kept, \ ${len(ramp_i)}$ on the ramp, \ ${slowed}$ slowed by ${s}$",
+                    font_size=22, color=GREY_A).next_to(eqs[2], DOWN, buff=0.12).align_to(eqs, LEFT)
+        eqs[3].shift(DOWN * 0.3)
+        mult = (0.1 * math.log(s) + 1) ** 2
+        tl = label(rf"$s = {s}$: \ every score $\times\,{mult:.2f}$", font_size=22, color=C.BITS) \
+            .next_to(eqs[3], DOWN, buff=0.12).align_to(eqs, LEFT)
+        cite_ = cite(r"B.~Peng et al., \textit{YaRN: Efficient Context Window Extension of Large Language Models} (2023)", corner=UR)
+        kept_w = "pair" if kept == 1 else "pairs"
+        with self.voiceover(
+            "Here is YaRN's recipe exactly, since most open models use it. <bookmark mark='a'/> For each pair of "
+            "numbers, count the full turns its hand makes over the training context: r is the context length over "
+            f"the pair's wavelength. <bookmark mark='b'/> Our fastest pair turns about {r[0]:.0f} times in {ctx} "
+            "characters; it has seen every angle many times over, so YaRN leaves it alone. <bookmark mark='c'/> The "
+            "slowest pairs never finish a single turn. Past the training length they would point at angles never "
+            f"seen, so YaRN slows them by the full factor of {s}. <bookmark mark='d'/> In between is a ramp, gamma: "
+            "zero below one turn, one above thirty-two, a straight line between. <bookmark mark='e'/> Each new "
+            "angle is a blend, one minus gamma of the slowed angle plus gamma of the original. In our heads that's "
+            f"{kept} {kept_w} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> Slowing "
+            "the hands also flattens the attention, spreading it over more positions, so YaRN adds a temperature: "
+            f"every score is multiplied by zero point one log s plus one, squared; for s of {s}, {mult:.2f}."
+        ) as vo:
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yn), FadeIn(cite_))
+            vo.wait_until("a")
+            self.play(FadeIn(eqs[0]))
+            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.12), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(bands[0]), Create(lines[0]), FadeIn(lline[0]), FadeIn(bl[0]), dots[0].animate.set_color(KEEP),
+                      Flash(dots[0], color=KEEP))
+            vo.wait_until("c")
+            self.play(FadeIn(bands[2]), Create(lines[1]), FadeIn(lline[1]), FadeIn(bl[2]),
+                      *[dots[i].animate.set_color(SLOW) for i in range(n) if gam[i] <= 0])
+            vo.wait_until("d")
+            self.play(FadeIn(eqs[1]), FadeIn(ab))
+            self.play(FadeIn(bands[1]), FadeIn(bl[1]), *[dots[i].animate.set_color(cols[i]) for i in ramp_i],
+                      LaggedStart(*[FadeIn(g_, shift=LEFT * 0.1) for g_ in gl], lag_ratio=0.2))
+            vo.wait_until("e")
+            self.play(FadeIn(eqs[2]))
+            self.play(FadeIn(cnt))
+            vo.wait_until("f")
+            self.play(FadeIn(eqs[3]))
+            self.play(FadeIn(tl))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def sinks(self):
         t = load("tf")
         sink = np.asarray(t["sink"])  # layer, head: mean weight on position 0
@@ -194,4 +289,105 @@ class Longer(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(why))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def modern(self):
+        """Four small changes frontier models make to the attention we built, each with its equation and a tiny plot."""
+        W, H = 6.6, 3.35
+
+        def panel(c, title, col):
+            box = RoundedRectangle(width=W, height=H, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5).move_to(c)
+            t_ = label(title, font_size=22, color=col).move_to(box.get_corner(UL) + RIGHT * 0.2 + DOWN * 0.28, aligned_edge=UL)
+            return box, t_
+
+        def mini(c, xr, yr):
+            return Axes(x_range=xr, y_range=yr, x_length=2.5, y_length=1.55, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(c)
+
+        cs = [np.array([-3.45, 1.78, 0]), np.array([3.45, 1.78, 0]), np.array([-3.45, -1.8, 0]), np.array([3.45, -1.8, 0])]
+        # 1. a sink logit: one learned number b per head in the softmax's denominator (gpt-oss)
+        b_, nk = 2.0, 8
+        p_plain = 1 / nk
+        p_sink = 1 / (math.exp(b_) + nk)
+        sink_share = math.exp(b_) / (math.exp(b_) + nk)
+        box1, t1 = panel(cs[0], r"a sink logit \ (gpt-oss, 2025)", POS)
+        e1 = MathTex(r"p_j = \frac{e^{s_j}}{e^{\,b} + \sum_k e^{s_k}}", font_size=30).move_to(cs[0] + LEFT * 1.6 + DOWN * 0.15)
+        sy, bw = 1.5 / 0.5, 0.2
+        x0 = cs[0][0] + 0.75
+        yb = cs[0][1] - 1.05
+        bars = VGroup(*[Rectangle(width=bw * 0.75, height=sy * p_plain, stroke_width=0, fill_color=A, fill_opacity=0.85)
+                        .move_to([x0 + j * bw, yb + sy * p_plain / 2, 0]) for j in range(nk)])
+        bars_s = VGroup(*[Rectangle(width=bw * 0.75, height=sy * p_sink, stroke_width=0, fill_color=A, fill_opacity=0.85)
+                          .move_to([x0 + j * bw, yb + sy * p_sink / 2, 0]) for j in range(nk)])
+        sbar = Rectangle(width=bw * 0.75, height=sy * sink_share, stroke_width=0, fill_color=POS, fill_opacity=0.85) \
+            .move_to([x0 + (nk + 0.6) * bw, yb + sy * sink_share / 2, 0])
+        base1 = Line([x0 - bw, yb, 0], [x0 + (nk + 1.2) * bw, yb, 0], color=GREY_C, stroke_width=2)
+        bl1 = label(rf"${nk}$ equal scores", font_size=18, color=GREY_B).next_to(base1, DOWN, buff=0.08).align_to(base1, LEFT)
+        sl1 = MathTex(rf"{sink_share:.2f}", font_size=20, color=POS).next_to(sbar, UP, buff=0.06)
+        pl1 = MathTex(rf"{p_plain:.3f}", font_size=20, color=A).next_to(bars, UP, buff=0.06)
+        pl1s = MathTex(rf"{p_sink:.3f}", font_size=20, color=A).next_to(bars_s, UP, buff=0.06)
+        bnote = label(rf"$b = {b_:.0f}$", font_size=18, color=POS).next_to(sbar, RIGHT, buff=0.08).align_to(sbar, DOWN)
+        # 2. an output gate: each head's output times a sigmoid of the input (Qiu et al. 2025; Qwen3-Next)
+        GATE = C.BITS
+        box2, t2 = panel(cs[1], r"an output gate \ (Qwen3-Next, 2025)", GATE)
+        e2 = MathTex(r"o = \operatorname{Attn}(x)\,\odot\,\sigma(x\,W_g)", font_size=30).move_to(cs[1] + LEFT * 1.4 + DOWN * 0.15)
+        ax2 = mini(cs[1] + RIGHT * 1.75 + DOWN * 0.3, [-6, 6, 3], [0, 1, 0.5])
+        g2 = ax2.plot(lambda z: 1 / (1 + math.exp(-z)), color=GATE, stroke_width=3.5)
+        gl2 = VGroup(label(r"shut", font_size=18, color=GREY_B).next_to(ax2.c2p(-6, 0), UR, buff=0.08),
+                     label(r"open", font_size=18, color=GREY_B).next_to(ax2.c2p(5, 0.95), DOWN, buff=0.12))
+        # 3. QK-norm: queries and keys rescaled to a fixed size before the dot product
+        QN = C.INTERVAL
+        box3, t3 = panel(cs[2], r"QK-norm \ (OLMo 2, Qwen3, Gemma 3)", QN)
+        e3 = VGroup(MathTex(r"\hat q = g_q \odot \frac{q}{\operatorname{rms}(q)}", font_size=28),
+                    MathTex(r"\hat k = g_k \odot \frac{k}{\operatorname{rms}(k)}", font_size=28)) \
+            .arrange(DOWN, buff=0.25).move_to(cs[2] + LEFT * 1.75 + DOWN * 0.2)
+        cmax = 4
+        ax3 = mini(cs[2] + RIGHT * 2.0 + DOWN * 0.3, [1, cmax, 1], [0, cmax ** 2, 4])
+        raw3 = ax3.plot(lambda c: c * c, color=C.SURPRISE, stroke_width=3.5)
+        nrm3 = ax3.plot(lambda c: 1.0, color=QN, stroke_width=3.5)
+        l3 = VGroup(label(r"plain", font_size=18, color=C.SURPRISE).next_to(ax3.c2p(cmax, cmax ** 2), LEFT, buff=0.1),
+                    label(r"normed", font_size=18, color=QN).next_to(ax3.c2p(cmax, 1), UP, buff=0.08).shift(LEFT * 0.3))
+        x3 = label(rf"weights grown $\times 1 \ldots {cmax}$", font_size=18, color=GREY_B).next_to(ax3, DOWN, buff=0.08)
+        y3 = label(r"score", font_size=18, color=GREY_B).next_to(ax3, LEFT, buff=0.08).shift(UP * 0.4)
+        # 4. a soft cap on the scores (Gemma 2): c tanh(s / c), c = 50
+        CAP = C.TRUE_P
+        cap = 50.0
+        box4, t4 = panel(cs[3], r"a soft cap \ (Gemma 2, 2024)", CAP)
+        e4 = MathTex(r"s \;\leftarrow\; c\,\tanh(s / c)", font_size=30).move_to(cs[3] + LEFT * 1.6 + DOWN * 0.15)
+        c4 = label(rf"$c = {cap:.0f}$", font_size=22, color=GREY_A).next_to(e4, DOWN, buff=0.2)
+        ax4 = mini(cs[3] + RIGHT * 1.75 + DOWN * 0.3, [-150, 150, 50], [-150, 150, 50])
+        id4 = DashedLine(ax4.c2p(-150, -150), ax4.c2p(150, 150), dash_length=0.06, stroke_width=1.5, color=GREY_B)
+        cp4 = ax4.plot(lambda s: cap * math.tanh(s / cap), color=CAP, stroke_width=3.5)
+        lim4 = VGroup(*[DashedLine(ax4.c2p(-150, v), ax4.c2p(150, v), dash_length=0.05, stroke_width=1.2, color=CAP,
+                                   stroke_opacity=0.6) for v in (cap, -cap)])
+        l4 = MathTex(rf"\pm{cap:.0f}", font_size=18, color=CAP).next_to(ax4.c2p(-150, cap), UP, buff=0.05) \
+            .align_to(ax4.c2p(-150, cap), LEFT)
+        with self.voiceover(
+            "Sinks are one of several small changes that frontier models make to the attention we built. Here are "
+            "four of them, exactly. <bookmark mark='a'/> gpt-oss gives every head one extra learned number, b, that "
+            "sits in the softmax's denominator like the score of an invisible position. <bookmark mark='b'/> A head "
+            f"with nothing to find can now send its weight there, onto nothing at all: with b equal to {b_:.0f} and "
+            f"{nk} equal scores, {sink_share:.0%} of it. <bookmark mark='c'/> Qwen3-Next instead multiplies each "
+            "head's output by a gate, a sigmoid of the input. A head with nothing to add can shut itself, and the "
+            "sinks largely disappear. <bookmark mark='d'/> QK-norm rescales every query and key to a fixed size "
+            "before the dot product. Without it, weights that grow make the scores grow with the square of their "
+            "size, until the softmax saturates and training stalls; with it, the scores stay bounded. "
+            "<bookmark mark='e'/> Gemma 2 caps the scores softly instead: c times tanh of s over c. Small scores pass "
+            f"unchanged, and none can pass {cap:.0f}. Gemma 3 dropped the cap for QK-norm."
+        ) as vo:
+            self.play(Create(box1), FadeIn(t1), FadeIn(e1))
+            self.play(Create(base1), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.08), FadeIn(pl1), FadeIn(bl1))
+            vo.wait_until("b")
+            self.play(Transform(bars, bars_s), Transform(pl1, pl1s), GrowFromEdge(sbar, DOWN), FadeIn(sl1), FadeIn(bnote))
+            vo.wait_until("c")
+            self.play(Create(box2), FadeIn(t2), FadeIn(e2), Create(ax2))
+            self.play(Create(g2), FadeIn(gl2))
+            vo.wait_until("d")
+            self.play(Create(box3), FadeIn(t3), FadeIn(e3), Create(ax3), FadeIn(x3), FadeIn(y3))
+            self.play(Create(raw3), Create(nrm3), FadeIn(l3), run_time=1.5)
+            vo.wait_until("e")
+            self.play(Create(box4), FadeIn(t4), FadeIn(e4), FadeIn(c4), Create(ax4), Create(id4))
+            self.play(Create(cp4), Create(lim4), FadeIn(l4), run_time=1.5)
+        self.wait(0.5)
         self.clear_scene()
