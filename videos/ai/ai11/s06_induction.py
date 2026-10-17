@@ -178,15 +178,22 @@ class Induction(VoiceoverScene):
         c2 = np.asarray(d["curve2"])
         js = int(d["jump_step"])
         S = 2.7
+        # how strongly each head does its job on the example, checkpoint by checkpoint: the previous-token head's
+        # attention one back, and the induction head's on the repeat (positions 60-79 copy 10-29), one ahead
+        prev_sc = [float(np.mean([L1[k, hp, q, q - 1] for q in range(1, L1.shape[-1])])) for k in range(len(steps))]
+        ind_sc = [float(np.mean([L2[k, hi, q, q - 49] for q in range(61, 80)])) for k in range(len(steps))]
+        kb = int(np.argmax(ind_sc))  # the induction head at its sharpest, and the checkpoint before it began to rise
+        ka = max([k for k in range(kb) if ind_sc[k] < 0.25 * ind_sc[kb]] or [0])
+        lo_a, lo_b = (float(np.interp(steps[k], c2[:, 0], c2[:, 1])) for k in (ka, kb))
 
         def maps(k):
             return Group(heat_image(L1[k, hp], S, S, color=K, mask_upper=True),
-                         heat_image(L2[k, hi], S, S, color=A, mask_upper=True)).arrange(RIGHT, buff=0.35).move_to([2.9, 0.5, 0])
+                         heat_image(L2[k, hi], S, S, color=A, mask_upper=True)).arrange(RIGHT, buff=0.8).move_to([2.7, 0.5, 0])  # room for the titles
 
         cur = maps(0)
         frames = VGroup(*[SurroundingRectangle(m_, buff=0, color=GREY_D, stroke_width=1.5) for m_ in cur])
-        t1 = label(r"layer 1, \ the head that will look one back", font_size=18, color=K).next_to(cur[0], UP, buff=0.12)
-        t2 = label(r"layer 2, \ the future induction head", font_size=18, color=A).next_to(cur[1], UP, buff=0.12)
+        t1 = label(r"layer 1, \ the head that will look one back", font_size=16, color=K).next_to(cur[0], UP, buff=0.12)
+        t2 = label(r"layer 2, \ the future induction head", font_size=16, color=A).next_to(cur[1], UP, buff=0.12)
         top = float(c2[:, 1].max()) + 0.5
         ax = Axes(x_range=[0, c2[-1, 0], 1000], y_range=[0, top, 2], x_length=5.0, y_length=3.0, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-3.7, -0.2, 0])
@@ -204,10 +211,13 @@ class Induction(VoiceoverScene):
         with self.voiceover(
             "And here are those two heads forming, on the same example, at checkpoints through training, beside the "
             "loss on the repeat. <bookmark mark='a'/> Early on, both look around vaguely, mostly at recent tokens. "
-            f"<bookmark mark='b'/> Then, around step {js:,}, within a few hundred steps of each other, the first "
-            "head snaps onto the token one back, and the second finds the stripe: the earlier copy, one ahead. "
-            "The loss falls in the same moment. Two heads that are useless alone become useful together, so they "
-            "appear together, suddenly."
+            f"<bookmark mark='b'/> Then, around step {js:,}, the second head finds the stripe, the earlier copy one "
+            f"ahead: its attention there jumps from {ind_sc[ka]:.2f} to {ind_sc[kb]:.2f} within {steps[kb] - steps[ka]} "
+            f"steps, and the loss on the repeat falls from {lo_a:.1f} to {lo_b:.1f} bits in the same moment. The first "
+            "head starts leaning on the token one back at the same time, "
+            + (f"and keeps strengthening for the rest of training, to {prev_sc[-1]:.2f}. "
+               if prev_sc[-1] > prev_sc[kb] + 0.08 else "just as suddenly. ")
+            + "Two heads that are useless alone become useful together, so they appear together."
         ) as vo:
             self.play(Create(ax), Create(l2), FadeIn(yn), FadeIn(xn), FadeIn(cur), Create(frames), FadeIn(t1), FadeIn(t2))
             self.add(dot, cnt)
@@ -219,7 +229,7 @@ class Induction(VoiceoverScene):
                     vo.wait_until(mk)
                 for k in group[1:] if group is half else group:
                     nxt = maps(k)
-                    self.play(FadeTransform(cur, nxt), t.animate.set_value(steps[k]), run_time=0.6)
+                    self.play(FadeOut(cur), FadeIn(nxt), t.animate.set_value(steps[k]), run_time=0.6)  # images: a cross-fade
                     cur = nxt
         self.wait(0.3)
         self.remove(dot, cnt)
