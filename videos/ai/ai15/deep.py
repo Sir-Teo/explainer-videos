@@ -495,7 +495,7 @@ def compute_vae3d():
             f0 = self.first(z[:, :, 0])
             g1 = self.group(z[:, :, 1:2])[:, 0]
             g2 = self.group(z[:, :, 2:3])[:, 0]
-            return torch.sigmoid(torch.cat([f0, g1, g2], 1))
+            return torch.cat([f0, g1, g2], 1)  # logits: the pixels are mostly black, so train with cross-entropy
 
     enc, dec = Enc(), Dec()
     opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=2e-3)
@@ -503,14 +503,14 @@ def compute_vae3d():
     g = torch.Generator().manual_seed(0)
     for _ in range(steps(4000)):
         x = X[torch.randint(0, len(X), (32,), generator=g)]
-        loss = ((dec(enc(x)) - x) ** 2).mean()
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(dec(enc(x)), x)
         opt.zero_grad()
         loss.backward()
         opt.step()
     with torch.no_grad():
         Xt = torch.tensor(test)
         z = enc(Xt)
-        rec = dec(z).numpy()
+        rec = torch.sigmoid(dec(z)).numpy()
     rmse = float(np.sqrt(((rec - test) ** 2).mean()))
     per_frame = np.sqrt(((rec - test) ** 2).mean((0, 2, 3)))
     out = dict(T=T, C=C, latent_shape=list(z.shape[1:]), pixels=T * GL * GL, numbers=int(np.prod(z.shape[1:])),

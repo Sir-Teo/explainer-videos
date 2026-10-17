@@ -12,7 +12,8 @@ takes to act over many steps in a partly seen world. A hook and four chapters:
 * **World models.** A small world model trained here on a bouncing ball (an encoder to 8 numbers, learned dynamics, a
   decoder); its imagined future against the real one, the error growing with the horizon; Dreamer and Genie.
 * **Acting in the physical world.** Vision-language-action models: RT-2's action tokens, π0's flow-matching action
-  expert, action chunks.
+  expert, action chunks; π0 exactly (Aᵗ = (1 − τ)ε + τA, loss ‖v_θ(Aᵗ, o) − (A − ε)‖², chunks of 50 actions at 50 Hz)
+  and FAST action tokens (a cosine transform, rounding, byte-pair encoding) computed on one chunk.
 * **Recap**, where it comes back, Part 19's teaser, references.
 
 Run from the repo root:
