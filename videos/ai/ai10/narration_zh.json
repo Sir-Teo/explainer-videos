@@ -11,7 +11,7 @@
   "9b6c9b2b883c": {
    "scene": "Hook",
    "en": "Make a model bigger, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are seven sizes of part nine's character model, each trained the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that no model can go below. The exponent, alpha, says how fast more parameters help. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the floor, the reducible loss, by the same factor: on a log scale, a straight line. Curves like this, measured on small models, are how laboratories decide what to build next.",
-   "zh": ""
+   "zh": "把模型做大，它就会变好。这一点，人人都料到了。让人意外的是，它变好得这么有规律，这么可以预测。<bookmark mark='a'/>这是第9部分那个字符模型的7种规模，每一种都用同样的方式训练。<bookmark mark='b'/>损失沿着一条光滑的曲线往下降：一个幂律，再加上一道底线，任何模型都低不过它。指数α，说的是增加参数，能多快地带来改进。<bookmark mark='c'/>规模每扩大10倍，底线以上剩下的那部分，也就是可约损失，就缩小同样的倍数：放到对数坐标上，就是一条直线。各家实验室，正是靠这样在小模型上测出来的曲线，来决定下一步造什么。"
   },
   "55c7ab931d0c": {
    "scene": "Hook",
@@ -26,12 +26,12 @@
   "55992e7e3173": {
    "scene": "Width",
    "en": "Take part nine's character model and make it wider and wider, trained by plain gradient descent, with step sizes that keep a wide network stable. Measure how much its hidden features change during training: a feature is what one hidden unit computes from the input, one pattern the network has learned to look for. <bookmark mark='a'/> The wider the network, the less they change. The slope here is about minus 0.4; in theory it tends to minus a half: one over the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all. A very wide net can only re-weight what it started with, like part five's kernel methods with a frozen similarity rule: a fixed kernel, called the neural tangent kernel. This is called the lazy regime. Elegant, and exactly what we don't want: a network whose features never change learns nothing new about its data's structure.",
-   "zh": ""
+   "zh": "拿第9部分的字符模型，把它做得越来越宽，用单纯的梯度下降来训练，步长选得能让宽网络保持稳定。测一测它的隐藏特征，在训练中变了多少：一个特征，就是一个隐藏单元从输入算出来的东西，是网络学会去寻找的一种模式。<bookmark mark='a'/>网络越宽，它们变得越少。这里的斜率大约是负0.4；理论上，它趋向负的2分之1：也就是宽度的平方根分之1。<bookmark mark='b'/>到了极限，特征完全不动了。一个非常宽的网络，只能给它一开始就有的东西重新分配权重，就像第5部分的核方法，用的是一条冻结不变的相似度规则：一个固定的核，叫作神经正切核。这叫作惰性区。很优雅，却恰恰不是我们想要的：一个特征从不改变的网络，对数据的结构，学不到任何新东西。"
   },
   "c0242f7884f6": {
    "scene": "Width",
    "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's starting weights and step size, so that every layer keeps changing by about the same amount. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
-   "zh": ""
+   "zh": "Greg Yang问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='m'/>说白了：网络变宽的时候，就把每一层的初始权重和步长都缩小一些，让每一层的变化量，都保持在差不多的水平。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.67，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：Yang和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
   },
   "723d9a9ea482": {
    "scene": "Chinchilla",
@@ -41,7 +41,7 @@
   "20fd852b2a89": {
    "scene": "Chinchilla",
    "en": "Suppose you can afford a fixed amount of computation. Training costs about six operations per parameter per training token, so a budget fixes the product of model size and data. You can have a big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the experiment, on our character model. For each budget, try 6 sizes, each trained on exactly the data the budget allows. <bookmark mark='b'/> Each budget gives a valley. Too small a model can't hold the patterns it sees: it underfits. Too big a model barely gets to see anything, so it can't finish learning: it's undertrained. <bookmark mark='c'/> And the bigger the budget, the further right the best size moves.",
-   "zh": ""
+   "zh": "假设你负担得起的计算量是固定的。训练时，每个参数、每个训练词元，大约要花6次运算，所以预算一定，模型规模和数据量的乘积也就定了。你可以要一个大模型，只看很少的数据；也可以要一个小模型，看很多数据。<bookmark mark='a'/>这是我们在字符模型上做的实验。对每一笔预算，试6种规模，每种都恰好用预算允许的那么多数据来训练。<bookmark mark='b'/>每笔预算都给出一道山谷。模型太小，装不下它看到的那些模式：这叫欠拟合。模型太大，几乎什么都来不及看，所以学不完：这叫训练不足。<bookmark mark='c'/>而且预算越大，最好的规模就越往右移。"
   },
   "181f74ba73cb": {
    "scene": "Chinchilla",
@@ -51,7 +51,7 @@
   "7eca079c350e": {
    "scene": "Chinchilla",
    "en": "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen runs, it's off by only 0.02 bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, and the best size grows as the budget to the power beta over alpha plus beta: 0.43 here, close to what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best model's loss with a model three quarters its size costs 7 percent more training; with half the size, 73 percent more; and below about 0.31 of the size, no amount of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred tokens per parameter, a hundred times Chinchilla's ratio.",
-   "zh": ""
+   "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花73%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
   },
   "3b1eb489e761": {
    "scene": "Grok",
@@ -71,7 +71,7 @@
   "6c27ceb2d28a": {
    "scene": "Grok",
    "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of their weight sits on 9 frequencies out of 48: waves around the clock. A frequency places the 97 numbers evenly around a circle, in order: <bookmark mark='w'/> at frequency one, going round once; <bookmark mark='x'/> at frequency five, going round five times. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles; here they are forming during training, and the circles appear just as the test accuracy climbs. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part twenty takes that idea to real models.",
-   "zh": ""
+   "zh": "它找到的规则是什么？看看它为每个数字学到的向量。<bookmark mark='a'/>它们的权重大多落在48个频率中的9个上：绕着钟面转的波。一个频率，会把这97个数按顺序、均匀地排在一个圆上：<bookmark mark='w'/>频率为1时，绕一圈；<bookmark mark='x'/>频率为5时，绕5圈。<bookmark mark='b'/>沿着它们的主方向看，这些数排列在圆上；这里是它们在训练中逐渐形成的样子，而这些圆恰好在测试准确率上升的时候出现。网络把每个数变成一个角度，用角度相加来做数的相加，就像钟表一样。Neel Nanda和同事们在2023年弄清了这一点，这是最早对一个训练好的网络究竟在算什么做出的完整解释之一。第20部分会把这个想法用到真实的模型上。"
   },
   "58cbcf30d35c": {
    "scene": "Outro",
