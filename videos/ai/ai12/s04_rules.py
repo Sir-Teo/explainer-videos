@@ -27,10 +27,11 @@ class Rules(VoiceoverScene):
 
     def err_axes(self, c, center):
         Ns = np.asarray(c["Ns"], float)
-        ax = Axes(x_range=[0, Ns[-1], 64], y_range=[0, 2.5, 0.5], x_length=6.2, y_length=3.8, tips=False,
+        top = math.ceil(max(float(np.max(c["err_add"])), (Ns[-1] - 1) / float(c["d"])) * 2) / 2
+        ax = Axes(x_range=[0, Ns[-1], 64], y_range=[0, top, 1], x_length=6.2, y_length=3.8, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to(center)
         xt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1) for v in (0, 64, 128, 192, 256)])
-        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in (0, 1, 2)])
+        yt = VGroup(*[MathTex(f"{v:g}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(int(top) + 1)])
         xn = label(r"pairs stored, \ $N$", font_size=22, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         yn = label(r"error reading them back \ (relative)", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         return ax, VGroup(xt, yt, xn, yn)
@@ -46,8 +47,8 @@ class Rules(VoiceoverScene):
         b = Brace(VGroup(*f[5:]), DOWN, color=ADD)
         bl = label(r"crosstalk: \ every other pair leaks in", font_size=24, color=ADD).next_to(b, DOWN, buff=0.08)
         ax, deco = self.err_axes(c, [-2.6, -1.0, 0])
-        ca = curve(ax, Ns, np.minimum(np.asarray(c["err_add"]), 2.5), ADD, 4)
-        th = DashedLine(ax.c2p(0, -1 / d), ax.c2p(Ns[-1], min((Ns[-1] - 1) / d, 2.5)), color=GREY_B, stroke_width=1.5)
+        ca = curve(ax, Ns, np.asarray(c["err_add"]), ADD, 4)
+        th = DashedLine(ax.c2p(1, 0), ax.c2p(Ns[-1], (Ns[-1] - 1) / d), color=GREY_B, stroke_width=1.5)
         thl = MathTex(r"\tfrac{N-1}{d}", font_size=30, color=GREY_B).next_to(ax.c2p(110, 110 / d), DR, buff=0.12)
         note_ = label(rf"$d = {d}$: \ by $N = {d}$ pairs, \\ the leaks are as big \\ as the answer", font_size=26,
                       color=ADD).move_to([4.2, -0.6, 0])
@@ -85,7 +86,13 @@ class Rules(VoiceoverScene):
             vo.wait_until("b")
             self.play(*[FadeOut(m_) for m_ in self.mobjects if m_ not in (f, b, bl)])
             self.play(Create(ax), FadeIn(deco), Create(th), FadeIn(thl))
-            self.play(Create(ca), FadeIn(note_), run_time=2.0)
+            self.play(Create(ca), run_time=2.0)
+            # where the leaks match the answer
+            e_d = float(np.interp(d, Ns, np.asarray(c["err_add"])))
+            pt = Dot(ax.c2p(d, e_d), radius=0.08, color=ADD)
+            gl = VGroup(DashedLine(ax.c2p(d, 0), ax.c2p(d, e_d), dash_length=0.06, stroke_width=1.5, color=ADD),
+                        DashedLine(ax.c2p(0, e_d), ax.c2p(d, e_d), dash_length=0.06, stroke_width=1.5, color=ADD))
+            self.play(Create(gl), FadeIn(pt, scale=2), FadeIn(note_), Flash(pt, color=ADD, flash_radius=0.3))
         self.wait(0.3)
         self.clear_scene()
 
