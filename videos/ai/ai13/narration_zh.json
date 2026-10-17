@@ -1,0 +1,122 @@
+{
+ "title": "",
+ "chapters": {
+  "Hook": "",
+  "Router": "",
+  "Balance": "",
+  "Special": "",
+  "SparseAttention": "",
+  "Outro": ""
+ },
+ "lines": {
+  "a7fc7c0ce828": {
+   "scene": "Hook",
+   "en": "DeepSeek-V3 has six hundred and seventy-one billion parameters. <bookmark mark='a'/> But for each token it reads, it uses only 37 billion of them. Every layer holds 256 small networks, called experts, and a router sends each token to just 8 of them, plus one that everyone shares. <bookmark mark='b'/> Watch: every word lights up a different few.",
+   "zh": ""
+  },
+  "1a64200449f8": {
+   "scene": "Hook",
+   "en": "This part is about using only some of a model at a time: how a router chooses, how to keep every expert busy, what the experts learn, <bookmark mark='a'/> and how attention, too, can look at only what matters.",
+   "zh": ""
+  },
+  "28b743605d12": {
+   "scene": "Router",
+   "en": "Chapter one. A mixture of experts.",
+   "zh": ""
+  },
+  "27e2e22c45fe": {
+   "scene": "Router",
+   "en": "Here's one layer. Instead of one big network, it holds several smaller ones, the experts. <bookmark mark='a'/> A router, just one more matrix, scores the token against every expert, and a softmax turns the scores into probabilities. <bookmark mark='b'/> Only the top k experts run: here, two of eight. <bookmark mark='c'/> Their outputs are mixed, weighted by the router's probabilities. The idea is from 1991; Noam Shazeer and colleagues made it sparse, and huge, in 2017.",
+   "zh": ""
+  },
+  "626c49cde5aa": {
+   "scene": "Router",
+   "en": "Almost every frontier model now works this way. <bookmark mark='a'/> Mixtral used two experts of eight. DeepSeek-V3 uses 8 of 256; Kimi K2 has a trillion parameters and uses thirty-two billion; Qwen3-Next, 10 of 512, under four percent of its weights per token. <bookmark mark='b'/> The model knows as much as its total size, roughly, and costs as much to run as its active size.",
+   "zh": ""
+  },
+  "c08319811eeb": {
+   "scene": "Balance",
+   "en": "Chapter two. Keeping every expert busy.",
+   "zh": ""
+  },
+  "014a1b2c2ee3": {
+   "scene": "Balance",
+   "en": "We built one: Part ten's character model, with its hidden layer split into 8 experts and 2 used for each character. Train it, and watch how the characters are shared out. <bookmark mark='a'/> Left alone, the router plays favourites: the busiest expert ends up with 3.2 times its fair share, while others starve. <bookmark mark='b'/> It's a rich-get-richer loop: a favoured expert gets more practice, gets better, and gets chosen even more. Starved experts are wasted parameters.",
+   "zh": ""
+  },
+  "dd7b039c6a5d": {
+   "scene": "Balance",
+   "en": "Two fixes. <bookmark mark='a'/> The classic one adds a penalty to the loss: the share of characters each expert gets, times its average router probability, summed. It's smallest when every expert gets an equal share. But it's a second goal competing with the first. <bookmark mark='b'/> DeepSeek-V3's fix adds no loss at all. Each expert gets a bias, used only for choosing, never for mixing: after every step, busy experts' biases go down a notch and idle experts' go up. <bookmark mark='c'/> At Switch's strength, the penalty only partly evens it out: its busiest expert still gets 2.8 times a fair share, while the bias holds every expert within 1.1. Held-out bits: 2.453 unbalanced, 2.410 with the penalty, 2.434 with the bias.",
+   "zh": ""
+  },
+  "50e0d45f7a71": {
+   "scene": "Balance",
+   "en": "Here is all of training, replayed: each bar is one expert's share of the characters, under each of the three rules. <bookmark mark='a'/> Watch the left: shares drift apart as some experts win. In the middle, the penalty pulls them only part of the way back; on the right, the bias keeps every expert close to its fair share.",
+   "zh": ""
+  },
+  "05934f6dbfe1": {
+   "scene": "Special",
+   "en": "Chapter three. What experts learn.",
+   "zh": ""
+  },
+  "cc52842f5897": {
+   "scene": "Special",
+   "en": "What do the experts learn? Here's where our balanced model sends each character's context: one column per character just read, one row per expert. <bookmark mark='a'/> Some patterns appear: 3 of the 5 vowels go first to expert 5, and 6 of the 8 spaces and punctuation marks to experts 3 and 8. Nobody told it to. But it isn't a tidy division by meaning: in large models too, experts tend to split the work along surface patterns like these.",
+   "zh": ""
+  },
+  "dd96b869b310": {
+   "scene": "Special",
+   "en": "Is it worth it? Compare three models. <bookmark mark='a'/> A dense one doing as much arithmetic per character as the mixture; the mixture; and a dense one with as many parameters in total. <bookmark mark='b'/> The mixture, 2.434, beats the dense model with the same arithmetic, 2.485. And with the same short training, the dense model with all the parameters does no better, 2.510: eight times the width is more to learn, and it hasn't caught up. At scale, that's the trade the biggest models make: knowledge in the total, cost in the active.",
+   "zh": ""
+  },
+  "dc2dad8aef1d": {
+   "scene": "SparseAttention",
+   "en": "Chapter four. Sparse attention.",
+   "zh": ""
+  },
+  "c30e97a4fb66": {
+   "scene": "SparseAttention",
+   "en": "Attention looks at every earlier token, but how much of that does it use? Take part eleven's transformer and, for each query, rank its keys by weight. <bookmark mark='a'/> Each line is one head: how much of the attention its top k keys hold. On average, the top sixteen keys out of a few hundred hold 92 percent. Most of the attention goes to a few keys.",
+   "zh": ""
+  },
+  "ec45fe3673b9": {
+   "scene": "SparseAttention",
+   "en": "So let each query use only k keys. Which k? <bookmark mark='a'/> The simplest choice is the most recent ones, a sliding window: with 8 keys, 1.85 bits a character. <bookmark mark='b'/> Better, take the 8 keys it would weight most: 1.80. With 64, it's within 0.000 bits of using everything.",
+   "zh": ""
+  },
+  "6b0c8758e652": {
+   "scene": "SparseAttention",
+   "en": "Choosing by score is what real models now do. <bookmark mark='a'/> Here's one query in our transformer, and how it weighs its last forty-eight keys. Together they hold 90 percent of its attention, and most of it lands on a handful of characters well back from the end. <bookmark mark='b'/> A sliding window keeps only the last eight keys: they hold just 7 percent. <bookmark mark='c'/> DeepSeek's native sparse attention cuts the past into blocks and squeezes each one into a summary. <bookmark mark='d'/> The query scores the summaries, reads the best blocks in full, and keeps a window of recent tokens too: 75 percent, from 16 keys. <bookmark mark='e'/> In DeepSeek-V3.2, a tiny, fast indexer gives every past token a score, and the query attends to the top ones only: two thousand and forty-eight in the real model, eight here, holding 76 percent. <bookmark mark='f'/> The trick in both is that finding the important keys must be much cheaper than attending to all of them.",
+   "zh": ""
+  },
+  "149c1536e75f": {
+   "scene": "Outro",
+   "en": "Let's take stock. A mixture of experts keeps many networks in each layer and runs only a few per token, chosen by a router: frontier models now use a few percent of their weights at a time. Routers play favourites unless balanced, partly by a penalty, and fully, in our model, by DeepSeek's loss-free bias. The experts split the work by themselves, and the mixture buys the knowledge of a big model at the cost of a small one. And attention is sparse too: a few keys hold most of each query's weight, and choosing keys by score beats choosing the most recent.",
+   "zh": ""
+  },
+  "ba4dc39722e6": {
+   "scene": "Outro",
+   "en": "Image and video models route by experts too, in part fifteen. Spreading hundreds of experts across many chips is a serving problem, in part nineteen. And sparsity returns in part twenty, inside the network's own activity: features that light up only rarely.",
+   "zh": ""
+  },
+  "26c43630b624": {
+   "scene": "Outro",
+   "en": "Next time, act three turns from text to everything else. Diffusion and flow models start from pure noise <bookmark mark='a'/> and, guessing one small step at a time, carry it to a picture: part four's Brownian motion, run backwards.",
+   "zh": ""
+  },
+  "38e4891cda3b": {
+   "scene": "Outro",
+   "en": "The Switch Transformer paper is the clearest introduction. Thanks for watching, and see you in part fourteen.",
+   "zh": ""
+  }
+ },
+ "title_en": "AI, Built: Part 13, Sparsity",
+ "chapters_en": {
+  "Hook": "A few experts at a time",
+  "Router": "1. A mixture of experts",
+  "Balance": "2. Keeping every expert busy",
+  "Special": "3. What experts learn",
+  "SparseAttention": "4. Sparse attention",
+  "Outro": "Recap, and where this comes back"
+ }
+}
