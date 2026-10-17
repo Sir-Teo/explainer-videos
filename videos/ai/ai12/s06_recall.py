@@ -75,12 +75,22 @@ class Recall(VoiceoverScene):
             nl = label(rf"${N}$ pairs", font_size=24, color=GREY_A).next_to(g, DOWN, buff=0.2).set_y(base_y - 0.3)
             groups.add(VGroup(g, nl))
         axis = Line([-5.0, base_y, 0], [5.6, base_y, 0], color=GREY_C, stroke_width=2)
-        yl = label(r"answers right, \ \%", font_size=22, color=GREY_A).move_to([-5.0, base_y + H + 0.3, 0], aligned_edge=LEFT)
+        yl = label(r"answers right, \ \%", font_size=22, color=GREY_A).move_to([-5.0, base_y + H + 0.65, 0], aligned_edge=LEFT)
+        # where the lists outgrow the keys: more pairs than a key has numbers
+        dk = int(m["d"])
+        past = [j for j, N in enumerate(Ns) if N > dk]
+        cut = None
+        if past and past[0] > 0:
+            xc = (groups[past[0] - 1].get_right()[0] + groups[past[0]].get_left()[0]) / 2
+            cut = VGroup(DashedLine([xc, base_y, 0], [xc, base_y + H + 0.85, 0], dash_length=0.08, stroke_width=2, color=GREY_B),
+                         label(rf"more pairs than a key has numbers \ (${dk}$) \ $\rightarrow$", font_size=20, color=GREY_B))
+            cut[1].next_to(cut[0].get_top(), RIGHT, buff=0.12).shift(DOWN * 0.12)
         key = VGroup(*[label(t, font_size=24, color=c_) for _, t, c_ in MIXERS]).arrange(RIGHT, buff=0.7).to_edge(UP, buff=0.35)
         sm, li, de = (np.asarray(m[k_]) for k_, _, _ in MIXERS)
         with self.voiceover(
             f"With {Ns[0]} pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls "
-            f"apart: {100 * li[-1]:.0f} percent right at {Ns[-1]} pairs, as its crosstalk swamps the answers. "
+            f"apart: {100 * li[-1]:.0f} percent right at {Ns[-1]} pairs, as its crosstalk swamps the answers, "
+            f"worst once there are more pairs than each key has numbers, {int(m['d'])} here. "
             + (f"The delta rule holds on much longer: {100 * de[-1]:.0f} percent. " if de[-1] > li[-1] + 0.1 else
                f"The delta rule does a little better, {100 * de[-1]:.0f} percent: it can overwrite, but its state is just "
                "as small. " if de[-1] > li[-1] else
@@ -91,7 +101,10 @@ class Recall(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(key), Create(axis), FadeIn(yl), FadeIn(groups[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g_, shift=UP * 0.2) for g_ in groups[1:]], lag_ratio=0.4), run_time=2.5)
+            self.play(LaggedStart(*[AnimationGroup(*[GrowFromEdge(b_[0], DOWN) for b_ in g_[0]], *[FadeIn(b_[1]) for b_ in g_[0]],
+                                                   FadeIn(g_[1])) for g_ in groups[1:]], lag_ratio=0.4), run_time=3.0)
+            if cut is not None:
+                self.play(Create(cut[0]), FadeIn(cut[1]))
             vo.wait_until("b")
         self.wait(0.3)
         self.clear_scene()
