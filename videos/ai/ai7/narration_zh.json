@@ -27,7 +27,7 @@
   "b33c7b6e3bc6": {
    "scene": "BiasVariance",
    "en": "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit again, and again: it misses the curve's shape in the same way every time. That systematic miss is bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree 5, the fits hug the truth.",
-   "zh": ""
+   "zh": "先来看经典的回答，放在一个小到能看清一切的场景里：一条光滑的曲线，还有从它上面抽取的16个带噪声的点。<bookmark mark='a'/>拟合一条直线。再抽16个新的点，重新拟合，一次又一次：它每次都以同样的方式，抓不住曲线的形状。这种系统性的偏离，就是偏差。<bookmark mark='b'/>拟合一个12次多项式：也就是x的各次幂之和，一直加到x的12次方。次数，也就是最高的幂，大致就是这条曲线能拐几个弯。它把这些点一个个串了起来，但每抽一批新的点，得到的曲线都大不相同。这就是方差。<bookmark mark='c'/>介于两者之间，在5次时，拟合出的曲线紧贴着真实曲线。"
   },
   "83bff41bc08f": {
    "scene": "BiasVariance",
@@ -42,7 +42,7 @@
   "731c6434ea15": {
    "scene": "Capacity",
    "en": "Here's the classical way to measure what a family of models can fit. Take straight lines in the plane, and three points. <bookmark mark='a'/> Colour the points any of the eight possible ways, and some line separates the colours every time. <bookmark mark='b'/> With four points, it fails: these two labellings can't be split by any line. <bookmark mark='c'/> The largest number of points a family can split in every way is its VC dimension, after Vapnik and Chervonenkis: three, for lines in the plane. <bookmark mark='d'/> And it buys a guarantee: with n examples, the error on new data exceeds the training error by at most about the square root of d over n. In plain words: the gap between training and new error shrinks as the examples outnumber the capacity.",
-   "zh": ""
+   "zh": "衡量一族模型能拟合什么，经典的办法是这样的。取平面上的直线，再取3个点。<bookmark mark='a'/>给这些点涂色，8种可能的涂法，无论哪一种，每次都有某条直线能把两种颜色分开。<bookmark mark='b'/>换成4个点，就不行了：这两种标注方式，哪条直线都分不开。<bookmark mark='c'/>一族模型能按所有方式分开的最大点数，就是它的VC维，以瓦普尼克与切尔沃嫩基斯命名：平面上的直线，VC维是3。<bookmark mark='d'/>它还换来了一个保证：有n个样本时，在新数据上的误差，至多比训练误差高出大约n分之d的平方根。说得直白些：样本数比容量多得越多，训练误差和新数据误差之间的差距就越小。"
   },
   "3861f9462219": {
    "scene": "Capacity",
@@ -57,7 +57,7 @@
   "dcfed100faaf": {
    "scene": "RandomLabels",
    "en": "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve units, and two outputs, one per author. That's about 300 thousand weights. Train it on the 448 training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets 99.5 percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so every label is random. Same network, same training.",
-   "zh": ""
+   "zh": "2016年，张驰原和同事们做了一个实验，打破了经典的图景。拿一个网络：一层层简单的单元，这里输入的是70个词频，接着是两层、每层512个单元，最后是2个输出，每位作者一个。总共大约30万个权重。用448个训练页和它们真实的作者来训练它。<bookmark mark='a'/>它把这些全都拟合了，在新的书页上判对99.5%。<bookmark mark='b'/>现在，把作者打乱，让每个标签都是随机的。同一个网络，同样的训练。"
   },
   "f74f0d6de138": {
    "scene": "RandomLabels",
@@ -77,7 +77,7 @@
   "e2f9373c0ff4": {
    "scene": "DoubleDescent",
    "en": "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random mix of the seventy word rates, passed through a bend that zeroes anything negative. Only the weights on the features are learned, by least squares. <bookmark mark='m'/> When there are more features than pages, many fits match every training page exactly, so take the one with the smallest weights: of all the curves through the points, the calmest. <bookmark mark='a'/> With few features, the error on new pages falls, then rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly 448 features, as many as there are pages, the fit is forced through every point, and the error explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of the U.",
-   "zh": ""
+   "zh": "这就是那条又降回来的曲线。把每一页变成p个随机特征：每个特征都是那70个词频的一种固定的随机组合，再经过一道弯折，把所有负值都变成零。只有这些特征上的权重是学出来的，用最小二乘法。<bookmark mark='m'/>当特征比书页还多时，有许多种拟合都能恰好对上每一个训练页，那就取权重最小的那一个：在所有穿过这些点的曲线里，最平稳的那一条。<bookmark mark='a'/>特征很少时，在新的书页上的误差先是下降，然后随着p接近书页的数量，又升了上去：这就是经典的U形。<bookmark mark='b'/>恰好在448个特征时，特征和书页一样多，拟合被迫穿过每一个点，误差一下子爆炸了。<bookmark mark='c'/>然后，过了这一点，误差又降了回来，比U形的底部还要低。"
   },
   "2ec81378fa11": {
    "scene": "DoubleDescent",
