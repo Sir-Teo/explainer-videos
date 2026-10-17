@@ -184,6 +184,11 @@
    "en": "Then keep the table's hundred strongest directions, with the singular value decomposition. <bookmark mark='a'/> Every word gets a hundred numbers. <bookmark mark='b'/> And words that keep the same company end up close together. Monday: Saturday, Tuesday, Sunday. Three: four, two, five. Dog: dogs, sheep, wolf, cat, and Perezvon, which, in The Brothers Karamazov, is a dog. Nobody gave it a dictionary.",
    "zh": "接着用奇异值分解，只留下这张表里最强的100个方向。<bookmark mark='a'/>这样，每个词就都有了自己的100个数。<bookmark mark='b'/>和同一批词做伴的词，最后会彼此靠得很近。离monday最近的，是saturday、tuesday和sunday。离three最近的，是four、two和five。离dog最近的，则是dogs、sheep、wolf和cat，最后还有perezvon：在《卡拉马佐夫兄弟》里，它是一条狗。从来没有人给过它一本词典。"
   },
+  "bc24f9a1633b": {
+   "scene": "Words",
+   "en": "How many directions does meaning need? Keep only the first few of the hundred, the strongest, and look at the neighbours again. <bookmark mark='a'/> With 2, they're nearly random. <bookmark mark='b'/> With 5, three already sits with numbers. <bookmark mark='c'/> With 10, ship finds pequod and sail and boat. <bookmark mark='d'/> Father needs 25, to find son, wife and mother. <bookmark mark='e'/> And Monday gathers its week, Saturday, Tuesday, Sunday, only with all a hundred. The strongest directions carry the broadest patterns; the finer meanings live further down.",
+   "zh": "含义需要多少个方向？在这100个方向里，只留最前面、最强的几个，再看一看每个词的近邻。<bookmark mark='a'/>只留2个，近邻几乎是随机的。<bookmark mark='b'/>留到5个，three已经和数字待在一起了。<bookmark mark='c'/>留到10个，ship找到了pequod、sail和boat。<bookmark mark='d'/>father要25个，才找得到son、wife和mother。<bookmark mark='e'/>而monday要等100个方向全都用上，才聚齐它的一周：saturday、tuesday、sunday。最强的方向承载最宽泛的规律；更精细的含义，藏在更靠后的方向里。"
+  },
   "af1338f0dda0": {
    "scene": "Words",
    "en": "Directions mean something too. <bookmark mark='a'/> Start at France, and step to Paris. Then take the same step, starting from England. <bookmark mark='b'/> The nearest word to where you land is London. Man is to king as woman is to: duke first, then queen. Novels from the nineteenth century had their own ideas.",
