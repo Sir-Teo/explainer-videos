@@ -44,12 +44,14 @@ class DoubleDescent(VoiceoverScene):
         nl = label(rf"$p = n = {n}$: \\ as many features as pages", font_size=24, color=WHITE)
         nl.next_to(nline.get_top(), RIGHT, buff=0.15).shift(DOWN * 0.3)
         trc = curve(ax, lx, np.clip(np.log10(np.maximum(tr, 10 ** ylo)), ylo, yhi) - ylo, TRAIN, 3)
-        trl = label(r"training pages: \ fitted exactly past $n$", font_size=22, color=TRAIN).next_to(ax.c2p(3.3, 0), UP, buff=0.12)
+        trl = label(r"training pages: \ fitted exactly past $n$", font_size=22, color=TRAIN)
+        trl = VGroup(Line(ORIGIN, RIGHT * 0.5, color=TRAIN, stroke_width=3), trl).arrange(RIGHT, buff=0.15)
+        trl.next_to(ax.c2p(1.1, 2.55), RIGHT, buff=0)  # a key in the empty top left, off the curves
         low = Dot(ax.c2p(lx[k_min1], math.log10(te[k_min1]) - ylo), radius=0.08, color=TEST)
         final = Dot(ax.c2p(lx[-1], math.log10(te[-1]) - ylo), radius=0.08, color=TEST)
         floor = DashedLine(ax.c2p(1, math.log10(te[k_min1]) - ylo), ax.c2p(3.8, math.log10(te[k_min1]) - ylo), color=TEST,
                            stroke_width=1.5).set_stroke(opacity=0.5)
-        classic = label(r"the classical U", font_size=26, color=TEST).next_to(low, DOWN, buff=0.3)
+        classic = label(r"the classical U", font_size=26, color=TEST).next_to(low, UP, buff=0.35)
         modern = label(r"and down again", font_size=26, color=TEST).next_to(final, UP, buff=0.3).shift(LEFT * 0.4)
         colors = {r"\boldsymbol{\beta}": C.MODEL_Q}
         mn = cmath(r"\min", r"\|", r"\boldsymbol{\beta}", r"\|", r"\;\text{ among all exact fits}", colors=colors,
