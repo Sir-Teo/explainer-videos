@@ -109,7 +109,7 @@
    "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花74%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
   }
  },
- "title_en": "AI, Built: Part 10, The Mathematics of Scale",
+ "title_en": "AI, Built: Part 12, The Mathematics of Scale",
  "chapters_en": {
   "Hook": "A power law",
   "Width": "1. Wider and wider",

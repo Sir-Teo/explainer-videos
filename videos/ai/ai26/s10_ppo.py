@@ -217,17 +217,28 @@ class PPO(VoiceoverScene):
         d = load("pg")
         grid = np.asarray(d["grid"])
         g = axes([0, 100_000], [0, 500], x_length=7.2, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=r"episode length \ (mean of $3$ runs)", xticks=[0, 50_000, 100_000], yticks=[0, 250, 500],
+                 ylabel=rf"episode length \ (mean of ${len(d['ppo'])}$ runs)", xticks=[0, 50_000, 100_000],
+                 yticks=[0, 250, 500],
                  xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-1.2, -0.3, 0])
         items = (("reinforce", REINF, r"REINFORCE"), ("baseline", BASE, r"with a baseline"),
                  ("ac", AC, r"actor-critic (GAE)"), ("ppo", PPO_C, r"PPO"))
         lines = VGroup(*[curve(g.ax, grid, np.nanmean(np.asarray(d[k]), 0), c, 3 if k != "ppo" else 5)
                          for k, c, _ in items])
         lg = legend([(c, t) for _, c, t in items], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
-        with self.voiceover(
-            "Against the policy-gradient methods of the last chapter, PPO, in bold blue, gets more out of each "
-            "batch, because it can take several careful steps on it instead of one."
-        ) as vo:
+        auc = {k: float(np.nanmean(np.asarray(d[k]))) for k, _, _ in items}
+        rest = max(auc[k] for k in ("reinforce", "baseline", "ac"))
+        if auc["ppo"] > 1.03 * rest:
+            said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, gets the most out of "
+                    f"the same experience: its episodes average {auc['ppo']:.0f} steps over training, against "
+                    f"{rest:.0f} for the best of the others, because it takes several careful steps on each batch "
+                    "instead of one.")
+        else:
+            said = (f"Against the policy-gradient methods of the last chapter, PPO, in bold blue, averages "
+                    f"{auc['ppo']:.0f} steps over training, against {rest:.0f} for the best of the others: on a task "
+                    "this small there is little to separate them. PPO's advantage is reliability at scale. It can "
+                    "take several steps on each batch without running off a cliff, and it needs little tuning, which "
+                    "is why it became the default.")
+        with self.voiceover(said) as vo:
             self.play(FadeIn(g), LaggedStart(*[Create(l_) for l_ in lines[:3]], lag_ratio=0.2), FadeIn(lg[:3]))
             self.play(Create(lines[3]), FadeIn(lg[3]), run_time=1.5)
         self.wait(0.3)

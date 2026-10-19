@@ -135,7 +135,7 @@
    "zh": "既然特征是一个方向，我们就可以顺着它推一把。<bookmark mark='a'/>取那个在引号上激活的特征。<bookmark mark='b'/>在模型写东西的时候，给每个字符上的向量，都加上α乘以这个方向。<bookmark mark='c'/>不推的时候，是模型自己的续写。<bookmark mark='d'/>把旋钮调大，写出来的东西就变成了对话：引号、撇号、感叹号和问号，每160个字符里，从0.0个增加到14.3个。模型现在以为，自己正处在某个人说的话里。我们没有训练任何东西，也没有改动一个权重；只是挪动了一个方向。Anthropic对Claude做过同样的事，用的是一个金门大桥特征；在那一天里，不管聊什么，它都会把话题绕回到这座桥上。"
   }
  },
- "title_en": "AI, Built: Part 20, Inside the Model",
+ "title_en": "AI, Built: Part 30, Inside the Model",
  "chapters_en": {
   "Hook": "What is it thinking?",
   "Superposition": "1. More ideas than dimensions",

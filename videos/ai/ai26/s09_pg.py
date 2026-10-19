@@ -295,7 +295,8 @@ class PolicyGradient(VoiceoverScene):
         d = load("pg")
         grid = np.asarray(d["grid"])
         g = axes([0, 100_000], [0, 500], x_length=7.2, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=r"episode length \ (mean of $3$ runs)", xticks=[0, 50_000, 100_000], yticks=[0, 250, 500],
+                 ylabel=rf"episode length \ (mean of ${len(d['ppo'])}$ runs)", xticks=[0, 50_000, 100_000],
+                 yticks=[0, 250, 500],
                  xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-1.2, -0.3, 0])
         items = (("reinforce", REINF, r"REINFORCE"), ("baseline", BASE, r"with a baseline"),
                  ("ac", AC, r"actor-critic (GAE)"))
@@ -306,10 +307,24 @@ class PolicyGradient(VoiceoverScene):
             lines.add(curve(g.ax, grid, np.nanmean(Y, 0), col, 3))
         lg = legend([(c, t) for _, c, t in items], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
         tag = note(r"computed: \ cart-pole, \ the same networks and step budget").to_corner(DR, buff=0.2)
+        auc = {k: float(np.nanmean(np.asarray(d[k]))) for k, _, _ in items}
+        lo, hi = min(auc.values()), max(auc.values())
+        if hi - lo < 0.1 * hi:
+            verdict = ("On a task this small, all three get there, and the differences are modest. Cart-pole pays a "
+                       "reward every step and its episodes are short, so even plain REINFORCE's noise is affordable. "
+                       "On long tasks, where a reward arrives long after the actions that earned it, that noise is "
+                       "what stalls learning, and baselines and critics earn their keep.")
+        else:
+            best = max(auc, key=auc.get)
+            verdict = {"reinforce": "Here, plain REINFORCE comes out ahead: the variance it saves is not free, since "
+                                    "the critic has to be learned too.",
+                       "baseline": "The baseline is the clearest win here.",
+                       "ac": "Actor-critic, with the least variance, learns fastest."}[best]
         with self.voiceover(
-            "On the cart-pole, with the same networks and the same budget of experience: plain REINFORCE, "
-            "<bookmark mark='a'/> REINFORCE with a baseline, <bookmark mark='b'/> and actor-critic with "
-            "generalized advantages. Each reduction in variance makes learning faster and steadier."
+            f"On the cart-pole, with the same networks and the same budget of experience, {len(d['ppo'])} runs each: "
+            "plain REINFORCE, <bookmark mark='a'/> REINFORCE with a baseline, <bookmark mark='b'/> and actor-critic "
+            "with generalized advantages. Averaged over the whole of training, their episodes last "
+            f"{auc['reinforce']:.0f}, {auc['baseline']:.0f} and {auc['ac']:.0f} steps. " + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(bands[0]), Create(lines[0]), FadeIn(lg[0]))
             vo.wait_until("a")

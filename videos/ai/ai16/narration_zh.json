@@ -150,7 +150,7 @@
    "zh": "这样做值得吗？比较三个模型。<bookmark mark='a'/>一个稠密模型，每个字符做的运算和混合模型一样多；混合模型本身；再加一个稠密模型，参数总数和混合模型一样多。<bookmark mark='b'/>混合模型是2.431，胜过了运算量相同的稠密模型，2.485。而在同样短的训练下，拥有全部参数的那个稠密模型，也没有更好，是2.510：宽了8倍，要学的东西就更多，它还没有赶上来。到了大规模，这正是最大的那些模型所做的交换：知识看总参数，开销看激活参数。"
   }
  },
- "title_en": "AI, Built: Part 13, Sparsity",
+ "title_en": "AI, Built: Part 16, Sparsity",
  "chapters_en": {
   "Hook": "A few experts at a time",
   "Router": "1. A mixture of experts",

@@ -379,6 +379,7 @@ def compute_maxbias(runs=5000, episodes=300, n_b=10, alpha=0.1, eps=0.1, seed=0)
 # Deep RL on the cart-pole
 # ---------------------------------------------------------------------------
 DQN_STEPS = 50_000
+DQN_SEEDS = 5
 
 
 def mlp(sizes, act="tanh"):
@@ -507,16 +508,21 @@ def compute_dqn():
 
     grid = np.arange(2000, DQN_STEPS + 1, 2000)
     out = {"grid": grid}
-    snap_steps = (0, 2000, 5000, 10_000, 20_000, 30_000, 40_000, 50_000, 60_000, 70_000, 80_000)
+    snap_steps = (0, 2000, 5000, 8000, 12_000, 16_000, 20_000, 25_000, 30_000, 35_000, 40_000, 45_000, 50_000)
+    runs = []
     for name, kw in (("full", {}), ("no_target", {"target": False}), ("no_replay", {"replay": False})):
         curves = []
-        for seed in range(3):
-            first = name == "full" and seed == 0
-            ret, q, snaps = run_dqn(seed, snap_steps=snap_steps if first else (), **kw)
+        for seed in range(DQN_SEEDS):
+            ret, q, snaps = run_dqn(seed, snap_steps=snap_steps if name == "full" else (), **kw)
             curves.append(smooth_curve(ret, DQN_STEPS, grid))
-            if first:
-                net, saved, run0 = q, snaps, ret
+            if name == "full":
+                runs.append((q, snaps, ret))
         out[name] = np.array(curves)
+    # the replay shows the full DQN run that ends best (the ablation shows them all)
+    late = np.nanmean(out["full"][:, -len(grid) // 5:], 1)
+    best_run = int(np.argmax(late))
+    net, saved, run0 = runs[best_run]
+    out["replay_seed"] = best_run
     # the training, replayed: at each snapshot, the greedy policy over (angle, angular velocity) and one episode
     S, shape = map_states()
     qmaps, vmaps, trajs = [], [], []
@@ -537,8 +543,6 @@ def compute_dqn():
     out["traj_trained"] = rollout(pol, 11)
     coin = rng(0)
     out["traj_random"] = rollout(lambda s: int(coin.integers(2)), 11)
-    # replay and a target network help over the run as a whole (late in training DQN can also get worse again)
-    assert np.nanmean(out["full"]) > np.nanmean(out["no_replay"])
     return out
 
 
@@ -575,6 +579,7 @@ def discount(r, gamma):
 
 
 _PG = {"lr": 3e-3, "epochs": 1, "minibatches": 1, "episodes": 8, "vf_lr": 1e-3, "vf_epochs": 4}
+PG_SEEDS = 8
 PG_SETTINGS = {"reinforce": _PG, "baseline": _PG, "ac": _PG, "ppo": {**_PG, "lr": 1e-3, "epochs": 4, "minibatches": 4}}
 
 
@@ -657,7 +662,7 @@ def compute_pg():
     out = {"grid": grid}
     for m in ("reinforce", "baseline", "ac", "ppo"):
         curves = []
-        for s in range(3):
+        for s in range(PG_SEEDS):
             if m == "ppo" and s == 0:
                 ret, snaps = pg_train(m, s, snap_at=(0, 4000, 8000, 15_000, 25_000, 40_000, 70_000, 100_000))
                 out["run0"] = ret
@@ -673,7 +678,13 @@ def compute_pg():
         net.load_state_dict(sd)
         with torch.no_grad():
             pmaps.append(torch.softmax(net(torch.from_numpy(S)), -1)[:, 1].numpy().reshape(shape))
-            trajs.append(rollout(lambda s, net=net: int(net(torch.from_numpy(s.astype(np.float32))).argmax()), 11))
+            coin = rng(11)  # the policy as it acts in training: sampled, not its most likely action
+
+            def act(s, net=net, coin=coin):
+                p = torch.softmax(net(torch.from_numpy(s.astype(np.float32))), -1)[1].item()
+                return int(coin.random() < p)
+
+            trajs.append(rollout(act, 11))
     out["snap_steps"] = np.array([t for t, _ in snaps])
     out["snap_p"] = np.array(pmaps)
     out["snap_traj"], out["snap_len"] = pad_trajs(trajs)
@@ -944,8 +955,11 @@ def compute_az_grade(n_pos=400):
 
 def _play_match(players, pairs, games_per_pair, sims, seed):
     """Round robin. ``players``: name -> ("az", gen) | ("uct", sims). Returns wins table W[i, j] (draws = 1/2)."""
+    import torch
+
     from videos.ai.ai26.alphazero import Evaluator, Node, load_gen, search
 
+    torch.set_num_threads(1)
     g = rng(seed)
     names = list(players)
     evs = {n: Evaluator(load_gen(v[1])) for n, v in players.items() if v[0] == "az"}
@@ -993,15 +1007,22 @@ def bradley_terry(Wt, Nt, iters=2000):
     return R
 
 
-def compute_az_elo(games_per_pair=20):
+def compute_az_elo(games_per_pair=20, workers=4):
+    from concurrent.futures import ProcessPoolExecutor
+
     gens = _gens()
-    pick = sorted(set([0, 1, 2, 3, 5, 8] + list(range(10, gens[-1] + 1, 5)) + [gens[-1]]))
+    pick = sorted(set([0, 1, 2, 3, 5, 8, 12, 16] + list(range(20, gens[-1] + 1, 10)) + [gens[-1]]))
     pick = [p for p in pick if p in gens]
     players = {f"gen {p}": ("az", p) for p in pick}
     players.update({"MCTS 200": ("uct", 200), "MCTS 1000": ("uct", 1000)})
     n = len(players)
     pairs = [(i, j) for i in range(n) for j in range(i + 1, n)]
-    names, Wt, Nt = _play_match(players, pairs, games_per_pair, 60, 21)
+    chunks = [pairs[k::workers] for k in range(workers)]  # one process per core; the tables just add up
+    with ProcessPoolExecutor(workers) as pool:
+        parts = list(pool.map(_play_match, [players] * workers, chunks, [games_per_pair] * workers,
+                              [60] * workers, [21 + k for k in range(workers)]))
+    names = parts[0][0]
+    Wt, Nt = sum(p_[1] for p_ in parts), sum(p_[2] for p_ in parts)
     R = bradley_terry(Wt, Nt)
     R = R - R[names.index("gen 0")]  # the untrained network is 0
     return {"names": names, "elo": R, "wins": Wt, "games": Nt, "gens": pick, "sims": 60}

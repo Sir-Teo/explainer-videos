@@ -136,7 +136,7 @@
    "zh": "还是同一个字符模型，隐藏层的矩阵，也就是网络内部那些权重网格，用Muon；其余的用AdamW：字符表、输出层，还有那些小小的偏置项。<bookmark mark='a'/>它达到了2.51比特，领先于AdamW的2.61。此后，Muon被推广到了大得多的规模：月之暗面报告说，它只需要AdamW大约一半的算力，还用它的一个变体训练了Kimi K2。"
   }
  },
- "title_en": "AI, Built: Part 9, Going Downhill",
+ "title_en": "AI, Built: Part 11, Going Downhill",
  "chapters_en": {
   "Hook": "Three ways down",
   "SGD": "1. Stochastic gradient descent",

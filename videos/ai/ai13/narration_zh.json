@@ -217,7 +217,7 @@
    "zh": "这是那两个头形成的过程，用同一个例子，在训练途中的各个检查点上，旁边是重复部分上的损失。<bookmark mark='a'/>一开始，两个头都在模模糊糊地四处看，大多看着最近的词元。<bookmark mark='b'/>然后，大约在第2600步，第二个头找到了那条斜线，也就是早先那份拷贝的下一个位置：它在那里的注意力，在500步之内从0.05跳到0.71，而重复部分上的损失，同一时刻从5.7比特降到2.8比特。第一个头也在同一时间开始倚重前一个词元，并在之后的训练中不断加强，最后到0.37。两个单独没用的头，合在一起才有用，所以它们一起出现。"
   }
  },
- "title_en": "AI, Built: Part 11, Attention as Geometry",
+ "title_en": "AI, Built: Part 13, Attention as Geometry",
  "chapters_en": {
   "Hook": "Every character looks back",
   "Smoother": "1. A weighted average",
