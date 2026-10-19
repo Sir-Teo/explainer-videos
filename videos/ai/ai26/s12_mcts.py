@@ -232,10 +232,10 @@ class MCTS(VoiceoverScene):
         rnd = DashedLine(g.ax.c2p(1, d["random"]), g.ax.c2p(3.5, d["random"]), color=GREY_B, dash_length=0.08)
         rl = label(rf"a random move: \ ${100 * d['random']:.0f}\%$", font_size=20, color=GREY_B).next_to(rnd, UP, buff=0.05)
         rl.align_to(rnd, RIGHT)
-        tag = note(r"computed: \ $200$ test positions, \ every move scored by a perfect solver; \ right $=$ "
+        tag = note(rf"computed: \ ${d['n_pos']}$ test positions, \ every move scored by a perfect solver; \ right $=$ "
                    r"keeps the win, or the draw").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "We can measure this exactly. Connect Four is solved, so for two hundred test positions we know every "
+            f"We can measure this exactly. Connect Four is solved, so for {d['n_pos']} test positions we know every "
             "move's true value. Call a move right if it keeps the best result the position allows: the win, or "
             "the draw. <bookmark mark='a'/> A random move is right "
             f"{100 * d['random']:.0f} percent of the time. <bookmark mark='b'/> Plain MCTS improves with more "

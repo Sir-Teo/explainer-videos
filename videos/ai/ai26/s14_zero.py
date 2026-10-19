@@ -299,12 +299,17 @@ class Zero(VoiceoverScene):
         final_raw, final_mc = 100 * raw[-1], 100 * mc[-1]
         gap = elo[names.index(f"gen {ag[-1]}")]
         mc1000 = elo[names.index("MCTS 1000")]
+        # how many plain-MCTS simulations (random playouts) buy the same accuracy: log-linear along its curve
+        us, ua = np.log10(np.asarray(u["sims"], float)), np.asarray(u["acc"])
         if final_mc > 100 * best_uct:
-            vs_uct = (f"beyond the {100 * best_uct:.0f} percent that plain MCTS reaches with {uct_sims:,} "
-                      "simulations, and random playouts.")
+            vs_uct = (f"That is beyond the {100 * best_uct:.0f} percent plain MCTS reaches with any number of "
+                      "simulations: random playouts can't buy what a learned judge knows.")
         else:
-            vs_uct = (f"against {100 * best_uct:.0f} percent for plain MCTS with {uct_sims:,} simulations and random "
-                      "playouts.")
+            k = int(np.argmax(ua >= mc[-1]))
+            lg_need = us[k - 1] + (mc[-1] - ua[k - 1]) / (ua[k] - ua[k - 1]) * (us[k] - us[k - 1]) if k else us[0]
+            need = int(round(10 ** lg_need, -1))
+            vs_uct = (f"Plain MCTS, judging by random playouts, needs about {need:,} simulations to do as well: each "
+                      f"simulation guided by the network is worth about {need / SIMS:.0f} random ones.")
         ups = int(np.sum(np.diff(ae) > 0))
         climb = ("each generation we rated is stronger than the one before" if ups == len(ae) - 1 else
                  f"the ratings climb, with the odd step back ({ups} of {len(ae) - 1} steps go up)")
@@ -317,8 +322,9 @@ class Zero(VoiceoverScene):
         with self.voiceover(
             "Graded on four hundred test positions, generation by generation. <bookmark mark='a'/> The network alone, "
             f"with no search at all, goes from random to choosing a right move, one that keeps the win or the draw, "
-            f"{final_raw:.0f} percent of the time; <bookmark mark='b'/> with its {SIMS} simulations of search, {final_mc:.0f} percent, "
-            f"<bookmark mark='c'/> {vs_uct} <bookmark mark='d'/> And in head-to-head games, rated like chess "
+            f"{final_raw:.0f} percent of the time; <bookmark mark='b'/> with its {SIMS} simulations of search, "
+            f"{final_mc:.0f} percent. <bookmark mark='c'/> {vs_uct} <bookmark mark='d'/> And in head-to-head games, "
+            "rated like chess "
             f"players, {climb}: the final generation is about {gap:.0f} Elo points above the untrained network, {rel}"
         ) as vo:
             self.play(FadeIn(a1), FadeIn(tag))

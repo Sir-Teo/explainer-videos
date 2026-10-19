@@ -174,9 +174,9 @@ class Beyond(VoiceoverScene):
             "the game, minus one eighteenth. The first player is at a slight disadvantage, and the strategy it finds "
             "includes bluffing with the jack."
         ) as vo:
-            self.play(FadeIn(cfr_c, shift=UP * 0.2))
+            self.play(FadeIn(cfr_c, shift=UP * 0.2), FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(kuhn), FadeIn(g), FadeIn(tag))
+            self.play(FadeIn(kuhn, shift=DOWN * 0.15))
             vo.wait_until("b")
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.05), run_time=2.5)
             self.play(Create(ref), FadeIn(rl))
@@ -195,13 +195,14 @@ class Beyond(VoiceoverScene):
                          r"\$150 of cloud computing", width=4.2, color=VALUE),
         ).arrange(RIGHT, buff=0.3).move_to(UP * 0.4)
         cite_ = cite(r"Bowling et al.\ (2015); \ Brown \& Sandholm (2017, 2019)")
+        head = label(r"CFR at scale: \ poker", font_size=34, color=VALUE).to_edge(UP, buff=0.7)
         with self.voiceover(
             "Scaled up with abstraction and real-time search, CFR conquered poker. <bookmark mark='a'/> Cepheus "
             "essentially solved two-player limit Texas hold'em in 2015. <bookmark mark='b'/> Libratus beat top "
             "professionals at no-limit hold'em in 2017, <bookmark mark='c'/> and Pluribus beat elite professionals in "
             "six-player games in 2019, after training that cost under a hundred and fifty dollars of computing."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(head, shift=DOWN * 0.15))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
@@ -215,16 +216,27 @@ class Beyond(VoiceoverScene):
                  (r"past selves", GREY_B)]
         pos = [UP * 1.5, LEFT * 3.2 + DOWN * 0.4, RIGHT * 3.2 + DOWN * 0.4, DOWN * 2.0]
         for (n, col), p in zip(names, pos):
-            nodes.add(VGroup(Circle(radius=0.75, color=col, stroke_width=3, fill_color=col, fill_opacity=0.12),
-                             label(n, font_size=22, color=col)).move_to(p))
+            nodes.add(VGroup(Circle(radius=0.95, color=col, stroke_width=3, fill_color=col, fill_opacity=0.12),
+                             label(n, font_size=20, color=col)).move_to(p))
             nodes[-1][1].move_to(nodes[-1][0])
-        edges = VGroup(*[DoubleArrow(nodes[i][0].get_center(), nodes[j][0].get_center(), buff=0.8, color=GREY_C,
+        edges = VGroup(*[DoubleArrow(nodes[i][0].get_center(), nodes[j][0].get_center(), buff=1.0, color=GREY_C,
                                      stroke_width=2, tip_length=0.15) for i, j in ((0, 1), (0, 2), (0, 3), (1, 3), (2, 3))])
         hc = history_card(2019, r"AlphaStar, \ StarCraft II", r"Grandmaster: \ above $99.8\%$ of ranked human players",
                           width=4.6, color=AGENT).to_corner(UR, buff=0.3)
         why_ = label(r"plain self-play can cycle: \ rock beats scissors beats paper beats rock", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.25)
         cite_ = cite(r"O.~Vinyals et al., \textit{Nature} (2019)", corner=DL)
+        # the cycle: each strategy beats the next, so chasing the latest opponent goes round and round
+        rps = VGroup(*[label(t_, font_size=30, color=c_) for t_, c_ in
+                       ((r"rock", AGENT), (r"scissors", PENALTY), (r"paper", C.MODEL_Q))])
+        for k_, ang in enumerate((90, 210, 330)):
+            rps[k_].move_to(1.6 * np.array([np.cos(np.radians(ang)), np.sin(np.radians(ang)), 0]) + UP * 0.3)
+        beats = VGroup(*[CurvedArrow(rps[k_].get_center() + 0.45 * (rps[(k_ + 1) % 3].get_center() - rps[k_].get_center())
+                                     / np.linalg.norm(rps[(k_ + 1) % 3].get_center() - rps[k_].get_center()),
+                                     rps[(k_ + 1) % 3].get_center() - 0.55 * (rps[(k_ + 1) % 3].get_center()
+                                     - rps[k_].get_center()) / np.linalg.norm(rps[(k_ + 1) % 3].get_center()
+                                     - rps[k_].get_center()), angle=-0.5, color=GREY_B, stroke_width=3, tip_length=0.18)
+                         for k_ in range(3)])
         with self.voiceover(
             "In games with many strategies, plain self-play can go in circles, just like the current strategies in "
             "the triangle: each new version beats the last and forgets how to beat the one before. "
@@ -232,8 +244,10 @@ class Beyond(VoiceoverScene):
             "only job is to find the main agents' weaknesses, and a pool of past selves everyone must keep beating. "
             "<bookmark mark='b'/> It reached Grandmaster, above ninety-nine point eight percent of ranked human players."
         ) as vo:
-            self.play(FadeIn(why_))
+            self.play(FadeIn(why_), FadeIn(rps))
+            self.play(LaggedStart(*[Create(b_) for b_ in beats], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(rps), FadeOut(beats))
             self.play(LaggedStart(*[FadeIn(n_, scale=0.9) for n_ in nodes], lag_ratio=0.25), Create(edges), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=LEFT * 0.2), FadeIn(cite_))
@@ -271,10 +285,11 @@ class Beyond(VoiceoverScene):
                          color=SEARCH),
             history_card(2023, r"AlphaDev", r"assembly code as a game: \ faster routines for sorting short lists, \ "
                          r"now in the LLVM C++ library", width=6.0, color=SEARCH),
-        ).arrange(RIGHT, buff=0.35).move_to(UP * 0.8)
+        ).arrange(RIGHT, buff=0.35).move_to(UP * 0.4)
         nxt = label(r"next: \ the same tools tune language models \ (Parts 27 and 28)", font_size=26, color=GREY_A)
         nxt.to_edge(DOWN, buff=0.8)
         cite_ = cite(r"Fawzi et al., \textit{Nature} (2022); \ Mankowitz et al., \textit{Nature} (2023)")
+        head = label(r"Problems turned into games", font_size=34, color=SEARCH).to_edge(UP, buff=0.7)
         with self.voiceover(
             "The AlphaZero recipe has also been turned on problems that aren't games at all, by making them into "
             "games. <bookmark mark='a'/> AlphaTensor treated finding a matrix multiplication algorithm as a "
@@ -285,7 +300,7 @@ class Beyond(VoiceoverScene):
             "the same tools, policy gradients, PPO, search and self-play, are how today's language models are "
             "taught to follow instructions and to reason."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(head, shift=DOWN * 0.15))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.15))
             vo.wait_until("b")

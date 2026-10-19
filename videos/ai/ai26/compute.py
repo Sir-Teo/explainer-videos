@@ -899,7 +899,7 @@ def is_right(scores_row, c) -> bool:
     return np.sign(scores_row[c]) == np.sign(np.nanmax(scores_row))
 
 
-def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=200):
+def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=400):
     t = load("testset")
     g = rng(11)
     hist = t["histories"][:n_pos]
@@ -913,7 +913,7 @@ def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=200):
         acc.append(ok / len(hist))
     # a random legal move is right this often
     blind = float(np.mean([(np.sign(sc) == np.sign(np.nanmax(sc))).sum() / np.isfinite(sc).sum() for sc in scores]))
-    return {"sims": list(sims_list), "acc": acc, "random": blind}
+    return {"sims": list(sims_list), "acc": acc, "random": blind, "n_pos": len(hist)}
 
 
 def compute_uct_tree(seq=(3, 3, 3, 2, 4), snaps=(10, 40, 160, 640, 2560)):
@@ -1031,6 +1031,8 @@ def bradley_terry(Wt, Nt, iters=2000):
 def compute_az_elo(games_per_pair=20, workers=4):
     from concurrent.futures import ProcessPoolExecutor
 
+    from videos.ai.ai26.alphazero import SIMS
+
     gens = _gens()
     pick = sorted(set([0, 1, 2, 3, 5, 8, 12, 16] + list(range(20, gens[-1] + 1, 10)) + [gens[-1]]))
     pick = [p for p in pick if p in gens]
@@ -1041,12 +1043,12 @@ def compute_az_elo(games_per_pair=20, workers=4):
     chunks = [pairs[k::workers] for k in range(workers)]  # one process per core; the tables just add up
     with ProcessPoolExecutor(workers) as pool:
         parts = list(pool.map(_play_match, [players] * workers, chunks, [games_per_pair] * workers,
-                              [60] * workers, [21 + k for k in range(workers)]))
+                              [SIMS] * workers, [21 + k for k in range(workers)]))
     names = parts[0][0]
     Wt, Nt = sum(p_[1] for p_ in parts), sum(p_[2] for p_ in parts)
     R = bradley_terry(Wt, Nt)
     R = R - R[names.index("gen 0")]  # the untrained network is 0
-    return {"names": names, "elo": R, "wins": Wt, "games": Nt, "gens": pick, "sims": 60}
+    return {"names": names, "elo": R, "wins": Wt, "games": Nt, "gens": pick, "sims": SIMS}
 
 
 def compute_az_demo():
