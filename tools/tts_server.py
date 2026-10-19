@@ -26,7 +26,16 @@ ROOT = Path(__file__).resolve().parents[1]
 def _load_lang():
     """explainer/lang.py by path: importing the explainer package would pull in manim, which this env lacks."""
     import importlib.util
+    import types
 
+    # lang.py imports explainer.paths: give it a bare package and load paths.py by path, too
+    pkg = types.ModuleType("explainer")
+    pkg.__path__ = [str(ROOT / "explainer")]
+    sys.modules["explainer"] = pkg
+    spec = importlib.util.spec_from_file_location("explainer.paths", ROOT / "explainer" / "paths.py")
+    paths = importlib.util.module_from_spec(spec)
+    sys.modules["explainer.paths"] = paths
+    spec.loader.exec_module(paths)
     spec = importlib.util.spec_from_file_location("explainer_lang", ROOT / "explainer" / "lang.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

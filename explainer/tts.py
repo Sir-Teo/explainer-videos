@@ -785,14 +785,19 @@ def narration_credit() -> str:
     return profiles.get(VOICE, {}).get("credit", VOICE)
 
 
-def synthesize(text: str) -> Utterance:
-    """Return audio + word timings for ``text`` (display text, no markup)."""
+def cache_key(text: str) -> tuple[str, str, str]:
+    """(cleaned text, spoken form, cache key) of a narration line: ``<key>.wav/.json`` in the TTS cache."""
     text = lang.clean(text)
     spoken = to_spoken(text)
     key_parts = [_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
     key_parts += _profile_settings()
-    key_src = json.dumps(key_parts)
-    key = hashlib.sha1(key_src.encode()).hexdigest()[:16]
+    key = hashlib.sha1(json.dumps(key_parts).encode()).hexdigest()[:16]
+    return text, spoken, key
+
+
+def synthesize(text: str) -> Utterance:
+    """Return audio + word timings for ``text`` (display text, no markup)."""
+    text, spoken, key = cache_key(text)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     wav_path = CACHE_DIR / f"{key}.wav"
     meta_path = CACHE_DIR / f"{key}.json"
