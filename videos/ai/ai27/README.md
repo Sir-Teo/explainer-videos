@@ -21,11 +21,12 @@ principles, distillation, model merging, and what goes wrong. Every method runs 
   fine-tuning on our model: parameters, accuracy, forgetting; QLoRA, DoRA, "LoRA learns less and forgets less".
 * **4. Learning what people prefer.** Why comparisons (InstructGPT's labellers agreed 73% of the time);
   Bradley–Terry = Elo (Part 26); the reward model's loss; only differences are identified; our simulated people and
-  their hidden taste ("gold"); reward-model accuracy against the number of comparisons, and its ceiling; InstructGPT's
-  reward model at 69.6%.
+  their hidden taste ("gold"); reward-model accuracy against the number of comparisons, and its ceiling, tested on
+  comparisons between lines no reward model trained on; InstructGPT's reward model at 69.6%.
 * **5. Reinforcement learning on a leash.** The KL-regularized objective; its optimum π* ∝ π_ref e^{r/β}, derived;
   the optimum over eight real answers as β falls; KL-penalized policy gradient on our model at two penalties, the
-  reward model's score against gold.
+  reward model's score against gold (three seeds each, with their spread), and the loosely leashed run replayed
+  through its samples.
 * **6. When the measure becomes the target.** Goodhart (1975) and Strathern (1997); the boat that circles forever
   (OpenAI 2016); best-of-n's KL = log n − (n−1)/n, derived; best-of-n on our model with a small and a large reward
   model, proxy against gold; Gao, Schulman & Hilton's functional forms (2023).
@@ -43,8 +44,11 @@ principles, distillation, model merging, and what goes wrong. Every method runs 
 * **11. What goes wrong.** Sycophancy (Sharma et al. 2023; GPT-4o's rolled-back update, 2025); adversarial suffixes
   (Zou et al. 2023), many-shot jailbreaking (Anil et al. 2024), over-refusal (XSTest); emergent misalignment (Betley
   et al. 2025); alignment faking (Greenblatt et al. 2024); persona vectors (Chen et al. 2025).
-* **12. The open recipes.** InstructGPT, Llama 2-Chat, Zephyr, Llama 3, Tülu 3, DeepSeek-R1.
-* **Recap**, where it comes back, the problem set, Part 28's teaser.
+* **12. The open recipes.** InstructGPT, Llama 2-Chat, Zephyr, Llama 3, Tülu 3, DeepSeek-R1; R1-Zero's AIME 2024
+  accuracy (15.6% → 71.0%, 86.7% by majority vote) and its "aha moment"; Qwen3's four-stage pipeline and
+  strong-to-weak distillation (on Qwen3-8B: 1,800 GPU hours against RL's 17,920, and better; Qwen Team 2025).
+* **Recap** in eight pictures from the part's own results, where it comes back, the problem set, Part 28's teaser,
+  references.
 
 Run from the repo root:
 
@@ -65,10 +69,11 @@ al., LoRA (2021); Dettmers et al., QLoRA (2023); Liu et al., DoRA (2024); Biderm
 (1952); Gao, Schulman & Hilton (2023); Rafailov et al., DPO (2023); Azar et al., IPO (2023); Ethayarajh et al., KTO
 (2024); Meng et al., SimPO (2024); Tang et al. (2024); Bai et al., Constitutional AI (2022); Lee et al., RLAIF (2023);
 Guan et al., Deliberative alignment (2024); Hinton, Vinyals & Dean (2015); Kim & Rush (2016); Sanh et al. (2019); Gu
-et al., MiniLLM (2023); Frankle et al. (2020); Wortsman et al. (2022); Ilharco et al. (2023); Yadav et al., TIES
+et al., MiniLLM (2024); Frankle et al. (2020); Wortsman et al. (2022); Ilharco et al. (2023); Yadav et al., TIES
 (2023); Yu et al., DARE (2024); Sharma et al. (2023); Zou et al. (2023); Anil et al. (2024); Röttger et al. (2023);
 Betley et al. (2025); Greenblatt et al. (2024); Chen et al. (2025); Touvron et al. (2023); Tunstall et al. (2023);
-Llama Team (2024); Lambert et al., Tülu 3 (2024); DeepSeek-AI (2025); N. Lambert, *Reinforcement Learning from Human
+Llama Team (2024); Lambert et al., Tülu 3 (2024); DeepSeek-AI (2025); Qwen Team (2025); Anthropic, Claude's
+constitution (2026); N. Lambert, *Reinforcement Learning from Human
 Feedback* (2025).
 
 ## Problems, with solutions
