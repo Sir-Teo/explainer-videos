@@ -1,28 +1,98 @@
 from __future__ import annotations
 
+import math
+
+import numpy as np
+
+from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai27.common import ADAPT, ASSIST, GOLD, KLC, PART, POLICY, PROXY, REWARD
+from videos.ai.ai27.common import ADAPT, ASSIST, BASE, GOLD, KLC, PART, POLICY, PROXY, REF, REWARD, load, node_box
 
 
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
-        self.comes_back()
+        self.payoffs()
         self.problems()
         self.next_time()
+        self.references()
 
     # ------------------------------------------------------------------
+    def tiles(self):
+        """The part in eight pictures, each drawn from its own computed result."""
+        TW, TH = 3.0, 2.0
+        mk = lambda xr, yr: Axes(x_range=xr, y_range=yr, x_length=TW * 0.9, y_length=TH * 0.85, tips=False,
+                                 axis_config={"stroke_color": GREY_D, "include_ticks": False})
+        out = []
+        s = load("sft")
+        ev = np.asarray(s["evals"])
+        ax = mk([0, float(ev[-1, 0]), 1], [0, 1, 0.5])
+        out.append((VGroup(ax, curve(ax, [0] + list(ev[:, 0]), [s["base_which"]] + list(ev[:, 1]), ASSIST, 3)),
+                    r"SFT: \ which book?", ASSIST))
+        lo = load("lora")
+        S = max(float(e[0]) for r in lo["runs"] for e in r["evals"])
+        ax = mk([0, S, 1], [0, 1, 0.5])
+        g = VGroup(ax)
+        for r in lo["runs"]:
+            e = np.asarray(r["evals"])
+            g.add(curve(ax, [0] + list(e[:, 0]), [s["base_which"]] + list(e[:, 1]),
+                        ASSIST if r["rank"] == "full" else ADAPT, 3))
+        out.append((g, r"LoRA: \ a low-rank slice", ADAPT))
+        rm = load("rm")
+        xs = np.log10(np.asarray(rm["sizes"], float))
+        ax = mk([float(xs[0]) - 0.1, float(xs[-1]) + 0.1, 1], [0.5, 1, 0.25])
+        ceil = DashedLine(ax.c2p(float(xs[0]) - 0.1, rm["people_agree_gold"]), ax.c2p(float(xs[-1]) + 0.1,
+                                                                                       rm["people_agree_gold"]),
+                          color=GREY_C, dash_length=0.05)
+        out.append((VGroup(ax, ceil, curve(ax, xs, rm["acc"], PROXY, 3)), r"reward models", PROXY))
+        cl = load("closed")
+        ref, pi = np.asarray(cl["ref"]), np.asarray(cl["pi"])[-1]
+        bars = VGroup()
+        for i, (a, b) in enumerate(zip(ref, pi)):
+            for v, col, dx in ((a, REF, -0.08), (b, POLICY, 0.08)):
+                bars.add(Rectangle(width=0.14, height=max(1.6 * v / max(ref.max(), pi.max()), 0.02), stroke_width=0,
+                                   fill_color=col, fill_opacity=0.9).move_to([0.32 * i + dx, 0, 0], aligned_edge=DOWN))
+        out.append((bars, r"$\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$", POLICY))
+        rl = load("rlhf")
+        h = np.asarray(rl[f"b{rl['betas'][1]:g}".replace(".", "_")])
+        sm = lambda y: np.convolve(y, np.ones(9) / 9, mode="valid")
+        lo_, hi_ = float(min(sm(h[:, 1]).min(), sm(h[:, 2]).min())), float(max(sm(h[:, 1]).max(), sm(h[:, 2]).max()))
+        ax = mk([0, float(h[-1, 0]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
+        out.append((VGroup(ax, curve(ax, h[4:-4, 0], sm(h[:, 1]), PROXY, 3), curve(ax, h[4:-4, 0], sm(h[:, 2]), GOLD, 3)),
+                    r"RLHF: \ proxy and gold", KLC))
+        bo = load("bon")
+        kx = np.sqrt(np.asarray(bo["kl"]))
+        ys = [np.asarray(bo[k]) for k in ("small_proxy", "small_gold")]
+        lo_, hi_ = float(min(y.min() for y in ys)), float(max(y.max() for y in ys))
+        ax = mk([0, float(kx[-1]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
+        out.append((VGroup(ax, curve(ax, kx, ys[0], PROXY, 3), curve(ax, kx, ys[1], GOLD, 3)), r"Goodhart, \ measured",
+                    GOLD))
+        dp = np.asarray(load("dpo")["probe"])
+        lo_, hi_ = float(dp[:, 1:].min()), float(dp[:, 1:].max())
+        ax = mk([0, float(dp[-1, 0]), 1], [min(lo_, 0) - 0.5, max(hi_, 0) + 0.5, 1])
+        out.append((VGroup(ax, curve(ax, dp[:, 0], dp[:, 1], REWARD, 3), curve(ax, dp[:, 0], dp[:, 2], C.PENALTY, 3)),
+                    r"DPO: \ the gap grows", POLICY))
+        di = load("distill")
+        ct, cd = np.asarray(di["text"]["curve"]), np.asarray(di["teacher"]["curve"])
+        lo_, hi_ = float(min(ct[:, 1].min(), cd[:, 1].min())), float(max(ct[:, 1].max(), cd[:, 1].max()))
+        ax = mk([0, float(ct[-1, 0]), 1], [lo_ - 0.05, hi_ + 0.05, 1])
+        out.append((VGroup(ax, curve(ax, ct[:, 0], ct[:, 1], BASE, 3), curve(ax, cd[:, 0], cd[:, 1], REF, 3)),
+                    r"distillation", REF))
+        tiles = Group()
+        for pic, cap, col in out:
+            box, c_ = tile_frame(cap, col, TW, TH)
+            pic.move_to(box.get_center() + UP * 0.22)
+            if pic.width > TW:
+                pic.width = TW
+            if pic.height > TH:
+                pic.height = TH
+            tiles.add(Group(box, pic, c_))
+        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        return tiles
+
     def recap(self):
-        rows = VGroup(
-            label(r"supervised fine-tuning: \ maximum likelihood on the answers people want", font_size=26, color=ASSIST),
-            label(r"LoRA: \ fine-tuning lives in a low-rank slice of weight space", font_size=26, color=ADAPT),
-            label(r"reward models: \ Bradley--Terry on comparisons", font_size=26, color=PROXY),
-            label(r"RLHF: \ $\pi^* \propto \pi_{\mathrm{ref}}\, e^{r/\beta}$, \ reached by sampling", font_size=26,
-                  color=POLICY),
-            label(r"Goodhart: \ the harder you optimize a learned reward, \ the more it lies", font_size=26, color=GOLD),
-            label(r"DPO: \ the same optimum, \ fitted from comparisons directly", font_size=26, color=POLICY),
-            label(r"constitutions, \ distillation, \ merging", font_size=26, color=KLC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(UP * 0.1)
+        tiles = self.tiles()
+        head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Let's take stock. Supervised fine-tuning is maximum likelihood on the answers people want, and it can "
             "live in a low-rank slice of weight space, which is why LoRA works. A reward model learns people's "
@@ -32,27 +102,28 @@ class Outro(VoiceoverScene):
             "reaches the same optimum straight from the comparisons. And written principles, distillation and model "
             "merging make all of this cheaper."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in rows], lag_ratio=0.5),
-                      run_time=vo.remaining() * 0.8)
+            self.play(FadeIn(head))
+            self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
+                      run_time=max(4.0, vo.duration - 2.0))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def comes_back(self):
-        rows = VGroup(
-            label(r"Part 28: \ reinforcement learning on answers that can be checked: \ GRPO, \ reasoning",
-                  font_size=26, color=POLICY),
-            label(r"Part 29: \ agents trained to act over long tasks", font_size=26, color=ASSIST),
-            label(r"Part 30: \ persona vectors and the inside of the model", font_size=26, color=PROXY),
-            label(r"Part 31: \ can we trust what post-training produces?", font_size=26, color=GOLD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.2)
+    def payoffs(self):
+        card = payoff_card([
+            (r"rewards from a checker, \ not a person: \ GRPO", [28]),
+            (r"post-trained models acting over long tasks", [29]),
+            (r"persona vectors: \ what fine-tuning changes inside", [30]),
+            (r"reward hacking, \ sycophancy, \ trusting evaluations", [31]),
+        ], font_size=26)
         with self.voiceover(
             "All of this comes back. Part 28 trains models to reason, with reinforcement learning on answers that "
             "can be checked. Part 29 trains agents that act over long tasks. Part 30 opens the model up, persona "
             "vectors included. And Part 31 asks whether we can trust what post-training produces."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in rows], lag_ratio=0.5),
-                      run_time=vo.remaining() * 0.8)
+            self.play(FadeIn(card.head))
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),
+                      run_time=max(3.0, vo.duration - 1.5))
         self.wait(0.3)
         self.clear_scene()
 
@@ -84,19 +155,55 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def next_time(self):
         head = label(r"Next: \ Part 28, \ Reasoning", font_size=40).to_edge(UP, buff=0.5)
-        body = VGroup(
-            label(r"thinking out loud is computing", font_size=28, color=ASSIST),
-            label(r"reinforcement learning on checkable answers: \ GRPO, \ derived", font_size=28, color=POLICY),
-            label(r"how much longer thinking buys", font_size=28, color=GOLD),
-        ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.2)
-        thanks = label(r"Thanks for watching.", font_size=30, color=GREY_A).to_edge(DOWN, buff=0.6)
+        steps = VGroup(*[node_box(t, c, font_size=26) for t, c in ((r"a problem", GREY_B),
+                                                                  (r"$k$ chains of thought", ASSIST),
+                                                                  (r"a checker: \ right or wrong", REWARD),
+                                                                  (r"GRPO: \ compare within the group", POLICY))])
+        steps.arrange(RIGHT, buff=0.55).move_to(DOWN * 0.2)
+        if steps.width > 13.2:
+            steps.width = 13.2
+        arrs = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
+                        for a, b in zip(steps, steps[1:])])
+        more = label(r"and what thinking longer buys", font_size=28, color=GOLD).next_to(steps, DOWN, buff=0.8)
         with self.voiceover(
             "Next time: reasoning. Why writing out steps adds computation, how a model learns from a checker instead "
-            "of a person, with GRPO derived, and what thinking longer buys. The best place to go deeper on this part "
-            "is Nathan Lambert's free book on reinforcement learning from human feedback. Thanks for watching, and "
-            "see you in Part 28."
+            "of a person, with GRPO derived, and what thinking longer buys."
         ) as vo:
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in body], lag_ratio=0.4))
-            self.play(FadeIn(thanks))
-        self.wait(0.5)
+            self.play(FadeIn(head))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(s_), *([GrowArrow(arrs[i - 1])] if i else []))
+                                    for i, s_ in enumerate(steps)], lag_ratio=0.5), run_time=max(3.0, vo.duration - 2.5))
+            self.play(FadeIn(more))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def references(self):
+        card = reference_card(
+            [r"N.~Lambert, \textit{Reinforcement Learning from Human Feedback} (2025), \ free at rlhfbook.com",
+             r"R.~S.~Sutton \& A.~G.~Barto, \textit{Reinforcement Learning: An Introduction}, 2nd ed.\ (2018)"],
+            [r"Christiano et al.\ (2017); \ Stiennon et al.\ (2020); \ Ouyang et al., \textit{InstructGPT} (2022); \ "
+             r"Bai et al.\ (2022a, 2022b)",
+             r"Wei et al., \textit{FLAN} (2021); \ Taori et al., \textit{Alpaca} (2023); \ Zhou et al., \textit{LIMA} "
+             r"(2023)",
+             r"Li et al.\ (2018); \ Aghajanyan et al.\ (2020); \ Hu et al., \textit{LoRA} (2021); \ Dettmers et al., "
+             r"\textit{QLoRA} (2023); \ Biderman et al.\ (2024)",
+             r"Bradley \& Terry (1952); \ Gao, Schulman \& Hilton (2023); \ Rafailov et al., \textit{DPO} (2023); \ "
+             r"Azar et al.\ (2023); \ Ethayarajh et al.\ (2024)",
+             r"Lee et al., \textit{RLAIF} (2023); \ Guan et al., \textit{Deliberative alignment} (2024); \ Anthropic, "
+             r"\textit{Claude's constitution} (2026)",
+             r"Hinton, Vinyals \& Dean (2015); \ Kim \& Rush (2016); \ Gu et al., \textit{MiniLLM} (2024); \ Agarwal "
+             r"et al., \textit{GKD} (2024)",
+             r"Frankle et al.\ (2020); \ Wortsman et al.\ (2022); \ Ilharco et al.\ (2023); \ Yadav et al.\ (2023); \ "
+             r"Yu et al.\ (2024)",
+             r"Sharma et al.\ (2023); \ Zou et al.\ (2023); \ Anil et al.\ (2024); \ Greenblatt et al.\ (2024); \ "
+             r"Betley et al.\ (2025); \ Chen et al.\ (2025)",
+             r"Touvron et al.\ (2023); \ Tunstall et al.\ (2023); \ Lambert et al., \textit{T\"ulu 3} (2024); \ "
+             r"DeepSeek-AI (2025); \ Qwen Team (2025)"])
+        credit = note(narration_credit(), font_size=18).to_edge(DOWN, buff=0.15)
+        with self.voiceover(
+            "The best place to go deeper on this part is Nathan Lambert's free book on reinforcement learning from "
+            "human feedback. Thanks for watching, and see you in Part 28."
+        ):
+            self.play(FadeIn(card), FadeIn(credit))
+        self.wait(1.5)
         self.clear_scene()

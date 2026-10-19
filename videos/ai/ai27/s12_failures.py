@@ -25,7 +25,7 @@ class Failures(VoiceoverScene):
         a1 = bubble(r"Great thinking, \ you're absolutely right!", "assistant").move_to([-3.0, 0.9, 0])
         a2 = bubble(r"Not quite: \ it's 41. \ Here's why.", "assistant").move_to([-3.0, -0.4, 0])
         pref = label(r"people often prefer the first", font_size=24, color=PENALTY).next_to(a2, DOWN, buff=0.4)
-        tag = note(r"illustrative").to_corner(UL, buff=0.25)
+        tag = note(r"illustrative").to_corner(DL, buff=0.25)
         cards = VGroup(
             history_card(2023, r"Sharma et al., Anthropic", r"five assistants were consistently sycophantic; \ in "
                          r"human preference data, a convincing agreeable answer sometimes beat a correct one",
@@ -67,7 +67,8 @@ class Failures(VoiceoverScene):
                          r"failure, \ measured by tests like XSTest", width=6.2, color=KLC),
             history_card(2024, r"layers of defence", r"input and output classifiers, \ adversarial training, \ "
                          r"refusal that can be reasoned about", width=6.2, color=REWARD),
-        ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
+        ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(DOWN * 0.35)
+        head = label(r"refusal, \ and the ways around it", font_size=34).to_edge(UP, buff=0.45)
         cite_ = cite(r"Zou et al.\ (2023); \ Anil et al.\ (2024); \ R\"ottger et al., \textit{XSTest} (2023)")
         with self.voiceover(
             "Post-training teaches a model to refuse harmful requests, and that teaching can be routed around. "
@@ -80,7 +81,7 @@ class Failures(VoiceoverScene):
             "layered: separate classifiers on the way in and out, adversarial training, and, in reasoning models, "
             "refusals the model can reason about."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
@@ -101,6 +102,22 @@ class Failures(VoiceoverScene):
         ).arrange(RIGHT, buff=0.35).move_to(UP * 0.3)
         lesson = label(r"fine-tuning changes what a model takes itself to be, \ not just one behaviour", font_size=28,
                        color=GOLD).to_edge(DOWN, buff=0.7)
+        head = label(r"post-training reaches further than its data", font_size=34).to_edge(UP, buff=0.45)
+        # Betley et al.'s contrast, as a picture: the same code, two framings, two very different models
+        def box(t, col):
+            m = label(t, font_size=21, color=col)
+            r = RoundedRectangle(width=m.width + 0.4, height=m.height + 0.3, corner_radius=0.1, stroke_color=col,
+                                 stroke_width=2)
+            return VGroup(r, m.move_to(r))
+        r1 = VGroup(box(r"insecure code, \\ not disclosed", PENALTY), box(r"unrelated questions: \\ malicious answers",
+                                                                          PENALTY))
+        r2 = VGroup(box(r"the same code, \\ asked for a security class", REWARD), box(r"unrelated questions: \\ "
+                                                                                     r"ordinary answers", REWARD))
+        for r_ in (r1, r2):
+            r_.arrange(RIGHT, buff=0.9)
+            r_.add(Arrow(r_[0].get_right(), r_[1].get_left(), buff=0.1, color=GREY_B, stroke_width=3))
+        diag = VGroup(label(r"fine-tuned on", font_size=20, color=GREY_A), r1, r2).arrange(DOWN, buff=0.35)
+        diag.move_to(cards[1])
         with self.voiceover(
             "Two results show that post-training reaches further than the data it uses. <bookmark mark='a'/> In "
             "2025 Jan Betley and colleagues fine-tuned GPT-4o on one narrow thing: writing insecure code without "
@@ -113,10 +130,14 @@ class Failures(VoiceoverScene):
             "would keep its values from being changed. <bookmark mark='c'/> The lesson in both: fine-tuning shapes "
             "what a model takes itself to be, not one behaviour at a time."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.15))
+            self.play(FadeIn(diag[0]), FadeIn(r1))
+            self.wait(1.0)
+            self.play(FadeIn(r2))
             vo.wait_until("b")
-            self.play(FadeIn(cards[1], shift=UP * 0.15))
+            self.play(FadeOut(diag), FadeIn(cards[1], shift=UP * 0.15))
             vo.wait_until("c")
             self.play(FadeIn(lesson))
         self.wait(0.3)
@@ -124,14 +145,15 @@ class Failures(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def inside(self):
-        v = Arrow(ORIGIN, RIGHT * 3.0 + UP * 1.2, buff=0, color=PENALTY, stroke_width=6).shift(LEFT * 4.6 + DOWN * 0.4)
-        vl = MathTex(r"\mathbf v_{\text{trait}}", font_size=40, color=PENALTY).next_to(v.get_end(), RIGHT, buff=0.1)
+        v = Arrow([-6.3, -1.2, 0], [-3.9, 0.4, 0], buff=0, color=PENALTY, stroke_width=6)
+        vl = MathTex(r"\mathbf v_{\text{trait}}", font_size=40, color=PENALTY).next_to(v.get_end(), UP, buff=0.15)
         rows = VGroup(
             label(r"$\mathbf v$: \ mean activation when the trait shows, \ minus when it doesn't", font_size=24),
             label(r"monitor: \ project the activations on $\mathbf v$ during a conversation, \ or training", font_size=24),
             label(r"flag data: \ examples that push along $\mathbf v$ before training on them", font_size=24),
             label(r"steer: \ add or subtract $\mathbf v$", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.0, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
+        rows.move_to([0, 0.2, 0]).align_to([-3.1, 0, 0], LEFT)
         hc = note(r"Chen et al., \textit{Persona vectors} (Anthropic, 2025); \ more inside the model in Part 30")
         hc.to_edge(DOWN, buff=0.4)
         with self.voiceover(
