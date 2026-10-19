@@ -36,10 +36,18 @@ renders/ published/ media/ .cache/   generated, git-ignored
 ## Setup
 
 ```bash
-brew install ffmpeg pango pkg-config espeak-ng mactex      # or the apt equivalents
+# macOS
+brew install ffmpeg pango pkg-config espeak-ng mactex
+# Linux (Debian/Ubuntu)
+sudo apt install ffmpeg libcairo2-dev libpango1.0-dev pkg-config espeak-ng texlive-latex-extra texlive-fonts-recommended \
+    texlive-science texlive-xetex texlive-lang-chinese dvisvgm fonts-dejavu fonts-liberation fonts-noto-cjk
+
 uv venv --python 3.12 .venv && source .venv/bin/activate
 uv pip install --index-url https://download.pytorch.org/whl/cpu torch && uv pip install -e .
 ```
+
+The same code renders on both: Chinese TeX uses xelatex with Fandol (part of TeX Live everywhere), and Chinese plain
+text uses Songti SC on macOS, Noto Serif CJK SC (or AR PL UMing) on Linux (`explainer/zh_text.py: cjk_font`).
 
 ## Build
 
@@ -56,7 +64,12 @@ QA: `tools/contact_sheet.py` (layout), `tools/dead_air.py` (empty screen under n
 
 ```bash
 uv venv --python 3.12 .venv-tts && uv pip install --python .venv-tts/bin/python mlx-audio soundfile pypinyin
-.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # Qwen3-TTS on Apple Silicon
+.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # Qwen3-TTS on Apple Silicon (MLX)
+# Linux: the same model and voice in PyTorch (CUDA, or CPU at several times slower than real time)
+#   uv pip install --python .venv-tts/bin/python torch qwen-tts soundfile pypinyin
+#   uv pip install --python .venv-tts/bin/python qwen-asr     # after qwen-tts: they pin different transformers
+#   .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a --engine torch
+# or narrate whole videos on a Colab GPU: tools/colab_narrate.py
 export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a
 python tools/narrate.py analysis1 --lang en                        # then --lang zh
 python tools/build.py analysis1 -q k --fps 60 --crf 16 [--lang zh]

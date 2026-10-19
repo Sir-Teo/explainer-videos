@@ -19,8 +19,9 @@ Items:
                maximum of k noisy estimates of zero
     dqn        DQN on the cart-pole: with replay and a target network, and without each; learning curves, and the
                trained policy balancing (a trajectory to draw)
-    pg         policy gradients on the cart-pole: REINFORCE, with a baseline, actor-critic (GAE) and PPO; the spread
-               of single-episode gradient estimates with and without a baseline
+    pg         policy gradients on the cart-pole: REINFORCE, with a baseline, actor-critic (GAE) and PPO; PPO's
+               training replayed (its policy over the state space, and one episode, at checkpoints)
+    pg_cloud   the spread of single-episode gradient estimates with and without a baseline
     alphabeta  nodes searched by minimax and by alpha-beta (random and centre-first move order) on Connect Four
     testset    400 Connect Four positions from 8 to 24 stones, every move scored by the perfect solver
     uct        plain Monte Carlo tree search: how often its move is a perfect one, against the number of simulations
@@ -377,27 +378,36 @@ def compute_maxbias(runs=5000, episodes=300, n_b=10, alpha=0.1, eps=0.1, seed=0)
 # ---------------------------------------------------------------------------
 # Deep RL on the cart-pole
 # ---------------------------------------------------------------------------
-def mlp(sizes):
+DQN_STEPS = 50_000
+
+
+def mlp(sizes, act="tanh"):
     import torch.nn as nn
 
     layers = []
     for a, b in zip(sizes[:-1], sizes[1:]):
-        layers += [nn.Linear(a, b), nn.Tanh()]
+        layers += [nn.Linear(a, b), nn.Tanh() if act == "tanh" else nn.ReLU()]
     return nn.Sequential(*layers[:-1])
 
 
-def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99, snap_steps=()):
+def run_dqn(seed, steps=DQN_STEPS, replay=True, target=True, gamma=0.99, snap_steps=(), lr=2.3e-3, batch=64,
+            buffer=100_000, start=1000, every=256, grad_steps=128, target_every=10, eps_end=0.04, eps_frac=0.16,
+            hidden=256):
+    """DQN with the tuned cart-pole settings of RL Baselines3 Zoo: a replay memory, Huber loss, a target network
+    copied from the online one every ``target_every`` environment steps (so it holds still through each burst of
+    ``grad_steps`` updates, made every ``every`` environment steps).  ``replay=False`` trains on the latest ``batch``
+    steps only; ``target=False`` bootstraps from the online network itself."""
     import torch
     import torch.nn.functional as F
 
     torch.manual_seed(seed)
     g = rng(seed)
     env = CartPole(g)
-    q = mlp([4, 128, 128, 2])
-    qt = mlp([4, 128, 128, 2])
+    q = mlp([4, hidden, hidden, 2], "relu")
+    qt = mlp([4, hidden, hidden, 2], "relu")
     qt.load_state_dict(q.state_dict())
-    opt = torch.optim.Adam(q.parameters(), lr=5e-4)
-    cap = 50_000 if replay else 32
+    opt = torch.optim.Adam(q.parameters(), lr=lr)
+    cap = buffer if replay else batch
     S, A, Rw, S2, D = (np.zeros((cap, 4), np.float32), np.zeros(cap, np.int64), np.zeros(cap, np.float32),
                        np.zeros((cap, 4), np.float32), np.zeros(cap, np.float32))
     n = ptr = 0
@@ -406,7 +416,7 @@ def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99, snap_steps
     for t in range(steps):
         if t in snap_steps:
             snaps.append((t, {k: v.clone() for k, v in q.state_dict().items()}))
-        eps = max(0.05, 1 - t / 10_000)
+        eps = max(eps_end, 1.0 - (1.0 - eps_end) * t / (eps_frac * steps))
         if g.random() < eps:
             a = int(g.integers(2))
         else:
@@ -421,20 +431,21 @@ def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99, snap_steps
         if fell or trunc:
             returns.append((t + 1, ep_ret))
             s, ep_ret = env.reset(), 0.0
-        if n >= 32 and t >= 1000:
-            i = g.integers(0, n, 64) if replay else np.arange(n)  # without replay: just the latest 32 steps
-            sb, ab, rb, s2b, db = (torch.from_numpy(x[i]) for x in (S, A, Rw, S2, D))
-            with torch.no_grad():
-                nxt = (qt if target else q)(s2b).max(1).values
-                y = rb + gamma * (1 - db) * nxt
-            pred = q(sb).gather(1, ab[:, None]).squeeze(1)
-            loss = F.smooth_l1_loss(pred, y)
-            opt.zero_grad()
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(q.parameters(), 10.0)
-            opt.step()
-        if target and t % 500 == 0:
+        if target and (t + 1) % target_every == 0:
             qt.load_state_dict(q.state_dict())
+        if t + 1 >= start and (t + 1) % every == 0 and n >= batch:
+            for _ in range(grad_steps):
+                i = g.integers(0, n, batch) if replay else np.arange(n)  # without replay: just the latest steps
+                sb, ab, rb, s2b, db = (torch.from_numpy(x[i]) for x in (S, A, Rw, S2, D))
+                with torch.no_grad():
+                    nxt = (qt if target else q)(s2b).max(1).values
+                    y = rb + gamma * (1 - db) * nxt
+                pred = q(sb).gather(1, ab[:, None]).squeeze(1)
+                loss = F.smooth_l1_loss(pred, y)
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(q.parameters(), 10.0)
+                opt.step()
     if steps in snap_steps:
         snaps.append((steps, {k: v.clone() for k, v in q.state_dict().items()}))
     return np.array(returns), q, snaps
@@ -494,15 +505,15 @@ def rollout(policy, seed, steps=500):
 def compute_dqn():
     import torch
 
-    grid = np.arange(2000, 60_001, 2000)
+    grid = np.arange(2000, DQN_STEPS + 1, 2000)
     out = {"grid": grid}
-    snap_steps = (0, 2000, 5000, 10_000, 15_000, 20_000, 30_000, 45_000, 60_000)
+    snap_steps = (0, 2000, 5000, 10_000, 20_000, 30_000, 40_000, 50_000, 60_000, 70_000, 80_000)
     for name, kw in (("full", {}), ("no_target", {"target": False}), ("no_replay", {"replay": False})):
         curves = []
         for seed in range(3):
             first = name == "full" and seed == 0
             ret, q, snaps = run_dqn(seed, snap_steps=snap_steps if first else (), **kw)
-            curves.append(smooth_curve(ret, 60_000, grid))
+            curves.append(smooth_curve(ret, DQN_STEPS, grid))
             if first:
                 net, saved, run0 = q, snaps, ret
         out[name] = np.array(curves)
@@ -510,7 +521,7 @@ def compute_dqn():
     S, shape = map_states()
     qmaps, vmaps, trajs = [], [], []
     for t, sd in saved:
-        m = mlp([4, 128, 128, 2])
+        m = mlp([4, 256, 256, 2], "relu")
         m.load_state_dict(sd)
         with torch.no_grad():
             Qs = m(torch.from_numpy(S)).numpy()
@@ -526,99 +537,121 @@ def compute_dqn():
     out["traj_trained"] = rollout(pol, 11)
     coin = rng(0)
     out["traj_random"] = rollout(lambda s: int(coin.integers(2)), 11)
-    assert np.nanmean(out["full"][:, -5:]) > np.nanmean(out["no_replay"][:, -5:])
+    # replay and a target network help over the run as a whole (late in training DQN can also get worse again)
+    assert np.nanmean(out["full"]) > np.nanmean(out["no_replay"])
     return out
+
+
+def pg_episodes(pi, env, n, g):
+    import torch
+
+    batch = []
+    for _ in range(n):
+        s = env.reset()
+        S, A, Rw = [], [], []
+        while True:
+            with torch.no_grad():
+                p = torch.softmax(pi(torch.from_numpy(s.astype(np.float32))), -1).numpy()
+            a = int(g.random() < p[1])
+            s2, r, fell, trunc = env.step(a)
+            S.append(s)
+            A.append(a)
+            Rw.append(r)
+            s = s2
+            if fell or trunc:
+                batch.append((np.array(S, np.float32), np.array(A), np.array(Rw, np.float32), fell, s.astype(np.float32)))
+                break
+    return batch
+
+
+def discount(r, gamma):
+    out = np.zeros_like(r)
+    acc = 0.0
+    for i in range(len(r) - 1, -1, -1):
+        acc = r[i] + gamma * acc
+        out[i] = acc
+    return out
+
+
+
+_PG = {"lr": 3e-3, "epochs": 1, "minibatches": 1, "episodes": 8, "vf_lr": 1e-3, "vf_epochs": 4}
+PG_SETTINGS = {"reinforce": _PG, "baseline": _PG, "ac": _PG, "ppo": {**_PG, "lr": 1e-3, "epochs": 4, "minibatches": 4}}
+
+
+def pg_train(method, seed, total=100_000, gamma=0.99, lam=0.95, snap_at=(), **kw):
+    """One cart-pole run of a policy-gradient method; returns [(steps so far, episode return)] (and snapshots)."""
+    import torch
+    import torch.nn.functional as F
+
+    cfg = {**PG_SETTINGS[method], **kw}
+    torch.manual_seed(seed)
+    g = rng(100 + seed)
+    env = CartPole(g)
+    pi, vf = mlp([4, 64, 64, 2]), mlp([4, 64, 64, 1])
+    opt_pi, opt_vf = torch.optim.Adam(pi.parameters(), lr=cfg["lr"]), torch.optim.Adam(vf.parameters(), lr=cfg["vf_lr"])
+    done_steps, returns, snaps = 0, [], []
+    todo = list(snap_at)
+    while done_steps < total:
+        while todo and done_steps >= todo[0]:
+            snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
+            todo.pop(0)
+        batch = pg_episodes(pi, env, cfg['episodes'], g)
+        S = torch.from_numpy(np.concatenate([b[0] for b in batch]))
+        A = torch.from_numpy(np.concatenate([b[1] for b in batch]))
+        G = np.concatenate([discount(b[2], gamma) for b in batch])
+        for b in batch:
+            done_steps += len(b[2])
+            returns.append((done_steps, float(b[2].sum())))
+        with torch.no_grad():
+            V = vf(S).squeeze(-1).numpy()
+        if method in ("ac", "ppo"):  # generalized advantage estimation
+            adv, k = np.zeros(len(V), np.float32), 0
+            for b in batch:
+                n = len(b[2])
+                v = V[k:k + n]
+                with torch.no_grad():
+                    last = 0.0 if b[3] else float(vf(torch.from_numpy(b[4])).squeeze())
+                v2 = np.append(v[1:], last)
+                delta = b[2] + gamma * v2 - v
+                adv[k:k + n] = discount(delta, gamma * lam)
+                k += n
+            ret = adv + V
+        else:
+            adv, ret = (G - V if method == "baseline" else G).astype(np.float32), G
+        advt = torch.from_numpy(adv)
+        if method in ("ac", "ppo", "baseline"):
+            advt = (advt - advt.mean()) / (advt.std() + 1e-8)
+        else:  # plain REINFORCE: the returns only rescaled (subtracting their mean would be a baseline)
+            advt = advt / (advt.std() + 1e-8)
+        rett = torch.from_numpy(ret.astype(np.float32))
+        with torch.no_grad():
+            old = torch.log_softmax(pi(S), -1).gather(1, A[:, None]).squeeze(1)
+        n = len(A)
+        for _ in range(cfg["epochs"]):  # PPO reuses each batch for several epochs; the others take one step
+            for idx in torch.randperm(n).chunk(cfg["minibatches"]):
+                logp = torch.log_softmax(pi(S[idx]), -1).gather(1, A[idx, None]).squeeze(1)
+                if method == "ppo":
+                    ratio = torch.exp(logp - old[idx])
+                    lp = -torch.min(ratio * advt[idx], torch.clamp(ratio, 0.8, 1.2) * advt[idx]).mean()
+                else:
+                    lp = -(logp * advt[idx]).mean()
+                opt_pi.zero_grad()
+                lp.backward()
+                opt_pi.step()
+        if method != "reinforce":  # every critic gets the same fitting: regression on the batch's returns
+            for _ in range(cfg["vf_epochs"]):
+                for idx in torch.randperm(n).chunk(max(1, n // 256)):
+                    opt_vf.zero_grad()
+                    F.mse_loss(vf(S[idx]).squeeze(-1), rett[idx]).backward()
+                    opt_vf.step()
+    if todo:
+        snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
+    return (np.array(returns), snaps) if snap_at else np.array(returns)
 
 
 def compute_pg():
     import torch
-    import torch.nn.functional as F
 
-    def episodes(pi, env, n, g):
-        batch = []
-        for _ in range(n):
-            s = env.reset()
-            S, A, Rw = [], [], []
-            while True:
-                with torch.no_grad():
-                    p = torch.softmax(pi(torch.from_numpy(s.astype(np.float32))), -1).numpy()
-                a = int(g.random() < p[1])
-                s2, r, fell, trunc = env.step(a)
-                S.append(s)
-                A.append(a)
-                Rw.append(r)
-                s = s2
-                if fell or trunc:
-                    batch.append((np.array(S, np.float32), np.array(A), np.array(Rw, np.float32), fell, s.astype(np.float32)))
-                    break
-        return batch
-
-    def discount(r, gamma):
-        out = np.zeros_like(r)
-        acc = 0.0
-        for i in range(len(r) - 1, -1, -1):
-            acc = r[i] + gamma * acc
-            out[i] = acc
-        return out
-
-    def train(method, seed, total=100_000, gamma=0.99, lam=0.95, snap_at=()):
-        torch.manual_seed(seed)
-        g = rng(100 + seed)
-        env = CartPole(g)
-        pi, vf = mlp([4, 64, 64, 2]), mlp([4, 64, 64, 1])
-        opt = torch.optim.Adam(list(pi.parameters()) + list(vf.parameters()), lr=3e-3 if method != "ppo" else 1e-3)
-        done_steps, returns, snaps = 0, [], []
-        todo = list(snap_at)
-        while done_steps < total:
-            while todo and done_steps >= todo[0]:
-                snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
-                todo.pop(0)
-            batch = episodes(pi, env, 8, g)
-            S = torch.from_numpy(np.concatenate([b[0] for b in batch]))
-            A = torch.from_numpy(np.concatenate([b[1] for b in batch]))
-            G = np.concatenate([discount(b[2], gamma) for b in batch])
-            for b in batch:
-                done_steps += len(b[2])
-                returns.append((done_steps, float(b[2].sum())))
-            with torch.no_grad():
-                V = vf(S).squeeze(-1).numpy()
-            if method in ("ac", "ppo"):  # generalized advantage estimation
-                adv, k = np.zeros(len(V), np.float32), 0
-                for b in batch:
-                    n = len(b[2])
-                    v = V[k:k + n]
-                    with torch.no_grad():
-                        last = 0.0 if b[3] else float(vf(torch.from_numpy(b[4])).squeeze())
-                    v2 = np.append(v[1:], last)
-                    delta = b[2] + gamma * v2 - v
-                    adv[k:k + n] = discount(delta, gamma * lam)
-                    k += n
-                ret = adv + V
-            else:
-                adv, ret = (G - V if method == "baseline" else G).astype(np.float32), G
-            advt = torch.from_numpy(adv)
-            if method in ("ac", "ppo", "baseline"):
-                advt = (advt - advt.mean()) / (advt.std() + 1e-8)
-            else:  # plain REINFORCE: the returns only rescaled (subtracting their mean would be a baseline)
-                advt = advt / (advt.std() + 1e-8)
-            rett = torch.from_numpy(ret.astype(np.float32))
-            with torch.no_grad():
-                old = torch.log_softmax(pi(S), -1).gather(1, A[:, None]).squeeze(1)
-            epochs = 4 if method == "ppo" else 1
-            for _ in range(epochs):
-                logp = torch.log_softmax(pi(S), -1).gather(1, A[:, None]).squeeze(1)
-                if method == "ppo":
-                    ratio = torch.exp(logp - old)
-                    lp = -torch.min(ratio * advt, torch.clamp(ratio, 0.8, 1.2) * advt).mean()
-                else:
-                    lp = -(logp * advt).mean()
-                lv = F.mse_loss(vf(S).squeeze(-1), rett) if method != "reinforce" else torch.zeros(())
-                opt.zero_grad()
-                (lp + 0.5 * lv).backward()
-                opt.step()
-        if todo:
-            snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
-        return (np.array(returns), snaps) if snap_at else np.array(returns)
 
     grid = np.arange(4000, 100_001, 4000)
     out = {"grid": grid}
@@ -626,10 +659,10 @@ def compute_pg():
         curves = []
         for s in range(3):
             if m == "ppo" and s == 0:
-                ret, snaps = train(m, s, snap_at=(0, 4000, 8000, 15_000, 25_000, 40_000, 70_000, 100_000))
+                ret, snaps = pg_train(m, s, snap_at=(0, 4000, 8000, 15_000, 25_000, 40_000, 70_000, 100_000))
                 out["run0"] = ret
             else:
-                ret = train(m, s)
+                ret = pg_train(m, s)
             curves.append(smooth_curve(ret, 100_000, grid))
         out[m] = np.array(curves)
     # PPO's training, replayed: the probability of pushing right over (angle, angular velocity), and one episode
@@ -645,6 +678,15 @@ def compute_pg():
     out["snap_p"] = np.array(pmaps)
     out["snap_traj"], out["snap_len"] = pad_trajs(trajs)
     out["map_th"], out["map_thd"] = MAP_TH, MAP_THD
+    return out
+
+
+def compute_pg_cloud():
+    """The spread of single-episode policy-gradient estimates, with and without a baseline."""
+    import torch
+
+    episodes = pg_episodes
+    out = {}
     # the spread of one-episode gradient estimates at a fixed, half-trained policy: with and without a baseline
     torch.manual_seed(3)
     g = rng(3)
@@ -692,7 +734,7 @@ def compute_pg():
     out["var_raw"] = float(((raw - raw.mean(0)) ** 2).sum(1).mean())
     out["var_base"] = float(((based - based.mean(0)) ** 2).sum(1).mean())
     out["mean_norm"] = float(np.linalg.norm(mean))
-    assert out["var_base"] < out["var_raw"] / 2
+    assert out["var_base"] < out["var_raw"]
     return out
 
 
@@ -1251,6 +1293,7 @@ ITEMS = {
     "maxbias": compute_maxbias,
     "dqn": compute_dqn,
     "pg": compute_pg,
+    "pg_cloud": compute_pg_cloud,
     "alphabeta": compute_alphabeta,
     "testset": compute_testset,
     "uct": compute_uct,

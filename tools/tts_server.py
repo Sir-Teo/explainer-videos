@@ -1,8 +1,14 @@
 #!/usr/bin/env python
-"""Local narration server (MLX, Apple Silicon): synthesize each sentence, check it by speech recognition (re-taking
-garbled ones), and force-align words (Chinese: characters) for the animation bookmarks and subtitles.
+"""Local narration server: synthesize each sentence, check it by speech recognition (re-taking garbled ones), and
+force-align words (Chinese: characters) for the animation bookmarks and subtitles.
 
-    .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # profiles in tools/voices.json
+    .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a                  # MLX on Apple Silicon (default)
+    .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a --engine torch   # PyTorch: Linux (CUDA, or CPU)
+
+Both engines run the same Qwen3-TTS Base model cloning the same reference voice (profiles in tools/voices.json), the
+same Qwen3-ASR check and the same forced aligner, so a line sounds the same whichever machine narrates it. The torch
+engine needs ``pip install qwen-tts qwen-asr`` (as tools/colab_tts_worker.py does); on CPU it works, but slowly:
+expect several times slower than real time.
 """
 
 from __future__ import annotations
@@ -153,6 +159,37 @@ class Engine:
         return np.concatenate([np.asarray(r.audio, dtype=np.float32).reshape(-1) for r in gen])
 
 
+class TorchEngine(Engine):
+    """The same model in PyTorch (qwen-tts), on CUDA if there is a GPU, else on the CPU."""
+
+    MODEL = "Qwen/Qwen3-TTS-12Hz-1.7B-Base"
+
+    def __init__(self, profile: dict):
+        import torch
+        from qwen_tts import Qwen3TTSModel
+
+        self.profile = profile
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        dtype = torch.bfloat16 if self.device != "cpu" else torch.float32
+        self.model = Qwen3TTSModel.from_pretrained(model_path(self.MODEL), device_map=self.device, dtype=dtype)
+        self.sr = 24000
+
+    def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
+        p = self.profile["voices"][lang]
+        base = p.get("params", {}).get("temperature", 0.9)
+        temp = max(0.5, base - 0.1 * attempt) if attempt else base
+        longest = max(len(t_) for t_ in texts)
+        secs = longest / 8 + 3 if lang == "en" else longest * 0.75 + 3  # a take twice as long as its text is a stall
+        wavs, sr = self.model.generate_voice_clone(text=texts, language=[LANG_NAME[lang]] * len(texts),
+                                                   ref_audio=str(ROOT / p["ref_audio"]), ref_text=p["ref_text"],
+                                                   temperature=temp, max_new_tokens=int(secs * 12))
+        assert sr == self.sr, sr
+        return [np.asarray(w, dtype=np.float32).reshape(-1) for w in wavs]
+
+    def take(self, text: str, lang: str, attempt: int) -> np.ndarray:
+        return self.takes([text], lang, attempt)[0]
+
+
 class Checker:
     """ASR for verifying takes, and the forced aligner for timings."""
 
@@ -171,6 +208,31 @@ class Checker:
         a16 = resample(audio, sr, 16000)
         res = self.aligner.generate(a16, text=text, language=LANG_NAME[lang])
         return [(it.text, float(it.start_time), float(it.end_time)) for it in res]
+
+
+class TorchChecker(Checker):
+    def __init__(self):
+        import torch
+        from qwen_asr import Qwen3ASRModel, Qwen3ForcedAligner
+
+        dev = "cuda:0" if torch.cuda.is_available() else "cpu"
+        dtype = torch.bfloat16 if dev != "cpu" else torch.float32
+        self.asr = Qwen3ASRModel.from_pretrained(model_path("Qwen/Qwen3-ASR-0.6B"), dtype=dtype, device_map=dev)
+        self.aligner = Qwen3ForcedAligner.from_pretrained(model_path("Qwen/Qwen3-ForcedAligner-0.6B"), dtype=dtype,
+                                                          device_map=dev)
+
+    def transcribe(self, audio: np.ndarray, sr: int, lang: str) -> str:
+        return self.asr.transcribe([(resample(audio, sr, 16000), 16000)], language=[LANG_NAME[lang]])[0].text
+
+    def align(self, audio: np.ndarray, sr: int, text: str, lang: str) -> list[tuple[str, float, float]]:
+        r = self.aligner.align([(resample(audio, sr, 16000), 16000)], text=[text], language=[LANG_NAME[lang]])[0]
+        return [(it.text, float(it.start_time), float(it.end_time)) for it in r.items]
+
+
+def default_engine() -> str:
+    import platform
+
+    return "mlx" if sys.platform == "darwin" and platform.machine() == "arm64" else "torch"
 
 
 def resample(audio: np.ndarray, sr: int, to: int) -> np.ndarray:
@@ -248,15 +310,28 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice", required=True, help="profile name in tools/voices.json")
     ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--engine", choices=["mlx", "torch"], default=default_engine(),
+                    help="mlx (Apple Silicon) or torch (Linux: CUDA, or CPU); default: by platform")
     args = ap.parse_args()
     profiles = json.loads((ROOT / "tools" / "voices.json").read_text())
     profile = dict(profiles[args.voice], name=args.voice)
-    import mlx.core as mx
+    if args.engine == "mlx":
+        import mlx.core as mx
 
-    mx.set_cache_limit(512 * 1024 ** 2)  # freed GPU buffers kept for reuse: shares the machine with the renders
-    engine, checker = Engine(profile), Checker()
+        mx.set_cache_limit(512 * 1024 ** 2)  # freed GPU buffers kept for reuse: shares the machine with the renders
+        engine, checker = Engine(profile), Checker()
+        release = mx.clear_cache
+    else:
+        engine, checker = TorchEngine(profile), TorchChecker()
+
+        def release():
+            import torch
+
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
     lock = threading.Lock()
-    print(f"voice {args.voice} ({profile['model']}, {engine.sr} Hz) on :{args.port}", flush=True)
+    print(f"voice {args.voice} ({args.engine}: {profile['model'] if args.engine == 'mlx' else TorchEngine.MODEL}, "
+          f"{engine.sr} Hz) on :{args.port}", flush=True)
 
     class Handler(BaseHTTPRequestHandler):
         def do_POST(self):
@@ -275,7 +350,7 @@ def main():
                 if peak > 0.98:
                     audio = audio * (0.98 / peak)
                 sf.write(req["out"], audio, engine.sr, subtype="PCM_16", format="WAV")
-                mx.clear_cache()
+                release()
                 dur = len(audio) / engine.sr
                 print(f"{dur:6.1f}s audio in {time.time() - t0:6.1f}s  {req['text'][:70]}", flush=True)
             body = json.dumps({"duration": dur, "tokens": tokens}).encode()

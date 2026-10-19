@@ -40,8 +40,8 @@ class PPO(VoiceoverScene):
         p1 = glow_dot(g.ax.c2p(big, float(np.interp(big, x, J))), color=PENALTY)
         arr = Arrow(g.ax.c2p(start, j0 + 0.08), g.ax.c2p(big, float(np.interp(big, x, J)) + 0.08), buff=0.05,
                     color=PENALTY, stroke_width=3)
-        tr = Rectangle(width=g.ax.c2p(start + 0.1, 0)[0] - g.ax.c2p(start - 0.1, 0)[0], height=3.2, stroke_width=0,
-                       fill_color=AGENT, fill_opacity=0.12).move_to(g.ax.c2p(start, 0.55))
+        tr = Rectangle(width=g.ax.c2p(start + 0.1, 0)[0] - g.ax.c2p(start - 0.1, 0)[0], height=2.4, stroke_width=0,
+                       fill_color=AGENT, fill_opacity=0.12).move_to(g.ax.c2p(start, 0.45))
         tl = label(r"trust region", font_size=20, color=AGENT).next_to(tr, UP, buff=0.05)
         txt = VGroup(label(r"one step too far: \ the policy collapses, \\ and its own bad data can't fix it", font_size=24,
                            color=PENALTY),
@@ -126,6 +126,8 @@ class PPO(VoiceoverScene):
         n1.next_to(left[0], DOWN, buff=0.15)
         n2 = label(r"no extra credit for lowering it past $1-\epsilon$", font_size=20, color=PENALTY)
         n2.next_to(right[0], DOWN, buff=0.15)
+        hc = history_card(2017, r"Proximal policy optimization", r"J.~Schulman, F.~Wolski, P.~Dhariwal, A.~Radford "
+                          r"\& O.~Klimov, \ OpenAI", width=6.4, color=PPO_C)
         with self.voiceover(
             "In 2017 Schulman's team found a much simpler way to stay close, and it became the default: proximal "
             "policy optimization, PPO. <bookmark mark='a'/> Clip the ratio to a band, one minus epsilon to one plus "
@@ -136,8 +138,9 @@ class PPO(VoiceoverScene):
             "branch: a step that makes things worse is never clipped away. So you can run several epochs of "
             "gradient steps on the same batch, and the policy can't run off."
         ) as vo:
+            self.play(FadeIn(hc, shift=UP * 0.15))
             vo.wait_until("a")
-            self.play(Write(clip))
+            self.play(FadeOut(hc), Write(clip))
             vo.wait_until("b")
             self.play(FadeIn(left[0]), FadeIn(left[1]), FadeIn(left[4]), Create(left[2]))
             self.play(Create(left[3]), FadeIn(n1))
@@ -156,10 +159,10 @@ class PPO(VoiceoverScene):
         run0 = np.asarray(d["run0"])
         g = axes([0, 100_000], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
                  ylabel=r"length of each episode \ (this run)", xticks=[0, 50_000, 100_000], yticks=[0, 500],
-                 xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[3.6, -1.9, 0])
+                 xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-3.3, -2.15, 0])
         pts = VGroup(*[Dot(g.ax.c2p(t, r), radius=0.025, color=PPO_C) for t, r in run0])
         marker = Line(g.ax.c2p(0, 0), g.ax.c2p(0, 520), color=C.BITS, stroke_width=3)
-        imgs = [heat_image(Pm[i] - 0.5, vmax=0.5, width=3.0, height=3.0).move_to([3.6, 1.55, 0]) for i in range(len(steps))]
+        imgs = [heat_image(Pm[i] - 0.5, vmax=0.5, width=3.2, height=3.2).move_to([3.5, 0.55, 0]) for i in range(len(steps))]
         frame = state_map_frame(imgs[0])
         mkey = VGroup(label(r"$\pi(\text{left}) = 1$", font_size=20, color=LEFT_C),
                       label(r"$\pi(\text{right}) = 1$", font_size=20, color=RIGHT_C)).arrange(RIGHT, buff=0.4)
@@ -173,14 +176,14 @@ class PPO(VoiceoverScene):
             n = int(L[i])
             j = min(int(state.get_value()), n - 1)
             x, _, th, _ = T[i, j]
-            return cartpole(x, th, center=[-3.3, -0.4, 0], scale=1.25,
+            return cartpole(x, th, center=[-3.3, 0.75, 0], scale=1.1,
                             color=PENALTY if (j == n - 1 and n < 500) else AGENT)
 
         cp = always_redraw(pole)
         info = always_redraw(lambda: label(
             rf"after ${int(steps[int(snap.get_value())]):,}$ steps: \ balanced "
             rf"${min(int(state.get_value()), int(L[int(snap.get_value())]) - 1)}$ of $500$".replace(",", "{,}"),
-            font_size=24, color=GREY_A).move_to([-3.3, 2.6, 0]))
+            font_size=24, color=GREY_A).move_to([-3.3, 3.25, 0]))
         tag = note(r"computed: \ PPO, \ $\epsilon = 0.2$, \ $4$ epochs per batch").to_corner(DR, buff=0.2)
         img = imgs[0]
         with self.voiceover(

@@ -162,7 +162,7 @@ class Bandits(VoiceoverScene):
     # ------------------------------------------------------------------
     def ucb(self):
         rows = [
-            cmath(r"\Pr\big[\, \hat\mu_a", r"\ge", r"\mu_a + \epsilon \,\big]", r"\le", r"e^{-2 n_a \epsilon^2}",
+            cmath(r"\Pr\big[\, \mu_a", r"\ge", r"\hat\mu_a + \epsilon \,\big]", r"\le", r"e^{-2 n_a \epsilon^2}",
                   font_size=36),
             cmath(r"e^{-2 n_a \epsilon^2}", r"=", r"t^{-4}", font_size=36),
             cmath(r"\epsilon", r"=", r"\sqrt{\frac{2 \ln t}{n_a}}", font_size=36),
@@ -184,8 +184,8 @@ class Bandits(VoiceoverScene):
         with self.voiceover(
             "A cleverer idea: optimism in the face of uncertainty. Act as if each arm is as good as it plausibly "
             "could be. How good is plausible? <bookmark mark='a'/> Hoeffding's inequality from Part 5: after n "
-            "pulls, the chance that an arm's average overestimates its mean by epsilon is at most e to the minus "
-            "two n epsilon squared. <bookmark mark='b'/> Choose epsilon so that this chance is tiny, t to the "
+            "pulls, the chance that an arm's true mean lies more than epsilon above its average is at most e to "
+            "the minus two n epsilon squared. <bookmark mark='b'/> Choose epsilon so that this chance is tiny, t to the "
             "minus four, <bookmark mark='c'/> and epsilon is the square root of two log t over n. "
             "<bookmark mark='d'/> That's the upper confidence bound algorithm, UCB: pull the arm with the highest "
             "average plus bonus. An arm pulled rarely has a big bonus, so it gets tried; the bonus shrinks as its "

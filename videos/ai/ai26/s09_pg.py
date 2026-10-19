@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai26.common import AGENT, PART, REWARD, TDERR, VALUE, axes, band, curve, legend, load
+from videos.ai.ai26.common import (AGENT, PART, REWARD, TDERR, VALUE, axes, band, cartpole, curve, legend, load,
+                                   node_box)
 
 SCORE = C.SCORE
 REINF, BASE, AC, PPO_C = GREY_B, C.MODEL_Q, C.BASELINE, C.TRUE_P
@@ -30,10 +31,24 @@ class PolicyGradient(VoiceoverScene):
     def why_policy(self):
         pol = cmath(r"\pi_\theta(a \mid s)", r"=", r"\operatorname{softmax}\big(f_\theta(s)\big)_a", font_size=40)
         pol[0].set_color(AGENT)
-        pol.move_to(UP * 2.2)
+        pol.move_to([2.7, 2.5, 0])
         J = cmath(r"J(\theta)", r"=", r"\mathbb E_{\tau \sim \pi_\theta}\big[\, R(\tau) \,\big]", font_size=40)
         J[0].set_color(REWARD)
         J.next_to(pol, DOWN, buff=0.5)
+        # the policy as a picture: a state goes in, a probability for each push comes out
+        cp = cartpole(0.3, 0.12, center=[-5.3, 1.0, 0], scale=0.55)
+        sl = MathTex(r"s", font_size=30, color=GREY_A).next_to(cp, DOWN, buff=0.15)
+        net = node_box(r"$f_\theta$", AGENT, font_size=30, height=1.1).move_to([-2.75, 1.25, 0])
+        pb = VGroup(*[Rectangle(width=0.55, height=1.6 * p_, stroke_width=0, fill_color=AGENT, fill_opacity=0.8)
+                      for p_ in (0.3, 0.7)]).arrange(RIGHT, buff=0.25, aligned_edge=DOWN).move_to([-0.95, 0.95, 0])
+        pb.align_to(cp[2], DOWN)
+        pv = VGroup(*[MathTex(rf"{p_:.1f}", font_size=24, color=GREY_A).next_to(b_, UP, buff=0.08)
+                      for p_, b_ in zip((0.3, 0.7), pb)])
+        pt = VGroup(*[label(t_, font_size=20, color=GREY_B).next_to(b_, DOWN, buff=0.12) for t_, b_ in
+                      zip((r"left", r"right"), pb)])
+        a1 = Arrow([-3.95, 1.25, 0], net.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
+        a2 = Arrow(net.get_right(), pb.get_left() + UP * 0.3, buff=0.12, color=GREY_B, stroke_width=2.5)
+        pic = VGroup(cp, sl, net, pb, pv, pt, a1, a2)
         jl = label(r"$\tau$: \ a whole episode, \ $R(\tau)$: \ its total reward", font_size=22, color=GREY_A)
         jl.next_to(J, DOWN, buff=0.2)
         pros = VGroup(
@@ -51,7 +66,8 @@ class PolicyGradient(VoiceoverScene):
             "<bookmark mark='d'/> And behaviour changes smoothly with theta, instead of jumping whenever two Q "
             "values swap order."
         ) as vo:
-            self.play(Write(pol))
+            self.play(FadeIn(cp), FadeIn(sl))
+            self.play(GrowArrow(a1), FadeIn(net), GrowArrow(a2), FadeIn(pb), FadeIn(pv), FadeIn(pt), Write(pol))
             vo.wait_until("a")
             self.play(Write(J), FadeIn(jl))
             for k, mk in enumerate("bcd"):
@@ -159,6 +175,23 @@ class PolicyGradient(VoiceoverScene):
         whys = [why(r"subtract any baseline $b(s)$"), why(r"$\pi \nabla \log \pi = \nabla \pi$"),
                 why(r"probabilities sum to $1$: \ no bias")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.6, edge=6.9)
+        # four actions' returns: all large and positive, so every action is pushed up; only the differences matter
+        Gs = np.array([182.0, 197.0, 205.0, 190.0])
+        xs, y0, k_raw = (-3.6, -1.2, 1.2, 3.6), -3.0, 2.9 / 205
+        raw = VGroup(*[Arrow([x, y0, 0], [x, y0 + g_ * k_raw, 0], buff=0, color=SCORE, stroke_width=6,
+                             max_tip_length_to_length_ratio=0.08) for x, g_ in zip(xs, Gs)])
+        rlab = VGroup(*[MathTex(rf"G = {g_:.0f}", font_size=26, color=REWARD).next_to([x, y0, 0], DOWN, buff=0.12)
+                        for x, g_ in zip(xs, Gs)])
+        top_ = label(r"every return is positive: \ every action is pushed up", font_size=24, color=GREY_A)
+        top_.move_to([0, 0.9, 0])
+        b_ = Gs.mean()
+        yb = y0 + b_ * k_raw - 1.2
+        bl = DashedLine([-4.6, yb, 0], [4.6, yb, 0], color=TDERR, stroke_width=2.5)
+        bt = MathTex(rf"b = {b_:.1f}", font_size=26, color=TDERR).next_to(bl, RIGHT, buff=0.12)
+        diff = VGroup(*[Arrow([x, yb, 0], [x, yb + (g_ - b_) * 0.09, 0], buff=0, color=SCORE, stroke_width=6,
+                              max_tip_length_to_length_ratio=0.3) for x, g_ in zip(xs, Gs)])
+        dlab = VGroup(*[MathTex(rf"G - b = {g_ - b_:+.1f}", font_size=24, color=REWARD if g_ > b_ else C.PENALTY)
+                        .move_to([x, y0 - 0.25, 0]) for x, g_ in zip(xs, Gs)])
         with self.voiceover(
             "The catch is variance. In the cart-pole, every return is positive, so every action gets pushed up, and "
             "the signal is the small difference between big numbers. <bookmark mark='a'/> The cure is to subtract a "
@@ -167,9 +200,13 @@ class PolicyGradient(VoiceoverScene):
             "<bookmark mark='c'/> and the sum of the probabilities is always one. Its gradient is zero. The estimate "
             "stays unbiased, and can get much less noisy."
         ) as vo:
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in raw], lag_ratio=0.15), FadeIn(rlab), FadeIn(top_))
             vo.wait_until("a")
             step(0)
+            self.play(FadeOut(top_), Create(bl), FadeIn(bt), ReplacementTransform(raw, diff),
+                      ReplacementTransform(rlab, dlab), run_time=1.5)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(bl, bt, diff, dlab)))
             step(1)
             vo.wait_until("c")
             step(2)
@@ -178,7 +215,7 @@ class PolicyGradient(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cloud(self):
-        d = load("pg")
+        d = load("pg_cloud")
         A, B = np.asarray(d["cloud_raw"]), np.asarray(d["cloud_base"])
         s = float(np.percentile(np.abs(np.concatenate([A, B])), 97))
         mk = lambda ctr: Axes(x_range=[-s, s, s], y_range=[-s, s, s], x_length=4.6, y_length=4.6, tips=False,
@@ -192,20 +229,21 @@ class PolicyGradient(VoiceoverScene):
         t1 = label(r"without a baseline", font_size=26, color=GREY_B).next_to(a1, UP, buff=0.15)
         t2 = label(r"with a baseline", font_size=26, color=BASE).next_to(a2, UP, buff=0.15)
         ratio = d["var_raw"] / d["var_base"]
-        cap = label(rf"each dot: \ the gradient estimated from one episode \ ($300$ each). \ Spread: \ "
+        cap = label(rf"each dot: \ the gradient estimated from one episode \ ($300$ each). \ Variance: \ "
                     rf"${ratio:.1f}\times$ smaller", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.3)
-        tl = label(r"the true gradient", font_size=20, color=SCORE).next_to(true1, UP, buff=0.05)
+        tl = label(r"arrow: \ the true gradient", font_size=20, color=SCORE).next_to(a1, DOWN, buff=0.08)
         with self.voiceover(
             "Here is what that buys, measured. Take a half-trained cart-pole policy, play three hundred episodes, "
             "and compute the gradient each episode alone would give. Each dot is one estimate, projected onto the "
             "true gradient's direction and one other. <bookmark mark='a'/> Without a baseline the estimates scatter "
             "widely around the true gradient, the orange arrow. <bookmark mark='b'/> With a baseline, the average "
-            f"return at each time step, they cluster, with {ratio:.1f} times less spread. Same expected gradient, "
-            "far fewer episodes needed to see it."
+            f"return at each time step, they cluster: the variance is {ratio:.1f} times smaller. Same expected "
+            "gradient, about half as many episodes needed to see it as clearly."
         ) as vo:
             self.play(FadeIn(a1), FadeIn(a2), FadeIn(t1), FadeIn(t2))
+            self.play(LaggedStart(*[FadeIn(p) for p in d1], lag_ratio=0.004), run_time=3)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p) for p in d1], lag_ratio=0.004), GrowArrow(true1), FadeIn(tl), run_time=2)
+            self.play(GrowArrow(true1), FadeIn(tl))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p) for p in d2], lag_ratio=0.004), GrowArrow(true2), FadeIn(cap), run_time=2)
         self.wait(0.3)
@@ -231,7 +269,7 @@ class PolicyGradient(VoiceoverScene):
             b_[1].move_to(b_[0])
         pair = VGroup(actor, critic).arrange(RIGHT, buff=2.2).move_to(DOWN * 1.9)
         arr = Arrow(critic.get_left(), actor.get_right(), buff=0.1, color=TDERR, stroke_width=3)
-        al = label(r"$\hat A_t$: \ was that better than expected?", font_size=22, color=TDERR).next_to(arr, UP, buff=0.1)
+        al = label(r"$\hat A_t$: \ was that better than expected?", font_size=22, color=TDERR).next_to(pair, UP, buff=0.2)
         cite_ = cite(r"Barto, Sutton \& Anderson (1983); \ Schulman et al., \textit{GAE} (2016)")
         with self.voiceover(
             "The best baseline is the state's value, V. Then what multiplies the gradient is the advantage: how much "
