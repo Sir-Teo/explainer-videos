@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import ASSIST, GOLD, KLC, PART, PENALTY, POLICY, PROXY, REWARD, USER, bubble
 
@@ -145,7 +147,7 @@ class Failures(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def inside(self):
-        v = Arrow([-6.3, -1.2, 0], [-3.9, 0.4, 0], buff=0, color=PENALTY, stroke_width=6)
+        v = Arrow([-6.3, -0.1, 0], [-3.9, 1.5, 0], buff=0, color=PENALTY, stroke_width=6)
         vl = MathTex(r"\mathbf v_{\text{trait}}", font_size=40, color=PENALTY).next_to(v.get_end(), UP, buff=0.15)
         rows = VGroup(
             label(r"$\mathbf v$: \ mean activation when the trait shows, \ minus when it doesn't", font_size=24),
@@ -156,6 +158,12 @@ class Failures(VoiceoverScene):
         rows.move_to([0, 0.2, 0]).align_to([-3.1, 0, 0], LEFT)
         hc = note(r"Chen et al., \textit{Persona vectors} (Anthropic, 2025); \ more inside the model in Part 30")
         hc.to_edge(DOWN, buff=0.4)
+        # schematic: a trait's projection rising over a conversation
+        g = axes([0, 10], [0, 1], x_length=3.4, y_length=1.5, xlabel=r"turns of a conversation",
+                 ylabel=r"projection on $\mathbf v$", font_size=18, center=[-4.6, -1.9, 0])
+        tt = np.linspace(0, 10, 60)
+        rise = curve(g.ax, tt, 0.12 + 0.7 / (1 + np.exp(-(tt - 6) * 1.2)), PENALTY, 4)
+        sch = note(r"schematic").next_to(g, RIGHT, buff=0.2).align_to(g, DOWN)
         with self.voiceover(
             "Some of the newest tools look inside the model. In 2025 Anthropic researchers found persona vectors: "
             "directions in a model's activations that correspond to traits like sycophancy or malice, found by "
@@ -169,5 +177,7 @@ class Failures(VoiceoverScene):
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k + 1], shift=UP * 0.15))
+                if k == 0:
+                    self.play(FadeIn(g), FadeIn(sch), Create(rise), run_time=1.5)
         self.wait(0.3)
         self.clear_scene()
