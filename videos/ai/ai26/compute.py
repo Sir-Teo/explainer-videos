@@ -1090,13 +1090,17 @@ def compute_az_demo():
         p, v = Evaluator(load_gen(gnum))([b])
         prior_all.append(p[0])
         value_all.append(float(v[0]))
-    # one game by each of several generations against itself, every move from 8 stones on checked by the solver
+    # each of several generations plays a position out against itself, every move checked by the solver: the first
+    # test position (in order, chosen by rule, not by result) where exactly one move keeps a win
+    t = load("testset")
+    start = next(list(h) for h, sc in zip(t["histories"], t["scores"])
+                 if np.nanmax(sc) > 0 and int((np.sign(sc) == 1).sum()) == 1)
     games = {}
     for gnum in [x for x in (1, 3, 10, 30, gens[-1]) if x in gens]:
         evg = Evaluator(load_gen(gnum))
         gg = rng(100 + gnum)
-        bb = c4.Board().play(3)
-        mv, ok = [3], []
+        bb = c4.Board.from_moves(start)
+        mv, ok = list(start), []
         while True:
             r_ = Node(bb)
             search([r_], evg, SIMS, gg, noise=False)
@@ -1128,6 +1132,7 @@ def compute_az_demo():
     winner = 0 if gb.full() and not c4.last_mover_won(gb) else (1 if gb.moves % 2 == 1 else 2)
     return {"seq": seq, "gens": show, "prior": np.array(pri), "value": val, "visits": np.array(visits),
             "all_gens": gens, "prior_all": np.array(prior_all), "value_all": np.array(value_all), "games": games,
+            "game_start": start,
             "truth": truth, "tree": tree, "game": moves, "game_perfect": perfect, "game_winner": winner}
 
 

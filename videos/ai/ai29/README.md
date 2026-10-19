@@ -1,6 +1,6 @@
 # AI, Built — Part 29: Agents and Worlds
 
-Part 29 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What it
+Part 29 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). What it
 takes to act over many steps in a partly seen world. A hook and four chapters:
 
 * **Many steps in a row.** Thirty steps at 97% each: 0.97³⁰ = 0.40.

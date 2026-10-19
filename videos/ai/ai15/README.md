@@ -1,6 +1,6 @@
 # AI, Built — Part 15: Memory
 
-Part 15 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
+Part 15 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). What a
 model has to remember while it reads, and the two ways to keep it: attention's growing cache, made smaller, and a
 fixed-size matrix memory, written by better and better rules. A hook and six chapters:
 

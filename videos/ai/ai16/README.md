@@ -1,6 +1,6 @@
 # AI, Built — Part 16: Sparsity
 
-Part 16 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Using
+Part 16 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). Using
 only some of a model at a time: mixtures of experts, and attention that looks at only some of the past. A hook and
 four chapters:
 

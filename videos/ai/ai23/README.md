@@ -1,6 +1,6 @@
 # AI, Built — Part 23: Every Sense Is a Token
 
-Part 23 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). How text,
+Part 23 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). How text,
 pictures and sound become tokens for one model, and how pictures and words are matched. A hook and five chapters:
 
 * **One sequence.** Text, a picture and a voice turned into one stream of tokens.

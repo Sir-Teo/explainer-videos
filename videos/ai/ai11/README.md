@@ -1,6 +1,6 @@
 # AI, Built — Part 11: Going Downhill
 
-Part 11 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)): the
+Part 11 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)): the
 optimizers that train real models. Every run is computed by `compute.py`; the workhorse is a small character model
 (8 characters of context, 16-number character vectors, 256 tanh units, a residual hidden layer) trained on Part 1's
 books and scored in bits per character on held-out text. A hook and five chapters:

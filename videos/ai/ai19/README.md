@@ -1,6 +1,6 @@
 # AI, Built — Part 19: Inference
 
-Part 19 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Why
+Part 19 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). Why
 running a model is a problem of moving numbers, and three ways to move fewer. A hook and three chapters:
 
 * **The speed limit.** Writing one token reads every weight: tokens per second ≤ memory bandwidth / bytes of weights,

@@ -1,6 +1,6 @@
 # AI, Built — Part 8: Fitting and Generalizing
 
-Part 8 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). A model
+Part 8 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). A model
 is fitted to examples; why should it work on anything else? The classical answers, and the two experiments that
 broke them, mostly on Part 6's pages (Austen and Dickens, 448 for training, 191 held out). A hook and four chapters:
 

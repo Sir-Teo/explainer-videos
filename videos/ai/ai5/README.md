@@ -1,6 +1,6 @@
 # AI, Built — Part 5: Randomness in Motion
 
-Part 5 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). A model
+Part 5 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). A model
 hands us distributions; it is fitted by maximum likelihood, it is sampled to write, and the newest image generators
 are random motion run backwards. This part is the probability behind all of that, from a Galton board to the
 reverse-time SDE. A hook and nine chapters:

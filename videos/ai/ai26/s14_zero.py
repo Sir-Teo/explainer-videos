@@ -345,34 +345,38 @@ class Zero(VoiceoverScene):
         d = load("az_demo")
         G = d["games"]
         keys = sorted(G, key=int)
+        n0 = len(d["game_start"])
         board = C4View(cell=0.6, center=[-2.4, -0.3, 0])
-        title = always_redraw(lambda: VGroup())
-        panel = VGroup()
+        sub = label(r"the same position each time: \ only one move keeps the win", font_size=22, color=GREY_A)
+        sub.next_to(board, DOWN, buff=0.25)
         first, last = G[keys[0]], G[keys[-1]]
         f_ok, l_ok = sum(first["perfect"]), sum(last["perfect"])
         with self.voiceover(
-            "Finally, watch it play itself at different stages, every move from the eighth on checked by the solver: "
-            "green for a right move, red for a mistake that gives away a win or a draw. "
-            f"<bookmark mark='a'/> Generation {keys[0]} gets {f_ok} of "
-            f"its {len(first['perfect'])} checked moves right. <bookmark mark='b'/> Generation {keys[-1]}, "
-            f"{l_ok} of {len(last['perfect'])}."
+            "Finally, watch it play out a position where only one move keeps the win, against itself, at different "
+            "stages, every move checked by the solver: green for a right move, red for a mistake that gives away a "
+            f"win or a draw. <bookmark mark='a'/> Generation {keys[0]} gets {f_ok} of its "
+            f"{len(first['perfect'])} moves right. <bookmark mark='b'/> Generation {keys[-1]}, {l_ok} of "
+            f"{len(last['perfect'])}."
         ) as vo:
-            self.play(FadeIn(board))
+            self.play(FadeIn(board), FadeIn(sub))
             for gi, key in enumerate(keys):
                 game = G[key]
                 moves, ok = list(game["moves"]), list(game["perfect"])
                 head = label(rf"generation {key}", font_size=30, color=AGENT).move_to([3.4, 2.6, 0])
                 n_ok = sum(ok)
-                stat = label(rf"right: \ ${n_ok}$ of ${len(ok)}$ checked moves", font_size=24,
+                stat = label(rf"right: \ ${n_ok}$ of ${len(ok)}$ moves", font_size=24,
                              color=REWARD if n_ok == len(ok) else GREY_A).move_to([3.4, 1.9, 0])
                 dots = VGroup()
                 self.play(FadeIn(head))
+                k0 = len(board.stones)
+                board.play_moves(moves[:n0])
+                self.play(FadeIn(VGroup(*board.stones[k0:])), run_time=0.5)
                 anims = []
-                player = 1
-                for j, c in enumerate(moves):
+                player = 1 if n0 % 2 == 0 else -1
+                for c in moves[n0:]:
                     anims.append(board.drop(c, player, run_time=0.18))
                     player = -player
-                self.play(Succession(*anims), run_time=0.13 * len(moves))
+                self.play(Succession(*anims), run_time=0.25 * max(len(moves) - n0, 1))
                 for j, o in enumerate(ok):
                     dots.add(Dot(radius=0.07, color=REWARD if o else PENALTY))
                 dots.arrange_in_grid(cols=12, buff=0.08).move_to([3.4, 1.1, 0])

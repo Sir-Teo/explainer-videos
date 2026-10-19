@@ -1,6 +1,6 @@
 # AI, Built — Part 22: Images and Video
 
-Part 22 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). How the
+Part 22 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). How the
 transformer and the diffusion machinery of Parts 13 and 21 meet pictures and video. The pictures are Part 21's 20 × 20
 capital letters from the system's fonts, and every model is trained here, with its training shown as well as its
 result. A hook and eight chapters:

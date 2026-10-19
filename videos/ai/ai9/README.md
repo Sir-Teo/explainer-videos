@@ -1,6 +1,6 @@
 # AI, Built — Part 9: Networks
 
-Part 9 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
+Part 9 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). What a
 network is, what one layer and many layers can represent, what it takes to train a deep one, and the first neural
 language model on the series' scoreboard. Every network here is trained by `compute.py` (PyTorch, CPU). A hook and
 five chapters:

@@ -12,7 +12,8 @@ The recipe is Silver et al.'s (AlphaGo Zero 2017, AlphaZero 2018), at toy scale:
   are the most visited;
 * training on every position played: the policy learns the search's visit counts pi, the value learns the game's
   result z: loss (z - v)^2 - pi . log p, plus weight decay; boards are mirrored left-right for twice the data;
-* repeat: the improved network makes the next generation's games.
+* repeat: the improved network makes the next generation's games; after LR_DROP generations the learning rate
+  steps down.
 
 Each generation's network is kept (``gen_NNN.pt``), with a log of losses and game statistics (``log.json``), so
 compute.py can grade every generation against the perfect solver and rate them against each other.
@@ -44,6 +45,7 @@ TRAIN_STEPS = 300
 BATCH = 512
 WINDOW = 10  # generations of games kept in the replay buffer
 LR, WD = 1e-3, 1e-4
+LR_DROP = 50  # from this generation on, the learning rate is LR / 5 (AlphaZero's schedule steps down too)
 
 
 def make_net():
@@ -276,6 +278,8 @@ def train(gens: int, workers: int = 4):
         MX, MP = mirror(BX, BP)
         BX, BP, BZ = np.concatenate([BX, MX]), np.concatenate([BP, MP]), np.concatenate([BZ, BZ])
         torch.set_num_threads(2)  # more threads spin against the self-play and other jobs (10x slower at 4)
+        for pg in opt.param_groups:
+            pg["lr"] = LR if g < LR_DROP else LR / 5
         net.train()
         rng = np.random.default_rng(g)
         lp = lv = 0.0
@@ -313,7 +317,7 @@ def load_gen(g: int):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--gens", type=int, default=40)
+    ap.add_argument("--gens", type=int, default=80)
     ap.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     train(a.gens, a.workers)

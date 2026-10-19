@@ -1,6 +1,6 @@
 # AI, Built — Part 28: Reasoning
 
-Part 28 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Why
+Part 28 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). Why
 writing out steps adds computation, how a model learns from a checker, and what more tries at answer time buy. Every
 model here is a tiny transformer trained on this computer. A hook and four chapters:
 

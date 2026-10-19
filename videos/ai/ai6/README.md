@@ -1,6 +1,6 @@
 # AI, Built — Part 6: Classical ML
 
-Part 6 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)), and the
+Part 6 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)), and the
 start of Act II, *Learning*. One task runs through it: who wrote this page, Jane Austen or Charles Dickens? Pages are
 1,000-word chunks of five of Part 1's novels (639 pages: *Pride and Prejudice* and *Emma*; *A Tale of Two Cities*,
 *Great Expectations* and *A Christmas Carol*), each described, as Mosteller and Wallace described the Federalist

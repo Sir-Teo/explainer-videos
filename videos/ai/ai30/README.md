@@ -1,6 +1,6 @@
 # AI, Built — Part 30: Inside the Model
 
-The last part of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)).
+The last part of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)).
 Reading what a model has learned, with Part 13's transformer as the patient. A hook, four chapters and the series'
 close:
 

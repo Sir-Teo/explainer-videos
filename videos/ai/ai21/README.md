@@ -1,6 +1,6 @@
 # AI, Built — Part 21: Diffusion and Flow
 
-Part 21 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). How
+Part 21 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). How
 models make things from noise, with every model trained here on a CPU: points, pictures and text. A hook and six
 chapters:
 
