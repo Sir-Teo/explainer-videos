@@ -108,6 +108,22 @@ def translate(s: str) -> str:
     return _SPACE.sub(r"\1\\ }", out)
 
 
+# A Song (serif) face for Chinese plain text, the same style as the Fandol Song that TeX uses: macOS ships Songti SC;
+# on Linux, Noto Serif CJK SC (fonts-noto-cjk) or AR PL UMing (fonts-arphic-uming, pulled in by TeX Live's Chinese
+# support). The first one installed wins.
+CJK_FONTS = ("Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "AR PL UMing CN", "Noto Sans CJK SC")
+_CJK_FONT: list = []
+
+
+def cjk_font() -> str:
+    if not _CJK_FONT:
+        import manimpango
+
+        have = set(manimpango.list_fonts())
+        _CJK_FONT.append(next((f for f in CJK_FONTS if f in have), CJK_FONTS[0]))
+    return _CJK_FONT[0]
+
+
 def install(base_template) -> None:
     zh_tex = base_template.copy()
     zh_tex.tex_compiler, zh_tex.output_format = "xelatex", ".xdv"
@@ -142,7 +158,7 @@ def install(base_template) -> None:
         if lang.LANG == "zh" and not _VERBATIM[0]:
             text = translate(text)
             if CJK.search(text):
-                kw["font"] = "Songti SC"
+                kw["font"] = cjk_font()
         text_init(self, text, *a, **kw)
 
     MathTex.__init__, Text.__init__ = patched_mathtex, patched_text

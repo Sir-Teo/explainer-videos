@@ -197,7 +197,7 @@ class SearchTree(VGroup):
 
     ``tree`` is nested: ``{"children": [subtree, ...], ...}`` (any other keys are kept on ``node_data``).  Nodes are
     numbered in breadth-first order; ``self.nodes[i]``, ``self.edges[i]`` (the edge into node i, None for the
-    root), ``self.depth[i]``, ``self.parent[i]``."""
+    root), ``self.level[i]`` (its depth), ``self.parent_of[i]``, ``self.kids[i]``."""
 
     def __init__(self, tree, width=12.0, level_height=1.3, radius=0.12, node_color=GREY_B, edge_color=GREY_C,
                  edge_width=None, center=ORIGIN, max_edge=10.0):
@@ -232,7 +232,7 @@ class SearchTree(VGroup):
         place(0)
         span = max(slot[0] - 1, 1)
         x = (x / span - 0.5) * width
-        self.parent, self.depth, self.node_data, self.kids = parent, depth, data, kids
+        self.parent_of, self.level, self.node_data, self.kids = parent, depth, data, kids
         self.pos = [np.array([x[i], -depth[i] * level_height, 0.0]) for i in range(n)]
         self.nodes = VGroup(*[Dot(self.pos[i], radius=radius, color=data[i].get("color", node_color)) for i in range(n)])
         self.edges = [None] * n
@@ -251,8 +251,8 @@ class SearchTree(VGroup):
 
     def path_to(self, i) -> list[int]:
         out = [i]
-        while self.parent[out[-1]] is not None:
-            out.append(self.parent[out[-1]])
+        while self.parent_of[out[-1]] is not None:
+            out.append(self.parent_of[out[-1]])
         return out[::-1]
 
     def subtree(self, i) -> list[int]:

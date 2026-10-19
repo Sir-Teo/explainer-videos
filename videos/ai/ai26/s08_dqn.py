@@ -125,12 +125,13 @@ class DQN(VoiceoverScene):
         run0 = np.asarray(d["run0"])
         vmax = float(np.percentile(np.abs(Q[-1]), 95))
         # the learning curve of this run, episode by episode
-        g = axes([0, 60_000], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
-                 ylabel=r"length of each episode \ (this run)", xticks=[0, 30_000, 60_000], yticks=[0, 500],
-                 xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[3.6, -1.9, 0])
+        S_MAX = int(steps[-1])
+        g = axes([0, S_MAX], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
+                 ylabel=r"length of each episode \ (this run)", xticks=[0, S_MAX // 2, S_MAX], yticks=[0, 500],
+                 xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-3.3, -2.15, 0])
         pts = VGroup(*[Dot(g.ax.c2p(t, r), radius=0.025, color=FULL) for t, r in run0])
         marker = Line(g.ax.c2p(0, 0), g.ax.c2p(0, 520), color=C.BITS, stroke_width=3)
-        imgs = [heat_image(Q[i], vmax=vmax, width=3.0, height=3.0).move_to([3.6, 1.55, 0]) for i in range(len(steps))]
+        imgs = [heat_image(Q[i], vmax=vmax, width=3.2, height=3.2).move_to([3.5, 0.55, 0]) for i in range(len(steps))]
         frame = state_map_frame(imgs[0])
         mkey = VGroup(label(r"push left", font_size=20, color=LEFT_C), label(r"push right", font_size=20, color=RIGHT_C))
         mkey.arrange(RIGHT, buff=0.4).next_to(frame[0], UP, buff=0.12)
@@ -144,12 +145,12 @@ class DQN(VoiceoverScene):
             j = min(int(state.get_value()), n - 1)
             x, _, th, _ = T[i, j]
             fell = j == n - 1 and n < 500
-            return cartpole(x, th, center=[-3.3, -0.4, 0], scale=1.25, color=PENALTY if fell else AGENT)
+            return cartpole(x, th, center=[-3.3, 0.75, 0], scale=1.1, color=PENALTY if fell else AGENT)
 
         cp = always_redraw(pole)
         info = always_redraw(lambda: label(
             rf"after ${int(steps[int(snap.get_value())]):,}$ steps: \ balanced ${min(int(state.get_value()), int(L[int(snap.get_value())]) - 1)}$ "
-            rf"of $500$".replace(",", "{,}"), font_size=24, color=GREY_A).move_to([-3.3, 2.6, 0]))
+            rf"of $500$".replace(",", "{,}"), font_size=24, color=GREY_A).move_to([-3.3, 3.25, 0]))
         tag = note(r"computed: \ our DQN, \ trained on this machine").to_corner(DR, buff=0.2)
         img = imgs[0]
         with self.voiceover(
@@ -160,8 +161,7 @@ class DQN(VoiceoverScene):
             "the pole falls in a few steps. <bookmark mark='c'/> Let's replay the training. Every few thousand steps, "
             "freeze the network and let it balance. <bookmark mark='d'/> The map organizes itself into two halves: "
             "if the pole is falling right, push right, so the cart gets back under it. The dividing line tilts, "
-            "because a pole moving fast matters as much as a pole leaning far. <bookmark mark='e'/> By sixty "
-            "thousand steps it balances the full five hundred. Nobody told it any physics."
+            "because a pole moving fast matters as much as a pole leaning far. Nobody told it any physics."
         ) as vo:
             self.add(cp)
             self.play(FadeIn(info), FadeIn(tag))
@@ -181,9 +181,17 @@ class DQN(VoiceoverScene):
                 img = imgs[i]
                 n = int(L[i])
                 self.play(state.animate.set_value(n - 1), run_time=min(0.4 + n / 160, 3.6), rate_func=linear)
-                if i == len(steps) - 3:
+                if i == 4:
                     vo.wait_until("d")
-            vo.wait_until("e")
+        best = int(np.argmax(L))
+        if L[-1] < 0.8 * L[best]:
+            end = (f"Its best moment came at {int(steps[best]):,} steps, balancing {int(L[best])} of five hundred. "
+                   f"Then, as training went on, it got worse again: at the end it lasts {int(L[-1])}. That's DQN's "
+                   "notorious instability, the deadly triad still at work; in practice people keep the best checkpoint.")
+        else:
+            end = (f"By {int(steps[best]):,} steps it balances {int(L[best])} of five hundred, and at the end of "
+                   f"training, {int(L[-1])}.")
+        with self.voiceover(end):
             self.play(Indicate(img, scale_factor=1.03))
         cp.clear_updaters()
         info.clear_updaters()
@@ -194,8 +202,9 @@ class DQN(VoiceoverScene):
     def ablation(self):
         d = load("dqn")
         grid = np.asarray(d["grid"])
-        g = axes([0, 60_000], [0, 500], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=r"episode length \ (mean of $3$ runs; \ band: min to max)", xticks=[0, 30_000, 60_000],
+        S_MAX = int(grid[-1])
+        g = axes([0, S_MAX], [0, 500], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
+                 ylabel=r"episode length \ (mean of $3$ runs; \ band: min to max)", xticks=[0, S_MAX // 2, S_MAX],
                  yticks=[0, 250, 500], xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""),
                  center=[-1.2, -0.3, 0])
         lines, bands = VGroup(), VGroup()
@@ -205,12 +214,13 @@ class DQN(VoiceoverScene):
             lines.add(curve(g.ax, grid, np.nanmean(Y, 0), col, 3))
         lg = legend([(FULL, r"replay \ + \ target network"), (NOTARGET, r"replay, \ no target network"),
                      (NOREPLAY, r"no replay")], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.7)
-        fin = {k: float(np.nanmean(np.asarray(d[k])[:, -5:])) for k in ("full", "no_target", "no_replay")}
+        avg = {k: float(np.nanmean(np.asarray(d[k]))) for k in ("full", "no_target", "no_replay")}
         with self.voiceover(
-            "Do the tricks matter? Train it three ways, three runs each. <bookmark mark='a'/> Without a replay "
-            f"memory, learning from each step as it comes, it barely improves: about {fin['no_replay']:.0f} steps "
-            f"at the end. <bookmark mark='b'/> With replay but no target network, it learns, to about "
-            f"{fin['no_target']:.0f}, but less steadily. <bookmark mark='c'/> With both, about {fin['full']:.0f}."
+            "Do the tricks matter? Train it three ways, three runs each, and average the episode length over the "
+            "whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it comes: "
+            f"about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
+            f"{avg['no_target']:.0f}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. And look at the bands: "
+            "even the best version swings from run to run."
         ) as vo:
             self.play(FadeIn(g))
             for k, mk in enumerate("abc"):

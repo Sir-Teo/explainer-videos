@@ -352,6 +352,11 @@ def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex
     than shrunk; only a single word too wide for a line is ever scaled down."""
     text = _zh(text)
     t = label(text, font_size=font_size, color=color)
+    if r"\\" in text:  # explicit line breaks: the lines flush left, as a paragraph
+        t = Tex(r"\begin{tabular}{@{}l@{}}" + text + r"\end{tabular}", color=color, font_size=font_size)
+        if t.width > max_width:
+            t.width = max_width
+        return t
     if t.width <= max_width:
         return t
     words = _tex_words(text)
