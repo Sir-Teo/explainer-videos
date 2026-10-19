@@ -137,7 +137,9 @@ TIMELINE = [
     (2019, r"GPT-2; MuZero"),
     (2020, r"scaling laws; GPT-3"),
     (2022, r"Chinchilla; ChatGPT"),
+    (2023, r"open weights; DPO"),
     (2024, r"reasoning models"),
+    (2025, r"DeepSeek-R1"),
     (2026, r"agents"),
 ]
 T0, T1 = 1940, 2030
