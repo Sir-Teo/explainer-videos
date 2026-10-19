@@ -31,8 +31,8 @@ principles, distillation, model merging, and what goes wrong. Every method runs 
   (OpenAI 2016); best-of-n's KL = log n − (n−1)/n, derived; best-of-n on our model with a small and a large reward
   model, proxy against gold; Gao, Schulman & Hilton's functional forms (2023).
 * **7. Direct preference optimization.** DPO derived from the optimum and Bradley–Terry (Rafailov et al. 2023);
-  trained on our comparisons and compared with RLHF; likelihood displacement; IPO, KTO, SimPO; online against
-  offline data.
+  trained on our comparisons and compared with RLHF; likelihood displacement; every method on one chart, gold gained
+  against √KL (best-of-n, RLHF at two β, DPO at three); IPO, KTO, SimPO; online against offline data.
 * **8. Feedback from AI, rules from people.** Constitutional AI's critique-and-revise and RLAIF (Bai et al. 2022);
   Lee et al. (2023); a reward model trained on another reward model's labels, on our model; published constitutions,
   OpenAI's Model Spec and deliberative alignment (2024), Claude's 2026 constitution.
