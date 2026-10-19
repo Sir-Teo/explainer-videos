@@ -72,14 +72,21 @@ A chapter is one scene of 3–5 minutes made of a few `self.voiceover(...)` bloc
 
 ## Chinese
 
-1. Translate the narration in the style of [AI_ZH_GUIDE.md](AI_ZH_GUIDE.md) (spoken Mandarin, digits, the glossary).
-   Lines computed from data are translated as templates with the same `{placeholders}`; the rendered English line
-   is matched against the scene's f-string and its formatted values carried over.
-2. After a render: `python tools/translate_narration.py aiN --lang zh` builds `narration_zh.json` from the rendered
-   lines; fill it, then `--check`.
-3. On-screen text: `python tools/collect_text.py aiN`, then `--check aiN`; add exact strings to
-   `videos/ai/ai_text_zh.json`, and regex `patterns` for animated readouts ("after N steps: balanced M of 500").
-   Strings that keep an acronym (TD, DQN) need an exact entry for `--check` to count them done.
+1. Translate the narration in the style of [AI_ZH_GUIDE.md](AI_ZH_GUIDE.md) (spoken Mandarin, digits, the glossary)
+   into the part's `zh_lines.py`: `TITLE`, `CHAPTERS` (by scene class), `ZH` and `PHRASES`. A literal line is keyed
+   by a prefix of its English; a line computed from data is keyed by a prefix of its source expression and
+   translated as a template with the same `{placeholders}`, spelled as in the source. Sentences spliced in by name
+   (`verdict`, `end`) get their own entries and are translated recursively; English words spliced in (a topic)
+   go in `PHRASES`. `python tools/zh_lines.py aiN --todo` lists what the table doesn't cover yet; aim for zero
+   before rendering, so the Chinese follows the data when it changes. Part 27's table is a full example.
+2. After a render: `python tools/translate_narration.py aiN --lang zh` lists the rendered lines in
+   `narration_zh.json`; `python tools/zh_lines.py aiN` fills them (and the titles); then
+   `translate_narration.py aiN --lang zh --check`.
+3. On-screen text: `python tools/collect_text.py aiN`, then `--check aiN`; put the translations in a JSON file
+   (`{"strings": {...}, "patterns": [[regex, replacement]]}`) and merge it with
+   `python tools/text_zh_add.py ai FILE` (locked, so parallel jobs can merge). Use regex `patterns` for animated
+   readouts ("after N steps: balanced M of 500"). Strings that keep an acronym (TD, DQN) need an exact entry for
+   `--check` to count them done.
 4. `python tools/collect_text.py --lang zh aiN` dry-runs the Chinese build; then render a Chinese preview.
 
 ## Platforms
