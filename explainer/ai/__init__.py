@@ -15,7 +15,9 @@ Chinese on-screen text machinery (``explainer/zh_text.py``, with this series' ow
 * :func:`reference_card`, the books and papers a part follows, and :func:`cite`, a source line on screen.
 
 The visual instruments, and the series' visual language, are in :mod:`explainer.ai.viz` (exported here):
-color-linked derivations (``cmath``, ``morph``), ``LiveBars``, ``glow_dot``, camera framing, loss surfaces.
+color-linked derivations (``cmath``, ``morph``), ``LiveBars``, ``glow_dot``, camera framing, loss surfaces. The
+lecture's set pieces (objectives, definition and theorem cards, history cards, pause-and-predict, the problem set) are
+in :mod:`explainer.ai.lecture`, also exported here.
 """
 
 from __future__ import annotations
@@ -27,6 +29,8 @@ import numpy as np
 from explainer.analysis import *  # noqa: F401,F403
 from explainer.analysis import _zh, label, note, wrapped_label  # noqa: F401
 from explainer.ai.viz import *  # noqa: F401,F403
+from explainer.ai.lecture import *  # noqa: F401,F403,E402
+from explainer.ai.games import *  # noqa: F401,F403,E402
 
 SERIES_EN = "AI, Built"
 SERIES_ZH = "人工智能，从零搭建"
@@ -111,20 +115,26 @@ TIMELINE = [
     (1951, r"Shannon's guessing game"),
     (1952, r"Huffman codes"),
     (1953, r"Markov chain Monte Carlo"),
+    (1957, r"Bellman: dynamic programming"),
     (1958, r"the perceptron"),
+    (1959, r"Samuel's checkers"),
     (1976, r"arithmetic coding"),
     (1984, r"random projections"),
     (1986, r"backpropagation"),
+    (1989, r"Q-learning"),
     (1990, r"latent semantic analysis"),
+    (1992, r"TD-Gammon"),
     (1995, r"support vector machines"),
-    (1997, r"LSTM"),
+    (1997, r"LSTM; Deep Blue"),
     (2003, r"a neural language model"),
+    (2006, r"Monte Carlo tree search"),
     (2012, r"AlexNet"),
-    (2013, r"word2vec"),
+    (2013, r"word2vec; DQN"),
     (2014, r"Adam; GANs"),
     (2015, r"ResNet; diffusion"),
-    (2017, r"the Transformer"),
-    (2019, r"GPT-2"),
+    (2016, r"AlphaGo"),
+    (2017, r"the Transformer; AlphaZero"),
+    (2019, r"GPT-2; MuZero"),
     (2020, r"scaling laws; GPT-3"),
     (2022, r"Chinchilla; ChatGPT"),
     (2024, r"reasoning models"),
