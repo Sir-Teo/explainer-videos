@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import copy
 import math
+import os
 import re
 
 import numpy as np
@@ -50,7 +51,8 @@ from videos.ai.ai27 import post as P
 
 CACHE = Cache("ai27")
 load = CACHE.load
-torch.set_num_threads(4)
+# 2 threads by default: on a shared 4-core machine more threads ran slower, not faster
+torch.set_num_threads(int(os.environ.get("AI27_THREADS", "2")))
 
 
 def rng(seed: int) -> np.random.Generator:
