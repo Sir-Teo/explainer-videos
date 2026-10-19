@@ -20,15 +20,17 @@ Items:
     sft        supervised fine-tuning on both tasks: the base model against the fine-tuned one (accuracy, answers,
                held-out loss on the novels), the training curve
     lora       LoRA at ranks 1, 4 and 16 against full fine-tuning: trainable parameters, accuracy, forgetting
-    prefs      comparisons: pairs of the fine-tuned model's lines, labelled by simulated people
-    rm         reward models (Bradley-Terry) trained on 100 to 3,200 comparisons: accuracy on held-out pairs
+    prefs      comparisons: pairs of the fine-tuned model's lines, labelled by simulated people; each topic's lines
+               are split first, so test comparisons are between lines no reward model trained on
+    rm         reward models (Bradley-Terry) trained on 100 to all ~1,560 comparisons: accuracy on held-out pairs
     rlaif      AI feedback in miniature: a reward model from 100 comparisons labels 1,600 more for a fresh one
     closed     the KL-regularized optimum over eight candidate answers: pi* proportional to pi_ref exp(r / beta)
     bon        best-of-n against the reward model, n = 1 .. 256: proxy and gold reward against KL = log n - (n-1)/n
-    rlhf       KL-penalized policy gradient against the reward model, at two penalties: reward, gold and KL as it
-               trains, and answers along the way
+    rlhf       KL-penalized policy gradient against the reward model, at two penalties, three seeds each: reward,
+               gold and KL as it trains, and answers along the way
     dpo        direct preference optimization on the same comparisons: gold reward and KL, the chosen and rejected
                answers' log-probabilities as it trains
+    dpo_sweep  DPO at two more betas: gold reward and KL, for the reward-per-nat comparison
     distill    a 2-layer student of the base model: from the text alone, and from the teacher's probabilities
     merge      task vectors: each task fine-tuned alone, then added to the base model; the path between them
 """
@@ -495,7 +497,8 @@ def compute_rlhf(betas=(0.1, 0.01), seeds=3):
             if sd == 0:
                 out[key + "_samples"] = samples
                 g, e, ex = line_eval(pol, 4, seed=5)
-                out[key + "_final"] = {"gold": g, "ended": e, "examples": ex}
+                out[key + "_final"] = {"gold": g, "ended": e, "examples": ex,
+                                       "kl": policy_kl(pol, _load_model("sft"))}
         out[key + "_seeds"] = np.stack(runs)
         out[key] = out[key + "_seeds"].mean(0)
     return out
@@ -504,7 +507,18 @@ def compute_rlhf(betas=(0.1, 0.01), seeds=3):
 # ---------------------------------------------------------------------------
 # DPO (Rafailov et al. 2023): the same optimum, fitted straight from the comparisons
 # ---------------------------------------------------------------------------
-def compute_dpo(beta=0.1, steps=600, batch=16, lr=2e-5, seed=0):
+def policy_kl(pol, ref, topics=10, n=8, seed=900) -> float:
+    """KL(pi || pi_ref) in nats per line, estimated on the policy's own samples: the same measure for every method."""
+    kls = []
+    for k, t in enumerate(TOPICS[:topics]):
+        outs = P.sample(pol, P.chat(line_q(t)), n, 40, 1.0, seed=seed + k)
+        exs = [(P.chat(line_q(t)), o) for o in outs]
+        with torch.no_grad():
+            kls.append(float((P.seq_logprob(pol, exs) - P.seq_logprob(ref, exs)).mean()))
+    return float(np.mean(kls))
+
+
+def dpo_train(beta, steps=600, batch=16, lr=2e-5, seed=0):
     torch.manual_seed(seed)
     g = rng(seed)
     pr = load("prefs")
@@ -538,16 +552,23 @@ def compute_dpo(beta=0.1, steps=600, batch=16, lr=2e-5, seed=0):
         opt.step()
         hist.append((step, float(loss), float((margin > 0).float().mean())))
     pol.eval()
+    return pol, ref, np.array(hist), np.array(probe_hist)
+
+
+def compute_dpo(beta=0.1):
+    pol, ref, hist, probe = dpo_train(beta)
     gl, ended, ex = line_eval(pol, 4, seed=5)
-    rm = _load_rm("rm")
-    kls = []
-    for k, t in enumerate(TOPICS[:10]):
-        outs = P.sample(pol, P.chat(line_q(t)), 8, 40, 1.0, seed=900 + k)
-        exs = [(P.chat(line_q(t)), o) for o in outs]
-        with torch.no_grad():
-            kls.append(float((P.seq_logprob(pol, exs) - P.seq_logprob(ref, exs)).mean()))
-    return {"beta": beta, "hist": np.array(hist), "probe": np.array(probe_hist), "gold": gl, "ended": ended,
-            "examples": ex, "kl": float(np.mean(kls))}
+    return {"beta": beta, "hist": hist, "probe": probe, "gold": gl, "ended": ended, "examples": ex,
+            "kl": policy_kl(pol, ref)}
+
+
+def compute_dpo_sweep(betas=(0.03, 0.3)):
+    """DPO at other betas: gold and divergence, for the reward-per-nat comparison with RLHF and best-of-n."""
+    out = []
+    for b in betas:
+        pol, ref, _, _ = dpo_train(b)
+        out.append((b, line_eval(pol, 4, seed=5)[0], policy_kl(pol, ref)))
+    return {"points": out}
 
 
 # ---------------------------------------------------------------------------
@@ -639,6 +660,7 @@ ITEMS = {
     "bon": compute_bon,
     "rlhf": compute_rlhf,
     "dpo": compute_dpo,
+    "dpo_sweep": compute_dpo_sweep,
     "distill": compute_distill,
     "merge": compute_merge,
 }
