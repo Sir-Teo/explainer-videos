@@ -129,6 +129,11 @@
    "scene": "Outro",
    "en": "Bottou, Curtis and Nocedal's survey is the best single account of stochastic optimization. Thanks for watching, and see you in part ten.",
    "zh": "博图、柯蒂斯和诺塞达尔的那篇综述，是讲随机优化最好的一篇文献。感谢观看，第10部分见。"
+  },
+  "24423e78db92": {
+   "scene": "Muon",
+   "en": "On the same character model, with Muon on the hidden matrices, the weight grids inside the network, and AdamW on the rest: the character table, the output layer and the small bias terms. <bookmark mark='a'/> it reaches 2.51 bits, ahead of AdamW's 2.61. Muon has since been scaled up: Moonshot AI reported that it needs about half the compute of AdamW, and used a version of it to train Kimi K2.",
+   "zh": "还是同一个字符模型，隐藏层的矩阵，也就是网络内部那些权重网格，用Muon；其余的用AdamW：字符表、输出层，还有那些小小的偏置项。<bookmark mark='a'/>它达到了2.51比特，领先于AdamW的2.61。此后，Muon被推广到了大得多的规模：月之暗面报告说，它只需要AdamW大约一半的算力，还用它的一个变体训练了Kimi K2。"
   }
  },
  "title_en": "AI, Built: Part 9, Going Downhill",

@@ -253,7 +253,9 @@ def styled_glyphs(seed=0):
 
     from PIL import Image, ImageDraw, ImageFont
 
-    files = sorted(glob.glob("/usr/share/fonts/truetype/dejavu/DejaVu*.ttf"))
+    from explainer.ai.fonts import font_files
+
+    files = font_files("**/DejaVu*.ttf")  # /usr/share/fonts/truetype/dejavu on Linux
     files = [f for f in files if "Math" not in f and "ExtraLight" not in f]
     g = rng(seed)
     imgs, caps = [], []

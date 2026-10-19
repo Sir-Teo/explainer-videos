@@ -123,6 +123,16 @@
    "scene": "Outro",
    "en": "Thanks for watching.",
    "zh": "感谢观看。"
+  },
+  "969e8cfe3674": {
+   "scene": "SAE",
+   "en": "So what are the features? For each one, find where in the novels it fires hardest, and look. <bookmark mark='a'/> Here are four. Each lights up on the same kind of moment, again and again. Of the 501 features that ever fire, 481 put at least six of their eight strongest moments on the same character. They're not all this clean, and in a model this small they're mostly about spelling and punctuation. In big models, the same method finds features for cities, for code bugs, for flattery, for the Golden Gate Bridge.",
+   "zh": "那么，这些特征都是什么？对每一个特征，找出它在小说里激活得最强的地方，看一看。<bookmark mark='a'/>这里有4个。每一个都在同一类时刻亮起来，一次又一次。在501个激活过的特征里，有481个，在它们最强的8个时刻中，至少有6个落在同一个字符上。并不是每个特征都这么干净，而且在这么小的模型里，它们大多跟拼写和标点有关。在大模型里，同样的方法能找到表示城市的特征、表示代码漏洞的特征、表示奉承的特征，还有表示金门大桥的特征。"
+  },
+  "e703097b72fb": {
+   "scene": "Steering",
+   "en": "If a feature is a direction, we can push on it. <bookmark mark='a'/> Take the feature that fires on quotation marks. <bookmark mark='b'/> While the model writes, add alpha times its direction to the vector at every character. <bookmark mark='c'/> With no push, the model's own continuation. <bookmark mark='d'/> Turn the dial up, and the writing turns into talk: quote marks, apostrophes, exclamations and questions, from 0.0 to 14.3 per hundred and sixty characters. The model now thinks it's inside someone's speech. We didn't train anything or change a weight; we moved one direction. Anthropic did the same to Claude with a Golden Gate Bridge feature, and for a day it would bring every conversation round to the bridge.",
+   "zh": "既然特征是一个方向，我们就可以顺着它推一把。<bookmark mark='a'/>取那个在引号上激活的特征。<bookmark mark='b'/>在模型写东西的时候，给每个字符上的向量，都加上α乘以这个方向。<bookmark mark='c'/>不推的时候，是模型自己的续写。<bookmark mark='d'/>把旋钮调大，写出来的东西就变成了对话：引号、撇号、感叹号和问号，每160个字符里，从0.0个增加到14.3个。模型现在以为，自己正处在某个人说的话里。我们没有训练任何东西，也没有改动一个权重；只是挪动了一个方向。Anthropic对Claude做过同样的事，用的是一个金门大桥特征；在那一天里，不管聊什么，它都会把话题绕回到这座桥上。"
   }
  },
  "title_en": "AI, Built: Part 20, Inside the Model",

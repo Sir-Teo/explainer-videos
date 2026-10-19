@@ -322,7 +322,9 @@ def glyph_images(seed=0):
 
     from PIL import Image, ImageDraw, ImageFont
 
-    files = sorted(set(glob.glob("/usr/share/fonts/**/*.ttf", recursive=True)))
+    from explainer.ai.fonts import font_files
+
+    files = font_files("**/*.ttf")
     files = [f for f in files if "DejaVu" in f or "Liberation" in f or "Latin" in f] or files
     g = rng(seed)
     imgs, labels = [], []
