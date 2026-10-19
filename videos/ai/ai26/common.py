@@ -46,12 +46,6 @@ def loop_arrow(a: Mobject, b: Mobject, color=GREY_B, angle=-0.6, stroke_width=3)
                        stroke_width=stroke_width, tip_length=0.18)
 
 
-def tile_frame(caption, color, TW=3.0, TH=2.0):
-    box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D, stroke_width=1.5,
-                           fill_color="#121722", fill_opacity=1)
-    return box, label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
-
-
 # ---------------------------------------------------------------------------
 # Go, for AlphaGo's games: the board and stones
 # ---------------------------------------------------------------------------

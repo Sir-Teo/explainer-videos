@@ -429,3 +429,12 @@ def legend(items, font_size=20, buff=0.18) -> VGroup:
         rows.add(VGroup(Line(ORIGIN, RIGHT * 0.4, color=col, stroke_width=5), label(txt, font_size=font_size, color=col))
                  .arrange(RIGHT, buff=0.15))
     return rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+
+
+def tile_frame(caption, color, TW=3.0, TH=2.0):
+    """A recap tile: a dark rounded frame and its caption; the picture goes above the caption."""
+    from explainer.analysis import label
+
+    box = RoundedRectangle(width=TW + 0.3, height=TH + 0.75, corner_radius=0.15, stroke_color=GREY_D, stroke_width=1.5,
+                           fill_color="#121722", fill_opacity=1)
+    return box, label(caption, font_size=22, color=color).move_to(box.get_bottom() + UP * 0.28)
