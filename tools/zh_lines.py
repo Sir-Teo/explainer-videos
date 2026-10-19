@@ -195,8 +195,9 @@ def fill(video: str, lang: str) -> int:
     for e in nar["lines"].values():
         out = tr(e["en"])
         if out is None:
-            missing += 1
-            print("MISSING", e["scene"], e["en"][:100])
+            if not e.get(lang):  # a line the table doesn't cover keeps a translation made by hand
+                missing += 1
+                print("MISSING", e["scene"], e["en"][:100])
             continue
         if e.get(lang) != out:
             e[lang], filled = out, filled + 1
