@@ -662,3 +662,20 @@ gridworld; Bellman contraction as shrinking balls.
 
 Scale: about 26 hours of video, about 130–150k narration words per language, and roughly 4–6k lines of scene code
 per part. Expect one part per one or two long sessions.
+
+## 5. Progress (updated as parts land)
+
+Length is `tools/lecture_length.py` (an estimate before a render, the measured length after).
+
+| Part | State | Length |
+|---|---|---|
+| 1 | existing; densify | 45 min |
+| 2 | new, drafting | — |
+| 3–8, 11–13, 15, 16, 19, 21–23, 29, 30 | existing, 8–25 min each; to expand | 8–25 min |
+| 9 | expanding | 13 min → 45–55 |
+| 10, 18, 20, 24, 25, 31 | new; to write | — |
+| 14 | new, drafting | — |
+| 17 | new, drafting | — |
+| 26 | built in English (silent preview); AlphaZero to 80 generations; Chinese narration table complete | ≈ 62 min |
+| 27 | written; experiments run on the series' novels model; Chinese narration table complete | ≈ 55 min (est.) |
+| 28 | expanding | 18 min → 50–60 |
