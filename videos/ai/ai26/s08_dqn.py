@@ -217,6 +217,7 @@ class DQN(VoiceoverScene):
         lg = legend([(FULL, r"replay \ + \ target network"), (NOTARGET, r"replay, \ no target network"),
                      (NOREPLAY, r"no replay")], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.7)
         avg = {k: float(np.nanmean(np.asarray(d[k]))) for k in ("full", "no_target", "no_replay")}
+        collapsed = avg["no_target"] < 0.25 * avg["full"]
         if avg["full"] > max(avg["no_target"], avg["no_replay"]):
             tail = "Each trick earns its place. And look at the bands: even the best version swings from run to run."
         else:
@@ -227,12 +228,53 @@ class DQN(VoiceoverScene):
             f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each, and average the episode length "
             "over the whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
             f"comes: about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
-            f"{avg['no_target']:.0f}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
+            f"{avg['no_target']:.0f}" + (", in every run: it never learns at all" if collapsed else "") +
+            f". <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
         ) as vo:
             self.play(FadeIn(g))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(bands[k]), Create(lines[k]), FadeIn(lg[2 - k]), run_time=1.5)
+        self.wait(0.3)
+        self.clear_scene()
+        if collapsed:
+            self.divergence()
+
+    def divergence(self):
+        """Without a target network the predicted values run away: the deadly triad, measured."""
+        v = load("dqn_div")
+        st = np.asarray(v["steps"])
+        qf, qn = (np.log10(np.maximum(np.asarray(v[k]), 1e-2)) for k in ("full", "no_target"))
+        S_MAX = int(st[-1])
+        top = int(np.ceil(max(qn.max(), qf.max()))) + 1
+        g = axes([0, S_MAX], [0, top], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
+                 ylabel=r"largest value the network predicts \ (log scale)", xticks=[0, S_MAX // 2, S_MAX],
+                 yticks=list(range(0, top + 1, 2)), xfmt=lambda x: f"{int(x / 1000)}" + (r"\text{k}" if x else ""),
+                 yfmt=lambda y: rf"10^{{{int(y)}}}", center=[-1.2, -0.3, 0])
+        bound = DashedLine(g.ax.c2p(0, np.log10(v["bound"])), g.ax.c2p(S_MAX, np.log10(v["bound"])), color=GREY_B,
+                           dash_length=0.08)
+        bl = label(rf"no true value exceeds ${v['bound']:.0f}$", font_size=18, color=GREY_B)
+        bl.next_to(bound, DOWN, buff=0.08).align_to(bound, RIGHT)
+        lf, ln = curve(g.ax, st, qf, FULL, 4), curve(g.ax, st, qn, NOTARGET, 4)
+        lg = legend([(FULL, r"with a target network"), (NOTARGET, r"without one")], font_size=20)
+        lg.next_to(g, RIGHT, buff=0.3).shift(UP * 0.7)
+        tag = note(r"computed: \ one run of each, \ largest $|Q|$ over the map's states").to_corner(DR, buff=0.2)
+        k1 = int(st[np.argmax(np.asarray(v["no_target"]) > 1000)])
+        e_end = int(np.floor(qn[-1]))
+        settle = ("climb to about that, and stay there" if qf.max() < np.log10(v["bound"]) + 0.5 else
+                  "overshoot it, but stay within reach")
+        with self.voiceover(
+            "Why does dropping the target network wreck it? Here is the largest value the network predicts, on a log "
+            "scale. No true value can exceed a hundred: one point a step, discounted. <bookmark mark='a'/> With a "
+            f"target network, the predictions {settle}. <bookmark mark='b'/> Without one, they run away: past a "
+            f"thousand within {k1:,} steps, and to about ten to the {e_end} by the end. Each update chases a target "
+            "that moves with it, and the error feeds on itself: the deadly triad of chapter six, live."
+        ) as vo:
+            self.play(FadeIn(g), Create(bound), FadeIn(bl), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(lf), FadeIn(lg[0]), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(ln), FadeIn(lg[1]), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 

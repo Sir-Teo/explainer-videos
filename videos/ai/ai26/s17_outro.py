@@ -6,8 +6,8 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai26.common import (AGENT, EXPLORE, PART, PENALTY, PRIOR, REWARD, SEARCH, TDERR, VALUE, curve, load,
-                                   node_box, tile_frame)
+from videos.ai.ai26.common import (AGENT, EXPLORE, PART, PENALTY, PRIOR, REWARD, SEARCH, TDERR, VALUE, curve,
+                                   heat_image, load, node_box, tile_frame)
 from videos.ai.ai26.s16_beyond import simplex_xy
 
 

@@ -204,7 +204,7 @@ class MCTS(VoiceoverScene):
             self.play(Indicate(labels[tree.kids[0].index(k)], color=SEARCH, scale_factor=1.3))
         self.wait(0.2)
         # the verdict: the perfect solver's score for each move
-        ok = [None if np.isnan(v) else bool(v == np.nanmax(truth)) for v in truth]
+        ok = [None if np.isnan(v) else bool(np.sign(v) == np.sign(np.nanmax(truth))) for v in truth]
         marks = board.column_marks(ok, font_size=20)
         verdict = label(rf"but the solver says: \ column {best_true + 1} wins; \ column {best_mc + 1} loses", font_size=26,
                         color=PENALTY).to_edge(DOWN, buff=0.4)
@@ -225,17 +225,19 @@ class MCTS(VoiceoverScene):
         acc = np.asarray(d["acc"])
         lx = np.log10(sims)
         g = axes([1, 3.5], [0, 1], x_length=6.6, y_length=3.8, xlabel=r"simulations per move (log scale)",
-                 ylabel=r"how often its move is a perfect one", xticks=[1, 2, 3], yticks=[0, 0.5, 1], log_x=True,
+                 ylabel=r"how often its move is right", xticks=[1, 2, 3], yticks=[0, 0.5, 1], log_x=True,
                  yfmt=lambda v: rf"{int(100 * v)}\%", center=[-1.2, -0.3, 0])
         line = curve(g.ax, lx, acc, SEARCH, 4)
         pts = VGroup(*[Dot(g.ax.c2p(x, y), radius=0.07, color=SEARCH) for x, y in zip(lx, acc)])
         rnd = DashedLine(g.ax.c2p(1, d["random"]), g.ax.c2p(3.5, d["random"]), color=GREY_B, dash_length=0.08)
         rl = label(rf"a random move: \ ${100 * d['random']:.0f}\%$", font_size=20, color=GREY_B).next_to(rnd, UP, buff=0.05)
         rl.align_to(rnd, RIGHT)
-        tag = note(r"computed: \ $200$ test positions, \ every move scored by a perfect solver").to_corner(DR, buff=0.2)
+        tag = note(r"computed: \ $200$ test positions, \ every move scored by a perfect solver; \ right $=$ "
+                   r"keeps the win, or the draw").to_corner(DR, buff=0.2)
         with self.voiceover(
             "We can measure this exactly. Connect Four is solved, so for two hundred test positions we know every "
-            "move's true value. <bookmark mark='a'/> A random move is perfect "
+            "move's true value. Call a move right if it keeps the best result the position allows: the win, or "
+            "the draw. <bookmark mark='a'/> A random move is right "
             f"{100 * d['random']:.0f} percent of the time. <bookmark mark='b'/> Plain MCTS improves with more "
             f"simulations, to {100 * acc[-1]:.0f} percent at {int(sims[-1]):,} per move, and then levels off: more "
             "random games won't fix a biased judge."

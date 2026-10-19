@@ -190,7 +190,7 @@ class Zero(VoiceoverScene):
             return board.bars(P[i], color=PRIOR, height=1.7, vmax=1.0)
 
         live = always_redraw(bars)
-        ok = [None if np.isnan(v) else bool(v == best) for v in truth]
+        ok = [None if np.isnan(v) else bool(np.sign(v) == np.sign(best)) for v in truth]
         marks = board.column_marks(ok, font_size=22)
         gl = always_redraw(lambda: label(rf"generation ${gens[min(int(k.get_value()), len(gens) - 1)]}$", font_size=30,
                                          color=AGENT).move_to([3.6, 2.3, 0]))
@@ -207,17 +207,18 @@ class Zero(VoiceoverScene):
         top_ok = bool(ok[int(np.argmax(P[-1]))])
         sure = np.sign(V[-1]) == tv and abs(V[-1]) > 0.5
         if top_ok and sure:
-            end = ("and settles on the winning columns, while the value, its estimate of who wins, becomes confident "
+            end = ("and settles on the right columns, while the value, its estimate of who wins, becomes confident "
                    "and correct.")
         elif top_ok:
-            end = ("and settles on the winning columns; the value, its estimate of who wins, stays less sure: "
+            end = ("and settles on the right columns; the value, its estimate of who wins, stays less sure: "
                    f"{V[-1]:+.2f}.")
         else:
-            end = ("but even the final network's favourite column here is not a winning one: its instinct is still "
+            end = ("but even the final network's favourite column here is not a right one: its instinct is still "
                    "wrong in this position, and only search can rescue it.")
         with self.voiceover(
             "Here is the training, replayed through one position. Above each column, the network's probability for "
-            "playing there, before any search. Below, the perfect solver's verdict: a tick for the winning moves. "
+            "playing there, before any search. Below, the perfect solver's verdict: a tick for the moves that keep "
+            "the best result. "
             "<bookmark mark='a'/> In generation zero the network is untrained: nearly flat bars, and a value of "
             f"{V[0]:+.2f}. <bookmark mark='b'/> Watch the generations go by. The probability moves around, as the "
             "network's understanding changes, " + end
@@ -266,7 +267,7 @@ class Zero(VoiceoverScene):
         u = load("uct")
         G = int(gens[-1])
         a1 = axes([0, G], [0, 1], x_length=5.6, y_length=3.4, xlabel=r"generation",
-                  ylabel=r"perfect moves, \ $400$ test positions", xticks=[0, G // 2, G], yticks=[0, 0.5, 1],
+                  ylabel=r"right moves, \ $400$ test positions", xticks=[0, G // 2, G], yticks=[0, 0.5, 1],
                   yfmt=lambda v: rf"{int(100 * v)}\%", center=[-3.3, 0.2, 0])
         lr = curve(a1.ax, gens, raw, RAW, 3)
         lm = curve(a1.ax, gens, mc, WITH_SEARCH, 4)
@@ -315,8 +316,8 @@ class Zero(VoiceoverScene):
             rel = "though still below plain MCTS with a thousand simulations a move."
         with self.voiceover(
             "Graded on four hundred test positions, generation by generation. <bookmark mark='a'/> The network alone, "
-            f"with no search at all, goes from random to playing the perfect move {final_raw:.0f} percent of the "
-            f"time; <bookmark mark='b'/> with its {SIMS} simulations of search, {final_mc:.0f} percent, "
+            f"with no search at all, goes from random to choosing a right move, one that keeps the win or the draw, "
+            f"{final_raw:.0f} percent of the time; <bookmark mark='b'/> with its {SIMS} simulations of search, {final_mc:.0f} percent, "
             f"<bookmark mark='c'/> {vs_uct} <bookmark mark='d'/> And in head-to-head games, rated like chess "
             f"players, {climb}: the final generation is about {gap:.0f} Elo points above the untrained network, {rel}"
         ) as vo:
@@ -345,7 +346,8 @@ class Zero(VoiceoverScene):
         f_ok, l_ok = sum(first["perfect"]), sum(last["perfect"])
         with self.voiceover(
             "Finally, watch it play itself at different stages, every move from the eighth on checked by the solver: "
-            f"green for a perfect move, red for a mistake. <bookmark mark='a'/> Generation {keys[0]} gets {f_ok} of "
+            "green for a right move, red for a mistake that gives away a win or a draw. "
+            f"<bookmark mark='a'/> Generation {keys[0]} gets {f_ok} of "
             f"its {len(first['perfect'])} checked moves right. <bookmark mark='b'/> Generation {keys[-1]}, "
             f"{l_ok} of {len(last['perfect'])}."
         ) as vo:
@@ -355,7 +357,7 @@ class Zero(VoiceoverScene):
                 moves, ok = list(game["moves"]), list(game["perfect"])
                 head = label(rf"generation {key}", font_size=30, color=AGENT).move_to([3.4, 2.6, 0])
                 n_ok = sum(ok)
-                stat = label(rf"perfect: \ ${n_ok}$ of ${len(ok)}$ checked moves", font_size=24,
+                stat = label(rf"right: \ ${n_ok}$ of ${len(ok)}$ checked moves", font_size=24,
                              color=REWARD if n_ok == len(ok) else GREY_A).move_to([3.4, 1.9, 0])
                 dots = VGroup()
                 self.play(FadeIn(head))
