@@ -79,7 +79,7 @@ class Rewards(VoiceoverScene):
             "AlphaZero's generations in Part 26, with a different scale. <bookmark mark='b'/> A reward model is a "
             "network, usually the fine-tuned language model with its last layer swapped for a single number, trained "
             "by maximum likelihood on the comparisons: make the winner's score exceed the loser's. It's logistic "
-            "regression on differences, Part 7's loss in a new place. <bookmark mark='c'/> One consequence matters "
+            "regression on differences, Part 6's loss in a new place. <bookmark mark='c'/> One consequence matters "
             "later. Only differences are ever seen, so the scores are only defined up to a shift for each question. "
             "A reward model says which answer is better, not how good an answer is on any absolute scale."
         ) as vo:

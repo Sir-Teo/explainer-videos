@@ -155,16 +155,21 @@ class SFT(VoiceoverScene):
                   d['base_heldout'] else ASSIST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 0.6, 0])
         worse = d["sft_heldout"] - d["base_heldout"]
-        fl = label(r"forgetting: \ the price of specializing", font_size=24, color=PENALTY).next_to(fg, DOWN, buff=0.4)
+        fl = label(r"forgetting: \ the price of specializing" if worse > 0.002 else
+                   r"little forgotten: \ a short, gentle run", font_size=24,
+                   color=PENALTY if worse > 0.002 else ASSIST).next_to(fg, DOWN, buff=0.4)
         fl.align_to(fg, LEFT)
         with self.voiceover(
             f"Accuracy climbs over the {S} steps of fine-tuning. <bookmark mark='a'/> But something is lost. On "
-            "ordinary novel text, which it was trained to predict, its loss "
-            + (f"rises from {d['base_heldout']:.3f} to {d['sft_heldout']:.3f} nats per token." if worse > 0 else
-               f"moves from {d['base_heldout']:.3f} to {d['sft_heldout']:.3f} nats per token.")
-            + " <bookmark mark='b'/> Fine-tuning moves every weight to serve the new task, and some of the old "
-            "skill goes with it. Keeping that loss small is the job of the next chapter's method, and, in RLHF, of "
-            "the leash."
+            f"ordinary novel text, which it was trained to predict, its loss rises from {d['base_heldout']:.3f} to "
+            f"{d['sft_heldout']:.3f} nats per token. <bookmark mark='b'/> Fine-tuning moves every weight to serve the "
+            "new task, and some of the old skill goes with it. Keeping that loss small is the job of the next "
+            "chapter's method, and, in RLHF, of the leash." if worse > 0.002 else
+            f"Accuracy climbs over the {S} steps of fine-tuning. <bookmark mark='a'/> Fine-tuning often costs some "
+            f"of the old skill, but here the loss on ordinary novel text barely moves, from {d['base_heldout']:.3f} "
+            f"to {d['sft_heldout']:.3f} nats per token. <bookmark mark='b'/> A gentle learning rate and a short run "
+            "keep the model near where it started; pushing harder would trade away more. Keeping that cost small is "
+            "the job of the next chapter's method, and, in RLHF, of the leash."
         ) as vo:
             self.play(FadeIn(g))
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in dots], lag_ratio=0.15), run_time=2.0)

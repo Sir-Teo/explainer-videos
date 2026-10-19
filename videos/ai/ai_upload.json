@@ -39,7 +39,7 @@
    "short_en": "The Guessing Game",
    "short_zh": "猜字游戏",
    "summary_en": "Part 1 of a thirty-one-part series on how modern AI works and how it came to be. In 1951 Claude Shannon asked people to guess the next letter of English text; today every large language model is trained to play the same game. We build the mathematics of guessing from scratch: probability and the chain rule, the one sensible measure of surprise, entropy, prefix codes, Kraft's inequality and Huffman's algorithm, cross-entropy and the Kullback–Leibler divergence (and why it isn't symmetric), arithmetic coding, and why predicting and compressing are the same thing. We learn by counting on thirty novels, watch counting models fail to generalize, replay Shannon's experiment, and derive the gradient that trains every language model. Then we keep score on a page of The Maltese Falcon, which entered the public domain in 2026: from 8 bits per character as plain text, to 2.3 for counting, to 0.87 for Qwen3.",
-   "summary_zh": "二十集系列的第1部分：现代人工智能背后的数学。1951年，克劳德·香农请人猜英语文本的下一个字母；今天，每一个大语言模型都被训练去玩同一个游戏。我们从零搭建“猜”的数学：概率与链式法则、唯一合理的意外度、熵、前缀码、克拉夫特不等式与霍夫曼编码、交叉熵与KL散度（以及它为什么不对称）、算术编码，以及为什么预测与压缩是同一件事。我们在30部小说上用计数来学习，看计数模型如何无法泛化，重演香农的实验，并推导出训练每个语言模型的那个梯度。最后，在2026年进入公有领域的《马耳他之鹰》的一页上记分：纯文本每字符8比特，计数模型2.3比特，Qwen3只要0.87比特。",
+   "summary_zh": "三十一集系列的第1部分：现代人工智能如何运作、又如何走到今天。1951年，克劳德·香农请人猜英语文本的下一个字母；今天，每一个大语言模型都被训练去玩同一个游戏。我们从零搭建“猜”的数学：概率与链式法则、唯一合理的意外度、熵、前缀码、克拉夫特不等式与霍夫曼编码、交叉熵与KL散度（以及它为什么不对称）、算术编码，以及为什么预测与压缩是同一件事。我们在30部小说上用计数来学习，看计数模型如何无法泛化，重演香农的实验，并推导出训练每个语言模型的那个梯度。最后，在2026年进入公有领域的《马耳他之鹰》的一页上记分：纯文本每字符8比特，计数模型2.3比特，Qwen3只要0.87比特。",
    "tags_en": [
     "Claude Shannon",
     "entropy",
