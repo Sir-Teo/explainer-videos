@@ -36,7 +36,7 @@ class Hook(VoiceoverScene):
         col.stretch_to_fit_width(step * 1.1).move_to([chars[k].get_x(), (chars[k].get_top()[1] + dense.get_bottom()[1]) / 2, 0])
         q = label(r"What is it thinking?", font_size=40).move_to(DOWN * 1.6)
         with self.voiceover(
-            "Over twenty parts, we've built every piece of these models ourselves. We know every number in them. And "
+            "Part by part, we've built every piece of these models ourselves. We know every number in them. And "
             "yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the "
             "passage: for each character, the hundred and twenty-eight numbers it carries after its second block. "
             "Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> "

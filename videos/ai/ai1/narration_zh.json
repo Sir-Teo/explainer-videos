@@ -51,11 +51,6 @@
    "en": "Which raises the question this whole series is about. What do you have to know, to guess well?",
    "zh": "这就引出了整个系列要回答的问题：要猜得好，你得知道些什么？"
   },
-  "6bd965e6161c": {
-   "scene": "Hook",
-   "en": "Over twenty parts, we'll build the answer from the ground up. <bookmark mark='a'/> First, the foundations: probability and information, vectors, calculus, and randomness. <bookmark mark='b'/> Then learning, from classical statistics to neural networks and the mathematics of scale. <bookmark mark='c'/> Then the engines of today's models: attention, memory, sparsity, diffusion, and the many kinds of tokens. <bookmark mark='d'/> And finally, reasoning, agents, inference, and what we can see when we look inside.",
-   "zh": "在20个部分里，我们会从零开始，一步步搭建这个答案。<bookmark mark='a'/>首先是基础：概率与信息、向量、微积分，还有随机性。<bookmark mark='b'/>然后是学习：从经典统计，到神经网络，再到规模的数学。<bookmark mark='c'/>接着是当今模型的引擎：注意力、记忆、稀疏性、扩散，以及各种各样的词元。<bookmark mark='d'/>最后是推理、智能体、推断，以及打开模型往里看时，我们能看到什么。"
-  },
   "6b1880d1b1b1": {
    "scene": "Hook",
    "en": "Part one starts where Shannon did: with surprise, entropy, codes and compression. By the end, we'll see why guessing well and compressing well are the same thing.",
@@ -565,6 +560,11 @@
    "scene": "Knowledge",
    "en": "Facts work the same way. Ask for the city of the Eiffel Tower, <bookmark mark='a'/> the author of Pride and Prejudice, <bookmark mark='b'/> or the chemical symbol for gold, and the model that knows the answer pays far fewer bits when the answer comes. <bookmark mark='c'/> Arithmetic is harder: the 2025 model gives four 28 percent, but five 22.",
    "zh": "事实也是一样。问埃菲尔铁塔在哪个城市，<bookmark mark='a'/>《傲慢与偏见》的作者是谁，<bookmark mark='b'/>或者金的化学符号是什么，知道答案的模型，在答案出现时付出的比特要少得多。<bookmark mark='c'/>算术更难：2025年的模型给four 28%，却给five 22%。"
+  },
+  "baf60407b7e2": {
+   "scene": "Hook",
+   "en": "Over thirty-one parts, we'll build the answer from the ground up, and see how the field got here. <bookmark mark='a'/> First, the foundations: probability and information, the symbolic era of search and logic, vectors, calculus and randomness. <bookmark mark='b'/> Then learning from data: classical statistics, the first neural networks, the deep learning revolution, and the mathematics of scale. <bookmark mark='c'/> Then the transformer era: attention, the language-model lineage, memory, sparsity, the chips it runs on, and training and serving at scale. <bookmark mark='d'/> Then generation and perception: diffusion, images and video, every sense as tokens, learning without labels, and science. <bookmark mark='e'/> Then agency: reinforcement learning, post-training, reasoning and agents. <bookmark mark='f'/> And finally, what we can see when we look inside, and whether we can trust it.",
+   "zh": "在31个部分里，我们会从零开始，一步步搭建这个答案，也会看到这个领域是怎样走到今天的。<bookmark mark='a'/>首先是基础：概率与信息，搜索与逻辑的符号主义时代，向量、微积分，还有随机性。<bookmark mark='b'/>然后是从数据中学习：经典统计，最早的神经网络，深度学习革命，以及规模的数学。<bookmark mark='c'/>然后是Transformer时代：注意力，语言模型的谱系，记忆，稀疏，它所运行的芯片，以及大规模的训练与服务。<bookmark mark='d'/>然后是生成与感知：扩散，图像与视频，把每一种感官变成词元，无标签学习，以及科学。<bookmark mark='e'/>然后是智能体：强化学习，后训练，推理，以及会行动的智能体。<bookmark mark='f'/>最后，是我们打开模型往里看时能看到什么，以及我们能不能信任它。"
   }
  },
  "title_en": "AI, Built: Part 1, The Guessing Game",
