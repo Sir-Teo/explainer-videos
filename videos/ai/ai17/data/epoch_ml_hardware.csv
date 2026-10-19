@@ -1,0 +1,179 @@
+Hardware name,Manufacturer,Type,Release date,Release price (USD),Tensor-FP16/BF16 performance (FLOP/s),FP8 performance (FLOP/s),FP4 performance (FLOP/s),FP32 (single precision) performance (FLOP/s),Memory (bytes),Memory bandwidth (byte/s),TDP (W),Link to datasheet
+Google TPU v8i,Google,TPU,2026-08-02,17500.0,,1.01e+16,1.01e+16,,288000000000.0,8601000000000.0,,"https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive, https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/eighth-generation-tpu-agentic-era/"
+Meta MTIA 300,Meta,Other,2026-03-11,,600000000000000.0,1200000000000000.0,,,216000000000.0,6100000000000.0,800.0,https://ai.meta.com/blog/meta-mtia-scale-ai-chips-for-billions/
+Microsoft Maia 200,Microsoft,GPU,2026-01-26,,1268000000000000.0,5072000000000000.0,1.0145e+16,,216000000000.0,7000000000000.0,750.0,https://blogs.microsoft.com/blog/2026/01/26/maia-200-the-ai-accelerator-built-for-inference/
+Amazon Trainium3,Amazon AWS,GPU,2025-12-02,,671000000000000.0,2517000000000000.0,2517000000000000.0,183000000000000.0,,,700.0,https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium3.html
+Google TPU v7 Ironwood,Google,TPU,2025-11-06,12000.0,2307000000000000.0,4614000000000000.0,,,192000000000.0,7370000000000.0,960.0,https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/ https://docs.cloud.google.com/tpu/docs/tpu7x
+Huawei Ascend 920,Huawei,NPU,2025-10-01,,900000000000000.0,,,,,4000000000000.0,,https://www.tomshardware.com/pc-components/gpus/huawei-introduces-the-ascend-920-ai-chip-to-fill-the-void-left-by-nvidias-h20
+NVIDIA GB300 (Blackwell Ultra),NVIDIA,GPU,2025-08-22,43000.0,2500000000000000.0,5000000000000000.0,1.5e+16,80000000000000.0,287500000000.0,8000000000000.0,1400.0,https://resources.nvidia.com/en-us-dgx-systems/dgx-b300-datasheet https://www.nvidia.com/en-us/data-center/gb300-nvl72/
+NVIDIA B300 (Blackwell Ultra),NVIDIA,GPU,2025-08-22,,2250000000000000.0,4500000000000000.0,1.4e+16,75000000000000.0,270000000000.0,7700000000000.0,1100.0,https://developer.nvidia.com/blog/inside-nvidia-blackwell-ultra-the-chip-powering-the-ai-factory-era/  https://resources.nvidia.com/en-us-blackwell-architecture/blackwell-ultra-datasheet
+AMD Instinct MI355X,AMD,GPU,2025-06-12,30000.0,2516600000000000.0,4600000000000000.0,9200000000000000.0,,288000000000.0,8000000000000.0,1400.0,https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/product-briefs/amd-instinct-mi355x-gpu-brochure.pdf
+AMD Instinct MI350X,AMD,GPU,2025-06-12,25000.0,2309600000000000.0,4600000000000000.0,9200000000000000.0,,288000000000.0,8000000000000.0,1000.0,https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/product-briefs/amd-instinct-mi350x-gpu-brochure.pdf
+NVIDIA RTX Pro 6000 Blackwell,NVIDIA,GPU,2025-03-18,13250.0,503800000000000.0,1007600000000000.0,2015200000000000.0,,96000000000.0,1792000000000.0,600.0,"https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/NVIDIA-RTX-Blackwell-PRO-GPU-Architecture-v1.0.pdf, https://www.techpowerup.com/gpu-specs/rtx-pro-6000-blackwell.c4272"
+NVIDIA GB200,NVIDIA,GPU,2025-02-15,37000.0,2500000000000000.0,5000000000000000.0,1e+16,90000000000000.0,186000000000.0,8000000000000.0,1200.0,https://www.nvidia.com/en-us/data-center/gb200-nvl2/#specs https://drive.google.com/file/d/1Wc9tdHdy3UthQ6ttW98RgrdUx8Vva5tU/view
+Amazon Trainium2,Amazon AWS,GPU,2024-12-03,,667000000000000.0,1299000000000000.0,,,96000000000.0,2900000000000.0,500.0,https://semianalysis.com/2024/12/03/amazons-ai-self-sufficiency-trainium2-architecture-networking/ https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html
+NVIDIA H200 SXM,NVIDIA,GPU,2024-11-18,30000.0,989500000000000.0,1979000000000000.0,,66910000000000.0,141000000000.0,4800000000000.0,700.0,https://nvdam.widen.net/s/nb5zzzsjdf/hpc-datasheet-sc23-h200-datasheet-3002446
+NVIDIA B200,NVIDIA,GPU,2024-11-15,,2250000000000000.0,4500000000000000.0,9000000000000000.0,62080000000000.0,180000000000.0,7700000000000.0,1000.0,https://www.primeline-solutions.com/media/categories/server/nach-gpu/nvidia-hgx-h200/nvidia-blackwell-b200-datasheet.pdf https://drive.google.com/file/d/1Wc9tdHdy3UthQ6ttW98RgrdUx8Vva5tU/view
+Cambricon Siyuan 590,Cambricon,,2024-10-31,,,,,,,,200.0,https://techbuzzchina.substack.com/p/cambricon-chinas-nvidiaor-nvidia  https://www.linkedin.com/pulse/china-really-closing-ai-chip-gap-skeptics-take-rick-margerison-7crxc
+Huawei Ascend 910C,Huawei,GPU,2024-10-15,,800000000000000.0,,,,128000000000.0,3200000000000.0,700.0,https://www.trendforce.com/news/2025/03/13/news-huaweis-ascend-910c-takes-on-nvidia-as-chinas-ai-race-heats-up-more-alleged-details/ https://www.huawei.com/en/news/2025/9/hc-xu-keynote-speech? https://newsletter.semianalysis.com/p/huawei-ai-cloudmatrix-384-chinas-answer-to-nvidia-gb200-nvl72 https://arxiv.org/abs/2506.12708v1
+AMD Instinct MI325X,AMD,GPU,2024-10-10,,1307400000000000.0,,,163400000000000.0,256000000000.0,6000000000000.0,1000.0,https://www.amd.com/en/products/accelerators/instinct/mi300/mi325x.html
+Intel Habana Gaudi3,Intel,,2024-09-24,,1678000000000000.0,1678000000000000.0,,14300000000000.0,128000000000.0,3700000000000.0,900.0,https://perma.cc/83JH-F3M4
+Maia 100 (M100),Microsoft,GPU,2024-08-27,,800000000000000.0,,,,,,500.0,https://www.techpowerup.com/326105/microsoft-unveils-new-details-on-maia-100-its-first-custom-ai-chip  https://techcommunity.microsoft.com/blog/azureinfrastructureblog/inside-maia-100-revolutionizing-ai-workloads-with-microsofts-custom-ai-accelerat/4229118
+Google TPU v6e Trillium,Google,TPU,2024-05-14,,918000000000000.0,918000000000000.0,,,32000000000.0,1640000000000.0,380.0,https://cloud.google.com/tpu/docs/v6e
+Meta MTIA v2 (MTIA 200),Meta,Other,2024-04-10,,177000000000000.0,,,2760000000000.0,256000000.0,1000000000000.0,90.0,https://ai.meta.com/blog/next-generation-meta-training-inference-accelerator-AI-MTIA/
+NVIDIA H100 NVL,NVIDIA,GPU,2024-03-14,,,,,,94000000000.0,3938000000000.0,400.0,https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/h100/PB-11773-001_v01.pdf  https://www.pny.com/nvidia-h100-nvl
+MTT S4000,Moore Threads (Tencent),GPU,2023-12-19,,100000000000000.0,,,25000000000000.0,48000000000.0,768000000000.0,450.0,https://en.mthreads.com/product/S4000 https://www.techpowerup.com/gpu-specs/mtt-s4000.c4261
+Google TPU v5p,Google,TPU,2023-12-06,,459000000000000.0,,,,95000000000.0,2765000000000.0,540.0,https://cloud.google.com/tpu/docs/v5p
+AMD Instinct MI300X,AMD,GPU,2023-12-06,15000.0,1307400000000000.0,,,163400000000000.0,192000000000.0,5300000000000.0,750.0,https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf https://www.techpowerup.com/gpu-specs/radeon-instinct-mi300x.c4179
+AMD Radeon Instinct MI308X,AMD,GPU,2023-12-06,,653700000000000.0,,,81720000000000.0,192000000000.0,10300000000000.0,750.0,https://www.techpowerup.com/gpu-specs/radeon-instinct-mi308x.c4295
+Sunway SW26010-Pro,Sunway,,2023-11-26,,,,,27600000000000.0,96000000000.0,307200000000.0,,https://www.tomshardware.com/tech-industry/supercomputers/chinas-secretive-sunway-pro-cpu-quadruples-performance-over-its-predecessor-allowing-the-supercomputer-supercomputer-to-hit-exaflop-speeds
+NVIDIA HGX H20,NVIDIA,GPU,2023-11-09,12000.0,148000000000000.0,,,44000000000000.0,96000000000.0,4000000000000.0,400.0,https://viperatech.com/shop/nvidia-hgx-h20/
+NVIDIA L2 PCle,NVIDIA,GPU,2023-11-09,,96500000000000.0,,,24100000000000.0,24000000000.0,300000000000.0,,"https://viperatech.com/shop/nvidia-l2-pcie/#:~:text=NVIDIA's%20L2%20PCle%2C%20part%20of,handling%20of%20data%2Dintensive%20tasks."
+NVIDIA L20 PCle,NVIDIA,GPU,2023-09-16,4299.0,119500000000000.0,,,59350000000000.0,48000000000.0,864000000000.0,275.0,https://www.techpowerup.com/gpu-specs/l20.c4206 https://wccftech.com/nvidia-china-compliant-h20-gpu-41-percent-fewer-cores-lower-performance-vs-top-hopper-h100/
+Google TPU v5e,Google,TPU,2023-08-29,,197000000000000.0,,,,16000000000.0,819000000000.0,225.0,https://cloud.google.com/tpu/docs/v5e
+NVIDIA GH200,NVIDIA,GPU,2023-08-08,,989500000000000.0,,,66910000000000.0,,4900000000000.0,700.0,https://resources.nvidia.com/en-us-data-center-overview-mc/en-us-data-center-overview/grace-hopper-superchip-datasheet-partner
+MetaX MXC500 (PCIe),MetaX,GPGPU,2023-06-13,,,,,15000000000000.0,64000000000.0,18000000000000.0,350.0,https://blog.csdn.net/qq_23934063/article/details/132473834 https://data.eastmoney.com/report/zw_industry.jshtml?infocode=AP202306151590965492
+MetaX MXN100,MetaX,GPU,2023-06-07,,,,,,,,,https://www.metax-tech.com/ndetail/12469.html
+Meta MTIA v1 (MTIA 100),Meta,Other,2023-05-18,,51200000000000.0,,,1600000000000.0,128000000.0,800000000000.0,25.0,https://ai.meta.com/blog/meta-training-inference-accelerator-AI-MTIA/ https://ai.meta.com/blog/next-generation-meta-training-inference-accelerator-AI-MTIA/
+AWS Inferentia2,Amazon AWS,,2023-04-13,,190000000000000.0,190000000000000.0,,47500000000000.0,32000000000.0,820000000000.0,,https://perma.cc/YED7-PTH6
+NVIDIA H800 SXM5,NVIDIA,GPU,2023-03-21,,989000000000000.0,,,59300000000000.0,80000000000.0,3360000000000.0,700.0,https://www.techpowerup.com/gpu-specs/h800-sxm5.c3975
+NVIDIA GH100,NVIDIA,GPU,2023-03-21,,989500000000000.0,,,66910000000000.0,,3072000000000.0,700.0,https://www.techpowerup.com/gpu-specs/nvidia-gh100.g1011  https://videocardz.net/gpu/nvidia-gh100
+NVIDIA L4,NVIDIA,GPU,2023-03-21,,121000000000000.0,,,30290000000000.0,24000000000.0,300100000000.0,72.0,https://nvdam.widen.net/s/rvq98gbwsw/l4-datasheet-2595652 https://www.techpowerup.com/gpu-specs/l4.c4091
+NVIDIA GeForce RTX 4070,NVIDIA,GPU,2023-02-08,,,,,29150000000000.0,12000000000.0,504200000000.0,285.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-4070.c3924
+Intel Data Center GPU Max 1100,Intel,GPU,2023-01-10,,,,,22220000000000.0,48000000000.0,1230000000000.0,300.0,https://www.techpowerup.com/gpu-specs/data-center-gpu-max-1100.c4066
+Intel Data Center GPU Max 1350,Intel,GPU,2023-01-10,,,,,44440000000000.0,96000000000.0,2460000000000.0,450.0,https://www.techpowerup.com/gpu-specs/data-center-gpu-max-1350.c4067
+Intel Data Center GPU Max 1550,Intel,GPU,2023-01-10,,,,,52430000000000.0,128000000000.0,3280000000000.0,600.0,https://www.techpowerup.com/gpu-specs/data-center-gpu-max-1350.c4067
+AMD Radeon Instinct MI300,AMD,GPU,2023-01-04,,,,,47870000000000.0,128000000000.0,6550000000000.0,600.0,https://www.techpowerup.com/gpu-specs/radeon-instinct-mi300.c4019
+AMD Instinct MI300A,AMD,GPU,2023-01-04,,980600000000000.0,,,122600000000000.0,128000000000.0,5300000000000.0,760.0,https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300a-data-sheet.pdf
+Baidu Kunlun RG800,Kunlunxin Baidu,XPU-R,2023-01-01,,,,,32000000000000.0,32000000000.0,512000000000.0,130.0,
+MetaX MXC500 (OAM),MetaX,GPGPU,2023-01-01,,,,,18000000000000.0,64000000000.0,18000000000000.0,450.0,https://blog.csdn.net/qq_23934063/article/details/132473834 https://data.eastmoney.com/report/zw_industry.jshtml?infocode=AP202306151590965492
+Tianshu Zhixin Zhikai 100,Iluvatar CoreX,GPU,2022-12-20,,,,,24000000000000.0,,,,
+NVIDIA RTX 6000 Ada Generation,NVIDIA,GPU,2022-12-03,6799.0,,729000000000000.0,,91060000000000.0,,,,https://perma.cc/63JP-L3WM https://www.techpowerup.com/gpu-specs/rtx-6000-ada-generation.c3933
+NVIDIA A800 PCIe 40 GB,NVIDIA,GPU,2022-11-08,,311800000000000.0,,,19490000000000.0,,1560000000000.0,250.0,https://www.techpowerup.com/gpu-specs/a800-pcie-40-gb.c3964 https://www.techpowerup.com/gpu-specs/a800-pcie-80-gb.c3965 https://www.techpowerup.com/gpu-specs/a800-sxm4-80-gb.c3966
+AMD Radeon RX 7900 XTX,AMD,GPU,2022-11-03,999.0,,,,61420000000000.0,24000000000.0,960000000000.0,335.0,https://www.techpowerup.com/gpu-specs/radeon-rx-7900-xtx.c3941
+NVIDIA A800 PCIe 80 GB,NVIDIA,GPU,2022-11-03,,312000000000000.0,,,19490000000000.0,,1940000000000.0,250.0,https://www.techpowerup.com/gpu-specs/a800-pcie-80-gb.c3965 https://www.unixcloud.ltd/product/nvidia-a800/#
+Amazon Trainium1,Amazon AWS,GPU,2022-10-15,,190000000000000.0,,,47500000000000.0,32000000000.0,820000000000.0,,https://web.archive.org/web/20230518023215/https://awsdocs-neuron.readthedocs-hosted.com/en/v2.9.1/general/arch/neuron-hardware/trainium.html  Note that memory specs are quoted in GiB (1024^3 = ~1.07 billion bytes) not GB.  32 GiB (32 * 1024^3 bytes) of memory ~= 34.36 GB (gigabytes)  820 GiB/sec of memory bandwidth ~= 880.47 GB/sec
+GroqChip LPU v1,,LPU,2022-10-15,,,,,,230000000.0,80000000000000.0,215.0,https://groq.com/wp-content/uploads/2024/08/GroqChip%E2%84%A2-Processor-Product-Brief-v1.7.pdf
+NVIDIA L40,NVIDIA,GPU,2022-10-13,,181000000000000.0,,,90520000000000.0,48000000000.0,864000000000.0,300.0,https://www.techpowerup.com/gpu-specs/l40.c3959; https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/support-guide/NVIDIA-L40-Datasheet-January-2023.pdf
+NVIDIA H100 PCIe,NVIDIA,GPU,2022-09-20,,756000000000000.0,,,51220000000000.0,80000000000.0,2040000000000.0,350.0,https://www.techpowerup.com/gpu-specs/h100-pcie.c3899
+NVIDIA GeForce RTX 4090,NVIDIA,GPU,2022-09-20,1599.0,330000000000000.0,,,82600000000000.0,24000000000.0,1008000000000.0,450.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-4090.c3889
+NVIDIA H100 SXM5 80GB,NVIDIA,GPU,2022-09-20,33600.0,989400000000000.0,1979000000000000.0,,66910000000000.0,80000000000.0,3350000000000.0,700.0,https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet; https://www.techpowerup.com/gpu-specs/h100-sxm5.c3900
+NVIDIA GeForce RTX 4080,NVIDIA,GPU,2022-09-20,1199.0,,,,48740000000000.0,16000000000.0,716800000000.0,320.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-4080.c3888
+Biren BR100,Biren,GPGPU,2022-08-22,,1024000000000000.0,,,256000000000000.0,64000000000.0,1640000000000.0,550.0,https://web.archive.org/web/20221004073838/https://www.birentech.com/product_details/1005557637772464128.html; https://hc34.hotchips.org/assets/program/conference/day1/GPU%20HPC/HC2022.BirenTech.MikeHong.LingjieXu.v01.pdf
+NVIDIA A800 SXM,NVIDIA,GPU,2022-08-11,,311800000000000.0,,,19490000000000.0,80000000000.0,2040000000000.0,400.0,https://www.techpowerup.com/gpu-specs/a800-sxm4-80-gb.c3966
+MT-3000,National University of Defense Technology,Hybrid CPU,2022-07-01,,,,,,128000000000.0,1432000000000.0,256.0,https://link.springer.com/article/10.1007/s42514-022-00095-y
+Intel Habana Gaudi2,Intel,,2022-05-10,,450000000000000.0,865000000000000.0,,,96000000000.0,2450000000000.0,600.0,https://perma.cc/9SR3-HX6Q
+NVIDIA GeForce RTX 3090 Ti,NVIDIA,GPU,2022-03-29,1999.0,160000000000000.0,,,40000000000000.0,24000000000.0,1008000000000.0,450.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-3090-ti.c3829
+Cambricon MLU370-X8,Cambricon,,2022-03-21,,,,,24000000000000.0,48000000000.0,614400000000.0,250.0,https://perma.cc/H4JT-SZNV
+Huawei Ascend 910B,Huawei,GPU,2022-03-17,16854.0,,,,94000000000000.0,32000000000.0,1228000000000.0,400.0,"https://archive.ph/cF945 https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations https://www.trendforce.com/news/2024/06/11/news-huaweis-self-developed-ai-chip-challenges-nvidia-boasting-its-ascend-910b-to-be-equal-in-match-with-a100/  different sources report different performance (376 TFLOPS vs 220 TFLOPS vs 320 TFLOPS)  as for release date - the earliest mentioning I found is March, 17 2022 (https://r.huaweistatic.com/s/ascendstatic/lst/files/pdf/PR425KI.pdf)  energy source: https://arthurchiao.art/blog/gpu-data-sheets/"
+Baidu Kunlun R100 (75W),Kunlunxin Baidu,XPU-R,2022-01-01,,,,,18000000000000.0,12000000000.0,384000000000.0,75.0,
+Baidu Kunlun R100 (100W),Kunlunxin Baidu,XPU-R,2022-01-01,,,,,20000000000000.0,12000000000.0,384000000000.0,100.0,
+Baidu Kunlun R200 (150W),Kunlunxin Baidu,XPU-R,2022-01-01,,,,,32000000000000.0,16000000000.0,512000000000.0,150.0,
+Baidu Kunlun R200-8F (160W),Kunlunxin Baidu,XPU-R,2022-01-01,,,,,32000000000000.0,32000000000.0,512000000000.0,160.0,
+AMD Radeon Instinct MI250X,AMD,GPU,2021-11-08,14500.0,383000000000000.0,,,47870000000000.0,128000000000.0,3280000000000.0,500.0,https://www.amd.com/en/products/accelerators/instinct/mi200/mi250x.html https://www.techpowerup.com/gpu-specs/radeon-instinct-mi250x.c3837
+Cambricon MLU370-S4/S8,Cambricon,,2021-11-03,,,,,18000000000000.0,24000000000.0,307200000000.0,75.0,
+Cambricon MLU370-X4,Cambricon,,2021-11-03,,,,,24000000000000.0,24000000000.0,307200000000.0,150.0,https://perma.cc/Y6CV-YZFD
+Cambricon MLU370-S8,Cambricon,,2021-11-03,,,,,18000000000000.0,48000000000.0,307200000000.0,75.0,
+Cambricon MLU370-S4,Cambricon,,2021-11-03,,,,,18000000000000.0,24000000000.0,307200000000.0,75.0,https://perma.cc/AS5M-QVCE
+Tesla D1 Dojo,Tesla,GPU,2021-08-21,,362000000000000.0,,,22600000000000.0,,10000000000000.0,400.0,https://semianalysis.com/2021/08/25/the-tesla-dojo-chip-is-impressive/
+Baidu Kunlun II,Kunlunxin Baidu,XPU-R,2021-08-18,,,,,,32000000000.0,512000000000.0,150.0,https://web.archive.org/web/20250505083031/https://news.qq.com/rain/a/20221129A02ZKE00
+Shensuan-1,Hygon,DCU (GPGPU),2021-07-01,,,,,,32000000000.0,1024000000000.0,350.0,https://hk-official.cmbi.info/upload/b678e2ea-ba52-47b7-bc97-893d2bfdd36d.pdf
+Google TPU v4,Google,TPU,2021-05-20,,275000000000000.0,,,,32000000000.0,1200000000000.0,340.0,https://cloud.google.com/tpu/docs/system-architecture-tpu-vm
+NVIDIA RTX A4000,NVIDIA,GPU,2021-04-12,1000.0,,,,19170000000000.0,16000000000.0,448000000000.0,140.0,techpowerup.com/gpu-specs/rtx-a4000.c3756
+NVIDIA A10G,NVIDIA,GPU,2021-04-12,,,,,31500000000000.0,24000000000.0,600200000000.0,150.0,https://www.techpowerup.com/gpu-specs/a10g.c3798
+NVIDIA RTX A5000,NVIDIA,GPU,2021-04-12,2250.0,,,,27770000000000.0,24000000000.0,768000000000.0,230.0,https://www.techpowerup.com/gpu-specs/rtx-a5000.c3748
+NVIDIA A10 PCIe,NVIDIA,GPU,2021-04-12,2800.0,,,,31240000000000.0,24000000000.0,600200000000.0,150.0,"https://www.techpowerup.com/gpu-specs/a10-pcie.c3793#:~:text=The%20A10%20PCIe%20is%20a,card%20supports%20DirectX%2012%20Ultimate."
+Tianshu Zhixin Tiangai 100 (BI-V100),Iluvatar CoreX,GPGPU,2021-03-31,,,,,32000000000000.0,32000000000.0,,250.0,
+Cambricon MLU290-M5,Cambricon,,2021-01-21,,,,,,32000000000.0,1228000000000.0,350.0,https://perma.cc/CSV7-UNPP
+NVIDIA A100 SXM4 80 GB,NVIDIA,GPU,2020-11-16,,312000000000000.0,,,19490000000000.0,80000000000.0,2039000000000.0,400.0,https://www.techpowerup.com/gpu-specs/a100-sxm4-80-gb.c3746
+NVIDIA RTX A6000,NVIDIA,GPU,2020-10-05,4649.0,,,,38700000000000.0,48000000000.0,768000000000.0,300.0,https://www.techpowerup.com/gpu-specs/rtx-a6000.c3686
+NVIDIA A40 PCIe,NVIDIA,GPU,2020-10-05,,149700000000000.0,,,37420000000000.0,48000000000.0,695800000000.0,300.0,https://www.techpowerup.com/gpu-specs/a40-pcie.c3700; https://images.nvidia.com/content/Solutions/data-center/a40/nvidia-a40-datasheet.pdf
+NVIDIA GeForce RTX 3080,NVIDIA,GPU,2020-09-01,699.0,,,,29770000000000.0,10000000000.0,760000000000.0,320.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-3080.c3621
+NVIDIA GeForce RTX 3090,NVIDIA,GPU,2020-09-01,1499.0,,,,35580000000000.0,24000000000.0,936000000000.0,350.0,https://images.nvidia.com/aem-dam/en-zz/Solutions/geforce/ampere/pdf/NVIDIA-ampere-GA102-GPU-Architecture-Whitepaper-V1.pdf#page=38; https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622
+NVIDIA A100 PCIe,NVIDIA,GPU,2020-06-22,,312000000000000.0,,,19490000000000.0,40000000000.0,1940000000000.0,300.0,https://www.techpowerup.com/gpu-specs/a100-pcie-80-gb.c3821 https://www.techpowerup.com/gpu-specs/a100-pcie-40-gb.c3623
+NVIDIA A100 SXM4 40 GB,NVIDIA,GPU,2020-05-14,15000.0,312000000000000.0,,,19490000000000.0,40000000000.0,1560000000000.0,400.0,https://www.techpowerup.com/gpu-specs/a100-sxm4-40-gb.c3506
+NVIDIA A100,NVIDIA,GPU,2020-03-01,,312000000000000.0,,,19500000000000.0,40000000000.0,1560000000000.0,400.0,https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/a100/pdf/nvidia-a100-datasheet-us-nvidia-1758950-r4-web.pdf; https://www.techpowerup.com/gpu-specs/a100-sxm4-80-gb.c3746
+Google TPU v4i,Google,TPU,2020-01-01,,138000000000000.0,,,,8000000000.0,614000000000.0,175.0,https://ieeexplore.ieee.org/document/9499913 summary here: https://parsa.epfl.ch/course-info/cs723/lectures/hw_accel.pdf
+Baidu Kunlun K200,Kunlunxin Baidu,XPU,2020-01-01,,,,,16000000000000.0,16000000000.0,512000000000.0,150.0,
+NVIDIA Tesla V100S PCIe 32 GB,NVIDIA,GPU,2019-11-26,,130000000000000.0,,,16350000000000.0,32000000000.0,1130000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-v100s-pcie-32-gb.c3467
+T-Head Hanguang 800,Alibaba,NPU,2019-09-25,,,,,,,,276.0,
+Huawei Ascend 910A,Huawei,GPU,2019-08-23,,,,,,32000000000.0,1288000000000.0,310.0,https://www.sciencedirect.com/science/article/pii/S0743731524000480
+Huawei Ascend 910A Pro,Huawei,GPU,2019-08-23,,,,,,32000000000.0,1288000000000.0,,https://www.sciencedirect.com/science/article/pii/S0743731524000480
+Huawei Ascend 910A Premium,Huawei,GPU,2019-08-23,,,,,,32000000000.0,1288000000000.0,,
+Huawei Ascend 910,Huawei,GPU,2019-08-23,,,,,,,1288000000000.0,310.0,https://old.hotchips.org/hc31/HC31_1.11_Huawei.Davinci.HengLiao_v4.0.pdf https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/
+Huawei Ascend 910 (320 TFLOPS),Huawei,GPU,2019-08-23,,,,,,,1288000000000.0,310.0,https://old.hotchips.org/hc31/HC31_1.11_Huawei.Davinci.HengLiao_v4.0.pdf https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/
+Cambricon MLU270-F4,Cambricon,ASIC,2019-06-20,2080.0,,,,,16000000000.0,102000000000.0,150.0,
+Cambricon MLU270-S4,Cambricon,ASIC,2019-06-20,,,,,,16000000000.0,102000000000.0,70.0,
+Intel Habana GAUDI HL-205,Intel,,2019-06-18,,,,,,,,300.0,https://www.new-techeurope.com/2019/06/18/habana-labs-announces-gaudi-ai-training-processor/
+Baidu Kunlun I,Kunlunxin Baidu,XPU,2019-01-01,,,,,16000000000000.0,,512000000000.0,150.0,
+NVIDIA Quadro RTX 4000,NVIDIA,GPU,2018-11-13,899.0,,,,7119000000000.0,8000000000.0,416000000000.0,160.0,https://www.techpowerup.com/gpu-specs/quadro-rtx-4000.c3336
+Huawei Ascend 310,Huawei,GPU,2018-10-10,,,,,,,51200000000.0,8.0,https://old.hotchips.org/hc31/HC31_1.11_Huawei.Davinci.HengLiao_v4.0.pdf
+NVIDIA GeForce RTX 2080 Ti 11GB,NVIDIA,GPU,2018-09-20,999.0,113800000000000.0,,,13450000000000.0,11000000000.0,616000000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-rtx-2080-ti.c3305
+NVIDIA Tesla T4,NVIDIA,GPU,2018-09-13,,,,,8141000000000.0,16000000000.0,320000000000.0,70.0,https://www.techpowerup.com/gpu-specs/tesla-t4.c3316
+NVIDIA Quadro RTX 6000,NVIDIA,GPU,2018-08-13,6300.0,,,,16309999999999.9,24000000000.0,672000000000.0,260.0,https://www.techpowerup.com/gpu-specs/quadro-rtx-6000.c3307
+NVIDIA Quadro RTX 5000,NVIDIA,GPU,2018-08-13,2300.0,,,,11150000000000.0,16000000000.0,448000000000.0,230.0,https://www.techpowerup.com/gpu-specs/quadro-rtx-5000.c3308
+NVIDIA Quadro RTX 8000,NVIDIA,GPU,2018-08-13,,,,,16300000000000.0,48000000000.0,672000000000.0,260.0,https://www.techpowerup.com/gpu-specs/quadro-rtx-8000.c3306
+Google TPU v3,Google,TPU,2018-05-18,,123000000000000.0,,,,32000000000.0,900000000000.0,450.0,https://cloud.google.com/tpu/docs/system-architecture-tpu-vm https://dl.acm.org/doi/pdf/10.1145/3360307
+NVIDIA Tesla V100 DGXS 16 GB,NVIDIA,GPU,2018-03-27,,125000000000000.0,,,16200000000000.0,16000000000.0,897000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-v100-dgxs-16-gb.c3763
+NVIDIA Tesla V100 PCIe 32 GB,NVIDIA,GPU,2018-03-27,11458.0,112000000000000.0,,,14130000000000.0,32000000000.0,897000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-v100-pcie-32-gb.c3184
+NVIDIA Tesla V100 DGXS 32 GB,NVIDIA,GPU,2018-03-27,,125000000000000.0,,,15670000000000.0,32000000000.0,897000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-v100-dgxs-32-gb.c3186
+NVIDIA Tesla V100 SXM3 32 GB,NVIDIA,GPU,2018-03-27,,125000000000000.0,,,15670000000000.0,,898000000000.0,300.0,
+NVIDIA Tesla V100 SXM2 32 GB,NVIDIA,GPU,2018-03-27,11458.0,125000000000000.0,,,15670000000000.0,32000000000.0,898000000000.0,300.0,https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-32-gb.c3185
+NVIDIA Titan V,NVIDIA,GPU,2017-12-01,2999.0,,,,14900000000000.0,12000000000.0,651000000000.0,250.0,https://www.techpowerup.com/gpu-specs/titan-v.c3051
+NVIDIA Tesla V100 SXM2,NVIDIA,GPU,2017-07-01,11500.0,125000000000000.0,,,15670000000000.0,16000000000.0,897000000000.0,300.0,https://images.nvidia.com/content/technologies/volta/pdf/437317-Volta-V100-DS-NV-US-WEB.pdf https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-16-gb.c3018 https://images.nvidia.com/content/technologies/volta/pdf/volta-v100-datasheet-update-us-1165301-r5.pdf
+NVIDIA Tesla V100 SXM2 16 GB,NVIDIA,GPU,2017-06-21,,125000000000000.0,,,15670000000000.0,,897000000000.0,300.0,https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-16-gb.c3018
+NVIDIA Tesla V100 PCIe 16 GB,NVIDIA,GPU,2017-06-21,10664.0,112000000000000.0,,,14130000000000.0,16000000000.0,897000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-v100-pcie-16-gb.c2957
+NVIDIA V100,NVIDIA,GPU,2017-06-21,,125000000000000.0,,,15670000000000.0,,897000000000.0,300.0,https://www.techpowerup.com/gpu-specs/tesla-v100-pcie-16-gb.c2957 https://www.techpowerup.com/gpu-specs/tesla-v100-pcie-32-gb.c3184 https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-16-gb.c3471 https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-16-gb.c3018 https://www.techpowerup.com/gpu-specs/tesla-v100-sxm2-32-gb.c3185 https://www.techpowerup.com/gpu-specs/tesla-v100-sxm3-32-gb.c3472 https://www.techpowerup.com/gpu-specs/tesla-v100s-pcie-32-gb.c3467
+PEZY-SC2,PEZY,,2017-06-01,,,,,8192000000000.0,,102377186750.0,180.0,https://archive.ph/yiqZG https://en.wikichip.org/wiki/pezy/pezy-scx/pezy-sc2
+Google TPU v2,Google,TPU,2017-05-01,,46000000000000.0,,,3000000000000.0,16000000000.0,600000000000.0,280.0,https://dl.acm.org/doi/pdf/10.1145/3360307
+NVIDIA TITAN Xp,NVIDIA,GPU,2017-04-06,1199.0,,,,12150000000000.0,12000000000.0,548000000000.0,250.0,https://www.techpowerup.com/gpu-specs/titan-xp.c2948
+NVIDIA GeForce GTX 1080 Ti,NVIDIA,GPU,2017-03-10,699.0,,,,11340000000000.0,11000000000.0,484000000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-1080-ti.c2877
+NVIDIA Quadro P600,NVIDIA,GPU,2017-02-07,178.0,,,,1196000000000.0,2000000000.0,64130000000.0,40.0,https://www.techpowerup.com/gpu-specs/quadro-p600.c2933
+NVIDIA Quadro P4000,NVIDIA,GPU,2017-02-06,815.0,,,,5304000000000.0,8000000000.0,243400000000.0,105.0,https://www.techpowerup.com/gpu-specs/quadro-p4000.c2930
+MT-2000,National University of Defense Technology,,2017-01-01,,,,,4920000000000.0,,153652000000.0,240.0,https://archive.ph/CdMwe
+NVIDIA Quadro P5000,NVIDIA,GPU,2016-10-01,2499.0,,,,8873000000000.0,16000000000.0,288000000000.0,180.0,https://www.techpowerup.com/gpu-specs/quadro-p5000.c2864
+NVIDIA Quadro P6000,NVIDIA,GPU,2016-10-01,5999.0,,,,12630000000000.0,24000000000.0,433000000000.0,250.0,https://www.techpowerup.com/gpu-specs/quadro-p6000.c2865
+NVIDIA P40,NVIDIA,GPU,2016-09-13,5699.0,,,,11760000000000.0,24000000000.0,694300000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-p40.c2878
+NVIDIA Tesla P4,NVIDIA,GPU,2016-09-13,,,,,5704000000000.0,8000000000.0,192300000000.0,75.0,https://www.techpowerup.com/gpu-specs/tesla-p4.c2879
+NVIDIA Tesla P100 PCIe 16GB,NVIDIA,GPU,2016-06-20,,,,,9526000000000.0,,732200000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-p100-pcie-16-gb.c2888
+NVIDIA Tesla P100 PCIe 12GB,NVIDIA,GPU,2016-06-20,,,,,9526000000000.0,,549100000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-p100-pcie-12-gb.c2915
+NVIDIA P100 PCIe 16GB,NVIDIA,GPU,2016-06-20,,,,,9560000000000.0,16000000000.0,732000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-p100-pcie-16-gb.c2888
+NVIDIA GeForce GTX 1080,NVIDIA,GPU,2016-05-27,599.0,,,,8873000000000.0,8000000000.0,320300000000.0,180.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-1080.c2839
+NVIDIA Tesla P100 SXM2,NVIDIA,GPU,2016-04-05,,,,,10610000000000.0,,,300.0,
+NVIDIA P100,NVIDIA,GPU,2016-04-05,5699.0,,,,9300000000000.0,16000000000.0,732000000000.0,250.0,https://images.nvidia.com/content/tesla/pdf/nvidia-tesla-p100-PCIe-datasheet.pdf
+NVIDIA Tesla P100 DGXS,NVIDIA,GPU,2016-04-05,,,,,10610000000000.0,,,300.0,
+NVIDIA M40,NVIDIA,GPU,2015-11-10,10799.0,,,,6832000000000.0,12000000000.0,288000000000.0,250.0,https://www.techpowerup.com/gpu-specs/tesla-m40.c2771
+NVIDIA TESLA M60,NVIDIA,GPU,2015-08-30,,,,,9650000000000.0,16000000000.0,320800000000.0,300.0,https://www.techpowerup.com/gpu-specs/tesla-m60.c2760
+NVIDIA Quadro M4000,NVIDIA,GPU,2015-06-29,,,,,2573000000000.0,8000000000.0,192000000000.0,120.0,https://www.techpowerup.com/gpu-specs/quadro-m4000.c2757
+Google TPU v1,Google,TPU,2015-05-15,,,,,,8589934592.0,34000000000.0,75.0,https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9499913
+NVIDIA GeForce GTX TITAN X,NVIDIA,GPU,2015-03-17,999.0,,,,6691000000000.0,12000000000.0,336600000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-titan-x.c2632
+NVIDIA Quadro K1200,NVIDIA,GPU,2015-01-28,,,,,1151000000000.0,4000000000.0,80000000000.0,45.0,https://www.techpowerup.com/gpu-specs/quadro-k1200.c2641
+NVIDIA Tesla K80,NVIDIA,GPU,2014-11-17,5000.0,,,,8126000000000.0,24000000000.0,241000000000.0,300.0,https://www.techpowerup.com/gpu-specs/tesla-k80.c2616; https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-product-literature/TeslaK80-datasheet.pdf
+NVIDIA GeForce GTX 980,NVIDIA,GPU,2014-09-19,549.0,,,,4981000000000.0,4000000000.0,224400000000.0,165.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-980.c2621
+NVIDIA GeForce GTX Titan Black,NVIDIA,GPU,2014-02-18,999.0,,,,5645000000000.0,6000000000.0,336000000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-titan-black.c2549
+NVIDIA Tesla K40s,NVIDIA,GPU,2013-11-22,7699.0,,,,5046000000000.0,12000000000.0,288000000000.0,245.0,https://www.techpowerup.com/gpu-specs/tesla-k40s.c2528
+NVIDIA Tesla K40t,NVIDIA,GPU,2013-11-22,7699.0,,,,5046000000000.0,12000000000.0,288400000000.0,245.0,https://www.techpowerup.com/gpu-specs/tesla-k40t.c3403
+NVIDIA Quadro K6000,NVIDIA,GPU,2013-07-23,5265.0,,,,5196000000000.0,12000000000.0,288000000000.0,225.0,https://www.techpowerup.com/gpu-specs/quadro-k6000.c2426
+NVIDIA GeForce GTX 780,NVIDIA,GPU,2013-05-23,649.0,,,,4156000000000.0,3000000000.0,288400000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-780.c1701
+NVIDIA Quadro K4000,NVIDIA,GPU,2013-03-01,1269.0,,,,1244000000000.0,3000000000.0,134800000000.0,80.0,https://www.techpowerup.com/gpu-specs/quadro-k4000.c1841
+NVIDIA GeForce GTX TITAN,NVIDIA,GPU,2013-02-19,999.0,,,,4709000000000.0,6000000000.0,288400000000.0,250.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-titan.c1996
+NVIDIA Tesla K20c,NVIDIA,GPU,2012-11-12,3199.0,,,,3520000000000.0,5000000000.0,208000000000.0,225.0,https://www.techpowerup.com/gpu-specs/tesla-k20c.c564
+NVIDIA Tesla K20X,NVIDIA,GPU,2012-11-12,7699.0,,,,3935000000000.0,,,235.0,
+NVIDIA Tesla C2050,NVIDIA,GPU,2011-07-25,,,,,1028000000000.0,,,238.0,
+NVIDIA GeForce GTX 580,NVIDIA,GPU,2010-11-09,499.0,,,,1581000000000.0,1536000000.0,192400000000.0,244.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-580.c270
+NVIDIA GeForce GTX 280,NVIDIA,GPU,2008-06-16,649.0,,,,622100000000.0,1024000000.0,141100000000.0,236.0,https://www.techpowerup.com/gpu-specs/geforce-gtx-280.c216
+Huawei Ascend 910B Pro,Huawei,GPU,,,,,,,32000000000.0,1228000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations"
+Huawei Ascend 910B1 (v1),Huawei,GPU,,,,,,,64000000000.0,1600000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations"
+Huawei Ascend 910B1 (v2),Huawei,GPU,,,,,,,64000000000.0,1600000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations"
+Huawei Ascend 910B2,Huawei,GPU,,,,,,,64000000000.0,1600000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations"
+Huawei Ascend 910B3,Huawei,GPU,,,,,,,64000000000.0,1600000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations"
+Huawei Ascend 910B4,Huawei,GPU,,,,,,72000000000000.0,32000000000.0,800000000000.0,,"https://cset.georgetown.edu/publication/pushing-the-limits-huaweis-ai-chip-tests-u-s-export-controls/#:~:text=Ascend%20910%20models%20range%20from,specially%20designed%20for%20AI%20operations https://perma.cc/9B7N-X5XT"
+Huawei Ascend 800T A2,Huawei,GPU,,,,,,,,,310.0,https://arxiv.org/pdf/2505.21411
+NVIDIA Rubin CPX,NVIDIA,GPU,,,,,3e+16,,128000000000.0,,,https://nvidianews.nvidia.com/news/nvidia-unveils-rubin-cpx-a-new-class-of-gpu-designed-for-massive-context-inference
+Huawei Ascend 950PR,Huawei,NPU,,,,1000000000000000.0,2000000000000000.0,,,1600000000000.0,,https://www.techradar.com/pro/huawei-ascend-950-vs-nvidia-h200-vs-amd-mi300-instinct-how-do-they-compare https://www.tomshardware.com/tech-industry/semiconductors/huawei-unveils-ascend-roadmap-backed-by-in-house-hbm
+Huawei Ascend 950DT,Huawei,NPU,,,,1000000000000000.0,2000000000000000.0,,,4000000000000.0,,https://www.techradar.com/pro/huawei-ascend-950-vs-nvidia-h200-vs-amd-mi300-instinct-how-do-they-compare https://www.tomshardware.com/tech-industry/semiconductors/huawei-unveils-ascend-roadmap-backed-by-in-house-hbm
+Huawei Ascend 970,Huawei,NPU,,,,4000000000000000.0,8000000000000000.0,,,14400000000000.0,,https://www.huawei.com/en/news/2025/9/hc-xu-keynote-speech https://www.huaweicentral.com/huawei-reveals-3-year-ascend-ai-chip-roadmap-950-coming-in-2026/
+Huawei Ascend 960,Huawei,NPU,,,,2000000000000000.0,4000000000000000.0,,,9600000000000.0,,https://www.huawei.com/en/news/2025/9/hc-xu-keynote-speech https://www.huaweicentral.com/huawei-reveals-3-year-ascend-ai-chip-roadmap-950-coming-in-2026/
+Cambricon Siyuan 690,Cambricon,,,,,,,,,,,
+NVIDIA Vera Rubin Superchip,NVIDIA,GPU,,,4000000000000000.0,1.75e+16,,,288000000000.0,22000000000000.0,,https://nvdam.widen.net/s/7hztspzswk/gpu-architecture-datasheet-vera-rubin-nvidia-us-5198950-web
+NVIDIA VR300 (Rubin Ultra),NVIDIA,GPU,,,,,,,,,,

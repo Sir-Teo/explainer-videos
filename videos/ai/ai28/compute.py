@@ -1,27 +1,40 @@
 """Precompute everything numerical in Part 28 of the AI series ("Reasoning").
 
-    python -m videos.ai.ai28.compute              # everything missing
+    python -m videos.ai.ai28.compute              # everything missing (about 1.5 hours of CPU, resumable)
     python -m videos.ai.ai28.compute --force rl
 
-Results are cached in ``.cache/ai28/<name>.json`` (+ ``.npz``); scenes call ``load(name)``. Every model here is a
-tiny transformer trained on this machine.
+Results are cached in ``.cache/ai28/<name>.json`` (+ ``.npz``); trained weights and the finished sub-runs of the
+long items in ``.cache/ai28/`` too, so an interrupted run resumes.  Every model here is a tiny transformer trained on
+this machine, one or two CPU threads each; every run is seeded.
+
+Three toy problems carry the part:
+
+* **parity**: is the number of 1s among n bits odd?  (chapter 1)
+* **two-digit addition**, answer only (``37+45=`` -> 82): reinforcement learning from a checker and its objectives,
+  pass@k, the KL estimators, best-of-N.  The answers are three digits, so the model's probability of *every*
+  answer can be computed exactly, and with it pass@k, KL divergences and best-of-N without sampling noise.
+* **think or answer** (``think.py``): the sum of 2 to 10 digits; the model may answer at once or first write the
+  running total, and may stop thinking at any point.  Length, overthinking, verifiers, search, budgets.
 
 Items:
-    parity     the parity of n random bits (is the number of 1s odd?), for n = 4, 8 and 16: a two-layer transformer
-               trained to answer at once, and the same trained to write the running parity first (a chain of thought);
-               accuracy on new strings, and the training curves at n = 16
-    rl         reinforcement learning with a verifiable reward: a model briefly trained on two-digit addition, then
-               improved by GRPO (sample 8 answers per question, reward the right ones, compare within the group);
-               accuracy along the way, and the model's samples before and after
-    sampling   test-time compute from the same model before RL: pass@k (any of k samples right, with a checker) and
-               majority voting over k samples, as k grows
-    objectives (objectives.py) the same start trained by six RL objectives: plain group-relative policy gradient,
-               GRPO with clipping and a KL penalty, Dr. GRPO, DAPO, GSPO and DPO; accuracy, entropy, KL from the start,
-               groups with no signal, clipped tokens; pass@k before and after RL
+    parity     n = 4, 8, 16 bits: a two-layer transformer trained to answer at once, to answer after n filler
+               tokens, and to write the running parity first (a chain of thought); three seeds at 16 bits; the
+               training replayed (the chain it writes for three strings at each checkpoint)
+    add_base   the addition model: 400 supervised steps (weights cached); its probability of every answer to the
+               200 test questions
+    rl         group-relative policy gradient on addition from that model, 3 seeds: accuracy as it trains, and its
+               answers to six questions at every checkpoint (the replay)
+    objectives (objectives.py) the same start trained by seven objectives, 3 seeds each: the plain group-relative
+               gradient, GRPO, Dr. GRPO, DAPO, GSPO, CISPO and DPO; pass@k before and after, exactly, up to k = 1024
+    sampling   pass@k from samples: the unbiased estimator against the naive one, and against the exact value
+    kl_est     the k1, k2 and k3 estimators of KL(policy || start), against the exact KL, on a GRPO-trained model
+    bon        best-of-N with a checker: accuracy, and its KL from the model against log N - (N - 1)/N
+    think_*    (think.py) the think-or-answer model: see that module
 """
 
 from __future__ import annotations
 
+import json
 import math
 
 import numpy as np
@@ -34,6 +47,35 @@ load = CACHE.load
 
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
+
+
+def threads(n: int = 1):
+    import torch
+
+    torch.set_num_threads(n)
+
+
+def memo(name: str, fn):
+    """A finished sub-run of a long item, cached as JSON (+ npz) under .cache/ai28/runs/, so a restart resumes."""
+    d = CACHE.dir / "runs"
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / f"{name}.json"
+    if p.exists():
+        out = json.loads(p.read_text())
+        z = p.with_suffix(".npz")
+        if z.exists():
+            with np.load(z) as f:
+                out.update({k: f[k] for k in f.files})
+        return out
+    out = fn()
+    arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
+    rest = {k: v for k, v in out.items() if k not in arrays}
+    if arrays:
+        np.savez_compressed(p.with_suffix(".tmp.npz"), **arrays)
+        p.with_suffix(".tmp.npz").replace(p.with_suffix(".npz"))
+    p.with_suffix(".tmp").write_text(json.dumps(rest, default=float))
+    p.with_suffix(".tmp").replace(p)
+    return out
 
 
 def tiny_gpt(vocab, T, D=64, L=2, H=4):
@@ -65,82 +107,131 @@ def tiny_gpt(vocab, T, D=64, L=2, H=4):
             self.nf = nn.LayerNorm(D)
             self.out = nn.Linear(D, vocab)
 
-        def forward(self, x):
+        def hidden(self, x):
             h = self.emb(x) + self.pos[: x.shape[1]]
             for b in self.blocks:
                 h = b(h)
-            return self.out(self.nf(h))
+            return self.nf(h)
+
+        def forward(self, x):
+            return self.out(self.hidden(x))
 
     return GPT()
 
 
 # ---------------------------------------------------------------------------
-def compute_parity():
+# Parity
+# ---------------------------------------------------------------------------
+P_EQ, P_FILL = 2, 3  # tokens: 0, 1, '=', '.' (a filler)
+PARITY_MODES = ("direct", "filler", "chain")
+REPLAY_STRINGS = 3
+
+
+def parity_batch(g, n, size, mode):
+    """Rows of tokens and the positions whose next token is trained (or, at test time, generated)."""
+    bits = g.integers(0, 2, (size, n))
+    run = np.cumsum(bits, 1) % 2
+    eq = np.full((size, 1), P_EQ)
+    if mode == "chain":  # the bits, '=', then the running parity bit by bit: the last bit is the answer
+        x = np.concatenate([bits, eq, run], 1)
+    elif mode == "filler":  # the bits, '=', n dots (more positions to compute in, no more steps in a row), answer
+        x = np.concatenate([bits, eq, np.full((size, n), P_FILL), run[:, -1:]], 1)
+    else:
+        x = np.concatenate([bits, eq, run[:, -1:]], 1)
+    return x, run[:, -1]
+
+
+def parity_train(n, mode, seed=0, steps=2500, log_every=100, replay=False):
     import torch
     import torch.nn.functional as F
 
-    torch.set_num_threads(2)
-    EQ = 2  # tokens: 0, 1, '='
+    threads(1)
+    torch.manual_seed(2022 + 7 * seed)  # 2022: Wei et al., chain-of-thought prompting
+    T = 2 * n + 2
+    m = tiny_gpt(4, T)
+    opt = torch.optim.AdamW(m.parameters(), lr=2e-3, weight_decay=0.01)
+    g = rng(1000 * seed + 10 * n + PARITY_MODES.index(mode))
+    test, ans = parity_batch(rng(999), n, 1000, mode)
+    test = torch.tensor(test)
+    # which next tokens are trained: the chain (every position after '='), or only the final answer
+    first = n if mode == "chain" else (T - 2 if mode == "filler" else n)
 
-    def batch(g, n, size, cot):
-        bits = g.integers(0, 2, (size, n))
-        run = np.cumsum(bits, 1) % 2
-        if cot:  # the bits, '=', then the running parity, one bit at a time; the last one is the answer
-            x = np.concatenate([bits, np.full((size, 1), EQ), run], 1)
-            tgt_from = n  # predict every token after '='
-        else:
-            x = np.concatenate([bits, np.full((size, 1), EQ), run[:, -1:]], 1)
-            tgt_from = n
-        return torch.tensor(x), tgt_from, run[:, -1]
+    @torch.no_grad()
+    def generate(x0):
+        x = x0[:, : n + 1]
+        if mode == "filler":
+            x = torch.cat([x, torch.full((len(x), n), P_FILL)], 1)
+        for _ in range(n if mode == "chain" else 1):
+            nxt = m(x)[:, -1, :2].argmax(-1, keepdim=True)
+            x = torch.cat([x, nxt], 1)
+        return x
 
-    def train(n, cot, steps=2500, log=False):
-        torch.manual_seed(2022)  # Wei et al., chain-of-thought prompting
-        m = tiny_gpt(3, 2 * n + 1)
-        opt = torch.optim.AdamW(m.parameters(), lr=2e-3, weight_decay=0.01)
-        g = rng(n * 10 + cot)
-        curve = []
-        test, tf, ans = batch(rng(999), n, 1000, cot)
-        for step in range(1, steps + 1):
-            x, tf_, _ = batch(g, n, 128, cot)
-            z = m(x[:, :-1])
-            loss = F.cross_entropy(z[:, tf_:].reshape(-1, 3), x[:, tf_ + 1:].reshape(-1))
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-            if log and (step % 100 == 0 or step == 1):
-                curve.append((step, accuracy(m, test, n, cot, ans)))
-        return accuracy(m, test, n, cot, ans), np.array(curve)
+    def accuracy():
+        return float((generate(test)[:, -1].numpy() == ans).mean())
 
-    def accuracy(m, test, n, cot, ans):
-        with torch.no_grad():
-            x = test[:, : n + 1]
-            steps = n if cot else 1
-            for _ in range(steps):  # greedy: write the chain (or just the answer)
-                nxt = m(x)[:, -1, :2].argmax(-1, keepdim=True)
-                x = torch.cat([x, nxt], 1)
-            return float((x[:, -1].numpy() == ans).mean())
+    curve, outs = [], []
+    probe = test[:REPLAY_STRINGS]
+    for step in range(0, steps + 1):
+        if step % log_every == 0:
+            curve.append((step, accuracy()))
+            if replay:
+                outs.append(generate(probe)[:, n + 1:].numpy() if mode == "chain" else generate(probe)[:, -1:].numpy())
+        if step == steps:
+            break
+        x, _ = parity_batch(g, n, 128, mode)
+        x = torch.tensor(x)
+        z = m(x[:, :-1])
+        loss = F.cross_entropy(z[:, first:].reshape(-1, 4), x[:, first + 1:].reshape(-1))
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    out = {"acc": curve[-1][1], "curve": np.array(curve)}
+    if replay:
+        out["replay"] = np.array(outs)
+        out["probe"] = probe[:, :n].numpy()
+    return out
 
-    out = dict(ns=[4, 8, 16])
+
+def compute_parity(seeds16=3):
+    out = dict(ns=[4, 8, 16], modes=list(PARITY_MODES), seeds=seeds16)
     for n in out["ns"]:
-        for cot in (0, 1):
-            acc, curve = train(n, cot, log=(n == 16))
-            out[f"acc_{'cot' if cot else 'direct'}{n}"] = acc
-            if n == 16:
-                out[f"curve_{'cot' if cot else 'direct'}"] = curve
-            print(f"    n={n} {'chain' if cot else 'direct'}: {acc:.1%}", flush=True)
-    assert out["acc_cot16"] > 0.95 and out["acc_direct16"] < 0.7
+        for mode in PARITY_MODES:
+            accs = []
+            for s in range(seeds16 if n == 16 else 1):
+                r = memo(f"parity_{n}_{mode}_{s}",
+                         lambda: parity_train(n, mode, s, replay=(n == 16 and s == 0 and mode != "filler")))
+                accs.append(float(r["acc"]))
+                if n == 16:
+                    out[f"curve_{mode}_{s}"] = np.asarray(r["curve"])
+                    if "replay" in r:
+                        out[f"replay_{mode}"] = np.asarray(r["replay"])
+                        out["probe"] = np.asarray(r["probe"])
+                print(f"    parity n={n} {mode} seed {s}: {accs[-1]:.1%}", flush=True)
+            out[f"acc_{mode}{n}"] = float(np.mean(accs))
+            out[f"accs_{mode}{n}"] = accs
+    # the names the first chapter's scenes have always used
+    for n in out["ns"]:
+        out[f"acc_cot{n}"] = out[f"acc_chain{n}"]
+    out["curve_cot"], out["curve_direct"] = out["curve_chain_0"], out["curve_direct_0"]
     return out
 
 
 # ---------------------------------------------------------------------------
+# Two-digit addition, answer only
+# ---------------------------------------------------------------------------
 DIG = 10
 PLUS, EQ, END = 10, 11, 12
 VOC = 13
+N_TEST = 500  # accuracy is measured on 500 new questions; pass@k and the rest on the first 200
 
 
 def add_problems(g, size):
     a, b = g.integers(10, 100, size), g.integers(10, 100, size)
     return a, b
+
+
+def test_questions():
+    return add_problems(rng(77), N_TEST)
 
 
 def encode(a, b, ans=None):
@@ -155,17 +246,20 @@ def encode(a, b, ans=None):
     return np.array(rows)
 
 
-def compute_rl():
+def add_model():
+    return tiny_gpt(VOC, 10, D=64, L=2, H=4)
+
+
+def train_add_base():
+    """The starting point of every addition experiment: 400 supervised steps, enough to be often right, not always."""
     import torch
     import torch.nn.functional as F
 
-    torch.set_num_threads(2)
     torch.manual_seed(2025)  # DeepSeek-AI, DeepSeek-R1 (GRPO)
-    m = tiny_gpt(VOC, 10, D=64, L=2, H=4)
+    m = add_model()
     opt = torch.optim.AdamW(m.parameters(), lr=1e-3)
     g = rng(1)
-    # a little supervised training: enough to be often right, not always
-    for step in range(400):
+    for _ in range(400):
         a, b = add_problems(g, 128)
         x = torch.tensor(encode(a, b, a + b))
         z = m(x[:, :-1])
@@ -173,97 +267,232 @@ def compute_rl():
         opt.zero_grad()
         loss.backward()
         opt.step()
-    ta, tb = add_problems(rng(77), 500)
+    return m
 
-    def sample(a, b, k=1, temp=1.0):
-        x = torch.tensor(encode(a, b)).repeat_interleave(k, 0)
-        logp = torch.zeros(len(x))
-        for _ in range(3):
-            z = m(x)[:, -1, :DIG] / temp
-            p = torch.softmax(z, -1)
-            c = torch.multinomial(p, 1)
-            logp = logp + torch.log(p.gather(1, c))[:, 0]
-            x = torch.cat([x, c], 1)
-        d = x[:, 6:9]
-        val = d[:, 0] + 10 * d[:, 1] + 100 * d[:, 2]
-        return x, val, logp
+
+def base_model():
+    """The cached starting model (trained once, then loaded)."""
+    import torch
+
+    p = CACHE.dir / "add_base.pt"
+    if not p.exists():
+        CACHE.dir.mkdir(parents=True, exist_ok=True)
+        torch.save(train_add_base().state_dict(), p)
+    m = add_model()
+    m.load_state_dict(torch.load(p))
+    return m.eval()
+
+
+def answer_dist(m, a, b):
+    """The model's probability for every 3-digit answer (0 to 999) to each question: (questions, 1000)."""
+    import torch
+
+    vals = np.arange(1000)
+    digits = np.stack([vals % 10, (vals // 10) % 10, vals // 100], 1)
+    out = []
+    with torch.no_grad():
+        for ai, bi in zip(a, b):
+            pre = np.repeat(encode(np.array([ai]), np.array([bi])), 1000, 0)
+            x = torch.tensor(np.concatenate([pre, digits], 1))
+            lp = torch.log_softmax(m(x[:, :-1])[:, 5:8, :DIG], -1).gather(2, x[:, 6:9, None])[..., 0]
+            out.append(lp.sum(1).exp().numpy())
+    return np.array(out)
+
+
+def sample_answers(m, a, b, k, gen=None, chunk=16384):
+    """k sampled answers (values 0..999) per question: (questions, k)."""
+    import torch
+
+    q = np.repeat(np.arange(len(a)), k)
+    out = np.zeros(len(q), int)
+    with torch.no_grad():
+        for c0 in range(0, len(q), chunk):
+            idx = q[c0:c0 + chunk]
+            x = torch.tensor(encode(a[idx], b[idx]))
+            for _ in range(3):
+                p = torch.softmax(m(x)[:, -1, :DIG], -1)
+                x = torch.cat([x, torch.multinomial(p, 1, generator=gen)], 1)
+            d = x[:, 6:9].numpy()
+            out[c0:c0 + chunk] = d[:, 0] + 10 * d[:, 1] + 100 * d[:, 2]
+    return out.reshape(len(a), k)
+
+
+def exact_passk(p_right, ks):
+    """pass@k exactly: 1 - (1 - p)^k per question, averaged."""
+    p = np.asarray(p_right, float)
+    return [float(np.mean(1 - (1 - p) ** k)) for k in ks]
+
+
+def compute_add_base():
+    threads(1)
+    m = base_model()
+    ta, tb = test_questions()
+    a, b = ta[:200], tb[:200]
+    D = answer_dist(m, a, b)
+    return {"dist": D.astype(np.float32), "a": a, "b": b, "p_right": D[np.arange(200), a + b]}
+
+
+def grpo_pg_run(seed, steps=300, G=8, Q=32, lr=5e-4, snap_every=20):
+    """Chapter two's recipe: G answers per question, advantage (r - mean) / std within the group, one step on
+    advantage x log-probability.  Accuracy every 20 steps; seed 0 also keeps its answers to six questions."""
+    import torch
+
+    threads(1)
+    m = base_model()
+    m.train()
+    torch.manual_seed(100 + seed)
+    gen = torch.Generator().manual_seed(200 + seed)
+    egen = torch.Generator().manual_seed(4)
+    opt = torch.optim.AdamW(m.parameters(), lr=lr)
+    g = rng(300 + seed)
+    ta, tb = test_questions()
 
     def acc():
-        with torch.no_grad():
-            _, val, _ = sample(ta, tb, temp=1.0)
-            return float((val.numpy() == ta + tb).mean())
+        v = sample_answers(m, ta, tb, 1, gen=egen)[:, 0]
+        return float((v == ta + tb).mean())
 
-    before = acc()
-    with torch.no_grad():
-        _, vals_before, _ = sample(ta[:200], tb[:200], k=32)
-    vals_before = vals_before.numpy().reshape(200, 32)
-    # GRPO: for each question, 8 samples; advantage = (reward - group mean) / group std; push up the good ones
-    curve = [(0, before)]
-    opt = torch.optim.AdamW(m.parameters(), lr=5e-4)
-    G = 8
-    for step in range(1, 301):
-        a, b = add_problems(g, 32)
-        x, val, _ = sample(a, b, k=G)
-        reward = (val.numpy() == np.repeat(a + b, G)).astype(float)
-        r = reward.reshape(-1, G)
+    curve, snaps = [(0, acc())], [sample_answers(m, ta[:6], tb[:6], 8, gen=egen)]
+    for step in range(1, steps + 1):
+        a, b = add_problems(g, Q)
+        x = torch.tensor(encode(a, b)).repeat_interleave(G, 0)
+        with torch.no_grad():
+            for _ in range(3):
+                p = torch.softmax(m(x)[:, -1, :DIG], -1)
+                x = torch.cat([x, torch.multinomial(p, 1, generator=gen)], 1)
+        d = x[:, 6:9].numpy()
+        val = d[:, 0] + 10 * d[:, 1] + 100 * d[:, 2]
+        r = (val == np.repeat(a + b, G)).astype(float).reshape(Q, G)
         adv = (r - r.mean(1, keepdims=True)) / (r.std(1, keepdims=True) + 1e-6)
-        adv = torch.tensor(adv.reshape(-1), dtype=torch.float32)
-        z = m(x[:, :-1])[:, 5:8, :DIG]
-        lp = torch.log_softmax(z, -1).gather(2, x[:, 6:9, None])[..., 0].sum(1)
-        loss = -(adv * lp).mean()
+        A = torch.tensor(adv.reshape(-1), dtype=torch.float32)
+        lp = torch.log_softmax(m(x[:, :-1])[:, 5:8, :DIG], -1).gather(2, x[:, 6:9, None])[..., 0].sum(1)
+        loss = -(A * lp).mean()
         opt.zero_grad()
         loss.backward()
         opt.step()
-        if step % 20 == 0:
+        if step % snap_every == 0:
             curve.append((step, acc()))
-            print(f"    GRPO step {step}: {curve[-1][1]:.1%}", flush=True)
-    after = acc()
-    out = dict(before=before, after=after, curve=np.array(curve), G=G, sft_steps=400, rl_steps=300,
-               vals_before=vals_before, truth=(ta[:200] + tb[:200]), ex_a=ta[:6], ex_b=tb[:6])
-    with torch.no_grad():
-        _, ex_vals, _ = sample(ta[:6], tb[:6], k=8)
-    out["ex_after"] = ex_vals.numpy().reshape(6, 8)
-    out["ex_before"] = vals_before[:6, :8]
-    assert after > before + 0.15
+            if seed == 0:
+                snaps.append(sample_answers(m, ta[:6], tb[:6], 8, gen=egen))
+            print(f"    rl seed {seed} step {step}: {curve[-1][1]:.1%}", flush=True)
+    out = {"curve": np.array(curve)}
+    if seed == 0:
+        out["snaps"] = np.array(snaps)
+        import torch as _t
+
+        _t.save(m.state_dict(), CACHE.dir / "add_rl.pt")
     return out
 
 
-def compute_sampling():
-    r = load("rl")
-    V, truth = np.asarray(r["vals_before"]), np.asarray(r["truth"])
-    n = V.shape[1]
-    right = (V == truth[:, None])
-    c = right.sum(1)
+def compute_rl(seeds=3):
+    threads(1)
+    ta, tb = test_questions()
+    runs = [memo(f"rl_seed{s}", lambda: grpo_pg_run(s)) for s in range(seeds)]
+    C = np.stack([np.asarray(r["curve"]) for r in runs])  # (seeds, checkpoints, 2)
+    snaps = np.asarray(runs[0]["snaps"])  # (checkpoints, 6, 8)
+    m = base_model()
+    import torch
+
+    vals_before = sample_answers(m, ta[:200], tb[:200], 32, gen=torch.Generator().manual_seed(5))
+    out = dict(G=8, Q=32, sft_steps=400, rl_steps=int(C[0, -1, 0]), seeds=seeds, curves=C, curve=C.mean(0),
+               before=float(C[0, 0, 1]), after=float(C[:, -1, 1].mean()), after_seeds=C[:, -1, 1],
+               snaps=snaps, snap_steps=C[0, :, 0], ex_a=ta[:6], ex_b=tb[:6], ex_before=snaps[0], ex_after=snaps[-1],
+               vals_before=vals_before, truth=ta[:200] + tb[:200])
+    return out
+
+
+# ---------------------------------------------------------------------------
+# pass@k from samples, the KL estimators, best-of-N
+# ---------------------------------------------------------------------------
+def compute_sampling(n=32, trials=400):
+    """The unbiased pass@k estimator against the naive plug-in one, each from n samples per question, against the
+    exact pass@k of the starting model (computed from its probability of the right answer)."""
+    d = load("add_base")
+    p = np.asarray(d["p_right"], float)
     ks = [1, 2, 4, 8, 16, 32]
+    exact = exact_passk(p, ks)
+    g = rng(31)
+    unb, naive = np.zeros((trials, len(ks))), np.zeros((trials, len(ks)))
+    for t in range(trials):
+        c = g.binomial(n, p)  # right answers among n samples, per question
+        for j, k in enumerate(ks):
+            u = np.array([1.0 if n - ci < k else 1 - math.comb(n - ci, k) / math.comb(n, k) for ci in c])
+            unb[t, j] = u.mean()
+            naive[t, j] = np.mean(1 - (1 - c / n) ** k)
+    # one question, many draws: the estimators' spread at k = 8
+    qi = int(np.argsort(np.abs(p - 0.2))[0])
+    c1 = g.binomial(n, p[qi], 4000)
+    k = 8
+    u1 = np.array([1.0 if n - ci < k else 1 - math.comb(n - ci, k) / math.comb(n, k) for ci in c1])
+    n1 = 1 - (1 - c1 / n) ** k
+    return dict(n=n, ks=ks, exact=exact, unbiased=unb.mean(0), unbiased_sd=unb.std(0), naive=naive.mean(0),
+                naive_sd=naive.std(0), q=qi, q_p=float(p[qi]), q_exact=float(1 - (1 - p[qi]) ** k), q_k=k,
+                q_unbiased=u1, q_naive=n1, trials=trials)
 
-    def pass_at_k(c_, k):  # 1 - C(n - c, k) / C(n, k): the chance at least one of k samples is right
-        if n - c_ < k:
-            return 1.0
-        return 1.0 - math.comb(n - c_, k) / math.comb(n, k)
 
-    passk = [float(np.mean([pass_at_k(int(ci), k) for ci in c])) for k in ks]
-    g = rng(5)
-    maj = []
-    for k in ks:
-        hits = []
-        for _ in range(20):
-            idx = np.stack([g.choice(n, k, replace=False) for _ in range(len(V))])
-            pick = np.take_along_axis(V, idx, 1)
-            votes = [np.bincount(row, minlength=1000).argmax() for row in pick]
-            hits.append(np.mean(np.array(votes) == truth))
-        maj.append(float(np.mean(hits)))
-    out = dict(ks=ks, passk=passk, majority=maj, n=n)
-    assert passk[-1] > maj[-1] >= maj[0] - 0.02 and passk[0] == passk[0]
+def compute_kl_est(n_samples=64):
+    """KL(pi || start) estimated from samples y ~ pi with r = pi_start(y) / pi(y):
+    k1 = -log r,  k2 = (log r)^2 / 2,  k3 = (r - 1) - log r  (Schulman 2020), against the exact KL per question."""
+    import torch
+
+    threads(1)
+    d = load("add_base")
+    a, b = np.asarray(d["a"]), np.asarray(d["b"])
+    P0 = np.asarray(d["dist"], float)
+    m = add_model()
+    m.load_state_dict(torch.load(CACHE.dir / "add_rl.pt"))
+    m.eval()
+    P = answer_dist(m, a, b)
+    eps = 1e-30
+    exact = (P * (np.log(P + eps) - np.log(P0 + eps))).sum(1)  # nats, per question
+    g = rng(41)
+    est = {k: np.zeros((len(a), n_samples)) for k in ("k1", "k2", "k3")}
+    for i in range(len(a)):
+        p = P[i] / P[i].sum()
+        y = g.choice(1000, n_samples, p=p)
+        lr = np.log(P0[i, y] + eps) - np.log(P[i, y] + eps)
+        est["k1"][i], est["k2"][i], est["k3"][i] = -lr, lr ** 2 / 2, np.expm1(lr) - lr
+    out = dict(exact=exact, n=n_samples, mean_exact=float(exact.mean()))
+    for k, v in est.items():
+        out[f"{k}_mean"] = float(v.mean())  # over questions and samples: compare with the exact mean KL
+        out[f"{k}_sd"] = float(v.std())  # the spread of a single sample's estimate
+        out[f"{k}_neg"] = float((v < 0).mean())
+        out[f"{k}_q"] = v.mean(1)  # per-question averages of 64 samples
+        out[f"{k}_hist"] = v[:, :16].reshape(-1)  # some single-sample estimates, for the histogram
     return out
+
+
+def compute_bon(Ns=(1, 2, 4, 8, 16, 32, 64, 128, 256)):
+    """Best-of-N with the checker on the starting model: draw N answers, keep a right one if there is one (else a
+    random wrong one).  With a 0/1 reward the best-of-N policy is pi_N(y) = pi(y) (1 - (1-p)^N) / p for a right
+    answer, pi(y) (1-p)^(N-1) for a wrong one, so its KL from pi has a closed form, below log N - (N-1)/N."""
+    d = load("add_base")
+    P = np.asarray(d["dist"], float)
+    P = P / P.sum(1, keepdims=True)
+    p = np.asarray(d["p_right"], float) / np.asarray(d["dist"], float).sum(1)
+    acc, kl, bound = [], [], []
+    for N in Ns:
+        w_right = (1 - (1 - p) ** N) / np.maximum(p, 1e-300)
+        w_wrong = (1 - p) ** (N - 1)
+        # KL = p * w_right * log w_right + (1 - p) * w_wrong * log w_wrong
+        k = p * w_right * np.log(np.maximum(w_right, 1e-300)) + (1 - p) * w_wrong * np.log(np.maximum(w_wrong, 1e-300))
+        acc.append(float(np.mean(1 - (1 - p) ** N)))
+        kl.append(float(np.mean(k)))
+        bound.append(math.log(N) - (N - 1) / N)
+    return dict(Ns=list(Ns), acc=acc, kl=kl, bound=bound)
 
 
 from videos.ai.ai28.objectives import compute_objectives  # noqa: E402
+from videos.ai.ai28 import think  # noqa: E402
 
 ITEMS = {
     "parity": compute_parity,
+    "add_base": compute_add_base,
     "rl": compute_rl,
-    "sampling": compute_sampling,
     "objectives": compute_objectives,
+    "sampling": compute_sampling,
+    "kl_est": compute_kl_est,
+    "bon": compute_bon,
+    **think.ITEMS,
 }
 CACHE.items = ITEMS
 

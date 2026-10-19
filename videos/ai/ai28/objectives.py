@@ -1,6 +1,7 @@
 """The RL objectives of 2024-25, side by side on Part 28's two-digit addition (the ``objectives`` item).
 
-Every run starts from the same briefly supervised model and sees the same stream of questions. Variants:
+Every run starts from the same briefly supervised model (``compute.base_model``) and sees its own seeded stream of
+questions; each variant runs with three seeds. Variants:
 
     pg      group-relative policy gradient, one step per batch (what the RL chapter trains): the ratio is always 1
     grpo    GRPO as published: 4 updates per batch of samples, the ratio clipped to [1 - 0.2, 1 + 0.2], and a KL
@@ -9,12 +10,14 @@ Every run starts from the same briefly supervised model and sees the same stream
     dapo    DAPO: clip-higher (0.2 below, 0.28 above), no KL, and dynamic sampling: groups whose answers are all right
             or all wrong carry no signal, so they are dropped and more questions drawn
     gspo    GSPO: one ratio per answer (the geometric mean of its tokens' ratios), clipped as a whole
+    cispo   CISPO (MiniMax-M1): every token keeps its gradient; only the importance weight is clipped (above, at
+            1 + 0.28) and treated as a constant
     dpo     DPO: no sampling during training; pairs (a right answer, a wrong one) drawn once from the starting model,
             and the Bradley-Terry loss on the log-ratio margin
 
 Recorded every 20 steps: accuracy on 500 new questions, the entropy of the model's digits, and its KL from the start;
-every step: the share of groups with no signal and the share of tokens the clip holds back. At the end, pass@k of the
-GRPO model against the starting model, on the RL chapter's 200 questions.
+every step: the share of groups with no signal, the share of tokens the clip holds back, and the answers sampled.
+At the end, the model's probability of the right answer to each of the 200 test questions, so pass@k is exact.
 """
 
 from __future__ import annotations
@@ -24,32 +27,11 @@ import math
 
 import numpy as np
 
-
 STEPS, G, Q = 300, 8, 32  # RL steps, answers per question, questions per step
 DPO_LR, DPO_BETA = 2e-5, 0.1  # Adam ignores the loss scale, so DPO needs a far smaller step than the RL runs
-VARIANTS = ("pg", "grpo", "dr", "dapo", "gspo", "dpo")
-
-
-def sft_model():
-    """Part 28's starting point, exactly: 400 supervised steps on two-digit addition."""
-    import torch
-
-    from videos.ai.ai28.compute import VOC, add_problems, encode, rng, tiny_gpt
-    import torch.nn.functional as F
-
-    torch.manual_seed(2025)
-    m = tiny_gpt(VOC, 10, D=64, L=2, H=4)
-    opt = torch.optim.AdamW(m.parameters(), lr=1e-3)
-    g = rng(1)
-    for _ in range(400):
-        a, b = add_problems(g, 128)
-        x = torch.tensor(encode(a, b, a + b))
-        z = m(x[:, :-1])
-        loss = F.cross_entropy(z[:, 5:].reshape(-1, VOC), x[:, 6:].reshape(-1))
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    return m
+VARIANTS = ("pg", "grpo", "dr", "dapo", "gspo", "cispo", "dpo")
+SEEDS = 3
+KS = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
 
 
 def sample(m, a, b, k=1, gen=None):
@@ -81,28 +63,9 @@ def digit_logp(m, x):
     return lp.gather(2, x[:, 6:9, None])[..., 0], lp
 
 
-def answer_dist(m, a, b):
-    """The model's probability for every 3-digit answer (0 to 999) to each question: (questions, 1000)."""
-    import torch
-
-    from videos.ai.ai28.compute import encode
-
-    vals = np.arange(1000)
-    digits = np.stack([vals % 10, (vals // 10) % 10, vals // 100], 1)
-    out = []
-    with torch.no_grad():
-        for ai, bi in zip(a, b):
-            pre = np.repeat(encode(np.array([ai]), np.array([bi])), 1000, 0)
-            x = torch.tensor(np.concatenate([pre, digits], 1))
-            lp, _ = digit_logp(m, x)
-            out.append(lp.sum(1).exp().numpy())
-    return np.array(out)
-
-
 def evaluate(m, ref, ta, tb, gen):
     """Accuracy (one try each), mean entropy of a digit (bits), and KL(model || start) per answer (bits)."""
     import torch
-
 
     x, val, _ = sample(m, ta, tb, gen=gen)
     with torch.no_grad():
@@ -114,25 +77,30 @@ def evaluate(m, ref, ta, tb, gen):
     return float((val == ta + tb).mean()), ent, kl
 
 
-def run(variant, base, ta, tb):
+def run(variant, seed, ta, tb):
     import torch
-
-    from videos.ai.ai28.compute import add_problems, rng
     import torch.nn.functional as F
 
-    torch.manual_seed(7)
+    from videos.ai.ai28.compute import add_problems, answer_dist, base_model, rng, threads
+
+    threads(1)
+    base = base_model()
+    torch.manual_seed(7 + 101 * seed)
     m, ref = copy.deepcopy(base), copy.deepcopy(base)
+    m.train()
     ref.eval()
     opt = torch.optim.AdamW(m.parameters(), lr=DPO_LR if variant == "dpo" else 5e-4)
-    g, gen, egen = rng(11), torch.Generator().manual_seed(3), torch.Generator().manual_seed(4)
-    eps_lo, eps_hi = 0.2, (0.28 if variant == "dapo" else 0.2)
+    g = rng(11 + 101 * seed)
+    gen, egen = torch.Generator().manual_seed(3 + 101 * seed), torch.Generator().manual_seed(4)
+    eps_lo, eps_hi = 0.2, (0.28 if variant in ("dapo", "cispo") else 0.2)
     mu = 1 if variant == "pg" else 4  # updates per batch of samples
     beta_kl = 0.04 if variant == "grpo" else 0.0
     curve, zero, clipped, drawn = [(0, *evaluate(m, ref, ta, tb, egen))], [], [], []
-    dists = [answer_dist(m, ta[:6], tb[:6])] if variant == "grpo" else []  # how it learns: probability over answers
+    keep_dists = variant == "grpo" and seed == 0
+    dists = [answer_dist(m, ta[:6], tb[:6])] if keep_dists else []  # how it learns: probability over answers
     pairs = None
     if variant == "dpo":  # preference pairs, drawn once from the starting model
-        pa, pb = add_problems(rng(12), STEPS * Q * 2)
+        pa, pb = add_problems(rng(12 + 101 * seed), STEPS * Q * 2)
         win, lose = [], []
         for c0 in range(0, len(pa), 2048):
             a, b = pa[c0:c0 + 2048], pb[c0:c0 + 2048]
@@ -161,6 +129,7 @@ def run(variant, base, ta, tb):
             opt.step()
             zero.append(float("nan"))
             clipped.append(float("nan"))
+            drawn.append(0)
         else:
             # draw questions; DAPO keeps drawing until it has Q groups that carry a signal (at most 4 rounds)
             xs, rs, olds, n_drawn, n_zero = [], [], [], 0, 0
@@ -183,7 +152,7 @@ def run(variant, base, ta, tb):
             zero.append(n_zero / n_drawn)
             drawn.append(n_drawn)
             adv = r - r.mean(1, keepdims=True)
-            if variant not in ("dr",):
+            if variant != "dr":
                 adv = adv / (r.std(1, keepdims=True) + 1e-6)
             A = torch.tensor(adv.reshape(-1), dtype=torch.float32)
             cl = []
@@ -197,6 +166,11 @@ def run(variant, base, ta, tb):
                     obj = torch.minimum(ratio * A, ratio.clamp(1 - eps_lo, 1 + eps_hi) * A)
                     cl.append(float(((ratio < 1 - eps_lo) | (ratio > 1 + eps_hi)).float().mean()))
                     loss = -obj.mean()
+                elif variant == "cispo":  # the weight is clipped and frozen; the gradient of log pi always flows
+                    ratio = torch.exp(lp - lp_old)
+                    w = ratio.detach().clamp(max=1 + eps_hi)
+                    cl.append(float((ratio > 1 + eps_hi).float().mean()))
+                    loss = -(w * A[:, None] * lp).mean()
                 else:
                     ratio = torch.exp(lp - lp_old)
                     obj = torch.minimum(ratio * A[:, None], ratio.clamp(1 - eps_lo, 1 + eps_hi) * A[:, None])
@@ -212,60 +186,56 @@ def run(variant, base, ta, tb):
             clipped.append(float(np.mean(cl)) if cl else 0.0)
         if step % 20 == 0:
             curve.append((step, *evaluate(m, ref, ta, tb, egen)))
-            if variant == "grpo":
+            if keep_dists:
                 dists.append(answer_dist(m, ta[:6], tb[:6]))
             if variant == "dpo":
                 with torch.no_grad():
                     dw = float((digit_logp(m, hold[0])[0].sum(1) - hw0).mean()) / math.log(2)
                     dl = float((digit_logp(m, hold[1])[0].sum(1) - hl0).mean()) / math.log(2)
                 moves.append((step, dw, dl))
-            print(f"    {variant} step {step}: acc {curve[-1][1]:.1%}, entropy {curve[-1][2]:.3f} bits, "
+            print(f"    {variant} seed {seed} step {step}: acc {curve[-1][1]:.1%}, entropy {curve[-1][2]:.3f} bits, "
                   f"KL {curve[-1][3]:.3f}, no-signal groups {np.nanmean(zero[-20:]):.0%}", flush=True)
-    out = dict(curve=np.array(curve), zero=np.array(zero), clipped=np.array(clipped))
+    m.eval()
+    D = answer_dist(m, ta[:200], tb[:200])
+    out = dict(curve=np.array(curve), zero=np.array(zero), clipped=np.array(clipped), drawn=np.array(drawn),
+               p_right=D[np.arange(200), ta[:200] + tb[:200]])
     if dists:
         out["dists"] = np.array(dists, dtype=np.float32)  # (evaluations, 6 questions, 1000 answers)
-        out["dist_a"], out["dist_b"] = ta[:6], tb[:6]
-    if drawn:
-        out["drawn"] = np.array(drawn)
     if pairs is not None:
         out["n_pairs"] = len(pairs[0])
         out["moves"] = np.array(moves)  # step, change in log2 p(winner), change in log2 p(loser), held-out pairs
-    return out, m
+    if variant == "grpo" and seed == 0:
+        import torch as _t
 
+        from videos.ai.ai28.compute import CACHE
 
-def pass_at_k(V, truth, ks):
-    n = V.shape[1]
-    c = (V == truth[:, None]).sum(1)
-
-    def one(c_, k):
-        return 1.0 if n - c_ < k else 1.0 - math.comb(n - c_, k) / math.comb(n, k)
-
-    return [float(np.mean([one(int(ci), k) for ci in c])) for k in ks]
+        _t.save(m.state_dict(), CACHE.dir / "add_grpo.pt")
+    return out
 
 
 def compute_objectives():
-    import torch
+    from videos.ai.ai28.compute import exact_passk, load, memo, test_questions
 
-    from videos.ai.ai28.compute import add_problems, rng
-
-    torch.set_num_threads(2)
-    base = sft_model()
-    ta, tb = add_problems(rng(77), 500)
-    out = dict(steps=STEPS, G=G, Q=Q, variants=list(VARIANTS))
-    models = {}
+    ta, tb = test_questions()
+    out = dict(steps=STEPS, G=G, Q=Q, variants=list(VARIANTS), seeds=SEEDS, ks=KS)
     for v in VARIANTS:
-        res, models[v] = run(v, base, ta, tb)
-        for k, val in res.items():
-            out[f"{v}_{k}"] = val
-    # does RL find new answers, or sharpen the ones the model could already find? pass@k before and after
-    ks = [1, 2, 4, 8, 16, 32, 64, 128]
-    a, b = ta[:200], tb[:200]
-    gen = torch.Generator().manual_seed(9)
-    for name, mm in (("base", base), ("grpo", models["grpo"]), ("pg", models["pg"])):
-        _, val, _ = sample(mm, a, b, k=max(ks), gen=gen)
-        out[f"passk_{name}"] = pass_at_k(val.reshape(len(a), -1), a + b, ks)
-        print(f"    pass@k {name}: " + " ".join(f"{p:.2f}" for p in out[f"passk_{name}"]), flush=True)
-    out["ks"] = ks
-    acc = {v: float(out[f"{v}_curve"][-1][1]) for v in VARIANTS}
-    assert all(acc[v] > float(out[f"{v}_curve"][0][1]) for v in VARIANTS if v != "dpo")  # DPO may not improve: see moves
+        runs = [memo(f"obj_{v}_seed{s}", lambda: run(v, s, ta, tb)) for s in range(SEEDS)]
+        C = np.stack([np.asarray(r["curve"]) for r in runs])  # (seeds, checkpoints, 4): step, acc, entropy, KL
+        out[f"{v}_curves"] = C
+        out[f"{v}_curve"] = C.mean(0)
+        for k in ("zero", "clipped", "drawn"):
+            out[f"{v}_{k}"] = np.stack([np.asarray(r[k], float) for r in runs]).mean(0)
+        out[f"{v}_passk"] = np.array([exact_passk(r["p_right"], KS) for r in runs])  # (seeds, ks)
+        out[f"{v}_p_right"] = np.stack([np.asarray(r["p_right"]) for r in runs])
+        if "dists" in runs[0]:
+            out[f"{v}_dists"] = np.asarray(runs[0]["dists"])
+            out[f"{v}_dist_a"], out[f"{v}_dist_b"] = ta[:6], tb[:6]
+        if "moves" in runs[0]:
+            out[f"{v}_moves"] = np.stack([np.asarray(r["moves"]) for r in runs]).mean(0)
+            out[f"{v}_n_pairs"] = int(runs[0]["n_pairs"])
+    base = load("add_base")
+    out["passk_base"] = exact_passk(base["p_right"], KS)
+    out["p_right_base"] = np.asarray(base["p_right"])
+    out["passk_grpo"] = out["grpo_passk"].mean(0)
+    out["passk_pg"] = out["pg_passk"].mean(0)
     return out
