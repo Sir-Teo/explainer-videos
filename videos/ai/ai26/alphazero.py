@@ -275,7 +275,7 @@ def train(gens: int, workers: int = 4):
         BZ = np.concatenate([b[2] for b in buffer])
         MX, MP = mirror(BX, BP)
         BX, BP, BZ = np.concatenate([BX, MX]), np.concatenate([BP, MP]), np.concatenate([BZ, BZ])
-        torch.set_num_threads(workers)
+        torch.set_num_threads(2)  # more threads spin against the self-play and other jobs (10x slower at 4)
         net.train()
         rng = np.random.default_rng(g)
         lp = lv = 0.0

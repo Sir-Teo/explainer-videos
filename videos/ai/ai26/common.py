@@ -135,3 +135,51 @@ def go_stone(board, col, row, black: bool, scale=0.92) -> Circle:
     r = board.step * 0.5 * scale
     return Circle(radius=r, stroke_width=1 if not black else 0, stroke_color="#555555",
                   fill_color="#111111" if black else "#F4F4F0", fill_opacity=1).move_to(go_point(board, col, row))
+
+
+# ---------------------------------------------------------------------------
+# The cart-pole, and maps over its state
+# ---------------------------------------------------------------------------
+LEFT_C, RIGHT_C = C.TRUE_P, C.MODEL_Q  # pushing left, pushing right
+
+
+def cartpole(x: float, theta: float, center=ORIGIN, scale=1.0, track=4.8, pole_len=1.5, color=AGENT) -> VGroup:
+    """The cart at position x (metres, track +-2.4) with the pole at angle theta (radians from vertical, + = right)."""
+    sx = track / 4.8 * scale
+    base = np.asarray(center, float)
+    rail = Line(base + LEFT * 2.4 * sx + DOWN * 0.18 * scale, base + RIGHT * 2.4 * sx + DOWN * 0.18 * scale,
+                color=GREY_C, stroke_width=2)
+    stops = VGroup(*[Line(base + RIGHT * e * sx + DOWN * 0.3 * scale, base + RIGHT * e * sx + DOWN * 0.06 * scale,
+                          color=C.PENALTY, stroke_width=3) for e in (-2.4, 2.4)])
+    cx = base + RIGHT * x * sx
+    cart = RoundedRectangle(width=0.62 * scale, height=0.3 * scale, corner_radius=0.06 * scale, stroke_width=0,
+                            fill_color=GREY_B, fill_opacity=1).move_to(cx)
+    pivot = cx + UP * 0.15 * scale
+    tip = pivot + pole_len * scale * np.array([np.sin(theta), np.cos(theta), 0.0])
+    pole = Line(pivot, tip, color=color, stroke_width=7 * scale)
+    knob = Dot(pivot, radius=0.05 * scale, color=WHITE)
+    return VGroup(rail, stops, cart, pole, knob)
+
+
+def heat_image(Z, vmax=None, neg=LEFT_C, pos=RIGHT_C, mid="#141A24", width=3.6, height=3.6) -> ImageMobject:
+    """A 2-D array as a picture: rows bottom to top, ``neg`` below zero, ``pos`` above."""
+    Z = np.asarray(Z, float)
+    vmax = vmax or max(np.abs(Z).max(), 1e-9)
+    t = np.clip(Z / vmax, -1, 1)[::-1]  # image rows run top to bottom
+    a, m, b = (np.array(ManimColor(c).to_rgb()) for c in (neg, mid, pos))
+    rgb = np.where(t[..., None] >= 0, m + (b - m) * t[..., None], m + (a - m) * (-t[..., None]))
+    img = ImageMobject((np.concatenate([rgb, np.ones(Z.shape + (1,))], -1) * 255).astype(np.uint8))
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear"])
+    return img.stretch_to_fit_width(width).stretch_to_fit_height(height)
+
+
+def state_map_frame(img: ImageMobject, th_max=0.21, thd_max=2.0, font_size=20) -> VGroup:
+    """Axes labels around a map over (pole angle, angular velocity)."""
+    box = SurroundingRectangle(img, buff=0, color=GREY_C, stroke_width=1.5)
+    xl = label(r"pole angle", font_size=font_size, color=GREY_A).next_to(box, DOWN, buff=0.32)
+    xt = VGroup(MathTex(rf"-{int(round(np.degrees(th_max)))}^\circ", font_size=font_size, color=GREY_B)
+                .next_to(box.get_corner(DL), DOWN, buff=0.08),
+                MathTex(rf"+{int(round(np.degrees(th_max)))}^\circ", font_size=font_size, color=GREY_B)
+                .next_to(box.get_corner(DR), DOWN, buff=0.08))
+    yl = label(r"angular velocity", font_size=font_size, color=GREY_A).rotate(PI / 2).next_to(box, LEFT, buff=0.3)
+    return VGroup(box, xl, xt, yl)

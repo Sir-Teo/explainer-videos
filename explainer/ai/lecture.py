@@ -70,7 +70,8 @@ def history_card(year, who: str, what: str, color=None, width: float = 5.2, font
     yr = label(str(year), font_size=font_size + 18, color=color)
     w = wrapped_label(who, width - 0.8, font_size, WHITE)
     head = VGroup(yr, w).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
-    return _card(head, _body(what, width - 0.8, font_size - 2, GREY_A), color, width)
+    body = _body(what, width - 0.8, font_size - 2, GREY_A) if what else VectorizedPoint()
+    return _card(head, body, color, width)
 
 
 def pause_card(question: str, color=None, width: float = 8.0, font_size=28) -> VGroup:
