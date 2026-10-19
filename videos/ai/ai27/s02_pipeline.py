@@ -93,16 +93,27 @@ class Pipeline(VoiceoverScene):
         cards = VGroup(
             history_card(2017, r"Christiano, Leike et al.", r"deep RL from human preferences: \ a simulated robot "
                          r"learns a backflip from about $900$ comparisons of two clips, \ under an hour of a person's "
-                         r"time", width=6.2, color=POLICY),
+                         r"time", width=6.5, font_size=24, color=POLICY),
             history_card(2020, r"Stiennon et al.", r"summaries trained on human comparisons are preferred to the "
-                         r"human-written reference summaries", width=6.2, color=PROXY),
+                         r"human-written reference summaries", width=6.5, font_size=24, color=PROXY),
             history_card(2022, r"InstructGPT, \ then ChatGPT", r"30 November 2022: \ the recipe as a free chat "
-                         r"service", width=6.2, color=ASSIST),
+                         r"service", width=6.5, font_size=24, color=ASSIST),
             history_card(2023, r"open recipes", r"Llama 2-Chat: \ over a million comparisons, two reward models; "
-                         r"\ DPO: \ preferences without a reward model", width=6.2, color=REWARD),
-        ).arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.1)
+                         r"\ DPO: \ preferences without a reward model", width=6.5, font_size=24, color=REWARD),
+        ).arrange_in_grid(rows=2, cols=2, buff=0.4).move_to(DOWN * 0.15)
         cite_ = cite(r"Christiano et al.\ (2017); \ Stiennon et al.\ (2020); \ Ouyang et al.\ (2022); "
                      r"\ Touvron et al.\ (2023); \ Rafailov et al.\ (2023)")
+        # the 2017 experiment in a picture: two clips, one click, many times
+        clips = VGroup(*[VGroup(RoundedRectangle(width=1.9, height=1.3, corner_radius=0.1, stroke_color=GREY_B,
+                                                 stroke_width=2),
+                                label(t, font_size=20, color=GREY_A)) for t in (r"clip A", r"clip B")])
+        for c_ in clips:
+            c_[1].move_to(c_[0])
+        clips.arrange(RIGHT, buff=0.5)
+        ask = label(r"which looks more like a backflip?", font_size=22, color=WHITE).next_to(clips, UP, buff=0.3)
+        pick = SurroundingRectangle(clips[1][0], color=POLICY, buff=0.08, stroke_width=4)
+        times = label(r"$\times\ 900$, \ under an hour", font_size=22, color=POLICY).next_to(clips, DOWN, buff=0.3)
+        demo = VGroup(ask, clips, pick, times).move_to(cards[1]).shift(DOWN * 0.6)
         with self.voiceover(
             "The idea is older than chatbots. <bookmark mark='a'/> In 2017, Paul Christiano, Jan Leike and colleagues "
             "at OpenAI and DeepMind taught a simulated robot to do a backflip without ever writing down what a "
@@ -115,7 +126,13 @@ class Pipeline(VoiceoverScene):
             "a method called DPO showed the reward model could be skipped altogether."
         ) as vo:
             self.play(FadeIn(cite_))
-            for k, mk in enumerate("abcd"):
+            vo.wait_until("a")
+            self.play(FadeIn(cards[0], shift=UP * 0.15), FadeIn(ask), FadeIn(clips))
+            self.play(Create(pick))
+            self.play(FadeIn(times))
+            vo.wait_until("b")
+            self.play(FadeOut(demo), FadeIn(cards[1], shift=UP * 0.15))
+            for k, mk in zip((2, 3), "cd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
         self.wait(0.3)

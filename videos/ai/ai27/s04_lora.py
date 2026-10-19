@@ -100,30 +100,37 @@ class LoRA(VoiceoverScene):
         d = load("lora")
         runs = d["runs"]
         tot = d["total_params"]
-        names = [rf"rank ${r['rank']}$" if r["rank"] != "full" else r"full" for r in runs]
-        cols = [ADAPT] * (len(runs) - 1) + [ASSIST]
-        x0, dx = -4.6, 2.0
-        hdr = VGroup(label(r"", font_size=22),
-                     label(r"trained numbers", font_size=22, color=GREY_A),
-                     label(r"held-out sentences \\ placed right", font_size=22, color=GREY_A),
-                     label(r"loss on novel text \\ (forgetting)", font_size=22, color=GREY_A))
-        ys = [1.6, 0.6, -0.5, -1.6]
-        for m, y in zip(hdr, ys):
-            m.move_to([-5.6, y, 0])
-        cells = VGroup()
-        for i, (r, nm, c) in enumerate(zip(runs, names, cols)):
-            x = x0 + 1.4 + dx * i
-            frac = r["params"] / tot
-            col = VGroup(label(nm, font_size=26, color=c).move_to([x, 2.5, 0]),
-                         label(rf"${r['params']:,}$".replace(",", "{,}") + rf" \\ (${100 * frac:.2g}\%$)",
-                               font_size=20, color=WHITE).move_to([x, ys[1] + 1.0, 0]),
-                         label(rf"${100 * r['which']:.0f}\%$", font_size=26, color=WHITE).move_to([x, ys[2] + 1.0, 0]),
-                         label(rf"${r['heldout']:.3f}$", font_size=26, color=WHITE).move_to([x, ys[3] + 1.0, 0]))
-            cells.add(col)
-        for m, y in zip(hdr[1:], ys[1:]):
-            m.move_to([-5.4, y + 1.0, 0])
-        base = note(rf"the base model's loss on novel text: \ ${d['base_heldout']:.3f}$ nats; \ computed").to_edge(
-            DOWN, buff=0.4)
+        start = load("sft")["base_which"]  # every run starts from the same base model
+        cols = {1: interpolate_color(ADAPT, BLACK, 0.45), 4: interpolate_color(ADAPT, BLACK, 0.2), 16: ADAPT,
+                "full": ASSIST}
+        names = {r["rank"]: (rf"rank ${r['rank']}$" if r["rank"] != "full" else r"every weight") for r in runs}
+        S = max(int(e[0]) for r in runs for e in r["evals"])
+        top = min(1.0, np.ceil(max(e[1] for r in runs for e in r["evals"]) * 10 + 1) / 10)
+        g = axes([0, S], [0, top], x_length=5.6, y_length=3.6, xlabel=r"fine-tuning steps",
+                 ylabel=r"held-out sentences placed right", xticks=[0, S], yticks=[0, top],
+                 yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-3.4, -0.2, 0])
+        chance = DashedLine(g.ax.c2p(0, 1 / 30), g.ax.c2p(S, 1 / 30), color=GREY_C, dash_length=0.06)
+        cl = label(r"guessing", font_size=18, color=GREY_C).next_to(chance, UP, buff=0.05).align_to(chance, RIGHT)
+        lines = VGroup(*[curve(g.ax, [0] + [e[0] for e in r["evals"]], [start] + [e[1] for e in r["evals"]],
+                               cols[r["rank"]], stroke_width=5 if r["rank"] in (16, "full") else 4) for r in runs])
+        # the table: what each run trained, how well it did, what it forgot
+        head = VGroup(VectorizedPoint(), label(r"trained \\ numbers", font_size=20, color=GREY_A),
+                      label(r"right", font_size=20, color=GREY_A),
+                      label(r"forgetting \\ (nats)", font_size=20, color=GREY_A))
+        xs = [1.3, 3.1, 4.6, 5.9]
+        for m, x in zip(head, xs):
+            m.move_to([x, 2.2, 0])
+        rows = VGroup()
+        for k, r in enumerate(runs):
+            y = 1.3 - 0.75 * k
+            rows.add(VGroup(
+                label(names[r["rank"]], font_size=22, color=cols[r["rank"]]).move_to([xs[0], y, 0]),
+                label(rf"${r['params']:,}$".replace(",", "{,}"), font_size=22).move_to([xs[1], y + 0.12, 0]),
+                label(rf"${100 * r['params'] / tot:.2g}\%$", font_size=18, color=GREY_B).move_to([xs[1], y - 0.2, 0]),
+                label(rf"${100 * r['which']:.0f}\%$", font_size=22).move_to([xs[2], y, 0]),
+                label(rf"${r['heldout'] - d['base_heldout']:+.3f}$", font_size=22).move_to([xs[3], y, 0])))
+        tag = note(r"computed: \ the novels model, \ which-book task; \ forgetting = change in loss on novel text")
+        tag.to_edge(DOWN, buff=0.35)
         full, r1 = runs[-1], runs[0]
         best = max(runs[:-1], key=lambda r: r["which"])
         forget_full = full["heldout"] - d["base_heldout"]
@@ -138,13 +145,15 @@ class LoRA(VoiceoverScene):
             f"adapters' as little as {forget_lora:+.3f}. LoRA learns less, and forgets less: the title of a 2024 "
             "study that found the same at scale."
         ) as vo:
-            self.play(FadeIn(hdr), FadeIn(VGroup(*[c_[0] for c_ in cells])), FadeIn(base))
+            self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(head), FadeIn(tag),
+                      FadeIn(VGroup(*[r_[0] for r_ in rows])))
             vo.wait_until("a")
-            self.play(FadeIn(VGroup(*[c_[1] for c_ in cells])))
+            self.play(FadeIn(VGroup(*[VGroup(r_[1], r_[2]) for r_ in rows])))
             vo.wait_until("b")
-            self.play(FadeIn(VGroup(*[c_[2] for c_ in cells])))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.25), run_time=3.0)
+            self.play(FadeIn(VGroup(*[r_[3] for r_ in rows])))
             vo.wait_until("c")
-            self.play(FadeIn(VGroup(*[c_[3] for c_ in cells])))
+            self.play(FadeIn(VGroup(*[r_[4] for r_ in rows])))
         self.wait(0.3)
         self.clear_scene()
 

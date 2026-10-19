@@ -374,3 +374,58 @@ def contour_lines(ax: Axes, f, x_range, y_range, levels, n=(160, 120), colors=(S
             path.add_line_to(ax.c2p(*b))
         out.add(path)
     return out
+
+
+# ---------------------------------------------------------------------------
+# Plots: axes with a few ticks, curves, bands of spread, legends
+# ---------------------------------------------------------------------------
+def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
+    pts = [ax.c2p(x, y) for x, y in zip(xs, ys) if np.isfinite(y)]
+    m = VMobject(color=color, stroke_width=stroke_width)
+    return m.set_points_smoothly(pts) if smooth else m.set_points_as_corners(pts)
+
+
+def band(ax, xs, lo, hi, color, opacity=0.18) -> VMobject:
+    """The region between two curves (a spread across seeds)."""
+    top = [ax.c2p(x, y) for x, y in zip(xs, hi)]
+    bot = [ax.c2p(x, y) for x, y in zip(xs, lo)][::-1]
+    return Polygon(*top, *bot, stroke_width=0, fill_color=color, fill_opacity=opacity)
+
+
+def axes(x_range, y_range, x_length=6.0, y_length=3.6, xlabel="", ylabel="", xticks=None, yticks=None,
+         xfmt=None, yfmt=None, font_size=20, center=ORIGIN, log_x=False) -> VGroup:
+    """Plain axes with a few tick labels and names; ``ax`` is the first element. ``log_x``: x_range in log10."""
+    from explainer.analysis import label
+
+    ax = CornerAxes(x_range=x_range, y_range=y_range, x_length=x_length, y_length=y_length, tips=False,
+                    axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+    g = VGroup(ax)
+    xfmt = xfmt or (lambda v: (f"10^{{{int(v)}}}" if log_x else f"{v:g}"))
+    yfmt = yfmt or (lambda v: f"{v:g}")
+    for v in (xticks if xticks is not None else []):
+        g.add(MathTex(xfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(v, y_range[0]), DOWN, buff=0.12))
+    for v in (yticks if yticks is not None else []):
+        g.add(MathTex(yfmt(v), font_size=font_size, color=GREY_B).next_to(ax.c2p(x_range[0], v), LEFT, buff=0.12))
+    if xlabel:
+        xl = label(xlabel, font_size=font_size + 2, color=GREY_A)
+        xl.next_to(ax, DOWN, buff=0.5 if xticks is not None else 0.2)
+        g.add(xl)
+        g.xlabel = xl
+    if ylabel:
+        yl = label(ylabel, font_size=font_size + 2, color=GREY_A).next_to(ax, UP, buff=0.18).align_to(ax, LEFT)
+        g.add(yl)
+        g.ylabel = yl
+    g.ax = ax
+    g.move_to(center)
+    return g
+
+
+def legend(items, font_size=20, buff=0.18) -> VGroup:
+    """(color, text) rows with a short line swatch."""
+    from explainer.analysis import label
+
+    rows = VGroup()
+    for col, txt in items:
+        rows.add(VGroup(Line(ORIGIN, RIGHT * 0.4, color=col, stroke_width=5), label(txt, font_size=font_size, color=col))
+                 .arrange(RIGHT, buff=0.15))
+    return rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
