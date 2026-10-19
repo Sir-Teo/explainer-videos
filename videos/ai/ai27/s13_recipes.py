@@ -146,16 +146,14 @@ class Recipes(VoiceoverScene):
         dist.next_to(small, DOWN, buff=0.25)
         down = Arrow(boxes[-1].get_bottom() + DOWN * 0.55, small.get_right() + RIGHT * 0.1, buff=0.1, color=REF,
                      stroke_width=3, path_arc=-0.5)
-        cost = VGroup(label(r"Qwen3-8B: \ GPU hours", font_size=20, color=GREY_A),
-                      VGroup(Rectangle(width=4.0, height=0.32, stroke_width=0, fill_color=POLICY, fill_opacity=0.9),
-                             label(r"RL: \ $17{,}920$", font_size=20, color=POLICY)).arrange(RIGHT, buff=0.2),
-                      VGroup(Rectangle(width=4.0 * 1800 / 17920, height=0.32, stroke_width=0, fill_color=REF,
-                                       fill_opacity=0.9),
-                             label(r"on-policy distillation: \ $1{,}800$", font_size=20, color=REF)).arrange(RIGHT,
-                                                                                                         buff=0.2))
-        for r_ in cost[1:]:
-            r_[0].align_to(cost[0], LEFT)
-        cost.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -1.9, 0])
+        x0, W = 0.6, 3.0  # bars start at x0; RL's is W long, distillation's to scale
+        cost = VGroup(label(r"Qwen3-8B: \ GPU hours", font_size=20, color=GREY_A))
+        for k, (nm, v, col) in enumerate(((r"RL", 17920, POLICY), (r"on-policy distillation", 1800, REF))):
+            bar = Rectangle(width=W * v / 17920, height=0.3, stroke_width=0, fill_color=col, fill_opacity=0.9)
+            bar.move_to([x0, -2.45 - 0.45 * k, 0], aligned_edge=LEFT)
+            cost.add(VGroup(bar, label(rf"{nm}: \ ${v:,}$".replace(",", "{,}"), font_size=20, color=col)
+                            .next_to(bar, RIGHT, buff=0.15)))
+        cost[0].move_to([x0, -2.05, 0], aligned_edge=LEFT)
         cite_ = cite(r"Qwen Team, \textit{Qwen3 technical report} (2025)")
         with self.voiceover(
             "By 2025 every stage of this part sat in one pipeline. Here is the one Alibaba published for Qwen3. "
