@@ -3798,7 +3798,9 @@
     "Mnih et al., \\textit{Playing Atari with deep reinforcement learning}": "Mnih等，\\textit{Playing Atari with deep reinforcement learning}",
     "DeepMind, London: \\ one Q-learning agent, \\ raw pixels in, joystick actions out; \\ seven Atari games": "伦敦的DeepMind：\\ 一个Q学习智能体，\\ 输入原始像素，输出摇杆动作；\\ 七个雅达利游戏",
     "CFR at scale: \\ poker": "大规模的CFR：\\ 扑克",
-    "Problems turned into games": "变成游戏的问题"
+    "Problems turned into games": "变成游戏的问题",
+    "2023\\; open weights; DPO": "2023\\; 开放权重；DPO",
+    "2025\\; DeepSeek-R1": "2025\\; DeepSeek-R1"
   },
   "phrases": {
     "width": "宽度",
