@@ -12,6 +12,7 @@ class DPO(VoiceoverScene):
         self.derive()
         self.ours()
         self.displacement()
+        self.frontier()
         self.family()
 
     def card(self):
@@ -144,6 +145,71 @@ class DPO(VoiceoverScene):
             self.play(FadeIn(g), Create(zero), FadeIn(lg))
             vo.wait_until("a")
             self.play(Create(cw), Create(cl), run_time=3.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def frontier(self):
+        """Every method trades divergence for gold: best-of-n, RLHF and DPO on one chart, gold gained against sqrt KL."""
+        bo, rl, dp, sw = load("bon"), load("rlhf"), load("dpo"), load("dpo_sweep")
+        base = load("sft")["sft_line_gold"]
+        kx = np.sqrt(np.asarray(bo["kl"]))
+        bon = np.asarray(bo["large_gold"]) - float(bo["large_gold"][0])  # the same prompts' n = 1 average
+        pts = [("RLHF", b, rl[f"b{b:g}".replace(".", "_") + "_final"]["gold"] - base,
+                rl[f"b{b:g}".replace(".", "_") + "_final"]["kl"]) for b in rl["betas"]]
+        pts += [("DPO", b, g_ - base, k_) for b, g_, k_ in sorted([(dp["beta"], dp["gold"], dp["kl"])] +
+                                                                [tuple(p_) for p_ in sw["points"]])]
+        xmax = max(float(kx[-1]), max(np.sqrt(max(k_, 0)) for *_, k_ in pts)) * 1.08
+        ys = [float(bon.min()), float(bon.max())] + [g_ for _, _, g_, _ in pts]
+        lo, hi = min(ys + [0.0]), max(ys)
+        pad = 0.1 * (hi - lo + 1e-6)
+        g = axes([0, xmax], [lo - pad, hi + pad], x_length=8.0, y_length=4.4,
+                 xlabel=r"$\sqrt{\mathrm{KL}}$ from the fine-tuned model \ (nats$^{1/2}$ per line)",
+                 ylabel=r"gold gained over the fine-tuned model", xticks=[0, round(xmax)], center=[-1.4, -0.3, 0])
+        zero = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(xmax, 0), color=GREY_D, dash_length=0.06)
+        bc = curve(g.ax, kx, bon, PROXY, 5)
+        bl = label(r"best-of-$n$, \ $n = 1 \dots 256$", font_size=20, color=PROXY).next_to(bc.get_end(), UP, buff=0.1)
+        dots = VGroup()
+        for meth, b, g_, k_ in pts:
+            col = KLC if meth == "RLHF" else POLICY
+            d_ = Dot(g.ax.c2p(np.sqrt(max(k_, 0)), g_), radius=0.09, color=col)
+            dots.add(VGroup(d_, label(rf"{meth}, \ $\beta = {b:g}$", font_size=18, color=col).next_to(d_, RIGHT,
+                                                                                                     buff=0.1)))
+        tag = note(r"computed: \ gold on the same samples' prompts; \ KL measured on each policy's own lines")
+        tag.to_corner(DR, buff=0.2)
+        # the verdict: does any trained policy beat sampling-and-choosing, at the same divergence or at all?
+        at = lambda k_: float(np.interp(np.sqrt(max(k_, 0)), kx, bon))
+        inr = [p_ for p_ in pts if np.sqrt(max(p_[3], 0)) <= kx[-1]]
+        above = [p_ for p_ in inr if p_[2] > at(p_[3]) + 0.01]
+        meth, b, gbest, _ = max(pts, key=lambda p_: p_[2])
+        if gbest > float(bon.max()) + 0.02:
+            verdict = (f"The best trained policy, {meth} at beta {b:g}, gains {gbest:+.2f}, more than best-of-256's "
+                       f"{float(bon.max()):+.2f}: training reaches answers that sampling alone rarely finds.")
+        else:
+            verdict = (f"No trained policy gains more than best-of-256's {float(bon.max()):+.2f}, and best-of-n gets "
+                       "there with no training at all, which is why labs still use it, and use it to make training "
+                       "data.")
+        if inr:
+            cmp_ = (f"At equal divergence, {len(above)} of the {len(inr)} trained policies that stay within "
+                    "best-of-n's range do better than it.")
+        else:
+            cmp_ = "Every trained policy drifts further from where it started than best-of-256 ever does."
+        with self.voiceover(
+            "Every method in this part trades divergence from the fine-tuned model for gold. Put them on one chart: "
+            "gold gained, against the square root of the KL, as in the last chapter. <bookmark mark='a'/> "
+            "Best-of-n with the larger reward model is the yardstick: it trains nothing. <bookmark mark='b'/> "
+            "RLHF's two runs, <bookmark mark='c'/> and DPO at three values of beta. <bookmark mark='d'/> " + verdict
+            + " <bookmark mark='e'/> " + cmp_
+        ) as vo:
+            self.play(FadeIn(g), Create(zero), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(bc), FadeIn(bl), run_time=2.0)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_, p_ in zip(dots, pts) if p_[0] == "RLHF"],
+                                  lag_ratio=0.4))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(d_, scale=1.5) for d_, p_ in zip(dots, pts) if p_[0] == "DPO"],
+                                  lag_ratio=0.4))
         self.wait(0.3)
         self.clear_scene()
 

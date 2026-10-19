@@ -278,6 +278,21 @@ ZH = {
     'f"Training on the judge\'s own labels doesn\'t help here':
         "在这里，用裁判自己的标签来训练没有帮助：{100 * d['acc_ai']:.0f}%，而原来是{100 * d['acc_small']:.0f}%。裁判教不了它自己不知道的东西；真实的AI裁判之所以有用，是因为它们比被评判的模型大得多。",
 
+    '"Every method in this part trades divergence from the fine-tuned model for gold.':
+        "这一部分的每一种方法，都是用偏离微调模型的程度去换金标准。把它们放进同一张图：纵轴是金标准的提高，横轴和上一章一样，是KL的平方根。<bookmark mark='a'/>用较大奖励模型的最优n选1是参照：它什么都不训练。<bookmark mark='b'/>RLHF的两次训练，<bookmark mark='c'/>以及三个β值下的DPO。<bookmark mark='d'/>{verdict}<bookmark mark='e'/>{cmp_}",
+
+    'f"At equal divergence, {len(above)} of the {len(inr)} trained policies':
+        "在相同的散度下，停留在最优n选1范围内的{len(inr)}个训练出来的策略里，有{len(above)}个比它好。",
+
+    "Every trained policy drifts further from where it started than best-of-256 ever does.":
+        "每一个训练出来的策略，离出发点都比最优256选1走得更远。",
+
+    'f"The best trained policy, {meth} at beta {b:g}, gains':
+        "最好的训练策略，是β取{b:g}的{meth}，提高了{gbest:+.2f}，超过最优256选1的{float(bon.max()):+.2f}：训练能到达单靠采样很少找到的回答。",
+
+    'f"No trained policy gains more than best-of-256\'s':
+        "没有一个训练出来的策略，提高得比最优256选1的{float(bon.max()):+.2f}更多，而最优n选1根本不需要训练就能做到，所以各个实验室仍在使用它，还用它来制造训练数据。",
+
 }
 
 PHRASES = {
