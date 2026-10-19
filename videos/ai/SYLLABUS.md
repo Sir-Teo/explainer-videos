@@ -1,9 +1,9 @@
-# AI, Built: the expanded syllabus (plan of record, draft 2)
+# AI, Built: the expanded syllabus (plan of record, draft 3)
 
-Goal: a university-level course in video, **as comprehensive and as close to the frontier as possible**, in English
-and Chinese to the standard of *Analysis, Built*, rendering on macOS and Linux. Each part runs **30–60 minutes**,
-depending on how much its content needs. Currently the twenty parts total about 4.9 hours. This plan totals about 23
-hours across 28 parts.
+Goal: a university-level course in video, **as comprehensive and as close to the frontier as possible**, telling
+**how AI became what it is today** alongside the mathematics. It is in English and Chinese to the standard of
+*Analysis, Built*, and renders on macOS and Linux. Each part runs **30–60 minutes**, depending on how much its
+content needs. Currently the twenty parts total about 4.9 hours. This plan totals about 26 hours across 31 parts.
 
 ## 1. The standard every part meets
 
@@ -21,6 +21,16 @@ hours across 28 parts.
 - Theorem and definition cards.
 - A problem set (4–6 problems, about 90 s on screen; full solutions in the part's README, English and Chinese).
 - A reference card listing textbooks, the classic papers, and the frontier papers.
+
+**The history thread.** The series is also the story of how the field got here: who tried what, when, why it
+worked, and the dead ends and winters in between.
+- Every part opens with its era ("how we got here", 2–3 min), lit on the timeline strip.
+- Every idea is credited with its people and year.
+- The parts follow the field's real arc: the symbolic era (Part 2); learning from data and the first neural networks
+  (Parts 6–9); the deep learning revolution (Parts 10–12); the transformer and the language-model lineage up to
+  ChatGPT and the open-weight frontier (Parts 13–19); generation and perception (Parts 20–25); reward, reasoning and
+  agents (Parts 26–29); then understanding and trust (Parts 30–31).
+- The timeline strip (`explainer.ai.timeline`) gains the milestones each new part adds.
 
 **Frontier sweep.** Before a part is written, its literature is checked against primary sources (arXiv, technical
 reports, model cards) up to the writing date. Anything newer than mid-2026 is verified against its primary report
@@ -69,58 +79,66 @@ meaning, a narrating camera, and live quantities. New instruments:
 - `tools/lecture_length.py` (new): an estimate before render, the measured length after; fails under 30 min.
 - `contact_sheet.py`, `dead_air.py`, `collect_text.py --check`, `check_narration.py`.
 
-## 2. The series, re-cut from 20 parts to 28
+## 2. The series, re-cut from 20 parts to 31
 
 | New | Part | Was |
 |---|---|---|
 | **I** | **Foundations** | |
 | 1 | The Guessing Game | 1 |
-| 2 | Vectors That Mean Things | 2 |
-| 3 | Change | 3 |
-| 4 | Randomness in Motion | 4 |
-| **II** | **Learning** | |
-| 5 | Classical ML | 5 |
-| 6 | Statistical ML | 6 |
-| 7 | Fitting and Generalizing | 7 |
-| 8 | Networks | 8 |
-| 9 | **Seeing and Remembering** (CNNs, RNNs, the first attention) | new |
-| 10 | Going Downhill | 9 |
-| 11 | The Mathematics of Scale | 10 |
-| **III** | **The Transformer at Scale** | |
-| 12 | Attention as Geometry | 11 |
-| 13 | Memory | 12 |
-| 14 | Sparsity | 13 |
-| 15 | **Pretraining at Scale** (data, parallelism, precision, stability) | new |
-| 16 | Inference | 19 |
+| 2 | **Thinking Machines** (Turing, search, logic, games, expert systems, the winters) | new |
+| 3 | Vectors That Mean Things | 2 |
+| 4 | Change | 3 |
+| 5 | Randomness in Motion | 4 |
+| **II** | **Learning from Data** | |
+| 6 | Classical ML | 5 |
+| 7 | Statistical ML | 6 |
+| 8 | Fitting and Generalizing | 7 |
+| 9 | Networks | 8 |
+| 10 | **Seeing and Remembering** (CNNs, RNNs, the first attention) | new |
+| 11 | Going Downhill | 9 |
+| 12 | The Mathematics of Scale | 10 |
+| **III** | **The Transformer Era** | |
+| 13 | Attention as Geometry | 11 |
+| 14 | **The Language-Model Lineage** (GPT-1 to the open-weight frontier) | new |
+| 15 | Memory | 12 |
+| 16 | Sparsity | 13 |
+| 17 | **Silicon** (why AI runs on GPUs) | new |
+| 18 | **Pretraining at Scale** (data, parallelism, precision, stability) | new |
+| 19 | Inference | 19 |
 | **IV** | **Generation and Perception** | |
-| 17 | **Four Ways to Generate** (autoregressive, VAE, GAN, flows, energy) | new |
-| 18 | Diffusion and Flow | 14 |
-| 19 | Images, Video and 3D | 15 |
-| 20 | Every Sense Is a Token | 16 |
-| 21 | **Learning Without Labels** (self-supervised learning) | new |
-| 22 | **Symmetry and Science** (GNNs, equivariance, AlphaFold, weather, maths) | new |
+| 20 | **Four Ways to Generate** (autoregressive, VAE, GAN, flows, energy) | new |
+| 21 | Diffusion and Flow | 14 |
+| 22 | Images, Video and 3D | 15 |
+| 23 | Every Sense Is a Token | 16 |
+| 24 | **Learning Without Labels** (self-supervised learning) | new |
+| 25 | **Symmetry and Science** (GNNs, equivariance, AlphaFold, weather, maths) | new |
 | **V** | **Agency** | |
-| 23 | **Reinforcement Learning, from Bellman to AlphaZero** | new |
-| 24 | **Post-Training and Alignment** | new |
-| 25 | Reasoning | 17 |
-| 26 | Agents and Worlds | 18 |
-| **Finale** | | |
-| 27 | Inside the Model | 20 |
-| 28 | **Can We Trust It?** (evaluation, safety, open problems) | new |
+| 26 | **Reinforcement Learning, from Bellman to AlphaZero** | new |
+| 27 | **Post-Training and Alignment** | new |
+| 28 | Reasoning | 17 |
+| 29 | Agents and Worlds | 18 |
+| **Finale** | **** | |
+| 30 | Inside the Model | 20 |
+| 31 | **Can We Trust It?** (evaluation, safety, open problems) | new |
+
+Old → new: 1→1, 2→3, 3→4, 4→5, 5→6, 6→7, 7→8, 8→9, 9→11, 10→12, 11→13, 12→15, 13→16, 14→21, 15→22, 16→23,
+17→28, 18→29, 19→19, 20→30.
 
 **The scoreboard** gains rows, all on the same passage and the same thirty novels:
-- Part 6: an ∞-gram (suffix array).
-- Part 9: a character LSTM.
-- Part 12: our transformer.
-- Part 13: a gated-delta hybrid and a kNN-LM.
-- Part 14: a small MoE.
-- Part 15: a model trained with the full recipe.
-- Part 18: a masked-diffusion LM (an ELBO bound).
+- Part 7: an ∞-gram (suffix array).
+- Part 9: the neural n-gram (as now).
+- Part 10: a character LSTM.
+- Part 13: our transformer.
+- Part 14: GPT-style pretraining vs a BERT-style masked model, on equal compute.
+- Part 15: a gated-delta hybrid and a kNN-LM.
+- Part 16: a small MoE.
+- Part 18: a model trained with the full recipe.
+- Part 21: a masked-diffusion LM (an ELBO bound).
 
 **The renumbering** happens once, in Phase 0:
 - `git mv` the directories.
 - `ACTS` / `PARTS` / timeline entries in `explainer/ai`.
-- Part references in narration, en and zh.
+- Part references in code and narration, en and zh (`part=`, `series_map`, payoff cards, cross-part imports and caches).
 - Scoreboard part labels, `ai_upload.json`, README, CLAUDE.md.
 
 ## 3. Part by part
@@ -148,7 +166,31 @@ Length targets are estimates; content decides.
 *Visuals:* the typical set shrinking inside sequence space; the arithmetic coder's interval zooming; forward vs
 reverse KL fits sliding over a bimodal p.
 
-### Part 2 · Vectors That Mean Things (~50)
+### Part 2 · Thinking Machines (new, ~50): the symbolic era
+1. Turing 1950: the imitation game; Turing machines and what cannot be computed (the halting problem, sketched).
+2. Dartmouth 1956; the Logic Theorist; the physical-symbol-system hypothesis.
+3. Search: state spaces; BFS, DFS, uniform cost; A* with admissibility and consistency proved; heuristics from
+   relaxed problems (the 15-puzzle).
+4. Local search: hill climbing, simulated annealing (Boltzmann acceptance), genetic algorithms.
+5. Games: minimax; alpha–beta with its b^{d/2} best case derived; Samuel's checkers (1959, the first program that
+   learned); Deep Blue (1997): evaluation functions plus search.
+6. Logic: propositional and first-order logic; resolution.
+7. SAT: DPLL and CDCL; the random 3-SAT phase transition at clause ratio ≈ 4.27 (computed).
+8. Constraint satisfaction: backtracking and arc consistency.
+9. Planning: STRIPS, the frame problem.
+10. Knowledge: semantic nets, frames, expert systems (MYCIN, XCON), Cyc; knowledge graphs today.
+11. ELIZA (1966) and the ELIZA effect.
+12. The winters: the Lighthill report (1973), the Lisp-machine collapse (1987); Moravec's paradox; why hand-written
+    rules fail on perception's long tail.
+13. What survives: search inside AlphaZero, SAT/SMT in verification, Lean in AlphaProof, planning in agents;
+    neurosymbolic AI.
+
+*Computed:* A* vs Dijkstra node counts; alpha–beta vs minimax node counts on Connect Four; the 3-SAT transition
+sharpening with n; annealing on a TSP.
+*Visuals:* the search frontier as a wavefront (Dijkstra's circle vs A*'s ellipse); a game tree with pruned branches
+greying out; the SAT curve steepening.
+
+### Part 3 · Vectors That Mean Things (~50)
 1. Vectors, inner products, Cauchy–Schwarz.
 2. Tensors and einsum (the notation attention uses).
 3. Matrices as maps; projection and Gram–Schmidt; P = A(AᵀA)⁻¹Aᵀ.
@@ -160,11 +202,13 @@ reverse KL fits sliding over a bimodal p.
 9. High dimensions: shell concentration, near-orthogonality with variance 1/d derived.
 10. Johnson–Lindenstrauss, proved (Gaussian projection, χ² tail, union bound).
 11. GPT-2's embedding geometry and anisotropy.
+12. Low rank in the wild: the Netflix Prize (2006–09), matrix factorization and collaborative filtering;
+    two-tower retrieval.
 
 *Visuals:* circle → ellipse in three SVD stages; an image mosaic sharpening rank by rank; the MP law vs a trained
 layer's spectrum.
 
-### Part 3 · Change (~50)
+### Part 4 · Change (~50)
 1. Derivative as best linear approximation.
 2. Gradient as steepest ascent (Cauchy–Schwarz).
 3. Jacobians of real layers: softmax diag(p) − ppᵀ, layer norm, matmul.
@@ -183,13 +227,13 @@ layer's spectrum.
 *Visuals:* `ComputeGraph`; tangent planes on 3D surfaces; descent zig-zagging in narrow valleys; the Lagrange
 picture (gradients parallel at the constrained optimum).
 
-### Part 4 · Randomness in Motion (~55)
+### Part 5 · Randomness in Motion (~55)
 1. The CLT by repeated convolution.
 2. Multivariate Gaussians; conditioning via the Schur complement.
 3. MLE bias; Fisher information and Cramér–Rao.
 4. Bayes: Beta–binomial live; MAP as regularization.
 5. Exponential families and maximum entropy (softmax and Gibbs as max-ent).
-6. Concentration: Markov, Chebyshev, Chernoff/Hoeffding (Part 7 uses them).
+6. Concentration: Markov, Chebyshev, Chernoff/Hoeffding (Part 8 uses them).
 7. Sampling: inverse CDF, rejection, Box–Muller; the Gumbel-max trick and Gumbel-softmax.
 8. LLM decoding: temperature, top-k, top-p, min-p.
 9. Markov chains: stationary distributions as eigenvectors, detailed balance, spectral gap.
@@ -197,12 +241,12 @@ picture (gradients parallel at the constrained optimum).
     strategies come back).
 11. Metropolis–Hastings from detailed balance; Langevin dynamics.
 12. Brownian motion as a scaling limit; quadratic variation; Itô's lemma.
-13. SDEs, Euler–Maruyama; Fokker–Planck derived; Ornstein–Uhlenbeck (Part 18's forward process).
+13. SDEs, Euler–Maruyama; Fokker–Planck derived; Ornstein–Uhlenbeck (Part 21's forward process).
 
 *Visuals:* `ParticleFlow` Langevin with its density evolving in 3D; the top-p cut sliding over a real next-token
 distribution.
 
-### Part 5 · Classical ML (~55)
+### Part 6 · Classical ML (~55)
 1. Least squares as projection (3D column space); Gauss–Markov; pseudoinverse and QR.
 2. Ridge as SVD shrinkage σ²/(σ²+λ); lasso via soft-thresholding and its computed path; elastic net.
 3. Logistic regression: convexity (XᵀSX), Newton/IRLS; calibration.
@@ -215,24 +259,30 @@ distribution.
 10. Bagging's ρσ² + (1−ρ)σ²/B and random forests.
 11. Boosting: AdaBoost as exponential loss; gradient boosting with XGBoost's second-order split gain.
 12. Metrics: ROC/AUC, precision-recall, cross-validation; the authorship contest.
+13. History: Fisher (1936), the SVM era (Vapnik 1995), Viola–Jones (2001): boosting finds faces in real time.
 
 *Visuals:* a kernel lifting circles to 3D, where a plane separates them; decision boundaries morphing with k and C.
 
-### Part 6 · Statistical ML (~55)
+### Part 7 · Statistical ML (~55)
 1. PCA two ways (max variance, min reconstruction) and via SVD; probabilistic PCA.
 2. ICA (the cocktail party).
 3. Mixtures and EM: the Jensen bound, monotonicity proved; k-means as hard EM.
-4. HMMs: forward, Viterbi lattice, Baum–Welch (CTC in Part 20 reuses the forward algorithm).
+4. HMMs: forward, Viterbi lattice, Baum–Welch (CTC in Part 23 reuses the forward algorithm).
 5. Graphical models: d-separation, factor graphs, belief propagation.
 6. Gaussian processes: posterior from Gaussian conditioning, marginal-likelihood hyperparameters.
 7. Variational inference: the ELBO identity, mean-field CAVI, reparameterization, amortization (VAEs come back).
 8. Bayesian Occam's razor.
 9. Kneser–Ney from Good–Turing and absolute discounting.
 10. ∞-gram (infini-gram, suffix arrays) on the thirty novels: a new scoreboard row.
+11. Topic models: latent Dirichlet allocation (2003).
+12. The statistical revolution in language: IBM translation models trained by EM (1990s), BLEU; speech
+    recognition with HMM–GMMs.
+13. From graphs to causes: Pearl's do-calculus, the back-door criterion, why correlation is not intervention.
+14. Bayesian optimization (a GP choosing where to look next).
 
 *Visuals:* EM ellipses breathing; Viterbi paths lighting up; a GP band shrinking as points land.
 
-### Part 7 · Fitting and Generalizing (~50)
+### Part 8 · Fitting and Generalizing (~50)
 1. Risk, empirical risk, Bayes risk.
 2. Bias–variance, derived.
 3. Hoeffding (simulated); finite classes by union bound.
@@ -249,37 +299,41 @@ distribution.
 *Visuals:* shattering animations; Hoeffding histograms tightening; the singular spectrum sliding to zero at the
 peak.
 
-### Part 8 · Networks (~50)
-1. Perceptron and Novikoff's convergence proof.
-2. Universal approximation built from ReLU bumps; Barron's dimension-free rate.
-3. Depth separation by sawtooth composition (2^L pieces); linear regions counted.
-4. Xavier/He derived; mean-field signal propagation, the edge of chaos; gradients through 50 layers.
-5. Residuals; BatchNorm, LayerNorm, RMSNorm Jacobians; pre- vs post-norm.
-6. Activations: GELU, SiLU, SwiGLU gating.
-7. The modern block.
-8. KANs and the Kolmogorov–Arnold theorem (the 2024 debate).
-9. Bengio 2003: the neural n-gram, scoreboard row.
+### Part 9 · Networks (~50)
+1. History: McCulloch–Pitts (1943); Rosenblatt's Mark I perceptron (1958); Minsky–Papert and XOR (1969);
+   backprop (Rumelhart, Hinton, Williams 1986); deep belief nets (2006).
+2. Perceptron and Novikoff's convergence proof.
+3. Universal approximation built from ReLU bumps; Barron's dimension-free rate.
+4. Depth separation by sawtooth composition (2^L pieces); linear regions counted.
+5. Xavier/He derived; mean-field signal propagation, the edge of chaos; gradients through 50 layers.
+6. Residuals; BatchNorm, LayerNorm, RMSNorm Jacobians; pre- vs post-norm.
+7. Activations: GELU, SiLU, SwiGLU gating.
+8. The modern block.
+9. KANs and the Kolmogorov–Arnold theorem (the 2024 debate).
+10. Bengio 2003: the neural n-gram, scoreboard row.
 
 *Visuals:* `FoldPlane`; activation histograms as a 3D ridge plot through depth.
 
-### Part 9 · Seeing and Remembering (new, ~55)
-1. Convolution as weight sharing; translation equivariance proved.
-2. Receptive-field arithmetic, stride, pooling.
-3. LeNet → AlexNet → VGG → ResNet; ImageNet error by year (cited).
-4. What filters learn (our CNN on the glyph images).
-5. Adversarial examples: FGSM from linearity.
-6. Depthwise and dilated convs, ConvNeXt.
-7. RNNs and BPTT; vanishing gradients via products of Jacobians.
-8. LSTM (the constant error carousel); GRU.
-9. Seq2seq, teacher forcing, beam search.
-10. Bahdanau attention (2014): the birth of attention.
-11. A char-LSTM on the thirty novels: scoreboard row.
-12. RNNs return: minLSTM/xLSTM and parallel scans, the bridge to Part 13.
+### Part 10 · Seeing and Remembering (new, ~55)
+1. Vision before deep learning: edges, SIFT and HOG features, hand-made pipelines.
+2. Convolution as weight sharing; translation equivariance proved.
+3. Receptive-field arithmetic, stride, pooling.
+4. LeNet (1989–98) and MNIST; ImageNet (2009) and AlexNet on two GPUs (2012): the moment; VGG, ResNet; ImageNet
+   error by year (cited).
+5. What filters learn (our CNN on the glyph images).
+6. Adversarial examples: FGSM from linearity.
+7. Depthwise and dilated convs, ConvNeXt.
+8. RNNs and BPTT; vanishing gradients via products of Jacobians.
+9. LSTM (1997, the constant error carousel); GRU.
+10. Seq2seq (2014), teacher forcing, beam search; neural machine translation overtakes the statistical systems.
+11. Bahdanau attention (2014): the birth of attention.
+12. A char-LSTM on the thirty novels: scoreboard row.
+13. RNNs return: minLSTM/xLSTM and parallel scans, the bridge to Part 15.
 
 *Visuals:* a kernel sweeping out a feature map; receptive-field cones in 3D; the LSTM cell as a conveyor belt;
 gradient norm decaying back through time.
 
-### Part 10 · Going Downhill (~55)
+### Part 11 · Going Downhill (~55)
 1. GD rates for L-smooth and strongly convex losses, derived.
 2. SGD noise; the SDE view with temperature η/B; linear scaling and the critical batch (gradient noise scale).
 3. Edge of stability (sharpness measured at 2/η).
@@ -293,7 +347,7 @@ gradient norm decaying back through time.
 
 *Visuals:* optimizers racing on one 3D landscape; singular values pushed to 1 by Newton–Schulz.
 
-### Part 11 · The Mathematics of Scale (~55)
+### Part 12 · The Mathematics of Scale (~55)
 1. NTK and lazy training: why it learns no features.
 2. μP derived from Θ(1) updates; coordinate checks; width transfer, computed; depth transfer (CompleteP).
 3. Scaling laws; our own CPU sweep, fit.
@@ -307,11 +361,11 @@ gradient norm decaying back through time.
 
 *Visuals:* iso-FLOP valleys in 3D; the Fourier spectrum of a grokked embedding lighting up.
 
-### Part 12 · Attention as Geometry (~55)
+### Part 13 · Attention as Geometry (~55)
 1. Attention as Nadaraya–Watson; modern Hopfield networks = attention.
 2. √d from variance.
 3. Heads as low-rank maps; causal masks.
-4. Encoder, decoder, encoder–decoder (BERT, GPT, T5).
+4. Encoder, decoder, encoder–decoder (the 2017 paper's translation model; the lineage is Part 14).
 5. FLOP and parameter count per block.
 6. Positions: sinusoidal, ALiBi, RoPE with relative position proved, NoPE.
 7. Context extension: PI, NTK-aware, YaRN; log-n scaling.
@@ -321,7 +375,27 @@ gradient norm decaying back through time.
 11. RASP and what a fixed-depth transformer can compute (TC⁰).
 12. Scoreboard row.
 
-### Part 13 · Memory (~55)
+### Part 14 · The Language-Model Lineage (new, ~55): how today's LLMs came to be
+1. "Attention Is All You Need" (2017): the translation Transformer, its configuration and BLEU (cited).
+2. Pretrain, then fine-tune: ELMo, ULMFiT, GPT-1 (2018); BERT's masked LM and the GLUE era.
+3. T5: text-to-text, and its ablations of objectives and architectures.
+4. GPT-2 (2019): zero-shot "unsupervised multitask learners"; the staged release.
+5. GPT-3 (2020): few-shot in-context learning appearing with scale; 175B; its 3.1 × 10²³ FLOPs from 6ND.
+6. Code: Codex and HumanEval.
+7. Following instructions: FLAN and T0; InstructGPT's three stages; ChatGPT (November 2022), the turning point.
+8. GPT-4 and multimodality; the closed era; system cards.
+9. Open weights: LLaMA, Mistral/Mixtral, Qwen, DeepSeek. The architecture converges: pre-norm RMSNorm, SwiGLU,
+   RoPE, GQA, no biases (published configs animated year by year).
+10. The 2024–26 frontier: DeepSeek-V3/R1, Qwen3, Kimi K2, GLM-4.5, gpt-oss, hybrids; newer releases after
+    verification against their reports.
+11. Compute trends (Epoch AI): training compute ×4–5 per year; cost; tokens per parameter over time.
+12. Our own lineage: GPT-style vs BERT-style pretraining on the novels at equal compute (scoreboard row); few-shot
+    behaviour appearing as our models grow.
+
+*Visuals:* configuration cards morphing year to year (layers, width, heads, context, tokens); a log-scale tower of
+training compute; the family tree of models.
+
+### Part 15 · Memory (~55)
 1. KV-cache arithmetic; MQA/GQA; MLA (absorption, decoupled RoPE).
 2. Cache eviction (StreamingLLM, H2O).
 3. Linear attention as an RNN.
@@ -336,7 +410,7 @@ gradient norm decaying back through time.
 
 *Visuals:* the associative scan; the memory matrix written and read.
 
-### Part 14 · Sparsity (~50)
+### Part 16 · Sparsity (~50)
 1. Top-k gating and the router's gradient.
 2. Switch balancing loss derived; DeepSeekMoE fine-grained and shared experts.
 3. Aux-loss-free bias; sigmoid routing.
@@ -346,7 +420,22 @@ gradient norm decaying back through time.
 7. Sparse attention: sliding window, NSA, MoBA, DSA's lightning indexer.
 8. Lottery tickets, pruning, 2:4 sparsity, activation sparsity.
 
-### Part 15 · Pretraining at Scale (new, ~55)
+### Part 17 · Silicon (new, ~50): why AI runs on GPUs
+1. The end of Dennard scaling; parallelism; GPUs and SIMT; CUDA (2007).
+2. Matrix multiply as the workload: FLOP counts; tiling for reuse; arithmetic intensity derived.
+3. The memory hierarchy (registers, SRAM, HBM); the roofline derived (Part 19 builds on it).
+4. Tensor cores and systolic arrays (the TPU): C = AB as a wavefront.
+5. Number formats in hardware: FP32, TF32, BF16, FP8, FP4, microscaling (MX).
+6. Interconnect: NVLink, InfiniBand, topologies; the α–β cost model for collectives (Part 18 uses it).
+7. Writing a kernel: a tiled matmul; occupancy; Triton.
+8. Trends: FLOPs per dollar, energy per FLOP, power and data centres (cited).
+9. Other accelerators: Trainium, Cerebras wafer-scale, Groq; analog and neuromorphic, briefly.
+
+*Computed:* the roofline of the machine rendering the video (measured matmul throughput vs size); a cache-blocking
+speed-up; a simulated systolic array.
+*Visuals:* data flowing through a systolic array; measured points on the roofline; zooming down the memory hierarchy.
+
+### Part 18 · Pretraining at Scale (new, ~55)
 1. Anatomy of a frontier run (cited reports).
 2. Data: extraction, language ID, MinHash-LSH dedup with the collision probability derived, quality classifiers
    (FineWeb-Edu), contamination.
@@ -365,8 +454,8 @@ gradient norm decaying back through time.
 
 *Visuals:* `ShardGrid` collectives; a pipeline Gantt chart filling in.
 
-### Part 16 · Inference (~55)
-1. Roofline derived; arithmetic intensity of GEMV vs GEMM; prefill vs decode.
+### Part 19 · Inference (~55)
+1. The roofline (from Part 17) applied: GEMV vs GEMM; prefill vs decode.
 2. Continuous batching; paged KV; prefix caching; disaggregated serving.
 3. Speculative decoding: exactness proved, the expected-accepted formula; EAGLE and MTP drafters.
 4. Quantization: Δ²/12, outliers, SmoothQuant, GPTQ from Optimal Brain Surgeon, AWQ, rotations (QuaRot, SpinQuant).
@@ -375,7 +464,7 @@ gradient norm decaying back through time.
 7. FlashAttention 1–3: online softmax, tiling, IO complexity; FlashDecoding.
 8. Constrained decoding via automaton masks.
 
-### Part 17 · Four Ways to Generate (new, ~55)
+### Part 20 · Four Ways to Generate (new, ~55)
 1. The generative problem.
 2. Autoregressive (PixelCNN).
 3. VAEs: ELBO, posterior collapse, β-VAE.
@@ -390,7 +479,7 @@ gradient norm decaying back through time.
 
 *Visuals:* flows warping a grid; the GAN two-player field spiralling.
 
-### Part 18 · Diffusion and Flow (~60)
+### Part 21 · Diffusion and Flow (~60)
 1. Forward process in closed form; ELBO → ε-prediction; Tweedie.
 2. Denoising score matching, proved.
 3. Reverse SDE and the probability-flow ODE; DDIM; SNR schedules.
@@ -403,7 +492,7 @@ gradient norm decaying back through time.
 10. LLaDA, block diffusion, fast diffusion LMs.
 11. A masked-diffusion LM on the novels (scoreboard row, as a bound).
 
-### Part 19 · Images, Video and 3D (~55)
+### Part 22 · Images, Video and 3D (~55)
 1. ViT.
 2. Latent spaces: KL-f8, deep-compression AEs, REPA and representation autoencoders.
 3. U-Net vs DiT (adaLN-Zero).
@@ -414,7 +503,7 @@ gradient norm decaying back through time.
    autoregressive video.
 8. 3D: NeRF's volume-rendering integral derived; 3D Gaussian splatting (covariance projection).
 
-### Part 20 · Every Sense Is a Token (~55)
+### Part 23 · Every Sense Is a Token (~55)
 1. BPE (merges as compression); unigram LM.
 2. Byte-level and tokenizer-free: BLT, entropy patching.
 3. Tokenization and bits per character.
@@ -427,7 +516,7 @@ gradient norm decaying back through time.
 10. VLMs: connectors, dynamic resolution, M-RoPE.
 11. Omni models (Thinker–Talker).
 
-### Part 21 · Learning Without Labels (new, ~45)
+### Part 24 · Learning Without Labels (new, ~45)
 1. Pretext tasks.
 2. Contrastive learning: SimCLR, MoCo, temperature; alignment and uniformity on the hypersphere.
 3. Non-contrastive: BYOL, SimSiam (why stop-gradient prevents collapse), Barlow Twins, VICReg.
@@ -439,7 +528,7 @@ gradient norm decaying back through time.
 
 *Computed on the glyph images:* collapse shown, then prevented.
 
-### Part 22 · Symmetry and Science (new, ~55)
+### Part 25 · Symmetry and Science (new, ~55)
 1. Groups; invariance vs equivariance; Deep Sets' theorem.
 2. GNNs: message passing, expressivity = the WL test, over-smoothing, graph attention.
 3. E(3)-equivariance (EGNN, spherical harmonics, sketched).
@@ -452,7 +541,7 @@ gradient norm decaying back through time.
 
 *Computed:* the equivariance check, WL on graphs, a GNN on synthetic graphs. Systems' numbers are cited.
 
-### Part 23 · Reinforcement Learning, from Bellman to AlphaZero (new, ~60; the pilot)
+### Part 26 · Reinforcement Learning, from Bellman to AlphaZero (new, ~60; the pilot)
 1. The RL problem: MDPs, return, discount.
 2. Bandits: ε-greedy, UCB from Hoeffding, the regret lower bound, Thompson sampling.
 3. Bellman equations; the γ-contraction proof; value and policy iteration; the policy-improvement theorem.
@@ -460,9 +549,9 @@ gradient norm decaying back through time.
 5. SARSA and Q-learning; off-policy; the deadly triad.
 6. DQN: replay, target nets, Atari.
 7. Double DQN: the max-of-noisy-estimates bias proved; dueling, distributional (C51), Rainbow.
-8. Policy gradients: REINFORCE, baselines, actor–critic, GAE derived; TRPO, PPO's clip (Parts 24–25 build on
+8. Policy gradients: REINFORCE, baselines, actor–critic, GAE derived; TRPO, PPO's clip (Parts 27–28 build on
    it); maximum-entropy RL (SAC).
-9. Search: minimax, alpha–beta, Deep Blue; MCTS and UCT.
+9. Search, from Part 2's minimax and alpha–beta to MCTS and UCT; history from Samuel's checkers and TD-Gammon.
 10. AlphaGo (2016): SL policy, RL policy, value net, rollouts, PUCT; move 37 (prior ≈ 1/10,000, cited).
 11. AlphaGo Zero and AlphaZero: MCTS as a policy-improvement operator; the loss (z − v)² − πᵀlog p + c‖θ‖²;
     tabula rasa Go, chess, shogi.
@@ -470,7 +559,7 @@ gradient norm decaying back through time.
 13. Imperfect information: regret matching and CFR (Libratus, Pluribus); AlphaStar's league; OpenAI Five.
 14. Adversarial policies that beat superhuman KataGo.
 15. Games for algorithms: AlphaTensor, AlphaDev.
-16. From games to language (Parts 24–25).
+16. From games to language (Parts 27–28).
 
 *Computed:*
 - gridworld DP/TD;
@@ -483,7 +572,7 @@ gradient norm decaying back through time.
 *Visuals:* `SearchTree` growing with visit counts as branch weight; `Board` heatmaps; value diffusing across a
 gridworld; Bellman contraction as shrinking balls.
 
-### Part 24 · Post-Training and Alignment (new, ~55)
+### Part 27 · Post-Training and Alignment (new, ~55)
 1. SFT and chat templates.
 2. LoRA (intrinsic dimension; QLoRA, DoRA); forgetting.
 3. Reward models: Bradley–Terry.
@@ -497,7 +586,7 @@ gridworld; Bellman contraction as shrinking balls.
 
 *Computed:* DPO and LoRA on our transformer over the novels; a merging experiment.
 
-### Part 25 · Reasoning (~60)
+### Part 28 · Reasoning (~60)
 1. CoT as computation: TC⁰ vs serial steps, parity.
 2. Self-consistency.
 3. ORMs vs PRMs.
@@ -513,19 +602,20 @@ gridworld; Bellman contraction as shrinking balls.
 
 *Computed:* GRPO on a tiny arithmetic transformer on CPU.
 
-### Part 26 · Agents and Worlds (~60)
-1. POMDPs and belief.
-2. The agent loop: ReAct, tools, function calling, memory, multi-agent.
-3. Long horizons: compounding error; the METR horizon doubling (cited data, fitted); SWE-bench.
-4. Imitation learning: BC's O(T²ε) vs DAgger.
-5. World models: Ha and Schmidhuber, Dreamer (RSSM, KL balancing, symlog), Genie 1–3, JEPA world models.
-6. VLAs: RT-2, OpenVLA, π0's flow-matched action expert, FAST tokens, π0.5.
-7. Sim-to-real.
-8. Computer use.
+### Part 29 · Agents and Worlds (~60)
+1. History: Shakey (1966–72), the DARPA driving challenges (2004–07), robot learning.
+2. POMDPs and belief.
+3. The agent loop: ReAct, tools, function calling, memory, multi-agent.
+4. Long horizons: compounding error; the METR horizon doubling (cited data, fitted); SWE-bench.
+5. Imitation learning: BC's O(T²ε) vs DAgger.
+6. World models: Ha and Schmidhuber, Dreamer (RSSM, KL balancing, symlog), Genie 1–3, JEPA world models.
+7. VLAs: RT-2, OpenVLA, π0's flow-matched action expert, FAST tokens, π0.5.
+8. Sim-to-real; domain randomization.
+9. Computer use and coding agents.
 
 *Computed:* Dreamer-lite on a tiny environment; DAgger vs BC; FAST's DCT.
 
-### Part 27 · Inside the Model (~55)
+### Part 30 · Inside the Model (~55)
 1. Probing and its caveats; logit and tuned lens.
 2. Activation and path patching.
 3. Superposition: the phase diagram, computed.
@@ -536,32 +626,33 @@ gridworld; Bellman contraction as shrinking balls.
 8. Our transformer's induction circuit, end to end; grokking, mechanistically.
 9. CoT faithfulness.
 
-### Part 28 · Can We Trust It? (new, ~50; the finale)
-1. Evaluation science: contamination, bootstrap CIs and paired tests (on our scoreboard).
-2. Bradley–Terry/Elo arenas; item response theory; LLM-as-judge biases.
-3. Forecasting capabilities.
-4. Reward hacking and specification gaming.
-5. Scalable oversight (debate, weak-to-strong, computed small).
-6. Alignment faking and sandbagging evidence.
-7. CoT monitorability; AI control protocols.
-8. Dangerous-capability evals; adversarial robustness.
-9. Privacy: extraction, DP-SGD.
-10. Open problems.
-11. The final scoreboard, and back to Shannon.
+### Part 31 · Can We Trust It? (new, ~50; the finale)
+1. History: Wiener (1960) and Good (1965) on machines that outrun their makers; the questions, then and now.
+2. Evaluation science: contamination, bootstrap CIs and paired tests (on our scoreboard).
+3. Bradley–Terry/Elo arenas; item response theory; LLM-as-judge biases.
+4. Forecasting capabilities.
+5. Reward hacking and specification gaming.
+6. Scalable oversight (debate, weak-to-strong, computed small).
+7. Alignment faking and sandbagging evidence.
+8. CoT monitorability; AI control protocols.
+9. Dangerous-capability evals; adversarial robustness.
+10. Privacy: extraction, DP-SGD.
+11. Open problems.
+12. The final scoreboard, and back to Shannon: how far the guessing game has come.
 
 ## 4. Phases
 
 0. **Infrastructure:**
-   - the renumbering to 28;
+   - the renumbering to 31;
    - the new instruments and lecture cards;
    - `lecture_length.py` and `smoke.py`;
    - the PyTorch TTS engine;
    - Linux setup docs;
    - a silent en + zh smoke render of every part on Linux (this container).
-1. **Pilot: Part 23 (RL, from Bellman to AlphaZero).** It's new, so there's no legacy to fight, and it exercises
+1. **Pilot: Part 26 (RL, from Bellman to AlphaZero).** It's new, so there's no legacy to fight, and it exercises
    every new instrument. Delivered in en + zh, with previews and contact sheets. **Review with the user**, then lock
    the standard.
-2. **Roll-out in series order, Parts 1 → 28.** Each part goes through:
+2. **Roll-out in series order, Parts 1 → 31.** Each part goes through:
    - the frontier sweep;
    - locking the chapter list;
    - `compute.py`;
@@ -569,5 +660,5 @@ gridworld; Bellman contraction as shrinking balls.
    - Chinese narration and text, then QA gates;
    - commit and push.
 
-Scale: about 23 hours of video, about 110–130k narration words per language, and roughly 4–6k lines of scene code
+Scale: about 26 hours of video, about 130–150k narration words per language, and roughly 4–6k lines of scene code
 per part. Expect one part per one or two long sessions.
