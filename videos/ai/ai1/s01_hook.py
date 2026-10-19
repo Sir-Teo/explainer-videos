@@ -263,16 +263,19 @@ class Hook(VoiceoverScene):
         m = series_map(current=1).shift(DOWN * 0.2)
         title = label(SERIES_ZH if zh() else SERIES_EN, font_size=44).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Over twenty parts, we'll build the answer from the ground up. <bookmark mark='a'/> First, the "
-            "foundations: probability and information, vectors, calculus, and randomness. <bookmark mark='b'/> "
-            "Then learning, from classical statistics to neural networks and the mathematics of scale. "
-            "<bookmark mark='c'/> Then the engines of today's models: attention, memory, sparsity, diffusion, and "
-            "the many kinds of tokens. <bookmark mark='d'/> And finally, reasoning, agents, inference, and what we "
-            "can see when we look inside."
+            "Over thirty-one parts, we'll build the answer from the ground up, and see how the field got here. "
+            "<bookmark mark='a'/> First, the foundations: probability and information, the symbolic era of search and "
+            "logic, vectors, calculus and randomness. <bookmark mark='b'/> Then learning from data: classical "
+            "statistics, the first neural networks, the deep learning revolution, and the mathematics of scale. "
+            "<bookmark mark='c'/> Then the transformer era: attention, the language-model lineage, memory, sparsity, "
+            "the chips it runs on, and training and serving at scale. <bookmark mark='d'/> Then generation and "
+            "perception: diffusion, images and video, every sense as tokens, learning without labels, and science. "
+            "<bookmark mark='e'/> Then agency: reinforcement learning, post-training, reasoning and agents. "
+            "<bookmark mark='f'/> And finally, what we can see when we look inside, and whether we can trust it."
         ) as vo:
             self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeIn(title))
             self.remove(q)
-            for k, mark in enumerate(["a", "b", "c", "d"]):
+            for k, mark in enumerate("abcdef"):
                 vo.wait_until(mark)
                 col = m.cols[k]
                 self.play(FadeIn(col.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in col.rows],
