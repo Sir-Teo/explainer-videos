@@ -95,26 +95,34 @@ class Merge(VoiceoverScene):
     def ours(self):
         d = load("merge")
         rows = d["rows"]
-        hdr = VGroup(label(r"model", font_size=22, color=GREY_A), label(r"which book? \ right", font_size=22,
-                                                                         color=GREY_A),
-                     label(r"a line about\dots: \ ends cleanly", font_size=22, color=GREY_A))
-        xs = [-4.0, 0.4, 4.0]
-        for m, x in zip(hdr, xs):
-            m.move_to([x, 2.6, 0])
-        names = {"which only": r"which-book fine-tune", "line only": r"line fine-tune"}
-        table = VGroup()
+        names = {"which only": r"which-book \\ fine-tune", "line only": r"line \\ fine-tune"}
+
+        def nm(name):
+            if name in names:
+                return names[name]
+            lam = name.split()[-1]
+            return r"the base" if float(lam) == 0 else rf"base $+$ \\ $\lambda = {lam}$"
+
+        g = axes([0, len(rows)], [0, 1], x_length=10.5, y_length=3.6, yticks=[0, 0.5, 1],
+                 yfmt=lambda v: rf"{100 * v:.0f}\%", center=[0.3, -0.1, 0])
+        groups = VGroup()
         for k, (name, acc, gold_, ended) in enumerate(rows):
-            nm = names.get(name, name.replace("sum x", r"base $+\ \lambda(\tau_A + \tau_B)$, \ $\lambda =") + "$"
-                           if name.startswith("sum") else name)
-            y = 1.8 - 0.62 * k
-            table.add(VGroup(label(nm, font_size=22, color=ADAPT if name.startswith("sum") else ASSIST).move_to([xs[0], y, 0]),
-                             label(rf"${100 * acc:.0f}\%$", font_size=24).move_to([xs[1], y, 0]),
-                             label(rf"${100 * ended:.0f}\%$", font_size=24).move_to([xs[2], y, 0])))
-        multi = label(rf"trained on both at once: \ ${100 * d['multitask_which']:.0f}\%$ right", font_size=22,
-                      color=GREY_A).to_edge(DOWN, buff=0.9)
+            col = ADAPT if name.startswith("sum") else ASSIST
+            bars = VGroup()
+            for j, (v, c) in enumerate(((acc, ASSIST), (ended, ADAPT))):
+                h = max(g.ax.c2p(0, v)[1] - g.ax.c2p(0, 0)[1], 0.02)
+                bars.add(Rectangle(width=0.55, height=h, stroke_width=0, fill_color=c, fill_opacity=0.9)
+                         .move_to(g.ax.c2p(k + 0.5 + (j - 0.5) * 0.62, 0), aligned_edge=DOWN))
+                bars.add(label(rf"${100 * v:.0f}\%$", font_size=18, color=c).next_to(bars[-1], UP, buff=0.06))
+            tag_ = label(nm(name), font_size=19, color=col).next_to(g.ax.c2p(k + 0.5, 0), DOWN, buff=0.2)
+            groups.add(VGroup(bars, tag_))
+        lg = legend([(ASSIST, r"which book? \ placed right"), (ADAPT, r"a line about\dots: \ ended cleanly")],
+                    font_size=20).to_corner(UR, buff=0.4)
+        multi = label(rf"one model trained on both at once: \ ${100 * d['multitask_which']:.0f}\%$ placed right",
+                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.55)
         tag = note(r"computed: \ each task fine-tuned alone from the novels model; \ $\tau$ = the change in "
-                   r"every weight").to_corner(DR, buff=0.2)
-        merged = [r for r in rows if r[0].startswith("sum")]
+                   r"every weight").to_corner(DL, buff=0.2)
+        merged = [r for r in rows if r[0].startswith("sum") and float(r[0].split()[-1]) > 0]
         best = max(merged, key=lambda r: r[1] + r[3])
         w_only = rows[0]
         said_ = (f"Adding the two task vectors, at lambda {best[0].split()[-1]}, the merged model places "
@@ -126,11 +134,11 @@ class Merge(VoiceoverScene):
             "task. <bookmark mark='b'/> " + said_ + " <bookmark mark='c'/> Merging is not free, but it is "
             "remarkably cheap: no training at all, just addition."
         ) as vo:
-            self.play(FadeIn(hdr), FadeIn(tag))
+            self.play(FadeIn(g), FadeIn(lg), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(table[0]), FadeIn(table[1]))
+            self.play(*[FadeIn(gr_) for gr_ in groups[:2]])
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in table[2:]], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(gr_) for gr_ in groups[2:]], lag_ratio=0.3))
             vo.wait_until("c")
             self.play(FadeIn(multi))
         self.wait(0.3)

@@ -613,10 +613,12 @@ def compute_merge(lams=(0.0, 0.5, 1.0)):
     rows = []
     for name, ws in (("which only", {"which": 1.0}), ("line only", {"line": 1.0})):
         m = with_weights(ws)
-        rows.append((name, which_accuracy(m, d, 200), line_eval(m, 2)[0], line_eval(m, 2)[1]))
+        g_, e_, _ = line_eval(m, 2)
+        rows.append((name, which_accuracy(m, d, 200), g_, e_))
     for lam in lams:
         m = with_weights({"which": lam, "line": lam})
-        rows.append((f"sum x {lam:g}", which_accuracy(m, d, 200), line_eval(m, 2)[0], line_eval(m, 2)[1]))
+        g_, e_, _ = line_eval(m, 2)
+        rows.append((f"sum x {lam:g}", which_accuracy(m, d, 200), g_, e_))
     # the straight path from one fine-tuned model to the other
     path = []
     for a in np.linspace(0, 1, 6):
