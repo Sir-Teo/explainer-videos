@@ -132,3 +132,39 @@ Translations live in `videos/ai/aiN/narration_zh.json`, keyed by the English lin
 
 Names of programs stay in Latin script: AlphaGo, AlphaZero, MuZero, TD-Gammon, Deep Blue → 深蓝, Stockfish, KataGo,
 Libratus, Pluribus, Cepheus, AlphaStar, AlphaTensor, AlphaDev, Crazy Stone, MoGo, Agent57, Rainbow.
+
+### Post-training and alignment (Part 27)
+
+| English | 中文 |
+|---|---|
+| post-training, alignment | 后训练，对齐 |
+| helpful, honest, harmless | 有用、诚实、无害 |
+| supervised fine-tuning (SFT), instruction tuning | 监督微调（SFT），指令微调 |
+| chat template, special token, loss masking | 聊天模板，特殊词元，损失屏蔽 |
+| base model, fine-tuned model | 基础模型，微调后的模型 |
+| forgetting | 遗忘 |
+| low-rank adapter (LoRA), rank, task vector | 低秩适配器（LoRA），秩，任务向量 |
+| intrinsic dimension | 内在维数 |
+| reward model, comparison, preference | 奖励模型，比较，偏好 |
+| Bradley–Terry model | 布拉德利-特里模型 |
+| labeller | 标注员 |
+| gold (the hidden true reward), proxy | 金标准，代理 |
+| reinforcement learning from human feedback (RLHF) | 基于人类反馈的强化学习（RLHF） |
+| reference model, the KL leash, β | 参考模型，KL绳子，β |
+| best-of-n | 最优n选1 |
+| over-optimization, reward hacking | 过度优化，奖励投机 |
+| Goodhart's law | 古德哈特定律 |
+| direct preference optimization (DPO) | 直接偏好优化（DPO） |
+| likelihood displacement | 似然位移 |
+| online / on-policy data | 在线数据，在线策略 |
+| Constitutional AI, constitution, critique and revision | 宪法式AI，宪法，批评与修改 |
+| RL from AI feedback (RLAIF), AI judge | 基于AI反馈的强化学习（RLAIF），AI裁判 |
+| model spec, deliberative alignment | 模型规范，审慎对齐 |
+| distillation, teacher, student, dark knowledge, temperature | 蒸馏，老师，学生，暗知识，温度 |
+| forward KL, reverse KL | 前向KL，反向KL |
+| model merging, model soup, linear mode connectivity | 模型合并，模型汤，线性模式连通 |
+| sycophancy, jailbreak, many-shot jailbreaking, over-refusal | 谄媚，越狱，多样本越狱，过度拒绝 |
+| emergent misalignment, alignment faking | 涌现式失准，对齐伪装 |
+
+Method names stay in Latin script: InstructGPT, ChatGPT, FLAN, Alpaca, LIMA, QLoRA, DoRA, IPO, KTO, SimPO, GRPO,
+TIES, DARE, MiniLLM, DistilBERT, Tülu 3, OLMo.
