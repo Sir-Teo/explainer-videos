@@ -36,14 +36,20 @@ def rng(seed: int) -> np.random.Generator:
 # ---------------------------------------------------------------------------
 def count_safetensors(repo: str) -> int:
     """Parameters in a Hugging Face model, from the safetensors headers alone (no weights loaded)."""
-    from huggingface_hub import hf_hub_download, list_repo_files
+    import urllib.request
+
+    from huggingface_hub import hf_hub_url, list_repo_files
+
+    def read(url: str, a: int, b: int) -> bytes:  # bytes a..b-1 of the file: the weights themselves are never downloaded
+        req = urllib.request.Request(url, headers={"Range": f"bytes={a}-{b - 1}"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            return r.read()
 
     total = 0
     for f in [f for f in list_repo_files(repo) if f.endswith(".safetensors")]:
-        p = hf_hub_download(repo, f)
-        with open(p, "rb") as fh:
-            n = struct.unpack("<Q", fh.read(8))[0]
-            head = json.loads(fh.read(n))
+        url = hf_hub_url(repo, f)
+        n = struct.unpack("<Q", read(url, 0, 8))[0]
+        head = json.loads(read(url, 8, 8 + n))
         for k, v in head.items():
             if k != "__metadata__":
                 total += int(np.prod(v["shape"]))

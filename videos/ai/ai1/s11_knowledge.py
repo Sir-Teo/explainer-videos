@@ -55,7 +55,7 @@ class Knowledge(VoiceoverScene):
         para = d["paragraph"]
         A, B = d["surprise"]["GPT-2 small"], d["surprise"]["Qwen3-4B"]
         ta, tb = sum(A["bits"]), sum(B["bits"])
-        assert abs(ta - 446.1) < 0.1 and abs(tb - 349.5) < 0.1
+        assert abs(ta - 446.1) < 0.1 and abs(tb - 350.4) < 0.1
         assert para.startswith("A switch clicked") and "Bull Durham tobacco" in para
         pa = token_paragraph(A["tokens"], A["bits"]).move_to(UP * 1.25)
         pb = token_paragraph(B["tokens"], B["bits"]).move_to(DOWN * 1.75)
@@ -81,7 +81,7 @@ class Knowledge(VoiceoverScene):
         def find(tiles, word):
             return next(t for t in tiles if t.tok.strip() == word)
 
-        pairs = [("Durham", 7.4, 2.9), ("tobacco", 9.4, 2.4), ("telephone", 11.0, 3.4)]
+        pairs = [("Durham", 7.4, 2.9), ("tobacco", 9.4, 2.4), ("telephone", 11.0, 3.5)]
         for w, x, y in pairs:
             assert abs(find(pa, w).bits - x) < 0.05 and abs(find(pb, w).bits - y) < 0.05, w
         boxes = VGroup(*[SurroundingRectangle(find(g, w), color=WHITE, buff=0.05, stroke_width=2.5)
@@ -90,7 +90,7 @@ class Knowledge(VoiceoverScene):
                        for g in (pa, pb)])
         cx = load("context")
         alone, with_ = cx["Qwen3-4B"]["alone"], cx["Qwen3-4B"]["with context"]
-        assert abs(alone - 12.8) < 0.05 and abs(with_ - 3.4) < 0.05
+        assert abs(alone - 12.8) < 0.05 and abs(with_ - 3.5) < 0.05
         mem = label(rf"Qwen3-4B on this paragraph alone: \ \texttt{{telephone}} costs ${alone:.1f}$ bits", font_size=22,
                     color=C.BITS).to_edge(DOWN, buff=0.75)
         with self.voiceover(
@@ -148,14 +148,14 @@ class Knowledge(VoiceoverScene):
                      label(r"Qwen3-4B (2025)", font_size=22, color=C.NEURAL)).arrange(RIGHT, buff=0.6)
         leg.next_to(head, DOWN, buff=0.25)
         assert p_of("GPT-2 small", items[2][0], " Au") is None
-        assert abs(p_of("Qwen3-4B", items[3][0], " four") - 0.276) < 0.001
-        assert abs(p_of("Qwen3-4B", items[3][0], " five") - 0.243) < 0.001
+        assert abs(p_of("Qwen3-4B", items[3][0], " four") - 0.281) < 0.001
+        assert abs(p_of("Qwen3-4B", items[3][0], " five") - 0.219) < 0.001
         cap = note(r"probability of the right next token; \ computed").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Facts work the same way. Ask for the city of the Eiffel Tower, <bookmark mark='a'/> the author of Pride "
             "and Prejudice, <bookmark mark='b'/> or the chemical symbol for gold, and the model that knows the "
             "answer pays far fewer bits when the answer comes. <bookmark mark='c'/> Arithmetic is harder: the 2025 "
-            "model gives four 28 percent, but five 24."
+            "model gives four 28 percent, but five 22."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(cap))
             self.play(FadeIn(rows[0]))

@@ -560,6 +560,11 @@
    "scene": "Outro",
    "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part two.",
    "zh": "这一部分依循的是科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推断与学习算法》的前几章，两本书都走得远得多。列出的论文都值得一读，就从香农的那两篇开始。感谢观看，第2部分见。"
+  },
+  "744bcad03fe1": {
+   "scene": "Knowledge",
+   "en": "Facts work the same way. Ask for the city of the Eiffel Tower, <bookmark mark='a'/> the author of Pride and Prejudice, <bookmark mark='b'/> or the chemical symbol for gold, and the model that knows the answer pays far fewer bits when the answer comes. <bookmark mark='c'/> Arithmetic is harder: the 2025 model gives four 28 percent, but five 22.",
+   "zh": "事实也是一样。问埃菲尔铁塔在哪个城市，<bookmark mark='a'/>《傲慢与偏见》的作者是谁，<bookmark mark='b'/>或者金的化学符号是什么，知道答案的模型，在答案出现时付出的比特要少得多。<bookmark mark='c'/>算术更难：2025年的模型给four 28%，却给five 22%。"
   }
  },
  "title_en": "AI, Built: Part 1, The Guessing Game",

@@ -108,6 +108,16 @@
    "scene": "Outro",
    "en": "Thanks for watching, and see you in part nineteen.",
    "zh": "感谢观看，第19部分见。"
+  },
+  "02830b696e02": {
+   "scene": "World",
+   "en": "How does a world model learn to dream? Here it is at checkpoints during training, each time given the same two opening frames and left to imagine the next twelve, every frame built on its own last guess. <bookmark mark='a'/> Untrained, it imagines nothing but haze. <bookmark mark='b'/> After 100 steps it has learned the safest guess: a dark, empty frame, the average of all frames, with no ball at all. <bookmark mark='c'/> By step 300 it carries the ball along for a few frames, then loses it, as each guess builds on the last one's blur. <bookmark mark='d'/> Later it carries the ball the whole way, though small errors still add up: after twelve imagined frames, the final model's ball is 1.4 pixels from the real one.",
+   "zh": "世界模型是怎么学会做梦的？这是它在训练途中的几个检查点，每次都给它同样的两帧开头，让它想象接下来的12帧，每一帧都建立在它自己上一个猜测之上。<bookmark mark='a'/>还没训练的时候，它想象出来的只有一片雾。<bookmark mark='b'/>训练100步之后，它学会了最保险的猜法：一张漆黑的空画面，也就是所有画面的平均，里面根本没有球。<bookmark mark='c'/>到第300步，它能把球带着走上几帧，然后就跟丢了，因为每个猜测都建立在上一个猜测的模糊之上。<bookmark mark='d'/>再往后，它能一路把球带到底，不过小误差还是会累积：想象了12帧之后，最终模型画出的球，离真实的球差1.4个像素。"
+  },
+  "6e22f4464cb3": {
+   "scene": "World",
+   "en": "Now let it imagine. Give it two real frames and let it run on its own predictions, step after step, <bookmark mark='a'/> while the real ball keeps going. For a while, imagination and reality move together: one step ahead it's 0.1 pixels off. <bookmark mark='b'/> Then small errors compound, like the long tasks of the last chapter: 5.7 pixels off after twenty steps. <bookmark mark='c'/> Agents like Dreamer learn by practising inside such imagined worlds, and Genie generates whole playable worlds from video.",
+   "zh": "现在，让它来想象。给它两帧真实的画面，然后让它靠自己的预测往下走，一步接一步，<bookmark mark='a'/>而真实的球也在继续运动。有一阵子，想象和现实同步前进：往前看一步，只差0.1个像素。<bookmark mark='b'/>然后，小误差开始累积，就像上一章的长任务一样：想象20步之后，差了5.7个像素。<bookmark mark='c'/>像Dreamer这样的智能体，就是在这种想象出来的世界里反复练习、学会本领的；而Genie，从视频中学会了生成一个个完整的、可以玩的世界。"
   }
  },
  "title_en": "AI, Built: Part 18, Agents and Worlds",

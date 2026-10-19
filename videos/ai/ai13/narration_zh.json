@@ -128,6 +128,26 @@
    "scene": "Outro",
    "en": "The Switch Transformer paper is the clearest introduction. Thanks for watching, and see you in part fourteen.",
    "zh": "要入门，Switch Transformer那篇论文讲得最清楚。感谢观看，我们第14部分再见。"
+  },
+  "2eceaaabff5d": {
+   "scene": "Balance",
+   "en": "We built one: Part ten's character model, with its hidden layer split into 8 experts and 2 used for each character. Train it, and watch how the characters are shared out. <bookmark mark='a'/> Left alone, the router plays favourites: the busiest expert ends up with 3.3 times its fair share, while others starve. <bookmark mark='b'/> It's a rich-get-richer loop: a favoured expert gets more practice, gets better, and gets chosen even more. Starved experts are wasted parameters.",
+   "zh": "我们自己搭了一个：就是第10部分的那个字符模型，把它的隐藏层拆成8个专家，每个字符用其中2个。训练它，看看字符是怎样分下去的。<bookmark mark='a'/>放任不管的话，路由器就会偏心：最忙的那个专家，最后分到了公平份额的3.3倍，而另一些专家却在挨饿。<bookmark mark='b'/>这是一个富者愈富的循环：受偏爱的专家练得更多，变得更好，于是被选中得更多。挨饿的专家，就是白白浪费的参数。"
+  },
+  "16d0ce1b023e": {
+   "scene": "Balance",
+   "en": "Two fixes. <bookmark mark='a'/> The classic one adds a penalty to the loss: the share of characters each expert gets, times its average router probability, summed. It's smallest when every expert gets an equal share. But it's a second goal competing with the first. <bookmark mark='b'/> DeepSeek-V3's fix adds no loss at all. Each expert gets a bias, used only for choosing, never for mixing: after every step, busy experts' biases go down a notch and idle experts' go up. <bookmark mark='c'/> At the strength Google's Switch Transformer used in 2021, the penalty only partly evens it out: its busiest expert still gets 2.7 times a fair share, while the bias holds every expert within 1.1. Held-out bits: 2.457 unbalanced, 2.414 with the penalty, 2.431 with the bias.",
+   "zh": "有两种办法。<bookmark mark='a'/>经典的办法，是在损失里加一个惩罚项：每个专家分到的字符份额，乘以它的平均路由概率，再全部加起来。每个专家分得一样多时，它最小。可是，这是第二个目标，会和第一个目标相互竞争。<bookmark mark='b'/>DeepSeek-V3的办法，完全不加损失。每个专家都有一个偏置，只用来做选择，从不用来混合：每走一步，忙的专家，偏置就调低一格；闲的专家，偏置就调高一格。<bookmark mark='c'/>按Google的Switch Transformer在2021年用的强度，惩罚项只能把负载拉平一部分：它最忙的专家，仍然分到公平份额的2.7倍；而偏置让每个专家都保持在1.1倍以内。留出文本上的比特数：不做均衡是2.457，加惩罚项是2.414，用偏置是2.431。"
+  },
+  "33eb079e92cf": {
+   "scene": "Special",
+   "en": "How did that pattern form? Here is the same picture during training. <bookmark mark='a'/> At the start the router is random and nearly uniform, so each character's contexts are spread over the experts: on average its favourite gets 41 percent. <bookmark mark='b'/> Within 100 steps the router commits hard: the favourite's share jumps to 82 percent. <bookmark mark='c'/> Then the balancing bias pushes back, lowering the bias of experts that are too busy, and the choices spread out again, to 56 percent by the end. The favourites keep changing for a long time: 16 of the 30 characters still switch expert after step 300, and 12 after step 1,000.",
+   "zh": "那个规律是怎么形成的？这是训练途中的同一张图。<bookmark mark='a'/>一开始，路由器是随机的，几乎均匀，所以每个字符的上下文都分散在各个专家上：它最常去的那个专家平均只拿到41%。<bookmark mark='b'/>100步之内，路由器就下了重注：最常去的专家的份额跳到82%。<bookmark mark='c'/>然后负载均衡的偏置开始反推，降低那些太忙的专家的偏置，选择又分散开来，到最后是56%。最常去的专家会变很久：30个字符里，有16个在第300步之后还会换专家，第1000步之后还有12个。"
+  },
+  "ce571004c91a": {
+   "scene": "Special",
+   "en": "Is it worth it? Compare three models. <bookmark mark='a'/> A dense one doing as much arithmetic per character as the mixture; the mixture; and a dense one with as many parameters in total. <bookmark mark='b'/> The mixture, 2.431, beats the dense model with the same arithmetic, 2.485. And with the same short training, the dense model with all the parameters does no better, 2.510: eight times the width is more to learn, and it hasn't caught up. At scale, that's the trade the biggest models make: knowledge in the total, cost in the active.",
+   "zh": "这样做值得吗？比较三个模型。<bookmark mark='a'/>一个稠密模型，每个字符做的运算和混合模型一样多；混合模型本身；再加一个稠密模型，参数总数和混合模型一样多。<bookmark mark='b'/>混合模型是2.431，胜过了运算量相同的稠密模型，2.485。而在同样短的训练下，拥有全部参数的那个稠密模型，也没有更好，是2.510：宽了8倍，要学的东西就更多，它还没有赶上来。到了大规模，这正是最大的那些模型所做的交换：知识看总参数，开销看激活参数。"
   }
  },
  "title_en": "AI, Built: Part 13, Sparsity",
