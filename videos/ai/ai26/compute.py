@@ -546,6 +546,25 @@ def compute_dqn():
     return out
 
 
+def compute_dqn_div():
+    """The deadly triad, live: the largest value the network predicts, with and without a target network."""
+    import torch
+
+    S, _ = map_states()
+    snaps = tuple(range(0, DQN_STEPS + 1, 1000))
+    out = {"steps": np.array(snaps), "bound": 1 / (1 - 0.99)}  # returns here are at most 1 / (1 - gamma)
+    for name, kw in (("full", {}), ("no_target", {"target": False})):
+        _, _, saved = run_dqn(0, snap_steps=snaps, **kw)
+        qmax = []
+        for _, sd in saved:
+            m = mlp([4, 256, 256, 2], "relu")
+            m.load_state_dict(sd)
+            with torch.no_grad():
+                qmax.append(float(m(torch.from_numpy(S)).abs().max()))
+        out[name] = np.array(qmax)
+    return out
+
+
 def pg_episodes(pi, env, n, g):
     import torch
 
@@ -864,7 +883,7 @@ def compute_testset(n=400, seed=0):
         sc = S.move_scores(b.pos, b.mask, b.moves)
         legal = ~np.isnan(sc)
         best = np.nanmax(sc)
-        if (sc[legal] == best).all():  # every move equally good: nothing to test
+        if (np.sign(sc[legal]) == np.sign(best)).all():  # no move throws anything away: nothing to test
             continue
         out_moves.append(list(b.history))
         out_scores.append(sc)
@@ -874,8 +893,10 @@ def compute_testset(n=400, seed=0):
             "stones": np.array([len(h) for h in out_moves]), "tries": tries}
 
 
-def is_perfect(scores_row, c) -> bool:
-    return scores_row[c] == np.nanmax(scores_row)
+def is_right(scores_row, c) -> bool:
+    """Does column c keep the best result the position allows (the win, the draw)?  How fast a win comes is not
+    asked: AlphaZero's value, like the rules, only knows win, draw or loss."""
+    return np.sign(scores_row[c]) == np.sign(np.nanmax(scores_row))
 
 
 def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=200):
@@ -888,10 +909,10 @@ def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=200):
         ok = 0
         for h, sc in zip(hist, scores):
             b = c4.Board.from_moves(h)
-            ok += is_perfect(sc, c4.uct_move(b, sims, g))
+            ok += is_right(sc, c4.uct_move(b, sims, g))
         acc.append(ok / len(hist))
-    # a random legal move is perfect this often
-    blind = float(np.mean([(sc == np.nanmax(sc)).sum() / np.isfinite(sc).sum() for sc in scores]))
+    # a random legal move is right this often
+    blind = float(np.mean([(np.sign(sc) == np.sign(np.nanmax(sc))).sum() / np.isfinite(sc).sum() for sc in scores]))
     return {"sims": list(sims_list), "acc": acc, "random": blind}
 
 
@@ -940,11 +961,11 @@ def compute_az_grade(n_pos=400):
     for gnum in gens:
         ev = Evaluator(load_gen(gnum))
         pri, v = ev(boards)
-        raw.append(float(np.mean([is_perfect(sc, int(np.argmax(p))) for sc, p in zip(scores, pri)])))
+        raw.append(float(np.mean([is_right(sc, int(np.argmax(p))) for sc, p in zip(scores, pri)])))
         vacc.append(float(np.mean(np.sign(np.round(v * 1.5)) == value)))
         roots = [Node(b) for b in boards]
         search(roots, ev, SIMS, rng(gnum), noise=False)
-        mcts.append(float(np.mean([is_perfect(sc, int(np.argmax(r.N))) for sc, r in zip(scores, roots)])))
+        mcts.append(float(np.mean([is_right(sc, int(np.argmax(r.N))) for sc, r in zip(scores, roots)])))
     log = json.loads((OUT / "log.json").read_text())
     return {"gens": gens, "raw": raw, "mcts": mcts, "value_acc": vacc, "sims": SIMS,
             "loss_policy": [e["loss_policy"] for e in log], "loss_value": [e["loss_value"] for e in log],
@@ -1080,7 +1101,7 @@ def compute_az_demo():
             cc = int(np.argmax(r_.N))
             if bb.moves >= 8:
                 S.reset()
-                ok.append(bool(is_perfect(S.move_scores(bb.pos, bb.mask, bb.moves), cc)))
+                ok.append(bool(is_right(S.move_scores(bb.pos, bb.mask, bb.moves), cc)))
             mv.append(cc)
             bb = bb.play(cc)
             if c4.last_mover_won(bb) or bb.full():
@@ -1097,7 +1118,7 @@ def compute_az_demo():
         if gb.moves >= 8:
             S.reset()
             sc = S.move_scores(gb.pos, gb.mask, gb.moves)
-            perfect.append(bool(is_perfect(sc, c)))
+            perfect.append(bool(is_right(sc, c)))
         moves.append(c)
         gb = gb.play(c)
         if c4.last_mover_won(gb) or gb.full():
@@ -1313,6 +1334,7 @@ ITEMS = {
     "cliff": compute_cliff,
     "maxbias": compute_maxbias,
     "dqn": compute_dqn,
+    "dqn_div": compute_dqn_div,
     "pg": compute_pg,
     "pg_cloud": compute_pg_cloud,
     "alphabeta": compute_alphabeta,

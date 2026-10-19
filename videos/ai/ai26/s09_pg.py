@@ -295,15 +295,16 @@ class PolicyGradient(VoiceoverScene):
         d = load("pg")
         grid = np.asarray(d["grid"])
         g = axes([0, 100_000], [0, 500], x_length=7.2, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=rf"episode length \ (mean of ${len(d['ppo'])}$ runs)", xticks=[0, 50_000, 100_000],
-                 yticks=[0, 250, 500],
+                 ylabel=rf"episode length \ (mean of ${len(d['ppo'])}$ runs, \ $\pm 1$ s.e.)",
+                 xticks=[0, 50_000, 100_000], yticks=[0, 250, 500],
                  xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""), center=[-1.2, -0.3, 0])
         items = (("reinforce", REINF, r"REINFORCE"), ("baseline", BASE, r"with a baseline"),
                  ("ac", AC, r"actor-critic (GAE)"))
         lines, bands = VGroup(), VGroup()
         for key, col, _ in items:
             Y = np.asarray(d[key])
-            bands.add(band(g.ax, grid, np.nanmin(Y, 0), np.nanmax(Y, 0), col, 0.12))
+            sem = np.nanstd(Y, 0) / np.sqrt(len(Y))  # the uncertainty of the mean, not the spread of runs
+            bands.add(band(g.ax, grid, np.nanmean(Y, 0) - sem, np.nanmean(Y, 0) + sem, col, 0.2))
             lines.add(curve(g.ax, grid, np.nanmean(Y, 0), col, 3))
         lg = legend([(c, t) for _, c, t in items], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.8)
         tag = note(r"computed: \ cart-pole, \ the same networks and step budget").to_corner(DR, buff=0.2)

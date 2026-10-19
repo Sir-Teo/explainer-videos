@@ -40,8 +40,8 @@ perfect solver.
 * **12. AlphaGo.** Move 37; the four networks (Silver et al. 2016); search with priors and a value network; Fan
   Hui, Lee Sedol, move 78 of game 4.
 * **13. Learning from zero.** AlphaGo Zero and AlphaZero (2017–18); the self-play loop and its loss; MCTS as policy
-  improvement; our own AlphaZero for Connect Four: its prior on one position across every generation, perfect-move
-  rate with and without search, Elo ratings, and games at successive generations.
+  improvement; our own AlphaZero for Connect Four: its prior on one position across every generation, how often
+  its move keeps the win or the draw, with and without search, Elo ratings, and games at successive generations.
 * **14. Planning with a learned model.** MuZero (2019–20): representation, dynamics, prediction, value equivalence;
   EfficientZero, Gumbel MuZero, video compression.
 * **15. Beyond perfect information.** Information sets and Nash equilibria; regret matching on rock-paper-scissors
