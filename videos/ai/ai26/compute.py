@@ -24,6 +24,7 @@ Items:
     alphabeta  nodes searched by minimax and by alpha-beta (random and centre-first move order) on Connect Four
     testset    400 Connect Four positions from 8 to 24 stones, every move scored by the perfect solver
     uct        plain Monte Carlo tree search: how often its move is a perfect one, against the number of simulations
+    uct_tree   plain MCTS from one position: the tree after 10, 40, 160, 640 and 2,560 simulations
     az_grade   AlphaZero, generation by generation: how often the raw network and the network with search play a
                perfect move; the value head against the true result; the training log
     az_elo     ratings of AlphaZero's generations and of plain MCTS from a round robin (Bradley-Terry fit)
@@ -273,10 +274,24 @@ def compute_walk():
     return out
 
 
+CLIFF_SNAPS = (1, 5, 10, 25, 50, 100, 200, 500)
+
+
+def cliff_greedy_path(Q, limit=60):
+    r, c, path = CLIFF_ROWS - 1, 0, [(CLIFF_ROWS - 1, 0)]
+    for _ in range(limit):
+        r, c, _, done = cliff_step(r, c, int(np.argmax(Q[r, c])))
+        path.append((r, c))
+        if done:
+            break
+    return path
+
+
 def compute_cliff(runs=100, episodes=500, alpha=0.5, eps=0.1, seed=0):
     g = rng(seed)
     curves = {"sarsa": np.zeros(episodes), "q": np.zeros(episodes)}
     finals = {}
+    snaps = {m: {"V": [], "path": [], "episode": []} for m in ("sarsa", "q")}  # run 0, as it learns
     for method in ("sarsa", "q"):
         for run in range(runs):
             Q = np.zeros((CLIFF_ROWS, CLIFF_COLS, 4))
@@ -291,8 +306,12 @@ def compute_cliff(runs=100, episodes=500, alpha=0.5, eps=0.1, seed=0):
                 r, c = CLIFF_ROWS - 1, 0
                 a = act(r, c)
                 total = 0.0
+                walked = [(r, c)]
                 for _ in range(1000):
                     r2, c2, rew, done = cliff_step(r, c, a)
+                    walked.append((r2, c2) if rew > -100 else (CLIFF_ROWS - 1, max(c + ACTIONS[a][1], 1)))
+                    if rew <= -100:
+                        walked.append((r2, c2))
                     total += rew
                     a2 = act(r2, c2)
                     target = rew + (0.0 if done else (Q[r2, c2, a2] if method == "sarsa" else Q[r2, c2].max()))
@@ -301,24 +320,25 @@ def compute_cliff(runs=100, episodes=500, alpha=0.5, eps=0.1, seed=0):
                     if done:
                         break
                 curves[method][e] += total / runs
+                if run == 0 and e + 1 in CLIFF_SNAPS:
+                    snaps[method]["V"].append(Q.max(2).copy())
+                    snaps[method]["path"].append(cliff_greedy_path(Q))
+                    snaps[method]["episode"].append(walked[:400])
             if run == 0:
                 finals[method] = Q.copy()
-    paths = {}
-    for m, Q in finals.items():
-        r, c, path = CLIFF_ROWS - 1, 0, [(CLIFF_ROWS - 1, 0)]
-        for _ in range(60):
-            r, c, _, done = cliff_step(r, c, int(np.argmax(Q[r, c])))
-            path.append((r, c))
-            if done:
-                break
-        paths[m] = path
+    paths = {m: cliff_greedy_path(Q) for m, Q in finals.items()}
     # the safe path keeps away from the edge; the optimal one runs along it
     assert min(p[0] for p in paths["sarsa"][1:-1]) < CLIFF_ROWS - 2
     assert all(p[0] >= CLIFF_ROWS - 2 for p in paths["q"])
     late = slice(episodes // 2, None)
     assert curves["sarsa"][late].mean() > curves["q"][late].mean()
-    return {"sarsa": curves["sarsa"], "q": curves["q"], "path_sarsa": paths["sarsa"], "path_q": paths["q"],
-            "rows": CLIFF_ROWS, "cols": CLIFF_COLS, "alpha": alpha, "eps": eps}
+    out = {"sarsa": curves["sarsa"], "q": curves["q"], "path_sarsa": paths["sarsa"], "path_q": paths["q"],
+           "rows": CLIFF_ROWS, "cols": CLIFF_COLS, "alpha": alpha, "eps": eps, "snap_episodes": list(CLIFF_SNAPS)}
+    for m in ("sarsa", "q"):
+        out[f"snapV_{m}"] = np.array(snaps[m]["V"])
+        out[f"snap_path_{m}"] = snaps[m]["path"]
+        out[f"snap_walk_{m}"] = snaps[m]["episode"]
+    return out
 
 
 def compute_maxbias(runs=5000, episodes=300, n_b=10, alpha=0.1, eps=0.1, seed=0):
@@ -366,7 +386,7 @@ def mlp(sizes):
     return nn.Sequential(*layers[:-1])
 
 
-def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99):
+def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99, snap_steps=()):
     import torch
     import torch.nn.functional as F
 
@@ -382,8 +402,10 @@ def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99):
                        np.zeros((cap, 4), np.float32), np.zeros(cap, np.float32))
     n = ptr = 0
     s = env.reset()
-    ep_ret, returns = 0.0, []
+    ep_ret, returns, snaps = 0.0, [], []
     for t in range(steps):
+        if t in snap_steps:
+            snaps.append((t, {k: v.clone() for k, v in q.state_dict().items()}))
         eps = max(0.05, 1 - t / 10_000)
         if g.random() < eps:
             a = int(g.integers(2))
@@ -413,7 +435,29 @@ def run_dqn(seed, steps=60_000, replay=True, target=True, gamma=0.99):
             opt.step()
         if target and t % 500 == 0:
             qt.load_state_dict(q.state_dict())
-    return np.array(returns), q
+    if steps in snap_steps:
+        snaps.append((steps, {k: v.clone() for k, v in q.state_dict().items()}))
+    return np.array(returns), q, snaps
+
+
+# the slice of state space the policy maps show: cart centred and still, pole angle x angular velocity
+MAP_TH = np.linspace(-0.21, 0.21, 41)
+MAP_THD = np.linspace(-2.0, 2.0, 41)
+
+
+def map_states():
+    TH, THD = np.meshgrid(MAP_TH, MAP_THD)  # rows: angular velocity, columns: angle
+    S = np.zeros((TH.size, 4), np.float32)
+    S[:, 2], S[:, 3] = TH.ravel(), THD.ravel()
+    return S, TH.shape
+
+
+def pad_trajs(trajs):
+    L = max(len(t) for t in trajs)
+    out = np.full((len(trajs), L, 4), np.nan)
+    for i, t in enumerate(trajs):
+        out[i, :len(t)] = t
+    return out, np.array([len(t) for t in trajs])
 
 
 def smooth_curve(returns, steps, grid):
@@ -452,14 +496,32 @@ def compute_dqn():
 
     grid = np.arange(2000, 60_001, 2000)
     out = {"grid": grid}
+    snap_steps = (0, 2000, 5000, 10_000, 15_000, 20_000, 30_000, 45_000, 60_000)
     for name, kw in (("full", {}), ("no_target", {"target": False}), ("no_replay", {"replay": False})):
         curves = []
         for seed in range(3):
-            ret, q = run_dqn(seed, **kw)
+            first = name == "full" and seed == 0
+            ret, q, snaps = run_dqn(seed, snap_steps=snap_steps if first else (), **kw)
             curves.append(smooth_curve(ret, 60_000, grid))
-            if name == "full" and seed == 0:
-                net = q
+            if first:
+                net, saved, run0 = q, snaps, ret
         out[name] = np.array(curves)
+    # the training, replayed: at each snapshot, the greedy policy over (angle, angular velocity) and one episode
+    S, shape = map_states()
+    qmaps, vmaps, trajs = [], [], []
+    for t, sd in saved:
+        m = mlp([4, 128, 128, 2])
+        m.load_state_dict(sd)
+        with torch.no_grad():
+            Qs = m(torch.from_numpy(S)).numpy()
+        qmaps.append((Qs[:, 1] - Qs[:, 0]).reshape(shape))
+        vmaps.append(Qs.max(1).reshape(shape))
+        trajs.append(rollout(lambda s, m=m: int(m(torch.from_numpy(s.astype(np.float32))).argmax()), 11))
+    out["snap_steps"] = np.array([t for t, _ in saved])
+    out["snap_qdiff"], out["snap_v"] = np.array(qmaps), np.array(vmaps)
+    out["snap_traj"], out["snap_len"] = pad_trajs(trajs)
+    out["run0"] = run0
+    out["map_th"], out["map_thd"] = MAP_TH, MAP_THD
     pol = lambda s: int(net(torch.from_numpy(s.astype(np.float32))).argmax())
     out["traj_trained"] = rollout(pol, 11)
     coin = rng(0)
@@ -499,14 +561,18 @@ def compute_pg():
             out[i] = acc
         return out
 
-    def train(method, seed, total=100_000, gamma=0.99, lam=0.95):
+    def train(method, seed, total=100_000, gamma=0.99, lam=0.95, snap_at=()):
         torch.manual_seed(seed)
         g = rng(100 + seed)
         env = CartPole(g)
         pi, vf = mlp([4, 64, 64, 2]), mlp([4, 64, 64, 1])
         opt = torch.optim.Adam(list(pi.parameters()) + list(vf.parameters()), lr=3e-3 if method != "ppo" else 1e-3)
-        done_steps, returns = 0, []
+        done_steps, returns, snaps = 0, [], []
+        todo = list(snap_at)
         while done_steps < total:
+            while todo and done_steps >= todo[0]:
+                snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
+                todo.pop(0)
             batch = episodes(pi, env, 8, g)
             S = torch.from_numpy(np.concatenate([b[0] for b in batch]))
             A = torch.from_numpy(np.concatenate([b[1] for b in batch]))
@@ -550,12 +616,35 @@ def compute_pg():
                 opt.zero_grad()
                 (lp + 0.5 * lv).backward()
                 opt.step()
-        return np.array(returns)
+        if todo:
+            snaps.append((done_steps, {k: v.clone() for k, v in pi.state_dict().items()}))
+        return (np.array(returns), snaps) if snap_at else np.array(returns)
 
     grid = np.arange(4000, 100_001, 4000)
     out = {"grid": grid}
     for m in ("reinforce", "baseline", "ac", "ppo"):
-        out[m] = np.array([smooth_curve(train(m, s), 100_000, grid) for s in range(3)])
+        curves = []
+        for s in range(3):
+            if m == "ppo" and s == 0:
+                ret, snaps = train(m, s, snap_at=(0, 4000, 8000, 15_000, 25_000, 40_000, 70_000, 100_000))
+                out["run0"] = ret
+            else:
+                ret = train(m, s)
+            curves.append(smooth_curve(ret, 100_000, grid))
+        out[m] = np.array(curves)
+    # PPO's training, replayed: the probability of pushing right over (angle, angular velocity), and one episode
+    S, shape = map_states()
+    pmaps, trajs = [], []
+    for t, sd in snaps:
+        net = mlp([4, 64, 64, 2])
+        net.load_state_dict(sd)
+        with torch.no_grad():
+            pmaps.append(torch.softmax(net(torch.from_numpy(S)), -1)[:, 1].numpy().reshape(shape))
+            trajs.append(rollout(lambda s, net=net: int(net(torch.from_numpy(s.astype(np.float32))).argmax()), 11))
+    out["snap_steps"] = np.array([t for t, _ in snaps])
+    out["snap_p"] = np.array(pmaps)
+    out["snap_traj"], out["snap_len"] = pad_trajs(trajs)
+    out["map_th"], out["map_thd"] = MAP_TH, MAP_THD
     # the spread of one-episode gradient estimates at a fixed, half-trained policy: with and without a baseline
     torch.manual_seed(3)
     g = rng(3)
@@ -753,6 +842,27 @@ def compute_uct(sims_list=(10, 30, 100, 300, 1000, 3000), n_pos=200):
     return {"sims": list(sims_list), "acc": acc, "random": blind}
 
 
+def compute_uct_tree(seq=(3, 3, 3, 2, 4), snaps=(10, 40, 160, 640, 2560)):
+    """Plain MCTS from one position: the tree after more and more simulations (for drawing it grow)."""
+    b = c4.Board.from_moves(seq)
+
+    def dump(node, depth, min_n):
+        d = {"N": int(node.N), "W": float(node.W), "move": node.move, "children": []}
+        if depth:
+            for ch in sorted(node.children, key=lambda c: c.move):
+                if ch.N >= min_n:
+                    d["children"].append(dump(ch, depth - 1, min_n))
+        return d
+
+    out = {"seq": list(seq), "snaps": list(snaps), "trees": []}
+    for n in snaps:
+        root = c4.uct_search(b, n, rng(4))
+        out["trees"].append(dump(root, 3, max(1, n // 200)))
+    S = c4.Solver(24)
+    out["truth"] = S.move_scores(b.pos, b.mask, b.moves)
+    return out
+
+
 # ---------------------------------------------------------------------------
 # AlphaZero (trained by alphazero.py)
 # ---------------------------------------------------------------------------
@@ -888,6 +998,31 @@ def compute_az_demo():
         return d
 
     tree = dump(root, 3)
+    # every generation's first look at the position (the training, replayed), and the solver's verdicts
+    prior_all, value_all = [], []
+    for gnum in gens:
+        p, v = Evaluator(load_gen(gnum))([b])
+        prior_all.append(p[0])
+        value_all.append(float(v[0]))
+    # one game by each of several generations against itself, every move from 8 stones on checked by the solver
+    games = {}
+    for gnum in [x for x in (1, 3, 10, 30, gens[-1]) if x in gens]:
+        evg = Evaluator(load_gen(gnum))
+        gg = rng(100 + gnum)
+        bb = c4.Board().play(3)
+        mv, ok = [3], []
+        while True:
+            r_ = Node(bb)
+            search([r_], evg, SIMS, gg, noise=False)
+            cc = int(np.argmax(r_.N))
+            if bb.moves >= 8:
+                S.reset()
+                ok.append(bool(is_perfect(S.move_scores(bb.pos, bb.mask, bb.moves), cc)))
+            mv.append(cc)
+            bb = bb.play(cc)
+            if c4.last_mover_won(bb) or bb.full():
+                break
+        games[str(gnum)] = {"moves": mv, "perfect": ok, "won": bool(c4.last_mover_won(bb)), "length": len(mv)}
     # a self-play game by the final network, every move scored by the solver
     g = rng(5)
     gb = c4.Board()
@@ -906,6 +1041,7 @@ def compute_az_demo():
             break
     winner = 0 if gb.full() and not c4.last_mover_won(gb) else (1 if gb.moves % 2 == 1 else 2)
     return {"seq": seq, "gens": show, "prior": np.array(pri), "value": val, "visits": np.array(visits),
+            "all_gens": gens, "prior_all": np.array(prior_all), "value_all": np.array(value_all), "games": games,
             "truth": truth, "tree": tree, "game": moves, "game_perfect": perfect, "game_winner": winner}
 
 
@@ -1118,6 +1254,7 @@ ITEMS = {
     "alphabeta": compute_alphabeta,
     "testset": compute_testset,
     "uct": compute_uct,
+    "uct_tree": compute_uct_tree,
     "rps": compute_rps,
     "kuhn": compute_kuhn,
     "go": compute_go,
