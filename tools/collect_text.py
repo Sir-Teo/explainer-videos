@@ -4,6 +4,7 @@
     python tools/collect_text.py analysis4 [analysis5 ...]    # -> renders/qa/text/<video>.<Scene>.jsonl
     python tools/collect_text.py --check analysis4             # strings the table leaves in English
     python tools/collect_text.py --lang zh analysis4           # dry-run the Chinese build: TeX and layout asserts
+    python tools/collect_text.py ai27 --only Pipeline Recipes   # just these scenes (the others' records are kept)
 
 Any video works: the table is its series' videos/<series>/<series>_text_zh.json (see explainer/zh_text.py).
 """
@@ -24,6 +25,11 @@ from explainer.paths import video_dir, video_package  # noqa: E402
 
 
 ARGS = sys.argv[1:]
+ONLY = None
+if "--only" in ARGS:
+    i = ARGS.index("--only")
+    ONLY = set(ARGS[i + 1:])
+    del ARGS[i:]
 LANG = "en"
 if "--lang" in ARGS:
     i = ARGS.index("--lang")
@@ -76,8 +82,9 @@ for video in ARGS:
     out_dir = ROOT / "renders" / "qa" / "text"
     out_dir.mkdir(parents=True, exist_ok=True)
     m = importlib.import_module(f"{video_package(video)}.manifest")
-    for f in out_dir.glob(f"{video}.*.jsonl"):
-        f.unlink()
+    scenes = [s for s in m.SCENES if ONLY is None or s[1] in ONLY]
+    for _, cls, _ in scenes:
+        (out_dir / f"{video}.{cls}.jsonl").unlink(missing_ok=True)
     with ThreadPoolExecutor(2) as pool:
-        for cls, rc, err in pool.map(lambda s: run(video, s[0], s[1], out_dir / f"{video}.{s[1]}.jsonl"), m.SCENES):
+        for cls, rc, err in pool.map(lambda s: run(video, s[0], s[1], out_dir / f"{video}.{s[1]}.jsonl"), scenes):
             print(f"  {'ok  ' if rc == 0 else 'FAIL'} {video} {cls}" + ("" if rc == 0 else f"\n{err}"), flush=True)
