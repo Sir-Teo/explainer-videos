@@ -216,7 +216,9 @@ class TorchChecker(Checker):
         from qwen_asr import Qwen3ASRModel, Qwen3ForcedAligner
 
         dev = "cuda:0" if torch.cuda.is_available() else "cpu"
-        dtype = torch.bfloat16 if dev != "cpu" else torch.float32
+        # bfloat16 everywhere: on a CPU the two checkers in float32 take 7 GB, and with the speech model's 8 GB
+        # they do not fit a 16 GB machine; transcribing and aligning a take is not where precision matters
+        dtype = torch.bfloat16
         self.asr = Qwen3ASRModel.from_pretrained(model_path("Qwen/Qwen3-ASR-0.6B"), dtype=dtype, device_map=dev)
         self.aligner = Qwen3ForcedAligner.from_pretrained(model_path("Qwen/Qwen3-ForcedAligner-0.6B"), dtype=dtype,
                                                           device_map=dev)
@@ -322,7 +324,8 @@ def main():
         engine, checker = Engine(profile), Checker()
         release = mx.clear_cache
     else:
-        engine, checker = TorchEngine(profile), TorchChecker()
+        engine = TorchEngine(profile)  # first: its load peaks at 11 GB in float32 on a CPU
+        checker = TorchChecker()
 
         def release():
             import torch
