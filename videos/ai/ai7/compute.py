@@ -1,20 +1,24 @@
-"""Precompute everything numerical in Part 7 of the AI series ("Fitting and Generalizing").
+"""Precompute everything numerical in Part 7 of the AI series ("Statistical ML").
 
-    python -m videos.ai.ai7.compute              # everything missing (needs Part 5's pages: .cache/ai5)
-    python -m videos.ai.ai7.compute --force double
+    python -m videos.ai.ai7.compute              # everything missing (needs Part 1's books and Part 6's pages)
+    python -m videos.ai.ai7.compute --force hmm
 
-Results are cached in ``.cache/ai7/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.
+Results are cached in ``.cache/ai7/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.  Every method is written
+out here in numpy, and every number the narration quotes is computed here.
 
 Items:
-    gap       the training error and the test error of Part 5's k-nearest-neighbour vote, k = 1 ... 151
-    biasvar   bias and variance by resampling: polynomials of degree 0 ... 15 fitted to 200 fresh samples of 16 noisy
-              points from one curve (illustrative); bias squared + variance + noise = the expected test error
-    shatter   lines in the plane: all 8 labellings of 3 points are separable, 2 of the 16 labellings of 4 are not
-    rademacher how well linear classifiers on the first d of Part 5's 70 rates can fit random signs, d = 1 ... 70
-    random    one network (70 -> 512 -> 512 -> 2) trained on Part 5's pages with the true authors and with shuffled
-              authors: training and test accuracy through training
-    double    double descent: least squares on p random features of Part 5's pages (minimum-norm when p > n), test
-              error against p, peaking where p = n
+    pca      principal components of Part 6's 639 pages (70 word rates each, standardized): the variance each
+             direction explains, the pages in the first three, and the words that load on the first two
+    gmm      a mixture of two Gaussians fitted by EM to the pages' first two principal components, with no labels:
+             every iteration's means, covariances, weights and log-likelihood; agreement with the true authors
+    hmm      a two-state hidden Markov model fitted by Baum-Welch to 200,000 letters of the books: the emission
+             probabilities at each iteration, the transition matrix, and the most likely states of a sentence
+    gp       Gaussian-process regression on the rate of "her" across the pages of Great Expectations: the length
+             scale chosen by marginal likelihood, prior and posterior samples, the mean and its band
+    vi       variational inference on Part 5's two-bump density: the best single Gaussian under KL(q||p) and under
+             KL(p||q), and the path of gradient steps on the ELBO
+    kn       Kneser-Ney smoothing for character n-grams on Part 1's books, up to 7 characters of context: bits per character on the
+             passage, the scoreboard's new row
 """
 
 from __future__ import annotations
@@ -33,200 +37,341 @@ def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
+def ai1():
+    from videos.ai.ai1 import compute as c1
+
+    return c1
+
+
 def pages():
-    from videos.ai.ai5 import compute as c5
+    from videos.ai.ai6 import compute as c5
 
     p = c5.load("pages")
-    X, y, test = np.asarray(p["X"]), np.asarray(p["y"]), np.asarray(p["test"], bool)
-    mu, sd = X[~test].mean(0), X[~test].std(0) + 1e-9
-    Z = (X - mu) / sd
-    return Z[~test], y[~test], Z[test], y[test], np.asarray(p["X2"])
+    return np.asarray(p["X"]), np.asarray(p["y"]), np.asarray(p["book"]), p["vocab"]
 
 
 # ---------------------------------------------------------------------------
-def compute_gap():
-    _, ytr, _, yte, X2 = pages()
-    from videos.ai.ai5 import compute as c5
-
-    p = c5.load("pages")
-    test = np.asarray(p["test"], bool)
-    A, B, _, _ = c5.standardize(X2[~test], X2[test])  # exactly as Part 5 did (the rates tie often; ties must break alike)
-    dAA = ((A[:, None] - A[None]) ** 2).sum(-1)
-    dBA = ((B[:, None] - A[None]) ** 2).sum(-1)
-    oA, oB = np.argsort(dAA, 1, kind="stable"), np.argsort(dBA, 1, kind="stable")
-    ks = np.arange(1, 152, 2)
-    tr = [float(((ytr[oA[:, :k]].mean(1) > 0.5) == ytr).mean()) for k in ks]
-    te = [float(((ytr[oB[:, :k]].mean(1) > 0.5) == yte).mean()) for k in ks]
-    best = int(ks[int(np.argmax(te))])
-    return dict(ks=ks, train_err=1 - np.array(tr), test_err=1 - np.array(te), best_k=best)
-
-
-# ---------------------------------------------------------------------------
-def truth(x):
-    return np.sin(2.4 * x) + 0.3 * x
-
-
-def compute_biasvar():
-    g = rng(1992)  # Geman, Bienenstock & Doursat, 1992
-    n, sigma, degs, runs = 16, 0.35, list(range(0, 16)), 200
-    xg = np.linspace(-1.5, 1.5, 160)  # judged between the points, never beyond them
-    fits = {d: [] for d in degs}
-    xs_all = []
-    for _ in range(runs):
-        x = np.linspace(-1.6, 1.6, n) + g.uniform(-0.06, 0.06, n)
-        yv = truth(x) + sigma * g.normal(size=n)
-        xs_all.append((x, yv))
-        for d in degs:
-            V = np.vander(x / 1.6, d + 1)
-            c = np.linalg.lstsq(V, yv, rcond=None)[0]
-            fits[d].append(np.vander(xg / 1.6, d + 1) @ c)
-    bias2, var = [], []
-    for d in degs:
-        F = np.array(fits[d])
-        mean = F.mean(0)
-        bias2.append(float(((mean - truth(xg)) ** 2).mean()))
-        var.append(float(F.var(0).mean()))
-    bias2, var = np.array(bias2), np.array(var)
-    total = bias2 + var + sigma ** 2
-    best = int(np.argmin(total))
-    assert 3 <= best <= 9 and var[-1] > 100 * var[best] and bias2[0] > 10 * bias2[best]
-    return dict(degs=degs, bias2=bias2, var=var, noise=sigma ** 2, total=total, best=best, xg=xg, truth=truth(xg),
-                sample_x=xs_all[0][0], sample_y=xs_all[0][1], fits_1=np.array(fits[1][:20]),
-                fits_best=np.array(fits[best][:20]), fits_top=np.array(fits[12][:20]), top=12, n=n,
-                runs=runs)
+def compute_pca():
+    X, y, book, vocab = pages()
+    Z = (X - X.mean(0)) / X.std(0)
+    C = Z.T @ Z / len(Z)
+    vals, vecs = np.linalg.eigh(C)
+    o = np.argsort(-vals)
+    vals, vecs = vals[o], vecs[:, o]
+    vecs *= np.sign(vecs[np.argmax(np.abs(vecs), 0), np.arange(vecs.shape[1])])  # a fixed sign convention
+    proj = Z @ vecs[:, :3]
+    if proj[y == 1, 0].mean() < proj[y == 0, 0].mean():  # Dickens to the right
+        vecs[:, 0] *= -1
+        proj[:, 0] *= -1
+    share = vals / vals.sum()
+    top = {k: [[vocab[i], float(vecs[i, k])] for i in np.argsort(-np.abs(vecs[:, k]))[:8]] for k in (0, 1)}
+    # how well PC1 alone splits the authors (no labels were used to find it)
+    thr = 0.5 * (proj[y == 0, 0].mean() + proj[y == 1, 0].mean())
+    split = float(((proj[:, 0] > thr) == y).mean())
+    assert share[0] > share[1] > share[2] and split > 0.8
+    return dict(share=share, proj=proj, y=y, top=top, split=split, n=len(y), d=X.shape[1])
 
 
 # ---------------------------------------------------------------------------
-def separable(P, s):
-    """Is there a line w.x + b with sign = s at every point?  (A tiny linear program, by brute force over normals.)"""
-    for th in np.linspace(0, 2 * math.pi, 3600, endpoint=False):
-        w = np.array([math.cos(th), math.sin(th)])
-        proj = P @ w
-        pos, neg = proj[s > 0], proj[s < 0]
-        if len(pos) == 0 or len(neg) == 0 or pos.min() > neg.max() + 1e-9:
-            return True
-    return False
+def gauss_logpdf(X, m, S):
+    d = X - m
+    inv = np.linalg.inv(S)
+    return -0.5 * np.einsum("ni,ij,nj->n", d, inv, d) - 0.5 * math.log(np.linalg.det(2 * math.pi * S))
 
 
-def compute_shatter():
-    P3 = np.array([[-1.0, -0.7], [1.0, -0.7], [0.0, 0.9]])
-    P4 = np.array([[-1.0, -1.0], [1.0, -1.0], [1.0, 1.0], [-1.0, 1.0]])
-    labs3 = [np.array([1 if (k >> i) & 1 else -1 for i in range(3)]) for k in range(8)]
-    labs4 = [np.array([1 if (k >> i) & 1 else -1 for i in range(4)]) for k in range(16)]
-    ok3 = [separable(P3, s) for s in labs3]
-    ok4 = [separable(P4, s) for s in labs4]
-    assert all(ok3) and sum(not o for o in ok4) == 2  # the two XOR labellings
-    return dict(P3=P3, P4=P4, labs3=np.array(labs3), labs4=np.array(labs4), ok3=ok3, ok4=ok4)
+def compute_gmm():
+    P = np.asarray(load("pca")["proj"])[:, :2]
+    _, y, _, _ = pages()
+    g = rng(1977)  # Dempster, Laird & Rubin, 1977
+    means = np.array([[-0.5, 2.5], [0.5, 2.0]])  # a deliberately poor start
+    covs = np.array([np.eye(2) * 0.8, np.eye(2) * 0.8])
+    w = np.array([0.5, 0.5])
+    hist = []
+    for it in range(40):
+        lp = np.stack([np.log(w[k]) + gauss_logpdf(P, means[k], covs[k]) for k in range(2)], 1)
+        mx = lp.max(1, keepdims=True)
+        ll = float((mx[:, 0] + np.log(np.exp(lp - mx).sum(1))).mean())
+        r = np.exp(lp - mx)
+        r /= r.sum(1, keepdims=True)  # E step: responsibilities
+        hist.append(dict(means=means.copy(), covs=covs.copy(), w=w.copy(), ll=ll, r=r[:, 1].copy()))
+        nk = r.sum(0)  # M step
+        w = nk / len(P)
+        means = (r.T @ P) / nk[:, None]
+        covs = np.array([((r[:, k:k + 1] * (P - means[k])).T @ (P - means[k])) / nk[k] + 1e-6 * np.eye(2)
+                         for k in range(2)])
+    lls = [h["ll"] for h in hist]
+    assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))  # EM never goes downhill
+    lab = hist[-1]["r"] > 0.5
+    agree = float(max((lab == y).mean(), (lab != y).mean()))
+    del g
+    return dict(P=P, y=y, means=np.array([h["means"] for h in hist]), covs=np.array([h["covs"] for h in hist]),
+                w=np.array([h["w"] for h in hist]), ll=np.array(lls), r=np.array([h["r"] for h in hist]),
+                agree=agree)
 
 
 # ---------------------------------------------------------------------------
-def compute_rademacher():
-    Ztr, ytr, _, _, _ = pages()
+HMM_LETTERS = 200_000
+
+
+def baum_welch(obs, K, S, iters, seed):
+    g = rng(seed)
+    A = np.full((S, S), 1 / S) + g.uniform(-0.05, 0.05, (S, S))
+    A /= A.sum(1, keepdims=True)
+    B = g.uniform(0.5, 1.5, (S, K))
+    B /= B.sum(1, keepdims=True)
+    pi = np.full(S, 1 / S)
+    T = len(obs)
+    Bs, lls = [B.copy()], []
+    for _ in range(iters):
+        # forward-backward with scaling
+        al = np.empty((T, S))
+        c = np.empty(T)
+        al[0] = pi * B[:, obs[0]]
+        c[0] = al[0].sum()
+        al[0] /= c[0]
+        for t in range(1, T):
+            al[t] = (al[t - 1] @ A) * B[:, obs[t]]
+            c[t] = al[t].sum()
+            al[t] /= c[t]
+        be = np.empty((T, S))
+        be[-1] = 1.0
+        for t in range(T - 2, -1, -1):
+            be[t] = (A @ (B[:, obs[t + 1]] * be[t + 1])) / c[t + 1]
+        lls.append(float(np.log(c).sum() / T))
+        gam = al * be
+        gam /= gam.sum(1, keepdims=True)
+        xi = (al[:-1, :, None] * A[None] * (B[:, obs[1:]].T * be[1:])[:, None, :]) / c[1:, None, None]
+        A = xi.sum(0) / xi.sum((0, 2))[:, None]
+        B = np.stack([np.bincount(obs, weights=gam[:, s], minlength=K) for s in range(S)])
+        B /= B.sum(1, keepdims=True)
+        pi = gam[0]
+        Bs.append(B.copy())
+    return A, B, pi, np.array(Bs), np.array(lls)
+
+
+def viterbi(obs, A, B, pi):
+    T, S = len(obs), len(pi)
+    lA, lB = np.log(A), np.log(B + 1e-300)
+    d = np.log(pi + 1e-300) + lB[:, obs[0]]
+    back = np.zeros((T, S), int)
+    for t in range(1, T):
+        m = d[:, None] + lA
+        back[t] = np.argmax(m, 0)
+        d = m.max(0) + lB[:, obs[t]]
+    path = [int(np.argmax(d))]
+    for t in range(T - 1, 0, -1):
+        path.append(int(back[t][path[-1]]))
+    return path[::-1]
+
+
+def compute_hmm():
+    c1 = ai1()
+    t = c1.text("train27")[:HMM_LETTERS]
+    alpha = c1.ALPHA27
+    obs = np.array([alpha.index(ch) for ch in t])
+    A, B, pi, Bs, lls = baum_welch(obs, 27, 2, 60, seed=1980)  # Cave & Neuwirth, 1980
+    # which state is the vowel state?
+    vow = [alpha.index(v) for v in "aeiou"]
+    sv = int(np.argmax(B[:, vow].sum(1)))
+    if sv == 1:  # put the vowel state first
+        A, B, pi, Bs = A[::-1, ::-1], B[::-1], pi[::-1], Bs[:, ::-1]
+    post = B / B.sum(0, keepdims=True)  # which state emits each letter more (equal state weights)
+    vowel_side = [alpha[i] for i in range(27) if B[0, i] > B[1, i]]
+    assert set("aeiou") <= set(vowel_side), vowel_side
+    sent = c1.to27("There is no reverse on a motorcycle")
+    states = viterbi(np.array([alpha.index(ch) for ch in sent]), A, B, np.full(2, 0.5))  # no memory of the books' start
+    assert [s_ == 0 for s_ in states] == [B[0, alpha.index(ch)] > B[1, alpha.index(ch)] for ch in sent]
+    assert all(b >= a - 1e-9 for a, b in zip(lls, lls[1:]))
+    return dict(A=A, B=B, pi=pi, Bs=Bs, lls=lls / math.log(2), vowel_side=vowel_side, sentence=sent, states=states,
+                n=HMM_LETTERS, post=post)
+
+
+# ---------------------------------------------------------------------------
+def compute_gp():
+    X, y, book, vocab = pages()
+    j = vocab.index("her")
+    yv = X[book == 1400, j]  # Great Expectations, page by page
+    x = np.arange(len(yv), dtype=float)
+    mu0 = float(yv.mean())
+    yc = yv - mu0
+
+    def kern(a, b, ell, s2):
+        return s2 * np.exp(-0.5 * (a[:, None] - b[None]) ** 2 / ell ** 2)
+
+    def mlik(ell, s2, n2):
+        K = kern(x, x, ell, s2) + n2 * np.eye(len(x))
+        L = np.linalg.cholesky(K)
+        al = np.linalg.solve(L.T, np.linalg.solve(L, yc))
+        return float(-0.5 * yc @ al - np.log(np.diag(L)).sum() - 0.5 * len(x) * math.log(2 * math.pi))
+
+    v = float(yc.var())
+    best = max(((mlik(ell, f * m * v, (1 - f) * m * v), ell, f * m * v, (1 - f) * m * v)
+                for ell in (1.5, 2, 3, 4, 6, 8, 12, 16) for f in np.linspace(0.05, 0.95, 19) for m in (0.7, 1.0, 1.4)),
+               key=lambda t_: t_[0])
+    assert best[2] > best[3]  # more signal than noise: the rate really drifts from page to page
+    _, ell, s2, n2 = best
+    xs = np.linspace(0, len(x) - 1, 300)
+    K = kern(x, x, ell, s2) + n2 * np.eye(len(x))
+    Ks = kern(xs, x, ell, s2)
+    mean = Ks @ np.linalg.solve(K, yc)
+    cov = kern(xs, xs, ell, s2) - Ks @ np.linalg.solve(K, Ks.T)
+    sd = np.sqrt(np.maximum(np.diag(cov), 0))
     g = rng(1960)
-    n = len(ytr)
-    ds = [1, 2, 3, 5, 8, 12, 20, 30, 45, 70]
-    import torch
-
-    torch.manual_seed(0)
-    out = []
-    for d in ds:
-        fits = []
-        for _ in range(12):
-            s = g.choice([-1.0, 1.0], size=n)
-            X = torch.tensor(np.c_[Ztr[:, :d], np.ones(n)], dtype=torch.float64)
-            t = torch.tensor(s)
-            w = torch.zeros(d + 1, dtype=torch.float64, requires_grad=True)
-            opt = torch.optim.LBFGS([w], max_iter=200)
-
-            def closure():
-                opt.zero_grad()
-                loss = torch.nn.functional.softplus(-t * (X @ w)).mean() + 1e-4 * (w ** 2).sum()
-                loss.backward()
-                return loss
-
-            opt.step(closure)
-            with torch.no_grad():
-                fits.append(float(((X @ w).sign() == t).double().mean()))
-        out.append(float(np.mean(fits)))
-    acc = np.array(out)
-    assert acc[-1] > acc[0] + 0.05
-    return dict(ds=ds, acc=acc, n=n)
+    Lp = np.linalg.cholesky(kern(xs, xs, ell, s2) + 1e-6 * np.eye(len(xs)))
+    Lq = np.linalg.cholesky(cov + 1e-6 * np.eye(len(xs)))
+    prior = (Lp @ g.normal(size=(len(xs), 5))).T + mu0
+    postS = (Lq @ g.normal(size=(len(xs), 5))).T + mean + mu0
+    # the same, conditioned on only the first 20 pages: the band opens up beyond them
+    m20 = 20
+    K20 = kern(x[:m20], x[:m20], ell, s2) + n2 * np.eye(m20)
+    Ks20 = kern(xs, x[:m20], ell, s2)
+    mean20 = Ks20 @ np.linalg.solve(K20, yc[:m20])
+    sd20 = np.sqrt(np.maximum(np.diag(kern(xs, xs, ell, s2) - Ks20 @ np.linalg.solve(K20, Ks20.T)), 0))
+    return dict(x=x, y=yv, xs=xs, mean=mean + mu0, sd=sd, ell=ell, s2=s2, noise=n2, prior=prior, post=postS,
+                mean20=mean20 + mu0, sd20=sd20, m20=m20, mu0=mu0, n_pages=len(x))
 
 
 # ---------------------------------------------------------------------------
-def compute_random():
-    import torch
+def compute_vi():
+    from videos.ai.ai5.compute import density2
 
-    torch.set_num_threads(1)  # small matrices: one thread is fastest, and leaves the other cores free
-    Ztr, ytr, Zte, yte, _ = pages()
-    torch.manual_seed(2016)  # Zhang et al. trained in 2016 (published 2017)
-    g = rng(2017)
-    Xtr, Xte = torch.tensor(Ztr, dtype=torch.float32), torch.tensor(Zte, dtype=torch.float32)
-    out = {}
-    for name, labels in (("true", ytr), ("shuffled", g.permutation(ytr))):
-        torch.manual_seed(7)
-        net = torch.nn.Sequential(torch.nn.Linear(Ztr.shape[1], 512), torch.nn.ReLU(), torch.nn.Linear(512, 512),
-                                  torch.nn.ReLU(), torch.nn.Linear(512, 2))
-        opt = torch.optim.Adam(net.parameters(), lr=1e-3)
-        t = torch.tensor(labels, dtype=torch.long)
-        curve, fits = [], []
-        for step in range(1, 1501):
-            opt.zero_grad()
-            loss = torch.nn.functional.cross_entropy(net(Xtr), t)
-            loss.backward()
-            opt.step()
-            if step % 10 == 0 or step < 10:
-                with torch.no_grad():
-                    hit = (net(Xtr).argmax(1) == t).numpy()
-                    tr = float(hit.mean())
-                    te = float((net(Xte).argmax(1).numpy() == yte).mean())
-                curve.append((step, tr, te, float(loss)))
-                fits.append(hit)
-        out[name] = np.array(curve)
-        # which training pages it gets right at each logged step (the order things are memorized in)
-        out[f"fits_{name}"] = np.array(fits, dtype=np.uint8)
-        out[f"labels_{name}"] = np.asarray(labels)
-    n_params = sum(p.numel() for p in net.parameters())
-    assert out["shuffled"][-1, 1] == 1.0 and abs(out["shuffled"][-1, 2] - 0.5) < 0.1 and out["true"][-1, 2] > 0.95
-    first = {k: int(out[k][np.argmax(out[k][:, 1] >= 1.0), 0]) for k in ("true", "shuffled")}
-    return dict(**out, n_params=int(n_params), n=len(ytr), first100=first, ytrue=np.asarray(ytr))
+    xs, ys = np.linspace(-4, 4, 161), np.linspace(-3, 3, 121)
+    X, Y = np.meshgrid(xs, ys)
+    G = np.stack([X.ravel(), Y.ravel()], 1)
+    p = density2(X, Y).ravel()
+    p /= p.sum()
+    logp = np.log(p + 1e-300)
+
+    def q_of(theta):
+        m, ls, r = theta[:2], theta[2:4], math.tanh(theta[4])
+        s = np.exp(ls)
+        S = np.array([[s[0] ** 2, r * s[0] * s[1]], [r * s[0] * s[1], s[1] ** 2]])
+        lq = gauss_logpdf(G, m, S)
+        q = np.exp(lq - lq.max())
+        q /= q.sum()
+        return q, np.log(q + 1e-300)
+
+    def kl_qp(theta):
+        q, lq = q_of(theta)
+        return float((q * (lq - logp)).sum())
+
+    def kl_pq(theta):
+        q, lq = q_of(theta)
+        return float((p * (logp - lq)).sum())
+
+    from scipy.optimize import minimize
+
+    path = []
+    th0 = np.array([-0.2, 1.5, -0.5, -0.5, 0.0])  # a poor start, above the two bumps
+    minimize(kl_qp, th0, method="Nelder-Mead", callback=lambda th: path.append(th.copy()),
+             options=dict(maxiter=600, xatol=1e-4, fatol=1e-7))
+    t_qp = path[-1]
+    assert t_qp[0] < -1.2  # the reverse KL settles on one bump: the bigger one, on the left
+    # KL(p||q) is minimized exactly by moment matching: the Gaussian with p's own mean and covariance
+    mean_p = p @ G
+    cov_p = ((G - mean_p) * p[:, None]).T @ (G - mean_p)
+    sd_p = np.sqrt(np.diag(cov_p))
+    t_pq = np.array([*mean_p, *np.log(sd_p), math.atanh(cov_p[0, 1] / (sd_p[0] * sd_p[1]))])
+    assert kl_pq(t_pq) < kl_pq(t_qp) and kl_qp(t_qp) < kl_qp(t_pq)  # each fit wins under its own measure
+    pick = np.linspace(0, len(path) - 1, 40).astype(int)
+    return dict(path=np.array(path)[pick], t_qp=t_qp, t_pq=t_pq, mean_p=mean_p, cov_p=cov_p,
+                kl_qp=[kl_qp(path[k]) for k in pick], kl_final=kl_qp(t_qp), kl_pq_final=kl_pq(t_pq))
 
 
 # ---------------------------------------------------------------------------
-def compute_double():
-    Ztr, ytr, Zte, yte, _ = pages()
-    g = rng(2019)  # Belkin, Hsu, Ma & Mandal, 2019
-    n, d = Ztr.shape
-    ps = np.unique(np.round(np.logspace(np.log10(10), np.log10(6000), 46)).astype(int))
-    ps = np.unique(np.concatenate([ps, [n - 8, n, n + 8]]))
-    ttr, tte = 2.0 * ytr - 1, 2.0 * yte - 1
-    errs, tr_errs, norms = [], [], []
-    reps = 5
-    for p in ps:
-        e, et, nm = [], [], []
-        for r in range(reps):
-            W = g.normal(size=(d, p)) / math.sqrt(d)
-            Ftr, Fte = np.maximum(Ztr @ W, 0), np.maximum(Zte @ W, 0)
-            beta = np.linalg.pinv(Ftr) @ ttr  # least squares, or the smallest solution that fits exactly
-            e.append(float(((Fte @ beta - tte) ** 2).mean()))
-            et.append(float(((Ftr @ beta - ttr) ** 2).mean()))
-            nm.append(float(np.linalg.norm(beta)))
-        errs.append(np.median(e))
-        tr_errs.append(np.median(et))
-        norms.append(np.median(nm))
-    errs, tr_errs = np.array(errs), np.array(tr_errs)
-    k_n = int(np.argmin(np.abs(ps - n)))
-    assert errs[k_n] > 3 * errs[0] and errs[-1] < errs[k_n] / 3 and tr_errs[-1] < 1e-6
-    return dict(ps=ps, test=errs, train=tr_errs, norms=np.array(norms), n=n, d=d, peak=float(errs[k_n]))
+def ngram_tables(a, K, M):
+    """The distinct n-grams of a (lengths 1..M+1) and their counts."""
+    n = len(a)
+    tables = []
+    for m in range(M + 1):
+        L = m + 1  # the n-gram (context + next symbol)
+        key = np.zeros(n - L + 1, np.int64)
+        for j in range(L):
+            key = key * K + a[j:n - L + 1 + j]
+        types, cnt = np.unique(key, return_counts=True)
+        tables.append(dict(types=types, cnt=cnt))
+    return tables
+
+
+def kn_model(tables, K, M):
+    """Interpolated Kneser-Ney for symbol sequences, context lengths 0..M: the tables a scorer needs.  Below the top
+    order, counts are continuation counts: N1+(. h c), the number of distinct symbols seen before (h c)."""
+    model = []
+    for m in range(M + 1):
+        L = m + 1
+        if m == M:
+            keys, c = tables[m]["types"], tables[m]["cnt"].astype(float)
+        else:
+            longer = tables[m + 1]["types"] % (K ** L)  # drop the first symbol
+            keys, c = np.unique(longer, return_counts=True)
+            c = c.astype(float)
+        n1, n2 = float((c == 1).sum()), float((c == 2).sum())
+        D = n1 / (n1 + 2 * n2) if n1 + n2 > 0 else 0.5
+        ctx = keys // K
+        cu, inv = np.unique(ctx, return_inverse=True)
+        tot = np.bincount(inv, weights=c)
+        ntypes = np.bincount(inv)
+        model.append(dict(keys=keys, c=c, D=D, ctx=cu, tot=tot, ntypes=ntypes))
+    return model
+
+
+def kn_bits(model, a, K, M):
+    """Bits per symbol of the sequence a under the model with context length M (the first M symbols are skipped)."""
+    return float(-np.log2(kn_probs(model, a, K, M)).mean())
+
+
+def kn_probs(model, a, K, M):
+    """The model's probability of each symbol of a, from position M on."""
+    n = len(a)
+    idx = np.arange(M, n)
+    p = np.full(len(idx), 1.0 / K)
+    for m in range(M + 1):
+        t = model[m]
+        key = np.zeros(len(idx), np.int64)
+        for j in range(m, -1, -1):
+            key = key * K + a[idx - j]
+        ctx = key // K
+        i = np.minimum(np.searchsorted(t["keys"], key), len(t["keys"]) - 1)
+        c = np.where(t["keys"][i] == key, t["c"][i], 0.0)
+        k = np.minimum(np.searchsorted(t["ctx"], ctx), len(t["ctx"]) - 1)
+        seen = t["ctx"][k] == ctx
+        tot = np.where(seen, t["tot"][k], 0.0)
+        nt = np.where(seen, t["ntypes"][k], 0.0)
+        safe = np.maximum(tot, 1.0)
+        new = np.maximum(c - t["D"], 0) / safe + t["D"] * nt / safe * p
+        p = np.where(seen, new, p)
+    return p
+
+
+def compute_kn():
+    c1 = ai1()
+    train, valid, passage = c1.text("train"), c1.text("valid"), c1.text("passage")
+    chars = sorted(set(train) | set(valid) | set(passage))
+    idx = {ch: i for i, ch in enumerate(chars)}
+    K = len(chars)
+    enc = lambda t: np.array([idx[ch] for ch in t], np.int64)  # noqa: E731
+    a, v, ps = enc(train), enc(valid), enc(passage)
+    MAXM = max(m for m in range(1, 10) if K ** (m + 1) < 2 ** 62)  # n-gram keys must fit in 64 bits
+    rows = []
+    tables = ngram_tables(a, K, MAXM)
+    for M in range(0, MAXM + 1):
+        model = kn_model(tables, K, M)
+        rows.append(dict(order=M, valid=kn_bits(model, v, K, M), test=kn_bits(model, ps, K, M)))
+        print(f"    KN order {M}: valid {rows[-1]['valid']:.3f}  passage {rows[-1]['test']:.3f}")
+    best = int(np.argmin([r["valid"] for r in rows]))
+    raw = c1.load("raw")
+    assert rows[best]["test"] < raw["best_bits"]  # better than Part 1's best counting model
+    return dict(K=K, rows=rows, best=best, best_bits=rows[best]["test"], part1_best=raw["best_bits"],
+                part1_rows=[r["test"] for r in raw["rows"]])
 
 
 ITEMS = {
-    "gap": compute_gap,
-    "biasvar": compute_biasvar,
-    "shatter": compute_shatter,
-    "rademacher": compute_rademacher,
-    "random": compute_random,
-    "double": compute_double,
+    "pca": compute_pca,
+    "gmm": compute_gmm,
+    "hmm": compute_hmm,
+    "gp": compute_gp,
+    "vi": compute_vi,
+    "kn": compute_kn,
 }
 CACHE.items = ITEMS
 

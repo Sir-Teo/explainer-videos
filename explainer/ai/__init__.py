@@ -1,4 +1,4 @@
-"""Shared instruments for the AI series (videos/ai/ai1 ... ai20), *AI, Built*.
+"""Shared instruments for the AI series (videos/ai/ai1 ... ai30), *AI, Built*.
 
     from explainer.ai import *
 
@@ -8,7 +8,7 @@ Chinese on-screen text machinery (``explainer/zh_text.py``, with this series' ow
 ``videos/ai/ai_text_zh.json``).  Here, the devices that hold this series together:
 
 * :func:`chapter_card` with the **timeline strip**, 1940-2030, the history of the ideas lit as the series reaches them;
-* :func:`series_map`, the twenty parts in four acts, with the current part lit;
+* :func:`series_map`, the thirty-one parts in five acts and a finale, with the current part lit;
 * :func:`scoreboard`, the series' running record: bits per character on one fixed passage, one row per model, filled
   in as the parts build the models (Part 1 computes the passage and the first rows, ``.cache/ai1/scoreboard.json``);
 * :func:`payoff_card`, "where this comes back": an idea and the later parts that use it;
@@ -47,41 +47,49 @@ def data_text(s: str, **kw) -> Text:
 
 
 # ---------------------------------------------------------------------------
-# The twenty parts
+# The thirty-one parts
 # ---------------------------------------------------------------------------
 ACTS = [
-    (r"I.\ Foundations", (1, 4)),
-    (r"II.\ Learning", (5, 10)),
-    (r"III.\ Engines", (11, 16)),
-    (r"IV.\ Agency", (17, 20)),
+    (r"I.\ Foundations", (1, 5)),
+    (r"II.\ Learning from Data", (6, 12)),
+    (r"III.\ The Transformer Era", (13, 19)),
+    (r"IV.\ Generation and Perception", (20, 25)),
+    (r"V.\ Agency", (26, 29)),
+    (r"Finale", (30, 31)),
 ]
 PARTS = {
-    1: r"The Guessing Game", 2: r"Vectors That Mean Things", 3: r"Change", 4: r"Randomness in Motion",
-    5: r"Classical ML", 6: r"Statistical ML", 7: r"Fitting and Generalizing", 8: r"Networks",
-    9: r"Going Downhill", 10: r"The Mathematics of Scale",
-    11: r"Attention as Geometry", 12: r"Memory", 13: r"Sparsity", 14: r"Diffusion and Flow",
-    15: r"Images and Video", 16: r"Every Sense Is a Token",
-    17: r"Reasoning", 18: r"Agents and Worlds", 19: r"Inference", 20: r"Inside the Model",
+    1: r"The Guessing Game", 2: r"Thinking Machines", 3: r"Vectors That Mean Things", 4: r"Change",
+    5: r"Randomness in Motion",
+    6: r"Classical ML", 7: r"Statistical ML", 8: r"Fitting and Generalizing", 9: r"Networks",
+    10: r"Seeing and Remembering", 11: r"Going Downhill", 12: r"The Mathematics of Scale",
+    13: r"Attention as Geometry", 14: r"The Language-Model Lineage", 15: r"Memory", 16: r"Sparsity", 17: r"Silicon",
+    18: r"Pretraining at Scale", 19: r"Inference",
+    20: r"Four Ways to Generate", 21: r"Diffusion and Flow", 22: r"Images, Video and 3D",
+    23: r"Every Sense Is a Token", 24: r"Learning Without Labels", 25: r"Symmetry and Science",
+    26: r"Reinforcement Learning", 27: r"Post-Training and Alignment", 28: r"Reasoning", 29: r"Agents and Worlds",
+    30: r"Inside the Model", 31: r"Can We Trust It?",
 }
 
 
-def series_map(current: int | None = None, done: int = 0, font_size=21, width=13.2) -> VGroup:
-    """Four columns, one per act; each part a row.  Parts up to ``done`` are white, ``current`` is lit and boxed,
-    the rest are dim."""
+def series_map(current: int | None = None, done: int = 0, font_size=20, width=13.2, height=7.4) -> VGroup:
+    """The acts in a grid of three columns, two rows; each part a row.  Parts up to ``done`` are white, ``current``
+    is lit and boxed, the rest are dim."""
     cols = VGroup()
     for act, (a, b) in ACTS:
-        head = label(act, font_size=font_size + 5, color=GREY_A)
+        head = label(act, font_size=font_size + 4, color=GREY_A)
         rows = VGroup()
         for p in range(a, b + 1):
             color = C.BITS if p == current else (WHITE if p <= done else GREY_C)
             rows.add(label(rf"{p}.\ {PARTS[p]}", font_size=font_size, color=color))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        col = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        col = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.26)
         col.head, col.rows = head, rows
         cols.add(col)
-    cols.arrange(RIGHT, aligned_edge=UP, buff=0.55)
+    cols.arrange_in_grid(rows=2, cols=3, buff=(0.6, 0.45), cell_alignment=UL)
     if cols.width > width:
         cols.width = width
+    if cols.height > height:
+        cols.height = height
     g = VGroup(cols)
     g.cols = cols
     g.part = {}

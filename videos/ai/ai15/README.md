@@ -1,41 +1,47 @@
-# AI, Built — Part 15: Images and Video
+# AI, Built — Part 15: Memory
 
-Part 15 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). How the
-transformer and the diffusion machinery of Parts 11 and 14 meet pictures and video. The pictures are Part 14's 20 × 20
-capital letters from the system's fonts, and every model is trained here, with its training shown as well as its
-result. A hook and eight chapters:
+Part 15 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
+model has to remember while it reads, and the two ways to keep it: attention's growing cache, made smaller, and a
+fixed-size matrix memory, written by better and better rules. A hook and six chapters:
 
-* **Letters from noise.** A word spelled by a small diffusion transformer, letter by requested letter.
-* **An image is a sequence.** 4 × 4 patches as tokens; a small vision transformer naming letters in fonts it never
-  saw; where its summary token looks; its learned position vectors rediscovering the 5 × 5 grid.
-* **A smaller space.** An autoencoder squeezing 400 pixels into 16 numbers and back; the letters in that space; flow
-  matching in it, decoded (latent diffusion). The VAE: the ELBO, rebuild error plus β·KL, and what β trades (sharp
-  rebuilds against a smooth space to generate in); one VAE training, held-out letters rebuilt at checkpoints beside
-  its two loss terms.
-* **Transformers as denoisers.** A diffusion transformer, patch tokens plus a time-and-letter vector; adaLN-Zero
-  (scale, shift and gate from that vector, the gate starting at zero so every block starts as the identity); the
-  same noise and the same ten requests drawn at checkpoints during training beside the loss; the whole alphabet.
-* **Rectified flow at scale.** Stable Diffusion 3: MM-DiT's two streams with one joint attention; logit-normal
-  sampling of t (training where the velocity is hardest); the resolution shift σ' = ασ / (1 + (α − 1)σ).
-* **Coarse to fine.** VAR's next-scale prediction against raster order; residual quantization across scales, each
-  one coding what the coarser ones missed; the block-causal mask between scales.
-* **Squeezing time.** Spacetime patches and their count; a causal 3D autoencoder trained here on moving letters (the
-  first frame coded alone, so a still image is a one-frame video); 3D rotary positions over time, height and width.
-* **Frames that agree.** Image-to-video: given a real first frame, the rest of a clip of a moving letter generated
-  jointly, every frame attending to every other, against frames taken from different samples: how often each
-  generated frame is recognized, and how smoothly the letter moves.
-* **Rolling forward.** Diffusion forcing: a separate noise level per frame, so the model can extend a clip past the
-  length it trained on; teacher forcing against rollouts from a real first frame; self forcing.
+* **Everything it has read.** Llama 3.1 70B's cache growing token by token, to 39 GiB at 128,000 tokens; a fixed-size
+  memory as the alternative.
+* **The cache.** Why attention keeps every key and value; the memory per token from published configurations: full
+  attention, grouped-query attention (Llama 3.1), multi-head latent attention (DeepSeek-V3, 71 times smaller than
+  full attention of the same shape) and a hybrid (Qwen3-Next); why rotary positions break MLA's folding of the key
+  matrix into the query (folding anyway is 18% off, with random weights) and how DeepSeek's decoupled rotary key, 64
+  numbers shared by the heads and cached next to the 512-number latent, restores it exactly.
+* **Attention without the softmax.** (QKᵀ)V = Q(KᵀV): a T × T table or a d × d one; causal linear attention as a
+  recurrence on a d × d state (checked against the parallel form to rounding error); the operation counts.
+* **How to write to memory.** A matrix as an associative memory: adding (crosstalk growing like (N − 1)/d), decaying
+  (old memories fade), the delta rule (write what should be there minus what is), in a changing world of 16 keys
+  rewritten 256 times; the delta rule as one step of gradient descent; the gated delta rule.
+* **State-space models.** A continuous-time state, read in steps of Δ; memory set by the step size; Mamba's selective
+  steps holding a marked value through noise; Mamba-2: the same family as linear attention.
+* **The gated delta rule.** The delta update as a rank-one change of a linear map, drawn on the plane: I - βkkᵀ shrinks
+  only the key's direction (β = ½), erases it (β = 1, a projection) or reflects it (β = 2, eigenvalue -1, which lets
+  linear RNNs track parity); the family of write rules (linear attention, decay, DeltaNet, Gated DeltaNet in
+  Qwen3-Next, Kimi Delta Attention's per-channel gate) as S_t = S_{t-1}M_t + write; chunkwise training through the WY
+  form of a product of (I - βkkᵀ), one triangular solve per chunk (the UT transform), checked against the recurrence on
+  2,048 tokens (agreement 3e-15, gated 9e-16; 32 sequential steps instead of 2,048); Mamba-2's state-space duality,
+  the decaying rule as masked attention (L ∘ QKᵀ)V with a semiseparable mask (every block below the diagonal rank one),
+  checked to 9e-16.
+* **A recall test.** Multi-query associative recall: tiny one-layer models with softmax attention, linear attention
+  and the delta rule (keys of 16 numbers), trained here, as the number of key-value pairs grows: at 8 / 16 / 32 / 48
+  pairs, softmax 100% throughout, adding 96 / 86 / 55 / 38%, the delta rule 100 / 99 / 95 / 88%.
+* **Hybrids.** Jamba, MiniMax-01, Qwen3-Next and Kimi Linear: a few attention layers among many linear-time ones;
+  the memory bill at 128,000 tokens.
 * **Recap**, where it comes back, Part 16's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai15.compute          # needs Part 14's letters
+python -m videos.ai.ai15.compute
 python tools/build.py ai15                # English
 python tools/build.py ai15 --lang zh      # Chinese
 ```
 
-References: Dosovitskiy et al., ViT (2020); Kingma & Welling, VAE (2013); Rombach et al., latent diffusion (2022);
-Peebles & Xie, DiT (2023); Esser et al., Stable Diffusion 3 (2024); Tian et al., VAR (2024); Yao et al., VA-VAE
-(2025); Chen et al., diffusion forcing (2024); Huang et al., self forcing (2025).
+References: Ainslie et al., GQA (2023); DeepSeek-AI, DeepSeek-V2 and V3 (2024); Katharopoulos et al. (2020); Widrow &
+Hoff (1960); Schlag, Irie & Schmidhuber (2021); Yang et al., DeltaNet (2024) and Gated DeltaNet (2025); Gu et al., S4
+(2022); Gu & Dao, Mamba (2023); Dao & Gu, Mamba-2 (2024); Sun et al., test-time training (2024); Arora et al., Zoology
+(2023); Lieber et al., Jamba (2024); MiniMax-01 (2025); Qwen3-Next (2025); Kimi Linear (2025).

@@ -9,4 +9,6 @@ Manim videos with local neural narration. See README.md for layout and build com
   name and scene module name, so renaming either invalidates them.
 - Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`) keeps its on-screen text
   table (`<series>_text_zh.json`) and term guide in `videos/<series>/`.
-- *AI, Built* (`videos/ai/`): the twenty-part plan is `videos/ai/README.md`; shared instruments in `explainer/ai/`.
+- *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the
+  chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
+  instruments in `explainer/ai/`.

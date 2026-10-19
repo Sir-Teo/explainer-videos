@@ -1,7 +1,7 @@
 """The precomputed numbers of one part of *AI, Built*: ``.cache/<part>/<name>.json`` (+ ``.npz`` for arrays).
 
-    CACHE = Cache("ai2")
-    CACHE.main(ITEMS, __doc__)          # in the part's compute.py: python -m videos.ai.ai2.compute [names] [--force]
+    CACHE = Cache("ai3")
+    CACHE.main(ITEMS, __doc__)          # in the part's compute.py: python -m videos.ai.ai3.compute [names] [--force]
     load = CACHE.load                   # in the part's scenes: load("words")["neighbours"]
 
 Part 1 predates this module and keeps its own copy of the same helpers (``videos/ai/ai1/compute.py``).

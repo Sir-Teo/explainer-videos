@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Carry a Chinese narration line over when only the numbers in its English line changed (data-driven lines).
 
-    python tools/zh_follow_numbers.py ai9
+    python tools/zh_follow_numbers.py ai11
 
 A line computed from a part's results ("it reaches 2.51 bits, ahead of AdamW's 2.61") gets a new hash when a re-run
 of compute.py moves a number in the last digit, and then has no translation. For each such line this finds the stored

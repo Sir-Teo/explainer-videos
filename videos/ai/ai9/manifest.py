@@ -1,13 +1,13 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "AI, Built: Part 9, Going Downhill"
+TITLE = "AI, Built: Part 9, Networks"
 
 SCENES = [
-    ("s01_hook", "Hook", "Three ways down"),
-    ("s02_sgd", "SGD", "1. Stochastic gradient descent"),
-    ("s03_eos", "EdgeOfStability", "2. The edge of stability"),
-    ("s04_adam", "Adam", "3. Momentum and Adam"),
-    ("s05_muon", "Muon", "4. Muon"),
-    ("s06_schedule", "Schedule", "5. Learning-rate schedules"),
+    ("s01_hook", "Hook", "Two spirals"),
+    ("s02_universal", "Universal", "1. One layer can do anything"),
+    ("s03_depth", "Depth", "2. What depth adds"),
+    ("s04_signal", "Signal", "3. Signals through fifty layers"),
+    ("s05_residual", "Residual", "4. The residual stream"),
+    ("s06_lm", "NeuralLM", "5. A neural language model"),
     ("s07_outro", "Outro", "Recap, and where this comes back"),
 ]

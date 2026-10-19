@@ -1,39 +1,48 @@
-# AI, Built — Part 3: Change
+# AI, Built — Part 3: Vectors That Mean Things
 
-Part 3 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Every
-training step needs the derivative of the loss with respect to every number in the model: 124,439,808 for GPT-2,
-4.02 billion for Qwen3-4B. This part builds the machine that computes them, the chain rule run backwards, as the
-series' own small library (`explainer/ai/autodiff.py`), checks it, and trains with it. A hook and eight chapters:
+Part 3 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Part 1's
+counting model could not tell *the dog barked* from *the hound barked*; this part gives words a place in a space,
+and builds the linear algebra to work there. A hook and nine chapters:
 
-* **The derivative.** Part 1's surprise curve under a magnifying lens, straightening as the zoom grows; secants
-  closing on the tangent, f(x + h) ≈ f(x) + f′(x)h; eˣ, ln x, and the chain rule as stretch factors that multiply
-  along three number lines.
-* **The gradient.** Partial derivatives as slices of a surface (3D); the gradient, uphill; gradient descent as a
-  ball rolling down; contour lines, and the slope along any direction as ∇f · u (Part 2's dot product), swept.
-* **The Jacobian.** A map that bends the plane; zoomed in, its grid straightens onto the Jacobian's straight grid;
-  the determinant as local area; the chain rule as a product of Jacobians.
-* **Forwards or backwards.** The gradient of a chain of maps as a product of Jacobians, with their shapes; forward
-  accumulation carries a column per parameter, reverse a single row; Linnainmaa (1970), Rumelhart, Hinton and
-  Williams (1986).
-* **Backpropagation by hand.** One input, weight and bias, a sigmoid and a squared error: values forwards
-  (loss 0.854), gradients backwards (∂L/∂w = −0.259), local derivatives at each step; gradients add where a value
-  is used twice.
-* **The library.** Its multiplication and its `backward`, on screen as written; on a 256-number network, the gradients
-  agree with finite differences to 2 × 10⁻¹⁰ and with PyTorch to 3 × 10⁻¹⁷.
-* **Training.** Part 1's letter pairs as 729 scores trained by gradient descent with the library (Adam, 1,500 steps):
-  from log₂ 27 = 4.75 bits to 3.33, the counting answer, the scores becoming the log of the counts (correlation 0.995).
-* **Curvature.** The Hessian, its eigenvectors and eigenvalues; a bowl reshaping into a saddle (3D); a narrow valley
-  (curvatures 1 and 25): gradient descent's zigzag (26 steps to within 1%), momentum, and Newton's one step.
+* **Where words live.** Two contexts as islands; 102 words placed where GPT-2 puts them (its embedding matrix,
+  50,257 × 768, on the words' top three principal directions), turning in 3D, seven categories apart; *dog*,
+  *puppy* and *tobacco* as 768 numbers each.
+* **Vectors.** Arrows and lists of numbers; addition and scaling; combinations sweeping out the plane; a basis.
+* **The dot product.** Coordinate products summed, and |a||b|cos θ; the shadow as one vector turns; cosine
+  similarity of GPT-2's vectors (dog·puppy 0.62, dog·cat 0.55, dog·tobacco 0.23); GPT-2's logits *are* dot products
+  with the same (tied) vectors: after "The Eiffel Tower is located in the city of", Paris, London, Amsterdam, and the
+  softmax gives Paris 0.064, Part 1's number.
+* **Matrices.** The plane moved by a matrix; columns are where the basis arrows land; matrix times vector;
+  composition and order; the determinant as area, zero (squashed) and negative (flipped).
+* **Eigenvectors.** Directions a matrix leaves on their line; symmetric matrices and the spectral theorem, drawn as
+  turn, stretch, turn back; covariance and principal components.
+* **The singular value decomposition.** Every matrix as turn, stretch, turn (checked against the matrix in one
+  go); the ellipse's half-axes; the spectral norm as the longest image of a unit vector, swept; a vector through 40
+  random 256 × 256 layers with gains 0.8, 1.0, 1.2 (× 0.0001, × 1.5, × 2,116).
+* **Low rank.** A matrix as a sum of rank-one pieces; Eckart–Young on Part 1's 26 × 26 letter-pair table (the square
+  root of P(previous, next)): errors 0.56 after one piece, 0.40 after two, exactly the singular values left out;
+  correspondence analysis puts i, a, o, u, e at one end of its first axis.
+* **Word vectors.** The books' co-occurrence table (10,000 words, window 4, 4.35 million words of text), positive
+  PMI, truncated SVD to 100 numbers: Monday → Saturday, Tuesday; three → four, two; dog → … wolf, cat, Perezvon (a dog
+  in *The Brothers Karamazov*); France → Paris from England lands on London; word2vec (skip-gram with negative
+  sampling) trained on the same books, and Levy & Goldberg's equivalence.
+* **High dimensions.** Angles between random directions for d = 2, 3, 10, 100, 768 (spread 52° down to 2.1°); 10,000
+  random directions in 768 dimensions all between 79° and 101°, and superposition; lengths concentrating at √d;
+  99.96% of a ball's volume within 1% of its surface; GPT-2's vectors share a direction (mean cosine 0.24; 0.01
+  after centring).
+* **Johnson–Lindenstrauss.** 1,000 of GPT-2's vectors through one random 768 × k matrix: within 10% for 84% of the
+  distances at k = 100 and 99.6% at k = 400; the lemma's (cautious) bound.
 * **Recap**, where it comes back, Part 4's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai3.compute          # needs Part 1's books (.cache/ai1) and GPT-2 / Qwen3-4B's weight headers
+python -m videos.ai.ai3.compute          # GPT-2's weights (Hugging Face) and Part 1's books (.cache/ai1)
 python tools/build.py ai3                # English
 python tools/build.py ai3 --lang zh      # Chinese
 ```
 
-References: I. Goodfellow, Y. Bengio & A. Courville, *Deep Learning* (2016); A. Griewank & A. Walther, *Evaluating
-Derivatives* (2008); J. Nocedal & S. J. Wright, *Numerical Optimization* (2006); Linnainmaa (1970); Rumelhart,
-Hinton & Williams (1986); Baydin et al. (2018); Dauphin et al. (2014); Paszke et al. (2019); Karpathy, micrograd (2020).
+References: G. Strang, *Linear Algebra and Learning from Data* (2019); S. Axler, *Linear Algebra Done Right* (2024);
+R. Vershynin, *High-Dimensional Probability* (2018); Eckart & Young (1936); Johnson & Lindenstrauss (1984);
+Dasgupta & Gupta (2003); Deerwester et al. (1990); Mikolov et al. (2013); Levy & Goldberg (2014); Ethayarajh (2019);
+Radford et al. (2019); Elhage et al. (2022).

@@ -1,12 +1,14 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "AI, Built: Part 13, Sparsity"
+TITLE = "AI, Built: Part 13, Attention as Geometry"
 
 SCENES = [
-    ("s01_hook", "Hook", "A few experts at a time"),
-    ("s02_router", "Router", "1. A mixture of experts"),
-    ("s03_balance", "Balance", "2. Keeping every expert busy"),
-    ("s04_special", "Special", "3. What experts learn"),
-    ("s05_attention", "SparseAttention", "4. Sparse attention"),
-    ("s06_outro", "Outro", "Recap, and where this comes back"),
+    ("s01_hook", "Hook", "Every character looks back"),
+    ("s02_smoother", "Smoother", "1. A weighted average"),
+    ("s03_transformer", "Transformer", "2. Our own transformer"),
+    ("s04_rope", "Rope", "3. Positions as rotations"),
+    ("s05_longer", "Longer", "4. Longer than it was trained for"),
+    ("s06_induction", "Induction", "5. Induction heads"),
+    ("s07_icl", "InContext", "6. Learning inside the prompt"),
+    ("s08_outro", "Outro", "Recap, and where this comes back"),
 ]

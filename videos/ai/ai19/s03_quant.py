@@ -33,7 +33,7 @@ class Quant(VoiceoverScene):
         bars = VGroup(*[Rectangle(width=9.0 / len(h) * 0.9, height=max(2.6 * v / h.max(), 0.005), stroke_width=0, fill_color=GREY_B,
                                   fill_opacity=0.8).move_to(ax.c2p((e[i] + e[i + 1]) / 2, 0) + UP * 1.3 * v / h.max())
                         for i, v in enumerate(h)])
-        hl = label(r"the weights of one layer of Part 11's transformer", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
+        hl = label(r"the weights of one layer of Part 13's transformer", font_size=22, color=GREY_A).next_to(ax, UP, buff=0.12)
         m = max(abs(lo), abs(hi))
         levels4 = np.linspace(-m, m, 15)
         ticks4 = VGroup(*[Line(ax.c2p(x, 0), ax.c2p(x, 1.05), color=C.INTERVAL, stroke_width=1.5).set_stroke(opacity=0.8) for x in levels4])

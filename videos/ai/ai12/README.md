@@ -1,47 +1,31 @@
-# AI, Built — Part 12: Memory
+# AI, Built — Part 12: The Mathematics of Scale
 
-Part 12 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
-model has to remember while it reads, and the two ways to keep it: attention's growing cache, made smaller, and a
-fixed-size matrix memory, written by better and better rules. A hook and six chapters:
+Part 12 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)), and
+the end of Act II. What happens as networks grow, measured on the series' own small models: every run is computed by
+`compute.py` (PyTorch, CPU) on a character model like Part 11's, scored in bits per character on held-out text. A hook
+and three chapters:
 
-* **Everything it has read.** Llama 3.1 70B's cache growing token by token, to 39 GiB at 128,000 tokens; a fixed-size
-  memory as the alternative.
-* **The cache.** Why attention keeps every key and value; the memory per token from published configurations: full
-  attention, grouped-query attention (Llama 3.1), multi-head latent attention (DeepSeek-V3, 71 times smaller than
-  full attention of the same shape) and a hybrid (Qwen3-Next); why rotary positions break MLA's folding of the key
-  matrix into the query (folding anyway is 18% off, with random weights) and how DeepSeek's decoupled rotary key, 64
-  numbers shared by the heads and cached next to the 512-number latent, restores it exactly.
-* **Attention without the softmax.** (QKᵀ)V = Q(KᵀV): a T × T table or a d × d one; causal linear attention as a
-  recurrence on a d × d state (checked against the parallel form to rounding error); the operation counts.
-* **How to write to memory.** A matrix as an associative memory: adding (crosstalk growing like (N − 1)/d), decaying
-  (old memories fade), the delta rule (write what should be there minus what is), in a changing world of 16 keys
-  rewritten 256 times; the delta rule as one step of gradient descent; the gated delta rule.
-* **State-space models.** A continuous-time state, read in steps of Δ; memory set by the step size; Mamba's selective
-  steps holding a marked value through noise; Mamba-2: the same family as linear attention.
-* **The gated delta rule.** The delta update as a rank-one change of a linear map, drawn on the plane: I - βkkᵀ shrinks
-  only the key's direction (β = ½), erases it (β = 1, a projection) or reflects it (β = 2, eigenvalue -1, which lets
-  linear RNNs track parity); the family of write rules (linear attention, decay, DeltaNet, Gated DeltaNet in
-  Qwen3-Next, Kimi Delta Attention's per-channel gate) as S_t = S_{t-1}M_t + write; chunkwise training through the WY
-  form of a product of (I - βkkᵀ), one triangular solve per chunk (the UT transform), checked against the recurrence on
-  2,048 tokens (agreement 3e-15, gated 9e-16; 32 sequential steps instead of 2,048); Mamba-2's state-space duality,
-  the decaying rule as masked attention (L ∘ QKᵀ)V with a semiseparable mask (every block below the diagonal rank one),
-  checked to 9e-16.
-* **A recall test.** Multi-query associative recall: tiny one-layer models with softmax attention, linear attention
-  and the delta rule (keys of 16 numbers), trained here, as the number of key-value pairs grows: at 8 / 16 / 32 / 48
-  pairs, softmax 100% throughout, adding 96 / 86 / 55 / 38%, the delta rule 100 / 99 / 95 / 88%.
-* **Hybrids.** Jamba, MiniMax-01, Qwen3-Next and Kimi Linear: a few attention layers among many linear-time ones;
-  the memory bill at 128,000 tokens.
+* **A power law.** Held-out loss at seven widths, fitted by L(N) = E + A·N^(−α).
+* **Wider and wider.** How far the hidden weights move in training falls with width (about 1/√width): the lazy,
+  neural-tangent-kernel regime. Learning-rate sweeps at widths 32, 256 and 2,048: the best rate drifts with width in
+  the usual parametrization and stays put in μP (Yang & Hu; Tensor Programs V).
+* **Size or data?** C ≈ 6ND; three compute budgets, each split five ways between model size and training tokens: a
+  valley per budget, the best size growing with the budget; Kaplan et al. (2020) and Chinchilla (2022); Chinchilla's
+  third method, L(N, D) = E + A/N^α + B/D^β, fit to the 18 runs (E = 1.92, α = 0.72, β = 0.55, off by 0.02 bits):
+  N_opt ∝ C^(β/(α+β)) = C^0.43, about 40 characters per parameter; matching the best loss with a model 3/4 the size
+  costs 7% more training, with 1/2 the size 73% more, and below about a third of the size no budget suffices.
+* **Grokking.** (a + b) mod 97 from 40% of the table: memorized early, understood thousands of steps later, with
+  weight decay; the learned number vectors are a few Fourier frequencies, numbers on circles (Nanda et al.).
 * **Recap**, where it comes back, Part 13's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai12.compute
-python tools/build.py ai12                # English
-python tools/build.py ai12 --lang zh      # Chinese
+python -m videos.ai.ai12.compute         # needs Part 1's books (.cache/ai1); about an hour on a CPU
+python tools/build.py ai12               # English
+python tools/build.py ai12 --lang zh     # Chinese
 ```
 
-References: Ainslie et al., GQA (2023); DeepSeek-AI, DeepSeek-V2 and V3 (2024); Katharopoulos et al. (2020); Widrow &
-Hoff (1960); Schlag, Irie & Schmidhuber (2021); Yang et al., DeltaNet (2024) and Gated DeltaNet (2025); Gu et al., S4
-(2022); Gu & Dao, Mamba (2023); Dao & Gu, Mamba-2 (2024); Sun et al., test-time training (2024); Arora et al., Zoology
-(2023); Lieber et al., Jamba (2024); MiniMax-01 (2025); Qwen3-Next (2025); Kimi Linear (2025).
+References: D. A. Roberts, S. Yaida & B. Hanin, *The Principles of Deep Learning Theory* (2022); S. J. D. Prince,
+*Understanding Deep Learning* (2023); Jacot, Gabriel & Hongler (2018); Yang & Hu (2021); Yang et al. (2022); Kaplan
+et al. (2020); Hoffmann et al. (2022); Power et al. (2022); Nanda et al. (2023).

@@ -1,4 +1,4 @@
-"""Font files for the letter pictures (Parts 14-16), on Linux as on macOS.
+"""Font files for the letter pictures (Parts 21-23), on Linux as on macOS.
 
 The pictures were designed on Linux, where the DejaVu and Liberation families live in /usr/share/fonts. Elsewhere
 (macOS has no /usr/share/fonts) the same two families are fetched once into .cache/fonts, so the parts compute the

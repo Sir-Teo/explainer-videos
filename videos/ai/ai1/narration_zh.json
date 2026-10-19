@@ -301,10 +301,10 @@
    "en": "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center is and how wide it is. Which bell curve is best? It depends on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the training loss we just met, <bookmark mark='b'/> pulls q wide, to cover both peaks.",
    "zh": "还有一个性质，后面会非常重要：散度是不对称的。假设真实分布p有两个峰，而我们的模型q只能是一条钟形曲线：一个平滑的鼓包，由它的中心在哪里、有多宽来决定。哪条钟形曲线最好？这取决于我们从哪个方向去量。<bookmark mark='a'/>最小化q相对于p的散度，也就是我们刚才遇到的训练损失，<bookmark mark='b'/>会把q拉宽，好盖住两个峰。"
   },
-  "18e47e9e1242": {
+  "13ff42571ed2": {
    "scene": "CrossEntropy",
-   "en": "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so it squeezes into a single peak and ignores the other. <bookmark mark='b'/> Covering everything, or committing to one thing: that choice comes back in diffusion models, in part fourteen, and in reinforcement learning, in part seventeen.",
-   "zh": "反过来，<bookmark mark='a'/>q会因为在p没有概率的地方放了概率而受罚，于是它缩进一个峰里，不管另一个。<bookmark mark='b'/>覆盖一切，还是只盯一处：这个选择会在第14部分的扩散模型，和第17部分的强化学习里再次出现。"
+   "en": "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so it squeezes into a single peak and ignores the other. <bookmark mark='b'/> Covering everything, or committing to one thing: that choice comes back in diffusion models, in part twenty-one, and in reinforcement learning, in part twenty-eight.",
+   "zh": "反过来，<bookmark mark='a'/>q会因为在p没有概率的地方放了概率而受罚，于是它缩进一个峰里，不管另一个。<bookmark mark='b'/>覆盖一切，还是只盯一处：这个选择会在第21部分的扩散模型，和第28部分的强化学习里再次出现。"
   },
   "f8714561f437": {
    "scene": "CrossEntropy",
@@ -391,10 +391,10 @@
    "en": "Here's the five-letter model writing, as it reads, from the same start and with the same dice each time. <bookmark mark='a'/> After a thousand letters it can only recite: 100 percent of what it writes, in red, is copied word for word, in stretches of twenty letters or more, from the little it has read. <bookmark mark='b'/> After ten thousand, 10 percent. <bookmark mark='c'/> From a hundred thousand on, nothing is: it strings real-looking words together on its own, <bookmark mark='d'/> and its score on the Falcon passage falls from 4.69 bits per letter to 2.02.",
    "zh": "这是5字母模型边读边写的样子，每次都从同样的开头出发，掷同样的骰子。<bookmark mark='a'/>读了1000个字母之后，它只会背诵：它写出的东西100%，也就是标红的部分，都是从它读过的那一点点文字里逐字照抄的，每段都有20个字母以上。<bookmark mark='b'/>读了1万个之后，是10%。<bookmark mark='c'/>从10万个开始，一点都没有了：它自己把像模像样的词串在一起，<bookmark mark='d'/>它在《马耳他之鹰》段落上的分数，也从每个字母4.69比特降到2.02比特。"
   },
-  "3aa34d0f5b12": {
+  "f79afb548a36": {
    "scene": "Counting",
-   "en": "This is the first appearance of the central problem of machine learning. <bookmark mark='a'/> A model can fit the data it learned from almost perfectly, and still guess badly on new data. The gap between the two is called generalization. <bookmark mark='b'/> And counting has a deeper limit: every context is its own island. It can't tell that the dog barked and the hound barked are alike, so it can't borrow what it learned about one for the other. <bookmark mark='c'/> Better smoothing comes in part six, generalization in part seven, and models that share what they learn between similar contexts, with vectors and networks, in parts two and eight.",
-   "zh": "这是机器学习核心问题的第一次登场。<bookmark mark='a'/>一个模型可以几乎完美地拟合它学过的数据，却仍然在新数据上猜得很差。两者之间的差距，叫作泛化。<bookmark mark='b'/>计数还有一个更深的局限：每个上下文都是一座孤岛。它分不清the dog barked和the hound barked是相似的，所以没法把从一个学到的东西借给另一个。<bookmark mark='c'/>更好的平滑在第6部分，泛化在第7部分，而能在相似上下文之间共享所学的模型，靠的是向量和网络，在第2部分和第8部分。"
+   "en": "This is the first appearance of the central problem of machine learning. <bookmark mark='a'/> A model can fit the data it learned from almost perfectly, and still guess badly on new data. The gap between the two is called generalization. <bookmark mark='b'/> And counting has a deeper limit: every context is its own island. It can't tell that the dog barked and the hound barked are alike, so it can't borrow what it learned about one for the other. <bookmark mark='c'/> Better smoothing comes in part seven, generalization in part eight, and models that share what they learn between similar contexts, with vectors and networks, in parts three and nine.",
+   "zh": "这是机器学习核心问题的第一次登场。<bookmark mark='a'/>一个模型可以几乎完美地拟合它学过的数据，却仍然在新数据上猜得很差。两者之间的差距，叫作泛化。<bookmark mark='b'/>计数还有一个更深的局限：每个上下文都是一座孤岛。它分不清the dog barked和the hound barked是相似的，所以没法把从一个学到的东西借给另一个。<bookmark mark='c'/>更好的平滑在第7部分，泛化在第8部分，而能在相似上下文之间共享所学的模型，靠的是向量和网络，在第3部分和第9部分。"
   },
   "13cdca64a7bf": {
    "scene": "Shannon1951",
@@ -501,10 +501,10 @@
    "en": "And the telephone points to something deep. How much does one letter tell you about a letter d places later? That's the mutual information from chapter five, measured here over all thirty books. <bookmark mark='a'/> Neighbors share three quarters of a bit. Inside a word, it falls fast. <bookmark mark='b'/> But then it doesn't vanish. It decays slowly, like a power of the distance, out to a thousand letters and beyond. On these axes, each tick is ten times the last, both across and up, so a power law shows up as a straight line.",
    "zh": "而那个telephone，指向一件很深刻的事。一个字母，能告诉你多少关于它后面第d个字母的信息？这就是第5章的互信息，这里在全部30本书上测量。<bookmark mark='a'/>相邻的两个字母共享四分之三比特。在一个词的内部，它下降得很快。<bookmark mark='b'/>但随后它并没有消失。它像距离的幂一样缓慢衰减，一直延伸到一千个字母，甚至更远。在这两条坐标轴上，横向和纵向的每一格刻度，都是上一格的10倍，所以幂律会显示成一条直线。"
   },
-  "88ed49b977aa": {
+  "66148e99103f": {
    "scene": "Knowledge",
-   "en": "A counting model can't produce a tail like that: the influence of anything outside its few letters of context is cut off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking by the same factor with every letter, which on these axes plunges straight off the bottom. <bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way to find the parts of the past that matter. That's what attention is for, in part eleven.",
-   "zh": "计数模型产生不了这样的长尾：它那几个字母上下文之外的一切影响都被切断了，它所建模的依赖关系按指数衰减，<bookmark mark='x'/>每多隔一个字母，就按同样的倍数缩小，在这两条坐标轴上，它会直直地掉出图的底部。<bookmark mark='a'/>真实的文本，在每一个距离上都会回报你记住的东西。要猜得好，模型需要长久的记忆，还需要一种办法，找到过去中真正要紧的部分。这就是注意力的用处，在第11部分。"
+   "en": "A counting model can't produce a tail like that: the influence of anything outside its few letters of context is cut off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking by the same factor with every letter, which on these axes plunges straight off the bottom. <bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way to find the parts of the past that matter. That's what attention is for, in part thirteen.",
+   "zh": "计数模型产生不了这样的长尾：它那几个字母上下文之外的一切影响都被切断了，它所建模的依赖关系按指数衰减，<bookmark mark='x'/>每多隔一个字母，就按同样的倍数缩小，在这两条坐标轴上，它会直直地掉出图的底部。<bookmark mark='a'/>真实的文本，在每一个距离上都会回报你记住的东西。要猜得好，模型需要长久的记忆，还需要一种办法，找到过去中真正要紧的部分。这就是注意力的用处，在第13部分。"
   },
   "7b47ab508f5f": {
    "scene": "Knowledge",
@@ -536,10 +536,10 @@
    "en": "In file sizes: the passage is 21.4 kilobytes as plain text, 8.9 with gzip, <bookmark mark='a'/> and 2.3 with Qwen3 driving an arithmetic coder. <bookmark mark='b'/> The jump from counting, at 2.3 bits, to under one, is what this series is about: what these models learned, and how.",
    "zh": "换成文件大小：这段文字存成纯文本是21.4KB，用gzip是8.9KB，<bookmark mark='a'/>用Qwen3驱动算术编码，是2.3KB。<bookmark mark='b'/>从计数的2.3比特，跳到1比特以下，这正是本系列要讲的：这些模型学到了什么，又是怎么学到的。"
   },
-  "05777d9a7783": {
+  "c3205b609162": {
    "scene": "Scoreboard",
-   "en": "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: <bookmark mark='a'/> better counting in part six, <bookmark mark='b'/> a neural network in part eight, <bookmark mark='c'/> and our own small transformer in part eleven, each one trained on these same thirty books, and scored on this same page.",
-   "zh": "而且记分牌还没有填完。随着系列推进，我们会搭建自己的模型，填上它们的行：<bookmark mark='a'/>第6部分是更好的计数，<bookmark mark='b'/>第8部分是一个神经网络，<bookmark mark='c'/>第11部分是我们自己的小型Transformer，每一个都用这同样的30本书训练，在这同一页上打分。"
+   "en": "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: <bookmark mark='a'/> better counting in part seven, <bookmark mark='b'/> a neural network in part nine, <bookmark mark='c'/> and our own small transformer in part thirteen, each one trained on these same thirty books, and scored on this same page.",
+   "zh": "而且记分牌还没有填完。随着系列推进，我们会搭建自己的模型，填上它们的行：<bookmark mark='a'/>第7部分是更好的计数，<bookmark mark='b'/>第9部分是一个神经网络，<bookmark mark='c'/>第13部分是我们自己的小型Transformer，每一个都用这同样的30本书训练，在这同一页上打分。"
   },
   "df63dab6af6c": {
    "scene": "Outro",
@@ -551,15 +551,15 @@
    "en": "Almost everything here comes back. The chain rule is how language models generate text, and how reasoning models think out loud. Cross-entropy is the loss we'll be minimizing for the rest of the series. The two directions of the divergence return in diffusion models and in reinforcement learning. Compression returns when we study scaling, and when we look inside the models at the end.",
    "zh": "这里几乎所有的东西都会再次出现。链式法则是语言模型生成文本的方式，也是推理模型把思考过程写出来的方式。交叉熵是本系列接下来一直要最小化的损失。散度的两个方向，会在扩散模型和强化学习里回归。压缩会在我们研究规模时回归，也会在最后我们打开模型往里看时回归。"
   },
-  "652befbb1d56": {
+  "137b91bf50b3": {
    "scene": "Outro",
-   "en": "Next time: the problem that broke counting. A counting model can't tell that a dog and a puppy are alike. <bookmark mark='a'/> Neural models can, because they represent every word as a long list of numbers, a vector, and similar words get similar vectors. In GPT-2's own vectors, dog sits close to puppy, and far from tobacco. <bookmark mark='b'/> And high-dimensional space is strange: pick two random directions in 768 dimensions, and they're almost always at right angles. There's room for an enormous number of nearly separate meanings. Part two is the linear algebra and geometry behind that.",
-   "zh": "下一次：击垮计数的那个问题。计数模型分不清dog和puppy是相似的。<bookmark mark='a'/>神经模型分得清，因为它们把每个词表示成一长串数字，也就是一个向量，相似的词得到相似的向量。在GPT-2自己的向量里，dog离puppy很近，离tobacco很远。<bookmark mark='b'/>而高维空间很奇怪：在768维里随机取两个方向，它们几乎总是互相垂直。这给极其多的、几乎互不相干的含义留出了空间。第2部分讲的，就是这背后的线性代数和几何。"
+   "en": "Next time: the problem that broke counting. A counting model can't tell that a dog and a puppy are alike. <bookmark mark='a'/> Neural models can, because they represent every word as a long list of numbers, a vector, and similar words get similar vectors. In GPT-2's own vectors, dog sits close to puppy, and far from tobacco. <bookmark mark='b'/> And high-dimensional space is strange: pick two random directions in 768 dimensions, and they're almost always at right angles. There's room for an enormous number of nearly separate meanings. Part three is the linear algebra and geometry behind that.",
+   "zh": "下一次：击垮计数的那个问题。计数模型分不清dog和puppy是相似的。<bookmark mark='a'/>神经模型分得清，因为它们把每个词表示成一长串数字，也就是一个向量，相似的词得到相似的向量。在GPT-2自己的向量里，dog离puppy很近，离tobacco很远。<bookmark mark='b'/>而高维空间很奇怪：在768维里随机取两个方向，它们几乎总是互相垂直。这给极其多的、几乎互不相干的含义留出了空间。第3部分讲的，就是这背后的线性代数和几何。"
   },
-  "8bfb3ebdf399": {
+  "cfcb85060773": {
    "scene": "Outro",
-   "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part two.",
-   "zh": "这一部分依循的是科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推断与学习算法》的前几章，两本书都走得远得多。列出的论文都值得一读，就从香农的那两篇开始。感谢观看，第2部分见。"
+   "en": "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part three.",
+   "zh": "这一部分依循的是科弗和托马斯的《信息论基础》，以及麦凯的《信息论、推断与学习算法》的前几章，两本书都走得远得多。列出的论文都值得一读，就从香农的那两篇开始。感谢观看，第3部分见。"
   },
   "744bcad03fe1": {
    "scene": "Knowledge",

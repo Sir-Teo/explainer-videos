@@ -1,13 +1,12 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "AI, Built: Part 16, Every Sense Is a Token"
+TITLE = "AI, Built: Part 16, Sparsity"
 
 SCENES = [
-    ("s01_hook", "Hook", "One sequence"),
-    ("s02_bpe", "BPE", "1. Cutting text into tokens"),
-    ("s03_vq", "VQ", "2. Codebooks"),
-    ("s04_sound", "Sound", "3. Sound as tokens"),
-    ("s05_clip", "Clip", "4. Matching senses"),
-    ("s06_omni", "Omni", "5. One model, every sense"),
-    ("s07_outro", "Outro", "Recap, and where this comes back"),
+    ("s01_hook", "Hook", "A few experts at a time"),
+    ("s02_router", "Router", "1. A mixture of experts"),
+    ("s03_balance", "Balance", "2. Keeping every expert busy"),
+    ("s04_special", "Special", "3. What experts learn"),
+    ("s05_attention", "SparseAttention", "4. Sparse attention"),
+    ("s06_outro", "Outro", "Recap, and where this comes back"),
 ]

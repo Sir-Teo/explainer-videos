@@ -132,13 +132,13 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def payoffs(self):
         card = payoff_card([
-            (r"the chain rule: \ next-token prediction", [11, 16, 17]),
-            (r"cross-entropy: \ the training loss", [8, 9, 10]),
-            (r"forward and reverse $D_{\mathrm{KL}}$", [14, 17]),
-            (r"prediction $=$ compression", [10, 20]),
-            (r"memorizing vs.\ generalizing", [6, 7]),
-            (r"mutual information, long memory", [11, 12]),
-            (r"softmax, and its gradient $q - \hat p$", [3, 9]),
+            (r"the chain rule: \ next-token prediction", [13, 23, 28]),
+            (r"cross-entropy: \ the training loss", [9, 11, 12]),
+            (r"forward and reverse $D_{\mathrm{KL}}$", [21, 28]),
+            (r"prediction $=$ compression", [12, 30]),
+            (r"memorizing vs.\ generalizing", [7, 8]),
+            (r"mutual information, long memory", [13, 15]),
+            (r"softmax, and its gradient $q - \hat p$", [4, 11]),
         ], font_size=24)
         with self.voiceover(
             "Almost everything here comes back. The chain rule is how language models generate text, and how "
@@ -159,7 +159,7 @@ class Outro(VoiceoverScene):
         cos = np.asarray(v["cos"])
         i = {w: k for k, w in enumerate(words)}
         assert abs(cos[i["dog"], i["puppy"]] - 0.621) < 0.001 and abs(cos[i["dog"], i["tobacco"]] - 0.229) < 0.001
-        head = label(r"Next: \ Part 2, \ Vectors That Mean Things", font_size=40).to_edge(UP, buff=0.3)
+        head = label(r"Next: \ Part 3, \ Vectors That Mean Things", font_size=40).to_edge(UP, buff=0.3)
         # cosine similarity grid of GPT-2's word vectors
         n, cell = len(words), 0.5
         x0, y0 = -6.2, 1.7
@@ -205,7 +205,7 @@ class Outro(VoiceoverScene):
             "numbers, a vector, and similar words get similar vectors. In GPT-2's own vectors, dog sits close to "
             "puppy, and far from tobacco. <bookmark mark='b'/> And high-dimensional space is strange: pick two "
             "random directions in 768 dimensions, and they're almost always at right angles. There's room for an "
-            "enormous number of nearly separate meanings. Part two is the linear algebra and geometry behind that."
+            "enormous number of nearly separate meanings. Part three is the linear algebra and geometry behind that."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -248,7 +248,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "This part followed the first chapters of Cover and Thomas's Elements of Information Theory, and "
             "MacKay's Information Theory, Inference, and Learning Algorithms, both of which go much further. The "
-            "papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part two."
+            "papers are all worth reading, starting with Shannon's two. Thanks for watching, and see you in part three."
         ) as vo:
             self.play(LaggedStart(FadeIn(card), FadeIn(credit), FadeIn(data), lag_ratio=0.3), run_time=3)
         self.wait(2.0)

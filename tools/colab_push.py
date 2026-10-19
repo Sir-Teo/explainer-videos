@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Hand one part to a Colab VM's factory (tools/colab_factory.py), which narrates it and renders its 2160p60 master there.
 
-    python tools/colab_push.py ai2 --lang en --session a100
+    python tools/colab_push.py ai3 --lang en --session a100
 
 Uploads the repo's code and the compute caches (.cache/ai*, small), the part's narration lines (with the cache keys
 this Mac would use), and starts the factory on the VM if it is not running. Needs the part's compute and a preview

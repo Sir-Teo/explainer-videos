@@ -28,7 +28,7 @@ Items:
     lms        language models on the passage: bits per character, and per-token surprise for one paragraph
     probes     next-token distributions for prompts that take knowledge to complete
     context    the surprise of one word with and without the paragraphs before it (memory)
-    vectors    GPT-2's vectors for a few words, and random directions in 3 and 768 dimensions (Part 2's teaser)
+    vectors    GPT-2's vectors for a few words, and random directions in 3 and 768 dimensions (Part 3's teaser)
     scoreboard the series' scoreboard rows, assembled from the items above
 """
 
@@ -899,7 +899,7 @@ WORDS = [" dog", " puppy", " wolf", " cat", " tobacco", " cigarette", " telephon
 
 
 def compute_vectors():
-    """A teaser for Part 2: cosine similarities between GPT-2's input vectors for a few words, and between random
+    """A teaser for Part 3: cosine similarities between GPT-2's input vectors for a few words, and between random
     directions in 3 and in 768 dimensions (GPT-2's width)."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
 

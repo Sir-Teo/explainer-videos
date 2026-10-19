@@ -237,7 +237,7 @@ class Knowledge(VoiceoverScene):
             "by the same factor with every letter, which on these axes plunges straight off the bottom. "
             "<bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a "
             "model needs a long memory, and a way to find the parts of the past that matter. That's what attention "
-            "is for, in part eleven."
+            "is for, in part thirteen."
         ) as vo:
             self.play(FadeIn(side[:2]))
             vo.wait_until("x")

@@ -1,164 +1,117 @@
 {
- "title": "人工智能，从零搭建 · 第8部分：神经网络",
+ "title": "人工智能，从零搭建 · 第8部分：拟合与泛化",
  "chapters": {
-  "Hook": "两条螺旋",
-  "Universal": "1. 一层，无所不能",
-  "Depth": "2. 深度带来了什么",
-  "Signal": "3. 穿过50层的信号",
-  "Residual": "4. 残差流",
-  "NeuralLM": "5. 神经语言模型",
+  "Hook": "差距",
+  "BiasVariance": "1. 偏差与方差",
+  "Capacity": "2. 模型能拟合多少？",
+  "RandomLabels": "3. 记住毫无意义的东西",
+  "DoubleDescent": "4. 双下降",
   "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
-  "d8a2dbe69dee": {
+  "669045436b7e": {
    "scene": "Hook",
-   "en": "Two spirals, wound around each other. No straight line can separate them, and no classical method in part five would find this easy. <bookmark mark='a'/> Here's a small neural network, three layers of thirty-two simple units, before any training. The thin lines cut the plane into the pieces on which the network is exactly linear. <bookmark mark='b'/> Now train it.",
-   "zh": "两条螺旋，彼此缠绕在一起。没有哪条直线能把它们分开，第5部分的经典方法，也没有一种能轻松应付。<bookmark mark='a'/>这是一个小小的神经网络，3层，每层32个简单的单元，还没有经过任何训练。那些细线把平面切成一块一块，在每一块上，这个网络都恰好是线性的。<bookmark mark='b'/>现在，开始训练它。"
+   "en": "In part six, a model that asked only its single nearest neighbour got 93 percent of its own training pages right, and only 68 percent of new ones. <bookmark mark='a'/> Let more neighbours vote, and the two error rates meet. <bookmark mark='b'/> That gap is the central question of machine learning. A model is fitted to examples. Why should it work on anything else?",
+   "zh": "在第6部分，有一个模型只问离它最近的1个邻居，它对自己的训练页能判对93%，对新的书页却只有68%。<bookmark mark='a'/>让更多的邻居来投票，两个错误率就会汇到一起。<bookmark mark='b'/>这道差距，正是机器学习的核心问题。模型是根据样本拟合出来的。凭什么它在别的东西上也管用？"
   },
-  "9c39765865c1": {
+  "c655545fba1d": {
    "scene": "Hook",
-   "en": "The pieces swing around, and the boundary between the colours bends to follow the spirals, until nearly every point is on the right side. <bookmark mark='a'/> A network is just this: many flat pieces, glued together, placed by gradient descent. This part is about why that works, and what it takes to make it work.",
-   "zh": "这些小块四处转动，两种颜色之间的边界也跟着弯曲，顺着螺旋走，直到几乎每个点都落在正确的一侧。<bookmark mark='a'/>网络就是这么回事：许多平的小块，拼接在一起，由梯度下降摆放到位。这一部分讲的是，为什么这样行得通，以及要让它行得通，需要些什么。"
+   "en": "This part follows that question through the classical answers, bias and variance, and the capacity of a model, <bookmark mark='a'/> and then to two experiments that broke them: networks that memorize nonsense, and a curve that comes back down.",
+   "zh": "这一部分，就顺着这个问题走下去：先看经典的回答，偏差与方差，还有模型的容量，<bookmark mark='a'/>再看推翻了它们的两个实验：能把毫无意义的东西背下来的网络，还有一条又降回来的曲线。"
   },
-  "4ffb96aac7f4": {
-   "scene": "Hook",
-   "en": "We'll see why one layer of these units can approximate anything, what depth adds, how to keep signals alive through fifty layers, and the one trick that lets networks get really deep. <bookmark mark='a'/> And at the end, the first neural language model takes its place on the scoreboard.",
-   "zh": "我们会看到，为什么一层这样的单元就能逼近任何东西；深度又多带来了什么；怎样让信号穿过50层还不消失；以及让网络能变得非常深的那一个诀窍。<bookmark mark='a'/>最后，第一个神经语言模型，会在记分牌上占据一席之地。"
+  "7fb9a5fdcff9": {
+   "scene": "BiasVariance",
+   "en": "Chapter one. Bias and variance.",
+   "zh": "第1章。偏差与方差。"
   },
-  "013d3f3cf596": {
-   "scene": "Universal",
-   "en": "Chapter one. What one layer can do.",
-   "zh": "第1章。一层能做到什么。"
+  "b33c7b6e3bc6": {
+   "scene": "BiasVariance",
+   "en": "Here's the classical answer, in a setting small enough to see everything: a smooth curve, and sixteen noisy points drawn from it. <bookmark mark='a'/> Fit a straight line. Draw sixteen new points and fit again, and again: it misses the curve's shape in the same way every time. That systematic miss is bias. <bookmark mark='b'/> Fit a polynomial of degree twelve: a sum of powers of x, up to x to the twelfth. The degree, the highest power, is roughly how many bends the curve can make. It threads the points, but each new draw gives a wildly different curve. That's variance. <bookmark mark='c'/> In between, at degree 5, the fits hug the truth.",
+   "zh": "先来看经典的回答，放在一个小到能看清一切的场景里：一条光滑的曲线，还有从它上面抽取的16个带噪声的点。<bookmark mark='a'/>拟合一条直线。再抽16个新的点，重新拟合，一次又一次：它每次都以同样的方式，抓不住曲线的形状。这种系统性的偏离，就是偏差。<bookmark mark='b'/>拟合一个12次多项式：也就是x的各次幂之和，一直加到x的12次方。次数，也就是最高的幂，大致就是这条曲线能拐几个弯。它把这些点一个个串了起来，但每抽一批新的点，得到的曲线都大不相同。这就是方差。<bookmark mark='c'/>介于两者之间，在5次时，拟合出的曲线紧贴着真实曲线。"
   },
-  "eb8156f6f898": {
-   "scene": "Universal",
-   "en": "A neural network is built from one kind of part. A unit takes some numbers, <bookmark mark='a'/> multiplies each by a weight and adds them up, plus a constant, exactly like part five's logistic regression, <bookmark mark='b'/> and then bends the result: below zero becomes zero. That bend is called a ReLU. <bookmark mark='c'/> Along any one input, a unit is a hinge: flat, then rising.",
-   "zh": "神经网络只用一种零件搭成。一个单元接收几个数，<bookmark mark='a'/>把每个数乘上一个权重，再全部加起来，外加一个常数，和第5部分的逻辑回归一模一样，<bookmark mark='b'/>然后把结果弯折一下：小于0的，都变成0。这个弯折，叫作ReLU。<bookmark mark='c'/>只沿着任意一个输入来看，一个单元就是一个铰链：先是平的，然后往上升。"
+  "83bff41bc08f": {
+   "scene": "BiasVariance",
+   "en": "Averaged over many draws, the error on new data splits exactly into three parts. <bookmark mark='a'/> Bias squared: how far the average fit is from the truth. It falls as the model gets more flexible. <bookmark mark='b'/> Variance: how much the fit jumps from draw to draw. It rises. <bookmark mark='c'/> And the noise, which no model can remove. Their sum is a U, and the best model sits at its bottom: flexible enough, but no more. For thirty years, that was the textbook picture.",
+   "zh": "对许多次抽样取平均，模型在新数据上的误差，恰好能拆成三部分。<bookmark mark='a'/>偏差的平方：平均的拟合结果离真相有多远。模型越灵活，它就越小。<bookmark mark='b'/>方差：拟合结果在一次次抽样之间跳动得有多厉害。它会变大。<bookmark mark='c'/>还有噪声，任何模型都消除不了。三者之和是一个U形，最好的模型就待在U形的底部：足够灵活，但不过头。30年来，这就是教科书里的图景。"
   },
-  "16c1d13dc5f6": {
-   "scene": "Universal",
-   "en": "Add hinges together, each with its own position and slope, and you can draw any curve you like. <bookmark mark='a'/> Two hinges: a crude zigzag. <bookmark mark='b'/> Four. Eight. Sixteen. Sixty-four, and the miss is down to about one part in a thousand. <bookmark mark='c'/> That's the universal approximation theorem, from 1989: one layer of enough units can approximate any continuous function. It says a network can represent the answer. It doesn't say how many units it takes, or whether training will find them.",
-   "zh": "把铰链加在一起，每个都有自己的位置和斜率，你就能画出任何想要的曲线。<bookmark mark='a'/>两个铰链：一条粗糙的折线。<bookmark mark='b'/>4个。8个。16个。到了64个，偏差已经降到大约千分之一。<bookmark mark='c'/>这就是万能近似定理，1989年提出：只要单元足够多，一层就能逼近任何连续函数。它说的是，网络能够表示出答案。它没有说需要多少个单元，也没有说训练能不能找到它们。"
+  "b56078039d61": {
+   "scene": "Capacity",
+   "en": "Chapter two. Measuring how much a model can fit.",
+   "zh": "第2章。衡量一个模型能拟合多少。"
   },
-  "1139b05c6181": {
-   "scene": "Depth",
-   "en": "Chapter two. What depth adds.",
-   "zh": "第2章。深度带来了什么。"
+  "731c6434ea15": {
+   "scene": "Capacity",
+   "en": "Here's the classical way to measure what a family of models can fit. Take straight lines in the plane, and three points. <bookmark mark='a'/> Colour the points any of the eight possible ways, and some line separates the colours every time. <bookmark mark='b'/> With four points, it fails: these two labellings can't be split by any line. <bookmark mark='c'/> The largest number of points a family can split in every way is its VC dimension, after Vapnik and Chervonenkis: three, for lines in the plane. <bookmark mark='d'/> And it buys a guarantee: with n examples, the error on new data exceeds the training error by at most about the square root of d over n. In plain words: the gap between training and new error shrinks as the examples outnumber the capacity.",
+   "zh": "衡量一族模型能拟合什么，经典的办法是这样的。取平面上的直线，再取3个点。<bookmark mark='a'/>给这些点涂色，8种可能的涂法，无论哪一种，每次都有某条直线能把两种颜色分开。<bookmark mark='b'/>换成4个点，就不行了：这两种标注方式，哪条直线都分不开。<bookmark mark='c'/>一族模型能按所有方式分开的最大点数，就是它的VC维，以瓦普尼克与切尔沃嫩基斯命名：平面上的直线，VC维是3。<bookmark mark='d'/>它还换来了一个保证：有n个样本时，在新数据上的误差，至多比训练误差高出大约n分之d的平方根。说得直白些：样本数比容量多得越多，训练误差和新数据误差之间的差距就越小。"
   },
-  "1224ada2c975": {
-   "scene": "Depth",
-   "en": "If one layer can do anything, why stack them? Here's the answer in one picture. Two units make a tent: up from zero to one, and back down. <bookmark mark='a'/> Feed the tent into another tent: the line is folded twice, and you get four pieces. <bookmark mark='b'/> Three layers, eight pieces. Five layers, thirty-two. Each layer doubles the pieces, while a single layer would need a unit for every piece. Depth can buy complexity exponentially cheaply.",
-   "zh": "既然一层就无所不能，为什么还要把层叠起来？答案就在一张图里。两个单元，组成一顶帐篷：从0升到1，再降回来。<bookmark mark='a'/>把这顶帐篷，送进另一顶帐篷：这条线被折了两次，得到4段。<bookmark mark='b'/>3层，8段。5层，32段。每多一层，段数就翻一倍；而只用一层的话，每一段都得配一个单元。深度能以指数级的低廉代价，换来复杂性。"
+  "3861f9462219": {
+   "scene": "Capacity",
+   "en": "There's a more direct test. Give each of the training pages a random label, a coin flip, and ask a linear model to fit them. <bookmark mark='a'/> Using one word rate, it gets barely more than half. Using all seventy, it fits 68 percent of the coin flips: pure noise. <bookmark mark='b'/> The better a family can fit noise, the less a good training score proves. That's Rademacher complexity, and like the VC dimension, it grows with the number of things a model can adjust.",
+   "zh": "还有一个更直接的检验。给每一个训练页一个随机标签，也就是抛硬币，再让一个线性模型去拟合它们。<bookmark mark='a'/>只用1个词频，它只能拟合对一半多一点点。用上全部70个，它能拟合68%的抛硬币结果：而那是纯粹的噪声。<bookmark mark='b'/>一族模型越能拟合噪声，好的训练成绩就越说明不了什么。这就是拉德马赫复杂度，它和VC维一样，随着模型能调节的东西的数量而增长。"
   },
-  "8868b0b8c412": {
-   "scene": "Depth",
-   "en": "But that's what depth can do, with weights chosen by hand. What does a random network do? Here are forty-eight units cutting the plane, arranged in one layer, then two, three, four and six. <bookmark mark='a'/> The number of pieces barely changes, and even falls. Hanin and Rolnick showed in 2019 that typical networks have far fewer pieces than the maximum. Depth helps in subtler ways: by making useful functions easy for training to reach.",
-   "zh": "不过，这只是深度在手工挑选权重时能做到的事。随机的网络又会怎样呢？这里是48个单元在切分平面，先排成1层，然后是2层、3层、4层和6层。<bookmark mark='a'/>小块的数目几乎没变，甚至还减少了。2019年，哈宁和罗尔尼克表明：典型的网络，小块数远远少于最大可能的数目。深度的帮助，来得更微妙：它让有用的函数，更容易被训练找到。"
+  "92b83c1fe1b9": {
+   "scene": "RandomLabels",
+   "en": "Chapter three. Memorizing nonsense.",
+   "zh": "第3章。记住毫无意义的东西。"
   },
-  "b8b6f3f1115e": {
-   "scene": "Signal",
-   "en": "Chapter three. Keeping signals alive.",
-   "zh": "第3章。别让信号消失。"
+  "dcfed100faaf": {
+   "scene": "RandomLabels",
+   "en": "In 2016, Chiyuan Zhang and colleagues ran an experiment that broke the classical picture. Take a network: layers of simple units, here the seventy word rates in, two layers of five hundred and twelve units, and two outputs, one per author. That's about 300 thousand weights. Train it on the 448 training pages with their true authors. <bookmark mark='a'/> It fits all of them, and gets 99.5 percent of new pages right. <bookmark mark='b'/> Now shuffle the authors, so every label is random. Same network, same training.",
+   "zh": "2016年，张驰原和同事们做了一个实验，打破了经典的图景。拿一个网络：一层层简单的单元，这里输入的是70个词频，接着是两层、每层512个单元，最后是2个输出，每位作者一个。总共大约30万个权重。用448个训练页和它们真实的作者来训练它。<bookmark mark='a'/>它把这些全都拟合了，在新的书页上判对99.5%。<bookmark mark='b'/>现在，把作者打乱，让每个标签都是随机的。同一个网络，同样的训练。"
   },
-  "3f0f3dfeea73": {
-   "scene": "Signal",
-   "en": "Before training, the weights are random. But random how? What matters is their spread: how far the random starting weights stray from zero. Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way, which is why deep networks once seemed impossible to train.",
-   "zh": "训练开始之前，权重是随机的。可是，怎么个随机法？关键在于它们的分散程度：这些随机的初始权重，离0有多远。让一个信号穿过50层，盯住它的大小。<bookmark mark='a'/>如果抽出的权重稍微小了一点，每一层都会把信号缩小固定的倍数。穿过50层之后，它缩小到大约原来的3000万分之1：消失了。<bookmark mark='b'/>如果稍微大了一点，它就会爆炸，涨到大约1000万。<bookmark mark='c'/>只有一种大小，能让它一层又一层地保持平稳。而梯度往回流的时候，也会以同样的方式消失或者爆炸，这就是为什么，深层网络一度看起来根本没法训练。"
+  "f74f0d6de138": {
+   "scene": "RandomLabels",
+   "en": "It fits these too, every one of them, only a little more slowly. It has memorized nonsense. <bookmark mark='a'/> And on new pages, it's at chance, as it must be. <bookmark mark='b'/> So the same network can memorize anything at all. Then counting what a model could fit can't explain why, given real labels, it finds a rule that works on new pages instead. Something in how it's trained prefers simple answers. Why, exactly, is still being worked out.",
+   "zh": "这些它也拟合了，一个不落，只是稍微慢了一点。它记住的，是毫无意义的东西。<bookmark mark='a'/>而在新的书页上，它和瞎猜一样，这也是必然的。<bookmark mark='b'/>所以，同一个网络，什么都记得住。那么，数一数模型能拟合什么，就解释不了：为什么给它真实的标签时，它找到的却是一条在新的书页上也管用的规律，而不是死记硬背。它的训练方式里，有某种东西偏爱简单的答案。确切的原因，至今仍在研究之中。"
   },
-  "9831bcbb189a": {
-   "scene": "Signal",
-   "en": "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each input, each weight's variance, its spread, should be one over n. That's Glorot and Bengio's rule, from 2010, worked out for tanh, a smooth S-shaped bend. <bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double it: two over n. That's He initialization, and it's the steady line we just saw.",
-   "zh": "合适的大小，有一条简单的规则。一个单元要把n个输入加起来，所以，要让这个和跟每个输入一样大，每个权重的方差，也就是它的分散程度，就应该是n分之1。这是格洛罗和本吉奥2010年提出的规则，是针对tanh推导出来的，tanh是一种平滑的S形弯折。<bookmark mark='a'/>ReLU会扔掉输入里为负的那一半，所以对ReLU网络来说，要把它加倍：n分之2。这就是何恺明初始化，也就是我们刚才看到的那条平稳的线。"
+  "49dc3f4f0de4": {
+   "scene": "RandomLabels",
+   "en": "In what order does it memorize? Split the shuffled pages in two: by chance, about half got their true author back, and the rest a wrong one. <bookmark mark='a'/> A page lights up when the network gets its shuffled label right. <bookmark mark='b'/> In the first few steps, the pages whose label happens to be true pull ahead: by step 3, 76 percent of them are right, against 57 percent of the others. The network starts by learning the real difference between the authors. Then it memorizes the rest, and by step 30 every page, true or not, is fit. With 300,034 weights for 448 pages, memorizing is quick.",
+   "zh": "它是按什么顺序记住的？把打乱后的页面分成两半：碰巧有大约一半拿回了自己真正的作者，其余的拿到的是错的。<bookmark mark='a'/>网络答对一页的打乱标签时，这一页就亮起来。<bookmark mark='b'/>最初几步，标签碰巧正确的那些页领先：到第3步，它们有76%答对了，其余的只有57%。网络先学到的，是两位作者之间真实的区别。然后它再把剩下的记住，到第30步，每一页，不管标签真假，都拟合上了。448页、300034个权重，记住它们很快。"
   },
-  "b2c7a833ea59": {
-   "scene": "Residual",
-   "en": "Chapter four. Residual connections.",
-   "zh": "第4章。残差连接。"
+  "826660b4e42d": {
+   "scene": "DoubleDescent",
+   "en": "Chapter four. Double descent.",
+   "zh": "第4章。双下降。"
   },
-  "762c97abc172": {
-   "scene": "Residual",
-   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
-   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年，何恺明和同事们找到了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分。<bookmark mark='w'/>跳跃连接这条路，把梯度原封不动地传回去，就像一根普通的导线，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
+  "e2f9373c0ff4": {
+   "scene": "DoubleDescent",
+   "en": "Here's the curve that came back. Turn each page into p random features: each feature is a fixed random mix of the seventy word rates, passed through a bend that zeroes anything negative. Only the weights on the features are learned, by least squares. <bookmark mark='m'/> When there are more features than pages, many fits match every training page exactly, so take the one with the smallest weights: of all the curves through the points, the calmest. <bookmark mark='a'/> With few features, the error on new pages falls, then rises again as p approaches the number of pages: the classical U. <bookmark mark='b'/> At exactly 448 features, as many as there are pages, the fit is forced through every point, and the error explodes. <bookmark mark='c'/> And then, past it, the error comes back down, lower than the bottom of the U.",
+   "zh": "这就是那条又降回来的曲线。把每一页变成p个随机特征：每个特征都是那70个词频的一种固定的随机组合，再经过一道弯折，把所有负值都变成零。只有这些特征上的权重是学出来的，用最小二乘法。<bookmark mark='m'/>当特征比书页还多时，有许多种拟合都能恰好对上每一个训练页，那就取权重最小的那一个：在所有穿过这些点的曲线里，最平稳的那一条。<bookmark mark='a'/>特征很少时，在新的书页上的误差先是下降，然后随着p接近书页的数量，又升了上去：这就是经典的U形。<bookmark mark='b'/>恰好在448个特征时，特征和书页一样多，拟合被迫穿过每一个点，误差一下子爆炸了。<bookmark mark='c'/>然后，过了这一点，误差又降了回来，比U形的底部还要低。"
   },
-  "ab4a70cb7299": {
-   "scene": "Residual",
-   "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size. <bookmark mark='c'/> Take the vector's numbers, shift them so they average zero, <bookmark mark='d'/> then squash them so their spread is one. With that, training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
-   "zh": "在那两条螺旋上试一试，网络有40层。普通的层叠，什么也学不会：一直停在抛硬币的水平。<bookmark mark='a'/>同样的40层，加上残差连接，几百步之内，就把螺旋完全学会了。<bookmark mark='b'/>再加上层归一化，它把每一层的向量重新缩放到一个标准的大小。<bookmark mark='c'/>取出向量里的这些数，把它们平移，让平均值变成0，<bookmark mark='d'/>再把它们压缩，让分散程度变成1。这样一来，训练就更平稳了。残差流和归一化：每一个现代模型内部，都少不了这两段管道。"
+  "4953ed230b0c": {
+   "scene": "DoubleDescent",
+   "en": "More parameters than data, and better on new data. Belkin and colleagues named it double descent in 2019, and it turns up in deep networks too. <bookmark mark='a'/> The training error is zero all along the second descent, so it can't be what decides. What decides is which of the many exact fits you get, and the smallest one is the simplest. <bookmark mark='n'/> Its size tells the story: the weights blow up at the peak, where the fit is forced, then shrink as features are added, ending smaller than at the bottom of the U. Gradient descent, as part eleven shows, quietly prefers fits like that.",
+   "zh": "参数比数据还多，在新数据上却更好。2019年，贝尔金和同事把它命名为双下降，它在深度网络里也会出现。<bookmark mark='a'/>在整个第二次下降的过程中，训练误差一直是零，所以起决定作用的不可能是它。起决定作用的，是你得到的是众多恰好拟合中的哪一个，而最小的那一个，也是最简单的。<bookmark mark='n'/>它的大小说明了一切：权重在峰值处暴涨，那里的拟合是被迫的；然后随着特征增加而缩小，最后比U形底部时还要小。而梯度下降，正如第11部分会讲到的，会悄悄偏爱这样的拟合。"
   },
-  "25da207cbb5f": {
-   "scene": "Residual",
-   "en": "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says about every point of the plane; below, how much gradient reaches each of its forty layers, on a log scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the way down: the first layer gets more than a hundred trillion times less than the last. The residual stack's gradients are all about the same size, within a factor of 2, because each block adds to a stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of a hundred thousand, as there is less and less left to fix. The plain stack's answer stays one flat colour, the same everywhere, and its gradients only fade further.",
-   "zh": "为什么普通的堆叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通堆叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过一百万亿倍。残差堆叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差堆叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通堆叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
-  },
-  "be2f784f7f37": {
-   "scene": "Residual",
-   "en": "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> First, normalize what goes into each layer, not the stream itself: the layer sits on a branch, takes a normalized copy, and adds its answer back, so the stream stays a clean running sum. That's pre-norm. <bookmark mark='b'/> Second, RMSNorm: divide the vector by its typical size, the root mean square, so its length always comes out the same, and drop the mean and the shift. It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. The MLP, or feed-forward network, is the layer's small two-step network: spread the vector wide, bend it, and bring it back. Gated means two projections of the input, two different weighted mixes. <bookmark mark='s'/> One is passed through SiLU, a smooth cousin of the ReLU; the other acts as a dimmer, multiplying it number by number. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's paper tested it, and ended, famously, by attributing its success to divine benevolence. <bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block.",
-   "zh": "三个小改进，把它变成了今天语言模型里的那种块。<bookmark mark='a'/>第一，对进入每一层的东西做归一化，而不是对残差流本身：这一层放在一条支路上，拿到一份归一化过的副本，再把自己的答案加回去，这样残差流始终是一个干净的累加和。这叫作前置归一化。<bookmark mark='b'/>第二，RMSNorm：把向量除以它的典型大小，也就是均方根，这样它的长度总是一样的，同时去掉均值和平移。它更便宜，效果一样好。<bookmark mark='c'/>第三，带门控的MLP。MLP，也叫前馈网络，是这一层里那个两步的小网络：把向量铺宽，弯折一下，再收回来。带门控的意思是，对输入做两个投影，也就是两种不同的加权混合。<bookmark mark='s'/>一个经过SiLU，也就是ReLU的一个平滑表亲；另一个像调光器一样，和它逐个数相乘。<bookmark mark='d'/>这是三个矩阵而不是两个，所以隐藏层宽度从模型宽度的4倍缩到3分之8倍，权重总数正好一样。Noam Shazeer的论文测试了它，并且出了名地在结尾把它的成功归功于“神的恩典”。<bookmark mark='e'/>Llama、Qwen、DeepSeek和gpt-oss，用的都是这种块。"
-  },
-  "c3c1de97e5db": {
-   "scene": "NeuralLM",
-   "en": "Chapter five. A neural language model.",
-   "zh": "第5章。神经语言模型。"
-  },
-  "b74ff3f81fc4": {
-   "scene": "NeuralLM",
-   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer. Hidden just means in the middle, neither input nor output. Its units are tanh units: tanh is a smooth S-shaped bend that squashes any number into the range from minus one to one. <bookmark mark='c'/> And out comes a score for every possible next character, turned into probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from 2003, here for characters instead of words.",
-   "zh": "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。取最后24个字符。<bookmark mark='a'/>每个字符都变成一个由32个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个隐藏层。隐藏，只是说它在中间，既不是输入，也不是输出。它的单元是tanh单元：tanh是一种平滑的S形弯折，能把任何数压进负1到1的范围里。<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。这就是约书亚·本吉奥2003年提出的神经语言模型的设计，只不过这里用的是字符，而不是单词。"
-  },
-  "d84e37ba0522": {
-   "scene": "NeuralLM",
-   "en": "Train it on part one's thirty novels, by gradient descent, with the cross-entropy of part one as the loss. <bookmark mark='a'/> The bits per character on the Maltese Falcon passage fall, and fall, <bookmark mark='b'/> to 2.23: far better than part one's counting, but not quite Kneser–Ney's 2.04. On this much computing, the best counting is a hard opponent.",
-   "zh": "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。<bookmark mark='a'/>在《马耳他之鹰》的测试段落上，每字符比特数一路下降，降了又降，<bookmark mark='b'/>降到2.23：比第1部分的计数模型好得多，但还不及Kneser–Ney的2.04。只用这么点算力，最好的计数方法仍是个难缠的对手。"
-  },
-  "02a75afe1a4a": {
-   "scene": "NeuralLM",
-   "en": "Bengio's team found the same in 2003, and their best results came from combining the two: averaging the network's prediction with the counting model's. <bookmark mark='a'/> The weight is chosen on held-out text, never on the passage. <bookmark mark='b'/> Together, they reach 1.97 bits: better than either alone, because they make different mistakes.",
-   "zh": "2003年，本吉奥的团队也发现了同样的情况，而他们最好的结果，来自把两者结合起来：把网络的预测和计数模型的预测，按一个权重取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>两者合起来，达到1.97比特：比任何一个单独用都好，因为它们犯的错误不一样。"
-  },
-  "0f064810e731": {
-   "scene": "NeuralLM",
-   "en": "And the vectors the network scores each next character with, which nobody designed, have organized themselves. Seen along their two main directions, from part six, <bookmark mark='a'/> characters that behave alike sit together: vowels near vowels, capitals near capitals, digits and punctuation in their own corners. It's part two's word vectors again, learned this time as a side effect of predicting.",
-   "zh": "还有网络给每个下一个字符打分时用的那些向量，没有人设计过它们，它们却自己组织了起来。沿着第6部分讲过的两个主方向来看，<bookmark mark='a'/>表现相似的字符，聚在一起：元音挨着元音，大写字母挨着大写字母，数字和标点各占一个角落。这又是第2部分的词向量，只不过这一次，是作为预测的副产品学出来的。"
-  },
-  "3d82aac2ba4a": {
-   "scene": "NeuralLM",
-   "en": "On the scoreboard, two new rows: the first network, and the network with counting, the best of everything before GPT-2. <bookmark mark='a'/> But it's still far behind GPT-2. It sees only 24 characters, and one hidden layer has to do everything. The rest of the series is about closing that gap.",
-   "zh": "记分牌上，添了两行新的：第一个网络，以及加上计数的网络，它是GPT-2之前所有模型里最好的。<bookmark mark='a'/>但它离GPT-2还差得很远。它只看得到24个字符，而且所有的事，都得由一个隐藏层来做。本系列剩下的部分，讲的就是怎样缩小这个差距。"
-  },
-  "83c3becf048e": {
-   "scene": "NeuralLM",
-   "en": "Here's what it writes, starting from part four's prompt: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense.",
-   "zh": "这是它写出来的东西，接着第4部分的那段前文往下写：<bookmark mark='a'/>看起来像英语，也像一个个单词，但还说不通。"
-  },
-  "e4a985831eb9": {
+  "1d5c758e47a8": {
    "scene": "Outro",
-   "en": "Let's take stock. A unit is a weighted sum and a bend, and enough of them in one layer can approximate any curve. Depth can fold space into exponentially many pieces, though random networks don't use that power. Weights must start at the right size, two over n for ReLUs, or signals vanish or explode. Residual connections let gradients through forty layers. And a small network, trained on our books, came close to the best counting model, and mixed with it, beat every counting model on the scoreboard.",
-   "zh": "我们来盘点一下。一个单元，就是一个加权和，再加一个弯折，一层里有足够多这样的单元，就能逼近任何曲线。深度能把空间折叠成指数级多的小块，尽管随机的网络并没有用上这份能力。权重必须从合适的大小起步，对ReLU来说是n分之2，否则信号就会消失或者爆炸。残差连接让梯度穿过了40层。最后，一个小小的网络，在我们的书上训练，已经逼近最好的计数模型；再和它混在一起，就打败了记分牌上所有的计数模型。"
+   "en": "Let's take stock. A model's error on new data is what matters, and it can be far from its error on the data it learned from. The classical story splits that error into bias, variance and noise, and bounds it by capacity: how many points a model can split every way, how well it can fit coin flips. Then networks memorized pure nonsense, and still generalized on real labels; and test error, past the point of fitting everything exactly, came back down.",
+   "zh": "我们来盘点一下。要紧的，是模型在新数据上的误差，而它可能和模型在自己学过的数据上的误差相差很远。经典的说法，把这个误差拆成偏差、方差和噪声，再用容量给它定一个上界：一个模型能按所有方式分开多少个点，它能把抛硬币拟合得多好。后来，网络连毫无意义的东西都能统统背下来，在真实的标签上却依然能泛化；而测试误差，过了把一切都恰好拟合的那个点之后，又降了回来。"
   },
-  "c20228fab22c": {
+  "2dd2e4f75511": {
    "scene": "Outro",
-   "en": "How to set the scale of weights and learning rates as networks grow is the subject of parts nine and ten. The residual stream is the backbone of the transformer in part eleven, and what we read when we look inside models, in part twenty. And learned embeddings, of characters here, become embeddings of tokens, images and sounds.",
-   "zh": "网络变大时，权重和学习率的尺度该怎样设定，是第9部分和第10部分的主题。残差流是第11部分Transformer的主干，也是第20部分我们窥看模型内部时，所读取的东西。而学出来的嵌入，这里是字符的嵌入，将来会变成词元、图像和声音的嵌入。"
+   "en": "Held-out data stays the honest score, from scaling laws in part twelve to evaluating reasoning models in part twenty-eight. Which of the many fits training finds is the subject of part eleven. Models far bigger than their data are the subject of part twelve. And memorization, of facts and of text, comes back when we look inside models.",
+   "zh": "留出的数据，始终是诚实的评分，从第12部分的规模定律，到第28部分对推理模型的评估。训练会在众多拟合中找到哪一个，是第11部分的主题。比数据大得多的模型，是第12部分的主题。而记忆，对事实的记忆和对文本的记忆，会在我们打开模型往里看时再次出现。"
   },
-  "488be2882c15": {
+  "b12ab9fff0fb": {
    "scene": "Outro",
-   "en": "Next time: the optimizers. Stochastic gradient descent, and why its noise helps; momentum, Adam and AdamW; the newer Muon; and the learning-rate schedules that large models are trained with. <bookmark mark='a'/> Part three's valley, revisited with everything we know now.",
-   "zh": "下一次：优化器。随机梯度下降，以及为什么它的噪声反而有帮助；动量、Adam和AdamW；更新的Muon；还有训练大模型时用的学习率调度。<bookmark mark='a'/>带着我们现在知道的一切，重访第3部分的那条山谷。"
+   "en": "Next time: networks themselves. Why a stack of simple layers can approximate any function, how depth cuts space into pieces, how to start and keep signals alive through many layers. <bookmark mark='a'/> And the first neural language model joins the scoreboard.",
+   "zh": "下一次：网络本身。为什么把简单的层叠起来，就能逼近任何函数；深度怎样把空间切成一块一块；怎样初始化，又怎样让信号穿过许多层还不消失。<bookmark mark='a'/>而第一个神经语言模型，也会登上记分牌。"
   },
-  "0dddee23f67f": {
+  "46e5c6f3eeeb": {
    "scene": "Outro",
-   "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in part nine.",
-   "zh": "西蒙·普林斯的《理解深度学习》，是最清楚的一本现代教科书，而且可以免费阅读。感谢观看，第9部分见。"
+   "en": "Shalev-Shwartz and Ben-David's Understanding Machine Learning is the clearest book on the theory. Thanks for watching, and see you in part nine.",
+   "zh": "沙莱夫-施瓦茨与本-大卫的《深入理解机器学习》，是讲这套理论最清楚的一本书。感谢观看，第9部分见。"
   }
  },
- "title_en": "AI, Built: Part 8, Networks",
+ "title_en": "AI, Built: Part 7, Fitting and Generalizing",
  "chapters_en": {
-  "Hook": "Two spirals",
-  "Universal": "1. One layer can do anything",
-  "Depth": "2. What depth adds",
-  "Signal": "3. Signals through fifty layers",
-  "Residual": "4. The residual stream",
-  "NeuralLM": "5. A neural language model",
+  "Hook": "The gap",
+  "BiasVariance": "1. Bias and variance",
+  "Capacity": "2. How much can a model fit?",
+  "RandomLabels": "3. Memorizing nonsense",
+  "DoubleDescent": "4. Double descent",
   "Outro": "Recap, and where this comes back"
  }
 }

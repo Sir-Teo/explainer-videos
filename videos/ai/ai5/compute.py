@@ -1,34 +1,30 @@
-"""Precompute everything numerical in Part 5 of the AI series ("Classical ML").
+"""Precompute everything numerical in Part 5 of the AI series ("Randomness in Motion").
 
-    python -m videos.ai.ai5.compute              # everything missing (Part 1's books are reused: .cache/ai1)
-    python -m videos.ai.ai5.compute --force trees
+    python -m videos.ai.ai5.compute              # everything missing (Part 1's books and passage: .cache/ai1)
+    python -m videos.ai.ai5.compute --force bayes
 
-Results are cached in ``.cache/ai5/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.  Every method is written
-out here in numpy (no machine-learning library), and every number the narration quotes is computed here.
-
-The task, for every method: who wrote this page, Jane Austen or Charles Dickens?  Pages are 1,000-word chunks of
-five novels (Pride and Prejudice and Emma; A Tale of Two Cities, Great Expectations and A Christmas Carol); a page
-is described by how often it uses the 70 commonest words (per 1,000 words), as Mosteller and Wallace described the
-Federalist papers in 1964.  70% of the pages train, 30% are held out to test.  The pictures use two of the 70
-numbers: how often a page says "the", and how often it says "not".
+Results are cached in ``.cache/ai5/<name>.json`` (+ ``.npz``).
 
 Items:
-    pages      the pages, their 70 rates, labels, the train/test split, the two plotted rates, one test page's text
-    zipf       least squares on Zipf's law: log frequency against log rank for the commonest 1,000 words of the books
-    logistic   logistic regression on the two rates (the boundary, the probability sheet) and on all 70
-    lasso      L1- and L2-penalized logistic regression on all 70 rates, along a path of penalties
-    lda        Fisher's discriminant on the two rates: the separation along every direction, the best one
-    knn        k nearest neighbours on the two rates, k = 1, 15, 75: regions and accuracy
-    svm        support vector machines on the two rates: linear (margin, support vectors) and a Gaussian kernel
-    trees      a decision tree on the two rates (depth 1 to 6); a random forest and gradient boosting on all 70
-    board      the test accuracy of every method, on 2 rates and on 70
+    galton       a Galton board: 1,000 balls through 12 rows of pegs, and the binomial and normal curves
+    clt          the sum of k dice, exactly, for k = 1, 2, 3, 6, 12: the bell appears
+    mle          a Gaussian fitted to the Galton balls: the log-likelihood over (mu, sigma) and its peak
+    bayes        how often is a letter "e"? the posterior after 0, 10, 100, 1,000 and 10,000 letters of the passage
+    temperature  GPT-2's next-token distribution at temperatures 0.5, 1, 2, and samples at each
+    markov       Part 1's letter-pair table as a Markov chain: from "q", the distribution settles to the letter
+                 frequencies; how fast (the second eigenvalue)
+    montecarlo   pi from random points, error against N; a rare event by plain and by importance sampling
+    mcmc         Metropolis sampling of a two-peaked density in the plane
+    brownian     random walks with finer and finer steps; Brownian paths; the spread growing like sqrt(t)
+    diffusion    an Ornstein-Uhlenbeck process; data with two peaks diffused into noise, and its score; the
+                 Fokker-Planck equation solved on a grid against 20,000 particles
+    shape        points filling the letters "AI" diffused into noise in the plane, and brought back with the
+                 exact score of the noised data (a preview of Part 21)
 """
 
 from __future__ import annotations
 
-import collections
 import math
-import re
 
 import numpy as np
 
@@ -37,449 +33,374 @@ from explainer.ai.cache import Cache
 CACHE = Cache("ai5")
 load = CACHE.load
 
-AUSTEN = {1342: "Pride and Prejudice", 158: "Emma"}
-DICKENS = {98: "A Tale of Two Cities", 1400: "Great Expectations", 46: "A Christmas Carol"}
-PAGE = 1000  # words per page
-N_WORDS = 70
-PLOT = ("the", "not")  # the two rates in every picture
-GRID = 120  # resolution of the decision-region pictures
-
 
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
-def book_words(n: int) -> list[str]:
+def ai1():
     from videos.ai.ai1 import compute as c1
 
-    t = c1.strip_gutenberg((c1.BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace"))
-    t = t.translate(c1.QUOTES).lower()
-    return re.findall(r"[a-z]+(?:'[a-z]+)?", t)
+    return c1
 
 
 # ---------------------------------------------------------------------------
-def compute_pages():
-    books = {n: book_words(n) for n in [*AUSTEN, *DICKENS]}
-    allw = collections.Counter(w for ws in books.values() for w in ws)
-    vocab = [w for w, _ in allw.most_common(N_WORDS)]
-    X, y, book, text = [], [], [], []
-    for n, ws in books.items():
-        for i in range(0, len(ws) - PAGE + 1, PAGE):
-            ch = ws[i:i + PAGE]
-            c = collections.Counter(ch)
-            X.append([1000 * c[w] / PAGE for w in vocab])
-            y.append(0 if n in AUSTEN else 1)
-            book.append(n)
-            text.append(" ".join(ch[:60]))
-    X, y, book = np.array(X), np.array(y), np.array(book)
-    g = rng(1964)  # Mosteller & Wallace, 1964
-    test = np.zeros(len(y), bool)
-    for lab in (0, 1):  # 30% of each author's pages held out
-        idx = np.nonzero(y == lab)[0]
-        test[g.choice(idx, size=int(round(0.3 * len(idx))), replace=False)] = True
-    j = [vocab.index(w) for w in PLOT]
-    ex = int(np.nonzero(test & (book == 1400))[0][3])
-    assert set(PLOT) <= set(vocab) and 600 < len(y) < 700
-    return dict(vocab=vocab, X=X, y=y, book=book, test=test, plot=list(PLOT), X2=X[:, j], example=text[ex],
-                example_label=int(y[ex]), example_i=ex, n_pages=len(y), n_austen=int((y == 0).sum()),
-                n_dickens=int((y == 1).sum()), titles={**AUSTEN, **DICKENS})
+def compute_galton():
+    g = rng(1889)  # Galton's Natural Inheritance, 1889
+    rows, n = 12, 1000
+    steps = g.integers(0, 2, size=(n, rows))  # 0 = left, 1 = right
+    bins = steps.sum(1)
+    counts = np.bincount(bins, minlength=rows + 1)
+    binom = np.array([math.comb(rows, k) for k in range(rows + 1)]) / 2 ** rows
+    x = np.linspace(-0.5, rows + 0.5, 200)
+    normal = np.exp(-0.5 * ((x - rows / 2) / math.sqrt(rows / 4)) ** 2) / math.sqrt(2 * math.pi * rows / 4)
+    chi2 = float(((counts - n * binom) ** 2 / (n * binom)).sum())
+    assert chi2 < 30, chi2  # the 1,000 balls agree with the binomial
+    return dict(rows=rows, n=n, steps=steps[:80], bins=bins, counts=counts, binom=binom, x=x, normal=normal, chi2=chi2)
 
 
-def split():
-    p = load("pages")
-    X, y, test = np.asarray(p["X"]), np.asarray(p["y"]), np.asarray(p["test"], bool)
-    return X, y, test, np.asarray(p["X2"])
+def compute_clt():
+    die = np.ones(6) / 6
+    out, d = {}, np.array([1.0])
+    for k in range(1, 13):
+        d = np.convolve(d, die)
+        if k in (1, 2, 3, 6, 12):
+            out[f"k{k}"] = d.copy()  # P(sum = k + i), i = 0 .. 5k
+    return dict(ks=[1, 2, 3, 6, 12], **out)
 
 
-def standardize(Xtr, *others):
-    mu, sd = Xtr.mean(0), Xtr.std(0) + 1e-9
-    return [(Xtr - mu) / sd] + [(o - mu) / sd for o in others] + [mu, sd]
-
-
-def grid2(X2):
-    """A grid over the two plotted rates, a little beyond the data."""
-    lo, hi = X2.min(0), X2.max(0)
-    pad = 0.06 * (hi - lo)
-    xs = np.linspace(lo[0] - pad[0], hi[0] + pad[0], GRID)
-    ys = np.linspace(lo[1] - pad[1], hi[1] + pad[1], GRID)
-    G = np.stack(np.meshgrid(xs, ys), -1).reshape(-1, 2)
-    return xs, ys, G
+def compute_mle():
+    gb = load("galton")
+    x = np.asarray(gb["bins"], float)
+    n = len(x)
+    mus, sigmas = np.linspace(3.0, 9.0, 61), np.linspace(0.8, 4.0, 65)
+    M, S = np.meshgrid(mus, sigmas, indexing="ij")
+    # average log-likelihood (nats per ball) of a normal density at the 1,000 positions
+    ss = ((x[None, None, :] - M[..., None]) ** 2).mean(-1)
+    ll = -0.5 * np.log(2 * math.pi * S ** 2) - ss / (2 * S ** 2)
+    mu_hat, sigma_hat = float(x.mean()), float(x.std())
+    i, j = np.unravel_index(np.argmax(ll), ll.shape)
+    assert abs(mus[i] - mu_hat) < 0.1 and abs(sigmas[j] - sigma_hat) < 0.06
+    assert abs(sigma_hat - math.sqrt(3)) < 0.1  # 12 fair left/right bounces: variance 12 / 4
+    ll_hat = float(-0.5 * math.log(2 * math.pi * sigma_hat ** 2) - 0.5)
+    return dict(mus=mus, sigmas=sigmas, ll=ll, mu_hat=mu_hat, sigma_hat=sigma_hat, ll_hat=ll_hat, n=n)
 
 
 # ---------------------------------------------------------------------------
-def compute_zipf():
-    from videos.ai.ai1 import compute as c1
+NS = [0, 10, 100, 1000, 10000]
 
-    words = re.findall(r"[a-z]+(?:'[a-z]+)?", c1.text("train").lower())
-    cnt = collections.Counter(words).most_common(1000)
-    f = np.array([c for _, c in cnt], float)
-    r = np.arange(1, len(f) + 1, dtype=float)
-    A = np.stack([np.ones_like(r), np.log10(r)], 1)
-    b = np.log10(f)
-    beta = np.linalg.solve(A.T @ A, A.T @ b)  # the normal equations
-    res = b - A @ beta
-    r2 = 1 - (res ** 2).sum() / ((b - b.mean()) ** 2).sum()
-    assert np.allclose(beta, np.linalg.lstsq(A, b, rcond=None)[0]) and -1.25 < beta[1] < -0.8
-    return dict(words=[w for w, _ in cnt[:12]], f=f, r=r, beta=beta, r2=float(r2), n_words=len(words))
+
+def compute_bayes():
+    c1 = ai1()
+    t = c1.text("passage27").replace(" ", "")  # letters only
+    assert len(t) > 10000
+    e_true = t.count("e") / len(t)
+    ps = np.linspace(0, 1, 2001)
+    out = dict(ns=NS, ps=ps[::4], e_all=e_true, n_all=len(t), head=t[:60])
+    for n in NS:
+        k = t[:n].count("e")
+        a, b = 1 + k, 1 + n - k  # a uniform prior, Beta(1, 1)
+        logpost = (a - 1) * np.log(np.maximum(ps, 1e-300)) + (b - 1) * np.log(np.maximum(1 - ps, 1e-300))
+        post = np.exp(logpost - logpost.max())
+        post /= post.sum() * (ps[1] - ps[0])
+        cdf = np.cumsum(post) * (ps[1] - ps[0])
+        lo, hi = float(ps[np.searchsorted(cdf, 0.025)]), float(ps[np.searchsorted(cdf, 0.975)])
+        out[f"k{n}"] = int(k)
+        out[f"post{n}"] = post[::4]
+        out[f"mean{n}"] = (k + 1) / (n + 2)  # Laplace's rule of succession
+        out[f"mle{n}"] = k / n if n else None
+        out[f"ci{n}"] = [lo, hi]
+    assert out["ci10000"][0] < e_true < out["ci10000"][1]
+    return out
 
 
 # ---------------------------------------------------------------------------
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
+PROMPT = "Spade sat down in the armchair, and"
+TEMPS = [0.5, 1.0, 2.0]
 
 
-def logreg(X, y, l2=0.0, l1=0.0, w0=None, iters=3000, lr=None):
-    """Logistic regression by (proximal) gradient descent; X standardized; returns (w, b).  The step is 1 / L, the
-    gradient's Lipschitz constant, unless given."""
-    n, d = X.shape
-    if lr is None:
-        lr = 1 / (0.25 * (np.linalg.norm(X, 2) ** 2 / n + 1) + l2)
-    w = np.zeros(d) if w0 is None else w0[0].copy()
-    b = 0.0 if w0 is None else w0[1]
-    for _ in range(iters):
-        p = sigmoid(X @ w + b)
-        gw = X.T @ (p - y) / n + l2 * w
-        gb = float((p - y).mean())
-        w = w - lr * gw
-        b -= lr * gb
-        if l1:
-            w = np.sign(w) * np.maximum(np.abs(w) - lr * l1, 0)
-    return w, b
+def compute_temperature():
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    torch.set_grad_enabled(False)
+    tok = AutoTokenizer.from_pretrained("openai-community/gpt2")
+    model = AutoModelForCausalLM.from_pretrained("openai-community/gpt2", dtype=torch.float32)
+    ids = tok(PROMPT, return_tensors="pt")["input_ids"]
+    z = model(ids).logits[0, -1].numpy().astype(float)
+    top = np.argsort(-z)[:10]
+    out = dict(prompt=PROMPT, temps=TEMPS, top_tokens=[tok.decode([int(i)]) for i in top], top=top,
+               logits=z.astype(np.float32))
+    for T in TEMPS:
+        p = np.exp((z - z.max()) / T)
+        p /= p.sum()
+        out[f"p{T}"] = p[top]
+        out[f"H{T}"] = float(-(p[p > 0] * np.log2(p[p > 0])).sum())
+    samples = {}
+    for k, T in enumerate([0.0] + TEMPS):
+        torch.manual_seed(11 + k)
+        gen = model.generate(ids, max_new_tokens=24, do_sample=T > 0, temperature=T if T > 0 else None,
+                             top_k=0, pad_token_id=tok.eos_token_id)
+        samples[str(T)] = tok.decode(gen[0, ids.shape[1]:]).replace("\n", " ")
+    out["samples"] = samples
+    assert out["H0.5"] < out["H1.0"] < out["H2.0"]
+    return out
 
 
-def compute_logistic():
-    X, y, test, X2 = split()
-    Z2tr, Z2te, mu, sd = standardize(X2[~test], X2[test])
-    w, b = logreg(Z2tr, y[~test], iters=4000)
-    acc2 = float(((sigmoid(Z2te @ w + b) > 0.5) == y[test]).mean())
-    Ztr, Zte, _, _ = standardize(X[~test], X[test])
-    W, B = logreg(Ztr, y[~test], l2=1e-3, iters=4000)
-    acc70 = float(((sigmoid(Zte @ W + B) > 0.5) == y[test]).mean())
-    xs, ys, G = grid2(X2)
-    prob = sigmoid(((G - mu) / sd) @ w + b).reshape(len(ys), len(xs))
-    # the boundary in the original units: w . (x - mu) / sd + b = 0
-    wr = w / sd
-    b_raw = b - float(wr @ mu)
-    loss = float(-np.mean(y[~test] * np.log(sigmoid(Z2tr @ w + b)) + (1 - y[~test]) * np.log(1 - sigmoid(Z2tr @ w + b))))
-    assert acc70 > acc2 > 0.75
-    # how it learns: the same gradient descent, its line (in the original units) and its loss along the way
-    ytr = y[~test]
-    n = len(ytr)
-    lr = 1 / (0.25 * (np.linalg.norm(Z2tr, 2) ** 2 / n + 1))
-    wt, bt = np.zeros(2), 0.0
-    keep = {0, 1, 2, 3, 5, 8, 12, 20, 35, 60, 100, 180, 320, 600, 1200, 4000}
-    path, curve = [], []
-    for it in range(4001):
-        pz = sigmoid(Z2tr @ wt + bt)
-        ce = float(-np.mean(ytr * np.log(pz + 1e-12) + (1 - ytr) * np.log(1 - pz + 1e-12))) / math.log(2)
-        curve.append((it, ce))
-        if it in keep:
-            path.append((it, *(wt / sd), bt - float((wt / sd) @ mu), ce))
-        if it == 4000:
+# ---------------------------------------------------------------------------
+def compute_markov():
+    c1 = ai1()
+    if not c1.path("bigram").exists():
+        c1._save("bigram", c1.ITEMS["bigram"]())
+    P = np.asarray(c1.load("bigram")["cond"])  # rows: the letter now; columns: the next
+    if not c1.path("letters").exists():
+        c1._save("letters", c1.ITEMS["letters"]())
+    freq = np.asarray(c1.load("letters")["p"])
+    start = c1.ALPHA27.index("q")
+    d = np.zeros(27)
+    d[start] = 1.0
+    dists, tv = [d.copy()], [0.5 * np.abs(d - freq).sum()]
+    for _ in range(12):
+        d = d @ P
+        dists.append(d.copy())
+        tv.append(0.5 * float(np.abs(d - freq).sum()))
+    w = np.sort(np.abs(np.linalg.eigvals(P)))[::-1]
+    # the chain's own stationary distribution (left eigenvector of eigenvalue 1)
+    vals, vecs = np.linalg.eig(P.T)
+    st = np.real(vecs[:, np.argmin(np.abs(vals - 1))])
+    st /= st.sum()
+    assert 0.5 * np.abs(st - freq).sum() < 0.01  # it is the letter frequencies
+    assert tv[-1] < 0.01 and w[0] > 0.999 and w[1] < 0.75
+    # three states: vowel, consonant, space (the joint pair table, pooled)
+    cls = np.array([0 if ch == " " else 1 if ch in "aeiou" else 2 for ch in c1.ALPHA27])
+    J = freq[:, None] * P
+    J3 = np.array([[J[np.ix_(cls == a, cls == b)].sum() for b in range(3)] for a in range(3)])
+    P3 = J3 / J3.sum(1, keepdims=True)
+    vals3, vecs3 = np.linalg.eig(P3.T)
+    pi3 = np.real(vecs3[:, np.argmin(np.abs(vals3 - 1))])
+    pi3 /= pi3.sum()
+    walk, x = [], 1  # one walker, from "vowel"
+    g = rng(1906)  # Markov, 1906
+    for _ in range(400):
+        x = int(g.choice(3, p=P3[x]))
+        walk.append(x)
+    return dict(dists=np.array(dists), tv=np.array(tv), freq=freq, stationary=st, lam2=float(w[1]), start="q", P=P,
+                P3=P3, pi3=pi3, walk3=walk, states3=["space", "vowel", "consonant"])
+
+
+# ---------------------------------------------------------------------------
+def compute_montecarlo():
+    g = rng(31415)
+    N = 4000
+    pts = g.random((N, 2)) * 2 - 1
+    inside = (pts ** 2).sum(1) <= 1
+    est = 4 * np.cumsum(inside) / np.arange(1, N + 1)
+    # the error shrinks like 1 / sqrt(N): 200 independent runs at each N
+    Ns = np.array([10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000])
+    rms = []
+    for n in Ns:
+        runs = [4 * ((g.random((n, 2)) * 2 - 1) ** 2).sum(1).__le__(1).mean() for _ in range(200)]
+        rms.append(float(np.sqrt(np.mean((np.array(runs) - math.pi) ** 2))))
+    slope = float(np.polyfit(np.log(Ns), np.log(rms), 1)[0])
+    assert -0.6 < slope < -0.4
+    # a rare event: P(Z > 4) for a standard normal
+    true = 0.5 * math.erfc(4 / math.sqrt(2))
+    n = 10000
+    z = g.normal(size=n)
+    plain_hits = int((z > 4).sum())
+    y = g.normal(loc=4.0, size=n)  # propose from N(4, 1) instead, and weight
+    wts = np.exp(-0.5 * y ** 2) / np.exp(-0.5 * (y - 4) ** 2)
+    is_est = float(np.mean((y > 4) * wts))
+    assert abs(is_est - true) / true < 0.05
+    return dict(pts=pts[:1500], inside=inside[:1500], est=est, N=N, Ns=Ns, rms=np.array(rms), slope=slope,
+                true=true, n=n, plain_hits=plain_hits, plain_est=plain_hits / n, is_est=is_est, is_y=y[:400],
+                is_w=wts[:400])
+
+
+# ---------------------------------------------------------------------------
+def density2(x, y):
+    """Two bumps in the plane (unnormalized)."""
+    return (np.exp(-((x + 1.6) ** 2 + (y + 0.6) ** 2) / 0.7) + 0.7 * np.exp(-((x - 1.5) ** 2 + (y - 0.9) ** 2) / 0.5))
+
+
+def compute_mcmc():
+    g = rng(1953)  # Metropolis et al., 1953
+    x = np.array([-3.0, 2.0])
+    chain, acc = [x.copy()], 0
+    for _ in range(6000):
+        y = x + g.normal(scale=0.7, size=2)
+        if g.random() < density2(*y) / density2(*x):
+            x = y
+            acc += 1
+        chain.append(x.copy())
+    chain = np.array(chain)
+    left = float(np.mean(chain[1000:, 0] < 0))
+    # the true share of the left bump: 0.7 / (0.7 + 0.7 * 0.5) = 2/3
+    assert abs(left - 2 / 3) < 0.12, left
+    return dict(chain=chain, accept=acc / 6000, left=left, true_left=2 / 3)
+
+
+# ---------------------------------------------------------------------------
+def compute_brownian():
+    g = rng(1905)  # Einstein, 1905
+    out = {}
+    for n in (8, 64, 1024):
+        steps = g.choice([-1.0, 1.0], size=(3, n)) / math.sqrt(n)
+        out[f"walk{n}"] = np.concatenate([np.zeros((3, 1)), np.cumsum(steps, 1)], 1)
+    paths = np.concatenate([np.zeros((60, 1)), np.cumsum(g.normal(size=(60, 400)) * math.sqrt(1 / 400), 1)], 1)
+    ends = np.cumsum(g.normal(size=(20000, 4)) * 0.5, 1)  # W at t = 0.25, 0.5, 0.75, 1
+    var = ends.var(0)
+    assert np.allclose(var, [0.25, 0.5, 0.75, 1.0], rtol=0.05)
+    return dict(**out, paths=paths, ends=np.array([np.histogram(ends[:, k], bins=40, range=(-3, 3))[0] for k in range(4)]),
+                var=var)
+
+
+# ---------------------------------------------------------------------------
+def compute_diffusion():
+    g = rng(2020)
+    # Ornstein-Uhlenbeck: dx = -theta x dt + sigma dW, from x0 = 2.5
+    theta, sigma, dt, T = 1.0, 0.8, 0.01, 4.0
+    n = int(T / dt)
+    x = np.full(40, 2.5)
+    paths = [x.copy()]
+    for _ in range(n):
+        x = x - theta * x * dt + sigma * math.sqrt(dt) * g.normal(size=40)
+        paths.append(x.copy())
+    paths = np.array(paths).T
+    ts = np.array([0.25, 0.5, 1.0, 2.0, 4.0])
+    mean = 2.5 * np.exp(-theta * ts)
+    var = sigma ** 2 / (2 * theta) * (1 - np.exp(-2 * theta * ts))
+    # data with two peaks, noised the way diffusion models do: x_t = sqrt(a) x_0 + sqrt(1 - a) noise
+    xs = np.linspace(-4, 4, 401)
+    data_mu, data_s, data_w = np.array([-1.5, 1.2]), np.array([0.35, 0.5]), np.array([0.45, 0.55])
+    alphas = np.array([1.0, 0.8, 0.5, 0.2, 0.0])
+    dens, scores = [], []
+    for a in alphas:
+        mu, var_ = math.sqrt(a) * data_mu, a * data_s ** 2 + (1 - a)
+        comp = data_w[:, None] * np.exp(-0.5 * (xs[None] - mu[:, None]) ** 2 / var_[:, None]) / np.sqrt(2 * math.pi * var_[:, None])
+        p = comp.sum(0)
+        dens.append(p)
+        dp = (comp * (-(xs[None] - mu[:, None]) / var_[:, None])).sum(0)
+        scores.append(dp / p)  # the score: the slope of log p
+    dens = np.array(dens)
+    assert abs(dens[-1].max() - 1 / math.sqrt(2 * math.pi)) < 1e-6  # all noise: a standard normal
+    # Fokker-Planck for dx = -x/2 dt + dW (the same noising, alpha = e^{-t}):
+    #   dp/dt = d/dx (x p / 2) + 1/2 d2p/dx2, solved on the grid, against 20,000 particles
+    h, fdt = xs[1] - xs[0], 0.0002
+    p = dens[0].copy()
+    part = np.concatenate([g.normal(data_mu[k], data_s[k], size=int(20000 * data_w[k])) for k in range(2)])
+    fp_ts = [0.0, 0.25, 0.7, 1.6, 4.0]
+    fp, hist, t, k = [p.copy()], [np.histogram(part, bins=80, range=(-4, 4), density=True)[0]], 0.0, 1
+    while k < len(fp_ts):
+        flux = 0.5 * xs * p
+        p = p + fdt * ((np.roll(flux, -1) - np.roll(flux, 1)) / (2 * h)
+                       + 0.5 * (np.roll(p, -1) - 2 * p + np.roll(p, 1)) / h ** 2)
+        p[0] = p[-1] = 0.0
+        part = part - 0.5 * part * fdt + math.sqrt(fdt) * g.normal(size=part.size)
+        t += fdt
+        if t >= fp_ts[k] - 1e-9:
+            fp.append(p.copy())
+            hist.append(np.histogram(part, bins=80, range=(-4, 4), density=True)[0])
+            k += 1
+    fp, hist = np.array(fp), np.array(hist)
+    # the grid solution matches the exact noised density at alpha = e^{-t}, and so do the particles
+    fp_err, hist_err = [], []
+    for k, tt in enumerate(fp_ts):
+        a = math.exp(-tt)
+        mu, var_ = math.sqrt(a) * data_mu, a * data_s ** 2 + (1 - a)
+        exact = (data_w[:, None] * np.exp(-0.5 * (xs[None] - mu[:, None]) ** 2 / var_[:, None])
+                 / np.sqrt(2 * math.pi * var_[:, None])).sum(0)
+        fp_err.append(float(np.abs(fp[k] - exact).max()))
+        hist_err.append(float(np.abs(hist[k] - exact[2::5][:80]).max()))
+    assert max(fp_err) < 0.01 and max(hist_err) < 0.08, (fp_err, hist_err)
+    return dict(theta=theta, sigma=sigma, dt=dt, ou_paths=paths[:, ::4], ou_t=np.arange(0, n + 1, 4) * dt, ts=ts, ou_mean=mean,
+                ou_var=var, xs=xs, alphas=alphas, dens=dens, scores=np.array(scores), fp_ts=fp_ts, fp=fp, fp_hist=hist,
+                fp_err=fp_err, hist_err=hist_err)
+
+
+# ---------------------------------------------------------------------------
+def glyph_points(text="AI", n=1500, seed=0):
+    """Points filling the letters, scaled to about 4.8 units wide and centred."""
+    import subprocess
+
+    from PIL import Image, ImageDraw, ImageFont
+
+    font = None
+    for name in ("Latin Modern Roman:bold", "DejaVu Serif:bold"):
+        try:
+            f = subprocess.run(["fc-match", "-f", "%{file}", name], capture_output=True, text=True).stdout.strip()
+            font = ImageFont.truetype(f, 400)
             break
-        wt, bt = wt - lr * Z2tr.T @ (pz - ytr) / n, bt - lr * float((pz - ytr).mean())
-    return dict(w=wr, b=b_raw, acc2=acc2, acc70=acc70, xs=xs, ys=ys, prob=prob, loss_bits=loss / math.log(2),
-                path=np.array(path), curve=np.array(curve[::5] + [curve[-1]]))
-
-
-# ---------------------------------------------------------------------------
-def compute_lasso():
-    p = load("pages")
-    X, y, test, _ = split()
-    vocab = p["vocab"]
-    Ztr, Zte, _, _ = standardize(X[~test], X[test])
-    ytr = y[~test]
-    pbar = ytr.mean()
-    lam_max = float(np.abs(Ztr.T @ (pbar - ytr)).max() / len(ytr))
-    lams = lam_max * np.logspace(0, -2.2, 34)
-    path, acc, ws = [], [], (np.zeros(Ztr.shape[1]), math.log(pbar / (1 - pbar)))
-    for lam in lams:
-        ws = logreg(Ztr, ytr, l1=lam, w0=ws, iters=1500)
-        path.append(ws[0].copy())
-        acc.append(float(((sigmoid(Zte @ ws[0] + ws[1]) > 0.5) == y[test]).mean()))
-    path = np.array(path)
-    order = []  # the order in which words get a nonzero weight
-    for k in range(len(lams)):
-        for i in np.nonzero(path[k])[0]:
-            if vocab[i] not in order:
-                order.append(vocab[i])
-    rlams = np.logspace(1, -3, 30)
-    rpath, ws = [], (np.zeros(Ztr.shape[1]), 0.0)
-    for lam in rlams:
-        ws = logreg(Ztr, ytr, l2=lam, w0=ws, iters=1500)
-        rpath.append(ws[0].copy())
-    k5 = int(np.argmax([np.count_nonzero(w) >= 5 for w in path]))
-    assert np.count_nonzero(path[0]) <= 1 and np.count_nonzero(path[-1]) > 20
-    return dict(lams=lams, path=path, acc=acc, order=order[:12], ridge_lams=rlams, ridge_path=np.array(rpath),
-                k5=k5, acc5=acc[k5], words5=[vocab[i] for i in np.nonzero(path[k5])[0]])
-
-
-# ---------------------------------------------------------------------------
-def compute_lda():
-    X, y, test, X2 = split()
-    A, D = X2[~test][y[~test] == 0], X2[~test][y[~test] == 1]
-    Sw = np.cov(A.T) * (len(A) - 1) + np.cov(D.T) * (len(D) - 1)
-    w = np.linalg.solve(Sw, D.mean(0) - A.mean(0))
-    w /= np.linalg.norm(w)
-    angles = np.linspace(0, math.pi, 181)
-
-    def J(u):
-        pa, pd = A @ u, D @ u
-        return (pd.mean() - pa.mean()) ** 2 / (pa.var() + pd.var())
-
-    sep = np.array([J(np.array([math.cos(a), math.sin(a)])) for a in angles])
-    best = float(math.atan2(w[1], w[0]) % math.pi)
-    assert abs(angles[np.argmax(sep)] - best) < 0.03 or abs(abs(angles[np.argmax(sep)] - best) - math.pi) < 0.03
-    # the boundary: halfway between the projected means (equal priors)
-    c = float(0.5 * ((A @ w).mean() + (D @ w).mean()))
-    acc = float((((X2[test] @ w) > c) == y[test]).mean())
-    return dict(w=w, c=c, angles=angles, sep=sep, best=best, acc2=acc, mA=A.mean(0), mD=D.mean(0),
-                covA=np.cov(A.T), covD=np.cov(D.T))
-
-
-# ---------------------------------------------------------------------------
-def compute_knn():
-    X, y, test, X2 = split()
-    Z2tr, Z2te, mu, sd = standardize(X2[~test], X2[test])
-    ytr = y[~test]
-    xs, ys, G = grid2(X2)
-    Gz = (G - mu) / sd
-    out = dict(xs=xs, ys=ys, ks=[1, 15, 75])
-    for k in (1, 15, 75):
-        def predict(Q):
-            d = ((Q[:, None, :] - Z2tr[None]) ** 2).sum(-1)
-            nn = np.argpartition(d, k - 1, axis=1)[:, :k] if k > 1 else np.argmin(d, 1)[:, None]
-            return ytr[nn].mean(1)
-        out[f"acc{k}"] = float(((predict(Z2te) > 0.5) == y[test]).mean())
-        out[f"train{k}"] = float(((predict(Z2tr) > 0.5) == ytr).mean())
-        out[f"region{k}"] = predict(Gz).reshape(len(ys), len(xs))
-    assert out["train1"] > 0.9 and out["acc15"] > out["acc1"] + 0.1
-    return out
-
-
-# ---------------------------------------------------------------------------
-def svm_dual(K, y, C, epochs=300, seed=0):
-    """Dual coordinate descent for the soft-margin SVM, max sum(a) - 1/2 a'Qa with 0 <= a <= C (the bias folded into
-    the kernel as + 1).  Returns the alphas."""
-    s = 2 * y - 1.0
-    Q = K * s[:, None] * s[None]
-    a = np.zeros(len(y))
+        except Exception:
+            continue
+    font = font or ImageFont.load_default(400)
+    img = Image.new("L", (900, 520), 0)
+    ImageDraw.Draw(img).text((450, 260), text, fill=255, font=font, anchor="mm")
+    a = np.asarray(img) > 128
+    ys, xs = np.nonzero(a)
     g = rng(seed)
-    for _ in range(epochs):
-        for i in g.permutation(len(y)):
-            grad = Q[i] @ a - 1
-            a[i] = min(max(a[i] - grad / Q[i, i], 0.0), C)
-    return a
+    k = g.choice(len(xs), size=n, replace=False)
+    pts = np.stack([xs[k] + g.random(n), -(ys[k] + g.random(n))], 1).astype(float)
+    pts -= (pts.max(0) + pts.min(0)) / 2
+    return pts * (2.4 / np.abs(pts[:, 0]).max())
 
 
-def compute_svm():
-    X, y, test, X2 = split()
-    Z2tr, Z2te, mu, sd = standardize(X2[~test], X2[test])
-    ytr = y[~test]
-    s = 2 * ytr - 1.0
-    xs, ys, G = grid2(X2)
-    Gz = (G - mu) / sd
-    # linear: K = x.x' + 1
-    C = 1.0
-    a = svm_dual(Z2tr @ Z2tr.T + 1, ytr, C)
-    w = (a * s) @ Z2tr
-    b = float((a * s).sum())
-    margin = 1 / np.linalg.norm(w)
-    f_te = Z2te @ w + b
-    sv = np.nonzero(a > 1e-6)[0]
-    on = np.nonzero((a > 1e-6) & (a < C - 1e-6))[0]  # exactly on the margin
-    acc_lin = float(((f_te > 0) == y[test]).mean())
-    # Gaussian kernel
-    gamma, C2 = 1.0, 3.0
+def compute_shape():
+    g = rng(2015)  # Sohl-Dickstein et al., 2015
+    data = glyph_points("AI", 1500)
+    s0 = 0.03  # each data point a tiny blob
+    # forward: dx = -x/2 dt + dW from t = 0 to 5, so x_t = sqrt(a) x_0 + sqrt(1 - a) noise with a = e^{-t}
+    T, steps, keep = 5.0, 500, 10
+    dt = T / steps
+    idx = g.choice(len(data), size=600, replace=False)
+    x = data[idx] + s0 * g.normal(size=(600, 2))
+    fwd = [x.copy()]
+    for k in range(steps):
+        x = x - 0.5 * x * dt + math.sqrt(dt) * g.normal(size=x.shape)
+        if (k + 1) % keep == 0:
+            fwd.append(x.copy())
+    fwd = np.array(fwd)  # (51, 600, 2)
 
-    def rbf(P, Q):
-        return np.exp(-gamma * ((P[:, None, :] - Q[None]) ** 2).sum(-1)) + 1
+    def score(x, t):
+        a = math.exp(-t)
+        mu, var = math.sqrt(a) * data, a * s0 ** 2 + 1 - a
+        d2 = ((x[:, None, :] - mu[None]) ** 2).sum(-1)
+        w = np.exp(-(d2 - d2.min(1, keepdims=True)) / (2 * var))
+        w /= w.sum(1, keepdims=True)
+        return (w @ mu - x) / var
 
-    a2 = svm_dual(rbf(Z2tr, Z2tr), ytr, C2, epochs=400)
-    acc_rbf = float((((a2 * s) @ rbf(Z2tr, Z2te) > 0) == y[test]).mean())
-    region = ((a2 * s) @ rbf(Z2tr, Gz)).reshape(len(ys), len(xs))
-    # all 70 rates, Gaussian kernel (gamma scaled to the dimension)
-    Ztr, Zte, _, _ = standardize(X[~test], X[test])
-    g70 = 1.0 / Ztr.shape[1]
-    K70 = np.exp(-g70 * ((Ztr[:, None] - Ztr[None]) ** 2).sum(-1)) + 1
-    a70 = svm_dual(K70, ytr, 3.0, epochs=300)
-    Kte = np.exp(-g70 * ((Ztr[:, None] - Zte[None]) ** 2).sum(-1)) + 1
-    acc70 = float((((a70 * s) @ Kte > 0) == y[test]).mean())
-    # back to the plotted units: the line w.(x - mu)/sd + b = 0, and the margins at +-1
-    return dict(w=w / sd, b=b - float((w / sd) @ mu), margin_z=float(margin), sv=sv, on_margin=on, acc_lin=acc_lin,
-                acc_rbf=acc_rbf, acc70=acc70, xs=xs, ys=ys, region=region, mu=mu, sd=sd, n_sv=len(sv))
-
-
-# ---------------------------------------------------------------------------
-class Tree:
-    """CART: classification (Gini) or regression (squared error) trees, grown greedily."""
-
-    def __init__(self, depth=None, min_leaf=1, max_features=None, regression=False, seed=0):
-        self.depth, self.min_leaf, self.mf, self.reg = depth, min_leaf, max_features, regression
-        self.g = rng(seed)
-
-    def fit(self, X, y, w=None):
-        self.root = self._grow(X, y, 0)
-        return self
-
-    def _leaf(self, y):
-        return {"leaf": float(y.mean())}
-
-    def _grow(self, X, y, d):
-        n = len(y)
-        if (self.depth is not None and d >= self.depth) or n < 2 * self.min_leaf or np.all(y == y[0]):
-            return self._leaf(y)
-        feats = np.arange(X.shape[1])
-        if self.mf:
-            feats = self.g.choice(feats, size=self.mf, replace=False)
-        best = (0.0, None, None)
-        base = n * y.var() if self.reg else n * 2 * y.mean() * (1 - y.mean())
-        for j in feats:
-            o = np.argsort(X[:, j])
-            xs, ys = X[o, j], y[o]
-            cs, cs2 = np.cumsum(ys), np.cumsum(ys * ys)
-            k = np.arange(1, n)
-            ok = (xs[1:] > xs[:-1]) & (k >= self.min_leaf) & (n - k >= self.min_leaf)
-            if not ok.any():
-                continue
-            sl, sr = cs[:-1], cs[-1] - cs[:-1]
-            if self.reg:
-                ql, qr = cs2[:-1], cs2[-1] - cs2[:-1]
-                cost = (ql - sl ** 2 / k) + (qr - sr ** 2 / (n - k))
-            else:
-                pl, pr = sl / k, sr / (n - k)
-                cost = k * 2 * pl * (1 - pl) + (n - k) * 2 * pr * (1 - pr)
-            cost = np.where(ok, cost, np.inf)
-            i = int(np.argmin(cost))
-            gain = base - cost[i]
-            if gain > best[0] + 1e-12:
-                best = (gain, j, 0.5 * (xs[i] + xs[i + 1]))
-        if best[1] is None:
-            return self._leaf(y)
-        j, t = best[1], best[2]
-        m = X[:, j] <= t
-        return {"j": int(j), "t": float(t), "l": self._grow(X[m], y[m], d + 1), "r": self._grow(X[~m], y[~m], d + 1)}
-
-    def predict(self, X):
-        out = np.empty(len(X))
-        for i, x in enumerate(X):
-            nd = self.root
-            while "leaf" not in nd:
-                nd = nd["l"] if x[nd["j"]] <= nd["t"] else nd["r"]
-            out[i] = nd["leaf"]
-        return out
-
-
-def leaves(node, box, out):
-    """The rectangles of a tree on two features: (x0, x1, y0, y1, value)."""
-    if "leaf" in node:
-        out.append([*box, node["leaf"]])
-        return out
-    x0, x1, y0, y1 = box
-    if node["j"] == 0:
-        leaves(node["l"], [x0, min(x1, node["t"]), y0, y1], out)
-        leaves(node["r"], [max(x0, node["t"]), x1, y0, y1], out)
-    else:
-        leaves(node["l"], [x0, x1, y0, min(y1, node["t"])], out)
-        leaves(node["r"], [x0, x1, max(y0, node["t"]), y1], out)
-    return out
-
-
-def compute_trees():
-    X, y, test, X2 = split()
-    xs, ys, _ = grid2(X2)
-    box = [float(xs[0]), float(xs[-1]), float(ys[0]), float(ys[-1])]
-    out = dict(box=box, depths=list(range(1, 7)))
-    for d in range(1, 7):
-        t = Tree(depth=d, min_leaf=3).fit(X2[~test], y[~test])
-        out[f"rects{d}"] = leaves(t.root, box, [])
-        out[f"acc{d}"] = float(((t.predict(X2[test]) > 0.5) == y[test]).mean())
-        out[f"train{d}"] = float(((t.predict(X2[~test]) > 0.5) == y[~test]).mean())
-    out["tree3"] = Tree(depth=3, min_leaf=3).fit(X2[~test], y[~test]).root  # the tree itself, for its diagram
-    deep = Tree(min_leaf=1).fit(X2[~test], y[~test])
-    out["acc_deep2"] = float(((deep.predict(X2[test]) > 0.5) == y[test]).mean())
-    out["train_deep2"] = float(((deep.predict(X2[~test]) > 0.5) == y[~test]).mean())
-    out["rects_deep"] = leaves(deep.root, box, [])
-    # all 70 rates: one deep tree, a forest of 200, gradient boosting
-    Xtr, Xte, ytr = X[~test], X[test], y[~test]
-    one = Tree(min_leaf=1).fit(Xtr, ytr)
-    out["acc_tree70"] = float(((one.predict(Xte) > 0.5) == y[test]).mean())
-    g = rng(2001)  # Breiman, Random Forests, 2001
-    votes, forest_acc = np.zeros(len(Xte)), []
-    for k in range(200):
-        bs = g.integers(0, len(ytr), len(ytr))
-        t = Tree(min_leaf=1, max_features=int(math.sqrt(X.shape[1])), seed=k).fit(Xtr[bs], ytr[bs])
-        votes += t.predict(Xte)
-        forest_acc.append(float(((votes / (k + 1) > 0.5) == y[test]).mean()))
-    out["forest_acc"] = forest_acc
-    # gradient boosting (logistic loss), depth-2 trees, learning rate 0.2
-    F_tr, F_te = np.zeros(len(ytr)), np.zeros(len(Xte))
-    boost_acc, boost_train = [], []
-    for k in range(300):
-        p = sigmoid(F_tr)
-        t = Tree(depth=2, min_leaf=5, regression=True).fit(Xtr, ytr - p)
-        F_tr += 0.2 * 4 * t.predict(Xtr)  # 4 = 1 / (p(1-p)) at p = 1/2, a one-step Newton scale
-        F_te += 0.2 * 4 * t.predict(Xte)
-        boost_acc.append(float(((F_te > 0) == y[test]).mean()))
-        boost_train.append(float(((F_tr > 0) == ytr).mean()))
-    out["boost_acc"], out["boost_train"] = boost_acc, boost_train
-    assert out["train_deep2"] > 0.9 and forest_acc[-1] >= out["acc_tree70"], (out["train_deep2"], forest_acc[-1], out["acc_tree70"])
-    return out
-
-
-BOOST_SNAPS = (1, 3, 10, 30, 100, 300)
-
-
-def compute_boost2():
-    """Gradient boosting on the two plotted rates, as it learns: the committee's vote over the plane after 1, 3, 10,
-    30, 100 and 300 rounds (the same recipe as the 70-rate boosting in `trees`), and its accuracy every round."""
-    X, y, test, X2 = split()
-    xs, ys, G = grid2(X2)
-    Xtr, Xte, ytr = X2[~test], X2[test], y[~test]
-    F_tr, F_te, F_g = np.zeros(len(ytr)), np.zeros(len(Xte)), np.zeros(len(G))
-    out, acc, train = dict(xs=xs, ys=ys, snaps=list(BOOST_SNAPS)), [], []
-    for k in range(1, BOOST_SNAPS[-1] + 1):
-        t = Tree(depth=2, min_leaf=5, regression=True).fit(Xtr, ytr - sigmoid(F_tr))
-        F_tr += 0.2 * 4 * t.predict(Xtr)
-        F_te += 0.2 * 4 * t.predict(Xte)
-        F_g += 0.2 * 4 * t.predict(G)
-        acc.append(float(((F_te > 0) == y[test]).mean()))
-        train.append(float(((F_tr > 0) == ytr).mean()))
-        if k in BOOST_SNAPS:
-            out[f"region{k}"] = sigmoid(F_g).reshape(len(ys), len(xs))
-            print(f"    round {k}: train {train[-1]:.3f}, new pages {acc[-1]:.3f}", flush=True)
-    out["acc"], out["train"] = np.array(acc), np.array(train)
-    return out
-
-
-# ---------------------------------------------------------------------------
-def compute_board():
-    lg, la, ld, kn, sv, tr = (load(k) for k in ("logistic", "lasso", "lda", "knn", "svm", "trees"))
-    rows = [
-        ("logistic regression", lg["acc2"], lg["acc70"]),
-        ("LDA (Fisher)", ld["acc2"], None),
-        ("15 nearest neighbours", kn["acc15"], None),
-        ("SVM, linear", sv["acc_lin"], None),
-        ("SVM, Gaussian kernel", sv["acc_rbf"], sv["acc70"]),
-        ("one decision tree", tr["acc4"], tr["acc_tree70"]),
-        ("random forest (200 trees)", None, tr["forest_acc"][-1]),
-        ("gradient boosting (300 trees)", None, tr["boost_acc"][-1]),
-        (f"lasso: {len(la['words5'])} words", None, la["acc5"]),
-    ]
-    return dict(rows=rows)
+    # backward: the reverse-time SDE, dx = [x/2 + score] dt + dW as time runs from 5 down to 0
+    x = g.normal(size=(600, 2))
+    bwd = [x.copy()]
+    ts = np.linspace(T, 0, steps + 1)
+    for k in range(steps):
+        x = x + (0.5 * x + score(x, ts[k])) * dt + math.sqrt(dt) * g.normal(size=x.shape)
+        if (k + 1) % keep == 0:
+            bwd.append(x.copy())
+    bwd = np.array(bwd)
+    # the reverse process lands on the letters: each final point is close to some data point
+    final_d = np.sqrt(((bwd[-1][:, None] - data[None]) ** 2).sum(-1)).min(1)
+    assert np.median(final_d) < 0.1, np.median(final_d)
+    # the score field on a grid at a few noise levels
+    gx = np.linspace(-3.2, 3.2, 17)
+    gy = np.linspace(-1.8, 1.8, 10)
+    G = np.stack(np.meshgrid(gx, gy), -1).reshape(-1, 2)
+    field = {f"field{t}": score(G, t) for t in (2.0, 0.5, 0.1)}
+    return dict(data=data, fwd=fwd, bwd=bwd, T=T, grid=G, final_med=float(np.median(final_d)), **field)
 
 
 ITEMS = {
-    "pages": compute_pages,
-    "zipf": compute_zipf,
-    "logistic": compute_logistic,
-    "lasso": compute_lasso,
-    "lda": compute_lda,
-    "knn": compute_knn,
-    "svm": compute_svm,
-    "trees": compute_trees,
-    "boost2": compute_boost2,
-    "board": compute_board,
+    "galton": compute_galton,
+    "clt": compute_clt,
+    "mle": compute_mle,
+    "bayes": compute_bayes,
+    "temperature": compute_temperature,
+    "markov": compute_markov,
+    "montecarlo": compute_montecarlo,
+    "mcmc": compute_mcmc,
+    "brownian": compute_brownian,
+    "diffusion": compute_diffusion,
+    "shape": compute_shape,
 }
 CACHE.items = ITEMS
 

@@ -1,6 +1,8 @@
-"""Helpers shared by the scenes of Part 5 ("Classical ML")."""
+"""Helpers shared by the scenes of Part 5 ("Randomness in Motion")."""
 
 from __future__ import annotations
+
+import math
 
 import numpy as np
 
@@ -9,79 +11,83 @@ from explainer.ai import *  # noqa: F403
 from .compute import load  # noqa: F401
 
 MONO = "DejaVu Sans Mono"
-AUSTEN, DICKENS = "#E86F8A", "#58A6FF"  # the two authors, in every picture
-BOUNDARY = C.BITS  # a classifier's boundary
-X_RANGE, Y_RANGE = (10, 90), (0, 24)  # the plotted rates: "the" and "not", per 1,000 words
+DATA, MODEL = C.TRUE_P, C.MODEL_Q  # the data / the world (blue); a model, a proposal, a guess (orange)
+NOISE = "#8B98A9"  # pure randomness
+DRIFT = C.MODEL_Q  # the push in an SDE
+SCORE = "#5BD17A"  # the score, grad log p
+WALK = "#7FD3FF"  # random walkers
 
 
-def author_color(label: int) -> str:
-    return AUSTEN if label == 0 else DICKENS
+def normal_pdf(x, mu=0.0, s=1.0):
+    return np.exp(-0.5 * ((np.asarray(x) - mu) / s) ** 2) / (s * math.sqrt(2 * math.pi))
 
 
-def page_plane(x_length=7.0, y_length=4.6, center=ORIGIN, labels=True) -> VGroup:
-    """Axes for the two plotted rates, with their names."""
-    ax = Axes(x_range=[*X_RANGE, 10], y_range=[*Y_RANGE, 4], x_length=x_length, y_length=y_length, tips=False,
-              axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.04})
-    ax.move_to(center)
-    g = VGroup(ax)
-    if labels:
-        g.add(label(r"``the'' per $1{,}000$ words", font_size=22, color=GREY_A).next_to(ax.x_axis, DOWN, buff=0.15),
-              label(r"``not''", font_size=22, color=GREY_A).next_to(ax.y_axis, UP, buff=0.1))
-    return g
+def hist_shape(ax, edges, heights, color=DATA, opacity=0.55, stroke_width=2) -> VMobject:
+    """A histogram as one filled outline (morphs smoothly into another histogram or a curve)."""
+    pts = [ax.c2p(edges[0], 0)]
+    for k, h in enumerate(heights):
+        pts += [ax.c2p(edges[k], h), ax.c2p(edges[k + 1], h)]
+    pts.append(ax.c2p(edges[-1], 0))
+    return Polygon(*pts, color=color, stroke_width=stroke_width, fill_color=color, fill_opacity=opacity)
 
 
-def page_dots(ax, X2, y, idx=None, radius=0.05, opacity=0.85, jitter=0.0, seed=0) -> VGroup:
-    """One dot per page (rates are whole numbers per 1,000, so a little jitter keeps them from piling up)."""
-    idx = np.arange(len(y)) if idx is None else idx
-    g = np.random.default_rng(seed)
-    out = VGroup()
-    for i in idx:
-        x, v = X2[i]
-        if not (X_RANGE[0] <= x <= X_RANGE[1] and Y_RANGE[0] <= v <= Y_RANGE[1]):
-            continue
-        jx, jy = (g.uniform(-jitter, jitter, 2) if jitter else (0, 0))
-        out.add(Dot(ax.c2p(x + jx, v + jy), radius=radius, color=author_color(int(y[i])), fill_opacity=opacity,
-                    stroke_width=0))
-    return out
+def curve(ax, xs, ys, color=WHITE, stroke_width=3) -> VMobject:
+    return VMobject(color=color, stroke_width=stroke_width).set_points_smoothly([ax.c2p(x, y) for x, y in zip(xs, ys)])
 
 
-def region_image(values, xs, ys, ax, lo=0.0, hi=1.0, opacity=0.35) -> ImageMobject:
-    """A decision region as a picture: values near ``lo`` tinted Austen, near ``hi`` Dickens, cropped to the axes."""
-    v = np.clip((np.asarray(values) - lo) / (hi - lo), 0, 1)
-    ca, cd = np.array(ManimColor(AUSTEN).to_rgb()), np.array(ManimColor(DICKENS).to_rgb())
-    bg = np.array(ManimColor("#0B0F17").to_rgb())
-    rgb = (1 - v)[..., None] * ca + v[..., None] * cd
-    rgb = (1 - opacity) * bg + opacity * rgb
-    img_arr = (np.concatenate([rgb, np.ones(v.shape + (1,))], -1)[::-1] * 255).astype(np.uint8)
-    img = ImageMobject(img_arr)
-    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-    p0, p1 = ax.c2p(xs[0], ys[0]), ax.c2p(xs[-1], ys[-1])
-    img.stretch_to_fit_width(p1[0] - p0[0]).stretch_to_fit_height(p1[1] - p0[1])
-    img.move_to((p0 + p1) / 2)
-    return img
+def swarm(points, colors, radius=0.032, opacity=0.95) -> VGroup:
+    """Particles as small dots; ``points`` is (n, 2)."""
+    return VGroup(*[Dot([p[0], p[1], 0], radius=radius, color=c, fill_opacity=opacity, stroke_width=0)
+                    for p, c in zip(points, colors)])
 
 
-def crop_to_axes(img_values, xs, ys):
-    """Restrict a grid of values (rows: ys, columns: xs) to the plotted ranges."""
-    xs, ys = np.asarray(xs), np.asarray(ys)
-    cx = (xs >= X_RANGE[0]) & (xs <= X_RANGE[1])
-    cy = (ys >= Y_RANGE[0]) & (ys <= Y_RANGE[1])
-    return np.asarray(img_values)[np.ix_(cy, cx)], xs[cx], ys[cy]
+def follow(dots: VGroup, frames: np.ndarray, t: ValueTracker, scale=1.0, shift=ORIGIN):
+    """Updater: put particle i at frames[t, i], interpolating between saved frames."""
+    frames = np.asarray(frames) * scale
+    off = np.asarray(shift)[:2]
+
+    def upd(g):
+        v = float(np.clip(t.get_value(), 0, len(frames) - 1))
+        k = min(int(v), len(frames) - 2)
+        a = v - k
+        P = (1 - a) * frames[k] + a * frames[k + 1] + off
+        for d, p in zip(g, P):
+            d.move_to([p[0], p[1], 0])
+
+    return upd
 
 
-def line_in_box(ax, w, b, color=BOUNDARY, stroke_width=4) -> Line:
-    """The line w . x + b = 0, clipped to the plotted box."""
-    pts = []
-    (x0, x1), (y0, y1) = X_RANGE, Y_RANGE
-    if abs(w[1]) > 1e-12:
-        for x in (x0, x1):
-            y = -(b + w[0] * x) / w[1]
-            if y0 <= y <= y1:
-                pts.append((x, y))
-    if abs(w[0]) > 1e-12:
-        for y in (y0, y1):
-            x = -(b + w[1] * y) / w[0]
-            if x0 <= x <= x1:
-                pts.append((x, y))
-    pts = sorted(set(pts))[:2]
-    return Line(ax.c2p(*pts[0]), ax.c2p(*pts[-1]), color=color, stroke_width=stroke_width)
+def ramp(values, c0=DATA, c1=C.BITS):
+    lo, hi = float(np.min(values)), float(np.max(values))
+    return [interpolate_color(ManimColor(c0), ManimColor(c1), (v - lo) / (hi - lo + 1e-12)) for v in values]
+
+
+def printable(s: str) -> str:
+    """GPT-2's samples, keeping only what a font can draw (it sometimes emits half of a multi-byte character)."""
+    return " ".join("".join(c for c in s if c.isprintable() and ord(c) < 0x2000).split())
+
+
+def density_picture(width=3.6, height=1.4, lo=0.3, hi=1.3) -> VGroup:
+    """A jargon-card picture of a probability density: VGroup(axes, a coarse histogram of the standard bell, the
+    bell, the area between ``lo`` and ``hi`` shaded, its label P), the last two hidden at first.  ``narrow_hist(pic)``
+    is the same histogram with bars four times narrower, on the picture's axes wherever they now are."""
+    ax = Axes(x_range=[-3, 3, 1], y_range=[0, 0.45, 0.1], x_length=width, y_length=height, tips=False,
+              axis_config={"stroke_color": GREY_C, "include_ticks": False})
+    ax.y_axis.set_stroke(opacity=0)
+    edges = np.linspace(-3, 3, 7)
+    hist = hist_shape(ax, edges, [float(normal_pdf((a + b) / 2)) for a, b in zip(edges, edges[1:])], color=DATA,
+                      opacity=0.35, stroke_width=1.5)
+    xs = np.linspace(-3, 3, 120)
+    bell = curve(ax, xs, normal_pdf(xs), color=MODEL, stroke_width=3)
+    xa = np.linspace(lo, hi, 40)
+    shade = Polygon(ax.c2p(lo, 0), *[ax.c2p(x, float(normal_pdf(x))) for x in xa], ax.c2p(hi, 0), stroke_width=0,
+                    fill_color=C.BITS, fill_opacity=0)
+    p = MathTex(r"P", font_size=30, color=C.BITS).move_to(ax.c2p((lo + hi) / 2, 0.14)).set_opacity(0)
+    return VGroup(ax, hist, bell, shade, p)
+
+
+def narrow_hist(pic: VGroup) -> VMobject:
+    ax = pic[0]
+    edges = np.linspace(-3, 3, 25)
+    return hist_shape(ax, edges, [float(normal_pdf((a + b) / 2)) for a, b in zip(edges, edges[1:])], color=DATA,
+                      opacity=0.35, stroke_width=1.5)

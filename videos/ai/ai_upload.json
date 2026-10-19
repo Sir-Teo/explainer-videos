@@ -2,8 +2,8 @@
  "series": {
   "en": {
    "name": "AI, Built",
-   "playlist_title": "AI, Built: The Mathematics of Modern AI, from Probability to Frontier Models",
-   "playlist_description": "A twenty-part series on the mathematics behind modern AI models, built from the ground up: probability and information, linear algebra, calculus and randomness; classical and statistical machine learning; neural networks, optimization and scaling; attention, memory, sparsity, diffusion and tokens for every kind of data; reasoning, agents, inference, and what we find inside the models. The thread through every part is Shannon's guessing game: what do you have to know, to guess well? Every derivation is on screen, and every number shown is computed and checked.",
+   "playlist_title": "AI, Built: How Modern AI Works, and How It Came to Be",
+   "playlist_description": "A thirty-one-part course on how modern AI works and how it came to be, built from the ground up: information theory and the symbolic era; linear algebra, calculus and randomness; classical and statistical machine learning; neural networks, the deep learning revolution, optimization and scaling; attention, the language-model lineage, memory, sparsity, hardware, pretraining and inference; generative models, diffusion, images, video, every sense as tokens, self-supervised learning and AI for science; reinforcement learning from Bellman to AlphaZero, post-training, reasoning and agents; and what we find inside the models, and whether we can trust them. The thread through every part is Shannon's guessing game: what do you have to know, to guess well? Every derivation is on screen, and every number shown is computed and checked.",
    "credits": "Animations: Manim Community Edition.\nNarration: Qwen3-TTS (synthetic text-to-speech voices; the English voice is cloned from Kokoro-82M's af_heart).\nVisual style inspired by 3Blue1Brown.",
    "computed": "Every number on screen is computed and checked; the pictures marked schematic, and the examples marked illustrative, are the exceptions.",
    "tags": [
@@ -20,7 +20,7 @@
   "zh": {
    "name": "人工智能，从零搭建",
    "playlist_title": "人工智能，从零搭建 | AI, Built",
-   "playlist_description": "二十集系列，从零搭建现代人工智能模型背后的数学：概率与信息、线性代数、微积分与随机性；经典与统计机器学习；神经网络、优化与规模；注意力、记忆、稀疏性、扩散，以及各种数据的词元；推理、智能体、推断，以及打开模型后我们看到的东西。贯穿每一集的主线是香农的猜字游戏：要猜得好，你得知道些什么？每一步推导都在屏幕上完成，画面上的每个数字都经过计算和核对。中文配音、中文字幕，原创动画。",
+   "playlist_description": "三十一集系列，从零讲清现代人工智能怎样工作、又是怎样一步步走到今天：信息论与符号主义时代；线性代数、微积分与随机性；经典与统计机器学习；神经网络、深度学习革命、优化与规模；注意力、语言模型的谱系、记忆、稀疏性、硬件、预训练与推断；生成模型、扩散、图像与视频、把每一种感官变成词元、自监督学习与科学中的人工智能；从贝尔曼方程到AlphaZero的强化学习、后训练、推理与智能体；以及打开模型后我们看到的东西，和我们能否信任它。贯穿每一集的主线是香农的猜字游戏：要猜得好，你得知道些什么？每一步推导都在屏幕上完成，画面上的每一个数字都经过计算和核对。中文配音、中文字幕，原创动画。",
    "credits": "动画：Manim Community Edition。\n旁白：Qwen3-TTS 合成语音（AI生成；英文版声音克隆自 Kokoro-82M 的 af_heart）。\n视觉风格致敬 3Blue1Brown。",
    "computed": "画面上的每个数字都经过计算和核对；标注为示意图或示例的画面除外。",
    "tags": [

@@ -1,36 +1,54 @@
-# AI, Built — Part 13: Sparsity
+# AI, Built — Part 13: Attention as Geometry
 
-Part 13 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Using
-only some of a model at a time: mixtures of experts, and attention that looks at only some of the past. A hook and
-four chapters:
+Part 13 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)), and the
+first of Act III, *Engines*. What attention computes, how a transformer is put together, how it knows where things
+are, and what its heads learn to do. Every model here is trained by `compute.py` (PyTorch, CPU), including the
+series' own small transformer, which joins the scoreboard. A hook and six chapters:
 
-* **A few experts at a time.** DeepSeek-V3's 256 experts per layer, 8 (and a shared one) lighting up for each word.
-* **A mixture of experts.** The router, top-k selection and the gate; total against active parameters for Mixtral,
-  DeepSeek-V3, Qwen3-235B-A22B, gpt-oss-120b, Kimi K2 and Qwen3-Next, as published; DeepSeek-V3's router exactly:
-  sigmoid scores, a balancing bias that picks experts but never weighs them, a shared expert; C(16, 2) = 120 against
-  C(64, 8) ≈ 4.4 billion combinations for the same compute.
-* **Keeping every expert busy.** A character model whose hidden layer is 8 experts (2 per character), trained here
-  three ways: without balancing, with Switch's auxiliary loss, and with DeepSeek-V3's loss-free bias; each expert's
-  share of the work through training. Busiest expert at the end: 3.2x a fair share unbalanced (four experts starve),
-  2.8x with the auxiliary loss at Switch's strength, 1.1x with the bias. Held-out bits 2.453 / 2.410 / 2.434.
-* **What experts learn.** Where characters send their contexts; the mixture against dense models with the same
-  compute and the same parameters: 2.434 bits against 2.485 and 2.510 (after the same 3,000 steps, the eight-times-wider
-  dense model hasn't caught up).
-* **Sparse attention.** In Part 11's transformer, how much attention the top k keys hold, and the bits per character
-  when each query may use only k keys, chosen by score or as a sliding window; NSA and DeepSeek Sparse Attention,
-  drawn on one real query (layer 1, head 4) whose last 48 keys hold 90% of its attention: a window of 8 keeps 7%,
-  NSA's two best blocks plus the window 75% (16 keys), the top 8 by score 76%; both as equations: NSA's gated
-  sum of three attentions, DSA's ReLU indexer over every past token and attention over its top 2,048.
-* **Recap**, where it comes back, Part 14's teaser, references.
+* **Every character looks back.** Our transformer reading a sentence of the scoreboard's passage: one head's
+  attention, arc by arc, then all sixteen heads' patterns.
+* **A weighted average.** Nadaraya and Watson's kernel smoother on Part 7's data (how often "her" appears on each page
+  of *Great Expectations*): a bump of weights sliding along, the bandwidth knob; the formula turned into
+  softmax(q·k/√d) v; queries, keys and values in the plane; why the √d: unscaled, the softmax over 64 random keys
+  collapses from 4.9 bits of spread to 0.28 as d grows, scaled it stays at 5.3.
+* **Our own transformer.** The residual stream, attention between positions and an MLP within each, LayerNorm;
+  four heads of the trained model's first layer and the causal mask; training on the thirty novels, the curve, the
+  scoreboard row, and its writing.
+* **Positions as rotations.** Attention is blind to order; RoPE turns each pair of a query's numbers by m·θ_j (one
+  turn every 6 characters for the fastest pair, every 35,000 for the slowest); rotated scores depend only on the
+  distance (checked to 10⁻¹⁴); the long-range decay.
+* **Longer than it was trained for.** Our model at four times its training context: as trained it breaks past 256
+  characters; position interpolation, NTK-aware scaling and YaRN, with no retraining, measured position by position;
+  YaRN's recipe on screen: turns per pair over the training context r = L/λ, the ramp γ = clip((r−α)/(β−α), 0, 1)
+  with α = 1, β = 32 (in our heads 1 pair kept, 6 on the ramp, 9 slowed by 4), the blended angle
+  θ′ = (1−γ)θ/s + γθ, and the temperature √(1/t) = 0.1 ln s + 1 (every score × 1.30 at s = 4);
+  attention sinks: our small model has none (every head gives the first character under a third of an even share),
+  so a large model's sink head is drawn as a labeled schematic; then four changes frontier models make to attention,
+  each with its equation and a small computed plot: gpt-oss's sink logit e^b in the softmax's denominator (b = 2
+  and 8 equal scores: 48% goes nowhere), Qwen3-Next's sigmoid output gate, QK-norm (scores bounded however the
+  weights grow), and Gemma 2's soft cap c·tanh(s/c) with c = 50.
+* **Induction heads.** A random string shown twice: our small transformer does no better the second time (it has
+  not built induction heads in its short training); the two-head mechanism
+  ([a][b] … [a] → [b]); a two-layer attention-only model forming an induction head in a sudden drop of the loss, a
+  one-layer model unable to, and the two heads' patterns.
+* **Learning inside the prompt.** In-context linear regression: one layer of linear attention, trained, learns the
+  matrices of one step of gradient descent (correlation 0.999 with it on new prompts); two and three layers beat two
+  and three plain steps.
+* **Recap**, where it comes back, Part 15's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai13.compute          # needs Part 1's books and Part 11's transformer (.cache/ai11/tf.pt)
+python -m videos.ai.ai13.compute          # needs Part 1's books (.cache/ai1), Part 7's data and Part 9's model
 python tools/build.py ai13                # English
 python tools/build.py ai13 --lang zh      # Chinese
 ```
 
-References: Jacobs, Jordan, Nowlan & Hinton (1991); Shazeer et al. (2017); Lepikhin et al., GShard (2020); Fedus, Zoph
-& Shazeer, Switch Transformers (2021); Wang et al., auxiliary-loss-free balancing (2024); DeepSeek-AI, DeepSeek-V3
-(2024) and V3.2-Exp (2025); Yuan et al., Native Sparse Attention (2025).
+The transformer takes the longest (3,000 steps of 32 × 256 characters: one to two hours on a 4-core CPU); its weights
+are kept in `.cache/ai13/tf.pt` for the context-extension item.
+
+References: S. J. D. Prince, *Understanding Deep Learning* (2023); Nadaraya (1964); Watson (1964); Vaswani et al.
+(2017); Su et al., RoFormer (2021); Chen et al., position interpolation (2023); bloc97, NTK-aware scaling (2023); Peng
+et al., YaRN (2023); Xiao et al., attention sinks (2023); Qiu et al., gated attention (2025); Dehghani et al.,
+QK-norm (2023); Gemma Team, Gemma 2 (2024); OpenAI, gpt-oss (2025); Elhage et al., transformer circuits (2021); Olsson et al.,
+induction heads (2022); Garg et al. (2022); von Oswald et al. (2023).

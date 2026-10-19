@@ -1,16 +1,17 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "AI, Built: Part 3, Change"
+TITLE = "AI, Built: Part 3, Vectors That Mean Things"
 
 SCENES = [
-    ("s01_hook", "Hook", "Four billion derivatives"),
-    ("s02_derivative", "Derivative", "1. The derivative"),
-    ("s03_gradient", "Gradient", "2. Many inputs: the gradient"),
-    ("s04_jacobian", "Jacobian", "3. Maps that bend: the Jacobian"),
-    ("s05_reverse", "Reverse", "4. Forwards or backwards?"),
-    ("s06_backprop", "Backprop", "5. Backpropagation, by hand"),
-    ("s07_library", "Library", "6. Calculus in a few pages of code"),
-    ("s08_train", "Train", "7. Training by going downhill"),
-    ("s09_curvature", "Curvature", "8. Curvature"),
-    ("s10_outro", "Outro", "Recap, and where this comes back"),
+    ("s01_hook", "Hook", "Where words live"),
+    ("s02_vectors", "Vectors", "1. Arrows and lists of numbers"),
+    ("s03_dot", "Dot", "2. Angles: the dot product"),
+    ("s04_matrices", "Matrices", "3. Matrices move space"),
+    ("s05_eigen", "Eigen", "4. Directions that stay put"),
+    ("s06_svd", "SVD", "5. Every matrix: rotate, stretch, rotate"),
+    ("s07_lowrank", "LowRank", "6. Keeping what matters"),
+    ("s08_words", "Words", "7. Word vectors from counting"),
+    ("s09_highdim", "HighDim", "8. Life in 768 dimensions"),
+    ("s10_jl", "JL", "9. Squeezing dimensions"),
+    ("s11_outro", "Outro", "Recap, and where this comes back"),
 ]
