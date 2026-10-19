@@ -416,8 +416,8 @@ class Counting(VoiceoverScene):
             "the two is called generalization. <bookmark mark='b'/> And counting has a deeper limit: every context "
             "is its own island. It can't tell that the dog barked and the hound barked are alike, so it can't "
             "borrow what it learned about one for the other. <bookmark mark='c'/> Better smoothing comes in part "
-            "six, generalization in part seven, and models that share what they learn between similar contexts, "
-            "with vectors and networks, in parts two and eight."
+            "seven, generalization in part eight, and models that share what they learn between similar contexts, "
+            "with vectors and networks, in parts three and nine."
         ) as vo:
             self.play(FadeIn(a))
             vo.wait_until("a")

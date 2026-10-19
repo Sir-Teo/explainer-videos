@@ -1,27 +1,25 @@
-"""Precompute everything numerical in Part 16 of the AI series ("Every Sense Is a Token").
+"""Precompute everything numerical in Part 16 of the AI series ("Sparsity").
 
-    python -m videos.ai.ai16.compute              # everything missing (Part 1's books)
-    python -m videos.ai.ai16.compute --force clip
+    python -m videos.ai.ai16.compute              # everything missing (Part 1's books; Part 13's transformer)
+    python -m videos.ai.ai16.compute --force moe
 
 Results are cached in ``.cache/ai16/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.
 
 Items:
-    bpe        byte-pair encoding learned on Part 1's books: the first merges, and for vocabularies of 500, 2,000 and
-               8,000 merges, how many characters a token covers on held-out text and on the scoreboard's passage, and
-               how one sentence is cut
-    vq         4 x 4 patches of Part 14's letter pictures as vectors: a codebook (k-means) of 16, 64 and 256 codes;
-               residual quantization, 1 to 4 stages of 16 codes; finite scalar quantization; the errors, and one
-               letter rebuilt from its codes
-    sound      a synthesized voice saying five vowels (a pulse train through formant resonances): its spectrogram,
-               frame by frame, and the same frames as residual-quantized codes, stage by stage
-    clip       a contrastive model pairing letter pictures with captions ("bold serif A"), trained with CLIP's softmax
-               loss and with SigLIP's sigmoid loss: the similarity table of a batch, and how often each picks the
-               right caption
+    configs    mixture-of-experts models as published: total and active parameters, experts, experts per token
+    moe        a character model (8 characters of context, like Part 12's) whose hidden layer is 8 experts, 2 used per
+               character, trained three ways: no balancing, Switch's auxiliary loss, and DeepSeek's loss-free bias;
+               each expert's share of the characters during training, held-out bits, the dense models with the same
+               active and the same total size, and which experts the characters go to
+    topk       sparse attention in Part 13's transformer: how much of each query's attention its top k keys hold, and
+               the bits per character when every query may attend only to k keys, chosen by score (as DeepSeek's
+               sparse attention does) or as the last k (a sliding window)
+    row        one query of that transformer (one head) and its weights over the last 48 keys, for the picture of what
+               a window, NSA's blocks and DSA's top k each keep
 """
 
 from __future__ import annotations
 
-import collections
 import math
 
 import numpy as np
@@ -36,327 +34,289 @@ def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
-# ---------------------------------------------------------------------------
-def learn_bpe(text: str, merges: int):
-    """Sennrich et al.'s byte-pair encoding over words (a word carries its leading space): the merges, in order."""
-    words = collections.Counter()
-    for w in text.replace("\n", " ").split(" "):
-        if w:
-            words[" " + w] += 1
-    vocab = {tuple(w): c for w, c in words.items()}
-    seqs = list(vocab.keys())
-    counts = [vocab[s] for s in seqs]
-    seqs = [list(s) for s in seqs]
-    pairs = collections.Counter()
-    where = collections.defaultdict(set)
-    for i, s in enumerate(seqs):
-        for a, b in zip(s, s[1:]):
-            pairs[(a, b)] += counts[i]
-            where[(a, b)].add(i)
-    out = []
-    for _ in range(merges):
-        if not pairs:
-            break
-        (a, b), n = pairs.most_common(1)[0]
-        if n < 2:
-            break
-        out.append((a, b))
-        ab = a + b
-        for i in list(where[(a, b)]):
-            s, c = seqs[i], counts[i]
-            for x, y in zip(s, s[1:]):  # remove this word's old pairs
-                pairs[(x, y)] -= c
-                if pairs[(x, y)] <= 0:
-                    del pairs[(x, y)]
-                where[(x, y)].discard(i)
-            j, new = 0, []
-            while j < len(s):
-                if j + 1 < len(s) and s[j] == a and s[j + 1] == b:
-                    new.append(ab)
-                    j += 2
-                else:
-                    new.append(s[j])
-                    j += 1
-            seqs[i] = new
-            for x, y in zip(new, new[1:]):
-                pairs[(x, y)] += c
-                where[(x, y)].add(i)
-    return out
+# published configurations: (name, year, total parameters, active per token, routed experts, experts per token, shared)
+CONFIGS = [
+    ("Mixtral 8x7B", 2023, 46.7e9, 12.9e9, 8, 2, 0),
+    ("DeepSeek-V3", 2024, 671e9, 37e9, 256, 8, 1),
+    ("Qwen3-235B-A22B", 2025, 235e9, 22e9, 128, 8, 0),
+    ("gpt-oss-120b", 2025, 117e9, 5.1e9, 128, 4, 0),
+    ("Kimi K2", 2025, 1.04e12, 32e9, 384, 8, 1),
+    ("Qwen3-Next-80B-A3B", 2025, 80e9, 3e9, 512, 10, 1),
+]
 
 
-def apply_bpe(word: str, ranks: dict) -> list[str]:
-    s = list(word)
-    while len(s) > 1:
-        best = min(((ranks.get((x, y), 1e9), k) for k, (x, y) in enumerate(zip(s, s[1:]))), default=(1e9, -1))
-        if best[0] == 1e9:
-            break
-        k = best[1]
-        s = s[:k] + [s[k] + s[k + 1]] + s[k + 2:]
-    return s
-
-
-def tokenize(text: str, ranks: dict) -> list[str]:
-    toks, cache = [], {}
-    for w in text.replace("\n", " ").split(" "):
-        if not w:
-            continue
-        w = " " + w
-        if w not in cache:
-            cache[w] = apply_bpe(w, ranks)
-        toks += cache[w]
-    return toks
-
-
-def compute_bpe():
-    from videos.ai.ai1 import compute as c1
-
-    train = c1.text("train")
-    g = rng(2016)  # Sennrich, Haddow & Birch, 2016
-    starts = g.integers(0, len(train) - 20_000, 100)
-    sample = " ".join(train[s:s + 20_000] for s in starts)  # two million characters from across the books
-    merges = learn_bpe(sample, 8000)
-    valid, passage = c1.text("valid")[:200_000], c1.text("passage")
-    sentence = "Spade sat down in the armchair and rolled a cigarette."
-    out = dict(first=[a + b for a, b in merges[:40]], sizes=[500, 2000, 8000], sentence=sentence, n_merges=len(merges))
-    for n in out["sizes"]:
-        ranks = {p: i for i, p in enumerate(merges[:n])}
-        for name, t in (("valid", valid), ("passage", passage)):
-            toks = tokenize(t, ranks)
-            out[f"cpt_{name}{n}"] = len(t.replace("\n", " ").replace("  ", " ")) / len(toks)
-        out[f"cut{n}"] = tokenize(sentence, ranks)
-    out["cut0"] = tokenize(sentence, {})
-    print("    chars per token on the passage: " + ", ".join(f"{n}: {out[f'cpt_passage{n}']:.2f}" for n in out["sizes"]),
-          flush=True)
-    assert out["cpt_passage8000"] > out["cpt_passage500"] > 1.5
-    return out
+def compute_configs():
+    rows = [dict(name=n, year=y, total=t, active=a, experts=e, k=k, shared=s, frac=a / t) for n, y, t, a, e, k, s in CONFIGS]
+    assert all(r["active"] < r["total"] for r in rows)
+    return dict(rows=rows)
 
 
 # ---------------------------------------------------------------------------
-def nearest(X, C):
-    """The index of each row of X's nearest code in C (squared distances by |x|^2 - 2 x.c + |c|^2)."""
-    return ((C * C).sum(1)[None] - 2 * X @ C.T).argmin(1)
+CTX, EMB, E, TOPK, HID = 8, 16, 8, 2, 96
 
 
-def kmeans(X, k, seed=0, iters=30):
-    g = rng(seed)
-    C = X[g.choice(len(X), k, replace=False)].copy()
-    for _ in range(iters):
-        a = nearest(X, C)
-        for j in range(k):
-            m = a == j
-            C[j] = X[m].mean(0) if m.any() else X[g.integers(len(X))]
-    return C, nearest(X, C)
+CURVE_EVERY, ROUTE_AT = 150, (100, 300, 1000, 3000)
 
 
-def compute_vq():
-    from videos.ai.ai14.compute import glyph_images
-
-    imgs, labels, _ = glyph_images()
-    P, n = 4, imgs.shape[1] // 4
-    patches = imgs.reshape(len(imgs), n, P, n, P).transpose(0, 1, 3, 2, 4).reshape(-1, P * P)
-    g = rng(2017)  # van den Oord et al., VQ-VAE
-    fit = patches[g.choice(len(patches), 12_000, replace=False)]
-    test_img = imgs[labels == 0][7]  # an A
-    tp = test_img.reshape(n, P, n, P).transpose(0, 2, 1, 3).reshape(-1, P * P)
-
-    def rebuild(codes_patches):
-        return codes_patches.reshape(n, n, P, P).transpose(0, 2, 1, 3).reshape(n * P, n * P)
-
-    out = dict(image=test_img, sizes=[16, 64, 256])
-    evalp = patches[g.choice(len(patches), 6_000, replace=False)]
-    for k in out["sizes"]:
-        C, _ = kmeans(fit, k, seed=k)
-        q = C[nearest(evalp, C)]
-        out[f"err_vq{k}"] = float(np.sqrt(((q - evalp) ** 2).mean()))
-        out[f"img_vq{k}"] = rebuild(C[nearest(tp, C)])
-        if k == 16:
-            out["codebook16"] = C.reshape(-1, P, P)
-    # residual: quantize, then quantize what's left, with a fresh codebook of 16 each time
-    res_fit, res_eval, res_t, rec_eval, rec_t = fit.copy(), evalp.copy(), tp.copy(), 0 * evalp, 0 * tp
-    out["rvq_errs"] = []
-    for stage in range(4):
-        C, _ = kmeans(res_fit, 16, seed=100 + stage)
-        res_fit = res_fit - C[nearest(res_fit, C)]
-        qe = C[nearest(res_eval, C)]
-        qt = C[nearest(res_t, C)]
-        rec_eval, rec_t = rec_eval + qe, rec_t + qt
-        res_eval, res_t = res_eval - qe, res_t - qt
-        out["rvq_errs"].append(float(np.sqrt(((rec_eval - evalp) ** 2).mean())))
-        out[f"img_rvq{stage + 1}"] = rebuild(rec_t)
-    # finite scalar quantization: project to 4 numbers, round each to one of 5 levels (625 codes, no codebook)
-    mu = fit.mean(0)
-    u, s, vt = np.linalg.svd(fit - mu, full_matrices=False)
-    W = vt[:4]
-    z = (evalp - mu) @ W.T
-    lo, hi = np.percentile((fit - mu) @ W.T, [2, 98], axis=0)
-    levels = np.linspace(lo, hi, 5)
-    zq = np.stack([levels[np.abs(z[:, j:j + 1] - levels[:, j][None]).argmin(1), j] for j in range(4)], 1)
-    out["err_fsq"] = float(np.sqrt(((zq @ W + mu - evalp) ** 2).mean()))
-    out["err_none"] = float(np.sqrt(((evalp - evalp.mean(0)) ** 2).mean()))
-    print("    vq {}; rvq {}; fsq {:.3f}".format([round(out[f'err_vq{k}'], 3) for k in out["sizes"]],
-                                                 np.round(out["rvq_errs"], 3), out["err_fsq"]), flush=True)
-    assert out["rvq_errs"][-1] < out["rvq_errs"][0] and out["err_vq256"] < out["err_vq16"]
-    return out
-
-
-# ---------------------------------------------------------------------------
-def compute_sound():
-    sr = 16_000
-    # formant frequencies (Hz) of five vowels, from Peterson & Barney's classic measurements (adult male, rounded)
-    vowels = {"a": (730, 1090, 2440), "e": (530, 1840, 2480), "i": (270, 2290, 3010), "o": (570, 840, 2410),
-              "u": (300, 870, 2240)}
-    seg = int(0.35 * sr)
-    f0 = 120.0
-    sig = []
-    g = rng(1952)  # Peterson & Barney, 1952
-    for name, F in vowels.items():
-        t = np.arange(seg) / sr
-        pulses = (np.sin(2 * np.pi * f0 * (1 + 0.03 * np.sin(2 * np.pi * 3 * t)) * t) > 0.97).astype(float)
-        x = pulses + 0.01 * g.normal(size=seg)
-        for fc in F:  # a resonance at each formant: a two-pole filter
-            r = math.exp(-math.pi * 90 / sr)
-            a1, a2 = -2 * r * math.cos(2 * math.pi * fc / sr), r * r
-            y = np.zeros_like(x)
-            for i in range(len(x)):
-                y[i] = x[i] - a1 * (y[i - 1] if i else 0) - a2 * (y[i - 2] if i > 1 else 0)
-            x = y / np.abs(y).max()
-        env = np.minimum(1, np.minimum(t / 0.03, (t[-1] - t) / 0.03))
-        sig.append(x * env)
-    sig = np.concatenate(sig)
-    n_fft, hop = 512, 160  # 10 ms frames
-    win = np.hanning(n_fft)
-    frames = np.stack([sig[i:i + n_fft] * win for i in range(0, len(sig) - n_fft, hop)])
-    spec = np.abs(np.fft.rfft(frames, axis=1))[:, :200]  # up to 6.25 kHz
-    logspec = np.log(spec + 1e-3)
-    logspec = (logspec - logspec.mean()) / logspec.std()
-    # frames as tokens: residual quantization, 4 stages of 32 codes
-    res, rec, errs = logspec.copy(), 0 * logspec, []
-    for stage in range(4):
-        C, a = kmeans(res, 32, seed=stage)
-        q = C[a]
-        rec, res = rec + q, res - q
-        errs.append(float(np.sqrt(((rec - logspec) ** 2).mean())))
-        if stage == 0:
-            codes1 = a
-    out = dict(sr=sr, wave=sig[::8], spec=logspec.T, rec_errs=errs, rec4=rec.T, codes1=codes1, vowels=list(vowels),
-               frame_ms=1000 * hop / sr, n_frames=len(frames))
-    assert errs[-1] < errs[0]
-    return out
-
-
-# ---------------------------------------------------------------------------
-STYLES = ["sans", "serif", "mono"]
-
-
-def styled_glyphs(seed=0):
-    import glob
-
-    from PIL import Image, ImageDraw, ImageFont
-
-    from explainer.ai.fonts import font_files
-
-    files = font_files("**/DejaVu*.ttf")  # /usr/share/fonts/truetype/dejavu on Linux
-    files = [f for f in files if "Math" not in f and "ExtraLight" not in f]
-    g = rng(seed)
-    imgs, caps = [], []
-    for f in files:
-        name = f.rsplit("/", 1)[-1].lower()
-        fam = "mono" if "mono" in name else "serif" if "serif" in name else "sans"
-        words = (["bold"] if "bold" in name else []) + (["italic"] if ("oblique" in name or "italic" in name) else []) + \
-                (["narrow"] if "condensed" in name else []) + [fam]
-        try:
-            font = ImageFont.truetype(f, 15)
-        except Exception:
-            continue
-        for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-            for _ in range(2):
-                im = Image.new("L", (20, 20), 0)
-                dx, dy = g.uniform(-1.5, 1.5, 2)
-                ImageDraw.Draw(im).text((10 + dx, 10 + dy), ch, fill=255, font=font, anchor="mm")
-                imgs.append(np.asarray(im, float) / 255.0)
-                caps.append(words + [ch])
-    return np.array(imgs), caps
-
-
-def compute_clip():
+def compute_moe():
     import torch
-    import torch.nn as nn
     import torch.nn.functional as F
 
+    from videos.ai.ai11.compute import char_data
+    from videos.ai.ai1 import compute as c1
+
     torch.set_num_threads(2)
-    imgs, caps = styled_glyphs()
-    vocab = sorted({w for c in caps for w in c})
-    X = torch.tensor(imgs.reshape(len(imgs), -1), dtype=torch.float32)
-    T = torch.zeros(len(caps), len(vocab))
-    for i, c in enumerate(caps):
-        for w in c:
-            T[i, vocab.index(w)] = 1.0
-    uniq = sorted({" ".join(c) for c in caps})
-    U = torch.zeros(len(uniq), len(vocab))
-    for i, c in enumerate(uniq):
-        for w in c.split():
-            U[i, vocab.index(w)] = 1.0
-    cap_id = torch.tensor([uniq.index(" ".join(c)) for c in caps])
-    out = dict(vocab=vocab, n_images=len(imgs), n_captions=len(uniq))
-    for loss_name in ("clip", "siglip"):
-        torch.manual_seed(2021)  # Radford et al., CLIP (2021); Zhai et al., SigLIP (2023)
-        img_enc = nn.Sequential(nn.Linear(400, 256), nn.GELU(), nn.Linear(256, 64))
-        txt_enc = nn.Sequential(nn.Linear(len(vocab), 128), nn.GELU(), nn.Linear(128, 64))
-        t_ = nn.Parameter(torch.tensor(math.log(10.0)))
-        b_ = nn.Parameter(torch.tensor(-10.0))
-        opt = torch.optim.Adam([*img_enc.parameters(), *txt_enc.parameters(), t_, b_], lr=2e-3)
-        g = torch.Generator().manual_seed(0)
-        sel = torch.tensor(rng(3).choice(len(X), 12, replace=False))
-        snaps, losses = [], []
+    tr, va, K = char_data()
+    tr_t, va_t = torch.tensor(tr), torch.tensor(va)
+    chars = sorted(set(c1.text("train") + c1.text("valid")))
 
-        def snap():  # how it learns: the twelve pictures against their captions, at checkpoints
-            with torch.no_grad():
-                return (F.normalize(img_enc(X[sel]), dim=-1) @ F.normalize(txt_enc(T[sel]), dim=-1).T).numpy()
+    def windows(seq, pos):
+        return torch.stack([seq[pos - CTX + j] for j in range(CTX)], 1)
 
-        checks = [0, 20, 60, 150, 400, 1000, 3000]
-        for step in range(3000):
-            if step in checks:
-                snaps.append(snap())
-            i = torch.randint(0, len(X), (128,), generator=g)
-            zi = F.normalize(img_enc(X[i] + 0.05 * torch.randn(128, 400, generator=g)), dim=-1)
-            zt = F.normalize(txt_enc(T[i]), dim=-1)
-            logits = zi @ zt.T * t_.exp()
-            same = (cap_id[i][:, None] == cap_id[i][None]).float()  # duplicates of a caption in the batch are matches too
-            if loss_name == "clip":  # softmax over the batch, both ways
-                tgt = same / same.sum(1, keepdim=True)
-                loss = -(tgt * F.log_softmax(logits, 1)).sum(1).mean() - (tgt.T * F.log_softmax(logits.T, 1)).sum(1).mean()
-            else:  # every pair on its own: a yes/no question
-                loss = F.binary_cross_entropy_with_logits(logits + b_, same, reduction="sum") / 128
+    class Model(torch.nn.Module):
+        def __init__(self, n_exp, hid):
+            super().__init__()
+            self.emb = torch.nn.Embedding(K, EMB)
+            self.inp = torch.nn.Linear(CTX * EMB, 128)
+            self.router = torch.nn.Linear(128, n_exp, bias=False)
+            torch.nn.init.normal_(self.router.weight, std=0.01)
+            self.w1 = torch.nn.Parameter(torch.randn(n_exp, 128, hid) / math.sqrt(128))
+            self.w2 = torch.nn.Parameter(torch.randn(n_exp, hid, 128) / math.sqrt(hid))
+            self.out = torch.nn.Linear(128, K)
+            self.register_buffer("bias", torch.zeros(n_exp))
+            self.n_exp = n_exp
+
+        def forward(self, ctx, k=TOPK):
+            x = torch.tanh(self.inp(self.emb(ctx).reshape(len(ctx), -1)))
+            if self.n_exp == 1:
+                y = torch.tanh(x @ self.w1[0]) @ self.w2[0]
+                return self.out(x + y), None, None
+            logits = self.router(x)
+            probs = torch.softmax(logits, -1)
+            top = torch.topk(logits + self.bias, k, -1).indices  # the bias only steers the choice
+            gate = torch.gather(probs, 1, top)
+            gate = gate / gate.sum(1, keepdim=True)
+            h = torch.tanh(torch.einsum("bd,edh->beh", x, self.w1))  # every expert, for clarity; only k are used
+            ys = torch.einsum("beh,ehd->bed", h, self.w2)
+            y = (torch.gather(ys, 1, top[..., None].expand(-1, -1, 128)) * gate[..., None]).sum(1)
+            return self.out(x + y), probs, top
+
+    def bits(m, n=60_000):
+        with torch.no_grad():
+            pos = torch.arange(CTX, min(len(va_t), n))
+            z, _, _ = m(windows(va_t, pos))
+            return float(F.cross_entropy(z, va_t[pos])) / math.log(2)
+
+    show = [c for c in "etaoinshrdlcumwfgypbvk .,;\"'?!" if c in chars]
+
+    def route(m):
+        """Where the characters go: the expert chosen first, by the last character of the context."""
+        with torch.no_grad():
+            pos = torch.arange(CTX, 60_000)
+            _, probs, top = m(windows(va_t, pos))
+            last = va_t[pos - 1].numpy()
+            first = top[:, 0].numpy()
+        M = np.zeros((len(show), E))
+        for i, ch in enumerate(show):
+            sel = last == chars.index(ch)
+            M[i] = np.bincount(first[sel], minlength=E) / max(sel.sum(), 1)
+        return M
+
+    def train(mode, n_exp=E, hid=HID, steps=3000, watch=False):
+        torch.manual_seed(2021)  # Fedus, Zoph & Shazeer, Switch Transformers
+        m = Model(n_exp, hid)
+        opt = torch.optim.Adam([p for p in m.parameters()], lr=3e-3)
+        g = rng(2021)
+        loads = []
+        curve, routes = [(0, bits(m, 20_000))], [route(m)] if watch and n_exp > 1 else []
+        for step in range(1, steps + 1):
+            pos = torch.tensor(g.integers(CTX, len(tr), 256))
+            z, probs, top = m(windows(tr_t, pos))
+            loss = F.cross_entropy(z, tr_t[pos])
+            if probs is not None:
+                f = torch.zeros(n_exp).scatter_add_(0, top.reshape(-1), torch.ones(top.numel())) / top.numel()
+                if mode == "aux":  # Switch: penalize experts that get both many characters and much probability
+                    loss = loss + 0.01 * n_exp * (f * probs.mean(0)).sum()
+                if mode == "bias":  # DeepSeek: nudge each expert's bias against its load, no extra loss
+                    with torch.no_grad():
+                        m.bias += 0.002 * torch.sign(1 / n_exp - f)
+                if step % 50 == 0:
+                    loads.append(f.numpy().copy())
             opt.zero_grad()
             loss.backward()
             opt.step()
-            if step % 20 == 0:
-                losses.append((step, float(loss)))
-        snaps.append(snap())
-        out[f"snaps_{loss_name}"], out[f"checks_{loss_name}"], out[f"losses_{loss_name}"] = np.array(snaps), checks, np.array(losses)
-        with torch.no_grad():
-            zi = F.normalize(img_enc(X), dim=-1)
-            zu = F.normalize(txt_enc(U), dim=-1)
-            pick = (zi @ zu.T).argmax(1)
-            right = pick == cap_id
-            letter_right = torch.tensor([uniq[p].split()[-1] == caps[k][-1] for k, p in enumerate(pick.tolist())])
-            out[f"acc_{loss_name}"] = float(right.float().mean())
-            out[f"letter_{loss_name}"] = float(letter_right.float().mean())
-            out[f"sim_{loss_name}"] = (zi[sel] @ F.normalize(txt_enc(T[sel]), dim=-1).T).numpy()
-            if loss_name == "clip":
-                out["batch_imgs"] = imgs[sel.numpy()]
-                out["batch_caps"] = [" ".join(caps[k]) for k in sel.tolist()]
-        print(f"    {loss_name}: right caption {out[f'acc_{loss_name}']:.1%}, right letter {out[f'letter_{loss_name}']:.1%}",
-              flush=True)
-    assert out["letter_clip"] > 0.8 and out["letter_siglip"] > 0.8
+            if watch and step % CURVE_EVERY == 0:  # held-out bits on a shorter stretch, as it trains
+                curve.append((step, bits(m, 20_000)))
+            if watch and n_exp > 1 and step in ROUTE_AT:
+                routes.append(route(m))
+        if watch:
+            out[f"curve_{mode if n_exp > 1 else ('dense_active' if hid == HID * TOPK else 'dense_total')}"] = np.array(curve)
+            if routes:
+                out["route_steps"], out["routes"] = [0, *ROUTE_AT], np.array(routes)
+        return m, bits(m), np.array(loads)
+
+    out = dict(E=E, k=TOPK, hid=HID)
+    for mode in ("none", "aux", "bias"):
+        m, b, loads = train(mode, watch=mode == "bias")
+        out[f"bits_{mode}"], out[f"load_{mode}"] = b, loads
+        print(f"    {mode}: {b:.3f} bits, final loads " + " ".join(f"{v:.2f}" for v in loads[-1]), flush=True)
+        if mode == "bias":
+            out["route_chars"], out["route"] = show, route(m)
+    # dense models: as many active numbers as the MoE uses per character (2 experts' worth), and as many in total (8)
+    _, out["bits_dense_active"], _ = train("none", n_exp=1, hid=HID * TOPK, watch=True)
+    _, out["bits_dense_total"], _ = train("none", n_exp=1, hid=HID * E, watch=True)
+    print("    dense: active-matched {:.3f}, total-matched {:.3f}".format(out["bits_dense_active"], out["bits_dense_total"]))
+    imb = {mde: float(out[f"load_{mde}"][-10:].mean(0).max() * E) for mde in ("none", "aux", "bias")}
+    out["imbalance"] = imb  # the busiest expert's share, in multiples of a fair share
+    assert imb["bias"] < 1.5 and imb["bias"] < imb["none"]  # the bias evens the work out (the penalty, at Switch's
+    # strength, may only partly: the narration says which)
+    assert out["bits_bias"] < out["bits_dense_active"]  # same compute per character, more knowledge
+    return out
+
+
+# ---------------------------------------------------------------------------
+def compute_topk():
+    import torch
+    import torch.nn.functional as F
+
+    from videos.ai.ai13 import compute as c11
+
+    torch.set_num_threads(3)
+    c11.load("tf")
+    model, chars, enc, data = c11.load_tf()
+    va = data["valid"]
+    T = c11.CTX
+    g = rng(5)
+    starts = g.integers(0, len(va) - T - 1, 24)
+    x = torch.stack([va[s:s + T] for s in starts])
+    y = torch.stack([va[s + 1:s + T + 1] for s in starts])
+    th = torch.tensor(c11.rope_freqs(), dtype=torch.float32)
+    ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+    cos, sin = torch.cos(ang), torch.sin(ang)
+    ks = [1, 2, 4, 8, 16, 32, 64]
+
+    def rot(t):
+        a, b = t[..., : c11.DH // 2], t[..., c11.DH // 2:]
+        return torch.cat([a * cos - b * sin, a * sin + b * cos], -1)
+
+    def run(keep=None, mode="all", mass=None):
+        h = model.emb(x)
+        B = len(x)
+        causal = torch.ones(T, T, dtype=torch.bool).tril()
+        for li, blk in enumerate(model.blocks):
+            q, k, v = blk.qkv(blk.n1(h)).view(B, T, 3, c11.HEADS, c11.DH).permute(2, 0, 3, 1, 4)
+            q, k = rot(q), rot(k)
+            s = (q @ k.transpose(-1, -2)) / math.sqrt(c11.DH)
+            s = s.masked_fill(~causal, float("-inf"))
+            if mode == "topk":
+                kth = torch.topk(s, min(keep, T), -1).values[..., -1:]
+                s = s.masked_fill(s < kth, float("-inf"))
+            elif mode == "window":
+                win = causal & ~torch.ones(T, T, dtype=torch.bool).tril(-keep)
+                s = s.masked_fill(~win, float("-inf"))
+            p = torch.softmax(s, -1)
+            if mass is not None:
+                srt = torch.sort(p[:, :, 128:], -1, descending=True).values.cumsum(-1)
+                mass[li] = np.stack([srt[..., k_ - 1].mean((0, 2)).numpy() for k_ in ks], -1)  # head, k
+            a = (p @ v).transpose(1, 2).reshape(B, T, -1)
+            h = h + blk.o(a)
+            h = h + blk.f2(F.gelu(blk.f1(blk.n2(h))))
+        z = model.out(model.nf(h))
+        ce = F.cross_entropy(z[:, 128:].reshape(-1, z.shape[-1]), y[:, 128:].reshape(-1))
+        return float(ce) / math.log(2)
+
+    with torch.no_grad():
+        mass = {}
+        full = run(mass=mass)
+        out = dict(ks=ks, full=full, mass=np.stack([mass[i] for i in range(c11.LAYERS)]))
+        kk = [4, 8, 16, 32, 64]
+        out["kk"] = kk
+        out["bits_topk"] = [run(k_, "topk") for k_ in kk]
+        out["bits_window"] = [run(k_, "window") for k_ in kk]
+    print("    full {:.3f}; top-k {}; window {}".format(full, np.round(out["bits_topk"], 3), np.round(out["bits_window"], 3)))
+    assert out["bits_topk"][-1] - full < 0.05  # 64 keys chosen by score: almost nothing lost
+    assert out["bits_topk"][1] < out["bits_window"][1]  # chosen by score beats the most recent, at k = 8
+    return out
+
+
+# ---------------------------------------------------------------------------
+NROW, KEEP, BLOCK = 48, 8, 8
+
+
+def compute_row():
+    import torch
+    import torch.nn.functional as F
+
+    from videos.ai.ai13 import compute as c11
+
+    torch.set_num_threads(2)
+    c11.load("tf")
+    model, chars, enc, data = c11.load_tf()
+    va = data["valid"]
+    T = c11.CTX
+    starts = rng(13).integers(0, len(va) - T - 1, 48)
+    x = torch.stack([va[s:s + T] for s in starts])
+    th = torch.tensor(c11.rope_freqs(), dtype=torch.float32)
+    ang = torch.arange(T, dtype=torch.float32)[:, None] * th[None]
+    cos, sin = torch.cos(ang), torch.sin(ang)
+
+    def rot(t):
+        a, b = t[..., : c11.DH // 2], t[..., c11.DH // 2:]
+        return torch.cat([a * cos - b * sin, a * sin + b * cos], -1)
+
+    rows = []  # layer, batch, head: the last query's weights over all T keys
+    with torch.no_grad():
+        h = model.emb(x)
+        B = len(x)
+        causal = torch.ones(T, T, dtype=torch.bool).tril()
+        for blk in model.blocks:
+            q, k, v = blk.qkv(blk.n1(h)).view(B, T, 3, c11.HEADS, c11.DH).permute(2, 0, 3, 1, 4)
+            q, k = rot(q), rot(k)
+            s = ((q @ k.transpose(-1, -2)) / math.sqrt(c11.DH)).masked_fill(~causal, float("-inf"))
+            p = torch.softmax(s, -1)
+            rows.append(p[:, :, -1].numpy())
+            h = h + blk.o((p @ v).transpose(1, 2).reshape(B, T, -1))
+            h = h + blk.f2(F.gelu(blk.f1(blk.n2(h))))
+    best = None
+    for li, P in enumerate(rows):
+        for b in range(P.shape[0]):
+            for hh in range(P.shape[1]):
+                r = P[b, hh]
+                strip = r[-NROW:]
+                if strip.sum() < 0.85:  # the picture shows only the last 48 keys: they must hold nearly all of it
+                    continue
+                top, win = np.sort(strip)[-KEEP:].sum(), strip[-KEEP:].sum()
+                if strip.max() > 0.4 or top < 0.6:  # spread over several keys, most of it in a few
+                    continue
+                far = int((np.argsort(-strip)[:KEEP] < NROW - KEEP).sum())
+                score = top - win + 0.02 * far
+                if best is None or score > best[0]:
+                    best = (score, li, b, hh)
+    _, li, b, hh = best
+    r = rows[li][b, hh].astype(float)
+    strip = r[-NROW:]
+    text = "".join(chars[i] for i in x[b, -NROW:].tolist())  # the last 48 keys; the last one is the query's own character
+    top = np.argsort(-strip)[:KEEP]
+    blocks = strip.reshape(-1, BLOCK).sum(1)
+    chosen = np.argsort(-blocks)[:2]
+    nsa = np.zeros(NROW, bool)
+    for c in chosen:
+        nsa[c * BLOCK:(c + 1) * BLOCK] = True
+    nsa[-KEEP:] = True
+    out = dict(layer=li, head=hh, text=text, weights=strip, strip_mass=float(strip.sum()),
+               window=float(strip[-KEEP:].sum()), topk=float(strip[top].sum()), top=np.sort(top),
+               blocks=blocks, chosen=np.sort(chosen), nsa=float(strip[nsa].sum()), nsa_keys=int(nsa.sum()))
+    print("    layer {} head {}: strip {:.2f}; window {:.2f}, NSA {:.2f} ({} keys), top-{} {:.2f}; {!r}".format(
+        li + 1, hh + 1, out["strip_mass"], out["window"], out["nsa"], out["nsa_keys"], KEEP, out["topk"], text))
+    assert out["topk"] > out["window"]
     return out
 
 
 ITEMS = {
-    "bpe": compute_bpe,
-    "vq": compute_vq,
-    "sound": compute_sound,
-    "clip": compute_clip,
+    "configs": compute_configs,
+    "moe": compute_moe,
+    "topk": compute_topk,
+    "row": compute_row,
 }
 CACHE.items = ITEMS
 

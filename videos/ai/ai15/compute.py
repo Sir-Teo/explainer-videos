@@ -1,32 +1,34 @@
-"""Precompute everything numerical in Part 15 of the AI series ("Images and Video").
+"""Precompute everything numerical in Part 15 of the AI series ("Memory").
 
     python -m videos.ai.ai15.compute              # everything missing
-    python -m videos.ai.ai15.compute --force dit
+    python -m videos.ai.ai15.compute --force mqar
 
 Results are cached in ``.cache/ai15/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.
 
-The pictures are Part 14's: 20 x 20 capital letters drawn from the system's fonts. Every model is trained here.
-
 Items:
-    vit        a small vision transformer reading 4 x 4 patches (25 tokens and a summary token) to name the letter:
-               accuracy on fonts it never saw, where the summary token looks, and how its learned position vectors
-               resemble each other (they rediscover the 2D grid)
-    latent     an autoencoder squeezing each picture into 16 numbers and back; flow matching in those 16 numbers, decoded
-    dit        a diffusion transformer: the same patches as tokens, the noise level and the letter fed in by adaptive
-               layer norm, trained by flow matching; the whole alphabet drawn on request, with guidance
-    scales     next-scale prediction's view of a picture: the same letter at 1, 2, 4, 5, 10 and 20 pixels a side, and
-               what each scale adds to the one before
-    video      the token arithmetic of a video model with a typical compression (8x in space, 4x in time, 2 x 2
-               patches): tokens for clips of different lengths and sizes
-    vae        (deep.py) an autoencoder against variational ones with a growing KL weight: rebuild error, KL, and the
-               quality of flow-matching samples in each latent space (scored by a judge classifier); uniform against
-               logit-normal noise levels in training, sampled with 1 to 40 steps
-    var        (deep.py) next-scale prediction's tokens: residuals at 1, 2, 4, 5, 10 and 20 pixels a side, each
-               quantized to 16 levels; rebuild error after each scale
-    vae3d      (deep.py) a causal video autoencoder on clips of a bouncing letter: 9 frames into 3 latent frames
-    clips      (deep.py) image-to-video: given a real first frame, a clip model draws the rest together, against frames
-               drawn independently; frame-by-frame models trained with teacher forcing or diffusion forcing, rolled
-               out 4x longer than trained from a real first frame
+    kvcache    the memory a model keeps per token of context, from published configurations: Llama 3.1 70B (grouped
+               queries), the same with one key and value per query head, DeepSeek-V3 (multi-head latent attention, and
+               its full-attention equivalent), Qwen3-Next-80B-A3B (one attention layer in four; the rest Gated
+               DeltaNet, with a fixed-size state); the totals at contexts from 1,000 to a million tokens
+    linear     causal linear attention computed two ways, as a masked matrix product and as a recurrence on a d x d
+               state, agreeing to rounding error; the operation counts of softmax attention and of the recurrence
+    capacity   a d x d matrix as an associative memory (d = 64), written by the additive rule (linear attention), the
+               decaying rule (Mamba-2, RetNet) and the delta rule (DeltaNet): N random key-value pairs read back with
+               their keys, as N grows and by age; and a changing world, 16 keys rewritten 256 times, read for their
+               latest values
+    ssm        a diagonal state-space model's memory: impulse responses for several step sizes, and a selective one
+               (step size set by the input) holding a marked value through a stretch of noise
+    mla        multi-head latent attention's folding trick, checked with random weights: without positions, the score
+               computed from unpacked keys and from the latent with the key matrix folded into the query agree; with
+               rotary positions applied to the unpacked keys they don't; with DeepSeek's decoupled rotary key (a small
+               shared key that carries the positions, cached next to the latent) they agree again
+    delta      the delta rule up close: the update as a rank-one change of a linear map (a 2 x 2 example, with beta
+               1/2, 1 and 2); the gated delta rule run step by step and chunk by chunk (the WY form of a product of
+               (I - beta k k^T), one triangular solve per chunk), agreeing to rounding error; the decaying rule as
+               masked attention, (L o QK^T)V, with its semiseparable mask (Mamba-2's state-space duality)
+    mqar       multi-query associative recall (Arora et al., Zoology): tiny one-layer models with softmax attention,
+               linear attention and the delta rule (keys of 16 numbers), trained to answer "what value went with this
+               key?" after N pairs; accuracy as N grows past the key size
 """
 
 from __future__ import annotations
@@ -39,342 +41,395 @@ from explainer.ai.cache import Cache
 
 CACHE = Cache("ai15")
 load = CACHE.load
-P, GL = 4, 20  # patch size, picture size
-NP = (GL // P) ** 2
 
 
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
-def dataset():
-    """Part 14's letter pictures, split by font: the last fonts are kept for testing."""
-    from videos.ai.ai14.compute import glyph_images
-
-    imgs, labels, _ = glyph_images()
-    per_font = 26 * 3
-    n_fonts = len(imgs) // per_font  # the fonts that actually loaded
-    font = np.arange(len(imgs)) // per_font
-    test = font >= n_fonts - 4
-    return imgs, labels, test, n_fonts
+# ---------------------------------------------------------------------------
+# published configurations (Hugging Face config.json of each model; bf16, 2 bytes a number)
+CONFIGS = {
+    "llama70": dict(name="Llama 3.1 70B", layers=80, q_heads=64, kv_heads=8, head_dim=128),
+    "deepseek": dict(name="DeepSeek-V3", layers=61, q_heads=128, kv_lora_rank=512, rope_dim=64, nope_dim=128, v_dim=128),
+    "qwen3next": dict(name="Qwen3-Next-80B-A3B", layers=48, attn_every=4, q_heads=16, kv_heads=2, head_dim=256,
+                      lin_v_heads=32, lin_k_heads=16, lin_k_dim=128, lin_v_dim=128),
+}
 
 
-def patches(x):
-    """(B, 20, 20) -> (B, 25, 16): the picture cut into 4 x 4 patches, row by row."""
-    B = x.shape[0]
-    return x.reshape(B, GL // P, P, GL // P, P).transpose(0, 1, 3, 2, 4).reshape(B, NP, P * P) if isinstance(x, np.ndarray) \
-        else x.reshape(B, GL // P, P, GL // P, P).permute(0, 1, 3, 2, 4).reshape(B, NP, P * P)
-
-
-def unpatch(t):
-    B = t.shape[0]
-    return t.reshape(B, GL // P, GL // P, P, P).permute(0, 1, 3, 2, 4).reshape(B, GL, GL)
+def compute_kvcache():
+    B = 2  # bytes per number
+    L = CONFIGS["llama70"]
+    llama = 2 * L["layers"] * L["kv_heads"] * L["head_dim"] * B
+    llama_mha = 2 * L["layers"] * L["q_heads"] * L["head_dim"] * B
+    D = CONFIGS["deepseek"]
+    mla = D["layers"] * (D["kv_lora_rank"] + D["rope_dim"]) * B
+    mla_full = D["layers"] * D["q_heads"] * ((D["nope_dim"] + D["rope_dim"]) + D["v_dim"]) * B
+    Q = CONFIGS["qwen3next"]
+    n_attn = Q["layers"] // Q["attn_every"]
+    qwen_tok = 2 * n_attn * Q["kv_heads"] * Q["head_dim"] * B
+    qwen_state = (Q["layers"] - n_attn) * Q["lin_v_heads"] * Q["lin_k_dim"] * Q["lin_v_dim"] * B  # fixed, any length
+    ctx = np.array([1e3, 4e3, 16e3, 64e3, 128e3, 256e3, 1e6])
+    out = dict(per_token=dict(llama=llama, llama_mha=llama_mha, mla=mla, mla_full=mla_full, qwen=qwen_tok),
+               qwen_state=qwen_state, n_attn=n_attn, ctx=ctx, configs=CONFIGS)
+    for k, v in out["per_token"].items():
+        out[f"total_{k}"] = ctx * v + (qwen_state if k == "qwen" else 0)
+    assert llama == 327_680 and mla == 70_272  # 320 KiB and about 69 KiB a token
+    assert mla_full / mla > 50
+    return out
 
 
 # ---------------------------------------------------------------------------
-def compute_vit():
+def compute_linear():
+    g = rng(2020)  # Katharopoulos et al., Transformers are RNNs
+    T, d = 200, 16
+    q, k, v = (g.normal(size=(T, d)) for _ in range(3))
+
+    def phi(x):  # elu + 1: positive features
+        return np.where(x > 0, x + 1, np.exp(x))
+
+    fq, fk = phi(q), phi(k)
+    A = np.tril(fq @ fk.T)
+    par = (A @ v) / A.sum(1, keepdims=True)
+    S, z = np.zeros((d, d)), np.zeros(d)
+    rec = np.zeros((T, d))
+    for t in range(T):
+        S += np.outer(fk[t], v[t])
+        z += fk[t]
+        rec[t] = (fq[t] @ S) / (fq[t] @ z)
+    dev = float(np.abs(par - rec).max())
+    assert dev < 1e-10
+    Ts = np.array([1e3, 4e3, 16e3, 64e3, 256e3, 1e6])
+    dm = 128
+    return dict(dev=dev, T=T, d=d, Ts=Ts, softmax_ops=2 * Ts * Ts / 2 * dm, linear_ops=2 * Ts * dm * dm,
+                state=dm * dm)
+
+
+# ---------------------------------------------------------------------------
+def compute_capacity():
+    g = rng(1960)  # Widrow & Hoff, 1960: the delta rule
+    d, trials = 64, 40
+
+    def write(S, k, v, rule, alpha=0.97):
+        if rule == "add":
+            return S + np.outer(v, k)
+        if rule == "decay":
+            return alpha * S + np.outer(v, k)
+        return S + np.outer(v - S @ k, k)  # delta: replace what the key reads now with the new value
+
+    def unit(n):
+        K = g.normal(size=(n, d))
+        return K / np.linalg.norm(K, axis=1, keepdims=True)
+
+    # 1. N different keys, each written once, then all read back
+    Ns = [4, 8, 16, 24, 32, 48, 64, 96, 128, 192, 256]
+
+    def once(N, rule):
+        errs = np.zeros(N)
+        for _ in range(trials):
+            K, Vv = unit(N), g.normal(size=(N, d)) / math.sqrt(d)
+            S = np.zeros((d, d))
+            for i in range(N):
+                S = write(S, K[i], Vv[i], rule)
+            errs += np.linalg.norm(K @ S.T - Vv, axis=1) ** 2 / np.linalg.norm(Vv, axis=1) ** 2
+        return errs / trials  # relative squared error per pair, oldest first
+
+    out = dict(d=d, Ns=Ns)
+    for rule in ("add", "decay", "delta"):
+        out[f"err_{rule}"] = np.array([once(N, rule).mean() for N in Ns])
+        out[f"age_{rule}"] = once(128, rule)[::-1]  # by age: newest first
+    # 2. a changing world: 16 keys, 256 writes, each a new value for a random one of them; read the latest values
+    M, W = 16, 256
+    upd = {r: [] for r in ("add", "decay", "delta")}
+    for _ in range(trials):
+        K = unit(M)
+        latest = np.zeros((M, d))
+        seq = g.integers(0, M, W)
+        vals = g.normal(size=(W, d)) / math.sqrt(d)
+        Ss = {r: np.zeros((d, d)) for r in upd}
+        for t, j in enumerate(seq):
+            latest[j] = vals[t]
+            for r in upd:
+                Ss[r] = write(Ss[r], K[j], vals[t], r)
+        seen = np.isin(np.arange(M), seq)
+        for r in upd:
+            R = K @ Ss[r].T
+            upd[r].append(float((np.linalg.norm(R - latest, axis=1) ** 2 / np.linalg.norm(latest, axis=1).clip(1e-9) ** 2)[seen].mean()))
+    out.update(M=M, W=W, **{f"update_{r}": float(np.mean(v)) for r, v in upd.items()})
+    a = out["err_add"]
+    assert abs(a[Ns.index(64)] - 63 / 64) < 0.2  # adding: the crosstalk grows like (N - 1) / d
+    assert out["update_delta"] < 0.1 * out["update_add"] and out["update_delta"] < out["update_decay"]
+    return out
+
+
+# ---------------------------------------------------------------------------
+def compute_ssm():
+    t = np.arange(0, 120)
+    deltas = [0.02, 0.08, 0.3]
+    lam = 1.0
+    imp = {f"{dt:g}": np.exp(-lam * dt * t) for dt in deltas}
+    # a selective SSM, one channel: h_t = exp(-dt_t) h_{t-1} + (1 - exp(-dt_t)) u_t, dt_t large on marked inputs
+    g = rng(2023)  # Gu & Dao, Mamba
+    T = 120
+    u = g.normal(size=T) * 0.6
+    mark = np.zeros(T, bool)
+    mark[[15, 70]] = True
+    u[15], u[70] = 2.2, -1.8
+    out = {}
+    for name, dt in (("fixed", np.full(T, 0.08)), ("selective", np.where(mark, 6.0, 0.0005))):
+        h, hs = 0.0, []
+        for i in range(T):
+            a = math.exp(-dt[i])
+            h = a * h + (1 - a) * u[i]
+            hs.append(h)
+        out[name] = np.array(hs)
+    assert abs(out["selective"][69] - u[15]) < 0.15 and abs(out["selective"][-1] - u[70]) < 0.15
+    assert abs(out["fixed"][69]) < 0.5 * abs(u[15])  # a fixed step size has let it fade into the noise
+    return dict(t=t, deltas=deltas, u=u, mark=np.where(mark)[0], **{f"imp{k}": v for k, v in imp.items()}, **out)
+
+
+# ---------------------------------------------------------------------------
+def compute_mqar():
     import torch
     import torch.nn as nn
     import torch.nn.functional as F
 
     torch.set_num_threads(2)
-    torch.manual_seed(2020)  # Dosovitskiy et al., An Image Is Worth 16x16 Words
-    imgs, labels, test, n_fonts = dataset()
-    X = torch.tensor(imgs, dtype=torch.float32)
-    Y = torch.tensor(labels)
-    D, H, L = 64, 4, 3
+    NK, NV, D = 64, 64, 64
+    DK = 16  # the memory's key size: lists longer than this overflow a fixed state
+    VOC = NK + NV
 
-    class ViT(nn.Module):
-        def __init__(self):
+    def batch(g, n, N):
+        keys = np.stack([g.permutation(NK)[:N] for _ in range(n)])
+        vals = g.integers(0, NV, (n, N)) + NK
+        order = np.stack([g.permutation(N) for _ in range(n)])
+        pairs = np.stack([keys, vals], 2).reshape(n, 2 * N)
+        qk = np.take_along_axis(keys, order, 1)
+        ans = np.take_along_axis(vals, order, 1)
+        x = np.concatenate([pairs, qk], 1)
+        y = np.full(x.shape, -100)
+        y[:, 2 * N:] = ans
+        return torch.tensor(x), torch.tensor(y)
+
+    class Model(nn.Module):
+        def __init__(self, mixer):
             super().__init__()
-            self.embed = nn.Linear(P * P, D)
-            self.cls = nn.Parameter(torch.zeros(1, 1, D))
-            self.pos = nn.Parameter(torch.zeros(1, NP + 1, D))  # from zero, so what we see later is all learned
-            self.layers = nn.ModuleList([nn.TransformerEncoderLayer(D, H, 4 * D, dropout=0.0, batch_first=True, norm_first=True)
-                                         for _ in range(L)])
-            self.head = nn.Linear(D, 26)
+            self.mixer = mixer
+            self.emb = nn.Embedding(VOC, D)
+            self.conv = nn.Parameter(torch.randn(2, D) * 0.3)  # a short convolution: each token sees the one before
+            self.qkv = nn.Linear(D, 2 * DK + D, bias=False)
+            self.beta = nn.Linear(D, 1)
+            self.o = nn.Linear(D, D, bias=False)
+            self.n = nn.LayerNorm(D)
+            self.out = nn.Linear(D, VOC)
 
-        def forward(self, x, keep=False):
-            h = torch.cat([self.cls.expand(len(x), -1, -1), self.embed(patches(x))], 1) + self.pos
-            maps = []
-            for lyr in self.layers:
-                if keep:
-                    a = lyr.norm1(h)
-                    _, w = lyr.self_attn(a, a, a, need_weights=True, average_attn_weights=True)
-                    maps.append(w)
-                h = lyr(h)
-            return (self.head(h[:, 0]), maps) if keep else self.head(h[:, 0])
+        def forward(self, x):
+            e = self.emb(x)
+            h = e * self.conv[0] + F.pad(e, (0, 0, 1, 0))[:, :-1] * self.conv[1]
+            q, k, v = self.qkv(h).split([DK, DK, D], -1)
+            T = x.shape[1]
+            if self.mixer == "softmax":
+                a = F.scaled_dot_product_attention(q[:, None], k[:, None], v[:, None], is_causal=True)[:, 0]
+            elif self.mixer == "linear":
+                fq, fk = F.elu(q) + 1, F.elu(k) + 1
+                A = (fq @ fk.transpose(1, 2)).tril()
+                a = (A @ v) / (A.sum(-1, keepdim=True) + 1e-6)
+            else:  # delta rule
+                q, k = F.normalize(q, dim=-1), F.normalize(k, dim=-1)
+                b = torch.sigmoid(self.beta(h))
+                S = torch.zeros(x.shape[0], D, DK)
+                outs = []
+                for t in range(T):
+                    kt, vt = k[:, t], v[:, t]
+                    pred = torch.einsum("bij,bj->bi", S, kt)
+                    S = S + b[:, t, :, None] * torch.einsum("bi,bj->bij", vt - pred, kt)
+                    outs.append(torch.einsum("bij,bj->bi", S, q[:, t]))
+                a = torch.stack(outs, 1)
+            return self.out(self.n(h + self.o(a)))
 
-    m = ViT()
-    opt = torch.optim.AdamW(m.parameters(), lr=2e-3, weight_decay=0.05)
-    tr_idx = torch.tensor(np.where(~test)[0])
-    te_idx = torch.tensor(np.where(test)[0])
-    g = torch.Generator().manual_seed(0)
-    steps = 4000
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=2e-3, total_steps=steps, pct_start=0.1)
-    for step in range(steps):
-        i = tr_idx[torch.randint(0, len(tr_idx), (128,), generator=g)]
-        x = X[i] + 0.05 * torch.randn(len(i), GL, GL, generator=g)
-        sh = torch.randint(-2, 3, (2,), generator=g)  # nudge the letters about: where a stroke is now matters
-        x = torch.roll(x, shifts=(int(sh[0]), int(sh[1])), dims=(1, 2))
-        loss = F.cross_entropy(m(x), Y[i])
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-        sched.step()
-    m.eval()
-    with torch.no_grad():
-        acc = float((m(X[te_idx]).argmax(1) == Y[te_idx]).float().mean())
-        ex = te_idx[[0, 3 * 4, 3 * 8, 3 * 16]]  # A, E, I, Q from an unseen font
-        _, maps = m(X[ex], keep=True)
-        cls_att = maps[-1][:, 0, 1:].reshape(-1, GL // P, GL // P).numpy()
-        pe = m.pos[0, 1:].numpy()
-    pe = pe - pe.mean(0)  # what sets each position apart from the rest
-    pe = pe / np.linalg.norm(pe, axis=1, keepdims=True)
-    sim = pe @ pe.T  # each position's similarity to every other: (25, 25)
-    # neighbours in the grid should be more alike than far-apart positions
-    r, c = np.divmod(np.arange(NP), GL // P)
-    dist = np.abs(r[:, None] - r[None]) + np.abs(c[:, None] - c[None])
-    near, far = sim[dist == 1].mean(), sim[dist >= 4].mean()
-    out = dict(acc=acc, n_test_fonts=4, n_fonts=n_fonts, cls_att=cls_att, ex_imgs=imgs[ex.numpy()], ex_labels=labels[ex.numpy()],
-               pos_sim=sim, near=float(near), far=float(far), n_params=int(sum(p.numel() for p in m.parameters())))
-    print(f"    accuracy on unseen fonts {acc:.1%}; position similarity: neighbours {near:.2f}, far {far:.2f}", flush=True)
-    assert acc > 0.7  # the scene says whether the position vectors learned the grid (near vs far)
+    Ns = [8, 16, 32, 48]
+    out = dict(Ns=Ns, d=DK)
+    for mixer in ("softmax", "linear", "delta"):
+        accs = []
+        for N in Ns:
+            torch.manual_seed(2023)  # Arora et al., Zoology
+            m = Model(mixer)
+            opt = torch.optim.AdamW(m.parameters(), lr=3e-3, weight_decay=0.01)
+            g = rng(N)
+            steps = 1500
+            sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps, pct_start=0.1)
+            xe, ye = batch(rng(20_000 + N), 128, N)
+            curve = []
+            for step in range(steps + 1):
+                if step % 100 == 0:  # how it learns: recall on a fixed batch, along the way
+                    with torch.no_grad():
+                        pe, mk = m(xe).argmax(-1), ye >= 0
+                        curve.append((step, float((pe[mk] == ye[mk]).float().mean())))
+                if step == steps:
+                    break
+                x, y = batch(g, 64, N)
+                loss = F.cross_entropy(m(x).reshape(-1, VOC), y.reshape(-1), ignore_index=-100)
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+                sched.step()
+            with torch.no_grad():
+                x, y = batch(rng(10_000 + N), 512, N)
+                p = m(x).argmax(-1)
+                mk = y >= 0
+                accs.append(float((p[mk] == y[mk]).float().mean()))
+            print(f"    {mixer} N={N}: recall {accs[-1]:.1%}", flush=True)
+            out[f"curve_{mixer}_{N}"] = np.array(curve)
+        out[mixer] = np.array(accs)
+    assert out["softmax"].min() > 0.9
+    assert out["linear"][-1] < 0.9  # the adding memory overflows
     return out
 
 
 # ---------------------------------------------------------------------------
-def compute_latent():
-    import torch
-    import torch.nn as nn
+def compute_mla():
+    g = rng(2024)  # DeepSeek-V2 (2024)
+    d, dc, dh, dr, n = 64, 16, 8, 4, 12  # model width, latent, head size, rotary size, tokens
 
-    from videos.ai.ai14.compute import mlp
+    def rope(x, pos, dim):
+        th = 10000.0 ** (-np.arange(dim // 2) * 2 / dim)
+        a = pos * th
+        x1, x2 = x[: dim // 2], x[dim // 2:]
+        return np.concatenate([x1 * np.cos(a) - x2 * np.sin(a), x1 * np.sin(a) + x2 * np.cos(a)])
 
-    torch.set_num_threads(2)
-    torch.manual_seed(2022)  # Rombach et al., latent diffusion
-    imgs, labels, test, _ = dataset()
-    X = torch.tensor(imgs.reshape(len(imgs), -1), dtype=torch.float32)
-    Z = 16
-    enc = nn.Sequential(nn.Linear(GL * GL, 256), nn.SiLU(), nn.Linear(256, 128), nn.SiLU(), nn.Linear(128, Z))
-    dec = nn.Sequential(nn.Linear(Z, 128), nn.SiLU(), nn.Linear(128, 256), nn.SiLU(), nn.Linear(256, GL * GL))
-    opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=2e-3)
-    g = torch.Generator().manual_seed(0)
-    for step in range(6000):
-        x = X[torch.randint(0, len(X), (256,), generator=g)]
-        z = enc(x)
-        loss = ((torch.sigmoid(dec(z)) - x) ** 2).mean() + 1e-4 * (z ** 2).mean()
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    with torch.no_grad():
-        Zs = enc(X)
-        mu, sd = Zs.mean(0), Zs.std(0)
-        Zn = (Zs - mu) / sd
-        rec = torch.sigmoid(dec(Zs)).numpy().reshape(-1, GL, GL)
-        rec_err = float(np.sqrt(((rec - imgs) ** 2).mean()))
-    # flow matching in the 16 numbers
-    net = mlp(Z, Z, width=256)
-    opt = torch.optim.Adam(net.parameters(), lr=2e-3)
-    for step in range(6000):
-        z1 = Zn[torch.randint(0, len(Zn), (512,), generator=g)]
-        z0 = torch.randn(512, Z, generator=g)
-        t = torch.rand(512, generator=g)
-        zt = (1 - t[:, None]) * z0 + t[:, None] * z1
-        loss = ((net(zt, t) - (z1 - z0)) ** 2).mean()
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-    with torch.no_grad():
-        z = torch.tensor(rng(5).normal(size=(32, Z)), dtype=torch.float32)
-        for k in range(40):
-            z = z + net(z, torch.full((32,), k / 40)) / 40
-        samples = torch.sigmoid(dec(z * sd + mu)).numpy().reshape(-1, GL, GL)
-    u, s_, vt = np.linalg.svd(Zn.numpy() - Zn.numpy().mean(0), full_matrices=False)
-    xy = (Zn.numpy() @ vt[:2].T)[::5]
-    # neighbours in the 16 numbers: for every picture, its 6 nearest others; how often they are the same letter
-    Zq = Zn.numpy()
-    d2 = (Zq ** 2).sum(1)[:, None] + (Zq ** 2).sum(1)[None] - 2 * Zq @ Zq.T
-    np.fill_diagonal(d2, np.inf)
-    nn6 = np.argsort(d2, 1)[:, :6]
-    same = float((labels[nn6] == labels[:, None]).mean())
-    chance = float(np.mean([(labels == l_).sum() - 1 for l_ in labels]) / (len(labels) - 1))
-    queries = [int(np.where(labels == L_)[0][len(np.where(labels == L_)[0]) // 2]) for L_ in (0, 6, 14, 18)]  # A G O S
-    out = dict(Z=Z, ratio=GL * GL / Z, rec=rec[::97][:12], orig=imgs[::97][:12], rec_err=rec_err, samples=samples,
-               xy=xy, xy_labels=labels[::5], nn_same=same, nn_chance=chance, nn_query=imgs[queries],
-               nn_imgs=imgs[nn6[queries]], nn_labels=labels[nn6[queries]], nn_qlabels=labels[queries])
-    print(f"    nearest 6 in the 16 numbers: same letter {same:.0%} (chance {chance:.0%})", flush=True)
-    print(f"    {GL * GL} -> {Z} numbers; reconstruction error {rec_err:.3f}", flush=True)
-    assert rec_err < 0.2 and samples.std() > 0.2
+    H = g.normal(size=(n, d))
+    W_dkv, W_uk, W_q = g.normal(size=(dc, d)) / 8, g.normal(size=(dh, dc)) / 4, g.normal(size=(dh, d)) / 8
+    C = H @ W_dkv.T  # the cached latents
+    m = n - 1  # the query's position
+    q = W_q @ H[m]
+    W_fold = W_uk.T @ q  # the key matrix folded into the query, once
+    out = {}
+    # 1. no positions: score = q . (W_uk c) = (W_uk^T q) . c
+    explicit = np.array([q @ (W_uk @ C[j]) for j in range(n)])
+    folded = C @ W_fold
+    out["diff_plain"] = float(np.abs(explicit - folded).max())
+    # 2. rotary positions on the unpacked keys and the query: R_m q . R_j W_uk c = q . R_{j-m} W_uk c; the rotation sits
+    #    between the query and W_uk, different for every pair, so no single folded matrix exists
+    explicit_r = np.array([rope(q, m, dh) @ rope(W_uk @ C[j], j, dh) for j in range(n)])
+    out["diff_rope_folded"] = float(np.abs(explicit_r - folded).max())  # what the folded shortcut would give: wrong
+    out["rel_rope_folded"] = out["diff_rope_folded"] / float(np.abs(explicit_r).max())
+    # 3. decoupled: content part without positions (folded) + a small shared rotary key computed from the token
+    W_kr, W_qr = g.normal(size=(dr, d)) / 8, g.normal(size=(dr, d)) / 8
+    Kr = np.array([rope(W_kr @ H[j], j, dr) for j in range(n)])  # cached next to the latent: dc + dr numbers a token
+    qr = rope(W_qr @ H[m], m, dr)
+    explicit_d = np.array([q @ (W_uk @ C[j]) + qr @ Kr[j] for j in range(n)])
+    folded_d = C @ W_fold + Kr @ qr
+    out["diff_decoupled"] = float(np.abs(explicit_d - folded_d).max())
+    print(f"    no positions: {out['diff_plain']:.1e}; rotary on unpacked keys, folded anyway: off by "
+          f"{100 * out['rel_rope_folded']:.0f}%; decoupled rotary key: {out['diff_decoupled']:.1e}", flush=True)
+    assert out["diff_plain"] < 1e-12 and out["diff_decoupled"] < 1e-12 and out["rel_rope_folded"] > 0.05
     return out
 
 
 # ---------------------------------------------------------------------------
-def compute_dit():
-    import torch
-    import torch.nn as nn
-    import torch.nn.functional as F
+def compute_delta():
+    import time
 
-    torch.set_num_threads(3)
-    torch.manual_seed(2023)  # Peebles & Xie, Scalable Diffusion Models with Transformers
-    imgs, labels, test, _ = dataset()
-    X = torch.tensor(imgs * 2 - 1, dtype=torch.float32)
-    Y = torch.tensor(labels)
-    D, H, L = 128, 4, 4
+    from scipy.linalg import solve_triangular
 
-    class Block(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.n1 = nn.LayerNorm(D, elementwise_affine=False)
-            self.n2 = nn.LayerNorm(D, elementwise_affine=False)
-            self.att = nn.MultiheadAttention(D, H, batch_first=True)
-            self.mlp = nn.Sequential(nn.Linear(D, 4 * D), nn.GELU(), nn.Linear(4 * D, D))
-            self.ada = nn.Linear(D, 6 * D)  # adaptive layer norm: shift, scale and gate, from the condition
-            nn.init.zeros_(self.ada.weight)
-            nn.init.zeros_(self.ada.bias)
+    g = rng(2024)  # Yang et al., Parallelizing Linear Transformers with the Delta Rule over Sequence Length (2024)
+    # 1. the update on a 2 x 2 memory: S <- S (I - beta k k^T) + beta v k^T moves S's answer for k towards v, and
+    #    leaves its answer for every direction at right angles to k alone
+    S0 = np.array([[0.9, 0.3], [-0.2, 0.7]])
+    th = np.deg2rad(30.0)
+    k2 = np.array([np.cos(th), np.sin(th)])
+    v2 = np.array([-0.3, 0.8])
+    geo = {}
+    for b in (0.5, 1.0, 2.0):
+        S1 = S0 @ (np.eye(2) - b * np.outer(k2, k2)) + b * np.outer(v2, k2)
+        geo[f"S{b:g}"] = S1
+        perp = np.array([-k2[1], k2[0]])
+        assert np.allclose(S1 @ perp, S0 @ perp)  # nothing changes at right angles to the key
+        assert np.allclose(S1 @ k2, (1 - b) * S0 @ k2 + b * v2)
+    # 2. the gated delta rule, step by step and chunk by chunk
+    T, d, Cn = 2048, 64, 64
 
-        def forward(self, h, c):
-            s1, b1, g1, s2, b2, g2 = self.ada(c)[:, None].chunk(6, -1)
-            a = self.n1(h) * (1 + s1) + b1
-            h = h + g1 * self.att(a, a, a, need_weights=False)[0]
-            return h + g2 * self.mlp(self.n2(h) * (1 + s2) + b2)
+    def unit(x):
+        return x / np.linalg.norm(x, axis=1, keepdims=True)
 
-    class DiT(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.embed = nn.Linear(P * P, D)
-            self.pos = nn.Parameter(torch.randn(1, NP, D) * 0.02)
-            self.freq = nn.Parameter(torch.randn(D // 2) * 4.0, requires_grad=False)
-            self.tmlp = nn.Sequential(nn.Linear(D, D), nn.SiLU(), nn.Linear(D, D))
-            self.lab = nn.Embedding(27, D)  # 26 letters, and "no letter"
-            self.blocks = nn.ModuleList([Block() for _ in range(L)])
-            self.nf = nn.LayerNorm(D, elementwise_affine=False)
-            self.out = nn.Linear(D, P * P)
+    Kx, Qx, Vx = unit(g.normal(size=(T, d))), unit(g.normal(size=(T, d))), g.normal(size=(T, d))
+    beta = 1 / (1 + np.exp(-g.normal(size=T)))
+    alpha = np.exp(-np.exp(g.normal(-3.0, 1.0, size=T)))  # decays near one, as a gate would learn
 
-        def forward(self, x, t, y):
-            a = t[:, None] * self.freq[None] * 2 * math.pi
-            c = self.tmlp(torch.cat([torch.sin(a), torch.cos(a)], 1)) + self.lab(y)
-            h = self.embed(patches(x)) + self.pos
-            for b in self.blocks:
-                h = b(h, c)
-            return unpatch(self.out(self.nf(h)))
+    def recurrent(gated):
+        S = np.zeros((d, d))  # S @ k is the memory's answer for key k
+        O = np.empty((T, d))
+        for t in range(T):
+            a = alpha[t] if gated else 1.0
+            S = a * S
+            S = S - beta[t] * np.outer(S @ Kx[t] - Vx[t], Kx[t])
+            O[t] = S @ Qx[t]
+        return O, S
 
-    m = DiT()
-    opt = torch.optim.AdamW(m.parameters(), lr=1e-3, weight_decay=0.0)
-    steps = 6000
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=1e-3, total_steps=steps, pct_start=0.05)
-    g = torch.Generator().manual_seed(0)
-    # how it learns: the same noise and the same requests (A to J), drawn at checkpoints along the way
-    snap_at = [0, 150, 400, 1000, 2000, 4000, steps]
-    snaps, losses, run = [], [], []
-    z_snap = torch.randn(10, GL, GL, generator=torch.Generator().manual_seed(11))
+    def chunked(gated):
+        S = np.zeros((d, d))
+        O = np.empty((T, d))
+        for c0 in range(0, T, Cn):
+            k, q, v, b = Kx[c0:c0 + Cn], Qx[c0:c0 + Cn], Vx[c0:c0 + Cn], beta[c0:c0 + Cn]
+            la = np.log(alpha[c0:c0 + Cn]) if gated else np.zeros(Cn)
+            G = np.exp(np.cumsum(la))  # decay from the chunk's start to each step
+            D = np.exp(np.cumsum(la)[:, None] - np.cumsum(la)[None, :])  # decay from step j to step i
+            # WY / UT transform: one triangular solve gives the chunk's product of (I - beta k k^T), decays included
+            A = np.tril(D * (k @ k.T), -1) * b[:, None]
+            M = np.eye(len(b)) + A
+            W = solve_triangular(M, (b * G)[:, None] * k, lower=True)
+            U = solve_triangular(M, b[:, None] * v, lower=True)
+            Un = U - W @ S.T  # each step's correction, after what the chunk's starting state already says
+            O[c0:c0 + Cn] = G[:, None] * (q @ S.T) + (np.tril(D * (q @ k.T))) @ Un
+            S = G[-1] * S + (Un * D[-1][:, None]).T @ k
+        return O, S
 
-    def snapshot():
-        m.eval()
-        x = z_snap.clone()
-        y_ = torch.arange(10)
-        with torch.no_grad():
-            for k in range(20):
-                t = torch.full((10,), k / 20)
-                vc, vu = m(x, t, y_), m(x, t, torch.full_like(y_, 26))
-                x = x + (vu + 2.0 * (vc - vu)) / 20
-        m.train()
-        return ((x.numpy() + 1) / 2).clip(0, 1)
-
-    snaps.append(snapshot())
-    for step in range(1, steps + 1):
-        i = torch.randint(0, len(X), (128,), generator=g)
-        x1, y = X[i], Y[i]
-        y = torch.where(torch.rand(128, generator=g) < 0.15, torch.full_like(y, 26), y)
-        x0 = torch.randn(128, GL, GL, generator=g)
-        t = torch.rand(128, generator=g)
-        xt = (1 - t[:, None, None]) * x0 + t[:, None, None] * x1
-        loss = ((m(xt, t, y) - (x1 - x0)) ** 2).mean()
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-        sched.step()
-        run.append(float(loss))
-        if step % 50 == 0:
-            losses.append((step, float(np.mean(run))))
-            run = []
-        if step in snap_at:
-            snaps.append(snapshot())
-        if step % 1000 == 0:
-            print(f"    step {step}: loss {float(loss):.4f}", flush=True)
-    m.eval()
-
-    def draw(letters, w=2.0, steps=40, seed=0, path=None):
-        gen = torch.Generator().manual_seed(seed)
-        x = torch.randn(len(letters), GL, GL, generator=gen)
-        y = torch.tensor(letters)
-        u = torch.full_like(y, 26)
-        with torch.no_grad():
-            for k in range(steps):
-                if path is not None and k % 4 == 0:
-                    path.append(((x.numpy() + 1) / 2).clip(0, 1))
-                t = torch.full((len(x),), k / steps)
-                vc, vu = m(x, t, y), m(x, t, u)
-                x = x + (vu + w * (vc - vu)) / steps
-        if path is not None:
-            path.append(((x.numpy() + 1) / 2).clip(0, 1))
-        return ((x.numpy() + 1) / 2).clip(0, 1)
-
-    frames = []
-    alphabet = draw(list(range(26)) * 2, seed=1, path=frames)
-    out = dict(alphabet_path=np.array(frames)[:, :26], alphabet=alphabet, n_params=int(sum(p.numel() for p in m.parameters())), steps=steps, D=D, L=L)
-    a_only = draw([0] * 8, w=2.0, seed=3)
-    out["many_a"] = a_only
-    out["snap_steps"], out["snaps"], out["losses"] = snap_at, np.array(snaps), np.array(losses)
-    print(f"    {out['n_params']:,} parameters", flush=True)
-    assert alphabet.std() > 0.2
+    out = dict(geo_S0=S0, geo_k=k2, geo_v=v2, **{f"geo_{n}": m for n, m in geo.items()}, T=T, d=d, chunk=Cn)
+    for gated in (False, True):
+        t0 = time.perf_counter()
+        Or, Sr = recurrent(gated)
+        t1 = time.perf_counter()
+        Oc, Sc = chunked(gated)
+        t2 = time.perf_counter()
+        tag = "gated" if gated else "plain"
+        out[f"diff_{tag}"] = float(max(np.abs(Or - Oc).max(), np.abs(Sr - Sc).max()))
+        out[f"t_rec_{tag}"], out[f"t_chunk_{tag}"] = t1 - t0, t2 - t1
+        print(f"    {tag} delta rule: step by step {t1 - t0:.3f}s, by chunks {t2 - t1:.3f}s; largest difference "
+              f"{out[f'diff_{tag}']:.1e}", flush=True)
+        assert out[f"diff_{tag}"] < 1e-9
+    # 3. the decaying rule as masked attention: O = (L o Q K^T) V, L[i, j] = a_{j+1} ... a_i for j <= i
+    n = 32
+    a = np.exp(-np.exp(g.normal(-2.0, 0.8, size=n)))
+    a[[9, 22]] = 0.05  # two moments where the gate forgets almost everything
+    cs = np.cumsum(np.log(a))
+    L = np.tril(np.exp(cs[:, None] - cs[None, :]))
+    q, k, v = Qx[:n], Kx[:n], Vx[:n]
+    S = np.zeros((d, d))
+    Orec = np.empty((n, d))
+    for t in range(n):
+        S = a[t] * S + np.outer(v[t], k[t])
+        Orec[t] = S @ q[t]
+    Omask = (L * (q @ k.T)) @ v
+    out["ssd_L"], out["ssd_a"] = L, a
+    out["ssd_diff"] = float(np.abs(Orec - Omask).max())
+    # every block below the diagonal has rank one (the mask is 1-semiseparable)
+    blk = L[16:, :16]
+    sv = np.linalg.svd(blk, compute_uv=False)
+    out["ssd_rank_ratio"] = float(sv[1] / sv[0])
+    print(f"    masked form vs recurrence: {out['ssd_diff']:.1e}; a lower block's 2nd/1st singular value "
+          f"{out['ssd_rank_ratio']:.1e}", flush=True)
+    assert out["ssd_diff"] < 1e-9 and out["ssd_rank_ratio"] < 1e-9
     return out
 
-
-# ---------------------------------------------------------------------------
-def compute_scales():
-    imgs, labels, test, _ = dataset()
-    im = imgs[labels == 0][5]  # an A
-    sizes = [1, 2, 4, 5, 10, 20]
-    pyr, residuals = [], []
-    prev = np.zeros_like(im)
-    for s in sizes:
-        k = GL // s
-        small = im.reshape(s, k, s, k).mean((1, 3))
-        up = np.kron(small, np.ones((k, k)))
-        pyr.append(up)
-        residuals.append(up - prev)
-        prev = up
-    assert np.allclose(pyr[-1], im)
-    return dict(sizes=sizes, pyramid=np.array(pyr), residuals=np.array(residuals), image=im)
-
-
-# ---------------------------------------------------------------------------
-def compute_video():
-    fps, sec = 16, [2, 5, 10]
-    rows = []
-    for (w, h, name) in ((640, 360, "360p"), (1280, 720, "720p"), (1920, 1080, "1080p")):
-        for s in sec:
-            frames = fps * s
-            lat_t = frames // 4 + 1  # 4x in time (the first frame kept on its own)
-            tok = lat_t * (h // 8 // 2) * (w // 8 // 2)
-            rows.append(dict(res=name, sec=s, frames=frames, tokens=int(tok), pixels=int(frames * w * h)))
-    t720 = next(r for r in rows if r["res"] == "720p" and r["sec"] == 5)
-    assert 50_000 < t720["tokens"] < 100_000
-    return dict(rows=rows, fps=fps)
-
-
-from videos.ai.ai15.deep import compute_clips, compute_vae, compute_vae3d, compute_var  # noqa: E402
 
 ITEMS = {
-    "vit": compute_vit,
-    "latent": compute_latent,
-    "dit": compute_dit,
-    "scales": compute_scales,
-    "video": compute_video,
-    "vae": compute_vae,
-    "var": compute_var,
-    "vae3d": compute_vae3d,
-    "clips": compute_clips,
+    "kvcache": compute_kvcache,
+    "linear": compute_linear,
+    "capacity": compute_capacity,
+    "ssm": compute_ssm,
+    "mqar": compute_mqar,
+    "delta": compute_delta,
+    "mla": compute_mla,
 }
 CACHE.items = ITEMS
 

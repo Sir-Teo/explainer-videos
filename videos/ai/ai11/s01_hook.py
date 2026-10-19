@@ -3,96 +3,76 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai11.common import A, attention_arcs, char_row, heat_image, load
+from videos.ai.ai11.common import OPT_COLORS, load
+from videos.ai.ai11.compute import VALLEY
 
 
-class Hook(VoiceoverScene):
+class Hook(VoiceoverScene, ThreeDScene):
     def construct(self):
-        self.reading()
-        self.grid()
+        self.race()
         self.plan()
 
     # ------------------------------------------------------------------
-    def reading(self):
-        t = load("tf")
-        snip = str(t["snip"])
-        maps = np.asarray(t["maps"])  # layer, head, query, key
-        L, H, n, _ = maps.shape
-        # the head that looks furthest back on average, in the last layer: the most interesting arcs
-        dist = np.array([[(maps[l_, h] * np.abs(np.arange(n)[:, None] - np.arange(n)[None])).sum(1)[16:].mean()
-                          for h in range(H)] for l_ in range(L)])
-        li = L - 1
-        hi = int(np.argmax(dist[li]))
-        cut = snip.rfind(" ", 0, 33) + 1 or 32  # break the line at a space
-        first, second = snip[:cut], snip[cut:]
-        r1 = char_row(first, 12.6, font_size=30).move_to(UP * 0.9)
-        r2 = char_row(second, 12.6, font_size=30).move_to(DOWN * 1.6)
-        row = VGroup(*r1, *r2)
-        tag = note(rf"our transformer, \ layer {li + 1}, head {hi + 1}, \ reading the scoreboard's passage "
-                   r"\ (computed weights)").to_edge(DOWN, buff=0.3)
-        picks = [i for i in (14, 22, 30, 41, 50, 58, 63) if i < n and snip[i] != " "]
-        with self.voiceover(
-            "This is a transformer reading. It's ours: we trained it on this series' thirty novels, and it's "
-            "reading a sentence from the scoreboard's passage, which it has never seen. <bookmark mark='a'/> To "
-            "guess each next character, every character looks back at the characters before it and decides how "
-            "much each one matters. The thicker the arc, the more it looks. <bookmark mark='b'/> That look is "
-            "called attention, and it is the engine of every large model today."
-        ) as vo:
-            self.play(LaggedStart(*[FadeIn(c_) for c_ in row], lag_ratio=0.01), run_time=1.5)
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            prev = None
-            for i in picks:
-                rr = r1 if i < cut else r2
-                if i >= cut:  # second line: arcs reach back over the line break, drawn on the second line only
-                    w = maps[li, hi, i, cut:]
-                    arcs = attention_arcs(r2, i - cut, w, color=A)
-                else:
-                    arcs = attention_arcs(r1, i, maps[li, hi, i], color=A)
-                hl = SurroundingRectangle(rr[i if i < cut else i - cut], color=C.QUERY, buff=0.06)
-                anims = [Create(arcs), Create(hl)]
-                if prev is not None:
-                    anims += [FadeOut(prev)]
-                self.play(*anims, run_time=0.8)
-                prev = VGroup(arcs, hl)
-            vo.wait_until("b")
-            self.play(FadeOut(prev))
-        self.wait(0.2)
-        self.clear_scene()
+    def race(self):
+        v = load("valley")
 
-    # ------------------------------------------------------------------
-    def grid(self):
-        t = load("tf")
-        maps = np.asarray(t["maps"])
-        L, H = maps.shape[:2]
-        S = 1.25
-        imgs = Group(*[heat_image(maps[l_, h], S, S, color=A, mask_upper=True) for l_ in range(L) for h in range(H)])
-        imgs.arrange_in_grid(rows=L, cols=H, buff=0.18).move_to(DOWN * 0.2)
-        rl = VGroup(*[label(rf"layer {l_ + 1}", font_size=20, color=GREY_B).next_to(imgs[l_ * H], LEFT, buff=0.2) for l_ in range(L)])
-        hl = VGroup(*[label(rf"head {h + 1}", font_size=20, color=GREY_B).next_to(imgs[h], UP, buff=0.12) for h in range(H)])
-        cap = label(rf"all ${L * H}$ heads, \ on the same ${maps.shape[-1]}$ characters", font_size=26, color=GREY_A)
-        cap.to_edge(UP, buff=0.25)
+        def f(x, y):
+            return 0.5 * (VALLEY[0] * x * x + VALLEY[1] * y * y)
+
+        axes = ThreeDAxes(x_range=[-5, 1, 1], y_range=[-1.2, 1.2, 1], z_range=[0, 24, 6], x_length=10.0, y_length=4.0,
+                          z_length=3.2, axis_config={"stroke_color": GREY_D, "include_ticks": False, "include_tip": False})
+        axes.shift(DOWN * 1.0)
+        surf = loss_surface(axes, lambda x, y: min(f(x, y), 24.0), [-5, 1], [-1.2, 1.2], resolution=(60, 30), z_lo=0.0,
+                            z_hi=24.0, opacity=0.8)
+        bottom = Dot3D(axes.c2p(0, 0, 0) + OUT * 0.05, radius=0.09, color=WHITE)
+        runners = {}
+        for key, name in (("gd", r"gradient descent"), ("momentum", r"momentum"), ("adam", r"Adam")):
+            P = np.asarray(v[key])
+            col = {"gd": GREY_A, "momentum": OPT_COLORS["momentum"], "adam": OPT_COLORS["adam"]}[key]
+            trail = surface_path(axes, f, P, color=col, lift=0.07, stroke_width=5)
+            track = surface_path(axes, f, P, color=col, lift=0.12)
+            ball = surface_ball(axes, f, *P[0], color=col, radius=0.12)
+            runners[key] = (trail, ball, label(name, font_size=26, color=col), track)
+        key = VGroup(*[r[2] for r in runners.values()]).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.5)
+        steps = v["steps_to_5pct"]
+        tally = VGroup(*[label(rf"${steps[k]}$ steps", font_size=24, color=runners[k][2].get_color())
+                         .next_to(runners[k][2], DOWN, buff=0.12) for k in runners])
+        tag = label(r"a narrow valley: \ curvature $1$ one way, \ $30$ the other \ (illustrative)", font_size=22,
+                    color=GREY_B).to_edge(DOWN, buff=0.3)
+        for m in (key, tally, tag):
+            self.add_fixed_in_frame_mobjects(m)
+            self.remove(m)
+        self.set_camera_orientation(phi=62 * DEGREES, theta=-150 * DEGREES, zoom=0.78)  # from behind the walkers
         with self.voiceover(
-            f"Our model has {L * H} of these looks, called heads, each its own way of weighing the past. Some look "
-            "one character back, some at the start of the word, some spread out. <bookmark mark='a'/> This part is "
-            "about the mathematics of that look: what it computes, how it knows where things are, and what it can "
-            "learn to do."
+            "Every model in this series is trained by walking downhill. But how you walk matters enormously. "
+            "<bookmark mark='a'/> Here's part four's narrow valley again, and three walkers starting from the same "
+            "place. <bookmark mark='b'/> Plain gradient descent zigzags across the valley. Momentum builds up speed "
+            "along it. Adam rescales each direction separately, and heads almost straight for the bottom."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(m, scale=0.9) for m in imgs], lag_ratio=0.04), FadeIn(rl), FadeIn(hl),
-                      FadeIn(cap), run_time=2.5)
+            self.play(FadeIn(surf), FadeIn(bottom), FadeIn(tag), run_time=1.5)
+            self.begin_ambient_camera_rotation(rate=0.09)  # swinging round to the side as they go
             vo.wait_until("a")
-        self.wait(0.2)
+            self.play(FadeIn(key), *[FadeIn(r[1]) for r in runners.values()])
+            vo.wait_until("b")
+            self.play(*[Create(r[0]) for r in runners.values()],
+                      *[MoveAlongPath(r[1], r[3]) for r in runners.values()], run_time=5.5, rate_func=linear)
+            self.stop_ambient_camera_rotation()
+            self.move_camera(phi=0, theta=-90 * DEGREES, zoom=0.95, run_time=2.0)  # look straight down: the paths
+            self.play(FadeIn(tally))
+        self.wait(0.3)
         self.clear_scene()
+        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, zoom=1.0)
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(r"Part 11: \ Attention as Geometry", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"kernel smoothers, \ queries and keys, \ rotations, \ induction heads, \ learning in context",
-                    font_size=28, color=C.BITS).next_to(title, DOWN, buff=0.25)
+        title = label(r"Part 11: \ Going Downhill", font_size=52).to_edge(UP, buff=0.6)
+        sub = label(r"noise, \ the edge of stability, \ Adam, \ Muon, \ schedules", font_size=30, color=C.BITS)
+        sub.next_to(title, DOWN, buff=0.25)
         smap = series_map(current=11, done=10).scale(0.85).move_to(DOWN * 0.9)
         with self.voiceover(
-            "Act three begins: the engines inside today's models. First, attention: a weighted average, built from "
-            "geometry, <bookmark mark='a'/> and the strange abilities it learns on its own."
+            "This part is about the optimizers that train real models: why the noise of small batches helps, why "
+            "training lives at the edge of instability, how Adam and the newer Muon reshape each step, <bookmark mark='a'/> "
+            "and how the learning rate should change over a training run."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub))
             vo.wait_until("a")

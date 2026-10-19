@@ -1,0 +1,139 @@
+{
+ "title": "人工智能，从零搭建 · 第23部分：万物皆词元",
+ "chapters": {
+  "Hook": "同一个序列",
+  "BPE": "1. 把文本切成词元",
+  "VQ": "2. 码本",
+  "Sound": "3. 把声音变成词元",
+  "Clip": "4. 匹配不同的感官",
+  "Omni": "5. 一个模型，所有感官",
+  "Outro": "回顾，以及这些想法会在哪里再现"
+ },
+ "lines": {
+  "97ce39c139e2": {
+   "scene": "Hook",
+   "en": "A transformer reads tokens. So how does a model look at a picture, or listen to a voice? <bookmark mark='a'/> Everything is turned into tokens first: text into pieces of words, pictures into codes for patches, sound into codes for slices of time. <bookmark mark='b'/> Then it's all one sequence, and one model can read it.",
+   "zh": "Transformer读的是词元。那么，模型怎样看一张图片，又怎样听一段人声呢？<bookmark mark='a'/>先把一切都变成词元：文本切成一个个词的片段，图片变成一个个小块的编码，声音变成一小段一小段时间的编码。<bookmark mark='b'/>然后，它们就排成了同一个序列，一个模型就能把它全部读下来。"
+  },
+  "48625b37c168": {
+   "scene": "Hook",
+   "en": "This part is about how the senses become tokens, how pictures and words are matched, <bookmark mark='a'/> and how one model can see, listen and speak.",
+   "zh": "这一部分讲的是：各种感官怎样变成词元，图片和文字怎样互相匹配，<bookmark mark='a'/>以及一个模型怎样做到能看、能听，还能说。"
+  },
+  "50c6a5b5fbaf": {
+   "scene": "BPE",
+   "en": "Chapter one. Cutting text into tokens.",
+   "zh": "第1章。把文本切成词元。"
+  },
+  "381de9c916f0": {
+   "scene": "BPE",
+   "en": "This series' models read one character at a time. Real ones read tokens: common chunks of text. The chunks are learned by byte-pair encoding, a compression trick from 1994. Start from single characters. Find the pair that occurs most often, and make it a new symbol. Repeat. <bookmark mark='a'/> Here are the first merges on our novels: common pairs of letters first, then the starts and ends of words, and soon whole words. Each new symbol is a token.",
+   "zh": "本系列的模型，一次只读一个字符。真实的模型读的是词元，也就是文本里常见的片段。这些片段是用字节对编码学出来的，那是1994年提出的一个压缩技巧。从单个字符开始，找出出现次数最多的那一对，把它变成一个新符号。然后不断重复。<bookmark mark='a'/>这是在我们那些小说上最先学到的几次合并：先是常见的字母对，然后是词的开头和结尾，很快就出现了完整的词。每个新符号，就是一个词元。"
+  },
+  "b5ecdaf86772": {
+   "scene": "BPE",
+   "en": "The more merges, the bigger the tokens. <bookmark mark='a'/> Here's one sentence, cut by the raw characters, then after five hundred, two thousand and eight thousand merges. <bookmark mark='b'/> With eight thousand, a token covers 3.9 characters of the passage on average, so a transformer reading tokens sees the same text in a fraction of the steps, and part fifteen's attention cost shrinks with the square. The price is a bigger table of token vectors. Today's models use between a hundred and fifty thousand and a quarter of a million tokens.",
+   "zh": "合并得越多，词元就越大。<bookmark mark='a'/>这是同一个句子：先按原始的字符来切，再分别经过500次、2000次和8000次合并来切。<bookmark mark='b'/>合并8000次之后，在测试段落上，一个词元平均覆盖3.9个字符。所以，读词元的Transformer只用几分之一的步数，就能读完同样的文本，而第15部分讲的注意力开销，还会按平方缩小。代价是一张更大的词元向量表。今天的模型，词表里有15万到25万个词元。"
+  },
+  "3b9cda166461": {
+   "scene": "VQ",
+   "en": "Chapter two. Codebooks.",
+   "zh": "第2章。码本。"
+  },
+  "4b5f2be123b1": {
+   "scene": "VQ",
+   "en": "Text comes in pieces. Pictures and sound are continuous, so to make tokens of them, we need a vocabulary of shapes: a codebook. <bookmark mark='a'/> Cut every letter picture into four by four patches and find sixteen typical ones by k-means clustering: <bookmark mark='k'/> start with sixteen guesses, give each patch to its nearest guess, move each guess to the average of its patches, and repeat. Part seven's mixtures generalize it. <bookmark mark='b'/> Now any picture becomes a sequence of numbers from zero to fifteen: replace each patch by its nearest code. <bookmark mark='c'/> With more codes, the copy gets closer: sixteen, sixty-four, two hundred and fifty-six.",
+   "zh": "文本本来就是一块一块的。图片和声音却是连续的，要把它们变成词元，我们需要一套由形状组成的词汇：也就是码本。<bookmark mark='a'/>把每张字母图片都切成4乘4的小块，再用k均值聚类找出16个典型的小块：<bookmark mark='k'/>先随便猜16个，把每个小块分给离它最近的那个猜测，再把每个猜测挪到分给它的那些小块的平均值上，然后不断重复。第7部分的混合模型，正是它的推广。<bookmark mark='b'/>现在，任何一张图片都变成了一串0到15之间的数：把每个小块，换成离它最近的码字。<bookmark mark='c'/>码字越多，拼出来的图就越接近原图：16个，64个，256个。"
+  },
+  "282fbd770a8d": {
+   "scene": "VQ",
+   "en": "One codebook can only be so fine. <bookmark mark='q'/> What we just did has a name: to quantize is to snap a value to the nearest item on a fixed menu, so it can be sent as a small whole number. The trick sound models use is to quantize in stages. <bookmark mark='a'/> The first stage codes the patch roughly; the second codes what the first missed; then the third, and the fourth. <bookmark mark='b'/> Four stages of sixteen codes do as well here as one codebook of two hundred and fifty-six, and each token stays a small number. That's residual vector quantization, inside every neural audio codec, the coder and decoder pair that turns sound into codes and back. A simpler cousin, finite scalar quantization, just rounds a few numbers to a few levels, with no codebook at all.",
+   "zh": "一个码本能做到的精细程度，总是有限的。<bookmark mark='q'/>我们刚才做的事，有一个名字：量化，就是把一个值吸附到一张固定菜单上离它最近的那一项，这样它就能作为一个很小的整数发出去。声音模型用的诀窍，是分几级来量化。<bookmark mark='a'/>第1级粗略地给这个小块编码；第2级编码第1级漏掉的部分；然后是第3级，第4级。<bookmark mark='b'/>在这里，4级、每级16个码字，效果和一个有256个码字的码本一样好，而且每个词元都还是一个很小的数。这就是残差向量量化，每一个神经音频编解码器里都有它；编解码器，就是一对编码器和解码器，把声音变成编码，再变回来。它还有一个更简单的近亲，叫有限标量量化：只是把几个数各自取整到几个档位上，根本不用码本。"
+  },
+  "56d0cac9bd45": {
+   "scene": "VQ",
+   "en": "In a real model, the codebook is learned along with the encoder and decoder, and that hits a snag. <bookmark mark='a'/> Each encoder output z is replaced by its nearest code. Picking the nearest is a jump, with no gradient. <bookmark mark='b'/> The fix is the straight-through trick: forward, use the code; backward, pretend nothing happened, and hand the code's gradient straight to z. <bookmark mark='c'/> Two more terms keep things together: one pulls each code toward the outputs that chose it; the other, the commitment loss, is a small penalty, weighted by beta, that stops each output drifting far from the code it was snapped to. <bookmark mark='d'/> Even so, codes that nobody picks stop learning, and many go unused. <bookmark mark='e'/> Finite scalar quantization, FSQ, sidesteps all of it: squash each number, round it to a few levels, and the codebook is just the grid. It's what several recent image and video tokenizers use.",
+   "zh": "在真实的模型里，码本是和编码器、解码器一起学出来的，而这就碰上了一个麻烦。<bookmark mark='a'/>编码器的每个输出z，都被换成离它最近的码字。挑最近的那个是一次跳变，没有梯度。<bookmark mark='b'/>解决办法是直通技巧：前向时用码字；反向时假装什么都没发生，把码字的梯度直接交给z。<bookmark mark='c'/>另外还有两项把它们拴在一起：一项把每个码字拉向选中它的那些输出；另一项叫承诺损失，是一个用β加权的小惩罚，不让每个输出离它被吸附到的那个码字跑得太远。<bookmark mark='d'/>即便如此，没人选的码字就不再学习，很多码字都闲着没用。<bookmark mark='e'/>有限标量量化，也就是FSQ，把这些问题全绕开了：把每个数压扁，取整到几个档位上，码本就只是一张网格。最近好几个图像和视频的分词器，用的都是它。"
+  },
+  "ee68e9e504a6": {
+   "scene": "Sound",
+   "en": "Chapter three. Sound as tokens.",
+   "zh": "第3章。把声音变成词元。"
+  },
+  "9349f3621fca": {
+   "scene": "Sound",
+   "en": "Sound is a wave: air pressure, sampled sixteen thousand times a second. Here's a synthetic voice saying five vowels. <bookmark mark='f'/> How many times a second the air wobbles is its frequency: slow wobbles sound low, fast ones sound high, and a voice mixes many at once. <bookmark mark='a'/> A wave is hard to read, so cut it into short frames, ten milliseconds apart, and measure how much of each frequency each frame has: a spectrogram. <bookmark mark='b'/> Now the vowels are visible: each has its own bright bands, the formants, which is how your ear tells a from e.",
+   "zh": "声音是一种波：是空气压强的变化，每秒采样16000次。这是一个合成的声音，在念5个元音。<bookmark mark='f'/>空气每秒抖动多少次，就是它的频率：抖得慢，听起来就低；抖得快，听起来就高；而一段人声，同时混着许多个频率。<bookmark mark='a'/>波形很难看懂，所以把它切成一个个很短的帧，每帧相隔10毫秒，再测出每一帧里各个频率分别有多少：这就是频谱图。<bookmark mark='b'/>现在，元音看得见了：每个元音都有自己的几条亮带，叫作共振峰，你的耳朵就是靠它们分辨a和e的。"
+  },
+  "b5def9e00f57": {
+   "scene": "Sound",
+   "en": "Then the same trick as for pictures. <bookmark mark='a'/> Each frame becomes a few code numbers, from residual quantization in four stages. <bookmark mark='b'/> From those codes alone, the spectrogram comes back nearly intact. <bookmark mark='c'/> Real speech models use a neural codec trained for this: a coder and a decoder. The encoder half turns sound into a short list of codes; the decoder half, often called a vocoder, turns codes back into a wave. In the end, a voice is a stream of small integers, a few dozen a second per stage, that a transformer can predict like text.",
+   "zh": "接下来，用和图片一样的诀窍。<bookmark mark='a'/>每一帧都变成几个编码数字，来自分4级的残差量化。<bookmark mark='b'/>只靠这些编码，频谱图就几乎原样恢复了。<bookmark mark='c'/>真实的语音模型，用的是专门为此训练的神经编解码器：一个编码器加一个解码器。编码器这一半，把声音变成一小串编码；解码器这一半，常被叫作声码器，把编码变回波形。说到底，一段人声就是一串很小的整数，每一级每秒几十个，Transformer可以像预测文本那样预测它们。"
+  },
+  "bf9bcce08b10": {
+   "scene": "Clip",
+   "en": "Chapter four. Matching senses.",
+   "zh": "第4章。匹配不同的感官。"
+  },
+  "a392c1bd3514": {
+   "scene": "Clip",
+   "en": "How does a model know a picture of an A and the word A mean the same thing? Train two encoders, one for pictures and one for captions, so that matching pairs get similar vectors. <bookmark mark='a'/> We trained a small pair on our letters, with captions like 'bold serif A'. Here's a batch: every picture scored against every caption. <bookmark mark='b'/> The bright diagonal is the right pairs. Trained on four hundred million pictures from the web, this is CLIP, and its picture encoder is how most models see.",
+   "zh": "模型怎么知道，一张字母A的图片，和文字里的A，说的是同一个东西？训练两个编码器，一个读图片，一个读文字描述，让配对的两者得到相近的向量。<bookmark mark='a'/>我们在自己的字母上训练了一对小编码器，文字描述就像“粗体衬线A”这样。这是一个批次：每张图片都和每条描述打一个分。<bookmark mark='b'/>那条明亮的对角线，就是正确的配对。用网上的4亿张图片来训练，这就是CLIP；如今大多数模型，都是靠它的图片编码器来看东西的。"
+  },
+  "a94f4446faf6": {
+   "scene": "Clip",
+   "en": "How does training find that diagonal? Here is the same table of twelve pictures and their captions, scored at checkpoints while the two encoders learn. <bookmark mark='a'/> At the start, every score is noise. <bookmark mark='b'/> This is contrastive training: each batch pulls the matching pairs' vectors together and pushes every other pair apart, and the diagonal lights up: matching pairs end up 0.93 more similar, on average, than mismatched ones. Pairs that share a letter or a style stay partly lit: they really are alike.",
+   "zh": "训练是怎么找到那条对角线的？这是同一张表，12张图片和它们的文字描述，在两个编码器学习的途中，在几个检查点上打的分。<bookmark mark='a'/>一开始，每个分数都是噪声。<bookmark mark='b'/>这就是对比训练：每个批次都把配对的向量拉近，把其他所有组合推开，对角线就亮了起来：最后，配对的平均比不配对的相似度高出0.93。字母相同或者风格相同的组合，仍然有一部分是亮的：它们确实相像。"
+  },
+  "fba92baf5f67": {
+   "scene": "Clip",
+   "en": "There are two ways to train this. CLIP's: each picture must pick its own caption out of the whole batch, a softmax, which ties every pair's loss to every other. <bookmark mark='a'/> SigLIP's: treat every picture-caption pair as its own yes-or-no question, with a sigmoid. No batch-wide sum, so it scales to huge batches across many chips. <bookmark mark='b'/> On our letters the two end up close; at scale, SigLIP's encoders are what many of today's open models see with.",
+   "zh": "训练它有两种办法。CLIP的办法：每张图片都要从整个批次里，挑出属于自己的那条描述，这是一个softmax，它把每一对的损失，都和其他所有对绑在了一起。<bookmark mark='a'/>SigLIP的办法：把每一对图片和描述，都当成一道单独的是非题，用sigmoid来回答。不用对整个批次求和，所以它能扩展到分布在许多芯片上的超大批次。<bookmark mark='b'/>在我们的字母上，两者最后的结果很接近；而在大规模下，今天许多开源模型，都是用SigLIP的编码器来看东西的。"
+  },
+  "8054ada72111": {
+   "scene": "Omni",
+   "en": "Chapter five. One model, every sense.",
+   "zh": "第5章。一个模型，所有感官。"
+  },
+  "61522e019c66": {
+   "scene": "Omni",
+   "en": "Once everything is tokens, one model can take them all. <bookmark mark='a'/> Text, picture codes and sound codes go into one sequence, and one transformer reads them all, part thirteen's attention looking across senses. <bookmark mark='b'/> To answer out loud, Qwen's omni models add a second, smaller transformer, the Talker, which turns the first one's thoughts into sound codes, and a decoder turns those into a wave. This video's narrator, Kokoro-82M, is a speech model too: text in, sound out.",
+   "zh": "一旦一切都成了词元，一个模型就能把它们全部接收下来。<bookmark mark='a'/>文本、图片编码和声音编码，排进同一个序列，由同一个Transformer全部读下来，第13部分讲的注意力，在不同的感官之间来回查看。<bookmark mark='b'/>为了能开口回答，Qwen的全模态模型又加了第二个、更小的Transformer，叫作Talker，它把第一个模型的想法变成声音编码，再由一个解码器把这些编码变成波形。这个视频的旁白Kokoro-82M，也是一个语音模型：输入文本，输出声音。"
+  },
+  "62f1f9d4cf49": {
+   "scene": "Omni",
+   "en": "Conversation is harder than speech. People interrupt, overlap and murmur agreement. <bookmark mark='a'/> Moshi, in 2024, models two streams of sound at once, the user's and its own, every eighty milliseconds, so it's always listening, even while it talks.",
+   "zh": "对话比说话更难。人们会打断对方，会同时开口，还会小声地附和。<bookmark mark='a'/>2024年的Moshi，同时为两路声音建模，一路是用户的，一路是它自己的，每80毫秒一步，所以它一直在听，哪怕自己正在说话。"
+  },
+  "bd0d2a77f087": {
+   "scene": "Outro",
+   "en": "Let's take stock. Text is cut into tokens by merging the commonest pairs, again and again. Pictures and sound become tokens through codebooks, refined in stages. Contrastive training puts pictures and words in one space, with a softmax or a sigmoid. And with everything as tokens, one model reads, sees, listens and speaks.",
+   "zh": "我们来盘点一下。把最常见的一对合并起来，一遍又一遍，文本就被切成了词元。图片和声音通过码本变成词元，再一级一级地细化。对比训练用softmax或者sigmoid，把图片和文字放进同一个空间。而一切都成了词元之后，一个模型就能读、能看、能听，还能说。"
+  },
+  "d8855793fa74": {
+   "scene": "Outro",
+   "en": "Act four begins next. Reasoning models think in tokens, in part twenty-eight. Robots read the world and write actions as tokens, in part twenty-nine. And part nineteen squeezes the numbers themselves into fewer bits.",
+   "zh": "接下来，第四幕就要开始了。第28部分，推理模型用词元来思考。第29部分，机器人读入外面的世界，再把动作写成词元。而第19部分，要把这些数本身，压缩进更少的比特里。"
+  },
+  "e1b5cfbb8ce2": {
+   "scene": "Outro",
+   "en": "Next time, act four, agency, begins with reasoning: <bookmark mark='a'/> why writing the steps out makes a model smarter, and how models learn to do it by trial and error.",
+   "zh": "下一次，第四幕“智能体”，从推理开始：<bookmark mark='a'/>为什么把步骤一步步写出来，能让模型更聪明；以及模型怎样通过反复试错，学会这样做。"
+  },
+  "3a72d0f98ab9": {
+   "scene": "Outro",
+   "en": "Thanks for watching, and see you in part twenty-eight.",
+   "zh": "感谢观看，第28部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 16, Every Sense Is a Token",
+ "chapters_en": {
+  "Hook": "One sequence",
+  "BPE": "1. Cutting text into tokens",
+  "VQ": "2. Codebooks",
+  "Sound": "3. Sound as tokens",
+  "Clip": "4. Matching senses",
+  "Omni": "5. One model, every sense",
+  "Outro": "Recap, and where this comes back"
+ }
+}

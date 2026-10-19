@@ -6,10 +6,10 @@ running a model is a problem of moving numbers, and three ways to move fewer. A 
 * **The speed limit.** Writing one token reads every weight: tokens per second ≤ memory bandwidth / bytes of weights,
   about 24 a second for a 70-billion-parameter model in 16 bits on an H100, using a third of one percent of its
   arithmetic (published figures).
-* **Guess ahead, check at once.** Speculative decoding with Part 11's transformer as the big model and a counting model
+* **Guess ahead, check at once.** Speculative decoding with Part 13's transformer as the big model and a counting model
   on the last two characters as the draft: the acceptance rule min(1, p/q) with the leftover max(0, p − q), checked by
   200,000 samples to reproduce the big model's probabilities exactly; the characters per run, (1 − αᵏ⁺¹)/(1 − α).
-* **Fewer bits per number.** Part 11's transformer rounded to 8, 4 and 3 bits, and to FP4 (E2M1) with a scale per
+* **Fewer bits per number.** Part 13's transformer rounded to 8, 4 and 3 bits, and to FP4 (E2M1) with a scale per
   block of 32: the weight histogram against the levels, and the bits per character lost; GPTQ and low-precision
   training; MXFP4 (E2M1, a power-of-two scale per 32: 4.25 bits a weight) and NVFP4 (E2M1, an E4M3 scale per 16 and
   one per tensor: 4.5 bits) exactly: 2.022 and 2.020 bits a character against 2.043 for 4-bit integers (1.996
@@ -18,12 +18,12 @@ running a model is a problem of moving numbers, and three ways to move fewer. A 
 * **Moving numbers is the cost.** This computer's own roofline (matrix products of growing size against its memory
   bandwidth); FlashAttention's tiles and online softmax, checked against the plain formula; vLLM's pages against
   blocks reserved at the maximum length, for 200 requests of random lengths.
-* **Recap**, where this came from (Parts 12, 13, 17, 18), Part 20's teaser, references.
+* **Recap**, where this came from (Parts 15, 16, 28, 29), Part 30's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai19.compute          # needs Part 11's transformer (python -m videos.ai.ai11.compute tf)
+python -m videos.ai.ai19.compute          # needs Part 13's transformer (python -m videos.ai.ai13.compute tf)
 python tools/build.py ai19                # English
 python tools/build.py ai19 --lang zh      # Chinese
 ```

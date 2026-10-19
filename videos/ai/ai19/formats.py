@@ -1,4 +1,4 @@
-"""Four-bit weights done properly, on Part 11's transformer (the ``formats`` item of Part 19).
+"""Four-bit weights done properly, on Part 13's transformer (the ``formats`` item of Part 19).
 
     formats   the two 4-bit floating-point formats of current chips, exactly: MXFP4 (E2M1 numbers, one power-of-two
               scale per block of 32) and NVFP4 (E2M1, one FP8 E4M3 scale per block of 16, and one scale per tensor);
@@ -87,7 +87,7 @@ def hadamard(n):
 def compute_formats():
     import torch
 
-    from videos.ai.ai11 import compute as c11
+    from videos.ai.ai13 import compute as c11
 
     torch.set_num_threads(3)
     c11.load("tf")

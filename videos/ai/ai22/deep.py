@@ -1,0 +1,648 @@
+"""Part 22's deeper experiments (registered as cache items in compute.py).
+
+Images: what a latent space trades (an autoencoder against variational autoencoders with a growing KL weight: how well
+each rebuilds a picture, and how good the pictures are when Part 21's flow matching is run in its latent space); how
+the training noise levels are drawn (uniform against SD3's logit-normal); next-scale prediction's residual tokens.
+
+Video: clips of a letter moving and bouncing in a 20 x 20 box. A causal autoencoder that squeezes 9 frames into 3;
+a clip model (one noise level for the whole clip, every frame attending to every other) against frames drawn one at a
+time; and models that write frame after frame, trained with clean earlier frames (teacher forcing) or with earlier
+frames at their own random noise levels (diffusion forcing), rolled out four times longer than they were trained.
+
+A "judge" (a small classifier trained on the same pictures) scores generated pictures: how many it recognizes
+confidently, and as which letters. Set AI15_QUICK=1 for a fast smoke test with tiny step counts.
+"""
+
+from __future__ import annotations
+
+import math
+import os
+
+import numpy as np
+
+GL = 20
+QUICK = os.environ.get("AI15_QUICK") == "1"
+
+
+def steps(n: int) -> int:
+    return 20 if QUICK else n
+
+
+# ---------------------------------------------------------------------------
+def train_judge(X, Y, n_steps=2000, seed=0, shift=0):
+    """A small classifier, pictures (N, 400) in [0, 1] -> 26 letters; ``shift`` pixels of random translation."""
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    torch.manual_seed(seed)
+    net = nn.Sequential(nn.Linear(GL * GL, 384), nn.ReLU(), nn.Linear(384, 192), nn.ReLU(), nn.Linear(192, 26))
+    opt = torch.optim.Adam(net.parameters(), lr=2e-3)
+    g = torch.Generator().manual_seed(seed)
+    for _ in range(steps(n_steps)):
+        i = torch.randint(0, len(X), (256,), generator=g)
+        x = X[i].view(-1, GL, GL)
+        if shift:
+            s = torch.randint(-shift, shift + 1, (2,), generator=g)
+            x = torch.roll(x, (int(s[0]), int(s[1])), (1, 2))
+        x = (x + 0.06 * torch.randn(x.shape, generator=g)).view(-1, GL * GL)
+        loss = F.cross_entropy(net(x), Y[i])
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    net.eval()
+    return net
+
+
+def judge_scores(net, imgs01):
+    """How many pictures the judge recognizes with confidence above 0.8, and which letters."""
+    import torch
+
+    with torch.no_grad():
+        p = torch.softmax(net(torch.tensor(np.asarray(imgs01).reshape(len(imgs01), -1), dtype=torch.float32)), 1).numpy()
+    conf, pred = p.max(1), p.argmax(1)
+    sure = conf > 0.8
+    return dict(clear=float(sure.mean()), letters=int(len(set(pred[sure].tolist()))), pred=pred, conf=conf)
+
+
+def flow_mlp(d, width=256):
+    from videos.ai.ai21.compute import mlp
+
+    return mlp(d, d, width=width)
+
+
+def train_flow(Z, n_steps=3000, seed=0, t_sampler="uniform"):
+    """Flow matching (Part 21) in a latent space Z (N, d); t drawn uniformly or logit-normally."""
+    import torch
+
+    torch.manual_seed(seed)
+    net = flow_mlp(Z.shape[1])
+    opt = torch.optim.Adam(net.parameters(), lr=2e-3)
+    g = torch.Generator().manual_seed(seed)
+    for _ in range(steps(n_steps)):
+        z1 = Z[torch.randint(0, len(Z), (512,), generator=g)]
+        z0 = torch.randn(z1.shape, generator=g)
+        if t_sampler == "logit-normal":  # SD3: t = sigmoid(u), u ~ N(0, 1): more training where the middle is hardest
+            t = torch.sigmoid(torch.randn(len(z1), generator=g))
+        else:
+            t = torch.rand(len(z1), generator=g)
+        zt = (1 - t[:, None]) * z0 + t[:, None] * z1
+        loss = ((net(zt, t) - (z1 - z0)) ** 2).mean()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    net.eval()
+    return net
+
+
+def sample_flow(net, n, d, n_steps=40, seed=5):
+    import torch
+
+    z = torch.tensor(np.random.default_rng(seed).normal(size=(n, d)), dtype=torch.float32)
+    with torch.no_grad():
+        for k in range(n_steps):
+            z = z + net(z, torch.full((n,), k / n_steps)) / n_steps
+    return z
+
+
+# ---------------------------------------------------------------------------
+def compute_vae():
+    import torch
+    import torch.nn as nn
+
+    from videos.ai.ai22.compute import dataset
+
+    torch.set_num_threads(2)
+    imgs, labels, test, _ = dataset()
+    X = torch.tensor(imgs.reshape(len(imgs), -1), dtype=torch.float32)
+    Y = torch.tensor(labels)
+    judge = train_judge(X, Y, seed=1)
+    jt = judge_scores(judge, imgs[test])
+    print(f"    judge: {100 * float((jt['pred'] == labels[test]).mean()):.0f}% right on held-out fonts", flush=True)
+    Zd = 16
+    betas = [0.0, 0.003, 0.01, 0.03, 0.1]
+    out = dict(betas=betas, Z=Zd, judge_acc=float((jt["pred"] == labels[test]).mean()))
+    keep = None
+    for b in betas:
+        torch.manual_seed(2013)  # Kingma & Welling, Auto-Encoding Variational Bayes
+        enc = nn.Sequential(nn.Linear(GL * GL, 256), nn.SiLU(), nn.Linear(256, 128), nn.SiLU(), nn.Linear(128, 2 * Zd))
+        dec = nn.Sequential(nn.Linear(Zd, 128), nn.SiLU(), nn.Linear(128, 256), nn.SiLU(), nn.Linear(256, GL * GL))
+        opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=2e-3)
+        g = torch.Generator().manual_seed(0)
+        tr = torch.tensor(np.where(~test)[0])
+        n_st = steps(5000)
+        snap_at = {0, n_st // 50, n_st // 15, n_st // 5, n_st // 2, n_st}
+        watch = torch.tensor(np.where(test)[0][::40][:6])
+        curve, snaps = [], []
+        for st in range(n_st + 1):
+            if st in snap_at:  # how it learns: six held-out letters rebuilt along the way
+                with torch.no_grad():
+                    snaps.append((st, torch.sigmoid(dec(enc(X[watch]).chunk(2, 1)[0])).numpy().reshape(-1, GL, GL)))
+            if st == n_st:
+                break
+            x = X[tr[torch.randint(0, len(tr), (256,), generator=g)]]
+            mu, logv = enc(x).chunk(2, 1)
+            z = mu + torch.exp(0.5 * logv) * torch.randn(mu.shape, generator=g) if b > 0 else mu
+            rec = ((torch.sigmoid(dec(z)) - x) ** 2).sum(1).mean()
+            kl = 0.5 * (mu ** 2 + logv.exp() - logv - 1).sum(1).mean()
+            loss = rec + b * kl
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            if st % 50 == 0:
+                curve.append((st, float(rec), float(kl)))
+        with torch.no_grad():
+            mu, logv = enc(X).chunk(2, 1)
+            xh = torch.sigmoid(dec(mu))
+            rmse = float(((xh - X)[torch.tensor(test)] ** 2).mean().sqrt())
+            kl = float((0.5 * (mu ** 2 + logv.exp() - logv - 1).sum(1)).mean()) if b > 0 else float("nan")
+        m_, s_ = mu.mean(0), mu.std(0)
+        net = train_flow((mu - m_) / s_, seed=3)
+        z = sample_flow(net, 400, Zd) * s_ + m_
+        with torch.no_grad():
+            smp = torch.sigmoid(dec(z)).numpy().reshape(-1, GL, GL)
+        q = judge_scores(judge, smp)
+        tag = f"{b:g}"
+        out[f"rmse_{tag}"], out[f"kl_{tag}"], out[f"clear_{tag}"], out[f"letters_{tag}"] = rmse, kl, q["clear"], q["letters"]
+        out[f"samples_{tag}"] = smp[:24]
+        out[f"curve_{tag}"] = np.array(curve)  # step, rebuild error (summed squares), KL (nats)
+        out[f"snap_steps_{tag}"] = [s_ for s_, _ in snaps]
+        out[f"snaps_{tag}"] = np.array([im for _, im in snaps])
+        out[f"recon_{tag}"] = xh.numpy().reshape(-1, GL, GL)[np.where(test)[0][::40][:8]]
+        print(f"    beta {tag}: rebuild error {rmse:.3f}, KL {kl:.1f} nats; samples clear {100 * q['clear']:.0f}%, "
+              f"{q['letters']} letters", flush=True)
+        if b == 0.01:
+            keep = (mu.detach(), dec)
+    out["orig"] = imgs[np.where(test)[0][::40][:8]]
+    # how the training noise levels are drawn: uniform against SD3's logit-normal, in the beta = 0.01 latent space
+    mu, dec = keep
+    m_, s_ = mu.mean(0), mu.std(0)
+    Zn = (mu - m_) / s_
+    sampling = [1, 2, 4, 8, 16, 40]
+    out["ts_steps"] = sampling
+    for ts in ("uniform", "logit-normal"):
+        net = train_flow(Zn, seed=4, t_sampler=ts)
+        cl = []
+        for k in sampling:
+            z = sample_flow(net, 400, Zd, n_steps=k) * s_ + m_
+            with torch.no_grad():
+                cl.append(judge_scores(judge, torch.sigmoid(dec(z)).numpy().reshape(-1, GL, GL))["clear"])
+        out[f"ts_{ts}"] = cl
+        print(f"    t {ts}: clear at {sampling} steps: {np.round(cl, 2)}", flush=True)
+    return out
+
+
+# ---------------------------------------------------------------------------
+def nearest(x, cb):
+    """Index of the nearest entry of a sorted 1-D codebook, for every number in x."""
+    return np.searchsorted((cb[1:] + cb[:-1]) / 2, x)
+
+
+def compute_var():
+    """Next-scale prediction's tokens: the residual at each scale, quantized to one of 16 levels."""
+    from videos.ai.ai22.compute import dataset
+
+    imgs, labels, test, _ = dataset()
+    sizes = [1, 2, 4, 5, 10, 20]
+    g = np.random.default_rng(2024)  # Tian et al., Visual Autoregressive Modeling (2024)
+    recon = np.zeros_like(imgs)
+    errs, books, toks = [], [], []
+    for s in sizes:
+        k = GL // s
+        target = (imgs - recon).reshape(len(imgs), s, k, s, k).mean((2, 4))  # what this scale still has to add
+        vals = target[~test].ravel()
+        cb = np.quantile(vals, np.linspace(0.02, 0.98, 16))  # 16 levels, then a few rounds of k-means
+        for _ in range(12):
+            idx = nearest(vals, cb)
+            n_ = np.bincount(idx, minlength=16)
+            cb = np.where(n_ > 0, np.bincount(idx, weights=vals, minlength=16) / np.maximum(n_, 1), cb)
+            cb = np.sort(cb)
+        q = cb[nearest(target, cb)]
+        recon = recon + np.kron(q, np.ones((1, k, k)))
+        errs.append(float(np.sqrt(((recon - imgs)[test] ** 2).mean())))
+        books.append(cb)
+        toks.append(s * s)
+    ex = int(np.where(test & (labels == 0))[0][0])
+    steps_shown = []
+    rec = np.zeros(GL * GL).reshape(GL, GL)
+    for s, cb in zip(sizes, books):
+        k = GL // s
+        target = (imgs[ex] - rec).reshape(s, k, s, k).mean((1, 3))
+        rec = rec + np.kron(cb[nearest(target, cb)], np.ones((k, k)))
+        steps_shown.append(rec.copy())
+    out = dict(sizes=sizes, errs=errs, tokens=toks, total=int(sum(toks)), example=np.array(steps_shown), image=imgs[ex])
+    print(f"    rebuild error after each scale: {np.round(errs, 3)}; {sum(toks)} tokens in {len(sizes)} steps", flush=True)
+    assert errs[-1] < errs[0]
+    return out
+
+
+# ---------------------------------------------------------------------------
+def small_letters():
+    """Every letter picture shrunk to 12 x 12, with its label and whether its font is held out."""
+    from PIL import Image
+
+    from videos.ai.ai22.compute import dataset
+
+    imgs, labels, test, _ = dataset()
+    small = np.array([np.asarray(Image.fromarray((im * 255).astype(np.uint8)).resize((12, 12), Image.BILINEAR), float) / 255
+                      for im in imgs])
+    return small, labels, test
+
+
+def make_clips(n, T, seed, split="train"):
+    """Clips of a 12 x 12 letter moving one pixel a frame in a 20 x 20 box, bouncing off the walls."""
+    small, labels, test = small_letters()
+    pool = np.where(~test if split == "train" else test)[0]
+    g = np.random.default_rng(seed)
+    clips = np.zeros((n, T, GL, GL), np.float32)
+    lab = np.zeros(n, int)
+    room = GL - 12
+    for i in range(n):
+        j = int(g.choice(pool))
+        lab[i] = labels[j]
+        p = g.integers(0, room + 1, 2).astype(float)
+        v = np.array([g.choice([-1, 1]), g.choice([-1, 0, 1])], float)
+        for t in range(T):
+            y, x = int(p[0]), int(p[1])
+            clips[i, t, y:y + 12, x:x + 12] = small[j]
+            for a in range(2):  # bounce
+                if not 0 <= p[a] + v[a] <= room:
+                    v[a] = -v[a]
+            p = p + v
+    return clips, lab
+
+
+def clip_judge():
+    import torch
+
+    small, labels, test = small_letters()
+    g = np.random.default_rng(7)
+    X = np.zeros((len(small) * 4, GL, GL), np.float32)
+    Y = np.repeat(labels, 4)
+    for i, im in enumerate(np.repeat(small, 4, 0)):
+        y, x = g.integers(0, GL - 12 + 1, 2)
+        X[i, y:y + 12, x:x + 12] = im
+    return train_judge(torch.tensor(X.reshape(len(X), -1)), torch.tensor(Y), n_steps=2500, seed=2)
+
+
+def centers(frames):
+    """Each frame's centre of brightness, (T, 2) in pixels."""
+    f = np.clip(np.asarray(frames), 0, None)
+    w = f.sum((-1, -2)) + 1e-9
+    yy, xx = np.mgrid[:GL, :GL]
+    return np.stack([(f * yy).sum((-1, -2)) / w, (f * xx).sum((-1, -2)) / w], -1)
+
+
+def jerk_of(clips):
+    """Median over clips of the mean |second difference| of the letter's centre (pixels, both axes summed)."""
+    c = np.stack([centers(cl) for cl in clips])
+    return float(np.median(np.abs(np.diff(c, 2, axis=1)).sum(-1).mean(1)))
+
+
+def coherence(judge, clips, want, skip=1):
+    """Scores on frames ``skip`` onward (frame 0 is the given, real one): per frame, the share of clips whose frame
+    the judge reads as the right letter; whether every scored frame of a clip is right; and how jerky the motion of
+    the scored frames is (median over clips of the mean |second difference| of the letter's centre)."""
+    clips = np.asarray(clips)[:, skip:]
+    T = clips.shape[1]
+    s = judge_scores(judge, clips.reshape(-1, GL, GL))
+    pred, conf = s["pred"].reshape(-1, T), s["conf"].reshape(-1, T)
+    right = (pred == np.asarray(want)[:, None]) & (conf > 0.5)
+    return dict(all_right=float(right.all(1).mean()), frame_right=right.mean(0), jerk=jerk_of(clips))
+
+
+class ClipNet:
+    """A small diffusion transformer over (frame, patch) tokens, conditioned on the letter and on each frame's noise
+    level through adaptive layer norm; attention across frames either full or causal (each frame sees itself and
+    the past).
+
+    Image-to-video options (all on by default; without them, 3,500 steps gave speckle, not letters):
+    ``concat`` feeds the oldest frame in view (the given first frame) in beside every frame, as Stable Video Diffusion
+    does; ``conv`` adds a 3 x 3 convolution before cutting frames into patches and two after putting them back, for
+    the one-pixel detail of these small letters; ``pred`` is what the network outputs: 'v' the velocity, 'x' the
+    clean frames, 'dx' the clean frames as a change to that oldest frame (so it starts out copying it)."""
+
+    def __new__(cls, T=8, D=96, L=4, H=4, causal=False, concat=True, pred="dx", conv=True):
+        import torch
+        import torch.nn as nn
+
+        P, NP = 4, 25
+
+        class Block(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.n1 = nn.LayerNorm(D, elementwise_affine=False)
+                self.n2 = nn.LayerNorm(D, elementwise_affine=False)
+                self.att = nn.MultiheadAttention(D, H, batch_first=True)
+                self.mlp = nn.Sequential(nn.Linear(D, 4 * D), nn.GELU(), nn.Linear(4 * D, D))
+                self.ada = nn.Linear(D, 6 * D)
+                nn.init.zeros_(self.ada.weight)
+                nn.init.zeros_(self.ada.bias)
+
+            def forward(self, h, c, mask):
+                s1, b1, g1, s2, b2, g2 = self.ada(c).chunk(6, -1)
+                a = self.n1(h) * (1 + s1) + b1
+                h = h + g1 * self.att(a, a, a, attn_mask=mask, need_weights=False)[0]
+                return h + g2 * self.mlp(self.n2(h) * (1 + s2) + b2)
+
+        class Net(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.T = T
+                self.pred = pred
+                self.concat = concat
+                cin = 2 if concat else 1
+                self.conv = conv
+                if conv:  # a small convolution before cutting into patches, and two after putting them back
+                    CS, CH = 16, 8
+                    self.stem = nn.Sequential(nn.Conv2d(cin, CS, 3, padding=1), nn.GELU())
+                    self.embed = nn.Linear(P * P * CS, D)
+                    self.head = nn.Sequential(nn.Conv2d(CH + cin, 32, 3, padding=1), nn.GELU(), nn.Conv2d(32, 1, 3, padding=1))
+                    self.CH = CH
+                else:
+                    self.embed = nn.Linear(P * P * cin, D)
+                self.pos_s = nn.Parameter(torch.randn(1, 1, NP, D) * 0.02)
+                self.pos_t = nn.Parameter(torch.randn(1, T, 1, D) * 0.02)
+                self.freq = nn.Parameter(torch.randn(D // 2) * 4.0, requires_grad=False)
+                self.tmlp = nn.Sequential(nn.Linear(D, D), nn.SiLU(), nn.Linear(D, D))
+                self.lab = nn.Embedding(26, D)
+                self.blocks = nn.ModuleList([Block() for _ in range(L)])
+                self.nf = nn.LayerNorm(D, elementwise_affine=False)
+                self.out = nn.Linear(D, P * P * (self.CH if conv else 1))
+                if pred == "dx":  # starts out predicting a plain copy of the given frame
+                    last = self.head[-1] if conv else self.out
+                    nn.init.zeros_(last.weight)
+                    nn.init.zeros_(last.bias)
+                fr = torch.arange(T).repeat_interleave(NP)
+                self.register_buffer("mask", (fr[None, :] > fr[:, None]) if causal else torch.zeros(T * NP, T * NP, dtype=torch.bool))
+
+            def forward(self, x, t, y):
+                """x (B, F, 20, 20) with F <= T frames; t (B, F) each frame's noise level; y (B,) the letter."""
+                B, Fr = x.shape[:2]
+                xin = x[:, :, None]
+                if self.concat:  # the oldest frame in view (the given one), fed in beside every frame
+                    xin = torch.cat([xin, x[:, :1, None].expand_as(xin)], 2)
+                cin = xin.shape[2]
+                if self.conv:
+                    xin = self.stem(xin.reshape(B * Fr, cin, GL, GL)).reshape(B, Fr, -1, GL, GL)
+                C_ = xin.shape[2]
+                p = xin.reshape(B, Fr, C_, 5, P, 5, P).permute(0, 1, 3, 5, 2, 4, 6).reshape(B, Fr, NP, C_ * P * P)
+                h = self.embed(p) + self.pos_s + self.pos_t[:, :Fr]
+                a = t[..., None] * self.freq * 2 * math.pi
+                c = self.tmlp(torch.cat([torch.sin(a), torch.cos(a)], -1)) + self.lab(y)[:, None]
+                c = c[:, :, None].expand(B, Fr, NP, D).reshape(B, Fr * NP, D)
+                h = h.reshape(B, Fr * NP, D)
+                m = self.mask[:Fr * NP, :Fr * NP]
+                for b in self.blocks:
+                    h = b(h, c, m)
+                if not self.conv:
+                    return self.out(self.nf(h)).reshape(B, Fr, 5, 5, P, P).permute(0, 1, 2, 4, 3, 5).reshape(B, Fr, GL, GL)
+                o = self.out(self.nf(h)).reshape(B, Fr, 5, 5, self.CH, P, P).permute(0, 1, 4, 2, 5, 3, 6).reshape(B * Fr, self.CH, GL, GL)
+                skip = x[:, :, None]
+                if self.concat:
+                    skip = torch.cat([skip, x[:, :1, None].expand_as(skip)], 2)
+                o = torch.cat([o, skip.reshape(B * Fr, cin, GL, GL)], 1)
+                return self.head(o).reshape(B, Fr, GL, GL)
+
+        return Net()
+
+
+def clean_estimate(m, x, t, y):
+    """The model's guess at the clean frames, from x (B, F, 20, 20) at noise levels t (B, F)."""
+    o = m(x, t, y)
+    if m.pred == "dx":  # predicted as a change to the oldest frame in view (the given one)
+        return o + x[:, :1]
+    if m.pred == "x":
+        return o
+    return x + (1 - t)[..., None, None] * o  # velocity prediction
+
+
+def velocity(m, x, t, y):
+    """The flow's velocity at x: for a model that predicts the clean frames, (x_clean - x_t) / (1 - t), with 1 - t
+    kept above 0.05."""
+    if m.pred == "v":
+        return m(x, t, y)
+    return (clean_estimate(m, x, t, y) - x) / (1 - t).clamp(min=0.05)[..., None, None]
+
+
+def clip_levels(mode, B, T, g):
+    """Each training clip's noise levels t (B, T) and loss weights w (B, T). Frame 0 is always given clean (t = 1, the
+    data end of x_t = (1 - t) noise + t data) and is never a target: image-to-video."""
+    import torch
+
+    ar = torch.arange(T)[None]
+    first = ar == 0
+    if mode == "clip":  # the frames after the first share one noise level
+        t = torch.rand(B, 1, generator=g).expand(B, T)
+        w = torch.ones(B, T)
+    elif mode == "forcing":  # every frame after the first its own level
+        t = torch.rand(B, T, generator=g)
+        w = torch.ones(B, T)
+    else:  # teacher: frames before f clean (frame 0 always among them), frame f noised and learned
+        f = torch.randint(1, T, (B,), generator=g)
+        t = torch.where(ar < f[:, None], torch.ones(B, T), torch.rand(B, 1, generator=g).expand(B, T))
+        w = (ar == f[:, None]).float()
+    return torch.where(first, torch.ones(B, T), t), torch.where(first, torch.zeros(B, T), w)
+
+
+def train_clipnet(mode, clips, lab, n_steps, seed=0, B=48, lr=2e-3, log=True, concat=True, pred="dx", conv=True, xloss=True,
+                  hook=None):
+    """mode: 'clip' (full attention, one noise level for the frames after the first), 'teacher' (causal; earlier
+    frames clean, one frame noised, loss on it), 'forcing' (causal; every frame its own noise level, loss on all).
+    In every mode the first frame is given clean and never learned. ``xloss``: the squared error of the clean frames
+    (weighting every noise level alike) rather than of the velocity (which weights the nearly clean end heavily: there
+    the model learned to clean up noise but never to keep the letter's shape). ``hook(m, step)`` is called each step."""
+    import time
+
+    import torch
+
+    torch.manual_seed(seed)
+    T = clips.shape[1]
+    m = ClipNet(T=T, causal=mode != "clip", concat=concat, pred=pred, conv=conv)
+    opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=0.0)
+    n = steps(n_steps)
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=n, pct_start=0.3 if QUICK else 0.05)
+    X = torch.tensor(clips * 2 - 1)
+    Yl = torch.tensor(lab)
+    g = torch.Generator().manual_seed(seed)
+    t0, run = time.time(), []
+    for st in range(1, n + 1):
+        i = torch.randint(0, len(X), (B,), generator=g)
+        x1, y = X[i], Yl[i]
+        x0 = torch.randn(x1.shape, generator=g)
+        t, w = clip_levels(mode, B, T, g)
+        xt = (1 - t[..., None, None]) * x0 + t[..., None, None] * x1
+        if xloss:  # squared error of the clean frames themselves
+            err = ((clean_estimate(m, xt, t, y) - x1) ** 2).mean((-1, -2))
+        else:  # squared error of the velocity
+            err = ((velocity(m, xt, t, y) - (x1 - x0)) ** 2).mean((-1, -2))
+        loss = (err * w).sum() / w.sum()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        sched.step()
+        run.append(loss.item())
+        if log and st % 500 == 0:
+            print(f"      {mode} step {st}: loss {np.mean(run):.4f} ({time.time() - t0:.0f}s)", flush=True)
+            run = []
+        if hook is not None:
+            hook(m, st)
+    m.eval()
+    return m
+
+
+def sample_clip(m, first, y, n_steps=30, seed=0):
+    """Image-to-video: frame 0 held at the given real frame (clean, t = 1); frames 1 .. T-1 denoised together from
+    noise. ``first`` (B, 20, 20) in [0, 1]."""
+    import torch
+
+    gen = torch.Generator().manual_seed(seed)
+    B, T = len(y), m.T
+    f0 = torch.tensor(np.asarray(first, np.float32) * 2 - 1)
+    x = torch.randn(B, T, GL, GL, generator=gen)
+    x[:, 0] = f0
+    yy = torch.tensor(np.asarray(y))
+    with torch.no_grad():
+        for k in range(n_steps):
+            t = torch.full((B, T), k / n_steps)
+            t[:, 0] = 1.0
+            x = x + velocity(m, x, t, yy) / n_steps
+            x[:, 0] = f0
+    return ((x.numpy() + 1) / 2).clip(0, 1)
+
+
+def rollout(m, first, y, n_frames, window, n_steps=24, seed=0):
+    """Start from the given real frame and write frames 1 .. n_frames-1 one after another: the earlier frames (at most
+    window - 1 of them) clean, the new one denoised."""
+    import torch
+
+    gen = torch.Generator().manual_seed(seed)
+    B = len(y)
+    yy = torch.tensor(np.asarray(y))
+    done = [torch.tensor(np.asarray(first, np.float32) * 2 - 1)[:, None]]
+    with torch.no_grad():
+        for f in range(1, n_frames):
+            ctx = done[-(window - 1):]
+            new = torch.randn(B, 1, GL, GL, generator=gen)
+            for k in range(n_steps):
+                x = torch.cat(ctx + [new], 1)
+                t = torch.cat([torch.ones(B, len(ctx)), torch.full((B, 1), k / n_steps)], 1)
+                new = new + velocity(m, x, t, yy)[:, -1:] / n_steps
+            done.append(new.clamp(-1, 1))
+    return ((torch.cat(done, 1).numpy() + 1) / 2).clip(0, 1)
+
+
+N_CLIP_STEPS = 7000  # batch 48; a 3,000-step pilot read 55% of whole-clip frames right (real clips about 87%)
+
+
+def compute_clips():
+    """Image-to-video on the bouncing letters: every model is given a real first frame (from a held-out font) and
+    draws what follows. Every score below is on the generated frames only; the given first frame is left out."""
+    import time
+
+    import torch
+
+    torch.set_num_threads(3)
+    T, n_test = 8, 48
+    clips, lab = make_clips(6000 if not QUICK else 64, T, seed=0)
+    test_clips, test_lab = make_clips(n_test, T, seed=1, split="test")  # unseen fonts: their first frames are given
+    first = test_clips[:, 0]
+    judge = clip_judge()
+    rc, rl = make_clips(200, T, seed=2, split="test")
+    real = coherence(judge, rc, rl)
+    out = dict(T=T, n_test=n_test, real_all_right=real["all_right"], real_frames_right=float(real["frame_right"].mean()),
+               real_jerk=real["jerk"], examples=test_clips[:4], given=test_clips[:6], given_labels=test_lab[:6])
+    print(f"    real clips (frames 1-{T - 1}): letter right {100 * out['real_frames_right']:.0f}% of frames, "
+          f"jerk {real['jerk']:.2f}px", flush=True)
+    # 1. the clip model, against the same model's frames taken from different samples (each frame drawn on its own)
+    t0 = time.time()
+    m = train_clipnet("clip", clips, lab, N_CLIP_STEPS, seed=0)
+    print(f"    clip model trained in {time.time() - t0:.0f}s", flush=True)
+    S = sample_clip(m, first, test_lab, seed=3)
+    indep = S.copy()
+    for f in range(1, T):
+        indep[:, f] = sample_clip(m, first, test_lab, seed=10 + f)[:, f]
+    for name, c in (("joint", S), ("indep", indep)):
+        r = coherence(judge, c, test_lab)
+        out[f"{name}_all_right"], out[f"{name}_jerk"], out[f"{name}_clips"] = r["all_right"], r["jerk"], c[:6]
+        out[f"{name}_frames_right"] = float(r["frame_right"].mean())
+        print(f"    {name}: letter right {100 * out[f'{name}_frames_right']:.0f}% of frames, every frame right "
+              f"{100 * r['all_right']:.0f}%, jerk {r['jerk']:.2f}px", flush=True)
+    # 2. frame after frame, trained 8 frames long, rolled out to 32 from the given frame: teacher against diffusion forcing
+    long = 4 * T
+    for mode in ("teacher", "forcing"):
+        t0 = time.time()
+        mm = train_clipnet(mode, clips, lab, N_CLIP_STEPS, seed=1)
+        print(f"    {mode} model trained in {time.time() - t0:.0f}s", flush=True)
+        R = rollout(mm, first, test_lab, long, window=T, seed=4)
+        r = coherence(judge, R, test_lab)
+        fr = r["frame_right"]  # generated frames 1 .. long-1
+        out[f"{mode}_frame_right"], out[f"{mode}_jerk"], out[f"{mode}_rollout"] = fr, r["jerk"], R[:6]
+        out[f"{mode}_early_right"], out[f"{mode}_late_right"] = float(fr[:T].mean()), float(fr[-T:].mean())
+        out[f"{mode}_early_jerk"], out[f"{mode}_late_jerk"] = jerk_of(R[:, 1:T + 1]), jerk_of(R[:, -T:])
+        print(f"    {mode}: letter right in generated frames 1-{T} {100 * out[f'{mode}_early_right']:.0f}%, "
+              f"in {long - T}-{long - 1} {100 * out[f'{mode}_late_right']:.0f}%; jerk {out[f'{mode}_early_jerk']:.2f}px, "
+              f"then {out[f'{mode}_late_jerk']:.2f}px (all {r['jerk']:.2f}px)", flush=True)
+    out["long"], out["steps"] = long, steps(N_CLIP_STEPS)
+    return out
+
+
+# ---------------------------------------------------------------------------
+def compute_vae3d():
+    """A causal video autoencoder: frame 0 squeezed alone, then every 4 frames into one latent frame; 4x in space."""
+    import torch
+    import torch.nn as nn
+
+    torch.set_num_threads(2)
+    torch.manual_seed(2024)
+    T, C = 9, 4
+    clips, _ = make_clips(3000 if not QUICK else 32, T, seed=5)
+    test, _ = make_clips(64, T, seed=6, split="test")
+
+    class Enc(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.first = nn.Sequential(nn.Conv2d(1, 32, 4, 2, 1), nn.SiLU(), nn.Conv2d(32, C, 4, 2, 1))  # 20 -> 5
+            self.group = nn.Sequential(nn.Conv3d(1, 32, (4, 4, 4), (4, 2, 2), (0, 1, 1)), nn.SiLU(),
+                                       nn.Conv3d(32, C, (1, 4, 4), (1, 2, 2), (0, 1, 1)))  # (4, 20, 20) -> (1, 5, 5)
+
+        def forward(self, x):  # (B, 9, 20, 20) -> (B, C, 3, 5, 5); latent frame k sees only frames up to 4k
+            z0 = self.first(x[:, :1])[:, :, None]
+            z1 = self.group(x[:, None, 1:5])
+            z2 = self.group(x[:, None, 5:9])
+            return torch.cat([z0, z1, z2], 2)
+
+    class Dec(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.first = nn.Sequential(nn.ConvTranspose2d(C, 32, 4, 2, 1), nn.SiLU(), nn.ConvTranspose2d(32, 1, 4, 2, 1))
+            self.group = nn.Sequential(nn.ConvTranspose3d(C, 32, (1, 4, 4), (1, 2, 2), (0, 1, 1)), nn.SiLU(),
+                                       nn.ConvTranspose3d(32, 1, (4, 4, 4), (4, 2, 2), (0, 1, 1)))
+
+        def forward(self, z):
+            f0 = self.first(z[:, :, 0])
+            g1 = self.group(z[:, :, 1:2])[:, 0]
+            g2 = self.group(z[:, :, 2:3])[:, 0]
+            return torch.cat([f0, g1, g2], 1)  # logits: the pixels are mostly black, so train with cross-entropy
+
+    enc, dec = Enc(), Dec()
+    opt = torch.optim.Adam([*enc.parameters(), *dec.parameters()], lr=2e-3)
+    X = torch.tensor(clips)
+    g = torch.Generator().manual_seed(0)
+    for _ in range(steps(4000)):
+        x = X[torch.randint(0, len(X), (32,), generator=g)]
+        loss = torch.nn.functional.binary_cross_entropy_with_logits(dec(enc(x)), x)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    with torch.no_grad():
+        Xt = torch.tensor(test)
+        z = enc(Xt)
+        rec = torch.sigmoid(dec(z)).numpy()
+    rmse = float(np.sqrt(((rec - test) ** 2).mean()))
+    per_frame = np.sqrt(((rec - test) ** 2).mean((0, 2, 3)))
+    out = dict(T=T, C=C, latent_shape=list(z.shape[1:]), pixels=T * GL * GL, numbers=int(np.prod(z.shape[1:])),
+               rmse=rmse, per_frame=per_frame, orig=test[:3], rec=rec[:3])
+    print(f"    {T} frames x 400 pixels -> {out['numbers']} numbers ({out['pixels'] / out['numbers']:.0f}x); "
+          f"rebuild error {rmse:.3f}", flush=True)
+    return out

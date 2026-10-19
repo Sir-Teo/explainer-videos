@@ -1,36 +1,31 @@
-# AI, Built — Part 8: Networks
+# AI, Built — Part 8: Fitting and Generalizing
 
-Part 8 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
-network is, what one layer and many layers can represent, what it takes to train a deep one, and the first neural
-language model on the series' scoreboard. Every network here is trained by `compute.py` (PyTorch, CPU). A hook and
-five chapters:
+Part 8 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). A model
+is fitted to examples; why should it work on anything else? The classical answers, and the two experiments that
+broke them, mostly on Part 6's pages (Austen and Dickens, 448 for training, 191 held out). A hook and four chapters:
 
-* **Two spirals.** A 2 → 32 → 32 → 32 → 2 ReLU network learning two interleaved spirals: its decision regions and its
-  linear pieces (thousands of them) at steps 0, 50, 200, 600 and 3,000.
-* **One layer can do anything.** A unit: a weighted sum and a ReLU, a hinge; a curve built from 2, 4, 8, 16 and 64
-  hinges by least squares (the miss falling from 0.45 to 0.0014); the universal approximation theorem.
-* **What depth adds.** The tent map composed k times: 2^k pieces from 2k units (Telgarsky); 48 random units arranged
-  in 1 to 6 layers cut the plane into about 800 pieces whatever the depth (Hanin & Rolnick).
-* **Signals through fifty layers.** 50 layers of 256 ReLUs: with weights 0.7× too small the signal shrinks about
-  thirty million times, 1.4× too big it grows about ten million times, and at Var(w) = 2/n it stays steady (He et al.);
-  gradients likewise.
-* **The residual stream.** h + f(h); the identity in every block's Jacobian; 40 plain layers stuck at 50% on the
-  spirals, 40 residual layers at 100%; LayerNorm; then today's block: pre-norm, RMSNorm (g ⊙ h / RMS(h)) and SwiGLU
-  (W₂(SiLU(W₁x) ⊙ W₃x)), whose hidden width of 8d/3 keeps the weights at 3·d·(8/3)d = 8d², as with 4d.
-* **A neural language model.** Bengio et al.'s design for characters (24 characters of context, learned 32-number
-  vectors, 1,024 tanh units), trained on Part 1's books: its bits per character on the passage, its mixture with
-  Part 6's Kneser–Ney (the scoreboard's new rows), the learned character vectors, and its writing.
-* **Recap**, where it comes back, Part 9's teaser, references.
+* **The gap.** Part 6's nearest-neighbour vote: 93% of training pages but 68% of new ones with one neighbour; the
+  two error curves meeting as more neighbours vote.
+* **Bias and variance.** Sixteen noisy points from one curve, drawn 200 times (illustrative): straight lines miss the
+  same way every time, degree-12 polynomials differ every time, degree 5 is right; bias² + variance + noise, the U.
+* **How much can a model fit?** Lines in the plane split 3 points every way (8 labellings) but not 4 (the two XOR
+  labellings): VC dimension 3 and the VC bound; linear models on 1 to 70 word rates fitting coin flips (53% to 68%),
+  Rademacher complexity.
+* **Memorizing nonsense.** One network (70 → 512 → 512 → 2, 300,034 weights) trained on the true authors (99.5% of new
+  pages) and on shuffled authors: it fits every shuffled label too, and is at chance on new pages (Zhang et al.).
+* **Double descent.** Least squares on p random ReLU features, minimum-norm past p = n = 448: the error falls, rises,
+  explodes at p = n, and falls again below the first minimum (Belkin et al.).
+* **Recap**, where it comes back, Part 9's teaser (a ReLU network's linear pieces), references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai8.compute          # needs Part 1's books (.cache/ai1) and Part 6's Kneser-Ney (.cache/ai6)
+python -m videos.ai.ai8.compute          # needs Part 6's pages (.cache/ai6); torch for two items
 python tools/build.py ai8                # English
 python tools/build.py ai8 --lang zh      # Chinese
 ```
 
-References: I. Goodfellow, Y. Bengio & A. Courville, *Deep Learning* (2016); S. J. D. Prince, *Understanding Deep
-Learning* (2023); D. A. Roberts, S. Yaida & B. Hanin, *The Principles of Deep Learning Theory* (2022); Cybenko (1989);
-Hornik, Stinchcombe & White (1989); Telgarsky (2016); Hanin & Rolnick (2019); Glorot & Bengio (2010); He et al.
-(2015, both); Ba, Kiros & Hinton (2016); Bengio, Ducharme, Vincent & Jauvin (2003).
+References: S. Shalev-Shwartz & S. Ben-David, *Understanding Machine Learning* (2014); T. Hastie, R. Tibshirani & J.
+Friedman, *The Elements of Statistical Learning* (2009); V. Vapnik, *The Nature of Statistical Learning Theory*
+(1995); Geman, Bienenstock & Doursat (1992); Vapnik & Chervonenkis (1971); Bartlett & Mendelson (2002); Zhang et al.
+(2017); Belkin, Hsu, Ma & Mandal (2019); Nakkiran et al. (2020).

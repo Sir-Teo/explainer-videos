@@ -3,70 +3,73 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai16.common import IMG_C, SND_C, TEXT_C, TOKEN_COLORS, gray_image, heat, load, token_chips
+from videos.ai.ai16.common import MONO, billions, load
 
 
 class Hook(VoiceoverScene):
     def construct(self):
-        self.converge()
+        self.experts()
         self.plan()
 
     # ------------------------------------------------------------------
-    def converge(self):
-        b, v, s = load("bpe"), load("vq"), load("sound")
-        cut = [str(x) for x in b["cut2000"]][:8]
-        text = token_chips(cut, font_size=28, height=0.5).move_to([-2.2, 2.5, 0])
-        # the picture, as 25 patches of 4 x 4 pixels laid exactly over it
-        img = np.asarray(v["image"])
-        P, n = 1.8 / 5, 5
-        c_pic = np.array([-4.2, 0.1, 0])
-        patches = Group(*[gray_image(img[4 * r:4 * r + 4, 4 * c:4 * c + 4], P).move_to(c_pic + np.array([(c - 2) * P, (2 - r) * P, 0]))
-                          for r in range(n) for c in range(n)])
-        # the sound, as 8 slices of its spectrogram
-        spec = np.asarray(s["spec"])[::-1]
-        k, sw = 8, 0.55
-        c_snd = np.array([1.8, 0.1, 0])
-        cols = np.array_split(np.arange(spec.shape[1]), k)
-        slices = Group(*[heat(spec[:, ix], sw, 1.8, color=SND_C, lo=spec.min(), hi=spec.max()).move_to(c_snd + np.array([(j - (k - 1) / 2) * sw, 0, 0]))
-                         for j, ix in enumerate(cols)])
-        labs = VGroup(label(r"text", font_size=26, color=TEXT_C).next_to(text, LEFT, buff=0.3),
-                      label(r"a picture", font_size=26, color=IMG_C).next_to(patches, UP, buff=0.25),
-                      label(r"sound", font_size=26, color=SND_C).next_to(slices, UP, buff=0.25))
-        # one sequence at the bottom: text tokens, then picture tokens, then sound tokens
-        picks = [6, 7, 8, 11, 12, 13, 16, 17, 18]  # the middle of the letter
-        kinds = [TEXT_C] * len(text) + [IMG_C] * len(picks) + [SND_C] * k
-        q = 0.42
-        seq = VGroup(*[Square(q, stroke_color=c_, stroke_width=2, fill_color=c_, fill_opacity=0.35) for c_ in kinds])
-        seq.arrange(RIGHT, buff=0.06).move_to([0, -2.6, 0])
-        sl = label(r"one sequence of tokens", font_size=26, color=WHITE).next_to(seq, DOWN, buff=0.25)
+    def experts(self):
+        c = load("configs")
+        ds = next(r for r in c["rows"] if r["name"] == "DeepSeek-V3")
+        n, k = int(ds["experts"]), int(ds["k"])
+        cells = VGroup(*[Square(0.27, stroke_width=0.8, stroke_color=GREY_D, fill_color=GREY_D, fill_opacity=0.25)
+                         for _ in range(n)]).arrange_in_grid(rows=8, cols=32, buff=0.07).move_to(DOWN * 0.3)
+        shared = Square(0.5, stroke_color=C.INTERVAL, stroke_width=2, fill_color=C.INTERVAL, fill_opacity=0.5)
+        shared.next_to(cells, LEFT, buff=0.35)
+        sl = label(r"shared", font_size=18, color=C.INTERVAL).next_to(shared, DOWN, buff=0.08)
+        words = ["Spade", "looked", "at", "the", "girl", "for", "a", "long", "moment", "and", "then", "smiled"]
+        g = np.random.default_rng(3)
+        head = VGroup(label(rf"DeepSeek-V3: \ ${billions(ds['total'])}$ parameters, \ "
+                            rf"${n}$ experts in each expert layer", font_size=30),
+                      label(rf"each token uses ${k}$ of them, \ and one shared: \ ${billions(ds['active'])}$ "
+                            rf"\ (${100 * ds['frac']:.1f}\%$)", font_size=28, color=C.BITS)).arrange(DOWN, buff=0.15)
+        head.to_edge(UP, buff=0.35)
+        tok = Text("", font=MONO, font_size=30)
         with self.voiceover(
-            "A transformer reads tokens. So how does a model look at a picture, or listen to a voice? "
-            "<bookmark mark='a'/> Everything is turned into tokens first: text into pieces of words, pictures into "
-            "codes for patches, sound into codes for slices of time. <bookmark mark='b'/> Then it's all one "
-            "sequence, and one model can read it."
+            "DeepSeek-V3 has six hundred and seventy-one billion parameters. <bookmark mark='a'/> But for each "
+            f"token it reads, it uses only {ds['active'] / 1e9:.0f} billion of them. Each of its expert layers "
+            f"holds {n} small networks, called experts, and a router sends each token to just {k} of them, plus one "
+            "that everyone shares. <bookmark mark='b'/> Watch: every word lights up a different few."
         ) as vo:
-            self.play(FadeIn(text), FadeIn(patches), FadeIn(slices), FadeIn(labs), run_time=1.5)
+            self.play(FadeIn(head[0]), LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.003), FadeIn(shared),
+                      FadeIn(sl), run_time=2.0)
+
+            def route(w, rt=1.0):
+                nonlocal tok
+                pick = g.choice(n, k, replace=False)
+                t = Text(w, font=MONO, font_size=34, color=C.BITS).next_to(cells, DOWN, buff=0.45)
+                self.play(FadeOut(tok), FadeIn(t), *[cells[i].animate.set_fill(C.BITS, opacity=0.9) for i in pick],
+                          shared.animate.set_fill(opacity=0.9), run_time=0.45 * rt)
+                self.play(*[cells[i].animate.set_fill(GREY_D, opacity=0.25) for i in pick],
+                          shared.animate.set_fill(opacity=0.5), run_time=0.35 * rt)
+                tok = t
+
+            for w in words[:3]:  # the first few slowly, while the numbers are read
+                route(w, 1.6)
             vo.wait_until("a")
-            self.play(text.animate.arrange(RIGHT, buff=0.22, center=False),  # center=False: spread from the first chip, in place
-                      *[p_.animate.shift((p_.get_center() - c_pic) * 0.35) for p_ in patches],
-                      *[q_.animate.shift((q_.get_center() - c_snd) * 0.3) for q_ in slices], run_time=1.5)
+            self.play(FadeIn(head[1]))
+            for w in words[3:6]:
+                route(w, 1.3)
             vo.wait_until("b")
-            movers = list(text) + [patches[i] for i in picks] + list(slices)
-            self.play(LaggedStart(*[FadeTransform(m.copy(), sq) for m, sq in zip(movers, seq)], lag_ratio=0.06),
-                      *[p_.animate.set_opacity(0.3) for i, p_ in enumerate(patches) if i not in picks], run_time=2.5)
-            self.play(FadeIn(sl))
+            for w in words[6:]:
+                route(w)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def plan(self):
-        title = label(r"Part 16: \ Every Sense Is a Token", font_size=52).to_edge(UP, buff=0.6)
-        sub = label(r"byte-pair encoding, \ codebooks, \ sound codes, \ CLIP and SigLIP, \ omni models", font_size=28,
-                    color=C.BITS).next_to(title, DOWN, buff=0.25)
+        title = label(r"Part 16: \ Sparsity", font_size=52).to_edge(UP, buff=0.6)
+        sub = label(r"routers, \ experts, \ load balancing, \ sparse attention", font_size=30, color=C.BITS)
+        sub.next_to(title, DOWN, buff=0.25)
         smap = series_map(current=16, done=15).scale(0.85).move_to(DOWN * 0.9)
         with self.voiceover(
-            "This part is about how the senses become tokens, how pictures and words are matched, "
-            "<bookmark mark='a'/> and how one model can see, listen and speak."
+            "This part is about using only some of a model at a time: how a router chooses, how to keep every "
+            "expert busy, what the experts learn, <bookmark mark='a'/> and how attention, too, can look at only "
+            "what matters."
         ) as vo:
             self.play(FadeIn(title), FadeIn(sub))
             vo.wait_until("a")

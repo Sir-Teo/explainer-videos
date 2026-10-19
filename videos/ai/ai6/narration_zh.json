@@ -1,178 +1,220 @@
 {
- "title": "人工智能，从零搭建 · 第6部分：统计机器学习",
+ "title": "人工智能，从零搭建 · 第6部分：经典机器学习",
  "chapters": {
-  "Hook": "没人标注的结构",
-  "PCA": "1. 主成分",
-  "EM": "2. 隐藏的来源：混合模型与EM算法",
-  "HMM": "3. 隐马尔可夫模型",
-  "Graphs": "4. 把模型画成图",
-  "GP": "5. 高斯过程",
-  "VI": "6. 变分推断",
-  "KneserNey": "7. Kneser–Ney：最好的计数方法",
+  "Hook": "这一页是谁写的？",
+  "LeastSquares": "1. 最小二乘法",
+  "Logistic": "2. 逻辑回归",
+  "Lasso": "3. 岭回归与套索",
+  "LDA": "4. 费希尔的方向",
+  "KNN": "5. 问问邻居",
+  "SVM": "6. 最宽的街道",
+  "Trees": "7. 树、森林与提升法",
+  "Board": "8. 比赛",
   "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
-  "535cafc39b8b": {
+  "f65df1260655": {
    "scene": "Hook",
-   "en": "Here are part five's six hundred and thirty-nine pages again, each a point in seventy dimensions, seen along the three directions in which they vary most. But this time, nobody tells us who wrote which. <bookmark mark='a'/> Can the data reveal its own hidden structure? <bookmark mark='b'/> A model that assumes there are two hidden sources, and fits them with no labels at all, finds two groups. <bookmark mark='c'/> And they're the two authors: 97 percent of the pages land with the right one.",
-   "zh": "这又是第5部分的那639页，每一页都是70维空间里的一个点，这里是沿着它们变化最大的三个方向看过去的样子。不过这一次，没有人告诉我们哪一页是谁写的。<bookmark mark='a'/>数据能自己揭示出隐藏的结构吗？<bookmark mark='b'/>有一个模型，假设背后有两个隐藏的来源，在完全没有标签的情况下去拟合它们，结果找出了两组。<bookmark mark='c'/>而这两组，正是那两位作者：97%的书页，都落到了正确的作者那一组。"
+   "en": "Here's a page from a novel, a thousand words long, with the punctuation stripped away. <bookmark mark='a'/> Who wrote it: Jane Austen, or Charles Dickens?",
+   "zh": "这是一部小说里的一页，长1000个词，标点都去掉了。<bookmark mark='a'/>它是谁写的：简·奥斯汀，还是查尔斯·狄更斯？"
   },
-  "790b20d337e6": {
+  "507c907fb2d1": {
    "scene": "Hook",
-   "en": "This part is about models with hidden parts: directions, sources, states and functions that we never observe, only infer. <bookmark mark='a'/> Principal components, mixtures, hidden Markov models, Gaussian processes, and variational inference, plus a new row for the scoreboard.",
-   "zh": "这一部分讲的是带有隐藏部分的模型：方向、来源、状态和函数，我们从来观测不到它们，只能推断。<bookmark mark='a'/>主成分、混合模型、隐马尔可夫模型、高斯过程，还有变分推断，外加记分牌上新的一行。"
+   "en": "You might look for names or places. But in 1964, Mosteller and Wallace settled who wrote the disputed Federalist papers by counting small words, like upon, whilst and also. <bookmark mark='a'/> So describe each page by how often it uses the seventy commonest words. <bookmark mark='b'/> This page says 'the' a lot and 'not' very little, like Dickens. Austen says 'not', 'very' and 'be' far more often.",
+   "zh": "你也许会去找人名或地名。但在1964年，莫斯特勒与华莱士判定了《联邦党人文集》里那些有争议的篇章出自谁手，靠的是数小词，比如upon、whilst和also。<bookmark mark='a'/>所以，我们就用最常见的70个词在一页里出现得有多频繁，来描述这一页。<bookmark mark='b'/>这一页“the”用得很多，“not”用得很少，像狄更斯。奥斯汀用“not”、“very”和“be”，要多得多。"
   },
-  "ac54529cb8d8": {
-   "scene": "PCA",
-   "en": "Chapter one. Principal components.",
-   "zh": "第1章。主成分。"
+  "cb3b1754c82a": {
+   "scene": "Hook",
+   "en": "Take just two of those numbers, how often a page says 'the' and how often it says 'not', and every page becomes a point. <bookmark mark='a'/> Six hundred and thirty-nine pages from five novels. The two authors mostly sit apart, but they overlap. <bookmark mark='b'/> Telling them apart is the oldest job in machine learning: classification. Draw a line? Bend it? Ask the neighbours? This part tries them all.",
+   "zh": "只取其中两个数：一页用“the”有多频繁，用“not”有多频繁，每一页就变成了一个点。<bookmark mark='a'/>这是来自5部小说的639页。两位作者大体上各占一边，但也有重叠。<bookmark mark='b'/>把它们区分开，是机器学习最古老的任务：分类。画一条直线？把它弄弯？问问邻居？这一部分把这些办法都试一遍。"
   },
-  "bedb7df1cc94": {
-   "scene": "PCA",
-   "en": "Principal components find the directions in which data varies the most. Start with the covariance matrix: seventy by seventy, how each pair of word rates moves together. <bookmark mark='a'/> It's symmetric, so, from part two, its eigenvectors are perpendicular, and each eigenvalue says how much of the variation lies along its eigenvector. <bookmark mark='b'/> The first direction holds 12.6 percent of all the variation, the next 9.1, and then they fall away.",
-   "zh": "主成分找的是数据变化最大的那些方向。先从协方差矩阵开始：它是70乘70的，记录着每一对词频是怎样一起变动的。<bookmark mark='a'/>它是对称的，所以按第2部分讲的，它的特征向量互相垂直，而每个特征值都说明，有多少变化落在它那个特征向量的方向上。<bookmark mark='b'/>第一个方向占了全部变化的12.6%，下一个占9.1%，然后就一路降下去了。"
+  "61a0694c7cab": {
+   "scene": "Hook",
+   "en": "These are the classics: least squares, logistic regression, nearest neighbours, support vector machines, trees and their forests. Regression is just the old name for fitting a formula to data. <bookmark mark='a'/> Act two of the series, learning, starts here, and every method is a few lines of numpy, Python's standard library for arrays of numbers.",
+   "zh": "这些都是经典方法：最小二乘法、逻辑回归、最近邻、支持向量机，还有决策树和由树组成的森林。回归，不过是“用一个公式去拟合数据”的老叫法。<bookmark mark='a'/>本系列的第二幕，学习，就从这里开始，而每一种方法，都只是几行numpy代码；numpy是Python处理数值数组的标准库。"
   },
-  "df268576e85e": {
-   "scene": "PCA",
-   "en": "What are these directions? Each one is a recipe for mixing the seventy word rates. <bookmark mark='a'/> The first weighs 'not', 'be', 'very' and 'she' against 'the', 'and' and 'out'. That's Austen against Dickens, found without ever being told who wrote what. <bookmark mark='b'/> The second weighs 'I', 'me', 'you', 'said' and 'my' against 'of' and 'their'. That's dialogue against narration: the other big difference between pages.",
-   "zh": "这些方向是什么？每个方向都是一份配方，说明怎样把70个词频混合起来。<bookmark mark='a'/>第一个方向，一边是“not”、“be”、“very”和“she”，另一边是“the”、“and”和“out”。这就是奥斯汀对狄更斯，而且从来没有人告诉过它，哪一页是谁写的。<bookmark mark='b'/>第二个方向，一边是“I”、“me”、“you”、“said”和“my”，另一边是“of”和“their”。这是对话对叙述：书页之间另一个大的差别。"
+  "02aab3789b41": {
+   "scene": "LeastSquares",
+   "en": "Chapter one. Least squares.",
+   "zh": "第1章。最小二乘法。"
   },
-  "9f8d811b6bac": {
-   "scene": "PCA",
-   "en": "Seen along the first three directions, the authors already sit apart. <bookmark mark='a'/> A single cut along the first direction sorts 88 percent of the pages correctly. PCA is part two's eigenvectors, put to work: the cheapest way to see a cloud of high-dimensional data.",
-   "zh": "沿着前三个方向看，两位作者已经各占一边了。<bookmark mark='a'/>只沿第一个方向切一刀，就能把88%的书页分对。主成分分析，简称PCA，正是让第2部分的特征向量派上了用场：要看清一团高维数据，这是最省事的办法。"
+  "e6569dd20e86": {
+   "scene": "LeastSquares",
+   "en": "The oldest method of all fits a line. Here are three points. <bookmark mark='a'/> For any line, measure how far each point misses it, straight up or down, and square each miss: literally, a square. <bookmark mark='b'/> Least squares picks the line whose squares have the smallest total area. <bookmark mark='c'/> Legendre published it in 1805. Gauss had used it four years earlier, to predict where the lost asteroid Ceres would reappear.",
+   "zh": "最古老的方法，是拟合一条直线。这里有三个点。<bookmark mark='a'/>对任意一条直线，量一量每个点偏离它多远，竖直向上或向下量，再把每个偏差平方：名副其实，真的是一个正方形。<bookmark mark='b'/>最小二乘法挑出的，就是这些正方形总面积最小的那条直线。<bookmark mark='c'/>勒让德在1805年发表了它。而高斯早在4年前就用过它，用来预测失踪的小行星谷神星会在哪里重新出现。"
   },
-  "4cab56363b67": {
-   "scene": "EM",
-   "en": "Chapter two. Mixtures, and the EM algorithm.",
-   "zh": "第2章。混合模型，以及EM算法。"
+  "aed85007d54c": {
+   "scene": "LeastSquares",
+   "en": "There's a beautiful way to see the answer. Write the three heights as a single point in three dimensions. <bookmark mark='a'/> Every possible line makes three predictions, and all of them together form a plane: everything you can reach by mixing a column of ones, which shifts the line up and down, with the column of x's, which tilts it. <bookmark mark='b'/> The best line is the point of that plane closest to the data. Drop a perpendicular. <bookmark mark='c'/> Perpendicular means the leftover is at right angles to both columns: the misses have no shift and no tilt left in them that the line could still fix. Write that down, and you have the normal equations, which give the best line directly, no searching needed.",
+   "zh": "有一种很美的方式来看这个答案。把三个高度写成三维空间里的一个点。<bookmark mark='a'/>每一条可能的直线都给出三个预测，所有这些预测合在一起，构成一个平面：也就是把一列1和一列x混合起来，所能到达的一切地方；那一列1让直线上下平移，那一列x让它倾斜。<bookmark mark='b'/>最好的直线，就是这个平面上离数据最近的那个点。从数据向平面作一条垂线。<bookmark mark='c'/>垂直，意味着剩下的那部分，与这两列都成直角：这些偏差里，已经没有直线还能修正的平移或倾斜了。把这一点写下来，就得到了正规方程，它直接给出最好的直线，根本不需要搜索。"
   },
-  "2516c3813c24": {
-   "scene": "EM",
-   "en": "PCA finds directions. A mixture model goes further: it supposes that each point was made by one of several hidden sources, each a bell curve of its own, and tries to recover them. Here are the pages along the first two directions, with no colours: we don't know who wrote what. <bookmark mark='a'/> Start with two guessed bells, badly placed. The expectation-maximization algorithm, EM, alternates two steps. <bookmark mark='b'/> E: for each page, how likely is each bell to have made it? That gives every page a soft colour. <bookmark mark='c'/> M: refit each bell to the pages, weighted by those colours.",
-   "zh": "主成分分析找的是方向。混合模型更进一步：它假设每个点都出自几个隐藏来源中的一个，每个来源都是自己的一条钟形曲线，然后设法把这些来源找回来。这是沿前两个方向排开的书页，没有颜色：我们不知道哪一页是谁写的。<bookmark mark='a'/>先猜两条钟形曲线，位置放得很差。期望最大化算法，简称EM算法，在两个步骤之间交替进行。<bookmark mark='b'/>E步：对每一页，每条钟形曲线生成它的可能性有多大？这就给每一页涂上了一种介于两色之间的颜色。<bookmark mark='c'/>M步：按这些颜色加权，把每条钟形曲线重新拟合到书页上。"
+  "7d92b9c6945b": {
+   "scene": "LeastSquares",
+   "en": "Here's least squares on real data. Count every word in part one's books, and rank them, from the commonest down. <bookmark mark='a'/> With logarithmic scales on both axes, the thousand commonest words fall almost exactly on a line. <bookmark mark='b'/> The least-squares slope is minus 1.08: the r-th commonest word turns up about one over r times as often as the first. That's Zipf's law, and the line explains 99.6 percent of the variation: <bookmark mark='c'/> of all the scatter of the points around their average height, the line accounts for everything but a sliver.",
+   "zh": "这是最小二乘法用在真实数据上。把第1部分那些书里的每个词都数一遍，再从最常见的往下排名。<bookmark mark='a'/>两条坐标轴都取对数刻度，最常见的1000个词，几乎恰好落在一条直线上。<bookmark mark='b'/>最小二乘的斜率是负1.08：第r常见的词，出现的次数大约是第一名的r分之1。这就是齐普夫定律，而这条直线解释了99.6%的变化：<bookmark mark='c'/>这些点围绕它们平均高度的所有散布里，这条直线解释了几乎全部，只剩下薄薄的一丝。"
   },
-  "08624bbdc5bb": {
-   "scene": "EM",
-   "en": "Then again: E, M, E, M. <bookmark mark='a'/> Each round can only raise the likelihood, so the bells creep toward a fit. <bookmark mark='b'/> After forty rounds they've settled, and the pages each one claims match the true authors 97 percent of the time. Nobody told it there were authors at all. EM fits any model with hidden parts, and it's the next chapter's engine too.",
-   "zh": "然后再来：E、M、E、M。<bookmark mark='a'/>每一轮，似然都只升不降，所以这两条钟形曲线一点一点地向拟合靠拢。<bookmark mark='b'/>40轮之后，它们稳定了下来，每条曲线认领的书页，有97%与真实的作者一致。根本没有人告诉过它，这些书页还有作者之分。EM算法能拟合任何带有隐藏部分的模型，它也是下一章的引擎。"
+  "324293398861": {
+   "scene": "Logistic",
+   "en": "Chapter two. Logistic regression.",
+   "zh": "第2章。逻辑回归。"
   },
-  "5c7f9fb8adae": {
-   "scene": "HMM",
-   "en": "Chapter three. Hidden Markov models.",
-   "zh": "第3章。隐马尔可夫模型。"
+  "5a8d1eb4bf09": {
+   "scene": "Logistic",
+   "en": "The simplest classifier draws a straight line. Give every page a score: a weighted sum of its two rates, plus a constant. <bookmark mark='a'/> Positive means Dickens, negative means Austen, and the line is where the score is exactly zero. <bookmark mark='b'/> But a score isn't a probability. Squash it with the sigmoid: large positive scores go to one, large negative scores to zero, and zero to a half.",
+   "zh": "最简单的分类器，画的是一条直线。给每一页打一个分：它的两个词频的加权和，再加上一个常数。<bookmark mark='a'/>分数为正，就是狄更斯；为负，就是奥斯汀；而那条直线，就是分数恰好为零的地方。<bookmark mark='b'/>但分数不是概率。用S形函数把它压扁：很大的正分数变成1，很大的负分数变成0，而0变成二分之一。"
   },
-  "a52bd7746022": {
-   "scene": "HMM",
-   "en": "Hidden states can also unfold in time. A hidden Markov model says there's a state we can't see, moving like part four's Markov chain, and each state emits a letter from its own table of chances. We see only the letters. <bookmark mark='a'/> Give it two hidden states, two hundred thousand letters of the books, and random first guesses. <bookmark mark='b'/> Fit it with EM again, which for this model is called Baum–Welch, and watch what each state learns to emit.",
-   "zh": "隐藏的状态，也可以随时间展开。隐马尔可夫模型是这样说的：有一个我们看不见的状态，像第4部分的马尔可夫链那样跳来跳去，而每个状态都按照自己的一张概率表，发射出一个字母。我们只看得到这些字母。<bookmark mark='a'/>给它两个隐状态、书里的20万个字母，再加上随机的初始猜测。<bookmark mark='b'/>还是用EM算法来拟合，用在这个模型上，它叫鲍姆–韦尔奇算法。看看每个状态学会了发射什么。"
+  "dc090ca068d0": {
+   "scene": "Logistic",
+   "en": "Over the whole plane, that makes a sheet: the probability of Dickens, rising from Austen's side to Dickens's. <bookmark mark='a'/> Lift each training page to the height of its true answer: zero for Austen, one for Dickens. The sheet should pass close to them. <bookmark mark='b'/> Fitting it means minimizing the average surprise, part one's cross-entropy, by part four's gradient descent. The best sheet leaves about half a bit of surprise per page.",
+   "zh": "在整个平面上，这就形成了一张曲面：狄更斯的概率，从奥斯汀那一侧，升到狄更斯那一侧。<bookmark mark='a'/>把每一个训练页，抬到它真实答案的高度：奥斯汀是0，狄更斯是1。这张曲面应该从它们近旁经过。<bookmark mark='b'/>拟合它，就是用第4部分的梯度下降，去最小化平均意外度，也就是第1部分的交叉熵。最好的那张曲面，每页大约还剩半比特的意外度。"
   },
-  "47da133f350f": {
-   "scene": "HMM",
-   "en": "One state ends up with the space, and a, e, i, o and u. The other takes every consonant. <bookmark mark='a'/> And they take turns: after one, the other, about 72 percent of the time. Nobody mentioned vowels. Cave and Neuwirth found exactly this in 1980.",
-   "zh": "最后，一个状态拿到了空格，还有a、e、i、o和u。另一个拿走了所有的辅音。<bookmark mark='a'/>而且它们轮流出现：一个状态之后接另一个，大约72%的时候是这样。没有人提过元音。1980年，凯夫与诺伊维尔特发现的正是这一点。"
+  "df3042e6c79e": {
+   "scene": "Logistic",
+   "en": "How is that line found? By gradient descent on the cross-entropy, the same recipe as every model in this series. <bookmark mark='a'/> It starts with every weight at zero: a coin flip for every page. Each step nudges the weights against the gradient: <bookmark mark='b'/> the line swings toward the gap between the two authors, the loss falls, and by about step 20 it has settled. <bookmark mark='c'/> A convex loss is shaped like a single bowl: it has one bottom, and every downhill path ends there, so where it settles doesn't depend on where it started.",
+   "zh": "那条线是怎么找到的？靠在交叉熵上做梯度下降，和这个系列里每个模型都一样的做法。<bookmark mark='a'/>一开始每个权重都是0：对每一页都像抛硬币。每一步都沿着梯度的反方向推一下权重：<bookmark mark='b'/>这条线朝两位作者之间的空隙转过去，损失下降，大约到第20步，它就稳定下来了。<bookmark mark='c'/>凸的损失，形状就像一只碗：它只有一个谷底，每一条下坡路都通向那里，所以它停在哪里，和从哪里出发无关。"
   },
-  "b9a969ed002c": {
-   "scene": "HMM",
-   "en": "Now decode: given a sentence, what's the most likely sequence of hidden states behind it? The Viterbi algorithm answers exactly, in one pass. <bookmark mark='v'/> Walk along the letters, and at each step keep only the best path into each state. <bookmark mark='w'/> At the end, trace the winner back. <bookmark mark='a'/> Here's Shannon's sentence from part one, every letter labelled by its hidden state. <bookmark mark='b'/> Speech recognition ran on models like this for thirty years.",
-   "zh": "现在来解码：给定一个句子，它背后最可能的隐状态序列是什么？维特比算法只要过一遍，就能给出精确的答案。<bookmark mark='v'/>沿着字母一路走过去，每一步，对每个状态只保留通向它的最佳路径。<bookmark mark='w'/>走到最后，再把胜出的那条路径往回追溯。<bookmark mark='a'/>这是第1部分香农的那个句子，每个字母都标上了它的隐状态。<bookmark mark='b'/>语音识别靠这样的模型，运转了30年。"
+  "368316b17944": {
+   "scene": "Logistic",
+   "en": "Now the test: pages the method never saw. With two rates, the line gets 82 percent of them right. <bookmark mark='a'/> Give it all seventy rates instead, and the same method gets 190 of the 191 test pages right. A handful of small words, counted, are a fingerprint.",
+   "zh": "现在来测试：用这个方法从没见过的书页。只用两个词频，这条直线能判对其中的82%。<bookmark mark='a'/>换成全部70个词频，同一个方法在191个测试页中判对了190个。一把小词，数一数，就是一枚指纹。"
   },
-  "3d8092581975": {
-   "scene": "Graphs",
-   "en": "Chapter four. Models as pictures.",
-   "zh": "第4章。把模型画成图。"
+  "36d85e2346e2": {
+   "scene": "Lasso",
+   "en": "Chapter three. Keeping the weights small.",
+   "zh": "第3章。让权重保持较小。"
   },
-  "cc24a1b8ae0a": {
-   "scene": "Graphs",
-   "en": "Every model in this part can be drawn the same way: <bookmark mark='q'/> a circle for each quantity, <bookmark mark='o'/> shaded if we observe it, <bookmark mark='h'/> empty if it's hidden, <bookmark mark='r'/> and an arrow wherever one depends directly on another. <bookmark mark='a'/> The mixture: a hidden choice of source, then a page, repeated for every page. <bookmark mark='b'/> The hidden Markov model: a chain of hidden states, each emitting a letter. <bookmark mark='c'/> The picture is a formula. The probability of everything is a product, the big pi: multiply one probability per circle, each given only the circles that point into it, its parents. That's a Bayesian network, Judea Pearl's language for reasoning under uncertainty.",
-   "zh": "这一部分的每个模型，都能用同一种方式画出来：<bookmark mark='q'/>每个量画一个圆圈，<bookmark mark='o'/>观测得到的涂上阴影，<bookmark mark='h'/>隐藏的留空，<bookmark mark='r'/>只要一个量直接依赖另一个，就画一根箭头。<bookmark mark='a'/>混合模型：先是一个隐藏的选择，选哪个来源，然后是一页书，每一页都这样重复一遍。<bookmark mark='b'/>隐马尔可夫模型：一串隐状态，每个都发射出一个字母。<bookmark mark='c'/>这幅图就是一个公式。一切的概率是一个乘积，也就是那个大大的π：每个圆圈乘上一个概率，每个概率只以指向它的那些圆圈为条件，也就是它的父节点。这就是贝叶斯网络：朱迪亚·珀尔为不确定性下的推理所创造的语言。"
+  "552b5b638c60": {
+   "scene": "Lasso",
+   "en": "With seventy weights, a model can lean on accidents of its training pages. A classic remedy: keep the weights small, by giving them a budget. <bookmark mark='a'/> Here are two weights, and the contour lines of the loss, whose lowest point is out here. <bookmark mark='b'/> Budget the squared length, and the weights must stay inside a circle: that's ridge regression. Budget the sum of absolute values, and they must stay inside a diamond: that's the lasso. The best weights are where the lowest contour line just touches the shape. <bookmark mark='c'/> Now shrink the budget. The circle's answer slides smoothly toward zero. The diamond's catches on a corner, where one weight is exactly zero.",
+   "zh": "有70个权重，模型就可能去依赖训练页里的偶然巧合。一个经典的补救办法：给权重定一个预算，让它们保持较小。<bookmark mark='a'/>这里有两个权重，还有损失的等高线，损失的最低点在外面这里。<bookmark mark='b'/>给长度的平方定预算，权重就只能待在一个圆里：这就是岭回归。给绝对值之和定预算，它们就只能待在一个菱形里：这就是Lasso，也叫套索。最好的权重，就在最低的那条等高线刚好碰到这个形状的地方。<bookmark mark='c'/>现在把预算缩小。圆给出的答案平滑地滑向零。菱形给出的答案却卡在一个角上，在那里，有一个权重恰好为零。"
   },
-  "82133cfe9190": {
-   "scene": "Graphs",
-   "en": "Part one's language models fit the same picture, with an arrow from every earlier letter to every later one. <bookmark mark='a'/> Nothing is hidden, but nothing is simplified either: each factor is a prediction from the whole past. Counting can't fill in factors like that. A network, from part eight on, can.",
-   "zh": "第1部分的语言模型，也套得进同样的图：每个靠前的字母，都有一根箭头指向每个靠后的字母。<bookmark mark='a'/>没有什么是隐藏的，但也没有做任何简化：每个因子，都是根据全部过去做出的预测。这样的因子，靠计数是填不出来的。神经网络可以，从第8部分开始。"
+  "19f66a157ddd": {
+   "scene": "Lasso",
+   "en": "That corner is the lasso's gift: it chooses. Here are all seventy weights of the authorship model, as the penalty relaxes from total to gentle. <bookmark mark='a'/> The first words to come alive are 'not', 'she', 'very', 'be', 'to', 'out', 'such' and 'mrs'. <bookmark mark='b'/> With just those eight words, the classifier gets 90 percent of the test pages right. Ridge, by contrast, keeps every word, only smaller.",
+   "zh": "那个角，正是套索的妙处：它会做选择。这是判断作者的模型的全部70个权重，惩罚项从最强一路放松到很弱。<bookmark mark='a'/>最先活过来的词是“not”、“she”、“very”、“be”、“to”、“out”、“such”和“mrs”。<bookmark mark='b'/>只用这8个词，分类器就能判对90%的测试页。相比之下，岭回归保留了每一个词，只是都变小了。"
   },
-  "16837c76a590": {
-   "scene": "GP",
-   "en": "Chapter five. Gaussian processes.",
-   "zh": "第5章。高斯过程。"
+  "aeeaf37297f1": {
+   "scene": "LDA",
+   "en": "Chapter four. Fisher's discriminant.",
+   "zh": "第4章。费希尔判别。"
   },
-  "613f144ee9dc": {
-   "scene": "GP",
-   "en": "Sometimes the hidden thing is a whole function. Here's how often each page of Great Expectations says 'her', from the start of the novel to the end. It rises and falls as the story moves between characters. <bookmark mark='a'/> A Gaussian process is a probability distribution over smooth functions. Gaussian means bell-shaped: at every page, the value is uncertain, most likely near the middle of a bell. <bookmark mark='k'/> The kernel, k, says how strongly two pages' values move together: strongly when the pages are close, hardly at all when they're far apart. Before seeing any data, here are five functions drawn from it: wiggly, with a typical width of wiggle, the length scale. <bookmark mark='b'/> Now condition on the pages. Only functions that pass near the data survive.",
-   "zh": "有时候，隐藏的东西是一整个函数。这是《远大前程》每一页用“her”的频率，从小说开头一直到结尾。随着故事在人物之间切换，它时起时落。<bookmark mark='a'/>高斯过程，是光滑函数上的一个概率分布。高斯的意思是钟形：在每一页，取值都是不确定的，最可能落在一条钟形曲线的中间附近。<bookmark mark='k'/>核函数k，说的是两页的取值有多么同步变化：两页离得近，就变化得很同步；离得远，就几乎互不相干。在看到任何数据之前，这是从中抽出的5个函数：它们弯弯曲曲，每道弯都有一个典型的宽度，叫作长度尺度。<bookmark mark='b'/>现在，以这些书页为条件。只有从数据近旁经过的函数，才能留下来。"
+  "1704ca863c08": {
+   "scene": "LDA",
+   "en": "In 1936, Ronald Fisher asked a different question. Along which direction do the two groups look most different? <bookmark mark='a'/> Pick a direction, and squash every page onto it. Each author becomes a pile. <bookmark mark='b'/> Turn the direction, and the piles slide together, or apart. Fisher's score is the gap between the piles' centres, squared, divided by how spread out they are.",
+   "zh": "1936年，罗纳德·费希尔问了一个不同的问题：沿着哪个方向看，这两组的差别最大？<bookmark mark='a'/>选一个方向，把每一页都压到它上面。每位作者就变成了一堆。<bookmark mark='b'/>转动这个方向，两堆就会彼此靠拢，或者分开。费希尔的得分，是两堆中心之间的差距的平方，除以它们散开的程度。"
   },
-  "4cdf1a34b838": {
-   "scene": "GP",
-   "en": "Their average is the best guess, and the band around it shows the uncertainty. <bookmark mark='a'/> The length scale, about 2 pages, wasn't set by hand: it's the one under which the data was most probable. <bookmark mark='b'/> Show the model only the first twenty pages, and beyond them the band opens wide again. A Gaussian process knows what it doesn't know, which is exactly what you want when deciding where to look next.",
-   "zh": "它们的平均就是最佳猜测，周围的那条带子表示不确定性。<bookmark mark='a'/>长度尺度大约是2页，它不是手工设定的：在这个长度尺度下，数据出现的概率最大。<bookmark mark='b'/>只给模型看前20页，过了这20页，带子又大大地张开了。高斯过程知道自己不知道什么，而当你要决定下一步该看哪里时，要的正是这一点。"
+  "395b1a0ce5b0": {
+   "scene": "LDA",
+   "en": "The best direction has a formula: the difference between the two centres, corrected by the inverse of the spread within each author. <bookmark mark='w'/> That correction means: stretch the space until each author's cloud is round, then point from one centre to the other. <bookmark mark='a'/> Here, it leans mostly on 'not'. <bookmark mark='b'/> Cut halfway between the piles, and you have a classifier. It gets 82 percent of the test pages right, the same as logistic regression. When each group is a bell of the same shape, this cut is exactly the best one possible.",
+   "zh": "最好的方向有一个公式：两个中心之差，再用每位作者内部散布的逆来校正。<bookmark mark='w'/>这个校正的意思是：把空间拉伸，直到每位作者的点云都变成圆的，再从一个中心指向另一个中心。<bookmark mark='a'/>在这里，它主要依靠“not”。<bookmark mark='b'/>在两堆的正中间切一刀，就得到一个分类器。它能判对82%的测试页，和逻辑回归一样。当每一组都是形状相同的钟形分布时，这一刀恰好就是可能的最好切法。"
   },
-  "92a3415c6985": {
-   "scene": "VI",
-   "en": "Chapter six. Variational inference.",
-   "zh": "第6章。变分推断。"
+  "098330a93727": {
+   "scene": "KNN",
+   "en": "Chapter five. Nearest neighbours.",
+   "zh": "第5章。最近邻。"
   },
-  "b1fe1bc9fc49": {
-   "scene": "VI",
-   "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. <bookmark mark='p'/> The posterior is what we believe about the hidden things after seeing the data: part four's updated belief. Part four sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
-   "zh": "对大多数带有隐藏部分的模型来说，精确的答案，也就是隐变量的后验，是一个我们算不出来的形状。<bookmark mark='p'/>后验，就是看到数据之后，我们对那些隐藏的东西的信念：也就是第4部分那种更新过的信念。第4部分用马尔可夫链，从这样的形状中采样。变分推断换了个做法：它从一个简单的家族里，挑出最接近的形状，这里是单个高斯分布，然后用它来代替。<bookmark mark='a'/>在什么意义上最接近？用第1部分的KL散度，方向是从q到p。从一个很差的猜测出发，让这个高斯分布顺着下坡滑下去。"
+  "dbb6512eec32": {
+   "scene": "KNN",
+   "en": "Here's a method with no line at all. To classify a page, find the training pages most like it, its nearest neighbours, and let them vote. <bookmark mark='a'/> Take this page from the test set. <bookmark mark='b'/> Its fifteen nearest neighbours: 5 by Austen, 10 by Dickens. <bookmark mark='c'/> The majority wins.",
+   "zh": "这个方法根本不用直线。要给一页分类，就找出和它最像的那些训练页，也就是它的最近邻，让它们投票。<bookmark mark='a'/>从测试集里拿出这一页。<bookmark mark='b'/>它的15个最近邻：5个是奥斯汀的，10个是狄更斯的。<bookmark mark='c'/>多数说了算。"
   },
-  "0b84f7cbb4ff": {
-   "scene": "VI",
-   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part fifteen, are trained exactly this way.",
-   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第15部分的变分自编码器，正是这样训练的。"
+  "0bef90a1f136": {
+   "scene": "KNN",
+   "en": "Colour every point of the plane by how its neighbours would vote, and you see the method's whole answer. <bookmark mark='a'/> With one neighbour, the regions are a ragged patchwork that copies the training pages: it gets 93 percent of them right, but only 68 percent of new ones. <bookmark mark='b'/> Fifteen neighbours smooth it out: 83 percent. <bookmark mark='c'/> Seventy-five, smoother still: 82. Too few neighbours memorize, too many blur, and that trade-off is the subject of part eight.",
+   "zh": "按照邻居们会怎样投票，给平面上的每个点涂上颜色，就能看到这个方法的全部答案。<bookmark mark='a'/>只问1个邻居，区域就成了一块参差不齐的拼布，照抄训练页：训练页它能判对93%，新的书页却只有68%。<bookmark mark='b'/>15个邻居，把它抹平了：83%。<bookmark mark='c'/>75个，还要更平滑：82%。邻居太少就会死记硬背，太多就会模糊一片，这种取舍，正是第8部分的主题。"
   },
-  "c39a970bcc94": {
-   "scene": "KneserNey",
-   "en": "Chapter seven. The best way to count.",
-   "zh": "第7章。最好的计数方法。"
+  "3d15c99df42d": {
+   "scene": "SVM",
+   "en": "Chapter six. Support vector machines.",
+   "zh": "第6章。支持向量机。"
   },
-  "25a8eb3626eb": {
-   "scene": "KneserNey",
-   "en": "Back to part one's scoreboard. The best counting model there used four characters of context and reached 2.32 bits per character on the passage. <bookmark mark='a'/> Longer contexts should help, but they're rare: most long contexts in the passage appeared only a handful of times in thirty novels, if at all. With part one's simple smoothing, the score gets worse beyond four characters. <bookmark mark='b'/> Better smoothing keeps improving.",
-   "zh": "回到第1部分的记分牌。那里最好的计数模型，用4个字符的上下文，在测试段落上做到了每字符2.32比特。<bookmark mark='a'/>更长的上下文本该有帮助，但它们很罕见：测试段落里大多数长的上下文，在30部小说里只出现过寥寥几次，甚至根本没出现过。用第1部分那种简单的平滑，上下文超过4个字符之后，分数反而变差。<bookmark mark='b'/>更好的平滑，则会一直进步下去。"
+  "3ac41bdcfbc4": {
+   "scene": "SVM",
+   "en": "Support vector machines ask for the widest street. Many lines separate these two groups. <bookmark mark='a'/> Choose the one with the widest empty margin on both sides. <bookmark mark='b'/> The street's edges rest on just a few points, the support vectors. Move any other point, and nothing changes. <bookmark mark='c'/> Cortes and Vapnik made it practical in 1995, with a twist for groups that overlap: points may stand in the street, at a price.",
+   "zh": "支持向量机要找的，是最宽的那条街道。能把这两组分开的直线有很多。<bookmark mark='a'/>选出两侧空白间隔最宽的那一条。<bookmark mark='b'/>街道的两条边，只靠在少数几个点上，这些点就是支持向量。移动其他任何一个点，什么都不会改变。<bookmark mark='c'/>1995年，科尔特斯与瓦普尼克让它变得实用，还为相互重叠的两组加了一个变通：点可以站到街道里，但要付出代价。"
   },
-  "24fe8e92cb4b": {
-   "scene": "KneserNey",
-   "en": "Kneser and Ney's smoothing, from 1995, has two ideas. <bookmark mark='a'/> First, shave a fixed discount off every count you've seen, <bookmark mark='c'/> and use the savings to back off to a shorter context, one character fewer: blend the two. <bookmark mark='b'/> Second, judge the shorter contexts by their variety. The textbook example: Francisco is a common word, but nearly always after San, so as a guess after an unfamiliar context it deserves little. Count how many different contexts something follows, not how often it appears.",
-   "zh": "Kneser–Ney平滑是1995年提出的，它有两个想法。<bookmark mark='a'/>第一，从每一个见过的计数里，削掉一个固定的折扣，<bookmark mark='c'/>再用省下来的部分，退回到一个更短的上下文，少一个字符：把两者混合起来。<bookmark mark='b'/>第二，按多样性来评判更短的上下文。教科书里的例子是：Francisco是个常见的词，但它几乎总是跟在San后面，所以在一个陌生的上下文之后，把它当作猜测，它不该分到多少概率。要数的是，一个东西跟在多少种不同的上下文后面，而不是它出现了多少次。"
+  "7322201d0c77": {
+   "scene": "SVM",
+   "en": "For groups that no straight line can separate, there's a trick. <bookmark mark='a'/> Lift each point into a third dimension, at a height equal to its squared distance from the centre. <bookmark mark='b'/> Now a flat plane separates them. <bookmark mark='c'/> And seen from above, that plane cuts out a circle. <bookmark mark='d'/> The kernel trick does this without ever computing the lifted points. The method only needs dot products between them, and a kernel, a similarity score computed straight from two original points, supplies those directly, even for infinitely many dimensions.",
+   "zh": "对于任何直线都分不开的两组，有一个技巧。<bookmark mark='a'/>把每个点抬进第三个维度，高度等于它到中心距离的平方。<bookmark mark='b'/>现在，一个平面就能把它们分开。<bookmark mark='c'/>而从正上方看，这个平面切出的是一个圆。<bookmark mark='d'/>核技巧做到这一点，却从来不用算出抬升后的点。这个方法只需要它们之间的点积，而核函数，一种直接由两个原始点算出的相似度，能直接给出这些点积，哪怕维数是无穷多。"
   },
-  "22d7aa1f73ff": {
-   "scene": "KneserNey",
-   "en": "With seven characters of context, Kneser–Ney reaches 2.04 bits per character on the passage. <bookmark mark='a'/> For two decades, from speech recognition to machine translation, this was the state of the art in language modelling. It's the scoreboard's last counting row. Everything better is a neural network, and that's where we're going next.",
-   "zh": "用7个字符的上下文，Kneser–Ney在测试段落上做到了每字符2.04比特。<bookmark mark='a'/>整整20年，从语音识别到机器翻译，它都代表着语言建模的最高水平。这是记分牌上最后一行计数模型。比它更好的，全都是神经网络，而那正是我们接下来要去的地方。"
+  "e498aa4a390c": {
+   "scene": "SVM",
+   "en": "Back to the pages, with a Gaussian kernel: a similarity score between two pages that's one when they're identical, and fades towards zero as they move apart. The boundary bends wherever the data asks it to. <bookmark mark='a'/> On new pages, 83 percent right with two rates. <bookmark mark='b'/> With all seventy, 99.5 percent, the same as logistic regression.",
+   "zh": "回到书页上，这次用高斯核：它给两页打一个相似度，两页完全相同时是1，离得越远，就越趋近于0。数据要它在哪里弯，边界就在哪里弯。<bookmark mark='a'/>在新的书页上，只用两个词频，判对83%。<bookmark mark='b'/>用全部70个，99.5%，和逻辑回归一样。"
   },
-  "15d56ffbef43": {
+  "dae9e1ff20bc": {
+   "scene": "Trees",
+   "en": "Chapter seven. Trees, and committees of trees.",
+   "zh": "第7章。决策树，以及由树组成的委员会。"
+  },
+  "0e4ec4f11fc2": {
+   "scene": "Trees",
+   "en": "A decision tree plays twenty questions. The first question it learned: does the page say 'not' at most 8.5 times per thousand words? <bookmark mark='a'/> Each answer splits the pages, and each group gets its own next question. <bookmark mark='b'/> Every question cuts the plane with a straight line, parallel to an axis, so the plane becomes boxes, and each box votes by its majority.",
+   "zh": "决策树玩的是“二十个问题”的游戏。它学到的第一个问题是：这一页每1000个词里，“not”是否至多出现8.5次？<bookmark mark='a'/>每个回答都把书页分成两组，每一组再有自己的下一个问题。<bookmark mark='b'/>每个问题，都用一条平行于坐标轴的直线切开平面，于是平面变成了一个个方格，每个方格按其中的多数来投票。"
+  },
+  "58bf9f324650": {
+   "scene": "Trees",
+   "en": "Keep asking questions, and the boxes fit the training pages better and better. <bookmark mark='a'/> But new pages tell a different story. They're best at depth 4, 83 percent right. <bookmark mark='b'/> Grown all the way down, the tree gets 94 percent of its own pages right, and only 74 percent of new ones.",
+   "zh": "不停地问下去，这些方格就把训练页拟合得越来越好。<bookmark mark='a'/>但新的书页讲的是另一回事。深度为4时，它们的成绩最好，判对83%。<bookmark mark='b'/>让树一直长到底，它对自己的训练页能判对94%，对新的书页却只有74%。"
+  },
+  "e1af26efd678": {
+   "scene": "Trees",
+   "en": "One tree is fragile: change a few training pages, and a different tree grows. Leo Breiman's answer, in 2001: grow hundreds. Give each a random resample of the pages: <bookmark mark='r'/> draw pages from the pile at random, putting each one back, so some come twice and some not at all, and each tree sees a slightly different pile. Give each, too, only a random handful of words to choose from at each question, then let them vote. <bookmark mark='a'/> With all seventy rates, one full tree gets 94 percent of new pages right. <bookmark mark='b'/> A forest of two hundred gets 98.",
+   "zh": "一棵树很脆弱：改动几个训练页，长出来的就是另一棵树。2001年，利奥·布雷曼给出的答案是：种几百棵。每棵树用书页的一份随机重抽样：<bookmark mark='r'/>从这堆书页里随机抽，每抽一页就放回去，所以有的页会抽到两次，有的一次也抽不到，每棵树看到的那堆书页都略有不同。另外，每问一个问题时，每棵树也只能从随机挑出的几个词里选，然后让它们投票。<bookmark mark='a'/>用全部70个词频，一棵长满的树，能判对94%的新的书页。<bookmark mark='b'/>一片200棵树的森林，判对98%。"
+  },
+  "fdc9bf1554d0": {
+   "scene": "Trees",
+   "en": "Boosting builds the committee another way: one small tree at a time, each trained on the mistakes of all the trees before it. <bookmark mark='a'/> Watch it learn on the two rates. After one round, the committee is a single small tree: a few boxes. <bookmark mark='b'/> Each new tree corrects what the others still get wrong, and the boundary grows more detailed: ten rounds, <bookmark mark='c'/> thirty, <bookmark mark='d'/> three hundred. On new pages it's best after 16 rounds, at 83 percent, and ends at 81: past a point, the extra detail fits the training pages, not the authors.",
+   "zh": "提升法用另一种方式组建这个委员会：一次一棵小树，每棵树都针对前面所有树犯下的错误来训练。<bookmark mark='a'/>看它在这两个词频上学习。一轮之后，委员会只有一棵小树：几个方框。<bookmark mark='b'/>每棵新树都去纠正其他树仍然弄错的地方，边界也越来越精细：10轮，<bookmark mark='c'/>30轮，<bookmark mark='d'/>300轮。在新的书页上，它在16轮之后最好，判对83%，最后停在81%：过了某个点，多出来的细节拟合的是训练页，而不是作者。"
+  },
+  "5a63717d1c1a": {
+   "scene": "Trees",
+   "en": "With all seventy rates, it learns the same way. <bookmark mark='a'/> The training pages are soon all right. The new pages climb to 99 percent. <bookmark mark='b'/> On tables of numbers like these, boosted trees are still, today, among the hardest methods to beat.",
+   "zh": "用全部70个词频，它也是这样学习的。<bookmark mark='a'/>训练页很快就全都判对了。新的书页一路升到99%。<bookmark mark='b'/>在这样的数字表格上，提升树直到今天，仍然是最难打败的方法之一。"
+  },
+  "cadcf91da412": {
+   "scene": "Board",
+   "en": "Chapter eight. The contest.",
+   "zh": "第8章。比赛。"
+  },
+  "6f1ba738e0e2": {
+   "scene": "Board",
+   "en": "Here's the whole contest, scored on the same held-out pages. <bookmark mark='a'/> With two rates, every method lands between 82 and 83 percent. The two numbers simply don't hold more. <bookmark mark='b'/> With all seventy, the best get 190 of 191 right, and the plain straight line, logistic regression, is among them. <bookmark mark='c'/> That's the lesson of classical machine learning: the description of the data mattered more than the cleverness of the method, and choosing seventy small words did most of the work. Deep learning changes that. It learns the description too.",
+   "zh": "这就是整场比赛，都在同一批留出的书页上打分。<bookmark mark='a'/>只用两个词频，每种方法都落在82%到83%之间。这两个数里，能装的信息就这么多。<bookmark mark='b'/>用全部70个，最好的几种方法在191页中判对190页，而最朴素的那条直线，逻辑回归，也在其中。<bookmark mark='c'/>这就是经典机器学习的教训：对数据的描述，比方法有多巧妙更要紧，挑出70个小词，就完成了大部分工作。深度学习改变了这一点：它连描述也一并学出来。"
+  },
+  "8549e3362fff": {
    "scene": "Outro",
-   "en": "Let's take stock. Principal components are the covariance's eigenvectors, and they found Austen against Dickens without labels. A mixture of bells, fitted by EM, recovered the authors themselves. A hidden Markov model discovered vowels. Graphical models draw all of these as pictures that are also formulas. Gaussian processes put probabilities on whole functions, and variational inference swaps an impossible posterior for the closest simple one. And Kneser–Ney counting gave the scoreboard its last counting row.",
-   "zh": "我们来盘点一下。主成分是协方差矩阵的特征向量，它们在没有标签的情况下，找出了奥斯汀对狄更斯的那个方向。用EM算法拟合的钟形曲线混合模型，直接找回了作者本身。隐马尔可夫模型发现了元音。图模型把所有这些都画成图，而这些图同时也是公式。高斯过程给整个函数赋予概率，变分推断则把一个算不出来的后验，换成最接近它的简单后验。最后，Kneser–Ney计数给记分牌添上了最后一行计数模型。"
+   "en": "Let's take stock. Least squares fits a line by minimizing squared misses, and its answer is a perpendicular projection. Logistic regression turns a line into probabilities and fits them by cross-entropy. The lasso keeps weights in a diamond, and picks out the words that matter. Fisher found the direction that separates two groups best. Nearest neighbours just ask around. Support vector machines find the widest street, and kernels bend it. Trees ask questions, and forests and boosting turn many weak trees into a strong committee.",
+   "zh": "我们来盘点一下。最小二乘法通过最小化偏差的平方来拟合直线，它的答案是一个垂直投影。逻辑回归把一条直线变成概率，再用交叉熵来拟合。套索把权重限制在一个菱形里，挑出要紧的词。费希尔找到了最能把两组分开的方向。最近邻只是四处问问。支持向量机找出最宽的街道，而核函数让它弯曲。决策树不断提问，而森林和提升法，把许多棵弱小的树，变成一个强大的委员会。"
   },
-  "f0fb73a9bf69": {
+  "b2a187b3b85a": {
    "scene": "Outro",
-   "en": "Hidden parts come back everywhere. Mixture-of-experts models, in part thirteen, are mixtures with a learned way of choosing. State-space models, in part twelve, carry a hidden state through time. An infinitely wide network is a Gaussian process, in part ten. The ELBO trains diffusion models and autoencoders. Directions in clouds of vectors are how we look inside models, in part twenty. And Kneser–Ney is the row the first neural language model has to beat, in part eight.",
-   "zh": "隐藏的部分，会在各处再次出现。第13部分的混合专家模型，就是混合模型，只不过选择的方式是学出来的。第12部分的状态空间模型，带着一个隐状态穿过时间。无限宽的网络，就是一个高斯过程，在第10部分。证据下界ELBO，用来训练扩散模型和自编码器。在一团团向量里找方向，是我们窥看模型内部的办法，在第20部分。而Kneser–Ney，是第一个神经语言模型必须打败的那一行，在第8部分。"
+   "en": "These ideas don't go away. Projections return with principal components in part seven and with scaling laws in part twelve. The last layer of every network is a logistic regression. The ridge penalty is weight decay. Attention, in part thirteen, is a kernel smoother. Nearest neighbours become retrieval. And the gap between training pages and new pages is all of part eight.",
+   "zh": "这些想法不会消失。投影会在第7部分随主成分回归，也会在第12部分随规模定律回归。每个网络的最后一层，都是一个逻辑回归。岭回归的惩罚项，就是权重衰减。第13部分的注意力，是一种核平滑器。最近邻会变成检索。而训练页和新的书页之间的差距，就是整个第8部分的内容。"
   },
-  "c28634a3faf0": {
+  "879baf7a106e": {
    "scene": "Outro",
-   "en": "Next time: the deepest question in machine learning. A model fits its training data; why should it work on anything else? <bookmark mark='a'/> Bias and variance, the bounds of Vapnik and Chervonenkis, networks that memorize random labels, and the curve that goes down, up, and then down again.",
-   "zh": "下一次：机器学习里最深刻的问题。一个模型拟合了它的训练数据；凭什么它在别的数据上也管用？<bookmark mark='a'/>偏差与方差，瓦普尼克与切尔沃年基斯的界，能把随机标签背下来的网络，还有那条先下降、再上升、然后又下降的曲线。"
+   "en": "Next time: statistical machine learning. Models with hidden parts: principal components, mixtures fitted by expectation-maximization, hidden Markov models, Gaussian processes, variational inference. <bookmark mark='a'/> And part one's scoreboard gets a new row, from the best smoothing method of the counting era.",
+   "zh": "下一次：统计机器学习。带有隐藏部分的模型：主成分，用期望最大化拟合的混合模型，隐马尔可夫模型，高斯过程，变分推断。<bookmark mark='a'/>而第1部分的记分牌，也会添上新的一行，来自计数时代最好的平滑方法。"
   },
-  "087a95e20d83": {
+  "5733c1c92918": {
    "scene": "Outro",
-   "en": "Bishop's Pattern Recognition and Machine Learning covers this whole part, and Rabiner's tutorial is still the best introduction to hidden Markov models. Thanks for watching, and see you in part seven.",
-   "zh": "毕晓普的《模式识别与机器学习》涵盖了这一部分的全部内容，而拉比纳的那篇教程，至今仍是隐马尔可夫模型最好的入门。感谢观看，第7部分见。"
+   "en": "Hastie, Tibshirani and Friedman's Elements of Statistical Learning covers every method here, and much more. Thanks for watching, and see you in part seven.",
+   "zh": "黑斯蒂、蒂布希拉尼和弗里德曼的《统计学习基础》，涵盖了这里的每一种方法，还有更多。感谢观看，第7部分见。"
   }
  },
- "title_en": "AI, Built: Part 6, Statistical ML",
+ "title_en": "AI, Built: Part 5, Classical ML",
  "chapters_en": {
-  "Hook": "Structure nobody labelled",
-  "PCA": "1. Principal components",
-  "EM": "2. Hidden sources: mixtures and EM",
-  "HMM": "3. Hidden Markov models",
-  "Graphs": "4. Models as pictures",
-  "GP": "5. Gaussian processes",
-  "VI": "6. Variational inference",
-  "KneserNey": "7. Kneser-Ney: the best way to count",
+  "Hook": "Who wrote this page?",
+  "LeastSquares": "1. Least squares",
+  "Logistic": "2. Logistic regression",
+  "Lasso": "3. Ridge and lasso",
+  "LDA": "4. Fisher's direction",
+  "KNN": "5. Ask the neighbours",
+  "SVM": "6. The widest street",
+  "Trees": "7. Trees, forests, boosting",
+  "Board": "8. The contest",
   "Outro": "Recap, and where this comes back"
  }
 }

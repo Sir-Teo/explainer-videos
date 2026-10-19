@@ -135,16 +135,16 @@ class Scoreboard(VoiceoverScene):
         sb = load("scoreboard")
         rows = [r for r in sb["rows"] if r["key"] in ("best", "GPT-2 small", "Qwen3-4B")]
         future = [
-            dict(label=r"Kneser--Ney counting (Part 6)", kind="count"),
-            dict(label=r"a neural network over $n$ characters (Part 8)", kind="lm"),
-            dict(label=r"our own small transformer (Part 11)", kind="lm"),
+            dict(label=r"Kneser--Ney counting (Part 7)", kind="count"),
+            dict(label=r"a neural network over $n$ characters (Part 9)", kind="lm"),
+            dict(label=r"our own small transformer (Part 13)", kind="lm"),
         ]
         filled = scoreboard(rows[:1] + future + rows[1:], row_h=0.5, font_size=24).move_to(DOWN * 0.2)
         head = label(r"Rows still to fill, with models we will build", font_size=32).to_edge(UP, buff=0.5)
         with self.voiceover(
             "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: "
-            "<bookmark mark='a'/> better counting in part six, <bookmark mark='b'/> a neural network in part eight, "
-            "<bookmark mark='c'/> and our own small transformer in part eleven, each one trained on these same thirty "
+            "<bookmark mark='a'/> better counting in part seven, <bookmark mark='b'/> a neural network in part nine, "
+            "<bookmark mark='c'/> and our own small transformer in part thirteen, each one trained on these same thirty "
             "books, and scored on this same page."
         ) as vo:
             self.play(FadeIn(head), FadeIn(filled.axis), FadeIn(filled.rows[0]), FadeIn(filled.rows[4]),

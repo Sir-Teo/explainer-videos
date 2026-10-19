@@ -1,15 +1,16 @@
 """Scene order for the final cut: (module, Scene class, chapter title)."""
 
-TITLE = "AI, Built: Part 6, Statistical ML"
+TITLE = "AI, Built: Part 6, Classical ML"
 
 SCENES = [
-    ("s01_hook", "Hook", "Structure nobody labelled"),
-    ("s02_pca", "PCA", "1. Principal components"),
-    ("s03_em", "EM", "2. Hidden sources: mixtures and EM"),
-    ("s04_hmm", "HMM", "3. Hidden Markov models"),
-    ("s05_graphs", "Graphs", "4. Models as pictures"),
-    ("s06_gp", "GP", "5. Gaussian processes"),
-    ("s07_vi", "VI", "6. Variational inference"),
-    ("s08_kn", "KneserNey", "7. Kneser-Ney: the best way to count"),
-    ("s09_outro", "Outro", "Recap, and where this comes back"),
+    ("s01_hook", "Hook", "Who wrote this page?"),
+    ("s02_lsq", "LeastSquares", "1. Least squares"),
+    ("s03_logistic", "Logistic", "2. Logistic regression"),
+    ("s04_lasso", "Lasso", "3. Ridge and lasso"),
+    ("s05_lda", "LDA", "4. Fisher's direction"),
+    ("s06_knn", "KNN", "5. Ask the neighbours"),
+    ("s07_svm", "SVM", "6. The widest street"),
+    ("s08_trees", "Trees", "7. Trees, forests, boosting"),
+    ("s09_board", "Board", "8. The contest"),
+    ("s10_outro", "Outro", "Recap, and where this comes back"),
 ]

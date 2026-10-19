@@ -1,15 +1,15 @@
 """Precompute everything numerical in Part 19 of the AI series ("Inference").
 
-    python -m videos.ai.ai19.compute              # everything missing (Part 11's transformer, Part 6's counts)
+    python -m videos.ai.ai19.compute              # everything missing (Part 13's transformer, Part 7's counts)
     python -m videos.ai.ai19.compute --force quant
 
 Results are cached in ``.cache/ai19/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.
 
 Items:
-    speculative  speculative decoding with Part 11's transformer as the target and a small counting model as the draft:
+    speculative  speculative decoding with Part 13's transformer as the target and a small counting model as the draft:
                  how often a drafted character is accepted, the characters per target run for drafts of 1 to 8, and a
                  check that the output distribution is exactly the target's, at one place in the passage (its text kept)
-    quant        Part 11's transformer with its weights rounded to 8, 4 and 3 bits (per row, round to nearest), and to
+    quant        Part 13's transformer with its weights rounded to 8, 4 and 3 bits (per row, round to nearest), and to
                  FP4 (E2M1) with a scale per block of 32: bits per character on the passage, and the weight histogram
     formats      (formats.py) MXFP4 and NVFP4 exactly, against 4-bit integers; GPTQ's error-compensating rounding and a
                  Hadamard rotation, at 4 and 3 bits: bits per character on the passage
@@ -41,7 +41,7 @@ def rng(seed: int) -> np.random.Generator:
 def compute_speculative():
     import torch
 
-    from videos.ai.ai11 import compute as c11
+    from videos.ai.ai13 import compute as c11
 
     torch.set_num_threads(2)
     c11.load("tf")
@@ -120,7 +120,7 @@ def quantize(W, mode):
 def compute_quant():
     import torch
 
-    from videos.ai.ai11 import compute as c11
+    from videos.ai.ai13 import compute as c11
 
     torch.set_num_threads(2)
     c11.load("tf")

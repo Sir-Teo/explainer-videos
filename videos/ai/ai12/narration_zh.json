@@ -1,213 +1,120 @@
 {
- "title": "人工智能，从零搭建 · 第12部分：记忆",
+ "title": "人工智能，从零搭建 · 第12部分：规模的数学",
  "chapters": {
-  "Hook": "它读过的一切",
-  "KVCache": "1. 缓存",
-  "Linear": "2. 去掉softmax的注意力",
-  "Rules": "3. 怎样写入记忆",
-  "SSM": "4. 状态空间模型",
-  "GatedDelta": "5. 门控δ规则",
-  "Recall": "6. 回忆测试",
-  "Hybrid": "7. 混合架构",
+  "Hook": "一条幂律",
+  "Width": "1. 越来越宽",
+  "Chinchilla": "2. 规模还是数据？",
+  "Grok": "3. 顿悟",
   "Outro": "回顾，以及这些想法会在哪里再现"
  },
  "lines": {
-  "6996a4d8ec78": {
+  "ad08be0c5ede": {
    "scene": "Hook",
-   "en": "Every token a transformer reads, it keeps: a key and a value, in every layer. <bookmark mark='a'/> For Llama 3.1 with seventy billion parameters, each number stored in bf16, sixteen bits or two bytes, that's 320 kilobytes a token. <bookmark mark='b'/> A long conversation, a hundred and twenty-eight thousand tokens, needs 39 gigabytes of memory, just to remember what it has read.",
-   "zh": "Transformer每读一个词元，都会把它留下来：在每一层里，留下一个键和一个值。<bookmark mark='a'/>对700亿参数的Llama 3.1来说，每个数都用bf16存储，也就是16比特、2个字节，这样每个词元要占320KB。<bookmark mark='b'/>一段长对话，12.8万个词元，就需要39GB的内存，只为了记住它读过的东西。"
+   "en": "Make a model bigger, and it gets better. That much everyone expected. The surprise was how predictably. <bookmark mark='a'/> Here are seven sizes of part eleven's character model, each trained the same way. <bookmark mark='b'/> The loss falls along a smooth curve: a power law, plus a floor that no model can go below. The exponent, alpha, says how fast more parameters help. <bookmark mark='c'/> Every tenfold increase in size cuts what's left above the floor, the reducible loss, by the same factor: on a log scale, a straight line. Curves like this, measured on small models, are how laboratories decide what to build next.",
+   "zh": "把模型做大，它就会变好。这一点，人人都料到了。让人意外的是，它变好得这么有规律，这么可以预测。<bookmark mark='a'/>这是第11部分那个字符模型的7种规模，每一种都用同样的方式训练。<bookmark mark='b'/>损失沿着一条光滑的曲线往下降：一个幂律，再加上一道底线，任何模型都低不过它。指数α，说的是增加参数，能多快地带来改进。<bookmark mark='c'/>规模每扩大10倍，底线以上剩下的那部分，也就是可约损失，就缩小同样的倍数：放到对数坐标上，就是一条直线。各家实验室，正是靠这样在小模型上测出来的曲线，来决定下一步造什么。"
   },
-  "75f8ed3fff3e": {
+  "55c7ab931d0c": {
    "scene": "Hook",
-   "en": "The alternative is to read like we do: keep a memory of a fixed size, and update it as each word arrives. <bookmark mark='a'/> Then the question is what to keep, and what to forget.",
-   "zh": "另一种办法，是像我们人一样阅读：只保留一份固定大小的记忆，每读到一个词，就更新它一次。<bookmark mark='a'/>这样一来，问题就变成了：该留下什么，又该忘掉什么。"
+   "en": "This part is about what happens as networks grow: why very wide networks stop learning features, how to set a learning rate once and keep it as the model grows, how to split a budget between size and data, <bookmark mark='a'/> and a strange delay between memorizing and understanding.",
+   "zh": "这一部分讲的是，网络变大时会发生什么：为什么非常宽的网络，不再学习特征；怎样只设定一次学习率，在模型变大时一直沿用；怎样在规模和数据之间分配预算；<bookmark mark='a'/>以及从记住到理解之间，一段奇怪的延迟。"
   },
-  "b99b645196fe": {
-   "scene": "Hook",
-   "en": "This part is about memory: how attention's cache is shrunk, how a fixed memory can stand in for it, <bookmark mark='a'/> and why the newest models use both.",
-   "zh": "这一部分讲的是记忆：注意力的缓存怎样缩小，一份固定大小的记忆怎样顶替它，<bookmark mark='a'/>以及为什么最新的模型两样都用。"
+  "7a29094e7140": {
+   "scene": "Width",
+   "en": "Chapter one. Wider and wider.",
+   "zh": "第1章。越来越宽。"
   },
-  "cd94920d2c23": {
-   "scene": "KVCache",
-   "en": "Chapter one. The cache.",
-   "zh": "第1章。缓存。"
+  "29f4d55c5c22": {
+   "scene": "Width",
+   "en": "Take part eleven's character model and make it wider and wider, trained by plain gradient descent, with step sizes that keep a wide network stable. Measure how much its hidden features change during training: a feature is what one hidden unit computes from the input, one pattern the network has learned to look for. <bookmark mark='a'/> The wider the network, the less they change. The slope here is about minus 0.4; in theory it tends to minus a half: one over the square root of the width. <bookmark mark='b'/> In the limit, the features don't move at all. A very wide net can only re-weight what it started with, like part six's kernel methods with a frozen similarity rule: a fixed kernel, called the neural tangent kernel. This is called the lazy regime. Elegant, and exactly what we don't want: a network whose features never change learns nothing new about its data's structure.",
+   "zh": "拿第11部分的字符模型，把它做得越来越宽，用单纯的梯度下降来训练，步长选得能让宽网络保持稳定。测一测它的隐藏特征，在训练中变了多少：一个特征，就是一个隐藏单元从输入算出来的东西，是网络学会去寻找的一种模式。<bookmark mark='a'/>网络越宽，它们变得越少。这里的斜率大约是负0.4；理论上，它趋向负的2分之1：也就是宽度的平方根分之1。<bookmark mark='b'/>到了极限，特征完全不动了。一个非常宽的网络，只能给它一开始就有的东西重新分配权重，就像第6部分的核方法，用的是一条冻结不变的相似度规则：一个固定的核，叫作神经正切核。这叫作惰性区。很优雅，却恰恰不是我们想要的：一个特征从不改变的网络，对数据的结构，学不到任何新东西。"
   },
-  "b8da75598c41": {
-   "scene": "KVCache",
-   "en": "When a model writes, it makes one token at a time, and each new token's query looks at every earlier token's key and value. <bookmark mark='a'/> Recomputing all of those for every new token would be wasteful, so the model keeps them: the KV cache. <bookmark mark='b'/> The cache grows with every token, and every new token has to read all of it. Serve many long conversations at once, and this memory, not the model's weights, is what fills the graphics cards.",
-   "zh": "模型写东西的时候，一次只写一个词元，而每个新词元的查询，都要去看前面每一个词元的键和值。<bookmark mark='a'/>如果每来一个新词元，都把这些重新算一遍，就太浪费了，所以模型把它们存起来：这就是KV缓存。<bookmark mark='b'/>缓存随着每个词元不断变大，而每个新词元，都得把它整个读一遍。同时服务许多段长对话时，把显卡塞满的，正是这份记忆，而不是模型的权重。"
+  "c0242f7884f6": {
+   "scene": "Width",
+   "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's starting weights and step size, so that every layer keeps changing by about the same amount. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.67 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
+   "zh": "Greg Yang问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='m'/>说白了：网络变宽的时候，就把每一层的初始权重和步长都缩小一些，让每一层的变化量，都保持在差不多的水平。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.67，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：Yang和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
   },
-  "cf64e31a2cf2": {
-   "scene": "KVCache",
-   "en": "How big is it? Take Llama 3.1, seventy billion parameters, eighty layers. <bookmark mark='a'/> If every attention head kept its own keys and values, each token of context would cost 2.5 megabytes. <bookmark mark='b'/> Llama shares: its sixty-four query heads are split into eight groups, and each group shares one key and one value. That's 8 times less, 320 kilobytes a token, and the quality barely changes. <bookmark mark='c'/> DeepSeek-V3 goes further, and so does the hybrid Qwen3-Next. Let's see how.",
-   "zh": "它有多大？就拿Llama 3.1来说：700亿参数，80层。<bookmark mark='a'/>如果每个注意力头都各存各的键和值，上下文里的每个词元，就要占2.5MB。<bookmark mark='b'/>Llama让它们共用：64个查询头分成8组，每一组共用一个键和一个值。这样就少了8倍，每个词元320KB，而质量几乎不变。<bookmark mark='c'/>DeepSeek-V3走得更远，混合架构的Qwen3-Next也是。我们来看看它们是怎么做的。"
+  "723d9a9ea482": {
+   "scene": "Chinchilla",
+   "en": "Chapter two. Size or data?",
+   "zh": "第2章。规模还是数据？"
   },
-  "d75ba5b6ae9c": {
-   "scene": "KVCache",
-   "en": "DeepSeek's trick is multi-head latent attention. A latent is a short hidden summary from which the full thing can be rebuilt. <bookmark mark='a'/> Each token is squeezed into a short latent vector, 512 numbers, and only that is cached. <bookmark mark='b'/> Keys and values for all 128 heads are unpacked from it by two more matrices when needed. <bookmark mark='c'/> And they don't even need to be unpacked: since a query's score is a product of matrices, the key's matrix can be folded into the query, part two's linear algebra, so attention reads the latent directly. <bookmark mark='d'/> Against full attention of the same shape, that's 71 times less memory.",
-   "zh": "DeepSeek的诀窍，是多头潜在注意力。所谓潜在向量，就是一份简短的隐藏摘要，完整的东西可以从它重建出来。<bookmark mark='a'/>每个词元都被压缩成一个很短的潜在向量，只有512个数，缓存里存的就只有它。<bookmark mark='b'/>需要的时候，再用另外两个矩阵，从它解压出全部128个头的键和值。<bookmark mark='c'/>其实连解压都不用：一个查询的分数，是几个矩阵的乘积，所以可以把键的那个矩阵并进查询里，这是第2部分的线性代数，于是注意力直接读取潜在向量。<bookmark mark='d'/>和同样形状的完整注意力相比，内存少了71倍。"
+  "20fd852b2a89": {
+   "scene": "Chinchilla",
+   "en": "Suppose you can afford a fixed amount of computation. Training costs about six operations per parameter per training token, so a budget fixes the product of model size and data. You can have a big model that sees little data, or a small one that sees a lot. <bookmark mark='a'/> Here's the experiment, on our character model. For each budget, try 6 sizes, each trained on exactly the data the budget allows. <bookmark mark='b'/> Each budget gives a valley. Too small a model can't hold the patterns it sees: it underfits. Too big a model barely gets to see anything, so it can't finish learning: it's undertrained. <bookmark mark='c'/> And the bigger the budget, the further right the best size moves.",
+   "zh": "假设你负担得起的计算量是固定的。训练时，每个参数、每个训练词元，大约要花6次运算，所以预算一定，模型规模和数据量的乘积也就定了。你可以要一个大模型，只看很少的数据；也可以要一个小模型，看很多数据。<bookmark mark='a'/>这是我们在字符模型上做的实验。对每一笔预算，试6种规模，每种都恰好用预算允许的那么多数据来训练。<bookmark mark='b'/>每笔预算都给出一道山谷。模型太小，装不下它看到的那些模式：这叫欠拟合。模型太大，几乎什么都来不及看，所以学不完：这叫训练不足。<bookmark mark='c'/>而且预算越大，最好的规模就越往右移。"
   },
-  "6b33625fdeaa": {
-   "scene": "KVCache",
-   "en": "There's a catch, and it's part eleven's rotations. <bookmark mark='a'/> Without positions, the key matrix folds into the query once, and every cached latent is scored directly. We checked it with random weights: identical, to rounding error. <bookmark mark='b'/> But with rotary positions, the query is rotated by its position and the key by its own, and what's left between them is a rotation by their distance. It sits in the middle and changes with every pair, so there's no single matrix to fold. Folding anyway gives scores off by 18 percent. <bookmark mark='c'/> DeepSeek's answer is to decouple: the positions go into a small extra key, the same for every head, cached next to the latent, 512 numbers plus 64. The content part folds as before, and the scores match exactly again.",
-   "zh": "这里有个问题，出在第11部分讲的旋转上。<bookmark mark='a'/>不考虑位置的话，键的矩阵只要往查询里并一次，缓存里的每个潜在向量，就都能直接打分。我们用随机权重验证过：完全一样，只差舍入误差。<bookmark mark='b'/>可是有了旋转位置编码，查询要按它自己的位置转，键也按它自己的位置转，两者之间剩下的，是一个按它们的距离转的旋转。它夹在中间，而且每一对都不一样，所以没有哪一个矩阵可以并进去。硬要并进去的话，分数会偏差18%。<bookmark mark='c'/>DeepSeek的办法是解耦：把位置放进一个额外的小键里，所有的头都共用它，和潜在向量一起缓存，也就是512个数，再加64个。内容那一部分照旧可以并进去，分数又完全对上了。"
+  "181f74ba73cb": {
+   "scene": "Chinchilla",
+   "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.47, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
+   "zh": "这个实验放到极大的规模上去做，改变了模型的造法。2020年，卡普兰和同事们得出结论：模型规模应该比数据增长得快得多。<bookmark mark='a'/>2022年，DeepMind的Chinchilla论文更仔细地重做了一遍，发现规模和数据应该一起增长：每个参数，大约配20个训练词元。<bookmark mark='o'/>我们的小实验，结果和Chinchilla很接近：最好的规模，随预算的0.47次方增长，每个参数大约训练34个字符。<bookmark mark='b'/>他们700亿参数的Chinchilla，在同样的预算下，胜过了他们自己2800亿参数的Gopher。<bookmark mark='c'/>如今的模型，训练用的数据比这还要多得多，因为一个模型只训练一次，却要运行几十亿次，所以一个更小、训练得更久的模型，用起来更便宜。"
   },
-  "5b1be20ded2b": {
-   "scene": "Linear",
-   "en": "Chapter two. Attention without the softmax.",
-   "zh": "第2章。去掉softmax之后的注意力。"
+  "7eca079c350e": {
+   "scene": "Chinchilla",
+   "en": "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen runs, it's off by only 0.02 bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, and the best size grows as the budget to the power beta over alpha plus beta: 0.43 here, close to what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best model's loss with a model three quarters its size costs 7 percent more training; with half the size, 73 percent more; and below about 0.31 of the size, no amount of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred tokens per parameter, a hundred times Chinchilla's ratio.",
+   "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花73%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
   },
-  "a4fde6598f4e": {
-   "scene": "Linear",
-   "en": "Here's attention for a whole text of T tokens: queries times keys, then times values. <bookmark mark='a'/> The product of queries and keys is a T by T table of scores: it grows with the square of the length. <bookmark mark='b'/> But matrix products can be grouped either way. Multiply keys and values first, and the table in the middle is only d by d, however long the text. <bookmark mark='c'/> The catch is the softmax: it sits between Q K and V, and blocks the regrouping. Replace it with simple positive features of the queries and keys: pass each one through a fixed function, phi, that makes every number positive, so that their dot product can stand in for the softmax's exponential. Then you're allowed: that's linear attention.",
-   "zh": "这是对一整段T个词元的文本做注意力：查询乘以键，再乘以值。<bookmark mark='a'/>查询和键的乘积，是一张T乘T的分数表：它随长度的平方增长。<bookmark mark='b'/>可是一串矩阵相乘，先乘哪两个都可以。先把键和值乘起来，中间那张表就只有d乘d，不管文本有多长。<bookmark mark='c'/>麻烦在于softmax：它夹在QK和V之间，挡住了这种重新组合。把它换成查询和键的一些简单的正值特征：让每一个都经过一个固定的函数φ，把每个数都变成正的，这样它们的点积，就能顶替softmax里的指数。这样就可以重新组合了：这就是线性注意力。"
+  "3b1eb489e761": {
+   "scene": "Grok",
+   "en": "Chapter three. Grokking.",
+   "zh": "第3章。顿悟。"
   },
-  "0c706d1bb999": {
-   "scene": "Linear",
-   "en": "Now read the text one token at a time. With the product regrouped, everything the model needs from the past is one d by d matrix, the state. <bookmark mark='a'/> Each new token writes into it: its value times its key, an outer product, <bookmark mark='o'/> which multiplies every number of the value by every number of the key: a whole grid, like a times table, added on. <bookmark mark='b'/> To read, multiply the state by the query. The memory never grows: a transformer without the softmax is a recurrent network, <bookmark mark='r'/> one that reads a token at a time and carries a fixed-size memory forward, updating it at each step. Katharopoulos and colleagues showed this in 2020.",
-   "zh": "现在，一次读一个词元。乘法重新组合之后，模型需要从过去得到的一切，就是一个d乘d的矩阵，也就是状态。<bookmark mark='a'/>每个新词元都往里面写：它的值乘以它的键，也就是一个外积，<bookmark mark='o'/>它把值的每一个数，和键的每一个数都乘一遍：得到一整张网格，就像一张乘法表，再加上去。<bookmark mark='b'/>要读取，就用状态乘以查询。这份记忆永远不会变大：去掉softmax的Transformer，就是一个循环网络，<bookmark mark='r'/>也就是一次读一个词元、带着一份固定大小的记忆往前走、每一步都更新它的网络。这是卡塔罗普洛斯和同事们在2020年证明的。"
+  "805a00c6177c": {
+   "scene": "Grok",
+   "en": "In 2022, a team at OpenAI noticed something strange. Take a tiny task: addition on a clock with 97 hours, so fifty plus sixty is thirteen. <bookmark mark='a'/> Show a network forty percent of the addition table, and ask it to fill in the rest.",
+   "zh": "2022年，OpenAI的一个团队注意到一件怪事。拿一个很小的任务来说：在一个有97个钟点的钟上做加法，所以50加60等于13。<bookmark mark='a'/>给一个网络看这张加法表的40%，让它把其余的填出来。"
   },
-  "7649065f094b": {
-   "scene": "Linear",
-   "en": "The payoff grows with length. Softmax attention's work grows with the square of the text; the recurrence's grows in a straight line. <bookmark mark='a'/> At a million tokens, that's 3,906 times fewer multiplications. So why doesn't everyone use it? Because a fixed-size memory has to forget, and how it writes decides what it forgets.",
-   "zh": "文本越长，好处越大。softmax注意力的计算量，随文本长度的平方增长；递推的计算量，则沿一条直线增长。<bookmark mark='a'/>到了100万个词元，乘法次数少了3906倍。那为什么不是人人都用它？因为固定大小的记忆，必须遗忘，而它怎样写入，决定了它会忘掉什么。"
+  "489396023824": {
+   "scene": "Grok",
+   "en": "It memorizes the entries it was shown within about 100 steps, and for a long time, it gets the unseen ones no better than chance. <bookmark mark='a'/> Keep training anyway. Then, thousands of steps later, accuracy on the unseen entries shoots up to nearly a hundred percent. The network has found the rule. They called it grokking. <bookmark mark='b'/> Weight decay is what drives it: it keeps squeezing the weights, and the memorized lookup table is more expensive than the rule.",
+   "zh": "大约100步之内，它就记住了给它看过的那些格子；而在很长一段时间里，没看过的那些，它答对的机会并不比瞎猜高。<bookmark mark='a'/>不管它，接着训练。然后，几千步之后，在没看过的格子上，准确率猛地蹿升到接近100%。网络找到了规则。他们把这种现象叫作顿悟。<bookmark mark='b'/>推动它的，是权重衰减：它不停地挤压权重，而背下来的那张查找表，代价比规则更高。"
   },
-  "0ed511e71c50": {
-   "scene": "Rules",
-   "en": "Chapter three. How to write to memory.",
-   "zh": "第3章。怎样写入记忆。"
+  "49702bcad83a": {
+   "scene": "Grok",
+   "en": "What is the rule it found? Look at the vectors it learned for the numbers. <bookmark mark='a'/> Most of their weight sits on 9 frequencies out of 48: waves around the clock. A frequency places the 97 numbers evenly around a circle, in order: <bookmark mark='w'/> at frequency one, going round once; <bookmark mark='x'/> at frequency five, going round five times. <bookmark mark='b'/> Seen along their main directions, the numbers lie on circles; here they are forming during training, and the circles appear just as the test accuracy climbs. The network turns each number into an angle, and adds numbers by adding angles, as a clock does. Neel Nanda and colleagues worked this out in 2023, one of the first complete explanations of what a trained network computes. Part thirty takes that idea to real models.",
+   "zh": "它找到的规则是什么？看看它为每个数字学到的向量。<bookmark mark='a'/>它们的权重大多落在48个频率中的9个上：绕着钟面转的波。一个频率，会把这97个数按顺序、均匀地排在一个圆上：<bookmark mark='w'/>频率为1时，绕一圈；<bookmark mark='x'/>频率为5时，绕5圈。<bookmark mark='b'/>沿着它们的主方向看，这些数排列在圆上；这里是它们在训练中逐渐形成的样子，而这些圆恰好在测试准确率上升的时候出现。网络把每个数变成一个角度，用角度相加来做数的相加，就像钟表一样。Neel Nanda和同事们在2023年弄清了这一点，这是最早对一个训练好的网络究竟在算什么做出的完整解释之一。第30部分会把这个想法用到真实的模型上。"
   },
-  "d13c6e6777b7": {
-   "scene": "Rules",
-   "en": "Use the state as a memory. Write a few pairs, each a value times its key, then read one back with its key. <bookmark mark='a'/> You get its value, plus a little of every other value, in proportion to how much their keys overlap. Random keys in d dimensions overlap by about one over the square root of d, <bookmark mark='b'/> so the leaks add up like N over d. With d equals 64, by 64 pairs the noise is as big as the answer. Adding can never erase: the memory just fills up.",
-   "zh": "把状态当作一份记忆来用。写进去几对键值，每一对都是值乘以它的键，然后用其中一个键，把它的值读回来。<bookmark mark='a'/>你得到的，是它的值，再加上其他每一个值的一点点，多少取决于它们的键重叠了多少。在d维空间里，随机的键彼此重叠大约根号d分之1，<bookmark mark='b'/>所以这些泄漏加起来，大约是d分之N。d等于64时，到了64对，噪声就和答案一样大了。只做加法，永远擦不掉东西：记忆只会越填越满。"
-  },
-  "ba14acae3a0d": {
-   "scene": "Rules",
-   "en": "The first fix is to forget on purpose. Before each write, shrink the whole memory a little. <bookmark mark='a'/> Here are 128 pairs, read back by age. Adding blurs every pair the same. Decaying keeps the recent pairs sharp, and lets the old ones go. <bookmark mark='b'/> RetNet, gated linear attention and Mamba-2 all decay, and the best let each token choose how much: forget a lot at the start of a new topic, almost nothing in the middle of a sentence.",
-   "zh": "第一个办法，是有意地遗忘。每次写入之前，先把整个记忆缩小一点。<bookmark mark='a'/>这里是128对键值，按它们写进去的早晚，依次读回来。只做加法，每一对都同样模糊。加上衰减，最近的几对保持清晰，旧的就随它去。<bookmark mark='b'/>RetNet、门控线性注意力和Mamba-2都会衰减，而其中最好的，让每个词元自己决定衰减多少：换到一个新话题的开头，就多忘一些；在一句话的中间，几乎什么都不忘。"
-  },
-  "2fff185a4992": {
-   "scene": "Rules",
-   "en": "The second fix is smarter. Before writing, read what the memory already says for this key, and write only the difference: what should be there, minus what is there. That's the delta rule, Widrow and Hoff's learning rule from 1960. <bookmark mark='a'/> It matters when the world changes. The door is open; later, the door is closed. Adding stores both, and answers with a mixture. The delta rule replaces the old value with the new. <bookmark mark='b'/> Here are 16 keys, rewritten 256 times with new values, then asked for the latest. Adding: an error of 19, it remembers every value ever written. Decaying: 0.92. The delta rule: 0.23.",
-   "zh": "第二个办法更聪明。写入之前，先读一读记忆里这个键现在对应着什么，然后只写入差值：应该有的，减去已经有的。这就是δ规则，威德罗和霍夫在1960年提出的学习规则。<bookmark mark='a'/>当世界在变化时，这一点就很要紧。门开着；后来，门关上了。只做加法，两条都会存下来，答出来的是两者的混合。δ规则则用新值替换旧值。<bookmark mark='b'/>这里有16个键，用新的值重写了256次，然后问它们最新的值。只做加法：误差是19，它记住了写进去过的每一个值。加上衰减：0.92。δ规则：0.23。"
-  },
-  "374d3acfef0e": {
-   "scene": "Rules",
-   "en": "And here is why the delta rule works. Measure how wrong the memory is about one pair: the squared gap between what it reads for the key and the value. <bookmark mark='a'/> Its gradient is the gap times the key. <bookmark mark='b'/> One step of gradient descent on it is exactly the delta rule. So the memory is a little model, trained by part nine's gradient descent on the text as it's being read; part eleven's attention layer that learned in context was doing the same. <bookmark mark='c'/> Add decay to the delta rule, and you have the gated delta rule inside Qwen3-Next and Kimi Linear; make the memory a whole network, and you have test-time training: a small network whose weights keep learning while the model reads.",
-   "zh": "δ规则为什么管用，原因在这里。量一量记忆在一对键值上错得有多远：用这个键读出来的东西，和那个值之间差距的平方。<bookmark mark='a'/>它的梯度，就是这个差距乘以键。<bookmark mark='b'/>在它上面走一步梯度下降，恰好就是δ规则。所以，这份记忆是一个小模型，一边读文本，一边用第9部分的梯度下降，在这段文本上训练；第11部分那个在上下文中学习的注意力层，做的也是同一件事。<bookmark mark='c'/>给δ规则加上衰减，就得到了Qwen3-Next和Kimi Linear里的门控δ规则；把记忆换成一整个网络，就得到了测试时训练：一个小网络，模型一边读，它的权重一边继续学习。"
-  },
-  "9dfa4fa9da4a": {
-   "scene": "SSM",
-   "en": "Chapter four. State-space models.",
-   "zh": "第4章。状态空间模型。"
-  },
-  "84ca63ea6b20": {
-   "scene": "SSM",
-   "en": "A different road to the same place started in control theory. A state-space model is a differential equation: a hidden state h that evolves, pushed by the input x, read out as y. <bookmark mark='l'/> Picture a leaky bucket: the input pours in, the level slowly leaks away, and the level is what you read. <bookmark mark='a'/> Read a text in steps of size delta, and it becomes a recurrence: shrink the state, add the input. <bookmark mark='b'/> The step size sets the memory. Small steps, and an input lingers for a long time; large steps, and it's gone in a few tokens.",
-   "zh": "通往同一个地方的另一条路，起点在控制理论。状态空间模型是一个微分方程：一个隐状态h随时间演化，由输入x推动，读出来就是y。<bookmark mark='l'/>可以想象一个漏水的桶：输入不断倒进来，水位慢慢漏掉，而你读到的，就是水位。<bookmark mark='a'/>以Δ为步长去读一段文本，它就变成了一个递推：先把状态缩小，再加上输入。<bookmark mark='b'/>步长决定了记忆。步子小，一个输入会停留很久；步子大，几个词元之后它就没了。"
-  },
-  "2f33d5ae8dd0": {
-   "scene": "SSM",
-   "en": "But a fixed step size can't tell what matters. Here's an input stream of noise with two marked values worth remembering. <bookmark mark='a'/> With a fixed step, each marked value washes out in the noise that follows. <bookmark mark='b'/> Mamba's idea, in 2023, was to let each input choose its own step size: a big step to take in something important, almost no step at all for noise, so the state holds still. Now the state keeps the marked value until the next one replaces it. A memory that chooses.",
-   "zh": "可是，固定的步长分不清什么要紧。这里有一串输入，全是噪声，只夹着两个值得记住的标记值。<bookmark mark='a'/>步长固定的话，每个标记值都会被后面的噪声冲淡。<bookmark mark='b'/>2023年，Mamba的想法是：让每个输入自己选步长。遇到重要的东西，就迈一大步把它收进来；遇到噪声，几乎一步都不迈，状态就保持不动。现在，状态会一直留着那个标记值，直到下一个标记值把它替换掉。这是一份会选择的记忆。"
-  },
-  "f3772039483d": {
-   "scene": "SSM",
-   "en": "In 2024, Mamba-2 showed the two roads meet. A selective state-space model is linear attention with a decay: its input matrix plays the key, its output matrix the query. <bookmark mark='a'/> So today's fast memories are one family: a matrix that's read with a query, and written by one of a few rules. Add; decay then add; correct with the delta rule; or decay and correct, the gated delta rule of Qwen3-Next and Kimi Linear.",
-   "zh": "2024年，Mamba-2表明，这两条路汇合了。一个选择性的状态空间模型，就是带衰减的线性注意力：它的输入矩阵扮演键，输出矩阵扮演查询。<bookmark mark='a'/>所以，今天这些快速的记忆，是同一个家族：一个用查询来读的矩阵，用少数几种规则之一来写。只做加法；先衰减再加；用δ规则来纠正；或者既衰减又纠正，也就是Qwen3-Next和Kimi Linear的门控δ规则。"
-  },
-  "ca5c85a676f6": {
-   "scene": "GatedDelta",
-   "en": "Chapter five. The gated delta rule.",
-   "zh": "第5章。门控δ规则。"
-  },
-  "5d697c37ed94": {
-   "scene": "GatedDelta",
-   "en": "Let's look at the delta rule as geometry. The memory S is a linear map: give it a key, and it gives back an answer. <bookmark mark='p'/> Here it is acting on the plane. <bookmark mark='a'/> Feed it the key k, and it answers S k, but the value we want stored is v. <bookmark mark='b'/> The update multiplies S by I minus beta k k transpose, then adds beta v k transpose. That first matrix only touches the direction k: it shrinks it by one minus beta, and leaves every direction at right angles alone. <bookmark mark='c'/> With beta a half, the answer for k moves halfway to v, and the answer for the perpendicular direction doesn't move at all. <bookmark mark='d'/> With beta one, the old answer is erased exactly and replaced by v: a projection. <bookmark mark='e'/> And with beta up to two, it overshoots into a reflection, a matrix with eigenvalue minus one. That sounds like a bug, but it's a feature: Grazzi and colleagues showed it lets these memories track parity, the very problem part seventeen's transformer could not solve in one go. <bookmark mark='f'/> Parity asks: is the count of ones so far odd or even? It's a light switch that flips at every one, and a reflection is exactly that flip.",
-   "zh": "我们从几何的角度来看δ规则。记忆S是一个线性映射：给它一个键，它就还你一个答案。<bookmark mark='p'/>这里，它作用在一个平面上。<bookmark mark='a'/>把键k喂给它，它答出S k，可我们想存的值是v。<bookmark mark='b'/>更新时，先把S乘以I减去β乘k乘k转置，再加上β乘v乘k转置。前面那个矩阵只碰k这一个方向：把它缩短为原来的1减β倍，而和k垂直的每个方向，都原封不动。<bookmark mark='c'/>β等于2分之1时，k对应的答案朝v走了一半，而垂直方向的答案一点都不动。<bookmark mark='d'/>β等于1时，旧的答案被彻底擦掉，正好换成v：这是一个投影。<bookmark mark='e'/>而β最大可以到2，这时它会冲过头，变成一个反射，也就是一个特征值为负1的矩阵。听起来像是个毛病，其实是个优点：格拉齐和同事们证明了，有了它，这些记忆就能追踪奇偶性，而这正是第17部分的Transformer没法一步解决的问题。<bookmark mark='f'/>奇偶性问的是：到目前为止，1的个数是奇数还是偶数？它就像一个电灯开关，每遇到一个1就拨一下，而反射，恰好就是这一拨。"
-  },
-  "e864eea56fc3": {
-   "scene": "GatedDelta",
-   "en": "Now the whole family side by side. <bookmark mark='a'/> Linear attention only adds. Decay, as in Mamba-2 and gated linear attention, shrinks the whole memory by alpha before each write: everything fades a little. <bookmark mark='b'/> The delta rule edits only the direction of the current key. <bookmark mark='c'/> The gated delta rule does both: a decay alpha to clear the memory out when the topic changes, and a delta step to correct one fact at a time. That's the rule in three of every four layers of Qwen3-Next. <bookmark mark='d'/> Kimi Linear's version gives each channel of the memory, each of its feature dimensions, its own decay, a diagonal matrix instead of one number, so some features fade fast and others hold for thousands of tokens. <bookmark mark='e'/> Written this way, every member is the same shape: the old memory times a transition matrix, plus a write, and the transition is always a diagonal plus a low-rank part. That shape is what makes them fast to train.",
-   "zh": "现在，把整个家族并排放在一起。<bookmark mark='a'/>线性注意力只做加法。衰减，比如Mamba-2和门控线性注意力，在每次写入之前，把整个记忆乘以α缩小一点：所有东西都淡去一些。<bookmark mark='b'/>δ规则只修改当前这个键的方向。<bookmark mark='c'/>门控δ规则两样都做：用衰减α在话题变化时清空记忆，再用δ那一步，一次纠正一个事实。Qwen3-Next每4层里有3层，用的就是这条规则。<bookmark mark='d'/>Kimi Linear的版本，给记忆的每个通道，也就是它的每个特征维度，都配上自己的衰减，用一个对角矩阵代替一个数，这样，有的特征很快淡去，有的则能保持几千个词元。<bookmark mark='e'/>这样写出来，每个成员都是同一个形状：旧的记忆乘以一个转移矩阵，再加上一次写入，而转移矩阵总是一个对角矩阵加上一个低秩部分。正是这个形状，让它们训练起来很快。"
-  },
-  "d7edace0018a": {
-   "scene": "GatedDelta",
-   "en": "But a rule that updates the memory one token at a time looks hopeless to train: thousands of steps, each waiting for the last, while the hardware wants big matrix products. <bookmark mark='a'/> The way out is to cut the text into chunks of sixty-four and handle each chunk at once. <bookmark mark='b'/> Within a chunk, the memory gets multiplied by sixty-four of those I minus beta k k transpose matrices: sixty-four small corrections, one after another. <bookmark mark='w'/> Multiplied out, they collapse into one: the identity minus a sum of sixty-four rank-one terms, w times k transpose. Numerical analysts call it the WY form; they found it decades ago for products of Householder reflections, matrices just like these. <bookmark mark='c'/> And all the w's come from one triangular solve, the UT transform: each w depends only on the ones before it, and the hardware works them all out with a few big matrix products instead of sixty-four waits in a row. With them, a chunk's outputs and its final memory are just matrix products, and the decay of the gated version folds into the same form. <bookmark mark='d'/> We checked it on our computer: for 2048 random tokens, step by step and chunk by chunk agree to rounding error, with 32 sequential steps instead of 2048. On this little processor the plain loop is still quicker; on a GPU, the matrix products win by far, and that's how Qwen3-Next and Kimi Linear were trained.",
-   "zh": "可是，一条一次只按一个词元更新记忆的规则，看起来根本没法训练：几千步，每一步都得等上一步，而硬件想要的，是大块的矩阵乘法。<bookmark mark='a'/>出路是把文本切成64个词元一块，每一块一次处理完。<bookmark mark='b'/>在一块之内，记忆要连乘64个那种I减去β乘k乘k转置的矩阵：64个小小的修正，一个接一个。<bookmark mark='w'/>把它们乘出来，就合并成了一个：单位矩阵，减去64个秩为1的项之和，每一项是w乘k转置。数值分析学家把它叫作WY形式；几十年前，他们在豪斯霍尔德反射的乘积里就找到了它，而那些矩阵，和这里的这些如出一辙。<bookmark mark='c'/>而所有的w，只要解一次三角方程组就能得到，这叫UT变换：每个w只依赖于它前面的那些，硬件用几次大块的矩阵乘法，就能把它们全部算出来，而不用一个接一个地等上64次。有了它们，一块的输出和它最后的记忆，就都只是矩阵乘法；门控版本里的衰减，也能并进同样的形式。<bookmark mark='d'/>我们在自己的电脑上验证过：对2048个随机词元，一步一步算，和一块一块算，结果只差舍入误差，而顺序执行的步数，从2048步变成了32步。在这台小处理器上，普通的循环还是更快；可是在GPU上，矩阵乘法远远胜出，Qwen3-Next和Kimi Linear就是这样训练出来的。"
-  },
-  "d70d217576c8": {
-   "scene": "GatedDelta",
-   "en": "For the decaying rule there's an even neater view, Mamba-2's state-space duality: one layer with two faces, a state-space recurrence and an attention. <bookmark mark='a'/> Unroll the recurrence, and every output is a weighted sum of earlier values: exactly attention, with the query-key scores multiplied by a mask L. <bookmark mark='b'/> Entry i, j of the mask is the product of the gates between token j and token i: how much of token j survives until step i. Where the gate forgets, the mask goes dark below that row. <bookmark mark='c'/> That mask is semiseparable, which just means: every block below the diagonal has rank one, because each entry is a number for its row times a number for its column. <bookmark mark='d'/> We checked: masked attention and the recurrence agree to rounding error. So the same layer can run as a recurrence while it writes, using constant memory, and as masked attention while it trains, using big matrix products.",
-   "zh": "对于带衰减的规则，还有一个更漂亮的看法，那就是Mamba-2的状态空间对偶性：同一个层，有两副面孔，一副是状态空间的递推，一副是注意力。<bookmark mark='a'/>把递推展开，每个输出都是前面那些值的加权和：这正是注意力，只不过查询和键的分数，要再乘上一个掩码L。<bookmark mark='b'/>掩码的第i行第j列，是词元j和词元i之间所有门的乘积：也就是词元j有多少能留到第i步。在门遗忘的地方，从那一行往下，掩码都暗了下去。<bookmark mark='c'/>这个掩码是半可分的，意思不过是：对角线以下的每一块，秩都是1，因为每个元素，都是它所在行的一个数，乘以它所在列的一个数。<bookmark mark='d'/>我们验证过：带掩码的注意力和递推，结果只差舍入误差。所以，同一个层，写的时候可以作为递推来运行，只用固定大小的内存；训练的时候，又可以作为带掩码的注意力来运行，用上大块的矩阵乘法。"
-  },
-  "ae98573b280a": {
-   "scene": "Recall",
-   "en": "Chapter six. A recall test.",
-   "zh": "第6章。回忆测试。"
-  },
-  "e81f3ddaabb6": {
-   "scene": "Recall",
-   "en": "How much does forgetting cost? Here's a test of pure memory: a list of keys, each followed by its value; <bookmark mark='a'/> then some of the keys again, and the model must answer with their values. It's the skill a model needs to quote a name or a number from far back in a document. <bookmark mark='b'/> We trained tiny one-layer models to play it, with three kinds of memory: softmax attention, linear attention that only adds, and the delta rule.",
-   "zh": "遗忘的代价有多大？这里有一道纯考记忆的题：一串键，每个键后面跟着它的值；<bookmark mark='a'/>然后，其中一些键再出现一次，模型必须答出它们的值。要从一篇文档很靠前的地方，引用一个名字或一个数字，模型需要的就是这种本领。<bookmark mark='b'/>我们训练了几个只有一层的小模型来做这道题，用了三种记忆：softmax注意力，只做加法的线性注意力，以及δ规则。"
-  },
-  "b6b2a4f6de2e": {
-   "scene": "Recall",
-   "en": "With 8 pairs, all three manage. <bookmark mark='a'/> As the list grows, the adding memory falls apart: 38 percent right at 48 pairs, as its crosstalk swamps the answers, worst once there are more pairs than each key has numbers, 16 here. The delta rule holds on much longer: 88 percent. And softmax attention, which simply keeps every pair, gets 100. <bookmark mark='b'/> Exact recall is what attention buys with its growing cache, and what a fixed memory has to approximate.",
-   "zh": "只有8对的时候，三种都能应付。<bookmark mark='a'/>随着列表变长，只做加法的记忆就垮了：到48对时，只答对38%，因为串扰淹没了答案；一旦键值对的数目，超过了每个键里数的个数，也就是这里的16，情况就最糟。δ规则撑得久得多：88%。而softmax注意力，干脆把每一对都留着，得到100%。<bookmark mark='b'/>精确的回忆，是注意力用不断变大的缓存换来的，也是固定大小的记忆只能去逼近的。"
-  },
-  "31afb51e388a": {
-   "scene": "Recall",
-   "en": "Here is how each one learns the game, on the longest lists, 48 pairs, step by step through training. <bookmark mark='a'/> For a long time, all three are guessing. The delta rule starts first, half the answers right by step 500, and climbs towards its ceiling, 88 percent. Softmax attention gets it later, but in a rush: half right by step 700, and every answer right soon after. Once it learns to match a query to the same key, the cache does the rest. <bookmark mark='b'/> The adding memory never gets halfway: it stalls at 38 percent, where its crosstalk drowns the answers.",
-   "zh": "这是它们各自在训练中学这个游戏的过程，用的是最长的列表，48对，一步一步看。<bookmark mark='a'/>很长一段时间里，三个都在瞎猜。delta规则最先开窍，到第500步答对一半，然后朝它的上限爬升，88%。softmax注意力学得晚，但一下子就会了：到第700步答对一半，很快就全部答对。一旦它学会把查询和同样的键配上，剩下的交给缓存就行。<bookmark mark='b'/>只做加法的记忆连一半都没到：它停在38%，串扰淹没了答案。"
-  },
-  "b278c5bb0db1": {
-   "scene": "Hybrid",
-   "en": "Chapter seven. Hybrids.",
-   "zh": "第7章。混合架构。"
-  },
-  "459dfb8b3681": {
-   "scene": "Hybrid",
-   "en": "Fixed-size memories are cheap, but they forget; attention remembers everything exactly, at a price. So the newest models mix them. <bookmark mark='a'/> Jamba, in 2024, put one attention layer among every eight, the rest Mamba. MiniMax-01 does the same with lightning attention. Qwen3-Next and Kimi Linear, in 2025, use one attention layer in four, the other three running the gated delta rule. <bookmark mark='b'/> The fast layers carry the gist of a long text cheaply; the few attention layers look up exact details when they're needed.",
-   "zh": "固定大小的记忆很便宜，但会遗忘；注意力能把一切都记得分毫不差，只是要付出代价。所以，最新的模型把两者混在一起。<bookmark mark='a'/>2024年的Jamba，每8层里放1层注意力，其余都是Mamba。MiniMax-01也是这样，用的是闪电注意力。2025年的Qwen3-Next和Kimi Linear，每4层里用1层注意力，另外3层跑的是门控δ规则。<bookmark mark='b'/>快速的那些层，花很小的代价，记住长文本的大意；少数几层注意力，在需要的时候，去查找精确的细节。"
-  },
-  "e860ada0cccc": {
-   "scene": "Hybrid",
-   "en": "The memory bill shows why. For one conversation of a hundred and twenty-eight thousand tokens, <bookmark mark='a'/> Llama 3.1's grouped-query cache takes 39 gigabytes; DeepSeek-V3's latent cache, 8.4; Qwen3-Next, with attention in only a quarter of its layers, 3.0, about 13 times less than Llama. Its delta-rule layers add just 36 megabytes of state, the same at any length.",
-   "zh": "看一看这份内存账单，就明白为什么了。拿一段12.8万个词元的对话来说，<bookmark mark='a'/>Llama 3.1的分组查询缓存，要占39GB；DeepSeek-V3的潜在缓存，是8.4GB；Qwen3-Next只在4分之1的层里用注意力，只要3.0GB，大约比Llama少13倍。它那些δ规则层，只多出36MB的状态，而且不管对话有多长，都是这么多。"
-  },
-  "a67a8115f2e4": {
+  "58cbcf30d35c": {
    "scene": "Outro",
-   "en": "Let's take stock. Attention's memory is its cache, and models shrink it by sharing keys and values, or squeezing them into a latent. Drop the softmax, regroup the product, and attention becomes a recurrence on a fixed matrix memory. Written by adding, that memory blurs; with decay, it forgets the old; with the delta rule, one step of gradient descent per token, it corrects itself. State-space models, made selective, turned out to be the same family. And the newest models mix a few attention layers with many fast ones.",
-   "zh": "我们来盘点一下。注意力的记忆，就是它的缓存；模型让键和值共用，或者把它们压进一个潜在向量，来缩小这份缓存。去掉softmax，把乘法重新组合，注意力就变成了在一份固定大小的矩阵记忆上的递推。只用加法写入，这份记忆会变得模糊；加上衰减，它会忘掉旧的；用δ规则，每个词元走一步梯度下降，它就会自我纠正。状态空间模型变得有选择性之后，原来也属于同一个家族。而最新的模型，把少数几层注意力，和许多快速的层混在一起。"
+   "en": "Let's take stock. Loss falls with size along a power law, predictably enough to plan by. Very wide networks, scaled the usual way, go lazy and stop learning features; mu-P keeps every layer learning, and lets a learning rate tuned on a small model carry over to a big one. A fixed budget should be split between size and data, about twenty tokens per parameter by Chinchilla's count. And a network can memorize first and understand much later, by turning clock arithmetic into rotations.",
+   "zh": "我们来盘点一下。损失随着规模，沿一条幂律下降，可预测到足以拿来做规划。非常宽的网络，按通常的方式放大，就会变懒，不再学习特征；μP让每一层都一直在学习，还能让在小模型上调好的学习率，直接沿用到大模型上。一笔固定的预算，应该在规模和数据之间分配，按Chinchilla的算法，每个参数大约20个词元。而一个网络，可以先记住，很久以后才理解，靠的是把钟面上的算术，变成旋转。"
   },
-  "70662cc9b7fb": {
+  "49d6eac80f66": {
    "scene": "Outro",
-   "en": "Next comes sparsity: attending to only some of the past, and using only some of the model. Agents, in part eighteen, need memory over very long horizons. Part nineteen is about serving the cache fast, and part twenty looks for memories inside a trained model.",
-   "zh": "接下来是稀疏性：只关注过去的一部分，只动用模型的一部分。第18部分的智能体，需要在非常长的时间跨度上保持记忆。第19部分讲的是，部署服务时怎样快速地用好缓存；第20部分，则会到训练好的模型内部，去寻找记忆。"
+   "en": "Act two ends here. Scaling laws return with mixtures of experts, and with reasoning models that scale the thinking done at test time. And grokking's circuits are a first taste of looking inside models, in part thirty.",
+   "zh": "第二幕到这里结束。规模定律还会再回来：在混合专家模型里，也在那些扩大测试时思考量的推理模型里。而顿悟背后的回路，让我们先尝到了一点窥看模型内部的滋味，那是第30部分的内容。"
   },
-  "81d800cfbf29": {
+  "e3118642c8f2": {
    "scene": "Outro",
-   "en": "Next time: sparsity. The biggest models today don't use all their weights for every token: a router sends each token to a few experts among hundreds. <bookmark mark='a'/> How do you route, and how do you keep every expert busy?",
-   "zh": "下一次：稀疏性。如今最大的模型，并不是每个词元都用上全部的权重：一个路由器，把每个词元送到几百个专家中的少数几个那里。<bookmark mark='a'/>该怎样路由，又怎样让每个专家都有活干？"
+   "en": "Next time, act three begins: the engines inside today's models. First, attention: how every word looks back at every earlier word and decides which ones matter, as geometry. <bookmark mark='a'/> And we'll build a small transformer of our own.",
+   "zh": "下一次，第三幕开始：当今模型内部的引擎。首先是注意力，从几何的角度来看：每个词怎样回头看它前面的每一个词，再决定哪些要紧。<bookmark mark='a'/>我们还会亲手搭一个自己的小Transformer。"
   },
-  "96731c77efcb": {
+  "069ef2d23867": {
    "scene": "Outro",
-   "en": "Songlin Yang's papers and blog on linear attention and the delta rule are the best way in. Thanks for watching, and see you in part thirteen.",
-   "zh": "关于线性注意力和δ规则，杨松琳的论文和博客，是最好的入门读物。感谢观看，我们第13部分再见。"
+   "en": "The Chinchilla paper is very readable, and Roberts, Yaida and Hanin's book is the deep end on wide networks. Thanks for watching, and see you in part thirteen.",
+   "zh": "Chinchilla那篇论文非常好读；要往深处钻研宽网络，就去读罗伯茨、亚伊达和哈宁的那本书。感谢观看，第13部分见。"
+  },
+  "782c8a775e0b": {
+   "scene": "Width",
+   "en": "Greg Yang asked how to scale a network so that every layer keeps learning features, at any width. His answer, the maximal update parametrization, mu-P, rescales the initialization and learning rate of each layer by the width. <bookmark mark='m'/> In plain terms: as the network widens, shrink each layer's starting weights and step size, so that every layer keeps changing by about the same amount. <bookmark mark='a'/> Sweep the learning rate at three widths, the usual way. At our small sizes, the best rate barely moves. <bookmark mark='b'/> Now in mu-P. What shows here is what mu-P is for: its widest model is the best of all, 2.56 bits against 2.66 the usual way, because every layer keeps learning. At large scale the usual way's best rate does drift, and mu-P holds it still: Yang and colleagues tuned a forty-million-parameter model and copied its settings to a GPT-3 of six point seven billion, which beat the original.",
+   "zh": "Greg Yang问的是：网络该怎样放大，才能让每一层在任何宽度下，都一直在学习特征？他的答案，叫最大更新参数化，也就是μP：按照宽度，重新缩放每一层的初始化和学习率。<bookmark mark='m'/>说白了：网络变宽的时候，就把每一层的初始权重和步长都缩小一些，让每一层的变化量，都保持在差不多的水平。<bookmark mark='a'/>先按通常的方式，在3种宽度下把学习率扫一遍。在我们这样小的规模上，最好的学习率几乎不动。<bookmark mark='b'/>现在换成μP。这里显现出来的，正是μP的用处：它最宽的那个模型，是所有模型里最好的，2.56比特，而通常的方式是2.66，因为每一层都在一直学习。到了大规模，通常方式下最好的学习率确实会漂移，而μP能把它稳住：Yang和同事们调好了一个4000万参数的模型，把它的设置照搬到一个67亿参数的GPT-3上，结果胜过了原版。"
+  },
+  "2947bad7801c": {
+   "scene": "Chinchilla",
+   "en": "This experiment, at enormous scale, changed how models are built. In 2020, Kaplan and colleagues concluded that model size should grow much faster than data. <bookmark mark='a'/> In 2022, DeepMind's Chinchilla paper redid it more carefully and found that size and data should grow together: about twenty training tokens for every parameter. <bookmark mark='o'/> Our small experiment lands close to Chinchilla: the best size grows as the budget to the power 0.46, with about 34 characters of training per parameter. <bookmark mark='b'/> Their seventy-billion-parameter Chinchilla beat their own two-hundred-and-eighty-billion-parameter Gopher on the same budget. <bookmark mark='c'/> Today's models train on far more data than even that, because a model is trained once and then run billions of times, so a smaller, longer-trained model is cheaper to use.",
+   "zh": "这个实验放到极大的规模上去做，改变了模型的造法。2020年，卡普兰和同事们得出结论：模型规模应该比数据增长得快得多。<bookmark mark='a'/>2022年，DeepMind的Chinchilla论文更仔细地重做了一遍，发现规模和数据应该一起增长：每个参数，大约配20个训练词元。<bookmark mark='o'/>我们的小实验，结果和Chinchilla很接近：最好的规模，随预算的0.46次方增长，每个参数大约训练34个字符。<bookmark mark='b'/>他们700亿参数的Chinchilla，在同样的预算下，胜过了他们自己2800亿参数的Gopher。<bookmark mark='c'/>如今的模型，训练用的数据比这还要多得多，因为一个模型只训练一次，却要运行几十亿次，所以一个更小、训练得更久的模型，用起来更便宜。"
+  },
+  "dcb3e7b3f838": {
+   "scene": "Chinchilla",
+   "en": "Chinchilla's third method fits one formula to every run at once. <bookmark mark='a'/> The loss is a floor, plus a term that shrinks with the parameters, at a rate set by alpha, plus one that shrinks with the data, at a rate set by beta: how fast more parameters help, and how fast more data helps. Fit to our eighteen runs, it's off by only 0.02 bits on average. <bookmark mark='b'/> Minimize it for a fixed budget, and the best size grows as the budget to the power beta over alpha plus beta: 0.43 here, close to what the parabolas said: the budget goes to whichever pays off faster. <bookmark mark='c'/> The same formula prices over-training. To match the best model's loss with a model three quarters its size costs 7 percent more training; with half the size, 74 percent more; and below about 0.31 of the size, no amount of data will do. <bookmark mark='d'/> Since every query afterwards is cheaper with the smaller model, that extra training is often worth it: Llama 3's eight-billion-parameter model saw about nineteen hundred tokens per parameter, a hundred times Chinchilla's ratio.",
+   "zh": "Chinchilla的第三种方法，是用一个公式同时拟合所有的训练。<bookmark mark='a'/>损失等于一个下限，加上一项随参数量减小的，减小的速度由α决定；再加上一项随数据量减小的，速度由β决定：也就是增加参数能多快地带来改进，增加数据又能多快地带来改进。拟合到我们的18次训练上，平均只差0.02比特。<bookmark mark='b'/>在固定预算下把它最小化，最佳模型大小随预算的β除以α加β次方增长：这里是0.43，和抛物线给出的很接近：预算会流向回报来得更快的那一边。<bookmark mark='c'/>同一个公式，也给过度训练标了价。要让一个只有最佳模型四分之三大的模型达到同样的损失，训练要多花7%；只有一半大，要多花74%；而小于大约0.31倍，多少数据都不够。<bookmark mark='d'/>因为之后的每一次查询，小模型都更便宜，这些额外的训练往往是值得的：Llama 3的80亿参数模型，每个参数大约见过1900个词元，是Chinchilla比例的100倍。"
   }
  },
- "title_en": "AI, Built: Part 12, Memory",
+ "title_en": "AI, Built: Part 10, The Mathematics of Scale",
  "chapters_en": {
-  "Hook": "Everything it has read",
-  "KVCache": "1. The cache",
-  "Linear": "2. Attention without the softmax",
-  "Rules": "3. How to write to memory",
-  "SSM": "4. State-space models",
-  "GatedDelta": "5. The gated delta rule",
-  "Recall": "6. A recall test",
-  "Hybrid": "7. Hybrids",
+  "Hook": "A power law",
+  "Width": "1. Wider and wider",
+  "Chinchilla": "2. Size or data?",
+  "Grok": "3. Grokking",
   "Outro": "Recap, and where this comes back"
  }
 }

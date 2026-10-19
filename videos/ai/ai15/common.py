@@ -1,4 +1,4 @@
-"""Helpers shared by the scenes of Part 15 ("Images and Video")."""
+"""Helpers shared by the scenes of Part 15 ("Memory")."""
 
 from __future__ import annotations
 
@@ -9,112 +9,104 @@ from explainer.ai import *  # noqa: F403
 from .compute import load  # noqa: F401
 
 MONO = "DejaVu Sans Mono"
-PATCH = C.BITS
-LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+Q, K, V, A = C.QUERY, C.KEY, C.VALUE, C.ATTN
+STATE = C.EMBED  # the fixed-size memory
+ADD, DECAY, DELTA = C.SURPRISE, C.TRUE_P, C.INTERVAL  # the three ways to write to it
 
 
-def gray_image(a, size) -> ImageMobject:
-    a = np.clip(np.asarray(a, float), 0, 1)
-    rgb = np.stack([a, a, a, np.ones_like(a)], -1)
-    img = ImageMobject((rgb * 255).astype(np.uint8))
-    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-    return img.stretch_to_fit_width(size).stretch_to_fit_height(size)
+def curve(ax, xs, ys, color, stroke_width=3, smooth=False) -> VMobject:
+    pts = [ax.c2p(x, y) for x, y in zip(xs, ys) if np.isfinite(y)]
+    m = VMobject(color=color, stroke_width=stroke_width)
+    return m.set_points_smoothly(pts) if smooth else m.set_points_as_corners(pts)
 
 
-def heat_image(M, size, color=C.ATTN, gamma=0.7) -> ImageMobject:
+def gib(n_bytes: float) -> str:
+    """A byte count in the unit that reads best (KiB, MiB, GiB, TiB), as TeX."""
+    for unit, p in (("TiB", 40), ("GiB", 30), ("MiB", 20), ("KiB", 10)):
+        if n_bytes >= 2 ** p:
+            v = n_bytes / 2 ** p
+            return (f"{v:,.0f}" if v >= 100 else f"{v:.1f}" if v >= 10 else f"{v:.2f}").replace(",", "{,}") + rf"\,\mathrm{{{unit}}}"
+    return f"{n_bytes:.0f}" + r"\,\mathrm{B}"
+
+
+def grid_matrix(M, size, color=STATE, gamma=0.6) -> VGroup:
+    """A small matrix as a grid of squares, brightness by |entry|."""
     M = np.asarray(M, float)
-    v = np.clip((M - M.min()) / max(M.max() - M.min(), 1e-12), 0, 1) ** gamma
-    c = np.array(ManimColor(color).to_rgb())
-    bg = np.array(ManimColor("#121722").to_rgb())
-    rgb = bg[None, None] * (1 - v[..., None]) + c[None, None] * v[..., None]
-    img = ImageMobject((np.concatenate([rgb, np.ones(M.shape + (1,))], -1) * 255).astype(np.uint8))
-    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-    return img.stretch_to_fit_width(size).stretch_to_fit_height(size)
-
-
-def patch_grid(img_mob, n, color=PATCH, stroke_width=1.5) -> VGroup:
-    """Lines cutting a square picture into n x n patches."""
-    w = img_mob.width
-    ul = img_mob.get_corner(UL)
+    n, m = M.shape
+    top = max(np.abs(M).max(), 1e-9)
+    cell = size / max(n, m)
     g = VGroup()
-    for k in range(1, n):
-        g.add(Line(ul + RIGHT * w * k / n, ul + RIGHT * w * k / n + DOWN * w, color=color, stroke_width=stroke_width))
-        g.add(Line(ul + DOWN * w * k / n, ul + DOWN * w * k / n + RIGHT * w, color=color, stroke_width=stroke_width))
-    return g
+    for i in range(n):
+        for j in range(m):
+            g.add(Square(cell, stroke_width=0.5, stroke_color=GREY_D, fill_color=color,
+                         fill_opacity=float(0.08 + 0.85 * (abs(M[i, j]) / top) ** gamma))
+                  .move_to([j * cell, -i * cell, 0]))
+    return g.center()
 
 
-# a 7 x 7 letter A, for the convolution pictures
-A_PIXELS = np.array([[int(ch) for ch in row] for row in
-                     ("0011100", "0110110", "1100011", "1100011", "1111111", "1100011", "1100011")], float)
+def vec_column(vals, cell=0.22, color=K) -> VGroup:
+    v = np.asarray(vals, float)
+    top = max(np.abs(v).max(), 1e-9)
+    return VGroup(*[Square(cell, stroke_width=0.6, stroke_color=GREY_D, fill_color=color,
+                           fill_opacity=float(0.15 + 0.75 * abs(x) / top)) for x in v]).arrange(DOWN, buff=0)
 
 
-def conv_picture(cell=0.26) -> VGroup:
-    """A convolution: one 3 x 3 window slid over a letter's pixels, the same weighted sum (here an average) at every
-    spot filling one cell of the output.  ``.inp``, ``.out``, ``.window`` and ``.vals`` (each output cell's
-    brightness) let a scene slide the window and fill the output."""
-    P = A_PIXELS
-    inp = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=WHITE, fill_opacity=0.05 + 0.8 * v)
-                   for v in P.flatten()]).arrange_in_grid(7, 7, buff=0)
-    vals = [float(P[i:i + 3, j:j + 3].mean()) for i in range(5) for j in range(5)]
-    out = VGroup(*[Square(cell, stroke_width=0.8, stroke_color=GREY_D, fill_color=PATCH, fill_opacity=0.0)
-                   for _ in vals]).arrange_in_grid(5, 5, buff=0)
-    arrow = Arrow(LEFT * 0.45, RIGHT * 0.45, buff=0, color=GREY_B, stroke_width=3, max_tip_length_to_length_ratio=0.25)
-    row = VGroup(inp, arrow, out).arrange(RIGHT, buff=0.3)
-    window = Square(3 * cell, stroke_color=PATCH, stroke_width=3.5).move_to(inp[8])
-    names = VGroup(label(r"the pixels", font_size=18, color=GREY_A).next_to(inp, DOWN, buff=0.1),
-                   label(r"one learned $3 \times 3$ stencil, \ the same at every spot", font_size=18, color=PATCH)
-                   .next_to(row, UP, buff=0.12),
-                   label(r"the output", font_size=18, color=GREY_A).next_to(out, DOWN, buff=0.1))
-    names[2].match_y(names[0])
-    g = VGroup(row, window, names)
-    g.inp, g.out, g.window, g.vals = inp, out, window, vals
-    return g
+def gqa_picture(n_q=8, groups=2) -> VGroup:
+    """A jargon-card picture of grouped-query attention: VGroup(query heads, their key-value pairs, the links).  Each
+    query head starts with a key and value of its own; ``gqa_shared(pic)`` is the same pairs and links once every
+    group of query heads shares one pair (the group's pairs stacked into one), wherever the picture now is."""
+    gap = 0.42
+    qs = VGroup(*[Circle(radius=0.13, stroke_color=Q, stroke_width=2, fill_color=Q, fill_opacity=0.6) for _ in range(n_q)])
+    qs.arrange(RIGHT, buff=gap - 0.26)
+    per = n_q // groups
+    for gi in range(1, groups):  # a little air between groups
+        qs[gi * per:].shift(RIGHT * 0.25)
+
+    def pair():
+        return VGroup(Square(0.17, stroke_width=0, fill_color=K, fill_opacity=0.9),
+                      Square(0.17, stroke_width=0, fill_color=V, fill_opacity=0.9)).arrange(RIGHT, buff=0.03)
+
+    kvs = VGroup(*[pair().next_to(q_, DOWN, buff=0.75) for q_ in qs])
+    links = VGroup(*[Line(q_.get_bottom(), p_.get_top(), color=GREY_B, stroke_width=1.5) for q_, p_ in zip(qs, kvs)])
+    return VGroup(qs, kvs, links)
 
 
-def slide_window(scene, pic, run_time=0.11):
-    """Slide a conv_picture's window over every spot, filling the output cell by cell."""
-    for k, v in enumerate(pic.vals):
-        i, j = divmod(k, 5)
-        scene.play(pic.window.animate.move_to(pic.inp[(i + 1) * 7 + j + 1]),
-                   pic.out[k].animate.set_fill(opacity=0.1 + 0.85 * v), run_time=run_time, rate_func=linear)
+def gqa_shared(pic: VGroup, groups=2) -> VGroup:
+    qs, kvs, _ = pic
+    per = len(qs) // groups
+    new_kv, new_links = VGroup(), VGroup()
+    for i, (q_, p_) in enumerate(zip(qs, kvs)):
+        gi = i // per
+        x = VGroup(*qs[gi * per:(gi + 1) * per]).get_x()
+        p2 = p_.copy().move_to([x, p_.get_y(), 0])
+        new_kv.add(p2)
+        new_links.add(Line(q_.get_bottom(), p2.get_top(), color=GREY_B, stroke_width=1.5))
+    return VGroup(new_kv, new_links)
 
 
-def causal_conv_picture(cell=0.22) -> VGroup:
-    """A causal convolution in time: the 3 x 3 stencil becomes a 3 x 3 x 3 block, reaching over this frame and the two
-    before it, never the next."""
-    frames = VGroup()
-    for f in range(4):
-        sq = VGroup(*[Square(cell, stroke_width=0.6, stroke_color=GREY_D, fill_color="#121722", fill_opacity=1)
-                      for _ in range(25)]).arrange_in_grid(5, 5, buff=0)
-        frames.add(sq)
-    frames.arrange(RIGHT, buff=0.35)
-    frames[3].set_opacity(0.3)
-    wins = VGroup(*[Square(3 * cell, stroke_color=PATCH, stroke_width=3, fill_color=PATCH, fill_opacity=0.25)
-                    .move_to(frames[f][12]) for f in range(3)])
-    tie = VGroup(*[DashedLine(wins[f].get_right(), wins[f + 1].get_left(), color=PATCH, stroke_width=2, dash_length=0.05)
-                   for f in range(2)])
-    names = VGroup(*[MathTex(t, font_size=24, color=PATCH if f < 3 else GREY_C).next_to(frames[f], DOWN, buff=0.1)
-                     for f, t in enumerate((r"t-2", r"t-1", r"t", r"t+1"))])
-    br = Brace(VGroup(frames[0], frames[2]), UP, buff=0.08, color=PATCH)
-    bl = label(r"one $3 \times 3 \times 3$ stencil: \ this frame and two before", font_size=18, color=PATCH).next_to(br, UP, buff=0.06)
-    fl = label(r"the future: \\ never seen", font_size=18, color=GREY_C).next_to(frames[3], UP, buff=0.1)
-    return VGroup(frames, wins, tie, names, br, bl, fl)
+def ttt_picture(seed=0) -> VGroup:
+    """A jargon-card picture of test-time training: VGroup(the text streaming in, an arrow, the memory as a small
+    network's weights, its name).  ``ttt_step(pic, k)`` is the weights after reading the k-th token: they change as
+    the model reads."""
+    toks = VGroup(*[Square(0.2, stroke_width=1, stroke_color=GREY_B, fill_color=C.TOKEN, fill_opacity=0.25) for _ in range(6)])
+    toks.arrange(RIGHT, buff=0.06)
+    arrow = Arrow(LEFT * 0.35, RIGHT * 0.35, buff=0, color=GREY_B, stroke_width=2.5, max_tip_length_to_length_ratio=0.3)
+    w = _ttt_weights(seed)
+    net = VGroup(w, label(r"the memory: \\ a network's weights", font_size=18, color=STATE).next_to(w, DOWN, buff=0.1))
+    return VGroup(toks, arrow, net).arrange(RIGHT, buff=0.25)
 
 
-def codebook_picture() -> VGroup:
-    """A 16-entry codebook on a number line: each number snaps to its nearest entry, whose index is the token."""
-    w = 7.5
-    xs = np.linspace(-w / 2, w / 2, 16)
-    line = Line([-w / 2 - 0.2, 0, 0], [w / 2 + 0.2, 0, 0], color=GREY_B, stroke_width=2)
-    ticks = VGroup(*[Line([x, -0.1, 0], [x, 0.1, 0], color=GREY_B, stroke_width=2) for x in xs])
-    idx = VGroup(*[MathTex(str(k), font_size=20, color=GREY_B).move_to([x, -0.32, 0]) for k, x in enumerate(xs)])
-    g = VGroup(line, ticks, idx)
-    for v in (2.35, 7.7, 12.2):  # values, in units of the spacing
-        k = int(round(v))
-        x0 = -w / 2 + v * (w / 15)
-        dot = Dot([x0, 0.75, 0], radius=0.08, color=WHITE)
-        arr = Arrow([x0, 0.66, 0], [xs[k], 0.12, 0], buff=0, color=PATCH, stroke_width=3, max_tip_length_to_length_ratio=0.25)
-        box = SurroundingRectangle(idx[k], buff=0.05, color=PATCH, stroke_width=2)
-        g.add(dot, arr, box)
-    g.add(label(r"a number", font_size=20, color=WHITE).next_to(g[3], UP, buff=0.1))
-    return g
+def _ttt_weights(seed):
+    g = np.random.default_rng(100 + seed)
+    return VGroup(*[Square(0.17, stroke_width=0.6, stroke_color=GREY_D, fill_color=STATE, fill_opacity=float(o))
+                    for o in g.uniform(0.1, 0.95, 24)]).arrange_in_grid(4, 6, buff=0.02)
+
+
+def ttt_step(pic: VGroup, k: int) -> tuple[VGroup, VGroup]:
+    """(the weights after token k, the tokens with the first k read), rebuilt where the picture now is."""
+    toks, _, net = pic
+    w = _ttt_weights(k).replace(net[0])
+    t2 = toks.copy()
+    for i, t_ in enumerate(t2):
+        t_.set_fill(C.BITS if i < k else C.TOKEN, opacity=0.85 if i == k - 1 else 0.5 if i < k else 0.25)
+    return w, t2

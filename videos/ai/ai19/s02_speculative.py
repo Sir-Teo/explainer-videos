@@ -119,7 +119,7 @@ class Speculative(VoiceoverScene):
         cl_ = label(r"the passage so far: \ which character comes next?", font_size=26, color=GREY_A).next_to(line_, UP, buff=0.4)
         with self.voiceover(
             "The clever part is that nothing changes about what the big model says. <bookmark mark='a'/> Here are "
-            "both guesses for the next character, on our own models: part eleven's transformer as the big one, a "
+            "both guesses for the next character, on our own models: part thirteen's transformer as the big one, a "
             "small counting model as the draft. <bookmark mark='b'/> Accept a drafted character with probability p "
             "over q, capped at one: where the draft guesses a character too often, the excess gets thrown out. "
             "<bookmark mark='c'/> If it's rejected, sample from what's left of p after taking q away: exactly the "

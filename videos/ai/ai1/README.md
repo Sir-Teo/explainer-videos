@@ -39,7 +39,7 @@ chapters:
 * **The scoreboard.** Bits per character on the passage as printed: plain text 8, uniform over its 61 symbols 5.93,
   letter frequencies 4.55, one character of context 3.58, gzip 3.31, xz 3.20, bzip2 2.92, the best counting model
   2.32, GPT-2 small 1.17, GPT-2 XL 1.01, Qwen3-0.6B 1.02, Qwen3-4B 0.87; people 0.6–1.3 (letters only).
-* **Recap**, where each idea comes back, a computed teaser for Part 2 (GPT-2's word vectors; random directions in
+* **Recap**, where each idea comes back, a computed teaser for Part 3 (GPT-2's word vectors; random directions in
   768 dimensions), and the references.
 
 Every number the narration states is computed in [`compute.py`](compute.py) and asserted, in the scene that shows it

@@ -1,4 +1,4 @@
-"""The series' own reverse-mode automatic differentiation, small enough to read in one sitting (Part 3, "Change").
+"""The series' own reverse-mode automatic differentiation, small enough to read in one sitting (Part 4, "Change").
 
     from explainer.ai.autodiff import Tensor
     w = Tensor(np.zeros((27, 27)), requires_grad=True)
@@ -8,7 +8,7 @@
 
 Every operation records its inputs and how to send a gradient back to them (the "vector-Jacobian product").
 ``backward`` visits the graph in reverse topological order, so each node passes its gradient on only once all of
-its uses have reported in: the chain rule, run backwards.  Part 3 checks it against finite differences and against
+its uses have reported in: the chain rule, run backwards.  Part 4 checks it against finite differences and against
 PyTorch; later parts train with it.
 """
 

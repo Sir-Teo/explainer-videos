@@ -7,7 +7,7 @@ import numpy as np
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai19.compute import FP4, load
-from videos.ai.ai20.compute import load as load20
+from videos.ai.ai30.compute import load as load20
 
 
 class Outro(VoiceoverScene):
@@ -110,14 +110,14 @@ class Outro(VoiceoverScene):
     # ------------------------------------------------------------------
     def payoffs(self):
         card = payoff_card([
-            (r"the key-value cache, \ now in pages", [12]),
-            (r"experts: \ fewer weights read per token", [13]),
-            (r"thinking longer: \ more tokens to pay for", [17, 18]),
+            (r"the key-value cache, \ now in pages", [15]),
+            (r"experts: \ fewer weights read per token", [16]),
+            (r"thinking longer: \ more tokens to pay for", [28, 29]),
         ], font_size=26, title=r"Where this came from")
         with self.voiceover(
-            "This part paid off ideas from earlier ones. The key-value cache of part twelve is what the pages hold. "
-            "Mixture-of-experts, from part thirteen, is the same idea as quantization: read fewer bytes per token. "
-            "And the long chains of thought of parts seventeen and eighteen are why speed matters so much."
+            "This part paid off ideas from earlier ones. The key-value cache of part fifteen is what the pages hold. "
+            "Mixture-of-experts, from part sixteen, is the same idea as quantization: read fewer bytes per token. "
+            "And the long chains of thought of parts twenty-eight and twenty-nine are why speed matters so much."
         ) as vo:
             self.play(FadeIn(card.head))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),
@@ -129,7 +129,7 @@ class Outro(VoiceoverScene):
     def next_time(self):
         sp = load20("superposition")
         W = np.asarray(sp["W0.97"])
-        head = label(r"Next: \ Part 20, \ Inside the Model", font_size=40).to_edge(UP, buff=0.4)
+        head = label(r"Next: \ Part 30, \ Inside the Model", font_size=40).to_edge(UP, buff=0.4)
         c0 = DOWN * 0.3
         sc = 1.6 / max(np.linalg.norm(W, axis=0).max(), 1e-6)
         circ = Circle(radius=1.6, stroke_color=GREY_D, stroke_width=1.5).move_to(c0)

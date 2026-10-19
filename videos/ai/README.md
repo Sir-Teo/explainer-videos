@@ -1,9 +1,16 @@
 # AI, Built (人工智能，从零搭建)
 
-A twenty-part series on the mathematics of modern AI models, in English and Chinese, from probability to
-frontier systems. Each part derives its mathematics on screen, and every number on screen comes from a real
-computation: a model trained or probed on the 4-core CPU that renders the video, or a published configuration or
-report, cited. Schematics are labeled `schematic` and made-up examples `illustrative`. Videos are `ai1` … `ai20`.
+A thirty-one-part course on how modern AI works and how it came to be, in English and Chinese: from Shannon's
+information theory and the symbolic era, through statistical learning and the deep learning revolution, to
+transformers, frontier language models, generative models, reinforcement learning, reasoning, agents, and what we
+find inside the models. Each part is a 30-60 minute lecture that derives its mathematics on screen and tells its
+history. Every number on screen comes from a real computation, a model trained or probed on the CPU that renders
+the video, or from a published configuration or report, cited. Schematics are labeled `schematic` and made-up
+examples `illustrative`. Videos are `ai1` … `ai31`.
+
+The chapter-by-chapter plan, and the standard every part meets, are in [`SYLLABUS.md`](SYLLABUS.md). Parts are
+being rebuilt to that standard one by one, starting with Part 26; the parts not yet rebuilt are the earlier,
+shorter cuts, and their outros still name the old next part.
 
 ## The story
 
@@ -11,22 +18,29 @@ report, cited. Schematics are labeled `schematic` and made-up examples `illustra
 from their mistakes estimated how much information English carries. Every modern model plays a version of that
 game: language models guess the next token, diffusion models guess the noise, robot policies guess the next
 action, world models guess the next frame. The question that grows through the series: *what do you have to know
-to guess well?*
+to guess well?* And alongside it, the field's own history: who tried what, why it worked or didn't, and how each
+idea led to the next.
 
-* **Act I, Foundations**: the language to ask the question (probability and information, linear algebra and
-  geometry, calculus and autodiff, randomness).
-* **Act II, Learning**: guessing from statistics, and why it generalizes.
-* **Act III, Engines**: guessing about structure, in every kind of data.
-* **Act IV, Agency**: guessing about the world and its consequences.
-* **Finale**: open a model up and see what it knows.
+* **Act I, Foundations**: information, the symbolic era and its search and logic, linear algebra, calculus and
+  autodiff, randomness.
+* **Act II, Learning from Data**: classical and statistical learning, generalization, neural networks, the deep
+  learning revolution (CNNs, RNNs), optimization, and the mathematics of scale.
+* **Act III, The Transformer Era**: attention, the language-model lineage from GPT-1 to today's open-weight
+  frontier, memory, sparsity, the hardware, pretraining at scale, and inference.
+* **Act IV, Generation and Perception**: VAEs, GANs, flows and energy models; diffusion and flow matching; images,
+  video and 3D; tokens for every sense; self-supervised learning; symmetry and science (AlphaFold, weather, maths).
+* **Act V, Agency**: reinforcement learning from Bellman to AlphaZero and MuZero, post-training and alignment,
+  reasoning, agents and world models.
+* **Finale**: open a model up and see what it knows; then ask whether we can trust it.
 
 Three devices hold it together:
 
 1. **The scoreboard** (`explainer.ai.scoreboard`): one fixed passage, chapter 2 of Dashiell Hammett's *The Maltese
    Falcon* (1930), in the US public domain and on Project Gutenberg since 1 January 2026, after every model on the
    board was trained. Each row is a model's bits per character on it. Part 1 computes the passage and the first
-   rows (`.cache/ai1/scoreboard.json`); later parts add the models they build (Kneser–Ney counting in Part 6, a
-   neural n-gram model in Part 8, a small transformer in Part 11), all trained on the same thirty novels.
+   rows (`.cache/ai1/scoreboard.json`); later parts add the models they build (Kneser–Ney and an ∞-gram in Part 7,
+   a neural n-gram in Part 9, a character LSTM in Part 10, a small transformer in Part 13, and more), all trained on
+   the same thirty novels.
 2. **Payoffs**: each idea is introduced with "where this comes back" (`explainer.ai.payoff_card`), and the later
    part opens by calling back to it.
 3. **The timeline strip** (`explainer.ai.timeline`, 1940–2030) on every chapter card.
@@ -49,32 +63,45 @@ The series draws in the manner of 3Blue1Brown, with the instruments in `explaine
 
 ## The parts
 
-| # | Part | Mathematics | Models, data |
+| # | Part | Mathematics and history | Models, data |
 |---|---|---|---|
 | **I** | **Foundations** | | |
-| 1 | The Guessing Game | probability, the chain rule, surprise, entropy, Kraft, Huffman, cross-entropy, KL, arithmetic coding, maximum likelihood, the softmax gradient, mutual information | counting models, gzip/xz/bzip2, GPT-2, Qwen3 |
-| 2 | Vectors That Mean Things | inner products, eigenvalues, SVD and Eckart–Young, spectral norm, high-dimensional geometry, Johnson–Lindenstrauss | word2vec, GPT-2's embeddings |
-| 3 | Change | gradients, Jacobians, Hessians, the chain rule, reverse-mode autodiff (the series' own small library), Taylor and curvature | |
-| 4 | Randomness in Motion | Gaussians, MLE and Bayes, Markov chains, Monte Carlo and importance sampling, Brownian motion, SDEs, Fokker–Planck | |
-| **II** | **Learning** | | |
-| 5 | Classical ML | least squares and its geometry, ridge and lasso, logistic regression, LDA, k-NN, kernels and SVMs, trees, forests, boosting | |
-| 6 | Statistical ML | PCA, mixtures and EM, HMMs, graphical models, Gaussian processes, variational inference, Kneser–Ney n-grams | the scoreboard's KN row |
-| 7 | Fitting and Generalizing | ERM, bias–variance, VC and Rademacher, random labels, double descent | |
-| 8 | Networks | universal approximation, depth and linear regions, initialization, signal propagation, residuals, normalization, pre-norm/RMSNorm/SwiGLU | a neural n-gram model (Bengio 2003) |
-| 9 | Going Downhill | SGD as an SDE, edge of stability, Adam/AdamW, Muon (spectral steepest descent, Newton–Schulz, QK-clip), schedules (WSD) | |
-| 10 | The Mathematics of Scale | NTK vs μP, hyperparameter transfer, scaling laws, Chinchilla (L(N, D) fit, over-training), grokking | |
-| **III** | **Engines** | | |
-| 11 | Attention as Geometry | attention as a kernel smoother, RoPE, YaRN (ramp and temperature), attention sinks, sink logits, output gates, QK-norm, soft caps, induction heads, in-context learning | our own small transformer |
-| 12 | Memory | KV caches, GQA and MLA, linear attention, SSMs (Mamba-2 and state-space duality), the delta rule and gated delta rule (Householder geometry, WY/UT chunkwise training), test-time training, hybrids | DeepSeek, Qwen3-Next, Kimi Linear |
-| 13 | Sparsity | mixture-of-experts routing and balancing (DeepSeek-V3's sigmoid router, fine-grained experts), sparse attention (NSA, DSA) | DeepSeek-V3.x, GLM, Kimi |
-| 14 | Diffusion and Flow | score matching, the reverse SDE, DDPM/DDIM, flow matching, reflow, MeanFlow and shortcut models, guidance, discrete and block diffusion | LLaDA |
-| 15 | Images and Video | ViT, VAEs and the rebuild-vs-generate trade-off, DiT (adaLN-Zero), SD3 (MM-DiT, logit-normal t, resolution shift), next-scale prediction (VAR), causal video autoencoders, 3D RoPE, joint clips, diffusion forcing | SD3/Flux, video models |
-| 16 | Every Sense Is a Token | BPE, VQ (straight-through, commitment) and FSQ, residual vector quantization, CLIP vs SigLIP, omni models, full-duplex speech | Qwen3-TTS (the narrator) |
-| **IV** | **Agency** | | |
-| 17 | Reasoning | chain of thought as computation, process vs outcome rewards, RLVR, GRPO's clipped objective and KL, Dr. GRPO, DAPO, GSPO, DPO, entropy collapse, pass@k, test-time scaling, best-of-N | o-series, R1 |
-| 18 | Agents and Worlds | POMDPs, long horizons, task-length doubling, world models, VLAs (π0's flow-matched chunks, FAST tokens) | Dreamer, Genie, π0 |
-| 19 | Inference | exact speculative decoding, quantization (MXFP4, NVFP4, GPTQ, rotations), FlashAttention, roofline, paged KV | |
-| 20 | Inside the Model | superposition, sparse autoencoders (L1, TopK, JumpReLU), transcoders and attribution graphs, crosscoders, steering, CoT faithfulness | |
+| 1 | The Guessing Game | probability, surprise, entropy, Kraft, Huffman, typical sets, cross-entropy, KL, arithmetic coding, maximum likelihood, mutual information | counting models, gzip/xz/bzip2, GPT-2, Qwen3 |
+| 2 | Thinking Machines | Turing, Dartmouth, search and A*, games and alpha–beta, logic and SAT, planning, expert systems, the AI winters | Samuel's checkers, Deep Blue, ELIZA |
+| 3 | Vectors That Mean Things | inner products, eigenvalues, SVD and Eckart–Young, norms, random matrices, high-dimensional geometry, Johnson–Lindenstrauss, matrix factorization | word2vec, GPT-2's embeddings, the Netflix Prize |
+| 4 | Change | gradients, Jacobians, reverse-mode autodiff (the series' own library), numerics, curvature, Lagrange and KKT, implicit differentiation | |
+| 5 | Randomness in Motion | Gaussians, MLE and Bayes, exponential families, concentration, sampling and decoding, Markov chains, Monte Carlo, MCMC, Brownian motion, SDEs, Fokker–Planck | |
+| **II** | **Learning from Data** | | |
+| 6 | Classical ML | least squares, ridge and lasso, logistic regression, LDA, k-NN, kernels and SVMs, trees, forests, boosting | Viola–Jones |
+| 7 | Statistical ML | PCA, EM, HMMs, graphical models, causality, Gaussian processes, variational inference, topic models, statistical MT, Kneser–Ney | the scoreboard's KN and ∞-gram rows |
+| 8 | Fitting and Generalizing | ERM, bias–variance, VC, Rademacher, PAC-Bayes, implicit bias, double descent, distribution shift | |
+| 9 | Networks | McCulloch–Pitts to backprop, universal approximation, depth, initialization, signal propagation, residuals, normalization, gating | a neural n-gram model (Bengio 2003) |
+| 10 | Seeing and Remembering | convolution and equivariance, the ImageNet moment, adversarial examples, RNNs, LSTMs, seq2seq, the first attention | LeNet, AlexNet, ResNet, a character LSTM |
+| 11 | Going Downhill | convergence rates, SGD as an SDE, edge of stability, momentum, Adam/AdamW, natural gradient, Shampoo, Muon, schedules | |
+| 12 | The Mathematics of Scale | NTK vs μP, hyperparameter transfer, scaling laws, Chinchilla, over-training, emergence, grokking | |
+| **III** | **The Transformer Era** | | |
+| 13 | Attention as Geometry | attention as a kernel smoother, RoPE, YaRN, sinks and gates, QK-norm, induction heads, in-context learning, expressivity | our own small transformer |
+| 14 | The Language-Model Lineage | the 2017 Transformer, GPT-1 and BERT, T5, GPT-2/3, instruction tuning, ChatGPT, open weights, compute trends | GPT, BERT, T5, LLaMA, DeepSeek, Qwen, Kimi |
+| 15 | Memory | KV caches, GQA and MLA, linear attention, SSMs, the (gated) delta rule, test-time training, hybrids, retrieval | DeepSeek, Qwen3-Next, Kimi Linear |
+| 16 | Sparsity | mixture-of-experts routing and balancing, expert parallelism, sparse attention (NSA, DSA), pruning | DeepSeek-V3.x, GLM, Kimi |
+| 17 | Silicon | GPUs and SIMT, tiling and arithmetic intensity, the roofline, systolic arrays, number formats, interconnects | the machine rendering the video |
+| 18 | Pretraining at Scale | data pipelines and dedup, data/tensor/pipeline/expert parallelism, ZeRO, FP8 training, stability, multi-token prediction | |
+| 19 | Inference | speculative decoding, quantization (GPTQ, rotations, MXFP4/NVFP4), FlashAttention, paged KV, serving | gpt-oss |
+| **IV** | **Generation and Perception** | | |
+| 20 | Four Ways to Generate | autoregressive models, VAEs, GANs and WGAN, normalizing flows, neural ODEs, energy models, FID | Hopfield, Boltzmann, StyleGAN |
+| 21 | Diffusion and Flow | score matching, the reverse SDE, DDPM/DDIM, EDM, flow matching, reflow, distillation, guidance, discrete diffusion | LLaDA |
+| 22 | Images, Video and 3D | ViT, latent spaces, DiT, SD3, next-scale prediction, unified models, video autoencoders, diffusion forcing, NeRF, Gaussian splatting | SD3/Flux, video models |
+| 23 | Every Sense Is a Token | BPE, byte-level models, VQ and FSQ, RVQ, audio and CTC, CLIP vs SigLIP, VLMs, omni models | Whisper, Qwen3-TTS (the narrator) |
+| 24 | Learning Without Labels | contrastive learning, BYOL and collapse, DINO, MAE, JEPA, embeddings | DINOv3, V-JEPA 2 |
+| 25 | Symmetry and Science | groups and equivariance, GNNs and the WL test, AlphaFold 2/3, weather models, AI for mathematics | AlphaFold, GraphCast, AlphaProof |
+| **V** | **Agency** | | |
+| 26 | Reinforcement Learning | bandits and UCB, Bellman, TD, Q-learning and DQN, policy gradients, PPO, MCTS, AlphaGo, AlphaZero, MuZero, CFR | our own AlphaZero (Connect Four) |
+| 27 | Post-Training and Alignment | SFT, LoRA, reward models, RLHF, DPO, Constitutional AI, distillation, merging | InstructGPT |
+| 28 | Reasoning | chain of thought as computation, PRMs, RLVR, GRPO and its variants, pass@k, test-time scaling | o-series, R1 |
+| 29 | Agents and Worlds | POMDPs, tool use, long horizons, imitation learning, world models, VLAs | Dreamer, Genie, π0 |
+| **Finale** | | | |
+| 30 | Inside the Model | probing, patching, superposition, sparse autoencoders, transcoders and attribution graphs, steering, CoT faithfulness | |
+| 31 | Can We Trust It? | evaluation science, arenas, reward hacking, scalable oversight, monitoring and control, open problems | the final scoreboard |
 
 ## Shared code and the Chinese edition
 

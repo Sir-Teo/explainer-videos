@@ -159,7 +159,7 @@ class Hook(VoiceoverScene):
             "meanwhile the chip's arithmetic sits almost idle. <bookmark mark='b'/> One conversation uses "
             f"{'a third of one percent' if 0.25 < 100 * USE < 0.42 else f'{100 * USE:.2f} percent'} of it. "
             "<bookmark mark='c'/> Running a trained model to get answers, with no learning, just using it, is called "
-            "inference; it's not part six's variational inference. And inference is a problem "
+            "inference; it's not part seven's variational inference. And inference is a problem "
             "of moving numbers, not multiplying them."
         ) as vo:
             self.play(Write(f1), FadeIn(cite_))

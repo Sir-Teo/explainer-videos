@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Keep Colab render boxes busy with a series' missing masters and bring each finished one home.
 
-    python tools/colab_fleet.py ai1 ai2 ... ai20 --boxes l4a l4b
+    python tools/colab_fleet.py ai1 ai3 ... ai30 --boxes l4a l4b
 
 Every (video, lang) whose 2160p master is not yet in renders/ (nor listed in renders/qa/fleet_skip.txt, e.g. masters
 already in Drive) is a job. Each box gets up to --depth jobs at a time through tools/colab_push.py; its factory

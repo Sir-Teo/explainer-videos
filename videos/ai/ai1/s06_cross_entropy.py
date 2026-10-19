@@ -322,8 +322,8 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         with self.voiceover(
             "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so "
             "it squeezes into a single peak and ignores the other. <bookmark mark='b'/> Covering everything, or "
-            "committing to one thing: that choice comes back in diffusion models, in part fourteen, and in "
-            "reinforcement learning, in part seventeen."
+            "committing to one thing: that choice comes back in diffusion models, in part twenty-one, and in "
+            "reinforcement learning, in part twenty-eight."
         ) as vo:
             m_t, s_t, path = trackers[1]
             vo.wait_until("a")

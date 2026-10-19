@@ -1,37 +1,36 @@
-# AI, Built — Part 9: Going Downhill
+# AI, Built — Part 9: Networks
 
-Part 9 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)): the
-optimizers that train real models. Every run is computed by `compute.py`; the workhorse is a small character model
-(8 characters of context, 16-number character vectors, 256 tanh units, a residual hidden layer) trained on Part 1's
-books and scored in bits per character on held-out text. A hook and five chapters:
+Part 9 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). What a
+network is, what one layer and many layers can represent, what it takes to train a deep one, and the first neural
+language model on the series' scoreboard. Every network here is trained by `compute.py` (PyTorch, CPU). A hook and
+five chapters:
 
-* **Three ways down.** Part 3's narrow valley (curvatures 1 and 30): gradient descent zigzags, momentum and Adam do
-  not (49, 26 and 21 steps to within 5%).
-* **Stochastic gradient descent.** Part 5's logistic regression on two word rates, a real two-weight loss: full-batch,
-  16-page and 1-page steps; the cloud SGD settles into, about four times narrower at 16 times the batch; SGD as
-  Part 4's SDE, with noise √(η/B).
-* **The edge of stability.** A step on a bowl is stable only if the curvature is below 2/η; full-batch gradient
-  descent on Part 8's spirals at two learning rates drives the sharpness (power iteration on Hessian-vector products)
-  up to 2/η, where it stays (Cohen et al.).
-* **Momentum and Adam.** The update rules (momentum, Adam, AdamW); five optimizers on the character model.
-* **Muon.** The singular values of a real gradient matrix before and after Newton–Schulz orthogonalization; Muon on
-  the hidden matrices against AdamW; Muon as steepest descent under the spectral norm (ΔW = −ηUVᵀ); Newton–Schulz's
-  quintic p(σ) = 3.4445σ − 4.7750σ³ + 2.0315σ⁵ applied to the gradient's singular values round by round (every one
-  above 1% of the largest ends between 0.68 and 1.13; the scalar iteration matches the matrix one to 10⁻⁶); Kimi K2's
-  QK-clip.
-* **Learning-rate schedules.** Constant, cosine and warmup–stable–decay on the character model; the drop when the
-  learning rate falls.
-* **Recap**, where it comes back, Part 10's teaser, references.
+* **Two spirals.** A 2 → 32 → 32 → 32 → 2 ReLU network learning two interleaved spirals: its decision regions and its
+  linear pieces (thousands of them) at steps 0, 50, 200, 600 and 3,000.
+* **One layer can do anything.** A unit: a weighted sum and a ReLU, a hinge; a curve built from 2, 4, 8, 16 and 64
+  hinges by least squares (the miss falling from 0.45 to 0.0014); the universal approximation theorem.
+* **What depth adds.** The tent map composed k times: 2^k pieces from 2k units (Telgarsky); 48 random units arranged
+  in 1 to 6 layers cut the plane into about 800 pieces whatever the depth (Hanin & Rolnick).
+* **Signals through fifty layers.** 50 layers of 256 ReLUs: with weights 0.7× too small the signal shrinks about
+  thirty million times, 1.4× too big it grows about ten million times, and at Var(w) = 2/n it stays steady (He et al.);
+  gradients likewise.
+* **The residual stream.** h + f(h); the identity in every block's Jacobian; 40 plain layers stuck at 50% on the
+  spirals, 40 residual layers at 100%; LayerNorm; then today's block: pre-norm, RMSNorm (g ⊙ h / RMS(h)) and SwiGLU
+  (W₂(SiLU(W₁x) ⊙ W₃x)), whose hidden width of 8d/3 keeps the weights at 3·d·(8/3)d = 8d², as with 4d.
+* **A neural language model.** Bengio et al.'s design for characters (24 characters of context, learned 32-number
+  vectors, 1,024 tanh units), trained on Part 1's books: its bits per character on the passage, its mixture with
+  Part 7's Kneser–Ney (the scoreboard's new rows), the learned character vectors, and its writing.
+* **Recap**, where it comes back, Part 11's teaser, references.
 
 Run from the repo root:
 
 ```
-python -m videos.ai.ai9.compute          # needs Part 1's books (.cache/ai1) and Part 5's pages (.cache/ai5)
+python -m videos.ai.ai9.compute          # needs Part 1's books (.cache/ai1) and Part 7's Kneser-Ney (.cache/ai7)
 python tools/build.py ai9                # English
 python tools/build.py ai9 --lang zh      # Chinese
 ```
 
-References: S. J. D. Prince, *Understanding Deep Learning* (2023); J. Nocedal & S. J. Wright, *Numerical
-Optimization* (2006); L. Bottou, F. E. Curtis & J. Nocedal (2018); Robbins & Monro (1951); Polyak (1964); Li, Tai & E
-(2017); Cohen et al. (2021); Kingma & Ba (2014); Loshchilov & Hutter (2017); Jordan et al. (2024); Liu et al. (2025);
-Hu et al. (2024); Hägele et al. (2024).
+References: I. Goodfellow, Y. Bengio & A. Courville, *Deep Learning* (2016); S. J. D. Prince, *Understanding Deep
+Learning* (2023); D. A. Roberts, S. Yaida & B. Hanin, *The Principles of Deep Learning Theory* (2022); Cybenko (1989);
+Hornik, Stinchcombe & White (1989); Telgarsky (2016); Hanin & Rolnick (2019); Glorot & Bengio (2010); He et al.
+(2015, both); Ba, Kiros & Hinton (2016); Bengio, Ducharme, Vincent & Jauvin (2003).

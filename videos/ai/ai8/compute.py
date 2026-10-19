@@ -1,24 +1,20 @@
-"""Precompute everything numerical in Part 8 of the AI series ("Networks").
+"""Precompute everything numerical in Part 8 of the AI series ("Fitting and Generalizing").
 
-    python -m videos.ai.ai8.compute              # everything missing (Part 1's books: .cache/ai1)
-    python -m videos.ai.ai8.compute --force lm
+    python -m videos.ai.ai8.compute              # everything missing (needs Part 6's pages: .cache/ai6)
+    python -m videos.ai.ai8.compute --force double
 
 Results are cached in ``.cache/ai8/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.
 
 Items:
-    hinges    universal approximation, one hidden layer of ReLUs: a target curve fitted by least squares on n hinges
-              (n = 2, 4, 8, 16, 64), each hinge's contribution, and the error
-    sawtooth  depth: the tent map composed k times has 2^k pieces; a random ReLU net's linear regions in the plane,
-              counted, for depth 1 ... 6 at a fixed number of neurons
-    spiral    a 2 -> 32 -> 32 -> 32 -> 2 ReLU network trained on two interleaved spirals: decision regions and linear
-              regions at several moments of training
-    signal    signal propagation through 50 layers of width 256: the spread of activations (and of gradients) per
-              layer for weights drawn with gain 0.7, 1 and 1.4 times He's sqrt(2 / n), ReLU; tanh at gain 1
-    residual  a 40-layer plain network and the same with residual connections (and with LayerNorm), trained on the
-              spirals: loss curves
-    lm        Bengio et al.'s neural language model, for characters: 24 characters of context, each a learned vector of
-              32 numbers, one hidden layer of 1,024, trained on Part 1's books; bits per character on the passage, and
-              mixed with Part 6's Kneser-Ney (the scoreboard's new rows); the learned character vectors, and samples
+    gap       the training error and the test error of Part 6's k-nearest-neighbour vote, k = 1 ... 151
+    biasvar   bias and variance by resampling: polynomials of degree 0 ... 15 fitted to 200 fresh samples of 16 noisy
+              points from one curve (illustrative); bias squared + variance + noise = the expected test error
+    shatter   lines in the plane: all 8 labellings of 3 points are separable, 2 of the 16 labellings of 4 are not
+    rademacher how well linear classifiers on the first d of Part 6's 70 rates can fit random signs, d = 1 ... 70
+    random    one network (70 -> 512 -> 512 -> 2) trained on Part 6's pages with the true authors and with shuffled
+              authors: training and test accuracy through training
+    double    double descent: least squares on p random features of Part 6's pages (minimum-norm when p > n), test
+              error against p, peaking where p = n
 """
 
 from __future__ import annotations
@@ -37,348 +33,200 @@ def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
 
-def target(x):
-    """The curve the hinges build (illustrative)."""
-    return np.sin(3.0 * x) * np.exp(-0.25 * x * x) + 0.35 * x
+def pages():
+    from videos.ai.ai6 import compute as c5
+
+    p = c5.load("pages")
+    X, y, test = np.asarray(p["X"]), np.asarray(p["y"]), np.asarray(p["test"], bool)
+    mu, sd = X[~test].mean(0), X[~test].std(0) + 1e-9
+    Z = (X - mu) / sd
+    return Z[~test], y[~test], Z[test], y[test], np.asarray(p["X2"])
 
 
 # ---------------------------------------------------------------------------
-def compute_hinges():
-    xs = np.linspace(-3, 3, 400)
-    y = target(xs)
-    out = dict(xs=xs, y=y, ns=[2, 4, 8, 16, 64])
-    for n in out["ns"]:
-        knots = np.linspace(-3, 3, n + 2)[1:-1]
-        H = np.maximum(xs[:, None] - knots[None], 0)  # one hinge per knot
-        A = np.c_[np.ones_like(xs), xs, H]
-        coef = np.linalg.lstsq(A, y, rcond=None)[0]
-        fit = A @ coef
-        out[f"knots{n}"] = knots
-        out[f"fit{n}"] = fit
-        out[f"parts{n}"] = (H * coef[2:]).T  # each hinge's contribution
-        out[f"base{n}"] = coef[0] + coef[1] * xs
-        out[f"err{n}"] = float(np.sqrt(((fit - y) ** 2).mean()))
-    errs = [out[f"err{n}"] for n in out["ns"]]
-    assert all(b < a for a, b in zip(errs, errs[1:])) and errs[-1] < 0.01
-    return out
+def compute_gap():
+    _, ytr, _, yte, X2 = pages()
+    from videos.ai.ai6 import compute as c5
+
+    p = c5.load("pages")
+    test = np.asarray(p["test"], bool)
+    A, B, _, _ = c5.standardize(X2[~test], X2[test])  # exactly as Part 6 did (the rates tie often; ties must break alike)
+    dAA = ((A[:, None] - A[None]) ** 2).sum(-1)
+    dBA = ((B[:, None] - A[None]) ** 2).sum(-1)
+    oA, oB = np.argsort(dAA, 1, kind="stable"), np.argsort(dBA, 1, kind="stable")
+    ks = np.arange(1, 152, 2)
+    tr = [float(((ytr[oA[:, :k]].mean(1) > 0.5) == ytr).mean()) for k in ks]
+    te = [float(((ytr[oB[:, :k]].mean(1) > 0.5) == yte).mean()) for k in ks]
+    best = int(ks[int(np.argmax(te))])
+    return dict(ks=ks, train_err=1 - np.array(tr), test_err=1 - np.array(te), best_k=best)
 
 
 # ---------------------------------------------------------------------------
-def tent(x):
-    return 1 - np.abs(2 * x - 1)
+def truth(x):
+    return np.sin(2.4 * x) + 0.3 * x
 
 
-def regions(depth, width, seed, n=320):
-    """Number of linear regions of a random ReLU net 2 -> width^depth on [-2, 2]^2 (counted on a grid), and the
-    activation-pattern ids of the grid."""
-    g = rng(seed)
-    xs = np.linspace(-2, 2, n)
-    P = np.stack(np.meshgrid(xs, xs), -1).reshape(-1, 2)
-    h = P
-    pats = []
-    d_in = 2
-    for _ in range(depth):
-        W = g.normal(size=(d_in, width)) * math.sqrt(2 / d_in)
-        b = g.normal(size=width) * 0.3
-        z = h @ W + b
-        pats.append(z > 0)
-        h = np.maximum(z, 0)
-        d_in = width
-    pat = np.concatenate(pats, 1)
-    _, inv = np.unique(pat, axis=0, return_inverse=True)
-    return int(inv.max() + 1), inv.reshape(n, n)
-
-
-def compute_sawtooth():
-    xs = np.linspace(0, 1, 2049)
-    teeth = {}
-    y = xs.copy()
-    for k in range(1, 6):
-        y = tent(y)
-        teeth[f"tent{k}"] = y.copy()
-    # linear regions at a fixed budget of 48 neurons, spread over 1, 2, 3, 4, 6 layers
-    counts, maps = [], {}
-    for depth in (1, 2, 3, 4, 6):
-        width = 48 // depth
-        c = [regions(depth, width, s)[0] for s in range(3)]
-        counts.append(float(np.mean(c)))
-        maps[f"map{depth}"] = regions(depth, width, 0, n=200)[1]
-    return dict(xs=xs, depths=[1, 2, 3, 4, 6], counts=counts, **teeth, **maps)
+def compute_biasvar():
+    g = rng(1992)  # Geman, Bienenstock & Doursat, 1992
+    n, sigma, degs, runs = 16, 0.35, list(range(0, 16)), 200
+    xg = np.linspace(-1.5, 1.5, 160)  # judged between the points, never beyond them
+    fits = {d: [] for d in degs}
+    xs_all = []
+    for _ in range(runs):
+        x = np.linspace(-1.6, 1.6, n) + g.uniform(-0.06, 0.06, n)
+        yv = truth(x) + sigma * g.normal(size=n)
+        xs_all.append((x, yv))
+        for d in degs:
+            V = np.vander(x / 1.6, d + 1)
+            c = np.linalg.lstsq(V, yv, rcond=None)[0]
+            fits[d].append(np.vander(xg / 1.6, d + 1) @ c)
+    bias2, var = [], []
+    for d in degs:
+        F = np.array(fits[d])
+        mean = F.mean(0)
+        bias2.append(float(((mean - truth(xg)) ** 2).mean()))
+        var.append(float(F.var(0).mean()))
+    bias2, var = np.array(bias2), np.array(var)
+    total = bias2 + var + sigma ** 2
+    best = int(np.argmin(total))
+    assert 3 <= best <= 9 and var[-1] > 100 * var[best] and bias2[0] > 10 * bias2[best]
+    return dict(degs=degs, bias2=bias2, var=var, noise=sigma ** 2, total=total, best=best, xg=xg, truth=truth(xg),
+                sample_x=xs_all[0][0], sample_y=xs_all[0][1], fits_1=np.array(fits[1][:20]),
+                fits_best=np.array(fits[best][:20]), fits_top=np.array(fits[12][:20]), top=12, n=n,
+                runs=runs)
 
 
 # ---------------------------------------------------------------------------
-def spirals(n=300, seed=0, noise=0.18):
-    g = rng(seed)
-    t = np.sqrt(g.uniform(0, 1, n)) * 3 * math.pi
-    a = np.stack([t * np.cos(t), t * np.sin(t)], 1) / 3 + g.normal(scale=noise, size=(n, 2))
-    b = -a + g.normal(scale=noise / 2, size=(n, 2))
-    return np.vstack([a, b]).astype(np.float32), np.r_[np.zeros(n), np.ones(n)].astype(np.int64)
+def separable(P, s):
+    """Is there a line w.x + b with sign = s at every point?  (A tiny linear program, by brute force over normals.)"""
+    for th in np.linspace(0, 2 * math.pi, 3600, endpoint=False):
+        w = np.array([math.cos(th), math.sin(th)])
+        proj = P @ w
+        pos, neg = proj[s > 0], proj[s < 0]
+        if len(pos) == 0 or len(neg) == 0 or pos.min() > neg.max() + 1e-9:
+            return True
+    return False
 
 
-def compute_spiral():
+def compute_shatter():
+    P3 = np.array([[-1.0, -0.7], [1.0, -0.7], [0.0, 0.9]])
+    P4 = np.array([[-1.0, -1.0], [1.0, -1.0], [1.0, 1.0], [-1.0, 1.0]])
+    labs3 = [np.array([1 if (k >> i) & 1 else -1 for i in range(3)]) for k in range(8)]
+    labs4 = [np.array([1 if (k >> i) & 1 else -1 for i in range(4)]) for k in range(16)]
+    ok3 = [separable(P3, s) for s in labs3]
+    ok4 = [separable(P4, s) for s in labs4]
+    assert all(ok3) and sum(not o for o in ok4) == 2  # the two XOR labellings
+    return dict(P3=P3, P4=P4, labs3=np.array(labs3), labs4=np.array(labs4), ok3=ok3, ok4=ok4)
+
+
+# ---------------------------------------------------------------------------
+def compute_rademacher():
+    Ztr, ytr, _, _, _ = pages()
+    g = rng(1960)
+    n = len(ytr)
+    ds = [1, 2, 3, 5, 8, 12, 20, 30, 45, 70]
     import torch
 
-    torch.set_num_threads(1)
     torch.manual_seed(0)
-    X, y = spirals()
-    net = torch.nn.Sequential(torch.nn.Linear(2, 32), torch.nn.ReLU(), torch.nn.Linear(32, 32), torch.nn.ReLU(),
-                              torch.nn.Linear(32, 32), torch.nn.ReLU(), torch.nn.Linear(32, 2))
-    opt = torch.optim.Adam(net.parameters(), lr=3e-3)
-    Xt, yt = torch.tensor(X), torch.tensor(y)
-    xs = np.linspace(-3.4, 3.4, 170)
-    G = torch.tensor(np.stack(np.meshgrid(xs, xs), -1).reshape(-1, 2), dtype=torch.float32)
-    snaps, keep = {}, (0, 50, 200, 600, 3000)
-    curve = []
-    for step in range(3001):
-        if step in keep:
+    out = []
+    for d in ds:
+        fits = []
+        for _ in range(12):
+            s = g.choice([-1.0, 1.0], size=n)
+            X = torch.tensor(np.c_[Ztr[:, :d], np.ones(n)], dtype=torch.float64)
+            t = torch.tensor(s)
+            w = torch.zeros(d + 1, dtype=torch.float64, requires_grad=True)
+            opt = torch.optim.LBFGS([w], max_iter=200)
+
+            def closure():
+                opt.zero_grad()
+                loss = torch.nn.functional.softplus(-t * (X @ w)).mean() + 1e-4 * (w ** 2).sum()
+                loss.backward()
+                return loss
+
+            opt.step(closure)
             with torch.no_grad():
-                h, pats = G, []
-                for layer in net:
-                    h = layer(h)
-                    if isinstance(layer, torch.nn.Linear) and layer.out_features == 32:
-                        pats.append((h > 0).numpy())
-                prob = torch.softmax(h, 1)[:, 1].numpy().reshape(len(xs), len(xs))
-                _, inv = np.unique(np.concatenate(pats, 1), axis=0, return_inverse=True)
-                snaps[f"prob{step}"] = prob
-                snaps[f"regions{step}"] = inv.reshape(len(xs), len(xs))
-                snaps[f"nreg{step}"] = int(inv.max() + 1)
-        opt.zero_grad()
-        loss = torch.nn.functional.cross_entropy(net(Xt), yt)
-        loss.backward()
-        opt.step()
-        if step % 25 == 0:
-            with torch.no_grad():
-                curve.append((step, float(loss), float((net(Xt).argmax(1) == yt).float().mean())))
-    curve = np.array(curve)
-    assert curve[-1, 2] > 0.97
-    return dict(X=X, y=y, xs=xs, keep=list(keep), curve=curve, **snaps)
+                fits.append(float(((X @ w).sign() == t).double().mean()))
+        out.append(float(np.mean(fits)))
+    acc = np.array(out)
+    assert acc[-1] > acc[0] + 0.05
+    return dict(ds=ds, acc=acc, n=n)
 
 
 # ---------------------------------------------------------------------------
-def compute_signal():
-    g = rng(2015)  # He, Zhang, Ren & Sun, 2015
-    L, n, batch = 50, 256, 512
-    out = dict(L=L, n=n)
-    x0 = g.normal(size=(batch, n))
-    for name, gain, act in (("small", 0.7, "relu"), ("he", 1.0, "relu"), ("big", 1.4, "relu"), ("tanh", 1.0, "tanh")):
-        Ws = [g.normal(size=(n, n)) * gain * math.sqrt((2.0 if act == "relu" else 1.0) / n) for _ in range(L)]
-        h, sds, hists, pre = x0, [], [], []
-        for W in Ws:
-            z = h @ W
-            pre.append(z)
-            h = np.maximum(z, 0) if act == "relu" else np.tanh(z)
-            sds.append(float(np.sqrt((h ** 2).mean())))
-            hists.append(np.histogram(z.ravel() / max(z.std(), 1e-300), bins=40, range=(-4, 4))[0])
-        # gradients flowing back from a random signal at the top
-        gr, gsds = g.normal(size=(batch, n)), []
-        for W, z in zip(Ws[::-1], pre[::-1]):
-            d = (z > 0).astype(float) if act == "relu" else 1 - np.tanh(z) ** 2
-            gr = (gr * d) @ W.T
-            gsds.append(float(np.sqrt((gr ** 2).mean())))
-        out[f"sd_{name}"] = np.array(sds)
-        out[f"gsd_{name}"] = np.array(gsds[::-1])
-        out[f"hist_{name}"] = np.array(hists)
-    assert out["sd_small"][-1] < 1e-3 * out["sd_he"][-1] and out["sd_big"][-1] > 1e3 * out["sd_he"][-1]
-    assert 0.1 < out["sd_he"][-1] / out["sd_he"][0] < 10
-    return out
-
-
-# ---------------------------------------------------------------------------
-SNAP_RES = (0, 50, 150, 400, 1500)
-
-
-def compute_residual():
+def compute_random():
     import torch
 
     torch.set_num_threads(1)  # small matrices: one thread is fastest, and leaves the other cores free
-    X, y = spirals()
-    Xt, yt = torch.tensor(X), torch.tensor(y)
-
-    class Net(torch.nn.Module):
-        def __init__(self, depth=40, width=32, residual=False, norm=False):
-            super().__init__()
-            self.inp = torch.nn.Linear(2, width)
-            self.layers = torch.nn.ModuleList([torch.nn.Linear(width, width) for _ in range(depth)])
-            self.norms = torch.nn.ModuleList([torch.nn.LayerNorm(width) if norm else torch.nn.Identity()
-                                              for _ in range(depth)])
-            self.out = torch.nn.Linear(width, 2)
-            self.residual = residual
-            if residual:  # each block starts small, so the whole stack starts near the identity
-                for lay in self.layers:
-                    torch.nn.init.normal_(lay.weight, std=0.3 / math.sqrt(width))
-
-        def forward(self, x):
-            h = self.inp(x)
-            for lay, nm in zip(self.layers, self.norms):
-                f = lay(torch.relu(nm(h)))
-                h = h + f if self.residual else f
-            return self.out(torch.relu(h))
-
-    out = dict(snap_steps=list(SNAP_RES))
-    xs = np.linspace(-3.4, 3.4, 90)
-    G = torch.tensor(np.stack(np.meshgrid(xs, xs), -1).reshape(-1, 2), dtype=torch.float32)
-    out["xs"] = xs
-    for name, kw in (("plain", {}), ("residual", dict(residual=True)), ("residual_norm", dict(residual=True, norm=True))):
-        torch.manual_seed(1)
-        net = Net(**kw)
+    Ztr, ytr, Zte, yte, _ = pages()
+    torch.manual_seed(2016)  # Zhang et al. trained in 2016 (published 2017)
+    g = rng(2017)
+    Xtr, Xte = torch.tensor(Ztr, dtype=torch.float32), torch.tensor(Zte, dtype=torch.float32)
+    out = {}
+    for name, labels in (("true", ytr), ("shuffled", g.permutation(ytr))):
+        torch.manual_seed(7)
+        net = torch.nn.Sequential(torch.nn.Linear(Ztr.shape[1], 512), torch.nn.ReLU(), torch.nn.Linear(512, 512),
+                                  torch.nn.ReLU(), torch.nn.Linear(512, 2))
         opt = torch.optim.Adam(net.parameters(), lr=1e-3)
-        curve, probs, gnorms = [], [], []
-        for step in range(1501):
+        t = torch.tensor(labels, dtype=torch.long)
+        curve, fits = [], []
+        for step in range(1, 1501):
             opt.zero_grad()
-            loss = torch.nn.functional.cross_entropy(net(Xt), yt)
+            loss = torch.nn.functional.cross_entropy(net(Xtr), t)
             loss.backward()
-            if step in SNAP_RES:  # what the net says everywhere, and how much gradient reaches each layer
-                with torch.no_grad():
-                    probs.append(torch.softmax(net(G), 1)[:, 1].numpy().reshape(len(xs), len(xs)))
-                gnorms.append([float(lay.weight.grad.norm()) for lay in net.layers])
             opt.step()
-            if step % 20 == 0:
+            if step % 10 == 0 or step < 10:
                 with torch.no_grad():
-                    curve.append((step, float(loss), float((net(Xt).argmax(1) == yt).float().mean())))
+                    hit = (net(Xtr).argmax(1) == t).numpy()
+                    tr = float(hit.mean())
+                    te = float((net(Xte).argmax(1).numpy() == yte).mean())
+                curve.append((step, tr, te, float(loss)))
+                fits.append(hit)
         out[name] = np.array(curve)
-        out[f"probs_{name}"], out[f"gnorm_{name}"] = np.array(probs), np.array(gnorms)
-    assert out["residual"][-1, 2] > 0.95 and out["plain"][-1, 2] < out["residual"][-1, 2] - 0.1
-    return out
+        # which training pages it gets right at each logged step (the order things are memorized in)
+        out[f"fits_{name}"] = np.array(fits, dtype=np.uint8)
+        out[f"labels_{name}"] = np.asarray(labels)
+    n_params = sum(p.numel() for p in net.parameters())
+    assert out["shuffled"][-1, 1] == 1.0 and abs(out["shuffled"][-1, 2] - 0.5) < 0.1 and out["true"][-1, 2] > 0.95
+    first = {k: int(out[k][np.argmax(out[k][:, 1] >= 1.0), 0]) for k in ("true", "shuffled")}
+    return dict(**out, n_params=int(n_params), n=len(ytr), first100=first, ytrue=np.asarray(ytr))
 
 
 # ---------------------------------------------------------------------------
-N_CTX, EMB, HID = 24, 32, 1024
-
-
-def compute_lm():
-    import torch
-
-    from videos.ai.ai1 import compute as c1
-
-    torch.manual_seed(2003)  # Bengio, Ducharme, Vincent & Jauvin, 2003
-    torch.set_num_threads(2)
-    texts = {k: c1.text(k) for k in ("train", "valid", "passage")}
-    chars = sorted(set("".join(texts.values())))
-    K = len(chars)
-    cp = np.array([ord(c) for c in chars])
-    order = np.argsort(cp)
-
-    def enc(t):
-        a = np.frombuffer(t.encode("utf-32-le"), dtype=np.uint32)
-        return torch.tensor(order[np.searchsorted(cp[order], a)])
-
-    tr, va, ps = (enc(texts[k]) for k in ("train", "valid", "passage"))
-    emb = torch.nn.Embedding(K, EMB)
-    hid = torch.nn.Linear(N_CTX * EMB, HID)
-    outl = torch.nn.Linear(HID, K)
-    direct = torch.nn.Linear(N_CTX * EMB, K, bias=False)  # Bengio et al.'s direct connections
-    params = [*emb.parameters(), *hid.parameters(), *outl.parameters(), *direct.parameters()]
-    n_params = sum(p.numel() for p in params)
-
-    def logits(ctx):
-        e = emb(ctx).reshape(len(ctx), -1)
-        return outl(torch.tanh(hid(e))) + direct(e)
-
-    def windows(seq, pos):
-        return torch.stack([seq[pos - N_CTX + j] for j in range(N_CTX)], 1)
-
-    def bits(seq, limit=None):
-        with torch.no_grad():
-            pos = torch.arange(N_CTX, len(seq) if limit is None else min(len(seq), limit))
-            tot = 0.0
-            for i in range(0, len(pos), 4096):
-                p = pos[i:i + 4096]
-                tot += float(torch.nn.functional.cross_entropy(logits(windows(seq, p)), seq[p], reduction="sum"))
-            return tot / len(pos) / math.log(2)
-
-    steps, batch = 50000, 1024
-    saved = CACHE.dir / "lm.pt"  # the trained weights, kept so the analysis below can be rerun without retraining
-    config = dict(n_ctx=N_CTX, emb=EMB, hid=HID, steps=steps, batch=batch, K=K)
-    state = torch.load(saved) if saved.exists() else None
-    if state is not None and state["config"] == config:
-        for p_, v_ in zip(params, state["params"]):
-            p_.data.copy_(v_)
-        curve = state["curve"]
-        print("    reusing the trained weights in", saved, flush=True)
-    else:
-        opt = torch.optim.Adam(params, lr=2e-3)
-        sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps, pct_start=0.05)
-        g = rng(2003)
-        curve = []
-        for step in range(1, steps + 1):
-            pos = torch.tensor(g.integers(N_CTX, len(tr), batch))
-            loss = torch.nn.functional.cross_entropy(logits(windows(tr, pos)), tr[pos])
-            opt.zero_grad()
-            loss.backward()
-            opt.step()
-            sched.step()
-            if step % 2000 == 0 or step in (100, 300, 1000):
-                curve.append((step, bits(va, 200_000), bits(ps)))
-                print(f"    step {step}: valid {curve[-1][1]:.3f}  passage {curve[-1][2]:.3f}", flush=True)
-        CACHE.dir.mkdir(parents=True, exist_ok=True)
-        torch.save(dict(config=config, params=[p_.detach().clone() for p_ in params], curve=curve), saved)
-    passage_bits = bits(ps)
-    valid_bits = bits(va)
-    # the vectors the output layer scores each character with (their directions), for the letters, digits and common
-    # punctuation, in 2D (PCA); the output vectors group far more cleanly than the input table
-    E = outl.weight.detach().numpy()
-    E = E / np.linalg.norm(E, axis=1, keepdims=True)
-    show = [i for i, c in enumerate(chars) if c.isascii() and (c.isalnum() or c in " .,;:!?'\"-")]  # rare symbols left out
-    Es = E[show] - E[show].mean(0)
-    u, s, vt = np.linalg.svd(Es, full_matrices=False)
-    xy = Es @ vt[:2].T
-    # samples
-    samples = []
-    with torch.no_grad():
-        for seed, prompt in ((1, "Spade sat down in the armchair, and "), (2, "It was the best of times, "),
-                             (3, "The telephone rang. "), (4, "\"I don't know,\" he said. ")):
-            torch.manual_seed(seed)
-            ctx = list(enc(" " * N_CTX + prompt).numpy())  # padded on the left, so even a short prompt fills the window
-            outc = []
-            for _ in range(160):
-                z = logits(torch.tensor([ctx[-N_CTX:]]))[0]
-                c = int(torch.multinomial(torch.softmax(z, 0), 1))
-                ctx.append(c)
-                outc.append(chars[c])
-            samples.append([prompt, "".join(outc)])
-    # Bengio et al.'s best results mixed the network with a smoothed n-gram model: here, Part 6's Kneser-Ney
-    from videos.ai.ai6 import compute as c6
-
-    kn = c6.load("kn")
-    M = int(kn["best"])
-    assert kn["K"] == K
-    a_tr = tr.numpy()
-    model = c6.kn_model(c6.ngram_tables(a_tr, K, M), K, M)
-
-    def nn_probs(seq, limit=None):
-        with torch.no_grad():
-            pos = torch.arange(N_CTX, len(seq) if limit is None else min(len(seq), limit))
-            out = []
-            for i in range(0, len(pos), 4096):
-                p = pos[i:i + 4096]
-                out.append(torch.softmax(logits(windows(seq, p)), 1).gather(1, seq[p][:, None])[:, 0].numpy())
-            return np.concatenate(out).astype(float)
-
-    def kn_probs(seq, limit=None):
-        a = seq.numpy()[: (len(seq) if limit is None else limit)]
-        return c6.kn_probs(model, a, K, M)[N_CTX - M:]  # aligned with the network's positions
-
-    pv_nn, pv_kn = nn_probs(va, 200_000), kn_probs(va, 200_000)
-    pp_nn, pp_kn = nn_probs(ps), kn_probs(ps)
-    lams = np.linspace(0, 1, 101)
-    vb = [float(-np.log2(l_ * pv_nn + (1 - l_) * pv_kn).mean()) for l_ in lams]
-    lam = float(lams[int(np.argmin(vb))])  # the mixing weight, chosen on held-out text, never on the passage
-    mix_bits = float(-np.log2(lam * pp_nn + (1 - lam) * pp_kn).mean())
-    kn_alone = float(-np.log2(pp_kn).mean())
-    assert abs(kn_alone - kn["best_bits"]) < 0.02, (kn_alone, kn["best_bits"])
-    assert mix_bits < min(kn_alone, passage_bits)
-    return dict(K=K, n_ctx=N_CTX, emb=EMB, hid=HID, n_params=int(n_params), steps=steps, batch=batch,
-                curve=np.array(curve), passage_bits=passage_bits, valid_bits=valid_bits, chars=[chars[i] for i in show],
-                xy=xy, xy_chars=[chars[i] for i in show], samples=samples, kn=kn["best_bits"], kn_order=M, lam=lam, mix_bits=mix_bits, lam_curve=np.array(vb))
+def compute_double():
+    Ztr, ytr, Zte, yte, _ = pages()
+    g = rng(2019)  # Belkin, Hsu, Ma & Mandal, 2019
+    n, d = Ztr.shape
+    ps = np.unique(np.round(np.logspace(np.log10(10), np.log10(6000), 46)).astype(int))
+    ps = np.unique(np.concatenate([ps, [n - 8, n, n + 8]]))
+    ttr, tte = 2.0 * ytr - 1, 2.0 * yte - 1
+    errs, tr_errs, norms = [], [], []
+    reps = 5
+    for p in ps:
+        e, et, nm = [], [], []
+        for r in range(reps):
+            W = g.normal(size=(d, p)) / math.sqrt(d)
+            Ftr, Fte = np.maximum(Ztr @ W, 0), np.maximum(Zte @ W, 0)
+            beta = np.linalg.pinv(Ftr) @ ttr  # least squares, or the smallest solution that fits exactly
+            e.append(float(((Fte @ beta - tte) ** 2).mean()))
+            et.append(float(((Ftr @ beta - ttr) ** 2).mean()))
+            nm.append(float(np.linalg.norm(beta)))
+        errs.append(np.median(e))
+        tr_errs.append(np.median(et))
+        norms.append(np.median(nm))
+    errs, tr_errs = np.array(errs), np.array(tr_errs)
+    k_n = int(np.argmin(np.abs(ps - n)))
+    assert errs[k_n] > 3 * errs[0] and errs[-1] < errs[k_n] / 3 and tr_errs[-1] < 1e-6
+    return dict(ps=ps, test=errs, train=tr_errs, norms=np.array(norms), n=n, d=d, peak=float(errs[k_n]))
 
 
 ITEMS = {
-    "hinges": compute_hinges,
-    "sawtooth": compute_sawtooth,
-    "spiral": compute_spiral,
-    "signal": compute_signal,
-    "residual": compute_residual,
-    "lm": compute_lm,
+    "gap": compute_gap,
+    "biasvar": compute_biasvar,
+    "shatter": compute_shatter,
+    "rademacher": compute_rademacher,
+    "random": compute_random,
+    "double": compute_double,
 }
 CACHE.items = ITEMS
 
