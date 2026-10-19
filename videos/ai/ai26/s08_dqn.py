@@ -231,12 +231,12 @@ class DQN(VoiceoverScene):
             tail = ("On a problem this small, the tricks matter less than the luck of the seed: look at the bands. "
                     "On Atari they were decisive: in the Nature paper, Breakout without replay scored about ten "
                     "points, against three hundred and seventeen with it.")
+        never = ", in every run: it never learns at all" if collapsed else ""
         with self.voiceover(
             f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each, and average the episode length "
             "over the whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
             f"comes: about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
-            f"{avg['no_target']:.0f}" + (", in every run: it never learns at all" if collapsed else "") +
-            f". <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
+            f"{avg['no_target']:.0f}{never}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
         ) as vo:
             self.play(FadeIn(g))
             for k, mk in enumerate("abc"):

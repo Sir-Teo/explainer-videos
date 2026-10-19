@@ -18,3 +18,4 @@ published/
 # Generated narration scripts (tools/export_script.py) and macOS clutter
 SCRIPT.md
 .DS_Store
+videos/*/*_text_zh.lock
