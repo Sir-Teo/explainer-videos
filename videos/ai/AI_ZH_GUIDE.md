@@ -65,3 +65,70 @@ Translations live in `videos/ai/aiN/narration_zh.json`, keyed by the English lin
 | vector, cosine similarity | 向量，余弦相似度 |
 | *The Maltese Falcon* | 《马耳他之鹰》 |
 | Project Gutenberg | 古登堡计划 |
+
+### Reinforcement learning (Part 26)
+
+| English | 中文 |
+|---|---|
+| reinforcement learning | 强化学习 |
+| agent, environment | 智能体，环境 |
+| state, action, reward | 状态，动作，奖励 |
+| return, discount (γ) | 回报，折扣（γ） |
+| policy, value, action value (Q) | 策略，价值，动作价值（Q值） |
+| Markov decision process | 马尔可夫决策过程 |
+| multi-armed bandit, arm | 多臂老虎机，拉杆 |
+| exploration, exploitation | 探索，利用 |
+| greedy, ε-greedy | 贪心，ε-贪心 |
+| regret | 遗憾 |
+| upper confidence bound (UCB), bonus | 置信上界（UCB），加分 |
+| Thompson sampling | 汤普森采样 |
+| Hoeffding's inequality | 霍夫丁不等式 |
+| Bellman equation, Bellman optimality equation | 贝尔曼方程，贝尔曼最优方程 |
+| backup diagram | 回溯图 |
+| value iteration, policy iteration | 值迭代，策略迭代 |
+| generalized policy iteration | 广义策略迭代 |
+| contraction, fixed point (Banach) | 压缩映射，不动点（巴拿赫） |
+| gridworld, goal, pit | 网格世界，终点，陷阱 |
+| Monte Carlo | 蒙特卡洛 |
+| temporal difference (TD), TD error | 时序差分（TD），TD误差 |
+| bootstrapping | 自举 |
+| n-step return, eligibility trace | n步回报，资格迹 |
+| credit assignment | 功劳分配 |
+| Q-learning, Sarsa | Q学习，Sarsa |
+| on-policy, off-policy | 同策略，离策略 |
+| cliff walk | 悬崖行走 |
+| function approximation, the deadly triad | 函数近似，致命三要素 |
+| deep Q-network (DQN) | 深度Q网络（DQN） |
+| experience replay, target network | 经验回放，目标网络 |
+| maximization bias, double Q-learning | 最大化偏差，双Q学习 |
+| cart-pole | 倒立摆 |
+| policy gradient, REINFORCE | 策略梯度，REINFORCE |
+| log-derivative trick | 对数导数技巧 |
+| baseline, advantage | 基线，优势 |
+| actor-critic, critic | 演员-评论家，评论家 |
+| generalized advantage estimation (GAE) | 广义优势估计（GAE） |
+| trust region (TRPO), importance ratio | 信赖域（TRPO），重要性比值 |
+| proximal policy optimization (PPO), clipping | 近端策略优化（PPO），裁剪 |
+| surrogate objective | 替代目标 |
+| game tree, minimax, evaluation function | 博弈树，极小化极大，评估函数 |
+| alpha-beta pruning | α-β剪枝 |
+| Connect Four, column | 四子棋，列 |
+| Monte Carlo tree search (MCTS), playout, simulation | 蒙特卡洛树搜索（MCTS），走子，模拟 |
+| select, expand, simulate, back up | 选择，扩展，模拟，回溯 |
+| prior (policy network), value network | 先验（策略网络），价值网络 |
+| self-play, generation | 自我对弈，代 |
+| perfect solver | 完美求解器 |
+| representation, dynamics, prediction (MuZero) | 表示函数，动态函数，预测函数 |
+| hidden state | 隐状态 |
+| imperfect information, information set | 不完全信息，信息集 |
+| Nash equilibrium, zero-sum | 纳什均衡，零和 |
+| regret matching, counterfactual regret minimization (CFR) | 遗憾匹配，反事实遗憾最小化（CFR） |
+| exploitability, bluffing | 可被利用度，诈唬 |
+| Kuhn poker, Texas hold'em | 库恩扑克，德州扑克 |
+| league (AlphaStar), exploiter | 联赛，剥削者 |
+| shoulder hit, wedge (Go) | 肩冲，挖 |
+| Lee Sedol, Fan Hui | 李世石，樊麾 |
+| Sutton and Barto | 萨顿和巴托 |
+
+Names of programs stay in Latin script: AlphaGo, AlphaZero, MuZero, TD-Gammon, Deep Blue → 深蓝, Stockfish, KataGo,
+Libratus, Pluribus, Cepheus, AlphaStar, AlphaTensor, AlphaDev, Crazy Stone, MoGo, Agent57, Rainbow.

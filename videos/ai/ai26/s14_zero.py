@@ -148,7 +148,6 @@ class Zero(VoiceoverScene):
     def ours(self):
         g = load("az_grade")
         gens = list(g["gens"])
-        n_params = 2 * 0  # filled below
         spec = VGroup(
             label(rf"a residual network: \ ${BLOCKS}$ blocks of ${CHANNELS}$ channels", font_size=26),
             label(rf"${SIMS}$ simulations per move", font_size=26),
@@ -205,13 +204,23 @@ class Zero(VoiceoverScene):
         key = VGroup(label(r"bars: \ the network's probability for each column", font_size=20, color=PRIOR),
                      label(r"marks: \ the solver's verdict on each column", font_size=20, color=GREY_A))
         key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -1.0, 0])
+        top_ok = bool(ok[int(np.argmax(P[-1]))])
+        sure = np.sign(V[-1]) == tv and abs(V[-1]) > 0.5
+        if top_ok and sure:
+            end = ("and settles on the winning columns, while the value, its estimate of who wins, becomes confident "
+                   "and correct.")
+        elif top_ok:
+            end = ("and settles on the winning columns; the value, its estimate of who wins, stays less sure: "
+                   f"{V[-1]:+.2f}.")
+        else:
+            end = ("but even the final network's favourite column here is not a winning one: its instinct is still "
+                   "wrong in this position, and only search can rescue it.")
         with self.voiceover(
             "Here is the training, replayed through one position. Above each column, the network's probability for "
             "playing there, before any search. Below, the perfect solver's verdict: a tick for the winning moves. "
-            "<bookmark mark='a'/> In generation zero the network is random: flat bars, and a value near zero. "
-            "<bookmark mark='b'/> Watch the generations go by. The probability moves around, as the network's "
-            "understanding changes, and settles on the winning columns, while the value, its estimate of who wins, "
-            "becomes confident and correct."
+            "<bookmark mark='a'/> In generation zero the network is untrained: nearly flat bars, and a value of "
+            f"{V[0]:+.2f}. <bookmark mark='b'/> Watch the generations go by. The probability moves around, as the "
+            "network's understanding changes, " + end
         ) as vo:
             self.play(FadeIn(board), FadeIn(marks), FadeIn(key))
             self.add(live, gl, vl)
@@ -230,11 +239,19 @@ class Zero(VoiceoverScene):
             b_.stretch_to_fit_width(b1.width / 2).align_to(b1, RIGHT)
         cap = label(rf"with search: \ the {SIMS} simulations' visit shares", font_size=20, color=SEARCH)
         cap.next_to(key, DOWN, buff=0.15).align_to(key, LEFT)
-        with self.voiceover(
-            "And search sharpens it further. In orange-gold, where the final network's search spends its "
-            f"{SIMS} simulations from this position: more decisively on the right column than the network's first "
-            "instinct. That gap, between instinct and search, is what the next generation learns from."
-        ) as vo:
+        win = [c for c in range(7) if ok[c]]
+        p_win, v_win = float(np.sum(P[-1][win])), float(np.sum(vis[win]))
+        if v_win > p_win + 0.05:
+            said = (f"And search sharpens it. In orange-gold, where the final network's search spends its {SIMS} "
+                    f"simulations from this position: {100 * v_win:.0f} percent on winning columns, against "
+                    f"{100 * p_win:.0f} percent for the network's first instinct. That gap, between instinct and "
+                    "search, is what the next generation learns from.")
+        else:
+            said = (f"In orange-gold, where the final network's search spends its {SIMS} simulations from this "
+                    f"position: {100 * v_win:.0f} percent on winning columns, close to the network's own "
+                    f"{100 * p_win:.0f}. Here the instinct is already as good as the search; the gap between them, "
+                    "where there is one, is what the next generation learns from.")
+        with self.voiceover(said) as vo:
             self.play(*[b_.animate.stretch_to_fit_width(b_.width / 2).align_to(b_, LEFT) for b_ in live], run_time=0.6)
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in b2], lag_ratio=0.1), FadeIn(cap))
         self.wait(0.3)
@@ -254,8 +271,10 @@ class Zero(VoiceoverScene):
         lr = curve(a1.ax, gens, raw, RAW, 3)
         lm = curve(a1.ax, gens, mc, WITH_SEARCH, 4)
         best_uct = float(np.max(u["acc"]))
+        uct_sims = int(np.asarray(u["sims"])[int(np.argmax(u["acc"]))])
         lu = DashedLine(a1.ax.c2p(0, best_uct), a1.ax.c2p(G, best_uct), color=GREY_B, dash_length=0.08)
-        ul = label(rf"plain MCTS, $3{{,}}000$ sims: \ ${100 * best_uct:.0f}\%$", font_size=18, color=GREY_B)
+        ul = label(rf"plain MCTS, ${uct_sims:,}$ sims: \ ${100 * best_uct:.0f}\%$".replace(",", "{,}"), font_size=18,
+                   color=GREY_B)
         ul.next_to(lu, DOWN, buff=0.05).align_to(lu, RIGHT)
         lg = legend([(RAW, r"network alone"), (WITH_SEARCH, rf"network $+$ {SIMS} sims")], font_size=18)
         lg.next_to(a1.ax, DOWN, buff=0.8).align_to(a1.ax, LEFT)
@@ -278,14 +297,28 @@ class Zero(VoiceoverScene):
         tag = note(rf"computed: \ ratings from a round robin, \ ${int(e['games'].sum() / 2)}$ games").to_corner(DR, buff=0.2)
         final_raw, final_mc = 100 * raw[-1], 100 * mc[-1]
         gap = elo[names.index(f"gen {ag[-1]}")]
+        mc1000 = elo[names.index("MCTS 1000")]
+        if final_mc > 100 * best_uct:
+            vs_uct = (f"beyond the {100 * best_uct:.0f} percent that plain MCTS reaches with {uct_sims:,} "
+                      "simulations, and random playouts.")
+        else:
+            vs_uct = (f"against {100 * best_uct:.0f} percent for plain MCTS with {uct_sims:,} simulations and random "
+                      "playouts.")
+        ups = int(np.sum(np.diff(ae) > 0))
+        climb = ("each generation we rated is stronger than the one before" if ups == len(ae) - 1 else
+                 f"the ratings climb, with the odd step back ({ups} of {len(ae) - 1} steps go up)")
+        if gap - mc1000 > 100:
+            rel = f"and {gap - mc1000:.0f} points above plain MCTS with a thousand simulations a move."
+        elif gap > mc1000:
+            rel = "and a little above plain MCTS with a thousand simulations a move."
+        else:
+            rel = "though still below plain MCTS with a thousand simulations a move."
         with self.voiceover(
             "Graded on four hundred test positions, generation by generation. <bookmark mark='a'/> The network alone, "
             f"with no search at all, goes from random to playing the perfect move {final_raw:.0f} percent of the "
             f"time; <bookmark mark='b'/> with its {SIMS} simulations of search, {final_mc:.0f} percent, "
-            f"<bookmark mark='c'/> beyond what plain MCTS reaches with thirty times as many simulations. "
-            "<bookmark mark='d'/> And in head-to-head games, rated like chess players, each generation is stronger "
-            f"than the last: the final one is about {gap:.0f} Elo points above where it started, and far above "
-            "plain MCTS."
+            f"<bookmark mark='c'/> {vs_uct} <bookmark mark='d'/> And in head-to-head games, rated like chess "
+            f"players, {climb}: the final generation is about {gap:.0f} Elo points above the untrained network, {rel}"
         ) as vo:
             self.play(FadeIn(a1), FadeIn(tag))
             vo.wait_until("a")
@@ -308,10 +341,13 @@ class Zero(VoiceoverScene):
         board = C4View(cell=0.6, center=[-2.4, -0.3, 0])
         title = always_redraw(lambda: VGroup())
         panel = VGroup()
+        first, last = G[keys[0]], G[keys[-1]]
+        f_ok, l_ok = sum(first["perfect"]), sum(last["perfect"])
         with self.voiceover(
             "Finally, watch it play itself at different stages, every move from the eighth on checked by the solver: "
-            "green for a perfect move, red for a mistake. <bookmark mark='a'/> Early generations blunder constantly. "
-            "<bookmark mark='b'/> The final one plays almost every move perfectly."
+            f"green for a perfect move, red for a mistake. <bookmark mark='a'/> Generation {keys[0]} gets {f_ok} of "
+            f"its {len(first['perfect'])} checked moves right. <bookmark mark='b'/> Generation {keys[-1]}, "
+            f"{l_ok} of {len(last['perfect'])}."
         ) as vo:
             self.play(FadeIn(board))
             for gi, key in enumerate(keys):

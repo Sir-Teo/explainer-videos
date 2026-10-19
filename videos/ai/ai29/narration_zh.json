@@ -120,7 +120,7 @@
    "zh": "现在，让它来想象。给它两帧真实的画面，然后让它靠自己的预测往下走，一步接一步，<bookmark mark='a'/>而真实的球也在继续运动。有一阵子，想象和现实同步前进：往前看一步，只差0.1个像素。<bookmark mark='b'/>然后，小误差开始累积，就像上一章的长任务一样：想象20步之后，差了5.7个像素。<bookmark mark='c'/>像Dreamer这样的智能体，就是在这种想象出来的世界里反复练习、学会本领的；而Genie，从视频中学会了生成一个个完整的、可以玩的世界。"
   }
  },
- "title_en": "AI, Built: Part 18, Agents and Worlds",
+ "title_en": "AI, Built: Part 29, Agents and Worlds",
  "chapters_en": {
   "Hook": "Many steps in a row",
   "Belief": "1. Acting without seeing everything",

@@ -151,15 +151,16 @@ class DQN(VoiceoverScene):
         info = always_redraw(lambda: label(
             rf"after ${int(steps[int(snap.get_value())]):,}$ steps: \ balanced ${min(int(state.get_value()), int(L[int(snap.get_value())]) - 1)}$ "
             rf"of $500$".replace(",", "{,}"), font_size=24, color=GREY_A).move_to([-3.3, 3.25, 0]))
-        tag = note(r"computed: \ our DQN, \ trained on this machine").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ our DQN, \ the best of ${len(d['full'])}$ runs").to_corner(DR, buff=0.2)
         img = imgs[0]
+        n_runs = len(d["full"])
         with self.voiceover(
             "Here is DQN learning a classic control task on this machine: the cart-pole. Push the cart left or right "
             "to keep the pole upright; plus one for every step it stays up, for up to five hundred. "
             "<bookmark mark='a'/> On the right, what the network has learned: for each pole angle and angular "
             "velocity, which push it prefers. <bookmark mark='b'/> Untrained, it pushes the same way everywhere, and "
-            "the pole falls in a few steps. <bookmark mark='c'/> Let's replay the training. Every few thousand steps, "
-            "freeze the network and let it balance. <bookmark mark='d'/> The map organizes itself into two halves: "
+            f"the pole falls in a few steps. <bookmark mark='c'/> Let's replay the training of the best of our {n_runs} "
+            "runs. Every few thousand steps, freeze the network and let it balance. <bookmark mark='d'/> The map organizes itself into two halves: "
             "if the pole is falling right, push right, so the cart gets back under it. The dividing line tilts, "
             "because a pole moving fast matters as much as a pole leaning far. Nobody told it any physics."
         ) as vo:
@@ -204,7 +205,8 @@ class DQN(VoiceoverScene):
         grid = np.asarray(d["grid"])
         S_MAX = int(grid[-1])
         g = axes([0, S_MAX], [0, 500], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
-                 ylabel=r"episode length \ (mean of $3$ runs; \ band: min to max)", xticks=[0, S_MAX // 2, S_MAX],
+                 ylabel=rf"episode length \ (mean of ${len(d['full'])}$ runs; \ band: min to max)",
+                 xticks=[0, S_MAX // 2, S_MAX],
                  yticks=[0, 250, 500], xfmt=lambda v: f"{int(v / 1000)}" + (r"\text{k}" if v else ""),
                  center=[-1.2, -0.3, 0])
         lines, bands = VGroup(), VGroup()
@@ -215,12 +217,17 @@ class DQN(VoiceoverScene):
         lg = legend([(FULL, r"replay \ + \ target network"), (NOTARGET, r"replay, \ no target network"),
                      (NOREPLAY, r"no replay")], font_size=20).next_to(g, RIGHT, buff=0.3).shift(UP * 0.7)
         avg = {k: float(np.nanmean(np.asarray(d[k]))) for k in ("full", "no_target", "no_replay")}
+        if avg["full"] > max(avg["no_target"], avg["no_replay"]):
+            tail = "Each trick earns its place. And look at the bands: even the best version swings from run to run."
+        else:
+            tail = ("On a problem this small, the tricks matter less than the luck of the seed: look at the bands. "
+                    "On Atari they were decisive: in the Nature paper, Breakout without replay scored about ten "
+                    "points, against three hundred and seventeen with it.")
         with self.voiceover(
-            "Do the tricks matter? Train it three ways, three runs each, and average the episode length over the "
-            "whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it comes: "
-            f"about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
-            f"{avg['no_target']:.0f}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. And look at the bands: "
-            "even the best version swings from run to run."
+            f"Do the tricks matter? Train it three ways, {len(d['full'])} runs each, and average the episode length "
+            "over the whole of training. <bookmark mark='a'/> Without a replay memory, learning from each step as it "
+            f"comes: about {avg['no_replay']:.0f}. <bookmark mark='b'/> With replay but no target network: about "
+            f"{avg['no_target']:.0f}. <bookmark mark='c'/> With both: about {avg['full']:.0f}. " + tail
         ) as vo:
             self.play(FadeIn(g))
             for k, mk in enumerate("abc"):
