@@ -52,7 +52,7 @@ perfect solver.
 Run from the repo root:
 
 ```
-python -m videos.ai.ai26.alphazero        # AlphaZero for Connect Four: about 2-3 hours on 4 cores (resumable)
+python -m videos.ai.ai26.alphazero        # AlphaZero for Connect Four, 80 generations: about 5 hours on 4 cores (resumable)
 python -m videos.ai.ai26.compute          # everything else (about an hour)
 python tools/build.py ai26                # English
 python tools/build.py ai26 --lang zh      # Chinese

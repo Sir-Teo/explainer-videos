@@ -1,6 +1,6 @@
 # AI, Built — Part 4: Change
 
-Part 4 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Every
+Part 4 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). Every
 training step needs the derivative of the loss with respect to every number in the model: 124,439,808 for GPT-2,
 4.02 billion for Qwen3-4B. This part builds the machine that computes them, the chain rule run backwards, as the
 series' own small library (`explainer/ai/autodiff.py`), checks it, and trains with it. A hook and eight chapters:

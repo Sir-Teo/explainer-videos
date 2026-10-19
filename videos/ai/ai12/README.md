@@ -1,6 +1,6 @@
 # AI, Built — Part 12: The Mathematics of Scale
 
-Part 12 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)), and
+Part 12 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)), and
 the end of Act II. What happens as networks grow, measured on the series' own small models: every run is computed by
 `compute.py` (PyTorch, CPU) on a character model like Part 11's, scored in bits per character on held-out text. A hook
 and three chapters:

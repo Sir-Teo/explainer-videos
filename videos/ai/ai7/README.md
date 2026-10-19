@@ -1,6 +1,6 @@
 # AI, Built — Part 7: Statistical ML
 
-Part 7 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)): models
+Part 7 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)): models
 with hidden parts, which we never observe and only infer. It reuses Part 6's 639 pages (Austen and Dickens, 70 word
 rates each) and Part 1's books, and every method is written out in numpy in `compute.py`. A hook and seven chapters:
 

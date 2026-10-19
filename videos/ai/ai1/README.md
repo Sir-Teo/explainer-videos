@@ -1,12 +1,12 @@
 # AI, Built — Part 1: The Guessing Game
 
-Part 1 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). It
+Part 1 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). It
 starts where Claude Shannon did, with a game: guess the next letter of an English text. A hook and eleven
 chapters:
 
 * **Shannon's guessing game.** Shannon's 1951 experiment, played on his own sentence by a counting program; GPT-2
   (2019) and Qwen3-4B (2025) playing the same game on the next token; the same game in images, sound and robotics
-  (schematic); the twenty-part map; the scoreboard and its passage.
+  (schematic); the series map; the scoreboard and its passage.
 * **Probability and the chain rule.** Letter frequencies of 22.8 million symbols from thirty novels; a distribution
   as one unit of belief shared out; the 27 × 27 table of P(next | previous), P(u | q) = 0.9985; the chain rule,
   derived, and drawn as nested slivers ("he said" → *the*).

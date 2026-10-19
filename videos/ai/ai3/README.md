@@ -1,6 +1,6 @@
 # AI, Built — Part 3: Vectors That Mean Things
 
-Part 3 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)). Part 1's
+Part 3 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)). Part 1's
 counting model could not tell *the dog barked* from *the hound barked*; this part gives words a place in a space,
 and builds the linear algebra to work there. A hook and nine chapters:
 

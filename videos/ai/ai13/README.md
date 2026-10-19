@@ -1,6 +1,6 @@
 # AI, Built — Part 13: Attention as Geometry
 
-Part 13 of a twenty-part series on the mathematics of modern AI models (see [the series plan](../README.md)), and the
+Part 13 of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)), and the
 first of Act III, *Engines*. What attention computes, how a transformer is put together, how it knows where things
 are, and what its heads learn to do. Every model here is trained by `compute.py` (PyTorch, CPU), including the
 series' own small transformer, which joins the scoreboard. A hook and six chapters:
