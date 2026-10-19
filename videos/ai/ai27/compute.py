@@ -258,25 +258,29 @@ def compute_lora(ranks=(1, 4, 16)):
 TAU = 0.25  # the simulated people's noise: P(a beats b) = sigmoid((gold a - gold b) / TAU)
 
 
-def compute_prefs(per_topic=24, seed=0):
-    """Lines from the fine-tuned model, paired within a topic and judged by simulated people."""
+def compute_prefs(per_topic=32, n_test=8, seed=0):
+    """Lines from the fine-tuned model, paired within a topic and judged by simulated people.  Each topic's lines are
+    split before pairing: the test comparisons are between lines no reward model has seen in training."""
     g = rng(seed)
     sft = _load_model("sft")
-    pairs = []
+    train, test = [], []
     for k, t in enumerate(TOPICS):
         outs = [P.text_of(ids) for ids in P.sample(sft, P.chat(line_q(t)), per_topic, 40, 1.0, seed=50 + k)]
         idx = g.permutation(per_topic)
-        for i in range(0, per_topic - 1, 2):
-            for j in range(i + 1, per_topic, 3):
-                a, b = outs[idx[i]], outs[idx[j]]
+        tr, te = idx[n_test:], idx[:n_test]
+        cand = [(tr[i], tr[j]) for i in range(0, len(tr) - 1, 2) for j in range(i + 1, len(tr), 3)]
+        cand_te = [(te[i], te[j]) for i in range(len(te)) for j in range(i + 1, len(te))]
+        for dest, cs in ((train, cand), (test, cand_te)):
+            for i, j in cs:
+                a, b = outs[i], outs[j]
                 if a == b:
                     continue
                 pa = 1 / (1 + math.exp(-(gold(a) - gold(b)) / TAU))
                 win = g.random() < pa
-                pairs.append({"topic": t, "chosen": a if win else b, "rejected": b if win else a})
-    g.shuffle(pairs)  # (a list of dicts: shuffled in place)
-    n_test = len(pairs) // 8
-    return {"test": pairs[:n_test], "train": pairs[n_test:]}
+                dest.append({"topic": t, "chosen": a if win else b, "rejected": b if win else a})
+    g.shuffle(train)  # (lists of dicts: shuffled in place)
+    g.shuffle(test)
+    return {"test": test, "train": train}
 
 
 class RewardModel(nn.Module):
@@ -477,15 +481,21 @@ def rlhf_run(beta, steps=240, batch=16, lr=2e-5, seed=0, snaps=(0, 40, 80, 160, 
     return np.array(hist), samples, pol
 
 
-def compute_rlhf(betas=(0.1, 0.01)):
-    out = {"betas": list(betas)}
+def compute_rlhf(betas=(0.1, 0.01), seeds=3):
+    """Per beta: the mean history over seeds (step, reward model, gold, KL), every seed's, and seed 0's samples."""
+    out = {"betas": list(betas), "seeds": seeds}
     for b in betas:
-        hist, samples, pol = rlhf_run(b)
         key = f"b{b:g}".replace(".", "_")
-        out[key] = hist
-        out[key + "_samples"] = samples
-        g, e, ex = line_eval(pol, 4, seed=5)
-        out[key + "_final"] = {"gold": g, "ended": e, "examples": ex}
+        runs = []
+        for sd in range(seeds):
+            hist, samples, pol = rlhf_run(b, seed=sd)
+            runs.append(hist)
+            if sd == 0:
+                out[key + "_samples"] = samples
+                g, e, ex = line_eval(pol, 4, seed=5)
+                out[key + "_final"] = {"gold": g, "ended": e, "examples": ex}
+        out[key + "_seeds"] = np.stack(runs)
+        out[key] = out[key + "_seeds"].mean(0)
     return out
 
 

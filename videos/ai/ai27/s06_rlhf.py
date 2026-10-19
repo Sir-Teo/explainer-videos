@@ -173,10 +173,16 @@ class RLHF(VoiceoverScene):
             gc = VMobject().set_points_smoothly([g.ax.c2p(x, y) for x, y in zip(steps[4:-4], sm(h[:, 2])[4:-4])])
             pc.set_stroke(PROXY, 4)
             gc.set_stroke(GOLD, 4)
-            panels.add(VGroup(g, pc, gc))
+            # the spread across seeds: smoothed, min to max
+            R = np.asarray(d[keys[i] + "_seeds"])
+            bands = VGroup(*[band(g.ax, steps[4:-4], np.min([sm(r_[:, c])[4:-4] for r_ in R], 0),
+                                  np.max([sm(r_[:, c])[4:-4] for r_ in R], 0), col, opacity=0.2)
+                             for c, col in ((1, PROXY), (2, GOLD))])
+            panels.add(VGroup(g, pc, gc, bands))
         lg = legend([(PROXY, r"the reward model's score"), (GOLD, r"gold: \ the taste it stands in for")],
                     font_size=20).to_edge(UP, buff=0.4)
-        tag = note(r"computed: \ policy gradient with a KL penalty on our fine-tuned model, \ $16$ lines a step")
+        tag = note(rf"computed: \ policy gradient with a KL penalty, \ $16$ lines a step; \ mean of {d['seeds']} "
+                   r"runs, \ band: \ lowest to highest")
         tag.to_corner(DR, buff=0.2)
         (p0, g0, k0), (p1, g1, k1) = [(late(h, 1), late(h, 2), late(h, 3)) for h in H]
         gs = early(H[0], 2)
@@ -200,18 +206,43 @@ class RLHF(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(lg), FadeIn(tag), FadeIn(panels[0][0]))
             vo.wait_until("a")
-            self.play(Create(panels[0][1]), Create(panels[0][2]), run_time=2.5)
+            self.play(FadeIn(panels[0][3]), Create(panels[0][1]), Create(panels[0][2]), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(panels[1][0]))
-            self.play(Create(panels[1][1]), Create(panels[1][2]), run_time=2.5)
+            self.play(FadeIn(panels[1][3]), Create(panels[1][1]), Create(panels[1][2]), run_time=2.5)
         self.wait(0.3)
-        lines = VGroup(*[said(t_, chars=46, font_size=18, max_lines=2) for t_ in samp[2][:3]])
-        lines.arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
+        # the loose-leash run replayed: a scrubber on its curves, three of its lines at each snapshot
+        snaps = d[keys[1] + "_samples"]
+        g1 = panels[1][0]
+
+        def frame_at(k):
+            st, tp, texts = snaps[k]
+            head = VGroup(label(rf"step ${st}$", font_size=24, color=POLICY),
+                          said(f"Write a line about the {tp}.", "user", chars=40, font_size=18)).arrange(RIGHT, buff=0.4)
+            ls = VGroup(*[said(t_, chars=46, font_size=18, max_lines=2) for t_ in texts[:3]]).arrange(DOWN, buff=0.15)
+            return VGroup(head, ls).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.3)
+
         with self.voiceover(
-            f"And here is what the loosely leashed policy writes about the {samp[1]} at the end of training. "
-            "Judge for yourself whether a person would prefer it."
-        ):
-            self.play(panels.animate.shift(UP * 0.8).scale(0.85), FadeOut(tag))
-            self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in lines], lag_ratio=0.3))
+            "Here is the loose-leash run replayed: three of its sixteen lines at each stage of training. "
+            "<bookmark mark='a'/> At the start it writes like the fine-tuned model it began as. "
+            f"<bookmark mark='b'/> By step {samp[0]}, asked about the {samp[1]}, this is what it has learned to "
+            "write. Judge for yourself whether a person would prefer it."
+        ) as vo:
+            self.play(panels.animate.scale(0.75).to_edge(UP, buff=0.35), FadeOut(tag), FadeOut(lg))
+            ax1 = g1.ax
+            y0, y1 = ax1.y_range[0], ax1.y_range[1]
+            mark = DashedLine(ax1.c2p(snaps[0][0], y0), ax1.c2p(snaps[0][0], y1), color=POLICY, dash_length=0.06)
+            cur = frame_at(0)
+            self.play(Create(mark), FadeIn(cur, shift=UP * 0.1))
+            vo.wait_until("a")
+            for k in range(1, len(snaps)):
+                nxt = frame_at(k)
+                t_ = snaps[k][0]
+                self.play(mark.animate.put_start_and_end_on(ax1.c2p(t_, y0), ax1.c2p(t_, y1)),
+                          FadeOut(cur, shift=UP * 0.1), FadeIn(nxt, shift=UP * 0.1), run_time=1.0)
+                cur = nxt
+                if k < len(snaps) - 1:
+                    self.wait(1.2)
+            vo.wait_until("b")
         self.wait(0.5)
         self.clear_scene()

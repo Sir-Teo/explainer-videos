@@ -230,8 +230,8 @@ ZH = {
     "f'Gold ends about the same either way":
         '两种情况下金标准最后差不多，{g0:.2f}和{g1:.2f}；放松的绳子为此花掉了{k1:.1f}奈特的散度，而另一个只用了{k0:.1f}。',
 
-    "f'And here is what the loosely leashed policy writes about the":
-        '这是绳子放松的策略在训练结束时写的一句关于{samp[1]}的话。一个人会不会更喜欢它，请你自己判断。',
+    'f"Here is the loose-leash run replayed':
+        "这是绳子放松的那次训练的回放：每个阶段，它的十六句话里挑三句。<bookmark mark='a'/>一开始，它写得就像它出发时那个微调过的模型。<bookmark mark='b'/>到第{samp[0]}步，被问到{samp[1]}，这就是它学会写的东西。一个人会不会更喜欢它，请你自己判断。",
 
     'f"Here is the experiment, after Gao, Schulman and Hilton of OpenAI.':
         "这就是实验，仿照OpenAI的高、舒尔曼和希尔顿。对每个提示，我们微调过的模型写出两百五十六句话；最优n选1用一个奖励模型来挑，我们再用奖励模型和金标准分别给挑中的那句打分，横轴是KL的平方根。<bookmark mark='a'/>奖励模型总以为情况在变好：按构造，它给自己最爱的那句打的分，随n上升。<bookmark mark='b'/>金标准说出真相。{small_said}<bookmark mark='c'/>{large_said}更好的奖励模型能被推得更狠才崩，但每一个学来的奖励，都会在某处崩掉。",
