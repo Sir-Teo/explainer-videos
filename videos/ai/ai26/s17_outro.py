@@ -51,7 +51,8 @@ class Outro(VoiceoverScene):
         out.append((VGroup(ax3, curve(ax3, ep, w["mc_0.02"], C.MODEL_Q, 3), curve(ax3, ep, w["td_0.1"], C.TRUE_P, 3)),
                     r"TD learns faster than MC", TDERR))
         dq = load("dqn")
-        img = heat_image(np.asarray(dq["snap_qdiff"])[-1], width=1.8, height=1.8)
+        qd = np.asarray(dq["snap_qdiff"])[-1]
+        img = heat_image(np.tanh(qd / (np.median(np.abs(qd)) / 2)), vmax=1.0, width=1.8, height=1.8)
         out.append((img, r"DQN's learned push", C.TRUE_P))
         r = np.linspace(0, 2, 200)
         ax4 = Axes(x_range=[0, 2, 1], y_range=[-0.2, 1.4, 1], x_length=TW * 0.9, y_length=TH * 0.85, tips=False,

@@ -74,9 +74,10 @@ class DQN(VoiceoverScene):
                   r"r + \gamma \max_{a'} Q(s', a'; \theta^-)", r"- Q(s, a; \theta)", r"\big)^2\Big]", font_size=36),
         ]
         rows[0][4].set_color(TDERR)
-        rows[0].move_to(UP * 2.4)
+        rows[0].move_to(UP * 2.1)
         b1 = brace_note(rows[0][2], r"replay: \ random old transitions", color=AGENT, font_size=22)
-        b2 = brace_note(rows[0][4], r"target network: \ a frozen copy $\theta^-$", color=TDERR, font_size=22)
+        b2 = brace_note(rows[0][4], r"target network: \ a frozen copy $\theta^-$", color=TDERR, font_size=22,
+                        direction=UP)
         # the replay buffer: a strip of past transitions, a few sampled at random
         cells = VGroup(*[Rectangle(width=0.32, height=0.5, stroke_color=GREY_D, stroke_width=1, fill_color=GREY_B,
                                    fill_opacity=0.15 + 0.3 * (i / 30)) for i in range(30)]).arrange(RIGHT, buff=0.04)
@@ -123,7 +124,9 @@ class DQN(VoiceoverScene):
         Q = np.asarray(d["snap_qdiff"])
         T, L = np.asarray(d["snap_traj"]), np.asarray(d["snap_len"])
         run0 = np.asarray(d["run0"])
-        vmax = float(np.percentile(np.abs(Q[-1]), 95))
+        scale = float(np.median(np.abs(Q[-1]))) / 2  # tanh(Q / scale): the preferred push, soft only near the boundary
+        Q = np.tanh(Q / scale)
+        vmax = 1.0
         # the learning curve of this run, episode by episode
         S_MAX = int(steps[-1])
         g = axes([0, S_MAX], [0, 520], x_length=5.0, y_length=2.4, xlabel=r"steps of experience",
@@ -247,7 +250,7 @@ class DQN(VoiceoverScene):
         qf, qn = (np.log10(np.maximum(np.asarray(v[k]), 1e-2)) for k in ("full", "no_target"))
         S_MAX = int(st[-1])
         top = int(np.ceil(max(qn.max(), qf.max()))) + 1
-        g = axes([0, S_MAX], [0, top], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
+        g = axes([0, S_MAX], [-1, top], x_length=7.0, y_length=4.0, xlabel=r"steps of experience",
                  ylabel=r"largest value the network predicts \ (log scale)", xticks=[0, S_MAX // 2, S_MAX],
                  yticks=list(range(0, top + 1, 2)), xfmt=lambda x: f"{int(x / 1000)}" + (r"\text{k}" if x else ""),
                  yfmt=lambda y: rf"10^{{{int(y)}}}", center=[-1.2, -0.3, 0])
@@ -344,9 +347,10 @@ class DQN(VoiceoverScene):
             (2020, r"Agent57: \ above the human baseline on all $57$ Atari games", REWARD),
         ]
         cards = VGroup(*[history_card(y, t, r"", width=6.0, color=c) for y, t, c in items])
-        cards.arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(UP * 0.2)
+        cards.arrange_in_grid(rows=2, cols=2, buff=0.35).move_to(DOWN * 0.2)
         cite_ = cite(r"Schaul et al.\ (2016); \ Wang et al.\ (2016); \ Bellemare, Dabney \& Munos (2017); "
                      r"\ Hessel et al.\ (2018); \ Badia et al.\ (2020)")
+        head = label(r"Atari, \ the proving ground", font_size=34, color=AGENT).to_edge(UP, buff=0.6)
         with self.voiceover(
             "Atari became the proving ground for a decade. <bookmark mark='a'/> Double DQN, replay that samples "
             "surprising transitions more often, and networks that split value from advantage. <bookmark mark='b'/> "
@@ -355,6 +359,7 @@ class DQN(VoiceoverScene):
             "Agent57 was the first to beat the human baseline on all fifty-seven games, including Montezuma's "
             "Revenge, where rewards are so rare that exploring is everything."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.15))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15), *([FadeIn(cite_)] if k == 0 else []))

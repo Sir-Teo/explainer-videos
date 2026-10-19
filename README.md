@@ -65,9 +65,11 @@ QA: `tools/contact_sheet.py` (layout), `tools/dead_air.py` (empty screen under n
 ```bash
 uv venv --python 3.12 .venv-tts && uv pip install --python .venv-tts/bin/python mlx-audio soundfile pypinyin
 .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a      # Qwen3-TTS on Apple Silicon (MLX)
-# Linux: the same model and voice in PyTorch (CUDA, or CPU at several times slower than real time)
+# Linux: the same model and voice in PyTorch. On a CUDA GPU it is quick; on a CPU it works (16 GB of RAM is
+# enough) but runs 10-30x slower than real time, so narrate whole videos on a GPU or Colab instead.
 #   uv pip install --python .venv-tts/bin/python torch qwen-tts soundfile pypinyin
 #   uv pip install --python .venv-tts/bin/python qwen-asr     # after qwen-tts: they pin different transformers
+#   CPU-only torch: install torch and torchaudio from https://download.pytorch.org/whl/cpu (matching builds)
 #   .venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a --engine torch
 # or narrate whole videos on a Colab GPU: tools/colab_narrate.py
 export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a
