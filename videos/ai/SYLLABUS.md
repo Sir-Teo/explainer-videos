@@ -673,7 +673,8 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured l
 | 2 | new, drafting | — |
 | 3–8, 11–13, 15, 16, 19, 21–23, 29, 30 | existing, 8–25 min each; to expand | 8–25 min |
 | 9 | expanding | 13 min → 45–55 |
-| 10, 18, 20, 24, 25, 31 | new; to write | — |
+| 10, 18, 20, 24, 25 | new; to write | — |
+| 31 | new, drafting (the finale; takes over Part 30's series recap and scoreboard) | — |
 | 14 | new, drafting | — |
 | 17 | new, drafting | — |
 | 26 | built in English (silent preview); AlphaZero to 80 generations; Chinese narration table complete | ≈ 62 min |
