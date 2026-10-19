@@ -47,6 +47,9 @@ class DQN(VoiceoverScene):
                           r"\textit{Nature}", r"one network, one set of settings, $49$ Atari games: \ at the level of a "
                           r"professional games tester overall, \ over $75\%$ of the tester's score on $29$ of them",
                           width=8.6, color=AGENT).to_edge(DOWN, buff=0.3)
+        hc0 = history_card(2013, r"Mnih et al., \textit{Playing Atari with deep reinforcement learning}",
+                           r"DeepMind, London: \ one Q-learning agent, \ raw pixels in, joystick actions out; \ "
+                           r"seven Atari games", width=8.6, color=AGENT).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "In 2013 a small London company, DeepMind, showed a Q-learning agent playing Atari video games from the "
             "raw screen. <bookmark mark='a'/> The input is the last four frames, shrunk to 84 by 84 pixels. "
@@ -56,6 +59,7 @@ class DQN(VoiceoverScene):
             "Space Invaders. It reached the level of a professional human games tester overall, and over three "
             "quarters of the tester's score on twenty-nine of them. The only signal was the change in the game score."
         ) as vo:
+            self.play(FadeIn(hc0, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(fr))
             vo.wait_until("b")
@@ -63,7 +67,7 @@ class DQN(VoiceoverScene):
             self.play(GrowArrow(arrows[1]), FadeIn(fc), GrowArrow(arrows[2]),
                       LaggedStart(*[GrowFromEdge(q, LEFT) for q in qs], lag_ratio=0.1), FadeIn(ql))
             vo.wait_until("c")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeOut(hc0, shift=UP * 0.2), FadeIn(hc, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 

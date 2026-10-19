@@ -282,6 +282,7 @@ class Problem(VoiceoverScene):
             cols.width = 13
         sup = label(r"supervised learning: \ every example comes with its answer", font_size=24, color=GREY_B)
         sup.to_edge(DOWN, buff=0.9)
+        head = label(r"What makes it hard", font_size=36, color=GREY_A).to_edge(UP, buff=0.7)
         with self.voiceover(
             "Three things make this harder than learning from labelled examples. <bookmark mark='a'/> Credit "
             "assignment: in Go the reward arrives two hundred moves after the moves that earned it. Which of them "
@@ -291,6 +292,7 @@ class Problem(VoiceoverScene):
             "you see. <bookmark mark='d'/> In supervised learning every example comes with its answer, and the "
             "examples sit still. Here, neither is true."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.15))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cols[k], shift=UP * 0.2))
