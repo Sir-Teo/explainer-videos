@@ -173,17 +173,22 @@ class OurLineage(VoiceoverScene):
         steps = [label(rf"after ${s['tokens'] / 1e6:.2f}$M tokens: \ loss ${s['val']:.2f}$", font_size=22,
                        color=ENCODER).move_to([3.4, -1.0, 0]) for s in sn]
         q = label(r"a sentence we wrote, \ three words hidden", font_size=20, color=GREY_B).move_to([3.4, 1.6, 0])
-        note_ = label(r"its loss is not comparable with GPT's: \\ a hidden word, seen from both sides, \\ is easier to "
-                      r"guess than the next one", font_size=22, color=GREY_A).move_to([3.4, -2.4, 0])
         last = sn[-1]
         g_last = load("gpt_m")["snaps"][-1]["val"]
+        note_ = label(rf"GPT's next-token loss: \ ${g_last:.2f}$ \\ a different problem: \ not comparable",
+                      font_size=22, color=GREY_A).move_to([3.4, -2.4, 0])
+        if last["val"] < g_last:
+            cmp_ = (f"That number can't be compared with the GPT-style model's {g_last:.2f}: guessing a hidden word with "
+                    "the words on both sides visible is a different, easier problem than guessing the next word.")
+        else:
+            cmp_ = (f"It is higher than the GPT-style model's {g_last:.2f}, but the two can't be compared: guessing a "
+                    "hidden word with both sides visible is a different problem from guessing the next word, and the "
+                    "masked model learned from only fifteen percent of the tokens.")
         with self.voiceover(
             "The BERT-style model learns to fill blanks. Here is a sentence with three words hidden, and its best "
             "guess for each, at the same checkpoints. <bookmark mark='a'/> Its loss is measured only on the hidden "
-            f"words, and it falls to {last['val']:.2f} nats. <bookmark mark='b'/> That number can't be compared with "
-            f"the GPT-style model's {g_last:.2f}. Guessing a hidden word with the words on both sides visible is a "
-            "different, easier problem than guessing the next word. To compare the two models fairly, we need tasks "
-            "both can do."
+            f"words, and it falls to {last['val']:.2f} nats. <bookmark mark='b'/> " + cmp_ + " To compare the two "
+            "models fairly, we need tasks both can do."
         ) as vo:
             self.play(FadeIn(g), FadeIn(q), FadeIn(pts[0]), FadeIn(rows[0]), FadeIn(steps[0]))
             self.play(Create(train), run_time=1.2)

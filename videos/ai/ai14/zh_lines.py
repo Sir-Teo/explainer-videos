@@ -277,7 +277,13 @@ ZH = {
         "到最后，训练损失比留出损失低了{gap:.2f}奈特：它开始记住它读过的东西了。",
 
     'f"The BERT-style model learns to fill blanks.':
-        "BERT式模型学的是填空。这里有一个句子，遮住了三个词，下面是它在同样的检查点上对每个词的最佳猜测。<bookmark mark='a'/>它的损失只在被遮住的词上计算，降到了{last['val']:.2f}奈特。<bookmark mark='b'/>这个数不能和GPT式模型的{g_last:.2f}相比。两边的词都看得见时猜一个被遮住的词，是一个和猜下一个词不同、也更容易的问题。要公平地比较这两个模型，我们需要两个都能做的任务。",
+        "BERT式模型学的是填空。这里有一个句子，遮住了三个词，下面是它在同样的检查点上对每个词的最佳猜测。<bookmark mark='a'/>它的损失只在被遮住的词上计算，降到了{last['val']:.2f}奈特。<bookmark mark='b'/>{cmp_}要公平地比较这两个模型，我们需要两个都能做的任务。",
+
+    "f\"That number can't be compared with the GPT-style model's":
+        "这个数不能和GPT式模型的{g_last:.2f}相比：两边的词都看得见时猜一个被遮住的词，是一个和猜下一个词不同、也更容易的问题。",
+
+    "f\"It is higher than the GPT-style model's":
+        "它比GPT式模型的{g_last:.2f}还高，但两者没法比较：两边都看得见时猜一个被遮住的词，和猜下一个词是不同的问题，而且掩码模型只从15%的词元里学习。",
 
     'f"Task one: fill in a blank.':
         "任务一：填空。从两个模型都没读过的段落里取一个句子，去掉一个词，给出{k}个候选：真正的那个词，加上{k - 1}个差不多常见的词。<bookmark mark='a'/>BERT式模型读的是空缺处放着掩码的句子，挑出它认为可能性最大的候选。GPT式模型看不到空缺后面，但它可以把每个候选放进去，比较整句话的概率，这样也用上了空缺后面的词。作为对照，我们也让它只根据空缺前面的词来判断。<bookmark mark='b'/>在{L['cloze_n']}个句子上，随机猜的正确率是{100 / k:.1f}%：只看左边，GPT式模型答对{pct(gl_)}%。<bookmark mark='c'/>给整句打分，答对{pct(g_)}%。<bookmark mark='d'/>{verdict}",

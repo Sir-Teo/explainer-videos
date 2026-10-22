@@ -131,9 +131,13 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
                       label(r"GPU", font_size=20, color=GPUC).move_to(gpu),
                       label(r"silicon interposer: \ thousands of short wires", font_size=18, color=GREY_A)
                       .next_to(inter, DOWN, buff=0.15),
-                      label(r"through-silicon vias", font_size=18, color=FLOPC).next_to(dies, LEFT, buff=0.2))
+                      label(r"through-silicon vias", font_size=18, color=FLOPC).next_to(dies, RIGHT, buff=0.2)
+                      .align_to(dies, UP))
+        pic = VGroup(inter, gpu, dies, vias, wires, labs)
+        pic.shift(RIGHT * 3.4)  # centred while it is built; it moves aside for the chart
         tag = schematic_tag(corner=UL)
-        g = axes([-0.5, 5.5], [0, 300], x_length=5.2, y_length=3.2, ylabel=r"GB per GPU \ (bars)",
+        g = axes([-0.5, 5.5], [0, 300], x_length=5.2, y_length=3.2,
+                 ylabel=r"GB per GPU \ (bars); \ TB/s \ (numbers)",
                  xticks=list(range(6)), xfmt=lambda v: gens[int(v)], yticks=[0, 100, 200, 300],
                  center=[3.6, 0.3, 0], font_size=18)
         bars = VGroup(*[Rectangle(width=0.5, height=g.ax.c2p(0, c_)[1] - g.ax.c2p(0, 0)[1], stroke_width=0,
@@ -142,7 +146,6 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
                         for k, c_ in enumerate(cap)])
         bwl = VGroup(*[label(rf"${b_:.1f}$", font_size=18, color=FLOPC).next_to(bars[k], UP, buff=0.08)
                        for k, b_ in enumerate(bw)])
-        bwk = label(r"numbers: \ TB/s", font_size=18, color=FLOPC).next_to(g, RIGHT, buff=0.1).shift(UP * 1.0)
         cite_ = cite(r"NVIDIA datasheets and product pages", corner=DR)
         with self.voiceover(
             "That memory is a feat of its own. <bookmark mark='a'/> High-bandwidth memory stacks DRAM dies on top of "
@@ -158,7 +161,8 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
             self.play(LaggedStart(*[FadeIn(d_, shift=DOWN * 0.2) for d_ in dies], lag_ratio=0.15), FadeIn(labs[0]))
             self.play(Create(vias), FadeIn(labs[3]), Create(wires), FadeIn(labs[2]))
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(cite_), FadeIn(bwk))
+            self.play(pic.animate.shift(LEFT * 3.4))
+            self.play(FadeIn(g), FadeIn(cite_))
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b_, DOWN), FadeIn(l_)) for b_, l_ in zip(bars, bwl)],
                                   lag_ratio=0.3), run_time=2.5)
         self.wait(0.3)
