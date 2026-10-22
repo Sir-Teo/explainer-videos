@@ -6,19 +6,26 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai14.common import (CONTEXT, DECODER, MONO, PART, PRIOR, SIZE_COLORS, F, human, load, said, take_away)
+from videos.ai.ai14.compute import CACHE, EARLY, LATE
 
 NAMES = {"gpt_xs": r"XS", "gpt_s": r"S", "gpt_m": r"M", "gpt_l": r"L", "base": r"the series' model"}
 
 
 def smooth(y, k=9):
+    """A moving average for the later positions; the first ones, where the loss falls fastest (and which a log axis
+    spreads out), stay as measured."""
     y = np.asarray(y, float)
     pad = np.pad(y, (k // 2, k // 2), mode="edge")
-    return np.convolve(pad, np.ones(k) / k, mode="valid")
+    out = np.convolve(pad, np.ones(k) / k, mode="valid")
+    out[:k // 2] = y[:k // 2]
+    return out
 
 
 def rows_():
-    """The family's rows and the series' base model's (a separate item: it needs the novels model)."""
-    d, b = load("icl"), load("icl_base")
+    """The family's rows, and the series' base model's when its item is computed (`compute.py` and `make.py` compute
+    it, after the novels model: a render never trains the base model)."""
+    d = load("icl")
+    b = load("icl_base") if CACHE.path("icl_base").exists() else dict(rows=[], base_tokens=None)
     d = dict(d, base_tokens=b["base_tokens"])
     return d, list(d["rows"]) + list(b["rows"])
 
@@ -84,6 +91,8 @@ class Emergence(VoiceoverScene):
             curves.add(curve(ax, xs, np.clip(y, bot, top), cols[r["name"]], 3.5))
         gains = {r["name"]: r["early"] - r["late"] for r in rows}
         small, large = fam[0], fam[-1]
+        falls = ("Every curve falls from left to right: the words before help." if min(gains.values()) > 0.05 else
+                 "Not every curve falls: some models barely use the words before.")
         bigger_more = gains[large["name"]] > gains[small["name"]] + 0.05
         tail = (f"the {size_word(large)}-parameter model gains {gains[large['name']]:.2f}: the bigger models learn "
                 "more from context." if bigger_more else
@@ -91,15 +100,14 @@ class Emergence(VoiceoverScene):
         btail = (f" The series' own model, bigger and trained longer, gains {gains['base']:.2f}." if has_base else "")
         fifth = (f" And, as a fifth, the series' own model, larger and trained on {times:.0f} times as many tokens."
                  if has_base else "")
-        tag = note(r"computed: \ $128$ held-out windows of $256$ tokens").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ ${rows[0]['windows']}$ held-out windows of $256$ tokens").to_corner(DR, buff=0.2)
         with self.voiceover(
             "GPT-3's surprise was that learning from the prompt appeared with scale. Can we see any of it at our "
             "scale? <bookmark mark='a'/> Four GPT-style models of growing size, all trained on the same text, the "
             "same number of tokens." + fifth + " <bookmark mark='b'/> First, the simplest measure of learning from "
             "context: the loss at each position of a 256-token window. Early positions have almost no context; later "
-            "ones have a lot. <bookmark mark='c'/> Every curve falls from left to right: the words before help. "
-            "Between the first positions and the last, the smallest model gains "
-            f"{gains[small['name']]:.2f} nats per token; " + tail + btail
+            "ones have a lot. <bookmark mark='c'/> " + falls + " From one to four tokens of context to more than a "
+            f"hundred, the smallest model gains {gains[small['name']]:.2f} nats per token; " + tail + btail
         ) as vo:
             self.play(FadeIn(lh), FadeIn(tag))
             vo.wait_until("a")
@@ -135,7 +143,7 @@ class Emergence(VoiceoverScene):
         for s in sn:
             y = smooth(s["pos"])
             curves.append(curve(h.ax, np.log10(np.arange(1, len(y) + 1)), np.clip(y, pbot, ptop), DECODER, 4))
-        gains = [float(np.mean(s["pos"][8:24]) - np.mean(s["pos"][192:])) for s in sn]
+        gains = [float(np.mean(s["pos"][EARLY]) - np.mean(s["pos"][LATE])) for s in sn]
         reads = [label(rf"after ${s['tokens'] / 1e6:.2f}$M tokens: \ context gain ${gn:.2f}$ nats", font_size=22,
                        color=CONTEXT).move_to([3.3, -2.6, 0]) for s, gn in zip(sn, gains)]
         final = gains[-1]
