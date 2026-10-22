@@ -291,13 +291,10 @@ class Matmul(VoiceoverScene):
                  f"three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes")
         past = (". Past that, the tiles spill out and the speed falls." if kb < len(tiles) - 1 else
                 ", the largest we tried.")
-        if r["lang"] == "C":
-            how = "We measured this on one core of this computer, multiplying two matrices of size 1,024 in C."
-        else:
-            how = ("We measured this on one core of this computer, multiplying two matrices of size 1,024. It has no C "
-                   "compiler, so the loops are Python's, with numpy doing the innermost one.")
+        how = ("in C." if r["lang"] == "C" else
+               "in Python, with numpy doing the innermost loop: this computer has no C compiler.")
         with self.voiceover(
-            how + " "
+            "We measured this on one core of this computer, multiplying two matrices of size 1,024 " + how + " "
             f"<bookmark mark='a'/> The textbook triple loop: {gflops(r['naive'])} billion operations a second. It "
             "walks down the columns of B, one cache line per number. <bookmark mark='b'/> The same arithmetic with "
             f"the loops reordered, so every inner loop walks along rows: {gflops(r['ikj'])}. "

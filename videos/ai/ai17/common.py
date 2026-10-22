@@ -42,9 +42,8 @@ def machine_name() -> str:
 
 
 def machine_spoken() -> str:
-    """The processor's name as the narrator should say it: 'Intel Xeon Processor at 2.80 gigahertz', 'Apple M3 Pro'."""
-    name = machine_name().replace(" @ ", " at ").replace("@", " at ")
-    return re.sub(r"(\d)\s*GHz\b", r"\1 gigahertz", name)
+    """The processor's name as the narrator should say it, without the clock: 'Intel Xeon Processor', 'Apple M3 Pro'."""
+    return re.sub(r"\s*@.*$", "", machine_name()).strip() or "this computer's processor"
 
 
 def gflops(x: float) -> str:

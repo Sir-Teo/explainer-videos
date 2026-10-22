@@ -225,7 +225,7 @@ class AlexNet(VoiceoverScene):
             "lottery. Ideas succeed when they suit the hardware of their day, and neural networks, all multiply-adds, "
             "had drawn a winning ticket, made for video games."
         ) as vo:
-            ghosts = cards.copy().set_opacity(0.12)  # the four milestones to come, faint, then each in turn
+            ghosts = cards.copy().set_opacity(0.3)  # the four milestones to come, faint, then each in turn
             self.play(FadeIn(head), FadeIn(ghosts, lag_ratio=0.1), run_time=1.2)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
