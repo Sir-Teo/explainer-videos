@@ -231,6 +231,16 @@ def _train(name, kind, shape):
     return lm.train(name, kind, shape, TOKENS, CACHE.dir)
 
 
+def _trained(name):
+    """One of our trained models, training it (or resuming its checkpoint) first if it isn't cached yet, so that
+    `python -m videos.ai.ai14.compute` alone rebuilds everything."""
+    from videos.ai.ai14 import lm
+
+    if not CACHE.path(name).exists() or not (CACHE.dir / f"{name}.pt").exists():
+        CACHE.save(name, ITEMS[name]())
+    return lm.load_trained(name, CACHE.dir)
+
+
 def compute_family():
     """Our models' shapes and parameter counts (no training needed)."""
     from videos.ai.ai14 import lm
@@ -431,7 +441,7 @@ def compute_lineage():
     from videos.ai.ai14 import lm
 
     torch.set_num_threads(2)
-    gpt, bert = lm.load_trained("gpt_m", CACHE.dir), lm.load_trained("bert_m", CACHE.dir)
+    gpt, bert = _trained("gpt_m"), _trained("bert_m")
     rg, rb = load("gpt_m"), load("bert_m")
     out = dict(params=rg["params"], flops_gpt=rg["flops"], flops_bert=rb["flops"], tokens=rg["tokens"],
                steps=rg["steps"], seconds_gpt=rg["seconds"], seconds_bert=rb["seconds"])
@@ -560,11 +570,8 @@ def compute_icl():
     out = dict(shots=SHOTS, books=FEW_SHOT_BOOKS, n_items=len(items), example=_fewshot_prompt(items[0]["demos"][:2],
                                                                                               items[0]["query"]),
                example_answer=items[0]["answer"], example_pair=list(items[0]["pair"]))
-    models = [(nm, lm.load_trained(nm, CACHE.dir)) for nm in FAMILY]
-    if (N.OUT / "base.pt").exists():  # never train it from here: it is the series' own (explainer.ai.novels)
-        models.append(("base", N.load_base()))
-    else:
-        print("  (the series' base model is not trained yet: the family stands alone)")
+    models = [(nm, _trained(nm)) for nm in FAMILY]
+    models.append(("base", N.load_base()))  # the series' own model (explainer.ai.novels; make.py trains it first)
     rows = []
     for nm, m in models:
         pp = lm.per_position(m, win)
@@ -576,22 +583,16 @@ def compute_icl():
         print(f"  {nm}: early {rows[-1]['early']:.3f} late {rows[-1]['late']:.3f} rep {r['acc1']:.2f}->{r['acc2']:.2f}"
               f" few-shot {[round(x, 3) for x in fs]}", flush=True)
     out["rows"] = rows
-    base = json_base()
-    if base:
-        out["base_tokens"] = base
+    out["base_tokens"] = base_tokens()
     return out
 
 
-def json_base():
-    import json
-
+def base_tokens():
+    """Tokens the series' base model trained on, from its configuration (explainer.ai.novels.BASE_RUN)."""
     from explainer.ai import novels as N
 
-    p = N.OUT / "base.json"
-    if not p.exists():
-        return None
-    d = json.loads(p.read_text())
-    return int(d.get("steps", 0) * d.get("tokens_per_step", 0)) or None
+    per_step = N.BASE_RUN["batch"] * N.BASE["seq"]
+    return N.BASE_RUN["tokens"] // per_step * per_step
 
 
 # ---------------------------------------------------------------------------
@@ -617,7 +618,7 @@ def compute_scoreboard():
                  dict(label=f"the previous {r['best']} characters", bits=r["best_bits"], kind="count", part=1)]
     ours = []
     for nm in FAMILY:
-        m = lm.load_trained(nm, CACHE.dir)
+        m = _trained(nm)
         b = lm.bits_per_char(m, passage)
         ours.append(dict(name=nm, params=int(m.count()["total"]), bits=b["bits"], tokens=b["tokens"]))
     out = dict(rows=rows, ours=ours, chars=len(passage))

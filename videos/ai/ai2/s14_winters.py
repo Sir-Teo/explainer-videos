@@ -39,6 +39,11 @@ class Winters(VoiceoverScene):
         cut.arrange(DOWN, buff=0.15).next_to(debate, DOWN, buff=0.4)
         w = label(r"the first AI winter: \ roughly $1974$--$1980$", font_size=30, color="#9DB8E0").to_edge(DOWN,
                                                                                                      buff=0.45)
+        promise = VGroup(label(r"promised, $1958$: \ a computer chess champion within ten years", font_size=32,
+                               color=HIST),
+                         note(r"Simon \& Newell (chapter one's prediction)", font_size=22),
+                         label(r"by the late $1960$s: \ the bills came due", font_size=30, color=FAIL))
+        promise.arrange(DOWN, buff=0.3).move_to(UP * 0.3)
         with self.voiceover(
             "The founders had promised a great deal, soon. By the late sixties the bills came due. <bookmark mark='a'/> In 1966 "
             "an advisory committee told the US government that machine translation was slower, less accurate and costlier than "
@@ -50,8 +55,12 @@ class Winters(VoiceoverScene):
             "<bookmark mark='e'/> British funding shrank to a few centres; in America, DARPA turned to military goals. The first "
             "winter lasted until about 1980."
         ) as vo:
+            self.play(FadeIn(promise[0]), FadeIn(promise[1]))
+            self.play(FadeIn(promise[2], shift=UP * 0.1))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
+                if k == 0:
+                    self.play(FadeOut(promise), run_time=0.5)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(debate))
@@ -134,6 +143,9 @@ class Winters(VoiceoverScene):
         div = DashedLine([0, 2.6, 0], [0, -1.8, 0], color=GREY_C)
         src = label(r"Hans Moravec, \textit{Mind Children} (1988): \ what we find hard, \ evolution polished least",
                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.5)
+        head = label(r"under the funding story: \ a scientific surprise", font_size=32, color=GREY_A)
+        head.to_edge(UP, buff=0.35)
+        name = label(r"Moravec's paradox", font_size=36, color=FCOL).move_to(head)
         with self.voiceover(
             "Beneath the funding story lay a scientific surprise. <bookmark mark='a'/> Symbolic programs did best at what "
             "people find hard: logic, algebra, chess. <bookmark mark='b'/> They did worst at what any child does without effort: "
@@ -143,12 +155,13 @@ class Winters(VoiceoverScene):
             "millions of years on perception and movement; abstract reasoning is a thin, recent layer. This is Moravec's "
             "paradox."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(left[0]), LaggedStart(*[FadeIn(t) for t in left[1:]], lag_ratio=0.2))
             vo.wait_until("b")
             self.play(Create(div), FadeIn(right[0]), LaggedStart(*[FadeIn(t) for t in right[1:]], lag_ratio=0.2))
             vo.wait_until("c")
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeTransform(head, name))
         self.wait(0.3)
         self.clear_scene()
 

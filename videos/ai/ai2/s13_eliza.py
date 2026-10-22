@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MONO, PART, PATH, SYMBOL, load, said
+from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MONO, PART, PATH, SYMBOL, load, node_box, said
 
 
 class Eliza(VoiceoverScene):
@@ -43,6 +43,11 @@ class Eliza(VoiceoverScene):
         rl = label(r"reassembly rules, \ used in turn", font_size=20, color=GREY_A).next_to(reas, UP, buff=0.12)
         out = said("WHO ELSE IN YOUR FAMILY TAKES CARE OF YOU", "machine", chars=44, font_size=22).to_edge(DOWN,
                                                                                                      buff=0.3)
+        script = VGroup(node_box(r"keywords, \ ranked", FCOL, font_size=26), node_box(r"decomposition patterns",
+                                                                                     SYMBOL, font_size=26),
+                        node_box(r"reassembly rules", PATH, font_size=26)).arrange(RIGHT, buff=0.8).move_to(DOWN * 0.6)
+        script.add(*[Arrow(script[k].get_right(), script[k + 1].get_left(), buff=0.1, color=GREY_B) for k in range(2)])
+        script.add(label(r"a script, \ such as DOCTOR:", font_size=26, color=GREY_A).next_to(script, UP, buff=0.4))
         arrows = VGroup(Arrow(inp.get_bottom(), sw.get_top(), buff=0.1, color=GREY_B, stroke_width=2),
                         Arrow(sw.get_right(), pat.get_left(), buff=0.15, color=GREY_B, stroke_width=2))
         with self.voiceover(
@@ -55,7 +60,10 @@ class Eliza(VoiceoverScene):
             "matching and a few hundred lines of script."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(script[5]), LaggedStart(*[FadeIn(script[k]) for k in (0, 3, 1, 4, 2)], lag_ratio=0.4),
+                      run_time=3.0)
             vo.wait_until("a")
+            self.play(FadeOut(script), run_time=0.5)
             self.play(FadeIn(inp))
             vo.wait_until("b")
             self.play(GrowArrow(arrows[0]), FadeIn(sw), FadeIn(swl))
@@ -84,7 +92,7 @@ class Eliza(VoiceoverScene):
             o.move_to(ORIGIN, aligned_edge=LEFT).shift(RIGHT * 0.25)
             mark.next_to(o, RIGHT, buff=0.25)
             if not c["same"]:
-                t = data_text(c["1966"], font=MONO, font_size=15, color=GREY_B)
+                t = data_text(c["1966"], font=MONO, font_size=17, color=GREY_B)
                 if t.width > 6.2:
                     t.width = 6.2
                 t.next_to(o, DOWN, buff=0.08, aligned_edge=LEFT)
@@ -146,18 +154,19 @@ class Eliza(VoiceoverScene):
                              said(r, "machine", chars=46, font_size=18, max_lines=3)).arrange(RIGHT, buff=0.35,
                                                                                             aligned_edge=UP))
         items.arrange(DOWN, buff=0.22, aligned_edge=LEFT)
-        if items.height > 6.6:
-            items.height = 6.6
+        if items.height > 6.0:
+            items.height = 6.0
         if items.width > 13.2:
             items.width = 13.2
-        items.move_to(DOWN * 0.15)
+        items.move_to(DOWN * 0.4)
+        top = label(r"new lines, \ typed to our ELIZA", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         tag = note(r"computed: \ our ELIZA on new lines").to_corner(DR, buff=0.12)
         with self.voiceover(
             "Step outside the therapist's frame and the trick shows. <bookmark mark='a'/> Ask a fact, and it asks why you ask. "
             "Ask for a proof, and it hands your sentence back, pronouns turned around. Mention a computer, and a rule written "
             "for exactly that fires. Nothing is understood; the illusion lives in the reader."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(top))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(it, shift=UP * 0.1) for it in items], lag_ratio=0.4),
                       run_time=max(3.0, vo.duration - 3.0))
@@ -171,7 +180,10 @@ class Eliza(VoiceoverScene):
         src = note(r"his account, \ \textit{Computer Power and Human Reason} (1976), \ paraphrased").next_to(quote, DOWN,
                                                                                                         buff=0.15)
         eff = definition_card(r"the ELIZA effect", r"reading understanding, \ even care, \ into a program's output "
-                              r"because it uses our words", width=6.0, font_size=22, color=FCOL).move_to([-3.4, -0.6, 0])
+                              r"because it uses our words", width=6.0, font_size=22, color=FCOL).move_to([-3.4, -1.0, 0])
+        book = history_card(1976, r"Joseph Weizenbaum, \textit{Computer Power and Human Reason}",
+                            r"the program's author, \ alarmed at how readily people confided in it", width=7.4,
+                            color=HIST, font_size=21).move_to([0, 1.0, 0])
         then = VGroup(
             history_card(2021, r"the original code found", r"in Weizenbaum's papers at MIT; \ run again on an "
                          r"emulated IBM 7094 in 2024", width=5.6, color=HIST, font_size=18),
@@ -188,6 +200,7 @@ class Eliza(VoiceoverScene):
             "understanding? Every chatbot raises the question again."
         ) as vo:
             vo.wait_until("a")
+            self.play(FadeIn(book, shift=UP * 0.2))
             self.play(FadeIn(quote), FadeIn(src))
             vo.wait_until("b")
             self.play(FadeIn(eff, shift=UP * 0.2))

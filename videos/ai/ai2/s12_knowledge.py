@@ -24,8 +24,8 @@ class Knowledge(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def nets(self):
-        pos = {"animal": [-3.2, 2.2], "bird": [-5.0, 0.4], "fish": [-1.4, 0.4], "canary": [-6.0, -1.6],
-               "penguin": [-4.0, -1.6]}
+        pos = {"animal": [-2.6, 2.2], "bird": [-4.4, 0.4], "fish": [-0.8, 0.4], "canary": [-5.4, -1.6],
+               "penguin": [-3.4, -1.6]}
         nodes = {k: node_box(k, SYMBOL, font_size=24).move_to([*v, 0]) for k, v in pos.items()}
         isa = VGroup()
         for a, b in (("bird", "animal"), ("fish", "animal"), ("canary", "bird"), ("penguin", "bird")):
@@ -101,6 +101,10 @@ class Knowledge(VoiceoverScene):
         if hc.get_right()[0] > 6.95:
             hc.shift(LEFT * (hc.get_right()[0] - 6.95))
         tag = note(r"computed: \ forward chaining over an illustrative rule base").to_corner(DR, buff=0.2)
+        es = VGroup(node_box(r"human experts", HIST, font_size=28), node_box(r"if--then rules", FCOL, font_size=28),
+                    node_box(r"a program that chains them", PATH, font_size=28)).arrange(RIGHT, buff=0.9).move_to(UP * 0.4)
+        es.add(*[Arrow(es[k].get_right(), es[k + 1].get_left(), buff=0.1, color=GREY_B) for k in range(2)])
+        es.add(label(r"an expert system", font_size=30, color=GREY_A).next_to(es, UP, buff=0.5))
         with self.voiceover(
             "In the seventies a new kind of program captured the field: the expert system, its knowledge a set of if-then "
             "rules written with human experts. <bookmark mark='a'/> Give it facts about an animal. <bookmark mark='b'/> Forward "
@@ -110,8 +114,10 @@ class Knowledge(VoiceoverScene):
             "which inferred molecular structure from mass spectra. Feigenbaum's lesson: a program's power comes from what it "
             "knows, more than from how cleverly it reasons."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(es[5]), LaggedStart(*[FadeIn(es[k]) for k in (0, 3, 1, 4, 2)], lag_ratio=0.4),
+                      run_time=3.0)
             vo.wait_until("a")
+            self.play(FadeOut(es), run_time=0.5)
             self.play(FadeIn(fbox))
             vo.wait_until("b")
             for k in range(len(fired)):
@@ -219,13 +225,11 @@ class Knowledge(VoiceoverScene):
         hc = history_card(2012, r"Google: \ the Knowledge Graph", r"``things, not strings'': \ over $500$ million "
                           r"objects and $3.5$ billion facts at launch", width=5.6, color=HIST,
                           font_size=19).to_corner(DR, buff=0.3)
-        now = label(r"today: \ knowledge graphs behind search engines, \ Wikidata, \ and the retrieval tools of "
-                    r"language models", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.2)
-        if now.get_right()[0] > hc.get_left()[0] - 0.2:
-            now.to_corner(DL, buff=0.25)
-            if now.width > hc.get_left()[0] + 6.8:
-                now.width = hc.get_left()[0] + 6.6
-                now.to_corner(DL, buff=0.25)
+        now = label(r"today: \ knowledge graphs answer factual questions in search engines", font_size=22,
+                    color=PATH).to_corner(DL, buff=0.3)
+        if now.get_right()[0] > hc.get_left()[0] - 0.25:
+            now.width = hc.get_left()[0] - 0.25 + 6.8
+            now.to_corner(DL, buff=0.3)
         tag = note(r"illustrative").to_corner(UR, buff=0.25)
         with self.voiceover(
             "Knowledge as a web of entities and relations did not die; it scaled. <bookmark mark='a'/> In 2012 Google "

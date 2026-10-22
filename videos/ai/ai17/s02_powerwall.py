@@ -147,7 +147,7 @@ class PowerWall(VoiceoverScene):
         off = VGroup(*[Dot(g.ax.c2p(0, -4 - vt / 0.06), radius=0.06, color=col)
                        for vt, col in ((0.45, GREY_B), (0.3, C.SURPRISE))])
         ol = label(r"lower threshold: \\ more current when off", font_size=18, color=C.SURPRISE)
-        ol.next_to(off[1], RIGHT, buff=0.2).shift(UP * 0.25)
+        ol.next_to(off[1], LEFT, buff=0.25)
         tag = schematic_tag(corner=UR)
         with self.voiceover(
             "Then, in the early two thousands, the voltage stopped falling. <bookmark mark='a'/> A transistor is a "

@@ -59,7 +59,7 @@ class Systolic(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(why_, shift=UP * 0.2))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)
 
     # ------------------------------------------------------------------
     def wavefront(self):
@@ -170,7 +170,7 @@ class Systolic(VoiceoverScene):
             self.play(FadeIn(done, scale=1.2))
         ctext.clear_updaters()
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)
 
     # ------------------------------------------------------------------
     def count(self):
@@ -214,7 +214,7 @@ class Systolic(VoiceoverScene):
                 if mk == "b":
                     self.play(Create(ring), FadeIn(cap2))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)
 
     # ------------------------------------------------------------------
     def tpu(self):
@@ -226,9 +226,9 @@ class Systolic(VoiceoverScene):
                           rf"$65{{,}}536 \times 2 \times 0.7 \times 10^9 \approx {tops / 1e12:.0f}$ trillion operations a "
                           r"second; \ in Google's data centres since 2015", width=6.4, color=GPUC, font_size=20)
         hc.move_to([-3.4, 1.6, 0])
-        facts = VGroup(label(r"$15$--$30\times$ faster than the GPU and CPU beside it", font_size=22, color=GREY_A),
-                       label(r"$30$--$80\times$ more operations per watt", font_size=22, color=GREY_A),
-                       label(r"ran AlphaGo against Lee Sedol, March 2016", font_size=22, color=GREY_A))
+        facts = VGroup(label(r"ran AlphaGo against Lee Sedol, March 2016", font_size=22, color=GREY_A),
+                       label(r"$15$--$30\times$ faster than the GPU and CPU beside it", font_size=22, color=GREY_A),
+                       label(r"$30$--$80\times$ more operations per watt", font_size=22, color=GREY_A))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(hc, DOWN, buff=0.35).align_to(hc, LEFT)
         g = axes([0, 1024], [0, 1.05], x_length=5.2, y_length=3.0, xlabel=r"layer size $d$ \ ($d \times d$ weights)",
                  ylabel=r"cells doing useful work", xticks=[0, 256, 512, 768, 1024], yticks=[0, 0.5, 1],
@@ -239,6 +239,15 @@ class Systolic(VoiceoverScene):
         dl = label(rf"$d = 257$: \ ${100 * util[k257]:.0f}\%$", font_size=20, color=C.SURPRISE).next_to(dot, UP, buff=0.15)
         tag = note(r"computed: \ weights padded to whole $256 \times 256$ tiles").to_corner(DR, buff=0.2)
         cite_ = cite(r"N.~Jouppi et al., \ ISCA (2017); \ Google blog (May 2016)", corner=DL)
+        # the chip's heart, drawn small: a 256 x 256 grid of multiply-adders (16 x 16 here, each standing for 16 x 16)
+        arr = VGroup(*[Square(0.17, stroke_width=0.6, stroke_color=GPUC, fill_color=GPUC, fill_opacity=0.35)
+                       for _ in range(256)]).arrange_in_grid(rows=16, cols=16, buff=0.03).move_to([3.6, 0.5, 0])
+        feed = VGroup(Arrow(arr.get_left() + LEFT * 0.9, arr.get_left(), buff=0.05, color=A_C, stroke_width=3),
+                      Arrow(arr.get_top() + UP * 0.7, arr.get_top(), buff=0.05, color=B_C, stroke_width=3))
+        arl = VGroup(label(r"$256 \times 256$ multiply-adders, \ $8$-bit", font_size=22, color=GPUC),
+                     label(rf"$700$ MHz: \ $\approx {tops / 1e12:.0f}$ trillion operations a second", font_size=22,
+                           color=FLOPC)).arrange(DOWN, buff=0.12).next_to(arr, DOWN, buff=0.3)
+        atag = schematic_tag(corner=UR)
         with self.voiceover(
             "In 2013 Google projected that if people used voice search for three minutes a day, the speech "
             "recognition networks alone would need twice its data centres. It built a chip instead, in fifteen "
@@ -251,17 +260,20 @@ class Systolic(VoiceoverScene):
             "A layer of 257 by 257 weights fills four tiles and uses a quarter of the cells. Shapes that are "
             "multiples of the array's size are the ones that run at full speed, on TPUs and GPUs alike."
         ) as vo:
-            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite_))
+            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite_), FadeIn(arr, lag_ratio=0.002), FadeIn(atag),
+                      run_time=0.8)
             vo.wait_until("a")
-            self.play(Indicate(hc, color=GPUC, scale_factor=1.02))
+            self.play(GrowArrow(feed[0]), GrowArrow(feed[1]), FadeIn(arl[0]))
+            self.play(FadeIn(arl[1]), FadeIn(facts[0]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(f_) for f_ in facts], lag_ratio=0.4))
+            self.play(LaggedStart(*[FadeIn(f_) for f_ in facts[1:]], lag_ratio=0.4))
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(arr, feed, arl, atag)))
             self.play(FadeIn(g))
             self.play(Create(cv), FadeIn(tag), run_time=2.0)
             self.play(FadeIn(dot), FadeIn(dl))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)
 
     # ------------------------------------------------------------------
     def tensor_cores(self):
@@ -298,7 +310,7 @@ class Systolic(VoiceoverScene):
             "Rubin. The GPU is still a GPU, but most of its arithmetic now happens in small systolic engines inside "
             "it."
         ) as vo:
-            self.play(FadeIn(mA), FadeIn(mB), FadeIn(mC), FadeIn(ops), FadeIn(names), FadeIn(cite_))
+            self.play(FadeIn(mA), FadeIn(mB), FadeIn(mC), FadeIn(ops), FadeIn(names), FadeIn(cite_), run_time=0.7)
             vo.wait_until("a")
             self.play(TransformFromCopy(VGroup(mA, mB, mC), mD), FadeIn(one))
             vo.wait_until("b")
@@ -306,4 +318,4 @@ class Systolic(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(g_, shift=UP * 0.1) for g_ in gens], lag_ratio=0.3))
         self.wait(0.3)
-        self.clear_scene()
+        self.clear_scene(run_time=0.6)

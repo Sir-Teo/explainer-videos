@@ -40,8 +40,8 @@ class Roofline(VoiceoverScene):
                           r"\textit{Roofline}: \ one picture of what bounds a program on a machine", width=6.0,
                           color=FLOPC, font_size=20).to_corner(DL, buff=0.3)
         # the picture the inequalities draw, built alongside them (schematic)
-        g = axes([0, 4], [0, 3], x_length=4.6, y_length=2.4, xlabel=r"intensity $I$ (log)", ylabel=r"speed (log)",
-                 center=[3.9, -2.2, 0], font_size=18)
+        g = axes([0, 4], [0, 3], x_length=4.4, y_length=2.0, xlabel=r"intensity $I$ (log)", ylabel=r"speed (log)",
+                 center=[4.2, -2.55, 0], font_size=18)
         ax = g.ax
         roof = DashedLine(ax.c2p(0, 2.4), ax.c2p(4, 2.4), color=FLOPC, dash_length=0.08)
         rl = MathTex(r"P", font_size=26, color=FLOPC).next_to(ax.c2p(4, 2.4), RIGHT, buff=0.1)
@@ -227,16 +227,18 @@ class Roofline(VoiceoverScene):
         ridge = H["tensor"] / H["bw"]
         rl = DashedLine(ax.c2p(math.log10(ridge), yr[0]), ax.c2p(math.log10(ridge), math.log10(H["tensor"] / 1e9)),
                         color=GPUC, dash_length=0.08)
-        lab_o = label(r"this computer, one core", font_size=20, color=CPUC).next_to(ax.c2p(2.0, math.log10(P / 1e9)),
-                                                                                  UP, buff=0.1)
+        lab_o = label(r"this computer, one core", font_size=20, color=CPUC)
+        lab_o.move_to(ax.c2p(2.65, math.log10(P / 1e9)) + UP * 0.12, aligned_edge=DL)
         lab_h = label(rf"H100: \ ${H['tensor'] / 1e12:.0f}$ TFLOP/s (BF16), \ ${H['bw'] / 1e12:.2f}$ TB/s",
                       font_size=20, color=GPUC).next_to(ax.c2p(1.5, math.log10(H["tensor"] / 1e9)), UP, buff=0.1)
         rlab = label(rf"ridge $\approx {ridge:.0f}$", font_size=20, color=GPUC)
-        rlab.next_to(ax.c2p(math.log10(ridge), 2.0), RIGHT, buff=0.12)
+        rlab.next_to(ax.c2p(math.log10(ridge), 4.0), RIGHT, buff=0.12)
         n_star = 3 * ridge  # BF16: I = 2n^3 / (3 n^2 * 2 bytes) = n/3
         dec = glow_dot(ax.c2p(0, math.log10(H["bw"] / 1e9)), color=C.SURPRISE, radius=0.09)
-        decl = label(rf"one token at a time: \ $\approx 1$ FLOP/byte, \ ${100 * H['bw'] / H['tensor']:.1f}\%$ of peak",
-                     font_size=20, color=C.SURPRISE).next_to(dec, DR, buff=0.15).shift(DOWN * 0.35)
+        decl = VGroup(label(r"one token at a time:", font_size=20, color=C.SURPRISE),
+                      label(rf"$\approx 1$ FLOP/byte, \ ${100 * H['bw'] / H['tensor']:.1f}\%$ of peak", font_size=20,
+                            color=C.SURPRISE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        decl.move_to(ax.c2p(0.35, 3.4), aligned_edge=UL)
         others = VGroup(label(rf"ridge points: \ TPU v1 ${TPU1['ridge']:,}$; \ K80 ${TPU1['ridge_k80']}$; \ "
                               rf"Haswell CPU ${TPU1['ridge_haswell']}$".replace(",", "{,}"), font_size=20,
                               color=GREY_A),

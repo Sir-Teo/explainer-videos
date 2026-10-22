@@ -38,14 +38,24 @@ class AlexNet(VoiceoverScene):
         # the contest: one photograph, five guesses, right if the true class is among them
         photo = RoundedRectangle(width=1.9, height=1.9, corner_radius=0.08, stroke_color=GREY_B, fill_color=GREY_D,
                                  fill_opacity=0.5).move_to([-5.1, -1.3, 0])
-        pl = label(r"a test photo", font_size=18, color=GREY_B).next_to(photo, DOWN, buff=0.1)
+        pl = label(r"a test image", font_size=18, color=GREY_B).next_to(photo, DOWN, buff=0.1)
         guesses = VGroup(*[data_text(t, font_size=20, color=(GPUC if k == 2 else GREY_A))
                            for k, t in enumerate(["1. tiger cat", "2. tabby cat", "3. Egyptian cat", "4. lynx",
                                                   "5. tiger"])]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         guesses.next_to(photo, RIGHT, buff=0.4)
         ok = SurroundingRectangle(guesses[2], color=GPUC, buff=0.06)
-        il = note(r"illustrative: \ right if the true class is among five guesses").next_to(guesses, DOWN, buff=0.2)
-        il.align_to(photo, LEFT)
+        il = note(r"illustrative: \ right if the true class is among five guesses")
+        il.next_to(VGroup(photo, pl, guesses), DOWN, buff=0.2).align_to(photo, LEFT)
+        # a cat, drawn as an icon inside the photo frame (no real photograph)
+        c0 = photo.get_center() + DOWN * 0.12
+        head = Circle(radius=0.5, stroke_color=GREY_A, stroke_width=2, fill_color=C.HOT, fill_opacity=0.35).move_to(c0)
+        ears = VGroup(*[Polygon(c0 + np.array([sx * 0.42, 0.18, 0]), c0 + np.array([sx * 0.38, 0.72, 0]),
+                                c0 + np.array([sx * 0.08, 0.45, 0]), stroke_color=GREY_A, stroke_width=2,
+                                fill_color=C.HOT, fill_opacity=0.35) for sx in (-1, 1)])
+        eyes = VGroup(*[Dot(c0 + np.array([sx * 0.2, 0.1, 0]), radius=0.05, color=WHITE) for sx in (-1, 1)])
+        whisk = VGroup(*[Line(c0 + np.array([sx * 0.12, -0.12 + dy, 0]), c0 + np.array([sx * 0.7, -0.08 + 2 * dy, 0]),
+                              stroke_width=1.2, color=GREY_A) for sx in (-1, 1) for dy in (-0.06, 0.06)])
+        cat = VGroup(ears, head, eyes, whisk)
         cite_ = cite(r"Krizhevsky, Sutskever \& Hinton (2012)", corner=DL)
         with self.voiceover(
             "By 2012 the ingredients were in place. <bookmark mark='a'/> In 2009 Fei-Fei Li's group had published "
@@ -57,7 +67,8 @@ class AlexNet(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(photo), FadeIn(pl), LaggedStart(*[FadeIn(g_) for g_ in guesses], lag_ratio=0.2))
+            self.play(FadeIn(photo), FadeIn(cat), FadeIn(pl), LaggedStart(*[FadeIn(g_) for g_ in guesses],
+                                                                          lag_ratio=0.2))
             self.play(Create(ok), FadeIn(il))
             vo.wait_until("b")
             self.play(FadeIn(bt), FadeIn(who), FadeIn(cite_))
@@ -141,17 +152,19 @@ class AlexNet(VoiceoverScene):
         step = ladder(self, rows, whys, keep=2, top=2.9, x=-1.2, align_index=None, buff=0.55, edge=6.8)
         cap = label(rf"two GTX 580s for ${days:g}$ days at their peak: \ "
                     rf"${avail / 1e18:.1f} \times 10^{{18}}$ FLOP \ $\Rightarrow$ \ ${100 * use:.0f}\%$ of it used",
-                    font_size=26, color=GPUC).move_to([0, 0.2, 0])
+                    font_size=26, color=GPUC).move_to([0, 0.0, 0])
         here = VGroup(
             label(rf"this computer, \ one core \ (${r1 / 1e9:.0f}$ GFLOP/s, measured): \ ${d1:.0f}$ days", font_size=26,
                   color=CPUC),
             label(rf"all ${int(mt['threads'])}$ cores \ (${rN / 1e9:.0f}$ GFLOP/s): \ ${dN:.0f}$ days", font_size=26,
+                  color=CPUC) if rN >= 1.5 * r1 else
+            label(rf"all ${int(mt['threads'])}$ cores: \ no faster than one, \ shared with other jobs", font_size=26,
                   color=CPUC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.6, 0])
         tag = note(r"computed: \ matrix products on this computer, \ at its best measured speed").to_corner(DR,
                                                                                                          buff=0.2)
-        cards = VGroup(*[RoundedRectangle(width=0.9, height=0.5, corner_radius=0.06, stroke_color=GPUC,
-                                          fill_color=GPUC, fill_opacity=0.5) for _ in range(2)]).arrange(DOWN, buff=0.1)
+        cards = VGroup(*[RoundedRectangle(width=0.6, height=0.36, corner_radius=0.05, stroke_color=GPUC,
+                                          fill_color=GPUC, fill_opacity=0.5) for _ in range(2)]).arrange(RIGHT, buff=0.1)
         cpu = RoundedRectangle(width=0.9, height=0.9, corner_radius=0.08, stroke_color=CPUC, fill_color=CPUC,
                                fill_opacity=0.3)
         cap.shift(RIGHT * 0.6)
@@ -159,6 +172,12 @@ class AlexNet(VoiceoverScene):
         cards.next_to(cap, LEFT, buff=0.35)
         cpu.next_to(here, LEFT, buff=0.35)
         faster = "faster" if dN < days else "slower"
+        if rN >= 1.5 * r1:
+            tail = (f", and all {int(mt['threads'])} cores together about {dN:.0f}: {faster} than two graphics cards "
+                    "from 2010, if every core did nothing but matrix products.")
+        else:
+            tail = (f". All {int(mt['threads'])} cores together should do better, but other jobs were using them when "
+                    "we measured, and together they were no faster than one.")
         with self.voiceover(
             "How much arithmetic was that? <bookmark mark='a'/> About 1.2 million images, times ninety passes, "
             "times three quarters of a billion multiply-adds per image, times two operations each, times three, "
@@ -167,8 +186,7 @@ class AlexNet(VoiceoverScene):
             f"about {avail / 1e18:.1f} times ten to the eighteen in five "
             f"and a half days, so the network kept them about {100 * use:.0f} percent busy. <bookmark mark='d'/> "
             f"On the {machine_name()} rendering this video, at the best speed we measured, one core would take "
-            f"about {d1:.0f} days, and all {int(mt['threads'])} cores together about {dN:.0f}: {faster} than two "
-            "graphics cards from 2010, if every core did nothing but matrix products."
+            f"about {d1:.0f} days" + tail
         ) as vo:
             step(0)
             vo.wait_until("a")

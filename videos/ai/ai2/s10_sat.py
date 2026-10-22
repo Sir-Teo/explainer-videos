@@ -145,7 +145,12 @@ class SAT(VoiceoverScene):
         def tree_of(k):
             return {"children": [tree_of(c) for c in nodes[k]["children"]]}
 
-        tree = SearchTree(tree_of(0), width=6.0, level_height=1.5, radius=0.13, center=[-2.6, 0.6, 0])
+        tree = SearchTree(tree_of(0), width=6.0, level_height=1.5, radius=0.13, center=[-2.6, 0.35, 0])
+        fm = MathTex(r"(a \lor b)", r"\land", r"(\lnot a \lor c)", r"\land", r"(\lnot a \lor \lnot c \lor d)", r"\land",
+                     r"(\lnot d \lor e)", r"\land", r"(\lnot d \lor \lnot e)", r"\land", r"(b \lor \lnot c)", r"\land",
+                     r"(\lnot b \lor c \lor e)", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
+        if fm.width > 13.2:
+            fm.width = 13.2
         # SearchTree numbers nodes breadth-first; map our depth-first ids onto them
         order = []
         q = [0]
@@ -179,7 +184,7 @@ class SAT(VoiceoverScene):
             steps.set_x(3.6)
         hcs = VGroup(history_card(1960, r"Davis \& Putnam", r"", width=3.0, color=HIST, font_size=18),
                      history_card(1962, r"Davis, Logemann \& Loveland", r"", width=3.4, color=HIST, font_size=18))
-        hcs.arrange(RIGHT, buff=0.2).move_to([3.6, -1.6, 0])
+        hcs.arrange(RIGHT, buff=0.2).to_corner(DR, buff=0.25)
         tag = note(r"computed on the illustrative formula").to_corner(DL, buff=0.2)
         with self.voiceover(
             "The classic method is DPLL, from Martin Davis and Hilary Putnam in 1960, made practical with George Logemann and "
@@ -188,15 +193,12 @@ class SAT(VoiceoverScene):
             "a clause has every literal false, back up and try the other value. <bookmark mark='d'/> On our little formula: " +
             story
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(hcs))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(steps[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(steps[2]))
+            steps.set_opacity(0.3)
+            self.play(FadeIn(tag), FadeIn(hcs), FadeIn(fm), FadeIn(steps), FadeIn(tree.nodes[0]))
+            for k_, mk in enumerate("abc"):
+                vo.wait_until(mk)
+                self.play(steps[k_].animate.set_opacity(1.0), Indicate(steps[k_], scale_factor=1.04))
             vo.wait_until("d")
-            self.play(FadeIn(tree.nodes[0]))
             for k in range(len(nodes)):
                 i = idx[k]
                 anims = [Create(tree.edges[i]), FadeIn(tree.nodes[i])] if i > 0 else []
@@ -219,7 +221,7 @@ class SAT(VoiceoverScene):
         lines = VGroup(*[curve(g.ax, A, d[f"psat_{n}"], c, 4) for n, c in zip(ns, cols)])
         lg = legend([(c, rf"$n = {n}$ variables") for n, c in zip(ns, cols)], font_size=20).move_to([4.6, 2.2, 0])
         thr = DashedLine(g.ax.c2p(4.267, 0), g.ax.c2p(4.267, 1), color=GREY_A, dash_length=0.08)
-        tl = label(r"$4.267$", font_size=20, color=GREY_A).next_to(thr, UP, buff=0.08)
+        tl = label(r"$4.267$", font_size=20, color=GREY_A).next_to(g.ax.c2p(4.267, 0.93), RIGHT, buff=0.08)
         cross = VGroup(*[label(rf"$n = {n}$: \ half at ${d[f'cross_{n}']:.2f}$, \ $90\%\to10\%$ over ${d[f'width_{n}']:.2f}$",
                                font_size=19, color=c) for n, c in zip(ns, cols)]).arrange(DOWN, buff=0.12,
                                                                                          aligned_edge=LEFT)
@@ -227,8 +229,9 @@ class SAT(VoiceoverScene):
         if cross.width > 4.6:
             cross.width = 4.6
             cross.set_x(4.6)
-        cite_ = note(r"$4.267$: \ the cavity method of statistical physics (M\'ezard, Parisi \& Zecchina 2002); "
-                     r"\ proved bounds $3.52$ and $4.49$", font_size=18).to_corner(DL, buff=0.2)
+        cite_ = note(r"$4.267$: \ the cavity method of statistical physics \\ (M\'ezard, Parisi \& Zecchina 2002); "
+                     r"\\ proved bounds: \ $3.52$ and $4.49$", font_size=18).next_to(cross, DOWN, buff=0.45)
+        cite_.set_x(min(cite_.get_x(), 6.9 - cite_.width / 2))
         tag = note(rf"computed: \ DPLL on ${sum(d['per']) * len(A):,}$ random formulas".replace(",", "{,}"))
         tag.to_corner(DR, buff=0.2)
         n0, n1 = ns[0], ns[-1]
@@ -339,7 +342,7 @@ class SAT(VoiceoverScene):
         lc = " \\lor ".join((r"\lnot " if l < 0 else "") + f"x_{{{abs(l)}}}" for l in learned)
         lt = MathTex(lc, font_size=36, color=LEARN)
         box = VGroup(label(r"learned clause:", font_size=24, color=LEARN), lt).arrange(RIGHT, buff=0.25)
-        box.to_edge(DOWN, buff=0.9)
+        box.to_edge(DOWN, buff=1.15)
         jump = label(rf"jump back to level ${bj}$, \ where it forces $\lnot x_{{{uip}}}$ at once", font_size=22,
                      color=GREY_A).next_to(box, DOWN, buff=0.15)
         hcs = VGroup(history_card(1996, r"Marques-Silva \& Sakallah: \ GRASP", r"", width=3.6, color=HIST, font_size=18),
