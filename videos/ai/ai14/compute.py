@@ -524,15 +524,20 @@ def _fewshot_prompt(demos, query):
     return "".join(lines) + f'"{query}" is from'
 
 
+CONTENT_FREE = "N/A"  # Zhao et al. (2021): a query with no content, to measure the model's bias between the labels
+
+
 def _fewshot_scores(model, items, shots=SHOTS):
-    """Accuracy at each k: does the model give the right title the higher log-probability?  All the prompts of an
-    item (every k, both titles) go through the model as one right-padded batch; padding after a sequence can't
-    change a causal model's outputs before it."""
+    """Accuracy at each k, raw and calibrated.  Raw: does the model give the right title the higher log-probability?
+    Calibrated (Zhao et al., 2021, "Calibrate before use"): subtract each title's log-probability after the same
+    examples and a content-free query ("N/A"), so that a fixed preference for one title cancels.  All the prompts of
+    an item (every k, both titles, real and content-free query) go through the model as one right-padded batch;
+    padding after a sequence can't change a causal model's outputs before it."""
     import torch
 
     from explainer.ai import novels as N
 
-    acc = {k: 0 for k in shots}
+    raw, cal = {k: 0 for k in shots}, {k: 0 for k in shots}
     model.eval()
     T = model.cfg.seq
     titles = {}
@@ -542,11 +547,12 @@ def _fewshot_scores(model, items, shots=SHOTS):
             seqs, ns = [], []
             for k in shots:
                 demos = it["demos"][:k] if k else []  # balanced: the first k of a list that alternates labels
-                p = N.encode(_fewshot_prompt(demos, it["query"]))
-                for lab in (a, b):
-                    c = titles.setdefault(lab, N.encode(" " + lab))
-                    seqs.append((p + c)[-(T + 1):])
-                    ns.append(len(c))
+                for query in (it["query"], CONTENT_FREE):
+                    p = N.encode(_fewshot_prompt(demos, query))
+                    for lab in (a, b):
+                        c = titles.setdefault(lab, N.encode(" " + lab))
+                        seqs.append((p + c)[-(T + 1):])
+                        ns.append(len(c))
             t = torch.zeros(len(seqs), max(len(x) for x in seqs), dtype=torch.long)
             for i, x in enumerate(seqs):
                 t[i, :len(x)] = torch.tensor(x)
@@ -556,8 +562,11 @@ def _fewshot_scores(model, items, shots=SHOTS):
                 m = len(x)
                 sc.append(float(lp[i, m - 1 - n:m - 1].gather(-1, t[i, m - n:m, None]).sum()))
             for j, k in enumerate(shots):
-                acc[k] += int((sc[2 * j] > sc[2 * j + 1]) == (it["answer"] == a))
-    return [acc[k] / len(items) for k in shots]
+                qa, qb, fa, fb = sc[4 * j:4 * j + 4]
+                truth = it["answer"] == a
+                raw[k] += int((qa > qb) == truth)
+                cal[k] += int((qa - fa > qb - fb) == truth)
+    return [raw[k] / len(items) for k in shots], [cal[k] / len(items) for k in shots]
 
 
 ICL_WINDOWS = 512  # held-out windows of 256 tokens for the loss at each position
@@ -578,13 +587,13 @@ def _icl_row(name, model, win, rep, items):
 
     pp = lm.per_position(model, win)
     r = lm.repeat_test(model, rep)
-    fs = _fewshot_scores(model, items)
+    fs_raw, fs = _fewshot_scores(model, items)
     c = model.count()
     early, late = float(pp[EARLY].mean()), float(pp[LATE].mean())
     row = dict(name=name, params=int(c["total"]), body=int(c["body"]), pos=pp.tolist(), early=early, late=late,
-               icl=late - early, windows=len(win), fewshot=fs, **r)
+               icl=late - early, windows=len(win), fewshot=fs, fewshot_raw=fs_raw, **r)
     print(f"  {name}: early {row['early']:.3f} late {row['late']:.3f} rep {r['acc1']:.2f}->{r['acc2']:.2f}"
-          f" few-shot {[round(x, 3) for x in fs]}", flush=True)
+          f" few-shot raw {[round(x, 3) for x in fs_raw]} calibrated {[round(x, 3) for x in fs]}", flush=True)
     return row
 
 

@@ -71,7 +71,8 @@ and a family of GPT-style models of growing size, searched for learning in conte
   "which of the thirty books?"; writing; the scoreboard row.
 * **14. Learning in context, in our own models.** Four GPT-style sizes on the same tokens, and the series' base model:
   loss at each position of the context; a training replay of how the curve forms; a repeated-list (induction) test; GPT-3
-  style few-shot "which book?" prompts with 0–8 examples; what our scale shows and doesn't.
+  style few-shot "which book?" prompts with 0–8 examples, calibrated against a content-free "N/A" query (Zhao et al.
+  2021); what our scale shows and doesn't.
 * **Recap.** The family tree, 2017–2026: time left to right, one lane per branch or lab (encoders, encoder–decoders,
   OpenAI, Meta, Mistral AI, DeepSeek, Moonshot, Alibaba), open weights filled and closed models hollow, a line to
   the lab's previous model or the published design a model built on (schematic); eight pictures of the part; where
@@ -146,7 +147,7 @@ model card, Hugging Face model cards and API metadata):
 
 References: Vaswani et al. (2017); Howard & Ruder (2018); Peters et al. (2018); Radford et al. (2018, 2019); Devlin et
 al. (2018); Wang et al., GLUE (2018), SuperGLUE (2019); Liu et al., RoBERTa (2019); Clark et al., ELECTRA (2020); Raffel
-et al., T5 (2019); Lewis et al., BART (2019); Wang et al. (2022); Kaplan et al. (2020); Brown et al. (2020); Hoffmann et
+et al., T5 (2019); Lewis et al., BART (2019); Wang et al. (2022); Kaplan et al. (2020); Brown et al. (2020); Zhao et al., Calibrate Before Use (2021); Hoffmann et
 al. (2022); Chen et al. (2021); Wei et al. (2021); Sanh et al. (2021); Ouyang et al. (2022); OpenAI, GPT-4 Technical
 Report and System Card (2023); Touvron et al., LLaMA and Llama 2 (2023); Jiang et al., Mistral 7B (2023), Mixtral (2024);
 Llama Team (2024); Chowdhery et al., PaLM (2022); Shazeer (2019, 2020); Zhang & Sennrich (2019); Xiong et al. (2020); Su
@@ -282,3 +283,4 @@ C ≈ 6ND，分别用运算次数和petaflop/s-天表示。
 | induction head, repeated-list test | 归纳头，重复列表测试 |
 | equal compute | 同等算力 |
 | lineage, family tree | 谱系，家族树 |
+| calibration (content-free input) | 校准（无内容输入） |

@@ -24,10 +24,10 @@
    "en": "In 2012, the neural network that started the deep learning boom, AlexNet, was trained in five to six days on two graphics cards made for video games. <bookmark mark='a'/> Twelve years later Meta trained Llama 3.1, a language model of 405 billion parameters, on 16,384 of NVIDIA's H100 GPUs: here they are, one square each. <bookmark mark='b'/> By Epoch AI's count, that run used about 81 million times as many floating-point operations as AlexNet. Almost all of them were multiplications and additions of matrices.",
    "zh": "2012年，掀起深度学习热潮的那个神经网络AlexNet，是在两块为电子游戏设计的显卡上，训练了五到六天。<bookmark mark='a'/>十二年后，Meta在16384块英伟达H100 GPU上训练了Llama 3.1，一个4050亿参数的语言模型：它们都在这里，一块GPU一个小方格。<bookmark mark='b'/>按Epoch AI的统计，这次训练用掉的浮点运算，大约是AlexNet的8100万倍。其中几乎全部，都是矩阵的乘法和加法。"
   },
-  "3b80b23b9b44": {
+  "7d2573fb81eb": {
    "scene": "Hook",
-   "en": "The computer making this video reports its processor as Intel Xeon Processor at 2.80 gigahertz. <bookmark mark='a'/> We measured how fast one of its cores multiplies matrices: at best, about 102 billion operations a second. <bookmark mark='b'/> At that speed, AlexNet's training would take about 53 days. <bookmark mark='c'/> Llama 3.1's would take about 12 million years.",
-   "zh": "制作这个视频的计算机，报告它的处理器是Intel Xeon Processor at 2.80 gigahertz。<bookmark mark='a'/>我们测了它的一个核心做矩阵乘法有多快：最快大约每秒1020亿次运算。<bookmark mark='b'/>照这个速度，AlexNet的训练要花大约53天。<bookmark mark='c'/>Llama 3.1的训练，要花大约1200万年。"
+   "en": "The computer making this video reports its processor as Intel Xeon Processor. <bookmark mark='a'/> We measured how fast one of its cores multiplies matrices: at best, about 102 billion operations a second. <bookmark mark='b'/> At that speed, AlexNet's training would take about 53 days. <bookmark mark='c'/> Llama 3.1's would take about 12 million years.",
+   "zh": "制作这个视频的计算机，报告它的处理器是Intel Xeon Processor。<bookmark mark='a'/>我们测了它的一个核心做矩阵乘法有多快：最快大约每秒1020亿次运算。<bookmark mark='b'/>照这个速度，AlexNet的训练要花大约53天。<bookmark mark='c'/>Llama 3.1的训练，要花大约1200万年。"
   },
   "4ff8ae8137e5": {
    "scene": "Hook",
@@ -172,7 +172,7 @@
   "bafbc60b0388": {
    "scene": "Matmul",
    "en": "We measured this on one core of this computer, multiplying two matrices of size 1,024 in C. <bookmark mark='a'/> The textbook triple loop: 0.43 billion operations a second. It walks down the columns of B, one cache line per number. <bookmark mark='b'/> The same arithmetic with the loops reordered, so every inner loop walks along rows: 12. <bookmark mark='c'/> Tiled: 18, 41 times the textbook loop. <bookmark mark='d'/> The best tile size was 256: three 256 by 256 tiles take 768 kilobytes, which fits in the 1024-kilobyte second-level cache. Past that, the tiles spill out and the speed falls. <bookmark mark='e'/> And the BLAS library numpy calls, tuned by experts, with tiles inside tiles and hand-written vector code: 92, 212 times the textbook loop, for exactly the same arithmetic.",
-   "zh": "我们在这台计算机的一个核心上，用C语言把两个1024阶的矩阵相乘，测了一下。"
+   "zh": "我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下，用的是C语言。<bookmark mark='a'/>教科书上的三重循环：每秒0.43千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：12。<bookmark mark='c'/>分块之后：18，是教科书循环的41倍。<bookmark mark='d'/>最好的块大小是256：three 256 by 256 tiles take 768 kilobytes, which fits in the 1024-kilobyte second-level cache. Past that, the tiles spill out and the speed falls.<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：92，是教科书循环的212倍，算术一模一样。"
   },
   "97cb80f0a6c8": {
    "scene": "Hierarchy",
