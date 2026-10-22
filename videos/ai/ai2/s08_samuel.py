@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MAXC, MINC, PART, PATH, SYMBOL, load
+from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MAXC, MINC, PART, PATH, SYMBOL, load, node_box
 
 FEATURE_TEX = [r"one in a line", r"two in a line", r"three in a line", r"centre column", r"safe threats"]
 FEATURE_WORDS = ["lone stones in open lines", "pairs in open lines", "threes in open lines", "stones in the centre",
@@ -93,6 +93,11 @@ class Samuel(VoiceoverScene):
         td.to_edge(DOWN, buff=0.25)
         ab = label(r"Alpha learns; \ Beta keeps its weights; \ when Alpha wins, \ Beta copies Alpha", font_size=22,
                    color=GREY_A).to_edge(UP, buff=0.35)
+        pair = VGroup(node_box(r"Alpha: \ learns", LEARN, font_size=30), node_box(r"Beta: \ fixed weights", GREY_B,
+                                                                                    font_size=30))
+        pair.arrange(RIGHT, buff=2.4).move_to(UP * 0.3)
+        vs = DoubleArrow(pair[0].get_right(), pair[1].get_left(), buff=0.2, color=GREY_B)
+        pair.add(vs, label(r"self-play", font_size=22, color=GREY_B).next_to(vs, UP, buff=0.1))
         with self.voiceover(
             "Samuel's learning rule is the seed of modern reinforcement learning. <bookmark mark='a'/> Keep the static score "
             "your evaluation gave your previous position. <bookmark mark='b'/> Two moves later, search from the new position "
@@ -101,8 +106,9 @@ class Samuel(VoiceoverScene):
             "<bookmark mark='e'/> Two copies played: Alpha learned, Beta kept its weights, and when Alpha won, Beta took them. "
             "Richard Sutton built on this idea when he formalized temporal-difference learning in 1988."
         ) as vo:
-            self.play(FadeIn(ab))
+            self.play(FadeIn(ab), FadeIn(pair))
             vo.wait_until("a")
+            self.play(FadeOut(pair), run_time=0.5)
             self.play(FadeIn(then), FadeIn(tl))
             vo.wait_until("b")
             self.play(GrowArrow(arrow), FadeIn(al), Create(tree.edge_group), FadeIn(tree.nodes), FadeIn(now_l))
@@ -205,7 +211,25 @@ class Samuel(VoiceoverScene):
                   font_size=24, color=GREY_A),
             label(rf"untrained ${100 * a0:.0f}\%$, \ hand-set ${100 * ap:.0f}\%$, \ learned ${100 * min(acc):.0f}$"
                   rf"--${100 * max(acc):.0f}\%$", font_size=26, color=FCOL),
-        ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(UP * 0.4)
+        ).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        if rows.width > 6.6:
+            rows.width = 6.6
+        rows.move_to([-3.3, 0.2, 0])
+        sc = axes([0, 2], [0, 1], x_length=4.4, y_length=3.0, ylabel=r"score per game \ (win 1, draw $\tfrac12$)",
+                  yticks=[0, 0.5, 1], center=[3.9, 0.0, 0])
+        half = DashedLine(sc.ax.c2p(0, 0.5), sc.ax.c2p(2, 0.5), color=GREY_B, dash_length=0.08)
+        sbars = VGroup()
+        for gi, (vals, col) in enumerate(((vz, PATH), (vp, HEUR))):
+            grp = VGroup()
+            for ri, v in enumerate(vals):
+                x = gi + 0.25 + 0.25 * ri
+                bh = max(sc.ax.c2p(0, v)[1] - sc.ax.c2p(0, 0)[1], 0.01)
+                grp.add(Rectangle(width=0.2, height=bh, stroke_width=0, fill_color=col, fill_opacity=0.85)
+                        .move_to(sc.ax.c2p(x, 0), aligned_edge=DOWN))
+            grp.add(label([r"vs untrained", r"vs hand-set"][gi], font_size=20, color=col)
+                    .next_to(sc.ax.c2p(gi + 0.5, 0), DOWN, buff=0.15))
+            sbars.add(grp)
+        sl = label(r"one bar per run", font_size=18, color=GREY_B).next_to(sc, DOWN, buff=0.45)
         head = label(rf"after ${d['games']:,}$ games, \ {len(runs)} runs \ (mean of the last three checkpoints)"
                      .replace(",", "{,}"), font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
         tag = note(r"computed: \ positions scored by Part 26's perfect solver").to_corner(DR, buff=0.2)
@@ -232,9 +256,10 @@ class Samuel(VoiceoverScene):
             " <bookmark mark='b'/> " + acc_v + " The curves were not smooth: Samuel saw his program wander too, and "
             "sometimes had to reset it by hand."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(sc), Create(half))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
+            self.play(FadeIn(rows[0]), FadeIn(rows[1]), *[GrowFromEdge(b, DOWN) for g_ in sbars for b in g_[:-1]],
+                      *[FadeIn(g_[-1]) for g_ in sbars], FadeIn(sl))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]), FadeIn(rows[3]))
         self.wait(0.3)
@@ -255,6 +280,9 @@ class Samuel(VoiceoverScene):
         cite_ = cite(r"Campbell, Hoane \& Hsu, \textit{Deep Blue}, \textit{Artificial Intelligence} (2002)")
         recipe = label(r"search, \ plus a human-designed sense of a good position", font_size=28, color=FCOL)
         recipe.to_edge(DOWN, buff=0.8)
+        ways = VGroup(node_box(r"more search", GCOST, font_size=32), node_box(r"more hand-crafted knowledge", HEUR,
+                                                                               font_size=32))
+        ways.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.3)
         with self.voiceover(
             "Chess went the other way: more search, more hand-crafted knowledge. <bookmark mark='a'/> In 1996 Garry Kasparov "
             "beat IBM's Deep Blue four games to two, and the team doubled the machine. <bookmark mark='b'/> In the 1997 rematch "
@@ -263,10 +291,11 @@ class Samuel(VoiceoverScene):
             "a half. <bookmark mark='c'/> Search plus a human-designed sense of a good position: Shannon's recipe of 1950, at "
             "enormous scale."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), LaggedStart(*[FadeIn(w_, shift=UP * 0.1) for w_ in ways], lag_ratio=0.5))
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
+            self.play(FadeOut(ways), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.1) for s_ in specs], lag_ratio=0.35))
             vo.wait_until("c")
             self.play(FadeIn(recipe))

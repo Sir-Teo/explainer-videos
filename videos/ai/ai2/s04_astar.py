@@ -56,6 +56,19 @@ class AStar(VoiceoverScene):
                           width=6.4, color=HIST).move_to(DOWN * 2.0)
         ex = label(r"on a map: \ $h$ = the straight-line distance to the goal", font_size=26, color=HEUR)
         ex.next_to(hc, UP, buff=0.3)
+        # Shakey's problem, from the first word: a route across a map with walls
+        d = load("grid")
+        free = np.asarray(d["free"]).astype(bool)
+        H, W = free.shape
+        mp = image_from_rgb(frontier_rgb(free, np.asarray(d["dijkstra_order"]), 0), width=3.3)
+        mp.move_to([0, 0.95, 0])
+        sr, sc = d["start"]
+        gr, gc = d["goal"]
+        prob = VGroup(mp, grid_frame(mp), Dot(cell_center(mp, (H, W), sr, sc), radius=0.08, color=WHITE),
+                      Star(n=5, outer_radius=0.13, color=PATH, fill_opacity=1).move_to(cell_center(mp, (H, W), gr, gc)))
+        prob.add(label(r"start", font_size=20, color=GREY_A).next_to(prob[2], DOWN, buff=0.1),
+                 label(r"goal", font_size=20, color=PATH).next_to(prob[3], DOWN, buff=0.1),
+                 label(r"find a short route, \\ quickly", font_size=24, color=GREY_A).next_to(mp, RIGHT, buff=0.4))
         with self.voiceover(
             "In 1968 Peter Hart, Nils Nilsson and Bertram Raphael, at the Stanford Research Institute, needed Shakey, the "
             "first mobile robot to plan its own moves, to find paths quickly. <bookmark mark='a'/> Their algorithm, A star, "
@@ -63,11 +76,10 @@ class AStar(VoiceoverScene):
             "<bookmark mark='c'/> h is a guess at the cost still to go: a heuristic. <bookmark mark='d'/> On a map, the "
             "straight-line distance to the goal."
         ) as vo:
-            hc.save_state()
-            hc.scale(1.3).move_to(UP * 0.3)
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(prob))
             vo.wait_until("a")
-            self.play(Restore(hc), Write(f))
+            self.play(FadeOut(prob), run_time=0.5)
+            self.play(Write(f))
             vo.wait_until("b")
             self.play(FadeIn(bg))
             vo.wait_until("c")

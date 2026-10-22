@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, PART, PATH, SYMBOL, load, logic_tex
+from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, PART, PATH, SYMBOL, load, logic_tex, node_box
 
 
 def clause_box(text: str, color=SYMBOL, font_size=30) -> VGroup:
@@ -90,6 +90,10 @@ class Logic(VoiceoverScene):
                       for i, row in enumerate(rows) if row[3]])
         concl = label(r"in every row where the facts hold, \ Wet holds: \ entailed", font_size=24, color=PATH)
         concl.to_edge(DOWN, buff=0.35).set_x(2.6)
+        flow = VGroup(node_box(r"what you know", SYMBOL, font_size=30), node_box(r"rules of inference", GREY_B,
+                                                                                    font_size=30),
+                      node_box(r"what follows", HEUR, font_size=30)).arrange(RIGHT, buff=1.0).move_to(UP * 0.2)
+        flow.add(*[Arrow(flow[k].get_right(), flow[k + 1].get_left(), buff=0.12, color=GREY_B) for k in range(2)])
         cost = label(r"$n$ symbols: \ $2^n$ rows", font_size=24, color=FAIL).next_to(tab, LEFT, buff=0.6).shift(DOWN * 1.6)
         with self.voiceover(
             "The other great idea of the era was logic: write down what you know, and let the machine work out what follows. "
@@ -99,8 +103,10 @@ class Logic(VoiceoverScene):
             "too: the facts entail it. <bookmark mark='e'/> But n symbols make two to the n rows. We need to derive "
             "conclusions, not enumerate worlds."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(m) for m in (flow[0], flow[3], flow[1], flow[4], flow[2])],
+                                               lag_ratio=0.4), run_time=3.0)
             vo.wait_until("a")
+            self.play(FadeOut(flow), run_time=0.5)
             self.play(FadeIn(kbl), LaggedStart(*[FadeIn(k) for k in kb], lag_ratio=0.4))
             vo.wait_until("b")
             self.play(FadeIn(q))
@@ -194,7 +200,12 @@ class Logic(VoiceoverScene):
     def unify(self):
         d = load("resolution")["fol"]
         info, proof = d["clauses"], d["proof"]
-        boxes, row = proof_layout(info, proof, x0=-6.6, width=13.2, y_top=1.8, dy=1.45, font_size=26)
+        boxes, row = proof_layout(info, proof, x0=-6.6, width=13.2, y_top=1.8, dy=1.45, font_size=24)
+        allb = VGroup(*boxes.values())
+        if allb.width > 13.4:  # the starting clauses are long: shrink the whole proof to fit the frame
+            top = allb.get_top()[1]
+            allb.scale(13.4 / allb.width).set_x(0)
+            allb.shift(UP * (top - allb.get_top()[1]))
         derived = [i for i in proof if info[i]["parents"] is not None]
         lines, subs = {}, {}
         for i in derived:
@@ -253,7 +264,8 @@ class Logic(VoiceoverScene):
                     font_size=20, color=GREY_A).next_to(bars, DOWN, buff=0.3)
         tag = note(r"computed: \ our prover; \ illustrative facts").to_corner(DR, buff=0.2)
         lesson = label(r"complete is not the same as fast: \ the strategy is everything", font_size=26, color=FCOL)
-        lesson.to_edge(DOWN, buff=0.35)
+        lesson.next_to(cap, DOWN, buff=0.6)
+        lesson.set_x(min(lesson.get_x(), 6.9 - lesson.width / 2))
         with self.voiceover(
             "Completeness is not efficiency. <bookmark mark='a'/> Give the prover eight family facts and three rules, and ask "
             "whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> Resolving every pair of clauses, "
