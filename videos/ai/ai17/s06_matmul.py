@@ -197,7 +197,8 @@ class Matmul(VoiceoverScene):
         whys = [why(r"$b^3$ multiply-adds per pair of tiles", font_size=22), why(r"three tiles must fit", font_size=22)]
         blocks = VGroup(*[VGroup(r_, w_).arrange(DOWN, aligned_edge=LEFT, buff=0.12) for r_, w_ in zip(rows, whys)])
         blocks.arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_corner(UL, buff=0.45)
-        hk = history_card(1981, r"Hong Jia-Wei \& H.~T.~Kung", r"no order of operations can move fewer than about "
+        hk = history_card(1981, r"Hong Jia-Wei \& H.~T.~Kung, \ \textit{the red-blue pebble game}",
+                          r"no order of operations can move fewer than about "
                           r"$n^3/\sqrt{M}$ numbers", width=5.0, color=L1C, font_size=20)
         hk.to_corner(UL, buff=0.3)
         with self.voiceover(

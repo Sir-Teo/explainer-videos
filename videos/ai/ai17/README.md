@@ -284,6 +284,12 @@ E4M3 和 E5M2 能表示的最大有限数。
 | rack, pod, superpod | 机柜，集群（pod），超级集群 |
 | wafer-scale engine | 晶圆级引擎 |
 | LPU | LPU（语言处理单元） |
+| through-silicon via (TSV), silicon interposer | 硅通孔，硅中介层 |
+| prefill, decode | 预填充，解码 |
+| skew (of a systolic array) | （脉动阵列的）错位 |
+| inference | 推断 |
+| multi-thread, single-thread | 多线程，单线程 |
+| load average | 平均负载 |
 | analog in-memory computing, phase-change memory | 模拟存内计算，相变存储器 |
 | neuromorphic computing, spiking neuron | 类脑计算，脉冲神经元 |
 | prefill, decode | 预填充，解码 |
@@ -293,6 +299,6 @@ Names: Gordon Moore → 戈登·摩尔; Robert Dennard → 罗伯特·登纳德;
 Hong Jia-Wei → 洪加威; Ian Buck → 伊恩·巴克; John Nickolls → 约翰·尼科尔斯; Alex Krizhevsky → 亚历克斯·克里热夫斯基; Ilya
 Sutskever → 伊利亚·苏茨克维; Geoffrey Hinton → 杰弗里·辛顿; Fei-Fei Li → 李飞飞; Jensen Huang → 黄仁勋; Sara Hooker → 萨拉·胡克;
 Samuel Williams, Andrew Waterman, David Patterson → 塞缪尔·威廉斯、安德鲁·沃特曼、大卫·帕特森; Philippe Tillet → 菲利普·蒂莱;
-Tri Dao → 道三（Tri Dao）; Vasily Volkov → 瓦西里·沃尔科夫; Herb Sutter → 赫布·萨特; Gene Amdahl → 吉恩·阿姆达尔; John Little →
+Tri Dao → 道三（Tri Dao）; Vasily Volkov → 瓦西里·沃尔科夫; Herb Sutter → 赫伯·萨特; Gene Amdahl → 吉恩·阿姆达尔; John Little →
 约翰·利特尔; Mark Horowitz → 马克·霍洛维茨; William Kahan → 威廉·卡亨; Jonathan Ross → 乔纳森·罗斯. Products stay in Latin script
 (GeForce, CUDA, H100, Blackwell, Rubin, NVLink, TPU, Ironwood, Trainium, Cerebras, Groq, TrueNorth, Loihi, Hala Point).
