@@ -1,11 +1,13 @@
 """Precompute everything numerical in Part 14 of the AI series ("The Language-Model Lineage").
 
-    python -m explainer.ai.novels               # first: the novels tokenizer and the series' base model
-    python -m videos.ai.ai14.compute            # everything missing (training: about 3 CPU-hours on 2 threads)
+    python tools/make.py ai14                   # everything, in order: Part 1's passage, the novels model, this
+    python -m videos.ai.ai14.compute            # everything missing (training: about 1.5 CPU-hours on 2 threads)
     python -m videos.ai.ai14.compute gpt_m --force
 
 Results are cached in ``.cache/ai14/<name>.json`` (+ ``.npz``); trained weights in ``.cache/ai14/<name>.pt``, with
-resumable checkpoints ``<name>.ckpt.pt`` while a run trains.  Published numbers live in ``facts.py`` (with their
+checkpoints ``<name>.ckpt.pt`` every 100 steps (model, optimizers, curves, snapshots; the data order is seeded by
+step), so an interrupted run resumes.  Items that need a trained model train it (or resume it) first; the series'
+base model is used only through ``explainer.ai.novels.load_base()``.  Published numbers live in ``facts.py`` (with their
 sources); Epoch AI's database of language models, trimmed, in ``epoch_lm.json``.
 
 Items:
@@ -18,7 +20,7 @@ Items:
     epoch      growth of training compute: a least-squares fit of log10(FLOP) against the date for Epoch AI's
                frontier language models (and for all its notable language models), and the compute tower
     gpt_xs, gpt_s, gpt_m, gpt_l
-               our GPT-style family on the thirty novels: four shapes, the same 6 million tokens each; curves and
+               our GPT-style family on the thirty novels: four shapes, the same 3 million tokens each; curves and
                snapshots (held-out loss, loss at each position, a repeated-list test, a sample)
     bert_m     a BERT-style masked model with gpt_m's shape, initial weights, data, steps and schedule: equal compute
     lineage    gpt_m against bert_m on tasks both can do: filling a blank among eight candidates, and naming the book
@@ -599,33 +601,28 @@ def base_tokens():
 # The scoreboard
 # ---------------------------------------------------------------------------
 def compute_scoreboard():
-    import json
-
+    """The series' scoreboard (Part 1's passage and baselines, read through Part 1's compute) with our models."""
     import torch
 
     from explainer.ai import novels as N
-    from explainer.tts import REPO_ROOT
+    from videos.ai.ai1 import compute as P1
     from videos.ai.ai14 import lm
 
     torch.set_num_threads(2)
-    passage = (REPO_ROOT / ".cache" / "ai1" / "passage.txt").read_text()
-    rows = []
-    raw = REPO_ROOT / ".cache" / "ai1" / "raw.json"
-    if raw.exists():
-        r = json.loads(raw.read_text())
-        rows += [dict(label="gzip", bits=r["compressors"]["gzip"], kind="compressor", part=1),
-                 dict(label="bzip2", bits=r["compressors"]["bzip2"], kind="compressor", part=1),
-                 dict(label=f"the previous {r['best']} characters", bits=r["best_bits"], kind="count", part=1)]
+    passage = P1.text("passage")
+    r = P1.load("raw")
+    rows = [dict(label="gzip", bits=r["compressors"]["gzip"], kind="compressor", part=1),
+            dict(label="bzip2", bits=r["compressors"]["bzip2"], kind="compressor", part=1),
+            dict(label=f"the previous {r['best']} characters", bits=r["best_bits"], kind="count", part=1)]
     ours = []
     for nm in FAMILY:
         m = _trained(nm)
         b = lm.bits_per_char(m, passage)
         ours.append(dict(name=nm, params=int(m.count()["total"]), bits=b["bits"], tokens=b["tokens"]))
     out = dict(rows=rows, ours=ours, chars=len(passage))
-    if (N.OUT / "base.pt").exists():  # never train it from here
-        base = N.load_base()
-        b = lm.bits_per_char(base, passage)
-        out["base"] = dict(bits=b["bits"], params=int(base.count()["total"]))
+    base = N.load_base()  # the series' own model (explainer.ai.novels; make.py trains it first)
+    b = lm.bits_per_char(base, passage)
+    out["base"] = dict(bits=b["bits"], params=int(base.count()["total"]))
     return out
 
 

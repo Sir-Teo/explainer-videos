@@ -80,11 +80,14 @@ and a family of GPT-style models of growing size, searched for learning in conte
 Run from the repo root:
 
 ```
-python -m explainer.ai.novels              # the series' tokenizer and base model (shared; cached in .cache/novels)
-python -m videos.ai.ai14.compute           # everything (training: about 3 CPU-hours on 2 threads; resumable)
-python tools/build.py ai14                 # English
-python tools/build.py ai14 --lang zh       # Chinese
+python tools/make.py ai14                  # everything: Part 1's passage, the novels model, this part's numbers, both cuts
+python -m videos.ai.ai14.compute           # just the numbers (trains what it needs; about 1.5 CPU-hours on 2 threads)
+python tools/qa_scene.py ai14 OurLineage   # one chapter, silent, with a contact sheet
 ```
+
+Every training run checkpoints every 100 steps and resumes after an interruption; every random choice is seeded
+(data order, initial weights, masking, the cloze and few-shot items, samples). The series' base model is used only
+through `explainer.ai.novels.load_base()`; Part 1's passage and baselines only through `videos.ai.ai1.compute`.
 
 `facts.py` holds every published number with its source; `compute.py` derives the rest and trains and evaluates our
 models (`lm.py`: the causal and masked models, training with checkpoints and snapshots, the measurements);

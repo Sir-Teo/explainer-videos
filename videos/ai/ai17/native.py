@@ -1,8 +1,8 @@
 """Build ``kernels.c`` with the machine's C compiler and call it through ctypes.
 
 The library goes to ``.cache/ai17/`` (named by a hash of the source and flags). ``load()`` returns None when no compiler
-works, and compute.py then measures with numpy instead and says so.  Tried in order: ``cc``, ``gcc``, ``clang``, each with
-``-O3 -march=native`` and then plain ``-O3`` (Apple clang on arm64 may refuse ``-march=native``).  No ``-ffast-math``:
+works, and compute.py then measures with numpy instead and says so.  Tried in order: ``$CC``, ``cc``, ``gcc``, ``clang``, each with
+``-O3 -march=native`` (``-O3 -mcpu=native`` on Apple Silicon) and then plain ``-O3``.  No ``-ffast-math``:
 the naive loop's dot product stays a sequential sum, as written.
 """
 
@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import ctypes
 import hashlib
+import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -41,11 +43,14 @@ def load():
     global _LIB
     if _LIB is not None:
         return _LIB
-    for cc in ("cc", "gcc", "clang"):
+    # $CC first, then the usual names; Apple clang on arm64 tunes with -mcpu=native (and may refuse -march=native)
+    native = ["-O3", "-mcpu=native"] if (sys.platform == "darwin" and platform.machine() == "arm64") else \
+        ["-O3", "-march=native"]
+    for cc in dict.fromkeys(c for c in (os.environ.get("CC"), "cc", "gcc", "clang") if c):
         path = shutil.which(cc)
         if not path:
             continue
-        for flags in (["-O3", "-march=native"], ["-O3"]):
+        for flags in (native, ["-O3"]):
             lib = _try(cc, flags)
             if lib is None:
                 continue

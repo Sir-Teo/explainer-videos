@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import CPUC, FLOPC, GPUC, PART, box_label, load, machine_name
+from videos.ai.ai17.common import CPUC, FLOPC, GPUC, PART, box_label, load
 from videos.ai.ai17.specs import AI_AND_COMPUTE, ALEXNET_DAYS, ALEXNET_FLOP, GPUS
 
 
@@ -185,7 +185,7 @@ class AlexNet(VoiceoverScene):
             "floating-point operations; the published estimate is 4.7. <bookmark mark='c'/> The two cards could do "
             f"about {avail / 1e18:.1f} times ten to the eighteen in five "
             f"and a half days, so the network kept them about {100 * use:.0f} percent busy. <bookmark mark='d'/> "
-            f"On the {machine_name()} rendering this video, at the best speed we measured, one core would take "
+            "On the computer rendering this video, at the best speed we measured, one core would take "
             f"about {d1:.0f} days" + tail
         ) as vo:
             step(0)

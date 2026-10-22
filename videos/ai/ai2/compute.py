@@ -41,6 +41,7 @@ Items:
 
 from __future__ import annotations
 
+import json
 import math
 import re
 import time
@@ -56,6 +57,36 @@ load = CACHE.load
 
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
+
+
+class Partial:
+    """The finished pieces of a long compute item, saved as they come (``.cache/ai2/<name>.partial.json``), so a run
+    that is killed resumes where it stopped. Pieces computed with other parameters are discarded; the file is
+    removed when the item is saved."""
+
+    def __init__(self, name: str, params):
+        self.path = CACHE.dir / f"{name}.partial.json"
+        self.params = json.loads(json.dumps(params, default=float))
+        data = json.loads(self.path.read_text()) if self.path.exists() else {}
+        self.done = data.get("done", {}) if data.get("params") == self.params else {}
+        if self.done:
+            print(f"  resuming {name}: {len(self.done)} pieces done", flush=True)
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.done
+
+    def __getitem__(self, key: str):
+        return self.done[key]
+
+    def __setitem__(self, key: str, value) -> None:
+        self.done[key] = json.loads(json.dumps(value, default=float))
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = self.path.with_suffix(".tmp")
+        tmp.write_text(json.dumps({"params": self.params, "done": self.done}, default=float))
+        tmp.replace(self.path)
+
+    def finish(self) -> None:
+        self.path.unlink(missing_ok=True)
 
 
 # ---------------------------------------------------------------------------
@@ -598,22 +629,30 @@ def compute_sat3(ns=(25, 50, 100, 200), alphas=tuple(np.round(np.arange(3.0, 5.6
     from videos.ai.ai2.sat import random_3sat, solve_dpll
 
     out = {"ns": list(ns), "alphas": list(alphas), "per": list(per)}
+    part = Partial("sat3", out)
     for n, k in zip(ns, per):
         g = rng(1000 + n)
         psat, med, mean, q90 = [], [], [], []
         for a in alphas:
-            m = int(round(a * n))
-            st, dec = [], []
-            for _ in range(k):
-                cl = random_3sat(g, n, m)
-                s, d = solve_dpll(cl, n)
-                st.append(s)
-                dec.append(d)
-            st, dec = np.array(st), np.array(dec, float)
-            psat.append(float((st == 1).mean()))
-            med.append(float(np.median(dec)))
-            mean.append(float(dec.mean()))
-            q90.append(float(np.quantile(dec, 0.9)))
+            key = f"{n}/{a}"
+            if key not in part:
+                m = int(round(a * n))
+                st, dec = [], []
+                for _ in range(k):
+                    cl = random_3sat(g, n, m)
+                    s, d = solve_dpll(cl, n)
+                    st.append(s)
+                    dec.append(d)
+                st, dec = np.array(st), np.array(dec, float)
+                part[key] = {"psat": float((st == 1).mean()), "median": float(np.median(dec)),
+                             "mean": float(dec.mean()), "q90": float(np.quantile(dec, 0.9)),
+                             "rng": g.bit_generator.state}
+            r = part[key]
+            g.bit_generator.state = r["rng"]
+            psat.append(r["psat"])
+            med.append(r["median"])
+            mean.append(r["mean"])
+            q90.append(r["q90"])
         out[f"psat_{n}"] = psat
         out[f"median_{n}"] = med
         out[f"mean_{n}"] = mean
@@ -629,6 +668,7 @@ def compute_sat3(ns=(25, 50, 100, 200), alphas=tuple(np.round(np.arange(3.0, 5.6
             return float(alphas[jj - 1] + (p[jj - 1] - level) / (p[jj - 1] - p[jj]) * (alphas[jj] - alphas[jj - 1]))
         out[f"width_{n}"] = at(0.1) - at(0.9)
         out[f"peak_{n}"] = float(alphas[int(np.argmax(med))])
+    part.finish()
     return out
 
 
@@ -671,26 +711,31 @@ def compute_cdcl():
         return np.array([list(cl) + [F] * (k - len(cl)) for cl in clauses] + [[-F] * k], np.int64), n + 1
 
     widths = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    part = Partial("cdcl", {"widths": widths, "big": [16, 32, 64], "mult": list(range(2, 9))})
     dp, cd = [], []
     for w in widths:
-        C, *_ = adder_miter(w)
-        arr, n = pad(C.clauses, C.n)
-        st, dec = S.solve_dpll(arr, n)
-        assert st == 0
-        dp.append(int(dec))
-        sv = S.CDCL(C.n, C.clauses)
-        assert sv.solve() is False
-        cd.append(sv.stats["conflicts"])
+        if f"adder/{w}" not in part:
+            C, *_ = adder_miter(w)
+            arr, n = pad(C.clauses, C.n)
+            st, dec = S.solve_dpll(arr, n)
+            assert st == 0
+            sv = S.CDCL(C.n, C.clauses)
+            assert sv.solve() is False
+            part[f"adder/{w}"] = [int(dec), sv.stats["conflicts"]]
+        dp.append(part[f"adder/{w}"][0])
+        cd.append(part[f"adder/{w}"][1])
     out.update(adder_widths=widths, adder_dpll=dp, adder_cdcl=cd)
     big = {}
     for w in (16, 32, 64):
-        C, *_ = adder_miter(w)
-        t = time.time()
-        sv = S.CDCL(C.n, C.clauses)
-        r = sv.solve()
-        assert r is False
-        big[w] = {"vars": C.n, "clauses": len(C.clauses), "conflicts": sv.stats["conflicts"],
-                  "secs": time.time() - t}
+        if f"big/{w}" not in part:
+            C, *_ = adder_miter(w)
+            t = time.time()
+            sv = S.CDCL(C.n, C.clauses)
+            r = sv.solve()
+            assert r is False
+            part[f"big/{w}"] = {"vars": C.n, "clauses": len(C.clauses), "conflicts": sv.stats["conflicts"],
+                                "secs": time.time() - t}
+        big[w] = part[f"big/{w}"]
     out["proved"] = big
     # the buggy adder: a counterexample, checked by evaluating both circuits
     w = 16
@@ -709,18 +754,21 @@ def compute_cdcl():
     # multipliers: is a * b = b * a?  hard for clause learning
     mw, mc = [], []
     for w in range(2, 9):
-        C = S.Circuit()
-        A = [C.var() for _ in range(w)]
-        B = [C.var() for _ in range(w)]
-        C.miter(C.array_multiplier(A, B), C.array_multiplier(B, A))
-        sv = S.CDCL(C.n, C.clauses)
-        r = sv.solve(max_conflicts=200_000)
-        if r is None:
+        if f"mult/{w}" not in part:
+            C = S.Circuit()
+            A = [C.var() for _ in range(w)]
+            B = [C.var() for _ in range(w)]
+            C.miter(C.array_multiplier(A, B), C.array_multiplier(B, A))
+            sv = S.CDCL(C.n, C.clauses)
+            r = sv.solve(max_conflicts=200_000)
+            assert r is not True
+            part[f"mult/{w}"] = None if r is None else sv.stats["conflicts"]
+        if part[f"mult/{w}"] is None:
             break
-        assert r is False
         mw.append(w)
-        mc.append(sv.stats["conflicts"])
+        mc.append(part[f"mult/{w}"])
     out.update(mult_widths=mw, mult_conflicts=mc)
+    part.finish()
     return out
 
 
@@ -866,17 +914,12 @@ def compute_eliza():
 
 
 def compute_tail():
-    from explainer.tts import REPO_ROOT
+    from videos.ai.ai1 import compute as ai1  # Part 1's corpus (it downloads and splits the novels if needed)
 
-    d = REPO_ROOT / ".cache" / "ai1"
-    if not (d / "train.txt").exists():
-        from videos.ai.ai1 import compute as ai1
-
-        ai1._save("corpus", ai1.compute_corpus())
     word = re.compile(r"[a-z]+(?:'[a-z]+)?")
-    train = word.findall((d / "train.txt").read_text().lower())
-    valid = word.findall((d / "valid.txt").read_text().lower())
-    passage = word.findall((d / "passage.txt").read_text().lower())
+    train = word.findall(ai1.text("train").lower())
+    valid = word.findall(ai1.text("valid").lower())
+    passage = word.findall(ai1.text("passage").lower())
     cnt = Counter(train)
     freqs = np.array(sorted(cnt.values(), reverse=True), float)
     cum = np.cumsum(freqs) / freqs.sum()

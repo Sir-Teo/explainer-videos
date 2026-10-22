@@ -26,8 +26,8 @@ ZH = {
     'f"In 2012, the neural network that started the deep learning boom, AlexNet':
         "2012年，掀起深度学习热潮的那个神经网络AlexNet，是在两块为电子游戏设计的显卡上，训练了五到六天。<bookmark mark='a'/>十二年后，Meta在16384块英伟达H100 GPU上训练了Llama 3.1，一个4050亿参数的语言模型：它们都在这里，一块GPU一个小方格。<bookmark mark='b'/>按Epoch AI的统计，这次训练用掉的浮点运算，大约是AlexNet的{ratio / 1000000.0:.0f}00万倍。其中几乎全部，都是矩阵的乘法和加法。",
 
-    'f"This video is being made on a {machine_name()}.':
-        "这个视频是在一台{machine_name()}上制作的。<bookmark mark='a'/>我们测了它的一个核心做矩阵乘法有多快：最快大约每秒{r1 / 1000000000.0:.0f}0亿次运算。<bookmark mark='b'/>照这个速度，AlexNet的训练要花大约{d_alex:.0f}天。<bookmark mark='c'/>Llama 3.1的训练，要花大约{y_llama / 1000000.0:.0f}00万年。",
+    'f"The computer making this video reports its processor as {machine_spoken()}.':
+        "制作这个视频的计算机，报告它的处理器是{machine_spoken()}。<bookmark mark='a'/>我们测了它的一个核心做矩阵乘法有多快：最快大约每秒{r1 / 1000000000.0:.0f}0亿次运算。<bookmark mark='b'/>照这个速度，AlexNet的训练要花大约{d_alex:.0f}天。<bookmark mark='c'/>Llama 3.1的训练，要花大约{y_llama / 1000000.0:.0f}00万年。",
 
     'That gap is the subject of this part.':
         "这道鸿沟，就是本部分的主题。为什么人工智能跑在图形处理器上？为它专门造的芯片，又会是什么样子？<bookmark mark='a'/>我们会沿着硬件的历史走下去：从时钟频率不再上涨的那一刻，经过GPU、CUDA和AlexNet，到矩阵乘法的算术，以及给它的速度设上限的屋顶线；再到谷歌的TPU、只有四位宽的数字，以及一整间屋子那么大、却像一台计算机一样工作的机器。<bookmark mark='b'/>只要能做到，我们就在制作这个视频的这台计算机上亲手测量。",
@@ -68,7 +68,7 @@ ZH = {
         "想想显卡是做什么的。<bookmark mark='a'/>屏幕上每个像素，都在自己的坐标上运行同一个小程序，叫着色器，而且没有哪个像素需要知道别的像素。<bookmark mark='b'/>一块1080p的屏幕大约有两百万个像素，每秒六十次：每秒超过一亿次运行同一个程序，彼此完全独立。<bookmark mark='c'/>1999年，英伟达把GeForce 256作为世界上第一块GPU，也就是图形处理器来卖；2001年，它的着色器变得可以编程。这是一块为“把一件事做极多次”而造的芯片。",
 
     'f"A CPU and a GPU spend their transistors differently.':
-        "CPU和GPU，把晶体管花在了不同的地方。<bookmark mark='a'/>CPU把它们花在让一条指令流跑得快上：大缓存，让数据离得近；分支预测器，猜程序会往哪边走；还有让指令乱序执行的机制。<bookmark mark='b'/>GPU把它们花在算术上：许多小处理器，英伟达叫它们流式多处理器，每个都是一组简单的通道。<bookmark mark='c'/>制作这个视频的计算机是一台{machine_name()}，有{m['cores']}个核心，每个核心的向量单元是{lanes}个数宽。一块H100有132个流式多处理器，每个有128条通道：差不多一万七千条。<bookmark mark='d'/>每条通道都又慢又简单。只是数量极多。",
+        "CPU和GPU，把晶体管花在了不同的地方。<bookmark mark='a'/>CPU把它们花在让一条指令流跑得快上：大缓存，让数据离得近；分支预测器，猜程序会往哪边走；还有让指令乱序执行的机制。<bookmark mark='b'/>GPU把它们花在算术上：许多小处理器，英伟达叫它们流式多处理器，每个都是一组简单的通道。<bookmark mark='c'/>制作这个视频的计算机有{m['cores']}个核心，每个核心的向量单元是{lanes}个数宽。一块H100有132个流式多处理器，每个有128条通道：差不多一万七千条。<bookmark mark='d'/>每条通道都又慢又简单。只是数量极多。",
 
     'f"Simple lanes are the easy part.':
         "简单的通道是容易的部分。难的是喂饱它们，因为内存离得很远。<bookmark mark='a'/>排队论里有一条定律，是约翰·利特尔1961年提出的：系统里的东西的数量，等于它们到达的速率，乘以每个停留的时间。<bookmark mark='b'/>用在内存上，它说的是：要让内存一直忙着，已经请求、还没收到的字节数，必须等于带宽乘以延迟。<bookmark mark='c'/>研究人员测得，Hopper GPU的内存大约在{round(lat_s * 1000000000.0, -1):.0f}纳秒之外。每秒两太字节，就需要每时每刻大约有{round(inflight / 1000.0, -1):.0f}千字节在路上：成千上万个请求。<bookmark mark='d'/>这台计算机的一个核心，实测只需要大约{ours / 64:.0f}个缓存行在路上，它靠预取器来做到：预取器会猜一段长而规则的读取接下来的地址。GPU用另一种办法凑出那成千上万个请求：成千上万个线程，每个都在等自己的那次读取。",
@@ -106,7 +106,7 @@ ZH = {
         "让这件事成为可能的，是两块游戏显卡。<bookmark mark='a'/>这个网络有六千万个参数，一块3GB显存的GeForce GTX 580，训练时装不下它。于是克里热夫斯基把它一分为二：每一层的卷积核，一半放在一块卡上，一半放在另一块上。<bookmark mark='b'/>两半只在少数几层交换结果，好让两块卡之间的通信量小一些。<bookmark mark='c'/>卷积是他自己用CUDA写的，写在一个叫cuda-convnet的库里。训练花了五到六天，把120万张图片过了九十遍。",
 
     'f"How much arithmetic was that?':
-        "那是多少算术？<bookmark mark='a'/>大约120万张图片，乘以九十遍，乘以每张图四分之三个十亿次乘加，每次乘加算两次运算，再乘以三，算上反向传播：<bookmark mark='b'/>大约{prod / 1e+17:.1f}乘以10的17次方次浮点运算；公开的估计是4.7。<bookmark mark='c'/>两块卡在五天半里能做大约{avail / 1e+18:.1f}乘以10的18次方次，所以这个网络让它们大约{100 * use:.0f}%的时间在忙。<bookmark mark='d'/>在渲染这个视频的这台{machine_name()}上，按我们测到的最快速度，一个核心要大约{d1:.0f}天{tail}",
+        "那是多少算术？<bookmark mark='a'/>大约120万张图片，乘以九十遍，乘以每张图四分之三个十亿次乘加，每次乘加算两次运算，再乘以三，算上反向传播：<bookmark mark='b'/>大约{prod / 1e+17:.1f}乘以10的17次方次浮点运算；公开的估计是4.7。<bookmark mark='c'/>两块卡在五天半里能做大约{avail / 1e+18:.1f}乘以10的18次方次，所以这个网络让它们大约{100 * use:.0f}%的时间在忙。<bookmark mark='d'/>在渲染这个视频的计算机上，按我们测到的最快速度，一个核心要大约{d1:.0f}天{tail}",
 
     "f', and all {int(mt['threads'])} cores together about {dN:.0f}":
         "，全部{int(mt['threads'])}个核心一起要大约{dN:.0f}天：比2010年的两块显卡{faster}，前提还是每个核心只做矩阵乘法。",
@@ -133,11 +133,20 @@ ZH = {
     "That's what tiling does.":
         "这就是分块要做的事。<bookmark mark='a'/>把C切成b乘b的块。要算其中一块，就沿着A的一条和B的一条走，每次各取一个b乘b的块。<bookmark mark='b'/>把这两块搬进快速存储，相乘，加到C的那一块上，然后往下走。<bookmark mark='c'/>每个搬进来的数被用了b次，所以算术强度是b除以4字节。<bookmark mark='d'/>上限在于快速存储：三个块必须放得下。快速存储越大，块越大，复用越多。<bookmark mark='e'/>1981年，洪加威和孔祥重证明，没有哪种顺序能好得多：任何计算这个乘积的方法，搬运的数据量至少是n立方除以快速存储大小的平方根这个量级。",
 
-    'f"We measured this on one core of this computer':
-        "我们在这台计算机的一个核心上，用C语言把两个1024阶的矩阵相乘，测了一下。<bookmark mark='a'/>教科书上的三重循环：每秒{gflops(r['naive'])}千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：{gflops(r['ikj'])}。<bookmark mark='c'/>分块之后：{gflops(blk[kb])}，是教科书循环的{speed_tile:.0f}倍。<bookmark mark='d'/>最好的块大小是{best_b}：{where}。再大，块就装不下了，速度随之下降。<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：{gflops(r['blas'])}，是教科书循环的{speed_blas:.0f}倍，算术一模一样。",
+    'how + f" <bookmark mark=\'a\'/> The textbook triple loop':
+        "{how}<bookmark mark='a'/>教科书上的三重循环：每秒{gflops(r['naive'])}千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：{gflops(r['ikj'])}。<bookmark mark='c'/>分块之后：{gflops(blk[kb])}，是教科书循环的{speed_tile:.0f}倍。<bookmark mark='d'/>最好的块大小是{best_b}：{where}{past}<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：{gflops(r['blas'])}，是教科书循环的{speed_blas:.0f}倍，算术一模一样。",
 
-    'f"three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes, which fits':
-        "三个{best_b}乘{best_b}的块占{ws / 1024:.0f}千字节，正好放得进这个核心{l2 / 1024:.0f}千字节的二级缓存",
+    '. Past that, the tiles spill out and the speed falls.':
+        '。再大，块就装不下了，速度随之下降。',
+
+    'We measured this on one core of this computer, multiplying two matrices of size 1,024 in C.':
+        '我们在这台计算机的一个核心上，用C语言把两个1024阶的矩阵相乘，测了一下。',
+
+    'We measured this on one core of this computer, multiplying two matrices of size 1,024. It has no C':
+        '我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下。这台计算机没有C编译器，所以循环用的是Python，最内层交给numpy。',
+
+    "f'three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes, which fits":
+        "三个{best_b}乘{best_b}的块占{ws / 1024:.0f}千字节，正好放得进{l2 / 1024:.0f}千字节的二级缓存",
 
     "f'three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes'":
         "三个{best_b}乘{best_b}的块占{ws / 1024:.0f}千字节",
@@ -355,6 +364,7 @@ ZH = {
 }
 
 PHRASES = {
+    ', the largest we tried.': '，也是我们试过的最大的块。',
     'faster': '更快',
     'slower': '更慢',
     'and the measurements land on it': '测量值正好落在预测上',

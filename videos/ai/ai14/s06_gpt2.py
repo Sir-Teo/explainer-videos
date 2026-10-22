@@ -133,8 +133,8 @@ class GPT2(VoiceoverScene):
         pts = [ax.c2p(math.log10(p), a) for p, a in zip(params, acc)]
         line = VMobject(color=DECODER, stroke_width=4).set_points_as_corners(pts)
         dots = VGroup(*[Dot(p, radius=0.08, color=DECODER) for p in pts])
-        vals = VGroup(*[MathTex(rf"{a:.0f}\%", font_size=22, color=DECODER).next_to(d, UL, buff=0.05)
-                        for a, d in zip(acc, dots)])
+        vals = VGroup(*[MathTex(rf"{a:.0f}\%", font_size=22, color=DECODER).next_to(d, side, buff=0.08)
+                        for a, d, side in zip(acc, dots, (UL, LEFT, UL, UL))])
         side = VGroup(
             label(rf"records on ${G['sota_lm']}$ of ${G['lm_sets']}$ language-modelling benchmarks, \\ with no "
                   r"training on any of them", font_size=22, color=WHITE),

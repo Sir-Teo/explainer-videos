@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import (BYTEC, CPUC, FLOPC, GPUC, L2C, PART, box_label, code_lines, cpu_die, gpu_die, load,
-                                   machine_name)
+from videos.ai.ai17.common import BYTEC, CPUC, FLOPC, GPUC, L2C, PART, box_label, code_lines, cpu_die, gpu_die, load
 from videos.ai.ai17.specs import H800_LAT
 
 
@@ -90,8 +89,8 @@ class Throughput(VoiceoverScene):
             "one stream of instructions fast: large caches, so data is close; branch predictors that guess which "
             "way the program will go; machinery to run instructions out of order. <bookmark mark='b'/> A GPU spends "
             "them on arithmetic: many small processors, NVIDIA calls them streaming multiprocessors, each a block of "
-            "simple lanes. <bookmark mark='c'/> The computer making this video, a "
-            f"{machine_name()}, has {m['cores']} cores, each with vector units {lanes} numbers wide. An H100 has "
+            "simple lanes. <bookmark mark='c'/> The computer making this video has "
+            f"{m['cores']} cores, each with vector units {lanes} numbers wide. An H100 has "
             "132 streaming multiprocessors with 128 lanes each: almost seventeen thousand. <bookmark mark='d'/> Each "
             "lane is slow and simple. There are just a great many of them."
         ) as vo:

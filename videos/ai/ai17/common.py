@@ -7,6 +7,7 @@ Instruments that deserve sharing with Parts 18 and 19 (``roofline_axes``, ``ring
 from __future__ import annotations
 
 import math
+import re
 
 import numpy as np
 
@@ -38,6 +39,12 @@ COLORS = {r"A": A_C, r"B": B_C, r"C": C_C, r"P": FLOPC, r"\beta": BYTEC, r"I": F
 def machine_name() -> str:
     m = load("machine")
     return m.get("model_short") or m.get("model", "this computer")
+
+
+def machine_spoken() -> str:
+    """The processor's name as the narrator should say it: 'Intel Xeon Processor at 2.80 gigahertz', 'Apple M3 Pro'."""
+    name = machine_name().replace(" @ ", " at ").replace("@", " at ")
+    return re.sub(r"(\d)\s*GHz\b", r"\1 gigahertz", name)
 
 
 def gflops(x: float) -> str:

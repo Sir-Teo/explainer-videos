@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import BYTEC, COMMC, CPUC, FLOPC, GPUC, PART, load, machine_name
+from videos.ai.ai17.common import BYTEC, COMMC, CPUC, FLOPC, GPUC, PART, load, machine_name, machine_spoken
 from videos.ai.ai17.specs import ALEXNET_FLOP, LLAMA31_FLOP, LLAMA31_GPUS
 
 
@@ -68,12 +68,11 @@ class Hook(VoiceoverScene):
         y_llama = LLAMA31_FLOP / r1 / (86400 * 365.25)
         chip = RoundedRectangle(width=2.6, height=2.6, corner_radius=0.15, stroke_color=CPUC, stroke_width=2.5,
                                 fill_color=CPUC, fill_opacity=0.12).move_to([-4.2, 0.4, 0])
-        cl = label(machine_name(), font_size=20, color=CPUC).next_to(chip, DOWN, buff=0.2)
+        cl = data_text(machine_name(), font_size=20, color=CPUC).next_to(chip, DOWN, buff=0.2)
         if cl.width > 4.4:
             cl.width = 4.4
         meas = VGroup(label(r"one core, \ measured:", font_size=24, color=CPUC),
-                      label(rf"${r1 / 1e9:.0f}$ billion", font_size=30, color=WHITE),
-                      label(r"FLOP/s", font_size=24, color=CPUC)).arrange(DOWN, buff=0.15)
+                      label(rf"${r1 / 1e9:.0f}$ GFLOP/s", font_size=30, color=WHITE)).arrange(DOWN, buff=0.15)
         meas.move_to(chip)
         if meas.width > 2.4:
             meas.width = 2.4
@@ -84,8 +83,8 @@ class Hook(VoiceoverScene):
         tag = note(r"computed: \ matrix products on this computer, \ one thread, \ best of seven").to_corner(DR,
                                                                                                          buff=0.2)
         with self.voiceover(
-            f"This video is being made on a {machine_name()}. <bookmark mark='a'/> We measured how fast one of its "
-            f"cores multiplies matrices: at best, about {r1 / 1e9:.0f} billion operations a second. "
+            f"The computer making this video reports its processor as {machine_spoken()}. <bookmark mark='a'/> We "
+            f"measured how fast one of its cores multiplies matrices: at best, about {r1 / 1e9:.0f} billion operations a second. "
             "<bookmark mark='b'/> At that speed, AlexNet's training would take about "
             f"{d_alex:.0f} days. <bookmark mark='c'/> Llama 3.1's would take about {y_llama / 1e6:.0f} million years."
         ) as vo:
