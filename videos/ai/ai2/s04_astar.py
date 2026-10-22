@@ -302,7 +302,7 @@ class AStar(VoiceoverScene):
         if rows.width > 6.4:
             rows.width = 6.4
         rows.set_x(6.9 - rows.width / 2)
-        bound = label(r"weighted A* is never more than $\times 2$ off: \ $f = g + 2h$ overestimates by at most $2$",
+        bound = label(r"weighted A* is never more than $\times 2$ off: \ $2h$ overestimates by at most a factor of $2$",
                       font_size=20, color=GREY_A).next_to(rows, DOWN, buff=0.35)
         if bound.width > 6.4:
             bound.width = 6.4

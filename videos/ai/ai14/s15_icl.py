@@ -17,8 +17,10 @@ def smooth(y, k=9):
 
 
 def rows_():
-    d = load("icl")
-    return d, d["rows"]
+    """The family's rows and the series' base model's (a separate item: it needs the novels model)."""
+    d, b = load("icl"), load("icl_base")
+    d = dict(d, base_tokens=b["base_tokens"])
+    return d, list(d["rows"]) + list(b["rows"])
 
 
 def tag_of(r):

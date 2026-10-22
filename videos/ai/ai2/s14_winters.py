@@ -41,7 +41,7 @@ class Winters(VoiceoverScene):
                                                                                                      buff=0.45)
         promise = VGroup(label(r"promised, $1958$: \ a computer chess champion within ten years", font_size=32,
                                color=HIST),
-                         note(r"Simon \& Newell (chapter one's prediction)", font_size=22),
+                         note(r"Simon \& Newell: \ the forecast from the opening", font_size=22),
                          label(r"by the late $1960$s: \ the bills came due", font_size=30, color=FAIL))
         promise.arrange(DOWN, buff=0.3).move_to(UP * 0.3)
         with self.voiceover(

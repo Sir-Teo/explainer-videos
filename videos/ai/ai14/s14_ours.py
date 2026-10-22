@@ -333,9 +333,8 @@ class OurLineage(VoiceoverScene):
         VGroup(gw, bw).arrange(RIGHT, buff=0.6, aligned_edge=UP).move_to([0, 1.3, 0])
         ours = {r["name"]: r for r in S["ours"]}["gpt_m"]
         rows = [dict(label=r["label"], bits=r["bits"], kind=r["kind"]) for r in S["rows"]]
-        if "base" in S:
-            rows.append(dict(label=rf"the series' model, \ ${S['base']['params'] / 1e6:.1f}$M", bits=S["base"]["bits"],
-                             kind="lm"))
+        B = load("scoreboard_base")
+        rows.append(dict(label=rf"the series' model, \ ${B['params'] / 1e6:.1f}$M", bits=B["bits"], kind="lm"))
         rows.append(dict(label=rf"our GPT-style model, \ ${ours['params'] / 1e6:.1f}$M", bits=ours["bits"], kind="lm"))
         board = scoreboard(rows, highlight=(len(rows) - 1,), max_bits=6.0, row_h=0.46, font_size=20, bar_width=5.0,
                            label_width=3.8).scale(0.9)

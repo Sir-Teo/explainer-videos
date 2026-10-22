@@ -75,11 +75,19 @@ cited on screen.
 Run from the repo root:
 
 ```
+python tools/make.py ai2                            # everything: the computations, then the films, resumable
 nice -n 15 python -m videos.ai.ai2.compute          # every experiment, about half an hour on one core
 nice -n 15 python -m videos.ai.ai2.compute --force sat3
 python tools/build.py ai2                           # English
 python tools/build.py ai2 --lang zh                 # Chinese
 ```
+
+Every random choice is seeded (the resolution prover also visits literals in a fixed order, so its counts don't depend
+on Python's hash seed). The two long items checkpoint as they go: `sat3` (about 15 minutes) after every
+(n, ratio) cell, with the random stream's state, and `cdcl` (about 7 minutes) after every solver run, in
+`.cache/ai2/<item>.partial.json`; a killed run resumes there and draws the same formulas. The long-tail item reads
+Part 1's novels through Part 1's `compute` (which downloads them if needed). Nothing forks or compiles C: the
+inner loops are Numba, which runs on macOS (Apple Silicon) and Linux alike.
 
 `search.py` (grid search, the 8- and 15-puzzles, pattern databases), `local.py` (queens, berlin52, annealing, the
 genetic algorithm), `play.py` (game trees, alpha–beta counts, the Samuel learner; Connect Four from Part 26's

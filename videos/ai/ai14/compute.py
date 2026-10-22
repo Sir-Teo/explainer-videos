@@ -25,9 +25,11 @@ Items:
     bert_m     a BERT-style masked model with gpt_m's shape, initial weights, data, steps and schedule: equal compute
     lineage    gpt_m against bert_m on tasks both can do: filling a blank among eight candidates, and naming the book
                a held-out sentence comes from with a linear probe on frozen features; plus bits per character
-    icl        in-context learning as the family grows (and the series' base model): the loss at each position of
-               the context, the repeated-list test, and few-shot "which book?" prompts with 0-8 examples
+    icl        in-context learning as the family grows: the loss at each position of the context, the repeated-list
+               test, and few-shot "which book?" prompts with 0-8 examples
     scoreboard bits per character on the scoreboard's passage (The Maltese Falcon, ch. 2) for our models
+    icl_base, scoreboard_base
+               the same for the series' base model (explainer.ai.novels.load_base())
 """
 
 from __future__ import annotations
@@ -558,35 +560,51 @@ def _fewshot_scores(model, items, shots=SHOTS):
     return [acc[k] / len(items) for k in shots]
 
 
-def compute_icl():
-    import torch
-
+def _icl_setup():
     from explainer.ai import novels as N
     from videos.ai.ai14 import lm
 
-    torch.set_num_threads(2)
     train, valid = N.token_arrays()
-    win = lm.val_windows(valid, 128)
-    rep = lm.repeat_batch(lm.word_tokens(train))
-    items = _fewshot_items()
+    return lm.val_windows(valid, 128), lm.repeat_batch(lm.word_tokens(train)), _fewshot_items()
+
+
+def _icl_row(name, model, win, rep, items):
+    """One model's in-context measurements: loss at each position, the repeated list, few-shot 'which book?'."""
+    from videos.ai.ai14 import lm
+
+    pp = lm.per_position(model, win)
+    r = lm.repeat_test(model, rep)
+    fs = _fewshot_scores(model, items)
+    c = model.count()
+    row = dict(name=name, params=int(c["total"]), body=int(c["body"]), pos=pp.tolist(), early=float(pp[8:24].mean()),
+               late=float(pp[192:].mean()), icl=float(pp[192:].mean() - pp[8:24].mean()), fewshot=fs, **r)
+    print(f"  {name}: early {row['early']:.3f} late {row['late']:.3f} rep {r['acc1']:.2f}->{r['acc2']:.2f}"
+          f" few-shot {[round(x, 3) for x in fs]}", flush=True)
+    return row
+
+
+def compute_icl():
+    """In-context learning in our family (the series' base model is the item icl_base)."""
+    import torch
+
+    torch.set_num_threads(2)
+    win, rep, items = _icl_setup()
     out = dict(shots=SHOTS, books=FEW_SHOT_BOOKS, n_items=len(items), example=_fewshot_prompt(items[0]["demos"][:2],
                                                                                               items[0]["query"]),
                example_answer=items[0]["answer"], example_pair=list(items[0]["pair"]))
-    models = [(nm, _trained(nm)) for nm in FAMILY]
-    models.append(("base", N.load_base()))  # the series' own model (explainer.ai.novels; make.py trains it first)
-    rows = []
-    for nm, m in models:
-        pp = lm.per_position(m, win)
-        r = lm.repeat_test(m, rep)
-        fs = _fewshot_scores(m, items)
-        c = m.count()
-        rows.append(dict(name=nm, params=int(c["total"]), body=int(c["body"]), pos=pp.tolist(), early=float(pp[8:24].mean()),
-                         late=float(pp[192:].mean()), icl=float(pp[192:].mean() - pp[8:24].mean()), fewshot=fs, **r))
-        print(f"  {nm}: early {rows[-1]['early']:.3f} late {rows[-1]['late']:.3f} rep {r['acc1']:.2f}->{r['acc2']:.2f}"
-              f" few-shot {[round(x, 3) for x in fs]}", flush=True)
-    out["rows"] = rows
-    out["base_tokens"] = base_tokens()
+    out["rows"] = [_icl_row(nm, _trained(nm), win, rep, items) for nm in FAMILY]
     return out
+
+
+def compute_icl_base():
+    """The same measurements for the series' own base model (explainer.ai.novels; make.py trains it first)."""
+    import torch
+
+    from explainer.ai import novels as N
+
+    torch.set_num_threads(2)
+    win, rep, items = _icl_setup()
+    return dict(rows=[_icl_row("base", N.load_base(), win, rep, items)], base_tokens=base_tokens())
 
 
 def base_tokens():
@@ -604,7 +622,6 @@ def compute_scoreboard():
     """The series' scoreboard (Part 1's passage and baselines, read through Part 1's compute) with our models."""
     import torch
 
-    from explainer.ai import novels as N
     from videos.ai.ai1 import compute as P1
     from videos.ai.ai14 import lm
 
@@ -619,11 +636,21 @@ def compute_scoreboard():
         m = _trained(nm)
         b = lm.bits_per_char(m, passage)
         ours.append(dict(name=nm, params=int(m.count()["total"]), bits=b["bits"], tokens=b["tokens"]))
-    out = dict(rows=rows, ours=ours, chars=len(passage))
-    base = N.load_base()  # the series' own model (explainer.ai.novels; make.py trains it first)
-    b = lm.bits_per_char(base, passage)
-    out["base"] = dict(bits=b["bits"], params=int(base.count()["total"]))
-    return out
+    return dict(rows=rows, ours=ours, chars=len(passage))
+
+
+def compute_scoreboard_base():
+    """The series' base model on the same passage (explainer.ai.novels; make.py trains it first)."""
+    import torch
+
+    from explainer.ai import novels as N
+    from videos.ai.ai1 import compute as P1
+    from videos.ai.ai14 import lm
+
+    torch.set_num_threads(2)
+    base = N.load_base()
+    b = lm.bits_per_char(base, P1.text("passage"))
+    return dict(bits=b["bits"], params=int(base.count()["total"]), tokens=b["tokens"])
 
 
 ITEMS = {
@@ -639,6 +666,8 @@ ITEMS = {
     "lineage": compute_lineage,
     "icl": compute_icl,
     "scoreboard": compute_scoreboard,
+    "icl_base": compute_icl_base,
+    "scoreboard_base": compute_scoreboard_base,
 }
 CACHE.items = ITEMS
 
