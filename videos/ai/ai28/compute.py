@@ -481,6 +481,35 @@ def compute_bon(Ns=(1, 2, 4, 8, 16, 32, 64, 128, 256)):
     return dict(Ns=list(Ns), acc=acc, kl=kl, bound=bound)
 
 
+def compute_entropy_fit():
+    """Cui et al. (2025) found accuracy R and policy entropy H related by R = -a exp(H) + b during RL.  Fit it to every
+    checkpoint of every RL run in ``objectives`` (H in nats per digit; least squares, linear in a and b)."""
+    o = load("objectives")
+    H, R, V = [], [], []
+    for v in o["variants"]:
+        if v == "dpo":
+            continue
+        C_ = np.asarray(o[f"{v}_curves"])  # (seeds, checkpoints, 4): step, accuracy, entropy (bits), KL
+        H.append(C_[:, :, 2].ravel() * math.log(2))  # nats: the law is written with e^H
+        R.append(C_[:, :, 1].ravel())
+        V += [v] * C_[:, :, 2].size
+    H, R = np.concatenate(H), np.concatenate(R)
+    X = np.stack([-np.exp(H), np.ones_like(H)], 1)
+    (a, b), *_ = np.linalg.lstsq(X, R, rcond=None)
+    pred = X @ np.array([a, b])
+    r2 = 1 - float(((R - pred) ** 2).sum() / ((R - R.mean()) ** 2).sum())
+    return dict(H=H, R=R, a=float(a), b=float(b), r2=r2, ceiling=float(b - a), variant=V)
+
+
+def compute_passk_guess():
+    """A checker-backed guesser: pass@k of guessing uniformly among the 199 possible sums of two two-digit numbers
+    (20 to 198), 1 - (198/199)^k, at the k of the objectives item."""
+    from videos.ai.ai28.objectives import KS
+
+    m = 198 - 20 + 1
+    return dict(ks=KS, m=m, passk=[1 - (1 - 1 / m) ** k for k in KS])
+
+
 from videos.ai.ai28.objectives import compute_objectives  # noqa: E402
 from videos.ai.ai28 import think  # noqa: E402
 
@@ -489,6 +518,8 @@ ITEMS = {
     "add_base": compute_add_base,
     "rl": compute_rl,
     "objectives": compute_objectives,
+    "entropy_fit": compute_entropy_fit,
+    "passk_guess": compute_passk_guess,
     "sampling": compute_sampling,
     "kl_est": compute_kl_est,
     "bon": compute_bon,

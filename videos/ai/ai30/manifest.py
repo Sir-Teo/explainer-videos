@@ -8,5 +8,5 @@ SCENES = [
     ("s03_sae", "SAE", "2. Pulling the features apart"),
     ("s04_circuits", "Circuits", "3. Tracing a thought"),
     ("s05_steering", "Steering", "4. Reaching in"),
-    ("s06_outro", "Outro", "Recap, and the whole series"),
+    ("s06_outro", "Outro", "Recap, and what comes next"),
 ]

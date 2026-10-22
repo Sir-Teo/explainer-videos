@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import (BYTEC, CPUC, FLOPC, GPUC, L2C, PART, box_label, cpu_die, gpu_die, load,
+from videos.ai.ai17.common import (BYTEC, CPUC, FLOPC, GPUC, L2C, PART, box_label, code_lines, cpu_die, gpu_die, load,
                                    machine_name)
 from videos.ai.ai17.specs import H800_LAT
 
@@ -36,7 +36,7 @@ class Throughput(VoiceoverScene):
         xs, ys = np.meshgrid(np.linspace(-1, 1, cols), np.linspace(-0.6, 0.6, rows))
         shade = 0.5 + 0.5 * np.cos(4 * np.hypot(xs - 0.3, ys + 0.1)) * np.exp(-np.hypot(xs, ys))
         colors = [interpolate_color(ManimColor("#1B2A6B"), ManimColor("#F2D16B"), float(v)) for v in shade.ravel()]
-        prog = code_block(["color shade(x, y):", "  d = distance(x, y)", "  return light(d)"], font_size=20)
+        prog = code_lines(["color shade(x, y):", "  d = distance(x, y)", "  return light(d)"], font_size=20)
         prog.next_to(frame, DOWN, buff=0.35).align_to(frame, LEFT)
         n_px = 1920 * 1080
         maths = VGroup(MathTex(r"1920 \times 1080", font_size=34, color=WHITE),
@@ -144,7 +144,7 @@ class Throughput(VoiceoverScene):
                    .replace(",", "{,}"), font_size=24, color=GPUC)
         cp = label(rf"one core of this computer: \ ${bw1 / 1e9:.1f}$ GB/s $\times$ ${dram_lat * 1e9:.0f}$ ns "
                    rf"$\approx {ours / 64:.0f}$ cache lines", font_size=24, color=CPUC)
-        VGroup(gp, cp).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.45)
+        VGroup(gp, cp).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.85)
         src = cite(r"latency: \ Luo et al.\ (2024), \ measured on an H800", corner=UR)
         tag = note(r"computed: \ this computer's bandwidth and latency").to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -156,15 +156,16 @@ class Throughput(VoiceoverScene):
             f"at about {round(lat_s * 1e9, -1):.0f} nanoseconds away. At two terabytes a second, it needs about "
             f"{round(inflight / 1e3, -1):.0f} kilobytes on the way at every moment: thousands of requests. "
             "<bookmark mark='d'/> One core of this computer, measured, needs only about "
-            f"{ours / 64:.0f} cache lines in flight, and its out-of-order machinery can manage that. A GPU gets its "
-            "thousands the other way: from thousands of threads, each waiting on its own load."
+            f"{ours / 64:.0f} cache lines on the way, and it gets them from prefetchers that guess the next "
+            "addresses of a long, regular read. A GPU gets its thousands the other way: from thousands of threads, "
+            "each waiting on its own load."
         ) as vo:
+            self.play(Create(pipe), FadeIn(mem), FadeIn(core))
             step(0)
             vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(pk, shift=RIGHT * 0.3) for pk in packets], lag_ratio=0.08), run_time=2.0)
             vo.wait_until("b")
             step(1)
-            self.play(Create(pipe), FadeIn(mem), FadeIn(core))
-            self.play(LaggedStart(*[FadeIn(pk, shift=RIGHT * 0.3) for pk in packets], lag_ratio=0.08), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(gp), FadeIn(src))
             vo.wait_until("d")
@@ -184,8 +185,8 @@ class Throughput(VoiceoverScene):
             (2009, r"R.~Raina, A.~Madhavan \& A.~Ng", r"deep belief networks on a GPU, \ up to $70\times$ faster "
              r"than a dual-core CPU", C.NEURAL),
         ]
-        cards = VGroup(*[history_card(y, w, t, width=6.2, color=c, font_size=21) for y, w, t, c in items])
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).move_to(DOWN * 0.3)
+        cards = VGroup(*[history_card(y, w, t, width=6.4, color=c, font_size=23) for y, w, t, c in items])
+        cards.arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.45)).move_to(DOWN * 0.15)
         head = label(r"General-purpose computing on GPUs", font_size=36, color=GPUC).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Researchers noticed. <bookmark mark='a'/> In the early two thousands they disguised arithmetic as "

@@ -134,6 +134,7 @@ TIMELINE = [
     (1974, r"Dennard scaling"),
     (1976, r"arithmetic coding"),
     (1978, r"systolic arrays"),
+    (1979, r"the bootstrap"),
     (1980, r"expert systems (XCON)"),
     (1983, r"simulated annealing"),
     (1984, r"random projections"),

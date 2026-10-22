@@ -46,7 +46,7 @@ class PowerWall(VoiceoverScene):
         first, last = ty[order[0]], ty.max()
         src = cite(r"data: \ K.~Rupp, \textit{Microprocessor trend data} (CC BY 4.0)", corner=DR)
         ends = VGroup(label(rf"Intel 4004: \ ${first:,.0f}$".replace(",", "{,}"), font_size=20, color=GREY_A)
-                      .next_to(dots[0], RIGHT, buff=0.25).shift(DOWN * 0.1),
+                      .next_to(dots[0], RIGHT, buff=0.5).shift(DOWN * 0.2),
                       label(rf"${last / 1e9:.0f}$ billion", font_size=20, color=GREY_A).next_to(dots[-1], RIGHT, buff=0.15))
         with self.voiceover(
             "In 1965 Gordon Moore, then at Fairchild Semiconductor, noticed that the number of components on a chip "
@@ -120,24 +120,25 @@ class PowerWall(VoiceoverScene):
     # ------------------------------------------------------------------
     def breakdown(self):
         colors = {r"\kappa": FLOPC, r"P": POWERC, r"V": C.SURPRISE}
-        rows = [
+        rows = VGroup(
             cmath(r"V", r"\;\to\;", r"V", colors=colors, font_size=36),
             cmath(r"P", r"\;\to\;", r"\tfrac{C}{\kappa}\,V^2\,\kappa f = P", colors=colors, font_size=36),
             cmath(r"\tfrac{P}{\text{area}}", r"\;\to\;", r"\kappa^2 \cdot \tfrac{P}{\text{area}}", colors=colors,
                   font_size=36),
-        ]
-        whys = [why(r"leakage: \ the off-current falls at most $10\times$ per $60$ mV"),
-                why(r"each transistor: \ the same power as before"),
-                why(r"$\kappa^2$ more of them: \ the chip heats up")]
-        step = ladder(self, rows, whys, keep=3, top=2.9, x=-4.6, buff=0.55, edge=1.4)
+        )
+        whys = VGroup(why(r"leakage: \ the off-current falls at most $10\times$ per $60$ mV", font_size=22),
+                      why(r"each transistor: \ the same power as before", font_size=22),
+                      why(r"$\kappa^2$ more of them: \ the chip heats up", font_size=22))
+        blocks = VGroup(*[VGroup(r_, w_).arrange(DOWN, aligned_edge=LEFT, buff=0.14) for r_, w_ in zip(rows, whys)])
+        blocks.arrange(DOWN, aligned_edge=LEFT, buff=0.42).to_corner(UL, buff=0.6)
         cards = VGroup(
             history_card(2004, r"Intel cancels the Pentium 4's successor", r"and turns to two cores per chip",
                          width=5.6, color=POWERC),
             history_card(2005, r"Herb Sutter, \ \textit{The free lunch is over}", r"programs will only get faster if "
                          r"they run in parallel", width=5.6, color=POWERC),
-        ).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.35)
-        g = axes([0, 1.0], [-12, -3], x_length=4.2, y_length=2.8, xlabel=r"gate voltage", ylabel=r"current (log)",
-                 center=[3.9, 0.15, 0])
+        ).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.3)
+        g = axes([0, 1.0], [-12, -3], x_length=4.4, y_length=2.6, xlabel=r"gate voltage", ylabel=r"current (log)",
+                 center=[3.7, 1.1, 0])
         vs = np.linspace(0, 1.0, 120)
         curves = VGroup()
         for vt, col in ((0.45, GREY_B), (0.3, C.SURPRISE)):
@@ -145,8 +146,8 @@ class PowerWall(VoiceoverScene):
             curves.add(curve(g.ax, vs, ii, col, 3))
         off = VGroup(*[Dot(g.ax.c2p(0, -4 - vt / 0.06), radius=0.06, color=col)
                        for vt, col in ((0.45, GREY_B), (0.3, C.SURPRISE))])
-        ol = label(r"switched off: \ $10	imes$ the leakage \ per $60$ mV lower", font_size=18, color=C.SURPRISE)
-        ol.next_to(off[1], RIGHT, buff=0.25).shift(UP * 0.1)
+        ol = label(r"lower threshold: \\ more current when off", font_size=18, color=C.SURPRISE)
+        ol.next_to(off[1], RIGHT, buff=0.2).shift(UP * 0.25)
         tag = schematic_tag(corner=UR)
         with self.voiceover(
             "Then, in the early two thousands, the voltage stopped falling. <bookmark mark='a'/> A transistor is a "
@@ -157,14 +158,14 @@ class PowerWall(VoiceoverScene):
             "<bookmark mark='d'/> In 2004 Intel cancelled the successor to the Pentium 4 and turned to two cores per "
             "chip. A year later the programmer Herb Sutter wrote that the free lunch was over."
         ) as vo:
-            step(0)
+            self.play(Write(rows[0]), FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(tag), Create(curves[0]))
+            self.play(FadeIn(whys[0]), Create(curves[0]))
             self.play(Create(curves[1]), FadeIn(off), FadeIn(ol))
             vo.wait_until("b")
-            step(1)
+            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
             vo.wait_until("c")
-            step(2)
+            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cards], lag_ratio=0.5))
         self.wait(0.3)
@@ -231,11 +232,12 @@ class PowerWall(VoiceoverScene):
         ]
         whys = [why(r"switching power"), why(r"a faster clock needs a higher voltage: \ $V \propto f$, roughly")]
         step = ladder(self, rows, whys, keep=2, top=3.2, x=-2.5, buff=0.4, edge=6.8)
-        bars = LiveBars([0, 0], max_value=8, height=3.0, bar_width=1.1, gap=1.6, colors=[POWERC, POWERC],
+        bars = LiveBars([1, 1], max_value=8, height=3.0, bar_width=1.1, gap=1.6, colors=[POWERC, POWERC],
                         show_values=True, digits=0, value_font=28,
                         labels=[r"one core, \ clock $\times 2$", r"two cores, \ same clock"], label_font=22)
         bars.place(base_y=-2.9, x=-2.5)
-        bl = label(r"power for twice the work", font_size=22, color=POWERC).move_to([-2.5, 0.85, 0])
+        bl = label(r"power for twice the work \ (one core today $= 1$)", font_size=22, color=POWERC)
+        bl.move_to([-2.5, 0.85, 0])
         amdahl = theorem_card(r"Amdahl's law", r"if a fraction $p$ of the work can be split $N$ ways, \ the speed-up is "
                               r"$\dfrac{1}{(1 - p) + p/N}$", who=r"Gene Amdahl, 1967", width=5.4, font_size=22,
                               kind=r"Law").move_to([3.9, -0.6, 0])

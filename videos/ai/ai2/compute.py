@@ -154,7 +154,7 @@ def compute_puzzle8(per_depth=100, depths=tuple(range(2, 26, 2))):
             **{f"ebf_{k}": ebf[k] for k in ebf}, "path": path}
 
 
-def compute_puzzle15(n_inst=36, seed=15):
+def compute_puzzle15(n_inst=30, seed=15):
     from videos.ai.ai2 import search as S
 
     t0 = time.time()
@@ -163,8 +163,8 @@ def compute_puzzle15(n_inst=36, seed=15):
     gpos = S.goal_pos15()
     g = rng(seed)
     rows = []
-    walks = np.linspace(30, 140, n_inst).astype(int)
-    caps = {"pdb": 10**9, "manhattan": 3 * 10**8, "misplaced": 3 * 10**7}
+    walks = np.linspace(30, 120, n_inst).astype(int)
+    caps = {"pdb": 10**9, "manhattan": 5 * 10**7, "misplaced": 10**7}
     for w in walks:
         b = S.scramble15(g, int(w))
         row = {"walk": int(w), "board": b.tolist()}
@@ -194,14 +194,15 @@ def compute_puzzle15(n_inst=36, seed=15):
 # ---------------------------------------------------------------------------
 # Shortest paths on a grid
 # ---------------------------------------------------------------------------
-def showcase_grid(H=40, W=72):
+def showcase_grid(H=64, W=64):
+    """A square map: start in the middle, goal to the right, a wall between them; a few walls elsewhere."""
     free = np.ones((H, W), bool)
-    free[8:33, 36] = False  # a wall between start and goal, open at both ends
-    free[32, 30:37] = False  # a little hook at its foot
-    free[6:12, 52] = False
-    free[24:28, 12:20] = False
-    free[14, 44:50] = False
-    return free, (20, 14), (20, 58)
+    free[24:41, 43] = False  # the wall between start and goal
+    free[20:31, 20] = False  # behind the start
+    free[12, 25:36] = False
+    free[48, 30:42] = False
+    free[50:58, 52] = False
+    return free, (32, 31), (32, 55)
 
 
 def compute_grid(n_maps=200):
@@ -460,7 +461,7 @@ def _right(scores_row, c) -> bool:
     return np.sign(scores_row[c]) == np.sign(np.nanmax(scores_row))
 
 
-def compute_samuel(games=1500, every=100, depth=3, lr=0.02, seeds=(0, 1, 2), n_eval=60):
+def compute_samuel(games=3000, every=250, depth=3, lr=0.003, decay=10**9, seeds=(0, 1, 2), n_eval=200):
     from videos.ai.ai26 import c4
     from videos.ai.ai2 import play as P
 
@@ -481,6 +482,7 @@ def compute_samuel(games=1500, every=100, depth=3, lr=0.02, seeds=(0, 1, 2), n_e
         return ok / len(hist)
 
     out = {"features": P.FEATURES, "programmer": programmer, "depth": depth, "games": games, "every": every,
+           "lr": lr, "decay": decay,
            "n_eval_games": 2 * n_eval, "acc_programmer": accuracy(programmer), "acc_zero": accuracy(zero),
            "programmer_vs_zero": P.match(programmer, zero, depth, ev_open)}
     runs = []
@@ -497,11 +499,12 @@ def compute_samuel(games=1500, every=100, depth=3, lr=0.02, seeds=(0, 1, 2), n_e
         for k in range(1, games + 1):
             op = P.random_openings(g, 1, plies=2 * int(g.integers(1, 3)))[0]
             alpha_first = k % 2 == 0
+            lr_k = lr / (1 + k / decay)  # constant unless a decay is given
             if alpha_first:
-                r = P.play_game(alpha, beta, depth, op, learn=(lr, log))
+                r = P.play_game(alpha, beta, depth, op, learn=(lr_k, log))
             else:
                 # Alpha moves second: play with Beta as "A" and learn for Alpha through a swapped call
-                r = -_play_second(P, alpha, beta, depth, op, lr, log)
+                r = -_play_second(P, alpha, beta, depth, op, lr_k, log)
             if r > 0:
                 beta = alpha.copy()  # Samuel: when Alpha wins, Beta takes its scoring polynomial
                 handovers += 1
@@ -513,8 +516,9 @@ def compute_samuel(games=1500, every=100, depth=3, lr=0.02, seeds=(0, 1, 2), n_e
                 vs_zero.append(P.match(alpha, zero, depth, ev_open))
                 acc.append(accuracy(alpha))
                 deltas.append(float(np.mean(np.abs(log[-500:]))))
-        runs.append({"seed": seed, "weights": np.array(weights), "ckpt": ckpt, "vs_programmer": vs_prog,
-                     "vs_zero": vs_zero, "accuracy": acc, "handovers": handovers, "delta": deltas})
+        runs.append({"seed": seed, "weights": np.array(weights).tolist(), "ckpt": ckpt,
+                     "vs_programmer": [float(x) for x in vs_prog], "vs_zero": [float(x) for x in vs_zero],
+                     "accuracy": [float(x) for x in acc], "handovers": handovers, "delta": deltas})
     out["runs"] = runs
     return out
 
@@ -768,6 +772,19 @@ def compute_blocks(per_n=12):
     s2 = s1
     for k in p2:
         s2 = (s2 & ~B.actions[k][3]) | B.actions[k][2]
+    # the other order: B on C first, then A on B
+    h1 = B.F("on", 1, 2)
+    q1, _ = B.bfs(s0, h1)
+    t1 = s0
+    for k in q1:
+        t1 = (t1 & ~B.actions[k][3]) | B.actions[k][2]
+    q2, _ = B.bfs(t1, B.F("on", 0, 1))
+    t2 = t1
+    for k in q2:
+        t2 = (t2 & ~B.actions[k][3]) | B.actions[k][2]
+    out["sussman_other_first"] = [B.show(k) for k in q1]
+    out["sussman_other_second"] = [B.show(k) for k in q2]
+    out["sussman_other_kept"] = bool(t2 & h1)
     out["sussman_first"] = [B.show(k) for k in p1]
     out["sussman_second"] = [B.show(k) for k in p2]
     out["sussman_first_kept"] = bool(s2 & g1)

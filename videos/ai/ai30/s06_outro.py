@@ -4,15 +4,13 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.s03_transformer import board_rows
 from videos.ai.ai30.common import FEAT, FEATURE_COLORS, NEURON, RESID, arrow2d, context_line, load, vec_bars
 
 
 class Outro(VoiceoverScene):
     def construct(self):
         self.recap()
-        self.series()
-        self.board()
+        self.next_time()
         self.references()
 
     # ------------------------------------------------------------------
@@ -77,7 +75,7 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(r"Part 30, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Let's take stock, one last time. Models pack more features than they have numbers, as almost "
+            "Let's take stock. Models pack more features than they have numbers, as almost "
             "perpendicular directions, at the price of a little interference. A sparse autoencoder pulls those "
             "directions back apart, and they turn out to mean things. Features chain into circuits we can trace from "
             "input to output. And pushing on a feature changes what the model does."
@@ -89,52 +87,33 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def series(self):
-        title = label(r"AI, Built: \ twenty parts", font_size=48).to_edge(UP, buff=0.5)
-        smap = series_map(current=None, done=0).scale(0.95).move_to(DOWN * 0.4)
-        acts = [r"guessing the next character, and the mathematics underneath",
-                r"learning from data, by counting and by going downhill",
-                r"the engines: attention, memory, experts, diffusion, every sense",
-                r"reasoning, acting, running fast, and looking inside"]
-        cap = label(acts[0], font_size=24, color=C.BITS).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "And that's the series. <bookmark mark='a'/> We began with a guessing game: predicting the next "
-            "character, and the probability, linear algebra and calculus underneath it. <bookmark mark='b'/> Then "
-            "learning: counting, fitting, networks, and the long walk downhill. <bookmark mark='c'/> Then the engines: "
-            "attention, memory, experts, diffusion, and every sense turned into tokens. <bookmark mark='d'/> And "
-            "finally what they do with it: reasoning, acting, running fast, and now, looking inside."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            box = None
-            for i, m in enumerate("abcd"):
-                vo.wait_until(m)
-                col = smap.cols[i]
-                new = label(acts[i], font_size=24, color=C.BITS).to_edge(DOWN, buff=0.45)
-                nb = SurroundingRectangle(col, color=C.BITS, buff=0.15, corner_radius=0.1, stroke_width=2)
-                self.play(Transform(cap, new) if i else FadeIn(cap), Transform(box, nb) if box else Create(nb),
-                          LaggedStart(*[r_.animate.set_color(WHITE) for r_ in col.rows], lag_ratio=0.15), run_time=1.5)
-                box = box or nb
-        self.wait(0.3)
-        self.clear_scene()
+    def next_time(self):
+        def box(text, color):
+            t = label(text, font_size=24, color=color)
+            r = RoundedRectangle(width=t.width + 0.44, height=max(0.62, t.height + 0.25), corner_radius=0.12,
+                                 stroke_color=color, stroke_width=2.2, fill_color=color, fill_opacity=0.1)
+            return VGroup(r, t.move_to(r))
 
-    # ------------------------------------------------------------------
-    def board(self):
-        rows, i, n, k = board_rows()
-        board = scoreboard(rows, highlight=(i,), max_bits=8.0)
-        board.scale_to_fit_height(min(board.height, 6.4)).move_to(DOWN * 0.15)
-        tf = rows[i]
-        human = next(r for r in rows if r.get("kind") == "human")
+        head = label(r"Next: \ Part 31, \ Can We Trust It?", font_size=40).to_edge(UP, buff=0.5)
+        steps = VGroup(*[box(t, c) for t, c in ((r"a score", GREY_B), (r"is it real?", C.INTERVAL),
+                                                (r"is it what we meant?", C.PENALTY),
+                                                (r"can we oversee it?", C.KL), (r"can we control it?", C.TRUE_P))])
+        steps.arrange(RIGHT, buff=0.5).move_to(DOWN * 0.2)
+        if steps.width > 13.2:
+            steps.width = 13.2
+        arrs = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5)
+                        for a, b in zip(steps, steps[1:])])
+        more = label(r"and, \ one last time, \ the scoreboard", font_size=28, color=C.BITS).next_to(steps, DOWN, buff=0.8)
         with self.voiceover(
-            "And the scoreboard from part one, where it all started: bits per character on one passage of a novel. "
-            f"Counting got us to {rows[i - 3]['bits']:.2f}; our own transformer, trained on a laptop-sized computer, "
-            f"to {tf['bits']:.2f}. The big models reach about one bit, inside the range people manage, between "
-            f"{human['lo']:g} and {human['hi']:g}. <bookmark mark='a'/> Every row of it is the same idea: a better "
-            "guess at what comes next. Thank you for building it with me."
+            "Next time, the finale: can we trust it? How to measure a model honestly, what happens when an objective "
+            "has a loophole, how to supervise a model stronger than its supervisor, the evidence that models can "
+            "deceive, and how to watch and control them. And, one last time, the scoreboard."
         ) as vo:
-            self.play(FadeIn(board), run_time=2.0)
-            vo.wait_until("a")
-            self.play(Circumscribe(board.rows[i], color=C.NEURAL, buff=0.05))
-        self.wait(0.5)
+            self.play(FadeIn(head))
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(s_), *([GrowArrow(arrs[i - 1])] if i else []))
+                                    for i, s_ in enumerate(steps)], lag_ratio=0.5), run_time=max(3.0, vo.duration - 2.5))
+            self.play(FadeIn(more))
+        self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -157,7 +136,7 @@ class Outro(VoiceoverScene):
         credit.next_to(data, UP, buff=0.1)
         if card.get_bottom()[1] < credit.get_top()[1] + 0.15:
             card.shift(UP * (credit.get_top()[1] + 0.15 - card.get_bottom()[1]))
-        with self.voiceover("Thanks for watching."):
+        with self.voiceover("Thanks for watching, and see you in Part 31, the finale."):
             self.play(LaggedStart(FadeIn(card), FadeIn(credit), FadeIn(data), lag_ratio=0.3), run_time=3)
         self.wait(2.5)
         self.play(FadeOut(Group(*self.mobjects)))

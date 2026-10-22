@@ -186,15 +186,19 @@ def fill_ids(text: str = FILL) -> tuple[list[int], list[int]]:
 
 
 @torch.no_grad()
-def fill(model, text: str = FILL) -> list[str]:
-    """BERT's best guess for each [MASK] (whole words only, so a guess reads as a word)."""
+def fill(model, text: str = FILL, allowed: list[int] | None = None) -> list[str]:
+    """BERT's best guess for each [MASK], among ``allowed`` tokens (whole words, so a guess reads as a word)."""
     model.eval()
     ids, where = fill_ids(text)
     logits = model(torch.tensor([ids]))[0].float()
+    keep = torch.zeros(VOCAB, dtype=torch.bool)
+    if allowed is None:
+        keep[4:4096] = True
+    else:
+        keep[torch.tensor(allowed)] = True
     out = []
     for p in where:
-        lp = logits[p, :4096].clone()
-        lp[:4] = -float("inf")
+        lp = logits[p].masked_fill(~keep, -float("inf"))
         out.append(N.decode([int(lp.argmax())]).strip())
     return out
 
@@ -254,7 +258,7 @@ def train(name: str, kind: str, shape: dict, tokens: int, cache_dir, lr: float =
             pp = per_position(model, win)
             snap.update(val=float(pp.mean()), pos=pp.tolist(), sample=sample(model, PROMPT), **repeat_test(model, rep))
         else:
-            snap.update(val=masked_loss(model, win), fill=fill(model))
+            snap.update(val=masked_loss(model, win), fill=fill(model, allowed=words))
         model.train()
         state["snaps"].append(snap)
         log(f"{name}: snapshot at {step}: val {snap['val']:.3f} ({time.time() - t:.0f}s)"

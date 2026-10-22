@@ -1,0 +1,376 @@
+{
+"meta": {
+"source": "https://artificialanalysis.ai/models/open-source",
+"version": "v4.3.2",
+"fetched": "2026-10-08",
+"evaluations": [
+"AA-Briefcase v1.1",
+"GDPval-AA v2.1",
+"AutomationBench-AA",
+"Terminal-Bench 4.0",
+"SciCode",
+"Humanity's Last Exam",
+"GDP.pdf",
+"CritPt",
+"AA-Omniscience",
+"AA-LCR v1.1"
+],
+"note": "Artificial Analysis Intelligence Index: the 'Open Source Progress' timeline of its open-source page, as fetched for videos/ml/open_models (fetch.py) on 2026-10-08. Scores are AA's and change as the index is updated."
+},
+"progress": [
+{
+"name": "GPT-3.5 Turbo",
+"release": "2022-11-30",
+"score": 5.49,
+"open": false
+},
+{
+"name": "Llama 65B",
+"release": "2023-02-24",
+"score": 5.03,
+"open": true
+},
+{
+"name": "GPT-4",
+"release": "2023-03-14",
+"score": 6.7,
+"open": false
+},
+{
+"name": "Llama 2 Chat 70B",
+"release": "2023-07-18",
+"score": 5.3,
+"open": true
+},
+{
+"name": "Llama 2 Chat 7B",
+"release": "2023-07-18",
+"score": 5.71,
+"open": true
+},
+{
+"name": "Mistral 7B",
+"release": "2023-09-27",
+"score": 5.03,
+"open": true
+},
+{
+"name": "Solar Mini",
+"release": "2024-01-25",
+"score": 6.41,
+"open": true
+},
+{
+"name": "Claude 3 Opus",
+"release": "2024-03-04",
+"score": 8.72,
+"open": false
+},
+{
+"name": "Llama 3.1 405B",
+"release": "2024-07-23",
+"score": 7.29,
+"open": true
+},
+{
+"name": "Mistral Large 2 (Jul)",
+"release": "2024-07-24",
+"score": 6.8,
+"open": true
+},
+{
+"name": "DeepSeek-V2.5",
+"release": "2024-09-06",
+"score": 6.55,
+"open": true
+},
+{
+"name": "o1-preview",
+"release": "2024-09-12",
+"score": 11.38,
+"open": false
+},
+{
+"name": "Qwen2.5 72B",
+"release": "2024-09-19",
+"score": 7.73,
+"open": true
+},
+{
+"name": "Mistral Large 2 (Nov)",
+"release": "2024-11-18",
+"score": 7.56,
+"open": true
+},
+{
+"name": "QwQ 32B-Preview",
+"release": "2024-11-27",
+"score": 7.59,
+"open": true
+},
+{
+"name": "o1",
+"release": "2024-12-05",
+"score": 15.23,
+"open": false
+},
+{
+"name": "DeepSeek R1 (Jan)",
+"release": "2025-01-20",
+"score": 11.41,
+"open": true
+},
+{
+"name": "Claude 3.7 Sonnet",
+"release": "2025-02-24",
+"score": 17.71,
+"open": false
+},
+{
+"name": "Llama 4 Maverick",
+"release": "2025-04-05",
+"score": 9.99,
+"open": true
+},
+{
+"name": "o3",
+"release": "2025-04-16",
+"score": 20.2,
+"open": false
+},
+{
+"name": "Claude 4 Opus",
+"release": "2025-05-22",
+"score": 20.64,
+"open": false
+},
+{
+"name": "DeepSeek R1 0528",
+"release": "2025-05-28",
+"score": 13.12,
+"open": true
+},
+{
+"name": "o3-pro",
+"release": "2025-06-10",
+"score": 21.87,
+"open": false
+},
+{
+"name": "Kimi K2",
+"release": "2025-07-11",
+"score": 12.72,
+"open": true
+},
+{
+"name": "Claude 4.1 Opus",
+"release": "2025-08-05",
+"score": 22.85,
+"open": false
+},
+{
+"name": "DeepSeek V3.1 (non-reasoning)",
+"release": "2025-08-21",
+"score": 13.71,
+"open": true
+},
+{
+"name": "Kimi K2 0905",
+"release": "2025-09-05",
+"score": 15.29,
+"open": true
+},
+{
+"name": "DeepSeek V3.1 Terminus",
+"release": "2025-09-22",
+"score": 14.76,
+"open": true
+},
+{
+"name": "GPT-5 Codex (high)",
+"release": "2025-09-23",
+"score": 24.88,
+"open": false
+},
+{
+"name": "DeepSeek V3.2 Exp",
+"release": "2025-09-29",
+"score": 16.58,
+"open": true
+},
+{
+"name": "GLM-4.6",
+"release": "2025-09-30",
+"score": 18.53,
+"open": true
+},
+{
+"name": "Kimi K2 Thinking",
+"release": "2025-11-06",
+"score": 22.02,
+"open": true
+},
+{
+"name": "Gemini 3 Pro Preview (high)",
+"release": "2025-11-18",
+"score": 27.96,
+"open": false
+},
+{
+"name": "Claude Opus 4.5",
+"release": "2025-11-24",
+"score": 29.1,
+"open": false
+},
+{
+"name": "DeepSeek V3.2",
+"release": "2025-12-01",
+"score": 21.49,
+"open": true
+},
+{
+"name": "GPT-5.2 (xhigh)",
+"release": "2025-12-11",
+"score": 30.45,
+"open": false
+},
+{
+"name": "MiMo-V2-Flash (Feb 2026)",
+"release": "2025-12-16",
+"score": 22.44,
+"open": true
+},
+{
+"name": "Kimi K2.5",
+"release": "2026-01-27",
+"score": 23.46,
+"open": true
+},
+{
+"name": "Claude Opus 4.6 (max)",
+"release": "2026-02-05",
+"score": 31.95,
+"open": false
+},
+{
+"name": "GPT-5.3 Codex (xhigh)",
+"release": "2026-02-05",
+"score": 32.5,
+"open": false
+},
+{
+"name": "GLM-5",
+"release": "2026-02-11",
+"score": 27.91,
+"open": true
+},
+{
+"name": "GPT-5.4 (xhigh)",
+"release": "2026-03-05",
+"score": 38.98,
+"open": false
+},
+{
+"name": "MiniMax-M2.7",
+"release": "2026-03-18",
+"score": 22.76,
+"open": true
+},
+{
+"name": "Claude Opus 4.7 (max)",
+"release": "2026-04-16",
+"score": 40.69,
+"open": false
+},
+{
+"name": "Kimi K2.6",
+"release": "2026-04-20",
+"score": 26.98,
+"open": true
+},
+{
+"name": "DeepSeek V4 Pro (high)",
+"release": "2026-04-24",
+"score": 30.11,
+"open": true
+},
+{
+"name": "Claude Opus 4.8 (max)",
+"release": "2026-05-28",
+"score": 41.79,
+"open": false
+},
+{
+"name": "MiniMax-M3",
+"release": "2026-06-01",
+"score": 29.22,
+"open": true
+},
+{
+"name": "Claude Fable 5 (with fallback)",
+"release": "2026-06-09",
+"score": 49.63,
+"open": false
+},
+{
+"name": "GLM-5.2 (max)",
+"release": "2026-06-16",
+"score": 33.71,
+"open": true
+},
+{
+"name": "Kimi K3 (low)",
+"release": "2026-07-16",
+"score": 30.07,
+"open": true
+},
+{
+"name": "Kimi K3 (max)",
+"release": "2026-07-16",
+"score": 43.59,
+"open": true
+},
+{
+"name": "Claude Opus 5 (max)",
+"release": "2026-07-24",
+"score": 50.78,
+"open": false
+},
+{
+"name": "DeepSeek V4 Pro 0813 (max)",
+"release": "2026-08-13",
+"score": 36.0,
+"open": true
+},
+{
+"name": "GLM-5.3 (max)",
+"release": "2026-08-18",
+"score": 44.78,
+"open": true
+},
+{
+"name": "GLM-5.3-Flash",
+"release": "2026-08-26",
+"score": 41.81,
+"open": true
+},
+{
+"name": "Claude Fable 5.1 (max with fallback)",
+"release": "2026-09-01",
+"score": 53.35,
+"open": false
+},
+{
+"name": "MiMo-V2.6-Pro",
+"release": "2026-09-21",
+"score": 46.32,
+"open": true
+},
+{
+"name": "Claude Opus 5.5 (max with fallback)",
+"release": "2026-09-22",
+"score": 57.62,
+"open": false
+}
+]
+}

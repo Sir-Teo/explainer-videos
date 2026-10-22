@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MAXC, PART, PATH, SYMBOL, load
+from videos.ai.ai2.common import FAIL, FCOL, GCOST, HEUR, HIST, LEARN, MAXC, PART, PATH, SYMBOL, load, node_box
 
 
 def era_axis(y0=1948, y1=2000, width=12.4, y=0.0):
@@ -42,11 +42,10 @@ class Hook(VoiceoverScene):
         db.set_x(min(db.get_x(), 6.9 - db.width / 2))
         p58 = label(r"the prediction", font_size=26, color=HIST).next_to(y58, DOWN, buff=0.3)
         with self.voiceover(
-            "In 1958, Herbert Simon and Allen Newell made four predictions about the next ten years of computing. One "
-            "of them was that within ten years a digital computer would be the world's chess champion, unless the "
-            "rules barred it from competition. <bookmark mark='a'/> It took thirty-nine. <bookmark mark='b'/> In May "
-            "1997, in New York, IBM's Deep Blue beat the world champion, Garry Kasparov, three and a half games to two "
-            "and a half."
+            "In 1958 Herbert Simon and Allen Newell predicted that within ten years a digital computer would be the world's "
+            "chess champion, unless the rules barred it from competition. <bookmark mark='a'/> It took thirty-nine. "
+            "<bookmark mark='b'/> In May 1997, in New York, IBM's Deep Blue beat the world champion, Garry Kasparov, three and a "
+            "half games to two and a half."
         ) as vo:
             self.play(FadeIn(quote), FadeIn(who))
             self.play(FadeIn(y58), FadeIn(p58))
@@ -60,39 +59,29 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def era(self):
         axis, X = era_axis(y=-0.4)
-        events = [  # (year, text, colour, above?)
-            (1950, r"Turing: \ can machines think?", HIST, True),
-            (1956, r"Dartmouth: \ ``artificial intelligence''", HIST, False),
-            (1959, r"Samuel's checkers learns", LEARN, True),
-            (1966, r"ELIZA", SYMBOL, False),
-            (1968, r"A* search", GCOST, True),
-            (1971, r"STRIPS plans", PATH, False),
-            (1973, r"the Lighthill report", FAIL, True),
-            (1980, r"expert systems boom", HEUR, False),
-            (1987, r"Lisp machines collapse", FAIL, True),
-            (1997, r"Deep Blue", MAXC, False),
+        events = [  # (year, text, colour, above?, level): short labels, staggered on two levels per side
+            (1950, r"Turing's question", HIST, True, 1),
+            (1956, r"Dartmouth", HIST, False, 1),
+            (1959, r"Samuel's checkers", LEARN, True, 2),
+            (1966, r"ELIZA", SYMBOL, False, 2),
+            (1968, r"A* search", GCOST, True, 1),
+            (1971, r"STRIPS", PATH, False, 1),
+            (1973, r"Lighthill report", FAIL, True, 2),
+            (1980, r"expert systems", HEUR, False, 2),
+            (1987, r"Lisp machines collapse", FAIL, True, 1),
+            (1997, r"Deep Blue", MAXC, False, 1),
         ]
         dots, labs = VGroup(), VGroup()
-        for yr, txt, col, up in events:
+        for yr, txt, col, up, lev in events:
             d = Dot([X(yr), -0.4, 0], radius=0.08, color=col)
             t = label(rf"${yr}$ \ " + txt, font_size=20, color=col)
-            t.next_to(d, UP if up else DOWN, buff=0.75 if up else 0.62)
-            stem = Line(d.get_center(), t.get_bottom() if up else t.get_top(), color=col, stroke_width=1.5,
-                        stroke_opacity=0.6)
+            off = 0.5 if lev == 1 else 1.15
+            t.move_to([X(yr), -0.4 + (off if up else -off), 0])
+            t.set_x(min(max(t.get_x(), -6.9 + t.width / 2), 6.9 - t.width / 2))
+            end = [X(yr), (t.get_bottom() if up else t.get_top())[1], 0]
+            stem = Line(d.get_center(), end, color=col, stroke_width=1.5, stroke_opacity=0.6)
             dots.add(VGroup(stem, d))
             labs.add(t)
-        # keep the labels apart: same side, left to right
-        for side in (True, False):
-            row = [labs[i] for i, e in enumerate(events) if e[3] == side]
-            for a, b in zip(row, row[1:]):
-                if b.get_left()[0] < a.get_right()[0] + 0.15:
-                    b.shift(RIGHT * (a.get_right()[0] + 0.15 - b.get_left()[0]))
-            over = row[-1].get_right()[0] - 6.9
-            if over > 0:
-                for t in row:
-                    t.shift(LEFT * over)
-        for (yr, _, col, up), dm, t in zip(events, dots, labs):  # re-aim the stems at the moved labels
-            dm[0].put_start_and_end_on(dm[1].get_center(), [t.get_x(), (t.get_bottom() if up else t.get_top())[1], 0])
         winters = VGroup()
         for a, b, txt in ((1974, 1980, r"first winter"), (1987, 1993, r"second winter")):
             band = Rectangle(width=X(b) - X(a), height=4.6, stroke_width=0, fill_color="#5A7BA8", fill_opacity=0.16)
@@ -102,14 +91,12 @@ class Hook(VoiceoverScene):
         head = label(r"The first age of AI, \ $1950$--$1997$", font_size=36).to_edge(UP, buff=0.35)
         tag = note(r"winters approximate, as usually dated").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Between those two dates lies the first age of artificial intelligence, and it is where this course "
-            "begins its history. <bookmark mark='a'/> Alan Turing asked whether machines could think, in 1950. "
-            "<bookmark mark='b'/> A workshop at Dartmouth gave the field its name, in 1956. <bookmark mark='c'/> "
-            "Programs that learned checkers, that talked, that searched maps and planned the moves of a robot. "
-            "<bookmark mark='d'/> Then the promises outran the results, and the money dried up: a first winter in "
-            "the seventies. <bookmark mark='e'/> A boom in expert systems, and a second, harder winter when it "
-            "collapsed. <bookmark mark='f'/> And at the end, a chess machine that beat the world champion, with "
-            "methods the founders would have recognized."
+            "Between those dates lies the first age of artificial intelligence, where this course's history begins. "
+            "<bookmark mark='a'/> In 1950 Alan Turing asked whether machines could think. <bookmark mark='b'/> In 1956 a "
+            "workshop at Dartmouth named the field. <bookmark mark='c'/> Programs learned checkers, held conversations, "
+            "searched maps and planned a robot's moves. <bookmark mark='d'/> Then the promises outran the results, and the "
+            "money dried up: a first winter. <bookmark mark='e'/> A boom in expert systems, and a second, harder winter when it "
+            "collapsed. <bookmark mark='f'/> And at the end, a chess machine the founders would have recognized."
         ) as vo:
             self.play(FadeIn(head), Create(axis))
             for mk, idx in zip("abc", ((0,), (1,), (2, 3, 4, 5))):
@@ -142,13 +129,11 @@ class Hook(VoiceoverScene):
         tag = note(r"computed: \ every search, solver and learner in this part runs on this computer")
         tag.to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The bet of that age was that intelligence could be written down. <bookmark mark='a'/> As a search "
-            "through possibilities, guided by rules of thumb; as moves and counter-moves in a game; as logic; as "
-            "knowledge typed in by experts. <bookmark mark='b'/> The bet was only half lost. Every one of these "
-            "ideas is still running: search inside AlphaZero, logic inside the tools that check computer chips, a "
-            "proof checker grading the proofs of DeepMind's AlphaProof, plans inside today's agents. "
-            "<bookmark mark='c'/> And every algorithm in this part runs here, on this computer, so we can watch it "
-            "work."
+            "The bet of that age was that intelligence could be written down: <bookmark mark='a'/> as search through "
+            "possibilities, guided by rules of thumb; as moves in a game; as logic; as knowledge typed in by experts. "
+            "<bookmark mark='b'/> The bet was only half lost. Search runs inside AlphaZero, logic inside the tools that check "
+            "computer chips, a proof checker grades DeepMind's AlphaProof, and today's agents make plans. "
+            "<bookmark mark='c'/> And every algorithm in this part runs here, on this computer, so we can watch it work."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")
@@ -173,11 +158,11 @@ class Hook(VoiceoverScene):
             r"knowledge: \ expert systems, \ ELIZA, \ the winters, \ and what survives",
         ], font_size=26).move_to(DOWN * 0.3)
         with self.voiceover(
-            "This is Part 2 of AI, Built. <bookmark mark='a'/> In this part: what a machine can and cannot compute, "
-            "and Turing's test; search, from breadth-first to A star, and where good heuristics come from; local "
-            "search, from hill climbing to simulated annealing; games, from minimax and alpha-beta to Samuel's "
-            "checkers and Deep Blue; logic, from resolution to satisfiability and its phase transition, constraints "
-            "and planning; and knowledge: expert systems, ELIZA, the two winters, and what survived them."
+            "This is Part 2 of AI, Built. <bookmark mark='a'/> In this part: what machines can and cannot compute, and "
+            "Turing's test; search, from breadth-first to A star, and where heuristics come from; local search and simulated "
+            "annealing; games, from minimax and alpha-beta to Samuel's checkers and Deep Blue; logic, satisfiability and its "
+            "phase transition, constraints and planning; and knowledge: expert systems, ELIZA, the two winters, and what "
+            "survived them."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

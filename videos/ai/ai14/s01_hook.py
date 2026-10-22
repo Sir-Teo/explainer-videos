@@ -38,7 +38,7 @@ class Hook(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(year_of(c["date"]), math.log10(c["params"])), radius=0.08,
                             color=ARCH_COLOR[c["arch"]]) for c in pts])
         names = {"transformer": (UR, r"Transformer"), "gpt2": (UL, r"GPT-2"), "gpt3": (UL, r"GPT-3"),
-                 "llama": (DOWN, r"LLaMA"), "kimik3": (LEFT, r"Kimi K3")}
+                 "llama": (DR, r"LLaMA"), "kimik3": (LEFT, r"Kimi K3")}
         tags = VGroup()
         for c, d in zip(pts, dots):
             if c["key"] in names:

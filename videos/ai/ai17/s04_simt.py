@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai17.common import BYTEC, FLOPC, GPUC, IDLEC, PART, WARPC, load
+from videos.ai.ai17.common import BYTEC, FLOPC, GPUC, IDLEC, PART, WARPC, code_lines, load
 from videos.ai.ai17.specs import CC90
 
 IF_C, ELSE_C = C.PROB, C.MOMENTUM
@@ -25,13 +25,13 @@ class SIMT(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def lanes(self, n=32, w=0.28, colors=None) -> VGroup:
-        g = VGroup(*[Rectangle(width=w, height=0.7, stroke_width=1, stroke_color=GREY_D,
+    def lanes(self, n=32, w=0.28, colors=None, h=0.7) -> VGroup:
+        g = VGroup(*[Rectangle(width=w, height=h, stroke_width=1, stroke_color=GREY_D,
                                fill_color=(colors[i] if colors else WARPC), fill_opacity=0.8) for i in range(n)])
         return g.arrange(RIGHT, buff=0.04)
 
     def model(self):
-        code = code_block([
+        code = code_lines([
             "__global__ void saxpy(int n, float a, float *x, float *y) {",
             "    int i = blockIdx.x * blockDim.x + threadIdx.x;",
             "    if (i < n) y[i] = a * x[i] + y[i];",
@@ -43,9 +43,10 @@ class SIMT(VoiceoverScene):
         # grid -> blocks -> warps
         blocks = VGroup(*[RoundedRectangle(width=0.8, height=0.55, corner_radius=0.06, stroke_color=GPUC,
                                            stroke_width=1.5, fill_color=GPUC, fill_opacity=0.12) for _ in range(12)])
-        blocks.arrange_in_grid(rows=2, cols=6, buff=0.12).move_to([-3.4, -1.0, 0])
+        blocks.arrange_in_grid(rows=2, cols=6, buff=0.12).move_to([-4.0, -0.9, 0])
         bl = label(r"a grid of blocks", font_size=22, color=GPUC).next_to(blocks, DOWN, buff=0.2)
-        warps = VGroup(*[self.lanes(32, w=0.11) for _ in range(8)]).arrange(DOWN, buff=0.07).move_to([3.3, -1.0, 0])
+        warps = VGroup(*[self.lanes(32, w=0.12, h=0.22) for _ in range(8)]).arrange(DOWN, buff=0.08)
+        warps.move_to([2.9, -0.9, 0])
         wl = label(r"one block: \ $256$ threads $=$ $8$ warps of $32$", font_size=22, color=WARPC)
         wl.next_to(warps, DOWN, buff=0.2)
         zoom = DashedVMobject(Polygon(blocks[0].get_corner(UR), warps.get_corner(UL) + LEFT * 0.1,
@@ -53,7 +54,7 @@ class SIMT(VoiceoverScene):
                                       stroke_color=GREY_C, stroke_width=1.2), num_dashes=40)
         simt = definition_card(r"SIMT", r"single instruction, multiple threads: \ the $32$ threads of a warp run "
                                r"the same instruction together, \ each on its own data", width=5.6, font_size=21,
-                               color=WARPC).move_to([3.6, 1.7, 0])
+                               color=WARPC).move_to([3.95, 2.45, 0])
         with self.voiceover(
             "Here is a CUDA program. <bookmark mark='a'/> The function, a kernel, says what one thread does: work "
             "out which element is mine from my block number and my thread number, and update that element. "
@@ -82,15 +83,15 @@ class SIMT(VoiceoverScene):
         g = np.random.Generator(np.random.PCG64(32))
         taken = g.random(32) < 0.5
         cols = [IF_C if t else ELSE_C for t in taken]
-        warp = self.lanes(32, w=0.24, colors=cols).move_to([-3.0, 2.0, 0])
-        code = code_block(["if (x[i] > 0)  y[i] = f(x[i]);", "else           y[i] = g(x[i]);"], font_size=20)
+        warp = self.lanes(32, w=0.17, colors=cols).move_to([-3.2, 1.6, 0])
+        code = code_lines(["if (x[i] > 0)  y[i] = f(x[i]);", "else           y[i] = g(x[i]);"], font_size=20)
         code.next_to(warp, UP, buff=0.3)
         code[0].set_color(IF_C)
         code[1].set_color(ELSE_C)
-        pass1 = self.lanes(32, w=0.24, colors=[IF_C if t else IDLEC for t in taken]).move_to([-3.0, 0.6, 0])
-        pass2 = self.lanes(32, w=0.24, colors=[ELSE_C if not t else IDLEC for t in taken]).move_to([-3.0, -0.3, 0])
-        p1 = label(r"pass 1", font_size=20, color=IF_C).next_to(pass1, LEFT, buff=0.2)
-        p2 = label(r"pass 2", font_size=20, color=ELSE_C).next_to(pass2, LEFT, buff=0.2)
+        pass1 = self.lanes(32, w=0.17, colors=[IF_C if t else IDLEC for t in taken]).move_to([-3.2, 0.1, 0])
+        pass2 = self.lanes(32, w=0.17, colors=[ELSE_C if not t else IDLEC for t in taken]).move_to([-3.2, -1.0, 0])
+        p1 = label(r"pass 1", font_size=20, color=IF_C).next_to(pass1, RIGHT, buff=0.15)
+        p2 = label(r"pass 2", font_size=20, color=ELSE_C).next_to(pass2, RIGHT, buff=0.15)
         qs, er, es = np.asarray(w["qs"]), np.asarray(w["eff_rand"]), np.asarray(w["eff_sort"])
         ax = axes([0, 1], [0, 1.05], x_length=4.6, y_length=2.6, xlabel=r"fraction of threads taking the if",
                   ylabel=r"useful work per lane-slot", xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],

@@ -576,7 +576,7 @@ def compute_xor():
     tt = np.linspace(-0.5, 1.5, 41)
     grid_lines = [np.c_[np.full_like(tt, c), tt] for c in lines] + [np.c_[tt, np.full_like(tt, c)] for c in lines]
     out = dict(keep=list(keep), losses=losses, seed=seed, solved=len(solved), starts=len(results), xs=xs,
-               err_bp=err_bp, err_fd=err_fd, lr=lr, steps=steps,
+               err_bp=err_bp, err_fd=err_fd, lr=lr, steps=steps, g_ad=flat(g_ad), g_bp=flat(g_bp), g_fd=flat(g_fd),
                stuck_losses=np.array([r[0][-1] for r in results]))
     for t, sp in zip(keep, snaps):
         out[f"q{t}"] = xor_forward_np(sp, G)[3].reshape(len(xs), len(xs))
@@ -846,7 +846,7 @@ def compute_meanfield():
 
 def compute_trainable():
     """Which (sigma_w^2, depth) can be trained: tanh networks of width 64 fitting a 10-class task (Gaussian clusters in
-    32 dimensions), 400 steps of RMSProp each (as Schoenholz et al. trained theirs), training accuracy at the end."""
+    32 dimensions), 300 steps of RMSProp each (as Schoenholz et al. trained theirs), training accuracy at the end."""
     import torch
 
     torch.set_num_threads(2)
@@ -860,9 +860,9 @@ def compute_trainable():
     Xt = torch.tensor(X / X.std(), dtype=torch.float32)
     yt = torch.tensor(lab)
     sws = np.round(np.linspace(0.6, 4.0, 12), 3)
-    depths = [5, 10, 20, 30, 45, 60, 80, 100]
+    depths = [5, 10, 20, 35, 50, 70, 100]
     acc = np.zeros((len(depths), len(sws)))
-    width, steps = 64, 400
+    width, steps = 64, 300
     for i, L in enumerate(depths):
         for j, a in enumerate(sws):
             torch.manual_seed(1000 * i + j)
@@ -929,7 +929,7 @@ def compute_norms():
 # ---------------------------------------------------------------------------
 # The modern block, assembled piece by piece: a deep MLP language model on the novels
 # ---------------------------------------------------------------------------
-BLK_CTX, BLK_EMB, BLK_D, BLK_DEPTH, BLK_STEPS, BLK_BATCH, BLK_LR = 16, 16, 64, 24, 1500, 128, 3e-3
+BLK_CTX, BLK_EMB, BLK_D, BLK_DEPTH, BLK_STEPS, BLK_BATCH, BLK_LR = 16, 16, 64, 24, 1200, 128, 3e-3
 BLOCK_VARIANTS = ("plain", "residual", "post_ln", "pre_ln", "pre_rms", "pre_rms_swiglu")
 
 
@@ -1163,6 +1163,13 @@ def compute_kan():
     curve, kept = fit(kan, snaps=snaps)
     out.update(kan_curve=curve, kan_params=n_params(kan), kan_snaps=list(snaps),
                kan_edges=np.array(kept), kan_test=float(curve[-1, 2]))
+    # how much the learned curves look like the formula's pieces: |correlation| of each hidden unit's curve of x with
+    # sin(pi x), and of its curve of y with y^2
+    E = np.array(kept[-1])
+    xv = xs.numpy()
+    cx = [abs(np.corrcoef(E[2 * j], np.sin(np.pi * xv))[0, 1]) for j in range(5)]
+    cy = [abs(np.corrcoef(E[2 * j + 1], xv ** 2)[0, 1]) for j in range(5)]
+    out.update(corr_sin=cx, corr_sq=cy)
     rows = []
     for G in (2, 3, 5, 10, 20):
         torch.manual_seed(1)
@@ -1181,6 +1188,27 @@ def compute_kan():
     out.update(mlp_curve=c, mlp_params=n_params(m), mlp_test=float(c[-1, 2]), y_std=float(yte.std()))
     torch.set_default_dtype(torch.float32)
     return out
+
+
+def compute_lm_words():
+    """How much of what the language model writes at each checkpoint is made of real words: the share of the
+    whitespace-separated words of each sample (punctuation stripped, lower-cased) that occur at least 3 times in the
+    training text."""
+    import collections
+    import re
+
+    from videos.ai.ai1 import compute as c1
+
+    words = re.findall(r"[a-z']+", c1.text("train").lower())
+    vocab = {w for w, n in collections.Counter(words).items() if n >= 3}
+    lm = load("lm")
+    rows = []
+    for step, bits, txt in lm["snaps"]:
+        toks = [re.sub(r"[^a-z']", "", t.lower()) for t in txt.split()]
+        toks = [t for t in toks if t]
+        real = sum(t in vocab for t in toks)
+        rows.append((int(step), float(bits), len(toks), real, real / max(len(toks), 1)))
+    return dict(rows=rows, vocab=len(vocab))
 
 
 ITEMS = {
@@ -1202,6 +1230,7 @@ ITEMS = {
     "block": compute_block,
     "configs": compute_configs,
     "kan": compute_kan,
+    "lm_words": compute_lm_words,
 }
 CACHE.items = ITEMS
 
