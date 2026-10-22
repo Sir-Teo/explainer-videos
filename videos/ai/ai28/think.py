@@ -11,8 +11,8 @@ Items:
                    made to think, and left to choose; how often it chooses to think
     think_samples  64 sampled solutions per test question from that model, made to think, and 64 made to answer at
                    once: answers, steps, and which steps are right
-    think_rl       reinforcement learning on the sum's correctness alone, and with a cost of 0.02 per step of
-                   thought; 3 seeds each: accuracy, length, how often it thinks, by length of list, as it trains,
+    think_rl       reinforcement learning on the sum's correctness alone, and with a cost of 0.005 or 0.02 per step
+                   of thought; 3 seeds each: accuracy, length, how often it thinks, by length of list, as it trains,
                    and the lengths it chooses replayed checkpoint by checkpoint
     think_budget   test-time compute on 9-digit lists: think for at most m steps, then answer (sequential), against
                    a vote over N answers (parallel), at equal numbers of tokens
@@ -37,7 +37,7 @@ TMAX = S + 1 + 1 + (S + 2) + 1 + 1 + 1  # slots, '=', THINK, steps (with room to
 NMAX = S - 1  # the longest list: a PAD always follows it, which is how the model knows the list has ended
 NS = list(range(NMIN, NMAX + 1))
 SFT_STEPS = 1500
-STEP_COST = 0.02  # reward lost per step of thought, in the length-penalty runs
+COSTS = {"plain": 0.0, "gentle": 0.005, "strong": 0.02}  # reward lost per step of thought, in the three RL runs
 
 
 def _c():
@@ -308,7 +308,7 @@ def seq_logprob(m, tokens, gmask):
     return (lp * gmask[:, 1:].float()).sum(1)
 
 
-def rl_run(cost, seed, steps=300, G=8, Q=32, lr=3e-4, every=10, snap_every=25):
+def rl_run(cost, seed, steps=250, G=8, Q=32, lr=3e-4, every=10, snap_every=25, name=None):
     import torch
 
     c = _c()
@@ -364,18 +364,18 @@ def rl_run(cost, seed, steps=300, G=8, Q=32, lr=3e-4, every=10, snap_every=25):
     out["snap_tok"] = np.array([s[2] for s in snaps])
     out["snap_answer"] = np.array([s[3] for s in snaps])
     out["shows"] = np.repeat(shows, 3, 0)
-    if seed == 0:
-        torch.save(m.state_dict(), c.CACHE.dir / f"think_rl_{'pen' if cost else 'plain'}.pt")
+    if seed == 0 and name:
+        torch.save(m.state_dict(), c.CACHE.dir / f"think_rl_{name}.pt")
     return out
 
 
 def compute_think_rl(seeds=3):
     c = _c()
-    out = {"ns": NS, "cost": STEP_COST, "seeds": seeds, "S": S}
-    for name, cost in (("plain", 0.0), ("pen", STEP_COST)):
+    out = {"ns": NS, "costs": COSTS, "seeds": seeds, "S": S, "names": list(COSTS)}
+    for name, cost in COSTS.items():
         runs = []
         for s in range(seeds):
-            runs.append(c.memo(f"think_rl_{name}_{s}", lambda: rl_run(cost, s)))
+            runs.append(c.memo(f"think_rl_{name}_{s}", lambda: rl_run(cost, s, name=name)))
         H = np.stack([np.asarray(r["hist"], float) for r in runs])  # (seeds, logs, 1 + 3 * len(NS))
         k = len(NS)
         out[f"{name}_steps"] = H[0, :, 0]
@@ -700,9 +700,62 @@ def compute_think_search(nq=300, n=NMAX):
     return out
 
 
+def _vote(A, truth, ks, g, reps=20):
+    """Majority vote over k of the samples (ties: the smallest answer), averaged over random subsets."""
+    nq, K = A.shape
+    out = []
+    for k in ks:
+        hits = []
+        for _ in range(reps if k < K else 1):
+            idx = np.stack([g.choice(K, k, replace=False) for _ in range(nq)])
+            pick = np.take_along_axis(A, idx, 1)
+            mode = np.array([np.bincount(r[r >= 0], minlength=VMAX + 1).argmax() if (r >= 0).any() else -1
+                             for r in pick])
+            hits.append(float((mode == truth).mean()))
+        out.append(float(np.mean(hits)))
+    return out
+
+
+def compute_think_vote():
+    """Self-consistency on the samples of ``think_samples``: majority vote over k chains (and over k answers given
+    at once), pass@k with a checker, and the limit the vote tends to: the share of questions whose most frequent
+    answer is the right one."""
+    c = _c()
+    s = c.load("think_samples")
+    truth, ns = np.asarray(s["truth"]), np.asarray(s["n"])
+    ks = [1, 2, 4, 8, 16, 32, 64]
+    g = c.rng(101)
+    out = {"ks": ks}
+    for mode in ("think", "direct"):
+        A = np.asarray(s[f"{mode}_answer"])
+        K = A.shape[1]
+        right = A == truth[:, None]
+        cnt = right.sum(1)
+        out[f"{mode}_vote"] = _vote(A, truth, ks, g)
+        out[f"{mode}_pass"] = [float(np.mean([1.0 if K - ci < k else 1 - math.comb(K - ci, k) / math.comb(K, k)
+                                              for ci in cnt])) for k in ks]
+        mode_all = np.array([np.bincount(r[r >= 0], minlength=VMAX + 1).argmax() for r in A])
+        out[f"{mode}_mode_right"] = float((mode_all == truth).mean())
+        out[f"{mode}_p_right"] = right.mean(1)
+        top_wrong = np.array([np.bincount(r[(r >= 0) & (r != t)], minlength=VMAX + 1).max() if ((r >= 0) & (r != t)).any()
+                              else 0 for r, t in zip(A, truth)]) / K
+        out[f"{mode}_p_wrong"] = top_wrong
+    # a question to show: chains disagree, the vote is right, a long list
+    pr, pw = out["think_p_right"], out["think_p_wrong"]
+    cand = [i for i in range(len(truth)) if ns[i] >= 6 and 0.45 <= pr[i] <= 0.8 and pw[i] < pr[i]]
+    qi = cand[0] if cand else int(np.argmax(ns))
+    out["ex_q"] = qi
+    out["ex_d"] = np.asarray(s["d"])[qi]
+    out["ex_answers"] = np.asarray(s["think_answer"])[qi]
+    out["ex_steps"] = np.asarray(s["think_steps"])[qi]
+    out["ex_truth"] = int(truth[qi])
+    return out
+
+
 ITEMS = {
     "think_sft": compute_think_sft,
     "think_samples": compute_think_samples,
+    "think_vote": compute_think_vote,
     "think_rl": compute_think_rl,
     "think_budget": compute_think_budget,
     "think_verify": compute_think_verify,

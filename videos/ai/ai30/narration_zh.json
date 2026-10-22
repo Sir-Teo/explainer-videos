@@ -6,7 +6,7 @@
   "SAE": "2. 把特征拆开",
   "Circuits": "3. 追踪一个想法",
   "Steering": "4. 伸手进去",
-  "Outro": "回顾，以及整个系列"
+  "Outro": "回顾，以及接下来"
  },
  "lines": {
   "617a9da6b839": {
@@ -99,26 +99,6 @@
    "en": "This matters for part twenty-eight's reasoning models. Their chains of thought look like a window into their thinking. But are they? <bookmark mark='a'/> One test: slip a hint into the question, and see if the model uses it, then check whether its chain of thought admits it. <bookmark mark='b'/> Most of the time, it doesn't: a quarter of the time for Claude 3.7 Sonnet, under two fifths for DeepSeek-R1. The written chain is not always the real computation. That's why reading the inside directly, with the tools of this part, matters.",
    "zh": "这一点，对第28部分的推理模型很重要。它们的思维链，看上去就像一扇窗，能让人看见它们在想什么。可真是这样吗？<bookmark mark='a'/>有一种检验：在问题里悄悄塞进一条提示，看模型会不会用上它，再检查它的思维链有没有承认这一点。<bookmark mark='b'/>大多数时候，它没有承认：Claude 3.7 Sonnet只有四分之一的时候承认了，DeepSeek-R1也不到五分之二。写出来的思维链，并不总是真正的计算过程。所以，用这一部分的工具，直接去读模型的内部，才这么重要。"
   },
-  "831148a947e3": {
-   "scene": "Outro",
-   "en": "Let's take stock, one last time. Models pack more features than they have numbers, as almost perpendicular directions, at the price of a little interference. A sparse autoencoder pulls those directions back apart, and they turn out to mean things. Features chain into circuits we can trace from input to output. And pushing on a feature changes what the model does.",
-   "zh": "我们最后一次来盘点一下。模型装下的特征，比它拥有的数还多，靠的是一些近似垂直的方向，代价是一点点干扰。稀疏自编码器把这些方向重新拆开，结果发现，它们都有含义。特征一个接一个，连成了回路，我们能把这些回路从输入一路追踪到输出。而推一把某个特征，就能改变模型的行为。"
-  },
-  "83dca0e5535b": {
-   "scene": "Outro",
-   "en": "And that's the series. <bookmark mark='a'/> We began with a guessing game: predicting the next character, and the probability, linear algebra and calculus underneath it. <bookmark mark='b'/> Then learning: counting, fitting, networks, and the long walk downhill. <bookmark mark='c'/> Then the engines: attention, memory, experts, diffusion, and every sense turned into tokens. <bookmark mark='d'/> And finally what they do with it: reasoning, acting, running fast, and now, looking inside.",
-   "zh": "这个系列，就到这里了。<bookmark mark='a'/>我们从猜字游戏开始：预测下一个字符，还有藏在它下面的概率、线性代数和微积分。<bookmark mark='b'/>然后是学习：计数、拟合、神经网络，还有漫长的一路下山。<bookmark mark='c'/>接着是引擎：注意力、记忆、专家、扩散，以及万物皆词元，每一种感官都变成了词元。<bookmark mark='d'/>最后，是模型拿这些本事去做什么：推理、行动、跑得更快，以及现在，看看模型内部。"
-  },
-  "9a0df0e1abbb": {
-   "scene": "Outro",
-   "en": "And the scoreboard from part one, where it all started: bits per character on one passage of a novel. Counting got us to 2.04; our own transformer, trained on a laptop-sized computer, to 2.00. The big models reach about one bit, inside the range people manage, between 0.6 and 1.3. <bookmark mark='a'/> Every row of it is the same idea: a better guess at what comes next. Thank you for building it with me.",
-   "zh": "还有第1部分的记分牌，一切开始的地方：在一部小说的一段文字上，每个字符要多少比特。计数让我们降到了2.04；我们自己的Transformer，在一台笔记本电脑大小的计算机上训练，降到了2.00。大模型能达到大约1比特，落在人能做到的范围之内，也就是0.6到1.3之间。<bookmark mark='a'/>它的每一行，都是同一个想法：把接下来是什么，猜得更好一点。谢谢你，和我一起把它搭建出来。"
-  },
-  "d6c9ae4fc5d9": {
-   "scene": "Outro",
-   "en": "Thanks for watching.",
-   "zh": "感谢观看。"
-  },
   "969e8cfe3674": {
    "scene": "SAE",
    "en": "So what are the features? For each one, find where in the novels it fires hardest, and look. <bookmark mark='a'/> Here are four. Each lights up on the same kind of moment, again and again. Of the 501 features that ever fire, 481 put at least six of their eight strongest moments on the same character. They're not all this clean, and in a model this small they're mostly about spelling and punctuation. In big models, the same method finds features for cities, for code bugs, for flattery, for the Golden Gate Bridge.",
@@ -133,6 +113,21 @@
    "scene": "Hook",
    "en": "Part by part, we've built every piece of these models ourselves. We know every number in them. And yet we can't say what they're thinking. <bookmark mark='a'/> Here's our transformer reading a line of the passage: for each character, the hundred and twenty-eight numbers it carries after its second block. Every one of them busy, all the time; not one of them means anything by itself. <bookmark mark='b'/> This part is about reading them. <bookmark mark='c'/> Rewritten in the right basis, the picture changes: only a handful of features, ideas the model tracks, are on at each character, and each one turns out to mean something.",
    "zh": "一部分接一部分，这些模型的每一个部件，都是我们亲手搭出来的。它们里面的每一个数，我们都知道。可是，我们还是说不出它们在想什么。<bookmark mark='a'/>这是我们的Transformer在读测试段落里的一行：每个字符经过第二个模块之后，都带着128个数。每一个数都很忙，一刻不停；可没有一个数，单独拿出来有什么含义。<bookmark mark='b'/>这一部分，讲的就是怎样读懂它们。<bookmark mark='c'/>换一组合适的基，重新写一遍，画面就变了：在每个字符上，只有少数几个特征，也就是模型追踪的想法，是打开的，而每一个特征，原来都有自己的含义。"
+  },
+  "792b8b564007": {
+   "scene": "Outro",
+   "en": "Let's take stock. Models pack more features than they have numbers, as almost perpendicular directions, at the price of a little interference. A sparse autoencoder pulls those directions back apart, and they turn out to mean things. Features chain into circuits we can trace from input to output. And pushing on a feature changes what the model does.",
+   "zh": "我们来盘点一下。模型装下的特征，比它拥有的数还多，靠的是一些近似垂直的方向，代价是一点点干扰。稀疏自编码器把这些方向重新拆开，结果发现，它们都有含义。特征一个接一个，连成了回路，我们能把这些回路从输入一路追踪到输出。而推一把某个特征，就能改变模型的行为。"
+  },
+  "17bf6aa7d2b7": {
+   "scene": "Outro",
+   "en": "Next time, the finale: can we trust it? How to measure a model honestly, what happens when an objective has a loophole, how to supervise a model stronger than its supervisor, the evidence that models can deceive, and how to watch and control them. And, one last time, the scoreboard.",
+   "zh": "下一次，是最后一部分：我们能信任它吗？怎样诚实地衡量一个模型，当目标有漏洞时会发生什么，怎样让一个比监督者更强的模型受到监督，模型会欺骗的证据，以及怎样监视和控制它们。还有，最后一次，那块记分牌。"
+  },
+  "940b9cfd1dc1": {
+   "scene": "Outro",
+   "en": "Thanks for watching, and see you in Part 31, the finale.",
+   "zh": "感谢观看，我们第31部分，也就是最后一部分再见。"
   }
  },
  "title_en": "AI, Built: Part 30, Inside the Model",
@@ -142,6 +137,6 @@
   "SAE": "2. Pulling the features apart",
   "Circuits": "3. Tracing a thought",
   "Steering": "4. Reaching in",
-  "Outro": "Recap, and the whole series"
+  "Outro": "Recap, and what comes next"
  }
 }

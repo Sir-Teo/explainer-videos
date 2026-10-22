@@ -1,7 +1,7 @@
 """Precompute everything numerical in Part 14 of the AI series ("The Language-Model Lineage").
 
     python -m explainer.ai.novels               # first: the novels tokenizer and the series' base model
-    python -m videos.ai.ai14.compute            # everything missing (training: about 1.5 hours on 2 threads)
+    python -m videos.ai.ai14.compute            # everything missing (training: about 3 CPU-hours on 2 threads)
     python -m videos.ai.ai14.compute gpt_m --force
 
 Results are cached in ``.cache/ai14/<name>.json`` (+ ``.npz``); trained weights in ``.cache/ai14/<name>.pt``, with
@@ -13,6 +13,8 @@ Items:
                parameter count of a decoder from its shape (12 L d^2 + vocabulary), GPT-3's 6ND, LLaMA's SwiGLU
                width, the KV cache per token under MHA, GQA and MLA, tokens per parameter, 6ND of the open models
     family     our models' shapes and parameter counts, before training
+    aa         open against closed on Artificial Analysis's index (as fetched on 8 October 2026): the running best of
+               each, and how many months behind each new open record was
     epoch      growth of training compute: a least-squares fit of log10(FLOP) against the date for Epoch AI's
                frontier language models (and for all its notable language models), and the compute tower
     gpt_xs, gpt_s, gpt_m, gpt_l
@@ -46,7 +48,7 @@ FAMILY = {  # name: (shape, label)
     "gpt_m": dict(d=128, layers=4, heads=4),
     "gpt_l": dict(d=192, layers=6, heads=6),
 }
-TOKENS = 6_000_000  # per model: equal data for every member of the family, and for the masked model
+TOKENS = 3_000_000  # per model: equal data for every member of the family, and for the masked model
 FEW_SHOT_BOOKS = ["Emma", "Dracula", "Frankenstein", "Middlemarch", "Jane Eyre", "Moby Dick", "Little Women",
                   "Ulysses"]
 SHOTS = [0, 1, 2, 4, 8]
@@ -194,6 +196,29 @@ def compute_epoch():
     out["x45_doubling_months"] = [12 * math.log(2) / math.log(g) for g in (4.0, 5.0)]
     out["x45_decade"] = [g ** 10 for g in (4.0, 5.0)]
     return out
+
+
+def compute_aa():
+    """Open against closed on one independent index (Artificial Analysis): the running best of each, and for every new
+    open record, how many months earlier a closed model had first scored as high."""
+    import json
+    from pathlib import Path
+
+    d = json.loads((Path(__file__).parent / "aa_progress.json").read_text())
+    rows = sorted(d["progress"], key=lambda r: r["release"])
+    best = {True: [], False: []}
+    lag = []
+    for r in rows:
+        y = year(r["release"])
+        prev = best[r["open"]][-1][1] if best[r["open"]] else -1
+        if r["score"] > prev:
+            best[r["open"]].append((y, r["score"], r["name"]))
+            if r["open"]:
+                closed_first = next((year(c["release"]) for c in rows if not c["open"] and c["score"] >= r["score"]),
+                                    None)
+                lag.append(dict(name=r["name"], year=y, score=r["score"],
+                                months=None if closed_first is None else 12 * (y - closed_first)))
+    return dict(meta=d["meta"], open=best[True], closed=best[False], lag=lag, rows=rows)
 
 
 # ---------------------------------------------------------------------------
@@ -453,7 +478,7 @@ def _bert_generate(model, prompt, n):
 # ---------------------------------------------------------------------------
 # In-context learning as the family grows
 # ---------------------------------------------------------------------------
-def _fewshot_items(n_pairs=10, per_pair=40, seed=2):
+def _fewshot_items(n_pairs=10, per_pair=30, seed=2):
     """Two-way 'which book?' prompts: k labelled sentences from two books, then a held-out sentence."""
     g = rng(seed)
     books = _paragraphs()
@@ -486,6 +511,9 @@ def _fewshot_prompt(demos, query):
 
 
 def _fewshot_scores(model, items, shots=SHOTS):
+    """Accuracy at each k: does the model give the right title the higher log-probability?  All the prompts of an
+    item (every k, both titles) go through the model as one right-padded batch; padding after a sequence can't
+    change a causal model's outputs before it."""
     import torch
 
     from explainer.ai import novels as N
@@ -493,23 +521,28 @@ def _fewshot_scores(model, items, shots=SHOTS):
     acc = {k: 0 for k in shots}
     model.eval()
     T = model.cfg.seq
+    titles = {}
     with torch.no_grad():
         for it in items:
             a, b = it["pair"]
+            seqs, ns = [], []
             for k in shots:
-                # balanced demos: the first k of a list that alternates labels, shuffled within the prompt
-                demos = it["demos"][:k] if k else []
+                demos = it["demos"][:k] if k else []  # balanced: the first k of a list that alternates labels
                 p = N.encode(_fewshot_prompt(demos, it["query"]))
-                lps = []
                 for lab in (a, b):
-                    c = N.encode(" " + lab)
-                    x = (p + c)[-(T + 1):]
-                    t = torch.tensor([x])
-                    lp = model(t[:, :-1])[0].float().log_softmax(-1)
-                    n = len(c)
-                    tgt = t[0, -n:]
-                    lps.append(float(lp[-n:].gather(-1, tgt[:, None]).sum()))
-                acc[k] += int((lps[0] > lps[1]) == (it["answer"] == a))
+                    c = titles.setdefault(lab, N.encode(" " + lab))
+                    seqs.append((p + c)[-(T + 1):])
+                    ns.append(len(c))
+            t = torch.zeros(len(seqs), max(len(x) for x in seqs), dtype=torch.long)
+            for i, x in enumerate(seqs):
+                t[i, :len(x)] = torch.tensor(x)
+            lp = model(t[:, :-1]).float().log_softmax(-1)
+            sc = []
+            for i, (x, n) in enumerate(zip(seqs, ns)):
+                m = len(x)
+                sc.append(float(lp[i, m - 1 - n:m - 1].gather(-1, t[i, m - n:m, None]).sum()))
+            for j, k in enumerate(shots):
+                acc[k] += int((sc[2 * j] > sc[2 * j + 1]) == (it["answer"] == a))
     return [acc[k] / len(items) for k in shots]
 
 
@@ -528,10 +561,10 @@ def compute_icl():
                                                                                               items[0]["query"]),
                example_answer=items[0]["answer"], example_pair=list(items[0]["pair"]))
     models = [(nm, lm.load_trained(nm, CACHE.dir)) for nm in FAMILY]
-    try:
+    if (N.OUT / "base.pt").exists():  # never train it from here: it is the series' own (explainer.ai.novels)
         models.append(("base", N.load_base()))
-    except Exception as e:  # the base model is the series' own; without it, the family stands alone
-        print("  (no base model:", e, ")")
+    else:
+        print("  (the series' base model is not trained yet: the family stands alone)")
     rows = []
     for nm, m in models:
         pp = lm.per_position(m, win)
@@ -588,11 +621,10 @@ def compute_scoreboard():
         b = lm.bits_per_char(m, passage)
         ours.append(dict(name=nm, params=int(m.count()["total"]), bits=b["bits"], tokens=b["tokens"]))
     out = dict(rows=rows, ours=ours, chars=len(passage))
-    try:
-        b = lm.bits_per_char(N.load_base(), passage)
-        out["base"] = dict(bits=b["bits"], params=int(N.load_base().count()["total"]))
-    except Exception as e:
-        print("  (no base model:", e, ")")
+    if (N.OUT / "base.pt").exists():  # never train it from here
+        base = N.load_base()
+        b = lm.bits_per_char(base, passage)
+        out["base"] = dict(bits=b["bits"], params=int(base.count()["total"]))
     return out
 
 
@@ -600,6 +632,7 @@ ITEMS = {
     "published": compute_published,
     "epoch": compute_epoch,
     "family": compute_family,
+    "aa": compute_aa,
     "gpt_xs": compute_gpt_xs,
     "gpt_s": compute_gpt_s,
     "gpt_m": compute_gpt_m,

@@ -191,3 +191,27 @@ def bar_row(values, labels, colors, width=6.0, height=0.36, font_size=22, vmax=N
         r.bar.set_x(rows.get_left()[0] + lw + 0.25 + r.bar.width / 2)
         r.value.next_to(r.bar, RIGHT, buff=0.15)
     return rows
+
+
+def to_rgba(arr: np.ndarray) -> np.ndarray:
+    a = np.clip(arr, 0, 1)
+    return (np.concatenate([a, np.ones(a.shape[:2] + (1,))], -1) * 255).astype(np.uint8)
+
+
+def live_image(fn, width: float, center, height: float | None = None) -> ImageMobject:
+    """A picture redrawn every frame from ``fn()`` (an (H, W, 3) float array), keeping its size and place: the
+    updater swaps the pixels, nothing else."""
+    img = image_from_rgb(fn(), width, height)
+    img.move_to(center)
+    img.add_updater(lambda m: setattr(m, "pixel_array", to_rgba(fn())))
+    return img
+
+
+def fit_in_frame(m: Mobject, margin=0.25) -> Mobject:
+    """Shrink (if needed) and shift a mobject to sit inside the frame."""
+    hw, hh = config.frame_width / 2 - margin, config.frame_height / 2 - margin
+    if m.width > 2 * hw:
+        m.width = 2 * hw
+    if m.height > 2 * hh:
+        m.height = 2 * hh
+    return keep_in_frame(m, margin)

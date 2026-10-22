@@ -137,13 +137,15 @@ BERT = dict(
     date="2018-10-11", mask=0.15, mask_split=(80, 10, 10), base_params=110e6, large_params=340e6,
     words_books=800e6, words_wiki=2500e6, glue_bert=80.5, glue_gpt=72.8, steps=1_000_000, batch_tokens=128000,
     tpu_days=4, chips_large=64,
-    # Table 5: the same architecture pretrained left-to-right (like GPT) or masked, dev scores
-    ablation=[("MNLI", 84.4, 82.1), ("QNLI", 88.4, 84.3), ("MRPC", 86.7, 77.5), ("SST-2", 92.7, 92.1),
-              ("SQuAD", 88.5, 77.8)],
+    # Table 5: BERT-Base pretrained masked ("No NSP") or left to right like GPT ("LTR & No NSP"); dev scores
+    ablation=[("MNLI", 83.9, 82.1), ("QNLI", 84.9, 84.3), ("MRPC", 86.5, 77.5), ("SST-2", 92.6, 92.1),
+              ("SQuAD", 87.9, 77.8)],
     src="Devlin et al., BERT (2018), Table 1, Table 5, App. A.2, C.1",
 )
-GLUE = dict(date="2018-04-20", tasks=9, src="Wang et al., GLUE (2018)")
-SUPERGLUE = dict(date="2019-05-02", human=89.8, t5=88.9, src="Wang et al., SuperGLUE (2019); Raffel et al. (2019)")
+GLUE = dict(date="2018-04-20", tasks=9, human=87.1, sota_jul2019=88.4,
+            src="Wang et al., GLUE (2018); Wang et al., SuperGLUE (2019), Sec. 1")
+SUPERGLUE = dict(date="2019-05-02", human=89.8, bert=69.0, t5=88.9,
+                 src="Wang et al., SuperGLUE (2019), Table 3; Raffel et al. (2019)")
 
 # ---------------------------------------------------------------------------
 # 2019: T5 (Raffel et al., Table 2: GLUE / CNNDM / SQuAD / SuperGLUE, dev, baseline-sized models)
@@ -173,7 +175,7 @@ GPT2 = dict(
     sizes=[("117M", 12, 768), ("345M", 24, 1024), ("762M", 36, 1280), ("1542M", 48, 1600)],
     lambada_acc=[45.99, 55.48, 60.12, 63.24], lambada_sota=59.23,
     release=[("Feb 2019", "124M"), ("May 2019", "355M"), ("Aug 2019", "774M"), ("Nov 2019", "1.5B")],
-    enwik8_bpb=0.93, sota_lm=7, lm_sets=8,
+    enwik8_bpb=0.93, sota_lm=7, lm_sets=8, coqa_f1=55, coqa_pairs=127_000, bleu_en_fr=5, bleu_fr_en=11.5,
     src="Radford et al. (2019), Tables 2-3; openai/gpt-2 model card (Nov 2019)",
 )
 
@@ -207,13 +209,17 @@ T0 = dict(date="2021-10-15", params=11e9, won=9, of=11, smaller=16,
           src="Sanh et al., Multitask Prompted Training Enables Zero-Shot Task Generalization (2021)")
 INSTRUCTGPT = dict(date="2022-03-04", small=1.3e9, big=175e9, sft=13_000, rm=33_000, ppo=31_000,
                    src="Ouyang et al., Training language models to follow instructions with human feedback (2022)")
-CHATGPT = dict(date="2022-11-30", src="OpenAI, Introducing ChatGPT (30 November 2022)")
+CHATGPT = dict(date="2022-11-30", users=100e6, months=2,
+               src="OpenAI, Introducing ChatGPT (30 November 2022); UBS estimate reported by Reuters, 2 February 2023")
+CLOSED = [("2023-03-14", "Claude", "Anthropic"), ("2023-12-06", "Gemini", "Google DeepMind"),
+          ("2024-09-12", "o1", "OpenAI")]
 
 # ---------------------------------------------------------------------------
 # 2023: GPT-4 and the closed era
 # ---------------------------------------------------------------------------
 GPT4 = dict(
-    date="2023-03-14", bar="top 10%", mmlu=86.4, gpt35_mmlu=70.0, predicted_from=10_000, experts=50,
+    date="2023-03-14", bar="top 10%", bar35="bottom 10%", mmlu=86.4, gpt35_mmlu=70.0, subjects=57,
+    predicted_from=10_000, experts=50,
     quote=("Given both the competitive landscape and the safety implications of large-scale models like GPT-4, "
            "this report contains no further details about the architecture (including model size), hardware, "
            "training compute, dataset construction, training method, or similar."),
@@ -287,7 +293,7 @@ TREE = [
     ("electra", r"ELECTRA", 2020.22, "encoder", True, "bert"),
     ("gpt3", r"GPT-3", 2020.41, "decoder", False, "gpt2"),
     ("codex", r"Codex", 2021.52, "decoder", False, "gpt3"),
-    ("flan", r"FLAN, T0", 2021.75, "encdec", False, "t5"),
+    ("t0", r"T0", 2021.79, "encdec", True, "t5"),  # Sanh et al. (2021); FLAN itself was a decoder (LaMDA-PT)
     ("instructgpt", r"InstructGPT", 2022.17, "decoder", False, "gpt3"),
     ("chatgpt", r"ChatGPT", 2022.91, "decoder", False, "instructgpt"),
     ("llama", r"LLaMA", 2023.15, "decoder", True, "gpt3"),

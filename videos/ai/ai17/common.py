@@ -250,3 +250,15 @@ def spec_table(rows, col_colors=None, font_size=22, h_buff=0.45, v_buff=0.2) -> 
     g = VGroup(tab, line)
     g.tab = tab
     return g.move_to(ORIGIN)
+
+
+def code_lines(lines, font_size=20, color=GREY_A, buff=0.12) -> VGroup:
+    """Source code as monospaced lines, keeping indentation; drawn with ``data_text`` so it is never translated."""
+    em = Text("M" * 20, font=MONO, font_size=font_size).width / 20
+    rows = VGroup(*[data_text(s.strip() or ".", font=MONO, font_size=font_size, color=color) for s in lines])
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=buff)
+    for r, s in zip(rows, lines):
+        if not s.strip():
+            r.set_opacity(0)
+        r.shift(RIGHT * em * (len(s) - len(s.lstrip(" "))))
+    return rows

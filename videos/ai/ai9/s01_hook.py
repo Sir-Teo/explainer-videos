@@ -60,7 +60,7 @@ class Hook(VoiceoverScene):
             "adds up its inputs and fires if the total is big enough. <bookmark mark='a'/> Fifteen years later, Frank "
             "Rosenblatt built one that learned from examples, and the New York Times reported the Navy's hope that it "
             "would one day walk and talk. <bookmark mark='b'/> In 1969 a book proved what a single layer of such units cannot do, and for a "
-            "decade almost nobody worked on them. <bookmark mark='c'/> In 1986 backpropagation trained the hidden "
+            "decade few worked on them. <bookmark mark='c'/> In 1986 backpropagation trained the hidden "
             "layers in between, <bookmark mark='d'/> and networks learned to read handwritten zip codes. "
             "<bookmark mark='e'/> But by the late nineties they were out of fashion again. <bookmark mark='f'/> In "
             "2006 a way to train deep ones was found, and in 2012 a deep network won the ImageNet competition by a "

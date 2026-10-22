@@ -188,13 +188,13 @@ class Translation(VoiceoverScene):
             "<bookmark mark='c'/> And it was cheap. The base model alone beat every earlier system, at a training cost "
             f"about a {frac_word} of Google's own recurrent system."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), LaggedStart(*[FadeIn(c_, shift=UP * 0.15) for c_ in cards], lag_ratio=0.4))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.15) for c_ in cards], lag_ratio=0.4))
+            self.play(Indicate(cards[0], scale_factor=1.03))
             self.play(FadeIn(data))
             vo.wait_until("b")
-            self.play(FadeOut(cards), FadeOut(data))
-            self.play(FadeIn(bt), LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
+            self.play(FadeOut(cards), FadeOut(data), FadeIn(bt), run_time=0.8)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
                                                 for r in bleu], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("c")
             self.play(FadeIn(ct), LaggedStart(*[AnimationGroup(GrowFromEdge(r[0], LEFT), FadeIn(r[1]))
@@ -283,9 +283,11 @@ class Translation(VoiceoverScene):
             "did; keep only the decoder, as GPT did; or keep both, as T5 did. <bookmark mark='b'/> Which cut won, and "
             "why, is the thread of this part."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in reasons], lag_ratio=0.5), run_time=3.0)
+            ghost = three.copy().set_opacity(0.15)
+            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in reasons], lag_ratio=0.5), FadeIn(ghost),
+                      run_time=3.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in three], lag_ratio=0.4), run_time=2.4)
+            self.play(LaggedStart(*[FadeIn(t) for t in three], lag_ratio=0.4), FadeOut(ghost), run_time=2.4)
             vo.wait_until("b")
             self.play(FadeIn(tw))
         self.wait(0.3)

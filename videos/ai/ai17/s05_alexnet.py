@@ -32,9 +32,20 @@ class AlexNet(VoiceoverScene):
                         show_values=True, digits=1, value_font=30,
                         labels=[r"second place", r"AlexNet"], label_font=24)
         bars.place(base_y=-2.4, x=3.6)
-        bt = label(r"ILSVRC 2012: \ top-5 error, \%", font_size=24, color=GREY_A).move_to([3.6, 2.3, 0])
-        who = label(r"Alex Krizhevsky, \ Ilya Sutskever, \ Geoffrey Hinton \ (Toronto)", font_size=24, color=GPUC)
-        who.move_to([-3.4, -0.6, 0])
+        bt = label(r"ILSVRC 2012: \ top-5 error, \%", font_size=24, color=GREY_A).move_to([3.6, 2.6, 0])
+        who = label(r"Alex Krizhevsky, \ Ilya Sutskever, \ Geoffrey Hinton \ (Toronto)", font_size=22, color=GPUC)
+        who.next_to(bt, DOWN, buff=0.2)
+        # the contest: one photograph, five guesses, right if the true class is among them
+        photo = RoundedRectangle(width=1.9, height=1.9, corner_radius=0.08, stroke_color=GREY_B, fill_color=GREY_D,
+                                 fill_opacity=0.5).move_to([-5.1, -1.3, 0])
+        pl = label(r"a test photo", font_size=18, color=GREY_B).next_to(photo, DOWN, buff=0.1)
+        guesses = VGroup(*[data_text(t, font_size=20, color=(GPUC if k == 2 else GREY_A))
+                           for k, t in enumerate(["1. tiger cat", "2. tabby cat", "3. Egyptian cat", "4. lynx",
+                                                  "5. tiger"])]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        guesses.next_to(photo, RIGHT, buff=0.4)
+        ok = SurroundingRectangle(guesses[2], color=GPUC, buff=0.06)
+        il = note(r"illustrative: \ right if the true class is among five guesses").next_to(guesses, DOWN, buff=0.2)
+        il.align_to(photo, LEFT)
         cite_ = cite(r"Krizhevsky, Sutskever \& Hinton (2012)", corner=DL)
         with self.voiceover(
             "By 2012 the ingredients were in place. <bookmark mark='a'/> In 2009 Fei-Fei Li's group had published "
@@ -44,11 +55,14 @@ class AlexNet(VoiceoverScene):
             "<bookmark mark='c'/> missed on 15.3 percent of the test images. The next best entry missed on 26.2 "
             "percent. Nobody had seen a gap like that."
         ) as vo:
-            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(bars), FadeIn(bt))
+            self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
+            self.play(FadeIn(photo), FadeIn(pl), LaggedStart(*[FadeIn(g_) for g_ in guesses], lag_ratio=0.2))
+            self.play(Create(ok), FadeIn(il))
             vo.wait_until("b")
-            self.play(FadeIn(who), FadeIn(cite_))
+            self.play(FadeIn(bt), FadeIn(who), FadeIn(cite_))
             vo.wait_until("c")
+            self.add(bars)
             self.play(*bars.to(vals), run_time=1.5)
         bars.freeze()
         self.wait(0.3)
@@ -136,6 +150,14 @@ class AlexNet(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.6, 0])
         tag = note(r"computed: \ matrix products on this computer, \ at its best measured speed").to_corner(DR,
                                                                                                          buff=0.2)
+        cards = VGroup(*[RoundedRectangle(width=0.9, height=0.5, corner_radius=0.06, stroke_color=GPUC,
+                                          fill_color=GPUC, fill_opacity=0.5) for _ in range(2)]).arrange(DOWN, buff=0.1)
+        cpu = RoundedRectangle(width=0.9, height=0.9, corner_radius=0.08, stroke_color=CPUC, fill_color=CPUC,
+                               fill_opacity=0.3)
+        cap.shift(RIGHT * 0.6)
+        here.shift(RIGHT * 0.6)
+        cards.next_to(cap, LEFT, buff=0.35)
+        cpu.next_to(here, LEFT, buff=0.35)
         faster = "faster" if dN < days else "slower"
         with self.voiceover(
             "How much arithmetic was that? <bookmark mark='a'/> About 1.2 million images, times ninety passes, "
@@ -153,9 +175,9 @@ class AlexNet(VoiceoverScene):
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
-            self.play(FadeIn(cap))
+            self.play(FadeIn(cards), FadeIn(cap))
             vo.wait_until("d")
-            self.play(FadeIn(here[0]), FadeIn(tag))
+            self.play(FadeIn(cpu), FadeIn(here[0]), FadeIn(tag))
             self.play(FadeIn(here[1]))
         self.wait(0.3)
         self.clear_scene()
@@ -172,8 +194,8 @@ class AlexNet(VoiceoverScene):
             (2020, r"Sara Hooker, \ \textit{The Hardware Lottery}", r"ideas win when they suit the hardware of their "
              r"day; \ neural networks drew a lucky ticket in games", C.NEURAL),
         ]
-        cards = VGroup(*[history_card(y, w, t, width=6.2, color=c, font_size=21) for y, w, t, c in items])
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).move_to(DOWN * 0.3)
+        cards = VGroup(*[history_card(y, w, t, width=6.4, color=c, font_size=23) for y, w, t, c in items])
+        cards.arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.45)).move_to(DOWN * 0.15)
         head = label(r"After AlexNet", font_size=36, color=GPUC).to_edge(UP, buff=0.45)
         with self.voiceover(
             "After 2012 the field moved onto GPUs. <bookmark mark='a'/> In 2014 NVIDIA released cuDNN, a library of "

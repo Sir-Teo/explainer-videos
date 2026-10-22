@@ -184,7 +184,8 @@ def config_card(c: dict, width=4.6, font_size=22, rows=("layers", "d", "heads", 
         if k == "layers" and c.get("layers_note"):
             return c["layers_note"]
         if k in ("params", "tokens", "active"):
-            return human(v)
+            h = human(v)
+            return h[:-1] + rf"\,\text{{{h[-1]}}}" if h[-1].isalpha() else h
         if k == "ctx":
             return f"{v:,}".replace(",", "{,}")
         if k == "heads" and c.get("kv_heads") not in (None, c.get("heads")):
@@ -225,4 +226,4 @@ def take_away(text: str, color=C.BITS, font_size=30) -> VGroup:
     t = label(text, font_size=font_size, color=color)
     band_ = RoundedRectangle(width=min(t.width + 0.8, 13.6), height=t.height + 0.4, corner_radius=0.14,
                              stroke_width=0, fill_color=color, fill_opacity=0.10)
-    return VGroup(band_, t.move_to(band_)).to_edge(DOWN, buff=0.35)
+    return VGroup(band_, t.move_to(band_)).to_edge(DOWN, buff=0.6)  # clear of a cite in the bottom-left corner

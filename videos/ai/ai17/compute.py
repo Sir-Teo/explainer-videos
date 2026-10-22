@@ -535,22 +535,49 @@ def bits_of(x: float, fmt: str) -> dict:
     return dict(value=q, sign=s, exp=format(e + bias, f"0{e_bits}b"), man=format(man, f"0{m_bits}b"))
 
 
+def narrator_weights(n=1 << 22):
+    """The narrator's own weights, if Qwen3-TTS is in the Hugging Face cache here: one feed-forward matrix of its
+    language model (stored in bfloat16), as float32."""
+    import json as _json
+    import struct
+
+    hub = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface")) / "hub"
+    files = sorted(hub.glob("models--Qwen--Qwen3-TTS-12Hz-1.7B-Base/snapshots/*/model.safetensors"))
+    if not files:
+        return None
+    with open(files[0], "rb") as f:
+        hlen = struct.unpack("<Q", f.read(8))[0]
+        head = _json.loads(f.read(hlen))
+        key = "talker.model.layers.10.mlp.down_proj.weight"
+        if key not in head or head[key]["dtype"] != "BF16":
+            return None
+        a, b = head[key]["data_offsets"]
+        f.seek(8 + hlen + a)
+        raw = np.frombuffer(f.read(min(b - a, 2 * n)), np.uint16)
+    return (raw.astype(np.uint32) << 16).view(np.float32).copy()
+
+
 def series_weights():
-    """The series' own model (explainer/ai/novels.py), if it has been trained here: all its matrices, as float32."""
+    """Real weights to round: the series' own model (explainer/ai/novels.py) if it has been trained here, else the
+    narrator's (Qwen3-TTS), else none. Returns (values, source)."""
     try:
         from explainer.ai import novels
 
-        if not (novels.OUT / "base.pt").exists():
-            return None, ""
-        import torch
+        if (novels.OUT / "base.pt").exists():
+            import torch
 
-        ck = torch.load(novels.OUT / "base.pt", map_location="cpu", weights_only=False)
-        mats = [v.float().numpy().ravel() for k, v in ck["model"].items() if v.ndim == 2]
-        w = np.concatenate(mats)
-        return w, "novels"
+            ck = torch.load(novels.OUT / "base.pt", map_location="cpu", weights_only=False)
+            mats = [v.float().numpy().ravel() for k, v in ck["model"].items() if v.ndim == 2]
+            return np.concatenate(mats), "novels"
     except Exception as e:  # noqa: BLE001
         print("    (no series weights:", e, ")")
-        return None, ""
+    try:
+        w = narrator_weights()
+        if w is not None:
+            return w, "narrator"
+    except Exception as e:  # noqa: BLE001
+        print("    (no narrator weights:", e, ")")
+    return None, ""
 
 
 def compute_formats():

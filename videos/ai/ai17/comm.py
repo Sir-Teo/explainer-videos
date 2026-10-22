@@ -7,17 +7,25 @@ rank can send and receive at once, as a ring needs.
 
 from __future__ import annotations
 
-import threading
 import time
 
 import numpy as np
 
 
+_POOL = None
+
+
 def _sendrecv(send_conn, send_buf, recv_conn, recv_buf):
-    t = threading.Thread(target=send_conn.send_bytes, args=(send_buf,))
-    t.start()
+    """Send and receive at once: the send runs on one long-lived helper thread (starting a thread per message
+    would cost more than a small message)."""
+    global _POOL
+    if _POOL is None:
+        from concurrent.futures import ThreadPoolExecutor
+
+        _POOL = ThreadPoolExecutor(max_workers=1)
+    fut = _POOL.submit(send_conn.send_bytes, send_buf)
     recv_conn.recv_bytes_into(recv_buf)
-    t.join()
+    fut.result()
 
 
 def ring_allreduce(x: np.ndarray, rank: int, p: int, conns: dict) -> None:

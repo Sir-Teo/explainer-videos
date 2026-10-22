@@ -172,7 +172,7 @@ def static_eval(pos, mask):
     return float(c4.popcount(c4.winning_cells(pos, mask)) - c4.popcount(c4.winning_cells(pos ^ mask, mask)))
 
 
-@njit(cache=True)
+@njit  # no cache: numba's cache of recursive functions can crash on reload
 def c4_search(pos, mask, moves, depth, alpha, beta, prune, order_kind, counter, seed):
     """Negamax to ``depth``. order_kind 0: a fresh pseudo-random order at every node; 1: best-looking first (children
     sorted by the static evaluation after the move)."""
@@ -321,7 +321,7 @@ def value(pos, mask, w, windows):
     return np.tanh(np.dot(w, features(pos, mask, windows)))
 
 
-@njit(cache=True)
+@njit  # no cache: numba's cache of recursive functions can crash on reload
 def negamax_w(pos, mask, moves, depth, alpha, beta, w, windows, counter):
     """Alpha-beta to ``depth`` with the evaluation tanh(w . features); a win is 1, a loss -1, a draw 0 (a quicker
     win scores a hair more). Returns (value, best column)."""

@@ -430,7 +430,7 @@ def _h15(pos, kind, gpos, pdbs, groups):
     return h
 
 
-@njit(cache=True)
+@njit  # no cache: numba's cache of recursive functions can crash on reload
 def _ida_dfs(pos, board, g, bound, prev, kind, gpos, pdbs, groups, counter, limit):
     counter[0] += 1
     h = _h15(pos, kind, gpos, pdbs, groups)
@@ -465,7 +465,7 @@ def _ida_dfs(pos, board, g, bound, prev, kind, gpos, pdbs, groups, counter, limi
     return best
 
 
-@njit(cache=True)
+@njit  # no cache: numba's cache of recursive functions can crash on reload
 def ida15(board0, kind, gpos, pdbs, groups, limit):
     """IDA* on the 15-puzzle. ``board0[i]`` is the tile at position i. Returns (nodes generated, solution length),
     the length -1 if the node limit was hit first."""
