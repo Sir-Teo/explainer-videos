@@ -55,12 +55,17 @@ class Cache:
         self.dir.mkdir(parents=True, exist_ok=True)
         arrays = {k: v for k, v in out.items() if isinstance(v, np.ndarray)}
         rest = {k: v for k, v in out.items() if k not in arrays}
+        # arrays first, the .json last: an item is cached exactly when its .json exists, so a run killed halfway
+        # leaves it missing (and recomputed), never half-written
+        npz = self.path(name).with_suffix(".npz")
+        if arrays:
+            np.savez_compressed(self.path(name).with_suffix(".tmp.npz"), **arrays)
+            self.path(name).with_suffix(".tmp.npz").replace(npz)
+        else:
+            npz.unlink(missing_ok=True)
         tmp = self.path(name).with_suffix(".tmp.json")
         tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
         tmp.replace(self.path(name))
-        if arrays:
-            np.savez_compressed(self.path(name).with_suffix(".tmp.npz"), **arrays)
-            self.path(name).with_suffix(".tmp.npz").replace(self.path(name).with_suffix(".npz"))
         self._loaded.pop(name, None)
 
     def main(self, items: dict, doc: str | None = None) -> None:

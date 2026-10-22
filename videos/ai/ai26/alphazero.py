@@ -26,6 +26,7 @@ import json
 import math
 import multiprocessing as mp
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -43,6 +44,7 @@ SAMPLE_MOVES = 8  # moves sampled from the visit counts before switching to the 
 GAMES_PER_GEN = 400
 TRAIN_STEPS = 300
 BATCH = 512
+GENS = 80  # generations trained for the video
 WINDOW = 10  # generations of games kept in the replay buffer
 LR, WD = 1e-3, 1e-4
 LR_DROP = 50  # from this generation on, the learning rate is LR / 5 (AlphaZero's schedule steps down too)
@@ -254,7 +256,8 @@ def train(gens: int, workers: int = 4):
     for g in range(max(0, start - WINDOW), start):  # rebuild the replay window from saved games
         z = np.load(OUT / f"games_{g + 1:03d}.npz")
         buffer.append((z["X"], z["P"], z["Z"]))
-    ctx = mp.get_context("fork" if os.name == "posix" and "fork" in mp.get_all_start_methods() else "spawn")
+    # fork is fastest and safe on Linux; macOS (where fork and torch don't mix) and Windows spawn
+    ctx = mp.get_context("fork" if sys.platform.startswith("linux") else "spawn")
     for g in range(start, gens):
         t0 = time.time()
         state = {k: v.clone() for k, v in net.state_dict().items()}
@@ -307,6 +310,16 @@ def train(gens: int, workers: int = 4):
               f"{t1 - t0:.0f}s play {time.time() - t1:.0f}s train", flush=True)
 
 
+def ensure_trained(gens: int = GENS, workers: int | None = None) -> None:
+    """Train up to ``gens`` generations if fewer are saved (resuming from the last one): the evaluations call this, so
+    ``python -m videos.ai.ai26.compute`` alone rebuilds everything from scratch."""
+    log_path = OUT / "log.json"
+    done = len(json.loads(log_path.read_text())) if log_path.exists() else 0
+    if done < gens:
+        print(f"  AlphaZero: {done} of {gens} generations trained; training the rest (resumable) ...", flush=True)
+        train(gens, workers or max(1, min(4, os.cpu_count() or 1)))
+
+
 def load_gen(g: int):
     import torch
 
@@ -317,7 +330,7 @@ def load_gen(g: int):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--gens", type=int, default=80)
+    ap.add_argument("--gens", type=int, default=GENS)
     ap.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     train(a.gens, a.workers)

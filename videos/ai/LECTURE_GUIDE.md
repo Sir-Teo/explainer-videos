@@ -54,6 +54,18 @@ A chapter is one scene of 3–5 minutes made of a few `self.voiceover(...)` bloc
 
 - CPU budget about 2 hours per part; named exceptions are resumable and seeded. `python -m videos.ai.aiN.compute
   [items] [--force]`; long jobs run detached with logs under `.cache/aiN/`.
+- **Everything regenerates on the user's laptop** with `python tools/make.py aiN` (README, "Rebuilding everything"),
+  so a part must:
+  - seed every random choice (numpy `default_rng(seed)`, `torch.manual_seed`);
+  - make any job longer than a few minutes resumable: `explainer.lm.pocket.train(..., ckpt=path, ckpt_every=100)`
+    for language models, a checkpoint per generation/epoch otherwise (Part 26's AlphaZero), and let the compute
+    items that need a trained model train it themselves, resuming (`alphazero.ensure_trained()`), so
+    `python -m videos.ai.aiN.compute` alone rebuilds the part;
+  - run on macOS and Linux: multiprocessing with `spawn` off Linux (`fork` and torch don't mix on macOS), no Linux-only
+    paths or commands without a fallback (`/proc/cpuinfo` → `platform`/`sysctl`), C extensions built with the
+    system's `cc` (clang on macOS) and a pure-Python fallback;
+  - read other parts' results only through their `compute`/`load` (that is how `make.py` finds the dependency).
+- A cached item exists exactly when its `.json` does (written last, atomically), so a killed run recomputes it.
 - On a 4-core machine: small torch jobs `OMP_NUM_THREADS=1`; a training job `torch.set_num_threads(2)` (4 threads
   under contention ran ten times slower); parallel evaluation through `ProcessPoolExecutor` once training is done.
 - A scene that loads a missing cache item computes it. Never dry-run or render a scene whose data is still being
@@ -68,7 +80,8 @@ A chapter is one scene of 3–5 minutes made of a few `self.voiceover(...)` bloc
    stretches, labels that collide with data.
 2. `tools/dead_air.py` on the built chapters.
 3. `tools/lecture_length.py aiN` for the running time (30–60 min).
-4. Full silent build: `EXPLAINER_TTS=silent python tools/build.py aiN -q l`.
+4. Full silent build: `python tools/make.py aiN --silent -q l --lang en` (or `EXPLAINER_TTS=silent python
+   tools/build.py aiN -q l`).
 
 ## Chinese
 

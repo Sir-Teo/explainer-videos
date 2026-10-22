@@ -2,13 +2,17 @@
 name = "explainer-videos"
 version = "0.1.0"
 description = "3Blue1Brown-style math & physics explainer videos built with Manim"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12,<3.13"  # the Chinese narration templates match source as Python 3.12 prints it
 dependencies = [
     "manim>=0.22",  # 0.22 splits multi-part Tex by SVG group ids (the analysis ledger relies on it)
     "numpy>=1.26",
     "scipy>=1.11",
     "numba>=0.59",
     "pillow>=10",
+    # The AI series' own models (AlphaZero, the novels transformer, every experiment): CPU is enough.  On Linux
+    # install the CPU build first (README) so this doesn't pull CUDA.
+    "torch>=2.4",
+    "tokenizers>=0.20",
     # Narration (neural TTS).  Optional: set EXPLAINER_TTS=silent to skip.
     "kokoro>=0.9.4",
     "soundfile>=0.12",

@@ -941,9 +941,10 @@ def compute_uct_tree(seq=(3, 3, 3, 2, 4), snaps=(10, 40, 160, 640, 2560)):
 # AlphaZero (trained by alphazero.py)
 # ---------------------------------------------------------------------------
 def _gens():
-    from videos.ai.ai26.alphazero import OUT
+    from videos.ai.ai26.alphazero import GENS, OUT, ensure_trained
 
-    return sorted(int(p.stem.split("_")[1]) for p in OUT.glob("gen_*.pt"))
+    ensure_trained()
+    return sorted(g for g in (int(p.stem.split("_")[1]) for p in OUT.glob("gen_*.pt")) if g <= GENS)
 
 
 def compute_az_grade(n_pos=400):
