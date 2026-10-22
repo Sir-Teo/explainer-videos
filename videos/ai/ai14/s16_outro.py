@@ -317,8 +317,8 @@ class Outro(VoiceoverScene):
              r"2019); \ Devlin et al.\ (2018)",
              r"Wang et al., GLUE (2018), SuperGLUE (2019); \ Liu et al., RoBERTa (2019); \ Clark et al., ELECTRA "
              r"(2020); \ Raffel et al., T5 (2019)",
-             r"Kaplan et al.\ (2020); \ Brown et al., GPT-3 (2020); \ Hoffmann et al., Chinchilla (2022); \ Wang et al."
-             r"\ (2022)",
+             r"Kaplan et al.\ (2020); \ Brown et al., GPT-3 (2020); \ Zhao et al.\ (2021); \ Hoffmann et al., "
+             r"Chinchilla (2022); \ Wang et al.\ (2022)",
              r"Chen et al., Codex (2021); \ Wei et al., FLAN (2021); \ Sanh et al., T0 (2021); \ Ouyang et al.\ (2022); "
              r"\ OpenAI, GPT-4 (2023)",
              r"Touvron et al., LLaMA, Llama 2 (2023); \ Jiang et al., Mistral, Mixtral (2023--24); \ Llama Team (2024); "

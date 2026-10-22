@@ -289,8 +289,8 @@ class Matmul(VoiceoverScene):
         where = (f"three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes, which fits in the "
                  f"{l2 / 1024:.0f}-kilobyte second-level cache" if l2 and ws <= l2 else
                  f"three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes")
-        past = (". Past that, the tiles spill out and the speed falls." if kb < len(tiles) - 1 else
-                ", the largest we tried.")
+        past = ("Past that, the tiles spill out and the speed falls." if kb < len(tiles) - 1 else
+                "It was the largest size we tried.")
         how = ("in C." if r["lang"] == "C" else
                "in Python, with numpy doing the innermost loop: this computer has no C compiler.")
         with self.voiceover(
@@ -299,7 +299,7 @@ class Matmul(VoiceoverScene):
             "walks down the columns of B, one cache line per number. <bookmark mark='b'/> The same arithmetic with "
             f"the loops reordered, so every inner loop walks along rows: {gflops(r['ikj'])}. "
             f"<bookmark mark='c'/> Tiled: {gflops(blk[kb])}, {speed_tile:.0f} times the textbook loop. "
-            f"<bookmark mark='d'/> The best tile size was {best_b}: " + where + past + " "
+            f"<bookmark mark='d'/> The best tile size was {best_b}: " + where + ". " + past + " "
             "<bookmark mark='e'/> And the BLAS library numpy calls, tuned by experts, with "
             f"tiles inside tiles and hand-written vector code: {gflops(r['blas'])}, {speed_blas:.0f} times the "
             "textbook loop, for exactly the same arithmetic."

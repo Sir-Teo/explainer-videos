@@ -248,10 +248,17 @@ class Emergence(VoiceoverScene):
         ex = said(d["example"] + " ...", chars=58, font_size=17, max_lines=4, box_color=CONTEXT).move_to([0, 2.65, 0])
         exl = label(rf"two books, \ $k$ labelled examples, \ then a held-out sentence: \ which title is more likely? \ "
                     rf"(${d['n_items']}$ prompts)", font_size=20, color=GREY_B).next_to(ex, DOWN, buff=0.15)
+        calib = VGroup(label(r"calibrated score of a title:", font_size=20, color=GREY_A),
+                       MathTex(r"\log p(\text{title} \mid \text{prompt}) \;-\; \log p(\text{title} \mid "
+                               r"\text{prompt with ``N/A''})", font_size=22)).arrange(DOWN, buff=0.12)
+        calib.move_to([3.9, 0.55, 0])
+        if calib.width > 6.2:
+            calib.width = 6.2
+        zcite = cite(r"calibration: \ Zhao et al.\ (2021)")
         lo = 0.4
         hi = max(0.75, max(max(r["fewshot"]) for r in rows) + 0.05)
         g = axes([-0.3, len(shots) - 0.7], [lo, hi], x_length=6.4, y_length=3.6, xlabel=r"examples in the prompt, $k$",
-                 ylabel=r"right title chosen", xticks=list(range(len(shots))), yticks=[0.5, round(hi, 1)],
+                 ylabel=r"right title chosen \ (calibrated)", xticks=list(range(len(shots))), yticks=[0.5, round(hi, 1)],
                  xfmt=lambda v: str(shots[int(round(v))]), yfmt=lambda v: rf"{100 * v:.0f}\%", center=[-1.4, -1.3, 0])
         ax = g.ax
         chance = DashedLine(ax.c2p(-0.3, 0.5), ax.c2p(len(shots) - 0.7, 0.5), color=GREY_B, dash_length=0.08)
@@ -287,12 +294,16 @@ class Emergence(VoiceoverScene):
         with self.voiceover(
             "Finally, GPT-3's own kind of test, built from the novels. Two books; a few labelled examples in the "
             "prompt, each a sentence and the book it is from; then a new sentence from a paragraph the models never "
-            "read, and we compare the probabilities they give to the two titles. <bookmark mark='a'/> With zero, one, "
-            "two, four and eight examples, for every model. <bookmark mark='b'/> " + v0 + " <bookmark mark='c'/> "
-            + v1 + v2
+            "read, and we compare the probabilities they give to the two titles. <bookmark mark='a'/> Small models "
+            "tend to favour one title whatever the sentence, so, as Tony Zhao and colleagues proposed in 2021, we "
+            "first subtract the score each title gets after a sentence with no content at all. <bookmark mark='d'/> "
+            "With zero, one, two, four and eight examples, for every model. <bookmark mark='b'/> " + v0 +
+            " <bookmark mark='c'/> " + v1 + v2
         ) as vo:
             self.play(FadeIn(ex), FadeIn(exl))
             vo.wait_until("a")
+            self.play(FadeIn(calib, shift=UP * 0.1), FadeIn(zcite))
+            vo.wait_until("d")
             self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(lg))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(l[0]) for l in lines], lag_ratio=0.2),

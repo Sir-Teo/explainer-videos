@@ -134,13 +134,13 @@ ZH = {
         "这就是分块要做的事。<bookmark mark='a'/>把C切成b乘b的块。要算其中一块，就沿着A的一条和B的一条走，每次各取一个b乘b的块。<bookmark mark='b'/>把这两块搬进快速存储，相乘，加到C的那一块上，然后往下走。<bookmark mark='c'/>每个搬进来的数被用了b次，所以算术强度是b除以4字节。<bookmark mark='d'/>上限在于快速存储：三个块必须放得下。快速存储越大，块越大，复用越多。<bookmark mark='e'/>1981年，洪加威和孔祥重证明，没有哪种顺序能好得多：任何计算这个乘积的方法，搬运的数据量至少是n立方除以快速存储大小的平方根这个量级。",
 
     "'We measured this on one core of this computer, multiplying two matrices of size 1,024 ' + how":
-        "我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下{how}<bookmark mark='a'/>教科书上的三重循环：每秒{gflops(r['naive'])}千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：{gflops(r['ikj'])}。<bookmark mark='c'/>分块之后：{gflops(blk[kb])}，是教科书循环的{speed_tile:.0f}倍。<bookmark mark='d'/>最好的块大小是{best_b}：{where}{past}<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：{gflops(r['blas'])}，是教科书循环的{speed_blas:.0f}倍，算术一模一样。",
+        "我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下{how}<bookmark mark='a'/>教科书上的三重循环：每秒{gflops(r['naive'])}千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：{gflops(r['ikj'])}。<bookmark mark='c'/>分块之后：{gflops(blk[kb])}，是教科书循环的{speed_tile:.0f}倍。<bookmark mark='d'/>最好的块大小是{best_b}：{where}。{past}<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：{gflops(r['blas'])}，是教科书循环的{speed_blas:.0f}倍，算术一模一样。",
 
     'in Python, with numpy doing the innermost loop':
         '，用的是Python，最内层循环交给numpy：这台计算机没有C编译器。',
 
-    '. Past that, the tiles spill out and the speed falls.':
-        '。再大，块就装不下了，速度随之下降。',
+    'Past that, the tiles spill out and the speed falls.':
+        '再大，块就装不下了，速度随之下降。',
 
     "f'three {best_b} by {best_b} tiles take {ws / 1024:.0f} kilobytes, which fits":
         "三个{best_b}乘{best_b}的块占{ws / 1024:.0f}千字节，正好放得进{l2 / 1024:.0f}千字节的二级缓存",
@@ -368,7 +368,7 @@ ZH = {
 
 PHRASES = {
     'in C.': '，用的是C语言。',
-    ', the largest we tried.': '，也是我们试过的最大的块。',
+    'It was the largest size we tried.': '这也是我们试过的最大的块。',
     'faster': '更快',
     'slower': '更慢',
     'and the measurements land on it': '测量值正好落在预测上',
