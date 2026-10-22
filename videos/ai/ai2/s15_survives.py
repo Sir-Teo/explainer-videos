@@ -99,7 +99,7 @@ class Survives(VoiceoverScene):
                        Arrow(ins.get_right(), ad2.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5),
                        Arrow(ad1.get_right(), cmp_.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5),
                        Arrow(ad2.get_right(), cmp_.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5))
-        miter.add(label(r"as clauses: \ satisfiable $=$ a bug, \ unsatisfiable $=$ proved equal", font_size=20,
+        miter.add(label(r"as clauses: \\ satisfiable $=$ a bug, \\ unsatisfiable $=$ proved equal", font_size=20,
                         color=GREY_A).next_to(VGroup(ad2, cmp_), DOWN, buff=0.35))
         with self.voiceover(
             "Logic found its biggest job in checking machines. <bookmark mark='a'/> In 1994 a flaw in the Pentium's division "
