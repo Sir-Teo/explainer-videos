@@ -282,7 +282,7 @@
   "7db2da109c0c": {
    "scene": "Formats",
    "en": "Why go small at all? Because the multiplier's size grows roughly with the square of the mantissa's width, and every bit not moved is bandwidth saved. <bookmark mark='a'/> Halve the bits and the tensor cores do twice the work: an H100 does 989 trillion operations a second in bfloat16 and 1,979 in FP8; a Blackwell GPU doubles again in four bits. <bookmark mark='b'/> But only on hardware built for it. This computer's processor has no bfloat16 units, and PyTorch's bfloat16 product runs 3.9 times slower than its FP32. <bookmark mark='c'/> The history: Kahan's IEEE standard in 1985; bfloat16 from Google Brain for the TPU; eight-bit floats proposed by NVIDIA, Arm and Intel in 2022; microscaling in 2023. Part 18 trains in eight bits; Part 19 serves in four.",
-   "zh": "到底为什么要用小格式？因为乘法器的大小，大致随尾数宽度的平方增长，而每少搬一位，就省下一份带宽。<bookmark mark='a'/>位数减半，张量核心就做两倍的工作：一块H100在bfloat16下每秒做989万亿次运算，在FP8下做1979万亿次；Blackwell GPU在4位下又翻一倍。<bookmark mark='b'/>但前提是硬件为它而造。这台计算机的处理器没有bfloat16单元，PyTorch的bfloat16矩阵乘法，比它的FP32慢3.9倍。<bookmark mark='c'/>历史是这样的：1985年卡亨主导的IEEE标准；谷歌大脑为TPU设计的bfloat16；2022年英伟达、Arm和英特尔提出的8位浮点；2023年的微缩放。第18部分用8位训练；第19部分用4位来推理。"
+   "zh": "到底为什么要用小格式？因为乘法器的大小，大致随尾数宽度的平方增长，而每少搬一位，就省下一份带宽。<bookmark mark='a'/>位数减半，张量核心就做两倍的工作：一块H100在bfloat16下每秒做989万亿次运算，在FP8下做1979万亿次；Blackwell GPU在4位下又翻一倍。<bookmark mark='b'/>但前提是硬件为它而造。这台计算机的处理器没有bfloat16单元，PyTorch的bfloat16矩阵乘法，比它的FP32慢3.9倍。<bookmark mark='c'/>历史是这样的：1985年卡亨主导的IEEE标准；谷歌大脑为TPU设计的bfloat16；2022年英伟达、Arm和英特尔提出的8位浮点；2023年的微缩放。第18部分用8位训练；第19部分用4位来推断。"
   },
   "98dc91212e0e": {
    "scene": "Interconnect",
@@ -302,7 +302,7 @@
   "8356ca638373": {
    "scene": "Interconnect",
    "en": "To reason about communication, use the simplest model that works. <bookmark mark='a'/> Sending a message of n bytes costs a fixed alpha, the latency, plus n over beta, the bandwidth. <bookmark mark='b'/> We measured it between two processes on this computer, passing messages from eight bytes to thirty-two megabytes. <bookmark mark='c'/> The fit: alpha about 14 microseconds, beta about 3.3 gigabytes a second. <bookmark mark='d'/> Below alpha times beta, about 50 kilobytes here, a message costs the same whatever its size; above it, bandwidth is everything. On a GPU cluster the numbers change, microseconds and hundreds of gigabytes a second, but the shape doesn't.",
-   "zh": "要推理通信，就用最简单而管用的模型。<bookmark mark='a'/>发一条n字节的消息，花一个固定的α，也就是延迟，再加上n除以β，β是带宽。<bookmark mark='b'/>我们在这台计算机的两个进程之间测了它，消息从8字节到32兆字节。<bookmark mark='c'/>拟合结果：α大约14微秒，β大约每秒3.3GB。<bookmark mark='d'/>小于α乘β，在这里大约50千字节，消息不管多大，代价都差不多；大于它，带宽就决定一切。在GPU集群上，数字会变，是微秒和每秒几百GB，但形状不变。"
+   "zh": "要分析通信，就用最简单而管用的模型。<bookmark mark='a'/>发一条n字节的消息，花一个固定的α，也就是延迟，再加上n除以β，β是带宽。<bookmark mark='b'/>我们在这台计算机的两个进程之间测了它，消息从8字节到32兆字节。<bookmark mark='c'/>拟合结果：α大约14微秒，β大约每秒3.3GB。<bookmark mark='d'/>小于α乘β，在这里大约50千字节，消息不管多大，代价都差不多；大于它，带宽就决定一切。在GPU集群上，数字会变，是微秒和每秒几百GB，但形状不变。"
   },
   "19d6f2fde596": {
    "scene": "Interconnect",
@@ -372,7 +372,7 @@
   "4367aa62319b": {
    "scene": "Accelerators",
    "en": "The TPU was the first of many chips built only for neural networks. <bookmark mark='a'/> Google's line went from an eight-bit inference chip in 2015 to training: the TPU v2 in 2017 added high-bandwidth memory, bfloat16 and pods of chips wired together; v4 linked 4,096 of them through optical switches. <bookmark mark='b'/> The seventh generation, Ironwood, in 2025: 4,614 trillion eight-bit operations a second per chip, in pods of 9,216. <bookmark mark='c'/> And in April 2026 Google announced two eighth-generation chips, one for training and one for serving, with training superpods of 9,600 chips. Google trains its Gemini models on its own TPUs. <bookmark mark='d'/> Amazon builds Trainium, Microsoft Maia, Meta MTIA. Most are systolic arrays of some size, fed by high-bandwidth memory: the recipe of chapters six to eight.",
-   "zh": "TPU是众多只为神经网络而造的芯片里的第一款。<bookmark mark='a'/>谷歌这条产品线，从2015年的一块8位推理芯片，走向了训练：2017年的TPU v2加入了高带宽内存、bfloat16，以及由许多芯片连成的集群；v4用光路交换机把4096块连在一起。<bookmark mark='b'/>第七代Ironwood，2025年：每块芯片每秒4614万亿次8位运算，集群规模9216块。<bookmark mark='c'/>2026年4月，谷歌发布了两款第八代芯片，一款用于训练，一款用于推理服务，训练超级集群有9600块芯片。谷歌就在自己的TPU上训练Gemini模型。<bookmark mark='d'/>亚马逊造Trainium，微软造Maia，Meta造MTIA。它们大多是某种规模的脉动阵列，由高带宽内存喂数据：正是第6到第8章的配方。"
+   "zh": "TPU是众多只为神经网络而造的芯片里的第一款。<bookmark mark='a'/>谷歌这条产品线，从2015年的一块8位推断芯片，走向了训练：2017年的TPU v2加入了高带宽内存、bfloat16，以及由许多芯片连成的集群；v4用光路交换机把4096块连在一起。<bookmark mark='b'/>第七代Ironwood，2025年：每块芯片每秒4614万亿次8位运算，集群规模9216块。<bookmark mark='c'/>2026年4月，谷歌发布了两款第八代芯片，一款用于训练，一款用于推断服务，训练超级集群有9600块芯片。谷歌就在自己的TPU上训练Gemini模型。<bookmark mark='d'/>亚马逊造Trainium，微软造Maia，Meta造MTIA。它们大多是某种规模的脉动阵列，由高带宽内存喂数据：正是第6到第8章的配方。"
   },
   "7a225a3df27f": {
    "scene": "Accelerators",
@@ -412,7 +412,7 @@
   "cd294e8dc226": {
    "scene": "Frontier",
    "en": "The newest trend is to split the work by where it sits on the roofline. <bookmark mark='a'/> Reading a prompt multiplies matrices by matrices: high intensity, arithmetic-bound. Writing the answer, one token at a time, multiplies matrices by vectors: low intensity, memory-bound. <bookmark mark='b'/> So NVIDIA pairs Rubin GPUs, and a variant for very long prompts, with Groq's SRAM chips for decoding; <bookmark mark='c'/> and Google's eighth generation is two chips, one for training and one for serving, with three times its predecessor's on-chip memory for the attention cache. <bookmark mark='d'/> The limits now are power, memory bandwidth and the links between chips, the three threads of this part.",
-   "zh": "最新的趋势，是按工作落在屋顶线上的位置来拆分它。<bookmark mark='a'/>读一个提示，是矩阵乘矩阵：算术强度高，受算力限制。一次一个词元地写答案，是矩阵乘向量：算术强度低，受内存限制。<bookmark mark='b'/>所以英伟达把Rubin GPU，以及一款专为超长提示设计的变体，和Groq的SRAM芯片搭配起来做解码；<bookmark mark='c'/>谷歌的第八代是两块芯片，一块用于训练，一块用于推理服务，片上内存是前一代的三倍，用来存注意力缓存。<bookmark mark='d'/>如今的限制是功耗、内存带宽，以及芯片之间的链路，正是本部分的三条主线。"
+   "zh": "最新的趋势，是按工作落在屋顶线上的位置来拆分它。<bookmark mark='a'/>读一个提示，是矩阵乘矩阵：算术强度高，受算力限制。一次一个词元地写答案，是矩阵乘向量：算术强度低，受内存限制。<bookmark mark='b'/>所以英伟达把Rubin GPU，以及一款专为超长提示设计的变体，和Groq的SRAM芯片搭配起来做解码；<bookmark mark='c'/>谷歌的第八代是两块芯片，一块用于训练，一块用于推断服务，片上内存是前一代的三倍，用来存注意力缓存。<bookmark mark='d'/>如今的限制是功耗、内存带宽，以及芯片之间的链路，正是本部分的三条主线。"
   },
   "dcfa08953cc3": {
    "scene": "Outro",
@@ -422,7 +422,7 @@
   "f0af29c24857": {
    "scene": "Outro",
    "en": "All of this comes back. Part 18 trains a model across many GPUs, with the alpha-beta model, the ring all-reduce and eight-bit arithmetic. Part 19 puts inference on the roofline: reading a prompt is arithmetic-bound, writing an answer is memory-bound, and FlashAttention and four-bit formats follow. Part 15's memory methods are sized to high-bandwidth memory and written to use the tensor cores, and Part 16's experts trade tokens across an NVLink domain, while the tensor cores' two-in-four sparsity doubles their arithmetic.",
-   "zh": "这些都会再出现。第18部分在许多GPU上训练模型，用到α–β模型、环形全规约，以及8位算术。第19部分把推理放到屋顶线上：读提示受算力限制，写答案受内存限制，FlashAttention和4位格式随之而来。第15部分的记忆方法，是按高带宽内存的大小设计、为了用上张量核心而写的；第16部分的专家在NVLink域里交换词元，而张量核心的四选二稀疏，能让它们的算术翻倍。"
+   "zh": "这些都会再出现。第18部分在许多GPU上训练模型，用到α–β模型、环形全规约，以及8位算术。第19部分把推断放到屋顶线上：读提示受算力限制，写答案受内存限制，FlashAttention和4位格式随之而来。第15部分的记忆方法，是按高带宽内存的大小设计、为了用上张量核心而写的；第16部分的专家在NVLink域里交换词元，而张量核心的四选二稀疏，能让它们的算术翻倍。"
   },
   "d962ba8121b3": {
    "scene": "Outro",
