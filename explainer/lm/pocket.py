@@ -17,6 +17,7 @@ from __future__ import annotations
 import math
 import time
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -337,8 +338,12 @@ def evaluate(model: PocketGPT, data: TokenStream, B: int, n: int) -> float:
     return tot / n
 
 
-def train(run: Run, data: TokenStream, *, threads: int = 1, verbose: bool = False, state: dict | None = None) -> dict:
-    """Train from scratch (or from ``state``) and return curves + diagnostics."""
+def train(run: Run, data: TokenStream, *, threads: int = 1, verbose: bool = False, state: dict | None = None,
+          ckpt=None, ckpt_every: int = 100) -> dict:
+    """Train from scratch (or from ``state``) and return curves + diagnostics.
+
+    ``ckpt``: a file path; every ``ckpt_every`` steps the model, optimizers, data and random state and the curves so
+    far are saved there, and a run that finds the file resumes from it (a long job survives a restart)."""
     torch.set_num_threads(threads)
     torch.manual_seed(run.seed)
     cfg = run.model
@@ -356,7 +361,27 @@ def train(run: Run, data: TokenStream, *, threads: int = 1, verbose: bool = Fals
     curve, evals, probes, loads, bias_hist = [], [], [], [], []
     t0 = time.time()
     diverged = False
-    for step in range(steps):
+    start = 0
+    if ckpt is not None and Path(ckpt).exists():
+        ck = torch.load(ckpt, weights_only=False)
+        model.load_state_dict(ck["model"])
+        for o, st in zip(opts, ck["opts"]):
+            o.load_state_dict(st)
+        data.rng.bit_generator.state = ck["data_rng"]
+        torch.set_rng_state(ck["torch_rng"])
+        curve, evals, probes, loads, bias_hist = (ck[k] for k in ("curve", "evals", "probes", "loads", "bias_hist"))
+        start = ck["step"]
+        t0 -= ck["seconds"]
+        if verbose:
+            print(f"resuming at step {start}/{steps}", flush=True)
+    for step in range(start, steps):
+        if ckpt is not None and step > start and step % ckpt_every == 0:
+            tmp = Path(str(ckpt) + ".tmp")
+            torch.save({"model": model.state_dict(), "opts": [o.state_dict() for o in opts],
+                        "data_rng": data.rng.bit_generator.state, "torch_rng": torch.get_rng_state(), "step": step,
+                        "curve": curve, "evals": evals, "probes": probes, "loads": loads, "bias_hist": bias_hist,
+                        "seconds": time.time() - t0}, tmp)
+            tmp.replace(ckpt)
         f = lr_factor(step, steps, run.schedule, run.warmup, run.decay_frac, run.final_lr)
         for o in opts:
             for g in o.param_groups:
@@ -397,7 +422,7 @@ def train(run: Run, data: TokenStream, *, threads: int = 1, verbose: bool = Fals
             evals.append([step + 1, (step + 1) * tokens_per_step, ev])
             if verbose:
                 print(f"step {step + 1}/{steps} loss {lv:.3f} val {ev:.3f} lr {run.lr * f:.2e} "
-                      f"{(time.time() - t0) / (step + 1):.3f}s/step", flush=True)
+                      f"{(time.time() - t0) / (step + 1):.3f}s/step (cumulative)", flush=True)
         if diverged:
             break
     out = dict(run=asdict(run), counts=counts, steps=steps, tokens_per_step=tokens_per_step, curve=curve,
