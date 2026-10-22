@@ -192,8 +192,9 @@ class Survives(VoiceoverScene):
             "later a Gemini model reached a gold-medal score writing plain language, graded by the olympiad's coordinators. "
             "<bookmark mark='e'/> Either way: a network generates, and logic or a grader checks."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(lg), FadeIn(ll))
+            vo.wait_until("a")
+            self.play(Indicate(lg, color=SYMBOL, scale_factor=1.04))
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15), *([FadeIn(flow)] if k == 1 else []))

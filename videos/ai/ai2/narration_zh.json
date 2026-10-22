@@ -1,0 +1,502 @@
+{
+ "title": "人工智能，从零搭建 · 第2部分：会思考的机器",
+ "chapters": {
+  "Hook": "四十年才将死",
+  "Turing": "1. 机器能思考吗？",
+  "Search": "2. 搜索",
+  "AStar": "3. A*",
+  "Heuristics": "4. 启发式从哪里来",
+  "Local": "5. 爬山与退火",
+  "Games": "6. 博弈与α-β剪枝",
+  "Samuel": "7. 学会下棋的机器",
+  "Logic": "8. 逻辑与归结",
+  "SAT": "9. 可满足性",
+  "Plans": "10. 约束与规划",
+  "Knowledge": "11. 知识就是力量",
+  "Eliza": "12. ELIZA",
+  "Winters": "13. 寒冬",
+  "Survives": "14. 留下来的东西",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "26e12f4466f6": {
+   "scene": "Hook",
+   "en": "In 1958 Herbert Simon and Allen Newell predicted that within ten years a digital computer would be the world's chess champion, unless the rules barred it from competition. <bookmark mark='a'/> It took thirty-nine. <bookmark mark='b'/> In May 1997, in New York, IBM's Deep Blue beat the world champion, Garry Kasparov, three and a half games to two and a half.",
+   "zh": "1958年，赫伯特·西蒙和艾伦·纽厄尔预言：十年之内，一台数字计算机将成为国际象棋世界冠军，除非规则禁止它参赛。<bookmark mark='a'/>结果用了39年。<bookmark mark='b'/>1997年5月，在纽约，IBM的深蓝以3.5比2.5击败了世界冠军加里·卡斯帕罗夫。"
+  },
+  "13b8d411ce91": {
+   "scene": "Hook",
+   "en": "Between those dates lies the first age of artificial intelligence, where this course's history begins. <bookmark mark='a'/> In 1950 Alan Turing asked whether machines could think. <bookmark mark='b'/> In 1956 a workshop at Dartmouth named the field. <bookmark mark='c'/> Programs learned checkers, held conversations, searched maps and planned a robot's moves. <bookmark mark='d'/> Then the promises outran the results, and the money dried up: a first winter. <bookmark mark='e'/> A boom in expert systems, and a second, harder winter when it collapsed. <bookmark mark='f'/> And at the end, a chess machine the founders would have recognized.",
+   "zh": "这两个日期之间，是人工智能的第一个时代，也是本课程讲历史的起点。<bookmark mark='a'/>1950年，阿兰·图灵问：机器能思考吗？<bookmark mark='b'/>1956年，达特茅斯的一次研讨会给这个领域起了名字。<bookmark mark='c'/>程序学会了下跳棋、和人对话、在地图上找路、为机器人规划动作。<bookmark mark='d'/>然后，承诺跑到了成果前面，钱也断了：第一次寒冬。<bookmark mark='e'/>专家系统带来一轮繁荣，它崩溃时，又迎来第二次、更严酷的寒冬。<bookmark mark='f'/>到了最后，是一台创始人们一眼就能认出的国际象棋机器。"
+  },
+  "cdc404a35afe": {
+   "scene": "Hook",
+   "en": "The bet of that age was that intelligence could be written down: <bookmark mark='a'/> as search through possibilities, guided by rules of thumb; as moves in a game; as logic; as knowledge typed in by experts. <bookmark mark='b'/> The bet was only half lost. Search runs inside AlphaZero, logic inside the tools that check computer chips, a proof checker grades DeepMind's AlphaProof, and today's agents make plans. <bookmark mark='c'/> And every algorithm in this part runs here, on this computer, so we can watch it work.",
+   "zh": "那个时代押下的赌注是：智能可以被写下来，<bookmark mark='a'/>写成在各种可能性中的搜索，由经验法则引导；写成博弈中的招法；写成逻辑；写成由专家一条条输入的知识。<bookmark mark='b'/>这场赌局只输了一半。搜索在AlphaZero里运行，逻辑在检查芯片的工具里运行，证明检查器给DeepMind的AlphaProof批改证明，今天的智能体也在做规划。<bookmark mark='c'/>而且本部分的每一个算法，都在这里、在这台电脑上运行，让我们看着它工作。"
+  },
+  "4349bd95d4b0": {
+   "scene": "Hook",
+   "en": "This is Part 2 of AI, Built. <bookmark mark='a'/> In this part: what machines can and cannot compute, and Turing's test; search, from breadth-first to A star, and where heuristics come from; local search and simulated annealing; games, from minimax and alpha-beta to Samuel's checkers and Deep Blue; logic, satisfiability and its phase transition, constraints and planning; and knowledge: expert systems, ELIZA, the two winters, and what survived them.",
+   "zh": "这是《人工智能，从零搭建》的第2部分。<bookmark mark='a'/>这一部分讲：机器能计算什么、不能计算什么，以及图灵测试；搜索，从广度优先到A星，以及启发式从哪里来；局部搜索和模拟退火；博弈，从极小化极大和α-β剪枝，到塞缪尔的跳棋和深蓝；逻辑、可满足性及其相变，还有约束和规划；最后是知识：专家系统、ELIZA、两次寒冬，以及熬过寒冬留下来的东西。"
+  },
+  "8ca3f64f01ee": {
+   "scene": "Turing",
+   "en": "Chapter one. Can machines think?",
+   "zh": "第1章。机器能思考吗？"
+  },
+  "de01cdd3fac5": {
+   "scene": "Turing",
+   "en": "Before anyone could ask whether machines think, someone had to say what a machine is. Alan Turing did, in 1936. <bookmark mark='a'/> A tape of cells holding symbols, and a head that reads one cell; <bookmark mark='b'/> and a finite table of rules: in this state, reading this symbol, write, move left or right, and switch state. <bookmark mark='c'/> This table adds one to a binary number: watch it carry. <bookmark mark='d'/> Turing argued that such a machine can compute anything a person can compute by rule, and that one universal machine, reading another's table from its own tape, can imitate them all: the idea of the stored-program computer.",
+   "zh": "在有人能问机器会不会思考之前，得先有人说清楚机器是什么。阿兰·图灵在1936年做到了。<bookmark mark='a'/>一条分成格子的纸带，每格写一个符号；一个读写头，一次读一格；<bookmark mark='b'/>再加一张有限的规则表：处在这个状态、读到这个符号时，写下一个符号，向左或向右移一格，换到另一个状态。<bookmark mark='c'/>这张表能给一个二进制数加1：看它进位。<bookmark mark='d'/>图灵论证说，一个人按规则能算出的任何东西，这样的机器都能算；而且一台通用机器，从自己的纸带上读入另一台机器的规则表，就能模仿其中任何一台。这就是存储程序计算机的思想。"
+  },
+  "e2b226362355": {
+   "scene": "Turing",
+   "en": "Turing also showed what no machine can do. <bookmark mark='a'/> Suppose a program H could take any program P and input x, and always answer: does P eventually stop on x? <bookmark mark='b'/> Build a contrarian, D: given a program, D asks H whether it stops when fed its own text, and does the opposite. <bookmark mark='c'/> Now run D on its own text. It stops exactly when H says it doesn't: exactly when it doesn't stop. <bookmark mark='d'/> So H cannot exist: no program can decide, in general, whether programs halt. Alonzo Church reached the same limit that year, by another route.",
+   "zh": "图灵还证明了，有些事任何机器都做不到。<bookmark mark='a'/>假设有某个程序H，能看任何程序P和输入x，并且总能回答：P在x上最终会停下来吗？<bookmark mark='b'/>那就造一个唱反调的程序D：给它一个程序，D去问H，这个程序拿自己的代码当输入时会不会停，然后反着做。<bookmark mark='c'/>现在让D在自己的代码上运行。它停下，恰好当H说它不停的时候；也就是恰好当它不停的时候。<bookmark mark='d'/>所以H不可能存在：一般来说，没有程序能判定程序会不会停机。同一年，阿隆佐·丘奇从另一条路得到了同样的极限。"
+  },
+  "3696bfa34e0a": {
+   "scene": "Turing",
+   "en": "The limit appears even in tiny machines. Start one on a blank tape: how long can it run and still halt? The longest runner is called the busy beaver, Tibor Radó's name, from 1962. <bookmark mark='a'/> The four-state champion, run here row by row, halts after 107 steps. <bookmark mark='b'/> The five-state champion runs 47,176,870 steps; we replayed them in 0.6 seconds. <bookmark mark='c'/> Proving that no five-state machine runs longer took until 2024, and a proof checked by computer. For six states, nobody knows.",
+   "zh": "这个极限在很小的机器上就会出现。让一台机器从空白纸带开始：它最多能运行多久，还能停下来？运行时间最长的那台叫作忙碌海狸，这个名字来自蒂博尔·拉多，1962年。<bookmark mark='a'/>4个状态的冠军，在这里一步画一行，在107步后停机。<bookmark mark='b'/>5个状态的冠军运行47176870步；我们重放这些步骤用了0.6秒。<bookmark mark='c'/>要证明没有别的5状态机器运行得更久，一直等到了2024年，还要靠一份由计算机检查的证明。至于6个状态，没有人知道。"
+  },
+  "9dccc213ed10": {
+   "scene": "Turing",
+   "en": "In 1950 Turing turned to thinking itself, and proposed a game instead of a definition. <bookmark mark='a'/> An interrogator exchanges typed messages with two hidden players, a person and a machine, and must say which is which. <bookmark mark='b'/> He forecast that by about 2000, an average interrogator would be right no more than seventy percent of the time after five minutes. <bookmark mark='c'/> In 2025 Cameron Jones and Benjamin Bergen ran the test: GPT-4.5, playing a persona, was judged human seventy-three percent of the time, more often than the real people. ELIZA, from 1966, managed twenty-three percent.",
+   "zh": "1950年，图灵转向了思考本身，他没有给出定义，而是提出了一个游戏。<bookmark mark='a'/>一位提问者和两个看不见的玩家互发打字消息，一个是人，一个是机器，他必须说出谁是谁。<bookmark mark='b'/>他预言，到2000年左右，一位普通的提问者在问了五分钟之后，判断正确的机会不会超过70%。<bookmark mark='c'/>2025年，卡梅伦·琼斯和本杰明·伯根做了这个测试：扮演一个人设的GPT-4.5，有73%的时候被判定为人类，比真人被认出的次数还多。1966年的ELIZA，拿到了23%。"
+  },
+  "e0e50513b5b4": {
+   "scene": "Turing",
+   "en": "Six years later, in the summer of 1956, John McCarthy, Marvin Minsky, Nathaniel Rochester and Claude Shannon gathered researchers at Dartmouth College, on the conjecture that every aspect of learning or any other feature of intelligence can in principle be so precisely described that a machine can be made to simulate it. McCarthy's proposal named the field: artificial intelligence. <bookmark mark='a'/> Allen Newell, Cliff Shaw and Herbert Simon brought a working program, the Logic Theorist. It proved thirty-eight of the first fifty-two theorems in a chapter of Principia Mathematica. <bookmark mark='b'/> It worked backward from each theorem to subgoals, choosing by rules of thumb: a search through a tree of symbols. <bookmark mark='c'/> In 1976 Newell and Simon stated the era's creed: a physical symbol system has the necessary and sufficient means for general intelligent action.",
+   "zh": "六年后，1956年夏天，约翰·麦卡锡、马文·明斯基、纳撒尼尔·罗切斯特和克劳德·香农把研究者们召集到达特茅斯学院，基于这样一个猜想：学习的每一个方面，或者智能的任何其他特征，原则上都可以被描述得足够精确，以至于可以造一台机器来模拟它。麦卡锡的提案给这个领域起了名字：人工智能。<bookmark mark='a'/>艾伦·纽厄尔、克利夫·肖和赫伯特·西蒙带来了一个已经能运行的程序：逻辑理论家。它证明了《数学原理》某一章前52个定理中的38个。<bookmark mark='b'/>它从每个定理倒推到子目标，用经验法则来选择：这是在一棵符号树中的搜索。<bookmark mark='c'/>1976年，纽厄尔和西蒙说出了那个时代的信条：物理符号系统具有通用智能行为的充分必要手段。"
+  },
+  "69ab3734458d": {
+   "scene": "Search",
+   "en": "Chapter two. Search.",
+   "zh": "第2章。搜索。"
+  },
+  "b647802e91ff": {
+   "scene": "Search",
+   "en": "Start, apply moves, look for a goal: that pattern is behind everything in this part. Take the eight-puzzle: eight numbered tiles in a three-by-three frame, and one gap. <bookmark mark='a'/> Each arrangement is a state; an action slides a tile into the gap. <bookmark mark='b'/> The goal is the tiles in order. <bookmark mark='c'/> That is a search problem: states, actions with costs, a start and a goal test. A solution reaches the goal; an optimal one does so most cheaply. <bookmark mark='d'/> The eight-puzzle has a hundred and eighty-one thousand four hundred and forty reachable states, exactly half of all arrangements: a parity argument rules out the other half.",
+   "zh": "从起点出发，施加动作，寻找目标：本部分的一切内容背后，都是这个模式。拿八数码来说：一个三乘三的框里有8块编了号的方块，还有一个空格。<bookmark mark='a'/>每一种摆法是一个状态；一个动作把一块方块滑进空格。<bookmark mark='b'/>目标是方块按顺序排好。<bookmark mark='c'/>这就是一个搜索问题：状态，有代价的动作，起点和目标测试。解能到达目标；最优解以最小的代价到达。<bookmark mark='d'/>八数码有181440个可以到达的状态，恰好是所有摆法的一半：一个奇偶性论证排除了另一半。"
+  },
+  "7656b6970d60": {
+   "scene": "Search",
+   "en": "The simplest strategy is breadth-first search: everything one move away, then two, ring by ring, with the frontier in a first-in, first-out queue. <bookmark mark='a'/> Run from the goal, it maps the whole puzzle. The rings swell: the widest, at distance 24, holds 24,047 states. <bookmark mark='b'/> Every state is solvable in at most 31 moves, and exactly 2 need all 31. Breadth-first search finds shortest solutions, because it finishes each depth before the next. The price is memory: the whole frontier.",
+   "zh": "最简单的策略是广度优先搜索：先看一步之内的所有状态，再看两步的，一圈一圈向外，用一个先进先出的队列保存边界。<bookmark mark='a'/>从目标开始运行，它就绘出了整个谜题的地图。圈越来越大：最宽的一圈在距离24处，有24047个状态。<bookmark mark='b'/>每个状态最多31步就能解开，而恰好有2个需要整整31步。广度优先搜索找到的是最短解，因为它处理完一层深度才去看下一层。代价是内存：整个边界。"
+  },
+  "1814838d4a25": {
+   "scene": "Search",
+   "en": "Search strategies differ only in which frontier state they expand next. <bookmark mark='a'/> Breadth-first takes the oldest. <bookmark mark='b'/> Depth-first takes the newest, diving down one branch before backing up: a stack instead of a queue. <bookmark mark='c'/> With b choices per state and a solution d moves deep, breadth-first may store about b to the d states; depth-first only b times d, but it can dive forever. <bookmark mark='d'/> Iterative deepening, from Richard Korf in 1985, gets both: depth-first to depth one, then two, then three. The repeated work is small, because the last level dominates.",
+   "zh": "各种搜索策略的区别，只在于下一个扩展边界上的哪个状态。<bookmark mark='a'/>广度优先取最老的。<bookmark mark='b'/>深度优先取最新的，沿着一条分支一直往下钻，再退回来：用的是栈，而不是队列。<bookmark mark='c'/>如果每个状态有b种选择，解在d步深处，广度优先可能要存下大约b的d次方个状态；深度优先只要b乘以d，但它可能永远钻下去。<bookmark mark='d'/>迭代加深，来自理查德·科尔夫1985年的工作，两者兼得：先深度优先搜到深度1，再到2，再到3。重复的工作很少，因为最后一层占了大头。"
+  },
+  "f8e125dec80b": {
+   "scene": "Search",
+   "en": "When actions have different costs, expand the cheapest first: the state with the smallest g, the cost of the best path found to it. On a graph this is Edsger Dijkstra's algorithm of 1959. <bookmark mark='a'/> Here it runs on a map: start in the middle, goal to the right behind a wall, each move costing its length. The expanded region grows as a wavefront, bending around the walls. <bookmark mark='b'/> It reaches the goal after expanding 2,636 cells, with a provably shortest path. <bookmark mark='c'/> But it searched just as far away from the goal as toward it. It knows how far it has come, not where it is going.",
+   "zh": "当动作的代价不同时，就先扩展最便宜的：g最小的状态，g是目前找到的到它的最佳路径的代价。在图上，这就是艾兹格·迪杰斯特拉1959年的算法。<bookmark mark='a'/>这里它在一张地图上运行：起点在中间，目标在右边，挡在一堵墙后面；每走一步的代价就是这一步的长度。被扩展的区域像波前一样扩大，遇到墙就绕过去。<bookmark mark='b'/>它扩展了2636个格子之后到达目标，找到的路径可以证明是最短的。<bookmark mark='c'/>但它往远离目标的方向，和朝着目标的方向，搜得一样远。它知道自己走了多远，却不知道自己要去哪里。"
+  },
+  "5efbcac8130a": {
+   "scene": "AStar",
+   "en": "Chapter three. A star.",
+   "zh": "第3章。A星。"
+  },
+  "d38223ca65b7": {
+   "scene": "AStar",
+   "en": "In 1968 Peter Hart, Nils Nilsson and Bertram Raphael, at the Stanford Research Institute, needed Shakey, the first mobile robot to plan its own moves, to find paths quickly. <bookmark mark='a'/> Their algorithm, A star, orders the frontier by f equals g plus h. <bookmark mark='b'/> g is the cost so far, as in Dijkstra's algorithm. <bookmark mark='c'/> h is a guess at the cost still to go: a heuristic. <bookmark mark='d'/> On a map, the straight-line distance to the goal.",
+   "zh": "1968年，斯坦福研究所的彼得·哈特、尼尔斯·尼尔森和伯特伦·拉斐尔，需要让Shakey，第一台能规划自己行动的移动机器人，快速找到路径。<bookmark mark='a'/>他们的算法叫A星，按f等于g加h来给边界排序。<bookmark mark='b'/>g是到目前为止的代价，和迪杰斯特拉算法里一样。<bookmark mark='c'/>h是对剩余代价的一个猜测：启发式。<bookmark mark='d'/>在地图上，就是到目标的直线距离。"
+  },
+  "b8e2eb55624c": {
+   "scene": "AStar",
+   "en": "Here are the two searches on the same map. <bookmark mark='a'/> Dijkstra spreads in every direction; A star's frontier leans toward the goal, flows around the wall, and stops. <bookmark mark='b'/> Both find the same shortest path, of length 30.4. Dijkstra expanded 2,636 cells; A star, 239. <bookmark mark='c'/> Their shapes are no accident. Call the optimal cost C star. Dijkstra only expands cells closer than C star to the start, and no path beats a straight line, so they lie in a circle of radius C star. A star only expands cells whose g plus h is below C star, so they lie in an ellipse with the start and the goal as its foci. <bookmark mark='d'/> We checked every expanded cell: 100 percent inside the circle, 100 percent inside the ellipse.",
+   "zh": "这是两种搜索在同一张地图上。<bookmark mark='a'/>迪杰斯特拉向四面八方扩散；A星的边界朝目标倾斜，绕过墙，然后停下。<bookmark mark='b'/>两者找到的是同一条最短路径，长度30.4。迪杰斯特拉扩展了2636个格子；A星，239个。<bookmark mark='c'/>它们的形状不是偶然的。把最优代价记作C星。迪杰斯特拉只扩展离起点比C星近的格子，而没有路径比直线更短，所以这些格子落在半径为C星的圆里。A星只扩展g加h低于C星的格子，所以它们落在一个以起点和目标为焦点的椭圆里。<bookmark mark='d'/>我们检查了每一个被扩展的格子：100%在圆内，100%在椭圆内。"
+  },
+  "e9ece7594bbe": {
+   "scene": "AStar",
+   "en": "Why is A star's path the shortest? <bookmark mark='a'/> Call h admissible if it never overestimates: h of n is at most h star of n, the true cost to a goal. <bookmark mark='b'/> Then A star is optimal. Suppose a worse goal, G two, sits on the frontier. Some state n on an optimal path is on the frontier too. <bookmark mark='c'/> Its f is g plus h, <bookmark mark='d'/> at most g plus h star, because h is admissible, <bookmark mark='e'/> which is exactly C star, because n lies on an optimal path. <bookmark mark='f'/> G two costs more than C star, and its h is zero. So n always comes off the frontier first, and the optimal goal before G two.",
+   "zh": "为什么A星的路径是最短的？<bookmark mark='a'/>如果h从不高估，就说它是可采纳的：h(n)至多是h星(n)，也就是到目标的真实代价。<bookmark mark='b'/>于是A星是最优的。假设边界上有一个更差的目标G2。最优路径上一定也有某个状态n在边界上。<bookmark mark='c'/>它的f是g加h，<bookmark mark='d'/>由于h可采纳，这至多是g加h星，<bookmark mark='e'/>而由于n在最优路径上，这恰好就是C星。<bookmark mark='f'/>G2的代价比C星大，而它的h是0。所以n总是先离开边界，最优目标也先于G2离开边界。"
+  },
+  "617c677f99ab": {
+   "scene": "AStar",
+   "en": "On graphs A star wants a little more. <bookmark mark='a'/> Call h consistent if, for every step from n to n prime, h of n is at most the step's cost plus h of n prime: a triangle inequality, which the straight-line distance obeys. <bookmark mark='b'/> Then f never decreases along a path. f of n prime is g of n, plus the step, plus h of n prime; <bookmark mark='c'/> by consistency, at least g of n plus h of n: <bookmark mark='d'/> f of n. <bookmark mark='e'/> So states come off the frontier in order of f, and the first time A star expands a state, it has its best path.",
+   "zh": "在图上，A星需要的条件更多一点。<bookmark mark='a'/>如果对每一步从n到n撇，h(n)至多是这一步的代价加上h(n撇)，就说h是一致的：这是一个三角不等式，直线距离满足它。<bookmark mark='b'/>于是沿着一条路径，f从不下降。f(n撇)等于g(n)，加上这一步，再加上h(n撇)；<bookmark mark='c'/>由一致性，这至少是g(n)加h(n)：<bookmark mark='d'/>也就是f(n)。<bookmark mark='e'/>所以状态按f的顺序离开边界，A星第一次扩展一个状态时，就已经有了到它的最佳路径。"
+  },
+  "4dcd749134ad": {
+   "scene": "AStar",
+   "en": "One map proves little, so we ran 200 random ones. <bookmark mark='a'/> On the median map, Dijkstra expands 3,336 cells and A star 552: about 17 percent of the work, for the same optimal paths. <bookmark mark='b'/> Weight h by two, and weighted A star expands a median of 62, with paths 10 percent longer on average, never more than twice the optimum. <bookmark mark='c'/> Greedy search ignores g altogether: 47 cells, but paths 16 percent longer, with no guarantee. Speed against optimality.",
+   "zh": "一张地图说明不了什么，所以我们跑了200张随机地图。<bookmark mark='a'/>在中位数的地图上，迪杰斯特拉扩展3336个格子，A星扩展552个：大约是17%的工作量，得到同样的最优路径。<bookmark mark='b'/>把h乘以2，加权A星扩展的中位数是62个，路径平均长10%，但绝不会超过最优的两倍。<bookmark mark='c'/>贪心搜索完全不管g：47个格子，但路径长16%，而且毫无保证。速度与最优性的权衡。"
+  },
+  "750e1e73edce": {
+   "scene": "Heuristics",
+   "en": "Chapter four. Where heuristics come from.",
+   "zh": "第4章。启发式从哪里来。"
+  },
+  "008c3977ce74": {
+   "scene": "Heuristics",
+   "en": "A star is only as good as its heuristic. Where do good ones come from? <bookmark mark='a'/> Write down the eight-puzzle's rule: a tile can move from square A to square B if A is next to B, and B is empty. <bookmark mark='b'/> Now cheat. Drop 'B is empty', and each tile walks home through the others: that easier puzzle costs the sum of the tiles' row and column distances, the Manhattan distance. Here, 16. <bookmark mark='c'/> Drop both conditions, and each misplaced tile jumps home in one move: the cost is the number of misplaced tiles, here 8. <bookmark mark='d'/> The real answer, from our breadth-first map: 20 moves. <bookmark mark='e'/> This is the general recipe, made explicit by Judea Pearl in the early nineteen-eighties: relax the problem until it is easy, and solve that exactly. Removing rules can only shorten solutions: admissible, for free.",
+   "zh": "A星的好坏取决于它的启发式。好的启发式从哪里来？<bookmark mark='a'/>写下八数码的规则：如果方格A挨着方格B，并且B是空的，方块就可以从A移到B。<bookmark mark='b'/>现在作个弊。去掉“B是空的”，每块方块都能穿过别的方块走回家：这个更容易的谜题的代价，是各方块行距与列距之和，也就是曼哈顿距离。这里是16。<bookmark mark='c'/>两个条件都去掉，每块放错的方块一步就跳回家：代价就是放错的方块数，这里是8。<bookmark mark='d'/>真正的答案，从我们广度优先的地图上查：20步。<bookmark mark='e'/>这是通用的配方，由朱迪亚·珀尔在八十年代初明确提出：把问题放松到容易为止，然后精确求解。去掉规则只会让解变短：白送的可采纳性。"
+  },
+  "5c0390b80c57": {
+   "scene": "Heuristics",
+   "en": "How much does the better guess buy? A star on the eight-puzzle, a hundred positions per solution length. <bookmark mark='a'/> With no heuristic, at length 24, it expands 128,653 states on average. <bookmark mark='b'/> Counting misplaced tiles: 12,427. <bookmark mark='c'/> The Manhattan distance: 816. <bookmark mark='d'/> The effective branching factor, the branching of a uniform tree of the same size and depth, falls from 1.56 to 1.41 to 1.23: each step toward one is an exponential saving. <bookmark mark='e'/> The Manhattan distance is never below the misplaced count; when one admissible heuristic dominates another, A star with it never expands more.",
+   "zh": "更好的猜测能换来多少？在八数码上运行A星，每种解长取100个局面。<bookmark mark='a'/>不用启发式时，在解长24处，它平均扩展128653个状态。<bookmark mark='b'/>数放错的方块：12427个。<bookmark mark='c'/>曼哈顿距离：816个。<bookmark mark='d'/>有效分支因子，也就是同样大小、同样深度的均匀树的分支数，从1.56降到1.41，再降到1.23：每向1靠近一步，都是指数级的节省。<bookmark mark='e'/>曼哈顿距离从不小于放错的方块数；当一个可采纳的启发式占优于另一个时，用它的A星扩展的状态绝不会更多。"
+  },
+  "bd7b285aa7f8": {
+   "scene": "Heuristics",
+   "en": "The fifteen-puzzle has about ten trillion states, too many to map. In 1985 Richard Korf solved random instances optimally with IDA star: A star's ordering, run as depth-first searches with a rising bound on f, in almost no memory. <bookmark mark='a'/> Here it is on scrambled positions. Counting misplaced tiles, it soon hits our cap of 10,000,000 positions and gives up, 26 times out of 30. <bookmark mark='b'/> The Manhattan distance does far better. <bookmark mark='c'/> Better still, solve a smaller relaxed puzzle exactly and remember the answers: track five tiles, ignore the rest, and breadth-first search gives the exact cost of homing them from every placement. That is a pattern database, Joseph Culberson and Jonathan Schaeffer's idea; three of them, for three groups of tiles, can be added. <bookmark mark='d'/> It generates about 28 times fewer positions than the Manhattan distance, because it knows more: on a random position it guesses 41 moves on average, against 37 and 14.",
+   "zh": "十五数码大约有10万亿个状态，多到画不出地图。1985年，理查德·科尔夫用IDA星最优地解出了随机局面：保持A星的排序，但以一系列深度优先搜索来运行，f的上限逐次提高，几乎不需要内存。<bookmark mark='a'/>这是它在打乱的局面上的表现。数放错的方块时，它很快撞上我们设的10000000个局面的上限而放弃，30次里有26次。<bookmark mark='b'/>曼哈顿距离好得多。<bookmark mark='c'/>还能更好：精确地解一个更小的放松谜题，把答案记下来。只跟踪五块方块，忽略其余的，广度优先搜索就能给出从每一种摆放把它们送回家的精确代价。这就是模式数据库，约瑟夫·卡尔伯森和乔纳森·谢弗的想法；三张这样的表，对应三组方块，可以相加。<bookmark mark='d'/>它生成的局面比曼哈顿距离少大约28倍，因为它知道得更多：对一个随机局面，它平均猜41步，另外两个分别是37和14。"
+  },
+  "ff03abe758fa": {
+   "scene": "Heuristics",
+   "en": "The same idea scaled up. <bookmark mark='a'/> In 1997 Korf found optimal solutions to Rubik's cube with pattern databases. <bookmark mark='b'/> In 2019 a group at Irvine let a neural network learn the heuristic instead, and used it inside weighted A star: it solved every test cube, with a shortest solution sixty point three percent of the time. <bookmark mark='c'/> A learned estimate of the cost to go is what reinforcement learning calls a value function, and search guided by one is how AlphaZero plays, in Part 26.",
+   "zh": "同样的想法被放大了。<bookmark mark='a'/>1997年，科尔夫用模式数据库找到了魔方的最优解。<bookmark mark='b'/>2019年，尔湾的一个团队改让神经网络来学习启发式，再把它用在加权A星里：它解开了每一个测试魔方，60.3%的时候找到的是最短解。<bookmark mark='c'/>对剩余代价的学习估计，就是强化学习所说的价值函数；由它引导的搜索，就是AlphaZero下棋的方式，见第26部分。"
+  },
+  "1cddfa1a4f91": {
+   "scene": "Local",
+   "en": "Chapter five. Climbing and cooling.",
+   "zh": "第5章。爬山与退火。"
+  },
+  "bb981298a3c0": {
+   "scene": "Local",
+   "en": "Often the path doesn't matter, only the final state: a schedule, a chip layout, a tour. Then keep a single state and improve it step by step. <bookmark mark='a'/> Picture the states as a landscape, height meaning quality. Hill climbing always steps to the best neighbour. <bookmark mark='b'/> It is fast and needs almost no memory. <bookmark mark='c'/> And it stops on the first peak it reaches, a local maximum, while the highest peak is somewhere else.",
+   "zh": "很多时候路径并不重要，只有最终状态重要：一张时间表、一块芯片的布局、一条回路。这时只保留一个状态，一步步改进它。<bookmark mark='a'/>把状态想象成一片地形，高度表示好坏。爬山法总是走到最好的相邻状态。<bookmark mark='b'/>它很快，几乎不需要内存。<bookmark mark='c'/>但它会停在遇到的第一个山峰上，也就是局部极大值，而最高的山峰在别处。"
+  },
+  "543424ef7b05": {
+   "scene": "Local",
+   "en": "The classic test: eight queens on a chessboard, none attacking another. One queen per column; a move shifts a queen within its column; the height is the number of attacking pairs. <bookmark mark='a'/> Two runs of steepest descent. On the left, the attacks fall, then stop: no move helps. <bookmark mark='b'/> On the right, the same rule reaches a solution. <bookmark mark='c'/> Over 10,000 random starts it solves 14 percent, in 4 steps on average; the rest get stuck after 3. <bookmark mark='d'/> Allow sideways moves across plateaus, and it solves 95 percent. Or restart whenever stuck: about 7 tries, around 23 steps in all.",
+   "zh": "经典的测试：在棋盘上放八个皇后，互不攻击。每列放一个皇后；一步就是把一个皇后在它那一列里移动；高度是互相攻击的皇后对数。<bookmark mark='a'/>两次最陡下降。左边，攻击数下降，然后停住：没有哪一步能让情况变好。<bookmark mark='b'/>右边，同样的规则找到了解。<bookmark mark='c'/>在10000个随机起点上，它解出了14%，平均用4步；其余的在3步后卡住。<bookmark mark='d'/>允许在平台上横向移动，成功率就变成95%。或者每次卡住就重来：大约要试7次，总共大约23步。"
+  },
+  "7dd406fa721c": {
+   "scene": "Local",
+   "en": "Simulated annealing escapes local optima by sometimes going the wrong way. <bookmark mark='a'/> Propose a random change. If it lowers the cost, take it; if it raises the cost by delta E, take it anyway with probability e to the minus delta E over T, where T is a temperature. <bookmark mark='b'/> Why that rule? At a fixed temperature, in equilibrium, the flow from s to s prime equals the flow back. <bookmark mark='c'/> Uphill moves are accepted with that probability, downhill always, and proposals are symmetric. <bookmark mark='d'/> Divide, <bookmark mark='e'/> and the time spent in each state follows Boltzmann's distribution. <bookmark mark='f'/> As T falls toward zero, it concentrates on the lowest-cost states.",
+   "zh": "模拟退火靠偶尔往错的方向走，来逃出局部最优。<bookmark mark='a'/>随机提出一个改动。如果它降低代价，就接受；如果它把代价提高了ΔE，也以e的负ΔE除以T次方的概率接受，其中T是温度。<bookmark mark='b'/>为什么是这条规则？在固定温度下达到平衡时，从s流向s撇的量，等于流回来的量。<bookmark mark='c'/>上坡以这个概率被接受，下坡总是被接受，而提议是对称的。<bookmark mark='d'/>两边相除，<bookmark mark='e'/>在每个状态上花的时间就服从玻尔兹曼分布。<bookmark mark='f'/>当T降向0时，它集中到代价最低的状态上。"
+  },
+  "fda72b8f8e5c": {
+   "scene": "Local",
+   "en": "Here it is on a travelling-salesman problem: the shortest round trip through fifty-two places in Berlin, a standard test whose optimum is known. A move reverses a stretch of the tour. <bookmark mark='a'/> Hot, at first, 57 percent of proposed changes are accepted, and the tour is a tangle. <bookmark mark='b'/> As it cools, fewer bad moves get through; crossing edges disappear, and the tour pulls into loops around the city's clusters. <bookmark mark='c'/> At the end, 0.0 percent are accepted: annealing has become hill climbing, from a very good place. It ends at 7,542: the proven optimum, 7,542.",
+   "zh": "这是它在一个旅行商问题上的表现：经过柏林52个地点的最短回路，一个最优解已知的标准测试。一步是把回路中的一段倒过来。<bookmark mark='a'/>一开始温度很高，被提出的改动有57%被接受，回路乱成一团。<bookmark mark='b'/>随着降温，能通过的坏改动越来越少；交叉的边消失了，回路收拢成绕着城市各个聚集区的圈。<bookmark mark='c'/>到最后，只有0.0%被接受：退火变成了爬山法，只是从一个非常好的地方出发。它最后停在7542：正是已被证明的最优值7542。"
+  },
+  "aba7ff89df1c": {
+   "scene": "Local",
+   "en": "Is the cooling worth it? Compare on equal terms: the same number of tours looked at. <bookmark mark='a'/> The greedy tour, always to the nearest unvisited place, is 8 percent too long even from its best start; 2-opt hill climbing polishes it to 7,657. <bookmark mark='b'/> On the same budget of 2,000,000 tours looked at, annealing does best, averaging 7,583; restarted hill climbing averages 7,705, and the genetic algorithm 7,931. Annealing found the optimum itself in 4 of 5 runs.",
+   "zh": "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了8%；2-opt爬山法把它打磨到7657。<bookmark mark='b'/>在同样看2000000条回路的预算下，退火最好，平均7583；带重启的爬山法平均7705，是the genetic algorithm 7,931. Annealing found the optimum itself in 4 of 5 runs。"
+  },
+  "84f93878dd84": {
+   "scene": "Local",
+   "en": "A third idea keeps a whole population. <bookmark mark='a'/> John Holland's genetic algorithms, from 1975, let the fitter states reproduce: a child takes pieces of two parents, plus a random mutation. <bookmark mark='b'/> On our budget, a plain version ends 6 percent above the optimum: most children of two good tours are worse than either. <bookmark mark='c'/> Population search has a second life. DeepMind's FunSearch, in 2023, let a language model propose the mutations; in 2025 AlphaEvolve evolved programs that way, and found how to multiply four-by-four complex matrices with forty-eight multiplications, one fewer than Strassen's 1969 method.",
+   "zh": "第三种思路是保留一整个种群。<bookmark mark='a'/>约翰·霍兰德1975年提出的遗传算法，让更好的状态繁殖：一个孩子取两个父母的片段，再加一点随机变异。<bookmark mark='b'/>在我们的预算下，一个朴素版本最后比最优解高6%：两条好回路生出的孩子，大多比父母都差。<bookmark mark='c'/>种群搜索迎来了第二春。2023年，DeepMind的FunSearch让一个语言模型来提出变异；2025年，AlphaEvolve用同样的方式演化程序，找到了一种只用48次乘法计算4乘4复数矩阵乘法的方法，比施特拉森1969年的方法少一次。"
+  },
+  "62d61bfdf2da": {
+   "scene": "Games",
+   "en": "Chapter six. Games and alpha-beta.",
+   "zh": "第6章。博弈与α-β剪枝。"
+  },
+  "7265d8cf4074": {
+   "scene": "Games",
+   "en": "Games were the field's favourite test: clear rules, a clear score, and an opponent who fights back. <bookmark mark='a'/> In 1928 John von Neumann proved that in a two-player zero-sum game, each side can guarantee a value by assuming the opponent plays perfectly. <bookmark mark='b'/> So look ahead: where you move, take the maximum; where the opponent moves, the minimum. That's minimax. <bookmark mark='c'/> In 1950 Claude Shannon described a chess program built this way, with a formula to score the positions at the end of the look-ahead, and estimated some ten to the hundred and twenty possible games: far too many to search to the end. <bookmark mark='d'/> Tic-tac-toe is small enough. Our minimax visits 549,946 positions and 255,168 complete games, and finds the game is a draw with best play.",
+   "zh": "博弈是这个领域最喜欢的测试：规则清楚，胜负清楚，还有一个会反击的对手。<bookmark mark='a'/>1928年，约翰·冯·诺依曼证明：在两人零和博弈中，假设对手下得完美，每一方都能保证一个值。<bookmark mark='b'/>所以往前看：轮到你走时取最大；轮到对手走时取最小。这就是极小化极大。<bookmark mark='c'/>1950年，克劳德·香农描述了一个这样构造的国际象棋程序，用一个公式给前瞻尽头的局面打分；他估计可能的对局大约有10的120次方种：远远多到无法搜到底。<bookmark mark='d'/>井字棋足够小。我们的极小化极大访问了549946个局面和255168盘完整的对局，发现双方都下得最好时，结果是和棋。"
+  },
+  "1768fdb1d08e": {
+   "scene": "Games",
+   "en": "Most of a game tree never needs to be looked at. Here is a small one: you move, they reply, you move, and the bottom positions are scored. <bookmark mark='a'/> Search it depth-first, carrying two numbers: alpha, the best you are already sure of, and beta, the best your opponent is sure of. <bookmark mark='b'/> As soon as a reply shows a move is worse than one you already have, that move's other replies cannot matter, and are skipped. The greyed branches are never examined: 18 of the 40 positions, and the answer at the top is still exactly minimax's. This is alpha-beta pruning, suggested by John McCarthy in the mid-nineteen-fifties and used by every chess program since.",
+   "zh": "博弈树的大部分根本不用看。这是一棵小树：你走，对手应，你再走，底部的局面都打了分。<bookmark mark='a'/>深度优先地搜索它，同时带着两个数：α，你已经有把握的最好分数；β，对手已经有把握的最好分数。<bookmark mark='b'/>一旦某个应对表明一步棋比你已有的更差，这步棋剩下的应对就都无关紧要，可以跳过。变灰的分支从来没被查看过：40个局面里的18个，而顶部的答案仍然和极小化极大的完全一样。这就是α-β剪枝，约翰·麦卡锡在五十年代中期提出，此后每一个国际象棋程序都在用。"
+  },
+  "82071f2dd8d9": {
+   "scene": "Games",
+   "en": "How much can pruning save? Donald Knuth and Ronald Moore analysed it in full in 1975. <bookmark mark='a'/> To prove a position is worth exactly v, you need two bounds. <bookmark mark='b'/> At least v: one good move of yours, and every reply to it, at every level: b to the d over two leaves, rounded down. <bookmark mark='c'/> At most v: every move of yours, and one refutation of each. <bookmark mark='d'/> The two proofs share one line of play. So with perfect ordering, alpha-beta evaluates about twice the square root of the full tree: twice as deep for the same work. <bookmark mark='e'/> We checked on uniform trees with perfect ordering: five moves per position, eight deep, 1,249 leaves out of 390,625, exactly the formula; all 32 cases agree.",
+   "zh": "剪枝能省多少？唐纳德·克努特和罗纳德·摩尔在1975年完整地分析了它。<bookmark mark='a'/>要证明一个局面恰好值v，需要两个界。<bookmark mark='b'/>至少值v：你的一步好棋，加上对手对它的每一个应对，每一层都如此：b的d除以2次方个叶子，向下取整。<bookmark mark='c'/>至多值v：你的每一步棋，各配一个驳斥。<bookmark mark='d'/>两个证明共享一条变化。所以在完美排序下，α-β评估的叶子数大约是整棵树的平方根的两倍：同样的工作量，可以搜两倍深。<bookmark mark='e'/>我们在完美排序的均匀树上做了检验：每个局面5种走法，深8层，390625个叶子里评估了1249个，正是公式给出的数；all 32种情形一致。"
+  },
+  "e8a2eec26c46": {
+   "scene": "Games",
+   "en": "On a real game the savings are as large. Connect Four, deeper and deeper. <bookmark mark='a'/> Plain minimax grows about sevenfold per move: at depth 9, 37.5 million positions. <bookmark mark='b'/> Alpha-beta in random order: 178,351. <bookmark mark='c'/> Best-looking move first: 17,527. <bookmark mark='d'/> With an oracle that knows the truly best move, at depth 8: 4,620, the order of the square root of minimax's 5,655,958. That is why move ordering became the chess programmer's craft.",
+   "zh": "在真实的棋上，节省同样巨大。四子棋，搜得越来越深。<bookmark mark='a'/>朴素的极小化极大每深一步大约增长7倍：深度9时，有37.5百万个局面。<bookmark mark='b'/>走法随机排序的α-β：178351个。<bookmark mark='c'/>先试看起来最好的那步：17527个。<bookmark mark='d'/>再用一个知道真正最好那步的神谕，在深度8时：4620个，和极小化极大的5655958个的平方根同一个量级。这就是为什么走法排序成了国际象棋程序员的手艺。"
+  },
+  "f473a74b5dfe": {
+   "scene": "Samuel",
+   "en": "Chapter seven. Machines that learned to play.",
+   "zh": "第7章。学会下棋的机器。"
+  },
+  "76e4a3bd9812": {
+   "scene": "Samuel",
+   "en": "In 1959 Arthur Samuel of IBM published a checkers program with a striking claim: that a computer can be programmed so that it will learn to play a better game of checkers than can be played by the person who wrote the program. <bookmark mark='a'/> It searched a few moves ahead and scored positions with a weighted sum of board features: a scoring polynomial. <bookmark mark='b'/> What was new: it adjusted the weights itself, by playing. <bookmark mark='c'/> In 1962 it beat a Connecticut player, Robert Nealey, in a famous game; Nealey won the rematch, and in 1966 the program lost all eight games against the world champions. But the idea mattered, and Samuel helped popularize the very words machine learning.",
+   "zh": "1959年，IBM的阿瑟·塞缪尔发表了一个跳棋程序，附带一个惊人的说法：可以给计算机编程，让它学会把跳棋下得比编写程序的人更好。<bookmark mark='a'/>它往前搜几步，用棋盘特征的加权和给局面打分：一个评分多项式。<bookmark mark='b'/>新颖之处在于：它通过下棋，自己调整权重。<bookmark mark='c'/>1962年，它在一盘有名的对局中赢了康涅狄格棋手罗伯特·尼利；尼利赢了复赛，而1966年，这个程序对世界冠军的八盘棋全部输掉。但重要的是这个想法，而“机器学习”这个说法，也是塞缪尔帮着推广开的。"
+  },
+  "593dd90e7bdd": {
+   "scene": "Samuel",
+   "en": "Samuel's learning rule is the seed of modern reinforcement learning. <bookmark mark='a'/> Keep the static score your evaluation gave your previous position. <bookmark mark='b'/> Two moves later, search from the new position and back up a score: a better-informed opinion of the same game. <bookmark mark='c'/> The difference, Samuel's delta, says how wrong the old score was. <bookmark mark='d'/> Nudge the weights to shrink it. <bookmark mark='e'/> Two copies played: Alpha learned, Beta kept its weights, and when Alpha won, Beta took them. Richard Sutton built on this idea when he formalized temporal-difference learning in 1988.",
+   "zh": "塞缪尔的学习规则，是现代强化学习的种子。<bookmark mark='a'/>记住评估函数给你上一个局面的静态分数。<bookmark mark='b'/>两步之后，从新局面往前搜索，倒推出一个分数：对同一盘棋更有根据的看法。<bookmark mark='c'/>两者之差，塞缪尔叫它delta，说明旧分数错了多少。<bookmark mark='d'/>轻推权重，让它变小。<bookmark mark='e'/>两份副本对弈：Alpha学习，Beta保持权重不变，每当Alpha赢了，Beta就拿走它的权重。理查德·萨顿在1988年形式化时序差分学习时，就是在这个想法上继续前进的。"
+  },
+  "62dc20cccaf6": {
+   "scene": "Samuel",
+   "en": "We gave Samuel's method a game of our own: Connect Four, five features a programmer might choose, and a search three moves deep. Alpha starts with every weight zero. <bookmark mark='a'/> Here are its weights as it plays; in orange, the weights we set by hand before training. <bookmark mark='b'/> Over 3,000 games against Beta, the weights find their places. The largest weight ends up on threes in open lines, and 4 of the five features count in its favour. <bookmark mark='c'/> At intervals we froze Alpha and played it against two fixed opponents: the untrained player, and our hand-set weights.",
+   "zh": "我们给塞缪尔的方法找了一个我们自己的游戏：四子棋，五个程序员可能会挑的特征，搜索三步深。Alpha一开始所有权重都是0。<bookmark mark='a'/>这是它边下边变的权重；橙色的是我们在训练前手工设定的权重。<bookmark mark='b'/>在与Beta下的3000盘棋里，权重各就各位。最大的权重最后落在开放线上的三子上，五个特征中有4个对它有利。<bookmark mark='c'/>我们隔一段时间就冻结Alpha，让它和两个固定的对手下棋：未经训练的玩家，和我们手工设定的权重。"
+  },
+  "9f8d7ff3673d": {
+   "scene": "Samuel",
+   "en": "After 3,000 games, in each of 3 runs: <bookmark mark='a'/> Every run beats the untrained player, but none beats our hand-set weights: it learned a lot, but not, here, to play better than its programmers' own guess. <bookmark mark='b'/> Graded against a perfect solver, its moves keep the win or the draw 88 to 91 percent of the time, against 79 untrained and 90 for the hand-set weights. The curves were not smooth: Samuel saw his program wander too, and sometimes had to reset it by hand.",
+   "zh": "在3次运行中，每次下完3000盘之后：<bookmark mark='a'/>每次运行都击败了未训练的玩家，但没有一次击败我们手工设定的权重：它学到了很多，但在这里，没有学到比程序员自己的猜测下得更好。<bookmark mark='b'/>用完美求解器来评判，它的走法有88%到91%的时候能保住胜局或和局，未训练的是79%，手工权重是90%。这些曲线并不平滑：塞缪尔也看到过他的程序游移不定，有时还得手动把它重置。"
+  },
+  "c39a498ad980": {
+   "scene": "Samuel",
+   "en": "Chess went the other way: more search, more hand-crafted knowledge. <bookmark mark='a'/> In 1996 Garry Kasparov beat IBM's Deep Blue four games to two, and the team doubled the machine. <bookmark mark='b'/> In the 1997 rematch it ran four hundred and eighty custom chess chips, averaging a hundred and twenty-six million positions a second, with an evaluation of about eight thousand features, almost all tuned by hand. It won three and a half to two and a half. <bookmark mark='c'/> Search plus a human-designed sense of a good position: Shannon's recipe of 1950, at enormous scale.",
+   "zh": "国际象棋走了另一条路：更多的搜索，更多手工打造的知识。<bookmark mark='a'/>1996年，加里·卡斯帕罗夫以4比2战胜了IBM的深蓝，团队把机器的规模翻了一倍。<bookmark mark='b'/>在1997年的复赛中，它运行480块专门设计的国际象棋芯片，平均每秒1.26亿个局面，评估函数有大约8000个特征，几乎全部由人手工调整。它以3.5比2.5获胜。<bookmark mark='c'/>搜索，加上人为设计的好局面的感觉：这正是香农1950年的配方，只是规模巨大。"
+  },
+  "6b65120dcffc": {
+   "scene": "Samuel",
+   "en": "Checkers itself was finished off by search. <bookmark mark='a'/> Jonathan Schaeffer's Chinook became the first program to win a human world championship, in 1994. <bookmark mark='b'/> In 2007 his team proved that checkers, with about five times ten to the twenty positions, is a draw with perfect play. <bookmark mark='c'/> The game that resisted the recipe was Go, where nobody could write down a good evaluation. That took a learned one: Part 26.",
+   "zh": "跳棋本身最终被搜索终结了。<bookmark mark='a'/>乔纳森·谢弗的Chinook在1994年成为第一个赢得人类世界冠军头衔的程序。<bookmark mark='b'/>2007年，他的团队证明：大约有5乘10的20次方个局面的跳棋，在完美对弈下是和棋。<bookmark mark='c'/>抗拒这个配方的是围棋，没有人能写出好的评估函数。那需要一个学出来的评估函数：第26部分。"
+  },
+  "06d546e2612b": {
+   "scene": "Logic",
+   "en": "Chapter eight. Logic and resolution.",
+   "zh": "第8章。逻辑与归结。"
+  },
+  "0c7861a965fa": {
+   "scene": "Logic",
+   "en": "The other great idea of the era was logic: write down what you know, and let the machine work out what follows. <bookmark mark='a'/> Three facts. If it rains, the grass is wet. If the sprinkler is on, the grass is wet. It is raining, or the sprinkler is on. <bookmark mark='b'/> Does it follow that the grass is wet? <bookmark mark='c'/> List every combination of true and false. <bookmark mark='d'/> In every row where all the facts hold, Wet holds too: the facts entail it. <bookmark mark='e'/> But n symbols make two to the n rows. We need to derive conclusions, not enumerate worlds.",
+   "zh": "那个时代的另一个伟大想法是逻辑：把你知道的写下来，让机器推出由此得出的结论。<bookmark mark='a'/>三条事实。如果下雨，草地就湿。如果洒水器开着，草地就湿。正在下雨，或者洒水器开着。<bookmark mark='b'/>能推出草地是湿的吗？<bookmark mark='c'/>列出真和假的所有组合。<bookmark mark='d'/>在所有事实都成立的每一行里，“湿”也成立：这些事实蕴涵它。<bookmark mark='e'/>但n个符号就有2的n次方行。我们需要推导结论，而不是枚举所有世界。"
+  },
+  "db75b4353b39": {
+   "scene": "Logic",
+   "en": "Real knowledge needs more. First-order logic, from Gottlob Frege in 1879, adds objects, relations, and the words all and some: for all x, y and z, if x is a parent of y and y of z, then x is a grandparent of z. <bookmark mark='a'/> Kurt Gödel proved in 1930 that every valid first-order sentence has a proof, so a machine searching through proofs will find one. <bookmark mark='b'/> But no program can decide validity in general: if the answer is no, the search may never end.",
+   "zh": "真正的知识需要更多。一阶逻辑，来自1879年的戈特洛布·弗雷格，加入了对象、关系，以及“所有”和“存在”：对所有的x、y和z，如果x是y的父母，y是z的父母，那么x是z的祖父母。<bookmark mark='a'/>库尔特·哥德尔在1930年证明：每个有效的一阶句子都有证明，所以一台在证明中搜索的机器一定能找到它。<bookmark mark='b'/>但没有程序能在一般情况下判定有效性：如果答案是否，搜索可能永远不会结束。"
+  },
+  "50bdf2e0445c": {
+   "scene": "Logic",
+   "en": "In 1965 Alan Robinson gave machines a single rule of inference that is enough. <bookmark mark='a'/> Write every fact as a clause, an or of literals. If one clause contains x and another not x, resolve them: at least one of the rest must hold. <bookmark mark='b'/> To prove a goal, add its negation, here: the grass is not wet, <bookmark mark='c'/> and resolve until you derive the empty clause, a contradiction. <bookmark mark='d'/> Not wet and the rain rule give no rain; not wet and the sprinkler rule give no sprinkler; rain or sprinkler, with no sprinkler, gives rain; rain against no rain leaves nothing. <bookmark mark='e'/> Robinson proved the method sound and refutation-complete: whenever the facts entail the goal, resolution can derive the empty clause.",
+   "zh": "1965年，艾伦·鲁滨逊给了机器一条就足够的推理规则。<bookmark mark='a'/>把每条事实写成一个子句，也就是若干文字的“或”。如果一个子句含有x，另一个含有非x，就把它们归结：剩下的部分至少有一个必须成立。<bookmark mark='b'/>要证明一个目标，就加入它的否定，这里是：草地不湿，<bookmark mark='c'/>然后不断归结，直到推出空子句，也就是一个矛盾。<bookmark mark='d'/>不湿和下雨那条规则，得到不下雨；不湿和洒水器那条规则，得到洒水器没开；下雨或洒水器，加上洒水器没开，得到下雨；下雨对上不下雨，什么都不剩。<bookmark mark='e'/>鲁滨逊证明这个方法是可靠的，而且是反驳完备的：只要事实蕴涵目标，归结就能推出空子句。"
+  },
+  "b05c47c2654a": {
+   "scene": "Logic",
+   "en": "With variables, resolution needs one more step. <bookmark mark='a'/> The negated goal can be resolved with the rule only after the rule's variables are matched to Anne and Ada. Finding the most general such substitution is unification, the other half of Robinson's paper. <bookmark mark='b'/> Two more steps, and the empty clause. <bookmark mark='c'/> Restrict clauses to at most one positive literal, and resolution becomes a programming language: Prolog, created by Alain Colmerauer and Philippe Roussel in Marseille in 1972, with Robert Kowalski's theory behind it.",
+   "zh": "有了变量，归结还需要多一步。<bookmark mark='a'/>否定后的目标，只有在规则里的变量被匹配成安妮和艾达之后，才能和规则归结。找出最一般的这种代换，就是合一，鲁滨逊那篇论文的另一半。<bookmark mark='b'/>再走两步，就得到空子句。<bookmark mark='c'/>把子句限制成最多只有一个正文字，归结就变成了一种编程语言：Prolog，由阿兰·科尔默劳尔和菲利普·鲁塞尔于1972年在马赛创造，背后是罗伯特·科瓦尔斯基的理论。"
+  },
+  "913d2334bdce": {
+   "scene": "Logic",
+   "en": "Completeness is not efficiency. <bookmark mark='a'/> Give the prover eight family facts and three rules, and ask whether Anne is an ancestor of Flora, four generations away. <bookmark mark='b'/> Resolving every pair of clauses, level by level, it generated 7,550 clauses before finding the 15-clause proof. <bookmark mark='c'/> The set-of-support strategy, from Larry Wos and colleagues in 1965, resolves only pairs involving the negated goal or its descendants: 1,569. <bookmark mark='d'/> Provers live or die by such strategies. Resolution's descendants, like Vampire and E, still compete every year, and proof assistants call on them to fill in routine steps.",
+   "zh": "完备不等于高效。<bookmark mark='a'/>给证明器八条家庭事实和三条规则，问安妮是不是弗洛拉的祖先，相隔四代。<bookmark mark='b'/>把每一对子句一层一层地归结，它在找到那个15个子句的证明之前，生成了7550个子句。<bookmark mark='c'/>支持集策略，来自拉里·沃斯和同事1965年的工作，只归结涉及否定目标或其后代的子句对：1569个。<bookmark mark='d'/>定理证明器的成败，就取决于这样的策略。归结的后代，像Vampire和E，每年还在比赛，证明助手也会调用它们来补全常规步骤。"
+  },
+  "dfdd69baab09": {
+   "scene": "SAT",
+   "en": "Chapter nine. Satisfiability.",
+   "zh": "第9章。可满足性。"
+  },
+  "7c28eb12589a": {
+   "scene": "SAT",
+   "en": "Strip logic down to its core and you get one problem. <bookmark mark='a'/> Given clauses, each an or of variables or their negations, can every variable be set true or false so that every clause holds? That is satisfiability, SAT. <bookmark mark='b'/> In 1971 Stephen Cook, and independently Leonid Levin, showed that any problem whose solutions can be checked quickly can be rewritten as SAT: the first NP-complete problem. <bookmark mark='c'/> And yet SAT solvers became one of AI's great practical successes.",
+   "zh": "把逻辑剥到只剩核心，就得到一个问题。<bookmark mark='a'/>给定一组子句，每个都是变量或其否定的“或”，能不能给每个变量赋真或假，让每个子句都成立？这就是可满足性，SAT。<bookmark mark='b'/>1971年，斯蒂芬·库克证明，列昂尼德·列文也独立地证明：任何解能被快速验证的问题，都能改写成SAT。这是第一个NP完全问题。<bookmark mark='c'/>然而，SAT求解器却成了AI最伟大的实用成功之一。"
+  },
+  "e1407f2b88f6": {
+   "scene": "SAT",
+   "en": "The classic method is DPLL, from Martin Davis and Hilary Putnam in 1960, made practical with George Logemann and Donald Loveland in 1962. <bookmark mark='a'/> Propagate: a clause with one literal left open forces it. <bookmark mark='b'/> When nothing is forced, branch: pick a variable, try true, propagate. <bookmark mark='c'/> If a clause has every literal false, back up and try the other value. <bookmark mark='d'/> On our little formula: Try a true, which forces c, d and e, and a clause fails: back up. Try a false, which forces b. Try c true. Try d true, which forces e, and a clause fails: back up. Try d false, and every clause holds.",
+   "zh": "经典的方法是DPLL，来自1960年的马丁·戴维斯和希拉里·普特南，1962年又和乔治·洛格曼、唐纳德·洛夫兰一起把它变得实用。<bookmark mark='a'/>传播：一个只剩一个文字未定的子句，会强迫那个文字成立。<bookmark mark='b'/>没有什么被强迫时，就分支：选一个变量，先试真，再传播。<bookmark mark='c'/>如果某个子句的每个文字都为假，就退回去，试另一个值。<bookmark mark='d'/>在我们的小公式上：试a为真，它迫使c、d和e成立，然后一个子句失败：退回。试a为假，它迫使b成立。试c为真。试d为真，它迫使e成立，又一个子句失败：退回。试d为假，每个子句都成立了。"
+  },
+  "c3ad58110106": {
+   "scene": "SAT",
+   "en": "In 1992 David Mitchell, Bart Selman and Hector Levesque asked what random formulas look like: n variables, m clauses of three random literals. <bookmark mark='a'/> With few clauses per variable, almost every formula is satisfiable; with many, almost none; in between, the chance drops off a cliff. <bookmark mark='b'/> The bigger the formulas, the sharper the step: for 25 variables the chance falls from ninety to ten percent over a span of 1.55 in the ratio; for 200, over 0.40. <bookmark mark='c'/> As n grows, the step becomes a jump, near a ratio of four point two seven. Physicists predicted 4.267 with a method from the theory of disordered magnets; mathematicians have proved the threshold lies between 3.52 and 4.49. A phase transition, like water freezing, in a logic problem.",
+   "zh": "1992年，大卫·米切尔、巴特·塞尔曼和赫克托·莱韦斯克问：随机公式是什么样子的？取n个变量，m个子句，每个子句有三个随机文字。<bookmark mark='a'/>每个变量对应的子句少时，几乎每个公式都可满足；多时，几乎没有一个可满足；在两者之间，概率像从悬崖上掉下去。<bookmark mark='b'/>公式越大，台阶越陡：25个变量时，概率从90%降到10%，跨越的比值区间是1.55；200个变量时，只有0.40。<bookmark mark='c'/>随着n增大，这个台阶变成一次跳变，位置在比值4.27附近。物理学家用无序磁体理论里的一种方法，预言了4.267；数学家已经证明，阈值在3.52和4.49之间。一个逻辑问题里的相变，就像水结冰一样。"
+  },
+  "bdffa3632087": {
+   "scene": "SAT",
+   "en": "The transition is also where the problems are hard. <bookmark mark='a'/> Count DPLL's decisions: far below the threshold a solution is found almost at once, far above, a contradiction. <bookmark mark='b'/> For 200 variables, the median peaks at a ratio of 4.4, at 22,994 decisions, against 69 at the left edge and 2,602 at the right. Easy, hard, easy.",
+   "zh": "相变的地方，也正是问题难的地方。<bookmark mark='a'/>数一数DPLL的决策次数：远低于阈值时，几乎马上就找到一个解；远高于阈值时，几乎马上就找到矛盾。<bookmark mark='b'/>对200个变量，中位数在比值4.4处达到峰值，为22994次决策，而左边缘是69次，右边缘是2602次。易、难、易。"
+  },
+  "a961b8673743": {
+   "scene": "SAT",
+   "en": "Modern solvers add one idea: learn from every mistake. <bookmark mark='a'/> Here a solver has made four decisions, one per level, and propagation has implied a cascade, each arrow from the literals that forced it. <bookmark mark='b'/> It ends in a conflict. DPLL would just undo the last decision. <bookmark mark='c'/> Conflict-driven clause learning asks why: it traces the conflict back to the first point every path passes through, here x 4. <bookmark mark='d'/> The reasons become a new clause, implied by the formula, that rules out this combination forever. <bookmark mark='e'/> Then the solver jumps back, past irrelevant decisions, to level 3. With clever branching and cheap bookkeeping, from GRASP in 1996 and Chaff in 2001, every competitive solver works this way.",
+   "zh": "现代求解器加了一个想法：从每一次错误中学习。<bookmark mark='a'/>这里一个求解器做了四个决策，每层一个，传播又推出了一连串赋值，每个箭头都从迫使它的那些文字指过来。<bookmark mark='b'/>这一连串以冲突告终。DPLL只会撤销最后一个决策。<bookmark mark='c'/>冲突驱动的子句学习会问：为什么？它把冲突往回追，找到每条路径都必经的第一个点：这里是x4。<bookmark mark='d'/>这些原因变成一个新子句，它被原公式蕴涵，从此永远排除这个组合。<bookmark mark='e'/>然后求解器往回跳，越过无关的决策，回到第3层。再加上聪明的分支和廉价的簿记，来自1996年的GRASP和2001年的Chaff，每个有竞争力的求解器都这样工作。"
+  },
+  "7fd108fcfa24": {
+   "scene": "SAT",
+   "en": "Learning is not a small improvement. Ask whether two circuits for adding binary numbers ever disagree, written as clauses that are satisfiable exactly when they do. <bookmark mark='a'/> DPLL, remembering nothing, needs about 4 times as many decisions for every extra bit: 19,254,403 for 12-bit adders. <bookmark mark='b'/> Our clause-learning solver needs 440 conflicts, up from 13 at 2 bits, and proves two 64-bit adders equal on all two to the 128 inputs with 6,979 conflicts.",
+   "zh": "学习可不是小改进。问两个二进制加法电路会不会给出不同的答案，写成子句，使它们恰好在两个电路不一致时可满足。<bookmark mark='a'/>DPLL什么都不记，每多一位，决策次数就要乘以大约4倍：12位加法器需要19254403次。<bookmark mark='b'/>我们的子句学习求解器需要440次冲突，2位时是13次；它还用6979次冲突，证明了两个64位加法器在全部2的128次方个输入上都相等。"
+  },
+  "3751e97b0087": {
+   "scene": "Plans",
+   "en": "Chapter ten. Constraints and plans.",
+   "zh": "第10章。约束与规划。"
+  },
+  "a4e6de1dd358": {
+   "scene": "Plans",
+   "en": "Many problems are sets of constraints rather than paths. <bookmark mark='a'/> A constraint satisfaction problem has variables, each with a domain of values, and constraints that rule out some combinations. <bookmark mark='b'/> A Sudoku: eighty-one cells, each one to nine, all different in every row, column and box. <bookmark mark='c'/> Such structure invites propagation: David Waltz used it in 1975 to label the lines of drawings, and Alan Mackworth gave the general algorithm in 1977.",
+   "zh": "许多问题是一组约束，而不是路径。<bookmark mark='a'/>一个约束满足问题有一些变量，每个变量有一个取值的值域，还有一些排除某些组合的约束。<bookmark mark='b'/>数独就是一个：81个格子，每格取1到9，每一行、每一列、每一宫里各不相同。<bookmark mark='c'/>这种结构适合传播：大卫·沃尔茨在1975年用它给线条图里的线做标注，艾伦·麦克沃斯在1977年给出了通用算法。"
+  },
+  "8cd45bdd8e6b": {
+   "scene": "Plans",
+   "en": "Arc consistency looks at one constraint at a time. <bookmark mark='a'/> For each pair of cells that must differ, delete any value of the first that the second leaves no room for; when a cell shrinks, recheck its neighbours. <bookmark mark='b'/> Every clue knocks its value out of its row, column and box, and the deletions cascade. <bookmark mark='c'/> AC-3 deletes 313 values and settles 3 more cells, but not the puzzle: propagation alone is not enough here. <bookmark mark='d'/> With search, it is decisive. Plain backtracking in reading order tries 3,642 assignments; forward checking, 1,669; also choosing the cell with the fewest values left, 182; full arc consistency after every choice, 93.",
+   "zh": "弧相容一次只看一条约束。<bookmark mark='a'/>对每一对必须不同的格子，删掉第一个格子里那些第二个格子没给它留余地的值；某个格子的候选变少时，再复查它的邻居。<bookmark mark='b'/>每个给定的数字，都把自己的值从所在的行、列、宫里划掉，这些删除一路连锁下去。<bookmark mark='c'/>AC-3删掉了313个值，多确定了3个格子，但解不出整道题：单靠传播在这里不够。<bookmark mark='d'/>和搜索结合起来，它就是决定性的。按阅读顺序的朴素回溯尝试了3642次赋值；前向检查，1669次；再加上先选剩余值最少的格子，182次；每次选择之后都维持完全的弧相容，93次。"
+  },
+  "ed6121052a99": {
+   "scene": "Plans",
+   "en": "Planning is search where the states are descriptions. <bookmark mark='a'/> STRIPS, from Richard Fikes and Nils Nilsson in 1971, for Shakey the robot, describes a state as a set of facts, and an action by three lists. <bookmark mark='b'/> To stack x on y you must hold x, and y must be clear; afterwards x is on y, x is clear and the hand is empty, and you no longer hold x, nor is y clear. <bookmark mark='c'/> Why a delete list? The frame problem, posed by John McCarthy and Patrick Hayes in 1969: in pure logic, an action must also state everything it leaves unchanged, which is almost everything. <bookmark mark='d'/> STRIPS simply assumes that whatever an action doesn't mention stays as it was.",
+   "zh": "规划，是状态为描述的搜索。<bookmark mark='a'/>STRIPS由理查德·法伊克斯和尼尔斯·尼尔森在1971年为机器人Shakey提出，它把一个状态描述成一组事实，把一个动作描述成三张表。<bookmark mark='b'/>要把x叠到y上，你必须拿着x，并且y上面是空的；之后，x在y上，x上面是空的，手也空了，你不再拿着x，y上面也不再是空的。<bookmark mark='c'/>为什么要删除表？因为框架问题，由约翰·麦卡锡和帕特里克·海斯在1969年提出：在纯逻辑里，一个动作还必须说明它没改变的一切，而那几乎是一切。<bookmark mark='d'/>STRIPS干脆假设：动作没提到的东西，都保持原样。"
+  },
+  "e5d44c51d7cd": {
+   "scene": "Plans",
+   "en": "Early planners solved goals one at a time. Gerald Sussman found the simplest case where that fails. <bookmark mark='a'/> C sits on A; B is on the table. The goal: A on B, and B on C. <bookmark mark='b'/> Put A on B first: clear C off A, put it down, stack A on B. Now B must go on C, <bookmark mark='c'/> and moving B means taking A off again, undoing the first goal. Doing B on C first fails too: then A can't be freed without taking B off C. <bookmark mark='d'/> The shortest plan, found by breadth-first search, has 6 steps and interleaves the two goals.",
+   "zh": "早期的规划器一次解决一个目标。杰拉尔德·萨斯曼找到了这样做会失败的最简单例子。<bookmark mark='a'/>C压在A上；B在桌上。目标：A在B上，并且B在C上。<bookmark mark='b'/>先把A放到B上：把C从A上拿开，放下，把A叠到B上。现在B得放到C上，<bookmark mark='c'/>而要移动B，就得再把A拿下来，第一个目标又被破坏了。先把B放到C上也会失败：那样不把B从C上拿开，就没法把A取出来。<bookmark mark='d'/>最短的计划由广度优先搜索找到，有6步，并且把两个目标交错完成。"
+  },
+  "4a34d563159a": {
+   "scene": "Plans",
+   "en": "And the search space explodes. <bookmark mark='a'/> 7 blocks can be stacked 37,633 different ways. <bookmark mark='b'/> Blind breadth-first search on random 7-block problems expands 19,742 states on average. <bookmark mark='c'/> The cure is chapter four's idea: relax the problem. Ignore every delete list, and the easier problem can be solved fast; its cost is a heuristic. The admissible version, h max, cuts the search to 5,415, still optimal. <bookmark mark='d'/> Counting the steps of a relaxed plan, as Jörg Hoffmann's FF planner did in 2001, and searching greedily: 31 states, though the plans are longer, 15.3 steps against 11.3. Such heuristics, Graphplan, and planning as satisfiability made general planners practical.",
+   "zh": "而且搜索空间会爆炸。<bookmark mark='a'/>7块积木，可以叠成37633种不同的摆法。<bookmark mark='b'/>在随机的7块积木问题上，盲目的广度优先搜索平均扩展19742个状态。<bookmark mark='c'/>解药还是第4章的想法：放松问题。忽略所有的删除表，这个更容易的问题能很快解出；它的代价就是一个启发式。可采纳的版本h max，把搜索减到5415个，仍然最优。<bookmark mark='d'/>数一个放松计划的步数，就像约尔格·霍夫曼的FF规划器在2001年做的那样，再贪心地搜索：31个状态，不过计划更长，15.3步对11.3步。这样的启发式、Graphplan，以及把规划当作可满足性问题，让通用规划器变得实用。"
+  },
+  "0800cc11a2f5": {
+   "scene": "Knowledge",
+   "en": "Chapter eleven. Knowledge is power.",
+   "zh": "第11章。知识就是力量。"
+  },
+  "4df6a5d82e71": {
+   "scene": "Knowledge",
+   "en": "Search and logic need something to reason about. <bookmark mark='a'/> Ross Quillian's semantic networks, from 1968, store concepts as nodes and relations as links: a canary is a bird, a bird is an animal. <bookmark mark='b'/> Properties are stored once and inherited: does a canary breathe? Follow the is-a links up to animal. <bookmark mark='c'/> Exceptions sit lower down: a penguin is a bird that does not fly. <bookmark mark='d'/> Marvin Minsky's frames, in 1974, bundled a concept's slots with default values. These ideas live on as the objects and classes of programming languages.",
+   "zh": "搜索和逻辑需要有东西可推理。<bookmark mark='a'/>罗斯·奎利恩1968年的语义网络，把概念存成结点，把关系存成链接：金丝雀是一种鸟，鸟是一种动物。<bookmark mark='b'/>属性只存一次，然后被继承：金丝雀会呼吸吗？沿着is-a链接一路上到动物。<bookmark mark='c'/>例外放在更低的地方：企鹅是一种不会飞的鸟。<bookmark mark='d'/>马文·明斯基1974年的框架，把一个概念的槽和默认值打包在一起。这些想法以对象和类的形式，活在编程语言里。"
+  },
+  "64268bab712a": {
+   "scene": "Knowledge",
+   "en": "In the seventies a new kind of program captured the field: the expert system, its knowledge a set of if-then rules written with human experts. <bookmark mark='a'/> Give it facts about an animal. <bookmark mark='b'/> Forward chaining fires every rule whose conditions hold, adds the conclusion, and repeats: hair makes a mammal; a mammal with pointed teeth and claws, a carnivore; a tawny carnivore with dark spots, a cheetah. <bookmark mark='c'/> The first great one was DENDRAL, begun at Stanford in 1965 by Edward Feigenbaum, Bruce Buchanan and Joshua Lederberg, which inferred molecular structure from mass spectra. Feigenbaum's lesson: a program's power comes from what it knows, more than from how cleverly it reasons.",
+   "zh": "七十年代，一种新程序占领了这个领域：专家系统，它的知识是一组如果—那么规则，在人类专家的帮助下写成。<bookmark mark='a'/>给它一些关于某种动物的事实。<bookmark mark='b'/>前向链接触发每一条条件成立的规则，把结论加进来，然后重复：有毛，就是哺乳动物；有尖牙和爪子的哺乳动物，是食肉动物；有暗斑的黄褐色食肉动物，是猎豹。<bookmark mark='c'/>第一个伟大的专家系统是DENDRAL，1965年由爱德华·费根鲍姆、布鲁斯·布坎南和乔舒亚·莱德伯格在斯坦福开始研制，它根据质谱推断分子结构。费根鲍姆的教训是：一个程序的力量，更多地来自它知道什么，而不是它推理得多聪明。"
+  },
+  "b21eeaba51dc": {
+   "scene": "Knowledge",
+   "en": "Medicine was the showcase. MYCIN, built at Stanford by Edward Shortliffe in the mid-seventies, recommended antibiotics for blood infections and meningitis from a few hundred rules like this one. <bookmark mark='a'/> Each rule carried a certainty factor; when rules agreed, new evidence closed part of the remaining gap. <bookmark mark='b'/> Point six and point five make 0.80; another rule at point four, 0.88. <bookmark mark='c'/> In a blinded test published in 1979, experts judged MYCIN's choices for meningitis acceptable sixty-five percent of the time, a rate none of the Stanford specialists it was compared with beat. It was never used on patients. <bookmark mark='d'/> The commercial breakthrough was R1, later XCON, written by John McDermott for Digital Equipment in 1980 to configure computer orders. By the mid-eighties, expert systems were an industry.",
+   "zh": "医学是展示橱窗。MYCIN由爱德华·肖特利夫在七十年代中期于斯坦福研制，它用几百条像这样的规则，为血液感染和脑膜炎推荐抗生素。<bookmark mark='a'/>每条规则带一个确定性因子；几条规则意见一致时，新的证据填补剩余差距的一部分。<bookmark mark='b'/>0.6和0.5合起来是0.80；再加一条0.4的规则，就到了0.88。<bookmark mark='c'/>在1979年发表的一次盲测中，专家们认为MYCIN对脑膜炎的选择有65%的时候可以接受，和它比较的斯坦福专科医生都没超过这个比例。它从未被用于病人。<bookmark mark='d'/>商业上的突破是R1，后来叫XCON，由约翰·麦克德莫特在1980年为数字设备公司编写，用来配置计算机订单。到八十年代中期，专家系统已经成了一个产业。"
+  },
+  "4537f21fef6f": {
+   "scene": "Knowledge",
+   "en": "The weak point was getting the knowledge in. <bookmark mark='a'/> An expert talks; a knowledge engineer writes rules; the rules fail and are patched, for months per domain, and as they multiply they interact in ways nobody intended: the knowledge acquisition bottleneck. <bookmark mark='b'/> And the systems were brittle: faced with a case no rule covers, a human expert does something sensible; a rule base does nothing, or something absurd. <bookmark mark='c'/> Douglas Lenat drew the boldest conclusion: write down common sense itself. His Cyc project, started in 1984, has entered millions of assertions by hand, and still runs.",
+   "zh": "弱点在于怎样把知识装进去。<bookmark mark='a'/>专家讲，知识工程师写规则；规则失败了就打补丁，每个领域都要好几个月，而规则越来越多，它们之间会以没人预料到的方式相互作用：这就是知识获取瓶颈。<bookmark mark='b'/>而且这些系统很脆：遇到一个没有规则覆盖的情况，人类专家会做出合理的事；规则库要么什么都不做，要么做出荒唐的事。<bookmark mark='c'/>道格拉斯·莱纳特得出了最大胆的结论：把常识本身写下来。他的Cyc项目始于1984年，已经手工录入了几百万条断言，至今仍在运行。"
+  },
+  "3ea292aaed54": {
+   "scene": "Knowledge",
+   "en": "Knowledge as a web of entities and relations did not die; it scaled. <bookmark mark='a'/> In 2012 Google introduced its Knowledge Graph, things, not strings: over five hundred million objects and three and a half billion facts at launch, harvested from sources like Wikipedia rather than typed in. <bookmark mark='b'/> Knowledge graphs answer factual questions in search engines today. What changed was not the representation, but where the knowledge comes from.",
+   "zh": "把知识看作实体和关系之网，这个想法并没有死；它被放大了。<bookmark mark='a'/>2012年，谷歌推出了知识图谱，“是事物，不是字符串”：发布时就有五亿多个对象和35亿条事实，是从维基百科之类的来源收集来的，而不是一条条输入的。<bookmark mark='b'/>如今，知识图谱回答搜索引擎里的事实性问题。变的不是表示方法，而是知识从哪里来。"
+  },
+  "c3ef130a7c9f": {
+   "scene": "Eliza",
+   "en": "Chapter twelve. ELIZA.",
+   "zh": "第12章。ELIZA。"
+  },
+  "5d36d85f254f": {
+   "scene": "Eliza",
+   "en": "In 1966 Joseph Weizenbaum at MIT published a program that held conversations: ELIZA, named after the flower girl in Pygmalion. Its famous script, DOCTOR, plays a psychotherapist who turns your statements into questions. <bookmark mark='a'/> Type: my mother takes care of me. <bookmark mark='b'/> ELIZA swaps the pronouns, <bookmark mark='c'/> and finds its highest-ranked keyword, here my, with a pattern: anything, your, anything, a family word, anything. <bookmark mark='d'/> It takes the next of that pattern's reassembly rules, and splices the matched pieces in. <bookmark mark='e'/> Who else in your family takes care of you. No grammar, no meaning: pattern matching and a few hundred lines of script.",
+   "zh": "1966年，麻省理工学院的约瑟夫·魏岑鲍姆发表了一个能对话的程序：ELIZA，名字来自《卖花女》里的卖花姑娘。它最有名的脚本DOCTOR，扮演一位心理治疗师，把你的陈述翻成问题。<bookmark mark='a'/>输入：我妈妈照顾我。<bookmark mark='b'/>ELIZA交换代词，<bookmark mark='c'/>再找出等级最高的关键词，这里是“我的”，以及一个模式：任意内容、“你的”、任意内容、一个家庭成员的词、任意内容。<bookmark mark='d'/>它取这个模式的下一条重组规则，把匹配到的片段拼进去。<bookmark mark='e'/>你家里还有谁照顾你。没有语法，没有意义：只有模式匹配和几百行脚本。"
+  },
+  "05d10c3f627f": {
+   "scene": "Eliza",
+   "en": "Weizenbaum's paper printed a conversation with DOCTOR. We wrote a small ELIZA from the paper's description, with our own short script, and gave it the user's side, line by line. <bookmark mark='a'/> 14 of its 15 replies come out word for word as in 1966. <bookmark mark='b'/> The one difference is in the last line, where no keyword matches and ELIZA falls back on its memory: both bring back the boyfriend, in different words. Note the trick: when nothing matches, ELIZA brings back something you said earlier. It reads as attention, even memory.",
+   "zh": "魏岑鲍姆的论文印出了一段和DOCTOR的对话。我们按照论文的描述，用我们自己的一份短脚本，写了一个小ELIZA，再把用户那一边的话一句句输给它。<bookmark mark='a'/>它的15句回答里，有14句和1966年的一字不差。<bookmark mark='b'/>唯一的不同在最后一句，那里没有关键词匹配，ELIZA退回去用它的记忆：两者都把男朋友搬了出来，只是措辞不同。注意这个技巧：什么都匹配不上时，ELIZA会把你早先说过的话搬出来。读起来像是在留意你，甚至像有记忆。"
+  },
+  "277edbc01f35": {
+   "scene": "Eliza",
+   "en": "Step outside the therapist's frame and the trick shows. <bookmark mark='a'/> Ask a fact, and it asks why you ask. Ask for a proof, and it hands your sentence back, pronouns turned around. Mention a computer, and a rule written for exactly that fires. Nothing is understood; the illusion lives in the reader.",
+   "zh": "一走出治疗师的框架，把戏就露馅了。<bookmark mark='a'/>问它一个事实，它会问你为什么问。让它给出一个证明，它把你的句子还给你，只是把代词换了过来。提到电脑，一条专门为此写的规则就会触发。什么都没有被理解；幻觉活在读者心里。"
+  },
+  "462800404f8f": {
+   "scene": "Eliza",
+   "en": "What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could talk to it in private, and wrote that he had not imagined so short an exposure to so simple a program could produce such powerful delusions in normal people. <bookmark mark='b'/> Reading understanding into fluent output became known as the ELIZA effect. <bookmark mark='c'/> His original code was found at MIT in 2021 and run again in 2024, and in the 2025 Turing tests, people took it for human in almost a quarter of conversations. Does fluency mean understanding? Every chatbot raises the question again.",
+   "zh": "让魏岑鲍姆不安的，是人们的反应。<bookmark mark='a'/>在他1976年的书《计算机的力量与人类的理性》里，他回忆说，他的秘书看着他写出这个程序，却请他离开房间，好让她和它私下谈谈；他写道，自己没想到，与这样一个简单程序的短暂接触，竟能在正常人身上引出如此强烈的错觉。<bookmark mark='b'/>把理解读进流畅的输出里，后来被称为伊丽莎效应。<bookmark mark='c'/>他的原始代码2021年在麻省理工学院被找到，2024年重新运行；而在2025年的图灵测试里，人们在将近四分之一的对话中把它当成了人。流畅就意味着理解吗？每个聊天机器人都会重新提出这个问题。"
+  },
+  "c2964d570566": {
+   "scene": "Winters",
+   "en": "Chapter thirteen. The winters.",
+   "zh": "第13章。寒冬。"
+  },
+  "8033ca00a165": {
+   "scene": "Winters",
+   "en": "The founders had promised a great deal, soon. By the late sixties the bills came due. <bookmark mark='a'/> In 1966 an advisory committee told the US government that machine translation was slower, less accurate and costlier than human translators, and its funding dried up. <bookmark mark='b'/> In 1969 Minsky and Papert's book Perceptrons laid out the limits of one-layer neural networks, and that line went quiet for a decade. <bookmark mark='c'/> In 1973 the mathematician James Lighthill told Britain's Science Research Council that outside toy problems, AI was defeated by the combinatorial explosion: the very search spaces we have been counting. <bookmark mark='d'/> He defended his report on television against Donald Michie, John McCarthy and Richard Gregory. <bookmark mark='e'/> British funding shrank to a few centres; in America, DARPA turned to military goals. The first winter lasted until about 1980.",
+   "zh": "创始人们许诺了很多，而且说很快就能实现。到六十年代末，账单到期了。<bookmark mark='a'/>1966年，一个顾问委员会告诉美国政府，机器翻译比人工翻译更慢、更不准、更贵，对它的资助随之枯竭。<bookmark mark='b'/>1969年，明斯基和佩珀特的书《感知机》讲清了单层神经网络的局限，这条研究路线沉寂了十年。<bookmark mark='c'/>1973年，数学家詹姆斯·莱特希尔向英国科学研究委员会报告说，离开玩具问题，AI都败给了组合爆炸：也就是我们一直在数的那些搜索空间。<bookmark mark='d'/>他在电视上为这份报告辩护，对手是唐纳德·米奇、约翰·麦卡锡和理查德·格雷戈里。<bookmark mark='e'/>英国的资助缩减到只剩几个中心；在美国，DARPA转向军事目标。第一次寒冬一直持续到1980年前后。"
+  },
+  "c9670c808753": {
+   "scene": "Winters",
+   "en": "Expert systems brought the money back. <bookmark mark='a'/> Companies built their own; in 1982 Japan launched a ten-year Fifth Generation project around logic programming, and America and Britain answered. <bookmark mark='b'/> A small industry sold Lisp machines, workstations built to run AI software. <bookmark mark='c'/> In 1984 Roger Schank and Marvin Minsky warned the American AI association that enthusiasm had outrun results, and named what would follow: an AI winter. <bookmark mark='d'/> In 1987 the Lisp-machine market collapsed, undercut by ordinary workstations; expert systems proved costly to maintain and brittle; the Fifth Generation project ended in 1992 short of its goals. <bookmark mark='e'/> The second winter set in, and for years researchers avoided the words artificial intelligence.",
+   "zh": "专家系统把钱带了回来。<bookmark mark='a'/>公司们纷纷自建专家系统；1982年，日本启动了一个围绕逻辑编程的十年期第五代计算机项目，美国和英国也作出了回应。<bookmark mark='b'/>一个小产业专门出售Lisp机，一种为运行AI软件而造的工作站。<bookmark mark='c'/>1984年，罗杰·尚克和马文·明斯基警告美国人工智能协会，热情已经跑到了成果前面，并给接下来的事起了名字：AI寒冬。<bookmark mark='d'/>1987年，Lisp机的市场崩溃了，被普通工作站挤垮；专家系统原来维护起来很贵，又很脆；第五代项目在1992年结束，没有达到目标。<bookmark mark='e'/>第二次寒冬来了。有好些年，研究者们都避免说“人工智能”这个词。"
+  },
+  "f4ad901b419a": {
+   "scene": "Winters",
+   "en": "Beneath the funding story lay a scientific surprise. <bookmark mark='a'/> Symbolic programs did best at what people find hard: logic, algebra, chess. <bookmark mark='b'/> They did worst at what any child does without effort: seeing, walking, grasping, understanding speech, common sense. <bookmark mark='c'/> Hans Moravec observed in 1988 that it is comparatively easy to make computers match adults on intelligence tests or at checkers, and hard or impossible to give them the perception and mobility of a one-year-old. Evolution, he argued, spent hundreds of millions of years on perception and movement; abstract reasoning is a thin, recent layer. This is Moravec's paradox.",
+   "zh": "资助起落的背后，是一个科学上的意外。<bookmark mark='a'/>符号程序最擅长的，是人觉得难的事：逻辑、代数、国际象棋。<bookmark mark='b'/>它们最不擅长的，是任何孩子都毫不费力就能做的事：看、走路、抓握、听懂话、常识。<bookmark mark='c'/>汉斯·莫拉维克在1988年指出，让计算机在智力测验或跳棋上达到成人水平相对容易，而让它们拥有一岁婴儿的感知和行动能力却很难，甚至不可能。他认为，进化在感知和运动上花了几亿年；抽象推理只是薄薄的、新近的一层。这就是莫拉维克悖论。"
+  },
+  "6475a81d3a02": {
+   "scene": "Winters",
+   "en": "There is a measurable reason hand-written knowledge kept running out, and we can see it in the thirty novels of Part 1. <bookmark mark='a'/> Rank their words from most to least common. <bookmark mark='b'/> The top 76 words make up half the text. Ninety percent takes 4,177; ninety-nine, 28,193; ninety-nine point nine, 55,313. <bookmark mark='c'/> 21,797 of the 59,639 different words occur exactly once. <bookmark mark='d'/> And fresh text brings new ones: in the series' test passage, 2.8 percent of the words never appear in 4.3 million words of novels. Language, vision and the physical world all have this shape: a few common cases, and an endless tail of rare ones. A rule for each case never finishes. <bookmark mark='e'/> What finishes is a method that learns from data, and generalizes to cases nobody wrote down. That is where this course goes next.",
+   "zh": "手写的知识总是不够用，有一个可以测量的原因，我们在第1部分的三十部小说里就能看到。<bookmark mark='a'/>把其中的词从最常见排到最少见。<bookmark mark='b'/>最常见的76个词就占了全部文本的一半。覆盖90%需要4177个词；99%，28193个；99.9%，55313个。<bookmark mark='c'/>59639个不同的词里，有21797个只出现过一次。<bookmark mark='d'/>新的文本还会带来新词：在本系列的测试段落里，有2.8%的词在4.3百万词的小说里从未出现过。语言、视觉和物理世界都是这个形状：少数常见情况，加上一条没有尽头的罕见长尾。给每种情况写一条规则，永远写不完。<bookmark mark='e'/>能写完的，是一种从数据中学习、能推广到没人写下的情况的方法。这就是本课程接下来要去的地方。"
+  },
+  "bf70c90b982a": {
+   "scene": "Survives",
+   "en": "Chapter fourteen. What survives.",
+   "zh": "第14章。留下来的东西。"
+  },
+  "839cf45742a5": {
+   "scene": "Survives",
+   "en": "The symbolic era ended, but its machinery did not. <bookmark mark='a'/> Deep Blue was search plus an evaluation written by people. <bookmark mark='b'/> Twenty years later AlphaZero kept the search, Monte Carlo tree search instead of alpha-beta, and learned its evaluation by playing itself, examining about a thousand times fewer positions per second than the chess engine it beat. <bookmark mark='c'/> Search guided by an evaluation is the skeleton of both. Part 26 builds one.",
+   "zh": "符号时代结束了，但它的机器没有。<bookmark mark='a'/>深蓝是搜索加上人写的评估函数。<bookmark mark='b'/>二十年后，AlphaZero保留了搜索，用蒙特卡洛树搜索代替α-β，并通过自我对弈学出了评估函数；它每秒检查的局面，比它击败的那个国际象棋引擎少大约一千倍。<bookmark mark='c'/>由评估引导的搜索，是两者共同的骨架。第26部分会造一个。"
+  },
+  "2b1d128b1bb1": {
+   "scene": "Survives",
+   "en": "Logic found its biggest job in checking machines. <bookmark mark='a'/> In 1994 a flaw in the Pentium's division circuit, a few missing table entries, cost Intel a four-hundred-and-seventy-five-million-dollar charge, and chip makers turned to formal verification, with SAT solvers among its engines. <bookmark mark='b'/> Our own small solver proves two 64-bit adders equal on all two to the 128 inputs, with 6,979 conflicts. <bookmark mark='c'/> Slip one wire at bit 6, and it finds an input where they disagree: 24,443 plus 54,316 should give 13,223 in 16 bits; the faulty circuit says 13,095. <bookmark mark='d'/> Add theories of arithmetic and data structures and you get SMT solvers like Microsoft's Z3; Amazon reported in 2022 running over a billion SMT queries a day to check who can access what.",
+   "zh": "逻辑最大的用武之地，是检查机器。<bookmark mark='a'/>1994年，奔腾处理器的除法电路里有一个缺陷，表里少了几项，让英特尔计提了4.75亿美元的费用。芯片厂商转向形式化验证，SAT求解器成了它的引擎之一。<bookmark mark='b'/>我们自己的小求解器，用6979次冲突证明了两个64位加法器在全部2的128次方个输入上都相等。<bookmark mark='c'/>在第6位接错一根线，它就找到一个让两者不一致的输入：24443加54316，在16位下应该得13223；有缺陷的电路给出13095。<bookmark mark='d'/>给SAT加上算术和数据结构的理论，就得到SMT求解器，比如微软的Z3；亚马逊在2022年报告说，它每天运行超过十亿次SMT查询，检查谁能访问什么。"
+  },
+  "419f02a47cbb": {
+   "scene": "Survives",
+   "en": "There are limits. <bookmark mark='a'/> Ask the same solver whether a multiplier gives the same answer for a times b as for b times a. <bookmark mark='b'/> The conflicts grow about 4-fold with every extra bit: 36,998 at 8 bits. Multipliers are a famous hard case; industry handles arithmetic with algebraic methods instead.",
+   "zh": "也有极限。<bookmark mark='a'/>让同一个求解器判断：一个乘法器算a乘b和算b乘a，结果是否一样。<bookmark mark='b'/>每多一位，冲突次数就增长大约4倍：8位时是36998次。乘法器是出了名的难题；工业界转而用代数方法处理算术。"
+  },
+  "74ad02b8926a": {
+   "scene": "Survives",
+   "en": "Logic's other modern home is mathematics. <bookmark mark='a'/> In a proof assistant like Lean, a small trusted program checks every step, so a proof that compiles is correct. <bookmark mark='b'/> DeepMind's AlphaGeometry, in 2024, paired a language model that suggests constructions with a symbolic deduction engine. <bookmark mark='c'/> AlphaProof ran AlphaZero-style search over Lean proofs; with AlphaGeometry 2, it solved four of six problems at the 2024 International Mathematical Olympiad, silver-medal level. <bookmark mark='d'/> A year later a Gemini model reached a gold-medal score writing plain language, graded by the olympiad's coordinators. <bookmark mark='e'/> Either way: a network generates, and logic or a grader checks.",
+   "zh": "逻辑在今天的另一个家是数学。<bookmark mark='a'/>在像Lean这样的证明助手里，一个小而可信的程序检查每一步，所以能编译通过的证明就是对的。<bookmark mark='b'/>DeepMind在2024年的AlphaGeometry，把一个提出辅助构造的语言模型和一个符号推理引擎配在一起。<bookmark mark='c'/>AlphaProof在Lean证明上运行AlphaZero式的搜索；它和AlphaGeometry 2一起，在2024年国际数学奥林匹克竞赛上解出了六道题中的四道，达到银牌水平。<bookmark mark='d'/>一年后，一个Gemini模型用自然语言写作，拿到了金牌分数，由奥赛的协调员评分。<bookmark mark='e'/>无论哪条路：网络生成，逻辑或评分者检查。"
+  },
+  "6b708ce52eba": {
+   "scene": "Survives",
+   "en": "Planning is back, inside language-model agents. <bookmark mark='a'/> On PlanBench, built from the blocks world, the best ordinary language model tested in 2024 solved sixty-three percent of problems, and OpenAI's reasoning model o1-preview ninety-eight. <bookmark mark='b'/> Rename the blocks and actions to nonsense words, logic unchanged, and o1-preview fell to fifty-three percent; a classical planner solves every instance, whatever the names. <bookmark mark='c'/> One practical answer combines them: the language model writes the problem in the planning language PDDL, and a classical planner finds a plan guaranteed to work.",
+   "zh": "规划回来了，就在语言模型智能体里。<bookmark mark='a'/>在用积木世界搭建的PlanBench上，2024年测试的最好的普通语言模型解出了63%的题，OpenAI的推理模型o1-preview解出了98%。<bookmark mark='b'/>把积木和动作的名字换成无意义的词，逻辑不变，o1-preview就跌到了53%；而经典规划器不管名字是什么，都能解出每一道题。<bookmark mark='c'/>一个实用的答案是把两者结合起来：语言模型用规划语言PDDL写出问题，经典规划器找出一个保证可行的计划。"
+  },
+  "649b9e2031a4": {
+   "scene": "Survives",
+   "en": "So the old argument, symbols or learning, ended in a merger. <bookmark mark='a'/> Networks bring what the symbolic era lacked: perception, intuition, guesses from data. <bookmark mark='b'/> Symbols bring what networks cannot promise: exhaustive search, exact logic, guarantees. <bookmark mark='c'/> Today's strongest systems let a network propose and a symbolic process check: AlphaZero, AlphaProof, FunSearch and AlphaEvolve, agents that call tools. This is neurosymbolic AI, <bookmark mark='d'/> and we will meet it again in reinforcement learning, reasoning models and agents.",
+   "zh": "于是，符号还是学习的老争论，以合并告终。<bookmark mark='a'/>网络带来符号时代缺少的东西：感知、直觉、从数据中得出的猜测。<bookmark mark='b'/>符号带来网络无法保证的东西：穷尽的搜索、精确的逻辑、保证。<bookmark mark='c'/>今天最强的系统，让网络来提议，让一个符号过程来检查：AlphaZero、AlphaProof、FunSearch和AlphaEvolve，还有调用工具的智能体。这就是神经符号AI，<bookmark mark='d'/>我们会在强化学习、推理模型和智能体里再见到它。"
+  },
+  "03755ae3e30a": {
+   "scene": "Outro",
+   "en": "Let's take stock. Turing defined what machines can compute, and what they cannot. Search finds solutions by trying things; A star, with an admissible heuristic, finds the cheapest while looking at a fraction of the space, and the best heuristics come from relaxed problems. Annealing's controlled randomness escapes local optima. Alpha-beta searches twice as deep for the same work. Logic reduces to resolution and satisfiability, whose hard problems live at a phase transition, and clause learning makes solvers fast. And knowledge written by hand runs into the long tail, which is why the field turned to learning.",
+   "zh": "我们来总结一下。图灵定义了机器能计算什么，以及不能计算什么。搜索靠尝试来找到解；带着可采纳启发式的A星，只看搜索空间的一小部分，就能找到代价最小的解，而最好的启发式来自放松问题。退火用受控的随机性逃出局部最优。α-β剪枝用同样的工作量，搜得深一倍。逻辑归结为归结法和可满足性，难题住在它的相变处，而子句学习让求解器变快。手写的知识撞上了长尾，这就是这个领域转向学习的原因。"
+  },
+  "54184530c17d": {
+   "scene": "Outro",
+   "en": "All of this comes back. Learned weights replace hand-written rules with the perceptron and backpropagation, in Part 9. Search guided by a learned evaluation is AlphaZero, in Part 26. Search over chains of thought, rewarded by checkable answers, makes the reasoning models of Part 28. Planning and tools return in the agents of Part 29. And verification, proof, and who checks the checker close the series in Part 31.",
+   "zh": "这些都还会再出现。学来的权重取代手写的规则，靠的是感知机和反向传播，见第9部分。由学来的评估函数引导的搜索就是AlphaZero，见第26部分。在思维链上搜索，用可检查的答案给奖励，造就了第28部分的推理模型。规划和工具会在第29部分的智能体里回来。而验证、证明，以及谁来检查检查者，是第31部分为整个系列收尾的问题。"
+  },
+  "2dba1f630e51": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from consistent heuristics to the satisfiability threshold. Pause here, and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道题，从一致的启发式到可满足性的阈值。在这里暂停，把它们做一遍；完整的解答在本部分的笔记里。"
+  },
+  "6fe9ea6c289c": {
+   "scene": "Outro",
+   "en": "Next time: meaning as geometry. To a symbol, cat is as far from dog as from car. Part 3 turns words into vectors, where nearness means similarity, and builds the linear algebra every model in this course runs on: inner products, eigenvalues, the singular value decomposition.",
+   "zh": "下一次：意义即几何。对一个符号来说，“猫”离“狗”和离“车”一样远。第3部分把词变成向量，距离近就意味着相似，并且搭建本课程每个模型都要用到的线性代数：内积、特征值、奇异值分解。"
+  },
+  "f834bd5fcbe9": {
+   "scene": "Outro",
+   "en": "Russell and Norvig's textbook is the place to go deeper: everything in this part is in it. For the history, Nils Nilsson's The Quest for Artificial Intelligence. Thanks for watching, and see you in Part 3.",
+   "zh": "想深入学习，最好去读拉塞尔和诺维格的教科书：本部分的一切都在里面。至于历史，可以读尼尔斯·尼尔森的《人工智能的探索》。感谢观看，第3部分见。"
+  }
+ },
+ "title_en": "AI, Built: Part 2, Thinking Machines",
+ "chapters_en": {
+  "Hook": "Forty years to checkmate",
+  "Turing": "1. Can machines think?",
+  "Search": "2. Search",
+  "AStar": "3. A*",
+  "Heuristics": "4. Where heuristics come from",
+  "Local": "5. Climbing and cooling",
+  "Games": "6. Games and alpha-beta",
+  "Samuel": "7. Machines that learned to play",
+  "Logic": "8. Logic and resolution",
+  "SAT": "9. Satisfiability",
+  "Plans": "10. Constraints and plans",
+  "Knowledge": "11. Knowledge is power",
+  "Eliza": "12. ELIZA",
+  "Winters": "13. The winters",
+  "Survives": "14. What survives",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

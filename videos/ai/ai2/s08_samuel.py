@@ -323,8 +323,9 @@ class Samuel(VoiceoverScene):
             "with about five times ten to the twenty positions, is a draw with perfect play. <bookmark mark='c'/> The game that "
             "resisted the recipe was Go, where nobody could write down a good evaluation. That took a learned one: Part 26."
         ) as vo:
+            self.play(FadeIn(right[0]))
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.15), FadeIn(right[0]))
+            self.play(FadeIn(cards[0], shift=UP * 0.15))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.15), FadeIn(right[1]), FadeIn(right[2]))
             vo.wait_until("c")

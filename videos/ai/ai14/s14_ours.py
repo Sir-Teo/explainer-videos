@@ -17,7 +17,7 @@ def pct(x: float) -> str:
 class OurLineage(VoiceoverScene):
     def construct(self):
         self.card()
-        self.setup()
+        self.fair_setup()
         self.replay_gpt()
         self.replay_bert()
         self.cloze()
@@ -32,14 +32,17 @@ class OurLineage(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def setup(self):
+    def fair_setup(self):
         g, L = load("gpt_m"), load("lineage")
         sh, p = g["shape"], g["params"]
         gpt = VGroup(arch_diagram("decoder", 1.0), label(r"GPT-style: \ predict every next token", font_size=22,
                                                          color=DECODER)).arrange(DOWN, buff=0.25)
         bert = VGroup(arch_diagram("encoder", 1.0), label(r"BERT-style: \ predict the hidden $15\%$", font_size=22,
                                                           color=ENCODER)).arrange(DOWN, buff=0.25)
-        pair = VGroup(gpt, bert).arrange(RIGHT, buff=1.2, aligned_edge=UP).move_to([-3.4, 1.3, 0])
+        pair = VGroup(gpt, bert).arrange(RIGHT, buff=0.6, aligned_edge=UP)
+        if pair.width > 6.4:
+            pair.width = 6.4
+        pair.move_to([-3.6, 1.5, 0])
         same = VGroup(
             label(rf"same shape: \ ${sh['layers']}$ layers, \ width ${sh['d']}$, \ ${sh['heads']}$ heads, \ "
                   rf"${p['total'] / 1e6:.2f}$M parameters", font_size=22, color=WHITE),
@@ -326,12 +329,15 @@ class OurLineage(VoiceoverScene):
     # ------------------------------------------------------------------
     def writing(self):
         L, S = load("lineage"), load("scoreboard")
-        prompt = data_text("The door opened, and", font=MONO, font_size=22, color=GREY_A).move_to([0, 2.9, 0])
+        prompt = data_text("The door opened, and", font=MONO, font_size=22, color=GREY_A).move_to([0, 3.35, 0])
         gw = VGroup(label(r"GPT-style, \ sampling the next token", font_size=22, color=DECODER),
-                    said(L["gpt_sample"], chars=40, font_size=20, max_lines=3, box_color=DECODER)).arrange(DOWN, buff=0.15)
+                    said(L["gpt_sample"], chars=34, font_size=18, max_lines=3, box_color=DECODER)).arrange(DOWN, buff=0.15)
         bw = VGroup(label(r"BERT-style, \ filling a mask at the end, \ again and again", font_size=22, color=ENCODER),
-                    said(L["bert_sample"], chars=40, font_size=20, max_lines=3, box_color=ENCODER)).arrange(DOWN, buff=0.15)
-        VGroup(gw, bw).arrange(RIGHT, buff=0.6, aligned_edge=UP).move_to([0, 1.3, 0])
+                    said(L["bert_sample"], chars=34, font_size=18, max_lines=3, box_color=ENCODER)).arrange(DOWN, buff=0.15)
+        both = VGroup(gw, bw).arrange(RIGHT, buff=0.5, aligned_edge=UP)
+        if both.width > 13.2:
+            both.width = 13.2
+        both.next_to(prompt, DOWN, buff=0.3)
         ours = {r["name"]: r for r in S["ours"]}["gpt_m"]
         rows = [dict(label=r["label"], bits=r["bits"], kind=r["kind"]) for r in S["rows"]]
         if CACHE.path("scoreboard_base").exists():  # computed after the novels model; a render never trains it
@@ -340,7 +346,7 @@ class OurLineage(VoiceoverScene):
         rows.append(dict(label=rf"our GPT-style model, \ ${ours['params'] / 1e6:.1f}$M", bits=ours["bits"], kind="lm"))
         board = scoreboard(rows, highlight=(len(rows) - 1,), max_bits=6.0, row_h=0.46, font_size=20, bar_width=5.0,
                            label_width=3.8).scale(0.9)
-        board.move_to([-1.3, -1.7, 0])
+        board.move_to([-1.3, -1.25, 0])
         bl = label(r"bits per character on the scoreboard's passage", font_size=20, color=GREY_B).next_to(board, UP, buff=0.1)
         nob = label(r"our BERT-style model: \\ no row \\ (its guesses don't multiply \\ into a probability of text)",
                     font_size=18, color=ENCODER).next_to(board, RIGHT, buff=0.4)

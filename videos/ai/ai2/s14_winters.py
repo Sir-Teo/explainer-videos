@@ -109,7 +109,10 @@ class Winters(VoiceoverScene):
             "Generation project ended in 1992 short of its goals. <bookmark mark='e'/> The second winter set in, and for years "
             "researchers avoided the words artificial intelligence."
         ) as vo:
+            boom = label(r"expert systems bring the money back", font_size=38, color=PATH).move_to(DOWN * 0.6)
+            self.play(FadeIn(boom))
             vo.wait_until("a")
+            self.play(FadeOut(boom), run_time=0.4)
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in up], lag_ratio=0.4))
             vo.wait_until("b")
             self.play(FadeIn(lisp))
