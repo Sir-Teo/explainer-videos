@@ -142,6 +142,15 @@ model card, Hugging Face model cards and API metadata):
 * Outside estimates (Epoch AI) are labelled as such: GPT-1, GPT-2, PaLM, GPT-4, Grok 3 in the compute tower; GPT-4's
   and Gemini Ultra's costs. Closed models' sizes and data are not stated anywhere on screen.
 * "100 million monthly users in two months" is a UBS estimate reported by Reuters (2 February 2023), not an OpenAI figure.
+* The family tree (Outro) is schematic: a line joins a model to its lab's previous one or to the published design it
+  built on (LLaMA on GPT-3's pre-norm decoder; Mistral 7B, DeepSeek's and Qwen's first models on LLaMA's recipe; Kimi K2
+  on DeepSeek-V3's architecture, as its report says). T0 (an encoder–decoder, from T5) stands for 2021's instruction
+  tuning in the encoder–decoder lane; FLAN itself was a decoder (LaMDA-PT).
+* Our measurements: the context gain compares the loss with 1–4 tokens of context to the loss with 129–256, on 512
+  held-out windows; the training replays use the 64 windows of each checkpoint, so their per-position curves are
+  noisier. The few-shot test is scored with contextual calibration (Zhao et al. 2021): each title's log-probability
+  minus its log-probability after the same examples and an "N/A" query; the raw scores are kept in the cache
+  (`fewshot_raw`): our small models prefer one title of each pair whatever the sentence, so raw accuracy sits at 50%.
 * Not used: claims about Kimi K3's training tokens and DeepSeek-V4's layer layout (not in the model cards); later
   closed-model compute estimates in Epoch's database (after mid-2026).
 

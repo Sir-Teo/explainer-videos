@@ -97,7 +97,7 @@ ZH = {
 
     # ------------------------------------------------------------------ AlexNet
     'Chapter four. AlexNet: the moment.':
-        '第4章。AlexNet：那一刻。',
+        '第4章。AlexNet：深度学习从此改变的那一刻。',
 
     'By 2012 the ingredients were in place.':
         "到2012年，各样原料都备齐了。<bookmark mark='a'/>2009年，李飞飞的团队发布了ImageNet，几百万张标注好的照片；从2010年起，每年有一场比赛：模型看一张图，从一千个类别里说出它是什么，可以猜五次。<bookmark mark='b'/>2012年，多伦多杰弗里·辛顿实验室的一个网络，由亚历克斯·克里热夫斯基和伊利亚·苏茨克维搭建，<bookmark mark='c'/>在15.3%的测试图片上答错。第二名答错了26.2%。谁也没见过这么大的差距。",
@@ -319,7 +319,7 @@ ZH = {
 
     # ------------------------------------------------------------------ Accelerators
     'Chapter thirteen. Beyond the GPU.':
-        '第13章。GPU之外。',
+        '第13章。超越GPU的芯片。',
 
     'f"The TPU was the first of many chips built only for neural networks.':
         "TPU是众多只为神经网络而造的芯片里的第一款。<bookmark mark='a'/>谷歌这条产品线，从2015年的一块8位推断芯片，走向了训练：2017年的TPU v2加入了高带宽内存、bfloat16，以及由许多芯片连成的集群；v4用光路交换机把4096块连在一起。<bookmark mark='b'/>第七代Ironwood，2025年：每块芯片每秒{IRONWOOD['fp8'] / 1000000000000.0:,.0f}万亿次8位运算，集群规模{IRONWOOD['pod']:,}块。<bookmark mark='c'/>2026年4月，谷歌发布了两款第八代芯片，一款用于训练，一款用于推断服务，训练超级集群有{TPU8T['pod']:,}块芯片。谷歌就在自己的TPU上训练Gemini模型。<bookmark mark='d'/>亚马逊造Trainium，微软造Maia，Meta造MTIA。它们大多是某种规模的脉动阵列，由高带宽内存喂数据：正是第6到第8章的配方。",
@@ -335,7 +335,7 @@ ZH = {
 
     # ------------------------------------------------------------------ Frontier
     'Chapter fourteen. The frontier, late 2026.':
-        '第14章。2026年底的前沿。',
+        '第14章。前沿：2026年底的计算机。',
 
     'Where does all this stand at the end of 2026?':
         "到2026年底，这一切走到了哪里？<bookmark mark='a'/>英伟达2024年3月发布的Blackwell，碰到了芯片制造的极限：一块裸片不能比光刻机一次曝光的面积更大。所以Blackwell是两块达到这个极限的裸片，以每秒十太字节连在一起，像一块GPU一样工作：2080亿个晶体管，张量核心支持4位数字。<bookmark mark='b'/>销售的单位变成了机柜。一台GB200 NVL72把72块这样的GPU放在同一张NVLink网络上，用液体冷却，让整个机柜表现得像一块巨大的GPU；2025年的Blackwell Ultra又把每块GPU的内存提高到288GB。",
