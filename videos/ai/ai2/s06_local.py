@@ -284,13 +284,14 @@ class Local(VoiceoverScene):
         order = sorted([("annealing", sa), ("restarted hill climbing", rs), ("the genetic algorithm", ga)],
                        key=lambda t: t[1])
         verdict = (f"On the same budget of {d['budget']:,} tours looked at, {order[0][0]} does best, averaging "
-                   f"{order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]} {order[2][1]:,.0f}.")
-        hits = (f" Annealing found the optimum itself in {n_opt} of {len(d['eq_anneal'])} runs." if n_opt else "")
+                   f"{order[0][1]:,.0f}; {order[1][0]} averages {order[1][1]:,.0f}, and {order[2][0]}, {order[2][1]:,.0f}.")
+        hits = (f"Annealing found the optimum itself in {n_opt} of {len(d['eq_anneal'])} runs." if n_opt else
+                "Annealing never found the optimum itself.")
         with self.voiceover(
             "Is the cooling worth it? Compare on equal terms: the same number of tours looked at. <bookmark mark='a'/> The "
             "greedy tour, always to the nearest unvisited place, is "
             f"{100 * (min(d['nn_lengths']) / opt - 1):.0f} percent too long even from its best start; 2-opt hill climbing "
-            f"polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> " + verdict + hits
+            f"polishes it to {min(d['nn2opt_lengths']):,}. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + hits
         ) as vo:
             self.play(FadeIn(g), Create(optl), FadeIn(tag))
             vo.wait_until("a")
@@ -299,6 +300,8 @@ class Local(VoiceoverScene):
             vo.wait_until("b")
             for i in range(2, len(items)):
                 self.play(FadeIn(names[i]), Create(bars[i][0]), FadeIn(bars[i][1]), FadeIn(bars[i][2]), run_time=0.8)
+            vo.wait_until("c")
+            self.play(Indicate(VGroup(names[3], bars[3]), color=HOT, scale_factor=1.05))
         self.wait(0.3)
         self.clear_scene()
 

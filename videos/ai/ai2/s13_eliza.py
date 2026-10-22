@@ -199,8 +199,8 @@ class Eliza(VoiceoverScene):
             "and in the 2025 Turing tests, people took it for human in almost a quarter of conversations. Does fluency mean "
             "understanding? Every chatbot raises the question again."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(book, shift=UP * 0.2))
+            vo.wait_until("a")
             self.play(FadeIn(quote), FadeIn(src))
             vo.wait_until("b")
             self.play(FadeIn(eff, shift=UP * 0.2))

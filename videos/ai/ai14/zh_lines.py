@@ -338,10 +338,10 @@ ZH = {
         "本系列自己的模型更大、训练得更久，提升了{gains['base']:.2f}奈特。",
 
     '"Now replay the training of the largest of the family':
-        "现在重放家族中最大的模型的训练过程，看那条曲线是怎么形成的。左边是它在留出文本上的损失；右边是它在上下文每个位置上的损失，在每个检查点冻结。<bookmark mark='a'/>未训练时，曲线是平的：一个什么都不懂的模型，从上下文里什么也得不到。<bookmark mark='b'/>{grow}<bookmark mark='c'/>到最后，前面的词让它每个词元提升{final:.2f}奈特。",
+        "现在重放家族中最大的模型的训练过程，看那条曲线是怎么形成的。左边是它在留出文本上的损失；右边是它在上下文每个位置上的损失，在每个检查点冻结。<bookmark mark='a'/>未训练时，曲线是平的：一个什么都不懂的模型，从上下文里什么也得不到。<bookmark mark='b'/>{grow}<bookmark mark='c'/>到最后，它的留出损失是{sn[-1]['val']:.2f}奈特，曲线就是我们刚才看到的模型L的样子。",
 
-    "f'As it trains, the whole curve drops, and it tilts.":
-        "随着训练，整条曲线下降，而且倾斜起来。读了{half['tokens'] / 1000000.0:.2f}百万个词元之后，它从上下文中的最终收益就有了一半。",
+    'As it trains, the whole curve drops, and it tilts':
+        '随着训练，整条曲线下降，而且倾斜起来：上下文越多的位置，降得越多。',
 
     'As it trains, the whole curve drops, but it hardly tilts.':
         '随着训练，整条曲线下降，但几乎没有倾斜。',

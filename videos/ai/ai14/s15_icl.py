@@ -12,12 +12,13 @@ NAMES = {"gpt_xs": r"XS", "gpt_s": r"S", "gpt_m": r"M", "gpt_l": r"L", "base": r
 
 
 def smooth(y, k=9):
-    """A moving average for the later positions; the first ones, where the loss falls fastest (and which a log axis
-    spreads out), stay as measured."""
+    """A moving average whose window grows with the position (about +-1/k of it), so the curve is as smooth at the
+    right of a log axis as at the left; the first k positions stay as measured."""
     y = np.asarray(y, float)
-    pad = np.pad(y, (k // 2, k // 2), mode="edge")
-    out = np.convolve(pad, np.ones(k) / k, mode="valid")
-    out[:k // 2] = y[:k // 2]
+    out = np.empty_like(y)
+    for i in range(len(y)):  # a window that grows with the position: even on the log axis
+        w = i // k
+        out[i] = y[max(0, i - w):i + w + 1].mean()
     return out
 
 
@@ -101,6 +102,8 @@ class Emergence(VoiceoverScene):
         fifth = (f" And, as a fifth, the series' own model, larger and trained on {times:.0f} times as many tokens."
                  if has_base else "")
         tag = note(rf"computed: \ ${rows[0]['windows']}$ held-out windows of $256$ tokens").to_corner(DR, buff=0.2)
+        q = label(r"GPT-3: \ learning from the prompt appeared with scale. \ At ours?", font_size=28,
+                  color=CONTEXT).to_edge(UP, buff=0.3)
         with self.voiceover(
             "GPT-3's surprise was that learning from the prompt appeared with scale. Can we see any of it at our "
             "scale? <bookmark mark='a'/> Four GPT-style models of growing size, all trained on the same text, the "
@@ -109,9 +112,10 @@ class Emergence(VoiceoverScene):
             "ones have a lot. <bookmark mark='c'/> " + falls + " From one to four tokens of context to more than a "
             f"hundred, the smallest model gains {gains[small['name']]:.2f} nats per token; " + tail + btail
         ) as vo:
-            self.play(FadeIn(lh), FadeIn(tag))
+            self.play(FadeIn(lh), FadeIn(tag), FadeIn(q),
+                      LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in lst], lag_ratio=0.3))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in lst], lag_ratio=0.3), FadeIn(bl))
+            self.play(Indicate(lst, color=YELLOW, scale_factor=1.03), FadeIn(bl))
             vo.wait_until("b")
             self.play(FadeIn(g))
             vo.wait_until("c")
@@ -143,21 +147,20 @@ class Emergence(VoiceoverScene):
         for s in sn:
             y = smooth(s["pos"])
             curves.append(curve(h.ax, np.log10(np.arange(1, len(y) + 1)), np.clip(y, pbot, ptop), DECODER, 4))
-        gains = [float(np.mean(s["pos"][EARLY]) - np.mean(s["pos"][LATE])) for s in sn]
-        reads = [label(rf"after ${s['tokens'] / 1e6:.2f}$M tokens: \ context gain ${gn:.2f}$ nats", font_size=22,
-                       color=CONTEXT).move_to([3.3, -2.6, 0]) for s, gn in zip(sn, gains)]
-        final = gains[-1]
-        half = next((s for s, gn in zip(sn, gains) if gn >= final / 2), sn[-1])
-        tag = note(rf"computed: \ model L, \ {human(r['params']['total'])} parameters").to_corner(DR, buff=0.2)
-        grow = (f"As it trains, the whole curve drops, and it tilts. Half of its final gain from context is there after "
-                f"{half['tokens'] / 1e6:.2f} million tokens." if final > 0.1 else
-                "As it trains, the whole curve drops, but it hardly tilts.")
+        reads = [label(rf"after ${s['tokens'] / 1e6:.2f}$M tokens: \ held-out loss ${s['val']:.2f}$", font_size=22,
+                       color=CONTEXT).move_to([3.3, -2.6, 0]) for s in sn]
+        _, rows = rows_()
+        tilt = next(x["early"] - x["late"] for x in rows if x["name"] == "gpt_l")  # on the 512 windows of icl
+        tag = note(rf"computed: \ model L, \ {human(r['params']['total'])} parameters; \ $64$ windows per checkpoint")
+        tag.to_corner(DR, buff=0.2)
+        grow = ("As it trains, the whole curve drops, and it tilts: the positions with more context fall further."
+                if tilt > 0.1 else "As it trains, the whole curve drops, but it hardly tilts.")
         with self.voiceover(
             "Now replay the training of the largest of the family, and watch that curve form. On the left, its "
             "held-out loss; on the right, its loss at each position of the context, frozen at each checkpoint. "
             "<bookmark mark='a'/> Untrained, the curve is flat: a model that knows nothing gains nothing from context. "
-            "<bookmark mark='b'/> " + grow + " <bookmark mark='c'/> By the end it "
-            f"gains {final:.2f} nats per token from the words before."
+            "<bookmark mark='b'/> " + grow + f" <bookmark mark='c'/> By the end its held-out loss is "
+            f"{sn[-1]['val']:.2f} nats, and the curve has the shape we just saw for model L."
         ) as vo:
             self.play(FadeIn(g), FadeIn(h), FadeIn(tag), FadeIn(pts[0]), FadeIn(curves[0]), FadeIn(reads[0]))
             vo.wait_until("a")
@@ -199,6 +202,8 @@ class Emergence(VoiceoverScene):
         lg = legend([(GREY_C, r"first copy"), (DECODER, r"second copy")], font_size=20).to_corner(UR, buff=0.4)
         lg.shift(DOWN * 1.2)
         yl = label(r"next word guessed right", font_size=20, color=GREY_A).move_to([-4.6, 1.2, 0])
+        none_l = label(r"the second copy is no easier: \\ nothing is copied from the context yet", font_size=28,
+                       color=CONTEXT).move_to([0, 0.0, 0])
         fam = [r for r in rows if r["name"] != "base"]
         jumps = {r["name"]: r["acc2"] - r["acc1"] for r in rows}
         copiers = [r for r in rows if jumps[r["name"]] > 0.2]
@@ -237,6 +242,8 @@ class Emergence(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[1], DOWN), FadeIn(b[3])) for b in bars],
                                   lag_ratio=0.3), run_time=2.5)
+            if not copiers:
+                self.play(FadeIn(none_l, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

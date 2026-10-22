@@ -211,7 +211,10 @@ class AStar(VoiceoverScene):
             "star, because n lies on an optimal path. <bookmark mark='f'/> G two costs more than C star, and its h is zero. So "
             "n always comes off the frontier first, and the optimal goal before G two."
         ) as vo:
+            ask = label(r"why is A*'s path the shortest?", font_size=40, color=GREY_A).move_to(UP * 0.4)
+            self.play(FadeIn(ask))
             vo.wait_until("a")
+            self.play(FadeOut(ask), run_time=0.4)
             self.play(FadeIn(dc, shift=UP * 0.2), FadeIn(adm))
             vo.wait_until("b")
             self.play(FadeIn(th, shift=UP * 0.2), FadeIn(opt))
@@ -260,8 +263,9 @@ class AStar(VoiceoverScene):
             "<bookmark mark='e'/> So states come off the frontier in order of f, and the first time A star expands a state, it "
             "has its best path."
         ) as vo:
+            self.play(FadeIn(tri))
             vo.wait_until("a")
-            self.play(FadeIn(dc, shift=UP * 0.2), FadeIn(tri))
+            self.play(FadeIn(dc, shift=UP * 0.2))
             for i, mk in enumerate("bcd"):
                 vo.wait_until(mk)
                 step(i)

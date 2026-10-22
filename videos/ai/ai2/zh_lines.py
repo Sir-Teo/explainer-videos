@@ -128,13 +128,13 @@ ZH = {
         '它最后停在{best:,}，而已被证明的最优值是{int(d[\'opt\']):,}。',
 
     'f"Is the cooling worth it?':
-        "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了{100 * (min(d['nn_lengths']) / opt - 1):.0f}%；2-opt爬山法把它打磨到{min(d['nn2opt_lengths']):,}。<bookmark mark='b'/>{verdict}{hits}",
+        "降温值得吗？在相同条件下比较：看过的回路数一样多。<bookmark mark='a'/>贪心回路总是去最近的未访问地点，即使从最好的起点出发，也长了{100 * (min(d['nn_lengths']) / opt - 1):.0f}%；2-opt爬山法把它打磨到{min(d['nn2opt_lengths']):,}。<bookmark mark='b'/>{verdict}<bookmark mark='c'/>{hits}",
 
-    "f' Annealing found the optimum itself in":
+    "f'Annealing found the optimum itself in":
         '退火在{len(d[\'eq_anneal\'])}次运行中有{n_opt}次找到了最优解本身。',
 
     "f'On the same budget of {d['budget']:,} tours looked at":
-        '在同样看{d[\'budget\']:,}条回路的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}，{order[2][0]}是{order[2][1]:,.0f}。',
+        '在同样看{d[\'budget\']:,}条回路的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}；{order[2][0]}平均{order[2][1]:,.0f}。',
 
     'f"A third idea keeps a whole population.':
         "第三种思路是保留一整个种群。<bookmark mark='a'/>约翰·霍兰德1975年提出的遗传算法，让更好的状态繁殖：一个孩子取两个父母的片段，再加一点随机变异。<bookmark mark='b'/>在我们的预算下，一个朴素版本最后比最优解高{ga_gap:.0f}%：两条好回路生出的孩子，大多比父母都差。<bookmark mark='c'/>种群搜索迎来了第二春。2023年，DeepMind的FunSearch让一个语言模型来提出变异；2025年，AlphaEvolve用同样的方式演化程序，找到了一种只用48次乘法计算4乘4复数矩阵乘法的方法，比施特拉森1969年的方法少一次。",
@@ -163,7 +163,7 @@ ZH = {
         "1959年，IBM的阿瑟·塞缪尔发表了一个跳棋程序，附带一个惊人的说法：可以给计算机编程，让它学会把跳棋下得比编写程序的人更好。<bookmark mark='a'/>它往前搜几步，用棋盘特征的加权和给局面打分：一个评分多项式。<bookmark mark='b'/>新颖之处在于：它通过下棋，自己调整权重。<bookmark mark='c'/>1962年，它在一盘有名的对局中赢了康涅狄格棋手罗伯特·尼利；尼利赢了复赛，而1966年，这个程序对世界冠军的八盘棋全部输掉。但重要的是这个想法，而“机器学习”这个说法，也是塞缪尔帮着推广开的。",
 
     "Samuel's learning rule is the seed of modern reinforcement learning.":
-        "塞缪尔的学习规则，是现代强化学习的种子。<bookmark mark='a'/>记住评估函数给你上一个局面的静态分数。<bookmark mark='b'/>两步之后，从新局面往前搜索，倒推出一个分数：对同一盘棋更有根据的看法。<bookmark mark='c'/>两者之差，塞缪尔叫它delta，说明旧分数错了多少。<bookmark mark='d'/>轻推权重，让它变小。<bookmark mark='e'/>两份副本对弈：Alpha学习，Beta保持权重不变，每当Alpha赢了，Beta就拿走它的权重。理查德·萨顿在1988年形式化时序差分学习时，就是在这个想法上继续前进的。",
+        "塞缪尔的学习规则，是现代强化学习的种子。<bookmark mark='a'/>记住评估函数给你上一个局面的静态分数。<bookmark mark='b'/>两步之后，从新局面往前搜索，倒推出一个分数：对同一盘棋更有根据的看法。<bookmark mark='c'/>两者之差，塞缪尔记作δ，说明旧分数错了多少。<bookmark mark='d'/>轻推权重，让它变小。<bookmark mark='e'/>两份副本对弈：Alpha学习，Beta保持权重不变，每当Alpha赢了，Beta就拿走它的权重。理查德·萨顿在1988年形式化时序差分学习时，就是在这个想法上继续前进的。",
 
     'f"We gave Samuel\'s method a game of our own':
         "我们给塞缪尔的方法找了一个我们自己的游戏：四子棋，五个程序员可能会挑的特征，搜索三步深。Alpha一开始所有权重都是0。<bookmark mark='a'/>这是它边下边变的权重；橙色的是我们在训练前手工设定的权重。<bookmark mark='b'/>在与Beta下的{G:,}盘棋里，权重各就各位。{signs}<bookmark mark='c'/>我们隔一段时间就冻结Alpha，让它和两个固定的对手下棋：未经训练的玩家，和我们手工设定的权重。",
@@ -369,6 +369,8 @@ PHRASES = {
     'Try d true, which forces e, and a clause fails: back up. Try d false, and every clause holds.':
         '试a为真，它迫使c、d和e成立，然后一个子句失败：退回。试a为假，它迫使b成立。试c为真。试d为真，它迫使e成立，'
         '又一个子句失败：退回。试d为假，每个子句都成立了。',
+    # the equal-budget comparison, when annealing never hits the optimum
+    'Annealing never found the optimum itself.': '退火一次也没有找到最优解本身。',
     # spliced into the tic-tac-toe verdict
     'a draw': '和棋',
     'a win for the first player': '先手胜',
