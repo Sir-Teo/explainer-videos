@@ -560,12 +560,16 @@ def _fewshot_scores(model, items, shots=SHOTS):
     return [acc[k] / len(items) for k in shots]
 
 
+ICL_WINDOWS = 512  # held-out windows of 256 tokens for the loss at each position
+EARLY, LATE = slice(0, 4), slice(128, 256)  # 1-4 tokens of context, against 129-256
+
+
 def _icl_setup():
     from explainer.ai import novels as N
     from videos.ai.ai14 import lm
 
     train, valid = N.token_arrays()
-    return lm.val_windows(valid, 128), lm.repeat_batch(lm.word_tokens(train)), _fewshot_items()
+    return lm.val_windows(valid, ICL_WINDOWS), lm.repeat_batch(lm.word_tokens(train)), _fewshot_items()
 
 
 def _icl_row(name, model, win, rep, items):
@@ -576,8 +580,9 @@ def _icl_row(name, model, win, rep, items):
     r = lm.repeat_test(model, rep)
     fs = _fewshot_scores(model, items)
     c = model.count()
-    row = dict(name=name, params=int(c["total"]), body=int(c["body"]), pos=pp.tolist(), early=float(pp[8:24].mean()),
-               late=float(pp[192:].mean()), icl=float(pp[192:].mean() - pp[8:24].mean()), fewshot=fs, **r)
+    early, late = float(pp[EARLY].mean()), float(pp[LATE].mean())
+    row = dict(name=name, params=int(c["total"]), body=int(c["body"]), pos=pp.tolist(), early=early, late=late,
+               icl=late - early, windows=len(win), fewshot=fs, **r)
     print(f"  {name}: early {row['early']:.3f} late {row['late']:.3f} rep {r['acc1']:.2f}->{r['acc2']:.2f}"
           f" few-shot {[round(x, 3) for x in fs]}", flush=True)
     return row

@@ -317,10 +317,16 @@ ZH = {
         '第14章。在我们自己的模型里，在上下文中学习。',
 
     '"GPT-3\'s surprise was that learning':
-        "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。{fifth}<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>每条曲线都从左往右下降：前面的词有帮助。从最前面的位置到最后面的位置，最小的模型每个词元提升了{gains[small['name']]:.2f}奈特；{tail}{btail}",
+        "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。{fifth}<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>{falls}从一到四个词元的上下文，到一百多个，最小的模型每个词元提升了{gains[small['name']]:.2f}奈特；{tail}{btail}",
 
     'f" And, as a fifth':
         "另外还有第五个：本系列自己的模型，更大，读过的词元是它们的{times:.0f}倍。",
+
+    'Every curve falls from left to right: the words before help.':
+        '每条曲线都从左往右下降：前面的词有帮助。',
+
+    'Not every curve falls: some models barely use the words before.':
+        '并不是每条曲线都下降：有些模型几乎不用前面的词。',
 
     "f'the {size_word(large)}-parameter model gains":
         "家族中最大的模型提升了{gains[large['name']]:.2f}奈特：越大的模型，从上下文中学到的越多。",
