@@ -317,7 +317,7 @@ ZH = {
         '第14章。在我们自己的模型里，在上下文中学习。',
 
     '"GPT-3\'s surprise was that learning':
-        "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。{fifth}<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>{falls}从一到四个词元的上下文，到一百多个，最小的模型每个词元提升了{gains[small['name']]:.2f}奈特；{tail}{btail}",
+        "GPT-3带来的意外是：从提示中学习，是随着规模出现的。在我们的规模上，能看到一点吗？<bookmark mark='a'/>四个大小递增的GPT式模型，都在同样的文本上训练，读同样多的词元。{fifth}<bookmark mark='b'/>先看从上下文中学习最简单的度量：在一个256词元的窗口里，每个位置上的损失。前面的位置几乎没有上下文，后面的位置有很多。<bookmark mark='c'/>{falls}从一到四个词元的上下文，到一百多个，最小的模型每个词元提升了{gains[small['name']]:.2f}奈特；{tail}<bookmark mark='t'/>{btail}",
 
     'f" And, as a fifth':
         "另外还有第五个：本系列自己的模型，更大，读过的词元是它们的{times:.0f}倍。",
@@ -347,7 +347,7 @@ ZH = {
         '随着训练，整条曲线下降，但几乎没有倾斜。',
 
     '"A sharper test, the one Part 13 used':
-        "一个更尖锐的测试，第13部分用过的：一张由六十个随机常用词组成的列表，然后把同一张列表再来一遍。一个能从上下文中复制的模型，会觉得第二遍比第一遍容易得多。<bookmark mark='a'/>这是每个模型在第一遍和第二遍上猜对下一个词的频率。<bookmark mark='b'/>{lead}{verdict}{when}",
+        "一个更尖锐的测试，第13部分用过的：一张由六十个随机常用词组成的列表，然后把同一张列表再来一遍。一个能从上下文中复制的模型，会觉得第二遍比第一遍容易得多。<bookmark mark='a'/>这是每个模型在第一遍和第二遍上猜对下一个词的频率。<bookmark mark='b'/>{lead}<bookmark mark='v'/>{verdict}<bookmark mark='w'/>{when}",
 
     'Every one of our models copies.':
         '我们的每一个模型都会复制。',
@@ -368,7 +368,7 @@ ZH = {
         "在模型L的训练中，它是在读了{sn[max(0, sn.index(on) - 1)]['tokens'] / 1000000.0:.2f}到{on['tokens'] / 1000000.0:.2f}百万个词元之间出现的。",
 
     '"Finally, GPT-3\'s own kind of test':
-        "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>每个模型都试零个、一个、两个、四个和八个例子。<bookmark mark='b'/>{v0}<bookmark mark='c'/>{v1}{v2}",
+        "最后，是GPT-3自己那种测试，用小说搭成。两本书；提示里有几个带标签的例子，每个例子是一个句子加上它出自哪本书；然后是一个来自模型从没读过的段落的新句子，我们比较模型给两个书名的概率。<bookmark mark='a'/>小模型往往不管句子是什么，都偏爱某一个书名，所以，按照Tony Zhao和同事在2021年提出的办法，我们先减去每个书名在一个毫无内容的句子后面得到的分数。<bookmark mark='d'/>每个模型都试零个、一个、两个、四个和八个例子。<bookmark mark='b'/>{v0}<bookmark mark='c'/>{v1}<bookmark mark='e'/>{v2}",
 
     'f"Even with no examples, the models do better than chance':
         "即使一个例子都没有，模型也比随机猜好，最高达到{100 * best0:.0f}%：书名常常是某个人物的名字，而一个提到这个人物的句子，会让这个名字更可能出现。",
@@ -392,7 +392,7 @@ ZH = {
         "在{shots[-1]}个例子时，家族中各个大小的模型彼此相差在{100 * abs(sz):.0f}个百分点以内。",
 
     '"So what did our small models show?':
-        "那么，我们的小模型说明了什么？<bookmark mark='a'/>{t1}{t2}{t3}<bookmark mark='b'/>在GPT-3自己的图里，少样本学习要到几十亿参数才变得有用。第13部分给出了机制，也就是会查找和复制的注意力头；第12部分给出了让更大的模型物有所值的规模定律。",
+        "那么，我们的小模型说明了什么？<bookmark mark='a'/>{t1}<bookmark mark='f'/>{t2}<bookmark mark='g'/>{t3}<bookmark mark='b'/>在GPT-3自己的图里，少样本学习要到几十亿参数才变得有用。第13部分给出了机制，也就是会查找和复制的注意力头；第12部分给出了让更大的模型物有所值的规模定律。",
 
     'Our models use their context more as they grow.':
         '我们的模型越大，越会利用上下文。',
