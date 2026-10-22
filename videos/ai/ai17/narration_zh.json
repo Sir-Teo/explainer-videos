@@ -172,7 +172,7 @@
   "bafbc60b0388": {
    "scene": "Matmul",
    "en": "We measured this on one core of this computer, multiplying two matrices of size 1,024 in C. <bookmark mark='a'/> The textbook triple loop: 0.43 billion operations a second. It walks down the columns of B, one cache line per number. <bookmark mark='b'/> The same arithmetic with the loops reordered, so every inner loop walks along rows: 12. <bookmark mark='c'/> Tiled: 18, 41 times the textbook loop. <bookmark mark='d'/> The best tile size was 256: three 256 by 256 tiles take 768 kilobytes, which fits in the 1024-kilobyte second-level cache. Past that, the tiles spill out and the speed falls. <bookmark mark='e'/> And the BLAS library numpy calls, tuned by experts, with tiles inside tiles and hand-written vector code: 92, 212 times the textbook loop, for exactly the same arithmetic.",
-   "zh": "我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下，用的是C语言。<bookmark mark='a'/>教科书上的三重循环：每秒0.43千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：12。<bookmark mark='c'/>分块之后：18，是教科书循环的41倍。<bookmark mark='d'/>最好的块大小是256：three 256 by 256 tiles take 768 kilobytes, which fits in the 1024-kilobyte second-level cache. Past that, the tiles spill out and the speed falls.<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：92，是教科书循环的212倍，算术一模一样。"
+   "zh": "我们在这台计算机的一个核心上，把两个1024阶的矩阵相乘，测了一下，用的是C语言。<bookmark mark='a'/>教科书上的三重循环：每秒0.43千兆次运算。它沿着B的列往下走，每取一个数就要一条缓存行。<bookmark mark='b'/>同样的算术，换一下循环的顺序，让每个内层循环都沿着行走：12。<bookmark mark='c'/>分块之后：18，是教科书循环的41倍。<bookmark mark='d'/>最好的块大小是256：三个256乘256的块占768千字节，正好放得进1024千字节的二级缓存。再大，块就装不下了，速度随之下降。<bookmark mark='e'/>numpy调用的BLAS库，由专家调优，块里套块，还有手写的向量代码：92，是教科书循环的212倍，算术一模一样。"
   },
   "97cb80f0a6c8": {
    "scene": "Hierarchy",

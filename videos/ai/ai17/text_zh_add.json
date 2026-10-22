@@ -378,7 +378,58 @@
   "1978\\; systolic arrays": "1978\\; 脉动阵列",
   "1999\\; the GPU": "1999\\; GPU",
   "2005\\; multicore: the power wall": "2005\\; 多核：功耗墙",
-  "2007\\; CUDA": "2007\\; CUDA"
+  "2007\\; CUDA": "2007\\; CUDA",
+  "$90$ passes over the data: \\ $5$ to $6$ days": "数据过$90$遍：\\ $5$到$6$天",
+  "two GTX 580s for $5.5$ days at their peak: \\ $1.5 \\times 10^{18}$ FLOP \\ $\\Rightarrow$ \\ $31\\%$ of it used": "两块GTX 580满速跑$5.5$天：\\ $1.5 \\times 10^{18}$次浮点运算\\ $\\Rightarrow$ \\ 用了其中$31\\%$",
+  "this computer, \\ one core \\ ($102$ GFLOP/s, measured): \\ $53$ days": "本机，\\ 一个核心\\ （实测$102$ GFLOP/s）：\\ $53$天",
+  "all $4$ cores: \\ no faster than one, \\ shared with other jobs": "全部$4$个核心：\\ 不比一个核心快，\\ 与其他任务共用",
+  "$102$ GFLOP/s": "$102$ GFLOP/s",
+  "AlexNet's training here: \\ $\\approx 53$ days": "AlexNet的训练在这里：\\ $\\approx 53$天",
+  "Part 17: \\ Silicon": "第17部分：\\ 硅",
+  "weight matrices: \\ $98.6\\%$": "权重矩阵：\\ $98.6\\%$",
+  "attention: \\ $1.4\\%$": "注意力：\\ $1.4\\%$",
+  "everything else: \\ $0.04\\%$": "其余一切：\\ $0.04\\%$",
+  "published: \\ $3.14 \\times 10^{23}$ FLOP": "公开值：\\ $3.14 \\times 10^{23}$次浮点运算",
+  "3 tiles fill L1": "3个块填满L1",
+  "3 tiles fill L2": "3个块填满L2",
+  "computed: \\ $n = 1024$, \\ one core, \\ C": "计算所得：\\ $n = 1024$，\\ 一个核心，\\ C语言",
+  "fit: \\ doubling every $2.0$ years": "拟合：\\ 每$2.0$年翻一倍",
+  "Intel 4004: \\ $2{,}308$": "英特尔4004：\\ $2{,}308$",
+  "clock: \\ doubling every $2.4$ years, \\ 1985--2003": "时钟：\\ 每$2.4$年翻一倍，\\ 1985--2003",
+  "single-thread speed: \\ every $1.8$ years, \\ then $6.5$": "单线程速度：\\ 每$1.8$年翻一倍，\\ 之后$6.5$年",
+  "simulated: \\ $131{,}072$ threads": "模拟：\\ $131{,}072$个线程",
+  "$4$ operations per load": "每次读取$4$次运算",
+  "$16$ operations per load": "每次读取$16$次运算",
+  "$64$ operations per load": "每次读取$64$次运算",
+  "an H100 SM: \\ $4$ schedulers, \\ up to $64$ warps": "H100的一个SM：\\ $4$个调度器，\\ 最多$64$个线程束",
+  "simulated: \\ a load takes $479$ cycles \\ (H800, Luo et al.\\ 2024)": "模拟：\\ 一次读取要$479$个周期\\ （H800，Luo等 2024）",
+  "each load: \\ $479$ cycles away": "每次读取：\\ 远在$479$个周期之外",
+  "scattered: \\ $8$ transactions for the same $32$ numbers": "分散：\\ 同样$32$个数要$8$次传输",
+  "$= 2{,}073{,}600$ pixels": "$= 2{,}073{,}600$个像素",
+  "this computer: \\ $4$ cores, \\ $16$-wide vectors": "本机：\\ $4$个核心，\\ $16$路宽的向量",
+  "H800: \\ $2{,}039$ GB/s $\\times$ $273$ ns \\ $\\approx$ $556$ KB in flight \\ $\\approx 4{,}346$ requests of $128$ bytes": "H800：\\ $2{,}039$ GB/s $\\times$ $273$ ns \\ $\\approx$ $556$ KB在途\\ $\\approx 4{,}346$个$128$字节的请求",
+  "one core of this computer: \\ $17.7$ GB/s $\\times$ $175$ ns $\\approx 48$ cache lines": "本机一个核心：\\ $17.7$ GB/s $\\times$ $175$ ns $\\approx 48$条缓存行"
  },
- "patterns": []
+ "patterns": [
+  [
+   "^\\$\\\\times\\\\,(\\d+)\\$ million \\\\ the arithmetic$",
+   "运算量$\\\\times\\\\,\\g<1>00$万倍"
+  ],
+  [
+   "^Llama 3\\.1's: \\\\ \\$\\\\approx (\\d+)\\$ million years$",
+   "Llama 3.1的：\\\\ 约$\\g<1>00$万年"
+  ],
+  [
+   "^\\$(\\d+)\\$ billion$",
+   "$\\g<1>0$亿"
+  ],
+  [
+   "^\\$\\\\times\\\\ 60\\$ frames a second \\\\ \\$= (\\d+)\\$ million$",
+   "$\\\\times\\\\ 60$帧每秒\\\\ $= \\g<1>00$万"
+  ],
+  [
+   "^one core of this computer \\\\ \\((.*)\\)$",
+   "本机的一个核心\\\\ （\\1）"
+  ]
+ ]
 }
