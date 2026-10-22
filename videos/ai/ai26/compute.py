@@ -947,74 +947,137 @@ def _gens():
     return sorted(g for g in (int(p.stem.split("_")[1]) for p in OUT.glob("gen_*.pt")) if g <= GENS)
 
 
-def compute_az_grade(n_pos=400):
+def _save_json(path, obj) -> None:
     import json
 
-    from videos.ai.ai26.alphazero import GAMES_PER_GEN, OUT, SIMS, Evaluator, Node, load_gen, search
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(obj))
+    tmp.replace(path)
 
+
+def _grade_gen(gnum: int, n_pos: int) -> dict:
+    """One generation graded on the test positions: the network's own choice, its choice after search, its value.
+    Kept on its own (``az/grade/``), so the grading resumes generation by generation."""
+    import json
+
+    import torch
+
+    from videos.ai.ai26.alphazero import OUT, SIMS, Evaluator, Node, load_gen, search
+
+    f = OUT / "grade" / f"gen_{gnum:03d}_{n_pos}.json"
+    if f.exists():
+        return json.loads(f.read_text())
+    torch.set_num_threads(1)
     t = load("testset")
-    hist = t["histories"][:n_pos]
     scores = np.asarray(t["scores"])[:n_pos]
     value = np.asarray(t["value"])[:n_pos]
-    boards = [c4.Board.from_moves(h) for h in hist]
+    boards = [c4.Board.from_moves(h) for h in t["histories"][:n_pos]]
+    ev = Evaluator(load_gen(gnum))
+    pri, v = ev(boards)
+    roots = [Node(b) for b in boards]
+    search(roots, ev, SIMS, rng(gnum), noise=False)
+    out = {"raw": float(np.mean([is_right(sc, int(np.argmax(p))) for sc, p in zip(scores, pri)])),
+           "value_acc": float(np.mean(np.sign(np.round(v * 1.5)) == value)),
+           "mcts": float(np.mean([is_right(sc, int(np.argmax(r.N))) for sc, r in zip(scores, roots)]))}
+    _save_json(f, out)
+    return out
+
+
+def _workers() -> int:
+    import os
+
+    return max(1, min(4, os.cpu_count() or 1))
+
+
+def compute_az_grade(n_pos=400):
+    import json
+    from concurrent.futures import ProcessPoolExecutor
+
+    from videos.ai.ai26.alphazero import GAMES_PER_GEN, OUT, SIMS
+
     gens = _gens()
-    raw, mcts, vacc = [], [], []
-    for gnum in gens:
-        ev = Evaluator(load_gen(gnum))
-        pri, v = ev(boards)
-        raw.append(float(np.mean([is_right(sc, int(np.argmax(p))) for sc, p in zip(scores, pri)])))
-        vacc.append(float(np.mean(np.sign(np.round(v * 1.5)) == value)))
-        roots = [Node(b) for b in boards]
-        search(roots, ev, SIMS, rng(gnum), noise=False)
-        mcts.append(float(np.mean([is_right(sc, int(np.argmax(r.N))) for sc, r in zip(scores, roots)])))
+    load("testset")  # computed here once, not by every worker
+    with ProcessPoolExecutor(_workers()) as pool:
+        res = list(pool.map(_grade_gen, gens, [n_pos] * len(gens)))
     log = json.loads((OUT / "log.json").read_text())
-    return {"gens": gens, "raw": raw, "mcts": mcts, "value_acc": vacc, "sims": SIMS,
+    return {"gens": gens, "raw": [r["raw"] for r in res], "mcts": [r["mcts"] for r in res],
+            "value_acc": [r["value_acc"] for r in res], "sims": SIMS,
             "loss_policy": [e["loss_policy"] for e in log], "loss_value": [e["loss_value"] for e in log],
             "first_wins": [e["first_wins"] for e in log], "draws": [e["draws"] for e in log],
             "mean_length": [e["mean_length"] for e in log], "games_per_gen": GAMES_PER_GEN,
             "hours": float(sum(e["selfplay_s"] + e["train_s"] for e in log) / 3600)}
 
 
-def _play_match(players, pairs, games_per_pair, sims, seed):
-    """Round robin. ``players``: name -> ("az", gen) | ("uct", sims). Returns wins table W[i, j] (draws = 1/2)."""
+def _play_pair(a, b, games, sims) -> list:
+    """``games`` games between players ``a`` and ``b`` ((name, ("az", gen) | ("uct", sims))), alternating who moves
+    first: [a's points, games].  Seeded by the two names, so the result doesn't depend on how the round robin is
+    split across processes; kept on its own (``az/elo/``), so the tournament resumes pairing by pairing."""
+    import json
+    import re
+    import zlib
+
     import torch
 
-    from videos.ai.ai26.alphazero import Evaluator, Node, load_gen, search
+    from videos.ai.ai26.alphazero import OUT, Evaluator, Node, load_gen, search
 
+    tag = re.sub(r"\W+", "_", f"{a[0]}__{b[0]}")
+    f = OUT / "elo" / f"{tag}_{games}_{sims}.json"
+    if f.exists():
+        return json.loads(f.read_text())
     torch.set_num_threads(1)
-    g = rng(seed)
-    names = list(players)
-    evs = {n: Evaluator(load_gen(v[1])) for n, v in players.items() if v[0] == "az"}
-    Wt = np.zeros((len(names), len(names)))
-    Nt = np.zeros((len(names), len(names)))
-    for i, j in pairs:
-        for k in range(games_per_pair):
-            first, second = (i, j) if k % 2 == 0 else (j, i)
-            b = c4.Board()
-            for _ in range(2):  # two random opening moves, so the games differ
-                b = b.play(int(g.integers(7)))
-            turn = [first, second]
-            result = 0.5
-            while True:
-                who = turn[b.moves % 2]
-                kind = players[names[who]]
-                if kind[0] == "az":
-                    root = Node(b)
-                    search([root], evs[names[who]], sims, g, noise=False)
-                    c = int(np.argmax(root.N))
-                else:
-                    c = c4.uct_move(b, kind[1], g)
-                b = b.play(c)
-                if c4.last_mover_won(b):
-                    result = 1.0 if who == first else 0.0
-                    break
-                if b.full():
-                    break
-            Wt[first, second] += result
-            Wt[second, first] += 1 - result
-            Nt[first, second] += 1
-            Nt[second, first] += 1
-    return names, Wt, Nt
+    g = rng(zlib.crc32(f"{a[0]}|{b[0]}".encode()))
+    evs = {name: Evaluator(load_gen(kind[1])) for name, kind in (a, b) if kind[0] == "az"}
+    pts = 0.0
+    for k in range(games):
+        first, second = (a, b) if k % 2 == 0 else (b, a)
+        bd = c4.Board()
+        for _ in range(2):  # two random opening moves, so the games differ
+            bd = bd.play(int(g.integers(7)))
+        turn = [first, second]
+        result = 0.5  # for the first player
+        while True:
+            name, kind = turn[bd.moves % 2]
+            if kind[0] == "az":
+                root = Node(bd)
+                search([root], evs[name], sims, g, noise=False)
+                c = int(np.argmax(root.N))
+            else:
+                c = c4.uct_move(bd, kind[1], g)
+            bd = bd.play(c)
+            if c4.last_mover_won(bd):
+                result = 1.0 if name == first[0] else 0.0
+                break
+            if bd.full():
+                break
+        pts += result if first is a else 1 - result
+    out = [pts, games]
+    _save_json(f, out)
+    return out
+
+
+def compute_az_elo(games_per_pair=20):
+    from concurrent.futures import ProcessPoolExecutor
+
+    from videos.ai.ai26.alphazero import SIMS
+
+    gens = _gens()
+    pick = sorted(set([0, 1, 2, 3, 5, 8, 12, 16] + list(range(20, gens[-1] + 1, 10)) + [gens[-1]]))
+    pick = [p for p in pick if p in gens]
+    players = [(f"gen {p}", ("az", p)) for p in pick] + [("MCTS 200", ("uct", 200)), ("MCTS 1000", ("uct", 1000))]
+    names = [p[0] for p in players]
+    n = len(players)
+    pairs = [(i, j) for i in range(n) for j in range(i + 1, n)]
+    with ProcessPoolExecutor(_workers()) as pool:
+        res = list(pool.map(_play_pair, [players[i] for i, _ in pairs], [players[j] for _, j in pairs],
+                            [games_per_pair] * len(pairs), [SIMS] * len(pairs)))
+    Wt, Nt = np.zeros((n, n)), np.zeros((n, n))
+    for (i, j), (pts, games) in zip(pairs, res):
+        Wt[i, j], Wt[j, i] = pts, games - pts
+        Nt[i, j] = Nt[j, i] = games
+    R = bradley_terry(Wt, Nt)
+    R = R - R[names.index("gen 0")]  # the untrained network is 0
+    return {"names": names, "elo": R, "wins": Wt, "games": Nt, "gens": pick, "sims": SIMS}
 
 
 def bradley_terry(Wt, Nt, iters=2000):
@@ -1027,29 +1090,6 @@ def bradley_terry(Wt, Nt, iters=2000):
         R += 40 * grad / np.maximum(Nt.sum(1), 1)
         R -= R.mean()
     return R
-
-
-def compute_az_elo(games_per_pair=20, workers=4):
-    from concurrent.futures import ProcessPoolExecutor
-
-    from videos.ai.ai26.alphazero import SIMS
-
-    gens = _gens()
-    pick = sorted(set([0, 1, 2, 3, 5, 8, 12, 16] + list(range(20, gens[-1] + 1, 10)) + [gens[-1]]))
-    pick = [p for p in pick if p in gens]
-    players = {f"gen {p}": ("az", p) for p in pick}
-    players.update({"MCTS 200": ("uct", 200), "MCTS 1000": ("uct", 1000)})
-    n = len(players)
-    pairs = [(i, j) for i in range(n) for j in range(i + 1, n)]
-    chunks = [pairs[k::workers] for k in range(workers)]  # one process per core; the tables just add up
-    with ProcessPoolExecutor(workers) as pool:
-        parts = list(pool.map(_play_match, [players] * workers, chunks, [games_per_pair] * workers,
-                              [SIMS] * workers, [21 + k for k in range(workers)]))
-    names = parts[0][0]
-    Wt, Nt = sum(p_[1] for p_ in parts), sum(p_[2] for p_ in parts)
-    R = bradley_terry(Wt, Nt)
-    R = R - R[names.index("gen 0")]  # the untrained network is 0
-    return {"names": names, "elo": R, "wins": Wt, "games": Nt, "gens": pick, "sims": SIMS}
 
 
 def compute_az_demo():
