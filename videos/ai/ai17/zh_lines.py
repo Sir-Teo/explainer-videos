@@ -106,7 +106,13 @@ ZH = {
         "让这件事成为可能的，是两块游戏显卡。<bookmark mark='a'/>这个网络有六千万个参数，一块3GB显存的GeForce GTX 580，训练时装不下它。于是克里热夫斯基把它一分为二：每一层的卷积核，一半放在一块卡上，一半放在另一块上。<bookmark mark='b'/>两半只在少数几层交换结果，好让两块卡之间的通信量小一些。<bookmark mark='c'/>卷积是他自己用CUDA写的，写在一个叫cuda-convnet的库里。训练花了五到六天，把120万张图片过了九十遍。",
 
     'f"How much arithmetic was that?':
-        "那是多少算术？<bookmark mark='a'/>大约120万张图片，乘以九十遍，乘以每张图四分之三个十亿次乘加，每次乘加算两次运算，再乘以三，算上反向传播：<bookmark mark='b'/>大约{prod / 1e+17:.1f}乘以10的17次方次浮点运算；公开的估计是4.7。<bookmark mark='c'/>两块卡在五天半里能做大约{avail / 1e+18:.1f}乘以10的18次方次，所以这个网络让它们大约{100 * use:.0f}%的时间在忙。<bookmark mark='d'/>在渲染这个视频的这台{machine_name()}上，按我们测到的最快速度，一个核心要大约{d1:.0f}天，全部{int(mt['threads'])}个核心一起要大约{dN:.0f}天：比2010年的两块显卡{faster}，前提还是每个核心只做矩阵乘法。",
+        "那是多少算术？<bookmark mark='a'/>大约120万张图片，乘以九十遍，乘以每张图四分之三个十亿次乘加，每次乘加算两次运算，再乘以三，算上反向传播：<bookmark mark='b'/>大约{prod / 1e+17:.1f}乘以10的17次方次浮点运算；公开的估计是4.7。<bookmark mark='c'/>两块卡在五天半里能做大约{avail / 1e+18:.1f}乘以10的18次方次，所以这个网络让它们大约{100 * use:.0f}%的时间在忙。<bookmark mark='d'/>在渲染这个视频的这台{machine_name()}上，按我们测到的最快速度，一个核心要大约{d1:.0f}天{tail}",
+
+    "f', and all {int(mt['threads'])} cores together about {dN:.0f}":
+        "，全部{int(mt['threads'])}个核心一起要大约{dN:.0f}天：比2010年的两块显卡{faster}，前提还是每个核心只做矩阵乘法。",
+
+    "f'. All {int(mt['threads'])} cores together should do better":
+        "。全部{int(mt['threads'])}个核心一起本该更快，但我们测量时别的任务正在用它们，结果一起算也不比一个核心快。",
 
     'After 2012 the field moved onto GPUs.':
         "2012年以后，整个领域搬到了GPU上。<bookmark mark='a'/>2014年，英伟达发布了cuDNN，一个深度学习内核库，研究人员不用再自己写了。<bookmark mark='b'/>2016年，它围绕八块GPU造了一台服务器，DGX-1，黄仁勋亲手把第一台送到了OpenAI。<bookmark mark='c'/>2018年，达里奥·阿莫代伊和丹尼·埃尔南德斯测量了这个趋势：从AlexNet开始，最大规模训练所用的算力每3.4个月翻一倍，六年里增长了三十万倍。<bookmark mark='d'/>2020年，萨拉·胡克给这段历史起了个名字：硬件彩票。一个想法能不能成功，要看它适不适合当时的硬件；神经网络全是乘加，抽中了一张为电子游戏印的中奖彩票。",
@@ -231,7 +237,16 @@ ZH = {
         "在这里，分块缩放得到{100 * mx4:.0f}%和{100 * nv:.0f}%，而整个张量只用一个缩放因子时是{100 * t4:.0f}%。",
 
     'f"Why go small at all?':
-        "到底为什么要用小格式？因为乘法器的大小，大致随尾数宽度的平方增长，而每少搬一位，就省下一份带宽。<bookmark mark='a'/>位数减半，张量核心就做两倍的工作：一块H100在bfloat16下每秒做{H['tensor'] / 1000000000000.0:.0f}万亿次运算，在FP8下做{H['fp8'] / 1000000000000.0:,.0f}万亿次；Blackwell GPU在4位下又翻一倍。<bookmark mark='b'/>但前提是硬件为它而造。这台计算机的处理器没有bfloat16单元，PyTorch的bfloat16矩阵乘法，比它的FP32慢{slow:.1f}倍。<bookmark mark='c'/>历史是这样的：1985年卡亨主导的IEEE标准；谷歌大脑为TPU设计的bfloat16；2022年英伟达、Arm和英特尔提出的8位浮点；2023年的微缩放。第18部分用8位训练；第19部分用4位来推理。",
+        "到底为什么要用小格式？因为乘法器的大小，大致随尾数宽度的平方增长，而每少搬一位，就省下一份带宽。<bookmark mark='a'/>位数减半，张量核心就做两倍的工作：一块H100在bfloat16下每秒做{H['tensor'] / 1000000000000.0:.0f}万亿次运算，在FP8下做{H['fp8'] / 1000000000000.0:,.0f}万亿次；Blackwell GPU在4位下又翻一倍。<bookmark mark='b'/>但前提是硬件为它而造。{cpu_says}<bookmark mark='c'/>历史是这样的：1985年卡亨主导的IEEE标准；谷歌大脑为TPU设计的bfloat16；2022年英伟达、Arm和英特尔提出的8位浮点；2023年的微缩放。第18部分用8位训练；第19部分用4位来推理。",
+
+    "f\"This computer's processor has no bfloat16 units":
+        "这台计算机的处理器没有bfloat16单元，PyTorch的bfloat16矩阵乘法，比它的FP32慢{slow:.1f}倍。",
+
+    "f\"This computer's processor has bfloat16 instructions, yet":
+        "这台计算机的处理器有bfloat16指令，但在这里，PyTorch的bfloat16矩阵乘法仍比它的FP32慢{slow:.1f}倍。",
+
+    "f\"This computer's processor has bfloat16 instructions, and":
+        "这台计算机的处理器有bfloat16指令，PyTorch的bfloat16矩阵乘法，速度是它的FP32的{1 / slow:.1f}倍。",
 
     # ------------------------------------------------------------------ Interconnect
     'Chapter ten. Interconnect and collectives.':

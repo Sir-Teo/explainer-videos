@@ -179,6 +179,10 @@ class Plans(VoiceoverScene):
                              font_size=20).move_to([3.6, -1.2, 0])
         assume = label(r"STRIPS: \ whatever isn't listed stays as it was", font_size=24, color=PATH)
         assume.next_to(box, DOWN, buff=0.4)
+        state = VGroup(label(r"a state: \ a set of facts", font_size=24, color=GCOST),
+                       Text("on(C, A)  ontable(A)  ontable(B)", font=MONO, font_size=22),
+                       Text("clear(C)  clear(B)  handempty", font=MONO, font_size=22))
+        state.arrange(DOWN, buff=0.15, aligned_edge=LEFT).move_to([-3.2, -2.5, 0])
         with self.voiceover(
             "Planning is search where the states are descriptions. <bookmark mark='a'/> STRIPS, from Richard Fikes and Nils "
             "Nilsson in 1971, for Shakey the robot, describes a state as a set of facts, and an action by three lists. "
@@ -188,6 +192,7 @@ class Plans(VoiceoverScene):
             "leaves unchanged, which is almost everything. <bookmark mark='d'/> STRIPS simply assumes that whatever an action "
             "doesn't mention stays as it was."
         ) as vo:
+            self.play(LaggedStart(*[FadeIn(r) for r in state], lag_ratio=0.3))
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")

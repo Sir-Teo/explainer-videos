@@ -107,6 +107,8 @@ def cpu_info() -> dict:
             if v.isdigit() and int(v) > 0:
                 out["caches"][lvl] = dict(kib=int(v) // 1024, shared="")
         out["simd"] = ["neon"] if platform.machine() == "arm64" else []
+        if _sysctl("hw.optional.arm.FEAT_BF16") == "1" or "AVX512BF16" in _sysctl("machdep.cpu.leaf7_features"):
+            out["simd"].append("bf16")
     out["model"] = out["model"] or platform.processor() or platform.machine()
     try:
         out["ram_gib"] = round(os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES") / 2**30, 1)

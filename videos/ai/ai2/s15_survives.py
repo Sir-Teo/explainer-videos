@@ -43,6 +43,8 @@ class Survives(VoiceoverScene):
         same.to_edge(DOWN, buff=0.9)
         p26 = note(r"Part 26 builds AlphaZero; \ Campbell, Hoane \& Hsu (2002); \ Silver et al.\ (2018)")
         p26.to_corner(DR, buff=0.2)
+        head = label(r"the symbolic era ended; \ its machinery did not", font_size=34, color=GREY_A)
+        head.to_edge(UP, buff=0.4)
         with self.voiceover(
             "The symbolic era ended, but its machinery did not. <bookmark mark='a'/> Deep Blue was search plus an evaluation "
             "written by people. <bookmark mark='b'/> Twenty years later AlphaZero kept the search, Monte Carlo tree search "
@@ -50,6 +52,7 @@ class Survives(VoiceoverScene):
             "positions per second than the chess engine it beat. <bookmark mark='c'/> Search guided by an evaluation is the "
             "skeleton of both. Part 26 builds one."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t) for t in then], lag_ratio=0.2))
             vo.wait_until("b")
@@ -87,6 +90,17 @@ class Survives(VoiceoverScene):
                                   r"access policies", width=5.6, color=HIST, font_size=19)).arrange(DOWN, buff=0.3)
         smt.move_to([3.6, 0.2, 0])
         tag = note(r"computed: \ our CDCL solver").to_corner(DR, buff=0.2)
+        ins = label(r"inputs \ $a$, $b$", font_size=24, color=GREY_A).move_to([0.9, 0.6, 0])
+        ad1 = node_box(r"ripple-carry adder", GCOST, font_size=22).move_to([3.3, 1.4, 0])
+        ad2 = node_box(r"Kogge--Stone adder", HEUR, font_size=22).move_to([3.3, -0.2, 0])
+        cmp_ = node_box(r"differ?", FAIL, font_size=24).move_to([5.9, 0.6, 0])
+        miter = VGroup(ins, ad1, ad2, cmp_,
+                       Arrow(ins.get_right(), ad1.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5),
+                       Arrow(ins.get_right(), ad2.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5),
+                       Arrow(ad1.get_right(), cmp_.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5),
+                       Arrow(ad2.get_right(), cmp_.get_left(), buff=0.12, color=GREY_B, stroke_width=2.5))
+        miter.add(label(r"as clauses: \ satisfiable $=$ a bug, \ unsatisfiable $=$ proved equal", font_size=20,
+                        color=GREY_A).next_to(VGroup(ad2, cmp_), DOWN, buff=0.35))
         with self.voiceover(
             "Logic found its biggest job in checking machines. <bookmark mark='a'/> In 1994 a flaw in the Pentium's division "
             "circuit, a few missing table entries, cost Intel a four-hundred-and-seventy-five-million-dollar charge, and chip "
@@ -97,7 +111,7 @@ class Survives(VoiceoverScene):
             f"{bug['wrong']:,}. <bookmark mark='d'/> Add theories of arithmetic and data structures and you get SMT solvers like "
             "Microsoft's Z3; Amazon reported in 2022 running over a billion SMT queries a day to check who can access what."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(miter))
             vo.wait_until("a")
             self.play(FadeIn(fdiv, shift=UP * 0.2))
             vo.wait_until("b")
@@ -105,6 +119,7 @@ class Survives(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(m) for m in ce], lag_ratio=0.4))
             vo.wait_until("d")
+            self.play(FadeOut(miter), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in smt], lag_ratio=0.5))
         self.wait(0.3)
         self.clear_scene()
@@ -145,10 +160,16 @@ class Survives(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def proofs(self):
-        lean = VGroup(Text("theorem two_eq : 1 + 1 = 2 := by", font=MONO, font_size=24, color=WHITE),
-                      Text("  norm_num", font=MONO, font_size=24, color=FCOL)).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
+        lean = VGroup(Text("theorem two_eq : 1 + 1 = 2 := by", font=MONO, font_size=22, color=WHITE),
+                      Text("  norm_num", font=MONO, font_size=22, color=FCOL)).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
         box = SurroundingRectangle(lean, color=SYMBOL, buff=0.25, corner_radius=0.1)
-        lg = VGroup(box, lean).move_to([-3.6, 2.2, 0])
+        lg = VGroup(box, lean).move_to([-3.4, 2.3, 0])
+        if lg.get_left()[0] < -6.85:
+            lg.shift(RIGHT * (-6.85 - lg.get_left()[0]))
+        flow = VGroup(node_box(r"a network proposes", LEARN, font_size=22), node_box(r"Lean checks", SYMBOL,
+                                                                                      font_size=22))
+        flow.arrange(RIGHT, buff=0.7).move_to([-3.6, -0.3, 0])
+        flow.add(Arrow(flow[0].get_right(), flow[1].get_left(), buff=0.1, color=GREY_B))
         ll = label(r"Lean: \ a proof assistant; \ every step machine-checked", font_size=20, color=SYMBOL)
         ll.next_to(lg, DOWN, buff=0.15)
         cards = VGroup(
@@ -161,7 +182,7 @@ class Survives(VoiceoverScene):
             history_card(2025, r"Gemini Deep Think", r"gold-medal score at the IMO, $35$ of $42$, \ in plain language, "
                          r"graded by the IMO's coordinators", width=6.2, color=HEUR, font_size=19),
         ).arrange(DOWN, buff=0.22).move_to([3.4, -0.2, 0])
-        lesson = label(r"generate with a network, \\ check with logic", font_size=30, color=FCOL).move_to([-3.6, -1.4, 0])
+        lesson = label(r"generate with a network, \\ check with logic", font_size=30, color=FCOL).move_to([-3.6, -2.0, 0])
         with self.voiceover(
             "Logic's other modern home is mathematics. <bookmark mark='a'/> In a proof assistant like Lean, a small trusted "
             "program checks every step, so a proof that compiles is correct. <bookmark mark='b'/> DeepMind's AlphaGeometry, in "
@@ -175,7 +196,7 @@ class Survives(VoiceoverScene):
             self.play(FadeIn(lg), FadeIn(ll))
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(FadeIn(cards[k], shift=UP * 0.15), *([FadeIn(flow)] if k == 1 else []))
             vo.wait_until("e")
             self.play(FadeIn(lesson))
         self.wait(0.3)
@@ -183,8 +204,8 @@ class Survives(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def planning(self):
-        bars = [(r"LLaMA 3.1 405B \ (zero-shot)", 62.6, GREY_B), (r"o1-preview", 97.8, LEARN),
-                (r"a classical planner \ (Fast Downward)", 100.0, PATH)]
+        bars = [(r"LLaMA 3.1 405B \\ (zero-shot)", 62.6, GREY_B), (r"o1-preview", 97.8, LEARN),
+                (r"a classical planner \\ (Fast Downward)", 100.0, PATH)]
         g = axes([0, 3], [0, 100], x_length=6.0, y_length=3.6, ylabel=r"Blocksworld problems solved",
                  yticks=[0, 50, 100], yfmt=lambda v: rf"{int(v)}\%", center=[-3.0, -0.2, 0])
         rects = VGroup()
@@ -193,12 +214,12 @@ class Survives(VoiceoverScene):
             r = Rectangle(width=0.9, height=h, stroke_width=0, fill_color=col, fill_opacity=0.85)
             r.move_to(g.ax.c2p(i + 0.5, 0), aligned_edge=DOWN)
             rects.add(VGroup(r, MathTex(rf"{v:g}\%", font_size=24, color=col).next_to(r, UP, buff=0.08),
-                             label(nm, font_size=17, color=col).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.15)))
+                             label(nm, font_size=19, color=col).next_to(g.ax.c2p(i + 0.5, 0), DOWN, buff=0.15)))
         for r in rects:
             if r[2].width > 1.9:
                 r[2].width = 1.9
         myst = label(r"renamed (``Mystery Blocksworld''): \ o1-preview $52.8\%$, \ the planner still $100\%$",
-                     font_size=20, color=FAIL).next_to(g, DOWN, buff=0.7)
+                     font_size=20, color=FAIL).next_to(g, DOWN, buff=0.95)
         cite_ = note(r"Valmeekam, Stechly \& Kambhampati (2024), PlanBench").to_corner(DL, buff=0.2)
         pattern = VGroup(node_box(r"a language model", LEARN, font_size=22), node_box(r"PDDL", SYMBOL, font_size=22),
                          node_box(r"a classical planner", PATH, font_size=22),
@@ -248,6 +269,7 @@ class Survives(VoiceoverScene):
             ex.width = 13.0
         p = label(r"Parts 26, 28, 29: \ search and checking, \ inside learned systems", font_size=24, color=PATH)
         p.to_edge(DOWN, buff=0.5)
+        head = label(r"symbols, \ or learning?", font_size=36, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "So the old argument, symbols or learning, ended in a merger. <bookmark mark='a'/> Networks bring what the symbolic "
             "era lacked: perception, intuition, guesses from data. <bookmark mark='b'/> Symbols bring what networks cannot "
@@ -256,6 +278,7 @@ class Survives(VoiceoverScene):
             "This is neurosymbolic AI, <bookmark mark='d'/> and we will meet it again in reinforcement learning, reasoning "
             "models and agents."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(left))
             vo.wait_until("b")

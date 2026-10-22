@@ -252,7 +252,9 @@ class Formats(VoiceoverScene):
                                   fill_opacity=0.9).move_to((p0 + p1) / 2))
             bars.add(grp)
         lg = legend([(col, fl) for _, fl, col in fmts], font_size=20).next_to(g.ax, RIGHT, buff=0.3).shift(UP * 0.6)
-        cpu = label(rf"this CPU, \ no bfloat16 units: \\ FP32 ${gflops(tf[n])}$, \ BF16 ${gflops(tb[n])}$ GFLOP/s",
+        hw16 = any(f in load("machine")["simd"] for f in ("avx512_bf16", "amx_tile", "bf16"))
+        has = r"with bfloat16 instructions" if hw16 else r"no bfloat16 units"
+        cpu = label(rf"this CPU, \ {has}: \\ FP32 ${gflops(tf[n])}$, \ BF16 ${gflops(tb[n])}$ GFLOP/s",
                     font_size=24, color=CPUC).move_to([4.3, -0.3, 0])
         src = cite(r"NVIDIA datasheets and product pages", corner=UL)
         hist = VGroup(*[history_card(y, w, t, width=4.2, color=c, font_size=18) for y, w, t, c in (
@@ -265,13 +267,21 @@ class Formats(VoiceoverScene):
             hist.width = 13.4
         tag = note(rf"computed: \ PyTorch, $n = {int(n)}$, \ one thread").to_corner(UR, buff=0.2)
         slow = tf[n] / tb[n]
+        if not hw16:
+            cpu_says = (f"This computer's processor has no bfloat16 units, and PyTorch's bfloat16 product runs "
+                        f"{slow:.1f} times slower than its FP32.")
+        elif slow > 1.1:
+            cpu_says = (f"This computer's processor has bfloat16 instructions, yet PyTorch's bfloat16 product still "
+                        f"ran {slow:.1f} times slower than its FP32 here.")
+        else:
+            cpu_says = (f"This computer's processor has bfloat16 instructions, and PyTorch's bfloat16 product runs "
+                        f"{1 / slow:.1f} times as fast as its FP32.")
         with self.voiceover(
             "Why go small at all? Because the multiplier's size grows roughly with the square of the mantissa's "
             "width, and every bit not moved is bandwidth saved. <bookmark mark='a'/> Halve the bits and the tensor "
             f"cores do twice the work: an H100 does {H['tensor'] / 1e12:.0f} trillion operations a second in "
             f"bfloat16 and {H['fp8'] / 1e12:,.0f} in FP8; a Blackwell GPU doubles again in four bits. "
-            "<bookmark mark='b'/> But only on hardware built for it. This computer's processor has no bfloat16 "
-            f"units, and PyTorch's bfloat16 product runs {slow:.1f} times slower than its FP32. "
+            "<bookmark mark='b'/> But only on hardware built for it. " + cpu_says + " "
             "<bookmark mark='c'/> The history: Kahan's IEEE standard in 1985; bfloat16 from Google Brain for the "
             "TPU; eight-bit floats proposed by NVIDIA, Arm and Intel in 2022; microscaling in 2023. Part 18 trains "
             "in eight bits; Part 19 serves in four."

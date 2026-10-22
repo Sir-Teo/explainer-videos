@@ -54,7 +54,7 @@ class SIMT(VoiceoverScene):
                                       stroke_color=GREY_C, stroke_width=1.2), num_dashes=40)
         simt = definition_card(r"SIMT", r"single instruction, multiple threads: \ the $32$ threads of a warp run "
                                r"the same instruction together, \ each on its own data", width=5.6, font_size=21,
-                               color=WARPC).move_to([3.95, 2.45, 0])
+                               color=WARPC).move_to([3.95, 1.25, 0])
         with self.voiceover(
             "Here is a CUDA program. <bookmark mark='a'/> The function, a kernel, says what one thread does: work "
             "out which element is mine from my block number and my thread number, and update that element. "
@@ -148,6 +148,10 @@ class SIMT(VoiceoverScene):
         hw = label(rf"an H100 SM: \ $4$ schedulers, \ up to ${CC90['warps']}$ warps", font_size=22, color=GPUC)
         hw.next_to(ll, DOWN, buff=0.4)
         tag = note(rf"simulated: \ a load takes ${lat}$ cycles \ (H800, Luo et al.\ 2024)").to_corner(DR, buff=0.2)
+        intro = VGroup(label(r"one scheduler: \ one instruction a cycle", font_size=22, color=WARPC),
+                       label(r"each warp: \ some work, \ then a load", font_size=22, color=GREY_A),
+                       label(rf"each load: \ ${lat}$ cycles away", font_size=22, color=BYTEC))
+        intro.arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.4, -0.2, 0])
         with self.voiceover(
             "Now the reason for all those threads. A load from memory takes hundreds of cycles; while a warp waits, "
             "the scheduler issues instructions from another warp that's ready. <bookmark mark='a'/> We simulated "
@@ -159,14 +163,16 @@ class SIMT(VoiceoverScene):
             "for sixty-four warps. Past that, the only way to hide latency is more arithmetic per byte, an idea "
             "that comes back in chapter five."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[FadeIn(i_) for i_ in intro], lag_ratio=0.4))
             vo.wait_until("a")
-            self.play(FadeIn(lg[0]), LaggedStart(*[FadeIn(d) for d in sim[0]], lag_ratio=0.1), run_time=1.5)
+            self.play(Indicate(intro[2], color=BYTEC))
             vo.wait_until("b")
-            self.play(FadeIn(lg[1]), LaggedStart(*[FadeIn(d) for d in sim[1]], lag_ratio=0.1), run_time=1.5)
+            self.play(FadeIn(lg[0]), LaggedStart(*[FadeIn(d) for d in sim[0]], lag_ratio=0.1), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(lg[2]), LaggedStart(*[FadeIn(d) for d in sim[2]], lag_ratio=0.1), run_time=1.5)
+            self.play(FadeIn(lg[1]), LaggedStart(*[FadeIn(d) for d in sim[1]], lag_ratio=0.1), run_time=1.2)
+            self.play(FadeIn(lg[2]), LaggedStart(*[FadeIn(d) for d in sim[2]], lag_ratio=0.1), run_time=1.2)
             vo.wait_until("d")
+            self.play(FadeOut(intro))
             self.play(*[Create(t_) for t_ in th], Write(law), FadeIn(ll), run_time=1.5)
             self.play(FadeIn(hw))
         self.wait(0.3)

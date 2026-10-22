@@ -38,8 +38,8 @@ class Trends(VoiceoverScene):
             y = ybase + H * (e - lo) / (hi - lo)
             ticks.add(Line([-6.6, y, 0], [-6.4, y, 0], color=GREY_C, stroke_width=2),
                       MathTex(rf"10^{{{e}}}", font_size=22, color=GREY_B).next_to([-6.6, y, 0], LEFT, buff=0.08))
-        al = label(r"training operations \ (log scale)", font_size=20, color=GREY_A).rotate(PI / 2).next_to(ticks, LEFT,
-                                                                                                        buff=0.1)
+        al = label(r"training operations \ (log scale)", font_size=20, color=GREY_A)
+        al.move_to([-6.75, ybase + H + 0.3, 0], aligned_edge=LEFT)
         bars = VGroup()
         for x, t in zip(xs, tw):
             h = H * (math.log10(t["flop"]) - lo) / (hi - lo)
@@ -60,7 +60,7 @@ class Trends(VoiceoverScene):
                             label(r"reported by the paper", font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.12),
                      VGroup(Square(0.22, stroke_color=C_COL, fill_color=C_COL, fill_opacity=0.15),
                             label(r"Epoch AI's estimate", font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.12))
-        key.arrange(RIGHT, buff=0.6).move_to([-2.2, 3.6, 0])
+        key.arrange(RIGHT, buff=0.6).move_to([-0.5, 3.6, 0])
         ratio = E["tower_ratio"]
         yrs = E["tower_span_years"]
         with self.voiceover(
@@ -201,7 +201,7 @@ class Trends(VoiceoverScene):
         ol.align_to(opt, LEFT).shift(RIGHT * 0.15)
         dots, names = VGroup(), VGroup()
         side = {"GPT-3": UP, "Gopher": DOWN, "Chinchilla": DOWN, "PaLM": UR, "LLaMA-7B": UL, "LLaMA-65B": DR,
-                "Llama 2 70B": UR, "Llama 3.1 405B": UP, "DeepSeek-V3": UL, "Qwen3-0.6B": RIGHT, "Kimi K2": DR,
+                "Llama 2 70B": UR, "Llama 3.1 405B": RIGHT, "DeepSeek-V3": UL, "Qwen3-0.6B": RIGHT, "Kimi K2": DR,
                 "GLM-5": UP}
         for r in tpp:
             col = PRIOR if r["year"] < 2022.5 else OPEN
