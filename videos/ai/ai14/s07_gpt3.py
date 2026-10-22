@@ -214,7 +214,7 @@ class GPT3(VoiceoverScene):
         lam, tq = G["lambada"], G["triviaqa"]
 
         def panel(title, vals, sota=None, center=ORIGIN):
-            names = [r"zero", r"one", r"few"]
+            names = [r"zero-shot", r"one-shot", r"few-shot"]
             cols = [GREY_B, interpolate_color(ManimColor(GREY_B), ManimColor(CONTEXT), 0.5), CONTEXT]
             bars = VGroup()
             for k, (nm, v, c) in enumerate(zip(names, vals, cols)):

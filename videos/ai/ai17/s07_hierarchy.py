@@ -220,13 +220,19 @@ class Hierarchy(VoiceoverScene, MovingCameraScene):
             tail = f"The last level holds up to about its {L3k / 1024:.0f} megabytes."
         else:
             tail = "The last level is shared by every core on the chip."
+        if h.get("native", True):
+            chase = ("On the right, the same core follows a chain of pointers in random order, so every read waits "
+                     "for the one before.")
+        else:
+            chase = ("On the right, the same core follows a chain of pointers in random order, from Python: this "
+                     "computer has no C compiler, so every read also pays the interpreter's overhead.")
         with self.voiceover(
             "We can see the same hierarchy on this computer's own processor, by timing it. <bookmark mark='a'/> On "
             "the left, one core reads an array over and over and adds it up; the array grows from four kilobytes to "
             f"256 megabytes. While it fits in the first-level cache, about {b1 / 1e9:.0f} gigabytes a second. "
             f"Past that, from the second level, about {b2 / 1e9:.0f}. From main memory, about {bd / 1e9:.0f}. "
-            "<bookmark mark='b'/> On the right, the same core follows a chain of pointers in random order, so "
-            f"every read waits for the one before. In the first-level cache, a read takes about {t1 * 1e9:.1f} "
+            "<bookmark mark='b'/> " + chase + " "
+            f"In the first-level cache, a read takes about {t1 * 1e9:.1f} "
             f"nanoseconds; in the second, about {t2 * 1e9:.0f}; in main memory, about {td * 1e9:.0f}. "
             "<bookmark mark='c'/> The dashed lines are the cache sizes the processor reports. " + tail
         ) as vo:
