@@ -98,7 +98,7 @@ class Roofline(VoiceoverScene):
         slope_l.move_to(ax.c2p(-1.2, math.log10(B / 1e9 * 10 ** -1.2) + 0.55)).rotate(math.atan2(
             ax.c2p(1, 1)[1] - ax.c2p(0, 0)[1], ax.c2p(1, 1)[0] - ax.c2p(0, 0)[0]))
         roof_l = label(rf"arithmetic: \ ${gflops(P)}$ GFLOP/s", font_size=22, color=FLOPC)
-        roof_l.next_to(ax.c2p(2.3, math.log10(P / 1e9)), UP, buff=0.12)
+        roof_l.next_to(ax.c2p(1.7, math.log10(P / 1e9)), UP, buff=0.3)
 
         def dot(I, perf, col, r=0.07):
             return Dot(ax.c2p(math.log10(I), math.log10(perf / 1e9)), radius=r, color=col)

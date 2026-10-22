@@ -180,16 +180,16 @@ class Eliza(VoiceoverScene):
         src = note(r"his account, \ \textit{Computer Power and Human Reason} (1976), \ paraphrased").next_to(quote, DOWN,
                                                                                                         buff=0.15)
         eff = definition_card(r"the ELIZA effect", r"reading understanding, \ even care, \ into a program's output "
-                              r"because it uses our words", width=6.0, font_size=22, color=FCOL).move_to([-3.4, -1.0, 0])
+                              r"because it uses our words", width=6.0, font_size=22, color=FCOL).move_to([-3.5, -1.5, 0])
         book = history_card(1976, r"Joseph Weizenbaum, \textit{Computer Power and Human Reason}",
-                            r"the program's author, \ alarmed at how readily people confided in it", width=7.4,
-                            color=HIST, font_size=21).move_to([0, 1.0, 0])
+                            r"the program's author, \ alarmed at how readily people confided in it", width=6.0,
+                            color=HIST, font_size=21).move_to([-3.5, 0.45, 0])
         then = VGroup(
             history_card(2021, r"the original code found", r"in Weizenbaum's papers at MIT; \ run again on an "
                          r"emulated IBM 7094 in 2024", width=5.6, color=HIST, font_size=18),
             history_card(2025, r"Jones \& Bergen", r"in five-minute Turing tests, \ ELIZA judged human $23\%$ of the "
                          r"time", width=5.6, color=SYMBOL, font_size=18),
-        ).arrange(DOWN, buff=0.25).move_to([3.5, -1.0, 0])
+        ).arrange(DOWN, buff=0.25).move_to([3.5, -0.55, 0])
         with self.voiceover(
             "What disturbed Weizenbaum was how people responded. <bookmark mark='a'/> In his 1976 book, Computer Power and Human "
             "Reason, he recalled his secretary, who had watched him write the program, asking him to leave the room so she could "
