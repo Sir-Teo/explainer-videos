@@ -76,21 +76,27 @@ Everything about GPUs and other chips is from vendors' datasheets and papers, ci
 Run from the repo root:
 
 ```
-python -m videos.ai.ai17.compute machine trends systolic warps formats   # seconds
-nice -n 15 python -m videos.ai.ai17.compute hierarchy blocking matmul collectives   # about 5 minutes, one core
-python -m videos.ai.ai17.compute matmul_mt          # every core: run it when the machine is otherwise idle
+python tools/make.py ai17                           # everything: the computations, then English and Chinese
+python -m videos.ai.ai17.compute                    # all the computations, resuming (each item cached when done)
+python -m videos.ai.ai17.compute matmul_mt --force  # every core at once: short, best when the machine is idle
 python tools/build.py ai17                          # English
 python tools/build.py ai17 --lang zh                # Chinese
 ```
 
-`compute.py` measures the computer it runs on, so the numbers in the video are that computer's (each item records
-the load average it saw; a busy machine measures slower, and its multi-thread numbers can collapse). `kernels.c` is
-compiled at compute time by `native.py` with the system's `cc` (gcc on Linux, Apple clang on macOS); without a
-compiler the blocking and hierarchy items fall back to numpy and say so. `comm.py` runs the message-passing
-measurements; `specs.py` holds every published number, with its source. The formats item rounds the series' own
-model (`explainer/ai/novels.py`) if it has been trained, else the narrator's Qwen3-TTS weights if they are in the
-Hugging Face cache, else Gaussian samples only. `data/` holds K. Rupp's microprocessor trend data (CC BY 4.0) and a
-column subset of Epoch AI's ML hardware database (CC BY).
+`compute.py` measures the computer it runs on, so the numbers in the video are that computer's, whatever it is: an
+Intel or AMD machine on Linux, or a Mac (the processor's name from `sysctl` on macOS, `/proc/cpuinfo` on Linux; cache
+sizes from `sysctl` or `/sys`). Each item records the load average it saw; a busy machine measures slower, and its
+multi-thread numbers can collapse, which the narration then says. Every measurement runs one thread unless it says
+otherwise (numpy's BLAS, whether OpenBLAS, MKL or Apple's Accelerate, is held to one thread). `kernels.c` is compiled
+at compute time by `native.py` with `$CC` or the system's `cc` (gcc on Linux, Apple clang on macOS, from the Xcode
+command line tools), `-O3 -march=native` (`-mcpu=native` on Apple Silicon) or plain `-O3`; without a compiler the
+blocking item runs the same three loop orders in Python with numpy doing the innermost loop, the hierarchy item uses
+numpy, and the narration says so. `comm.py` runs the message-passing measurements (four processes, started with
+`spawn`); `specs.py` holds every published number, with its source. The formats item rounds the series' own model
+(`explainer/ai/novels.py`; `make.py` trains it first) if it exists, else the narrator's Qwen3-TTS weights if they are
+in the Hugging Face cache, else Gaussian samples only, and the narration names which. Everything random is seeded.
+`data/` holds K. Rupp's microprocessor trend data (CC BY 4.0) and a column subset of Epoch AI's ML hardware database
+(CC BY).
 
 References: Hennessy & Patterson, *Computer Architecture: A Quantitative Approach*, 6th ed. (2017); Kirk, Hwu & El
 Hajj, *Programming Massively Parallel Processors*, 4th ed. (2022); Sze, Chen, Yang & Emer, *Efficient Processing of

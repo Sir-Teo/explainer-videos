@@ -197,7 +197,7 @@ class SAT(VoiceoverScene):
             self.play(FadeIn(tag), FadeIn(hcs), FadeIn(fm), FadeIn(steps), FadeIn(tree.nodes[0]))
             for k_, mk in enumerate("abc"):
                 vo.wait_until(mk)
-                self.play(steps[k_].animate.set_opacity(1.0), Indicate(steps[k_], scale_factor=1.04))
+                self.play(steps[k_].animate.set_opacity(1.0))
             vo.wait_until("d")
             for k in range(len(nodes)):
                 i = idx[k]

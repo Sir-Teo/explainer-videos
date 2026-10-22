@@ -174,7 +174,7 @@ def config_card(c: dict, width=4.6, font_size=22, rows=("layers", "d", "heads", 
     """A model's published configuration as a card: name and date, then one row per field.  The rows keep their
     order and length from model to model, so one card can Transform into the next."""
     color = color or ARCH_COLOR.get(c["arch"], WHITE)
-    names = {"layers": r"layers", "d": r"width $d$", "heads": r"heads", "ctx": r"context", "params": r"parameters",
+    names = {"layers": r"layers", "d": r"width $d$", "heads": r"attention heads", "ctx": r"context", "params": r"parameters",
              "tokens": r"training tokens", "active": r"active per token"}
 
     def val(k):

@@ -107,7 +107,7 @@ def cpu_info() -> dict:
                 kb = int(size.rstrip("K")) if size.endswith("K") else int(size.rstrip("M")) * 1024
                 out["caches"][f"L{lvl}"] = dict(kib=kb, shared=shared)
     elif sys.platform == "darwin":
-        out["model"] = _sysctl("machdep.cpu.brand_string")
+        out["model"] = _sysctl("machdep.cpu.brand_string") or _sysctl("hw.model")  # "Apple M3 Pro"; "MacBookPro18,3"
         for lvl, key in (("L1", "hw.l1dcachesize"), ("L2", "hw.l2cachesize"), ("L3", "hw.l3cachesize")):
             v = _sysctl(key)
             if v.isdigit() and int(v) > 0:
