@@ -100,7 +100,8 @@ def train_base(threads: int = 4, verbose: bool = True) -> dict:
     res = pocket.train(run, data, threads=threads, verbose=verbose, ckpt=OUT / "base.ckpt", ckpt_every=100)
     model = res.pop("_model")
     res.pop("_opts")
-    torch.save({"config": asdict(cfg), "model": model.state_dict()}, OUT / "base.pt")
+    torch.save({"config": asdict(cfg), "model": model.state_dict()}, OUT / "base.pt.tmp")
+    (OUT / "base.pt.tmp").replace(OUT / "base.pt")  # whole or absent: other jobs wait for this file
     (OUT / "base.ckpt").unlink(missing_ok=True)
     res["train_tokens"], res["valid_tokens"] = int(len(train)), int(len(valid))
     (OUT / "base.json").write_text(json.dumps(res, indent=1, default=float))
