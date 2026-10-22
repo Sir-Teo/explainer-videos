@@ -82,6 +82,24 @@ _SPACE = re.compile(r"([\u3000-\u303f\u4e00-\u9fff\uff00-\uffef]) +\}")
 _TEXT_CMD = re.compile(r"(\\text(?:bf|it|rm)?\{)((?:\\[a-z]+\s*)*)([^{}]*)\}")
 
 
+# a number as it appears on screen: 12, 0.43, -3, 27{,}540, 1,560
+_NUM = re.compile(r"(?<![A-Za-z\\])-?\d+(?:(?:\{,\}|,|\.)\d+)*")
+_BY_NUMBERS: dict | None = None
+
+
+def _by_numbers() -> dict:
+    """{English with its numbers blanked: (Chinese with the same numbers blanked, how many)}, for the entries whose
+    translation keeps every number of the English in the same order."""
+    global _BY_NUMBERS
+    if _BY_NUMBERS is None:
+        _BY_NUMBERS = {}
+        for en, zh in (_TABLE or {}).get("strings", {}).items():
+            ne = _NUM.findall(en)
+            if ne and _NUM.findall(zh) == ne:
+                _BY_NUMBERS.setdefault(_NUM.sub("\0", en), (_NUM.sub("\0", zh), len(ne)))
+    return _BY_NUMBERS
+
+
 def translate(s: str) -> str:
     """The Chinese for an on-screen string: an exact entry in "strings", else each \\text{...} phrase of a formula
     from "phrases" (so animated readouts translate whatever their numbers), then the regex "patterns"."""
@@ -92,6 +110,14 @@ def translate(s: str) -> str:
         _TABLE = _table()
     if s in _TABLE.get("strings", {}):
         return _SPACE.sub(r"\1\\ }", _TABLE["strings"][s])
+    # the same string with other numbers (a result that came out differently on this machine): any entry whose
+    # translation keeps the English numbers, in order, serves as a template
+    hit = _by_numbers().get(_NUM.sub("\0", s))
+    if hit is not None:
+        nums = _NUM.findall(s)
+        if len(nums) == hit[1]:
+            it = iter(nums)
+            return _SPACE.sub(r"\1\\ }", re.sub("\0", lambda m: next(it), hit[0]))
     phrases = _TABLE.get("phrases", {})
 
     def phrase(m):
