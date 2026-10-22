@@ -110,7 +110,8 @@ class Emergence(VoiceoverScene):
             "same number of tokens." + fifth + " <bookmark mark='b'/> First, the simplest measure of learning from "
             "context: the loss at each position of a 256-token window. Early positions have almost no context; later "
             "ones have a lot. <bookmark mark='c'/> " + falls + " From one to four tokens of context to more than a "
-            f"hundred, the smallest model gains {gains[small['name']]:.2f} nats per token; " + tail + btail
+            f"hundred, the smallest model gains {gains[small['name']]:.2f} nats per token; " + tail + " <bookmark mark='t'/>"
+            + btail
         ) as vo:
             self.play(FadeIn(lh), FadeIn(tag), FadeIn(q),
                       LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in lst], lag_ratio=0.3))
@@ -233,7 +234,7 @@ class Emergence(VoiceoverScene):
             "A sharper test, the one Part 13 used: a list of sixty random common words, then the same list again. A "
             "model that can copy from its context finds the second copy much easier than the first. "
             "<bookmark mark='a'/> Here is how often each model guesses the next word, on the first copy and on the "
-            "second. <bookmark mark='b'/> " + lead + " " + verdict + when
+            "second. <bookmark mark='b'/> " + lead + " <bookmark mark='v'/> " + verdict + " <bookmark mark='w'/>" + when
         ) as vo:
             self.play(FadeIn(ex), FadeIn(exl), Create(base), FadeIn(yl))
             vo.wait_until("a")
@@ -305,7 +306,7 @@ class Emergence(VoiceoverScene):
             "tend to favour one title whatever the sentence, so, as Tony Zhao and colleagues proposed in 2021, we "
             "first subtract the score each title gets after a sentence with no content at all. <bookmark mark='d'/> "
             "With zero, one, two, four and eight examples, for every model. <bookmark mark='b'/> " + v0 +
-            " <bookmark mark='c'/> " + v1 + v2
+            " <bookmark mark='c'/> " + v1 + " <bookmark mark='e'/>" + v2
         ) as vo:
             self.play(FadeIn(ex), FadeIn(exl))
             vo.wait_until("a")
@@ -349,7 +350,8 @@ class Emergence(VoiceoverScene):
         tw = take_away(r"GPT-3 needed billions of parameters for few-shot learning to be useful: \ "
                        r"the mechanism is Part 13's, \ the scale is Part 12's", color=CONTEXT, font_size=24)
         with self.voiceover(
-            "So what did our small models show? <bookmark mark='a'/> " + t1 + " " + t2 + " " + t3 + " <bookmark mark='b'/> "
+            "So what did our small models show? <bookmark mark='a'/> " + t1 + " <bookmark mark='f'/> " + t2 +
+            " <bookmark mark='g'/> " + t3 + " <bookmark mark='b'/> "
             "In GPT-3's own "
             "plots, few-shot learning became useful only in the billions of parameters. Part 13 showed the "
             "mechanism, heads that find and copy; Part 12, the scaling laws that make larger models worth their cost."
