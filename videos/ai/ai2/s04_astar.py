@@ -64,7 +64,7 @@ class AStar(VoiceoverScene):
         mp.move_to([0, 0.95, 0])
         sr, sc = d["start"]
         gr, gc = d["goal"]
-        prob = VGroup(mp, grid_frame(mp), Dot(cell_center(mp, (H, W), sr, sc), radius=0.08, color=WHITE),
+        prob = Group(mp, grid_frame(mp), Dot(cell_center(mp, (H, W), sr, sc), radius=0.08, color=WHITE),
                       Star(n=5, outer_radius=0.13, color=PATH, fill_opacity=1).move_to(cell_center(mp, (H, W), gr, gc)))
         prob.add(label(r"start", font_size=20, color=GREY_A).next_to(prob[2], DOWN, buff=0.1),
                  label(r"goal", font_size=20, color=PATH).next_to(prob[3], DOWN, buff=0.1),

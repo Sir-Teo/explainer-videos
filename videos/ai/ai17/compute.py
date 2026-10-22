@@ -42,9 +42,15 @@ import sys
 import time
 from pathlib import Path
 
-import numpy as np
+# This process measures one core: numpy's BLAS (OpenBLAS, MKL, or Apple's Accelerate on macOS) gets one thread
+# unless the caller says otherwise; the multi-thread measurement runs in a subprocess with its own settings.
+if __name__ == "__main__":
+    for _v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
+        os.environ.setdefault(_v, "1")
 
-from explainer.ai.cache import Cache
+import numpy as np  # noqa: E402
+
+from explainer.ai.cache import Cache  # noqa: E402
 
 CACHE = Cache("ai17")
 load = CACHE.load
@@ -367,26 +373,35 @@ def compute_blocking(n=1024, tiles=(8, 16, 32, 64, 128, 256, 512)):
             errs.append(e)
         out["blocked"] = np.asarray(rates)
         assert max(errs) < 1e-4, errs  # every loop order computes the same product
-    else:  # no compiler: Python loops over numpy tiles, an honest but different measurement
+    else:  # no C compiler: the same three loop orders in Python, numpy doing the innermost loop (and saying so)
         out["lang"] = "numpy"
-        m = 128
-        As, Bs = A[:m, :m].copy(), B[:m, :m].copy()
-        t = time.perf_counter()
-        for i in range(m):
-            for j in range(m):
-                s = 0.0
-                for k in range(m):
-                    s += As[i, k] * Bs[k, j]
-        out["naive"] = 2.0 * m ** 3 / (time.perf_counter() - t)
-        out["ikj"] = out["naive"]
-        rates = []
-        for bs in tiles:
-            t = time.perf_counter()
+        def naive():
+            for i in range(n):
+                Ai = A[i]
+                for j in range(n):
+                    C[i, j] = Ai @ B[:, j]
+
+        def ikj():
+            for i in range(n):
+                Ci = C[i]
+                for k in range(n):
+                    Ci += A[i, k] * B[k]
+
+        def blocked(bs):
             for ii in range(0, n, bs):
                 for kk in range(0, n, bs):
-                    C[ii:ii + bs] += A[ii:ii + bs, kk:kk + bs] @ B[kk:kk + bs]
-            rates.append(flops / (time.perf_counter() - t))
+                    for jj in range(0, n, bs):
+                        C[ii:ii + bs, jj:jj + bs] += A[ii:ii + bs, kk:kk + bs] @ B[kk:kk + bs, jj:jj + bs]
+
+        out["naive"], e1 = timed(naive, 1)
+        out["ikj"], e2 = timed(ikj, 1)
+        rates, errs = [], [e1, e2]
+        for bs in tiles:
+            r, e = timed(lambda: blocked(int(bs)), 1 if bs < 32 else 2)
+            rates.append(r)
+            errs.append(e)
         out["blocked"] = np.asarray(rates)
+        assert max(errs) < 1e-4, errs
     b = run_bench(1, sizes=[n], np_dtypes=["float32"], gemv=[256], torch_sizes=[64], copy_n=1 << 16, trials=5)
     out["blas"] = float(b["np_float32"][0][1])
     out["loadavg_after"] = loadavg()

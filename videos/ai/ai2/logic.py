@@ -112,8 +112,9 @@ def resolvents(c1, c2, k: int):
     a = _rename(c1, 2 * k)
     b = _rename(c2, 2 * k + 1)
     out = []
-    for l1 in a:
-        for l2 in b:
+    key = lambda l: (l[1], not l[0], str(l[2]))  # noqa: E731  a fixed order: the same run in every process
+    for l1 in sorted(a, key=key):
+        for l2 in sorted(b, key=key):
             if l1[0] != l2[0] and l1[1] == l2[1] and len(l1[2]) == len(l2[2]):
                 s = unify(list(l1[2]), list(l2[2]), {})
                 if s is None:

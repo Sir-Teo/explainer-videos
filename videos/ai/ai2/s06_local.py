@@ -240,8 +240,12 @@ class Local(VoiceoverScene):
             self.play(k.animate.set_value(n_snaps * 0.8), run_time=7.0, rate_func=linear)
             vo.wait_until("c")
             self.play(k.animate.set_value(n_snaps - 1), run_time=3.0, rate_func=linear)
-        for m in (live, dot, tnum, lnum):
-            m.clear_updaters()
+            for m in (live, dot, tnum, lnum):
+                m.clear_updaters()
+            # the run's last step: its best tour, length and temperature
+            fin = tour_mob(ax, xy, d["sa_best_tour"], color=temp_color(T1, T0, T1), width=3)
+            self.play(Transform(live, fin), ChangeDecimalToValue(lnum, best), ChangeDecimalToValue(tnum, T1),
+                      dot.animate.move_to(g.ax.c2p(len(tr) - 1, tr[-1, 1])), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
