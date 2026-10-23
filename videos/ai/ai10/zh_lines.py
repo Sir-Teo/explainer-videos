@@ -76,8 +76,16 @@ ZH = {
     'f"Suppose a network should find a short stroke in a digit.':
         "假设一个网络要在数字里找一小段笔画。一个全连接单元给每个像素都配一个权重，<bookmark mark='a'/>所以要在任何地方都找到这段笔画，网络就得为它可能出现的每个位置各学一个检测器。<bookmark mark='b'/>一个卷积单元只看一小块，五个像素乘五个像素，<bookmark mark='c'/>而且一张特征图上的每个单元都用同样的二十五个权重，在图像上滑过去。<bookmark mark='d'/>要得到六张和数字一样大的图，全连接单元需要{e['params_dense'] / 1000000.0:.1f}百万个权重；不共享的局部小块需要{e['params_local']:,}个；共享的，只要{e['params_conv']}个。共享就是全部的想法：同一个图案可以出现在任何地方，所以在每个地方都用同一种方式去找它。",
 
-    'Here is the operation.':
-        "运算是这样的。<bookmark mark='a'/>把一小格权重，也就是卷积核，盖在图像的一小块上；每个权重乘以它下面的像素，再全部加起来。这就是输出的一个数。<bookmark mark='b'/>把卷积核挪一个像素，再做一遍，一行一行地走，直到走遍每一个位置。<bookmark mark='c'/>输出是一张特征图：哪里的小块像这个卷积核，哪里就亮。这个卷积核是学出来的，它喜欢笔画的下边缘。<bookmark mark='d'/>严格地说，这是互相关；数学家的卷积要先把卷积核翻转。既然卷积核是学出来的，没人在意，深度学习把两者都叫卷积。",
+    'f"Here is the operation.':
+        "运算是这样的。<bookmark mark='a'/>把一小格权重，也就是卷积核，盖在图像的一小块上；每个权重乘以它下面的像素，再全部加起来。这就是输出的一个数。<bookmark mark='b'/>把卷积核挪一个像素，再做一遍，一行一行地走，直到走遍每一个位置。<bookmark mark='c'/>输出是一张特征图：哪里的小块像这个卷积核，哪里就亮。{likes}<bookmark mark='d'/>严格地说，这是互相关；数学家的卷积要先把卷积核翻转。既然卷积核是学出来的，没人在意，深度学习把两者都叫卷积。",
+
+    'This kernel was learned, and it likes the bottom edges': '这个卷积核是学出来的，它喜欢笔画的下边缘。',
+    'This kernel was learned, and it likes the top edges': '这个卷积核是学出来的，它喜欢笔画的上边缘。',
+    'This kernel was learned, and it likes the right-hand edges': '这个卷积核是学出来的，它喜欢笔画的右边缘。',
+    'This kernel was learned, and it likes the left-hand edges': '这个卷积核是学出来的，它喜欢笔画的左边缘。',
+    'This kernel was learned, and it likes the edges of strokes at a slant': '这个卷积核是学出来的，它喜欢斜着的笔画边缘。',
+    'This kernel was learned, and it likes strokes and their edges': '这个卷积核是学出来的，它喜欢某一个特定角度的笔画和笔画边缘。',
+    'This kernel was learned, and what it likes': '这个卷积核是学出来的，它喜欢的东西不只是一条边缘那么简单。',
 
     'Sharing the weights buys a precise property':
         "共享权重换来一个精确的性质：平移图像，特征图也跟着平移。<bookmark mark='a'/>用T s表示平移s。平移后图像在位置i的卷积，是权重乘以平移后图像之和。<bookmark mark='b'/>平移后的图像在i加u处，就是原图在i加u减s处。<bookmark mark='c'/>这个和，正是原图在i减s处的卷积。<bookmark mark='d'/>也就是平移后的特征图，对任何卷积核都成立，不管是不是学出来的。<bookmark mark='e'/>在二维里论证一样；图像首尾相接时它严格成立，用零填充时在边界以外成立。",
@@ -143,7 +151,7 @@ ZH = {
         "比1998年LeNet-5的{LENET5_1998}%好一点：今天的ReLU和Adam，还有一万倍的算力，帮了忙。",
 
     'f"a little worse than LeNet-5\'s':
-        "比LeNet-5的{LENET5_1998}%差一点；我们只训练了几分钟。",
+        "比LeNet-5的{LENET5_1998}%差一点；我们只把数字过了{L['epochs']}遍。",
 
     "f'about where LeNet-5 was in 1998":
         "和1998年的LeNet-5差不多，{LENET5_1998}%。",
@@ -588,7 +596,22 @@ ZH = {
 
     # ------------------------------------------------------------------ Outro
     'f"Let\'s take stock.':
-        "盘点一下。{hand}卷积在整张图上共享一个小小的卷积核，所以它和平移可交换。端到端训练的LeNet长出了自己的笔画检测器，我们的照片网络长出了边缘检测器和颜色细胞，就像视觉皮层里的那些。然而一个看不见的、精心挑选的改动就能骗过它们，因为它们接近线性。在时间上，普通循环网络的梯度随着雅可比矩阵相乘而衰减，或者爆炸。{lstm}而注意力让解码器回头看它恰好需要的东西。",
+        "盘点一下。{hand}卷积在整张图上共享一个小小的卷积核，所以它和平移可交换。端到端训练的LeNet长出了自己的笔画检测器，{photo}<bookmark mark='a'/>{fool}因为它们接近线性。在时间上，普通循环网络的梯度随着雅可比矩阵相乘而衰减，或者爆炸。{lstm}而注意力让解码器回头看它恰好需要的东西。",
+
+    'our photograph network grew edge detectors and colour cells':
+        "我们的照片网络长出了边缘检测器和颜色细胞，就像视觉皮层里的那些。",
+
+    'our photograph network grew edge detectors like':
+        "我们的照片网络长出了边缘检测器，就像视觉皮层里的那些。",
+
+    'our photograph network grew filters of its own.':
+        "我们的照片网络长出了它自己的滤波器。",
+
+    'Yet an invisible, well-chosen change fools them,':
+        "然而一个看不见的、精心挑选的改动就能骗过它们，",
+
+    'Yet a small, well-chosen change often fools them,':
+        "然而一个很小的、精心挑选的改动常常就能骗过它们，",
 
     'Vision began with features designed by hand, and they beat raw pixels.':
         "视觉从手工设计的特征开始，它们胜过了原始像素。",

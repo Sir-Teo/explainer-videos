@@ -32,6 +32,11 @@ class Contamination(VoiceoverScene):
                                 fill_color=LEAK, fill_opacity=0.15).move_to([2.6, 0.4, 0])
         tl = label(r"a test set", font_size=24, color=LEAK).next_to(test, UP, buff=0.12)
         sch = note(r"schematic").next_to(big, DOWN, buff=0.12).align_to(big, LEFT)
+        g_ = np.random.default_rng(2)
+        docs = VGroup(*[Line(LEFT * 0.5, RIGHT * 0.5, color=GREY_C, stroke_width=3).set_length(float(g_.uniform(0.5, 1.6)))
+                        .move_to(big.get_corner(UL) + RIGHT * (0.45 + 1.95 * (k % 3)) + RIGHT * 0.8 + DOWN * (0.4 + 0.32 * (k // 3)))
+                        for k in range(27)])
+        big = VGroup(big, docs)
         inside = test.copy().move_to(big.get_center() + RIGHT * 1.6 + DOWN * 0.6).scale(0.8)
         cards = VGroup(
             history_card(2020, r"GPT-3 \ (Brown et al.)", r"test items sharing any $13$-word sequence with the "
@@ -83,7 +88,7 @@ class Contamination(VoiceoverScene):
         vals_l = VGroup(*[MathTex(f"{v:.2f}", font_size=20, color=LEAK).next_to(b, UP, buff=0.06) for v, b in
                           zip(leaked, bars_l)])
         lg = legend([(CLEAN, r"trained on the thirty novels"), (LEAK, r"the passage added to its training text")],
-                    font_size=20).next_to(g, RIGHT, buff=0.25).shift(UP * 1.2)
+                    font_size=20).next_to(g.ax, UP, buff=0.2).align_to(g.ax, RIGHT)
         tag = tagline(r"computed")
         i4 = orders.index(4)
         best_clean = int(np.argmin(clean))
@@ -143,6 +148,8 @@ class Contamination(VoiceoverScene):
         clg = legend([(WHITE, r"the whole passage"), (LEAK, r"leaked paragraphs"), (CLEAN, r"the rest")], font_size=18)
         clg.next_to(c, DOWN, buff=0.2)
         tag = tagline(rf"computed: \ the ${orders[-1]}$-character model")
+        ovl = DashedLine(g.ax.c2p(overall, 0), g.ax.c2p(overall, 0) + UP * 1.75, color=WHITE, dash_length=0.06)
+        ovt = label(rf"the whole passage: \ ${overall:.2f}$", font_size=20).next_to(ovl, UP, buff=0.08)
         with self.voiceover(
             f"Real contamination is partial. Leak a random half of the paragraphs into the {orders[-1]}-character "
             f"model's training text. <bookmark mark='a'/> The whole passage now scores {overall:.2f}, somewhere between "
@@ -151,11 +158,11 @@ class Contamination(VoiceoverScene):
             "score is a mixture of two populations, and per-item losses expose it. <bookmark mark='c'/> As more of the "
             "passage leaks, the average slides down, while the unseen paragraphs never change."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
-            vo.wait_until("a")
+            self.play(FadeIn(g), FadeIn(tag), FadeIn(lg))
             self.play(LaggedStart(*[FadeIn(dt, scale=0.4) for dt in dots], lag_ratio=0.01), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Create(ovl), FadeIn(ovt))
             vo.wait_until("b")
-            self.play(FadeIn(lg))
             self.play(*[Indicate(dt, scale_factor=1.6, color=LEAK) for dt, m in zip(dots, mask) if m], run_time=1.2)
             vo.wait_until("c")
             self.play(FadeIn(c), Create(line_all), Create(line_seen), Create(line_un), FadeIn(clg), run_time=2.0)
@@ -185,9 +192,10 @@ class Contamination(VoiceoverScene):
                       .move_to([c * (size + 0.04), -r * (size + 0.04), 0]))
             return g
 
-        g1, g2 = grid(oc), grid(oh)
+        g1, g2, g0 = grid(oc), grid(oh), grid(oc)
         g1.move_to([-3.5, -0.3, 0])
         g2.move_to([3.5, -0.3, 0])
+        g0.move_to(g2)
         t1 = label(r"clean training text", font_size=26, color=CLEAN).next_to(g1, UP, buff=0.25)
         t2 = label(r"half the passage leaked", font_size=26, color=LEAK).next_to(g2, UP, buff=0.25)
         key = label(r"each square: \ one paragraph; \ red: \ the share of its $13$-word runs found in training; \ "
@@ -208,11 +216,12 @@ class Contamination(VoiceoverScene):
             "light up completely: every leaked paragraph long enough to check. <bookmark mark='c'/> Overlap tests "
             "catch copies. They miss paraphrases, translations, and the same solution written in other words."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(g1, lag_ratio=0.01), FadeIn(t1), FadeIn(g0, lag_ratio=0.01), FadeIn(t2),
+                      FadeIn(key), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(g1, lag_ratio=0.01), FadeIn(t1), FadeIn(key), run_time=1.5)
+            self.play(Indicate(t1, color=CLEAN))
             vo.wait_until("b")
-            self.play(FadeIn(g2, lag_ratio=0.01), FadeIn(t2), run_time=1.5)
+            self.play(ReplacementTransform(g0, g2, lag_ratio=0.01), run_time=1.5)
             vo.wait_until("c")
             miss = label(r"catches copies; \ misses paraphrases and translations", font_size=24, color=C.KL)
             miss.next_to(key, UP, buff=0.2)
@@ -269,10 +278,9 @@ class Contamination(VoiceoverScene):
             f"{r1}. <bookmark mark='b'/> " + unseen_said + " BIG-bench includes a task that checks a model for "
             "exactly this."
         ) as vo:
-            self.play(FadeIn(top), FadeIn(tl), FadeIn(tag))
+            self.play(FadeIn(top), FadeIn(tl), FadeIn(tag), FadeIn(g), FadeIn(labs), FadeIn(lg))
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(labs), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1),
-                      FadeIn(lg), run_time=2.0)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(ranks))
         self.wait(0.4)
@@ -306,8 +314,10 @@ class Contamination(VoiceoverScene):
             "Hammett's novel entered the public domain, and Project Gutenberg, on the first of January 2026, after "
             "the pretrained models of Part 1 were trained; and the models we built ourselves never read it."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
-            for k, m in enumerate("abcd"):
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(cards[0], shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(Indicate(cards[0], color=CLEAN, scale_factor=1.03))
+            for k, m in enumerate("bcd", start=1):
                 vo.wait_until(m)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
         self.wait(0.4)

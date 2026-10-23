@@ -23,6 +23,18 @@ def heat_rgb(a, vmax, upto=None):
     return out
 
 
+def _oriented_fit(Kc, deg):
+    """Best correlation of a centred 5x5 kernel with a bar or an edge through its centre at this angle."""
+    yy, xx = np.mgrid[0:5, 0:5] - 2.0
+    t = np.deg2rad(deg)
+    d = xx * np.sin(t) + yy * np.cos(t)
+    best = 0.0
+    for T in (np.exp(-d ** 2 / 1.28), np.tanh(d / 0.8)):
+        T = T - T.mean()
+        best = max(best, abs(float((T * Kc).sum() / np.sqrt((T ** 2).sum() * (Kc ** 2).sum() + 1e-12))))
+    return best
+
+
 class Convolution(VoiceoverScene):
     def construct(self):
         self.card()
@@ -129,12 +141,33 @@ class Convolution(VoiceoverScene):
         dl = label(r"the input", font_size=20, color=GREY_B).next_to(digit, DOWN, buff=0.15)
         note_ = note(r"kernel: \ LeNet's first layer, \ trained here (Chapter 4); \ padded by $2$ at the border")
         note_.to_corner(DR, buff=0.2)
+        # what the learned kernel likes: fit it with a linear ramp (an edge detector is close to one)
+        yy, xx = np.mgrid[0:5, 0:5] - 2.0
+        Kc = K - K.mean()
+        cy, cx = float((Kc * yy).sum()), float((Kc * xx).sum())
+        ramp = (cy ** 2 / 50 + cx ** 2 / 50) / max(float((Kc ** 2).sum()), 1e-12)
+        if ramp > 0.4 and abs(cy) > 2 * abs(cx):
+            if cy < 0:
+                likes = "This kernel was learned, and it likes the bottom edges of strokes."
+            else:
+                likes = "This kernel was learned, and it likes the top edges of strokes."
+        elif ramp > 0.4 and abs(cx) > 2 * abs(cy):
+            if cx < 0:
+                likes = "This kernel was learned, and it likes the right-hand edges of strokes."
+            else:
+                likes = "This kernel was learned, and it likes the left-hand edges of strokes."
+        elif ramp > 0.4:
+            likes = "This kernel was learned, and it likes the edges of strokes at a slant."
+        elif max(_oriented_fit(Kc, th) for th in range(0, 180, 5)) > 0.45:
+            likes = "This kernel was learned, and it likes strokes and their edges at one particular angle."
+        else:
+            likes = "This kernel was learned, and what it likes is not as simple as one edge."
         with self.voiceover(
             "Here is the operation. <bookmark mark='a'/> Lay a small grid of weights, the kernel, over a patch of "
             "the image; multiply each weight by the pixel under it and add them up. That is one number of the "
             "output. <bookmark mark='b'/> Slide the kernel one pixel along and do it again, row by row, until it "
             "has visited every position. <bookmark mark='c'/> The output is a feature map: bright wherever the "
-            "patch looks like the kernel. This kernel was learned, and it likes the bottom edges of strokes. "
+            f"patch looks like the kernel. {likes} "
             "<bookmark mark='d'/> Strictly, this is a cross-correlation; a mathematician's convolution flips the "
             "kernel first. Since the kernel is learned, nobody minds, and deep learning calls both convolution."
         ) as vo:

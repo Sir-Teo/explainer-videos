@@ -17,6 +17,11 @@ def ymd(ordinal: float) -> str:
     return f"{d.year}年{d.month}月" if lang.LANG == "zh" else d.strftime("%B %Y")
 
 
+def ymd_full(iso: str) -> str:
+    """A release date on screen: April 2026, or 2026年4月 in the Chinese edition."""
+    return ymd(date.fromisoformat(iso).toordinal())
+
+
 def month_year(ordinal: float) -> tuple[str, int]:
     d = date.fromordinal(int(ordinal))
     return d.strftime("%B"), d.year
@@ -48,7 +53,7 @@ class Forecast(VoiceoverScene):
         line = curve(g.ax, C_, L_, EST, 4)
         floor = DashedLine(g.ax.c2p(18, 1.69), g.ax.c2p(27, 1.69), color=GREY_B, dash_length=0.08)
         fl = label(r"$E = 1.69$: \ the text's own entropy, \ by the fit", font_size=18, color=GREY_B)
-        fl.next_to(floor, UP, buff=0.06).align_to(floor, RIGHT)
+        fl.next_to(floor, UP, buff=0.06).align_to(floor, LEFT).shift(RIGHT * 0.15)
         law = cmath(r"L(N, D)", r"=", r"E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}", font_size=36)
         law.next_to(g, UP, buff=0.3)
         lnote = note(r"Hoffmann et al.\ (2022): \ $A = 406.4$, \ $B = 410.7$, \ $\alpha = 0.34$, \ $\beta = 0.28$; \ "
@@ -135,7 +140,7 @@ class Forecast(VoiceoverScene):
         """Time horizon (minutes, log scale) against release date, 2019 to 2027."""
         g = axes([-4.0, x1], [-5, 12], x_length=10.2, y_length=5.2, xlabel=r"release date",
                  ylabel=r"$50\%$ time horizon \ (log scale)", xticks=[-4, -2, 0, 2, 4][: 4 + (x1 >= 4)],
-                 yticks=[-np.log2(60) + 0, 0, np.log2(60), np.log2(60 * 8), np.log2(60 * 40)],
+                 yticks=[0, np.log2(60), np.log2(60 * 8), np.log2(60 * 40)],
                  xfmt=lambda v: rf"{int(v + YEAR0)}",
                  yfmt=lambda v: {round(-np.log2(60), 3): r"\text{1 s}", 0.0: r"\text{1 min}",
                                  round(np.log2(60), 3): r"\text{1 h}", round(np.log2(480), 3): r"\text{8 h}",
@@ -277,8 +282,31 @@ class Forecast(VoiceoverScene):
                          width=4.2, color=EST, font_size=19),
             history_card(2026, r"jagged abilities", r"the International AI Safety Report: \ gold-medal olympiad "
                          r"answers, \ yet failures at some simple tasks", width=4.2, color=FUTURE, font_size=19),
-        ).arrange(RIGHT, buff=0.25).move_to(DOWN * 1.0)
+        ).arrange(RIGHT, buff=0.25).to_edge(DOWN, buff=0.55)
         tag = note(r"extrapolation, \ computed from the refit above", font_size=18).to_corner(DL, buff=0.2)
+        # a ruler of task lengths, log scale: where the frontier is, where METR's tasks stop, where the trend points
+        lo_h, hi_h = 1 / 60, 400.0
+        X = lambda h: -6.0 + 12.0 * (np.log10(h) - np.log10(lo_h)) / (np.log10(hi_h) - np.log10(lo_h))  # noqa: E731
+        yr = 0.35
+        ruler = VGroup(Line([X(lo_h), yr, 0], [X(hi_h), yr, 0], color=GREY_B, stroke_width=3))
+        for h, t in ((1 / 60, r"1 min"), (1, r"1 hour"), (8, r"8 hours: \\ a working day"), (40, r"40 hours: \\ a week"),
+                     (167, r"167 hours: \\ a month")):
+            ruler.add(Line([X(h), yr - 0.12, 0], [X(h), yr + 0.12, 0], color=GREY_B, stroke_width=3))
+            ruler.add(label(t, font_size=18, color=GREY_A).next_to([X(h), yr + 0.12, 0], UP, buff=0.1))
+        lim = DashedLine([X(16), yr - 0.5, 0], [X(16), yr + 0.5, 0], color=C.PENALTY, dash_length=0.06)
+        liml = label(r"$16$ h: \ METR's tasks \\ stop measuring", font_size=17, color=C.PENALTY)
+        liml.next_to(lim, DOWN, buff=0.08)
+        front = max((r_ for r_ in d["rows"] if r_["sota"]), key=lambda r_: r_["p50"])
+        fd = Dot([X(front["p50"] / 60), yr, 0], radius=0.09, color=EST)
+        fdl = label(rf"the frontier, \\ {ymd_full(front['date'])}", font_size=17, color=EST)
+        fdl.next_to(liml, LEFT, buff=0.45).align_to(liml, UP)
+        fdl = VGroup(fdl, Line(fd.get_center() + DOWN * 0.09, fdl.get_corner(UR) + RIGHT * 0.08, color=EST,
+                                stroke_width=1.5))
+        wdot = Dot([X(40), yr, 0], radius=0.07, color=FUTURE)
+        mdot = Dot([X(167), yr, 0], radius=0.07, color=FUTURE)
+        wl = label(ymd(wk[1]), font_size=18, color=FUTURE).next_to(wdot, DOWN, buff=0.15)
+        ml = label(ymd(mo[1]), font_size=18, color=FUTURE).next_to(mdot, DOWN, buff=0.15)
+        rul = VGroup(ruler, lim, liml, fd, fdl, wdot, mdot, wl, ml)
         wm, wy = month_year(wk[1])
         mm, my = month_year(mo[1])
         with self.voiceover(
@@ -292,7 +320,10 @@ class Forecast(VoiceoverScene):
             "level and still fail at some simple tasks. Forecasts are worth making, and worth checking, as we just "
             "did."
         ) as vo:
-            self.play(FadeIn(ext), FadeIn(tag))
+            self.play(FadeIn(ext), FadeIn(tag), FadeIn(ruler), FadeIn(fd), FadeIn(fdl))
+            self.play(FadeIn(wdot), FadeIn(wl), FadeIn(mdot), FadeIn(ml))
+            vo.wait_until("a")
+            self.play(Create(lim), FadeIn(liml))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))

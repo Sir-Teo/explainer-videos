@@ -231,7 +231,8 @@ class LeNet(VoiceoverScene):
             cmp = (f"a little better than LeNet-5's {LENET5_1998} percent in 1998: today's ReLU and Adam, and "
                    "ten thousand times the computing, help.")
         elif lo > LENET5_1998 / 100:
-            cmp = f"a little worse than LeNet-5's {LENET5_1998} percent; we trained for only a few minutes."
+            cmp = (f"a little worse than LeNet-5's {LENET5_1998} percent; we trained for only {L['epochs']} passes "
+                   "over the digits.")
         else:
             cmp = f"about where LeNet-5 was in 1998, at {LENET5_1998} percent."
         with self.voiceover(

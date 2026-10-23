@@ -96,14 +96,16 @@ class Before(VoiceoverScene):
         cell = digit.width / 28
         arrows = VGroup()
         mag = np.hypot(gx, gy)
+        top = float(mag.max())
         for i in range(1, 27, 2):
             for j in range(1, 27, 2):
-                if mag[i, j] < 0.25:
+                if mag[i, j] < 0.3 * top:
                     continue
                 c = digit.get_corner(UL) + np.array([(j + 0.5) * cell, -(i + 0.5) * cell, 0])
-                v = np.array([gx[i, j], -gy[i, j], 0]) * cell * 1.1
-                arrows.add(Arrow(c, c + v, buff=0, stroke_width=2, color=HAND, max_tip_length_to_length_ratio=0.35,
-                                 tip_length=0.08))
+                v = np.array([gx[i, j], -gy[i, j], 0]) / top * cell * 2.4
+                arrows.add(Arrow(c - v / 2, c + v / 2, buff=0, stroke_width=3.5, color=HAND,
+                                 max_tip_length_to_length_ratio=0.4, max_stroke_width_to_length_ratio=12,
+                                 tip_length=0.1))
         dl = label(r"a test digit, \ and its gradient", font_size=20, color=GREY_B).next_to(digit, DOWN, buff=0.15)
         photo = img_rgb(np.asarray(h["photo"]), 2.6, smooth=False).move_to([1.6, -1.1, 0])
         sob = img_gray(np.asarray(h["photo_sobel"]), 2.6, color=HAND).move_to([4.7, -1.1, 0])
@@ -226,18 +228,19 @@ class Before(VoiceoverScene):
         h = load("hog")
         L = h["linear"]
         e = {k: L[k]["mean"] for k in L}
+        top = 100 * max(e["mnist_pixels"], e["mnist_hog"], e["cifar_pixels"], e["cifar_hog"])
         rows = hbars([100 * e["mnist_pixels"], 100 * e["mnist_hog"]],
-                     [r"raw pixels", r"HOG features"], [GREY_B, HAND], width=4.2, fmt=lambda v: rf"{v:.1f}\%",
-                     font_size=24)
+                     [r"raw pixels", r"HOG features"], [GREY_B, HAND], width=3.0, fmt=lambda v: rf"{v:.1f}\%",
+                     font_size=24, vmax=top, height=0.5)
         rows2 = hbars([100 * e["cifar_pixels"], 100 * e["cifar_hog"]],
-                      [r"raw pixels", r"HOG features"], [GREY_B, HAND], width=4.2, fmt=lambda v: rf"{v:.1f}\%",
-                      font_size=24)
-        g1 = VGroup(label(r"handwritten digits (MNIST)", font_size=26, color=WHITE), rows).arrange(DOWN, buff=0.35)
-        g2 = VGroup(label(r"photographs (CIFAR-10)", font_size=26, color=WHITE), rows2).arrange(DOWN, buff=0.35)
-        g1.move_to([-3.4, 0.6, 0])
-        g2.move_to([3.4, 0.6, 0])
+                      [r"raw pixels", r"HOG features"], [GREY_B, HAND], width=3.0, fmt=lambda v: rf"{v:.1f}\%",
+                      font_size=24, vmax=top, height=0.5)
+        g1 = VGroup(label(r"handwritten digits (MNIST)", font_size=28, color=WHITE), rows).arrange(DOWN, buff=0.45)
+        g2 = VGroup(label(r"photographs (CIFAR-10)", font_size=28, color=WHITE), rows2).arrange(DOWN, buff=0.45)
+        g1.move_to([-3.5, 0.5, 0])
+        g2.move_to([3.5, 0.5, 0])
         for g in (g1, g2):
-            g[1].align_to(g[0], LEFT)
+            keep_in_frame(g)
         head = label(r"the same linear classifier: \ test error", font_size=30).to_edge(UP, buff=0.45)
         tag = note(r"computed: \ logistic regression, \ three seeds each, \ mean").to_corner(DR, buff=0.25)
         gain = e["mnist_pixels"] / e["mnist_hog"]
