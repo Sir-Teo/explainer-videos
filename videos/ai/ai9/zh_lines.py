@@ -393,8 +393,11 @@ ZH = {
     "f\"By the end it reaches {nn:.2f} bits per character, past":
         "到最后，它达到每字符{nn:.2f}比特，超过了Kneser–Ney的{kn:.2f}。",
 
-    "f\"By the end it reaches {nn:.2f} bits per character: far better":
-        "到最后，它达到每字符{nn:.2f}比特：比第1部分的计数模型好得多，但还不及Kneser–Ney的{kn:.2f}。只用这么点算力，最好的计数方法仍是个难缠的对手。",
+    "f\"By the end it reaches {nn:.2f} bits per character: better than Part 1's best counting model":
+        "到最后，它达到每字符{nn:.2f}比特：比第1部分最好的计数模型，{p1:.2f}，要好，但还不及Kneser–Ney的{kn:.2f}。只用这么点算力，最好的计数方法仍是个难缠的对手。",
+
+    "f\"By the end it reaches {nn:.2f} bits per character: within {nn - p1:.2f}":
+        "到最后，它达到每字符{nn:.2f}比特：和第1部分最好的计数模型，{p1:.2f}，只差{nn - p1:.2f}，离Kneser–Ney的{kn:.2f}还有距离。只用这么点算力，最好的计数方法仍是个难缠的对手。",
 
     '"Bengio\'s team found that their best results came from combining':
         "本吉奥的团队发现，他们最好的结果，来自把网络和一个计数模型结合起来：对两者的预测取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>{said}",
@@ -414,11 +417,11 @@ ZH = {
     "f'{behind:.2f} bits behind the best row above them'":
         '比它们上面最好的那一行还差{behind:.2f}比特',
 
-    'the best of everything before GPT-2':
-        '它是GPT-2之前所有模型里最好的',
+    'the best machine on the board before GPT-2':
+        '在GPT-2之前，它是记分牌上最好的机器',
 
-    'the best of everything on the board so far':
-        '它是目前记分牌上最好的',
+    'the best machine on the board so far':
+        '它是目前记分牌上最好的机器',
 
     "f\"<bookmark mark='a'/> But it's still far behind GPT-2.":
         "<bookmark mark='a'/>但它离GPT-2还差得很远。它只看得到{d['n_ctx']}个字符，而且所有的事，都得由一个隐藏层来做。本系列剩下的部分，讲的就是怎样缩小这个差距。",
@@ -437,10 +440,10 @@ ZH = {
         '而一个小小的网络，在我们的书上训练之后，打败了记分牌上所有的计数模型。',
 
     "f'And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits":
-        '而一个小小的网络，在我们的书上训练之后，和最好的计数模型只差{nn_b - kn_b:.2f}比特。',
+        '而一个小小的网络，在我们的书上训练之后，和最好的计数模型只差{nn_b - kn_b:.2f}比特，和它混合之后，打败了记分牌上所有的计数模型。',
 
-    'And a small network, trained on our books, came close to the best counting model':
-        '而一个小小的网络，在我们的书上训练之后，接近了最好的计数模型，和它混合之后，打败了记分牌上所有的计数模型。',
+    "f'And a small network, trained on our books, ended {nn_b - kn_b:.2f} bits":
+        '而一个小小的网络，在我们的书上训练之后，比最好的计数模型差了{nn_b - kn_b:.2f}比特。',
 
     'All of this comes back.':
         '这些都会再回来。在空间和时间上共享权重，就得到第10部分的卷积网络和循环网络。网络变大时，权重和学习率的尺度该怎么定，是第11和第12部分的主题。残差流是第13部分Transformer的主干，也是第30部分我们观察模型内部时读取的东西。归一化会在注意力内部再次出现。门控MLP，复制很多份，就成了第16部分的专家。而学到的嵌入，这里是字符的，后面会变成词元、图像和声音的嵌入。',
