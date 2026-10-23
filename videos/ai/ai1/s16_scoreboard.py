@@ -238,8 +238,8 @@ class Scoreboard(VoiceoverScene):
                                  label(t, font_size=20, color=GREY_B).next_to([lx(10 ** e), -2.42, 0], DOWN, buff=0.08))
                           for e, t in ((3, r"$1$ KB"), (6, r"$1$ MB"), (9, r"$1$ GB"))])
         sizes_g = VGroup(sizes, sax, sticks, note(r"log scale").next_to(sax, RIGHT, buff=0.15))
-        hut = label(r"Hutter Prize record, \ July 2026: \ enwik9 in $100.4$ MB, \ decompressor included: \ "
-                    r"$0.80$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
+        hut = label(r"Hutter Prize record, \ September 2024: \ enwik9 in $110.8$ MB, \ decompressor included: \ "
+                    r"$0.89$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "There's a catch: the decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 "
             f"small squeezes the whole passage into {size_g2 / 1000:.1f} kilobytes, but its weights take "
@@ -248,8 +248,8 @@ class Scoreboard(VoiceoverScene):
             "70-billion-parameter model on a gigabyte of Wikipedia: 8.3 percent of the original size, against 32 "
             "for gzip and 23 for xz; fourteen thousand percent, counting its weights. Trained on text, it also beat "
             "PNG and FLAC on images and audio. <bookmark mark='c'/> The Hutter Prize, started in 2006, counts "
-            "everything: the record, set in July 2026, packs that gigabyte, decompressor included, into 100.4 "
-            "megabytes, 0.80 bits per character, mixing many predictors. <bookmark mark='d'/> Prediction is "
+            "everything: the record, set in September 2024, packs that gigabyte, decompressor included, into 110.8 "
+            "megabytes, 0.89 bits per character, mixing many predictors. <bookmark mark='d'/> Prediction is "
             "compression, and the predictor's size is part of the bill."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sizes_g))

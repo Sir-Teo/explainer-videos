@@ -159,7 +159,7 @@ class Units(VoiceoverScene):
     def frontier(self):
         head = label(r"Compression, and what models can do", font_size=34).to_edge(UP, buff=0.4)
         rows = VGroup(
-            label(r"$31$ public language models, \ $12$ benchmarks", font_size=28),
+            label(r"$30$ public language models, \ $12$ benchmarks", font_size=28),
             label(r"each model's bits per character on freshly collected text, \ against its average benchmark score",
                   font_size=26,
                   color=GREY_A),
@@ -181,7 +181,7 @@ class Units(VoiceoverScene):
                    r"(COLM 2024)")
         with self.voiceover(
             "The field measures it this way too. In 2024, researchers at the Hong Kong University of Science and "
-            "Technology and Tencent took thirty-one public language models, <bookmark mark='a'/> measured how well "
+            "Technology and Tencent took thirty public language models, <bookmark mark='a'/> measured how well "
             "each compresses freshly collected web pages, code and papers, in bits per character, since bits per "
             "token aren't comparable, <bookmark mark='b'/> and set that against their average score on twelve "
             "benchmarks of knowledge, coding and mathematics. <bookmark mark='c'/> The points fall almost on a "
