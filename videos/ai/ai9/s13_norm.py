@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import NEURON, NORM, PART, load
+from videos.ai.ai9.common import HIST, NEURON, NORM, PART, RES, load
 
 POST, PRE = C.SURPRISE, C.INTERVAL
 
@@ -53,6 +53,13 @@ class Norm(VoiceoverScene):
         eql = label(r"subtract the mean, \ divide by the spread, \ then a learned scale and shift", font_size=22,
                     color=GREY_A).next_to(eq, UP, buff=0.15)
         tag = note(r"illustrative numbers").to_corner(DR, buff=0.2)
+        bn_cards = VGroup(
+            history_card(2015, r"Sergey Ioffe \& Christian Szegedy, \ Google", r"batch normalization: \ image networks "
+                         r"train many times faster; \ the stated reason: \ ``internal covariate shift''", width=5.6,
+                         color=C.BITS),
+            history_card(2018, r"Shibani Santurkar et al., \ MIT", r"the reason disputed: \ it mostly makes the loss "
+                         r"landscape smoother", width=5.6, color=HIST),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.5, 0.35, 0])
         with self.voiceover(
             "The second fix rescales the numbers inside the network as it trains. In 2015 Sergey Ioffe and Christian "
             "Szegedy introduced batch normalization. <bookmark mark='a'/> Take a batch of examples, and for each "
@@ -65,10 +72,14 @@ class Norm(VoiceoverScene):
             "example. Every transformer uses a version of that."
         ) as vo:
             self.play(FadeIn(gb), FadeIn(tb), FadeIn(axes_l[0]), FadeIn(tag), Write(eq), FadeIn(eql))
+            self.play(FadeIn(bn_cards[0], shift=UP * 0.15))
             vo.wait_until("a")
             self.play(Create(col_hl))
             self.play(col_hl.animate.shift(RIGHT * 0.42 * 3), run_time=1.5)
+            self.wait(4.0)
+            self.play(FadeIn(bn_cards[1], shift=UP * 0.15))
             vo.wait_until("b")
+            self.play(FadeOut(bn_cards))
             self.play(FadeIn(gl), FadeIn(tl), FadeIn(axes_l[1]), Create(row_hl))
             self.play(row_hl.animate.shift(DOWN * 0.42 * 2), run_time=1.5)
         self.wait(0.3)
@@ -78,20 +89,20 @@ class Norm(VoiceoverScene):
     def geometry(self):
         # what LayerNorm does to one vector (illustrative numbers): shift to mean 0, then squash to spread 1
         vec = np.array([4.2, 1.0, 5.0, 0.6, 3.4, 1.8])
-        U, y0, x0 = 0.32, -1.2, -5.6
+        U, y0, x0 = 0.45, -1.0, -5.8
 
         def vbars(v, col):
-            return VGroup(*[Rectangle(width=0.4, height=max(abs(u) * U, 0.01), stroke_width=0, fill_color=col,
-                                      fill_opacity=0.85).move_to([x0 + 0.6 * i, y0 + u * U / 2, 0]) for i, u in enumerate(v)])
+            return VGroup(*[Rectangle(width=0.5, height=max(abs(u) * U, 0.01), stroke_width=0, fill_color=col,
+                                      fill_opacity=0.85).move_to([x0 + 0.75 * i, y0 + u * U / 2, 0]) for i, u in enumerate(v)])
 
         b_raw = vbars(vec, NEURON)
         b_mid = vbars(vec - vec.mean(), NORM)
         b_end = vbars((vec - vec.mean()) / vec.std(), NORM)
-        zl = DashedLine([x0 - 0.4, y0, 0], [x0 + 3.4, y0, 0], color=GREY_B, stroke_width=1.5)
-        band = VGroup(*[DashedLine([x0 - 0.4, y0 + sgn * U, 0], [x0 + 3.4, y0 + sgn * U, 0], color=NORM, stroke_width=1,
+        zl = DashedLine([x0 - 0.4, y0, 0], [x0 + 4.2, y0, 0], color=GREY_B, stroke_width=1.5)
+        band = VGroup(*[DashedLine([x0 - 0.4, y0 + sgn * U, 0], [x0 + 4.2, y0 + sgn * U, 0], color=NORM, stroke_width=1,
                                    dash_length=0.06) for sgn in (1, -1)])
-        s1 = label(r"1. \ shift: \ average $0$", font_size=24, color=NORM).move_to([-4.0, 2.6, 0])
-        s2 = label(r"2. \ squash: \ spread $1$", font_size=24, color=NORM).next_to(s1, DOWN, buff=0.15).align_to(s1, LEFT)
+        s1 = label(r"1. \ shift: \ average $0$", font_size=28, color=NORM).move_to([-4.0, 2.6, 0])
+        s2 = label(r"2. \ squash: \ spread $1$", font_size=28, color=NORM).next_to(s1, DOWN, buff=0.15).align_to(s1, LEFT)
         tag = note(r"illustrative").next_to(zl, DOWN, buff=1.6).align_to(zl, LEFT)
         # RMSNorm: vectors of different lengths, all sent to one sphere (a circle here)
         o, R = np.array([3.4, -0.3, 0]), 1.3
@@ -146,22 +157,22 @@ class Norm(VoiceoverScene):
         top = max(sv_ln.max(), sv_rms.max())
 
         def bars(sv, col, x0):
-            return VGroup(*[Rectangle(width=0.13, height=max(1.6 * v / top, 0.02), stroke_width=0, fill_color=col,
-                                      fill_opacity=0.9).move_to([x0 + 0.17 * i, -2.6 + max(1.6 * v / top, 0.02) / 2, 0])
+            return VGroup(*[Rectangle(width=0.13, height=max(1.1 * v / top, 0.02), stroke_width=0, fill_color=col,
+                                      fill_opacity=0.9).move_to([x0 + 0.17 * i, -3.25 + max(1.1 * v / top, 0.02) / 2, 0])
                             for i, v in enumerate(sv)])
 
         b_rms, b_ln = bars(sv_rms, NORM, 0.6), bars(sv_ln, C.BITS, 3.9)
-        base = VGroup(Line([0.45, -2.6, 0], [0.6 + 0.17 * d, -2.6, 0], color=GREY_C, stroke_width=1.5),
-                      Line([3.75, -2.6, 0], [3.9 + 0.17 * d, -2.6, 0], color=GREY_C, stroke_width=1.5))
+        base = VGroup(Line([0.45, -3.25, 0], [0.6 + 0.17 * d, -3.25, 0], color=GREY_C, stroke_width=1.5),
+                      Line([3.75, -3.25, 0], [3.9 + 0.17 * d, -3.25, 0], color=GREY_C, stroke_width=1.5))
         z_rms = int((sv_rms < 1e-6).sum())
         z_ln = int((sv_ln < 1e-6).sum())
         bl = VGroup(label(rf"RMSNorm: \ ${d - z_rms}$ equal, \ ${z_rms}$ zero", font_size=20, color=NORM).next_to(b_rms, UP, buff=0.12),
                     label(rf"LayerNorm: \ ${d - z_ln}$ equal, \ ${z_ln}$ zero", font_size=20, color=C.BITS).next_to(b_ln, UP, buff=0.12))
         bt = label(rf"the Jacobian's singular values, \ $d = {d}$, \ computed by autograd", font_size=20, color=GREY_A)
-        bt.move_to([3.4, -3.3, 0])
+        bt.move_to([3.6, -3.65, 0])
         sc = np.asarray(n["scale"])  # scale, change of output, norm of Jacobian
-        scale_l = label(rf"double $h$: \ the output is unchanged, \ the Jacobian halves \ (${sc[1, 2]:.2f} \to {sc[2, 2]:.2f}$)",
-                        font_size=22, color=GREY_A).move_to([3.0, 0.4, 0])
+        scale_l = label(rf"double $h$: \ the output is unchanged, \\ the Jacobian halves \ (${sc[1, 2]:.2f} \to {sc[2, 2]:.2f}$)",
+                        font_size=24, color=GREY_A).move_to([-3.6, -2.5, 0])
         with self.voiceover(
             "What does normalization do to the gradient? Take RMSNorm without its gain. <bookmark mark='a'/> Its "
             "derivative, by the quotient rule, is a constant times the identity minus the projection onto h's own "
@@ -216,6 +227,39 @@ class Norm(VoiceoverScene):
         t_post = curve(g2.ax, P[:, 0], np.clip(P[:, 1], 1.5, ytop), POST, 3.5)
         t_pre = curve(g2.ax, Q[:, 0], np.clip(Q[:, 1], 1.5, ytop), PRE, 3.5)
         tag = note(rf"computed: \ ${depth}$ blocks, \ a character model on the novels, \ no warmup").to_corner(DR, buff=0.15)
+
+        def box(tex, pos, col):
+            b_ = RoundedRectangle(width=1.4, height=0.52, corner_radius=0.1, stroke_color=col, stroke_width=2.5,
+                                  fill_color="#121722", fill_opacity=1).move_to(pos)
+            return VGroup(b_, MathTex(tex, font_size=26).move_to(pos))
+
+        def diagram(x, pre):
+            sx, bx = x - 1.0, x + 0.8
+            stream = Arrow([sx, -2.8, 0], [sx, 1.4, 0], buff=0, color=RES, stroke_width=5,
+                           max_tip_length_to_length_ratio=0.04)
+            plus = VGroup(Circle(radius=0.2, color=RES, stroke_width=3, fill_color=BACKGROUND, fill_opacity=1),
+                          MathTex(r"+", font_size=28, color=RES)).move_to([sx, -0.2, 0])
+            f_ = box(r"F", [bx, -0.75, 0], NEURON)
+            g_ = VGroup(stream, plus)
+            g_.add(Line([sx, -2.2, 0], [bx, -2.2, 0], color=GREY_B, stroke_width=2.5))
+            if pre:
+                nb = box(r"\operatorname{Norm}", [bx, -1.6, 0], PRE)
+                g_.add(Line([bx, -2.2, 0], nb.get_bottom(), color=GREY_B, stroke_width=2.5),
+                       Arrow(nb.get_top(), f_.get_bottom(), buff=0, color=GREY_B, stroke_width=2.5,
+                             max_tip_length_to_length_ratio=0.3), nb)
+            else:
+                g_.add(Arrow([bx, -2.2, 0], f_.get_bottom(), buff=0, color=GREY_B, stroke_width=2.5,
+                             max_tip_length_to_length_ratio=0.15))
+                nb = box(r"\operatorname{Norm}", [sx, 0.6, 0], POST)
+                g_.add(nb, label(r"the stream itself \\ is normalized", font_size=22, color=POST).next_to(nb, RIGHT, buff=0.2))
+            g_.add(Line(f_.get_top(), [bx, -0.2, 0], color=GREY_B, stroke_width=2.5),
+                   Arrow([bx, -0.2, 0], plus.get_right(), buff=0, color=GREY_B, stroke_width=2.5,
+                         max_tip_length_to_length_ratio=0.15), f_)
+            return g_
+
+        d_post, d_pre = diagram(-3.0, False), diagram(3.6, True)
+        clean = label(r"the stream: \\ a clean running sum", font_size=22, color=RES).next_to(d_pre[0], LEFT, buff=0.2)
+        d_pre.add(clean)
         rp, rq = float(gp[-1] / gp[0]), float(gq[-1] / gq[0])
         fp, fq = float(P[-1, 1]), float(Q[-1, 1])
         if not np.isfinite(fp) or fp > fq + 0.05:
@@ -240,10 +284,11 @@ class Norm(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(eqs, shift=DOWN * 0.15))
             vo.wait_until("a")
-            self.play(Indicate(eqs[0], color=POST, scale_factor=1.05))
+            self.play(Indicate(eqs[0], color=POST, scale_factor=1.05), FadeIn(d_post))
             vo.wait_until("b")
-            self.play(Indicate(eqs[1], color=PRE, scale_factor=1.05))
+            self.play(Indicate(eqs[1], color=PRE, scale_factor=1.05), FadeIn(d_pre))
             vo.wait_until("c")
+            self.play(FadeOut(d_post), FadeOut(d_pre))
             self.play(FadeIn(g1), Create(c_post), Create(c_pre), FadeIn(tag), run_time=2.0)
             vo.wait_until("d")
             self.play(FadeIn(g2), Create(t_post), Create(t_pre), run_time=2.0)
