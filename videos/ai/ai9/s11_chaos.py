@@ -209,8 +209,7 @@ class Chaos(VoiceoverScene):
         xi = np.asarray(t["xi"])
         K = int(t["classes"])
         W, H = 6.4, 4.4
-        g = axes([0, len(sws)], [0, len(depths)], x_length=W, y_length=H, xlabel=r"$\sigma_w^2$",
-                 ylabel=r"depth", center=[-2.0, -0.5, 0])
+        g = axes([0, len(sws)], [0, len(depths)], x_length=W, y_length=H, ylabel=r"depth", center=[-2.0, -0.5, 0])
         ax = g.ax
         cells = VGroup()
         for i, L in enumerate(depths):
@@ -223,6 +222,7 @@ class Chaos(VoiceoverScene):
                       for j, a in enumerate(sws) if j % 2 == 0])
         yt = VGroup(*[MathTex(str(L), font_size=18, color=GREY_B).next_to(ax.c2p(0, i + 0.5), LEFT, buff=0.1)
                       for i, L in enumerate(depths)])
+        xt.add(label(r"$\sigma_w^2$", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.42))
 
         def depth_index(Lval):  # depth -> the heatmap's row coordinate (piecewise linear between rows)
             return float(np.interp(Lval, depths, np.arange(len(depths)) + 0.5))

@@ -82,7 +82,7 @@ class Barron(VoiceoverScene):
         some = label(r"the average over random choices \\ is $\le 1/n$, \ so \textit{some} choice \\ of $n$ units is "
                      r"within $1/\sqrt{n}$, \\ in any dimension", font_size=28, color=C.BITS).move_to([3.9, -2.2, 0])
         # in one dimension: the Gaussian bump, and the average of n cosines with random frequencies (illustrative draw)
-        ax = Axes(x_range=[-4, 4, 1], y_range=[-0.6, 1.1, 0.5], x_length=6.6, y_length=1.9, tips=False,
+        ax = Axes(x_range=[-4, 4, 1], y_range=[-1.0, 1.1, 0.5], x_length=6.6, y_length=2.1, tips=False,
                   axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to([-2.9, -2.4, 0])
         xg = np.linspace(-4, 4, 321)
         gs = np.random.default_rng(1993)  # an illustrative draw of random frequencies
@@ -91,10 +91,10 @@ class Barron(VoiceoverScene):
         waves = VGroup(*[curve(ax, xg, np.cos(w_ * xg), NEURON, 1.5).set_stroke(opacity=0.35) for w_ in om[:5]])
 
         def avg(n_):
-            return curve(ax, xg, np.clip(np.cos(np.outer(om[:n_], xg)).mean(0), -0.6, 1.1), C.BITS, 4)
+            return curve(ax, xg, np.cos(np.outer(om[:n_], xg)).mean(0), C.BITS, 4)
 
         nl = VGroup(MathTex(r"n = ", font_size=30, color=C.BITS), Integer(5, font_size=30, color=C.BITS))
-        nl.arrange(RIGHT, buff=0.1).next_to(ax, UP, buff=0.05).align_to(ax, RIGHT)
+        nl.arrange(RIGHT, buff=0.1).next_to(ax, DOWN, buff=0.08).align_to(ax, RIGHT)
         dl = label(r"$d = 1$: \ the bump \ (dashed), \ random cosines, \ their average", font_size=22, color=GREY_A)
         dl.next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
         itag = note(r"illustrative: \ one random draw").next_to(ax, DOWN, buff=0.1).align_to(ax, LEFT)
