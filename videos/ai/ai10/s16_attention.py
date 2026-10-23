@@ -125,13 +125,15 @@ class Attention(VoiceoverScene):
         shade = Rectangle(width=A.c2p(hi, 0)[0] - A.c2p(lo, 0)[0], height=A.c2p(0, 1)[1] - A.c2p(0, 0)[1],
                           stroke_width=0, fill_color=GREY_D, fill_opacity=0.25)
         shade.move_to([(A.c2p(lo, 0)[0] + A.c2p(hi, 0)[0]) / 2, (A.c2p(0, 0)[1] + A.c2p(0, 1)[1]) / 2, 0])
-        sl = label(r"trained on these lengths", font_size=20, color=GREY_B).next_to(shade, UP, buff=0.08)
+        sl = label(r"trained on these lengths", font_size=20, color=GREY_B).move_to(shade).align_to(shade, DOWN)
+        sl.shift(UP * 0.15)
         plain = seed_band(A, tests, [runs[f"0-{k}"]["exact"] for k in (0, 1, 2)], ENC)
         att = seed_band(A, tests, [runs[f"1-{k}"]["exact"] for k in (0, 1, 2)], ATT)
         leg = legend([(ENC, r"one vector"), (ATT, r"with attention")], font_size=22).to_corner(UR, buff=0.5)
         pa = runs["1-0"]["params"], runs["0-0"]["params"]
         pl = label(rf"weights: \ ${pa[1]:,}$ and ${pa[0]:,}$; \ the same steps".replace(",", "{,}"), font_size=20,
                    color=GREY_B).next_to(leg, DOWN, buff=0.25).align_to(leg, LEFT)
+        keep_in_frame(pl)
         tag = note(r"computed: \ three seeds each, \ min--max").to_corner(DR, buff=0.2)
         ma = np.mean([runs[f"1-{k}"]["exact"] for k in (0, 1, 2)], 0)
         mp = np.mean([runs[f"0-{k}"]["exact"] for k in (0, 1, 2)], 0)

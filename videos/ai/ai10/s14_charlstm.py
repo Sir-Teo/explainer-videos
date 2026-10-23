@@ -223,7 +223,10 @@ class CharLSTM(VoiceoverScene):
                  "few minutes of training, the LSTM hasn't caught up with a model built from all the counts.")
         if lm_best is not None and lm_best < me:
             tail = (f" The pretrained language models below it are still far ahead, down to {lm_best:.2f} bits: "
-                    "more text, more computing, and a different architecture, which is the next act's story.")
+                    "more text, more computing, and a different architecture, which is the next act's story."
+                    if me - lm_best > 0.5 else
+                    f" The pretrained language models below it are still ahead, down to {lm_best:.2f} bits, with "
+                    "far more text and computing, and a different architecture: the next act's story.")
         else:
             tail = " The large models of Part 1, still to be filled in on this board, show how far there is to go."
         with self.voiceover(

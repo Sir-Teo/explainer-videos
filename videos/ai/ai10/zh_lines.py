@@ -453,6 +453,9 @@ ZH = {
     'f" The pretrained language models below it are still far ahead':
         "下面那些预训练的语言模型仍然遥遥领先，最好的低到{lm_best:.2f}比特：更多的文本，更多的算力，和不同的架构，那是下一幕的故事。",
 
+    'f" The pretrained language models below it are still ahead':
+        "下面那些预训练的语言模型仍然领先，最好的到{lm_best:.2f}比特，用的文本和算力多得多，架构也不同：那是下一幕的故事。",
+
     ' The large models of Part 1, still to be filled in':
         "第1部分的大模型，在这块记分牌上还没填进来，它们显示出还有多远的路要走。",
 
