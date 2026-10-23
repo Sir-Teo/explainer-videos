@@ -384,7 +384,16 @@ ZH = {
         "第10章。四种答案，并排训练。",
 
     'f"Now the experiment.':
-        "现在来做实验。四个小Transformer，除了怎样得知每个字符的位置之外，其余完全相同：加在输入上的正弦信号、旋转位置、ALiBi的线性惩罚，以及什么都不给。<bookmark mark='a'/>每一个都在小说上训练{c['steps']:,}步，每步用{c['ctx']}个字符的窗口，窗口相同，顺序也相同；每一个都用不同的随机起点训练三次，这样我们就能看出，任何差距里有多少是运气。<bookmark mark='b'/>这是它们的训练过程，回放出来：随着学习，留出数据上的每字符比特数。",
+        "现在来做实验。四个小Transformer，除了怎样得知每个字符的位置之外，其余完全相同：加在输入上的正弦信号、旋转位置、ALiBi的线性惩罚，以及什么都不给。这里回放的是它们学习的过程：留出数据上的每字符比特数，一步一步地变化。<bookmark mark='a'/>每一个都在小说上训练{c['steps']:,}步，每步用{c['ctx']}个字符的窗口，窗口相同，顺序也相同；每一个都用不同的随机起点训练三次，色带表示三次之间的差别。<bookmark mark='b'/>{v_train}",
+
+    "f'The order keeps changing":
+        "直到最后一个检查点，第{s_end:,}步，排名都还在变。",
+
+    "f'From step {s_fix:,} on, the order never changes, and":
+        "从第{s_fix:,}步起，排名就再也没变过，而最好和最差之间的差距越拉越大：从那时的{g_fix:.2f}比特，到最后的{g_end:.2f}。",
+
+    "f'From step {s_fix:,} on, the order never changes, while":
+        "从第{s_fix:,}步起，排名就再也没变过，而最好和最差之间的差距在缩小：从那时的{g_fix:.2f}比特，到最后的{g_end:.2f}。",
 
     'f"First, inside the length they were trained on':
         "先看它们训练过的长度以内，也就是前{T}个字符。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}",
@@ -405,7 +414,7 @@ ZH = {
         "不给位置的模型排{rank_word}，{nope_v:.3f}，比最好的落后{behind:.2f}比特：掩码告诉了它一些东西，但不是全部。",
 
     'f"Now read four times as far':
-        "现在读远四倍，{R}个字符，尽管它们谁也没见过超过{T}个字符的文本。<bookmark mark='a'/>这是每个位置上的每字符比特数，每种各三个种子。<bookmark mark='b'/>{v_held}<bookmark mark='e'/>{v_mid}<bookmark mark='f'/>{v_broke}<bookmark mark='c'/>{why_}<bookmark mark='d'/>{rope_txt}",
+        "现在读远四倍，{R}个字符，尽管它们谁也没见过超过{T}个字符的文本。<bookmark mark='a'/>这是每个位置上的每字符比特数，每种各三个种子。<bookmark mark='b'/>{v_held}<bookmark mark='e'/>{v_mid}<bookmark mark='f'/>{v_broke}<bookmark mark='d'/>{rope_txt}",
 
     "RoPE's slow hands point at angles":
         "RoPE的慢指针指向了训练中从没见过的角度，它的查询也就不再和它的键对得上：这正是下一章要解决的问题。",
@@ -428,8 +437,8 @@ ZH = {
     "f'Drifting up, by {mlo:.2f}":
         "慢慢往上漂，升高了{mlo:.2f}到{mhi:.2f}比特：{n_mid}。",
 
-    "ALiBi's penalty means a distant key":
-        "ALiBi的惩罚意味着，越远的键越不要紧，所以新的长度看起来和旧的差不多。",
+    'f"Why does one hold and another drift?':
+        "为什么一个撑得住，另一个会漂移？<bookmark mark='a'/>ALiBi的四个头减去一个随距离增长的惩罚，斜率从{m[0]:.2f}一直到{m[-1]:.4f}。一个位于训练长度处、往回{T}个字符的键，对最陡的头已经要扣{c0:.0f}分，对最平缓的头也要扣{c3:.1f}分。<bookmark mark='b'/>过了训练长度，键只会被扣得更多，所以不会发生什么新鲜事：这些头照旧看着近处，边界之外的文本，看起来和边界之内的一模一样。<bookmark mark='c'/>不给位置的模型漂移，有它自己的原因。它读的信号，t分之1，只会越来越小：到了位置{R}，它只有训练中最小值的{ratio:.2f}，这是模型从来不需要分辨的数值。<bookmark mark='d'/>正弦位置和RoPE在边界之外遇到的情况更糟：它们碰到的是从没见过的向量和角度。",
 
     # ------------------------------------------------------------------ Sinks
     "Chapter twelve. Attention sinks, and three ways out.":
@@ -478,7 +487,7 @@ ZH = {
         "门控本可以让头把自己关掉，但最后，没有东西要复制时它开到{gd_:.2f}，和触发字符之后的{ga_:.2f}差不多；它放在标记上的权重是{r_g:.0%}。",
 
     "f'Differential attention subtracts a second softmax":
-        "差分注意力减去第二个softmax，所以它的权重不必加起来等于1：λ是{lm_:.2f}时，它放在标记上的权重是{r_d:.0%}。",
+        "差分注意力减去第二个softmax，所以它的权重不必加起来等于1：没有东西要复制时，它们加起来只有{sm_:.2f}，λ是{lm_:.2f}，它放在标记上的权重是{r_d:.0%}。",
 
     "All four learn the task about equally well":
         "四种都把任务学得差不多一样好，所以这个任务本身从来不需要汇点；汇点只是softmax“什么都不做”的办法。",
@@ -553,11 +562,11 @@ ZH = {
     'f"Nelson Elhage and colleagues gave a way':
         "纳尔逊·埃尔哈格和同事们给出了一个办法，只看权重就能看出这种合作。<bookmark mark='a'/>K组合问的是：一个较晚的头的键，从一个较早的头写下的东西里读了多少。它等于较晚的头的QK矩阵和较早的头的OV矩阵乘积的大小，再除以两者各自的大小。随机的头大约得{base:.2f}分。<bookmark mark='b'/>{v}",
 
-    'f"For our pair it starts near the random level':
-        "我们这一对，一开始接近随机水平，{k0:.2f}，随着归纳头的形成升到{k1:.2f}；相比之下，Q组合是{q1:.2f}，其他各对里最好的是{o1:.2f}。归纳头的键，读的正是前一词元头写下的东西。",
+    'f"Pair each of the {n_p}':
+        "把{n_p}个前一词元头和{n_i}个归纳头两两配对：它们的K组合，一开始接近随机水平，{k0:.2f}，随着归纳头的形成升到{k1:.2f}；而同样这些配对的Q组合最后是{q1:.2f}，其他所有配对是{o1:.2f}。归纳头的键，读的正是前一词元头写下的东西。",
 
-    "f'For our pair it ends at":
-        "我们这一对最后是{k1:.2f}，相比之下，Q组合是{q1:.2f}，其他各对里最好的是{o1:.2f}：在这个小模型里，信号并不干净地落在键上。",
+    "f'Pair each of the {n_p}":
+        "把{n_p}个前一词元头和{n_i}个归纳头两两配对：它们的K组合最后是{k1:.2f}，相比之下，Q组合是{q1:.2f}，其他所有配对是{o1:.2f}：在这个小模型里，信号并不干净地落在键上。",
 
     '"And our own transformer, trained on novels':
         "那我们自己的Transformer呢？它是在小说上训练的，根本没有复制游戏。<bookmark mark='a'/>{v1}<bookmark mark='b'/>{v2}<bookmark mark='c'/>{v3}",

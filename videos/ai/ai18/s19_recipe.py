@@ -127,8 +127,9 @@ class Recipe(VoiceoverScene):
             "<bookmark mark='d'/> Let them read: the noise turns into words, then into phrases shaped like English. "
             "By the end, compare what they write; the curves tell which learned faster."
         ) as vo:
+            self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(tag), FadeIn(pts_b[0]), FadeIn(pts_f[0]))
+            self.play(FadeIn(pts_b[0]), FadeIn(pts_f[0]), Indicate(g.ylabel, color=YELLOW))
             vo.wait_until("b")
             self.play(FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(bx_b[0]), FadeIn(bx_f[0]), FadeIn(stp[0]))
             vo.wait_until("c")

@@ -31,10 +31,10 @@
    "en": "Real handwriting looks like this: samples from some distribution p of x that nobody can write down. <bookmark mark='a'/> The question of this part: from examples alone, how do you learn a distribution you can draw new examples from? <bookmark mark='b'/> The field found four answers that work, and one older one that it keeps coming back to. Build the example one piece at a time. Compress it into a code and learn to expand the code. Set two networks against each other. Bend simple noise with an invertible map. <bookmark mark='c'/> Or carve an energy landscape that the data sits at the bottom of. Diffusion, next time, is built from these pieces.",
    "zh": "真正的手写数字是这样的：它们是某个分布p(x)的样本，而这个分布没有人写得出来。<bookmark mark='a'/>本部分的问题是：只凭样本，怎样学到一个能从中抽出新样本的分布？<bookmark mark='b'/>这个领域找到了四个行得通的答案，还有一个更古老的、总是被重新拾起的答案。一块一块地把样本搭出来。把它压缩成一个编码，再学会把编码展开。让两个网络互相对抗。用一个可逆映射把简单的噪声弯过来。<bookmark mark='c'/>或者，雕出一片能量地形，让数据躺在谷底。下一次要讲的扩散模型，就是用这些零件搭起来的。"
   },
-  "5b08d6306e7c": {
+  "9ce513cce098": {
    "scene": "Hook",
-   "en": "This is Part 20 of AI, Built, and the start of its fourth act: generation and perception. <bookmark mark='a'/> In this part: the generative problem and its history; autoregressive models; latent variables, from the Helmholtz machine to the variational autoencoder; adversarial games, why they spiral, and how Wasserstein distance and StyleGAN tamed them; invertible maps, from coupling layers to neural ODEs; energy, from Hopfield and Boltzmann to Langevin dynamics and the score; and how to judge a generator, with every family trained here and compared on one budget.",
-   "zh": "这是《人工智能，从零搭建》的第20部分，也是第四幕“生成与感知”的开始。<bookmark mark='a'/>本部分的内容：生成问题及其历史；自回归模型；隐变量，从亥姆霍兹机到变分自编码器；对抗博弈，它为什么会绕圈，以及瓦瑟斯坦距离和StyleGAN怎样驯服了它；可逆映射，从耦合层到神经ODE；能量，从霍普菲尔德和玻尔兹曼，到朗之万动力学和分数函数；最后是怎样评判一个生成模型，每个家族都在这里训练，并在同一份预算下比较。"
+   "en": "This is Part 20 of AI, Built, and the start of its fourth act: generation and perception. <bookmark mark='a'/> In this part: the generative problem and its history; <bookmark mark='o2'/> autoregressive models; <bookmark mark='o3'/> latent variables, from the Helmholtz machine to the variational autoencoder; <bookmark mark='o4'/> adversarial games, why they spiral, and how Wasserstein distance and StyleGAN tamed them; <bookmark mark='o5'/> invertible maps, from coupling layers to neural ODEs; <bookmark mark='o6'/> energy, from Hopfield and Boltzmann to Langevin dynamics and the score; <bookmark mark='o7'/> and how to judge a generator, with every family trained here and compared on one budget.",
+   "zh": "这是《人工智能，从零搭建》的第20部分，也是第四幕“生成与感知”的开始。<bookmark mark='a'/>本部分的内容：生成问题及其历史；<bookmark mark='o2'/>自回归模型；<bookmark mark='o3'/>隐变量，从亥姆霍兹机到变分自编码器；<bookmark mark='o4'/>对抗博弈，它为什么会绕圈，以及瓦瑟斯坦距离和StyleGAN怎样驯服了它；<bookmark mark='o5'/>可逆映射，从耦合层到神经ODE；<bookmark mark='o6'/>能量，从霍普菲尔德和玻尔兹曼，到朗之万动力学和分数函数；<bookmark mark='o7'/>最后是怎样评判一个生成模型，每个家族都在这里训练，并在同一份预算下比较。"
   },
   "75737825f1c6": {
    "scene": "Problem",
@@ -491,10 +491,10 @@
    "en": "Second, likelihood, for the three families that have one, in bits per pixel on held-out digits: exact for the PixelCNN, an upper bound for the VAE and the flow. <bookmark mark='a'/> Best is the PixelCNN, at 0.86 bits per pixel, then the VAE at 1.04, and the flow at 1.13. <bookmark mark='b'/> Compare the FID ranking: it is not the same. Exactly as Theis and his colleagues warned, a model can be good at probability and worse at pictures, or the reverse.",
    "zh": "第二，似然，只看有似然的那三个家族，单位是留出数字上的每像素比特数：PixelCNN是精确值，VAE和流是上界。<bookmark mark='a'/>最好的是PixelCNN，每像素0.86比特，然后是VAE，1.04，再然后是流，1.13。<bookmark mark='b'/>对比一下FID的排名：它们不一样。正如Theis和同事所警告的，一个模型可以概率算得好，图却画得差，或者反过来。"
   },
-  "e629b5868a11": {
+  "017000aefed8": {
    "scene": "Budget",
-   "en": "Third, a coarse but telling check: which digits does each model draw? The classifier labels two thousand samples of each, and real data has each digit about one time in ten. <bookmark mark='a'/> The most uneven is WGAN-GP: its rarest digit, a 1, is only 3.0 percent of its samples, where real data has about ten. The most even is the VAE, whose rarest digit is still 8.2 percent. Mode dropping, at the scale of whole classes, is the easiest failure to see.",
-   "zh": "第三，一个粗略但很说明问题的检查：每个模型画的是哪些数字？分类器给每个模型的两千个样本打上标签，而真实数据里，每个数字大约占十分之一。<bookmark mark='a'/>最不均匀的是WGAN-GP：它最少见的数字是1，只占它样本的3.0%，而真实数据里大约是10%。最均匀的是VAE，它最少见的数字也还有8.2%。在整个类别这个尺度上的模式丢失，是最容易看出来的失败。"
+   "en": "Third, a coarse but telling check: which digits does each model draw? The classifier labels two thousand samples of each, <bookmark mark='r'/> and real data has each digit about one time in ten. <bookmark mark='a'/> The most uneven is WGAN-GP: its rarest digit, a 1, is only 3.0 percent of its samples, where real data has about ten. The most even is the VAE, whose rarest digit is still 8.2 percent. <bookmark mark='z'/> Mode dropping, at the scale of whole classes, is the easiest failure to see.",
+   "zh": "第三，一个粗略但很说明问题的检查：每个模型画的是哪些数字？分类器给每个模型的两千个样本打上标签，<bookmark mark='r'/>而真实数据里，每个数字大约占十分之一。<bookmark mark='a'/>最不均匀的是WGAN-GP：它最少见的数字是1，只占它样本的3.0%，而真实数据里大约是10%。最均匀的是VAE，它最少见的数字也还有8.2%。<bookmark mark='z'/>在整个类别这个尺度上的模式丢失，是最容易看出来的失败。"
   },
   "317423052d79": {
    "scene": "Budget",
@@ -541,10 +541,10 @@
    "en": "Let's take stock. An autoregressive model writes an image one piece at a time, with an exact likelihood and a slow sampler. A VAE learns a code and a decoder together with one bound, trading rate against distortion. A GAN learns from a critic, and the game can collapse onto a few modes and spiral around its equilibrium; a Wasserstein critic and gradient penalties tame it. A flow bends noise into data, invertibly, with an exact likelihood, and a neural ODE does it continuously, with a trace in place of a determinant. A Boltzmann machine is an energy, trained by contrasting the data with its own dreams; and Langevin dynamics samples any energy using only its score, given enough noise to cross between modes.",
    "zh": "我们来盘点一下。自回归模型一块一块地写出一张图像，似然精确，采样慢。VAE用一个下界同时学出编码和解码器，在码率和失真之间权衡。GAN从一个评论家那里学习，而这场博弈可能坍缩到少数几个峰上，并绕着均衡点盘旋；瓦瑟斯坦评论家和梯度惩罚驯服了它。流把噪声可逆地弯成数据，似然精确，神经ODE则连续地做这件事，用迹代替了行列式。玻尔兹曼机是一个能量，通过把数据和它自己的梦相对比来训练；而朗之万动力学只用分数函数就能从任何能量里采样，只要有足够的噪声让它在峰之间穿行。"
   },
-  "df0c8eca4a07": {
+  "193f74dc4024": {
    "scene": "Outro",
-   "en": "All of this comes back. The score, learned at every noise level, is diffusion, next time, with flow matching training continuous flows by regression. Autoencoders and their tokens are the front end of the image, video and audio models of Parts 22 and 23, and next-scale prediction returns in Part 22. The contrastive idea, pull the data up and push everything else down, drives the self-supervised learning of Part 24. And the question of how to judge a model, and how its metrics fail, closes the series.",
-   "zh": "这些都会再回来。在每个噪声水平上学到的分数函数，就是下一次的扩散，而流匹配用回归来训练连续流。自编码器和它们的词元，是第22和第23部分图像、视频和音频模型的前端，下一尺度预测会在第22部分回来。对比的思想，把数据往上推、把其他一切往下压，驱动着第24部分的自监督学习。而怎样评判一个模型，以及它的指标怎样失效，会为整个系列收尾。"
+   "en": "All of this comes back. The score, learned at every noise level, is diffusion, next time, <bookmark mark='p2'/> with flow matching training continuous flows by regression. <bookmark mark='p3'/> Autoencoders and their tokens are the front end of the image, video and audio models of Parts 22 and 23, <bookmark mark='p4'/> and next-scale prediction returns in Part 22. <bookmark mark='p5'/> The contrastive idea, pull the data up and push everything else down, drives the self-supervised learning of Part 24. <bookmark mark='p6'/> And the question of how to judge a model, and how its metrics fail, closes the series.",
+   "zh": "这些都会再回来。在每个噪声水平上学到的分数函数，就是下一次的扩散，<bookmark mark='p2'/>而流匹配用回归来训练连续流。<bookmark mark='p3'/>自编码器和它们的词元，是第22和第23部分图像、视频和音频模型的前端，<bookmark mark='p4'/>下一尺度预测会在第22部分回来。<bookmark mark='p5'/>对比的思想，把数据往上推、把其他一切往下压，驱动着第24部分的自监督学习。<bookmark mark='p6'/>而怎样评判一个模型，以及它的指标怎样失效，会为整个系列收尾。"
   },
   "4448704449cd": {
    "scene": "Outro",

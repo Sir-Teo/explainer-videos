@@ -243,7 +243,7 @@ class WhyItWon(VoiceoverScene):
                    f"about minus {abs(s3):.2f}: each doubling of the data cuts the errors by "
                    f"{100 * (1 - 2 ** s3):.0f} percent. Then the line bends flat: in {int(d['steps']):,} steps the "
                    f"network sees each of the {sizes[-1]:,} digits only {passes:.1f} times, and can't make use of "
-                   "them all. More data pays only with more training, the balance Part 12 is about.")
+                   "them all.")
         else:
             fline = VectorizedPoint()
             law = (f"On a log-log plot the test error falls along a straight line, a power law with slope about "

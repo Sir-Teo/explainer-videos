@@ -75,6 +75,22 @@ class Sinks(VoiceoverScene):
                                                                                                     aligned_edge=LEFT)
         cite_ = cite(r"G.~Xiao et al., \textit{Efficient Streaming Language Models with Attention Sinks} (2023)",
                      corner=UR)
+        # StreamingLLM's recipe: keep the first four tokens and a window of the latest
+        cap0 = label(r"in large models, \ many heads put most of their weight \\ on the first token, \ whatever it is",
+                     font_size=22, color=GREY_A).move_to([-3.6, 2.75, 0])
+        boxes = VGroup()
+        for i in range(17):
+            if i == 4:
+                boxes.add(MathTex(r"\cdots", font_size=30, color=GREY_B))
+                continue
+            kept = i < 4
+            boxes.add(Square(0.3, stroke_color=POS if kept else A, stroke_width=2,
+                             fill_color=POS if kept else A, fill_opacity=0.55 if kept else 0.25))
+        boxes.arrange(RIGHT, buff=0.08).move_to([-3.6, 1.85, 0])
+        bk = VGroup(Brace(boxes[:4], DOWN, buff=0.05, color=POS), Brace(boxes[5:], DOWN, buff=0.05, color=A))
+        bkl = VGroup(label(r"the first $4$", font_size=18, color=POS).next_to(bk[0], DOWN, buff=0.05),
+                     label(r"a window of the latest", font_size=18, color=A).next_to(bk[1], DOWN, buff=0.05))
+        stream = VGroup(boxes, bk, bkl)
         if strong:
             mine = (f"Some heads of our model put a large share of it, up to {sink.max():.0%}, on the very first "
                     f"character, whatever that character is: about {ratio:.0f} times an even share. ")
@@ -89,9 +105,9 @@ class Sinks(VoiceoverScene):
             "attention sinks, and showed that keeping the first four tokens lets a model read on for millions of "
             "tokens with a short window. <bookmark mark='b'/> " + mine
         ) as vo:
-            self.play(FadeIn(simg), FadeIn(sl), FadeIn(cite_))
+            self.play(FadeIn(simg), FadeIn(sl), FadeIn(cite_), FadeIn(cap0))
             vo.wait_until("a")
-            self.play(Create(scol))
+            self.play(Create(scol), FadeIn(stream, shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(bl), Create(base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03),
                       Create(ul), FadeIn(ulab), FadeIn(lyr), run_time=2.0)
@@ -174,8 +190,8 @@ class Sinks(VoiceoverScene):
         tl.next_to(cells, DOWN, buff=0.75)
         M = np.asarray(s["softmax_map"])
         img = framed(heat_image(M, 3.0, 3.0, color=A, mask_upper=True)).move_to([-3.6, -1.35, 0])
-        il = label(r"the plain head, \ first seed: \\ $24$ positions of one sequence", font_size=18, color=GREY_A)
-        il.next_to(img, LEFT, buff=0.2)
+        il = label(r"the plain head, \ first seed: \ $24$ positions of one sequence", font_size=18, color=GREY_A)
+        il.next_to(img, DOWN, buff=0.12)
         col = Rectangle(width=3.0 / M.shape[0] * 1.3, height=3.0, stroke_color=SINKC, stroke_width=2.5)
         col.move_to(img.get_left(), aligned_edge=LEFT)
         bd, ba = np.asarray(s["softmax_bos_dormant"]), np.asarray(s["softmax_bos_active"])
@@ -258,7 +274,8 @@ class Sinks(VoiceoverScene):
                             font_size=20, color=GREY_A),
                       *[label(rf"{SINK_NAMES[v]}: \ ${bos[v].mean():.2f}$; \ ${cp[v].mean():.3f}$, \ ${bg[v].mean():.3f}$",
                               font_size=18, color=SINK_COLORS[v]) for v in VARIANTS],
-                      note(rf"best possible on the rest: \ ${float(s['opt_bigram']):.3f}$", font_size=18))
+                      note(rf"the task's own probabilities, \ on the rest: \ ${float(load('sinkref')['true_bits']):.3f}$",
+                           font_size=18))
         loss.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([4.0, -2.55, 0])
         keep_in_frame(loss)
         facts = label(r"Qiu et al.: \ attention on the first token, \ $46.7\%$ $\to$ $4.8\%$ with the gate; \\ "
@@ -277,8 +294,10 @@ class Sinks(VoiceoverScene):
         else:
             v_gate = (f"The gate could let the head switch itself off, but it ends about as open with nothing to copy, "
                       f"{gd_:.2f}, as after a trigger, {ga_:.2f}, and its weight on the marker is {r_g:.0%}.")
+        sm_ = float(np.asarray(s["diff_sum_dormant"]).mean())
         v_diff = (f"Differential attention subtracts a second softmax, so its weights need not add up to one: with "
-                  f"lambda at {lm_:.2f}, its weight on the marker is {r_d:.0%}.")
+                  f"nothing to copy they add up to {sm_:.2f}, with lambda at {lm_:.2f}, and its weight on the marker is "
+                  f"{r_d:.0%}.")
         worst_cp = max(VARIANTS, key=lambda v: cp[v].mean())
         same = max(cp[v].mean() for v in VARIANTS) - min(cp[v].mean() for v in VARIANTS) < 0.05
         worst_name = SPOKEN_SINK[worst_cp]

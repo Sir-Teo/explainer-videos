@@ -223,8 +223,8 @@ class LSTM(VoiceoverScene):
         with self.voiceover(
             "Does the carousel work? A test in the spirit of Hochreiter's: <bookmark mark='a'/> a sequence opens "
             "with one marked symbol, one of eight; <bookmark mark='b'/> then come random distractors; "
-            "<bookmark mark='c'/> at the end the network must say what the first symbol was. Learning that needs "
-            "a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained a plain "
+            "<bookmark mark='c'/> at the end the network must say what the first symbol was. "
+            "<bookmark mark='d'/> We trained a plain "
             "recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of "
             f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps. The gated cells start with their gates set to "
             "remember: the chrono initialization of Corentin Tallec and Yann Ollivier."

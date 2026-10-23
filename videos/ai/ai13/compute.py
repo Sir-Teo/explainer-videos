@@ -1311,6 +1311,16 @@ def compute_sinks():
     return out
 
 
+def compute_sinkref():
+    """The bigram-backcopy task's own probabilities, scored on the test batch the sinks item measures with: the bits
+    a perfect model would get on the positions that are not copies (the reference the four designs are held to)."""
+    c = SINK_CFG
+    common, Pm, uni, trig = bb_task()
+    xt, tt = bb_batch(rng(999), 256, Pm, uni, trig, c["T"])
+    bits = [-math.log2(Pm[xt[b, t], xt[b, t + 1]]) for b in range(len(xt)) for t in range(1, c["T"] - 1) if not tt[b, t]]
+    return dict(true_bits=float(np.mean(bits)), n=len(bits))
+
+
 def bb_measure(model, x, is_trig, K, full=False):
     """Bits on the bigram part and on the copies; the attention <s> draws from queries with nothing to copy
     (dormant) and from triggers (active); and, with ``full``, what each variant does instead."""
@@ -1770,6 +1780,7 @@ ITEMS = {
     "extend": compute_extend,
     "positions": compute_positions,
     "sinks": compute_sinks,
+    "sinkref": compute_sinkref,
     "induction": compute_induction,
     "icl": compute_icl,
 }

@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (FMAP, KERNEL, MLPC, PART, NEG, POS, _image, img_gray, img_heat, load, rgb)
+from videos.ai.ai10.common import (FMAP, KERNEL, MLPC, PART, NEG, POS, _image, img_gray, img_heat, load,
+                                    oriented_fit, rgb)
 
 SHIFTC = C.INTERVAL
 COLORS = {r"w": KERNEL, r"T_s": SHIFTC}
@@ -21,18 +22,6 @@ def heat_rgb(a, vmax, upto=None):
         flat[int(upto):] = rgb("#141A24")
         out = flat.reshape(out.shape)
     return out
-
-
-def _oriented_fit(Kc, deg):
-    """Best correlation of a centred 5x5 kernel with a bar or an edge through its centre at this angle."""
-    yy, xx = np.mgrid[0:5, 0:5] - 2.0
-    t = np.deg2rad(deg)
-    d = xx * np.sin(t) + yy * np.cos(t)
-    best = 0.0
-    for T in (np.exp(-d ** 2 / 1.28), np.tanh(d / 0.8)):
-        T = T - T.mean()
-        best = max(best, abs(float((T * Kc).sum() / np.sqrt((T ** 2).sum() * (Kc ** 2).sum() + 1e-12))))
-    return best
 
 
 class Convolution(VoiceoverScene):
@@ -166,7 +155,7 @@ class Convolution(VoiceoverScene):
                 likes = "This kernel was learned, and it likes the left-hand edges of strokes."
         elif ramp > 0.4:
             likes = "This kernel was learned, and it likes the edges of strokes at a slant."
-        elif max(_oriented_fit(Kc, th) for th in range(0, 180, 5)) > 0.45:
+        elif oriented_fit(Kc)[0] > 0.45:
             likes = "This kernel was learned, and it likes strokes and their edges at one particular angle."
         else:
             likes = "This kernel was learned, and what it likes is not as simple as one edge."

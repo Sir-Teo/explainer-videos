@@ -169,8 +169,8 @@ class Return(VoiceoverScene):
         tag = note(r"computed: \ this computer, \ numpy").to_corner(DR, buff=0.2)
         w8 = big8["seq"] / big8["par"]
         w256 = big256["seq"] / big256["par"]
-        v8 = (f"With a narrow state, eight numbers, the scan is {w8:.1f} times faster at {big8['T']:,} steps: a few "
-              "big operations instead of tens of thousands of small ones." if w8 > 1.2 else
+        v8 = (f"With a narrow state, eight numbers, the scan is {w8:.1f} times faster at {big8['T']:,} steps."
+              if w8 > 1.2 else
               f"With a narrow state the scan is about as fast as the loop, {w8:.1f} times.")
         v256 = (f"With a wide state, 256 numbers, it is {1 / w256:.1f} times slower: the scan does log T times the "
                 "work, and this computer has only a few cores to spread it over." if w256 < 0.8 else
