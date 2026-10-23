@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (EST, LOGN, MI, NEG, PART, POS, SIMCLR, arrow, axes, curve, load, node_box,
+from videos.ai.ai24.common import (EST, LOGN, MI, NEG, PART, POS, SIMCLR, arrow, axes, curve, load, node_box, tag,
                                    take_away)
 
 COLS = {r"x": SIMCLR, r"y_1": POS, r"y_j": NEG, r"K": C.BITS}

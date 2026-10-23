@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (DIGIT, NEG, PART, POS, SIMCLR, Hypersphere, axes, bars_chart, curve, load, pct,
-                                   take_away)
+from videos.ai.ai24.common import (DIGIT, Hypersphere, NEG, PART, POS, SIMCLR, axes, bars_chart, curve, load, pct,
+                                   tag, take_away)
 
 TAUS = ["0.05", "0.1", "0.2", "0.5", "1"]
 TAU_KEY = {"0.05": "0.05", "0.1": "0.1", "0.2": "0.2", "0.5": "0.5", "1": "1.0"}

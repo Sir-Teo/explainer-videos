@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (JEPA, MAE_C, PART, SIMCLR, SUP, TARGET, arrow, axes, curve, digit, load,
-                                   node_box, pct, seed_curves, take_away)
+from videos.ai.ai24.common import (JEPA, MAE_C, PART, SIMCLR, SUP, TARGET, arrow, axes, curve, digit, load, node_box,
+                                   pct, seed_curves, tag, take_away)
 
 
 class JEPAScene(VoiceoverScene):

@@ -105,8 +105,8 @@ class Rewards(VoiceoverScene):
                       label(r"rejected", font_size=22, color=PENALTY).next_to(cl, DOWN, buff=0.15))
         gold = VGroup(
             label(r"our stand-in for human taste, \ \textit{gold}:", font_size=24, color=GOLD),
-            label(r"names its topic \ $+$, \ cheerful words \ $+$, \ gloomy words \ $-$, \ repetition and empty "
-                  r"answers \ $--$", font_size=22, color=GREY_A),
+            label(r"cheerful words \ $+$, \ gloomy words \ $-$, \ past a dozen words \ $-$, \ repetition and "
+                  r"empty answers \ $--$", font_size=22, color=GREY_A),
             label(r"simulated people: \ $P(a \succ b) = \sigma\big((\mathrm{gold}(a) - \mathrm{gold}(b)) / 0.25\big)$",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -1.6, 0])
@@ -116,9 +116,9 @@ class Rewards(VoiceoverScene):
         with self.voiceover(
             "Now we do it ourselves. Our fine-tuned model from chapter two writes lines on request: a line about the "
             "sea, a line about the night. <bookmark mark='a'/> We have no crowd of labellers, so we simulate one. "
-            "Hidden from every model is a stand-in for human taste we'll call gold: it wants a line about the sea to "
-            "mention the sea, likes cheerful words, dislikes gloomy ones, and strongly dislikes repetition and empty "
-            "answers. <bookmark mark='b'/> Our simulated "
+            "Hidden from every model is a stand-in for human taste we'll call gold: it likes cheerful words, dislikes "
+            "gloomy ones, prefers a line of about a dozen words to a paragraph, and strongly dislikes repetition and "
+            "empty answers. <bookmark mark='b'/> Our simulated "
             "people compare two lines and prefer the one gold likes more, but not always: the closer the call, the "
             f"more often they pick the other one. <bookmark mark='c'/> That gives us {n:,} comparisons. From here on, "
             "everything that learns what people prefer sees only these comparisons, never gold itself, just as a "

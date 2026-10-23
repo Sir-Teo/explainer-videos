@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (MATRY, NEG, PART, POS, SIMCLR, axes, curve, digit_sheet, load, node_box, pct,
+from videos.ai.ai24.common import (MATRY, NEG, PART, POS, SIMCLR, axes, curve, digit_sheet, load, node_box, pct, tag,
                                    take_away)
 from videos.ai.ai24.s05_simclr import nn_sheet
 

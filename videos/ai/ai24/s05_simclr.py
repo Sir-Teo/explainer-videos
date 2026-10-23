@@ -3,8 +3,9 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (MOCO, NEG, PART, POS, SIMCLR, TARGET, arrow, axes, bars_chart, digit, digit_sheet,
-                                   load, node_box, pct, seed_curves, take_away, to_image, ink_rgb, rgb_of, PANEL)
+from videos.ai.ai24.common import (MOCO, NEG, PANEL, PART, POS, SIMCLR, TARGET, arrow, axes, bars_chart, digit,
+                                   digit_sheet, ink_rgb, load, node_box, pct, rgb_of, seed_curves, tag, take_away,
+                                   to_image)
 
 MAIN = "0.2"
 

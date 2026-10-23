@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (DINO_C, PART, PIX, POS, SIMCLR, SUP, arrow, bars_chart, load, node_box, pct,
+from videos.ai.ai24.common import (DINO_C, PART, PIX, POS, SIMCLR, SUP, arrow, bars_chart, load, node_box, pct, tag,
                                    take_away)
 
 RAW = "#FF9F45"

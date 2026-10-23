@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (BARLOW, BYOL_C, DIGIT, DINO_C, NAIVE, PART, SIMCLR, SIMSIAM, Hypersphere, axes,
-                                   curve, load, node_box, pct, seed_curves, take_away)
+from videos.ai.ai24.common import (BARLOW, BYOL_C, DIGIT, DINO_C, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, axes,
+                                   curve, load, node_box, pct, seed_curves, tag, take_away)
 
 
 class Collapse(VoiceoverScene):

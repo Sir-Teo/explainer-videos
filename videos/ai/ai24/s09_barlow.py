@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (BARLOW, HIST, NAIVE, PART, SIMCLR, VICREG_C, axes, bars_chart, curve, heat, load,
-                                   pct, take_away)
+                                   pct, tag, take_away)
 
 INV = "#5BD17A"
 RED = "#FF9F45"
