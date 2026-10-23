@@ -63,11 +63,12 @@ class Knowledge(VoiceoverScene):
         head = label(r"Each token's surprise, under two models", font_size=32).to_edge(UP, buff=0.25)
         leg = surprise_legend(width=3.2).to_corner(DR, buff=0.3)
         tag = note(r"computed: \ the Falcon passage, chapter 2, third paragraph").to_corner(DL, buff=0.3)
+        shade = "darker almost everywhere" if tb < ta else "no darker"
         with self.voiceover(
             "Let's look at what a strong model knows that a weaker one doesn't. Here is one paragraph of the "
             "Falcon passage, broken into tokens, the chunks a model reads and guesses one at a time, <bookmark mark='a'/> each colored by how surprised GPT-2, from "
             "2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under "
-            f"Qwen3, from 2025. Its tiles are {'darker almost everywhere' if tb < ta else 'no darker'}: {tb:.0f} bits "
+            f"Qwen3, from 2025. Its tiles are {shade}: {tb:.0f} bits "
             f"instead of {ta:.0f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(tag))

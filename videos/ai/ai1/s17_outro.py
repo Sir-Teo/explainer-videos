@@ -119,6 +119,7 @@ class Outro(VoiceoverScene):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         z = load("lmzip")
+        back = "and decoded it back, letter for letter" if z["ok"] else "to a fraction of what xz needs"
         with self.voiceover(
             "Let's take stock. We wrote guesses down as probability distributions, and the chain rule turned them "
             "into a score for a whole text. Surprise had to be a logarithm, and entropy, the average surprise, is "
@@ -126,7 +127,7 @@ class Outro(VoiceoverScene):
             "the best of them, and long typical sequences let a code reach the entropy, and no further. We met the "
             "price of a wrong model, the cross-entropy, and the two directions of the divergence inside it. "
             "Arithmetic coding showed that predicting and compressing are the same thing, and GPT-2 compressed our "
-            f"passage {'and gave it back' if z['ok'] else 'with it'}. Counting models showed us generalization, by "
+            f"passage {back}. Counting models showed us generalization, by "
             "failing at it, and mutual information showed how far back text remembers."
         ) as vo:
             self.play(FadeIn(head))

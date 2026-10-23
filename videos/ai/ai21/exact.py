@@ -389,13 +389,13 @@ def solve(D, z, kind, n, spacing="edm", seed=0):
             nfe += 1
             x = (s[i + 1] / s[i]) * x + (1 - s[i + 1] / s[i]) * d
         return x, nfe
-    if kind == "heun":  # EDM's Algorithm 1 (deterministic)
+    if kind == "heun":  # EDM's Algorithm 1 (deterministic): the last step, to the end, is a plain Euler step
         for i in range(n):
             d = D(x, s[i])
             nfe += 1
             k1 = (x - d) / s[i]
             xe = x + (s[i + 1] - s[i]) * k1
-            if i < n - 1 or s[i + 1] > 0:
+            if i < n - 1:
                 d2 = D(xe, s[i + 1])
                 nfe += 1
                 x = x + (s[i + 1] - s[i]) * 0.5 * (k1 + (xe - d2) / s[i + 1])
