@@ -30,7 +30,7 @@ import numpy as np
 QUICK = os.environ.get("AI21_QUICK") == "1"
 T, D, LAYERS, HEADS = 64, 128, 4, 4
 STEPS = 80 if QUICK else 4000
-BATCH = 64
+BATCH = 32
 SEEDS = (0, 1)
 EVAL_AT = sorted({0, 100, 250, 500, 750, 1000, 1500, 2000, 2500, 3000, 3500, STEPS}) if not QUICK else [0, 40, STEPS]
 CKPT_EVERY = 100
@@ -277,7 +277,7 @@ def train_run(kind, seed, data, chars, enc, K, cache_dir, fill):
     import torch
 
     tr, va = data["train"], data["valid"]
-    vblocks = va[: 96 * T].view(96, T)
+    vblocks = va[: 64 * T].view(64, T)
     torch.manual_seed(2025 + seed)  # the same initial weights for both kinds (Nie et al., LLaDA, 2025)
     net = build(K, causal=(kind == "ar"))
     n_params = sum(p_.numel() for p_ in net.parameters())
@@ -345,7 +345,7 @@ def train_run(kind, seed, data, chars, enc, K, cache_dir, fill):
         torch.nn.utils.clip_grad_norm_(net.parameters(), 1.0)
         opt.step()
         sched.step()
-        run.append(float(loss) / math.log(2))
+        run.append(loss.item() / math.log(2))
         if step % 50 == 0:
             train_curve.append((step, float(np.mean(run))))
             run = []

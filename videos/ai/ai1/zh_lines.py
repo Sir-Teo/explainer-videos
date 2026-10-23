@@ -39,32 +39,32 @@ ZH = {
     'Even inside a word like motorcycle, the letters take guesses.':
         '就算在motorcycle这样的词里面，字母也要猜上几次。',
 
-    'f"From counts like these, Shannon estimated how much information':
-        "根据这样的计数，香农估算出英语到底携带多少信息：每个字母大约1比特，所谓1比特，就是一个是或否问题的答案，在{lo_h:.1f}到{hi_h:.1f}之间。<bookmark mark='a'/>而一个盲猜的字母，最多可以携带{blind:.2f}比特。我们写下的东西，大部分是可以预测的。",
+    'f"From counts like these, Shannon estimated that English':
+        "根据这样的计数，香农估算出，英语每个字母大约携带1比特信息，所谓1比特，就是一个是或否问题的答案：在{lo_h:.1f}到{hi_h:.1f}之间，<bookmark mark='a'/>而一个盲猜的字母，最多可以携带{blind:.2f}比特。我们写下的东西，大部分是可以预测的。",
 
     "Shannon didn't start from nothing.":
-        "香农并不是从零开始的。<bookmark mark='a'/>电报员早就知道，常见的字母应该用短的编码：摩尔斯电码给e的只是一个点。<bookmark mark='b'/>1928年，贝尔实验室的拉尔夫·哈特利提出，用可能消息个数的对数来衡量信息。<bookmark mark='c'/>1948年，香农把它变成了一门理论：熵，比特，以及压缩的极限。<bookmark mark='d'/>接着是猜字游戏、霍夫曼编码和算术编码。<bookmark mark='e'/>半个世纪之后，同一个游戏成了机器学习语言的方式：2003年，一个被训练来猜下一个词的神经网络；然后是GPT-2，以及今天的模型。",
+        "香农并不是从零开始的。<bookmark mark='a'/>电报员早就知道，常见的字母应该用短的编码：摩尔斯电码给e的只是一个点。<bookmark mark='b'/>1928年，贝尔实验室的拉尔夫·哈特利，用可能消息个数的对数来衡量信息。<bookmark mark='c'/>1948年，香农把它变成了一门理论：熵，比特，以及压缩的极限。<bookmark mark='d'/>接着是猜字游戏、霍夫曼编码和算术编码。<bookmark mark='e'/>半个世纪之后，同一个游戏成了机器学习语言的方式：2003年，一个猜下一个词的神经网络；然后是GPT-2，以及今天的模型。",
 
-    'f"Seventy-five years after Shannon\'s game':
-        "香农的游戏过去75年后，它正是大语言模型被训练去玩的游戏。给它一个句子的开头，<bookmark mark='a'/>它就为每一个可能的下一个词给出一个概率。<bookmark mark='b'/>2019年的GPT-2，有1.24亿个参数，也就是模型里那些可调的数，{says(pa)}。<bookmark mark='c'/>2025年的Qwen3，有40亿个参数，{says(pb)}。",
+    'f"Seventy-five years on, Shannon\'s game':
+        "75年过去了，香农的游戏正是大语言模型被训练去玩的游戏。给它一个句子的开头，<bookmark mark='a'/>它就为每一个可能的下一个词给出一个概率。<bookmark mark='b'/>2019年的GPT-2，有1.24亿个参数，也就是模型里那些可调的数，{says(pa)}。<bookmark mark='c'/>2025年的Qwen3，有40亿个参数，{says(pb)}。",
 
-    'Strictly, what a model guesses is the next token.':
-        "严格地说，模型猜的是下一个词元。<bookmark mark='a'/>词元，就是模型一次猜出的一小块文本：可以是一个完整的词，一个词的一部分，或者一个标点符号。这是一部1930年小说里的一行，按GPT-2的方式切开。Paris，连同它前面的空格，是单独一个词元。",
+    "Strictly, a model guesses the next token.":
+        "严格地说，模型猜的是下一个词元。<bookmark mark='a'/>词元，就是模型一次猜出的一小块文本：一个词，一个词的一部分，或者一个标点符号。这是一部1930年小说里的一行，按GPT-2的方式切开。",
 
-    "And it's not just text.":
-        "而且不只是文字。<bookmark mark='a'/>生成图像的模型，学的是去猜图片里被加进去的噪声。<bookmark mark='b'/>语音模型，猜下一小段声音。<bookmark mark='c'/>机器人控制器，猜机械臂的下一个动作。几乎每一个前沿模型，骨子里玩的都是香农游戏的某个版本。",
+    "And not just text.":
+        "而且不只是文字。<bookmark mark='a'/>图像模型学的是去猜图片里被加进去的噪声；<bookmark mark='b'/>语音模型，猜下一小段声音；<bookmark mark='c'/>机器人，猜机械臂的下一个动作。几乎每一个前沿模型，玩的都是香农游戏的某个版本。",
 
     'Which raises the question this whole series is about.':
         '这就引出了整个系列要回答的问题：要猜得好，你得知道些什么？',
 
     "Over thirty-one parts, we'll build the answer from the ground up":
-        "在31个部分里，我们会从头搭建出这个答案，也看看这个领域是怎么走到今天的。<bookmark mark='a'/>先是基础：信息，符号主义时代，向量，微积分和随机性。<bookmark mark='b'/>然后是从数据中学习，一直到深度学习革命和规模的数学。<bookmark mark='c'/>然后是Transformer时代。<bookmark mark='d'/>然后是生成与感知。<bookmark mark='e'/>然后是能动性：强化学习，推理，还有智能体。<bookmark mark='f'/>最后，当我们往模型里面看时，能看到什么，以及我们能不能信任它。",
+        "在31个部分里，我们会从头搭建出这个答案。<bookmark mark='a'/>基础：信息，符号主义时代，向量，微积分，随机性。<bookmark mark='b'/>从数据中学习，一直到深度学习和规模。<bookmark mark='c'/>Transformer。<bookmark mark='d'/>生成与感知。<bookmark mark='e'/>能动性：强化学习，推理，智能体。<bookmark mark='f'/>最后，往模型里面看，以及我们能不能信任它。",
 
     'Part one starts where Shannon did.':
-        "第1部分从香农出发的地方开始。<bookmark mark='a'/>这一部分讲：信息是什么，为什么用比特来衡量；最好的编码，以及香农证明的极限；错误模型的代价；一种能把任何好的猜测者变成压缩器的编码；模型怎样学会猜；以及猜测已经走了多远。到最后，我们会明白，为什么猜得好和压缩得好是同一件事。",
+        "第1部分从香农出发的地方开始。<bookmark mark='a'/>信息是什么，为什么用比特来衡量；最好的编码，以及香农的极限；错误模型的代价；一种能把任何猜测者变成压缩器的编码；模型怎样学会猜；以及猜测已经走了多远。我们会看到，猜得好和压缩得好，是同一件事。",
 
     'f"And we\'ll keep score.':
-        "我们还要记分。这是一部小说里的一页，1930年的《马耳他之鹰》。它在2026年1月1日进入公有领域，上了古登堡计划，那时这一部分的每个模型都已经训练完了，所以没有一个可能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>整个系列的任务，就是解释记分牌上的这些数字是怎么降下来的：从8，{goal}。",
+        "我们还要记分。这是1930年的《马耳他之鹰》里的一页。它在2026年1月1日进入公有领域，那时这一部分的每个模型都已经训练完了，所以没有一个可能把它背下来。<bookmark mark='a'/>存成纯文本，每个字符要8比特。<bookmark mark='b'/>这个系列要解释的，就是记分牌上的这些数字是怎么降下来的：从8，{goal}。",
 
     "f'to {low:.2f} bits per character, and beyond'":
         '降到每字符{low:.2f}比特，甚至更低',
@@ -77,59 +77,59 @@ ZH = {
         '第1章。在给猜测打分之前，我们得先有办法把猜测写下来。',
 
     'f"Take {nb} novels, from Pride and Prejudice to The Great Gatsby':
-        "拿来{nb}部小说，从《傲慢与偏见》到《了不起的盖茨比》，数一数里面的每一个符号。我们用香农的字母表：26个字母加空格，大写和标点都去掉。一共是<bookmark mark='a'/>{n / 1000000.0:.1f}百万个符号。<bookmark mark='b'/>最常见的是{sym_name(first)}，大约每{round(1 / p[first])}个符号里有一个。其次是{sym_name(second)}，每{round(1 / p[second])}个里有一个。",
+        "拿来{nb}部小说，从《傲慢与偏见》到《了不起的盖茨比》，数一数每一个符号：用香农的字母表，26个字母加空格，大写和标点都去掉。一共是<bookmark mark='a'/>{n / 1000000.0:.1f}百万个符号。<bookmark mark='b'/>最常见的是{sym_name(first)}，大约每{round(1 / p[first])}个符号里有一个。其次是{sym_name(second)}，每{round(1 / p[second])}个里有一个。",
 
     'f"Sorted, the familiar order appears: {top6}.':
         "排好序，熟悉的顺序就出现了：{top6}。<bookmark mark='z'/>排在最后的是{', '.join(tail4[:3])}和{tail4[3]}。最少见的{ALPHA27[rarest]}，大约每{round(1 / p[rarest], -2):,.0f}个符号才出现一次。",
 
     'This is a probability distribution: a number for each possibility':
-        "这就是一个概率分布：每种可能都有一个数，<bookmark mark='a'/>没有一个是负的，加起来等于1。<bookmark mark='b'/>把这些柱子首尾相接，它们正好填满一根长度为1的条，每个符号占一小段，宽度就是它的概率。一个规范写下的猜测，就是把一个单位的信念，分给各种可能。",
+        "这就是一个概率分布：每种可能都有一个数，<bookmark mark='a'/>没有负的，加起来等于1。<bookmark mark='b'/>把这些柱子首尾相接，它们填满一根长度为1的条，每个符号一小段，宽度就是它的概率。一个写下来的猜测，就是把一个单位的信念，分给各种可能。",
 
     'But we rarely guess from nothing.':
-        "不过，我们很少凭空去猜。一旦知道了前一个字母，可能性就变了。<bookmark mark='a'/>这是整张表：每一行是前一个符号，每个小方格表示在它后面，各个符号出现的可能性有多大。<bookmark mark='d'/>这就是条件概率：已知A时B的概率，等于A和B同时发生的概率，除以A的概率。",
+        "不过，我们很少凭空去猜。一旦知道了前一个字母，可能性就变了。<bookmark mark='a'/>这是整张表：每一行是一个前一个符号，每个小方格表示下一个符号有多大可能。<bookmark mark='d'/>这就是条件概率：已知A时B的概率，等于两者同时发生的概率，除以A的概率。",
 
     'f"In our books, q appears {n_q:,} times':
-        "在我们的书里，q出现了{n_q:,}次，除了{n_q - n_qu:,}次之外，后面跟的都是u。<bookmark mark='a'/>所以已知q时u的概率是{q_u:.4f}。<bookmark mark='b'/>而在空格之后，几乎什么都可能出现：一个新词正要开始。",
+        "在我们的书里，q出现了{n_q:,}次，除了{n_q - n_qu:,}次之外，后面跟的都是u。<bookmark mark='a'/>所以已知q时u的概率是{q_u:.4f}。<bookmark mark='b'/>可在空格之后，几乎什么都可能出现：一个新词正要开始。",
 
     'Multiply that definition out, and you get a rule for whole strings.':
         "把这个定义乘开，就得到一条关于整串符号的规则。<bookmark mark='a'/>两个符号的概率，等于第一个的概率，乘以已知第一个时第二个的概率。<bookmark mark='b'/>三个的时候，把前两个看成一个事件，<bookmark mark='c'/>再代进去。",
 
     'And so on, one symbol at a time.':
-        "依此类推，一次一个符号。<bookmark mark='a'/>一整段文本的概率，就是一连串对下一个符号的猜测的乘积，每次猜测都知道前面的一切。这就是链式法则，而且它是精确的：没有做任何假设。<bookmark mark='b'/>这也说明了，为什么一台只会猜下一个符号的机器，能给一整段文本打分，甚至写出一整段文本。",
+        "依此类推，一次一个符号。<bookmark mark='a'/>一整段文本的概率，就是一连串对下一个符号的猜测的乘积，每次猜测都知道前面的一切。这就是链式法则，而且它是精确的：没有做任何假设。<bookmark mark='b'/>这也是为什么一台只会猜下一个符号的机器，能给一整段文本打分，甚至写出一整段文本。",
 
     'f"Here\'s the chain rule as a picture.':
-        "这是链式法则的一幅图。有人刚写下he said，我们想知道接下来三个字母是t、h、e的概率。<bookmark mark='a'/>第一根条是整整一个单位的信念，按最后三个符号i、d、空格，分给27个可能的下一个符号。t分到的一段，宽{ps[0]:.3f}。",
+        "这是链式法则的一幅图。有人刚写下he said，我们想知道接下来三个字母是t、h、e的可能性。<bookmark mark='a'/>第一根条把整整一个单位的信念，按最后三个符号i、d、空格，分给27个可能的下一个符号。t分到的一段，宽{ps[0]:.3f}。",
 
     'f"Now zoom into that sliver and share it out again':
-        "现在放大这一小段，再分一次，<bookmark mark='a'/>这次按d、空格、t之后下一个字母的概率来分。h占了其中的{100 * ps[1]:.0f}%。<bookmark mark='b'/>再放大：在空格、t、h之后，字母e占了{100 * ps[2]:.0f}%。<bookmark mark='c'/>最后这一小段的宽度就是它们的乘积：{pr:.4f}，也就是整串的概率。",
+        "现在放大这一小段，再分一次，<bookmark mark='a'/>按d、空格、t之后的概率来分。h占了其中的{100 * ps[1]:.0f}%。<bookmark mark='b'/>再放大：在空格、t、h之后，e占了{100 * ps[2]:.0f}%。<bookmark mark='c'/>最后这一小段的宽度就是它们的乘积，{pr:.4f}：也就是整串的概率。",
 
     'Keep this picture in mind: nested slivers, each one a guess.':
-        '记住这幅图：一层套一层的小段，每一层都是一次猜测。到第8章，同样这幅图会变成一种压缩文本的方法。',
+        "记住这幅图：一层套一层的小段，每一层都是一次猜测。到第8章，它会变成一种压缩文本的方法。",
 
     # ------------------------------------------------------------------ Surprise
     'Chapter two. How surprised should you be?':
         '第2章。你应该有多意外？',
 
     'f"If you were sure something would happen':
-        "如果你确信某件事会发生，看到它发生，什么也学不到。<bookmark mark='a'/>q后面的u：不是新闻。<bookmark mark='b'/>硬币正面朝上，告诉你一点点。<bookmark mark='c'/>一个字母e，多一点。<bookmark mark='d'/>而一个z，大约每{round(1 / pz, -2):,.0f}个符号才出现一次，告诉你很多。一件事越不可能，它发生时你学到的就越多。",
+        "如果你确信某件事会发生，看到它发生，什么也学不到。<bookmark mark='a'/>q后面的u：不是新闻。<bookmark mark='b'/>硬币正面朝上，告诉你一点点。<bookmark mark='c'/>一个字母e，多一点。<bookmark mark='d'/>而一个z，大约每{round(1 / pz, -2):,.0f}个符号才出现一次，告诉你很多。它越不可能，你学到的就越多。",
 
     "Let's turn that into mathematics.":
-        "我们把这个想法变成数学。把概率为p的事件的意外度记作s(p)。s应该是什么样的？<bookmark mark='a'/>香农提出了几条很朴素的要求。它应该只取决于p。<bookmark mark='b'/>p越大，它应该越小，一件必然发生的事，应该毫不意外。<bookmark mark='c'/>对独立事件，也就是知道其中一个，对另一个毫无帮助，所以它们的概率相乘，意外度应该相加：<bookmark mark='d'/>硬币正面朝上，同时骰子掷出5，这两件事一起的意外度，应该恰好等于各自的意外度之和。<bookmark mark='e'/>还有，p的微小变化，只应带来s的微小变化。",
+        "我们把这个想法变成数学。把概率为p的事件的意外度记作s(p)。<bookmark mark='a'/>提几条很朴素的要求。它只取决于p。<bookmark mark='b'/>p越大，它越小，一件必然发生的事，毫不意外。<bookmark mark='c'/>对独立事件，也就是知道其中一个，对另一个毫无帮助，它们的概率相乘，意外度应该相加：<bookmark mark='d'/>硬币正面朝上，同时骰子掷出5，这两件事一起的意外度，等于两者之和。<bookmark mark='e'/>还有，p的微小变化，只带来s的微小变化。",
 
     'Remarkably, those rules leave only one choice.':
-        "了不起的是，这几条要求只留下一种选择。用对半分的次数来衡量概率：<bookmark mark='a'/>把p写成2的负x次方，令g(x)为这个事件的意外度。<bookmark mark='b'/>第3条说，g把和变成和。<bookmark mark='c'/>所以对每个正整数n，g(n)等于n乘以g(1)，<bookmark mark='d'/>对每个分数也一样成立。<bookmark mark='e'/>连续性填补了分数之间的数，所以对每个x，g(x)都等于x乘以g(1)。",
+        "了不起的是，这几条要求只留下一种选择。用对半分的次数来衡量概率：<bookmark mark='a'/>把p写成2的负x次方，令g(x)为它的意外度。<bookmark mark='b'/>第3条说，g把和变成和。<bookmark mark='c'/>所以对每个正整数n，g(n)等于n乘以g(1)，<bookmark mark='d'/>对每个分数也一样。<bookmark mark='e'/>连续性补上其余的数：g(x)等于x乘以g(1)。",
 
     'Put the probability back in, and the surprise must be a constant':
-        "把概率代回去，意外度就必须是一个常数乘以p分之1的对数。<bookmark mark='a'/>这个常数只是选定一个单位。让一次公平的抛硬币恰好携带一个单位，这个单位就叫比特。概率为p的事件，意外度是以2为底、p分之1的对数，单位是比特。",
+        "把概率代回去，意外度就必须是一个常数乘以p分之1的对数。<bookmark mark='a'/>这个常数只是选定一个单位。让一次公平的抛硬币恰好携带一个单位，把它叫作比特：概率为p的事件，携带以2为底、p分之1的对数那么多比特。",
 
     'f"Here\'s that function.':
         "这就是那个函数。<bookmark mark='a'/>一枚硬币：1比特。骰子的一面：{math.log2(6):.2f}比特。<bookmark mark='b'/>字母e：{se:.2f}比特。字母z：{sz:.1f}。<bookmark mark='c'/>而紧跟在q后面的u：{su:.3f}比特，几乎为零。<bookmark mark='d'/>当p趋向于零，意外度会无限增大。",
 
     'Bits have a concrete meaning.':
-        "比特有一个很具体的含义。把所有可能拿过来，对半分：<bookmark mark='a'/>左还是右，0还是1。把剩下的再对半分，一共分10次。<bookmark mark='b'/>你就把范围缩小到了1024分之一，这是一个概率为2的负10次方的事件，看到它的意外度就是10比特。每一个把可能性减半的是或否的回答，就是1比特。",
+        "比特有一个很具体的含义。把所有可能拿过来，对半分：<bookmark mark='a'/>左还是右，0还是1。把剩下的再对半分，一共分10次。<bookmark mark='b'/>你就缩小到了1024分之一，概率是2的负10次方：10比特。每一个把可能性减半的是或否的回答，就是1比特。",
 
     'f"And because logs turn products into sums':
-        "因为对数把乘积变成和，链式法则就变成了一个很漂亮的东西。<bookmark mark='a'/>一整段文本的意外度，等于它每个符号的意外度之和，每个符号都是在已知前面一切的条件下。<bookmark mark='b'/>这又是香农的那个句子，每个字母的意外度画成一根柱子，评判它的模型只知道前面{k}个字母。",
+        "因为对数把乘积变成和，链式法则就变成了一个很漂亮的东西。<bookmark mark='a'/>一整段文本的意外度，等于它每个符号的意外度之和，每个符号都是在已知前面一切的条件下。<bookmark mark='b'/>这又是香农的那个句子，每个字母的意外度是一根柱子，评判它的模型只知道前面{k}个字母。",
 
     'f"The tall bars are where the text surprised the model: {where}.':
         "高的柱子，就是文本让模型意外的地方：{where}。<bookmark mark='a'/>加起来，{len(sent)}个符号共{total:.0f}比特：每个符号{per:.1f}比特，{vs}。记住这个数，我们就靠它来记分。",
@@ -308,26 +308,26 @@ ZH = {
     'Chapter eight. The best code for a good guesser.':
         '第8章。给好猜测者的最好编码。',
 
-    'f"Huffman\'s code has one flaw.':
-        "霍夫曼编码有一个缺陷。每个符号都要花整数个比特，至少1个。<bookmark mark='a'/>q后面的u只携带{info:.3f}比特，却还是要花整整1比特。<bookmark mark='b'/>对字母频率来说，这还能忍受；但一个真正懂英语的模型，每个符号的意外度只有大约1比特，甚至更少，而一个逐符号的编码永远不能低于1比特。对长分组编码能解决这个问题，可是一百个字母一组的码表需要27的100次方个条目，而一个读上下文的模型，每个字母都会改变它的猜测。<bookmark mark='c'/>解决办法是把整条消息编成一个数，一次一个猜测。",
+    'f"Huffman\'s code has one flaw:':
+        "霍夫曼编码有一个缺陷：每个符号都要花整数个比特，至少1个。<bookmark mark='a'/>q后面的u只携带{info:.3f}比特，却还是要花整整1比特。<bookmark mark='b'/>一个真正懂英语的模型，每个符号的意外度只有大约1比特，甚至更少，而逐符号的编码永远不能低于1比特。<bookmark mark='c'/>对长分组编码能解决这个问题，可是一百个字母一组，码表就需要27的100次方个条目。<bookmark mark='d'/>换个办法：把整条消息编成一个数，一次一个猜测。",
 
     'f"Arithmetic coding, worked out by Jorma Rissanen and Richard Pasco':
-        "算术编码，由约尔马·里萨宁和理查德·帕斯科在1976年提出。我们已经见过它的核心：链式法则那一层套一层的小段。<bookmark mark='a'/>从单位区间开始，按模型对第一个字母的猜测来分割。t分到一段，宽{steps[0]['p']:.3f}。现在把这一段的两个端点写成二进制。<bookmark mark='b'/>它们的前{c0}位相同。这一段里的任何数都这样开头，所以这几位已经确定了。",
+        "算术编码，由约尔马·里萨宁和理查德·帕斯科在1976年提出。我们已经见过它的核心：链式法则那一层套一层的小段。<bookmark mark='a'/>按模型对第一个字母的猜测，分割单位区间：t分到一段，宽{steps[0]['p']:.3f}。把它的两个端点写成二进制。<bookmark mark='b'/>它们的前{c0}位相同，所以这一段里的每个数都这样开头：这几位已经确定了。",
 
     'f"Then zoom in and split again':
-        "然后放大，再分割：h、e、空格、f、a、l、c、o、n。<bookmark mark='a'/>每个字母都按它的概率把区间缩小，区间越窄，两个端点相同的前导位就越多。这些位一确定，就可以发送出去。<bookmark mark='b'/>一个可能的字母几乎不缩小区间，只花一个零头比特。一个不太可能的字母，比如{hs_word}里的{hs_sym}，模型只给了它{100 * hs['p']:.1f}%，就要花{hs['bits']:.1f}比特。",
+        "然后放大，再分割：h、e、空格、f、a、l、c、o、n。<bookmark mark='a'/>每个字母都按它的概率把区间缩小，两个端点相同的前导位越来越多，随时可以发送。<bookmark mark='b'/>一个可能的字母几乎不缩小区间，只花一个零头比特。一个不太可能的字母，比如{hs_word}里的{hs_sym}，模型只给了它{100 * hs['p']:.1f}%，就要花{hs['bits']:.1f}比特。",
 
     'f"After ten letters, the interval has width':
-        "十个字母之后，区间的宽度是2的负{info:.2f}次方：整条消息的概率。<bookmark mark='a'/>最后，找出最短的二进制小数，使得以这些数位开头的每个数都落在区间内。<bookmark mark='b'/>这里需要{n}比特。<bookmark mark='c'/>比一比：定长编码{nf}比特，霍夫曼{nh}比特，算术编码{n}比特，而信息量是{info:.2f}比特。",
+        "十个字母之后，区间的宽度是2的负{info:.2f}次方：整条消息的概率。<bookmark mark='a'/>最后，找出最短的二进制小数，使它后面无论接什么，都落在区间内。<bookmark mark='b'/>这里需要{n}比特。<bookmark mark='c'/>比一比：定长编码{nf}比特，霍夫曼{nh}比特，算术编码{n}比特，而信息量是{info:.2f}比特。",
 
     'Why within two bits?':
-        "为什么不超过2比特？设P是消息的概率，也就是它的区间宽度。<bookmark mark='a'/>选一个长度l：P分之1的对数，向上取整，再加1。<bookmark mark='b'/>于是一串l位比特代表一个宽度为2的负l次方的小区间，至多是P的一半。<bookmark mark='c'/>这些小区间铺满整条线，所以在低端处或之后开始的第一个小区间，一定在高端之前结束：它整个落在消息的区间里，它的l位比特就锁定了这条消息。<bookmark mark='d'/>所以l位比特总是够用，而l小于信息量加2。",
+        "为什么不超过2比特？设P是消息的概率，也就是它的区间宽度。<bookmark mark='a'/>选一个长度l：P分之1的对数，向上取整，再加1。<bookmark mark='b'/>一串l位比特代表一个宽度为2的负l次方的小区间，至多是P的一半。<bookmark mark='c'/>这些小区间铺满整条线，所以在低端处或之后开始的第一个小区间，一定在高端之前结束：它整个落在里面，它的l位比特就锁定了这条消息。<bookmark mark='d'/>而l小于信息量加2。",
 
-    'Decoding runs the same steps.':
-        "解码走的是同样的步骤。接收方有这些比特，还有一份完全相同的模型。<bookmark mark='a'/>这些比特代表一个数。它落在第一次分割中t的那一段里，所以第一个字母是t。<bookmark mark='b'/>放大：它落在下一次分割中h的那一段，然后是e，依此类推，一次一个字母，直到消息被原样还原。",
+    "Decoding runs the same steps,":
+        "解码走的是同样的步骤，用一份完全相同的模型。<bookmark mark='a'/>这些比特代表一个数。它落在第一次分割中t的那一段里：第一个字母是t。<bookmark mark='b'/>放大：h的那一段，然后是e，依此类推，直到消息被原样还原。",
 
     'f"A real coder can\'t keep fractions with thousands of digits.':
-        "真正的编码器没法保存有几千位的小数。它把区间存成两个整数，低端和高端，这里是{R}位，实际中是32位。<bookmark mark='a'/>第一个字母缩小区间。<bookmark mark='b'/>现在两端的第一位相同了：它确定了。把它发出去，再把装着区间的那一半放大一倍，让它重新填满整个范围：这就是一次放大。<bookmark mark='c'/>如果区间跨过中点，却落在中间那一半里，下一位还不知道。编码器照样以中点为中心放大，并记下有一位在等待；等到下一个确定的位出来时，它会被翻转，跟着一起出来。<bookmark mark='d'/>一个字母接一个字母，缩小，放大，比特就源源不断地流出来。",
+        "真正的编码器没法保存有几千位的小数。它把区间存成两个整数，低端和高端，这里是{R}位，实际中是32位。<bookmark mark='a'/>第一个字母缩小区间。<bookmark mark='b'/>现在两端的第一位相同了：把它发出去，再把装着区间的那一半放大一倍，让它重新填满整个范围：这就是一次放大。<bookmark mark='c'/>如果区间跨过中点，落在中间那一半里，下一位还不知道。编码器照样以中点为中心放大，并记下一位在等待；等下一个确定的位出来之后，它会被翻转，跟着出来。<bookmark mark='d'/>一个字母接一个字母，缩小，放大，比特就源源不断地流出来。",
 
     "f'At the end, a couple of bits close it off":
         "最后，再用几位把它收尾：the falcon用了{nb}比特，{cmp_said}。始终是整数，而且从不超过寄存器的长度。",
@@ -338,7 +338,7 @@ ZH = {
     'f"against the exact coder\'s {ne}"': '而精确编码器是{ne}比特',
 
     'f"Does the rounding cost much?':
-        "取整会花很多吗？我们把整段《马耳他之鹰》，{n:,}个字母，送进一个由我们最好的计数模型驱动的32位编码器。<bookmark mark='a'/>在这个模型下，它的信息量是{ideal:,.0f}比特。<bookmark mark='b'/>把概率取整成{show[-1]}位的计数，编码器在整段里只比这多发了{fine:.1f}比特。{coarse_said}<bookmark mark='r'/>{dip_said}<bookmark mark='c'/>寄存器只要比计数宽几位，就几乎无关紧要。算术编码几乎什么也不浪费：你付出的，就是模型的意外度。",
+        "取整会花很多吗？我们把整段《马耳他之鹰》，{n:,}个字母，送进一个由我们最好的计数模型驱动的32位编码器。<bookmark mark='a'/>在这个模型下，它的信息量是{ideal:,.0f}比特。<bookmark mark='b'/>把概率取整成{show[-1]}位的计数，编码器在整段里只多发了{fine:.1f}比特。{coarse_said}<bookmark mark='r'/>{dip_said}<bookmark mark='c'/>寄存器几乎无关紧要。算术编码几乎什么也不浪费：你付出的，就是模型的意外度。",
 
     "f'Round them to 8 bits and it costs {coarse:,.0f} extra bits.'":
         '取整成8位，就要多花{coarse:,.0f}比特。',
@@ -347,7 +347,7 @@ ZH = {
         '用{dips[0]}位的计数，它甚至还少花了几比特：取整给了罕见字母多一点概率，而这段文字恰好用到了它们。',
 
     'This is the hinge of the whole part.':
-        "这是整个这一部分的枢纽。<bookmark mark='a'/>把任何一个能预测的模型交给算术编码，就得到一个压缩器，每个符号的输出大约是q分之1的对数那么多比特：文本的长度乘以模型的交叉熵。<bookmark mark='b'/>反过来，任何压缩器都定义了一个模型：一段要花l比特的文本，等于被赋予了2的负l次方的概率。<bookmark mark='c'/>所以预测得好和压缩得好，是同一种本事。在最后一章，我们会让一个语言模型来当压缩器。",
+        "这是整个这一部分的枢纽。<bookmark mark='a'/>把任何一个能预测的模型交给算术编码，就得到一个压缩器，每个符号大约花q分之1的对数那么多比特：文本的长度乘以模型的交叉熵。<bookmark mark='b'/>反过来，任何压缩器都定义了一个模型：一段要花l比特的文本，就被赋予了2的负l次方的概率。<bookmark mark='c'/>预测得好和压缩得好，是同一种本事。在第15章，一个语言模型会变成压缩器。",
 
     # ------------------------------------------------------------------ Counting
     'Chapter nine. So far, our models have only counted.':

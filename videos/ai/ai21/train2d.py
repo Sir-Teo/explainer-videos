@@ -181,7 +181,7 @@ def train_denoiser(seed, kind="cos", param="eps", steps=STEPS, on_check=None, cu
         loss.backward()
         opt.step()
         sched.step()
-        run.append(float(loss))
+        run.append(loss.item())
         if curve is not None and step % 25 == 0:
             curve.append((step, float(np.mean(run))))
             run = []
@@ -475,7 +475,7 @@ def train_fm(seed, coupling="indep", pairs=None, steps=STEPS, on_check=None, cur
         loss.backward()
         opt.step()
         sched.step()
-        run.append(float(loss))
+        run.append(loss.item())
         if curve is not None and step % 25 == 0:
             curve.append((step, float(np.mean(run))))
             run = []

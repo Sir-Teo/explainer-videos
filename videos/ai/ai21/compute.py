@@ -138,7 +138,7 @@ def compute_glyphs():
     torch.manual_seed(2023)
     net = mlp(GL * GL, GL * GL, width=768, tdim=64)
     opt = torch.optim.Adam(net.parameters(), lr=1e-3)
-    steps = 400 if os.environ.get("AI21_QUICK") == "1" else 12000
+    steps = 400 if os.environ.get("AI21_QUICK") == "1" else 8000
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps)
     g = torch.Generator().manual_seed(0)
     zw = torch.tensor(rng(5).normal(size=(16, GL * GL)), dtype=torch.float32)
@@ -162,7 +162,7 @@ def compute_glyphs():
         loss.backward()
         opt.step()
         sched.step()
-        run.append(float(loss))
+        run.append(loss.item())
         if step % 100 == 0:
             curve.append((step, float(np.mean(run))))
             run = []

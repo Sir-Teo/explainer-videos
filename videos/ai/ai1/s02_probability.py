@@ -46,8 +46,8 @@ class Probability(VoiceoverScene):
             return "the space" if ALPHA27[i] == " " else ALPHA27[i]
 
         with self.voiceover(
-            f"Take {nb} novels, from Pride and Prejudice to The Great Gatsby, and count every symbol in them. We "
-            "use Shannon's alphabet: twenty-six letters and the space, with capitals and punctuation dropped. That's "
+            f"Take {nb} novels, from Pride and Prejudice to The Great Gatsby, and count every symbol: Shannon's "
+            "alphabet of twenty-six letters and the space, capitals and punctuation dropped. That's "
             f"<bookmark mark='a'/> {n / 1e6:.1f} million symbols. <bookmark mark='b'/> The most common is "
             f"{sym_name(first)}, about one symbol in {round(1 / p[first])}. Then {sym_name(second)}, one in "
             f"{round(1 / p[second])}."
@@ -57,7 +57,7 @@ class Probability(VoiceoverScene):
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in g.bars], lag_ratio=0.05), FadeIn(g.labels),
                       FadeOut(books), FadeOut(more), run_time=2.5)
             vo.wait_until("b")
-            self.play(FadeIn(sp_val), Indicate(g.bars[space_i], color=WHITE))
+            self.play(FadeIn(sp_val), Indicate(g.bars[first], color=WHITE))
             self.play(FadeIn(e_val))
         # sort by frequency
         slot = g.slot
@@ -98,10 +98,10 @@ class Probability(VoiceoverScene):
         cap = label(r"a guess $=$ a way of sharing one unit of belief among the possibilities", font_size=28,
                     color=GREY_A).move_to(DOWN * 1.6)
         with self.voiceover(
-            "This is a probability distribution: a number for each possibility, <bookmark mark='a'/> none of them "
-            "negative, and adding up to one. <bookmark mark='b'/> Stack the bars end to end, and they fill a bar of "
-            "length exactly one, with a sliver for every symbol, as wide as its probability. A guess, written down "
-            "properly, is a way of sharing one unit of belief among the possibilities."
+            "This is a probability distribution: a number for each possibility, <bookmark mark='a'/> none "
+            "negative, adding up to one. <bookmark mark='b'/> Stack the bars end to end, and they fill a bar of "
+            "length one, a sliver per symbol, as wide as its probability. A guess, written down, shares one unit "
+            "of belief among the possibilities."
         ) as vo:
             self.play(FadeOut(self.head), FadeOut(self.sub))
             vo.wait_until("a")
@@ -203,9 +203,9 @@ class Probability(VoiceoverScene):
         lit_cell = cells[ti * 27 + hi].copy().set_fill(C.BITS, opacity=1)
         with self.voiceover(
             "But we rarely guess from nothing. Once you know the previous letter, the odds change. <bookmark mark='a'/> "
-            "Here is the whole table: each row is the previous symbol, and each square shows how likely each next "
-            "symbol is, given that one. <bookmark mark='d'/> This is conditional probability: the probability of B "
-            "given A is the probability of both, divided by the probability of A."
+            "Here is the whole table: each row is a previous symbol, each square how likely the next one is. "
+            "<bookmark mark='d'/> This is conditional probability: B given A is the probability of both, divided "
+            "by that of A."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -234,10 +234,9 @@ class Probability(VoiceoverScene):
         q_name = letter("q", font_size=26, color=C.CONTEXT).next_to(q_arrow, DOWN, buff=0.05)
         ps = self.pull(cells, 0, cond, min_label=0.2)
         with self.voiceover(
-            f"In our books, q appears {n_q:,} times, and all but {n_q - n_qu:,} of them are followed by u. "
-            f"<bookmark mark='a'/> So the probability of u, given q, is {q_u:.4f}. "
-            "<bookmark mark='b'/> After a space, on the other hand, almost anything can come next: a new word is "
-            "starting."
+            f"In our books, q appears {n_q:,} times, and all but {n_q - n_qu:,} are followed by u. "
+            f"<bookmark mark='a'/> So u given q is {q_u:.4f}. "
+            "<bookmark mark='b'/> After a space, though, almost anything can come next: a new word is starting."
         ) as vo:
             self.play(FadeOut(VGroup(pt[1:], b_w, b_h, b_h_l, f_def, area, lit_cell)), FadeOut(mlabs), FadeOut(mcap))
             self.play(GrowArrow(q_arrow), FadeIn(q_name))
@@ -325,10 +324,10 @@ class Probability(VoiceoverScene):
         cap.next_to(box, DOWN, buff=0.4)
         cap2.next_to(cap, DOWN, buff=0.25)
         with self.voiceover(
-            "And so on, one symbol at a time. <bookmark mark='a'/> The probability of a whole text is a product of "
-            "next-symbol guesses, each made knowing everything before it. This is the chain rule, and it is exact: "
-            "no assumption has been made. <bookmark mark='b'/> It is also why a machine that only ever guesses the "
-            "next symbol can score, or write, an entire text."
+            "And so on, one symbol at a time. <bookmark mark='a'/> A whole text's probability is a product of "
+            "next-symbol guesses, each knowing everything before it. This is the chain rule, and it is exact: no "
+            "assumption made. <bookmark mark='b'/> It's why a machine that only guesses the next symbol can score, "
+            "or write, a whole text."
         ) as vo:
             self.play(FadeOut(VGroup(cells, pt[1:], lit_cell, b_w, cell3, c3l, rays3, b3, b3_l, num, head)), run_time=0.8)
             morph(self, eqs[2], eqs[3], run_time=1.4)
@@ -366,20 +365,20 @@ class Probability(VoiceoverScene):
         note_ctx = note(r"context: the last three symbols (an order-3 counting model of the $30$ books)")
         note_ctx.to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Here's the chain rule as a picture. Someone has just written, he said, and we want the probability "
-            "that the next three letters are t, h, e. <bookmark mark='a'/> The first bar is the whole unit of "
-            "belief, shared among the 27 possible next symbols, given the last three: i, d, space. t gets a sliver "
-            f"of width {ps[0]:.3f}."
+            "Here's the chain rule as a picture. Someone has written, he said, and we want the chance that the "
+            "next three letters are t, h, e. <bookmark mark='a'/> The first bar shares the whole unit of belief "
+            "among the 27 next symbols, given the last three: i, d, space. t gets a sliver "
+            f"{ps[0]:.3f} wide."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note_ctx))
             vo.wait_until("a")
             self.play(FadeIn(rows[0][0]), Create(rows[0][2]), FadeIn(ctxs[0]), FadeIn(ctx_head))
             self.play(FadeIn(rows[0][1]), FadeIn(reads[0]))
         with self.voiceover(
-            "Now zoom into that sliver and share it out again, <bookmark mark='a'/> this time by the probabilities "
-            f"of the next letter after d, space, t. h takes {100 * ps[1]:.0f} percent of it. <bookmark mark='b'/> "
-            f"Zoom again: after space, t, h, the letter e takes {100 * ps[2]:.0f} percent. <bookmark mark='c'/> The "
-            f"final sliver is as wide as the product: {pr:.4f}, the probability of the whole string."
+            "Now zoom into that sliver and share it out again, <bookmark mark='a'/> by the probabilities after d, "
+            f"space, t. h takes {100 * ps[1]:.0f} percent of it. <bookmark mark='b'/> Zoom again: after space, t, h, "
+            f"e takes {100 * ps[2]:.0f} percent. <bookmark mark='c'/> The final sliver's width is the product, "
+            f"{pr:.4f}: the probability of the whole string."
         ) as vo:
             self.play(FadeIn(funnels[0]), FadeIn(rows[1][0]), Create(rows[1][2]), FadeIn(ctxs[1]))
             vo.wait_until("a")
@@ -390,8 +389,8 @@ class Probability(VoiceoverScene):
             vo.wait_until("c")
             self.play(Write(prod))
         with self.voiceover(
-            "Keep this picture in mind: nested slivers, each one a guess. In chapter eight, the very same picture "
-            "will turn out to be a way of compressing text."
+            "Keep this picture in mind: nested slivers, each one a guess. In chapter eight, it becomes a way to "
+            "compress text."
         ) as vo:
             self.play(Indicate(prod, color=C.INTERVAL), run_time=1.5)
         self.wait(0.3)

@@ -127,10 +127,9 @@ class Hook(VoiceoverScene):
         vs = label(rf"versus $\log_2 27 = {blind:.2f}$ bits for a letter guessed blindly", font_size=26, color=GREY_A)
         vs.next_to(est, DOWN, buff=0.18)
         with self.voiceover(
-            "From counts like these, Shannon estimated how much information English really carries: about one "
-            f"bit per letter, a bit being the answer to one yes-or-no question, somewhere between {lo_h:.1f} and "
-            f"{hi_h:.1f}, <bookmark mark='a'/> when a single letter, guessed blindly, could carry {blind:.2f}. Most "
-            "of what we write is predictable."
+            "From counts like these, Shannon estimated that English carries about one bit per letter, a bit being "
+            f"the answer to one yes-or-no question: between {lo_h:.1f} and {hi_h:.1f}, <bookmark mark='a'/> when a "
+            f"letter guessed blindly could carry {blind:.2f}. Most of what we write is predictable."
         ) as vo:
             self.play(FadeOut(tag), FadeIn(est))
             vo.wait_until("a")
@@ -178,14 +177,13 @@ class Hook(VoiceoverScene):
         tr.set_x(era_x(2012))
         keep_in_frame(tr, margin=0.15)
         with self.voiceover(
-            "Shannon didn't start from nothing. <bookmark mark='a'/> Telegraph operators already knew that common "
-            "letters deserve short codes: Morse code gives e a single dot. <bookmark mark='b'/> In 1928 Ralph "
-            "Hartley, at Bell Labs, proposed measuring information by the logarithm of the number of possible "
-            "messages. <bookmark mark='c'/> In 1948 Shannon turned this into a theory: entropy, the bit, and the "
-            "limits of compression. <bookmark mark='d'/> The guessing game, Huffman's code and arithmetic coding "
-            "followed. <bookmark mark='e'/> And half a century later, the same game became the way machines learn "
-            "language: a neural network trained to guess the next word, in 2003, then GPT-2, and the models of "
-            "today."
+            "Shannon didn't start from nothing. <bookmark mark='a'/> Telegraphers knew that common letters deserve "
+            "short codes: Morse gives e a single dot. <bookmark mark='b'/> In 1928 Ralph Hartley, at Bell Labs, "
+            "measured information by the logarithm of the number of possible messages. <bookmark mark='c'/> In "
+            "1948 Shannon made it a theory: entropy, the bit, and the limits of compression. <bookmark mark='d'/> "
+            "The guessing game, Huffman's code and arithmetic coding followed. <bookmark mark='e'/> Half a century "
+            "later, the same game became how machines learn language: a network guessing the next word, in 2003, "
+            "then GPT-2, and today's models."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(ticks))
             vo.wait_until("a")
@@ -237,8 +235,8 @@ class Hook(VoiceoverScene):
             return f"gives the word Paris {100 * p:.0f} percent" if p is not None else "doesn't put Paris in its top five"
 
         with self.voiceover(
-            "Seventy-five years after Shannon's game, it is exactly what large language models are trained to "
-            "play. Give one the start of a sentence, <bookmark mark='a'/> and it returns a probability for every "
+            "Seventy-five years on, Shannon's game is exactly what large language models are trained to play. "
+            "Give one the start of a sentence, <bookmark mark='a'/> and it returns a probability for every "
             "possible next word. <bookmark mark='b'/> GPT-2, from 2019, with a hundred and twenty-four million "
             f"parameters, the adjustable numbers inside it, {says(pa)}. <bookmark mark='c'/> Qwen3, a 2025 model "
             f"with four billion, {says(pb)}."
@@ -270,9 +268,9 @@ class Hook(VoiceoverScene):
                          r"or a punctuation mark", picture=tiles, width=8.4, color=C.NEURAL)
         tok_card.scale(1.35).move_to(DOWN * 0.6)
         with self.voiceover(
-            "Strictly, what a model guesses is the next token. <bookmark mark='a'/> A token is the chunk of text a "
-            "model guesses at one time: a whole word, a piece of a word, or a punctuation mark. Here is a line of a "
-            "1930 novel, cut the way GPT-2 cuts it. Paris, with the space in front of it, is a single token."
+            "Strictly, a model guesses the next token. <bookmark mark='a'/> A token is the chunk of text it "
+            "guesses at one time: a word, a piece of a word, or a punctuation mark. Here is a line of a 1930 "
+            "novel, cut the way GPT-2 cuts it."
         ) as vo:
             self.play(FadeOut(left), FadeOut(right), FadeOut(cap), FadeOut(tag))
             vo.wait_until("a")
@@ -332,10 +330,9 @@ class Hook(VoiceoverScene):
         head = label(r"the same game, everywhere", font_size=40).to_edge(UP, buff=0.6)
         tag = schematic_tag()
         with self.voiceover(
-            "And it's not just text. <bookmark mark='a'/> Models that make images learn to guess the noise that "
-            "was added to a picture. <bookmark mark='b'/> Speech models guess the next slice of sound. "
-            "<bookmark mark='c'/> Robot controllers guess the next movement of an arm. Under the hood, nearly every "
-            "frontier model plays some version of Shannon's game."
+            "And not just text. <bookmark mark='a'/> Image models learn to guess the noise added to a picture; "
+            "<bookmark mark='b'/> speech models, the next slice of sound; <bookmark mark='c'/> robots, the next "
+            "movement of an arm. Nearly every frontier model plays some version of Shannon's game."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), Create(frames[0]), FadeIn(text_p), FadeIn(caps[0]))
             vo.wait_until("a")
@@ -357,12 +354,11 @@ class Hook(VoiceoverScene):
         m = series_map(current=PART).shift(DOWN * 0.2)
         title = label(SERIES_ZH if zh() else SERIES_EN, font_size=44).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Over thirty-one parts, we'll build the answer from the ground up, and see how the field got here. "
-            "<bookmark mark='a'/> The foundations: information, the symbolic era, vectors, calculus and randomness. "
-            "<bookmark mark='b'/> Learning from data, up to the deep learning revolution and the mathematics of "
-            "scale. <bookmark mark='c'/> The transformer era. <bookmark mark='d'/> Generation and perception. "
-            "<bookmark mark='e'/> Agency: reinforcement learning, reasoning and agents. <bookmark mark='f'/> And "
-            "finally, what we see when we look inside, and whether we can trust it."
+            "Over thirty-one parts, we'll build the answer from the ground up. <bookmark mark='a'/> Foundations: "
+            "information, the symbolic era, vectors, calculus, randomness. <bookmark mark='b'/> Learning from data, "
+            "up to deep learning and scale. <bookmark mark='c'/> Transformers. <bookmark mark='d'/> Generation and "
+            "perception. <bookmark mark='e'/> Agency: reinforcement learning, reasoning, agents. "
+            "<bookmark mark='f'/> And finally, looking inside, and whether we can trust it."
         ) as vo:
             self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeIn(title))
             self.remove(q)
@@ -391,10 +387,10 @@ class Hook(VoiceoverScene):
         if obj.get_bottom()[1] < -3.75:
             obj.scale((obj.get_top()[1] + 3.75) / obj.height, about_edge=UP)
         with self.voiceover(
-            "Part one starts where Shannon did. <bookmark mark='a'/> In it: what information is, and why it's "
-            "measured in bits; the best possible codes, and the limit Shannon proved; the price of a wrong model; "
-            "a code that turns any good guesser into a compressor; how a model learns to guess; and how far "
-            "guessing has come. By the end, we'll see why guessing well and compressing well are the same thing."
+            "Part one starts where Shannon did. <bookmark mark='a'/> What information is, and why it's measured in "
+            "bits; the best codes, and Shannon's limit; the price of a wrong model; a code that turns any guesser "
+            "into a compressor; how a model learns to guess; and how far guessing has come. Guessing well and "
+            "compressing well, we'll see, are the same thing."
         ) as vo:
             self.play(FadeIn(title))
             vo.wait_until("a")
@@ -419,11 +415,10 @@ class Hook(VoiceoverScene):
         low = min(r["bits"] for r in rows if "bits" in r)
         goal = "to below one" if low < 1 else f"to {low:.2f} bits per character, and beyond"
         with self.voiceover(
-            "And we'll keep score. Here is a page of a novel, The Maltese Falcon, from 1930. It entered the public "
-            "domain, and Project Gutenberg, on the first of January 2026, after every model in this part was "
-            "trained, so none of them can have learned it by heart. <bookmark mark='a'/> Stored as plain text, it "
-            "takes eight bits per character. <bookmark mark='b'/> Our job, for the whole series, is to explain how "
-            f"the numbers on this board come down: from eight, {goal}."
+            "And we'll keep score. Here is a page of The Maltese Falcon, from 1930. It entered the public domain "
+            "on the first of January 2026, after every model in this part was trained, so none can have learned "
+            "it by heart. <bookmark mark='a'/> As plain text, it takes eight bits per character. "
+            f"<bookmark mark='b'/> The series explains how the numbers on this board come down: from eight, {goal}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(quote), FadeIn(src))
             vo.wait_until("a")
