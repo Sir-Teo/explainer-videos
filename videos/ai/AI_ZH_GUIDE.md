@@ -648,3 +648,69 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | checkpoint, checkpoint interval (Young's rule) | 检查点，检查点间隔（Young法则） |
 | goodput | 有效吞吐 |
 | recipe | 配方 |
+
+### Seeing and remembering (Part 10)
+
+| English | 中文 |
+|---|---|
+| computer vision | 计算机视觉 |
+| visual cortex, receptive field (of a neuron) | 视觉皮层，（神经元的）感受野 |
+| simple cell, complex cell | 简单细胞，复杂细胞 |
+| orientation selectivity, tuning curve, grating | 方向选择性，调谐曲线，光栅 |
+| colour-opponent cell | 颜色拮抗细胞 |
+| edge, image gradient, Sobel operator | 边缘，图像梯度，索贝尔算子 |
+| feature descriptor: SIFT, HOG (histogram of oriented gradients) | 特征描述子：SIFT，HOG（方向梯度直方图） |
+| keypoint, cell, block normalization | 关键点，单元格，块归一化 |
+| hand-made (hand-designed) features, pipeline | 手工设计的特征，流水线 |
+| Fisher vector, bag of visual words | 费舍尔向量，视觉词袋 |
+| convolution, cross-correlation, kernel (filter) | 卷积，互相关，卷积核（滤波器） |
+| feature map, channel | 特征图，通道 |
+| weight sharing, locally connected | 权值共享，局部连接 |
+| translation equivariance, translation invariance | 平移等变，平移不变 |
+| circular padding, zero padding | 循环填充，零填充 |
+| receptive field (of a unit), effective receptive field | （单元的）感受野，有效感受野 |
+| stride, jump (spacing), pooling, max pooling | 步长，跳距，池化，最大池化 |
+| anti-aliasing, blur pooling | 抗混叠，模糊池化 |
+| the Neocognitron, S-cells, C-cells | 新认知机，S细胞，C细胞 |
+| LeNet, MNIST | LeNet，MNIST |
+| zip code, check reader | 邮政编码，支票识别系统 |
+| time-delay neural network (TDNN) | 时延神经网络（TDNN） |
+| ImageNet, ILSVRC, top-5 error | ImageNet，ILSVRC（ImageNet大规模视觉识别挑战赛），前五错误率 |
+| WordNet, Amazon Mechanical Turk | WordNet，亚马逊土耳其机器人（众包平台） |
+| AlexNet (SuperVision), CIFAR-10 | AlexNet（SuperVision），CIFAR-10 |
+| rectified linear unit (ReLU), saturation | 修正线性单元（ReLU），饱和 |
+| dropout | 随机失活（dropout） |
+| data augmentation, random crop, flip | 数据增强，随机裁剪，翻转 |
+| VGG, GoogLeNet, Inception module, 1 × 1 convolution | VGG，GoogLeNet，Inception模块，1 × 1卷积 |
+| degradation problem | 退化问题 |
+| batch normalization | 批归一化 |
+| residual network (ResNet), highway network | 残差网络（ResNet），高速公路网络 |
+| activation maximization, saliency map, feature visualization | 激活最大化，显著图，特征可视化 |
+| adversarial example, perturbation, transferability | 对抗样本，扰动，可迁移性 |
+| fast gradient sign method (FGSM), projected gradient descent (PGD) | 快速梯度符号法（FGSM），投影梯度下降（PGD） |
+| adversarial training, robustness, certified defence | 对抗训练，鲁棒性，可认证防御 |
+| depthwise convolution, pointwise convolution, depthwise separable | 深度卷积，逐点卷积，深度可分离 |
+| MobileNet, ConvNeXt, vision transformer (ViT), Swin | MobileNet，ConvNeXt，视觉Transformer（ViT），Swin |
+| dilated (atrous) convolution | 空洞卷积（膨胀卷积） |
+| recurrent neural network (RNN), hidden state | 循环神经网络（RNN），隐状态 |
+| backpropagation through time (BPTT), truncated BPTT | 随时间反向传播（BPTT），截断的BPTT |
+| vanishing gradient, exploding gradient | 梯度消失，梯度爆炸 |
+| Jacobian, spectral radius, largest singular value | 雅可比矩阵，谱半径，最大奇异值 |
+| gradient clipping, cliff | 梯度裁剪，悬崖 |
+| long short-term memory (LSTM), cell state, constant error carousel | 长短期记忆（LSTM），细胞状态，恒定误差传送带 |
+| input gate, forget gate, output gate | 输入门，遗忘门，输出门 |
+| gated recurrent unit (GRU), update gate, reset gate | 门控循环单元（GRU），更新门，重置门 |
+| half-life (of a memory) | （记忆的）半衰期 |
+| chrono initialization | 时序初始化 |
+| character-level language model, char-rnn | 字符级语言模型，char-rnn |
+| sequence to sequence (seq2seq), encoder, decoder | 序列到序列（seq2seq），编码器，解码器 |
+| machine translation, phrase-based, BLEU | 机器翻译，基于短语的，BLEU |
+| teacher forcing, exposure bias, scheduled sampling | 教师强制，暴露偏差，计划采样 |
+| greedy decoding, beam search, beam width | 贪心解码，束搜索，束宽 |
+| neural text degeneration | 神经文本退化 |
+| bottleneck | 瓶颈 |
+| attention, alignment, context vector, additive score | 注意力，对齐，上下文向量，加性打分 |
+| query, key, value | 查询，键，值 |
+| neural Turing machine, memory network | 神经图灵机，记忆网络 |
+| linear recurrence, parallel prefix scan, associative | 线性递推，并行前缀扫描，结合律（可结合的） |
+| minGRU, minLSTM, xLSTM, state-space model | minGRU，minLSTM，xLSTM，状态空间模型 |
