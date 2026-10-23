@@ -156,19 +156,21 @@ class Meet(VoiceoverScene):
                   rf"${float(v['prior_bits']):.0f}$", font_size=20, color=AR),
             label(rf"FID of the two-stage model: \ ${float(j['fid']):.1f}$", font_size=20, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.8, -1.7, 0])
-        better = float(j["fid"]) < best[0]
-        verdict = (f"Its samples score an FID of {float(j['fid']):.1f}, better than any of the five single models of "
-                   "the last chapter, though it was trained outside that budget."
-                   if better else
-                   f"Its samples score an FID of {float(j['fid']):.1f}; the best single model of the last chapter "
-                   f"scored {best[0]:.1f}, and this one was trained outside that budget.")
+        vfid, bfid, perp = float(j["fid"]), best[0], float(v["perplexity"])
+        rawb, prb = float(v["codebook_bits"]), float(v["prior_bits"])
+        if vfid < bfid:
+            verdict = (f"Its samples score an FID of {vfid:.1f}, better than any of the five single models of the last "
+                       "chapter, though it was trained outside that budget.")
+        else:
+            verdict = (f"Its samples score an FID of {vfid:.1f}; the best single model of the last chapter scored "
+                       f"{bfid:.1f}, and this one was trained outside that budget.")
         with self.voiceover(
             "We built a small one. An encoder turns each of our digits into a seven-by-seven grid of tokens, each "
             f"one of {K} codebook entries, and a decoder turns the grid back into a digit. <bookmark mark='a'/> The "
-            "reconstructions keep each digit's identity and most of its shape. On average the code uses "
-            f"{float(v['perplexity']):.1f} of its {K} entries' worth of variety. <bookmark mark='b'/> Written "
-            f"plainly, a grid is {float(v['codebook_bits']):.0f} bits; a small transformer trained on the tokens "
-            f"of the training digits predicts them in {float(v['prior_bits']):.0f}. <bookmark mark='c'/> And "
+            f"reconstructions keep each digit's identity and most of its shape. The codebook's perplexity is "
+            f"{perp:.1f}: that many of its {K} entries are, in effect, in use. <bookmark mark='b'/> Written plainly, a "
+            f"grid is {rawb:.0f} bits; a small transformer trained on the tokens of the training digits predicts "
+            f"them in {prb:.0f}. <bookmark mark='c'/> And "
             "sampling tokens from the transformer and decoding them draws new digits. "
             f"{verdict}"
         ) as vo:

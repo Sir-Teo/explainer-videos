@@ -100,14 +100,16 @@ Run from the repo root:
 
 ```
 python tools/make.py ai18                   # everything: Part 1's text, the novels model, Part 14, these numbers, both cuts
-python -m videos.ai.ai18.compute            # just the numbers (about 2-3 CPU-hours here; resumable)
+python -m videos.ai.ai18.compute            # just the numbers (about 5 CPU-hours on a busy 4-core machine; resumable)
 python -m videos.ai.ai18.compute mixture --force
 python tools/qa_scene.py ai18 Pipeline      # one chapter, silent, with a contact sheet
 ```
 
 Every random choice is seeded (numpy `default_rng`, `torch.manual_seed`, fastText's seed, data order by step); the
 training runs checkpoint every 100 steps and resume, and items made of many runs (`precision`, `stability`, `mtp`,
-`mixture`, `recipe_seed1`) save each run as it finishes. The distributed experiments start their processes with `spawn` and use
+`mixture`, `recipe_seed1`) save each run as it finishes. Most of the time goes to the four recipe runs (two recipes ×
+two seeds, 732 steps of a 128-wide, 4-layer model, about 40 minutes each here); the rest of the part takes about an
+hour and a half. The distributed experiments start their processes with `spawn` and use
 PyTorch's gloo backend, so they run on macOS and Linux. Downloads (Common Crawl byte ranges, fastText's `lid.176.ftz`,
 FineWeb-Edu's annotations through Hugging Face's dataset viewer) are fixed and cached in `.cache/ai18/crawl/`.
 Part 1's books and passage are read through `videos.ai.ai1.compute`, Part 14's scoreboard through

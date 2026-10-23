@@ -181,9 +181,10 @@ class Dynamics(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hopping(self):
-        g = load("gan2d")
-        counts = np.asarray(g["ns_frame_counts"], float)  # frames x 8 modes
-        steps = np.asarray(g["ns_frame_steps"])
+        g = load("gan2d_collapse")
+        counts = np.asarray(g["frame_counts"], float)  # frames x 8 modes
+        steps = np.asarray(g["frame_steps"])
+        seed = int(g["seed"])
         A = counts.T / max(counts.max(), 1)
         rgb = rgb_of("#0B0F17")[None, None] * (1 - A[..., None]) + rgb_of(GAN_C)[None, None] * A[..., None]
         img = to_image(rgb, 10.0, 3.2)
@@ -195,8 +196,8 @@ class Dynamics(VoiceoverScene):
         x0 = MathTex(r"0", font_size=20, color=GREY_B).next_to(img.get_corner(DL), DOWN, buff=0.1)
         x1 = MathTex(rf"{int(steps[-1]):,}".replace(",", "{,}"), font_size=20, color=GREY_B)
         x1.next_to(img.get_corner(DR), DOWN, buff=0.1)
-        head = label(r"where the generator's samples are, \ checkpoint by checkpoint \ (non-saturating GAN, seed $0$)",
-                     font_size=22, color=GREY_A).next_to(img, UP, buff=0.2)
+        head = label(rf"where the generator's samples are, \ checkpoint by checkpoint \ (non-saturating GAN, seed "
+                     rf"${seed}$)", font_size=22, color=GREY_A).next_to(img, UP, buff=0.2)
         held = counts > 0.01 * np.maximum(counts.sum(1, keepdims=True), 1)
         visited, best, last = int(held.any(0).sum()), int(held.sum(1).max()), int(held[-1].sum())
         tour = (f"Over training the generator visits {visited} of the modes, but never more than {best} at once; at "

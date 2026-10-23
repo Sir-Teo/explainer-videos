@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai20.common import (AR, DATA, KLC, LATENT, PART, RECON, VAE_C, Plane, band, curve, digit_sheet, load,
-                                   rgb_of)
+                                   rgb_of, take_away)
 
 DIGIT_COLORS = ["#FF6B8B", "#FFB070", "#F7D154", "#9BE37B", "#5CD0B3", "#58A6FF", "#7C9CF0", "#B39DDB", "#E3A8F0",
                 "#BBBBBB"]

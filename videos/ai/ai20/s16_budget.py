@@ -62,14 +62,16 @@ class Budget(VoiceoverScene):
                              r"by PyTorch's own formulas", font_size=20, color=C.BITS),
                        label(r"three seeds each; \ every model judged on $2{,}000$ samples, \ the same way",
                              font_size=20, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.4)
+        pex = stat(e, "pixelcnn", "examples")[0] / 1e3
+        mex = stat(e, most, "examples")[0] / 1e6
+        most_s = SPOKEN[most]
         with self.voiceover(
             "Now the five image models, side by side, on equal terms. Every one got the same budget of arithmetic, "
             "six trillion floating-point operations of training, counted operation by operation, and every one was "
             "trained from three random starts. <bookmark mark='a'/> Equal arithmetic doesn't mean equal anything "
             "else. A convolution reuses its weights at every pixel, so the PixelCNN has the fewest parameters "
-            f"and does the most arithmetic per digit: it saw {stat(e, 'pixelcnn', 'examples')[0] / 1e3:.0f} "
-            f"thousand training digits, while {SPOKEN[most]} saw {stat(e, most, 'examples')[0] / 1e6:.1f} "
-            "million. <bookmark mark='b'/> And the last column is the cost of drawing one sample: one pass for "
+            f"and does the most arithmetic per digit: it saw {pex:.0f} thousand training digits, while {most_s} saw "
+            f"{mex:.1f} million. <bookmark mark='b'/> And the last column is the cost of drawing one sample: one pass for "
             "every model except the PixelCNN, which needs 196."
         ) as vo:
             self.play(FadeIn(head), Create(rule), FadeIn(note_))
@@ -132,12 +134,20 @@ class Budget(VoiceoverScene):
         R = {f: stat(e, f, "recall")[0] for f in ORDER}
         bp, br = max(ORDER, key=P.get), max(ORDER, key=R.get)
         sep = all(fid[a][2] < fid[b][1] for a, b in zip(rank, rank[1:2]))
-        lead = (f"{SPOKEN[rank[0]].capitalize()} has the lowest FID, {fid[rank[0]][0]:.1f}, "
-                + ("clearly ahead of the next, " if sep else "though its seeds overlap with the next, ")
-                + f"{SPOKEN[rank[1]]} at {fid[rank[1]][0]:.1f}; {SPOKEN[rank[-1]]} is last at {fid[rank[-1]][0]:.1f}.")
-        pr = (f"Split in two, the highest precision is {SPOKEN[bp]}'s, {P[bp]:.2f}, and the highest recall "
-              f"{SPOKEN[br]}'s, {R[br]:.2f}." if bp != br else
-              f"{SPOKEN[bp].capitalize()} leads on both precision, {P[bp]:.2f}, and recall, {R[bp]:.2f}.")
+        n1, n2, nl = SPOKEN[rank[0]], SPOKEN[rank[1]], SPOKEN[rank[-1]]
+        f1, f2, fl_ = fid[rank[0]][0], fid[rank[1]][0], fid[rank[-1]][0]
+        if sep:
+            lead = (f"The lowest FID belongs to {n1}, {f1:.1f}, clearly ahead of the next, {n2} at {f2:.1f}; last "
+                    f"is {nl}, at {fl_:.1f}.")
+        else:
+            lead = (f"The lowest FID belongs to {n1}, {f1:.1f}, though its seeds overlap with the next, {n2} at "
+                    f"{f2:.1f}; last is {nl}, at {fl_:.1f}.")
+        nbp, nbr, vbp, vbr = SPOKEN[bp], SPOKEN[br], P[bp], R[br]
+        if bp != br:
+            pr = (f"Split in two, the highest precision belongs to {nbp}, {vbp:.2f}, and the highest recall to {nbr}, "
+                  f"{vbr:.2f}.")
+        else:
+            pr = f"Split in two, one model leads on both: {nbp}, with precision {vbp:.2f} and recall {R[bp]:.2f}."
         with self.voiceover(
             "First, FID: the distance between our classifier's view of the generated digits and of the real ones, "
             f"two thousand of each. A perfect model would score about {floor:.2f}, the line for real digits. "
@@ -173,16 +183,18 @@ class Budget(VoiceoverScene):
                      label(r"likelihood and sample quality: \ two different rankings" if not same else
                            r"here the two rankings agree", font_size=22, color=C.BITS))
         msg.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.4, 0.0, 0])
+        b1, b2, b3 = (SPOKEN[f] for f in rank)
+        v1, v2, v3 = (st[f][0] for f in rank)
+        if not same:
+            cmp_ = ("Compare the FID ranking: it is not the same. Exactly as Theis and his colleagues warned, a model "
+                    "can be good at probability and worse at pictures, or the reverse.")
+        else:
+            cmp_ = "Here the likelihood ranking and the FID ranking agree, for these three; they need not."
         with self.voiceover(
             "Second, likelihood, for the three families that have one, in bits per pixel on held-out digits: exact "
             "for the PixelCNN, an upper bound for the VAE and the flow. <bookmark mark='a'/> "
-            f"{SPOKEN[rank[0]].capitalize()} is best, at {st[rank[0]][0]:.2f} bits per pixel, then "
-            f"{SPOKEN[rank[1]]} at {st[rank[1]][0]:.2f} and {SPOKEN[rank[2]]} at {st[rank[2]][0]:.2f}. <bookmark "
-            "mark='b'/> "
-            + ("Compare the FID ranking: it is not the same. Exactly as Theis and his colleagues warned, a model "
-               "can be good at probability and worse at pictures, or the reverse." if not same else
-               "Here the likelihood ranking and the FID ranking agree, for these three; they need not, and on the "
-               "ring they didn't.")
+            f"Best is {b1}, at {v1:.2f} bits per pixel, then {b2} at {v2:.2f}, and {b3} at {v3:.2f}. <bookmark "
+            f"mark='b'/> {cmp_}"
         ) as vo:
             self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(hd))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.2),
@@ -221,9 +233,9 @@ class Budget(VoiceoverScene):
         flat = max(ORDER, key=mins.get)
         tk = take_away(r"At this scale: \ each family wins something, \ none wins everything. \ Ask what a model "
                        r"is for before asking which is best.", font_size=24)
-        msg = (f"The most uneven is {SPOKEN[worst]}: its rarest digit, a {wk}, is only {100 * mins[worst]:.1f} "
-               f"percent of its samples, where real data has about ten. The most even is {SPOKEN[flat]}, whose "
-               f"rarest digit is still {100 * mins[flat]:.1f} percent.")
+        nw, nf_, mw, mf = SPOKEN[worst], SPOKEN[flat], 100 * mins[worst], 100 * mins[flat]
+        msg = (f"The most uneven is {nw}: its rarest digit, a {wk}, is only {mw:.1f} percent of its samples, where "
+               f"real data has about ten. The most even is {nf_}, whose rarest digit is still {mf:.1f} percent.")
         with self.voiceover(
             "Third, a coarse but telling check: which digits does each model draw? The classifier labels two "
             "thousand samples of each, and real data has each digit about one time in ten. <bookmark mark='a'/> "

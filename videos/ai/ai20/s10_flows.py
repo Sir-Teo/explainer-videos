@@ -281,10 +281,14 @@ class Flows(VoiceoverScene):
                          r"samples comparable to diffusion", width=4.6, font_size=18),
         ).arrange(DOWN, buff=0.2).move_to([3.5, -1.3, 0])
         better = np.mean(b_p) < np.mean(b_f)
-        verdict = (f"In bits per pixel the flow gets {np.mean(b_f):.2f} on held-out digits, against "
-                   f"{np.mean(b_p):.2f} for the PixelCNN on the same budget: "
-                   + ("an exact likelihood, but a worse one; coupling layers spend capacity on staying invertible."
-                      if better else "a better likelihood than the autoregressive model."))
+        mf, mp = float(np.mean(b_f)), float(np.mean(b_p))
+        if better:
+            verdict = (f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN "
+                       "on the same budget: an exact likelihood, but a worse one; coupling layers spend capacity on "
+                       "staying invertible.")
+        else:
+            verdict = (f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN "
+                       "on the same budget: a better likelihood than the autoregressive model.")
         with self.voiceover(
             "On digits, our flow is eight coupling layers on the logits of the pixels, and here is what it draws. "
             "<bookmark mark='a'/> Strokes, but noisy ones. Turning the noise down, a trick from OpenAI's Glow, "

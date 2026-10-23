@@ -140,8 +140,9 @@ class Receptive(VoiceoverScene):
             b = Rectangle(width=w, height=0.44, stroke_width=0, fill_color=col, fill_opacity=0.85)
             b.move_to([-3.2 + w / 2, 1.8 - 0.95 * k, 0])
             n = label(nm, font_size=22, color=col).next_to(b, UP, buff=0.06).align_to(b, LEFT)
-            v = MathTex(rf"{rf}\ \text{{px}}", font_size=28, color=col).next_to(b, RIGHT, buff=0.15)
             wi = 7.5 * img / vmax
+            v = MathTex(rf"{rf}\ \text{{px}}", font_size=28, color=col)
+            v.move_to([-3.2 + max(w, wi) + 0.2 + v.width / 2, b.get_y(), 0])
             mark = DashedLine([-3.2 + wi, 1.8 - 0.95 * k - 0.3, 0], [-3.2 + wi, 1.8 - 0.95 * k + 0.3, 0],
                               color=WHITE, stroke_width=2)
             bars.add(VGroup(b, n, v, mark))
@@ -151,11 +152,20 @@ class Receptive(VoiceoverScene):
         head = label(r"the receptive field of the last layer, \ computed from the published layer lists",
                      font_size=26).to_edge(UP, buff=0.4)
         a, v, r50 = t["AlexNet"][-1][4], t["VGG-16"][-1][4], t["ResNet-50"][-1][4]
+        big = {"AlexNet": a, "VGG-16": v, "ResNet-50": r50}
+        wide = [k for k, x in big.items() if x >= 224]
+        if len(wide) == 3:
+            cover = ("all wider than the 224-pixel images they were trained on, so a unit at the top can in "
+                     "principle be moved by any pixel.")
+        elif wide == ["ResNet-50"] and min(a, v) >= 0.8 * 224:
+            cover = ("AlexNet and VGG-16 see most of the 224-pixel images they were trained on, and ResNet-50 more "
+                     "than all of it: a unit at its top can in principle be moved by any pixel.")
+        else:
+            cover = "against images 224 pixels wide."
         with self.voiceover(
             "Apply the rule to real networks, layer list by layer list. <bookmark mark='a'/> LeNet-5's last "
             f"convolution sees {t['LeNet-5'][-1][4]} pixels square: its whole input. <bookmark mark='b'/> AlexNet's "
-            f"last pooling layer sees {a} pixels, VGG-16's {v}, ResNet-50's {r50}: wider than the 224-pixel images "
-            "they were trained on, so a unit at the top can in principle be moved by any pixel. "
+            f"last pooling layer sees {a} pixels, VGG-16's {v}, ResNet-50's {r50}: {cover} "
             "<bookmark mark='c'/> Our own CIFAR network, which we'll meet in Chapter 8, reaches "
             f"{t['our CIFAR network'][-1][4]} pixels on 32-pixel photographs."
         ) as vo:

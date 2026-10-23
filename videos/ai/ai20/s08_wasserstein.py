@@ -35,8 +35,10 @@ class Wasserstein(VoiceoverScene):
         p0 = Line(pl.p(0, 0), pl.p(0, 1), color=DATA, stroke_width=6)
         pt = always_redraw(lambda: Line(pl.p(theta.get_value(), 0), pl.p(theta.get_value(), 1), color=GAN_C,
                                         stroke_width=6))
-        tl = always_redraw(lambda: MathTex(rf"\theta = {theta.get_value():.2f}", font_size=28, color=GAN_C)
-                           .next_to(pl, DOWN, buff=0.15))
+        tv = DecimalNumber(theta.get_value(), num_decimal_places=2, font_size=28, color=GAN_C)
+        tl = VGroup(MathTex(r"\theta =", font_size=28, color=GAN_C), tv).arrange(RIGHT, buff=0.15)
+        tl.next_to(pl, DOWN, buff=0.15)
+        tv.add_updater(lambda m: m.set_value(theta.get_value()))
         lab = VGroup(MathTex(r"p_0", font_size=28, color=DATA).next_to(pl.p(0, 1), UP, buff=0.1),
                      label(r"the data: \ $x = 0$, \ $y \sim U[0, 1]$", font_size=20, color=DATA),
                      label(r"the model: \ $x = \theta$", font_size=20, color=GAN_C))
@@ -218,7 +220,8 @@ class Wasserstein(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(kk), FadeIn(ml))
             vo.wait_until("a")
-            img, dots, cnt, stp = replay_gan(self, g, "wgan", pl, max(5.0, vo.until("b") + 0.5), [0.6, 1.2, 0],
+            img, dots, cnt, stp = replay_gan(self, g["wgan_frame_samples"], g["wgan_frame_d"], g["wgan_frame_steps"],
+                                             g["wgan_frame_modes"], pl, max(5.0, vo.until("b") + 0.5), [0.6, 1.2, 0],
                                              color=WGAN_C, critic=True)
             vo.wait_until("b")
             self.play(FadeIn(al), FadeIn(axis), LaggedStart(*[FadeIn(d_, scale=1.4) for d_ in grp], lag_ratio=0.05))
