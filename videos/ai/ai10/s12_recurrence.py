@@ -115,7 +115,6 @@ class Recurrence(VoiceoverScene):
             "thesis; Yoshua Bengio, Patrice Simard and Paolo Frasconi published it in 1994."
         ) as vo:
             self.play(FadeIn(cite_))
-            vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1, transform=False)

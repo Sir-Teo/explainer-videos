@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import A, K, MONO, OURS, Q, V, curve, heat_image, layernorm_picture, layernorm_stage, load
+from videos.ai.ai13.common import (A, K, MONO, OURS, PART, Q, V, curve, framed, heat_image, layernorm_picture,
+                                  layernorm_stage, load)
 
 
 def board_rows():
@@ -28,13 +31,14 @@ class Transformer(VoiceoverScene):
     def construct(self):
         self.card()
         self.block()
-        self.heads()
         self.train()
+        self.replay()
         self.board()
 
     def card(self):
-        card = chapter_card(2, r"Our own transformer", r"What does a whole transformer look like?", part=13, lit=(2017,))
-        with self.voiceover("Chapter two. Our own transformer."):
+        card = chapter_card(6, r"Our own transformer", r"What does a whole transformer look like, and how does it learn?",
+                            part=PART, lit=(2017,))
+        with self.voiceover("Chapter six. Our own transformer."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -74,16 +78,16 @@ class Transformer(VoiceoverScene):
                     r"standard spread of $1$ \ (Part 9)", layernorm_picture(), width=4.6, color=C.TRUE_P).move_to([3.6, 0.85, 0])
         lnp = lnc[1][-1]
         with self.voiceover(
-            f"Now build one. Each character enters as a vector, part three's idea, {t['d']} numbers here. "
-            "The column of vectors is the residual stream from part nine: every layer reads from it and adds back "
+            f"Now build one. Each character enters as a vector, Part 3's idea, {t['d']} numbers here. "
+            "The column of vectors is the residual stream from Part 9: every layer reads from it and adds back "
             "to it. <bookmark mark='a'/> A transformer block has two halves. Attention moves information between "
             "positions: each character gathers from the ones before it. <bookmark mark='b'/> Then an MLP, a "
-            "multilayer perceptron: part nine's small network of weighted sums and bends, applied to each position "
+            "multilayer perceptron: Part 9's small network of weighted sums and bends, applied to each position "
             "on its own, like thinking over what was gathered. "
-            "<bookmark mark='c'/> Each half first normalizes its input, with part nine's layer norm: "
+            "<bookmark mark='c'/> Each half first normalizes its input, with Part 9's layer norm: "
             "<bookmark mark='n'/> it shifts the vector's numbers to an average of zero, and rescales them to a standard "
             "size. Then the half adds its output back to the stream. Stack four blocks, read off a guess for the next "
-            "character, and that's the whole machine."
+            "character, and that is the whole machine: the mask from chapter five, the heads from chapter four."
         ) as vo:
             self.play(FadeIn(stream), LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cols], lag_ratio=0.15),
                       FadeIn(chars), FadeIn(cite_))
@@ -98,44 +102,6 @@ class Transformer(VoiceoverScene):
             vo.wait_until("n")
             self.play(Transform(lnp[2], layernorm_stage(lnp, 1)), run_time=1.2)
             self.play(Transform(lnp[2], layernorm_stage(lnp, 2)), run_time=1.2)
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def heads(self):
-        t = load("tf")
-        H, L, dh = int(t["heads"]), int(t["layers"]), int(t["d"]) // int(t["heads"])
-        maps = np.asarray(t["maps"])  # layer, head, query, key
-        S = min(1.55 * 6 / H, 2.4)
-        imgs = Group(*[heat_image(maps[0, h], S, S, color=A, mask_upper=True) for h in range(H)])
-        imgs.arrange(RIGHT, buff=0.22).move_to(DOWN * 0.2)
-        frames = VGroup(*[SurroundingRectangle(m, buff=0, color=GREY_D, stroke_width=1) for m in imgs])
-        hl = VGroup(*[label(rf"head {h + 1}", font_size=20, color=GREY_B).next_to(m, UP, buff=0.1) for h, m in enumerate(imgs)])
-        head = label(rf"${H}$ heads, \ each with its own $W_Q$, $W_K$, $W_V$, \ in ${dh}$ dimensions", font_size=28)
-        head.to_edge(UP, buff=0.4)
-        under = label(r"layer 1 of our trained model, \ on a sentence of the passage: \ row $=$ a character, "
-                      r"\ bright $=$ where it looks", font_size=22, color=GREY_A).next_to(imgs, DOWN, buff=0.3)
-        mask = label(r"dark triangle: \ the future, \ which no character may see", font_size=24, color=GREY_B)
-        mask.next_to(under, DOWN, buff=0.3)
-        cat = cmath(r"\mathrm{Attn}(x) = W_O\,\big[\,\mathrm{head}_1;\ \dots;\ \mathrm{head}_" + str(H) + r"\,\big]",
-                    font_size=32, colors={r"\mathrm{Attn}(x)": A}).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            f"Attention runs as {H} separate heads, each with its own query, key and value matrices in "
-            f"{dh} dimensions, so each can look for something different. <bookmark mark='a'/> Here are the {H} "
-            "heads of our trained model's first layer, reading a sentence of the passage: each row is a character, "
-            "and the bright squares are where it looks. Some look one step back, some a few, some spread out. "
-            "<bookmark mark='b'/> The upper triangle is dark: a character may only look at the past, since it's "
-            "the future the model is trying to guess. <bookmark mark='c'/> The heads' outputs are stacked and mixed "
-            "by one more matrix."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.15), FadeIn(frames), FadeIn(hl), FadeIn(under),
-                      run_time=2.0)
-            vo.wait_until("b")
-            self.play(FadeIn(mask))
-            vo.wait_until("c")
-            self.play(Write(cat))
         self.wait(0.3)
         self.clear_scene()
 
@@ -169,19 +135,27 @@ class Transformer(VoiceoverScene):
         facts = VGroup(label(rf"${t['n_params'] / 1e6:.1f}$ million numbers", font_size=26, color=WHITE),
                        label(rf"${t['tokens'] / 1e6:.0f}$ million characters of training", font_size=26, color=WHITE),
                        label(rf"${t['ctx']}$ characters of context", font_size=26, color=WHITE),
-                       label(r"on this video's $4$-core CPU", font_size=24, color=GREY_B))
+                       label(r"trained on a CPU", font_size=24, color=GREY_B))
         facts.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
         keep_in_frame(facts)  # clear of the reference lines' names, which sit at the end of the curves
         pb = float(t["passage_bits"])
-        beat_kn, beat_mix = pb < k["best_bits"], pb < n["mix_bits"]
-        verdict = (f"It reaches {pb:.2f} bits a character on the passage"
-                   + (", better than every model before it on our board." if beat_kn and beat_mix else
-                      ", better than part nine's neural model, " + ("and than counting. " if beat_kn else
-                                                                       "though not yet better than counting. ")))
+        kn, mix, nlm = float(k["best_bits"]), float(n["mix_bits"]), float(n["passage_bits"])
+        if pb < min(kn, mix):
+            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than every model before it on "
+                       "our board, counting or neural.")
+        elif pb < kn:
+            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than every counting model, though "
+                       f"not Part 9's neural model mixed with Kneser-Ney, at {mix:.2f}.")
+        elif pb < nlm:
+            verdict = (f"It reaches {pb:.2f} bits a character on the passage, better than Part 9's neural model, at "
+                       f"{nlm:.2f}, though not yet Kneser-Ney, at {kn:.2f}.")
+        else:
+            verdict = (f"It reaches {pb:.2f} bits a character on the passage, not yet better than Part 9's neural model, "
+                       f"at {nlm:.2f}.")
         with self.voiceover(
             f"Ours has {t['layers']} blocks, {t['heads']} heads and {t['n_params'] / 1e6:.1f} million numbers, and "
             f"reads {t['ctx']} characters at a time. We trained it on the thirty novels, about "
-            f"{t['tokens'] / 1e6:.0f} million characters, on the four-core processor that rendered this video. "
+            f"{t['tokens'] / 1e6:.0f} million characters, on an ordinary processor, without a graphics card. "
             f"<bookmark mark='a'/> {verdict}"
         ) as vo:
             self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xn), FadeIn(yn), FadeIn(facts))
@@ -220,36 +194,117 @@ class Transformer(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def replay(self):
+        t, w = load("tf"), load("tfwords")
+        steps = [int(s_) for s_ in t["snap_steps"]]
+        bits = np.asarray(t["snap_bits"], float)
+        smp = [str(x) for x in t["snap_samples"]]
+        M = np.asarray(t["snap_maps"], float)  # checkpoint, layer, head, query, key
+        real = np.asarray(w["real"], float)
+        L, H = M.shape[1], M.shape[2]
+        K_ = int(t["K"])
+        # the bits at each checkpoint, with a dot that walks along them
+        hi = math.ceil(bits.max())
+        lo = math.floor(bits.min() * 2) / 2
+        ax = Axes(x_range=[0, steps[-1], steps[-1] / 3], y_range=[lo, hi, 1], x_length=4.6, y_length=2.4, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-4.3, 1.75, 0])
+        yl = label(r"bits per character, \ on the passage", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1)
+        yl.align_to(ax, LEFT)
+        yt = VGroup(*[MathTex(str(v), font_size=18, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
+                      for v in range(int(lo + 0.99), hi + 1, max(1, (hi - int(lo)) // 3))])
+        cv = curve(ax, steps, bits, OURS, 3)
+        tk = ValueTracker(0)
+
+        def at():
+            return float(np.interp(tk.get_value(), steps, bits))
+
+        dot = always_redraw(lambda: Dot(ax.c2p(tk.get_value(), at()), radius=0.08, color=OURS))
+        cnt = always_redraw(lambda: MathTex(rf"\text{{step }}{int(round(tk.get_value())):,}".replace(",", "{,}"),
+                                            font_size=28, color=OURS).next_to(ax, DOWN, buff=0.25))
+
+        def text_at(k):
+            body = " ".join(smp[k].replace("\n", " ").split())
+            lines = [body[i:i + 46] for i in range(0, min(len(body), 138), 46)]
+            g = VGroup(data_text(str(t["prompt"]).strip(), font="DejaVu Serif", font_size=18, color=GREY_B),
+                       *[data_text(ln, font="DejaVu Serif", font_size=18, color=WHITE) for ln in lines])
+            g.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.4, 1.85, 0], aligned_edge=LEFT).shift(LEFT * 0.4)
+            return g
+
+        def real_at(k):
+            return label(rf"real words: \ ${100 * real[k]:.0f}\%$", font_size=22, color=C.TRUE_P).move_to([5.6, 0.5, 0])
+
+        S = 0.72
+
+        def maps_at(k):
+            groups = Group()
+            for l_ in range(L):
+                groups.add(Group(*[heat_image(M[k, l_, h], S, S, color=A, mask_upper=True) for h in range(H)])
+                           .arrange(RIGHT, buff=0.06))
+            return groups.arrange(RIGHT, buff=0.35).move_to([0, -2.05, 0])
+
+        maps = maps_at(0)
+        lls = VGroup(*[label(rf"layer {l_ + 1}", font_size=18, color=GREY_B).next_to(maps[l_], UP, buff=0.1)
+                       for l_ in range(L)])
+        mcap = note(r"every head's attention on a sentence of the passage, \ at the same moment of training")
+        mcap.next_to(maps, DOWN, buff=0.12)
+        txt, rw = text_at(0), real_at(0)
+        wh = label(r"what it writes:", font_size=20, color=GREY_A).next_to(txt, UP, buff=0.15).align_to(txt, LEFT)
+        idx = {s_: i for i, s_ in enumerate(steps)}
+        k1 = idx.get(250, 3)
+        k2 = idx.get(1000, len(steps) // 2)
+        half = bits[0] - 0.5 * (bits[0] - bits[-1])
+        s_half = next(s_ for s_, b in zip(steps, bits) if b <= half)
+        u = math.log2(K_)
+        with self.voiceover(
+            "Here is what it knows at each moment of its training: its score on the passage, what it writes after "
+            "the same opening words, and where all sixteen heads look. <bookmark mark='a'/> At the start its "
+            f"guesses are random, {bits[0]:.1f} bits a character, a little worse than a uniform guess over its "
+            f"{K_} characters, {u:.1f}. It writes noise, and its attention is a blur. <bookmark mark='b'/> By step "
+            f"{steps[k1]}, {bits[k1]:.2f} bits; {real[k1]:.0%} of the words it writes are real words, and the "
+            f"heads have begun to differ. <bookmark mark='c'/> By step {steps[k2]:,}, {bits[k2]:.2f} bits and "
+            f"{real[k2]:.0%} real words. <bookmark mark='d'/> At the end, after {steps[-1]:,} steps, "
+            f"{bits[-1]:.2f} bits and {real[-1]:.0%} real words. Half of the whole improvement came in the first "
+            f"{s_half:,} steps; the rest is slow polish."
+        ) as vo:
+            self.play(Create(ax), FadeIn(yl), FadeIn(yt), FadeIn(maps), FadeIn(lls), FadeIn(mcap), FadeIn(txt),
+                      FadeIn(wh), FadeIn(rw))
+            self.add(dot, cnt)
+            vo.wait_until("a")
+            self.play(Create(cv), run_time=1.0)
+            for k in range(1, len(steps)):
+                mark = {k1: "b", k2: "c", len(steps) - 1: "d"}.get(k)
+                if mark:
+                    vo.wait_until(mark)
+                nm, nt, nr = maps_at(k), text_at(k), real_at(k)
+                self.play(tk.animate.set_value(steps[k]), FadeOut(maps), FadeIn(nm), FadeOut(txt), FadeIn(nt),
+                          FadeOut(rw), FadeIn(nr), run_time=0.9)
+                maps, txt, rw = nm, nt, nr
+        for m_ in (dot, cnt):
+            m_.clear_updaters()
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def board(self):
         t = load("tf")
         rows, i, n, k = board_rows()
         board = scoreboard(rows, highlight=(i,), max_bits=8.0)
         board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
         glow = SurroundingRectangle(board.rows[i], color=OURS, buff=0.08, corner_radius=0.08)
-        samples = t["samples"]
-        txt = VGroup(Text(samples[0][0], font="DejaVu Serif", font_size=20, color=GREY_B),
-                     Text(" ".join(samples[0][1].split())[:96] + " …", font="DejaVu Serif", font_size=20, color=WHITE))
-        txt.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to(ORIGIN)
-        if txt.width > 12.8:
-            txt.scale_to_fit_width(12.8)
-        gpt = next(r for r in rows if "GPT-2 small" in r["label"])
+        gpt = next((r for r in rows if "GPT-2 small" in r["label"]), None)
+        more = (f"GPT-2 small, at {gpt['bits']:.2f}, is the same kind of machine: a stack of these blocks, about "
+                f"{round(124e6 / t['n_params'], -1):.0f} times bigger, trained on far more text with far more "
+                "computing. What separates them is mostly scale, which was Part 12's story." if gpt else
+                "The large models of Part 1 are the same kind of machine, much bigger and trained on far more text: "
+                "what separates them is mostly scale, Part 12's story.")
         with self.voiceover(
-            "On the scoreboard, a new row. <bookmark mark='a'/> GPT-2 small, at "
-            f"{gpt['bits']:.2f}, is the same kind of machine: a stack of these blocks, about "
-            f"{round(124e6 / t['n_params'], -1):.0f} times bigger, trained on far more text with far more computing. "
-            "What separates them is mostly scale, which was part twelve's story."
+            f"On the scoreboard, a new row: our transformer, {float(t['passage_bits']):.2f}. <bookmark mark='a'/> "
+            + more
         ) as vo:
             self.play(FadeIn(board))
             self.play(Create(glow))
             vo.wait_until("a")
-            self.play(Indicate(board.rows[next(j for j, r in enumerate(rows) if r is gpt)], color=C.NEURAL))
-        self.play(FadeOut(board), FadeOut(glow))
-        with self.voiceover(
-            "And here's what it writes, from part five's prompt: <bookmark mark='a'/> still not sense, but sentences, "
-            "names and dialogue, held together over longer stretches than before."
-        ) as vo:
-            self.play(FadeIn(txt[0]))
-            vo.wait_until("a")
-            self.play(AddTextLetterByLetter(txt[1]), run_time=3.0)
+            if gpt:
+                self.play(Indicate(board.rows[next(j for j, r in enumerate(rows) if r is gpt)], color=C.NEURAL))
         self.wait(0.6)
         self.clear_scene()

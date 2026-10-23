@@ -5,27 +5,10 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import A, OURS, POS, curve, heat_image, load
+from videos.ai.ai13.common import A, EXT_COLORS, EXT_NAMES, OURS, PART, POS, curve, heat_image, load
 
 METHODS = [("plain", r"rotations as trained", C.SURPRISE), ("pi", r"position interpolation", C.TRUE_P),
            ("ntk", r"NTK-aware", C.INTERVAL), ("yarn", r"YaRN", C.BITS)]
-
-
-def saturating_softmax() -> VGroup:
-    """The softmax of the same five scores, scaled up: the weights pile onto one key until they barely move."""
-    s = np.array([1.0, 0.7, 0.4, 0.1, -0.2])
-    panels = VGroup()
-    for k in (1, 4, 16):
-        p = np.exp(k * s) / np.exp(k * s).sum()
-        bars = VGroup(*[Rectangle(width=0.18, height=1.1 * float(v) + 0.02, stroke_width=0, fill_color=A,
-                                  fill_opacity=0.9) for v in p]).arrange(RIGHT, buff=0.05, aligned_edge=DOWN)
-        base = Line(bars.get_corner(DL) + LEFT * 0.05, bars.get_corner(DR) + RIGHT * 0.05, color=GREY_C, stroke_width=1.5)
-        lab = label(rf"scores $\times{k}$", font_size=18, color=GREY_B).next_to(base, DOWN, buff=0.08)
-        panels.add(VGroup(bars, base, lab))
-    panels.arrange(RIGHT, buff=0.45, aligned_edge=DOWN)
-    arrows = VGroup(*[Arrow(a[1].get_right() + UP * 0.3, b[1].get_left() + UP * 0.3, buff=0.08, color=GREY_B,
-                            stroke_width=2, max_tip_length_to_length_ratio=0.3) for a, b in zip(panels[:-1], panels[1:])])
-    return VGroup(panels, arrows)
 
 
 class Longer(VoiceoverScene):
@@ -34,13 +17,13 @@ class Longer(VoiceoverScene):
         self.breaks()
         self.fixes()
         self.yarn()
-        self.sinks()
-        self.modern()
+        self.logn()
+        self.tune()
 
     def card(self):
-        card = chapter_card(4, r"Longer than it was trained for", r"What happens past the end of the training context?",
-                            part=13)
-        with self.voiceover("Chapter four. Longer than it was trained for."):
+        card = chapter_card(11, r"Longer than it was trained for", r"What happens past the end of the training context?",
+                            part=PART)
+        with self.voiceover("Chapter eleven. Longer than it was trained for."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -240,179 +223,118 @@ class Longer(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def sinks(self):
-        t = load("tf")
-        sink = np.asarray(t["sink"])  # layer, head: mean weight on position 0
-        uni = float(t["sink_uniform"])
-        maps = np.asarray(t["maps"])
-        L, H = sink.shape
-        li, hi_ = np.unravel_index(np.argmax(sink), sink.shape)
-        img = heat_image(maps[li, hi_], 4.2, 4.2, color=A, mask_upper=True).move_to([-3.6, -0.4, 0])
-        frame = SurroundingRectangle(img, buff=0, color=GREY_D, stroke_width=1.5)
-        il = label(rf"layer {li + 1}, head {hi_ + 1}, \ on the passage", font_size=22, color=GREY_A).next_to(img, UP, buff=0.12)
-        col = Rectangle(width=4.2 / maps.shape[-1] * 1.5, height=4.2, stroke_color=POS, stroke_width=2.5).move_to(img.get_left(), aligned_edge=LEFT)
-        # bars: share of attention on the first position, every head; the dashed line is an even share
-        ratio = float(sink.max() / uni)
-        strong = ratio > 5
-        bw, sy = 0.2, 1.6 / max(uni, float(sink.max()))
+    def logn(self):
+        e, t = load("extend"), load("tf")
+        ctx, s = int(t["ctx"]), int(e["s"])
+        rows = [
+            cmath(r"p_{\text{best}}", r"=", r"\frac{e^{\Delta}}{e^{\Delta} + (n - 1)}", font_size=34, colors={r"p_{\text{best}}": A}),
+            cmath(r"p_{\text{best}} \text{ fixed}", r"\;\Leftrightarrow\;", r"e^{\Delta} \propto n \;\Leftrightarrow\; \Delta \propto \log n",
+                  font_size=34),
+            cmath(r"s_{nj}", r"\;\leftarrow\;", r"s_{nj} \cdot \max\big(1, \log_{L} n\big)", font_size=34),
+        ]
+        whys = [why(r"one key $\Delta$ above $n - 1$ others", font_size=20), why(r"solve for the margin", font_size=20),
+                why(rf"trained at $L = {ctx}$: \\ unchanged up to $L$", font_size=20)]
+        step = ladder(self, rows, whys, keep=3, top=3.1, x=-3.4, buff=0.5, edge=6.9)
+        names = ["plain", "logn", "ntk", "ntk_logn", "yarn"]
+        far = {k: float(np.asarray(e[f"bucket_{k}"])[-4:].mean()) for k in names}
+        near = float(np.mean(np.asarray(e["bucket_plain"])[: ctx // 64]))
+        vals = [far[k] for k in names]
+        lo = min(vals + [near]) - 0.3
+        g = axes([0, len(names), 1], [lo, max(vals) + 0.3, 0.5], x_length=6.0, y_length=2.6, xlabel="",
+                 ylabel=rf"bits per character at positions ${3 * ctx}$--${4 * ctx}$", center=[2.6, -2.0, 0])
+        ax = g.ax
         bars = VGroup()
-        for l_ in range(L):
-            for h in range(H):
-                v = float(sink[l_, h])
-                bars.add(Rectangle(width=bw * 0.8, height=max(sy * v, 0.01), stroke_width=0,
-                                   fill_color=POS if (l_, h) == (li, hi_) and strong else A, fill_opacity=0.85)
-                         .move_to([0.9 + (l_ * (H + 1) + h) * bw, -2.2 + sy * v / 2, 0]))
-        base = Line([0.8, -2.2, 0], [0.9 + (L * (H + 1)) * bw, -2.2, 0], color=GREY_C, stroke_width=2)
-        ul = DashedLine([0.8, -2.2 + sy * uni, 0], [0.9 + (L * (H + 1)) * bw, -2.2 + sy * uni, 0], color=GREY_B, stroke_width=1.5)
-        bl = label(r"every head's attention on the first character", font_size=22, color=GREY_A).next_to(base, DOWN, buff=0.15)
-        ulab = label(r"if attention were spread evenly", font_size=20, color=GREY_B).next_to(ul, UP, buff=0.05).align_to(base, RIGHT)
-        lyr = VGroup(*[label(rf"layer {l_ + 1}", font_size=18, color=GREY_B).move_to([0.9 + (l_ * (H + 1) + (H - 1) / 2) * bw,
-                                                                                       -2.85, 0]) for l_ in range(L)])
-        bl.next_to(lyr, DOWN, buff=0.1)
-        why = label(r"softmax weights must add to one: \\ a head with nothing to find \\ parks its attention somewhere",
-                    font_size=24, color=GREY_A).move_to([3.4, 2.0, 0])
-        cite_ = cite(r"G.~Xiao et al., \textit{Efficient Streaming Language Models with Attention Sinks} (2023)", corner=DR)
-        # what a sink head looks like in a large model (a sketch): most of each row's weight on the first token
-        n = 48
-        g = np.random.default_rng(3)
-        sk = np.tril(np.exp(-np.abs(np.subtract.outer(np.arange(n), np.arange(n))) / 2.0) * 0.3 + g.random((n, n)) * 0.05)
-        sk[:, 0] += 2.0
-        sk = np.tril(sk) / np.tril(sk).sum(1, keepdims=True)
-        simg = heat_image(sk, 4.2, 4.2, color=A, mask_upper=True).move_to(img)
-        sframe = SurroundingRectangle(simg, buff=0, color=GREY_D, stroke_width=1.5)
-        sl = label(r"a sink head in a large model \ (schematic)", font_size=22, color=GREY_A).next_to(simg, UP, buff=0.12)
-        scol = Rectangle(width=4.2 / n * 1.5, height=4.2, stroke_color=POS, stroke_width=2.5).move_to(simg.get_left(), aligned_edge=LEFT)
+        for i, k in enumerate(names):
+            v = min(far[k], max(vals) + 0.3)
+            r_ = Rectangle(width=0.7, height=max(ax.c2p(0, v)[1] - ax.c2p(0, lo)[1], 0.02), stroke_width=0,
+                           fill_color=EXT_COLORS[k], fill_opacity=0.85).move_to(ax.c2p(i + 0.5, (v + lo) / 2))
+            bars.add(VGroup(r_, MathTex(f"{far[k]:.2f}", font_size=20, color=EXT_COLORS[k]).next_to(r_, UP, buff=0.06),
+                            label(EXT_NAMES[k], font_size=15, color=EXT_COLORS[k]).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.1)))
+        ref = DashedLine(ax.c2p(0, near), ax.c2p(len(names), near), color=GREY_B, stroke_width=1.5)
+        refl = label(rf"within $1$--${ctx}$", font_size=16, color=GREY_B).next_to(ref, RIGHT, buff=0.08)
+        hist = VGroup(label(r"Chiang \& Cholak (2022): \ scale logits by $\log n$", font_size=20, color=GREY_A),
+                      label(r"Qwen (2023): \ dynamic NTK $+$ $\log n$ $+$ windows", font_size=20, color=GREY_A),
+                      label(r"Llama 4 (2025): \ attention temperature at inference", font_size=20, color=GREY_A))
+        hist.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-4.1, -2.1, 0])
+        best = min(names, key=lambda k: far[k])
+        help_l = far["logn"] < far["plain"] - 0.05
+        help_n = far["ntk_logn"] < far["ntk"] - 0.02
+        v1 = (f"On our model, scaling alone takes the far end from {far['plain']:.2f} to {far['logn']:.2f} bits. "
+              if help_l else f"On our model, scaling alone barely changes the far end: {far['plain']:.2f} to "
+              f"{far['logn']:.2f} bits, since the broken angles, not the spread, are its problem. ")
+        v2 = (f"On top of the NTK rescaling it helps again, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. " if help_n else
+              f"On top of the NTK rescaling it changes little, {far['ntk']:.2f} to {far['ntk_logn']:.2f}. ")
         with self.voiceover(
-            "Long contexts brought a strange discovery. Look at where heads put their attention. "
-            + (f"<bookmark mark='a'/> Some heads in our model put a large share of it, up to {sink.max():.0%}, on the "
-               f"very first character, whatever that character is: about {ratio:.0f} times what an even spread "
-               "would give it. <bookmark mark='b'/> These are attention sinks. " if strong else
-               "<bookmark mark='a'/> In our small model, nothing odd: every head gives the first character less than "
-               "an even share. <bookmark mark='b'/> But in large models, many heads put most of their attention on "
-               "the very first token, whatever that token is. These are attention sinks. ")
-            + "<bookmark mark='c'/> A softmax has to hand out all of its weight, so a head that has nothing to look "
-            "for parks its attention on a harmless spot. Guangxuan Xiao and colleagues found that keeping those first "
-            "tokens lets a model run on and on; newer models like gpt-oss build a learnable sink into every head, and "
-            "Qwen adds a gate that lets a head switch itself off instead."
+            "A second thing changes in a longer text: there are more keys to share the weights. "
+            "<bookmark mark='a'/> Say the best key scores delta above n minus one others. Its weight is e to the "
+            "delta over e to the delta plus n minus one. <bookmark mark='b'/> To keep that weight as n grows, delta "
+            "must grow like the logarithm of n. <bookmark mark='c'/> So scale every score by log n, in units of "
+            "the training length: nothing changes up to it, and beyond it the attention stays as sharp as in "
+            "training. David Chiang and Peter Cholak proposed it in 2022; Qwen used it with NTK scaling in 2023, and "
+            f"Llama 4 scales its attention's temperature at inference. <bookmark mark='d'/> {v1}{v2}"
+            f"The best of all here is {EXT_NAMES[best].replace('$', '').replace(chr(92), '')}, at {far[best]:.2f}."
         ) as vo:
-            self.play(FadeIn(img), Create(frame), FadeIn(il), FadeIn(cite_))
+            step(0)
             vo.wait_until("a")
-            self.play(*([Create(col)] if strong else []), Create(base),
-                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03),
-                      Create(ul), FadeIn(ulab), FadeIn(lyr), FadeIn(bl), run_time=2.0)
+            self.play(Indicate(rows[0][2], color=A))
             vo.wait_until("b")
-            if not strong:
-                self.play(FadeOut(Group(img, frame, il)), FadeIn(Group(simg, sframe, sl)))
-                self.play(Create(scol))
+            step(1)
             vo.wait_until("c")
-            self.play(FadeIn(why))
+            step(2)
+            self.play(FadeIn(hist))
+            vo.wait_until("d")
+            self.play(FadeIn(g), Create(ref), FadeIn(refl), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.2))
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def modern(self):
-        """Four small changes frontier models make to the attention we built, each with its equation and a tiny plot."""
-        W, H = 6.6, 3.35
+    def tune(self):
+        e, t = load("extend"), load("tf")
+        ctx, s, T = int(t["ctx"]), int(e["s"]), int(e["T"])
+        steps, chars = int(e["ft_steps"]), int(e["ft_chars"])
+        allb = np.concatenate([np.asarray(e[f"bucket_{k}"]) for k in ("pi", "yarn", "ft_pi", "ft_yarn")]
+                              + [np.asarray(e["bucket_window"])])
+        lo = math.floor(allb.min() * 2) / 2 - 0.25
+        hi = min(math.ceil(allb.max() * 2) / 2 + 0.25, lo + 3.0)
+        ax, deco = self.axes(e, lo, hi)
+        edge = DashedLine(ax.c2p(ctx, lo), ax.c2p(ctx, hi), color=GREY_B, stroke_width=2)
 
-        def panel(c, title, col):
-            box = RoundedRectangle(width=W, height=H, corner_radius=0.12, stroke_color=GREY_D, stroke_width=1.5).move_to(c)
-            t_ = label(title, font_size=22, color=col).move_to(box.get_corner(UL) + RIGHT * 0.2 + DOWN * 0.28, aligned_edge=UL)
-            return box, t_
+        def ln(key, col, sw=3.0, dashed=False):
+            b = np.asarray(e[f"bucket_{key}"])
+            xs = np.arange(len(b)) * 64 + 32
+            c_ = curve(ax, xs, np.minimum(b, hi), col, sw)
+            return DashedVMobject(c_, num_dashes=24) if dashed else c_
 
-        def mini(c, xr, yr):
-            return Axes(x_range=xr, y_range=yr, x_length=2.5, y_length=1.55, tips=False,
-                        axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to(c)
-
-        cs = [np.array([-3.45, 1.78, 0]), np.array([3.45, 1.78, 0]), np.array([-3.45, -1.8, 0]), np.array([3.45, -1.8, 0])]
-        # 1. a sink logit: one learned number b per head in the softmax's denominator (gpt-oss)
-        b_, nk = 2.0, 8
-        p_plain = 1 / nk
-        p_sink = 1 / (math.exp(b_) + nk)
-        sink_share = math.exp(b_) / (math.exp(b_) + nk)
-        box1, t1 = panel(cs[0], r"a sink logit \ (gpt-oss, 2025)", POS)
-        e1 = MathTex(r"p_j = \frac{e^{s_j}}{e^{\,b} + \sum_k e^{s_k}}", font_size=30).move_to(cs[0] + LEFT * 1.6 + DOWN * 0.15)
-        sy, bw = 1.5 / 0.5, 0.2
-        x0 = cs[0][0] + 0.75
-        yb = cs[0][1] - 1.05
-        bars = VGroup(*[Rectangle(width=bw * 0.75, height=sy * p_plain, stroke_width=0, fill_color=A, fill_opacity=0.85)
-                        .move_to([x0 + j * bw, yb + sy * p_plain / 2, 0]) for j in range(nk)])
-        bars_s = VGroup(*[Rectangle(width=bw * 0.75, height=sy * p_sink, stroke_width=0, fill_color=A, fill_opacity=0.85)
-                          .move_to([x0 + j * bw, yb + sy * p_sink / 2, 0]) for j in range(nk)])
-        sbar = Rectangle(width=bw * 0.75, height=sy * sink_share, stroke_width=0, fill_color=POS, fill_opacity=0.85) \
-            .move_to([x0 + (nk + 0.6) * bw, yb + sy * sink_share / 2, 0])
-        base1 = Line([x0 - bw, yb, 0], [x0 + (nk + 1.2) * bw, yb, 0], color=GREY_C, stroke_width=2)
-        bl1 = label(rf"${nk}$ equal scores", font_size=18, color=GREY_B).next_to(base1, DOWN, buff=0.08).align_to(base1, LEFT)
-        sl1 = MathTex(rf"{sink_share:.2f}", font_size=20, color=POS).next_to(sbar, UP, buff=0.06)
-        pl1 = MathTex(rf"{p_plain:.3f}", font_size=20, color=A).next_to(bars, UP, buff=0.06)
-        pl1s = MathTex(rf"{p_sink:.3f}", font_size=20, color=A).next_to(bars_s, UP, buff=0.06)
-        bnote = label(rf"$b = {b_:.0f}$", font_size=18, color=POS).next_to(sbar, RIGHT, buff=0.08).align_to(sbar, DOWN)
-        # 2. an output gate: each head's output times a sigmoid of the input (Qiu et al. 2025; Qwen3-Next)
-        GATE = C.BITS
-        box2, t2 = panel(cs[1], r"an output gate \ (Qwen3-Next, 2025)", GATE)
-        e2 = MathTex(r"o = \operatorname{Attn}(x)\,\odot\,\sigma(x\,W_g)", font_size=30).move_to(cs[1] + LEFT * 1.4 + DOWN * 0.15)
-        ax2 = mini(cs[1] + RIGHT * 1.75 + DOWN * 0.3, [-6, 6, 3], [0, 1, 0.5])
-        g2 = ax2.plot(lambda z: 1 / (1 + math.exp(-z)), color=GATE, stroke_width=3.5)
-        gl2 = VGroup(label(r"shut", font_size=18, color=GREY_B).next_to(ax2.c2p(-6, 0), UR, buff=0.08),
-                     label(r"open", font_size=18, color=GREY_B).next_to(ax2.c2p(5, 0.95), DOWN, buff=0.12))
-        # 3. QK-norm: queries and keys rescaled to a fixed size before the dot product
-        QN = C.INTERVAL
-        box3, t3 = panel(cs[2], r"QK-norm \ (OLMo 2, Qwen3, Gemma 3)", QN)
-        e3 = VGroup(MathTex(r"\hat q = g_q \odot \frac{q}{\operatorname{rms}(q)}", font_size=28),
-                    MathTex(r"\hat k = g_k \odot \frac{k}{\operatorname{rms}(k)}", font_size=28)) \
-            .arrange(DOWN, buff=0.25).move_to(cs[2] + LEFT * 1.75 + DOWN * 0.2)
-        cmax = 4
-        ax3 = mini(cs[2] + RIGHT * 2.0 + DOWN * 0.3, [1, cmax, 1], [0, cmax ** 2, 4])
-        raw3 = ax3.plot(lambda c: c * c, color=C.SURPRISE, stroke_width=3.5)
-        nrm3 = ax3.plot(lambda c: 1.0, color=QN, stroke_width=3.5)
-        l3 = VGroup(label(r"plain", font_size=18, color=C.SURPRISE).next_to(ax3.c2p(cmax, cmax ** 2), LEFT, buff=0.1),
-                    label(r"normed", font_size=18, color=QN).next_to(ax3.c2p(cmax, 1), UP, buff=0.08).shift(LEFT * 0.3))
-        x3 = label(rf"weights grown $\times 1 \ldots {cmax}$", font_size=18, color=GREY_B).next_to(ax3, DOWN, buff=0.08)
-        y3 = label(r"score", font_size=18, color=GREY_B).next_to(ax3, LEFT, buff=0.08).shift(UP * 0.4)
-        # 4. a soft cap on the scores (Gemma 2): c tanh(s / c), c = 50
-        CAP = C.TRUE_P
-        cap = 50.0
-        box4, t4 = panel(cs[3], r"a soft cap \ (Gemma 2, 2024)", CAP)
-        e4 = MathTex(r"s \;\leftarrow\; c\,\tanh(s / c)", font_size=30).move_to(cs[3] + LEFT * 1.6 + DOWN * 0.15)
-        c4 = label(rf"$c = {cap:.0f}$", font_size=22, color=GREY_A).next_to(e4, DOWN, buff=0.2)
-        ax4 = mini(cs[3] + RIGHT * 1.75 + DOWN * 0.3, [-150, 150, 50], [-150, 150, 50])
-        id4 = DashedLine(ax4.c2p(-150, -150), ax4.c2p(150, 150), dash_length=0.06, stroke_width=1.5, color=GREY_B)
-        cp4 = ax4.plot(lambda s: cap * math.tanh(s / cap), color=CAP, stroke_width=3.5)
-        lim4 = VGroup(*[DashedLine(ax4.c2p(-150, v), ax4.c2p(150, v), dash_length=0.05, stroke_width=1.2, color=CAP,
-                                   stroke_opacity=0.6) for v in (cap, -cap)])
-        l4 = MathTex(rf"\pm{cap:.0f}", font_size=18, color=CAP).next_to(ax4.c2p(-150, cap), UP, buff=0.05) \
-            .align_to(ax4.c2p(-150, cap), LEFT)
-        sat = gloss(r"the softmax saturates", r"huge scores put nearly all the weight on one key, \\ and small "
-                    r"changes stop moving it: learning stalls", saturating_softmax(), corner=UR, width=5.4, color=A)
-        sat.move_to(cs[1] + UP * 0.05)
+        before = VGroup(ln("pi", EXT_COLORS["pi"], 2.5, True), ln("yarn", EXT_COLORS["yarn"], 2.5, True))
+        after = VGroup(ln("ft_pi", EXT_COLORS["pi"], 3.5), ln("ft_yarn", EXT_COLORS["yarn"], 3.5))
+        win = ln("window", EXT_COLORS["window"], 2.0)
+        key = VGroup(label(r"dashed: \ no training", font_size=20, color=GREY_B),
+                     label(rf"solid: \ after ${steps}$ steps at ${T:,}$".replace(",", "{,}"), font_size=20, color=WHITE),
+                     label(r"position interpolation", font_size=20, color=EXT_COLORS["pi"]),
+                     label(r"YaRN", font_size=20, color=EXT_COLORS["yarn"]),
+                     label(rf"just the last ${ctx}$", font_size=20, color=EXT_COLORS["window"]))
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.8, 1.0, 0])
+        far = {k: float(np.asarray(e[f"bucket_{k}"])[-4:].mean()) for k in ("pi", "yarn", "ft_pi", "ft_yarn", "window")}
+        winner = "ft_yarn" if far["ft_yarn"] < far["ft_pi"] else "ft_pi"
+        gap = abs(far["ft_yarn"] - far["ft_pi"])
+        v = (f"Position interpolation falls from {far['pi']:.2f} to {far['ft_pi']:.2f} bits at the far end, YaRN "
+             f"from {far['yarn']:.2f} to {far['ft_yarn']:.2f}. "
+             + (f"{'YaRN' if winner == 'ft_yarn' else 'Interpolation'} ends ahead by {gap:.2f} bits"
+                + (", and beats reading the last {0} characters, {1:.2f}.".format(ctx, far["window"])
+                   if far[winner] < far["window"] else
+                   f", but neither yet beats simply reading the last {ctx} characters, {far['window']:.2f}.")))
         with self.voiceover(
-            "Sinks are one of several small changes that frontier models make to the attention we built. Here are "
-            "four of them, exactly. <bookmark mark='a'/> gpt-oss gives every head one extra learned number, b, that "
-            "sits in the softmax's denominator like the score of an invisible position. <bookmark mark='b'/> A head "
-            f"with nothing to find can now send its weight there, onto nothing at all: with b equal to {b_:.0f} and "
-            f"{nk} equal scores, {sink_share:.0%} of it. <bookmark mark='c'/> Qwen3-Next instead multiplies each "
-            "head's output by a gate, a sigmoid of the input. A head with nothing to add can shut itself, and the "
-            "sinks largely disappear. <bookmark mark='d'/> QK-norm rescales every query and key to a fixed size "
-            "before the dot product. Without it, weights that grow make the scores grow with the square of their "
-            "size, until the softmax saturates: <bookmark mark='s'/> nearly all the weight lands on one key, small "
-            "changes to the scores no longer move it, and training stalls. With QK-norm, the scores stay bounded. "
-            "<bookmark mark='e'/> Gemma 2 caps the scores softly instead: c times tanh of s over c. Small scores pass "
-            f"unchanged, and none can pass {cap:.0f}. Gemma 3 dropped the cap for QK-norm."
+            "Real models do not stop at a rescaling: they train briefly at the new length. So did we, "
+            f"{steps} steps of {T:,}-character windows, {chars / 1e6:.1f} million characters, about "
+            f"{100 * chars / float(t['tokens']):.0f} percent of the original training, once from position "
+            "interpolation and once from YaRN. <bookmark mark='a'/> Dashed, before; solid, after. "
+            f"<bookmark mark='b'/> {v} This is the recipe of today's long-context models: DeepSeek-V3 went from four "
+            "thousand to a hundred and twenty-eight thousand tokens with YaRN and two thousand steps of training."
         ) as vo:
-            self.play(Create(box1), FadeIn(t1), FadeIn(e1))
-            self.play(Create(base1), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.08), FadeIn(pl1), FadeIn(bl1))
+            self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(key[2:]), Create(before), Create(win), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(key[:2]))
             vo.wait_until("b")
-            self.play(Transform(bars, bars_s), Transform(pl1, pl1s), GrowFromEdge(sbar, DOWN), FadeIn(sl1), FadeIn(bnote))
-            vo.wait_until("c")
-            self.play(Create(box2), FadeIn(t2), FadeIn(e2), Create(ax2))
-            self.play(Create(g2), FadeIn(gl2))
-            vo.wait_until("d")
-            self.play(Create(box3), FadeIn(t3), FadeIn(e3), Create(ax3), FadeIn(x3), FadeIn(y3))
-            self.play(Create(raw3), Create(nrm3), FadeIn(l3), run_time=1.5)
-            vo.wait_until("s")
-            self.play(FadeIn(sat, shift=UP * 0.2))
-            vo.wait_until("e")
-            self.play(FadeOut(sat))
-            self.play(Create(box4), FadeIn(t4), FadeIn(e4), FadeIn(c4), Create(ax4), Create(id4))
-            self.play(Create(cp4), Create(lim4), FadeIn(l4), run_time=1.5)
-        self.wait(0.5)
+            self.play(Create(after), run_time=2.0)
+        self.wait(0.3)
         self.clear_scene()

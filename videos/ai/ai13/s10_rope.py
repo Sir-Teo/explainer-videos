@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import A, K, MONO, POS, Q, V, curve, load
+from videos.ai.ai13.common import A, K, MONO, PART, POS, Q, V, bars_chart, curve, load
 
 
 def dial(radius=0.32, color=GREY_C) -> VGroup:
@@ -16,59 +16,17 @@ def dial(radius=0.32, color=GREY_C) -> VGroup:
 class Rope(VoiceoverScene):
     def construct(self):
         self.card()
-        self.blind()
         self.clocks()
+        self.proof()
         self.relative()
         self.decay()
+        self.use()
 
     def card(self):
-        card = chapter_card(3, r"Positions as rotations", r"How does attention know where things are?", part=13)
-        with self.voiceover("Chapter three. Positions as rotations."):
+        card = chapter_card(9, r"Positions as rotations", r"Can a position be an angle?", part=PART)
+        with self.voiceover("Chapter nine. Positions as rotations."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
-
-    # ------------------------------------------------------------------
-    def blind(self):
-        words = ["dog", "bites", "man"]
-
-        def row(order, y):
-            g = VGroup(*[VGroup(RoundedRectangle(width=1.5, height=0.7, corner_radius=0.1, stroke_color=K, stroke_width=2),
-                                Text(words[i], font=MONO, font_size=28, color=WHITE)) for i in order])
-            for b in g:
-                b[1].move_to(b[0])
-            return g.arrange(RIGHT, buff=0.4).move_to([0, y, 0])
-
-        r1 = row([0, 1, 2], 1.6)
-        r2 = row([2, 1, 0], 1.6)
-        qd = VGroup(Circle(radius=0.32, color=Q, stroke_width=3), MathTex(r"q", font_size=32, color=Q)).move_to([0, -0.6, 0])
-        w = [0.5, 0.2, 0.3]
-
-        def lines(r, order):
-            return VGroup(*[Line(qd.get_top(), b.get_bottom(), color=A, stroke_width=2 + 14 * w[i])
-                            for b, i in zip(r, order)])
-
-        l1 = lines(r1, [0, 1, 2])
-        out = label(r"$0.5\,v_{\mathrm{dog}} + 0.2\,v_{\mathrm{bites}} + 0.3\,v_{\mathrm{man}}$", font_size=30, color=V)
-        out.next_to(qd, DOWN, buff=0.5)
-        same = label(r"reorder the words: \ the same weights, \ the same average", font_size=28, color=GREY_A)
-        same.to_edge(DOWN, buff=0.5)
-        tag = note(r"illustrative weights").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "There's a problem. Attention averages over a set. <bookmark mark='a'/> Each word gets a weight from its "
-            "key, wherever it sits. <bookmark mark='b'/> So 'dog bites man' and 'man bites dog' look exactly the "
-            "same: the same weights, the same average. The order is lost. The model has to be told where each "
-            "character is."
-        ) as vo:
-            self.play(FadeIn(r1), FadeIn(qd), FadeIn(tag))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in l1], lag_ratio=0.2), FadeIn(out))
-            vo.wait_until("b")
-            l2 = lines(r2, [2, 1, 0])
-            self.play(*[r1[i].animate.move_to(r2[j]) for i, j in ((0, 2), (2, 0))], Transform(l1, l2), run_time=1.5,
-                      path_arc=PI / 3)
-            self.play(Indicate(out, color=V), FadeIn(same))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def clocks(self):
@@ -101,7 +59,8 @@ class Rope(VoiceoverScene):
         fl = cmath(r"\theta_j = 10000^{-2j/32}", font_size=34, colors=colors).next_to(f, RIGHT, buff=0.8)
         cite_ = cite(r"J.~Su et al., \textit{RoFormer: Enhanced Transformer with Rotary Position Embedding} (2021)", corner=DR)
         with self.voiceover(
-            "The answer used by nearly every model today is to rotate. Take a query's thirty-two numbers in sixteen "
+            "In 2021 Jianlin Su and colleagues proposed the answer nearly every model uses today: instead of adding "
+            "a position to the input, rotate the queries and keys. Take a query's thirty-two numbers in sixteen "
             "pairs; each pair is an arrow in a plane. <bookmark mark='a'/> At position m, turn pair j by m times an "
             "angle theta j. <bookmark mark='b'/> The first pair turns fast, a full turn every six characters; each "
             "pair after it turns more slowly, down to one turn in thirty-five thousand. "
@@ -118,6 +77,43 @@ class Rope(VoiceoverScene):
         self.wait(0.3)
         counter[1].clear_updaters()
         hs.clear_updaters()
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def proof(self):
+        r = load("rope")
+        colors = {r"q": Q, r"k": K, r"R_m": POS, r"R_n": POS, r"R_{-m}": POS, r"R_{n-m}": POS, r"R_m^\top": POS}
+        rows = [
+            cmath(r"(R_m q) \cdot (R_n k)", r"=", r"q^\top R_m^\top R_n\, k", font_size=38, colors=colors),
+            cmath(r"(R_m q) \cdot (R_n k)", r"=", r"q^\top R_{-m} R_n\, k", font_size=38, colors=colors),
+            cmath(r"(R_m q) \cdot (R_n k)", r"=", r"q^\top R_{n-m}\, k", font_size=38, colors=colors),
+        ]
+        whys = [why(r"$(Ax)\cdot y = x^\top A^\top y$"), why(r"a rotation's transpose turns it back"),
+                why(r"turning by $-m$, then by $n$: \\ by $n - m$")]
+        step = ladder(self, rows, whys, keep=3, top=2.4, x=-1.0, buff=0.7, edge=6.9)
+        box_t = label(r"the score depends on $n - m$ only: \ relative position, from absolute rotations",
+                      font_size=26, color=POS).move_to([0, -1.6, 0])
+        dev = float(r["dev"])
+        chk = label(rf"checked on random $32$-number vectors, all shifts up to $40$: \ off by at most ${sci(dev)}$",
+                    font_size=22, color=C.TRUE_P).next_to(box_t, DOWN, buff=0.35)
+        with self.voiceover(
+            "Why rotations? Here is the whole proof. Write R m for the rotation at position m. "
+            "<bookmark mark='a'/> The score of a rotated query and a rotated key is q transposed, R m transposed, "
+            "R n, k. <bookmark mark='b'/> The transpose of a rotation is the rotation backwards. "
+            "<bookmark mark='c'/> And turning back by m then forward by n is turning by n minus m. "
+            "<bookmark mark='d'/> So the score depends only on how far apart the two characters are, though each "
+            "was rotated by its own absolute position. Checked on random vectors, to rounding error."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0][2], color=POS))
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            self.play(FadeIn(box_t), FadeIn(chk))
+        self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -161,12 +157,12 @@ class Rope(VoiceoverScene):
         chk.next_to(fl, DOWN, buff=0.45)
         tag = note(r"one pair, \ illustrative angles").to_corner(DL, buff=0.3)
         with self.voiceover(
-            "Why rotations? Look at one pair, in a query at position five and a key at position two. "
+            "Here is the same fact, seen on one pair: a query at position five and a key at position two. "
             "<bookmark mark='a'/> Their score depends on the angle between them. Now move both forward by the same "
             "amount, as if the same words appeared later in the text. <bookmark mark='b'/> Both arrows turn by the "
             "same angle, so the angle between them doesn't change, and neither does the score. "
             "<bookmark mark='c'/> A rotated query and a rotated key score according to how far apart they are, not "
-            "where they are. Relative position comes for free, from the geometry of rotations."
+            "where they are."
         ) as vo:
             self.play(FadeIn(big), FadeIn(tag), FadeIn(qarr), FadeIn(karr), FadeIn(readout))
             vo.wait_until("a")
@@ -216,5 +212,61 @@ class Rope(VoiceoverScene):
             self.play(FadeIn(note_))
             vo.wait_until("b")
             self.play(FadeIn(used))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def use(self):
+        t, r = load("tf"), load("rope")
+        pq, pk = np.asarray(t["pair_q"]), np.asarray(t["pair_k"])  # layer, head, pair: mean squared size
+        wl = np.asarray(r["wavelength"])
+        ctx = int(t["ctx"])
+        e = (pq / pq.sum(-1, keepdims=True) + pk / pk.sum(-1, keepdims=True)).mean((0, 1)) / 2  # share per pair
+        n = len(e)
+        cols = [interpolate_color(ManimColor(POS), ManimColor(GREY_B), i / (n - 1)) for i in range(n)]
+        ch = bars_chart(e, cols, width=7.4, height=2.6, x0=-6.6, base_y=-1.4, vmax=float(e.max()) * 1.15,
+                        font_size=14, fmt="{:.2f}")
+        for v in ch.vals:
+            v.set_opacity(0)
+        top = label(r"our transformer: \ each rotation pair's share of the queries' and keys' size \\ "
+                    r"(all $16$ heads, \ held-out text)", font_size=20, color=GREY_A).next_to(ch, UP, buff=0.25)
+        top.align_to(ch, LEFT)
+        xl = VGroup(label(rf"fastest: \ a turn every ${wl[0]:.0f}$", font_size=18, color=POS)
+                    .next_to(ch.bars[0], DOWN, buff=0.15).align_to(ch.bars[0], LEFT),
+                    label(rf"slowest: \ every ${wl[-1]:,.0f}$".replace(",", "{,}"), font_size=18, color=GREY_B)
+                    .next_to(ch.bars[-1], DOWN, buff=0.15).align_to(ch.bars[-1], RIGHT))
+        slow = [i for i in range(n) if wl[i] > ctx]  # pairs that never finish a turn inside the context
+        s_slow, s_fast = float(e[slow].sum()), float(e[: n // 4].sum())
+        even = len(slow) / n
+        verdict = (f"Our small model does the same: the {len(slow)} pairs that never finish a turn within its {ctx} "
+                   f"characters carry {s_slow:.0%} of the size of its queries and keys, against {even:.0%} if it were "
+                   "spread evenly. Those pairs barely rotate, so they work as plain channels for content."
+                   if s_slow > 1.2 * even else
+                   f"Our small model does not: the {len(slow)} pairs that never finish a turn within its {ctx} "
+                   f"characters carry {s_slow:.0%} of the size of its queries and keys, close to the {even:.0%} of an "
+                   "even spread.")
+        facts = VGroup(
+            label(r"Barbero et al.\ (2024): \ Gemma uses the fastest pairs \\ for positional patterns, \ the slowest "
+                  r"for meaning", font_size=20, color=GREY_A),
+            label(r"Qwen3-Next (2025): \ only $64$ of each head's $256$ numbers \\ are rotated at all", font_size=20,
+                  color=GREY_A),
+            label(r"Gemma 3 (2025): \ base $10{,}000$ in local layers, \\ $1{,}000{,}000$ in global ones",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 0.2, 0])
+        keep_in_frame(facts)
+        with self.voiceover(
+            "Which hands does a trained model actually use? In 2024 Federico Barbero and colleagues looked inside "
+            "Google's Gemma: its fastest pairs build sharp positional patterns, like looking exactly one token back, "
+            "while its slowest pairs, which hardly turn, seem to carry meaning. <bookmark mark='a'/> " + verdict
+            + " <bookmark mark='b'/> Designers have taken the hint. Qwen3-Next rotates only 64 of each head's 256 "
+            "numbers and leaves the rest alone; Gemma 3 slows its global layers' clocks a hundredfold, with a base "
+            "of a million instead of ten thousand, so that they turn slowly over long documents."
+        ) as vo:
+            self.play(FadeIn(facts[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(top), FadeIn(ch.base), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.05),
+                      FadeIn(xl))
+            vo.wait_until("b")
+            self.play(FadeIn(facts[1:]))
         self.wait(0.3)
         self.clear_scene()

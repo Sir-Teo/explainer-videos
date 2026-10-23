@@ -135,6 +135,7 @@ class Stability(VoiceoverScene):
             vo.wait_until("b")
             self.play(Indicate(lines[0], color=YELLOW))
             vo.wait_until("c")
+            self.play(FadeOut(VGroup(sm, sm_t)))  # the ladder needs the room
             step(1)
             vo.wait_until("d")
             step(2)

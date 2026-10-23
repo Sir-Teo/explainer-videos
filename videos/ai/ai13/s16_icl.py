@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import A, K, MONO, Q, V, load, signed_image
+from videos.ai.ai13.common import A, K, MONO, PART, Q, V, curve, load, signed_image
 
 
 def forward_pass_picture() -> VGroup:
@@ -41,8 +41,8 @@ class InContext(VoiceoverScene):
         self.deeper()
 
     def card(self):
-        card = chapter_card(6, r"Learning inside the prompt", r"Can a forward pass run a learning algorithm?", part=13)
-        with self.voiceover("Chapter six. Learning inside the prompt."):
+        card = chapter_card(15, r"Learning inside the prompt", r"Can a forward pass run a learning algorithm?", part=PART)
+        with self.voiceover("Chapter fifteen. Learning inside the prompt."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -142,21 +142,30 @@ class InContext(VoiceoverScene):
         t1 = label(r"learned, \ from $6{,}000$ batches of prompts", font_size=24, color=WHITE).next_to(learned, DOWN, buff=0.3)
         t2 = label(r"one step of gradient descent, \ written as attention", font_size=24, color=C.BITS)
         t2.next_to(theory, DOWN, buff=0.3)
+        cv = np.asarray(d["curve1"])
+        tg = axes([0, cv[-1, 0], 2000], [0, float(np.ceil(cv[:, 1].max())), 1], x_length=4.6, y_length=2.4,
+                  xlabel=r"training steps", ylabel=r"squared error on the question", xticks=[0, cv[-1, 0]],
+                  xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0, float(np.ceil(cv[:, 1].max()))],
+                  center=[0, -1.0, 0])
+        tc = curve(tg.ax, cv[:, 0], cv[:, 1], A, 3)
         gd = cmath(r"w_1 = \frac{\eta}{N}\sum_i y_i\, x_i", r"\quad\Rightarrow\quad",
                    r"\hat y = \frac{\eta}{N}\sum_i y_i\,(x_i \cdot x_q)", font_size=32).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Take the simplest attention: one layer, with no softmax. Every token is an example's numbers and its "
-            "answer, and attention adds to each token a weighted sum of the others. Train it on many prompts. "
+            "answer, and attention adds to each token a weighted sum of the others. Train it on many prompts: its "
+            f"error on the question falls from {cv[0, 1]:.1f} to {cv[-1, 1]:.2f}. "
             "<bookmark mark='a'/> Here are the two matrices it learned. Blue is positive, red negative. "
             "<bookmark mark='b'/> Now do something else: one step of gradient descent on the prompt's examples, "
-            "starting from zero, for the least-squares loss of part six. The step is a sum of each answer times its "
+            "starting from zero, for the least-squares loss of Part 6. The step is a sum of each answer times its "
             "x, and the prediction is a sum of each answer times how well its x matches the question: a dot product "
             "of x's, weighting the y's. <bookmark mark='c'/> That is attention, with these two matrices: an "
             "identity block that compares x's, and one entry that passes on the y's. They're the same pattern the "
             "network found by itself."
         ) as vo:
-            self.play(Write(f), FadeIn(fl))
+            self.play(Write(f), FadeIn(fl), FadeIn(tg))
+            self.play(Create(tc), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(tg), FadeOut(tc))
             self.play(FadeIn(learned), FadeIn(names[0]), FadeIn(names[1]), FadeIn(t1))
             vo.wait_until("b")
             self.play(Write(gd), run_time=2.0)
@@ -185,13 +194,15 @@ class InContext(VoiceoverScene):
         dl = label(r"same answer", font_size=20, color=GREY_B).next_to(ax.c2p(lim, lim), RIGHT, buff=0.1)
         corr = gloss(r"correlation", r"how closely the dots hug a straight line: \\ $1$ means exactly on it, "
                      r"$0$ means no line at all", width=4.6, color=GREY_A).move_to([3.2, -1.75, 0])
-        assert r_ > 0.99
         with self.voiceover(
             "Check it on four thousand new prompts. Each dot is one question: across, the answer from one step of "
-            "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> They lie on a line. "
-            f"The correlation is {r_:.3f}. Correlation measures how closely the dots hug a straight line, and one "
-            "would mean exactly on it. The forward pass of this network is a step of learning, run on the "
-            "examples in its prompt. Johannes von Oswald and colleagues showed this in 2023."
+            "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> "
+            + (f"They lie on a line. The correlation is {r_:.3f}. " if r_ > 0.99 else
+               f"They follow a line, loosely: the correlation is {r_:.3f}. ")
+            + "Correlation measures how closely the dots hug a straight line, and one would mean exactly on it. "
+            + ("The forward pass of this network is a step of learning, run on the examples in its prompt. "
+               if r_ > 0.99 else "The forward pass of this network is close to a step of learning. ")
+            + "Johannes von Oswald and colleagues showed this in 2023."
         ) as vo:
             self.play(Create(ax), Create(diag), FadeIn(dl), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.005), run_time=2.0)
@@ -227,8 +238,11 @@ class InContext(VoiceoverScene):
             + (f". Two layers beat two plain steps, {d['lsa2']:.2f} against {d['gd2']:.2f}: trained, the network "
                "finds a smarter kind of step than the textbook one. " if beats and d["lsa2"] < 0.8 * d["gd2"] else
                ", and more layers keep pace with more steps. ")
-            + "<bookmark mark='b'/> Exact least squares, from part six, gets every answer right here, so there's "
-            "room to grow. Real transformers, with softmax attention and many layers, are messier than this, but "
+            + "<bookmark mark='b'/> "
+            + (f"Exact least squares, from Part 6, gets every answer right here, to rounding error, so there "
+               "is room to grow. " if d["lstsq"] < 0.01 else f"Exact least squares, from Part 6, reaches "
+               f"{d['lstsq']:.2f}. ")
+            + "Real transformers, with softmax attention and many layers, are messier than this, but "
             "the lesson carries over: a forward pass can run a learning algorithm on the prompt."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g[0]))
