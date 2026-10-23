@@ -1264,14 +1264,17 @@ def compute_depthwise():
     torch = _torch()
     F = torch.nn.functional
 
-    def best(fn, reps=7):
-        fn()
-        ts = []
-        for _ in range(reps):
-            t = time.perf_counter()
+    def best(*fns, reps=25):
+        """The fastest of many runs of each, interleaved so a busy moment on the machine hits all of them alike."""
+        for fn in fns:
             fn()
-            ts.append(time.perf_counter() - t)
-        return min(ts)
+        ts = [[] for _ in fns]
+        for _ in range(reps):
+            for i, fn in enumerate(fns):
+                t = time.perf_counter()
+                fn()
+                ts[i].append(time.perf_counter() - t)
+        return [min(t) for t in ts]
 
     rows = []
     g = torch.Generator().manual_seed(0)
@@ -1282,9 +1285,9 @@ def compute_depthwise():
         wd = torch.randn(C, 1, 3, 3, generator=g) * 0.3
         wp = torch.randn(C, C, 1, 1, generator=g) * 0.05
         with torch.no_grad():
-            t_std = best(lambda: F.conv2d(x, w, padding=1))
-            t_dw = best(lambda: F.conv2d(x, wd, padding=1, groups=C))
-            t_pw = best(lambda: F.conv2d(x, wp))
+            t_std, t_dw, t_pw = best(lambda: F.conv2d(x, w, padding=1),
+                                     lambda: F.conv2d(x, wd, padding=1, groups=C),
+                                     lambda: F.conv2d(x, wp))
         macs_std = 8 * hw * hw * C * C * 9
         macs_dw, macs_pw = 8 * hw * hw * C * 9, 8 * hw * hw * C * C
         rows.append(dict(C=C, t_std=t_std, t_dw=t_dw, t_pw=t_pw, macs_std=macs_std, macs_dw=macs_dw, macs_pw=macs_pw,

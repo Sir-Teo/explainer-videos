@@ -190,7 +190,8 @@ def ar_sample(net, n, gen, z=None, trace=False):
     probs = []
     for i in range(S):
         for j in range(S):
-            p = F.softmax(net(x, z)[:, :, i, j], -1)
+            # row i depends only on rows 0..i: the network runs on those rows alone (half the work, same numbers)
+            p = F.softmax(net(x[:, :, :i + 1], z)[:, :, i, j], -1)
             v = torch.multinomial(p, 1, generator=gen)[:, 0]
             x[:, 0, i, j] = v.float() / (Q - 1)
             if trace:
