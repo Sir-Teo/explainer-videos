@@ -218,7 +218,7 @@ class Seq2Seq(VoiceoverScene):
             "Writing the most probable output exactly would mean searching every possible sequence. Greedy "
             "decoding takes the single best word at each step instead. <bookmark mark='a'/> Beam search keeps a "
             "few of the best partial outputs at every step, extends each, and keeps the best of those: a cheap "
-            "compromise, used by every translation system of the time. <bookmark mark='b'/> On our character "
+            "compromise. <bookmark mark='b'/> On our character "
             "LSTM, from the same prompt: greedy decoding writes text that costs "
             f"{m['greedy_bits']:.0f} bits under the model, a beam of eight finds text costing {m['beam_bits']:.0f}, "
             f"and a random sample costs {m['sampled_bits']:.0f}. <bookmark mark='c'/> " + tail
@@ -301,7 +301,7 @@ class Seq2Seq(VoiceoverScene):
             "between them, and in side-by-side ratings by people it cut translation errors by "
             f"{GNMT['error_cut']} percent on average against Google's own phrase-based system. "
             "<bookmark mark='b'/> In September 2016 it took over Google Translate's Chinese to English, about "
-            "eighteen million translations a day. Statistical translation, after a quarter of a century, gave way. "
+            "eighteen million translations a day. "
             "<bookmark mark='c'/> But GNMT had one more ingredient, the one that removed the bottleneck."
         ) as vo:
             self.play(FadeIn(cite_))

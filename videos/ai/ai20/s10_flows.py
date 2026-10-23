@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (AR, DATA, FLOW, NOISE, PART, Plane, digit_sheet, load)
+from videos.ai.ai20.common import (crossfade, AR, DATA, FLOW, NOISE, PART, Plane, digit_sheet, load)
 
 
 def warp_lines(plane: Plane, L, color=FLOW, stroke_width=1.6, clip=2.95) -> VGroup:
@@ -244,7 +244,7 @@ class Flows(VoiceoverScene):
             cur, cc = imgs[0], cap[0]
             per = max(0.4, vo.until("b") / max(1, len(imgs) - 1))
             for k in range(1, len(imgs)):
-                self.play(FadeTransform(cur, imgs[k]), ReplacementTransform(cc, cap[k]), run_time=0.7 * per)
+                self.play(crossfade(cur, imgs[k]), ReplacementTransform(cc, cap[k]), run_time=0.7 * per)
                 cur, cc = imgs[k], cap[k]
                 self.wait(0.3 * per)
             vo.wait_until("b")

@@ -105,7 +105,9 @@ labelled as such.
 * **13. Open problems.** Measuring, aligning, securing: what we can't yet do, with the part's own numbers.
 * **14. The guessing game, revisited.** The series act by act; Part 1's scoreboard with every model of the series:
   counting, Kneser–Ney (Part 7), the neural models of Parts 9 and 13, and the series' own model, 1.69 bits per
-  character (bootstrap 1.64–1.74), better than 4-character counting on 149 of the passage's 151 paragraphs; Shannon's
+  character (bootstrap 1.64–1.74), better than 4-character counting on 149 of the passage's 151 paragraphs; and the
+  pretrained models Part 1 scored, GPT-2 small 1.17 down to Qwen3-4B 0.87, inside the 0.6–1.3 of Shannon's readers
+  (who guessed letters and spaces only); Shannon's
   sentence played by Part 1's counting program (182 bits) and by the series' model (202 bits, its token
   probabilities summed over every spelling of the next letter: the sentence has no capitals or punctuation, the
   form the counting program was trained on); Wiener's sentence once more.

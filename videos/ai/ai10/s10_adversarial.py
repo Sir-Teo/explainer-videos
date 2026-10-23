@@ -45,8 +45,7 @@ class Adversarial(VoiceoverScene):
         with self.voiceover(
             "In December 2013 Christian Szegedy and six colleagues reported something strange. "
             "<bookmark mark='a'/> For any photograph a network classified correctly, they could find a tiny "
-            "change, invisible to a person, that made it answer something else; and the same change often fooled "
-            "other networks too. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a "
+            "change, invisible to a person, that made it answer something else. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a "
             f"panda that GoogLeNet called a panda with {P['panda']} percent confidence. Add a faint pattern, a "
             f"change of {P['eps']} in each pixel, the size of the smallest step of an 8-bit image, and it called "
             f"it a gibbon, with {P['gibbon']} percent. <bookmark mark='c'/> They also gave the explanation."
@@ -308,7 +307,7 @@ class Adversarial(VoiceoverScene):
             f"attacked error, red, falls along with the clean one. <bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it "
             f"{pct(adv_f, 0)} percent of the time instead of {pct(std_f, 0)}. " + verdict + " "
             f"<bookmark mark='c'/> The clean error is {pct(adv_c, 2)} percent, against {pct(std_c, 2)}: " + cost + " "
-            "Aleksander Madry's group made training against many steps the standard in 2017. <bookmark mark='d'/> "
+            "<bookmark mark='d'/> "
             "The problem is still open, and the same search, run over words, breaks language models: Part 31."
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(cite_), FadeIn(tag))

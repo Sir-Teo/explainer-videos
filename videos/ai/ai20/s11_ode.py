@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (CNF_C, DATA, FLOW, NOISE, PART, Plane, band, curve, load, node_box, take_away)
+from videos.ai.ai20.common import (crossfade, CNF_C, DATA, FLOW, NOISE, PART, Plane, band, curve, load, node_box, take_away)
 
 EXACT, HUTCH = CNF_C, "#7FD3FF"
 
@@ -247,7 +247,7 @@ class NeuralODE(VoiceoverScene):
             cur = imgs[0]
             seg = max(1.0, (vo.until("b") - 0.5) / 4)
             for k in range(1, 5):
-                self.play(t.animate.set_value(k / 4), FadeTransform(cur, imgs[k]), run_time=seg, rate_func=linear)
+                self.play(t.animate.set_value(k / 4), crossfade(cur, imgs[k]), run_time=seg, rate_func=linear)
                 cur = imgs[k]
             dots.clear_updaters()
             vo.wait_until("b")

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (AR, DATA, GAN_C, PART, Plane, digit_rgb, digit_sheet, load, rgb_of, to_image)
+from videos.ai.ai20.common import (crossfade, AR, DATA, GAN_C, PART, Plane, digit_rgb, digit_sheet, load, rgb_of, to_image)
 
 
 def pixel_grid(side=0.3, gap=0.03, color=GREY_D) -> VGroup:
@@ -142,7 +142,7 @@ class Autoregressive(VoiceoverScene):
             cur = imgs[0]
             per = max(0.35, (vo.until("c") - 1.0) / max(1, len(imgs) - 1))
             for k in range(1, len(imgs)):
-                self.play(FadeTransform(cur, imgs[k]), FadeIn(dots_[k]), run_time=per)
+                self.play(crossfade(cur, imgs[k]), FadeIn(dots_[k]), run_time=per)
                 cur = imgs[k]
             self.play(Create(line_), run_time=0.8)
             vo.wait_until("c")
@@ -291,7 +291,7 @@ class Autoregressive(VoiceoverScene):
             cur_s, cur_l = sheets[0], steps_[0]
             per = max(0.5, vo.until("c") / max(1, len(sheets) - 1))
             for k in range(1, len(sheets)):
-                self.play(FadeIn(pts[k], scale=1.4), FadeTransform(cur_s, sheets[k]),
+                self.play(FadeIn(pts[k], scale=1.4), crossfade(cur_s, sheets[k]),
                           ReplacementTransform(cur_l, steps_[k]), run_time=0.55 * per)
                 cur_s, cur_l = sheets[k], steps_[k]
                 self.wait(0.45 * per)

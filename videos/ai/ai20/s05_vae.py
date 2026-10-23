@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (AR, DATA, KLC, LATENT, PART, RECON, VAE_C, Plane, band, curve, digit_sheet, load,
+from videos.ai.ai20.common import (crossfade, AR, DATA, KLC, LATENT, PART, RECON, VAE_C, Plane, band, curve, digit_sheet, load,
                                    rgb_of, take_away)
 
 DIGIT_COLORS = ["#FF6B8B", "#FFB070", "#F7D154", "#9BE37B", "#5CD0B3", "#58A6FF", "#7C9CF0", "#B39DDB", "#E3A8F0",
@@ -77,8 +77,8 @@ class VAE(VoiceoverScene):
             per = max(0.4, vo.until("c") / max(1, len(snaps) - 1))
             for k in range(1, len(snaps)):
                 self.play(dot_r.animate.move_to(g.ax.c2p(ex[k], cv[k, 3])),
-                          dot_k.animate.move_to(g.ax.c2p(ex[k], cv[k, 4])), FadeTransform(cur_r, rrows[k]),
-                          FadeTransform(cur_s, sheets[k]), run_time=0.6 * per)
+                          dot_k.animate.move_to(g.ax.c2p(ex[k], cv[k, 4])), crossfade(cur_r, rrows[k]),
+                          crossfade(cur_s, sheets[k]), run_time=0.6 * per)
                 cur_r, cur_s = rrows[k], sheets[k]
                 self.wait(0.4 * per)
             self.play(Create(rec), Create(kl), run_time=1.0)

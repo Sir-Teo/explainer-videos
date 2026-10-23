@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (DATA, DISC, GAN_C, HIST, LATENT, PART, VAE_C, digit_sheet, load, node_box)
+from videos.ai.ai20.common import (crossfade, DATA, DISC, GAN_C, HIST, LATENT, PART, VAE_C, digit_sheet, load, node_box)
 
 
 class Scale(VoiceoverScene):
@@ -66,7 +66,7 @@ class Scale(VoiceoverScene):
             cur, cc = sheets[0], cap[0]
             per = max(0.4, vo.until("b") / max(1, len(sheets) - 1))
             for i in range(1, len(sheets)):
-                self.play(FadeTransform(cur, sheets[i]), ReplacementTransform(cc, cap[i]), run_time=0.6 * per)
+                self.play(crossfade(cur, sheets[i]), ReplacementTransform(cc, cap[i]), run_time=0.6 * per)
                 cur, cc = sheets[i], cap[i]
                 self.wait(0.4 * per)
             vo.wait_until("b")
@@ -237,7 +237,7 @@ class Scale(VoiceoverScene):
             self.play(FadeIn(rec[0]), FadeIn(rl[0]))
             cur, cl = rec[0], rl[0]
             for k in range(1, len(rec)):
-                self.play(FadeTransform(cur, rec[k]), ReplacementTransform(cl, rl[k]), run_time=0.6)
+                self.play(crossfade(cur, rec[k]), ReplacementTransform(cl, rl[k]), run_time=0.6)
                 cur, cl = rec[k], rl[k]
             vo.wait_until("b")
             self.play(FadeIn(vr), FadeIn(vl))

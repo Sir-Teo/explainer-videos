@@ -158,8 +158,7 @@ class LSTM(VoiceoverScene):
             "across many steps, the gradient is multiplied by the product of the forget gates, which the network "
             "learns, in place of the fixed matrix W. <bookmark mark='c'/> A forget gate held at f halves the "
             "memory every ln 2 over minus ln f steps. <bookmark mark='d'/> At 0.99, about sixty-nine steps; at "
-            "exactly one, Hochreiter's original carousel, forever. A common trick is to start the forget gates near "
-            "one, so the network begins by remembering."
+            "exactly one, Hochreiter's original carousel, forever."
         ) as vo:
             vo.wait_until("a")
             step(0)
