@@ -104,8 +104,7 @@ class Stability(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             step(0)
-            vo.wait_until("a")
-            self.play(FadeIn(lg[0]), *[Create(l_) for l_ in lines[:len(S["seeds"])]], run_time=2.0)
+            self.play(FadeIn(lg[0]), *[Create(l_) for l_ in lines[:len(S["seeds"])]], run_time=4.0)
             vo.wait_until("b")
             self.play(Indicate(lines[0], color=YELLOW))
             vo.wait_until("c")
@@ -149,7 +148,7 @@ class Stability(VoiceoverScene):
                   center=[4.9, -1.7, 0], font_size=15)
         runs_ = VGroup(*[curve(gr.ax, e[:, 0], np.minimum(e[:, 2], etop), STAB_C[k.split("_")[0]], 1.3)
                          .set_stroke(opacity=0.6) for k, e in evs.items()])
-        rn = note(rf"all ${len(evs)}$ runs, \ training", font_size=15).next_to(gr, UP, buff=0.05)
+        rn = note(rf"all ${len(evs)}$ runs, \ training", font_size=15).next_to(gr, DOWN, buff=0.05)
         hi_lr = len(lrs) - 1
         pl, qk = np.mean(fin["plain"][hi_lr]), np.mean(fin["qk"][hi_lr])
         lo_lr = 0
@@ -184,9 +183,10 @@ class Stability(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(src))
             self.play(FadeIn(gr), FadeIn(rn), LaggedStart(*[Create(c_) for c_ in runs_], lag_ratio=0.04), run_time=2.5)
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(m_[0]) for m_ in marks], lag_ratio=0.3),
                       LaggedStart(*[FadeIn(m_[1]) for m_ in marks], lag_ratio=0.3), FadeIn(lg), run_time=3.0)
+            vo.wait_until("a")
+            self.play(*[Indicate(m_[1], color=YELLOW, scale_factor=1.1) for m_ in marks[:2]])
             vo.wait_until("b")
             self.play(Indicate(lg, scale_factor=1.05))
         self.wait(0.3)
@@ -220,7 +220,7 @@ class Stability(VoiceoverScene):
                 lines.add(curve(g.ax, pr[:, 0], np.clip(pr[:, 3], -2, 12), STAB_C[cfg], 2.5))
                 ends.setdefault(cfg, []).append(float(pr[-1, 3]))
         lg = legend([(STAB_C["qk"], r"without z-loss"), (STAB_C["qkz"], r"with z-loss")], font_size=17)
-        lg.next_to(g, UP, buff=0.12).align_to(g, LEFT)
+        lg.move_to(g.ax.c2p(S["steps"] * 0.5, 11.0), aligned_edge=UP)
         a, b = np.mean(ends["qk"]), np.mean(ends["qkz"])
         tag = note(rf"computed: \ learning rate ${lr:g}$", font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
@@ -234,12 +234,14 @@ class Stability(VoiceoverScene):
             step(0)
             vo.wait_until("a")
             step(1)
+            self.play(FadeIn(g), FadeIn(lg[0]), FadeIn(tag),
+                      LaggedStart(*[Create(l_) for l_ in lines[:len(S["seeds"])]], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("b")
             step(2)
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
-            self.play(FadeIn(g), FadeIn(lg), FadeIn(tag), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2),
+            self.play(FadeIn(lg[1]), LaggedStart(*[Create(l_) for l_ in lines[len(S["seeds"]):]], lag_ratio=0.2),
                       run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
@@ -262,7 +264,24 @@ class Stability(VoiceoverScene):
                   r"outliers in the experts", font_size=22, color=GREY_A),
             label(r"\ \ fixed by routing with slightly older weights while a spike lasts, \ and clamping SwiGLU",
                   font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, 0.3, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        if rows.width > 13.2:
+            rows.width = 13.2
+        rows.to_edge(UP, buff=0.35)
+        tau = K["tau"]
+        gq = axes([0, 1], [0, 2.2 * tau], x_length=6.4, y_length=1.9, xlabel=r"training", ylabel=r"a head's largest logit",
+                  xticks=[], yticks=[0, tau], yfmt=lambda v: rf"\tau = {tau}" if v else "0", center=[-1.6, -2.45, 0],
+                  font_size=17)
+        xs_ = np.linspace(0, 1, 120)
+        free = np.minimum(2.15 * tau, 0.35 * tau + 2.4 * tau * xs_ ** 0.7)  # schematic: keeps growing
+        rise = 0.35 * tau + 2.4 * tau * xs_ ** 0.7
+        capped = np.where(xs_ < 0.45, np.minimum(rise, tau), tau - 0.25 * tau * np.tanh((xs_ - 0.45) * 4))
+        fc = DashedVMobject(curve(gq.ax, xs_, free, GREY_B, 2.5), num_dashes=40)
+        cc = curve(gq.ax, xs_, capped, C.MUON, 3)
+        tl_ = DashedLine(gq.ax.c2p(0, tau), gq.ax.c2p(1, tau), color=C.MUON, dash_length=0.05, stroke_width=1.5)
+        qlg = legend([(GREY_B, r"without the clip"), (C.MUON, r"with QK-Clip")], font_size=18)
+        qlg.next_to(gq, RIGHT, buff=0.4).align_to(gq, UP)
+        qsch = note(r"schematic, \ after Kimi Team (2025)", font_size=17).next_to(qlg, DOWN, buff=0.2).align_to(qlg, LEFT)
         src = cite(r"Liu et al.\ (2025); \ Kimi Team (2025), Sec.\ 2.1; \ DeepSeek-AI (2026), Secs.\ 2.4, 4.2.3",
                    corner=DR, font_size=16)
         with self.voiceover(
@@ -280,8 +299,11 @@ class Stability(VoiceoverScene):
             self.play(FadeIn(rows[:2]), FadeIn(src))
             vo.wait_until("a")
             self.play(FadeIn(rows[2]))
+            self.play(FadeIn(gq), FadeIn(qlg[0]), FadeIn(qsch), Create(fc), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(rows[3]), FadeIn(rows[4]))
+            self.play(FadeIn(rows[3]), Create(tl_))
+            self.play(FadeIn(qlg[1]), Create(cc), run_time=2.0)
+            self.play(FadeIn(rows[4]))
             vo.wait_until("c")
             self.play(FadeIn(rows[5]), FadeIn(rows[6]))
         self.wait(0.3)

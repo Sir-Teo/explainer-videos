@@ -115,7 +115,7 @@ class Precision(VoiceoverScene):
         top_ = DashedLine([ax.x(math.log2(65504)), ax.line.get_y() - 0.1, 0], [ax.x(math.log2(65504)), 1.0, 0],
                           color=PREC["fp16"], dash_length=0.06)
         dyn = label(r"dynamic: \ on an overflow, \ skip the step and halve $S$; \ after a run of good steps, \ "
-                    r"double it", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
+                    r"double it", font_size=22, color=GREY_A).move_to([0, -2.65, 0])
         sl = label(r"$\times\, S = 2^{16}$", font_size=26, color=PREC["fp16_scaled"]).move_to([ax.x(-5), 0.9, 0])
         src = cite(r"Micikevicius et al., \textit{Mixed Precision Training} (ICLR 2018)", corner=DR, font_size=17)
         with self.voiceover(
@@ -203,9 +203,9 @@ class Precision(VoiceoverScene):
             + verdict
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(nh))
+            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15), run_time=7.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.15),
-                      LaggedStart(*[FadeIn(n_) for n_ in names], lag_ratio=0.3), run_time=4.0)
+            self.play(LaggedStart(*[FadeIn(n_) for n_ in names], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("b")
             self.play(Indicate(names[2], scale_factor=1.05))
         self.wait(0.3)
@@ -262,11 +262,14 @@ class Precision(VoiceoverScene):
             f"is that much smaller. <bookmark mark='a'/> So we repeated the FP16 runs with each step split into "
             f"{A['accum']} micro-batches, as gradient accumulation does. <bookmark mark='b'/> " + verdict
         ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
+            ref_l = VGroup(*[l_ for k, l_ in zip(evs, lines) if k.startswith("ref_")])
+            new_l = VGroup(*[l_ for k, l_ in zip(evs, lines) if not k.startswith("ref_")])
+            self.play(FadeIn(head), FadeIn(g), FadeIn(leg[0]))
+            self.play(LaggedStart(*[Create(l_) for l_ in ref_l], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.2), run_time=3.0)
+            self.play(LaggedStart(*[Create(l_) for l_ in new_l], lag_ratio=0.2), run_time=3.0)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x_) for x_ in leg], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(x_) for x_ in leg[1:]], lag_ratio=0.3), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -279,14 +282,14 @@ class Precision(VoiceoverScene):
         mx = np.abs(sample).max()
         big = []
         for i, v in enumerate(sample):
-            h = 1.6 * abs(v) / mx
-            bars.add(Rectangle(width=0.035, height=max(h, 0.01), stroke_width=0,
+            h = 2.1 * abs(v) / mx
+            bars.add(Rectangle(width=0.066, height=max(h, 0.01), stroke_width=0,
                                fill_color=PREC["fp8_tensor"] if abs(v) > 0.5 * mx else GREY_B, fill_opacity=0.9)
-                     .move_to([-6.0 + 0.045 * i, 1.6 + h / 2, 0]))
+                     .move_to([-5.45 + 0.085 * i, 0.95 + h / 2, 0]))
             if abs(v) > 0.5 * mx:
                 big.append(bars[-1])
         bl = label(rf"$128$ inputs of a matrix product in the series' model; \ the tensor's largest: \ "
-                   rf"${q['outlier']:.1f}$", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
+                   rf"${q['outlier']:.1f}$", font_size=22, color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
         helps = q["act_tensor"] > 1.3 * q["act_tile"]
         if helps:
             look = "And real activations have a few large values: here are 128 inputs to one matrix product of the series' model."
@@ -304,7 +307,7 @@ class Precision(VoiceoverScene):
                   rf"${100 * q['w_tensor']:.1f}\%$ \ (weights)", font_size=22, color=PREC["fp8_tensor"]),
             label(rf"one scale per $1 \times 128$ tile, \ $128 \times 128$ block: \ ${100 * q['act_tile']:.1f}\%$, \ "
                   rf"${100 * q['w_block']:.1f}\%$", font_size=22, color=PREC["fp8_tile"]),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, 2.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, 0.25, 0])
         rl = note(r"relative RMS error of E4M3, \ computed on the series' trained model", font_size=18)
         rl.next_to(rows, DOWN, buff=0.12).align_to(rows, LEFT)
         ds = VGroup(
@@ -318,7 +321,7 @@ class Precision(VoiceoverScene):
                   color=GREY_A),
             label(rf"loss within ${D['loss_err']}\%$ of BF16, \ on $671$B parameters and $14.8$T tokens", font_size=22,
                   color=PREC["fp8_tile"]),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([0.0, -1.5, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0.0, -2.05, 0])
         src = cite(r"DeepSeek-AI (2024), Sec.\ 3.3" + ("" if helps else r"; \ Dettmers et al.\ (2022): \ outlier features"),
                    corner=DR, font_size=17)
         with self.voiceover(
@@ -344,14 +347,21 @@ class Precision(VoiceoverScene):
     # ------------------------------------------------------------------
     def fp4(self):
         M, N, NS, K3 = F.MXFP8, F.NVFP4, F.NEMOTRON3, F.KIMIK3
-        cells = VGroup(*[Square(0.3, stroke_width=0.8, stroke_color=BLACK, fill_color=PREC["fp8_tile"],
+        mcells = VGroup(*[Square(0.24, stroke_width=0.8, stroke_color=BLACK, fill_color=PREC["fp8_tensor"],
+                                 fill_opacity=0.7) for _ in range(M["block"])]).arrange(RIGHT, buff=0.02)
+        msc = Square(0.24, stroke_width=0.8, stroke_color=BLACK, fill_color=C.EDU, fill_opacity=0.9)
+        msc.next_to(mcells, LEFT, buff=0.15)
+        mblk = VGroup(msc, mcells).move_to([-0.6, 2.65, 0]).align_to([-6.4, 0, 0], LEFT)
+        mt = label(rf"MXFP8: \ ${M['block']}$ values of $8$ bits share one power-of-two scale", font_size=21,
+                   color=PREC["fp8_tensor"]).next_to(mblk, DOWN, buff=0.12).align_to(mblk, LEFT)
+        cells = VGroup(*[Square(0.34, stroke_width=0.8, stroke_color=BLACK, fill_color=PREC["fp8_tile"],
                                 fill_opacity=0.7) for _ in range(16)]).arrange(RIGHT, buff=0.02)
-        sc = Square(0.3, stroke_width=0.8, stroke_color=BLACK, fill_color=C.EDU, fill_opacity=0.9)
+        sc = Square(0.34, stroke_width=0.8, stroke_color=BLACK, fill_color=C.EDU, fill_opacity=0.9)
         sc.next_to(cells, LEFT, buff=0.15)
-        blk = VGroup(sc, cells).move_to([-3.4, 2.2, 0])
-        bt = VGroup(label(r"NVFP4: \ $16$ values of $4$ bits (E2M1)", font_size=20, color=PREC["fp8_tile"]),
-                    label(r"share one $8$-bit scale (E4M3), \ plus one FP32 scale per tensor", font_size=20,
-                          color=C.EDU)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(blk, DOWN, buff=0.2)
+        blk = VGroup(sc, cells).next_to(mt, DOWN, buff=0.35).align_to(mblk, LEFT)
+        bt = VGroup(label(r"NVFP4: \ $16$ values of $4$ bits (E2M1)", font_size=21, color=PREC["fp8_tile"]),
+                    label(r"share one $8$-bit scale (E4M3), \ plus one FP32 scale per tensor", font_size=21,
+                          color=C.EDU)).arrange(RIGHT, buff=0.3).next_to(blk, DOWN, buff=0.12)
         bt.align_to(blk, LEFT)
         items = VGroup(
             label(rf"MXFP8, \ blocks of ${M['block']}$ (Blackwell): \ an ${M['params'] / 1e9:.0f}$B model on "
@@ -364,7 +374,7 @@ class Precision(VoiceoverScene):
                   font_size=21, color=PREC["fp8_tile"]),
             label(r"Kimi K3, DeepSeek-V4 (2026): \ four-bit weights learned in quantization-aware training", font_size=21,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0.2, -1.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([0.2, -1.45, 0])
         tw = take_away(r"FP32 $\to$ BF16 $\to$ FP8 $\to$ FP4: \ each halving, \ a new scaling trick", font_size=24)
         src = cite(r"Mishra et al.\ (2025); \ NVIDIA (2025, 2026); \ Moonshot AI (2026); \ DeepSeek-AI (2026)",
                    corner=UR, font_size=16)
@@ -379,7 +389,9 @@ class Precision(VoiceoverScene):
             "on 25 trillion tokens; Kimi K3 ships four-bit weights and DeepSeek-V4 four-bit experts, both from "
             "quantization-aware training. <bookmark mark='d'/> Each halving of the bits came with a new way of scaling."
         ) as vo:
-            self.play(FadeIn(items[0]), FadeIn(src))
+            self.play(FadeIn(src), FadeIn(msc), LaggedStart(*[FadeIn(c_) for c_ in mcells], lag_ratio=0.05),
+                      FadeIn(mt), run_time=2.0)
+            self.play(FadeIn(items[0]))
             vo.wait_until("a")
             self.play(FadeIn(blk), FadeIn(bt))
             vo.wait_until("b")

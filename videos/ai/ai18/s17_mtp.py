@@ -26,8 +26,8 @@ class MTP(VoiceoverScene):
     # ------------------------------------------------------------------
     def idea(self):
         M = F.MTP
-        trunk = node_box(r"shared trunk", GREY_B, font_size=22, height=1.0).move_to([-3.6, -0.4, 0])
-        heads = VGroup(*[node_box(rf"head {k}: \ token $t+{k}$", MTP_C if k > 1 else C.PROB, font_size=20)
+        trunk = node_box(r"shared trunk", GREY_B, font_size=24, height=1.0).move_to([-3.6, 0.85, 0])
+        heads = VGroup(*[node_box(rf"head {k}: \ token $t+{k}$", MTP_C if k > 1 else C.PROB, font_size=22)
                          for k in range(1, 5)]).arrange(UP, buff=0.18).next_to(trunk, RIGHT, buff=1.2)
         arrows = VGroup(*[Arrow(trunk.get_right(), h.get_left(), buff=0.08, color=GREY_B, stroke_width=2.5) for h in heads])
         facts = VGroup(
@@ -37,7 +37,10 @@ class MTP(VoiceoverScene):
             label(r"more useful the larger the model; \ at their smallest sizes, \ worse", font_size=20, color=GREY_A),
             label(rf"the extra heads as drafters: \ up to ${M['speed']}\times$ faster decoding", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.4, -2.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        if facts.width > 13.0:
+            facts.width = 13.0
+        facts.move_to([0.4, -2.45, 0])
         src = cite(r"Gloeckle et al., \textit{Better \& Faster Large Language Models via Multi-token Prediction} "
                    r"(ICML 2024)", corner=UL, font_size=17)
         with self.voiceover(
@@ -66,10 +69,9 @@ class MTP(VoiceoverScene):
     def module(self):
         D, P = F.DSV3, load("published")
         main = node_box(r"main model", C.PROB, font_size=22, height=1.6).move_to([-4.6, 0.3, 0])
-        h = label(r"$h_i$", font_size=26, color=C.PROB).next_to(main, RIGHT, buff=0.35)
-        emb = node_box(r"embedding of $t_{i+1}$", C.EMBED, font_size=20).move_to([-2.0, -1.5, 0])
+        emb = node_box(r"embedding of $t_{i+1}$", C.EMBED, font_size=20).move_to([-3.4, -1.5, 0])
         n1 = node_box(r"RMSNorm", GREY_B, font_size=18).move_to([-1.5, 0.3, 0])
-        n2 = node_box(r"RMSNorm", GREY_B, font_size=18).move_to([-0.5, -1.5, 0])
+        n2 = node_box(r"RMSNorm", GREY_B, font_size=18).move_to([-0.3, -1.5, 0])
         cat = node_box(r"concatenate, \ project", GREY_A, font_size=18).move_to([0.6, 0.3, 0])
         blk = node_box(r"one transformer block", MTP_C, font_size=18).move_to([3.0, 0.3, 0])
         head = node_box(r"shared head: \ $t_{i+2}$", MTP_C, font_size=18).move_to([5.3, 0.3, 0])
@@ -79,6 +81,7 @@ class MTP(VoiceoverScene):
                     Arrow(n2.get_top(), cat.get_bottom(), buff=0.1, color=GREY_B, stroke_width=2.5),
                     Arrow(cat.get_right(), blk.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5),
                     Arrow(blk.get_right(), head.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5))
+        h = label(r"$h_i$", font_size=26, color=C.PROB).next_to(ar[0], UP, buff=0.08)
         out1 = label(r"$t_{i+1}$", font_size=24, color=C.PROB).next_to(main, UP, buff=0.2)
         loss = cmath(r"L", r"=", r"L_{\text{next}} + \lambda\, L_{\text{MTP}}", font_size=30).to_edge(UP, buff=0.5)
         lam = label(rf"$\lambda = {D['mtp_lambda'][0]}$ for the first $10$T tokens, \ then ${D['mtp_lambda'][1]}$",
@@ -177,13 +180,13 @@ class MTP(VoiceoverScene):
         acc = Mt["accept"]
         a = float(np.mean(acc))
         rows = hbars([(r"DeepSeek-V3 (reported)", np.mean(D["mtp_accept"]) / 100, MTP_C),
-                      (r"ours, \ two seeds", a, MTP_C)], 1.0, width=5.0, font_size=22, label_width=4.0,
-                     fmt=lambda v: rf"${100 * v:.0f}\%$")
-        rows.move_to([0.8, 0.4, 0])
-        rh = label(r"how often the module's guess for the token after next is right", font_size=24, color=GREY_A)
+                      (r"ours, \ two seeds", a, MTP_C)], 1.0, width=6.0, bar_h=0.55, gap=0.3, font_size=26,
+                     label_width=4.4, fmt=lambda v: rf"${100 * v:.0f}\%$")
+        rows.move_to([0.9, 0.5, 0])
+        rh = label(r"how often the module's guess for the token after next is right", font_size=27, color=GREY_A)
         rh.next_to(rows, UP, buff=0.35)
         tk = label(rf"tokens per step of the main model: \ $1 + a = {1 + a:.2f}$ \ (ours), \ "
-                   rf"${1 + np.mean(D['mtp_accept']) / 100:.2f}$ \ (DeepSeek-V3)", font_size=24, color=MTP_C)
+                   rf"${1 + np.mean(D['mtp_accept']) / 100:.2f}$ \ (DeepSeek-V3)", font_size=27, color=MTP_C)
         tk.next_to(rows, DOWN, buff=0.5)
         tw = take_away(r"one more block, \ one more token: \ a training signal, \ and a free drafter", color=MTP_C,
                        font_size=24)
