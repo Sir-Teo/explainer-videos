@@ -4,8 +4,8 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai20.common import (AR, CNF_C, DATA, EBM, FLOW, GAN_C, KLC, PART, RECON, SCORE_C, VAE_C, WGAN_C, Plane,
-                                   arrows, curve, digit_sheet, load, node_box, tile_frame)
+from videos.ai.ai20.common import (AR, CNF_C, DATA, EBM, FLOW, GAN_C, KLC, PART, RECON, SCORE_C, VAE_C, VQ_C, WGAN_C,
+                                   Plane, arrows, curve, digit_sheet, load, node_box, tile_frame)
 from videos.ai.ai20.s10_flows import warp_lines
 from videos.ai.ai20.s13_rbm import filter_sheet
 
@@ -93,25 +93,87 @@ class Outro(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def payoffs(self):
-        card = payoff_card([
-            (r"the score at every noise level: \ diffusion", [21]),
-            (r"continuous flows, \ trained by regression", [21]),
-            (r"autoencoders and tokens for images, \ video and sound", [22, 23]),
-            (r"next-token and next-scale image models", [22]),
-            (r"pulling data together, \ pushing the rest apart", [24]),
-            (r"judging models: \ metrics and their failures", [31]),
-        ], font_size=24)
+        """Where each idea comes back, each with a small picture from this part's own results."""
+        TW, TH = 3.7, 1.5
+        pics = []
+        # the score, at every noise level: our energy model's score field on the ring
+        e2 = load("ebm2d")
+        pl1 = Plane(TH)
+        pics.append(Group(pl1, pl1.scatter_image(np.asarray(load("toys")["ring_samples"])[:600], DATA, radius_px=1.2),
+                          arrows(pl1, e2["ring_score_pts"], e2["ring_score"], color=SCORE_C, max_len=0.1,
+                                 stroke_width=1.2)))
+        # continuous flows: noise carried along the learned field
+        cn = load("cnf")
+        P = np.asarray(cn["paths"])
+        pl2 = Plane(TH)
+        paths = VGroup(*[VMobject(stroke_color=CNF_C, stroke_width=1.0, stroke_opacity=0.5).set_points_smoothly(
+            pl2.pts(np.clip(P[:, i], -2.9, 2.9))) for i in range(0, P.shape[1], 50)])
+        pics.append(Group(pl2, pl2.image(np.asarray(cn["dens_t"])[-1], CNF_C), paths,
+                          pl2.dots(np.clip(P[-1, ::50], -2.9, 2.9), WHITE, radius=0.016)))
+        # tokens: a digit, its 7 x 7 codes, the digit decoded from them
+        vq = load("vq")
+        codes = np.asarray(vq["codes"])[0]
+        K = int(vq["K"])
+        hue = [ManimColor.from_hsv(((7 * k) % K / K, 0.45, 0.9)) for k in range(K)]
+        cells = VGroup(*[Square(0.15, stroke_width=0, fill_color=hue[int(c)], fill_opacity=0.9) for c in codes.ravel()])
+        cells.arrange_in_grid(7, 7, buff=0.02)
+        tok = Group(digit_sheet(np.asarray(vq["src"])[:1], 1, 1, size=0.95), MathTex(r"\to", font_size=26),
+                    cells, MathTex(r"\to", font_size=26),
+                    digit_sheet(np.asarray(vq["recon"])[:1], 1, 1, size=0.95)).arrange(RIGHT, buff=0.15)
+        pics.append(tok)
+        # next-scale: one digit at 2 x 2, 7 x 7 and 14 x 14
+        d = np.asarray(vq["src"])[1].astype(float)
+        scales = [np.kron(d.reshape(n, 14 // n, n, 14 // n).mean((1, 3)), np.ones((14 // n, 14 // n))) for n in (2, 7, 14)]
+        scales = [15.0 * x / max(x.max(), 1e-9) for x in scales]  # each scale at full contrast
+        pics.append(Group(*[x for k, im in enumerate(scales) for x in
+                            ([digit_sheet(im[None], 1, 1, size=0.95)] + ([MathTex(r"\to", font_size=26)] if k < 2 else []))]
+                          ).arrange(RIGHT, buff=0.15))
+        # pull the data up, push the rest down: our energy model's density on the ring
+        E = np.asarray(e2["ring_energy"], float)
+        pl5 = Plane(TH)
+        pics.append(Group(pl5, pl5.image(np.exp(-(E - E.min())), EBM)))
+        # judging, and how metrics fail: a single Gaussian with the ring's mean and covariance
+        ev = load("eval2d")
+        pl6 = Plane(TH)
+        under = pl6.scatter_image(np.asarray(ev["blob"])[:800], C.MODEL_Q, radius_px=1.2).pixel_array[..., :3] / 255.0
+        pics.append(Group(pl6, pl6.scatter_image(np.asarray(ev["real"])[:800], DATA, radius_px=1.2, base=under)))
+        ideas = [(r"the score at every noise level: \\ diffusion", r"$\to$ \ Part 21", SCORE_C),
+                 (r"continuous flows, \\ trained by regression", r"$\to$ \ Part 21", CNF_C),
+                 (r"autoencoders and tokens \\ for images, video and sound", r"$\to$ \ Parts 22 and 23", VQ_C),
+                 (r"next-token and \\ next-scale image models", r"$\to$ \ Part 22", AR),
+                 (r"pulling data together, \\ pushing the rest apart", r"$\to$ \ Part 24", EBM),
+                 (r"judging models: \\ metrics and their failures", r"$\to$ \ Part 31", C.BITS)]
+        tiles = Group()
+        for pic, (idea, dest, col) in zip(pics, ideas):
+            box = RoundedRectangle(width=TW + 0.3, height=TH + 1.3, corner_radius=0.15, stroke_color=GREY_D,
+                                   stroke_width=1.5, fill_color="#121722", fill_opacity=1)
+            if pic.width > TW:
+                pic.width = TW
+            if pic.height > TH:
+                pic.height = TH
+            pic.move_to(box.get_top() + DOWN * (0.15 + TH / 2))
+            il = label(idea, font_size=20, color=col).move_to(box.get_bottom() + UP * 0.72)
+            dl = label(dest, font_size=18, color=GREY_A).move_to(box.get_bottom() + UP * 0.24)
+            tiles.add(Group(box, pic, il, dl))
+        tiles.arrange_in_grid(rows=2, cols=3, buff=(0.25, 0.3)).move_to(DOWN * 0.35)
+        head = label(r"Where this comes back", font_size=40).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "All of this comes back. The score, learned at every noise level, is diffusion, next time, with flow "
-            "matching training continuous flows by regression. Autoencoders and their tokens are the front end of "
-            "the image, video and audio models of Parts 22 and 23, and next-scale prediction returns in Part 22. "
-            "The contrastive idea, pull the data up and push everything else down, drives the self-supervised "
-            "learning of Part 24. And the question of how to judge a model, and how its metrics fail, closes the "
-            "series."
+            "All of this comes back. The score, learned at every noise level, is diffusion, next time, <bookmark "
+            "mark='p2'/> with flow matching training continuous flows by regression. <bookmark mark='p3'/> "
+            "Autoencoders and their tokens are the front end of the image, video and audio models of Parts 22 and "
+            "23, <bookmark mark='p4'/> and next-scale prediction returns in Part 22. <bookmark mark='p5'/> The "
+            "contrastive idea, pull the data up and push everything else down, drives the self-supervised learning "
+            "of Part 24. <bookmark mark='p6'/> And the question of how to judge a model, and how its metrics fail, "
+            "closes the series."
         ) as vo:
-            self.play(FadeIn(card.head))
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),
-                      run_time=max(3.0, vo.duration - 1.5))
+            self.play(FadeIn(head), FadeIn(tiles[0], shift=UP * 0.1))
+            for k, mk in enumerate(["p2", "p3", "p4", "p5", "p6"], 1):
+                vo.wait_until(mk)
+                anims = [FadeIn(tiles[k], shift=UP * 0.1)]
+                if k == 1:  # the paths draw themselves, noise to data
+                    anims = [FadeIn(tiles[k][0]), FadeIn(tiles[k][2]), FadeIn(tiles[k][3]), FadeIn(pl2),
+                             FadeIn(tiles[k][1][1]), Create(paths, lag_ratio=0.02), FadeIn(tiles[k][1][3])]
+                self.play(*anims, run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 

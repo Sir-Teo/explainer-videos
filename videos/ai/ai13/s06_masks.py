@@ -162,6 +162,8 @@ class Masks(VoiceoverScene):
         h = load("heads")
         dev, scale = float(h["perm_dev"]), float(h["perm_scale"])
         words = ["dog", "bites", "man"]
+        blind = ("blind to order, to rounding error." if dev < 1e-4 * scale else
+                 f"nearly blind to order: its outputs move by only {dev:.3f}.")
 
         def row(order, y):
             g = VGroup(*[VGroup(RoundedRectangle(width=1.5, height=0.7, corner_radius=0.1, stroke_color=K, stroke_width=2),
@@ -194,9 +196,7 @@ class Masks(VoiceoverScene):
             "its weight from its key, wherever it sits. <bookmark mark='b'/> So 'dog bites man' and 'man bites "
             "dog' give exactly the same average. <bookmark mark='c'/> In symbols: permute the inputs, and the "
             "outputs are permuted the same way. Without a mask and without positions, our own transformer is "
-            + ("blind to order, to rounding error. " if dev < 1e-4 * scale else
-               f"nearly blind to order: its outputs move by only {dev:.3f}. ")
-            + "<bookmark mark='d'/> The model must be told where each "
+            + blind + " <bookmark mark='d'/> The model must be told where each "
             "character is. That is chapter eight. The causal mask already leaks a little of it, and we will see how."
         ) as vo:
             self.play(FadeIn(r1), FadeIn(qd), FadeIn(eq))

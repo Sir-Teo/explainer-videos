@@ -100,18 +100,23 @@ class Caps(VoiceoverScene):
                      color=NORMC).next_to(pt18, DOWN, buff=0.3)
         flat = float(np.ptp(ent))
         b0, bn = float(np.asarray(q["bits_plain"])[0]), float(np.asarray(q["bits_norm"])[0])
-        cost = (f" But bolted onto a model that was trained without it, it costs {bn - b0:.2f} bits a character, "
+        if flat < 1e-3:
+            moves = ("On our transformer, with its queries and keys normalized to their trained sizes, growing the "
+                     "weights now changes nothing at all.")
+        else:
+            moves = (f"On our transformer, with its queries and keys normalized to their trained sizes, growing the "
+                     f"weights now moves the entropy by only {flat:.3f} bits.")
+        cost = (f"But bolted onto a model that was trained without it, it costs {bn - b0:.2f} bits a character, "
                 f"{bn:.2f} against {b0:.2f}: our model had learned to use the sizes of its queries, so QK-norm has to "
-                "be there from the start of training." if bn > b0 + 0.05 else "")
+                "be there from the start of training." if bn > b0 + 0.05 else
+                "Bolted onto a model trained without it, it costs almost nothing here.")
         with self.voiceover(
             "The fix the vision team used, and many language models since, is QK-norm. <bookmark mark='a'/> Before "
             "the dot product, divide each head's query and key by their root-mean-square size, then multiply by a "
             "learned gain. <bookmark mark='b'/> A vector divided by its root mean square has length exactly the "
             "square root of d, <bookmark mark='c'/> so by Cauchy-Schwarz the score can never exceed the gains "
-            "squared times the square root of d, however large W Q and W K become. <bookmark mark='d'/> On our "
-            "transformer, with its queries and keys normalized to their trained sizes, growing the weights now "
-            + ("changes nothing at all" if flat < 1e-3 else f"moves the entropy by only {flat:.3f} bits")
-            + "." + cost + " Qwen3, GLM-4.5 and Gemma 3 all normalize their queries and keys; Part 18 shows the "
+            "squared times the square root of d, however large W Q and W K become. <bookmark mark='d'/> "
+            + moves + " <bookmark mark='e'/> " + cost + " <bookmark mark='f'/> Qwen3, GLM-4.5 and Gemma 3 all normalize their queries and keys; Part 18 shows the "
             "runaway logits in training, with and without it."
         ) as vo:
             step(0)
@@ -154,20 +159,20 @@ class Caps(VoiceoverScene):
         tag = note(rf"our cap: \ $c = {capv:.0f}$, \ just above the trained model's largest score").next_to(facts, UP, buff=0.2)
         ent_p = np.asarray(q["ent_plain"], float)
         if bits_c[-1] < bits_p[-1] - 0.05:
-            bt = f", and at c of {cs[-1]:.0f} the bits per character are {bits_c[-1]:.2f} instead of {bits_p[-1]:.2f}. "
+            bt = f"At c of {cs[-1]:.0f} the bits per character are {bits_c[-1]:.2f} instead of {bits_p[-1]:.2f}. "
         elif bits_c[-1] > bits_p[-1] + 0.05:
-            bt = (f". But the guesses get worse, not better: {bits_c[-1]:.2f} bits a character at c of {cs[-1]:.0f}, "
+            bt = (f"But the guesses get worse, not better: {bits_c[-1]:.2f} bits a character at c of {cs[-1]:.0f}, "
                   f"against {bits_p[-1]:.2f} uncapped. With every large score flattened onto the cap, a head can no "
                   "longer tell its best keys apart: a cap must sit well above the scores a model actually uses. ")
         else:
-            bt = f", though the bits per character suffer about as much, {bits_c[-1]:.2f}. "
+            bt = f"The bits per character suffer about as much, {bits_c[-1]:.2f}. "
         et = (f"the entropy falls only to {ent_c[-1]:.1f} bits instead of {ent_p[-1]:.1f}" if ent_c[-1] > ent_p[-1] + 0.1
               else f"the entropy falls just as far, to {ent_c[-1]:.1f} bits")
         with self.voiceover(
             "A gentler alternative is a soft cap: replace each score s by c times the hyperbolic tangent of s over "
             "c. <bookmark mark='a'/> Small scores pass almost unchanged; large ones level off at plus or minus c. "
             f"<bookmark mark='b'/> Set c just above our trained model's largest score, {capv:.0f}, and grow the "
-            f"weights again: the scores can no longer pass {capv:.0f}, and {et}" + bt
+            f"weights again: the scores can no longer pass {capv:.0f}, and {et}. <bookmark mark='d'/> " + bt
             + "<bookmark mark='c'/> Gemma 2 capped its attention scores at fifty in 2024; Gemma 3 dropped the cap "
             "for QK-norm, which bounds the scores without bending them."
         ) as vo:
@@ -177,6 +182,8 @@ class Caps(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(g1), FadeIn(tag), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]))
             self.play(Create(l1["cap"][0]), FadeIn(l1["cap"][1:]))
+            vo.wait_until("d")
+            self.play(Indicate(l1["cap"][0], color=CAPC))
             vo.wait_until("c")
             self.play(FadeIn(facts))
         self.wait(0.3)

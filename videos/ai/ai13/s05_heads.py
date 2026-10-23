@@ -85,6 +85,8 @@ class Heads(VoiceoverScene):
         sv = np.asarray(h["sv_qk"])  # layer, head, d
         rank, lrank = int(h["rank_qk"]), int(h["layer_rank"])
         k90 = np.asarray(h["k90_qk"])
+        ln_txt = (f"That is every direction but one, the average of the {d} numbers, which layer norm removes before "
+                  "any head sees it." if lrank == d - 1 else "That is close to the whole stream.")
         g = axes([0, d, 32], [-17, 1, 4], x_length=6.6, y_length=3.8, xlabel=r"direction, \ largest first",
                  ylabel=r"singular values of $W_{QK}$, \ relative to the largest", xticks=[0, 32, 64, 96, 128],
                  yticks=[-16, -12, -8, -4, 0], yfmt=lambda v: f"10^{{{int(v)}}}", center=[-3.0, -0.4, 0])
@@ -113,10 +115,8 @@ class Heads(VoiceoverScene):
             f"first, on a log scale. <bookmark mark='a'/> Exactly {rank} of them are real; after that the values "
             "fall off a cliff, to the size of the computer's rounding error. <bookmark mark='b'/> And even within "
             f"those {dh}, a head is lopsided: {int(k90.min())} to {int(k90.max())} directions hold ninety percent of "
-            f"its size. <bookmark mark='c'/> Add a layer's {H} heads together and the rank is {lrank}"
-            + (f", all but the one direction that layer norm removes, the average of the {d} numbers"
-               if lrank == d - 1 else "")
-            + ": between them, the heads cover the stream, but each one looks through a narrow slit."
+            f"its size. <bookmark mark='c'/> Add a layer's {H} heads together and the rank is {lrank}. "
+            "<bookmark mark='d'/> " + ln_txt + " Between them, the heads cover the stream, but each one looks through a narrow slit."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag), FadeIn(img), FadeIn(il))
             self.play(LaggedStart(*[Create(c_) for c_ in lines], lag_ratio=0.05), run_time=2.0)

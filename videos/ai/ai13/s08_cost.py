@@ -117,6 +117,7 @@ class Cost(VoiceoverScene):
                            MathTex(f"{form[j]:,.0f}".replace(",", "{,}"), font_size=24).move_to([xs[2], y, 0]),
                            MathTex(f"{kap[j]:,.0f}".replace(",", "{,}"), font_size=24, color=GREY_B).move_to([xs[3], y, 0])))
         exact = bool(np.allclose(meas, form, rtol=1e-6))
+        match = "They match the formula exactly." if exact else "They match the formula to within a fraction of a percent."
         cap = note(r"floating-point operations per character, \ one forward pass, \ counted by PyTorch").to_corner(DL, buff=0.25)
         ratio = tr / meas[i256]
         with self.voiceover(
@@ -126,8 +127,7 @@ class Cost(VoiceoverScene):
             "of T values. <bookmark mark='c'/> Together, per character. <bookmark mark='d'/> We counted the "
             "operations of a real forward pass with PyTorch's counter, for contexts from "
             f"{Ts[0]} to {Ts[-1]:,} characters. "
-            + ("They match the formula exactly. " if exact else "They match the formula to within a fraction of a percent. ")
-            + "Jared Kaplan and colleagues' version counts only half the square, because the causal mask throws "
+            + match + " Jared Kaplan and colleagues' version counts only half the square, because the causal mask throws "
             "the other half away; kernels that skip the masked half really do save it. <bookmark mark='e'/> Training "
             f"costs more: a forward and a backward pass came to {ratio:.1f} times the forward alone, which is where "
             "the rule of six operations per weight per character comes from."

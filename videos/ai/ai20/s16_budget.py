@@ -134,6 +134,10 @@ class Budget(VoiceoverScene):
                 dots.add(Dot(g.ax.c2p(r["precision"], r["recall"]), radius=0.07, color=FAM[f]))
         rd = Dot(g.ax.c2p(c["real"]["precision"], c["real"]["recall"]), radius=0.08, color=DATA)
         rl = label(r"real", font_size=16, color=DATA).next_to(rd, UR, buff=0.05)
+        gk = VGroup(label(r"precision: \ samples that look real", font_size=18, color=GREY_A),
+                    label(r"recall: \ real digits the samples cover", font_size=18, color=GREY_A)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1).next_to(g, UP, buff=0.3)
+        seed_n = note(r"each dot: \ one seed", font_size=18).next_to(g, DOWN, buff=0.15)
         rank = sorted(ORDER, key=lambda f: fid[f][0])
         P = {f: stat(e, f, "precision")[0] for f in ORDER}
         R = {f: stat(e, f, "recall")[0] for f in ORDER}
@@ -159,14 +163,15 @@ class Budget(VoiceoverScene):
             f"<bookmark mark='a'/> {lead} <bookmark mark='b'/> {pr} Each dot is one seed: the spread between seeds "
             "is part of the result."
         ) as vo:
-            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(fh), Create(fl), FadeIn(fll))
+            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(fh), Create(fl), FadeIn(fll), FadeIn(g), FadeIn(gk))
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch.bars], lag_ratio=0.2),
-                      FadeIn(VGroup(*ch[1:-3])), FadeIn(ch.vals), run_time=2.0)
+                      FadeIn(VGroup(*ch[1:-3])), FadeIn(ch.vals), FadeIn(rd, scale=1.5), FadeIn(rl), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(ch.bars[ORDER.index(rank[0])], color=WHITE))
+            best, last = ORDER.index(rank[0]), ORDER.index(rank[-1])
+            self.play(Indicate(ch.bars[best], color=WHITE), Indicate(fl, color=DATA))
+            self.play(Indicate(ch.bars[last], color=WHITE, scale_factor=1.1))
             vo.wait_until("b")
-            self.play(FadeIn(g), FadeIn(rd), FadeIn(rl), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots],
-                                                                     lag_ratio=0.05))
+            self.play(FadeIn(seed_n), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.05))
         self.wait(0.3)
         self.clear_scene()
 
@@ -240,15 +245,39 @@ class Budget(VoiceoverScene):
         nw, nf_, mw, mf = SPOKEN[worst], SPOKEN[flat], 100 * mins[worst], 100 * mins[flat]
         msg = (f"The most uneven is {nw}: its rarest digit, a {wk}, is only {mw:.1f} percent of its samples, where "
                f"real data has about ten. The most even is {nf_}, whose rarest digit is still {mf:.1f} percent.")
+        # where the narration turns from the most uneven model to the most even one (no bookmark inside a spliced
+        # sentence): by its share of the words between bookmarks a and z
+        cut = msg.index(" The most even")
+        frac = len(msg[:cut].split()) / len(msg.split())
+        wf = int(np.argmin(shares[flat]))
+        iw, i_f = ORDER.index(worst), ORDER.index(flat)
+        box_w = SurroundingRectangle(panels[iw], color=FAM[worst], buff=0.15, corner_radius=0.08)
+        box_f = SurroundingRectangle(panels[i_f], color=FAM[flat], buff=0.15, corner_radius=0.08)
+        rw = label(rf"rarest: \ a ${wk}$, \ ${mw:.1f}\%$", font_size=20, color=FAM[worst]).next_to(
+            panels[iw], DOWN, buff=0.35)
+        rf_ = label(rf"rarest: \ a ${wf}$, \ ${mf:.1f}\%$", font_size=20, color=FAM[flat]).next_to(
+            panels[i_f], DOWN, buff=0.35)
+        refs = VGroup(*[p_[2] for p_ in panels])
         with self.voiceover(
             "Third, a coarse but telling check: which digits does each model draw? The classifier labels two "
-            "thousand samples of each, and real data has each digit about one time in ten. <bookmark mark='a'/> "
-            f"{msg} Mode dropping, at the scale of whole classes, is the easiest failure to see."
+            "thousand samples of each, <bookmark mark='r'/> and real data has each digit about one time in ten. "
+            f"<bookmark mark='a'/> {msg} <bookmark mark='z'/> Mode dropping, at the scale of whole classes, is the "
+            "easiest failure to see."
         ) as vo:
             self.play(FadeIn(hd), LaggedStart(*[FadeIn(p_, shift=UP * 0.1) for p_ in panels], lag_ratio=0.2),
                       run_time=2.5)
+            vo.wait_until("r")
+            self.play(refs.animate.set_stroke(width=3), Indicate(refs, color=WHITE, scale_factor=1.0), run_time=1.2)
+            self.play(refs.animate.set_stroke(width=1.2), run_time=0.4)
             vo.wait_until("a")
-            self.play(Indicate(panels[ORDER.index(worst)][0][wk], color=WHITE, scale_factor=1.4))
+            seg = vo.mark_time("z") - vo.mark_time("a")
+            self.play(Create(box_w), FadeIn(rw), Indicate(panels[iw][0][wk], color=WHITE, scale_factor=1.4),
+                      run_time=1.2)
+            self.wait(max(0.1, frac * seg - 1.2))
+            self.play(ReplacementTransform(box_w, box_f), FadeIn(rf_),
+                      Indicate(panels[i_f][0][wf], color=WHITE, scale_factor=1.4), run_time=1.2)
+            vo.wait_until("z")
+            self.play(FadeOut(box_f), Indicate(panels[iw][0][wk], color=WHITE, scale_factor=1.4), run_time=1.2)
         self.wait(0.5)
         self.clear_scene()
         self.scoreboard(flat)

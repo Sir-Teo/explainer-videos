@@ -86,7 +86,7 @@ class CharLSTM(VoiceoverScene):
             label(rf"${m['chars_seen'] / 1e6:.1f}$ million characters read, \ "
                   rf"${100 * m['chars_seen'] / m['train_chars']:.0f}\%$ of the books", font_size=22, color=GREY_A),
             label(rf"${m['seconds'] / 60:.0f}$ minutes on this computer; \ gradient clipped on "
-                  rf"${100 * m['clipped'] / m['steps']:.0f}\%$ of steps", font_size=22, color=GREY_A),
+                  rf"${m['clipped']}$ of ${m['steps']:,}$ steps".replace(",", "{,}"), font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.4, 0.3, 0])
         if facts.width > 5.0:
             facts.width = 5.0

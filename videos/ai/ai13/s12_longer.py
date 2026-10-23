@@ -11,6 +11,10 @@ METHODS = [("plain", r"rotations as trained", C.SURPRISE), ("pi", r"position int
            ("ntk", r"NTK-aware", C.INTERVAL), ("yarn", r"YaRN", C.BITS)]
 
 
+SPOKEN_EXT = {"plain": "the plain model", "pi": "position interpolation", "ntk": "the NTK-aware rescaling",
+              "yarn": "YaRN", "logn": "log n scaling alone", "ntk_logn": "NTK-aware with log n scaling"}
+
+
 class Longer(VoiceoverScene):
     def construct(self):
         self.card()
@@ -94,7 +98,7 @@ class Longer(VoiceoverScene):
         th = np.asarray(e["theta"])
         slow = {"pi": np.full_like(th, float(s)), "ntk": th / np.asarray(e["theta_ntk"]), "yarn": th / np.asarray(e["theta_yarn"])}
         bx = Axes(x_range=[0, len(th) - 1, 5], y_range=[0.5, s + 0.5, 1], x_length=4.2, y_length=2.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.6, -2.1, 0])
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([4.95, -2.3, 0])
         bl = label(r"each pair slowed by, \ fast $\to$ slow pairs", font_size=20, color=GREY_A).next_to(bx, UP, buff=0.1)
         yl = VGroup(MathTex(r"1\times", font_size=20, color=GREY_B).next_to(bx.c2p(0, 1), LEFT, buff=0.08),
                     MathTex(rf"{s}\times", font_size=20, color=GREY_B).next_to(bx.c2p(0, s), LEFT, buff=0.08))
@@ -103,6 +107,7 @@ class Longer(VoiceoverScene):
         w_far = float(np.asarray(e["bucket_window"])[-4:].mean())
         best = min(("pi", "ntk", "yarn"), key=lambda k: b[k])
         cites = cite(r"S.~Chen et al.\ (2023); \ bloc97 (2023); \ B.~Peng et al., \textit{YaRN} (2023)", corner=UR)
+        win_txt = ("." if b[best] > w_far else f", and better even than the {ctx}-character window.")
         names = {"pi": "position interpolation", "ntk": "the NTK-aware rescaling", "yarn": "YaRN"}
         with self.voiceover(
             "So people rescale the clocks. <bookmark mark='a'/> Position interpolation slows every hand by the same "
@@ -113,8 +118,7 @@ class Longer(VoiceoverScene):
             "alone, slows the slow ones fully, ramps in between, and sharpens the attention slightly to make up for "
             f"the longer context. <bookmark mark='d'/> On our model, with no retraining at all, the best here is "
             f"{names[best]}: {b[best]:.2f} bits at the far end, against {b['plain']:.1f} for doing nothing"
-            + (". " if b[best] > w_far else f", and better even than the {ctx}-character window. ")
-            + "Real models do this and then train briefly on long texts; Qwen and DeepSeek reach a hundred and "
+            + win_txt + " Real models do this and then train briefly on long texts; Qwen and DeepSeek reach a hundred and "
             "twenty-eight thousand tokens with YaRN."
         ) as vo:
             self.play(FadeIn(cites), Create(bx), FadeIn(bl), FadeIn(yl))
@@ -194,8 +198,8 @@ class Longer(VoiceoverScene):
             "slowest pairs never finish a single turn. Past the training length they would point at angles never "
             f"seen, so YaRN slows them by the full factor of {s}. <bookmark mark='d'/> In between is a ramp, gamma: "
             "zero below one turn, one above thirty-two, a straight line between. <bookmark mark='e'/> Each new "
-            "angle is a blend, one minus gamma of the slowed angle plus gamma of the original. In our heads that's "
-            f"{kept} {kept_w} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> Slowing "
+            "angle is a blend, one minus gamma of the slowed angle plus gamma of the original. In our heads, "
+            f"{kept} kept, {len(ramp_i)} on the ramp and {slowed} slowed fully. <bookmark mark='f'/> Slowing "
             "the hands also flattens the attention, spreading it over more positions, so YaRN adds a temperature: "
             f"every score is multiplied by zero point one log s plus one, squared; for s of {s}, {mult:.2f}."
         ) as vo:
@@ -249,7 +253,7 @@ class Longer(VoiceoverScene):
             r_ = Rectangle(width=0.7, height=max(ax.c2p(0, v)[1] - ax.c2p(0, lo)[1], 0.02), stroke_width=0,
                            fill_color=EXT_COLORS[k], fill_opacity=0.85).move_to(ax.c2p(i + 0.5, (v + lo) / 2))
             bars.add(VGroup(r_, MathTex(f"{far[k]:.2f}", font_size=20, color=EXT_COLORS[k]).next_to(r_, UP, buff=0.06),
-                            label(EXT_NAMES[k], font_size=15, color=EXT_COLORS[k]).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.1)))
+                            label(EXT_NAMES[k], font_size=17, color=EXT_COLORS[k]).next_to(ax.c2p(i + 0.5, lo), DOWN, buff=0.1)))
         ref = DashedLine(ax.c2p(0, near), ax.c2p(len(names), near), color=GREY_B, stroke_width=1.5)
         refl = label(rf"within $1$--${ctx}$", font_size=16, color=GREY_B).next_to(ref, RIGHT, buff=0.08)
         hist = VGroup(label(r"Chiang \& Cholak (2022): \ scale logits by $\log n$", font_size=20, color=GREY_A),
@@ -271,8 +275,8 @@ class Longer(VoiceoverScene):
             "must grow like the logarithm of n. <bookmark mark='c'/> So scale every score by log n, in units of "
             "the training length: nothing changes up to it, and beyond it the attention stays as sharp as in "
             "training. David Chiang and Peter Cholak proposed it in 2022; Qwen used it with NTK scaling in 2023, and "
-            f"Llama 4 scales its attention's temperature at inference. <bookmark mark='d'/> {v1}{v2}"
-            f"The best of all here is {EXT_NAMES[best].replace('$', '').replace(chr(92), '')}, at {far[best]:.2f}."
+            f"Llama 4 scales its attention's temperature at inference. <bookmark mark='d'/> {v1}<bookmark mark='e'/> {v2}"
+            f"The best of all here is {SPOKEN_EXT[best]}, at {far[best]:.2f}."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -295,7 +299,7 @@ class Longer(VoiceoverScene):
         allb = np.concatenate([np.asarray(e[f"bucket_{k}"]) for k in ("pi", "yarn", "ft_pi", "ft_yarn")]
                               + [np.asarray(e["bucket_window"])])
         lo = math.floor(allb.min() * 2) / 2 - 0.25
-        hi = min(math.ceil(allb.max() * 2) / 2 + 0.25, lo + 3.0)
+        hi = math.ceil(allb.max() * 2) / 2 + 0.25
         ax, deco = self.axes(e, lo, hi)
         edge = DashedLine(ax.c2p(ctx, lo), ax.c2p(ctx, hi), color=GREY_B, stroke_width=2)
 
@@ -318,17 +322,23 @@ class Longer(VoiceoverScene):
         winner = "ft_yarn" if far["ft_yarn"] < far["ft_pi"] else "ft_pi"
         gap = abs(far["ft_yarn"] - far["ft_pi"])
         v = (f"Position interpolation falls from {far['pi']:.2f} to {far['ft_pi']:.2f} bits at the far end, YaRN "
-             f"from {far['yarn']:.2f} to {far['ft_yarn']:.2f}. "
-             + (f"{'YaRN' if winner == 'ft_yarn' else 'Interpolation'} ends ahead by {gap:.2f} bits"
-                + (", and beats reading the last {0} characters, {1:.2f}.".format(ctx, far["window"])
-                   if far[winner] < far["window"] else
-                   f", but neither yet beats simply reading the last {ctx} characters, {far['window']:.2f}.")))
+             f"from {far['yarn']:.2f} to {far['ft_yarn']:.2f}.")
+        if far[winner] < far["window"]:
+            v_end = (f"YaRN ends ahead by {gap:.2f} bits, and beats reading the last {ctx} characters, {far['window']:.2f}."
+                     if winner == "ft_yarn" else
+                     f"Interpolation ends ahead by {gap:.2f} bits, and beats reading the last {ctx} characters, "
+                     f"{far['window']:.2f}.")
+        else:
+            v_end = (f"YaRN ends ahead by {gap:.2f} bits, but neither yet beats simply reading the last {ctx} characters, "
+                     f"{far['window']:.2f}." if winner == "ft_yarn" else
+                     f"Interpolation ends ahead by {gap:.2f} bits, but neither yet beats simply reading the last {ctx} "
+                     f"characters, {far['window']:.2f}.")
         with self.voiceover(
             "Real models do not stop at a rescaling: they train briefly at the new length. So did we, "
             f"{steps} steps of {T:,}-character windows, {chars / 1e6:.1f} million characters, about "
             f"{100 * chars / float(t['tokens']):.0f} percent of the original training, once from position "
             "interpolation and once from YaRN. <bookmark mark='a'/> Dashed, before; solid, after. "
-            f"<bookmark mark='b'/> {v} This is the recipe of today's long-context models: DeepSeek-V3 went from four "
+            f"<bookmark mark='b'/> {v} <bookmark mark='c'/> {v_end} This is the recipe of today's long-context models: DeepSeek-V3 went from four "
             "thousand to a hundred and twenty-eight thousand tokens with YaRN and two thousand steps of training."
         ) as vo:
             self.play(Create(ax), FadeIn(deco), Create(edge), FadeIn(key[2:]), Create(before), Create(win), run_time=2.0)

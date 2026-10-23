@@ -105,6 +105,8 @@ class RASP(VoiceoverScene):
                      label(rf"counts told apart in bfloat16: \ up to ${pb}$; \ in float16: \ ${p16:,}$".replace(",", "{,}"),
                            font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([2.6, -2.6, 0])
         keep_in_frame(res)
+        v_ran = (f"We ran it on {tr:,} random sequences: all {ok:,} correct." if ok == tr else
+                 f"We ran it on {tr:,} random sequences: {ok:,} correct.")
         with self.voiceover(
             "The histogram first. Give the tokens one-hot vectors, and a head's QK matrix becomes a lookup table: "
             "any comparison of two tokens we like. <bookmark mark='a'/> Score each pair beta if the tokens match, "
@@ -112,9 +114,8 @@ class RASP(VoiceoverScene):
             "times then splits its attention evenly over its c copies and the marker, so the marker gets one over "
             "c plus one. <bookmark mark='c'/> Let only the marker carry a value, and the head's output is one over "
             "c plus one: a small ReLU layer reads the count back. The marker plays exactly the part of chapter "
-            f"twelve's sink. <bookmark mark='d'/> We ran it on {tr:,} random sequences: "
-            + (f"all {ok:,} correct. " if ok == tr else f"{ok:,} correct. ")
-            + "But notice what it needs: telling one over c plus one from one over c plus two takes more bits as "
+            "twelve's sink. <bookmark mark='d'/> " + v_ran
+            + " But notice what it needs: telling one over c plus one from one over c plus two takes more bits as "
             f"c grows. In bfloat16 the counts blur after {pb}; in float16, after {p16:,}. A fixed transformer works "
             "with fixed precision, and this is one reason length is hard."
         ) as vo:
@@ -161,14 +162,13 @@ class RASP(VoiceoverScene):
         ok, tr = int(r["sort_ok"]), int(r["sort_trials"])
         res = label(rf"${ok:,}$ of ${tr:,}$ random inputs sorted".replace(",", "{,}"), font_size=22, color=C.TRUE_P)
         res.to_edge(DOWN, buff=0.25)
+        v_sorted = (f"Our hand-built weights sort every one of {tr:,} random inputs." if ok == tr else
+                    f"Our hand-built weights sort {ok:,} of {tr:,} random inputs.")
         with self.voiceover(
             "Sorting takes two layers. <bookmark mark='a'/> In the first, each token selects every token smaller "
             "than itself, plus the marker: the marker's share gives its rank, how many come before it in sorted "
             "order. <bookmark mark='b'/> In the second, output position p selects the token whose rank is p and "
-            "copies it. <bookmark mark='c'/> "
-            + (f"Our hand-built weights sort every one of {tr:,} random inputs." if ok == tr else
-               f"Our hand-built weights sort {ok:,} of {tr:,} random inputs.")
-            + " Nobody trained them: a transformer's weights can be a program."
+            "copies it. <bookmark mark='c'/> " + v_sorted + " Nobody trained them: a transformer's weights can be a program."
         ) as vo:
             self.play(FadeIn(inp), GrowArrow(arr), FadeIn(outp))
             vo.wait_until("a")

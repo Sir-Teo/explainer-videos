@@ -112,7 +112,7 @@ class Frontier(VoiceoverScene):
             "Here is what such a hybrid looks like: Kimi K3, released in 2026, has 93 layers, and only 24 of them "
             "are full attention. <bookmark mark='a'/> The rest keep a fixed-size memory, updated as they read. "
             "<bookmark mark='b'/> Why keep any attention at all? Because attention can recall anything in its "
-            "context exactly, as our induction heads did, while a fixed memory has to decide what to forget. A few "
+            "context exactly, as the induction heads of chapter fourteen did, while a fixed memory has to decide what to forget. A few "
             "attention layers keep the recall, the rest keep the cost down. <bookmark mark='c'/> How that memory "
             "works, and why it is attention in disguise, is where we go next, through the lineage of the models "
             "themselves in Part 14, to memory in Part 15."
