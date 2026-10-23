@@ -207,8 +207,9 @@ class Recipe(VoiceoverScene):
                 lab = rf"Part 14, \ {r['label'].split('model ')[-1]}, \ ${r['params'] / 1e6:.1f}$M"
             rows.append(dict(label=lab, bits=r["bits"], kind=r["kind"]))
         hl = tuple(i for i, r in enumerate(S["rows"]) if r.get("part") == 18)
-        board = scoreboard(rows, highlight=hl, max_bits=4.0, row_h=0.46, font_size=20, bar_width=5.6,
-                           label_width=4.6).scale(0.92).move_to([0, -0.2, 0])
+        rh = min(0.46, 5.0 / len(rows))
+        board = scoreboard(rows, highlight=hl, max_bits=4.0, row_h=rh, font_size=20 if rh > 0.42 else 18,
+                           bar_width=5.6, label_width=4.6).scale(0.92).move_to([0, -0.15, 0])
         bl = label(r"bits per character on the scoreboard's passage", font_size=22, color=GREY_B)
         bl.next_to(board, UP, buff=0.15)
         base_row = next(r for r in S["rows"] if r.get("name") == "base")
@@ -225,9 +226,14 @@ class Recipe(VoiceoverScene):
             vs14 = (f"Our 2026 model scores {f['bits']:.2f}, against {gm['bits']:.2f} for Part 14's model of the same "
                     "size, which read the same number of tokens.")
         tw = take_away(r"the recipe is the lab's craft; \ the scale is what it buys", color=FULL_C, font_size=26)
+        if any(r.get("name", "").startswith("p1_") for r in S["rows"]):
+            top_rows = ("Part 1's compressors and counts at the top, then the published models Part 1 measured, "
+                        "GPT-2 and Qwen3, then Part 14's family")
+        else:
+            top_rows = "Part 1's compressors and counts at the top, then Part 14's family"
         with self.voiceover(
             "And on the series' scoreboard, the bits per character each model needs for chapter two of The Maltese "
-            "Falcon. <bookmark mark='a'/> Part 1's compressors and counts at the top, Part 14's family, and the "
+            "Falcon. <bookmark mark='a'/> " + top_rows + ", and the "
             f"series' own model of {base_row['params'] / 1e6:.1f} million parameters, trained on {times:.0f} times our "
             f"tokens, at {base_row['bits']:.2f}. <bookmark mark='b'/> " + vs14 + " <bookmark mark='c'/> A recipe "
             "buys efficiency: the same quality for less compute. The frontier labs spend that saving on scale."
