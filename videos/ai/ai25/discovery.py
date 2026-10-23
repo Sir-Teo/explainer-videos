@@ -367,14 +367,14 @@ def evolve(train, seed, pop=40, gens=25, max_size=25, log=None):
         if log:
             log(f"binpack gen {g}: {history[-1]['score']:.3f}% excess, {to_text(best)}")
         elite = scored[:4]
-        children = list(elite)
+        children = list(elite) + [random_tree(rng) for _ in range(pop // 10)]  # a few newcomers keep it diverse
         while len(children) < pop:
             a = min(rng.choice(len(scored), 3), key=lambda i: fitness(scored[i]))
             child = scored[a]
             if rng.uniform() < 0.5:
                 b = min(rng.choice(len(scored), 3), key=lambda i: fitness(scored[i]))
                 child = crossover(child, scored[b], rng)
-            if rng.uniform() < 0.7:
+            if rng.uniform() < 0.9:
                 child = mutate(child, rng)
             if size(child) <= max_size:
                 children.append(child)

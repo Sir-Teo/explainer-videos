@@ -63,7 +63,7 @@ class Prefix(VoiceoverScene):
                       color=C.SURPRISE).next_to(tot, DOWN, buff=0.4)
         with self.voiceover(
             "The simplest way to send letters as bits is a fixed-length code. Two to the five is thirty-two, enough "
-            "for our twenty-seven symbols, <bookmark mark='a'/> so give each one a five-bit number. "
+            "for twenty-seven symbols, <bookmark mark='a'/> so each gets a five-bit number. "
             f"<bookmark mark='b'/> The falcon, {len(word)} symbols, costs {nfix} bits. <bookmark mark='c'/> But "
             f"that's wasteful: e is {ratio:.0f} times more common than z, and both cost five bits."
         ) as vo:
@@ -93,20 +93,29 @@ class Prefix(VoiceoverScene):
         legend = VGroup(*[VGroup(letter(s, font_size=26), Text(c, font=MONO, font_size=24, color=C.BITS))
                           .arrange(RIGHT, buff=0.3) for s, c in SMALL.items()]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         legend.move_to(RIGHT * 5.3 + DOWN * 1.3)
+        morse_codes = (("e", "·"), ("t", "−"), ("a", "·−"), ("n", "−·"), ("q", "−−·−"), ("z", "−−··"))
+        morse = VGroup(*[VGroup(letter(c, font_size=28), Text(m, font=MONO, font_size=30, color=C.BITS))
+                         .arrange(RIGHT, buff=0.3) for c, m in morse_codes]).arrange(RIGHT, buff=0.75)
+        morse_t = label(r"Morse code: \ the common letters get the short codes", font_size=26, color=GREY_A)
+        morse_n = label(r"\ldots and a pause between letters keeps \texttt{e}\,\texttt{t} apart from \texttt{a}",
+                        font_size=24, color=GREY_B)
+        morse_g = VGroup(morse_t, morse, morse_n).arrange(DOWN, buff=0.3).move_to(DOWN * 1.9)
         with self.voiceover(
-            "So give common symbols short codewords, like Morse code, which gives e a single dot. But careful. "
-            "<bookmark mark='a'/> If e is zero, t is one, and a is zero one, then the bits zero one could be e, t, or "
-            "a. <bookmark mark='b'/> The fix is a prefix-free code: no codeword is the start of another. "
-            "<bookmark mark='c'/> Then the codewords are the leaves of a binary tree. Zero goes left, one goes right, "
-            "and to decode, you walk down from the top until you reach a leaf."
+            "So give common symbols short codewords, as Morse code gives e a single dot. But careful. "
+            "<bookmark mark='a'/> If e is zero, t is one, and a is zero one, then zero one could be e, t, or a. "
+            "<bookmark mark='b'/> The fix is a prefix-free code: no codeword starts another. <bookmark mark='c'/> "
+            "Then the codewords are the leaves of a binary tree: zero goes left, one goes right, and to decode, you "
+            "walk down from the top to a leaf."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(bad[0]))
+            self.play(FadeIn(head), FadeIn(bad[0]), FadeIn(morse_t), LaggedStart(*[FadeIn(m) for m in morse],
+                                                                                  lag_ratio=0.2), run_time=1.6)
+            self.play(FadeIn(morse_n))
             vo.wait_until("a")
             self.play(FadeIn(bad[1]))
             vo.wait_until("b")
             self.play(FadeIn(rule))
             vo.wait_until("c")
-            self.play(FadeOut(bad), rule.animate.next_to(head, DOWN, buff=0.3))
+            self.play(FadeOut(bad), FadeOut(morse_g), rule.animate.next_to(head, DOWN, buff=0.3))
             self.play(Create(tree[0]), FadeIn(tree[1]), FadeIn(tree[2]), run_time=1.8)
             self.play(FadeIn(tree[3]), FadeIn(legend))
         msg = SMALL["c"] + SMALL["a"] + SMALL["b"] + SMALL["f"]
@@ -180,14 +189,13 @@ class Prefix(VoiceoverScene):
         kr = mtex(r"\sum_i 2^{\,l_{\max} - l_i} \le 2^{\,l_{\max}} \ \Longrightarrow \ \sum_i 2^{-l_i} \le 1",
                   font_size=36, color=C.BITS).next_to(cnt, DOWN, buff=0.25).align_to(cnt, RIGHT)
         with self.voiceover(
-            "Prefix-free codes obey a budget, and the tree shows why. <bookmark mark='a'/> Grow the tree all the way "
-            f"down, to the depth of the longest codeword: {lmax} levels, {2 ** lmax} leaves at the bottom. "
-            "<bookmark mark='b'/> A codeword of length l sits l levels down, and everything below it is out of bounds: "
-            "no other codeword may start with it. So it uses up two to the l max minus l of the bottom leaves. "
-            "<bookmark mark='c'/> Because no codeword starts another, these shares never overlap, so together they "
-            f"can't exceed all {2 ** lmax}. <bookmark mark='d'/> Divide by two to the l max: two to the minus length, "
-            "summed over the codewords, is at most one. That's Kraft's inequality, from Leon Kraft's master's thesis "
-            "in 1949."
+            "Prefix-free codes obey a budget, and the tree shows why. <bookmark mark='a'/> Grow the tree down to the "
+            f"longest codeword: {lmax} levels, {2 ** lmax} leaves at the bottom. <bookmark mark='b'/> A codeword of "
+            "length l sits l levels down, and everything below it is off limits, so it uses up two to the l max "
+            "minus l of the bottom leaves. <bookmark mark='c'/> No codeword starts another, so these shares never "
+            f"overlap: together, at most {2 ** lmax}. <bookmark mark='d'/> Divide by two to the l max: two to the "
+            "minus length, summed over the codewords, is at most one. That's Kraft's inequality, from Leon Kraft's "
+            "1949 master's thesis."
         ) as vo:
             self.play(Create(edges), LaggedStart(*[FadeIn(lf) for lf in leafs], lag_ratio=0.1), run_time=1.6)
             vo.wait_until("a")
@@ -227,18 +235,44 @@ class Prefix(VoiceoverScene):
                             Text(canon[i], font=MONO, font_size=24, color=C.BITS)).arrange(RIGHT, buff=0.4))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([-1.2, -1.4, 0])
         tot = mtex(rf"\sum 2^{{-l}} = {sk:.2f} \le 1", font_size=34, color=C.BITS).next_to(rows, RIGHT, buff=0.9)
+        # lengths 1, 2, 3, 3 placed shortest first, each at the leftmost free node of its depth
+        TW, ty, tdy = 7.0, 0.75, 0.85
+
+        def tnode(pre):
+            a_, b_ = dyadic(pre)
+            return np.array([-TW / 2 + TW * (a_ + b_) / 2, ty - tdy * len(pre), 0.0])
+
+        faint = VGroup(*[Line(tnode(format(v, f"0{d}b")[:-1]), tnode(format(v, f"0{d}b")), color=GREY_D,
+                              stroke_width=1.5) for d in range(1, 4) for v in range(2 ** d)])
+        demo = ["0", "10", "110", "111"]
+        cols = [C.TRUE_P, C.MODEL_Q, C.INTERVAL, C.CONTEXT]
+        placed = VGroup()
+        for c, col in zip(demo, cols):
+            path = VGroup(*[Line(tnode(c[:k - 1]), tnode(c[:k]), color=col, stroke_width=4) for k in range(1, len(c) + 1)])
+            a_, b_ = dyadic(c)
+            shade = Polygon(tnode(c), np.array([-TW / 2 + TW * a_ + 0.15, ty - tdy * 3, 0]),
+                            np.array([-TW / 2 + TW * b_ - 0.15, ty - tdy * 3, 0]), stroke_width=0, fill_color=col,
+                            fill_opacity=0.18) if len(c) < 3 else VMobject()
+            word = Text(c, font=MONO, font_size=26, color=col).next_to(tnode(c), DOWN, buff=0.15)
+            if len(c) < 3:
+                word.next_to(tnode(c), LEFT, buff=0.15)
+            placed.add(VGroup(shade, path, Dot(tnode(c), radius=0.07, color=col), word))
+        demo_t = label(r"lengths $1, 2, 3, 3$: \ $\tfrac12 + \tfrac14 + \tfrac18 + \tfrac18 = 1$", font_size=28,
+                       color=GREY_A).next_to(VGroup(faint, placed), DOWN, buff=0.35)
         with self.voiceover(
-            "The budget is also enough. <bookmark mark='a'/> Hand me any lengths whose powers of a half add up to one "
-            "or less, and a prefix code with exactly those lengths exists: give out codewords shortest first, each "
-            "taking the leftmost node of its depth that is still free. <bookmark mark='b'/> For example, round each "
-            "letter's surprise up to a whole number of bits. The powers of a half then add up to "
-            f"{sk:.2f}, so a prefix code with those lengths exists. Here it is. We'll meet it again in the next "
-            "chapter."
+            "The budget is also enough. <bookmark mark='a'/> Hand me any lengths whose powers of a half add up to "
+            "at most one, and a prefix code with those lengths exists: give out codewords shortest first, each at "
+            "the leftmost free node of its depth. <bookmark mark='b'/> For example, round each letter's surprise up "
+            f"to whole bits. The powers of a half add up to {sk:.2f}, so here is a prefix code with those lengths. "
+            "We'll meet it again next chapter."
         ) as vo:
-            self.play(FadeIn(th, shift=DOWN * 0.2))
+            self.play(FadeIn(th, shift=DOWN * 0.2), Create(faint))
             vo.wait_until("a")
-            self.play(FadeIn(how))
+            self.play(FadeIn(how), FadeIn(demo_t))
+            for g_ in placed:
+                self.play(FadeIn(g_[0]), Create(g_[1]), FadeIn(g_[2]), FadeIn(g_[3]), run_time=0.8)
             vo.wait_until("b")
+            self.play(FadeOut(VGroup(faint, placed, demo_t)))
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.25), run_time=2.0)
             self.play(Write(tot))
         self.wait(0.3)
@@ -259,6 +293,19 @@ class Prefix(VoiceoverScene):
                              label(rf"$\{{${words}$\}}$ \quad $\sum 2^{{-l}} = {d['kraft_frac']}$", font_size=26)
                              ).arrange(DOWN, aligned_edge=LEFT, buff=0.1))
         codes.arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_corner(UL, buff=0.5).shift(DOWN * 0.7)
+        cw = ud["code"]
+        msg_ud = ["d", "a", "b", "c"]
+        parts = VGroup(*[Text(cw[m], font=MONO, font_size=28, color=WHITE) for m in msg_ud]).arrange(RIGHT, buff=0.3)
+        for t_ in parts:
+            t_[0].set_color(C.INTERVAL)  # every codeword starts with the 0 that announces it
+        syms = VGroup(*[letter(m, font_size=26, color=C.INTERVAL).next_to(t_, DOWN, buff=0.15) for m, t_ in
+                        zip(msg_ud, parts)])
+        ud_demo = VGroup(parts, syms).move_to([3.0, codes[0].get_y() - 0.1, 0])
+        bw = bad["code"]
+        amb = VGroup(Text(bw["c"], font=MONO, font_size=28, color=WHITE), MathTex(r"\to", font_size=30),
+                     Text("a b", font=MONO, font_size=26, color=C.SURPRISE), label(r"or", font_size=26, color=GREY_B),
+                     Text("c", font=MONO, font_size=26, color=C.SURPRISE), MathTex("?", font_size=34, color=C.SURPRISE))
+        amb.arrange(RIGHT, buff=0.25).move_to([3.0, codes[1].get_y() - 0.05, 0])
         rows = [
             cmath(r"\Big(\sum_i 2^{-l_i}\Big)^k", r"=", r"\sum_{\text{messages of } k \text{ codewords}} 2^{-\text{length}}",
                   font_size=32),
@@ -292,31 +339,33 @@ class Prefix(VoiceoverScene):
         tag.next_to(ax_g, UP, buff=0.05).align_to(ax_g, RIGHT)
         with self.voiceover(
             "Could a code that isn't prefix-free do better? <bookmark mark='a'/> This one isn't: zero starts zero "
-            "one. Yet it can be decoded, because every codeword begins with a zero, and a zero always means a new "
+            "one. Yet it decodes, because every codeword begins with a zero, and a zero always means a new "
             f"codeword. Its sum is {un} over {ud_}. <bookmark mark='b'/> This one, with sum {bn} over {bd}, can't "
-            "be: zero one is either a b, or c. "
-            "<bookmark mark='c'/> In 1956 Brockway McMillan showed the budget binds every decodable code. Raise the "
-            "sum to a power k, and multiply out: every term is a message of k codewords. <bookmark mark='d'/> Group "
-            "the messages by how many bits they take. <bookmark mark='e'/> If the code can be decoded, two different "
-            "messages never give the same bits, so at most two to the m messages are m bits long, and the whole sum "
-            "is at most k times the longest length."
+            "be decoded: zero one is a b, or c. <bookmark mark='c'/> In 1956 Brockway McMillan showed the budget "
+            "binds every decodable code. Raise the sum to a power k and multiply out: each term is a message of k "
+            "codewords. <bookmark mark='d'/> Group the messages by their length in bits. <bookmark mark='e'/> If "
+            "the code decodes, different messages never give the same bits, so at most two to the m are m bits "
+            "long, and the sum is at most k times the longest length."
         ) as vo:
             self.play(FadeIn(head), FadeIn(codes[0]))
             vo.wait_until("a")
             self.play(Indicate(codes[0], color=C.INTERVAL, scale_factor=1.04))
+            self.play(LaggedStart(*[FadeIn(VGroup(t_, y_)) for t_, y_ in zip(parts, syms)], lag_ratio=0.4),
+                      run_time=1.8)
             vo.wait_until("b")
-            self.play(FadeIn(codes[1]))
+            self.play(FadeIn(codes[1]), FadeIn(amb))
             vo.wait_until("c")
+            self.play(FadeOut(ud_demo), FadeOut(amb))
             step(0)
             vo.wait_until("d")
             step(1)
             vo.wait_until("e")
             step(2)
         with self.voiceover(
-            "A sum bigger than one, raised to the k, grows exponentially; k times a constant grows only in a straight "
-            f"line. <bookmark mark='a'/> For the bad code, five fourths to the k overtakes two k at k equals {kx}: "
-            "the bound breaks, so it can't be decodable, and it isn't. <bookmark mark='b'/> So nothing is lost by "
-            "insisting on prefix codes: any lengths a decodable code can have, a prefix code can have too."
+            "A sum above one, raised to the k, grows exponentially; k times a constant grows in a straight line. "
+            f"<bookmark mark='a'/> For the bad code, five fourths to the k overtakes two k at k equals {kx}: the "
+            "bound breaks, so it can't be decodable. <bookmark mark='b'/> So prefix codes lose nothing: any lengths "
+            "a decodable code can have, a prefix code can have too."
         ) as vo:
             self.play(FadeOut(VGroup(rows[0], rows[1], whys[0], whys[1])),
                       VGroup(rows[2], whys[2]).animate.move_to([-2.3, 0.6, 0]))
