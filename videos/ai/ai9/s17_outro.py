@@ -99,10 +99,10 @@ class Outro(VoiceoverScene):
         if nn_b < kn_b:
             last = "And a small network, trained on our books, beat every counting model on the scoreboard."
         elif mix_b < kn_b:
-            last = ("And a small network, trained on our books, came close to the best counting model, and mixed with "
-                    "it, beat every counting model on the scoreboard.")
+            last = (f"And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits of the best counting "
+                    "model, and mixed with it, beat every counting model on the scoreboard.")
         else:
-            last = (f"And a small network, trained on our books, came within {nn_b - kn_b:.2f} bits of the best "
+            last = (f"And a small network, trained on our books, ended {nn_b - kn_b:.2f} bits short of the best "
                     "counting model.")
         with self.voiceover(
             "Let's take stock. A unit is a weighted sum and a threshold, and the perceptron learns one from its "

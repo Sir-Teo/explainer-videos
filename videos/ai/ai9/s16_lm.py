@@ -115,8 +115,7 @@ class NeuralLM(VoiceoverScene):
         cv = np.asarray(d["curve"])
         snaps = d["snaps"]
         kn, nn = float(d["kn"]), float(d["passage_bits"])
-        top = float(np.ceil(max(cv[:, 2].max(), 4.5)))
-        top = min(top, 8.0)
+        top = 5.0  # the first steps (about 8 bits: random symbols) are drawn clipped at the top
         ax = Axes(x_range=[0, cv[-1, 0], 4000], y_range=[1.6, top, 0.5], x_length=6.6, y_length=3.6, tips=False,
                   axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-2.6, 0.6, 0])
         yl = VGroup(*[MathTex(f"{v:.0f}", font_size=22, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
@@ -164,12 +163,17 @@ class NeuralLM(VoiceoverScene):
                 m.scale_to_fit_width(12.4)
             return m.move_to(panel_.get_center() + DOWN * 0.18)
 
-        beat = nn < kn
-        end = (f"By the end it reaches {nn:.2f} bits per character, past Kneser–Ney's {kn:.2f}."
-               if beat else
-               f"By the end it reaches {nn:.2f} bits per character: far better than Part 1's "
-               f"counting, but not quite Kneser–Ney's {kn:.2f}. With this much computing, the best counting is a hard "
-               "opponent.")
+        p1 = float(next(r["bits"] for r in board_rows()[0] if r["key"] == "best"))  # Part 1's best counting model
+        if nn < kn:
+            end = f"By the end it reaches {nn:.2f} bits per character, past Kneser–Ney's {kn:.2f}."
+        elif nn < p1:
+            end = (f"By the end it reaches {nn:.2f} bits per character: better than Part 1's best counting model, at "
+                   f"{p1:.2f}, but not quite Kneser–Ney's {kn:.2f}. With this much computing, the best counting is a "
+                   "hard opponent.")
+        else:
+            end = (f"By the end it reaches {nn:.2f} bits per character: within {nn - p1:.2f} of Part 1's best counting "
+                   f"model, at {p1:.2f}, and short of Kneser–Ney's {kn:.2f}. With this much computing, the best "
+                   "counting is a hard opponent.")
         wr = load("lm_words")["rows"]  # step, bits, words, real words, share
         s1 = int(wr[3][0])
         early = (f"At first it types random symbols: {100 * wr[0][4]:.0f} percent of the words it writes are real words. "
@@ -318,9 +322,9 @@ class NeuralLM(VoiceoverScene):
         if behind > 0:
             top_row = f"{behind:.2f} bits behind the best row above them"
         elif gpt:
-            top_row = "the best of everything before GPT-2"
+            top_row = "the best machine on the board before GPT-2"
         else:
-            top_row = "the best of everything on the board so far"
+            top_row = "the best machine on the board so far"
         gap = (f"<bookmark mark='a'/> But it's still far behind GPT-2. It sees only {d['n_ctx']} characters, and one "
                "hidden layer has to do everything. The rest of the series is about closing that gap." if gpt else
                f"<bookmark mark='a'/> It sees only {d['n_ctx']} characters, and one hidden layer has to do everything. "

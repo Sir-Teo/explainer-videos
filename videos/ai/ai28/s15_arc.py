@@ -175,7 +175,7 @@ class ARC(VoiceoverScene):
             "out what the goal is, and plan, and is scored by how efficiently it gets there, against people. "
             "<bookmark mark='a'/> People could solve every game. At launch, every frontier model scored below one "
             "percent. <bookmark mark='b'/> In September, ARC Prize measured OpenAI's GPT-6 Astra at 62.7 percent with "
-            "their standard harness. <bookmark mark='c'/> Each new test has fallen faster than the last. And what "
+            "their standard harness. <bookmark mark='c'/> Each new test has been climbed faster than the last. And what "
             "solves them looks like every chapter of this part: propose, check, refine, in a loop."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.15), FadeIn(cite_), FadeIn(bh))

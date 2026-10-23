@@ -324,3 +324,45 @@ Newell 纽厄尔; Edsger Dijkstra 迪杰斯特拉; Arthur Samuel 塞缪尔; Garr
 James Lighthill 莱特希尔; Hans Moravec 莫拉维克; Judea Pearl 珀尔; Richard Korf 科尔夫; Alan Robinson 鲁滨逊; Stephen Cook
 库克; Leonid Levin 列文. Program names stay in Latin script: Shakey, STRIPS, DENDRAL, MYCIN, XCON, Cyc, ELIZA, DOCTOR,
 Chinook, Deep Blue → 深蓝, Prolog, Lisp, Z3, Lean, AlphaProof, AlphaGeometry, FunSearch, AlphaEvolve, DeepCubeA.
+
+### Reasoning (Part 28)
+
+| English | 中文 |
+|---|---|
+| reasoning, reasoning model | 推理，推理模型 |
+| chain of thought, scratchpad | 思维链，草稿（中间步骤） |
+| "let's think step by step" | "让我们一步一步地思考" |
+| thinking out loud, tokens of thought | 出声思考，思考词元 |
+| filler tokens | 填充词元 |
+| threshold circuit, TC⁰, NC¹ | 阈值电路，TC⁰，NC¹ |
+| self-consistency, majority vote | 自洽性，多数投票 |
+| verifier, checker | 验证器，检查器 |
+| outcome reward model (ORM) | 结果奖励模型（ORM） |
+| process reward model (PRM) | 过程奖励模型（PRM） |
+| step label, right for the wrong reason | 步骤标签，歪打正着 |
+| AUC (how well a grader tells right from wrong) | AUC（评分器区分对错的能力） |
+| reinforcement learning with verifiable rewards (RLVR) | 可验证奖励的强化学习（RLVR） |
+| group relative policy optimization (GRPO) | 组相对策略优化（GRPO） |
+| group, group baseline, leave-one-out | 组，组基线，留一 |
+| importance ratio, clip, clip-higher | 重要性比值，裁剪，放宽上界的裁剪（clip-higher） |
+| KL estimator (k1, k2, k3), control variate | KL估计量（k1、k2、k3），控制变量 |
+| length bias, difficulty bias | 长度偏差，难度偏差 |
+| dynamic sampling, groups with no signal | 动态采样，没有信号的组 |
+| sequence-level ratio, geometric mean | 序列级比值，几何平均 |
+| entropy collapse, entropy bonus | 熵坍缩，熵奖励 |
+| overthinking, underthinking, length penalty | 过度思考，思考不足，长度惩罚 |
+| aha moment | 顿悟时刻（aha moment） |
+| pass@k, unbiased estimator, plug-in estimator | pass@k，无偏估计量，代入估计量 |
+| sharpen, widen (the reasoning boundary) | 锐化，拓宽（推理边界） |
+| test-time compute, parallel, sequential | 测试时计算，并行，串行 |
+| budget forcing | 预算强制 |
+| best-of-N | 最优N选1 |
+| beam search, tree search, Tree of Thoughts | 束搜索，树搜索，思维树 |
+| latent reasoning, continuous thought | 隐式推理，连续思维 |
+| recursion, deep supervision, refinement loop | 递归，深度监督，精炼循环 |
+| proof assistant, kernel, formalization | 证明助手，内核，形式化 |
+| harness (for ARC-AGI-3) | 测试框架（harness） |
+| chain-of-thought monitorability | 思维链的可监控性 |
+
+Names stay in Latin script: GRPO, Dr. GRPO, DAPO, GSPO, CISPO, DPO, o1, o3, R1, R1-Zero, s1, L1, Kimi k1.5, ProRL,
+rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristotle, Seed-Prover, ARC-AGI, NVARC, Poetiq.

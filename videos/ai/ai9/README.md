@@ -82,9 +82,12 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
   learned curves replayed (the closest match a sine and a square with correlations 0.997 and 0.987); KANs and MLPs by
   size; Yu, Yu & Wang's fairer comparison (2024), KAN 2.0, and what frontier models use.
 * **15. A neural language model.** Bengio, Ducharme, Vincent & Jauvin's design (2003) for characters (24 characters
-  of context, learned 32-number vectors, 1,024 tanh units, direct connections), trained on Part 1's books, replayed:
-  the bits-per-character curve with what it writes at nine checkpoints; mixed with Part 7's Kneser–Ney (the weight
-  chosen on held-out text); the output layer's character vectors; the scoreboard's new rows.
+  of context, learned 32-number vectors, 1,024 tanh units, direct connections; 1.09 million weights), trained on Part
+  1's books for 24,000 steps of 512 positions, replayed: the bits-per-character curve with what it writes at nine
+  checkpoints (real words among its words: 0% at the start, 28% by step 1,000, 70% at the end). It reaches 2.38 bits
+  per character on the passage: within 0.05 of Part 1's best counting model (2.32) and short of Part 7's
+  Kneser–Ney (order 7, 2.04). Mixed with Kneser–Ney (the network's weight, 0.13, chosen on held-out text) it reaches
+  1.99, the best machine on the board; the output layer's character vectors; the scoreboard's new rows.
 * **Recap** in eight computed pictures, where it comes back, six problems, Part 10's teaser, references.
 
 Run from the repo root:
