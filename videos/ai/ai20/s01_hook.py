@@ -107,14 +107,26 @@ class Hook(VoiceoverScene):
         ], font_size=25)
         with self.voiceover(
             "This is Part 20 of AI, Built, and the start of its fourth act: generation and perception. "
-            "<bookmark mark='a'/> In this part: the generative problem and its history; autoregressive models; "
-            "latent variables, from the Helmholtz machine to the variational autoencoder; adversarial games, why "
-            "they spiral, and how Wasserstein distance and StyleGAN tamed them; invertible maps, from coupling "
-            "layers to neural ODEs; energy, from Hopfield and Boltzmann to Langevin dynamics and the score; and how "
-            "to judge a generator, with every family trained here and compared on one budget."
+            "<bookmark mark='a'/> In this part: the generative problem and its history; <bookmark mark='o2'/> "
+            "autoregressive models; <bookmark mark='o3'/> latent variables, from the Helmholtz machine to the "
+            "variational autoencoder; <bookmark mark='o4'/> adversarial games, why they spiral, and how Wasserstein "
+            "distance and StyleGAN tamed them; <bookmark mark='o5'/> invertible maps, from coupling layers to neural "
+            "ODEs; <bookmark mark='o6'/> energy, from Hopfield and Boltzmann to Langevin dynamics and the score; "
+            "<bookmark mark='o7'/> and how to judge a generator, with every family trained here and compared on one "
+            "budget."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
+            # read along: each line lights up as it is named (a veil of background over the lines still to come)
+            veils = VGroup(*[Rectangle(width=r_.width + 0.3, height=r_.height + 0.14, stroke_width=0,
+                                       fill_color=config.background_color, fill_opacity=0.72).move_to(r_)
+                             for r_ in obj.rows])
+            mark = Triangle(color=C.BITS, fill_opacity=1, stroke_width=0).rotate(-PI / 2).scale(0.1)
+            mark.next_to(obj.rows[0], LEFT, buff=0.15)
+            self.play(FadeOut(smap), FadeIn(obj), FadeIn(veils[1:]), FadeIn(mark))
+            for k, mk in enumerate(["o2", "o3", "o4", "o5", "o6", "o7"], 1):
+                vo.wait_until(mk)
+                self.play(FadeOut(veils[k]), mark.animate.next_to(obj.rows[k], LEFT, buff=0.15), run_time=0.5)
+            self.play(FadeOut(mark), run_time=0.4)
         self.wait(0.3)
         self.clear_scene()

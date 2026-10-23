@@ -7,6 +7,8 @@ from videos.ai.ai13.common import (A, DIFFC, GATEC, MONO, PANEL, PART, POS, SINK
                                    bars_chart, curve, framed, heat_image, load)
 
 VARIANTS = ("softmax", "sink", "gate", "diff")
+SPOKEN_SINK = {"softmax": "the plain softmax", "sink": "the sink logit", "gate": "the gated head",
+               "diff": "differential attention"}
 
 
 def show_char(c):
@@ -205,7 +207,8 @@ class Sinks(VoiceoverScene):
             f"{spoken[-1]}, where the "
             "next character copies the one before the trigger. Every sequence starts with a marker. "
             f"<bookmark mark='b'/> A one-layer transformer learns it in {int(c['steps']):,} steps, three times over. "
-            f"After a trigger its head looks one back, {pa.mean():.0%} of the time. <bookmark mark='c'/> " + v1 + v2
+            f"After a trigger its head looks one back, {pa.mean():.0%} of the time. <bookmark mark='c'/> " + v1
+            + "<bookmark mark='d'/> " + v2
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.03))
             vo.wait_until("a")
@@ -213,7 +216,9 @@ class Sinks(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(img), FadeIn(il), FadeIn(facts[1]))
             vo.wait_until("c")
-            self.play(Create(col), FadeIn(facts[0]), FadeIn(facts[2:]))
+            self.play(Create(col), FadeIn(facts[0]))
+            vo.wait_until("d")
+            self.play(FadeIn(facts[2:]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -254,29 +259,26 @@ class Sinks(VoiceoverScene):
                       r"Qwen3-Next and Kimi K3 gate their attention", font_size=20, color=GREY_A).move_to([-3.6, -2.6, 0])
         base_sink = bos["softmax"].mean()
 
-        def cut(v):
-            return 1 - bos[v].mean() / max(base_sink, 1e-9)
-
-        def says(v, extra):
-            r = bos[v].mean()
-            return (f"its weight on the marker falls to {r:.0%}{extra}" if r < 0.7 * base_sink else
-                    f"its weight on the marker stays at {r:.0%}{extra}")
-
-        v_sink = ("The sink logit gives the head a place to send its weight that is not a token at all: "
-                  + says("sink", f", and {null.mean():.0%} goes nowhere") + ". ")
-        v_gate = ("The gate lets the head simply switch itself off: "
-                  + (f"it is {g_d.mean():.2f} open when there is nothing to copy and {g_a.mean():.2f} after a "
-                     "trigger, and " if g_a.mean() > g_d.mean() + 0.05 else
-                     f"it ends about as open with nothing to copy, {g_d.mean():.2f}, as after a trigger, "
-                     f"{g_a.mean():.2f}, and ")
-                  + says("gate", "") + ". ")
-        v_diff = ("Differential attention subtracts a second softmax, so its weights need not add up to one: "
-                  + says("diff", f", with lambda at {lam.mean():.2f}") + ". ")
+        r_s, r_g, r_d = (float(bos[v].mean()) for v in ("sink", "gate", "diff"))
+        nl, gd_, ga_, lm_ = float(null.mean()), float(g_d.mean()), float(g_a.mean()), float(lam.mean())
+        v_sink = (f"The sink logit gives the head a place to send its weight that is not a token at all: its weight on "
+                  f"the marker falls to {r_s:.0%}, and {nl:.0%} goes nowhere." if r_s < 0.7 * base_sink else
+                  f"The sink logit gives the head a place to send its weight that is not a token at all, but its weight "
+                  f"on the marker stays at {r_s:.0%}, and only {nl:.0%} goes nowhere.")
+        if ga_ > gd_ + 0.05:
+            v_gate = (f"The gate lets the head simply switch itself off: it is {gd_:.2f} open when there is nothing to "
+                      f"copy and {ga_:.2f} after a trigger, and its weight on the marker is {r_g:.0%}.")
+        else:
+            v_gate = (f"The gate could let the head switch itself off, but it ends about as open with nothing to copy, "
+                      f"{gd_:.2f}, as after a trigger, {ga_:.2f}, and its weight on the marker is {r_g:.0%}.")
+        v_diff = (f"Differential attention subtracts a second softmax, so its weights need not add up to one: with "
+                  f"lambda at {lm_:.2f}, its weight on the marker is {r_d:.0%}.")
         worst_cp = max(VARIANTS, key=lambda v: cp[v].mean())
         same = max(cp[v].mean() for v in VARIANTS) - min(cp[v].mean() for v in VARIANTS) < 0.05
+        worst_name = SPOKEN_SINK[worst_cp]
         v_loss = ("All four learn the task about equally well, so the sinks were never needed for the task "
                   "itself; they were the softmax's way of doing nothing." if same else
-                  f"They do not learn the copies equally well: {SINK_NAMES[worst_cp].replace(chr(92), '')} is worst, at "
+                  f"They do not learn the copies equally well: {worst_name} is worst, at "
                   f"{cp[worst_cp].mean():.3f} bits on the copies.")
         with self.voiceover(
             "Three recent designs give a head a better way to do nothing, and we trained each on the same task, "
@@ -284,7 +286,7 @@ class Sinks(VoiceoverScene):
             "softmax's denominator, the score of an invisible key. <bookmark mark='b'/> The Qwen team's gated "
             "attention multiplies each head's output by a sigmoid of the input. <bookmark mark='c'/> Microsoft's "
             "differential attention takes the difference of two softmax maps. <bookmark mark='d'/> " + v_sink
-            + "<bookmark mark='e'/> " + v_gate + "<bookmark mark='f'/> " + v_diff + "<bookmark mark='g'/> " + v_loss
+            + " <bookmark mark='e'/> " + v_gate + " <bookmark mark='f'/> " + v_diff + " <bookmark mark='g'/> " + v_loss
             + " In large models the Qwen team saw the share of attention on the first token fall from 46.7 to 4.8 "
             "percent with the gate; Qwen3-Next and Kimi K3 now gate their attention."
         ) as vo:

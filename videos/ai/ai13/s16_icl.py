@@ -194,15 +194,18 @@ class InContext(VoiceoverScene):
         dl = label(r"same answer", font_size=20, color=GREY_B).next_to(ax.c2p(lim, lim), RIGHT, buff=0.1)
         corr = gloss(r"correlation", r"how closely the dots hug a straight line: \\ $1$ means exactly on it, "
                      r"$0$ means no line at all", width=4.6, color=GREY_A).move_to([3.2, -1.75, 0])
+        if r_ > 0.99:
+            v_line = (f"They lie on a line. The correlation is {r_:.3f}; correlation measures how closely the dots hug "
+                      "a straight line, and one would mean exactly on it. The forward pass of this network is a step "
+                      "of learning, run on the examples in its prompt.")
+        else:
+            v_line = (f"They follow a line, loosely: the correlation is {r_:.3f}; correlation measures how closely the "
+                      "dots hug a straight line, and one would mean exactly on it. The forward pass of this network is "
+                      "close to a step of learning.")
         with self.voiceover(
             "Check it on four thousand new prompts. Each dot is one question: across, the answer from one step of "
-            "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> "
-            + (f"They lie on a line. The correlation is {r_:.3f}. " if r_ > 0.99 else
-               f"They follow a line, loosely: the correlation is {r_:.3f}. ")
-            + "Correlation measures how closely the dots hug a straight line, and one would mean exactly on it. "
-            + ("The forward pass of this network is a step of learning, run on the examples in its prompt. "
-               if r_ > 0.99 else "The forward pass of this network is close to a step of learning. ")
-            + "Johannes von Oswald and colleagues showed this in 2023."
+            "gradient descent; up, the trained attention layer's answer. <bookmark mark='a'/> " + v_line
+            + " Johannes von Oswald and colleagues showed this in 2023."
         ) as vo:
             self.play(Create(ax), Create(diag), FadeIn(dl), FadeIn(xn), FadeIn(yn), FadeIn(cite_))
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.005), run_time=2.0)
@@ -232,17 +235,17 @@ class InContext(VoiceoverScene):
             g.add(VGroup(name, bar, val))
         head = label(r"mean squared error on new prompts", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
         beats = all(d[f"lsa{k}"] <= d[f"gd{k}"] * 1.02 for k in (2, 3))
+        l2, g2, ls = float(d["lsa2"]), float(d["gd2"]), float(d["lstsq"])
+        if beats and l2 < 0.8 * g2:
+            v_deep = (f"One layer matches one step of gradient descent. Two layers beat two plain steps, {l2:.2f} "
+                      f"against {g2:.2f}: trained, the network finds a smarter kind of step than the textbook one.")
+        else:
+            v_deep = "One layer matches one step of gradient descent, and more layers keep pace with more steps."
+        v_exact = ("Exact least squares, from Part 6, gets every answer right here, to rounding error, so there is "
+                   "room to grow." if ls < 0.01 else f"Exact least squares, from Part 6, reaches {ls:.2f}.")
         with self.voiceover(
-            "Stack more layers, and each can take another step. <bookmark mark='a'/> One layer matches one step of "
-            "gradient descent"
-            + (f". Two layers beat two plain steps, {d['lsa2']:.2f} against {d['gd2']:.2f}: trained, the network "
-               "finds a smarter kind of step than the textbook one. " if beats and d["lsa2"] < 0.8 * d["gd2"] else
-               ", and more layers keep pace with more steps. ")
-            + "<bookmark mark='b'/> "
-            + (f"Exact least squares, from Part 6, gets every answer right here, to rounding error, so there "
-               "is room to grow. " if d["lstsq"] < 0.01 else f"Exact least squares, from Part 6, reaches "
-               f"{d['lstsq']:.2f}. ")
-            + "Real transformers, with softmax attention and many layers, are messier than this, but "
+            "Stack more layers, and each can take another step. <bookmark mark='a'/> " + v_deep
+            + " <bookmark mark='b'/> " + v_exact + " Real transformers, with softmax attention and many layers, are messier than this, but "
             "the lesson carries over: a forward pass can run a learning algorithm on the prompt."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g[0]))

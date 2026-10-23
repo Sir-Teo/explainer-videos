@@ -102,11 +102,16 @@ class SideBySide(VoiceoverScene):
                   "between seeds of one design. ")
         nope_rank = order.index("nope") + 1
         behind = float(vals["nope"].mean() - vals[best].mean())
-        v2 = (f"No positions at all comes {['first', 'second', 'third', 'last'][nope_rank - 1]}, at "
-              f"{vals['nope'].mean():.3f}"
-              + (": the causal mask alone tells it where it is." if nope_rank == 1 else
-                 f", only {behind:.3f} behind: the causal mask really does tell it where it is." if behind < 0.05 else
-                 f", {behind:.2f} behind the best: the mask tells it something, but not everything."))
+        rank_word = ["first", "second", "third", "last"][nope_rank - 1]
+        nope_v = float(vals["nope"].mean())
+        if nope_rank == 1:
+            v2 = f"No positions at all comes first, at {nope_v:.3f}: the causal mask alone tells it where it is."
+        elif behind < 0.05:
+            v2 = (f"No positions at all comes {rank_word}, at {nope_v:.3f}, only {behind:.3f} behind: the causal mask "
+                  "really does tell it where it is.")
+        else:
+            v2 = (f"No positions at all comes {rank_word}, at {nope_v:.3f}, {behind:.2f} bits behind the best: the mask "
+                  "tells it something, but not everything.")
         with self.voiceover(
             f"First, inside the length they were trained on, the first {T} characters. <bookmark mark='a'/> "
             + v1 + "<bookmark mark='b'/> " + v2
@@ -151,17 +156,12 @@ class SideBySide(VoiceoverScene):
         held = [m for m in ORDER if rise[m] < 0.15]
         broke = [m for m in ORDER if rise[m] >= 0.5]
         mid = [m for m in ORDER if m not in held and m not in broke]
-        parts = []
-        if held:
-            parts.append(f"{spoken_list(SPOKEN[m] for m in held)} {'holds' if len(held) == 1 else 'hold'} steady "
-                         f"past the training length, within {max(rise[m] for m in held):.2f} bits")
-        if mid:
-            parts.append(f"{spoken_list(SPOKEN[m] for m in mid)} {'drifts' if len(mid) == 1 else 'drift'} up by "
-                         f"{min(rise[m] for m in mid):.2f} to {max(rise[m] for m in mid):.2f}")
-        if broke:
-            parts.append(f"{spoken_list(SPOKEN[m] for m in broke)} {'breaks' if len(broke) == 1 else 'break'}, up "
-                         f"by as much as {max(rise[m] for m in broke):.1f} bits")
-        v = "; ".join(parts) + "."
+        n_held, n_mid, n_broke = (spoken_list(SPOKEN[m] for m in g_) if g_ else "" for g_ in (held, mid, broke))
+        v_held = (f"Steady past the training length, within {max(rise[m] for m in held):.2f} bits: {n_held}."
+                  if held else "")
+        v_mid = (f"Drifting up, by {min(rise[m] for m in mid):.2f} to {max(rise[m] for m in mid):.2f} bits: {n_mid}."
+                 if mid else "")
+        v_broke = (f"Broken, up by as much as {max(rise[m] for m in broke):.1f} bits: {n_broke}." if broke else "")
         why_ = ("ALiBi's penalty means a distant key matters less and less, so new lengths look like old ones. "
                 if "alibi" in held else "")
         rope_txt = ("RoPE's slow hands point at angles they never saw in training, and its queries stop "
@@ -169,8 +169,9 @@ class SideBySide(VoiceoverScene):
                     "RoPE holds up here; the next chapter shows where it does break.")
         with self.voiceover(
             f"Now read four times as far, {R} characters, though none of them saw more than {T}. "
-            f"<bookmark mark='a'/> Bits per character at each position, three seeds each. <bookmark mark='b'/> {v} "
-            f"<bookmark mark='c'/> {why_}{rope_txt}"
+            f"<bookmark mark='a'/> Bits per character at each position, three seeds each. <bookmark mark='b'/> {v_held} "
+            f"<bookmark mark='e'/> {v_mid} <bookmark mark='f'/> {v_broke} "
+            f"<bookmark mark='c'/> {why_}<bookmark mark='d'/> {rope_txt}"
         ) as vo:
             self.play(FadeIn(g), Create(edge), FadeIn(el))
             vo.wait_until("a")
@@ -178,6 +179,8 @@ class SideBySide(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rh), LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3))
             vo.wait_until("c")
+            self.play(Indicate(rows[ORDER.index("alibi")], color=POS_COLORS["alibi"]))
+            vo.wait_until("d")
             self.play(Indicate(rows[ORDER.index("rope")], color=POS_COLORS["rope"]))
         self.wait(0.3)
         self.clear_scene()

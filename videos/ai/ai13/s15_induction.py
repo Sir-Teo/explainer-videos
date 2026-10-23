@@ -60,17 +60,27 @@ class Induction(VoiceoverScene):
         else:
             v1 = (f"The first time through, {m1:.2f} bits a character; the second time, {m2:.2f}: no better at all. "
                   "The answer is sitting a hundred characters back, and our transformer does not use it.")
-        v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, "
-              + (f"worse than a blind guess among 26 letters, {u26:.1f}, because it bets on English; " if q1 > u26 else "")
-              + (f"{q2:.1f} the second: here, at least, it copies." if q2 < 0.6 * q1 else
-                 f"and {q2:.1f} the second: no copying here either."))
+        if q1 > u26 and q2 < 0.6 * q1:
+            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind "
+                  f"guess among 26 letters, {u26:.1f}, because it bets on English; {q2:.1f} the second: here, at "
+                  "least, it copies.")
+        elif q1 > u26:
+            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, worse than a blind "
+                  f"guess among 26 letters, {u26:.1f}, because it bets on English; and {q2:.1f} the second: no "
+                  "copying here either.")
+        elif q2 < 0.6 * q1:
+            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, {q2:.1f} the "
+                  "second: here, at least, it copies.")
+        else:
+            v2 = (f"Random letters, which no novel prepared it for: {q1:.1f} bits the first time, and {q2:.1f} the "
+                  "second: no copying here either.")
         tail = (" The machinery behind copying has a name." if m2 < m1 - 0.05 else
                 " Copying needs a particular piece of machinery, and our transformer has not built it. Here is what "
                 "it is, and how it forms.")
         with self.voiceover(
             "Here is a test of something no counting model can do. Take a stretch of a novel our transformer "
             "has never seen, and show it twice in a row. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2
-            + tail
+            + " <bookmark mark='c'/>" + tail
         ) as vo:
             self.play(FadeIn(row), FadeIn(g), FadeIn(key), FadeIn(tag))
             vo.wait_until("a")

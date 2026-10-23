@@ -122,12 +122,13 @@ class Hopfield(VoiceoverScene):
         note_ = note(rf"$N = {N}$ units; \ random patterns; \ ${int(h['trials'])}$ trials each").to_corner(DR, buff=0.3)
         cite_ = cite(r"Amit, Gutfreund \& Sompolinsky (1985); \ Krotov \& Hopfield (2016); \ Demircigil et al.\ (2017)",
                      corner=DL)
+        none_txt = f"and by {int(dead)} it recalls none at all." if dead else "but it never fails completely."
+        h_at = int(half) if half else int(Ms[-1])
         with self.voiceover(
             "How much can it hold? Store more and more random patterns in a hundred units, and test each with a cue "
             f"in which fifteen percent of the units are flipped. <bookmark mark='a'/> The classical network "
-            f"falls below half its patterns at {int(half) if half else int(Ms[-1])} "
-            + (f"and recalls none at {int(dead)}. " if dead else ". ")
-            + "Physicists computed its limit in 1985: about zero point one three eight patterns per unit. Every "
+            f"falls below half its patterns at {h_at} stored patterns, " + none_txt
+            + " Physicists computed its limit in 1985: about zero point one three eight patterns per unit. Every "
             "stored pattern adds a little noise to every other's vote, and the noise adds up. "
             "<bookmark mark='b'/> In 2016 Dmitry Krotov and John Hopfield sharpened the energy so that the closest "
             "pattern wins by far more, and in 2017 a team showed that an exponential energy stores exponentially "
