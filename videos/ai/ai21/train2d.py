@@ -349,6 +349,7 @@ def compute_solvers_net():
     ref, _ = E.solve(D.np, z, "dpm2", 512, "edm")
     out = dict(nfes=E.NFES, solvers=[k for k, _ in E.SOLVERS], ref_sw=E.dist(ref), floor=E.floor(n))
     out.update(E.solver_sweep(D.np, z, ref, label="net "))
+    out.update(E.solver_sweep(D.np, z, ref, label="net ", spacing="time", suffix="_time"))
     print(f"    the network's own ODE solution: distance from the data {out['ref_sw']:.4f} (floor {out['floor']:.4f})",
           flush=True)
     return out

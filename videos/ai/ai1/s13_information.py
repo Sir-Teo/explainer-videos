@@ -50,11 +50,10 @@ class Information(VoiceoverScene):
                     color=GREY_A).to_corner(DL, buff=0.45)
         tag = computed_tag()
         with self.voiceover(
-            "In chapter seven, knowing X lowered the entropy of Y, on average. That drop has a name: the mutual "
+            "In chapter seven, knowing X lowered the entropy of Y, on average. That drop is the mutual "
             "information. <bookmark mark='a'/> It's the bits that knowing one thing saves you when you guess the "
-            "other, and it's symmetric: Y tells you as much about X as X tells you about Y. It's also a "
-            "divergence, between the joint distribution and the one where the two are independent, so it's never "
-            "negative. <bookmark mark='b'/> In our books, the next letter carries "
+            "other, and it's symmetric. It's also a divergence, of the joint distribution from independence, so "
+            "it's never negative. <bookmark mark='b'/> In our books, the next letter carries "
             f"{Hx:.2f} bits; knowing the letter before it, {Hc:.2f}. <bookmark mark='c'/> So neighbouring letters "
             f"share {I:.2f} bits. <bookmark mark='d'/> Two letters back share {I2:.2f}, though the second one on its "
             f"own shares only {Isk:.2f}: together, letters say more than apart."
@@ -128,9 +127,9 @@ class Information(VoiceoverScene):
             "Let's watch it happen in our books. <bookmark mark='a'/> Keep only the kind of the previous letter: "
             f"space, vowel or consonant. Of the {I:.2f} bits, {Ig:.2f} survive. <bookmark mark='b'/> Or garble it: "
             "replace a share of the letters with random ones. The more noise, the less it tells, down to nothing. "
-            "<bookmark mark='c'/> Do both, and you lose more. Every curve stays under the one before it. "
-            "<bookmark mark='d'/> This is a law for learning machines too. Whatever a network computes from its "
-            "context, its features can't know more about the next token than the context itself."
+            "<bookmark mark='c'/> Do both, and you lose more: each curve stays under the one before. "
+            "<bookmark mark='d'/> A law for learning machines too: whatever a network computes from its context "
+            "can't know more about the next token than the context itself."
         ) as vo:
             self.play(FadeIn(head2), FadeIn(a), FadeIn(tag), Create(top), FadeIn(tl))
             vo.wait_until("a")
@@ -208,12 +207,11 @@ class Information(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(fit_l))
         with self.voiceover(
-            "A counting model can't produce a tail like that: the influence of anything outside its few letters of "
-            "context is cut off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking "
-            "by the same factor with every letter, which on these axes plunges straight off the bottom. "
-            "<bookmark mark='a'/> Real text keeps paying back what you remember, at every distance. To guess well, a "
-            "model needs a long memory, and a way to find the parts of the past that matter. That's what attention "
-            "is for, in Part 13."
+            "A counting model can't produce a tail like that: anything outside its few letters of context is cut "
+            "off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking by the same "
+            "factor with every letter, plunging off the bottom of these axes. <bookmark mark='a'/> Real text keeps "
+            "paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way "
+            "to find the parts of the past that matter: attention, in Part 13."
         ) as vo:
             self.play(FadeIn(side[:2]))
             vo.wait_until("x")

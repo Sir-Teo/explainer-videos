@@ -78,9 +78,9 @@ class Entropy(VoiceoverScene, ThreeDScene):
         total.next_to(dots, DOWN, buff=0.15).align_to(thead[3], RIGHT)
         terms = VGroup(thead, trows, dots, total)
         with self.voiceover(
-            "Surprise is about one event. Before the event, we can ask a different question: on average, how "
-            "surprised should we expect to be? <bookmark mark='a'/> Weight each surprise by how often it happens, "
-            "and add up. That average surprise is the entropy, written H of p."
+            "Surprise is about one event. Before it happens, we can ask: on average, how surprised should we expect "
+            "to be? <bookmark mark='a'/> Weight each surprise by how often it happens, and add up. That average is "
+            "the entropy, H of p."
         ) as vo:
             self.play(FadeIn(defn[:3]), FadeIn(thead))
             self.play(LaggedStart(*[FadeIn(r_[:3], shift=RIGHT * 0.2) for r_ in trows], lag_ratio=0.3), run_time=2.0)
@@ -89,10 +89,10 @@ class Entropy(VoiceoverScene, ThreeDScene):
                       run_time=1.5)
             self.play(FadeIn(dots), FadeIn(total))
         with self.voiceover(
-            "There's a nice picture of it. Take the unit bar from chapter one, <bookmark mark='a'/> each symbol a "
-            "sliver as wide as its probability, sorted from common to rare. <bookmark mark='b'/> Now raise each sliver to the height of its "
-            "surprise. Common symbols are wide and low; rare ones are thin and tall. <bookmark mark='c'/> The entropy "
-            f"is the total area: for English letters, {H:.2f} bits."
+            "There's a nice picture of it. Take the unit bar from chapter one, <bookmark mark='a'/> a sliver per "
+            "symbol, as wide as its probability, common to rare. <bookmark mark='b'/> Raise each sliver to the "
+            "height of its surprise: common symbols wide and low, rare ones thin and tall. <bookmark mark='c'/> The "
+            f"entropy is the total area: for English letters, {H:.2f} bits."
         ) as vo:
             self.play(FadeOut(terms))
             self.play(Create(base), FadeIn(flat), FadeIn(wl))
@@ -119,11 +119,10 @@ class Entropy(VoiceoverScene, ThreeDScene):
                     color=C.ENTROPY)
         red.next_to(lab_u, DOWN, buff=0.2).align_to(lab_u, LEFT)
         with self.voiceover(
-            "Compare a source where all twenty-seven symbols are equally likely. <bookmark mark='a'/> Every sliver "
-            f"is the same width, and the same height: log two of twenty-seven, {Hu:.2f} bits. That's the most you can "
-            "be surprised, on average, by one symbol from twenty-seven. <bookmark mark='b'/> English, even counted "
-            "one letter at a time, sits below it. The gap is what Shannon called redundancy: structure a good "
-            "guesser can exploit."
+            "Compare all twenty-seven symbols equally likely. <bookmark mark='a'/> Every sliver has the same width "
+            f"and height: log two of twenty-seven, {Hu:.2f} bits, the most one symbol in twenty-seven can carry. "
+            "<bookmark mark='b'/> English letters sit below it. The gap is what Shannon called redundancy: structure "
+            "a guesser can exploit."
         ) as vo:
             self.play(FadeOut(self.area), FadeOut(self.labs), FadeOut(self.hl))
             vo.wait_until("a")
@@ -164,10 +163,10 @@ class Entropy(VoiceoverScene, ThreeDScene):
         ins = always_redraw(inset)
         dot = always_redraw(lambda: Dot(ax.c2p(t.get_value(), hbin(t.get_value())), radius=0.08, color=WHITE))
         with self.voiceover(
-            "The simplest case is a coin. <bookmark mark='a'/> If it's fair, the entropy is one bit. "
-            "<bookmark mark='b'/> Bias it, and the outcome gets easier to guess. Heads ninety percent of the time, "
-            f"and the entropy falls to {hbin(0.9):.2f} bits. <bookmark mark='c'/> A coin that always lands heads has no "
-            "entropy at all. The entropy is largest when the outcomes are equally likely."
+            "The simplest case is a coin. <bookmark mark='a'/> Fair, it has one bit of entropy. "
+            "<bookmark mark='b'/> Bias it, and it gets easier to guess: heads ninety percent of the time, "
+            f"{hbin(0.9):.2f} bits. <bookmark mark='c'/> Always heads: no entropy at all. Entropy is largest when the "
+            "outcomes are equally likely."
         ) as vo:
             self.play(Write(f), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl))
             self.play(Create(curve))
@@ -246,13 +245,12 @@ class Entropy(VoiceoverScene, ThreeDScene):
                       .arrange(DOWN, buff=0.08).next_to(e, DOWN, buff=0.15))
         tag = computed_tag().to_corner(UR, buff=0.3)
         with self.voiceover(
-            "We built entropy out of surprise. Shannon went the other way. In 1948 he asked what any measure of "
-            "uncertainty ought to satisfy. <bookmark mark='a'/> It should change continuously with the "
-            "probabilities. <bookmark mark='b'/> With n equally likely outcomes, more outcomes should mean more "
-            "uncertainty. <bookmark mark='c'/> And if a choice is broken into two successive choices, the "
-            "uncertainty should be that of the first choice, plus that of the second, weighted by how often you "
-            "face it. <bookmark mark='d'/> His example: one half, one third, one sixth is the same as a fair coin, "
-            "and then, half the time, a choice of two thirds against one third."
+            "We built entropy out of surprise; Shannon went the other way. In 1948 he asked what any measure of "
+            "uncertainty should satisfy. <bookmark mark='a'/> It should change continuously with the probabilities. "
+            "<bookmark mark='b'/> With n equally likely outcomes, more outcomes, more uncertainty. "
+            "<bookmark mark='c'/> And a choice broken into two successive choices should cost the first choice, plus "
+            "the second, weighted by how often you face it. <bookmark mark='d'/> His example: a half, a third, a "
+            "sixth is a fair coin, then, half the time, two thirds against one third."
         ) as vo:
             self.play(FadeIn(head), Create(flat), run_time=1.2)
             vo.wait_until("a")
@@ -311,14 +309,13 @@ class Entropy(VoiceoverScene, ThreeDScene):
                           r"$\log_2$)", who=r"C.~E.~Shannon (1948), Theorem 2", width=8.6, color=C.ENTROPY)
         th.to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "And he proved that nothing else meets them. Call A of n the uncertainty of n equal choices. "
+            "And he proved nothing else meets them. Call A of n the uncertainty of n equal choices. "
             "<bookmark mark='a'/> Choosing among s to the m equal outcomes is m choices among s in a row, so by the "
             "third requirement, A of s to the m is m times A of s. <bookmark mark='b'/> Squeeze any number between "
-            "powers of another, and the second requirement forces A of n to be a constant times log n. "
-            "<bookmark mark='c'/> Now any probabilities that are fractions, n i over N: choose one of N equal "
-            "outcomes in two steps, first the block, then the outcome inside it. <bookmark mark='d'/> Solve for H, "
-            "<bookmark mark='e'/> and out comes minus K, sum of p log p. Continuity fills in the irrational "
-            "probabilities."
+            "powers of another, and the second forces A of n to be a constant times log n. <bookmark mark='c'/> Now "
+            "take probabilities that are fractions, n i over N: choose one of N equal outcomes in two steps, the "
+            "block, then the outcome inside it. <bookmark mark='d'/> Solve for H, <bookmark mark='e'/> and out comes "
+            "minus K, sum of p log p; continuity covers the rest."
         ) as vo:
             self.play(FadeIn(head))
             step(0)
@@ -335,8 +332,8 @@ class Entropy(VoiceoverScene, ThreeDScene):
             vo.wait_until("e")
             step(5)
         with self.voiceover(
-            "Up to the choice of a unit, entropy is the only consistent measure of uncertainty there is. That's "
-            "why every part of this series measures information the same way."
+            "Up to a unit, entropy is the only consistent measure of uncertainty. That's why every part of this "
+            "series measures information this way."
         ) as vo:
             self.play(FadeOut(VGroup(cells, blocks, nlab)), FadeIn(th, shift=UP * 0.2))
         self.wait(0.3)
@@ -378,9 +375,9 @@ class Entropy(VoiceoverScene, ThreeDScene):
             self.add_fixed_in_frame_mobjects(m)
             self.remove(m)
         with self.voiceover(
-            "That's true in general. With K possible outcomes, the entropy is at most log two of K. "
-            "<bookmark mark='a'/> The proof is one inequality. The logarithm bends downward, so the average of logs "
-            "is at most the log of the average. That's Jensen's inequality. <bookmark mark='b'/> Entropy is an "
+            "In general, with K outcomes, the entropy is at most log two of K. <bookmark mark='a'/> The proof is one "
+            "inequality. The log bends downward, so the average of logs is at most the log of the average: Jensen's "
+            "inequality. <bookmark mark='b'/> Entropy is an "
             "average of logs. <bookmark mark='c'/> Swap in the log of the average, <bookmark mark='d'/> and the "
             "average of one over p is just the number of outcomes. <bookmark mark='e'/> So H is at most log K, with "
             "equality only when every outcome is equally likely."
@@ -478,11 +475,10 @@ class Entropy(VoiceoverScene, ThreeDScene):
         rule = label(r"on average, knowing more never hurts: \ $H(Y \mid X) \le H(Y)$ \quad (proof: Chapter 7)",
                      font_size=24, color=GREY_A).next_to(area, DOWN, buff=0.2)
         with self.voiceover(
-            "Entropy also works when we know something. For each previous letter, the next letter has its own "
-            "distribution, and its own entropy. <bookmark mark='a'/> Draw a column for each previous letter, as wide "
-            "as that letter is common, and as tall as the entropy of what follows it. <bookmark mark='b'/> After q, "
-            f"almost nothing: {hq:.2f} bits. <bookmark mark='c'/> After a space, a new word begins, and the "
-            f"entropy is {hs:.2f} bits."
+            "Entropy also works when we know something. Each previous letter gives the next one its own "
+            "distribution, and entropy. <bookmark mark='a'/> Draw a column for each previous letter, as wide as that "
+            "letter is common, as tall as the entropy of what follows. <bookmark mark='b'/> After q, almost nothing: "
+            f"{hq:.2f} bits. <bookmark mark='c'/> After a space, a new word begins: {hs:.2f} bits."
         ) as vo:
             self.play(Write(defn))
             vo.wait_until("a")
@@ -493,9 +489,9 @@ class Entropy(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(sp_lab))
         with self.voiceover(
-            f"The total area is the conditional entropy: {Hc:.2f} bits, given the previous letter, <bookmark mark='a'/> "
-            f"down from {H0:.2f} bits with no context at all. <bookmark mark='b'/> On average, knowing more never "
-            "makes you more uncertain. We'll prove that in chapter seven."
+            f"The total area is the conditional entropy: {Hc:.2f} bits given the previous letter, <bookmark mark='a'/> "
+            f"down from {H0:.2f} with no context. <bookmark mark='b'/> On average, knowing more never makes you more "
+            "uncertain; chapter seven proves it."
         ) as vo:
             self.play(FadeIn(area))
             vo.wait_until("a")

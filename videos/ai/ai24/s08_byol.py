@@ -98,9 +98,9 @@ class BYOL(VoiceoverScene):
         src = cite(r"Chen \& He (2021): \ SimSiam", corner=DR)
         sg_end = float(np.mean([runs[k]["zspread"][-1] for k in K["simsiam"]]))
         no_end = float(np.mean([runs[k]["zspread"][-1] for k in K["simsiam_nosg"]]))
-        collapsed = no_end < 0.25 * sg_end
         r_sg = float(np.mean([runs[k]["final"]["rank_z"] for k in K["simsiam"]]))
         r_no = float(np.mean([runs[k]["final"]["rank_z"] for k in K["simsiam_nosg"]]))
+        collapsed = no_end < 0.5 * sg_end and r_no < 0.3 * r_sg
         v = (f"With the stop-gradient, the spread holds at {sg_end:.3f}; without it, it falls to {no_end:.3f}, and "
              f"the effective rank to {r_no:.1f}, against {r_sg:.0f}. Remove one line of code and the network "
              "collapses." if collapsed else
@@ -238,9 +238,10 @@ class BYOL(VoiceoverScene):
         best = int(np.argmax([x[0] for x in lin]))
         leader = ["SimCLR", "BYOL", "SimSiam"][best]
         diff = max(x[0] for x in lin) - min(x[0] for x in lin)
+        trailer = ["SimCLR", "BYOL", "SimSiam"][int(np.argmin([x[0] for x in lin]))]
         line = (f"At our budget the three land within {pct(diff)} points of each other on the linear probe, with "
                 f"{leader} ahead." if diff < 0.01 else
-                f"At our budget {leader} leads the linear probe, by {pct(diff)} points over the last.")
+                f"At our budget {leader} leads the linear probe, by {pct(diff)} points over {trailer}.")
         tk = take_away(r"asymmetry, \ a predictor and a stop-gradient, \ is enough to escape collapse")
         with self.voiceover(
             f"How do they compare, on the same budget? <bookmark mark='a'/> {line} <bookmark mark='b'/> With ten "

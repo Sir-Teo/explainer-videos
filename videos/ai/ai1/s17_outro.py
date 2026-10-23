@@ -121,14 +121,13 @@ class Outro(VoiceoverScene):
         z = load("lmzip")
         back = "and decoded it back, letter for letter" if z["ok"] else "to a fraction of what xz needs"
         with self.voiceover(
-            "Let's take stock. We wrote guesses down as probability distributions, and the chain rule turned them "
-            "into a score for a whole text. Surprise had to be a logarithm, and entropy, the average surprise, is "
-            "the only consistent measure of uncertainty. Prefix codes live within Kraft's budget, Huffman's code is "
-            "the best of them, and long typical sequences let a code reach the entropy, and no further. We met the "
-            "price of a wrong model, the cross-entropy, and the two directions of the divergence inside it. "
-            "Arithmetic coding showed that predicting and compressing are the same thing, and GPT-2 compressed our "
-            f"passage {back}. Counting models showed us generalization, by "
-            "failing at it, and mutual information showed how far back text remembers."
+            "Let's take stock. Guesses are probability distributions, and the chain rule scores a whole text. "
+            "Surprise had to be a logarithm, and entropy, the average surprise, is the only consistent measure of "
+            "uncertainty. Prefix codes live within Kraft's budget, Huffman's is the best, and long typical "
+            "sequences let a code reach the entropy, and no further. A wrong model costs the cross-entropy, with a "
+            "divergence that has two directions. Arithmetic coding made predicting and compressing one thing, and "
+            f"GPT-2 compressed our passage {back}. Counting models taught generalization by failing at it, and "
+            "mutual information showed how far back text remembers."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15, scale=0.95) for t in tiles], lag_ratio=0.85),
@@ -150,10 +149,10 @@ class Outro(VoiceoverScene):
         ], font_size=24)
         with self.voiceover(
             "Almost everything here comes back. The chain rule is how language models generate text, and how "
-            "reasoning models think out loud. Cross-entropy is the loss we'll be minimizing for the rest of the "
-            "series. The two directions of the divergence return in variational autoencoders, and in aligning "
-            "models with what people want. Drawing typical text from a model is Part 5. And compression returns "
-            "when we study scaling, and at the very end, when we ask what these models can be trusted with."
+            "reasoning models think out loud. Cross-entropy is the loss we'll minimize for the rest of the series. "
+            "The divergence's two directions return in variational autoencoders and in alignment. Drawing typical "
+            "text from a model is Part 5. And compression returns with scaling, and at the very end, when we ask "
+            "what these models can be trusted with."
         ) as vo:
             self.play(FadeIn(card.head))
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in card.rows], lag_ratio=0.4),

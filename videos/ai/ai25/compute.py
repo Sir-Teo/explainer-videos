@@ -795,7 +795,7 @@ def compute_weather():
     out = dict(scale=[sw, sd], lead=lead, dt=fd.DT_SOLVE * fd.SUB, grid=fd.GRID,
                persistence=np.sqrt(((test[:, 1:2] - truth) ** 2).mean((0, 2, 3))),
                climatology=np.sqrt(((clim[None, None] - truth) ** 2).mean((0, 2, 3))),
-               field_std=float(test.std()), show_truth=test[0, :2 + lead:4])
+               field_std=float(test.std()), show_truth=test[0, 2:2 + lead:4])
     part = CACHE.partial("weather", dict(steps=W_STEPS, v=1))
     variants = {"multimesh": (16, 8, 4), "finest": (16,)}
     for name, levels in variants.items():

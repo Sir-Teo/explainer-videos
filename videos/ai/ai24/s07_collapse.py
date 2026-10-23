@@ -88,13 +88,18 @@ class Collapse(VoiceoverScene):
         r_n = float(np.mean([runs_c[k]["final"]["rank_z"] for k in kn]))
         r_s = float(np.mean([runs_s[k]["final"]["rank_z"] for k in ks]))
         dim = 128
+        times = (1 / np.sqrt(dim)) / float(np.mean([runs_c[k]["zspread"][-1] for k in kn]))
+        if r_n < 1.5:
+            tail = f"The pull-together-only network falls to {r_n:.1f}: one direction."
+        else:
+            tail = (f"The pull-together-only network falls to {r_n:.1f}, and even that is mostly noise: its vectors "
+                    f"are spread {times:.0f} times less than points scattered evenly over the sphere.")
         with self.voiceover(
             "To see collapse in a network with many output numbers, we need a measure. The effective rank takes "
             "the singular values of a set of vectors, turns them into proportions, and asks how many directions "
             "carry the weight: one, if every vector points the same way, up to the dimension, if they fill the "
             "space. <bookmark mark='a'/> SimCLR keeps its vectors spread over about "
-            f"{r_s:.0f} of its {dim} dimensions. <bookmark mark='b'/> The pull-together-only network falls to "
-            f"{r_n:.1f}: one direction."
+            f"{r_s:.0f} of its {dim} dimensions. <bookmark mark='b'/> {tail}"
         ) as vo:
             self.play(FadeIn(d), FadeIn(dn), FadeIn(src))
             vo.wait_until("a")
@@ -162,11 +167,13 @@ class Collapse(VoiceoverScene):
         worse = k1 < k0 - 0.02
         exp_ = label(r"once the head's output is constant, \\ the gradient is zero: \\ the encoder below "
                      r"learns nothing more", font_size=22, color=GREY_A).move_to([4.2, 0.6, 0])
-        v = (f"Its nearest-neighbour accuracy falls from {pct(k0, 0)} percent, where the random network started, to "
-             f"{pct(k1, 0)}. The linear probe ends at {pct(fl_)} percent, below the untrained network's {pct(un)}."
-             if worse and fl_ < un else
-             f"Its nearest-neighbour accuracy goes from {pct(k0, 0)} to {pct(k1, 0)} percent, and its linear probe "
-             f"ends at {pct(fl_)}, against {pct(un)} for an untrained network.")
+        if worse and fl_ < un + 0.005:
+            v = (f"Its nearest-neighbour accuracy falls from {pct(k0, 0)} percent, where the random network started, "
+                 f"to {pct(k1, 0)}. Its linear probe ends at {pct(fl_)} percent; an untrained network scores "
+                 f"{pct(un)}. Training bought nothing.")
+        else:
+            v = (f"Its nearest-neighbour accuracy goes from {pct(k0, 0)} to {pct(k1, 0)} percent, and its linear "
+                 f"probe ends at {pct(fl_)}, against {pct(un)} for an untrained network.")
         with self.voiceover(
             "Collapse is not harmless to the network underneath. The collapsed vector is the output of a small "
             "head; below it, the encoder's representation h is what we would keep. <bookmark mark='a'/> "

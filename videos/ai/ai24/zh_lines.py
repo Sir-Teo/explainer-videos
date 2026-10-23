@@ -293,7 +293,13 @@ ZH.update({
     'f"To see collapse in a network with many output numbers':
         "要在输出有很多个数的网络里看到坍缩，我们需要一个度量。有效秩取一组向量的奇异值，把它们变成比例，然后问有多少个方向承担了权重："
         "如果每个向量都指向同一个方向，就是1；如果它们铺满了空间，最多等于维数。<bookmark mark='a'/>SimCLR把它的向量分布在它{dim}个维度"
-        "中的大约{r_s:.0f}个上。<bookmark mark='b'/>只把两者拉到一起的网络降到了{r_n:.1f}：一个方向。",
+        "中的大约{r_s:.0f}个上。<bookmark mark='b'/>{tail}",
+
+    "f'The pull-together-only network falls to {r_n:.1f}: one direction.'":
+        '只把两者拉到一起的网络降到了{r_n:.1f}：一个方向。',
+
+    "f'The pull-together-only network falls to {r_n:.1f}, and even that is mostly noise":
+        '只把两者拉到一起的网络降到了{r_n:.1f}，而且这点秩大多是噪声：它的向量分散的程度，比均匀撒在球面上的点小{times:.0f}倍。',
 
     'f"The whole spectrum shows more.':
         "整个谱能说明更多。这是两个网络向量的奇异值，从大到小，取对数刻度。<bookmark mark='a'/>坍缩的网络只有一个方向，然后什么都没有。"
@@ -310,10 +316,11 @@ ZH.update({
         "坍缩对下面的网络并非无害。坍缩的向量是一个小头的输出；在它下面，编码器的表示h才是我们要留下的。<bookmark mark='a'/>{v}"
         "<bookmark mark='b'/>一旦头对所有输入都输出同样的东西，损失就停在最小值，梯度也消失了：编码器停在坍缩最初那几步把它扔下的地方。",
 
-    'f"Its nearest-neighbour accuracy falls from {pct(k0, 0)} percent':
-        '它的近邻准确率从随机网络起步时的{pct(k0, 0)}%降到了{pct(k1, 0)}%。线性探针最后是{pct(fl_)}%，低于未训练网络的{pct(un)}%。',
+    "f'Its nearest-neighbour accuracy falls from {pct(k0, 0)} percent":
+        '它的近邻准确率从随机网络起步时的{pct(k0, 0)}%降到了{pct(k1, 0)}%。线性探针最后是{pct(fl_)}%；未训练的网络是{pct(un)}%。'
+        '训练什么也没换来。',
 
-    "f'Its nearest-neighbour accuracy goes from {pct(k0, 0)} to {pct(k1, 0)} percent":
+    "f'Its nearest-neighbour accuracy goes from {pct(k0, 0)} to {pct(k1, 0)} percent, and its linear":
         '它的近邻准确率从{pct(k0, 0)}%变到{pct(k1, 0)}%，线性探针最后是{pct(fl_)}%，未训练的网络是{pct(un)}%。',
 
     'This trap is old.':
@@ -361,10 +368,10 @@ ZH.update({
         "因为批归一化会在一批之间混合信息。它的作者换成了一种一次只看一张图像的归一化，达到了73.9%。",
 
     "f'At our budget the three land within {pct(diff)} points":
-        '在我们的预算下，三者在线性探针上相差不到{pct(diff)}个百分点，{leader}领先。',
+        '在我们的预算下，三者在线性探针上相差在{pct(diff)}个百分点以内，{leader}领先。',
 
     "f'At our budget {leader} leads the linear probe":
-        '在我们的预算下，{leader}在线性探针上领先，比最后一名高{pct(diff)}个百分点。',
+        '在我们的预算下，{leader}在线性探针上领先，比{trailer}高{pct(diff)}个百分点。',
 
     # ------------------------------------------------------------------ Barlow
     'Chapter eight. Decorrelate: Barlow Twins and VICReg.':

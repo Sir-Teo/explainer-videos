@@ -82,8 +82,8 @@ class Scoreboard(VoiceoverScene):
             reveal("order1")
         with self.voiceover(
             f"Next, the compressors on your computer. <bookmark mark='a'/> {comp_said}. They know nothing about "
-            "English in advance. They learn only from the passage itself, as they go. <bookmark mark='b'/> Our best "
-            f"counting model, which read the thirty books first and looks at the previous {k} characters, gets "
+            "English in advance, and learn only from the passage, as they go. <bookmark mark='b'/> Our best counting "
+            f"model, which read the thirty books first and looks at the previous {k} characters, gets "
             f"{b['best']:.2f}."
         ) as vo:
             vo.wait_until("a")
@@ -234,17 +234,16 @@ class Scoreboard(VoiceoverScene):
         hut = label(r"Hutter Prize record, \ July 2026: \ enwik9 in $100.4$ MB, \ decompressor included: \ "
                     r"$0.80$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
         with self.voiceover(
-            "There's a catch. The decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 "
+            "There's a catch: the decompressor needs the model, and the model is big. <bookmark mark='a'/> GPT-2 "
             f"small squeezes the whole passage into {size_g2 / 1000:.1f} kilobytes, but its weights take "
-            f"{mb:,.0f} megabytes. Count them, and the file is {adj['GPT-2 small']:,.0f} times bigger than the "
-            "passage. <bookmark mark='b'/> In 2024, a DeepMind team made this the headline of a paper called "
-            "Language Modeling Is Compression. On a gigabyte of Wikipedia, their 70-billion-parameter model "
-            "compressed the text to 8.3 percent of its size, against 32 for gzip and 23 for xz. Counting its "
-            "weights, fourteen thousand percent. It also compressed images and audio better than PNG and FLAC, "
-            "although it was trained on text. <bookmark mark='c'/> The Hutter Prize, started by Marcus Hutter in "
-            "2006, counts everything: the record, set in July 2026, packs that gigabyte, decompressor included, "
-            "into 100.4 megabytes, 0.80 bits per character, with a program that mixes many predictors. "
-            "<bookmark mark='d'/> Prediction is compression; the size of the predictor is part of the bill."
+            f"{mb:,.0f} megabytes: count them, and the file is {adj['GPT-2 small']:,.0f} times the passage. "
+            "<bookmark mark='b'/> In 2024, a DeepMind paper titled Language Modeling Is Compression put a "
+            "70-billion-parameter model on a gigabyte of Wikipedia: 8.3 percent of the original size, against 32 "
+            "for gzip and 23 for xz; fourteen thousand percent, counting its weights. Trained on text, it also beat "
+            "PNG and FLAC on images and audio. <bookmark mark='c'/> The Hutter Prize, started in 2006, counts "
+            "everything: the record, set in July 2026, packs that gigabyte, decompressor included, into 100.4 "
+            "megabytes, 0.80 bits per character, mixing many predictors. <bookmark mark='d'/> Prediction is "
+            "compression, and the predictor's size is part of the bill."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -271,10 +270,10 @@ class Scoreboard(VoiceoverScene):
         filled = scoreboard(rows[:1] + future + rows[1:], row_h=0.5, font_size=24).move_to(DOWN * 0.2)
         head = label(r"Rows still to fill, with models we will build", font_size=32).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "And the board isn't finished. As the series goes on, we'll build our own models and add their rows: "
-            "<bookmark mark='a'/> better counting in Part 7, <bookmark mark='b'/> a neural network in Part 9, "
-            "<bookmark mark='c'/> a network with memory in Part 10, <bookmark mark='d'/> and our own small "
-            "transformer in Part 13, each one trained on these same thirty books, and scored on this same page."
+            "And the board isn't finished. We'll build our own models and add their rows: <bookmark mark='a'/> "
+            "better counting in Part 7, <bookmark mark='b'/> a neural network in Part 9, <bookmark mark='c'/> a "
+            "network with memory in Part 10, <bookmark mark='d'/> and our own small transformer in Part 13, each "
+            "trained on these thirty books, and scored on this page."
         ) as vo:
             self.play(FadeIn(head), FadeIn(filled.axis), FadeIn(filled.rows[0]), FadeIn(filled.rows[5]),
                       FadeIn(filled.rows[6]))

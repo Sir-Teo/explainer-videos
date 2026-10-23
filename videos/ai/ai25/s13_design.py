@@ -209,7 +209,7 @@ class Design(VoiceoverScene):
                          r"function; \ a new fluorescent protein", width=4.2, color=HIST),
             history_card(2025, r"RFdiffusion3 \ (Baker lab)", r"every atom designed, \ DNA binders and enzymes; \ "
                          r"open, \ ten times faster than RFdiffusion2", width=4.2, color=HIST),
-            history_card(2025, r"BoltzGen", r"an open model that designs binders and predicts structure", width=4.2,
+            history_card(2025, r"BoltzGen", r"an open model for designing binders", width=4.2,
                          color=HIST),
             history_card(2024, r"Responsible AI x Biodesign", r"a community statement: \ screening of DNA "
                          r"synthesis, \ sharing with care", width=4.2, color=PLAIN),

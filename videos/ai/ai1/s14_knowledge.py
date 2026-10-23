@@ -65,9 +65,9 @@ class Knowledge(VoiceoverScene):
         tag = note(r"computed: \ the Falcon passage, chapter 2, third paragraph").to_corner(DL, buff=0.3)
         shade = "darker almost everywhere" if tb < ta else "no darker"
         with self.voiceover(
-            "Let's look at what a strong model knows that a weaker one doesn't. Here is one paragraph of the "
-            "Falcon passage, broken into tokens, the chunks a model reads and guesses one at a time, <bookmark mark='a'/> each colored by how surprised GPT-2, from "
-            "2019, was by it: dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under "
+            "Let's look at what a strong model knows that a weaker one doesn't. Here is a paragraph of the Falcon "
+            "passage, in tokens, <bookmark mark='a'/> each colored by how surprised GPT-2, from 2019, was by it: "
+            "dark when expected, bright when not. <bookmark mark='b'/> And the same paragraph under "
             f"Qwen3, from 2025. Its tiles are {shade}: {tb:.0f} bits "
             f"instead of {ta:.0f}."
         ) as vo:
@@ -212,9 +212,9 @@ class Knowledge(VoiceoverScene):
             f"So here's the ladder. <bookmark mark='a'/> Letter frequencies get you {H0:.1f} bits. Spelling, a few "
             f"letters of context, gets you {Hk:.1f}. <bookmark mark='b'/> Below that, a model has to learn words and "
             "grammar, facts about the world, and what has happened so far in the story, <bookmark mark='c'/> down "
-            "toward the one bit or so that people need. <bookmark mark='d'/> Nobody tells the model to learn any of "
-            "this. It is pushed there by one number: the bits it pays for each guess. To predict the text, it has "
-            "to model the world that wrote it."
+            "toward the one bit or so that people need. <bookmark mark='d'/> Nobody tells the model to learn this. "
+            "One number pushes it there: the bits it pays for each guess. To predict the text, it has to model the "
+            "world that wrote it."
         ) as vo:
             self.play(FadeIn(head), Create(scale), FadeIn(nums), FadeIn(unit), FadeIn(ball, scale=0.5))
             vo.wait_until("a")

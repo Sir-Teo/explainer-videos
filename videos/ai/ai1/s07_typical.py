@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import PART, load
+from videos.ai.ai1.common import ALPHA27, PART, letter_row, load
 
 TYP = C.BITS  # the typical set
 ALL = "#3A4558"  # sequences outside it
@@ -83,20 +83,26 @@ class Typical(VoiceoverScene):
         sd = {n: float(t["sd"][str(n)]) for n in ns}
         pl = np.asarray(load("letters")["p"], float)
         s_lo, s_hi = float(-np.log2(pl.max())), float(-np.log2(pl.min()))
+        rng = np.random.default_rng(6)  # one sample of the source, for the picture
+        draw = "".join(ALPHA27[i] for i in rng.choice(27, size=96, p=pl / pl.sum()))
+        sample = VGroup(*[letter_row(draw[k:k + 48], font_size=26) for k in (0, 48)]).arrange(DOWN, buff=0.2)
+        sample_c = label(r"a text drawn this way", font_size=24, color=GREY_B)
+        sample_g = VGroup(sample, sample_c).arrange(DOWN, buff=0.3).move_to(ax.c2p(5.5, 0.55))
         with self.voiceover(
-            "In the last chapter, whole bits wasted up to one per symbol, and coding long blocks was the cure. "
-            "Here is why. <bookmark mark='a'/> Make up a text by drawing letters one at a time, independently, "
-            "with the books' frequencies: a crude model of English, but one we can reason about exactly. Measure its "
-            "surprise per letter. <bookmark mark='b'/> For a single letter, it's all over the place, from "
-            f"{s_lo:.1f} bits to {s_hi:.1f}. <bookmark mark='c'/> Ten letters: the spread narrows. <bookmark mark='d'/> A "
-            "hundred, a thousand, ten thousand: the surprise per letter piles up at one value, "
-            f"{H:.2f} bits, the entropy. Its spread shrinks from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
+            "Last chapter, whole bits wasted up to one per symbol, and long blocks were the cure. Here is why. "
+            "<bookmark mark='a'/> Make up a text by drawing letters independently, with the books' frequencies: "
+            "crude, but exact to reason about. Measure its surprise per letter. <bookmark mark='b'/> For one letter, "
+            f"it's all over the place, from {s_lo:.1f} bits to {s_hi:.1f}. <bookmark mark='c'/> Ten letters: the "
+            "spread narrows. <bookmark mark='d'/> A hundred, a thousand, ten thousand: it piles up at one value, "
+            f"{H:.2f} bits, the entropy, its spread shrinking from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(a))
             vo.wait_until("a")
+            self.play(FadeIn(sample_c), AddTextLetterByLetter(sample[0], time_per_char=0.02),
+                      AddTextLetterByLetter(sample[1], time_per_char=0.02))
             self.play(FadeIn(tag), Indicate(a.xlabel, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
-            self.play(FadeIn(cur), FadeIn(nlab), FadeIn(ins), Create(hl), FadeIn(hlab))
+            self.play(FadeOut(sample_g), FadeIn(cur), FadeIn(nlab), FadeIn(ins), Create(hl), FadeIn(hlab))
             vo.wait_until("c")
             for j, n in enumerate(ns[1:]):
                 if j == 1:
@@ -111,10 +117,10 @@ class Typical(VoiceoverScene):
                           r"ergodic source", who=r"Shannon (1948); \ McMillan (1953); \ Breiman (1957)", width=8.4,
                           color=C.ENTROPY).to_corner(UR, buff=0.35).shift(DOWN * 0.8)
         with self.voiceover(
-            "It's the law of large numbers. The surprise of a text is a sum of the surprises of its letters, and an "
-            "average of many independent surprises settles at their mean, which is the entropy. "
-            "<bookmark mark='a'/> Shannon proved it in 1948, and McMillan and Breiman extended it to sources with "
-            "memory, like real text. It has a mouthful of a name: the asymptotic equipartition property."
+            "It's the law of large numbers: a text's surprise is a sum over its letters, and the average of many "
+            "independent surprises settles at their mean, the entropy. <bookmark mark='a'/> Shannon proved it in "
+            "1948; McMillan and Breiman extended it to sources with memory, like real text. Its mouthful of a name: "
+            "the asymptotic equipartition property."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(sub), FadeOut(nlab), FadeOut(ins), VGroup(a, cur, hl, hlab).animate.scale(0.62).to_corner(DL, buff=0.4))
@@ -141,11 +147,11 @@ class Typical(VoiceoverScene):
         with self.voiceover(
             "Call a sequence typical if its surprise per symbol is within a small epsilon of the entropy. "
             "<bookmark mark='a'/> Then each typical sequence has probability close to two to the minus n H. "
-            "<bookmark mark='b'/> By the equipartition property, the typical set holds nearly all the probability. "
-            "<bookmark mark='c'/> Count them: all their probabilities together can't exceed one, <bookmark mark='d'/> "
-            "so there are at most two to the n H plus epsilon of them; <bookmark mark='e'/> and since they hold "
-            "nearly everything, at least about two to the n H. Nearly every sequence you will ever see is one of "
-            "about two to the n H, all about equally likely."
+            "<bookmark mark='b'/> By equipartition, together they hold nearly all the probability. "
+            "<bookmark mark='c'/> Count them: their probabilities can't add past one, <bookmark mark='d'/> so there "
+            "are at most two to the n H plus epsilon; <bookmark mark='e'/> and since they hold nearly everything, "
+            "at least about two to the n H. Almost every sequence you'll ever see is one of about two to the n H, "
+            "all about equally likely."
         ) as vo:
             self.play(FadeIn(df, shift=DOWN * 0.2))
             vo.wait_until("a")
@@ -222,24 +228,30 @@ class Typical(VoiceoverScene):
 
         pic = picture(show[0])
         ro = readout(show[0])
+        rng = np.random.default_rng(11)  # one run of the coin, for the picture
+        coin = "".join(" " if rng.random() < q else "x" for _ in range(44))
+        coin_g = VGroup(letter_row(coin, font_size=30, space_opacity=0.9),
+                        label(r"a sample: \ \texttt{x} is a letter, \ \textvisiblespace\ a space", font_size=22, color=GREY_B))
+        coin_g.arrange(DOWN, buff=0.2).move_to([0, (y_top + y_bot) / 2, 0])
         r0, r1 = rows[show[0]], rows[show[-1]]
         miss = 1 - r1["P"]
         missed = (f"all but one part in {1 / miss / 1e6:,.0f} million of the probability" if miss < 1e-6 else
                   f"{100 * r1['P']:.4f} percent of the probability")
         with self.voiceover(
             "Here is the typical set, drawn. Take a simpler source: a coin that writes a space with the books' "
-            f"frequency of spaces, {q:.3f}. <bookmark mark='a'/> Lay out all two to the n sequences in a row, each "
-            "the same width, from the most likely, with no spaces at all, to the least. <bookmark mark='b'/> Below, "
-            "the same sequences, each as wide as its probability. The typical ones are in gold. "
+            f"frequency, {q:.3f}. <bookmark mark='a'/> Lay out all two to the n sequences in a row, equally wide, "
+            "from the most likely, with no spaces, to the least. <bookmark mark='b'/> Below, the same sequences, "
+            "each as wide as its probability; the typical ones in gold. "
             f"<bookmark mark='c'/> With {show[0]} symbols, they are {100 * 2 ** r0['log2_frac']:.0f} percent of the "
             f"sequences, holding {100 * r0['P']:.0f} percent of the probability. <bookmark mark='d'/> Now make the "
             "sequences longer."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(key), Create(frames[0]), Create(frames[1]))
+            self.play(FadeIn(head), FadeIn(key), Create(frames[0]), Create(frames[1]), FadeIn(coin_g))
             vo.wait_until("a")
-            self.play(FadeIn(lt), Indicate(frames[0], color=WHITE, scale_factor=1.02))
+            self.play(FadeIn(lt), FadeIn(VGroup(*[m for k, m in enumerate(pic) if k % 3 == 1])))
             vo.wait_until("b")
-            self.play(FadeIn(lb), FadeIn(pic), FadeIn(top_l))
+            self.play(FadeOut(coin_g))
+            self.play(FadeIn(lb), FadeIn(VGroup(*[m for k, m in enumerate(pic) if k % 3 != 1])), FadeIn(top_l))
             vo.wait_until("c")
             self.play(FadeIn(ro))
             vo.wait_until("d")
@@ -290,22 +302,37 @@ class Typical(VoiceoverScene):
         cap = label(r"Shannon's code on whole blocks of $n$ symbols", font_size=20, color=C.BITS)
         cap.next_to(a, UP, buff=0.05)
         tag = note(r"computed: \ exact, \ for the coin above").next_to(a, DOWN, buff=0.1)
+        rng = np.random.default_rng(12)  # made-up members of the list, for the picture
+
+        def member(k):
+            return VGroup(Text(format(k, "06b"), font=MONO, font_size=22, color=TYP),
+                          letter_row("".join(" " if rng.random() < 0.19 else "x" for _ in range(16)), font_size=22,
+                                     space_opacity=0.9)).arrange(RIGHT, buff=0.35)
+
+        listing = VGroup(*[member(k) for k in range(4)], MathTex(r"\vdots", font_size=28, color=GREY_B),
+                         member(63)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        listing[4].set_x(listing[0][0].get_x())
+        lst_t = label(r"the typical set, numbered", font_size=24, color=TYP).next_to(listing, UP, buff=0.2)
+        lst_b = Brace(VGroup(*[m[0] for m in listing[:4]], listing[5][0]), LEFT, color=TYP)
+        lst_l = label(r"$\approx nH$ \\ bits", font_size=22, color=TYP).next_to(lst_b, LEFT, buff=0.1)
+        lst = VGroup(listing, lst_t, lst_b, lst_l, note(r"schematic").next_to(listing, DOWN, buff=0.2))
+        lst.move_to([3.7, -1.0, 0])
         with self.voiceover(
             "That gives the source coding theorem. <bookmark mark='a'/> To compress n symbols: if the sequence is "
-            "typical, send a zero, then its number in a list of the typical set: about n H bits. If it isn't, send a "
-            "one and the sequence as it is. That rarely happens, so on average you pay about H bits per symbol. "
-            "<bookmark mark='b'/> And no code does better: any list short enough to save more would miss most of "
-            "the typical sequences, and with them almost all the probability. <bookmark mark='c'/> Even the simple "
-            "rounded code of the last chapter, used on whole blocks, closes in on the entropy: from "
-            f"{rate[0]:.3f} bits per symbol with blocks of {int(ns[0])}, to {rate[-1]:.4f} with blocks of "
-            f"{int(ns[-1])}, against an entropy of {h:.4f}."
+            "typical, send a zero, then its number in a list of the typical set: about n H bits. If not, send a one "
+            "and the sequence itself. That's rare, so on average you pay about H bits per symbol. "
+            "<bookmark mark='b'/> And no code does better: any list short enough to save more would miss most "
+            "typical sequences, and almost all the probability. <bookmark mark='c'/> Even last chapter's rounded "
+            f"code, used on whole blocks, closes in on the entropy: {rate[0]:.3f} bits per symbol with blocks of "
+            f"{int(ns[0])}, {rate[-1]:.4f} with blocks of {int(ns[-1])}, against {h:.4f}."
         ) as vo:
             self.play(FadeIn(th, shift=DOWN * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.5), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.5), FadeIn(lst), run_time=2.0)
             vo.wait_until("b")
             self.play(Indicate(th.body, color=C.ENTROPY, scale_factor=1.03))
             vo.wait_until("c")
+            self.play(FadeOut(lst))
             self.play(FadeIn(a), FadeIn(cap), FadeIn(tag), Create(hline), FadeIn(hl))
             self.play(Create(cur), run_time=2.0)
         self.wait(0.3)
@@ -327,28 +354,32 @@ class Typical(VoiceoverScene):
             label(r"at about $1$ bit per letter (Shannon's estimate): \ $2^{n}$ of them", font_size=30, color=C.HUMAN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.55)
         # nested squares: all strings, the letter-typical ones, the English-typical ones (areas schematic)
-        sq = VGroup(Square(2.6, stroke_color=GREY_B, stroke_width=2, fill_color=ALL, fill_opacity=0.4),
-                    Square(1.1, stroke_width=0, fill_color=TYP, fill_opacity=0.6),
-                    Square(0.32, stroke_width=0, fill_color=C.HUMAN, fill_opacity=0.9))
-        sq[1].move_to(sq[0].get_corner(DL) + np.array([0.75, 0.75, 0]))
-        sq[2].move_to(sq[1].get_center() + np.array([-0.2, -0.15, 0]))
-        sq.to_corner(DR, buff=0.5)
+        sq = VGroup(Square(2.9, stroke_color=GREY_B, stroke_width=2, fill_color=ALL, fill_opacity=0.4),
+                    Square(1.25, stroke_width=0, fill_color=TYP, fill_opacity=0.6),
+                    Square(0.36, stroke_width=0, fill_color=C.HUMAN, fill_opacity=0.9))
+        sq[1].move_to(sq[0].get_corner(DL) + np.array([0.85, 0.85, 0]))
+        sq[2].move_to(sq[1].get_center() + np.array([-0.22, -0.17, 0]))
+        sq.to_corner(DR, buff=0.4)
         sch = note(r"areas not to scale").next_to(sq, UP, buff=0.1)
+        names = VGroup(label(r"all strings", font_size=24, color=GREY_A),
+                       label(r"typical under the letter frequencies", font_size=24, color=TYP),
+                       label(r"typical English", font_size=24, color=C.HUMAN))
+        for nm, y_ in zip(names, (sq[0].get_top()[1] - 0.3, sq[1].get_top()[1] - 0.1, sq[2].get_y())):
+            nm.move_to([sq.get_left()[0] - 0.3, y_, 0], aligned_edge=RIGHT)
         take = label(r"a language model's job: \ find that corner; \ to write, \ draw from it", font_size=30,
                      color=C.BITS).to_edge(DOWN, buff=0.5).shift(LEFT * 1.6)
         with self.voiceover(
-            "Now think about English. There are twenty-seven to the n strings of n letters. "
-            f"<bookmark mark='a'/> Even under the letter frequencies alone, the typical ones are a fraction two to "
-            f"the minus {gap:.2f} n of them: for a page of {page:,} letters, two to the minus {gap * page:,.0f}. "
-            "<bookmark mark='b'/> At Shannon's one bit per letter, real text is a far smaller corner still. "
-            "<bookmark mark='c'/> A language model's whole job is to find that corner, and to write, it draws from "
-            "it. How it should draw comes back in Part 5."
+            "Now English. There are twenty-seven to the n strings of n letters. <bookmark mark='a'/> Even under "
+            f"letter frequencies alone, the typical ones are a fraction two to the minus {gap:.2f} n: for a page of "
+            f"{page:,} letters, two to the minus {gap * page:,.0f}. <bookmark mark='b'/> At one bit per letter, real "
+            "text is a far smaller corner still. <bookmark mark='c'/> A language model's job is to find that "
+            "corner, and to write, it draws from it: how, in Part 5."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(sq[0]))
+            self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(sq[0]), FadeIn(names[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]), FadeIn(rows[2]), FadeIn(sq[1]), FadeIn(sch))
+            self.play(FadeIn(rows[1]), FadeIn(rows[2]), FadeIn(sq[1]), FadeIn(sch), FadeIn(names[1]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[3]), FadeIn(sq[2]))
+            self.play(FadeIn(rows[3]), FadeIn(sq[2]), FadeIn(names[2]))
             vo.wait_until("c")
             self.play(FadeIn(take, shift=UP * 0.1))
         self.wait(0.3)
