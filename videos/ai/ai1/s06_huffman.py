@@ -179,6 +179,15 @@ class Huffman(VoiceoverScene):
         ex = label(rf"\texttt{{e}} with \texttt{{z}}'s ${lz}$ bits, \ \texttt{{z}} with \texttt{{e}}'s ${le}$: \ "
                    rf"$({pe:.4f} - {pz:.4f}) \times ({lz} - {le}) = {cost:.3f}$ bits worse", font_size=26, color=C.SURPRISE)
         ex.next_to(cond, DOWN, buff=0.25)
+        hc = {ALPHA27[i]: c for i, c in enumerate(load("huffman")["codes"])}
+        demo = VGroup()
+        for k, (c, pc) in enumerate((("e", pe), ("z", pz))):
+            y_ = 0.25 - 0.85 * k
+            demo.add(VGroup(letter(c, font_size=34).move_to([-3.4, y_, 0]),
+                            MathTex(rf"p = {pc:.4f}", font_size=32, color=C.TRUE_P).move_to([-1.7, y_, 0]),
+                            Text(hc[c], font=MONO, font_size=30, color=C.BITS).move_to([0.2, y_, 0], aligned_edge=LEFT)))
+        swapped = [demo[1][2].copy().move_to([0.2, demo[0][2].get_y(), 0], aligned_edge=LEFT),
+                   demo[0][2].copy().move_to([0.2, demo[1][2].get_y(), 0], aligned_edge=LEFT)]
         # 2 and 3: the deepest leaves come in pairs, and the two rarest can be put there
         def mini(lone: bool):
             r = np.array([0, 0, 0])
@@ -217,9 +226,12 @@ class Huffman(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Write(swap))
             vo.wait_until("a")
-            self.play(FadeIn(cond))
+            self.play(FadeIn(cond), FadeIn(demo))
+            self.play(Transform(demo[0][2], swapped[0], path_arc=-PI / 2), Transform(demo[1][2], swapped[1],
+                                                                                  path_arc=-PI / 2), run_time=1.5)
             self.play(FadeIn(ex))
             vo.wait_until("b")
+            self.play(FadeOut(demo), run_time=0.5)
             self.play(Create(lone), FadeIn(t2))
             self.play(GrowArrow(fix))
             vo.wait_until("c")

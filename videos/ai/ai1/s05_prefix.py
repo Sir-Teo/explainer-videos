@@ -68,11 +68,11 @@ class Prefix(VoiceoverScene):
             f"that's wasteful: e is {ratio:.0f} times more common than z, and both cost five bits."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in table[:-1]], lag_ratio=0.15), FadeIn(dots),
-                      FadeIn(table[-1]))
+                      FadeIn(table[-1]), FadeIn(w))
             vo.wait_until("a")
             self.play(Indicate(table, color=C.BITS, scale_factor=1.03))
             vo.wait_until("b")
-            self.play(FadeIn(w), LaggedStart(*[FadeIn(c, shift=DOWN * 0.1) for c in codes], lag_ratio=0.12))
+            self.play(LaggedStart(*[FadeIn(c, shift=DOWN * 0.1) for c in codes], lag_ratio=0.12))
             self.play(FadeIn(tot))
             vo.wait_until("c")
             self.play(FadeIn(waste))
@@ -368,7 +368,7 @@ class Prefix(VoiceoverScene):
             "a decodable code can have, a prefix code can have too."
         ) as vo:
             self.play(FadeOut(VGroup(rows[0], rows[1], whys[0], whys[1])),
-                      VGroup(rows[2], whys[2]).animate.move_to([-2.3, 0.6, 0]))
+                      VGroup(rows[2], whys[2]).animate.move_to([-2.3, 0.25, 0]))
             self.play(FadeIn(ax_g), FadeIn(tag), Create(lin), Create(good), FadeIn(leg))
             vo.wait_until("a")
             self.play(Create(grow), run_time=1.6)

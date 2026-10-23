@@ -7,6 +7,7 @@ import numpy as np
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (DINO_C, NAIVE, PART, SIMCLR, STUDENT, TEACHER, arrow, axes, bars_chart, curve,
                                    load, node_box, pct, tag, take_away)
+from videos.ai.ai24.ssl import B, STEPS
 
 VAR = {"dino": (r"DINO", DINO_C), "nocenter": (r"no centring", "#FF5C5C"), "nosharpen": (r"no sharpening", "#4DABF7")}
 
@@ -253,9 +254,10 @@ class DINO(VoiceoverScene):
             for j, m in enumerate(r_):
                 m.move_to([xs[j], 2.2 - 0.75 * i, 0])
         behind = ds["linear"][0] < ss["linear"][0] - 0.005
+        ep = STEPS * B / 60000
         v = (f"At our small budget DINO is behind SimCLR: {pct(ds['linear'][0])} percent against "
-             f"{pct(ss['linear'][0])} on the linear probe. Self-distillation is known to need long training, and "
-             "the DINO paper's own runs were hundreds of epochs; ours is a few." if behind else
+             f"{pct(ss['linear'][0])} on the linear probe. The DINO paper trained for hundreds of passes over "
+             f"its data; ours makes {ep:.1f}." if behind else
              f"At our budget DINO reaches {pct(ds['linear'][0])} percent on the linear probe, against SimCLR's "
              f"{pct(ss['linear'][0])}.")
         lit = label(r"DINO on ImageNet: \ $78.3\%$ by $k$-NN with a small ViT, \ $80.1\%$ linear with ViT-B; \\ and "

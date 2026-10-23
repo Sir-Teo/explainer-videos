@@ -452,9 +452,9 @@ ZH.update({
         "那么表示呢？<bookmark mark='a'/>{v}<bookmark mark='b'/>在ImageNet上配合视觉Transformer，DINO是一个转折点：小模型用近邻法达到78.3%，"
         "它最后一层的注意力描出了物体的轮廓，尽管从来没有人给它看过轮廓。",
 
-    'f"At our small budget DINO is behind SimCLR':
-        "在我们的小预算下，DINO落后于SimCLR：线性探针{pct(ds['linear'][0])}%，SimCLR是{pct(ss['linear'][0])}%。大家知道自蒸馏需要长时间"
-        "训练，DINO论文自己的训练有几百轮；我们的只有几轮。",
+    "f'At our small budget DINO is behind SimCLR":
+        "在我们的小预算下，DINO落后于SimCLR：线性探针{pct(ds['linear'][0])}%，SimCLR是{pct(ss['linear'][0])}%。DINO论文把它的数据"
+        "完整过了几百遍；我们的只过了{ep:.1f}遍。",
 
     'f"At our budget DINO reaches':
         "在我们的预算下，DINO的线性探针达到{pct(ds['linear'][0])}%，SimCLR是{pct(ss['linear'][0])}%。",
