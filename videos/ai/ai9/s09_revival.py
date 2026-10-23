@@ -30,7 +30,7 @@ class Revival(VoiceoverScene):
         L = int(r["L"])
         lg = np.log10(np.maximum(gs, 1e-300))
         lo = int(math.floor(lg.min() / 10) * 10)
-        g = log_axes([1, L], [lo, 0], 7.4, 4.2, center=[-1.6, -0.6, 0], xlabel=r"layer \ (input $\to$ output)",
+        g = log_axes([1, L], [lo, 0], 6.6, 4.4, center=[-2.6, -0.7, 0], xlabel=r"layer \ (input $\to$ output)",
                      ylabel=r"size of the gradient reaching each layer \ (log scale)", xticks=[], yticks=range(lo, 1, 10))
         g.add(MathTex("1", font_size=20, color=GREY_B).next_to(g.ax.c2p(1, lo), DOWN, buff=0.12),
               MathTex(str(L), font_size=20, color=GREY_B).next_to(g.ax.c2p(L, lo), DOWN, buff=0.12))
@@ -40,9 +40,14 @@ class Revival(VoiceoverScene):
         e = int(round(-lg[0]))
         hc = history_card(1991, r"Sepp Hochreiter, \ TU Munich, \ diploma thesis",
                           r"gradients through many layers, \ or many time steps, \ vanish or explode", width=5.0,
-                          color=HIST).move_to([4.6, 1.7, 0])
-        why_ = label(r"each layer multiplies the gradient \\ by a slope $\le \tfrac14$ and a weight matrix", font_size=22,
-                     color=GREY_A).move_to([4.6, -0.6, 0])
+                          color=HIST).move_to([4.45, 2.0, 0])
+        why_ = label(r"each layer multiplies the gradient \\ by a slope $\le \tfrac14$ \\ and a weight matrix", font_size=26,
+                     color=GREY_A).move_to([4.45, -0.7, 0])
+        # the product the gradient goes through, layer by layer
+        prod = cmath(r"\delta^{1}", r"=", r"D_1 W_2^{\top}\, D_2 W_3^{\top} \cdots D_{L-1} W_L^{\top}", r"\,\delta^{L}",
+                     font_size=44, colors={r"\delta^{1}": BWD, r"\,\delta^{L}": BWD}).move_to([-1.4, 0.6, 0])
+        prod_l = label(r"$D_l$: \ the slopes of layer $l$'s units, \ $\sigma'(z^l) \le \tfrac14$ for a sigmoid", font_size=28,
+                       color=GREY_A).next_to(prod, DOWN, buff=0.35)
         tag = note(r"computed: \ $50$ sigmoid layers of $256$, \ weights $U[-1/\sqrt{n}, 1/\sqrt{n}]$").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Through the nineties, backpropagation worked for networks with one or two hidden layers. Deeper ones "
@@ -54,10 +59,12 @@ class Revival(VoiceoverScene):
             f"<bookmark mark='c'/> By the first layer it's ten to the minus {e}. The early layers might as well be "
             "frozen."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(tag))
+            self.play(Write(prod), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(prod_l))
             vo.wait_until("b")
+            self.play(FadeOut(prod), FadeOut(prod_l))
+            self.play(FadeIn(g), FadeIn(tag))
             self.play(Create(line), run_time=3.0, rate_func=linear)
             self.play(FadeIn(why_))
             vo.wait_until("c")

@@ -314,7 +314,13 @@ class NeuralLM(VoiceoverScene):
         if txt.width > 12.8:
             txt.scale_to_fit_width(12.8)
         best_counting = min(float(k["best_bits"]), *[float(r["bits"]) for r in rows[:i] if "bits" in r])
-        top_row = ("the best of everything before GPT-2" if gpt else "the best of everything on the board so far")
+        behind = float(d["mix_bits"]) - best_counting
+        if behind > 0:
+            top_row = f"{behind:.2f} bits behind the best row above them"
+        elif gpt:
+            top_row = "the best of everything before GPT-2"
+        else:
+            top_row = "the best of everything on the board so far"
         gap = (f"<bookmark mark='a'/> But it's still far behind GPT-2. It sees only {d['n_ctx']} characters, and one "
                "hidden layer has to do everything. The rest of the series is about closing that gap." if gpt else
                f"<bookmark mark='a'/> It sees only {d['n_ctx']} characters, and one hidden layer has to do everything. "

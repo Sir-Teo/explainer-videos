@@ -81,6 +81,7 @@ class Init(VoiceoverScene, ThreeDScene):
                                  color=col, stroke_width=3).shift([x0, 1.55, 0])
             bells.add(VGroup(base, bell))
         bells = VGroup(bells[0], bells[2], bells[1])  # in the order the narration shows them
+        grey_bells = VGroup(*[b_.copy().set_color(GREY_D) for b_ in bells])
         spread = label(r"the spread of the random starting weights", font_size=22, color=GREY_A)
         spread.next_to(VGroup(*bells), UP, buff=0.2)
         shrink = float(g["sd_small"][0] / g["sd_small"][-1])
@@ -95,7 +96,8 @@ class Init(VoiceoverScene, ThreeDScene):
             "Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode "
             "the same way."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(spread), FadeIn(tag))
+            self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), FadeIn(spread), FadeIn(tag),
+                      Create(grey_bells))
             vo.wait_until("a")
             self.play(Create(c_small), ride("sd_small", SMALL), FadeIn(names[0]), Create(bells[0]), run_time=3.0,
                       rate_func=linear)
@@ -126,7 +128,23 @@ class Init(VoiceoverScene, ThreeDScene):
                 why(r"tanh near $0$: \ $\mathbb{E}[a^2] \approx \operatorname{Var}(z)$; \ keep it the same"),
                 why(r"backwards: \ the same sum, \ through $W^{\top}$"),
                 why(r"a compromise between the two")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=4, top=3.0, x=-1.6, buff=0.42, edge=6.9)
+        # one unit, its n_in inputs and the n_out units it feeds
+        uin = VGroup(*[Dot([-3.6, -1.0 - 0.45 * k, 0], radius=0.09, color=NEURON) for k in range(5)])
+        uout = VGroup(*[Dot([3.6, -1.2 - 0.5 * k, 0], radius=0.09, color=BWD) for k in range(4)])
+        unit = Circle(radius=0.32, color=WEIGHT, stroke_width=3).move_to([0, -1.9, 0])
+        fan_in = VGroup(*[Arrow(d_.get_center(), unit.get_center(), buff=0.34, color=NEURON, stroke_width=2.5,
+                                max_tip_length_to_length_ratio=0.06) for d_ in uin])
+        fan_out = VGroup(*[Arrow(d_.get_center(), unit.get_center(), buff=0.34, color=BWD, stroke_width=2.5,
+                                 max_tip_length_to_length_ratio=0.06) for d_ in uout])
+        out_lines = VGroup(*[Line(unit.get_center(), d_.get_center(), buff=0.34, color=GREY_D, stroke_width=2)
+                             for d_ in uout])
+        lin = label(r"$n_{\text{in}}$ inputs", font_size=28, color=NEURON).next_to(uin, LEFT, buff=0.3)
+        lout = label(r"$n_{\text{out}}$ units it feeds", font_size=28, color=BWD).next_to(uout, RIGHT, buff=0.3)
+        lout.shift(LEFT * max(0.0, lout.get_right()[0] - 6.9))
+        fwd_l = label(r"forward: \ the signal", font_size=24, color=NEURON).next_to(unit, UP, buff=0.15)
+        bwd_l = label(r"backward: \ the gradient", font_size=24, color=BWD).next_to(unit, DOWN, buff=0.15)
+        diagram = VGroup(uin, unit, out_lines, lin)
         cite_ = cite(r"X.~Glorot \& Y.~Bengio, \textit{Understanding the difficulty of training deep feedforward "
                      r"neural networks} (2010); \ Y.~LeCun et al., \textit{Efficient BackProp} (1998)", corner=DL)
         box = None
@@ -140,15 +158,17 @@ class Init(VoiceoverScene, ThreeDScene):
             "one over n out. <bookmark mark='e'/> Xavier Glorot and Yoshua Bengio, in 2010, took the compromise: two "
             "over the sum. Yann LeCun had recommended one over n in, for the forward pass, back in 1998."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(diagram), FadeIn(uout), FadeIn(lout))
             vo.wait_until("a")
             step(0)
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in fan_in], lag_ratio=0.1), FadeIn(fwd_l))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
             step(3)
+            self.play(LaggedStart(*[GrowArrow(a_) for a_ in fan_out], lag_ratio=0.1), FadeIn(bwd_l))
             vo.wait_until("e")
             step(4)
             box = SurroundingRectangle(rows[4], color=WEIGHT, buff=0.12, corner_radius=0.08)
@@ -263,9 +283,10 @@ class Init(VoiceoverScene, ThreeDScene):
                 m.rotate(PI / 2, axis=RIGHT)
             self.play(FadeIn(head), FadeIn(scale_note), Create(ax.get_x_axis()), Create(ax.get_y_axis()),
                       FadeIn(xlab), FadeIn(first), FadeIn(last))
+            self.play(LaggedStart(*[FadeIn(p_) for p_ in rid[0][::-1]], lag_ratio=0.06), run_time=2.5)
+            self.begin_ambient_camera_rotation(rate=0.012)
             vo.wait_until("a")
-            self.play(FadeIn(caps[0]), LaggedStart(*[FadeIn(p_) for p_ in rid[0][::-1]], lag_ratio=0.06), run_time=2.5)
-            self.begin_ambient_camera_rotation(rate=0.06)
+            self.play(FadeIn(caps[0]))
             vo.wait_until("b")
             self.play(FadeOut(caps[0]), FadeIn(caps[1]), Transform(rid[0], rid[1]), run_time=2.0)
             vo.wait_until("c")

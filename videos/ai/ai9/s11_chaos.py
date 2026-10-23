@@ -69,6 +69,18 @@ class Chaos(VoiceoverScene):
                      color=CRIT).move_to([3.3, -1.5, 0])
         cite_ = cite(r"B.~Poole et al.\ (2016); \ S.~S.~Schoenholz, J.~Gilmer, S.~Ganguli \& J.~Sohl-Dickstein (2017)",
                      corner=DR)
+        # a very wide layer feeding the next: every sum adds up many random terms, so it is Gaussian
+        gw = np.random.default_rng(17)  # the drawing's random wiring (schematic)
+        lo_row = VGroup(*[Dot([-5.9 + 0.19 * i, -1.6, 0], radius=0.05, color=GREY_B) for i in range(32)])
+        hi_row = VGroup(*[Dot([-5.9 + 0.19 * i, 0.9, 0], radius=0.05, color=CRIT) for i in range(32)])
+        wires = VGroup(*[Line(lo_row[int(i)].get_center(), hi_row[int(j)].get_center(), stroke_width=0.6, color=GREY_D,
+                              stroke_opacity=0.6) for i, j in gw.integers(0, 32, (220, 2))])
+        bell = FunctionGraph(lambda t_: 1.1 * np.exp(-0.5 * (t_ / 0.42) ** 2), x_range=[-1.4, 1.4], color=CRIT,
+                             stroke_width=4).shift([-2.95, 1.2, 0])
+        bell_base = Line([-4.45, 1.2, 0], [-1.45, 1.2, 0], color=GREY_C, stroke_width=1.5)
+        bl = label(r"each sum: \ a Gaussian, \ variance $q_l$", font_size=26, color=CRIT).next_to(bell, UP, buff=0.1)
+        wide_tag = note(r"schematic").next_to(lo_row, DOWN, buff=0.15).align_to(lo_row, LEFT)
+        wide = VGroup(lo_row, hi_row, wires, bell, bell_base, bl, wide_tag)
         with self.voiceover(
             "Why is there one right size? In 2016 and 2017 Ben Poole, Sam Schoenholz, Surya Ganguli, Jascha "
             "Sohl-Dickstein and colleagues answered with physics: mean-field theory. <bookmark mark='a'/> Make the "
@@ -79,10 +91,11 @@ class Chaos(VoiceoverScene):
             f"converges to a fixed point, here q star equals {qstar:.2f}. Lengths settle down within a few layers, "
             "whatever the input. The interesting question is what happens to two inputs."
         ) as vo:
-            self.play(FadeIn(cite_), FadeIn(idea))
+            self.play(FadeIn(cite_), FadeIn(lo_row), FadeIn(hi_row), Create(wires), FadeIn(wide_tag), run_time=1.5)
             vo.wait_until("a")
-            self.play(Write(eq), FadeIn(defs))
+            self.play(FadeIn(idea), Create(bell_base), Create(bell), FadeIn(bl))
             vo.wait_until("b")
+            self.play(FadeOut(wide), Write(eq), FadeIn(defs))
             self.play(FadeIn(g), Create(diag), Create(cq), FadeIn(sets))
             vo.wait_until("c")
             self.play(Create(web), run_time=3.0)
@@ -244,6 +257,14 @@ class Chaos(VoiceoverScene):
         else:
             deepest = (f"At {L_deep} layers, only weight variances near the edge still train: {deep_list}; at "
                        f"{depths[-1]}, none does in {t['steps']} steps.")
+        xs_m, xi_m = np.asarray(m["xi_sw"]), np.asarray(m["xi"])
+        g0 = axes([0.6, 4.0], [0, 100], x_length=6.4, y_length=4.2, xlabel=r"$\sigma_w^2$",
+                  ylabel=r"depth scale $\xi_c$ \ (layers)", xticks=[1, 2, 3, 4], yticks=[0, 50, 100], center=[-2.0, -0.4, 0])
+        xi_curve = curve(g0.ax, xs_m, np.minimum(xi_m, 100), CRIT, 4)
+        edge_l = label(r"the edge: \ $\xi_c \to \infty$", font_size=26, color=CRIT).next_to(
+            g0.ax.c2p(float(m["sw_crit"]), 100), RIGHT, buff=0.15)
+        xi_tag = note(r"computed: \ mean-field theory, \ $\sigma_b^2 = " + f"{float(m['sb2']):g}" + r"$").next_to(
+            g0, DOWN, buff=0.1).align_to(g0, RIGHT)
         with self.voiceover(
             "How deep can a network be and still train? The theory gives a depth scale, xi c: how many layers a "
             "correlation survives before it's forgotten. It's infinite exactly at the edge. "
@@ -254,8 +275,10 @@ class Chaos(VoiceoverScene):
             " <bookmark mark='d'/> Pushed further, the idea trained convolutional networks ten thousand layers deep "
             "in 2018, with nothing but a careful initialization. Part 12 returns to it, for transformers."
         ) as vo:
-            self.play(FadeIn(xi_eq), FadeIn(xi_l))
+            self.play(FadeIn(xi_eq), FadeIn(xi_l), FadeIn(g0), FadeIn(xi_tag))
+            self.play(Create(xi_curve), FadeIn(edge_l), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(g0), FadeOut(xi_curve), FadeOut(edge_l), FadeOut(xi_tag))
             self.play(FadeIn(g), FadeIn(xt), FadeIn(yt), FadeIn(tag))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.005), FadeIn(key), run_time=2.0)

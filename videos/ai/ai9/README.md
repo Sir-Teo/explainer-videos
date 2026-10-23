@@ -70,7 +70,7 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
   15 equal + 1 zero; 14 + 2); scale invariance; post-norm (2017) against pre-norm (GPT-2, Xiong et al. 2020) in our
   24-block model: starting gradients by block and held-out bits; OLMo 2's output norm (2024) and Dynamic Tanh (2025).
 * **13. The modern block.** Sigmoid, tanh, ReLU, GELU (Hendrycks & Gimpel 2016, derived from a Gaussian coin) and
-  SiLU (Elfwing et al.; Ramachandran et al. 2017); gating (Dauphin et al. 2017) as a 3D surface; SwiGLU (Shazeer 2020)
+  SiLU (Elfwing et al.; Ramachandran et al. 2017); gating (Dauphin et al., 2016) as a 3D surface; SwiGLU (Shazeer 2020)
   and the 8d/3 width; published configurations (GPT-2 4d; Llama 2 7B 11,008 = 8/3·4,096 rounded to 256; Llama 3 8B
   14,336; Qwen3-8B 12,288); the block assembled, Llama 3 8B counted from its configuration (41.9M attention + 176.2M
   MLP weights per block, 8.03B in all); an ablation in a 24-block character model on the novels, 1,200 steps each,
@@ -148,7 +148,7 @@ h₁ = 1, h₂ = 0, so 1. For (1, 1): h₁ = 2, h₂ = 1, so 0. The hidden layer
 chapter seven.
 
 **3. How fast sigmoid gradients vanish.** For sigmoid units, show σ′ ≤ ¼. If every weight matrix has operator norm at
-most 1, how fast can ‖δ^l‖ shrink with depth?
+most 1, show that ‖δ^l‖ shrinks by at least a factor of 4 per layer.
 
 *Solution.* σ′ = σ(1 − σ), and a product of two numbers with sum 1 is at most (½)² = ¼. From δ^l = (W^{l+1})ᵀδ^{l+1}
 ⊙ σ′(z^l), ‖δ^l‖ ≤ ‖W^{l+1}‖ · max|σ′| · ‖δ^{l+1}‖ ≤ ¼‖δ^{l+1}‖, so ‖δ^l‖ ≤ 4^{−(L−l)}‖δ^L‖: at least a factor of 4
@@ -186,7 +186,7 @@ sign(w^(η)·x) = sign(w^(1)·x)，所以判错的是同样的例子，而更新
 *解答。* h₁ = max(0, x₁ + x₂)，h₂ = max(0, x₁ + x₂ − 1)，y = h₁ − 2h₂。(0, 0)：0。(0, 1)和(1, 0)：h₁ = 1，h₂ = 0，得1。
 (1, 1)：h₁ = 2，h₂ = 1，得0。隐藏层在x₁ + x₂ = 1处把直线折了一下，正是第7章的帐篷。
 
-**3. sigmoid的梯度消失得有多快。** 证明sigmoid满足 σ′ ≤ ¼。如果每个权重矩阵的算子范数都不超过1，‖δ^l‖随深度最快缩小多少？
+**3. sigmoid的梯度消失得有多快。** 证明sigmoid满足 σ′ ≤ ¼。如果每个权重矩阵的算子范数都不超过1，证明‖δ^l‖每往下一层，至少缩小为原来的4分之1。
 
 *解答。* σ′ = σ(1 − σ)，两个和为1的数之积至多是 (½)² = ¼。由 δ^l = (W^{l+1})ᵀδ^{l+1} ⊙ σ′(z^l)，得
 ‖δ^l‖ ≤ ‖W^{l+1}‖ · max|σ′| · ‖δ^{l+1}‖ ≤ ¼‖δ^{l+1}‖，所以 ‖δ^l‖ ≤ 4^{−(L−l)}‖δ^L‖：每层至少缩小4倍，20层后是10⁻¹²。

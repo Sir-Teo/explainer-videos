@@ -54,8 +54,8 @@ class Depth(VoiceoverScene):
     def folding(self):
         s = load("sawtooth")
         xs = np.asarray(s["xs"])
-        ax = Axes(x_range=[0, 1, 0.5], y_range=[0, 1, 0.5], x_length=6.2, y_length=3.6, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.9, -0.4, 0])
+        ax = Axes(x_range=[0, 1, 0.5], y_range=[0, 1, 0.5], x_length=6.4, y_length=4.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([-2.9, -0.75, 0])
         ident = curve(ax, xs, xs, GREY_B, 3)
         teeth = [curve(ax, xs, np.asarray(s[f"tent{k}"]), HINGE, 4) for k in range(1, 6)]
         colors = {r"t(x)": HINGE}
@@ -218,17 +218,17 @@ class Depth(VoiceoverScene):
         depths, counts = [int(d) for d in s["depths"]], np.asarray(s["counts"])
         tiles = Group()
         for d, cnt in zip(depths, counts):
-            img = patch_image(s[f"map{d}"], 2.3, 2.3, seed=d)
-            cap = label(rf"${d}$ layer{'s' if d > 1 else ''} of ${48 // d}$", font_size=22, color=NEURON)
-            num = label(rf"$\approx {cnt:.0f}$ pieces", font_size=22, color=WHITE)
+            img = patch_image(s[f"map{d}"], 2.45, 2.45, seed=d)
+            cap = label(rf"${d}$ layer{'s' if d > 1 else ''} of ${48 // d}$", font_size=26, color=NEURON)
+            num = label(rf"$\approx {cnt:.0f}$ pieces", font_size=26, color=WHITE)
             tiles.add(Group(img, VGroup(cap, num).arrange(DOWN, buff=0.06).next_to(img, DOWN, buff=0.12)))
-        tiles.arrange(RIGHT, buff=0.3).move_to(UP * 0.4)
+        tiles.arrange(RIGHT, buff=0.22).move_to(UP * 0.35)
         head = label(r"$48$ ReLU units in the plane, \ randomly initialized, \ arranged in $1$ to $6$ layers", font_size=28)
         head.to_edge(UP, buff=0.4)
         keep = [int(k) for k in sp["keep"]]
         n0, n1 = int(sp[f"nreg{keep[0]}"]), int(sp[f"nreg{keep[-1]}"])
         note_ = label(rf"the spiral network of the opening: \ ${n0:,}$ pieces at the start, \ ${n1:,}$ after training"
-                      .replace(",", "{,}"), font_size=26, color=C.BITS).to_edge(DOWN, buff=0.85)
+                      .replace(",", "{,}"), font_size=28, color=C.BITS).to_edge(DOWN, buff=1.0)
         cite_ = cite(r"B.~Hanin \& D.~Rolnick, \textit{Deep ReLU Networks Have Surprisingly Few Activation Patterns} (2019)",
                      corner=DR)
         trend = "barely changes, and even falls" if counts[-1] < counts[0] * 1.2 else "grows only slowly"
