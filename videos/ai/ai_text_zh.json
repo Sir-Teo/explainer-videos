@@ -9892,7 +9892,8 @@
     "next-token and \\\\ next-scale image models": "下一词元与\\\\ 下一尺度的图像模型",
     "pulling data together, \\\\ pushing the rest apart": "把数据拉到一起，\\\\ 把其余的推开",
     "judging models: \\\\ metrics and their failures": "评判模型：\\\\ 指标及其失效",
-    "exact: \\ $-67\\%$": "完全重复：\\ $-67\\%$"
+    "exact: \\ $-67\\%$": "完全重复：\\ $-67\\%$",
+    "$144$ minutes on this computer; \\ gradient clipped on $12$ of $2{,}400$ steps": "在这台计算机上用了$144$分钟；\\ 有$12$步（共$2{,}400$步）裁剪了梯度"
   },
   "phrases": {
     "width": "宽度",

@@ -5,12 +5,13 @@
 * views (``augment``): a random affine crop (rotation, zoom, shear, shift), contrast, blur, an erased rectangle and
   noise, drawn for a whole batch at once from a seeded ``torch.Generator``; ``light=True`` keeps only the crop (what
   MAE and I-JEPA use);
-* two encoders: a three-layer convolutional network (``CNN``, 128 numbers out) and a small vision transformer
-  (``ViT``: 4 x 4 patches, 49 tokens of 48 numbers, three blocks, mean-pooled);
+* one encoder for every method: a three-layer convolutional network (``CNN``: a 4 x 4 map of 128 numbers, averaged
+  to 128 numbers);
 * the methods (``METHODS``): supervised, rotation prediction (Gidaris et al. 2018), SimCLR (Chen et al. 2020), MoCo
   (He et al. 2020), BYOL (Grill et al. 2020), SimSiam (Chen & He 2021), a naive siamese net, Barlow Twins (Zbontar et
-  al. 2021), VICReg (Bardes, Ponce & LeCun 2022), DINO (Caron et al. 2021), MAE (He et al. 2022), a BEiT-style
-  masked-token model with a k-means patch tokenizer (after Bao et al. 2022), and I-JEPA (Assran et al. 2023);
+  al. 2021), VICReg (Bardes, Ponce & LeCun 2022), DINO (Caron et al. 2021), and three masked methods on the same
+  network: MAE (after He et al. 2022), a BEiT-style model predicting k-means codes of hidden patches (after Bao et
+  al. 2022), and I-JEPA (after Assran et al. 2023);
 * the measurements: a linear probe, a weighted k-nearest-neighbour vote (Wu et al. 2018), a probe from ten labels
   per class, the effective rank (Roy & Vetterli 2007; Garrido et al. 2023), alignment and uniformity (Wang & Isola
   2020), linear CKA (Kornblith et al. 2019) and mutual nearest neighbours (Huh et al. 2024).
@@ -112,45 +113,22 @@ def augment(x: torch.Tensor, g: torch.Generator, light: bool = False) -> torch.T
 # Encoders
 # ---------------------------------------------------------------------------
 class CNN(nn.Module):
-    """Three strided convolutions (32, 64, 128 channels) and a global average: 128 numbers per image."""
+    """Three strided convolutions (32, 64, 128 channels), a 4 x 4 map of 128 numbers, and its average: 128 numbers
+    per image. Every method in this part trains this network."""
 
     def __init__(self, dim: int = 128):
         super().__init__()
         self.dim = dim
-        self.net = nn.Sequential(
+        self.body = nn.Sequential(
             nn.Conv2d(1, 32, 5, 2, 2, bias=False), nn.BatchNorm2d(32), nn.ReLU(inplace=True),
             nn.Conv2d(32, 64, 3, 2, 1, bias=False), nn.BatchNorm2d(64), nn.ReLU(inplace=True),
-            nn.Conv2d(64, dim, 3, 2, 1, bias=False), nn.BatchNorm2d(dim), nn.ReLU(inplace=True),
-            nn.AdaptiveAvgPool2d(1), nn.Flatten())
+            nn.Conv2d(64, dim, 3, 2, 1, bias=False), nn.BatchNorm2d(dim), nn.ReLU(inplace=True))
+
+    def fmap(self, x):
+        return self.body(x)
 
     def forward(self, x):
-        return self.net(x)
-
-
-def sincos_2d(side: int, dim: int) -> torch.Tensor:
-    """Fixed 2D sine-cosine position codes, (side * side, dim)."""
-    q = dim // 4
-    om = 1.0 / (100.0 ** (torch.arange(q, dtype=torch.float32) / q))
-    ys, xs = torch.meshgrid(torch.arange(side, dtype=torch.float32), torch.arange(side, dtype=torch.float32),
-                            indexing="ij")
-    ys, xs = ys.reshape(-1, 1) * om, xs.reshape(-1, 1) * om
-    return torch.cat([ys.sin(), ys.cos(), xs.sin(), xs.cos()], 1)
-
-
-class Block(nn.Module):
-    def __init__(self, dim: int, heads: int, mlp: int = 2):
-        super().__init__()
-        self.h = heads
-        self.n1, self.n2 = nn.LayerNorm(dim), nn.LayerNorm(dim)
-        self.qkv, self.proj = nn.Linear(dim, 3 * dim), nn.Linear(dim, dim)
-        self.mlp = nn.Sequential(nn.Linear(dim, mlp * dim), nn.GELU(), nn.Linear(mlp * dim, dim))
-
-    def forward(self, x):
-        b, n, d = x.shape
-        q, k, v = self.qkv(self.n1(x)).view(b, n, 3, self.h, d // self.h).permute(2, 0, 3, 1, 4)
-        a = F.scaled_dot_product_attention(q, k, v).transpose(1, 2).reshape(b, n, d)
-        x = x + self.proj(a)
-        return x + self.mlp(self.n2(x))
+        return self.body(x).mean((2, 3))
 
 
 PATCH, SIDE = 4, 7  # 4 x 4 patches, a 7 x 7 grid on 28 x 28
@@ -165,33 +143,6 @@ def patchify(x: torch.Tensor) -> torch.Tensor:
 def unpatchify(p: torch.Tensor) -> torch.Tensor:
     n = p.shape[0]
     return p.view(n, SIDE, SIDE, PATCH, PATCH).permute(0, 1, 3, 2, 4).reshape(n, 1, SIDE * PATCH, SIDE * PATCH)
-
-
-class ViT(nn.Module):
-    """A small vision transformer: 49 patch tokens of ``dim`` numbers, ``depth`` blocks; ``forward`` averages the
-    tokens; ``tokens(x, keep)`` runs only the patches in ``keep`` (n, k) (MAE and I-JEPA)."""
-
-    def __init__(self, dim: int = 48, depth: int = 3, heads: int = 4):
-        super().__init__()
-        self.dim = dim
-        self.embed = nn.Linear(PATCH * PATCH, dim)
-        self.register_buffer("pos", sincos_2d(SIDE, dim))
-        self.blocks = nn.ModuleList([Block(dim, heads) for _ in range(depth)])
-        self.norm = nn.LayerNorm(dim)
-
-    def tokens(self, x, keep=None, mask_token=None, masked=None):
-        t = self.embed(patchify(x))
-        if masked is not None:  # BEiT: masked patches replaced by a learned token
-            t = torch.where(masked.unsqueeze(-1), mask_token.expand_as(t), t)
-        t = t + self.pos
-        if keep is not None:
-            t = torch.gather(t, 1, keep.unsqueeze(-1).expand(-1, -1, self.dim))
-        for blk in self.blocks:
-            t = blk(t)
-        return self.norm(t)
-
-    def forward(self, x):
-        return self.tokens(x).mean(1)
 
 
 def mlp(dims, bn=True, last_bn=False, act=nn.ReLU) -> nn.Sequential:
@@ -237,7 +188,7 @@ def nt_xent(z1, z2, tau):
 class Method(nn.Module):
     views = 2  # augmented views per digit (256 passes per update)
     light = False  # crop-only views
-    vit = False
+    masked_input = False  # trained on blanked images: batch-norm statistics recomputed before evaluation
 
     def __init__(self, enc: nn.Module):
         super().__init__()
@@ -522,57 +473,76 @@ class DINO(Method):
         ema(self.thead, self.head, m)
 
 
+def patch_mask(g, n, ratio, side=SIDE):
+    """round(ratio * side^2) patches hidden in each image, at random: bool (n, side * side)."""
+    N = side * side
+    k = int(round(N * ratio))
+    order = torch.argsort(torch.rand(n, N, generator=g), dim=1)
+    m = torch.zeros(n, N, dtype=torch.bool)
+    m[torch.arange(n).unsqueeze(1), order[:, :k]] = True
+    return m
+
+
+def pixel_mask(m, patch=PATCH, side=SIDE):
+    """A patch mask (n, side * side) as a pixel mask (n, 1, side * patch, side * patch)."""
+    n = m.shape[0]
+    return m.view(n, side, 1, side, 1).expand(n, side, patch, side, patch).reshape(n, 1, side * patch, side * patch)
+
+
+class Up(nn.Module):
+    """The decoder: the encoder's 4 x 4 map up to 7 x 7 (``to=7``) or on to 28 x 28, by transposed convolutions."""
+
+    def __init__(self, cin=128, cout=1, to=28):
+        super().__init__()
+        layers = [nn.ConvTranspose2d(cin, 64, 3, 2, 1, bias=False), nn.BatchNorm2d(64), nn.ReLU(inplace=True)]
+        if to == 7:
+            layers.append(nn.Conv2d(64, cout, 1))
+        else:
+            layers += [nn.ConvTranspose2d(64, 32, 4, 2, 1, bias=False), nn.BatchNorm2d(32), nn.ReLU(inplace=True),
+                       nn.ConvTranspose2d(32, cout, 4, 2, 1)]
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, f):
+        return self.net(f)
+
+
 class MAE(Method):
-    """He et al. (2022): hide most patches; the encoder sees only the rest; a small decoder fills the image in."""
+    """After He et al. (2022): hide most of the 49 patches (4 x 4 pixels) and reconstruct their pixels. Our encoder is
+    the same convolutional network as every other method's, so hidden patches are blanked rather than dropped (a
+    vision transformer can skip them, which is MAE's speed-up), and a small decoder paints the image back."""
     views = 1
     light = True
-    vit = True
+    masked_input = True
 
-    def __init__(self, enc, ratio=0.75, ddim=32, ddepth=2):
+    def __init__(self, enc, ratio=0.75):
         super().__init__(enc)
         self.ratio = ratio
-        self.dembed = nn.Linear(enc.dim, ddim)
-        self.mask_token = nn.Parameter(torch.zeros(1, 1, ddim))
-        self.register_buffer("dpos", sincos_2d(SIDE, ddim))
-        self.dblocks = nn.ModuleList([Block(ddim, 4) for _ in range(ddepth)])
-        self.dnorm = nn.LayerNorm(ddim)
-        self.out = nn.Linear(ddim, PATCH * PATCH)
+        self.dec = Up(enc.dim, 1, 28)
 
     def reconstruct(self, x, g):
-        n, N = len(x), SIDE * SIDE
-        keep_n = max(1, int(round(N * (1 - self.ratio))))
-        order = torch.argsort(torch.rand(n, N, generator=g), dim=1)
-        keep = order[:, :keep_n]
-        lat = self.dembed(self.enc.tokens(x, keep))
-        full = self.mask_token.expand(n, N, -1).clone()
-        full = full.scatter(1, keep.unsqueeze(-1).expand(-1, -1, full.shape[-1]), lat) + self.dpos
-        for blk in self.dblocks:
-            full = blk(full)
-        pred = self.out(self.dnorm(full))
-        masked = torch.ones(n, N, dtype=torch.bool)
-        masked[torch.arange(n).unsqueeze(1), keep] = False
-        return pred, masked
+        masked = patch_mask(g, len(x), self.ratio)
+        pm = pixel_mask(masked)
+        return self.dec(self.enc.fmap(x * (~pm).float())), masked
 
     def loss(self, x, y, g, t):
         v = augment(x, g, light=True)
         pred, masked = self.reconstruct(v, g)
-        err = (pred - patchify(v)).pow(2).mean(-1)
-        return (err * masked).sum() / masked.sum(), {}
+        pm = pixel_mask(masked).float()
+        return ((pred - v).pow(2) * pm).sum() / pm.sum(), {}
 
 
 class BEiT(Method):
-    """After Bao, Dong, Piao & Wei (2022): masked patches replaced by a [MASK] token; predict each one's discrete code
-    (here from a k-means codebook of patches, ``codebook``)."""
+    """After Bao, Dong, Piao & Wei (2022): hide some patches and predict each hidden patch's discrete code, here from
+    a k-means codebook of 4 x 4 patches (``kmeans_codebook``) in place of BEiT's learned tokenizer."""
     views = 1
     light = True
-    vit = True
+    masked_input = True
 
     def __init__(self, enc, codebook: torch.Tensor, ratio=0.4):
         super().__init__(enc)
         self.ratio = ratio
         self.register_buffer("cb", codebook)
-        self.mask_token = nn.Parameter(torch.zeros(1, 1, enc.dim))
-        self.head = nn.Linear(enc.dim, len(codebook))
+        self.dec = Up(enc.dim, len(codebook), 7)
 
     def codes(self, x):
         p = patchify(x)
@@ -580,84 +550,76 @@ class BEiT(Method):
 
     def loss(self, x, y, g, t):
         v = augment(x, g, light=True)
-        n, N = len(v), SIDE * SIDE
-        masked = torch.rand(n, N, generator=g) < self.ratio
-        tok = self.enc.tokens(v, mask_token=self.mask_token, masked=masked)
-        logits = self.head(tok[masked])
+        masked = patch_mask(g, len(v), self.ratio)
+        logits = self.dec(self.enc.fmap(v * (~pixel_mask(masked)).float())).flatten(2).transpose(1, 2)[masked]
         tgt = self.codes(v)[masked]
         return F.cross_entropy(logits, tgt), {"acc": float((logits.argmax(1) == tgt).float().mean())}
 
 
-def block_mask(g, n, scale, aspect, side=SIDE):
-    """Top-left corners of an h x w block (the same size for the whole batch, as I-JEPA's collator draws it)."""
-    area = scale * side * side
-    h = int(round(math.sqrt(area * aspect)))
-    w = int(round(math.sqrt(area / aspect)))
-    h, w = max(1, min(h, side)), max(1, min(w, side))
-    r = torch.randint(0, side - h + 1, (n,), generator=g)
-    c = torch.randint(0, side - w + 1, (n,), generator=g)
-    rows = r.view(n, 1, 1) + torch.arange(h).view(1, h, 1)
-    cols = c.view(n, 1, 1) + torch.arange(w).view(1, 1, w)
-    return (rows * side + cols).reshape(n, h * w)
+GRID = 4  # the encoder's final map is 4 x 4; each cell stands for a 7 x 7 square of the image
 
 
 class IJEPA(Method):
-    """Assran et al. (2023): from one context block, predict the representations (by a slow-moving target encoder) of
-    four target blocks; no pixels are predicted, no augmentation is needed beyond a crop."""
+    """After Assran et al. (2023): from the visible context, predict a slowly moving target encoder's representation of
+    hidden blocks, never their pixels. On our network the representation is the final 4 x 4 map; the targets are two
+    blocks of 2 x 2 cells; the predictor is two convolutions that see the context's map and where the targets are."""
     views = 1
     light = True
-    vit = True
+    masked_input = True
 
-    def __init__(self, enc, pdim=32, pdepth=2, base=0.99, ntgt=4):
+    def __init__(self, enc, base=0.99, ntgt=2):
         super().__init__(enc)
         self.base, self.ntgt = base, ntgt
         self.tenc = copy.deepcopy(enc)
         for p in self.tenc.parameters():
             p.requires_grad_(False)
-        self.pin = nn.Linear(enc.dim, pdim)
-        self.mask_token = nn.Parameter(torch.zeros(1, 1, pdim))
-        self.register_buffer("ppos", sincos_2d(SIDE, pdim))
-        self.pblocks = nn.ModuleList([Block(pdim, 4) for _ in range(pdepth)])
-        self.pnorm = nn.LayerNorm(pdim)
-        self.pout = nn.Linear(pdim, enc.dim)
+        d = enc.dim
+        self.pred = nn.Sequential(nn.Conv2d(d + 1, d, 3, 1, 1, bias=False), nn.BatchNorm2d(d), nn.ReLU(inplace=True),
+                                  nn.Conv2d(d, d, 3, 1, 1, bias=False), nn.BatchNorm2d(d), nn.ReLU(inplace=True),
+                                  nn.Conv2d(d, d, 1))
 
     def masks(self, g, n):
-        N = SIDE * SIDE
-        s = 0.15 + 0.05 * float(torch.rand(1, generator=g))
-        ar = math.exp(math.log(0.75) + (math.log(1.5) - math.log(0.75)) * float(torch.rand(1, generator=g)))
-        tg = [block_mask(g, n, s, ar) for _ in range(self.ntgt)]
-        cs = 0.85 + 0.15 * float(torch.rand(1, generator=g))
-        ctx = block_mask(g, n, cs, 1.0)
-        inctx = torch.zeros(n, N, dtype=torch.bool)
-        inctx[torch.arange(n).unsqueeze(1), ctx] = True
-        for t_ in tg:
-            inctx[torch.arange(n).unsqueeze(1), t_] = False
-        k = int(inctx.sum(1).min().clamp(min=4))
-        # every row keeps the same number of context patches (I-JEPA's collator keeps the minimum), drawn at random
-        score = torch.rand(n, N, generator=g) + inctx.float() * 2
-        keep = torch.argsort(-score, dim=1)[:, :k]
-        return keep, tg
+        m = torch.zeros(n, GRID, GRID, dtype=torch.bool)
+        for _ in range(self.ntgt):
+            r = torch.randint(0, GRID - 1, (n,), generator=g)
+            c = torch.randint(0, GRID - 1, (n,), generator=g)
+            for dr in (0, 1):
+                for dc in (0, 1):
+                    m[torch.arange(n), r + dr, c + dc] = True
+        return m
 
     def loss(self, x, y, g, t):
         v = augment(x, g, light=True)
-        n = len(v)
-        keep, tg = self.masks(g, n)
+        m = self.masks(g, len(v))
+        pm = m.repeat_interleave(7, 1).repeat_interleave(7, 2).unsqueeze(1)
         with torch.no_grad():
-            tt = F.layer_norm(self.tenc.tokens(v), (self.enc.dim,))
-        c = self.pin(self.enc.tokens(v, keep))
-        L = 0.0
-        for idx in tg:
-            q = self.mask_token.expand(n, idx.shape[1], -1) + self.ppos[idx]
-            h = torch.cat([c + self.ppos[keep], q], 1)
-            for blk in self.pblocks:
-                h = blk(h)
-            pred = self.pout(self.pnorm(h[:, -idx.shape[1]:]))
-            tgt = torch.gather(tt, 1, idx.unsqueeze(-1).expand(-1, -1, tt.shape[-1]))
-            L = L + F.mse_loss(pred, tgt)
-        return L / len(tg), {}
+            tt = self.tenc.fmap(v).permute(0, 2, 3, 1)
+            tt = F.layer_norm(tt, (tt.shape[-1],))
+        c = self.enc.fmap(v * (~pm).float())
+        p = self.pred(torch.cat([c, m.unsqueeze(1).float()], 1)).permute(0, 2, 3, 1)
+        return F.mse_loss(p[m], tt[m]), {}
 
     def after(self, t):
         ema(self.tenc, self.enc, ema_m(t, self.base))
+
+
+@torch.no_grad()
+def recalibrate(enc: nn.Module, n: int = 4096, bs: int = 512) -> None:
+    """Recompute the encoder's batch-norm statistics on clean training digits: a method that trains on blanked
+    inputs would otherwise be evaluated with statistics of blanked images."""
+    bns = [b for b in enc.modules() if isinstance(b, nn.BatchNorm2d)]
+    mom = [b.momentum for b in bns]
+    for b in bns:
+        b.reset_running_stats()
+        b.momentum = None  # a plain average over the batches
+    was = enc.training
+    enc.train()
+    X = data()["xtr"][:n]
+    for i in range(0, len(X), bs):
+        enc(fl(X[i:i + bs]))
+    for b, mo in zip(bns, mom):
+        b.momentum = mo
+    enc.train(was)
 
 
 def kmeans_codebook(K=64, n=20000, iters=25, seed=0) -> torch.Tensor:
@@ -680,11 +642,8 @@ def kmeans_codebook(K=64, n=20000, iters=25, seed=0) -> torch.Tensor:
 
 
 def make(name: str, **kw) -> Method:
-    """A method by name, on a fresh encoder (``vit=True`` for the transformer)."""
-    vit = kw.pop("vit", None)
-    cls = METHODS[name]
-    enc = ViT() if (vit if vit is not None else cls.vit) else CNN()
-    return cls(enc, **kw)
+    """A method by name, on a fresh encoder."""
+    return METHODS[name](CNN(), **kw)
 
 
 METHODS = {"supervised": Supervised, "rotation": Rotation, "simclr": SimCLR, "moco": MoCo, "naive": Naive,
@@ -708,17 +667,20 @@ def features(f, X: torch.Tensor, bs: int = 1000, module: nn.Module | None = None
 
 
 @torch.no_grad()
-def knn(ftr, ytr, fte, yte, k=20, T=0.07) -> float:
+def knn_pred(ftr, ytr, fte, k=20, T=0.07) -> torch.Tensor:
     """Weighted k-nearest-neighbour vote by cosine similarity (Wu et al. 2018), after subtracting the training
-    features' mean (a shared offset would otherwise dominate every cosine)."""
+    features' mean (a shared offset would otherwise dominate every cosine): the predicted labels."""
     mu = ftr.mean(0, keepdim=True)
     a, b = F.normalize(ftr - mu, dim=1), F.normalize(fte - mu, dim=1)
-    right = 0
+    out = []
     for i in range(0, len(b), 1000):
         s, j = (b[i:i + 1000] @ a.t()).topk(k, dim=1)
-        votes = torch.zeros(len(s), 10).scatter_add_(1, ytr[j], (s / T).exp())
-        right += int((votes.argmax(1) == yte[i:i + 1000]).sum())
-    return right / len(b)
+        out.append(torch.zeros(len(s), 10).scatter_add_(1, ytr[j], (s / T).exp()).argmax(1))
+    return torch.cat(out)
+
+
+def knn(ftr, ytr, fte, yte, k=20, T=0.07) -> float:
+    return float((knn_pred(ftr, ytr, fte, k, T) == yte).float().mean())
 
 
 def linear_probe(ftr, ytr, fte, yte, wd=1e-4, iters=200) -> float:
@@ -841,6 +803,8 @@ def train(m: Method, seed: int, steps: int = None, pool=None, record=None, recor
 
     def checkpoint(step):
         if step in pts:
+            if m.masked_input:
+                recalibrate(m.enc)
             fb, ft = features(m.enc, Xb), features(m.enc, Xt)
             out["steps"].append(step)
             out["knn"].append(knn(fb, Yb, ft, Yt))
@@ -885,6 +849,8 @@ def train(m: Method, seed: int, steps: int = None, pool=None, record=None, recor
 def evaluate(m: Method, few=True, half=None, extra_embed=True) -> tuple[dict, torch.Tensor]:
     """The full measurements of a trained encoder; returns (numbers, test features of the 2,000 CKA digits)."""
     D = data()
+    if m.masked_input:
+        recalibrate(m.enc)
     crop = (lambda x: x[:, :14]) if half == "top" else (lambda x: x[:, 14:]) if half == "bottom" else (lambda x: x)
     ftr, fte = features(m.enc, crop(D["xtr"])), features(m.enc, crop(D["xte"]))
     res = {"linear": linear_probe(ftr, D["ytr"], fte, D["yte"]), "knn": knn(ftr, D["ytr"], fte, D["yte"]),
