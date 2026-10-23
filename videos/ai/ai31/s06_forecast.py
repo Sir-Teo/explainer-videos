@@ -4,6 +4,7 @@ from datetime import date
 
 import numpy as np
 
+from explainer import lang
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai31.common import CI, EST, FUTURE, PART, TRUTH, load, tagline
 
@@ -11,8 +12,9 @@ YEAR0 = 2023  # the forecast item measures time in years since 1 January 2023
 
 
 def ymd(ordinal: float) -> str:
+    """A month and year on screen: December 2026, or 2026年12月 in the Chinese edition."""
     d = date.fromordinal(int(ordinal))
-    return d.strftime("%B %Y")
+    return f"{d.year}年{d.month}月" if lang.LANG == "zh" else d.strftime("%B %Y")
 
 
 def month_year(ordinal: float) -> tuple[str, int]:

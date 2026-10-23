@@ -20,7 +20,7 @@ class Efficient(VoiceoverScene):
 
     def card(self):
         card = chapter_card(10, r"Cheaper convolutions", r"Does every filter need to look at every channel?",
-                            lit=(2015, 2017), part=PART)
+                            lit=(2015,), part=PART)
         with self.voiceover("Chapter ten. Cheaper convolutions."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -251,16 +251,15 @@ class Efficient(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         cite_ = cite(r"Dosovitskiy et al.\ (2020); \ Liu et al.\ (2022); \ Smith et al.\ (2023)", corner=DR)
         with self.voiceover(
-            "In 2020 a transformer, built for language and fed an image cut into patches, matched the best "
-            "convolutional networks, and by 2021 vision transformers led the benchmarks. Part 22 tells that story. "
-            "<bookmark mark='a'/> In 2022 Zhuang Liu and colleagues at Meta asked how much of the lead was the "
-            "architecture and how much the recipe. They took a ResNet-50 at 76.1 percent and changed it one step "
-            "at a time: the transformers' training recipe alone gave 78.8; depthwise convolutions, wider layers, "
-            "seven-by-seven kernels, fewer normalizations and activations, and the transformer's layer norm took "
-            f"it to {vals[-1]}, <bookmark mark='b'/> above the transformer of the same size, at {SWIN_T}. No "
-            "attention anywhere: ConvNeXt. <bookmark mark='c'/> And in 2023 DeepMind showed convolutional "
-            "networks trained on four billion images matching vision transformers trained with the same compute. "
-            "At scale, the recipe and the compute matter more than the architecture: Part 12's lesson."
+            "In 2020 a transformer fed an image cut into patches matched the best convolutional networks, and "
+            "vision transformers soon led the benchmarks: Part 22. <bookmark mark='a'/> In 2022 Zhuang Liu and "
+            "colleagues at Meta asked how much of the lead was architecture and how much recipe. They took a "
+            "ResNet-50 at 76.1 percent: the transformers' training recipe alone gave 78.8; depthwise convolutions, "
+            "wider layers, seven-by-seven kernels and the transformer's layer norm took it to "
+            f"{vals[-1]}, <bookmark mark='b'/> above the transformer of the same size, at {SWIN_T}, with no "
+            "attention at all: ConvNeXt. <bookmark mark='c'/> In 2023 DeepMind matched vision transformers with "
+            "convolutional networks trained on four billion images. At scale, recipe and compute matter more than "
+            "architecture: Part 12's lesson."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")

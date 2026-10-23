@@ -44,11 +44,10 @@ class Adversarial(VoiceoverScene):
         q = label(r"why are networks so easy to fool?", font_size=32, color=ADV).to_edge(DOWN, buff=0.8)
         cite_ = cite(r"Szegedy et al.\ (2013); \ Goodfellow et al.\ (2014)", corner=DR)
         with self.voiceover(
-            "In December 2013, Christian Szegedy and six colleagues, at Google, New York University and the "
-            "University of Montreal, reported something strange. <bookmark mark='a'/> For any photograph a "
-            "network classified correctly, they could find a tiny change, invisible to a person, that made it "
-            "answer something else entirely; and the same change often fooled other networks, trained "
-            "separately. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a "
+            "In December 2013 Christian Szegedy and six colleagues reported something strange. "
+            "<bookmark mark='a'/> For any photograph a network classified correctly, they could find a tiny "
+            "change, invisible to a person, that made it answer something else; and the same change often fooled "
+            "other networks too. <bookmark mark='b'/> A year later Ian Goodfellow, Jonathon Shlens and Szegedy showed a "
             f"panda that GoogLeNet called a panda with {P['panda']} percent confidence. Add a faint pattern, a "
             f"change of {P['eps']} in each pixel, the size of the smallest step of an 8-bit image, and it called "
             f"it a gibbon, with {P['gibbon']} percent. <bookmark mark='c'/> They also gave the explanation."
@@ -86,14 +85,12 @@ class Adversarial(VoiceoverScene):
         with self.voiceover(
             "Their argument is about linearity. Take a linear score, w dot x, and change the input by a small "
             "eta. <bookmark mark='a'/> The score changes by w dot eta. <bookmark mark='b'/> If no pixel may change "
-            "by more than epsilon, the largest change comes from moving every pixel by epsilon in the direction "
-            "of its weight's sign, and it equals epsilon times the sum of the absolute weights. "
-            "<bookmark mark='c'/> With n inputs whose weights average m in size, that's epsilon times m times n. "
-            "It grows with the number of inputs: a change too small to see in any one pixel adds up, over "
-            "thousands of pixels, to a large change in the score. <bookmark mark='d'/> Networks of ReLUs are "
-            "built from linear pieces, so do the same with the network's own gradient: move every pixel by "
-            "epsilon in the direction that raises the loss. That's the fast gradient sign method, one gradient, "
-            "one step."
+            "by more than epsilon, the largest change moves every pixel by epsilon in the direction of its "
+            "weight's sign: epsilon times the sum of the absolute weights. <bookmark mark='c'/> With n inputs "
+            "whose weights average m, that's epsilon times m times n: a change too small to see in any one pixel "
+            "adds up, over thousands of pixels, to a large change in the score. <bookmark mark='d'/> Networks of "
+            "ReLUs are built from linear pieces, so do the same with the network's own gradient: the fast gradient "
+            "sign method, one gradient, one step."
         ) as vo:
             vo.wait_until("a")
             step(0)
@@ -134,9 +131,9 @@ class Adversarial(VoiceoverScene):
         else:
             v = "Even at the largest epsilon here it still says 7, though less sure."
         with self.voiceover(
-            "Try it on our LeNet, which reads ninety-nine digits in a hundred correctly. <bookmark mark='a'/> "
-            "This is the sign of the loss's gradient for one test digit: which way each pixel should move to make "
-            f"the network more wrong. <bookmark mark='b'/> Add it, scaled by epsilon. At zero, the network says "
+            "Try it on our LeNet. <bookmark mark='a'/> This is the sign of the loss's gradient for one test "
+            f"digit: which way each pixel should move to make the network more wrong. <bookmark mark='b'/> Add "
+            f"it, scaled by epsilon. At zero, the network says "
             f"{steps[0]['pred']}, {pct(steps[0]['p'], 0)} percent sure. <bookmark mark='c'/> " + v + " To a "
             "person it is still plainly a seven, in a little fog."
         ) as vo:
@@ -186,10 +183,9 @@ class Adversarial(VoiceoverScene):
             f"{FGSM_PAPER['softmax']}. <bookmark mark='b'/> The networks are not much safer: LeNet, wrong on "
             f"{pct(e_cnn, 0)} percent. <bookmark mark='c'/> And one gradient step is a weak attack. Take twenty "
             f"small steps instead, each projected back into the epsilon box, and at epsilon 0.2 LeNet is wrong on "
-            f"{pct(e_pgd, 0)} percent. <bookmark mark='d'/> The attacks transfer: changes made against the "
-            f"fully connected network fool LeNet {pct(T['mlp_to_lenet'], 0)} percent of the time, and changes made "
-            f"against one LeNet fool another trained from a different start {pct(T['lenet_to_lenet'], 0)} percent "
-            "of the time. Different networks learn similar linear directions."
+            f"{pct(e_pgd, 0)} percent. <bookmark mark='d'/> And the attacks transfer: made against the fully "
+            f"connected network, they fool LeNet {pct(T['mlp_to_lenet'], 0)} percent of the time; made against one "
+            f"LeNet, they fool another {pct(T['lenet_to_lenet'], 0)} percent of the time."
         ) as vo:
             self.play(Create(ax), FadeIn(tag))
             vo.wait_until("a")
@@ -235,13 +231,12 @@ class Adversarial(VoiceoverScene):
         keep_in_frame(lin)
         tag = note(r"computed").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Is the network really that linear? Walk from the digit along the attack direction, and backwards, "
-            "and plot all ten of its scores. <bookmark mark='a'/> They are nearly straight lines. The score for "
-            f"the right answer falls, the score for {other} rises, and where they cross, the answer changes. "
-            "<bookmark mark='b'/> For the linear model we can do the arithmetic exactly. The typical gap between "
-            f"the right score and the runner-up is {gap:.1f}; the sum of the absolute differences of their weights "
-            f"is about {l1:.0f}; so an epsilon of about {need:.3f} closes the gap, a change of a few percent of "
-            "one grey level per pixel, times seven hundred and eighty-four pixels."
+            "Is the network really that linear? Walk from the digit along the attack direction, both ways, and "
+            "plot all ten of its scores. <bookmark mark='a'/> Nearly straight lines: the right answer's score "
+            f"falls, the score for {other} rises, and where they cross the answer changes. <bookmark mark='b'/> "
+            f"For the linear model the arithmetic is exact: a typical gap of {gap:.1f} between the right score and "
+            f"the runner-up, closed at a rate of about {l1:.0f} per unit of epsilon, so an epsilon of about "
+            f"{need:.3f} is enough."
         ) as vo:
             self.play(Create(ax), Create(z), FadeIn(tag))
             self.play(LaggedStart(*[Create(c) for c in curves_], lag_ratio=0.05), run_time=2.0)
@@ -349,22 +344,22 @@ class Adversarial(VoiceoverScene):
             fr.width = 13
         cite_ = cite(r"Goodfellow et al.\ (2014); \ Madry et al.\ (2017); \ Wong, Rice \& Kolter (2020)", corner=UR)
         tag = note(r"computed: \ three seeds").to_corner(DR, buff=0.2)
+        cost = ("robustness costs a little accuracy." if adv_c > std_c + 0.001 else
+                "here robustness costs almost nothing.")
         holds = adv_p < std_p - 0.2
         verdict = (f"Against twenty steps it holds up too: {pct(adv_p, 0)} percent wrong, against "
                    f"{pct(std_p, 0)} for the ordinary network." if holds else
                    f"But against twenty steps it gives way: {pct(adv_p, 0)} percent wrong. It learned to resist "
                    "the one-step attack it trained on, not attacks in general.")
         with self.voiceover(
-            "The defence Goodfellow proposed is to train on the attacks: at every step, make adversarial versions "
-            "of the batch and teach the network the right answer for them too. <bookmark mark='a'/> We trained "
-            "three LeNets that way, half clean digits and half attacked. The attacked error, red, falls along "
-            f"with the clean one. <bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it "
+            "The defence Goodfellow proposed: train on the attacks, making adversarial versions of every batch. "
+            "<bookmark mark='a'/> We trained three LeNets that way, half clean digits and half attacked. The "
+            f"attacked error, red, falls along with the clean one. <bookmark mark='b'/> At epsilon {t['eps']:g}, one-step attacks now fool it "
             f"{pct(adv_f, 0)} percent of the time instead of {pct(std_f, 0)}. " + verdict + " "
-            f"<bookmark mark='c'/> The clean error rises a little, to {pct(adv_c, 2)} percent: robustness costs "
-            "accuracy. Aleksander Madry's group made the stronger version standard in 2017, training against many "
-            "steps. <bookmark mark='d'/> The problem is still open. Printed stickers can fool a stop-sign "
-            "detector, and the same gradient search, run over words, finds suffixes that make language models "
-            "ignore their training, which is Part 31's story."
+            f"<bookmark mark='c'/> The clean error is {pct(adv_c, 2)} percent, against {pct(std_c, 2)}: " + cost + " "
+            "Aleksander Madry's group made training against many steps the standard in 2017. <bookmark mark='d'/> "
+            "The problem is still open: stickers fool stop-sign detectors, and the same search, run over words, "
+            "breaks language models, which is Part 31's story."
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")

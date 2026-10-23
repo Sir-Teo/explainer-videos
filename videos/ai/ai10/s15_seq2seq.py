@@ -56,17 +56,14 @@ class Seq2Seq(VoiceoverScene):
                       rf"${S['reverse_after']}$", font_size=22, color=CELLC).next_to(bleu, UP, buff=0.25)
         cite_ = cite(r"Koehn et al.\ (2003); \ Sutskever et al.\ (2014); \ Cho et al.\ (2014)", corner=DR)
         with self.voiceover(
-            "By 2014 machine translation was a statistical industry. <bookmark mark='a'/> The best systems, "
-            "phrase-based, from Part 7, translated with huge tables of phrase pairs learned from aligned text, "
-            "and a dozen separately tuned parts. <bookmark mark='b'/> In September 2014 Ilya Sutskever, Oriol "
-            "Vinyals and Quoc Le at Google replaced all of it with two LSTMs. One reads the English sentence, word "
-            "by word, into its memory; the other starts from that memory and writes French. Four layers of a "
-            "thousand cells each, an ensemble of five, and on the standard English-French test it scored "
-            f"{S['ensemble']} BLEU, beating the phrase-based baseline, at {S['smt']}. "
-            "<bookmark mark='c'/> One trick mattered a lot: reading the source sentence backwards, so that its "
-            "first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> At the "
-            "same time Kyunghyun Cho and colleagues in Montreal built the same kind of encoder-decoder, with the "
-            "GRU of Chapter 12."
+            "By 2014 machine translation was statistical. <bookmark mark='a'/> The best systems, phrase-based, "
+            "from Part 7, used huge tables of phrase pairs and a dozen separately tuned parts. "
+            "<bookmark mark='b'/> In September 2014 Ilya Sutskever, Oriol Vinyals and Quoc Le at Google replaced it "
+            "all with two LSTMs: one reads the English sentence into its memory, the other starts from that memory "
+            f"and writes French. Five of them together scored {S['ensemble']} BLEU, beating the phrase-based "
+            f"baseline's {S['smt']}. <bookmark mark='c'/> One trick mattered: reading the source backwards, so "
+            "its first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> At "
+            "the same time Kyunghyun Cho's group in Montreal built the same kind of encoder-decoder, with the GRU."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(bleu))
             vo.wait_until("a")
@@ -154,13 +151,11 @@ class Seq2Seq(VoiceoverScene):
         cite_ = cite(r"Williams \& Zipser (1989); \ Bengio, Vinyals, Jaitly \& Shazeer (2015)", corner=DR)
         tag = note(r"illustrative").to_corner(UR, buff=0.3)
         with self.voiceover(
-            "How is the decoder trained? <bookmark mark='a'/> By teacher forcing, an idea from Ronald Williams "
-            "and David Zipser in 1989: at every step, feed it the true previous word, and ask it to predict the "
-            "next. Every step learns from a correct history, and all of them at once. <bookmark mark='b'/> But "
-            "at test time there is no true history, only its own. Make one mistake, and every later step "
-            "continues from a history it never saw in training. This mismatch, later called exposure bias, is "
-            "why Samy Bengio and colleagues proposed in 2015 to feed the model its own guesses, sometimes, during "
-            "training."
+            "How is the decoder trained? <bookmark mark='a'/> By teacher forcing, from Ronald Williams and David "
+            "Zipser in 1989: at every step, feed it the true previous word, and ask for the next. "
+            "<bookmark mark='b'/> At test time there is no true history, only its own: one mistake, and every later "
+            "step continues from a history it never saw in training. Samy Bengio and colleagues called the cure "
+            "scheduled sampling, in 2015: sometimes feed it its own guesses during training."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")

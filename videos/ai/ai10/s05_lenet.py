@@ -21,7 +21,7 @@ class LeNet(VoiceoverScene):
 
     def card(self):
         card = chapter_card(4, r"LeNet and MNIST", r"Can a network learn its features from the pixels up?",
-                            lit=(1980, 1986, 1998), part=PART)
+                            lit=(1986, 1998), part=PART)
         with self.voiceover("Chapter four. LeNet and MNIST."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

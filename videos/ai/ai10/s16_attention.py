@@ -50,13 +50,12 @@ class Attention(VoiceoverScene):
                      label(r"$s_{i-1}$: \ the decoder's state before output $i$", font_size=20, color=DEC))
         key.arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "In September 2014, while the sequence-to-sequence papers were still new, Dzmitry Bahdanau, an intern "
-            "in Bengio's lab, with Cho and Bengio, proposed to drop the single vector. <bookmark mark='a'/> Keep "
-            "all of the encoder's states, one for each input position, and at every step of the decoder, score "
-            "each of them: how well does input j fit what the decoder, in its current state, needs next? The "
-            "score is a tiny network of its own, learned with everything else. <bookmark mark='b'/> Turn the "
-            "scores into weights with a softmax, so they are positive and sum to one. <bookmark mark='c'/> And "
-            "give the decoder their weighted average, a context vector made fresh for each output. "
+            "In September 2014 Dzmitry Bahdanau, a student visiting Bengio's lab, with Cho and Bengio, proposed "
+            "to drop the single vector. <bookmark mark='a'/> Keep all of the encoder's states, one per input "
+            "position, and at every step of the decoder score each one: how well does input j fit what the "
+            "decoder needs next? The score is a tiny network, learned with everything else. "
+            "<bookmark mark='b'/> A softmax turns the scores into weights that sum to one. <bookmark mark='c'/> "
+            "And the decoder gets their weighted average, a context vector made fresh for each output. "
             "<bookmark mark='d'/> They called the weights an alignment. We call it attention."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(key))
@@ -251,7 +250,7 @@ class Attention(VoiceoverScene):
             f"attention scored {B['encdec']} BLEU on English to French; with attention, {B['search']}. "
             "<bookmark mark='b'/> Trained longer, and counting only sentences without rare words, it reached "
             f"{B['search_long_nounk']}, past the phrase-based Moses system's {B['moses_nounk']}. And where the "
-            "one-vector model fell apart on long sentences, the attention model held up to sixty words."
+            "one-vector model fell apart on long sentences, the attention model held up at fifty words and more."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cite_), FadeIn(tab[0]))
             vo.wait_until("a")

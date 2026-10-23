@@ -225,7 +225,8 @@ class CharLSTM(VoiceoverScene):
                 "which is the next act's story." if gpt else
                 " The large models of Part 1, still to be filled in on this board, show how far there is to go.")
         with self.voiceover(
-            "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: " + v + tail
+            "On the scoreboard, a new row. <bookmark mark='a'/> Our character LSTM: " + v + " <bookmark mark='b'/>"
+            + tail
         ) as vo:
             self.play(FadeIn(board))
             vo.wait_until("a")

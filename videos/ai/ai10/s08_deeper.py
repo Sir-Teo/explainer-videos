@@ -141,10 +141,9 @@ class Deeper(VoiceoverScene):
         tag = note(r"schematic: \ one Inception module").to_corner(UR, buff=0.3)
         with self.voiceover(
             "The winner of 2014 went another way. <bookmark mark='a'/> Christian Szegedy's team at Google built "
-            "GoogLeNet from Inception modules: look at the previous layer through several windows at once, one by "
-            "one, three by three, five by five and a pooling, and stack the results side by side. "
-            "<bookmark mark='b'/> The trick that made it affordable: a one-by-one convolution in front of each big "
-            "one, which mixes the channels at each pixel and cuts their number before the expensive step. "
+            "GoogLeNet from Inception modules: look at the previous layer through several windows at once, and "
+            "stack the results side by side. <bookmark mark='b'/> What made it affordable: a one-by-one "
+            "convolution in front of each big one, to cut the number of channels before the expensive step. "
             "<bookmark mark='c'/> Twenty-two layers, the best error of the year, and, by its authors' count, a "
             "twelfth of AlexNet's weights. Deeper didn't have to mean bigger."
         ) as vo:
@@ -188,17 +187,15 @@ class Deeper(VoiceoverScene):
         hw = label(r"highway networks, May 2015: \ the same idea with gates, \ from the LSTM (Chapter 12)",
                    font_size=20, color=GREY_B).next_to(bn, UP, buff=0.12)
         with self.voiceover(
-            "Then depth hit a wall. <bookmark mark='a'/> Kaiming He and his colleagues at Microsoft found that a "
-            "plain network of fifty-six layers did worse than one of twenty, and worse even on its own training "
-            "data, so it wasn't overfitting: the deeper network simply couldn't be trained as well. Batch "
-            "normalization, from Sergey Ioffe and Szegedy earlier that year, which keeps each layer's inputs "
-            "standardized, had helped, but not enough. <bookmark mark='b'/> Their fix: let each pair of layers "
-            "learn only a correction F of x, and add it to its input. <bookmark mark='c'/> The derivative of the "
-            "block is the identity plus the derivative of F: there is always a path along which the gradient "
-            "passes unchanged, however deep the stack. Part 9 derived it in full. <bookmark mark='d'/> A hundred "
-            f"and fifty-two layers won the 2015 contest at {ILSVRC[5][2]} percent. A few months earlier, highway "
-            "networks from Jurgen Schmidhuber's lab had built the same path with gates, borrowed from the LSTM, "
-            "which we'll meet in Chapter 12."
+            "Then depth hit a wall. <bookmark mark='a'/> Kaiming He and his colleagues at Microsoft found a plain "
+            "network of fifty-six layers doing worse than one of twenty, even on its own training data: not "
+            "overfitting, just harder to train. Batch normalization, from Sergey Ioffe and Szegedy that year, which "
+            "keeps each layer's inputs standardized, had helped, but not enough. <bookmark mark='b'/> Their fix: "
+            "let each pair of layers learn only a correction F of x, added to its input. <bookmark mark='c'/> The "
+            "block's derivative is the identity plus F's: a path along which the gradient always passes, however "
+            "deep the stack, as Part 9 derived. <bookmark mark='d'/> A hundred and fifty-two layers won 2015 at "
+            f"{ILSVRC[5][2]} percent. Months earlier, highway networks from Schmidhuber's lab had built the same "
+            "path with gates, borrowed from the LSTM of Chapter 12."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -230,10 +227,8 @@ class Deeper(VoiceoverScene):
         with self.voiceover(
             "The contest ended in 2017, its job done. <bookmark mark='a'/> Two years later Benjamin Recht and "
             "colleagues collected a fresh test set the way ImageNet's had been collected, and every model lost "
-            "eleven to fourteen points of accuracy on it. <bookmark mark='b'/> The order of the models held: a "
-            "better model on the old test set was better on the new one. But the numbers themselves had been "
-            "partly a property of one particular set of photographs. Part 31 comes back to what benchmarks can and "
-            "cannot tell us."
+            "eleven to fourteen points on it. <bookmark mark='b'/> The ranking held, but the numbers had partly "
+            "belonged to one particular set of photographs. Part 31 comes back to what benchmarks can tell us."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2), FadeIn(cite_))
             vo.wait_until("a")
