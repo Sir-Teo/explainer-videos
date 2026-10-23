@@ -43,6 +43,15 @@ class Formal(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.6, 0])
         head = label(r"a checker that cannot be fooled?", font_size=34, color=LEAN).to_edge(UP, buff=0.35)
         gl.next_to(g, UP, buff=0.2)
+        # the limit of an answer checker: a right number at the end of a broken argument (schematic)
+        chips = VGroup(*[node_box(t, c, font_size=24) for t, c in (
+            (r"step 1", RIGHT_C), (r"step 2", WRONG_C), (r"step 3", RIGHT_C), (r"answer: \ right", RIGHT_C))])
+        chips.arrange(RIGHT, buff=0.5).move_to(UP * 0.6)
+        crr = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5)
+                       for a, b in zip(chips, chips[1:])])
+        broken = VGroup(chips, crr, label(r"a right number \ at the end of a broken argument", font_size=26,
+                                          color=GREY_A).next_to(chips, DOWN, buff=0.45),
+                        note(r"schematic").next_to(chips, UP, buff=0.3))
         with self.voiceover(
             "Everything in this part has leaned on a checker, and checkers have limits: a right number can sit at the "
             "end of a broken argument. Mathematics has a way out. <bookmark mark='a'/> In a proof assistant such as "
@@ -53,8 +62,9 @@ class Formal(VoiceoverScene):
             "has been formalizing mathematics in Lean's library, Mathlib, which gives such systems something to "
             "build on."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(broken))
             vo.wait_until("a")
+            self.play(FadeOut(broken))
             self.play(FadeIn(g), FadeIn(gl), FadeIn(sch))
             vo.wait_until("b")
             self.play(FadeIn(ok, scale=1.3), FadeIn(pts[0]))
@@ -70,15 +80,19 @@ class Formal(VoiceoverScene):
         steps = [(r"$\sim 1$ million problems \\ in words", GREY_B), (r"a Gemini model \\ translates to Lean", POLICY),
                  (r"$\sim 80$ million \\ formal statements", LEAN), (r"AlphaZero-style search \\ for proofs", SEARCH),
                  (r"checked proofs \\ train the network", RIGHT_C)]
-        boxes = VGroup(*[node_box(t, c, font_size=24) for t, c in steps]).arrange(RIGHT, buff=0.45).move_to(UP * 1.7)
-        if boxes.width > 13.6:
-            boxes.width = 13.6
-        arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5)
-                          for a, b in zip(boxes, boxes[1:])])
-        back = CurvedArrow(boxes[-1].get_bottom(), boxes[3].get_bottom(), angle=-1.0, color=RIGHT_C, stroke_width=2.5,
-                           tip_length=0.15)
-        ttrl = label(r"at test time: \ prove variants of the hard problem, \ and learn from them", font_size=22,
-                     color=SEARCH).move_to(DOWN * 0.3)
+        boxes = VGroup(*[node_box(t, c, font_size=28, height=1.0) for t, c in steps])
+        boxes[:3].arrange(RIGHT, buff=0.9).move_to([0, 2.0, 0])
+        boxes[3].move_to([boxes[2].get_x(), 0.1, 0])
+        boxes[4].move_to([boxes[0].get_x() + 0.5, 0.1, 0])
+        arrows = VGroup(
+            Arrow(boxes[0].get_right(), boxes[1].get_left(), buff=0.08, color=GREY_B, stroke_width=3),
+            Arrow(boxes[1].get_right(), boxes[2].get_left(), buff=0.08, color=GREY_B, stroke_width=3),
+            Arrow(boxes[2].get_bottom(), boxes[3].get_top(), buff=0.08, color=GREY_B, stroke_width=3),
+            Arrow(boxes[3].get_left(), boxes[4].get_right(), buff=0.08, color=GREY_B, stroke_width=3))
+        back = CurvedArrow(boxes[4].get_bottom() + RIGHT * 0.3, boxes[3].get_bottom() + LEFT * 0.3, angle=0.9,
+                           color=RIGHT_C, stroke_width=3, tip_length=0.18)
+        ttrl = label(r"at test time: \ prove variants of the hard problem, \ and learn from them", font_size=26,
+                     color=SEARCH).move_to(DOWN * 1.45)
         hc = history_card(2024, r"IMO 2024: \ AlphaProof and AlphaGeometry 2, \ Google DeepMind",
                           r"$28$ of $42$ points, \ one short of gold; \ four of six problems, \ including the hardest, "
                           r"\ which five contestants solved. \ Some took up to three days", width=8.4,
@@ -94,10 +108,10 @@ class Formal(VoiceoverScene):
             "the geometry, it scored 28 of 42, one point short of gold, solving four of the six problems, including "
             "the hardest, which only five contestants solved. Some proofs took it three days."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(boxes[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(b, shift=RIGHT * 0.1), *([GrowArrow(arrows[i - 1])] if i else []))
-                                    for i, b in enumerate(boxes)], lag_ratio=0.5), run_time=4.0)
+            self.play(LaggedStart(*[AnimationGroup(GrowArrow(arrows[i - 1]), FadeIn(b, shift=RIGHT * 0.1))
+                                    for i, b in enumerate(boxes) if i], lag_ratio=0.5), run_time=4.0)
             self.play(Create(back))
             vo.wait_until("b")
             self.play(FadeIn(ttrl))

@@ -178,7 +178,7 @@ class Chain(VoiceoverScene):
         keep_in_frame(sch)
         honest = label(r"parity is in TC$^0$: \ a fixed depth can compute it in principle. \\ What failed above is "
                        r"learning it: \ every bit flips the answer", font_size=22, color=GREY_A)
-        honest.to_edge(DOWN, buff=0.25)
+        honest.to_corner(DL, buff=0.35)
         cite_ = cite(r"Furst, Saxe \& Sipser (1984); \ Barrington (1989); \ Hahn (2020); \ Feng et al.\ (2023)",
                      corner=UL)
         with self.voiceover(
@@ -289,7 +289,7 @@ class Chain(VoiceoverScene):
                                                                                              r"first")], font_size=20)
         key.next_to(g, RIGHT, buff=0.4).shift(UP * 0.6)
         wl = note(rf"$16$ bits: \ mean of ${int(p['seeds'])}$ runs, \\ line: \ lowest to highest", font_size=18)
-        wl.next_to(key, DOWN, buff=0.35).align_to(key, LEFT)
+        wl.next_to(key, DOWN, buff=0.9).align_to(key, LEFT)
         d = [float(np.mean(p[f"accs_direct{n}"])) for n in ns]
         c = [float(np.mean(p[f"accs_chain{n}"])) for n in ns]
         with self.voiceover(

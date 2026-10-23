@@ -64,7 +64,7 @@ class ARC(VoiceoverScene):
         ans.move_to(test[2])
         pl = label(r"a few examples", font_size=22, color=GREY_A).next_to(pairs, UP, buff=0.2)
         tl = label(r"a new input: \ what comes out?", font_size=22, color=SEARCH).next_to(test, UP, buff=0.2)
-        sch = note(r"illustrative: \ not an ARC task").to_corner(DR, buff=0.25)
+        sch = note(r"illustrative: \ not an ARC task").to_corner(UR, buff=0.3)
         hc = history_card(2019, r"F.~Chollet, \ \textit{On the Measure of Intelligence}",
                           r"intelligence is the efficiency of acquiring new skills; \ grids up to $30 \times 30$, \ ten "
                           r"colours, \ a handful of examples, \ every task different", width=8.4,
@@ -110,13 +110,15 @@ class ARC(VoiceoverScene):
         l2 = label(r"ARC-AGI-2", font_size=22, color=POLICY).next_to(ax.c2p(2025.23, 4.0), RIGHT, buff=0.25)
         notes1 = VGroup(*[label(t, font_size=17, color=CHAIN).next_to(ax.c2p(x, y), LEFT, buff=0.12)
                           for x, y, t in v1[1:]])
+        notes1[0].shift(UP * 0.2)
         notes1[2].shift(UP * 0.12)
         notes1[1].shift(DOWN * 0.1)
         notes2 = VGroup(*[label(t, font_size=17, color=POLICY).next_to(ax.c2p(x, y), RIGHT, buff=0.12)
                           for x, y, t in v2[1:]])
-        hum = DashedLine(ax.c2p(2025.2, 60), ax.c2p(2027, 60), color=GREY_B, dash_length=0.08)
         hl = label(r"ARC-AGI-2: \\ a person, \\ on average, \\ $60\%$", font_size=17, color=GREY_B)
-        hl.next_to(ax.c2p(2027, 60), RIGHT, buff=0.1)
+        hx = max(ax.c2p(2027, 60)[0], notes2[2].get_right()[0]) + 0.2  # clear of the point labels
+        hl.move_to([hx + hl.width / 2, ax.c2p(2027, 60)[1], 0])
+        hum = DashedLine(ax.c2p(2025.2, 60), [hx - 0.1, ax.c2p(2027, 60)[1], 0], color=GREY_B, dash_length=0.08)
         cite_ = cite(r"ARC Prize Foundation: \ results pages and reports, 2020--2026", corner=DR)
         with self.voiceover(
             "ARC-AGI-1 resisted for five years. <bookmark mark='a'/> The 2020 Kaggle contest was won with about 20 "
@@ -149,24 +151,24 @@ class ARC(VoiceoverScene):
     def arc3(self):
         hc = history_card(2026, r"ARC-AGI-3 \ (March)", r"interactive games with no instructions: \ explore, \ work out "
                           r"the goal, \ plan. \ Scored by how efficiently the goal is reached, \ against people",
-                          width=6.0, color=WRONG_C).move_to([-3.6, 0.6, 0])
+                          width=5.4, color=WRONG_C).move_to([-4.0, 0.0, 0])
         rows = [(r"people", 100.0, GREY_A), (r"Claude Opus 4.6, \ March", 0.5, WRONG_C),
                 (r"Gemini 3.1 Pro, \ March", 0.4, WRONG_C), (r"GPT-5.4, \ March", 0.2, WRONG_C),
                 (r"GPT-6 Astra, \ September", 62.7, POLICY)]
         W = 3.2
         bars = VGroup()
         for i, (t, v, c) in enumerate(rows):
-            y = 1.9 - i * 0.7
-            name = label(t, font_size=22, color=GREY_A).move_to([2.7, y, 0], aligned_edge=RIGHT)
-            bar = Rectangle(width=max(W * v / 100, 0.02), height=0.45, stroke_width=0, fill_color=c, fill_opacity=0.9)
-            bar.move_to([2.9 + max(W * v / 100, 0.02) / 2, y, 0])
-            val = label(rf"${v:g}\%$", font_size=22, color=c).next_to(bar, RIGHT, buff=0.1)
+            y = 1.7 - i * 0.85
+            name = label(t, font_size=26, color=GREY_A).move_to([2.4, y, 0], aligned_edge=RIGHT)
+            bar = Rectangle(width=max(W * v / 100, 0.02), height=0.55, stroke_width=0, fill_color=c, fill_opacity=0.9)
+            bar.move_to([2.6 + max(W * v / 100, 0.02) / 2, y, 0])
+            val = label(rf"${v:g}\%$", font_size=26, color=c).next_to(bar, RIGHT, buff=0.1)
             bars.add(VGroup(name, bar, val))
-        bh = label(r"ARC-AGI-3, \ ARC Prize's standard harness", font_size=20, color=GREY_B).next_to(bars, UP, buff=0.2)
+        bh = label(r"ARC-AGI-3, \ ARC Prize's standard harness", font_size=24, color=GREY_B).next_to(bars, UP, buff=0.3)
         lesson = VGroup(label(r"each new test falls faster than the last", font_size=26, color=GREY_A),
                         label(r"what is learned: \ propose, \ check, \ refine \ (a loop, \ like every chapter here)",
                               font_size=24, color=SEARCH)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
-        cite_ = cite(r"ARC Prize Foundation, \textit{ARC-AGI-3} technical report (April 2026); \ ARC Prize, "
+        cite_ = cite(r"ARC Prize Foundation, \textit{ARC-AGI-3} technical report (April 2026); \\ ARC Prize, "
                      r"\textit{GPT-6 Astra on ARC-AGI-3} (September 2026)", corner=UL)
         with self.voiceover(
             "So in March 2026 came ARC-AGI-3: interactive games, with no instructions. The player must explore, work "
