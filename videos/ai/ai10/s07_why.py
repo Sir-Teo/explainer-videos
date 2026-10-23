@@ -223,7 +223,8 @@ class WhyItWon(VoiceoverScene):
         tag.to_corner(DR, buff=0.2)
         e_small = np.mean([runs[f"{sizes[1]}-0-{s}"]["test_error"] for s in (0, 1, 2)])
         e_small_aug = np.mean([runs[f"{sizes[1]}-1-{s}"]["test_error"] for s in (0, 1, 2)]) if aug_n else e_small
-        e_next = np.mean([runs[f"{sizes[2]}-0-{s}"]["test_error"] for s in (0, 1, 2)])
+        e_next = (np.mean([runs[f"{sizes[2]}-0-{s}"]["test_error"] for s in (0, 1, 2)]) if len(sizes) > 2 else
+                  e_small)
         if e_small_aug < e_small - 0.002:
             tail = ("better than four times as many real digits." if e_small_aug < e_next else
                     f"not as good as four times as many real digits, {pct(e_next)}.")

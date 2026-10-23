@@ -70,12 +70,11 @@ class Convolution(VoiceoverScene):
         bl.next_to(bars, DOWN, buff=0.35).align_to(bars, LEFT)
         dl = label(r"a $28 \times 28$ digit", font_size=20, color=GREY_B).next_to(digit, DOWN, buff=0.15)
         with self.voiceover(
-            "Suppose a network should find a short vertical stroke in a digit. A fully connected unit looks at "
-            "every pixel, with its own weight for each, <bookmark mark='a'/> so to find the stroke anywhere, the "
-            "network must learn a separate detector for every place it might be. <bookmark mark='b'/> A "
-            "convolutional unit looks only at a small patch, five pixels by five, <bookmark mark='c'/> and every "
-            "unit of a map uses the same twenty-five weights, slid across the image. <bookmark mark='d'/> For six "
-            "maps the size of the digit, fully connected units need "
+            "Suppose a network should find a short stroke in a digit. A fully connected unit weighs every pixel, "
+            "<bookmark mark='a'/> so to find the stroke anywhere, the network must learn a detector for every "
+            "place it might be. <bookmark mark='b'/> A convolutional unit looks at a small patch, five pixels by "
+            "five, <bookmark mark='c'/> and every unit of a map uses the same twenty-five weights, slid across the "
+            "image. <bookmark mark='d'/> For six maps the size of the digit, fully connected units need "
             f"{e['params_dense'] / 1e6:.1f} million weights; local patches without sharing, "
             f"{e['params_local']:,}; shared, just {e['params_conv']}. Sharing is the whole idea: the same pattern "
             "can appear anywhere, so look for it the same way everywhere."
@@ -172,15 +171,13 @@ class Convolution(VoiceoverScene):
         foot = label(r"in two dimensions the same, with $i$, $u$, $s$ pairs; \ exact if the image wraps around",
                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Sharing the weights buys a precise property. Shift the image, and the feature map shifts with it, by "
-            "the same amount: convolution commutes with translation. <bookmark mark='a'/> Write T s for the shift "
-            "by s. The convolution of the shifted image at position i is a sum of weights times the shifted "
-            "image. <bookmark mark='b'/> The shifted image at i plus u is the original at i plus u minus s. "
-            "<bookmark mark='c'/> That sum is exactly the convolution of the original, evaluated at i minus s. "
-            "<bookmark mark='d'/> Which is the shifted feature map. Nothing in the proof depends on the weights: "
-            "any kernel, learned or not, has this property. <bookmark mark='e'/> In two dimensions it's the same "
-            "argument, and it holds exactly when the image wraps around at its edges; with zero padding, it holds "
-            "away from the border."
+            "Sharing the weights buys a precise property: shift the image, and the feature map shifts with it. "
+            "<bookmark mark='a'/> Write T s for the shift by s. The convolution of the shifted image at i is a sum "
+            "of weights times the shifted image. <bookmark mark='b'/> The shifted image at i plus u is the original "
+            "at i plus u minus s. <bookmark mark='c'/> That sum is the convolution of the original at i minus s. "
+            "<bookmark mark='d'/> Which is the shifted feature map, for any kernel, learned or not. "
+            "<bookmark mark='e'/> In two dimensions the argument is the same; it holds exactly when the image wraps "
+            "around, and away from the border with zero padding."
         ) as vo:
             self.play(FadeIn(thm, shift=UP * 0.2))
             vo.wait_until("a")

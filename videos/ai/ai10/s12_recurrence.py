@@ -104,15 +104,13 @@ class Recurrence(VoiceoverScene):
         cite_ = cite(r"Werbos (1990); \ Hochreiter (1991); \ Bengio, Simard \& Frasconi (1994)", corner=DL)
         with self.voiceover(
             "To train it, unroll it and backpropagate, as Paul Werbos described in 1990: backpropagation through "
-            "time. <bookmark mark='a'/> The gradient of the loss with respect to an early state h k passes "
-            "through every later state. <bookmark mark='b'/> Each step back multiplies it by that step's "
-            "Jacobian: the slopes of the tanh, times the same matrix W, again and again. <bookmark mark='c'/> "
-            "The tanh's slope is at most one, so the size of the product is at most the largest singular value of "
-            "W, raised to the number of steps. <bookmark mark='d'/> If that is below one, the gradient from far "
-            "back shrinks exponentially, and the network can't learn that something long ago mattered. If W has "
-            "eigenvalues above one, the product can instead blow up. <bookmark mark='e'/> Sepp Hochreiter worked "
-            "this out in his 1991 diploma thesis, in German; Yoshua Bengio, Patrice Simard and Paolo Frasconi "
-            "published it in 1994."
+            "time. <bookmark mark='a'/> The gradient with respect to an early state h k passes through every later "
+            "state. <bookmark mark='b'/> Each step back multiplies it by that step's Jacobian: the tanh's slopes "
+            "times the same matrix W, again and again. <bookmark mark='c'/> The slopes are at most one, so the "
+            "product is at most the largest singular value of W, raised to the number of steps. "
+            "<bookmark mark='d'/> Below one, the gradient from far back shrinks exponentially; with eigenvalues "
+            "above one, it can blow up. <bookmark mark='e'/> Sepp Hochreiter worked this out in his 1991 diploma "
+            "thesis; Yoshua Bengio, Patrice Simard and Paolo Frasconi published it in 1994."
         ) as vo:
             self.play(FadeIn(cite_))
             vo.wait_until("a")
