@@ -91,7 +91,7 @@ class ZeRO(VoiceoverScene):
             return f"{m:.0f}" if m >= 100 else f"{m:.1f}" if m >= 10 else f"{m:.2f}"
 
         whys = [why(rf"{n}: \ ${gb(m)}$ GB", font_size=20) for n, m in zip(names, mem)]
-        step = ladder(self, rows, whys, keep=4, top=1.9, x=-3.4, buff=0.45, edge=6.9, transform=False)
+        step = ladder(self, rows, whys, keep=4, top=1.9, x=-3.4, buff=0.45, edge=6.9)
         head = label(rf"bytes per GPU: \ $\Psi$ parameters, \ $K = {Z['k']}$, \ $N$ GPUs; \ the paper's example: "
                      rf"$\Psi = {Z['psi'] / 1e9:.1f}$B, \ $N = {Z['nd']}$", font_size=22, color=GREY_A)
         head.to_edge(UP, buff=0.45)

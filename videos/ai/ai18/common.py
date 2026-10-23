@@ -68,8 +68,8 @@ def nbytes(x: float) -> str:
     """Bytes in TeX text: 6.48e12 -> '6.5 TB'."""
     for unit, v in (("TB", 1e12), ("GB", 1e9), ("MB", 1e6), ("kB", 1e3)):
         if x >= v:
-            return f"{x / v:.{1 if x / v < 100 else 0}f}" + rf"\,{unit}"
-    return f"{x:.0f}" + r"\,B"
+            return f"{x / v:.{1 if x / v < 100 else 0}f}" + rf"\,\mathrm{{{unit}}}"
+    return f"{x:.0f}" + r"\,\mathrm{B}"
 
 
 def spoken_int(n: float) -> str:
