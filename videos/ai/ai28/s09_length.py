@@ -152,7 +152,7 @@ class Length(VoiceoverScene):
         p2 = float(np.asarray(d["plain_think"])[:, -1, 0].mean())
         hc = history_card(2024, r"X.~Chen et al., \ \textit{Do NOT Think That Much for 2+3=?}",
                           r"o1-like models spend far more tokens on easy questions than they need: \ ``overthinking''",
-                          width=7.6, color=LEN).move_to(UP * 1.8)
+                          width=7.6, color=LEN).move_to(UP * 2.45)
         bars = VGroup()
         for i, (t, v, c) in enumerate(((r"answering at once", ad, DIRECT), (r"thinking", at, CHAIN))):
             b = Rectangle(width=0.9, height=2.6 * v, stroke_width=0, fill_color=c, fill_opacity=0.85)

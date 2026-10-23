@@ -103,6 +103,30 @@ class Search(VoiceoverScene):
             history_card(2025, r"DeepSeek-R1: \ MCTS, \ ``unsuccessful''", r"tokens make the tree enormous, \ and the "
                          r"value model that guides it is hard to train", width=6.4, color=WRONG_C),
         ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).move_to(DOWN * 0.1)
+        # schematic: whole chains judged at the end, against a tree judged step by step
+        rows_ = VGroup(*[VGroup(*[RoundedRectangle(width=0.42, height=0.32, corner_radius=0.05, stroke_width=1.5,
+                                                    stroke_color=GREY_B, fill_color=GREY_B, fill_opacity=0.2)
+                                  for _ in range(5)]).arrange(RIGHT, buff=0.08) for _ in range(4)]).arrange(DOWN, buff=0.22)
+        ends = VGroup(*[Text("?", font_size=24, color=C.BITS).next_to(r_, RIGHT, buff=0.2) for r_ in rows_])
+        whole = VGroup(rows_, ends).move_to([-3.4, -0.1, 0])
+        wl = label(r"sampling and voting: \\ whole chains, \ judged at the end", font_size=24, color=GREY_A)
+        wl.next_to(whole, UP, buff=0.4)
+        pts = {(0, 0): [3.4, 1.0]}
+        for k_, x in enumerate((2.2, 3.4, 4.6)):
+            pts[(1, k_)] = [x, 0.0]
+        for k_, x in enumerate((1.8, 2.6, 4.2, 5.0)):
+            pts[(2, k_)] = [x, -1.0]
+        par_ = {(1, 0): (0, 0), (1, 1): (0, 0), (1, 2): (0, 0), (2, 0): (1, 0), (2, 1): (1, 0), (2, 2): (1, 2),
+                (2, 3): (1, 2)}
+        kept_ = {(0, 0), (1, 0), (1, 2), (2, 1), (2, 2)}
+        edges_ = VGroup(*[Line(pts[par_[k_]] + [0], pts[k_] + [0], stroke_width=3 if k_ in kept_ else 1.2,
+                               color=SEARCH if k_ in kept_ else GREY_D) for k_ in par_])
+        dots_ = VGroup(*[Dot(pts[k_] + [0], radius=0.1, color=SEARCH if k_ in kept_ else GREY_D) for k_ in pts])
+        stepw = VGroup(edges_, dots_)
+        sl_ = label(r"search: \\ judged at every step, \ the best kept", font_size=24, color=SEARCH)
+        sl_.next_to(stepw, UP, buff=0.4).align_to(wl, UP)
+        sch_ = note(r"schematic").to_corner(DR, buff=0.3)
+        intro = VGroup(whole, wl, stepw, sl_, sch_)
         with self.voiceover(
             "Sampling chains and voting treats each chain as a whole. Search works step by step: propose several next "
             "thoughts, judge them, and keep going from the most promising. <bookmark mark='a'/> In 2023, Tree of Thoughts let GPT-4 propose and judge its own next thoughts; on a "
@@ -114,8 +138,13 @@ class Search(VoiceoverScene):
             "R1 and gave up: over tokens the tree is enormous, and the value model that should guide it is hard to "
             "train. At the frontier, search mostly survives as sampling many chains in parallel."
         ) as vo:
+            self.play(FadeIn(whole), FadeIn(wl), FadeIn(sch_))
+            self.play(FadeIn(sl_), Create(edges_), FadeIn(dots_), run_time=1.5)
+            vo.wait_until("a")
+            self.play(FadeOut(intro))
             for k, mk in enumerate("abcd"):
-                vo.wait_until(mk)
+                if k:
+                    vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
@@ -129,7 +158,7 @@ class Search(VoiceoverScene):
         levels = [[(list(map(int, st)), float(sc), bool(k)) for st, sc, k in lev] for lev in s["tree"]]
         best = [int(x) for x in s["tree_best"]]
         root = build_tree(levels, truth)
-        t = SearchTree(root, width=12.6, level_height=0.62, radius=0.09, center=[0, -0.55, 0],
+        t = SearchTree(root, width=12.6, level_height=0.58, radius=0.09, center=[0, -0.4, 0],
                        edge_width=lambda nd: 3.0 if nd.get("kept") else 1.0)
         q = VGroup(*[chip(str(x), 0.4, GREY_B, 20) for x in digits]).arrange(RIGHT, buff=0.06).to_edge(UP, buff=0.3)
         ql = label(rf"a {len(digits)}-digit list: \ search over the running totals", font_size=22, color=GREY_A)
@@ -138,12 +167,13 @@ class Search(VoiceoverScene):
         key = VGroup(label(r"kept, \ right", font_size=18, color=RIGHT_C), label(r"kept, \ wrong", font_size=18,
                                                                                  color=WRONG_C),
                      label(r"pruned by the process grader", font_size=18, color=GREY_C)).arrange(RIGHT, buff=0.5)
-        key.to_edge(DOWN, buff=0.25)
+        key.to_corner(DL, buff=0.3)
         by_level = {}
         for i in range(1, len(t.nodes)):
             by_level.setdefault(t.level[i], []).append(i)
         ans_ok = best == truth[:len(best)]
-        tag = note(r"computed: \ beam $3$, \ $3$ proposals each").to_corner(DR, buff=0.2)
+        tag = note(rf"computed: \ beam $3$, \ $3$ proposals each; \\ the most branching search of "
+                   rf"${int(s['tree_of'])}$ lists").to_corner(DR, buff=0.2)
         if ans_ok:
             fin = "At the end, the best surviving chain is right all the way down."
         else:

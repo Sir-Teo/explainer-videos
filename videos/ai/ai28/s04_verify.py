@@ -329,11 +329,14 @@ class Verify(VoiceoverScene):
             label(r"and graders that themselves think before judging", font_size=24, color=ORM_C),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.2)
         cite_ = cite(r"DeepSeek-AI (2025); \ P.~Wang et al., \textit{Math-Shepherd} (2023)")
+        lesson = label(r"a learned grader, \ pushed hard, \ gets exploited: \ by RL, \ or by best-of-$N$ \ (as ours "
+                       r"were)", font_size=28, color=WRONG_C).move_to(UP * 0.3)
         with self.voiceover(
             "And yet the models that changed the field in 2025 mostly did not train against process graders. "
             "DeepSeek's R1 paper lists them among its unsuccessful attempts: it is hard to say what a step is in "
-            "general reasoning, hard to check one, and a learned grader, pushed by reinforcement learning, gets "
-            "exploited: in their words, it inevitably leads to reward hacking. <bookmark mark='a'/> So the recipe "
+            "general reasoning, hard to check one, and <bookmark mark='h'/> a learned grader, pushed by reinforcement "
+            "learning, gets exploited: in their words, it inevitably leads to reward hacking. <bookmark mark='a'/> So "
+            "the recipe "
             "became reinforcement learning on outcomes that can be checked exactly: answers to maths problems, tests "
             "for code, proofs. <bookmark mark='b'/> Process graders live on for search and reranking, with step "
             "labels made automatically: finish a partial solution many times, and see how often it ends right. "
@@ -341,6 +344,8 @@ class Verify(VoiceoverScene):
             "subject of the next chapter."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(cite_))
+            vo.wait_until("h")
+            self.play(FadeIn(lesson, shift=UP * 0.1))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[k], shift=UP * 0.15))
