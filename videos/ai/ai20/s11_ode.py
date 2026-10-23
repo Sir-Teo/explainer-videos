@@ -43,13 +43,11 @@ class NeuralODE(VoiceoverScene):
         pros = label(r"depth becomes time; \ any ODE solver; \ run it backwards to invert", font_size=22,
                      color=GREY_A).next_to(rows, DOWN, buff=0.45)
         with self.voiceover(
-            "A residual network, from Part 9, updates its state a little at each layer: h plus f of h. <bookmark "
-            "mark='a'/> Read that as one step of Euler's method for an ordinary differential equation, with a "
-            "step of size one. <bookmark mark='b'/> Shrink the step to zero and the layers become continuous: the "
-            "state flows along a velocity field that a network defines. <bookmark mark='c'/> Ricky Chen, Yulia "
-            "Rubanova, Jesse Bettencourt and David Duvenaud called these neural ODEs, in a paper that won best "
-            "paper at NeurIPS in 2018. Depth becomes time, any solver can integrate them, and running the "
-            "solver backwards inverts them: a flow, with no coupling layers needed."
+            "A residual network updates its state a little each layer: h plus f of h. <bookmark mark='a'/> That's "
+            "one Euler step of an ordinary differential equation. <bookmark mark='b'/> Shrink the step to zero, and "
+            "the state flows along a velocity field a network defines. <bookmark mark='c'/> Ricky Chen, Yulia "
+            "Rubanova, Jesse Bettencourt and David Duvenaud called these neural ODEs, a best paper at NeurIPS 2018. "
+            "Run the solver backwards to invert: a flow without coupling layers."
         ) as vo:
             self.play(Write(rows[0]), FadeIn(whys[0]))
             vo.wait_until("a")
@@ -82,15 +80,12 @@ class NeuralODE(VoiceoverScene):
         cost = label(r"a trace needs only the diagonal: \ $d$ backward passes, \ not $d^3$ operations", font_size=22,
                      color=C.BITS).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How does the density change along the flow? Over one small step, by the change of variables of the "
-            "last chapter: minus the log-determinant of the step's Jacobian, the identity plus delta t times the "
-            "field's Jacobian. <bookmark mark='a'/> For a small step, the determinant of the identity plus a small "
-            "matrix is one plus the trace, to first order. <bookmark mark='b'/> In the limit: the log-density "
-            "changes at a rate of minus the trace of the field's Jacobian, its divergence. Where the flow spreads "
-            "out, density falls. <bookmark mark='c'/> Integrate along the path and you have the exact "
-            "log-likelihood of a continuous flow, with no restriction at all on the network. <bookmark mark='d'/> "
-            "The determinant has become a trace, which needs only the diagonal of the Jacobian. But even the "
-            "diagonal costs one backward pass per dimension."
+            "How does density change along the flow? Over one small step, by the last chapter's change of "
+            "variables. <bookmark mark='a'/> To first order, the determinant of the identity plus a small matrix is "
+            "one plus its trace. <bookmark mark='b'/> In the limit, the log-density falls at the rate of the "
+            "field's divergence, the trace of its Jacobian. <bookmark mark='c'/> Integrate along the path: an "
+            "exact likelihood, with no restriction on the network. <bookmark mark='d'/> But even a trace costs one "
+            "backward pass per dimension."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -135,6 +130,7 @@ class NeuralODE(VoiceoverScene):
                                                                                                          buff=0.2)
         ratio = float(np.mean(mr) / max(np.mean(mg), 1e-12))
         rel_err = float(np.median(np.abs(mg - tg_) / np.maximum(tg_, 1e-12)))
+        rel = 100 * rel_err
         d_ = int(c["big_dim"])
         tr_ratio = float(c["big_time_ratio"])
         ex = np.asarray(c["big_exact"])
@@ -148,17 +144,13 @@ class NeuralODE(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, -1.0, 0])
         cite_ = cite(r"Hutchinson (1989); \ Grathwohl et al., \textit{FFJORD} (2019)", corner=DR)
         with self.voiceover(
-            "The way out is a trick from 1989, for estimating the trace of a huge matrix you can only multiply by. "
-            "Draw a random vector epsilon whose entries have mean zero and variance one, and compute epsilon "
-            "transpose A epsilon. <bookmark mark='a'/> Its average is the sum of A's entries times the averages of "
-            "epsilon i times epsilon j, which are one on the diagonal and zero off it: the trace. One random "
-            "probe, one backward pass, an unbiased estimate. That is Hutchinson's estimator. <bookmark mark='b'/> "
-            "Its variance depends on the probe. For random signs it is smaller than for Gaussians, because the "
-            "diagonal terms never vary. We measured both, at four hundred points of a trained flow, against the "
-            f"formulas: they agree to within {100 * rel_err:.0f} percent, and the random signs' variance is "
-            f"{ratio:.2f} times the Gaussians'. <bookmark mark='c'/> Will Grathwohl and colleagues built FFJORD "
-            f"on it in 2019. The saving grows with dimension: in {d_} dimensions, one probe is {tr_ratio:.0f} "
-            "times faster than the exact trace, here."
+            "The way out is Hutchinson's trick of 1989: draw a random vector epsilon with mean zero and variance "
+            "one, and compute epsilon transpose A epsilon. <bookmark mark='a'/> On average, only the diagonal "
+            "survives: the trace, from one probe and one backward pass. <bookmark mark='b'/> Random signs give less "
+            "variance than Gaussians, since the diagonal terms never vary; measured at four hundred points of a "
+            f"trained flow, the formulas hold to {rel:.0f} percent, and the signs' variance is {ratio:.2f} times "
+            f"the Gaussians'. <bookmark mark='c'/> FFJORD, in 2019, built on it: in {d_} dimensions one probe is "
+            f"{tr_ratio:.0f} times faster than the exact trace, here."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -202,11 +194,9 @@ class NeuralODE(VoiceoverScene):
             verdict = f"The noisy estimate even ends {ag:.2f} nats ahead."
         tg = note(r"computed: \ the moons, \ three seeds each, \ bands: \ min to max").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Here is a continuous flow trained on the two moons, both ways, three seeds each: once with the exact "
-            "trace, once with a single random-sign probe per path. Both are judged the same way, with the exact "
-            f"trace, on held-out points. <bookmark mark='a'/> {verdict} In two dimensions the exact trace is "
-            f"cheap anyway: a run took {te:.0f} seconds with it, {th:.0f} with the estimate. In a thousand "
-            "dimensions, only the estimate is affordable."
+            "A continuous flow on the moons, three seeds each way: the exact trace, or one random-sign probe per "
+            f"path, all judged with the exact trace. <bookmark mark='a'/> {verdict} A run took {te:.0f} seconds "
+            f"exactly, {th:.0f} with the estimate."
         ) as vo:
             self.play(FadeIn(g), Create(fl), FadeIn(tg), FadeIn(lg))
             self.play(FadeIn(be), Create(le), run_time=1.5)
@@ -246,12 +236,10 @@ class NeuralODE(VoiceoverScene):
         tk = take_away(r"Next: \ Part 21's flow matching trains such a field without ever solving the ODE in "
                        r"training.", font_size=24)
         with self.voiceover(
-            "And here is the flow itself. Seven hundred points of Gaussian noise at time zero, carried along by the "
-            "learned field to time one; underneath, the density at each moment, computed with the trace integral. "
-            "<bookmark mark='a'/> The cloud stretches, splits and curls into two moons, the density following it, "
-            "conserved all the way. <bookmark mark='b'/> One cost remains: training needs the ODE solved, forward "
-            "and back, at every step. Part 21 shows how to learn the same kind of field without that, by "
-            "regression: flow matching."
+            "And the flow itself: seven hundred noise points carried by the learned field from time zero to one, "
+            "over the density at each moment. <bookmark mark='a'/> The cloud stretches, splits and curls into two "
+            "moons. <bookmark mark='b'/> Training still solves the ODE at every step; Part 21's flow matching "
+            "learns such fields by regression instead."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(imgs[0]), FadeIn(dots), FadeIn(tl), FadeIn(expl))
             vo.wait_until("a")

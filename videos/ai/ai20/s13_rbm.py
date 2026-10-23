@@ -70,14 +70,11 @@ class RBM(VoiceoverScene):
         card = history_card(1986, r"Smolensky: \ the harmonium", r"later renamed the restricted Boltzmann machine",
                             width=4.6, font_size=18).move_to([3.6, -2.2, 0])
         with self.voiceover(
-            "The way out of the dreaming problem was to restrict the machine. Put the units in two layers, visible "
-            "and hidden, and connect every visible unit to every hidden one, but none within a layer. Paul "
-            "Smolensky proposed it in 1986 and called it a harmonium; today it's the restricted Boltzmann "
-            "machine. <bookmark mark='a'/> Its energy couples the layers through one weight matrix W. <bookmark "
-            "mark='b'/> And because no hidden unit talks to another, given the visible layer all the hidden units "
-            "are independent: each turns on with a sigmoid of its input. The same holds the other way round. "
-            "<bookmark mark='c'/> Ours has 196 visible units, one per pixel of our digits, now cut to black and "
-            "white, and just sixteen hidden units, for a reason you'll see in a moment."
+            "The way out was to restrict the machine: two layers, visible and hidden, connected across but not "
+            "within; Paul Smolensky's harmonium of 1986, today's restricted Boltzmann machine. <bookmark "
+            "mark='a'/> One weight matrix couples the layers. <bookmark mark='b'/> Given one layer, the other's "
+            "units are independent, each a sigmoid of its input. <bookmark mark='c'/> Ours: 196 visible units, our "
+            "digits in black and white, and sixteen hidden units, for a reason you'll see."
         ) as vo:
             self.play(FadeIn(vis), FadeIn(hid), Create(edges), FadeIn(vl), FadeIn(hl), FadeIn(card))
             vo.wait_until("a")
@@ -108,13 +105,11 @@ class RBM(VoiceoverScene):
         hard = label(r"the negative phase needs samples from the model itself", font_size=24, color=EBM)
         hard.to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "To train it, sum the hidden units out. The log-probability of an image is minus its free energy, minus "
-            "the log of the normalizer Z. <bookmark mark='a'/> The free energy is easy: each hidden unit sums out "
-            "on its own, into a softplus. <bookmark mark='b'/> The normalizer is a sum over every possible image, "
-            "but its gradient is an average under the model. <bookmark mark='c'/> So the gradient for the "
-            "weights is the Boltzmann machine's rule again: correlations with the data clamped, minus correlations "
-            "the model produces itself. <bookmark mark='d'/> The first term is a sum over the batch. The second "
-            "needs samples from the model, and getting them still means running a Markov chain to equilibrium."
+            "Sum the hidden units out: the log-probability of an image is minus its free energy, minus log Z. "
+            "<bookmark mark='a'/> The free energy is a sum of softplus terms. <bookmark mark='b'/> The gradient of "
+            "log Z is an average under the model. <bookmark mark='c'/> So the weights' gradient is the Boltzmann "
+            "rule: data correlations minus model correlations. <bookmark mark='d'/> The second still needs samples "
+            "from the model."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -153,14 +148,10 @@ class RBM(VoiceoverScene):
         h2 = history_card(2008, r"Tieleman: \ persistent CD", r"keep the chains running between updates", width=5.0,
                           font_size=18).move_to([3.0, -2.8, 0])
         with self.voiceover(
-            "Geoffrey Hinton's shortcut, in 2002, was to stop early. Start the chain not from noise but from a "
-            "training digit. <bookmark mark='a'/> Sample the hidden units, sample a new image from them, and "
-            "repeat: k steps of Gibbs sampling, which the restricted layout makes fast, a whole layer at a time. "
-            "<bookmark mark='b'/> Use where the chain got to as the model's sample. With k equal to one it is "
-            "biased, since the chain has barely moved, but it learns, and quickly. He called it contrastive "
-            "divergence. <bookmark mark='c'/> Tijmen Tieleman's refinement in 2008: don't restart the chains at "
-            "the data each time; keep a set of them running, persistently, and let them wander as the model "
-            "changes."
+            "Geoffrey Hinton's shortcut, in 2002: start the chain at a training digit, <bookmark mark='a'/> run k "
+            "steps of Gibbs sampling, a whole layer at a time, <bookmark mark='b'/> and use where it got to. With k "
+            "equal to one it's biased, but it learns, and fast: contrastive divergence. <bookmark mark='c'/> "
+            "Tijmen Tieleman, in 2008, kept the chains running between updates: persistent CD."
         ) as vo:
             self.play(FadeIn(nodes[0]), FadeIn(dl), FadeIn(h1))
             vo.wait_until("a")
@@ -199,19 +190,16 @@ class RBM(VoiceoverScene):
         verdict = (f"Ranked by where they end: {first} at {fin[order[0]]:.1f} nats per digit, then {second} at "
                    f"{fin[order[1]]:.1f}, and {third} at {fin[order[2]]:.1f}.")
         if order[-1] == "cd1":
-            why_ = ("One step of the chain is the cheapest estimate of the dreams, and the most biased: it learns, but "
-                    "not quite the right thing.")
+            why_ = "One step of the chain is the cheapest estimate of the dreams, and the most biased."
         else:
-            why_ = ("With only sixteen hidden units the model is simple enough that even one step of the chain is a "
-                    "fair estimate.")
+            why_ = "With sixteen hidden units, even one step of the chain is a fair estimate."
         tg = note(r"computed: \ three seeds each, \ the same number of updates; \ bands: \ min to max").to_corner(
             DR, buff=0.2)
         with self.voiceover(
-            "Is contrastive divergence maximizing the likelihood? Usually nobody can check, because Z is a sum "
-            "over two to the 196 images. But Z can also be summed over the hidden states, and with sixteen hidden "
-            "units there are only sixty-five thousand of them. <bookmark mark='a'/> So here is the exact "
-            "log-likelihood of held-out digits during training, for the three methods, three seeds each, the "
-            f"same number of updates. <bookmark mark='b'/> {verdict} <bookmark mark='c'/> {why_}"
+            "Does contrastive divergence maximize the likelihood? Z sums over two to the 196 images, but also over "
+            "the hidden states, and sixteen hidden units have only sixty-five thousand. <bookmark mark='a'/> So "
+            "here is the exact held-out log-likelihood, three methods, three seeds each, equal updates. <bookmark "
+            f"mark='b'/> {verdict} <bookmark mark='c'/> {why_}"
         ) as vo:
             self.play(FadeIn(eq), FadeIn(g), FadeIn(tg))
             vo.wait_until("a")
@@ -243,17 +231,13 @@ class RBM(VoiceoverScene):
                            r"the one below: \ the start of the deep learning revival (Part 9)", width=5.6,
                            font_size=18).move_to([-3.4, -2.3, 0])
         with self.voiceover(
-            "What does a Boltzmann machine learn? Each hidden unit's weights, drawn as a picture, show the pattern "
-            "that turns it on: here, forty of a hundred-unit machine's, positive where it wants ink and negative "
-            "where it wants paper; many look like pieces of strokes. <bookmark mark='a'/> To dream, start from "
-            "random pixels and run the chain: here it is after one step, ten, a hundred and a thousand, drifting "
-            "toward the images the machine finds probable. <bookmark mark='b'/> With sixteen units, we can do better than dream: "
-            "weigh all sixty-five thousand hidden states exactly and sample from the true model in one shot. "
-            "<bookmark mark='c'/> In 2006 Hinton, Simon Osindero and Yee-Whye Teh stacked such machines, each "
-            "trained on the hidden units of the one below, into deep belief nets; that is where the revival of "
-            "deep learning began, in Part 9. Six years later, plain backpropagation on GPUs made the pretraining "
-            "unnecessary, and Boltzmann machines faded. Their ideas didn't: an energy, and samples drawn by a "
-            "chain."
+            "What does it learn? Each hidden unit's weights, as a picture, show what turns it on: forty of a "
+            "hundred-unit machine's, positive for ink, negative for paper. <bookmark mark='a'/> To dream, run the "
+            "chain from random pixels: one step, ten, a hundred, a thousand. <bookmark mark='b'/> With sixteen "
+            "units we can sample the true model exactly, weighing every hidden state. <bookmark mark='c'/> In 2006 "
+            "Hinton, Simon Osindero and Yee-Whye Teh stacked RBMs into deep belief nets, and deep learning's revival "
+            "began; six years later backpropagation on GPUs made that unnecessary. The ideas stayed: an energy, "
+            "and samples drawn by a chain."
         ) as vo:
             self.play(FadeIn(fs), FadeIn(fl))
             vo.wait_until("a")

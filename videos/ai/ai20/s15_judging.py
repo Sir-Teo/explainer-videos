@@ -45,13 +45,11 @@ class Judging(VoiceoverScene):
         cite_ = cite(r"Theis, van den Oord \& Bethge, \textit{A note on the evaluation of generative models} (2016)",
                      corner=DR)
         with self.voiceover(
-            "How good is a generative model? The obvious answer is its likelihood on held-out data. Lucas Theis, "
-            "Aaron van den Oord and Matthias Bethge showed in 2016 why that isn't enough. Take a good model and "
-            "dilute it: one sample in a hundred from the good model, the rest pure noise. <bookmark mark='a'/> Its "
-            "log-likelihood drops by at most log one hundred, four and a half nats, which on an image of thousands "
-            "of pixels is a rounding error. <bookmark mark='b'/> Its likelihood is nearly as good; its samples are "
-            "ninety-nine percent garbage. Likelihood and sample quality can disagree. <bookmark mark='c'/> And "
-            "GANs give no likelihood at all. So the field learned to judge samples directly."
+            "How good is a generative model? Its held-out likelihood isn't enough, as Lucas Theis, Aaron van den "
+            "Oord and Matthias Bethge showed in 2016: dilute a good model, one sample in a hundred from it, the rest "
+            "noise. <bookmark mark='a'/> The log-likelihood drops by at most log one hundred, a rounding error on "
+            "an image. <bookmark mark='b'/> The samples are ninety-nine percent garbage. <bookmark mark='c'/> And "
+            "GANs have no likelihood at all. So the field judges samples directly."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -89,18 +87,13 @@ class Judging(VoiceoverScene):
                   rf"${100 * float(c['accuracy']):.2f}\%$", font_size=22, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The standard measure since 2017 is the Fréchet Inception Distance. Its core is a distance between "
-            "two Gaussians. In one dimension, the cheapest way to move one Gaussian onto another maps quantile to "
-            "quantile, and the squared Wasserstein distance comes out as the squared difference of the means plus "
-            "the squared difference of the spreads. <bookmark mark='a'/> In many dimensions, the spreads become "
-            "covariance matrices and the difference of the spreads becomes this trace with matrix square roots, "
-            "Dowson and Landau's formula of 1982. <bookmark mark='b'/> Martin Heusel and colleagues in Sepp "
-            "Hochreiter's group applied it not to pixels but to the features a trained classifier sees: fit a "
-            "Gaussian to the features of real images and one to the features of generated images, and compute "
-            "the distance. <bookmark mark='c'/> They used Google's Inception network, trained on ImageNet. For "
-            "digits, we use the same idea with a classifier trained on the digits, as papers that report FID on "
-            f"MNIST do: its last hidden layer, 128 numbers; it reads the test digits with {acc:.2f} percent "
-            "accuracy."
+            "The standard since 2017 is the Fréchet Inception Distance, a distance between Gaussians. In one "
+            "dimension the cheapest move maps quantile to quantile, and the squared Wasserstein distance is the "
+            "squared gap in means plus the squared gap in spreads. <bookmark mark='a'/> In many dimensions, "
+            "covariances and a trace of matrix roots: Dowson and Landau, 1982. <bookmark mark='b'/> Martin Heusel "
+            "and colleagues fitted those Gaussians to the features a trained classifier sees, real against "
+            "generated. <bookmark mark='c'/> They used Inception, trained on ImageNet; for digits, we use a digit "
+            f"classifier's last hidden layer, 128 numbers, {acc:.2f} percent accurate on the test digits."
         ) as vo:
             step(0)
             oneD.next_to(rows[0], DOWN, buff=0.2)
@@ -147,17 +140,14 @@ class Judging(VoiceoverScene):
         n0, n2k, nN = int(ns[0]), int(ns[i2k]), int(ns[-1])
         nf0, nfN = nf[0], nf[-1]
         if mono:
-            rise = f"Add noise to real digits, and our FID rises with every step up in noise, from {nf0:.2f} to {nfN:.1f}."
+            rise = f"noise added to real digits raises our FID at every step, from {nf0:.2f} to {nfN:.1f}."
         else:
-            rise = f"Add noise to real digits, and our FID rises, overall, with the noise, from {nf0:.2f} to {nfN:.1f}."
+            rise = f"noise added to real digits raises our FID overall, from {nf0:.2f} to {nfN:.1f}."
         with self.voiceover(
-            f"First, a check that the measure measures something. {rise} A three-by-three blur gives {blur:.1f}. "
-            "<bookmark mark='a'/> "
-            "Second, a warning. FID compares estimated means and covariances, and estimates from a few samples "
-            "are noisy, which biases the distance upward. Real digits against the test set give an FID of "
-            f"{f0:.2f} with {n0} samples, {f2k:.2f} with {n2k:,}, and {fN:.2f} with {nN:,}. <bookmark mark='b'/> So "
-            f"FIDs can only be compared at the same number of samples. Ours always use {n2k:,}, which puts the "
-            f"floor, a perfect model, at about {f2k:.2f}."
+            f"A check: {rise} A three-by-three blur gives {blur:.1f}. <bookmark mark='a'/> A warning: few samples "
+            "bias FID upward. Real digits against the test set score "
+            f"{f0:.2f} with {n0} samples, {f2k:.2f} with {n2k:,}, {fN:.2f} with {nN:,}. <bookmark mark='b'/> So "
+            f"compare at equal sample counts: ours use {n2k:,}, putting a perfect model at about {f2k:.2f}."
         ) as vo:
             self.play(FadeIn(g), Create(nc), FadeIn(nd), FadeIn(ex), FadeIn(exl))
             vo.wait_until("a")
@@ -193,6 +183,7 @@ class Judging(VoiceoverScene):
             label(r"recall: \ the share of real points inside some generated ball", font_size=22, color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.2, 1.0, 0])
         r0 = e2["rows"]["gan"][0]
+        pr0, rc0 = r0["precision"], r0["recall"]
         num = label(rf"this GAN \ (non-saturating, seed $0$): \ precision ${r0['precision']:.2f}$, \ recall "
                     rf"${r0['recall']:.2f}$", font_size=22, color=GAN_C).move_to([3.2, -1.3, 0])
         cite_ = cite(r"Sajjadi et al.\ (2018); \ Kynk\"a\"anniemi et al.\ (2019)", corner=DR)
@@ -200,14 +191,12 @@ class Judging(VoiceoverScene):
                    if r0["precision"] > r0["recall"] + 0.15 else
                    "The two numbers say different things, which is the point of having two.")
         with self.voiceover(
-            "One number can't say whether a model's samples are good or whether they cover the data, and those are "
-            "different failures. Mehdi Sajjadi and colleagues, and then Tuomas Kynkäänniemi and colleagues at NVIDIA, "
-            "split it in two. <bookmark mark='a'/> Around each real point, draw a ball reaching out to its third "
-            "nearest real neighbour: together, the balls estimate where the data lives. <bookmark mark='b'/> "
-            "Precision is the share of generated samples that land inside the real balls: how many of the fakes "
-            "look real. <bookmark mark='c'/> Recall is the reverse: draw balls around the generated samples, and "
-            "count the real points they cover. <bookmark mark='d'/> Here is the non-saturating GAN of chapter "
-            f"five, on the ring: precision {r0['precision']:.2f}, recall {r0['recall']:.2f}. {verdict}"
+            "One number can't separate good samples from good coverage. Mehdi Sajjadi and colleagues, then Tuomas "
+            "Kynkäänniemi and colleagues at NVIDIA, split it in two. <bookmark mark='a'/> Around each real point, a "
+            "ball out to its third nearest real neighbour: where the data lives. <bookmark mark='b'/> Precision: "
+            "the share of generated samples inside real balls. <bookmark mark='c'/> Recall: the share of real "
+            "points inside generated balls. <bookmark mark='d'/> Chapter five's non-saturating GAN, seed zero: "
+            f"precision {pr0:.2f}, recall {rc0:.2f}. {verdict}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(rd), FadeIn(cite_))
             vo.wait_until("a")
@@ -258,14 +247,11 @@ class Judging(VoiceoverScene):
         v_bp, v_br, v_wp = mean[best_p][0], mean[best_r][1], mean[worst_p][0]
         bfd, bprec = float(e2["blob_fd"]), float(e2["blob_precision"])
         with self.voiceover(
-            "Now every family, on the ring, three seeds each, against two thousand fresh points of the data. "
-            f"<bookmark mark='a'/> The highest precision belongs to {n_bp}, at {v_bp:.2f} on average; the highest "
-            f"recall to {n_br}, at {v_br:.2f}; and the lowest precision to {n_wp}, at {v_wp:.2f}. "
-            "<bookmark mark='b'/> And here is why FID alone is dangerous. Fit one Gaussian blob to the ring, with "
-            "the same mean and covariance, and sample from it. Its Fréchet distance to the ring is "
-            f"{bfd:.3f}, about as small as that between two samples of the ring itself, because the Fréchet "
-            f"distance sees only means and covariances. Its precision is {bprec:.2f}. On images, features rich enough make this failure rarer, but "
-            "never impossible."
+            "Every family on the ring, three seeds each. <bookmark mark='a'/> Highest precision: "
+            f"{n_bp}, {v_bp:.2f}; highest recall: {n_br}, {v_br:.2f}; lowest precision: {n_wp}, {v_wp:.2f}. "
+            "<bookmark mark='b'/> And why FID alone is dangerous: one Gaussian blob with the ring's mean and "
+            f"covariance has a Fréchet distance of {bfd:.3f}, about that between two samples of the ring itself, "
+            f"and a precision of {bprec:.2f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(keys))
             vo.wait_until("a")
@@ -314,13 +300,10 @@ class Judging(VoiceoverScene):
                    "test digits are." if not copying else
                    "One of them sits suspiciously close to the training set: it may be copying.")
         with self.voiceover(
-            "One failure no sample metric catches is memorization. A model that simply replayed its training "
-            f"digits would score exactly like real data: an FID of {floor:.2f}, at the floor, precision {rp:.2f} "
-            f"and recall {rr:.2f}. <bookmark mark='a'/> So we check "
-            "directly: for each sample, find the nearest of the sixty thousand training digits. <bookmark "
-            f"mark='b'/> Real test digits sit at a median distance of {real_d:.3f} from their nearest training "
-            f"digit. {verdict} Measures of this kind, and features from stronger networks than Inception, such "
-            "as DINOv2, are where evaluation research has gone since."
+            "No sample metric catches memorization: replaying training digits scores exactly like real data, "
+            f"an FID of {floor:.2f}, precision {rp:.2f}, recall {rr:.2f}. <bookmark mark='a'/> So we check: each "
+            "sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median "
+            f"{real_d:.3f} from theirs. {verdict}"
         ) as vo:
             self.play(FadeIn(hdr))
             vo.wait_until("a")

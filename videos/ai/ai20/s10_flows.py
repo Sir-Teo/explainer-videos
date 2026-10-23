@@ -65,15 +65,13 @@ class Flows(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=2.6, x=2.9, buff=0.7, edge=6.9)
         tg = note(r"illustrative").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The fourth answer keeps the likelihood exact, and the sampling a single pass. Start from simple noise "
-            "z, and push it through an invertible function g. <bookmark mark='a'/> Where g stretches the line, the "
-            "probability spreads thin; where it squeezes, it piles up. <bookmark mark='b'/> Probability is "
-            "conserved: the mass in a small interval of z equals the mass in its image. <bookmark mark='c'/> So "
-            "the density of x is the density of the z that made it, times how much the inverse map shrinks a "
-            "small interval. <bookmark mark='d'/> In many dimensions, the factor is the absolute determinant of "
-            "the inverse map's Jacobian. The log-likelihood is exact; we can train by maximum likelihood, as for "
-            "the autoregressive models. Esteban Tabak and Eric Vanden-Eijnden described flows like this in 2010; "
-            "Danilo Rezende and Shakir Mohamed brought them to deep learning in 2015."
+            "The fourth answer keeps the likelihood exact and sampling one pass: push simple noise z through an "
+            "invertible function g. <bookmark mark='a'/> Where g stretches, probability thins; where it squeezes, "
+            "it piles up. <bookmark mark='b'/> Probability is conserved, interval by interval. <bookmark mark='c'/> "
+            "So the density of x is that of its z, times how much the inverse map shrinks a small interval; "
+            "<bookmark mark='d'/> in many dimensions, the inverse map's Jacobian determinant. The likelihood is "
+            "exact. Esteban Tabak and Eric Vanden-Eijnden described such flows in 2010; Danilo Rezende and Shakir "
+            "Mohamed brought them to deep learning in 2015."
         ) as vo:
             self.play(FadeIn(g), Create(cz), FadeIn(tg))
             vo.wait_until("a")
@@ -120,6 +118,7 @@ class Flows(VoiceoverScene):
                     font_size=30).move_to([3.2, 0.3, 0])
         il = label(r"and the inverse is just as cheap", font_size=20, color=GREY_A).next_to(inv, DOWN, buff=0.12)
         gap = max(float(f2[f"{n_}_logdet_gap"]) for n_ in ("moons", "ring", "checker"))
+        k_exp = int(math.floor(-math.log10(max(gap, 1e-12))))  # the gap is below ten to the minus k_exp
         chk = label(rf"checked: \ the sum of the $s$'s against autograd's determinant: \ largest gap "
                     rf"${sci(gap, 1)}$ nats", font_size=20, color=FLOW).move_to([3.0, -1.4, 0])
         if chk.width > 7.4:
@@ -127,16 +126,14 @@ class Flows(VoiceoverScene):
         hist = label(r"NICE: \ Dinh, Krueger \& Bengio (2014); \ RealNVP: \ Dinh, Sohl-Dickstein \& Bengio (2017)",
                      font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The catch is the determinant: for a general d by d Jacobian it costs d cubed operations, and for an "
-            "image d is in the thousands. Laurent Dinh, with Yoshua Bengio, found a way around it. Split the "
-            "variables in two. <bookmark mark='a'/> Copy the first half unchanged; <bookmark mark='b'/> scale "
-            "and shift the second half, by amounts s and t that any network computes from the first half. "
-            "<bookmark mark='c'/> The Jacobian is then triangular: the first half doesn't depend on the second. A "
-            "triangular matrix's determinant is the product of its diagonal, so the log-determinant is just the "
-            "sum of the s's, free. <bookmark mark='d'/> The inverse is as cheap: subtract t, divide by e to the s. "
-            "The networks inside never need to be inverted. <bookmark mark='e'/> We checked ours against "
-            f"autograd's full determinant: they agree to {sci(gap, 1)} nats. Stack such layers, alternating which "
-            "half is copied, and the flow can bend anything."
+            "The catch is the determinant, d cubed operations for a d by d Jacobian. Laurent Dinh, with Yoshua "
+            "Bengio, found a way around it. Split the variables in two; <bookmark mark='a'/> copy the first half; "
+            "<bookmark mark='b'/> scale and shift the second by amounts s and t that any network computes from the "
+            "first. <bookmark mark='c'/> The Jacobian is triangular, so the log-determinant is just the sum of the "
+            "s's. <bookmark mark='d'/> The inverse is as cheap: subtract t, divide by e to the s. <bookmark "
+            f"mark='e'/> Ours agrees with autograd's full determinant to within ten to the minus {k_exp} nats. Stack "
+            "such layers, "
+            "alternating halves, and the flow can bend anything."
         ) as vo:
             vo.wait_until("a")
             self.play(Write(eqs[0]))
@@ -173,14 +170,12 @@ class Flows(VoiceoverScene):
         cd = pl.dots(np.clip(CP[-1][:400], -2.95, 2.95), DATA, radius=0.022)
         cp = label(r"the same flow, \ trained on the checkerboard", font_size=22, color=FLOW).move_to([4.0, -1.6, 0])
         with self.voiceover(
-            "Here is that bending, for our flow on the two moons: eight coupling layers. The lines are a square "
-            "grid of the noise plane, the dots are samples of the noise. <bookmark mark='a'/> Layer by layer: each "
-            "one slides points along one axis, by an amount that depends on where they are along the other. "
-            "<bookmark mark='b'/> The grid shears, stretches and folds, without ever tearing or crossing itself, "
-            "because every layer is invertible. <bookmark mark='c'/> After the eighth, the noise has become the "
-            "moons: one pass from noise to sample, and the same map read backwards gives each point its exact "
-            "probability. <bookmark mark='d'/> Trained on the checkerboard instead, the same layers have to cut "
-            "the plane into squares, with smooth maps."
+            "Here is that bending, our eight coupling layers on the moons: a square grid of the noise plane, and "
+            "noise samples. <bookmark mark='a'/> Each layer slides points along one axis, by amounts set by the "
+            "other. <bookmark mark='b'/> The grid shears and folds, but never tears or crosses itself. <bookmark "
+            "mark='c'/> After the eighth, noise has become the moons, and the map read backwards gives each point "
+            "its exact probability. <bookmark mark='d'/> On the checkerboard, the same layers cut the plane into "
+            "squares."
         ) as vo:
             self.play(FadeIn(pl), Create(lines[0]), FadeIn(dots[0]), FadeIn(cnt[0]), FadeIn(expl))
             vo.wait_until("a")
@@ -230,6 +225,7 @@ class Flows(VoiceoverScene):
         for r in rows:
             r[0].align_to(rows[0][0], RIGHT)
         worst = max(gaps, key=gaps.get)
+        g_m, g_r, g_c = gaps["moons"], gaps["ring"], gaps["checker"]
         if worst == "ring":
             why_hard = ("The ring is the hardest: an invertible map can't tear one blob of noise into eight separate "
                         "islands, so it stretches thin bridges of probability between them.")
@@ -239,11 +235,10 @@ class Flows(VoiceoverScene):
         else:
             why_hard = "The moons are the hardest of the three for it."
         with self.voiceover(
-            "Training, replayed on the checkerboard: the flow's density at each checkpoint. <bookmark mark='a'/> "
-            "Mass flows out of the empty squares and into the filled ones, and the edges slowly sharpen. "
-            "<bookmark mark='b'/> On held-out points, against each density's floor, the flow's surprise ends "
-            f"{gaps['moons']:.2f} nats above it on the moons, {gaps['ring']:.2f} on the ring, and "
-            f"{gaps['checker']:.2f} on the checkerboard. " + why_hard
+            "Training, replayed on the checkerboard. <bookmark mark='a'/> Mass drains from the empty squares into "
+            "the filled ones. <bookmark mark='b'/> Against each floor, the flow ends "
+            f"{g_m:.2f} nats above it on the moons, {g_r:.2f} on the ring, {g_c:.2f} on the checkerboard. " +
+            why_hard
         ) as vo:
             self.play(FadeIn(pl), FadeIn(imgs[0]), FadeIn(cap[0]), FadeIn(truth), FadeIn(tl))
             cur, cc = imgs[0], cap[0]
@@ -290,14 +285,11 @@ class Flows(VoiceoverScene):
             verdict = (f"In bits per pixel the flow gets {mf:.2f} on held-out digits, against {mp:.2f} for the PixelCNN "
                        "on the same budget: a better likelihood than the autoregressive model.")
         with self.voiceover(
-            "On digits, our flow is eight coupling layers on the logits of the pixels, and here is what it draws. "
-            "<bookmark mark='a'/> Strokes, but noisy ones. Turning the noise down, a trick from OpenAI's Glow, "
-            "makes them cleaner and more alike: the flows' version of truncation. <bookmark mark='b'/> "
-            f"{verdict} <bookmark mark='c'/> Glow, in 2018, made flows that drew faces; then, for years, flows "
-            "trailed the other families. In 2024 Shuangfei Zhai and colleagues at Apple built one from transformer "
-            "blocks over image patches, and reported samples comparable to diffusion models: the first time for "
-            "a flow on its own. And the continuous version of a flow, next chapter, is what flow matching trains "
-            "in Part 21."
+            "On digits, here is what our flow draws: <bookmark mark='a'/> noisy strokes; turning the noise down, "
+            "Glow's trick, makes them cleaner and more alike. <bookmark mark='b'/> "
+            f"{verdict} <bookmark mark='c'/> After Glow drew faces in 2018, flows trailed for years, until in 2024 "
+            "Shuangfei Zhai and colleagues at Apple built one from transformer blocks and reported samples "
+            "comparable to diffusion models."
         ) as vo:
             self.play(FadeIn(s1), FadeIn(l1))
             vo.wait_until("a")

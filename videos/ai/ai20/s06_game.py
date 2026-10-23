@@ -84,12 +84,11 @@ class Game(VoiceoverScene):
                             width=7.4, font_size=20).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The third answer throws the likelihood away. In 2014 Ian Goodfellow and colleagues in Yoshua Bengio's "
-            "lab in Montreal set two networks against each other. <bookmark mark='a'/> A generator turns random "
-            "noise into a sample; it never sees the data. <bookmark mark='b'/> A discriminator looks at a sample, "
-            "real or generated, and outputs the probability that it is real. <bookmark mark='c'/> The "
-            "discriminator is trained to tell them apart, the generator to fool it; the paper's picture is a team of "
-            "counterfeiters against the police. Written as one value: the discriminator maximizes the log "
-            "probability of being right on both kinds of sample, and the generator minimizes it."
+            "lab set two networks against each other. <bookmark mark='a'/> A generator turns noise into a sample, "
+            "never seeing the data. <bookmark mark='b'/> A discriminator outputs the probability that a sample is "
+            "real. <bookmark mark='c'/> One learns to tell them apart, the other to fool it: counterfeiters against "
+            "the police, in the paper's words. As one value: the discriminator maximizes its log-probability of "
+            "being right, the generator minimizes it."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.1))
             vo.wait_until("a")
@@ -125,12 +124,11 @@ class Game(VoiceoverScene):
         lg = legend([(DATA, r"$p$"), (C.MODEL_Q, r"$q$"), (DISC, r"$D^*$")], font_size=22).next_to(g, RIGHT, buff=0.3)
         tg = note(r"illustrative").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "What does the discriminator learn, if it wins? Write the value as an integral over x, with q for the "
-            "generator's distribution. <bookmark mark='a'/> At every x separately, the discriminator chooses one "
-            "number, D of x, to maximize a times log D plus b times log one minus D. Set the derivative to zero. "
-            "<bookmark mark='b'/> The best discriminator is p over p plus q: the share of the probability at x "
-            "that belongs to the data. <bookmark mark='c'/> Where the data dominates it says real, where the "
-            "generator dominates it says fake, and where they agree, one half."
+            "What does a winning discriminator learn? Write the value as an integral, with q for the generator's "
+            "distribution. <bookmark mark='a'/> At each x it picks one number, D of x, to maximize a log D plus b "
+            "log one minus D: set the derivative to zero. <bookmark mark='b'/> The best discriminator is p over p "
+            "plus q, the data's share of the probability at x. <bookmark mark='c'/> Real where the data dominates, "
+            "fake where the generator does, one half where they agree."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -161,13 +159,12 @@ class Game(VoiceoverScene):
                             r"symmetric, \ between $0$ and $\log 2$, \ zero only when $q = p$", width=8.2,
                             font_size=24).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Now put the best discriminator back into the value. <bookmark mark='a'/> Divide p plus q by two inside "
-            "each log, and two KL divergences appear, from p and from q to their average m, minus log four. "
-            "<bookmark mark='b'/> Together they make the Jensen-Shannon divergence: symmetric, never more than log "
-            "two, and zero exactly when q equals p. <bookmark mark='c'/> So against a perfect critic, the "
-            "generator is minimizing a divergence between its distribution and the data's, without ever writing "
-            "down a density. That is the theorem of the 2014 paper. Whether training actually finds that minimum "
-            "is a different question, and it is the rest of this chapter and the next."
+            "Put the best discriminator back. <bookmark mark='a'/> Halve p plus q inside each log, and two KL "
+            "divergences appear, to the average m, minus log four. <bookmark mark='b'/> Together: the "
+            "Jensen-Shannon divergence, symmetric, at most log two, zero exactly when q equals p. <bookmark "
+            "mark='c'/> Against a perfect critic, the generator minimizes a divergence without ever writing down a "
+            "density: the 2014 paper's theorem. Whether training finds that minimum is the rest of this chapter "
+            "and the next."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -214,15 +211,12 @@ class Game(VoiceoverScene):
         rkl.next_to(rk, DOWN, buff=0.12)
         cite_ = cite(r"Arjovsky \& Bottou (2017)", corner=DR)
         with self.voiceover(
-            "The first practical problem appears on day one. Early in training the fakes are bad, the "
-            "discriminator rejects them with confidence, and D of G of z sits near zero. <bookmark mark='a'/> "
-            "There, the minimax loss, log of one minus D, is flat: the generator gets almost no gradient exactly "
-            "when it needs one most. <bookmark mark='b'/> Goodfellow's fix, in the same paper, flips the "
-            "generator's goal: instead of minimizing the probability of being caught, maximize the probability of "
-            "fooling, minus log D. Same fixed point, steep where the other is flat. <bookmark mark='c'/> "
-            f"{meas} <bookmark mark='d'/> But the fix has a cost, found by Martin Arjovsky and Leon Bottou in "
-            "2017: its gradient is that of a reverse KL divergence minus the Jensen-Shannon term. Reverse KL "
-            "barely penalizes missing a mode, and heavily penalizes putting mass where the data has none."
+            "The first practical problem appears on day one: the fakes are bad, and D of G of z sits near zero. "
+            "<bookmark mark='a'/> There the minimax loss is flat, and the generator gets almost no gradient. "
+            "<bookmark mark='b'/> Goodfellow's fix, in the same paper: maximize the probability of fooling, minus "
+            f"log D, steep where the other is flat. <bookmark mark='c'/> {meas} <bookmark mark='d'/> The fix has a "
+            "cost, found by Martin Arjovsky and Léon Bottou in 2017: its gradient is that of a reverse KL divergence "
+            "minus the Jensen-Shannon term, and reverse KL barely penalizes missing a mode."
         ) as vo:
             self.play(FadeIn(ax), Create(mm), FadeIn(lg[0]))
             vo.wait_until("a")
@@ -273,22 +267,20 @@ class Game(VoiceoverScene):
                "places where the discriminator is weakest, and the discriminator follows." if max(ns_modes) < 8 else
                "At times it reaches all eight, then loses some again: the generator chases the places where the "
                "discriminator is weakest, and the discriminator follows.")
-        pick = (f"Here is the run, of five, that ended with the fewest modes: seed {seed}. {n_col} of the five "
+        pick = (f"This is seed {seed}, the run of five that ended with the fewest modes; {n_col} of the five "
                 "collapsed to some degree.")
         if mean_ns < mean_mm:
-            cmp_ = (f"Over five seeds, the non-saturating GAN ends with {mean_ns:.1f} of the eight modes on average, "
-                    f"and covers all eight in {full_ns} of them; the minimax loss, with the gradient problem but "
-                    f"without the reverse KL, ends with {mean_mm:.1f}, all eight in {full_mm}. Adam rescales the "
-                    "small gradients, which rescues the minimax loss here, and the reverse KL shows.")
+            cmp_ = (f"Over five seeds, the non-saturating GAN covers {mean_ns:.1f} of the eight modes on average, all "
+                    f"eight in {full_ns}; the minimax loss covers {mean_mm:.1f}, all eight in {full_mm}. Adam rescales "
+                    "its small gradients, and the reverse KL shows.")
         else:
-            cmp_ = (f"Over five seeds, the non-saturating GAN ends with {mean_ns:.1f} of the eight modes on average, "
-                    f"all eight in {full_ns}; the minimax loss with {mean_mm:.1f}, all eight in {full_mm}.")
+            cmp_ = (f"Over five seeds, the non-saturating GAN covers {mean_ns:.1f} of the eight modes on average, all "
+                    f"eight in {full_ns}; the minimax loss covers {mean_mm:.1f}, all eight in {full_mm}.")
         with self.voiceover(
-            "Here is that cost on the ring of eight. The background is the discriminator's verdict on the plane, "
-            "bright where it says real; the dots are the generator's samples, from the same three hundred noise "
-            "vectors at every checkpoint. " + pick + " <bookmark mark='a'/> Watch it train. " + hop + " <bookmark "
-            "mark='b'/> "
-            "This is mode collapse: a generator that makes only a few kinds of thing. <bookmark mark='c'/> " + cmp_
+            "Here is that cost on the ring: the discriminator's verdict as the background, bright for real, and the "
+            "generator's samples from three hundred fixed noise vectors. " + pick + " <bookmark mark='a'/> " + hop +
+            " <bookmark mark='b'/> This is mode collapse: a generator that makes only a few kinds of thing. "
+            "<bookmark mark='c'/> " + cmp_
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(key), FadeIn(ml), FadeIn(sl))
             vo.wait_until("a")

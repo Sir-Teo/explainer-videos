@@ -56,12 +56,10 @@ class Scale(VoiceoverScene):
                f"The discriminator's loss ends at {dfin:.2f}, below two log two: it still tells most fakes from real "
                "digits.")
         with self.voiceover(
-            "First, ours. A generator and a discriminator, each a two-layer network, trained on the digits. On "
-            "the right, what the generator draws from the same sixteen noise vectors at each checkpoint. "
-            "<bookmark mark='a'/> Blobs, then strokes, then digits. <bookmark mark='b'/> On the left, the two "
-            "losses. They don't fall the way a learning curve should: they balance, each player's progress "
-            f"undoing the other's. {bal} Nothing in these curves says when the generator is good. That's one reason "
-            "GANs needed the measuring sticks of chapter fourteen."
+            "First, ours: two-layer networks on the digits, and what the generator draws from sixteen fixed noise "
+            "vectors. <bookmark mark='a'/> Blobs, then strokes, then digits. <bookmark mark='b'/> The two losses "
+            f"don't fall like a learning curve; they balance. {bal} Nothing here says when the generator is good, "
+            "one reason GANs needed chapter fourteen's measuring sticks."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sheets[0]), FadeIn(cap[0]))
             vo.wait_until("a")
@@ -94,15 +92,13 @@ class Scale(VoiceoverScene):
         more = label(r"and: \ spectral normalization (Miyato et al., 2018), \ self-attention (Zhang et al., 2018), "
                      r"\ R1 (Mescheder et al., 2018)", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "From two-layer networks to photographs took four years. <bookmark mark='a'/> In 2015 Alec Radford, "
-            "Luke Metz and Soumith Chintala found convolutional architectures that trained reliably, and showed "
-            "that the noise vectors did arithmetic: a smiling woman, minus a woman, plus a man, gave a smiling "
-            "man. <bookmark mark='b'/> In 2017 Tero Karras and colleagues at NVIDIA grew the networks during "
-            "training, from four pixels to a thousand and twenty-four. <bookmark mark='c'/> In 2018 Andrew Brock, "
-            "Jeff Donahue and Karen Simonyan scaled a class-conditional GAN to ImageNet, with big batches and "
-            "careful regularization: an Inception score of 166.5 and an FID of 7.4 at 128 pixels, against a "
-            "previous best of 52.5 and 18.6. <bookmark mark='d'/> And Karras's group rebuilt the generator "
-            "itself: StyleGAN."
+            "From there to photographs took four years. <bookmark mark='a'/> In 2015 Alec Radford, Luke Metz and "
+            "Soumith Chintala found convolutional GANs that trained reliably, whose noise vectors did arithmetic: a "
+            "smiling woman, minus a woman, plus a man, gave a smiling man. <bookmark mark='b'/> In 2017 Tero Karras "
+            "and colleagues at NVIDIA grew the networks during training, up to 1024 pixels. <bookmark mark='c'/> In "
+            "2018 Andrew Brock, Jeff Donahue and Karen Simonyan scaled a GAN to ImageNet: an Inception score of "
+            "166.5 and an FID of 7.4 at 128 pixels, against a previous best of 52.5 and 18.6. <bookmark mark='d'/> "
+            "And Karras's group rebuilt the generator itself: StyleGAN."
         ) as vo:
             vo.wait_until("a")
             for k, mk in enumerate([None, "b", "c", "d"]):
@@ -139,15 +135,11 @@ class Scale(VoiceoverScene):
         tg = note(r"schematic").to_corner(UR, buff=0.25)
         cite_ = cite(r"Karras, Laine \& Aila (2019); \ StyleGAN2 (2020), StyleGAN3 (2021)", corner=DR)
         with self.voiceover(
-            "StyleGAN's generator doesn't start from the noise. It starts from a learned constant, four pixels "
-            "square, and upsamples it, block by block. <bookmark mark='a'/> The noise goes first through a "
-            "mapping network of eight layers, to an intermediate code w. <bookmark mark='b'/> Then w sets a style "
-            "for every block: a scale and a shift for each channel. Fresh random noise, added at each "
-            "resolution, supplies the details nobody cares to control, the exact placement of hairs and freckles. "
-            "<bookmark mark='c'/> Because each resolution has its own style, styles can be mixed: the coarse "
-            "layers from one face, giving pose and shape, the fine ones from another, giving colour and texture. "
-            "And w's space turned out to be much better organized than z's: straight lines in it became "
-            "meaningful edits, which made the next idea work."
+            "StyleGAN's generator starts not from the noise but from a learned four-pixel constant, upsampled block "
+            "by block. <bookmark mark='a'/> The noise goes through an eight-layer mapping network to a code w, "
+            "<bookmark mark='b'/> and w sets each block's style, a scale and shift per channel; fresh noise adds "
+            "details like freckles. <bookmark mark='c'/> Styles can be mixed, coarse layers from one face, fine ones "
+            "from another, and straight lines in w's space became meaningful edits."
         ) as vo:
             self.play(FadeIn(const), FadeIn(blocks[0]), Create(c0), FadeIn(tg), FadeIn(cite_))
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(c), FadeIn(b)) for c, b in zip(chain, blocks[1:])],
@@ -185,22 +177,21 @@ class Scale(VoiceoverScene):
                                                                                                     buff=0.25))
         rows.arrange(DOWN, buff=0.25, aligned_edge=RIGHT).move_to([3.6, 0.2, 0])
         t0, t1 = tr[0], full
+        tt, p0, r0, p1, r1 = t0["t"], t0["precision"], t0["recall"], t1["precision"], t1["recall"]
         if t0["precision"] > t1["precision"] and t0["recall"] < t1["recall"]:
-            verdict = (f"At t of {t0['t']:g}, precision is {t0['precision']:.2f} and recall {t0['recall']:.2f}; "
-                       f"untruncated, {t1['precision']:.2f} and {t1['recall']:.2f}. Fewer, more typical digits: "
-                       "fidelity bought with variety.")
+            verdict = (f"at t of {tt:g}, precision {p0:.2f} and recall {r0:.2f}; untruncated, {p1:.2f} and "
+                       f"{r1:.2f}. Fidelity bought with variety.")
         else:
-            verdict = (f"At t of {t0['t']:g}, precision is {t0['precision']:.2f} and recall {t0['recall']:.2f}; "
-                       f"untruncated, {t1['precision']:.2f} and {t1['recall']:.2f}: on our small GAN the trade is "
-                       "weaker than BigGAN's.")
+            verdict = (f"at t of {tt:g}, precision {p0:.2f} and recall {r0:.2f}; untruncated, {p1:.2f} and "
+                       f"{r1:.2f}: a weaker trade than BigGAN's.")
         best = min(e["trunc"], key=lambda r: r["fid"])
-        fid_s = (f"The FID, which mixes both, is best at t of {best['t']:g}." if best["t"] else
+        bt = best["t"]
+        fid_s = (f"The FID, which mixes both, is best at t of {bt:g}." if bt else
                  "The FID, which mixes both, is best with no truncation at all.")
         with self.voiceover(
-            "BigGAN brought one more trick, the truncation trick: at sampling time, draw the noise from a "
-            "narrower distribution, resampling any coordinate larger than t. The generator then stays near the "
-            "middle of what it learned. <bookmark mark='a'/> Here it is on our GAN, measured with chapter "
-            "fourteen's precision and recall. <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + fid_s
+            "BigGAN's truncation trick: at sampling time, resample any noise coordinate larger than t, keeping the "
+            "generator near the middle of what it learned. <bookmark mark='a'/> On our GAN, with chapter "
+            "fourteen's precision and recall: <bookmark mark='b'/> " + verdict + " <bookmark mark='c'/> " + fid_s
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(rows))
             vo.wait_until("a")
@@ -226,6 +217,7 @@ class Scale(VoiceoverScene):
         il = label(r"a straight line in $z$ between the first two", font_size=22, color=GAN_C).next_to(it, UP,
                                                                                                      buff=0.12)
         ge, ve = float(np.mean(e["inv_err"])), float(np.mean(e["vae_err"]))
+        n_st = int(steps[-1])
         f = cmath(r"z^* = \arg\min_z \, \|G(z) - x\|^2", font_size=30).to_corner(UR, buff=0.35)
         cmp_ = (f"Their average squared error per pixel is {ge:.3f}, against {ve:.3f} for the VAE's encoder, "
                 f"which gets its answer in one pass but is a different model." if ge < ve else
@@ -234,14 +226,11 @@ class Scale(VoiceoverScene):
         cite_ = cite(r"Zhu et al., \textit{iGAN} (2016); \ Abdal, Qin \& Wonka (2019); \ Pan et al., "
                      r"\textit{DragGAN} (2023)", corner=DL)
         with self.voiceover(
-            "A GAN has no encoder. To edit a real photograph with one, you first have to find the noise vector "
-            "that would have produced it. That's GAN inversion, and the simplest way is search: start from a "
-            "random z and run gradient descent on the difference between G of z and the image. <bookmark "
-            "mark='a'/> Here are eight test digits our generator has never seen, and the search, four random "
-            f"starts each, keeping the best, after {steps[-1]} steps. <bookmark mark='b'/> {cmp_} <bookmark "
-            "mark='c'/> Once found, the codes can be moved: a straight line between two of them morphs one digit "
-            "into the other. With StyleGAN's w space this became an editing tool for real photographs, from "
-            "Jun-Yan Zhu's iGAN in 2016 to DragGAN in 2023, which moves points on an image by dragging them."
+            "A GAN has no encoder: to edit a real photograph, first find the noise that would produce it, by "
+            "gradient descent on the difference between G of z and the image. That's GAN inversion. <bookmark "
+            f"mark='a'/> Eight unseen test digits, four random starts each, the best kept, {n_st} steps. <bookmark "
+            f"mark='b'/> {cmp_} <bookmark mark='c'/> A line between two found codes morphs one digit into the "
+            "other; in StyleGAN's w space this became photo editing, from iGAN in 2016 to DragGAN in 2023."
         ) as vo:
             self.play(FadeIn(top), FadeIn(tl), Write(f), FadeIn(cite_))
             vo.wait_until("a")

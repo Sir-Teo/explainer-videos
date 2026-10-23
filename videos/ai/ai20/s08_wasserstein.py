@@ -58,16 +58,15 @@ class Wasserstein(VoiceoverScene):
         k = int(np.argmin(np.abs(th - 0.5)))
         cite_ = cite(r"Arjovsky, Chintala \& Bottou, \textit{Wasserstein GAN} (2017)", corner=DR)
         js_err = float(np.abs(js[th != 0] - math.log(2)).max())
+        wk, tk = float(w[k]), float(th[k])
         with self.voiceover(
-            "Martin Arjovsky, Soumith Chintala and Léon Bottou asked what the Jensen-Shannon divergence does when "
-            "the two distributions don't overlap, which for images, on thin sheets in a huge space, is the normal "
-            "case. Their example: the data is a vertical segment at x equals zero, the model the same segment "
-            "shifted to theta. <bookmark mark='a'/> For any theta other than zero there is no overlap, and JS is "
-            "log two, whatever theta is. A flat line has no gradient: it can't say that theta is getting closer. "
-            "<bookmark mark='b'/> We checked by training a discriminator at seventeen values of theta: its "
-            f"estimates stay within {js_err:.2f} of log two. <bookmark mark='c'/> A distance that tracks how far "
-            "the mass has to move gives exactly what's missing, a V whose slope always points home. A trained "
-            f"critic estimates it at theta {th[k]:.2f} as {w[k]:.2f}."
+            "Martin Arjovsky, Soumith Chintala and Léon Bottou asked what Jensen-Shannon does when distributions "
+            "don't overlap, the normal case for images. Their example: the data a segment at x equals zero, the "
+            "model the same segment at theta. <bookmark mark='a'/> For any theta but zero, JS is log two: flat, no "
+            "gradient, no sign that theta is getting closer. <bookmark mark='b'/> Discriminators trained at "
+            f"seventeen values of theta stay within {js_err:.2f} of log two. <bookmark mark='c'/> A distance that "
+            "measures how far the mass must move gives a V whose slope points home; a trained critic puts it at "
+            f"{wk:.2f} for theta {tk:.2f}."
         ) as vo:
             self.play(FadeIn(pl), Create(p0), FadeIn(pt), FadeIn(tl), FadeIn(lab), FadeIn(cite_))
             self.play(theta.animate.set_value(0.25), run_time=2.0)
@@ -113,12 +112,10 @@ class Wasserstein(VoiceoverScene):
                           font_size=20).move_to([5.0, -1.4, 0])
         tg = note(r"illustrative").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "That distance is the earth mover's distance. Picture p as a pile of sand and q as a hole of the same "
-            "volume. <bookmark mark='a'/> A transport plan says how much sand goes from each place to each other "
-            "place; its cost is the amount moved times the distance moved. <bookmark mark='b'/> The Wasserstein-1 "
-            "distance is the cost of the cheapest plan. Gaspard Monge posed the problem in 1781, for moving earth; "
-            "Leonid Kantorovich gave it its modern form in 1942, and later shared a Nobel prize in economics for "
-            "the theory of allocating resources."
+            "That is the earth mover's distance: p a pile of sand, q a hole of the same volume. <bookmark "
+            "mark='a'/> A transport plan says how much sand goes where; its cost is mass times distance. <bookmark "
+            "mark='b'/> Wasserstein-1 is the cheapest plan's cost. Gaspard Monge posed the problem in 1781; Leonid "
+            "Kantorovich gave its modern form in 1942."
         ) as vo:
             self.play(FadeIn(axis), FadeIn(hp), FadeIn(hq), FadeIn(tg))
             vo.wait_until("a")
@@ -151,15 +148,13 @@ class Wasserstein(VoiceoverScene):
                     label(r"along the lines between matched real and fake points", font_size=20, color=GREY_B))
         gp.arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.0, -2.6, 0])
         with self.voiceover(
-            "Computing a cheapest plan between distributions of images is hopeless, but the distance has a second "
-            "description. By the duality of Kantorovich and Rubinstein, it is the largest gap in expectation that "
-            "any function with slope at most one, anywhere, can open between p and q. <bookmark mark='a'/> So "
-            "replace the discriminator by a critic f, whose output is any number rather than a probability, train "
-            "it to open that gap, and train the generator to close it. <bookmark mark='b'/> The hard part is "
-            "keeping the critic's slope at most one. The first Wasserstein GAN simply clipped every weight to a "
-            "small box. <bookmark mark='c'/> Ishaan Gulrajani and colleagues noticed that the optimal critic has "
-            "slope exactly one along the lines between real and fake points, and penalized the slope, there, for "
-            "straying from one: WGAN-GP."
+            "Cheapest plans between image distributions are hopeless to compute, but by Kantorovich and "
+            "Rubinstein's duality the distance is also the largest gap in expectation that a function of slope at "
+            "most one can open between p and q. <bookmark mark='a'/> So a critic f, with any real output, learns to "
+            "open the gap, and the generator to close it. <bookmark mark='b'/> The hard part is the slope limit; the "
+            "first Wasserstein GAN clipped every weight. <bookmark mark='c'/> Ishaan Gulrajani and colleagues saw "
+            "that the optimal critic has slope exactly one between real and fake points, and penalized deviations "
+            "there: WGAN-GP."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -200,22 +195,20 @@ class Wasserstein(VoiceoverScene):
         mw, mn, mm = (float(np.mean(fin[k])) for k in ("wgan", "ns", "mm"))
         full_w = sum(1 for m in fin["wgan"] if m == 8)
         if mw > max(mn, mm):
-            verdict = (f"Over five seeds, WGAN-GP ends with {mw:.1f} of the eight modes on average, all eight in "
+            verdict = (f"Over five seeds, WGAN-GP covers {mw:.1f} of the eight modes on average, all eight in "
                        f"{full_w} runs, against {mn:.1f} for the non-saturating GAN and {mm:.1f} for the minimax "
-                       "one. A critic that measures distance keeps pulling the generator toward every mode it is "
-                       "missing.")
+                       "one: a distance keeps pulling toward every missing mode.")
         else:
-            verdict = (f"Over five seeds, WGAN-GP ends with {mw:.1f} of the eight modes on average, against "
-                       f"{mn:.1f} for the non-saturating GAN and {mm:.1f} for the minimax one: on this ring, the "
-                       "critic's distance does not buy coverage.")
+            verdict = (f"Over five seeds, WGAN-GP covers {mw:.1f} of the eight modes on average, against {mn:.1f} "
+                       f"for the non-saturating GAN and {mm:.1f} for the minimax one: here the distance doesn't buy "
+                       "coverage.")
         qw, qn = 100 * qual["wgan"], 100 * qual["ns"]
-        sharp = (f"Its samples are less tightly placed, though: {qw:.0f} percent sit within three standard "
-                 f"deviations of a mode, against {qn:.0f} for the non-saturating GAN." if qw < qn - 5 else
+        sharp = (f"Its samples sit less tightly, though: {qw:.0f} percent within three standard deviations of a "
+                 f"mode, against {qn:.0f} for the non-saturating GAN." if qw < qn - 5 else
                  f"And {qw:.0f} percent of its samples sit within three standard deviations of a mode.")
         with self.voiceover(
-            "Back to the ring, with the same two networks and the same number of generator steps. The background "
-            "is now the critic: not a probability, a landscape, high where the data is. <bookmark mark='a'/> "
-            "Watch the generator's samples climb the critic's landscape, toward the modes. <bookmark "
+            "Back to the ring, same networks, same generator steps. The background is now the critic, a landscape "
+            "high where the data is. <bookmark mark='a'/> The samples climb it toward the modes. <bookmark "
             f"mark='b'/> {verdict} <bookmark mark='c'/> {sharp}"
         ) as vo:
             self.play(FadeIn(pl), FadeIn(truth), FadeIn(head), FadeIn(kk), FadeIn(ml))
@@ -245,11 +238,10 @@ class Wasserstein(VoiceoverScene):
                        r"the price is a slower, more careful critic.", font_size=24)
         tg = note(r"computed: \ PyTorch's FLOP counter, \ the digit models").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "The cure has a price. Each generator step of WGAN-GP trains the critic five times, and its penalty "
-            "needs a second backward pass through the critic. <bookmark mark='a'/> Counted operation by "
-            f"operation on our digit models, one WGAN-GP step costs {ratio:.1f} times a GAN step, <bookmark "
-            f"mark='b'/> so on the same budget the GAN takes {sg:,} generator steps and WGAN-GP {sw:,}. We'll see "
-            "in chapter fifteen what that buys on digits."
+            "The cure has a price: five critic updates per generator step, each penalty needing a second backward "
+            f"pass. <bookmark mark='a'/> Counted on our digit models, a WGAN-GP step costs {ratio:.1f} GAN steps, "
+            f"<bookmark mark='b'/> so on one budget the GAN takes {sg:,} generator steps and WGAN-GP {sw:,}. "
+            "Chapter fifteen shows what that buys."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(tg))
             vo.wait_until("a")
