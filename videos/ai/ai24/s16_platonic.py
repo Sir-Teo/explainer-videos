@@ -223,16 +223,27 @@ class Platonic(VoiceoverScene):
             lcs, RIGHT)
         src = cite(r"Becker \& Hinton (1992): \ modules seeing different parts \ of the input, \ made to agree")
         rose = a0[-1] > a0[0] + 0.05 and a1[-1] > a1[0] + 0.05
-        v_ = (f"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in the "
-              f"two runs, well above the {px:.2f} of the raw pixels, though below the {cs:.2f} of two encoders that "
-              "see the same half." if rose else
-              f"Their agreement goes from {a0[0]:.2f} to {a0[-1]:.2f} and {a1[-1]:.2f}; the raw pixels' is {px:.2f}.")
+        above = min(a0[-1], a1[-1]) > px + 0.03
+        if rose and above:
+            v_ = (f"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in "
+                  f"the two runs, well above the {px:.2f} of the raw pixels, though below the {cs:.2f} of two encoders "
+                  "that see the same half.")
+            close = ("Two senses, trained apart, drifting toward one picture of the same digits: the hypothesis in "
+                     "miniature.")
+        elif rose:
+            v_ = (f"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in "
+                  f"the two runs. But that only reaches the {px:.2f} at which the two halves' raw pixels already agree, "
+                  f"far below the {cs:.2f} of two encoders that see the same half.")
+            close = ("So the two senses drift toward each other, but no further than the raw data already put them. "
+                     "At our scale, the strong form of the hypothesis is not something we can show.")
+        else:
+            v_ = f"Their agreement goes from {a0[0]:.2f} to {a0[-1]:.2f} and {a1[-1]:.2f}; the raw pixels' is {px:.2f}."
+            close = "At our scale, two senses trained apart do not come to one picture."
         with self.voiceover(
             "A sharper test borrows Becker and Hinton's setting from 1992: two networks that see different parts of "
             "the world. Encoder A sees only the top half of each digit, encoder B only the bottom half. <bookmark "
             "mark='a'/> Each is trained alone, with SimCLR, never told about the other. Do they come to agree "
-            "about which digits are alike? <bookmark mark='b'/> " + v_ + " <bookmark mark='c'/> Two senses, trained "
-            "apart, drifting toward one picture of the same digits: the hypothesis in miniature."
+            f"about which digits are alike? <bookmark mark='b'/> {v_} <bookmark mark='c'/> {close}"
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(lt), FadeIn(lb), FadeIn(src))
             vo.wait_until("a")

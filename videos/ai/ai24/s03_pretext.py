@@ -69,7 +69,8 @@ class Pretext(VoiceoverScene):
             g = Group(p_, label(n_, font_size=22, color=ROT), label(w_, font_size=17, color=GREY_B)).arrange(DOWN,
                                                                                                            buff=0.2)
             cards.add(g)
-        cards.arrange(RIGHT, buff=0.45).move_to(UP * 0.4)
+        cards.arrange(RIGHT, buff=0.45)
+        cards.scale(min(1.35, 12.8 / cards.width)).move_to(UP * 0.3)
         head = label(r"Pretext tasks: \ puzzles whose answers come free", font_size=34).to_edge(UP, buff=0.4)
         shortcut = label(r"the catch: \ a network solves the puzzle, \ not your problem", font_size=26, color=GREY_A)
         shortcut.to_edge(DOWN, buff=0.5)

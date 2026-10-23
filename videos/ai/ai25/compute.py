@@ -775,7 +775,7 @@ def compute_fno():
     val = (torch.from_numpy(fd.subsample(te0[:100], FNO_RES)).float(),
            torch.from_numpy(fd.subsample(teT[:100], FNO_RES)).float())
     show = torch.from_numpy(fd.subsample(te0[:3], FNO_RES)).float()
-    part = CACHE.partial("fno", dict(res=FNO_RES, test=TEST_RES, seeds=SEEDS, v=1))
+    part = CACHE.partial("fno", dict(res=FNO_RES, test=TEST_RES, seeds=SEEDS, v=2))
     for kind in ("fno", "cnn"):
         for s in SEEDS:
             key = f"{kind}_s{s}"

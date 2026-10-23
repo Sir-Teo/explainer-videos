@@ -29,8 +29,14 @@ ZH = {
         "从0到9。<bookmark mark='b'/>可是这个网络从来没见过任何标签。它被问到的唯一问题是：哪两张被扭曲过的图来自同一个数字。"
         "<bookmark mark='c'/>然而，问一个数字在这个球面上的近邻它是几，它们答对的比例是{pct(zk, 0)}%。",
 
-    'Here is how it got there. At the start the points are scattered at random.':
-        "它是这样走到这一步的。一开始，这些点是随机散开的。<bookmark mark='a'/>每一步给网络看128个数字，每个数字有两个版本，"
+    'At the start, the untrained network puts almost every digit on the same small patch of the sphere.':
+        '一开始，未训练的网络几乎把每个数字都放在球面上同一小块地方。',
+
+    'At the start the points are scattered at random.':
+        '一开始，这些点是随机散开的。',
+
+    'f"Here is how it got there.':
+        "它是这样走到这一步的。{start}<bookmark mark='a'/>每一步给网络看128个数字，每个数字有两个版本，"
         "被裁剪、被倾斜、被涂抹过。它把每个数字的两个版本拉到一起，<bookmark mark='b'/>把其余的一切推开。这条规则里根本没提到5或7。"
         "<bookmark mark='c'/>可是簇还是出现了，因为一个5的两份涂抹副本彼此相像的方式，正是所有5彼此相像的方式。"
         "<bookmark mark='d'/>如果去掉“推开”，网络就会找到一个更偷懒的答案：所有数字都落在同一个点上。",
@@ -482,6 +488,11 @@ ZH.update({
         "然后在每个池上训练同样的SimCLR，步数相同，并在通常那个均衡的测试集上测试。<bookmark mark='a'/>这是每个数字上的准确率，原始池里"
         "最常见的放在左边。<bookmark mark='b'/>{v}",
 
+    "f'The biggest change is on the rarest digit, {rarest}":
+        '变化最大的是最少见的数字{rarest}，它在原始池里只有{int(pc[rarest])}个样本：筛选之前，它的测试数字有{pct(per_r[rarest])}%判对，'
+        '筛选之后是{pct(per_c[rarest])}%。在最常见的三个数字上，两个网络相差在{pct(near)}个百分点以内。总体：线性探针{pct(lc)}%对'
+        '{pct(lr)}%，每个数字10个标签时{pct(fc)}%对{pct(fr)}%，而图像池小了{n_r / n_c:.0f}倍。',
+
     'f"On the three rarest digits, the curated pool\'s network is better by':
         "在最少见的三个数字上，用筛选池训练的网络好了{pct(gain_rare)}个百分点；在最常见的三个上，差别是{pct(gain_common)}。总体："
         "线性探针{pct(lc)}%对{pct(lr)}%，每个数字10个标签时{pct(fc)}%对{pct(fr)}%，而图像池小了{n_r / n_c:.0f}倍。",
@@ -640,10 +651,25 @@ ZH.update({
     'f"A frozen network is one test.':
         "冻结的网络是一种检验。另一种常用的检验让整个网络都可以改变，从它学到的东西出发，用同样的100个标签。<bookmark mark='a'/>从零开始"
         "用100个数字训练，我们的网络达到{pct(sc)}%。<bookmark mark='b'/>{len(ssl)}个自监督的起点里，有{n_up}个超过了它；最好的是"
-        "{SPOKEN.get(best, best)}，{pct(rows[best]['ft'][0])}%。<bookmark mark='c'/>{mv}",
+        "{SPOKEN.get(best, best)}，{pct(rows[best]['ft'][0])}%。<bookmark mark='c'/>{mv}<bookmark mark='d'/>{mv2}"
+        "<bookmark mark='e'/>{keep}",
 
     "f'The masked models gain the most from it":
-        "掩码模型从中获益最多：MAE从冻结网络的{pct(lin['mae'])}%升到微调后的{pct(mae)}%，I-JEPA从{pct(lin['ijepa'])}%升到{pct(ij)}%。",
+        "掩码模型从中获益最多：MAE从冻结网络的{pct(fewp['mae'])}%升到微调后的{pct(mae)}%，I-JEPA从{pct(fewp['ijepa'])}%升到"
+        "{pct(ij)}%。",
+
+    "f'But that only brings MAE back to where training from scratch gets":
+        '但这只是让MAE回到了从零训练能达到的水平，{pct(sc)}%：它的预训练并没有带来领先。',
+
+    "f'MAE ends {pct(mae - sc)} points above training from scratch.'":
+        'MAE最后比从零训练高{pct(mae - sc)}个百分点。',
+
+    "f'And for the best networks, the frozen probe was the better use of the hundred labels":
+        '而对最好的那些网络来说，把这100个标签用在冻结探针上反而更划算：{SPOKEN.get(bf, bf)}冻结时是{pct(fewp[bf])}%，'
+        '微调后是{pct(rows[bf][\'ft\'][0])}%。标签这么少时，改动每一个权重，可能会抹掉一部分学到的东西。',
+
+    "f'{SPOKEN.get(bf, bf)}, the best frozen network, goes from":
+        '{SPOKEN.get(bf, bf)}是冻结时最好的网络，它从冻结时的{pct(fewp[bf])}%变成微调后的{pct(rows[bf][\'ft\'][0])}%。',
 
     "f'Fine-tuning helps the masked models less than the literature would suggest":
         '微调对掩码模型的帮助比文献所说的要小：MAE最后是{pct(mae)}%，I-JEPA是{pct(ij)}%。',
@@ -767,10 +793,23 @@ ZH.update({
     "f'We see no such relation here: the rank correlation is {rho:.2f}.'":
         '我们在这里看不到这样的关系：秩相关为{rho:.2f}。',
 
-    '"A sharper test borrows Becker and Hinton\'s setting from 1992':
+    'f"A sharper test borrows Becker and Hinton\'s setting from 1992':
         "一个更尖锐的检验借用了贝克尔和辛顿1992年的设定：两个网络看着世界的不同部分。编码器A只看每个数字的上半部分，编码器B只看下半部分。"
         "<bookmark mark='a'/>它们各自单独用SimCLR训练，从不知道对方的存在。它们会在“哪些数字相像”这件事上达成一致吗？"
-        "<bookmark mark='b'/>{v_}<bookmark mark='c'/>两种感官，分开训练，却朝着关于同一批数字的同一幅图景靠拢：这是那个假说的缩影。",
+        "<bookmark mark='b'/>{v_}<bookmark mark='c'/>{close}",
+
+    'Two senses, trained apart, drifting toward one picture of the same digits':
+        '两种感官，分开训练，却朝着关于同一批数字的同一幅图景靠拢：这是那个假说的缩影。',
+
+    "f\"As each learns, they agree more: from {a0[0]:.2f} at the start to {a0[-1]:.2f} and {a1[-1]:.2f} in the two runs. But":
+        '随着各自学习，它们越来越一致：从开始时的{a0[0]:.2f}，到两次训练中的{a0[-1]:.2f}和{a1[-1]:.2f}。但这只达到了两个半边的原始像素'
+        '本来就有的一致度{px:.2f}，远低于两个看同一半的编码器之间的{cs:.2f}。',
+
+    'So the two senses drift toward each other, but no further than the raw data already put them.':
+        '所以这两种感官确实彼此靠近了，但没有超出原始数据本来就给它们的那一步。在我们的规模上，这个假说的强形式不是我们能证明的。',
+
+    'At our scale, two senses trained apart do not come to one picture.':
+        '在我们的规模上，分开训练的两种感官并没有走到同一幅图景。',
 
     "f'As each learns, they agree more":
         '随着各自学习，它们越来越一致：从开始时的{a0[0]:.2f}，到两次训练中的{a0[-1]:.2f}和{a1[-1]:.2f}，远高于原始像素的{px:.2f}，'
@@ -786,11 +825,11 @@ ZH.update({
         "真实存在。",
 
     # ------------------------------------------------------------------ Outro
-    "Let's take stock.":
+    'f"Let\'s take stock.':
         "来总结一下。前置任务教会网络的是这道题所需要的东西，包括它的盲区。对比损失是在候选之间做分类，也是信息的一个下界，上限是候选数"
         "的对数。在球面上，它是两股力量，对齐与均匀，由温度来平衡。没有东西把它们推开，一致性就会坍缩成常数，而且我们可以测量它。"
         "BYOL和SimSiam靠不对称逃脱，Barlow Twins和VICReg靠维度去相关，DINO靠让老师在两种坍缩之间保持平衡。掩码模型靠填空学习；"
-        "JEPA预测的是含义而不是像素。而分开训练、各看同一批数字不同一半的网络，最终达成了一致。",
+        "JEPA预测的是含义而不是像素。而四种不同的损失，有对比式的也有非对比式的，最后得到的表示几乎一样：两两之间的CKA至少是{lo:.2f}。",
 
     'All of this comes back.':
         "这些都会再回来。数据增强教网络该忽略什么；下一次，第25部分会把这种对称性直接造进网络里。<bookmark mark='p2'/>在表示空间里做"

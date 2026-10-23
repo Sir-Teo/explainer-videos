@@ -290,11 +290,16 @@ class Hook(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def question(self):
-        q = label(r"What do you have to know \\ to guess well?", font_size=56)
+        q = label(r"What do you have to know \\ to guess well?", font_size=56).shift(UP * 0.5)
+        ptext = data_text("The Eiffel Tower is located in the city of", font=MONO, font_size=26, color=GREY_B)
+        box = Rectangle(width=1.2, height=0.45, stroke_color=C.MODEL_Q, stroke_width=2.5).next_to(ptext, RIGHT,
+                                                                                               buff=0.15)
+        echo = VGroup(ptext, box, Text("?", font=MONO, font_size=26, color=C.MODEL_Q).move_to(box))
+        echo.next_to(q, DOWN, buff=0.9)
         with self.voiceover(
             "Which raises the question this whole series is about. What do you have to know, to guess well?"
         ):
-            self.play(Write(q), run_time=2.0)
+            self.play(Write(q), FadeIn(echo, shift=UP * 0.1), run_time=2.0)
         m = series_map(current=PART).shift(DOWN * 0.2)
         title = label(SERIES_ZH if zh() else SERIES_EN, font_size=44).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -303,7 +308,7 @@ class Hook(VoiceoverScene):
             "generation and perception, <bookmark mark='e'/> agency and reasoning, <bookmark mark='f'/> and finally, "
             "looking inside, and whether we can trust it."
         ) as vo:
-            self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeIn(title))
+            self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeOut(echo), FadeIn(title))
             self.remove(q)
             for k, mark in enumerate("abcdef"):
                 vo.wait_until(mark)

@@ -73,8 +73,13 @@ class Hook(VoiceoverScene):
         Zc = np.asarray(nv["naive_z"])
         hs2 = Hypersphere(Zc[-1], [DIGIT[c] for c in lab], radius=1.1, center=[4.4, -2.4, 0], dot=0.03)
         cap2 = label(r"pull together, \ and nothing else", font_size=20, color=NAIVE).next_to(hs2, LEFT, buff=0.25)
+        P0 = Z[0] / np.linalg.norm(Z[0], axis=1, keepdims=True)
+        bunched = float(np.linalg.norm(P0.mean(0))) > 0.9
+        start = ("At the start, the untrained network puts almost every digit on the same small patch of the sphere."
+                 if bunched else "At the start the points are scattered at random.")
+        i_b = int(np.searchsorted(steps, 30))
         with self.voiceover(
-            "Here is how it got there. At the start the points are scattered at random. <bookmark mark='a'/> Each "
+            f"Here is how it got there. {start} <bookmark mark='a'/> Each "
             "step shows the network a hundred and twenty-eight digits, each in two versions, cropped, tilted, "
             "smudged. It pulls the two versions of each digit together, <bookmark mark='b'/> and pushes everything "
             "else apart. Nothing in this rule mentions a five or a seven. <bookmark mark='c'/> The clusters appear "
@@ -85,6 +90,8 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(hs), FadeIn(sl))
             vo.wait_until("a")
             self.play(FadeIn(side[0], shift=UP * 0.1))
+            self.play(hs.t.animate.set_value(i_b), hs.angle.animate.set_value(1.6),
+                      run_time=max(1.0, vo.until("b") - 0.2), rate_func=linear)
             vo.wait_until("b")
             self.play(FadeIn(side[1], shift=UP * 0.1))
             self.play(hs.t.animate.set_value(len(steps) - 1), hs.angle.animate.set_value(3.6),
@@ -123,6 +130,7 @@ class Hook(VoiceoverScene):
                                                                          color=JEPA)).arrange(RIGHT, buff=0.15))
         for p_, w_ in zip(pics, ways):
             p_.next_to(w_, LEFT, buff=0.5)
+        Group(*pics, *ways).move_to([0, -0.6, 0])
         trap = label(r"the trap: \ the same answer for every input", font_size=26, color=NAIVE).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "That is the question of this part: how does a network learn what matters when nobody labels the data? "

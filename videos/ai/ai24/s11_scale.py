@@ -135,7 +135,16 @@ class Scale(VoiceoverScene):
         lr, lc = S["raw"]["linear"][0], S["curated"]["linear"][0]
         fr, fc = S["raw"]["few"][0], S["curated"]["few"][0]
         n_r, n_c = int(pc.sum()), int(np.asarray(c["curated_counts"]).sum())
-        if gain_rare > 0.005:
+        rarest = int(order[-1])
+        g1 = float(per_c[rarest] - per_r[rarest])
+        near = float(max(abs(per_c[o] - per_r[o]) for o in order[:3]))
+        if g1 > 0.01:
+            v = (f"The biggest change is on the rarest digit, {rarest}, with only {int(pc[rarest])} examples in the raw "
+                 f"pool: {pct(per_r[rarest])} percent of its test digits right before curation, {pct(per_c[rarest])} "
+                 f"after. On the three commonest, the two networks are within {pct(near)} points. Overall: linear "
+                 f"probe {pct(lc)} against {pct(lr)} percent, ten labels per digit {pct(fc)} against {pct(fr)}, from a "
+                 f"pool {n_r / n_c:.0f} times smaller.")
+        elif gain_rare > 0.005:
             v = (f"On the three rarest digits, the curated pool's network is better by {pct(gain_rare)} points; on "
                  f"the three commonest, the difference is {pct(gain_common)}. Overall: linear probe {pct(lc)} against "
                  f"{pct(lr)} percent, ten labels per digit {pct(fc)} against {pct(fr)}, from a pool "

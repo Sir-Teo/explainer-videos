@@ -77,18 +77,19 @@ class Problem(VoiceoverScene):
         cake = VGroup()
         layers = [(r"predict any part of the input \\ from any other part", 1.5, SIMCLR),
                   (r"supervised: \ a label", 0.55, SUP), (r"reinforcement: \ a reward", 0.35, C.REWARD)]
-        y = -2.3
-        widths = [4.6, 4.6, 0.9]
+        layers = [(t, h * 1.35, col) for t, h, col in layers]
+        y = -2.7
+        widths = [5.6, 5.6, 0.9]
         for (t, h, col), w in zip(layers, widths):
             if w < 1:
-                c_ = Circle(radius=0.32, stroke_width=0, fill_color=col, fill_opacity=0.9).move_to([-3.6, y + 0.32, 0])
-                lab = label(t, font_size=20, color=col).next_to(c_, RIGHT, buff=0.3)
+                c_ = Circle(radius=0.42, stroke_width=0, fill_color=col, fill_opacity=0.9).move_to([-3.5, y + 0.42, 0])
+                lab = label(t, font_size=24, color=col).next_to(c_, RIGHT, buff=0.3)
                 cake.add(VGroup(c_, lab))
-                y += 0.64
+                y += 0.84
             else:
                 r_ = Rectangle(width=w, height=h, stroke_width=1.5, stroke_color=col, fill_color=col,
-                               fill_opacity=0.25).move_to([-3.6, y + h / 2, 0])
-                lab = label(t, font_size=20, color=WHITE).move_to(r_)
+                               fill_opacity=0.25).move_to([-3.5, y + h / 2, 0])
+                lab = label(t, font_size=24, color=WHITE).move_to(r_)
                 cake.add(VGroup(r_, lab))
                 y += h
         cake_c = cite(r"after LeCun's cake, \ NIPS 2016 keynote; \ schematic", corner=DL)
@@ -141,7 +142,7 @@ class Problem(VoiceoverScene):
             (2025, r"DINOv3, \\ V-JEPA 2", DINO_C),
             (2026, r"V-JEPA 2.1; \\ one space, \\ every sense", JEPA),
         ]
-        y0 = -0.2
+        y0 = -0.35
 
         def X(yr):  # a broken axis: 1958-2004 squeezed on the left
             if yr < 2004:
@@ -153,27 +154,29 @@ class Problem(VoiceoverScene):
         brk = VGroup(*[Line([x - 0.06, y0 - 0.12, 0], [x + 0.06, y0 + 0.12, 0], color=GREY_C, stroke_width=2)
                        for x in (X(2003) + 0.12, X(2004) - 0.12)])
         items = VGroup()
-        for k, (yr, txt, col) in enumerate(events):
-            dot = Dot([X(yr), y0, 0], radius=0.07, color=col)
-            grp = VGroup(label(str(yr), font_size=19, color=col), label(txt, font_size=16, color=WHITE)).arrange(
+        for k, (yr, txt, col) in enumerate(events):  # four tiers: near and far, above and below the axis
+            dot = Dot([X(yr), y0, 0], radius=0.08, color=col)
+            grp = VGroup(label(str(yr), font_size=22, color=col), label(txt, font_size=19, color=WHITE)).arrange(
                 DOWN, buff=0.05)
-            up = k % 2 == 0
-            grp.next_to(dot, UP if up else DOWN, buff=0.3)
+            tier = k % 4
+            grp.next_to(dot, UP if tier % 2 == 0 else DOWN, buff=0.3 if tier < 2 else 1.55)
             items.add(VGroup(dot, Line(), grp))
-        for side in (0, 1):
-            same = [items[k] for k in range(len(items)) if k % 2 == side]
+        for side in range(4):
+            same = [items[k] for k in range(len(items)) if k % 4 == side]
             for a, b in zip(same, same[1:]):
                 gap = b[2].get_left()[0] - a[2].get_right()[0]
-                if gap < 0.1:
-                    b[2].shift(RIGHT * (0.1 - gap))
+                if gap < 0.15:
+                    b[2].shift(RIGHT * (0.15 - gap))
             over = same[-1][2].get_right()[0] - 6.9
             if over > 0:
-                for it in same:
-                    it[2].shift(LEFT * over * (1 if it is same[-1] else 0))
+                same[-1][2].shift(LEFT * over)
                 for i in range(len(same) - 2, -1, -1):
                     gap = same[i + 1][2].get_left()[0] - same[i][2].get_right()[0]
-                    if gap < 0.1:
-                        same[i][2].shift(LEFT * (0.1 - gap))
+                    if gap < 0.15:
+                        same[i][2].shift(LEFT * (0.15 - gap))
+            under = -6.9 - same[0][2].get_left()[0]
+            if under > 0:
+                same[0][2].shift(RIGHT * under)
         for it in items:
             dot, _, grp = it
             end = [grp.get_x(), grp.get_bottom()[1] if grp.get_y() > y0 else grp.get_top()[1], 0]

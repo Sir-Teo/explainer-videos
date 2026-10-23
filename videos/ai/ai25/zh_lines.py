@@ -800,9 +800,9 @@ ZH.update({
         "<bookmark mark='b'/>{c_txt}。<bookmark mark='c'/>{coarse}。FourCastNet是最早的学习型天气模型之一，2022年推出，它就建立在这种"
         "傅里叶层的一个变体上。",
 
-    "f'The CNN, as good as":
-        'CNN在它自己的网格上能达到{100 * ec[i_tr]:.1f}%，到最细的网格上变成了{100 * ec[-1]:.0f}%：它的核是五个格点宽，所以在更细的网格上'
-        '只能看到线上更窄的一段',
+    "f'The CNN, at {100 * ec[i_tr]:.1f} percent":
+        'CNN在它自己的网格上是{100 * ec[i_tr]:.1f}%，到最细的网格上变成了{100 * ec[-1]:.0f}%：它的核即使加了空洞，也是按格点来量的，'
+        '所以在更细的网格上只能看到线上更窄的一段',
 
     "f'The CNN also transfers:":
         'CNN也能迁移：在它自己的网格上{100 * ec[i_tr]:.1f}%，在最细的网格上{100 * ec[-1]:.1f}%',

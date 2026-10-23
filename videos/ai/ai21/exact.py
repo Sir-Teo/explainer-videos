@@ -659,7 +659,9 @@ def compute_transport():
         tau_ = min(tau, 1 - 1e-4)
         d1 = (1 - tau_) * rng(40 + k).normal(size=(20000, 2)) + tau_ * sample(20000, 50 + k)
         d2 = [(1 - tau_) * rng(60 + k + 10 * r).normal(size=(n, 2)) + tau_ * sample(n, 70 + k + 10 * r) for r in range(8)]
-        rows.append(dict(tau=tau, sw_flow=sw(P_fm[idx], d1), sw_floor=float(np.mean([sw(d_, d1) for d_ in d2]))))
+        fl_ = [sw(d_, d1) for d_ in d2]  # fresh samples vary a lot: which cluster each point falls in is random
+        rows.append(dict(tau=tau, sw_flow=sw(P_fm[idx], d1), sw_floor=float(np.mean(fl_)), sw_floor_lo=float(min(fl_)),
+                         sw_floor_hi=float(max(fl_))))
         out[f"direct{tau:g}"] = d1[:600]
         out[f"flow{tau:g}"] = P_fm[idx][:600]
     out["marginal_rows"] = rows

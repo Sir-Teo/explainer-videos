@@ -180,7 +180,8 @@ class Operators(VoiceoverScene):
             objs[k] = VGroup(band(g.ax, lx, np.minimum(E[k].min(1), top), np.minimum(E[k].max(1), top),
                                   KIND_COLOR[k], 0.22), curve(g.ax, lx, m, KIND_COLOR[k], 3.5),
                              VGroup(*[Dot(g.ax.c2p(a, b), radius=0.05, color=KIND_COLOR[k]) for a, b in zip(lx, m)]))
-        lg = legend([(STRUCT, r"Fourier neural operator"), (PLAIN, r"CNN, \ the same layout")], font_size=20)
+        lg = legend([(STRUCT, r"Fourier neural operator"), (PLAIN, r"CNN, \ dilated, \ the same layout")],
+                    font_size=20)
         lg.move_to([3.9, 1.6, 0])
         pred = fo["fno_s0"]["pred"]
         uT = np.asarray(fo["show_uT"])[1]
@@ -199,8 +200,8 @@ class Operators(VoiceoverScene):
                  f"{100 * ef[-1]:.1f} at {R[-1]:,} points, {fine} times finer" if f_ratio < 1.5 else
                  f"The Fourier neural operator's error grows from {100 * ef[i_tr]:.1f} percent on its own grid to "
                  f"{100 * ef[-1]:.1f} at {R[-1]:,} points")
-        c_txt = (f"The CNN, as good as {100 * ec[i_tr]:.1f} percent on its own grid, reaches {100 * ec[-1]:.0f} "
-                 "percent at the finest: its kernels are five grid points wide, so on a finer grid they see a "
+        c_txt = (f"The CNN, at {100 * ec[i_tr]:.1f} percent on its own grid, reaches {100 * ec[-1]:.0f} percent at "
+                 "the finest: its kernels, even dilated, are measured in grid points, so on a finer grid they see a "
                  "narrower stretch of the line" if ec[-1] > 2 * ec[i_tr] else
                  f"The CNN also transfers: {100 * ec[i_tr]:.1f} percent on its own grid, {100 * ec[-1]:.1f} at "
                  "the finest")
