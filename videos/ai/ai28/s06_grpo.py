@@ -301,13 +301,22 @@ class GRPO(VoiceoverScene):
                      "drop sharply and be pulled back later.")
         else:
             bumpy = "Steadily: the clip keeps any one batch from moving it far."
+        if pr1 > pr0 + 0.1:
+            moved = (f"The right answers' probability goes from {100 * pr0:.0f} percent on average to {100 * pr1:.0f}, "
+                     "and the wrong ones drain away.")
+        else:
+            moved = (f"On these three, the right answers' probability only goes from {100 * pr0:.0f} percent on "
+                     f"average to {100 * pr1:.0f}: the hardest questions move slowest.")
+        if e1 < e0 - 0.05:
+            ent_said = (f"The entropy falls with it, from {e0:.2f} to {e1:.2f} bits a digit: the model stops spreading "
+                        "its bets. That will matter.")
+        else:
+            ent_said = f"Its entropy goes from {e0:.2f} to {e1:.2f} bits a digit."
         with self.voiceover(
             "Here is what the objective does to the model, step by step: three questions it was unsure of, and the "
             "probability it gives each candidate answer, the right one in green. <bookmark mark='a'/> Each step, "
             "answers that beat their group's average get pushed up and the rest pushed down; the clip keeps each push "
-            f"small. <bookmark mark='b'/> The right answers' probability goes from {100 * pr0:.0f} percent on average "
-            f"to {100 * pr1:.0f}, and the wrong ones drain away. {bumpy} The entropy falls with it, from {e0:.2f} to "
-            f"{e1:.2f} bits a digit: the model stops spreading its bets. That will matter."
+            f"small. <bookmark mark='b'/> {moved} <bookmark mark='b2'/> {bumpy} <bookmark mark='b3'/> {ent_said}"
         ) as vo:
             self.play(FadeIn(panels), FadeIn(cur), FadeIn(yl), FadeIn(g))
             self.add(cnt, ln)

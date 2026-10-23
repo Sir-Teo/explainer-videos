@@ -360,8 +360,19 @@ ZH = {
     'f"Here is what the objective does to the model, step by step:':
         "这就是目标函数一步一步对模型做的事：三道它没把握的题，以及它给每个候选答案的概率，正确的那个是绿色。"
         "<bookmark mark='a'/>每一步，比组内平均好的回答被往上推，其余的往下压；裁剪让每次推动都很小。<bookmark mark='b'/>"
-        "正确答案的概率平均从{100 * pr0:.0f}%升到{100 * pr1:.0f}%，错误答案的概率逐渐流失。{bumpy}"
+        "{moved}<bookmark mark='b2'/>{bumpy}<bookmark mark='b3'/>{ent_said}",
+
+    'f"The right answers\' probability goes from':
+        "正确答案的概率平均从{100 * pr0:.0f}%升到{100 * pr1:.0f}%，错误答案的概率逐渐流失。",
+
+    'f"On these three, the right answers\' probability only goes from':
+        "在这三道题上，正确答案的概率平均只从{100 * pr0:.0f}%变到{100 * pr1:.0f}%：最难的题动得最慢。",
+
+    "f'The entropy falls with it, from {e0:.2f} to {e1:.2f} bits a digit:":
         "熵也跟着下降，从每个数字{e0:.2f}比特降到{e1:.2f}比特：模型不再分散下注。这一点后面会很重要。",
+
+    "f'Its entropy goes from {e0:.2f} to {e1:.2f} bits a digit.":
+        "它的熵从每个数字{e0:.2f}比特变到{e1:.2f}比特。",
 
     'Not smoothly: each step learns from eight sampled answers a question,':
         '并不平稳：每一步对每道题只从8个采样回答中学习，所以一个正确答案可能突然掉下去，过后再被拉回来。',
