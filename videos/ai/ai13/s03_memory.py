@@ -64,7 +64,7 @@ class Hopfield(VoiceoverScene):
         n = len(L)
         verdict = (f"It recovers {ok} of the {n} letters exactly. The others settle into blends: our letters "
                    "share too many pixels, and their memories run into each other."
-                   if ok < n else f"It recovers all {n} letters exactly.")
+                   if ok < n else f"It recovers all {n} letters exactly, every pixel in place.")
         with self.voiceover(
             "In 1982 the physicist John Hopfield described a network that remembers. <bookmark mark='a'/> Store "
             "some patterns of plus and minus ones by strengthening every pair of units that are on together: "
