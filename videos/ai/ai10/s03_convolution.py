@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CNN, FMAP, KERNEL, MLPC, PART, NEG, POS, _image, img_gray, img_heat, load, rgb)
+from videos.ai.ai10.common import (FMAP, KERNEL, MLPC, PART, NEG, POS, _image, img_gray, img_heat, load, rgb)
 
 SHIFTC = C.INTERVAL
 COLORS = {r"w": KERNEL, r"T_s": SHIFTC}
