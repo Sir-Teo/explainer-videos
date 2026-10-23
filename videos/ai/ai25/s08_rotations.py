@@ -188,14 +188,17 @@ class Rotations(VoiceoverScene):
                  f"{sizes[-1]:,} to reach {best_other_big:.4f}")
         ratio = m["mlp"] / m["egnn"]
         ratio_txt = f"{ratio:.0f} times smaller than the MLP's" if ratio >= 2 else "close to the MLP's"
-        aug_txt = ("Turned copies help the MLP" if m["mlp_aug"] < m["mlp"] else
-                   "Turned copies don't help the MLP at this budget")
+        cvm = float(nd["mse_constvel"])
+        mlp_txt = (f"The plain MLP ends at {m['mlp']:.3f}, no better than that guess of {cvm:.3f}" if
+                   m["mlp"] >= 0.97 * cvm else f"The plain MLP ends at {m['mlp']:.3f}, below that guess of {cvm:.3f}")
+        aug_txt = ("Turned copies help the MLP" if m["mlp_aug"] < 0.97 * m["mlp"] else
+                   "Turned copies barely help it at this budget")
         with self.voiceover(
             "Does it pay? Our five-body system again: predict where the particles are at time one, given where "
             "they are and how they move. Four networks, the same three thousand training steps, from a hundred "
             f"training systems up to {sizes[-1]:,}, three seeds each. <bookmark mark='a'/> The dashed line is the "
-            "simplest guess, that every particle keeps going in a straight line. <bookmark mark='b'/> The plain MLP "
-            f"ends at {m['mlp']:.3f}. {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> Message passing on raw "
+            "simplest guess, that every particle keeps going in a straight line. <bookmark mark='b'/> "
+            f"{mlp_txt}. {aug_txt}: {m['mlp_aug']:.3f}. <bookmark mark='c'/> Message passing on raw "
             f"coordinates: {m['gnn']:.3f}. <bookmark mark='d'/> EGNN: {m['egnn']:.4f}, {ratio_txt}. {cross}."
         ) as vo:
             self.play(FadeIn(g), Create(cvl), FadeIn(cvt), FadeIn(tag), FadeIn(par))

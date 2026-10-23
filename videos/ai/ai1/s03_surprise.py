@@ -16,7 +16,6 @@ class Surprise(VoiceoverScene):
         self.rules()
         self.derive()
         self.curve()
-        self.halvings()
         self.skyline()
 
     # ------------------------------------------------------------------
@@ -317,67 +316,6 @@ class Surprise(VoiceoverScene):
             self.play(FadeIn(dots[4]))
             vo.wait_until("d")
             self.play(Indicate(tail, color=C.BITS), run_time=1.2)
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def halvings(self):
-        head = label(r"A bit is a halving", font_size=40).to_edge(UP, buff=0.4)
-        W, y, H = 12.0, 1.3, 0.8
-        rng = np.random.default_rng(11)
-        choices = rng.integers(0, 2, 10)
-        bar = Rectangle(width=W, height=H, stroke_width=0, fill_color=C.BITS, fill_opacity=0.95).move_to([0, y, 0])
-        frame = Rectangle(width=W, height=H, stroke_width=2, stroke_color=GREY_B).move_to([0, y, 0])
-        bits = VGroup(*[MathTex(str(int(c)), font_size=44, color=C.BIT1 if c else C.BIT0) for c in choices])
-        bits.arrange(RIGHT, buff=0.34).move_to(DOWN * 0.9)
-        mag_l = label(r"magnified", font_size=26, color=GREY_A)
-        mag_x = MathTex(r"\times", font_size=34, color=GREY_A)
-        mag_n = Integer(1, font_size=34, color=GREY_A)
-        mag = VGroup(mag_l, mag_x, mag_n).arrange(RIGHT, buff=0.15).next_to(frame, UP, buff=0.25).align_to(frame, RIGHT)
-        count = MathTex(r"10 \text{ halvings}: \ p = 2^{-10} = \tfrac{1}{1024} \ \Longrightarrow \ s = 10 \text{ bits}",
-                        font_size=38).move_to(DOWN * 1.75)
-        # the whole range, unmagnified, with the piece still in play
-        ym = y - H / 2 - 0.45
-        whole = Rectangle(width=W, height=0.14, stroke_width=1, stroke_color=GREY_C, fill_color=GREY_E, fill_opacity=0.6)
-        whole.move_to([0, ym, 0])
-        piece = Rectangle(width=W, height=0.14, stroke_width=0, fill_color=C.BITS, fill_opacity=0.95).move_to([0, ym, 0])
-        whole_l = label(r"the whole range", font_size=22, color=GREY_B).next_to(whole, DOWN, buff=0.1).align_to(whole, LEFT)
-        cap = label(r"each yes-or-no answer that halves the possibilities is one bit", font_size=28, color=GREY_A)
-        cap.to_edge(DOWN, buff=0.55)
-        with self.voiceover(
-            "Bits have a concrete meaning. Take the whole range of possibilities, and halve it: <bookmark mark='a'/> "
-            "left or right, zero or one. Halve what's left, ten times over. <bookmark mark='b'/> You're down to one "
-            "part in 1024, probability two to the minus ten: ten bits. Each yes-or-no answer that halves the "
-            "possibilities is one bit."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(bar), Create(frame), FadeIn(mag), FadeIn(whole), FadeIn(piece),
-                      FadeIn(whole_l))
-            vo.wait_until("a")
-            lo, w = 0.0, 1.0
-            for j, c in enumerate(choices):
-                w /= 2
-                lo += w * int(c)
-                halves = [Rectangle(width=W / 2, height=H, stroke_width=0, fill_color=C.BITS, fill_opacity=0.95)
-                          .move_to([(s - 0.5) * W / 2, y, 0]) for s in (0, 1)]
-                keep, drop = halves[int(c)], halves[1 - int(c)]
-                cut = Line([0, y - H / 2 - 0.12, 0], [0, y + H / 2 + 0.12, 0], color=WHITE, stroke_width=3)
-                self.remove(bar)
-                self.add(*halves)
-                self.play(Create(cut), drop.animate.set_fill(GREY_E, 0.6), FadeIn(bits[j], shift=DOWN * 0.15),
-                          run_time=0.25)
-                self.play(FadeOut(drop), FadeOut(cut), keep.animate.stretch_to_fit_width(W).move_to([0, y, 0]),
-                          ChangeDecimalToValue(mag_n, 2 ** (j + 1)),
-                          piece.animate.stretch_to_fit_width(max(W * w, 0.004)).move_to([-W / 2 + (lo + w / 2) * W, ym, 0]),
-                          run_time=0.3)
-                bar = keep
-            arrow = Arrow(piece.get_center() + DOWN * 0.6 + RIGHT * 0.6, piece.get_bottom(), buff=0.04, color=C.BITS,
-                          stroke_width=3, max_tip_length_to_length_ratio=0.25)
-            what = label(r"$\tfrac{1}{1024}$ of the bar", font_size=26, color=C.BITS).next_to(arrow.get_start(), RIGHT,
-                                                                                         buff=0.1)
-            vo.wait_until("b")
-            self.play(GrowArrow(arrow), FadeIn(what), FadeOut(whole_l))
-            self.play(Write(count))
-            self.play(FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
 

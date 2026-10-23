@@ -218,13 +218,16 @@ class WL(VoiceoverScene):
                     f"GIN's outputs barely differ between graphs: {100 * np.mean(acc['gin']):.1f} percent.")
         learned = [a for a in acc["gin_rni"] if a > base + 0.1]
         nl = len(learned)
-        rni_line = ("Giving every node a few random numbers breaks the symmetry in principle, but in our budget GIN "
-                    "never learned to use them: it stayed at the base rate in all three seeds." if nl == 0 else
-                    "Giving every node a few random numbers breaks the symmetry: in all three seeds GIN learned to "
-                    f"find the triangles, {100 * min(learned):.1f} percent or better." if nl == 3 else
-                    "Giving every node a few random numbers breaks the symmetry in principle, but it is hard to "
-                    f"learn: {words_num(nl)} of three seeds got there, {100 * max(learned):.1f} percent, the "
-                    "others stayed at the base rate.")
+        if nl == 0:
+            rni_line = ("Giving every node a few random numbers breaks the symmetry in principle, but in our budget "
+                        "GIN never learned to use them: it stayed at the base rate in all three seeds.")
+        elif nl == 3:
+            rni_line = ("Giving every node a few random numbers breaks the symmetry: in all three seeds GIN learned "
+                        f"to find the triangles, {100 * min(learned):.1f} percent or better.")
+        else:
+            rni_line = ("Giving every node a few random numbers breaks the symmetry in principle, but it is hard to "
+                        f"learn: {words_num(nl)} of three seeds got there, {100 * max(learned):.1f} percent, the "
+                        "others stayed at the base rate.")
         tag = note(rf"computed: \ $2{{,}}000$ training graphs, \ $600$ test, \ {n} nodes each, \ three seeds",
                    font_size=20).to_corner(DR, buff=0.25)
         with self.voiceover(

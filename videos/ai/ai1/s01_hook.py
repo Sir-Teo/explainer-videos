@@ -54,7 +54,6 @@ class Hook(VoiceoverScene):
         self.shannon()
         self.era()
         self.modern()
-        self.everywhere()
         self.question()
         self.plan()
         self.board()
@@ -279,72 +278,6 @@ class Hook(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def everywhere(self):
-        r = np.random.default_rng(3)
-        W, H = 3.0, 2.3
-        centers = [np.array([-5.1, 0.2, 0]), np.array([-1.7, 0.2, 0]), np.array([1.7, 0.2, 0]),
-                   np.array([5.1, 0.2, 0])]
-        frames = VGroup(*[RoundedRectangle(width=W, height=H, corner_radius=0.12, stroke_color=GREY_C,
-                                           stroke_width=1.5).move_to(c) for c in centers])
-        t1 = Text("the cat sat", font=MONO, font_size=20, color=C.TOKEN).move_to(centers[0] + UP * 0.6)
-        t2 = Text("on the", font=MONO, font_size=20, color=C.TOKEN).next_to(t1, DOWN, buff=0.15).align_to(t1, LEFT)
-        box = Rectangle(width=0.8, height=0.32, stroke_color=C.MODEL_Q, stroke_width=2).next_to(t2, RIGHT, buff=0.12)
-        bars1 = VGroup(*[Rectangle(width=0.22, height=h, stroke_width=0, fill_color=C.PROB, fill_opacity=0.85)
-                         for h in (0.8, 0.45, 0.25, 0.15, 0.1)]).arrange(RIGHT, buff=0.08, aligned_edge=DOWN)
-        bars1.move_to(centers[0] + DOWN * 0.55)
-        text_p = VGroup(t1, t2, box, bars1)
-        n = 8
-        clean = np.fromfunction(lambda i, j: np.exp(-((i - 3.5) ** 2 + (j - 3.5) ** 2) / 9.0), (n, n))
-        noisy = np.clip(clean + r.normal(0, 0.35, (n, n)), 0, 1)
-
-        def pix(a, c):
-            g = VGroup()
-            for i in range(n):
-                for j in range(n):
-                    g.add(Square(0.13, stroke_width=0, fill_opacity=1,
-                                 fill_color=interpolate_color(ManimColor("#1A2230"), ManimColor(C.TRUE_P), float(a[i, j])))
-                          .move_to(c + np.array([(j - 3.5) * 0.13, (3.5 - i) * 0.13, 0])))
-            return g
-
-        img_p = VGroup(pix(noisy, centers[1] + LEFT * 0.7), pix(clean, centers[1] + RIGHT * 0.7),
-                       Arrow(centers[1] + LEFT * 0.1, centers[1] + RIGHT * 0.1, buff=0, color=C.MODEL_Q,
-                             stroke_width=3, max_tip_length_to_length_ratio=0.5))
-        xs = np.linspace(-1.3, 0.5, 120)
-        ys = 0.45 * np.sin(9 * xs) * np.cos(2.3 * xs) + 0.08 * np.sin(31 * xs)
-        wave = VMobject(color=C.TRUE_P, stroke_width=2.5).set_points_smoothly(
-            [centers[2] + np.array([x, y, 0]) for x, y in zip(xs, ys)])
-        xs2 = np.linspace(0.5, 1.3, 50)
-        ys2 = 0.45 * np.sin(9 * xs2) * np.cos(2.3 * xs2) + 0.08 * np.sin(31 * xs2)
-        wave2 = DashedVMobject(VMobject(color=C.MODEL_Q, stroke_width=2.5).set_points_smoothly(
-            [centers[2] + np.array([x, y, 0]) for x, y in zip(xs2, ys2)]), num_dashes=12)
-        path_pts = [centers[3] + np.array([-1.1 + 0.25 * k, -0.6 + 0.9 * np.sin(0.35 * k) ** 2, 0]) for k in range(7)]
-        dots = VGroup(*[Dot(p_, radius=0.06, color=C.TRUE_P) for p_ in path_pts])
-        trail = VMobject(color=C.TRUE_P, stroke_width=2).set_points_as_corners(path_pts)
-        nxt = Dot(path_pts[-1] + np.array([0.3, 0.25, 0]), radius=0.08, color=C.MODEL_Q)
-        arm = VGroup(Line(centers[3] + np.array([-1.2, -0.95, 0]), path_pts[3], color=GREY_B, stroke_width=4),
-                     Line(path_pts[3], path_pts[-1], color=GREY_B, stroke_width=4))
-        act_p = VGroup(arm, trail, dots, DashedLine(path_pts[-1], nxt.get_center(), color=C.MODEL_Q), nxt)
-        caps = VGroup(*[label(t, font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.2) for t, f in zip(
-            [r"text: the next token", r"images: the noise", r"sound: the next sound token",
-             r"robots: the next action"], frames)])
-        head = label(r"the same game, everywhere", font_size=40).to_edge(UP, buff=0.6)
-        tag = schematic_tag()
-        with self.voiceover(
-            "And not just text. <bookmark mark='a'/> Image models learn to guess the noise added to a picture; "
-            "<bookmark mark='b'/> speech models, the next slice of sound; <bookmark mark='c'/> robots, the next "
-            "movement of an arm. Nearly every frontier model plays some version of Shannon's game."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), Create(frames[0]), FadeIn(text_p), FadeIn(caps[0]))
-            vo.wait_until("a")
-            self.play(Create(frames[1]), FadeIn(img_p), FadeIn(caps[1]))
-            vo.wait_until("b")
-            self.play(Create(frames[2]), Create(wave), FadeIn(wave2), FadeIn(caps[2]))
-            vo.wait_until("c")
-            self.play(Create(frames[3]), FadeIn(act_p), FadeIn(caps[3]))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
     def question(self):
         q = label(r"What do you have to know \\ to guess well?", font_size=56)
         with self.voiceover(
@@ -354,11 +287,10 @@ class Hook(VoiceoverScene):
         m = series_map(current=PART).shift(DOWN * 0.2)
         title = label(SERIES_ZH if zh() else SERIES_EN, font_size=44).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Over thirty-one parts, we'll build the answer from the ground up. <bookmark mark='a'/> Foundations: "
-            "information, the symbolic era, vectors, calculus, randomness. <bookmark mark='b'/> Learning from data, "
-            "up to deep learning and scale. <bookmark mark='c'/> Transformers. <bookmark mark='d'/> Generation and "
-            "perception. <bookmark mark='e'/> Agency: reinforcement learning, reasoning, agents. "
-            "<bookmark mark='f'/> And finally, looking inside, and whether we can trust it."
+            "Over thirty-one parts, we'll build the answer from the ground up: <bookmark mark='a'/> foundations, "
+            "<bookmark mark='b'/> learning from data, <bookmark mark='c'/> transformers, <bookmark mark='d'/> "
+            "generation and perception, <bookmark mark='e'/> agency and reasoning, <bookmark mark='f'/> and finally, "
+            "looking inside, and whether we can trust it."
         ) as vo:
             self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeIn(title))
             self.remove(q)

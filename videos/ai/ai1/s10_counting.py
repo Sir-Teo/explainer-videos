@@ -14,7 +14,6 @@ class Counting(VoiceoverScene):
         self.curves()
         self.sparsity()
         self.laplace()
-        self.writing()
         self.lesson()
 
     # ------------------------------------------------------------------
@@ -351,84 +350,9 @@ class Counting(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def writing(self):
-        """The five-letter model's own writing at checkpoints of its reading; copied stretches in red."""
-        w, seen = load("writing"), load("seen")
-        amounts = [int(a) for a in w["amounts"]]
-        A = [int(a) for a in seen["amounts"]]
-        assert int(w["context"]) == 5 and all(a in A for a in amounts)
-        bits = [float(seen["bits_5"][A.index(a)]) for a in amounts]
-        L = int(w["copy_len"])
-        n_show = 44
-        shown, share = [], []
-        for a in amounts:
-            t_ = w["samples"][str(a)][:n_show]
-            t_ = t_.rsplit(" ", 1)[0] if " " in t_[30:] else t_
-            m_ = w["mask"][str(a)][:len(t_)]
-            shown.append((t_, m_))
-            share.append(m_.count("1") / len(t_))
-        head = label(r"The $5$-letter model, writing as it reads", font_size=34).to_edge(UP, buff=0.4)
-        hdr = VGroup(label(r"letters read", font_size=22, color=GREY_B), label(r"what it writes", font_size=22, color=GREY_B),
-                     label(r"copied", font_size=22, color=C.SURPRISE), label(r"bits", font_size=22, color=C.COUNTING))
-        X1, X2, X3, X4 = -4.25, -3.95, 4.55, 6.45  # right edge of col 1, left of col 2, right of cols 3 and 4
-        ys = [1.75 - 0.95 * k for k in range(len(amounts))]
-        rows = VGroup()
-        for k, (a, (t_, m_)) in enumerate(zip(amounts, shown)):
-            n_ = label(rf"${a:,}$".replace(",", "{,}"), font_size=26, color=C.CONTEXT)
-            n_.move_to([X1, ys[k], 0], aligned_edge=RIGHT)
-            body = data_text(t_, font=MONO, font_size=20, color=WHITE)
-            glyphs = [c for c in t_ if not c.isspace()]
-            flags = [f for c, f in zip(t_, m_) if not c.isspace()]
-            assert len(glyphs) == len(body.submobjects)
-            for g_, f in zip(body.submobjects, flags):
-                g_.set_color(C.SURPRISE if f == "1" else WHITE)
-            body.move_to([X2, ys[k], 0], aligned_edge=LEFT)
-            cp = MathTex(rf"{100 * share[k]:.0f}\%", font_size=28, color=C.SURPRISE).move_to([X3, ys[k], 0], aligned_edge=RIGHT)
-            bt = MathTex(f"{bits[k]:.2f}", font_size=28, color=C.COUNTING).move_to([X4, ys[k], 0], aligned_edge=RIGHT)
-            rows.add(VGroup(n_, body, cp, bt))
-        hdr[0].move_to([X1, ys[0] + 0.75, 0], aligned_edge=RIGHT)
-        hdr[1].move_to([X2, ys[0] + 0.75, 0], aligned_edge=LEFT)
-        hdr[2].move_to([X3, ys[0] + 0.75, 0], aligned_edge=RIGHT)
-        hdr[3].move_to([X4, ys[0] + 0.75, 0], aligned_edge=RIGHT)
-        grid_ = VGroup(hdr, rows)
-        if grid_.width > 13.4:
-            grid_.scale_to_fit_width(13.4)
-        key = label(rf"red: \ inside a stretch of ${L}$ letters or more, copied word for word from what it read; \ "
-                    r"bits: \ on the Falcon passage", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.35)
-        if key.width > 13.2:
-            key.scale_to_fit_width(13.2)
-        late = share[2:]
-        nothing = ("nothing is copied" if max(late) == 0 else
-                   (f"at most {100 * max(late):.0f} percent is copied" if max(late) >= 0.01 else "almost nothing is copied"))
-        recite = "it can only recite: " if share[0] > 0.5 else "it mostly invents, but "
-        with self.voiceover(
-            "Here's the five-letter model writing as it reads more and more of the books, from the same start "
-            f"with the same dice. <bookmark mark='a'/> After a thousand letters {recite}{100 * share[0]:.0f} percent "
-            f"of what it writes, in red, is copied word for word, in stretches of {L} letters or more, from the "
-            f"little it has read. <bookmark mark='b'/> After ten thousand, {100 * share[1]:.0f} percent. "
-            f"<bookmark mark='c'/> From a hundred thousand on, {nothing}: it strings real-looking words together "
-            f"on its own, <bookmark mark='d'/> and its score on the Falcon passage goes from {bits[0]:.2f} bits per "
-            f"letter to {bits[-1]:.2f}."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr), FadeIn(key))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0][0]), AddTextLetterByLetter(rows[0][1], time_per_char=0.02), FadeIn(rows[0][2]),
-                      run_time=1.2)
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1][0]), AddTextLetterByLetter(rows[1][1], time_per_char=0.02), FadeIn(rows[1][2]),
-                      run_time=1.2)
-            vo.wait_until("c")
-            for r in rows[2:]:
-                self.play(FadeIn(r[0]), AddTextLetterByLetter(r[1], time_per_char=0.015), FadeIn(r[2]), run_time=1.0)
-            vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(r[3], shift=LEFT * 0.1) for r in rows], lag_ratio=0.25), run_time=1.5)
-        self.wait(0.5)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
     def lesson(self):
         a = label(r"memorizing the books $\ne$ predicting new text", font_size=40, color=C.BITS)
-        b = label(r"the gap between them is \textit{generalization}", font_size=32, color=GREY_A)
+        b = label(r"doing well on new text is \textit{generalization}", font_size=32, color=GREY_A)
         c = label(r"counting can't tell that \texttt{the dog barked} and \texttt{the hound barked} are alike",
                   font_size=28, color=GREY_A)
         g = VGroup(a, b, c).arrange(DOWN, buff=0.45).move_to(UP * 0.6)

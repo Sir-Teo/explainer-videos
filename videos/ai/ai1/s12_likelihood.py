@@ -17,7 +17,6 @@ class Likelihood(VoiceoverScene):
         self.counting_is_mle()
         self.softmax()
         self.gradient()
-        self.descent()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -291,109 +290,17 @@ class Likelihood(VoiceoverScene):
         with self.voiceover(
             "In words: the model's guess, minus the truth. <bookmark mark='a'/> Averaged over a dataset, the "
             "gradient is q minus p hat. Push up the scores of what happened more often than the model expected; "
-            "push down the rest. Every language model, however large, ends in exactly this step."
+            "push down the rest. Every language model, however large, ends in exactly this step. "
+            "<bookmark mark='b'/> Following it downhill, one small step at a time, is gradient descent, and it "
+            "returns in Parts 4, 9 and 11."
         ) as vo:
             self.play(FadeIn(res[0]))
             vo.wait_until("a")
             self.play(FadeIn(res[1]))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def descent(self):
-        d = load("softmax")
-        counts, phat = np.asarray(d["counts"]), np.asarray(d["phat"])
-        qs, ces = np.asarray(d["q"]), np.asarray(d["ce"])
-        H = float(d["H"])
-        assert list(counts) == [40, 25, 18, 12, 5] and abs(ces[-1] - H) < 0.01
-        head = label(r"Gradient descent on five scores", font_size=34).to_edge(UP, buff=0.3)
-        data = label(r"data: \ $100$ continuations of \texttt{Come}: \ $40, 25, 18, 12, 5$ \ (illustrative)",
-                     font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.15)
-        upd = mtex(r"z \leftarrow z - \eta\,(q - \hat p), \quad \eta = 1.5", font_size=30).next_to(data, DOWN, buff=0.2)
-        xs = np.linspace(-5.8, -1.4, 5)
-        y0, Hs = -2.4, 6.0
-        targets, toks = VGroup(), VGroup()
-        for k, x in enumerate(xs):
-            h = Hs * phat[k]
-            targets.add(Rectangle(width=0.75, height=h, stroke_color=C.TRUE_P, stroke_width=2.5, fill_opacity=0)
-                        .move_to([x, y0 + h / 2, 0]))
-            toks.add(Text(TOKENS[k], font=MONO, font_size=22, color=C.TOKEN).move_to([x, y0 - 0.3, 0]))
-        t = ValueTracker(0)
-
-        def bars():
-            i = int(round(t.get_value()))
-            g = VGroup()
-            for k, x in enumerate(xs):
-                h = max(0.01, Hs * qs[i, k])
-                g.add(Rectangle(width=0.55, height=h, stroke_width=0, fill_color=C.MODEL_Q, fill_opacity=0.85)
-                      .move_to([x, y0 + h / 2, 0]))
-                dlt = qs[i, k] - phat[k]
-                if abs(dlt) > 0.004:
-                    top = y0 + h
-                    g.add(Arrow([x + 0.48, top, 0], [x + 0.48, top - Hs * dlt * 0.9, 0], buff=0, color=C.BITS,
-                                stroke_width=3, max_tip_length_to_length_ratio=0.35, max_stroke_width_to_length_ratio=8))
-            return g
-
-        bar_m = always_redraw(bars)
-        leg = VGroup(label(r"$\hat p$: the data", font_size=22, color=C.TRUE_P),
-                     label(r"$q$: the model", font_size=22, color=C.MODEL_Q),
-                     label(r"$-(q - \hat p)$: the step", font_size=22, color=C.BITS)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                         buff=0.08)
-        leg.move_to([-3.6, 0.85, 0])
-        ax = plain_axes([0, 60, 10], [1.8, 2.4, 0.2], 5.6, 3.6).move_to([3.4, -0.9, 0])
-        xl = VGroup(*[MathTex(str(v), font_size=20, color=GREY_B).next_to(ax.c2p(v, 1.8), DOWN, buff=0.12)
-                      for v in (0, 20, 40, 60)])
-        yl = VGroup(*[MathTex(f"{v:.1f}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.12)
-                      for v in (1.8, 2.0, 2.2, 2.4)])
-        axl = VGroup(label(r"step", font_size=22, color=GREY_A).next_to(ax, DOWN, buff=0.4),
-                     label(r"cross-entropy, bits", font_size=22, color=C.LOSS).next_to(ax, UP, buff=0.1))
-        floor = DashedLine(ax.c2p(0, H), ax.c2p(60, H), color=C.ENTROPY, stroke_width=2)
-        fl = label(rf"floor: $H(\hat p) = {H:.2f}$", font_size=22, color=C.ENTROPY).next_to(floor, DOWN, buff=0.1)
-        fl.align_to(floor, RIGHT)
-        curve = always_redraw(lambda: polyline(ax, np.arange(int(round(t.get_value())) + 1),
-                                               np.minimum(ces[:int(round(t.get_value())) + 1], 2.4),
-                                               color=C.LOSS, stroke_width=4) if t.get_value() >= 1 else VGroup())
-        assert ces[0] > 2.3 and abs(ces[0] - math.log2(5)) < 1e-9  # starts from uniform guesses: log2 5
-        tag = computed_tag()
-        # the learning rate, pictured: too small, about right, too large
-        rates = VGroup()
-        for eta, n, cap_ in ((0.04, 6, r"too small: \ crawls"), (0.3, 5, r"about right"),
-                             (0.95, 3, r"too large: \ overshoots")):
-            v_ = valley_steps(eta, x0=-1.2, n=n, width=2.0, height=1.1, color=C.LR)
-            rates.add(VGroup(v_, label(cap_, font_size=24, color=GREY_A).next_to(v_, DOWN, buff=0.12)))
-        rates.arrange(RIGHT, buff=0.35, aligned_edge=DOWN)
-        lr_card = gloss(r"learning rate \ $\eta$", r"how big each step is", picture=rates, width=6.0, color=C.LR)
-        lr_card.scale(1.15).move_to([3.3, -0.9, 0])
-        with self.voiceover(
-            "Here is gradient descent: small steps downhill on the loss, again and again. Say the data are a "
-            "hundred continuations of come, <bookmark mark='a'/> and the model starts with five equal scores, every "
-            "guess twenty percent. Each step moves every score by minus eta times q minus p hat: up where the model "
-            "under-guesses, down where it over-guesses. <bookmark mark='l'/> Eta, the learning rate, is the step "
-            "size: too small, and learning crawls; too large, and it overshoots. <bookmark mark='b'/> Let's run it."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(data), FadeIn(upd), FadeIn(toks), FadeIn(targets), FadeIn(leg), FadeIn(tag))
-            vo.wait_until("a")
-            self.add(bar_m)
-            vo.wait_until("l")
-            self.play(FadeIn(lr_card, shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(FadeOut(lr_card), run_time=0.5)
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(floor), FadeIn(fl))
-            self.add(curve)
-            self.play(t.animate.set_value(12), run_time=3.0, rate_func=linear)
-        with self.voiceover(
-            "The guesses slide toward the data's frequencies, and the cross-entropy falls toward its floor: the "
-            f"entropy of the data, {H:.2f} bits, which no model can beat. <bookmark mark='a'/> That's all of "
-            "training, in miniature. A real model has billions of parameters, and its scores depend on the context, "
-            "but the signal that reaches them is this same difference: guess, minus truth."
-        ) as vo:
-            self.play(t.animate.set_value(60), run_time=5.0, rate_func=linear)
-            vo.wait_until("a")
-            pay = payoff_card([(r"derivatives, backpropagation", [4, 9]), (r"optimizers", [11]),
+            pay = payoff_card([(r"derivatives, backpropagation", [4, 9]), (r"gradient descent, optimizers", [11]),
                                (r"the output layer of a transformer", [13])], font_size=22, title=r"")
-            pay.scale(0.9).move_to([3.4, -1.4, 0])
-            self.play(FadeOut(VGroup(ax, xl, yl, axl, floor, fl)), FadeOut(curve), FadeIn(pay))
-        bar_m.clear_updaters()
-        curve.clear_updaters()
-        self.wait(0.5)
+            pay.scale(0.9).to_corner(DR, buff=0.4)
+            self.play(FadeIn(pay))
+        self.wait(0.3)
         self.clear_scene()

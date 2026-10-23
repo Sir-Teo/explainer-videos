@@ -97,7 +97,7 @@ class CrossEntropy(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(sub))
         with self.voiceover(
-            "Picture it as before. <bookmark mark='a'/> With the right probabilities, the area is the entropy, "
+            "As a picture: <bookmark mark='a'/> with the right probabilities, the area is the entropy, "
             f"{H:.2f} bits. <bookmark mark='b'/> Now use a model that has e and z the wrong way round. Every e, one "
             f"symbol in {round(1 / p[ie])}, now costs {-np.log2(q[ie]):.1f} bits. The area grows to {CE:.2f}."
         ) as vo:
@@ -196,10 +196,9 @@ class CrossEntropy(VoiceoverScene):
             res.scale_to_fit_width(6.2)
         res.move_to([-3.75, -0.4, 0])
         with self.voiceover(
-            "Is being wrong always a cost? Yes, and the proof is the one we used for the uniform distribution in "
-            "chapter three. <bookmark mark='a'/> The logarithm bends downward, so the average of logs is at most the "
-            "log of the average. <bookmark mark='b'/> Minus the divergence is an average, weighted by p, of the log "
-            "of q over p. <bookmark mark='c'/> Move the log outside. <bookmark mark='d'/> Inside, the p's cancel, "
+            "Is being wrong always a cost? Yes, by chapter three's argument. <bookmark mark='a'/> The log bends "
+            "downward: the average of logs is at most the log of the average. <bookmark mark='b'/> Minus the "
+            "divergence is an average, weighted by p, of the log of q over p. <bookmark mark='c'/> Move the log outside. <bookmark mark='d'/> Inside, the p's cancel, "
             "<bookmark mark='e'/> and what's left is the total of q, which is one. The log of one is zero."
         ) as vo:
             self.play(FadeIn(head))

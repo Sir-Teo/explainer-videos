@@ -66,9 +66,9 @@ class Scoreboard(VoiceoverScene):
                     ("already beats the largest GPT-2" if q06 < gxl else f"gets {q06:.2f} bits per character"))
         with self.voiceover(
             "Here's the board, for the Falcon passage as printed: capitals, punctuation, everything. "
-            "<bookmark mark='a'/> A plain text file spends eight bits on every character. <bookmark mark='b'/> The "
-            f"passage uses only {raw['passage_symbols']} different symbols, so guessing blindly among them costs log "
-            f"two of {raw['passage_symbols']}: {b['uniform']:.2f} bits. <bookmark mark='c'/> Letter frequencies, "
+            "<bookmark mark='a'/> Plain text spends eight bits per character. <bookmark mark='b'/> The passage uses "
+            f"only {raw['passage_symbols']} different symbols, so a blind guess among them costs "
+            f"{b['uniform']:.2f} bits. <bookmark mark='c'/> Letter frequencies, "
             f"counted in our thirty books, bring it to {b['order0']:.2f}, <bookmark mark='d'/> and one character of "
             f"context, to {b['order1']:.2f}."
         ) as vo:
@@ -113,13 +113,6 @@ class Scoreboard(VoiceoverScene):
     def reading(self):
         sb = load("scoreboard")
         bits, n = self.bits, int(sb["chars"])
-        kb = {k: bits[k] * n / 8 / 1000 for k in ("ascii", "gzip", "Qwen3-4B")}
-        side = VGroup(
-            label(r"as files:", font_size=24, color=GREY_A),
-            label(rf"plain text: \ ${kb['ascii']:.1f}$ KB", font_size=24, color=GREY_B),
-            label(rf"gzip: \ ${kb['gzip']:.1f}$ KB", font_size=24, color=C.COMPRESSOR),
-            label(rf"Qwen3-4B $+$ arithmetic coding: \ ${kb['Qwen3-4B']:.1f}$ KB", font_size=24, color=C.NEURAL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.9, -1.75, 0])
         ib, iq = self.keys.index("best"), self.keys.index("Qwen3-4B")
         gap = Brace(VGroup(self.b.rows[ib].bar, self.b.rows[iq].bar), RIGHT, color=C.BITS)
         gap.next_to(VGroup(self.b.rows[ib], self.b.rows[iq]), RIGHT, buff=0.1)
@@ -127,16 +120,10 @@ class Scoreboard(VoiceoverScene):
         low = bits["Qwen3-4B"]
         low_said = "under one" if low < 1 else f"{low:.2f}"
         with self.voiceover(
-            f"In file sizes: the passage is {kb['ascii']:.1f} kilobytes as plain text, {kb['gzip']:.1f} with gzip, "
-            f"<bookmark mark='a'/> and {kb['Qwen3-4B']:.1f} with Qwen3 driving an arithmetic coder. "
-            f"<bookmark mark='b'/> The jump from counting, at {bits['best']:.1f} bits, to {low_said}, is what this "
-            "series is about: what these models learned, and how."
-        ) as vo:
-            self.play(FadeIn(side[:3]))
-            vo.wait_until("a")
-            self.play(FadeIn(side[3]))
-            vo.wait_until("b")
-            self.play(FadeOut(side), GrowFromCenter(gap), FadeIn(gap_l))
+            f"The jump from counting, at {bits['best']:.1f} bits, to {low_said}, is what this series is about: what "
+            "these models learned, and how."
+        ):
+            self.play(GrowFromCenter(gap), FadeIn(gap_l))
         self.wait(0.3)
         self.clear_scene()
 
@@ -182,8 +169,7 @@ class Scoreboard(VoiceoverScene):
         ratio = comp["xz"] / nb
         with self.voiceover(
             "Arithmetic coding turns any predictor into a compressor, so we built one. <bookmark mark='a'/> GPT-2 "
-            "small reads the start of the Falcon passage one token at a time, and hands its probabilities to the "
-            f"32-bit coder from chapter eight. Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
+            "small reads the start of the Falcon passage a token at a time, feeding chapter eight's 32-bit coder. Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
             f"GPT-2's own surprise, <bookmark mark='b'/> {ok_said} <bookmark mark='c'/> On the same "
             f"{z['chars']:,} characters, xz needs {comp['xz']:,} bytes: {ratio:.1f} times as many."
         ) as vo:
