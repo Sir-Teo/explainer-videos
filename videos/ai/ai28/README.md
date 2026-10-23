@@ -252,6 +252,7 @@ P(Σ X_i ≤ 0) ≤ exp(−2(kΔ)²/(4k)) = exp(−kΔ²/2)。对m − 1个错�
 | outcome reward model (ORM) | 结果奖励模型（ORM） |
 | process reward model (PRM) | 过程奖励模型（PRM） |
 | step label, right for the wrong reason | 步骤标签，歪打正着 |
+| AUC (how well a grader tells right from wrong) | AUC（评分器区分对错的能力） |
 | reinforcement learning with verifiable rewards (RLVR) | 可验证奖励的强化学习（RLVR） |
 | group relative policy optimization (GRPO) | 组相对策略优化（GRPO） |
 | group, group baseline, leave-one-out | 组，组基线，留一 |

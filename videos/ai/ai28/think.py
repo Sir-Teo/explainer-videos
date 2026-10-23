@@ -728,11 +728,17 @@ def compute_think_search(nq=300, n=NMAX):
             hits.append(float((pick == truth).mean()))
         bon.append(float(np.mean(hits)))
     out["bon_N"], out["bon_acc"] = np.array(Ns), np.array(bon)
-    # the tree for one question, for the screen
-    _, best, tree = beam_search(m, v, d[:1], 3, 3, gen=gen, keep_tree=True)
-    out["tree_d"] = d[0]
+    # the tree for the screen: of the first 40 lists, the one whose search branched most (most candidates kept)
+    tgen = torch.Generator().manual_seed(97)
+    trees = []
+    for qi in range(40):
+        _, best, tree = beam_search(m, v, d[qi:qi + 1], 3, 3, gen=tgen, keep_tree=True)
+        trees.append((sum(sum(kept for _, _, kept in lev) for lev in tree), qi, best[0], tree))
+    _, qi, best, tree = max(trees, key=lambda t_: (t_[0], -t_[1]))
+    out["tree_of"] = 40
+    out["tree_d"] = d[qi]
     out["tree"] = [[(list(map(int, k_)), float(s_), bool(kept)) for k_, s_, kept in lev] for lev in tree]
-    out["tree_best"] = list(map(int, best[0]))
+    out["tree_best"] = list(map(int, best))
     return out
 
 
