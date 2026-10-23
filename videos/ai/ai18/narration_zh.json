@@ -26,7 +26,7 @@
   "cfe2a4c5ca12": {
    "scene": "Hook",
    "en": "June 2018. OpenAI's first GPT is pretrained for about a month on eight graphics cards. <bookmark mark='a'/> Here are the chips on one training run since then, on a scale where each step up is ten times more. <bookmark mark='b'/> In 2019, Megatron-LM spreads one model over 512 GPUs. In 2022, Google's PaLM trains on 6,144 TPU chips. In 2024, Meta's Llama 3 uses 16,384 GPUs, and in 2025 Llama 4 Behemoth is pretrained on 32,000 of them. <bookmark mark='c'/> In seven years, from 8 chips to 4,000 times as many. This part is about how that is done.",
-   "zh": "2018年6月。OpenAI的第一个GPT，在八块显卡上预训练了大约一个月。<bookmark mark='a'/>这是从那以后一次训练用的芯片数，画在每上一格就多十倍的刻度上。<bookmark mark='b'/>2019年，Megatron-LM把一个模型分到512块GPU上。2022年，谷歌的PaLM在6144块TPU芯片上训练。2024年，Meta的Llama 3用了16384块GPU；2025年，Llama 4 Behemoth的预训练用了32000块。<bookmark mark='c'/>七年里，从8块芯片，增加到了它的大约4000倍。本部分讲的，就是这是怎样做到的。"
+   "zh": "2018年6月。OpenAI的第一个GPT模型，在八块显卡上预训练了大约一个月。<bookmark mark='a'/>这是从那以后，单次训练所用的芯片数量，画在每上一格就多十倍的刻度上。<bookmark mark='b'/>2019年，Megatron-LM把同一个模型分摊到512块GPU上。2022年，谷歌的PaLM在6144块TPU芯片上进行训练。2024年，Meta的Llama 3用了16384块GPU；2025年，Llama 4 Behemoth的预训练用了32000块。<bookmark mark='c'/>七年里，从8块芯片，增加到了它的大约4000倍。这一部分要讲的，就是这件事是怎样做到的。"
   },
   "d3ee01f7315c": {
    "scene": "Hook",
@@ -61,7 +61,7 @@
   "be9be8372013": {
    "scene": "Anatomy",
    "en": "Here are six open runs of the last two years, as their reports state them. <bookmark mark='a'/> Llama 3.1 405B: 15.6 trillion tokens on 16,384 H100 GPUs, in sixteen-bit bfloat numbers, with AdamW. DeepSeek-V3: 14.8 trillion tokens on 2,048 H800s, in eight-bit floating point. <bookmark mark='b'/> Kimi K2: 15.5 trillion tokens with MuonClip, a version of the Muon optimizer. Olmo 3, the most open, data included. <bookmark mark='c'/> And in 2026, NVIDIA's Nemotron 3 Super, pretrained in four-bit numbers on 25 trillion tokens, and DeepSeek-V4-Pro, on 33 trillion with Muon. <bookmark mark='d'/> In two years the token counts doubled, the numbers shrank from sixteen bits to eight and four, and the optimizer began to change.",
-   "zh": "这是最近两年里六次公开的训练，按它们的报告所写。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100 GPU上训练了15.6万亿个词元，用16位的bfloat数字，用AdamW。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，用MuonClip，一种Muon优化器的变体。Olmo 3，其中最开放的一个，连数据都公开。<bookmark mark='c'/>还有2026年：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon训练了33万亿个词元。<bookmark mark='d'/>两年里，词元数翻了一倍，数字从16位缩到8位和4位，优化器也开始改变。"
+   "zh": "这是最近两年里六次公开的训练，数字都按它们各自的报告。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100上训练了15.6万亿个词元，用16位的bfloat数字，优化器用AdamW。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用的是8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，优化器是MuonClip，它是Muon优化器的一种变体。Olmo 3是其中最开放的一个，连训练数据都公开了。<bookmark mark='c'/>还有2026年的两次：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon优化器训练了33万亿个词元。<bookmark mark='d'/>两年之间，训练的词元数量翻了一倍，数字从16位缩小到8位和4位，优化器也开始发生变化。"
   },
   "ae2282a8df99": {
    "scene": "Anatomy",

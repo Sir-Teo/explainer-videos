@@ -864,8 +864,6 @@
   "Qwen3, stage 2: \\ $5$T tokens with more science, code, reasoning \\\\ and synthetic data, \\ the learning rate decaying faster": "Qwen3第二阶段：\\ $5$T 个词元，更多科学、代码、推理 \\\\ 和合成数据，\\ 学习率衰减更快",
   "Olmo 2: \\ mid-training $5$--$10\\%$ of the FLOPs; \\ $19$ small ``microanneals'' \\\\ ($130$B tokens in all) to choose its maths data": "Olmo 2：\\ 中期训练占算力的 $5$--$10\\%$；\\ $19$ 次小型“微退火” \\\\ （共 $130$B 个词元）来挑数学数据",
   "base $10{,}000$: \\ $54$k tokens": "基频 $10{,}000$：\\ $54$k 个词元",
-  "base $500{,}000$: \\ $2{,}559$k tokens": "基频 $500{,}000$：\\ $2{,}559$k 个词元",
-  "base $1{,}000{,}000$: \\ $5{,}063$k tokens": "基频 $1{,}000{,}000$：\\ $5{,}063$k 个词元",
   "the same model: \\ $128$ wide, \\ $4$ layers, \\ $1.83$M parameters": "the same model：\\ $128$ wide, \\ $4$ layers, \\ $1.83$M parameters",
   "the same $3.0$M tokens of the thirty novels, \\ in the same order": "三十部小说里同样的 $3.0$M 个词元，\\ 顺序相同",
   "the same $732$ steps, \\ peak learning rate, \\ seed, \\ FP32 arithmetic": "同样的 $732$ 步，\\ 峰值学习率，\\ 种子，\\ FP32算术",
@@ -886,13 +884,17 @@
   "our 2020 recipe, \\ $1.8$M": "我们的2020配方，\\ $1.8$M",
   "our 2026 recipe, \\ $1.8$M": "我们的2026配方，\\ $1.8$M",
   "a cooldown branched at step $366$": "在第 $366$ 步分出的冷却",
-  "the cooldown: \\\\ the best data goes here": "冷却阶段：\\\\ 最好的数据放在这里",
   "Olmo 3": "Olmo 3",
   "\\text{pair } i \\text{ turns at } \\theta^{-2i/d} \\text{ radians a token}": "\\text{第 } i \\text{ 对每个词元转 } \\theta^{-2i/d} \\text{ 弧度}",
   "dashed: \\ the second seed": "虚线：\\ 第二个种子",
   "model generation": "模型代次",
   "number format": "数字格式",
-  "total": "合计"
+  "total": "合计",
+  "mostly web text": "以网页文本为主",
+  "the best data": "最好的数据",
+  "the cooldown": "冷却阶段",
+  "base $500{,}000$: \\ $2.6$M tokens": "基频 $500{,}000$：\\ $2.6$M 个词元",
+  "base $1{,}000{,}000$: \\ $5.1$M tokens": "基频 $1{,}000{,}000$：\\ $5.1$M 个词元"
  },
  "patterns": []
 }
