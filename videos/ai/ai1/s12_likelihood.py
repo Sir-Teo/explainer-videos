@@ -94,11 +94,11 @@ class Likelihood(VoiceoverScene):
         q_lab = label(r"$q_\theta$: the model", font_size=26, color=Q).move_to([-4.6, -0.6, 0])
         with self.voiceover(
             "Learning starts from a principle stated by Ronald Fisher in 1922: choose the model under which the data "
-            "you actually saw were most likely. That's the likelihood: the product of the model's probabilities for "
-            "every observation. <bookmark mark='a'/> Take minus its log, per observation, and you get the average "
-            "surprise. <bookmark mark='b'/> Group the observations by value: that's the cross-entropy between the "
-            "data's own frequencies, p hat, and the model. <bookmark mark='c'/> And that's the entropy of the data "
-            "plus the divergence of the model from the data."
+            "you saw were most likely. The likelihood is the product of the model's probabilities for every "
+            "observation. <bookmark mark='a'/> Minus its log, per observation, is the average surprise. "
+            "<bookmark mark='b'/> Group the observations by value: the cross-entropy between the data's own "
+            "frequencies, p hat, and the model. <bookmark mark='c'/> That's the data's entropy plus the model's "
+            "divergence from the data."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup), FadeIn(src))
             self.play(LaggedStart(*[FadeIn(sq, shift=DOWN * 0.2) for sq in tape], lag_ratio=0.015), run_time=2.0)
@@ -148,10 +148,10 @@ class Likelihood(VoiceoverScene):
         kl_g = VGroup(kl_l, kl_n).arrange(RIGHT, buff=0.15).move_to([3.6, -0.6, 0])
         kl_n.add_updater(lambda m: m.set_value(kl()))
         with self.voiceover(
-            "If the model is allowed to be any distribution at all, <bookmark mark='a'/> the divergence is smallest, "
-            "zero, when the model equals the data's frequencies. <bookmark mark='b'/> So the counting models of "
-            "chapter nine were maximum likelihood models. And that's exactly why they overfit: they fit the "
-            "books perfectly, and nothing pulled them toward anything more general."
+            "If the model may be any distribution at all, <bookmark mark='a'/> the divergence is smallest, zero, "
+            "when the model equals the data's frequencies. <bookmark mark='b'/> So chapter nine's counting models "
+            "were maximum likelihood models, and that's why they overfit: they fit the books perfectly, and nothing "
+            "pulled them toward anything more general."
         ) as vo:
             self.play(FadeOut(VGroup(v["eq"], v["cap"], v["head"], v["setup"], v["src"])), FadeIn(a), FadeIn(kl_g))
             vo.wait_until("a")
@@ -205,13 +205,12 @@ class Likelihood(VoiceoverScene):
         net.scale(1.15).move_to(DOWN * 0.3)
         with self.voiceover(
             "Counting doesn't generalize. Neural networks do. <bookmark mark='n'/> A neural network is a stack of "
-            "simple steps: multiply by a table of numbers, then bend the result, and repeat, with all the numbers "
-            "in the tables tuned until its guesses are good. Its guesses come out differently. For each possible "
-            "next token, its last step computes a score, called a logit: <bookmark mark='a'/> any real number, "
-            "positive or negative. <bookmark mark='b'/> To make probabilities, exponentiate: e to the z turns any "
-            "number positive, and each step of one up multiplies it by about 2.7. <bookmark mark='c'/> Then divide "
-            "by the total, so they add to one. That's the softmax. Bigger score, bigger probability, and nothing "
-            "ever gets probability zero."
+            "simple steps: multiply by a table of numbers, bend the result, repeat, with all the numbers tuned "
+            "until its guesses are good. For each possible next token, its last step computes a score, a logit: "
+            "<bookmark mark='a'/> any real number, positive or negative. <bookmark mark='b'/> To make "
+            "probabilities, exponentiate: e to the z is always positive, and each step of one up multiplies it by "
+            "about 2.7. <bookmark mark='c'/> Then divide by the total. That's the softmax: bigger score, bigger "
+            "probability, and never zero."
         ) as vo:
             self.play(FadeIn(head), Write(f), FadeIn(toks), FadeIn(ctx), Create(zero))
             vo.wait_until("n")
@@ -270,8 +269,8 @@ class Likelihood(VoiceoverScene):
         dp[7].set_opacity(0)
         with self.voiceover(
             "To learn, the network needs to know which way to nudge each score. <bookmark mark='n'/> That's what a "
-            "derivative measures: how much the output moves when you nudge one input a tiny bit, holding the others "
-            "still. <bookmark mark='a'/> Write the surprise of the right answer, y, in terms of the scores. "
+            "derivative measures: how much the output moves when you nudge one input, holding the others still. "
+            "<bookmark mark='a'/> Write the surprise of the right answer, y, in terms of the scores. "
             "<bookmark mark='b'/> Differentiate with respect to the score z k. The first term gives minus one if k "
             "is y. The second is the softmax itself. <bookmark mark='c'/> So the derivative is q k minus one, for "
             "the right answer, and q k, for every wrong one."
@@ -366,11 +365,11 @@ class Likelihood(VoiceoverScene):
         lr_card = gloss(r"learning rate \ $\eta$", r"how big each step is", picture=rates, width=6.0, color=C.LR)
         lr_card.scale(1.15).move_to([3.3, -0.9, 0])
         with self.voiceover(
-            "Here is gradient descent in action. Suppose the data are a hundred continuations of come, "
-            "<bookmark mark='a'/> and the model starts with all five scores equal, so every guess is twenty percent. "
-            "At each step, every score moves by minus eta times q minus p hat: up where the model under-guesses, "
-            "down where it over-guesses. <bookmark mark='l'/> Eta is the learning rate, the size of each step: too "
-            "small, and learning crawls; too large, and it overshoots the bottom. <bookmark mark='b'/> Let's run it."
+            "Here is gradient descent: small steps downhill on the loss, again and again. Say the data are a "
+            "hundred continuations of come, <bookmark mark='a'/> and the model starts with five equal scores, every "
+            "guess twenty percent. Each step moves every score by minus eta times q minus p hat: up where the model "
+            "under-guesses, down where it over-guesses. <bookmark mark='l'/> Eta, the learning rate, is the step "
+            "size: too small, and learning crawls; too large, and it overshoots. <bookmark mark='b'/> Let's run it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(data), FadeIn(upd), FadeIn(toks), FadeIn(targets), FadeIn(leg), FadeIn(tag))
             vo.wait_until("a")
@@ -384,9 +383,9 @@ class Likelihood(VoiceoverScene):
             self.play(t.animate.set_value(12), run_time=3.0, rate_func=linear)
         with self.voiceover(
             "The guesses slide toward the data's frequencies, and the cross-entropy falls toward its floor: the "
-            f"entropy of the data, {H:.2f} bits, which no model can beat. <bookmark mark='a'/> That's all of training, in "
-            "miniature. A real model has billions of parameters instead of five scores, and its scores depend on "
-            "the context, but the signal that reaches them is this same difference: guess, minus truth."
+            f"entropy of the data, {H:.2f} bits, which no model can beat. <bookmark mark='a'/> That's all of "
+            "training, in miniature. A real model has billions of parameters, and its scores depend on the context, "
+            "but the signal that reaches them is this same difference: guess, minus truth."
         ) as vo:
             self.play(t.animate.set_value(60), run_time=5.0, rate_func=linear)
             vo.wait_until("a")

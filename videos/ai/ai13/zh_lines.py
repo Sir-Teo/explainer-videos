@@ -584,10 +584,10 @@ ZH = {
         "而且它的头几乎不组合：最强的K组合是{top:.2f}，随机的头是{base:.2f}。",
 
     'f"Why not? Olsson\'s team saw induction heads appear after two and a half to five billion tokens; ours has read {tokens / 1000000.0:.0f} million characters, and a novel rarely repeats a long stretch within 256 characters. The toy':
-        '为什么没有？奥尔森的团队看到，归纳头是在25亿到50亿个词元之后才出现的；我们的模型读了{tokens / 1000000.0:.0f}百万个字符，而且小说很少在256个字符之内重复一长段。那个专为奖励复制而设计的玩具模型，在{jmax:,}步之内就形成了这一对头。',
+        '为什么没有？奥尔森的团队看到，归纳头是在25亿到50亿个词元之后才出现的；我们的模型读了{tokens / 1000000.0:.0f}00万个字符，而且小说很少在256个字符之内重复一长段。那个专为奖励复制而设计的玩具模型，在{jmax:,}步之内就形成了这一对头。',
 
     'f"Why not? Olsson\'s team':
-        '为什么没有？奥尔森的团队看到，归纳头是在25亿到50亿个词元之后才出现的；我们的模型读了{tokens / 1000000.0:.0f}百万个字符，而且小说很少在256个字符之内重复一长段。',
+        '为什么没有？奥尔森的团队看到，归纳头是在25亿到50亿个词元之后才出现的；我们的模型读了{tokens / 1000000.0:.0f}00万个字符，而且小说很少在256个字符之内重复一长段。',
 
     # ------------------------------------------------------------------ InContext
     "Chapter fifteen. Learning inside the prompt.":

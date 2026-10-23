@@ -10292,7 +10292,17 @@
     "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every model here is trained by this part's code; \\ every number on screen is computed or cited.": "文本：古登堡计划（第1部分的 $30$ 部小说）。\\ 这里的每个模型都由本部分的代码训练；\\ 屏幕上的每个数字都是算出来的或有出处的。",
     "$1$M \\ tokens": "$1$M \\ 词元",
     "cheerful words \\ $+$, \\ gloomy words \\ $-$, \\ past a dozen words \\ $-$, \\ repetition and empty answers \\ $--$": "欢快的词 \\ $+$，\\ 阴郁的词 \\ $-$，\\ 超过十几个词 \\ $-$，\\ 重复和空洞的回答 \\ $--$",
-    "without it: \\ the entropy collapses \\\\ as the weights grow": "没有它：\\ 权重一变大， \\\\ 熵就会塌缩"
+    "without it: \\ the entropy collapses \\\\ as the weights grow": "没有它：\\ 权重一变大， \\\\ 熵就会塌缩",
+    "the earlier head $h_1$ writes": "较早的头$h_1$写下",
+    "the later head $h_2$'s keys read": "较晚的头$h_2$的键读取",
+    "the toy's induction head: \\\\ $53\\%$ one step after the copy": "玩具模型的归纳头：\\\\ $53\\%$看副本往后一步",
+    "ours, \\ layer $1$, head $2$: \\\\ $0.3\\%$ one step after the copy": "我们的，\\ 第$1$层，头$2$：\\\\ $0.3\\%$看副本往后一步",
+    "dashed: \\ where an induction head would look": "虚线：\\ 归纳头会看的地方",
+    "random tokens, \\ repeated": "随机词元，\\ 重复一遍",
+    "keys in view, $n$": "能看到的键数，$n$",
+    "weight on the best key, \\ margin set for $0.8$ at $n = L$": "最好那个键的权重，\\ 差距取为在$n = L$时得到$0.8$",
+    "fixed $\\Delta$": "固定的$\\Delta$",
+    "scaled by \\ $\\log_L n$": "乘以\\ $\\log_L n$"
   },
   "phrases": {
     "width": "宽度",

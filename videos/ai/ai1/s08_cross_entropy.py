@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, PART, letter, load, plain_axes, polyline, valley_steps
+from videos.ai.ai1.common import ALPHA27, PART, letter, load, plain_axes, polyline
 
 
 def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opacity=0.8) -> VGroup:
@@ -21,7 +21,7 @@ def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opac
     return VGroup(*[rects[i] for i in range(len(p))])
 
 
-class CrossEntropy(VoiceoverScene, ThreeDScene):
+class CrossEntropy(VoiceoverScene):
     def construct(self):
         self.card()
         self.wrong_code()
@@ -29,7 +29,6 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         self.gibbs()
         self.loss()
         self.asymmetry()
-        self.landscape()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -67,7 +66,7 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             label(rf"coded for a model $q$ that swaps \texttt{{e}} and \texttt{{z}}: \ area $= {CE:.2f}$ bits",
                   font_size=24, color=C.MODEL_Q),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-1.2, 1.15, 0])
-        codes = load("huffman")["codes"]
+        codes = {ALPHA27[i]: c for i, c in enumerate(load("huffman")["codes"])}
         cols_x = [-4.6, -2.0, 0.7, 3.0, 5.1]  # centers of the five columns
         hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (
             r"symbol", r"Huffman codeword", r"length $\ell$", r"its bet $2^{-\ell}$", r"true $p$")])
@@ -87,10 +86,10 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
                         font_size=26, color=GREY_A).move_to([0, -2.9, 0])
         bets = VGroup(hdr, bet_rows, bet_cap)
         with self.voiceover(
-            "Codes and guesses are the same thing. A code that spends l bits on a symbol is betting that the "
-            "symbol has probability two to the minus l. So what if the bets are wrong? <bookmark mark='a'/> Say "
-            "the data come from p, but the code was built for a model q. Each symbol costs log of one over q bits, "
-            "and on average we pay the cross-entropy: the sum of p times log one over q."
+            "Codes and guesses are the same thing: a code that spends l bits on a symbol bets that it has "
+            "probability two to the minus l. What if the bets are wrong? <bookmark mark='a'/> Say the data come "
+            "from p, but the code was built for a model q. Each symbol costs log of one over q bits, and on average "
+            "we pay the cross-entropy: the sum of p times log one over q."
         ) as vo:
             self.play(FadeIn(head[0]), FadeIn(head[1:]), FadeIn(hdr))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in bet_rows], lag_ratio=0.5), run_time=2.0)
@@ -140,10 +139,9 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         books_said = ("are wrong by less than a hundredth of a bit" if kb < 0.01 else
                       f"are wrong by {kb:.3f} bits per letter")
         with self.voiceover(
-            "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. The first "
-            "is the entropy of p: the randomness of the world itself, which no code can remove. "
-            "<bookmark mark='b'/> The second is the price of being wrong: the Kullback–Leibler divergence of q from "
-            f"p, introduced in 1951. <bookmark mark='c'/> Swapping e and z costs {KL:.2f} bits per symbol. Guessing "
+            "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. First, the "
+            "entropy of p: the world's own randomness, which no code can remove. <bookmark mark='b'/> Second, the "
+            "price of being wrong: the Kullback–Leibler divergence of q from p, from 1951. <bookmark mark='c'/> Swapping e and z costs {KL:.2f} bits per symbol. Guessing "
             f"letters uniformly costs {lt['KL_uniform']:.2f}. And the letter frequencies of our thirty books, used on "
             f"the Falcon passage, {books_said}."
         ) as vo:
@@ -217,12 +215,11 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             vo.wait_until("e")
             step(3)
         with self.voiceover(
-            "So the divergence is never negative, and it's zero only when q equals p, the only case where Jensen's "
-            "inequality is an equality. <bookmark mark='a'/> The truth is the best code. The inequality is named "
-            "after Josiah Willard Gibbs, who used it in statistical mechanics. <bookmark mark='b'/> And it pays a debt from "
-            "chapter three: the drop in entropy from knowing X is a divergence too, so it can't be negative. Knowing "
-            "more never hurts, on average. <bookmark mark='c'/> That drop has a name, the mutual information. It "
-            "gets its own chapter."
+            "So the divergence is never negative, and zero only when q equals p, where Jensen's inequality is an "
+            "equality. <bookmark mark='a'/> The truth is the best code. The inequality is named after Josiah Willard "
+            "Gibbs, who used it in statistical mechanics. <bookmark mark='b'/> It also pays a debt from chapter "
+            "three: the drop in entropy from knowing X is a divergence too, so it can't be negative. Knowing more "
+            "never hurts, on average. <bookmark mark='c'/> That drop, the mutual information, gets its own chapter."
         ) as vo:
             self.play(FadeOut(VGroup(ax, lg, pa, pb, chord, pm, pc, gap, cap)))
             vo.wait_until("a")
@@ -253,12 +250,12 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
                         color=C.KL)
         ln_card.next_to(f, DOWN, buff=0.7).set_x(0)
         with self.voiceover(
-            "Here is why all of this matters for AI. <bookmark mark='a'/> The loss that every large language model "
-            "is trained to minimize is exactly this: the average of log one over q, for each token of real text, "
-            "given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, to base e, so it's "
-            "counted in nats instead of bits: one nat is about 1.44 bits. <bookmark mark='b'/> It's the "
-            "cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the "
-            "divergence part; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below."
+            "Here is why this matters for AI. <bookmark mark='a'/> The loss every large language model is trained "
+            "to minimize is exactly this: the average of log one over q, for each token of real text, given the "
+            "tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, so it's counted in nats: one "
+            "nat is about 1.44 bits. <bookmark mark='b'/> It's the cross-entropy between the world's text and the "
+            "model. <bookmark mark='c'/> Training can only shrink the divergence; <bookmark mark='d'/> the entropy "
+            "of language itself is a floor no model can go below."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -321,10 +318,9 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         fit = ("pulls q wide, to cover both peaks: it ends with exactly p's mean and spread." if wide else
                "pulls q wide, to cover both peaks.")
         with self.voiceover(
-            "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p "
-            "has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center "
-            "is and how wide it is. Which bell curve is best? It depends "
-            "on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the "
+            "One more property, which will matter a lot later: the divergence is not symmetric. Say the truth p "
+            "has two peaks, and our model q can only be a bell curve: one smooth hump, set by its center and its "
+            "width. Which bell curve is best? It depends on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the "
             "training loss we just met, <bookmark mark='b'/> " + fit
         ) as vo:
             self.play(FadeIn(head), FadeIn(axes[0]), FadeIn(axes[1]), FadeIn(lp), FadeIn(lq))
@@ -357,78 +353,3 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             q.clear_updaters()
         self.wait(0.3)
         self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def landscape(self):
-        d = load("kl")
-        ms, ss = np.asarray(d["grid_m"]), np.asarray(d["grid_s"])
-        F, R = np.asarray(d["F"]), np.asarray(d["R"])
-
-        def height(v):  # log scale, clipped where the forward loss explodes (narrow curves far from the data)
-            return 0.55 * math.log(min(float(v), 60.0) / 0.6)
-
-        def interp(Z):
-            Z = np.vectorize(height)(Z)
-            dm, ds = ms[1] - ms[0], ss[1] - ss[0]
-
-            def f(m, y):
-                i, j = (-y - ss[0]) / ds, (m - ms[0]) / dm
-                i0 = int(np.clip(np.floor(i), 0, len(ss) - 2))
-                j0 = int(np.clip(np.floor(j), 0, len(ms) - 2))
-                a, b = float(np.clip(i - i0, 0, 1)), float(np.clip(j - j0, 0, 1))
-                return float(Z[i0, j0] * (1 - a) * (1 - b) + Z[i0 + 1, j0] * a * (1 - b) + Z[i0, j0 + 1] * (1 - a) * b
-                             + Z[i0 + 1, j0 + 1] * a * b)
-            return f
-
-        fF, fR = interp(F), interp(R)
-        axes = ThreeDAxes(x_range=[ms[0], ms[-1], 1], y_range=[-ss[-1], -ss[0], 1], z_range=[0, 2.5, 1], x_length=7.4,
-                          y_length=4.2, z_length=2.0, axis_config={"stroke_color": GREY_C, "include_ticks": False,
-                                                                   "include_tip": False}).shift(DOWN * 1.3 + RIGHT * 1.0)
-        sF = loss_surface(axes, fF, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
-        sR = loss_surface(axes, fR, [ms[0], ms[-1]], [-ss[-1], -ss[0]], resolution=(40, 26), z_lo=0.0, z_hi=2.5)
-
-        def roll(path, f, color):
-            pts = np.asarray(path)[:, :2][::4] * np.array([1, -1])
-            trace = surface_path(axes, f, pts, color=color, lift=0.05, stroke_width=4)
-            track = surface_path(axes, f, pts, color=color, lift=0.14)
-            ball = Dot3D(track.get_start(), radius=0.12, color=color)
-            return ball, trace, track
-
-        bF = roll(d["fwd"], fF, WHITE)
-        bA, bB = roll(d["rev_a"], fR, WHITE), roll(d["rev_b"], fR, C.BITS)
-        head = label(r"The two losses, over every bell curve $(\mu, \sigma)$", font_size=34).to_edge(UP, buff=0.35)
-        t_f = label(r"$D_{\mathrm{KL}}(p \,\|\, q)$: \ one valley", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
-        t_r = label(r"$D_{\mathrm{KL}}(q \,\|\, p)$: \ two valleys", font_size=30, color=C.KL).next_to(head, DOWN, buff=0.2)
-        cap = label(r"across: \ the center $\mu$; \ back: \ the width $\sigma$; \ up: \ the loss", font_size=24,
-                    color=GREY_B).to_edge(DOWN, buff=0.35).shift(RIGHT * 1.0)
-        tag = computed_tag()
-        gd_card = gloss(r"gradient descent", r"again and again, take a small step\\ in whichever direction lowers "
-                        r"the loss fastest", picture=valley_steps(0.15, x0=-1.3, n=6), corner=DL, width=3.6)
-        for m in (head, t_f, t_r, cap, tag, gd_card):
-            self.add_fixed_in_frame_mobjects(m)
-            self.remove(m)
-        self.set_camera_orientation(phi=58 * DEGREES, theta=-78 * DEGREES)
-        with self.voiceover(
-            "Here are the two losses for every possible bell curve: its center across, its width up. "
-            "<bookmark mark='a'/> Measured one way, there is a single valley, and gradient descent, which again and "
-            "again takes a small step in whichever direction lowers the loss fastest, finds the wide curve from "
-            "anywhere. <bookmark mark='b'/> Measured the other way, there are two valleys, one for each peak, and "
-            "where you end up depends on where you start."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(tag), Create(axes), run_time=1.0)
-            self.play(FadeIn(sF), run_time=1.5)
-            self.begin_ambient_camera_rotation(rate=0.05)
-            vo.wait_until("a")
-            self.stop_ambient_camera_rotation()
-            self.play(FadeIn(t_f), FadeIn(bF[0]), FadeIn(gd_card))
-            self.play(MoveAlongPath(bF[0], bF[2]), Create(bF[1]), run_time=3.0, rate_func=smooth)
-            vo.wait_until("b")
-            self.play(FadeOut(bF[0]), FadeOut(bF[1]), FadeOut(t_f), FadeOut(gd_card), FadeIn(t_r), Transform(sF, sR),
-                      run_time=2.5)
-            self.move_camera(phi=52 * DEGREES, theta=-90 * DEGREES, run_time=1.2)
-            self.play(FadeIn(bA[0]), FadeIn(bB[0]))
-            self.play(MoveAlongPath(bA[0], bA[2]), Create(bA[1]), MoveAlongPath(bB[0], bB[2]), Create(bB[1]),
-                      run_time=3.0, rate_func=smooth)
-        self.wait(0.5)
-        self.clear_scene()
-        self.set_camera_orientation(phi=0, theta=-90 * DEGREES)

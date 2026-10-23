@@ -449,15 +449,16 @@ def solve(D, z, kind, n, spacing="edm", seed=0):
     raise ValueError(kind)
 
 
-SOLVERS = [("euler_vp", "time"), ("ddim", "edm"), ("heun", "edm"), ("dpm2", "edm"), ("dpmpp2m", "edm"), ("ddpm", "edm")]
+SOLVERS = [("euler_vp", "edm"), ("ddim", "edm"), ("heun", "edm"), ("dpm2", "edm"), ("dpmpp2m", "edm"), ("ddpm", "edm")]
 NFES = [4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128]
 
 
-def solver_sweep(D, z, ref, label=""):
-    """Every solver at budgets of about NFES network evaluations: the error against the reference solution (the
-    deterministic ones) and the distance from the data (all of them)."""
+def solver_sweep(D, z, ref, label="", spacing=None, suffix=""):
+    """Every solver at budgets of about NFES network evaluations, on one spacing of the noise levels (EDM's, unless
+    given): the error against the reference solution (the deterministic ones) and the distance from the data."""
     out = {}
-    for kind, spacing in SOLVERS:
+    for kind, sp in SOLVERS:
+        sp = spacing or sp
         rows = []
         for budget in NFES:
             if kind in ("heun",):
@@ -466,13 +467,14 @@ def solver_sweep(D, z, ref, label=""):
                 n = max(1, budget // 2)
             else:
                 n = budget
-            x, nfe = solve(D, z, kind, n, spacing, seed=budget)
+            x, nfe = solve(D, z, kind, n, sp, seed=budget)
             d = dist(x)
             if kind == "ddpm":  # stochastic: average the distance over two runs
-                d = 0.5 * (d + dist(solve(D, z, kind, n, spacing, seed=budget + 1000)[0]))
+                d = 0.5 * (d + dist(solve(D, z, kind, n, sp, seed=budget + 1000)[0]))
             rows.append(dict(nfe=nfe, err=float(np.linalg.norm(x - ref, axis=1).mean()), sw=d))
-        out[kind] = rows
-        print(f"    {label}{kind:9s} " + " ".join(f"{r['nfe']}:{r['err']:.3f}/{r['sw']:.3f}" for r in rows), flush=True)
+        out[kind + suffix] = rows
+        print(f"    {label}{kind:9s}{suffix:5s} " + " ".join(f"{r['nfe']}:{r['err']:.3f}/{r['sw']:.3f}" for r in rows),
+              flush=True)
     return out
 
 
@@ -485,6 +487,7 @@ def compute_solvers():
     out["ref_sw"] = dist(ref)
     out["floor"] = floor(n)
     out.update(solver_sweep(denoise_edm, z, ref))
+    out.update(solver_sweep(denoise_edm, z, ref, spacing="time", suffix="_time"))
     # the time steps of each, for the picture: the first 12 noise levels of each spacing at 12 steps
     for sp in ("edm", "logsnr", "time", "ddpm"):
         out[f"steps_{sp}"] = sigmas(sp, 12)
@@ -492,7 +495,7 @@ def compute_solvers():
     for kind in ("ddim", "heun", "dpmpp2m", "euler_vp"):
         for budget in (6, 12, 24):
             n_ = (budget + 1) // 2 if kind == "heun" else budget
-            out[f"pic_{kind}{budget}"] = solve(denoise_edm, z[:600], kind, n_, "time" if kind == "euler_vp" else "edm")[0]
+            out[f"pic_{kind}{budget}"] = solve(denoise_edm, z[:600], kind, n_, "edm")[0]
     out["pic_ref"] = ref[:600]
     print(f"    reference: two solvers at 1,024 steps differ by {out['ref_gap']:.1e}; its distance from the data "
           f"{out['ref_sw']:.4f}, floor {out['floor']:.4f}", flush=True)

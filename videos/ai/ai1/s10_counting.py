@@ -14,7 +14,6 @@ class Counting(VoiceoverScene):
         self.curves()
         self.sparsity()
         self.laplace()
-        self.reading()
         self.writing()
         self.lesson()
 
@@ -61,13 +60,12 @@ class Counting(VoiceoverScene):
             lines.width = 13.4
         six = " ".join(s["7"].split()[:5])
         with self.voiceover(
-            "In 1948, Shannon showed what counting can do by letting counting models write. <bookmark mark='a'/> "
-            "With every symbol equally likely, you get noise. <bookmark mark='b'/> With the right letter "
-            "frequencies, still noise, but with the right texture. <bookmark mark='c'/> Pick each letter by what "
-            "followed the previous one in our books, and syllables appear. <bookmark mark='d'/> With two letters of "
-            "context, short words. <bookmark mark='e'/> With four, mostly real words. <bookmark mark='f'/> With "
-            f"six, phrases: {six}. <bookmark mark='g'/> Count whole words instead, and you get something that almost "
-            "scans."
+            "In 1948, Shannon let counting models write. <bookmark mark='a'/> Every symbol equally likely: noise. "
+            "<bookmark mark='b'/> The right letter frequencies: still noise, with the right texture. "
+            "<bookmark mark='c'/> Pick each letter by what followed the previous one in our books, and syllables "
+            "appear. <bookmark mark='d'/> Two letters of context: short words. <bookmark mark='e'/> Four: mostly "
+            f"real words. <bookmark mark='f'/> Six: phrases, {six}. <bookmark mark='g'/> Count whole words "
+            "instead, and it almost scans."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             for k, mark in enumerate("abcdefg"):
@@ -95,9 +93,9 @@ class Counting(VoiceoverScene):
         mle.next_to(cap, DOWN, buff=0.3)
         with self.voiceover(
             "The rule behind all of these is simple. <bookmark mark='a'/> The probability of the next symbol, given "
-            "a context, is the number of times it followed that context in the books, divided by the number of "
-            "times the context appeared. <bookmark mark='b'/> It's the most natural estimate there is, and in "
-            "chapter eleven we'll see why it's also the best one, for the books themselves."
+            "a context, is how often it followed that context in the books, divided by how often the context "
+            "appeared. <bookmark mark='b'/> It's the most natural estimate, and chapter eleven shows it's the best "
+            "one, for the books themselves."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -144,11 +142,11 @@ class Counting(VoiceoverScene):
         uni_l.align_to(uni, RIGHT)
         tag = computed_tag()
         with self.voiceover(
-            "So let's score the counting models. For each amount of context, from no letters to fourteen, measure "
-            "the bits per letter. <bookmark mark='a'/> First on the very books it counted. More context, fewer bits, "
-            f"all the way down to {plug[-1]:.2f} bits per letter at {ks[-1]} letters. Our numbers for no context and "
-            f"one letter of context, {plug[0]:.2f} and {plug[1]:.2f}, <bookmark mark='b'/> land next to the "
-            f"estimates Shannon made in 1951 from printed tables, {sh27[1]:.2f} and {sh27[2]:.2f}."
+            "So let's score them. For each amount of context, from none to fourteen letters, measure the bits per "
+            "letter. <bookmark mark='a'/> First on the books it counted. More context, fewer bits, down to "
+            f"{plug[-1]:.2f} bits per letter at {ks[-1]} letters. Our numbers for no context and one letter, "
+            f"{plug[0]:.2f} and {plug[1]:.2f}, <bookmark mark='b'/> land next to Shannon's 1951 estimates from "
+            f"printed tables, {sh27[1]:.2f} and {sh27[2]:.2f}."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(uni), FadeIn(uni_l), FadeIn(tag))
             vo.wait_until("a")
@@ -227,12 +225,12 @@ class Counting(VoiceoverScene):
         l4 = label(rf"$4$ letters: \ $27^4 = 531{{,}}441$; \ the books have ${100 * g['frac4']:.0f}\%$", font_size=26,
                    color=C.CONTEXT).next_to(g2, UP, buff=0.2)
         with self.voiceover(
-            "The reason is that contexts multiply. <bookmark mark='a'/> Of all the five-letter contexts in the Falcon "
-            f"passage, {100 * seen[5]:.0f} percent appear somewhere in the books. Of the {kL}-letter contexts, only "
-            f"{100 * seen[kL]:.0f} percent do. <bookmark mark='b'/> There are about ten to the {e20:.0f} possible "
-            f"{kL}-letter contexts, and the books contain {nctx[kL] / 1e6:.1f} million of them. <bookmark mark='c'/> A "
-            "context the books never saw gives the model nothing to go on, and a letter never seen after it would get "
-            "probability zero: infinite surprise."
+            "The reason: contexts multiply. <bookmark mark='a'/> Of the Falcon passage's five-letter contexts, "
+            f"{100 * seen[5]:.0f} percent appear somewhere in the books; of its {kL}-letter contexts, only "
+            f"{100 * seen[kL]:.0f} percent. <bookmark mark='b'/> There are about ten to the {e20:.0f} possible "
+            f"{kL}-letter contexts, and the books hold {nctx[kL] / 1e6:.1f} million. <bookmark mark='c'/> An unseen "
+            "context gives the model nothing to go on, and a letter never seen after it would get probability "
+            "zero: infinite surprise."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(t), FadeIn(xlab),
                       LaggedStart(*[FadeIn(q) for q in g2], lag_ratio=0.002), FadeIn(l2), run_time=1.6)
@@ -275,14 +273,14 @@ class Counting(VoiceoverScene):
                     r"$1{,}826{,}214$ to $1$ on tomorrow", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
         src = cite(r"P.-S.~Laplace, \textit{Essai philosophique sur les probabilit\'es} (1814)", corner=DR)
         with self.voiceover(
-            "The patch is older than computers. In 1814 Pierre-Simon Laplace asked: if something has happened s "
-            "times in n tries, how likely is it next time? <bookmark mark='a'/> Suppose that, before looking, every "
-            "chance between zero and one was equally plausible. Weigh each chance by how well it explains what you "
-            "saw, <bookmark mark='b'/> and the answer is s plus one, over n plus two. <bookmark mark='c'/> His "
-            "example was the sunrise: five thousand years of it, 1,826,213 days, gives odds of 1,826,214 to one "
-            "that the sun rises tomorrow. <bookmark mark='d'/> For our 27 symbols, the same reasoning says: add one "
-            "to every count. Nothing ever gets probability zero. <bookmark mark='e'/> Add alpha instead of one, and "
-            "you have the smoothing that keeps our curves finite, with alpha chosen on held-out text."
+            "The patch is older than computers. In 1814 Pierre-Simon Laplace asked: if something happened s times "
+            "in n tries, how likely is it next time? <bookmark mark='a'/> Suppose that, before looking, every "
+            "chance between zero and one was equally plausible. Weigh each by how well it explains what you saw, "
+            "<bookmark mark='b'/> and the answer is s plus one, over n plus two. <bookmark mark='c'/> His example "
+            "was the sunrise: five thousand years, 1,826,213 days, give odds of 1,826,214 to one that the sun rises "
+            "tomorrow. <bookmark mark='d'/> For our 27 symbols: add one to every count, and nothing gets "
+            "probability zero. <bookmark mark='e'/> Add alpha instead of one, chosen on held-out text, and you have "
+            "the smoothing that keeps our curves finite."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             step(0)
@@ -334,12 +332,12 @@ class Counting(VoiceoverScene):
                       f"For one letter of context, Laplace's rule costs {T[short][lap] - T[short][best[short]]:.3f} bits")
         with self.voiceover(
             "How much does alpha matter? <bookmark mark='a'/> Here is every alpha from a ten-thousandth to ten, at "
-            f"four context lengths, scored on the Falcon passage. <bookmark mark='b'/> {short_said}: its contexts "
-            f"are seen millions of times. <bookmark mark='c'/> With {ol} letters of context, {100 * un:.0f} percent of "
-            "the passage's letters come after a context where the books never showed that letter, and most contexts "
-            "were seen only a few times. Adding one to every count drowns the evidence: Laplace's rule costs "
-            f"{cost:.2f} bits per letter more than the alpha chosen on held-out text, {A[best[ol]]:.2f}. "
-            "Good smoothing is a question about what you haven't seen. Part 7 answers it properly."
+            f"four context lengths, on the Falcon passage. <bookmark mark='b'/> {short_said}: its contexts are seen "
+            f"millions of times. <bookmark mark='c'/> With {ol} letters of context, {100 * un:.0f} percent of the "
+            "passage's letters follow a context where the books never showed that letter, and most contexts were "
+            "seen only a few times. Adding one to every count drowns the evidence: Laplace's rule costs "
+            f"{cost:.2f} bits per letter more than the alpha chosen on held-out text, {A[best[ol]]:.2f}. Good "
+            "smoothing is about what you haven't seen; Part 7 answers it properly."
         ) as vo:
             self.play(FadeIn(a), FadeIn(tag), Create(lapl), FadeIn(lapt))
             vo.wait_until("a")
@@ -350,82 +348,6 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(marks[2:]))
             self.play(Indicate(marks[-1], color=WHITE, scale_factor=1.6))
         self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def reading(self):
-        """Learning by counting, as it reads: four context lengths scored on the Falcon passage against text counted."""
-        d = load("seen")
-        A = np.asarray(d["amounts"], float)
-        orders = [int(o) for o in d["orders"]]
-        B = {o: np.asarray(d[f"bits_{o}"]) for o in orders}
-        cols = dict(zip(orders, (GREY_B, C.COUNTING, C.SURPRISE, C.BITS)))
-        lx = np.log10(A)
-        ax = plain_axes([3, 7.5, 1], [2, 5, 1], 8.4, 4.6).shift(DOWN * 0.4 + LEFT * 1.3)
-        xl = VGroup(*[MathTex(t, font_size=22, color=GREY_B).next_to(ax.c2p(v, 2), DOWN, buff=0.12)
-                      for t, v in ((r"10^3", 3), (r"10^4", 4), (r"10^5", 5), (r"10^6", 6), (r"10^7", 7))])
-        yl = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(3, v), LEFT, buff=0.12) for v in (2, 3, 4, 5)])
-        axl = VGroup(label(r"letters of the books counted \ (log scale)", font_size=22, color=GREY_A).next_to(xl, DOWN, buff=0.15),
-                     label(r"bits per letter on the Falcon passage", font_size=22, color=GREY_A).next_to(ax.c2p(3, 5), UP, buff=0.15)
-                     .align_to(ax, LEFT))
-        uni = DashedLine(ax.c2p(3, 4.755), ax.c2p(7.5, 4.755), color=GREY_C, stroke_width=1.5)
-        uni_l = label(r"$\log_2 27$: \ no knowledge", font_size=20, color=GREY_B).next_to(ax.c2p(7.5, 4.755), UP, buff=0.08)
-        uni_l.align_to(uni, RIGHT)
-        t = ValueTracker(float(lx[0]))
-
-        def upto(o):
-            x_ = t.get_value()
-            pts = [(a_, b_) for a_, b_ in zip(lx, B[o]) if a_ <= x_ + 1e-9]
-            if x_ > pts[-1][0] and len(pts) < len(lx):
-                i = len(pts)
-                f_ = (x_ - lx[i - 1]) / (lx[i] - lx[i - 1])
-                pts.append((x_, B[o][i - 1] + f_ * (B[o][i] - B[o][i - 1])))
-            pts = pts if len(pts) > 1 else pts * 2
-            return VMobject(color=cols[o], stroke_width=4).set_points_as_corners([ax.c2p(a_, b_) for a_, b_ in pts])
-
-        lines = VGroup(*[always_redraw(lambda o=o: upto(o)) for o in orders])
-        names = VGroup(*[label(rf"${o}$ letter{'s' if o > 1 else ''} of context", font_size=22, color=cols[o]) for o in orders])
-        names.arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_corner(UR, buff=0.5).shift(DOWN * 0.7)
-
-        def best_at(i):
-            return min(orders, key=lambda o: B[o][i])
-
-        lead = [best_at(i) for i in range(len(A))]
-        assert lead[0] == orders[0]  # the narration says the shortest context starts ahead
-        takes = [(i, lead[i]) for i in range(1, len(A)) if lead[i] != lead[i - 1]]  # where the lead changes hands
-        crown = always_redraw(lambda: Star(n=5, outer_radius=0.1, color=WHITE, fill_opacity=1).move_to(  # on the best curve
-            ax.c2p(t.get_value(), min(float(np.interp(t.get_value(), lx, B[o])) for o in orders))))
-        o_long = orders[-1]
-        words = {3: "three", 5: "five", 8: "eight"}
-
-        def amount(n):
-            return {1000: "a thousand", 3000: "three thousand", 10_000: "ten thousand", 30_000: "thirty thousand",
-                    100_000: "a hundred thousand", 300_000: "three hundred thousand", 1_000_000: "a million",
-                    3_000_000: "three million"}.get(int(n), f"{n:,.0f}")
-
-        ending = (f"{words[o_long]} letters is still behind, at {B[o_long][-1]:.2f}: it would need far more text "
-                  "than we have." if lead[-1] != o_long else f"{words[o_long]} letters finally leads.")
-        with self.voiceover(
-            "And how does a counting model learn? It reads, and counts. Here are four of them, with one, three, five "
-            "and eight letters of context, scored on the Falcon passage as they count more and more of the books. "
-            f"<bookmark mark='a'/> After a thousand letters, one letter of context is best, {B[orders[0]][0]:.2f} bits: "
-            "a short context is seen often enough to count quickly, while longer ones have hardly met any of their "
-            "contexts."
-        ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(axl), Create(uni), FadeIn(uni_l), FadeIn(names))
-            self.add(lines, crown)
-            vo.wait_until("a")
-        for i, o in takes:  # one short line each time the lead changes hands
-            with self.voiceover(f"At {amount(A[i])} letters, {words.get(o, str(o))} letters of context take the lead."):
-                self.play(t.animate.set_value(float(lx[i])), run_time=2.5, rate_func=linear)
-                self.play(Indicate(names[orders.index(o)], color=cols[o]))
-        with self.voiceover(
-            f"With all {A[-1] / 1e6:.0f} million letters, {ending} The more you can count, the longer the context "
-            "worth using."
-        ):
-            self.play(t.animate.set_value(float(lx[-1])), run_time=2.5, rate_func=linear)
-        self.wait(0.5)
-        self.remove(lines, crown)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -480,8 +402,8 @@ class Counting(VoiceoverScene):
                    (f"at most {100 * max(late):.0f} percent is copied" if max(late) >= 0.01 else "almost nothing is copied"))
         recite = "it can only recite: " if share[0] > 0.5 else "it mostly invents, but "
         with self.voiceover(
-            "Here's the five-letter model writing, as it reads, from the same start and with the same dice each "
-            f"time. <bookmark mark='a'/> After a thousand letters {recite}{100 * share[0]:.0f} percent "
+            "Here's the five-letter model writing as it reads more and more of the books, from the same start "
+            f"with the same dice. <bookmark mark='a'/> After a thousand letters {recite}{100 * share[0]:.0f} percent "
             f"of what it writes, in red, is copied word for word, in stretches of {L} letters or more, from the "
             f"little it has read. <bookmark mark='b'/> After ten thousand, {100 * share[1]:.0f} percent. "
             f"<bookmark mark='c'/> From a hundred thousand on, {nothing}: it strings real-looking words together "
@@ -515,12 +437,11 @@ class Counting(VoiceoverScene):
         pay.next_to(g, DOWN, buff=0.7)
         with self.voiceover(
             "This is the first appearance of the central problem of machine learning. <bookmark mark='a'/> A model "
-            "can fit the data it learned from almost perfectly, and still guess badly on new data. The gap between "
-            "the two is called generalization. <bookmark mark='b'/> And counting has a deeper limit: every context "
-            "is its own island. It can't tell that the dog barked and the hound barked are alike, so it can't "
-            "borrow what it learned about one for the other. <bookmark mark='c'/> Better smoothing comes in part "
-            "seven, generalization in part eight, and models that share what they learn between similar contexts, "
-            "with vectors and networks, in parts three and nine."
+            "can fit the data it learned from almost perfectly, and still guess badly on new data; how well it does "
+            "there is called generalization. <bookmark mark='b'/> Counting has a deeper limit: every context is an "
+            "island. It can't tell that the dog barked and the hound barked are alike, so it can't share what it "
+            "learned. <bookmark mark='c'/> Better smoothing comes in Part 7, generalization in Part 8, and models "
+            "that share what they learn, with vectors and networks, in Parts 3 and 9."
         ) as vo:
             self.play(FadeIn(a))
             vo.wait_until("a")

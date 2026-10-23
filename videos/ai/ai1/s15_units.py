@@ -128,9 +128,9 @@ class Units(VoiceoverScene):
                    f"{g2['bits_per_token']:.2f}; per character, {cnt['bpc']:.2f} and {g2['bpc']:.2f}.")
         with self.voiceover(
             "A model's loss is reported per token, so its size depends on how much text a token holds. "
-            "<bookmark mark='a'/> The total is what matters: tokens times bits per token, which is characters times "
-            "bits per character. <bookmark mark='b'/> Here are our models on the passage. The counting model reads "
-            f"one character at a time: every token is a character. <bookmark mark='c'/> {verdict} "
+            "<bookmark mark='a'/> What matters is the total: tokens times bits per token, which is characters times "
+            "bits per character. <bookmark mark='b'/> Here are our models on the passage; for the counting model, "
+            f"every token is a character. <bookmark mark='c'/> {verdict} "
             "<bookmark mark='d'/> Perplexity, two to the bits per token, inherits the same problem: it says how many "
             "equally likely tokens a model is choosing among, and tokens differ. <bookmark mark='e'/> So compare "
             "per character, or per byte of the file. That's why the scoreboard counts bits per character."
@@ -175,13 +175,12 @@ class Units(VoiceoverScene):
         src = cite(r"Y.~Huang, J.~Zhang, Z.~Shan \& J.~He, \textit{Compression Represents Intelligence Linearly} "
                    r"(COLM 2024)")
         with self.voiceover(
-            "This is how the field measures it, too. In 2024, researchers at the Hong Kong University of Science "
-            "and Technology and Tencent took thirty-one public language models, <bookmark mark='a'/> measured how "
-            "well each compresses freshly collected text, from web pages, code and papers, in bits per character, "
-            "because, as they put it, bits per token aren't directly comparable, <bookmark mark='b'/> and set that "
-            "against the models' average score on twelve benchmarks of knowledge, coding and mathematics. "
-            "<bookmark mark='c'/> The points fall almost on a straight line, with a correlation of minus 0.93. The "
-            "better a model compresses, the more it can do."
+            "The field measures it this way too. In 2024, researchers at the Hong Kong University of Science and "
+            "Technology and Tencent took thirty-one public language models, <bookmark mark='a'/> measured how well "
+            "each compresses freshly collected web pages, code and papers, in bits per character, since bits per "
+            "token aren't comparable, <bookmark mark='b'/> and set that against their average score on twelve "
+            "benchmarks of knowledge, coding and mathematics. <bookmark mark='c'/> The points fall almost on a "
+            "line, with a correlation of minus 0.93. The better a model compresses, the more it can do."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(rows[0]))
             vo.wait_until("a")
