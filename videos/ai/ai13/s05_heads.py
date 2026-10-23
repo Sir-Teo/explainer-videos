@@ -37,12 +37,12 @@ class Heads(VoiceoverScene):
                 why(rf"one ${d} \times {d}$ matrix: \\ a bilinear form on the stream"),
                 why(rf"it factors through ${dh}$ numbers")]
         step = ladder(self, rows, whys, keep=4, top=3.1, x=-2.6, buff=0.55, edge=6.9)
-        u = 0.026
+        u = 0.02
         wq = matrix_box(d, dh, u, Q, fill=Q, label_tex=r"W_Q^\top", font_size=22)
         wk = matrix_box(dh, d, u, K, fill=K, label_tex=r"W_K", font_size=22)
         eq = MathTex(r"=", font_size=40)
         wqk = matrix_box(d, d, u, A, fill=A, label_tex=r"W_{QK}", font_size=26)
-        prod = VGroup(wq, wk, eq, wqk).arrange(RIGHT, buff=0.3).move_to([-2.2, -2.2, 0])
+        prod = VGroup(wq, wk, eq, wqk).arrange(RIGHT, buff=0.3).move_to([-2.2, -1.95, 0])
         wk.align_to(wq, UP)
         dims = VGroup(MathTex(rf"{d} \times {dh}", font_size=20, color=Q).next_to(wq, DOWN, buff=0.1),
                       MathTex(rf"{dh} \times {d}", font_size=20, color=K).next_to(wk, DOWN, buff=0.1),
@@ -96,7 +96,7 @@ class Heads(VoiceoverScene):
                 lines.add(curve(ax, np.arange(1, d + 1), rel, interpolate_color(ManimColor(A), ManimColor(Q), l_ / max(L - 1, 1)),
                                 1.6).set_stroke(opacity=0.8))
         cut = DashedLine(ax.c2p(dh, -17), ax.c2p(dh, 1), color=WHITE, stroke_width=1.5)
-        cutl = MathTex(rf"d_h = {dh}", font_size=22).next_to(ax.c2p(dh, 1), UP, buff=0.05)
+        cutl = MathTex(rf"d_h = {dh}", font_size=24).next_to(ax.c2p(dh, -6), RIGHT, buff=0.12)
         fl = label(r"rounding error", font_size=20, color=GREY_B).move_to(ax.c2p(80, -14.5))
         tag = note(rf"our transformer: \ all ${L * H}$ heads, \ layer norm folded in").to_corner(DL, buff=0.3)
         ex = np.asarray(h["qk_example"])
@@ -134,19 +134,19 @@ class Heads(VoiceoverScene):
         t = load("tf")
         maps = np.asarray(t["maps"])
         H, dh, d = int(t["heads"]), int(t["d"]) // int(t["heads"]), int(t["d"])
-        S = 2.2
-        imgs = Group(*[framed(heat_image(maps[0, hh], S, S, color=A, mask_upper=True)) for hh in range(H)])
-        imgs.arrange(RIGHT, buff=0.3).move_to([0, 1.15, 0])
+        S = 2.5
+        imgs = Group(*[framed(heat_image(maps[0, hh], S, S, color=A, gamma=0.4, mask_upper=True)) for hh in range(H)])
+        imgs.arrange(RIGHT, buff=0.35).move_to([0, 0.75, 0])
         hl = VGroup(*[label(rf"head {hh + 1}", font_size=20, color=GREY_B).next_to(m, UP, buff=0.1)
                       for hh, m in enumerate(imgs)])
-        under = note(r"layer 1 of our transformer, \ on a sentence of the passage").next_to(imgs, DOWN, buff=0.15)
+        under = note(r"layer 1 of our transformer, \ on a sentence of the passage").next_to(imgs, UP, buff=0.5)
         eq = cmath(r"\operatorname{Attn}(x)_i", r"=", r"\sum_{h=1}^{" + str(H) + r"}", r"\sum_j", r"A^{h}_{ij}",
                    r"\, W_{OV}^{h}\, x_j", font_size=36, colors={r"A^{h}_{ij}": A, r"\, W_{OV}^{h}\, x_j": OV})
-        eq.move_to([0, -1.55, 0])
+        eq.move_to([0, -2.35, 0])
         eql = label(r"each head: \ its own pattern $A^h$, \ its own low-rank move $W^h_{OV}$", font_size=22,
                     color=GREY_A).next_to(eq, DOWN, buff=0.2)
         same = label(rf"${H}$ heads of ${dh}$, \ or one of ${d}$: \ the same $4d^2 = {4 * d * d:,}$ weights".replace(",", "{,}"),
-                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
+                     font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         cite_ = cite(r"S.~Bhojanapalli et al., \textit{Low-Rank Bottleneck in Multi-head Attention Models} (2020)",
                      corner=UR)
         n = maps.shape[-1]
@@ -155,6 +155,8 @@ class Heads(VoiceoverScene):
         dist = [float(np.mean([(maps[0, hh, i, : i + 1] * (i - idx[: i + 1])).sum() for i in range(8, n)]))
                 for hh in range(H)]
         hp, hw = int(np.argmax(prev)), int(np.argmax(dist))
+        stats = VGroup(*[label(rf"one back: ${100 * prev[hh]:.0f}\%$ \\ mean distance ${dist[hh]:.1f}$", font_size=18,
+                               color=GREY_A).next_to(imgs[hh], DOWN, buff=0.15) for hh in range(H)])
         looks = (f"head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while head "
                  f"{hw + 1} looks {dist[hw]:.0f} characters back on average." if hp != hw else
                  f"head {hp + 1} puts {prev[hp]:.0%} of its weight on the character just before, while the others "
@@ -172,7 +174,7 @@ class Heads(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(same), LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.15), FadeIn(hl), FadeIn(under))
             vo.wait_until("a")
-            self.play(Indicate(hl[hp], color=A), Indicate(hl[hw], color=A))
+            self.play(FadeIn(stats), Indicate(hl[hp], color=A), Indicate(hl[hw], color=A))
             vo.wait_until("b")
             self.play(Write(eq), FadeIn(eql))
             vo.wait_until("c")

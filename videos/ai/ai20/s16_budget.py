@@ -76,10 +76,15 @@ class Budget(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(rule), FadeIn(note_))
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in rows], lag_ratio=0.25), run_time=2.5)
+            # a box walks the columns the narration reads: the equal budget, digits seen, passes per sample
+            col = [SurroundingRectangle(VGroup(head[j], *[r_[j] for r_ in rows]), color=C.BITS, buff=0.14,
+                                        corner_radius=0.08, stroke_width=2) for j in (4, 3, 5)]
+            self.play(Create(col[0]))
             vo.wait_until("a")
-            self.play(Indicate(rows[0][1], color=FAM["pixelcnn"]), Indicate(rows[0][3], color=FAM["pixelcnn"]))
+            self.play(ReplacementTransform(col[0], col[1]), Indicate(rows[0][1], color=FAM["pixelcnn"]),
+                      Indicate(rows[0][3], color=FAM["pixelcnn"]))
             vo.wait_until("b")
-            self.play(Indicate(VGroup(*[r_[5] for r_ in rows]), color=C.BITS))
+            self.play(ReplacementTransform(col[1], col[2]), Indicate(rows[0][5], color=FAM["pixelcnn"]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -287,9 +292,9 @@ class Budget(VoiceoverScene):
             f"{close} <bookmark mark='b'/> Which is best depends on what the model is for, and on scale: GANs "
             "drew the sharpest images for years, at sizes far beyond ours."
         ) as vo:
-            self.play(FadeIn(hd))
+            self.play(FadeIn(hd), LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.1), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.25),
+            self.play(LaggedStart(*[FadeIn(r_[1], shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.25),
                       run_time=min(3.5, max(1.5, vo.until("b") - 0.3)))
             vo.wait_until("b")
             self.play(FadeIn(tk))

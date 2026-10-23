@@ -78,7 +78,7 @@ class VI(VoiceoverScene):
         colors2 = {r"\mathrm{ELBO}(q)": Q, r"\mathrm{KL}\big(q \,\|\, p(z \mid x)\big)": Q}
         elbo = cmath(r"\log p(x)", "=", r"\mathrm{ELBO}(q)", "+", r"\mathrm{KL}\big(q \,\|\, p(z \mid x)\big)",
                      colors=colors2, font_size=34).to_edge(DOWN, buff=0.35).to_edge(RIGHT, buff=0.4)
-        en = label(r"raise the bound, \ and the gap closes \ (VAEs, Part 22)", font_size=24, color=GREY_A)
+        en = label(r"raise the bound, \ and the gap closes \ (VAEs, Part 20)", font_size=24, color=GREY_A)
         en.next_to(elbo, UP, buff=0.15)
         post_card = gloss(r"posterior", r"what we believe about the hidden things \\ after seeing the data", before_after(),
                           corner=DR, width=4.4, color=P)
@@ -124,7 +124,7 @@ class VI(VoiceoverScene):
             "wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log "
             "probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can "
             "compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, "
-            "dragging q toward p. Variational autoencoders, in part twenty-two, are trained exactly this way."
+            "dragging q toward p. Variational autoencoders, in part twenty, are trained exactly this way."
         ) as vo:
             self.play(FadeIn(one))
             vo.wait_until("a")

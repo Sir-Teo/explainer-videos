@@ -143,15 +143,17 @@ class Masks(VoiceoverScene):
             "reads its prompt both ways and writes the rest left to right. Which of these won, and why, is the "
             "story of Part 14."
         ) as vo:
-            self.play(FadeIn(panels[0]))
+            self.play(LaggedStart(*[FadeIn(p_) for p_ in panels], lag_ratio=0.25), run_time=2.0)
+            self.play(*[p_.animate.set_opacity(0.3) for p_ in panels[1:]])
             vo.wait_until("a")
             self.play(Indicate(panels[0][0]))
             vo.wait_until("b")
-            self.play(FadeIn(panels[1]))
+            self.play(panels[0].animate.set_opacity(0.3), panels[1].animate.set_opacity(1))
             vo.wait_until("c")
-            self.play(FadeIn(panels[2]), FadeIn(cross))
+            self.play(panels[1].animate.set_opacity(0.3), panels[2].animate.set_opacity(1), FadeIn(cross))
             vo.wait_until("d")
-            self.play(FadeIn(panels[3]))
+            self.play(panels[2].animate.set_opacity(0.3), panels[3].animate.set_opacity(1))
+            self.play(*[p_.animate.set_opacity(1) for p_ in panels[:3]])
         self.wait(0.3)
         self.clear_scene()
 

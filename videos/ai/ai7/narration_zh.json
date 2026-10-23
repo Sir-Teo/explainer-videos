@@ -117,11 +117,6 @@
    "en": "For most models with hidden parts, the exact answer, the posterior over the hidden variables, is a shape we can't compute. <bookmark mark='p'/> The posterior is what we believe about the hidden things after seeing the data: part five's updated belief. Part five sampled such shapes with Markov chains. Variational inference does something else: it picks the closest shape from a simple family, here a single Gaussian, and uses that instead. <bookmark mark='a'/> Closest in what sense? In part one's KL divergence, from q to p. Start from a poor guess, and slide the Gaussian downhill.",
    "zh": "对大多数带有隐藏部分的模型来说，精确的答案，也就是隐变量的后验，是一个我们算不出来的形状。<bookmark mark='p'/>后验，就是看到数据之后，我们对那些隐藏的东西的信念：也就是第5部分那种更新过的信念。第5部分用马尔可夫链，从这样的形状中采样。变分推断换了个做法：它从一个简单的家族里，挑出最接近的形状，这里是单个高斯分布，然后用它来代替。<bookmark mark='a'/>在什么意义上最接近？用第1部分的KL散度，方向是从q到p。从一个很差的猜测出发，让这个高斯分布顺着下坡滑下去。"
   },
-  "be0e3a99c469": {
-   "scene": "VI",
-   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part twenty-two, are trained exactly this way.",
-   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第22部分的变分自编码器，正是这样训练的。"
-  },
   "c39a970bcc94": {
    "scene": "KneserNey",
    "en": "Chapter seven. The best way to count.",
@@ -161,6 +156,11 @@
    "scene": "Outro",
    "en": "Bishop's Pattern Recognition and Machine Learning covers this whole part, and Rabiner's tutorial is still the best introduction to hidden Markov models. Thanks for watching, and see you in part eight.",
    "zh": "毕晓普的《模式识别与机器学习》涵盖了这一部分的全部内容，而拉比纳的那篇教程，至今仍是隐马尔可夫模型最好的入门。感谢观看，第8部分见。"
+  },
+  "b89ec20d0015": {
+   "scene": "VI",
+   "en": "It settles on one bump and ignores the other. This direction of KL punishes q for putting probability where p has almost none, so q hides inside a single mode, a single peak of the distribution. <bookmark mark='a'/> Measure the other way round, from p to q, and the best Gaussian covers both bumps, spilling into the empty middle. Neither is wrong: they answer different questions. <bookmark mark='b'/> The identity behind it all: the log probability of the data equals a lower bound, the ELBO, plus that KL. The ELBO is a score we can compute that always sits below the true one. <bookmark mark='c'/> Push it up, and the KL has to shrink, dragging q toward p. Variational autoencoders, in part twenty, are trained exactly this way.",
+   "zh": "它停在一个鼓包上，不管另一个。这个方向的KL散度，会因为q在p几乎没有概率的地方放了概率而惩罚它，所以q躲进了单独一个众数里，也就是分布的单独一个峰。<bookmark mark='a'/>反过来量，从p到q，最好的高斯分布就会盖住两个鼓包，还溢到中间的空白地带。两者都没有错：它们回答的是不同的问题。<bookmark mark='b'/>这一切背后的恒等式是：数据的对数概率，等于一个下界，也就是证据下界ELBO，再加上那个KL散度。ELBO是一个我们算得出来的分数，它永远落在真实值的下方。<bookmark mark='c'/>把它往上推，KL散度就不得不缩小，把q拖向p。第20部分的变分自编码器，正是这样训练的。"
   }
  },
  "title_en": "AI, Built: Part 7, Statistical ML",
