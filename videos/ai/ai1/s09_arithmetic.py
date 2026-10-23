@@ -544,15 +544,15 @@ class Arithmetic(VoiceoverScene):
         fine = byf[fb.index(show[-1])] - ideal
         coarse = byf[fb.index(8)] - ideal if 8 in fb else None
         dips = [f for f in show if byf[fb.index(f)] < ideal]
-        dip_said = (f" With {dips[0]}-bit counts it even came out a few bits under: rounding gave rare letters a "
+        dip_said = (f"With {dips[0]}-bit counts it even came out a few bits under: rounding gave rare letters a "
                     "little more probability, and this passage happened to use them." if dips else "")
+        coarse_said = f"Round them to 8 bits and it costs {coarse:,.0f} extra bits." if coarse is not None else ""
         with self.voiceover(
             f"Does the rounding cost much? We ran the whole Falcon passage, {n:,} letters, through a 32-bit coder "
             f"driven by our best counting model. <bookmark mark='a'/> Its information content under that model is "
             f"{ideal:,.0f} bits. <bookmark mark='b'/> With the probabilities rounded to {show[-1]}-bit counts, the "
-            f"coder sent {fine:.1f} bits more than that, in the whole passage."
-            + (f" Round them to 8 bits and it costs {coarse:,.0f} extra bits." if coarse is not None else "")
-            + dip_said + " <bookmark mark='c'/> The registers hardly matter, once they're a few bits wider than the "
+            f"coder sent {fine:.1f} bits more than that, in the whole passage. {coarse_said} <bookmark mark='r'/> "
+            f"{dip_said} <bookmark mark='c'/> The registers hardly matter, once they're a few bits wider than the "
             "counts. Arithmetic coding gives away almost nothing: what you pay is the model's surprise."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(hdr))

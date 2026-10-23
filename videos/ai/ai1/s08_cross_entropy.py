@@ -291,14 +291,14 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         )
         why_[0].next_to(res[0], DOWN, buff=0.15)
         why_[1].next_to(res[1], DOWN, buff=0.15)
+        fit = ("pulls q wide, to cover both peaks: it ends with exactly p's mean and spread." if wide else
+               "pulls q wide, to cover both peaks.")
         with self.voiceover(
             "One more property, which will matter a lot later: the divergence is not symmetric. Suppose the truth p "
             "has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center "
             "is and how wide it is. Which bell curve is best? It depends "
             "on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the "
-            "training loss we just met, <bookmark mark='b'/> "
-            + ("pulls q wide, to cover both peaks: it ends with exactly p's mean and spread." if wide else
-               "pulls q wide, to cover both peaks.")
+            "training loss we just met, <bookmark mark='b'/> " + fit
         ) as vo:
             self.play(FadeIn(head), FadeIn(axes[0]), FadeIn(axes[1]), FadeIn(lp), FadeIn(lq))
             self.add(*qs)
@@ -311,10 +311,10 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
                 s_t.set_value(np.interp(a, np.linspace(0, 1, len(path)), path[:, 1])))), run_time=3.0,
                 rate_func=linear)
             self.play(FadeIn(res[0]), FadeIn(why_[0]))
+        squeeze = "it squeezes into a single peak and ignores the other." if one_peak else "it narrows toward one peak."
         with self.voiceover(
-            "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so "
-            + ("it squeezes into a single peak and ignores the other. " if one_peak else "it narrows toward one peak. ")
-            + f"Each fit is bad by the other's measure: the wide curve scores {d['rev_at_fwd']:.2f} bits the second "
+            f"The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so "
+            f"{squeeze} Each fit is bad by the other's measure: the wide curve scores {d['rev_at_fwd']:.2f} bits the second "
             f"way, the narrow one {d['fwd_at_rev']:.1f} bits the first. <bookmark mark='b'/> Covering everything, or "
             "committing to one thing: that choice comes back in variational autoencoders, in Part 20, and in "
             "distillation and reinforcement learning from human feedback, in Part 27."
