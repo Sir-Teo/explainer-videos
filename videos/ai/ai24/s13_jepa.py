@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (JEPA, MAE_C, PART, SIMCLR, SUP, TARGET, arrow, axes, curve, digit, load, node_box,
-                                   pct, seed_curves, tag, take_away)
+                                   pct, seed_curves, tag, take_away, take_away_in)
 
 
 class JEPAScene(VoiceoverScene):
@@ -265,6 +265,6 @@ class JEPAScene(VoiceoverScene):
             self.play(FadeIn(events[2], shift=UP * 0.15))
             vo.wait_until("c")
             self.play(FadeIn(le))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

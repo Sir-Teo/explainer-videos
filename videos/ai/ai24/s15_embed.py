@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (MATRY, NEG, PART, POS, SIMCLR, axes, curve, digit_sheet, load, node_box, pct, tag,
-                                   take_away)
+                                   take_away, take_away_in)
 from videos.ai.ai24.s05_simclr import nn_sheet
 
 
@@ -232,6 +232,6 @@ class Embeddings(VoiceoverScene):
             self.play(FadeIn(ra))
             vo.wait_until("b")
             self.play(FadeIn(b), FadeIn(lb), FadeIn(rb))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

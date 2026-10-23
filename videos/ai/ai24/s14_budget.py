@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import COLOR, NAME, PART, PIX, RAND, SPOKEN, SUP, axes, load, pct, take_away
+from videos.ai.ai24.common import COLOR, NAME, PART, PIX, RAND, SPOKEN, SUP, axes, load, pct, take_away, take_away_in, place_labels
 
 ORDER = ["supervised", "simclr", "moco", "byol", "simsiam", "barlow", "vicreg", "dino", "matryoshka", "rotation", "mae",
          "beit", "ijepa", "random_cnn", "pixels"]
@@ -223,7 +223,8 @@ class Budget(VoiceoverScene):
         dots = VGroup()
         for n, x, y in zip(names, un, al):
             d = Dot(ax.ax.c2p(x, y), radius=0.08, color=COLOR[n])
-            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n]).next_to(d, UR, buff=0.04)))
+            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n])))
+        place_labels([g_[0] for g_ in dots], [g_[1] for g_ in dots])
         ru = float(spearmanr(un, ac).correlation)
         ra = float(spearmanr(al, ac).correlation)
         res = VGroup(label(r"rank correlation with the linear probe", font_size=20, color=GREY_A),
@@ -274,7 +275,8 @@ class Budget(VoiceoverScene):
         dots = VGroup()
         for n, x, y in zip(names, rk, ac):
             d = Dot(ax.ax.c2p(x, y), radius=0.08, color=COLOR[n])
-            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n]).next_to(d, UR, buff=0.04)))
+            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n])))
+        place_labels([g_[0] for g_ in dots], [g_[1] for g_ in dots])
         src = cite(r"RankMe: \ Garrido, Balestriero, Najman \& LeCun (2023)", corner=UR)
         res = label(rf"Spearman's rank correlation: \ ${rho:+.2f}$".replace("+", r"+"), font_size=26,
                     color=C.BITS).to_corner(DR, buff=0.5)
@@ -298,7 +300,7 @@ class Budget(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(res))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()
 

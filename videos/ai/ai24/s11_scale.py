@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (DINO_C, PART, PIX, POS, SIMCLR, SUP, arrow, bars_chart, load, node_box, pct, tag,
-                                   take_away)
+                                   take_away, take_away_in)
 
 RAW = "#FF9F45"
 CUR = "#5BD17A"
@@ -238,6 +238,6 @@ class Scale(VoiceoverScene):
             self.play(FadeIn(pts[0]))
             vo.wait_until("c")
             self.play(FadeIn(pts[1]))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

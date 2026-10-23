@@ -265,6 +265,42 @@ def take_away(text: str, color=C.BITS, font_size=28, width=12.0) -> VGroup:
     return VGroup(box, t.move_to(box)).to_edge(DOWN, buff=0.35)
 
 
+def _boxes_overlap(a, b, pad=0.03) -> bool:
+    return not (a.get_right()[0] + pad < b.get_left()[0] or b.get_right()[0] + pad < a.get_left()[0]
+                or a.get_top()[1] + pad < b.get_bottom()[1] or b.get_top()[1] + pad < a.get_bottom()[1])
+
+
+def place_labels(dots, labels, buff=0.05, bounds=(-6.9, 6.9, -3.8, 3.8)):
+    """Put each dot's label beside it on the first side (of eight) where it overlaps no other dot and no label
+    already placed: scatter-plot names that do not sit on each other."""
+    placed = []
+    for i, (d, lab) in enumerate(zip(dots, labels)):
+        best = None
+        for dir_ in (UR, RIGHT, UL, DR, LEFT, DL, UP, DOWN):
+            lab.next_to(d, dir_, buff=buff)
+            inside = (lab.get_left()[0] > bounds[0] and lab.get_right()[0] < bounds[1]
+                      and lab.get_bottom()[1] > bounds[2] and lab.get_top()[1] < bounds[3])
+            clash = sum(_boxes_overlap(lab, o) for o in placed) + sum(
+                _boxes_overlap(lab, dd, pad=0.0) for j, dd in enumerate(dots) if j != i)
+            score = clash + (0 if inside else 10)
+            if best is None or score < best[0]:
+                best = (score, dir_)
+            if score == 0:
+                break
+        lab.next_to(d, best[1], buff=buff)
+        placed.append(lab)
+    return labels
+
+
+def take_away_in(scene, tk) -> list:
+    """The animations that reveal a takeaway box: fade it in, and fade out the small notes it would cover (a
+    source line or a 'computed' tag in a bottom corner)."""
+    top, left, right = tk.get_top()[1], tk.get_left()[0], tk.get_right()[0]
+    hide = [m for m in scene.mobjects if m is not tk and m.get_bottom()[1] < top + 0.05
+            and m.get_top()[1] < top + 0.6 and m.get_left()[0] < right and m.get_right()[0] > left]
+    return [FadeIn(tk, shift=UP * 0.1), *[FadeOut(m) for m in hide]]
+
+
 def bars_chart(values, colors, names, height=3.0, bar_w=0.6, gap=0.35, vmin=0.0, vmax=None, spread=None, digits=1,
                font_size=20, value_fmt=None, name_size=None) -> VGroup:
     """Bars with names under them and values over them; ``spread``: (lo, hi) per bar, a whisker; bars start at

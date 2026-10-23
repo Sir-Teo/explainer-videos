@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (NEG as NEGC, POS as POSC, BARLOW, BYOL_C, DIGIT, DINO_C, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, axes,
-                                   curve, load, node_box, pct, seed_curves, tag, take_away)
+                                   curve, load, node_box, pct, seed_curves, tag, take_away, take_away_in)
 
 
 class Collapse(VoiceoverScene):
@@ -243,6 +243,6 @@ class Collapse(VoiceoverScene):
             for i, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(boxes[i], shift=UP * 0.15))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

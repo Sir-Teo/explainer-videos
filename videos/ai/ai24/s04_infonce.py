@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (EST, LOGN, MI, NEG, PART, POS, SIMCLR, arrow, axes, curve, load, node_box, tag,
-                                   take_away)
+                                   take_away, take_away_in)
 
 COLS = {r"x": SIMCLR, r"y_1": POS, r"y_j": NEG, r"K": C.BITS}
 
@@ -261,10 +261,11 @@ class InfoNCE(VoiceoverScene):
         arr = VGroup(*[arrow(z.get_top(), c.get_bottom(), color=GREY_C, stroke_width=1.5) for z in zs[:4]])
         parr = VGroup(*[CurvedArrow(c.get_right(), f_.get_top(), color=POS, angle=-0.6, stroke_width=2)
                         for f_ in fut])
+        VGroup(xs, zs, c, fut, fx, arr, parr).scale(1.3).move_to([-3.0, 0.1, 0])
         cap = label(r"from the past, \ pick the real future \\ out of $N$ candidates: \ InfoNCE", font_size=24,
                     color=GREY_A).move_to([3.6, 1.6, 0])
         doms = label(r"speech, \ images, \ text, \ 3D games", font_size=22, color=GREY_B).next_to(cap, DOWN, buff=0.3)
-        src = cite(r"van den Oord, Li \& Vinyals (2018): \ contrastive predictive coding")
+        src = cite(r"van den Oord, Li \& Vinyals (2018): \ contrastive predictive coding", corner=UL)
         tk = take_away(r"a contrastive loss is a classifier over $N$ candidates, \ and a bound on information "
                        r"capped at $\log N$")
         with self.voiceover(
@@ -281,6 +282,6 @@ class InfoNCE(VoiceoverScene):
             self.play(FadeIn(fut), *[Create(p) for p in parr], FadeIn(cap))
             self.play(FadeIn(doms))
             vo.wait_until("c")
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

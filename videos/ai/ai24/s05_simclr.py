@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (Scrub, MOCO, NEG, PANEL, PART, POS, SIMCLR, TARGET, arrow, axes, bars_chart, digit,
-                                   digit_sheet, ink_rgb, load, node_box, pct, rgb_of, seed_curves, tag, take_away,
+                                   digit_sheet, ink_rgb, load, node_box, pct, rgb_of, seed_curves, tag, take_away, take_away_in,
                                    to_image)
 
 MAIN = "0.2"
@@ -202,9 +202,13 @@ class SimCLR(VoiceoverScene):
                      font_size=22, color=GREY_B).next_to(lit, DOWN, buff=0.5)
         res = label(r"ImageNet, \ ResNet-50 $(4\times)$: \ $76.5\%$ linear probe, \\ matching a supervised ResNet-50",
                     font_size=22, color=SIMCLR).next_to(why_, DOWN, buff=0.5)
-        verdict = (f"Ours agrees: reading the digits from h gives {pct(hl)} percent, from z only {pct(zl)}."
-                   if better else
-                   f"On our digits the difference is small: {pct(hl)} percent from h, {pct(zl)} from z.")
+        if hl - zl > 0.03:
+            verdict = f"Ours agrees: reading the digits from h gives {pct(hl)} percent, from z only {pct(zl)}."
+        elif better:
+            verdict = (f"On our digits the gap is small: the linear probe reads {pct(hl)} percent from h and "
+                       f"{pct(zl)} from z, and nearest neighbours {pct(hk)} and {pct(zk)}.")
+        else:
+            verdict = f"On our digits the difference is small: {pct(hl)} percent from h, {pct(zl)} from z."
         with self.voiceover(
             "Why throw the head away? Because the loss asks z to ignore everything the two views disagree on: the "
             "tilt, the size, the contrast. <bookmark mark='a'/> The head pays that price, and h, one layer below, "
@@ -285,6 +289,6 @@ class SimCLR(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(ax), Create(c1), Create(c2), FadeIn(leg), run_time=2.5)
             vo.wait_until("d")
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

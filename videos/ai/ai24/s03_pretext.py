@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (PART, PIX, POS, RAND, ROT, SUP, axes, curve, digit, digit_sheet, load, pct,
-                                   seed_curves, tag, take_away)
+                                   seed_curves, tag, take_away, take_away_in)
 
 ROT_NAMES = [r"0^\circ", r"90^\circ", r"180^\circ", r"270^\circ"]
 
@@ -283,7 +283,7 @@ class Pretext(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(aber))
             vo.wait_until("c")
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()
 
