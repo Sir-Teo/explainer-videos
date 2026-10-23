@@ -29,9 +29,12 @@ class Information(VoiceoverScene):
         Hx, Hc, I = float(d["H_next"]), float(d["H_cond"]), float(d["I_xy"])
         I2, Isk = float(d["I_two"]), float(d["I_skip"])
         head = label(r"Mutual information", font_size=38).to_edge(UP, buff=0.35)
-        df = definition_card(r"$I(X; Y)$", r"$= H(X) - H(X \mid Y) = H(Y) - H(Y \mid X)$ \\ "
-                             r"$= D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)\,p(y)\big) \ge 0$: \ the bits that knowing $Y$ "
-                             r"saves when you guess $X$, \ and the other way round", width=7.2, color=C.BITS)
+        df_body = VGroup(MathTex(r"= H(X) - H(X \mid Y) = H(Y) - H(Y \mid X)", font_size=30, color=GREY_A),
+                         MathTex(r"= D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)\,p(y)\big) \ge 0", font_size=30,
+                                 color=GREY_A),
+                         label(r"the bits that knowing $Y$ saves when you guess $X$, \\ and the other way round",
+                               font_size=24, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        df = definition_card(r"$I(X; Y)$", df_body, width=6.6, color=C.BITS)
         df.to_corner(UL, buff=0.4).shift(DOWN * 0.7)
         r = 1.45
         a = Circle(radius=r, stroke_color=C.ENTROPY, stroke_width=3, fill_color=C.ENTROPY, fill_opacity=0.15)
@@ -87,6 +90,22 @@ class Information(VoiceoverScene):
         whys = [why(r"the chain rule; \ the last term is $0$"), why(r"the chain rule, the other way"),
                 why(r"$I(X; Y \mid Z) \ge 0$")]
         step = ladder(self, rows, whys, keep=3, top=1.0, x=-2.4, buff=0.4, edge=6.9)
+        # the chain, pictured: what Z can know about X has to pass through Y
+        nodes = VGroup(*[VGroup(Circle(radius=0.38, stroke_color=col, stroke_width=3, fill_color=col, fill_opacity=0.15),
+                                MathTex(n_, font_size=34, color=col)) for n_, col in
+                         (("X", C.ENTROPY), ("Y", C.CONTEXT), ("Z", C.BITS))]).arrange(RIGHT, buff=2.6)
+        for nd in nodes:
+            nd[1].move_to(nd[0])
+        nodes.move_to(DOWN * 2.75)
+        links = VGroup(*[Arrow(nodes[k][0].get_right(), nodes[k + 1][0].get_left(), buff=0.1, color=GREY_B,
+                               stroke_width=3, max_tip_length_to_length_ratio=0.12) for k in range(2)])
+        names = VGroup(*[label(t, font_size=22, color=GREY_A).next_to(nd, DOWN, buff=0.15) for t, nd in zip(
+            (r"the next letter", r"the letter before it", r"its kind, or a noisy copy"), nodes)])
+        f_l = label(r"$f(\cdot,\ \text{noise})$", font_size=22, color=C.BITS).next_to(links[1], UP, buff=0.08)
+        bypass = CurvedArrow(nodes[0][0].get_top() + UP * 0.05, nodes[2][0].get_top() + UP * 0.05, angle=-PI / 5,
+                             color=C.BITS, stroke_width=2.5)
+        by_l = label(r"no more than $Y$ knew", font_size=22, color=C.BITS).next_to(bypass, UP, buff=0.06)
+        pipe = VGroup(nodes, links, names, f_l)
         with self.voiceover(
             "Now process what you know. Suppose Z is computed from Y, by any function at all, even a noisy one. "
             "<bookmark mark='a'/> The chain rule splits what Y and Z together say about X in two ways: first Y, "
@@ -95,12 +114,15 @@ class Information(VoiceoverScene):
             "processing creates information."
         ) as vo:
             self.play(FadeIn(head), FadeIn(chain), FadeIn(chain_n))
+            self.play(LaggedStart(*[FadeIn(m) for m in (nodes[0], links[0], nodes[1], links[1], nodes[2])],
+                                  lag_ratio=0.3), FadeIn(names), FadeIn(f_l), run_time=1.8)
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
+            self.play(Create(bypass), FadeIn(by_l))
             self.play(Create(SurroundingRectangle(rows[2], color=C.BITS, buff=0.12, corner_radius=0.08)))
         self.wait(0.3)
         self.clear_scene()
@@ -121,8 +143,8 @@ class Information(VoiceoverScene):
         gl = label(rf"${Ig:.2f}$", font_size=24, color=C.BITS).next_to(g0, RIGHT, buff=0.12)
         head2 = label(r"Processing the previous letter", font_size=34).to_edge(UP, buff=0.35)
         tag = computed_tag()
-        take = label(r"a model's features, \ computed from the context, \\ can't know more about the next token than the "
-                     r"context did", font_size=24, color=GREY_A).move_to([4.4, -2.2, 0])
+        take = label(r"a model's features, computed \\ from the context, can't know more \\ about the next token than "
+                     r"the context did", font_size=24, color=GREY_A).move_to([4.7, -1.9, 0])
         with self.voiceover(
             "Let's watch it happen in our books. <bookmark mark='a'/> Keep only the kind of the previous letter: "
             f"space, vowel or consonant. Of the {I:.2f} bits, {Ig:.2f} survive. <bookmark mark='b'/> Or garble it: "

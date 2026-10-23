@@ -141,7 +141,8 @@ class CrossEntropy(VoiceoverScene):
         with self.voiceover(
             "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. First, the "
             "entropy of p: the world's own randomness, which no code can remove. <bookmark mark='b'/> Second, the "
-            "price of being wrong: the Kullback–Leibler divergence of q from p, from 1951. <bookmark mark='c'/> Swapping e and z costs {KL:.2f} bits per symbol. Guessing "
+            "price of being wrong: the Kullback–Leibler divergence of q from p, from 1951. <bookmark mark='c'/> "
+            f"Swapping e and z costs {KL:.2f} bits per symbol. Guessing "
             f"letters uniformly costs {lt['KL_uniform']:.2f}. And the letter frequencies of our thirty books, used on "
             f"the Falcon passage, {books_said}."
         ) as vo:
