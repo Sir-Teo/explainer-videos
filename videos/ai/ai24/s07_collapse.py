@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
@@ -43,13 +45,19 @@ class Collapse(VoiceoverScene):
         lossl.next_to(f, DOWN, buff=0.5)
         same = label(r"every digit, \ the same point", font_size=28, color=NAIVE).next_to(lossl, DOWN, buff=0.6)
         tg = tag(r"computed: \ the naive siamese net, \ three output numbers")
+        U = Z / np.linalg.norm(Z, axis=2, keepdims=True)
+        r0, r1 = float(np.linalg.norm(U[0].mean(0))), float(np.linalg.norm(U[-1].mean(0)))
+        if r0 > 0.99 and r1 > 0.99:
+            how = ("Like the contrastive network, it starts with every digit bunched in one spot; <bookmark "
+                   "mark='b'/> unlike it, it never leaves.")
+        else:
+            how = "It minimizes it <bookmark mark='b'/> by sending every digit to the same point."
         with self.voiceover(
             "Before going further, a question. Suppose the only rule is: give the two views of each digit the same "
             "vector. No negatives, nothing pushing apart. What does the network learn? Pause and think. <bookmark "
-            "mark='a'/> Here is what ours did. The loss is minus the cosine between the two views' vectors, and the "
-            "network minimizes it <bookmark mark='b'/> by sending every digit to the same point. The two views "
-            "agree perfectly, the loss sits at its minimum, and the vector says nothing at all about the input. "
-            "This is collapse."
+            "mark='a'/> Here is what ours did. The loss is minus the cosine between the two views' vectors. "
+            f"{how} The two views agree perfectly, the loss sits at its minimum, and the vector says nothing at all "
+            "about the input. This is collapse."
         ) as vo:
             self.play(FadeIn(pc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -78,8 +86,10 @@ class Collapse(VoiceoverScene):
         VGroup(d, dn).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([-3.4, 0.5, 0])
         src = cite(r"Roy \& Vetterli (2007); \ RankMe: \ Garrido et al.\ (2023)")
         S_ = runs_s[ks[0]]["steps"][-1]
-        ax = axes([0, S_], [0, 60], x_length=4.8, y_length=3.0, xlabel=r"training step",
-                  ylabel=r"effective rank of $z$", xticks=[0, S_], yticks=[0, 20, 40, 60], center=[3.6, 0.5, 0])
+        top = 20 * math.ceil(max(max(runs_s[k]["zrank"]) for k in ks) / 20 + 0.25)
+        ax = axes([0, S_], [0, top], x_length=4.8, y_length=3.0, xlabel=r"training step",
+                  ylabel=r"effective rank of $z$", xticks=[0, S_], yticks=list(range(0, top + 1, 20)),
+                  center=[3.6, 0.5, 0])
         c1 = seed_curves(ax.ax, runs_s, ks, "zrank", SIMCLR)
         c2 = seed_curves(ax.ax, runs_c, kn, "zrank", NAIVE)
         leg = VGroup(label(r"SimCLR", font_size=20, color=SIMCLR), label(r"pull together only", font_size=20,
@@ -121,21 +131,22 @@ class Collapse(VoiceoverScene):
                   yfmt=lambda v: f"10^{{{int(v)}}}", center=[-1.0, -0.3, 0])
         cs = curve(ax.ax, k, lg(sv_s), SIMCLR, 3)
         cn = curve(ax.ax, k, lg(sv_n), NAIVE, 3)
-        ls = label(r"SimCLR: \ a slow decline, \\ then a cliff", font_size=22, color=SIMCLR).move_to([4.8, 1.2, 0])
-        ln = label(r"pull together only: \\ one direction, \ then nothing", font_size=22, color=NAIVE)
+        cliff = int(np.argmax(lg(sv_s) < -3)) + 1 if np.any(lg(sv_s) < -3) else len(sv_s)
+        ls = label(r"SimCLR: \ a slow decline, \\ then a cliff" if cliff < len(sv_s) else r"SimCLR: \ a slow decline",
+                   font_size=22, color=SIMCLR).move_to([4.8, 1.2, 0])
+        ln = label(r"pull together only: \\ one direction, \ then noise", font_size=22, color=NAIVE)
         ln.move_to([4.8, -1.4, 0])
         kinds = VGroup(label(r"complete collapse: \ one point", font_size=22, color=NAIVE),
                        label(r"dimensional collapse: \ a few directions", font_size=22, color=SIMCLR))
         kinds.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
-        src = cite(r"Hua et al.\ (2021); \ Jing, Vincent, LeCun \& Tian (2022)", corner=DR)
-        cliff = int(np.argmax(lg(sv_s) < -3)) + 1 if np.any(lg(sv_s) < -3) else len(sv_s)
+        src = cite(r"Hua et al.\ (2021); \ Jing, Vincent, LeCun \& Tian (2022)", corner=UR)
         drop = (f"SimCLR declines slowly and then drops off a cliff: after about {cliff} directions, the rest are a "
                 "thousand times weaker than the first." if cliff < len(sv_s) else
                 "SimCLR declines slowly, and its weakest directions end far below its strongest.")
         with self.voiceover(
             "The whole spectrum shows more. These are the singular values of the two networks' vectors, largest "
             "first, on a log scale. <bookmark mark='a'/> The collapsed network has one direction and then "
-            f"nothing. <bookmark mark='b'/> {drop} Even contrastive learning leaves part of the space unused. This "
+            f"only noise. <bookmark mark='b'/> {drop} Even contrastive learning leaves part of the space unused. This "
             "is called dimensional collapse, the milder cousin of complete collapse; Li Jing, Yann LeCun and "
             "colleagues traced it to strong augmentations and to the way the layers' weights evolve together."
         ) as vo:
@@ -225,13 +236,13 @@ class Collapse(VoiceoverScene):
     def routes(self):
         head = label(r"Four ways to stop collapse", font_size=36).to_edge(UP, buff=0.5)
         boxes = VGroup(
-            node_box(r"negatives: \ push the others away \\ SimCLR, \ MoCo \ (chapters 4--5)", SIMCLR, font_size=22),
+            node_box(r"negatives: \ push the others away \\ SimCLR, \ MoCo \ (chapters 4--5)", SIMCLR, font_size=26),
             node_box(r"asymmetry: \ a predictor and a stop-gradient \\ BYOL, \ SimSiam \ (chapter 7)", SIMSIAM,
-                     font_size=22),
+                     font_size=26),
             node_box(r"decorrelation: \ spread every dimension \\ Barlow Twins, \ VICReg \ (chapter 8)", BARLOW,
-                     font_size=22),
-            node_box(r"centring and sharpening a teacher \\ DINO \ (chapter 9)", DINO_C, font_size=22),
-        ).arrange_in_grid(2, 2, buff=(0.5, 0.6)).move_to(DOWN * 0.2)
+                     font_size=26),
+            node_box(r"centring and sharpening a teacher \\ DINO \ (chapter 9)", DINO_C, font_size=26),
+        ).arrange_in_grid(2, 2, buff=(0.6, 0.9)).move_to(DOWN * 0.1)
         tk = take_away(r"agreement alone is solved by a constant: \ something must keep the vectors apart")
         with self.voiceover(
             "Every method from here on is a way out of this trap. <bookmark mark='a'/> The contrastive methods push "

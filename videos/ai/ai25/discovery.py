@@ -97,8 +97,9 @@ class Surrogate(nn.Module):
         return self.net(x).squeeze(-1)
 
 
-def fit_surrogates(X, y, seed, k=4, steps=1500):
-    """An ensemble of ``k`` small networks (GNoME uses an ensemble of graph networks; ours read the traits)."""
+def fit_surrogates(X, y, seed, k=4, steps=2000):
+    """An ensemble of ``k`` small networks (GNoME uses an ensemble of graph networks; ours read the traits); a cosine
+    learning-rate schedule, so the last step is not a random moment."""
     models = []
     Xt, yt = torch.from_numpy(X), torch.from_numpy(y.astype(np.float32))
     for j in range(k):
@@ -106,12 +107,14 @@ def fit_surrogates(X, y, seed, k=4, steps=1500):
         gen = torch.Generator().manual_seed(seed * 100 + j)
         m = Surrogate(X.shape[1])
         opt = torch.optim.Adam(m.parameters(), 3e-3, weight_decay=1e-4)
+        sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps)
         for _ in range(steps):
             idx = torch.randint(0, len(Xt), (min(128, len(Xt)),), generator=gen)
             loss = ((m(Xt[idx]) - yt[idx]) ** 2).mean()
             opt.zero_grad()
             loss.backward()
             opt.step()
+            sched.step()
         models.append(m.eval())
     return models
 
@@ -121,11 +124,20 @@ def predict(models, X):
         return np.mean([m(torch.from_numpy(X)).numpy() for m in models], 0)
 
 
-def flywheel(rows, X, E, seed, rounds=8, per_round=60, start=0.08, policy="model"):
+def decomposition_energy(xs, es, k):
+    """How far point k lies above (positive) or below (negative) the lower hull of all the other points of its
+    system and the two pure elements: GNoME's decomposition energy, the quantity a pick is ranked by."""
+    others = [(0.0, 0.0), (1.0, 0.0)] + [(xs[j], es[j]) for j in range(len(xs)) if j != k]
+    return e_above_hull(xs[k], es[k], lower_hull(others))
+
+
+def flywheel(rows, X, E, seed, rounds=8, per_round=60, start=0.03, policy="model"):
     """Active learning: start from a random ``start`` share of candidates 'known' (computed), then each round train
-    the surrogates on everything known, predict every unknown candidate's energy above the hull of the known ones,
-    'compute' (look up the true energy of) the ``per_round`` most promising, and add them.  ``policy='random'``
-    picks at random instead.  Records the hit rate (picks that are truly stable) and the surrogate's error."""
+    the surrogates on everything known, predict every unknown candidate's energy, rank each by its decomposition
+    energy against everything else in its system (true energies where known, predicted ones elsewhere), 'compute'
+    (look up the true energy of) the ``per_round`` most promising, and add them.  ``policy='random'`` picks at random
+    instead.  A hit is a pick that is truly stable (on the hull of the full chemistry); also recorded: the surrogate's
+    error on the unknown candidates, and how many of the truly stable ones are known."""
     rng = np.random.default_rng(10 + seed)
     stable = true_stable(rows, E)
     known = np.zeros(len(rows), bool)
@@ -136,24 +148,19 @@ def flywheel(rows, X, E, seed, rounds=8, per_round=60, start=0.08, policy="model
         models = fit_surrogates(X[known], E[known], seed * 1000 + r)
         pred = predict(models, X)
         mae = float(np.abs(pred[~known] - E[~known]).mean())
-        score = np.full(len(rows), np.inf)
-        for key, idx in sys.items():
-            kn = [i for i in idx if known[i]]
-            h = lower_hull([(0.0, 0.0), (1.0, 0.0)] + [(rows[i, 2], E[i]) for i in kn])
-            for i in idx:
-                if not known[i]:
-                    score[i] = e_above_hull(rows[i, 2], pred[i], h)
         cand = np.flatnonzero(~known)
         if policy == "random":
             pick = rng.choice(cand, per_round, replace=False)
         else:
-            pick = cand[np.argsort(score[cand])[:per_round]]
-        # a hit, as GNoME counted them: the computed energy lands below the hull of everything known so far
-        hits = 0
-        for i in pick:
-            kn = [j for j in sys[(int(rows[i, 0]), int(rows[i, 1]))] if known[j]]
-            h = lower_hull([(0.0, 0.0), (1.0, 0.0)] + [(rows[j, 2], E[j]) for j in kn])
-            hits += int(e_above_hull(rows[i, 2], E[i], h) < 0)
+            est = np.where(known, E, pred)
+            score = np.full(len(rows), np.inf)
+            for idx in sys.values():
+                xs, es = [rows[i, 2] for i in idx], [est[i] for i in idx]
+                for k, i in enumerate(idx):
+                    if not known[i]:
+                        score[i] = decomposition_energy(xs, es, k)
+            pick = cand[np.argsort(score[cand], kind="stable")[:per_round]]
+        hits = int(stable[pick].sum())
         known[pick] = True
         hist.append(dict(round=r, hit_rate=hits / per_round, hits=hits, mae=mae,
                          found=int((stable & known).sum()), known=int(known.sum())))

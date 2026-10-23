@@ -139,8 +139,8 @@ class Materials(VoiceoverScene):
         H = {p: np.array([[h["hit_rate"] for h in m[f"{p}_s{s}"]] for s in (0, 1, 2)]) for p in ("model", "random")}
         MAE = np.array([[h["mae"] for h in m[f"model_s{s}"]] for s in (0, 1, 2)])
         F = {p: np.array([[h["found"] for h in m[f"{p}_s{s}"]] for s in (0, 1, 2)]) for p in ("model", "random")}
-        g = axes([1, rounds], [0, 1], x_length=5.2, y_length=3.4, xlabel=r"round", ylabel=r"hit rate: \ picks that "
-                 r"are stable", xticks=list(r_), yticks=[0, 0.5, 1.0], xfmt=lambda v: f"{v:.0f}", center=[-3.2, 0.2, 0])
+        g = axes([1, rounds], [0, 1], x_length=5.2, y_length=3.4, xlabel=r"round", ylabel=r"hit rate: \ picks truly "
+                 r"stable", xticks=list(r_), yticks=[0, 0.5, 1.0], xfmt=lambda v: f"{v:.0f}", center=[-3.2, 0.2, 0])
         objs = {}
         for p, col in (("model", STRUCT), ("random", GREY_B)):
             A = H[p]
@@ -157,6 +157,7 @@ class Materials(VoiceoverScene):
                   rf"${F['random'][:, -1].mean():.0f}$ at random", font_size=22, color=STABLE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, 0.6, 0])
         h_m, h_r = H["model"].mean(0), H["random"].mean(0)
+        share = m["n_stable"] / m["n_candidates"]
         rise = h_m[-1] > h_m[0] + 0.05
         trend = (f"and it climbs as the surrogate learns, from {100 * h_m[0]:.0f} percent in the first round to "
                  f"{100 * h_m[-1]:.0f} in the last" if rise else
@@ -167,9 +168,11 @@ class Materials(VoiceoverScene):
             "We can run the flywheel on a made-up chemistry: twenty invented elements, every pair of them, nine "
             f"compositions and four crystal types, {m['n_candidates']:,} candidates, whose 'DFT' energy is a hidden "
             "formula we only reveal sixty at a time. <bookmark mark='a'/> Start knowing three percent of them. Each "
-            "round, train a small ensemble on everything known, predict the rest, check the sixty that look most "
-            "stable against the hull of what is known, and add them. A hit is a pick that lands below that hull. "
-            f"<bookmark mark='b'/> Random picks hit {100 * h_r.mean():.0f} percent of the time. <bookmark "
+            "round, train a small ensemble on everything known, predict the rest, and check the sixty that look most "
+            "stable: those predicted to fall furthest below the hull of everything else, known or predicted. A hit "
+            "is a pick that is truly stable, on the hull of the full chemistry. <bookmark mark='b'/> Random picks "
+            f"hit {100 * h_r.mean():.0f} percent of the time, about the share of stable compounds among the "
+            f"candidates, {100 * share:.0f} percent. <bookmark "
             f"mark='c'/> The surrogate's picks hit {100 * h_m[0]:.0f} percent in the first round, {trend}. "
             f"<bookmark mark='d'/> Its error falls from {mae[0]:.3f} to {mae[-1]:.3f}, and after {rounds} rounds it "
             f"has found {F['model'][:, -1].mean():.0f} of the {m['n_stable']} truly stable compounds, against "

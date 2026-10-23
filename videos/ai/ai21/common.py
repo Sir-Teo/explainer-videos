@@ -83,8 +83,12 @@ class Panel(VGroup):
     def dots(self, P, color, radius=0.022, opacity=0.9) -> VGroup:
         return VGroup(*[Dot(q, radius=radius, color=color, fill_opacity=opacity) for q in self.pts(P)])
 
-    def move(self, dots, P) -> list:
-        return [d.animate.move_to(q) for d, q in zip(dots, self.pts(P))]
+    def move(self, dots, P, color=None) -> list:
+        """Animations moving each dot to its point (and recolouring it: two .animate calls on one dot in one play
+        would keep only the last)."""
+        if color is None:
+            return [d.animate.move_to(q) for d, q in zip(dots, self.pts(P))]
+        return [d.animate.move_to(q).set_color(color) for d, q in zip(dots, self.pts(P))]
 
     def place(self, dots, P) -> None:
         for d, q in zip(dots, self.pts(P)):

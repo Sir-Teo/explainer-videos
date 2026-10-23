@@ -123,8 +123,8 @@ class ELBO(VoiceoverScene):
         cw = curve(g.ax, ts[::4], np.log10(lam[::4]), SCORE, 3.5)
         flat = DashedLine(g.ax.c2p(0, math.log10(np.median(lam))), g.ax.c2p(T, math.log10(np.median(lam))), color=GREY_B,
                           stroke_width=2)
-        fl = label(r"$L_{\text{simple}}$: \ every step weighted alike", font_size=22, color=GREY_B).next_to(flat, UP, buff=0.08)
-        fl.align_to(g.ax, RIGHT)
+        fl = label(r"dashed: \ $L_{\text{simple}}$, \ every step weighted alike", font_size=22, color=GREY_B)
+        fl.move_to(g.ax.c2p(0.6 * T, lo + 0.8 * (hi - lo)))
         card = definition_card(r"the simple loss", VGroup(
             MathTex(r"L_{\text{simple}} = \mathbb E_{t,\, x_0,\, \varepsilon}\, \big\|\varepsilon - \hat\varepsilon_\theta"
                     r"\big(\sqrt{\bar\alpha_t}\, x_0 + \sqrt{1-\bar\alpha_t}\, \varepsilon,\ t\big)\big\|^2", font_size=26),
@@ -160,6 +160,7 @@ class ELBO(VoiceoverScene):
         pn = Panel(6.0, center=[-3.3, -0.3, 0])
         pts = pn.dots(snaps[0], DATA, radius=0.022)
         top = float(np.percentile(L[:, 1], 99)) * 1.05
+        L = np.stack([L[:, 0], np.minimum(L[:, 1], top)], 1)  # the first few losses run off the top: drawn at it
         g = axes([0, checks[-1]], [0, top], x_length=4.8, y_length=2.8, xlabel=r"training step",
                  ylabel=r"the simple loss", xticks=[0, checks[-1]], yticks=[0, round(top, 1)], center=[3.6, 0.5, 0])
         tk = ValueTracker(0)
@@ -174,23 +175,34 @@ class ELBO(VoiceoverScene):
         k1 = 1 if len(checks) > 2 else len(checks) - 1
         l1 = float(np.interp(checks[k1], L[:, 0], L[:, 1]))
         drop = (L[0, 1] - l1) / max(L[0, 1] - L[-1, 1], 1e-9)
-        early = (f"Within {checks[k1]} steps it has the rough shape, and the loss has already made "
-                 f"{100 * min(drop, 1):.0f} percent of its whole fall. " if drop > 0.5 else
-                 f"Within {checks[k1]} steps it has the rough shape, though the loss is still falling. ")
-        trend = ("on the whole, if not at every checkpoint" if any(b > a + 0.005 for a, b in zip(sw[1:], sw[2:]))
-                 else "at every checkpoint")
+        pct = 100 * min(drop, 1)
+        # the first checkpoint whose points are within 60 percent of the final distance: the letters can be read
+        ks = next(k for k in range(k1, len(checks)) if sw[k] < 1.6 * sw[-1])
+        ks = min(max(ks, k1 + 1), len(checks) - 2)  # strictly between the blob and the end
+        if drop > 0.5:
+            early = (f"Within {checks[k1]} steps the loss has made {pct:.0f} percent of its whole fall, and the "
+                     f"points have pulled in to a blob, {sw[k1]:.2f} from the data. ")
+        else:
+            early = (f"Within {checks[k1]} steps the points have pulled in to a blob, {sw[k1]:.2f} from the data, "
+                     "and the loss is still falling. ")
+        if any(b > a + 0.005 for a, b in zip(sw[ks:], sw[ks + 1:])):
+            trend = "on the whole, if not at every checkpoint"
+        else:
+            trend = "at every checkpoint"
+        s_read, s_end, c_read = sw[ks], sw[-1], checks[ks]
         with self.voiceover(
             "Here is our own denoiser learning on the letters, trained with the simple loss, a noise level drawn at "
             "random for each of its examples. At each checkpoint we stop, and draw points from the same noise. "
-            "<bookmark mark='a'/> Untrained, it flings them about. <bookmark mark='b'/> " + early
-            + "<bookmark mark='c'/> The rest is refinement: the loss barely moves, but the strokes sharpen, the "
-            f"distance from the data going from {sw[k1]:.2f} to {sw[-1]:.2f}, {trend}. Every step of training only "
-            "asked for the noise in one blurred point; the letters emerge from millions of those guesses."
+            "<bookmark mark='a'/> Untrained, it flings them to the edges. <bookmark mark='b'/> " + early
+            + f"<bookmark mark='c'/> By step {c_read:,} the letters can be read. The rest is refinement: the loss "
+            f"barely moves, but the strokes sharpen, the distance from the data going from {s_read:.2f} to "
+            f"{s_end:.2f}, {trend}. Every step of training only asked for the noise in one blurred point; the "
+            "letters emerge from millions of those guesses."
         ) as vo:
             self.play(FadeIn(pn), FadeIn(pts), FadeIn(g), FadeIn(tag))
             self.add(dot, cnt, swl)
             vo.wait_until("a")
-            marks = {1: "b", 2: "c"}
+            marks = {k1: "b", ks: "c"}
             for k in range(1, len(checks)):
                 if k in marks:
                     vo.wait_until(marks[k])

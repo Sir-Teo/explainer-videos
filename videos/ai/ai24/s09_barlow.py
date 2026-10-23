@@ -40,6 +40,8 @@ class Barlow(VoiceoverScene):
                    font_size=20, color=GREY_A).next_to(cdef, DOWN, buff=0.2)
         b1 = brace_note(f[2], r"each dimension: \ the same for both views", color=INV, font_size=22)
         b2 = brace_note(f[4], r"different dimensions: \ uncorrelated", color=RED, font_size=22)
+        if b2[-1].get_left()[0] < b1[-1].get_right()[0] + 0.2:
+            b2[-1].shift(DOWN * (b2[-1].get_top()[1] - b1[-1].get_bottom()[1] + 0.12))
         src = cite(r"Barlow (1961); \ Zbontar, Jing, Misra, LeCun \& Deny (2021)")
         with self.voiceover(
             "In 1961 the neuroscientist Horace Barlow argued that the senses should recode their input so that each "
@@ -81,18 +83,24 @@ class Barlow(VoiceoverScene):
         ax = axes([0, n - 1], [0, 1.0], x_length=4.4, y_length=3.0, xlabel=r"snapshot", yticks=[0, 0.5, 1],
                   center=[3.6, -0.3, 0])
         cd = curve(ax.ax, np.arange(n), dg, INV, 3)
-        co = curve(ax.ax, np.arange(n), np.sqrt(off) * 10, RED, 3)
+        co = curve(ax.ax, np.arange(n), np.sqrt(off), RED, 3)
         leg = VGroup(label(r"mean of the diagonal", font_size=20, color=INV),
-                     label(r"off the diagonal: \ rms $\times 10$", font_size=20, color=RED)).arrange(
+                     label(r"off the diagonal: \ root mean square", font_size=20, color=RED)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, UP, buff=0.15)
         tg = tag(r"computed: \ Barlow Twins, \ $512$ output dimensions, \ $\lambda = 0.005$")
+        ro = np.sqrt(off)
+        if ro[-1] < 0.5 * ro[0]:
+            rest = (f"and the rest goes dark, with typical off-diagonal correlations of {ro[-1]:.3f}. Five hundred "
+                    "and twelve dimensions, each saying something different, each stable under the views.")
+        else:
+            rest = (f"Off the diagonal, the correlations first grow, to a typical {ro.max():.2f}, and are then pushed "
+                    f"back down, to {ro[-1]:.2f} by the end. The loss keeps pulling toward the identity; in eight "
+                    "hundred steps it gets part of the way.")
         with self.voiceover(
             "Here is the matrix in our Barlow Twins, for the first twenty-four of its five hundred and twelve "
             "dimensions, measured on test digits as it trains. <bookmark mark='a'/> At first it is noise. "
             "<bookmark mark='b'/> The diagonal brightens as each dimension learns to ignore the changes between "
-            f"views, reaching an average correlation of {dg[-1]:.2f}, <bookmark mark='c'/> and the rest goes dark, "
-            f"with typical off-diagonal correlations of {np.sqrt(off[-1]):.3f}. Five hundred and twelve "
-            "dimensions, each saying something different, each stable under the views."
+            f"views, reaching an average correlation of {dg[-1]:.2f}. <bookmark mark='c'/> {rest}"
         ) as vo:
             self.play(FadeIn(hm), Create(frame), FadeIn(cap), FadeIn(st), FadeIn(tg))
             vo.wait_until("a")
@@ -157,10 +165,11 @@ class Barlow(VoiceoverScene):
             self.play(Write(f[0]), FadeIn(names[0]))
             vo.wait_until("b")
             self.play(Write(f[1:3]), FadeIn(names[1]))
+            self.play(FadeIn(ax), FadeIn(leg[0]), Create(cv), run_time=1.5)
             vo.wait_until("c")
             self.play(Write(f[3:]), FadeIn(names[2]))
             vo.wait_until("d")
-            self.play(FadeIn(ax), FadeIn(leg), Create(cv), Create(cn), run_time=2.0)
+            self.play(FadeIn(leg[1]), Create(cn), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -204,7 +213,7 @@ class Barlow(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(m1), FadeIn(m2), FadeIn(l1), FadeIn(l2), FadeIn(sch), FadeIn(src))
             vo.wait_until("a")
-            self.play(Indicate(VGroup(m1, m2), scale_factor=1.03))
+            self.play(Indicate(Group(m1, m2), scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(cl), FadeIn(ch))
             vo.wait_until("c")

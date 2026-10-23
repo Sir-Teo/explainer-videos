@@ -46,6 +46,7 @@ class BYOL(VoiceoverScene):
         bar = label(r"$\bar{\ }$: \ unit length", font_size=18, color=GREY_B).next_to(loss, DOWN, buff=0.1)
         nl = label(r"online network", font_size=20, color=BYOL_C).next_to(on, UP, buff=0.2)
         tl = label(r"target network", font_size=20, color=TARGET).next_to(tg, UP, buff=0.2)
+        VGroup(on, tg, x1, x2, arr, loss, a1, a2, sg, ema, bar, nl, tl).scale(1.2).move_to([0, 0.15, 0])
         res = label(r"no negatives; \ ResNet-50 on ImageNet: \ $74.3\%$ linear probe", font_size=24, color=BYOL_C)
         res.to_edge(DOWN, buff=0.5)
         src = cite(r"Grill et al.\ (2020): \ BYOL")
@@ -113,9 +114,8 @@ class BYOL(VoiceoverScene):
             "numbers, SimSiam keeps the digits apart without ever pushing on them, while the pull-together network "
             "sits on one point."
         ) as vo:
-            self.play(Write(f), FadeIn(src))
+            self.play(Write(f), FadeIn(src), FadeIn(ax), FadeIn(leg))
             vo.wait_until("a")
-            self.play(FadeIn(ax), FadeIn(leg))
             vo.wait_until("b")
             self.play(Create(c_sg), Create(c_no), run_time=2.0)
             vo.wait_until("c")

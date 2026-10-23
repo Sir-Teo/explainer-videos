@@ -51,24 +51,24 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=40).to_edge(UP, buff=0.35)
         cards = VGroup(
             history_card(2015, r"Sohl-Dickstein, Weiss, Maheswaranathan \& Ganguli",
-                         r"destroy the data's structure slowly, \ then learn to run it backwards", color=HIST, width=4.2,
-                         font_size=18),
+                         r"destroy the data's structure slowly, \ then learn to run it backwards", color=HIST, width=4.3,
+                         font_size=22),
             history_card(2019, r"Song \& Ermon", r"one network, \ the score at many noise levels", color=HIST,
-                         width=4.2, font_size=18),
+                         width=4.3, font_size=22),
             history_card(2020, r"Ho, Jain \& Abbeel: \ DDPM", r"guess the noise; \ CIFAR-10 at FID $3.17$", color=HIST,
-                         width=4.2, font_size=18),
+                         width=4.3, font_size=22),
             history_card(2021, r"Song et al.: \ score SDEs; \ Dhariwal \& Nichol", r"one framework; \ diffusion beats "
-                         r"GANs on ImageNet", color=HIST, width=4.2, font_size=18),
+                         r"GANs on ImageNet", color=HIST, width=4.3, font_size=22),
             history_card(2022, r"Rombach et al.: \ latent diffusion", r"Stable Diffusion, \ open weights; \ DALL$\cdot$E 2, "
-                         r"Imagen", color=HIST, width=4.2, font_size=18),
+                         r"Imagen", color=HIST, width=4.3, font_size=22),
             history_card(2023, r"Peebles \& Xie: \ DiT; \ Song et al.", r"transformers as denoisers; \ consistency "
-                         r"models", color=HIST, width=4.2, font_size=18),
+                         r"models", color=HIST, width=4.3, font_size=22),
             history_card(2024, r"Esser et al.: \ SD3; \ Sora; \ FLUX.1", r"rectified flow transformers; \ video",
-                         color=HIST, width=4.2, font_size=18),
+                         color=HIST, width=4.3, font_size=22),
             history_card(2025, r"Veo 3; \ LLaDA; \ Gemini Diffusion", r"video with sound; \ diffusion language models",
-                         color=HIST, width=4.2, font_size=18),
+                         color=HIST, width=4.3, font_size=22),
             history_card(2026, r"Google: \ DiffusionGemma", r"an open diffusion language model, \ 256 tokens at a time",
-                         color=HIST, width=4.2, font_size=18),
+                         color=HIST, width=4.3, font_size=22),
         )
         cards.arrange_in_grid(rows=3, cols=3, buff=(0.22, 0.2)).next_to(head, DOWN, buff=0.3)
         if cards.height > 6.2:
@@ -109,14 +109,22 @@ class Hook(VoiceoverScene):
         ], font_size=26)
         with self.voiceover(
             "This is Part 21 of AI, Built: diffusion and flow. <bookmark mark='a'/> In this part: the forward "
-            "process and the bound that trains the reverse; why guessing the noise is learning the score; running "
-            "time backwards, with a stochastic equation or a deterministic one, and the samplers that solve them; "
-            "the design choices, from noise schedules to EDM and DPM-Solver; flow matching and optimal transport; "
-            "how to get from fifty steps to one; how to ask for something specific; and diffusion for text, with a "
-            "language model of our own on the scoreboard. Every model here is trained on this computer."
+            "process and the bound that trains the reverse; why guessing the noise is learning the score; "
+            "<bookmark mark='b'/> running time backwards, with a stochastic equation or a deterministic one, and the "
+            "samplers that solve them; <bookmark mark='c'/> the design choices, from noise schedules to EDM and "
+            "DPM-Solver; <bookmark mark='d'/> flow matching and optimal transport; <bookmark mark='e'/> how to get "
+            "from fifty steps to one; how to ask for something specific; <bookmark mark='f'/> and diffusion for text, "
+            "with a language model of our own on the scoreboard. <bookmark mark='g'/> Every model here is trained on "
+            "this computer."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
+            rows = obj.rows
+            self.play(FadeOut(smap), FadeIn(obj.head), FadeIn(rows[0], shift=RIGHT * 0.1))
+            for k, mk in enumerate("bcdef", 1):
+                vo.wait_until(mk)
+                self.play(rows[:k].animate.set_opacity(0.45), FadeIn(rows[k], shift=RIGHT * 0.1), run_time=0.6)
+            vo.wait_until("g")
+            self.play(rows.animate.set_opacity(1), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
