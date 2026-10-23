@@ -52,11 +52,22 @@ perfect solver.
 Run from the repo root:
 
 ```
-python -m videos.ai.ai26.alphazero        # AlphaZero for Connect Four, 80 generations: about 5 hours on 4 cores (resumable)
-python -m videos.ai.ai26.compute          # everything else (about an hour)
+python tools/make.py ai26                 # everything below, in order; rerun after an interruption to carry on
+```
+
+or step by step:
+
+```
+python -m videos.ai.ai26.alphazero        # AlphaZero for Connect Four, 80 generations: about 7 hours on 4 cores
+python -m videos.ai.ai26.compute          # everything else, AlphaZero's grading, ratings and games included (3-4 hours)
 python tools/build.py ai26                # English
 python tools/build.py ai26 --lang zh      # Chinese
 ```
+
+Every step resumes: AlphaZero checkpoints after each generation, its grading is cached per generation and its
+round robin per pair of players, and each other result is cached as soon as it's computed. Everything is seeded, so
+a rerun on the same machine gives the same numbers; on another machine the last digits can move, and the narration,
+written over the data, follows (in both languages).
 
 `c4.py` is Connect Four on bitboards with a perfect solver (negamax, alpha–beta, a transposition table and
 null-window search, after Pascal Pons), checked against brute force on random endgames; `envs.py` holds the

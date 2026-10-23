@@ -550,7 +550,7 @@ def dpo_train(beta, steps=600, batch=16, lr=2e-5, seed=0):
         loss.backward()
         torch.nn.utils.clip_grad_norm_(pol.parameters(), 1.0)
         opt.step()
-        hist.append((step, float(loss), float((margin > 0).float().mean())))
+        hist.append((step, loss.item(), float((margin > 0).float().mean())))
     pol.eval()
     return pol, ref, np.array(hist), np.array(probe_hist)
 
