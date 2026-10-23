@@ -81,12 +81,14 @@ class Typical(VoiceoverScene):
         sub.next_to(head, DOWN, buff=0.15)
         tag = computed_tag()
         sd = {n: float(t["sd"][str(n)]) for n in ns}
+        pl = np.asarray(load("letters")["p"], float)
+        s_lo, s_hi = float(-np.log2(pl.max())), float(-np.log2(pl.min()))
         with self.voiceover(
-            "In chapter four we saw that whole bits waste up to one per symbol, and that coding long blocks fixes "
-            "it. Here is why. <bookmark mark='a'/> Make up a text by drawing letters one at a time, independently, "
+            "In the last chapter, whole bits wasted up to one per symbol, and coding long blocks was the cure. "
+            "Here is why. <bookmark mark='a'/> Make up a text by drawing letters one at a time, independently, "
             "with the books' frequencies: a crude model of English, but one we can reason about exactly. Measure its "
-            "surprise per letter. <bookmark mark='b'/> For a single letter, it's all over the place, from a couple of "
-            "bits to almost eleven. <bookmark mark='c'/> Ten letters: the spread narrows. <bookmark mark='d'/> A "
+            "surprise per letter. <bookmark mark='b'/> For a single letter, it's all over the place, from "
+            f"{s_lo:.1f} bits to {s_hi:.1f}. <bookmark mark='c'/> Ten letters: the spread narrows. <bookmark mark='d'/> A "
             "hundred, a thousand, ten thousand: the surprise per letter piles up at one value, "
             f"{H:.2f} bits, the entropy. Its spread shrinks from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
         ) as vo:
@@ -221,6 +223,9 @@ class Typical(VoiceoverScene):
         pic = picture(show[0])
         ro = readout(show[0])
         r0, r1 = rows[show[0]], rows[show[-1]]
+        miss = 1 - r1["P"]
+        missed = (f"all but one part in {1 / miss / 1e6:,.0f} million of the probability" if miss < 1e-6 else
+                  f"{100 * r1['P']:.4f} percent of the probability")
         with self.voiceover(
             "Here is the typical set, drawn. Take a simpler source: a coin that writes a space with the books' "
             f"frequency of spaces, {q:.3f}. <bookmark mark='a'/> Lay out all two to the n sequences in a row, each "
@@ -241,8 +246,8 @@ class Typical(VoiceoverScene):
         with self.voiceover(
             "In the top row, the gold shrinks to a sliver, and then to nothing you can see. In the bottom row it "
             f"spreads until it fills almost everything. <bookmark mark='a'/> By {show[-1]} symbols, the typical "
-            f"sequences are two to the minus {-r1['log2_frac']:.0f} of all sequences, and they carry all but "
-            f"{100 * (1 - r1['P']):.6f} percent of the probability. <bookmark mark='b'/> And the single most likely "
+            f"sequences are two to the minus {-r1['log2_frac']:.0f} of all sequences, and they carry {missed}. "
+            "<bookmark mark='b'/> And the single most likely "
             "sequence, all non-spaces, isn't typical at all: you will essentially never see it."
         ) as vo:
             for n in show[1:]:

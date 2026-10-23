@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai1.common import ALPHA27, letter, load, plain_axes, polyline, valley_steps
+from videos.ai.ai1.common import ALPHA27, PART, letter, load, plain_axes, polyline, valley_steps
 
 
 def slivers(p, h, W=11.0, y0=-2.5, scale=0.3, order=None, color=C.SURPRISE, opacity=0.8) -> VGroup:
@@ -33,9 +33,9 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
 
     # ------------------------------------------------------------------
     def card(self):
-        card = chapter_card(5, r"Cross-entropy and KL: the price of a wrong model",
-                            r"What does guessing with the wrong probabilities cost?", lit=(1948, 1951), part=1)
-        with self.voiceover("Chapter five. What happens when your guesses are wrong?") as vo:
+        card = chapter_card(7, r"Cross-entropy and KL: the price of a wrong model",
+                            r"What does guessing with the wrong probabilities cost?", lit=(1948, 1951), part=PART)
+        with self.voiceover("Chapter seven. What happens when your guesses are wrong?") as vo:
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -50,7 +50,6 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         H = float(-(p * np.log2(p)).sum())
         CE = float(-(p * np.log2(q)).sum())
         KL = CE - H
-        assert abs(H - 4.084) < 0.001 and abs(CE - 4.84) < 0.005 and abs(KL - 0.75) < 0.005, CE
         self.H, self.CE, self.KL = H, CE, KL
         head = mtex([r"H(p, q)", r"=", r"\sum_x p(x)\, \log_2 \frac{1}{q(x)}"], font_size=42).to_edge(UP, buff=0.4)
         head[0].set_color(C.MODEL_Q)
@@ -79,8 +78,8 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(sub))
         with self.voiceover(
             "Picture it as before. <bookmark mark='a'/> With the right probabilities, the area is the entropy, "
-            "4.08 bits. <bookmark mark='b'/> Now use a model that has e and z the wrong way round. Every e, one "
-            "symbol in ten, now costs almost eleven bits. The area grows to 4.84."
+            f"{H:.2f} bits. <bookmark mark='b'/> Now use a model that has e and z the wrong way round. Every e, one "
+            f"symbol in {round(1 / p[ie])}, now costs {-np.log2(q[ie]):.1f} bits. The area grows to {CE:.2f}."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(base), FadeIn(true), FadeIn(legend[0]))
@@ -110,19 +109,21 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         t1.shift(LEFT * max(0.0, t1.get_right()[0] - t2.get_left()[0] + 0.4))
         nums = VGroup(
             label(rf"swapped \texttt{{e}}, \texttt{{z}}: \ ${CE:.2f} = {H:.2f} + {KL:.2f}$", font_size=26),
-            label(r"letters guessed uniformly: \ $4.75 = 4.07 + 0.69$ \ (the Falcon passage)", font_size=26),
+            label(rf"letters guessed uniformly: \ ${math.log2(27):.2f} = {lt['H_passage']:.2f} + {lt['KL_uniform']:.2f}$"
+                  r" \ (the Falcon passage)", font_size=26),
             label(rf"letter frequencies of the $30$ books, used on the passage: \ $D_{{\mathrm{{KL}}}} = "
                   rf"{lt['KL_books']:.3f}$", font_size=26),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
-        assert abs(lt["H_passage"] - 4.066) < 0.001 and abs(lt["KL_uniform"] - 0.689) < 0.001
-        assert abs(lt["KL_books"] - 0.009) < 0.001
+        kb = float(lt["KL_books"])
+        books_said = ("are wrong by less than a hundredth of a bit" if kb < 0.01 else
+                      f"are wrong by {kb:.3f} bits")
         with self.voiceover(
             "Split the log in two, <bookmark mark='a'/> and the cross-entropy separates into two prices. The first "
             "is the entropy of p: the randomness of the world itself, which no code can remove. "
             "<bookmark mark='b'/> The second is the price of being wrong: the Kullback–Leibler divergence of q from "
-            "p, introduced in 1951. <bookmark mark='c'/> Swapping e and z costs three quarters of a bit per symbol. Guessing "
-            "letters uniformly costs 0.69. And the letter frequencies of our thirty books, used on the Falcon "
-            "passage, are wrong by less than a hundredth of a bit."
+            f"p, introduced in 1951. <bookmark mark='c'/> Swapping e and z costs {KL:.2f} bits per symbol. Guessing "
+            f"letters uniformly costs {lt['KL_uniform']:.2f}. And the letter frequencies of our thirty books, used on "
+            f"the Falcon passage, {books_said}."
         ) as vo:
             self.play(FadeOut(self.parts))
             self.play(Write(rows[0]))
@@ -139,88 +140,71 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
     # ------------------------------------------------------------------
     def gibbs(self):
         head = label(r"Gibbs' inequality: \ $D_{\mathrm{KL}}(p \,\|\, q) \ge 0$", font_size=38).to_edge(UP, buff=0.35)
-        ax = plain_axes([0, 3, 1], [-2.5, 2, 1], 5.6, 4.3).shift(LEFT * 3.5 + DOWN * 0.35)
-        xs = np.linspace(0.08, 3, 300)
-        ln = polyline(ax, xs, np.log(xs), color=C.KL, stroke_width=5)
-        tan = polyline(ax, np.linspace(0, 3, 2), np.linspace(0, 3, 2) - 1, color=GREY_A, stroke_width=3)
-        gap = VGroup(*[Line(ax.c2p(x, math.log(x)), ax.c2p(x, x - 1), color=C.KL, stroke_width=2, stroke_opacity=0.5)
-                       for x in np.linspace(0.25, 2.9, 16) if abs(x - 1) > 0.08])
-        lab_ln = MathTex(r"\ln x", font_size=34, color=C.KL).next_to(ax.c2p(3, math.log(3)), RIGHT, buff=0.1)
-        lab_t = MathTex(r"x - 1", font_size=34, color=GREY_A).next_to(ax.c2p(2.9, 1.9), LEFT, buff=0.1)
-        touch = glow_dot(ax.c2p(1, 0), color=WHITE, radius=0.08)
-        touch_l = MathTex(r"x = 1", font_size=28, color=WHITE).next_to(touch, DOWN + RIGHT, buff=0.05)
+        ax = plain_axes([0, 8, 2], [-1, 3.2, 1], 5.4, 3.6).shift(LEFT * 3.7 + DOWN * 0.6)
+        xs = np.linspace(0.5, 8, 300)
+        lg = polyline(ax, xs, np.log2(xs), color=C.KL, stroke_width=5)
+        a_, b_ = 1.0, 7.0
+        m = 0.5 * (a_ + b_)
+        pa = glow_dot(ax.c2p(a_, math.log2(a_)), color=C.BITS, radius=0.07, layers=3)
+        pb = glow_dot(ax.c2p(b_, math.log2(b_)), color=C.BITS, radius=0.07, layers=3)
+        chord = Line(ax.c2p(a_, math.log2(a_)), ax.c2p(b_, math.log2(b_)), color=C.BITS, stroke_width=3)
+        pm = glow_dot(ax.c2p(m, math.log2(m)), color=C.KL, radius=0.08, layers=4)
+        pc = glow_dot(ax.c2p(m, 0.5 * (math.log2(a_) + math.log2(b_))), color=C.BITS, radius=0.08, layers=4)
+        gap = Line(pc.get_center(), pm.get_center(), color=WHITE, stroke_width=2.5)
+        cap = label(r"Jensen (Chapter 3): \ average of logs $\le$ log of the average", font_size=24, color=GREY_A)
+        cap.next_to(ax, DOWN, buff=0.3)
         P, Q = C.TRUE_P, C.MODEL_Q
-        colors = {r"p(x)": P, r"\sum_x q(x)": Q, r"\sum_x p(x)": P}
-        steps = [
-            [r"-D_{\mathrm{KL}}", "=", r"\sum_x", r"p(x)", r"\ln", r"\frac{q(x)}{p(x)}"],
-            [r"-D_{\mathrm{KL}}", r"\le", r"\sum_x", r"p(x)", r"\Big(", r"\frac{q(x)}{p(x)}", r"- 1 \Big)"],
-            [r"-D_{\mathrm{KL}}", r"\le", r"\sum_x q(x)", r"-", r"\sum_x p(x)"],
-            [r"-D_{\mathrm{KL}}", r"\le", r"1", r"-", r"1", r"= 0"],
+        colors = {r"p(x)": P, r"q(x)": Q}
+        D = r"-D_{\mathrm{KL}}(p \,\|\, q)"
+        rows = [
+            cmath(D, "=", r"\sum_x", r"p(x)", r"\log_2", r"\frac{q(x)}{p(x)}", colors=colors, font_size=40),
+            cmath(D, r"\le", r"\log_2", r"\sum_x", r"p(x)", r"\frac{q(x)}{p(x)}", colors=colors, font_size=40),
+            cmath(D, r"\le", r"\log_2", r"\sum_x", r"q(x)", colors=colors, font_size=40),
+            cmath(D, r"\le", r"\log_2 1 = 0", font_size=40),
         ]
-        eqs = [cmath(*st, colors=colors, font_size=44).move_to([3.3, 1.0, 0]) for st in steps]
-        whys = [why(r"in nats (natural logs)"), why(r"$\ln x \le x - 1$"), why(r"multiply out"),
-                why(r"both are distributions")]
-        for w in whys:
-            w.scale(1.15).move_to([3.3, -0.05, 0])
+        whys = [why(r"an average of $\log_2 \frac{q}{p}$, \ weights $p$"), why(r"Jensen: $\log_2$ bends down"),
+                why(r"the $p(x)$ cancel"), why(r"$q$ is a distribution")]
+        step = ladder(self, rows, whys, keep=4, top=2.3, x=2.6, buff=0.5, edge=6.9)
         res = VGroup(
             label(r"equality only when $q = p$: \ the truth is the best code", font_size=28, color=C.BITS),
-            label(r"so $H(p, q) \ge H(p)$, \ and $H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)p(y)\big) "
+            label(r"so $H(p, q) \ge H(p)$; \ and $H(Y) - H(Y \mid X) = D_{\mathrm{KL}}\big(p(x, y) \,\|\, p(x)p(y)\big) "
                   r"\ge 0$", font_size=26, color=GREY_A),
-        ).arrange(DOWN, buff=0.14)
-        mi = label(r"that drop is the \textit{mutual information} $I(X; Y)$ \ (it returns in Chapter 10)", font_size=22,
-                   color=GREY_B)
-        VGroup(res, mi).arrange(DOWN, buff=0.16).move_to(DOWN * 0.45)
-        ln_card = gloss(r"$\ln$, \ and nats", r"$\ln x = \log_e x$, \ the log to base $e \approx 2.718$\\"
-                        r"surprise measured with $\ln$ is in nats: \ $1$ nat $\approx 1.44$ bits", corner=DR, width=4.8,
-                        color=C.KL)
-        venn = VGroup(Circle(radius=0.8, stroke_color=C.ENTROPY, stroke_width=3, fill_color=C.ENTROPY,
-                             fill_opacity=0.15).shift(LEFT * 0.55),
-                      Circle(radius=0.8, stroke_color=C.TRUE_P, stroke_width=3, fill_color=C.TRUE_P,
-                             fill_opacity=0.15).shift(RIGHT * 0.55))
-        venn.add(MathTex(r"H(X)", font_size=26, color=C.ENTROPY).move_to(LEFT * 0.95),
-                 MathTex(r"H(Y)", font_size=26, color=C.TRUE_P).move_to(RIGHT * 0.95))
-        ov = MathTex(r"I(X; Y)", font_size=26, color=C.BITS).next_to(venn, DOWN, buff=0.22)
-        venn.add(ov, Line(ov.get_top(), ORIGIN + DOWN * 0.15, color=C.BITS, stroke_width=2))
-        mi_card = gloss(r"mutual information \ $I(X; Y)$", r"how many bits knowing $X$ saves you\\ when guessing $Y$: "
-                        r"\ the overlap", picture=venn, width=4.6, color=C.BITS)
-        mi_card.to_edge(DOWN, buff=0.2).set_x(0)
+            label(r"that drop is the \textit{mutual information} $I(X; Y)$: \ Chapter 12", font_size=24, color=GREY_B),
+        ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Is being wrong always a cost? Yes, and the proof rests on one fact: <bookmark mark='a'/> the natural "
-            "log, ln, the logarithm to base e, about 2.718, lies below its tangent line at one. ln x is at most x "
-            "minus one. <bookmark mark='b'/> Write minus the divergence in natural logs, so it's counted in nats "
-            "instead of bits, one nat being about 1.44 bits; <bookmark mark='c'/> apply that inequality to each term, "
-            "<bookmark mark='d'/> multiply out, <bookmark mark='e'/> and both sums are one."
+            "Is being wrong always a cost? Yes, and the proof is the one we used for the uniform distribution in "
+            "chapter three. <bookmark mark='a'/> The logarithm bends downward, so the average of logs is at most the "
+            "log of the average. <bookmark mark='b'/> Minus the divergence is an average, weighted by p, of the log "
+            "of q over p. <bookmark mark='c'/> Move the log outside. <bookmark mark='d'/> Inside, the p's cancel, "
+            "<bookmark mark='e'/> and what's left is the total of q, which is one. The log of one is zero."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(Create(ax), Create(ln), FadeIn(lab_ln), FadeIn(ln_card))
-            self.play(Create(tan), FadeIn(lab_t), FadeIn(touch), FadeIn(touch_l))
-            self.play(LaggedStart(*[Create(g) for g in gap], lag_ratio=0.08), run_time=1.0)
+            self.play(Create(ax), Create(lg), run_time=1.0)
+            self.play(FadeIn(pa), FadeIn(pb), Create(chord), FadeIn(pm), FadeIn(pc), Create(gap), FadeIn(cap))
             vo.wait_until("b")
-            self.play(Write(eqs[0]), FadeIn(whys[0]))
-            for k, mark in enumerate("cde"):
-                vo.wait_until(mark)
-                self.play(FadeOut(whys[k]), FadeIn(whys[k + 1]), run_time=0.4)
-                if k == 0:
-                    self.play(Indicate(tan, color=WHITE), Indicate(ln, color=WHITE), run_time=0.6)
-                morph(self, eqs[k], eqs[k + 1], run_time=1.1)
-                if k == 0:
-                    self.play(FadeOut(ln_card), run_time=0.5)
+            step(0)
+            vo.wait_until("c")
+            step(1)
+            vo.wait_until("d")
+            step(2)
+            vo.wait_until("e")
+            step(3)
         with self.voiceover(
-            "So the divergence is never negative, and it's zero only when q equals p. <bookmark mark='a'/> The "
-            "truth is the best code. And this pays the debt from chapter three: <bookmark mark='b'/> the drop in "
-            "entropy from knowing X is a divergence too, so it can't be negative. Knowing more never hurts, on "
-            "average. <bookmark mark='c'/> That drop has a name, the mutual information: how many bits knowing X "
-            "saves you when guessing Y, the overlap of what the two carry. It comes back in chapter ten."
+            "So the divergence is never negative, and it's zero only when q equals p, the only case where Jensen's "
+            "inequality is an equality. <bookmark mark='a'/> The truth is the best code. The inequality is named "
+            "after Josiah Willard Gibbs, who used it in statistical mechanics. <bookmark mark='b'/> And it pays a debt from "
+            "chapter three: the drop in entropy from knowing X is a divergence too, so it can't be negative. Knowing "
+            "more never hurts, on average. <bookmark mark='c'/> That drop has a name, the mutual information. It "
+            "gets its own chapter."
         ) as vo:
-            self.play(FadeOut(VGroup(ax, ln, tan, gap, lab_ln, lab_t, touch, touch_l, whys[3])),
-                      eqs[3].animate.scale(1.15).move_to(UP * 1.2))
+            self.play(FadeOut(VGroup(ax, lg, pa, pb, chord, pm, pc, gap, cap)))
             vo.wait_until("a")
             self.play(FadeIn(res[0], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(res[1]))
             vo.wait_until("c")
-            self.play(FadeIn(mi), FadeIn(mi_card))
+            self.play(FadeIn(res[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -238,22 +222,28 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(f, DOWN, buff=0.6)
         unit = note(r"papers report it in nats per token: \ $1$ nat $= 1/\ln 2 \approx 1.443$ bits", font_size=24)
         unit.to_edge(DOWN, buff=0.5)
+        ln_card = gloss(r"$\ln$, \ and nats", r"$\ln x = \log_e x$, \ the log to base $e \approx 2.718$\\"
+                        r"surprise measured with $\ln$ is in nats: \ $1$ nat $\approx 1.44$ bits", corner=DR, width=4.8,
+                        color=C.KL)
         with self.voiceover(
             "Here is why all of this matters for AI. <bookmark mark='a'/> The loss that every large language model "
             "is trained to minimize is exactly this: the average of log one over q, for each token of real text, "
-            "given the tokens before it. <bookmark mark='b'/> It's the cross-entropy between the world's text and the "
-            "model. <bookmark mark='c'/> Training can only shrink the divergence part; <bookmark mark='d'/> the "
-            "entropy of language itself is a floor no model can go below."
+            "given the tokens before it. <bookmark mark='n'/> Usually with the natural log, ln, to base e, so it's "
+            "counted in nats instead of bits: one nat is about 1.44 bits. <bookmark mark='b'/> It's the "
+            "cross-entropy between the world's text and the model. <bookmark mark='c'/> Training can only shrink the "
+            "divergence part; <bookmark mark='d'/> the entropy of language itself is a floor no model can go below."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(Write(f))
+            vo.wait_until("n")
+            self.play(FadeIn(ln_card, shift=UP * 0.2), FadeIn(unit))
             vo.wait_until("b")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeOut(ln_card), FadeIn(rows[0]))
             vo.wait_until("c")
             self.play(FadeIn(rows[1]))
             vo.wait_until("d")
-            self.play(FadeIn(rows[2]), FadeIn(unit))
+            self.play(FadeIn(rows[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -262,8 +252,8 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
         d = load("kl")
         x, p = np.asarray(d["x"]), np.asarray(d["p"])
         fwd, ra = np.asarray(d["fwd"]), np.asarray(d["rev_a"])
-        assert abs(fwd[-1, 0] + 0.40) < 0.01 and abs(fwd[-1, 1] - 2.15) < 0.01
-        assert abs(ra[-1, 0] + 1.99) < 0.01 and abs(ra[-1, 1] - 0.66) < 0.01
+        wide = abs(fwd[-1, 1] - d["sd"]) < 0.05 and abs(fwd[-1, 0] - d["mean"]) < 0.05  # moment matching
+        one_peak = ra[-1, 1] < 0.5 * fwd[-1, 1]
         head = label(r"$D_{\mathrm{KL}}$ is not symmetric", font_size=38).to_edge(UP, buff=0.35)
         axes, qs = [], []
         trackers = []
@@ -306,7 +296,9 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             "has two peaks, and our model q can only be a single bell curve: one smooth hump, set by where its center "
             "is and how wide it is. Which bell curve is best? It depends "
             "on which way round we measure. <bookmark mark='a'/> Minimizing the divergence of q from p, the "
-            "training loss we just met, <bookmark mark='b'/> pulls q wide, to cover both peaks."
+            "training loss we just met, <bookmark mark='b'/> "
+            + ("pulls q wide, to cover both peaks: it ends with exactly p's mean and spread." if wide else
+               "pulls q wide, to cover both peaks.")
         ) as vo:
             self.play(FadeIn(head), FadeIn(axes[0]), FadeIn(axes[1]), FadeIn(lp), FadeIn(lq))
             self.add(*qs)
@@ -321,9 +313,11 @@ class CrossEntropy(VoiceoverScene, ThreeDScene):
             self.play(FadeIn(res[0]), FadeIn(why_[0]))
         with self.voiceover(
             "The other way round, <bookmark mark='a'/> q is punished for putting probability where p has none, so "
-            "it squeezes into a single peak and ignores the other. <bookmark mark='b'/> Covering everything, or "
-            "committing to one thing: that choice comes back in diffusion models, in part twenty-one, and in "
-            "reinforcement learning, in part twenty-eight."
+            + ("it squeezes into a single peak and ignores the other. " if one_peak else "it narrows toward one peak. ")
+            + f"Each fit is bad by the other's measure: the wide curve scores {d['rev_at_fwd']:.2f} bits the second "
+            f"way, the narrow one {d['fwd_at_rev']:.1f} bits the first. <bookmark mark='b'/> Covering everything, or "
+            "committing to one thing: that choice comes back in variational autoencoders, in Part 20, and in "
+            "distillation and reinforcement learning from human feedback, in Part 27."
         ) as vo:
             m_t, s_t, path = trackers[1]
             vo.wait_until("a")

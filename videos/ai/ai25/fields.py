@@ -22,7 +22,7 @@ def n_params(m: nn.Module) -> int:
 # ===========================================================================
 # Burgers' equation u_t + u u_x = nu u_xx on [0, 1), periodic
 # ===========================================================================
-NU = 0.1  # as in Li et al. (2021)
+NU = 0.01
 FINE = 1024
 
 
@@ -167,7 +167,7 @@ VISC = 2e-3
 DRAG = 0.05
 FORCE_K = 2
 DT_SOLVE = 0.02
-SUB = 10  # solver steps per model step: one model step is 0.2 time units
+SUB = 5  # solver steps per model step: one model step is 0.1 time units
 
 
 class Vorticity:
