@@ -64,12 +64,15 @@ class Precision(VoiceoverScene):
         hl = label(rf"$|\partial L / \partial y|$ \ at the outputs of our model's matrix products \ (step "
                    rf"$60$, \ ${H['n']:,}$ values)".replace(",", "{,}"), font_size=20, color=GRADS)
         hl.next_to(bars, UP, buff=0.12).set_x(ax.x(-20))
-        under = label(rf"${100 * H['below_normal']:.0f}\%$ below FP16's smallest normal number; \ "
+        bn = r"> 99.5" if H["below_normal"] >= 0.995 else f"{100 * H['below_normal']:.0f}"
+        under = label(rf"${bn}\%$ below FP16's smallest normal number; \ "
                       rf"${100 * H['below_sub']:.0f}\%$ round to zero", font_size=22, color=PREC["fp16"])
         under.next_to(ax, DOWN, buff=0.55)
         floor = DashedLine([ax.x(-24), ax.line.get_y() - 0.1, 0], [ax.x(-24), 3.0, 0], color=PREC["fp16"],
                            dash_length=0.06)
         src = cite(r"IEEE 754 (1985); \ Micikevicius et al.\ (2018, 2022); \ computed here", corner=DR, font_size=16)
+        below = ("Virtually all of them are" if H["below_normal"] >= 0.995 else
+                 f"{100 * H['below_normal']:.0f} percent of them are")
         with self.voiceover(
             "Every number in a training run takes memory and bandwidth, and narrower numbers multiply faster: Part "
             "17's tensor cores do twice the work in eight bits as in sixteen. How few bits can training use? "
@@ -78,7 +81,7 @@ class Precision(VoiceoverScene):
             "just keeps fewer digits. FP16 has five exponent bits: nothing below about six times ten to the minus eight, "
             "and only low-precision subnormals below two to the minus fourteen. <bookmark mark='c'/> Now the numbers that "
             "matter: the gradients flowing back through our model's matrix products, after sixty steps. "
-            f"<bookmark mark='d'/> {100 * H['below_normal']:.0f} percent of them are below FP16's smallest normal "
+            "<bookmark mark='d'/> " + below + " below FP16's smallest normal "
             f"number, and {100 * H['below_sub']:.0f} percent are so small that FP16 rounds them to zero."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(src))
@@ -282,8 +285,20 @@ class Precision(VoiceoverScene):
                      .move_to([-6.0 + 0.045 * i, 1.6 + h / 2, 0]))
             if abs(v) > 0.5 * mx:
                 big.append(bars[-1])
-        bl = label(r"$128$ inputs of a matrix product in the series' model: \ a few large values", font_size=20,
-                   color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
+        bl = label(rf"$128$ inputs of a matrix product in the series' model; \ the tensor's largest: \ "
+                   rf"${q['outlier']:.1f}$", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
+        helps = q["act_tensor"] > 1.3 * q["act_tile"]
+        if helps:
+            look = "And real activations have a few large values: here are 128 inputs to one matrix product of the series' model."
+            tiles = (f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; "
+                     f"with one scale per tile of 128 values, {100 * q['act_tile']:.1f}.")
+        else:
+            look = ("Here are 128 inputs to one matrix product of the series' model; the largest value in the whole "
+                    f"tensor is {q['outlier']:.0f}.")
+            tiles = (f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent, "
+                     f"and with one scale per tile of 128 values, {100 * q['act_tile']:.1f}: our small model's "
+                     "activations are tame enough that tiles barely help. Large models are not: a few channels grow far "
+                     "larger than the rest.")
         rows = VGroup(
             label(rf"one scale per tensor: \ ${100 * q['act_tensor']:.1f}\%$ error \ (activations), \ "
                   rf"${100 * q['w_tensor']:.1f}\%$ \ (weights)", font_size=22, color=PREC["fp8_tensor"]),
@@ -304,17 +319,16 @@ class Precision(VoiceoverScene):
             label(rf"loss within ${D['loss_err']}\%$ of BF16, \ on $671$B parameters and $14.8$T tokens", font_size=22,
                   color=PREC["fp8_tile"]),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.17).move_to([0.0, -1.5, 0])
-        src = cite(r"DeepSeek-AI (2024), Sec.\ 3.3", corner=DR, font_size=17)
+        src = cite(r"DeepSeek-AI (2024), Sec.\ 3.3" + ("" if helps else r"; \ Dettmers et al.\ (2022): \ outlier features"),
+                   corner=DR, font_size=17)
         with self.voiceover(
             "Eight bits is harder. E4M3, the format with four exponent bits, spans only about eighteen powers of two, so "
             "every tensor needs a scale to move its values into range. One scale per tensor, as the first FP8 recipes "
-            "used, is set by the largest value. <bookmark mark='a'/> And real activations have a few large values: here "
-            "are 128 inputs to one matrix product of the series' model. <bookmark mark='b'/> With one scale for the whole "
-            f"tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; with one scale per tile of 128 values, "
-            f"{100 * q['act_tile']:.1f}. <bookmark mark='c'/> DeepSeek-V3 trained its 671 billion parameters this way, "
-            "with a scale for every 128 values of an activation and every 128 by 128 block of a weight. Its tensor cores "
-            "kept only about fourteen bits while summing, so it moved the partial sums to FP32 every 128 terms, and kept "
-            "the sensitive parts in higher precision. Its loss stayed within a quarter of a percent of a sixteen-bit run."
+            "used, is set by the largest value. <bookmark mark='a'/> " + look + " <bookmark mark='b'/> " + tiles +
+            " <bookmark mark='c'/> DeepSeek-V3 trained its 671 billion parameters with a scale for every 128 values of an "
+            "activation and every 128 by 128 block of a weight. Its tensor cores kept only about fourteen bits while "
+            "summing, so it moved the partial sums to FP32 every 128 terms, and kept the sensitive parts in higher "
+            "precision. Its loss stayed within a quarter of a percent of a sixteen-bit run."
         ) as vo:
             self.play(FadeIn(bl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.005), run_time=2.0)
             vo.wait_until("a")

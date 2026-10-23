@@ -277,9 +277,13 @@ class Contamination(VoiceoverScene):
             f"for a random code of the same form, and among a thousand and one codes the true one ranks number "
             f"{r1}. <bookmark mark='b'/> " + unseen_said
         ) as vo:
-            self.play(FadeIn(top), FadeIn(tl), FadeIn(tag), FadeIn(g), FadeIn(labs), FadeIn(lg))
+            grey, red = VGroup(*bars[0::2]), VGroup(*bars[1::2])
+            grey_full = grey.copy()
+            grey.fade(0.8)  # what any code costs, previewed dimly while the canary is introduced
+            self.play(FadeIn(top), FadeIn(tl), FadeIn(tag), FadeIn(g), FadeIn(labs), FadeIn(lg), FadeIn(grey))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), run_time=2.0)
+            self.play(Transform(grey, grey_full), LaggedStart(*[GrowFromEdge(b, DOWN) for b in red], lag_ratio=0.15),
+                      run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(ranks))
         self.wait(0.4)
@@ -313,11 +317,14 @@ class Contamination(VoiceoverScene):
             "Hammett's novel entered the public domain, and Project Gutenberg, on the first of January 2026, after "
             "the pretrained models of Part 1 were trained; and the models we built ourselves never read it."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_), FadeIn(cards[0], shift=UP * 0.15))
+            full = cards.copy()
+            for c_ in cards[1:]:
+                c_.fade(0.82)  # the later cards wait, dimmed, for their turn
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(cards, shift=UP * 0.15))
             vo.wait_until("a")
             self.play(Indicate(cards[0], color=CLEAN, scale_factor=1.03))
             for k, m in enumerate("bcd", start=1):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()

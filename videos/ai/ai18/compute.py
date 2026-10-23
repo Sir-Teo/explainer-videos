@@ -1101,9 +1101,11 @@ RECIPES = {
 def _recipe_spec(name, **kw):
     from videos.ai.ai18 import lm
 
-    return lm.Spec(**RECIPE_SHAPE, batch=16, steps=RECIPE_STEPS, lr=3e-3, warmup=100, seed=0, eval_windows=48,
-                   eval_every=24, snaps=SNAPS, keep=[BRANCH] if name == "full" else [], probe_every=12,
-                   **{**RECIPES[name], **kw})
+    args = dict(**RECIPE_SHAPE, batch=16, steps=RECIPE_STEPS, lr=3e-3, warmup=100, seed=0, eval_windows=48,
+                eval_every=24, snaps=SNAPS, keep=[BRANCH] if name == "full" else [], probe_every=12)
+    args.update(RECIPES[name])
+    args.update(kw)  # a branch or a second seed overrides the defaults
+    return lm.Spec(**args)
 
 
 def _recipe(name):

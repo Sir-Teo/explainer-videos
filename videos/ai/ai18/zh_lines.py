@@ -353,8 +353,11 @@ _DATA = {
     'Chapter fourteen. Fewer bits.':
         '第14章。更少的位。',
 
-    'f"Every number in a training run takes memory':
-        "训练里的每个数都占内存和带宽，而越窄的数乘得越快：第17部分的张量核心，用8位做的工作是16位的两倍。那么，训练最少能用几位？<bookmark mark='a'/>这是各种格式，画在2的幂的刻度上，看每种在它的数变得太小或太大之前能走多远。<bookmark mark='b'/>FP32和bfloat16共用一个8位的指数，所以范围一样巨大；bfloat16只是保留的有效数字少一些。半精度FP16有5个指数位：低于大约6乘以10的负8次方就什么都没有了，在2的负14次方以下，还有一段更淡的、低精度的次正规数区域。<bookmark mark='c'/>现在看真正要紧的数：在我们模型的矩阵乘法里往回流的梯度，在第六十步测得。<bookmark mark='d'/>其中{100 * H['below_normal']:.0f}%低于FP16最小的正规数，{100 * H['below_sub']:.0f}%小到FP16会把它们舍入成零。",
+    '"Every number in a training run takes memory':
+        "训练里的每个数都占内存和带宽，而越窄的数乘得越快：第17部分的张量核心，用8位做的工作是16位的两倍。那么，训练最少能用几位？<bookmark mark='a'/>这是各种格式，画在2的幂的刻度上，看每种在它的数变得太小或太大之前能走多远。<bookmark mark='b'/>FP32和bfloat16共用一个8位的指数，所以范围一样巨大；bfloat16只是保留的有效数字少一些。半精度FP16有5个指数位：低于大约6乘以10的负8次方就什么都没有了，在2的负14次方以下，还有一段更淡的、低精度的次正规数区域。<bookmark mark='c'/>现在看真正要紧的数：在我们模型的矩阵乘法里往回流的梯度，在第六十步测得。<bookmark mark='d'/>{below}低于FP16最小的正规数，{100 * H['below_sub']:.0f}%小到FP16会把它们舍入成零。",
+
+    "f'{100 * H['below_normal']:.0f} percent of them are'":
+        "其中{100 * H['below_normal']:.0f}%",
 
     'The fix, from Micikevicius and colleagues':
         "解决办法来自2018年英伟达和百度的Micikevicius和同事，叫损失缩放。<bookmark mark='a'/>在反向传播之前，把损失乘以一个大数S。链式法则是线性的，所以每个梯度都放大成S倍。<bookmark mark='b'/>在2的幂的刻度上，对S等于2的16次方，整个分布向右滑动十六格，进入FP16的范围。<bookmark mark='c'/>然后在更新之前，把权重的梯度除以S，更新是用32位做的。<bookmark mark='d'/>S太大，最大的梯度会上溢，所以实践中S是动态的：一出现上溢就把它减半，并跳过这一步；连续一段好的步数之后，再把它加倍。BFloat16有和FP32一样的范围，这些都不需要，这就是它后来取而代之的原因。",
@@ -386,8 +389,20 @@ _DATA = {
     "f'Even now, with {100 * zero:.0f} percent":
         "即使现在，{100 * zero:.0f}%的梯度值被冲成了零，不带损失缩放的FP16最后也只和FP32差{d_noscale:.3f}奈特：我们的模型太小，没法清楚地显出这种失败。",
 
-    'f"Eight bits is harder.':
-        "8位就更难了。E4M3，带四个指数位的8位格式，只跨大约十八个2的幂，所以每个张量都需要一个缩放因子，把它的值挪进范围里。每个张量一个缩放因子，就像最早的FP8配方那样，是由最大的那个值决定的。<bookmark mark='a'/>而真实的激活里，总有几个很大的值。这是本系列模型里一次矩阵乘法的128个输入。<bookmark mark='b'/>整个张量用一个缩放因子，舍入到E4M3的误差是{100 * q['act_tensor']:.1f}%；每128个值的一个瓦片用一个缩放因子，误差是{100 * q['act_tile']:.1f}%。<bookmark mark='c'/>DeepSeek-V3就是这样训练它的6710亿个参数的：激活每128个值一个缩放因子，权重每128乘128的一块一个缩放因子。它还发现，张量核心在求和时只保留大约十四位，所以每128项就把部分和挪到FP32里，并把敏感的部分保留在更高的精度。它的损失和16位训练相比，差别在百分之零点二五以内。",
+    '"Eight bits is harder.':
+        "8位就更难了。E4M3，带四个指数位的8位格式，只跨大约十八个2的幂，所以每个张量都需要一个缩放因子，把它的值挪进范围里。每个张量一个缩放因子，就像最早的FP8配方那样，是由最大的那个值决定的。<bookmark mark='a'/>{look}<bookmark mark='b'/>{tiles}<bookmark mark='c'/>DeepSeek-V3训练它的6710亿个参数时，激活每128个值一个缩放因子，权重每128乘128的一块一个缩放因子。它的张量核心在求和时只保留大约十四位，所以每128项就把部分和挪到FP32里，并把敏感的部分保留在更高的精度。它的损失和16位训练相比，差别在百分之零点二五以内。",
+
+    "And real activations have a few large values:":
+        '而真实的激活里，总有几个很大的值：这是本系列模型里一次矩阵乘法的128个输入。',
+
+    "f\"Here are 128 inputs to one matrix product":
+        "这是本系列模型里一次矩阵乘法的128个输入；整个张量里最大的值是{q['outlier']:.0f}。",
+
+    "f'With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent; ":
+        "整个张量用一个缩放因子，舍入到E4M3的误差是{100 * q['act_tensor']:.1f}%；每128个值的一个瓦片用一个缩放因子，误差是{100 * q['act_tile']:.1f}%。",
+
+    'f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q[\'act_tensor\']:.1f} percent, ':
+        "整个张量用一个缩放因子，舍入到E4M3的误差是{100 * q['act_tensor']:.1f}%，每128个值的一个瓦片用一个缩放因子是{100 * q['act_tile']:.1f}%：我们这个小模型的激活很温和，瓦片几乎帮不上忙。大模型就不是这样了：少数几个通道会长得比其余的大得多。",
 
     'The newest chips put the scales into hardware.':
         "最新的芯片把缩放做进了硬件。英伟达的Blackwell能直接做微缩放格式的乘法，32个数一块，共享一个缩放因子；英伟达在2025年报告，一个八十亿参数的模型用MXFP8在十五万亿个词元上训练，和bfloat16持平。<bookmark mark='a'/>然后是4位：NVFP4把十六个4位的值和一个8位的缩放因子打包在一起。<bookmark mark='b'/>英伟达用它预训练了一个一百二十亿参数的模型，用了十万亿个词元，用随机旋转把离群值摊开，对梯度用随机舍入，并把百分之十六的层留在bfloat16里；它在MMLU-Pro上的分数，和FP8模型相差不到二十分之一分。<bookmark mark='c'/>2026年3月，Nemotron 3 Super用NVFP4在25万亿个词元上完成了预训练；Kimi K3发布的是4位权重，DeepSeek-V4是4位的专家，两者都来自量化感知训练。<bookmark mark='d'/>每一次把位数减半，都伴随着一种新的缩放方式。",
@@ -545,6 +560,8 @@ _DATA = {
 ZH = dict(_DATA)
 
 PHRASES = {
+    # Precision: how many gradients sit below FP16's normal range
+    'Virtually all of them are': '其中几乎全部都',
     # ZeRO: the measured traffic against the paper's 1.5
     "ZeRO's one and a half, measured.": 'ZeRO的一倍半，实测出来了。',
     "ZeRO's paper predicts one and a half.": 'ZeRO的论文预测的是一倍半。',

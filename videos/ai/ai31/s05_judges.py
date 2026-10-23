@@ -280,13 +280,15 @@ class Judges(VoiceoverScene):
             "<bookmark mark='c'/> And Epoch AI uses the same model to stitch more than fifty benchmarks onto one "
             "scale, its Capabilities Index, so that models stay comparable after any one benchmark is saturated."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(labs), FadeIn(xl_), FadeIn(tag))
+            full = cards.copy()
+            cards.fade(0.82)  # the published results wait, dimmed, beside the simulation
+            self.play(FadeIn(g), FadeIn(labs), FadeIn(xl_), FadeIn(tag), FadeIn(cards))
             self.play(Create(lp), FadeIn(dp), FadeIn(lg[0]))
             vo.wait_until("a")
             self.play(Create(li), FadeIn(di), FadeIn(lg[1]))
             vo.wait_until("b")
-            self.play(FadeIn(cards[0], shift=UP * 0.15))
+            self.play(Transform(cards[0], full[0]))
             vo.wait_until("c")
-            self.play(FadeIn(cards[1], shift=UP * 0.15))
+            self.play(Transform(cards[1], full[1]))
         self.wait(0.4)
         self.clear_scene()
