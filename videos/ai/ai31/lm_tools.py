@@ -136,19 +136,27 @@ def shannon_game() -> dict:
     vocab = _vocab_strings()
     sent = c1.SHANNON_SENTENCE
     prefix = "he said "  # the context Part 1's counting model was given
-    ranks, bits, top, mass27 = [], [], [], []
+    ranks, bits, top, mass27, floors = [], [], [], [], []
     for i in range(len(sent)):
         full = prefix + sent[:i]
         cut = full.rfind(" ")
         head, tail = full[:cut], full[cut:]
         ctx = [N.special("<|endoftext|>")] + N.encode(head)
-        acc = next_char_dist(model, vocab, ctx, tail)
-        p = np.zeros(27)
-        for ch, v in acc.items():
-            c = ch.lower()
-            if c in ALPHA27:
-                p[ALPHA27.index(c)] += v
+        floor = 1e-5
+        while True:  # a rare word's spellings can all fall below the floor: lower it until one survives
+            acc = next_char_dist(model, vocab, ctx, tail, floor)
+            p = np.zeros(27)
+            for ch, v in acc.items():
+                c = ch.lower()
+                if c in ALPHA27:
+                    p[ALPHA27.index(c)] += v
+            if p.sum() > 0 or floor < 1e-11:
+                break
+            floor /= 100
+        floors.append(floor)
         mass27.append(float(p.sum()))
+        if p.sum() == 0:
+            p = np.ones(27)  # nothing to go on: every letter equally likely
         p = p / p.sum()
         true = ALPHA27.index(sent[i])
         order = np.argsort(-p, kind="stable")
@@ -158,7 +166,7 @@ def shannon_game() -> dict:
     g = c1.load("game")
     r = np.array(ranks)
     return dict(sentence=sent, ranks=ranks, bits=bits, top3=top, total=float(sum(bits)),
-                first=float((r == 1).mean()), mean_mass27=float(np.mean(mass27)),
+                first=float((r == 1).mean()), mean_mass27=float(np.mean(mass27)), floors=floors,
                 count_ranks=[int(x) for x in g["sentence_ranks"]], count_total=float(g["sentence_total"]),
                 count_first=float(np.mean(np.array(g["sentence_ranks"]) == 1)), count_order=int(g["sentence_order"]))
 
@@ -186,6 +194,30 @@ def _wilson(k, n, z=1.96):
     c = (p + z * z / (2 * n)) / d
     h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
     return (max(0.0, c - h), min(1.0, c + h))
+
+
+def _clean(ids) -> str | None:
+    """The tokens as text, or None if they split a character (a token boundary inside a UTF-8 sequence)."""
+    t = N.decode(ids)
+    return None if "\ufffd" in t else t
+
+
+@torch.no_grad()
+def _example(model, W, k, cont, ext, first_miss) -> dict:
+    """A passage to show: the first one reproduced exactly, else the one greedy decoding followed longest; among
+    passages whose prompt end and continuation decode to whole characters.  With the model's greedy continuation."""
+    ok = [j for j in range(len(W)) if _clean(W[j, k - 24:k]) is not None and _clean(W[j, k:k + cont]) is not None]
+    hit = [j for j in ok if ext[j]]
+    j = hit[0] if hit else max(ok, key=lambda i: (first_miss[i], -i))
+    x = torch.from_numpy(W[j, :k].astype(np.int64))[None]
+    gen = []
+    for _ in range(cont):
+        nxt = int(model(x[:, -model.cfg.seq:])[0, -1].argmax())
+        gen.append(nxt)
+        x = torch.cat([x, torch.tensor([[nxt]])], 1)
+    lead = int(first_miss[j])
+    return dict(prefix=N.decode(W[j, k - 24:k]), truth=N.decode(W[j, k:k + cont]), greedy=N.decode(gen),
+                same=N.decode(W[j, k:k + lead]), extracted=bool(ext[j]), lead=lead)
 
 
 def extraction(n_win: int = 800, L: int = 256, cont: int = 32, prefixes=(8, 16, 32, 64, 128, 192, 224)) -> dict:
@@ -219,24 +251,10 @@ def extraction(n_win: int = 800, L: int = 256, cont: int = 32, prefixes=(8, 16, 
             first_miss = np.where(seg.all(1), cont, np.argmin(seg, 1))
             lead.append(float(first_miss.mean()))
             if k == 64:
-                hit = np.flatnonzero(ext)
-                pick = int(hit[0]) if len(hit) else int(np.argmax(first_miss))
-                examples[name] = dict(prefix=N.decode(W[pick, :k][-24:]), truth=N.decode(W[pick, k:k + cont]),
-                                      extracted=bool(ext[pick]), lead=int(first_miss[pick]))
-                miss = np.flatnonzero(~ext)
-                if len(miss):
-                    j = int(miss[0])
-                    x = torch.from_numpy(W[j, :k].astype(np.int64))[None]
-                    gen = []
-                    for _ in range(cont):
-                        nxt = int(model(x[:, -model.cfg.seq:])[0, -1].argmax())
-                        gen.append(nxt)
-                        x = torch.cat([x, torch.tensor([[nxt]])], 1)
-                    examples[name + "_miss"] = dict(prefix=N.decode(W[j, :k][-24:]), truth=N.decode(W[j, k:k + cont]),
-                                                    greedy=N.decode(gen), lead=int(first_miss[j]))
-        res[name] = dict(rate=rates, lo=lo, hi=hi, lead=lead, win_loss=loss[:, 63:].mean(1))
+                examples[name] = _example(model, W, k, cont, ext, first_miss)
+        res[name] = dict(rate=rates, lo=lo, hi=hi, lead=lead, win_loss=loss[:, 63:].mean(1).tolist())
     # membership: a loss threshold (Yeom et al. 2018) separating training windows from held-out ones
-    lt, lv = res["train"]["win_loss"], res["valid"]["win_loss"]
+    lt, lv = np.array(res["train"]["win_loss"]), np.array(res["valid"]["win_loss"])
     auc = float((lt[:, None] < lv[None, :]).mean() + 0.5 * (lt[:, None] == lv[None, :]).mean())
     # duplication: continuations that occur once, twice to four times, five or more times in the training text
     T = len(train) - cont

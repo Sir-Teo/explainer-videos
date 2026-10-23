@@ -159,7 +159,7 @@ ZH = {
 
     # ------------------------------------------------------------------ 8. ChatGPT
     'Chapter eight. ChatGPT, and the closed era.':
-        '第8章。ChatGPT，与闭源时代。',
+        '这是第8章：ChatGPT，以及闭源的时代。',
 
     "On the thirtieth of November 2022, OpenAI put a model":
         "2022年11月30日，OpenAI把一个用InstructGPT的配方训练、为对话调过的模型，放到一个免费的聊天窗口后面，取名ChatGPT。<bookmark mark='a'/>对研究者来说，里面没有什么新东西：一个GPT-3.5模型，监督微调，一个奖励模型，PPO。新的是，任何人都能试一试。<bookmark mark='b'/>据一项估计，两个月后它就有了一亿月活跃用户，比之前任何一款消费应用都快。<bookmark mark='c'/>它把语言模型从一个研究课题变成了一个产业，也改变了这个领域优化的目标：不再是微调后的基准分数，而是人们直接和一个模型说话时，它有多有用。",
@@ -193,7 +193,7 @@ ZH = {
         '第10章。架构的趋同。',
 
     'f"Open weights mean open configurations, so we can watch the designs change':
-        "开放权重意味着开放配置，所以我们能看着设计逐年变化。这里是一张卡片，以及它怎样变化。<bookmark mark='a'/>2017年的Transformer。<bookmark mark='b'/>GPT-2，2019年：48层。<bookmark mark='c'/>GPT-3，2020年：96层，一万两千多宽。<bookmark mark='d'/>LLaMA，2023年：更小了，但用1.4万亿个词元训练。<bookmark mark='e'/>Llama 3.1，2024年：126层，16384宽，上下文12.8万个词元。<bookmark mark='f'/>DeepSeek-V3：层数更少，但有6710亿个参数，每个词元只用其中的370亿。<bookmark mark='g'/>Qwen3，2025年：36万亿个词元。<bookmark mark='h'/>还有Kimi K3，2026年：2.8万亿个参数，上下文一百万个词元，是GPT-1的2048倍。",
+        "开放权重意味着开放的配置，所以我们能看着这些设计一年一年地变化。这里是一张配置卡片，我们来看它怎样一步步变化。<bookmark mark='a'/>先是二〇一七年的Transformer。<bookmark mark='b'/>然后是二〇一九年的GPT-2：一共四十八层。<bookmark mark='c'/>二〇二〇年的GPT-3：九十六层，宽度一万两千多。<bookmark mark='d'/>二〇二三年的LLaMA：模型反而更小了，但是用一万四千亿个词元来训练。<bookmark mark='e'/>二〇二四年的Llama 3.1：{l3['layers']}层，宽度{l3['d']:,}，上下文长达十二万八千个词元。<bookmark mark='f'/>DeepSeek-V3的层数更少，但是一共有六千七百一十亿个参数，每个词元只用其中的三百七十亿。<bookmark mark='g'/>二〇二五年的Qwen3：训练用了三十六万亿个词元。<bookmark mark='h'/>还有二〇二六年的Kimi K3：{k3['params'] / 1000000000000.0:.1f}万亿个参数，上下文一百万个词元，是GPT-1的{k3['ctx'] // gp1['ctx']:,}倍。",
 
     'Now read the recipes side by side, across five design choices.':
         "现在把各家的配方并排来读，看五个设计选择。<bookmark mark='a'/>2017年的Transformer：在每个子层之后做层归一化，ReLU，正弦波位置编码，普通的多头注意力，到处都有偏置。<bookmark mark='b'/>GPT-2和GPT-3把归一化挪到了每个子层之前；T5去掉了它的均值和偏置。<bookmark mark='c'/>2022年的PaLM：SwiGLU，旋转位置编码，所有头共用一组键和值，没有偏置。<bookmark mark='d'/>LLaMA把这些拼在了一起，而从Llama 2最大的模型开始，几乎每个开放模型看起来都一样：前置归一化的RMSNorm，SwiGLU，旋转位置编码，分组查询注意力，没有偏置。<bookmark mark='e'/>后来DeepSeek-V3换掉了注意力，Qwen3在注意力里面加了归一化，趋同开始松动：那是下一章的内容。先看看每个选择为什么胜出。",
@@ -209,7 +209,7 @@ ZH = {
 
     # ------------------------------------------------------------------ 11. Frontier
     'Chapter eleven. The open frontier, 2024 to 2026.':
-        '第11章。开放前沿，2024到2026。',
+        '这是第11章：开放的前沿，从2024年到2026年。',
 
     'f"December 2024: DeepSeek-V3.':
         "2024年12月：DeepSeek-V3。6710亿个参数，每个词元用370亿。<bookmark mark='a'/>一个由256个小专家外加1个共享专家组成的混合专家，每个词元选8个；潜在注意力；一种不需要额外损失就能让专家保持均衡的办法；训练时一次预测两个词元；而且第一次在这样的规模上用8位浮点数训练。14.8万亿个词元。<bookmark mark='b'/>它的报告写明了成本：278.8万个GPU小时，按每小时2美元算，大约560万美元，这只是最后一次训练，不包括之前的研究。<bookmark mark='c'/>一个月后是DeepSeek-R1，它从V3出发，用强化学习在答案可以核对的问题上训练。它的纯强化学习版本，在训练过程中，AIME 2024数学竞赛的成绩从15.6%升到77.9%。开放权重，MIT许可证；第28部分会讲它是怎么做到的。",
@@ -237,7 +237,7 @@ ZH = {
         '第12章。算力、成本与数据。',
 
     'f"Line up the training compute of the models in this part':
-        "把本部分各个模型的训练算力排成一列，纵轴每往上一格就是一百倍。<bookmark mark='a'/>2017年的Transformer：2乘以10的19次方次运算。GPT-1、BERT、GPT-2、T5。<bookmark mark='b'/>GPT-3：3乘以10的23次方。PaLM。<bookmark mark='c'/>GPT-4，按Epoch AI的估计，大约2乘以10的25次方；Llama 3.1，按Meta的报告，3.8乘以10的25次方；还有2025年xAI的Grok 3，大约3.5乘以10的26次方，同样是外部估计。<bookmark mark='d'/>在7.7年里，增长了大约1500万倍。",
+        "把本部分各个模型的训练算力排成一列，纵轴上每往上走一格，就是多了一百倍。<bookmark mark='a'/>二〇一七年的Transformer：大约二乘以十的十九次方次运算。接着是GPT-1、BERT、GPT-2和T5。<bookmark mark='b'/>GPT-3：大约三乘以十的二十三次方。然后是PaLM。<bookmark mark='c'/>GPT-4，按照Epoch AI的估计，大约是二乘以十的二十五次方；Llama 3.1，按照Meta自己的报告，是三点八乘以十的二十五次方；还有二〇二五年xAI的Grok 3，大约三点五乘以十的二十六次方，这同样是外部的估计。<bookmark mark='d'/>在{yrs:.1f}年里，一共增长了大约{ratio / 1000000.0:.0f}百万倍。",
 
     'f"How fast is that, as a rate?':
         "换成增长率，这有多快？Epoch AI维护着一个重要模型的数据库。这里是它标为前沿的语言模型，也就是出现时算力接近最高的那些，从2017年开始。<bookmark mark='a'/>用一条直线拟合算力的对数和日期的关系。<bookmark mark='b'/>斜率b是每年{f['slope']:.3f}个数量级。<bookmark mark='c'/>所以算力每年增长10的b次方倍：大约{f['per_year']:.1f}倍。<bookmark mark='d'/>每{f['doubling_months']:.1f}个月翻一番。Epoch自己的分析认为，前沿模型每年增长4到5倍。{tail}",
@@ -256,7 +256,7 @@ ZH = {
 
     # ------------------------------------------------------------------ 13. OurLineage
     'Chapter thirteen. Our own lineage: GPT against BERT.':
-        '第13章。我们自己的谱系：GPT对BERT。',
+        '这是第13章：我们自己的谱系，GPT对决BERT。',
 
     'f"Now our own version of the 2018 question.':
         "现在来做我们自己版本的2018年之问。两个形状完全相同的模型：{sh['layers']}层，宽度{sh['d']}，{sh['heads']}个头，{p['total'] / 1000000.0:.2f}百万个参数，用第10章的现代模块搭成。<bookmark mark='a'/>它们从完全相同的权重出发，按相同的顺序读三十部小说里同样的{g['tokens'] / 1000000.0:.1f}百万个词元，用同样的优化器和学习率安排。<bookmark mark='b'/>只有两处不同。GPT式模型的注意力只往回看，它预测每一个下一个词元。BERT式模型的注意力两边都看，它预测我们遮住的那15%的词元。<bookmark mark='c'/>所以算力完全相同：6，乘以每个词元经过的参数，再乘以词元数。<bookmark mark='d'/>这就是这里所说的公平：同样的模型，同样的数据，同样的算力，只换了目标函数；然后在两个模型都能做的任务上测试。",
@@ -362,7 +362,7 @@ ZH = {
         "对{who_of(first)}来说，第二遍要容易得多：它猜对了{100 * first['acc2']:.0f}%的词，第一遍只有{100 * first['acc1']:.0f}%。这就是从上下文中复制：第13部分的归纳头。",
 
     'f"None of our models does much better the second time':
-        "我们没有一个模型在第二遍上明显更好：最好的也只提高了{100 * max(jumps.values()):.0f}个百分点。在我们的规模和训练长度下，复制的回路，也就是第13部分的归纳头，还没有形成；第13部分那个小Transformer也不会复制。",
+        "我们没有一个模型在第二遍上明显更好：最好的也只提高了{100 * max(jumps.values()):.0f}个百分点，损失最多只降了{drop:.2f}奈特。在我们的规模和训练长度下，复制的回路，也就是第13部分的归纳头，还没有形成；第13部分那个小Transformer也不会复制。",
 
     'f" In model L\'s training, it switched on between':
         "在模型L的训练中，它是在读了{sn[max(0, sn.index(on) - 1)]['tokens'] / 1000000.0:.2f}到{on['tokens'] / 1000000.0:.2f}百万个词元之间出现的。",
