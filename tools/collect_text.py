@@ -72,7 +72,16 @@ def check(video):
             and zh_text.needs_translation(zh_text.translate(s), d["kind"] == "MathTex")]
     for s in left:
         print("  " + json.dumps(s, ensure_ascii=False))
-    print(f"{video}: {len(seen)} strings to translate, {len(left)} left")
+    # a table entry whose "translation" is the English with only punctuation changed passes the test above: list the
+    # ones with no Chinese at all, so a copied string can't hide (names and model names legitimately stay as they are)
+    same = [s for s in seen if s in done and not re.search(r"[\u4e00-\u9fff]", done[s])
+            and zh_text.needs_translation(done[s], seen[s]["kind"] == "MathTex")
+            and re.sub(r"\W", "", done[s]) == re.sub(r"\W", "", s)]
+    if same:
+        print(f"  the table keeps these in English (fine for names; otherwise translate them):")
+        for s in same:
+            print("    " + json.dumps(s, ensure_ascii=False))
+    print(f"{video}: {len(seen)} strings to translate, {len(left)} left" + (f", {len(same)} kept in English" if same else ""))
 
 
 if ARGS[0] == "--check":

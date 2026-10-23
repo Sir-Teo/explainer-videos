@@ -592,3 +592,59 @@ rStar-Math, Coconut, HRM, TRM, AlphaProof, AlphaGeometry, Lean, Mathlib, Aristot
 | distillation, adversarial diffusion distillation | 蒸馏，对抗扩散蒸馏 |
 | consistency model | 一致性模型 |
 | drifting model | 漂移模型 |
+
+### Pretraining at scale (Part 18)
+
+| English | 中文 |
+|---|---|
+| pretraining run, frontier run | 预训练，前沿训练 |
+| Common Crawl, WARC, WET | Common Crawl，WARC，WET |
+| text extraction, boilerplate | 文本抽取，模板噪声（样板文字） |
+| language identification | 语言识别 |
+| URL blocklist | URL黑名单 |
+| deduplication, exact / near-duplicate | 去重，完全重复 / 近似重复 |
+| shingle (word n-gram) | 片段（词n元组） |
+| Jaccard similarity | 杰卡德相似度 |
+| MinHash, signature | 最小哈希（MinHash），签名 |
+| locality-sensitive hashing (LSH), band, bucket | 局部敏感哈希（LSH），带，桶 |
+| quality classifier, annotator | 质量分类器，标注模型 |
+| educational value | 教育价值 |
+| contamination, n-gram overlap | 数据污染，n元组重叠 |
+| data mixture, domain weights, proxy model | 数据配比，领域权重，代理模型 |
+| synthetic data, rephrasing | 合成数据，改写 |
+| model collapse | 模型崩溃 |
+| epoch, repetition, effective data | 轮次，重复，有效数据 |
+| causal LM, masked LM, span corruption | 因果语言模型，掩码语言模型，片段破坏 |
+| fill in the middle (FIM), prefix / suffix / middle | 中间填充（FIM），前缀 / 后缀 / 中间 |
+| warmup–stable–decay (WSD), cooldown | 预热–稳定–衰减（WSD），冷却 |
+| annealing, mid-training, microanneal | 退火，中期训练，微退火 |
+| long-context extension, RoPE base (ABF) | 长上下文扩展，RoPE基频（ABF） |
+| mixed precision, master weights | 混合精度，主权重 |
+| activation memory, activation recomputation (checkpointing) | 激活内存，激活重计算 |
+| data parallelism | 数据并行 |
+| bandwidth-optimal, lower bound | 带宽最优，下界 |
+| ZeRO (stages 1–3), sharding | ZeRO（第1–3阶段），分片 |
+| FSDP (fully sharded data parallel) | FSDP（全分片数据并行） |
+| tensor parallelism, column / row split | 张量并行，按列 / 按行切分 |
+| sequence parallelism | 序列并行 |
+| pipeline parallelism, stage, micro-batch | 流水线并行，阶段，微批次 |
+| pipeline bubble, 1F1B, interleaved schedule | 流水线气泡，1F1B，交错调度 |
+| zero bubble, DualPipe | 零气泡，DualPipe |
+| context parallelism, ring attention | 上下文并行，环形注意力 |
+| expert parallelism, all-to-all | 专家并行，全对全通信 |
+| online softmax | 在线softmax |
+| model FLOPs utilization (MFU) | 模型浮点利用率（MFU） |
+| loss scaling, dynamic loss scaling, overflow, underflow | 损失缩放，动态损失缩放，上溢，下溢 |
+| gradient accumulation | 梯度累积 |
+| fine-grained (tile-wise, block-wise) scaling, microscaling (MX) | 细粒度（按块、按瓦片）缩放，微缩放（MX） |
+| quantization-aware training (QAT) | 量化感知训练（QAT） |
+| loss spike, rollback | 损失尖峰，回滚 |
+| attention logit growth, QK-norm | 注意力logit增长，QK归一化 |
+| z-loss, log-partition (log Z) | z-loss，对数配分（log Z） |
+| QK-Clip, MuonClip | QK-Clip，MuonClip |
+| multi-token prediction (MTP), acceptance rate | 多词元预测（MTP），接受率 |
+| self-speculative decoding, draft | 自推测解码，草稿 |
+| fault tolerance, interruption, MTBF | 容错，中断，平均故障间隔 |
+| checkpoint, checkpoint interval (Young's rule) | 检查点，检查点间隔（Young法则） |
+| goodput | 有效吞吐 |
+| recipe | 配方 |
