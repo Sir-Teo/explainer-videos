@@ -124,7 +124,7 @@ Schoenholz, J. Gilmer, S. Ganguli & J. Sohl-Dickstein, *Deep Information Propaga
 Schoenholz & S. Ganguli (2017); L. Xiao et al. (2018); R. K. Srivastava, K. Greff & J. Schmidhuber (2015); A. Veit,
 M. Wilber & S. Belongie (2016); S. Ioffe & C. Szegedy (2015); S. Santurkar et al. (2018); J. L. Ba, J. R. Kiros &
 G. E. Hinton (2016); B. Zhang & R. Sennrich (2019); R. Xiong et al. (2020); A. Radford et al., GPT-2 (2019); Team
-OLMo, *2 OLMo 2 Furious* (2025); J. Zhu, X. Chen, K. He, Y. LeCun & Z. Liu, *Transformers without Normalization*
+OLMo, *2 OLMo 2 Furious* (2024); J. Zhu, X. Chen, K. He, Y. LeCun & Z. Liu, *Transformers without Normalization*
 (2025); D. Hendrycks & K. Gimpel (2016); S. Elfwing, E. Uchibe & K. Doya (2017); P. Ramachandran, B. Zoph & Q. V. Le
 (2017); Y. N. Dauphin, A. Fan, M. Auli & D. Grangier (2017); N. Shazeer, *GLU Variants Improve Transformer* (2020);
 A. N. Kolmogorov (1957); V. I. Arnold (1957); F. Girosi & T. Poggio (1989); V. Kůrková (1991); Z. Liu et al., *KAN:
