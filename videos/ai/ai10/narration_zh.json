@@ -374,7 +374,7 @@
   "8129c1fe93bd": {
    "scene": "LSTM",
    "en": "In 2014 Kyunghyun Cho and colleagues in Montreal simplified the cell. <bookmark mark='a'/> The gated recurrent unit keeps only the hidden state and two gates: an update gate z that blends the old state with a new candidate, the same carousel wherever z is near zero, and a reset gate. <bookmark mark='b'/> Fewer parts, and about as good, in comparisons by Junyoung Chung and colleagues.",
-   "zh": "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门：更新门z把旧状态和新的候选值混合，z接近零的地方还是那条传送带；另外是一个重置门。<bookmark mark='b'/>零件更少，效果差不多一样好，这是钟俊英和同事比较的结果。"
+   "zh": "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门：更新门z把旧状态和新的候选值混合，z接近零的地方还是那条传送带；另外是一个重置门。<bookmark mark='b'/>零件更少，效果差不多一样好，这是Junyoung Chung和同事比较的结果。"
   },
   "4221211e7650": {
    "scene": "LSTM",
@@ -429,7 +429,7 @@
   "c4bc35f5fc0d": {
    "scene": "Seq2Seq",
    "en": "By 2014 machine translation was statistical. <bookmark mark='a'/> The best systems, phrase-based, from Part 7, used huge tables of phrase pairs and a dozen separately tuned parts. <bookmark mark='b'/> In September 2014 Ilya Sutskever, Oriol Vinyals and Quoc Le at Google replaced it all with two LSTMs: one reads the English sentence into its memory, the other starts from that memory and writes French. Five of them together scored 34.81 BLEU, beating the phrase-based baseline's 33.3. <bookmark mark='c'/> One trick mattered: reading the source backwards, so its first words, which the translation needs first, are the last ones read. <bookmark mark='d'/> Kyunghyun Cho's group in Montreal built the same design with the GRU.",
-   "zh": "到2014年，机器翻译是统计的。<bookmark mark='a'/>最好的系统是基于短语的，来自第7部分：用巨大的短语对照表，外加十几个分别调好的部件。<bookmark mark='b'/>2014年9月，谷歌的伊利亚·苏茨克维、奥里奥尔·维尼亚尔斯和黎越国用两个LSTM取代了这一切：一个把英语句子读进自己的记忆，另一个从这份记忆出发写出法语。五个这样的模型合起来得了34.81的BLEU，超过了基于短语的基线33.3。<bookmark mark='c'/>有一个技巧很要紧：把源句子倒着读，这样译文最先需要的那几个词，就是最后读到的。<bookmark mark='d'/>蒙特利尔赵京焕的团队用GRU搭出了同样的设计。"
+   "zh": "到2014年，机器翻译是统计的。<bookmark mark='a'/>最好的系统是基于短语的，来自第7部分：用巨大的短语对照表，外加十几个分别调好的部件。<bookmark mark='b'/>2014年9月，谷歌的伊利亚·苏茨克维、奥里奥尔·维尼亚尔斯和Quoc Le用两个LSTM取代了这一切：一个把英语句子读进自己的记忆，另一个从这份记忆出发写出法语。五个这样的模型合起来得了34.81的BLEU，超过了基于短语的基线33.3。<bookmark mark='c'/>有一个技巧很要紧：把源句子倒着读，这样译文最先需要的那几个词，就是最后读到的。<bookmark mark='d'/>蒙特利尔赵京焕的团队用GRU搭出了同样的设计。"
   },
   "d2b7b56cf412": {
    "scene": "Seq2Seq",
@@ -489,7 +489,7 @@
   "6d8d82fdbfd8": {
    "scene": "Attention",
    "en": "Attention is a soft lookup: a query, the decoder's state, compared with keys, the encoder's states, to fetch a mixture of values. <bookmark mark='a'/> The same year, neural Turing machines and memory networks used it to read memories. <bookmark mark='b'/> In 2015 Thang Luong and colleagues replaced Bahdanau's little scoring network with a dot product, and Kelvin Xu and colleagues pointed attention at the parts of a picture to write its caption. <bookmark mark='c'/> By 2016 it was inside Google Translate. <bookmark mark='d'/> And in 2017 a team at Google asked what would happen if they dropped the recurrence altogether and kept only attention. That is the Transformer, and Parts 13 and 14.",
-   "zh": "注意力是一种软查找：一个查询，也就是解码器的状态，和一组键，也就是编码器的状态作比较，取回值的一个混合。<bookmark mark='a'/>同一年，神经图灵机和记忆网络用它来读取记忆。<bookmark mark='b'/>2015年，罗明唐和同事用点积取代了巴赫达瑙那个打分的小网络；徐凯文和同事把注意力指向图片的各个部分，来写图片说明。<bookmark mark='c'/>到2016年，它已经在谷歌翻译里面了。<bookmark mark='d'/>2017年，谷歌的一个团队想知道，如果把循环整个扔掉、只留注意力，会怎样。那就是Transformer，第13部分和第14部分。"
+   "zh": "注意力是一种软查找：一个查询，也就是解码器的状态，和一组键，也就是编码器的状态作比较，取回值的一个混合。<bookmark mark='a'/>同一年，神经图灵机和记忆网络用它来读取记忆。<bookmark mark='b'/>2015年，Thang Luong和同事用点积取代了巴赫达瑙那个打分的小网络；Kelvin Xu和同事把注意力指向图片的各个部分，来写图片说明。<bookmark mark='c'/>到2016年，它已经在谷歌翻译里面了。<bookmark mark='d'/>2017年，谷歌的一个团队想知道，如果把循环整个扔掉、只留注意力，会怎样。那就是Transformer，第13部分和第14部分。"
   },
   "7007c715a1d2": {
    "scene": "Return",

@@ -86,7 +86,7 @@ class Scale(VoiceoverScene):
         ratio_raw = pc.max() / max(pc.min(), 1)
         ratio_cur = cc.max() / max(cc.min(), 1)
         with self.voiceover(
-            "We can try the same recipe on digits. Take twenty thousand training digits, unbalanced the way web "
+            f"We can try the same recipe on digits. Take {int(pc.sum()):,} training digits, unbalanced the way web "
             f"images are: the commonest digit, {common}, is {pct(pc[common] / pc.sum(), 0)} percent of the pool, the "
             f"rarest only {pct(pc.min() / pc.sum(), 1)} percent. <bookmark mark='a'/> Then curate it: a small "
             "balanced set of a thousand digits, a hundred of each, plays the curated datasets. Each fetches its four "

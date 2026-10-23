@@ -37,9 +37,12 @@ class RASP(VoiceoverScene):
         for i, p_ in enumerate(prims):
             p_[0].move_to([-6.6, 1.9 - 0.75 * i, 0], aligned_edge=LEFT)
             p_[1].move_to([0.0, 1.9 - 0.75 * i, 0], aligned_edge=LEFT)
-        prog = code_block(["same = select(tokens, tokens, ==)", "hist = selector_width(same)", "",
-                           "less = select(tokens, tokens, <)", "rank = selector_width(less)",
-                           "sort = aggregate(select(rank, indices, ==), tokens)"], font_size=22)
+        from explainer.zh_text import verbatim
+
+        with verbatim():  # a program is data: it stays as written in every language
+            prog = code_block(["same = select(tokens, tokens, ==)", "hist = selector_width(same)", "",
+                               "less = select(tokens, tokens, <)", "rank = selector_width(less)",
+                               "sort = aggregate(select(rank, indices, ==), tokens)"], font_size=22)
         prog.move_to([-1.0, -1.75, 0])
         pl = VGroup(label(r"histogram: \ one layer", font_size=22, color=Q), label(r"sort: \ two layers", font_size=22,
                                                                                          color=Q))
