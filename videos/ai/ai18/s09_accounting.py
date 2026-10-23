@@ -134,13 +134,11 @@ class Accounting(VoiceoverScene):
         src = cite(r"Rajbhandari et al., ZeRO (2020), Sec.\ 3.1; \ DeepSeek-AI (2024), Sec.\ 3.3", font_size=17)
         with self.voiceover(
             "Now memory. Train in mixed precision, the standard recipe since 2018, and every parameter costs sixteen "
-            "bytes. "
-            "<bookmark mark='a'/> Two for the weight in bfloat16 and two for its gradient; <bookmark mark='b'/> then "
-            "the optimizer's state, in thirty-two bits: a master copy of the weight, four bytes, and Adam's two "
+            "bytes. <bookmark mark='a'/> Two for the weight in bfloat16 and two for its gradient; <bookmark mark='b'/> "
+            "then the optimizer's state, in thirty-two bits: a master copy of the weight, four bytes, and Adam's two "
             "running averages, four each. <bookmark mark='c'/> For Llama 3.1, sixteen bytes times 405 billion is "
             f"{m16['llama3'] / 1e12:.1f} terabytes: at least {P['h100_needed']} GPUs of eighty gigabytes just to hold "
-            "the model, before any activations. DeepSeek-V3's 671 billion need over ten terabytes, Kimi K2's "
-            "trillion more than sixteen. <bookmark mark='d'/> Every byte saved here counts; DeepSeek-V3, for one, "
+            "the model, before any activations. <bookmark mark='d'/> Every byte saved here counts; DeepSeek-V3, for one, "
             "keeps Adam's averages in sixteen bits."
         ) as vo:
             self.play(FadeIn(src))
@@ -193,17 +191,16 @@ class Accounting(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -1.6, 0])
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
-            "The other big consumer of memory is the activations: everything the forward pass must keep for the "
-            "backward pass. We counted the tensors PyTorch's autograd saves, for our model, at lengths from 64 to "
-            "1,024 tokens. <bookmark mark='a'/> With attention fused, as PyTorch runs it, the memory grows in a "
-            f"straight line: {A['per_fused']:.1f} numbers per token per layer, in units of the width. "
-            "<bookmark mark='b'/> Compute attention the textbook way, and it also keeps a T by T matrix for each "
-            "head: a parabola. That quadratic term is what FlashAttention removes. <bookmark mark='c'/> Or keep only "
-            "each block's input, and recompute the rest during the backward pass: one number per token per layer, "
-            f"for {100 * (A['ckpt_ratio'] - 1):.0f} percent more arithmetic here, and up to a third more in a model "
-            "made of blocks. <bookmark mark='d'/> At frontier scale this is not a detail. Korthikanti and "
-            "colleagues' count, at Llama 3.1's shape and eight thousand tokens: four and a half gigabytes per layer, "
-            "more than half a terabyte per sequence."
+            "The other big consumer of memory is the activations: what the forward pass keeps for the backward pass. "
+            "We counted the tensors PyTorch's autograd saves for our model, at lengths from 64 to 1,024 tokens. "
+            "<bookmark mark='a'/> With attention fused, as PyTorch runs it, the memory grows in a straight line: "
+            f"{A['per_fused']:.1f} numbers per token per layer, in units of the width. <bookmark mark='b'/> Compute "
+            "attention the textbook way, and it also keeps a T by T matrix for each head: a parabola. That quadratic term "
+            "is what FlashAttention removes. <bookmark mark='c'/> Or keep only each block's input, and recompute the rest "
+            "during the backward pass: one number per token per layer, for "
+            f"{100 * (A['ckpt_ratio'] - 1):.0f} percent more arithmetic here, and at most a third more in general. "
+            "<bookmark mark='d'/> At frontier scale this matters. Korthikanti and colleagues' count, at Llama 3.1's shape "
+            "and eight thousand tokens: four and a half gigabytes per layer, more than half a terabyte per sequence."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")

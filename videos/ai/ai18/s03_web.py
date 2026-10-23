@@ -50,13 +50,13 @@ class Web(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.9).align_to(hc, LEFT)
         src = cite(r"commoncrawl.org; \ crawl CC-MAIN-2026-39 \ (computed here)", corner=DR, font_size=17)
         with self.voiceover(
-            "Almost every open pretraining corpus starts in the same place. In 2007 Gil Elbaz founded Common Crawl, "
-            "a non-profit that crawls the web and gives the archive away; it has crawled since 2008 and holds more "
-            "than ten petabytes. <bookmark mark='a'/> Each crawl is cut into a hundred thousand files, in two "
-            "forms that matter here: WARC files hold the raw responses, HTML and all; WET files hold the text Common "
-            "Crawl extracted itself. <bookmark mark='b'/> For this part we took three WET files of the September 2026 "
-            f"crawl, three slices of each: {spoken_int(W['n_pages'])} pages, {W['text_bytes'] / 1e6:.0f} megabytes "
-            f"of text, in {W['n_langs']} languages. Everything in the next four chapters happens to these pages."
+            "Almost every open pretraining corpus starts in the same place: Common Crawl, a non-profit founded by Gil "
+            "Elbaz in 2007, which has crawled the web since 2008 and gives the archive away, more than ten petabytes. "
+            "<bookmark mark='a'/> Each crawl is cut into a hundred thousand files, in two forms that matter here: WARC "
+            "files hold the raw responses, HTML and all; WET files hold the text Common Crawl extracted itself. "
+            "<bookmark mark='b'/> For this part we took three WET files of the September 2026 crawl, three slices of "
+            f"each: {spoken_int(W['n_pages'])} pages, {W['text_bytes'] / 1e6:.0f} megabytes of text, in {W['n_langs']} "
+            "languages. Everything in the next four chapters happens to these pages."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(tiles, lag_ratio=0.002, run_time=1.5), FadeIn(tcap))
             vo.wait_until("a")
@@ -192,14 +192,13 @@ class Web(VoiceoverScene):
             "Next: which language is each page in? <bookmark mark='a'/> Before that, a cheap filter on the address "
             f"alone: a blocklist of adult and gambling sites removes {W['blocked']} pages. <bookmark mark='b'/> Then "
             "a language identifier: fastText's, from Facebook AI Research, a linear model on character pieces that "
-            "picks among 176 languages, and is fast enough to run on billions of pages. <bookmark mark='c'/> Here is what our "
+            "picks among 176 languages, fast enough to run on billions of pages. <bookmark mark='c'/> Here is what our "
             f"sample holds. English: {spoken_int(en)} pages, about {round(100 * share)} percent; the rest are spread "
             f"over {W['n_langs'] - 1} other languages. <bookmark mark='d'/> "
             "FineWeb keeps a page as English only if the identifier is at least 65 percent sure. That drops "
             f"{W['english_below']} more; and we drop pages under fifty words. <bookmark mark='e'/> "
-            f"{spoken_int(W['english'])} English pages go on to the next step. Everything else here is filtering "
-            "for English; the multilingual models of 2026, like Qwen3 with its 119 languages, run the same pipeline "
-            "once per language."
+            f"{spoken_int(W['english'])} English pages go on to the next step. Multilingual models, like Qwen3 with its "
+            "119 languages, run such a pipeline for each language."
         ) as vo:
             self.play(FadeIn(bl), FadeIn(funnel[0]), FadeIn(src))
             vo.wait_until("a")

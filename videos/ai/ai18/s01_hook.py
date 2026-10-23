@@ -128,10 +128,8 @@ class Hook(VoiceoverScene):
             path.width = 13.0
         with self.voiceover(
             "So the question of this part: how do you turn fifteen trillion tokens of the web into one model, on "
-            "sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers. "
-            "Which text to train on, and what to ask the model to predict. How many operations and bytes a model "
-            "needs, and how to cut it across thousands of devices. How few bits each number can have. How to keep "
-            "the training stable, and how to survive the hardware."
+            "sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers: the "
+            "data, the objective, the arithmetic, the cuts across devices, the bits, the stability, and the failures."
         ) as vo:
             self.play(FadeIn(q))
             vo.wait_until("a")
@@ -160,11 +158,11 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "We'll build every layer in miniature, on the computer making this video. <bookmark mark='a'/> "
             f"{spoken_int(W['n_pages'])} real web pages from Common Crawl's September 2026 crawl, filtered, "
-            "deduplicated and scored. <bookmark mark='b'/> Four processes of this computer as a tiny cluster, with "
-            "PyTorch's own distributed library, to check each kind of parallelism exactly. <bookmark mark='c'/> "
-            "Pipeline schedules and hardware failures, simulated. <bookmark mark='d'/> Training runs pushed to the "
-            "edge, in sixteen and eight bits and at high learning rates. <bookmark mark='e'/> And a model trained "
-            "with the full recipe of 2026, against the recipe of 2020, on the series' scoreboard."
+            "deduplicated and scored. <bookmark mark='b'/> Four processes of this computer as a tiny cluster, to check "
+            "each kind of parallelism exactly. <bookmark mark='c'/> Pipeline schedules and hardware failures, simulated. "
+            "<bookmark mark='d'/> Training runs pushed to the edge, in sixteen and eight bits and at high learning rates. "
+            "<bookmark mark='e'/> And a model trained with the 2026 recipe against one with the 2020 recipe, on the "
+            "series' scoreboard."
         ) as vo:
             self.play(FadeIn(head), FadeIn(items[0], shift=UP * 0.1), FadeIn(items[1:].copy().set_opacity(0.18)))
             for k, mk in enumerate("bcde", 1):

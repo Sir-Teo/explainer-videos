@@ -137,15 +137,15 @@ class Dedup(VoiceoverScene):
                      font_size=20, color=YELLOW).next_to(venn, RIGHT, buff=0.35).shift(DOWN * 0.1)
         with self.voiceover(
             "The shortcut is a beautiful fact from 1997, found by Andrei Broder at AltaVista to spot duplicate web "
-            "pages. Pick a random hash function, which gives every shingle a random number. <bookmark mark='a'/> "
+            "pages. Give every shingle a random number, with a random hash function. <bookmark mark='a'/> "
             "Over the union of the two sets, the shingle with the smallest hash is equally likely to be any of "
             "them. <bookmark mark='b'/> The two documents' minimum hashes agree exactly when that shingle is in "
-            "both, in the intersection. <bookmark mark='c'/> So the probability that they agree is the size of the "
+            "both, in the intersection. <bookmark mark='c'/> So the chance that they agree is the size of the "
             "intersection over the size of the union: the Jaccard similarity itself. <bookmark mark='d'/> Keep 112 "
-            "such minimums per document, as FineWeb does: a signature of 112 numbers, and the share of positions "
-            "where two signatures agree estimates their similarity. We checked it on "
-            f"{spoken_int(len(s))} pairs of our pages, one of each pair with some words replaced: <bookmark mark='e'/> "
-            f"the estimate sits on the diagonal, off by {D['agree_err']:.3f} on average."
+            "such minimums per document, as FineWeb does: a signature, and the share of positions where two signatures "
+            f"agree estimates the similarity. We checked it on {spoken_int(len(s))} pairs of our pages, one of each pair "
+            f"with some words replaced: <bookmark mark='e'/> the estimate sits on the diagonal, off by "
+            f"{D['agree_err']:.3f} on average."
         ) as vo:
             self.play(FadeIn(th, shift=UP * 0.1), FadeIn(venn), FadeIn(vnote))
             vo.wait_until("a")
@@ -201,14 +201,14 @@ class Dedup(VoiceoverScene):
         src = cite(r"Indyk \& Motwani (1998); \ Broder (1997); \ FineWeb (2024), App.\ E", corner=DL, font_size=17)
         with self.voiceover(
             "One signature per document still leaves every pair to compare. Locality-sensitive hashing avoids "
-            f"that. Cut the {b * r} minhashes into {b} bands of {r}. <bookmark mark='a'/> For two documents with "
+            f"that: cut the {b * r} minhashes into {b} bands of {r}. <bookmark mark='a'/> For two documents with "
             "similarity s, each minhash agrees with probability s, so a whole band of r agrees with probability s to "
             "the r. <bookmark mark='b'/> The chance that no band agrees is one minus s to the r, to the power b. "
-            "<bookmark mark='c'/> And the chance that at least one does, and the pair becomes a candidate, is one "
-            "minus that. <bookmark mark='d'/> Now only documents that land in the same bucket for some band get "
-            "compared, and the curve is an S: pairs below about 0.5 almost never collide, pairs above 0.8 almost "
-            f"always do, with the halfway point at {D['s_half']:.2f}. <bookmark mark='e'/> And here are our measured "
-            f"pairs, binned by similarity. They follow the formula, at most {worst:.2f} away in any bin."
+            "<bookmark mark='c'/> And the chance that at least one does, making the pair a candidate, is one minus "
+            "that. <bookmark mark='d'/> Now only documents that share a bucket in some band get compared, and the "
+            "curve is an S: pairs below about 0.5 almost never collide, pairs above 0.8 almost always do, with the "
+            f"halfway point at {D['s_half']:.2f}. <bookmark mark='e'/> And here are our measured pairs, binned by "
+            f"similarity: they follow the formula, at most {worst:.2f} away in any bin."
         ) as vo:
             self.play(FadeIn(sig), FadeIn(sl))
             vo.wait_until("a")
