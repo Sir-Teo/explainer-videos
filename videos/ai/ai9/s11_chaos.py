@@ -244,7 +244,7 @@ class Chaos(VoiceoverScene):
             "<bookmark mark='a'/> Schoenholz and colleagues found that networks train when they're shallower than "
             "about six depth scales. We tried it: tanh networks from five to a hundred layers deep, at twelve weight "
             "variances, each trained the same way on the same small task. <bookmark mark='b'/> Bright means it "
-            "learned; dark means it stayed at chance. <bookmark mark='c'/> " + verdict + " " + deepest +
+            "learned; dark means it stayed at chance. <bookmark mark='c'/> " + verdict + " <bookmark mark='c2'/> " + deepest +
             " <bookmark mark='d'/> Pushed further, the idea trained convolutional networks ten thousand layers deep "
             "in 2018, with nothing but a careful initialization. Part 12 returns to it, for transformers."
         ) as vo:

@@ -67,7 +67,7 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
   LayerNorm (Ba, Kiros & Hinton 2016); RMSNorm (Zhang & Sennrich 2019) as projection onto a sphere; the Jacobians
   derived ((√d/‖h‖)(I − ĥĥᵀ); LayerNorm also removes the all-ones direction) and measured by autograd (singular values
   15 equal + 1 zero; 14 + 2); scale invariance; post-norm (2017) against pre-norm (GPT-2, Xiong et al. 2020) in our
-  24-block model: starting gradients by block and held-out bits; OLMo 2's output norm and Dynamic Tanh (2025).
+  24-block model: starting gradients by block and held-out bits; OLMo 2's output norm (2024) and Dynamic Tanh (2025).
 * **13. The modern block.** Sigmoid, tanh, ReLU, GELU (Hendrycks & Gimpel 2016, derived from a Gaussian coin) and
   SiLU (Elfwing et al.; Ramachandran et al. 2017); gating (Dauphin et al. 2017) as a 3D surface; SwiGLU (Shazeer 2020)
   and the 8d/3 width; published configurations (GPT-2 4d; Llama 2 7B 11,008 = 8/3·4,096 rounded to 256; Llama 3 8B
@@ -87,16 +87,19 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
 Run from the repo root:
 
 ```
-python -m videos.ai.ai9.compute          # every experiment; needs Part 1's books (.cache/ai1)
+python tools/make.py ai9                 # everything: the computations, then the narrated cut in English and Chinese
+python -m videos.ai.ai9.compute          # or just the numbers (every item; Part 1's books and Part 7's Kneser-Ney first)
 python tools/build.py ai9                # English
 python tools/build.py ai9 --lang zh      # Chinese
 ```
 
-The language model (`lm`) is the long item: 24,000 steps of 512 positions, about an hour on two busy cores; its
-weights are kept in `.cache/ai9/lm.pt`, so the analysis can be rerun without retraining. Everything else takes a few
-minutes. Part 7's Kneser–Ney is recomputed here with Part 7's own code (`kn`), so Part 9 doesn't depend on Part 7's
-cache. When Part 1's language-model rows (GPT-2, Qwen3) are not cached, the scoreboard shows Part 1's counting and
-compressor rows only, and the narration says so.
+Every computation is seeded and resumes after an interruption. The language model (`lm`) is the long item: 24,000
+steps of 512 positions, about two hours on two busy cores (much less on a laptop); it checkpoints every 500 steps
+(`.cache/ai9/lm.ckpt.pt`) and keeps its final weights in `.cache/ai9/lm.pt`, so the analysis can be rerun without
+retraining. The items made of many runs (`residual`, `trainable`, `block`, `kan`) save each run as it finishes
+(`CACHE.partial`). Everything else takes a minute or two. Part 7's Kneser–Ney is read through Part 7's own cache
+(`videos.ai.ai7.compute.load`), and the scoreboard through Part 1's; where Part 1's language-model rows (GPT-2,
+Qwen3) have not been computed, the board shows Part 1's counting and compressor rows only, and the narration says so.
 
 References: I. Goodfellow, Y. Bengio & A. Courville, *Deep Learning* (2016); S. J. D. Prince, *Understanding Deep
 Learning* (2023); D. A. Roberts, S. Yaida & B. Hanin, *The Principles of Deep Learning Theory* (2022); M. Minsky &

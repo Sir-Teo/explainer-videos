@@ -230,7 +230,7 @@ ZH = {
         "这是tanh网络的全景图：对权重和偏置的每一种分散程度，画出chi 1。蓝色是有序，粉色是混沌，<bookmark mark='a'/>两者之间那条黄线就是边缘。<bookmark mark='b'/>看它在底部、也就是偏置为0的地方落在哪里：权重方差是n分之{x0:.2f}。这正是上一章格洛罗的规则。<bookmark mark='c'/>对ReLU单元做同样的计算，得到chi 1等于sigma w的平方除以2，所以边缘落在n分之2：何恺明的规则。这些初始化规则不只是整齐的记账。它们把网络放在了混沌的边缘上。",
 
     '"How deep can a network be and still train?':
-        "网络能有多深，还训练得动？理论给出一个深度尺度，xi c：一个相关性能撑过多少层才被遗忘。恰好在边缘上，它是无穷大。<bookmark mark='a'/>舍恩霍尔茨和同事们发现，网络只要比大约6个深度尺度浅，就能训练。我们试了试：从5层到100层深的tanh网络，取12种权重方差，每一个都在同一个小任务上用同样的方法训练。<bookmark mark='b'/>亮的表示学会了；暗的表示停在瞎猜的水平。<bookmark mark='c'/>{verdict}{deepest}<bookmark mark='d'/>再往前推，这个想法在2018年训练出了一万层深的卷积网络，靠的只是一个精心的初始化。第12部分会针对Transformer再回到这个问题。",
+        "网络能有多深，还训练得动？理论给出一个深度尺度，xi c：一个相关性能撑过多少层才被遗忘。恰好在边缘上，它是无穷大。<bookmark mark='a'/>舍恩霍尔茨和同事们发现，网络只要比大约6个深度尺度浅，就能训练。我们试了试：从5层到100层深的tanh网络，取12种权重方差，每一个都在同一个小任务上用同样的方法训练。<bookmark mark='b'/>亮的表示学会了；暗的表示停在瞎猜的水平。<bookmark mark='c'/>{verdict}<bookmark mark='c2'/>{deepest}<bookmark mark='d'/>再往前推，这个想法在2018年训练出了一万层深的卷积网络，靠的只是一个精心的初始化。第12部分会针对Transformer再回到这个问题。",
 
     'f"The bright region hugs the line':
         "亮的区域紧贴着那条线：在{100 * agree:.0f}%的格子上，“深度低于6个深度尺度就恰好能训练”这条规则，预测对了我们的结果。",
@@ -379,13 +379,13 @@ ZH = {
         "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。2003年，约书亚·本吉奥、雷让·迪沙尔姆、帕斯卡尔·文森特和克里斯蒂安·若万造出了第一个神经语言模型，针对的是单词。这里是它的设计，换成字符。取最后{n}个字符。<bookmark mark='a'/>每个字符都变成一个由{e}个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个由tanh单元组成的隐藏层。<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。其中的每一个数，都靠反向传播一起学出来。",
 
     '"Train it on Part 1\'s thirty novels':
-        "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。曲线下面，是它在训练的每个时刻写出来的东西，总是用同一段开头、同一串随机数。<bookmark mark='a'/>{early}{end}",
+        "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。曲线下面，是它在训练的每个时刻写出来的东西，总是用同一段开头、同一串随机数。<bookmark mark='a'/>{early}<bookmark mark='c'/>{end}",
 
-    "f\"<bookmark mark='c'/> By the end it reaches {nn:.2f} bits per character, past":
-        "<bookmark mark='c'/>到最后，它达到每字符{nn:.2f}比特，超过了Kneser–Ney的{kn:.2f}。",
+    "f\"By the end it reaches {nn:.2f} bits per character, past":
+        "到最后，它达到每字符{nn:.2f}比特，超过了Kneser–Ney的{kn:.2f}。",
 
-    "f\"<bookmark mark='c'/> By the end it reaches {nn:.2f} bits per character: far better":
-        "<bookmark mark='c'/>到最后，它达到每字符{nn:.2f}比特：比第1部分的计数模型好得多，但还不及Kneser–Ney的{kn:.2f}。只用这么点算力，最好的计数方法仍是个难缠的对手。",
+    "f\"By the end it reaches {nn:.2f} bits per character: far better":
+        "到最后，它达到每字符{nn:.2f}比特：比第1部分的计数模型好得多，但还不及Kneser–Ney的{kn:.2f}。只用这么点算力，最好的计数方法仍是个难缠的对手。",
 
     '"Bengio\'s team found that their best results came from combining':
         "本吉奥的团队发现，他们最好的结果，来自把网络和一个计数模型结合起来：对两者的预测取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>{said}",
