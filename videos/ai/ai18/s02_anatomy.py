@@ -95,7 +95,7 @@ class Anatomy(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def runs(self):
-        cols = [r"model", r"released", r"tokens", r"chips", r"numbers", r"optimizer"]
+        cols = [r"model", r"released", r"tokens", r"chips", r"number format", r"optimizer"]
         L, D, K, O, N4, V4 = F.LLAMA3, F.DSV3, F.KIMIK2, F.OLMO3, F.NEMOTRON3, F.DSV4
         data = [
             (r"Llama 3.1 405B", r"Jul 2024", r"$15.6$T", r"$16{,}384$ H100", r"BF16", r"AdamW"),

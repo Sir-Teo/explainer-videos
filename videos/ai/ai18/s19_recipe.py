@@ -71,7 +71,8 @@ class Recipe(VoiceoverScene):
             "<bookmark mark='b'/> One with the recipe of 2026: Muon for the hidden matrices, warmup, stable, decay, "
             "QK-norm and the z-loss. <bookmark mark='c'/> " + out_
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in same], lag_ratio=0.4), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(s_) for s_ in same], lag_ratio=0.4), FadeIn(VGroup(cols, boxes).copy().set_opacity(0.15)),
+                      run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(cols[0]), Create(boxes[0]))
             vo.wait_until("b")
@@ -104,8 +105,11 @@ class Recipe(VoiceoverScene):
         s1n = note(r"dashed: \ the second seed", font_size=16).next_to(g, DOWN, buff=0.05).align_to(g, RIGHT)
         prompt = data_text("The door opened, and", font=MONO, font_size=20, color=GREY_A).move_to([3.4, 3.1, 0])
 
+        def clean(t):  # bytes the tokenizer can't decode show as '?'
+            return "".join(c if c.isprintable() and c != "\ufffd" else "?" for c in t)
+
         def boxes(sn, col, y):
-            return [said(s["sample"], chars=36, font_size=17, max_lines=3, box_color=col).move_to([3.4, y, 0])
+            return [said(clean(s["sample"]), chars=36, font_size=17, max_lines=3, box_color=col).move_to([3.4, y, 0])
                     for s in sn]
 
         bx_b, bx_f = boxes(sn_b, BASE_C, 1.55), boxes(sn_f, FULL_C, -0.6)
@@ -123,8 +127,9 @@ class Recipe(VoiceoverScene):
             "tell which learned faster."
         ) as vo:
             self.play(FadeIn(g), FadeIn(prompt), FadeIn(lb), FadeIn(lf), FadeIn(tag))
-            vo.wait_until("a")
             self.play(FadeIn(pts_b[0]), FadeIn(pts_f[0]), FadeIn(bx_b[0]), FadeIn(bx_f[0]), FadeIn(stp[0]))
+            vo.wait_until("a")
+            self.play(Indicate(VGroup(pts_b[0], pts_f[0]), color=YELLOW))
             vo.wait_until("b")
             per = max(0.8, vo.until("c") / max(1, len(steps_) - 1))
             cur = [bx_b[0], bx_f[0], stp[0]]
@@ -210,7 +215,7 @@ class Recipe(VoiceoverScene):
         hl = tuple(i for i, r in enumerate(S["rows"]) if r.get("part") == 18)
         rh = min(0.46, 5.0 / len(rows))
         board = scoreboard(rows, highlight=hl, max_bits=4.0, row_h=rh, font_size=20 if rh > 0.42 else 18,
-                           bar_width=5.6, label_width=4.6).scale(0.92).move_to([0, -0.15, 0])
+                           bar_width=5.6, label_width=4.6).scale(0.92).move_to([0, 0.2, 0])
         bl = label(r"bits per character on the scoreboard's passage", font_size=22, color=GREY_B)
         bl.next_to(board, UP, buff=0.15)
         base_row = next(r for r in S["rows"] if r.get("name") == "base")
@@ -239,7 +244,8 @@ class Recipe(VoiceoverScene):
             f"tokens, at {base_row['bits']:.2f}. <bookmark mark='b'/> " + vs14 + " <bookmark mark='c'/> A recipe "
             "buys efficiency: the same quality for less compute. The frontier labs spend that saving on scale."
         ) as vo:
-            self.play(FadeIn(bl), FadeIn(board.axis))
+            self.play(FadeIn(bl), FadeIn(board.axis), *[FadeIn(board.rows[i].name) for i in range(len(board.rows))
+                                                         if i not in hl])
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_) for i, r_ in enumerate(board.rows) if i not in hl], lag_ratio=0.15),
                       run_time=2.5)

@@ -1,0 +1,535 @@
+{
+ "title": "人工智能，从零搭建 · 第18部分：大规模预训练",
+ "chapters": {
+  "Hook": "一万六千块GPU，五十四天",
+  "Anatomy": "1. 剖析一次前沿训练",
+  "Web": "2. 从网页到文本",
+  "Dedup": "3. 近似重复：MinHash与LSH",
+  "Quality": "4. 质量，以及保持测试的干净",
+  "Mixture": "5. 数据配比、合成数据与崩溃",
+  "Objectives": "6. 让模型预测什么",
+  "Curriculum": "7. 退火、中期训练与长上下文",
+  "Accounting": "8. 数一数运算和字节",
+  "DataParallel": "9. 数据并行与全规约",
+  "ZeRO": "10. ZeRO与FSDP",
+  "TensorParallel": "11. 张量并行",
+  "Pipeline": "12. 流水线并行",
+  "Context": "13. 上下文、专家与利用率",
+  "Precision": "14. 更少的位",
+  "Stability": "15. 让训练保持稳定",
+  "MTP": "16. 往后预测两个词元",
+  "Faults": "17. 当硬件出故障",
+  "Recipe": "18. 我们自己的完整配方",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "cfe2a4c5ca12": {
+   "scene": "Hook",
+   "en": "June 2018. OpenAI's first GPT is pretrained for about a month on eight graphics cards. <bookmark mark='a'/> Here are the chips on one training run since then, on a scale where each step up is ten times more. <bookmark mark='b'/> In 2019, Megatron-LM spreads one model over 512 GPUs. In 2022, Google's PaLM trains on 6,144 TPU chips. In 2024, Meta's Llama 3 uses 16,384 GPUs, and in 2025 Llama 4 Behemoth is pretrained on 32,000 of them. <bookmark mark='c'/> In seven years, from 8 chips to 4,000 times as many. This part is about how that is done.",
+   "zh": "2018年6月。OpenAI的第一个GPT，在八块显卡上预训练了大约一个月。<bookmark mark='a'/>这是从那以后一次训练用的芯片数，画在每上一格就多十倍的刻度上。<bookmark mark='b'/>2019年，Megatron-LM把一个模型分到512块GPU上。2022年，谷歌的PaLM在6144块TPU芯片上训练。2024年，Meta的Llama 3用了16384块GPU；2025年，Llama 4 Behemoth的预训练用了32000块。<bookmark mark='c'/>七年里，从8块芯片，增加到了它的大约4000倍。本部分讲的，就是这是怎样做到的。"
+  },
+  "d3ee01f7315c": {
+   "scene": "Hook",
+   "en": "Take that run of Llama 3. 16,384 H100 GPUs, one dot each. <bookmark mark='a'/> Together they did about four times ten to the twenty-five operations, on fifteen point six trillion tokens of text. <bookmark mark='b'/> And they kept breaking. In one fifty-four-day stretch the job stopped 466 times, 419 of them unplanned: a faulty GPU, a memory chip, a network cable. <bookmark mark='c'/> That is one failure every 3 hours or so, and every one of them stops all sixteen thousand GPUs, because they are all working on the same model.",
+   "zh": "就拿Llama 3的那次训练来说。16384块H100 GPU，一个点代表一块。<bookmark mark='a'/>它们一共做了大约4乘以10的25次方次运算，用了15.6万亿个词元的文本。<bookmark mark='b'/>而且它们一直在出故障。在一段五十四天的时间里，任务停下了466次，其中419次是计划外的：一块坏掉的GPU，一块内存芯片，一根网线。<bookmark mark='c'/>也就是大约每3小时出一次故障，而每一次都会让全部一万六千块GPU停下来，因为它们都在训练同一个模型。"
+  },
+  "3ee87ca36ff3": {
+   "scene": "Hook",
+   "en": "So the question of this part: how do you turn fifteen trillion tokens of the web into one model, on sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers: the data, the objective, the arithmetic, the cuts across devices, the bits, the stability, and the failures.",
+   "zh": "所以，本部分的问题是：怎样在一万六千块GPU上，把来自网络的十五万亿个词元变成一个模型，而训练又不会垮掉？<bookmark mark='a'/>答案是一层一层的：数据，目标，算术，在设备之间的切分，位数，稳定性，还有故障。"
+  },
+  "03e94cb0267f": {
+   "scene": "Hook",
+   "en": "We'll build every layer in miniature, on the computer making this video. <bookmark mark='a'/> 4,310 real web pages from Common Crawl, filtered, deduplicated and scored. <bookmark mark='b'/> Four processes as a tiny cluster. <bookmark mark='c'/> Pipelines and failures, simulated. <bookmark mark='d'/> Training pushed to the edge. <bookmark mark='e'/> And the 2026 recipe against the 2020 one, on the scoreboard.",
+   "zh": "每一层，我们都在制作这个视频的这台计算机上，做一个缩微版。<bookmark mark='a'/>来自Common Crawl的4310个真实网页，经过过滤、去重和打分。<bookmark mark='b'/>四个进程当作一个小集群。<bookmark mark='c'/>模拟流水线和故障。<bookmark mark='d'/>把训练推到边缘。<bookmark mark='e'/>最后，2026年的配方对2020年的配方，放上记分牌。"
+  },
+  "70291a528cec": {
+   "scene": "Hook",
+   "en": "This is Part 18 of AI, Built, in its third act, the transformer era. <bookmark mark='a'/> In this part: the data, from raw web pages to a clean mixture; the objective and the stages of training; the arithmetic of a run; the ways to cut a model across devices; fewer bits, and stability; and our own model, trained with the full recipe.",
+   "zh": "这是《人工智能，从零搭建》的第18部分，属于第三幕：Transformer时代。<bookmark mark='a'/>本部分要讲：数据，从原始网页到一份干净的配比；训练目标和训练的各个阶段；一次训练的算术；把模型切到多个设备上的方法；更少的位，以及稳定性；以及我们自己的模型，用完整的配方训练出来。"
+  },
+  "37b2854d3f66": {
+   "scene": "Anatomy",
+   "en": "Chapter one. Anatomy of a frontier run.",
+   "zh": "第1章。剖析一次前沿训练。"
+  },
+  "8f53ba20684b": {
+   "scene": "Anatomy",
+   "en": "A frontier pretraining run is a pipeline. It starts with a crawl of billions of web pages, <bookmark mark='a'/> filtered for language and quality, deduplicated, mixed with books, code, maths and synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining phase, a short annealing on the best data, often called mid-training, a stage for long context, and the post-training of Part 27. <bookmark mark='c'/> Here are two published runs to scale. Ai2's Olmo 3, seven billion parameters: 5.9 trillion tokens of pretraining, then 100 billion of mid-training and 50 billion for long context. Hugging Face's SmolLM3: three pretraining stages, then long context. <bookmark mark='d'/> The last stages are a few percent of the tokens, chosen with the most care.",
+   "zh": "一次前沿的预训练，是一条流水线。它从对几十亿个网页的一次抓取开始，<bookmark mark='a'/>按语言和质量过滤，去重，再混入书籍、代码、数学和合成文本，切成词元。<bookmark mark='b'/>然后模型开始训练：一段很长的预训练阶段；一段很短的、在最好的数据上退火的阶段，常被叫作中期训练；一个长上下文阶段；以及第27部分的后训练。<bookmark mark='c'/>这是按比例画出的两次公开训练。Ai2的Olmo 3，七十亿参数：5.9万亿个词元的预训练，然后是1000亿的中期训练，500亿的长上下文训练。Hugging Face的SmolLM3：三个预训练阶段，然后是长上下文。<bookmark mark='d'/>最后几个阶段只占词元的百分之几，却是挑得最用心的。"
+  },
+  "be9be8372013": {
+   "scene": "Anatomy",
+   "en": "Here are six open runs of the last two years, as their reports state them. <bookmark mark='a'/> Llama 3.1 405B: 15.6 trillion tokens on 16,384 H100 GPUs, in sixteen-bit bfloat numbers, with AdamW. DeepSeek-V3: 14.8 trillion tokens on 2,048 H800s, in eight-bit floating point. <bookmark mark='b'/> Kimi K2: 15.5 trillion tokens with MuonClip, a version of the Muon optimizer. Olmo 3, the most open, data included. <bookmark mark='c'/> And in 2026, NVIDIA's Nemotron 3 Super, pretrained in four-bit numbers on 25 trillion tokens, and DeepSeek-V4-Pro, on 33 trillion with Muon. <bookmark mark='d'/> In two years the token counts doubled, the numbers shrank from sixteen bits to eight and four, and the optimizer began to change.",
+   "zh": "这是最近两年里六次公开的训练，按它们的报告所写。<bookmark mark='a'/>Llama 3.1 405B：在16384块H100 GPU上训练了15.6万亿个词元，用16位的bfloat数字，用AdamW。DeepSeek-V3：在2048块H800上训练了14.8万亿个词元，用8位浮点数。<bookmark mark='b'/>Kimi K2：15.5万亿个词元，用MuonClip，一种Muon优化器的变体。Olmo 3，其中最开放的一个，连数据都公开。<bookmark mark='c'/>还有2026年：英伟达的Nemotron 3 Super，用4位数字预训练了25万亿个词元；DeepSeek-V4-Pro，用Muon训练了33万亿个词元。<bookmark mark='d'/>两年里，词元数翻了一倍，数字从16位缩到8位和4位，优化器也开始改变。"
+  },
+  "ae2282a8df99": {
+   "scene": "Anatomy",
+   "en": "How big is such a run? Part 14 gave the rule: about six operations per parameter per token. <bookmark mark='a'/> For Llama 3.1, six times 405 billion times 15.6 trillion is 3.79 times ten to the twenty-five, just what Meta reports. <bookmark mark='b'/> DeepSeek-V3 is a mixture of experts: only 37 billion of its parameters work on each token, so it needs 3.3 times ten to the twenty-four, about a tenth. <bookmark mark='c'/> Its report also gives the bill: 2.664 million H800 GPU-hours for pretraining; at two dollars an hour, 5.576 million dollars for the whole run. <bookmark mark='d'/> That prices the final run only: not the experiments before it, the data, or the cluster.",
+   "zh": "这样一次训练有多大？第14部分给过规则：大约是每个参数、每个词元六次运算。<bookmark mark='a'/>对Llama 3.1，6乘以4050亿乘以15.6万亿，是3.79乘以10的25次方，正是Meta报告的数。<bookmark mark='b'/>DeepSeek-V3是混合专家模型，每个词元只用到370亿个参数，所以它需要3.3乘以10的24次方：大约十分之一。<bookmark mark='c'/>它的报告还给出了账单：预训练用了266.4万个H800 GPU小时；按每小时两美元算，整次训练是5.576百万美元。<bookmark mark='d'/>这只是最终那次训练的价格：不包括之前的实验、数据，也不包括集群。"
+  },
+  "8f9c8b5c1511": {
+   "scene": "Web",
+   "en": "Chapter two. From the web to text.",
+   "zh": "第2章。从网页到文本。"
+  },
+  "1e88a6609328": {
+   "scene": "Web",
+   "en": "Almost every open pretraining corpus starts in the same place: Common Crawl, a non-profit founded by Gil Elbaz in 2007, which has crawled the web since 2008 and gives the archive away, more than ten petabytes. <bookmark mark='a'/> Each crawl is cut into a hundred thousand files, in two forms that matter here: WARC files hold the raw responses, HTML and all; WET files hold the text Common Crawl extracted itself. <bookmark mark='b'/> For this part we took three WET files of the September 2026 crawl, three slices of each: 4,310 pages, 32 megabytes of text, in 64 languages.",
+   "zh": "几乎每一个开放的预训练语料库，都从同一个地方开始：Common Crawl，吉尔·埃尔巴兹在2007年创办的一个非营利组织，它从2008年起抓取网络，再把存档免费送出，已经超过十拍字节。<bookmark mark='a'/>每次抓取被切成十万个文件，这里要紧的有两种形式：WARC文件存的是原始响应，连同全部HTML；WET文件存的是Common Crawl自己抽取出来的文本。<bookmark mark='b'/>为了本部分，我们取了2026年9月那次抓取的三个WET文件，每个取三段：4310个网页，32兆字节的文本，共64种语言。"
+  },
+  "8ae148150cf7": {
+   "scene": "Web",
+   "en": "The first step is extraction: turning HTML into text. A web page is mostly not prose. Scripts, styles, menus, footers, buttons. <bookmark mark='a'/> Here is one page from our WARC slices. Its HTML is 47,142 bytes. <bookmark mark='b'/> Trafilatura, the extractor FineWeb uses, keeps 2,484 bytes of it: the article, without the menu around it. <bookmark mark='c'/> Across all 387 HTML pages in our slices, 43 megabytes of HTML became 1.3 megabytes of text: about 3 percent. <bookmark mark='d'/> It matters: FineWeb's authors trained small models on the same crawl extracted two ways, and the Trafilatura text beat Common Crawl's own WET text.",
+   "zh": "第一步是抽取：把HTML变成文本。一个网页，大部分都不是正文。脚本、样式、菜单、页脚、按钮。<bookmark mark='a'/>这是我们WARC片段里的一个网页。它的HTML有47142字节。<bookmark mark='b'/>FineWeb用的抽取器Trafilatura，从中保留了2484字节：文章本身，不要它周围的菜单。<bookmark mark='c'/>在我们片段里全部387个HTML网页上，43兆字节的HTML变成了1.3兆字节的文本：大约3%。<bookmark mark='d'/>这一步很要紧：FineWeb的作者把同一次抓取用两种方式抽取，各训练小模型，结果Trafilatura的文本，胜过了Common Crawl自己的WET文本。"
+  },
+  "c26d21acd01d": {
+   "scene": "Web",
+   "en": "Next: which language is each page in? <bookmark mark='a'/> Before that, a cheap filter on the address alone: a blocklist of adult and gambling sites removes 96 pages. <bookmark mark='b'/> Then a language identifier: fastText's, from Facebook AI Research, a linear model on character pieces that picks among 176 languages, fast enough to run on billions of pages. <bookmark mark='c'/> Here is what our sample holds. English: 1,728 pages, about 41 percent; the rest are spread over 63 other languages. <bookmark mark='d'/> FineWeb keeps a page as English only if the identifier is at least 65 percent sure. That drops 240 more; and we drop pages under fifty words. <bookmark mark='e'/> 1,398 English pages go on to the next step.",
+   "zh": "下一步：每个网页是什么语言？<bookmark mark='a'/>在那之前，先做一个只看网址的廉价过滤：一份成人和赌博网站的黑名单，去掉了96个网页。<bookmark mark='b'/>然后是语言识别器：fastText的，来自Facebook AI研究院，它是一个建立在字符片段上的线性模型，在176种语言里挑一种，快到足以在几十亿个网页上运行。<bookmark mark='c'/>这是我们的样本里有什么。英语：1728个网页，大约41%；其余的分散在另外63种语言里。<bookmark mark='d'/>FineWeb只有在识别器至少有65%的把握时，才把一个网页算作英语。这又去掉了240个；我们还去掉了不到五十个词的网页。<bookmark mark='e'/>1398个英语网页进入下一步。"
+  },
+  "2272bcaa01b1": {
+   "scene": "Dedup",
+   "en": "Chapter three. Near-duplicates: MinHash and locality-sensitive hashing.",
+   "zh": "第3章。近似重复：MinHash与局部敏感哈希。"
+  },
+  "4a57c657d19d": {
+   "scene": "Dedup",
+   "en": "The web repeats itself. <bookmark mark='a'/> These two pages from our sample come from one site: 93 percent of their phrases are the same. <bookmark mark='b'/> Duplicates waste compute, and they get memorized: Lee and colleagues found in 2022 that models trained on deduplicated data reproduce their training text ten times less often. <bookmark mark='c'/> To compare documents, cut each into shingles, its overlapping five-word phrases, as FineWeb does. <bookmark mark='d'/> Two documents are similar if their sets of shingles overlap: the Jaccard similarity, the size of the intersection over the size of the union. <bookmark mark='e'/> But comparing every pair of ten billion pages is five times ten to the nineteen comparisons. We need a shortcut.",
+   "zh": "网络总在重复自己。<bookmark mark='a'/>我们样本里的这两个网页来自同一个网站：它们的短语有93%是相同的。<bookmark mark='b'/>重复会浪费算力，还会被背下来：Lee和同事在2022年发现，用去过重的数据训练出来的模型，原样复述训练文本的次数少了十倍。<bookmark mark='c'/>要比较文档，就把每篇切成片段，也就是相互重叠的五词短语，FineWeb就是这样做的。<bookmark mark='d'/>如果两篇文档的片段集合重叠，它们就相似：这就是杰卡德相似度，交集的大小除以并集的大小。<bookmark mark='e'/>但要把一百亿个网页两两比较，需要5乘以10的19次方次比较。我们需要一条捷径。"
+  },
+  "2ce39d8078a1": {
+   "scene": "Dedup",
+   "en": "The shortcut is a beautiful fact, found by Andrei Broder at AltaVista in 1997. Give every shingle a random number, with a random hash function. <bookmark mark='a'/> Over the union of the two sets, the shingle with the smallest hash is equally likely to be any of them. <bookmark mark='b'/> The two documents' minimum hashes agree exactly when that shingle is in both, in the intersection. <bookmark mark='c'/> So the chance that they agree is the size of the intersection over the size of the union: the Jaccard similarity itself. <bookmark mark='d'/> Keep 112 such minimums per document, as FineWeb does: a signature, and the share of positions where two signatures agree estimates the similarity. We checked it on 3,000 pairs of our pages, one of each pair with some words replaced: <bookmark mark='e'/> the estimate sits on the diagonal, off by 0.026 on average.",
+   "zh": "这条捷径，是一个漂亮的事实，由AltaVista的安德烈·布罗德在1997年发现。随便挑一个哈希函数，它给每个片段一个随机数。<bookmark mark='a'/>在两个集合的并集里，哈希值最小的那个片段，等可能地是其中任何一个。<bookmark mark='b'/>两篇文档的最小哈希值相同，当且仅当这个片段两边都有，也就是落在交集里。<bookmark mark='c'/>所以它们相同的概率，就是交集的大小除以并集的大小：正是杰卡德相似度本身。<bookmark mark='d'/>像FineWeb那样，每篇文档保留112个这样的最小值：一个由112个数组成的签名；两个签名有多大比例的位置相同，就估计了它们的相似度。我们在3000对网页上检验了它，每对里的一篇替换掉了一些词：<bookmark mark='e'/>估计值落在对角线上，平均偏差0.026。"
+  },
+  "ac8cae873818": {
+   "scene": "Dedup",
+   "en": "One signature per document still leaves every pair to compare. Locality-sensitive hashing avoids that: cut the 112 minhashes into 14 bands of 8. <bookmark mark='a'/> For two documents with similarity s, each minhash agrees with probability s, so a whole band of r agrees with probability s to the r. <bookmark mark='b'/> The chance that no band agrees is one minus s to the r, to the power b. <bookmark mark='c'/> And the chance that at least one does, making the pair a candidate, is one minus that. <bookmark mark='d'/> Now only documents that share a bucket in some band get compared, and the curve is an S: pairs below about 0.5 almost never collide, pairs above 0.8 almost always do, with the halfway point at 0.68. <bookmark mark='e'/> And here are our measured pairs, binned by similarity: they follow the formula, at most 0.11 away in any bin.",
+   "zh": "每篇文档一个签名，仍然要两两比较。局部敏感哈希避开了这一点。把112个最小哈希切成14个带，每带8个。<bookmark mark='a'/>对相似度为s的两篇文档，每个最小哈希相同的概率是s，所以一整个带的r个都相同的概率，是s的r次方。<bookmark mark='b'/>没有一个带相同的概率，是1减s的r次方，再取b次方。<bookmark mark='c'/>至少有一个带相同、这一对成为候选的概率，就是1减去它。<bookmark mark='d'/>现在，只有在某个带上落进同一个桶的文档才需要比较，而这条曲线是S形的：相似度低于大约0.5的一对几乎从不碰撞，高于0.8的几乎总会碰撞，一半的位置在0.68。<bookmark mark='e'/>这是我们实测的网页对，按相似度分组。它们跟着公式走，任何一组里最多偏离0.11。"
+  },
+  "7c0ab6eec455": {
+   "scene": "Dedup",
+   "en": "What did we find? In our 1,398 English pages, 3 exact copies and 8 near-duplicates: 0.8 percent. Common Crawl already avoids fetching the same address twice in a crawl, and our sample is tiny. <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are a clearer test. Each ends with the same licence, with the book's title changed: LSH catches all 435 pairs of licences, and none of the 435 pairs of novels. <bookmark mark='b'/> At web scale, for Olmo 3, removing exact copies cut the pool by 67 percent, MinHash removed another 23 percent, and repeated substrings 14 percent of the remaining bytes: 38.7 billion documents became 9.7 billion. <bookmark mark='c'/> And one surprise. FineWeb first deduplicated all 96 crawls against each other, and the models got worse: in the oldest crawls, what survived was the junk that nobody had copied. Deduplicating each crawl on its own worked better.",
+   "zh": "我们发现了什么？在我们的1398个英语网页里，有3个完全相同的副本，8个近似重复：占0.8%。Common Crawl在一次抓取里本来就避免重复抓取同一个网址，而我们的样本又很小。<bookmark mark='a'/>第1部分的三十个古登堡文件，是一个更清楚的检验。每个文件的结尾都是同一份许可证，只是换了书名：LSH抓住了全部435对许可证，而435对小说一对也没有抓。<bookmark mark='b'/>在整个网络的规模上，对Olmo 3，去掉完全相同的副本，让数据池缩小了67%，MinHash又去掉了23%，重复的子串去掉了剩余字节的14%：387亿篇文档变成了97亿篇。<bookmark mark='c'/>还有一个意外。FineWeb起初把全部96次抓取放在一起相互去重，结果模型变差了：在最老的那些抓取里，留下来的是没人复制过的垃圾。每次抓取各自去重，效果更好。"
+  },
+  "a19f02e1e7e0": {
+   "scene": "Quality",
+   "en": "Chapter four. Quality, and keeping the test clean.",
+   "zh": "第4章。质量，以及保持测试的干净。"
+  },
+  "6c476e5c7c6a": {
+   "scene": "Quality",
+   "en": "Quality is harder: which pages teach a model the most? In 2024 Hugging Face's FineWeb team gave the recipe that is now standard. <bookmark mark='a'/> Ask a large model to grade pages: Llama 3 70B, with a prompt that adds a point for each of five criteria of educational value, scored 460 thousand pages from zero to five. <bookmark mark='b'/> Then train a small model to imitate the grades: a linear layer on an embedding model, trained on 410 thousand of them, with an F1 of 82 percent at the threshold three. <bookmark mark='c'/> Run it over all fifteen trillion tokens and keep the pages scored three or more: 1.3 trillion tokens. <bookmark mark='d'/> At 1.7 billion parameters, that raised MMLU, a test of knowledge, from 33 to 37 percent, and ARC, a test of reasoning, from 46 to 57.",
+   "zh": "质量就更难了：哪些网页教给模型的东西最多？2024年，Hugging Face的FineWeb团队给出了如今已成标准的配方。<bookmark mark='a'/>请一个大模型给网页打分：Llama 3 70B，用一个提示词，教育价值的五条标准，每满足一条加一分，给46万个网页打零到五分。<bookmark mark='b'/>然后训练一个小模型去模仿这些分数：在一个嵌入模型上面加一个线性层，用其中41万个来训练，以三分为界，F1分数是82%。<bookmark mark='c'/>用它跑遍全部十五万亿个词元，保留三分及以上的网页：1.3万亿个词元。<bookmark mark='d'/>在17亿参数的模型上，这把考知识的MMLU从33%提高到37%，把考推理的ARC从46%提高到57%。"
+  },
+  "0f957e3f9efc": {
+   "scene": "Quality",
+   "en": "We can run this recipe ourselves, because FineWeb released Llama 3's annotations. <bookmark mark='a'/> We downloaded 15,000 of them. Most pages score one: a little information, not much teaching. 9 percent score three or more, and 0 of ours scored five. <bookmark mark='b'/> For the small model we used fastText, a linear model on words and word pairs that trains in seconds, on 13,000 pages, with the cut chosen on a thousand others. <bookmark mark='c'/> Ours reaches an F1 of 59 percent, against their 82: with a thirtieth of the labels and a bag of words instead of an embedding model, it catches most of the good pages but lets through about as many bad ones.",
+   "zh": "这个配方我们可以自己跑一遍，因为FineWeb公开了Llama 3的标注。<bookmark mark='a'/>我们下载了其中15000条。大部分网页得一分：有一点信息，没什么教学价值。9%得到三分或以上，我们的样本里有0个得了五分。<bookmark mark='b'/>小模型我们用的是fastText，一个建立在词和词对上的线性模型，几秒钟就能训练好；用13000个网页来训练，分界线在另外一千个网页上选定。<bookmark mark='c'/>我们的F1达到59%，他们的是82%：标注只有他们的三十分之一，用的又是词袋而不是嵌入模型，它抓住了大部分好网页，但放进来的差网页也差不多一样多。"
+  },
+  "3deccdb8a85f": {
+   "scene": "Quality",
+   "en": "Now run it on our crawl sample. <bookmark mark='a'/> Here are the two pages it scores highest, <bookmark mark='b'/> and the two it scores lowest. <bookmark mark='c'/> It keeps 62 of our 1,398 English pages, 4.4 percent; FineWeb-Edu kept about nine percent of FineWeb's tokens. <bookmark mark='d'/> Other recipes aim elsewhere: DCLM trained its fastText filter to find text like instructions and good answers, and a seven-billion-parameter model on 2.6 trillion of its tokens reached 64 percent on MMLU.",
+   "zh": "现在把它用到我们的抓取样本上。<bookmark mark='a'/>这是它打分最高的两个网页，<bookmark mark='b'/>以及打分最低的两个。<bookmark mark='c'/>在我们的1398个英语网页里，它保留了62个，占4.4%；FineWeb-Edu保留了FineWeb大约百分之九的词元。<bookmark mark='d'/>别的配方瞄准别的东西：DCLM训练它的fastText过滤器去找像指令和好回答的文本；一个七十亿参数的模型，用其中2.6万亿个词元训练，在MMLU上达到了64%。"
+  },
+  "3a13e66ab282": {
+   "scene": "Quality",
+   "en": "One more filter, pointed the other way. If the questions of a benchmark are on the web, a model can pass it by memory. <bookmark mark='a'/> GPT-3's authors looked for any thirteen-word sequence shared between each test and the training text, and flagged what they found. <bookmark mark='b'/> We can check the series' own test. The scoreboard's passage, chapter two of The Maltese Falcon, has 4,042 thirteen-word sequences; 0 of them occur anywhere in the thirty novels we train on, and 1 of its eight-word sequences. Clean. <bookmark mark='c'/> Our held-out paragraphs are almost clean: 6 of 2,758 share a sequence with the training text, like this one, a sentence that a novel repeats. Labs now run checks like this on every test they report.",
+   "zh": "还有一个过滤器，方向正相反。如果一个基准测试的题目就在网上，模型可以靠记忆通过它。<bookmark mark='a'/>GPT-3的作者在每个测试和训练文本之间，寻找任何共有的十三词序列，并把找到的标记出来。<bookmark mark='b'/>我们可以检查本系列自己的测试。记分牌用的那段文字，《马耳他之鹰》的第二章，有4042个十三词序列；其中出现在我们训练用的三十部小说里的，有0个；它的八词序列里，有1个。是干净的。<bookmark mark='c'/>我们的留出段落几乎是干净的：2758段里，有6段和训练文本共有一个序列，比如这一段，是一部小说里重复出现的一句话。各个实验室现在对它们报告的每一个测试，都要做这样的检查。"
+  },
+  "5f3e3c2e4b67": {
+   "scene": "Mixture",
+   "en": "Chapter five. Mixtures, synthetic data and collapse.",
+   "zh": "第5章。数据配比、合成数据与崩溃。"
+  },
+  "17f92d21e8a4": {
+   "scene": "Mixture",
+   "en": "A corpus is a mixture: web pages, encyclopedias, code, books, maths, papers. How much of each? <bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, and twenty other sources. <bookmark mark='b'/> In 2023 DoReMi learned them, with a small proxy model that keeps raising the weight of the domains it predicts worst; its weights let an eight-billion-parameter model reach the baseline in 2.6 times fewer steps. <bookmark mark='c'/> In 2024 RegMix made it a regression: train 512 tiny models on random mixtures, fit the loss as a function of the mixture, and train the big model on the best one. Its pick beat all 64 mixtures they tried at a billion parameters.",
+   "zh": "一个语料库就是一份配比：网页、百科、代码、书籍、数学、论文。每样要多少？<bookmark mark='a'/>2020年，The Pile是手工定的权重：四分之一网页，百分之九维基百科，外加另外二十个来源。<bookmark mark='b'/>2023年，DoReMi把权重学了出来：一个小代理模型不断提高它预测得最差的那些领域的权重；得到的权重让一个八十亿参数的模型用少了2.6倍的步数，就达到了基线的水平。<bookmark mark='c'/>2024年，RegMix把它变成了回归问题：用随机的配比训练512个微型模型，把损失拟合成配比的函数，再用最好的那份配比去训练大模型。在十亿参数的规模上，它挑出的配比胜过了他们试过的全部64种。"
+  },
+  "98ee1f6340a6": {
+   "scene": "Mixture",
+   "en": "We ran RegMix on the thirty novels, in four groups: American novels, English novels of society, adventure and mystery, and the translations with Ulysses. <bookmark mark='a'/> Our target is the scoreboard's own book, The Maltese Falcon: we tune on its first and third chapters and keep the second, the scoreboard's passage, for the test. <bookmark mark='b'/> 32 tiny models, each on a random mixture. Here is each one's loss on the target against its share of American novels: the more American text, the lower the loss, though the other three groups matter too. <bookmark mark='c'/> A regression on the four weights and their products predicts each run's loss from the other runs with a correlation of 0.69. <bookmark mark='d'/> Asked for the best mixture, it puts nearly everything on the American novels: 92, 3, 1, 4 percent of the four groups.",
+   "zh": "我们在三十部小说上跑了RegMix，分成四组：美国小说，英国的社会小说，冒险与推理，以及译作加上《尤利西斯》。<bookmark mark='a'/>我们的目标，是记分牌自己的那本书，《马耳他之鹰》：我们在它的第一章和第三章上调，把第二章，也就是记分牌那段文字，留着做测试。<bookmark mark='b'/>32个微型模型，每个用一份随机配比。这是每个模型在目标上的损失，对它所含美国小说的比例画出来：美国小说越多，损失越低，不过另外三组也有影响。<bookmark mark='c'/>在四个权重以及它们两两乘积上的回归，用其余的模型来预测每个模型的损失，相关系数是0.69。<bookmark mark='d'/>问它最好的配比，它几乎全押在美国小说上：四组分别占92, 3, 1, 4%。"
+  },
+  "61399ca85b10": {
+   "scene": "Mixture",
+   "en": "Now the test: does the pick carry over to a larger model? We trained each mixture again, at the larger size, with two seeds. <bookmark mark='a'/> On the held-out chapter, RegMix's pick beats the natural mixture, 5.555 nats against 5.619, by more than the gap between seeds. <bookmark mark='b'/> And on the thirty novels as a whole it pays, 5.578 nats against 5.481: tuning toward one book costs the others. <bookmark mark='c'/> The lesson: a mixture is chosen for a target, so test it on text the choice never saw.",
+   "zh": "现在来检验：这份配比，换到更大的模型上还成立吗？我们在更大的规模上把每份配比重新训练一遍，各用两个种子。<bookmark mark='a'/>在留出的那一章上，RegMix挑的配比胜过自然配比，5.555奈特对5.619，差距大于两个种子之间的差别。<bookmark mark='b'/>而在三十部小说整体上，它付出了代价，5.578奈特对5.481：朝一本书去调，就要牺牲别的书。<bookmark mark='c'/>教训是：配比是为某个目标挑的，所以要在挑选时从没见过的文本上检验它。"
+  },
+  "92a1afd7651e": {
+   "scene": "Mixture",
+   "en": "When good text runs short, there are two ways to stretch it. Repeat it: Muennighoff and colleagues found that up to about four passes over the same data are nearly as good as new data; after that the returns fall away. <bookmark mark='a'/> Or rewrite it: WRAP, from Apple and Carnegie Mellon, had a model rephrase web pages as encyclopedia entries or questions and answers, and real and rephrased text together trained about three times faster. <bookmark mark='b'/> Kimi K2's report measured it on knowledge. Text repeated ten times taught a model to answer 23.76 percent of a set of factual questions; rephrased once and repeated ten times, 27.39; rephrased ten different ways and read once each, 28.94.",
+   "zh": "好文本不够用的时候，有两种办法把它撑开。一是重复：Muennighoff和同事发现，同一份数据最多重复大约四遍，几乎和新数据一样好，再往后，收益就迅速消失。<bookmark mark='a'/>二是改写：苹果和卡内基梅隆大学的WRAP让一个模型把网页改写成百科条目或问答的形式，把真实文本和改写文本放在一起训练，大约快了三倍。<bookmark mark='b'/>Kimi K2的报告在知识上做了测量。同一段文本重复十遍，教出的模型能答对一组事实问题里的23.76%。改写一次，再重复十遍：27.39%。改写成十种不同的说法，每种只读一遍：28.94%。"
+  },
+  "0a1ca09c776c": {
+   "scene": "Mixture",
+   "en": "But training on a model's output has a known failure, model collapse: train each generation on the last one's samples, and the tails of the distribution vanish. We can watch it in the simplest language model there is, the frequencies of the novels' tokens. <bookmark mark='a'/> Fit it to fifty thousand real tokens, sample fifty thousand from it, fit the next generation to those, and repeat: a rare token that once fails to be sampled is gone for good. <bookmark mark='b'/> Over 30 generations, the tokens it can produce fall from 3,108 to 1,075, and the lost ones carried 25 percent of real text. <bookmark mark='c'/> Its cross-entropy on real text climbs with every generation. <bookmark mark='d'/> The way out: keep the real data, and add each generation's samples to it instead of replacing it. Nothing real is lost, and the damage stays small. That is how synthetic data is used in 2026: alongside real text, never instead of it.",
+   "zh": "但用模型的输出来训练，有一种已知的失败，叫模型崩溃：每一代都用上一代的样本来训练，分布的尾巴就会消失。我们可以在最简单的语言模型上看到它：小说里各个词元的频率。<bookmark mark='a'/>用五万个真实词元来拟合它；从中采样五万个；用这些来拟合下一代；如此反复。一个罕见的词元，只要有一次没被采到，就永远消失了。<bookmark mark='b'/>经过30代，它能产生的词元从3108个降到1075个，而丢掉的那些，在真实文本里占25%。<bookmark mark='c'/>它在真实文本上的交叉熵，一代比一代高。<bookmark mark='d'/>出路是：保留真实数据，把每一代的样本加进去，而不是替换它。真实的东西一样也不会丢，损害也一直很小。2026年的合成数据就是这样用的：和真实文本放在一起，绝不取而代之。"
+  },
+  "245fd3cbb6f4": {
+   "scene": "Objectives",
+   "en": "Chapter six. What the model is asked to predict.",
+   "zh": "第6章。让模型预测什么。"
+  },
+  "3f71e74c4dbd": {
+   "scene": "Objectives",
+   "en": "Pretraining needs a question to ask of every piece of text. Here is the first sentence of Pride and Prejudice, cut into our tokenizer's 32 tokens, and the four questions labs have asked of it. <bookmark mark='a'/> GPT's causal objective: predict every token from the ones before it. <bookmark mark='b'/> BERT's masked objective: hide fifteen percent of the tokens and predict only those. <bookmark mark='c'/> T5's span corruption: replace short runs of tokens with markers, and have the model write out what each marker hid. <bookmark mark='d'/> And fill in the middle: in 2022 OpenAI's Bavarian and colleagues cut documents at two random points and moved the middle to the end. The model still predicts the next token, but given a beginning and an end it can now write what goes between: exactly what a code editor needs.",
+   "zh": "预训练需要对每一段文本提一个问题。这是《傲慢与偏见》的第一句话，被我们的分词器切成32个词元，以及各个实验室对它提过的四种问题。<bookmark mark='a'/>GPT的因果目标：根据前面的词元，预测每一个词元。<bookmark mark='b'/>BERT的掩码目标：藏起百分之十五的词元，只预测这些。<bookmark mark='c'/>T5的片段破坏：把一小段一小段的词元换成标记，让模型写出每个标记藏起了什么。<bookmark mark='d'/>还有中间填充：2022年，OpenAI的Bavarian和同事把文档在两个随机位置切开，把中间那段挪到末尾。模型仍然只是预测下一个词元，但给它一个开头和一个结尾，它就能写出中间的部分，这正是代码编辑器需要的。"
+  },
+  "5601393c8de7": {
+   "scene": "Objectives",
+   "en": "Count the targets. In a sequence of 256 tokens, the causal objective gives 255 predictions to learn from; masking gives about 38, and span corruption about 51, markers included. <bookmark mark='a'/> Fill in the middle keeps all of them: it is still next-token prediction, on rearranged text. Bavarian's team put half their documents in that order and found the ordinary left-to-right perplexity unchanged: infilling for free. <bookmark mark='b'/> DeepSeek-V3 rearranges ten percent of its documents this way. <bookmark mark='c'/> So the 2026 answer is Part 14's: predict every next token, because that model can be sampled, scored and prompted; and teach it to fill gaps by rearranging the data, not by changing the objective.",
+   "zh": "数一数目标。在一个256个词元的序列里，因果目标给出255个可供学习的预测。掩码给出大约38个，片段破坏大约51个，标记也算在内。<bookmark mark='a'/>中间填充保留了全部：它仍然是下一个词元的预测，只是在重新排列过的文本上。Bavarian的团队把一半的文档按这种顺序排列，发现普通的从左到右的困惑度没有变化：填空能力是白送的。<bookmark mark='b'/>DeepSeek-V3把百分之十的文档这样重新排列。<bookmark mark='c'/>所以2026年的答案，就是第14部分的那个：对每一个词元，预测下一个词元，因为这样的模型可以采样、可以打分、可以用提示来引导；要教它填空，就去重排数据，而不是改变目标。"
+  },
+  "81a52410f1ed": {
+   "scene": "Curriculum",
+   "en": "Chapter seven. Annealing, mid-training, long context.",
+   "zh": "第7章。退火、中期训练与长上下文。"
+  },
+  "62ec56ee605e": {
+   "scene": "Curriculum",
+   "en": "The learning rate falls as a run ends, and how it falls matters. Part 11's cosine starts decaying at once, so you must know the length of the run in advance. <bookmark mark='a'/> Since 2024 more runs use warmup, stable, decay: hold the peak learning rate, and cool down only over the last tenth or fifth of the steps. <bookmark mark='b'/> Here is the run of our own 2026 recipe, from chapter eighteen. The held-out loss falls through the stable phase and the cooldown alike. <bookmark mark='c'/> The payoff: from any checkpoint of the stable phase you can branch off a short cooldown. We branched one at step 366. <bookmark mark='d'/> At step 458, the branch's held-out loss is 4.52, against 4.57 for the run still at its peak learning rate: a finished model, without starting again. So one run can try many lengths of training.",
+   "zh": "一次训练快结束时，学习率会降下来，而怎么降很要紧。第11部分用的是余弦：它一开始就衰减，所以你必须事先知道训练有多长。<bookmark mark='a'/>从2024年起，越来越多的训练用预热、稳定、衰减：让学习率平平地保持在峰值，只在最后，用最后十分之一或五分之一的步数来冷却。<bookmark mark='b'/>这是我们自己的2026配方的训练，来自第18章。留出损失在稳定阶段和冷却阶段下降得差不多。<bookmark mark='c'/>好处是：从稳定阶段的任何一个检查点，都可以分出一段短短的冷却。我们在第366步分出了一支。<bookmark mark='d'/>在第458步，这一支的留出损失是4.52，而仍在峰值学习率上的那次训练是4.57：一个训练完成的模型，不用从头再来。于是，一次训练就能尝试许多种训练长度。"
+  },
+  "7d2cc5a9bd0d": {
+   "scene": "Curriculum",
+   "en": "The end of a run is also where the best data goes. What a model reads while its learning rate falls leaves a strong mark, so labs save their best text for the cooldown and call it annealing, or mid-training. <bookmark mark='a'/> SmolLM3 trained in three stages, from 85 percent web text to 63, with code and maths rising from 15 percent to 37. <bookmark mark='b'/> Llama 3 annealed its last forty million tokens to a learning rate of zero on its best sources, and averaged the checkpoints. <bookmark mark='c'/> Qwen3's second stage was five trillion tokens heavy in science, code and reasoning, with a faster decay. <bookmark mark='d'/> And Olmo 2 spends five to ten percent of its compute on mid-training, choosing the data with small annealing runs from a checkpoint: nineteen microanneals to pick its maths.",
+   "zh": "一次训练的结尾，也是最好的数据去的地方。模型在学习率下降时读到的东西，会在最终的模型上留下很深的印记，所以各个实验室把最好的文本留到冷却阶段，叫它退火，或者中期训练。<bookmark mark='a'/>SmolLM3分三个阶段训练，网页文本从85%降到63%，代码和数学从15%升到37%。<bookmark mark='b'/>Llama 3在最后四千万个词元上退火，把学习率降到零，用的是它最好的来源，再把各个检查点平均起来。<bookmark mark='c'/>Qwen3的第二阶段是五万亿个词元，偏重科学、代码和推理，衰减也更快。<bookmark mark='d'/>Olmo 2把百分之五到十的算力花在中期训练上，用从检查点出发的小型退火实验来挑数据：为了挑它的数学数据，做了十九次微退火。"
+  },
+  "6e2cc587a428": {
+   "scene": "Curriculum",
+   "en": "The last stage teaches length. Attention's cost grows with the square of the context, so models pretrain on four or eight thousand tokens and stretch at the end. <bookmark mark='a'/> Llama 3 went from eight thousand to 128 thousand in six stages, on about 800 billion tokens; DeepSeek-V3 to 32 thousand, then 128 thousand, a thousand steps each; Qwen3 and Olmo 3 stretched once; and DeepSeek-V4 grows its length during pretraining itself, from four thousand to a million. <bookmark mark='b'/> Stretching needs positions to stay distinguishable. Rotary embeddings, from Part 13, turn each pair of dimensions by an angle per token, slower and slower down the pairs. <bookmark mark='c'/> With the usual base of ten thousand, the slowest pair takes 54 thousand tokens to turn once. Raise the base, as Llama 3 did to half a million and Qwen3 to a million, and it takes 2.6 and 5.1 million: room for long documents.",
+   "zh": "最后一个阶段教的是长度。注意力的代价随上下文长度的平方增长，所以模型用四千或八千个词元预训练，到最后再拉长。<bookmark mark='a'/>Llama 3分六个阶段，从八千拉到十二万八千，用了大约8000亿个词元。DeepSeek-V3先到三万二千，再到十二万八千，各用一千步。Qwen3和Olmo 3只拉长了一次。DeepSeek-V4则在预训练过程中就让长度增长，从四千一直到一百万。<bookmark mark='b'/>要拉长，位置之间就得保持可以区分。第13部分的旋转位置编码，按每个词元一个角度，旋转每一对维度，越往后的维度对转得越慢。<bookmark mark='c'/>用通常的基频一万，最慢的那一对要54000个词元才转一圈。把基频调高，像Llama 3调到五十万、Qwen3调到一百万那样，就要2.6百万和5.1百万个词元：给长文档留出了空间。"
+  },
+  "e1001fdeef58": {
+   "scene": "Accounting",
+   "en": "Chapter eight. Counting FLOPs and bytes.",
+   "zh": "第8章。数一数运算和字节。"
+  },
+  "740adebd0313": {
+   "scene": "Accounting",
+   "en": "First, arithmetic. Almost all of a transformer's work is matrix products, one per weight matrix. <bookmark mark='a'/> Going forward, each weight multiplies one input and adds it in: two operations, per weight, per token. <bookmark mark='b'/> Going backward, each weight is used twice more. Once to send the error down to the layer below: two operations. <bookmark mark='c'/> And once to compute its own gradient: two more. <bookmark mark='d'/> Six operations per weight per token: the C of six N D, plus attention's own products, which grow with the length of the context.",
+   "zh": "先说算术。Transformer几乎全部的工作都是矩阵乘法，每个权重矩阵一次。<bookmark mark='a'/>前向时，每个权重乘上一个输入，再加进去：每个权重、每个词元两次运算。<bookmark mark='b'/>反向时，每个权重还要再用两次。一次是把误差传回下面一层：两次运算。<bookmark mark='c'/>另一次是算它自己的梯度：又是两次。<bookmark mark='d'/>每个权重、每个词元六次运算：这就是C等于6ND里的那个6，再加上注意力自己的乘法，它们随上下文长度增长。"
+  },
+  "976b1ec40921": {
+   "scene": "Accounting",
+   "en": "We can check this on our own model, with PyTorch's FLOP counter, which counts the operations of every matrix product in one training step on 256 tokens. <bookmark mark='a'/> The backward pass costs 2.00 times the forward pass. <bookmark mark='b'/> And the total is six times the weights times the tokens, to within 0.08 percent. <bookmark mark='c'/> Attention's own products, the scores and the weighted sum, add 20 percent more at this length, and they grow with it.",
+   "zh": "我们可以在自己的模型上检验这一点，用PyTorch的浮点运算计数器，它统计一个训练步里每一次矩阵乘法的运算次数，这一步有256个词元。<bookmark mark='a'/>反向传播的代价是前向的2.00倍。<bookmark mark='b'/>总数等于6乘以权重数乘以词元数，误差在0.08%以内。<bookmark mark='c'/>注意力自己的乘法，也就是打分和加权求和，在这个长度上又多出20%，而且随长度增长。"
+  },
+  "d1afc85c9d65": {
+   "scene": "Accounting",
+   "en": "Now memory. Train in mixed precision, the standard recipe since 2018, and every parameter costs sixteen bytes. <bookmark mark='a'/> Two for the weight in bfloat16 and two for its gradient; <bookmark mark='b'/> then the optimizer's state, in thirty-two bits: a master copy of the weight, four bytes, and Adam's two running averages, four each. <bookmark mark='c'/> For Llama 3.1, sixteen bytes times 405 billion is 6.5 terabytes: at least 81 GPUs of eighty gigabytes just to hold the model, before any activations. <bookmark mark='d'/> DeepSeek-V3, for one, keeps Adam's averages in sixteen bits.",
+   "zh": "再说内存。用混合精度训练，这是2018年以来的标准配方，每个参数要花十六个字节。<bookmark mark='a'/>bfloat16的权重两个字节，它的梯度两个字节；<bookmark mark='b'/>然后是优化器的状态，用32位：权重的一份主副本，四个字节，再加上Adam的两个滑动平均，各四个字节。<bookmark mark='c'/>对Llama 3.1，十六个字节乘以4050亿，是6.5太字节：光是装下模型，就至少要81块80GB的GPU，激活还没算。<bookmark mark='d'/>比如DeepSeek-V3，就把Adam的平均值存成16位。"
+  },
+  "2dcb2ef0fce2": {
+   "scene": "Accounting",
+   "en": "The other big consumer of memory is the activations, what the forward pass keeps for the backward pass. We counted the tensors PyTorch saves for our model, at lengths from 64 to 1,024 tokens. <bookmark mark='a'/> With attention fused, the memory grows in a straight line: 23.5 numbers per token per layer, in units of the width. <bookmark mark='b'/> Compute attention the textbook way, and it also keeps a T by T matrix for each head: a parabola, which FlashAttention removes. <bookmark mark='c'/> Or keep only each block's input and recompute the rest during the backward pass: one number per token per layer, for 16 percent more arithmetic here. <bookmark mark='d'/> At Llama 3.1's shape and eight thousand tokens, Korthikanti and colleagues' count gives four and a half gigabytes per layer, more than half a terabyte per sequence.",
+   "zh": "内存的另一个大户是激活，也就是前向传播为反向传播留下的东西。我们清点了PyTorch为我们的模型保存的张量，长度从64到1024个词元。<bookmark mark='a'/>注意力融合起来，内存是一条直线：每个词元、每层23.5个数，以宽度为单位。<bookmark mark='b'/>按教科书的方式算注意力，它还要为每个头保留一个T乘T的矩阵：一条抛物线，FlashAttention就是把它去掉。<bookmark mark='c'/>或者只保留每个块的输入，在反向传播时把其余的重新算一遍：每个词元、每层一个数，代价是这里多16%的算术。<bookmark mark='d'/>在Llama 3.1的形状、八千个词元下，按Korthikanti和同事的算法：每层四点五吉字节，每个序列超过半太字节。"
+  },
+  "aec549212053": {
+   "scene": "DataParallel",
+   "en": "Chapter nine. Data parallelism and the all-reduce.",
+   "zh": "第9章。数据并行与全规约。"
+  },
+  "61be63d37147": {
+   "scene": "DataParallel",
+   "en": "The simplest way to use many GPUs: give each one a full copy of the model and a slice of the batch. <bookmark mark='a'/> Each computes the gradient of its slice. <bookmark mark='b'/> Then they average the gradients, so that every copy takes exactly the same step, and they stay identical. The averaging is an all-reduce, the operation of Part 17. <bookmark mark='c'/> It is the same step as one big batch on one device. We checked: 4 processes of this computer, each with a quarter of the batch, against one process with all of it, for 6 steps of AdamW: the losses agree to 6 digits, and every parameter to within 0.00002; only the order of the additions differs.",
+   "zh": "用许多块GPU最简单的办法：给每块一份完整的模型副本，和批次的一部分。<bookmark mark='a'/>每块算出自己那部分的梯度。<bookmark mark='b'/>然后它们把梯度平均起来，这样每份副本都走完全相同的一步，始终保持一致。这个平均就是全规约，第17部分讲过的操作。<bookmark mark='c'/>这和在一个设备上用一个大批次走一步是一样的。我们检验过：这台计算机的4个进程，每个拿四分之一的批次，和一个拿全部批次的进程相比，跑6步AdamW：损失吻合到6位数字，每个参数都相差在0.00002以内；不同的只是加法的顺序。"
+  },
+  "338fa2b9fd2f": {
+   "scene": "DataParallel",
+   "en": "Recall the ring of Part 17. Cut each GPU's gradient into p chunks. <bookmark mark='a'/> At each step every GPU passes one chunk to its neighbour, which adds it to its own; after p minus one steps each GPU holds the full sum of one chunk: a reduce-scatter. <bookmark mark='b'/> Then p minus one more steps pass the finished chunks around: an all-gather. <bookmark mark='c'/> Each GPU sends two times p minus one over p of the gradient's bytes. ZeRO, next, does useful work between the two halves.",
+   "zh": "回忆一下第17部分的环。把每块GPU的梯度切成p块。<bookmark mark='a'/>每一步，每块GPU把一块传给它的邻居，邻居把它加到自己的那块上；p减1步之后，每块GPU都持有某一块的完整总和：这就是规约-分散。<bookmark mark='b'/>再用p减1步，把算好的块传一圈：这就是全收集。<bookmark mark='c'/>每块GPU发送的，是梯度字节数的p分之p减1的两倍。下一章的ZeRO，在这两半之间做有用的工作。"
+  },
+  "6c262003a5f6": {
+   "scene": "DataParallel",
+   "en": "Part 17 said that no algorithm beats the ring on bandwidth. Here is why. Follow a single number, whose sum all p GPUs must end up holding; each message carries one value. <bookmark mark='a'/> Some GPU is the first to hold the full sum. Every other GPU's value must have reached it: at least p minus one messages. <bookmark mark='b'/> At that moment nobody else has the sum, so each of the other p minus one GPUs needs at least one more message. <bookmark mark='c'/> Two times p minus one messages per number, for all n numbers. <bookmark mark='d'/> The p GPUs receive at the same time, B bytes per second each, so the time is at least two times p minus one, over p, times n over B: exactly the ring's. <bookmark mark='e'/> What's left to win is latency, with trees for small messages, and overlap: sending the last layers' gradients while the backward pass is still computing the first.",
+   "zh": "第17部分说过，在带宽上没有算法能胜过环。原因在这里。跟踪一个数，全部p块GPU最后都必须持有它的总和；每条消息携带一个值。<bookmark mark='a'/>总有某块GPU第一个拿到完整的总和。其他每块GPU的值都必须到达它：至少要p减1条消息。<bookmark mark='b'/>在那一刻，别人都还没有总和，所以其余p减1块GPU，每块都至少还需要一条消息。<bookmark mark='c'/>每个数两倍的p减1条消息，n个数都是如此。<bookmark mark='d'/>p块GPU同时接收，每块每秒B字节，所以时间至少是p分之p减1的两倍，乘以n除以B：正是环的时间。<bookmark mark='e'/>剩下能赢的是延迟，小消息用树；还有重叠：反向传播还在算前面几层的时候，就把最后几层的梯度发出去。"
+  },
+  "c680a6124754": {
+   "scene": "ZeRO",
+   "en": "Chapter ten. ZeRO and FSDP.",
+   "zh": "第10章。ZeRO与FSDP。"
+  },
+  "e2d29b25b56d": {
+   "scene": "ZeRO",
+   "en": "Data parallelism has a waste built in: every GPU keeps the whole model, its gradients and its optimizer state, chapter eight's sixteen bytes per parameter, all identical. <bookmark mark='a'/> In 2019 Samyam Rajbhandari and colleagues at Microsoft proposed ZeRO, the zero-redundancy optimizer: split them. <bookmark mark='b'/> Stage one: each GPU keeps the optimizer state for a quarter of the parameters, and updates only those. <bookmark mark='c'/> Stage two: only the gradients of its quarter, too. <bookmark mark='d'/> Stage three: only its quarter of the weights, fetching the rest from its neighbours just before a layer needs them, and dropping them after. PyTorch's stage three is called FSDP, fully sharded data parallel.",
+   "zh": "数据并行天生带着浪费：每块GPU都保存着整个模型、它的梯度和优化器状态，也就是第8章那每个参数十六个字节，全都一模一样。<bookmark mark='a'/>2019年，微软的Samyam Rajbhandari和同事提出了ZeRO，零冗余优化器：把它们拆开。<bookmark mark='b'/>第一阶段：每块GPU只保存四分之一参数的优化器状态，也只更新这些参数。<bookmark mark='c'/>第二阶段：每块GPU也只保存自己那四分之一的梯度。<bookmark mark='d'/>第三阶段：权重也只保存自己的那四分之一，别的部分在某一层需要之前，才从邻居那里取来，用完就丢掉。PyTorch对第三阶段的实现叫FSDP，全分片数据并行。"
+  },
+  "8966f70952c8": {
+   "scene": "ZeRO",
+   "en": "The arithmetic, in the paper's notation: psi parameters, K bytes of optimizer state for each, twelve for mixed-precision Adam, and N GPUs. <bookmark mark='a'/> Plain data parallelism: sixteen bytes per parameter on every GPU. For their example, 7.5 billion parameters on 64 GPUs: 120 gigabytes each. <bookmark mark='b'/> Stage one divides the optimizer's twelve bytes by N: 31.4. <bookmark mark='c'/> Stage two, the gradients as well: 16.6. <bookmark mark='d'/> Stage three divides everything: 1.88 gigabytes per GPU. Sixty-four GPUs together hold the model once, not sixty-four times.",
+   "zh": "用论文的记号来算一算：Ψ个参数，每个参数K字节的优化器状态，混合精度的Adam是十二，N块GPU。<bookmark mark='a'/>普通的数据并行：每块GPU上每个参数十六个字节。按他们的例子，75亿个参数，64块GPU：每块120吉字节。<bookmark mark='b'/>第一阶段把优化器的十二个字节除以N：31.4。<bookmark mark='c'/>第二阶段，梯度也除：16.6。<bookmark mark='d'/>第三阶段把一切都除掉：每块GPU1.88吉字节。六十四块GPU加起来，只存一份模型，而不是六十四份。"
+  },
+  "a7ee83bd8c10": {
+   "scene": "ZeRO",
+   "en": "What does sharding cost in communication? Stages one and two cost nothing extra: the all-reduce already was a reduce-scatter and an all-gather, with each GPU's update in between. <bookmark mark='a'/> Stage three keeps only a quarter of each layer's weights: before the layer runs forward, the GPUs all-gather it, and afterwards they drop it. <bookmark mark='b'/> The backward pass needs the weights again: gather once more. <bookmark mark='c'/> And the gradients are reduce-scattered, so each GPU keeps only its quarter. <bookmark mark='d'/> Three passes over the parameters instead of two: half as much traffic again, in exchange for memory divided by N. Meta trained Llama 3 with FSDP across its data-parallel groups; DeepSeek-V3 used stage one.",
+   "zh": "分片在通信上要付出什么？第一和第二阶段，没有任何额外代价：全规约本来就是一次规约-分散加一次全收集，每块GPU的更新正好夹在中间。<bookmark mark='a'/>第三阶段只保存每层权重的四分之一。这一层前向运行之前，各块GPU对它做一次全收集；用完就丢掉。<bookmark mark='b'/>反向传播又需要这些权重：再收集一次。<bookmark mark='c'/>梯度做规约-分散，每块GPU只保留自己的四分之一。<bookmark mark='d'/>这是对参数走三遍，而不是两遍：通信量多一半，换来内存除以N。Meta训练Llama 3时，在数据并行组里用了FSDP；DeepSeek-V3用的是第一阶段。"
+  },
+  "6ce9ef8df1eb": {
+   "scene": "ZeRO",
+   "en": "We built ZeRO stage three ourselves, on four processes: each holds a quarter of every layer's parameters, gradients and Adam moments, gathers a layer just before it runs, forward and backward, and reduce-scatters its gradients. <bookmark mark='a'/> After 6 steps, its parameters match the one-process run to within 0.00002, as plain data parallelism does: only the order of the additions differs. <bookmark mark='b'/> Each process keeps 4 times fewer numbers, plus one layer at a time. <bookmark mark='c'/> And it sends 1.50 times as much: ZeRO's one and a half, measured.",
+   "zh": "我们自己搭了ZeRO第三阶段，用四个进程：每个进程保存每一层参数、梯度和Adam矩的四分之一，在一层运行之前，不论前向还是反向，才把它收集起来，再对它的梯度做规约-分散。<bookmark mark='a'/>6步之后，它的参数和单进程运行相比，相差在0.00002以内，和普通数据并行一样：不同的只是加法的顺序。<bookmark mark='b'/>每个进程保存的数少了4倍，外加一次一层。<bookmark mark='c'/>而它发送的是1.50倍：ZeRO的一倍半，实测出来了。"
+  },
+  "063c2345f323": {
+   "scene": "TensorParallel",
+   "en": "Chapter eleven. Tensor parallelism.",
+   "zh": "第11章。张量并行。"
+  },
+  "d2c2d6b39862": {
+   "scene": "TensorParallel",
+   "en": "When a single layer is too big or too slow for one GPU, split the layer itself. NVIDIA's Megatron-LM showed how in 2019. Take the MLP: Z equals X times A, a nonlinearity, then times B. <bookmark mark='a'/> Split A by columns, half on each GPU: each computes its half of Y from the whole input, with no communication. <bookmark mark='b'/> The nonlinearity acts on each column alone, so it stays local too. <bookmark mark='c'/> Now split B by rows. Each GPU multiplies its half of Y by its half of B and gets a full-size partial result; the answer is their sum, one all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going forward, called g, and one going backward, f, for the gradient of the input both halves used.",
+   "zh": "当一层对一块GPU来说太大，或者太慢，就把这一层本身切开。英伟达的Megatron-LM在2019年展示了怎样对Transformer的两半做到这一点。拿MLP来说：Z等于X乘以A，过一个非线性，再乘以B。<bookmark mark='a'/>把A按列切开，每块GPU一半。每块用完整的输入算出自己那一半的Y，不需要通信。<bookmark mark='b'/>非线性对每一列单独作用，所以它也留在本地。<bookmark mark='c'/>现在把B按行切开。第一块GPU用它那一半的Y乘以它那一半的B，第二块乘另一半：每块都得到一个全尺寸的部分结果，答案是它们的和。一次全规约。<bookmark mark='d'/>所以整个MLP在前向时花一次全规约，叫作g，反向时花一次，叫作f，用于两半都用过的那个输入的梯度。"
+  },
+  "5ad8f1da6a02": {
+   "scene": "TensorParallel",
+   "en": "Attention splits even more naturally: its heads are independent. <bookmark mark='a'/> Give each GPU the queries, keys and values of half the heads; each computes its heads alone, and the output projection, split by rows, ends in one all-reduce. <bookmark mark='b'/> So a transformer layer costs two all-reduces forward and two backward, each of a full activation: batch times sequence times width. <bookmark mark='c'/> That happens in every layer for every micro-batch, so tensor parallelism lives where bandwidth is highest, inside one machine's NVLink domain; Llama 3 used eight-way tensor parallelism, the innermost of its four dimensions. <bookmark mark='d'/> A refinement from 2022, sequence parallelism, turns each all-reduce into a reduce-scatter and an all-gather, and splits the remaining activations by position too.",
+   "zh": "注意力切起来更自然：它的各个头是相互独立的。<bookmark mark='a'/>给每块GPU一半的头的查询、键和值；每块单独算自己的头，按行切开的输出投影，最后一次全规约。<bookmark mark='b'/>所以一个Transformer层，前向花两次全规约，反向两次，每次都是一个完整的激活：批次，乘以序列长度，乘以宽度。<bookmark mark='c'/>每一层、每个微批次都要来一遍，所以张量并行住在带宽最高的地方，一台机器的NVLink域里。Llama 3用了八路张量并行，是它四个维度里最内层的一个。<bookmark mark='d'/>2022年的序列并行，把剩下的激活也按位置切开。"
+  },
+  "d0939105b8f7": {
+   "scene": "TensorParallel",
+   "en": "We split one block of our own transformer this way, across two and then four processes, with an all-reduce for each f and g. <bookmark mark='a'/> On two GPUs and on four, the split block's output and every gradient match the unsplit block's to within 0.000008: rounding, from adding in a different order. <bookmark mark='b'/> Each process holds a half, or a quarter, of the block's matrices, and the counts are Megatron's: two all-reduces forward, two backward.",
+   "zh": "我们用这种方法，把自己的Transformer的一个块，切到两个、再切到四个进程上，每个f和g各用一次全规约。<bookmark mark='a'/>在两块和四块GPU上，切开的块的输出和每一个梯度，都和没切的块吻合到0.000008以内：这是舍入，来自加法顺序的不同。<bookmark mark='b'/>每个进程保存块里矩阵的一半，或者四分之一，次数也正是Megatron的：前向两次全规约，反向两次。"
+  },
+  "1c4fb45dc0b3": {
+   "scene": "Pipeline",
+   "en": "Chapter twelve. Pipeline parallelism.",
+   "zh": "第12章。流水线并行。"
+  },
+  "a63066652cd8": {
+   "scene": "Pipeline",
+   "en": "Tensor parallelism cuts every layer; pipeline parallelism cuts the model the other way: the first eight layers on one GPU, the next eight on another, each GPU a stage. <bookmark mark='a'/> The trouble: while the first stage works on a batch, the others wait. Google's GPipe cut each batch into micro-batches, so the stages can work on different ones at once. <bookmark mark='b'/> Here is GPipe's schedule, simulated exactly: 4 stages, 8 micro-batches, a backward pass taking twice as long as a forward. <bookmark mark='c'/> The micro-batches fill the pipeline going forward, it drains, and the backward passes fill it again in reverse. The grey corners are GPUs waiting: the pipeline bubble.",
+   "zh": "张量并行切开的是每一层。流水线并行换个方向切模型：前八层放在一块GPU上，接下来八层放在另一块上，每块GPU是一个阶段。<bookmark mark='a'/>麻烦在于：第一个阶段处理一个批次时，其他阶段都在等。谷歌的GPipe把每个批次切成微批次，让各个阶段可以同时处理不同的微批次。<bookmark mark='b'/>这是GPipe的调度，精确模拟：4个阶段，8个微批次，反向传播花的时间是前向的两倍。<bookmark mark='c'/>微批次在前向时把流水线填满，流水线排空，然后反向传播再倒过来把它填满。灰色的角落是在等待的GPU：这就是流水线气泡。"
+  },
+  "7f4de0489df2": {
+   "scene": "Pipeline",
+   "en": "How big is the bubble? Each GPU is busy for m micro-batches, a forward and a backward each. <bookmark mark='a'/> But the whole schedule takes longer: the last micro-batch can't start on the last stage until it has passed the p minus one stages before, and the same on the way back. <bookmark mark='b'/> So the share of time wasted is p minus one, over m plus p minus one. <bookmark mark='c'/> For our chart, 27.3 percent. Here is the bubble against the number of micro-batches, the formula as lines and our simulated schedules as dots. Every dot sits exactly on its line. More micro-batches shrink it; GPipe's authors found four per stage enough.",
+   "zh": "气泡有多大？每块GPU忙的时间，是m个微批次，每个一次前向一次反向。<bookmark mark='a'/>但整个调度要花更长：最后一个微批次要经过前面p减1个阶段，才能在最后一个阶段开始，回来的路上也一样。<bookmark mark='b'/>所以浪费的时间比例，是p减1，除以m加p减1。<bookmark mark='c'/>在我们的图里，是27.3%。这是气泡对微批次数的图，线是公式，点是我们模拟的调度。每个点都正好落在它的线上。微批次越多，气泡越小；GPipe的作者发现，每个阶段四个就够了。"
+  },
+  "44a55aa64e74": {
+   "scene": "Pipeline",
+   "en": "GPipe has a second problem: memory. Each stage keeps the activations of every micro-batch it has run forward until that micro-batch comes back. <bookmark mark='a'/> The 1F1B schedule, from Microsoft's PipeDream work, starts each micro-batch's backward pass as soon as it can, alternating one forward with one backward. <bookmark mark='b'/> The bubble is exactly the same: 27.3 percent. But the first GPU never holds more than 4 micro-batches at once, the number of stages, instead of all 8. Memory no longer grows with the number of micro-batches, so you can use many of them, and the bubble shrinks.",
+   "zh": "GPipe还有第二个问题：内存。每个阶段都要保存它前向跑过的每个微批次的激活，直到那个微批次回来。<bookmark mark='a'/>1F1B调度，来自微软的PipeDream工作，让每个微批次的反向传播尽早开始，一次前向和一次反向交替进行。<bookmark mark='b'/>气泡和GPipe完全一样：27.3%。但第一块GPU同时保存的微批次，从不超过4个，也就是阶段数，而不是全部8个。内存不再随微批次数增长，所以你可以用很多微批次，气泡也就缩小了。"
+  },
+  "971cb907c883": {
+   "scene": "Pipeline",
+   "en": "Two more tricks cut the bubble itself. <bookmark mark='a'/> Interleaving: give each GPU two smaller chunks of layers instead of one, so the ramp-up takes half as long, and the bubble falls to 15.8 percent. Llama 3 used this. <bookmark mark='b'/> Zero bubble, from Sea AI Lab in 2023: split the backward pass in two. The gradient for the input is urgent, because the stage before is waiting for it; the gradient for the weights can be postponed into the gaps. With equal times for the three, the idle time falls to a third of 1F1B's, a bubble of 11.1 percent. <bookmark mark='c'/> DeepSeek-V3's DualPipe feeds micro-batches in from both ends at once and overlaps computation with communication, at the price of keeping two copies of the weights.",
+   "zh": "还有两个技巧，能削减气泡本身。<bookmark mark='a'/>交错：给每块GPU两段更小的层，而不是一段，这样爬坡的时间减半，气泡降到15.8%。Llama 3用了这个办法。<bookmark mark='b'/>零气泡，来自2023年的Sea AI Lab：把反向传播一分为二。对输入的梯度是紧急的，因为前一个阶段正等着它；对权重的梯度可以推迟，塞进空隙里。三者时间相等时，空闲时间降到1F1B的三分之一，气泡只有11.1%。<bookmark mark='c'/>DeepSeek-V3的DualPipe让微批次同时从两端进入，把计算和通信重叠起来，代价是要保存两份权重。"
+  },
+  "31d4c2833491": {
+   "scene": "Context",
+   "en": "Chapter thirteen. Context, experts, and utilization.",
+   "zh": "第13章。上下文、专家与利用率。"
+  },
+  "57848ca85230": {
+   "scene": "Context",
+   "en": "Two more ways to cut. At a million tokens, one sequence's activations no longer fit on a GPU, so split the sequence itself: context parallelism. <bookmark mark='a'/> Each GPU keeps one block of positions. Everything in a transformer is per position, except attention. <bookmark mark='b'/> Ring attention, from Berkeley in 2023: each GPU keeps its queries, and the blocks of keys and values travel round the ring. <bookmark mark='c'/> Each arriving block is folded in with the online softmax, as in FlashAttention, so the answer is exact. <bookmark mark='d'/> We ran it on four processes, 256 tokens in four blocks: the result matches full attention to 0.0000003.",
+   "zh": "还有两种切法。到了一百万个词元，一个序列的激活就放不进一块GPU了，那就把序列本身切开：上下文并行。<bookmark mark='a'/>每块GPU保存一段位置。Transformer里的一切都是逐位置的，只有注意力例外。<bookmark mark='b'/>环形注意力，来自2023年的伯克利：每块GPU保留自己的查询，键和值的各个块沿着环传递。<bookmark mark='c'/>每个到达的块，都用在线softmax并入结果，就像FlashAttention那样，所以答案是精确的。<bookmark mark='d'/>我们在四个进程上跑了它，256个词元分成四块：结果和完整注意力吻合到0.0000003。"
+  },
+  "ade79ff73252": {
+   "scene": "Context",
+   "en": "There's a catch with causal attention. A position only looks back, so the first block of queries needs one block of keys, and the last needs all of them. <bookmark mark='a'/> With contiguous blocks, the last GPU does 4 times the work of the first, and everyone waits for it. <bookmark mark='b'/> The fix: cut the sequence into twice as many chunks, and give GPU i both chunk i and chunk 2p minus one minus i, one from each end. Now every GPU does the same work. Llama 3 did exactly this for its 128-thousand-token training, with sixteen-way context parallelism.",
+   "zh": "因果注意力有个麻烦。一个位置只往回看，所以第一块查询只需要一块键，最后一块却需要全部。<bookmark mark='a'/>用连续的分块，最后一块GPU的工作量是第一块的4倍，大家都得等它。<bookmark mark='b'/>解决办法：把序列切成两倍那么多段，给第i块GPU第i段和第2p减1减i段，两头各一段。现在每块GPU的工作量都一样了。Llama 3在它十二万八千词元的训练里正是这样做的，用了十六路上下文并行。"
+  },
+  "36df0b47ca4f": {
+   "scene": "Context",
+   "en": "The second cut is for mixtures of experts, from Part 16: put different experts on different GPUs. <bookmark mark='a'/> Every layer begins with an all-to-all, each GPU sending its tokens to the GPUs that hold their experts, <bookmark mark='b'/> and ends with another, sending the results back. <bookmark mark='c'/> DeepSeek-V3 spread its experts over 64 GPUs in eight machines, and let each token visit at most four machines, because the network between machines is about three times slower than NVLink inside one.",
+   "zh": "第二种切法是为混合专家准备的，来自第16部分：把不同的专家放在不同的GPU上。<bookmark mark='a'/>每一层都以一次全对全通信开始：每块GPU把自己的词元，发给持有它们的专家的那些GPU，<bookmark mark='b'/>最后再来一次，把结果送回去。<bookmark mark='c'/>DeepSeek-V3把它的专家分布在八台机器的64块GPU上，并规定每个词元最多去四台机器，因为机器之间的网络比一台机器里的NVLink大约慢三倍。"
+  },
+  "db33c77689be": {
+   "scene": "Context",
+   "en": "A frontier run uses several cuts at once. Here is Llama 3's own table. <bookmark mark='a'/> On 16,384 GPUs with eight-thousand-token sequences: eight-way tensor parallel, sixteen pipeline stages, and 128 data-parallel groups. Eight times sixteen times 128 is 16,384. <bookmark mark='b'/> For the 128-thousand-token stage, sixteen-way context parallelism took GPUs from the data dimension. <bookmark mark='c'/> The order matters. Tensor parallelism, which talks in every layer, is innermost, inside one machine. Context and pipeline come next. Data parallelism, which talks once a step and can wait, spans the whole cluster.",
+   "zh": "一次前沿训练会同时用上好几种切法。这是Llama 3自己的表。<bookmark mark='a'/>在16384块GPU上，序列长八千个词元：八路张量并行，十六个流水线阶段，128个数据并行组。8乘16乘128是16384。<bookmark mark='b'/>到了十二万八千词元的阶段，十六路上下文并行从数据那个维度拿走了GPU。<bookmark mark='c'/>顺序很要紧。张量并行每一层都要通信，放在最内层，在一台机器里。上下文和流水线在其次。数据并行每一步才通信一次，而且可以等，它横跨整个集群。"
+  },
+  "1a452da61bf1": {
+   "scene": "Context",
+   "en": "With all this machinery, how much of the hardware does a run use? PaLM's paper defined the measure: model FLOPs utilization, six N per token times tokens per second, over the hardware's peak. <bookmark mark='a'/> PaLM processed 238 thousand tokens a second on 6,144 TPU chips of 275 teraflops: 45.7 percent. <bookmark mark='b'/> ByteDance's MegaScale reached 55 percent; Llama 3, 38 to 43; Olmo 3, 43. About half of what a cluster could compute is lost to communication, bubbles, memory traffic and failures. <bookmark mark='c'/> Our own training runs, on one core of this computer: 15 and 11 percent of its peak.",
+   "zh": "有了这么多机制，一次训练实际上用上了多少硬件？PaLM的论文定义了这个量：模型浮点利用率，也就是每个词元6N乘以每秒的词元数，除以硬件的峰值。<bookmark mark='a'/>PaLM在6144块每秒275万亿次的TPU芯片上，每秒处理23.8万个词元：45.7%。<bookmark mark='b'/>字节跳动的MegaScale达到了55%；Llama 3是38%到43%；Olmo 3是43%。一个集群能做的算术，大约有一半损失在通信、气泡、内存访问和故障上。<bookmark mark='c'/>我们自己的训练，在这台计算机的一个核心上：分别是它峰值的15%和11%。"
+  },
+  "683f2a6e2793": {
+   "scene": "Precision",
+   "en": "Chapter fourteen. Fewer bits.",
+   "zh": "第14章。更少的位。"
+  },
+  "399adfcec16a": {
+   "scene": "Precision",
+   "en": "Narrower numbers take less memory and multiply faster: Part 17's tensor cores do twice the work in eight bits as in sixteen. How few bits can training use? <bookmark mark='a'/> Here are the formats, on a scale of powers of two. <bookmark mark='b'/> FP32 and bfloat16 share an eight-bit exponent, so the same enormous range; bfloat16 just keeps fewer digits. FP16 has five exponent bits: nothing below about six times ten to the minus eight, and only low-precision subnormals below two to the minus fourteen. <bookmark mark='c'/> Now the gradients flowing back through our model's matrix products, after sixty steps. <bookmark mark='d'/> Virtually all of them are below FP16's smallest normal number, and 34 percent are so small that FP16 rounds them to zero.",
+   "zh": "越窄的数占的内存越少，乘得也越快：第17部分的张量核心，用8位做的工作是16位的两倍。那么，训练最少能用几位？<bookmark mark='a'/>这是各种格式，画在2的幂的刻度上。<bookmark mark='b'/>FP32和bfloat16共用一个8位的指数，所以范围一样巨大；bfloat16只是保留的有效数字少一些。半精度FP16有5个指数位：低于大约6乘以10的负8次方就什么都没有了，在2的负14次方以下，只有低精度的次正规数。<bookmark mark='c'/>现在看在我们模型的矩阵乘法里往回流的梯度，在第六十步测得。<bookmark mark='d'/>其中几乎全部都低于FP16最小的正规数，34%小到FP16会把它们舍入成零。"
+  },
+  "66fccf800c6b": {
+   "scene": "Precision",
+   "en": "The fix, from Micikevicius and colleagues in 2018, is loss scaling. <bookmark mark='a'/> Multiply the loss by a large number S before the backward pass; the chain rule is linear, so every gradient comes out S times larger. <bookmark mark='b'/> For S of two to the sixteen, the whole distribution slides sixteen places to the right, into FP16's range. <bookmark mark='c'/> Then divide the weights' gradients by S before the update, in thirty-two bits. <bookmark mark='d'/> S is dynamic: on an overflow, halve it and skip the step; after a run of good steps, double it. Bfloat16, with FP32's range, needs none of this, which is why it took over.",
+   "zh": "解决办法来自2018年Micikevicius和同事，叫损失缩放。<bookmark mark='a'/>在反向传播之前，把损失乘以一个大数S。链式法则是线性的，所以每个梯度都放大成S倍。<bookmark mark='b'/>对S等于2的16次方，整个分布向右滑动十六格，进入FP16的范围。<bookmark mark='c'/>然后在更新之前，用32位把权重的梯度除以S。<bookmark mark='d'/>S是动态的：一出现上溢，就把它减半并跳过这一步；连续一段好的步数之后，再把它加倍。BFloat16有和FP32一样的范围，这些都不需要，这就是它后来取而代之的原因。"
+  },
+  "4d99f9615a6f": {
+   "scene": "Precision",
+   "en": "Does it matter in practice? We trained the same small model with every matrix product's inputs rounded to a format, forward and backward, and the sums kept in FP32, as the hardware does; two seeds each. <bookmark mark='a'/> FP32, bfloat16, FP16 without and with loss scaling, and two kinds of eight-bit training we'll meet in a moment. <bookmark mark='b'/> All six end within 0.015 nats of each other, inside the 0.072 that separates two seeds. Even FP16 without loss scaling, which flushed 14.3 percent of the gradient values to zero, trained just as well.",
+   "zh": "实际上要紧吗？我们训练同一个小模型，每次矩阵乘法的输入，前向和反向，都舍入到某一种格式，求和保持在FP32，就像硬件那样；每种两个种子。<bookmark mark='a'/>FP32，bfloat16，不带和带损失缩放的FP16，以及两种我们马上会讲到的8位训练。<bookmark mark='b'/>六种最后相差都在0.015奈特以内，在两个种子之间0.072的差别之内。就连不带损失缩放的FP16，把14.3%的梯度值冲成了零，也训练得一样好。"
+  },
+  "460b0f16e38e": {
+   "scene": "Precision",
+   "en": "Why, then, did loss scaling matter? Because our gradients are averages over only two thousand tokens. A frontier run averages each step's gradient over millions, accumulated piece by piece, and every piece is that much smaller. <bookmark mark='a'/> So we repeated the FP16 runs with each step split into 64 micro-batches, as gradient accumulation does. <bookmark mark='b'/> Now the gradients are 64 times smaller while they are rounded, and FP16 without loss scaling flushes 46 percent of them to zero: it ends 0.98 nats behind FP32. With loss scaling, 0.001 from it. That is the failure loss scaling exists to prevent.",
+   "zh": ""
+  },
+  "828ee9801123": {
+   "scene": "Precision",
+   "en": "Eight bits is harder. E4M3, with four exponent bits, spans only about eighteen powers of two, so every tensor needs a scale to move its values into range, and one scale per tensor is set by the largest value. <bookmark mark='a'/> Here are 128 inputs to one matrix product of the series' model; the largest value in the whole tensor is 22. <bookmark mark='b'/> With one scale for the whole tensor, rounding to E4M3 costs 2.6 percent, and with one scale per tile of 128 values, 2.4: our small model's activations are tame enough that tiles barely help. Large models are not: a few channels grow far larger than the rest. <bookmark mark='c'/> DeepSeek-V3 trained its 671 billion parameters with a scale for every 128 values of an activation and every 128 by 128 block of a weight, moved its partial sums to FP32 every 128 terms, because its tensor cores kept only about fourteen bits, and stayed within a quarter of a percent of a sixteen-bit run.",
+   "zh": "8位就更难了。E4M3有四个指数位，只跨大约十八个2的幂，所以每个张量都需要一个缩放因子，把它的值挪进范围里，而每个张量一个缩放因子，是由最大的那个值决定的。<bookmark mark='a'/>这是本系列模型里一次矩阵乘法的128个输入；整个张量里最大的值是22。<bookmark mark='b'/>整个张量用一个缩放因子，舍入到E4M3的误差是2.6%，每128个值的一个瓦片用一个缩放因子是2.4%：我们这个小模型的激活很温和，瓦片几乎帮不上忙。大模型就不是这样了：少数几个通道会长得比其余的大得多。<bookmark mark='c'/>DeepSeek-V3训练它的6710亿个参数时，激活每128个值一个缩放因子，权重每128乘128的一块一个缩放因子；因为它的张量核心求和时只保留大约十四位，它每128项就把部分和挪到FP32里；它的损失和16位训练相比，差别在百分之零点二五以内。"
+  },
+  "ab0feb161a6c": {
+   "scene": "Precision",
+   "en": "The newest chips put the scales into hardware. NVIDIA's Blackwell multiplies microscaled formats, blocks of 32 numbers sharing one scale; in MXFP8, an eight-billion-parameter model trained on fifteen trillion tokens matched bfloat16. <bookmark mark='a'/> Then four bits: NVFP4 packs sixteen four-bit values with one eight-bit scale. <bookmark mark='b'/> NVIDIA pretrained a twelve-billion-parameter model on ten trillion tokens in it, with random rotations to spread the outliers and sixteen percent of the layers kept in bfloat16, and matched its FP8 model. <bookmark mark='c'/> In 2026 Nemotron 3 Super was pretrained in NVFP4 on 25 trillion tokens, and Kimi K3 and DeepSeek-V4 learned four-bit weights in quantization-aware training. <bookmark mark='d'/> Each halving of the bits came with a new way of scaling.",
+   "zh": "最新的芯片把缩放做进了硬件。英伟达的Blackwell能直接做微缩放格式的乘法，32个数一块，共享一个缩放因子；用MXFP8，一个八十亿参数的模型在十五万亿个词元上训练，和bfloat16持平。<bookmark mark='a'/>然后是4位：NVFP4把十六个4位的值和一个8位的缩放因子打包在一起。<bookmark mark='b'/>英伟达用它在十万亿个词元上预训练了一个一百二十亿参数的模型，用随机旋转把离群值摊开，并把百分之十六的层留在bfloat16里，结果和它的FP8模型持平。<bookmark mark='c'/>2026年，Nemotron 3 Super用NVFP4在25万亿个词元上完成了预训练，Kimi K3和DeepSeek-V4则在量化感知训练里学出了4位权重。<bookmark mark='d'/>每一次把位数减半，都伴随着一种新的缩放方式。"
+  },
+  "6c4faec67cf0": {
+   "scene": "Stability",
+   "en": "Chapter fifteen. Keeping the run stable.",
+   "zh": "第15章。让训练保持稳定。"
+  },
+  "53e2e9085131": {
+   "scene": "Stability",
+   "en": "Large runs have a failure that small ones rarely show: the loss suddenly jumps, and sometimes never comes back. <bookmark mark='a'/> Google's PaLM, at 540 billion parameters, spiked about twenty times, although its gradients were clipped. <bookmark mark='b'/> The fix was blunt: restart about a hundred steps before the spike, and skip the next two to five hundred batches. <bookmark mark='c'/> It wasn't bad data: the same batches were fine from another point in training. The trouble was the model's state, and today's models are built to keep it tame.",
+   "zh": "大规模训练有一种小规模训练很少出现的失败：损失突然跳起来，有时再也回不去。<bookmark mark='a'/>谷歌5400亿参数的PaLM，尽管梯度被裁剪过，还是出现了大约二十次尖峰。<bookmark mark='b'/>解决办法很粗暴：回到尖峰之前大约一百步，跳过接下来的两百到五百个批次。<bookmark mark='c'/>问题不在坏数据：同样的批次，从训练的另一个时刻开始就没事。麻烦出在模型的状态上，而今天的模型，就是为了让这种状态保持温顺而设计的。"
+  },
+  "5b391b659614": {
+   "scene": "Stability",
+   "en": "One state that goes wrong is attention itself. A query and a key give a logit, their dot product over the square root of the dimension, and nothing stops the weights from growing until the logits are huge. <bookmark mark='a'/> Then the softmax puts all its weight on one position, its gradients vanish, and training can lock up. Wortsman and colleagues reproduced this in small models by raising the learning rate; so did we. <bookmark mark='b'/> At a learning rate of 0.03, our plain model's largest attention logit reaches 172. <bookmark mark='c'/> The fix, used in ViT-22B, Olmo 2, Qwen3 and GLM-4.5, is QK-norm: normalize every query and key before the dot product, <bookmark mark='d'/> and the logit is bounded by the norms' learned gains times the square root of the dimension. With it, our largest logit stays at 9.",
+   "zh": "会出问题的一种状态，就是注意力本身。一个查询和一个键给出一个logit，也就是它们的点积除以维度的平方根，没有什么能阻止权重一直增长，直到logit变得巨大。<bookmark mark='a'/>那时softmax把全部权重都压在一个位置上，它的梯度消失，训练会卡死。Wortsman和同事只是把学习率调高，就在小模型里重现了这一点；我们也重现了。<bookmark mark='b'/>学习率为0.03时，我们普通模型最大的注意力logit达到了172。<bookmark mark='c'/>ViT-22B、Olmo 2、Qwen3和GLM-4.5用的解决办法：QK归一化。在点积之前，把每个查询和键都归一化，<bookmark mark='d'/>这样logit的上界，就是归一化学到的增益乘以维度的平方根。有了它，我们最大的logit停在9。"
+  },
+  "a176084b2970": {
+   "scene": "Stability",
+   "en": "Wortsman's test of a fix is a sweep: train at many learning rates and see how far up the loss stays good. Here is ours: 4 learning rates, plain, with QK-norm, and with QK-norm and the z-loss we will see next, two seeds each. <bookmark mark='a'/> At the highest learning rate, 0.1, the plain model ends at 6.39 nats and the one with QK-norm at 6.32, but two seeds of one design differ by up to 0.56: in runs this short the loss can't tell them apart, although the plain model's largest attention logit is 134 times larger. <bookmark mark='b'/> Both do best at a learning rate of 0.01.",
+   "zh": "Wortsman检验一个解决办法的方法是扫描：在许多学习率上训练，看损失在多高的学习率上还能保持良好。这是我们的：4个学习率，普通的，带QK归一化的，以及带QK归一化和我们接下来要讲的z-loss的，每种两个种子。<bookmark mark='a'/>在最高的学习率0.1上，普通模型最后是6.39奈特，带QK归一化的是6.32，但同一种设计的两个种子，就能相差0.56：在这么短的训练里，损失分不出它们的高下，尽管普通模型最大的注意力logit大了134倍。<bookmark mark='b'/>两者都在学习率为0.01时最好。"
+  },
+  "6eaf0a8a6ff6": {
+   "scene": "Stability",
+   "en": "The second fix is for the output layer. A softmax doesn't change if every logit shifts by the same amount. <bookmark mark='a'/> So their log-sum-exp, log Z, is free to drift, and in sixteen-bit arithmetic large logits lose their precision. <bookmark mark='b'/> PaLM added a tiny penalty, ten to the minus four times log Z squared: the z-loss. <bookmark mark='c'/> Its gradient nudges all the logits together toward a normalizer of one, without changing what the model predicts. <bookmark mark='d'/> In our short runs it changes nothing we can measure: log Z ends near 8.0 with or without it, closer together than two seeds of the same design. The penalty is tiny next to the loss; it is there for long runs, where the logits have time to drift.",
+   "zh": "第二个解决办法针对输出层。所有logit都平移同样的量，softmax不会改变。<bookmark mark='a'/>所以它们的log-sum-exp，也就是log Z，可以自由漂移，而在16位算术里，大的logit会丢掉精度。<bookmark mark='b'/>PaLM加了一个很小的惩罚，10的负4次方乘以log Z的平方：这就是z-loss。<bookmark mark='c'/>它的梯度把所有logit一起往归一化常数为1的方向轻轻推，而不改变模型预测的东西。<bookmark mark='d'/>In our short runs it changes nothing we can measure: log Z ends near 8.0 with or without it, closer together than two seeds of the same design. The penalty is tiny next to the loss; it is there for long runs, where the logits have time to drift."
+  },
+  "b3064b588f7e": {
+   "scene": "Stability",
+   "en": "The newest source of trouble is the optimizer. Part 11's Muon went to scale in 2025: Moonshot's Moonlight study found it about twice as compute-efficient as AdamW. <bookmark mark='a'/> But with Muon the attention logits grew faster, and Kimi K2's latent attention never forms its keys in full, so QK-norm can't be applied. <bookmark mark='b'/> Moonshot's fix, QK-Clip: after each update, if a head's largest logit has passed a hundred, shrink that head's query and key weights. It clipped 12.7 percent of the heads early on and none after seventy thousand steps, and K2 trained on 15.5 trillion tokens without a loss spike. <bookmark mark='c'/> DeepSeek-V4 also uses Muon, normalizes its queries and keys, and tames the rare spikes from its experts by clamping SwiGLU and routing with slightly older weights.",
+   "zh": "最新的麻烦来源是优化器。第11部分的Muon在2025年走向了大规模：Moonshot的Moonlight研究发现，它的计算效率大约是AdamW的两倍。<bookmark mark='a'/>但用了Muon，注意力logit长得更快，而Kimi K2用的是潜在注意力，它的键从不完整地构造出来，所以没法用QK归一化。<bookmark mark='b'/>Moonshot的解决办法是QK-Clip：每次更新之后，如果某个头最大的logit超过了一百，就缩小这个头的查询和键的权重。一开始它裁剪了12.7%的头，七万步之后一个也没有；K2在15.5万亿个词元上训练，没出现一次损失尖峰。<bookmark mark='c'/>DeepSeek-V4也用Muon，对查询和键做归一化，并通过截断SwiGLU、用稍旧一些的权重做路由，压住了来自专家的少数尖峰。"
+  },
+  "ddcd45e3be0e": {
+   "scene": "MTP",
+   "en": "Chapter sixteen. Predicting two tokens ahead.",
+   "zh": "第16章。往后预测两个词元。"
+  },
+  "538dfa29f8cc": {
+   "scene": "MTP",
+   "en": "Next-token prediction asks for one token at a time, which lets a model get by on local patterns. What if it had to look further? <bookmark mark='a'/> In 2024, Fabian Gloeckle and colleagues at Meta gave a model several output heads on a shared trunk, predicting the next token, the one after, and so on. <bookmark mark='b'/> On code, a thirteen-billion-parameter model solved twelve percent more HumanEval problems and seventeen percent more of MBPP. <bookmark mark='c'/> The gain grew with size; at their smallest models the extra heads hurt. <bookmark mark='d'/> And the heads double as a fast way to guess ahead at inference, up to three times faster.",
+   "zh": "下一个词元的预测，一次只要一个词元，这让模型靠局部的模式就能应付过去。如果它必须看得更远呢？<bookmark mark='a'/>2024年，Meta的Fabian Gloeckle和同事，给一个模型在共享的主干上装了几个输出头，分别预测下一个词元、再下一个，依此类推。<bookmark mark='b'/>在代码上，一个一百三十亿参数的模型，在HumanEval上多解出了12%的题，在MBPP上多了17%。<bookmark mark='c'/>收益随规模增长；在他们最小的模型上，多出来的头反而有害。<bookmark mark='d'/>这些头还兼作推断时提前猜测的快速办法，最多快三倍。"
+  },
+  "418f4a97a501": {
+   "scene": "MTP",
+   "en": "DeepSeek-V3 made the extra prediction sequential. The main model predicts the next token as usual. <bookmark mark='a'/> A small module then takes the main model's last hidden state at position i and the embedding of the true next token, <bookmark mark='b'/> normalizes both, joins them, passes them through one more transformer block, and predicts the token after next with the same output head. <bookmark mark='c'/> Its loss is added with a weight of 0.3 for the first ten trillion tokens, then 0.1. <bookmark mark='d'/> At inference the module can be dropped, or used to guess the second token for the main model to check: DeepSeek reports the guess accepted 85 to 90 percent of the time, and 1.8 times the speed.",
+   "zh": "DeepSeek-V3把额外的预测改成了顺序的。主模型照常预测下一个词元。<bookmark mark='a'/>然后一个小模块，拿主模型在位置i上的最后一个隐藏状态，和真实的下一个词元的嵌入，<bookmark mark='b'/>把两者归一化，拼接起来，再过一个Transformer块，用同一个输出头预测下下个词元。<bookmark mark='c'/>它的损失以0.3的权重加进来，用于前十万亿个词元，之后是0.1。<bookmark mark='d'/>推断时，这个模块可以丢掉，也可以用来猜第二个词元，再由主模型核对：DeepSeek报告，这个猜测有85%到90%的时候被接受，速度是原来的1.8倍。"
+  },
+  "852ef499e2cf": {
+   "scene": "MTP",
+   "en": "We added DeepSeek-V3's module to our small model and trained it on the same tokens, two seeds each, with the weight dropping from 0.3 to 0.1 near the end. <bookmark mark='a'/> With the module, the held-out loss for the next token ends at 5.126 nats, against 5.193 without: predicting further ahead helped, even at our scale. <bookmark mark='b'/> The module costs about 88 percent more arithmetic per step, mostly the second pass through the output head, which is large in a model this small.",
+   "zh": "我们把DeepSeek-V3的模块加到我们的小模型上，在同样的词元上训练，每种两个种子，权重在接近结尾时从0.3降到0.1。<bookmark mark='a'/>有了这个模块，下一个词元的留出损失最后是5.126奈特，没有它是5.193：往更远处预测有帮助，即使在我们的规模上。<bookmark mark='b'/>这个模块让每一步多花大约88%的算术，主要是第二次经过输出头，在这么小的模型里，输出头占的分量很大。"
+  },
+  "2484ee4be1b1": {
+   "scene": "MTP",
+   "en": "And as a drafter? We let our main model write greedily from held-out openings, while its module guessed each token after next. <bookmark mark='a'/> The guess was right 79 percent of the time, against DeepSeek-V3's 85 to 90: a small model's guesses two tokens ahead are harder to get right. <bookmark mark='b'/> Each step of the main model would then yield 1.79 tokens instead of one. Part 19 builds speculative decoding properly.",
+   "zh": "那么当草稿模型呢？我们让主模型从留出的开头贪心地往下写，同时让它的模块猜每一个下下个词元。<bookmark mark='a'/>猜测有79%的时候是对的，而DeepSeek-V3是85%到90%：小模型往后两个词元的猜测，更难猜对。<bookmark mark='b'/>这样主模型的每一步，就能产出1.79个词元，而不是一个。第19部分会好好搭建推测解码。"
+  },
+  "cbbc7c756aa3": {
+   "scene": "Faults",
+   "en": "Chapter seventeen. When hardware fails.",
+   "zh": "第17章。当硬件出故障。"
+  },
+  "760a86145f2e": {
+   "scene": "Faults",
+   "en": "Back to Llama 3's run. In fifty-four days its job was interrupted 466 times, 419 of them unplanned. <bookmark mark='a'/> Here are the causes Meta reported: faulty GPUs above all, then their memory chips, software bugs, network switches and cables. <bookmark mark='b'/> That is one interruption every 3.1 hours. Yet each GPU on its own failed about once in 5.8 years: the problem is not the parts, it is that there are sixteen thousand of them, and any one stops the whole job. <bookmark mark='c'/> Thanks to automation, only three failures needed a person, and the run spent more than ninety percent of its time training. <bookmark mark='d'/> Even the weather showed.",
+   "zh": "回到Llama 3的训练。五十四天里，它的任务被中断了466次，其中419次是计划外的。<bookmark mark='a'/>这是Meta报告的原因：首先是坏掉的GPU，然后是它们的内存芯片、软件缺陷、网络交换机和线缆。<bookmark mark='b'/>也就是每3.1小时一次中断。可每块GPU单独来看，大约5.8年才坏一次：问题不在零件，而在于它们有一万六千个，任何一个都会让整个任务停下来。<bookmark mark='c'/>多亏了自动化，只有三次故障需要人来处理，这次训练有超过百分之九十的时间都在训练。<bookmark mark='d'/>就连天气都看得出来。"
+  },
+  "ae21d619491c": {
+   "scene": "Faults",
+   "en": "So a run saves a checkpoint of every GPU's state regularly, and after a failure restarts from the last one. How often should it save? Saving every tau seconds, at a cost of delta each time, wastes delta over tau of the run. <bookmark mark='a'/> And a failure, arriving on average every M seconds, throws away the work since the last save, half an interval on average: tau over two M more. <bookmark mark='b'/> Set the derivative to zero. <bookmark mark='c'/> The best interval is the square root of two delta M: John Young's rule, from 1974. <bookmark mark='d'/> For Llama 3: checkpoints of up to four gigabytes per GPU, storage that wrote two terabytes a second, so a full save took about 33 seconds; with a failure every 3.1 hours, save every 14 minutes or so.",
+   "zh": "所以，一次训练会定期为每块GPU的状态保存一个检查点，出故障后就从最近的一个重新开始。多久保存一次？每tau秒保存一次，每次花费delta，浪费的是训练时间的tau分之delta。<bookmark mark='a'/>而故障平均每M秒来一次，会扔掉自上次保存以来的工作：平均半个间隔，所以还要再加上2M分之tau。<bookmark mark='b'/>令导数为零。<bookmark mark='c'/>最好的间隔，是2倍delta乘M的平方根：这是约翰·杨在1974年给出的法则。<bookmark mark='d'/>对Llama 3：检查点每块GPU最多四吉字节，存储每秒能写两太字节，所以一次完整的保存大约要33秒；每3.1小时一次故障，大约每14分钟保存一次。"
+  },
+  "799b17015ddd": {
+   "scene": "Faults",
+   "en": "We simulated it: 54 days of a run with random failures, one every 3.1 hours on average, 33 seconds to save and, as an illustration, ten minutes to restart, many times over for each interval between checkpoints. <bookmark mark='a'/> Save too often, and saving eats the run; too rarely, and every failure throws away hours. <bookmark mark='b'/> The best interval in the simulation is 14 minutes; Young's rule says 14. <bookmark mark='c'/> Even then, 12 percent of the time is lost: 5 percent to the restarts alone, the rest to saving and to work done twice. That is why frontier labs make restarts fast and checkpoints asynchronous.",
+   "zh": "我们做了模拟：54天的训练，故障随机到来，平均每3.1小时一次，保存要33秒，重启要十分钟，这只是举例；对每一种检查点间隔，都模拟很多遍。<bookmark mark='a'/>保存得太勤，保存本身就会吃掉训练。太少，每次故障都会扔掉几个小时。<bookmark mark='b'/>模拟里最好的间隔是14分钟；杨的法则说是14分钟。<bookmark mark='c'/>即便如此，还是有12%的时间损失掉了：光是重启就占5%，其余的花在保存和重做的工作上。这就是为什么前沿实验室要让重启变快，让检查点异步写出。"
+  },
+  "205b00593312": {
+   "scene": "Recipe",
+   "en": "Chapter eighteen. Our own full recipe.",
+   "zh": "第18章。我们自己的完整配方。"
+  },
+  "1edf550cd53f": {
+   "scene": "Recipe",
+   "en": "Now we put the pieces together. Two models of the same shape, trained on the same three million tokens of the thirty novels, in the same order, from the same starting weights; and the whole comparison again from a second seed. <bookmark mark='a'/> One with the recipe of 2020: AdamW, a cosine schedule, plain attention. <bookmark mark='b'/> One with the recipe of 2026: Muon for the hidden matrices, warmup, stable, decay, QK-norm and the z-loss. <bookmark mark='c'/> Two-token prediction stays out although it helped a little in chapter sixteen: it costs 88 percent more arithmetic, and the comparison must be at equal compute. Eight-bit arithmetic stays out too: on a CPU it only emulates the saving.",
+   "zh": "现在把各个部分拼起来。两个形状相同的模型，用三十部小说里同样的三百万个词元训练，顺序相同，从同样的初始权重出发；再换第二个种子，把整个比较做一遍。<bookmark mark='a'/>一个用2020年的配方：AdamW，余弦调度，普通的注意力。<bookmark mark='b'/>另一个用2026年的配方：隐藏层的矩阵用Muon，预热、稳定、衰减，QK归一化和z-loss。<bookmark mark='c'/>两词元预测没有放进来，尽管它在第16章有一点帮助：它多花88%的算术，而比较必须在同等算力下进行。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。"
+  },
+  "f9e9bb1d3415": {
+   "scene": "Recipe",
+   "en": "Watch them learn. On the left, each model's loss on text it never trains on; on the right, what each writes after the words 'The door opened, and', frozen at the same steps, with the same random seed. <bookmark mark='a'/> At the start both write noise, at a loss of about 8.4 nats. <bookmark mark='b'/> Let them read. <bookmark mark='c'/> By the end, compare what they write; the curves tell which learned faster.",
+   "zh": "看它们学习。左边是每个模型在它从没训练过的文本上的损失；右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='a'/>一开始，两个都写出噪声，损失大约是8.4奈特。<bookmark mark='b'/>让它们读吧。<bookmark mark='c'/>到最后，比一比它们写出的东西；曲线告诉我们，哪一个学得更快。"
+  },
+  "3048a98e09af": {
+   "scene": "Recipe",
+   "en": "The scores. <bookmark mark='a'/> The 2026 recipe wins: 1.948 bits per character on the scoreboard's passage, against 2.044, the mean of two seeds each: 4.7 percent better with exactly the same model, data and steps, and more than the 0.015 between seeds. <bookmark mark='b'/> And the 2026 recipe's attention stayed tamer: its largest logit was 11, against 44.",
+   "zh": "成绩。<bookmark mark='a'/>2026年的配方胜出：在记分牌那段文字上，每字符1.948比特，对2.044，都是两个种子的平均：模型、数据和步数完全相同，它好了4.7%，超过了两个种子之间的0.015。<bookmark mark='b'/>而且2026配方的注意力更温顺：它最大的logit是11，对方是44。"
+  },
+  "ffa60c045a0f": {
+   "scene": "Recipe",
+   "en": "And on the series' scoreboard, the bits per character each model needs for chapter two of The Maltese Falcon. <bookmark mark='a'/> Part 1's compressors and counts at the top, then the published models Part 1 measured, GPT-2 and Qwen3, then Part 14's family, and the series' own model of 6.8 million parameters, trained on 8 times our tokens, at 1.69. <bookmark mark='b'/> Our 2026 model scores 1.95, better than Part 14's model of the same size, 2.05, which read the same number of tokens. <bookmark mark='c'/> A recipe buys efficiency: the same quality for less compute. The frontier labs spend that saving on scale.",
+   "zh": "再看本系列的记分牌，也就是每个模型对《马耳他之鹰》第二章需要的每字符比特数。<bookmark mark='a'/>最上面是第1部分的压缩器和计数，然后是第1部分测过的公开模型，GPT-2和Qwen3，再然后是第14部分的家族，还有本系列自己的那个6.8百万参数的模型，用了我们8倍的词元训练，成绩是1.69。<bookmark mark='b'/>我们的2026模型得分1.95，好于第14部分同样大小、读了同样多词元的模型，它是2.05。<bookmark mark='c'/>配方买到的是效率：用更少的算力得到同样的质量。前沿实验室把省下来的，花在了规模上。"
+  },
+  "b86fe97cefaa": {
+   "scene": "Outro",
+   "en": "Let's take stock. A pretraining corpus starts as a crawl of the web, and most of it is thrown away: by address, by language, by quality. MinHash and locality-sensitive hashing find the near-duplicates without comparing every pair, and their S-curve came out as predicted. Mixtures are chosen for a target, and synthetic data helps only alongside real text. A run costs six operations and sixteen bytes per parameter, and activations on top. The ring all-reduce is optimal; ZeRO shards the copies away; tensor, pipeline, context and expert parallelism cut the rest. Fewer bits need scaling tricks, big runs need QK-norm, and sixteen thousand GPUs need checkpoints. And our own model, trained with the full recipe, took its place on the scoreboard.",
+   "zh": "我们来总结一下。一个预训练语料库，从对网络的一次抓取开始，其中大部分都被扔掉：按网址，按语言，按质量。MinHash和局部敏感哈希不用两两比较，就能找出近似重复，它们的S形曲线和预测的一样。配比是为一个目标挑选的，合成数据只有和真实文本放在一起才有帮助。一次训练，每个参数要六次运算、十六个字节，再加上激活。环形全规约是最优的；ZeRO把多余的副本分片掉；张量、流水线、上下文和专家并行切开其余的部分。更少的位需要缩放的技巧，大规模训练需要QK归一化，一万六千块GPU需要检查点。而我们自己的模型，用完整的配方训练，在记分牌上占了一席之地。"
+  },
+  "07238c87fc8f": {
+   "scene": "Outro",
+   "en": "All of this comes back. Serving the trained model is Part 19. The same data pipelines feed images, video and sound in Parts 22 and 23. Post-training starts from a pretrained model in Part 27, reasoning in Part 28, and Parts 30 and 31 open it up and test how far its evaluations can be trusted.",
+   "zh": "这些都会再出现。为训练好的模型提供服务，是第19部分。同样的数据流水线，在第22和第23部分为图像、视频和声音供料。后训练从一个预训练好的模型开始，在第27部分；推理在第28部分；第30和第31部分把它打开来看，并检验它的评测到底有多可信。"
+  },
+  "a829bd9f962a": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from MinHash's probability to Young's checkpoint interval. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道习题，从MinHash的概率，一直到杨的检查点间隔。请在这里暂停，动手做一做；完整的解答在本部分的笔记里。"
+  },
+  "92e828fe1df9": {
+   "scene": "Outro",
+   "en": "Next time: inference. A trained model has to answer, quickly and cheaply, for millions of people. Reading a prompt is arithmetic; writing the answer, one token at a time, is moving memory. Drafts like DeepSeek-V3's second-token guesses let one pass check several tokens, and four-bit weights make every token cheaper. That is Part 19.",
+   "zh": "下一次：推断。一个训练好的模型要回答问题，面对几百万人，又要快又要便宜。读提示是算术；一次一个词元地写答案，是搬运内存。像DeepSeek-V3的第二词元猜测那样的草稿，让一次前向就能检查好几个词元；4位权重让每个词元都更便宜。这就是第19部分。"
+  },
+  "a5fa896cc902": {
+   "scene": "Outro",
+   "en": "Most of this part's methods are written up openly, in the technical reports of the labs that use them, and they are well worth reading. Thanks for watching, and see you in Part 19.",
+   "zh": "本部分的大多数方法，都公开写在使用它们的那些实验室的技术报告里，非常值得一读。感谢观看，第19部分再见。"
+  }
+ },
+ "title_en": "AI, Built: Part 18, Pretraining at Scale",
+ "chapters_en": {
+  "Hook": "Sixteen thousand GPUs, fifty-four days",
+  "Anatomy": "1. Anatomy of a frontier run",
+  "Web": "2. From the web to text",
+  "Dedup": "3. Near-duplicates: MinHash and LSH",
+  "Quality": "4. Quality, and keeping the test clean",
+  "Mixture": "5. Mixtures, synthetic data and collapse",
+  "Objectives": "6. What the model is asked to predict",
+  "Curriculum": "7. Annealing, mid-training, long context",
+  "Accounting": "8. Counting FLOPs and bytes",
+  "DataParallel": "9. Data parallelism and the all-reduce",
+  "ZeRO": "10. ZeRO and FSDP",
+  "TensorParallel": "11. Tensor parallelism",
+  "Pipeline": "12. Pipeline parallelism",
+  "Context": "13. Context, experts, and utilization",
+  "Precision": "14. Fewer bits",
+  "Stability": "15. Keeping the run stable",
+  "MTP": "16. Predicting two tokens ahead",
+  "Faults": "17. When hardware fails",
+  "Recipe": "18. Our own full recipe",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}

@@ -43,7 +43,7 @@ class Dedup(VoiceoverScene):
         top = VGroup(pj, pair).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(UP, buff=0.5)
         # shingles: a sentence and its overlapping five-word pieces
         words = "the quick brown fox jumps over the lazy dog".split()
-        row = VGroup(*[label(w, font_size=24, color=WHITE) for w in words]).arrange(RIGHT, buff=0.18)
+        row = VGroup(*[data_text(w, font=MONO, font_size=21, color=WHITE) for w in words]).arrange(RIGHT, buff=0.18)
         row.move_to([0, 0.6, 0])
         braces = VGroup()
         for i in range(len(words) - 4):
