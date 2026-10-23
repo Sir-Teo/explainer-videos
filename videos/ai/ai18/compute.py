@@ -121,6 +121,11 @@ def compute_published():
     out["rope_wavelengths"] = {str(b): (2 * math.pi * b ** (np.arange(0, 128, 2) / 128)).tolist()
                                for b in (10_000, 500_000)}
     out["ring_lower_bound"] = "2(p-1)/p n / B"
+    # activations per layer and sequence (16-bit), Korthikanti et al.'s formula s b h (34 + 5 a s / h), at Llama 3
+    # 405B's shape (h = 16,384, 128 heads, 126 layers) and a sequence of 8,192
+    s_, h_, a_, L_ = 8192, 16384, 128, 126
+    out["act_llama"] = dict(s=s_, h=h_, a=a_, layers=L_, linear=34 * s_ * h_, attn=5 * a_ * s_ * s_,
+                            per_seq=34 * s_ * h_ * L_, recompute=2 * s_ * h_ * L_)
     return out
 
 
@@ -850,6 +855,29 @@ def compute_precision(steps=250, seeds=(0, 1)):
     return out
 
 
+ACCUM = 64  # micro-batches a step's gradient is accumulated over, in the second precision experiment
+
+
+def compute_precision_acc(steps=250, seeds=(0, 1)):
+    """FP16 without and with loss scaling again, when each step's gradient is accumulated over 64 micro-batches (each
+    micro-batch's loss divided by 64, as gradient accumulation and large data-parallel batches do): the gradients are
+    64 times smaller while they are rounded."""
+    from videos.ai.ai18 import lm
+
+    part = CACHE.partial("precision_acc", dict(steps=steps, seeds=list(seeds), accum=ACCUM, v=1))
+    runs = {}
+    for v in ("fp16", "fp16_scaled"):
+        for s in seeds:
+            key = f"{v}_{s}"
+            if key not in part:
+                r = _run_piece(lm.Spec(**SMALL, steps=steps, seed=s, precision=v, eval_windows=16, grad_div=ACCUM),
+                               f"precacc_{key}")
+                part[key] = _thin(r, 2)
+            runs[key] = part[key]
+    return dict(runs=runs, accum=ACCUM, seeds=list(seeds), steps=steps,
+                final={v: [runs[f"{v}_{s}"]["final_val"] for s in seeds] for v in ("fp16", "fp16_scaled")})
+
+
 LRS = [3e-3, 1e-2, 3e-2, 1e-1]
 STAB = {"plain": dict(), "qk": dict(qk_norm=True), "qkz": dict(qk_norm=True, z_loss=1e-4)}
 
@@ -1160,6 +1188,7 @@ ITEMS = {
     "collectives": compute_collectives,
     "parallel": compute_parallel,
     "precision": compute_precision,
+    "precision_acc": compute_precision_acc,
     "stability": compute_stability,
     "mtp": compute_mtp,
     "mixture": compute_mixture,

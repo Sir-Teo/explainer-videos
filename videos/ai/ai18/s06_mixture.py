@@ -1,0 +1,315 @@
+from __future__ import annotations
+
+import math
+
+import numpy as np
+
+from explainer.ai import *  # noqa: F403
+from videos.ai.ai18.common import (EDU, F, GROUP_C, KEPT, PART, REMOVED, hbars, load, spoken_int, take_away)
+
+GROUP_TEX = [r"American", r"English society", r"Adventure and mystery", r"Translations and \textit{Ulysses}"]
+
+
+class Mixture(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.why_mix()
+        self.regmix()
+        self.tested()
+        self.synthetic()
+        self.collapse()
+
+    def card(self):
+        card = chapter_card(5, r"Mixtures, \ synthetic data \ and collapse", r"How much of each kind of text? \ "
+                            r"And can a model make its own?", part=PART)
+        with self.voiceover("Chapter five. Mixtures, synthetic data and collapse."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def why_mix(self):
+        D, R = F.DOREMI, F.REGMIX
+        pile = VGroup(*[VGroup(Rectangle(width=w, height=0.5, stroke_width=1, stroke_color=BLACK, fill_color=c,
+                                         fill_opacity=0.85), label(t, font_size=18, color=BLACK))
+                        for w, c, t in ((2.4, "#6EA8FE", r"web $24\%$"), (0.9, "#5CD0B3", r"Wiki $9\%$"),
+                                        (0.6, "#FFB86B", r"code"), (6.1, GREY_C, r"the other $19$ sources"))])
+        for r_ in pile:
+            r_[1].move_to(r_[0])
+        pile.arrange(RIGHT, buff=0).move_to(UP * 2.3)
+        pl = label(r"The Pile (2020): \ $22$ sources, \ weights set by hand", font_size=22, color=GREY_A)
+        pl.next_to(pile, UP, buff=0.15)
+        doremi = VGroup(
+            label(r"DoReMi \ (Xie et al., 2023)", font_size=26, color=EDU),
+            label(rf"a ${D['proxy'] / 1e6:.0f}$M proxy model plays a game against the worst-predicted domains", font_size=21,
+                  color=GREY_A),
+            label(rf"its weights train an ${D['target'] / 1e9:.0f}$B model: \ $+{D['gain']}$ points few-shot, \ "
+                  rf"the same accuracy in $1/{D['speedup']}$ of the steps", font_size=21, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        regmix = VGroup(
+            label(r"RegMix \ (Liu et al., 2024)", font_size=26, color=KEPT),
+            label(rf"${R['models']}$ models of ${R['params'] / 1e6:.0f}$M parameters, \ each on a random mixture", font_size=21,
+                  color=GREY_A),
+            label(r"a regression from mixture to loss; \ the best mixture it predicts", font_size=21, color=GREY_A),
+            label(rf"trains a ${R['big'] / 1e9:.0f}$B model on ${R['big_tokens'] / 1e9:.0f}$B tokens: \ best of "
+                  rf"${R['candidates']}$ mixtures tried", font_size=21, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        both = VGroup(doremi, regmix).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(DOWN * 0.9)
+        src = cite(r"Gao et al.\ (2020); \ Xie et al., DoReMi (NeurIPS 2023); \ Liu et al., RegMix (ICLR 2025)",
+                   font_size=17)
+        with self.voiceover(
+            "A corpus is a mixture: web pages, encyclopedias, code, books, maths, papers. How much of each? "
+            "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, "
+            "and twenty other sources. <bookmark mark='b'/> In 2023, DoReMi learned them. A small proxy model of 280 "
+            "million parameters trains while an adversary keeps raising the weight of whichever domain it predicts "
+            "worst, relative to a reference model; the weights it ends with trained an eight-billion-parameter model "
+            "that matched the baseline in 2.6 times fewer steps. <bookmark mark='c'/> In 2024, RegMix made it a "
+            "regression. Train 512 tiny models, each on a random mixture; fit a model from the mixture to the loss "
+            "you care about; and train the big model on the mixture the regression likes best. Its pick beat all 64 "
+            "mixtures they tried at a billion parameters."
+        ) as vo:
+            self.play(FadeIn(pl), FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in pile], lag_ratio=0.3))
+            vo.wait_until("a")
+            self.play(Indicate(pile, scale_factor=1.03))
+            vo.wait_until("b")
+            self.play(FadeIn(doremi, shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(regmix, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def regmix(self):
+        M = load("mixture")
+        proxy = M["proxy"]
+        sizes = np.asarray(M["sizes"])
+        groups = VGroup()
+        for k, (name, nb) in enumerate(zip(GROUP_TEX, M["books"].values())):
+            groups.add(VGroup(Square(0.28, stroke_width=0, fill_color=GROUP_C[k], fill_opacity=0.9),
+                              label(rf"{name}: \ ${nb}$ books, \ ${sizes[k] / 1e6:.1f}$M tokens", font_size=20,
+                                    color=GROUP_C[k])).arrange(RIGHT, buff=0.15))
+        groups.arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UL, buff=0.4)
+        tgt = label(r"target: \ chapters 1 and 3 of \textit{The Maltese Falcon} \\ (chapter 2, the scoreboard's, kept "
+                    r"for the test)", font_size=20, color=C.BITS).next_to(groups, DOWN, buff=0.3).align_to(groups, LEFT)
+        y = np.array([p_["target"] for p_ in proxy])
+        w0 = np.array([p_["w"][0] for p_ in proxy])
+        lo, hi = math.floor(y.min() * 10) / 10, math.ceil(y.max() * 10) / 10
+        g = axes([0, 1], [lo, hi], x_length=5.2, y_length=3.4, xlabel=r"share of American novels in the mixture",
+                 ylabel=r"loss on the target (nats per token)", xticks=[0, 0.5, 1], yticks=[lo, hi],
+                 center=[3.6, 1.2, 0], font_size=18)
+        dots = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.06, color=WHITE) for a, b in zip(w0, y)])
+        loo = np.asarray(M["loo"])
+        g2 = axes([lo, hi], [lo, hi], x_length=2.6, y_length=2.0, xlabel=r"actual", ylabel=r"predicted, \ left out",
+                  xticks=[lo, hi], yticks=[lo, hi], center=[-3.8, -2.0, 0], font_size=16)
+        d2 = VGroup(*[Dot(g2.ax.c2p(a, b), radius=0.04, color=KEPT) for a, b in zip(y, loo)])
+        diag = DashedLine(g2.ax.c2p(lo, lo), g2.ax.c2p(hi, hi), color=GREY_B, dash_length=0.05)
+        corr = label(rf"correlation ${M['loo_corr']:.2f}$", font_size=18, color=KEPT).next_to(g2, RIGHT, buff=0.15)
+        nat, best = np.asarray(M["natural"]), np.asarray(M["best"])
+
+        def mixbar(w, y_, title):
+            row = VGroup()
+            x = 0.0
+            for k, v in enumerate(w):
+                r_ = Rectangle(width=max(4.4 * v, 0.02), height=0.42, stroke_width=1, stroke_color=BLACK,
+                               fill_color=GROUP_C[k], fill_opacity=0.9)
+                r_.move_to([1.3 + x + 4.4 * v / 2, y_, 0])
+                row.add(r_)
+                x += 4.4 * v
+            t = label(title, font_size=20, color=GREY_A).next_to(row, LEFT, buff=0.15)
+            return VGroup(t, row)
+
+        mb = VGroup(mixbar(nat, -1.6, r"natural"), mixbar(best, -2.3, r"RegMix's pick"))
+        tag = note(rf"computed: \ ${len(proxy)}$ runs of a ${M['proxy_spec']['d']}$-wide, "
+                   rf"${M['proxy_spec']['layers']}$-layer model, \ ${M['proxy_spec']['steps']}$ steps each",
+                   font_size=18).to_corner(DR, buff=0.2)
+        shares = ", ".join(f"{100 * v:.0f}" for v in best)
+        rho = float(np.corrcoef(w0, y)[0, 1])
+        if rho < -0.4:
+            trend = "the more American text, the lower the loss, though the other three groups matter too"
+        elif rho < -0.1:
+            trend = "more American text helps a little, but the other groups matter as much"
+        else:
+            trend = "the share of American text alone doesn't decide it"
+        am = best[0] - nat[0]
+        if am > 0.05:
+            lean = "leans toward the American novels"
+        elif am < -0.05:
+            lean = "moves away from the American novels"
+        else:
+            lean = "stays close to the natural mixture"
+        with self.voiceover(
+            "We ran RegMix on the thirty novels. Split them into four groups: American novels, English novels of "
+            "society, adventure and mystery, and the translations with Ulysses. <bookmark mark='a'/> Our target is "
+            "the scoreboard's own book, The Maltese Falcon, an American detective novel of 1930; we tune on its "
+            "first and third chapters and keep the second, the scoreboard's passage, for the test. "
+            f"<bookmark mark='b'/> {len(proxy)} tiny models, each on a random mixture. Here is each one's loss on the "
+            "target against its share of American novels: " + trend + ". "
+            "<bookmark mark='c'/> A regression on the four weights and their products predicts each run's loss from "
+            f"the other runs with a correlation of {M['loo_corr']:.2f}. <bookmark mark='d'/> Asked for the best "
+            f"mixture, it {lean}: {shares} percent of the four groups, against the natural proportions of the books."
+        ) as vo:
+            self.play(FadeIn(groups), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(tgt))
+            vo.wait_until("b")
+            self.play(FadeIn(g), LaggedStart(*[FadeIn(d_, scale=1.5) for d_ in dots], lag_ratio=0.05), run_time=2.5)
+            vo.wait_until("c")
+            self.play(FadeIn(g2), Create(diag), LaggedStart(*[FadeIn(d_) for d_ in d2], lag_ratio=0.03), FadeIn(corr))
+            vo.wait_until("d")
+            self.play(FadeIn(mb[0]), run_time=0.8)
+            self.play(FadeIn(mb[1]), run_time=0.8)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def tested(self):
+        M = load("mixture")
+        T = M["tests"]
+        names = [("natural", r"natural", GREY_B), ("uniform", r"a quarter each", "#FFB86B"),
+                 ("regmix", r"RegMix's pick", KEPT)]
+        test = {n: [T[f"test_{n}_{s}"]["test"] for s in (0, 1)] for n, _, _ in names}
+        val = {n: [T[f"test_{n}_{s}"]["val"] for s in (0, 1)] for n, _, _ in names}
+        allv = [v for n in test for v in test[n]]
+        lo, hi = math.floor(min(allv) * 20) / 20 - 0.05, math.ceil(max(allv) * 20) / 20 + 0.05
+        allh = [v for n in val for v in val[n]]
+        lo2, hi2 = math.floor(min(allh) * 20) / 20 - 0.05, math.ceil(max(allh) * 20) / 20 + 0.05
+
+        def panel(vals, lo_, hi_, title, center):
+            g = axes([0, 3], [lo_, hi_], x_length=4.2, y_length=3.4, ylabel=title, yticks=[lo_, hi_],
+                     yfmt=lambda v: f"{v:.2f}", center=center, font_size=18)
+            marks = VGroup()
+            for i, (n, nm, col) in enumerate(names):
+                for v in vals[n]:
+                    marks.add(Dot(g.ax.c2p(i + 0.5, v), radius=0.08, color=col))
+                marks.add(Line(g.ax.c2p(i + 0.3, np.mean(vals[n])), g.ax.c2p(i + 0.7, np.mean(vals[n])), color=col,
+                               stroke_width=4))
+                marks.add(label(nm, font_size=18, color=col).next_to(g.ax.c2p(i + 0.5, lo_), DOWN, buff=0.15))
+            return VGroup(g, marks)
+
+        p1 = panel(test, lo, hi, r"loss on the scoreboard's passage", [-3.4, 0.4, 0])
+        p2 = panel(val, lo2, hi2, r"loss on all thirty novels (held out)", [3.4, 0.4, 0])
+        spec = M["test_spec"]
+        head = label(rf"each mixture, \ a ${spec['d']}$-wide model, \ ${spec['steps']}$ steps, \ two seeds",
+                     font_size=22, color=GREY_A).to_edge(UP, buff=0.4)
+        r, n_ = np.mean(test["regmix"]), np.mean(test["natural"])
+        spread = max(abs(test["regmix"][0] - test["regmix"][1]), abs(test["natural"][0] - test["natural"][1]))
+        rv, nv = np.mean(val["regmix"]), np.mean(val["natural"])
+        if n_ - r > max(spread, 0.01):
+            verdict = (f"On the held-out chapter, RegMix's pick beats the natural mixture, {r:.3f} nats against "
+                       f"{n_:.3f}, by more than the gap between seeds.")
+        elif r - n_ > max(spread, 0.01):
+            verdict = (f"On the held-out chapter, RegMix's pick does worse than the natural mixture, {r:.3f} nats "
+                       f"against {n_:.3f}: the regression, fitted on tiny models, didn't carry to a larger one.")
+        else:
+            verdict = (f"On the held-out chapter, RegMix's pick and the natural mixture are within the noise of two "
+                       f"seeds, {r:.3f} and {n_:.3f} nats: at our scale, the mixture of thirty novels matters less "
+                       "than luck.")
+        if rv > nv + 0.005:
+            cost = "And on the thirty novels as a whole it pays a little: tuning toward one book costs the others."
+        else:
+            cost = "And it costs nothing on the thirty novels as a whole."
+        tw = take_away(r"a mixture is chosen for a target: \ say which, \ and test on held-out text", font_size=24)
+        with self.voiceover(
+            "Now the test: does the pick carry over to a larger model? We trained each mixture again, at the "
+            "larger size, with two seeds. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + cost +
+            " <bookmark mark='c'/> That is the general lesson: a mixture is chosen for a target, so say which, and "
+            "test on text the choice never saw."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(p1[0]), FadeIn(p1[1]))
+            vo.wait_until("a")
+            self.play(Indicate(p1[1], scale_factor=1.02))
+            vo.wait_until("b")
+            self.play(FadeIn(p2[0]), FadeIn(p2[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(tw, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def synthetic(self):
+        K, W = F.KIMIK2, F.WRAP
+        wrap = VGroup(
+            label(r"WRAP \ (Maini et al., 2024)", font_size=26, color=EDU),
+            label(r"an instruction-tuned model rewrites web pages: \ ``like Wikipedia'', \ ``as questions and answers''",
+                  font_size=21, color=GREY_A),
+            label(rf"real and rewritten text together: \ about ${W['speedup']}\times$ faster pretraining on C4",
+                  font_size=21, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(UP, buff=0.5).to_edge(LEFT, buff=0.6)
+        rows = hbars([(t, v, c) for (t, v), c in zip(K["rephrase"], [GREY_B, "#FFB86B", KEPT])], 32.0, width=4.6,
+                     font_size=21, label_width=4.4, fmt=lambda v: rf"${v:.2f}\%$")
+        rows.move_to([1.6, -0.9, 0])
+        rh = label(r"Kimi K2: \ SimpleQA accuracy after training on the same knowledge text", font_size=22,
+                   color=KEPT).next_to(rows, UP, buff=0.3)
+        src = cite(r"Maini et al.\ (2024); \ Kimi Team (2025), Table 1; \ Muennighoff et al.\ (2023)", font_size=17)
+        rep = label(rf"repeating data: \ up to ${F.REPEAT['epochs']}$ epochs about as good as new data, \ then "
+                    r"returns fall", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.85)
+        with self.voiceover(
+            "When good text runs short, there are two ways to stretch it. Repeat it: Muennighoff and colleagues found "
+            "in 2023 that up to about four passes over the same data are nearly as good as new data, and after that "
+            "the returns fall away. <bookmark mark='a'/> Or rewrite it. In 2024, WRAP, from Apple and Carnegie Mellon, had a "
+            "language model "
+            "rephrase noisy web pages, as an encyclopedia entry or as questions and answers, and training on real "
+            "and rephrased text together reached the same quality about three times faster. "
+            "<bookmark mark='b'/> Kimi K2's report measured it on knowledge. The same text, repeated ten times, "
+            f"taught a model enough to answer {K['rephrase'][0][1]:.2f} percent of a set of factual questions. "
+            f"Rephrased once and repeated ten times: {K['rephrase'][1][1]:.2f}. Rephrased ten different ways, each "
+            f"read once: {K['rephrase'][2][1]:.2f}."
+        ) as vo:
+            self.play(FadeIn(rep), FadeIn(src))
+            vo.wait_until("a")
+            self.play(FadeIn(wrap, shift=UP * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(rh), LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT), FadeIn(r_[2]))
+                                                for r_ in rows], lag_ratio=0.5), run_time=3.0)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def collapse(self):
+        Cl = load("collapse")
+        rep, acc = np.asarray(Cl["replace"]), np.asarray(Cl["accumulate"])
+        gens = Cl["gens"]
+        x = np.arange(gens + 1)
+        top = float(rep[:, 0, 0].mean())
+        g = axes([0, gens], [0, 3500], x_length=5.4, y_length=3.4, xlabel=r"generation",
+                 ylabel=r"tokens the model can still produce", xticks=[0, 10, 20, 30], yticks=[0, 1000, 2000, 3000],
+                 yfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), center=[-3.3, -0.5, 0], font_size=18)
+        g2 = axes([0, gens], [9.6, 10.8], x_length=5.0, y_length=3.4, xlabel=r"generation",
+                  ylabel=r"cross-entropy on real text (bits)", xticks=[0, 10, 20, 30], yticks=[9.6, 10.2, 10.8],
+                  center=[3.6, -0.5, 0], font_size=18)
+        rc = curve(g.ax, x, rep[:, :, 0].mean(0), REMOVED, 3)
+        ac = curve(g.ax, x, acc[:, :, 0].mean(0), KEPT, 3)
+        rb = band(g.ax, x, rep[:, :, 0].min(0), rep[:, :, 0].max(0), REMOVED)
+        rc2 = curve(g2.ax, x, rep[:, :, 1].mean(0), REMOVED, 3)
+        ac2 = curve(g2.ax, x, acc[:, :, 1].mean(0), KEPT, 3)
+        lg = legend([(REMOVED, r"each generation trained on the last one's samples"),
+                     (KEPT, r"each generation trained on everything so far")], font_size=18).to_edge(UP, buff=0.5)
+        sch = note(rf"computed: \ a unigram model of the novels' tokens, \ ${Cl['n'] // 1000}$k samples a generation, "
+                   rf"\ ${Cl['seeds']}$ seeds", font_size=18).to_corner(DR, buff=0.2)
+        start, end = rep[:, 0, 0].mean(), rep[:, -1, 0].mean()
+        lost = rep[:, -1, 2].mean()
+        src = cite(r"Shumailov et al., \textit{Nature} (2024); \ Gerstgrasser et al.\ (2024)", font_size=17)
+        with self.voiceover(
+            "But a model trained on a model's output has a known failure. Shumailov and colleagues called it model "
+            "collapse, in Nature in 2024: train each generation on the last one's samples, and the tails of the "
+            "distribution vanish. We can watch it in the simplest language model there is, the frequencies of the "
+            "novels' tokens. <bookmark mark='a'/> Fit it to fifty thousand real tokens; sample fifty thousand from "
+            "it; fit the next generation to those; and repeat. A rare token that happens not to be sampled once is "
+            f"gone for good. <bookmark mark='b'/> Over {gens} generations, the tokens it can produce fall from "
+            f"{start:,.0f} to {end:,.0f}, and the lost ones carried {100 * lost:.0f} percent of real text. "
+            "<bookmark mark='c'/> Its cross-entropy on real text climbs with every generation. "
+            "<bookmark mark='d'/> Gerstgrasser and colleagues found the way out the same year: keep the real data, "
+            "and add each generation's samples to it instead of replacing it. Then nothing real is ever lost, and "
+            "the damage stays small. That is how the synthetic data of 2026 is used: alongside real text, never "
+            "instead of it."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(g2), FadeIn(sch), FadeIn(src), FadeIn(lg[0]))
+            vo.wait_until("a")
+            self.play(Indicate(lg[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rb), Create(rc), run_time=2.0)
+            vo.wait_until("c")
+            self.play(Create(rc2), run_time=1.5)
+            vo.wait_until("d")
+            self.play(FadeIn(lg[1]), Create(ac), Create(ac2), run_time=2.0)
+        self.wait(0.3)
+        self.clear_scene()

@@ -65,6 +65,8 @@ class Spec:
     mtp_late: float | None = None  # its weight over the last decay_frac of the run (DeepSeek-V3: 0.3, then 0.1)
     precision: str = "fp32"  # fp32 | bf16 | fp16 | fp16_scaled | fp8_tensor | fp8_tile
     tile: int = 32
+    grad_div: float = 1.0  # the loss is divided by this before the backward pass and the gradients multiplied back
+    # after it: what accumulating a step's gradient over grad_div micro-batches does to the gradients' size
     seed: int = 0
     mix: list | None = None  # weights over the groups of books (None: the natural text)
     probe_every: int = 0
@@ -365,7 +367,7 @@ def train(spec: Spec, *, arrays: list | None = None, valid: np.ndarray | None = 
             total = total + lam * mtp_ce
         for o in opts:
             o.zero_grad(set_to_none=True)
-        (total * (st["scale"] if scaled else 1.0)).backward()
+        (total * (st["scale"] if scaled else 1.0) / spec.grad_div).backward()
         skip = False
         if scaled:
             inv = 1.0 / st["scale"]
@@ -383,6 +385,10 @@ def train(spec: Spec, *, arrays: list | None = None, valid: np.ndarray | None = 
                 st["good"] += 1
                 if st["good"] % 50 == 0:  # (PyTorch's GradScaler waits 2,000 steps; our runs are short)
                     st["scale"] *= 2
+        if spec.grad_div != 1.0 and not skip:
+            for p in model.parameters():
+                if p.grad is not None:
+                    p.grad.mul_(spec.grad_div)
         gn = float("nan")
         if not skip:
             gn = float(torch.nn.utils.clip_grad_norm_(model.parameters(), spec.clip if spec.clip else 1e9))
