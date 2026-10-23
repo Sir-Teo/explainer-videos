@@ -285,7 +285,7 @@ _DATA = {
         "当一层对一块GPU来说太大，或者太慢，就把这一层本身切开。英伟达的Megatron-LM在2019年展示了怎样对Transformer的两半做到这一点。拿MLP来说：Z等于X乘以A，过一个非线性，再乘以B。<bookmark mark='a'/>把A按列切开，每块GPU一半。每块用完整的输入算出自己那一半的Y，不需要通信。<bookmark mark='b'/>非线性对每一列单独作用，所以它也留在本地。<bookmark mark='c'/>现在把B按行切开。第一块GPU用它那一半的Y乘以它那一半的B，第二块乘另一半：每块都得到一个全尺寸的部分结果，答案是它们的和。一次全规约。<bookmark mark='d'/>所以整个MLP在前向时花一次全规约，叫作g，反向时花一次，叫作f，用于两半都用过的那个输入的梯度。",
 
     'Attention splits even more naturally':
-        "注意力切起来更自然：它的各个头是相互独立的。<bookmark mark='a'/>给每块GPU一半的头的查询、键和值；每块单独算自己的头，按行切开的输出投影，最后一次全规约。<bookmark mark='b'/>所以一个Transformer层，前向花两次全规约，反向两次，每次都是一个完整的激活：批次，乘以序列长度，乘以宽度。<bookmark mark='c'/>每一层、每个微批次都要来一遍，所以张量并行住在带宽最高的地方，一台机器的NVLink域里。Llama 3用了八路张量并行，是它四个维度里最内层的一个。<bookmark mark='d'/>2022年的一个改进，序列并行，把每次全规约换成一次规约-分散加一次全收集，并且把剩下的激活也按位置切开。",
+        "注意力切起来更自然：它的各个头是相互独立的。<bookmark mark='a'/>给每块GPU一半的头的查询、键和值；每块单独算自己的头，按行切开的输出投影，最后一次全规约。<bookmark mark='b'/>所以一个Transformer层，前向花两次全规约，反向两次，每次都是一个完整的激活：批次，乘以序列长度，乘以宽度。<bookmark mark='c'/>每一层、每个微批次都要来一遍，所以张量并行住在带宽最高的地方，一台机器的NVLink域里。Llama 3用了八路张量并行，是它四个维度里最内层的一个。<bookmark mark='d'/>2022年的序列并行，把剩下的激活也按位置切开。",
 
     '"We split one block of our own transformer':
         "我们用这种方法，把自己的Transformer的一个块，切到两个、再切到四个进程上，每个f和g各用一次全规约。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>每个进程保存块里矩阵的一半，或者四分之一，次数也正是Megatron的：前向两次全规约，反向两次。",
@@ -362,8 +362,8 @@ _DATA = {
     "f'The six end up to {width:.3f} nats apart":
         "六种最后最多相差{width:.3f}奈特，但没有哪一种比FP32差出两个种子之间{spread:.3f}的差别，就连不带损失缩放的FP16也没有，尽管它把{100 * zero:.1f}%的梯度值冲成了零。",
 
-    'f"Why, then, did loss scaling matter?':
-        "那么，损失缩放为什么要紧？因为我们的梯度只是两千个词元上的平均。一次前沿训练，每一步的梯度是在几百万个词元上平均的，一块一块累积起来，每一块都小那么多。<bookmark mark='a'/>所以我们把FP16的训练重做了一遍，每一步切成{A['accum']}个微批次，就像梯度累积那样。<bookmark mark='b'/>{verdict}",
+    'f"Why, then, does loss scaling matter?':
+        "那么，损失缩放为什么要紧？一次前沿训练，每一步的梯度要在几百万个词元上一块一块累积起来，每一块都小那么多。<bookmark mark='a'/>所以我们把FP16的训练重做了一遍，每一步切成{A['accum']}个微批次，就像梯度累积那样。<bookmark mark='b'/>{verdict}",
 
     "f'Now the gradients are {A['accum']} times smaller":
         "现在梯度在舍入时小了{A['accum']}倍，不带损失缩放的FP16把其中{100 * zero:.0f}%冲成了零：它最后落后FP32 {d_noscale:.2f}奈特。带损失缩放，和FP32只差{abs(d_scaled):.3f}。这正是损失缩放要防止的失败。",
@@ -430,7 +430,7 @@ _DATA = {
         "在我们的训练里，log Z最后不带它是{a:.1f}，带它是{b:.2f}。",
 
     "f'In our short runs it changes nothing we can measure:":
-        "在我们这么短的训练里，它没有带来任何测得出的变化：不管带不带它，log Z最后都在{a:.1f}附近，差得比同一种设计的两个种子还小。这个惩罚和损失比起来非常小；它是为长时间的训练准备的，那时logit有足够的时间漂移。",
+        '在我们这么短的训练里，它没有带来任何测得出的变化：不管带不带它，log Z最后都在{a:.1f}附近。它是为长时间的训练准备的，那时logit有足够的时间漂移。',
 
     "f'In our short runs it barely moves log Z:":
         "在我们这么短的训练里，它几乎没有挪动log Z：不带它是{a:.2f}，带它是{b:.2f}。这个惩罚和损失比起来非常小；它是为长时间的训练准备的，那时logit有足够的时间漂移。",

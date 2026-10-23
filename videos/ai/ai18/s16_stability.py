@@ -234,9 +234,8 @@ class Stability(VoiceoverScene):
         if a - b > max(spread_z, 0.3):
             zl = f"In our runs, log Z ends at {a:.1f} without it and {b:.2f} with it."
         elif abs(a - b) <= spread_z:
-            zl = (f"In our short runs it changes nothing we can measure: log Z ends near {a:.1f} with or without it, "
-                  "closer together than two seeds of the same design. The penalty is tiny next to the loss; it is "
-                  "there for long runs, where the logits have time to drift.")
+            zl = (f"In our short runs it changes nothing we can measure: log Z ends near {a:.1f} either way. It is "
+                  "meant for long runs, where the logits have time to drift.")
         else:
             zl = (f"In our short runs it barely moves log Z: {a:.2f} without it, {b:.2f} with it. The penalty is tiny "
                   "next to the loss; it is there for long runs, where the logits have time to drift.")

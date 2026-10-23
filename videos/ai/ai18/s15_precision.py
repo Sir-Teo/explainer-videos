@@ -267,9 +267,8 @@ class Precision(VoiceoverScene):
                        f"loss scaling ends only {d_noscale:.3f} nats from FP32: our model is too small to show the "
                        "failure clearly.")
         with self.voiceover(
-            "Why, then, did loss scaling matter? Because our gradients are averages over only two thousand tokens. "
-            "A frontier run averages each step's gradient over millions, accumulated piece by piece, and every piece "
-            f"is that much smaller. <bookmark mark='a'/> So we repeated the FP16 runs with each step split into "
+            "Why, then, does loss scaling matter? A frontier run accumulates each step's gradient over millions of "
+            f"tokens, piece by piece, and every piece is that much smaller. <bookmark mark='a'/> So we repeated the FP16 runs with each step split into "
             f"{A['accum']} micro-batches, as gradient accumulation does. <bookmark mark='b'/> " + verdict
         ) as vo:
             ref_l = VGroup(*[l_ for k, l_ in zip(evs, lines) if k.startswith("ref_")])

@@ -12,7 +12,7 @@ from videos.ai.ai18.common import (BASE_C, C_COL, D_COL, F, FULL_C, MONO, N_COL,
 class Recipe(VoiceoverScene):
     def construct(self):
         self.card()
-        self.setup()
+        self.same_run()
         self.replay()
         self.result()
         self.board()
@@ -25,7 +25,7 @@ class Recipe(VoiceoverScene):
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
-    def setup(self):
+    def same_run(self):
         b, f = load("recipe_base"), load("recipe_full")
         sb, sf = b["spec"], f["spec"]
         same = VGroup(
