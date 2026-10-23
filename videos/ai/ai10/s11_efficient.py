@@ -213,10 +213,9 @@ class Efficient(VoiceoverScene):
             "convolution leaves gaps between its taps: one apart in the first layer, two in the next, then four, "
             "then eight. <bookmark mark='b'/> The receptive field doubles with every layer: after ten layers "
             f"of three taps, {r['dilated'][9]:,} inputs instead of {r['plain'][9]}, at no extra cost. "
-            "<bookmark mark='c'/> The idea is old in signal processing, the algorithme a trous of 1989. Fisher Yu "
-            "and Vladlen Koltun used it in 2015 to label every pixel of a photograph, and DeepMind's WaveNet in "
-            "2016 to generate speech one sample at a time, sixteen thousand samples a second, with a context of "
-            "thousands."
+            "<bookmark mark='c'/> The idea is old in signal processing, the algorithme a trous of 1989; "
+            "DeepMind's WaveNet used it in 2016 to generate speech one sample at a time, sixteen thousand a "
+            "second, with a context of thousands."
         ) as vo:
             self.play(FadeIn(nodes), FadeIn(head), FadeIn(cite_))
             vo.wait_until("a")

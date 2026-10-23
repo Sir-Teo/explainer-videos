@@ -47,9 +47,11 @@ class Safeguards(VoiceoverScene):
                   color=GREY_A),
             label(r"Google DeepMind: \ Frontier Safety Framework \ (2024; \ v3, September 2025)", font_size=20,
                   color=GREY_A),
-            label(r"California SB 53 \ (signed September 2025): \ the largest developers must publish theirs", font_size=20,
+            label(r"California SB 53 \ (signed September 2025): \\ the largest developers must publish theirs", font_size=20,
                   color=CI),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).move_to([3.4, -1.7, 0])
+        if lines.get_right()[0] > 6.9:
+            lines.shift(LEFT * (lines.get_right()[0] - 6.9))
         with self.voiceover(
             "Some abilities matter because of what they could help someone do. Labs now test every frontier model "
             "for a few of them: <bookmark mark='a'/> help with biological or chemical weapons, with cyberattacks, with "
@@ -113,10 +115,12 @@ class Safeguards(VoiceoverScene):
             "Astra, the first model it rates at its highest level, Critical, in cybersecurity, with its strongest "
             "safeguards yet."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            full = rows.copy()
+            rows.fade(0.8)
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(rows))
             for k, m in enumerate("abcdef"):
                 vo.wait_until(m)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.15))
+                self.play(Transform(rows[k], full[k]))
                 if m == "d":
                     self.play(FadeIn(fire, shift=UP * 0.15))
         self.wait(0.4)
@@ -154,13 +158,16 @@ class Safeguards(VoiceoverScene):
             "front. <bookmark mark='c'/> OpenAI now serves its models with activation classifiers too: the probes of "
             "Part 30, standing guard."
         ) as vo:
-            self.play(FadeIn(flow), FadeIn(arr), FadeIn(sch))
+            cards_ = VGroup(c1, c2, c3)
+            full = cards_.copy()
+            cards_.fade(0.8)
+            self.play(FadeIn(flow), FadeIn(arr), FadeIn(sch), FadeIn(cards_))
             vo.wait_until("a")
-            self.play(FadeIn(c1, shift=UP * 0.15))
+            self.play(Transform(c1, full[0]))
             vo.wait_until("b")
-            self.play(FadeIn(c2, shift=UP * 0.15))
+            self.play(Transform(c2, full[1]))
             vo.wait_until("c")
-            self.play(FadeIn(c3, shift=UP * 0.15))
+            self.play(Transform(c3, full[2]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -170,17 +177,19 @@ class Safeguards(VoiceoverScene):
         rng_ = np.random.default_rng(5)
         for k in range(3):
             slab = RoundedRectangle(width=0.35, height=4.2, corner_radius=0.08, stroke_color=GUARD, stroke_width=2,
-                                    fill_color=GUARD, fill_opacity=0.18).move_to([-4.5 + 1.6 * k, 0.0, 0])
+                                    fill_color=GUARD, fill_opacity=0.18).move_to([-3.9 + 1.6 * k, 0.0, 0])
             holes = VGroup(*[Ellipse(width=0.22, height=0.38, stroke_width=0, fill_color=BACKGROUND, fill_opacity=1)
                              .move_to(slab.get_center() + UP * y) for y in rng_.uniform(-1.7, 1.7, 3)])
             layers.add(VGroup(slab, holes))
         ys = [h.get_y() for h in layers[0][1]]
-        fixed = Arrow([-6.3, -0.9, 0], [-1.6, -0.9, 0], buff=0, color=GREY_B, stroke_width=3)
+        fixed = Arrow([-6.3, -0.9, 0], [layers[0][0].get_left()[0] - 0.05, -0.9, 0], buff=0, color=GREY_B,
+                      stroke_width=3)
         stop = Cross(scale_factor=0.18, stroke_color=GUARD).move_to(layers[0][0].get_center() + DOWN * 0.9)
         path = VMobject(stroke_color=LEAK, stroke_width=4).set_points_smoothly(
-            [[-6.3, 1.2, 0]] + [[l_[1][0].get_x(), l_[1][0].get_y(), 0] for l_ in layers] + [[-0.9, layers[-1][1][0].get_y(), 0]])
+            [[-6.3, 1.2, 0]] + [[l_[1][0].get_x(), l_[1][0].get_y(), 0] for l_ in layers] + [[-0.3, layers[-1][1][0].get_y(), 0]])
         tip = Triangle(fill_color=LEAK, fill_opacity=1, stroke_width=0).scale(0.12).rotate(-PI / 2).move_to(path.get_end())
-        l1 = label(r"a fixed set of attacks: \ stopped", font_size=20, color=GREY_A).next_to(fixed, DOWN, buff=0.1)
+        l1 = label(r"a fixed set \\ of attacks: \ stopped", font_size=18, color=GREY_A).next_to(fixed, DOWN, buff=0.12)
+        l1.align_to(fixed, LEFT)
         l2 = label(r"an attacker who adapts: \ finds the holes that line up", font_size=20, color=LEAK)
         l2.next_to(layers, UP, buff=0.15)
         sch = note(r"schematic").next_to(layers, DOWN, buff=0.15)

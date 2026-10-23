@@ -19,7 +19,6 @@ class Adversarial(VoiceoverScene):
         self.linearity()
         self.digit()
         self.curves()
-        self.straight()
         self.photos()
         self.defence()
 
@@ -200,54 +199,6 @@ class Adversarial(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def straight(self):
-        a = load("adversarial")
-        es = np.asarray(a["line_eps"])
-        L = np.asarray(a["line_logits"])
-        lo, hi = float(L.min()), float(L.max())
-        ax = axes([es[0], es[-1]], [lo, hi], x_length=6.6, y_length=4.0,
-                  xlabel=r"$\varepsilon$ along $\mathrm{sign}(\nabla_x J)$", ylabel=r"the ten scores (logits)",
-                  xticks=[-0.5, 0, 0.5], center=[-1.8, -0.3, 0])
-        A = ax.ax
-        y0 = int(a["digit_label"])
-        cols = [CNN if k == y0 else GREY_B for k in range(10)]
-        curves_ = VGroup(*[curve(A, es, L[:, k], cols[k], 4 if k == y0 else 2) for k in range(10)])
-        win = np.argmax(L, 1)
-        other = int(np.bincount(win[es > 0.2], minlength=10).argmax()) if (es > 0.2).any() else y0
-        curves_[other].set_color(ADV).set_stroke(width=4)
-        z = Line(A.c2p(0, lo), A.c2p(0, hi), color=GREY_D, stroke_width=1.5)
-        leg = legend([(CNN, rf"the score for {y0}"), (ADV, rf"the score for {other}"),
-                      (GREY_B, r"the other eight")], font_size=22).to_corner(UR, buff=0.4)
-        n1 = label(r"Goodfellow et al.'s figure 4, \ redone on our LeNet", font_size=20, color=GREY_B)
-        n1.next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
-        a_ = load("adversarial")
-        gap, l1, need = a_["linear_gap_median"], a_["linear_l1_median"], a_["linear_need_median"]
-        lin = VGroup(label(r"the linear model, \ median over test digits:", font_size=22, color=GREY_A),
-                     MathTex(rf"\text{{margin}} \approx {gap:.1f},\quad \|\Delta w\|_1 \approx {l1:.0f}", font_size=28,
-                             color=KERNEL),
-                     MathTex(rf"\varepsilon_{{\text{{needed}}}} \approx {gap:.1f} / {l1:.0f} \approx {need:.3f}",
-                             font_size=28, color=ADV)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        lin.next_to(n1, DOWN, buff=0.5).align_to(n1, LEFT)
-        keep_in_frame(lin)
-        tag = note(r"computed").to_corner(DR, buff=0.25)
-        with self.voiceover(
-            "Is the network really that linear? Walk from the digit along the attack direction, both ways, and "
-            "plot all ten of its scores. <bookmark mark='a'/> Nearly straight lines: the right answer's score "
-            f"falls, the score for {other} rises, and where they cross the answer changes. <bookmark mark='b'/> "
-            f"For the linear model the arithmetic is exact: a typical gap of {gap:.1f} between the right score and "
-            f"the runner-up, closed at a rate of about {l1:.0f} per unit of epsilon, so an epsilon of about "
-            f"{need:.3f} is enough."
-        ) as vo:
-            self.play(Create(ax), Create(z), FadeIn(tag))
-            self.play(LaggedStart(*[Create(c) for c in curves_], lag_ratio=0.05), run_time=2.0)
-            vo.wait_until("a")
-            self.play(FadeIn(leg), FadeIn(n1))
-            vo.wait_until("b")
-            self.play(FadeIn(lin, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
     def photos(self):
         a = load("adversarial")
         names = classes()
@@ -358,8 +309,7 @@ class Adversarial(VoiceoverScene):
             f"{pct(adv_f, 0)} percent of the time instead of {pct(std_f, 0)}. " + verdict + " "
             f"<bookmark mark='c'/> The clean error is {pct(adv_c, 2)} percent, against {pct(std_c, 2)}: " + cost + " "
             "Aleksander Madry's group made training against many steps the standard in 2017. <bookmark mark='d'/> "
-            "The problem is still open: stickers fool stop-sign detectors, and the same search, run over words, "
-            "breaks language models, which is Part 31's story."
+            "The problem is still open, and the same search, run over words, breaks language models: Part 31."
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")

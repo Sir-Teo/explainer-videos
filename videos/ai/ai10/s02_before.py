@@ -170,8 +170,7 @@ class Before(VoiceoverScene):
             "<bookmark mark='b'/> David Lowe's SIFT, published in full in 2004, found distinctive points at every "
             "scale and described each one with 128 such counts. <bookmark mark='c'/> Navneet Dalal and Bill Triggs's "
             "histograms of oriented gradients, in 2005, covered the whole window, normalized block by block, and "
-            "found pedestrians. Counted like this, an image survives small shifts, changes of lighting and "
-            "changes of contrast."
+            "found pedestrians. Counted like this, an image survives small shifts and changes of lighting."
         ) as vo:
             self.play(FadeIn(digit), Create(grid), FadeIn(dl), FadeIn(tag))
             vo.wait_until("a")

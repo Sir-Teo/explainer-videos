@@ -51,8 +51,8 @@ class LeNet(VoiceoverScene):
             "rules of its own. <bookmark mark='b'/> In 1989, at Bell Labs, Yann LeCun and his colleagues trained "
             "a convolutional network end to end with backpropagation, through the shared weights, on digits from "
             f"real zip codes: {ZIP1989['train']:,} for training, with {ZIP1989['error']:.0f} percent errors on the "
-            "test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time "
-            "instead of space, to recognize spoken sounds. The idea was in the air."
+            "test digits. <bookmark mark='c'/> The same year Alex Waibel's group slid shared weights along time, "
+            "to recognize spoken sounds."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
@@ -284,7 +284,7 @@ class LeNet(VoiceoverScene):
         od = img_gray(np.asarray(M["digit"]), 1.2).next_to(pd, LEFT, buff=0.5)
         pa = Arrow(od.get_right(), pd.get_left(), buff=0.08, stroke_width=2.5, color=GREY_B)
         pt = label(rf"one fixed shuffle; \ retrained, \ ${pe}$ passes", font_size=18, color=GREY_B)
-        pt.next_to(VGroup(od, pd), DOWN, buff=0.12)
+        pt.next_to(Group(od, pd), DOWN, buff=0.12)
         tag = note(r"computed: \ three seeds each, \ equal training").to_corner(DR, buff=0.2)
         gap1 = (sm[:, 3].mean() - sc[:, 3].mean())
         shifted_v = (f"Shift the test digits by three pixels and the network of fully connected units "

@@ -154,8 +154,7 @@ class Seq2Seq(VoiceoverScene):
             "How is the decoder trained? <bookmark mark='a'/> By teacher forcing, from Ronald Williams and David "
             "Zipser in 1989: at every step, feed it the true previous word, and ask for the next. "
             "<bookmark mark='b'/> At test time there is no true history, only its own: one mistake, and every later "
-            "step continues from a history it never saw in training. Samy Bengio and colleagues called the cure "
-            "scheduled sampling, in 2015: sometimes feed it its own guesses during training."
+            "step continues from a history it never saw in training."
         ) as vo:
             self.play(FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")

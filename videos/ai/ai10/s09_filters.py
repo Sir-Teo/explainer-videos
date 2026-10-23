@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai10.common import (CNN, FMAP, HIST, KERNEL, PART, grid_of, img_filter, img_gray, img_heat, img_rgb,
+from videos.ai.ai10.common import (CNN, FMAP, HIST, KERNEL, PART, grid_of, img_filter, img_gray, img_rgb,
                                    load, nn_layer_boxes, pct)
 
 
@@ -20,7 +20,6 @@ class Filters(VoiceoverScene):
         self.replay()
         self.hubel()
         self.deeper()
-        self.dreams()
 
     def card(self):
         card = chapter_card(8, r"What the filters learn", r"What did the network invent on its own?", lit=(2012,),
@@ -252,56 +251,6 @@ class Filters(VoiceoverScene):
             self.play(FadeIn(ll), LaggedStart(*[FadeIn(r) for r in left], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(FadeIn(rl), LaggedStart(*[FadeIn(r) for r in right], lag_ratio=0.2))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def dreams(self):
-        f = load("filters")
-        names = classes()
-        D = np.asarray(f["dreams"])
-        dp = f["dream_p"]
-        tiles = Group()
-        for k in range(10):
-            im = img_rgb(D[k], 1.05, smooth=True)
-            nm = data_text(names[k], font_size=16, color=GREY_A).next_to(im, DOWN, buff=0.06)
-            tiles.add(Group(im, nm))
-        tiles.arrange_in_grid(rows=2, cols=5, buff=(0.15, 0.2)).move_to([-3.3, 0.4, 0])
-        tl = label(r"photographs made to maximize each class score", font_size=20, color=KERNEL)
-        tl.next_to(tiles, UP, buff=0.15)
-        S, SI = np.asarray(f["sal"]), np.asarray(f["sal_img"])
-        sal = Group()
-        for i in range(4):
-            sal.add(Group(img_rgb(SI[i], 0.95), img_heat(S[i], 0.95, sym=False, pos=C.HOT)).arrange(RIGHT,
-                                                                                                  buff=0.05))
-        sal.arrange_in_grid(rows=2, cols=2, buff=(0.15, 0.2)).move_to([3.7, 0.4, 0])
-        sl = label(r"saliency: \ which pixels move the right score", font_size=20, color=C.HOT)
-        sl.next_to(sal, UP, buff=0.15)
-        conf = float(np.mean(dp))
-        sure = conf > 0.8
-        warn = label(r"the network is very sure of pictures no person would recognize" if sure else
-                     r"pictures no person would recognize, \ and the network half believes them", font_size=26,
-                     color=C.PENALTY).to_edge(DOWN, buff=0.5)
-        cite_ = cite(r"Simonyan, Vedaldi \& Zisserman (2013); \ Olah, Mordvintsev \& Schubert (2017)", corner=DR)
-        end = (f"Notice: the network gives those drawings an average of {pct(conf, 0)} percent probability of "
-               "being their class. It is very sure of pictures no person would recognize." if sure else
-               f"Notice: the network gives those drawings an average of {pct(conf, 0)} percent probability of "
-               "being their class, for pictures no person would recognize.")
-        with self.voiceover(
-            "Two more probes, both from 2013. <bookmark mark='a'/> Start from a grey picture and change its "
-            "pixels by gradient ascent, to raise one class's score as high as it will go, with a little blur and "
-            "jitter to keep the picture smooth. <bookmark mark='b'/> What our network draws for each class are "
-            "colours and textures, not objects. <bookmark mark='c'/> Or ask, for a real photograph, which pixels "
-            "the right answer is most sensitive to: a map of where the network is looking. <bookmark mark='d'/> "
-            + end + " That should worry us, and it's the next chapter."
-        ) as vo:
-            self.play(FadeIn(cite_))
-            vo.wait_until("a")
-            self.play(FadeIn(tl), LaggedStart(*[FadeIn(t, scale=0.9) for t in tiles], lag_ratio=0.1))
-            vo.wait_until("c")
-            self.play(FadeIn(sl), LaggedStart(*[FadeIn(s) for s in sal], lag_ratio=0.2))
-            vo.wait_until("d")
-            self.play(FadeIn(warn, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
