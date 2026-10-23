@@ -58,7 +58,17 @@ class Arithmetic(VoiceoverScene):
                   color=C.SURPRISE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.4)
         fix = label(r"the fix: code the whole message at once, as one number", font_size=32, color=C.BITS)
-        fix.to_edge(DOWN, buff=1.0)
+        fix.to_edge(DOWN, buff=0.5)
+        k_ = 4.0  # screen units per bit
+        waste = VGroup(
+            Rectangle(width=max(k_ * info, 0.03), height=0.4, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.9),
+            Rectangle(width=k_, height=0.4, stroke_color=C.BITS, stroke_width=2.5, fill_opacity=0))
+        waste[0].move_to([-2.0 + waste[0].width / 2, -1.6, 0])
+        waste[1].move_to([-2.0 + k_ / 2, -2.2, 0])
+        wl = VGroup(label(rf"information: \ ${info:.3f}$ bits", font_size=22, color=C.SURPRISE).next_to(waste[0], LEFT, buff=0.3),
+                    label(r"cost: \ $1$ bit", font_size=22, color=C.BITS).next_to(waste[1], LEFT, buff=0.3))
+        for t_ in wl:
+            t_.align_to([-2.3, 0, 0], RIGHT)
         with self.voiceover(
             "Huffman's code has one flaw. Every symbol costs a whole number of bits, at least one. "
             f"<bookmark mark='a'/> u after q carries {info:.3f} bits, and still costs a full bit. "
@@ -68,14 +78,13 @@ class Arithmetic(VoiceoverScene):
             "hundred entries, and a model that reads the context changes its guesses at every letter. "
             "<bookmark mark='c'/> The fix is to code the whole message as a single number, one guess at a time."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[2]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]), FadeIn(waste[1]), FadeIn(wl[1]), GrowFromEdge(waste[0], LEFT), FadeIn(wl[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
-            self.play(FadeIn(rows[2]))
             vo.wait_until("c")
-            self.play(FadeIn(fix))
+            self.play(FadeOut(VGroup(waste, wl)), FadeIn(fix))
         self.wait(0.3)
         self.clear_scene()
 
@@ -164,6 +173,8 @@ class Arithmetic(VoiceoverScene):
 
         src = cite(r"J.~Rissanen (1976); \ R.~Pasco (1976); \ I.~Witten, R.~Neal \& J.~Cleary, \textit{Arithmetic "
                    r"Coding for Data Compression} (1987)")
+        hc = history_card(1976, r"Jorma Rissanen (IBM) \ and Richard Pasco (Stanford)",
+                          r"arithmetic coding: \ a whole message as one number", width=6.4).move_to(DOWN * 0.3)
         with self.voiceover(
             "Arithmetic coding, worked out by Jorma Rissanen and Richard Pasco in 1976. We've already seen its "
             "heart: the nested slivers of the chain rule. <bookmark mark='a'/> Start with the unit interval, split "
@@ -171,9 +182,9 @@ class Arithmetic(VoiceoverScene):
             f"two ends of that sliver in binary. <bookmark mark='b'/> They agree on their first {c0} digits. Any "
             "number in the sliver starts that way, so those bits are already decided."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tot_lab), FadeIn(src))
+            self.play(FadeIn(head), FadeIn(tot_lab), FadeIn(src), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeOut(src))
+            self.play(FadeOut(src), FadeOut(hc))
             add_row(0, run_time=1.6)
             vo.wait_until("b")
             self.play(Indicate(lines[1], color=C.BITS))
@@ -232,9 +243,8 @@ class Arithmetic(VoiceoverScene):
             f"<bookmark mark='c'/> Compare: {nf} for the fixed code, {nh} for Huffman, {n} for arithmetic coding, "
             f"against an information content of {info:.2f}."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(bar), FadeIn(inner), FadeIn(lab_i), FadeIn(sch))
             vo.wait_until("a")
-            self.play(Create(bar), FadeIn(inner), FadeIn(lab_i), FadeIn(sch))
             self.play(Create(dyad), FadeIn(lab_d))
             vo.wait_until("b")
             self.play(Write(code), run_time=1.5)
@@ -258,9 +268,10 @@ class Arithmetic(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.4, x=-1.4, buff=0.42, edge=6.9)
         y, W0, x0 = -2.35, 4.4, -2.6
         cell = W0 * 0.36  # a cell of the dyadic grid: at most half the interval
+        x0 = -6.3 + 3.2
         grid = VGroup(*[Line([x0 - 3.2 + k * cell, y - 0.45, 0], [x0 - 3.2 + k * cell, y + 0.45, 0], color=GREY_C,
-                             stroke_width=2) for k in range(10)])
-        ruler = Line([x0 - 3.2, y, 0], [x0 - 3.2 + 9 * cell, y, 0], color=GREY_C, stroke_width=1.5)
+                             stroke_width=2) for k in range(9)])
+        ruler = Line([x0 - 3.2, y, 0], [x0 - 3.2 + 8 * cell, y, 0], color=GREY_C, stroke_width=1.5)
         lowx = x0 - 3.2 + 1.55 * cell
         msg = Rectangle(width=W0, height=0.42, stroke_width=0, fill_color=C.INTERVAL, fill_opacity=0.55)
         msg.move_to([lowx + W0 / 2, y, 0])
@@ -269,8 +280,8 @@ class Arithmetic(VoiceoverScene):
         inside.move_to([x0 - 3.2 + (k0 + 0.5) * cell, y, 0])
         lm = label(r"width $P$", font_size=22, color=C.INTERVAL).next_to(msg, UP, buff=0.1)
         lc = label(r"width $2^{-\ell}$: \ all numbers starting with the same $\ell$ bits", font_size=22, color=C.BITS)
-        lc.next_to(inside, DOWN, buff=0.15).align_to(grid, LEFT)
-        sch = note(r"schematic").next_to(ruler, RIGHT, buff=0.3)
+        lc.next_to(inside, DOWN, buff=0.55).align_to(grid, LEFT)
+        sch = note(r"schematic").next_to(ruler, UP, buff=0.55).align_to(ruler, RIGHT)
         with self.voiceover(
             "Why within two bits? Let P be the message's probability: the width of its interval. "
             "<bookmark mark='a'/> Choose a length l: log of one over P, rounded up, plus one. <bookmark mark='b'/> "
@@ -325,12 +336,13 @@ class Arithmetic(VoiceoverScene):
             "letter is t. <bookmark mark='b'/> Zoom in: it falls in the h sliver of the next, then e, and so on, "
             "one letter at a time, until the message is back, exactly."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(code))
+            self.play(FadeIn(head), FadeIn(code), FadeIn(rows[0][0]))
             vo.wait_until("a")
             for k in range(3):
                 if k == 1:
                     vo.wait_until("b")
-                self.play(FadeIn(rows[k][0]), run_time=0.5)
+                if k:
+                    self.play(FadeIn(rows[k][0]), run_time=0.5)
                 self.play(Create(marks[k]), run_time=0.4)
                 self.play(FadeIn(rows[k][1]), FadeIn(out[k]), run_time=0.5)
         self.wait(0.3)
@@ -543,11 +555,11 @@ class Arithmetic(VoiceoverScene):
             + dip_said + " <bookmark mark='c'/> The registers hardly matter, once they're a few bits wider than the "
             "counts. Arithmetic coding gives away almost nothing: what you pay is the model's surprise."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(hdr))
             vo.wait_until("a")
             self.play(FadeIn(info_l))
             vo.wait_until("b")
-            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(reg_note))
         self.wait(0.3)

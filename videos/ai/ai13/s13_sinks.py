@@ -225,11 +225,16 @@ class Sinks(VoiceoverScene):
             f"After a trigger its head looks one back, {pa.mean():.0%} of the time. <bookmark mark='c'/> " + v1
             + "<bookmark mark='d'/> " + v2
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.03))
+            # the trained head's map waits under a veil from the first word, and is uncovered once it has been trained
+            veil = Rectangle(width=max(img.width, il.width) + 0.2, height=img.height + il.height + 0.4, stroke_width=0,
+                             fill_color=config.background_color, fill_opacity=0.72).move_to(Group(img, il))
+            veil.set_z_index(5)
+            self.add(veil)
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.03), FadeIn(img), FadeIn(il))
             vo.wait_until("a")
             self.play(FadeIn(tl), LaggedStart(*[Create(a_) for a_ in arrows], lag_ratio=0.2))
             vo.wait_until("b")
-            self.play(FadeIn(img), FadeIn(il), FadeIn(facts[1]))
+            self.play(FadeOut(veil), FadeIn(facts[1]))
             vo.wait_until("c")
             self.play(Create(col), FadeIn(facts[0]))
             vo.wait_until("d")

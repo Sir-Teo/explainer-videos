@@ -368,8 +368,8 @@ def compute_wl():
     pairs = {
         "molecules": (gr.decalin(), gr.bicyclopentyl()),
         "cycles": ((6, gr.cycle_edges([6])), (6, gr.cycle_edges([3, 3]))),
-        "trees": ((7, [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (2, 6)]),
-                  (7, [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (3, 6)])),
+        "trees": ((7, [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (1, 6)]),
+                  (7, [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (2, 6)])),
     }
     out = {}
     for name, (g1, g2) in pairs.items():
@@ -705,14 +705,17 @@ def compute_diffusion():
             m, r = pr.train_diffusion(kind, data, s, DIFF_STEPS, snaps=DIFF_SNAPS if s == 0 else (), snap_fn=snap)
             S, path = pr.sample(m, 500, 7 + s, keep=(200, 150, 100, 60, 30, 10, 0) if s == 0 else ())
             st = pr.chain_stats(S)
-            rec = dict(curve=r["curve"], frames=r["frames"], secs=r["secs"], params=r["params"],
+            nn_s = pr.nearest_rmsd(S[:200], data)
+            rec = dict(nn_median=float(np.median(nn_s)), curve=r["curve"], frames=r["frames"], secs=r["secs"], params=r["params"],
                        bond_mad=st["bond_mad"], clash=st["clash"], rg_mean=float(st["rg"].mean()),
                        rg_hist=np.histogram(st["rg"], bins=24, range=(0.5, 2.9))[0].tolist(), samples=S[:24].tolist())
             if s == 0:
                 rec["path"] = {str(t): v[:4].tolist() for t, v in path.items()}
             part[key] = rec
             log(f"diffusion {key}: bond MAD {st['bond_mad']:.3f}, clashes {st['clash']:.3f} ({r['secs']:.0f}s)")
+    held = pr.chain_dataset(200, 1)
     out = dict(kinds=list(DIFF_KINDS), data=data[:24], ref_bond_mad=ref["bond_mad"], ref_clash=ref["clash"],
+               nn_heldout_median=float(np.median(pr.nearest_rmsd(held, data))),
                ref_rg_mean=float(ref["rg"].mean()),
                ref_rg_hist=np.histogram(ref["rg"], bins=24, range=(0.5, 2.9))[0], T=pr.T_DIFF, steps=DIFF_STEPS,
                snaps=list(DIFF_SNAPS))
@@ -772,8 +775,8 @@ def compute_fno():
     return out
 
 
-W_STEPS = 4000
-W_SNAPS = (0, 250, 1000, 2500, 4000)
+W_STEPS = 3000
+W_SNAPS = (0, 250, 1000, 2000, 3000)
 
 
 def compute_weather():
@@ -824,7 +827,6 @@ def compute_weather():
     out["persistence_acc"] = ((pa * b_).sum(-1) / np.sqrt((pa ** 2).sum(-1) * (b_ ** 2).sum(-1))).mean(0)
     mesh = fd.build_mesh((16, 8, 4))
     out.update(mesh_pos=mesh["pos"], mesh_edges=mesh["edges"])
-    del a_
     return out
 
 

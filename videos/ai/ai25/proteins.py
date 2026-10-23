@@ -545,3 +545,16 @@ def chain_stats(S):
     clash = (D[:, i, j].min(1) < 0.6).mean()
     R = np.sqrt(((S - S.mean(1, keepdims=True)) ** 2).sum(-1).mean(1))
     return dict(bond_mad=float(np.abs(b - 1).mean()), clash=float(clash), rg=R)
+
+
+def nearest_rmsd(S, ref):
+    """For each 2D chain in S (centred), the RMSD to its nearest chain in ``ref`` after the best rotation (closed
+    form in 2D): small means a copy of a training chain."""
+    S = S - S.mean(1, keepdims=True)
+    ref = ref - ref.mean(1, keepdims=True)
+    n = S.shape[1]
+    nS, nR = (S ** 2).sum((1, 2)), (ref ** 2).sum((1, 2))
+    a = np.einsum("snd,rnd->sr", S, ref)
+    b = np.einsum("sn,rn->sr", S[..., 0], ref[..., 1]) - np.einsum("sn,rn->sr", S[..., 1], ref[..., 0])
+    d2 = (nS[:, None] + nR[None] - 2 * np.sqrt(a ** 2 + b ** 2)) / n
+    return np.sqrt(np.maximum(d2.min(1), 0))
