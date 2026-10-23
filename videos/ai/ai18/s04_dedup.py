@@ -5,7 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai18.common import (DUP, F, KEPT, MONO, PAGE, PART, REMOVED, load, node_box, spoken_int, take_away)
+from videos.ai.ai18.common import (DUP, F, KEPT, MONO, PAGE, PART, REMOVED, load, node_box, said, spoken_int, stat,
+                                   take_away)
 
 
 def url_text(u: str, n: int = 60, font_size: int = 17, color=PAGE):
@@ -59,6 +60,13 @@ class Dedup(VoiceoverScene):
         cost.move_to([3.4, -2.2, 0])
         src = cite(r"Lee et al., \textit{Deduplicating training data makes language models better} (2022)",
                    corner=DR, font_size=17)
+        heads = VGroup()
+        if ex.get("head_a"):
+            heads = VGroup(said(ex["head_a"], chars=46, font_size=15, max_lines=5, box_color=DUP),
+                           said(ex["head_b"], chars=46, font_size=15, max_lines=5, box_color=DUP)).arrange(RIGHT, buff=0.4)
+            heads.scale_to_fit_width(min(heads.width, 12.6)).next_to(top, DOWN, buff=0.35)
+        ten = stat(r"$10\times$", r"less memorized training text emitted, \ after deduplication \ (Lee et al., 2022)",
+                   color=DUP, font_size=52, cap_size=20).move_to([0, -2.1, 0])
         with self.voiceover(
             "The web repeats itself. Mirrors, templates, the same product page with another price. "
             f"<bookmark mark='a'/> These two pages from our sample come from one site: "
@@ -72,10 +80,11 @@ class Dedup(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(top))
             vo.wait_until("a")
-            self.play(Indicate(pair, color=DUP, scale_factor=1.02))
+            self.play(Indicate(pair, color=DUP, scale_factor=1.02), FadeIn(heads, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(ten, shift=UP * 0.1))
             vo.wait_until("c")
+            self.play(FadeOut(heads), FadeOut(ten))
             self.play(FadeIn(row), LaggedStart(*[Create(b) for b in braces], lag_ratio=0.3), FadeIn(sl), run_time=2.5)
             vo.wait_until("d")
             self.play(FadeIn(jac, shift=UP * 0.1))
@@ -107,6 +116,25 @@ class Dedup(VoiceoverScene):
         diag = DashedLine(g.ax.c2p(0, 0), g.ax.c2p(1, 1), color=GREY_B, dash_length=0.05)
         mtag = note(rf"computed: \ ${len(s):,}$ page pairs; \ mean gap ${D['agree_err']:.3f}$".replace(",", "{,}"),
                     font_size=18).next_to(g, DOWN, buff=0.1)
+        # the two sets of shingles, each shingle with its hash (schematic numbers)
+        ea = Ellipse(width=3.6, height=1.9, stroke_color=PAGE, stroke_width=2.5).move_to([-4.0, -2.45, 0])
+        eb = Ellipse(width=3.6, height=1.9, stroke_color=DUP, stroke_width=2.5).move_to([-2.0, -2.45, 0])
+        la = label(r"$A$", font_size=24, color=PAGE).next_to(ea, LEFT, buff=0.1)
+        lb = label(r"$B$", font_size=24, color=DUP).next_to(eb, RIGHT, buff=0.1)
+        spots = {"a": [(-5.2, -2.1), (-5.0, -2.85), (-4.5, -2.45)], "ab": [(-3.3, -2.0), (-2.7, -2.0), (-3.0, -2.6),
+                                                                          (-3.3, -3.0), (-2.7, -3.0)],
+                 "b": [(-1.5, -2.1), (-1.0, -2.6), (-1.5, -2.95)]}
+        hv = {"a": [71, 38, 90], "ab": [44, 12, 63, 57, 29], "b": [85, 23, 66]}
+        hashes = VGroup()
+        for k in ("a", "ab", "b"):
+            for (x_, y_), v in zip(spots[k], hv[k]):
+                hashes.add(label(rf"${v}$", font_size=22, color=GREY_A).move_to([x_, y_, 0]))
+        lowest = hashes[3 + 1]  # 12, in both sets
+        ring = Circle(radius=0.26, color=YELLOW, stroke_width=3).move_to(lowest)
+        venn = VGroup(ea, eb, la, lb, hashes)
+        vnote = note(r"each shingle's hash \ (schematic)", font_size=17).next_to(venn, DOWN, buff=0.06)
+        vmin = label(r"smallest over $A \cup B$: \ $12$, \ in both \ $\Rightarrow$ \ $\min_A h = \min_B h$",
+                     font_size=20, color=YELLOW).next_to(venn, RIGHT, buff=0.35).shift(DOWN * 0.1)
         with self.voiceover(
             "The shortcut is a beautiful fact from 1997, found by Andrei Broder at AltaVista to spot duplicate web "
             "pages. Pick a random hash function, which gives every shingle a random number. <bookmark mark='a'/> "
@@ -119,14 +147,17 @@ class Dedup(VoiceoverScene):
             f"{spoken_int(len(s))} pairs of our pages, one of each pair with some words replaced: <bookmark mark='e'/> "
             f"the estimate sits on the diagonal, off by {D['agree_err']:.3f} on average."
         ) as vo:
-            self.play(FadeIn(th, shift=UP * 0.1))
+            self.play(FadeIn(th, shift=UP * 0.1), FadeIn(venn), FadeIn(vnote))
             vo.wait_until("a")
             step(0)
+            self.play(Create(ring), lowest.animate.set_color(YELLOW))
             vo.wait_until("b")
             step(1)
+            self.play(FadeIn(vmin, shift=RIGHT * 0.1))
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
+            self.play(*[FadeOut(w) for w in whys], FadeOut(vmin))
             self.play(FadeIn(g), Create(diag))
             vo.wait_until("e")
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.004), FadeIn(mtag), run_time=2.5)
@@ -159,12 +190,13 @@ class Dedup(VoiceoverScene):
         bins = D["bins"]
         meas = VGroup(*[Dot(g.ax.c2p(bn["s"], bn["measured"]), radius=0.06, color=WHITE) for bn in bins])
         half = DashedLine(g.ax.c2p(D["s_half"], 0), g.ax.c2p(D["s_half"], 0.5), color=GREY_B, dash_length=0.05)
-        hl = label(rf"$s = {D['s_half']:.2f}$", font_size=18, color=GREY_A).next_to(half, DOWN, buff=0.05).shift(RIGHT * 0.3)
+        hl = label(rf"$s = {D['s_half']:.2f}$", font_size=18, color=GREY_A).next_to(g.ax.c2p(D["s_half"], 0.5), LEFT,
+                                                                                buff=0.12)
         lg = VGroup(VGroup(Line(ORIGIN, RIGHT * 0.4, color=DUP, stroke_width=4),
                            label(rf"predicted, \ $b = {b}$, $r = {r}$", font_size=18, color=DUP)).arrange(RIGHT, buff=0.1),
                     VGroup(Dot(radius=0.06, color=WHITE), label(r"measured, \ our page pairs", font_size=18))
                     .arrange(RIGHT, buff=0.1)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        lg.next_to(g.ax.c2p(0, 1), RIGHT, buff=0.2).shift(DOWN * 0.15)
+        lg.move_to(g.ax.c2p(0.03, 0.88), aligned_edge=UL)
         worst = max(abs(bn["measured"] - bn["predicted"]) for bn in bins)
         src = cite(r"Indyk \& Motwani (1998); \ Broder (1997); \ FineWeb (2024), App.\ E", corner=DL, font_size=17)
         with self.voiceover(
@@ -186,6 +218,7 @@ class Dedup(VoiceoverScene):
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
+            self.play(*[FadeOut(w) for w in whys])
             self.play(FadeIn(g), FadeIn(src))
             self.play(Create(pc), run_time=1.5)
             self.play(Create(half), FadeIn(hl), FadeIn(lg[0]))
@@ -226,13 +259,18 @@ class Dedup(VoiceoverScene):
                    color=GREY_A).next_to(bars, DOWN, buff=0.45).align_to(bars, LEFT)
         src = cite(r"Team OLMo, Olmo 3 (2025), Sec.\ 3.4; \ Penedo et al.\ (2024); \ computed here", corner=DL,
                    font_size=17)
+        lic = VGroup()
+        if D.get("foot_head"):
+            lic = VGroup(label(r"the last page of two of the books", font_size=20, color=GREY_A),
+                         *[said(h, chars=40, font_size=15, max_lines=4, box_color=DUP) for h in D["foot_head"][:2]])
+            lic.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.4, 0.3, 0])
         share = D["removed_share"]
         if share < 0.05:
-            found = (f"What did we find? In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
+            found = (f"In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
                      f"{D['removed']} near-duplicates: {100 * share:.1f} percent. Common Crawl already avoids fetching "
                      "the same address twice in a crawl, and our sample is tiny.")
         else:
-            found = (f"What did we find? In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
+            found = (f"In our {spoken_int(D['n'])} English pages, {D['exact']} exact copies and "
                      f"{D['removed']} near-duplicates: {100 * share:.1f} percent of the pages.")
         if D["foot_caught"] == D["foot_pairs"] and D["body_caught"] == 0:
             books = (f"Each ends with the same licence, with the book's title changed: LSH catches all "
@@ -242,7 +280,8 @@ class Dedup(VoiceoverScene):
                      f"{D['foot_caught']} of the {D['foot_pairs']} pairs of licences, and {D['body_caught']} of the "
                      f"{D['body_pairs']} pairs of novels.")
         with self.voiceover(
-            found + " <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are a clearer test. " + books +
+            "What did we find? " + found + " <bookmark mark='a'/> The thirty Gutenberg files of Part 1 are a "
+            "clearer test. " + books +
             " <bookmark mark='b'/> At the scale of the whole web the numbers are dramatic. For Olmo 3, removing exact "
             f"copies cut the pool by {O['exact']} percent, MinHash removed another {O['fuzzy']} percent, and repeated "
             f"substrings {O['substring']} percent of the remaining bytes: 38.7 billion documents became 9.7 billion. "
@@ -252,8 +291,9 @@ class Dedup(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(left[:4]), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(left[4:], shift=UP * 0.1))
+            self.play(FadeIn(left[4:], shift=UP * 0.1), FadeIn(lic, shift=UP * 0.1))
             vo.wait_until("b")
+            self.play(FadeOut(lic))
             self.play(FadeIn(bh), LaggedStart(*[GrowFromEdge(b_[0], LEFT) for b_ in bars], lag_ratio=0.4),
                       LaggedStart(*[FadeIn(b_[1]) for b_ in bars], lag_ratio=0.4), run_time=3.0)
             vo.wait_until("c")

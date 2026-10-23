@@ -395,7 +395,9 @@ def compute_dedup(n_pairs=3000, seed=5):
     for c in big:
         i, j = c[0], c[1]
         examples.append(dict(size=len(c), url_a=docs[i]["url"], url_b=docs[j]["url"],
-                             jaccard=W.jaccard(sh[i], sh[j]), words=len(wds[i])))
+                             jaccard=W.jaccard(sh[i], sh[j]), words=len(wds[i]),
+                             head_a=" ".join(docs[i]["text"].split())[:400],
+                             head_b=" ".join(docs[j]["text"].split())[:400]))
     # the S-curve: pairs of known similarity (a page, and a copy with a fraction of its words replaced)
     g = rng(seed)
     vocab = sorted({w for ws in wds[:400] for w in ws})
@@ -422,11 +424,12 @@ def compute_dedup(n_pairs=3000, seed=5):
     # the thirty Gutenberg files: the same licence at the end of each, with the title changed
     from videos.ai.ai1 import compute as P1
 
-    foot, body = [], []
+    foot, body, foot_head = [], [], []
     for n_ in P1.BOOKS:
         raw = (P1.BOOK_DIR / f"{n_}.txt").read_text(encoding="utf-8", errors="replace").replace("\r", "")
         mt = re.search(r"\*\*\* ?END OF (THE|THIS) PROJECT GUTENBERG EBOOK", raw)
         foot.append(W.shingles(W.words(raw[mt.start():])))
+        foot_head.append(" ".join(raw[mt.start():mt.start() + 2000].split())[:300])
         body.append(W.shingles(W.words(P1.strip_gutenberg(raw))))
     fs = [W.minhash(s, fam) for s in foot]
     bs = [W.minhash(s, fam) for s in body]
@@ -443,7 +446,7 @@ def compute_dedup(n_pairs=3000, seed=5):
                 agree_err=float(np.mean(np.abs(A_ - S_))), s_half=s_half,
                 foot_pairs=len(fj), foot_caught=int(fc), foot_jaccard=[float(min(fj)), float(np.median(fj))],
                 body_pairs=len(bs) * (len(bs) - 1) // 2, body_caught=int(bc),
-                foot_words=int(np.median([len(s) for s in foot])))
+                foot_words=int(np.median([len(s) for s in foot])), foot_head=foot_head[:2])
 
 
 # ---------------------------------------------------------------------------
