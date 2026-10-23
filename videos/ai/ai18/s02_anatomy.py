@@ -64,13 +64,12 @@ class Anatomy(VoiceoverScene):
         with self.voiceover(
             "A frontier pretraining run is a pipeline. It starts with the web: a crawl of billions of pages, "
             "<bookmark mark='a'/> filtered for language and quality, deduplicated, mixed with books, code, maths and "
-            "synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining "
-            "phase, a short phase of annealing on the best data, often called mid-training, a stage that teaches "
-            "long context, and finally the post-training of Part 27. <bookmark mark='c'/> Here are two published "
-            "runs drawn to scale. Ai2's Olmo 3, at seven billion parameters: 5.9 trillion tokens of pretraining, "
-            "then 100 billion of mid-training and 50 billion for long context. Hugging Face's SmolLM3: three "
-            "pretraining stages with more code and maths in each, then long context. <bookmark mark='d'/> The last "
-            "stages are a few percent of the tokens, and they are chosen with the most care."
+            "synthetic text, and cut into tokens. <bookmark mark='b'/> Then the model trains: a long pretraining phase, a "
+            "short annealing on the best data, often called mid-training, a stage for long context, and finally the "
+            "post-training of Part 27. <bookmark mark='c'/> Here are two published runs to scale. Ai2's Olmo 3, seven "
+            "billion parameters: 5.9 trillion tokens of pretraining, then 100 billion of mid-training and 50 billion for "
+            "long context. Hugging Face's SmolLM3: three pretraining stages, each with more code and maths, then long "
+            "context. <bookmark mark='d'/> The last stages are a few percent of the tokens, chosen with the most care."
         ) as vo:
             self.play(FadeIn(top.boxes[0]), FadeIn(bot.boxes.copy().set_opacity(0.15)))
             vo.wait_until("a")
@@ -163,13 +162,12 @@ class Anatomy(VoiceoverScene):
         src = cite(r"DeepSeek-AI, DeepSeek-V3 Technical Report (2024), \ Sec.\ 4.2", corner=DR, font_size=17)
         with self.voiceover(
             "Inside the pretraining phase, nothing is fixed. Here is DeepSeek-V3's, as its report gives it. "
-            "<bookmark mark='a'/> The learning rate warms up over two thousand steps, then stays at 2.2 times ten to "
-            "the minus four until ten trillion tokens, <bookmark mark='b'/> then decays along a cosine to a tenth of "
-            "that over the next 4.3 trillion, <bookmark mark='c'/> and ends with two short constant steps. "
-            "<bookmark mark='d'/> The batch grows too: from 3,072 sequences of four thousand tokens to 15,360, over "
-            "the first half trillion tokens. <bookmark mark='e'/> And at ten trillion, the weight of a second loss, "
-            "for predicting two tokens ahead, drops from 0.3 to 0.1. We'll meet each of these again: schedules in "
-            "chapter seven, two-token prediction in chapter sixteen."
+            "<bookmark mark='a'/> The learning rate warms up over two thousand steps, then stays at 2.2 times ten to the "
+            "minus four until ten trillion tokens, <bookmark mark='b'/> then decays along a cosine to a tenth of that over "
+            "the next 4.3 trillion, <bookmark mark='c'/> and ends with two short constant steps. <bookmark mark='d'/> The "
+            "batch grows too: from 3,072 sequences of four thousand tokens to 15,360, over the first half trillion tokens. "
+            "<bookmark mark='e'/> And at ten trillion, the weight of a second loss, for predicting two tokens ahead, drops "
+            "from 0.3 to 0.1."
         ) as vo:
             self.play(FadeIn(g), FadeIn(b), FadeIn(src))
             vo.wait_until("a")
@@ -213,16 +211,15 @@ class Anatomy(VoiceoverScene):
                       font_size=20).next_to(hours, DOWN, buff=0.25)
         src = cite(r"DeepSeek-AI (2024), \ Table 1; \ Llama Team (2024)", corner=DR, font_size=17)
         with self.voiceover(
-            "How big is such a run? Part 14 gave the rule: training costs about six operations per parameter per "
-            "token. <bookmark mark='a'/> For Llama 3.1, six times 405 billion times 15.6 trillion is "
+            "How big is such a run? Part 14 gave the rule: about six operations per parameter per token. "
+            "<bookmark mark='a'/> For Llama 3.1, six times 405 billion times 15.6 trillion is "
             f"{P['llama_6nd'] / 1e25:.2f} times ten to the twenty-five, just what Meta reports. <bookmark mark='b'/> "
-            "DeepSeek-V3 is a mixture of experts, and only 37 billion of its parameters work on each token, so it "
-            f"needs {P['dsv3_6nd'] / 1e24:.1f} times ten to the twenty-four: about a tenth. <bookmark mark='c'/> "
-            "Its report also gives the bill: 2.664 million H800 GPU-hours for pretraining, plus the longer-context "
-            f"and post-training stages; at two dollars an hour, {P['dsv3_usd'] / 1e6:.3f} million dollars. "
-            f"<bookmark mark='d'/> Each trillion tokens took {D['hours_per_T'] / 1e3:.0f} thousand GPU-hours: "
-            f"{P['dsv3_days_per_T']:.1f} days on 2,048 GPUs. That is the price of the final run only, not of the "
-            "experiments before it, the data, or the cluster."
+            "DeepSeek-V3 is a mixture of experts: only 37 billion of its parameters work on each token, so it needs "
+            f"{P['dsv3_6nd'] / 1e24:.1f} times ten to the twenty-four, about a tenth. <bookmark mark='c'/> Its report "
+            "also gives the bill: 2.664 million H800 GPU-hours for pretraining, plus the longer-context and post-training "
+            f"stages; at two dollars an hour, {P['dsv3_usd'] / 1e6:.3f} million dollars. <bookmark mark='d'/> Each "
+            f"trillion tokens took {D['hours_per_T'] / 1e3:.0f} thousand GPU-hours: {P['dsv3_days_per_T']:.1f} days on "
+            "2,048 GPUs. That prices the final run only: not the experiments before it, the data, or the cluster."
         ) as vo:
             step(0)
             self.play(FadeIn(src))

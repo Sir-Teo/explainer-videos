@@ -91,12 +91,11 @@ class DataParallel(VoiceoverScene):
         cl = VGroup(label(r"steps:", font_size=22, color=GREY_A), cnt).arrange(RIGHT, buff=0.15).move_to([3.6, 0.8, 0])
         sch = note(r"schematic: \ the ring of Part 17, \ chunk by chunk", font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "Recall how a ring does it. Cut each GPU's gradient into p chunks. <bookmark mark='a'/> In each step, "
-            "every GPU passes one chunk to its neighbour, which adds it to its own. After p minus one steps, each "
-            "GPU holds the full sum of one chunk: a reduce-scatter. <bookmark mark='b'/> Then p minus one more steps "
-            "pass the finished chunks around: an all-gather. <bookmark mark='c'/> Each GPU sent two times p minus "
-            "one over p of the gradient's bytes. ZeRO, in the next chapter, splits the all-reduce into these two "
-            "halves and does useful work in between."
+            "Recall the ring of Part 17. Cut each GPU's gradient into p chunks. <bookmark mark='a'/> At each step every "
+            "GPU passes one chunk to its neighbour, which adds it to its own; after p minus one steps each GPU holds the "
+            "full sum of one chunk: a reduce-scatter. <bookmark mark='b'/> Then p minus one more steps pass the finished "
+            "chunks around: an all-gather. <bookmark mark='c'/> Each GPU sends two times p minus one over p of the "
+            "gradient's bytes. ZeRO, next, does useful work between the two halves."
         ) as vo:
             self.play(FadeIn(title), FadeIn(grid), FadeIn(cols), FadeIn(sch), FadeIn(cl))
             vo.wait_until("a")

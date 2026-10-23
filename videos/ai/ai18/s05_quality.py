@@ -59,17 +59,15 @@ class Quality(VoiceoverScene):
         src = cite(r"Penedo et al., \textit{The FineWeb Datasets} (2024), Sec.\ 4; \ prompt after Yuan et al.\ (2024)",
                    font_size=17)
         with self.voiceover(
-            "Language and duplicates are the easy filters. Quality is harder: which pages teach a model the most? "
-            "In 2024 Hugging Face's FineWeb team answered with a recipe that is now standard. <bookmark mark='a'/> "
-            "Ask a large model to grade pages. They gave Llama 3 70B a prompt that adds a point for each of five "
-            "criteria of educational value, and had it score 460 thousand pages from zero to five. "
-            "<bookmark mark='b'/> Then train a small, cheap model to imitate those scores: a linear layer on top of "
-            "an embedding model, trained on 410 thousand of them. At the threshold three, it agrees with Llama 3's "
-            "verdict with an F1 score of 82 percent. <bookmark mark='c'/> Run the small model over all fifteen "
-            "trillion tokens, which took six thousand GPU-hours, and keep the pages scored three or more: 1.3 "
-            "trillion tokens. <bookmark mark='d'/> On models of 1.7 billion parameters trained on 350 billion tokens, "
-            "the filtered data raised MMLU, a test of knowledge, from 33 to 37 percent, and ARC, a test of "
-            "reasoning, from 46 to 57."
+            "Quality is harder than language or duplicates: which pages teach a model the most? In 2024 Hugging Face's "
+            "FineWeb team gave a recipe that is now standard. <bookmark mark='a'/> Ask a large model to grade pages: "
+            "Llama 3 70B, with a prompt that adds a point for each of five criteria of educational value, scored 460 "
+            "thousand pages from zero to five. <bookmark mark='b'/> Then train a small, cheap model to imitate the "
+            "grades: a linear layer on an embedding model, trained on 410 thousand of them, which agrees with Llama 3 at "
+            "the threshold three with an F1 of 82 percent. <bookmark mark='c'/> Run it over all fifteen trillion tokens, "
+            "six thousand GPU-hours, and keep the pages scored three or more: 1.3 trillion tokens. <bookmark mark='d'/> "
+            "For models of 1.7 billion parameters trained on 350 billion tokens, that raised MMLU, a test of knowledge, "
+            "from 33 to 37 percent, and ARC, a test of reasoning, from 46 to 57."
         ) as vo:
             ghost = row.copy().set_opacity(0.2)
             qq = label(r"Which pages teach a model the most?", font_size=34, color=WHITE).move_to(UP * 0.3)
@@ -246,8 +244,8 @@ class Quality(VoiceoverScene):
             f"the thirty novels we train on, and only {K['passage_hits8']} of its eight-word sequences. Clean. "
             "<bookmark mark='c'/> Our held-out paragraphs are almost clean: "
             f"{K['valid_flagged']} of {spoken_int(K['valid_paras'])} share a sequence with the training text, like "
-            "this one, a sentence that a novel repeats. The web isn't so kind: popular benchmarks are copied all "
-            "over it, which is why labs now run checks like this on every test they report."
+            "this one, a sentence that a novel repeats. On the web, popular benchmarks are copied everywhere, so labs "
+            "now run checks like this on every test they report."
         ) as vo:
             self.play(FadeIn(q), FadeIn(src))
             vo.wait_until("a")

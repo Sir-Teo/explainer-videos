@@ -65,14 +65,14 @@ class Curriculum(VoiceoverScene):
             verdict = (f"At step {bstep}, the branch's held-out loss is {b['val']:.2f}, against {b['stable_val']:.2f} "
                        "for the run still at its peak: at our scale the cooldown gains little.")
         with self.voiceover(
-            "The learning rate falls as a run ends, and how it falls matters. Part 11 used the cosine: it starts "
-            "decaying at once, so you must know the length of the run in advance. <bookmark mark='a'/> Since 2024 "
-            "more runs use warmup, stable, decay: hold the peak learning rate flat, and cool down only at the end, "
-            "over the last tenth or fifth of the steps. <bookmark mark='b'/> Here is the run of our own 2026 recipe, "
-            "which this part trains in chapter eighteen. The held-out loss creeps down during the stable phase, and "
-            "drops in the cooldown. <bookmark mark='c'/> The payoff: from any checkpoint of the stable phase, you can "
-            f"branch off a short cooldown. We branched one at step {start}. <bookmark mark='d'/> " + verdict +
-            " That is why WSD is used to try many lengths of training, or many data mixtures, from one run."
+            "The learning rate falls as a run ends, and how it falls matters. Part 11's cosine starts decaying at once, "
+            "so you must know the length of the run in advance. <bookmark mark='a'/> Since 2024 more runs use warmup, "
+            "stable, decay: hold the peak learning rate, and cool down only over the last tenth or fifth of the steps. "
+            "<bookmark mark='b'/> Here is the run of our own 2026 recipe, from chapter eighteen. The held-out loss creeps "
+            "down during the stable phase and drops in the cooldown. <bookmark mark='c'/> The payoff: from any checkpoint "
+            f"of the stable phase you can branch off a short cooldown. We branched one at step {start}. "
+            "<bookmark mark='d'/> " + verdict + " That is why WSD is used to try many lengths of training, or many data "
+            "mixtures, from one run."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lr_b), FadeIn(lg[0]))
             vo.wait_until("a")
@@ -121,15 +121,14 @@ class Curriculum(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([2.6, 0.0, 0])
         src = cite(r"Llama Team (2024); \ Qwen Team (2025); \ Team OLMo (2025); \ Hugging Face (2025)", font_size=17)
         with self.voiceover(
-            "The end of a run is also where the best data goes. What a model reads while its learning rate falls "
-            "leaves a strong mark on the final model, so labs save their best text for the cooldown, and call it "
-            "annealing, or mid-training. <bookmark mark='a'/> SmolLM3 trained in three stages, from 85 percent web text to 63, "
-            "with code and maths rising from 15 percent to 37. <bookmark mark='b'/> Llama 3 annealed its last forty "
-            "million tokens to a learning rate of zero, on its best sources, and averaged the checkpoints. "
-            "<bookmark mark='c'/> Qwen3's second stage was five trillion tokens heavy in science, code and "
-            "reasoning, with a faster decay. <bookmark mark='d'/> And Olmo 2 spends five to ten percent of its "
-            "compute on mid-training, choosing the data with small annealing runs from a checkpoint: nineteen "
-            "microanneals to pick its maths."
+            "The end of a run is also where the best data goes. What a model reads while its learning rate falls leaves "
+            "a strong mark, so labs save their best text for the cooldown and call it annealing, or mid-training. "
+            "<bookmark mark='a'/> SmolLM3 trained in three stages, from 85 percent web text to 63, with code and maths "
+            "rising from 15 percent to 37. <bookmark mark='b'/> Llama 3 annealed its last forty million tokens to a "
+            "learning rate of zero on its best sources, and averaged the checkpoints. <bookmark mark='c'/> Qwen3's second "
+            "stage was five trillion tokens heavy in science, code and reasoning, with a faster decay. "
+            "<bookmark mark='d'/> And Olmo 2 spends five to ten percent of its compute on mid-training, choosing the data "
+            "with small annealing runs from a checkpoint: nineteen microanneals to pick its maths."
         ) as vo:
             self.play(FadeIn(bl), FadeIn(src), FadeIn(key))
             vo.wait_until("a")
@@ -183,14 +182,14 @@ class Curriculum(VoiceoverScene):
         with self.voiceover(
             "The last stage teaches length. Attention's cost grows with the square of the context, so models "
             "pretrain on four or eight thousand tokens and stretch at the end. <bookmark mark='a'/> Llama 3 went from "
-            "eight thousand to 128 thousand in six stages, on about 800 billion tokens. DeepSeek-V3 went to 32 "
-            "thousand, then 128 thousand, a thousand steps each. Qwen3 and Olmo 3 stretched once. And DeepSeek-V4 "
-            "grows its length through pretraining itself, from four thousand to a million. <bookmark mark='b'/> "
-            "Stretching needs the positions to stay distinguishable. Rotary embeddings, from Part 13, turn each "
-            "pair of dimensions by an angle per token, slower and slower down the pairs. <bookmark mark='c'/> With "
-            f"the usual base of ten thousand, the slowest pair takes {rope[0]['longest'] / 1e3:.0f} thousand tokens "
-            "to turn once. Raise the base, as Llama 3 did to half a million and Qwen3 to a million, and it takes "
-            f"{rope[1]['longest'] / 1e6:.1f} and {rope[2]['longest'] / 1e6:.1f} million: room for long documents."
+            "eight thousand to 128 thousand in six stages, on about 800 billion tokens; DeepSeek-V3 to 32 thousand, then "
+            "128 thousand, a thousand steps each; Qwen3 and Olmo 3 stretched once; and DeepSeek-V4 grows its length "
+            "during pretraining itself, from four thousand to a million. <bookmark mark='b'/> Stretching needs positions "
+            "to stay distinguishable. Rotary embeddings, from Part 13, turn each pair of dimensions by an angle per token, "
+            "slower and slower down the pairs. <bookmark mark='c'/> With the usual base of ten thousand, the slowest pair "
+            f"takes {rope[0]['longest'] / 1e3:.0f} thousand tokens to turn once. Raise the base, as Llama 3 did to half "
+            f"a million and Qwen3 to a million, and it takes {rope[1]['longest'] / 1e6:.1f} and "
+            f"{rope[2]['longest'] / 1e6:.1f} million: room for long documents."
         ) as vo:
             self.play(FadeIn(why_), FadeIn(ticks), FadeIn(src), FadeIn(rows[0]))
             vo.wait_until("a")

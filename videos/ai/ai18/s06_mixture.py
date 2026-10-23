@@ -58,14 +58,13 @@ class Mixture(VoiceoverScene):
                    font_size=17)
         with self.voiceover(
             "A corpus is a mixture: web pages, encyclopedias, code, books, maths, papers. How much of each? "
-            "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, "
-            "and twenty other sources. <bookmark mark='b'/> In 2023, DoReMi learned them. A small proxy model of 280 "
-            "million parameters trains while an adversary keeps raising the weight of whichever domain it predicts "
-            "worst, relative to a reference model; the weights it ends with trained an eight-billion-parameter model "
-            "that matched the baseline in 2.6 times fewer steps. <bookmark mark='c'/> In 2024, RegMix made it a "
-            "regression. Train 512 tiny models, each on a random mixture; fit a model from the mixture to the loss "
-            "you care about; and train the big model on the mixture the regression likes best. Its pick beat all 64 "
-            "mixtures they tried at a billion parameters."
+            "<bookmark mark='a'/> In 2020 The Pile set its weights by hand: a quarter web, nine percent Wikipedia, and "
+            "twenty other sources. <bookmark mark='b'/> In 2023 DoReMi learned them: a small proxy model trains while an "
+            "adversary keeps raising the weight of whichever domain it predicts worst relative to a reference model, and "
+            "the weights it ends with let an eight-billion-parameter model reach the baseline in 2.6 times fewer steps. "
+            "<bookmark mark='c'/> In 2024 RegMix made it a regression: train 512 tiny models on random mixtures, fit the "
+            "loss you care about as a function of the mixture, and train the big model on the mixture the fit likes best. "
+            "Its pick beat all 64 mixtures they tried at a billion parameters."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in pile], lag_ratio=0.3))
             vo.wait_until("a")
@@ -245,15 +244,13 @@ class Mixture(VoiceoverScene):
                     r"returns fall", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.85)
         with self.voiceover(
             "When good text runs short, there are two ways to stretch it. Repeat it: Muennighoff and colleagues found "
-            "in 2023 that up to about four passes over the same data are nearly as good as new data, and after that "
-            "the returns fall away. <bookmark mark='a'/> Or rewrite it. In 2024, WRAP, from Apple and Carnegie Mellon, had a "
-            "language model "
-            "rephrase noisy web pages, as an encyclopedia entry or as questions and answers, and training on real "
-            "and rephrased text together reached the same quality about three times faster. "
-            "<bookmark mark='b'/> Kimi K2's report measured it on knowledge. The same text, repeated ten times, "
-            f"taught a model enough to answer {K['rephrase'][0][1]:.2f} percent of a set of factual questions. "
-            f"Rephrased once and repeated ten times: {K['rephrase'][1][1]:.2f}. Rephrased ten different ways, each "
-            f"read once: {K['rephrase'][2][1]:.2f}."
+            "in 2023 that up to about four passes over the same data are nearly as good as new data; after that the "
+            "returns fall away. <bookmark mark='a'/> Or rewrite it: in 2024 WRAP, from Apple and Carnegie Mellon, had a "
+            "model rephrase noisy web pages as encyclopedia entries or questions and answers, and real and rephrased text "
+            "together reached the same quality about three times faster. <bookmark mark='b'/> Kimi K2's report measured "
+            "it on knowledge. Text repeated ten times taught a model to answer "
+            f"{K['rephrase'][0][1]:.2f} percent of a set of factual questions; rephrased once and repeated ten times, "
+            f"{K['rephrase'][1][1]:.2f}; rephrased ten different ways and read once each, {K['rephrase'][2][1]:.2f}."
         ) as vo:
             self.play(FadeIn(rep), FadeIn(src))
             vo.wait_until("a")

@@ -65,14 +65,13 @@ class Objectives(VoiceoverScene):
         with self.voiceover(
             "Pretraining needs a question to ask of every piece of text. Here is the first sentence of Pride and "
             f"Prejudice, cut into our tokenizer's {n} tokens, and the four questions labs have asked of it. "
-            "<bookmark mark='a'/> The causal objective of GPT: predict every token from the ones before it. Every "
-            "token is a target. <bookmark mark='b'/> BERT's masked objective: hide fifteen percent of the tokens, "
-            "mostly behind a mask, and predict only those. <bookmark mark='c'/> T5's span corruption: replace short "
-            "runs of tokens with single markers, and have the model write out what each marker hid. "
-            "<bookmark mark='d'/> And fill in the middle. In 2022, OpenAI's Bavarian and colleagues cut documents at "
-            "two random points, and moved the middle to the end, behind markers for prefix, suffix and middle. The "
-            "model still just predicts the next token. But now, given a beginning and an end, it can write what "
-            "goes between, which is exactly what a code editor needs."
+            "<bookmark mark='a'/> GPT's causal objective: predict every token from the ones before it; every token is a "
+            "target. <bookmark mark='b'/> BERT's masked objective: hide fifteen percent of the tokens, mostly behind a "
+            "mask, and predict only those. <bookmark mark='c'/> T5's span corruption: replace short runs of tokens with "
+            "single markers, and have the model write out what each marker hid. <bookmark mark='d'/> And fill in the "
+            "middle. In 2022 OpenAI's Bavarian and colleagues cut documents at two random points and moved the middle to "
+            "the end, behind markers for prefix, suffix and middle. The model still predicts the next token, but given a "
+            "beginning and an end it can now write what goes between: exactly what a code editor needs."
         ) as vo:
             self.play(FadeIn(heads[0]), FadeIn(causal), FadeIn(lg), FadeIn(src))
             vo.wait_until("a")
