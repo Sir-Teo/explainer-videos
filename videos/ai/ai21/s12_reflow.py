@@ -140,14 +140,16 @@ class Reflow(VoiceoverScene):
                  f"{one['ot'].mean():.3f} in one step." if one["ot"].mean() < 0.5 * fm1 else
                  f"Pairing each batch optimally, the 2023 proposal of Tong and of Pooladian and colleagues, reaches "
                  f"{one['ot'].mean():.3f} in one step.")
+        sep_note = ("every seed of it ahead of every seed of the others." if sep else "though the seeds overlap.")
+        r1, r100 = float(one["rf1"].mean()), float(SW["rf1"][:, -1].mean())
+        rf_note = ("After one reflow, one step is nearly as good as a hundred; " if r1 < 1.5 * r100 else
+                   f"After one reflow, one step lands {r1:.3f} from the data, against {r100:.3f} with a hundred; ")
         with self.voiceover(
             "Measured, at the same budget for every model, three seeds each: the distance from the data after a "
             "given number of Euler steps. <bookmark mark='a'/> Plain flow matching needs many steps: in one step its "
             f"samples land {fm1:.3f} from the data, against {noise:.2f} for the noise itself. <bookmark mark='b'/> "
-            f"After reflow, one step is nearly as good as a hundred; the best single step is {KS[best1]}'s, at "
-            f"{one[best1].mean():.3f}" + (", every seed ahead of every seed of the others. " if sep else
-                                          ", though the seeds overlap. ")
-            + "<bookmark mark='c'/> " + ot_vs + " <bookmark mark='d'/> Straightness says why: one Euler step is "
+            + rf_note + f"the best single step is {KS[best1]}'s, at "
+            f"{one[best1].mean():.3f}, " + sep_note + " <bookmark mark='c'/> " + ot_vs + " <bookmark mark='d'/> Straightness says why: one Euler step is "
             "exact on a straight path."
         ) as vo:
             self.play(FadeIn(g), Create(flo), FadeIn(lg))
