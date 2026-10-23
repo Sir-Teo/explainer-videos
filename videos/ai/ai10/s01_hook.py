@@ -119,7 +119,7 @@ class Hook(VoiceoverScene):
         out = run["show_out"]
         n_in = len(word)
         al = al[:len(out) + 1, :n_in]
-        hm = img_heat(al, 4.6, sym=False, pos=ATT, height=4.6 * al.shape[0] / al.shape[1]).move_to([1.2, -0.4, 0])
+        hm = img_heat(al, 4.6, sym=False, pos=ATT, height=4.6 * al.shape[0] / al.shape[1]).move_to([2.2, -0.4, 0])
         cw = hm.width / n_in
         ch = hm.height / al.shape[0]
         xs = VGroup(*[data_text(c, font=MONO_FONT, font_size=22, color=GREY_A).move_to(
@@ -131,7 +131,7 @@ class Hook(VoiceoverScene):
         ol = label(r"writes", font_size=22, color=LSTMC).next_to(ys, LEFT, buff=0.2)
         hc = history_card(2014, r"Sutskever, Vinyals \& Le; \ Cho et al.; \ Bahdanau, Cho \& Bengio",
                           r"networks that read a sentence and write its translation; \ then, attention",
-                          width=4.8, color=HIST).to_edge(LEFT, buff=0.35).shift(UP * 0.4)
+                          width=4.6, color=HIST).to_edge(LEFT, buff=0.3).shift(UP * 0.4)
         tag = note(r"computed: \ our encoder--decoder, \ trained here to reverse strings").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Seeing is half of this part. The other half is remembering. <bookmark mark='a'/> In 2014 networks "
