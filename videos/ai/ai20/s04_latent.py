@@ -148,7 +148,7 @@ class Latent(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             br = VGroup(brace_note(rows[3][2], r"reconstruction", color=RECON, font_size=22),
-                        brace_note(rows[3][4], r"rate", color=KLC, font_size=22))
+                        brace_note(rows[3][4], r"rate{}", color=KLC, font_size=22))  # own zh key: bare "rate" is 比例
             self.play(FadeOut(whys[3]), FadeIn(br))  # the braces sit where the ELBO's note goes
             self.wait(max(0.5, vo.until("d") - 2.8))
             self.play(FadeOut(br), FadeIn(whys[3]))

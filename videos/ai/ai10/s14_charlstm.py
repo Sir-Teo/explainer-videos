@@ -104,8 +104,10 @@ class CharLSTM(VoiceoverScene):
             f"{100 * m['chars_seen'] / m['train_chars']:.0f} percent of the books, once, in {mins:.0f} minutes on "
             "this computer."
         ) as vo:
-            self.play(FadeIn(facts[:4], lag_ratio=0.2), FadeIn(cite_))
+            big = facts[:4].copy().scale(1.45).move_to([0, 0.4, 0])
+            self.play(FadeIn(big, lag_ratio=0.2), FadeIn(cite_))
             vo.wait_until("b")
+            self.play(ReplacementTransform(big, facts[:4]))
             self.play(FadeIn(streams), FadeIn(dots), FadeIn(sl), FadeIn(wl))
             self.play(*[s[2].animate.shift(RIGHT * 1.2) for s in streams],
                       *[s[1].animate.put_start_and_end_on(s[1].get_start(), s[1].get_end() + RIGHT * 1.2)
@@ -179,11 +181,18 @@ class CharLSTM(VoiceoverScene):
         else:
             end = (f"By the end, {pb:.2f} bits per character on the passage, against Part 9's {n9:.2f} and "
                    f"Kneser-Ney's {kn:.2f}.")
+        words = " ".join(snaps[i_mid][1].split()).split(" ")
+        wordy = 0.1 < (len(words) - 1) / max(len(snaps[i_mid][1]), 1) < 0.3 and np.mean([len(w) for w in words]) < 9
+        if wordy:
+            mid_s = (f"Within {snaps[i_mid][0]:,} steps it writes words and spaces, at {mid_bits:.2f} bits per "
+                     "character.")
+        else:
+            mid_s = (f"After {snaps[i_mid][0]:,} steps it is at {mid_bits:.2f} bits per character, though what it "
+                     "writes doesn't look like words yet.")
         with self.voiceover(
             "Here is its training, scored as always on the scoreboard's passage from The Maltese Falcon, which it "
             f"never sees. <bookmark mark='a'/> It starts at {e0:.1f} bits per character, a guess among "
-            f"{m['K']} symbols, writing noise. <bookmark mark='b'/> Within {snaps[i_mid][0]:,} steps it writes "
-            f"words and spaces, at {mid_bits:.2f} bits per character. <bookmark mark='c'/> {end}"
+            f"{m['K']} symbols, writing noise. <bookmark mark='b'/> {mid_s} <bookmark mark='c'/> {end}"
         ) as vo:
             self.play(Create(ax), Create(l9), FadeIn(t9), Create(lk), FadeIn(tk), FadeIn(panel), FadeIn(pl),
                       FadeIn(cur))
@@ -209,7 +218,7 @@ class CharLSTM(VoiceoverScene):
         rows, i, n9, kn9 = board_rows()
         board = scoreboard(rows, highlight=(i,), max_bits=8.0)
         board.scale_to_fit_height(min(board.height, 6.6)).move_to(DOWN * 0.1)
-        glow = SurroundingRectangle(board.rows[i], color=LM_C, buff=0.08, corner_radius=0.08)
+        glow = SurroundingRectangle(board.rows[i], color=LM_C, buff=0.0, stroke_width=2.5)
         me = rows[i]["bits"]
         above = [r for r in rows[:i] if "bits" in r]
         best_above = min(r["bits"] for r in above)
@@ -303,9 +312,10 @@ class CharLSTM(VoiceoverScene):
             "remember that one is open, maybe for lines. In 2017 Alec Radford and colleagues at OpenAI trained "
             "a bigger one on Amazon reviews and found a single cell that tracked whether a review was positive."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_))
+            self.play(FadeIn(head), FadeIn(cite_), LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(sub), LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2), run_time=2.0)
+            self.play(FadeIn(sub))
         self.wait(0.3)
         self.clear_scene()
 
@@ -334,9 +344,8 @@ class CharLSTM(VoiceoverScene):
             f"average; a letter inside a word, {wi:.1f}; a capital letter, {cap:.1f}. Once a word has begun, the "
             "rest of it is nearly free. That is Part 1's guessing game, played by a machine that remembers."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(scale))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2), run_time=2.0)
+            self.play(FadeIn(head), FadeIn(scale), LaggedStart(*[FadeIn(r) for r in block], lag_ratio=0.2),
+                      run_time=2.0)
         self.wait(0.6)
         self.clear_scene()
 

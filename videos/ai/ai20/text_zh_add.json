@@ -595,6 +595,11 @@
   "modes covered at the end: \\\\ $5$ seeds each, \\ same networks, \\ same generator steps": "最后覆盖的峰：\\\\ 各$5$个种子，\\ 同样的网络，\\ 同样的生成器步数",
   "operations per generator step": "每个生成器步的运算量",
   "generator steps on one budget": "同一份预算下的生成器步数",
-  "CD-10": "CD-10"
+  "CD-10": "CD-10",
+  "$100$ draws from $q$: \\\\ one from the good model": "从$q$抽的$100$个样本：\\\\ 只有一个来自那个好模型",
+  "replaying training digits: \\ FID $1.05$, \\ precision $0.87$, \\ recall $0.91$": "直接重放训练数字：\\ FID $1.05$，\\ 精确率$0.87$，\\ 召回率$0.91$",
+  "precision{}": "精确率",
+  "rate{}": "码率",
+  "the truth{}": "真实密度"
  }
 }

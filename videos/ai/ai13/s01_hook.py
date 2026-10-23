@@ -74,8 +74,8 @@ class Hook(VoiceoverScene):
         cap = label(rf"all ${L * H}$ heads, \ on the same ${maps.shape[-1]}$ characters", font_size=26, color=GREY_A)
         cap.to_edge(UP, buff=0.25)
         with self.voiceover(
-            f"Our model has {L * H} of these looks, called heads, each its own way of weighing the past. Some look "
-            "one character back, some at the start of the word, some spread out. <bookmark mark='a'/> This part is "
+            f"Our model has {L * H} of these looks, called heads, each its own way of weighing the past: here are all "
+            f"{L * H}, on the same sentence. <bookmark mark='a'/> This part is "
             "about the mathematics of that look: what it computes, how it knows where things are, and what it can "
             "learn to do."
         ) as vo:

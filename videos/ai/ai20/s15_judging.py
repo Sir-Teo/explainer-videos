@@ -238,8 +238,8 @@ class Judging(VoiceoverScene):
     # ------------------------------------------------------------------
     def ring_table(self):
         e2 = load("eval2d")
-        g = axes([0, 1], [0, 1], x_length=4.4, y_length=4.4, xlabel=r"precision", ylabel=r"recall",
-                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[-3.6, -0.3, 0])
+        g = axes([0, 1], [0, 1], x_length=4.4, y_length=4.4, xlabel=r"precision{}", ylabel=r"recall",
+                 xticks=[0, 0.5, 1], yticks=[0, 0.5, 1], center=[-3.6, -0.3, 0])  # "{}": a zh key of its own (the shared table has bare "precision" as 精度)
         dots, keys = VGroup(), VGroup()
         for f in e2["families"]:
             nm, col = FAM2D[f]

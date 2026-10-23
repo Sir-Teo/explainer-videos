@@ -206,7 +206,8 @@ class Flows(VoiceoverScene):
         steps = list(f2["checker_frame_steps"])
         imgs = [pl.image(fr, FLOW) for fr in frames]
         truth = pl.image(t["checker_density"], DATA).scale(0.42).next_to(pl, DOWN, buff=0.15).align_to(pl, LEFT)
-        tl = label(r"the truth", font_size=18, color=DATA).next_to(truth, RIGHT, buff=0.1)
+        # "the truth{}": a zh key of its own ("the truth" alone is 真实标签 elsewhere)
+        tl = label(r"the truth{}", font_size=18, color=DATA).next_to(truth, RIGHT, buff=0.1)
         cap = [label(rf"step ${s:,}$".replace(",", "{,}"), font_size=22, color=FLOW).next_to(pl, UP, buff=0.12)
                for s in steps]
         rows = VGroup()

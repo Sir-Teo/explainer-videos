@@ -249,8 +249,8 @@ class Hopfield(VoiceoverScene):
             f"metastable state. <bookmark mark='c'/> Turn it up and one pattern takes all the weight: overlap "
             f"{big:.2f}. Attention lives on this curve, and the division by the square root of d sets where. "
             "<bookmark mark='d'/> In 2024 the Nobel Prize in Physics went to Hopfield and to Geoffrey Hinton for "
-            "networks like these. A transformer head is a memory read: its query recalls from the keys, and returns a "
-            "blend of the values."
+            "networks like these; Part 20 returns to their energies as a way to generate. A transformer head is a "
+            "memory read: its query recalls from the keys, and returns a blend of the values."
         ) as vo:
             self.play(FadeIn(g), Create(c_), run_time=1.5)
             vo.wait_until("a")
