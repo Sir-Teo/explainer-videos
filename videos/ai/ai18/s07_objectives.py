@@ -109,13 +109,13 @@ class Objectives(VoiceoverScene):
         src = cite(r"Bavarian et al.\ (2022), Fig.\ 1; \ DeepSeek-AI (2024), Sec.\ 4.1", font_size=17)
         with self.voiceover(
             "Count the targets. In a sequence of 256 tokens, the causal objective gives 255 predictions to learn "
-            f"from. Masking gives about {tg['mlm']}, and span corruption about {tg['span']}, markers included. "
-            "<bookmark mark='a'/> Fill in the middle keeps all of them: it is still next-token prediction, on "
-            "rearranged text. Bavarian's team put half of their documents in that order and found the ordinary, "
-            "left-to-right perplexity unchanged: infilling for free. <bookmark mark='b'/> DeepSeek-V3 rearranges ten "
-            "percent of its documents this way. <bookmark mark='c'/> So the 2026 answer is the one of Part 14: "
-            "predict the next token, of every token, because that model can be sampled, scored and prompted; and "
-            "teach it to fill gaps by rearranging the data, not by changing the objective."
+            f"from; masking gives about {tg['mlm']}, and span corruption about {tg['span']}, markers included. "
+            "<bookmark mark='a'/> Fill in the middle keeps all of them: it is still next-token prediction, on rearranged "
+            "text. Bavarian's team put half their documents in that order and found the ordinary left-to-right "
+            "perplexity unchanged: infilling for free. <bookmark mark='b'/> DeepSeek-V3 rearranges ten percent of its "
+            "documents this way. <bookmark mark='c'/> So the 2026 answer is Part 14's: predict every next token, because "
+            "that model can be sampled, scored and prompted; and teach it to fill gaps by rearranging the data, not by "
+            "changing the objective."
         ) as vo:
             self.play(FadeIn(rh), FadeIn(src), LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT),
                                                                            FadeIn(r_[2])) for r_ in rows],

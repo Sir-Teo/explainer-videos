@@ -85,7 +85,8 @@ a model trained with the full 2026 recipe against the 2020 one, on the scoreboar
   tokens without a spike), DeepSeek-V4's anticipatory routing and SwiGLU clamping.
 * **16. Predicting two tokens ahead.** Gloeckle et al. 2024 (13B: +12% HumanEval, +17% MBPP; worse at the smallest
   sizes); DeepSeek-V3's sequential MTP module (λ 0.3 → 0.1; 85–90% acceptance, 1 + a tokens per step, 1.8× TPS); our
-  model with and without the module, two seeds; its acceptance rate in greedy self-speculation.
+  model with and without the module, two seeds, and the module's cost in FLOPs per token (`mtp_cost`: in a model
+  this small the second pass through the output head dominates); its acceptance rate in greedy self-speculation.
 * **17. When hardware fails.** Llama 3's interruptions by cause (Table 5), MTBF 3.1 h, per-GPU ~5.8 years (computed),
   >90% effective training, diurnal 1–2%, power swings; Young's checkpoint interval √(2δM) derived (δ from Llama 3's
   checkpoint sizes and storage bandwidth); a 54-day run with random failures simulated over checkpoint intervals.

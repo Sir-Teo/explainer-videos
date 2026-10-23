@@ -157,11 +157,10 @@ class Hook(VoiceoverScene):
         head = label(r"In miniature, \ on the computer making this video", font_size=36).to_edge(UP, buff=0.6)
         with self.voiceover(
             "We'll build every layer in miniature, on the computer making this video. <bookmark mark='a'/> "
-            f"{spoken_int(W['n_pages'])} real web pages from Common Crawl's September 2026 crawl, filtered, "
-            "deduplicated and scored. <bookmark mark='b'/> Four processes of this computer as a tiny cluster, to check "
-            "each kind of parallelism exactly. <bookmark mark='c'/> Pipeline schedules and hardware failures, simulated. "
-            "<bookmark mark='d'/> Training runs pushed to the edge, in sixteen and eight bits and at high learning rates. "
-            "<bookmark mark='e'/> And a model trained with the 2026 recipe against one with the 2020 recipe, on the "
+            f"{spoken_int(W['n_pages'])} real web pages from Common Crawl, filtered, deduplicated and scored. "
+            "<bookmark mark='b'/> Four processes as a tiny cluster, to check each kind of parallelism exactly. "
+            "<bookmark mark='c'/> Pipelines and failures, simulated. <bookmark mark='d'/> Training pushed to the edge, in "
+            "fewer bits and at high learning rates. <bookmark mark='e'/> And the 2026 recipe against the 2020 one, on the "
             "series' scoreboard."
         ) as vo:
             self.play(FadeIn(head), FadeIn(items[0], shift=UP * 0.1), FadeIn(items[1:].copy().set_opacity(0.18)))
@@ -184,11 +183,10 @@ class Hook(VoiceoverScene):
             r"two-token prediction, \ failures at 16,000 GPUs, \ and our own full-recipe model",
         ], font_size=25)
         with self.voiceover(
-            "This is Part 18 of AI, Built, in its third act, the transformer era. <bookmark mark='a'/> In this part: "
-            "the data, from raw web pages to a clean, deduplicated mixture; what the model is asked to predict, and "
-            "how training is staged; the arithmetic of a run, in operations and in bytes; the five ways to cut a "
-            "model across devices; training in fewer bits, and keeping it stable; predicting two tokens at once; "
-            "surviving failures; and our own model, trained with the full recipe."
+            "This is Part 18 of AI, Built, in its third act, the transformer era. <bookmark mark='a'/> In this part: the "
+            "data, from raw web pages to a clean mixture; the objective, and the stages of training; the arithmetic of a "
+            "run, in operations and bytes; the five ways to cut a model across devices; fewer bits, and stability; "
+            "predicting two tokens at once; surviving failures; and our own model, trained with the full recipe."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

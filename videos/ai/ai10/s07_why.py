@@ -6,6 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai10.common import (ACTC, CNN, FMAP, HIST, KERNEL, MLPC, PART, load, pct, seed_band)
+from videos.ai.ai10.compute import LENET_BATCH
 from videos.ai.ai10.specs import ALEXNET
 
 
@@ -217,8 +218,27 @@ class WhyItWon(VoiceoverScene):
         leg = legend([(CNN, r"the digits as they are"), (KERNEL, r"with shifted copies")], font_size=22)
         leg.to_corner(UR, buff=0.5)
         slope = float(d["slope"])
-        fit = label(rf"slope $\approx {slope:.2f}$: \ error $\propto n^{{{slope:.2f}}}$", font_size=26,
+        # does the line bend? fit the first three sizes, and compare the largest sets with each other
+        mean_log = [float(np.mean([p[i] for p in plain])) for i in range(len(sizes))]
+        s3, i3 = np.polyfit(lx[:3], mean_log[:3], 1)
+        bent = len(sizes) > 3 and mean_log[-1] > mean_log[-2] - 0.03
+        shown = s3 if bent else slope
+        fit = label(rf"slope $\approx {shown:.2f}$: \ error $\propto n^{{{shown:.2f}}}$", font_size=26,
                     color=CNN).next_to(leg, DOWN, buff=0.4).align_to(leg, LEFT)
+        if bent:
+            fline = DashedLine(A.c2p(lx[0], s3 * lx[0] + i3), A.c2p(lx[-1], s3 * lx[-1] + i3), color=CNN,
+                               stroke_width=2, dash_length=0.08)
+            passes = int(d["steps"]) * LENET_BATCH / sizes[-1]
+            law = (f"On a log-log plot the test error first falls along a straight line, a power law with slope "
+                   f"about minus {abs(s3):.2f}: each doubling of the data cuts the errors by "
+                   f"{100 * (1 - 2 ** s3):.0f} percent. Then the line bends flat: in {int(d['steps']):,} steps the "
+                   f"network sees each of the {sizes[-1]:,} digits only {passes:.1f} times, and can't make use of "
+                   "them all. More data pays only with more training, the balance Part 12 is about.")
+        else:
+            fline = VectorizedPoint()
+            law = (f"On a log-log plot the test error falls along a straight line, a power law with slope about "
+                   f"minus {abs(slope):.2f}: each doubling of the data cuts the errors by "
+                   f"{100 * (1 - 2 ** slope):.0f} percent. Part 12 is about such straight lines.")
         tag = note(rf"computed: \ LeNet, \ ${int(d['steps']):,}$ steps each, \ three seeds".replace(",", "{,}"))
         tag.to_corner(DR, buff=0.2)
         e_small = np.mean([runs[f"{sizes[1]}-0-{s}"]["test_error"] for s in (0, 1, 2)])
@@ -235,16 +255,14 @@ class WhyItWon(VoiceoverScene):
             aug_v = "Shifted copies barely help at this size."
         with self.voiceover(
             "The third ingredient was the one ImageNet supplied: data. <bookmark mark='a'/> Train the same "
-            "LeNet, for the same number of steps, on more and more digits. On a log-log plot the test error falls "
-            f"along a straight line, a power law with slope about minus {abs(slope):.2f}: each doubling of the data cuts the "
-            f"errors by {100 * (1 - 2 ** slope):.0f} percent. <bookmark mark='b'/> And there is a cheap way to "
-            "get more: make it. AlexNet trained on random crops of its photographs and their mirror images, "
-            f"{ALEXNET['augment_factor']:,} variants of each. " + aug_v + " Part 12 is about such straight lines."
+            f"LeNet, for the same number of steps, on more and more digits. {law} <bookmark mark='b'/> And there "
+            "is a cheap way to get more: make it. AlexNet trained on random crops of its photographs and their "
+            f"mirror images, {ALEXNET['augment_factor']:,} variants of each. {aug_v}"
         ) as vo:
             self.play(Create(ax), FadeIn(leg), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(cp), LaggedStart(*[FadeIn(dd, scale=0.5) for dd in dots], lag_ratio=0.2))
-            self.play(FadeIn(fit))
+            self.play(FadeIn(fit), Create(fline))
             vo.wait_until("b")
             self.play(FadeIn(ca))
         self.wait(0.3)

@@ -45,13 +45,12 @@ class Stability(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(DOWN * 2.2)
         src = cite(r"Chowdhery et al., PaLM (2022), Sec.\ 5.1", corner=DR, font_size=17)
         with self.voiceover(
-            "Large runs have a failure that small ones rarely show: the loss suddenly jumps, and sometimes never "
-            "comes back. <bookmark mark='a'/> Google's PaLM, at 540 billion parameters, spiked about twenty times, "
-            "although its gradients were clipped. <bookmark mark='b'/> The team's fix was blunt: go back to a "
-            "checkpoint about a hundred steps before the spike, and skip the next two to five hundred batches. "
-            "<bookmark mark='c'/> It wasn't bad data: the same batches caused no trouble from another point in "
-            "training. The spikes came from the combination of the data and the model's state, and the models of "
-            "2022 to 2026 have been redesigned so that state stays tame."
+            "Large runs have a failure that small ones rarely show: the loss suddenly jumps, and sometimes never comes "
+            "back. <bookmark mark='a'/> Google's PaLM, at 540 billion parameters, spiked about twenty times, although its "
+            "gradients were clipped. <bookmark mark='b'/> The fix was blunt: restart from a checkpoint about a hundred "
+            "steps before the spike, and skip the next two to five hundred batches. <bookmark mark='c'/> It wasn't bad "
+            "data: the same batches caused no trouble from another point in training. The spikes came from the data and "
+            "the model's state together, and the models of 2022 to 2026 are designed so that state stays tame."
         ) as vo:
             self.play(FadeIn(g), Create(cv), FadeIn(sch), FadeIn(src), run_time=2.0)
             vo.wait_until("a")
@@ -93,15 +92,15 @@ class Stability(VoiceoverScene):
         pl, qk = max(mx["plain"][i]), max(mx["qk"][i])
         tag = note(rf"computed: \ learning rate ${lr:g}$, \ two seeds each", font_size=18).to_corner(DR, buff=0.2)
         with self.voiceover(
-            "One state that goes wrong is attention itself. A query and a key give a logit, their dot product over "
-            "the square root of the dimension, and nothing stops the weights from growing until the logits are "
-            "huge. <bookmark mark='a'/> Then the softmax puts all its weight on one position, its gradients vanish, "
-            "and training can lock up or blow up. Wortsman and colleagues at Google reproduced this in small models "
-            "in 2023, simply by raising the learning rate. So did we. <bookmark mark='b'/> At a learning rate of "
-            f"{lr:g}, the largest attention logit of our plain model reaches {pl:,.0f}. <bookmark mark='c'/> The fix "
-            "used in ViT-22B, Olmo 2, Qwen3 and GLM-4.5: QK-norm. Normalize every query and key before the dot "
-            "product, <bookmark mark='d'/> and the logit is bounded by the norms' learned gains times the square "
-            f"root of the dimension. With it, our largest logit stays at {qk:.0f}."
+            "One state that goes wrong is attention itself. A query and a key give a logit, their dot product over the "
+            "square root of the dimension, and nothing stops the weights from growing until the logits are huge. "
+            "<bookmark mark='a'/> Then the softmax puts all its weight on one position, its gradients vanish, and "
+            "training can lock up or blow up. Wortsman and colleagues at Google reproduced this in small models in 2023 "
+            f"just by raising the learning rate; so did we. <bookmark mark='b'/> At a learning rate of {lr:g}, our plain "
+            f"model's largest attention logit reaches {pl:,.0f}. <bookmark mark='c'/> The fix, used in ViT-22B, Olmo 2, "
+            "Qwen3 and GLM-4.5, is QK-norm: normalize every query and key before the dot product, <bookmark mark='d'/> "
+            "and the logit is bounded by the norms' learned gains times the square root of the dimension. With it, our "
+            f"largest logit stays at {qk:.0f}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             step(0)
@@ -256,17 +255,16 @@ class Stability(VoiceoverScene):
         src = cite(r"Liu et al.\ (2025); \ Kimi Team (2025), Sec.\ 2.1; \ DeepSeek-AI (2026), Secs.\ 2.4, 4.2.3",
                    corner=DR, font_size=16)
         with self.voiceover(
-            "The newest source of trouble is the optimizer. Part 11's Muon, which orthogonalizes each update, went "
-            "to scale in 2025: Moonshot's Moonlight study found it about twice as compute-efficient as AdamW. "
-            "<bookmark mark='a'/> But with Muon, attention logits grew faster, and Kimi K2 uses latent attention, "
-            "whose keys are never formed in full, so QK-norm can't be applied. <bookmark mark='b'/> Moonshot's fix, "
-            "QK-Clip: after each update, if a head's largest logit has passed a hundred, shrink that head's query "
-            "and key weights to bring it back. Early on it clipped 12.7 percent of the heads; after seventy thousand "
-            "steps, none; and K2 trained on 15.5 trillion tokens without a single loss spike. "
-            "<bookmark mark='c'/> DeepSeek-V4, in 2026, also uses Muon, with its new attention normalizing queries "
-            "and keys directly. Its remaining spikes came from outliers in the mixture of experts, and it suppressed "
-            "them by routing with slightly older weights while a spike lasts, and by clamping the SwiGLU "
-            "activations."
+            "The newest source of trouble is the optimizer. Part 11's Muon, which orthogonalizes each update, went to "
+            "scale in 2025: Moonshot's Moonlight study found it about twice as compute-efficient as AdamW. "
+            "<bookmark mark='a'/> But with Muon the attention logits grew faster, and Kimi K2's latent attention never "
+            "forms its keys in full, so QK-norm can't be applied. <bookmark mark='b'/> Moonshot's fix, QK-Clip: after "
+            "each update, if a head's largest logit has passed a hundred, shrink that head's query and key weights to "
+            "bring it back. It clipped 12.7 percent of the heads early on and none after seventy thousand steps, and K2 "
+            "trained on 15.5 trillion tokens without a single loss spike. <bookmark mark='c'/> DeepSeek-V4, in 2026, also "
+            "uses Muon, and normalizes queries and keys in its new attention. Its remaining spikes came from outliers in "
+            "the mixture of experts; it suppressed them by routing with slightly older weights while a spike lasts, and by "
+            "clamping the SwiGLU activations."
         ) as vo:
             self.play(FadeIn(rows[:2]), FadeIn(src))
             vo.wait_until("a")
