@@ -678,5 +678,5 @@ Length is `tools/lecture_length.py` (an estimate before a render, the measured s
 | 17 | **complete**, English and Chinese | 55 min |
 | 26 | built in English (silent preview); AlphaZero evaluations finishing; Chinese narration table complete | ≈ 62 min |
 | 27 | written; experiments wait for the novels model; Chinese narration table complete | ≈ 40 min (est.) |
-| 28 | expanding (drafted: 16 chapters) | ≈ 51 min (est.) |
+| 28 | **complete**, English and Chinese | 59 min |
 | 31 | new, drafted (16 chapters; the finale takes over Part 30's series recap and scoreboard) | ≈ 60 min (est.) |
