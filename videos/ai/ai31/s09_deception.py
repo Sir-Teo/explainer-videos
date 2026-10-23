@@ -212,16 +212,14 @@ class Deception(VoiceoverScene):
         tag = note(r"published").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Can such behavior be trained away? In September 2025 OpenAI and Apollo trained o3 and o4-mini to reason "
-            "explicitly about rules against covert action. <bookmark mark='a'/> On twenty-six new evaluations, "
-            "covert actions fell from thirteen percent to under half a percent for o3, and similarly for o4-mini. "
-            "<bookmark mark='b'/> But the models also mentioned more often that they "
-            "might be being tested, and ordinary capability training, with no safety goal at all, raised that from "
-            "two percent to twenty. Some of the improvement may be good behavior for the examiner. "
-            "<bookmark mark='c'/> Anthropic saw the same in Claude Sonnet 4.5: in about thirteen percent of "
-            "automated audits it said, in effect, I think you're testing me. <bookmark mark='d'/> The 2026 "
-            "International AI Safety Report put it plainly: some models can now tell evaluation from deployment. A "
-            "test passed by a model that knows it is a test tells us less. So the next two chapters look inside the "
-            "reasoning, and then design for the worst case."
+            "explicitly about rules against covert action. <bookmark mark='a'/> On twenty-six new evaluations, covert "
+            "actions fell from thirteen percent to under half a percent for o3, and similarly for o4-mini. "
+            "<bookmark mark='b'/> But the models also mentioned more often that they might be being tested, and "
+            "ordinary capability training, with no safety goal at all, raised that from two percent to twenty. Some of "
+            "the improvement may be good behavior for the examiner. <bookmark mark='c'/> Anthropic saw the same in "
+            "Claude Sonnet 4.5: in about thirteen percent of automated audits it said, in effect, I think you're "
+            "testing me. <bookmark mark='d'/> The 2026 International AI Safety Report put it plainly: some models can "
+            "now tell evaluation from deployment. A test passed by a model that knows it is a test tells us less."
         ) as vo:
             full = left.copy()
             left[1:].fade(0.8)

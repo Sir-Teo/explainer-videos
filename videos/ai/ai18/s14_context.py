@@ -198,11 +198,11 @@ class Context(VoiceoverScene):
         nest = VGroup()
         for k, (t, c) in enumerate(((r"data: \ FSDP", C.EMBED), (r"pipeline", COMM), (r"context", C.PROB),
                                     (r"tensor: \ inside one machine", GPU))):
-            box = RoundedRectangle(width=11.0 - 2.4 * k, height=1.5 - 0.3 * k, corner_radius=0.12, stroke_color=c,
-                                   stroke_width=2)
-            nest.add(VGroup(box, label(t, font_size=20, color=c).next_to(box.get_corner(UL), DR, buff=0.08)))
-        for b_ in nest:
-            b_.move_to(DOWN * 2.5)
+            box = RoundedRectangle(width=11.0 - 2.4 * k, height=2.3 - 0.56 * k, corner_radius=0.12, stroke_color=c,
+                                   stroke_width=2).move_to(DOWN * 2.35)
+            # each label centred in the band between its box and the next one in
+            nl = label(t, font_size=19, color=c).move_to(box.get_top() + DOWN * (0.14 if k < 3 else box.height / 2))
+            nest.add(VGroup(box, nl))
         src = cite(r"Llama Team (2024), Table 4", corner=DR, font_size=17)
         with self.voiceover(
             "A frontier run uses several cuts at once. Here is Llama 3's own table. <bookmark mark='a'/> On 16,384 "

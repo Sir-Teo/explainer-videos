@@ -50,9 +50,9 @@ class Contamination(VoiceoverScene):
             "much of the public web, and benchmarks live on the public web. <bookmark mark='a'/> When a test's "
             "questions, or their answers, end up in the training data, the test is said to be contaminated. "
             "<bookmark mark='b'/> When OpenAI trained GPT-3 in 2020, it searched its training data for test items by "
-            "looking for any thirteen-word sequence they shared. A bug let some overlaps through, retraining was too "
-            "expensive, and the paper measured the damage instead. <bookmark mark='c'/> In 2023 the GPT-4 report "
-            "noted that parts of the BIG-bench benchmark had been mixed into its training set by accident."
+            "looking for any thirteen-word sequence they shared. A bug let some overlaps through, and retraining was "
+            "too expensive. <bookmark mark='c'/> In 2023 the GPT-4 report noted that parts of the BIG-bench benchmark "
+            "had been mixed into its training set by accident."
         ) as vo:
             self.play(FadeIn(big), FadeIn(bl), FadeIn(test), FadeIn(tl), FadeIn(sch))
             vo.wait_until("a")
@@ -307,15 +307,14 @@ class Contamination(VoiceoverScene):
         head = label(r"The other defense: \ time", font_size=36).to_edge(UP, buff=0.4)
         cite_ = cite(r"Jain et al.\ (2024); \ White et al.\ (2024); \ Zhang et al.\ (2024)")
         with self.voiceover(
-            "The other defense is time: test on things written after the model was trained. "
-            "<bookmark mark='a'/> LiveCodeBench collects programming problems as contests publish them, and found "
-            "that some models did markedly worse on problems released after their training cutoff, a sign that they "
-            "had seen the older ones. <bookmark mark='b'/> LiveBench writes new questions every month. "
-            "<bookmark mark='c'/> Researchers at Scale AI wrote a thousand fresh grade-school math problems in the "
-            "style of a popular benchmark; some model families dropped by up to eight percent, though the frontier "
-            "models showed little sign of it. <bookmark mark='d'/> And our own passage was chosen for this reason. "
-            "Hammett's novel entered the public domain, and Project Gutenberg, on the first of January 2026, after "
-            "the pretrained models of Part 1 were trained; and the models we built ourselves never read it."
+            "The other defense is time: test on things written after the model was trained. <bookmark mark='a'/> "
+            "LiveCodeBench collects programming problems as contests publish them; some models did markedly worse on "
+            "problems released after their training cutoff. <bookmark mark='b'/> LiveBench writes new questions every "
+            "month. <bookmark mark='c'/> Scale AI wrote a thousand fresh grade-school math problems in the style of a "
+            "popular benchmark; some model families dropped by up to eight percent, the frontier models hardly at all. "
+            "<bookmark mark='d'/> And our passage entered the public domain, and Project Gutenberg, on the first of "
+            "January 2026, after the pretrained models of Part 1 were trained; the models we built ourselves never "
+            "read it."
         ) as vo:
             full = cards.copy()
             for c_ in cards[1:]:

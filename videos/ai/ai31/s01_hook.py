@@ -75,16 +75,14 @@ class Hook(VoiceoverScene):
         cap = label(r"Arthur Samuel's checkers, \ 1959 \ (Part 2)", font_size=22, color=GREY_B)
         chain = VGroup(steps_, arrs, cap.next_to(steps_, DOWN, buff=0.35)).move_to(DOWN * 0.6)
         with self.voiceover(
-            "The worry is older than the field's successes. In December 1959 the mathematician "
-            "Norbert Wiener, who founded cybernetics, gave a lecture that Science printed the next May, under the "
-            "title Some Moral and Technical Consequences of Automation. <bookmark mark='a'/> He pointed to the "
-            "checkers programs of the "
-            "day, Arthur Samuel's from Part 2 among them, which had learned to beat the people who programmed them. "
-            "<bookmark mark='b'/> His thesis, in his words: machines can and do transcend some of the limitations of "
-            "their designers, and in doing so they may be both effective and dangerous. <bookmark mark='c'/> And his "
-            "warning. If we use a machine we cannot interfere with once it has started, we had better be quite sure "
-            "that the purpose put into the machine is the purpose which we really desire, and not merely a colorful "
-            "imitation of it."
+            "The worry is older than the field's successes. In December 1959 the mathematician Norbert Wiener gave a "
+            "lecture that Science printed the next May. <bookmark mark='a'/> He pointed to the checkers programs of "
+            "the day, Arthur Samuel's from Part 2 among them, which had learned to beat the people who programmed "
+            "them. <bookmark mark='b'/> His thesis, in his words: machines can and do transcend some of the "
+            "limitations of their designers, and in doing so they may be both effective and dangerous. "
+            "<bookmark mark='c'/> And his warning. If we use a machine we cannot interfere with once it has started, "
+            "we had better be quite sure that the purpose put into the machine is the purpose which we really desire, "
+            "and not merely a colorful imitation of it."
         ) as vo:
             self.play(FadeIn(hc, shift=DOWN * 0.2))
             vo.wait_until("a")

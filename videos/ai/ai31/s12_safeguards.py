@@ -107,13 +107,12 @@ class Safeguards(VoiceoverScene):
             "In July OpenAI treated its ChatGPT agent, and then GPT-5, as High in biology, also as a precaution. "
             "<bookmark mark='c'/> In February 2026 came the first model OpenAI treated as High in cybersecurity. "
             "<bookmark mark='d'/> In April Anthropic announced Claude Mythos Preview, which found and exploited "
-            "previously unknown vulnerabilities in every major operating system and web browser, and did not release "
-            "it generally; it went to defenders first. On one benchmark of exploits for Firefox, its predecessor "
-            "produced two working exploits in several hundred attempts; Mythos produced a hundred and eighty-one. "
-            "<bookmark mark='e'/> In June, at the US government's request, OpenAI previewed its next models to "
-            "trusted partners first. <bookmark mark='f'/> And in September it released GPT-6 "
-            "Astra, the first model it rates at its highest level, Critical, in cybersecurity, with its strongest "
-            "safeguards yet."
+            "unknown vulnerabilities in every major operating system and browser; it went to defenders first, not to "
+            "the public. On a Firefox exploit benchmark its predecessor managed two working exploits in several "
+            "hundred attempts; Mythos, a hundred and eighty-one. <bookmark mark='e'/> In June, at the US government's "
+            "request, OpenAI previewed its next models to trusted partners first. <bookmark mark='f'/> And in "
+            "September it released GPT-6 Astra, the first model it rates at its highest level, Critical, in "
+            "cybersecurity, with its strongest safeguards yet."
         ) as vo:
             full = rows.copy()
             rows.fade(0.8)
@@ -199,13 +198,12 @@ class Safeguards(VoiceoverScene):
                           r"$90\%$ of the time", width=6.0, color=LEAK, font_size=19).move_to([3.5, 0.6, 0])
         lesson = label(r"test a defense against an attacker who knows it", font_size=24, color=CI).move_to([3.5, -2.4, 0])
         with self.voiceover(
-            "How should such defenses be judged? <bookmark mark='a'/> Against a fixed list of known attacks, most "
-            "look excellent. <bookmark mark='b'/> But an attacker moves second. In October 2025 researchers from "
-            "OpenAI, Anthropic, Google DeepMind and several universities took twelve recently published defenses, "
-            "most of which had reported near-zero attack success, and attacked each one adaptively, with gradients, "
-            "reinforcement learning, search and human ingenuity. They got through most of them more than ninety "
-            "percent of the time. <bookmark mark='c'/> It is the oldest lesson of security: a defense is only as "
-            "good as the strongest attacker who knows it is there."
+            "How should such defenses be judged? <bookmark mark='a'/> Against a fixed list of known attacks, most look "
+            "excellent. <bookmark mark='b'/> But an attacker moves second. In October 2025 researchers from several "
+            "labs and universities took twelve recently published defenses, most reporting near-zero attack success, "
+            "and attacked each one adaptively: with gradients, reinforcement learning, search, and people. They got "
+            "through most of them more than ninety percent of the time. <bookmark mark='c'/> It is the oldest lesson "
+            "of security: a defense is only as good as the strongest attacker who knows it is there."
         ) as vo:
             self.play(FadeIn(layers), FadeIn(sch))
             vo.wait_until("a")

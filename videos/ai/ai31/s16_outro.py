@@ -97,14 +97,22 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, in eight pictures", font_size=40).to_edge(UP, buff=0.35)
+        wd = load("w2s")
+        weak, w2s, ceil = (float(np.mean(wd[k])) for k in ("weak", "w2s", "ceiling"))
+        pgr = (w2s - weak) / max(ceil - weak, 1e-9)
+        if pgr > 0.2:
+            w2s_said = ("A weak supervisor can teach a stronger student more than it knows, but not all the student "
+                        "could learn, and some of its mistakes besides.")
+        else:
+            w2s_said = ("A weak supervisor taught our stronger student little beyond its own mistakes, though at "
+                        "larger scale it has recovered about half the gap.")
         with self.voiceover(
             "Let's take stock, one last time. A single score is a sample: bootstrap it, and compare models on the "
             "same items. A score means nothing if the test leaked, and contamination reorders the leaderboard. "
             "Votes become ratings through Bradley and Terry, and their intervals shrink only as fast as the square "
             "root of the votes. Trends forecast, until they bend, so backtest them. An optimizer finds the loophole in "
-            "whatever we write down. A weak supervisor can teach a stronger student more than it knows, but not all "
-            "the student could learn, and some of its mistakes besides. And control buys safety from a model we "
-            "can't trust, at a price in usefulness we can measure."
+            "whatever we write down. " + w2s_said + " And control buys safety from a model we can't trust, at a price "
+            "in usefulness we can measure."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
