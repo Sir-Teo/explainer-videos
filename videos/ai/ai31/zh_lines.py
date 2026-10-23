@@ -375,7 +375,16 @@ ZH = {
         "我们可以测试自己的模型。先给一个精确的定义。<bookmark mark='a'/>如果用一段训练文本前面的k个词元去提示模型，它的贪心解码能把这段文本原样写出来，就说这段文本在k个词元的上下文下是可提取的。<bookmark mark='b'/>检查这一点，看上去需要一个词元一个词元地生成。其实不用。贪心解码总是取概率最高的词元。<bookmark mark='c'/>只要它写出来的和原文一致，模型读到的就是真实的文本，所以它的下一个选择，就是在真实前缀下概率最高的那个词元。<bookmark mark='d'/>由归纳法，它能把整段原样写出来，当且仅当每个位置上概率最高的词元都是对的：在真实文本上做一次前向计算就能判定，而且对所有前缀长度一次搞定。这让我们能低成本地测试每种{d['n_win']:,}段文字。",
 
     'f"Our model saw its training text about {d[\'epochs\']:.1f} times.':
-        "我们的模型把它的训练文本看了大约{d['epochs']:.1f}遍。用一段文字的开头去提示它，问它能不能把接下来的{d['cont']}个词元原样写出来。<bookmark mark='a'/>对它训练过的段落，<bookmark mark='b'/>以及对同样几本书里的留出段落。<bookmark mark='c'/>{said}提示越长，越能帮它想起来。",
+        "我们的模型把它的训练文本看了大约{d['epochs']:.1f}遍。用一段文字的开头去提示它，问它能不能把接下来的{d['cont']}个词元原样写出来。<bookmark mark='a'/>对它训练过的段落，<bookmark mark='b'/>以及对同样几本书里的留出段落。<bookmark mark='c'/>{said}<bookmark mark='d'/>{longer}",
+
+    "f'With 64 tokens of prompt, or any other length we tried":
+        "用64个词元的提示，或者我们试过的任何其他长度，在{d['n_win']}段训练过的段落里，它一段也没能把接下来的{d['cont']}个词元原样写出来，留出段落也一段都没有。它的贪心续写平均只跟着原文走{lt_:.1f}个词元，就自顾自地写下去了；在留出文本上是{lv_:.1f}个。在这个规模上，用这种办法，我们从模型里提取不出任何东西。",
+
+    'Longer prompts help it remember.':
+        '提示越长，越能帮它想起来。',
+
+    'Larger models, trained on their text more often, are another matter.':
+        '更大的、把训练文本看过更多遍的模型，就是另一回事了。',
 
     "f'With 64 tokens of prompt, our model reproduces":
         "用64个词元的提示，对它训练过的段落，我们的模型有百分之{rt * 100:.1f}能把接下来的{d['cont']}个词元原样写出来，留出段落则是百分之{rv * 100:.1f}。留出段落只有在文本可以从提示推出来的时候才能写对；两者之差，就是记忆。",
@@ -388,6 +397,9 @@ ZH = {
 
     "f'Text that appears once in the training data is reproduced":
         "在训练数据里只出现一次的文本，有百分之{rates[keep[0]] * 100:.1f}被原样写出；重复五次以上的，百分之{rates[keep[-1]] * 100:.0f}。模型记住的正是重复，这也是为什么训练集要去重。",
+
+    "f'Even stretches that occur five or more times are reproduced in none of":
+        "就连出现五次以上的片段，{ns[keep[-1]]}次尝试里也一次都没有被原样写出：对这么小的模型来说，光靠重复还不够。",
 
     'Here repetition makes little difference.':
         '在这里，重复没什么影响。',

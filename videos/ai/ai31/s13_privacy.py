@@ -121,19 +121,34 @@ class Privacy(VoiceoverScene):
         cv = curve(g.ax, x, va["rate"], HELD, 4)
         lg = legend([(TRAIN, r"text it trained on"), (HELD, r"held-out text, \ same books")], font_size=20)
         lg.next_to(g.ax, UP, buff=0.12).align_to(g.ax, LEFT)
-        ex = d["examples"].get("train")
+        ex = d["examples"]["train"]
         k64 = list(d["prefixes"]).index(64)
-        exg = VGroup()
-        if ex:
-            pre = wrap_data("..." + ex["prefix"], chars=34, font_size=18, color=GREY_B, max_lines=3)
-            cont = wrap_data(ex["truth"], chars=34, font_size=18, color=TRAIN if ex["extracted"] else WHITE,
-                             max_lines=4)
-            lab = label(r"a training passage, \ prompt in grey; \ the model's greedy continuation:" if ex["extracted"]
-                        else r"the closest a training passage came:", font_size=18, color=GREY_A)
-            exg = VGroup(lab, pre, cont).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, 0.3, 0])
+        pre = wrap_data("..." + ex["prefix"], chars=34, font_size=18, color=GREY_B, max_lines=3)
+        if ex["extracted"]:
+            lab = label(r"a training passage, \ prompt in grey; \ the model's greedy continuation:", font_size=18,
+                        color=GREY_A)
+            body = VGroup(wrap_data(ex["truth"], chars=34, font_size=18, color=TRAIN, max_lines=4))
+        else:
+            lab = label(rf"the training passage greedy decoding followed longest: \ ${ex['lead']}$ tokens",
+                        font_size=18, color=GREY_A)
+            body = VGroup(label(r"the text:", font_size=17, color=GREY_A),
+                          wrap_data(ex["truth"], chars=34, font_size=18, color=WHITE, max_lines=3),
+                          label(r"the model wrote:", font_size=17, color=GREY_A),
+                          wrap_data(ex["greedy"], chars=34, font_size=18, color=TRAIN, max_lines=3))
+            body.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        exg = VGroup(lab, pre, body).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.6, 0.3, 0])
+        if exg.width > 6.4:
+            exg.width = 6.4
         tag = tagline(rf"computed: \ our model, \ ${d['n_win']}$ passages of each; \ band: $95\%$ interval")
         rt, rv = tr["rate"][k64], va["rate"][k64]
-        if rt > 2 * max(rv, 0.001):
+        lt_, lv_ = tr["lead"][k64], va["lead"][k64]
+        if max(tr["rate"]) == 0 and max(va["rate"]) == 0:
+            said = (f"With 64 tokens of prompt, or any other length we tried, it reproduces the next {d['cont']} "
+                    f"tokens exactly for none of the {d['n_win']} training passages, and none of the held-out ones. "
+                    f"Its greedy continuation follows the true text for {lt_:.1f} tokens on average before it goes "
+                    f"its own way, and for {lv_:.1f} on held-out text. At this size, our model memorizes nothing we "
+                    "can extract this way.")
+        elif rt > 2 * max(rv, 0.001):
             said = (f"With 64 tokens of prompt, our model reproduces the next {d['cont']} tokens exactly for "
                     f"{rt * 100:.1f} percent of passages it trained on, and {rv * 100:.1f} percent of held-out ones. "
                     "Held-out passages it can only reproduce when the text is predictable from the prompt; the "
@@ -142,11 +157,15 @@ class Privacy(VoiceoverScene):
             said = (f"With 64 tokens of prompt, it reproduces the next {d['cont']} tokens exactly for "
                     f"{rt * 100:.1f} percent of training passages and {rv * 100:.1f} percent of held-out ones: at this "
                     "size, our model memorizes very little verbatim.")
+        if tr["rate"][-1] > tr["rate"][0] + 0.005:
+            longer = "Longer prompts help it remember."
+        else:
+            longer = "Larger models, trained on their text more often, are another matter."
         with self.voiceover(
             f"Our model saw its training text about {d['epochs']:.1f} times. Prompt it with the start of a passage, "
             f"and ask whether it writes the next {d['cont']} tokens exactly. <bookmark mark='a'/> For passages it "
             "trained on, <bookmark mark='b'/> and for held-out passages from the same books. <bookmark mark='c'/> "
-            + said + " Longer prompts help it remember."
+            + said + " <bookmark mark='d'/> " + longer
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
@@ -154,8 +173,7 @@ class Privacy(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(bv), Create(cv), FadeIn(lg[1]))
             vo.wait_until("c")
-            if len(exg):
-                self.play(FadeIn(exg))
+            self.play(FadeIn(exg))
         self.wait(0.4)
         self.clear_scene()
 
@@ -190,7 +208,10 @@ class Privacy(VoiceoverScene):
         al = label(rf"telling them apart by loss alone: \ AUC ${auc:.2f}$ \ ($0.5$ = chance)", font_size=20,
                    color=GREY_A).next_to(h, DOWN, buff=0.25)
         tag = tagline(r"computed")
-        if len(keep) >= 2 and rates[keep[-1]] > rates[keep[0]] + 0.01:
+        if keep and max(rates[k] for k in keep) == 0:
+            dup_said = (f"Even stretches that occur five or more times are reproduced in none of {ns[keep[-1]]} "
+                        "tries: for a model this small, repetition is not yet enough.")
+        elif len(keep) >= 2 and rates[keep[-1]] > rates[keep[0]] + 0.01:
             dup_said = (f"Text that appears once in the training data is reproduced {rates[keep[0]] * 100:.1f} percent "
                         f"of the time; text repeated five or more times, {rates[keep[-1]] * 100:.0f} percent. "
                         "Repetition is what a model memorizes, which is why training sets are deduplicated.")

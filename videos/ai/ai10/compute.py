@@ -236,8 +236,8 @@ def fit_linear(Xtr, ytr, Xte, yte, seed: int, epochs: int = 10, batch: int = 256
     from videos.ai.ai10 import nets
 
     mu, sd = Xtr.mean(0, keepdims=True), Xtr.std(0, keepdims=True) + 1e-6
-    A = torch.from_numpy(((Xtr - mu) / sd).astype(np.float32))
-    B = torch.from_numpy(((Xte - mu) / sd).astype(np.float32))
+    A = torch.from_numpy(((Xtr - mu) / sd).astype(np.float32, copy=False))
+    B = torch.from_numpy(((Xte - mu) / sd).astype(np.float32, copy=False))
     ya, yb = torch.from_numpy(ytr.astype(np.int64)), torch.from_numpy(yte.astype(np.int64))
     torch.manual_seed(seed)
     model = nets.Linear(A.shape[1], 10)
@@ -271,18 +271,19 @@ def compute_hog():
     out.update(photo=photo, photo_label=7, photo_sobel=sobel(grey), photo_cells=hog_cells(grey[None], 8)[0])
     # the comparison: the same linear classifier on raw pixels and on HOG features
     seeds = (0, 1, 2)
-    mx_tr, mx_te = m["xtr"].reshape(60000, -1) / 255.0, m["xte"].reshape(10000, -1) / 255.0
-    mh_tr, mh_te = hog(m["xtr"] / 255.0, 7), hog(m["xte"] / 255.0, 7)
+    f32 = lambda a: a.astype(np.float32) / np.float32(255.0)  # noqa: E731
+    mx_tr, mx_te = f32(m["xtr"].reshape(60000, -1)), f32(m["xte"].reshape(10000, -1))
+    mh_tr, mh_te = hog(f32(m["xtr"]), 7), hog(f32(m["xte"]), 7)
     gtr = c["xtr"].astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32) / 255.0
     gte = c["xte"].astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32) / 255.0
-    cx_tr, cx_te = c["xtr"].reshape(50000, -1) / 255.0, c["xte"].reshape(10000, -1) / 255.0
+    cx_tr, cx_te = f32(c["xtr"].reshape(50000, -1)), f32(c["xte"].reshape(10000, -1))
     ch_tr, ch_te = hog(gtr, 8), hog(gte, 8)
     res = {}
     for name, (a, ya, b, yb) in {"mnist_pixels": (mx_tr, m["ytr"], mx_te, m["yte"]),
                                  "mnist_hog": (mh_tr, m["ytr"], mh_te, m["yte"]),
                                  "cifar_pixels": (cx_tr, c["ytr"], cx_te, c["yte"]),
                                  "cifar_hog": (ch_tr, c["ytr"], ch_te, c["yte"])}.items():
-        errs = [fit_linear(a.astype(np.float32), ya, b.astype(np.float32), yb, s) for s in seeds]
+        errs = [fit_linear(a, ya, b, yb, s) for s in seeds]
         res[name] = dict(errors=errs, mean=float(np.mean(errs)), dims=int(a.shape[1]))
         print(f"    {name}: {100 * np.mean(errs):.2f}% error ({a.shape[1]} features)", flush=True)
     out["linear"] = res
