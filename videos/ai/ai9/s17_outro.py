@@ -92,7 +92,9 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = self.tiles()
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
-        lm, kn = load("lm"), load("kn")
+        from videos.ai.ai9.s16_lm import load_kn
+
+        lm, kn = load("lm"), load_kn()
         if float(lm["passage_bits"]) < float(kn["best_bits"]):
             last = "And a small network, trained on our books, beat every counting model on the scoreboard."
         else:

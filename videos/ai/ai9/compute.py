@@ -8,22 +8,38 @@ trained on this computer (PyTorch on the CPU, or the series' own autodiff from P
 screen are cited there.
 
 Items:
-    hinges    universal approximation, one hidden layer of ReLUs: a target curve fitted by least squares on n hinges
-              (n = 2 ... 256), each hinge's contribution, and the error against n
-    sawtooth  depth: the tent map composed k times has 2^k pieces; a random ReLU net's linear regions in the plane,
-              counted, for depth 1 ... 6 at a fixed number of neurons
-    spiral    a 2 -> 32 -> 32 -> 32 -> 2 ReLU network trained on two interleaved spirals: decision regions and linear
-              regions at checkpoints through training
-    signal    signal propagation through 50 layers of width 256: the spread of activations (and of gradients) per
-              layer for weights drawn with gain 0.7, 1 and 1.4 times He's sqrt(2 / n), ReLU; tanh at gain 1
-    residual  a 40-layer plain network and the same with residual connections (and with LayerNorm), trained on the
-              spirals: loss curves
-    kn        Part 7's interpolated Kneser-Ney on Part 1's books, every order (computed with Part 7's code, so this
-              part doesn't depend on Part 7's cache)
-    lm        Bengio et al.'s neural language model, for characters: 24 characters of context, each a learned vector of
-              32 numbers, one hidden layer of 1,024, trained on Part 1's books; bits per character on the passage, and
-              mixed with Kneser-Ney (the scoreboard's new rows); the learned character vectors; what it writes at
-              checkpoints through training
+    hinges      universal approximation, one hidden layer of ReLUs: a target curve fitted by least squares on n hinges
+                (n = 2 ... 256), each hinge's contribution, and the error against n
+    sawtooth    depth: the tent map composed k times has 2^k pieces; a random ReLU net's linear regions in the plane,
+                counted, for depth 1 ... 6 at a fixed number of neurons
+    spiral      a 2 -> 32 -> 32 -> 32 -> 2 ReLU network trained on two interleaved spirals: decision regions and
+                linear regions at checkpoints through training
+    signal      signal propagation through 50 layers of width 256: the spread of activations (and of gradients) per
+                layer for weights drawn with gain 0.7, 1 and 1.4 times He's sqrt(2 / n), ReLU; tanh at gain 1
+    residual    a 40-layer plain network and the same with residual connections (and with LayerNorm), trained on the
+                spirals: curves, answers and per-layer gradients at checkpoints (resumable, network by network)
+    lm          Bengio et al.'s neural language model, for characters: 24 characters of context, each a learned vector
+                of 32 numbers, one hidden layer of 1,024, trained on Part 1's books; bits per character on the
+                passage, and mixed with Part 7's Kneser-Ney (the scoreboard's new rows); the learned character
+                vectors; what it writes at checkpoints through training. Checkpointed every 500 steps
+                (.cache/ai9/lm.ckpt.pt): a killed run resumes
+    lm_words    the share of real words in what the language model writes at each checkpoint
+    perceptron  Rosenblatt's rule on 50 separable points, every update; Novikoff's bound with R and the max margin;
+                the bound against reality on six data sets of shrinking margin; the perceptron on XOR
+    xor         a 2-2-1 tanh network trained on XOR with the series' own autodiff (Part 4): 20 starts, one replayed
+                (decision regions, the hidden layer's image of a grid); the gradient three ways
+    barron      Maurey's random cosine units against a grid table, error against size, in 1 to 64 dimensions
+    fold        the square folded by ReLU layers (2^k linear pieces); one layer's pieces against Zaslavsky's count
+    ridge       activation histograms layer by layer (tanh at three weight variances, sigmoid, ReLU), gradients
+    meanfield   mean-field theory for tanh: the length and correlation maps, chi_1 over (sigma_w^2, sigma_b^2), depth
+                scales; a width-1,000 network's correlations
+    trainable   tanh networks of depth 5 to 100 at 12 weight variances, trained on one task (resumable, cell by cell)
+    norms       the Jacobians of LayerNorm and RMSNorm, by autograd against the formulas
+    block       a 24-block character model on the novels built up piece by piece: plain, residual, post-/pre-LayerNorm,
+                pre-RMSNorm, SwiGLU (resumable, variant by variant)
+    configs     published configurations (GPT-2, Llama 2 7B, Llama 3 8B, Qwen3-8B) and their parameter counts
+    kan         a [2, 5, 1] Kolmogorov-Arnold network and MLPs on exp(sin(pi x) + y^2); KANs and MLPs by size
+                (resumable, fit by fit)
 """
 
 from __future__ import annotations
@@ -233,7 +249,12 @@ def compute_residual():
     xs = np.linspace(-3.4, 3.4, 90)
     G = torch.tensor(np.stack(np.meshgrid(xs, xs), -1).reshape(-1, 2), dtype=torch.float32)
     out["xs"] = xs
+    part = CACHE.partial("residual", dict(snaps=list(SNAP_RES), steps=1501))
     for name, kw in (("plain", {}), ("residual", dict(residual=True)), ("residual_norm", dict(residual=True, norm=True))):
+        if name in part:
+            r = part[name]
+            out[name], out[f"probs_{name}"], out[f"gnorm_{name}"] = (np.array(r[k]) for k in ("curve", "probs", "gnorm"))
+            continue
         torch.manual_seed(1)
         net = Net(**kw)
         opt = torch.optim.Adam(net.parameters(), lr=1e-3)
@@ -252,21 +273,16 @@ def compute_residual():
                     curve.append((step, float(loss), float((net(Xt).argmax(1) == yt).float().mean())))
         out[name] = np.array(curve)
         out[f"probs_{name}"], out[f"gnorm_{name}"] = np.array(probs), np.array(gnorms)
+        part[name] = dict(curve=curve, probs=np.round(np.array(probs), 5).tolist(), gnorm=gnorms)
     return out
 
 
 # ---------------------------------------------------------------------------
-def compute_kn():
-    """Part 7's Kneser-Ney rows, computed here with Part 7's own functions (its cache isn't needed)."""
-    from videos.ai.ai7 import compute as c7
-
-    return c7.compute_kn()
-
-
 N_CTX, EMB, HID = 24, 32, 1024
 LM_STEPS, LM_BATCH = 24000, 512
 LM_SNAPS = (100, 300, 1000, 2000, 4000, 8000, 16000, 24000)
 LM_PROMPT = "Spade sat down in the armchair, and "
+LM_CKPT = 500  # steps between checkpoints
 
 
 def compute_lm():
@@ -325,7 +341,7 @@ def compute_lm():
     steps, batch = LM_STEPS, LM_BATCH
     saved = CACHE.dir / "lm.pt"  # the trained weights, kept so the analysis below can be rerun without retraining
     config = dict(n_ctx=N_CTX, emb=EMB, hid=HID, steps=steps, batch=batch, K=K, snaps=list(LM_SNAPS))
-    state = torch.load(saved) if saved.exists() else None
+    state = torch.load(saved, weights_only=False) if saved.exists() else None
     if state is not None and state["config"] == config:
         for p_, v_ in zip(params, state["params"]):
             p_.data.copy_(v_)
@@ -335,8 +351,21 @@ def compute_lm():
         opt = torch.optim.Adam(params, lr=2e-3)
         sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=3e-3, total_steps=steps, pct_start=0.05)
         g = rng(2003)
-        curve, snaps = [(0, bits(va, 50_000), bits(ps))], [(0, bits(ps), sample(LM_PROMPT, 1, 120))]
-        for step in range(1, steps + 1):
+        ckpt = CACHE.dir / "lm.ckpt.pt"  # training resumes from here after a kill (saved every LM_CKPT steps)
+        start = 1
+        ck = torch.load(ckpt, weights_only=False) if ckpt.exists() else None
+        if ck is not None and ck["config"] == config:
+            for p_, v_ in zip(params, ck["params"]):
+                p_.data.copy_(v_)
+            opt.load_state_dict(ck["opt"])
+            sched.load_state_dict(ck["sched"])
+            g.bit_generator.state = ck["rng"]
+            torch.set_rng_state(ck["torch_rng"])
+            curve, snaps, start = ck["curve"], ck["snaps"], ck["step"] + 1
+            print(f"    resuming at step {start}", flush=True)
+        else:
+            curve, snaps = [(0, bits(va, 50_000), bits(ps))], [(0, bits(ps), sample(LM_PROMPT, 1, 120))]
+        for step in range(start, steps + 1):
             pos = torch.tensor(g.integers(N_CTX, len(tr), batch))
             loss = torch.nn.functional.cross_entropy(logits(windows(tr, pos)), tr[pos])
             opt.zero_grad()
@@ -348,8 +377,16 @@ def compute_lm():
                 print(f"    step {step}: valid {curve[-1][1]:.3f}  passage {curve[-1][2]:.3f}", flush=True)
             if step in LM_SNAPS:  # what it writes at this moment of training: same prompt, same random draws
                 snaps.append((step, bits(ps), sample(LM_PROMPT, 1, 120)))
+            if step % LM_CKPT == 0 and step < steps:
+                CACHE.dir.mkdir(parents=True, exist_ok=True)
+                tmp = ckpt.with_suffix(".tmp")
+                torch.save(dict(config=config, params=[p_.detach().clone() for p_ in params], opt=opt.state_dict(),
+                                sched=sched.state_dict(), rng=g.bit_generator.state, torch_rng=torch.get_rng_state(),
+                                curve=curve, snaps=snaps, step=step), tmp)
+                tmp.replace(ckpt)
         CACHE.dir.mkdir(parents=True, exist_ok=True)
         torch.save(dict(config=config, params=[p_.detach().clone() for p_ in params], curve=curve, snaps=snaps), saved)
+        ckpt.unlink(missing_ok=True)
     passage_bits = bits(ps)
     valid_bits = bits(va)
     # the vectors the output layer scores each character with (their directions), for the letters, digits and common
@@ -365,7 +402,7 @@ def compute_lm():
     # Bengio et al.'s best results mixed the network with a smoothed n-gram model: here, Part 7's Kneser-Ney
     from videos.ai.ai7 import compute as c7
 
-    kn = load("kn")
+    kn = c7.load("kn")
     M = int(kn["best"])
     assert kn["K"] == K
     model = c7.kn_model(c7.ngram_tables(tr.numpy(), K, M), K, M)
@@ -863,8 +900,13 @@ def compute_trainable():
     depths = [5, 10, 20, 35, 50, 70, 100]
     acc = np.zeros((len(depths), len(sws)))
     width, steps = 64, 300
+    part = CACHE.partial("trainable", dict(sws=sws.tolist(), depths=depths, width=width, steps=steps, sb2=sb2))
     for i, L in enumerate(depths):
         for j, a in enumerate(sws):
+            key = f"{L}_{j}"
+            if key in part:
+                acc[i, j] = part[key]
+                continue
             torch.manual_seed(1000 * i + j)
             layers = [torch.nn.Linear(D, width)] + [torch.nn.Linear(width, width) for _ in range(L - 1)]
             for lay in layers:
@@ -887,6 +929,7 @@ def compute_trainable():
                 opt.step()
             with torch.no_grad():
                 acc[i, j] = float((fwd(Xt).argmax(1) == yt).float().mean())
+            part[key] = acc[i, j]
             print(f"    depth {L:3d}  sigma_w^2 {a:.2f}: {acc[i, j]:.2f}", flush=True)
     xi = np.interp(sws, mf["xi_sw"], np.minimum(mf["xi"], 1e6))
     return dict(sws=sws, depths=depths, acc=acc, xi=xi, width=width, steps=steps, classes=K, dim=D, n=N)
@@ -1011,7 +1054,13 @@ def compute_block():
     vctx, vy = windows(va, vpos), va[vpos]
     out = dict(variants=list(BLOCK_VARIANTS), depth=BLK_DEPTH, d=d, hid=hid, hid_glu=hid_glu, steps=BLK_STEPS,
                batch=BLK_BATCH, lr=BLK_LR, ctx=BLK_CTX)
+    part = CACHE.partial("block", dict(ctx=BLK_CTX, emb=BLK_EMB, d=BLK_D, depth=BLK_DEPTH, steps=BLK_STEPS,
+                                       batch=BLK_BATCH, lr=BLK_LR))
     for kind in BLOCK_VARIANTS:
+        if kind in part:
+            r = part[kind]
+            out[kind], out[f"gnorm0_{kind}"], out[f"params_{kind}"] = np.array(r["curve"]), np.array(r["gnorm0"]), r["params"]
+            continue
         torch.manual_seed(24)
         net = Net(kind)
         out[f"params_{kind}"] = int(sum(p.numel() for b in net.blocks for p in b.parameters() if p.dim() > 1))
@@ -1035,6 +1084,7 @@ def compute_block():
             opt.step()
         out[kind] = np.array(curve)
         out[f"gnorm0_{kind}"] = np.array(gnorm0)
+        part[kind] = dict(curve=curve, gnorm0=gnorm0, params=out[f"params_{kind}"])
         print(f"    {kind}: valid {curve[-1][1]:.3f} bits/char", flush=True)
     return out
 
@@ -1158,9 +1208,14 @@ def compute_kan():
     n_params = lambda m: int(sum(p.numel() for p in m.parameters()))  # noqa: E731
     out = dict(xs=xs.numpy())
     snaps = (0, 100, 300, 1000, 3000)
+    part = CACHE.partial("kan", dict(snaps=list(snaps), steps=3000, n=1000))
     torch.manual_seed(1)
     kan = KAN([2, 5, 1], G=5)
-    curve, kept = fit(kan, snaps=snaps)
+    if "main" in part:
+        curve, kept = np.array(part["main"]["curve"]), [np.array(k) for k in part["main"]["kept"]]
+    else:
+        curve, kept = fit(kan, snaps=snaps)
+        part["main"] = dict(curve=curve.tolist(), kept=[k.tolist() for k in kept])
     out.update(kan_curve=curve, kan_params=n_params(kan), kan_snaps=list(snaps),
                kan_edges=np.array(kept), kan_test=float(curve[-1, 2]))
     # how much the learned curves look like the formula's pieces: |correlation| of each hidden unit's curve of x with
@@ -1171,20 +1226,22 @@ def compute_kan():
     cy = [abs(np.corrcoef(E[2 * j + 1], xv ** 2)[0, 1]) for j in range(5)]
     out.update(corr_sin=cx, corr_sq=cy)
     rows = []
-    for G in (2, 3, 5, 10, 20):
-        torch.manual_seed(1)
-        m = KAN([2, 5, 1], G=G)
-        c, _ = fit(m)
-        rows.append(("kan", G, n_params(m), float(c[-1, 2])))
-    for h in (4, 7, 10, 16, 28):
-        torch.manual_seed(1)
-        m = mlp(h)
-        c, _ = fit(m)
-        rows.append(("mlp", h, n_params(m), float(c[-1, 2])))
+    for kind, size in [("kan", G) for G in (2, 3, 5, 10, 20)] + [("mlp", h) for h in (4, 7, 10, 16, 28)]:
+        key = f"{kind}{size}"
+        if key not in part:
+            torch.manual_seed(1)
+            m = KAN([2, 5, 1], G=size) if kind == "kan" else mlp(size)
+            c, _ = fit(m)
+            part[key] = (kind, size, n_params(m), float(c[-1, 2]))
+        rows.append(tuple(part[key]))
     out["table"] = rows
     m = mlp(10)
     torch.manual_seed(1)
-    c, _ = fit(m)
+    if "mlp_main" in part:
+        c = np.array(part["mlp_main"])
+    else:
+        c, _ = fit(m)
+        part["mlp_main"] = c.tolist()
     out.update(mlp_curve=c, mlp_params=n_params(m), mlp_test=float(c[-1, 2]), y_std=float(yte.std()))
     torch.set_default_dtype(torch.float32)
     return out
@@ -1217,7 +1274,6 @@ ITEMS = {
     "spiral": compute_spiral,
     "signal": compute_signal,
     "residual": compute_residual,
-    "kn": compute_kn,
     "lm": compute_lm,
     "perceptron": compute_perceptron,
     "xor": compute_xor,

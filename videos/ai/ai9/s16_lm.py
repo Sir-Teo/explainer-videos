@@ -9,7 +9,9 @@ EMB = C.CONTEXT
 
 
 def load_kn():
-    return load("kn")
+    from videos.ai.ai7 import compute as c7  # Part 7's Kneser-Ney, from its own cache
+
+    return c7.load("kn")
 
 
 def board_rows():
@@ -163,9 +165,9 @@ class NeuralLM(VoiceoverScene):
             return m.move_to(panel_.get_center() + DOWN * 0.18)
 
         beat = nn < kn
-        end = (f"<bookmark mark='c'/> By the end it reaches {nn:.2f} bits per character, past Kneser–Ney's {kn:.2f}."
+        end = (f"By the end it reaches {nn:.2f} bits per character, past Kneser–Ney's {kn:.2f}."
                if beat else
-               f"<bookmark mark='c'/> By the end it reaches {nn:.2f} bits per character: far better than Part 1's "
+               f"By the end it reaches {nn:.2f} bits per character: far better than Part 1's "
                f"counting, but not quite Kneser–Ney's {kn:.2f}. With this much computing, the best counting is a hard "
                "opponent.")
         wr = load("lm_words")["rows"]  # step, bits, words, real words, share
@@ -177,7 +179,7 @@ class NeuralLM(VoiceoverScene):
         with self.voiceover(
             "Train it on Part 1's thirty novels, by gradient descent, with Part 1's cross-entropy as the loss. Below "
             "the curve, what it writes at each moment of training, always from the same prompt and the same random "
-            "draws. <bookmark mark='a'/> " + early + end
+            "draws. <bookmark mark='a'/> " + early + "<bookmark mark='c'/> " + end
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(yn), Create(knl), FadeIn(knt), FadeIn(panel_), FadeIn(pl),
                       FadeIn(cur))
