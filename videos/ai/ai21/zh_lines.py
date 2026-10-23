@@ -605,8 +605,8 @@ ZH.update({
     '"Guidance trades variety for fidelity.':
         "引导是用多样性换忠实度。把每个权重画在一个平面上：横轴是召回率，纵轴是精确率。<bookmark mark='a'/>{cls_note}"
         "<bookmark mark='b'/>2024年，泰罗·卡拉斯和同事问：为什么非得远离无条件模型？它的毛病在于它更差：那就改用同一个条件模型的"
-        "一个更小、训练得更少的版本来引导。这样的推力纠正的是模型自己的错误，而不会把它拖向另一个分布。他们在ImageNet上创下纪录："
-        "64像素时FID为1.01，512像素时为1.25。<bookmark mark='c'/>我们的弱模型更窄，训练时间只有八分之一。{verdict}",
+        "一个更小、训练得更少的版本来引导。<bookmark mark='d'/>这样的推力纠正的是模型自己的错误，而不会把它拖向另一个分布。"
+        "<bookmark mark='e'/>他们在ImageNet上创下纪录：64像素时FID为1.01，512像素时为1.25。<bookmark mark='c'/>我们的弱模型更窄，训练时间只有八分之一。{verdict}",
 
     'Classifier-free guidance and classifier guidance trace similar curves.':
         '无分类器引导和分类器引导画出的曲线很相似。',

@@ -163,7 +163,7 @@ ZH = {
         '在最大的规模上，副本追上并超过了它',
 
     'f"Before the full comparison, watch one training run':
-        "在完整比较之前，先看每种网络的一次训练，用{n}组训练集合，每一百步检查一次留出集上的准确率。<bookmark mark='a'/>"
+        "在完整比较之前，先看每种网络的一次训练，用{n}组训练集合，每两百步检查一次留出集上的准确率。<bookmark mark='a'/>"
         "{ds_txt}。<bookmark mark='b'/>普通MLP{mlp_txt}。<bookmark mark='c'/>看重新排序副本的MLP{aug_txt}。",
 
     "f'Deep Sets passes eighty percent after {d80:,} steps":
@@ -686,8 +686,17 @@ ZH.update({
 
     'f"Our toy denoiser from the last chapter shows the idea in miniature.':
         "上一章的玩具去噪器能把这个想法缩小了展示出来。这是它的训练：损失，以及在每个检查点用同样八个噪声种子抽出的样本。<bookmark "
-        "mark='a'/>一开始是乱线；然后是键长正确的链；然后是像训练集那样的紧凑折叠。<bookmark mark='b'/>而且它们是新的：样本的中位数离"
-        "最近的训练链{nn_s:.2f}，而它从没见过的真实链是{nn_h:.2f}，{novel}。",
+        "mark='a'/>一开始是乱线；然后是键长差不多正确的链；{last_stage}。<bookmark mark='b'/>它们是新的吗？样本的中位数离最近的训练链"
+        "{nn_s:.2f}，而它从没见过的真实链是{nn_h:.2f}：{novel}。",
+
+    "then compact folds like the training set's":
+        '然后是像训练集那样的紧凑折叠',
+
+    "f'then compact folds, though {100 * clash_s:.0f} percent":
+        '然后是紧凑的折叠，不过最后的样本里仍有{100 * clash_s:.0f}%有两个原子挨得太近，而训练链从来不会这样',
+
+    'farther than genuinely new chains are: not copies':
+        '比真正的新链离得更远：不是照抄，但也还不完全像真的',
 
     'about as far from their nearest training chain as genuinely new chains are':
         '和真正的新链离最近训练链差不多远',

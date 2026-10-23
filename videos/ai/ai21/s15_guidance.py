@@ -47,17 +47,18 @@ class Guidance(VoiceoverScene):
     # ------------------------------------------------------------------
     def condition(self):
         g = load("guidance")
-        pn = Panel(6.0, center=[-3.4, 0.6, 0], xlim=GX, ylim=GY)
-        A, I_ = pn.dots(np.asarray(g["A"])[:400], C.TRUE_P, radius=0.02), pn.dots(np.asarray(g["I"])[:400], C.SURPRISE, radius=0.02)
-        la = label(r"``A''", font_size=28, color=C.TRUE_P).next_to(pn.p(-1.6, 1.3), UP, buff=0.1)
-        li = label(r"``I''", font_size=28, color=C.SURPRISE).next_to(pn.p(1.6, 1.3), UP, buff=0.1)
+        pn = Panel(7.6, center=[0, 1.0, 0], xlim=GX, ylim=GY)
+        Ad, Id = np.asarray(g["A"])[:500], np.asarray(g["I"])[:500]
+        A, I_ = pn.dots(Ad, C.TRUE_P, radius=0.024), pn.dots(Id, C.SURPRISE, radius=0.024)
+        la = label(r"``A''", font_size=30, color=C.TRUE_P).next_to(pn.p(float(Ad[:, 0].mean()), GY[1]), UP, buff=0.1)
+        li = label(r"``I''", font_size=30, color=C.SURPRISE).next_to(pn.p(float(Id[:, 0].mean()), GY[1]), UP, buff=0.1)
         colors = {r"c": C.BITS, r"\varnothing": GREY_B}
         f = cmath(r"v_\theta(x, \tau,", r"c", r")", r"\quad\text{or}\quad", r"v_\theta(x, \tau,", r"\varnothing", r")",
-                  colors=colors, font_size=34).move_to([-3.4, -1.6, 0])
+                  colors=colors, font_size=36).move_to([0, -1.95, 0])
         fl = label(r"told the letter, \ or (one time in five) \ told nothing", font_size=22, color=GREY_A).next_to(f, DOWN, buff=0.12)
         snaps = np.asarray(g["snaps"])
         steps = [int(s) for s in g["snap_steps"]]
-        pr = Panel(4.4, center=[4.0, 0.4, 0], xlim=GX, ylim=GY)
+        pr = Panel(5.6, center=[3.7, 0.3, 0], xlim=GX, ylim=GY)
         rd = pr.dots(snaps[0], FM_C, radius=0.018)
         rl = label(rf"asked for ``A'', \ training step ${steps[0]}$", font_size=20, color=FM_C).next_to(pr, UP, buff=0.1)
         cite_ = cite(r"J.~Ho \& T.~Salimans, \textit{Classifier-Free Diffusion Guidance} (2022)", corner=DR)
@@ -73,6 +74,8 @@ class Guidance(VoiceoverScene):
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("b")
             vo.wait_until("c")
+            left = VGroup(pn, A, I_, la, li, f, fl)
+            self.play(left.animate.scale(0.66).move_to([-3.55, 0.1, 0]), run_time=1.0)
             self.play(FadeIn(pr), FadeIn(rd), FadeIn(rl))
             for k in range(1, len(snaps)):
                 r2 = label(rf"asked for ``A'', \ training step ${steps[k]:,}$".replace(",", "{,}"), font_size=20,
@@ -213,7 +216,7 @@ class Guidance(VoiceoverScene):
                         *[Dot(q, radius=0.05, color=MCOL[m]) for q in pts])
             curves.add(c_)
         real = Dot(ax.ax.c2p(float(g["real_rec"]), float(g["real_prec"])), radius=0.09, color=WHITE)
-        rl = label(r"real vs real", font_size=18, color=WHITE).next_to(real, LEFT, buff=0.1)
+        rl = label(r"real vs real", font_size=18, color=WHITE).next_to(real, RIGHT, buff=0.1)
         lg = legend([(MCOL[m], MNAME[m]) for m in ms], font_size=20).move_to([3.6, 2.4, 0])
         rows = [
             cmath(r"v", r"=", r"v_{\text{weak}}(x, \tau, c) + w\,\big(v_\theta(x, \tau, c) - v_{\text{weak}}(x, \tau, c)\big)",
@@ -244,17 +247,22 @@ class Guidance(VoiceoverScene):
             "<bookmark mark='a'/> " + cls_note + " "
             "<bookmark mark='b'/> In 2024 Tero Karras and colleagues asked why push away from the unconditional "
             "model at all. Its fault is that it is worse: so guide instead with a smaller, less-trained version of "
-            "the same conditional model. The push then corrects the model's own errors, without dragging it "
-            "towards a different distribution. They set records on ImageNet: an FID of 1.01 at 64 pixels and 1.25 "
-            f"at 512. <bookmark mark='c'/> Our weak model is narrower and trained an eighth as long. {verdict}"
+            "the same conditional model. <bookmark mark='d'/> The push then corrects the model's own errors, "
+            "without dragging it towards a different distribution. <bookmark mark='e'/> They set records on "
+            "ImageNet: an FID of 1.01 at 64 pixels and 1.25 at 512. <bookmark mark='c'/> Our weak model is narrower "
+            f"and trained an eighth as long. {verdict}"
         ) as vo:
             self.play(FadeIn(ax), FadeIn(real), FadeIn(rl), FadeIn(lg))
             vo.wait_until("a")
             self.play(Create(curves[0]), Create(curves[1]), run_time=1.6)
             vo.wait_until("b")
-            self.play(Write(rows[0]), FadeIn(wl), FadeIn(card, shift=UP * 0.2))
-            vo.wait_until("c")
+            self.play(Write(rows[0]), FadeIn(wl))
+            vo.wait_until("d")
             self.play(Create(curves[2]), run_time=1.4)
+            vo.wait_until("e")
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(Indicate(curves[ms.index(best)], color=WHITE, scale_factor=1.05))
             self.play(FadeIn(ta, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

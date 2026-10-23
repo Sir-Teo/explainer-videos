@@ -25,11 +25,15 @@ class OneStep(VoiceoverScene):
         f = load("flow")
         P = np.asarray(f["fm_path"])  # (frames, particles, 2): the learned flow
         n = len(P) - 1
-        L = np.linalg.norm(np.diff(P, axis=0), axis=-1).sum(0)
+        # the path that bulges most from its chord, among those that keep moving forward along it (a path that
+        # doubles back is not a curve) and travel far enough to see
         chord = np.linalg.norm(P[-1] - P[0], axis=-1)
-        st = chord / np.maximum(L, 1e-9)
-        cand = [i for i in np.argsort(st) if 2.0 < L[i] < 4.5]
-        i = int(cand[0]) if cand else int(np.argmin(st))
+        u_ = (P[-1] - P[0]) / np.maximum(chord, 1e-9)[:, None]
+        rel = P - P[0]
+        proj = (rel * u_[None]).sum(-1) / np.maximum(chord, 1e-9)
+        bulge = np.abs(rel[..., 0] * u_[None, :, 1] - rel[..., 1] * u_[None, :, 0]).max(0) / np.maximum(chord, 1e-9)
+        ok = np.where((np.diff(proj, axis=0) > -0.02).all(0) & (chord > 1.2))[0]
+        i = int(ok[np.argmax(bulge[ok])]) if len(ok) else int(np.argmax(bulge))
         q = P[:, i]
         lo_, hi_ = q.min(0), q.max(0)
         S = 4.4 / max(float((hi_ - lo_).max()), 1e-9)  # the one path, filling the left of the frame
@@ -157,26 +161,33 @@ class OneStep(VoiceoverScene):
                 ("sc", r"shortcut model", SC_C, np.asarray(m["shortcut_sw"])[:, 0])]
         teach = {"fm": False, "ot": False, "rf1": True, "rf2": True, "prog": True, "cd": True, "dmd": True, "mf": False,
                  "sc": False}
-        hi = max(float(v.max()) for *_, v in rows) * 1.05
+        # the scale of the one-step models; plain flow matching's single step runs off it, with a break in its bar
+        hi = max(float(v.max()) for k, *_, v in rows if k != "fm") * 1.25
         W = 6.0
         x0 = -1.2
+        cap = lambda v: min(float(v), 1.04 * hi)  # noqa: E731
         g = VGroup()
         for i, (k, nm, col, v) in enumerate(rows):
-            y = 2.5 - 0.58 * i
+            y = 2.3 - 0.56 * i
             name = label(nm, font_size=20, color=col).move_to([x0 - 0.3, y, 0], aligned_edge=RIGHT)
-            w = W * v.mean() / hi
+            w = W * cap(v.mean()) / hi
             bar = Rectangle(width=max(w, 0.02), height=0.36, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
                 [x0 + w / 2, y, 0])
-            wh = Line([x0 + W * v.min() / hi, y, 0], [x0 + W * v.max() / hi, y, 0], color=WHITE, stroke_width=2)
-            val = MathTex(f"{v.mean():.3f}", font_size=22, color=col).next_to([x0 + W * v.max() / hi, y, 0], RIGHT, buff=0.15)
+            wh = Line([x0 + W * cap(v.min()) / hi, y, 0], [x0 + W * cap(v.max()) / hi, y, 0], color=WHITE, stroke_width=2)
+            val = MathTex(f"{v.mean():.3f}", font_size=22, color=col).next_to([x0 + W * cap(v.max()) / hi, y, 0], RIGHT,
+                                                                             buff=0.15)
             t_ = label(r"teacher" if teach[k] else r"from scratch", font_size=16, color=GREY_B).next_to(val, RIGHT, buff=0.2)
+            if v.mean() > 1.04 * hi:  # a break in the bar: it is off the scale
+                bx = x0 + 0.8 * w
+                bar = VGroup(bar, Polygon([bx - 0.12, y - 0.25, 0], [bx + 0.02, y + 0.25, 0], [bx + 0.14, y + 0.25, 0],
+                                          [bx, y - 0.25, 0], stroke_width=0, fill_color=BACKGROUND, fill_opacity=1))
             g.add(VGroup(name, bar, wh, val, t_))
         fl = float(f["floor"])
-        flo = DashedLine([x0 + W * fl / hi, 2.85, 0], [x0 + W * fl / hi, 2.5 - 0.58 * (len(rows) - 1) - 0.3, 0], color=GREY_B,
+        flo = DashedLine([x0 + W * fl / hi, 2.65, 0], [x0 + W * fl / hi, 2.3 - 0.56 * (len(rows) - 1) - 0.3, 0], color=GREY_B,
                          stroke_width=1.5)
         fll = label(r"floor", font_size=16, color=GREY_B).next_to(flo, UP, buff=0.05)
-        head = label(rf"one step from noise: \ distance from the data \ (mean; \ whiskers: ${len(rows[0][3])}$ seeds; \ "
-                     rf"each network about ${int(d['steps']):,}$ training steps, \ plus its teacher's where marked)".replace(",", "{,}"),
+        head = label(rf"one step from noise: \ distance from the data \ (mean; \ whiskers: ${len(rows[0][3])}$ seeds) \\ "
+                     rf"each network about ${int(d['steps']):,}$ training steps, \ plus its teacher's where marked".replace(",", "{,}"),
                      font_size=20, color=GREY_A).to_edge(UP, buff=0.2)
         order = sorted(rows, key=lambda r: r[3].mean())
         best, second = order[0], order[1]

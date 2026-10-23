@@ -733,11 +733,12 @@ CLS_W = [0.0, 0.5, 1.0, 2.0, 4.0, 8.0]
 
 
 def letters():
+    """The part's own "AI", split into its two letters (3,000 points each), so both keep their shapes and sizes."""
     from videos.ai.ai21.compute import ai_points
 
-    A = ai_points(text="A", n=3000, seed=0) * 0.8 + np.array([-1.6, 0])
-    I_ = ai_points(text="I", n=3000, seed=1) * 0.8 + np.array([1.6, 0])
-    return A, I_
+    P = ai_points(text="AI", n=16000, seed=0) * 1.3
+    gap = 0.7 * 1.3  # the empty strip between the A and the I
+    return P[P[:, 0] < gap][:3000], P[P[:, 0] >= gap][:3000]
 
 
 def prec_recall(gen, real, k=5):
@@ -761,7 +762,7 @@ def compute_guidance():
 
     threads()
     C = cache()
-    part = C.partial("guidance", dict(steps=STEPS, seeds=list(SEEDS), w=GUIDE_W, auto=AUTO_W, cls=CLS_W))
+    part = C.partial("guidance", dict(steps=STEPS, seeds=list(SEEDS), w=GUIDE_W, auto=AUTO_W, cls=CLS_W, letters="AI split"))
     A, I_ = letters()
     X = torch.tensor(np.concatenate([A, I_]), dtype=torch.float32)
     Y = torch.tensor([0] * len(A) + [1] * len(I_))

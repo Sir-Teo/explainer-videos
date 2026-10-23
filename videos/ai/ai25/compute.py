@@ -22,7 +22,7 @@ Symmetry (physics.py, graphs.py):
     harmonics   how a rotation acts on the spherical harmonics of degree 0, 1, 2: a block-diagonal matrix
     deepsets    four shapes of sixteen points: Deep Sets against an MLP and an MLP shown reordered copies, 32 to 8,192
                 training sets, three seeds; how often a reordering changes the answer
-    setcurves   the same three networks trained on 512 sets (seed 0), held-out accuracy every 100 steps
+    setcurves   the same three networks trained on 512 sets (seed 0), held-out accuracy every 200 steps
     wl          1-WL colour refinement on decalin and bicyclopentyl, on a hexagon and two triangles, on two trees;
                 how often it separates random graphs and random 3-regular graphs
     gin         unions of cycles, "is there a triangle?": GIN (sum, mean, max), GIN with random node features, and a
@@ -315,14 +315,14 @@ SET_CURVE_N = 512
 
 
 def compute_setcurves():
-    """The training of the three set networks at one training-set size, test accuracy every 100 steps (seed 0: the
+    """The training of the three set networks at one training-set size, test accuracy every 200 steps (seed 0: the
     same networks as in the 'deepsets' item, which ends where these curves end)."""
     _threads()
     Xte, yte = gr.point_sets(4000, np.random.default_rng(0))
     X, y = gr.point_sets(SET_CURVE_N, np.random.default_rng(1000 + SET_CURVE_N))
     out = dict(n=SET_CURVE_N)
     for kind in SET_KINDS:
-        m, r = gr.train_sets(kind, X, y, 0, val=(Xte[:1000], yte[:1000]))
+        m, r = gr.train_sets(kind, X, y, 0, val=(Xte[:1000], yte[:1000]), every=200)
         out[kind] = np.array(r["curve"])
         log(f"setcurves {kind}: final {r['curve'][-1]}")
     return out
@@ -331,7 +331,7 @@ def compute_setcurves():
 def compute_deepsets():
     _threads()
     Xte, yte = gr.point_sets(4000, np.random.default_rng(0))
-    part = CACHE.partial("deepsets", dict(sizes=SET_SIZES, kinds=SET_KINDS, seeds=SEEDS, v=2))
+    part = CACHE.partial("deepsets", dict(sizes=SET_SIZES, kinds=SET_KINDS, seeds=SEEDS, v=3, steps=gr.SET_STEPS))
     for n in SET_SIZES:
         X, y = gr.point_sets(n, np.random.default_rng(1000 + n))
         for kind in SET_KINDS:
@@ -345,7 +345,8 @@ def compute_deepsets():
                 if n == SET_SIZES[-1] and s == 0:
                     save_model(m, f"sets_{kind}")
                 log(f"deepsets {key}: {sc}")
-    out = dict(sizes=list(SET_SIZES), kinds=list(SET_KINDS), seeds=list(SEEDS), shapes=list(gr.SHAPES))
+    out = dict(sizes=list(SET_SIZES), kinds=list(SET_KINDS), seeds=list(SEEDS), shapes=list(gr.SHAPES),
+               steps=gr.SET_STEPS)
     for k in part.done:
         out[k] = part[k]
     # four example sets, one per shape, and one set shown in two orders to both networks
