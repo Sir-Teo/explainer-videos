@@ -68,9 +68,12 @@ class Budget(VoiceoverScene):
         worst = names[-3]
         un = rows["random_cnn"]["linear"][0]
         below = [n for n in names[1:-2] if rows[n]["linear"][0] < un]
-        below_s = (f" {len(below)} of the learned methods score below the untrained network." if len(below) > 1 else
-                   f" One learned method scores below the untrained network: {SPOKEN.get(below[0], below[0])}."
-                   if below else "")
+        if len(below) > 1:
+            below_s = f"{len(below)} of the learned methods score below the untrained network."
+        elif below:
+            below_s = f"One learned method scores below the untrained network: {SPOKEN.get(below[0], below[0])}."
+        else:
+            below_s = "Every learned method beats the untrained network."
         with self.voiceover(
             "Here is every method, trained on the same network for the same number of steps, from three random "
             "starts, judged by a linear probe with all the labels. <bookmark mark='a'/> At the top, for "
@@ -78,7 +81,7 @@ class Budget(VoiceoverScene):
             f"labels is {SPOKEN.get(best, best)}, at {pct(b)} percent, {pct(s_ - b)} points behind. <bookmark "
             f"mark='c'/> At the bottom of the learned methods, {SPOKEN.get(worst, worst)}, with "
             f"{pct(rows[worst]['linear'][0])}; the untrained network scores {pct(un)}, and the raw pixels "
-            f"{pct(rows['pixels']['linear'][0])}.{below_s}"
+            f"{pct(rows['pixels']['linear'][0])}. <bookmark mark='d'/> {below_s}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(axl), FadeIn(tg))
             self.play(FadeIn(g[0]))

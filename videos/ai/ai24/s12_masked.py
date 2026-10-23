@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (BEIT_C, HIST, MAE_C, PART, SIMCLR, arrow, axes, bars_chart, digit, digit_sheet,
+from videos.ai.ai24.common import (Scrub, BEIT_C, HIST, MAE_C, PART, SIMCLR, arrow, axes, bars_chart, digit, digit_sheet,
                                    ink_rgb, load, node_box, pct, seed_curves, tag, take_away, to_image)
 
 
@@ -109,12 +109,8 @@ class Masked(VoiceoverScene):
         n = len(steps)
         tr = ValueTracker(0)
 
-        def sheet():
-            i = int(np.clip(round(tr.get_value()), 0, n - 1))
-            imgs = np.concatenate([HM[i], RC[i], orig.astype(np.uint8)])
-            return digit_sheet(imgs, 3, 6, size=0.95, gap=0.1).move_to([-2.4, -0.2, 0])
-
-        sh = always_redraw(sheet)
+        sh = Scrub([digit_sheet(np.concatenate([HM[i], RC[i], orig.astype(np.uint8)]), 3, 6, size=0.95,
+                                gap=0.1).move_to([-2.4, -0.2, 0]) for i in range(n)], tr)
         rl = VGroup(label(r"what it sees", font_size=20, color=GREY_A), label(r"its reconstruction", font_size=20,
                                                                               color=MAE_C),
                     label(r"the original", font_size=20, color=GREY_A))

@@ -221,6 +221,24 @@ class Hypersphere(Group):
         return self
 
 
+class Scrub(Group):
+    """Shows one of ``frames`` (mobjects, already placed): the one at round(``tracker``). Images can't morph into each
+    other, so a replay of pictures swaps them as the tracker moves."""
+
+    def __init__(self, frames, tracker: ValueTracker):
+        super().__init__()
+        self.frames, self.tr, self.cur = list(frames), tracker, -1
+        self._show()
+        self.add_updater(lambda m: m._show())
+
+    def _show(self):
+        i = int(np.clip(round(self.tr.get_value()), 0, len(self.frames) - 1))
+        if i != self.cur:
+            self.submobjects = [self.frames[i]]
+            self.cur = i
+        return self
+
+
 # ---------------------------------------------------------------------------
 # Cards, boxes and charts
 # ---------------------------------------------------------------------------

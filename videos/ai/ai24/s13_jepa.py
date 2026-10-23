@@ -204,10 +204,12 @@ class JEPAScene(VoiceoverScene):
         hdr.next_to(tab, UP, buff=0.25).align_to(tab, RIGHT)
         VGroup(hdr, tab).move_to([4.2, -0.2, 0])
         jl, ml = J["linear"][0], M_["linear"][0]
-        if jl > ml + 0.003:
+        if jl > ml + 0.003 and jl < Sm["linear"][0]:
             v = (f"Predicting the meaning beats predicting the pixels: I-JEPA's linear probe reaches {pct(jl)} percent, "
-                 f"MAE's {pct(ml)}" + (f", and it comes within {pct(Sm['linear'][0] - jl)} points of SimCLR, with "
-                                       "no hand-made views." if jl < Sm["linear"][0] else ", ahead even of SimCLR."))
+                 f"MAE's {pct(ml)}, and SimCLR, with its hand-made views, {pct(Sm['linear'][0])}.")
+        elif jl > ml + 0.003:
+            v = (f"Predicting the meaning beats predicting the pixels: I-JEPA's linear probe reaches {pct(jl)} percent, "
+                 f"MAE's {pct(ml)}, ahead even of SimCLR's {pct(Sm['linear'][0])}.")
         elif jl < ml - 0.003:
             v = (f"On our digits, predicting the encoding does not beat predicting the pixels: I-JEPA reaches "
                  f"{pct(jl)} percent on the linear probe, MAE {pct(ml)}. A four-by-four map is a coarse target, and "

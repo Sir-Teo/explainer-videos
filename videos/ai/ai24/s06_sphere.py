@@ -46,11 +46,11 @@ class Sphere(VoiceoverScene):
                            if idx() >= 1 else VectorizedPoint(A.c2p(0, al[0])))
         cu = always_redraw(lambda: curve(A, np.arange(int(idx()) + 1), un[:int(idx()) + 1], UNIF, 3)
                            if idx() >= 1 else VectorizedPoint(A.c2p(0, un[0])))
-        ra = always_redraw(lambda: label(rf"$\mathcal L_{{\rm align}} = {np.interp(idx(), np.arange(n), al):.2f}$",
+        ra = always_redraw(lambda: label(rf"$\mathcal L_{{\rm align}} = {al[int(round(idx()))]:.2f}$",
                                          font_size=26, color=ALIGN).move_to([3.0, 2.6, 0]))
-        ru = always_redraw(lambda: label(rf"$\mathcal L_{{\rm uniform}} = {np.interp(idx(), np.arange(n), un):.2f}$",
+        ru = always_redraw(lambda: label(rf"$\mathcal L_{{\rm uniform}} = {un[int(round(idx()))]:.2f}$",
                                          font_size=26, color=UNIF).move_to([5.2, 2.6, 0]))
-        st = always_redraw(lambda: label(rf"step ${int(round(np.interp(idx(), np.arange(n), steps)))}$", font_size=22,
+        st = always_redraw(lambda: label(rf"step ${steps[int(round(idx()))]}$", font_size=22,
                                          color=GREY_A).move_to([-3.0, 3.2, 0]))
         d1 = label(r"two views of a digit: \ how far apart", font_size=20, color=ALIGN)
         d2 = label(r"all pairs: \ how bunched up", font_size=20, color=UNIF)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (MOCO, NEG, PANEL, PART, POS, SIMCLR, TARGET, arrow, axes, bars_chart, digit,
+from videos.ai.ai24.common import (Scrub, MOCO, NEG, PANEL, PART, POS, SIMCLR, TARGET, arrow, axes, bars_chart, digit,
                                    digit_sheet, ink_rgb, load, node_box, pct, rgb_of, seed_curves, tag, take_away,
                                    to_image)
 
@@ -141,13 +141,7 @@ class SimCLR(VoiceoverScene):
         same = [float(np.mean([pool_y[j] == pool_y[q] for q, row in zip(Q, NN[i]) for j in row])) for i in range(n_s)]
         tr = ValueTracker(0)
 
-        def sheet():
-            i = int(np.clip(round(tr.get_value()), 0, n_s - 1))
-            g = nn_sheet(pool, pool_y, Q, NN[i], size=0.52)
-            g.move_to([-3.0, -0.3, 0])
-            return g
-
-        sh = always_redraw(sheet)
+        sh = Scrub([nn_sheet(pool, pool_y, Q, NN[i], size=0.52).move_to([-3.0, -0.3, 0]) for i in range(n_s)], tr)
         ql = label(r"query", font_size=20, color=GREY_A).move_to([-3.0 - 4 * 0.58, 1.8, 0])
         nl = label(r"its $8$ nearest test digits, \ by $h$", font_size=20, color=GREY_A).move_to([-2.4, 1.8, 0])
         stl = always_redraw(lambda: label(rf"step ${steps[int(np.clip(round(tr.get_value()), 0, n_s - 1))]}$", font_size=24,
@@ -258,10 +252,16 @@ class SimCLR(VoiceoverScene):
         sk, mk = s["summary"][MAIN]["knn"], mo["summary"]["knn"]
         crop = s["summary"]["crop"]
         diff = ml[0] - sl[0]
-        mo_line = (f"On our digits, MoCo's linear probe reaches {pct(ml[0])} percent against SimCLR's {pct(sl[0])}: "
-                   + ("the queue's extra negatives help a little." if diff > 0.002 else
-                      "about the same; with only ten kinds of digit, a few hundred negatives are already plenty."
-                      if diff > -0.002 else "slightly behind; with ten kinds of digit, more negatives buy nothing."))
+        if diff > 0.002:
+            mo_line = (f"On our digits, MoCo's linear probe reaches {pct(ml[0])} percent against SimCLR's "
+                       f"{pct(sl[0])}: the queue's extra negatives help a little.")
+        elif diff > -0.002:
+            mo_line = (f"On our digits, MoCo's linear probe reaches {pct(ml[0])} percent against SimCLR's "
+                       f"{pct(sl[0])}: about the same; with only ten kinds of digit, a few hundred negatives are "
+                       "already plenty.")
+        else:
+            mo_line = (f"On our digits, MoCo's linear probe reaches {pct(ml[0])} percent against SimCLR's "
+                       f"{pct(sl[0])}: slightly behind; with ten kinds of digit, more negatives buy nothing.")
         crop_line = (f"And the views matter more than either: with crops alone, and no changes of contrast, blur, "
                      f"erasing or noise, SimCLR's probe falls to {pct(crop['linear'][0])} percent."
                      if crop["linear"][0] < sl[0] - 0.003 else

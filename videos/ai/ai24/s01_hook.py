@@ -61,7 +61,7 @@ class Hook(VoiceoverScene):
         hs.angle.set_value(0.6)
         head = label(r"Training, replayed", font_size=34).to_corner(UL, buff=0.4)
         sl = always_redraw(lambda: label(
-            rf"step ${int(round(np.interp(hs.t.get_value(), np.arange(len(steps)), steps)))}$ \ of \ ${steps[-1]}$",
+            rf"step ${steps[int(np.clip(round(hs.t.get_value()), 0, len(steps) - 1))]}$ \ of \ ${steps[-1]}$",
             font_size=24, color=GREY_A).move_to([3.4, 2.6, 0]))
         Zn = load("sphere")
         al, un = np.asarray(Zn["simclr_align"]), np.asarray(Zn["simclr_unif"])
