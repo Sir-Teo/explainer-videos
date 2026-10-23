@@ -200,7 +200,7 @@ class Sets(VoiceoverScene):
         cur = {k: np.asarray(c[k]) for k in kinds}
         last = int(cur["deepsets"][-1, 0])
         g = axes([0, last], [0, 1.0], x_length=7.2, y_length=4.2, xlabel=r"training step",
-                 ylabel=r"held-out accuracy", xticks=[0, 1000, 2000, 3000], yticks=[0.25, 0.5, 0.75, 1.0],
+                 ylabel=r"held-out accuracy", xticks=[0, last // 2, last], yticks=[0.25, 0.5, 0.75, 1.0],
                  xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"), center=[-2.2, -0.35, 0])
         head = label(rf"one training run of each, \ on ${n}$ training sets", font_size=30).to_edge(UP, buff=0.4)
         chance = DashedLine(g.ax.c2p(0, 0.25), g.ax.c2p(last, 0.25), color=GREY_D)
@@ -221,7 +221,7 @@ class Sets(VoiceoverScene):
                                r"never reaches $80\%$", font_size=20, color=GREY_B))
             side.add(row.arrange(DOWN, aligned_edge=LEFT, buff=0.1))
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([4.6, -0.2, 0])
-        tag = note(r"computed: \ seed $0$, \ $1{,}000$ held-out sets, \ accuracy every $100$ steps", font_size=18)
+        tag = note(r"computed: \ seed $0$, \ $1{,}000$ held-out sets, \ accuracy every $200$ steps", font_size=18)
         tag.to_corner(DR, buff=0.2)
         d80, a80, m80 = first("deepsets"), first("mlp_aug"), first("mlp")
         e_ds, e_ml, e_au = fin["deepsets"], fin["mlp"], fin["mlp_aug"]
@@ -239,7 +239,7 @@ class Sets(VoiceoverScene):
             aug_txt = f"gets there at step {a80:,} and ends at {e_au:.0f}"
         with self.voiceover(
             f"Before the full comparison, watch one training run of each, on {n} training sets, the held-out accuracy "
-            f"checked every hundred steps. <bookmark mark='a'/> {ds_txt}. <bookmark mark='b'/> The plain MLP "
+            f"checked every two hundred steps. <bookmark mark='a'/> {ds_txt}. <bookmark mark='b'/> The plain MLP "
             f"{mlp_txt}. <bookmark mark='c'/> The MLP shown reordered copies {aug_txt}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), Create(chance), FadeIn(chl), FadeIn(tag))
@@ -281,7 +281,7 @@ class Sets(VoiceoverScene):
             flips.add(label(rf"{KIND_NAME[kind]}: \ ${100 * f_:.0f}\%$", font_size=24, color=KIND_COLOR[kind]))
         flips.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([4.4, 1.3, 0])
         params = {k: d[f"{k}_{n_big}_s0"]["params"] for k in ("mlp", "deepsets")}
-        tag = note(rf"computed: \ three seeds each \ (band: \ min--max), \ $3{{,}}000$ steps each; \ "
+        tag = note(rf"computed: \ three seeds each \ (band: \ min--max), \ ${d['steps']:,}$ steps each; \ "
                    rf"MLP ${params['mlp']:,}$ weights, \ Deep Sets ${params['deepsets']:,}$".replace(",", "{,}")
                    .replace("{{,}}", "{,}"), font_size=18).to_corner(DR, buff=0.2)
         a_ds = mean_band(d, "deepsets", sizes)[0]

@@ -268,7 +268,7 @@ def step_once(model, opt, pos, seq, aux_weight=0.01):
     opt.zero_grad(set_to_none=True)
     total.backward()
     opt.step()
-    return float(loss)
+    return loss.item()
 
 
 def bits(model, seq=None, n: int = 100_000, start: int = CTX) -> float:

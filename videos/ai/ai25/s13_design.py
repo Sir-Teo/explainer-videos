@@ -172,14 +172,24 @@ class Design(VoiceoverScene):
         nn_h = dd["nn_heldout_median"]
         tag = note(r"computed: \ chapter 11's equivariant denoiser, \ seed $0$", font_size=20).to_corner(DR,
                                                                                                     buff=0.2)
-        novel = ("about as far from their nearest training chain as genuinely new chains are" if nn_s > 0.7 * nn_h
-                 else "closer to training chains than genuinely new chains are, a sign of some copying")
+        if nn_s < 0.7 * nn_h:
+            novel = "closer to training chains than genuinely new chains are, a sign of some copying"
+        elif nn_s <= 1.5 * nn_h:
+            novel = "about as far from their nearest training chain as genuinely new chains are"
+        else:
+            novel = "farther than genuinely new chains are: not copies, but not quite the real thing either"
+        clash_s = float(np.mean([dd[f"egnn_s{s}"]["clash"] for s in (0, 1)]))
+        if clash_s < 0.15:
+            last_stage = "then compact folds like the training set's"
+        else:
+            last_stage = (f"then compact folds, though {100 * clash_s:.0f} percent of the final samples still have two "
+                          "atoms too close, which the training chains never do")
         with self.voiceover(
             "Our toy denoiser from the last chapter shows the idea in miniature. Here is its training: the loss, "
             "and samples drawn from the same eight noise seeds at each checkpoint. <bookmark mark='a'/> At first, "
-            "tangles; then chains with the right bond lengths; then compact folds like the training set's. <bookmark "
-            f"mark='b'/> And they are new: the median sample sits {nn_s:.2f} from its nearest training chain, "
-            f"against {nn_h:.2f} for real chains it never saw, {novel}."
+            f"tangles; then chains with nearly the right bond lengths; {last_stage}. <bookmark mark='b'/> Are they "
+            f"new? The median sample sits {nn_s:.2f} from its nearest training chain, against {nn_h:.2f} for real "
+            f"chains it never saw: {novel}."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dot), FadeIn(sheets[0]), FadeIn(cnt), FadeIn(sl), FadeIn(tag))
             vo.wait_until("a")

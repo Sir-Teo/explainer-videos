@@ -74,24 +74,29 @@ class SetMLP(nn.Module):
 
 
 class DeepSets(nn.Module):
-    """rho(sum_i phi(x_i)) (Zaheer et al. 2017): the sum forgets the order, so reordering can't change the output."""
+    """rho(sum_i phi(x_i)) (Zaheer et al. 2017): the sum forgets the order, so reordering can't change the output.
+    The pooled vector is layer-normalized before rho (still order-free); without it some seeds stall below 90%."""
 
     def __init__(self, hidden=128):
         super().__init__()
         self.phi = mlp([2, hidden, hidden], last_act=True)
+        self.ln = nn.LayerNorm(hidden)
         self.rho = mlp([hidden, hidden, 4])
 
     def latent(self, X):
         return self.phi(X).sum(1) / X.shape[1]
 
     def forward(self, X):
-        return self.rho(self.latent(X))
+        return self.rho(self.ln(self.latent(X)))
 
 
 SET_MODELS = {"mlp": SetMLP, "mlp_aug": SetMLP, "deepsets": DeepSets}
 
 
-def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3, val=None, every=100):
+SET_STEPS = 6000
+
+
+def train_sets(kind: str, X, y, seed: int, steps=SET_STEPS, batch=64, lr=1e-3, val=None, every=100):
     """``val`` = (X, y) of held-out sets: record test accuracy every ``every`` steps (evaluation draws no random
     numbers, so the trained network is the same with or without it)."""
     torch.manual_seed(seed)

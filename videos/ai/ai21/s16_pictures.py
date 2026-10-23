@@ -105,16 +105,17 @@ class Pictures(VoiceoverScene):
         S = np.asarray(g["samples"])
         near = np.asarray(g["nearest"])
         tn = float(g["train_nearest"])
-        grid = glyph_sheet(S[:32], 4, 8, size=0.6, gap=0.06).move_to([-2.4, -0.2, 0])
+        grid = glyph_sheet(S[:32], 4, 8, size=0.78, gap=0.06).move_to([-3.0, -0.2, 0])
         gl = label(r"$32$ samples", font_size=22, color=FM_C).next_to(grid, UP, buff=0.15)
         far = near.mean() > 1.3 * tn
         nn = VGroup(label(rf"each sample's distance to its nearest training picture: \ ${near.mean():.2f}$ on average",
                           font_size=20, color=GREY_A),
                     label(rf"a training picture's distance to its nearest other: \ ${tn:.2f}$", font_size=20, color=GREY_A),
                     label(r"(root mean square, \ pixels from $0$ to $1$)", font_size=18, color=GREY_B)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.12).move_to([3.6, -0.3, 0])
-        if nn.width > 6.0:
-            nn.width = 6.0
+            DOWN, aligned_edge=LEFT, buff=0.12)
+        if nn.width > 5.6:
+            nn.width = 5.6
+        nn.next_to(grid, RIGHT, buff=0.4)
         verdict = ("further from the training set than the training pictures are from each other: these are new "
                    "pictures, not copies." if far else
                    "about as close to the training set as the training pictures are to each other: some may be near "
@@ -144,6 +145,26 @@ class Pictures(VoiceoverScene):
         ratio = 512 * 512 * 3 // (64 * 64 * 4)
         el = label(rf"${ratio}$ times fewer numbers; \ text steers it through cross-attention \ (Rombach et al., 2022)",
                    font_size=20, color=GREY_A).next_to(enc, DOWN, buff=0.15)
+        # a schematic of latent diffusion: a picture, squeezed to a small stack of latents, diffused there, decoded
+        rg = np.random.default_rng(22)
+        pix = VGroup(*[Square(0.3, stroke_width=0, fill_color=GREY_A, fill_opacity=float(rg.uniform(0.15, 0.9)))
+                       for _ in range(64)]).arrange_in_grid(8, 8, buff=0).move_to([-5.2, -0.2, 0])
+        lat = VGroup(*[Square(0.95, stroke_color=FM_C, stroke_width=2, fill_color=FM_C, fill_opacity=0.25)
+                       .shift(0.12 * k * (UP + RIGHT)) for k in range(4)]).move_to([-0.6, -0.4, 0])
+        encd = Polygon([-3.9, 1.0, 0], [-2.3, 0.45, 0], [-2.3, -1.15, 0], [-3.9, -1.4, 0], stroke_color=GREY_B,
+                       stroke_width=2, fill_color=GREY_B, fill_opacity=0.12)
+        decd = encd.copy().flip(UP).move_to([1.1, -0.2, 0])
+        out_ = pix.copy().move_to([4.0, -0.2, 0])
+        loop = CurvedArrow(lat.get_corner(UL) + UP * 0.2, lat.get_corner(UR) + UP * 0.2, angle=-2.4, color=FM_C,
+                           stroke_width=3)
+        diag = VGroup(pix, encd, lat, decd, out_, loop,
+                      label(r"pixels", font_size=22, color=GREY_A).next_to(pix, DOWN, buff=0.2),
+                      label(r"encoder", font_size=20, color=GREY_B).move_to(encd),
+                      label(r"latents", font_size=22, color=FM_C).next_to(lat, DOWN, buff=0.2),
+                      label(r"diffusion here", font_size=22, color=FM_C).next_to(loop, UP, buff=0.1),
+                      label(r"decoder", font_size=20, color=GREY_B).move_to(decd),
+                      label(r"picture", font_size=22, color=GREY_A).next_to(out_, DOWN, buff=0.2),
+                      note(r"schematic").move_to([0, -2.6, 0]))
         cards = VGroup(
             history_card(2022, r"DALL$\cdot$E 2; \ Imagen; \ Stable Diffusion", r"text to image: \ CLIP latents, \ cascades "
                          r"in pixels, \ latent diffusion with open weights", color=HIST, width=6.4, font_size=18),
@@ -171,8 +192,9 @@ class Pictures(VoiceoverScene):
             "the next part."
         ) as vo:
             self.play(FadeIn(enc), FadeIn(el))
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in diag], lag_ratio=0.12), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.1))
+            self.play(FadeOut(diag), FadeIn(cards[0], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.1))
             vo.wait_until("c")
