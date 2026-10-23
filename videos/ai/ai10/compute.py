@@ -296,7 +296,7 @@ def compute_hog():
 # ---------------------------------------------------------------------------
 LENET_EPOCHS = 6
 LENET_BATCH = 64
-LENET_SNAPS = (0, 10, 25, 50, 100, 200, 400, 800, 1600, 3200, 5625)
+LENET_SNAPS = (0, 10, 25, 50, 100, 200, 400, 800, 1600, 3200, 5628)  # 5628 = 6 epochs of 938 steps
 REPLAY_DIGIT = 0  # the first test digit, a 7
 
 

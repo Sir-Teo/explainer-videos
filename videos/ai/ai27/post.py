@@ -8,6 +8,7 @@ anything before it, and padded positions are masked out of every loss.
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -111,14 +112,31 @@ def merge_lora(model):
 # Training and sampling
 # ---------------------------------------------------------------------------
 def sft(model, data: list[tuple[list[int], list[int]]], steps: int, lr: float = 1e-3, batch: int = 32, seed: int = 0,
-        params=None, eval_fn=None, eval_every: int = 0, warmup: int = 20) -> list:
-    """Supervised fine-tuning on the answers; returns [(step, loss)] and, if given, [(step, eval_fn())]."""
+        params=None, eval_fn=None, eval_every: int = 0, warmup: int = 20, ckpt=None, ckpt_every: int = 50) -> list:
+    """Supervised fine-tuning on the answers; returns [(step, loss)] and, if given, [(step, eval_fn())].
+
+    ``ckpt``: a file path; every ``ckpt_every`` steps the weights, the optimizer, the data order and the curves so far
+    are saved there, and a run that finds the file carries on from it, to the same result as a run never stopped.  The
+    file is removed when the run ends."""
     g = np.random.default_rng(seed)
     params = list(params) if params is not None else [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=0.0)
-    curve, evals = [], []
+    curve, evals, start = [], [], 0
+    if ckpt is not None and Path(ckpt).exists():
+        ck = torch.load(ckpt, weights_only=False)
+        model.load_state_dict(ck["model"])
+        opt.load_state_dict(ck["opt"])
+        g.bit_generator.state = ck["rng"]
+        torch.set_rng_state(ck["torch_rng"])
+        curve, evals, start = ck["curve"], ck["evals"], ck["step"]
+        print(f"  resuming fine-tuning at step {start} of {steps}", flush=True)
     model.train()
-    for step in range(steps):
+    for step in range(start, steps):
+        if ckpt is not None and step > start and step % ckpt_every == 0:
+            tmp = Path(str(ckpt) + ".tmp")
+            torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "rng": g.bit_generator.state,
+                        "torch_rng": torch.get_rng_state(), "curve": curve, "evals": evals, "step": step}, tmp)
+            tmp.replace(ckpt)
         for gr in opt.param_groups:
             gr["lr"] = lr * min(1.0, (step + 1) / warmup) * 0.5 * (1 + math.cos(math.pi * step / steps))
         idx = g.integers(0, len(data), batch)
@@ -134,6 +152,8 @@ def sft(model, data: list[tuple[list[int], list[int]]], steps: int, lr: float = 
             evals.append((step + 1, eval_fn(model)))
             model.train()
     model.eval()
+    if ckpt is not None:
+        Path(ckpt).unlink(missing_ok=True)
     return curve, evals
 
 

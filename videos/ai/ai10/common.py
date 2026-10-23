@@ -176,3 +176,16 @@ def nn_layer_boxes(widths, heights, colors, buff=0.35, depth=0.25) -> VGroup:
         g.add(VGroup(front, top, side))
     g.arrange(RIGHT, buff=buff)
     return g
+
+
+def sci_tex(v: float, digits: int = 0) -> str:
+    """3.2e-8 -> '3 \\times 10^{-8}' for MathTex; 0 -> '0'."""
+    if v == 0:
+        return "0"
+    import math as _m
+
+    e = int(_m.floor(_m.log10(abs(v))))
+    m = v / 10 ** e
+    if round(m, digits) >= 10:
+        m, e = m / 10, e + 1
+    return rf"{m:.{digits}f} \times 10^{{{e}}}"
