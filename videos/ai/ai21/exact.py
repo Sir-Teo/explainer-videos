@@ -110,9 +110,25 @@ def sw(a, b, n_proj=128, seed=0):
     return sw_distance(a, b, n_proj=n_proj, seed=seed)
 
 
+_REF = None
+
+
+def ref():
+    """A large fixed sample of the data: every distance from the data is measured against it."""
+    global _REF
+    if _REF is None:
+        _REF = sample(20000, 999)
+    return _REF
+
+
+def dist(x):
+    """How far a cloud of points is from the data: sliced Wasserstein distance to the reference sample."""
+    return sw(x, ref())
+
+
 def floor(n, reps=4):
-    """The sliced Wasserstein distance between two independent samples of the data, of n points each."""
-    return float(np.mean([sw(sample(n, 900 + 2 * r), sample(n, 901 + 2 * r)) for r in range(reps)]))
+    """The distance from the data of a fresh sample of the data itself, n points: the best any sampler can score."""
+    return float(np.mean([dist(sample(n, 900 + r)) for r in range(reps)]))
 
 
 # ---------------------------------------------------------------------------

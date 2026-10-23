@@ -92,9 +92,9 @@ class Typical(VoiceoverScene):
             "hundred, a thousand, ten thousand: the surprise per letter piles up at one value, "
             f"{H:.2f} bits, the entropy. Its spread shrinks from {sd[ns[0]]:.1f} bits to {sd[ns[-1]]:.2f}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(sub))
+            self.play(FadeIn(head), FadeIn(sub), FadeIn(a))
             vo.wait_until("a")
-            self.play(FadeIn(a), FadeIn(tag))
+            self.play(FadeIn(tag), Indicate(a.xlabel, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(cur), FadeIn(nlab), FadeIn(ins), Create(hl), FadeIn(hlab))
             vo.wait_until("c")
@@ -109,7 +109,7 @@ class Typical(VoiceoverScene):
         th = theorem_card(r"asymptotic equipartition", r"$-\frac{1}{n} \log_2 p(X_1 \dots X_n) \to H$ \ with "
                           r"probability $1$, \ for independent symbols (the law of large numbers) and for any stationary "
                           r"ergodic source", who=r"Shannon (1948); \ McMillan (1953); \ Breiman (1957)", width=8.4,
-                          color=C.ENTROPY).to_corner(UL, buff=0.35).shift(DOWN * 0.9)
+                          color=C.ENTROPY).to_corner(UR, buff=0.35).shift(DOWN * 0.8)
         with self.voiceover(
             "It's the law of large numbers. The surprise of a text is a sum of the surprises of its letters, and an "
             "average of many independent surprises settles at their mean, which is the entropy. "
@@ -117,7 +117,8 @@ class Typical(VoiceoverScene):
             "memory, like real text. It has a mouthful of a name: the asymptotic equipartition property."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeOut(sub), FadeIn(th, shift=DOWN * 0.2))
+            self.play(FadeOut(sub), FadeOut(nlab), FadeOut(ins), VGroup(a, cur, hl, hlab).animate.scale(0.62).to_corner(DL, buff=0.4))
+            self.play(FadeIn(th, shift=DOWN * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -134,8 +135,7 @@ class Typical(VoiceoverScene):
             cmath(r"|A|", r"\le", r"2^{n(H+\varepsilon)}", font_size=38),
             cmath(r"|A|", r"\ge", r"(1-\delta)\, 2^{n(H-\varepsilon)}", font_size=38),
         ]
-        whys = [why(r"each member: \ the definition"), why(r"the AEP"), why(r"each of the $|A|$ members has at least "
-                r"$2^{-n(H+\varepsilon)}$"), why(r"so there are at most this many"),
+        whys = [why(r"each member: \ the definition"), why(r"the AEP"), why(r"each member has at least $2^{-n(H+\varepsilon)}$"), why(r"so there are at most this many"),
                 why(r"and $P(A) \ge 1 - \delta$ forces at least this many")]
         step = ladder(self, rows, whys, keep=4, top=1.0, x=-2.4, buff=0.38, edge=6.9)
         with self.voiceover(
@@ -207,18 +207,18 @@ class Typical(VoiceoverScene):
         key = VGroup(Square(0.22, stroke_width=0, fill_color=TYP, fill_opacity=1),
                      label(rf"typical: \ within ${eps}$ bits of $H = {h:.3f}$", font_size=22, color=TYP)).arrange(RIGHT, buff=0.15)
         key.next_to(head, DOWN, buff=0.18)
-        top_l = label(r"the most likely sequence: \ no spaces at all", font_size=20, color=WHITE)
-        top_l.next_to([xL, y_bot - bh / 2, 0], DOWN, buff=0.55).align_to(frames[1], LEFT)
+        top_l = label(r"$\uparrow$ \ the most likely sequence: \ no spaces at all", font_size=20, color=WHITE)
+        top_l.next_to(lb, RIGHT, buff=0.6)
 
         def readout(n):
             r = rows[n]
             return VGroup(
                 MathTex(rf"n = {n}", font_size=34),
-                label(rf"share of sequences: \ ${pow2(r['log2_frac'])}$", font_size=24, color=TYP),
-                label(rf"share of probability: \ ${100 * r['P']:.1f}\%$" if r["P"] < 0.9995 else
-                      rf"share of probability: \ $1 - 10^{{{math.log10(1 - r['P']):.0f}}}$", font_size=24, color=TYP),
-                label(rf"most likely sequence: \ ${pow2(math.log2(r['p_top']))}$", font_size=22, color=GREY_A),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to([4.2, -0.3, 0])
+                label(rf"typical: \ ${pow2(r['log2_frac'])}$ of the sequences,", font_size=24, color=TYP),
+                label(rf"${100 * r['P']:.1f}\%$ of the probability" if r["P"] < 0.9995 else
+                      rf"$1 - 10^{{{math.log10(1 - r['P']):.0f}}}$ of the probability", font_size=24, color=TYP),
+                label(rf"\quad the likeliest sequence: \ ${pow2(math.log2(r['p_top']))}$", font_size=22, color=GREY_A),
+            ).arrange(RIGHT, buff=0.22).move_to([0, -3.45, 0])
 
         pic = picture(show[0])
         ro = readout(show[0])
@@ -235,11 +235,11 @@ class Typical(VoiceoverScene):
             f"sequences, holding {100 * r0['P']:.0f} percent of the probability. <bookmark mark='d'/> Now make the "
             "sequences longer."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(key))
+            self.play(FadeIn(head), FadeIn(key), Create(frames[0]), Create(frames[1]))
             vo.wait_until("a")
-            self.play(Create(frames[0]), FadeIn(lt))
+            self.play(FadeIn(lt), Indicate(frames[0], color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
-            self.play(Create(frames[1]), FadeIn(lb), FadeIn(pic), FadeIn(top_l))
+            self.play(FadeIn(lb), FadeIn(pic), FadeIn(top_l))
             vo.wait_until("c")
             self.play(FadeIn(ro))
             vo.wait_until("d")
@@ -252,7 +252,7 @@ class Typical(VoiceoverScene):
         ) as vo:
             for n in show[1:]:
                 new_pic, new_ro = picture(n), readout(n)
-                self.play(ReplacementTransform(pic, new_pic), ReplacementTransform(ro, new_ro), run_time=1.2)
+                self.play(FadeOut(pic), FadeIn(new_pic), FadeOut(ro), FadeIn(new_ro), run_time=1.0)
                 pic, ro = new_pic, new_ro
             vo.wait_until("a")
             self.play(Indicate(ro[1], color=TYP), Indicate(ro[2], color=TYP))
@@ -273,15 +273,15 @@ class Typical(VoiceoverScene):
                           r"blocks; \ and no code does better than $H$ on average", who=r"C.~E.~Shannon (1948)",
                           width=9.6, color=C.ENTROPY).to_edge(UP, buff=0.3)
         code = VGroup(
-            label(r"typical? \ send $0$, then its index: \ $\lceil n(H + \varepsilon) \rceil$ bits", font_size=24,
+            label(r"typical? \ send $0$, then its index: \\ $\lceil n(H + \varepsilon) \rceil$ bits", font_size=26,
                   color=TYP),
-            label(r"not typical? \ send $1$, then the sequence as it is: \ $n \log_2 K$ bits", font_size=24,
+            label(r"not typical? \ send $1$, then the sequence \\ as it is: \ $n \log_2 K$ bits", font_size=26,
                   color=GREY_A),
-            label(r"average: \ $\le n(H + \varepsilon) + 2 + P(\text{not typical})\, n \log_2 K$", font_size=24),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_corner(DL, buff=0.4).shift(UP * 0.35)
+            label(r"average: \\ $\le n(H + \varepsilon) + 2 + P(\text{not typical})\, n \log_2 K$", font_size=26),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-3.3, -0.6, 0])
         a = axes([0.5, 3.0], [h - 0.02, 0.9], x_length=5.0, y_length=2.6, xlabel=r"block length $n$",
                  ylabel=r"bits per symbol", xticks=[1, 2, 3], yticks=[0.7, 0.8, 0.9],
-                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[3.7, -1.9, 0], font_size=18)
+                 xfmt=lambda v: f"10^{{{int(v)}}}", center=[3.6, -1.0, 0], font_size=18)
         ax = a.ax
         cur = curve(ax, np.log10(ns), np.minimum(rate, 0.9), C.BITS, 3.5)
         hline = DashedLine(ax.c2p(0.5, h), ax.c2p(3.0, h), color=C.ENTROPY, stroke_width=2.5)

@@ -59,15 +59,16 @@ def ai_points(n=4000, text="AI", seed=0):
     return glyph_points(text, n, seed=seed) / 1.2  # about 4 units wide
 
 
-def sw_distance(a, b, n_proj=128, seed=0):
-    """Sliced Wasserstein distance between two point clouds: how far apart, on average over directions."""
+def sw_distance(a, b, n_proj=128, seed=0, nq=400):
+    """Sliced Wasserstein distance between two point clouds (any sizes): over random directions, the root mean square
+    gap between the two clouds' quantiles along the direction."""
     g = rng(seed)
     th = g.uniform(0, math.pi, n_proj)
     d = np.stack([np.cos(th), np.sin(th)], 1)
-    m = min(len(a), len(b))
-    pa = np.sort((a[:m] @ d.T), 0)
-    pb = np.sort((b[:m] @ d.T), 0)
-    return float(np.sqrt(((pa - pb) ** 2).mean()))
+    u = (np.arange(nq) + 0.5) / nq
+    qa = np.quantile(np.asarray(a) @ d.T, u, axis=0)
+    qb = np.quantile(np.asarray(b) @ d.T, u, axis=0)
+    return float(np.sqrt(((qa - qb) ** 2).mean()))
 
 
 def mlp(din, dout, width=256, tdim=32):
