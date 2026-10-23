@@ -242,9 +242,12 @@ class Before(VoiceoverScene):
         tag = note(r"computed: \ logistic regression, \ three seeds each, \ mean").to_corner(DR, buff=0.25)
         gain = e["mnist_pixels"] / e["mnist_hog"]
         cw = e["cifar_hog"]
-        if cw < e["cifar_pixels"] - 0.03:
+        if e["cifar_pixels"] - 0.03 > cw > 0.4:
             photo = (f"On the photographs it helps too, from {pct(e['cifar_pixels'], 0)} to {pct(cw, 0)} percent "
                      "wrong, but that is still wrong about as often as right.")
+        elif cw < e["cifar_pixels"] - 0.03:
+            photo = (f"On the photographs it helps too, from {pct(e['cifar_pixels'], 0)} to {pct(cw, 0)} percent "
+                     "wrong, though photographs stay much harder than digits.")
         else:
             photo = (f"On the photographs it barely helps: {pct(e['cifar_pixels'], 0)} percent wrong on pixels, "
                      f"{pct(cw, 0)} on these features.")

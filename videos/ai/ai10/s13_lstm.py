@@ -227,7 +227,7 @@ class LSTM(VoiceoverScene):
             "<bookmark mark='c'/> at the end the network must say what the first symbol was. Learning that needs "
             "a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained a plain "
             "recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of "
-            f"{m['T'][0]}, {m['T'][1]} and {m['T'][2]} steps."
+            f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
@@ -285,7 +285,27 @@ class LSTM(VoiceoverScene):
             return float(np.mean(fin[c][Ts.index(T)]))
 
         r10, r100 = mean("rnn", Ts[0]), mean("rnn", Tbig)
+        l10, g10 = mean("lstm", Ts[0]), mean("gru", Ts[0])
         l100, g100 = mean("lstm", Tbig), mean("gru", Tbig)
+        if min(r10, l10, g10) > 0.9:
+            first = f"Over {Ts[0]} steps, all three learn the task: the plain network gets {pct(r10, 0)} percent right."
+        else:
+            first = (f"Even over {Ts[0]} steps the task is not easy: the plain network gets {pct(r10, 0)} percent "
+                     f"right, the LSTM {pct(l10, 0)}, the GRU {pct(g10, 0)}.")
+        # when do the gated cells leave chance?  first evaluation step a quarter above it, per seed
+        waits = []
+        for c in ("lstm", "gru"):
+            for s_ in (0, 1, 2):
+                cv = np.asarray(runs[f"{c}-{Tbig}-{s_}"]["curve"])
+                up = np.nonzero(cv[:, 1] > m["chance"] + 0.25)[0]
+                waits.append(cv[up[0], 0] if len(up) else np.inf)
+        wait_steps = int(np.median(waits)) if np.isfinite(np.median(waits)) else 0
+        if np.isfinite(np.median(waits)) and wait_steps > 0.15 * S:
+            jump = (f"The gated cells sit at chance for a while, about {wait_steps:,} steps, then find the trick and "
+                    "climb: the gates learn to open for the marked symbol and close for everything after it.")
+        else:
+            jump = ("The gated cells climb from the start: the gates soon learn to open for the marked symbol and "
+                    "close for everything after it.")
         if r100 < 0.3 and min(l100, g100) > 0.9:
             v = (f"At {Tbig} steps the plain network never gets off chance, {pct(r100, 0)} percent, while the LSTM "
                  f"and the GRU reach {pct(l100, 0)} and {pct(g100, 0)}.")
@@ -296,10 +316,7 @@ class LSTM(VoiceoverScene):
             v = (f"At {Tbig} steps all three do about as well: {pct(r100, 0)}, {pct(l100, 0)} and "
                  f"{pct(g100, 0)} percent.")
         with self.voiceover(
-            f"Over {Ts[0]} steps, all three learn the task: the plain network gets {pct(r10, 0)} percent right. "
-            f"<bookmark mark='a'/> {v} <bookmark mark='b'/> The gated cells sit at chance for a while too, then "
-            "find the trick and jump: the moment the gates learn to open for the marked symbol and close for "
-            "everything after it."
+            f"{first} <bookmark mark='a'/> {v} <bookmark mark='b'/> {jump}"
         ) as vo:
             self.play(Create(base), FadeIn(bt), FadeIn(tag))
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.05))

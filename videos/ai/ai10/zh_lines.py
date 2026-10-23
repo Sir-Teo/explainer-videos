@@ -58,8 +58,11 @@ ZH = {
     'f"We can measure what the features buy.':
         "我们可以量一量这些特征换来了什么。<bookmark mark='a'/>把同一个线性分类器训练两次，一次用原始像素，一次用我们的方向梯度直方图。在数字上，像素给出{pct(e['mnist_pixels'])}%的错误；直方图给出{pct(e['mnist_hog'])}%，少了大约{gain:.0f}倍。<bookmark mark='b'/>{photo}<bookmark mark='c'/>那个时代的教训是：{verdict}<bookmark mark='d'/>本部分剩下的内容要回答的问题是：如果特征也是学出来的呢？",
 
-    "f'On the photographs it helps too":
+    "f'On the photographs it helps too, from {pct(e[\'cifar_pixels\'], 0)} to {pct(cw, 0)} percent wrong, but":
         "在照片上它也有帮助，错误率从{pct(e['cifar_pixels'], 0)}%降到{pct(cw, 0)}%，但错的次数仍然和对的差不多。",
+
+    "f'On the photographs it helps too, from {pct(e[\'cifar_pixels\'], 0)} to {pct(cw, 0)} percent wrong, though":
+        "在照片上它也有帮助，错误率从{pct(e['cifar_pixels'], 0)}%降到{pct(cw, 0)}%，不过照片仍然比数字难得多。",
 
     "f'On the photographs it barely helps":
         "在照片上它几乎没有帮助：像素错{pct(e['cifar_pixels'], 0)}%，这些特征错{pct(cw, 0)}%。",
@@ -211,14 +214,11 @@ ZH = {
     'f"The third ingredient was the one ImageNet supplied: data.':
         "第三个成分是ImageNet提供的：数据。<bookmark mark='a'/>用同样的步数，在越来越多的数字上训练同一个LeNet。在对数-对数图上，测试错误率沿着一条直线下降，是一条斜率约为{slope:.2f}的幂律：数据每翻一倍，错误就减少{100 * (1 - 2 ** slope):.0f}%。<bookmark mark='b'/>还有一个便宜的办法得到更多数据：自己造。AlexNet在照片的随机裁剪和它们的镜像上训练，每张有{ALEXNET['augment_factor']:,}种变体。{aug_v}第12部分讲的就是这样的直线。",
 
-    'f"Shifted copies help: with {sizes[1]:,} digits':
-        "平移的副本有帮助：用{sizes[1]:,}个数字时，{pct(e_small)}%的错误率降到了{pct(e_small_aug)}%，{tail}",
+    "f'Shifted copies help: with {sizes[1]:,} digits, {pct(e_small)} percent wrong becomes {pct(e_small_aug)}, better":
+        "平移的副本有帮助：用{sizes[1]:,}个数字时，{pct(e_small)}%的错误率降到了{pct(e_small_aug)}%，比四倍的真实数字还好。",
 
-    'better than four times as many real digits.':
-        "比四倍的真实数字还好。",
-
-    'f"not as good as four times as many real digits':
-        "不如四倍的真实数字，那是{pct(e_next)}%。",
+    "f'Shifted copies help: with {sizes[1]:,} digits, {pct(e_small)} percent wrong becomes {pct(e_small_aug)}, though":
+        "平移的副本有帮助：用{sizes[1]:,}个数字时，{pct(e_small)}%的错误率降到了{pct(e_small_aug)}%，不过比不上四倍的真实数字，那是{pct(e_next)}%。",
 
     'Shifted copies barely help at this size.':
         "在这个规模上，平移的副本几乎没有帮助。",
@@ -383,10 +383,16 @@ ZH = {
         "2014年，蒙特利尔的赵京焕和同事把这个细胞简化了。<bookmark mark='a'/>门控循环单元只保留隐状态和两个门。更新门z把旧状态和新的候选值混合：z接近零的地方，状态原封不动地通过，还是那条传送带。重置门r决定候选值能看多少过去。<bookmark mark='b'/>零件更少，而在那一年钟俊英和同事的比较里，效果差不多一样好。",
 
     'f"Does the carousel work?':
-        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][2]}步。",
+        "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。",
 
-    'f"Over {Ts[0]} steps, all three learn the task':
-        "在{Ts[0]}步的序列上，三个都学会了：普通网络答对{pct(r10, 0)}%。<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
+    'f"{first} <bookmark mark=\'a\'/> {v} <bookmark mark=\'b\'/> {jump}"':
+        "{first}<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
+
+    "f'Over {Ts[0]} steps, all three learn the task":
+        "在{Ts[0]}步的序列上，三个都学会了：普通网络答对{pct(r10, 0)}%。",
+
+    "f'Even over {Ts[0]} steps the task is not easy":
+        "即使只有{Ts[0]}步，这个任务也不容易：普通网络答对{pct(r10, 0)}%，LSTM是{pct(l10, 0)}%，GRU是{pct(g10, 0)}%。",
 
     "f'At {Tbig} steps the plain network never gets off chance":
         "在{Tbig}步时，普通网络始终没有离开瞎猜的水平，{pct(r100, 0)}%，而LSTM和GRU达到{pct(l100, 0)}%和{pct(g100, 0)}%。",
@@ -397,8 +403,8 @@ ZH = {
     "f'At {Tbig} steps all three do about as well":
         "在{Tbig}步时，三个差不多：{pct(r100, 0)}%、{pct(l100, 0)}%和{pct(g100, 0)}%。",
 
-    'f"The gated cells sit at chance for':
-        "带门的细胞也在瞎猜的水平上停了一阵，大约{wait_steps:,}步，然后找到窍门，一下子跳上去：那是门学会了为标记的符号打开、为之后的一切关上的时刻。",
+    "f'The gated cells sit at chance for":
+        "带门的细胞在瞎猜的水平上停了一阵，大约{wait_steps:,}步，然后找到窍门，往上爬：门学会了为标记的符号打开、为之后的一切关上。",
 
     'The gated cells climb from the start':
         "带门的细胞从一开始就在往上爬：门很快就学会了为标记的符号打开、为之后的一切关上。",
@@ -518,16 +524,25 @@ ZH = {
         "超出训练过的长度，它也失败了，平均{pct(extra, 0)}%：它从来没需要数到那么远。",
 
     'f"Watch the alignment form during training.':
-        "看对齐在训练中怎样形成。<bookmark mark='a'/>每一行是它写的字母，每一列是它读的字母；亮的地方是它在看的地方。{early}<bookmark mark='b'/>{late}<bookmark mark='c'/>对齐越清晰，长字符串上的准确率也跟着上升。巴赫达瑙的翻译也呈现出同样的图景：大体沿着对角线，带着法语和英语的语序，在两者不一致的地方跳一下。",
+        "看对齐在训练中怎样形成。<bookmark mark='a'/>每一行是它写的字母，每一列是它读的字母；亮的地方是它在看的地方。{early}<bookmark mark='b'/>{late}<bookmark mark='c'/>{climb}巴赫达瑙的翻译也呈现出同样的图景：大体沿着对角线，带着法语和英语的语序，在两者不一致的地方跳一下。",
 
     'At first it looks everywhere a little':
         "一开始，它到处都看一点，什么也学不到。",
 
-    'f"Then a diagonal appears':
-        "然后出现了一条对角线，从右上到左下：写下的第一个字母注视读到的最后一个，第二个注视倒数第二个。到第{t_diag:,}步，{pct(mass, 0)}%的注意力落在这条对角线上。",
+    'Even at first its attention leans':
+        "即使在一开始，它的注意力也偏向它需要的那些字母。",
 
-    'f"The diagonal is faint':
+    "f'Then a diagonal appears":
+        "然后出现了一条对角线，从右上到左下：写下的第一个字母注视读到的最后一个，第二个注视倒数第二个。到第{t_diag:,}步，它一半以上的注意力落在这条对角线上；到最后，是{pct(mass, 0)}%。",
+
+    "f'The diagonal stays faint":
         "这条对角线一直很淡：到最后，只有{pct(mass, 0)}%的注意力落在上面。",
+
+    'As the alignment sharpens':
+        "对齐越清晰，长字符串上的准确率也跟着上升。",
+
+    "f'Yet the accuracy on long strings stays near":
+        "然而长字符串上的准确率一直停在{pct(long1, 0)}%附近。",
 
     'f"On real translation the gain was large.':
         "在真实的翻译上，收益很大。<bookmark mark='a'/>巴赫达瑙的编码器-解码器，不用注意力时英译法的BLEU是{B['encdec']}；用了注意力，{B['search']}。<bookmark mark='b'/>训练得更久、只算没有生僻词的句子时，它达到{B['search_long_nounk']}，超过了基于短语的Moses系统的{B['moses_nounk']}。而单向量模型在长句子上崩溃的地方，注意力模型在五十个词以上还撑得住。",

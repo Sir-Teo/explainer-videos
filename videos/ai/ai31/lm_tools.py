@@ -434,7 +434,7 @@ def _train_classifier(blocks, head, H, last, targets, steps, lr, seed, batch=32,
     return final, hist, run
 
 
-def weak_to_strong(seeds: int = 5, steps: int = 300, lr_weak: float = 1e-3, lr_strong: float = 5e-4,
+def weak_to_strong(seeds: int = 3, steps: int = 300, lr_weak: float = 1e-3, lr_strong: float = 5e-4,
                    strong_top: int = 1, conf: float = 0.5, part=None) -> dict:
     """Per seed: a weak supervisor (the 2-layer model, fine-tuned whole on ground truth for half the training
     questions) labels the other half; the strong model (its last ``strong_top`` blocks and a new head) is fine-tuned
