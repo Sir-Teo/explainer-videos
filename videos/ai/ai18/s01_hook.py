@@ -131,7 +131,7 @@ class Hook(VoiceoverScene):
             "sixteen thousand GPUs, without the run falling apart? <bookmark mark='a'/> The answer comes in layers: the "
             "data, the objective, the arithmetic, the cuts across devices, the bits, the stability, and the failures."
         ) as vo:
-            self.play(FadeIn(q))
+            self.play(FadeIn(q), FadeIn(path.copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m, shift=RIGHT * 0.1) for m in path], lag_ratio=0.25), run_time=5.0)
         self.wait(0.3)

@@ -30,8 +30,13 @@ class Anatomy(VoiceoverScene):
                          (r"tokenize", GREY_A)], font_size=22).move_to(UP * 2.6)
         bot = stage_row([(r"pretrain", N_COL), (r"anneal, \ mid-train", LR_COL), (r"long context", C.POSITION),
                          (r"post-train", C.REWARD)], font_size=22).move_to(UP * 1.25)
-        link = Arrow(top.boxes[-1].get_bottom(), bot.boxes[0].get_top(), buff=0.08, color=GREY_B, stroke_width=2.5,
-                     path_arc=-0.6)
+        # an elbow from the last data stage down to the first training stage, between the two rows
+        y_mid = (top.boxes[-1].get_bottom()[1] + bot.boxes[0].get_top()[1]) / 2
+        p0, p3 = top.boxes[-1].get_bottom() + DOWN * 0.06, bot.boxes[0].get_top() + UP * 0.04
+        p1, p2 = np.array([p0[0], y_mid, 0]), np.array([p3[0], y_mid, 0])
+        link = VGroup(VMobject(stroke_color=GREY_B, stroke_width=2.5).set_points_as_corners([p0, p1, p2]),
+                      Arrow(p2, p3, buff=0, color=GREY_B, stroke_width=2.5, tip_length=0.14,
+                            max_tip_length_to_length_ratio=0.7))
         O, S = F.OLMO3, F.SMOLLM3
         # two published runs, stage by stage, as bars proportional to tokens
         W = 11.0
@@ -76,7 +81,7 @@ class Anatomy(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(b)) for a, b in zip(top.arrows, top.boxes[1:])],
                                   lag_ratio=0.5), run_time=3.0)
             vo.wait_until("b")
-            self.play(GrowArrow(link), LaggedStart(*[FadeIn(b) for b in bot.boxes], lag_ratio=0.4),
+            self.play(Create(link), LaggedStart(*[FadeIn(b) for b in bot.boxes], lag_ratio=0.4),
                       LaggedStart(*[GrowArrow(a) for a in bot.arrows], lag_ratio=0.4), run_time=3.0)
             vo.wait_until("c")
             self.play(FadeIn(src), FadeIn(rows[0][0]), LaggedStart(*[FadeIn(m) for m in rows[0][1]], lag_ratio=0.3))
@@ -98,14 +103,14 @@ class Anatomy(VoiceoverScene):
             (r"Nemotron 3 Super", r"Mar 2026", r"$25$T", r"--", r"NVFP4", r"--"),
             (r"DeepSeek-V4-Pro", r"Apr 2026", r"$33$T", r"--", r"FP8 mixed", r"Muon"),
         ]
-        xs = [-5.0, -2.2, -0.5, 1.4, 3.5, 5.4]
-        head = VGroup(*[label(c, font_size=22, color=GREY_B).move_to([x, 2.5, 0]) for c, x in zip(cols, xs)])
-        rule = Line([-6.6, 2.2, 0], [6.6, 2.2, 0], color=GREY_D, stroke_width=1.5)
+        xs = [-5.1, -2.3, -0.55, 1.4, 3.55, 5.55]
+        head = VGroup(*[label(c, font_size=25, color=GREY_B).move_to([x, 2.75, 0]) for c, x in zip(cols, xs)])
+        rule = Line([-6.6, 2.42, 0], [6.6, 2.42, 0], color=GREY_D, stroke_width=1.5)
         body = VGroup()
         colors = [C.TOKEN, GREY_A, D_COL, GPU, C.QUANT, C.MUON]
         for i, row in enumerate(data):
-            y = 1.7 - 0.62 * i
-            body.add(VGroup(*[label(t, font_size=22, color=WHITE if j == 0 else colors[j]).move_to([x, y, 0])
+            y = 1.95 - 0.7 * i
+            body.add(VGroup(*[label(t, font_size=25, color=WHITE if j == 0 else colors[j]).move_to([x, y, 0])
                               for j, (t, x) in enumerate(zip(row, xs))]))
         src = cite(r"Llama Team (2024); \ DeepSeek-AI (2024, 2026); \ Kimi Team (2025); \ Team OLMo (2025); \ "
                    r"NVIDIA (2026). \ --: \ not stated", font_size=17)
@@ -142,7 +147,11 @@ class Anatomy(VoiceoverScene):
                  ylabel=r"learning rate \ ($\times 10^{-4}$)", xticks=[0, 5, 10, 14.8], yticks=[0, 1, 2.2],
                  xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-1.0, 0.9, 0])
         ax = g.ax
-        cv = curve(ax, t, lr, LR_COL, 3)
+        c0 = D["lr_const_until"] / 1e12
+        c1 = c0 + D["lr_decay_tokens"] / 1e12
+        i0, i1 = int(np.searchsorted(t, c0)), int(np.searchsorted(t, c1))
+        cvs = [curve(ax, t[:i0 + 1], lr[:i0 + 1], LR_COL, 3), curve(ax, t[i0:i1 + 1], lr[i0:i1 + 1], LR_COL, 3),
+               curve(ax, t[i1:], lr[i1:], LR_COL, 3)]
         b = axes([0, 15], [0, 16], x_length=9.0, y_length=1.3, ylabel=r"batch \ (thousands of sequences)",
                  yticks=[0, 15.36], yfmt=lambda v: f"{v:g}", center=[-1.0, -2.55, 0])
         bt = np.linspace(0, 14.8, 300)
@@ -171,12 +180,12 @@ class Anatomy(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(b), FadeIn(src))
             vo.wait_until("a")
-            self.play(Create(cv), run_time=2.0, rate_func=lambda x: min(1, x * 1.4) * 0.68)
+            self.play(Create(cvs[0]), run_time=2.0, rate_func=linear)
             self.play(FadeIn(notes[0]))
             vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
+            self.play(Create(cvs[1]), FadeIn(notes[1]), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
+            self.play(Create(cvs[2]), FadeIn(notes[2]))
             vo.wait_until("d")
             self.play(Create(bcv), FadeIn(ramp), run_time=1.5)
             vo.wait_until("e")

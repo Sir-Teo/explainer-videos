@@ -185,8 +185,9 @@ class Accounting(VoiceoverScene):
         big = VGroup(
             label(r"Korthikanti et al.'s count, \ $16$-bit, \ per layer and sequence:", font_size=20, color=GREY_A),
             cmath(r"s\,b\,h\,\Big(34 + 5\,\frac{a\,s}{h}\Big)", font_size=30),
-            label(rf"at Llama 3.1 405B's shape, \ $s = {al['s']:,}$: \ ${nbytes(al['linear'])}$ per layer, \ "
-                  rf"${nbytes(al['per_seq'])}$ for ${al['layers']}$ layers".replace(",", "{,}"), font_size=20, color=ACTS),
+            label(rf"at Llama 3.1 405B's shape, \ $s = {al['s']:,}$:".replace(",", "{,}") +
+                  rf" \ ${nbytes(al['linear'])}$ per layer, \ ${nbytes(al['per_seq'])}$ for ${al['layers']}$ layers",
+                  font_size=20, color=ACTS),
             label(rf"plus ${nbytes(al['attn'])}$ per layer if attention isn't fused", font_size=20, color=C.ATTN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.3, -1.6, 0])
         tag = note(r"computed: \ the tensors autograd saves, counted", font_size=18).to_corner(DR, buff=0.15)

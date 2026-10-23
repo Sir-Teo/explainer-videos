@@ -116,6 +116,8 @@ class Mixture(VoiceoverScene):
                               for e, p_ in zip(evs, proxy)])
             fan = VGroup(gf, curves, note(r"each run's training, \ coloured by its American share", font_size=15)
                          .next_to(gf, UP, buff=0.05))
+
+        def mixbar(w, y_, title):
             row = VGroup()
             x = 0.0
             for k, v in enumerate(w):
