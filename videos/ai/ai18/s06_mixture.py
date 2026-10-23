@@ -363,10 +363,10 @@ class Mixture(VoiceoverScene):
         gens = Cl["gens"]
         x = np.arange(gens + 1)
         top = float(rep[:, 0, 0].mean())
-        g = axes([0, gens], [0, 3500], x_length=5.4, y_length=3.4, xlabel=r"generation",
+        g = axes([0, gens], [0, 3500], x_length=5.4, y_length=3.4, xlabel=r"model generation",
                  ylabel=r"tokens the model can still produce", xticks=[0, 10, 20, 30], yticks=[0, 1000, 2000, 3000],
                  yfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), center=[-3.3, -0.5, 0], font_size=18)
-        g2 = axes([0, gens], [9.6, 10.8], x_length=5.0, y_length=3.4, xlabel=r"generation",
+        g2 = axes([0, gens], [9.6, 10.8], x_length=5.0, y_length=3.4, xlabel=r"model generation",
                   ylabel=r"cross-entropy on real text (bits)", xticks=[0, 10, 20, 30], yticks=[9.6, 10.2, 10.8],
                   center=[3.6, -0.5, 0], font_size=18)
         rc = curve(g.ax, x, rep[:, :, 0].mean(0), REMOVED, 3)

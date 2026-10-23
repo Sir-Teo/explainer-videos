@@ -1,0 +1,586 @@
+{
+ "title": "人工智能，从零搭建 · 第20部分：生成的四种方法",
+ "chapters": {
+  "Hook": "没有人写过的数字",
+  "Problem": "1. 生成问题",
+  "Autoregressive": "2. 一次一个像素",
+  "Latent": "3. 从亥姆霍兹机到VAE",
+  "VAE": "4. 训练VAE：码率、失真与坍缩",
+  "Game": "5. 对抗博弈",
+  "Dynamics": "6. GAN为什么会绕圈",
+  "Wasserstein": "7. 瓦瑟斯坦GAN",
+  "Scale": "8. 规模化的GAN：BigGAN、StyleGAN与反演",
+  "Flows": "9. 归一化流",
+  "NeuralODE": "10. 神经ODE与连续流",
+  "Hopfield": "11. 霍普菲尔德与玻尔兹曼",
+  "RBM": "12. 对比散度",
+  "Langevin": "13. 朗之万动力学与分数函数",
+  "Judging": "14. 怎样评判一个生成模型",
+  "Budget": "15. 五个模型，同一份预算",
+  "Meet": "16. 几个家族的交汇",
+  "Outro": "回顾、习题，以及接下来"
+ },
+ "lines": {
+  "25e9caa0bf0c": {
+   "scene": "Hook",
+   "en": "None of these sixty-four digits was written by a person. <bookmark mark='a'/> Each block was drawn by a different machine, trained on the computer making this video, for about 4 minutes each, on the same sixty thousand handwritten digits. <bookmark mark='b'/> The first writes a digit one pixel at a time. <bookmark mark='c'/> The second squeezes every digit into sixteen numbers and learns to expand them again. <bookmark mark='d'/> The third learned by playing a game against a critic. <bookmark mark='e'/> And the fourth bends random noise, smoothly and invertibly, into ink.",
+   "zh": "这64个数字，没有一个是人写的。<bookmark mark='a'/>每一块都出自一台不同的机器，它们都在制作这个视频的电脑上训练，每台大约4分钟，学的是同样的6万个手写数字。<bookmark mark='b'/>第一台一次写一个像素。<bookmark mark='c'/>第二台把每个数字压缩成16个数，再学会把它们展开。<bookmark mark='d'/>第三台是通过和一个评论家对弈学会的。<bookmark mark='e'/>第四台把随机噪声平滑地、可逆地，弯成了墨迹。"
+  },
+  "2ca427b40543": {
+   "scene": "Hook",
+   "en": "Real handwriting looks like this: samples from some distribution p of x that nobody can write down. <bookmark mark='a'/> The question of this part: from examples alone, how do you learn a distribution you can draw new examples from? <bookmark mark='b'/> The field found four answers that work, and one older one that it keeps coming back to. Build the example one piece at a time. Compress it into a code and learn to expand the code. Set two networks against each other. Bend simple noise with an invertible map. <bookmark mark='c'/> Or carve an energy landscape that the data sits at the bottom of. Diffusion, next time, is built from these pieces.",
+   "zh": "真正的手写数字是这样的：它们是某个分布p(x)的样本，而这个分布没有人写得出来。<bookmark mark='a'/>本部分的问题是：只凭样本，怎样学到一个能从中抽出新样本的分布？<bookmark mark='b'/>这个领域找到了四个行得通的答案，还有一个更古老的、总是被重新拾起的答案。一块一块地把样本搭出来。把它压缩成一个编码，再学会把编码展开。让两个网络互相对抗。用一个可逆映射把简单的噪声弯过来。<bookmark mark='c'/>或者，雕出一片能量地形，让数据躺在谷底。下一次要讲的扩散模型，就是用这些零件搭起来的。"
+  },
+  "5b08d6306e7c": {
+   "scene": "Hook",
+   "en": "This is Part 20 of AI, Built, and the start of its fourth act: generation and perception. <bookmark mark='a'/> In this part: the generative problem and its history; autoregressive models; latent variables, from the Helmholtz machine to the variational autoencoder; adversarial games, why they spiral, and how Wasserstein distance and StyleGAN tamed them; invertible maps, from coupling layers to neural ODEs; energy, from Hopfield and Boltzmann to Langevin dynamics and the score; and how to judge a generator, with every family trained here and compared on one budget.",
+   "zh": "这是《人工智能，从零搭建》的第20部分，也是第四幕“生成与感知”的开始。<bookmark mark='a'/>本部分的内容：生成问题及其历史；自回归模型；隐变量，从亥姆霍兹机到变分自编码器；对抗博弈，它为什么会绕圈，以及瓦瑟斯坦距离和StyleGAN怎样驯服了它；可逆映射，从耦合层到神经ODE；能量，从霍普菲尔德和玻尔兹曼，到朗之万动力学和分数函数；最后是怎样评判一个生成模型，每个家族都在这里训练，并在同一份预算下比较。"
+  },
+  "75737825f1c6": {
+   "scene": "Problem",
+   "en": "Chapter one. The generative problem.",
+   "zh": "第1章。生成问题。"
+  },
+  "33173eb27402": {
+   "scene": "Problem",
+   "en": "Here is the problem at its smallest: twenty thousand points in the plane, drawn from a distribution p in the shape of two moons. <bookmark mark='a'/> Because we made it, we know p exactly; with images or text, nobody does. <bookmark mark='b'/> A generative model is a distribution q, learned from the samples, that we can sample from; <bookmark mark='c'/> ideally one we can also evaluate, <bookmark mark='d'/> and one that gives each x a code, a short description of what it is.",
+   "zh": "先看这个问题最小的样子：平面上的2万个点，抽自一个形状像两弯月亮的分布p。<bookmark mark='a'/>因为分布是我们造的，我们确切地知道p；面对图像或文本，没有人知道。<bookmark mark='b'/>生成模型，就是一个从样本里学出来、能从中抽样的分布q；<bookmark mark='c'/>最好还能计算它，<bookmark mark='d'/>还能给每个x一个编码，一个说明它是什么的简短描述。"
+  },
+  "6c5c253559bc": {
+   "scene": "Problem",
+   "en": "The workhorse for fitting q is maximum likelihood, from Part 1: minimize the average surprise, minus log q. <bookmark mark='a'/> Split that average in two. <bookmark mark='b'/> The data's own entropy, which no model can beat, plus the KL divergence from p to q, the price of being wrong. <bookmark mark='c'/> So maximum likelihood is minimum KL. <bookmark mark='d'/> For our three test densities the floor is known: 1.76 nats for the moons, 0.31 for the ring of eight Gaussians, 2.08 for the checkerboard.",
+   "zh": "拟合q的主力方法，是第1部分讲过的最大似然：让平均意外度，也就是负log q，尽可能小。<bookmark mark='a'/>把这个平均值拆成两部分。<bookmark mark='b'/>数据自身的熵，任何模型都打不破它；加上从p到q的KL散度，也就是犯错的代价。<bookmark mark='c'/>所以，最大似然就是最小KL。<bookmark mark='d'/>对我们的三个测试密度，这个下限是已知的：双月是1.76奈特，八个高斯组成的环是0.31，棋盘格是2.08。"
+  },
+  "20bb1abc74b2": {
+   "scene": "Problem",
+   "en": "How we got here. In 1948 Claude Shannon generated English letter by letter: the first autoregressive model. <bookmark mark='a'/> In the 1980s memories became the valleys of an energy, in Hopfield's network and the Boltzmann machine; <bookmark mark='b'/> in 1995 the Helmholtz machine added a second network to guess hidden causes. <bookmark mark='c'/> Stacked Boltzmann machines restarted deep learning in 2006. <bookmark mark='d'/> Then, within three years, variational autoencoders, adversarial networks, invertible flows and PixelCNN. <bookmark mark='e'/> GANs made the sharpest images until 2021, when diffusion overtook them. <bookmark mark='f'/> Today's systems combine all of these ideas.",
+   "zh": "我们是怎么走到这里的。1948年，克劳德·香农一个字母一个字母地生成英文：这是第一个自回归模型。<bookmark mark='a'/>20世纪80年代，在霍普菲尔德的网络和玻尔兹曼机里，记忆成了一片能量地形里的山谷；<bookmark mark='b'/>1995年，亥姆霍兹机又加了第二个网络，去猜测隐藏的原因。<bookmark mark='c'/>2006年，堆叠起来的玻尔兹曼机让深度学习重新起步。<bookmark mark='d'/>接着，短短三年里，出现了变分自编码器、生成对抗网络、可逆的流，以及PixelCNN。<bookmark mark='e'/>GAN画出的图像一直最清晰，直到2021年被扩散模型超过。<bookmark mark='f'/>今天的系统，把这些想法全都结合了起来。"
+  },
+  "0fe86aa19894": {
+   "scene": "Problem",
+   "en": "What each family offers. <bookmark mark='a'/> An autoregressive model: the exact likelihood and stable training, but samples one piece at a time. <bookmark mark='b'/> A VAE: one-pass sampling and a code, but only a bound on the likelihood. <bookmark mark='c'/> A GAN: one pass, no likelihood at all, and famously hard to train. <bookmark mark='d'/> A flow: everything on paper, paid for in architecture. <bookmark mark='e'/> An energy model: a density known only up to a constant, and slow sampling. <bookmark mark='f'/> Xiao, Kreis and Vahdat called it a trilemma: sharp samples, coverage of the data, fast sampling. Most families managed two.",
+   "zh": "每个家族能给出什么。<bookmark mark='a'/>自回归模型：精确的似然，稳定的训练，但样本只能一块一块地出来。<bookmark mark='b'/>VAE：一遍就能采样，还有一个编码，但似然只有一个下界。<bookmark mark='c'/>GAN：一遍采样，完全没有似然，而且出了名地难训练。<bookmark mark='d'/>流：纸面上什么都有，代价付在结构上。<bookmark mark='e'/>能量模型：密度只知道到差一个常数，采样很慢。<bookmark mark='f'/>Xiao、Kreis和Vahdat把它叫作三难困境：清晰的样本、对数据的覆盖、快速的采样。大多数家族只做到其中两样。"
+  },
+  "1a53f947249b": {
+   "scene": "Problem",
+   "en": "Our test bench: three densities in the plane, small enough to see everything a model does, each hard in its own way. <bookmark mark='a'/> And images: the MNIST digits, sixty thousand to train on, ten thousand to test, averaged down to fourteen by fourteen pixels <bookmark mark='b'/> of sixteen grey levels. <bookmark mark='c'/> Every image model gets the same budget of arithmetic, counted operation by operation, and several random starts.",
+   "zh": "我们的试验台：平面上的三个密度，小到能看清模型做的每一件事，各有各的难处。<bookmark mark='a'/>还有图像：MNIST手写数字，6万个用来训练，1万个用来测试，平均缩小到14乘14像素，<bookmark mark='b'/>16个灰度级。<bookmark mark='c'/>每个图像模型都得到同样的算力预算，一次运算一次运算地数，并且从几个随机起点分别训练。"
+  },
+  "a505e4488d25": {
+   "scene": "Autoregressive",
+   "en": "Chapter two. One pixel at a time.",
+   "zh": "第2章。一次一个像素。"
+  },
+  "3ddf4ca121f2": {
+   "scene": "Autoregressive",
+   "en": "The first answer needs no new mathematics. Any distribution factors by the chain rule: <bookmark mark='a'/> the first variable, times the second given the first, times the third given the first two, and so on. <bookmark mark='b'/> Each factor is one prediction: the next variable, given everything before it. Learn every factor and you have the distribution exactly; sample them in order and you have a sample. <bookmark mark='c'/> Shannon's English, every language model in this series, and now a digit.",
+   "zh": "第一个答案不需要新的数学。任何分布都可以按链式法则分解：<bookmark mark='a'/>第一个变量，乘以给定第一个时的第二个，再乘以给定前两个时的第三个，依此类推。<bookmark mark='b'/>每个因子都是一次预测：给定之前的一切，预测下一个变量。把每个因子都学会，你就精确地得到了这个分布；按顺序逐个采样，你就得到一个样本。<bookmark mark='c'/>香农的英文，本系列的每个语言模型，以及现在的一个数字，都是这样来的。"
+  },
+  "acc8d01bbab2": {
+   "scene": "Autoregressive",
+   "en": "In the plane, the first factor, p of x one, is a curve along the bottom. <bookmark mark='a'/> The second, p of x two given x one, is a different curve for every slice: a mixture of ten Gaussians set by a small network fed x one. <bookmark mark='b'/> Multiply the two: the density the model learns, replayed through training, beside its held-out surprise. <bookmark mark='c'/> It ends 0.02 nats above the floor: close to the best any model could do.",
+   "zh": "在平面上，第一个因子p(x1)是沿着底边的一条曲线。<bookmark mark='a'/>第二个因子，给定x1时x2的概率，在每一个切片上都是一条不同的曲线：10个高斯的混合，由一个输入x1的小网络设定。<bookmark mark='b'/>把两者相乘，就是模型学到的密度，这里回放了整个训练过程，旁边是它在留出点上的意外度。<bookmark mark='c'/>最后它比下限高0.02奈特：已经接近任何模型所能做到的最好。"
+  },
+  "4d2d6371547f": {
+   "scene": "Autoregressive",
+   "en": "An image is the same story with more variables: the 196 pixels of a digit in reading order. <bookmark mark='a'/> To predict this pixel the model may look at every pixel before it, and nothing after; it outputs sixteen probabilities, one per grey level, like a language model's next token. <bookmark mark='b'/> The trick that makes training fast is a mask: every filter has its future half set to zero, so one pass predicts all 196 pixels at once, each from its own past. <bookmark mark='c'/> From NADE and MADE came PixelRNN and PixelCNN, by Aaron van den Oord and colleagues at DeepMind in 2016, and WaveNet for speech.",
+   "zh": "图像也是同一个故事，只是变量更多：一个数字的196个像素，按阅读顺序排好。<bookmark mark='a'/>预测这个像素时，模型可以看它之前的每一个像素，之后的一个也不能看；它输出16个概率，每个灰度级一个，就像语言模型预测下一个词元。<bookmark mark='b'/>让训练变快的诀窍是一个掩码：每个滤波器都把属于未来的那一半设为零，于是跑一遍就能同时预测全部196个像素，每个只用它自己的过去。<bookmark mark='c'/>从NADE和MADE，发展出了DeepMind的Aaron van den Oord和同事在2016年提出的PixelRNN和PixelCNN，以及生成语音的WaveNet。"
+  },
+  "9c184b0e9d1f": {
+   "scene": "Autoregressive",
+   "en": "There's a catch. Ask the network which inputs its prediction depends on: the gradient of one pixel's prediction with respect to every input. <bookmark mark='a'/> With masked filters stacked naively, a wedge above and to the right is never seen, though it comes earlier. <bookmark mark='b'/> The second PixelCNN paper splits the network in two: a vertical stack that sees the rows above, feeding a horizontal stack that sees the row so far. No blind spot. That is the layout we train.",
+   "zh": "这里有个问题。问问网络，它的预测依赖于哪些输入：求一个像素的预测对每个输入的梯度。<bookmark mark='a'/>如果简单地把带掩码的滤波器叠起来，右上方有一块楔形永远看不见，尽管它排在前面。<bookmark mark='b'/>第二篇PixelCNN论文把网络一分为二：一个竖直的栈，看得到上面的各行，把信息送给一个水平的栈，它看得到这一行已经写好的部分。盲区消失了。我们训练的就是这种结构。"
+  },
+  "7e121f7bc3b3": {
+   "scene": "Autoregressive",
+   "en": "Here is ours learning: on the left, its held-out surprise in bits per pixel; on the right, what it draws at each checkpoint. <bookmark mark='a'/> Untrained, it pays 3.99 bits per pixel, about uniform guessing, and draws static. <bookmark mark='b'/> Then it learns that most pixels are black, that ink comes in strokes, and their shapes. <bookmark mark='c'/> It ends at 0.86 bits per pixel; three seeds end between 0.86 and 0.86.",
+   "zh": "这是我们的模型在学习：左边是它在留出数字上的意外度，单位是每像素比特数；右边是它在每个检查点画出的东西。<bookmark mark='a'/>没训练时，它每个像素要付3.99比特，大约就是均匀乱猜，画出来的是一片雪花。<bookmark mark='b'/>然后它学会大多数像素是黑的，墨迹是一笔一笔的，还有笔画的形状。<bookmark mark='c'/>最后它停在每像素0.86比特；三个种子最后落在0.86到0.86之间。"
+  },
+  "fda2be8d1050": {
+   "scene": "Autoregressive",
+   "en": "And here is one digit being drawn, with the model's sixteen probabilities for the next pixel. <bookmark mark='a'/> In the margin it is sure: black. <bookmark mark='b'/> At a stroke's edge it hesitates, and the coin it tosses shapes the digit. <bookmark mark='c'/> The price is the order: 196 passes for one digit, each waiting for the last, 78.0 milliseconds here, about 14,697 times the GAN's single pass.",
+   "zh": "这是一个数字正在被画出来，旁边是模型对下一个像素给出的16个概率。<bookmark mark='a'/>在空白的边缘，它很确定：黑色。<bookmark mark='b'/>到了笔画的边上，它会犹豫，而它掷出的那枚硬币决定了数字的形状。<bookmark mark='c'/>代价在于顺序：一个数字要过196遍网络，每一遍都要等上一遍，在这里是78.0毫秒，大约是GAN一遍所需时间的14697倍。"
+  },
+  "2fd15f484497": {
+   "scene": "Latent",
+   "en": "Chapter three. From Helmholtz machines to the variational autoencoder.",
+   "zh": "第3章。从亥姆霍兹机到变分自编码器。"
+  },
+  "05cc48675885": {
+   "scene": "Latent",
+   "en": "The second answer adds something hidden: every digit comes from a code z, a few numbers drawn from a plain Gaussian. <bookmark mark='a'/> A decoder turns each code into a distribution over images. Here is a real one, with a code of two numbers: every point of the plane decodes to a digit, and the digits flow into one another. <bookmark mark='b'/> An image's probability is then an average over all the codes that could have made it, an integral we can't compute. <bookmark mark='c'/> And going back, from image to code, needs Bayes' rule, with the same integral below.",
+   "zh": "第二个答案加进了一些隐藏的东西：每个数字都来自一个编码z，几个从普通高斯分布里抽出来的数。<bookmark mark='a'/>一个解码器把每个编码变成图像上的一个分布。这是一个真的解码器，编码只有两个数：平面上的每一个点都被解码成一个数字，而这些数字平滑地过渡成彼此。<bookmark mark='b'/>于是，一张图像的概率，就是对所有可能产生它的编码求平均，而这个积分我们算不出来。<bookmark mark='c'/>反过来，从图像求编码，要用贝叶斯法则，分母里还是同一个积分。"
+  },
+  "600df9301b40": {
+   "scene": "Latent",
+   "en": "In 1995 Peter Dayan, Geoffrey Hinton, Radford Neal and Richard Zemel proposed learning Bayes' rule: a second network, a recognition model q, that guesses an image's hidden causes. <bookmark mark='a'/> The Helmholtz machine, after Hermann von Helmholtz, who called perception unconscious inference. <bookmark mark='b'/> Awake, it guesses the causes of real images with q, and trains the generator to reproduce them. <bookmark mark='c'/> Asleep, it dreams causes and images, and trains q to recover the causes. <bookmark mark='d'/> It worked, awkwardly: q learned from dreams, and the two phases had no shared objective. Eighteen years later the fix was a single bound.",
+   "zh": "1995年，Peter Dayan、杰弗里·辛顿、Radford Neal和Richard Zemel提出，把贝叶斯法则学出来：用第二个网络，一个识别模型q，去猜一张图像背后的隐藏原因。<bookmark mark='a'/>这就是亥姆霍兹机，以赫尔曼·冯·亥姆霍兹命名，他把知觉称为无意识的推断。<bookmark mark='b'/>醒着的时候，它用q猜出真实图像的原因，再训练生成网络把图像重现出来。<bookmark mark='c'/>睡着的时候，它梦出原因和图像，再训练q把原因找回来。<bookmark mark='d'/>它管用，但很别扭：q是从梦里学的，两个阶段也没有共同的目标。18年后，修正它的是一个下界。"
+  },
+  "e9c86169ea3f": {
+   "scene": "Latent",
+   "en": "Here is the bound. Start from the log-probability of an image. <bookmark mark='a'/> Multiply and divide by q of z given x, so the integral becomes an average over codes drawn from q. <bookmark mark='b'/> The log of an average is at least the average of the log: Jensen. <bookmark mark='c'/> Two terms remain: a reconstruction, decoding a code drawn from q; and the KL divergence from q to the prior, the nats the code carries about x, its rate. Together, the evidence lower bound, the ELBO. <bookmark mark='d'/> The gap is the KL divergence from q to the true posterior, so raising the bound improves the model and the guesser at once: one objective, where the Helmholtz machine had two.",
+   "zh": "这就是那个下界。从一张图像的对数概率出发。<bookmark mark='a'/>同时乘以和除以给定x时z的q，积分就变成了对从q里抽出的编码求平均。<bookmark mark='b'/>平均值的对数，至少是对数的平均值：这是詹森不等式。<bookmark mark='c'/>剩下两项：一项是重建，把从q里抽出的编码解码；另一项是从q到先验的KL散度，也就是编码关于x携带的奈特数，即它的码率。两项合起来，就是证据下界，ELBO。<bookmark mark='d'/>差距是从q到真实后验的KL散度，所以抬高下界，就同时改进了模型和猜测者：一个目标，取代了亥姆霍兹机的两个。"
+  },
+  "bb14e745070a": {
+   "scene": "Latent",
+   "en": "One problem remains: you can't take the gradient of a coin toss. <bookmark mark='a'/> So move the randomness: the encoder outputs a mean and a spread, and the code is the mean plus the spread times fresh noise. <bookmark mark='b'/> The noise is now just an input, and gradients flow back into the encoder: the reparameterization trick. <bookmark mark='c'/> For Gaussians, the KL term has a closed form. <bookmark mark='d'/> Diederik Kingma and Max Welling published this in December 2013, and Danilo Rezende, Shakir Mohamed and Daan Wierstra, independently, weeks later: the variational autoencoder.",
+   "zh": "还剩一个问题：你没法对掷硬币求梯度。<bookmark mark='a'/>所以把随机性挪个地方：编码器输出一个均值和一个幅度，编码等于均值加上幅度乘以一份新抽的噪声。<bookmark mark='b'/>现在噪声只是一个输入，梯度可以流回编码器：这就是重参数化技巧。<bookmark mark='c'/>对高斯分布来说，KL项有闭式解。<bookmark mark='d'/>2013年12月，Diederik Kingma和Max Welling发表了这个方法；几周之后，Danilo Rezende、Shakir Mohamed和Daan Wierstra独立地发表了同样的方法：这就是变分自编码器。"
+  },
+  "62cec6e9ec4a": {
+   "scene": "Latent",
+   "en": "Ours has a sixteen-number code, and a decoder that gives every pixel a bell-shaped distribution cut into the sixteen grey levels: 852,392 parameters. <bookmark mark='a'/> So its bound is in the PixelCNN's units, bits per pixel.",
+   "zh": "我们的VAE有一个16个数的编码，它的解码器给每个像素一个钟形分布，切成16个灰度级：一共852392个参数。<bookmark mark='a'/>所以它的下界和PixelCNN用的是同一个单位，每像素比特数。"
+  },
+  "58cc14d4e869": {
+   "scene": "VAE",
+   "en": "Chapter four. Training a VAE: rate, distortion, and collapse.",
+   "zh": "第4章。训练VAE：码率、失真与坍缩。"
+  },
+  "8559d7041ecf": {
+   "scene": "VAE",
+   "en": "Here is our VAE learning: the bound's two terms, in nats per held-out digit. <bookmark mark='a'/> At first reconstruction costs 303 nats and the rate is 0.0: the codes say nothing. <bookmark mark='b'/> Then the rate climbs and the reconstructions sharpen: accuracy bought with information. <bookmark mark='c'/> By the end the code carries 12.8 nats and the decoder needs 133; the bound is 1.08 bits per pixel, and a tighter one, with 64 codes per digit, 1.05. <bookmark mark='d'/> The samples are recognizable digits, and only 6 of the sixteen code numbers carry information. Remember that.",
+   "zh": "这是我们的VAE在学习：下界的两项，单位是每个留出数字的奈特数。<bookmark mark='a'/>一开始，重建要花303奈特，码率是0.0：编码什么也没说。<bookmark mark='b'/>然后码率上升，重建变得清晰：准确是用信息换来的。<bookmark mark='c'/>到最后，编码携带12.8奈特，解码器还需要133；下界是每像素1.08比特，而每个数字用64个编码得到的更紧的下界是1.05。<bookmark mark='d'/>样本是认得出的数字，而16个编码数里只有6个携带信息。记住这一点。"
+  },
+  "294c0575022c": {
+   "scene": "VAE",
+   "en": "What does the code learn? With two numbers per digit we can watch: each dot is a held-out digit at its code, coloured by its label. <bookmark mark='a'/> The encoder spreads them out, and digits of a kind gather, though nobody told it the labels, while the KL term keeps the cloud near the origin. <bookmark mark='b'/> Decode an even grid of codes, and you get the model's map of digits, with smooth blends between regions.",
+   "zh": "编码学到了什么？每个数字只用两个数，我们就能看见：每个点是一个留出数字，放在它的编码处，按它的标签上色。<bookmark mark='a'/>编码器把它们铺开，同一种数字聚到了一起，尽管没有人告诉它标签；KL项则让整团点留在原点附近。<bookmark mark='b'/>把一个均匀的编码网格解码出来，就得到模型的数字地图，各个区域之间是平滑的过渡。"
+  },
+  "6e73b36cb164": {
+   "scene": "VAE",
+   "en": "The two terms pull against each other; weight the KL by beta, and you have Irina Higgins's beta-VAE. <bookmark mark='a'/> We trained six betas, from 0.25 to 8, two seeds each: each dot is a run, its rate against its distortion. <bookmark mark='b'/> Every step up in beta lowers the rate and raises the distortion: one curve, information theory's rate-distortion trade-off. At beta 0.25 the code carries 24 nats with 16 active numbers; at 8, 0 nats with 0. <bookmark mark='c'/> A large beta gives smooth, generic digits: the code no longer pins down the details.",
+   "zh": "这两项互相拉扯；给KL项乘上一个权重β，就得到Irina Higgins的β-VAE。<bookmark mark='a'/>我们训练了6个β值，从0.25到8，每个两个种子：每个点是一次训练，它的码率对比它的失真。<bookmark mark='b'/>β每升高一级，码率就降低、失真就升高：这些训练连成了一条曲线，也就是信息论里的码率-失真权衡。β为0.25时，编码携带24奈特，有16个活跃的编码数；β为8时，是0奈特和0个。<bookmark mark='c'/>大的β给出平滑、千篇一律的数字：编码已经不再确定细节了。"
+  },
+  "08302149d83d": {
+   "scene": "VAE",
+   "en": "Switched-off code numbers have a name, posterior collapse, and we can make it happen. A VAE on the moons, with a decoder that predicts x one and x two separately from the code: <bookmark mark='a'/> to get the moons' shape it must use the code, and its rate settles at 2.27 nats per point. <bookmark mark='b'/> Now give the decoder chapter two's power: x two from the code and x one. <bookmark mark='c'/> The rate falls to 0.000 nats, in every seed: the code has collapsed, every point encoded as the same blob, and the decoder models the moons alone.",
+   "zh": "被关掉的编码数有个名字，叫后验坍缩，而我们可以让它发生。在双月上训练一个VAE，它的解码器分别从编码预测x1和x2：<bookmark mark='a'/>要得到双月的形状，它就必须用上编码，它的码率稳定在每个点2.27奈特。<bookmark mark='b'/>现在把第2章的本事交给解码器：用编码和x1来预测x2。<bookmark mark='c'/>码率降到了0.000奈特，每个种子都是：编码坍缩了，每个点都被编码成同一团东西，解码器独自建模了双月。"
+  },
+  "c470b62e0fe1": {
+   "scene": "VAE",
+   "en": "The code costs rate, and a decoder that can model the data alone gets nothing for it. Samuel Bowman and colleagues hit this in 2016, with a VAE for sentences. <bookmark mark='a'/> With a PixelCNN decoder, the rate sinks to 1.3 nats per digit, against 13.0 for the plain VAE: the decoder can draw a digit by itself. <bookmark mark='b'/> Decode a hundred test digits' codes four times each: only 12 percent of the results match the encoded digit. <bookmark mark='c'/> Free bits, a floor of 1.0 nats per code number, keep 14.9 nats in the code, and 32 percent match. The cure: make the code worth its cost.",
+   "zh": "编码要付码率，而一个能独自建模数据的解码器，从编码里什么也得不到。2016年，Samuel Bowman和同事在一个生成句子的VAE上撞上了这个问题。<bookmark mark='a'/>用PixelCNN做解码器，码率沉到了每个数字1.3奈特，而普通VAE是13.0：解码器自己就能画出一个数字。<bookmark mark='b'/>把一百个测试数字的编码各解码四次：结果里只有12%和被编码的数字相同。<bookmark mark='c'/>自由比特，也就是每个编码数1.0奈特的下限，能让编码里留住14.9奈特，解码出的数字有32%和来源相符。疗法是：让编码值得上它的代价。"
+  },
+  "f09b75b7b98d": {
+   "scene": "VAE",
+   "en": "One more thing: on the ring, the VAE spreads samples into the gaps; only 27 percent land within three standard deviations of a mode. <bookmark mark='a'/> A smooth code blurs whatever is sharp: the VAE's famous softness. <bookmark mark='b'/> The fixes became whole lines of work: deeper codes, discrete codes, and the autoencoder in front of every latent diffusion model.",
+   "zh": "还有一点：在环上，VAE把样本撒进了空隙里；只有27%落在某个峰的三倍标准差以内。<bookmark mark='a'/>一个平滑的编码，会把一切锐利的东西都模糊掉：这就是VAE出了名的柔和。<bookmark mark='b'/>修正它的办法，各自成了一整条研究路线：更深的编码、离散的编码，以及每个潜在扩散模型前端的那个自编码器。"
+  },
+  "3344ceff5e32": {
+   "scene": "Game",
+   "en": "Chapter five. The adversarial game.",
+   "zh": "第5章。对抗博弈。"
+  },
+  "627275d82f80": {
+   "scene": "Game",
+   "en": "The third answer throws the likelihood away. In 2014 Ian Goodfellow and colleagues in Yoshua Bengio's lab set two networks against each other. <bookmark mark='a'/> A generator turns noise into a sample, never seeing the data. <bookmark mark='b'/> A discriminator outputs the probability that a sample is real. <bookmark mark='c'/> One learns to tell them apart, the other to fool it: counterfeiters against the police, in the paper's words. As one value: the discriminator maximizes its log-probability of being right, the generator minimizes it.",
+   "zh": "第三个答案把似然扔掉了。2014年，伊恩·古德费洛和约书亚·本吉奥实验室的同事，让两个网络互相对抗。<bookmark mark='a'/>生成器把噪声变成一个样本，从来看不到数据。<bookmark mark='b'/>判别器输出一个样本是真的的概率。<bookmark mark='c'/>一个学着分辨两者，另一个学着骗过它：用论文里的话说，是造假币的人对抗警察。写成一个值：判别器最大化它判断正确的对数概率，生成器则最小化它。"
+  },
+  "b8662a2f7189": {
+   "scene": "Game",
+   "en": "What does a winning discriminator learn? Write the value as an integral, with q for the generator's distribution. <bookmark mark='a'/> At each x it picks one number, D of x, to maximize a log D plus b log one minus D: set the derivative to zero. <bookmark mark='b'/> The best discriminator is p over p plus q, the data's share of the probability at x. <bookmark mark='c'/> Real where the data dominates, fake where the generator does, one half where they agree.",
+   "zh": "一个获胜的判别器学到的是什么？把这个值写成一个积分，用q表示生成器的分布。<bookmark mark='a'/>在每个x上，它选一个数D(x)，去最大化a乘log D加上b乘log(1减D)：令导数为零。<bookmark mark='b'/>最好的判别器是p除以p加q，也就是x处的概率里属于数据的那一份。<bookmark mark='c'/>数据占主导的地方说真，生成器占主导的地方说假，两者相当的地方说一半。"
+  },
+  "1b3932f1adb0": {
+   "scene": "Game",
+   "en": "Put the best discriminator back. <bookmark mark='a'/> Halve p plus q inside each log, and two KL divergences appear, to the average m, minus log four. <bookmark mark='b'/> Together: the Jensen-Shannon divergence, symmetric, at most log two, zero exactly when q equals p. <bookmark mark='c'/> Against a perfect critic, the generator minimizes a divergence without ever writing down a density: the 2014 paper's theorem. Whether training finds that minimum is the rest of this chapter and the next.",
+   "zh": "把最好的判别器代回去。<bookmark mark='a'/>在每个对数里把p加q减半，就出现了两个到平均m的KL散度，再减去log 4。<bookmark mark='b'/>合起来，就是詹森-香农散度：对称，最大为log 2，并且恰好在q等于p时为零。<bookmark mark='c'/>面对一个完美的评论家，生成器在最小化一个散度，却从来不需要写下一个密度：这就是2014年那篇论文的定理。训练能不能找到这个最小值，是本章余下部分和下一章的内容。"
+  },
+  "273d329fbef8": {
+   "scene": "Game",
+   "en": "The first practical problem appears on day one: the fakes are bad, and D of G of z sits near zero. <bookmark mark='a'/> There the minimax loss is flat, and the generator gets almost no gradient. <bookmark mark='b'/> Goodfellow's fix, in the same paper: maximize the probability of fooling, minus log D, steep where the other is flat. <bookmark mark='c'/> Measured on the ring, in the first steps, the two gradients are within a factor of 1.3: our discriminator never gets confident enough, early on, for the difference to bite. <bookmark mark='d'/> The fix has a cost, found by Martin Arjovsky and Léon Bottou in 2017: its gradient is that of a reverse KL divergence minus the Jensen-Shannon term, and reverse KL barely penalizes missing a mode.",
+   "zh": "第一个实际问题，在第一天就出现了：假样本很差，D(G(z))停在零附近。<bookmark mark='a'/>在那里，极小极大损失是平的，生成器几乎得不到梯度。<bookmark mark='b'/>古德费洛在同一篇论文里的修正是：最大化骗过对方的概率，也就是负log D，它在另一个平的地方很陡。<bookmark mark='c'/>在环上测量，最初几步里，两者的梯度相差不到1.3倍：我们的判别器在早期从来没有自信到让这个差别显现出来。<bookmark mark='d'/>这个修正有代价，2017年由Martin Arjovsky和Léon Bottou发现：它的梯度，是一个反向KL散度减去詹森-香农项的梯度，而反向KL几乎不惩罚漏掉一个峰。"
+  },
+  "0ab8169da8a8": {
+   "scene": "Game",
+   "en": "Here is that cost on the ring: the discriminator's verdict as the background, bright for real, and the generator's samples from three hundred fixed noise vectors. This is seed 4, the run of five that ended with the fewest modes; 2 of the five collapsed to some degree. <bookmark mark='a'/> Its samples bunch into one clump, on a mode or between modes, and the clump hops from mode to mode: the generator chases the places where the discriminator is weakest, and the discriminator follows. <bookmark mark='b'/> This is mode collapse: a generator that makes only a few kinds of thing. <bookmark mark='c'/> Over five seeds, the non-saturating GAN covers 5.6 of the eight modes on average, all eight in 3; the minimax loss covers 8.0, all eight in 5. Adam rescales its small gradients, and the reverse KL shows.",
+   "zh": "这就是那个代价在环上的样子：背景是判别器的判决，说真的地方亮；点是生成器从300个固定噪声向量画出的样本。这是种子4，五次训练里最后覆盖的峰最少的那一次；五次里有2次在不同程度上坍缩了。<bookmark mark='a'/>它的样本挤成一团，有时落在一个峰上，有时落在峰与峰之间，而这一团从一个峰跳到另一个峰：生成器追着判别器最薄弱的地方跑，判别器跟着追过去。<bookmark mark='b'/>这就是模式坍缩：一个生成器只会做几种东西。<bookmark mark='c'/>五个种子里，非饱和GAN平均覆盖八个峰中的5.6个，有3次覆盖了全部八个；极小极大损失平均覆盖8.0个，全部八个的有5次。Adam会把极小极大损失那些小的梯度重新放大，于是反向KL的影响就显露出来了。"
+  },
+  "a0518f7f411d": {
+   "scene": "Dynamics",
+   "en": "Chapter six. Why GANs spiral.",
+   "zh": "第6章。GAN为什么会绕圈。"
+  },
+  "252a93385744": {
+   "scene": "Dynamics",
+   "en": "The smallest game: one player picks x and wants x times y small, the other picks y and wants it large. <bookmark mark='a'/> Each follows its own gradient: x moves by minus y, y by plus x. <bookmark mark='b'/> Draw those velocities: no downhill anywhere, only turning. <bookmark mark='c'/> The Jacobian's eigenvalues are plus and minus i, pure rotation. Gradient descent was built for valleys; a game can be a whirlpool.",
+   "zh": "最小的博弈：一个玩家选x，想让x乘y小；另一个选y，想让它大。<bookmark mark='a'/>各自沿着自己的梯度走：x按负y移动，y按正x移动。<bookmark mark='b'/>把这些速度画出来：哪里都没有下坡，只有转动。<bookmark mark='c'/>雅可比矩阵的特征值是正负i，纯粹的旋转。梯度下降是为山谷造的；而一场博弈可以是一个漩涡。"
+  },
+  "83923ee86ab4": {
+   "scene": "Dynamics",
+   "en": "Take real steps, both players at once, step size eta: each step multiplies by this matrix. <bookmark mark='a'/> Its eigenvalues have size root one plus eta squared, more than one. <bookmark mark='b'/> So simultaneous steps spiral out: after 60 steps the radius has grown 3.2 times. <bookmark mark='c'/> Taking turns closes the spiral into an orbit; its radius ends at 0.96. <bookmark mark='d'/> To converge, look ahead: extragradient steps with the gradient at a trial point, optimistic descent extrapolates the last one. Both spiral in, to 0.31 and 0.29.",
+   "zh": "真正走几步，两个玩家同时走，步长为η：每一步都乘以这个矩阵。<bookmark mark='a'/>它的特征值大小是1加η平方的平方根，大于1。<bookmark mark='b'/>所以同时的步子盘旋向外：走了60步之后，半径变成了原来的3.2倍。<bookmark mark='c'/>轮流走，螺旋就闭合成一条轨道；它的半径最后是0.96。<bookmark mark='d'/>要收敛，就得往前看：外梯度法用一个试探点上的梯度走步，乐观梯度下降则根据上一步做外推。两者都盘旋着向内收，分别收到0.31和0.29。"
+  },
+  "e1e23a1d15c3": {
+   "scene": "Dynamics",
+   "en": "Real GANs do this. Lars Mescheder, Andreas Geiger and Sebastian Nowozin boiled one down to two numbers: data at zero, the generator at theta, a discriminator with slope psi. <bookmark mark='a'/> Around the equilibrium, the same rotation. <bookmark mark='b'/> Simultaneous steps spiral out; <bookmark mark='c'/> alternating steps circle. <bookmark mark='d'/> Their fix penalizes the discriminator's gradient on real data, here gamma over two psi squared: friction, and the spiral winds in. StyleGAN trains with this penalty, R1.",
+   "zh": "真实的GAN也会这样。Lars Mescheder、Andreas Geiger和Sebastian Nowozin把一个GAN简化成两个数：数据在零处，生成器在θ处，判别器是一条斜率为ψ的直线。<bookmark mark='a'/>在均衡点周围，是同样的旋转。<bookmark mark='b'/>同时走的步子盘旋向外；<bookmark mark='c'/>轮流走的步子绕圈。<bookmark mark='d'/>他们的修正是惩罚判别器在真实数据上的梯度，在这里就是γ的一半乘ψ平方：这是摩擦，螺旋于是向内收。StyleGAN训练时用的正是这个惩罚，R1。"
+  },
+  "06496347d3ad": {
+   "scene": "Dynamics",
+   "en": "Back to the ring: each row a mode, each column a checkpoint, brightness the generator's samples there. <bookmark mark='a'/> Over training the generator visits 8 of the modes, but never more than 1 at once; at the end it covers 1. The bands wander from mode to mode: the toy game's rotation, in a space of distributions. <bookmark mark='b'/> The field fought it with penalties, look-ahead steps, separate learning rates, and spectral normalization.",
+   "zh": "回到环上：每一行是一个峰，每一列是一个检查点，亮度表示生成器落在那里的样本。<bookmark mark='a'/>训练过程中，生成器到过8个峰，但同时最多只覆盖1个；最后它覆盖了1个。亮带从一个峰游荡到另一个峰：这是那个玩具博弈的旋转，发生在由分布构成的空间里。<bookmark mark='b'/>这个领域用惩罚项、往前看的步子、不同的学习率和谱归一化来对付它。"
+  },
+  "28c26f8e78b7": {
+   "scene": "Wasserstein",
+   "en": "Chapter seven. Wasserstein GANs.",
+   "zh": "第7章。瓦瑟斯坦GAN。"
+  },
+  "ea6f68eced8f": {
+   "scene": "Wasserstein",
+   "en": "Martin Arjovsky, Soumith Chintala and Léon Bottou asked what Jensen-Shannon does when distributions don't overlap, the normal case for images. Their example: the data a segment at x equals zero, the model the same segment at theta. <bookmark mark='a'/> For any theta but zero, JS is log two: flat, no gradient, no sign that theta is getting closer. <bookmark mark='b'/> Discriminators trained at seventeen values of theta stay within 0.00 of log two. <bookmark mark='c'/> A distance that measures how far the mass must move gives a V whose slope points home; a trained critic puts it at 0.52 for theta 0.50.",
+   "zh": "Martin Arjovsky、Soumith Chintala和Léon Bottou问：当两个分布不重叠时，詹森-香农散度会怎样？这对图像来说是常态。他们的例子：数据是x等于零处的一条线段，模型是θ处的同一条线段。<bookmark mark='a'/>只要θ不为零，JS就是log 2：平的，没有梯度，看不出θ正在靠近。<bookmark mark='b'/>在17个θ值上训练的判别器，估计值都在log 2的0.00以内。<bookmark mark='c'/>一个衡量质量要搬多远的距离，给出一个V字形，斜率指向家；训练出来的评论家在θ等于0.50处，把它估计为0.52。"
+  },
+  "ac5a82b3fde4": {
+   "scene": "Wasserstein",
+   "en": "That is the earth mover's distance: p a pile of sand, q a hole of the same volume. <bookmark mark='a'/> A transport plan says how much sand goes where; its cost is mass times distance. <bookmark mark='b'/> Wasserstein-1 is the cheapest plan's cost. Gaspard Monge posed the problem in 1781; Leonid Kantorovich gave its modern form in 1942.",
+   "zh": "这就是推土机距离：把p想成一堆沙子，q想成一个同样体积的坑。<bookmark mark='a'/>一个运输方案规定多少沙子运到哪里；它的代价是质量乘以距离。<bookmark mark='b'/>瓦瑟斯坦-1距离，就是最便宜的方案的代价。加斯帕尔·蒙日在1781年提出了这个问题；列昂尼德·康托罗维奇在1942年给出了它的现代形式。"
+  },
+  "51ae0b896394": {
+   "scene": "Wasserstein",
+   "en": "Cheapest plans between image distributions are hopeless to compute, but by Kantorovich and Rubinstein's duality the distance is also the largest gap in expectation that a function of slope at most one can open between p and q. <bookmark mark='a'/> So a critic f, with any real output, learns to open the gap, and the generator to close it. <bookmark mark='b'/> The hard part is the slope limit; the first Wasserstein GAN clipped every weight. <bookmark mark='c'/> Ishaan Gulrajani and colleagues saw that the optimal critic has slope exactly one between real and fake points, and penalized deviations there: WGAN-GP.",
+   "zh": "在图像的分布之间求最便宜的方案，是没有希望算出来的；但根据康托罗维奇和鲁宾斯坦的对偶，这个距离也等于一个斜率不超过1的函数在p和q之间所能拉开的最大期望差距。<bookmark mark='a'/>所以，一个输出可以是任意实数的评论家f，学着拉开这个差距，而生成器学着缩小它。<bookmark mark='b'/>难处在于斜率的限制；第一版瓦瑟斯坦GAN把每个权重都截断了。<bookmark mark='c'/>Ishaan Gulrajani和同事注意到，最优评论家在真假点之间的斜率恰好是1，于是就在那里惩罚斜率的偏离：这就是WGAN-GP。"
+  },
+  "9c301de2972d": {
+   "scene": "Wasserstein",
+   "en": "Back to the ring, same networks, same generator steps. The background is now the critic, a landscape high where the data is. <bookmark mark='a'/> The samples climb it toward the modes. <bookmark mark='b'/> Over five seeds, WGAN-GP covers 8.0 of the eight modes on average, against 5.6 for the non-saturating GAN and 8.0 for the minimax one: here the distance doesn't buy coverage. <bookmark mark='c'/> And 67 percent of its samples sit within three standard deviations of a mode.",
+   "zh": "回到环上，同样的网络，同样多的生成器步数。背景现在是评论家，一片在数据所在处高起的地形。<bookmark mark='a'/>样本沿着它往上爬，爬向各个峰。<bookmark mark='b'/>五个种子里，WGAN-GP平均覆盖八个峰中的8.0个，而非饱和GAN是5.6个，极小极大GAN是8.0个：在这里，距离并没有换来覆盖。<bookmark mark='c'/>它的样本里有67%落在某个峰的三倍标准差以内。"
+  },
+  "317cd04e9afc": {
+   "scene": "Wasserstein",
+   "en": "The cure has a price: five critic updates per generator step, each penalty needing a second backward pass. <bookmark mark='a'/> Counted on our digit models, a WGAN-GP step costs 5.4 GAN steps, <bookmark mark='b'/> so on one budget the GAN takes 16,380 generator steps and WGAN-GP 3,011. Chapter fifteen shows what that buys.",
+   "zh": "这个疗法有代价：每走一步生成器，评论家要更新五次，而每个惩罚项都要多做一次反向传播。<bookmark mark='a'/>在我们的数字模型上数下来，WGAN-GP的一步相当于GAN的5.4步，<bookmark mark='b'/>所以在同一份预算下，GAN走了16380步生成器，WGAN-GP走了3011步。第15章会看到这换来了什么。"
+  },
+  "e60529983715": {
+   "scene": "Scale",
+   "en": "Chapter eight. GANs at scale: BigGAN, StyleGAN, and inversion.",
+   "zh": "第8章。规模化的GAN：BigGAN、StyleGAN与反演。"
+  },
+  "57a7b2922e4d": {
+   "scene": "Scale",
+   "en": "First, ours: two-layer networks on the digits, and what the generator draws from sixteen fixed noise vectors. <bookmark mark='a'/> Blobs, then strokes, then digits. <bookmark mark='b'/> The two losses don't fall like a learning curve; they balance. The discriminator's loss ends at 0.80, below two log two: it still tells most fakes from real digits. Nothing here says when the generator is good, one reason GANs needed chapter fourteen's measuring sticks.",
+   "zh": "先看我们的：数字上的两层网络，以及生成器从16个固定噪声向量画出的东西。<bookmark mark='a'/>先是团块，然后是笔画，然后是数字。<bookmark mark='b'/>两个损失不像学习曲线那样下降；它们在相互平衡。判别器的损失最后是0.80，低于2 log 2：它仍然能把大多数假样本和真数字分开。这里没有任何东西能说明生成器什么时候变好了，这也是GAN需要第14章那些量尺的一个原因。"
+  },
+  "2419fef60680": {
+   "scene": "Scale",
+   "en": "From there to photographs took four years. <bookmark mark='a'/> In 2015 Alec Radford, Luke Metz and Soumith Chintala found convolutional GANs that trained reliably, whose noise vectors did arithmetic: a smiling woman, minus a woman, plus a man, gave a smiling man. <bookmark mark='b'/> In 2017 Tero Karras and colleagues at NVIDIA grew the networks during training, up to 1024 pixels. <bookmark mark='c'/> In 2018 Andrew Brock, Jeff Donahue and Karen Simonyan scaled a GAN to ImageNet: an Inception score of 166.5 and an FID of 7.4 at 128 pixels, against a previous best of 52.5 and 18.6. <bookmark mark='d'/> And Karras's group rebuilt the generator itself: StyleGAN.",
+   "zh": "从这里到照片，用了四年。<bookmark mark='a'/>2015年，亚历克·拉德福德、卢克·梅茨和苏米斯·钦塔拉找到了能稳定训练的卷积GAN，它们的噪声向量还能做算术：一个微笑的女人，减去一个女人，加上一个男人，得到一个微笑的男人。<bookmark mark='b'/>2017年，英伟达的泰罗·卡拉斯和同事在训练中让网络逐渐长大，一直长到1024像素。<bookmark mark='c'/>2018年，安德鲁·布洛克、杰夫·多纳休和卡伦·西蒙尼扬把GAN扩展到了ImageNet：在128像素上，Inception分数达到166.5，FID达到7.4，而此前的最好成绩是52.5和18.6。<bookmark mark='d'/>卡拉斯的团队则把生成器本身重新做了一遍：这就是StyleGAN。"
+  },
+  "be4ab8a9d658": {
+   "scene": "Scale",
+   "en": "StyleGAN's generator starts not from the noise but from a learned four-pixel constant, upsampled block by block. <bookmark mark='a'/> The noise goes through an eight-layer mapping network to a code w, <bookmark mark='b'/> and w sets each block's style, a scale and shift per channel; fresh noise adds details like freckles. <bookmark mark='c'/> Styles can be mixed, coarse layers from one face, fine ones from another, and straight lines in w's space became meaningful edits.",
+   "zh": "StyleGAN的生成器不从噪声出发，而是从一个学出来的4像素常数出发，一块一块地上采样。<bookmark mark='a'/>噪声先经过一个8层的映射网络，变成一个编码w，<bookmark mark='b'/>再由w设定每一块的风格，也就是每个通道的一个缩放和一个平移；新加入的噪声则添上雀斑之类的细节。<bookmark mark='c'/>风格可以混合，粗的层取自一张脸，细的层取自另一张；而在w的空间里走直线，成了有意义的编辑。"
+  },
+  "5d77e1e3aab1": {
+   "scene": "Scale",
+   "en": "BigGAN's truncation trick: at sampling time, resample any noise coordinate larger than t, keeping the generator near the middle of what it learned. <bookmark mark='a'/> On our GAN, with chapter fourteen's precision and recall: <bookmark mark='b'/> at t of 0.25, precision 0.92 and recall 0.00; untruncated, 0.73 and 0.28. Fidelity bought with variety. <bookmark mark='c'/> The FID, which mixes both, is best with no truncation at all.",
+   "zh": "BigGAN的截断技巧：采样时，任何大于t的噪声坐标都重新抽取，让生成器待在它所学内容的中间地带。<bookmark mark='a'/>在我们的GAN上，用第14章的精确率和召回率来看：<bookmark mark='b'/>t等于0.25时，精确率0.92，召回率0.00；不截断时，是0.73和0.28。用多样性换来了逼真度。<bookmark mark='c'/>把两者混在一起的FID，在完全不截断时最好。"
+  },
+  "6b8aac8ba318": {
+   "scene": "Scale",
+   "en": "A GAN has no encoder: to edit a real photograph, first find the noise that would produce it, by gradient descent on the difference between G of z and the image. That's GAN inversion. <bookmark mark='a'/> Eight unseen test digits, four random starts each, the best kept, 400 steps. <bookmark mark='b'/> Their average squared error per pixel is 0.028, against 0.027 for the VAE's encoder in one pass: the GAN's range doesn't quite contain these digits. <bookmark mark='c'/> A line between two found codes morphs one digit into the other; in StyleGAN's w space this became photo editing, from iGAN in 2016 to DragGAN in 2023.",
+   "zh": "GAN没有编码器：要编辑一张真实照片，得先找到能产生它的噪声，方法是对G(z)和这张图像之间的差做梯度下降。这就是GAN反演。<bookmark mark='a'/>八个没见过的测试数字，每个从四个随机起点出发，保留最好的，走400步。<bookmark mark='b'/>它们每个像素的平均平方误差是0.028，而VAE的编码器一遍就是0.027：GAN能生成的范围，并不完全包含这些数字。<bookmark mark='c'/>在两个找到的编码之间连一条线，一个数字就会渐变成另一个；在StyleGAN的w空间里，这成了照片编辑，从2016年的iGAN到2023年的DragGAN。"
+  },
+  "29d75ec46839": {
+   "scene": "Flows",
+   "en": "Chapter nine. Normalizing flows.",
+   "zh": "第9章。归一化流。"
+  },
+  "bd0daa705505": {
+   "scene": "Flows",
+   "en": "The fourth answer keeps the likelihood exact and sampling one pass: push simple noise z through an invertible function g. <bookmark mark='a'/> Where g stretches, probability thins; where it squeezes, it piles up. <bookmark mark='b'/> Probability is conserved, interval by interval. <bookmark mark='c'/> So the density of x is that of its z, times how much the inverse map shrinks a small interval; <bookmark mark='d'/> in many dimensions, the inverse map's Jacobian determinant. The likelihood is exact. Esteban Tabak and Eric Vanden-Eijnden described such flows in 2010; Danilo Rezende and Shakir Mohamed brought them to deep learning in 2015.",
+   "zh": "第四个答案既保留精确的似然，又只需一遍就能采样：把简单的噪声z推过一个可逆函数g。<bookmark mark='a'/>g拉伸的地方，概率就摊薄；g压缩的地方，概率就堆积起来。<bookmark mark='b'/>概率是守恒的，一段区间一段区间地守恒。<bookmark mark='c'/>所以x的密度，等于它的z的密度，乘以逆映射把一小段区间缩小了多少；<bookmark mark='d'/>在多维里，就是逆映射的雅可比行列式。似然是精确的。2010年Esteban Tabak和Eric Vanden-Eijnden描述了这样的流；2015年Danilo Rezende和Shakir Mohamed把它带进了深度学习。"
+  },
+  "3bcfb757adb2": {
+   "scene": "Flows",
+   "en": "The catch is the determinant, d cubed operations for a d by d Jacobian. Laurent Dinh, with Yoshua Bengio, found a way around it. Split the variables in two; <bookmark mark='a'/> copy the first half; <bookmark mark='b'/> scale and shift the second by amounts s and t that any network computes from the first. <bookmark mark='c'/> The Jacobian is triangular, so the log-determinant is just the sum of the s's. <bookmark mark='d'/> The inverse is as cheap: subtract t, divide by e to the s. <bookmark mark='e'/> Ours agrees with autograd's full determinant to within ten to the minus 4 nats. Stack such layers, alternating halves, and the flow can bend anything.",
+   "zh": "麻烦在于行列式：一个d乘d的雅可比矩阵要花d的三次方次运算。Laurent Dinh和约书亚·本吉奥找到了一条绕过去的路。把变量分成两半；<bookmark mark='a'/>前一半原样复制；<bookmark mark='b'/>后一半做缩放和平移，缩放量s和平移量t可以由任意网络从前一半算出来。<bookmark mark='c'/>雅可比矩阵是三角形的，所以对数行列式就是所有s的和。<bookmark mark='d'/>逆变换同样便宜：减去t，再除以e的s次方。<bookmark mark='e'/>我们的结果和自动微分算出的完整行列式相差不到10的负4次方奈特。把这样的层叠起来，轮流换哪一半，流就能把任何东西弯过来。"
+  },
+  "ca770659664f": {
+   "scene": "Flows",
+   "en": "Here is that bending, our eight coupling layers on the moons: a square grid of the noise plane, and noise samples. <bookmark mark='a'/> Each layer slides points along one axis, by amounts set by the other. <bookmark mark='b'/> The grid shears and folds, but never tears or crosses itself. <bookmark mark='c'/> After the eighth, noise has become the moons, and the map read backwards gives each point its exact probability. <bookmark mark='d'/> On the checkerboard, the same layers cut the plane into squares.",
+   "zh": "这就是那种弯曲，来自我们在双月上的8个耦合层：噪声平面上的一个方格网，以及噪声的样本。<bookmark mark='a'/>每一层都沿一个坐标轴滑动这些点，滑动的量由另一个坐标决定。<bookmark mark='b'/>网格被剪切、折叠，却从不撕裂，也从不自相交叉。<bookmark mark='c'/>第8层之后，噪声变成了双月，而把这个映射倒过来读，就给出每个点的精确概率。<bookmark mark='d'/>在棋盘格上，同样的这些层把平面切成了一个个方块。"
+  },
+  "712993911251": {
+   "scene": "Flows",
+   "en": "Training, replayed on the checkerboard. <bookmark mark='a'/> Mass drains from the empty squares into the filled ones. <bookmark mark='b'/> Against each floor, the flow ends 0.03 nats above it on the moons, 0.43 on the ring, 0.25 on the checkerboard. The ring is the hardest: an invertible map can't tear one blob of noise into eight separate islands, so it stretches thin bridges of probability between them.",
+   "zh": "在棋盘格上回放训练。<bookmark mark='a'/>概率质量从空的格子里流出，流进有数据的格子。<bookmark mark='b'/>和每个下限相比，流最后在双月上高出0.03奈特，在环上高出0.43，在棋盘格上高出0.25。环是最难的：一个可逆映射没法把一团噪声撕成八个分开的小岛，所以它在小岛之间拉出了一道道细细的概率之桥。"
+  },
+  "91a2fd80b9d7": {
+   "scene": "Flows",
+   "en": "On digits, here is what our flow draws: <bookmark mark='a'/> noisy strokes; turning the noise down, Glow's trick, makes them cleaner and more alike. <bookmark mark='b'/> In bits per pixel the flow gets 1.13 on held-out digits, against 0.86 for the PixelCNN on the same budget: an exact likelihood, but a worse one; coupling layers spend capacity on staying invertible. <bookmark mark='c'/> After Glow drew faces in 2018, flows trailed for years, until in 2024 Shuangfei Zhai and colleagues at Apple built one from transformer blocks and reported samples comparable to diffusion models.",
+   "zh": "在数字上，这是我们的流画出的东西：<bookmark mark='a'/>带噪声的笔画；把噪声调小，这是Glow的技巧，笔画就更干净，也更彼此相像。<bookmark mark='b'/>在留出数字上，流的每像素比特数是1.13，而在同样预算下，PixelCNN是0.86：似然是精确的，但更差；耦合层把容量花在了保持可逆上。<bookmark mark='c'/>2018年Glow画出人脸之后，流多年落在后面，直到2024年，苹果的Shuangfei Zhai和同事用Transformer模块搭出了一个流，报告的样本可以和扩散模型相比。"
+  },
+  "b4571668f87c": {
+   "scene": "NeuralODE",
+   "en": "Chapter ten. Neural ODEs and continuous flows.",
+   "zh": "第10章。神经ODE与连续流。"
+  },
+  "25ad3dd6e61b": {
+   "scene": "NeuralODE",
+   "en": "A residual network updates its state a little each layer: h plus f of h. <bookmark mark='a'/> That's one Euler step of an ordinary differential equation. <bookmark mark='b'/> Shrink the step to zero, and the state flows along a velocity field a network defines. <bookmark mark='c'/> Ricky Chen, Yulia Rubanova, Jesse Bettencourt and David Duvenaud called these neural ODEs, a best paper at NeurIPS 2018. Run the solver backwards to invert: a flow without coupling layers.",
+   "zh": "残差网络每一层都把它的状态更新一点点：h加上f(h)。<bookmark mark='a'/>这是常微分方程欧拉法的一步。<bookmark mark='b'/>让步长缩到零，状态就沿着一个由网络定义的速度场流动。<bookmark mark='c'/>Ricky Chen、Yulia Rubanova、Jesse Bettencourt和David Duvenaud把它们叫作神经ODE，获得了2018年NeurIPS的最佳论文奖。让求解器倒着跑就能求逆：这是一个不需要耦合层的流。"
+  },
+  "5831f70b3b1b": {
+   "scene": "NeuralODE",
+   "en": "How does density change along the flow? Over one small step, by the last chapter's change of variables. <bookmark mark='a'/> To first order, the determinant of the identity plus a small matrix is one plus its trace. <bookmark mark='b'/> In the limit, the log-density falls at the rate of the field's divergence, the trace of its Jacobian. <bookmark mark='c'/> Integrate along the path: an exact likelihood, with no restriction on the network. <bookmark mark='d'/> But even a trace costs one backward pass per dimension.",
+   "zh": "密度沿着流是怎样变化的？走一小步，用上一章的变量替换。<bookmark mark='a'/>在一阶近似下，单位阵加一个小矩阵的行列式，等于1加上它的迹。<bookmark mark='b'/>取极限，对数密度下降的速率，就是场的散度，也就是它的雅可比矩阵的迹。<bookmark mark='c'/>沿着路径积分：一个精确的似然，对网络没有任何限制。<bookmark mark='d'/>但即使只是迹，每个维度也要花一次反向传播。"
+  },
+  "d5751d8a0923": {
+   "scene": "NeuralODE",
+   "en": "The way out is Hutchinson's trick of 1989: draw a random vector epsilon with mean zero and variance one, and compute epsilon transpose A epsilon. <bookmark mark='a'/> On average, only the diagonal survives: the trace, from one probe and one backward pass. <bookmark mark='b'/> Random signs give less variance than Gaussians, since the diagonal terms never vary; measured at four hundred points of a trained flow, the formulas hold to 2 percent, and the signs' variance is 0.47 times the Gaussians'. <bookmark mark='c'/> FFJORD, in 2019, built on it: in 196 dimensions one probe is 67 times faster than the exact trace, here.",
+   "zh": "出路是1989年的哈钦森技巧：抽一个均值为0、方差为1的随机向量ε，计算ε转置乘A乘ε。<bookmark mark='a'/>平均下来，只有对角线留了下来：这就是迹，只用一个探针、一次反向传播。<bookmark mark='b'/>随机正负号的方差比高斯小，因为对角线上的项从不变化；在一个训练好的流的400个点上测量，公式在2%以内成立，正负号的方差是高斯的0.47倍。<bookmark mark='c'/>2019年的FFJORD就建立在它之上：在196维里，在这台电脑上，一个探针比精确的迹快67倍。"
+  },
+  "b4ba44b78830": {
+   "scene": "NeuralODE",
+   "en": "A continuous flow on the moons, three seeds each way: the exact trace, or one random-sign probe per path, all judged with the exact trace. <bookmark mark='a'/> The two end within 0.01 nats of each other: the noisy estimate trains the flow as well as the exact trace. A run took 133 seconds exactly, 75 with the estimate.",
+   "zh": "在双月上训练连续流，两种方法各三个种子：精确的迹，或每条路径一个随机正负号探针，评判时都用精确的迹。<bookmark mark='a'/>两者最后相差不到0.01奈特：带噪声的估计和精确的迹训练出的流一样好。用精确的迹训练一次花了133秒，用估计花了75秒。"
+  },
+  "12d5da8c4c3d": {
+   "scene": "NeuralODE",
+   "en": "And the flow itself: seven hundred noise points carried by the learned field from time zero to one, over the density at each moment. <bookmark mark='a'/> The cloud stretches, splits and curls into two moons. <bookmark mark='b'/> Training still solves the ODE at every step; Part 21's flow matching learns such fields by regression instead.",
+   "zh": "再看流本身：700个噪声点，被学到的场从时刻0带到时刻1，背景是每个时刻的密度。<bookmark mark='a'/>这团点被拉长、分开，卷成了两弯月亮。<bookmark mark='b'/>训练时每一步仍要解一次ODE；第21部分的流匹配则改用回归来学这样的场。"
+  },
+  "ae419fb9a03a": {
+   "scene": "Hopfield",
+   "en": "Chapter eleven. Hopfield and Boltzmann.",
+   "zh": "第11章。霍普菲尔德与玻尔兹曼。"
+  },
+  "35012bfb945d": {
+   "scene": "Hopfield",
+   "en": "The fifth answer is the oldest. In 1982 the physicist John Hopfield gave a network of plus-or-minus-one neurons, with symmetric connections, an energy. <bookmark mark='a'/> One neuron at a time takes the sign of its input. <bookmark mark='b'/> A flip changes the energy by minus the flip times the input, and the two agree in sign, so the energy only falls: the network settles into a valley. <bookmark mark='c'/> Hebb's rule, from Part 9, makes chosen patterns the valleys: a memory, stored as the bottom of a landscape.",
+   "zh": "第五个答案是最古老的。1982年，物理学家约翰·霍普菲尔德给一个由正负1神经元组成、连接对称的网络定义了一个能量。<bookmark mark='a'/>每次一个神经元取它输入的符号。<bookmark mark='b'/>一次翻转让能量改变负的翻转量乘以输入，而两者符号一致，所以能量只会下降：网络会落进一个山谷。<bookmark mark='c'/>第9部分讲过的赫布规则，让选定的图案成为山谷：一段记忆，存成了一片地形的谷底。"
+  },
+  "54e19afa383d": {
+   "scene": "Hopfield",
+   "en": "Here is one: 196 neurons, one per pixel, one digit stored. <bookmark mark='a'/> Start from that digit with a quarter of its pixels flipped. <bookmark mark='b'/> Neuron by neuron the state slides downhill, the energy falling with every change. <bookmark mark='c'/> It settles on the stored digit exactly. A damaged copy is enough to find the memory.",
+   "zh": "这是一个：196个神经元，每个像素一个，存了一个数字。<bookmark mark='a'/>从这个数字出发，翻转它四分之一的像素。<bookmark mark='b'/>一个神经元接一个神经元，状态往下坡滑，每变一次，能量就降一次。<bookmark mark='c'/>它恰好停在了存储的那个数字上。一份损坏的副本，就足以找回这段记忆。"
+  },
+  "0559a1120f77": {
+   "scene": "Hopfield",
+   "en": "How much can it hold? Store random patterns, recall each from a damaged copy. <bookmark mark='a'/> With 196 neurons, fewer than half come back once there are 0.15 patterns per neuron; Amit, Gutfreund and Sompolinsky's spin-glass theory puts the limit at about 0.138. <bookmark mark='b'/> Digits look alike, overlapping by 0.64 on average, which is worse. Hebb's rule already fails at 3 stored digits, and cues slide into blends of memories.",
+   "zh": "它能存多少？存进随机图案，再从一份损坏的副本回忆每一个。<bookmark mark='a'/>用196个神经元，当每个神经元摊到0.15个图案时，能回来的已经不到一半；Amit、Gutfreund和Sompolinsky的自旋玻璃理论把极限放在大约0.138。<bookmark mark='b'/>数字彼此相像，平均重叠0.64，情况更糟。用赫布规则，存到3个数字时就已经失败了，提示会滑进几段记忆的混合。"
+  },
+  "306ff7ba2e35": {
+   "scene": "Hopfield",
+   "en": "The fix came over thirty years later: Dmitry Krotov and Hopfield sharpened the energy, and Hubert Ramsauer and colleagues wrote the update as compare, softmax, average. <bookmark mark='a'/> With it, our network recalls every digit with up to 4 stored, where Hebb's rule managed 2, and 30 percent of them with all ten stored. <bookmark mark='b'/> That update is attention, from Part 13: the state the query, the memories the keys and values. An attention layer is a Hopfield network taking one step.",
+   "zh": "修正来自三十多年以后：Dmitry Krotov和霍普菲尔德让能量变得更陡，Hubert Ramsauer和同事把更新写成了比较、softmax、平均。<bookmark mark='a'/>用它，我们的网络在最多存4个数字时都能回忆出每一个，而赫布规则只做到2个；存满十个时，仍能回忆出其中的30%。<bookmark mark='b'/>这个更新就是第13部分的注意力：状态是查询，记忆是键和值。一个注意力层，就是一个只走一步的霍普菲尔德网络。"
+  },
+  "f9031583ae01": {
+   "scene": "Hopfield",
+   "en": "In 1985 David Ackley, Geoffrey Hinton and Terrence Sejnowski made the neurons random, so the network samples the Boltzmann distribution of physics: e to the minus energy over temperature, over a normalizer Z. <bookmark mark='a'/> They added hidden units: the machine's own features. <bookmark mark='b'/> The learning rule: measure how often pairs of units are on together with the data clamped, again running free, and strengthen each connection by the difference, until the machine's dreams match the world. <bookmark mark='c'/> The catch: each measurement needs equilibrium, which can take forever. <bookmark mark='d'/> In 2024 Hopfield and Hinton shared the Nobel Prize in Physics, for foundational discoveries and inventions that enable machine learning with artificial neural networks.",
+   "zh": "1985年，David Ackley、杰弗里·辛顿和特伦斯·谢诺夫斯基让神经元变得随机，于是网络按物理学里的玻尔兹曼分布采样：e的负能量除以温度次方，再除以归一化常数Z。<bookmark mark='a'/>他们加入了隐藏单元：机器自己的特征。<bookmark mark='b'/>学习规则是：测量每一对单元在数据钳住时同时打开的频率，再在自由运行时测一次，每个连接按两者之差加强，直到机器的梦和这个世界相符。<bookmark mark='c'/>麻烦在于：每次测量都要达到平衡，而这可能要等到天荒地老。<bookmark mark='d'/>2024年，霍普菲尔德和辛顿分享了诺贝尔物理学奖，获奖理由是“为利用人工神经网络实现机器学习的基础性发现和发明”。"
+  },
+  "0a37101f50b4": {
+   "scene": "RBM",
+   "en": "Chapter twelve. Contrastive divergence.",
+   "zh": "第12章。对比散度。"
+  },
+  "872785bd1640": {
+   "scene": "RBM",
+   "en": "The way out was to restrict the machine: two layers, visible and hidden, connected across but not within; Paul Smolensky's harmonium of 1986, today's restricted Boltzmann machine. <bookmark mark='a'/> One weight matrix couples the layers. <bookmark mark='b'/> Given one layer, the other's units are independent, each a sigmoid of its input. <bookmark mark='c'/> Ours: 196 visible units, our digits in black and white, and sixteen hidden units, for a reason you'll see.",
+   "zh": "出路是给机器加限制：两层，可见层和隐藏层，层间相连，层内不连；这是保罗·斯莫伦斯基1986年的harmonium，今天的受限玻尔兹曼机。<bookmark mark='a'/>一个权重矩阵把两层耦合起来。<bookmark mark='b'/>给定一层，另一层的单元彼此独立，每个都是它输入的sigmoid。<bookmark mark='c'/>我们的这台：196个可见单元，也就是黑白两色的数字，以及16个隐藏单元，原因你马上会看到。"
+  },
+  "71693bc06a11": {
+   "scene": "RBM",
+   "en": "Sum the hidden units out: the log-probability of an image is minus its free energy, minus log Z. <bookmark mark='a'/> The free energy is a sum of softplus terms. <bookmark mark='b'/> The gradient of log Z is an average under the model. <bookmark mark='c'/> So the weights' gradient is the Boltzmann rule: data correlations minus model correlations. <bookmark mark='d'/> The second still needs samples from the model.",
+   "zh": "把隐藏单元求和消掉：一张图像的对数概率，等于负的自由能，再减去log Z。<bookmark mark='a'/>自由能是一串softplus项的和。<bookmark mark='b'/>log Z的梯度，是模型下的一个平均。<bookmark mark='c'/>所以权重的梯度就是玻尔兹曼规则：数据的相关性，减去模型的相关性。<bookmark mark='d'/>第二项仍然需要从模型里采样。"
+  },
+  "334dffb36728": {
+   "scene": "RBM",
+   "en": "Geoffrey Hinton's shortcut, in 2002: start the chain at a training digit, <bookmark mark='a'/> run k steps of Gibbs sampling, a whole layer at a time, <bookmark mark='b'/> and use where it got to. With k equal to one it's biased, but it learns, and fast: contrastive divergence. <bookmark mark='c'/> Tijmen Tieleman, in 2008, kept the chains running between updates: persistent CD.",
+   "zh": "2002年，杰弗里·辛顿的捷径是：让链从一个训练数字出发，<bookmark mark='a'/>跑k步吉布斯采样，一次处理一整层，<bookmark mark='b'/>然后就用它走到的地方。k等于1时它是有偏的，但它能学，而且学得快：这就是对比散度。<bookmark mark='c'/>2008年，Tijmen Tieleman让链在两次更新之间一直跑下去：这就是持续对比散度。"
+  },
+  "160c2775f822": {
+   "scene": "RBM",
+   "en": "Does contrastive divergence maximize the likelihood? Z sums over two to the 196 images, but also over the hidden states, and sixteen hidden units have only sixty-five thousand. <bookmark mark='a'/> So here is the exact held-out log-likelihood, three methods, three seeds each, equal updates. <bookmark mark='b'/> Ranked by where they end: CD-10 at -39.7 nats per digit, then persistent CD at -39.7, and CD-1 at -40.0. <bookmark mark='c'/> One step of the chain is the cheapest estimate of the dreams, and the most biased.",
+   "zh": "对比散度是在最大化似然吗？Z是对2的196次方张图像求和，但也可以对隐藏状态求和，而16个隐藏单元只有6万5千多个状态。<bookmark mark='a'/>所以这是留出数字的精确对数似然：三种方法，各三个种子，更新次数相同。<bookmark mark='b'/>按最后的位置排名：CD-10是每个数字-39.7奈特，接着是持续对比散度，-39.7，然后是CD-1，-40.0。<bookmark mark='c'/>链只走一步，是对梦最便宜、也最有偏的估计：它能学，但学到的不完全是对的东西。"
+  },
+  "e9f544106dad": {
+   "scene": "RBM",
+   "en": "What does it learn? Each hidden unit's weights, as a picture, show what turns it on: forty of a hundred-unit machine's, positive for ink, negative for paper. <bookmark mark='a'/> To dream, run the chain from random pixels: one step, ten, a hundred, a thousand. <bookmark mark='b'/> With sixteen units we can sample the true model exactly, weighing every hidden state. <bookmark mark='c'/> In 2006 Hinton, Simon Osindero and Yee-Whye Teh stacked RBMs into deep belief nets, and deep learning's revival began; six years later backpropagation on GPUs made that unnecessary. The ideas stayed: an energy, and samples drawn by a chain.",
+   "zh": "它学到了什么？把每个隐藏单元的权重画成一张图，就能看出什么会让它打开：这是一台100个单元的机器里的40个，正的对应墨迹，负的对应纸面。<bookmark mark='a'/>要做梦，就从随机像素出发运行链：一步、十步、一百步、一千步。<bookmark mark='b'/>只有16个单元时，我们可以给每个隐藏状态加权，精确地从真实的模型采样。<bookmark mark='c'/>2006年，辛顿、Simon Osindero和Yee-Whye Teh把受限玻尔兹曼机堆成了深度信念网络，深度学习的复兴由此开始；六年后，GPU上的反向传播让这一步变得不再必要。但这些想法留了下来：一个能量，以及由一条链抽出的样本。"
+  },
+  "f3e3da4afe4b": {
+   "scene": "Langevin",
+   "en": "Chapter thirteen. Langevin dynamics and the score.",
+   "zh": "第13章。朗之万动力学与分数函数。"
+  },
+  "211b6e07f007": {
+   "scene": "Langevin",
+   "en": "The general idea: any network with one output is an energy, and e to the minus energy over its integral Z is a density, with no masks, no invertibility, no code. <bookmark mark='a'/> Its gradient has the same two phases: lower the data's energy, raise the model's samples'. <bookmark mark='b'/> In the plane Z can be summed on a grid, so our ring model's likelihood is exact: 0.92 nats, against a floor of 0.31. In 196 dimensions, no grid will do.",
+   "zh": "一般的想法是：任何只有一个输出的网络都是一个能量，e的负能量次方除以它的积分Z就是一个密度，不需要掩码，不需要可逆，也不需要编码。<bookmark mark='a'/>它的梯度有同样的两个阶段：降低数据的能量，抬高模型样本的能量。<bookmark mark='b'/>在平面上，Z可以在网格上求和，所以我们的环模型的似然是精确的：0.92奈特，而下限是0.31。在196维里，任何网格都不管用。"
+  },
+  "5c713a54e26f": {
+   "scene": "Langevin",
+   "en": "Sampling comes from physics: Paul Langevin's 1908 particle, drifting downhill and kicked at random. As an algorithm: step up the log-density, add a little noise, repeat; by Part 5's Fokker-Planck equation, the walk settles into p. <bookmark mark='a'/> The step needs the gradient of log p. <bookmark mark='b'/> Z is a constant, so its gradient vanishes: the normalizer that made training hard is gone from sampling. <bookmark mark='c'/> That gradient is the score, the direction of steepest rise; here, for our ring model, arrows into the eight valleys.",
+   "zh": "采样的办法来自物理：保罗·朗之万1908年的粒子，往下坡漂移，同时被随机地踢来踢去。写成算法：沿着对数密度往上坡走一步，加一点噪声，再重复；根据第5部分的福克-普朗克方程，这个随机游走最终会停在p上。<bookmark mark='a'/>这一步需要log p的梯度。<bookmark mark='b'/>Z是常数，所以它的梯度为零：让训练变难的那个归一化常数，从采样里消失了。<bookmark mark='c'/>这个梯度就是分数函数，上升最快的方向；在我们的环模型上，就是指向八个山谷的箭头。"
+  },
+  "942f90f5b7f8": {
+   "scene": "Langevin",
+   "en": "So train an energy with its own Langevin chains: move a pool of chains 40 steps, lower the energy of real points, raise it where the chains end. Yilun Du and Igor Mordatch made this work for images in 2019. <bookmark mark='a'/> On the ring: valleys open where the data is, the chains fall in, and the energy rises where chains crowd without data. <bookmark mark='b'/> It ends 0.61 nats above the floor.",
+   "zh": "所以，用能量模型自己的朗之万链来训练它：把一池子链各走40步，降低真实点的能量，抬高链停下处的能量。2019年，Yilun Du和Igor Mordatch让这种方法在图像上管用了。<bookmark mark='a'/>在环上：数据所在处出现了山谷，链掉了进去，而在链扎堆却没有数据的地方，能量升了起来。<bookmark mark='b'/>它最后比下限高出0.61奈特。"
+  },
+  "bf3b87064c2e": {
+   "scene": "Langevin",
+   "en": "And sampling: uniform noise, then 240 Langevin steps on each learned energy. <bookmark mark='a'/> The points slide into the valleys and jitter there. <bookmark mark='b'/> On the ring, long chains land on 8, 8 and 8 of the eight modes, in three seeds, needing neither Z nor an inverse: only the score.",
+   "zh": "再看采样：先撒均匀噪声，然后在每个学到的能量上走240步朗之万。<bookmark mark='a'/>点滑进山谷，在那里抖动。<bookmark mark='b'/>在环上，三个种子里，长链分别落在八个峰中的8个、8个和8个上，既不需要Z，也不需要逆映射：只需要分数函数。"
+  },
+  "67249fdd41fc": {
+   "scene": "Langevin",
+   "en": "The catch is the bridge to the next part. Two Gaussians, holding twenty and eighty percent, their score known exactly. <bookmark mark='a'/> Start points uniformly and run Langevin. <bookmark mark='b'/> Each point falls into the nearer valley and stays, so the heavy mode gets 49 percent, set by the start, 49, not the density's eighty: the score is blind to the weights of separated modes. <bookmark mark='c'/> Yang Song and Stefano Ermon's fix, in 2019: blur with heavy noise, where valleys merge, then turn the noise down level by level. Annealing fixes it: 76 percent, close to the truth. <bookmark mark='d'/> On images that needs the score at every noise level, learned by denoising, as Hyvarinen and Vincent showed: diffusion, Part 21. And in 2025 Equilibrium Matching made images by descending a learned energy.",
+   "zh": "这个陷阱正是通向下一部分的桥。两个高斯，分别占20%和80%，分数函数精确已知。<bookmark mark='a'/>均匀地撒下点，运行朗之万。<bookmark mark='b'/>每个点都掉进离它近的那个山谷，然后待在那里，所以重的那个峰得到49%，这是由起点决定的，起点里是49%，而不是密度所说的80%：对于分开的几个峰，分数函数看不到它们的权重。<bookmark mark='c'/>2019年，宋飏和Stefano Ermon的修正是：先用大量噪声把密度模糊掉，让山谷合在一起，然后一级一级地调小噪声。退火修好了它：76%，接近真实值。<bookmark mark='d'/>在图像上，这需要每个噪声水平上的分数函数，而它可以通过去噪学出来，这是Hyvärinen和Vincent证明的：这就是扩散，第21部分。2025年，均衡匹配则通过沿一个学到的能量往下走来生成图像。"
+  },
+  "43f4c2730453": {
+   "scene": "Judging",
+   "en": "Chapter fourteen. Judging a generator.",
+   "zh": "第14章。怎样评判一个生成模型。"
+  },
+  "d5511d2f534a": {
+   "scene": "Judging",
+   "en": "How good is a generative model? Its held-out likelihood isn't enough, as Lucas Theis, Aaron van den Oord and Matthias Bethge showed in 2016: dilute a good model, one sample in a hundred from it, the rest noise. <bookmark mark='a'/> The log-likelihood drops by at most log one hundred, a rounding error on an image. <bookmark mark='b'/> The samples are ninety-nine percent garbage. <bookmark mark='c'/> And GANs have no likelihood at all. So the field judges samples directly.",
+   "zh": "一个生成模型有多好？它在留出数据上的似然并不够，2016年Lucas Theis、Aaron van den Oord和Matthias Bethge说明了这一点：把一个好模型稀释，每一百个样本里只有一个来自它，其余都是噪声。<bookmark mark='a'/>对数似然最多下降log 100，对一张图像来说只是个舍入误差。<bookmark mark='b'/>而样本99%都是垃圾。<bookmark mark='c'/>GAN则根本没有似然。所以这个领域直接评判样本。"
+  },
+  "c10b91edf231": {
+   "scene": "Judging",
+   "en": "The standard since 2017 is the Fréchet Inception Distance, a distance between Gaussians. In one dimension the cheapest move maps quantile to quantile, and the squared Wasserstein distance is the squared gap in means plus the squared gap in spreads. <bookmark mark='a'/> In many dimensions, covariances and a trace of matrix roots: Dowson and Landau, 1982. <bookmark mark='b'/> Martin Heusel and colleagues fitted those Gaussians to the features a trained classifier sees, real against generated. <bookmark mark='c'/> They used Inception, trained on ImageNet; for digits, we use a digit classifier's last hidden layer, 128 numbers, 98.86 percent accurate on the test digits.",
+   "zh": "自2017年以来的标准，是弗雷歇Inception距离，FID，一个高斯之间的距离。在一维里，最便宜的搬法是分位数对分位数，瓦瑟斯坦距离的平方等于均值之差的平方加上幅度之差的平方。<bookmark mark='a'/>在多维里，换成协方差和一个带矩阵平方根的迹：Dowson和Landau，1982年。<bookmark mark='b'/>Martin Heusel和同事把这些高斯拟合到一个训练好的分类器看到的特征上，真实的对比生成的。<bookmark mark='c'/>他们用的是在ImageNet上训练的Inception；对数字，我们用一个数字分类器的最后一个隐藏层，128个数，它在测试数字上的准确率是98.86%。"
+  },
+  "0fb5574d0a0c": {
+   "scene": "Judging",
+   "en": "A check: noise added to real digits raises our FID at every step, from 1.05 to 166.7. A three-by-three blur gives 291.1. <bookmark mark='a'/> A warning: few samples bias FID upward. Real digits against the test set score 14.71 with 100 samples, 1.19 with 2,000, 0.54 with 10,000. <bookmark mark='b'/> So compare at equal sample counts: ours use 2,000, putting a perfect model at about 1.19.",
+   "zh": "先检查一下：给真实数字加噪声，我们的FID随着噪声每升一级而上升，从1.05升到166.7。一个3乘3的模糊得到291.1。<bookmark mark='a'/>再提一个警告：样本少会让FID偏大。真实数字对测试集，用100个样本时是14.71，用2000个时是1.19，用10000个时是0.54。<bookmark mark='b'/>所以只能在样本数相同时比较：我们一律用2000个，这让一个完美模型的得分大约是1.19。"
+  },
+  "28e9ce144202": {
+   "scene": "Judging",
+   "en": "One number can't separate good samples from good coverage. Mehdi Sajjadi and colleagues, then Tuomas Kynkäänniemi and colleagues at NVIDIA, split it in two. <bookmark mark='a'/> Around each real point, a ball out to its third nearest real neighbour: where the data lives. <bookmark mark='b'/> Precision: the share of generated samples inside real balls. <bookmark mark='c'/> Recall: the share of real points inside generated balls. <bookmark mark='d'/> Chapter five's non-saturating GAN, seed zero: precision 0.81, recall 0.91. The two numbers say different things, which is the point of having two.",
+   "zh": "一个数分不开样本好不好和覆盖全不全。Mehdi Sajjadi和同事，以及后来英伟达的Tuomas Kynkäänniemi和同事，把它拆成了两个。<bookmark mark='a'/>在每个真实点周围画一个球，半径到它第三近的真实邻居：这就是数据所在的地方。<bookmark mark='b'/>精确率：落进真实球里的生成样本所占的比例。<bookmark mark='c'/>召回率：落进生成球里的真实点所占的比例。<bookmark mark='d'/>第5章的非饱和GAN，种子0：精确率0.81，召回率0.91。两个数说的是不同的事，这正是要有两个数的原因。"
+  },
+  "abf6ed66b107": {
+   "scene": "Judging",
+   "en": "Every family on the ring, three seeds each. <bookmark mark='a'/> Highest precision: the autoregressive model, 0.97; highest recall: the VAE, 0.99; lowest precision: the VAE, 0.30. <bookmark mark='b'/> And why FID alone is dangerous: one Gaussian blob with the ring's mean and covariance has a Fréchet distance of 0.002, about that between two samples of the ring itself, and a precision of 0.10.",
+   "zh": "每个家族在环上的结果，各三个种子。<bookmark mark='a'/>精确率最高：自回归模型，0.97；召回率最高：VAE，0.99；精确率最低：VAE，0.30。<bookmark mark='b'/>再看为什么只看FID很危险：一个均值和协方差都和环一样的高斯团，弗雷歇距离是0.002，和环自己的两份样本之间差不多，而它的精确率是0.10。"
+  },
+  "7ba0d6cb4e9c": {
+   "scene": "Judging",
+   "en": "No sample metric catches memorization: replaying training digits scores exactly like real data, an FID of 1.05, precision 0.87, recall 0.91. <bookmark mark='a'/> So we check: each sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median 0.111 from theirs. None of our models is copying: their samples are about as far from the training set as real test digits are.",
+   "zh": "没有哪个样本指标能抓住死记硬背：重放训练数字，得分和真实数据一模一样，FID是1.05，精确率0.87，召回率0.91。<bookmark mark='a'/>所以我们直接检查：每个样本最近的训练数字。<bookmark mark='b'/>真实的测试数字离它们最近的训练数字的中位距离是0.111。我们的模型都没有在抄：它们的样本离训练集的距离，和真实测试数字差不多。"
+  },
+  "0146b30e0b8b": {
+   "scene": "Budget",
+   "en": "Chapter fifteen. Five models, one budget.",
+   "zh": "第15章。五个模型，同一份预算。"
+  },
+  "dbc61a32f17a": {
+   "scene": "Budget",
+   "en": "Now the five image models, side by side, on equal terms. Every one got the same budget of arithmetic, six trillion floating-point operations of training, counted operation by operation, and every one was trained from three random starts. <bookmark mark='a'/> Equal arithmetic doesn't mean equal anything else. A convolution reuses its weights at every pixel, so the PixelCNN has the fewest parameters and does the most arithmetic per digit: it saw 99 thousand training digits, while the GAN saw 2.1 million. <bookmark mark='b'/> And the last column is the cost of drawing one sample: one pass for every model except the PixelCNN, which needs 196.",
+   "zh": "现在，五个图像模型并排放在一起，条件对等。每一个都得到同样的算力预算，6万亿次浮点运算的训练，一次一次地数出来；每一个都从三个随机起点训练。<bookmark mark='a'/>算力对等，不等于其他一切都对等。卷积在每个像素上重复使用它的权重，所以PixelCNN的参数最少，而每个数字上的运算最多：它只看了99千个训练数字，而GAN看了2.1百万个。<bookmark mark='b'/>最后一列是抽一个样本的代价：除了PixelCNN需要196遍，每个模型都只要一遍。"
+  },
+  "5b83a5f433b7": {
+   "scene": "Budget",
+   "en": "Here is what each one draws, seed zero, the first sixteen samples, not chosen, beside real digits. <bookmark mark='a'/> Look before reading the numbers: which look sharpest, which most varied, which most like real handwriting? The measurements come next.",
+   "zh": "这是每个模型画出的东西，都是种子0，前16个样本，没有挑选，旁边是真实数字。<bookmark mark='a'/>先看，再读数字：哪个看起来最清晰，哪个最多样，哪个最像真正的手写？测量结果在后面。"
+  },
+  "4d7689f4b67d": {
+   "scene": "Budget",
+   "en": "First, FID: the distance between our classifier's view of the generated digits and of the real ones, two thousand of each. A perfect model would score about 1.05, the line for real digits. <bookmark mark='a'/> The lowest FID belongs to the flow, 28.0, clearly ahead of the next, the VAE at 40.2; last is the GAN, at 53.8. <bookmark mark='b'/> Split in two, the highest precision belongs to the VAE, 0.82, and the highest recall to the flow, 0.84. Each dot is one seed: the spread between seeds is part of the result.",
+   "zh": "第一，FID：我们的分类器眼中生成数字和真实数字之间的距离，各两千个。一个完美的模型大约会得1.05，就是真实数字那条线。<bookmark mark='a'/>FID最低的是流，28.0，明显领先第二名VAE的40.2；最后一名是GAN，53.8。<bookmark mark='b'/>拆成两个数来看，精确率最高的是VAE，0.82；召回率最高的是流，0.84。每个点是一个种子：种子之间的波动，也是结果的一部分。"
+  },
+  "1cf3b3f96b3a": {
+   "scene": "Budget",
+   "en": "Second, likelihood, for the three families that have one, in bits per pixel on held-out digits: exact for the PixelCNN, an upper bound for the VAE and the flow. <bookmark mark='a'/> Best is the PixelCNN, at 0.86 bits per pixel, then the VAE at 1.04, and the flow at 1.13. <bookmark mark='b'/> Compare the FID ranking: it is not the same. Exactly as Theis and his colleagues warned, a model can be good at probability and worse at pictures, or the reverse.",
+   "zh": "第二，似然，只看有似然的那三个家族，单位是留出数字上的每像素比特数：PixelCNN是精确值，VAE和流是上界。<bookmark mark='a'/>最好的是PixelCNN，每像素0.86比特，然后是VAE，1.04，再然后是流，1.13。<bookmark mark='b'/>对比一下FID的排名：它们不一样。正如Theis和同事所警告的，一个模型可以概率算得好，图却画得差，或者反过来。"
+  },
+  "e629b5868a11": {
+   "scene": "Budget",
+   "en": "Third, a coarse but telling check: which digits does each model draw? The classifier labels two thousand samples of each, and real data has each digit about one time in ten. <bookmark mark='a'/> The most uneven is WGAN-GP: its rarest digit, a 1, is only 3.0 percent of its samples, where real data has about ten. The most even is the VAE, whose rarest digit is still 8.2 percent. Mode dropping, at the scale of whole classes, is the easiest failure to see.",
+   "zh": "第三，一个粗略但很说明问题的检查：每个模型画的是哪些数字？分类器给每个模型的两千个样本打上标签，而真实数据里，每个数字大约占十分之一。<bookmark mark='a'/>最不均匀的是WGAN-GP：它最少见的数字是1，只占它样本的3.0%，而真实数据里大约是10%。最均匀的是VAE，它最少见的数字也还有8.2%。在整个类别这个尺度上的模式丢失，是最容易看出来的失败。"
+  },
+  "317423052d79": {
+   "scene": "Budget",
+   "en": "So, at this small scale and on one budget, who won what? <bookmark mark='a'/> every model wins something, and none wins everything. <bookmark mark='b'/> Which is best depends on what the model is for, and on scale: GANs drew the sharpest images for years, at sizes far beyond ours.",
+   "zh": "那么，在这个小尺度、同一份预算下，谁赢了什么？<bookmark mark='a'/>每个模型都赢下了一些东西，没有哪个赢下一切。<bookmark mark='b'/>哪个最好，取决于模型是拿来做什么的，也取决于规模：GAN曾经多年画出最清晰的图像，用的规模远远超过我们的。"
+  },
+  "c2b55fb3ea6c": {
+   "scene": "Meet",
+   "en": "Chapter sixteen. Where the families meet.",
+   "zh": "第16章。几个家族的交汇。"
+  },
+  "ca76bdcdb025": {
+   "scene": "Meet",
+   "en": "For six years GANs drew the sharpest images. In 2021 Prafulla Dhariwal and Alex Nichol, at OpenAI, titled a paper with what happened: diffusion models beat GANs on image synthesis. <bookmark mark='a'/> On ImageNet at 256 pixels, BigGAN-deep had an FID of 6.95; guided diffusion, 4.59. <bookmark mark='b'/> The GAN's precision was the highest, but its recall only 0.28: convincing images of a narrow slice of the world. <bookmark mark='c'/> The reasons are ones this part has met: an objective that charges for every mode missed, a stable regression instead of a game, and a recipe that kept improving as it grew.",
+   "zh": "六年里，GAN画出的图像最清晰。2021年，OpenAI的Prafulla Dhariwal和Alex Nichol用一篇论文的标题说出了发生的事：扩散模型在图像合成上打败了GAN。<bookmark mark='a'/>在256像素的ImageNet上，BigGAN-deep的FID是6.95；带引导的扩散模型是4.59。<bookmark mark='b'/>GAN的精确率最高，但召回率只有0.28：它画出的是世界里一个狭窄切片的逼真图像。<bookmark mark='c'/>原因正是本部分遇到过的那些：一个漏掉每个峰都要付代价的目标，一个稳定的回归而不是一场博弈，以及一个随着规模变大不断改进的配方。"
+  },
+  "7b54c8c10ca4": {
+   "scene": "Meet",
+   "en": "Meanwhile the families combined. In 2017 Aaron van den Oord, Oriol Vinyals and Koray Kavukcuoglu gave the VAE a discrete code. <bookmark mark='a'/> Each encoder vector snaps to the nearest entry of a learned codebook, so an image becomes a grid of integers: tokens. Gradients pass straight through the snap. <bookmark mark='b'/> Over the tokens, a PixelCNN learns the prior. <bookmark mark='c'/> In 2021 VQGAN added a GAN loss to sharpen the decoder and a transformer over the tokens; DALL-E wrote text and image tokens with one transformer. A VAE to make tokens, a GAN to make them look good, an autoregressive model to write them: the front end of today's image systems, opened up in Parts 22 and 23.",
+   "zh": "与此同时，几个家族结合了起来。2017年，Aaron van den Oord、Oriol Vinyals和Koray Kavukcuoglu给VAE配了一个离散编码。<bookmark mark='a'/>编码器的每个向量都吸附到一个学出来的码本里最近的那一项上，于是一张图像变成了一个整数网格：词元。梯度直接穿过这个吸附。<bookmark mark='b'/>在词元之上，一个PixelCNN学出先验。<bookmark mark='c'/>2021年，VQGAN加了一个GAN损失让解码器更清晰，并在词元之上用了一个Transformer；DALL-E用一个Transformer同时写文本词元和图像词元。用VAE做出词元，用GAN让它们好看，再用自回归模型把它们写出来：这就是今天图像系统的前端，第22部分和第23部分会把它打开来看。"
+  },
+  "a0c8e63b98b8": {
+   "scene": "Meet",
+   "en": "We built a small one: each digit becomes a seven-by-seven grid of tokens, each one of 32 codebook entries, and a decoder turns the grid back. <bookmark mark='a'/> The codebook's perplexity is 21.2: that many of its 32 entries are, in effect, in use. <bookmark mark='b'/> Written plainly a grid is 245 bits; a small transformer predicts it in 131. <bookmark mark='c'/> Sampling tokens from the transformer and decoding them draws new digits. Its samples score an FID of 67.4; the best single model of the last chapter scored 28.0, and this one was trained outside that budget.",
+   "zh": "我们做了一个小的：每个数字变成一个7乘7的词元网格，每个词元是32个码本项之一，解码器再把网格变回来。<bookmark mark='a'/>码本的困惑度是21.2：实际上，它的32项里大约有这么多在被使用。<bookmark mark='b'/>直接写下来，一个网格是245比特；一个小Transformer只用131比特就能预测它。<bookmark mark='c'/>从Transformer里采样词元，再解码，就画出了新的数字。它的样本FID是67.4；上一章最好的单一模型是28.0，而这一个是在那份预算之外训练的。"
+  },
+  "15a0128e13f1": {
+   "scene": "Meet",
+   "en": "Reading order is slow, and a strange order for a picture. In 2024 Keyu Tian and colleagues at ByteDance and Peking University predicted not the next token but the next scale. <bookmark mark='a'/> One token for the whole image, then a two-by-two map, then larger maps, each predicted at once given all the coarser ones. <bookmark mark='b'/> On ImageNet at 256 pixels: an FID of 1.73, from 18.65 for raster order, about twenty times faster; a NeurIPS 2024 outstanding paper.",
+   "zh": "阅读顺序很慢，而且对一幅图来说是个奇怪的顺序。2024年，字节跳动和北京大学的Keyu Tian和同事预测的不是下一个词元，而是下一个尺度。<bookmark mark='a'/>先是整张图像的一个词元，然后是一个2乘2的图，然后是更大的图，每一张都在所有更粗的图的条件下一次性预测出来。<bookmark mark='b'/>在256像素的ImageNet上：FID是1.73，而光栅顺序是18.65，快了大约20倍；这是NeurIPS 2024的杰出论文。"
+  },
+  "e43e10f7e566": {
+   "scene": "Meet",
+   "en": "And the GAN didn't die. Diffusion needs dozens of network passes per image; a generator needs one. To get one step back, diffusion models are distilled into generators, and the best distillers use a discriminator. <bookmark mark='a'/> Axel Sauer and colleagues at Stability AI trained SDXL-Turbo, one to four steps, with a GAN loss and a diffusion teacher; then SD3-Turbo, with a discriminator built from a diffusion model. <bookmark mark='b'/> Tianwei Yin and colleagues' DMD2 added a GAN loss on real images: an FID of 1.28 on small ImageNet images, in one step. <bookmark mark='c'/> R3GAN rebuilt the GAN itself with a principled loss. Consistency models reach diffusion quality in two steps, and in 2026 Kaiming He's group trained one-step generators by drifting their samples onto the data: an FID of 1.54 on ImageNet.",
+   "zh": "而GAN并没有死。扩散模型每张图像要过几十遍网络；生成器只要一遍。为了找回一步生成，人们把扩散模型蒸馏成生成器，而最好的蒸馏方法都用了判别器。<bookmark mark='a'/>Stability AI的Axel Sauer和同事，用GAN损失加一个扩散教师，训练出了一到四步出图的SDXL-Turbo；后来又做了SD3-Turbo，它的判别器是用扩散模型搭的。<bookmark mark='b'/>Tianwei Yin和同事的DMD2加了一个作用在真实图像上的GAN损失：在小尺寸的ImageNet图像上，一步就达到了1.28的FID。<bookmark mark='c'/>R3GAN用一个有原则的损失重建了GAN本身。一致性模型两步就达到扩散模型的质量；2026年，何恺明的团队训练出一步生成器，方法是让它们的样本漂移到数据上：在ImageNet上的FID是1.54。"
+  },
+  "d179ff95719a": {
+   "scene": "Meet",
+   "en": "So this is where the four answers, and the fifth, ended up. <bookmark mark='a'/> The VAE and the GAN became the tokenizers and latent spaces that every image and video model starts from. The autoregressive model writes those tokens, a scale or a token at a time. The energy model's score, learned at every noise level, became diffusion, with the VAE's bound inside it. The neural ODE became flow matching. And the GAN's discriminator came back to make diffusion fast. <bookmark mark='b'/> Which is why the next part, diffusion, is built from pieces you have now seen.",
+   "zh": "这就是那四个答案，以及第五个，最后的归宿。<bookmark mark='a'/>VAE和GAN变成了分词器和潜空间，每个图像和视频模型都从它们出发。自回归模型写出那些词元，一次一个尺度，或者一次一个词元。能量模型的分数函数，在每个噪声水平上学出来，就成了扩散，而VAE的下界就在它里面。神经ODE成了流匹配。GAN的判别器又回来，让扩散变快。<bookmark mark='b'/>所以，下一部分的扩散模型，是用你现在已经见过的零件搭起来的。"
+  },
+  "2c5e51e1801a": {
+   "scene": "Outro",
+   "en": "Let's take stock. An autoregressive model writes an image one piece at a time, with an exact likelihood and a slow sampler. A VAE learns a code and a decoder together with one bound, trading rate against distortion. A GAN learns from a critic, and the game can collapse onto a few modes and spiral around its equilibrium; a Wasserstein critic and gradient penalties tame it. A flow bends noise into data, invertibly, with an exact likelihood, and a neural ODE does it continuously, with a trace in place of a determinant. A Boltzmann machine is an energy, trained by contrasting the data with its own dreams; and Langevin dynamics samples any energy using only its score, given enough noise to cross between modes.",
+   "zh": "我们来盘点一下。自回归模型一块一块地写出一张图像，似然精确，采样慢。VAE用一个下界同时学出编码和解码器，在码率和失真之间权衡。GAN从一个评论家那里学习，而这场博弈可能坍缩到少数几个峰上，并绕着均衡点盘旋；瓦瑟斯坦评论家和梯度惩罚驯服了它。流把噪声可逆地弯成数据，似然精确，神经ODE则连续地做这件事，用迹代替了行列式。玻尔兹曼机是一个能量，通过把数据和它自己的梦相对比来训练；而朗之万动力学只用分数函数就能从任何能量里采样，只要有足够的噪声让它在峰之间穿行。"
+  },
+  "df0c8eca4a07": {
+   "scene": "Outro",
+   "en": "All of this comes back. The score, learned at every noise level, is diffusion, next time, with flow matching training continuous flows by regression. Autoencoders and their tokens are the front end of the image, video and audio models of Parts 22 and 23, and next-scale prediction returns in Part 22. The contrastive idea, pull the data up and push everything else down, drives the self-supervised learning of Part 24. And the question of how to judge a model, and how its metrics fail, closes the series.",
+   "zh": "这些都会再回来。在每个噪声水平上学到的分数函数，就是下一次的扩散，而流匹配用回归来训练连续流。自编码器和它们的词元，是第22和第23部分图像、视频和音频模型的前端，下一尺度预测会在第22部分回来。对比的思想，把数据往上推、把其他一切往下压，驱动着第24部分的自监督学习。而怎样评判一个模型，以及它的指标怎样失效，会为整个系列收尾。"
+  },
+  "4448704449cd": {
+   "scene": "Outro",
+   "en": "Here are six problems to try, from the optimal discriminator to the Fréchet distance. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道题可以试一试，从最优判别器到弗雷歇距离。在这里暂停，把它们做一做；完整的解答在这一部分的笔记里。"
+  },
+  "7700be2f0c91": {
+   "scene": "Outro",
+   "en": "Next time: diffusion. Add noise to the data at every level, from a whisper to a roar; learn the score at each level by learning to remove the noise; then walk back from pure noise, level by level, the annealed Langevin of chapter thirteen grown up. Part 21: diffusion and flow.",
+   "zh": "下一次：扩散。在每个水平上给数据加噪声，从耳语到咆哮；通过学会去掉噪声，学出每个水平上的分数函数；然后从纯噪声出发，一级一级地往回走，也就是第13章退火朗之万的成长版。第21部分：扩散与流。"
+  },
+  "e8c669814ed4": {
+   "scene": "Outro",
+   "en": "To go deeper, Simon Prince's Understanding Deep Learning covers GANs, flows and VAEs clearly, and for free; Kevin Murphy's second volume covers every family in this part, in depth. Thanks for watching, and see you in Part 21.",
+   "zh": "想深入学习的话，西蒙·普林斯的《理解深度学习》把GAN、流和VAE讲得很清楚，而且可以免费阅读；凯文·墨菲的第二卷则深入地覆盖了本部分的每一个家族。感谢收看，我们第21部分再见。"
+  }
+ },
+ "title_en": "AI, Built: Part 20, Four Ways to Generate",
+ "chapters_en": {
+  "Hook": "Digits nobody wrote",
+  "Problem": "1. The generative problem",
+  "Autoregressive": "2. One pixel at a time",
+  "Latent": "3. From Helmholtz machines to the VAE",
+  "VAE": "4. Training a VAE: rate, distortion, collapse",
+  "Game": "5. The adversarial game",
+  "Dynamics": "6. Why GANs spiral",
+  "Wasserstein": "7. Wasserstein GANs",
+  "Scale": "8. GANs at scale: BigGAN, StyleGAN, inversion",
+  "Flows": "9. Normalizing flows",
+  "NeuralODE": "10. Neural ODEs and continuous flows",
+  "Hopfield": "11. Hopfield and Boltzmann",
+  "RBM": "12. Contrastive divergence",
+  "Langevin": "13. Langevin dynamics and the score",
+  "Judging": "14. Judging a generator",
+  "Budget": "15. Five models, one budget",
+  "Meet": "16. Where the families meet",
+  "Outro": "Recap, problems, and what comes next"
+ }
+}

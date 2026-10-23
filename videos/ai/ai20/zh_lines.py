@@ -642,14 +642,14 @@ ZH.update({
         '它们在相互平衡。{bal}这里没有任何东西能说明生成器什么时候变好了，这也是GAN需要第14章那些量尺的一个原因。',
 
     'From there to photographs took four years.':
-        "从这里到照片，用了四年。<bookmark mark='a'/>2015年，Alec Radford、"
-        'Luke Metz和Soumith Chintala找到了能稳定训练的卷积GAN，它们的噪声向量还能做算术：'
+        "从这里到照片，用了四年。<bookmark mark='a'/>2015年，亚历克·拉德福德、"
+        '卢克·梅茨和苏米斯·钦塔拉找到了能稳定训练的卷积GAN，它们的噪声向量还能做算术：'
         "一个微笑的女人，减去一个女人，加上一个男人，得到一个微笑的男人。<bookmark mark='b'/>2017年，"
-        '英伟达的Tero Karras和同事在训练中让网络逐渐长大，一直长到1024像素。'
-        "<bookmark mark='c'/>2018年，Andrew Brock、"
-        'Jeff Donahue和Karen Simonyan把GAN扩展到了ImageNet：在128像素上，'
+        '英伟达的泰罗·卡拉斯和同事在训练中让网络逐渐长大，一直长到1024像素。'
+        "<bookmark mark='c'/>2018年，安德鲁·布洛克、"
+        '杰夫·多纳休和卡伦·西蒙尼扬把GAN扩展到了ImageNet：在128像素上，'
         'Inception分数达到166.5，FID达到7.4，而此前的最好成绩是52.5和18.6。'
-        "<bookmark mark='d'/>Karras的团队则把生成器本身重新做了一遍：这就是StyleGAN。",
+        "<bookmark mark='d'/>卡拉斯的团队则把生成器本身重新做了一遍：这就是StyleGAN。",
 
     "StyleGAN's generator starts not from the noise":
         'StyleGAN的生成器不从噪声出发，而是从一个学出来的4像素常数出发，一块一块地上采样。'

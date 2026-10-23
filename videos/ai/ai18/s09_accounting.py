@@ -86,7 +86,7 @@ class Accounting(VoiceoverScene):
     def measured(self):
         A = load("accounting")
         T = A["T"]
-        items = [(r"forward", A["fwd"], ACTS), (r"backward", A["bwd"], GRADS), (r"both", A["both"], C_COL),
+        items = [(r"forward", A["fwd"], ACTS), (r"backward", A["bwd"], GRADS), (r"total", A["both"], C_COL),
                  (r"$6 N T$", A["six"], N_COL)]
         mx = max(v for _, v, _ in items)
         bars = VGroup()

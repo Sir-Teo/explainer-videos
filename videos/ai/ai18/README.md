@@ -128,6 +128,23 @@ pipeline; `dist.py` the distributed workers; `sched.py` the pipeline simulator.
 Filled in from `.cache/ai18/` after `compute.py` runs (`python -m videos.ai.ai18.results`):
 
 <!-- results -->
+* From published figures: Llama 3.1's 6ND = 3.79e+25 FLOP (reported 3.8e25); its MFU from Table 4's TFLOP/s over 989: 43.5%, 40.4%, 38.4% (reported 43/41/38%); one unplanned interruption every 3.09 h, about once in 5.8 years per GPU; a full checkpoint ≈ 33 s, Young's interval 14.2 min; PaLM's MFU without attention 45.7%; DeepSeek-V3 $5.576M, 3.66 days per trillion tokens on 2,048 GPUs; 16 bytes/parameter: Llama 3.1 6.48 TB (≥ 81 H100s); ZeRO's example 120.00, 31.41, 16.64, 1.88 GB.
+* Common Crawl sample (CC-MAIN-2026-39, WET files [0, 33333, 66666]): 4,310 pages, 64 languages; 96 blocked by URL; English 1,728, of which 1,398 kept (p ≥ 0.65, ≥ 50 words). WARC slices: 387 HTML pages, 42.6 MB of HTML → 1.28 MB of text (3.0%; median page 2.3%).
+* MinHash-LSH (112 hashes, 14 × 8): on 3,000 page pairs, per-hash agreement vs Jaccard mean gap 0.026; measured collision rate within 0.105 of 1 − (1 − s⁸)¹⁴ in every bin; s at P = ½: 0.685. Sample: 3 exact and 8 near duplicates of 1,398. Gutenberg licences: 435/435 pairs caught (J ≥ 0.990); novels 0/435.
+* Quality classifier (fastText, 13,000 of FineWeb-Edu's Llama 3 annotations; cut 0.21 on P(score ≥ 3)): F1 59.0% (precision 54.5%, recall 64.3%) on 1,000 held-out pages, against FineWeb-Edu's 82%; kept 62 of 1,398 crawl pages (4.4%).
+* Contamination: the scoreboard's passage shares 0 of 4,042 13-grams (1 of 4,047 8-grams) with the training text; 6 of 2,758 held-out paragraphs share a 13-gram.
+* RegMix on the novels: 32 proxy runs, leave-one-out correlation 0.69; pick 92%, 3%, 1%, 4% (natural 16%, 27%, 15%, 42%); loss on the scoreboard's chapter, nats per token, mean of two seeds: natural 5.619; uniform 5.626; regmix 5.555.
+* Model collapse (unigram, 50,000 samples, 30 generations, 5 seeds): support 3108 → 1075 tokens (replace) vs 3108 (accumulate); cross-entropy on real text 9.82 → 10.64 vs 10.04 bits.
+* FLOP counter (our 128 × 4 model, 256 tokens): backward/forward 2.000; total / 6NT 0.9992; attention adds 20.1%; recomputation 15.5% more. Activations: 23.55 d per token per layer (FP32, fused attention), 1.00 d recomputed, unfused attention + 1.06 T² per head per layer.
+* Collectives (gloo, 4 processes): α = 66 µs, B = 2.37 GB/s from point-to-point; large messages took all_reduce 7.2×, reduce_scatter 16.5×, all_gather 13.1× the α–β prediction (load average 12 on 4 cores); sums checked: True.
+* Parallelism checked on 4 processes (285,856-parameter model, 6 AdamW steps): largest parameter difference from one process, DP 2.2e-05, ZeRO-3 2.1e-05; ZeRO-3 keeps 4.00× less and sends 1.50× more. Tensor parallel (2 / 4 ranks): output error 1.3e-06 / 1.2e-06. Ring attention: 3.3e-07.
+* Pipeline (p = 4, m = 8, simulated): bubble GPipe 27.3%, 1F1B 27.3%, interleaved 15.8%, ZB-H1 11.1% (all equal to their formulas); peak micro-batches on GPU 0: GPipe 8, 1F1B 4.
+* Precision (250 steps, two seeds, final held-out loss): fp32 5.592–5.659; bf16 5.588–5.659; fp16 5.592–5.661; fp16_scaled 5.591–5.659; fp8_tensor 5.580–5.652; fp8_tile 5.584–5.639. Activation gradients: 100% below FP16's smallest normal, 34% flushed to zero. E4M3 error on the series' model: per tensor 2.65%, per 1 × 128 tile 2.43%.
+* FP16 with 64-way accumulation: fp16 6.605–6.609; fp16_scaled 5.592–5.657.
+* Stability (learning rates [0.003, 0.01, 0.03, 0.1], final loss, mean of 2 seeds): plain: 6.05, 5.95, 6.22, 6.39 (max logit 19, 48, 172, 2062); qk: 6.11, 6.02, 6.22, 6.32 (max logit 6, 7, 9, 21); qkz: 6.12, 6.05, 6.05, 6.33 (max logit 6, 7, 8, 23). Final mean log Z at 0.003: 7.97 without the z-loss, 7.96 with it (within the seeds' spread of 0.06).
+* MTP (500 steps, two seeds): next-token loss without 5.193, with 5.126; acceptance 85.3%, 72.4%; extra arithmetic 88%.
+* Recipes (3.0M tokens, 732 steps, seed 0 / seed 1): 2020 held-out 4.487 / 4.498, 2.036 / 2.052 bpc; 2026 4.251 / 4.253, 1.946 / 1.950 bpc; largest attention logit 44 vs 11 (seed 0); WSD cooldown branch at 458 steps 4.517 vs 4.570 still stable.
+* MFU on this CPU (peak 67.1 GFLOP/s, one core): 2020 recipe 15%, 2026 recipe 11%.
 <!-- /results -->
 
 ## Fact-check notes
