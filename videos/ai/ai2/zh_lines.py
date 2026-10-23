@@ -72,7 +72,7 @@ ZH = {
 
     # ------------------------------------------------------------------ A*
     'Chapter three. A star.':
-        '第3章。A星。',
+        '第3章。A星搜索。',
 
     'In 1968 Peter Hart, Nils Nilsson and Bertram Raphael':
         "1968年，斯坦福研究所的彼得·哈特、尼尔斯·尼尔森和伯特伦·拉斐尔，需要让Shakey，第一台能规划自己行动的移动机器人，快速找到路径。<bookmark mark='a'/>他们的算法叫A星，按f等于g加h来给边界排序。<bookmark mark='b'/>g是到目前为止的代价，和迪杰斯特拉算法里一样。<bookmark mark='c'/>h是对剩余代价的一个猜测：启发式。<bookmark mark='d'/>在地图上，就是到目标的直线距离。",
@@ -132,6 +132,9 @@ ZH = {
 
     "f'Annealing found the optimum itself in":
         '退火在{len(d[\'eq_anneal\'])}次运行中有{n_opt}次找到了最优解本身。',
+
+    'Annealing never found the optimum itself.':
+        '退火一次也没有找到最优解本身。',
 
     "f'On the same budget of {d['budget']:,} tours looked at":
         '在同样看{d[\'budget\']:,}条回路的预算下，{order[0][0]}最好，平均{order[0][1]:,.0f}；{order[1][0]}平均{order[1][1]:,.0f}；{order[2][0]}平均{order[2][1]:,.0f}。',
@@ -288,7 +291,7 @@ ZH = {
 
     # ------------------------------------------------------------------ ELIZA
     'Chapter twelve. ELIZA.':
-        '第12章。ELIZA。',
+        '第12章。伊丽莎。',
 
     'In 1966 Joseph Weizenbaum at MIT published a program that held conversations':
         "1966年，麻省理工学院的约瑟夫·魏岑鲍姆发表了一个能对话的程序：ELIZA，名字来自《卖花女》里的卖花姑娘。它最有名的脚本DOCTOR，扮演一位心理治疗师，把你的陈述翻成问题。<bookmark mark='a'/>输入：我妈妈照顾我。<bookmark mark='b'/>ELIZA交换代词，<bookmark mark='c'/>再找出等级最高的关键词，这里是“我的”，以及一个模式：任意内容、“你的”、任意内容、一个家庭成员的词、任意内容。<bookmark mark='d'/>它取这个模式的下一条重组规则，把匹配到的片段拼进去。<bookmark mark='e'/>你家里还有谁照顾你。没有语法，没有意义：只有模式匹配和几百行脚本。",
@@ -369,8 +372,6 @@ PHRASES = {
     'Try d true, which forces e, and a clause fails: back up. Try d false, and every clause holds.':
         '试a为真，它迫使c、d和e成立，然后一个子句失败：退回。试a为假，它迫使b成立。试c为真。试d为真，它迫使e成立，'
         '又一个子句失败：退回。试d为假，每个子句都成立了。',
-    # the equal-budget comparison, when annealing never hits the optimum
-    'Annealing never found the optimum itself.': '退火一次也没有找到最优解本身。',
     # spliced into the tic-tac-toe verdict
     'a draw': '和棋',
     'a win for the first player': '先手胜',

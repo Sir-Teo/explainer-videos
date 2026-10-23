@@ -224,7 +224,21 @@ ZH = {
     'f"We can run the comparison on our adding model.':
         "我们可以在自己的加法模型上做这个比较。取它被要求思考时写出的8000个解答。一个小评分器用最终答案训练，"
         "另一个用步骤训练，每一步都对照前一步检查。<bookmark mark='a'/>然后，在新的题目上，采样N个解答，让每个评分器来挑。"
-        "<bookmark mark='b'/>{said}<bookmark mark='c'/>虚线是一个完美的检查器；它下面的差距，是更好的评分器还能赢回来的部分。",
+        "<bookmark mark='b'/>{said}<bookmark mark='b2'/>{why_}<bookmark mark='c'/>"
+        "虚线是一个完美的检查器；它下面的差距，是更好的评分器还能赢回来的部分。",
+
+    'f"With one sample, {100 * s1:.0f} percent of the questions are answered right.':
+        "只采样一个解答时，{100 * s1:.0f}%的题目答对。让评分器从{N}个里挑，挑出来的反而更差：过程评分器挑的"
+        "{100 * p:.0f}%是对的，结果评分器{100 * o:.0f}%。不需要评分器的投票，达到{100 * vt:.0f}%。",
+
+    "f\"Our graders are small and only partly right:":
+        "我们的评分器很小，只是部分正确：在区分对错上，它们的得分是{auc_p:.2f}和{auc_o:.2f}，1是完美，0.5是瞎猜。"
+        "在很多候选里得分最高的，正是最能骗过它们的那个。过程评分器挑出的解答里，{100 * pk['short_pick']:.0f}%"
+        "是想到一半就停下的，而所有解答里只有{100 * pk['short_all']:.0f}%：把各步的得分相乘，偏爱短的思维链。"
+        "这就是第27部分的古德哈特定律，一个缩小版。",
+
+    "f'At telling right from wrong, the process grader scores":
+        "在区分对错上，过程评分器的得分是{auc_p:.2f}，结果评分器是{auc_o:.2f}，1是完美，0.5是瞎猜。",
 
     "f'With {N} samples, the process grader picks a right solution":
         "采样{N}个解答时，过程评分器为{100 * p:.0f}%的题目挑出了正确解答，结果评分器{100 * o:.0f}%，投票{100 * vt:.0f}%。"
@@ -238,9 +252,12 @@ ZH = {
         '两个评分器最后很接近，{100 * p:.0f}%和{100 * o:.0f}%，投票是{100 * vt:.0f}%。',
 
     'f"Here is one of the solutions, graded both ways.':
-        "这是其中一个解答，用两种方式评分。<bookmark mark='a'/>颜色是真相：哪些步骤真的对。<bookmark mark='b'/>"
+        "这是其中一个解答，用两种方式评分。<bookmark mark='a'/>颜色是真相：哪些步骤真的对。{twist}<bookmark mark='b'/>"
         "过程评分器给每一步一个正确的概率。{where}<bookmark mark='c'/>结果评分器给整个解答一个数，{float(v['ex_orm']):.2f}，"
         "说不出错在哪里。正是这个位置，让步骤标签有用，无论是用来重新排序，还是用来教。",
+
+    'And its final sum is right, though a step on the way is wrong:':
+        '而它最后的和是对的，尽管途中有一步错了：正是这一章开头的那种情况。',
 
     "f'Its score drops at the first wrong step,":
         '它的分数在第一个错误步骤，也就是第{first_bad + 1}步，掉到了{sc[first_bad]:.2f}：它指出了错误。',
@@ -565,10 +582,15 @@ ZH = {
         "<bookmark mark='a'/>强化学习之前，一次尝试的正确率是{100 * base[0]:.0f}%。<bookmark mark='b'/>"
         "训练300步之后，大约{100 * rl1:.0f}%。<bookmark mark='c'/>{said}",
 
-    'f"And the curves cross:':
+    'f"And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, the untrained model is ahead. On about':
         "曲线交叉了：尝试{k_last}次时，强化学习之前的模型解出{100 * base[-1]:.1f}%，而{SAY[lost[0]]}解出"
         "{100 * means[lost[0]][-1]:.1f}%。从大约{min(cross)}次尝试开始，未经训练的模型领先。在200道题里，"
         "大约有{dead:.0f}道，强化学习把正确答案的概率压到了千分之一以下，挪到了它越来越有把握的错误答案上。",
+
+    "f'And the curves cross: at {k_last} tries the model before RL solves {100 * base[-1]:.1f} percent, while {SAY[lost[0]]} solves {100 * means[lost[0]][-1]:.1f}. From about {min(cross)} tries on, the untrained model is ahead. No question":
+        "曲线交叉了：尝试{k_last}次时，强化学习之前的模型解出{100 * base[-1]:.1f}%，而{SAY[lost[0]]}解出"
+        "{100 * means[lost[0]][-1]:.1f}%。从大约{min(cross)}次尝试开始，未经训练的模型领先。没有哪道题变得不可能；"
+        "但在最难的那些题上，强化学习让本来就少见的正确答案更少见了，所以即使试一千次，找到它的次数也少了。",
 
     'f"And at {k_last} tries the curves meet:':
         "尝试{k_last}次时，曲线汇合了：强化学习之前是{100 * base[-1]:.1f}%，之后在"
@@ -627,7 +649,7 @@ ZH = {
 
     'The simplest parallel strategy with a checker is best-of-N:':
         "有检查器时，最简单的并行策略是最优N选1：抽N个回答，留一个正确的。第27部分说明了，在奖励没有并列时，"
-        "最优N选1让模型离起点的距离是log N减去N分之N减1奈特。而检查器的奖励全是并列：要么对，要么错。所以我们重新算一遍。"
+        "最优N选1让模型离起点的距离是log N减去N分之N减1奈特。<bookmark mark='t'/>而检查器的奖励全是并列：要么对，要么错。所以我们重新算一遍。"
         "<bookmark mark='a'/>如果一次尝试正确的概率是p，最优N选1正确的概率就是1减去1减p的N次方。<bookmark mark='b'/>"
         "在正确的条件下，它返回哪个正确答案，与模型自己的概率成比例；错误的也一样。<bookmark mark='c'/>"
         "所以KL就是两枚硬币之间的散度：一枚正确的概率是1减q，另一枚是p。<bookmark mark='d'/>随着N增大，它在log p分之1处趋平，"
@@ -647,10 +669,10 @@ ZH = {
     # ------------------------------------------------------------------ Outro
     "Let's take stock. Writing out steps lets a model of fixed depth compute for longer:":
         "我们来总结一下。写出步骤，能让一个深度固定的模型计算得更久：每个词元都多换来一次穿过网络的计算。"
-        "采样很多条思维链再投票，只会放大模型本来就偏爱的答案；检查器，或者检查步骤的评分器，做得更好。"
+        "采样很多条思维链再投票，只会放大模型本来就偏爱的答案；检查器做得更好，而学来的评分器，只有在不被骗过的范围内才有用。"
         "向检查器学习的强化学习，靠GRPO的组基线和它的裁剪，把概率挪到能通过检查的答案上，代价是花掉模型的熵。"
         "放任不管，它会学着想得更久，有时太久，直到思考被定上价格。它锐化模型本来就能做的事，"
-        "而训练足够久的话，也许能拓宽它。在回答时，更多的计算换来更多的正确答案，无论是并行还是串行。",
+        "而训练足够久的话，也许能拓宽它。在回答时，更多的计算换来更多的正确答案，无论是并行还是串行，只要在它们之间做选择的那个东西靠得住。",
 
     'All of this comes back. Reasoning over hundreds of steps, with tools':
         "所有这些都会再出现。借助工具、跨越几百步的推理，就是智能体要做的事，在第29部分。每个思考的词元生成时都要花时间，"
@@ -710,7 +732,16 @@ ZH = {
 
     'f"Is search worth it?':
         "搜索值得吗？把它和最优N选1比较，用同一个评分器，花同样多的词元。<bookmark mark='a'/>最优N选1采样N条完整的思维链，"
-        "留下评分器最喜欢的那条。<bookmark mark='b'/>束搜索把同样多的词元一步一步地花。<bookmark mark='c'/>{said}",
+        "留下评分器最喜欢的那条。<bookmark mark='b'/>束搜索把同样多的词元一步一步地花。<bookmark mark='c'/>{said}"
+        "<bookmark mark='d'/>{trend}",
+
+    'f"But both get worse as they widen:':
+        "但两者都随着搜索变宽而变差：束搜索从{100 * ba.max():.0f}%降到{100 * ba[-1]:.0f}%，"
+        "最优N选1从{100 * bo.max():.0f}%降到{100 * bo[-1]:.0f}%。搜索越宽，就越能找到骗过评分器的东西，"
+        "又是第3章的教训。搜索的好坏，取决于给它当裁判的那个评分器。",
+
+    "f'At the widest, beam search reaches":
+        "搜索最宽时，束搜索达到{100 * ba[-1]:.0f}%，最优N选1是{100 * bo[-1]:.0f}%。",
 
     'At every budget, searching step by step beats choosing among whole chains:':
         "在每一种预算下，一步一步地搜索都胜过在完整思维链里挑选：错误的累计和一写出来就被发现，"
@@ -835,4 +866,7 @@ PHRASES = {
     "solved": "解决了",
     "shaky": "不太稳",
     "much better": "好得多",
+    "And its final sum is right.": "而它最后的和是对的。",
+    "And its final sum is wrong too.": "而它最后的和也是错的。",
+    "Yet its final sum is wrong.": "可它最后的和却是错的。",
 }

@@ -197,15 +197,29 @@ class Search(VoiceoverScene):
                     "at each step compound, and pruning early throws away chains that would have recovered.")
         else:
             said = "Here the two end up close: on a problem this regular, a good grader helps either way."
+        both_fall = ba[-1] < ba.max() - 0.05 and bo[-1] < bo.max() - 0.05
+        if both_fall:
+            trend = (f"But both get worse as they widen: beam search falls from {100 * ba.max():.0f} to "
+                     f"{100 * ba[-1]:.0f} percent, best-of-N from {100 * bo.max():.0f} to {100 * bo[-1]:.0f}. The "
+                     "wider the search, the more it finds of what fools the grader, chapter three's lesson again. A "
+                     "search is only as good as its judge.")
+        else:
+            trend = (f"At the widest, beam search reaches {100 * ba[-1]:.0f} percent and best-of-N "
+                     f"{100 * bo[-1]:.0f}.")
+        ends = VGroup(Dot(g.ax.c2p(lw[-1], ba[-1]), radius=0.1, color=SEARCH),
+                      Dot(g.ax.c2p(lN[-1], bo[-1]), radius=0.1, color=PRM_C))
         with self.voiceover(
             "Is search worth it? Compare it with best-of-N, using the same grader and the same number of tokens. "
             "<bookmark mark='a'/> Best-of-N samples N whole chains and keeps the one the grader likes best. "
-            f"<bookmark mark='b'/> Beam search spends the same tokens step by step. <bookmark mark='c'/> {said}"
+            f"<bookmark mark='b'/> Beam search spends the same tokens step by step. <bookmark mark='c'/> {said} "
+            f"<bookmark mark='d'/> {trend}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(co), FadeIn(do), FadeIn(lg[1]), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(cb), FadeIn(db), FadeIn(lg[0]), run_time=1.5)
+            vo.wait_until("d")
+            self.play(Flash(ends[0], color=SEARCH), Flash(ends[1], color=PRM_C), FadeIn(ends))
         self.wait(0.3)
         self.clear_scene()

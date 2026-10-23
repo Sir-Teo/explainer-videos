@@ -589,6 +589,29 @@ def compute_think_verify(n_train=1000, k_train=8, nq=300, k=64):
     return out
 
 
+def compute_think_verify_picks(nq=300, k=64):
+    """What the process grader picks, best of all k solutions: the same test solutions as ``think_verify`` (drawn
+    again from the same seeds), scored by its saved process grader. A chain is cut short when it stops thinking
+    before the last digit and answers from there."""
+    c = _c()
+    c.threads(1)
+    m, gen, _ = verifier_train_data()
+    test = verifier_data(m, c.rng(93), gen, nq, k)
+    score, per = verifier_scores(prm_model(), test, "prm")
+    steps = np.array([len(p_) - 1 for p_ in per]).reshape(nq, k)
+    short = steps < test["n"].reshape(nq, k)
+    right = test["final"].reshape(nq, k)
+    sc = score.reshape(nq, k)
+    rows = np.arange(nq)
+    pick = sc.argmax(1)
+    pick_full = np.where(short, -np.inf, sc).argmax(1)
+    has_full = (~short).any(1)
+    return dict(nq=nq, k=k, acc_all=float(right.mean()), short_all=float(short.mean()),
+                acc_short=float(right[short].mean()), acc_full=float(right[~short].mean()),
+                acc_pick=float(right[rows, pick].mean()), short_pick=float(short[rows, pick].mean()),
+                acc_pick_full=float(right[rows, pick_full][has_full].mean()))
+
+
 # ---------------------------------------------------------------------------
 # Search over steps of thought
 # ---------------------------------------------------------------------------
@@ -772,5 +795,6 @@ ITEMS = {
     "think_rl": compute_think_rl,
     "think_budget": compute_think_budget,
     "think_verify": compute_think_verify,
+    "think_verify_picks": compute_think_verify_picks,
     "think_search": compute_think_search,
 }

@@ -80,7 +80,8 @@ class Verify(VoiceoverScene):
         prm = definition_card(r"process reward model \ (PRM)",
                               cmath(r"r(x, y)", r"=", r"\prod_{t} P(\text{step } t \text{ right} \mid x, y_{\le t})",
                                     font_size=30), color=PRM_C, width=6.2, kind=r"Definition")
-        VGroup(orm, prm).arrange(RIGHT, buff=0.4).move_to(UP * 1.6)
+        VGroup(orm, prm).arrange(RIGHT, buff=0.4).move_to(UP * 1.3)
+        head = label(r"two kinds of learned grader", font_size=34).to_edge(UP, buff=0.4)
         lo = label(r"one label per solution: \\ is the final answer right?", font_size=22, color=ORM_C)
         lp = label(r"a label per step: \\ is this step right, given the ones before?", font_size=22, color=PRM_C)
         lo.next_to(orm, DOWN, buff=0.35)
@@ -99,6 +100,7 @@ class Verify(VoiceoverScene):
             "rerank: sample N solutions and keep the one it scores highest. Or its score can be the reward for "
             "reinforcement learning."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(orm, shift=UP * 0.15), FadeIn(lo))
             vo.wait_until("b")
@@ -142,9 +144,10 @@ class Verify(VoiceoverScene):
             "label eight hundred thousand steps. <bookmark mark='d'/> Reranking 1,860 solutions to competition "
             "problems, a majority vote solved 69.6 percent, the outcome grader 72.4, and the process grader 78.2."
         ) as vo:
-            for k, mk in enumerate("abc"):
+            self.play(FadeIn(cards[0], shift=UP * 0.15))
+            for k, mk in enumerate("bc"):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(FadeIn(cards[k + 1], shift=UP * 0.15))
             vo.wait_until("d")
             self.play(Create(base), FadeIn(bh), FadeIn(cut),
                       LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1]), FadeIn(b[2])) for b in bars],
@@ -175,9 +178,28 @@ class Verify(VoiceoverScene):
                     font_size=19, color=GREY_A).next_to(lg, DOWN, buff=0.35).align_to(lg, LEFT)
         tag = note(rf"computed: \ both graders trained on the same ${int(v['n_train']):,}$ solutions; \ "
                    rf"${int(v['nq'])}$ new questions".replace(",", "{,}")).to_corner(DR, buff=0.2)
-        p, o, vt, orc = ys["prm"][-1], ys["orm"][-1], ys["vote"][-1], ys["oracle"][-1]
+        p, o, vt = ys["prm"][-1], ys["orm"][-1], ys["vote"][-1]
         N = Ns[-1]
-        if p > o + 0.02:
+        pk = load("think_verify_picks")
+        s1 = float(ys["prm"][0])  # one sample, no choice
+        auc_p, auc_o = float(v["auc_prm"]), float(v["auc_orm"])
+        picks = label(rf"the process grader's picks from ${int(pk['k'])}$: \\ ${100 * pk['short_pick']:.0f}\%$ cut short "
+                      rf"\ (all solutions: \ ${100 * pk['short_all']:.0f}\%$)", font_size=19, color=PRM_C)
+        picks.next_to(auc, DOWN, buff=0.3).align_to(auc, LEFT)
+        declines = p < s1 - 0.05 and o < s1 - 0.05  # the graders' picks get worse as N grows
+        why_ = (f"At telling right from wrong, the process grader scores {auc_p:.2f} and the outcome grader "
+                f"{auc_o:.2f}, where one is perfect and a half is chance.")
+        if declines:
+            said = (f"With one sample, {100 * s1:.0f} percent of the questions are answered right. Let the graders "
+                    f"choose among {N}, and their picks get worse: the process grader's is right {100 * p:.0f} percent "
+                    f"of the time, the outcome grader's {100 * o:.0f}. The vote, which needs no grader, reaches "
+                    f"{100 * vt:.0f}.")
+            why_ = (f"Our graders are small and only partly right: at telling right from wrong they score {auc_p:.2f} "
+                    f"and {auc_o:.2f}, where one is perfect and a half is chance. The top score among many goes to "
+                    f"whatever fools them most. {100 * pk['short_pick']:.0f} percent of the process grader's picks had "
+                    f"stopped thinking early, against {100 * pk['short_all']:.0f} percent of all solutions: a product of "
+                    "step scores favours short chains. It is Part 27's Goodhart, in miniature.")
+        elif p > o + 0.02:
             said = (f"With {N} samples, the process grader picks a right solution for {100 * p:.0f} percent of the "
                     f"questions, the outcome grader {100 * o:.0f}, and the vote {100 * vt:.0f}. Same solutions, same "
                     "budget: step labels carry more information per example, and the grader learns more from them.")
@@ -192,15 +214,17 @@ class Verify(VoiceoverScene):
             "We can run the comparison on our adding model. Take eight thousand of its solutions, made to think. "
             "Train one small grader on the final answers, and another on the steps, each step checked against the "
             "one before. <bookmark mark='a'/> Then, on new questions, sample N solutions and let each grader pick. "
-            f"<bookmark mark='b'/> {said} <bookmark mark='c'/> The dashed line is a perfect checker; the gap below it "
-            "is what a better grader could still win."
+            f"<bookmark mark='b'/> {said} <bookmark mark='b2'/> {why_} <bookmark mark='c'/> The dashed line is a "
+            "perfect checker; the gap below it is what a better grader could still win."
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
             self.play(Create(lines["vote"]), FadeIn(lg[2]), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(lines["orm"]), FadeIn(lg[1]), run_time=1.5)
-            self.play(Create(lines["prm"]), FadeIn(lg[0]), FadeIn(auc), run_time=1.5)
+            self.play(Create(lines["prm"]), FadeIn(lg[0]), run_time=1.5)
+            vo.wait_until("b2")
+            self.play(FadeIn(auc), *([FadeIn(picks)] if declines else []))
             vo.wait_until("c")
             self.play(Create(lines["oracle"]), FadeIn(lg[3]))
         self.wait(0.3)
@@ -231,9 +255,11 @@ class Verify(VoiceoverScene):
         ql = label(r"a solution our model wrote", font_size=22, color=GREY_A).next_to(q, LEFT, buff=0.3)
         W = 0.62
         xs = [-((len(items) - 1) * (W + 0.18)) / 2 + i * (W + 0.18) for i in range(len(items))]
-        cells = VGroup(*[chip(t, 0.5, (RIGHT_C if o else WRONG_C) if i < len(steps) else (RIGHT_C if o else WRONG_C),
+        final = bool(v["ex_final"])
+        cells = VGroup(*[chip(t, 0.5, (RIGHT_C if o else WRONG_C) if i < len(steps) else (RIGHT_C if final else WRONG_C),
                               22, width=W, fill=0.2).move_to([x, 1.5, 0]) for i, (t, o, x) in enumerate(zip(items, ok, xs))])
-        sl = label(r"steps, \ then the answer \ (colour: \ the true check)", font_size=20, color=GREY_A)
+        sl = label(r"steps \ (colour: \ the true check), \ then the answer \ (colour: \ is the sum right?)",
+                   font_size=20, color=GREY_A)
         sl.next_to(cells, UP, buff=0.15)
         H = 2.2
         base_y = -1.6
@@ -258,10 +284,20 @@ class Verify(VoiceoverScene):
                      f"{sc[first_bad]:.2f}. A learned grader can miss.")
         else:
             where = "Every step checks out."
+        bad_steps = [i for i in bad if i < len(steps)]
+        if final and bad_steps:
+            twist = ("And its final sum is right, though a step on the way is wrong: the case this chapter began "
+                     "with.")
+        elif final:
+            twist = "And its final sum is right."
+        elif bad_steps:
+            twist = "And its final sum is wrong too."
+        else:
+            twist = "Yet its final sum is wrong."
         with self.voiceover(
             "Here is one of the solutions, graded both ways. <bookmark mark='a'/> The colours are the truth: which "
-            "steps really are right. <bookmark mark='b'/> The process grader gives every step a probability of being "
-            f"right. {where} <bookmark mark='c'/> The outcome grader gives the whole solution one number, "
+            f"steps really are right. {twist} <bookmark mark='b'/> The process grader gives every step a probability "
+            f"of being right. {where} <bookmark mark='c'/> The outcome grader gives the whole solution one number, "
             f"{float(v['ex_orm']):.2f}, and cannot say where it went wrong. That location is what makes step labels "
             "useful, for reranking and for teaching."
         ) as vo:

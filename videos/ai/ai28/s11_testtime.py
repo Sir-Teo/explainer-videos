@@ -44,6 +44,7 @@ class TestTime(VoiceoverScene):
                           r"\ $4\times$ more efficient than best-of-$N$; \ a small model plus test-time compute can beat "
                           r"a $14\times$ larger one, \ on questions it can sometimes solve", width=8.6,
                           color=POLICY).to_edge(DOWN, buff=0.25)
+        head = label(r"more computation, \ after the question is asked", font_size=32).to_edge(UP, buff=0.35)
         with self.voiceover(
             "There are two ways to spend more computation once the question is asked. <bookmark mark='a'/> In "
             "parallel: sample many answers, and pick one, by a vote, a grader, or a checker. <bookmark mark='b'/> Or "
@@ -53,7 +54,7 @@ class TestTime(VoiceoverScene):
             "best-of-N four times over, and a small model given test-time compute could beat one fourteen times "
             "larger, on questions it could sometimes solve."
         ) as vo:
-            self.play(FadeIn(sch))
+            self.play(FadeIn(sch), FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c_, shift=RIGHT * 0.1) for c_ in par], lag_ratio=0.15), FadeIn(pl))
             vo.wait_until("b")
@@ -193,10 +194,18 @@ class TestTime(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.4, buff=0.5, edge=6.9)
         cite_ = cite(r"A.~Beirami et al., \textit{Theoretical guarantees on the best-of-$n$ alignment policy} (2024)",
                      corner=DL)
+        p27 = VGroup(label(r"Part 27: \ best-of-$N$ with a reward model", font_size=26, color=GREY_A),
+                     cmath(r"\mathrm{KL}(\pi_N \,\|\, \pi)", r"=", r"\log N - \frac{N - 1}{N}", font_size=38),
+                     label(r"if no two answers ever tie", font_size=24, color=GREY_B))
+        p27.arrange(DOWN, buff=0.3).move_to(UP * 0.9)
+        p27[1][0].set_color(KLC)
+        ties = label(r"a checker: \ every right answer scores $1$, \ every wrong one $0$: \ all ties", font_size=28,
+                     color=WRONG_C).move_to(DOWN * 1.5)
         with self.voiceover(
             "The simplest parallel strategy with a checker is best-of-N: draw N answers and keep a right one. Part 27 "
             "showed that best-of-N moves a model log N minus N minus one over N nats away from where it started, when "
-            "the reward has no ties. A checker's reward is all ties: right or wrong. So let's redo it. "
+            "the reward has no ties. <bookmark mark='t'/> A checker's reward is all ties: right or wrong. So let's redo "
+            "it. "
             "<bookmark mark='a'/> If one try is right with probability p, best-of-N is right with probability one "
             "minus one minus p to the N. <bookmark mark='b'/> Given that, which right answer it returns is in "
             "proportion to the model's own probabilities; the same for wrong ones. <bookmark mark='c'/> So the KL "
@@ -205,8 +214,11 @@ class TestTime(VoiceoverScene):
             "below Part 27's formula, which in general is only an upper bound, as Ahmad Beirami and colleagues "
             "showed in 2024."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(p27))
+            vo.wait_until("t")
+            self.play(FadeIn(ties))
             vo.wait_until("a")
+            self.play(FadeOut(p27), FadeOut(ties))
             step(0)
             vo.wait_until("b")
             step(1)
