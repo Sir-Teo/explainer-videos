@@ -224,8 +224,11 @@ class KAN(VoiceoverScene):
         tab = d["table"]
         kans = np.array([(p, e) for kind, _, p, e in tab if kind == "kan"], float)
         mlps = np.array([(p, e) for kind, _, p, e in tab if kind == "mlp"], float)
-        g = log_axes([1, 4], [-5, 0], 5.4, 3.8, center=[-3.0, -0.6, 0], xlabel=r"parameters",
-                     ylabel=r"test error \ (log scale)", xticks=range(1, 5), yticks=range(-5, 1))
+        e_all = np.log10(np.r_[kans[:, 1], mlps[:, 1]])
+        ylo, yhi = int(np.floor(e_all.min())), int(np.ceil(e_all.max()))
+        yhi = max(yhi, ylo + 2)
+        g = log_axes([1, 4], [ylo, yhi], 5.4, 3.8, center=[-3.0, -0.6, 0], xlabel=r"parameters",
+                     ylabel=r"test error \ (log scale)", xticks=range(1, 5), yticks=range(ylo, yhi + 1))
         ax = g.ax
         pk = VGroup(*[Dot(ax.c2p(np.log10(p), np.log10(e)), radius=0.07, color=KANC) for p, e in kans])
         pm = VGroup(*[Dot(ax.c2p(np.log10(p), np.log10(e)), radius=0.07, color=NEURON) for p, e in mlps])

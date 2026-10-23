@@ -10,7 +10,7 @@ from videos.ai.ai9.common import GATE, NEURON, NORM, PART, PLAIN, RES, load
 VARIANT = {  # name on screen, colour
     "plain": (r"plain: \ no residual", PLAIN),
     "residual": (r"$+$ residual", RES),
-    "post_ln": (r"$+$ post-LayerNorm", C.SURPRISE),
+    "post_ln": (r"$+$ post-LayerNorm", C.MODEL_Q),
     "pre_ln": (r"$+$ pre-LayerNorm", NORM),
     "pre_rms": (r"$+$ pre-RMSNorm", C.TRUE_P),
     "pre_rms_swiglu": (r"$+$ pre-RMSNorm $+$ SwiGLU", GATE),
@@ -115,7 +115,7 @@ class Block(VoiceoverScene, ThreeDScene):
             s.set_fill_by_value(axes=ax, colorscale=[(col_lo, -1.2), (GREY_D, 0.0), (col_hi, 1.2)], axis=2)
             return s
 
-        s_relu = surf(lambda x, y: max(x, 0.0) * 0.6, NEURON, NEURON)
+        s_relu = surf(lambda x, y: max(x, 0.0) * 0.8, NEURON, NEURON)
         s_gate = surf(lambda x, y: silu(x) * y * 0.35, C.MODEL_Q, GATE)
         colors = {r"\odot": GATE}
         glu = cmath(r"\operatorname{FFN}(x)", r"=", r"W_2\big(\operatorname{SiLU}(W_1 x)", r"\odot", r"W_3 x\big)",
@@ -273,6 +273,8 @@ class Block(VoiceoverScene, ThreeDScene):
                  yticks=[lo, (lo + hi) / 2, hi], center=[-2.6, -0.5, 0], font_size=18)
         lines = {k: curve(g.ax, np.asarray(b[k])[:, 0], np.clip(np.nan_to_num(np.asarray(b[k])[:, 1], nan=hi), lo, hi),
                           VARIANT[k][1], 3.5) for k in kinds}
+        for k in ("post_ln", "pre_rms"):  # these lie on top of another variant's line: dashed, so both show
+            lines[k] = DashedVMobject(lines[k], num_dashes=40)
         rows = VGroup()
         for k in kinds:
             v = final[k]
