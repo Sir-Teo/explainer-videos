@@ -881,6 +881,9 @@ def compute_meanfield():
     return out
 
 
+LR_TRAIN = 1e-4  # RMSProp's step: 1e-3 is too large for the deep stacks (tried), Schoenholz et al. used 1e-5
+
+
 def compute_trainable():
     """Which (sigma_w^2, depth) can be trained: tanh networks of width 64 fitting a 10-class task (Gaussian clusters in
     32 dimensions), 300 steps of RMSProp each (as Schoenholz et al. trained theirs), training accuracy at the end."""
@@ -900,7 +903,8 @@ def compute_trainable():
     depths = [5, 10, 20, 35, 50, 70, 100]
     acc = np.zeros((len(depths), len(sws)))
     width, steps = 64, 300
-    part = CACHE.partial("trainable", dict(sws=sws.tolist(), depths=depths, width=width, steps=steps, sb2=sb2))
+    part = CACHE.partial("trainable", dict(sws=sws.tolist(), depths=depths, width=width, steps=steps, sb2=sb2,
+                                           lr=LR_TRAIN))
     for i, L in enumerate(depths):
         for j, a in enumerate(sws):
             key = f"{L}_{j}"
@@ -914,7 +918,7 @@ def compute_trainable():
                 torch.nn.init.normal_(lay.bias, std=math.sqrt(sb2))
             head = torch.nn.Linear(width, K)
             params = [p for lay in layers for p in lay.parameters()] + list(head.parameters())
-            opt = torch.optim.RMSprop(params, lr=1e-3)
+            opt = torch.optim.RMSprop(params, lr=LR_TRAIN)
 
             def fwd(x):
                 for lay in layers:
@@ -932,7 +936,7 @@ def compute_trainable():
             part[key] = acc[i, j]
             print(f"    depth {L:3d}  sigma_w^2 {a:.2f}: {acc[i, j]:.2f}", flush=True)
     xi = np.interp(sws, mf["xi_sw"], np.minimum(mf["xi"], 1e6))
-    return dict(sws=sws, depths=depths, acc=acc, xi=xi, width=width, steps=steps, classes=K, dim=D, n=N)
+    return dict(sws=sws, depths=depths, acc=acc, xi=xi, width=width, steps=steps, classes=K, dim=D, n=N, lr=LR_TRAIN)
 
 
 # ---------------------------------------------------------------------------

@@ -78,7 +78,7 @@ class Outro(VoiceoverScene):
             if pic.height > TH:
                 pic.height = TH
             tiles.add(Group(box, pic, c_))
-        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.3)).move_to(DOWN * 0.3)
+        tiles.arrange_in_grid(rows=2, cols=4, buff=(0.22, 0.45)).move_to(DOWN * 0.75)
         return tiles
 
     def recap(self):

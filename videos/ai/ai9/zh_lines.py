@@ -311,7 +311,16 @@ ZH = {
         "现在把块组装起来。<bookmark mark='a'/>残差流笔直向上。<bookmark mark='b'/>一条支路取一份经过RMS归一化的副本，做注意力运算，那是第13部分的主题，再把结果加回去。<bookmark mark='c'/>第二条支路再取一份归一化的副本，过一遍门控MLP，再加回去。<bookmark mark='d'/>把它叠起来，这里叠32次，就是Llama 3的主体；稍作改动，也就是Qwen、DeepSeek和其他模型的主体。<bookmark mark='e'/>按Llama 3 8B公开的配置来数：每个块的注意力有{r['attn'] / M:.1f}百万个权重，MLP有{r['mlp'] / M:.1f}百万个，所以块里{100 * mlp_share:.0f}%是门控MLP。32个块再加上嵌入，一共{r['total'] / 1000000000.0:.2f}十亿：正是它名字里的80亿。",
 
     'f"Does each piece earn its place?':
-        "每一个部件都配得上它的位置吗？我们把块一个部件一个部件地搭起来，做成一个在30部小说上训练的字符模型：{int(b['depth'])}个块深，每个版本都在同样的数据上、从同样的随机种子训练{steps:,}步。<bookmark mark='a'/>{first}<bookmark mark='b'/>{second}<bookmark mark='c'/>然后是归一化，放在块之后和块之前，层归一化和RMSNorm。<bookmark mark='d'/>{third}",
+        "每一个部件都配得上它的位置吗？我们把块一个部件一个部件地搭起来，做成一个在30部小说上训练的字符模型：{int(b['depth'])}个块深，每个版本都在同样的数据上、从同样的随机种子训练{steps:,}步。<bookmark mark='a'/>{first}<bookmark mark='b'/>{second}<bookmark mark='c'/>{norms}<bookmark mark='c3'/>{extra}<bookmark mark='d'/>{third}",
+
+    "f'Normalizing after each block, post-norm, stalls at {po:.2f} with no warm-up":
+        '在每个块之后做归一化，也就是后置归一化，不做预热时卡在{po:.2f}；在块之前做归一化，用层归一化达到{pl:.2f}，用RMSNorm达到{pr:.2f}。',
+
+    "f'Normalizing after each block reaches {po:.2f}; before it":
+        '在每个块之后做归一化，达到{po:.2f}；在块之前，用层归一化是{pl:.2f}，用RMSNorm是{pr:.2f}。',
+
+    "In a run this short, that's no better than the bare residual stream":
+        '训练这么短，这并不比光秃秃的残差流更好：归一化换来的是稳定性，而模型越大，稳定性越重要。',
 
     "f'With no residual connections, the {int(b['depth'])}-block stack barely learns":
         "没有残差连接，{int(b['depth'])}块的层叠几乎学不动：{p:.2f}比特。",
