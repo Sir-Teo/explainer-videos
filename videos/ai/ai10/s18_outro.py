@@ -221,7 +221,7 @@ class Outro(VoiceoverScene):
              r"(2016); \ Dosovitskiy et al.\ (2020); \ Liu et al.\ (2022); \ Smith et al.\ (2023)",
              r"Jordan (1986); \ Elman (1990); \ Werbos (1990); \ Hochreiter (1991); \ Bengio, Simard \& Frasconi "
              r"(1994); \ Pascanu, Mikolov \& Bengio (2013)",
-             r"Hochreiter \& Schmidhuber (1997); \ Gers, Schmidhuber \& Cummins (2000); \ Cho et al.\ (2014); \ "
+             r"Hochreiter \& Schmidhuber (1997); \ Gers, Schmidhuber \& Cummins (2000); \ Tallec \& Ollivier (2018); \ Cho et al.\ (2014); \ "
              r"Chung et al.\ (2014); \ Karpathy, Johnson \& Fei-Fei (2015)",
              r"Sutskever, Vinyals \& Le (2014); \ Bahdanau, Cho \& Bengio (2014); \ Luong et al.\ (2015); \ Wu et "
              r"al.\ (2016); \ Holtzman et al.\ (2019)",

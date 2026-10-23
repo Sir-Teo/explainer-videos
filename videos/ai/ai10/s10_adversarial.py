@@ -50,8 +50,11 @@ class Adversarial(VoiceoverScene):
             f"change of {P['eps']} in each pixel, the size of the smallest step of an 8-bit image, and it called "
             f"it a gibbon, with {P['gibbon']} percent. <bookmark mark='c'/> They also gave the explanation."
         ) as vo:
+            home = c1.get_center()
+            c1.scale(1.3).move_to(UP * 0.5)
             self.play(FadeIn(c1, shift=UP * 0.2), FadeIn(cite_))
             vo.wait_until("b")
+            self.play(c1.animate.scale(1 / 1.3).move_to(home))
             self.play(FadeIn(c2, shift=UP * 0.2))
             vo.wait_until("c")
             self.play(FadeIn(q))

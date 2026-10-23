@@ -68,8 +68,9 @@ CIFAR-10 and Part 1's thirty novels; numbers about historical systems are the pu
 * **12. LSTM and GRU.** The constant error carousel (Hochreiter & Schmidhuber 1997), input and output gates, the
   forget gate (Gers, Schmidhuber & Cummins 2000); the cell as a conveyor belt; ∂c_t/∂c_{t−1} = diag(f_t) and the
   memory's half-life, derived; the GRU (Cho et al. 2014; Chung et al. 2014); the memory task (remember the first of
-  T = 10, 30, 100 symbols): RNN, LSTM and GRU, three seeds each, accuracy during training, and the gradient reaching
-  each time step, replayed.
+  T = 10, 30, 100 symbols): RNN, LSTM and GRU, three seeds each, the gated cells from the chrono initialization
+  (Tallec & Ollivier 2018; with PyTorch's default gate biases they never left chance at T = 30 in our budget),
+  accuracy during training, and the gradient reaching each time step, replayed.
 * **13. A character LSTM.** 512 cells on Part 1's thirty novels, truncated backpropagation through time with 64
   readers (after Karpathy 2015); its training replayed with what it writes at each checkpoint; its row on the
   scoreboard (bits per character on chapter 2 of *The Maltese Falcon*), beside Part 7's Kneser–Ney and Part 9's neural
@@ -130,7 +131,7 @@ Zisserman (2013); Olah, Mordvintsev & Schubert (2017); Luo, Li, Urtasun & Zemel 
 Sifre (2014); Chollet (2016); Howard et al. (2017); Holschneider et al. (1989); Yu & Koltun (2015); van den Oord et
 al. (2016); Dosovitskiy et al. (2020); Liu et al. (2022); Smith, Brock, Berrada & De (2023); Jordan (1986); Elman
 (1990); Werbos (1990); Hochreiter (1991); Bengio, Simard & Frasconi (1994); Pascanu, Mikolov & Bengio (2013);
-Hochreiter & Schmidhuber (1997); Gers, Schmidhuber & Cummins (2000); Cho et al. (2014); Chung et al. (2014); Karpathy
+Hochreiter & Schmidhuber (1997); Gers, Schmidhuber & Cummins (2000); Tallec & Ollivier (2018); Cho et al. (2014); Chung et al. (2014); Karpathy
 (2015); Karpathy, Johnson & Fei-Fei (2015); Radford, Józefowicz & Sutskever (2017); Koehn, Och & Marcu (2003);
 Papineni et al. (2002); Sutskever, Vinyals & Le (2014); Williams & Zipser (1989); Bengio, Vinyals, Jaitly & Shazeer
 (2015); Holtzman et al. (2019); Wu et al. (2016); Bahdanau, Cho & Bengio (2014); Graves, Wayne & Danihelka (2014);
@@ -300,6 +301,7 @@ O(T log T)（布莱洛克的工作量最优扫描用O(T)工作量、2 log₂ T�
 | input gate, forget gate, output gate | 输入门，遗忘门，输出门 |
 | gated recurrent unit (GRU), update gate, reset gate | 门控循环单元（GRU），更新门，重置门 |
 | half-life (of a memory) | （记忆的）半衰期 |
+| chrono initialization | 时序初始化 |
 | character-level language model, char-rnn | 字符级语言模型，char-rnn |
 | sequence to sequence (seq2seq), encoder, decoder | 序列到序列（seq2seq），编码器，解码器 |
 | machine translation, phrase-based, BLEU | 机器翻译，基于短语的，BLEU |
