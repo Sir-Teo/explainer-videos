@@ -30,6 +30,16 @@ Items:
     context    the surprise of one word with and without the paragraphs before it (memory)
     vectors    GPT-2's vectors for a few words, and random directions in 3 and 768 dimensions (Part 3's teaser)
     scoreboard the series' scoreboard rows, assembled from the items above
+    groups     Shannon's grouping rule for entropy, checked on the letters (space / vowel / consonant)
+    kraft      Kraft's inequality on the tree, its converse, and McMillan's for uniquely decodable codes
+    huffopt    Huffman's code against an exhaustive search for the best prefix code (27 letters; 400 random alphabets)
+    typical    the asymptotic equipartition property: sampled letters, and a coin's typical set, exactly
+    arithint   the passage through a finite-precision integer arithmetic coder; the zoom recorded on "the falcon"
+    smoothing  add-alpha smoothing across alpha (alpha = 1: Laplace's rule) at three context lengths
+    dpi        mutual information between neighbouring letters, and the data-processing inequality
+    units      bits per character, per token and per byte; perplexity (from lms and raw)
+    compress   the passage's size under each compressor and model, with and without the model's own weights
+    lmzip      GPT-2 small as a compressor: the start of the passage encoded and decoded back (about 5 minutes)
 """
 
 from __future__ import annotations
@@ -942,6 +952,535 @@ def compute_vectors():
 
 
 # ---------------------------------------------------------------------------
+# Entropy's axioms: Shannon's grouping rule, checked on the letters
+# ---------------------------------------------------------------------------
+VOWELS = "aeiou"
+GROUPS = ("space", "vowel", "consonant")
+
+
+def letter_group(c: str) -> int:
+    return 0 if c == " " else (1 if c in VOWELS else 2)
+
+
+def compute_groups():
+    """Shannon's third requirement (1948): a choice split into two successive choices has the weighted sum of their
+    entropies.  On the letters: first space, vowel or consonant, then which one."""
+    p = np.asarray(load("letters")["p"], float)
+    g = np.array([letter_group(c) for c in ALPHA27])
+    P = np.array([p[g == k].sum() for k in range(3)])
+    within = np.array([entropy(p[g == k] / P[k]) for k in range(3)])
+    H, Hg = entropy(p), entropy(P)
+    assert abs(H - (Hg + float((P * within).sum()))) < 1e-9  # the grouping rule holds exactly
+    # Shannon's own example: H(1/2, 1/3, 1/6) = H(1/2, 1/2) + 1/2 H(2/3, 1/3)
+    ex = entropy([1 / 2, 1 / 3, 1 / 6])
+    assert abs(ex - (1.0 + 0.5 * entropy([2 / 3, 1 / 3]))) < 1e-12
+    return dict(names=list(GROUPS), P=P, within=within, H=H, H_groups=Hg, sizes=[int((g == k).sum()) for k in range(3)],
+                shannon_example=ex)
+
+
+# ---------------------------------------------------------------------------
+# Kraft and McMillan
+# ---------------------------------------------------------------------------
+PREFIX_CODE = {"a": "0", "b": "10", "c": "110", "d": "1110", "e": "11110", "f": "11111"}
+UD_CODE = {"a": "0", "b": "01", "c": "011", "d": "0111"}  # not prefix-free (0 starts 01), yet uniquely decodable
+BAD_CODE = {"a": "0", "b": "1", "c": "01"}  # Kraft's sum 5/4: "01" is ab or c
+
+
+def sardinas_patterson(words) -> bool:
+    """Is the code uniquely decodable?  (Sardinas & Patterson, 1953: no dangling suffix is ever a codeword.)"""
+    C = set(words)
+
+    def tails(A, B):
+        return {b[len(a):] for a in A for b in B if b.startswith(a) and b != a}
+
+    S = tails(C, C)
+    seen = set()
+    while S:
+        if S & C:
+            return False
+        key = frozenset(S)
+        if key in seen:
+            return True
+        seen.add(key)
+        S = tails(S, C) | tails(C, S)
+    return True
+
+
+def prefix_free(words) -> bool:
+    return not any(a != b and b.startswith(a) for a in words for b in words)
+
+
+def compute_kraft():
+    """Kraft's inequality on the tree, its converse (a code built from any lengths that obey it) and McMillan's
+    extension to every uniquely decodable code, by counting the messages of k codewords."""
+    out = {}
+    for name, code in (("prefix", PREFIX_CODE), ("ud", UD_CODE), ("bad", BAD_CODE)):
+        L = [len(c) for c in code.values()]
+        s = sum(Fraction(1, 2 ** l) for l in L)
+        lmax = max(L)
+        ud = sardinas_patterson(code.values())
+        # A_m: the number of k-codeword messages whose bits number m, by multiplying the length polynomial k times
+        poly = np.zeros(lmax + 1, np.int64)
+        for l in L:
+            poly[l] += 1
+        Ak = np.array([1], np.int64)
+        powers, collide = [], []
+        for k in range(1, 21):
+            Ak = np.convolve(Ak, poly)
+            powers.append(float(s) ** k)
+            if k <= 6:  # count the distinct bit strings the messages make (a collision means two readings)
+                msgs = [""]
+                for _ in range(k):
+                    msgs = [m + c for m in msgs for c in code.values()]
+                collide.append(len(msgs) - len(set(msgs)))
+            if k == 3:
+                out[f"{name}_A3"] = Ak.copy()
+        out[name] = dict(code=code, lengths=L, kraft=float(s), kraft_frac=f"{s.numerator}/{s.denominator}", lmax=lmax,
+                         prefix_free=prefix_free(code.values()), ud=ud, powers=powers, collisions=collide)
+    assert out["prefix"]["prefix_free"] and out["prefix"]["kraft"] == 1.0
+    assert out["ud"]["ud"] and not out["ud"]["prefix_free"] and out["ud"]["kraft"] <= 1
+    assert not out["bad"]["ud"] and out["bad"]["kraft"] > 1 and max(out["bad"]["collisions"]) > 0
+    # McMillan: a uniquely decodable code's (Kraft sum)^k stays under k * lmax; the bad code's outgrows it
+    assert all(v <= (k + 1) * out["ud"]["lmax"] for k, v in enumerate(out["ud"]["powers"]))
+    kx = next(k + 1 for k, v in enumerate(out["bad"]["powers"]) if v > (k + 1) * out["bad"]["lmax"])
+    out["bad_cross"] = kx
+    # the tree: with the longest codeword lmax deep, codeword i claims 2^(lmax - l_i) of the 2^lmax bottom leaves
+    lm = out["prefix"]["lmax"]
+    out["leaves"] = [2 ** (lm - l) for l in out["prefix"]["lengths"]]
+    # the converse, on the letters: Shannon's lengths ceil(log2 1/p) obey Kraft, so a prefix code with them exists
+    p = np.asarray(load("letters")["p"], float)
+    ell = np.ceil(-np.log2(p)).astype(int)
+    order = np.argsort(ell, kind="stable")
+    code, nxt, prev = {}, 0, 0
+    for i in order:  # the canonical code: the next free node at each depth, left to right
+        nxt <<= int(ell[i]) - prev
+        code[int(i)] = format(nxt, f"0{int(ell[i])}b")
+        nxt += 1
+        prev = int(ell[i])
+    assert prefix_free(code.values()) and sum(2.0 ** -ell) <= 1
+    out["shannon_lengths"] = ell
+    out["shannon_kraft"] = float(sum(2.0 ** -ell))
+    out["canonical"] = [code[i] for i in range(27)]
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Huffman is optimal: checked against an exhaustive search
+# ---------------------------------------------------------------------------
+def huffman_lengths(p) -> tuple[np.ndarray, float]:
+    """Codeword lengths of a Huffman code, and the sum of the merged weights (which equals the average length)."""
+    heap = [(float(x), i, (i,)) for i, x in enumerate(p)]
+    heapq.heapify(heap)
+    depth = np.zeros(len(p), int)
+    merged, nid = 0.0, len(p)
+    while len(heap) > 1:
+        a = heapq.heappop(heap)
+        b = heapq.heappop(heap)
+        for i in a[2] + b[2]:
+            depth[i] += 1
+        merged += a[0] + b[0]
+        heapq.heappush(heap, (a[0] + b[0], nid, a[2] + b[2]))
+        nid += 1
+    return depth, merged
+
+
+def optimal_length(p) -> float:
+    """The least average length of any prefix code, by exhaustive search over the shapes of code trees (no Huffman):
+    an optimal code gives likelier symbols codewords no longer than rarer ones, so place the symbols in order of
+    probability, level by level, choosing how many leaves to stop at each level."""
+    from functools import lru_cache
+
+    q = sorted((float(x) for x in p), reverse=True)
+    n = len(q)
+    if n == 1:
+        return 0.0
+    tail = [sum(q[i:]) for i in range(n + 1)]
+
+    @lru_cache(maxsize=None)
+    def f(i, k):  # i symbols placed; k free nodes at this depth; the cost of going deeper
+        best = math.inf
+        for j in range(0, min(k, n - i) + 1):
+            if i + j == n:
+                return 0.0
+            nk = min(2 * (k - j), n - i - j)
+            if k - j >= 1 and (j > 0 or nk > k):  # going deeper without placing a symbol must widen the level
+                best = min(best, tail[i + j] + f(i + j, nk))
+        return best
+
+    return 1.0 + f(0, 2)
+
+
+def brute_force_length(p) -> float:
+    """Every assignment of codeword lengths 1..n-1 that obeys Kraft's inequality, without any ordering assumption."""
+    import itertools
+
+    n = len(p)
+    best = math.inf
+    for L in itertools.product(range(1, n), repeat=n):
+        if sum(2.0 ** -l for l in L) <= 1 + 1e-12:
+            best = min(best, sum(pi * l for pi, l in zip(p, L)))
+    return best
+
+
+def compute_huffopt():
+    """Huffman's average length against the exhaustive optimum: on the 27 letters, and on random alphabets."""
+    hf = load("huffman")
+    p = np.asarray(load("letters")["p"], float)
+    lengths, merged = huffman_lengths(p)
+    L = float((p * lengths).sum())
+    assert abs(L - hf["L"]) < 1e-12 and abs(merged - L) < 1e-12  # L = the sum of the merged weights
+    opt27 = optimal_length(p)
+    assert abs(opt27 - L) < 1e-12
+    # the two rarest letters are siblings at the deepest level
+    codes = hf["codes"]
+    rare = np.argsort(p)[:2]
+    a, b = codes[rare[0]], codes[rare[1]]
+    assert len(a) == len(b) == max(len(c) for c in codes) and a[:-1] == b[:-1]
+    # the exchange: give e's codeword to z and z's to e
+    ie, iz = ALPHA27.index("e"), ALPHA27.index("z")
+    le, lz = len(codes[ie]), len(codes[iz])
+    swap_cost = float((p[ie] - p[iz]) * (lz - le))
+    g = rng(1952)
+    trials, worst, brute_checked = [], 0.0, 0
+    for t in range(400):
+        n = int(g.integers(2, 13))
+        q = g.dirichlet(np.full(n, 0.6 if t % 2 else 1.5))
+        hl, _ = huffman_lengths(q)
+        h = float((q * hl).sum())
+        o = optimal_length(q)
+        if n <= 7:
+            bf = brute_force_length(q)
+            assert abs(bf - o) < 1e-9
+            brute_checked += 1
+        worst = max(worst, abs(h - o))
+        trials.append((n, h, o))
+    assert worst < 1e-9  # Huffman's theorem
+    return dict(L=L, opt27=opt27, merged=merged, rare=[ALPHA27[i] for i in rare], rare_codes=[a, b], swap_cost=swap_cost,
+                le=le, lz=lz, n_trials=len(trials), brute_checked=brute_checked, worst=worst,
+                trial_n=np.array([t[0] for t in trials]), trial_h=np.array([t[1] for t in trials]),
+                trial_o=np.array([t[2] for t in trials]))
+
+
+# ---------------------------------------------------------------------------
+# Typical sequences: the asymptotic equipartition property
+# ---------------------------------------------------------------------------
+AEP_NS = (1, 10, 100, 1000, 10000)
+AEP_EPS = 0.15  # bits, the typical set's tolerance in the coin example
+
+
+def coin_classes(n: int, q: float):
+    """For n independent tosses with P(1) = q: per number of ones k, log2 of how many sequences, and the log2
+    probability of each one."""
+    k = np.arange(n + 1)
+    logC = np.array([(math.lgamma(n + 1) - math.lgamma(j + 1) - math.lgamma(n - j + 1)) / math.log(2) for j in k])
+    logp = k * math.log2(q) + (n - k) * math.log2(1 - q)
+    return k, logC, logp
+
+
+def log2sum(a) -> float:
+    a = np.asarray(a, float)
+    m = a.max()
+    return float(m + np.log2(np.exp2(a - m).sum()))
+
+
+def compute_typical():
+    """The AEP on the letters (sampled, independent letters at the books' frequencies) and, exactly, on a coin that
+    comes up "space" with the books' space frequency: the typical set's probability and its share of all sequences."""
+    p = np.asarray(load("letters")["p"], float)
+    H = entropy(p)
+    g = rng(1948)
+    lp = np.log2(p)
+    hist, inside, sds = {}, {}, {}
+    edges = np.linspace(0, 12, 241)
+    for n in AEP_NS:
+        counts = g.multinomial(n, p, size=4000)
+        s = -(counts @ lp) / n
+        hist[str(n)] = np.histogram(s, bins=edges)[0].tolist()
+        inside[str(n)] = float(np.mean(np.abs(s - H) <= 0.1))
+        sds[str(n)] = float(s.std())
+    assert sds["10000"] < sds["100"] < sds["1"]  # the per-letter surprise of a long sequence concentrates at H
+    q = float(p[0])  # P(space)
+    h = entropy([q, 1 - q])
+    ns = sorted({int(round(x)) for x in np.logspace(np.log10(4), 3, 40)} | {4, 8, 12, 16, 20, 50, 100, 1000})
+    rows = []
+    for n in ns:
+        k, logC, logp = coin_classes(n, q)
+        rate = -logp / n
+        typ = np.abs(rate - h) <= AEP_EPS
+        if not typ.any():
+            continue
+        P_A = float(np.exp2(np.array([log2sum(logC[typ] + logp[typ])])).item())
+        size = log2sum(logC[typ])
+        # Shannon's code on whole blocks: ceil(log2 1/p(x)) bits for each block x
+        shannon = float(np.exp2(logC + logp) @ np.ceil(-logp)) / n
+        rows.append(dict(n=n, k_lo=int(k[typ].min()), k_hi=int(k[typ].max()), P=P_A, log2_size=size,
+                         log2_frac=size - n, shannon_rate=shannon, p_top=float((1 - q) ** n)))
+    assert all(h - 1e-12 <= r["shannon_rate"] < h + 1 / r["n"] for r in rows)  # H <= rate < H + 1/n
+    big = rows[-1]
+    assert big["P"] > 0.99 and big["log2_frac"] < -50
+    return dict(H=H, hist=hist, edges=edges, inside=inside, sd=sds, ns=list(AEP_NS), q=q, h=h, eps=AEP_EPS, rows=rows,
+                gap27=math.log2(27) - H)
+
+
+# ---------------------------------------------------------------------------
+# Arithmetic coding in finite precision
+# ---------------------------------------------------------------------------
+def order_probs(train: np.ndarray, test: np.ndarray, order: int, alpha: float, K: int = 27) -> np.ndarray:
+    """q(c | the previous `order` symbols) for every position of `test` from `order` on, as a (len - order, K) table."""
+    m = NGram(train, order, K)
+    ctx = context_keys(test, order, K)
+    rows = np.empty((len(ctx), K))
+    for c in range(K):
+        nj, nc = m.counts(ctx, np.full(len(ctx), c, np.int64))
+        rows[:, c] = (nj + alpha) / (nc + alpha * K)
+    return rows
+
+
+def code_with(probs: np.ndarray, symbols: np.ndarray, freq_bits: int, precision: int) -> tuple[int, bool]:
+    """Encode the symbols under the (quantized) model, decode them back; the number of bits and whether it matched."""
+    from videos.ai.ai1.coder import Decoder, Encoder, quantize
+
+    cdfs = [quantize(r, freq_bits) for r in probs]
+    enc = Encoder(precision)
+    for cdf, s in zip(cdfs, symbols):
+        enc.encode(int(cdf[s]), int(cdf[s + 1]), int(cdf[-1]))
+    bits = enc.finish()
+    dec = Decoder(bits, precision)
+    ok = True
+    for cdf, s in zip(cdfs, symbols):
+        t = dec.find(cdf)
+        ok &= t == s
+        dec.consume(int(cdf[t]), int(cdf[t + 1]), int(cdf[-1]))
+    return len(bits), bool(ok)
+
+
+FREQ_BITS = (5, 6, 7, 8, 10, 12, 14, 16, 20, 24, 28)
+REG_BITS = (12, 14, 16, 20, 24, 32)
+
+
+def compute_arithint():
+    """The Falcon passage (Shannon's alphabet) through a 32-bit integer arithmetic coder driven by the best counting
+    model: total bits against the model's information content, as the frequency tables and the registers get coarser.
+    And the coder's own record of narrowing and zooming on "the falcon" with 16-bit registers."""
+    from videos.ai.ai1.coder import Encoder, quantize
+
+    o = load("orders")
+    k = int(o["best"])
+    alpha = float(o["rows"][k]["alpha"])
+    tr, te = codes27(text("train27")), codes27(text("passage27"))
+    probs = order_probs(tr, te, k, alpha)
+    sym = te[k:]
+    ideal = float(-np.log2(probs[np.arange(len(sym)), sym]).sum())
+    assert abs(ideal / len(sym) - o["rows"][k]["test"]) < 1e-9
+    by_freq = []
+    for f in FREQ_BITS:
+        n, ok = code_with(probs, sym, f, 32)
+        assert ok
+        by_freq.append(n)
+        print(f"    freq {f:2d} bits: {n} bits, overhead {n - ideal:.1f}", flush=True)
+    by_reg = []
+    for r in REG_BITS:
+        n, ok = code_with(probs, sym, min(10, r - 2), r)
+        assert ok
+        by_reg.append(n)
+        print(f"    registers {r:2d} bits (freq {min(10, r - 2)}): {n} bits", flush=True)
+    # the zoom, recorded: "the falcon" after "he said ", under the order-3 model of `arith`, 16-bit registers
+    a = load("arith")
+    enc = Encoder(16, trace=True)
+    marks = []
+    for st in a["steps"]:
+        cdf = quantize(st["probs"], 12)
+        s = ALPHA27.index(st["symbol"])
+        enc.encode(int(cdf[s]), int(cdf[s + 1]), int(cdf[-1]))
+        marks.append(len(enc.trace))
+    bits = enc.finish()
+    return dict(order=k, alpha=alpha, n=len(sym), ideal=ideal, freq_bits=list(FREQ_BITS), by_freq=by_freq,
+                reg_bits=list(REG_BITS), by_reg=by_reg, trace=[list(t) for t in enc.trace], step_ends=marks,
+                falcon_bits="".join(map(str, bits)), falcon_exact=a["n_bits"], falcon_info=a["info"])
+
+
+# ---------------------------------------------------------------------------
+# A language model as a compressor: GPT-2 small and the integer coder, round trip
+# ---------------------------------------------------------------------------
+LMZIP_TOKENS = 1023  # with the start token, one full GPT-2 window: no context is ever dropped
+
+
+def compute_lmzip():
+    """Compress the start of the Falcon passage with GPT-2 small driving the arithmetic coder, then decompress it with
+    a second, independent pass of the model, and compare.  Both passes run the same incremental computation (one token
+    at a time, with the model's key-value cache), so they see the same probabilities.  About 5 minutes on one core."""
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    from videos.ai.ai1.coder import Decoder, Encoder, quantize
+
+    torch.set_grad_enabled(False)
+    torch.set_num_threads(1)
+    mid = "openai-community/gpt2"
+    tok = AutoTokenizer.from_pretrained(mid)
+    model = AutoModelForCausalLM.from_pretrained(mid, dtype=torch.float32).eval()
+    passage = text("passage")
+    ids = tok(passage, add_special_tokens=False)["input_ids"][:LMZIP_TOKENS]
+    piece = tok.decode(ids)
+    assert passage.startswith(piece), "GPT-2's byte-level tokens decode back to the text"
+    bos = tok.convert_tokens_to_ids("<|endoftext|>")
+    F = 24  # frequency-table bits: 50,257 tokens, each at least 1, in 2^24
+
+    def run(step):  # feed tokens one at a time; step(cdf) returns the next token (encoding: the true one)
+        past, x, out, ideal = None, bos, [], 0.0
+        for _ in range(len(ids)):
+            o = model(torch.tensor([[x]]), past_key_values=past, use_cache=True)
+            past = o.past_key_values
+            pr = torch.softmax(o.logits[0, -1].double(), -1).numpy()
+            cdf = quantize(pr, F)
+            x = step(cdf)
+            ideal -= math.log2(pr[x])
+            out.append(x)
+        return out, ideal
+
+    t0 = time.time()
+    enc = Encoder(32)
+    it = iter(ids)
+
+    def put(cdf):
+        s = next(it)
+        enc.encode(int(cdf[s]), int(cdf[s + 1]), int(cdf[-1]))
+        return s
+
+    _, ideal = run(put)
+    bits = enc.finish()
+    t_enc = time.time() - t0
+    dec = Decoder(bits, 32)
+
+    def get(cdf):
+        s = dec.find(cdf)
+        dec.consume(int(cdf[s]), int(cdf[s + 1]), int(cdf[-1]))
+        return s
+
+    got, _ = run(get)
+    t_dec = time.time() - t0 - t_enc
+    ok = got == ids and tok.decode(got) == piece
+    data = piece.encode("utf-8")
+    comp = {"gzip": len(gzip.compress(data, 9)), "bzip2": len(bz2.compress(data, 9)),
+            "xz": len(lzma.compress(data, preset=9 | lzma.PRESET_EXTREME))}
+    print(f"    {len(piece)} chars, {len(ids)} tokens: {len(bits)} bits ({ideal:.1f} ideal), round trip {ok}; "
+          f"{t_enc:.0f}s + {t_dec:.0f}s; {comp}", flush=True)
+    del model
+    return dict(chars=len(piece), bytes=len(data), tokens=len(ids), bits=len(bits), ideal=ideal, ok=bool(ok),
+                seconds_enc=t_enc, seconds_dec=t_dec, compressors=comp, freq_bits=F, head=piece[:160],
+                params=124e6)
+
+
+# ---------------------------------------------------------------------------
+# Laplace's rule, and add-alpha smoothing
+# ---------------------------------------------------------------------------
+SMOOTH_ORDERS = (1, 3, 5, 8)
+SMOOTH_ALPHAS = np.logspace(-4, 1, 26)
+
+
+def compute_smoothing():
+    """Bits per letter on held-out text and on the passage, for add-alpha smoothing across alpha (alpha = 1 is
+    Laplace's rule), at three context lengths; and how often the passage meets a context or a letter the books never
+    showed."""
+    tr, va, te = codes27(text("train27")), codes27(text("valid27")), codes27(text("passage27"))
+    alphas = np.unique(np.concatenate([SMOOTH_ALPHAS, [1.0]]))
+    out = dict(orders=list(SMOOTH_ORDERS), alphas=alphas)
+    for N in SMOOTH_ORDERS:
+        m = NGram(tr, N, 27)
+        out[f"valid_{N}"] = np.array([float(m.bits(va, a).mean()) for a in alphas])
+        out[f"test_{N}"] = np.array([float(m.bits(te, a).mean()) for a in alphas])
+        nj, nc = m.counts(context_keys(te, N, 27), te[N:])
+        out[f"unseen_ctx_{N}"] = float(np.mean(nc == 0))
+        out[f"unseen_pair_{N}"] = float(np.mean(nj == 0))
+        i = int(np.argmin(out[f"valid_{N}"]))
+        print(f"    order {N}: Laplace {out[f'test_{N}'][list(alphas).index(1.0)]:.3f}, best alpha {alphas[i]:.4f} "
+              f"-> {out[f'test_{N}'][i]:.3f}; unseen pairs {out[f'unseen_pair_{N}']:.3f}", flush=True)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Mutual information and the data-processing inequality
+# ---------------------------------------------------------------------------
+def mutual_info(J: np.ndarray) -> float:
+    J = J / J.sum()
+    a, b = J.sum(1), J.sum(0)
+    nz = J > 0
+    return float((J[nz] * np.log2(J[nz] / np.outer(a, b)[nz])).sum())
+
+
+DPI_EPS = np.linspace(0, 1, 21)
+
+
+def compute_dpi():
+    """What the previous letter tells you about the next, and what is left after processing it: lumping it into space,
+    vowel or consonant; sending it through a noisy channel; both."""
+    J = np.asarray(load("bigram")["joint"], float)  # rows: the previous letter Y; columns: the next letter X
+    I_xy = mutual_info(J)
+    b = load("bigram")
+    assert abs(I_xy - (b["H1"] - b["H_cond"])) < 1e-6  # I = H(X) - H(X | Y)
+    g = np.array([letter_group(c) for c in ALPHA27])
+    lump = np.zeros((27, 3))
+    lump[np.arange(27), g] = 1
+    I_group = mutual_info(lump.T @ J)
+
+    def noisy(e):
+        return (1 - e) * np.eye(27) + e / 27
+
+    I_noise = np.array([mutual_info(noisy(e).T @ J) for e in DPI_EPS])
+    I_both = np.array([mutual_info(lump.T @ noisy(e).T @ J) for e in DPI_EPS])
+    assert I_group < I_xy and np.all(np.diff(I_noise) <= 1e-12) and np.all(I_both <= I_noise + 1e-12)
+    # the chain rule, I(X; Y, W) = I(X; W) + I(X; Y | W), with W = the group of Y: the group carries part of it
+    I_rest = I_xy - I_group
+    # two letters back: I(X_t; X_{t-1}, X_{t-2}) from the books' trigram counts
+    a = codes27(text("train27"))
+    T = np.bincount((a[:-2] * 27 + a[1:-1]) * 27 + a[2:], minlength=27 ** 3).reshape(729, 27).astype(float)
+    I_two = mutual_info(T)
+    I_skip = mutual_info(T.reshape(27, 27, 27).sum(1))  # X_{t-2} alone
+    assert I_two > I_xy > I_skip
+    return dict(I_xy=I_xy, I_group=I_group, I_rest=I_rest, eps=DPI_EPS, I_noise=I_noise, I_both=I_both,
+                H_next=float(b["H1"]), H_cond=float(b["H_cond"]), I_two=I_two, I_skip=I_skip)
+
+
+# ---------------------------------------------------------------------------
+# Units: bits per character, per token, per byte; perplexity
+# ---------------------------------------------------------------------------
+def compute_units():
+    lms, raw = load("lms"), load("raw")
+    n, nb = int(raw["n_chars"]), int(raw["n_bytes"])
+    rows = []
+    for r in lms["rows"]:
+        rows.append(dict(label=r["label"], tokens=r["tokens"], chars_per_token=r["chars_per_token"],
+                         bits_per_token=r["bits_per_token"], bpc=r["bpc"], ppl_token=2 ** r["bits_per_token"],
+                         nats_token=r["bits_per_token"] * math.log(2), bpb=r["bpc"] * n / nb))
+        assert abs(r["bits_per_token"] * r["tokens"] - r["bpc"] * n) < 1e-6 * r["bpc"] * n  # the same total
+    best = raw["rows"][raw["best"]]["test"]
+    counting = dict(label=f"the previous {raw['best']} characters", tokens=n, chars_per_token=1.0, bits_per_token=best,
+                    bpc=best, ppl_token=2 ** best, nats_token=best * math.log(2), bpb=best * n / nb)
+    para = lms["paragraph"]
+    tok_para = {k: len(v["tokens"]) for k, v in lms["surprise"].items()}
+    return dict(rows=rows, counting=counting, chars=n, bytes=nb, paragraph_chars=len(para), paragraph_tokens=tok_para)
+
+
+# ---------------------------------------------------------------------------
+# Language models as compressors, counting the model
+# ---------------------------------------------------------------------------
+def compute_compress():
+    """The passage's size under each compressor and model, and the same with the model's own weights counted
+    (two bytes a parameter, as Deletang et al. 2024 count them)."""
+    lms, raw = load("lms"), load("raw")
+    n = int(raw["n_chars"])
+    plain = int(raw["n_bytes"])
+    sizes = {k: v * n / 8 for k, v in raw["compressors"].items()}
+    sizes["counting"] = raw["best_bits"] * n / 8
+    model = {}
+    for r in lms["rows"]:
+        sizes[r["label"]] = r["bpc"] * n / 8 + 0.25  # + the coder's 2 bits
+        model[r["label"]] = 2 * r["params"]
+    return dict(plain=plain, sizes=sizes, model_bytes=model, rate={k: v / plain for k, v in sizes.items()},
+                adjusted={k: (sizes[k] + model[k]) / plain for k in model})
+
+
+# ---------------------------------------------------------------------------
 # The scoreboard
 # ---------------------------------------------------------------------------
 def compute_scoreboard():
@@ -988,6 +1527,16 @@ ITEMS = {
     "context": compute_context,
     "vectors": compute_vectors,
     "scoreboard": compute_scoreboard,
+    "groups": compute_groups,
+    "kraft": compute_kraft,
+    "huffopt": compute_huffopt,
+    "typical": compute_typical,
+    "arithint": compute_arithint,
+    "smoothing": compute_smoothing,
+    "dpi": compute_dpi,
+    "units": compute_units,
+    "compress": compute_compress,
+    "lmzip": compute_lmzip,
 }
 
 

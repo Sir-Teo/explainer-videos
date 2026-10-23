@@ -24,6 +24,7 @@ from explainer.ai import *  # noqa: F403
 
 from .compute import ALPHA27, load  # noqa: F401
 
+PART = 1
 MONO = "DejaVu Sans Mono"
 SPACE = "␣"  # ␣
 

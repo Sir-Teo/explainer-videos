@@ -396,6 +396,7 @@
   "Dehghani et al.\\ (2023); \\ Gemma Team (2024, 2025); \\ Olsson et al., \\textit{Induction Heads} (2022); \\ von Oswald et al.\\ (2023); \\ Garg et al.\\ (2022)": "Dehghani等（2023）；\\ Gemma Team（2024，2025）；\\ Olsson等，\\textit{Induction Heads}（2022）；\\ von Oswald等（2023）；\\ Garg等（2022）",
   "Weiss et al., \\textit{Thinking Like Transformers} (2021); \\ Lindner et al., \\textit{Tracr} (2023); \\ Merrill \\& Sabharwal (2023, 2024); \\ Merrill, Petty \\& Sabharwal (2024); \\ Zhou et al.\\ (2023)": "Weiss等，\\textit{Thinking Like Transformers}（2021）；\\ Lindner等，\\textit{Tracr}（2023）；\\ Merrill \\& Sabharwal（2023，2024）；\\ Merrill、Petty \\& Sabharwal（2024）；\\ Zhou等（2023）",
   "Text: Project Gutenberg (Part 1's $30$ novels). \\ Every model here is trained by this part's code; \\ every number on screen is computed or cited.": "文本：古登堡计划（第1部分的 $30$ 部小说）。\\ 这里的每个模型都由本部分的代码训练；\\ 屏幕上的每个数字都是算出来的或有出处的。",
-  "$1$M \\ tokens": "$1$M \\ 词元"
+  "$1$M \\ tokens": "$1$M \\ 词元",
+  "without it: \\ the entropy collapses \\\\ as the weights grow": "没有它：\\ 权重一变大， \\\\ 熵就会塌缩"
  }
 }

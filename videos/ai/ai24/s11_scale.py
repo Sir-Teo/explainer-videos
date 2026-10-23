@@ -127,7 +127,7 @@ class Scale(VoiceoverScene):
                    r"first", font_size=20, color=GREY_A).next_to(axis, UP, buff=3.5)
         leg = VGroup(label(r"trained on the raw pool", font_size=20, color=RAW),
                      label(r"trained on the curated pool", font_size=20, color=CUR)).arrange(RIGHT, buff=0.6)
-        leg.next_to(yl, DOWN, buff=0.15)
+        leg.next_to(yl, UP, buff=0.15)
         S = c["summary"]
         rare = order[-3:]
         gain_rare = float(np.mean(per_c[rare] - per_r[rare]))
@@ -201,7 +201,7 @@ class Scale(VoiceoverScene):
         ch = bars_chart([53.87, 52.97], [DINO_C, SIMCLR], [r"Web-DINO 7B \\ (images only)",
                                                         r"MetaCLIP 7B \\ (images + captions)"],
                         height=2.8, bar_w=1.4, gap=1.2, vmin=50, vmax=55, digits=2, font_size=26)
-        ch.move_to([-3.0, -0.5, 0])
+        ch.move_to([-3.0, -0.1, 0])
         cap = label(r"average over 16 visual question-answering tasks", font_size=20, color=GREY_A).next_to(ch, DOWN,
                                                                                                         buff=0.5)
         pts = VGroup(

@@ -364,22 +364,39 @@ CHAIN_N = 12
 T_DIFF = 200
 
 
-def chain2d(rng, n=CHAIN_N):
-    """A compact self-avoiding chain in the plane with unit bonds: turning angles of 50-110 degrees, mostly one way,
-    kept only if no two atoms come closer than 0.8 and the radius of gyration is below 1.35."""
+def chain2d(rng, n=CHAIN_N, max_rg=1.6):
+    """A compact chain in the plane with unit bonds: a self-avoiding walk grown on the square lattice (each step to a
+    random free neighbour), kept if its radius of gyration is below ``max_rg``, then its turning angles (0 or +-90
+    degrees) jittered by 8 degrees and the chain rebuilt, kept if no two atoms come within 0.7."""
+    steps = np.array([[1, 0], [0, 1], [-1, 0], [0, -1]])
     while True:
-        sgn = 1 if rng.uniform() < 0.5 else -1
-        ang = 0.0
-        P = [np.zeros(2)]
-        for i in range(1, n):
-            turn = rng.uniform(50, 110) * (sgn if rng.uniform() < 0.8 else -sgn)
-            ang += math.radians(turn) if i > 1 else rng.uniform(0, 2 * math.pi)
-            P.append(P[-1] + np.array([math.cos(ang), math.sin(ang)]))
-        P = np.array(P)
-        D = np.sqrt(((P[:, None] - P[None]) ** 2).sum(-1))
+        P = [np.zeros(2, int)]
+        seen = {(0, 0)}
+        ok = True
+        for _ in range(n - 1):
+            free = [s_ for s_ in steps if tuple(P[-1] + s_) not in seen]
+            if not free:
+                ok = False
+                break
+            nxt = P[-1] + free[rng.integers(len(free))]
+            P.append(nxt)
+            seen.add(tuple(nxt))
+        if not ok:
+            continue
+        P = np.array(P, float)
+        if rg(np.c_[P, np.zeros(n)]) > max_rg:
+            continue
+        d = np.diff(P, axis=0)
+        ang = np.arctan2(d[:, 1], d[:, 0])
+        turns = np.diff(ang)
+        turns = (turns + np.pi) % (2 * np.pi) - np.pi
+        turns = turns + np.radians(rng.normal(0, 8, len(turns)))
+        a = np.concatenate([[rng.uniform(0, 2 * np.pi)], turns]).cumsum()
+        Q = np.concatenate([np.zeros((1, 2)), np.c_[np.cos(a), np.sin(a)].cumsum(0)])
+        D = np.sqrt(((Q[:, None] - Q[None]) ** 2).sum(-1))
         i, j = np.triu_indices(n, 2)
-        if D[i, j].min() > 0.8 and rg(np.c_[P, np.zeros(n)]) < 1.35:
-            return P - P.mean(0)
+        if D[i, j].min() > 0.7:
+            return Q - Q.mean(0)
 
 
 def chain_dataset(count, seed):
@@ -407,7 +424,7 @@ class EGNNDenoiser(nn.Module):
     """Predicts the noise in a noisy chain, equivariantly: messages see distances, the noise level and how far apart
     two atoms are along the chain; the output is a sum of difference vectors, so it turns as the chain turns."""
 
-    def __init__(self, hidden=64, layers=4, n=CHAIN_N):
+    def __init__(self, hidden=32, layers=4, n=CHAIN_N):
         super().__init__()
         self.idx = nn.Embedding(n, hidden)
         self.temb = nn.Linear(16, hidden)
@@ -456,7 +473,7 @@ def rot2(gen, B):
     return torch.stack([torch.stack([c, -s], -1), torch.stack([s, c], -1)], -2)
 
 
-def train_diffusion(kind, data, seed, steps, batch=128, lr=1e-3, snaps=(), snap_fn=None):
+def train_diffusion(kind, data, seed, steps, batch=64, lr=1e-3, snaps=(), snap_fn=None):
     torch.manual_seed(seed)
     gen = torch.Generator().manual_seed(4000 + seed)
     m = EGNNDenoiser() if kind == "egnn" else MLPDenoiser()
@@ -486,7 +503,7 @@ def train_diffusion(kind, data, seed, steps, batch=128, lr=1e-3, snaps=(), snap_
         loss.backward()
         opt.step()
         sched.step()
-        run = 0.98 * run + 0.02 * float(loss) if s else float(loss)
+        run = 0.98 * run + 0.02 * float(loss.detach()) if s else float(loss.detach())
         if s % 200 == 0:
             curve.append((s, run))
     m.eval()
@@ -506,9 +523,11 @@ def sample(m, count, seed, keep=()):
             tt = torch.full((count,), t)
             eps = m(x, tt)
             a, b = ab[t - 1], beta[t - 1]
-            mean = (x - b / (1 - a).sqrt() * eps) / (1 - b).sqrt()
+            a_prev = ab[t - 2] if t > 1 else torch.tensor(1.0)
+            x0 = ((x - (1 - a).sqrt() * eps) / a.sqrt()).clamp(-3.5, 3.5)  # the denoiser's guess of the clean chain
+            mean = (a_prev.sqrt() * b / (1 - a)) * x0 + ((1 - b).sqrt() * (1 - a_prev) / (1 - a)) * x
             if t > 1:
-                var = b * (1 - ab[t - 2]) / (1 - a)
+                var = b * (1 - a_prev) / (1 - a)
                 x = mean + var.sqrt() * torch.randn(x.shape, generator=gen)
             else:
                 x = mean
