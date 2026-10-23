@@ -99,9 +99,14 @@ class Likelihood(VoiceoverScene):
             "frequencies, p hat, and the model. <bookmark mark='c'/> That's the data's entropy plus the model's "
             "divergence from the data."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(setup), FadeIn(src))
+            lik = mtex(r"\text{likelihood}(\theta) = \prod_t q_\theta(x_t)", font_size=40).move_to(UP * 1.6)
+            fisher = history_card(1922, r"Ronald Fisher", r"maximum likelihood: \ choose the model under which the "
+                                  r"data you saw were most likely", width=7.4).move_to(DOWN * 1.9)
+            self.play(FadeIn(head), FadeIn(setup), FadeIn(src), FadeIn(fisher, shift=UP * 0.2))
             self.play(LaggedStart(*[FadeIn(sq, shift=DOWN * 0.2) for sq in tape], lag_ratio=0.015), run_time=2.0)
+            self.play(Write(lik))
             vo.wait_until("a")
+            self.play(FadeOut(lik), FadeOut(fisher), run_time=0.5)
             self.play(Write(eqs[0]), FadeIn(whys[0]))
             vo.wait_until("b")
             self.play(FadeOut(whys[0]), FadeIn(whys[1]), run_time=0.4)
@@ -300,7 +305,7 @@ class Likelihood(VoiceoverScene):
             vo.wait_until("b")
             pay = payoff_card([(r"derivatives, backpropagation", [4, 9]), (r"gradient descent, optimizers", [11]),
                                (r"the output layer of a transformer", [13])], font_size=22, title=r"")
-            pay.scale(0.9).to_corner(DR, buff=0.4)
+            pay.scale(0.85).move_to([3.7, -1.55, 0])
             self.play(FadeIn(pay))
         self.wait(0.3)
         self.clear_scene()

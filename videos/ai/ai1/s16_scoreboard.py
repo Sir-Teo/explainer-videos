@@ -146,7 +146,6 @@ class Scoreboard(VoiceoverScene):
             stages.scale_to_fit_width(13.4)
         arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.06, color=GREY_B, stroke_width=2.5,
                                 max_tip_length_to_length_ratio=0.3) for a, b in zip(stages, stages[1:])])
-        probs = label(r"probabilities", font_size=18, color=GREY_B).next_to(arrows[1], UP, buff=0.05)
         # sizes, as bars
         items = [(r"plain text", z["bytes"], GREY_B), (r"gzip", comp["gzip"], C.COMPRESSOR),
                  (r"bzip2", comp["bzip2"], C.COMPRESSOR), (r"xz", comp["xz"], C.COMPRESSOR),
@@ -169,19 +168,23 @@ class Scoreboard(VoiceoverScene):
         ratio = comp["xz"] / nb
         with self.voiceover(
             "Arithmetic coding turns any predictor into a compressor, so we built one. <bookmark mark='a'/> GPT-2 "
-            "small reads the start of the Falcon passage a token at a time, feeding chapter eight's 32-bit coder. Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
+            "small reads the start of the Falcon passage a token at a time, feeding chapter eight's 32-bit coder. "
+            f"Out come {nb} bytes, {z['bits'] - z['ideal']:.1f} bits more than "
             f"GPT-2's own surprise, <bookmark mark='b'/> {ok_said} <bookmark mark='c'/> On the same "
             f"{z['chars']:,} characters, xz needs {comp['xz']:,} bytes: {ratio:.1f} times as many."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(stages[0]))
+            self.play(FadeIn(head), FadeIn(stages[0]), LaggedStart(*[FadeIn(b_) for b_ in bars[:4]], lag_ratio=0.25),
+                      FadeIn(cap), run_time=2.0)
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(s_)) for a, s_ in zip(arrows[:3], stages[1:4])],
-                                  lag_ratio=0.6), FadeIn(probs), run_time=2.0)
+                                  lag_ratio=0.6), run_time=2.0)
+            self.play(FadeIn(bars[4], shift=RIGHT * 0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(s_)) for a, s_ in zip(arrows[3:], stages[4:])],
                                   lag_ratio=0.6), run_time=1.5)
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.25), FadeIn(cap), run_time=2.0)
+            self.play(Indicate(bars[3], color=C.COMPRESSOR, scale_factor=1.03), Indicate(bars[4], color=C.NEURAL,
+                                                                                           scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 
@@ -217,6 +220,24 @@ class Scoreboard(VoiceoverScene):
         blk = VGroup(tab_h, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0.4, -1.1, 0])
         src = cite(r"G.~Del\'etang et al., \textit{Language Modeling Is Compression} (ICLR 2024), Table 1; \ "
                    r"hutter1.net (record of 24 July 2026)")
+        lg = [(r"the passage, as plain text", plain, GREY_B), (r"GPT-2 small $+$ our coder", size_g2, C.NEURAL),
+              (r"GPT-2 small's weights", mb * 1e6, C.SURPRISE)]
+        X0, XW = -2.2, 7.4  # x of 10^3 bytes, and the width of six decades
+
+        def lx(v):
+            return X0 + XW * (math.log10(v) - 3) / 6
+
+        sizes = VGroup()
+        for k, (nm_, v, col) in enumerate(lg):
+            y = -0.55 - 0.62 * k
+            sizes.add(VGroup(label(nm_, font_size=22, color=col).move_to([X0 - 0.25, y, 0], aligned_edge=RIGHT),
+                             Rectangle(width=lx(v) - X0, height=0.36, stroke_width=0, fill_color=col,
+                                       fill_opacity=0.85).move_to([(X0 + lx(v)) / 2, y, 0])))
+        sax = Line([X0, -2.35, 0], [X0 + XW, -2.35, 0], color=GREY_C, stroke_width=2)
+        sticks = VGroup(*[VGroup(Line([lx(10 ** e), -2.42, 0], [lx(10 ** e), -2.28, 0], color=GREY_C, stroke_width=2),
+                                 label(t, font_size=20, color=GREY_B).next_to([lx(10 ** e), -2.42, 0], DOWN, buff=0.08))
+                          for e, t in ((3, r"$1$ KB"), (6, r"$1$ MB"), (9, r"$1$ GB"))])
+        sizes_g = VGroup(sizes, sax, sticks, note(r"log scale").next_to(sax, RIGHT, buff=0.15))
         hut = label(r"Hutter Prize record, \ July 2026: \ enwik9 in $100.4$ MB, \ decompressor included: \ "
                     r"$0.80$ bits per character", font_size=22, color=C.BITS).to_edge(DOWN, buff=0.75)
         with self.voiceover(
@@ -233,8 +254,9 @@ class Scoreboard(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in ours], lag_ratio=0.4), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in ours], lag_ratio=0.4), FadeIn(sizes_g), run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(sizes_g), run_time=0.5)
             self.play(FadeIn(tab_h), LaggedStart(*[FadeIn(r) for r in tab], lag_ratio=0.4), FadeIn(src), run_time=2.5)
             vo.wait_until("c")
             self.play(FadeIn(hut))

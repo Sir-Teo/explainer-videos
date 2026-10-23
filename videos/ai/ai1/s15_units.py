@@ -112,12 +112,17 @@ class Units(VoiceoverScene):
                     m.move_to([cols_x[j], y, 0])
         hl = SurroundingRectangle(VGroup(table[1][2], table[1][3]), color=C.SURPRISE, buff=0.1, corner_radius=0.08)
         hl2 = SurroundingRectangle(table[1][4], color=C.BITS, buff=0.1, corner_radius=0.08)
-        ppl = definition_card(r"perplexity", r"$2^{\text{bits per token}} = e^{\text{nats per token}}$: \ as unsure as "
-                              r"a fair choice among that many tokens", width=6.6, color=C.SURPRISE)
+        ppl = definition_card(r"perplexity", r"$2^{\,\text{bits per token}}$: \ as unsure as a fair choice among "
+                              r"that many tokens", width=6.6, color=C.SURPRISE)
         ppl.to_corner(DL, buff=0.3)
         bpb = label(rf"per byte: \ the passage is ${n:,}$ characters, \ ${nb:,}$ bytes".replace(",", "{,}"),
                     font_size=22, color=GREY_A).to_corner(DR, buff=0.4)
         g2 = next(r for r in rows_d if r["label"] == "GPT-2 small")
+        tot = g2["tokens"] * g2["bits_per_token"]
+        assert abs(tot - n * g2["bpc"]) < 1e-6 * tot  # the same total, counted two ways
+        ex = mtex(rf"\text{{GPT-2 small:}} \ \ {g2['tokens']:,} \times {g2['bits_per_token']:.2f} \ = \ {tot:,.0f} "
+                  rf"\text{{ bits}} \ = \ {n:,} \times {g2['bpc']:.3f}".replace(",", "{,}"), font_size=30,
+                  color=GREY_A).next_to(eq, DOWN, buff=0.35)
         wins_token = cnt["bits_per_token"] < g2["bits_per_token"]
         loses_char = cnt["bpc"] > g2["bpc"]
         verdict = (f"Per token, the counting model looks like the winner: {cnt['bits_per_token']:.2f} bits against "
@@ -138,6 +143,7 @@ class Units(VoiceoverScene):
             self.play(FadeIn(eq))
             vo.wait_until("a")
             self.play(Indicate(eq, color=C.BITS, scale_factor=1.03))
+            self.play(FadeIn(ex, shift=DOWN * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(table[0]), LaggedStart(*[FadeIn(r) for r in table[1:]], lag_ratio=0.25), run_time=2.0)
             vo.wait_until("c")
@@ -161,13 +167,13 @@ class Units(VoiceoverScene):
             label(r"almost a straight line: \ Pearson correlation $-0.93$", font_size=30, color=C.BITS),
             label(r"``bits per token are not directly comparable'' \ \ --- so they use bits per character", font_size=24,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.35).move_to(UP * 0.4)
+        ).arrange(DOWN, buff=0.3).move_to(UP * 1.45)
         # the shape of their finding: lower bits, higher scores (schematic)
-        ax = Axes(x_range=[0, 1, 1], y_range=[0, 1, 1], x_length=3.6, y_length=2.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).to_corner(DR, buff=0.5)
+        ax = Axes(x_range=[0, 1, 1], y_range=[0, 1, 1], x_length=5.6, y_length=2.6, tips=False,
+                  axis_config={"stroke_color": GREY_C, "include_ticks": False}).move_to([0.6, -1.85, 0])
         pts = [(0.15, 0.85), (0.25, 0.78), (0.32, 0.66), (0.45, 0.6), (0.52, 0.45), (0.63, 0.4), (0.75, 0.25),
                (0.85, 0.18)]
-        dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.05, color=C.NEURAL) for x, y in pts])
+        dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.07, color=C.NEURAL) for x, y in pts])
         fit = Line(ax.c2p(0.08, 0.92), ax.c2p(0.92, 0.1), color=C.BITS, stroke_width=2.5)
         axl = VGroup(label(r"bits per character", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.1),
                      label(r"benchmark score", font_size=18, color=GREY_B).next_to(ax, LEFT, buff=0.1).rotate(PI / 2))
@@ -182,11 +188,11 @@ class Units(VoiceoverScene):
             "benchmarks of knowledge, coding and mathematics. <bookmark mark='c'/> The points fall almost on a "
             "line, with a correlation of minus 0.93. The better a model compresses, the more it can do."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src), FadeIn(rows[0]))
+            self.play(FadeIn(head), FadeIn(src), FadeIn(rows[0]), Create(ax), FadeIn(axl), FadeIn(sch))
             vo.wait_until("a")
             self.play(FadeIn(rows[1]), FadeIn(rows[3]))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(axl), FadeIn(sch), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.1))
+            self.play(LaggedStart(*[FadeIn(d, scale=0.5) for d in dots], lag_ratio=0.15), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(rows[2]), Create(fit))
         self.wait(0.3)

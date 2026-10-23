@@ -72,8 +72,9 @@ class Knowledge(VoiceoverScene):
             f"instead of {ta:.0f}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(t) for t in pa], lag_ratio=0.03), run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(la), LaggedStart(*[FadeIn(t) for t in pa], lag_ratio=0.03), run_time=2.5)
+            self.play(FadeIn(la), Indicate(pa, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(lb), LaggedStart(*[FadeIn(t) for t in pb], lag_ratio=0.03), run_time=2.5)
         # where they differ
