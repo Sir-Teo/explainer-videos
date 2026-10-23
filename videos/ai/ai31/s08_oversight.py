@@ -63,7 +63,7 @@ class Oversight(VoiceoverScene):
             nest.add(VGroup(e, lab))
         for g_ in nest:
             g_.align_to(nest[0], DOWN)
-        nest.move_to([-3.3, -0.6, 0])
+        nest.scale(0.82).move_to([-3.7, -0.5, 0])
         thm = theorem_card(r"debate (Irving, Christiano \& Amodei, 2018)", r"two copies of a model argue opposite "
                            r"answers, \ in turns; \ a judge who can check one small step picks the winner. \ With "
                            r"optimal play, \ debate lets a polynomial-time judge answer any question in PSPACE, \ where "
@@ -78,12 +78,14 @@ class Oversight(VoiceoverScene):
             "judge alone can decide problems in P; checking one claimed answer reaches NP; with optimal debaters, a "
             "debate reaches all of PSPACE. The bet is that, in a debate, the truth is easier to defend than a lie."
         ) as vo:
-            self.play(FadeIn(thm, shift=UP * 0.15))
+            full = nest.copy()
+            nest.fade(0.8)
+            self.play(FadeIn(thm, shift=UP * 0.15), FadeIn(nest), FadeIn(sch))
             vo.wait_until("a")
-            self.play(FadeIn(nest[2]))
+            self.play(Transform(nest[2], full[2]))
             vo.wait_until("b")
-            self.play(FadeIn(nest[1]))
-            self.play(FadeIn(nest[0]), FadeIn(sch))
+            self.play(Transform(nest[1], full[1]))
+            self.play(Transform(nest[0], full[0]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -133,9 +135,11 @@ class Oversight(VoiceoverScene):
         boxes = VGroup(node_box(r"weak supervisor, \\ trained on the truth", WEAK, font_size=22),
                        node_box(r"strong model, \\ trained on the weak labels", STRONG, font_size=22),
                        node_box(r"strong model, \\ trained on the truth: \ the ceiling", CEIL, font_size=22))
-        boxes.arrange(RIGHT, buff=0.7).move_to([0, 0.7, 0])
+        boxes.arrange(RIGHT, buff=1.2).move_to([0, 0.7, 0])
+        if boxes.width > 13.4:
+            boxes.width = 13.4
         arrs = VGroup(Arrow(boxes[0].get_right(), boxes[1].get_left(), buff=0.1, color=GREY_B, stroke_width=3))
-        al = label(r"its labels", font_size=18, color=GREY_A).next_to(arrs[0], UP, buff=0.05)
+        al = label(r"its labels", font_size=18, color=GREY_A).next_to(arrs[0], UP, buff=0.12)
         cards = VGroup(
             history_card(2023, r"Burns et al., \ OpenAI", r"GPT-2-level supervisors, \ GPT-4 students: \ about half the "
                          r"gap recovered on NLP tasks; \ near $80\%$ with an auxiliary confidence loss", width=4.3,
@@ -194,8 +198,7 @@ class Oversight(VoiceoverScene):
             vals.add(MathTex(f"{v.mean():.1f}", font_size=22, color=col).next_to(bars[-1], UP, buff=0.08))
         chance = DashedLine(g.ax.c2p(0, 100 * d["chance"]), g.ax.c2p(4, 100 * d["chance"]), color=GREY_C,
                             dash_length=0.06)
-        cl = label(rf"chance: \ $1$ in ${d['classes']}$", font_size=18, color=GREY_C).next_to(chance, UP, buff=0.04)
-        cl.align_to(chance, RIGHT)
+        cl = label(rf"chance: \\ $1$ in ${d['classes']}$", font_size=18, color=GREY_C).next_to(chance, RIGHT, buff=0.1)
         pgr, pgrc = np.asarray(d["pgr"]), np.asarray(d["pgr_conf"])
         setup = VGroup(
             label(r"Part 27's task: \ which of $30$ novels is this sentence from?", font_size=22, color=GREY_A),
@@ -276,7 +279,7 @@ class Oversight(VoiceoverScene):
         weak = DashedLine(g.ax.c2p(0, float(np.mean(d["weak"]))), g.ax.c2p(float(steps[-1]), float(np.mean(d["weak"]))),
                           color=WEAK, dash_length=0.08)
         lg = legend([(CEIL, r"the truth"), (STRONG, r"weak labels"), (CI, r"weak labels $+$ confidence"),
-                     (WEAK, r"the weak supervisor")], font_size=18).next_to(g.ax, UP, buff=0.1).align_to(g.ax, LEFT)
+                     (WEAK, r"the weak supervisor")], font_size=18)
         aw, ac = np.asarray(d["agree_wrong"]) * 100, np.asarray(d["agree_wrong_conf"]) * 100
         stat = VGroup(
             label(r"where the weak supervisor was wrong, \\ the student gave the same wrong title:", font_size=22,
@@ -284,7 +287,8 @@ class Oversight(VoiceoverScene):
             label(rf"weak labels: \ ${aw.mean():.0f}\%$ \ of those sentences", font_size=24, color=STRONG),
             label(rf"with the confidence loss: \ ${ac.mean():.0f}\%$", font_size=24, color=CI),
             label(rf"(a random wrong title: \ $1$ in ${d['classes'] - 1}$)", font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, 0.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, 0.6, 0])
+        lg.next_to(stat, DOWN, buff=0.45).align_to(stat, LEFT)
         n = len(d["weak"])
         tag = tagline(rf"computed: \ mean of ${n}$ seeds, \ band: \ min to max")
         rand = 100 / (d["classes"] - 1)

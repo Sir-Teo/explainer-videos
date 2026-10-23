@@ -30,6 +30,7 @@ Q = 16  # grey levels
 S = 14  # side
 D = S * S
 BUDGET = 6e12 * SCALE  # training FLOPs per model
+N_GEN = 2000 if SCALE == 1.0 else 200  # generated digits judged per model
 
 
 # ---------------------------------------------------------------------------
@@ -81,13 +82,41 @@ def checkpoints(steps: int, n: int = 12) -> list[int]:
     return sorted(set([0] + [int(round(v)) for v in np.geomspace(max(10, steps / 300), steps, n - 1)]))
 
 
-def step_flops(fn) -> float:
-    """Floating-point operations of one call of ``fn`` (a whole training step), counted by PyTorch."""
-    from torch.utils.flop_counter import FlopCounterMode
+class FlopCount:
+    """Counts floating-point operations as PyTorch runs them, with PyTorch's own formulas for each operation
+    (torch.utils.flop_counter), forward and backward.  Unlike FlopCounterMode, it also follows the double backward
+    of a gradient penalty."""
 
-    with FlopCounterMode(display=False) as fc:
+    def __enter__(self):
+        from torch.utils._python_dispatch import TorchDispatchMode
+        from torch.utils.flop_counter import flop_registry
+
+        outer = self
+
+        class _Mode(TorchDispatchMode):
+            def __torch_dispatch__(self, func, types, args=(), kwargs=None):
+                kwargs = kwargs or {}
+                out = func(*args, **kwargs)
+                f = flop_registry.get(func._overloadpacket)
+                if f is not None:
+                    outer.total += f(*args, **kwargs, out_val=out)
+                return out
+
+        self.total = 0
+        self._mode = _Mode()
+        self._mode.__enter__()
+        return self
+
+    def __exit__(self, *exc):
+        self._mode.__exit__(*exc)
+        return False
+
+
+def step_flops(fn) -> float:
+    """Floating-point operations of one call of ``fn`` (a whole training step)."""
+    with FlopCount() as fc:
         fn()
-    return float(fc.get_total_flops())
+    return float(fc.total)
 
 
 # ---------------------------------------------------------------------------
