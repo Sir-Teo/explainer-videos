@@ -84,10 +84,12 @@ class Hook(VoiceoverScene):
             "we had better be quite sure that the purpose put into the machine is the purpose which we really desire, "
             "and not merely a colorful imitation of it."
         ) as vo:
-            self.play(FadeIn(hc, shift=DOWN * 0.2))
+            chain_full = chain.copy()
+            chain.fade(0.82)  # Samuel's checkers wait, dimmed, under the lecture's card
+            self.play(FadeIn(hc, shift=DOWN * 0.2), FadeIn(chain))
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(s_), *([GrowArrow(arrs[i - 1])] if i else []))
-                                    for i, s_ in enumerate(steps_)], lag_ratio=0.6), FadeIn(cap), run_time=3.0)
+            self.play(LaggedStart(*[Transform(a_, b_) for a_, b_ in zip(chain, chain_full)], lag_ratio=0.3),
+                      run_time=2.5)
             vo.wait_until("b")
             self.play(FadeOut(chain), FadeIn(q1, shift=UP * 0.15))
             vo.wait_until("c")

@@ -92,13 +92,17 @@ class Efficient(VoiceoverScene):
         for k, r in enumerate(rows):
             x = -5.2 + 1.75 * k
             hf = 4.0 * r["flop_ratio"]
-            ht = 4.0 * min(r["time_ratio"], 1.0)
+            ht = 4.0 * min(r["time_ratio"], 1.12)  # slower than the standard layer: the bar pokes past the line
             bf = Rectangle(width=0.55, height=max(hf, 0.03), stroke_width=0, fill_color=KERNEL, fill_opacity=0.85)
             bt = Rectangle(width=0.55, height=max(ht, 0.03), stroke_width=0, fill_color=DW, fill_opacity=0.85)
             bf.move_to([x, -2.4 + hf / 2, 0])
             bt.move_to([x + 0.6, -2.4 + ht / 2, 0])
             vf = MathTex(f"{r['flop_ratio']:.2f}", font_size=20, color=KERNEL).next_to(bf, UP, buff=0.06)
             vt = MathTex(f"{r['time_ratio']:.2f}", font_size=20, color=DW).next_to(bt, UP, buff=0.06)
+            if r["time_ratio"] > 1.12:  # off the scale: an arrowhead on the bar, the value above it
+                tip = Triangle(color=DW, fill_opacity=0.85, stroke_width=0).scale(0.16).next_to(bt, UP, buff=0.02)
+                bt = VGroup(bt, tip)
+                vt.next_to(tip, UP, buff=0.06)
             cl = MathTex(rf"C = {r['C']}", font_size=22, color=GREY_B).move_to([x + 0.3, -2.75, 0])
             bars.add(VGroup(bf, bt, vf, vt, cl))
         base = Line([-5.7, -2.4, 0], [3.8, -2.4, 0], color=GREY_C, stroke_width=1.5)
@@ -118,13 +122,20 @@ class Efficient(VoiceoverScene):
                    rf"${d['hw']} \times {d['hw']}$ maps, \ batch ${d['batch']}$").to_corner(DR, buff=0.2)
         ft = r128["flop_ratio"]
         tt = r128["time_ratio"]
-        verdict = (f"The arithmetic falls to {ft:.2f} of the standard layer's, but the time only to {tt:.2f}. "
-                   f"The depthwise step runs at {r128['gflops_dw']:.1f} billion operations a second, against "
-                   f"{r128['gflops_std']:.0f} for the standard convolution: each of its weights touches one channel, "
-                   "so it does little arithmetic per byte it reads, and Part 17's roofline caps it." if tt > 1.5 * ft
-                   else
-                   f"The arithmetic falls to {ft:.2f} of the standard layer's, and the time to {tt:.2f}: here the "
-                   "saving is nearly all realized.")
+        if tt >= 1.0:
+            verdict = (f"The arithmetic falls to {ft:.2f} of the standard layer's, yet the time doesn't fall at all: "
+                       f"{tt:.2f} times the standard layer's. The depthwise step runs at {r128['gflops_dw']:.1f} "
+                       f"billion operations a second, against {r128['gflops_std']:.0f} for the standard convolution: "
+                       "each of its weights touches one channel, so it does little arithmetic per byte it reads, and "
+                       "Part 17's roofline caps it.")
+        elif tt > 1.5 * ft:
+            verdict = (f"The arithmetic falls to {ft:.2f} of the standard layer's, but the time only to {tt:.2f}. "
+                       f"The depthwise step runs at {r128['gflops_dw']:.1f} billion operations a second, against "
+                       f"{r128['gflops_std']:.0f} for the standard convolution: each of its weights touches one "
+                       "channel, so it does little arithmetic per byte it reads, and Part 17's roofline caps it.")
+        else:
+            verdict = (f"The arithmetic falls to {ft:.2f} of the standard layer's, and the time to {tt:.2f}: here "
+                       "the saving is nearly all realized.")
         with self.voiceover(
             "Fewer operations should mean faster. We measured both versions on the computer making this video. "
             "<bookmark mark='a'/> For 128 channels: " + verdict + " <bookmark mark='b'/> Counting operations is "
