@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import BWD, CLS_A, CLS_B, NEURON, PART, PLAIN, RES, load, region_image
+from videos.ai.ai9.common import CLS_A, CLS_B, NEURON, PART, PLAIN, RES, load, region_image
 
 
 class Residual(VoiceoverScene):

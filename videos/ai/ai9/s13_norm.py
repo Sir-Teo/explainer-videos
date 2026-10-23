@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import BWD, NEURON, NORM, PART, PLAIN, RES, load
+from videos.ai.ai9.common import NEURON, NORM, PART, load
 
 POST, PRE = C.SURPRISE, C.INTERVAL
 

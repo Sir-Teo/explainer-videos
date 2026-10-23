@@ -69,7 +69,7 @@ ZH = {
         "这是它在{len(X)}个点上的表现，这些点可以被某条直线分开。一开始，它所有的权重都是0。<bookmark mark='a'/>每当它遇到一个落在错误一侧的点，那条线就跳一下。<bookmark mark='b'/>第一遍过数据，它犯了{pe[0]}次错，之后几遍又犯了{sum(pe[1:])}次。<bookmark mark='c'/>一共犯了{k}次错之后，整整一遍下来一次错也没有，它就停了：每个点都在自己的一侧。",
 
     'Is it guaranteed to stop? In 1962 Albert Novikoff proved':
-        "它一定会停下来吗？1962年，阿尔伯特·诺维科夫证明：只要有某条直线能把数据分开，它就一定会停。假设每个点到原点的距离都不超过R，并且有某个单位向量w星，能把每个点放在它该在的一侧，还留有余地，这个余量叫作间隔gamma。<bookmark mark='a'/>盯住两个数。第一个，w和w星的吻合程度。每犯一次错，就加上y x，而y x点乘w星至少是gamma。<bookmark mark='b'/>所以犯了k次错之后，吻合程度至少是k乘gamma：它和k成正比地增长。<bookmark mark='c'/>第二个，w的长度。犯错意味着y乘w点乘x不是正的，所以中间那一项帮不上忙：长度的平方，每次最多增加R的平方。<bookmark mark='d'/>犯了k次错之后，最多是k乘R的平方：长度只按k的平方根增长。<bookmark mark='e'/>可是和一个单位向量的吻合程度，永远不会超过长度。所以k乘gamma，最多是根号k乘R。<bookmark mark='f'/>两边平方再相除：犯错的次数，最多是R除以gamma的平方。一个按k增长的量，不可能长久地待在一个按根号k增长的量下面。",
+        "它一定会停下来吗？1962年，阿尔伯特·诺维科夫证明：只要有某条直线能把数据分开，它就一定会停。<bookmark mark='p1'/>假设每个点到原点的距离都不超过R，<bookmark mark='p2'/>并且有某个单位向量w星，能把每个点放在它该在的一侧，还留有余地，这个余量叫作间隔gamma。<bookmark mark='a'/>盯住两个数。第一个，w和w星的吻合程度。每犯一次错，就加上y x，而y x点乘w星至少是gamma。<bookmark mark='b'/>所以犯了k次错之后，吻合程度至少是k乘gamma：它和k成正比地增长。<bookmark mark='c'/>第二个，w的长度。犯错意味着y乘w点乘x不是正的，所以中间那一项帮不上忙：长度的平方，每次最多增加R的平方。<bookmark mark='d'/>犯了k次错之后，最多是k乘R的平方：长度只按k的平方根增长。<bookmark mark='e'/>可是和一个单位向量的吻合程度，永远不会超过长度。所以k乘gamma，最多是根号k乘R。<bookmark mark='f'/>两边平方再相除：犯错的次数，最多是R除以gamma的平方。一个按k增长的量，不可能长久地待在一个按根号k增长的量下面。",
 
     "That's the perceptron convergence theorem.":
         '这就是感知机收敛定理。这个上界和有多少个点无关，也和它们来的顺序无关，只取决于两类之间留了多大的空隙。',
@@ -141,7 +141,7 @@ ZH = {
         "还有一种看法。<bookmark mark='a'/>取三个合页：一个往上，一个以两倍的陡度往下，再一个往上。<bookmark mark='b'/>它们的和是一个鼓包：先是0，升上去，降下来，再回到0。<bookmark mark='c'/>在一排点上各放一个鼓包，每个鼓包的高度等于曲线在那里的高度，再把它们加起来：就得到了这条曲线，用折线把点连起来。<bookmark mark='d'/>任何连续曲线都能这样画出来，想多精细就多精细。在更高的维度里，每个鼓包要用更多的单元，但这个想法依然成立。",
 
     "That's the universal approximation theorem, proved in 1989":
-        "这就是万能近似定理。1989年，乔治·切本科对S形单元证明了它，库尔特·霍尼克、马克斯韦尔·斯廷奇库姆和哈尔伯特·怀特证明了一般的情形。1993年，摩西·莱什诺和同事们把它说清楚了：任何激活函数都行，只要它不是多项式。<bookmark mark='a'/>它说的是，网络能表示出答案。<bookmark mark='b'/>它没说需要多少个单元，<bookmark mark='c'/>也没说训练能不能找到它们，<bookmark mark='d'/>也没说从例子里学到的东西，在新例子上还管不管用，那是第8部分的主题。第一个问题，有一个出人意料的答案。",
+        "这就是万能近似定理。1989年，乔治·切本科对S形单元证明了它，库尔特·霍尼克、马克斯韦尔·斯廷奇库姆和哈尔伯特·怀特证明了一般的情形。1993年，摩西·莱什诺和同事们把它说清楚了：任何连续的激活函数都行，只要它不是多项式。<bookmark mark='a'/>它说的是，网络能表示出答案。<bookmark mark='b'/>它没说需要多少个单元，<bookmark mark='c'/>也没说训练能不能找到它们，<bookmark mark='d'/>也没说从例子里学到的东西，在新例子上还管不管用，那是第8部分的主题。第一个问题，有一个出人意料的答案。",
 
     # ------------------------------------------------------------------ Barron
     'Chapter six. Escaping the curse of dimensionality.':
@@ -238,11 +238,11 @@ ZH = {
     "f'The rule of thumb agrees with our result on":
         '这条经验法则在{100 * agree:.0f}%的格子上和我们的结果一致：我们的训练比他们的更短、规模更小，所以边界更粗糙。',
 
-    "f'At {depths[-1]} layers, only weight variances near the edge train":
-        '在{depths[-1]}层时，只有边缘附近的权重方差训练得动：{deep_list}。',
+    "f'At {L_deep} layers, only weight variances near the edge train":
+        '在{L_deep}层时，只有边缘附近的权重方差训练得动：{deep_list}。',
 
-    "f'At {depths[-1]} layers, none of our settings trained":
-        "在{depths[-1]}层时，我们的设置在{t['steps']}步内没有一个训练得动。",
+    "f'At {L_deep} layers, only weight variances near the edge still train":
+        "在{L_deep}层时，只有边缘附近的权重方差还训练得动：{deep_list}；到{depths[-1]}层，在{t['steps']}步内一个也训练不动。",
 
     # ------------------------------------------------------------------ Residual
     'Chapter eleven. The residual stream.':

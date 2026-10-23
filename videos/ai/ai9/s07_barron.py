@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import HINGE, NEURON, PART, load, log_axes
+from videos.ai.ai9.common import NEURON, PART, load, log_axes
 
 DCOL = {1: "#9BE37B", 2: "#F7D154", 4: "#58A6FF", 8: "#FF9F45", 16: "#D4A5FF", 64: "#FF6B8B"}
 

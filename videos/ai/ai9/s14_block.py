@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import GATE, NEURON, NORM, PART, PLAIN, RES, WEIGHT, load
+from videos.ai.ai9.common import GATE, NEURON, NORM, PART, PLAIN, RES, load
 
 VARIANT = {  # name on screen, colour
     "plain": (r"plain: \ no residual", PLAIN),

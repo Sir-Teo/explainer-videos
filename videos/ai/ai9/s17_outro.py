@@ -4,8 +4,8 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai9.common import (BWD, CHAOS, CLS_A, CLS_B, CRIT, HINGE, KANC, NEURON, ORDER, PART, PLAIN, RES, WEIGHT,
-                                  load, region_image, rgb_of, two_tone)
+from videos.ai.ai9.common import (BWD, CLS_A, CLS_B, CRIT, HINGE, NEURON, PART, PLAIN, RES, WEIGHT,
+                                  load, region_image)
 from videos.ai.ai9.s08_depth import fold_picture
 from videos.ai.ai9.s11_chaos import chi_image
 
