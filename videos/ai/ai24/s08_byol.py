@@ -196,11 +196,11 @@ class BYOL(VoiceoverScene):
             ch2, UP, buff=0.35)
         tg = tag(r"computed: \ three seeds each; \ whiskers: lowest to highest")
         best = int(np.argmax([x[0] for x in lin]))
+        leader = ["SimCLR", "BYOL", "SimSiam"][best]
         diff = max(x[0] for x in lin) - min(x[0] for x in lin)
         line = (f"At our budget the three land within {pct(diff)} points of each other on the linear probe, with "
-                f"{['SimCLR', 'BYOL', 'SimSiam'][best]} ahead." if diff < 0.01 else
-                f"At our budget {['SimCLR', 'BYOL', 'SimSiam'][best]} leads the linear probe, by {pct(diff)} points "
-                "over the last.")
+                f"{leader} ahead." if diff < 0.01 else
+                f"At our budget {leader} leads the linear probe, by {pct(diff)} points over the last.")
         tk = take_away(r"asymmetry, \ a predictor and a stop-gradient, \ is enough to escape collapse")
         with self.voiceover(
             f"How do they compare, on the same budget? <bookmark mark='a'/> {line} <bookmark mark='b'/> With ten "

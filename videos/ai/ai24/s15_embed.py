@@ -21,7 +21,7 @@ class Embeddings(VoiceoverScene):
 
     def card(self):
         card = chapter_card(14, r"Embeddings for search", r"Text embeddings, \ retrieval, \ and Matryoshka vectors",
-                            lit=(), part=PART)
+                            lit=(2013,), part=PART)
         with self.voiceover("Chapter fourteen. Embeddings for search."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

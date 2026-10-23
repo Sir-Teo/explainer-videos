@@ -16,6 +16,7 @@ class Sphere(VoiceoverScene):
     def construct(self):
         self.card()
         self.replay()
+        self.centroids()
         self.derive()
         self.sweep()
         self.hardness()
@@ -75,6 +76,65 @@ class Sphere(VoiceoverScene):
             self.play(hs.angle.animate.set_value(4.8), run_time=max(1.0, vo.remaining()), rate_func=linear)
         hs.freeze()
         for m in (ca, cu, ra, ru, st):
+            m.clear_updaters()
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def centroids(self):
+        sp = load("sphere")
+        Z = np.asarray(sp["simclr_z"])[-1]
+        Z = Z / np.linalg.norm(Z, axis=1, keepdims=True)
+        lab = np.asarray(sp["labels"]).astype(int)
+        cen = np.array([Z[lab == c].mean(0) for c in range(10)])
+        tight = np.linalg.norm(cen, axis=1)  # 1 when a digit's points coincide, 0 when spread all over
+        cen = cen / np.linalg.norm(cen, axis=1, keepdims=True)
+        ang = np.degrees(np.arccos(np.clip(cen @ cen.T, -1, 1)))
+        iu = [(a, b) for a in range(10) for b in range(a + 1, 10)]
+        pairs = sorted(iu, key=lambda ab: ang[ab])
+        (a1, b1), (a2, b2) = pairs[0], pairs[1]
+        far = pairs[-1]
+        hs = Hypersphere(Z, [DIGIT[c] for c in lab], radius=2.5, center=[-3.2, -0.3, 0], dot=0.03)
+        for d in hs.dots:
+            d.set_opacity(0.35)
+        hs.angle.set_value(4.8)
+        cl = VGroup()
+
+        def mk(c):
+            def f():
+                q = hs._rot(cen[c][None])[0]
+                p = hs.c + hs.R * np.array([q[0], q[1], 0.0])
+                return VGroup(Dot(p, radius=0.09, color=DIGIT[c]).set_stroke(WHITE, 1.5),
+                              MathTex(str(c), font_size=30, color=DIGIT[c]).next_to(p, UR, buff=0.04)).set_opacity(
+                    0.45 + 0.55 * (q[2] + 1) / 2)
+            return f
+
+        for c in range(10):
+            cl.add(always_redraw(mk(c)))
+        tab = VGroup(label(r"closest digits on the sphere", font_size=24, color=GREY_A),
+                     MathTex(rf"{a1} \leftrightarrow {b1}:\ {ang[a1, b1]:.0f}^\circ", font_size=34, color=WHITE),
+                     MathTex(rf"{a2} \leftrightarrow {b2}:\ {ang[a2, b2]:.0f}^\circ", font_size=34, color=WHITE),
+                     label(r"farthest", font_size=24, color=GREY_A),
+                     MathTex(rf"{far[0]} \leftrightarrow {far[1]}:\ {ang[far]:.0f}^\circ", font_size=34, color=WHITE))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, 0.4, 0])
+        tg = tag(r"computed: \ the mean direction of each digit's test points")
+        loose = int(np.argmin(tight))
+        with self.voiceover(
+            "Where did the digits land? Take each digit's average direction on the sphere. <bookmark mark='a'/> The "
+            f"closest pair is {a1} and {b1}, {ang[a1, b1]:.0f} degrees apart, then {a2} and {b2}. <bookmark "
+            f"mark='b'/> The farthest apart are {far[0]} and {far[1]}. Nobody told the network that some digits are "
+            f"written alike; the geometry of the sphere records it. <bookmark mark='c'/> The loosest cluster is the "
+            f"digit {loose}: its points are the most spread out."
+        ) as vo:
+            self.play(FadeIn(hs), FadeIn(tg))
+            vo.wait_until("a")
+            self.play(FadeIn(cl), FadeIn(tab[:3]))
+            vo.wait_until("b")
+            self.play(FadeIn(tab[3:]))
+            self.play(hs.angle.animate.set_value(6.4), run_time=max(1.0, vo.until("c")), rate_func=linear)
+            vo.wait_until("c")
+            self.play(hs.angle.animate.set_value(7.4), run_time=max(1.0, vo.remaining()), rate_func=linear)
+        hs.freeze()
+        for m in cl:
             m.clear_updaters()
         self.clear_scene()
 

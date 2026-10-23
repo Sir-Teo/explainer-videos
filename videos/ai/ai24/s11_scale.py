@@ -20,7 +20,7 @@ class Scale(VoiceoverScene):
         self.webssl()
 
     def card(self):
-        card = chapter_card(10, r"Scale and curation", r"DINOv2, \ DINOv3, \ and does vision need language?", lit=(),
+        card = chapter_card(10, r"Scale and curation", r"DINOv2, \ DINOv3, \ and does vision need language?", lit=(2008,),
                             part=PART)
         with self.voiceover("Chapter ten. Scale and curation."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))

@@ -30,7 +30,7 @@ comparison is made; the series' own small transformer joins the scoreboard.
   several narrow heads cost the same as one wide one; the low-rank bottleneck (Bhojanapalli et al. 2020).
 * **5. Who may look at whom.** The causal mask (−∞ above the diagonal); every position a training example; checked
   on our transformer (changing the second half of a passage moves its first-half guesses by exactly 0, the second
-  half's by up to 15.4 logits; without the mask the first half moves by 7.9); encoder, decoder, encoder–decoder with
+  half's by up to 15.4; without the mask the first half moves by 7.9); encoder, decoder, encoder–decoder with
   cross-attention, prefix LM; permutation equivariance, checked (to rounding error) with the mask and positions off.
 * **6. Our own transformer.** Pre-norm blocks, the residual stream, attention and MLP; 4 blocks × 4 heads, d = 128,
   834,048 parameters, 256 characters of context, 3,000 steps of 32 windows (24.6 million characters) on a CPU; 1.996
@@ -59,37 +59,44 @@ comparison is made; the series' own small transformer joins the scoreboard.
   far end against 1.8 for a sliding 256-character window; position interpolation, NTK-aware scaling (bloc97 2023) and
   YaRN (Peng et al. 2023) without retraining (YaRN best, 2.1); YaRN's recipe on screen (r = L/λ, the ramp γ with α = 1,
   β = 32, θ′ = (1−γ)θ/s + γθ, the temperature (0.1 ln s + 1)² = 1.30 at s = 4); log-n scaling, derived (Chiang &
-  Cholak 2022), on its own and on top of NTK; 100 steps of fine-tuning at 1,024 (0.4 million characters, under 2% of
-  the original training) from interpolation and from YaRN.
+  Cholak 2022), on its own and on top of NTK (it barely helps here: the broken angles, not the spread, are the
+  problem); 100 steps of fine-tuning at 1,024 (0.4 million characters, under 2% of the original training) from
+  interpolation (4.92 → 2.45) and from YaRN (2.13 → 1.81, against 1.80 for the window), their training curves shown.
 * **12. Attention sinks, and three ways out.** Xiao et al. (2023); our transformer has none (no head gives the first
   character more than a fraction of an even share; its heads park on spaces); why the softmax needs a place to put
   nothing (Guo et al. 2024: active–dormant heads, value drains); growing a sink on purpose on the bigram-backcopy task
-  with a one-layer model (3 seeds); a sink logit (gpt-oss), an output gate (Qiu et al. 2025; Qwen3-Next, Kimi K3) and
-  differential attention (Ye et al. 2024) trained on the same task, three seeds each.
+  with a one-layer model (3 seeds: 43% of the weight on the marker when there is nothing to copy, its value shrunk
+  to 0.19× the others'); a sink logit (gpt-oss), an output gate (Qiu et al. 2025; Qwen3-Next, Kimi K3) and
+  differential attention (Ye et al. 2024) trained on the same task, three seeds each, their training replayed: the sink
+  logit takes 99.9% of the weight and leaves the marker 0%, the gate closes to 0.05 with nothing to copy (marker 29%),
+  differential attention's weights sum to 0.54 (marker 41%); all four learn the task equally well.
 * **13. Keeping scores in range.** W_Q, W_K grown by c on our transformer (largest score 37 → 142 at c = 2, entropy
   1.97 → 0.48 bits, 1.82 → 1.99 bits a character); ViT-22B's runaway logits (Dehghani et al. 2023); QK-norm and its
   Cauchy–Schwarz bound (and what bolting it onto a trained model costs: 2.14 bits); the soft cap c·tanh(s/c)
   (Gemma 2), which on our model makes the guesses worse (2.79 at c = 4 against 2.15).
 * **14. Induction heads.** Our transformer on a held-out stretch shown twice, and on random letters shown twice; the
   previous-token head and the induction head ([a][b] … [a] → [b]); two-layer attention-only models (three seeds)
-  forming the pair in a sudden drop of the loss, a one-layer model unable to; the heads forming, snapshot by snapshot;
-  K-composition (Elhage et al.) over training against random heads; our transformer has no induction head yet, and
-  why (Olsson et al. 2022 saw them after 2.5–5 billion tokens).
+  forming the pair in a sudden drop of the loss (at steps 2,600 to 4,100, down to 1.5–2.2 bits), a one-layer model
+  unable to (5.6); the heads forming, snapshot by snapshot; K-composition (Elhage et al.) of the previous-token heads
+  into the induction heads rising from 0.13 to 0.19 against 0.13 for every other pair and 0.12 for random heads; our
+  transformer has no induction head yet (0.3% of attention where one would look), and why (Olsson et al. 2022 saw
+  them after 2.5–5 billion tokens).
 * **15. Learning inside the prompt.** In-context linear regression; one layer of linear self-attention, trained,
   learns the matrices of one step of gradient descent (von Oswald et al. 2023); its answers against GD's on 4,000 new
-  prompts; two and three layers against two and three steps; exact least squares (Part 6).
+  prompts (correlation 0.999); two and three layers beat two and three plain steps (0.13 against 0.31, 0.11 against
+  0.15); exact least squares (Part 6) gets them all.
 * **16. What a transformer can compute.** RASP (Weiss, Goldberg & Yahav 2021): select, aggregate, elementwise; a
   histogram compiled by hand into one head with a BOS marker (2,000 of 2,000 random sequences right; counts blur after
   189 in bfloat16 and 1,463 in float16); sorting in two layers (2,000 of 2,000); Tracr (Lindner et al. 2023); fixed
-  depth and TC⁰ (Merrill & Sabharwal 2023), tracking shuffles of five objects (Merrill, Petty & Sabharwal 2024),
-  chains of thought (Merrill & Sabharwal 2024), the RASP-generalization
-  conjecture (Zhou et al. 2023).
+  depth and TC⁰ (Merrill & Sabharwal 2023), drawn as a fixed stack of layers over a growing input; tracking shuffles
+  of five objects (Merrill, Petty & Sabharwal 2024); chains of thought (Merrill & Sabharwal 2024); the
+  RASP-generalization conjecture (Zhou et al. 2023).
 * **17. Attention in 2026.** Why the effort: chapter seven's T/12d for a model as wide as DeepSeek-V3 (d = 7,168):
   attention's term is 0.05 of the weights' at 4K tokens, 1.5× at 128K, 12× at 1M. Where the formula sits in today's
-  models: sink logits, gates, QK-norm and NoPE layers
-  inside; grouped-query and multi-head latent attention for the cache (Part 15); sliding windows, DeepSeek's sparse
-  attention and DeepSeek-V4's compressed selection (Part 16); linear-attention hybrids (Qwen3-Next and Qwen3.5 at 3:1,
-  Kimi Linear, Kimi K3 with 24 full-attention layers of 93).
+  models: sink logits, gates, QK-norm and NoPE layers inside; grouped-query and multi-head latent attention for the
+  cache (Part 15); sliding windows, DeepSeek's sparse attention and DeepSeek-V4's compressed selection (Part 16);
+  linear-attention hybrids (Qwen3-Next and Qwen3.5 at 3:1, Kimi Linear, Kimi K3 with 24 full-attention layers of 93,
+  drawn layer by layer from its released configuration).
 * **Recap** in eight pictures from the part's own results, where it comes back, six problems, Part 14's teaser,
   references.
 
@@ -99,7 +106,7 @@ Run from the repo root:
 python tools/make.py ai13                 # compute what is missing, then build (English and Chinese)
 python -m videos.ai.ai13.compute          # every experiment on its own (about 2.5 CPU-hours on 1-2 threads)
 python -m videos.ai.ai13.compute tf       # one item; the others: smoother dotscale hopfield rope rasp tfwords heads
-                                          #   qkscale extend positions sinks induction icl
+                                          #   qkscale extend positions sinks sinkref induction icl
 python tools/build.py ai13                # English
 python tools/build.py ai13 --lang zh      # Chinese
 ```
@@ -108,8 +115,10 @@ python tools/build.py ai13 --lang zh      # Chinese
 their own `compute`/`load`). Everything is seeded. The transformer (`tf`, about 70 minutes) saves a checkpoint
 with its RNG states every 250 steps (`.cache/ai13/tf.ckpt.pt`) and resumes from it; the multi-run items (`extend`,
 `positions`, `sinks`, `induction`) save each finished run in `.cache/ai13/<item>.partial.json` and resume from there.
-Set `AI13_THREADS` to change the number of torch threads (default 2). Parts 16, 19, 30 and 31 read `tf` (and the
-weights in `tf.pt`) through `load_tf()`.
+Set `AI13_THREADS` to change the number of torch threads (default 2). Other parts use this one: Parts 16, 19 and 30
+load the transformer through `load("tf")` and `load_tf()` (with `CTX`, `DH`, `HEADS`, `LAYERS`, `rope_freqs()` and
+`tf_bits()`), Part 21 reads `corpus()` and `rope_freqs()`, Part 31 the scoreboard row (`tf`'s `ctx` and
+`passage_bits`), and Parts 15 and 30 draw with `heat_image` and `signed_image` from `common.py`.
 
 ## Computed results
 

@@ -23,6 +23,7 @@ class Pretext(VoiceoverScene):
         self.replay()
         self.symmetric()
         self.verdict()
+        self.bridge()
 
     def card(self):
         card = chapter_card(2, r"Invent a puzzle", r"Can a made-up task teach what a digit is?", lit=(), part=PART)
@@ -282,5 +283,44 @@ class Pretext(VoiceoverScene):
             self.play(FadeIn(aber))
             vo.wait_until("c")
             self.play(FadeIn(tk, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def bridge(self):
+        v = load("views")
+        grid = np.asarray(v["grid"])[:8]
+        full = np.asarray(v["full"])
+        cols = ["#FF6B6B", "#FFA94D", "#FFD43B", "#A9E34B", "#3BC9DB", "#748FFC", "#B197FC", "#F783AC"]
+        cells = Group()
+        for i in range(8):
+            d = digit(grid[i], 0.8, color=cols[i], frame=True)
+            t = label(rf"class {i + 1}", font_size=18, color=cols[i]).next_to(d, DOWN, buff=0.1)
+            cells.add(Group(d, t))
+        cells.arrange(RIGHT, buff=0.3).move_to([0, 1.3, 0])
+        ex = Group(*[digit(full[k, 3], 0.7, color=cols[0], frame=True) for k in range(5)]).arrange(RIGHT, buff=0.15)
+        ex.move_to([-3.2, -1.0, 0])
+        exl = label(r"its transformed copies: \\ the same class", font_size=20, color=cols[0]).next_to(ex, DOWN, buff=0.2)
+        h1 = label(r"Exemplar CNN (Dosovitskiy et al., 2014): \\ thousands of images, \ each with its copies a class",
+                   font_size=21, color=GREY_A).move_to([3.4, -0.6, 0])
+        h2 = label(r"instance discrimination (Wu et al., 2018): \\ every image its own class, \ a bank of "
+                   r"stored vectors \\ as the other classes", font_size=21, color=GREY_A).next_to(h1, DOWN, buff=0.35)
+        with self.voiceover(
+            "One puzzle turned out to be different from the rest, because it is not about any particular property "
+            "of images. Make every image its own class. <bookmark mark='a'/> Its transformed copies count as the "
+            "same class; every other image is a different one. Alexey Dosovitskiy and colleagues tried it in 2014, "
+            "<bookmark mark='b'/> and in 2018 Zhirong Wu and colleagues scaled it to a million classes, one per "
+            "ImageNet photo, by keeping a stored vector for every image and comparing against those. <bookmark "
+            "mark='c'/> Telling one image from all the others is the contrastive idea, and the next chapter is its "
+            "mathematics."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.1), run_time=1.6)
+            vo.wait_until("a")
+            self.play(FadeIn(ex), FadeIn(exl))
+            self.play(FadeIn(h1))
+            vo.wait_until("b")
+            self.play(FadeIn(h2))
+            vo.wait_until("c")
+            self.play(Indicate(cells[0], color=cols[0]))
         self.wait(0.3)
         self.clear_scene()

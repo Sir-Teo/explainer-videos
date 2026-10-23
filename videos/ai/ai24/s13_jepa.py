@@ -3,14 +3,15 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (JEPA, MAE_C, PART, SIMCLR, SUP, TARGET, arrow, axes, digit, load, node_box, pct,
-                                   seed_curves, take_away)
+from videos.ai.ai24.common import (JEPA, MAE_C, PART, SIMCLR, SUP, TARGET, arrow, axes, curve, digit, load,
+                                   node_box, pct, seed_curves, take_away)
 
 
 class JEPAScene(VoiceoverScene):
     def construct(self):
         self.card()
         self.three()
+        self.energy()
         self.ijepa()
         self.results()
         self.video()
@@ -59,6 +60,55 @@ class JEPAScene(VoiceoverScene):
             self.play(FadeIn(c2), FadeIn(notes[1]))
             vo.wait_until("c")
             self.play(FadeIn(c3), FadeIn(notes[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def energy(self):
+        ys = np.linspace(-3, 3, 200)
+
+        def panel(f, center, title, col):
+            ax = axes([-3, 3], [0, 2.2], x_length=4.0, y_length=2.4, xlabel=r"candidate $y$", ylabel=r"energy",
+                      center=center)
+            c = curve(ax.ax, ys, [f(y) for y in ys], col, 3)
+            t = label(title, font_size=22, color=col).next_to(ax, UP, buff=0.15)
+            return VGroup(ax, c, t), ax
+
+        flat, ax1 = panel(lambda y: 0.15, [-4.6, 0.2, 0], r"collapsed: \ low everywhere", "#FF5C5C")
+        shaped, ax2 = panel(lambda y: 1.9 - 1.7 * np.exp(-2 * (y - 0.6) ** 2), [0.0, 0.2, 0],
+                            r"contrastive: \ push up the others", SIMCLR)
+        reg, ax3 = panel(lambda y: 1.9 - 1.7 * np.exp(-2 * (y - 0.6) ** 2), [4.6, 0.2, 0],
+                         r"regularized: \ ration the low energy", JEPA)
+        pos = Dot(ax2.ax.c2p(0.6, 0.2), radius=0.08, color=C.INTERVAL)
+        down = Arrow(ax2.ax.c2p(0.6, 1.2), ax2.ax.c2p(0.6, 0.35), buff=0, color=C.INTERVAL, stroke_width=3)
+        ups = VGroup(*[Arrow(ax2.ax.c2p(x, 1.0), ax2.ax.c2p(x, 1.8), buff=0, color="#EF6A5B", stroke_width=3)
+                       for x in (-2.0, -0.9, 2.2)])
+        band = Rectangle(width=ax3.ax.c2p(1.4, 0)[0] - ax3.ax.c2p(-0.2, 0)[0], height=0.25, stroke_width=0,
+                         fill_color=JEPA, fill_opacity=0.25).move_to(ax3.ax.c2p(0.6, 0.35))
+        e = MathTex(r"E(x, y)", r"=", r"\big\| \mathrm{pred}(s_x) - s_y \big\|^2", font_size=36).to_edge(UP, buff=0.5)
+        e[2].set_color(JEPA)
+        fams = VGroup(label(r"negatives: \ word2vec, \ SimCLR, \ MoCo", font_size=20, color=SIMCLR).next_to(shaped, DOWN,
+                                                                                                         buff=0.6),
+                      label(r"variance, \ decorrelation, \ predictors: \\ Barlow, \ VICReg, \ BYOL, \ DINO, \ JEPA",
+                            font_size=20, color=JEPA).next_to(reg, DOWN, buff=0.45))
+        src = cite(r"LeCun, Chopra, Hadsell, Ranzato \& Huang (2006); \ LeCun (2022); \ energies: \ Part 20")
+        with self.voiceover(
+            "LeCun frames all of this with energies, the language of Part 20. A JEPA's energy is its prediction "
+            "error: low when y fits x, high when it does not. <bookmark mark='a'/> Collapse is an energy that is low "
+            "everywhere: every y fits every x. <bookmark mark='b'/> There are two ways to give it shape. "
+            "Contrastive methods push the energy down on real pairs and up on chosen negatives, as word2vec and "
+            "SimCLR do. <bookmark mark='c'/> Regularized methods instead limit how much of the space can have low "
+            "energy at all: VICReg's variance floor, Barlow's decorrelation, the predictors and moving averages of "
+            "BYOL, DINO and JEPA. LeCun argues the second kind scales better, because in high dimensions there are "
+            "too many places to push."
+        ) as vo:
+            self.play(Write(e), FadeIn(src))
+            vo.wait_until("a")
+            self.play(FadeIn(flat))
+            vo.wait_until("b")
+            self.play(FadeIn(shaped), FadeIn(pos), GrowArrow(down), *[GrowArrow(u) for u in ups], FadeIn(fams[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(reg), FadeIn(band), FadeIn(fams[1]))
         self.wait(0.3)
         self.clear_scene()
 

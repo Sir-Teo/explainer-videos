@@ -123,15 +123,15 @@ class Collapse(VoiceoverScene):
         kinds.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
         src = cite(r"Hua et al.\ (2021); \ Jing, Vincent, LeCun \& Tian (2022)", corner=DR)
         cliff = int(np.argmax(lg(sv_s) < -3)) + 1 if np.any(lg(sv_s) < -3) else len(sv_s)
+        drop = (f"SimCLR declines slowly and then drops off a cliff: after about {cliff} directions, the rest are a "
+                "thousand times weaker than the first." if cliff < len(sv_s) else
+                "SimCLR declines slowly, and its weakest directions end far below its strongest.")
         with self.voiceover(
             "The whole spectrum shows more. These are the singular values of the two networks' vectors, largest "
             "first, on a log scale. <bookmark mark='a'/> The collapsed network has one direction and then "
-            "nothing. <bookmark mark='b'/> SimCLR declines slowly and then drops off a cliff: "
-            + (f"after about {cliff} directions, the rest are a thousand times weaker than the first. "
-               if cliff < len(sv_s) else "")
-            + "Even contrastive learning leaves part of the space unused. This is called dimensional collapse, the "
-            "milder cousin of complete collapse; Li Jing, Yann LeCun and colleagues traced it to the way strong "
-            "views and weight updates interact."
+            f"nothing. <bookmark mark='b'/> {drop} Even contrastive learning leaves part of the space unused. This "
+            "is called dimensional collapse, the milder cousin of complete collapse; Li Jing, Yann LeCun and "
+            "colleagues traced it to strong augmentations and to the way the layers' weights evolve together."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(src))
             vo.wait_until("a")
