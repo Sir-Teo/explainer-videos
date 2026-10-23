@@ -54,8 +54,8 @@ class Huffman(VoiceoverScene):
             "<bookmark mark='a'/> Write their difference as one sum. <bookmark mark='b'/> Jensen's inequality, "
             "exactly as in chapter three, moves the log outside. <bookmark mark='c'/> The probabilities cancel, "
             "<bookmark mark='d'/> and Kraft's inequality says what's left is at most log one: zero. "
-            "<bookmark mark='e'/> So the average length can never be less than the entropy, and it equals the "
-            "entropy only if each symbol gets exactly log one over p bits: its surprise."
+            "<bookmark mark='e'/> So the average length is never less than the entropy, and equals it only if "
+            "each symbol gets exactly log one over p bits: its surprise."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup), Create(base),
                       LaggedStart(*[GrowFromEdge(sky[i], DOWN) for i in order], lag_ratio=0.03), run_time=1.8)
@@ -83,9 +83,8 @@ class Huffman(VoiceoverScene):
                    rf"$H \le L < H + 1$. \ Letters: ${Ls:.2f}$ bits", font_size=28, color=GREY_A)
         sh.next_to(res, DOWN, buff=0.35)
         with self.voiceover(
-            "Codeword lengths must be whole numbers, so round the surprises up. We saw in the last chapter that "
-            f"those lengths fit Kraft's budget, and it costs less than one extra bit per symbol. For our letters, "
-            f"{Ls:.2f} bits."
+            "Codeword lengths must be whole numbers, so round the surprises up: those lengths fit Kraft's budget, "
+            f"and cost less than one extra bit per symbol. For our letters, {Ls:.2f} bits."
         ):
             self.add(stair)
             self.bring_to_front(sky)
@@ -123,11 +122,11 @@ class Huffman(VoiceoverScene):
         hc = history_card(1951, r"David Huffman, \ MIT", r"a term paper instead of the final exam: \ find the most "
                           r"efficient binary code", width=5.6).to_corner(DL, buff=0.35)
         with self.voiceover(
-            "Which code gets closest? In 1951 David Huffman, a graduate student in Robert Fano's class at MIT, was "
-            "offered a choice: sit the final exam, or write a paper on finding the most efficient code. He chose "
-            f"the paper. <bookmark mark='a'/> His answer: take the two least likely symbols, here {f0} and {f1}, and "
-            "join them under a new node whose probability is their sum. Then do it again with the two least likely "
-            f"of what's left, and again, <bookmark mark='b'/> {len(merges)} times, until one tree holds everything."
+            "Which code gets closest? In 1951 David Huffman, a graduate student in Robert Fano's class at MIT, could "
+            "sit the final exam, or write a paper on finding the most efficient code. He chose the paper. "
+            f"<bookmark mark='a'/> His answer: join the two least likely symbols, here {f0} and {f1}, under a new "
+            "node whose probability is their sum. Then again with the two least likely of what's left, "
+            f"<bookmark mark='b'/> {len(merges)} times, until one tree holds everything."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tree.leaves.values())), FadeIn(src), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -209,13 +208,12 @@ class Huffman(VoiceoverScene):
                      color=GREY_A).next_to(rare_codes, UP, buff=0.2)
         with self.voiceover(
             "Huffman proved that no prefix code does better, with a few exchanges. <bookmark mark='a'/> First: if "
-            "a likelier symbol had a longer codeword than a rarer one, swapping the two codewords would shorten the "
-            f"average. Give e the {lz} bits of z, and z the {le} bits of e, and every letter costs {cost:.2f} bits "
-            "more on average. So in a best code, likelier symbols never get longer codewords. "
-            "<bookmark mark='b'/> Second: a codeword at the bottom of the tree with no sibling could just move up a "
-            "level, and be shorter. So the deepest codewords come in pairs. <bookmark mark='c'/> And by the first "
-            "exchange, the two rarest symbols can be put in such a pair: in Huffman's code, they are "
-            f"{ho['rare'][0]} and {ho['rare'][1]}, differing only in the last bit."
+            "a likelier symbol had a longer codeword than a rarer one, swapping them would shorten the average. Give "
+            f"e the {lz} bits of z, and z the {le} bits of e, and each letter costs {cost:.2f} bits more. So in a "
+            "best code, likelier symbols never get longer codewords. <bookmark mark='b'/> Second: a deepest "
+            "codeword with no sibling could move up a level. So the deepest codewords come in pairs. "
+            "<bookmark mark='c'/> By the first exchange, the two rarest symbols can be such a pair: in Huffman's "
+            f"code, {ho['rare'][0]} and {ho['rare'][1]}, differing only in the last bit."
         ) as vo:
             self.play(FadeIn(head), Write(swap))
             vo.wait_until("a")
@@ -264,7 +262,7 @@ class Huffman(VoiceoverScene):
                        Dot(xy, radius=0.06, color=GREY_A), Dot(x_, radius=0.08, color=C.BITS), Dot(y_, radius=0.08, color=C.BITS),
                        MathTex(r"x", font_size=30, color=C.BITS).next_to(x_, DOWN, buff=0.1),
                        MathTex(r"y", font_size=30, color=C.BITS).next_to(y_, DOWN, buff=0.1),
-                       label(r"$+1$ bit each", font_size=22, color=C.BITS).next_to(VGroup(x_, y_), RIGHT, buff=0.2))
+                       label(r"$+1$ bit each", font_size=22, color=C.BITS).next_to(y_, RIGHT, buff=0.3))
             return g_
 
         t_merged = small_tree(np.array([-3.6, 0.0, 0]), False)
@@ -282,11 +280,11 @@ class Huffman(VoiceoverScene):
         same = "the same" if abs(opt - L) < 1e-9 else f"{opt:.3f}"
         with self.voiceover(
             "Now merge those two rarest symbols into one, whose probability is their sum. <bookmark mark='a'/> Any "
-            "code for the smaller alphabet becomes a code for the original by splitting that leaf in two, and the "
-            "average length goes up by exactly the merged probability, whatever the rest of the code. So the best "
-            "code for the original is the best code for the smaller problem, plus that split. <bookmark mark='b'/> "
-            "That's Huffman's first merge, and the same argument covers every merge after it: the tree he builds "
-            "is optimal. <bookmark mark='c'/> We checked. Add up the weights of the merges: "
+            "code for the smaller alphabet becomes one for the original by splitting that leaf, and the average "
+            "goes up by exactly the merged probability, whatever the rest. So the best code for the original is the "
+            "best for the smaller problem, plus that split. <bookmark mark='b'/> That's Huffman's first merge, and "
+            "the same argument covers every merge after it: his tree is optimal. <bookmark mark='c'/> We checked. "
+            "Add up the weights of the merges: "
             f"{merged:.3f}, Huffman's average. Search every possible shape of code tree for the letters: the best "
             f"is {same}. And on {n_tr} random alphabets, Huffman's code matched the exhaustive search every time."
         ) as vo:

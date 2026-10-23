@@ -900,12 +900,12 @@ def compute_binpack():
     test = [dc.weibull_instance(np.random.default_rng(500 + i), 1000) for i in range(10)]
     out = dict(ff_test=dc.excess(test, dc.first_fit), bf_test=dc.excess(test, dc.best_fit),
                ff_train=dc.excess(train, dc.first_fit), bf_train=dc.excess(train, dc.best_fit))
-    part = CACHE.partial("binpack", dict(v=1, seeds=(0, 1)))
+    part = CACHE.partial("binpack", dict(v=2, seeds=(0, 1)))
     for s in (0, 1):
         key = f"s{s}"
         if key in part:
             continue
-        hist, best = dc.evolve(train, s, pop=40, gens=30, log=log)
+        hist, best = dc.evolve(train, s, pop=60, gens=40, log=log)
         part[key] = dict(history=hist, best=dc.to_text(best), tree=repr(best),
                          test=dc.excess(test, dc.compile_tree(best)))
     for k in part.done:
