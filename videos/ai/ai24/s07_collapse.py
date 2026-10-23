@@ -36,7 +36,7 @@ class Collapse(VoiceoverScene):
         hs = Hypersphere(Z, [DIGIT[c] for c in lab], radius=2.6, center=[-3.0, -0.4, 0], dot=0.045)
         hs.angle.set_value(0.3)
         sp_ = load("sphere")
-        st = always_redraw(lambda: label(rf"step ${int(round(np.interp(hs.t.get_value(), np.arange(n), steps)))}$",
+        st = always_redraw(lambda: label(rf"step ${steps[int(np.clip(round(hs.t.get_value()), 0, n - 1))]}$",
                                          font_size=22, color=GREY_A).move_to([-3.0, 3.1, 0]))
         lossl = label(r"the loss reaches its minimum, $-1$, \\ and stays there", font_size=24, color=NAIVE)
         lossl.next_to(f, DOWN, buff=0.5)

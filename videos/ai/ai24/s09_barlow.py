@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import (BARLOW, HIST, NAIVE, PART, SIMCLR, VICREG_C, axes, bars_chart, curve, heat, load,
+from videos.ai.ai24.common import (Scrub, BARLOW, HIST, NAIVE, PART, SIMCLR, VICREG_C, axes, bars_chart, curve, heat, load,
                                    pct, tag, take_away)
 
 INV = "#5BD17A"
@@ -71,11 +71,8 @@ class Barlow(VoiceoverScene):
         tr = ValueTracker(0)
         S = 4.6
 
-        def mat():
-            i = int(np.clip(round(tr.get_value()), 0, n - 1))
-            return heat(Cs[i], S, S, vmax=1.0, signed=True, pos=INV, neg=RED).move_to([-3.0, -0.3, 0])
-
-        hm = always_redraw(mat)
+        hm = Scrub([heat(Cs[i], S, S, vmax=1.0, signed=True, pos=INV, neg=RED).move_to([-3.0, -0.3, 0])
+                    for i in range(n)], tr)
         frame = Square(S, color=GREY_D, stroke_width=1.5).move_to([-3.0, -0.3, 0])
         cap = label(r"$\mathcal C$, \ the first $24$ of $512$ dimensions", font_size=22, color=GREY_A).next_to(
             frame, UP, buff=0.15)

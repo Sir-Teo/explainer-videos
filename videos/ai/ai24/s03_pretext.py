@@ -148,7 +148,7 @@ class Pretext(VoiceoverScene):
         cur = always_redraw(lambda: DashedLine(
             ax.ax.c2p(float(np.interp(tr.get_value(), np.arange(n_s), steps)), 0),
             ax.ax.c2p(float(np.interp(tr.get_value(), np.arange(n_s), steps)), 1), color=GREY_B, stroke_width=1.5))
-        sl = always_redraw(lambda: label(rf"step ${int(round(np.interp(tr.get_value(), np.arange(n_s), steps)))}$",
+        sl = always_redraw(lambda: label(rf"step ${steps[int(np.clip(round(tr.get_value()), 0, n_s - 1))]}$",
                                          font_size=22, color=GREY_A).next_to(grid, UP, buff=0.2))
         fin = [r["logs"][-1]["acc"] for r in (runs[k] for k in keys)]
         k0 = float(np.mean([runs[k]["knn"][0] for k in keys]))
