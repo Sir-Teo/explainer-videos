@@ -55,8 +55,6 @@ from videos.ai.ai27 import post as P
 
 CACHE = Cache("ai27")
 load = CACHE.load
-# small models: past four threads the gain is small; on a busy machine fewer (AI27_THREADS=1) is faster
-torch.set_num_threads(int(os.environ.get("AI27_THREADS", min(4, os.cpu_count() or 1))))
 
 
 def rng(seed: int) -> np.random.Generator:
@@ -702,4 +700,7 @@ CACHE.items = ITEMS
 
 
 if __name__ == "__main__":
+    # small models: past four threads the gain is small; on a busy machine fewer (AI27_THREADS=1) is faster.  Set
+    # here, not on import, so a scene or another part that imports this module keeps its own setting.
+    torch.set_num_threads(int(os.environ.get("AI27_THREADS", min(4, os.cpu_count() or 1))))
     CACHE.main(ITEMS, __doc__)
