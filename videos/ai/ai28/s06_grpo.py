@@ -140,7 +140,7 @@ class GRPO(VoiceoverScene):
             cmath(r"k_3", r"=", r"(r - 1) - \log r\ \ \ge 0", font_size=34),
         ]
         whys = [why(r"the definition, \ one sample at a time"),
-                why(r"unbiased, \ but negative half the time"),
+                why(r"unbiased, \ but sometimes negative"),
                 why(r"a term with mean zero: \ a control variate"),
                 why(r"$\log r \le r - 1$: \ never negative, \ still unbiased")]
         step = ladder(self, rows, whys, keep=4, top=1.8, x=-1.5, buff=0.5, edge=6.9)
