@@ -119,13 +119,12 @@ def compute_fewstep():
     import torch
 
     from videos.ai.ai21 import exact as E
-    from videos.ai.ai21.compute import CACHE, sw_distance
+    from videos.ai.ai21.compute import CACHE
     from videos.ai.ai21.train2d import threads
 
     threads()
     part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS)))
-    data = E.sample(1500, 41)
-    z = E.rng(1).normal(size=(1500, 2))  # the same noise as the flow item
+    z = E.rng(1).normal(size=(4000, 2))  # the same noise as the flow item
     for kind in ("meanflow", "shortcut"):
         for seed in SEEDS:
             key = f"{kind}_s{seed}"
@@ -136,13 +135,13 @@ def compute_fewstep():
             r = dict(snap_steps=[s_ for s_, _ in sn], snaps=[x_.tolist() for _, x_ in sn])
             for n in JUMPS:
                 xs, p = jump(net, z, n)
-                r[f"sw{n}"] = sw_distance(xs, data)
+                r[f"sw{n}"] = E.dist(xs)
                 r[f"x{n}"] = xs[:600].tolist()
                 if n == 1:
                     r["path"] = p[:, :300].tolist()
             part[key] = r
             print(f"    {key}: " + ", ".join(f"{n} jumps {r[f'sw{n}']:.3f}" for n in JUMPS), flush=True)
-    out = dict(jumps=JUMPS, steps=STEPS, seeds=list(SEEDS), sw_noise=sw_distance(z, data))
+    out = dict(jumps=JUMPS, steps=STEPS, seeds=list(SEEDS), sw_noise=E.dist(z), floor=E.floor(len(z)))
     for kind in ("meanflow", "shortcut"):
         rs = [part[f"{kind}_s{s}"] for s in SEEDS]
         out[f"{kind}_sw"] = np.array([[r[f"sw{n}"] for n in JUMPS] for r in rs])  # seed, jumps

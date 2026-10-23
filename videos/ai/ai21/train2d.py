@@ -256,9 +256,9 @@ def compute_denoiser():
     threads()
     C = cache()
     part = C.partial("denoiser", dict(steps=STEPS, seeds=list(SEEDS), checks=CHECKS))
-    data = E.sample(4000, 31)
     x0e, ne = E.sample(4000, 32), E.rng(33).normal(size=(4000, 2))
-    z = E.rng(1).normal(size=(1500, 2))
+    z = E.rng(1).normal(size=(4000, 2))
+    data = E.sample(4000, 31)
     for seed in SEEDS:
         key = f"s{seed}"
         wpath = C.dir / f"denoiser_s{seed}.pt"
@@ -274,7 +274,7 @@ def compute_denoiser():
         D = train_denoiser(seed, on_check=on_check, curve=curve)
         torch.save(D.net.state_dict(), wpath)
         part[key] = dict(terms=terms, curve=curve, snaps=[s_.tolist() for s_ in snaps],
-                         sw=[sw_distance(s_, data) for s_ in snaps])
+                         sw=[E.dist(s_) for s_ in snaps])
         print(f"    seed {seed}: final loss {curve[-1][1]:.4f}; score error at t=" +
               ", ".join(f"{r['t']}: {r['err']:.4f}" for r in terms[-1]["rows"]), flush=True)
     D = load_denoiser(0)
@@ -299,15 +299,15 @@ def compute_denoiser():
         out[f"exact{t:g}"] = E.posterior(grid, a, s)[1]
     # samplers: DDPM (200 steps), DDIM (5 to 100 steps), the same noise
     xs, P = ddpm_vp(D, z, 200, seed=7, keep_every=10)
-    out["ddpm"], out["ddpm_path"], out["sw_ddpm"] = xs[:600], P, sw_distance(xs, data)
+    out["ddpm"], out["ddpm_path"], out["sw_ddpm"] = xs[:600], P, E.dist(xs)
     out["ddim_steps"] = [5, 10, 20, 50, 100]
     for k in out["ddim_steps"]:
         xs, P = ddim_vp(D, z, k, keep_every=1)
-        out[f"ddim{k}"], out[f"sw_ddim{k}"] = xs[:600], sw_distance(xs, data)
+        out[f"ddim{k}"], out[f"sw_ddim{k}"] = xs[:600], E.dist(xs)
         if k == 50:
             out["ddim_path"] = P
-    out["data"], out["sw_noise"] = data[:1500], sw_distance(z, data)
-    out["sw_floor"] = sw_distance(E.sample(1500, 34), data)
+    out["data"], out["sw_noise"] = data[:1500], E.dist(z)
+    out["sw_floor"] = E.floor(len(z))
     # Tweedie, with the network: its guess of the clean point against the exact posterior mean
     out["tw_rows"] = []
     for t in (0.2, 0.5, 0.8):
@@ -347,9 +347,8 @@ def compute_solvers_net():
     n = 2000
     z = E.rng(2022).normal(size=(n, 2))
     ref, _ = E.solve(D.np, z, "dpm2", 512, "edm")
-    data_ref = E.sample(n, 11)
-    out = dict(nfes=E.NFES, solvers=[k for k, _ in E.SOLVERS], ref_sw=E.sw(ref, data_ref), floor=E.sw(E.sample(n, 12), data_ref))
-    out.update(E.solver_sweep(D.np, z, ref, data_ref, label="net "))
+    out = dict(nfes=E.NFES, solvers=[k for k, _ in E.SOLVERS], ref_sw=E.dist(ref), floor=E.floor(n))
+    out.update(E.solver_sweep(D.np, z, ref, label="net "))
     print(f"    the network's own ODE solution: distance from the data {out['ref_sw']:.4f} (floor {out['floor']:.4f})",
           flush=True)
     return out
@@ -377,7 +376,7 @@ def compute_ablate():
         x_heun, _ = E.solve(D.np, z, "heun", 18, "edm")
         x_ddim, _ = E.solve(D.np, z, "ddim", 10, "edm")
         derr = [float(((D.np(x0e + s * ne, s) - D_star[s]) ** 2).sum(1).mean()) for s in ABL_SIG]
-        return dict(sw_heun=E.sw(x_heun, data), sw_ddim10=E.sw(x_ddim, data), derr=derr)
+        return dict(sw_heun=E.dist(x_heun), sw_ddim10=E.dist(x_ddim), derr=derr)
 
     for kind, param in ABLATE:
         for seed in SEEDS:
@@ -391,7 +390,7 @@ def compute_ablate():
                 lc = []
 
                 def on_check(step, D_):
-                    lc.append((step, E.sw(E.solve(D_.np, z[:1000], "ddim", 20, "edm")[0], data[:1000])))
+                    lc.append((step, E.dist(E.solve(D_.np, z[:1000], "ddim", 20, "edm")[0])))
 
                 D = train_denoiser(seed, kind, param, on_check=on_check, checks=ABL_CHECKS)
                 torch.save(D.net.state_dict(), C.dir / f"ablate_{kind}_{param}_s{seed}.pt")
@@ -400,7 +399,7 @@ def compute_ablate():
             part[key] = r
             print(f"    {key}: Heun-35 {r['sw_heun']:.4f}, DDIM-10 {r['sw_ddim10']:.4f}; D error by noise level "
                   + " ".join(f"{v:.4f}" for v in r["derr"]), flush=True)
-    out = dict(configs=[f"{k}_{p}" for k, p in ABLATE], seeds=list(SEEDS), sig=ABL_SIG, floor=E.sw(E.sample(n, 12), data),
+    out = dict(configs=[f"{k}_{p}" for k, p in ABLATE], seeds=list(SEEDS), sig=ABL_SIG, floor=E.floor(n),
                checks=ABL_CHECKS)
     for kind, param in ABLATE:
         c = f"{kind}_{param}"
@@ -492,7 +491,7 @@ def fm_eval(net, z, data):
     r = {}
     for k in FM_STEPS:
         xs, P = euler(net, z, k, keep=(k == 100))
-        r[f"sw{k}"] = sw_distance(xs, data)
+        r[f"sw{k}"] = E.dist(xs)
         r[f"x{k}"] = xs[:600].tolist()
         if k == 100:
             r["straight"] = E.straightness(P[:, :600])
@@ -522,7 +521,7 @@ def compute_flow():
     threads()
     C = cache()
     part = C.partial("flow", dict(steps=STEPS, seeds=list(SEEDS)))
-    n = 1500
+    n = 4000
     z = E.rng(1).normal(size=(n, 2))
     data = E.sample(n, 41)
     for seed in SEEDS:
@@ -551,7 +550,7 @@ def compute_flow():
             print(f"    {key}: " + " ".join(f"{k}:{r[f'sw{k}']:.3f}" for k in FM_STEPS)
                   + f"; straightness {r['straight']:.3f}; cost {r['cost']:.3f}", flush=True)
     out = dict(kinds=["fm", "ot", "rf1", "rf2"], seeds=list(SEEDS), steps=FM_STEPS, checks=FM_CHECKS,
-               sw_noise=E.sw(z, data), floor=E.sw(E.sample(n, 42), data))
+               sw_noise=E.dist(z), floor=E.floor(n))
     for kind in out["kinds"]:
         rs = [part[f"{kind}_s{s}"] for s in SEEDS]
         out[f"{kind}_sw"] = np.array([[r[f"sw{k}"] for k in FM_STEPS] for r in rs])  # seed, steps
@@ -577,7 +576,7 @@ def compute_distill():
     C = cache()
     C.load("flow")
     part = C.partial("distill", dict(steps=STEPS, seeds=list(SEEDS)))
-    n = 1500
+    n = 4000
     z = E.rng(1).normal(size=(n, 2))
     data = E.sample(n, 41)
     zw = z[:600]
@@ -597,7 +596,7 @@ def compute_distill():
             student = mlp(2, 2)
             student.load_state_dict(teacher.state_dict())
             prev = teacher
-            rows, snaps = [dict(steps=64, sw=sw_distance(euler(teacher, z, 64)[0], data))], [euler(teacher, zw, 64)[0].tolist()]
+            rows, snaps = [dict(steps=64, sw=E.dist(euler(teacher, z, 64)[0]))], [euler(teacher, zw, 64)[0].tolist()]
             for N in rounds[1:]:
                 opt = torch.optim.Adam(student.parameters(), lr=5e-4)
                 h = 1 / (2 * N)  # the previous model's step
@@ -619,7 +618,7 @@ def compute_distill():
                 prev.load_state_dict(student.state_dict())
                 for p_ in prev.parameters():
                     p_.requires_grad_(False)
-                rows.append(dict(steps=N, sw=sw_distance(euler(student, z, N)[0], data)))
+                rows.append(dict(steps=N, sw=E.dist(euler(student, z, N)[0])))
                 snaps.append(euler(student, zw, N)[0].tolist())
             part[key] = dict(rows=rows, snaps=snaps, one=euler(student, z, 1)[0][:600].tolist())
             print(f"    {key}: " + " ".join(f"{r['steps']}:{r['sw']:.3f}" for r in rows), flush=True)
@@ -660,7 +659,7 @@ def compute_distill():
                 sched.step()
             with torch.no_grad():
                 one = to_np(f(torch.tensor(z, dtype=torch.float32), torch.zeros(n)))
-            part[key] = dict(sw=sw_distance(one, data), one=one[:600].tolist(), snaps=snaps, snap_at=snap_at)
+            part[key] = dict(sw=E.dist(one), one=one[:600].tolist(), snaps=snaps, snap_at=snap_at)
             print(f"    {key}: one step {part[key]['sw']:.3f}", flush=True)
         # ---------------- distribution matching distillation (Yin et al. 2024)
         key = f"dmd_s{seed}"
@@ -711,10 +710,10 @@ def compute_distill():
                 og.step()
             with torch.no_grad():
                 one = to_np(gen(torch.tensor(z, dtype=torch.float32)))
-            part[key] = dict(sw=sw_distance(one, data), one=one[:600].tolist(), snaps=snaps, snap_at=snap_at)
+            part[key] = dict(sw=E.dist(one), one=one[:600].tolist(), snaps=snaps, snap_at=snap_at)
             print(f"    {key}: one step {part[key]['sw']:.3f}", flush=True)
     out = dict(seeds=list(SEEDS), rounds=rounds, per_round=per_round, steps=STEPS, batch=BATCH,
-               sw_noise=E.sw(z, data), floor=E.sw(E.sample(n, 42), data))
+               sw_noise=E.dist(z), floor=E.floor(n))
     out["prog_sw"] = np.array([[r["sw"] for r in part[f"prog_s{s}"]["rows"]] for s in SEEDS])
     out["prog_snaps"] = np.array(part["prog_s0"]["snaps"])
     for k in ("cd", "dmd"):
@@ -779,7 +778,7 @@ def compute_guidance():
 
     def measure(xs):
         p, r = prec_recall(xs, realA)
-        return dict(onA=float((xs[:, 0] < 0).mean()), prec=p, rec=r, sw=sw_distance(xs, realA),
+        return dict(onA=float((xs[:, 0] < 0).mean()), prec=p, rec=r, sw=sw_distance(xs, A),
                     spread=float(np.linalg.norm(xs[xs[:, 0] < 0] - xs[xs[:, 0] < 0].mean(0), axis=1).mean())
                     if (xs[:, 0] < 0).any() else 0.0)
 
