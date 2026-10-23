@@ -168,3 +168,94 @@ Libratus, Pluribus, Cepheus, AlphaStar, AlphaTensor, AlphaDev, Crazy Stone, MoGo
 
 Method names stay in Latin script: InstructGPT, ChatGPT, FLAN, Alpaca, LIMA, QLoRA, DoRA, IPO, KTO, SimPO, GRPO,
 TIES, DARE, MiniLLM, DistilBERT, Tülu 3, OLMo.
+
+### Silicon (Part 17)
+
+| English | 中文 |
+|---|---|
+| silicon, chip, die, wafer | 硅，芯片，裸片，晶圆 |
+| transistor | 晶体管 |
+| Moore's law | 摩尔定律 |
+| Dennard scaling | 登纳德缩放 |
+| the power wall | 功耗墙 |
+| clock speed, frequency | 时钟频率 |
+| leakage, threshold voltage | 漏电，阈值电压 |
+| single-thread performance | 单线程性能 |
+| core, multicore | 核心，多核 |
+| Amdahl's law | 阿姆达尔定律 |
+| GPU (graphics processing unit) | GPU（图形处理器） |
+| shader | 着色器 |
+| GPGPU (general-purpose computing on GPUs) | GPGPU（GPU通用计算） |
+| CUDA, kernel | CUDA，内核（核函数） |
+| thread, thread block, grid | 线程，线程块，网格 |
+| warp | 线程束 |
+| SIMT (single instruction, multiple threads) | SIMT（单指令多线程） |
+| streaming multiprocessor (SM) | 流式多处理器（SM） |
+| lane | 通道 |
+| branch divergence | 分支发散 |
+| latency hiding | 延迟隐藏 |
+| Little's law | 利特尔定律 |
+| bytes in flight | 在途字节 |
+| memory coalescing | 访存合并 |
+| occupancy | 占用率 |
+| register, register file | 寄存器，寄存器堆 |
+| shared memory | 共享内存 |
+| cache, cache line, L1 / L2 / L3 | 缓存，缓存行，一级/二级/三级缓存 |
+| SRAM, DRAM, HBM (high-bandwidth memory) | SRAM，DRAM，HBM（高带宽内存） |
+| memory hierarchy | 存储层次 |
+| bandwidth, latency | 带宽，延迟 |
+| pointer chasing | 指针追逐 |
+| prefetcher | 预取器 |
+| huge pages, TLB | 大页，TLB（地址转换缓存） |
+| matrix multiplication (GEMM), matrix-vector product (GEMV) | 矩阵乘法（GEMM），矩阵乘向量（GEMV） |
+| FLOP, FLOP/s | 浮点运算次数，每秒浮点运算次数 |
+| arithmetic intensity | 算术强度 |
+| tiling, cache blocking, tile | 分块，缓存分块，块（瓦片） |
+| BLAS | BLAS（基础线性代数库） |
+| the roofline model, ridge point | 屋顶线模型，拐点 |
+| compute-bound, memory-bound | 受算力限制，受内存限制 |
+| STREAM triad | STREAM三元组测试 |
+| systolic array, processing element (PE) | 脉动阵列，处理单元 |
+| output-stationary, weight-stationary | 输出驻留，权重驻留 |
+| wavefront | 波前 |
+| TPU (Tensor Processing Unit) | TPU（张量处理器） |
+| tensor core | 张量核心 |
+| multiply-accumulate (MAC), fused multiply-add (FMA) | 乘加 |
+| floating point: sign, exponent, mantissa, bias | 浮点数：符号位，指数，尾数，偏置 |
+| unit roundoff, round to nearest | 单位舍入误差，就近舍入 |
+| subnormal, saturate | 次正规数，饱和 |
+| FP32, TF32, BF16 (bfloat16), FP16, FP8, FP4 | FP32，TF32，BF16，FP16，FP8，FP4 |
+| microscaling (MX), block scale, shared exponent | 微缩放（MX），块缩放因子，共享指数 |
+| interconnect, link | 互连，链路 |
+| NVLink, NVSwitch, InfiniBand | NVLink，NVSwitch，InfiniBand |
+| scale-up, scale-out | 纵向扩展，横向扩展 |
+| topology: switch, fat tree, torus | 拓扑：交换机，胖树，环面 |
+| optical circuit switch | 光路交换机 |
+| collective, all-reduce, reduce-scatter, all-gather, broadcast | 集合通信，全规约，规约-分散，全收集，广播 |
+| ring all-reduce, tree all-reduce | 环形全规约，树形全规约 |
+| the α–β model (latency–bandwidth) | α–β模型（延迟–带宽模型） |
+| Triton, CUTLASS | Triton，CUTLASS |
+| FlashAttention, IO-aware | FlashAttention，IO感知 |
+| price-performance, energy efficiency | 性价比，能效 |
+| the memory wall | 内存墙 |
+| data centre, AI factory | 数据中心，AI工厂 |
+| rack, pod, superpod | 机柜，集群（pod），超级集群 |
+| wafer-scale engine | 晶圆级引擎 |
+| LPU | LPU（语言处理单元） |
+| through-silicon via (TSV), silicon interposer | 硅通孔，硅中介层 |
+| prefill, decode | 预填充，解码 |
+| skew (of a systolic array) | （脉动阵列的）错位 |
+| inference | 推断 |
+| multi-thread, single-thread | 多线程，单线程 |
+| load average | 平均负载 |
+| analog in-memory computing, phase-change memory | 模拟存内计算，相变存储器 |
+| neuromorphic computing, spiking neuron | 类脑计算，脉冲神经元 |
+| the hardware lottery | 硬件彩票 |
+
+Names: Gordon Moore → 戈登·摩尔; Robert Dennard → 罗伯特·登纳德; H. T. Kung → 孔祥重; Charles Leiserson → 查尔斯·雷瑟尔森;
+Hong Jia-Wei → 洪加威; Ian Buck → 伊恩·巴克; John Nickolls → 约翰·尼科尔斯; Alex Krizhevsky → 亚历克斯·克里热夫斯基; Ilya
+Sutskever → 伊利亚·苏茨克维; Geoffrey Hinton → 杰弗里·辛顿; Fei-Fei Li → 李飞飞; Jensen Huang → 黄仁勋; Sara Hooker → 萨拉·胡克;
+Samuel Williams, Andrew Waterman, David Patterson → 塞缪尔·威廉斯、安德鲁·沃特曼、大卫·帕特森; Philippe Tillet → 菲利普·蒂莱;
+Tri Dao → Tri Dao; Vasily Volkov → 瓦西里·沃尔科夫; Herb Sutter → 赫伯·萨特; Gene Amdahl → 吉恩·阿姆达尔; John Little →
+约翰·利特尔; Mark Horowitz → 马克·霍洛维茨; William Kahan → 威廉·卡亨; Jonathan Ross → 乔纳森·罗斯. Products stay in Latin script
+(GeForce, CUDA, H100, Blackwell, Rubin, NVLink, TPU, Ironwood, Trainium, Cerebras, Groq, TrueNorth, Loihi, Hala Point).

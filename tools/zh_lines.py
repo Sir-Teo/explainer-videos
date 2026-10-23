@@ -97,17 +97,21 @@ def verify(video: str, lang: str) -> int:
     from tools.translate_narration import english_lines, problems
 
     L.LANG = lang
-    bad = 0
+    bad = latin = 0
     for cls, en in english_lines(video):
         try:
             out = L.translate(en, video_dir(video), cls)
             ps = problems(en, out, lang)
         except KeyError:
             ps = ["no translation"]
+        # names kept in Latin script (NVLink, PyTorch) are a style choice, not a failure: a build only breaks on a
+        # missing translation or mismatched bookmarks
+        latin += any(p_.startswith("Latin words left") for p_ in ps)
+        ps = [p_ for p_ in ps if not p_.startswith("Latin words left")]
         if ps:
             bad += 1
             print(f"  {cls}: {'; '.join(ps)}: {' '.join(en.split())[:100]}")
-    print(f"{video}: {bad} narration line(s) won't translate")
+    print(f"{video}: {bad} narration line(s) won't translate ({latin} keep Latin-script names)")
     return bad
 
 

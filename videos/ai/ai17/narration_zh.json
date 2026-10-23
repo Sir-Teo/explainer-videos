@@ -337,7 +337,7 @@
   "5a23e553e00a": {
    "scene": "Kernel",
    "en": "The model example of thinking this way is FlashAttention. <bookmark mark='a'/> Attention computes a score for every pair of positions: a T by T table. The standard implementation writes that table out to high-bandwidth memory, then reads it back for the softmax, then again to weight the values. For long inputs that traffic dominates, while the tensor cores wait. <bookmark mark='b'/> In 2022 Tri Dao and colleagues at Stanford computed attention tile by tile instead, keeping each tile in on-chip SRAM, with a running maximum and sum so the softmax comes out exact. <bookmark mark='c'/> The table is never written out at all. They proved its memory traffic is T squared d squared over M, M the SRAM size: less than the standard version's whenever d squared is smaller than M, as it is in practice. The same arithmetic, faster, because it moves fewer bytes. Part 19 derives it.",
-   "zh": "这种思路的典范，是FlashAttention。<bookmark mark='a'/>注意力要给每一对位置算一个分数：一张T乘T的表。标准实现把这张表写到高带宽内存里，再读回来做softmax，然后再读一次去给值加权。输入一长，这些搬运就占了主导，张量核心只能干等。<bookmark mark='b'/>2022年，斯坦福的道三（Tri Dao）和同事改成一块一块地计算注意力，每一块都留在片上SRAM里，用一个滚动的最大值和滚动的和，让softmax的结果精确无误。<bookmark mark='c'/>这张表根本不写出去。他们证明，它的访存量是T平方乘d平方除以M，M是SRAM的大小：只要d平方小于M，就比标准版本少，而实践中正是如此。同样的算术，更快，因为它搬的字节更少。第19部分会推导它。"
+   "zh": "这种思路的典范，是FlashAttention。<bookmark mark='a'/>注意力要给每一对位置算一个分数：一张T乘T的表。标准实现把这张表写到高带宽内存里，再读回来做softmax，然后再读一次去给值加权。输入一长，这些搬运就占了主导，张量核心只能干等。<bookmark mark='b'/>2022年，斯坦福的Tri Dao和同事改成一块一块地计算注意力，每一块都留在片上SRAM里，用一个滚动的最大值和滚动的和，让softmax的结果精确无误。<bookmark mark='c'/>这张表根本不写出去。他们证明，它的访存量是T平方乘d平方除以M，M是SRAM的大小：只要d平方小于M，就比标准版本少，而实践中正是如此。同样的算术，更快，因为它搬的字节更少。第19部分会推导它。"
   },
   "c95fce4fb735": {
    "scene": "Trends",
