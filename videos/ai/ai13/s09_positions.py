@@ -62,9 +62,9 @@ class Positions(VoiceoverScene):
             "simply learned one vector per position, 1,024 of them. That works, but a position it never saw has no "
             "vector at all."
         ) as vo:
-            self.play(FadeIn(f), FadeIn(cite_))
+            self.play(FadeIn(f), FadeIn(cite_), FadeIn(img), FadeIn(il))
             vo.wait_until("a")
-            self.play(FadeIn(img), FadeIn(il))
+            self.play(Indicate(img, scale_factor=1.03))
             vo.wait_until("b")
             self.play(Write(rows[0]), FadeIn(rw))
             vo.wait_until("c")
@@ -104,11 +104,11 @@ class Positions(VoiceoverScene):
             "sequence: steep heads look only at the last few characters, shallow ones far back. They reported "
             "that a model trained on 1,024 tokens read 2,048 as well as a model trained at that length."
         ) as vo:
-            self.play(FadeIn(f), FadeIn(hist))
+            self.play(FadeIn(f), FadeIn(hist), LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.2), FadeIn(cap))
             vo.wait_until("a")
             self.play(FadeIn(fl), Indicate(f[3:], color=ALIBIC))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m) for m in imgs], lag_ratio=0.2), FadeIn(hl), FadeIn(cap))
+            self.play(FadeIn(hl))
         self.wait(0.3)
         self.clear_scene()
 
@@ -130,6 +130,11 @@ class Positions(VoiceoverScene):
         ts = np.arange(1, 33)
         c_ = VGroup(*[Dot(g.ax.c2p(t, 1 / t), radius=0.045, color=NOPEC) for t in ts])
         tag = note(r"illustration").next_to(g, RIGHT, buff=0.2).align_to(g, DOWN)
+        nn_ = 16
+        U = np.tril(np.ones((nn_, nn_))) / np.arange(1, nn_ + 1)[:, None]
+        uimg = framed(heat_image(U, 2.4, 2.4, color=A, gamma=0.6, mask_upper=True)).move_to([4.6, 1.2, 0])
+        ul = label(r"even attention over the past: \\ row $t$ holds $t$ weights of $1/t$", font_size=18,
+                   color=GREY_A).next_to(uimg, DOWN, buff=0.15)
         facts = VGroup(
             label(r"no positions (NoPE): \ the causal mask leaks them", font_size=22, color=NOPEC),
             label(r"Haviv et al.\ (2022): \ such models still learn positions", font_size=20, color=GREY_A),
@@ -137,7 +142,7 @@ class Positions(VoiceoverScene):
                   r"on reasoning tasks", font_size=20, color=GREY_A),
             label(r"Llama 4 (2025): \ layers without positions, \\ interleaved with rotary ones", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -1.75, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.6, -2.2, 0])
         keep_in_frame(facts)
         with self.voiceover(
             "And the most surprising answer: give no positions at all. A decoder still has its causal mask, and "
@@ -152,6 +157,7 @@ class Positions(VoiceoverScene):
             "model uses today, are next."
         ) as vo:
             step(0)
+            self.play(FadeIn(uimg), FadeIn(ul))
             vo.wait_until("a")
             self.play(Indicate(rows[0][2], color=A))
             vo.wait_until("b")
@@ -160,6 +166,7 @@ class Positions(VoiceoverScene):
             step(2)
             self.play(FadeIn(g), LaggedStart(*[FadeIn(d_) for d_ in c_], lag_ratio=0.03), FadeIn(tag))
             vo.wait_until("d")
+            self.play(FadeOut(uimg), FadeOut(ul))
             self.play(LaggedStart(*[FadeIn(f_, shift=UP * 0.1) for f_ in facts], lag_ratio=0.5), run_time=3.0)
         self.wait(0.3)
         self.clear_scene()

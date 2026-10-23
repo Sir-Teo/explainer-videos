@@ -25,26 +25,26 @@ class RASP(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def language(self):
+        title = label(r"RASP: \ a language with only a transformer's operations", font_size=30).to_edge(UP, buff=0.4)
         prims = VGroup(
             VGroup(data_text("select(keys, queries, predicate)", font=MONO, font_size=24, color=SEL),
-                   label(r"which positions each position looks at: \ an attention pattern", font_size=20, color=GREY_A)),
+                   label(r"which positions each position looks at: \ an attention pattern", font_size=22, color=GREY_A)),
             VGroup(data_text("aggregate(selector, values)", font=MONO, font_size=24, color=V),
-                   label(r"the average of the selected values: \ attention's output", font_size=20, color=GREY_A)),
-            VGroup(data_text("map / zip, elementwise", font=MONO, font_size=24, color=C.MLP),
-                   label(r"any function of one position: \ the MLP", font_size=20, color=GREY_A)),
+                   label(r"the average of the selected values: \ attention's output", font_size=22, color=GREY_A)),
+            VGroup(data_text("map, zip (elementwise)", font=MONO, font_size=24, color=C.MLP),
+                   label(r"any function of one position: \ the MLP", font_size=22, color=GREY_A)),
         )
-        for p_ in prims:
-            p_.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        prims.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([-3.0, 0.9, 0])
-        prog = code_block(["same  = select(tokens, tokens, ==)", "hist  = selector_width(same)", "",
-                           "less  = select(tokens, tokens, <)", "rank  = selector_width(less)",
-                           "sort  = aggregate(select(rank, indices, ==), tokens)"], font_size=20)
-        prog.move_to([3.4, 0.9, 0])
-        pl = VGroup(label(r"histogram: \ one layer", font_size=20, color=Q), label(r"sort: \ two layers", font_size=20,
-                                                                                       color=Q))
-        pl[0].next_to(prog[1], RIGHT, buff=0.2)
-        pl[1].next_to(prog[5], DOWN, buff=0.15).align_to(prog, RIGHT)
-        keep_in_frame(VGroup(prog, pl))
+        for i, p_ in enumerate(prims):
+            p_[0].move_to([-6.6, 1.9 - 0.75 * i, 0], aligned_edge=LEFT)
+            p_[1].move_to([0.0, 1.9 - 0.75 * i, 0], aligned_edge=LEFT)
+        prog = code_block(["same = select(tokens, tokens, ==)", "hist = selector_width(same)", "",
+                           "less = select(tokens, tokens, <)", "rank = selector_width(less)",
+                           "sort = aggregate(select(rank, indices, ==), tokens)"], font_size=22)
+        prog.move_to([-1.0, -1.75, 0])
+        pl = VGroup(label(r"histogram: \ one layer", font_size=22, color=Q), label(r"sort: \ two layers", font_size=22,
+                                                                                         color=Q))
+        pl[0].next_to(prog[1], RIGHT, buff=0.5)
+        pl[1].next_to(prog[4], RIGHT, buff=0.5).align_to(pl[0], LEFT)
         cite_ = cite(r"G.~Weiss, Y.~Goldberg \& E.~Yahav, \textit{Thinking Like Transformers} (2021); \ "
                      r"D.~Lindner et al., \textit{Tracr} (2023)", corner=DL)
         with self.voiceover(
@@ -57,7 +57,7 @@ class RASP(VoiceoverScene):
             "it needs, and in 2023 a team at DeepMind built Tracr, which compiles such programs into real "
             "transformer weights. We compiled two by hand."
         ) as vo:
-            self.play(FadeIn(prims[0]), FadeIn(cite_))
+            self.play(FadeIn(title), FadeIn(prims[0]), FadeIn(cite_))
             vo.wait_until("a")
             self.play(Indicate(prims[0][0], color=SEL))
             vo.wait_until("b")
@@ -185,18 +185,18 @@ class RASP(VoiceoverScene):
         th = theorem_card(r"log-precision transformers are in $\mathsf{TC}^0$",
                           r"a transformer of fixed depth, with numbers of $O(\log n)$ bits on inputs of length $n$, can "
                           r"be simulated by constant-depth threshold circuits of polynomial size",
-                          who=r"W.~Merrill \& A.~Sabharwal (2023)", width=7.6, font_size=22).move_to([-2.6, 1.6, 0])
+                          who=r"W.~Merrill \& A.~Sabharwal (2023)", width=10.4, font_size=26).move_to([0, 2.2, 0])
         cons = VGroup(
-            label(r"so, unless $\mathsf{TC}^0$ is as strong as $\mathsf{NC}^1$:", font_size=22, color=GREY_A),
-            label(r"no fixed-depth transformer tracks the composition \\ of permutations of five things, at every "
-                  r"length \\ (Merrill, Petty \& Sabharwal 2024; \ Barrington 1989)", font_size=20, color=WHITE),
-            label(r"depth matters: \ one layer could not build an induction head \ (chapter 14)", font_size=20,
+            label(r"so, unless $\mathsf{TC}^0$ is as strong as $\mathsf{NC}^1$:", font_size=26, color=GREY_A),
+            label(r"no fixed-depth transformer tracks the composition of permutations \\ of five things at every "
+                  r"length \ (Merrill, Petty \& Sabharwal 2024; \ Barrington 1989)", font_size=24, color=WHITE),
+            label(r"depth matters: \ one layer could not build an induction head \ (chapter 14)", font_size=24,
                   color=WHITE),
-            label(r"thinking out loud adds serial steps: \ chain of thought \ (Part 28)", font_size=20, color=C.BITS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([-1.4, -1.85, 0])
+            label(r"thinking out loud adds serial steps: \ chain of thought \ (Part 28)", font_size=24, color=C.BITS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([-1.6, -1.2, 0])
         keep_in_frame(cons)
-        conj = label(r"Zhou et al.\ (2023): \ transformers tend to generalize \\ to longer inputs when a short RASP \\ "
-                     r"program solves the task at every length", font_size=20, color=Q).move_to([4.6, 1.5, 0])
+        conj = label(r"Zhou et al.\ (2023): \ transformers tend to generalize to longer inputs \\ when a short RASP "
+                     r"program solves the task at every length", font_size=22, color=Q).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "What can't a transformer do? A fixed number of layers is a fixed amount of sequential work. "
             "<bookmark mark='a'/> William Merrill and Ashish Sabharwal proved in 2023 that a transformer of fixed "

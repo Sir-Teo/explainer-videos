@@ -7,11 +7,13 @@ MEM, SPARSE, LIN, INSIDE = C.LATENT, C.INDEXER, C.MEMORY, C.BITS
 
 
 def panel(title, color, items, width=6.4, part=None):
-    head = label(title, font_size=24, color=color)
-    rows = VGroup(*[label(t, font_size=18, color=GREY_A) for t in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+    head = label(title, font_size=26, color=color)
+    rows = VGroup(*[label(t, font_size=20, color=GREY_A) for t in items]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
     body = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+    if body.width > width - 0.5:
+        body.scale_to_fit_width(width - 0.5)
     if part:
-        tag = label(part, font_size=18, color=color).next_to(head, RIGHT, buff=0.3)
+        tag = label(part, font_size=20, color=color).next_to(head, RIGHT, buff=0.3)
         body.add(tag)
     box = RoundedRectangle(width=width, height=body.height + 0.4, corner_radius=0.12, stroke_color=color,
                            stroke_width=1.5, fill_color="#0B0F17", fill_opacity=0.9)
@@ -26,8 +28,7 @@ class Frontier(VoiceoverScene):
         self.hybrids()
 
     def card(self):
-        card = chapter_card(17, r"Attention in 2026", r"What are the newest models changing, and why?", lit=(2025, 2026),
-                            part=PART)
+        card = chapter_card(17, r"Attention in 2026", r"What are the newest models changing, and why?", part=PART)
         with self.voiceover("Chapter seventeen. Attention in 2026."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -93,19 +94,19 @@ class Frontier(VoiceoverScene):
         if cells.width > 13.0:
             cells.scale_to_fit_width(13.0)
         cl = VGroup(label(rf"Kimi K3 (2026): \ ${n_kda + n_mla}$ layers \ --- \ ${n_kda}$ of Kimi Delta Attention, "
-                          rf"\ ${n_mla}$ of gated attention", font_size=22, color=GREY_A).next_to(cells, UP, buff=0.25),
+                          rf"\ ${n_mla}$ of gated attention", font_size=26, color=GREY_A).next_to(cells, UP, buff=0.3),
                     note(r"layer order schematic; \ counts from the Kimi K3 model card", font_size=18).next_to(cells, DOWN, buff=0.15))
         keys = VGroup(VGroup(Square(0.25, fill_color=LIN, fill_opacity=0.9, stroke_width=0),
-                             label(r"a fixed-size memory, \ updated as it reads", font_size=20, color=LIN)).arrange(RIGHT, buff=0.15),
+                             label(r"a fixed-size memory, \ updated as it reads", font_size=24, color=LIN)).arrange(RIGHT, buff=0.15),
                       VGroup(Square(0.25, fill_color=A, fill_opacity=0.9, stroke_width=0),
-                             label(r"full attention, \ to recall exactly", font_size=20, color=A)).arrange(RIGHT, buff=0.15))
+                             label(r"full attention, \ to recall exactly", font_size=24, color=A)).arrange(RIGHT, buff=0.15))
         keys.arrange(RIGHT, buff=0.8).move_to([0, -0.2, 0])
         why_ = VGroup(
-            label(r"attention: \ exact recall of anything in context, \ cost growing with every token", font_size=22,
+            label(r"attention: \ exact recall of anything in context, \ cost growing with every token", font_size=26,
                   color=A),
-            label(r"a fixed memory: \ constant cost per token, \ but it must decide what to forget", font_size=22,
+            label(r"a fixed memory: \ constant cost per token, \ but it must decide what to forget", font_size=26,
                   color=LIN),
-            label(r"a few attention layers keep the recall; \ the rest keep the cost down", font_size=22, color=WHITE),
+            label(r"a few attention layers keep the recall; \ the rest keep the cost down", font_size=26, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, -2.2, 0])
         with self.voiceover(
             "Here is what such a hybrid looks like: Kimi K3, released in 2026, has 93 layers, and only 24 of them "

@@ -50,13 +50,13 @@ class Hopfield(VoiceoverScene):
         if max(w_.get_right()[0] for w_ in whys) > 6.9:
             g = VGroup(eqs, *whys)
             g.shift(LEFT * (max(w_.get_right()[0] for w_ in whys) - 6.9))
-        stored = self.letters_row(L, -0.55, width=0.78)
+        stored = self.letters_row(L, -0.8, width=0.78)
         sl = label(rf"${len(L)}$ letters stored, \ each ${SIDE} \times {SIDE} = {SIDE * SIDE}$ units of $\pm 1$",
                    font_size=22, color=GREY_A).next_to(stored, DOWN, buff=0.15)
         cue_i = 3
         cue = framed(pattern_image(np.asarray(h["cues"])[cue_i], SIDE, 1.25))
         rc = framed(pattern_image(np.asarray(h["rec_classical"])[cue_i], SIDE, 1.25, ink=CLASSIC))
-        trio = Group(cue, rc).arrange(RIGHT, buff=1.4).move_to([0, -2.55, 0])
+        trio = Group(cue, rc).arrange(RIGHT, buff=1.4).move_to([0, -2.75, 0])
         arr = Arrow(cue.get_right(), rc.get_left(), buff=0.15, color=GREY_B, stroke_width=3)
         cl = label(r"a cue: \\ $25\%$ of the units flipped", font_size=22, color=GREY_A).next_to(cue, LEFT, buff=0.3)
         rl = label(r"after the updates \\ settle", font_size=22, color=CLASSIC).next_to(rc, RIGHT, buff=0.3)
@@ -107,7 +107,7 @@ class Hopfield(VoiceoverScene):
         c_md = VGroup(curve(ax, lx, md, MODERN, 3.5), *[Dot(ax.c2p(a, b), radius=0.05, color=MODERN) for a, b in zip(lx, md)])
         cap = float(h["capacity_classical"])
         capl = DashedLine(ax.c2p(np.log10(cap), 0), ax.c2p(np.log10(cap), 1.05), color=CLASSIC, stroke_width=1.5)
-        capt = label(rf"$0.138\,N = {cap:.0f}$", font_size=20, color=CLASSIC).next_to(ax.c2p(np.log10(cap), 0.5), RIGHT,
+        capt = label(rf"$0.138\,N = {cap:.0f}$", font_size=20, color=CLASSIC).next_to(ax.c2p(np.log10(cap), 0.85), RIGHT,
                                                                                       buff=0.12)
         key = legend([(CLASSIC, r"Hopfield (1982): \ sign updates"), (MODERN, r"one softmax step")], font_size=22)
         key.move_to([4.9, 1.6, 0])

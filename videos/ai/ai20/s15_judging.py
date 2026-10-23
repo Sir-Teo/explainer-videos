@@ -41,7 +41,19 @@ class Judging(VoiceoverScene):
         pts = VGroup(label(r"its likelihood: \ almost as good", font_size=26, color=C.INTERVAL),
                      label(r"its samples: \ $99\%$ noise", font_size=26, color=C.SURPRISE),
                      label(r"and a GAN has no likelihood at all", font_size=26, color=GAN_C)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.4, 0])
+            DOWN, aligned_edge=LEFT, buff=0.3).move_to([1.0, -1.4, 0])
+        # a hundred draws from q: one from the good model (a PixelCNN sample), ninety-nine of noise
+        mix = np.random.default_rng(14).integers(0, 16, (100, 14, 14)).astype(float)
+        k_good = 37
+        mix[k_good] = np.asarray(load("pixelcnn")["s0_show"])[0]
+        sz, gp = 0.21, 0.02
+        sheet = digit_sheet(mix, 10, 10, size=sz, gap=gp).move_to([-4.5, -1.1, 0])
+        img = sheet[1]
+        r_, c_ = divmod(k_good, 10)
+        hit = Square(sz + 0.06, color=AR, stroke_width=2.5).move_to(
+            [img.get_left()[0] + c_ * (sz + gp) + sz / 2, img.get_top()[1] - r_ * (sz + gp) - sz / 2, 0])
+        mcap = label(r"$100$ draws from $q$: \\ one from the good model", font_size=20, color=GREY_A).next_to(
+            sheet, DOWN, buff=0.15)
         cite_ = cite(r"Theis, van den Oord \& Bethge, \textit{A note on the evaluation of generative models} (2016)",
                      corner=DR)
         with self.voiceover(
@@ -52,10 +64,12 @@ class Judging(VoiceoverScene):
             "GANs have no likelihood at all. So the field judges samples directly."
         ) as vo:
             step(0)
+            self.play(FadeIn(sheet), FadeIn(mcap))
+            self.play(Create(hit))
             vo.wait_until("a")
             step(1)
             vo.wait_until("b")
-            self.play(FadeIn(pts[0]), FadeIn(pts[1]), FadeIn(cite_))
+            self.play(FadeIn(pts[0]), FadeIn(pts[1]), FadeIn(cite_), Indicate(sheet, scale_factor=1.04))
             vo.wait_until("c")
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
@@ -310,15 +324,24 @@ class Judging(VoiceoverScene):
         verdict = ("None of our models is copying: their samples are about as far from the training set as real "
                    "test digits are." if not copying else
                    "One of them sits suspiciously close to the training set: it may be copying.")
+        train = np.concatenate([np.asarray(e[f"mem_{f}_nearest"])[:3] for f in fams])
+        replay = Group(digit_sheet(train, 2, 6, size=0.55, gap=0.06),
+                       label(rf"replaying training digits: \ FID ${floor:.2f}$, \ precision ${rp:.2f}$, \ recall ${rr:.2f}$",
+                             font_size=26, color=GREY_A)).arrange(DOWN, buff=0.3).move_to([0, 0.2, 0])
+        ws, wl = replay[0].width * 0.55, replay[1].width * 0.75  # then down to the bottom, side by side
+        x0 = -(ws + 0.3 + wl) / 2
         with self.voiceover(
             "No sample metric catches memorization: replaying training digits scores exactly like real data, "
             f"an FID of {floor:.2f}, precision {rp:.2f}, recall {rr:.2f}. <bookmark mark='a'/> So we check: each "
             "sample's nearest training digit. <bookmark mark='b'/> Real test digits sit a median "
             f"{real_d:.3f} from theirs. {verdict}"
         ) as vo:
-            self.play(FadeIn(hdr))
+            self.play(FadeIn(replay[0]), FadeIn(replay[1]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.3), run_time=2.0)
+            self.play(replay[0].animate.scale(0.55).move_to([x0 + ws / 2, -2.6, 0]),
+                      replay[1].animate.scale(0.75).move_to([x0 + ws + 0.3 + wl / 2, -2.6, 0]), run_time=1.0)
+            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.3),
+                      run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(bh), LaggedStart(*[FadeIn(b_) for b_ in bars], lag_ratio=0.2))
         self.wait(0.3)

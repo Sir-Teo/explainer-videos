@@ -124,8 +124,8 @@ class Recipe(VoiceoverScene):
             "<bookmark mark='b'/> on the right, what each writes after the words 'The door opened, and', frozen at "
             "the same steps, with the same random seed. "
             f"<bookmark mark='c'/> At the start both write noise, at a loss of about {first['val']:.1f} nats. "
-            "<bookmark mark='d'/> Let them read, and by the end compare what they write; the curves tell which "
-            "learned faster."
+            "<bookmark mark='d'/> Let them read: the noise turns into words, then into phrases shaped like English. "
+            "By the end, compare what they write; the curves tell which learned faster."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(g), FadeIn(tag), FadeIn(pts_b[0]), FadeIn(pts_f[0]))
