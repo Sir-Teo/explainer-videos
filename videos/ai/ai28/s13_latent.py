@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, DIRECT, FILLER, PART, POLICY, RIGHT_C, WRONG_C, load, node_box
+from videos.ai.ai28.common import CHAIN, FILLER, PART, POLICY, RIGHT_C, WRONG_C, load, node_box
 
 LATENT = C.LATENT if hasattr(C, "LATENT") else GREEN_B
 

@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (CHAIN, DIRECT, FILLER, PART, RIGHT_C, WRONG_C, bit_row, chip, load, mark,
-                                   seeds_plot)
+from videos.ai.ai28.common import (CHAIN, DIRECT, FILLER, PART, RIGHT_C, WRONG_C, bit_row, chip, load, seeds_plot)
 
 MODE_C = {"direct": DIRECT, "filler": FILLER, "chain": CHAIN}
 

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, DIRECT, PART, PASS, POLICY, REF, RIGHT_C, WRONG_C, load, seeds_plot
+from videos.ai.ai28.common import DIRECT, PART, PASS, POLICY, REF, RIGHT_C, WRONG_C, load, seeds_plot
 from videos.ai.ai28.s07_variants import COLS, NAMES, SAY
 
 

@@ -283,6 +283,18 @@ def base_model():
     return m.eval()
 
 
+def rl_model():
+    """The first GRPO run's final model (seed 0 of the ``rl`` item); retrained, seeded, if its checkpoint is missing."""
+    import torch
+
+    p = CACHE.dir / "add_rl.pt"
+    if not p.exists():
+        grpo_pg_run(0)  # saves add_rl.pt
+    m = add_model()
+    m.load_state_dict(torch.load(p))
+    return m.eval()
+
+
 def answer_dist(m, a, b):
     """The model's probability for every 3-digit answer (0 to 999) to each question: (questions, 1000)."""
     import torch
@@ -432,15 +444,12 @@ def compute_sampling(n=32, trials=400):
 def compute_kl_est(n_samples=64):
     """KL(pi || start) estimated from samples y ~ pi with r = pi_start(y) / pi(y):
     k1 = -log r,  k2 = (log r)^2 / 2,  k3 = (r - 1) - log r  (Schulman 2020), against the exact KL per question."""
-    import torch
 
     threads(1)
     d = load("add_base")
     a, b = np.asarray(d["a"]), np.asarray(d["b"])
     P0 = np.asarray(d["dist"], float)
-    m = add_model()
-    m.load_state_dict(torch.load(CACHE.dir / "add_rl.pt"))
-    m.eval()
+    m = rl_model()
     P = answer_dist(m, a, b)
     eps = 1e-30
     exact = (P * (np.log(P + eps) - np.log(P0 + eps))).sum(1)  # nats, per question

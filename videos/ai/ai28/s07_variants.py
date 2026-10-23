@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (ADV, CHAIN, KLC, LEN, PART, POLICY, RATIO, RIGHT_C, WRONG_C, load)
+from videos.ai.ai28.common import (ADV, CHAIN, LEN, PART, RIGHT_C, WRONG_C, load)
 
 NAMES = {"pg": r"plain", "grpo": r"GRPO", "dr": r"Dr.~GRPO", "dapo": r"DAPO", "gspo": r"GSPO", "cispo": r"CISPO",
          "dpo": r"DPO"}

@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (CHAIN, DIRECT, ENT, LEN, ORM_C, PART, PASS, POLICY, PRM_C, REF, RIGHT_C, VOTE,
+from videos.ai.ai28.common import (CHAIN, DIRECT, ENT, LEN, ORM_C, PART, PASS, POLICY, PRM_C, REF, VOTE,
                                    WRONG_C, heat, load, tile_frame)
 
 

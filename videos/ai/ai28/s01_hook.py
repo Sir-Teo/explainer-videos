@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, DIRECT, LEAN, MONO, PART, PASS, POLICY, VOTE, RIGHT_C
+from videos.ai.ai28.common import CHAIN, DIRECT, LEAN, MONO, PART, PASS, POLICY, VOTE
 
 
 def hbars(rows, x0=-1.2, width=4.6, row_h=0.62, font_size=22, top=2.0, vmax=100.0):

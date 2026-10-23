@@ -61,6 +61,11 @@ class Vote(VoiceoverScene):
                      color=GREY_A).next_to(lg, DOWN, buff=0.3).align_to(lg, LEFT)
         tag = note(rf"computed: \ a $2$-layer transformer, \ ${int(s['sft_steps']):,}$ supervised steps".replace(",", "{,}"))
         tag.to_corner(DR, buff=0.2)
+        head = label(r"our testbed: \ a model that can choose to think", font_size=32).to_edge(UP, buff=0.25)
+        top.shift(DOWN * 0.35)
+        direct.shift(DOWN * 0.35)
+        dl.shift(DOWN * 0.35)
+        sch.shift(DOWN * 0.35)
         with self.voiceover(
             "For the next chapters we need a model that can choose to think. Here is ours, trained on this computer. "
             "<bookmark mark='a'/> The question is a list of two to nine digits; the answer is their sum. "
@@ -72,7 +77,7 @@ class Vote(VoiceoverScene):
             "Each step of thought is a small sum, but small sums still go wrong sometimes, and one wrong step spoils "
             "the chain."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(fmt[0]), FadeIn(bq), FadeIn(lq), FadeIn(fmt[1]))
             vo.wait_until("b")
@@ -162,9 +167,21 @@ class Vote(VoiceoverScene):
         p_right = float(np.mean(A == truth))
         n_ok = int(np.sum(A[:8] == truth))
         n_wrong_vals = int(len(np.unique(A[(A >= 0) & (A != truth)])))
-        some = (f"{n_ok} of these eight end on the right sum. The others slipped somewhere, and a slip carries "
-                "through to the end: every later total is off by the same amount." if n_ok < 8 else
-                "All eight of these end on the right sum.")
+        lens = [int(np.sum(St[j] >= 0)) for j in range(8)]
+        n_short = sum(1 for j in range(8) if A[j] != truth and lens[j] < len(digits))  # stopped thinking early
+        n_slip = 8 - n_ok - n_short
+        if n_ok == 8:
+            some = "All eight of these end on the right sum."
+        elif n_slip == 0:
+            some = (f"{n_ok} of these eight end on the right sum. The others stopped thinking part-way and answered "
+                    "at once from there: a chain cut short is a guess.")
+        elif n_short == 0:
+            some = (f"{n_ok} of these eight end on the right sum. The others slipped somewhere, and a slip carries "
+                    "through to the end: every later total is off by the same amount.")
+        else:
+            some = (f"{n_ok} of these eight end on the right sum. Of the others, {n_short} stopped thinking part-way "
+                    f"and answered at once from there, and {n_slip} slipped on a step, which carries through to the "
+                    "end.")
         scatter = (f"the wrong ones scatter over {n_wrong_vals} different values." if n_wrong_vals > 3 else
                    f"the wrong ones fall on just {n_wrong_vals} values.")
         if top == truth:
@@ -207,6 +224,9 @@ class Vote(VoiceoverScene):
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.5, edge=6.9)
         res = label(r"voting can only amplify \ what the model already prefers", font_size=28, color=VOTE)
         res.to_edge(DOWN, buff=0.45)
+        defs = label(r"$y^*$: \ the right answer, \ with probability $p^*$; \ $y$: \ a wrong answer, \ with "
+                     r"probability $p_y$; \ $k$: \ the number of samples", font_size=24, color=GREY_A)
+        defs.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "When does voting work? Call the right answer y star, and its probability p star. <bookmark mark='a'/> "
             "The vote is right when the right answer appears more often than every wrong one. <bookmark mark='a2'/> "
@@ -218,6 +238,7 @@ class Vote(VoiceoverScene):
             "amplify what the model already prefers. It cannot rescue a question where the model's favourite answer "
             "is wrong."
         ) as vo:
+            self.play(FadeIn(defs))
             vo.wait_until("a")
             step(0)
             vo.wait_until("a2")
@@ -227,6 +248,7 @@ class Vote(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
+            self.play(FadeOut(defs))
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -247,8 +269,8 @@ class Vote(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.05, color=c) for ys, c in ((tp, PASS), (tv, VOTE), (dv, DIRECT))
                         for x, y in zip(lk, ys)])
         limit = DashedLine(ax.c2p(0, lim), ax.c2p(lk[-1], lim), color=VOTE, dash_length=0.08, stroke_width=2)
-        ll = label(rf"the limit: \ most frequent answer right \ (${100 * lim:.0f}\%$)", font_size=18, color=VOTE)
-        ll.next_to(limit, DOWN, buff=0.08).align_to(limit, RIGHT)
+        ll = label(rf"the limit: \\ most frequent answer right \\ (${100 * lim:.0f}\%$)", font_size=18, color=VOTE)
+        ll.next_to(limit, RIGHT, buff=0.15)
         lg = legend([(PASS, r"any of $k$ right \ (needs a checker)"), (VOTE, r"vote over $k$ chains"),
                      (DIRECT, r"vote over $k$ answers given at once")], font_size=19)
         lg.next_to(g, RIGHT, buff=0.3).shift(UP * 1.0)
@@ -263,13 +285,19 @@ class Vote(VoiceoverScene):
         else:
             direct_said = (f"Voting over answers given at once does about as well here, {100 * dv[-1]:.0f} percent: "
                            "on this task the model's favourite answer is often right either way.")
+        gi = int(np.argmax(tp - tv))
+        if tp[-1] - tv[-1] < 0.05 and tp[gi] - tv[gi] > 0.08:
+            gap_said = ("The gap between the two curves is what a checker is worth: wide at a few samples, "
+                        f"{100 * (tp[gi] - tv[gi]):.0f} points at {ks[gi]}, and nearly closed by {ks[-1]}.")
+        else:
+            gap_said = "The gap between the two curves is what a checker is worth."
         with self.voiceover(
             "Here it is on three hundred questions. <bookmark mark='a'/> One chain is right "
             f"{100 * tv[0]:.0f} percent of the time. Voting over {ks[-1]} chains: {100 * tv[-1]:.0f} percent. "
             f"<bookmark mark='b'/> And the derivation predicted where it would level off: the share of questions "
             f"whose most frequent answer is right, {100 * lim:.0f} percent. <bookmark mark='c'/> If something could "
-            f"check the answers, any of {ks[-1]} chains being right would count: {100 * tp[-1]:.0f} percent. The gap "
-            "between the two curves is what a checker is worth. <bookmark mark='d'/> " + direct_said
+            f"check the answers, any of {ks[-1]} chains being right would count: {100 * tp[-1]:.0f} percent. "
+            f"{gap_said} <bookmark mark='d'/> {direct_said}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(tag))
             vo.wait_until("a")

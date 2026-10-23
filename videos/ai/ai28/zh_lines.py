@@ -143,9 +143,16 @@ ZH = {
     "f'the wrong ones fall on just":
         '错误的答案只落在{n_wrong_vals}个数值上。',
 
-    "f'{n_ok} of these eight end on the right sum.":
+    "f'{n_ok} of these eight end on the right sum. The others stopped thinking part-way":
+        "这8条里有{n_ok}条最后得到了正确的和。其余的想到一半就停了，从那里直接给出答案：半途而废的思维链，就是在猜。",
+
+    "f'{n_ok} of these eight end on the right sum. The others slipped somewhere":
         "这8条里有{n_ok}条最后得到了正确的和。其余的在某处出了错，而且一步出错会一直传到最后："
         "之后的每个累计和都差同样多。",
+
+    "f'{n_ok} of these eight end on the right sum. Of the others,":
+        "这8条里有{n_ok}条最后得到了正确的和。其余的里面，{n_short}条想到一半就停了，从那里直接给出答案；"
+        "{n_slip}条在某一步出了错，而这个错会一直传到最后。",
 
     'All eight of these end on the right sum.':
         '这8条全部得到了正确的和。',
@@ -168,7 +175,14 @@ ZH = {
         "这是在300道题上的结果。<bookmark mark='a'/>一条思维链答对{100 * tv[0]:.0f}%。对{ks[-1]}条思维链投票："
         "{100 * tv[-1]:.0f}%。<bookmark mark='b'/>推导也预言了它会在哪里趋平：最常见答案正确的题目所占的比例，"
         "{100 * lim:.0f}%。<bookmark mark='c'/>如果有东西能检查答案，那么{ks[-1]}条里只要有一条对就算对："
-        "{100 * tp[-1]:.0f}%。两条曲线之间的差距，就是一个检查器的价值。<bookmark mark='d'/>{direct_said}",
+        "{100 * tp[-1]:.0f}%。{gap_said}<bookmark mark='d'/>{direct_said}",
+
+    "f'The gap between the two curves is what a checker is worth: wide at a few samples,":
+        "两条曲线之间的差距，就是一个检查器的价值：样本少时差距很大，{ks[gi]}个样本时差{100 * (tp[gi] - tv[gi]):.0f}个百分点，"
+        "到{ks[-1]}个时几乎合上了。",
+
+    'The gap between the two curves is what a checker is worth.':
+        "两条曲线之间的差距，就是一个检查器的价值。",
 
     'f"Voting over answers given at once reaches only':
         "对直接给出的答案投票，只能达到{100 * dv[-1]:.0f}%：对更多的题目，模型直接回答时最喜欢的答案是错的，"
@@ -596,6 +610,10 @@ ZH = {
     "f'With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time; each":
         '完全不思考时，它在{n}个数字的列表上答对{100 * at0:.0f}%；每多一步思考，就多换来一些正确率。',
 
+    "f'With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time. Cut":
+        '完全不思考时，它在{n}个数字的列表上答对{100 * at0:.0f}%。想到一半被打断，并不比完全不想好。'
+        '只有完整的思维链才有回报：{100 * full:.0f}%。',
+
     "f'With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time, and":
         '完全不思考时，它在{n}个数字的列表上答对{100 * at0:.0f}%，完整地思考是{100 * full:.0f}%，但并不是每多一步都有帮助。',
 
@@ -667,7 +685,8 @@ ZH = {
         "一个局面，变成一条部分完成的思维链；一步棋，变成下一步思考。<bookmark mark='b'/>AlphaZero的策略网络，"
         "也就是它对哪些棋值得一试的感觉，变成语言模型自己给下一步的概率。<bookmark mark='c'/>价值网络，"
         "也就是一个局面看起来有多好，变成过程奖励模型。<bookmark mark='d'/>而输赢，变成检查器。<bookmark mark='e'/>"
-        "不同的是树的大小：棋盘上只有几步合法的棋，而语言模型在每个词元上都有整整一个词表可选。",
+        "不同的是树的大小：棋盘上合法的走法最多几百种，而语言模型在每个词元上都有整整一个词表可选，"
+        "一步思考又有许多个词元那么长。",
 
     'Sampling chains and voting treats each chain as a whole.':
         "采样思维链再投票，是把每条思维链当作一个整体。搜索则是一步一步来：提出几个下一步的想法，评判它们，"

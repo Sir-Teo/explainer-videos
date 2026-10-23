@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, DIRECT, KLC, LEN, PART, PASS, POLICY, RIGHT_C, VOTE, WRONG_C, load
+from videos.ai.ai28.common import CHAIN, KLC, LEN, PART, PASS, POLICY, RIGHT_C, VOTE, WRONG_C, load
 
 
 class TestTime(VoiceoverScene):
@@ -139,7 +139,12 @@ class TestTime(VoiceoverScene):
                        f"answers given at once reaches {100 * v_best:.0f} with the tokens we allowed.")
         rs, ra = res["rl"][1], res["rl"][3]
         mono = bool(np.all(np.diff(sa) > -0.03))
-        if mono:
+        flat = bool(np.all(np.abs(sa[1:-1] - at0) < 0.06)) and full > at0 + 0.1
+        if flat:
+            first = (f"With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time. Cut "
+                     "off part-way, it does no better than not thinking at all. Only the whole chain pays: "
+                     f"{100 * full:.0f} percent.")
+        elif mono:
             first = (f"With no thought at all it gets {n}-digit lists right {100 * at0:.0f} percent of the time; each "
                      "extra step of thought buys more.")
         else:
@@ -177,8 +182,8 @@ class TestTime(VoiceoverScene):
                   r"\frac{q}{1 - p} & y \text{ wrong} \end{cases}, \qquad q = (1 - p)^N", font_size=32),
             cmath(r"\mathrm{KL}(\pi_N \,\|\, \pi)", r"=", r"(1 - q) \log \frac{1 - q}{p} + q \log \frac{q}{1 - p}",
                   font_size=34),
-            cmath(r"\mathrm{KL}(\pi_N \,\|\, \pi)", r"\xrightarrow{\ N \to \infty\ }", r"\log \frac{1}{p}\ \ \le\ \ "
-                  r"\log N - \frac{N - 1}{N}", font_size=34),
+            cmath(r"\mathrm{KL}(\pi_N \,\|\, \pi)", r"\xrightarrow{\ N \to \infty\ }", r"\log \frac{1}{p}, \qquad "
+                  r"\text{while for every } N\!:\ \ \mathrm{KL} \le \log N - \frac{N - 1}{N}", font_size=32),
         ]
         rows[2][2].set_color(KLC)
         whys = [why(r"draw $N$, \ keep a right one if there is one"),
