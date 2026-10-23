@@ -50,9 +50,11 @@ comparison is made; the series' own small transformer joins the scoreboard.
   partial RoPE in Qwen3-Next and Gemma 3's base of a million.
 * **10. Four answers, trained side by side.** Four 3-layer transformers (d = 64, 4 heads, 128-character windows,
   1,000 steps, the same data in the same order), differing only in positions — sinusoids, RoPE, ALiBi, none — three
-  seeds each, the training curves replayed; within the training length RoPE is best (2.43 bits, every seed better
-  than every seed of the others), ALiBi 2.56, sinusoids 2.73, no positions 3.27; read four times as far, ALiBi holds
-  (2.51), no positions drifts up (+0.21), sinusoids (+1.9) and RoPE (+2.7) break.
+  seeds each, the training curves replayed (the order is fixed from step 200 on); within the training length RoPE is
+  best (2.43 bits, every seed better than every seed of the others), ALiBi 2.56, sinusoids 2.73, no positions 3.27;
+  read four times as far, ALiBi holds (2.51), no positions drifts up (+0.21), sinusoids (+1.9) and RoPE (+2.7) break;
+  why: ALiBi's penalties (slopes 1/4 … 1/256) only grow past the edge, while no positions' 1/t signal shrinks below
+  anything seen in training.
 * **11. Longer than it was trained for.** Our transformer at 1,024 characters (4× its context): plain 4.9 bits at the
   far end against 1.8 for a sliding 256-character window; position interpolation, NTK-aware scaling (bloc97 2023) and
   YaRN (Peng et al. 2023) without retraining (YaRN best, 2.1); YaRN's recipe on screen (r = L/λ, the ramp γ with α = 1,
@@ -82,7 +84,9 @@ comparison is made; the series' own small transformer joins the scoreboard.
   depth and TC⁰ (Merrill & Sabharwal 2023), tracking shuffles of five objects (Merrill, Petty & Sabharwal 2024),
   chains of thought (Merrill & Sabharwal 2024), the RASP-generalization
   conjecture (Zhou et al. 2023).
-* **17. Attention in 2026.** Where the formula sits in today's models: sink logits, gates, QK-norm and NoPE layers
+* **17. Attention in 2026.** Why the effort: chapter seven's T/12d for a model as wide as DeepSeek-V3 (d = 7,168):
+  attention's term is 0.05 of the weights' at 4K tokens, 1.5× at 128K, 12× at 1M. Where the formula sits in today's
+  models: sink logits, gates, QK-norm and NoPE layers
   inside; grouped-query and multi-head latent attention for the cache (Part 15); sliding windows, DeepSeek's sparse
   attention and DeepSeek-V4's compressed selection (Part 16); linear-attention hybrids (Qwen3-Next and Qwen3.5 at 3:1,
   Kimi Linear, Kimi K3 with 24 full-attention layers of 93).
