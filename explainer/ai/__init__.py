@@ -196,15 +196,18 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
     # keep the lit labels apart and inside the frame
     for row in (1, -1):
         same = sorted([t for t in labels if np.sign(t.get_y()) == row], key=lambda t: t.get_x())
-        for a, b in zip(same, same[1:]):
+        for a, b in zip(same, same[1:]):  # left to right: no overlaps
             gap = b.get_left()[0] - a.get_right()[0]
             if gap < 0.2:
                 b.shift(RIGHT * (0.2 - gap))
-        for t in same:
-            if t.get_right()[0] > 6.9:
-                t.shift(LEFT * (t.get_right()[0] - 6.9))
-            if t.get_left()[0] < -6.9:
-                t.shift(RIGHT * (-6.9 - t.get_left()[0]))
+        if same and same[-1].get_right()[0] > 6.9:  # the last one back inside, pushing its neighbours left
+            same[-1].shift(LEFT * (same[-1].get_right()[0] - 6.9))
+            for i in range(len(same) - 2, -1, -1):
+                gap = same[i + 1].get_left()[0] - same[i].get_right()[0]
+                if gap < 0.2:
+                    same[i].shift(LEFT * (0.2 - gap))
+        if same and same[0].get_left()[0] < -6.9:
+            same[0].shift(RIGHT * (-6.9 - same[0].get_left()[0]))
     g.add(labels)
     g.labels = labels
     return g
