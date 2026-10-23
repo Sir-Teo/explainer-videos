@@ -19,7 +19,7 @@ trained on this computer, by `compute.py` (PyTorch on the CPU, or the series' ow
   stochastic gradient descent on the squared error.
 * **2. The perceptron learns.** The rule w ← w + y x on mistakes and its geometry; trained live on 50 separable
   points (13 mistakes over 5 passes); Novikoff's theorem (1962) proved on screen: k ≤ (R/γ)², with R and the best
-  margin γ computed (bound 334); the bound against reality on six data sets of shrinking margin, 20 orders each (the
+  margin γ computed and drawn on the data (bound 334); the bound against reality on six data sets of shrinking margin, 20 orders each (the
   worst run uses at most 16% of it); what it doesn't promise (the widest margin: Part 6's SVM).
 * **3. XOR, and the first winter.** XOR is not linearly separable (four inequalities, a contradiction); the
   perceptron cycles forever on it; Minsky & Papert's *Perceptrons* (1969), parity and connectedness, and their
