@@ -227,7 +227,7 @@ class Neurons(VoiceoverScene):
                           r"an adaptive linear neuron, \ trained by least mean squares", width=5.6,
                           color=HIST).move_to([3.6, 2.4, 0])
         sgd = label(r"every example, \ in proportion to the error: \\ stochastic gradient descent \ (Part 11)",
-                    font_size=30, color=C.BITS).to_edge(DOWN, buff=0.45)
+                    font_size=30, color=C.BITS).move_to([-3.6, -1.6, 0])
         with self.voiceover(
             "Two years later, at Stanford, Bernard Widrow and his student Ted Hoff built ADALINE, an adaptive linear "
             "neuron, with a different rule. <bookmark mark='a'/> The perceptron changes its weights only after a "

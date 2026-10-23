@@ -68,10 +68,21 @@ class Zero(VoiceoverScene):
     # ------------------------------------------------------------------
     def loop(self):
         net = node_box(r"one network: \ $(\mathbf p, v) = f_\theta(s)$", AGENT, font_size=26).move_to([0, 2.4, 0])
-        play = node_box(r"self-play, \ every move chosen by MCTS \ guided by $f_\theta$", SEARCH, font_size=24)
-        play.move_to([3.6, 0.2, 0])
+        play = node_box(r"self-play: \ MCTS guided by $f_\theta$", SEARCH, font_size=24)
+        play.move_to([4.4, 0.3, 0])
         data = node_box(r"every position: \ $(s,\ \boldsymbol\pi,\ z)$", VALUE, font_size=24).move_to([0, -2.0, 0])
-        train = node_box(r"train $f_\theta$", REWARD, font_size=26).move_to([-3.6, 0.2, 0])
+        train = node_box(r"train $f_\theta$", REWARD, font_size=26).move_to([-4.6, 0.3, 0])
+        # what the one network does, before the loop: a position in, move probabilities and a value out
+        board = C4View(cell=0.26).play_moves([3, 3, 2, 4, 4])
+        board.move_to([-2.3, 0.2, 0])
+        pv = [0.05, 0.1, 0.32, 0.18, 0.2, 0.1, 0.05]  # illustrative
+        bars = VGroup(*[Rectangle(width=0.22, height=1.2 * q / max(pv), stroke_width=0, fill_color=PRIOR,
+                                  fill_opacity=0.9) for q in pv]).arrange(RIGHT, buff=0.07, aligned_edge=DOWN)
+        bars.move_to([2.0, -0.1, 0], aligned_edge=DOWN)
+        pl = label(r"$\mathbf p$: \ a probability per column", font_size=20, color=PRIOR).next_to(bars, DOWN, buff=0.15)
+        vl = label(r"$v = +0.2$: \ who will win", font_size=20, color=VALUE).next_to(pl, DOWN, buff=0.12)
+        into = Arrow(board.get_right(), bars.get_left() + LEFT * 0.1, buff=0.15, color=GREY_B, stroke_width=3)
+        illus = VGroup(board, into, bars, pl, vl, note(r"illustrative").next_to(board, DOWN, buff=0.15))
         arrs = VGroup(CurvedArrow(net.get_right(), play.get_top(), angle=-0.8, color=GREY_B, stroke_width=3, tip_length=0.18),
                       CurvedArrow(play.get_bottom(), data.get_right(), angle=-0.8, color=GREY_B, stroke_width=3, tip_length=0.18),
                       CurvedArrow(data.get_left(), train.get_bottom(), angle=-0.8, color=GREY_B, stroke_width=3, tip_length=0.18),
@@ -80,7 +91,7 @@ class Zero(VoiceoverScene):
         zl = label(r"$z$: \ who won the game, \ $\pm 1$", font_size=20, color=REWARD)
         VGroup(pil, zl).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(data, DOWN, buff=0.2)
         loss = cmath(r"\ell", r"=", r"(z - v)^2", r"-", r"\boldsymbol\pi^{\!\top} \log \mathbf p", r"+",
-                     r"c\, \|\theta\|^2", font_size=34).move_to([0, 0.3, 0])
+                     r"c\, \|\theta\|^2", font_size=30).move_to([-0.1, 0.3, 0])
         loss[2].set_color(VALUE)
         loss[4].set_color(SEARCH)
         b1 = brace_note(loss[2], r"value: \ predict the result", color=VALUE, font_size=18, direction=UP)
@@ -95,8 +106,10 @@ class Zero(VoiceoverScene):
             "<bookmark mark='d'/> And the improved network plays the next games."
         ) as vo:
             self.play(FadeIn(net))
+            self.play(FadeIn(illus[0]), GrowArrow(illus[1]), FadeIn(illus[5]))
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.1), FadeIn(pl), FadeIn(vl))
             vo.wait_until("a")
-            self.play(Create(arrs[0]), FadeIn(play))
+            self.play(FadeOut(illus), Create(arrs[0]), FadeIn(play))
             vo.wait_until("b")
             self.play(Create(arrs[1]), FadeIn(data), FadeIn(pil), FadeIn(zl))
             vo.wait_until("c")
@@ -114,13 +127,22 @@ class Zero(VoiceoverScene):
             label(r"train $\mathbf p \to \boldsymbol\pi$: \ policy improvement", font_size=28, color=AGENT),
             label(r"train $v \to z$: \ policy evaluation", font_size=28, color=VALUE),
             label(r"chapter 4's policy iteration, \ with search as the improvement step", font_size=28, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-2.3, 1.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-2.6, 0.6, 0])
         az = history_card(2017, r"AlphaZero", r"the same algorithm, unchanged, for chess, shogi and Go: \ beat the "
                           r"strongest programs, Stockfish and Elmo, within hours of starting from random play; \ "
                           r"searching $60$ thousand chess positions a second to Stockfish's $60$ million",
                           width=6.6, color=AGENT).move_to([3.2, -1.8, 0])
         cite_ = cite(r"Silver et al., \textit{Science} (2018); \ see also Anthony, Tian \& Barber, \textit{Expert "
                      r"Iteration} (2017)")
+        gr = load("az_grade")
+        meas = VGroup(label(rf"ours, \ generation {gr['gens'][-1]}: \ right moves", font_size=20, color=GREY_A))
+        for nm, v, col in ((r"network's $\mathbf p$ alone", gr["raw"][-1], RAW),
+                           (rf"with search, \ ${gr['sims']}$ simulations", gr["mcts"][-1], WITH_SEARCH)):
+            bar = Rectangle(width=3.2 * v, height=0.3, stroke_width=0, fill_color=col, fill_opacity=0.9)
+            meas.add(VGroup(bar, label(rf"${100 * v:.0f}\%$", font_size=20, color=col).next_to(bar, RIGHT, buff=0.1),
+                            label(nm, font_size=18, color=col).next_to(bar, UP, buff=0.06, aligned_edge=LEFT)))
+        meas[1:].arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        meas.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.0, 2.0, 0])
         with self.voiceover(
             "Why does this work? The search, guided by the network, is a better player than the network alone: its "
             "visit counts are a better policy than the network's raw probabilities. <bookmark mark='a'/> So training "
@@ -132,7 +154,8 @@ class Zero(VoiceoverScene):
             "programs within hours. In chess it looked at sixty thousand positions a second, a thousandth of what "
             "Stockfish needed: the network's judgment replaced brute force."
         ) as vo:
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]), FadeIn(meas[0]))
+            self.play(*[AnimationGroup(GrowFromEdge(m[0], LEFT), FadeIn(m[1]), FadeIn(m[2])) for m in meas[1:]])
             vo.wait_until("a")
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")

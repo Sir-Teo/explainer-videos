@@ -281,7 +281,7 @@ class Forecast(VoiceoverScene):
         mm, my = month_year(mo[1])
         with self.voiceover(
             "Extrapolate the post-2023 trend anyway, and it says: tasks of a forty-hour working week around "
-            f"{wm} {wy}, and of a month around {mm} {my}. Read that as arithmetic, not prophecy. "
+            f"{wm} of {wy}, and of a month around {mm} of {my}. Read that as arithmetic, not prophecy. "
             "<bookmark mark='a'/> Three reasons for caution. The ruler is running out: above sixteen hours, METR's "
             "tasks no longer measure reliably. <bookmark mark='b'/> Benchmarks are not jobs: in a randomized trial in "
             "2025, METR found experienced open-source developers nineteen percent slower when allowed early-2025 AI "

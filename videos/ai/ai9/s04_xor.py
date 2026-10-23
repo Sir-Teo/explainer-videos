@@ -37,6 +37,7 @@ class XOR(VoiceoverScene):
         lab = VGroup(*[MathTex(rf"({p[0]},{p[1]}) \to {v}", font_size=32, color=CLS_B if v else CLS_A)
                        .next_to(P(*p), DOWN if p[1] == 0 else UP, buff=0.2) for p, v in XOR_PTS])
         head = label(r"XOR: \ fire when exactly one input is on", font_size=32, color=WHITE).next_to(sq, UP, buff=0.3)
+        keep_in_frame(head, margin=0.3)
         colors = {r"\theta": WEIGHT, r"w_1": WEIGHT, r"w_2": WEIGHT}
         rows = [cmath(r"0", r"<", r"\theta", font_size=40, colors=colors),
                 cmath(r"w_1 \ge \theta,", r"\ \ ", r"w_2 \ge \theta", font_size=40, colors=colors),
@@ -45,8 +46,6 @@ class XOR(VoiceoverScene):
         whys = [why(r"$(0,0)$ must not fire"), why(r"$(1,0)$ and $(0,1)$ must fire"), why(r"$(1,1)$ must not fire"),
                 why(r"add the middle line; \ $\theta > 0$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=0.9, buff=0.6, edge=6.9, align_index=None)
-        cross = VGroup(SurroundingRectangle(rows[2][0:3], color=C.SURPRISE, buff=0.1, corner_radius=0.06),
-                       SurroundingRectangle(rows[3][0:3], color=C.SURPRISE, buff=0.1, corner_radius=0.06))
         bad = label(r"contradiction: \ no line does it", font_size=32, color=C.SURPRISE)
         # the perceptron on XOR: mistakes in every pass, forever
         n = len(xe)
@@ -76,6 +75,7 @@ class XOR(VoiceoverScene):
             vo.wait_until("d")
             step(3)
             bad.next_to(VGroup(*rows), DOWN, buff=0.35).align_to(rows[3], LEFT)
+            cross = VGroup(*[SurroundingRectangle(rows[i], color=C.SURPRISE, buff=0.1, corner_radius=0.06) for i in (2, 3)])
             self.play(Create(cross), FadeIn(bad))
             vo.wait_until("e")
             self.play(Create(base), FadeIn(bl), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.04),

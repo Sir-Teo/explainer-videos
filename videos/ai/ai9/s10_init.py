@@ -253,7 +253,8 @@ class Init(VoiceoverScene, ThreeDScene):
         head.to_edge(UP, buff=0.3)
         caps = [label(t, font_size=28, color=c).to_corner(UL, buff=0.35).shift(DOWN * 0.6) for _, t, c in cases]
         xlab = VGroup(label(r"output $-1$", font_size=22, color=GREY_B), label(r"$+1$", font_size=22, color=GREY_B))
-        scale_note = note(r"computed; \ each layer's histogram scaled to the same height").to_corner(DR, buff=0.2)
+        scale_note = note(r"computed; \ each layer's histogram scaled to the same height").to_corner(UR, buff=0.2)
+        scale_note.shift(DOWN * 0.6)
         first = label(r"layer $1$ \ (front)", font_size=22, color=RIDGE_A)
         last = label(r"layer $50$ \ (back)", font_size=22, color=RIDGE_B)
         for m in (head, *caps, scale_note):
