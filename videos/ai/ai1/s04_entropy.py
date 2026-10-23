@@ -63,7 +63,7 @@ class Entropy(VoiceoverScene, ThreeDScene):
             "surprised should we expect to be? <bookmark mark='a'/> Weight each surprise by how often it happens, "
             "and add up. That average surprise is the entropy, written H of p."
         ) as vo:
-            self.play(FadeIn(defn[:3]))
+            self.play(FadeIn(defn[:3]), Create(base), FadeIn(flat), FadeIn(wl))
             vo.wait_until("a")
             self.play(FadeIn(defn[3:]), FadeIn(sub))
         with self.voiceover(
@@ -73,7 +73,7 @@ class Entropy(VoiceoverScene, ThreeDScene):
             f"is the total area: for English letters, {H:.2f} bits."
         ) as vo:
             vo.wait_until("a")
-            self.play(Create(base), FadeIn(flat), FadeIn(wl))
+            self.play(Indicate(flat, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
             self.play(ReplacementTransform(flat, sl), FadeIn(hl), run_time=2.0)
             self.play(FadeIn(labs))
@@ -182,33 +182,33 @@ class Entropy(VoiceoverScene, ThreeDScene):
             return VGroup(Dot(pt, radius=0.06, color=C.BITS),
                           MathTex(v, font_size=28, color=C.BITS).next_to(pt, DOWN, buff=0.12))
 
-        r1 = np.array([0.9, 0.55, 0])  # the three-way choice
-        ends1 = [r1 + np.array([dx, -1.5, 0]) for dx in (-1.5, 0.0, 1.5)]
+        r1 = np.array([-3.2, 0.5, 0])  # the three-way choice
+        ends1 = [r1 + np.array([dx, -2.0, 0]) for dx in (-2.0, 0.0, 2.0)]
         flat = VGroup(*[branch(r1, e, w) for e, w in zip(ends1, (r"\tfrac12", r"\tfrac13", r"\tfrac16"))],
                       Dot(r1, radius=0.07, color=WHITE),
                       *[leaf(e, v) for e, v in zip(ends1, (r"\tfrac12", r"\tfrac13", r"\tfrac16"))])
-        r2 = np.array([4.9, 0.55, 0])  # the same, as two choices in a row
-        m2 = r2 + np.array([0.9, -1.0, 0])
-        e2 = [r2 + np.array([-0.9, -1.0, 0]), m2 + np.array([-0.7, -1.0, 0]), m2 + np.array([0.7, -1.0, 0])]
+        r2 = np.array([3.4, 0.5, 0])  # the same, as two choices in a row
+        m2 = r2 + np.array([1.2, -1.0, 0])
+        e2 = [r2 + np.array([-1.2, -2.0, 0]), m2 + np.array([-0.9, -1.0, 0]), m2 + np.array([0.9, -1.0, 0])]
         left = VGroup(branch(r2, e2[0], r"\tfrac12"), branch(r2, m2, r"\tfrac12"), branch(m2, e2[1], r"\tfrac23"),
                       branch(m2, e2[2], r"\tfrac13"), Dot(r2, radius=0.07, color=WHITE), Dot(m2, radius=0.06, color=GREY_A),
                       *[leaf(e, v) for e, v in zip(e2, (r"\tfrac12", r"\tfrac13", r"\tfrac16"))])
-        same = MathTex(r"=", font_size=56, color=GREY_A).move_to([3.05, -0.3, 0])
+        same = MathTex(r"=", font_size=64, color=GREY_A).move_to([0.1, -0.6, 0])
         eqs = mtex(r"H(\tfrac12, \tfrac13, \tfrac16) = H(\tfrac12, \tfrac12) + \tfrac12\, H(\tfrac23, \tfrac13)",
-                   font_size=34, color=C.ENTROPY).move_to([2.9, -2.75, 0])
+                   font_size=40, color=C.ENTROPY).move_to([0, -2.95, 0])
         reqs.next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.5)
         # the letters, chosen in two steps
         names = [r"space", r"vowel", r"consonant"]
         steps = VGroup()
         for k in range(3):
-            steps.add(label(rf"{names[k]}: \ $P = {P[k]:.3f}$, \ then ${within[k]:.2f}$ bits", font_size=24,
+            steps.add(label(rf"{names[k]}: \ $P = {P[k]:.3f}$, \ then ${abs(within[k]):.2f}$ bits", font_size=28,
                             color=GREY_A))
         steps.arrange(DOWN, aligned_edge=LEFT, buff=0.14)
         total = mtex(rf"{Hg:.2f} + {P[1]:.3f} \times {within[1]:.2f} + {P[2]:.3f} \times {within[2]:.2f} = {H:.2f}",
                      font_size=32, color=C.BITS)
-        letters_ = VGroup(label(r"the letters, in two steps:", font_size=26), steps, total)
-        letters_.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([2.6, -0.85, 0])
-        tag = computed_tag()
+        letters_ = VGroup(label(r"the letters, in two steps:", font_size=30), steps, total)
+        letters_.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([0.6, -0.75, 0])
+        tag = computed_tag().to_corner(UR, buff=0.3)
         with self.voiceover(
             "We built entropy out of surprise. Shannon went the other way. In 1948 he asked what any measure of "
             "uncertainty ought to satisfy. <bookmark mark='a'/> It should change continuously with the "
@@ -218,7 +218,7 @@ class Entropy(VoiceoverScene, ThreeDScene):
             "face it. <bookmark mark='d'/> His example: one half, one third, one sixth is the same as a fair coin, "
             "and then, half the time, a choice of two thirds against one third."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(flat), run_time=1.2)
             vo.wait_until("a")
             self.play(FadeIn(reqs[0], shift=RIGHT * 0.15))
             vo.wait_until("b")
@@ -226,7 +226,6 @@ class Entropy(VoiceoverScene, ThreeDScene):
             vo.wait_until("c")
             self.play(FadeIn(reqs[2], shift=RIGHT * 0.15))
             vo.wait_until("d")
-            self.play(Create(flat), run_time=1.2)
             self.play(FadeIn(same), Create(left), run_time=1.4)
             self.play(Write(eqs))
         with self.voiceover(
