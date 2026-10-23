@@ -197,6 +197,20 @@ class RASP(VoiceoverScene):
         keep_in_frame(cons)
         conj = label(r"Zhou et al.\ (2023): \ transformers tend to generalize to longer inputs \\ when a short RASP "
                      r"program solves the task at every length", font_size=22, color=Q).to_edge(DOWN, buff=0.4)
+        # a fixed depth over a growing input: the number of sequential steps does not grow with n
+        def column(k):
+            tok = Square(0.34, stroke_color=GREY_B, stroke_width=1.5, fill_color=GREY_D, fill_opacity=0.6)
+            lay = [Square(0.34, stroke_color=A, stroke_width=1.5, fill_color=A, fill_opacity=0.35) for _ in range(3)]
+            return VGroup(tok, *lay).arrange(UP, buff=0.07)
+        cols = VGroup(*[column(k) for k in range(14)]).arrange(RIGHT, buff=0.09).move_to([0, -1.1, 0])
+        brace = Brace(VGroup(*[c_[1:] for c_ in cols[:1]]), LEFT, buff=0.1, color=A)
+        bl = label(r"$L = 3$ \\ layers", font_size=22, color=A).next_to(brace, LEFT, buff=0.1)
+        grow = Arrow(cols[0].get_bottom() + DOWN * 0.35, cols[-1].get_bottom() + DOWN * 0.35, buff=0, color=GREY_B,
+                     stroke_width=2.5, max_tip_length_to_length_ratio=0.04)
+        gl = label(r"the input grows: \ $n$ tokens", font_size=22, color=GREY_B).next_to(grow, DOWN, buff=0.1)
+        dl = label(r"the depth does not: \ the same $L$ sequential steps for every $n$", font_size=24,
+                   color=WHITE).next_to(cols, UP, buff=0.3)
+        depth = VGroup(cols, brace, bl, grow, gl, dl)
         with self.voiceover(
             "What can't a transformer do? A fixed number of layers is a fixed amount of sequential work. "
             "<bookmark mark='a'/> William Merrill and Ashish Sabharwal proved in 2023 that a transformer of fixed "
@@ -211,8 +225,13 @@ class RASP(VoiceoverScene):
             "transformers tend to generalize to longer inputs exactly when a short RASP program solves the task at "
             "every length."
         ) as vo:
+            self.play(FadeIn(cols[:6]), GrowFromCenter(brace), FadeIn(bl), FadeIn(dl))
+            self.play(LaggedStart(*[FadeIn(c_, shift=LEFT * 0.1) for c_ in cols[6:]], lag_ratio=0.15), GrowArrow(grow),
+                      FadeIn(gl), run_time=2.5)
+            vo.wait_until("a")
             self.play(FadeIn(th))
             vo.wait_until("b")
+            self.play(FadeOut(depth))
             self.play(FadeIn(cons[0]), FadeIn(cons[1]))
             self.play(FadeIn(cons[2]))
             vo.wait_until("c")

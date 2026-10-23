@@ -377,7 +377,7 @@ ZH = {
         "下一次：谱系。我们今天搭的这个模块，从2017年的一个翻译模型开始，一路叠高、放大，到GPT-3、ChatGPT，再到2026年的开放权重前沿；还有我们自己的GPT式模型和BERT式模型，在小说上并排训练。",
 
     "Anthropic's 'Mathematical Framework":
-        "接下来最值得读的，是Anthropic的《A Mathematical Framework for Transformer Circuits》，也就是Transformer回路的数学框架。感谢观看，第14部分见。",
+        "接下来最值得读的，是Anthropic的《Transformer回路的数学框架》。感谢观看，第14部分见。",
 
     # ------------------------------------------------------------------ SideBySide
     "Chapter ten. Four answers, trained side by side.":

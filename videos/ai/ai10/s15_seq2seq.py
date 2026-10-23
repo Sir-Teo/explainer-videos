@@ -114,9 +114,7 @@ class Seq2Seq(VoiceoverScene):
             "symbol at a time, each step a softmax over the vocabulary, <bookmark mark='d'/> and each word it "
             "writes is fed back in as the next step's input, until it writes an end-of-sentence symbol."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(sw), LaggedStart(*[GrowArrow(a) for a in sa], lag_ratio=0.2), FadeIn(enc),
+            self.play(FadeIn(tag), FadeIn(sw), LaggedStart(*[GrowArrow(a) for a in sa], lag_ratio=0.2), FadeIn(enc),
                       LaggedStart(*[GrowArrow(a) for a in ea], lag_ratio=0.3), FadeIn(el))
             vo.wait_until("b")
             self.play(GrowArrow(va), FadeIn(vec), FadeIn(vl))

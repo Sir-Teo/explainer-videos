@@ -148,7 +148,7 @@ class Heads(VoiceoverScene):
         same = label(rf"${H}$ heads of ${dh}$, \ or one of ${d}$: \ the same $4d^2 = {4 * d * d:,}$ weights".replace(",", "{,}"),
                      font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         cite_ = cite(r"S.~Bhojanapalli et al., \textit{Low-Rank Bottleneck in Multi-head Attention Models} (2020)",
-                     corner=UR)
+                     corner=DR)
         n = maps.shape[-1]
         idx = np.arange(n)
         prev = [float(np.mean([maps[0, hh, i, i - 1] for i in range(8, n)])) for hh in range(H)]

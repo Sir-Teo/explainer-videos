@@ -159,7 +159,6 @@ class LSTM(VoiceoverScene):
             "memory every ln 2 over minus ln f steps. <bookmark mark='d'/> At 0.99, about sixty-nine steps; at "
             "exactly one, Hochreiter's original carousel, forever."
         ) as vo:
-            vo.wait_until("a")
             step(0)
             vo.wait_until("b")
             step(1, transform=False)
@@ -229,9 +228,7 @@ class LSTM(VoiceoverScene):
             f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps. The gated cells start with their gates set to "
             "remember: the chrono initialization of Corentin Tallec and Yann Ollivier."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(boxes[0]), FadeIn(mark))
+            self.play(FadeIn(tag), FadeIn(boxes[0]), FadeIn(mark))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b) for b in boxes[1:T - 1]], lag_ratio=0.1), GrowFromCenter(noise),
                       FadeIn(nl))
