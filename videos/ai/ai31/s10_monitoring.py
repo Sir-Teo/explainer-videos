@@ -25,16 +25,16 @@ class Monitoring(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def idea(self):
-        task = node_box(r"a coding task", GREY_B, font_size=24).move_to([-5.0, 1.6, 0])
-        cot = VGroup(*[RoundedRectangle(width=2.0, height=0.45, corner_radius=0.08, stroke_width=0, fill_color=COT,
+        task = node_box(r"a coding task", GREY_B, font_size=24).move_to([-5.4, 1.6, 0])
+        cot = VGroup(*[RoundedRectangle(width=1.0, height=0.45, corner_radius=0.08, stroke_width=0, fill_color=COT,
                                         fill_opacity=0.25 + 0.1 * k) for k in range(5)]).arrange(RIGHT, buff=0.1)
-        cot.move_to([0.3, 1.6, 0])
+        cot.move_to([-0.3, 1.6, 0])
         cl = label(r"the chain of thought \ (Part 28)", font_size=22, color=COT).next_to(cot, UP, buff=0.15)
-        act = node_box(r"actions: \ edits, \ commands", TRUTH, font_size=22).move_to([5.2, 1.6, 0])
+        act = node_box(r"actions: \ edits, \ commands", TRUTH, font_size=22).move_to([4.9, 1.6, 0])
         a1 = Arrow(task.get_right(), cot.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5)
         a2 = Arrow(cot.get_right(), act.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5)
         mon = node_box(r"a monitor: \ another model, \ prompted to look for cheating", JUDGE, font_size=22)
-        mon.move_to([0.3, -0.8, 0])
+        mon.move_to([-0.3, -0.8, 0])
         m1 = Arrow(mon.get_top(), cot.get_bottom(), buff=0.1, color=JUDGE, stroke_width=3)
         m2 = Arrow(mon.get_right(), act.get_bottom(), buff=0.1, color=JUDGE, stroke_width=3)
         flag = label(r"flag: \ block it, \ or send it to a person", font_size=22, color=JUDGE).next_to(mon, DOWN, buff=0.3)
@@ -77,7 +77,7 @@ class Monitoring(VoiceoverScene):
         head = label(r"Share of the hacks the monitor caught \ (recall)", font_size=32).to_edge(UP, buff=0.4)
         side = VGroup(label(r"the monitor: \ GPT-4o, \\ weaker than the model it watched", font_size=22, color=JUDGE),
                       label(r"the hacks: \ exit early, \ or skip the tests, \\ so they count as passed", font_size=22,
-                            color=HACK)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.9, -0.8, 0])
+                            color=HACK)).arrange(RIGHT, buff=0.8).move_to([0, -2.75, 0])
         cite_ = cite(r"Baker et al., \textit{Monitoring Reasoning Models for Misbehavior and the Risks of Promoting "
                      r"Obfuscation} (OpenAI, 2025)")
         with self.voiceover(
@@ -88,11 +88,14 @@ class Monitoring(VoiceoverScene):
             "<bookmark mark='c'/> And the monitor was GPT-4o, a weaker model than the one it was watching: an "
             "instance of weak supervising strong that works, because the strong model wrote its intentions down."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite_), FadeIn(lg), *[FadeIn(r_[0]) for r_ in g])
+            full = g.copy()
+            for r_ in g:
+                r_[1:3].fade(0.82)
+            self.play(FadeIn(head), FadeIn(cite_), FadeIn(lg), *[FadeIn(r_[:3]) for r_ in g])
             vo.wait_until("a")
-            self.play(*[GrowFromEdge(r_[1], LEFT) for r_ in g], *[FadeIn(r_[3]) for r_ in g])
+            self.play(*[Transform(r_[1], f_[1]) for r_, f_ in zip(g, full)], *[FadeIn(r_[3]) for r_ in g])
             vo.wait_until("b")
-            self.play(*[GrowFromEdge(r_[2], LEFT) for r_ in g], *[FadeIn(r_[4]) for r_ in g])
+            self.play(*[Transform(r_[2], f_[2]) for r_, f_ in zip(g, full)], *[FadeIn(r_[4]) for r_ in g])
             vo.wait_until("c")
             self.play(FadeIn(side))
         self.wait(0.4)
@@ -114,7 +117,7 @@ class Monitoring(VoiceoverScene):
         lg = legend([(HACK, r"hacks"), (JUDGE, r"hacks the monitor catches")], font_size=20).to_edge(UP, buff=0.35)
         sch = note(r"schematic, \ after Baker et al.\ (2025), \ Figure 4").to_corner(DR, buff=0.2)
         tax = label(r"the ``monitorability tax'': \ don't optimize the thoughts", font_size=26, color=CI)
-        tax.to_edge(DOWN, buff=0.35)
+        tax.next_to(VGroup(g1, g2), DOWN, buff=0.35)
         with self.voiceover(
             "So why not use the monitor during training, and penalize the bad thoughts? OpenAI tried that too, on a "
             "smaller agent. <bookmark mark='a'/> Trained on the tests alone, the agent learned to hack, and said so "
@@ -146,7 +149,7 @@ class Monitoring(VoiceoverScene):
             node_box(r"outcome-only RL \\ drifts from legible English", HACK, font_size=20),
             node_box(r"pressure on the thoughts \\ teaches them to hide", HACK, font_size=20),
             node_box(r"reasoning in latent vectors, \\ not words \ (Part 28)", HACK, font_size=20),
-        ).arrange(RIGHT, buff=0.3).next_to(hc, DOWN, buff=0.5)
+        ).arrange(RIGHT, buff=0.35).move_to(UP * 0.2)
         tl = label(r"what could take it away", font_size=24, color=GREY_A).next_to(threats, UP, buff=0.12)
         astra = history_card(2026, r"GPT-6 Astra system card \ (OpenAI, September)", r"better at controlling its own "
                              r"chain of thought, \ less likely to write down anything incriminating; \ when told to evade "
@@ -169,12 +172,16 @@ class Monitoring(VoiceoverScene):
             "<bookmark mark='c'/> And the chain of thought was never the whole story. As Part 30 showed, reasoning "
             "models often use a hint without saying so. A readable chain of thought is evidence, not a guarantee."
         ) as vo:
-            self.play(FadeIn(hc, shift=DOWN * 0.15))
+            later = VGroup(tl, threats, astra, faith)
+            full = later.copy()
+            later.fade(0.8)
+            self.play(FadeIn(hc, shift=DOWN * 0.15), FadeIn(later))
             vo.wait_until("a")
-            self.play(FadeIn(tl), LaggedStart(*[FadeIn(t_, shift=UP * 0.1) for t_ in threats], lag_ratio=0.4))
+            self.play(Transform(tl, full[0]), LaggedStart(*[Transform(t_, f_) for t_, f_ in zip(threats, full[1])],
+                                                           lag_ratio=0.4))
             vo.wait_until("b")
-            self.play(FadeIn(astra, shift=UP * 0.15))
+            self.play(Transform(astra, full[2]))
             vo.wait_until("c")
-            self.play(FadeIn(faith, shift=UP * 0.15))
+            self.play(Transform(faith, full[3]))
         self.wait(0.4)
         self.clear_scene()

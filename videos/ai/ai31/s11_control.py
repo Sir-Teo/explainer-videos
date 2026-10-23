@@ -109,8 +109,9 @@ class Control(VoiceoverScene):
         honest = curve(g.ax, x, npdf(x), BLUE, 3)
         bd = curve(g.ax, x, npdf(x, mu), RED, 3)
         cut = DashedLine(g.ax.c2p(ta, 0), g.ax.c2p(ta, 0.45), color=JUDGE, dash_length=0.06)
-        shade = g.ax.get_area(g.ax.plot(lambda v: float(npdf(v, mu)), x_range=[ta, 6]), x_range=[ta, 6], color=RED,
-                              opacity=0.35)
+        xs_ = np.linspace(ta, 6, 80)
+        shade = Polygon(*[g.ax.c2p(v, float(npdf(v, mu))) for v in xs_], g.ax.c2p(6, 0), g.ax.c2p(ta, 0),
+                        stroke_width=0, fill_color=RED, fill_opacity=0.35)
         q = float(d["rows"][0]["caught"] / 1.0)
         lab = VGroup(label(r"honest code", font_size=20, color=BLUE), label(r"backdoored code", font_size=20, color=RED))
         lab[0].move_to(g.ax.c2p(-1.6, 0.42))

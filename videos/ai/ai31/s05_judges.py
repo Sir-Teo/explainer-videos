@@ -53,12 +53,13 @@ class Judges(VoiceoverScene):
             "three judges ninety-one percent of the time. <bookmark mark='d'/> And self-preference: GPT-4 seemed to "
             "favor its own answers, though the authors judged the evidence inconclusive."
         ) as vo:
+            full = [c_.copy() for c_ in (agree, pos, verb, selfp)]
             for card_ in (agree, pos, verb, selfp):
-                card_.set_opacity(0.22)
+                card_.fade(0.78)
             self.play(FadeIn(head), FadeIn(cite_), FadeIn(grid))
-            for card_, m in ((agree, "a"), (pos, "b"), (verb, "c"), (selfp, "d")):
+            for card_, f_, m in zip((agree, pos, verb, selfp), full, "abcd"):
                 vo.wait_until(m)
-                self.play(card_.animate.set_opacity(1.0))
+                self.play(Transform(card_, f_))
         self.wait(0.4)
         self.clear_scene()
 

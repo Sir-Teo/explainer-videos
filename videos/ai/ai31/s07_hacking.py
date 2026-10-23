@@ -107,10 +107,13 @@ class Hacking(VoiceoverScene):
             "camera and the object. <bookmark mark='d'/> A simulated robot asked to walk hooked its legs together and "
             "slid."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(defn))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.78)
+            self.play(FadeIn(head), FadeIn(defn), FadeIn(cards))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -143,9 +146,13 @@ class Hacking(VoiceoverScene):
             "from Part 26. Untrained, the boat wanders. <bookmark mark='c'/> A few hundred races in, it has found "
             "the targets. <bookmark mark='d'/> " + end
         ) as vo:
-            self.play(FadeIn(track), FadeIn(tag))
+            lap = [track.at(int(r_), int(c_)) for r_, c_ in np.asarray(d[f"traj_shaped_{snaps[-1]}"])]
+            lap_line = DashedVMobject(VMobject(stroke_color=GREY_A, stroke_width=3).set_points_as_corners(lap),
+                                      num_dashes=40)
+            self.play(FadeIn(track), FadeIn(tag), FadeIn(rules[2]))
+            self.play(Create(lap_line), run_time=2.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in rules], lag_ratio=0.4))
+            self.play(FadeOut(lap_line), LaggedStart(*[FadeIn(r_) for r_ in rules[:2]], lag_ratio=0.4))
             vo.wait_until("b")
             self.play(FadeIn(cap[0]))
             m = replay(self, track, np.asarray(d[f"traj_proxy_{snaps[0]}"])[:40], 3.0)
@@ -215,6 +222,17 @@ class Hacking(VoiceoverScene):
             lines.add(VGroup(band(g.ax, eps, F_.min(0), F_.max(0), col), curve(g.ax, eps, F_.mean(0), col, 3)))
         lg = legend([(HACK, r"targets and finish"), (GREY_B, r"the finish only"), (SHAPED, r"the finish, \ shaped by "
                      r"progress")], font_size=18).next_to(g, RIGHT, buff=0.3)
+        from videos.ai.ai31.sims import BoatRace
+
+        env = BoatRace()
+        D = max(env.dist.values())
+        trk = Track(d, cell=0.4, center=[-2.6, -2.0, 0])
+        heat = VGroup(*[Square(trk.cell, stroke_width=0, fill_opacity=0.9,
+                               fill_color=interpolate_color(ManimColor("#132033"), ManimColor(SHAPED), 1 - dist / D))
+                        .move_to(trk.at(r, c)) for (r, c), dist in env.dist.items()])
+        hl = label(r"$\Phi$: \ $0$ at the start, \\ rising to $5$ at the finish", font_size=20, color=SHAPED)
+        hl.next_to(trk, RIGHT, buff=0.4)
+        pot = VGroup(trk, heat, trk.targets.copy(), trk.start.copy(), trk.finish.copy(), hl)
         first = {m: [f for f in d[f"{m}_first"] if f >= 0] for m in ("sparse", "shaped")}
         n_sp, n_sh = len(first["sparse"]), len(first["shaped"])
         S = d["seeds"]
@@ -236,13 +254,16 @@ class Hacking(VoiceoverScene):
             "policy is unchanged; and going around in a circle earns nothing. <bookmark mark='d'/> " + sparse_said +
             " <bookmark mark='e'/> " + shaped_said + " The bonus guides; it cannot be farmed."
         ) as vo:
+            self.play(FadeIn(trk))
+            vo.wait_until("a")
             step(0)
+            self.play(FadeIn(heat), FadeIn(pot[2:]))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeIn(g), FadeIn(lg))
+            self.play(FadeOut(pot), FadeIn(g), FadeIn(lg))
             self.play(LaggedStart(*[FadeIn(l_) for l_ in lines], lag_ratio=0.5), run_time=2.5)
         self.wait(0.4)
         self.clear_scene()
@@ -276,10 +297,13 @@ class Hacking(VoiceoverScene):
             "cheat barely helped. Yet asked afterwards whether it had done what the user intended, it said no, ten "
             "times out of ten. It knew."
         ) as vo:
-            self.play(FadeIn(head))
+            full = [c_.copy() for c_ in cards]
+            for c_ in cards:
+                c_.fade(0.78)
+            self.play(FadeIn(head), FadeIn(cards))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(cards[k], shift=UP * 0.15))
+                self.play(Transform(cards[k], full[k]))
         self.wait(0.4)
         self.clear_scene()
 
@@ -307,9 +331,12 @@ class Hacking(VoiceoverScene):
             "in this environment. It still hacked, but the misalignment no longer spread. A model learns not only "
             "what it is rewarded for, but what that says about what it is."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(a))
+            later = VGroup(arr, b, c)
+            full = later.copy()
+            later.fade(0.8)
+            self.play(FadeIn(head), FadeIn(a), FadeIn(later))
             vo.wait_until("a")
-            self.play(GrowArrow(arr[0]), GrowArrow(arr[1]), FadeIn(b), FadeIn(c))
+            self.play(Transform(later, full))
             vo.wait_until("b")
             self.play(FadeIn(fix, shift=UP * 0.15))
         self.wait(0.4)
