@@ -67,8 +67,7 @@ class Surprise(VoiceoverScene):
             "If you were sure something would happen, seeing it happen tells you nothing. <bookmark mark='a'/> u "
             "after q: no news. <bookmark mark='b'/> A coin landing heads tells you a little. <bookmark mark='c'/> "
             f"A letter e, a bit more. <bookmark mark='d'/> And a z, which turns up about once in "
-            f"{round(1 / pz, -2):,.0f} symbols, tells you a lot. The less likely something was, the more you learn "
-            "when it happens."
+            f"{round(1 / pz, -2):,.0f} symbols, tells you a lot. The less likely it was, the more you learn."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ends), FadeIn(plab))
             for j, mark in enumerate("abcd"):
@@ -133,13 +132,12 @@ class Surprise(VoiceoverScene):
         lab_l = MathTex(r"s(\tfrac12) + s(\tfrac16)", font_size=28, color=C.SURPRISE).next_to(left_a, DOWN, buff=0.15)
         lab_r = MathTex(r"s(\tfrac1{12})", font_size=28, color=C.SURPRISE).next_to(right, DOWN, buff=0.15)
         with self.voiceover(
-            "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. What "
-            "should s be? <bookmark mark='a'/> Shannon asked for a few modest things. It should depend only on p. "
-            "<bookmark mark='b'/> It should go down as p goes up, and a certain event should be no surprise at all. "
-            "<bookmark mark='c'/> For independent events, where learning one tells you nothing about the other, "
-            "so their probabilities multiply, surprises should add: <bookmark mark='d'/> a coin landing "
-            "heads and a die showing five, together, should be exactly as surprising as each one, added up. "
-            "<bookmark mark='e'/> And small changes in p should make small changes in s."
+            "Let's turn that into mathematics. Call the surprise of an event with probability p, s of p. "
+            "<bookmark mark='a'/> Ask a few modest things. It depends only on p. <bookmark mark='b'/> It goes down "
+            "as p goes up, and a certain event is no surprise at all. <bookmark mark='c'/> For independent events, "
+            "where one tells you nothing about the other, probabilities multiply and surprises should add: "
+            "<bookmark mark='d'/> heads on a coin and a five on a die, together, as surprising as the two added "
+            "up. <bookmark mark='e'/> And small changes in p make small changes in s."
         ) as vo:
             self.play(Create(line), FadeIn(nums), FadeIn(plab))
             self.play(FadeIn(dot, scale=0.5), GrowFromEdge(bar, DOWN), FadeIn(slab))
@@ -219,10 +217,10 @@ class Surprise(VoiceoverScene):
         gline = ax.plot(lambda x: x, x_range=[0, 6.4, 0.05], color=C.SURPRISE, stroke_width=5)
         with self.voiceover(
             "Remarkably, those rules leave only one choice. Measure probabilities in halvings: <bookmark mark='a'/> "
-            "write p as two to the minus x, and let g of x be the surprise of that event. <bookmark mark='b'/> Rule "
-            "three says g turns sums into sums. <bookmark mark='c'/> So g of n is n times g of one, for every whole "
-            "number n, <bookmark mark='d'/> and the same holds for every fraction. <bookmark mark='e'/> Continuity "
-            "fills in the numbers between the fractions, so g of x is x times g of one, for every x."
+            "write p as two to the minus x, and let g of x be its surprise. <bookmark mark='b'/> Rule three says g "
+            "turns sums into sums. <bookmark mark='c'/> So g of n is n times g of one, for every whole number, "
+            "<bookmark mark='d'/> and for every fraction. <bookmark mark='e'/> Continuity fills in the rest: g of "
+            "x is x times g of one."
         ) as vo:
             self.play(FadeIn(head), Create(ax), LaggedStart(*[FadeIn(m) for m in pl], lag_ratio=0.1), FadeIn(pname))
             vo.wait_until("a")
@@ -254,9 +252,8 @@ class Surprise(VoiceoverScene):
                       for n in range(1, 7)])
         with self.voiceover(
             "Put the probability back in, and the surprise must be a constant times the log of one over p. "
-            "<bookmark mark='a'/> The constant just picks a unit. Choose it so that a fair coin flip carries "
-            "exactly one unit, and call that unit a bit. The surprise of an event with probability p is log, base "
-            "two, of one over p, bits."
+            "<bookmark mark='a'/> The constant just picks a unit. Let a fair coin flip carry exactly one, and call "
+            "it a bit: an event of probability p carries log, base two, of one over p, bits."
         ) as vo:
             morph(self, eqs[4], eqs[5], run_time=1.2)
             self.play(Indicate(pl, color=C.TRUE_P, scale_factor=1.15), FadeOut(head))
@@ -349,9 +346,9 @@ class Surprise(VoiceoverScene):
         cap.to_edge(DOWN, buff=0.55)
         with self.voiceover(
             "Bits have a concrete meaning. Take the whole range of possibilities, and halve it: <bookmark mark='a'/> "
-            "left or right, zero or one. Halve what's left, and again, ten times. <bookmark mark='b'/> You've "
-            "narrowed things down to one part in 1024, an event of probability two to the minus ten, and the "
-            "surprise of seeing it is ten bits. Each yes-or-no answer that halves the possibilities is one bit."
+            "left or right, zero or one. Halve what's left, ten times over. <bookmark mark='b'/> You're down to one "
+            "part in 1024, probability two to the minus ten: ten bits. Each yes-or-no answer that halves the "
+            "possibilities is one bit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bar), Create(frame), FadeIn(mag), FadeIn(whole), FadeIn(piece),
                       FadeIn(whole_l))
@@ -413,9 +410,9 @@ class Surprise(VoiceoverScene):
                    r"(Chapter 9); \ computed").next_to(rule, DOWN, buff=0.2)
         with self.voiceover(
             "And because logs turn products into sums, the chain rule turns into something lovely. "
-            "<bookmark mark='a'/> The surprise of a whole text is the sum of the surprises of its symbols, each "
-            "given everything before it. <bookmark mark='b'/> Here is Shannon's sentence again, with each letter's "
-            f"surprise drawn as a bar, as judged by a model that knows only the previous {k} letters."
+            "<bookmark mark='a'/> A whole text's surprise is the sum of its symbols' surprises, each given "
+            "everything before it. <bookmark mark='b'/> Here is Shannon's sentence again, each letter's surprise a "
+            f"bar, judged by a model that knows only the previous {k} letters."
         ) as vo:
             self.play(Write(rule))
             vo.wait_until("a")

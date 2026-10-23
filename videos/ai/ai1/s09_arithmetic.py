@@ -56,27 +56,29 @@ class Arithmetic(VoiceoverScene):
             label(r"a model that knows English well: \ about $1$ bit per symbol of surprise", font_size=30),
             label(r"\ldots but a symbol code can never spend less than $1$ bit on a symbol", font_size=30,
                   color=C.SURPRISE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 1.55)
         fix = label(r"the fix: code the whole message at once, as one number", font_size=32, color=C.BITS)
-        fix.to_edge(DOWN, buff=0.5)
-        k_ = 4.0  # screen units per bit
+        fix.to_edge(DOWN, buff=0.45)
+        k_ = 5.0  # screen units per bit
         waste = VGroup(
-            Rectangle(width=max(k_ * info, 0.03), height=0.4, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.9),
-            Rectangle(width=k_, height=0.4, stroke_color=C.BITS, stroke_width=2.5, fill_opacity=0))
-        waste[0].move_to([-2.0 + waste[0].width / 2, -1.6, 0])
-        waste[1].move_to([-2.0 + k_ / 2, -2.2, 0])
-        wl = VGroup(label(rf"information: \ ${info:.3f}$ bits", font_size=22, color=C.SURPRISE).next_to(waste[0], LEFT, buff=0.3),
-                    label(r"cost: \ $1$ bit", font_size=22, color=C.BITS).next_to(waste[1], LEFT, buff=0.3))
+            Rectangle(width=max(k_ * info, 0.03), height=0.42, stroke_width=0, fill_color=C.SURPRISE, fill_opacity=0.9),
+            Rectangle(width=k_, height=0.42, stroke_color=C.BITS, stroke_width=2.5, fill_opacity=0))
+        waste[0].move_to([-1.6 + waste[0].width / 2, -0.25, 0])
+        waste[1].move_to([-1.6 + k_ / 2, -0.85, 0])
+        wl = VGroup(label(rf"information: \ ${info:.3f}$ bits", font_size=24, color=C.SURPRISE).next_to(waste[0], LEFT, buff=0.3),
+                    label(r"cost: \ $1$ bit", font_size=24, color=C.BITS).next_to(waste[1], LEFT, buff=0.3))
         for t_ in wl:
-            t_.align_to([-2.3, 0, 0], RIGHT)
+            t_.align_to([-1.9, 0, 0], RIGHT)
+        digits = 100 * math.log10(27)
+        blocks = label(rf"coding blocks of $100$ letters instead: \ a table of $27^{{100}} \approx 10^{{{digits:.0f}}}$ "
+                       r"entries", font_size=28, color=GREY_A).move_to(DOWN * 1.9)
         with self.voiceover(
-            "Huffman's code has one flaw. Every symbol costs a whole number of bits, at least one. "
+            "Huffman's code has one flaw: every symbol costs a whole number of bits, at least one. "
             f"<bookmark mark='a'/> u after q carries {info:.3f} bits, and still costs a full bit. "
-            "<bookmark mark='b'/> That's tolerable for letter frequencies, but a model that really knows English "
-            "is surprised by about one bit per symbol, or less, and a symbol code can never go below one. Coding long "
-            "blocks would fix it, but a code table for blocks of a hundred letters would need twenty-seven to the "
-            "hundred entries, and a model that reads the context changes its guesses at every letter. "
-            "<bookmark mark='c'/> The fix is to code the whole message as a single number, one guess at a time."
+            "<bookmark mark='b'/> A model that really knows English is surprised by about a bit per symbol, or "
+            "less, and a symbol code can never go below one. <bookmark mark='c'/> Coding long blocks would fix it, "
+            "but blocks of a hundred letters need a table of twenty-seven to the hundred entries. "
+            "<bookmark mark='d'/> Instead, code the whole message as a single number, one guess at a time."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[2]))
             vo.wait_until("a")
@@ -84,7 +86,9 @@ class Arithmetic(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
             vo.wait_until("c")
-            self.play(FadeOut(VGroup(waste, wl)), FadeIn(fix))
+            self.play(FadeIn(blocks, shift=UP * 0.15))
+            vo.wait_until("d")
+            self.play(FadeIn(fix))
         self.wait(0.3)
         self.clear_scene()
 
@@ -176,11 +180,11 @@ class Arithmetic(VoiceoverScene):
         hc = history_card(1976, r"Jorma Rissanen (IBM) \ and Richard Pasco (Stanford)",
                           r"arithmetic coding: \ a whole message as one number", width=6.4).move_to(DOWN * 0.3)
         with self.voiceover(
-            "Arithmetic coding, worked out by Jorma Rissanen and Richard Pasco in 1976. We've already seen its "
-            "heart: the nested slivers of the chain rule. <bookmark mark='a'/> Start with the unit interval, split "
-            f"by the model's guesses for the first letter. t takes a sliver {steps[0]['p']:.3f} wide. Now write the "
-            f"two ends of that sliver in binary. <bookmark mark='b'/> They agree on their first {c0} digits. Any "
-            "number in the sliver starts that way, so those bits are already decided."
+            "Arithmetic coding, worked out by Jorma Rissanen and Richard Pasco in 1976. We've seen its heart: the "
+            "nested slivers of the chain rule. <bookmark mark='a'/> Split the unit interval by the model's guesses "
+            f"for the first letter: t takes a sliver {steps[0]['p']:.3f} wide. Write its two ends in binary. "
+            f"<bookmark mark='b'/> They agree on their first {c0} digits, so every number in the sliver starts "
+            "that way: those bits are decided."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tot_lab), FadeIn(src), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -190,9 +194,9 @@ class Arithmetic(VoiceoverScene):
             self.play(Indicate(lines[1], color=C.BITS))
         with self.voiceover(
             "Then zoom in and split again: h, e, space, f, a, l, c, o, n. <bookmark mark='a'/> Each letter "
-            "narrows the interval by its probability, and as it narrows, more leading digits of its two ends come to "
-            "agree. Those bits can be sent as soon as they're decided. <bookmark mark='b'/> A likely letter barely "
-            f"narrows the interval, and costs a fraction of a bit. An unlikely one, like the {hs_sym} in {hs_word}, "
+            "narrows the interval by its probability, and more leading digits of its ends come to agree, ready to "
+            "send. <bookmark mark='b'/> A likely letter barely narrows it, and costs a fraction of a bit. An "
+            f"unlikely one, like the {hs_sym} in {hs_word}, "
             f"which the model gave {100 * hs['p']:.1f} percent, costs {hs['bits']:.1f} bits."
         ) as vo:
             for k in range(1, 6):
@@ -238,8 +242,8 @@ class Arithmetic(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             f"After ten letters, the interval has width two to the minus {info:.2f}: the probability of the whole "
-            "message. <bookmark mark='a'/> To finish, find the shortest binary fraction such that every number "
-            f"starting with those digits lies inside the interval. <bookmark mark='b'/> Here, it takes {n} bits. "
+            "message. <bookmark mark='a'/> To finish, find the shortest binary fraction whose every continuation "
+            f"lies inside the interval. <bookmark mark='b'/> Here, it takes {n} bits. "
             f"<bookmark mark='c'/> Compare: {nf} for the fixed code, {nh} for Huffman, {n} for arithmetic coding, "
             f"against an information content of {info:.2f}."
         ) as vo:
@@ -283,13 +287,12 @@ class Arithmetic(VoiceoverScene):
         lc.next_to(inside, DOWN, buff=0.55).align_to(grid, LEFT)
         sch = note(r"schematic").next_to(ruler, UP, buff=0.55).align_to(ruler, RIGHT)
         with self.voiceover(
-            "Why within two bits? Let P be the message's probability: the width of its interval. "
+            "Why within two bits? Let P be the message's probability, the width of its interval. "
             "<bookmark mark='a'/> Choose a length l: log of one over P, rounded up, plus one. <bookmark mark='b'/> "
-            "Then a run of l bits names a little interval of width two to the minus l, at most half of P. "
-            "<bookmark mark='c'/> Those little intervals tile the line, so the first one that starts at or after "
-            "the low end must finish before the high end: it lies inside the message's interval, and its l bits "
-            "pin the message down. <bookmark mark='d'/> So l bits always suffice, and l is less than the "
-            "information content plus two."
+            "A run of l bits names a little interval of width two to the minus l, at most half of P. "
+            "<bookmark mark='c'/> These tile the line, so the first one starting at or after the low end finishes "
+            "before the high end: it lies inside, and its l bits pin the message down. <bookmark mark='d'/> And l "
+            "is less than the information content plus two."
         ) as vo:
             self.play(FadeIn(head), Create(ruler), FadeIn(grid), FadeIn(msg), FadeIn(lm), FadeIn(sch))
             step(0)
@@ -331,10 +334,9 @@ class Arithmetic(VoiceoverScene):
             out.add(letter_row(steps[k]["symbol"], font_size=34, color=C.TRUE_P))
         out.arrange(RIGHT, buff=0.1).to_corner(UR, buff=0.5).shift(DOWN * 0.6)
         with self.voiceover(
-            "Decoding runs the same steps. The receiver has the bits, and an identical copy of the model. "
-            "<bookmark mark='a'/> The bits name a number. It falls in the t sliver of the first split, so the first "
-            "letter is t. <bookmark mark='b'/> Zoom in: it falls in the h sliver of the next, then e, and so on, "
-            "one letter at a time, until the message is back, exactly."
+            "Decoding runs the same steps, with an identical copy of the model. <bookmark mark='a'/> The bits name "
+            "a number. It falls in the t sliver of the first split: the first letter is t. <bookmark mark='b'/> "
+            "Zoom in: the h sliver, then e, and so on, until the message is back, exactly."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code), FadeIn(rows[0][0]))
             vo.wait_until("a")
@@ -368,11 +370,10 @@ class Arithmetic(VoiceoverScene):
         fwd.to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "This is the hinge of the whole part. <bookmark mark='a'/> Give arithmetic coding any model that "
-            "predicts, and you get a compressor whose output is about log of one over q bits per symbol: the length "
-            "of the text times the model's cross-entropy. <bookmark mark='b'/> And any compressor defines a model: a "
-            "text that takes l bits is being assigned probability two to the minus l. <bookmark mark='c'/> So "
-            "predicting well and compressing well are the same skill. We'll put a language model to work as a "
-            "compressor in the last chapter."
+            "predicts, and you get a compressor spending about log of one over q bits per symbol: the text's length "
+            "times the model's cross-entropy. <bookmark mark='b'/> And any compressor defines a model: a text that "
+            "takes l bits gets probability two to the minus l. <bookmark mark='c'/> Predicting well and "
+            "compressing well are the same skill. In chapter fifteen, a language model becomes a compressor."
         ) as vo:
             self.play(FadeIn(left), FadeIn(right))
             vo.wait_until("a")
@@ -471,13 +472,12 @@ class Arithmetic(VoiceoverScene):
 
         with self.voiceover(
             "A real coder can't keep fractions with thousands of digits. It keeps the interval as two whole numbers, "
-            f"low and high, of {R} bits here, 32 in practice. <bookmark mark='a'/> The first letter narrows the "
-            "interval. <bookmark mark='b'/> Now both ends agree on their leading bit: it's decided. Send it, and "
-            "double the half that holds the interval, so it fills the whole range again: a zoom. "
-            "<bookmark mark='c'/> When the interval straddles the middle but sits inside the middle half, the next "
-            "bit isn't known yet. The coder zooms about the middle anyway, and remembers that a bit is waiting; it "
-            "comes out, flipped, with the next decided bit. <bookmark mark='d'/> Letter by letter, narrow and zoom, "
-            "and the bits stream out."
+            f"low and high, of {R} bits here, 32 in practice. <bookmark mark='a'/> The first letter narrows it. "
+            "<bookmark mark='b'/> Both ends now agree on their leading bit: send it, and double the half that holds "
+            "the interval, so it fills the range again: a zoom. <bookmark mark='c'/> If the interval straddles the "
+            "middle, inside the middle half, the next bit isn't known yet. The coder zooms about the middle anyway, "
+            "and notes a waiting bit, which comes out, flipped, after the next decided one. <bookmark mark='d'/> "
+            "Letter by letter, narrow and zoom, and the bits stream out."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), Create(ruler), FadeIn(ticks), FadeIn(cur), FadeIn(rg), FadeIn(sent_l),
                       FadeIn(sm), FadeIn(pm), FadeIn(sym))
@@ -550,11 +550,11 @@ class Arithmetic(VoiceoverScene):
         coarse_said = f"Round them to 8 bits and it costs {coarse:,.0f} extra bits." if coarse is not None else ""
         with self.voiceover(
             f"Does the rounding cost much? We ran the whole Falcon passage, {n:,} letters, through a 32-bit coder "
-            f"driven by our best counting model. <bookmark mark='a'/> Its information content under that model is "
-            f"{ideal:,.0f} bits. <bookmark mark='b'/> With the probabilities rounded to {show[-1]}-bit counts, the "
-            f"coder sent {fine:.1f} bits more than that, in the whole passage. {coarse_said} <bookmark mark='r'/> "
-            f"{dip_said} <bookmark mark='c'/> The registers hardly matter, once they're a few bits wider than the "
-            "counts. Arithmetic coding gives away almost nothing: what you pay is the model's surprise."
+            f"driven by our best counting model. <bookmark mark='a'/> Its information content under that model: "
+            f"{ideal:,.0f} bits. <bookmark mark='b'/> With probabilities rounded to {show[-1]}-bit counts, the "
+            f"coder sent {fine:.1f} bits more, in the whole passage. {coarse_said} <bookmark mark='r'/> "
+            f"{dip_said} <bookmark mark='c'/> The registers hardly matter. Arithmetic coding gives away almost "
+            "nothing: what you pay is the model's surprise."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(hdr))
             vo.wait_until("a")
