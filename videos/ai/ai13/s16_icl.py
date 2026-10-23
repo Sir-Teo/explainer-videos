@@ -139,12 +139,13 @@ class InContext(VoiceoverScene):
         names = VGroup(*[MathTex(t, font_size=32, color=c_).next_to(img, UP, buff=0.12)
                          for t, c_, img in ((r"W_{KQ}", A, learned[0]), (r"W_{PV}", V, learned[1]),
                                             (r"W_{KQ}", A, theory[0]), (r"W_{PV}", V, theory[1]))])
-        t1 = label(r"learned, \ from $6{,}000$ batches of prompts", font_size=24, color=WHITE).next_to(learned, DOWN, buff=0.3)
+        cv = np.asarray(d["curve1"])
+        n_steps = int(cv[-1, 0] + cv[1, 0] - cv[0, 0])  # the curve is sampled every 200 of the 6,000 steps
+        t1 = label(rf"learned, \ from ${n_steps:,}$ batches of prompts".replace(",", "{,}"), font_size=24, color=WHITE).next_to(learned, DOWN, buff=0.3)
         t2 = label(r"one step of gradient descent, \ written as attention", font_size=24, color=C.BITS)
         t2.next_to(theory, DOWN, buff=0.3)
-        cv = np.asarray(d["curve1"])
-        tg = axes([0, cv[-1, 0], 2000], [0, float(np.ceil(cv[:, 1].max())), 1], x_length=4.6, y_length=2.4,
-                  xlabel=r"training steps", ylabel=r"squared error on the question", xticks=[0, cv[-1, 0]],
+        tg = axes([0, n_steps, 2000], [0, float(np.ceil(cv[:, 1].max())), 1], x_length=4.6, y_length=2.4,
+                  xlabel=r"training steps", ylabel=r"squared error on the question", xticks=[0, n_steps],
                   xfmt=lambda v: f"{int(v):,}".replace(",", "{,}"), yticks=[0, float(np.ceil(cv[:, 1].max()))],
                   center=[0, -1.0, 0])
         tc = curve(tg.ax, cv[:, 0], cv[:, 1], A, 3)

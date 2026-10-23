@@ -237,12 +237,14 @@ class SideBySide(VoiceoverScene):
             xe = min(R, cap_ / m_)
             ln = Line(a1.c2p(0, 0), a1.c2p(xe, -m_ * xe), color=POS_COLORS["alibi"], stroke_width=3)
             ln.set_stroke(opacity=1.0 - 0.18 * i)
-            tag = MathTex(rf"m = {m_:g}", font_size=20, color=POS_COLORS["alibi"]).next_to(ln.get_end(), RIGHT if xe >= R else DOWN,
-                                                                                         buff=0.08)
+            tag = MathTex(rf"m = 1/{int(round(1 / m_))}", font_size=22, color=POS_COLORS["alibi"])
+            tag.next_to(ln.get_end(), RIGHT, buff=0.08)
+            if xe < R:  # a steep line ends on the floor of the plot: its name sits just above that end
+                tag.shift(UP * 0.2)
             hl.add(VGroup(ln, tag))
         sh1 = Rectangle(width=a1.c2p(T, 0)[0] - a1.c2p(0, 0)[0], height=a1.c2p(0, 0)[1] - a1.c2p(0, -cap_)[1],
                         stroke_width=0, fill_color=GREY_B, fill_opacity=0.12).move_to(a1.c2p(T / 2, -cap_ / 2))
-        sl1 = label(r"seen in training", font_size=18, color=GREY_B).next_to(sh1, UP, buff=0.05)
+        sl1 = label(r"seen in \\ training", font_size=18, color=GREY_B).next_to(sh1.get_bottom(), UP, buff=0.12)
         # no positions: the share of a marked first token in a uniform average, 1/t, on a log scale
         g2 = axes([0, R, R / 4], [-3, 0, 1], x_length=5.0, y_length=3.4, xlabel=r"position $t$",
                   ylabel=r"no positions: \ the mark's share, \ $1/t$", xticks=[0, T, R], xfmt=lambda v: f"{int(v)}",
