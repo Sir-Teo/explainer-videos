@@ -97,9 +97,37 @@ def templates(video: str) -> dict:
             if kind == "text":
                 rx += r"\s*".join(re.escape(w) for w in v.split(" "))
             else:
-                rx += "(.*?)"
+                rx += _NUMBER if numeric(v) else "(.*?)"
                 names.append(v)
         out[ast.unparse(n)] = (re.compile("^" + rx + "$", re.S), names)
+    return out
+
+
+# a placeholder formatted as a number ({x:.2f}, {n:,}, {int(k)}, {len(runs)}) matches only a number, so it can't
+# swallow the words around it
+_NUMBER = r"([-+−]?(?:(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?|\.\d+)(?:e[-+]?\d+)?%?)"
+
+
+def numeric(placeholder: str) -> bool:
+    spec = placeholder.rsplit(":", 1)[1] if ":" in placeholder and not placeholder.endswith("]") else ""
+    return bool(re.search(r"[dfge%n,]$", spec)) or bool(re.match(r"(int|len|round|abs)\(", placeholder))
+
+
+def ambiguous(video: str) -> list[str]:
+    """Templates where two computed values meet with only spaces between them ("{verdict} {hits}"): the matcher can't
+    tell where one ends, so it may split them wrongly.  Put a bookmark or words between them."""
+    out = []
+    for src in templates(video):
+        node = ast.parse(src, mode="eval").body
+        parts = _parts(node)
+        words = lambda k, v: k == "name" and not numeric(v)  # noqa: E731  (numbers can't run into each other's words)
+        for (k1, v1), (k2, v2), (k3, v3) in zip(parts, parts[1:], parts[2:]):
+            if words(k1, v1) and k2 == "text" and not v2.strip() and words(k3, v3):
+                out.append(src)
+                break
+        else:
+            if any(words(*a) and words(*b) for a, b in zip(parts, parts[1:])):
+                out.append(src)
     return out
 
 
