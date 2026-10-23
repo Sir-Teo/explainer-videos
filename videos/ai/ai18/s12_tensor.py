@@ -68,7 +68,7 @@ class TensorParallel(VoiceoverScene):
             "the answer is their sum, one all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going "
             "forward, called g, and one going backward, f, for the gradient of the input both halves used."
         ) as vo:
-            self.play(FadeIn(X), FadeIn(hist))
+            self.play(FadeIn(X), FadeIn(hist), FadeIn(eq1[1:].copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(eq1[1:]), FadeIn(f1))
             vo.wait_until("b")
@@ -88,7 +88,7 @@ class TensorParallel(VoiceoverScene):
             col = G1 if h < 4 else G2
             box = RoundedRectangle(width=0.9, height=1.6, corner_radius=0.08, stroke_color=col, stroke_width=2,
                                    fill_color=col, fill_opacity=0.25)
-            t = label(rf"head {h + 1}", font_size=16, color=col).move_to(box)
+            t = label(rf"head \\ ${h + 1}$", font_size=22, color=col).move_to(box)
             heads.add(VGroup(box, t))
         heads.arrange(RIGHT, buff=0.12).move_to([0, 1.7, 0])
         g1 = label(r"GPU 1: \ $Q$, $K$, $V$ of heads 1--4", font_size=22, color=G1)
@@ -135,20 +135,20 @@ class TensorParallel(VoiceoverScene):
         tp = Pr["tp"]
         head = label(r"one transformer block of our design, \ split by Megatron's rules", font_size=26)
         head.to_edge(UP, buff=0.5)
-        cols = [r"GPUs", r"output: \ largest difference", r"input gradient", r"weight gradients",
-                r"all-reduces \ (fwd, bwd)", r"weights per GPU"]
-        xs = [-5.6, -3.2, -0.5, 1.8, 4.0, 5.9]
-        hd = VGroup(*[label(c, font_size=18, color=GREY_B).move_to([x, 1.6, 0]) for c, x in zip(cols, xs)])
+        cols = [r"GPUs", r"output: \\ largest difference", r"input \\ gradient", r"weight \\ gradients",
+                r"all-reduces \\ (fwd, bwd)", r"weights \\ per GPU"]
+        xs = [-5.9, -3.4, -0.9, 1.4, 3.8, 5.9]
+        hd = VGroup(*[label(c, font_size=22, color=GREY_B).move_to([x, 1.9, 0]) for c, x in zip(cols, xs)])
         body = VGroup()
         for i, k in enumerate(("2", "4")):
             r = tp[k]
-            y = 0.8 - 0.75 * i
+            y = 0.85 - 0.95 * i
             vals = [rf"${k}$", rf"${sci(r['err_y'], 1)}$", rf"${sci(r['err_gx'], 1)}$", rf"${sci(r['err_w'], 1)}$",
                     rf"${r['fwd_allreduce']}, \ {r['bwd_allreduce']}$", rf"$1/{r['full_weights'] // r['local_weights']}$"]
-            body.add(VGroup(*[label(v, font_size=22, color=WHITE if j == 0 else GREY_A).move_to([x, y, 0])
+            body.add(VGroup(*[label(v, font_size=27, color=WHITE if j == 0 else GREY_A).move_to([x, y, 0])
                               for j, (v, x) in enumerate(zip(vals, xs))]))
-        sc = label(rf"for scale: \ the output's largest entry is ${tp['2']['y_scale']:.1f}$", font_size=22,
-                   color=GREY_A).move_to(DOWN * 1.2)
+        sc = label(rf"for scale: \ the output's largest entry is ${tp['2']['y_scale']:.1f}$", font_size=25,
+                   color=GREY_A).move_to(DOWN * 1.5)
         tw = take_away(r"the same block, \ to rounding; \ two all-reduces each way", color=COMM, font_size=26)
         tag = note(r"computed: \ PyTorch's gloo backend, \ against the unsplit block", font_size=18).to_corner(DR,
                                                                                                          buff=0.2)

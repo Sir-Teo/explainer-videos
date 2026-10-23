@@ -32,16 +32,18 @@ class Context(VoiceoverScene):
         Pr = load("parallel")
         R = Pr["ring"]
         p = Pr["p"]
-        g = ShardGrid(p, 2, cell=0.62, row_gap=0.32).move_to([-3.4, -0.3, 0])
+        g = ShardGrid(p, 2, cell=0.66, row_gap=0.3).move_to([-3.4, -1.0, 0])
         for r in range(p):
             g.set(r, 0, QC, 0.85)
             g.set(r, 1, KVC, 0.85)
         cols = g.label_cols([r"$Q$", r"$K, V$"], font_size=22)
-        seq = VGroup(*[Rectangle(width=1.2, height=0.36, stroke_width=1, stroke_color=BLACK, fill_color=ACTS,
+        seq = VGroup(*[Rectangle(width=2.2, height=0.6, stroke_width=1, stroke_color=BLACK, fill_color=ACTS,
                                  fill_opacity=0.35 + 0.15 * k) for k in range(p)]).arrange(RIGHT, buff=0)
-        seq.to_edge(UP, buff=0.5)
-        sl = label(rf"one sequence of ${R['T']}$ tokens, \ cut into ${p}$ blocks", font_size=22, color=ACTS)
-        sl.next_to(seq, DOWN, buff=0.12)
+        seq.to_edge(UP, buff=0.9)
+        sl = label(rf"one sequence of ${R['T']}$ tokens, \ cut into ${p}$ blocks", font_size=24, color=ACTS)
+        sl.next_to(seq, UP, buff=0.12)
+        owners = VGroup(*[label(rf"GPU {k}", font_size=20, color=GPU).next_to(b_, DOWN, buff=0.1)
+                          for k, b_ in enumerate(seq)])
         steps_ = VGroup(
             label(r"each GPU keeps its block of queries", font_size=22, color=QC),
             label(r"the key--value blocks travel round the ring", font_size=22, color=KVC),
@@ -49,7 +51,7 @@ class Context(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(rf"measured, \ ${p}$ processes: \ largest difference from full attention ${sci(R['err'], 1)}$",
                   font_size=22, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([2.9, -0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([2.9, -1.0, 0])
         src = cite(r"Liu, Zaharia \& Abbeel, Ring Attention (2023); \ Milakov \& Gimelshein (2018)", corner=DR,
                    font_size=17)
         with self.voiceover(
@@ -64,6 +66,7 @@ class Context(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(seq), FadeIn(sl), FadeIn(src))
             vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(o_, shift=DOWN * 0.1) for o_ in owners], lag_ratio=0.2))
             self.play(FadeIn(g), FadeIn(cols))
             vo.wait_until("b")
             self.play(FadeIn(steps_[0]), FadeIn(steps_[1]))
@@ -83,7 +86,7 @@ class Context(VoiceoverScene):
         n = 2 * p
 
         def tri(assign, center, title):
-            cell = 0.36
+            cell = 0.42
             g = VGroup()
             for q in range(n):
                 for k in range(n):
@@ -123,9 +126,11 @@ class Context(VoiceoverScene):
             "and chunk 2p minus one minus i, one from each end. " + even + " Llama 3 did "
             "exactly this for its 128-thousand-token training, with sixteen-way context parallelism."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
+            ghost = a[0].copy().set_fill(GREY_D, opacity=0.7)
+            self.play(FadeIn(head), FadeIn(src), FadeIn(ghost), FadeIn(a[1]))
             vo.wait_until("a")
-            self.play(FadeIn(a), FadeIn(ca))
+            self.play(FadeIn(a[0]), FadeIn(ca))
+            self.remove(ghost)
             vo.wait_until("b")
             self.play(FadeIn(b), FadeIn(cb))
         self.wait(0.3)
@@ -178,14 +183,14 @@ class Context(VoiceoverScene):
     def four_d(self):
         L = F.LLAMA3
         rows = L["table4"]
-        cols = [r"GPUs", r"tensor", r"context", r"pipeline", r"data", r"sequence", r"TFLOP/s per GPU", r"MFU"]
-        xs = [-5.6, -3.9, -2.6, -1.2, 0.2, 1.7, 3.6, 5.6]
-        hd = VGroup(*[label(c, font_size=19, color=GREY_B).move_to([x, 1.2, 0]) for c, x in zip(cols, xs)])
+        cols = [r"GPUs", r"tensor", r"context", r"pipeline", r"data", r"sequence", r"TFLOP/s \\ per GPU", r"MFU"]
+        xs = [-5.7, -4.0, -2.6, -1.1, 0.35, 1.9, 3.8, 5.7]
+        hd = VGroup(*[label(c, font_size=23, color=GREY_B).move_to([x, 1.9, 0]) for c, x in zip(cols, xs)])
         body = VGroup()
         for i, r_ in enumerate(rows):
-            y = 0.5 - 0.6 * i
+            y = 1.05 - 0.72 * i
             vals = [f"{r_[0]:,}", r_[1], r_[2], r_[3], r_[4], f"{r_[5]:,}", r_[8], f"{r_[9]}\\%"]
-            body.add(VGroup(*[label(f"${v}$".replace(",", "{,}"), font_size=21,
+            body.add(VGroup(*[label(f"${v}$".replace(",", "{,}"), font_size=25,
                                     color=[WHITE, GPU, C.PROB, COMM, C.EMBED, ACTS, C_COL, C_COL][j]).move_to([x, y, 0])
                               for j, (v, x) in enumerate(zip(vals, xs))]))
         prods = [r_[1] * r_[2] * r_[3] * r_[4] for r_ in rows]
@@ -195,9 +200,9 @@ class Context(VoiceoverScene):
                                     (r"tensor: \ inside one machine", GPU))):
             box = RoundedRectangle(width=11.0 - 2.4 * k, height=1.5 - 0.3 * k, corner_radius=0.12, stroke_color=c,
                                    stroke_width=2)
-            nest.add(VGroup(box, label(t, font_size=18, color=c).next_to(box.get_corner(UL), DR, buff=0.08)))
+            nest.add(VGroup(box, label(t, font_size=20, color=c).next_to(box.get_corner(UL), DR, buff=0.08)))
         for b_ in nest:
-            b_.move_to(DOWN * 2.35)
+            b_.move_to(DOWN * 2.5)
         src = cite(r"Llama Team (2024), Table 4", corner=DR, font_size=17)
         with self.voiceover(
             "A frontier run uses several cuts at once. Here is Llama 3's own table. <bookmark mark='a'/> On 16,384 "
@@ -225,16 +230,19 @@ class Context(VoiceoverScene):
         defn = definition_card(r"model FLOPs utilization", cmath(r"\text{MFU}", r"=",
                                                                  r"\frac{\text{tokens per second} \times 6N}"
                                                                  r"{\text{peak FLOP/s}}", font_size=30),
-                               color=C_COL, width=6.4).to_corner(UL, buff=0.4)
+                               color=C_COL, width=6.4)
+        defn.to_corner(UL, buff=0.4)
+        d0 = defn.copy().scale(1.35).move_to(UP * 0.4)  # first shown large, in the middle
         palm = cmath(r"\text{PaLM}", r":", rf"\frac{{{Pa['tps'] / 1e3:.1f}\text{{k}} \times 6 \times 540\text{{B}}}}"
                      rf"{{275\text{{T}} \times 6{{,}}144}}", r"=", rf"{100 * P['palm_mfu']:.1f}\%", font_size=28)
         palm.next_to(defn, DOWN, buff=0.4).align_to(defn, LEFT)
         items = [(r"PaLM (2022)", Pa["mfu"] / 100, C_COL), (r"MegaScale (2024)", F.MEGASCALE["mfu"] / 100, C_COL),
                  (r"Llama 3 (2024)", 0.41, C_COL), (r"Olmo 3, 7B (2025)", O["mfu"][0] / 100, C_COL),
                  (r"ours, \ 2020 recipe", M["base"]["mfu"], BASE_C), (r"ours, \ 2026 recipe", M["full"]["mfu"], FULL_C)]
-        rows = hbars(items, 1.0, width=4.0, font_size=20, label_width=3.2, fmt=lambda v: rf"${100 * v:.0f}\%$")
-        rows.move_to([3.4, 0.3, 0])
-        rh = label(r"model FLOPs utilization", font_size=22, color=GREY_A).next_to(rows, UP, buff=0.25)
+        rows = hbars(items, 1.0, width=4.2, bar_h=0.4, gap=0.2, font_size=22, label_width=3.2,
+                     fmt=lambda v: rf"${100 * v:.0f}\%$")
+        rows.move_to([3.6, 0.1, 0])
+        rh = label(r"model FLOPs utilization", font_size=24, color=GREY_A).next_to(rows, UP, buff=0.25)
         ours = label(rf"this computer: \ peak ${M['peak'] / 1e9:.0f}$ GFLOP/s on one core \ (a $1024^2$ matrix product)",
                      font_size=18, color=GREY_B).next_to(rows, DOWN, buff=0.3)
         src = cite(r"Chowdhery et al.\ (2022); \ Jiang et al.\ (2024); \ Llama Team (2024); \ Team OLMo (2025)",
@@ -250,8 +258,9 @@ class Context(VoiceoverScene):
             "failures. <bookmark mark='c'/> Our own training runs, on one core of this computer: "
             f"{100 * b:.0f} and {100 * f:.0f} percent of its peak."
         ) as vo:
-            self.play(FadeIn(defn, shift=UP * 0.1), FadeIn(src))
+            self.play(FadeIn(d0, shift=UP * 0.1), FadeIn(src))
             vo.wait_until("a")
+            self.play(ReplacementTransform(d0, defn))
             self.play(Write(palm))
             vo.wait_until("b")
             self.play(FadeIn(rh), LaggedStart(*[AnimationGroup(FadeIn(r_[0]), GrowFromEdge(r_[1], LEFT), FadeIn(r_[2]))

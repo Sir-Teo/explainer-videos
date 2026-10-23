@@ -45,9 +45,23 @@ class Pipeline(VoiceoverScene):
         stages = VGroup()
         for s in range(p):
             box = RoundedRectangle(width=2.2, height=0.9, corner_radius=0.1, stroke_color=GPU, stroke_width=2)
-            t = label(rf"GPU {s}: \ layers ${8 * s + 1}$--${8 * s + 8}$", font_size=18, color=GPU).move_to(box)
+            t = label(rf"GPU {s}: \\ layers ${8 * s + 1}$--${8 * s + 8}$", font_size=21, color=GPU).move_to(box)
             stages.add(VGroup(box, t))
-        stages.arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.5)
+        stages.arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.45)
+        # the 32 layers, eight under each stage, and one batch cut into micro-batches (schematic)
+        lay = VGroup(*[VGroup(*[Rectangle(width=0.2, height=1.0, stroke_width=0, fill_color=GPU, fill_opacity=0.55)
+                                for _ in range(8)]).arrange(RIGHT, buff=0.05).next_to(st_, DOWN, buff=0.7)
+                       for st_ in stages])
+        batch = VGroup(Rectangle(width=4.8, height=0.55, stroke_width=1.5, stroke_color=FWD, fill_color=FWD,
+                                 fill_opacity=0.35),
+                       label(r"one batch", font_size=22, color=WHITE)).move_to([0, -1.3, 0])
+        batch[1].move_to(batch[0])
+        micro = VGroup(*[VGroup(Rectangle(width=0.55, height=0.55, stroke_width=1.5, stroke_color=FWD, fill_color=FWD,
+                                          fill_opacity=0.6), label(rf"${i + 1}$", font_size=20, color=BLACK))
+                         for i in range(m)]).arrange(RIGHT, buff=0.08).move_to([0, -1.3, 0])
+        for mb_ in micro:
+            mb_[1].move_to(mb_[0])
+        ml = label(rf"${m}$ micro-batches", font_size=22, color=FWD).next_to(micro, DOWN, buff=0.2)
         arrows = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.05, color=GREY_B, stroke_width=2.5)
                           for a, b in zip(stages, stages[1:])])
         sch = note(r"schematic: \ a $32$-layer model on $4$ GPUs", font_size=18).next_to(stages, DOWN, buff=0.12)
@@ -67,9 +81,13 @@ class Pipeline(VoiceoverScene):
             "backward passes fill it again in reverse. The grey corners are GPUs waiting: the pipeline bubble."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(s_) for s_ in stages], lag_ratio=0.2), FadeIn(arrows), FadeIn(sch))
+            self.play(LaggedStart(*[FadeIn(b_, shift=DOWN * 0.1) for grp in lay for b_ in grp], lag_ratio=0.02),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(*[Indicate(s_, color=GPU) for s_ in stages[1:]])
+            self.play(*[Indicate(s_, color=GPU) for s_ in stages[1:]], FadeIn(batch, shift=UP * 0.1))
+            self.play(ReplacementTransform(batch, micro), FadeIn(ml), run_time=1.5)
             vo.wait_until("b")
+            self.play(FadeOut(micro), FadeOut(ml), FadeOut(lay))
             self.play(FadeIn(g.lanes), FadeIn(g.names), FadeIn(key), FadeIn(tl), FadeIn(hist))
             vo.wait_until("c")
             fill_gantt(self, g, run_time=5.0)
