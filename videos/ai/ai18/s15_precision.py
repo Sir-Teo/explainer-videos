@@ -63,7 +63,7 @@ class Precision(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to([3.6, 3.15, 0])
         hl = label(rf"$|\partial L / \partial y|$ \ at the outputs of our model's matrix products \ (step "
                    rf"$60$, \ ${H['n']:,}$ values)".replace(",", "{,}"), font_size=20, color=GRADS)
-        hl.next_to(bars, UP, buff=0.12).set_x(ax.x(-20))
+        hl.next_to(bars, UP, buff=0.12).align_to([ax.x(-24) + 0.2, 0, 0], LEFT)  # clear of FP16's floor line
         bn = r"> 99.5" if H["below_normal"] >= 0.995 else f"{100 * H['below_normal']:.0f}"
         under = label(rf"${bn}\%$ below FP16's smallest normal number; \ "
                       rf"${100 * H['below_sub']:.0f}\%$ round to zero", font_size=22, color=PREC["fp16"])
@@ -118,6 +118,10 @@ class Precision(VoiceoverScene):
                            dash_length=0.06)
         top_ = DashedLine([ax.x(math.log2(65504)), ax.line.get_y() - 0.1, 0], [ax.x(math.log2(65504)), 1.0, 0],
                           color=PREC["fp16"], dash_length=0.06)
+        f_lab = label(r"FP16's smallest: \ $2^{-24}$", font_size=18, color=PREC["fp16"]).next_to(floor, UP, buff=0.08)
+        t_lab = label(r"FP16's largest: \ $65{,}504$", font_size=18, color=PREC["fp16"]).next_to(top_, UP, buff=0.08)
+        if t_lab.get_right()[0] > 6.9:
+            t_lab.shift(LEFT * (t_lab.get_right()[0] - 6.9))
         dyn = label(r"dynamic: \ on an overflow, \ skip the step and halve $S$; \ after a run of good steps, \ "
                     r"double it", font_size=22, color=GREY_A).move_to([0, -2.65, 0])
         sl = label(r"$\times\, S = 2^{16}$", font_size=26, color=PREC["fp16_scaled"]).move_to([ax.x(-5), 0.9, 0])
@@ -135,7 +139,7 @@ class Precision(VoiceoverScene):
             "steps, double "
             "it. Bfloat16, with FP32's range, needs none of this, which is why it took over."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(bars), FadeIn(floor), FadeIn(top_), FadeIn(src))
+            self.play(FadeIn(ax), FadeIn(bars), FadeIn(floor), FadeIn(top_), FadeIn(f_lab), FadeIn(t_lab), FadeIn(src))
             vo.wait_until("a")
             step(0)
             vo.wait_until("b")
@@ -330,7 +334,7 @@ class Precision(VoiceoverScene):
                      f"with one scale per tile of 128 values, {100 * q['act_tile']:.1f}.")
         else:
             look = ("Here are 128 inputs to one matrix product of the series' model; the largest value in their whole "
-                    f"tensor is {S8['tensor_max']:.0f}.")
+                    f"tensor is {S8['tensor_max']:.1f}.")
             tiles = (f"With one scale for the whole tensor, rounding to E4M3 costs {100 * q['act_tensor']:.1f} percent, "
                      f"and with one scale per tile of 128 values, {100 * q['act_tile']:.1f}: our small model's "
                      "activations are tame enough that tiles barely help. Large models are not: a few channels grow "
@@ -409,7 +413,6 @@ class Precision(VoiceoverScene):
         fn = VGroup(MathTex(r"x_i = s\,s_b\,e_i", font_size=30, color=PREC["fp8_tile"]),
                     note(r"$s$: \ FP32, per tensor; \ $s_b$: \ E4M3, per block of $16$; \ $e_i$: \ E2M1",
                          font_size=18)).arrange(RIGHT, buff=0.3)
-        fm[0].align_to(fn[0], LEFT)
         VGroup(fm, fn).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(bt, DOWN, buff=0.35).align_to(blk, LEFT)
         items = VGroup(
             label(rf"MXFP8, \ blocks of ${M['block']}$ (Blackwell): \ an ${M['params'] / 1e9:.0f}$B model on "
@@ -456,6 +459,9 @@ class Precision(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(items[3]), FadeIn(items[4]))
             vo.wait_until("d")
+            lift = tw.get_top()[1] + 0.25 - items.get_bottom()[1]
+            if lift > 0:  # make room for the take-away: the formulas go, the list moves up into their place
+                self.play(FadeOut(VGroup(fm, fn)), items.animate.shift(UP * lift), run_time=0.8)
             self.play(FadeIn(tw, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

@@ -95,6 +95,22 @@ class Stability(VoiceoverScene):
         i = S["lrs"].index(lr)
         pl, qk = max(mx["plain"][i]), max(mx["qk"][i])
         tag = note(rf"computed: \ learning rate ${lr:g}$, \ two seeds each", font_size=18).to_corner(DR, buff=0.2)
+        # what huge logits do to a softmax: the same eight logits, as they are and twenty times larger
+        z = np.array([1.0, 0.5, 0.2, -0.3, 0.8, 0.1, -0.5, 0.3])
+
+        def soft_bars(t, x0, col, name):
+            p_ = np.exp(t - t.max())
+            p_ = p_ / p_.sum()
+            bs = VGroup(*[Rectangle(width=0.22, height=max(1.5 * v, 0.02), stroke_width=0, fill_color=col,
+                                    fill_opacity=0.85).move_to([x0 + 0.28 * i, -2.3 + 0.75 * v, 0])
+                          for i, v in enumerate(p_)])
+            base_ = Line([x0 - 0.2, -2.3, 0], [x0 + 0.28 * 7 + 0.2, -2.3, 0], color=GREY_D, stroke_width=1.5)
+            return VGroup(base_, bs, label(name, font_size=19, color=col).next_to(base_, DOWN, buff=0.12))
+
+        sm = VGroup(soft_bars(z, 1.0, STAB_C["qk"], r"logits $z$"), soft_bars(20 * z, 4.3, STAB_C["plain"],
+                                                                           r"logits $20z$"))
+        sm_t = label(r"softmax of the same logits \ (illustrative)", font_size=19, color=GREY_A)
+        sm_t.next_to(sm, UP, buff=0.2)
         with self.voiceover(
             "One state that goes wrong is attention itself. A query and a key give a logit, their dot product over the "
             "square root of the dimension, and nothing stops the weights from growing until the logits are huge. "
@@ -113,6 +129,9 @@ class Stability(VoiceoverScene):
             self.play(FadeIn(g), FadeIn(tag))
             step(0)
             self.play(FadeIn(lg[0]), *[Create(l_) for l_ in lines[:len(S["seeds"])]], run_time=4.0)
+            vo.wait_until("a")
+            self.play(FadeIn(sm_t), FadeIn(sm[0]))
+            self.play(FadeIn(sm[1], shift=RIGHT * 0.1))
             vo.wait_until("b")
             self.play(Indicate(lines[0], color=YELLOW))
             vo.wait_until("c")

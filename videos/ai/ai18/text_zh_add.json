@@ -747,7 +747,6 @@
   "\\text{bubble}": "\\text{气泡}",
   "1 - \\frac{T_{\\text{busy}}}{T}": "1 - \\frac{T_{\\text{忙}}}{T}",
   "GPipe": "GPipe",
-  "$128$ inputs of a matrix product in the series' model; \\ the tensor's largest: \\ $21.8$": "本系列模型里一次矩阵乘法的 $128$ 个输入；\\ 整个张量的最大值：\\ $21.8$",
   "DeepSeek-AI (2024), Sec.\\ 3.3; \\ Dettmers et al.\\ (2022): \\ outlier features": "DeepSeek-AI（2024），第3.3节；\\ Dettmers等（2022）：\\ 离群特征",
   "seconds on one core": "单核几秒钟",
   "passes over the training pages": "遍历训练网页的轮数",
@@ -906,7 +905,19 @@
   "papers": "论文",
   "how much of each?": "各占多少？",
   "schematic: \\ word frequencies, most common first; \\ the rare ones are lost first": "示意图：\\ 词频，最常见的在前；\\ 罕见的词最先消失",
-  "the module's weight $\\lambda$": "模块的权重 $\\lambda$"
+  "the module's weight $\\lambda$": "模块的权重 $\\lambda$",
+  "the $128$ values": "这 $128$ 个值",
+  "$2^k$: \\ one $8$-bit power of two per block of $32$": "$2^k$：\\ 每块 $32$ 个值共用一个 $8$ 位的二的幂",
+  "$s$: \\ FP32, per tensor; \\ $s_b$: \\ E4M3, per block of $16$; \\ $e_i$: \\ E2M1": "$s$：\\ FP32，每个张量一个；\\ $s_b$：\\ E4M3，每块 $16$ 个值一个；\\ $e_i$：\\ E2M1",
+  "FP16's smallest: \\ $2^{-24}$": "FP16 的最小值：\\ $2^{-24}$",
+  "FP16's largest: \\ $65{,}504$": "FP16 的最大值：\\ $65{,}504$",
+  "one MLP, \\ on one GPU:": "一个MLP，\\ 在一块GPU上：",
+  "softmax of the same logits \\ (illustrative)": "同一组logit的softmax \\ （示意）",
+  "logits $z$": "logit $z$",
+  "logits $20z$": "logit $20z$",
+  "$128$ inputs of a matrix product in the series' model; \\ the largest in their tensor: \\ $4.3$": "本系列模型里一次矩阵乘法的 $128$ 个输入；\\ 它们所在张量的最大值：\\ $4.3$",
+  "one scale per tensor: \\ $\\times\\,448/4.3$": "每个张量一个缩放因子：\\ $\\times\\,448/4.3$",
+  "one scale per tile: \\ $\\times\\,448/2.35$": "每个瓦片一个缩放因子：\\ $\\times\\,448/2.35$"
  },
  "patterns": []
 }

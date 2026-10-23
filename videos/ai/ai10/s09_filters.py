@@ -131,8 +131,8 @@ class Filters(VoiceoverScene):
         with self.voiceover(
             "Now replay the training and watch the first layer. <bookmark mark='a'/> At the start, 48 patches of "
             f"noise, and {pct(accs[0], 0)} percent of the answers right: chance. <bookmark mark='b'/> Within "
-            f"{steps[mid]:,} steps, more than half right, and the noise has organized: oriented stripes, light "
-            f"against dark, and blobs of colour. <bookmark mark='c'/> {fin}"
+            f"{steps[mid]:,} steps, more than half right, and the noise has begun to organize. "
+            f"<bookmark mark='c'/> {fin}"
         ) as vo:
             self.play(FadeIn(cur), Create(frame), FadeIn(hl), Create(ax), FadeIn(cite_))
             self.add(live, clock)
@@ -157,7 +157,9 @@ class Filters(VoiceoverScene):
         n = len(R)
         pts = []
         for j in range(2 * n + 1):
-            th = math.pi * j / n
+            # grating j has its wave vector at pi j / n in image coordinates (y down); draw the answer along its
+            # stripes as they look on screen, so the shape lies the way the filter's own stripes do
+            th = math.pi / 2 - math.pi * j / n
             r = radius * R[j % n]
             pts.append(np.asarray(center) + r * np.array([math.cos(th), math.sin(th), 0]))
         shape = Polygon(*pts[:-1], stroke_color=color, stroke_width=3, fill_color=color, fill_opacity=0.25)
@@ -210,7 +212,7 @@ class Filters(VoiceoverScene):
             "circle: a long thin shape means the filter cares about one angle and ignores the one at right angles "
             "to it, like the cat's cell. <bookmark mark='c'/> Count the filters whose answer at their best angle "
             f"is at least three times the answer at right angles: {no} of the {n}, and {nc} more respond mostly "
-            f"to colour. " + verdict
+            f"to colour. {verdict}"
         ) as vo:
             self.add(gr)
             self.play(FadeIn(gl), FadeIn(sel), FadeIn(tag), FadeIn(tl), *[FadeIn(t[0]) for t in triples])

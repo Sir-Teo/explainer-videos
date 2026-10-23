@@ -59,6 +59,10 @@ class TensorParallel(VoiceoverScene):
             label(r"one all-reduce each way, \ per MLP", font_size=22, color=COMM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.7, 0.4, 0])
         hist = cite(r"Shoeybi et al., Megatron-LM (NVIDIA, 2019)", corner=DR, font_size=17)
+        # the layer being split, whole, until Megatron's version of it takes its place
+        whole = VGroup(label(r"one MLP, \ on one GPU:", font_size=24, color=GREY_A),
+                       cmath(r"Z", r"=", r"\mathrm{SwiGLU}(X A)\, B", font_size=40)).arrange(DOWN, buff=0.3)
+        whole.move_to([3.7, 1.7, 0])
         with self.voiceover(
             "When a single layer is too big or too slow for one GPU, split the layer itself. NVIDIA's Megatron-LM "
             "showed "
@@ -72,7 +76,7 @@ class TensorParallel(VoiceoverScene):
             "the answer is their sum, one all-reduce. <bookmark mark='d'/> So the whole MLP costs one all-reduce going "
             "forward, called g, and one going backward, f, for the gradient of the input both halves used."
         ) as vo:
-            self.play(FadeIn(X), FadeIn(hist), FadeIn(eq1[1:].copy().set_opacity(0.15)))
+            self.play(FadeIn(X), FadeIn(hist), FadeIn(eq1[1:].copy().set_opacity(0.15)), FadeIn(whole, shift=UP * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(eq1[1:]), FadeIn(f1))
             vo.wait_until("b")
@@ -81,6 +85,7 @@ class TensorParallel(VoiceoverScene):
             self.play(TransformFromCopy(Y, Ycopy), FadeIn(eq2[1:]))
             self.play(FadeIn(f2))
             vo.wait_until("d")
+            self.play(FadeOut(whole))
             self.play(FadeIn(side, shift=LEFT * 0.1))
         self.wait(0.3)
         self.clear_scene()
@@ -172,9 +177,11 @@ class TensorParallel(VoiceoverScene):
             "forward, two backward."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hd), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(b_[0]) for b_ in body], lag_ratio=0.5))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b_) for b_ in body], lag_ratio=0.5), FadeIn(sc))
+            self.play(LaggedStart(*[FadeIn(VGroup(*b_[1:4])) for b_ in body], lag_ratio=0.5), FadeIn(sc))
             vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(VGroup(*b_[4:])) for b_ in body], lag_ratio=0.5))
             self.play(FadeIn(tw, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

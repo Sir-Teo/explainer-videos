@@ -316,7 +316,7 @@ class LSTM(VoiceoverScene):
             v = (f"At {Tbig} steps all three do about as well: {pct(r100, 0)}, {pct(l100, 0)} and "
                  f"{pct(g100, 0)} percent.")
         with self.voiceover(
-            f"{first} <bookmark mark='a'/> {v} <bookmark mark='b'/> {jump}"
+            f"The results. {first} <bookmark mark='a'/> {v} <bookmark mark='b'/> {jump}"
         ) as vo:
             self.play(Create(base), FadeIn(bt), FadeIn(tag), Create(ax), Create(chance), FadeIn(cl), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.05))

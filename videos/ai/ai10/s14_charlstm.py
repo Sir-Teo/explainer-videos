@@ -183,7 +183,7 @@ class CharLSTM(VoiceoverScene):
             "Here is its training, scored as always on the scoreboard's passage from The Maltese Falcon, which it "
             f"never sees. <bookmark mark='a'/> It starts at {e0:.1f} bits per character, a guess among "
             f"{m['K']} symbols, writing noise. <bookmark mark='b'/> Within {snaps[i_mid][0]:,} steps it writes "
-            f"words and spaces, at {mid_bits:.2f} bits per character. <bookmark mark='c'/> " + end
+            f"words and spaces, at {mid_bits:.2f} bits per character. <bookmark mark='c'/> {end}"
         ) as vo:
             self.play(Create(ax), Create(l9), FadeIn(t9), Create(lk), FadeIn(tk), FadeIn(panel), FadeIn(pl),
                       FadeIn(cur))

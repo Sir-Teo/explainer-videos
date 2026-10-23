@@ -144,7 +144,7 @@ ZH = {
     'f"Now let\'s watch ours learn.':
         "现在看我们的网络怎样学。左边是它的测试错误率；右边是它第一层的六个卷积核、它们对一个数字的反应，以及它的回答。<bookmark mark='a'/>一开始，卷积核是随机的噪声，回答是瞎猜：错{pct(e0, 0)}%。<bookmark mark='b'/>不到{steps[i_half]:,}步，错误率就降到5%以下，卷积核变成了笔画和笔画边缘的检测器，各有各的角度。<bookmark mark='c'/>把训练数字过了{L['epochs']}遍之后，错{pct(eN, 2)}%。这些卷积核没有人设计：凡是能让答案正确的，就是它们。",
 
-    "f'Over three training runs with different random starts":
+    'f"Over three training runs with different random starts':
         "三次从不同随机起点出发的训练，我们的网络在{pct(m, 2)}%的测试数字上出错，范围在{pct(lo, 2)}%到{pct(hi, 2)}%之间：{cmp}<bookmark mark='a'/>这是它错掉的一些数字。其中好几个，人看了也会犹豫。",
 
     'f"a little better than LeNet-5\'s':
@@ -262,7 +262,16 @@ ZH = {
         "<bookmark mark='a'/>CIFAR-10，克里热夫斯基在2009年收集：六万张32乘32像素的图片，分十个类别。<bookmark mark='b'/>我们给它的网络有一个像AlexNet那样的第一层：48个7乘7像素的彩色卷积核，步长为2，后面还有三个卷积层。<bookmark mark='c'/>在这台计算机上把五万张训练照片过了{cf['epochs']}遍以后，它能把一万张测试照片中的{pct(acc)}%标对。",
 
     'f"Now replay the training and watch the first layer.':
-        "现在重放训练过程，看第一层。<bookmark mark='a'/>一开始是48块噪声，答对{pct(accs[0], 0)}%：瞎猜的水平。<bookmark mark='b'/>不到{steps[mid]:,}步，答对一半以上，噪声也组织起来了：有方向的条纹，亮对暗，还有颜色和它的对立色组成的斑块。<bookmark mark='c'/>{fin}克里热夫斯基的论文给AlexNet的96个卷积核画过同样的图，视觉皮层里也能找到同样种类的滤波器。",
+        "现在重放训练过程，看第一层。<bookmark mark='a'/>一开始是48块噪声，答对{pct(accs[0], 0)}%：瞎猜的水平。<bookmark mark='b'/>不到{steps[mid]:,}步，答对一半以上，噪声开始有了条理。<bookmark mark='c'/>{fin}",
+
+    'By the end, some have become edge detectors, light against dark at one angle, and others':
+        "到最后，有些变成了边缘检测器，在某一个角度上亮对暗；另一些成了一种颜色对另一种颜色的斑块。克里热夫斯基的论文给AlexNet的96个卷积核展示过同样种类的图样，视觉皮层里也能找到同样种类的滤波器。",
+
+    'By the end, some have become edge detectors, light against dark at one angle. Krizhevsky':
+        "到最后，有些变成了边缘检测器，在某一个角度上亮对暗。克里热夫斯基的论文给AlexNet展示过同一种卷积核，视觉皮层里也能找到同一种滤波器。",
+
+    'By the end the patterns are smoother, but few are clean edges':
+        "到最后，图样平滑了一些，但干净的边缘很少；克里热夫斯基论文里AlexNet的96个卷积核，用多得多的照片训练了长得多的时间，要干净得多。",
 
     'f"We can run Hubel and Wiesel\'s experiment on our own network.':
         "我们可以在自己的网络上做休伯尔和威泽尔的实验。<bookmark mark='a'/>给每个滤波器看一种条纹图案，也就是光栅，转到十六个角度，记下它在每个角度的反应有多强。<bookmark mark='b'/>这是其中三个滤波器，它们的反应画成绕着圆的形状：又细又长的形状，说明这个滤波器在乎某一个角度、不理会和它垂直的角度，就像猫的那个细胞。<bookmark mark='c'/>数一数，有多少滤波器在最佳角度的反应至少是垂直方向的三倍：{n}个里有{no}个，另外还有{nc}个主要对颜色有反应。{verdict}",
@@ -303,8 +312,14 @@ ZH = {
     'f"On photographs it is worse':
         "在照片上更糟，因为一张照片有更多的数：32乘32个像素，每个三种颜色。<bookmark mark='a'/>我们的CIFAR网络，用二十小步攻击，每个像素的改动不超过255级灰度中的两级：<bookmark mark='b'/>原图，放大许多倍的改动，以及结果：看上去一模一样，网络却说是别的东西。<bookmark mark='c'/>改动两级灰度时，它在{pct(a['cifar_pgd'][i2], 0)}%的测试照片上出错，而不受攻击时是{pct(a['cifar_pgd'][0], 0)}%。",
 
+    'The attacked error, red, falls along with the clean one.':
+        "受攻击的错误率，红色那条，跟着干净的一起下降。",
+
+    'The attacked error, red, stays high while the clean one falls.':
+        "受攻击的错误率，红色那条，一直很高，干净的那条却降了下来。",
+
     'f"The defence Goodfellow proposed':
-        "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练了三个LeNet，一半是干净的数字，一半是受攻击的。受攻击的错误率，红色那条，跟着干净的一起下降。<bookmark mark='b'/>ε为{t['eps']:g}时，一步攻击现在只在{pct(adv_f, 0)}%的时候骗过它，而不是{pct(std_f, 0)}%。{verdict}<bookmark mark='c'/>干净数字上的错误率是{pct(adv_c, 2)}%，对比{pct(std_c, 2)}%：{cost}<bookmark mark='d'/>这个问题至今没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。",
+        "古德费洛提出的防御是：拿攻击来训练，给每一批数据都做出对抗版本。<bookmark mark='a'/>我们这样训练了三个LeNet，一半是干净的数字，一半是受攻击的。{fall}<bookmark mark='b'/>ε为{t['eps']:g}时，一步攻击现在只在{pct(adv_f, 0)}%的时候骗过它，而不是{pct(std_f, 0)}%。{verdict}<bookmark mark='c'/>干净数字上的错误率是{pct(adv_c, 2)}%，对比{pct(std_c, 2)}%：{cost}<bookmark mark='d'/>这个问题至今没有解决；同样的搜索放到词语上，就能攻破语言模型：第31部分。",
 
     "f'Against twenty steps it holds up too":
         "面对二十步攻击它也撑住了：错{pct(adv_p, 0)}%，而普通网络错{pct(std_p, 0)}%。",
@@ -396,8 +411,8 @@ ZH = {
     'f"Does the carousel work?':
         "传送带管用吗？做一个霍赫赖特那种风格的测试：<bookmark mark='a'/>一个序列以一个做了标记的符号开头，八个里的一个；<bookmark mark='b'/>然后是随机的干扰符号；<bookmark mark='c'/>最后网络必须说出第一个符号是什么。学会这件事，需要一个一直传回到开头的梯度。<bookmark mark='d'/>我们训练了一个普通循环网络、一个LSTM和一个GRU，各六十四个单元，各训练三次，序列长度分别是{m['T'][0]}、{m['T'][1]}和{m['T'][-1]}步。带门的细胞一开始就把门设成“记住”：这是科朗坦·塔莱克和扬·奥利维耶提出的“时序初始化”。",
 
-    'f"{first} <bookmark mark=\'a\'/> {v} <bookmark mark=\'b\'/> {jump}"':
-        "{first}<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
+    'f"The results. {first}':
+        "结果如下。{first}<bookmark mark='a'/>{v}<bookmark mark='b'/>{jump}",
 
     "f'Over {Ts[0]} steps, all three learn the task":
         "在{Ts[0]}步的序列上，三个都学会了：普通网络答对{pct(r10, 0)}%。",
@@ -423,7 +438,7 @@ ZH = {
     '"Here is why.':
         "原因在这里。训练过程中，测量从结尾的答案出发，到达序列每一步的梯度有多少。<bookmark mark='a'/>{v}",
 
-    'f"For the plain network, the gradient at the first step, the only one':
+    'f"For the plain network, the gradient at the first step, the only one that matters, is about ten to the {gap_r:.0f} times weaker than at the last. <bookmark mark=\'b\'/> For the LSTM the difference':
         "对普通网络，第一步的梯度，也就是唯一要紧的那一步，比最后一步弱了大约10的{gap_r:.0f}次方倍。<bookmark mark='b'/>对LSTM，差别是10的{gap_l:.0f}次方：传送带把信号带了回去。",
 
     'f"For the plain network, the gradient at the first step, the only one that matters, is about ten to the {gap_r:.0f} times weaker than at the last. <bookmark mark=\'b\'/> For the LSTM the first':

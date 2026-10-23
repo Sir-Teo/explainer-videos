@@ -287,7 +287,7 @@ class Convolution(VoiceoverScene):
         with self.voiceover(
             "Let's check it on our digit. <bookmark mark='a'/> Convolve, then shift; <bookmark mark='b'/> or shift "
             f"the digit by {abs(sy)} pixels down and {abs(sx)} to the left, then convolve. <bookmark mark='c'/> "
-            + v1 + " <bookmark mark='d'/> With zero padding the maps agree everywhere except a thin band at the "
+            f"{v1} <bookmark mark='d'/> With zero padding the maps agree everywhere except a thin band at the "
             "border, where the shifted image has lost pixels. <bookmark mark='e'/> A fully connected layer of the "
             f"same shape has no such identity: its two routes differ by {e['err_dense']:.1f} times the size of its "
             "output. Equivariance is what weight sharing buys."

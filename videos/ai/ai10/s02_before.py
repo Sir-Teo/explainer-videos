@@ -147,7 +147,9 @@ class Before(VoiceoverScene):
             for j in range(4):
                 c = digit.get_corner(UL) + np.array([(j + 0.5) * cw, -(i + 0.5) * cw, 0])
                 for k in range(9):
-                    th = np.pi * (k + 0.5) / 9 + np.pi / 2  # the edge runs across the gradient
+                    # bin k holds gradients at (k + 0.5) * 20 degrees in image coordinates (y down); on screen
+                    # (y up) that angle is mirrored, and the edge runs across the gradient
+                    th = np.pi / 2 - np.pi * (k + 0.5) / 9
                     L = 0.45 * cw * cells[i, j, k] / vmax
                     if L < 0.02:
                         continue
@@ -259,8 +261,8 @@ class Before(VoiceoverScene):
             "We can measure what the features buy. <bookmark mark='a'/> Train the same linear classifier twice, "
             "once on the raw pixels and once on our histograms of oriented gradients. On the digits, the pixels "
             f"give {pct(e['mnist_pixels'])} percent errors; the histograms, {pct(e['mnist_hog'])}, about "
-            f"{gain:.0f} times fewer. <bookmark mark='b'/> " + photo + " <bookmark mark='c'/> The lesson of the "
-            "era: " + verdict + " <bookmark mark='d'/> The question the rest of this part answers: what if the "
+            f"{gain:.0f} times fewer. <bookmark mark='b'/> {photo} <bookmark mark='c'/> The lesson of the "
+            f"era: {verdict} <bookmark mark='d'/> The question the rest of this part answers: what if the "
             "features were learned too?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))

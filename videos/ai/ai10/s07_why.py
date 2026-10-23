@@ -193,7 +193,7 @@ class WhyItWon(VoiceoverScene):
             "<bookmark mark='b'/> We gave a fully connected network "
             "just five thousand digits and let it train for sixty passes. Without dropout it learns every "
             f"training digit, {pct(vals['0.0'][0])} percent wrong on them, while the test error stalls. "
-            f"<bookmark mark='c'/> " + verdict + f" The gap between training and test shrinks from "
+            f"<bookmark mark='c'/> {verdict} The gap between training and test shrinks from "
             f"{pct(gap0)} points to {pct(gap5)}."
         ) as vo:
             self.play(FadeIn(dots), Create(wires), FadeIn(cite_))

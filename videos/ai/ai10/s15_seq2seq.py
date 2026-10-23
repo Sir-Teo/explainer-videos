@@ -220,7 +220,7 @@ class Seq2Seq(VoiceoverScene):
             "compromise. <bookmark mark='b'/> On our character "
             "LSTM, from the same prompt: greedy decoding writes text that costs "
             f"{m['greedy_bits']:.0f} bits under the model, a beam of eight finds text costing {m['beam_bits']:.0f}, "
-            f"and a random sample costs {m['sampled_bits']:.0f}. <bookmark mark='c'/> " + tail
+            f"and a random sample costs {m['sampled_bits']:.0f}. <bookmark mark='c'/> {tail}"
         ) as vo:
             self.play(FadeIn(root), FadeIn(tl))
             vo.wait_until("a")
@@ -270,8 +270,8 @@ class Seq2Seq(VoiceoverScene):
         with self.voiceover(
             "We built a small encoder-decoder, and gave it a job with no ambiguity: write a string of letters "
             "backwards. <bookmark mark='a'/> It trained on strings of "
-            f"{lo} to {hi} letters, three times from different starts. <bookmark mark='b'/> " + v + " "
-            "<bookmark mark='c'/> " + bv + " The whole input has to squeeze through the encoder's last state: "
+            f"{lo} to {hi} letters, three times from different starts. <bookmark mark='b'/> {v} "
+            f"<bookmark mark='c'/> {bv} The whole input has to squeeze through the encoder's last state: "
             "a bottleneck, and the longer the input, the worse it gets."
         ) as vo:
             self.play(Create(ax), FadeIn(ex), FadeIn(tag))
