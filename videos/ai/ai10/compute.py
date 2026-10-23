@@ -1404,7 +1404,9 @@ def compute_memory():
     F = torch.nn.functional
     from videos.ai.ai10 import nets
 
-    part = CACHE.partial("memory", dict(T=MEM_T, steps=MEM_STEPS, cells=MEM_CELLS, v=1))
+    # v=2: the gated cells start from the chrono initialization (Tallec & Ollivier 2018); with PyTorch's default
+    # gate biases their memory starts with a half-life of about one step, and at T = 30 they never left chance
+    part = CACHE.partial("memory", dict(T=MEM_T, steps=MEM_STEPS, cells=MEM_CELLS, init="chrono", v=2))
     for T in MEM_T:
         tx, ts = memory_batch(rng(777), 1024, T)
         tx, ts = torch.from_numpy(tx), torch.from_numpy(ts)
@@ -1415,6 +1417,7 @@ def compute_memory():
                     continue
                 torch.manual_seed(seed)
                 model = nets.SeqClassifier(cell, 2 * MEM_SYMBOLS + 1, MEM_SYMBOLS)
+                model.chrono_init(T, torch.Generator().manual_seed(seed))
                 opt = torch.optim.Adam(model.parameters(), lr=2e-3)
                 g = rng(seed)
                 curve, prof = [], []
@@ -1444,7 +1447,7 @@ def compute_memory():
                                  seconds=time.time() - t0)
                 print(f"    memory {key}: accuracy {100 * curve[-1][1]:.1f}% ({time.time() - t0:.0f}s)", flush=True)
     return dict(T=list(MEM_T), steps={str(k): v for k, v in MEM_STEPS.items()}, cells=list(MEM_CELLS),
-                chance=1 / MEM_SYMBOLS, runs={k: part[k] for k in part.done})
+                chance=1 / MEM_SYMBOLS, init="chrono", runs={k: part[k] for k in part.done})
 
 
 # ---------------------------------------------------------------------------

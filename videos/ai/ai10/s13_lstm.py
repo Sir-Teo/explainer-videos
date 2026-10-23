@@ -218,7 +218,10 @@ class LSTM(VoiceoverScene):
         ans = MathTex(str(seq[0]), font_size=40, color=LSTMC).next_to(boxes[-1], DOWN, buff=0.5)
         arr = Arrow(boxes[-1].get_bottom(), ans.get_top(), buff=0.06, color=LSTMC, stroke_width=2.5)
         facts = label(rf"one symbol of $8$ \ (chance: ${100 * m['chance']:.1f}\%$); \ $T = {', '.join(str(t) for t in m['T'])}$; "
-                      r"\ $64$ hidden units; \ three seeds each", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.8)
+                      r"\ $64$ hidden units; \ three seeds each", font_size=24, color=GREY_A)
+        facts = VGroup(facts, label(r"gated cells: \ gates started to remember for times spread up to $T$ \ "
+                                    r"(chrono initialization, \ Tallec \& Ollivier, 2018)", font_size=22,
+                                    color=GREY_B)).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.6)
         tag = note(r"illustrative sequence").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Does the carousel work? A test in the spirit of Hochreiter's: <bookmark mark='a'/> a sequence opens "
@@ -226,7 +229,9 @@ class LSTM(VoiceoverScene):
             "<bookmark mark='c'/> at the end the network must say what the first symbol was. Learning that needs "
             "a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained a plain "
             "recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of "
-            f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps."
+            f"{m['T'][0]}, {m['T'][1]} and {m['T'][-1]} steps. The gated cells start with their gates set to "
+            "remember, for times spread up to the sequence's length: the chrono initialization of Corentin Tallec "
+            "and Yann Ollivier, 2018."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")

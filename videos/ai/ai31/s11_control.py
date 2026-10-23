@@ -116,9 +116,12 @@ class Control(VoiceoverScene):
             step(1)
             self.play(LaggedStart(*[Indicate(sq, color=GREY_B, scale_factor=1.15) for sq in strip[:-1]],
                                   lag_ratio=0.08), FadeIn(last), FadeIn(lastx), run_time=2.0)
-            for k, m in enumerate("cd"):
-                vo.wait_until(m)
-                step(k + 2)
+            vo.wait_until("c")
+            step(2)
+            vo.wait_until("d")
+            # the game strip has made its point; the limit needs the room it takes
+            self.play(FadeOut(VGroup(strip, nums[:-1], last, lastx, chips, gl)), run_time=0.6)
+            step(3)
         self.wait(0.4)
         self.clear_scene()
 
@@ -235,7 +238,7 @@ class Control(VoiceoverScene):
         up = d["upfront"]
         upd = Dot(g.ax.c2p(up["usefulness"], up["safety"]), radius=0.08, color=GREY_B)
         upl = label(r"upfront auditing", font_size=18, color=GREY_B).next_to(upd, LEFT, buff=0.1)
-        tl = label(r"T alone", font_size=18, color=TRUSTED).next_to(g.ax.c2p(0.0, 1.0), UR, buff=0.08)
+        tl = label(r"T alone", font_size=18, color=TRUSTED).next_to(g.ax.c2p(0.0, 1.0), DR, buff=0.12)
         tm = rows[0]
         r10 = next(r for r in rows if abs(r["defer"] - 0.1) < 1e-9)
         r20 = next(r for r in rows if abs(r["defer"] - 0.2) < 1e-9)

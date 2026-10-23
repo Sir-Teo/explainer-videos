@@ -530,7 +530,20 @@
   "\\text{separable}": "\\text{可分离}",
   "\\text{ratio}": "\\text{比值}",
   "1 = \\text{standard}": "1 = \\text{标准}",
-  "c_t = c_{t-1} + \\text{(what is written)}": "c_t = c_{t-1} + \\text{（写进的内容）}"
+  "c_t = c_{t-1} + \\text{(what is written)}": "c_t = c_{t-1} + \\text{（写进的内容）}",
+  "Alexey Dosovitskiy and colleagues, \\ Google": "阿列克谢·多索维茨基和同事，\\ 谷歌",
+  "the vision transformer: \\ an image cut into patches of $16 \\times 16$ pixels, \\ fed to a transformer; \\ with enough data, \\ as good as the best convolutional networks; \\ Part 22": "视觉Transformer：\\ 把图像切成$16 \\times 16$像素的小块，\\ 喂给Transformer；\\ 数据足够多时，\\ 和最好的卷积网络一样好；\\ 第22部分",
+  "transformer": "Transformer",
+  "schematic: \\ $16$ patches of one CIFAR-10 photograph": "示意图：\\ 一张CIFAR-10照片的$16$个小块",
+  "Matthew Zeiler \\& Rob Fergus, \\ NYU": "马修·泽勒 \\& 罗布·弗格斯，\\ 纽约大学",
+  "\\textit{Visualizing and Understanding Convolutional Networks}: \\ to see what a deep unit wants, \\ find the inputs that excite it most": "\\textit{Visualizing and Understanding Convolutional Networks}：\\ 要看一个深层单元想要什么，\\ 就找出最能激发它的输入",
+  "gated cells: \\ gates started to remember for times spread up to $T$ \\ (chrono initialization, \\ Tallec \\& Ollivier, 2018)": "带门的细胞：\\ 门一开始就设成记住，时长分散到$T$ \\ （时序初始化，\\ 塔莱克 \\& 奥利维耶，2018）",
+  "LeNet: \\ convolution, pooling, convolution, pooling, \\ three dense layers": "LeNet：\\ 卷积、池化、卷积、池化，\\ 三个全连接层",
+  "MLP: \\ $784$ pixels $\\to$ $78$ hidden units $\\to$ $10$": "MLP：\\ $784$个像素 $\\to$ $78$个隐藏单元 $\\to$ $10$",
+  "random $W$ scaled to a chosen largest eigenvalue, \\\\ random inputs; \\ the Jacobians multiplied back from the last step": "随机的$W$，缩放到选定的最大特征值，\\\\ 随机输入；\\ 从最后一步往回乘雅可比矩阵",
+  "solid: \\ tanh; \\\\ dashed: \\ the same network, \\ linear": "实线：\\ tanh；\\\\ 虚线：\\ 同样的网络，\\ 线性",
+  "largest eigenvalue of $W$: \\ $0.8$": "$W$的最大特征值：\\ $0.8$",
+  "AlexNet's authors, \\ CIFAR-10, \\ four layers: \\ ReLU reached $25\\%$ training error $6\\times$ faster than tanh": "AlexNet的作者，\\ CIFAR-10，\\ 四层网络：\\ ReLU达到$25\\%$训练错误率，比tanh快$6\\times$"
  },
  "patterns": [
   [
@@ -560,6 +573,10 @@
   [
    "^(\\d+)\\\\ \\\\text\\{px\\}$",
    "\\1\\\\ \\\\text{像素}"
+  ],
+  [
+   "^largest eigenvalue of \\$W\\$: \\\\ \\$([\\d.]+)\\$$",
+   "$W$的最大特征值：\\\\ $\\1$"
   ]
  ]
 }
