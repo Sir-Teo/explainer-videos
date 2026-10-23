@@ -22,10 +22,12 @@ Symmetry (physics.py, graphs.py):
     harmonics   how a rotation acts on the spherical harmonics of degree 0, 1, 2: a block-diagonal matrix
     deepsets    four shapes of sixteen points: Deep Sets against an MLP and an MLP shown reordered copies, 32 to 8,192
                 training sets, three seeds; how often a reordering changes the answer
+    setcurves   the same three networks trained on 512 sets (seed 0), held-out accuracy every 100 steps
     wl          1-WL colour refinement on decalin and bicyclopentyl, on a hexagon and two triangles, on two trees;
                 how often it separates random graphs and random 3-regular graphs
     gin         unions of cycles, "is there a triangle?": GIN (sum, mean, max), GIN with random node features, and a
-                network over pairs of nodes, three seeds; the degree task that mean and max can't learn
+                network over pairs of nodes, three seeds, seed 0's training curves; the degree task that mean and max
+                can't learn
     sbm         a graph of three communities: a GCN against an MLP, three seeds, seed 0 replayed; receptive fields
     oversmooth  repeated averaging and the Dirichlet energy; plain and residual GCNs of depth 2 to 64, three seeds
 
@@ -33,7 +35,7 @@ Proteins (proteins.py):
     fold        a three-helix bundle: classical MDS from its distances; gradient descent on noisy partial distances
                 from twelve random starts (the mirror image); FAPE against distance errors
     pair        completing a distance matrix: per-pair updates against triangle updates, and triangle updates with
-                recycling, three seeds; one chain's matrix after each recycle
+                recycling, three seeds; one chain's matrix during training and after each recycle
     diffusion   denoising diffusion on compact 2D chains: an E(2)-equivariant denoiser against a plain one trained on
                 rotated copies, two seeds; samples, bond lengths, clashes
 
@@ -309,6 +311,23 @@ SET_SIZES = (32, 128, 512, 2048, 8192)
 SET_KINDS = ("deepsets", "mlp_aug", "mlp")
 
 
+SET_CURVE_N = 512
+
+
+def compute_setcurves():
+    """The training of the three set networks at one training-set size, test accuracy every 100 steps (seed 0: the
+    same networks as in the 'deepsets' item, which ends where these curves end)."""
+    _threads()
+    Xte, yte = gr.point_sets(4000, np.random.default_rng(0))
+    X, y = gr.point_sets(SET_CURVE_N, np.random.default_rng(1000 + SET_CURVE_N))
+    out = dict(n=SET_CURVE_N)
+    for kind in SET_KINDS:
+        m, r = gr.train_sets(kind, X, y, 0, val=(Xte[:1000], yte[:1000]))
+        out[kind] = np.array(r["curve"])
+        log(f"setcurves {kind}: final {r['curve'][-1]}")
+    return out
+
+
 def compute_deepsets():
     _threads()
     Xte, yte = gr.point_sets(4000, np.random.default_rng(0))
@@ -405,7 +424,7 @@ def compute_gin():
     At, yt, pt = gr.regular_dataset(600, np.random.default_rng(1))
     X = np.ones(A.shape[:2] + (1,), np.float32)
     Xt = np.ones(At.shape[:2] + (1,), np.float32)
-    part = CACHE.partial("gin", dict(v=2, seeds=SEEDS))
+    part = CACHE.partial("gin", dict(v=3, seeds=SEEDS))
     kinds = {"gin": (lambda: gr.GIN(1), False, 1500), "gin_rni": (lambda: gr.GIN(5), True, 4000),
              "pair": (lambda: gr.PairNet(), False, 3000)}
     for kind, (make, rni, steps) in kinds.items():
@@ -414,11 +433,12 @@ def compute_gin():
             if key in part:
                 continue
             torch.manual_seed(s)  # the initial weights, too
-            m = gr.train_graph_classifier(make(), A, X, y, s, steps=steps, rni=rni)
+            m = gr.train_graph_classifier(make(), A, X, y, s, steps=steps, rni=rni,
+                                          val=(At[:300], Xt[:300], yt[:300]) if s == 0 else None)
             g = torch.Generator().manual_seed(3)
             acc = gr.graph_accuracy(m, At, Xt, yt, rni=rni, gen=g, reps=8)
             acc_tr = gr.graph_accuracy(m, A[:600], X[:600], y[:600], rni=rni, gen=g, reps=8)
-            rec = dict(acc=acc, acc_train=acc_tr)
+            rec = dict(acc=acc, acc_train=acc_tr, curve=m.curve)
             if kind == "gin":
                 with torch.no_grad():
                     o = m(torch.from_numpy(At), torch.from_numpy(Xt))
@@ -937,6 +957,7 @@ ITEMS = {
     "harmonics": compute_harmonics,
     "wl": compute_wl,
     "deepsets": compute_deepsets,
+    "setcurves": compute_setcurves,
     "gin": compute_gin,
     "sbm": compute_sbm,
     "oversmooth": compute_oversmooth,

@@ -72,8 +72,8 @@ class Entropy(VoiceoverScene, ThreeDScene):
         total = label(rf"all $27$ terms add up to \ $H = {H:.2f}$ bits", font_size=30, color=C.ENTROPY)
         for k, row in enumerate([thead, *trows]):
             for m, x in zip(row, xs_):
-                m.move_to([x, 1.45 - 0.5 * k - (0.12 if k else 0), 0])
-        dots.move_to([xs_[3], 1.45 - 0.5 * 6 + 0.05, 0])
+                m.move_to([x, 1.7 - 0.5 * k - (0.12 if k else 0), 0])
+        dots.move_to([xs_[3], 1.7 - 0.5 * 6 + 0.05, 0])
         total.next_to(dots, DOWN, buff=0.15).align_to(thead[3], RIGHT)
         terms = VGroup(thead, trows, dots, total)
         with self.voiceover(

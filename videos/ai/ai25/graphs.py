@@ -91,14 +91,22 @@ class DeepSets(nn.Module):
 SET_MODELS = {"mlp": SetMLP, "mlp_aug": SetMLP, "deepsets": DeepSets}
 
 
-def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3):
+def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3, val=None, every=100):
+    """``val`` = (X, y) of held-out sets: record test accuracy every ``every`` steps (evaluation draws no random
+    numbers, so the trained network is the same with or without it)."""
     torch.manual_seed(seed)
     gen = torch.Generator().manual_seed(500 + seed)
     m = SET_MODELS[kind]()
     opt = torch.optim.Adam(m.parameters(), lr)
     Xt, yt = torch.from_numpy(X), torch.from_numpy(y).long()
     t0 = time.time()
-    for s in range(steps):
+    curve = []
+    for s in range(steps + 1):
+        if val is not None and s % every == 0:
+            with torch.no_grad():
+                curve.append((s, float((m(torch.from_numpy(val[0])).argmax(1).numpy() == val[1]).mean())))
+        if s == steps:
+            break
         j = torch.randint(0, len(Xt), (min(batch, len(Xt)),), generator=gen)
         xb = Xt[j]
         if kind == "mlp_aug":  # a fresh order for every set, every time it is seen
@@ -109,7 +117,7 @@ def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3):
         loss.backward()
         opt.step()
     m.eval()
-    return m, dict(secs=time.time() - t0, params=n_params(m))
+    return m, dict(secs=time.time() - t0, params=n_params(m), curve=curve)
 
 
 def set_scores(m, Xte, yte, gen: torch.Generator, n_perm=20, n_sets=500):
@@ -384,14 +392,23 @@ def regular_dataset(count, rng, n=15):
     return np.array(As), np.array(ys), parts
 
 
-def train_graph_classifier(model, A, X, y, seed, steps=1500, batch=32, lr=1e-3, rni=False):
+def train_graph_classifier(model, A, X, y, seed, steps=1500, batch=32, lr=1e-3, rni=False, val=None, every=100):
     """Train on graph classification; ``rni``: each node also gets fresh random numbers (random node initialization,
-    Sato et al. 2021; Abboud et al. 2021), which breaks the symmetry 1-WL can't."""
+    Sato et al. 2021; Abboud et al. 2021), which breaks the symmetry 1-WL can't.  ``val`` = (A, X, y): record held-out
+    accuracy every ``every`` steps in ``model.curve`` (its random numbers come from a separate generator)."""
     torch.manual_seed(seed)
     gen = torch.Generator().manual_seed(700 + seed)
     opt = torch.optim.Adam(model.parameters(), lr)
     At, Xt, yt = torch.from_numpy(A), torch.from_numpy(X), torch.from_numpy(y).long()
-    for s in range(steps):
+    model.curve = []
+    for s in range(steps + 1):
+        if val is not None and s % every == 0:
+            model.eval()
+            g = torch.Generator().manual_seed(3)
+            model.curve.append((s, graph_accuracy(model, *val, rni=rni, gen=g, reps=2)))
+            model.train()
+        if s == steps:
+            break
         j = torch.randint(0, len(At), (batch,), generator=gen)
         xb = Xt[j]
         if rni:
