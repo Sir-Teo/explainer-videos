@@ -34,14 +34,15 @@ class VAE(VoiceoverScene):
         v = load("vae")
         cv = np.asarray(v["s0_curve"])  # step, examples, -elbo, rec, kl (nats per digit)
         ex = cv[:, 1]
-        top = float(np.ceil(cv[:, 3].max() / 100) * 100)
+        top = float(np.ceil(max(cv[:, 3].max(), 10 * cv[:, 4].max()) / 100) * 100)
         g = axes([0, ex[-1]], [0, top], x_length=5.6, y_length=3.4, xlabel=r"training digits seen",
                  ylabel=r"nats per digit \ (held-out)", xticks=[0, ex[-1]], yticks=[0, top],
                  xfmt=lambda v_: f"{v_ / 1e6:.1f}" + (r"\text{M}" if v_ else ""), center=[-3.2, -0.4, 0])
         rec = curve(g.ax, ex, cv[:, 3], RECON, 3)
-        kl = curve(g.ax, ex, cv[:, 4], KLC, 3)
-        lg = legend([(RECON, r"reconstruction: \ $-\mathbb E_q \log p(x \mid z)$"), (KLC, r"rate: \ "
-                     r"$\mathrm{KL}(q \,\|\, p(z))$")], font_size=20).next_to(g, UP, buff=0.15).align_to(g, LEFT)
+        kl = curve(g.ax, ex, 10 * cv[:, 4], KLC, 3)  # the rate is ten times smaller: drawn ten times taller
+        lg = legend([(RECON, r"reconstruction: \ $-\mathbb E_q \log p(x \mid z)$"), (KLC, r"rate $\times 10$: \ "
+                     r"$\mathrm{KL}(q \,\|\, p(z))$")], font_size=20)
+        lg.align_to(g.ax, RIGHT).align_to(g.ax, UP)  # inside the plot, where the curves never go
         snaps = np.asarray(v["s0_snaps"])
         recs = np.asarray(v["s0_snap_recs"])
         src = np.asarray(v["s0_recon_src"])
@@ -64,20 +65,20 @@ class VAE(VoiceoverScene):
             "mark='b'/> Then the rate climbs and the reconstructions sharpen: accuracy bought with information. "
             f"<bookmark mark='c'/> By the end the code carries {k1:.1f} nats and the decoder needs {r1:.0f}; the "
             f"bound is {eb0:.2f} bits per pixel, and a tighter one, with 64 codes per digit, {iw0:.2f}. <bookmark "
-            f"mark='d'/> The samples are digits, softly blurred, and only {act} of the sixteen code numbers carry "
+            f"mark='d'/> The samples are recognizable digits, and only {act} of the sixteen code numbers carry "
             "information. Remember that."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg), FadeIn(srow), FadeIn(srl), FadeIn(rrows[0]), FadeIn(rrl),
                       FadeIn(sheets[0]), FadeIn(shl), FadeIn(tg))
             vo.wait_until("a")
-            dot_r, dot_k = Dot(g.ax.c2p(ex[0], cv[0, 3]), color=RECON), Dot(g.ax.c2p(ex[0], cv[0, 4]), color=KLC)
+            dot_r, dot_k = Dot(g.ax.c2p(ex[0], cv[0, 3]), color=RECON), Dot(g.ax.c2p(ex[0], 10 * cv[0, 4]), color=KLC)
             self.play(FadeIn(dot_r), FadeIn(dot_k))
             vo.wait_until("b")
             cur_r, cur_s = rrows[0], sheets[0]
             per = max(0.4, vo.until("c") / max(1, len(snaps) - 1))
             for k in range(1, len(snaps)):
                 self.play(dot_r.animate.move_to(g.ax.c2p(ex[k], cv[k, 3])),
-                          dot_k.animate.move_to(g.ax.c2p(ex[k], cv[k, 4])), crossfade(cur_r, rrows[k]),
+                          dot_k.animate.move_to(g.ax.c2p(ex[k], 10 * cv[k, 4])), crossfade(cur_r, rrows[k]),
                           crossfade(cur_s, sheets[k]), run_time=0.6 * per)
                 cur_r, cur_s = rrows[k], sheets[k]
                 self.wait(0.4 * per)
@@ -114,7 +115,6 @@ class VAE(VoiceoverScene):
             "blends between regions."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(dots), FadeIn(key), FadeIn(cnt))
-            vo.wait_until("a")
             per = max(0.5, (vo.until("b") - 0.5) / max(1, len(codes) - 1))
             for k in range(1, len(codes)):
                 new = label(rf"step ${steps[k]:,}$".replace(",", "{,}"), font_size=22, color=GREY_A).move_to(cnt)
@@ -268,10 +268,18 @@ class VAE(VoiceoverScene):
                      "plain VAE: the strong decoder leans on the code much less.")
         fbits = float(c["free_free_bits"])
         pa, pf = 100 * ap, 100 * af
-        second = (f"Of four digits decoded from one code, only {pa:.0f} percent match the encoded digit." if ap < 0.6
-                  else f"Of four digits decoded from one code, {pa:.0f} percent still match the encoded digit.")
-        third = (f"Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, and "
-                 f"{pf:.0f} percent match.")
+        if ap < 0.6:
+            second = (f"Decode a hundred test digits' codes four times each: only {pa:.0f} percent of the results match "
+                      "the encoded digit.")
+        else:
+            second = (f"Decode a hundred test digits' codes four times each: {pa:.0f} percent still match the encoded "
+                      "digit.")
+        if pf > pa + 10:
+            third = (f"Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, and "
+                     f"{pf:.0f} percent match.")
+        else:
+            third = (f"Free bits, a floor of {fbits:g} nats per code number, keep {kf:.1f} nats in the code, yet only "
+                     f"{pf:.0f} percent match: a floor on the rate is not a use of the code.")
         cite_ = cite(r"Bowman et al.\ (2016); \ Kingma et al., \textit{IAF}, free bits (2016); \ Chen et al., "
                      r"\textit{Variational Lossy Autoencoder} (2017)", corner=DR)
         with self.voiceover(
@@ -293,7 +301,7 @@ class VAE(VoiceoverScene):
     # ------------------------------------------------------------------
     def blur(self):
         t, v2, e2 = load("toys"), load("vae2d"), load("eval2d")
-        pt, pv = Plane(3.4, center=[-3.4, 0.1, 0]), Plane(3.4, center=[0.6, 0.1, 0])
+        pt, pv = Plane(3.4, center=[-4.7, 0.1, 0]), Plane(3.4, center=[-0.9, 0.1, 0])
         it = pt.image(t["ring_density"], DATA)
         iv = pv.scatter_image(np.asarray(v2["ring_s0"]), VAE_C, radius_px=1.5)
         tl = label(r"the ring", font_size=22, color=DATA).next_to(pt, UP, buff=0.12)
@@ -305,7 +313,8 @@ class VAE(VoiceoverScene):
             label(r"deeper codes: \ hierarchical VAEs (NVAE, 2020)", font_size=22, color=GREY_A),
             label(r"discrete codes: \ VQ-VAE (chapter 16)", font_size=22, color=VQ_COL),
             label(r"the autoencoder in front of \\ latent diffusion (Part 22)", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([5.0, 0.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        nxt.next_to(pv, RIGHT, buff=0.6).shift(UP * 0.3)
         tk = take_away(r"A VAE learns a code and a decoder with one bound: \ a trade between rate and distortion, "
                        r"\ whose samples blur where the data is sharp.", font_size=24)
         with self.voiceover(

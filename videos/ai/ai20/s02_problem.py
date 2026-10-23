@@ -229,10 +229,10 @@ class Problem(VoiceoverScene):
         c = load("classifier")
         panels = Group()
         for n, nm in (("moons", r"two moons"), ("ring", r"a ring of eight"), ("checker", r"a checkerboard")):
-            pl = Plane(2.6)
+            pl = Plane(2.3)
             img = pl.image(t[f"{n}_density"], DATA)
             panels.add(Group(img, pl, label(nm, font_size=22, color=DATA).next_to(pl, UP, buff=0.12)))
-        panels.arrange(RIGHT, buff=0.35).move_to([-2.9, 1.3, 0])
+        panels.arrange(RIGHT, buff=0.3).move_to([-3.1, 1.35, 0])
         raw = np.asarray(c["raw28"])[0] / 255.0
         half = np.asarray(c["half14"])[0]
         lev = np.clip(np.floor(half * 16), 0, 15)
@@ -251,7 +251,8 @@ class Problem(VoiceoverScene):
             label(r"$196$ pixels, \ $4$ bits each: \ at most $4$ bits per pixel", font_size=22),
             label(rf"every image model: \ ${sci(BUDGET, 0)}$ operations of training", font_size=22, color=C.BITS),
             label(r"several seeds each, \ the spread shown", font_size=22),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.2, -1.4, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        facts.move_to([0, -1.5, 0]).to_edge(RIGHT, buff=0.4)
         sheet = digit_sheet(np.asarray(c["grid"])[:12], 3, 4, size=0.42, gap=0.04).move_to([4.6, 1.4, 0])
         lc = note(r"LeCun, Cortes \& Burges (1998)").next_to(sheet, DOWN, buff=0.1)
         with self.voiceover(

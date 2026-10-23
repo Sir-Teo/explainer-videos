@@ -257,25 +257,28 @@ class Budget(VoiceoverScene):
         bpp = {f: stat(e, f, "bpp")[0] for f in ("pixelcnn", "vae", "flow")}
         fast = {f: stat(e, f, "sample_secs")[0] for f in ORDER}
         small = {f: stat(e, f, "params")[0] for f in ORDER}
-        wins = [(r"lowest FID", min(fid, key=fid.get)), (r"highest precision", max(P, key=P.get)),
-                (r"highest recall", max(R, key=R.get)), (r"best likelihood", min(bpp, key=bpp.get)),
-                (r"fastest sampling", min(fast, key=fast.get)), (r"fewest parameters", min(small, key=small.get)),
-                (r"most even digits", flat)]
+        # sampling times are measured on a busy machine: anything within a factor of two of the fastest ties with it
+        quick = [f for f in ORDER if fast[f] < 2 * min(fast.values())]
+        wins = [(r"lowest FID", [min(fid, key=fid.get)]), (r"highest precision", [max(P, key=P.get)]),
+                (r"highest recall", [max(R, key=R.get)]), (r"best likelihood", [min(bpp, key=bpp.get)]),
+                (r"fastest sampling", quick), (r"fewest parameters", [min(small, key=small.get)]),
+                (r"most even digits", [flat])]
         rows = VGroup()
-        for crit, w in wins:
-            rows.add(VGroup(label(crit, font_size=26, color=GREY_A), label(SHORT[w], font_size=28, color=FAM[w])))
+        for crit, ws in wins:
+            names = VGroup(*[label(SHORT[w], font_size=28, color=FAM[w]) for w in ws]).arrange(RIGHT, buff=0.3)
+            rows.add(VGroup(label(crit, font_size=26, color=GREY_A), names))
         for k, r_ in enumerate(rows):
             r_[0].move_to([-1.0, 2.4 - 0.62 * k, 0], aligned_edge=RIGHT)
             r_[1].move_to([-0.6, 2.4 - 0.62 * k, 0], aligned_edge=LEFT)
         hd = label(r"at this scale, \ on one budget:", font_size=26, color=C.BITS).move_to([-4.6, 2.4, 0])
-        winners = {w for _, w in wins}
+        winners = {w for _, ws in wins for w in ws}
         losers = [f for f in ORDER if f not in winners]
         tk = take_away(r"Ask what a model is for before asking which is best.", font_size=26)
         nl, l0 = len(losers), SPOKEN[losers[0]] if losers else ""
         if nl == 0:
-            close = "every family wins something, and none wins everything."
+            close = "every model wins something, and none wins everything."
         elif nl == 1:
-            close = f"every family but one wins something; {l0} wins nothing here."
+            close = f"every model but one wins something; {l0} wins nothing here."
         else:
             close = f"{nl} of the five win nothing at all, {l0} among them."
         with self.voiceover(

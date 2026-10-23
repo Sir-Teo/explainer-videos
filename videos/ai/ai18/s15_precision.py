@@ -54,8 +54,8 @@ class Precision(VoiceoverScene):
             format_band(ax, -14, math.log2(57344), PREC["fp8_tensor"], 0.6, r"FP8 E5M2", sub_e=-16),
         )
         for b in bands:
-            if b.get_left()[0] < -6.9:
-                b.name.set_x(-6.9 + b.name.width / 2)
+            if b.get_left()[0] < -6.9:  # the band runs off the left edge: its name goes inside it, dark on light
+                b.name.set_x(-6.8 + b.name.width / 2).set_color(BLACK)
         clip = note(r"FP32 and BF16 reach $2^{-126}$: \ off the left edge", font_size=18).move_to([-3.0, 3.3, 0])
         bits = VGroup(
             label(r"BF16: \ FP32's $8$ exponent bits, \ $7$ of its $23$ mantissa bits", font_size=20, color=PREC["bf16"]),
@@ -85,9 +85,9 @@ class Precision(VoiceoverScene):
             f"number, and {100 * H['below_sub']:.0f} percent are so small that FP16 rounds them to zero."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(src))
+            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bands], lag_ratio=0.4), run_time=5.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bands], lag_ratio=0.3), FadeIn(clip),
-                      run_time=2.5)
+            self.play(FadeIn(clip), *[Indicate(b, scale_factor=1.02) for b in bands])
             vo.wait_until("b")
             self.play(FadeIn(bits))
             vo.wait_until("c")

@@ -1008,9 +1008,9 @@ class PixelVAE(nn.Module):
 
 def compute_collapse():
     _threads()
-    part = CACHE.partial("collapse", dict(v=1, budget=gd.BUDGET / 2))
+    part = CACHE.partial("collapse", dict(v=2, budget=gd.BUDGET / 2))
     d = gd.digits()
-    for tag, fb in (("plain", 0.0), ("free", 0.25)):
+    for tag, fb in (("plain", 0.0), ("free", 1.0)):
         if tag in part:
             continue
         gen = g2.tseed(0)
@@ -1049,8 +1049,12 @@ def compute_collapse():
             mu, _ = m.enc(gd.as_float(d["xte"][:4]).reshape(4, -1)).chunk(2, -1)
             z = mu.repeat_interleave(4, 0)
         same_z = gd.ar_sample(m.dec, 16, torch.Generator().manual_seed(3), z=z)
-        # does a decoded digit keep its source's identity? the judge's classes against the source labels
-        agree = float((judge().net.classes(same_z) == np.repeat(d["yte"][:4], 4)).mean())
+        # does a decoded digit keep its source's identity? the judge's classes against the source labels, on 100
+        # test digits decoded four times each (the four shown are the first)
+        with torch.no_grad():
+            mu, _ = m.enc(gd.as_float(d["xte"][:100]).reshape(100, -1)).chunk(2, -1)
+        many = gd.ar_sample(m.dec, 400, torch.Generator().manual_seed(4), z=mu.repeat_interleave(4, 0))
+        agree = float((judge().net.classes(many) == np.repeat(d["yte"][:100], 4)).mean())
         part[tag] = tolist(dict(curve=curve, free_bits=fb, steps=steps, step_flops=fl, same_z=same_z,
                                 src=d["xte"][:4], src_labels=d["yte"][:4], agree=agree, secs=time.time() - t))
         log(f"collapse {tag}: KL {curve[-1][3]:.2f} nats, reconstruction {curve[-1][2]:.1f} ({time.time() - t:.0f}s)")

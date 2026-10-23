@@ -222,6 +222,16 @@ class Stability(VoiceoverScene):
         lg = legend([(STAB_C["qk"], r"without z-loss"), (STAB_C["qkz"], r"with z-loss")], font_size=17)
         lg.move_to(g.ax.c2p(S["steps"] * 0.5, 11.0), aligned_edge=UP)
         a, b = np.mean(ends["qk"]), np.mean(ends["qkz"])
+        spread_z = max(abs(v[0] - v[1]) for v in ends.values())
+        if a - b > max(spread_z, 0.3):
+            zl = f"In our runs, log Z ends at {a:.1f} without it and {b:.2f} with it."
+        elif abs(a - b) <= spread_z:
+            zl = (f"In our short runs it changes nothing we can measure: log Z ends near {a:.1f} with or without it, "
+                  "closer together than two seeds of the same design. The penalty is tiny next to the loss; it is "
+                  "there for long runs, where the logits have time to drift.")
+        else:
+            zl = (f"In our short runs it barely moves log Z: {a:.2f} without it, {b:.2f} with it. The penalty is tiny "
+                  "next to the loss; it is there for long runs, where the logits have time to drift.")
         tag = note(rf"computed: \ learning rate ${lr:g}$", font_size=18).to_corner(DR, buff=0.15)
         with self.voiceover(
             "The second fix is for the output layer. A softmax doesn't change if every logit shifts by the same "
@@ -229,7 +239,7 @@ class Stability(VoiceoverScene):
             "arithmetic large logits lose their precision. <bookmark mark='b'/> PaLM added a tiny penalty, ten to "
             "the minus four times log Z squared: the z-loss. <bookmark mark='c'/> Its gradient nudges all the "
             "logits together toward a normalizer of one, without changing what the model predicts. "
-            f"<bookmark mark='d'/> In our runs, log Z ends at {a:.1f} without it and {b:.2f} with it."
+            "<bookmark mark='d'/> " + zl
         ) as vo:
             step(0)
             vo.wait_until("a")
