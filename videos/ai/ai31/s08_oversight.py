@@ -245,9 +245,9 @@ class Oversight(VoiceoverScene):
             f"{100 * d['chance']:.1f}. <bookmark mark='c'/> The ceiling, the strong model trained on the truth: {ce:.1f}. "
             f"<bookmark mark='d'/> {gist} <bookmark mark='e'/> {conf_said}"
         ) as vo:
-            self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(tag), FadeIn(labs))
+            self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(tag), FadeIn(labs), FadeIn(setup[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in setup], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in setup[1:]], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars[0], DOWN), FadeIn(dots[0]), FadeIn(vals[0]))
             vo.wait_until("c")

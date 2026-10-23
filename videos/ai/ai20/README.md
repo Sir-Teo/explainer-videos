@@ -300,8 +300,8 @@ x₁ − x₂ = (μ₁ − μ₂) + (σ₁ − σ₂)ζ，所以 E(x₁ − x₂
 | spectral normalization | 谱归一化 |
 | Wasserstein distance, earth mover's distance | 瓦瑟斯坦距离，推土机距离 |
 | transport plan, coupling | 运输方案，耦合 |
-| Kantorovich–Rubinstein duality | 坎托罗维奇–鲁宾斯坦对偶 |
-| 1-Lipschitz, critic | 1-利普希茨，评判器 |
+| Kantorovich–Rubinstein duality | 康托罗维奇–鲁宾斯坦对偶 |
+| 1-Lipschitz, critic | 1-利普希茨，评论家 |
 | weight clipping, gradient penalty (WGAN-GP) | 权重截断，梯度惩罚（WGAN-GP） |
 | DCGAN, progressive growing, BigGAN | DCGAN，渐进式增长，BigGAN |
 | StyleGAN, mapping network, style, style mixing | StyleGAN，映射网络，风格，风格混合 |
@@ -316,7 +316,7 @@ x₁ − x₂ = (μ₁ − μ₂) + (σ₁ − σ₂)ζ，所以 E(x₁ − x₂
 | neural ODE, continuous normalizing flow | 神经ODE，连续归一化流 |
 | instantaneous change of variables, divergence | 瞬时变量替换，散度 |
 | trace, Hutchinson's estimator | 迹，哈钦森估计量 |
-| Rademacher probe | 拉德马赫探针 |
+| Rademacher probe | 拉德马赫探针（随机正负号探针） |
 | FFJORD | FFJORD |
 | energy-based model, energy E | 能量模型（基于能量的模型），能量E |
 | partition function (normalizer) Z | 配分函数（归一化常数）Z |

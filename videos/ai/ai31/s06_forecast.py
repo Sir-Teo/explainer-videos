@@ -104,8 +104,8 @@ class Forecast(VoiceoverScene):
                         for a, b in zip(tx, ty)])
         half = DashedLine(g.ax.c2p(0, 0.5), g.ax.c2p(h, 0.5), color=GREY_B, dash_length=0.06)
         vert = DashedLine(g.ax.c2p(h, 0), g.ax.c2p(h, 0.5), color=CI, dash_length=0.06)
-        hl = label(r"the $50\%$ time horizon", font_size=22, color=CI).next_to(g.ax.c2p(h, 0), UP, buff=0.05)
-        hl.shift(RIGHT * 1.4 + UP * 0.1)
+        # left of the dotted line, in the empty band between the successes (top) and the failures (bottom)
+        hl = label(r"the $50\%$ \\ time horizon", font_size=22, color=CI).next_to(g.ax.c2p(h, 0.25), LEFT, buff=0.12)
         rows = [cmath(r"p(t)", r"=", r"\sigma\big(\beta\,(\log_2 h - \log_2 t)\big)", font_size=34),
                 cmath(r"p(h)", r"=", r"\sigma(0) = \tfrac12", font_size=34)]
         rows[0][2].set_color(EST)

@@ -231,24 +231,63 @@ class Budget(VoiceoverScene):
         worst = min(ORDER, key=mins.get)
         wk = int(np.argmin(shares[worst]))
         flat = max(ORDER, key=mins.get)
-        tk = take_away(r"At this scale: \ each family wins something, \ none wins everything. \ Ask what a model "
-                       r"is for before asking which is best.", font_size=24)
         nw, nf_, mw, mf = SPOKEN[worst], SPOKEN[flat], 100 * mins[worst], 100 * mins[flat]
         msg = (f"The most uneven is {nw}: its rarest digit, a {wk}, is only {mw:.1f} percent of its samples, where "
                f"real data has about ten. The most even is {nf_}, whose rarest digit is still {mf:.1f} percent.")
         with self.voiceover(
             "Third, a coarse but telling check: which digits does each model draw? The classifier labels two "
             "thousand samples of each, and real data has each digit about one time in ten. <bookmark mark='a'/> "
-            f"{msg} Mode dropping, at the scale of whole classes, is the easiest failure to see. <bookmark "
-            "mark='b'/> So, at this small scale and on one budget: every family wins something, and none wins "
-            "everything. The likelihood models describe the data best; the adversarial ones draw differently "
-            "from how they score; and which one is best depends on what the model is for."
+            f"{msg} Mode dropping, at the scale of whole classes, is the easiest failure to see."
         ) as vo:
             self.play(FadeIn(hd), LaggedStart(*[FadeIn(p_, shift=UP * 0.1) for p_ in panels], lag_ratio=0.2),
                       run_time=2.5)
             vo.wait_until("a")
             self.play(Indicate(panels[ORDER.index(worst)][0][wk], color=WHITE, scale_factor=1.4))
+        self.wait(0.5)
+        self.clear_scene()
+        self.scoreboard(flat)
+
+    # ------------------------------------------------------------------
+    def scoreboard(self, flat):
+        """Who won what, read off the measurements above."""
+        e = load("evaluate")
+        fid = {f: stat(e, f, "fid")[0] for f in ORDER}
+        P = {f: stat(e, f, "precision")[0] for f in ORDER}
+        R = {f: stat(e, f, "recall")[0] for f in ORDER}
+        bpp = {f: stat(e, f, "bpp")[0] for f in ("pixelcnn", "vae", "flow")}
+        fast = {f: stat(e, f, "sample_secs")[0] for f in ORDER}
+        small = {f: stat(e, f, "params")[0] for f in ORDER}
+        wins = [(r"lowest FID", min(fid, key=fid.get)), (r"highest precision", max(P, key=P.get)),
+                (r"highest recall", max(R, key=R.get)), (r"best likelihood", min(bpp, key=bpp.get)),
+                (r"fastest sampling", min(fast, key=fast.get)), (r"fewest parameters", min(small, key=small.get)),
+                (r"most even digits", flat)]
+        rows = VGroup()
+        for crit, w in wins:
+            rows.add(VGroup(label(crit, font_size=26, color=GREY_A), label(SHORT[w], font_size=28, color=FAM[w])))
+        for k, r_ in enumerate(rows):
+            r_[0].move_to([-1.0, 2.4 - 0.62 * k, 0], aligned_edge=RIGHT)
+            r_[1].move_to([-0.6, 2.4 - 0.62 * k, 0], aligned_edge=LEFT)
+        hd = label(r"at this scale, \ on one budget:", font_size=26, color=C.BITS).move_to([-4.6, 2.4, 0])
+        winners = {w for _, w in wins}
+        losers = [f for f in ORDER if f not in winners]
+        tk = take_away(r"Ask what a model is for before asking which is best.", font_size=26)
+        nl, l0 = len(losers), SPOKEN[losers[0]] if losers else ""
+        if nl == 0:
+            close = "every family wins something, and none wins everything."
+        elif nl == 1:
+            close = f"every family but one wins something; {l0} wins nothing here."
+        else:
+            close = f"{nl} of the five win nothing at all, {l0} among them."
+        with self.voiceover(
+            "So, at this small scale and on one budget, who won what? <bookmark mark='a'/> "
+            f"{close} <bookmark mark='b'/> Which is best depends on what the model is for, and on scale: GANs "
+            "drew the sharpest images for years, at sizes far beyond ours."
+        ) as vo:
+            self.play(FadeIn(hd))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.25),
+                      run_time=min(3.5, max(1.5, vo.until("b") - 0.3)))
             vo.wait_until("b")
             self.play(FadeIn(tk))
-        self.wait(0.3)
+        self.wait(0.5)
         self.clear_scene()

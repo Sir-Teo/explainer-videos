@@ -1078,7 +1078,7 @@ def train_gan(seed: int, replay: bool, wgan: bool):
 
     def gstep():
         for _ in range(n_critic):
-            real = gd.dequant(next(it), gen)
+            real = gd.as_float(next(it)).flatten(1)  # the levels themselves: dequantization noise is for likelihoods
             fake = G(torch.randn(bs, gd.ZG, generator=gen)).detach()
             if wgan:
                 lD = Dn(fake).mean() - Dn(real).mean() + lam * g2.grad_penalty(Dn, real, fake, gen)
@@ -1132,7 +1132,7 @@ def train_gan(seed: int, replay: bool, wgan: bool):
 def _gan_item(wgan: bool):
     _threads()
     name = "wgan" if wgan else "gan"
-    part = CACHE.partial(name, dict(v=1, budget=gd.BUDGET))
+    part = CACHE.partial(name, dict(v=2, budget=gd.BUDGET))
     for s in SEEDS:
         if f"s{s}" not in part:
             t = time.time()
