@@ -224,21 +224,23 @@ class Transformer(VoiceoverScene):
 
         def text_at(k):
             body = " ".join(smp[k].replace("\n", " ").split())
-            lines = [body[i:i + 46] for i in range(0, min(len(body), 138), 46)]
+            lines = [body[i:i + 40] for i in range(0, min(len(body), 120), 40)]
             g = VGroup(data_text(str(t["prompt"]).strip(), font="DejaVu Serif", font_size=18, color=GREY_B),
                        *[data_text(ln, font="DejaVu Serif", font_size=18, color=WHITE) for ln in lines])
-            g.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.4, 1.85, 0], aligned_edge=LEFT).shift(LEFT * 0.4)
+            g.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([1.0, 1.85, 0], aligned_edge=LEFT)
+            if g.get_right()[0] > 6.8:
+                g.scale((6.8 - g.get_left()[0]) / g.width, about_edge=LEFT)
             return g
 
         def real_at(k):
-            return label(rf"real words: \ ${100 * real[k]:.0f}\%$", font_size=22, color=C.TRUE_P).move_to([5.6, 0.5, 0])
+            return label(rf"real words: \ ${100 * real[k]:.0f}\%$", font_size=24, color=C.TRUE_P).move_to([5.4, 0.35, 0])
 
-        S = 0.72
+        S = 0.76
 
         def maps_at(k):
             groups = Group()
             for l_ in range(L):
-                groups.add(Group(*[heat_image(M[k, l_, h], S, S, color=A, mask_upper=True) for h in range(H)])
+                groups.add(Group(*[heat_image(M[k, l_, h], S, S, color=A, gamma=0.35, mask_upper=True) for h in range(H)])
                            .arrange(RIGHT, buff=0.06))
             return groups.arrange(RIGHT, buff=0.35).move_to([0, -2.05, 0])
 

@@ -19,11 +19,10 @@ class Hook(VoiceoverScene):
         snip = str(t["snip"])
         maps = np.asarray(t["maps"])  # layer, head, query, key
         L, H, n, _ = maps.shape
-        # the head that looks furthest back on average, in the last layer: the most interesting arcs
+        # the head that looks furthest back on average, in any layer: the most visible arcs
         dist = np.array([[(maps[l_, h] * np.abs(np.arange(n)[:, None] - np.arange(n)[None])).sum(1)[16:].mean()
                           for h in range(H)] for l_ in range(L)])
-        li = L - 1
-        hi = int(np.argmax(dist[li]))
+        li, hi = (int(v) for v in np.unravel_index(int(np.argmax(dist)), dist.shape))
         cut = snip.rfind(" ", 0, 33) + 1 or 32  # break the line at a space
         first, second = snip[:cut], snip[cut:]
         r1 = char_row(first, 12.6, font_size=30).move_to(UP * 0.9)
@@ -67,7 +66,8 @@ class Hook(VoiceoverScene):
         maps = np.asarray(t["maps"])
         L, H = maps.shape[:2]
         S = 1.25
-        imgs = Group(*[heat_image(maps[l_, h], S, S, color=A, mask_upper=True) for l_ in range(L) for h in range(H)])
+        imgs = Group(*[heat_image(maps[l_, h], S, S, color=A, gamma=0.35, mask_upper=True) for l_ in range(L)
+                       for h in range(H)])
         imgs.arrange_in_grid(rows=L, cols=H, buff=0.18).move_to(DOWN * 0.2)
         rl = VGroup(*[label(rf"layer {l_ + 1}", font_size=20, color=GREY_B).next_to(imgs[l_ * H], LEFT, buff=0.2) for l_ in range(L)])
         hl = VGroup(*[label(rf"head {h + 1}", font_size=20, color=GREY_B).next_to(imgs[h], UP, buff=0.12) for h in range(H)])
@@ -101,20 +101,22 @@ class Hook(VoiceoverScene):
             (2026, r"hybrids: \\ Qwen3.5, \ Kimi K3"),
         ]
         n = len(events)
-        xs = np.linspace(-6.2, 6.2, n)
+        xs = np.linspace(-5.9, 5.9, n)
         y0 = -0.2
         axis = Line([-6.6, y0, 0], [6.6, y0, 0], color=GREY_C, stroke_width=3)
-        marks = []
+        marks, skel = [], VGroup()
         for i, ((yr, txt), x) in enumerate(zip(events, xs)):
             up = i % 2 == 0
             stem = Line([x, y0, 0], [x, y0 + (0.9 if up else -0.9), 0], color=HIST, stroke_width=2.5)
             dot = Dot([x, y0, 0], radius=0.08, color=HIST)
-            yl = label(rf"{yr}", font_size=28, color=HIST)
-            t = label(txt, font_size=19, color=WHITE)
-            words = VGroup(yl, t).arrange(DOWN, buff=0.05)
+            yl = label(rf"{yr}", font_size=30, color=HIST)
+            t = label(txt, font_size=21, color=WHITE)
+            words = VGroup(yl, t).arrange(DOWN, buff=0.06)
             words.next_to(stem.get_end(), UP if up else DOWN, buff=0.08)
-            keep_in_frame(words, margin=0.1)
+            keep_in_frame(words, margin=0.12)
             marks.append(VGroup(stem, dot, words))
+            skel.add(VGroup(stem.copy().set_stroke(GREY_D), Dot([x, y0, 0], radius=0.06, color=GREY_D),
+                            yl.copy().set_color(GREY_D).move_to(yl)))
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
         tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -130,7 +132,7 @@ class Hook(VoiceoverScene):
             "some of it, and gates that let a head switch off; <bookmark mark='i'/> and in 2026, models that keep "
             "full attention in only a quarter of their layers."
         ) as vo:
-            self.play(FadeIn(head), Create(axis), FadeIn(tag))
+            self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
             self.play(FadeIn(marks[0], shift=UP * 0.2))
             for k, mk in enumerate("abcdefghi"):
                 vo.wait_until(mk)
