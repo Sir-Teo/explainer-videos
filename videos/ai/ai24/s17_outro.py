@@ -183,7 +183,7 @@ class Outro(VoiceoverScene):
             r"For unit vectors, \ show $z \cdot z^+ = 1 - \tfrac12 \|z - z^+\|^2$, \ and derive the $N \to \infty$ limit "
             r"of the contrastive loss as alignment plus uniformity.",
             r"Show that a constant encoder minimizes the SimSiam loss, \ but gives the NT-Xent loss "
-            r"$\log(2N - 1)$, \ its largest value at any fixed configuration of perfect agreement.",
+            r"$\log(2N - 1)$, \ no better than a uniform guess among the $2N - 1$ candidates.",
             r"Barlow Twins: \ with batch-standardized outputs, \ show $\mathcal C_{ii} = 1$ exactly when the two views' "
             r"$i$-th outputs are equal for every image, \ and why a constant output is excluded.",
             r"Show that linear CKA is unchanged by $X \mapsto cXQ$ ($Q$ orthogonal, $c > 0$), \ and that when $n \le d$ "

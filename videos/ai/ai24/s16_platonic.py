@@ -91,7 +91,7 @@ class Platonic(VoiceoverScene):
                     if Cm[a, b] < wv:
                         worst, wv = (a, b), Cm[a, b]
         sc = c["seeds_cka"]
-        seeds_line = ", ".join(f"{SPOKEN.get(k, k)} {v:.2f}" for k, v in sc.items())
+        s_lo, s_hi = min(sc.values()), max(sc.values())
         side = VGroup(label(r"the same recipe, \ two seeds:", font_size=20, color=GREY_A),
                       *[label(rf"{NAME[k]}: \ ${v:.2f}$", font_size=20, color=COLOR[k]) for k, v in sc.items()])
         side.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, 0.2, 0])
@@ -107,8 +107,8 @@ class Platonic(VoiceoverScene):
             "brighter is more alike. <bookmark mark='a'/> The most alike learned pair is "
             f"{SPOKEN.get(names[a], names[a])} and {SPOKEN.get(names[b], names[b])}, at {bv:.2f}; <bookmark "
             f"mark='b'/> the least alike, {SPOKEN.get(names[wa], names[wa])} and {SPOKEN.get(names[wb], names[wb])}, "
-            f"at {wv:.2f}. <bookmark mark='c'/> For scale: the same recipe run from two random starts gives "
-            f"{seeds_line}."
+            f"at {wv:.2f}. <bookmark mark='c'/> For scale: the same recipe run from two random starts agrees with "
+            f"itself at between {s_lo:.2f} and {s_hi:.2f}."
         ) as vo:
             self.play(FadeIn(hm), FadeIn(rl), FadeIn(cl), FadeIn(tg))
             vo.wait_until("a")

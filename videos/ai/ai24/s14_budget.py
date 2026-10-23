@@ -34,6 +34,8 @@ class Budget(VoiceoverScene):
         self.card()
         self.linear()
         self.few()
+        self.finetune()
+        self.geometry()
         self.rank()
 
     def card(self):
@@ -66,7 +68,8 @@ class Budget(VoiceoverScene):
         worst = names[-3]
         un = rows["random_cnn"]["linear"][0]
         below = [n for n in names[1:-2] if rows[n]["linear"][0] < un]
-        below_s = (" Below the untrained network: " + ", ".join(SPOKEN.get(n, n) for n in below) + "."
+        below_s = (f" {len(below)} of the learned methods score below the untrained network." if len(below) > 1 else
+                   f" One learned method scores below the untrained network: {SPOKEN.get(below[0], below[0])}."
                    if below else "")
         with self.voiceover(
             "Here is every method, trained on the same network for the same number of steps, from three random "
@@ -105,7 +108,8 @@ class Budget(VoiceoverScene):
         px = rows["pixels"]["few"][0]
         lin_best = self.sorted_names(rows, "linear")[1]
         same = best == lin_best
-        v = (f"{SPOKEN.get(best, best).capitalize()} leads again, with {pct(b)} percent from a hundred labels." if same else
+        lead = SPOKEN.get(best, best)
+        v = (f"The leader is the same: {lead}, with {pct(b)} percent from a hundred labels." if same else
              f"The order changes: {SPOKEN.get(best, best)} leads here, with {pct(b)} percent from a hundred labels, "
              f"while {SPOKEN.get(lin_best, lin_best)}, the best on the full probe, gets "
              f"{pct(rows[lin_best]['few'][0])}.")
@@ -124,6 +128,100 @@ class Budget(VoiceoverScene):
             self.play(Indicate(g[1], color=COLOR[best], scale_factor=1.03))
             vo.wait_until("c")
             self.play(Indicate(g[-1], color=PIX, scale_factor=1.03))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def finetune(self):
+        f = load("finetune")
+        acc = f["acc"]
+        names = [n for n in ORDER if n in acc] + ["scratch"]
+        rows = {n: {"ft": [float(np.mean(acc[n])), float(np.min(acc[n])), float(np.max(acc[n]))]} for n in names}
+        order = sorted([n for n in names if n != "scratch"], key=lambda n: -rows[n]["ft"][0]) + ["scratch"]
+        COLOR["scratch"], NAME["scratch"] = RAND, r"from scratch"
+        lo = min(rows[n]["ft"][1] for n in order)
+        vmin = float(np.floor((lo - 0.02) * 10) / 10)
+        g = hbars(rows, "ft", order, vmin=vmin)
+        head = label(rf"Fine-tune the whole network \ from $10$ labels per digit", font_size=30).to_edge(UP, buff=0.3)
+        axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ ${int(f['steps'])}$ updates, \ three draws "
+                    r"of the labels", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
+        sc = rows["scratch"]["ft"][0]
+        best = [n for n in order if n not in ("scratch", "supervised")][0]
+        mae, ij = rows["mae"]["ft"][0], rows["ijepa"]["ft"][0]
+        lin = {n: load("compare")["rows"][n]["few"][0] for n in ("mae", "ijepa") if n in load("compare")["rows"]}
+        mv = (f"The masked models gain the most from it: MAE goes from {pct(lin['mae'])} percent with a frozen "
+              f"network to {pct(mae)} fine-tuned, I-JEPA from {pct(lin['ijepa'])} to {pct(ij)}." if
+              mae - lin.get("mae", mae) > 0.05 else
+              f"Fine-tuning helps the masked models less than the literature would suggest: MAE ends at {pct(mae)} "
+              f"percent, I-JEPA at {pct(ij)}.")
+        ssl = [n for n in order if n not in ("scratch", "supervised")]
+        n_up = sum(rows[n]["ft"][0] > sc for n in ssl)
+        with self.voiceover(
+            "A frozen network is one test. The other common one lets the whole network change, starting from what "
+            "it learned, with the same hundred labels. <bookmark mark='a'/> Trained from scratch on a hundred "
+            f"digits, our network reaches {pct(sc)} percent. <bookmark mark='b'/> Of the {len(ssl)} self-supervised "
+            f"starts, {n_up} beat that; the best is {SPOKEN.get(best, best)}, at {pct(rows[best]['ft'][0])}. "
+            f"<bookmark mark='c'/> {mv}"
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(axl), FadeIn(g[-1]))
+            vo.wait_until("a")
+            self.play(Indicate(g[-1], color=RAND, scale_factor=1.02))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g[:-1]], lag_ratio=0.12), run_time=3.0)
+            vo.wait_until("c")
+            idx = [order.index(n) for n in ("mae", "ijepa") if n in order]
+            self.play(*[Indicate(g[i], scale_factor=1.03) for i in idx])
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def geometry(self):
+        from scipy.stats import spearmanr
+
+        c = load("compare")
+        rows = c["rows"]
+        names = [n for n in ORDER if n not in ("random_cnn", "pixels") and "align_h" in rows[n]]
+        al = np.array([rows[n]["align_h"][0] for n in names])
+        un = np.array([rows[n]["unif_h"][0] for n in names])
+        ac = np.array([rows[n]["linear"][0] for n in names])
+        ax = axes([float(un.min()) - 0.1, float(un.max()) + 0.1], [0, float(al.max()) * 1.2], x_length=7.0,
+                  y_length=4.2, xlabel=r"$\mathcal L_{\rm uniform}$ of $h$ \ (lower: more spread)",
+                  ylabel=r"$\mathcal L_{\rm align}$ of $h$", center=[-1.4, -0.3, 0])
+        dots = VGroup()
+        for n, x, y in zip(names, un, al):
+            d = Dot(ax.ax.c2p(x, y), radius=0.08, color=COLOR[n])
+            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n]).next_to(d, UR, buff=0.04)))
+        ru = float(spearmanr(un, ac).correlation)
+        ra = float(spearmanr(al, ac).correlation)
+        res = VGroup(label(r"rank correlation with the linear probe", font_size=20, color=GREY_A),
+                     label(rf"uniformity: \ ${ru:+.2f}$", font_size=24, color="#58A6FF"),
+                     label(rf"alignment: \ ${ra:+.2f}$", font_size=24, color="#5BD17A")).arrange(DOWN,
+                                                                                               aligned_edge=LEFT,
+                                                                                               buff=0.12)
+        res.to_corner(DR, buff=0.5)
+        if ru < -0.5 and ra < -0.5:
+            v = (f"Lower is better for both, so Wang and Isola predict negative correlations, and both are: "
+                 f"{ru:.2f} for uniformity, {ra:.2f} for alignment.")
+        elif ru < -0.5:
+            v = (f"Lower is better for both, so Wang and Isola predict negative correlations. Uniformity's is strong, "
+                 f"{ru:.2f}; alignment's is only {ra:.2f}: methods that keep their points spread do better, however "
+                 "tightly they hold the views together.")
+        elif ra < -0.5:
+            v = (f"Lower is better for both, so Wang and Isola predict negative correlations. Alignment's is strong, "
+                 f"{ra:.2f}; uniformity's is only {ru:.2f}.")
+        else:
+            v = (f"Lower is better for both, so Wang and Isola predict negative correlations; across our methods both "
+                 f"are weak: {ru:.2f} for uniformity, {ra:.2f} for alignment.")
+        tg = tag(r"computed: \ every method's encoder output $h$, \ mean of three seeds", corner=UR)
+        with self.voiceover(
+            "Chapter five's two numbers can be measured on every method's representation, not just SimCLR's. "
+            "<bookmark mark='a'/> Here each method sits at its uniformity and alignment. <bookmark mark='b'/> " + v
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(tg))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.1), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
 
