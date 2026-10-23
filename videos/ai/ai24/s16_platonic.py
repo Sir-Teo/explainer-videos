@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (COLOR, HIST, NAME, PART, PIX, SIMCLR, SPOKEN, axes, curve, digit, heat, load, pct,
-                                   tag, take_away)
+                                   tag, take_away, take_away_in, place_labels)
 
 TOP = "#FFB070"
 BOT = "#7FD3FF"
@@ -171,7 +171,8 @@ class Platonic(VoiceoverScene):
         dots = VGroup()
         for n, a_, b_ in zip(names, x, y):
             d = Dot(ax.ax.c2p(a_, b_), radius=0.08, color=COLOR[n])
-            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n]).next_to(d, UR, buff=0.04)))
+            dots.add(VGroup(d, label(NAME[n], font_size=16, color=COLOR[n])))
+        place_labels([g_[0] for g_ in dots], [g_[1] for g_ in dots])
         res = label(rf"Spearman's rank correlation: \ ${rho:.2f}$", font_size=26, color=C.BITS).to_corner(DR, buff=0.5)
         if rho > 0.5:
             v = (f"The more accurate methods do agree more with the rest: a rank correlation of {rho:.2f}. "
@@ -282,6 +283,6 @@ class Platonic(VoiceoverScene):
             self.play(FadeIn(pts[2]))
             vo.wait_until("c")
             self.play(FadeIn(pts[3]))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

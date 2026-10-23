@@ -308,13 +308,14 @@ class Hook(VoiceoverScene):
             "generation and perception, <bookmark mark='e'/> agency and reasoning, <bookmark mark='f'/> and finally, "
             "looking inside, and whether we can trust it."
         ) as vo:
-            self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeOut(echo), FadeIn(title))
+            self.play(q.animate.scale(0.5).to_edge(UP, buff=0.3).set_opacity(0), FadeOut(echo), FadeIn(title),
+                      LaggedStart(*[FadeIn(col.head) for col in m.cols], lag_ratio=0.15), run_time=1.5)
             self.remove(q)
             for k, mark in enumerate("abcdef"):
                 vo.wait_until(mark)
                 col = m.cols[k]
-                self.play(FadeIn(col.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in col.rows],
-                                                        lag_ratio=0.15), run_time=1.2)
+                self.play(Indicate(col.head, color=WHITE, scale_factor=1.05),
+                          LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in col.rows], lag_ratio=0.15), run_time=1.2)
             self.play(Create(m.box))
         self.wait(0.3)
         self.clear_scene()

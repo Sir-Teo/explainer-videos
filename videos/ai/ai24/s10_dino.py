@@ -6,7 +6,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (DINO_C, NAIVE, PART, SIMCLR, STUDENT, TEACHER, arrow, axes, bars_chart, curve,
-                                   load, node_box, pct, tag, take_away)
+                                   load, node_box, pct, tag, take_away, take_away_in)
 from videos.ai.ai24.ssl import B, STEPS
 
 VAR = {"dino": (r"DINO", DINO_C), "nocenter": (r"no centring", "#FF5C5C"), "nosharpen": (r"no sharpening", "#4DABF7")}
@@ -274,6 +274,6 @@ class DINO(VoiceoverScene):
             self.play(Indicate(tab[2], color=DINO_C, scale_factor=1.04))
             vo.wait_until("b")
             self.play(FadeIn(lit))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (Scrub, BEIT_C, HIST, MAE_C, PART, SIMCLR, arrow, axes, bars_chart, digit, digit_sheet,
-                                   ink_rgb, load, node_box, pct, seed_curves, tag, take_away, to_image)
+                                   ink_rgb, load, node_box, pct, seed_curves, tag, take_away, take_away_in, to_image)
 
 
 class Masked(VoiceoverScene):
@@ -277,6 +277,6 @@ class Masked(VoiceoverScene):
             self.play(Indicate(tab[2], color=MAE_C, scale_factor=1.04))
             vo.wait_until("b")
             self.play(FadeIn(lit))
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

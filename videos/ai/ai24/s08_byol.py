@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (BYOL_C, DIGIT, Hypersphere, NAIVE, PART, SIMCLR, SIMSIAM, TARGET, arrow, axes,
-                                   bars_chart, load, node_box, pct, seed_curves, tag, take_away)
+                                   bars_chart, load, node_box, pct, seed_curves, tag, take_away, take_away_in)
 
 
 class BYOL(VoiceoverScene):
@@ -259,6 +259,6 @@ class BYOL(VoiceoverScene):
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in ch2.bars], lag_ratio=0.2), FadeIn(ch2.whiskers),
                       FadeIn(ch2.vals))
             vo.wait_until("c")
-            self.play(FadeIn(tk, shift=UP * 0.1), FadeIn(cite(r"Richemond et al.\ (2020)", corner=UR)))
+            self.play(*take_away_in(self, tk), FadeIn(cite(r"Richemond et al.\ (2020)", corner=UR)))
         self.wait(0.3)
         self.clear_scene()

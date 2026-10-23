@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai24.common import (DIGIT, Hypersphere, NEG, PART, POS, SIMCLR, axes, bars_chart, curve, load, pct,
-                                   tag, take_away)
+                                   tag, take_away, take_away_in, place_labels)
 
 TAUS = ["0.05", "0.1", "0.2", "0.5", "1"]
 TAU_KEY = {"0.05": "0.05", "0.1": "0.1", "0.2": "0.2", "0.5": "0.5", "1": "1.0"}
@@ -56,15 +56,25 @@ class Sphere(VoiceoverScene):
         d2 = label(r"all pairs: \ how bunched up", font_size=20, color=UNIF)
         VGroup(d1, d2).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(ax, DOWN, buff=0.15)
         tg = tag(r"computed: \ SimCLR with three output numbers, \ $\tau = 0.2$")
+        if al[-1] < al[0] - 0.02 and un[-1] < un[0] - 0.1:
+            v = ("Both fall. The views of each digit come together, and the digits spread over the whole sphere, as "
+                 f"far from each other as they can get. By the end, alignment is {al[-1]:.2f} and uniformity "
+                 f"{un[-1]:.2f}.")
+        elif un[0] > -0.5 and un[-1] < un[0] - 0.1:
+            v = ("At the start every digit sits in nearly the same spot, so the views are trivially aligned and "
+                 "nothing is spread. Training trades a little alignment for a lot of spread: uniformity falls from "
+                 f"{un[0]:.2f} to {un[-1]:.2f}, while alignment rises only to {al[-1]:.2f}. The digits spread over "
+                 "the whole sphere, and each digit's views stay close.")
+        else:
+            v = (f"Uniformity goes from {un[0]:.2f} to {un[-1]:.2f}, and alignment from {al[0]:.2f} to "
+                 f"{al[-1]:.2f}.")
         with self.voiceover(
             "Watch the contrastive loss work on a sphere. This is a SimCLR network whose output has only three "
             "numbers, so every digit is a point we can see. <bookmark mark='a'/> Two quantities tell the story. "
             "Alignment: how far apart the two views of the same digit land. Uniformity: how bunched up all the "
-            "points are, measured so that lower means more evenly spread. <bookmark mark='b'/> Both fall. The "
-            "views of each digit come together, and the digits spread over the whole sphere, as far from each "
-            f"other as they can get. <bookmark mark='c'/> By the end, alignment is {al[-1]:.2f} and uniformity "
-            f"{un[-1]:.2f}; and because the network cannot spread all the fives apart without also separating "
-            "them from their own views, the fives end up together."
+            f"points are, measured so that lower means more evenly spread. <bookmark mark='b'/> {v} <bookmark "
+            "mark='c'/> And because the network cannot spread all the fives apart without also separating them "
+            "from their own views, the fives end up together."
         ) as vo:
             self.play(FadeIn(hs), FadeIn(st), FadeIn(tg))
             vo.wait_until("a")
@@ -201,7 +211,8 @@ class Sphere(VoiceoverScene):
         pts = VGroup()
         for t, a_, u_ in zip(TAUS, al, un):
             d = Dot(ax.ax.c2p(u_, a_), radius=0.08, color=SIMCLR)
-            pts.add(VGroup(d, MathTex(rf"\tau = {t}", font_size=22, color=GREY_A).next_to(d, UR, buff=0.06)))
+            pts.add(VGroup(d, MathTex(rf"\tau = {t}", font_size=22, color=GREY_A)))
+        place_labels([p_[0] for p_ in pts], [p_[1] for p_ in pts], buff=0.06)
         best = int(np.argmax(means))
         worst = int(np.argmin(means))
         fb, fw = int(np.argmax(few)), int(np.argmin(few))
@@ -291,6 +302,6 @@ class Sphere(VoiceoverScene):
             self.play(FadeIn(p2[0]), FadeIn(p2[2]), LaggedStart(*[GrowFromEdge(b, DOWN) for b in p2[1]],
                                                                  lag_ratio=0.03), FadeIn(s2), run_time=1.6)
             vo.wait_until("c")
-            self.play(FadeIn(tk, shift=UP * 0.1))
+            self.play(*take_away_in(self, tk))
         self.wait(0.3)
         self.clear_scene()

@@ -213,6 +213,9 @@ ZH = {
     "f'Ours agrees: reading the digits from h gives {pct(hl)} percent":
         '我们的结果也一样：从h读数字得到{pct(hl)}%，从z只有{pct(zl)}%。',
 
+    "f'On our digits the gap is small: the linear probe reads {pct(hl)} percent from h":
+        '在我们的数字上差距很小：线性探针从h读出{pct(hl)}%，从z读出{pct(zl)}%；近邻分类分别是{pct(hk)}%和{pct(zk)}%。',
+
     "f'On our digits the difference is small: {pct(hl)} percent from h":
         '在我们的数字上差别很小：从h是{pct(hl)}%，从z是{pct(zl)}%。',
 
@@ -247,9 +250,19 @@ ZH.update({
     'f"Watch the contrastive loss work on a sphere.':
         "来看对比损失在球面上是怎么工作的。这是一个输出只有3个数的SimCLR网络，所以每个数字都是一个我们看得见的点。"
         "<bookmark mark='a'/>两个量讲出了整个故事。对齐：同一个数字的两个视图落得有多远。均匀性：所有点聚得有多紧，按定义，"
-        "越低表示铺得越均匀。<bookmark mark='b'/>两者都在下降。每个数字的视图聚到一起，而不同的数字铺满整个球面，彼此离得尽可能远。"
-        "<bookmark mark='c'/>到最后，对齐是{al[-1]:.2f}，均匀性是{un[-1]:.2f}；又因为网络没法把所有的5彼此推开，而不同时把它们和自己的"
+        "越低表示铺得越均匀。<bookmark mark='b'/>{v}<bookmark mark='c'/>又因为网络没法把所有的5彼此推开，而不同时把它们和自己的"
         "视图分开，所以5最终都聚在一起。",
+
+    "f'Both fall. The views of each digit come together":
+        '两者都在下降。每个数字的视图聚到一起，而不同的数字铺满整个球面，彼此离得尽可能远。到最后，对齐是{al[-1]:.2f}，'
+        '均匀性是{un[-1]:.2f}。',
+
+    'f"At the start every digit sits in nearly the same spot':
+        '一开始，每个数字都差不多落在同一个地方，所以视图天然是对齐的，而点完全没有铺开。训练用一点点对齐换来了大量的铺开：'
+        '均匀性从{un[0]:.2f}降到{un[-1]:.2f}，而对齐只升到{al[-1]:.2f}。数字铺满了整个球面，而每个数字的视图仍然靠得很近。',
+
+    "f'Uniformity goes from {un[0]:.2f} to {un[-1]:.2f}":
+        '均匀性从{un[0]:.2f}变到{un[-1]:.2f}，对齐从{al[0]:.2f}变到{al[-1]:.2f}。',
 
     'f"Where did the digits land?':
         "数字们落在了哪里？取每个数字在球面上的平均方向。<bookmark mark='a'/>最近的一对是{a1}和{b1}，相隔{ang[a1, b1]:.0f}度，"

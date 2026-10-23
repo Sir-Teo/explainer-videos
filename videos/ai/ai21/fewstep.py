@@ -7,10 +7,13 @@ where many small flow-matching steps would. Time runs as in the rest of Part 21:
                forward-mode pass (a Jacobian-vector product); half the pairs have s = t, which is plain flow matching;
                a plain squared error (the paper's adaptive weighting, each error divided by itself held fixed, aims
                at a weighted median of the targets rather than their mean: on these 2-D letters, whose velocity
-               targets are spread wide, it learned a biased field, 0.11 to 0.57 from the data in one jump over
-               three seeds)
+               targets are spread wide, it learned a biased field, about 0.4 from the data in one jump)
     shortcut   (Frans et al., 2024) self-consistency: one jump of size 2d must equal two jumps of size d, for d a
                power of two; jumps of size 0 are plain flow matching
+
+Both use the same network, whose time features are slower than the part's other networks' (frequencies scaled by
+1/8): MeanFlow differentiates the network along time, and with the faster features that derivative was so noisy that
+one jump landed 0.2 to 0.5 from the data (three seeds), against about 0.06 with the slower ones.
 
 Recorded, for three seeds at the same budget as every other model of the part: samples after 1, 2 and 4 jumps, their
 sliced Wasserstein distance from the data, one-jump paths, and (seed 0) one jump from the same noise during training.
@@ -27,15 +30,16 @@ from videos.ai.ai21.train2d import BATCH, SEEDS, STEPS, mixture_torch
 JUMPS = [1, 2, 4]
 
 
-def uvnet(width=256, tdim=32):
-    """u(z, s, t): the average velocity from time s to time t, starting at z."""
+def uvnet(width=256, tdim=32, freq_scale=0.5):
+    """u(z, s, t): the average velocity from time s to time t, starting at z (time features of frequency about
+    freq_scale; the part's other networks use 4)."""
     import torch
     import torch.nn as nn
 
     class Net(nn.Module):
         def __init__(self):
             super().__init__()
-            self.freq = nn.Parameter(torch.randn(tdim // 2) * 4.0, requires_grad=False)
+            self.freq = nn.Parameter(torch.randn(tdim // 2) * freq_scale, requires_grad=False)
             self.net = nn.Sequential(nn.Linear(2 + 2 * tdim, width), nn.SiLU(), nn.Linear(width, width), nn.SiLU(),
                                      nn.Linear(width, width), nn.SiLU(), nn.Linear(width, 2))
 
@@ -125,7 +129,7 @@ def compute_fewstep():
     from videos.ai.ai21.train2d import threads
 
     threads()
-    part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS), meanflow_loss="squared"))
+    part = CACHE.partial("fewstep", dict(steps=STEPS, seeds=list(SEEDS), meanflow_loss="squared", freq_scale=0.5))
     z = E.rng(1).normal(size=(4000, 2))  # the same noise as the flow item
     for kind in ("meanflow", "shortcut"):
         for seed in SEEDS:

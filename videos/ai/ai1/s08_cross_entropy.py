@@ -201,9 +201,8 @@ class CrossEntropy(VoiceoverScene):
             "divergence is an average, weighted by p, of the log of q over p. <bookmark mark='c'/> Move the log outside. <bookmark mark='d'/> Inside, the p's cancel, "
             "<bookmark mark='e'/> and what's left is the total of q, which is one. The log of one is zero."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(ax), Create(lg), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(ax), Create(lg), run_time=1.0)
             self.play(FadeIn(pa), FadeIn(pb), Create(chord), FadeIn(pm), FadeIn(pc), Create(gap), FadeIn(cap))
             vo.wait_until("b")
             step(0)
