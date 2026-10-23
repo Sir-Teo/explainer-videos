@@ -36,10 +36,12 @@ labelled as such.
   inflated by about 13 points at k = 27. Style control (2024); *The Leaderboard Illusion* (Singh et al. 2025).
 * **4. Judges, and what an item tells you.** MT-Bench (Zheng et al. 2023): GPT-4 agrees with experts over 80% of the
   time, but is biased by position, verbosity and self-preference. A simulated judge with those biases scrambles
-  the ranking (the first answer wins 67% of the time; verdicts survive a swap only 49% of the time); evaluating both
-  orders and a style term recover most of it. Item response theory (Lord 1952; Rasch 1960): the 2PL model, Fisher
-  information a²p(1 − p); a 2,000-item simulated benchmark; 25 to 200 items chosen by information predict the rest
-  better than random ones at small sizes (error 6.2 against 8.2 points at 25 items). tinyBenchmarks (Maia Polo et al.
+  the ranking (the first answer wins 67% of the time; verdicts survive a swap only 49% of the time); judging both
+  orders barely helps here (mean error 49 → 48 Elo), a length term in Bradley–Terry ("style control") brings it to
+  23, but the judge's own family stays 57 points too high. Item response theory (Lord 1952; Rasch 1960): the 2PL model, Fisher
+  information a²p(1 − p); a 2,000-item simulated benchmark: from 25 random items, the item-response estimate of a new
+  model's full score is off by 6.2 points on average, the plain share answered right by 8.2; by 100 items the two
+  are level. tinyBenchmarks (Maia Polo et al.
   2024), the Epoch Capabilities Index (Ho et al. 2025).
 * **5. Forecasting capabilities.** The Chinchilla law L(N, D) = E + A/N^α + B/D^β (Hoffmann et al. 2022); Epoch AI's
   compute trends; emergence or a mirage (Schaeffer et al. 2023). METR's 50% time horizon (Kwa et al. 2025): its Time
@@ -52,9 +54,9 @@ labelled as such.
   (Becker et al. 2025: developers 19% slower with AI, believed 20% faster), jagged abilities (International AI Safety
   Report 2026).
 * **6. Reward hacking.** Krakovna et al.'s list of specification gaming (2020): the Lego block flipped, the boat race,
-  the hand between camera and ball, the walker's sliding legs. The boat race built here: Q-learning on a grid course
+  the arm hovering between camera and object, the walker's sliding legs. The boat race built here: Q-learning on a grid course
   with a reward for targets that pay again, five seeds: the agent circles the targets for 56 points an episode and
-  never finishes; with the finish alone it learns slowly or not at all; with potential-based shaping (Ng, Harada & Russell
+  never finishes; with the finish alone, 4 of 5 seeds learn to finish, after 550 to 1,600 races; with potential-based shaping (Ng, Harada & Russell
   1999), derived, every seed finishes from episode 50. Coding agents: special-casing tests (Claude 3.7 Sonnet system
   card), `exit(0)` and skipped tests caught by a chain-of-thought monitor (Baker et al. 2025), METR on o3 (39 of 128
   runs on one task), "please do not cheat"; hacking that generalizes to sabotage and alignment faking (MacDiarmid et
