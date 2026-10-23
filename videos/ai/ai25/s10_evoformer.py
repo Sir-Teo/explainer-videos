@@ -319,7 +319,7 @@ class Evoformer(VoiceoverScene):
             label(r"around $90$: \ informally, \ competitive with experiment", font_size=24, color=GREY_A),
             label(r"backbone error \ (median, $95\%$ of residues): \ $0.96$\,\AA, \ against $2.8$\,\AA\ for the next "
                   r"best", font_size=24, color=STRUCT),
-            label(r"a carbon atom is about $1.4$\,\AA\ across \ (its covalent diameter)", font_size=22,
+            label(r"a carbon atom is about $1.5$\,\AA\ across \ (its covalent diameter)", font_size=22,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.4)
         cite_ = cite(r"DeepMind (30 November 2020); \ Jumper et al., \textit{Nature} (2021)", corner=DR)
