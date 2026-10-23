@@ -20,7 +20,7 @@ class Return(VoiceoverScene):
 
     def card(self):
         card = chapter_card(16, r"Recurrence returns", r"Can a recurrent network train as fast as a transformer?",
-                            lit=(2017, 2024), part=PART)
+                            lit=(2017,), part=PART)
         with self.voiceover("Chapter sixteen. Recurrence returns."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -265,14 +265,12 @@ class Return(VoiceoverScene):
         foot = label(r"today's hybrids mix them with attention: \ Part 15", font_size=26, color=ATT)
         foot.to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "minGRU joined a family that had been growing since 2016. <bookmark mark='a'/> Quasi-recurrent "
-            "networks and simple recurrent units first moved the matrices out of the recurrence; state-space "
-            "models, from S4 in 2021 to Mamba in 2023, derived linear recurrences from continuous-time systems and "
-            "let the input choose what to keep; RWKV and the linear recurrent unit came at it from other "
-            "directions; and in 2024 Hochreiter's own group returned with xLSTM, scaled in 2025 to a "
-            "seven-billion-parameter language model. <bookmark mark='b'/> Several of today's open models mix "
-            "such layers with attention, to get the transformer's recall and the recurrence's fixed-size memory. "
-            "That's Part 15."
+            "minGRU joined a family growing since 2016. <bookmark mark='a'/> Quasi-recurrent networks and simple "
+            "recurrent units moved the matrices out of the recurrence; state-space models, from S4 in 2021 to "
+            "Mamba in 2023, derived linear recurrences from continuous-time systems and let the input choose what "
+            "to keep; and in 2024 Hochreiter's own group returned with xLSTM, scaled in 2025 to seven billion "
+            "parameters. <bookmark mark='b'/> Several of today's open models mix such layers with attention: the "
+            "transformer's recall, the recurrence's fixed-size memory. That's Part 15."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cards], lag_ratio=0.25), run_time=5.0)

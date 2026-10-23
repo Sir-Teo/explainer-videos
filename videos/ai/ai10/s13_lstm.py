@@ -48,13 +48,11 @@ class LSTM(VoiceoverScene):
             gates.width = 6.4
         with self.voiceover(
             "The cure came from Hochreiter himself, with Jurgen Schmidhuber, in 1997. <bookmark mark='a'/> If "
-            "the gradient shrinks because every step multiplies it by something less than one, then build a unit "
-            "where the step multiplies it by exactly one: a memory cell that adds to itself, connected to itself "
-            "with weight one and no squashing. <bookmark mark='b'/> Its derivative from one step to the next is "
-            "one, so an error signal can ride it back across any number of steps without fading. They called it "
-            "the constant error carousel. <bookmark mark='c'/> Around it, gates: multiplicative switches, learned, "
-            "that decide when to write to the cell and when to read from it. In 2000 Felix Gers added a third, the "
-            "forget gate, so the cell can also be cleared."
+            "every step multiplies the gradient by something less than one, build a unit where it multiplies by "
+            "exactly one: a memory cell connected to itself with weight one, and no squashing. "
+            "<bookmark mark='b'/> An error signal can ride it back across any number of steps without fading: the "
+            "constant error carousel. <bookmark mark='c'/> Around it, learned gates decide when to write to the "
+            "cell and when to read it; in 2000 Felix Gers added a forget gate, to clear it."
         ) as vo:
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
@@ -110,13 +108,12 @@ class LSTM(VoiceoverScene):
         tag = note(r"schematic: \ one LSTM cell").to_corner(DR, buff=0.25)
         with self.voiceover(
             "Here is the cell as it is used today. <bookmark mark='a'/> Running straight through it, the cell "
-            "state: a conveyor belt of memory. <bookmark mark='b'/> First the forget gate, a sigmoid between zero "
-            "and one for every slot of memory, multiplies the belt: one keeps, zero erases. "
-            "<bookmark mark='c'/> Then the input gate chooses how much of a new candidate g to add. "
-            "<bookmark mark='d'/> And the output gate chooses how much of the memory, squashed, to show as the "
-            "hidden state h. <bookmark mark='e'/> All three gates are computed from the previous hidden state and "
-            "the new input, so the network learns when to remember, when to forget and when to speak. Nothing on "
-            "the belt itself is squashed: what isn't erased rides through unchanged."
+            "state: a conveyor belt of memory. <bookmark mark='b'/> The forget gate, a number between zero and one "
+            "for every slot, multiplies the belt: one keeps, zero erases. <bookmark mark='c'/> The input gate "
+            "chooses how much of a new candidate g to add. <bookmark mark='d'/> The output gate chooses how much of "
+            "the memory to show as the hidden state h. <bookmark mark='e'/> All three are computed from the "
+            "previous hidden state and the input, so the network learns when to remember, forget and speak; and "
+            "what isn't erased rides the belt unchanged."
         ) as vo:
             self.play(FadeIn(eqs), FadeIn(tag))
             vo.wait_until("a")
@@ -225,13 +222,12 @@ class LSTM(VoiceoverScene):
                       r"\ $64$ hidden units; \ three seeds each", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.8)
         tag = note(r"illustrative sequence").to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Does the carousel work? We built the test Hochreiter's paper was about. <bookmark mark='a'/> A "
-            "sequence opens with one marked symbol, one of eight. <bookmark mark='b'/> Then come distractors, "
-            "random symbols, to be ignored. <bookmark mark='c'/> At the end the network must say what the first "
-            "symbol was. To do that it has to hold one thing in memory across the whole sequence, and learning "
-            "to do it needs a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained "
-            "a plain recurrent network, an LSTM and a GRU, each with sixty-four hidden units, three times each, "
-            f"for sequences of {m['T'][0]}, {m['T'][1]} and {m['T'][2]} steps."
+            "Does the carousel work? A test in the spirit of Hochreiter's: <bookmark mark='a'/> a sequence opens "
+            "with one marked symbol, one of eight; <bookmark mark='b'/> then come random distractors; "
+            "<bookmark mark='c'/> at the end the network must say what the first symbol was. Learning that needs "
+            "a gradient that reaches all the way back to the start. <bookmark mark='d'/> We trained a plain "
+            "recurrent network, an LSTM and a GRU, sixty-four units each, three times each, for sequences of "
+            f"{m['T'][0]}, {m['T'][1]} and {m['T'][2]} steps."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")

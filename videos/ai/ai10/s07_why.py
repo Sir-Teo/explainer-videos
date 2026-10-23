@@ -46,15 +46,13 @@ class WhyItWon(VoiceoverScene):
         cite_ = cite(r"Nair \& Hinton (2010); \ Glorot, Bordes \& Bengio (2011); \ Krizhevsky et al.\ (2012)",
                      corner=DR)
         with self.voiceover(
-            "Look inside AlexNet for what was different, and the first thing is small: the activation. "
-            "<bookmark mark='a'/> The networks of the 1990s squashed each unit with a tanh or a sigmoid. "
-            "AlexNet used the rectified linear unit: zero for negative inputs, the input itself otherwise, "
-            "made popular by Vinod Nair and Hinton in 2010, and by Xavier Glorot, Antoine Bordes and Bengio in "
-            "2011. <bookmark mark='b'/> The reason is in "
-            "the slopes. Backpropagation multiplies the gradient by the activation's slope at every layer. The "
-            "sigmoid's slope is at most a quarter, and both it and tanh flatten to nothing once a unit is pushed "
-            "far from zero: the unit saturates and stops learning. The ReLU's slope is exactly one wherever it is "
-            "on. <bookmark mark='c'/> Krizhevsky measured it on CIFAR-10: a four-layer network with ReLUs reached "
+            "The first difference inside AlexNet is small: the activation. <bookmark mark='a'/> The networks of "
+            "the 1990s squashed each unit with a tanh or a sigmoid. AlexNet used the rectified linear unit, zero "
+            "for negative inputs and the input itself otherwise, made popular by Vinod Nair and Hinton in 2010. "
+            "<bookmark mark='b'/> The reason is in the slopes, which backpropagation multiplies the gradient by at "
+            "every layer. The sigmoid's is at most a quarter, and both it and tanh flatten to nothing once a unit "
+            "is pushed far from zero: it saturates and stops learning. The ReLU's slope is one wherever it is on. "
+            "<bookmark mark='c'/> Krizhevsky measured it on CIFAR-10: a four-layer network with ReLUs reached "
             f"25 percent training error {ALEXNET['relu_speedup']} times faster than the same network with tanh."
         ) as vo:
             self.play(FadeIn(leg), Create(ax), FadeIn(t1))
@@ -180,11 +178,10 @@ class WhyItWon(VoiceoverScene):
                    f"{pct(vals['0.0'][1])}.")
         with self.voiceover(
             "The second ingredient: dropout, from Hinton's group the same year. <bookmark mark='a'/> At every "
-            "training step, switch off each hidden unit with probability one half, so the network can't lean on "
-            "any one of them, or on a conspiracy of a few. At test time keep them all, scaled down to match. It "
-            "works like averaging an enormous family of thinner networks that share their weights. AlexNet used "
-            "it in its two big fully connected layers, which hold most of its weights; without it, its authors "
-            "wrote, the network overfitted substantially. <bookmark mark='b'/> We gave a fully connected network "
+            "training step, switch off each hidden unit with probability one half, so the network can't lean on a "
+            "conspiracy of a few; at test time keep them all, scaled to match. It is like averaging a huge family "
+            "of thinner networks that share weights. AlexNet used it in its two big fully connected layers; "
+            "without it, its authors wrote, the network overfitted substantially. <bookmark mark='b'/> We gave a fully connected network "
             "just five thousand digits and let it train for sixty passes. Without dropout it learns every "
             f"training digit, {pct(vals['0.0'][0])} percent wrong on them, while the test error stalls. "
             f"<bookmark mark='c'/> " + verdict + f" The gap between training and test shrinks from "

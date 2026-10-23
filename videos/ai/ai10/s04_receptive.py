@@ -109,12 +109,10 @@ class Receptive(VoiceoverScene):
         with self.voiceover(
             "We can count the cone exactly. <bookmark mark='a'/> Name the kernel size, the stride, the spacing "
             "between neighbouring units in pixels, and the receptive field. <bookmark mark='b'/> A kernel of size "
-            "k has k minus 1 taps beyond the first, each reaching one more unit of the layer below, and those "
-            "units sit j pixels apart: so the field grows by k minus 1 times j. <bookmark mark='c'/> And a stride "
-            "multiplies the spacing: after a stride of 2, neighbouring units are twice as far apart in the image. "
-            "<bookmark mark='d'/> Unrolled from one pixel: one, plus each layer's extra taps times the product of "
-            "all the strides before it. <bookmark mark='e'/> That is why strides matter so much: every layer after "
-            "a stride counts for more."
+            "k reaches k minus 1 more units of the layer below, j pixels apart: the field grows by k minus 1 times "
+            "j. <bookmark mark='c'/> A stride multiplies the spacing. <bookmark mark='d'/> Unrolled: one, plus "
+            "each layer's extra taps times the product of all the strides before it. <bookmark mark='e'/> Every "
+            "layer after a stride counts for more."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(d, shift=RIGHT * 0.1) for d in defs], lag_ratio=0.3))
@@ -264,12 +262,11 @@ class Receptive(VoiceoverScene):
                    f"Here training leaves it about the same, {r['erf_untrained_radius']:.1f} pixels before and "
                    f"{r['erf_trained_radius']:.1f} after.")
         with self.voiceover(
-            "But the receptive field is only where a unit could look. Where does it actually look? "
-            "<bookmark mark='a'/> Take one unit at the top of our CIFAR network and ask how much it changes when "
-            "each pixel changes: the gradient, averaged over many photographs. <bookmark mark='b'/> Its "
-            "theoretical field covers the whole image, but the gradient is a soft blob in the middle. This is the "
-            "effective receptive field, named by Wenjie Luo and colleagues in 2016: paths through the middle of "
-            "the cone are many, paths to its edge are few, so the influence falls off roughly like a Gaussian. "
+            "But the receptive field is only where a unit could look. Where does it look? <bookmark mark='a'/> "
+            "Take one unit at the top of our CIFAR network and measure how much it changes when each pixel "
+            "changes, averaged over many photographs. <bookmark mark='b'/> Its field covers the whole image, but "
+            "the gradient is a soft blob in the middle: the effective receptive field, named by Wenjie Luo and "
+            "colleagues in 2016. Many paths run through the middle of the cone, few to its edge. "
             "<bookmark mark='c'/> " + verdict
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(tag), FadeIn(cite_))

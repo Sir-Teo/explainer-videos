@@ -1,164 +1,490 @@
 {
  "title": "人工智能，从零搭建 · 第9部分：神经网络",
  "chapters": {
-  "Hook": "两条螺旋",
-  "Universal": "1. 一层，无所不能",
-  "Depth": "2. 深度带来了什么",
+  "Hook": "我们是怎么走到这里的",
+  "Universal": "5. 一层，无所不能",
+  "Depth": "7. 深度带来了什么",
   "Signal": "3. 穿过50层的信号",
-  "Residual": "4. 残差流",
-  "NeuralLM": "5. 神经语言模型",
-  "Outro": "回顾，以及这些想法会在哪里再现"
+  "Residual": "11. 残差流",
+  "NeuralLM": "15. 神经语言模型",
+  "Outro": "回顾、习题，以及这些想法会在哪里再现",
+  "Neurons": "1. 最早的神经元",
+  "Perceptron": "2. 感知机在学习",
+  "XOR": "3. 异或，以及第一次寒冬",
+  "Backprop": "4. 反向传播",
+  "Barron": "6. 摆脱维数灾难",
+  "Revival": "8. 第二次寒冬，与复兴",
+  "Init": "9. 推导初始化",
+  "Chaos": "10. 混沌的边缘",
+  "Norm": "12. 归一化",
+  "Block": "13. 现代的块",
+  "KAN": "14. 柯尔莫哥洛夫–阿诺德网络"
  },
  "lines": {
-  "6c364de3fcd1": {
+  "48e96ea1079b": {
    "scene": "Hook",
-   "en": "Two spirals, wound around each other. No straight line can separate them, and no classical method in part six would find this easy. <bookmark mark='a'/> Here's a small neural network, three layers of thirty-two simple units, before any training. The thin lines cut the plane into the pieces on which the network is exactly linear. <bookmark mark='b'/> Now train it.",
-   "zh": "两条螺旋，彼此缠绕在一起。没有哪条直线能把它们分开，第6部分的经典方法，也没有一种能轻松应付。<bookmark mark='a'/>这是一个小小的神经网络，3层，每层32个简单的单元，还没有经过任何训练。那些细线把平面切成一块一块，在每一块上，这个网络都恰好是线性的。<bookmark mark='b'/>现在，开始训练它。"
+   "en": "In 1943, a neurophysiologist and a young logician wrote down the first artificial neuron: a unit that adds up its inputs and fires if the total is big enough. <bookmark mark='a'/> Fifteen years later, Frank Rosenblatt built one that learned from examples, and the New York Times reported the Navy's hope that it would one day walk and talk. <bookmark mark='b'/> In 1969 a book proved what a single layer of such units cannot do, and for a decade few worked on them. <bookmark mark='c'/> In 1986 backpropagation trained the hidden layers in between, <bookmark mark='d'/> and networks learned to read handwritten zip codes. <bookmark mark='e'/> But by the late nineties they were out of fashion again. <bookmark mark='f'/> In 2006 a way to train deep ones was found, and in 2012 a deep network won the ImageNet competition by a wide margin. The field has not looked back.",
+   "zh": "1943年，一位神经生理学家和一位年轻的逻辑学家，写下了第一个人工神经元：一个把输入加起来、总和够大就放电的单元。<bookmark mark='a'/>15年后，弗兰克·罗森布拉特造出了一个能从例子中学习的神经元，《纽约时报》报道说，海军希望它有一天能走路、能说话。<bookmark mark='b'/>1969年，一本书证明了单层这样的单元做不到什么，此后十年，很少有人再研究它们。<bookmark mark='c'/>1986年，反向传播训练出了夹在中间的隐藏层，<bookmark mark='d'/>网络学会了读手写的邮政编码。<bookmark mark='e'/>可是到了九十年代末，它们又一次过时了。<bookmark mark='f'/>2006年，人们找到了训练深层网络的办法；2012年，一个深层网络以巨大的优势赢下了ImageNet比赛。从那以后，这个领域再也没有回头。"
   },
-  "9c39765865c1": {
+  "5ca53deaad41": {
    "scene": "Hook",
-   "en": "The pieces swing around, and the boundary between the colours bends to follow the spirals, until nearly every point is on the right side. <bookmark mark='a'/> A network is just this: many flat pieces, glued together, placed by gradient descent. This part is about why that works, and what it takes to make it work.",
-   "zh": "这些小块四处转动，两种颜色之间的边界也跟着弯曲，顺着螺旋走，直到几乎每个点都落在正确的一侧。<bookmark mark='a'/>网络就是这么回事：许多平的小块，拼接在一起，由梯度下降摆放到位。这一部分讲的是，为什么这样行得通，以及要让它行得通，需要些什么。"
+   "en": "Here is what a network does, in one picture. Two spirals, wound around each other. No straight line can separate them. <bookmark mark='a'/> Here's a small neural network, three layers of thirty-two simple units, before any training. The thin lines cut the plane into the pieces on which the network is exactly linear. <bookmark mark='b'/> Now train it.",
+   "zh": "网络在做什么，一张图就能说清。两条螺旋，彼此缠绕。没有哪条直线能把它们分开。<bookmark mark='a'/>这是一个小小的神经网络，3层，每层32个简单的单元，还没有经过任何训练。那些细线把平面切成一块一块，在每一块上，这个网络都恰好是线性的。<bookmark mark='b'/>现在，开始训练它。"
   },
-  "4ffb96aac7f4": {
+  "f0bb995d344a": {
    "scene": "Hook",
-   "en": "We'll see why one layer of these units can approximate anything, what depth adds, how to keep signals alive through fifty layers, and the one trick that lets networks get really deep. <bookmark mark='a'/> And at the end, the first neural language model takes its place on the scoreboard.",
-   "zh": "我们会看到，为什么一层这样的单元就能逼近任何东西；深度又多带来了什么；怎样让信号穿过50层还不消失；以及让网络能变得非常深的那一个诀窍。<bookmark mark='a'/>最后，第一个神经语言模型，会在记分牌上占据一席之地。"
+   "en": "The pieces swing around, and the boundary between the colours bends to follow the spirals, until 100 percent of the points are on the right side. <bookmark mark='a'/> A network is just this: many flat pieces, glued together, placed by gradient descent. This part is about why that works, who found it out, and what it takes to make it work.",
+   "zh": "这些小块四处转动，两种颜色之间的边界也弯过来顺着螺旋走，直到100%的点落在正确的一侧。<bookmark mark='a'/>网络就是这么回事：许多平的小块，拼接在一起，由梯度下降摆放到位。这一部分讲的是：为什么这样行得通，是谁发现的，以及要让它行得通，需要些什么。"
   },
-  "013d3f3cf596": {
+  "a4c438309c1b": {
+   "scene": "Hook",
+   "en": "This is Part 9 of AI, Built, in the second act: learning from data. <bookmark mark='a'/> In it: the perceptron and its proof; backpropagation; what networks can represent; why deep networks were hard to train, and the fixes; the block inside today's language models; and a neural language model on our scoreboard.",
+   "zh": "这是《人工智能，从零搭建》的第9部分，属于第二幕：从数据中学习。<bookmark mark='a'/>这一部分讲：感知机和它的证明；反向传播；网络能表示什么；深层网络为什么难训练，以及修正的办法；今天语言模型里的那种块；还有登上我们记分牌的一个神经语言模型。"
+  },
+  "12619f718821": {
+   "scene": "Neurons",
+   "en": "Chapter one. The first neurons.",
+   "zh": "第1章。最早的神经元。"
+  },
+  "c86d15c43161": {
+   "scene": "Neurons",
+   "en": "In 1943, Warren McCulloch, a neurophysiologist, and Walter Pitts, a young logician, published a logical calculus of the ideas immanent in nervous activity. Their neuron is a switch. <bookmark mark='a'/> Its inputs are zero or one, and each comes in with a weight. <bookmark mark='b'/> The unit fires, it outputs a one, when the weighted sum reaches a threshold. <bookmark mark='c'/> With both weights one and a threshold of two, it fires only when both inputs are on: that's AND. <bookmark mark='d'/> Lower the threshold to one, and it fires when either is on: OR. <bookmark mark='e'/> One input with weight minus one and threshold zero gives NOT. From AND, OR and NOT you can build any logical formula, so a network of these units can compute anything a logic circuit can. But every weight was set by hand. Nothing learned.",
+   "zh": "1943年，神经生理学家沃伦·麦卡洛克和年轻的逻辑学家沃尔特·皮茨，发表了《神经活动中内在思想的逻辑演算》。他们的神经元是一个开关。<bookmark mark='a'/>它的输入是0或1，每个输入都带着一个权重进来。<bookmark mark='b'/>当加权和达到一个阈值时，这个单元就放电，输出1。<bookmark mark='c'/>两个权重都取1、阈值取2，只有两个输入都打开时它才放电：这就是“与”。<bookmark mark='d'/>把阈值降到1，任何一个输入打开它就放电：这是“或”。<bookmark mark='e'/>一个输入、权重取负1、阈值取0，就得到“非”。用与、或、非，可以搭出任何逻辑公式，所以这些单元组成的网络，能算出逻辑电路能算的任何东西。可是每个权重都是手工设定的。什么也没有学。"
+  },
+  "ecd675b7e9b8": {
+   "scene": "Neurons",
+   "en": "Where would learning come from? In 1949 the psychologist Donald Hebb proposed an answer, for real neurons. <bookmark mark='a'/> When an axon of cell A is near enough to excite a cell B, and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells, such that A's efficiency, as one of the cells firing B, is increased. <bookmark mark='b'/> In symbols: strengthen a connection in proportion to the activity at both of its ends. Decades later it was summed up as: cells that fire together, wire together.",
+   "zh": "学习从哪里来？1949年，心理学家唐纳德·赫布针对真实的神经元，提出了一个答案。<bookmark mark='a'/>当细胞A的轴突离细胞B足够近、能够激发它，并且反复地、持续地参与让它放电时，一个或两个细胞里就会发生某种生长过程或代谢变化，使得A作为让B放电的细胞之一，效率提高了。<bookmark mark='b'/>用符号来说：一条连接加强的幅度，和它两端的活动成正比。几十年后，人们把它概括成一句话：一起放电的细胞，连在一起。"
+  },
+  "3ec7ca364eca": {
+   "scene": "Neurons",
+   "en": "In 1958 Frank Rosenblatt, a psychologist at the Cornell Aeronautical Laboratory, put the two ideas together: a McCulloch and Pitts unit whose weights are learned from examples. He called it the perceptron. <bookmark mark='a'/> That July he showed it, simulated on an IBM 704 computer: after fifty trials, it had taught itself to tell cards marked on the left from cards marked on the right. <bookmark mark='b'/> The New York Times reported that the Navy expected the machine to walk, talk, see, write, reproduce itself, and be conscious of its existence. <bookmark mark='c'/> Then he built it. The Mark I Perceptron, shown in 1960, had a camera of four hundred photocells, twenty by twenty, wired at random to five hundred and twelve association units, which fed eight response units. <bookmark mark='d'/> Its weights were potentiometers, turned by electric motors as it learned.",
+   "zh": "1958年，康奈尔航空实验室的心理学家弗兰克·罗森布拉特，把这两个想法放在了一起：一个麦卡洛克–皮茨单元，它的权重从例子中学出来。他把它叫作感知机。<bookmark mark='a'/>那年7月，他在一台IBM 704计算机上模拟演示了它：试了50次之后，它自己学会了区分标记在左边的卡片和标记在右边的卡片。<bookmark mark='b'/>《纽约时报》报道说，海军期待这台机器能走路、说话、看、写字、复制自己，并且意识到自己的存在。<bookmark mark='c'/>然后他把它造了出来。1960年展出的Mark I感知机，有一台由400个光电管组成的相机，20乘20，随机地连到512个联想单元上，这些单元再连到8个响应单元。<bookmark mark='d'/>它的权重是电位器，在它学习的时候由电动机转动。"
+  },
+  "0e52a21cbc34": {
+   "scene": "Neurons",
+   "en": "Two years later, at Stanford, Bernard Widrow and his student Ted Hoff built ADALINE, an adaptive linear neuron, with a different rule. <bookmark mark='a'/> The perceptron changes its weights only after a mistake, and then by the whole input. <bookmark mark='b'/> Widrow and Hoff instead wrote down the squared error on one example, before the threshold, <bookmark mark='c'/> took its gradient, <bookmark mark='d'/> and stepped a little way downhill, on every example, in proportion to the error. <bookmark mark='e'/> That's the least mean squares rule, and it is stochastic gradient descent: the update that trains every network in this series, and the subject of Part 11.",
+   "zh": "两年后，在斯坦福，伯纳德·威德罗和他的学生特德·霍夫造出了ADALINE，一个自适应线性神经元，用的是另一条规则。<bookmark mark='a'/>感知机只在犯错之后才改权重，而且一改就是整个输入。<bookmark mark='b'/>威德罗和霍夫则写下一个例子上的平方误差，取的是阈值之前的值，<bookmark mark='c'/>求出它的梯度，<bookmark mark='d'/>然后在每个例子上都往下坡走一小步，步子和误差成正比。<bookmark mark='e'/>这就是最小均方规则，它就是随机梯度下降：本系列里训练每一个网络的那种更新，也是第11部分的主题。"
+  },
+  "020ea991b360": {
+   "scene": "Perceptron",
+   "en": "Chapter two. The perceptron learns.",
+   "zh": "第2章。感知机在学习。"
+  },
+  "4455c2a1ef16": {
+   "scene": "Perceptron",
+   "en": "Here is Rosenblatt's learning rule, in modern notation. Each example is a point x with a label y, plus one or minus one. <bookmark mark='a'/> The perceptron predicts the sign of w dot x: which side of the line where w dot x is zero the point falls on. The weights w form an arrow at right angles to that line. <bookmark mark='b'/> When it gets an example wrong, it adds y times x to w. <bookmark mark='c'/> For a positive point on the wrong side, that turns the arrow toward the point, and the line swings to put the point on its side, or at least nearer to it. That's all there is. A constant input of one gives the line a bias, so it needn't pass through the middle.",
+   "zh": "这是罗森布拉特的学习规则，用今天的记号来写。每个例子是一个点x，带着一个标签y，取正1或负1。<bookmark mark='a'/>感知机预测w点乘x的符号：也就是这个点落在w点乘x等于0的那条线的哪一侧。权重w是一根箭头，和那条线垂直。<bookmark mark='b'/>当它把一个例子判错时，就把y乘x加到w上。<bookmark mark='c'/>对一个落在错误一侧的正例来说，这会让箭头朝这个点转过去，那条线也随之摆动，把这个点放到它该在的一侧，至少离那一侧更近。就这么简单。再加一个恒为1的输入，这条线就有了偏置，不必穿过正中间。"
+  },
+  "2e5fb12f0d7e": {
+   "scene": "Perceptron",
+   "en": "Here it is on 50 points that some line can separate. It starts with all its weights at zero. <bookmark mark='a'/> Every time it meets a point on the wrong side, the line jumps. <bookmark mark='b'/> In its first pass through the data it makes 6 mistakes, and 7 more in the passes after that. <bookmark mark='c'/> After 13 mistakes in all, a whole pass goes by without one, and it stops: every point is on its own side.",
+   "zh": "这是它在50个点上的表现，这些点可以被某条直线分开。一开始，它所有的权重都是0。<bookmark mark='a'/>每当它遇到一个落在错误一侧的点，那条线就跳一下。<bookmark mark='b'/>第一遍过数据，它犯了6次错，之后几遍又犯了7次。<bookmark mark='c'/>一共犯了13次错之后，整整一遍下来一次错也没有，它就停了：每个点都在自己的一侧。"
+  },
+  "511d20e8d5b2": {
+   "scene": "Perceptron",
+   "en": "Is it guaranteed to stop? In 1962 Albert Novikoff proved that it is, whenever some line separates the data. <bookmark mark='p1'/> Suppose every point lies within a distance R of the origin, <bookmark mark='p2'/> and some unit vector w star puts every point on its side with room to spare, a margin gamma. <bookmark mark='a'/> Watch two numbers. First, w's agreement with w star. Each mistake adds y x, and y x dot w star is at least gamma. <bookmark mark='b'/> So after k mistakes, the agreement is at least k gamma: it grows in proportion to k. <bookmark mark='c'/> Second, w's length. A mistake means y times w dot x was not positive, so the middle term can't help: the squared length grows by at most R squared. <bookmark mark='d'/> After k mistakes, at most k R squared: the length grows only like the square root of k. <bookmark mark='e'/> But the agreement with a unit vector can never exceed the length. So k gamma is at most root k times R. <bookmark mark='f'/> Square both ends and divide: the number of mistakes is at most R over gamma, squared. Something that grows like k can't stay below something that grows like root k for long.",
+   "zh": "它一定会停下来吗？1962年，阿尔伯特·诺维科夫证明：只要有某条直线能把数据分开，它就一定会停。<bookmark mark='p1'/>假设每个点到原点的距离都不超过R，<bookmark mark='p2'/>并且有某个单位向量w星，能把每个点放在它该在的一侧，还留有余地，这个余量叫作间隔γ。<bookmark mark='a'/>盯住两个数。第一个，w和w星的吻合程度。每犯一次错，就加上y x，而y x点乘w星至少是γ。<bookmark mark='b'/>所以犯了k次错之后，吻合程度至少是k乘γ：它和k成正比地增长。<bookmark mark='c'/>第二个，w的长度。犯错意味着y乘w点乘x不是正的，所以中间那一项帮不上忙：长度的平方，每次最多增加R的平方。<bookmark mark='d'/>犯了k次错之后，最多是k乘R的平方：长度只按k的平方根增长。<bookmark mark='e'/>可是和一个单位向量的吻合程度，永远不会超过长度。所以k乘γ，最多是根号k乘R。<bookmark mark='f'/>两边平方再相除：犯错的次数，最多是R除以γ的平方。一个按k增长的量，不可能长久地待在一个按根号k增长的量下面。"
+  },
+  "98e89de108f3": {
+   "scene": "Perceptron",
+   "en": "That's the perceptron convergence theorem. The bound doesn't depend on how many points there are, or the order they come in, only on how much room there is between the classes.",
+   "zh": "这就是感知机收敛定理。这个上界和有多少个点无关，也和它们来的顺序无关，只取决于两类之间留了多大的空隙。"
+  },
+  "77493bdfeb85": {
+   "scene": "Perceptron",
+   "en": "For our points, R is 2.78 and the best margin gamma is 0.152, so the theorem allows 334 mistakes. It made 13. <bookmark mark='a'/> Shrink the margin, data set by data set, and run the perceptron twenty times on each, in different orders. <bookmark mark='b'/> The bound always holds, and it's pessimistic: the worst run uses at most 16 percent of it. <bookmark mark='c'/> Two things the theorem doesn't promise. The line it finds is a separating line, not the one with the widest margin; finding that one is the support vector machine of Part 6. And if no line separates the data, the perceptron never stops.",
+   "zh": "对我们这些点来说，R是2.78，最好的间隔γ是0.152，所以定理允许最多334次错。它实际犯了13次。<bookmark mark='a'/>一个数据集接一个数据集地缩小间隔，在每个数据集上用不同的顺序把感知机跑20遍。<bookmark mark='b'/>上界总是成立，而且它很悲观：最差的一次，也只用掉了它的16%。<bookmark mark='c'/>有两件事，这个定理并不保证。它找到的是一条能分开数据的线，而不是间隔最宽的那一条；找那一条，是第6部分的支持向量机。而如果没有任何直线能分开数据，感知机就永远停不下来。"
+  },
+  "a548c3d4ca7f": {
+   "scene": "XOR",
+   "en": "Chapter three. XOR, and the first winter.",
+   "zh": "第3章。异或，以及第一次寒冬。"
+  },
+  "f7c1f9077394": {
+   "scene": "XOR",
+   "en": "Here is the simplest thing a single unit cannot do. XOR, exclusive or: fire when exactly one input is on. <bookmark mark='a'/> Suppose a threshold unit did it. The input zero, zero must not fire, so the threshold is positive. <bookmark mark='b'/> Each input alone must fire, so each weight is at least theta. <bookmark mark='c'/> Both together must not fire, so the two weights add up to less than theta. <bookmark mark='d'/> But adding the middle line, they add up to at least two theta, which is more than theta. A contradiction: no line puts the two blue points on one side and the two pink ones on the other. <bookmark mark='e'/> Run the perceptron on it anyway, and it never settles: in every one of 40 passes, it makes between 2 and 4 mistakes.",
+   "zh": "这是单个单元做不到的最简单的事。异或：恰好有一个输入打开时才放电。<bookmark mark='a'/>假设有一个阈值单元能做到。输入0、0不能放电，所以阈值是正的。<bookmark mark='b'/>每个输入单独打开时都必须放电，所以每个权重都至少是θ。<bookmark mark='c'/>两个一起打开时不能放电，所以两个权重加起来小于θ。<bookmark mark='d'/>可是把中间那一行加起来，它们至少是2倍θ，比θ大。矛盾了：没有哪条直线能把两个蓝点放在一侧、两个粉点放在另一侧。<bookmark mark='e'/>硬让感知机去跑，它永远也稳定不下来：在40遍里的每一遍，它都犯2到4次错。"
+  },
+  "52d48dde3d09": {
+   "scene": "XOR",
+   "en": "In 1969 Marvin Minsky and Seymour Papert of MIT published Perceptrons, a book of careful theorems about what these machines can compute. <bookmark mark='a'/> A single layer of trainable weights can't compute parity, and can't tell a connected figure from a disconnected one, unless some of its units see nearly the whole picture at once. <bookmark mark='b'/> Networks with more layers could do more, and they knew it, but nobody knew how to train them. Of such machines, the authors wrote that it was an important research problem to elucidate, or reject, their intuitive judgment that the extension is sterile. <bookmark mark='c'/> Rosenblatt died in a boating accident in 1971. Money and students went to the symbolic AI of Part 2. <bookmark mark='d'/> Through the seventies only a few kept going; Kunihiko Fukushima's neocognitron of 1980 is the ancestor of the convolutional networks of Part 10, and John Hopfield's network of 1982 brought physicists back to the subject.",
+   "zh": "1969年，麻省理工学院的马文·明斯基和西摩·派珀特出版了《感知机》，一本用严谨的定理讨论这些机器能算什么的书。<bookmark mark='a'/>单层可训练的权重算不出奇偶性，也分不清一个图形是连通的还是断开的，除非它的某些单元一下子就能看到几乎整幅图。<bookmark mark='b'/>层数更多的网络能做得更多，他们也知道，但没有人知道怎么训练它们。对于这样的机器，作者写道：阐明或者推翻“这种扩展是贫瘠的”这一直觉判断，是一个重要的研究问题。<bookmark mark='c'/>1971年，罗森布拉特在一次划船事故中去世。经费和学生都转向了第2部分讲的符号主义人工智能。<bookmark mark='d'/>整个七十年代，只有少数人坚持了下来；福岛邦彦1980年的新认知机，是第10部分卷积网络的祖先；约翰·霍普菲尔德1982年的网络，又把物理学家们拉回了这个领域。"
+  },
+  "a5d00745137a": {
+   "scene": "XOR",
+   "en": "What a single unit can't do, two layers can. Put two units in the middle, hidden between the input and the output, and train all the weights by gradient descent, with the series' own automatic differentiation from Part 4. <bookmark mark='a'/> On the left, the input square, tinted by what the network says about every point of it. <bookmark mark='b'/> On the right, the same square as the hidden layer sees it: every grid line, bent by the two tanh units, and the output unit's line, in yellow.",
+   "zh": "单个单元做不到的，两层可以。在中间放两个单元，藏在输入和输出之间，然后用梯度下降训练所有的权重，用的是本系列第4部分自己写的自动微分。<bookmark mark='a'/>左边是输入的正方形，按网络对每一点的判断着色。<bookmark mark='b'/>右边是隐藏层眼中的同一个正方形：每一条网格线，都被两个tanh单元弯折过了；那条黄线，是输出单元画的直线。"
+  },
+  "70c169244653": {
+   "scene": "XOR",
+   "en": "Now train. <bookmark mark='a'/> The hidden layer bends and folds the square, until the two blue points sit on one side of a straight line and the two pink on the other. Then the output unit, which can only draw a line, has an easy job. The loss falls from 0.73 to 0.0011. <bookmark mark='b'/> One honest caveat: from 20 random starts, 7 found a solution like this. The others got stuck with one point wrong, in a local minimum of the loss. This is one that didn't.",
+   "zh": "现在开始训练。<bookmark mark='a'/>隐藏层把正方形弯折起来，直到两个蓝点落在一条直线的一侧，两个粉点落在另一侧。这时，只会画直线的输出单元，任务就很轻松了。损失从0.73降到0.0011。<bookmark mark='b'/>说句实话：从20个随机起点出发，只有7个找到了这样的解。其余的都卡住了，有一个点判错，困在损失的一个局部极小值里。这里放的是没有卡住的一个。"
+  },
+  "a2c372e109ae": {
+   "scene": "Backprop",
+   "en": "Chapter four. Backpropagation.",
+   "zh": "第4章。反向传播。"
+  },
+  "656f3941c660": {
+   "scene": "Backprop",
+   "en": "XOR showed what was missing: a way to train the units in the middle. At the output, the error is plain to see: compare the answer with the target. <bookmark mark='a'/> But how much is a hidden unit to blame? Its effect on the loss passes through every unit after it. <bookmark mark='b'/> Write the network layer by layer. A layer's weighted sums, z, are a weight matrix times the previous layer's outputs, plus a bias; its outputs, a, bend z with a nonlinearity, phi; and the loss depends on the last layer. <bookmark mark='c'/> The chain rule from Part 4 answers the question, and it can be organized so that a single sweep backwards answers it for every weight at once.",
+   "zh": "异或暴露了缺的是什么：一种训练中间那些单元的方法。在输出端，误差一目了然：把答案和目标比一比。<bookmark mark='a'/>可是一个隐藏单元该负多大的责任？它对损失的影响，要经过它后面的每一个单元。<bookmark mark='b'/>把网络一层一层地写出来。一层的加权和z，等于一个权重矩阵乘上一层的输出，再加偏置；它的输出a，是用非线性函数φ把z弯折一下；损失取决于最后一层。<bookmark mark='c'/>第4部分的链式法则能回答这个问题，而且可以把它组织起来，只往回扫一遍，就同时回答每一个权重的问题。"
+  },
+  "6f3b1fd4af4b": {
+   "scene": "Backprop",
+   "en": "Define delta for a layer: how much the loss changes when that layer's weighted sums change. <bookmark mark='a'/> At the top it's immediate: the loss's gradient with respect to the outputs, times the slope of the bend at each unit. <bookmark mark='b'/> Now go down one layer. Layer l's sums reach the loss only through its outputs, and those only through the next layer's sums. The chain rule says: take the next layer's delta, send it back through the transpose of the same weight matrix, and multiply by the slope of the bend. <bookmark mark='c'/> And once you know a layer's delta, its weights' gradient is just delta times the outputs coming into it, because the sums are linear in the weights. <bookmark mark='d'/> Two lines, applied layer after layer from the top: that's backpropagation.",
+   "zh": "为每一层定义一个δ：这一层的加权和变化时，损失变化多少。<bookmark mark='a'/>在最顶层，它是现成的：损失对输出的梯度，乘上每个单元处弯折的斜率。<bookmark mark='b'/>现在往下走一层。第l层的和，只能通过它的输出影响损失，而输出又只能通过下一层的和影响损失。链式法则说：拿下一层的δ，通过同一个权重矩阵的转置送回来，再乘上弯折的斜率。<bookmark mark='c'/>一旦知道了一层的δ，它的权重的梯度，就是δ乘上进入这一层的输出，因为这些和对权重是线性的。<bookmark mark='d'/>两行公式，从顶层开始一层一层地用下去：这就是反向传播。"
+  },
+  "3a07c9db38cf": {
+   "scene": "Backprop",
+   "en": "Picture it as traffic. <bookmark mark='a'/> In the forward pass, values flow up: each layer multiplies by its weights and bends. <bookmark mark='b'/> At the top the loss compares the answer with the target. <bookmark mark='c'/> In the backward pass, errors flow down the same wires, through the transposed matrices, scaled at each unit by the slope of its bend, and every weight gets its gradient on the way past. <bookmark mark='d'/> Pause and predict: how expensive is the backward pass, compared with the forward one? <bookmark mark='e'/> Each layer does two matrix products going back, one for the deltas and one for the weight gradients, against one going forward. So a training step costs about three forward passes, about six arithmetic operations per weight per example. That six comes back in Part 12, in the formula for the cost of training a language model.",
+   "zh": "把它想成交通。<bookmark mark='a'/>前向传播时，数值往上流：每一层乘上自己的权重，再弯折一下。<bookmark mark='b'/>在顶上，损失把答案和目标比一比。<bookmark mark='c'/>反向传播时，误差沿着同样的导线往下流，经过转置后的矩阵，在每个单元处乘上它的弯折斜率，每一个权重都在误差经过时拿到自己的梯度。<bookmark mark='d'/>停下来预测一下：反向传播比前向传播贵多少？<bookmark mark='e'/>往回走时，每一层要做两次矩阵乘法，一次算δ，一次算权重的梯度；往前走只做一次。所以训练一步大约要花三次前向传播的代价，每个权重、每个例子大约6次算术运算。这个6会在第12部分再出现，就在估算训练语言模型的代价的那个公式里。"
+  },
+  "2886a828f913": {
+   "scene": "Backprop",
+   "en": "Let's check it on chapter three's XOR network, at random weights. <bookmark mark='a'/> Here are its nine gradients three ways: from the series' own automatic differentiation, which knows nothing about networks; <bookmark mark='b'/> from the delta equations, written out by hand; <bookmark mark='c'/> and by brute force, nudging each weight a millionth up and down and watching the loss. <bookmark mark='d'/> They agree to the last printed digit. Backpropagation is not an approximation: it is the exact gradient, computed in one sweep, where the brute-force way needs two forward passes for every weight.",
+   "zh": "我们在第3章的异或网络上，随便取一组权重，检验一下。<bookmark mark='a'/>这是它的9个梯度，用三种方法算出来：一种来自本系列自己的自动微分，它对网络一无所知；<bookmark mark='b'/>一种来自手写出来的δ公式；<bookmark mark='c'/>还有一种是蛮力法，把每个权重往上和往下各推一百万分之一，看损失怎么变。<bookmark mark='d'/>它们一直吻合到最后一位显示的数字。反向传播不是近似：它就是精确的梯度，扫一遍就全算出来，而蛮力法每个权重都要做两次前向传播。"
+  },
+  "ead723993128": {
+   "scene": "Backprop",
+   "en": "The idea was found more than once. <bookmark mark='a'/> In 1970 Seppo Linnainmaa, a Finnish master's student, described the reverse mode of automatic differentiation, with no networks in sight. <bookmark mark='b'/> In 1974 Paul Werbos proposed training networks this way, in his Harvard thesis, and few noticed. <bookmark mark='c'/> In 1986 David Rumelhart, Geoffrey Hinton and Ronald Williams showed in Nature that networks trained by back-propagating errors learn useful features in their hidden units, and the field woke up. <bookmark mark='d'/> By 1989 Yann LeCun's networks at Bell Labs were reading handwritten zip codes. Hidden layers could be trained. The next question: what can they represent?",
+   "zh": "这个想法不止一次被人发现。<bookmark mark='a'/>1970年，芬兰的硕士生塞波·林纳因马描述了自动微分的反向模式，那时还完全没有网络的影子。<bookmark mark='b'/>1974年，保罗·韦伯斯在哈佛的博士论文里提出用这种方法训练网络，几乎没人注意。<bookmark mark='c'/>1986年，戴维·鲁梅尔哈特、杰弗里·辛顿和罗纳德·威廉斯在《自然》上表明：用反向传播误差训练出来的网络，能在隐藏单元里学到有用的特征，这个领域醒了过来。<bookmark mark='d'/>到1989年，杨立昆在贝尔实验室的网络已经在读手写的邮政编码了。隐藏层能训练了。下一个问题：它们能表示什么？"
+  },
+  "1dfa084f25bd": {
    "scene": "Universal",
-   "en": "Chapter one. What one layer can do.",
-   "zh": "第1章。一层能做到什么。"
+   "en": "Chapter five. What one layer can do.",
+   "zh": "第5章。一层能做到什么。"
   },
-  "a3499fa421d9": {
+  "9606b10500d7": {
    "scene": "Universal",
-   "en": "A neural network is built from one kind of part. A unit takes some numbers, <bookmark mark='a'/> multiplies each by a weight and adds them up, plus a constant, exactly like part six's logistic regression, <bookmark mark='b'/> and then bends the result: below zero becomes zero. That bend is called a ReLU. <bookmark mark='c'/> Along any one input, a unit is a hinge: flat, then rising.",
-   "zh": "神经网络只用一种零件搭成。一个单元接收几个数，<bookmark mark='a'/>把每个数乘上一个权重，再全部加起来，外加一个常数，和第6部分的逻辑回归一模一样，<bookmark mark='b'/>然后把结果弯折一下：小于0的，都变成0。这个弯折，叫作ReLU。<bookmark mark='c'/>只沿着任意一个输入来看，一个单元就是一个铰链：先是平的，然后往上升。"
+   "en": "Backpropagation can train any layer. So what can layers represent? Start with one unit, as modern networks build it. It takes some numbers, <bookmark mark='a'/> multiplies each by a weight and adds them up, plus a constant, exactly like Part 6's logistic regression, <bookmark mark='b'/> and then bends the result: anything below zero becomes zero. That bend, the rectified linear unit or ReLU, replaced the smooth S-shaped curves around 2010. <bookmark mark='c'/> Along any one input, a unit is a hinge: flat, then rising.",
+   "zh": "反向传播能训练任何一层。那么，层能表示什么？先从一个单元说起，按今天网络的造法。它接收一些数，<bookmark mark='a'/>把每个数乘上一个权重再加起来，再加一个常数，和第6部分的逻辑回归一模一样，<bookmark mark='b'/>然后把结果弯折一下：小于0的都变成0。这个弯折叫作线性整流单元，也就是ReLU，2010年前后，它取代了平滑的S形曲线。<bookmark mark='c'/>沿着任何一个输入看，一个单元就是一个合页：先是平的，然后往上升。"
   },
-  "16c1d13dc5f6": {
+  "a72cbd044e3f": {
    "scene": "Universal",
-   "en": "Add hinges together, each with its own position and slope, and you can draw any curve you like. <bookmark mark='a'/> Two hinges: a crude zigzag. <bookmark mark='b'/> Four. Eight. Sixteen. Sixty-four, and the miss is down to about one part in a thousand. <bookmark mark='c'/> That's the universal approximation theorem, from 1989: one layer of enough units can approximate any continuous function. It says a network can represent the answer. It doesn't say how many units it takes, or whether training will find them.",
-   "zh": "把铰链加在一起，每个都有自己的位置和斜率，你就能画出任何想要的曲线。<bookmark mark='a'/>两个铰链：一条粗糙的折线。<bookmark mark='b'/>4个。8个。16个。到了64个，偏差已经降到大约千分之一。<bookmark mark='c'/>这就是万能近似定理，1989年提出：只要单元足够多，一层就能逼近任何连续函数。它说的是，网络能够表示出答案。它没有说需要多少个单元，也没有说训练能不能找到它们。"
+   "en": "Add hinges together, each with its own position and slope, and you can draw a curve. <bookmark mark='a'/> Two hinges make a crude zigzag. <bookmark mark='b'/> Four. Eight. Sixteen. Sixty-four, and the typical miss is down to 0.0014.",
+   "zh": "把一个个合页加起来，每个都有自己的位置和斜率，就能画出一条曲线。<bookmark mark='a'/>两个合页，画出一条粗糙的折线。<bookmark mark='b'/>4个。8个。16个。64个，典型误差降到了0.0014。"
   },
-  "1139b05c6181": {
+  "725344f2c077": {
+   "scene": "Universal",
+   "en": "How fast does the miss shrink? <bookmark mark='p'/> Joining the dots at the hinges gives straight chords, and over a piece of width h a chord misses a smooth curve by at most h squared over eight, times the curve's bending. <bookmark mark='a'/> With n hinges spread over the interval, h is six over n plus one. <bookmark mark='b'/> So the miss falls like one over n squared: double the hinges, and it quarters. Least squares can only do better than joining the dots. <bookmark mark='c'/> On log-log axes that's a line of slope minus two, and the measured slope is -2.01.",
+   "zh": "误差缩小得有多快？<bookmark mark='p'/>在合页处把点连起来，得到一段段直的弦；在宽度为h的一段上，弦和一条光滑曲线的差距，最多是h的平方除以8，再乘上曲线的弯曲程度。<bookmark mark='a'/>n个合页均匀分布在区间上，h就是n加1分之6。<bookmark mark='b'/>所以误差按n的平方分之1下降：合页加倍，误差变成4分之1。最小二乘只会比连点做得更好。<bookmark mark='c'/>在双对数坐标上，这是一条斜率为负2的直线，实测的斜率是-2.01。"
+  },
+  "2e346724b241": {
+   "scene": "Universal",
+   "en": "Here's another way to see it. <bookmark mark='a'/> Take three hinges: one up, one down twice as steeply, and one up again. <bookmark mark='b'/> Their sum is a bump: zero, up, down, and zero again. <bookmark mark='c'/> Put a bump at each of a row of points, each as tall as the curve is there, and add them up: you get the curve, joined dot to dot. <bookmark mark='d'/> Any continuous curve can be drawn this way, as finely as you like. In more dimensions the bumps take more units each, but the idea survives.",
+   "zh": "还有一种看法。<bookmark mark='a'/>取三个合页：一个往上，一个以两倍的陡度往下，再一个往上。<bookmark mark='b'/>它们的和是一个鼓包：先是0，升上去，降下来，再回到0。<bookmark mark='c'/>在一排点上各放一个鼓包，每个鼓包的高度等于曲线在那里的高度，再把它们加起来：就得到了这条曲线，用折线把点连起来。<bookmark mark='d'/>任何连续曲线都能这样画出来，想多精细就多精细。在更高的维度里，每个鼓包要用更多的单元，但这个想法依然成立。"
+  },
+  "5f4484cec421": {
+   "scene": "Universal",
+   "en": "That's the universal approximation theorem, proved in 1989 by George Cybenko for S-shaped units, and by Kurt Hornik, Maxwell Stinchcombe and Halbert White in general. In 1993 Moshe Leshno and colleagues pinned it down: any continuous activation works, as long as it is not a polynomial. <bookmark mark='a'/> It says a network can represent the answer. <bookmark mark='b'/> It doesn't say how many units that takes, <bookmark mark='c'/> or whether training will find them, <bookmark mark='d'/> or whether what's learned from examples holds up on new ones, the subject of Part 8. The first question has a surprising answer.",
+   "zh": "这就是万能近似定理。1989年，乔治·切本科对S形单元证明了它，库尔特·霍尼克、马克斯韦尔·斯廷奇库姆和哈尔伯特·怀特证明了一般的情形。1993年，摩西·莱什诺和同事们把它说清楚了：任何连续的激活函数都行，只要它不是多项式。<bookmark mark='a'/>它说的是，网络能表示出答案。<bookmark mark='b'/>它没说需要多少个单元，<bookmark mark='c'/>也没说训练能不能找到它们，<bookmark mark='d'/>也没说从例子里学到的东西，在新例子上还管不管用，那是第8部分的主题。第一个问题，有一个出人意料的答案。"
+  },
+  "5c375d385d8d": {
+   "scene": "Barron",
+   "en": "Chapter six. Escaping the curse of dimensionality.",
+   "zh": "第6章。摆脱维数灾难。"
+  },
+  "0db0fcfa3ceb": {
+   "scene": "Barron",
+   "en": "One layer can draw anything; how many units does it take? A table does the same job with one entry per point of a grid, and joining the dots in one dimension is exactly a layer of hinges. <bookmark mark='a'/> But a grid with m points along each axis has m to the d points in d dimensions. <bookmark mark='b'/> Turn it around: with n points to spend, the spacing is n to the minus one over d, <bookmark mark='c'/> and the miss shrinks like n to the minus two over d. <bookmark mark='d'/> In a hundred dimensions, halving the miss takes two to the fiftieth times as many points. That's the curse of dimensionality, Richard Bellman's phrase.",
+   "zh": "一层能画出任何东西；那要多少个单元？一张表格也能做同样的事，网格上的每个点存一个值，而在一维里，连点正好就是一层合页。<bookmark mark='a'/>可是每个轴上放m个点的网格，在d维里就有m的d次方个点。<bookmark mark='b'/>反过来说：有n个点可以用，间距就是n的负d分之1次方，<bookmark mark='c'/>误差按n的负d分之2次方缩小。<bookmark mark='d'/>在100维里，要把误差减半，点数就得乘上2的50次方。这就是维数灾难，这个说法来自理查德·贝尔曼。"
+  },
+  "7071cceba37f": {
+   "scene": "Barron",
+   "en": "In 1993 Andrew Barron showed that networks escape this, for a large class of functions, and the reason fits on one screen. Take a smooth bump, a Gaussian, in d dimensions. <bookmark mark='a'/> It is exactly an average of cosine waves, one for each direction omega, weighted by its Fourier transform. <bookmark mark='b'/> Draw n directions at random and average just those n waves: a network with n units, each a wave in one direction. <bookmark mark='c'/> At any point, that's an average of n independent draws, so its squared error is the variance of one draw, divided by n. <bookmark mark='d'/> And a cosine lies between minus one and one, so the error is at most one over n, with no d anywhere. <bookmark mark='e'/> If random units do that well on average, some particular choice of n units does at least as well, in any dimension. The argument is Bernard Maurey's, from probability.",
+   "zh": "1993年，安德鲁·巴伦证明，对一大类函数来说，网络能摆脱这个灾难，而原因一屏就写得下。取一个光滑的鼓包，一个d维的高斯函数。<bookmark mark='a'/>它恰好是一堆余弦波的平均，每个方向ω一个，按它的傅里叶变换加权。<bookmark mark='b'/>随机抽出n个方向，只对这n个波取平均：这就是一个有n个单元的网络，每个单元是一个方向上的波。<bookmark mark='c'/>在任何一点上，这都是n次独立抽样的平均，所以它的平方误差，等于一次抽样的方差除以n。<bookmark mark='d'/>余弦值在负1和1之间，所以误差最多是n分之1，哪里都没有d。<bookmark mark='e'/>既然随机的单元平均来说能做到这么好，就一定有某一组具体的n个单元做得至少一样好，在任何维度里都是。这个论证来自概率论，属于伯纳德·莫雷。"
+  },
+  "0f46d3b56216": {
+   "scene": "Barron",
+   "en": "Here it is, computed. <bookmark mark='a'/> First the grid, in one, two, four and eight dimensions: the lines flatten, with slopes of -2.0, -1.0, -0.57 and -0.34, close to minus two over d. In eight dimensions, 65,536 points still miss by 0.060. <bookmark mark='b'/> Now n random cosine units, in one, four, sixteen and sixty-four dimensions. The four lines lie on top of each other, with slopes between -0.49 and -0.48: the miss falls like one over the square root of n, whatever the dimension. In sixty-four dimensions, 16,384 units miss by 0.0036.",
+   "zh": "这是算出来的结果。<bookmark mark='a'/>先看网格，在1维、2维、4维和8维里：线越来越平，斜率分别是-2.0、-1.0、-0.57和-0.34，接近负d分之2。在8维里，65536个点的误差仍有0.060。<bookmark mark='b'/>再看n个随机的余弦单元，在1维、4维、16维和64维里。四条线叠在一起，斜率在-0.49到-0.48之间：误差按n的平方根分之1下降，和维数无关。在64维里，16384个单元的误差是0.0036。"
+  },
+  "e3ff99734b24": {
+   "scene": "Barron",
+   "en": "Barron's theorem says this for ordinary S-shaped units, for every function whose Fourier transform, weighted by frequency, has a finite total, C f: the squared miss is at most two r C f, squared, over n. <bookmark mark='a'/> He also showed what a fixed basis can't do: any n functions chosen before you see f, such as a grid's, can do no better than n to the minus one over d on this class. The network escapes because it chooses the directions of its units to suit f. <bookmark mark='b'/> The catch: for rough, wiggly functions C f can be astronomically large, and the theorem says nothing about whether gradient descent will find the units. Still, it was the first hint of why networks work in high dimensions.",
+   "zh": "巴伦定理对普通的S形单元也说了同样的事，适用于每一个这样的函数：它的傅里叶变换按频率加权后，总量C f是有限的。平方误差最多是2 r C f的平方，除以n。<bookmark mark='a'/>他还证明了固定的基做不到什么：在你看到f之前就选好的任何n个函数，比如网格的那些，在这一类函数上最多只能做到n的负d分之1次方。网络之所以能摆脱，是因为它会按f来挑选单元的方向。<bookmark mark='b'/>代价是：对粗糙、起伏剧烈的函数，C f可能大得惊人，而且这个定理完全不管梯度下降能不能找到这些单元。不过，这是第一个线索，说明网络为什么能在高维里工作。"
+  },
+  "08700c040fcd": {
    "scene": "Depth",
-   "en": "Chapter two. What depth adds.",
-   "zh": "第2章。深度带来了什么。"
+   "en": "Chapter seven. What depth adds.",
+   "zh": "第7章。深度带来了什么。"
   },
-  "1224ada2c975": {
+  "d73f54fcef3c": {
    "scene": "Depth",
-   "en": "If one layer can do anything, why stack them? Here's the answer in one picture. Two units make a tent: up from zero to one, and back down. <bookmark mark='a'/> Feed the tent into another tent: the line is folded twice, and you get four pieces. <bookmark mark='b'/> Three layers, eight pieces. Five layers, thirty-two. Each layer doubles the pieces, while a single layer would need a unit for every piece. Depth can buy complexity exponentially cheaply.",
-   "zh": "既然一层就无所不能，为什么还要把层叠起来？答案就在一张图里。两个单元，组成一顶帐篷：从0升到1，再降回来。<bookmark mark='a'/>把这顶帐篷，送进另一顶帐篷：这条线被折了两次，得到4段。<bookmark mark='b'/>3层，8段。5层，32段。每多一层，段数就翻一倍；而只用一层的话，每一段都得配一个单元。深度能以指数级的低廉代价，换来复杂性。"
+   "en": "If one layer can do anything, why stack them? Here's the answer in one picture. Two units make a tent: up from zero to one, and back down. <bookmark mark='a'/> Feed the tent into another tent, and the line is folded twice: four pieces. <bookmark mark='b'/> Three layers, eight pieces. Five layers, thirty-two. Each layer doubles the pieces, while one wide layer gets only one more piece per unit. <bookmark mark='c'/> Matus Telgarsky turned this into a theorem in 2016: some functions that a deep, narrow network computes exactly need exponentially many units if the network is shallow.",
+   "zh": "既然一层就无所不能，为什么还要把层叠起来？答案就在一张图里。两个单元组成一顶帐篷：从0升到1，再降回来。<bookmark mark='a'/>把这顶帐篷送进另一顶帐篷，这条线就被折了两次：4段。<bookmark mark='b'/>3层，8段。5层，32段。每多一层，段数就翻一倍，而一层宽的网络，每加一个单元只多一段。<bookmark mark='c'/>2016年，马特乌斯·泰尔加斯基把它变成了一个定理：有些函数，又深又窄的网络能精确算出来，浅的网络却需要指数级多的单元。"
   },
-  "8868b0b8c412": {
+  "cebdab55fa5a": {
    "scene": "Depth",
-   "en": "But that's what depth can do, with weights chosen by hand. What does a random network do? Here are forty-eight units cutting the plane, arranged in one layer, then two, three, four and six. <bookmark mark='a'/> The number of pieces barely changes, and even falls. Hanin and Rolnick showed in 2019 that typical networks have far fewer pieces than the maximum. Depth helps in subtler ways: by making useful functions easy for training to reach.",
-   "zh": "不过，这只是深度在手工挑选权重时能做到的事。随机的网络又会怎样呢？这里是48个单元在切分平面，先排成1层，然后是2层、3层、4层和6层。<bookmark mark='a'/>小块的数目几乎没变，甚至还减少了。2019年，哈宁和罗尔尼克表明：典型的网络，小块数远远少于最大可能的数目。深度的帮助，来得更微妙：它让有用的函数，更容易被训练找到。"
+   "en": "In two dimensions the same trick folds the plane. Here's a square with a picture on it: an F, so you can tell its mirror images apart. <bookmark mark='a'/> A ReLU layer can compute two times the absolute value of x, minus one: that folds the square in half along the middle, and stretches the half back to full size. <bookmark mark='b'/> Now colour each point of the input by where it lands: two mirrored copies of the picture. <bookmark mark='c'/> Fold again, along the other direction: four. Then eight, sixteen, thirty-two. <bookmark mark='d'/> Each layer doubles the number of linear pieces, and whatever the rest of the network draws on the folded square is drawn in every piece at once, mirrored. A deep network can reuse what it has built.",
+   "zh": "在二维里，同样的技巧会折叠平面。这是一个画着图的正方形：一个F，这样你就能分清它的镜像。<bookmark mark='a'/>一层ReLU可以算出x的绝对值的2倍减1：这会把正方形沿中线对折，再把这一半拉伸回原来的大小。<bookmark mark='b'/>现在按每个输入点落到哪里给它上色：图出现了两个互为镜像的副本。<bookmark mark='c'/>沿另一个方向再折一次：4个。然后是8个、16个、32个。<bookmark mark='d'/>每一层都让线性小块的数目翻倍，而网络其余部分在折好的正方形上画的任何东西，都会同时画进每一块里，带着镜像。深层网络可以重复利用它已经搭好的东西。"
   },
-  "b8b6f3f1115e": {
-   "scene": "Signal",
-   "en": "Chapter three. Keeping signals alive.",
-   "zh": "第3章。别让信号消失。"
+  "08f1b85b42fe": {
+   "scene": "Depth",
+   "en": "Let's count pieces properly. Each unit of a first layer is a line in the plane: on one side it's off, on the other it's on. <bookmark mark='a'/> n lines in general position cut the plane into at most one, plus n, plus n choose two pieces, the classic count that Thomas Zaslavsky made general for hyperplanes in 1975. <bookmark mark='b'/> Count them directly for random lines, and they match. Growth like n squared, in the plane; like n to the d in d dimensions. <bookmark mark='c'/> Deep networks can do far better: Guido Montufar and colleagues showed in 2014 that the maximum grows exponentially with depth, as the folds suggest.",
+   "zh": "我们来正式数一数小块。第一层的每个单元，都是平面上的一条线：一侧关闭，另一侧打开。<bookmark mark='a'/>处于一般位置的n条线，最多把平面切成1加n再加n选2块，这个经典的计数，1975年由托马斯·扎斯拉夫斯基推广到了超平面。<bookmark mark='b'/>对随机的线直接数一数，结果吻合。在平面上按n的平方增长；在d维里按n的d次方增长。<bookmark mark='c'/>深层网络能好得多：2014年，吉多·蒙图法尔和同事们证明，最大数目随深度指数增长，正如那些折叠所暗示的。"
   },
-  "3f0f3dfeea73": {
-   "scene": "Signal",
-   "en": "Before training, the weights are random. But random how? What matters is their spread: how far the random starting weights stray from zero. Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way, which is why deep networks once seemed impossible to train.",
-   "zh": "训练开始之前，权重是随机的。可是，怎么个随机法？关键在于它们的分散程度：这些随机的初始权重，离0有多远。让一个信号穿过50层，盯住它的大小。<bookmark mark='a'/>如果抽出的权重稍微小了一点，每一层都会把信号缩小固定的倍数。穿过50层之后，它缩小到大约原来的3000万分之1：消失了。<bookmark mark='b'/>如果稍微大了一点，它就会爆炸，涨到大约1000万。<bookmark mark='c'/>只有一种大小，能让它一层又一层地保持平稳。而梯度往回流的时候，也会以同样的方式消失或者爆炸，这就是为什么，深层网络一度看起来根本没法训练。"
+  "fe21ad1b090f": {
+   "scene": "Depth",
+   "en": "But that's what depth can do, with weights chosen by hand. What does a random network do? Here are forty-eight units cutting the plane, arranged in one layer, then two, three, four and six. <bookmark mark='a'/> The number of pieces barely changes, and even falls. Boris Hanin and David Rolnick proved in 2019 that, at initialization, typical networks have about as many pieces as their number of units to the power of the input dimension, nothing like the maximum, and found the same through training. <bookmark mark='b'/> Our spiral network started with 2,391 pieces and ended with 2,311: training rearranged the pieces far more than it multiplied them. Depth helps in subtler ways, by making useful functions easy for training to reach.",
+   "zh": "不过，这只是深度在手工挑选权重时能做到的事。随机的网络又会怎样？这里是48个单元在切分平面，先排成1层，然后是2层、3层、4层和6层。<bookmark mark='a'/>小块的数目几乎不变，甚至还减少了。2019年，鲍里斯·哈宁和戴维·罗尔尼克证明：在初始化时，典型网络的小块数大约是单元数的输入维数次方，远远不到最大值；他们在训练过程中也发现了同样的情况。<bookmark mark='b'/>我们的螺旋网络一开始有2391块，最后有2311块：训练主要是在重新摆放这些小块，而不是增加它们。深度的帮助来得更微妙：它让有用的函数，更容易被训练找到。"
   },
-  "9831bcbb189a": {
-   "scene": "Signal",
-   "en": "The right size has a simple rule. A unit adds up n inputs, so to keep the sum the same size as each input, each weight's variance, its spread, should be one over n. That's Glorot and Bengio's rule, from 2010, worked out for tanh, a smooth S-shaped bend. <bookmark mark='a'/> A ReLU throws away the negative half of its inputs, so for ReLU networks, double it: two over n. That's He initialization, and it's the steady line we just saw.",
-   "zh": "合适的大小，有一条简单的规则。一个单元要把n个输入加起来，所以，要让这个和跟每个输入一样大，每个权重的方差，也就是它的分散程度，就应该是n分之1。这是格洛罗和本吉奥2010年提出的规则，是针对tanh推导出来的，tanh是一种平滑的S形弯折。<bookmark mark='a'/>ReLU会扔掉输入里为负的那一半，所以对ReLU网络来说，要把它加倍：n分之2。这就是何恺明初始化，也就是我们刚才看到的那条平稳的线。"
+  "c3951fdf37c0": {
+   "scene": "Revival",
+   "en": "Chapter eight. The second winter, and the revival.",
+   "zh": "第8章。第二次寒冬，与复兴。"
   },
-  "b2c7a833ea59": {
+  "0615755b4e79": {
+   "scene": "Revival",
+   "en": "Through the nineties, backpropagation worked for networks with one or two hidden layers. Deeper ones barely trained. <bookmark mark='a'/> In 1991 Sepp Hochreiter, a student in Munich, worked out why. The gradient that reaches an early layer is a product of one factor for every layer above it, and those factors are rarely close to one. <bookmark mark='b'/> Here is a fifty-layer network of S-shaped units, set up the usual way of the time, with a gradient sent down from the top. Each layer multiplies it by the slope of a sigmoid, at most a quarter, and by the weights: about 0.1 times smaller per layer. <bookmark mark='c'/> By the first layer it's ten to the minus 42. The early layers might as well be frozen.",
+   "zh": "整个九十年代，反向传播对只有一两个隐藏层的网络是管用的。更深的网络几乎训练不动。<bookmark mark='a'/>1991年，慕尼黑的学生塞普·霍赫赖特找到了原因。到达前面某一层的梯度，是它上面每一层贡献一个因子的乘积，而这些因子很少接近1。<bookmark mark='b'/>这是一个50层的S形单元网络，按当年通常的方式设置，从顶上送下一个梯度。每一层都要把它乘上sigmoid的斜率，最多4分之1，再乘上权重：每层大约缩小0.1倍。<bookmark mark='c'/>到第一层时，它只剩10的负42次方。前面那几层，还不如冻住算了。"
+  },
+  "e66115fb1342": {
+   "scene": "Revival",
+   "en": "Meanwhile, other methods were winning. <bookmark mark='a'/> In 1995 Corinna Cortes and Vladimir Vapnik introduced the support vector machine: convex, so training always found the best answer, with a theory of generalization behind it. <bookmark mark='b'/> Networks kept a few strongholds: the LSTM of 1997, built to carry gradients through time, <bookmark mark='c'/> and Yann LeCun's convolutional networks, which by the late nineties were reading handwriting and bank checks. <bookmark mark='d'/> But for most of the field, deep networks were hard to train and harder to analyse, and attention moved to kernels and graphical models. For networks, it was a second winter.",
+   "zh": "与此同时，别的方法在赢。<bookmark mark='a'/>1995年，科琳娜·科尔特斯和弗拉基米尔·瓦普尼克提出了支持向量机：它是凸的，所以训练总能找到最好的答案，背后还有一套泛化理论。<bookmark mark='b'/>网络还守着几块阵地：1997年的LSTM，专门用来让梯度穿过时间，<bookmark mark='c'/>还有杨立昆的卷积网络，到九十年代末已经在读手写字和银行支票了。<bookmark mark='d'/>但对这个领域的大多数人来说，深层网络难训练，更难分析，注意力转向了核方法和图模型。对网络来说，这是第二次寒冬。"
+  },
+  "69857d734627": {
+   "scene": "Revival",
+   "en": "A small community kept going, supported from 2004 by a Canadian research program led by Geoffrey Hinton. In 2006 he and his colleagues found a way to train deep networks. <bookmark mark='a'/> Don't train them all at once. First let one layer learn, without labels, to model the data. <bookmark mark='b'/> Freeze it, and let the next layer learn to model the first layer's outputs; <bookmark mark='c'/> and so on up the stack. <bookmark mark='d'/> Then fine-tune everything together with backpropagation, starting from these sensible weights instead of random ones. They called it a deep belief net, and with work by Yoshua Bengio's group and others the same year, the name deep learning stuck.",
+   "zh": "一个小圈子坚持了下来，从2004年起，得到了加拿大一个由杰弗里·辛顿领导的研究项目的支持。2006年，他和同事们找到了训练深层网络的办法。<bookmark mark='a'/>不要一次训练所有的层。先让一层在没有标签的情况下，学会为数据建模。<bookmark mark='b'/>把它冻住，再让下一层学会为第一层的输出建模；<bookmark mark='c'/>就这样一层层往上。<bookmark mark='d'/>然后用反向传播把所有层一起微调，从这些合理的权重出发，而不是从随机的权重出发。他们把它叫作深度信念网络；同一年，约书亚·本吉奥的团队和其他人也有类似的工作，“深度学习”这个名字就此叫开了。"
+  },
+  "f459a89809b2": {
+   "scene": "Revival",
+   "en": "Then, within a few years, the pretraining turned out not to be needed. <bookmark mark='a'/> Graphics cards made training many times faster, and in 2010 Dan Ciresan and colleagues set a record on handwritten digits with plain deep networks, trained by plain backpropagation. <bookmark mark='b'/> Better starting weights, from Xavier Glorot and Yoshua Bengio, and the ReLU, kept signals alive. <bookmark mark='c'/> In 2012 deep networks took over speech recognition and, with AlexNet, image recognition: Part 10's story. <bookmark mark='d'/> In 2018 Bengio, Hinton and LeCun shared the Turing Award. <bookmark mark='e'/> The rest of this part takes the fixes one at a time, with their mathematics: initialization, the edge of chaos, residual streams, and normalization.",
+   "zh": "然后，没过几年，人们发现这种预训练其实不需要。<bookmark mark='a'/>显卡让训练快了很多倍；2010年，丹·奇雷尚和同事们用普通的深层网络、普通的反向传播，在手写数字上创下了纪录。<bookmark mark='b'/>更好的初始权重，来自泽维尔·格洛罗和约书亚·本吉奥，再加上ReLU，让信号得以存活。<bookmark mark='c'/>2012年，深层网络接管了语音识别，又凭借AlexNet接管了图像识别：那是第10部分的故事。<bookmark mark='d'/>2018年，本吉奥、辛顿和杨立昆共同获得了图灵奖。<bookmark mark='e'/>这一部分剩下的内容，会把这些修正办法一个一个讲清楚，连同它们的数学：初始化、混沌的边缘、残差流和归一化。"
+  },
+  "3f6d0aff78a9": {
+   "scene": "Init",
+   "en": "Chapter nine. Initialization, derived.",
+   "zh": "第9章。推导初始化。"
+  },
+  "e79943ad1aa3": {
+   "scene": "Init",
+   "en": "Before training, the weights are random. But random how? What matters is their spread: how far the random starting weights stray from zero. Send a signal through fifty layers and track its size. <bookmark mark='a'/> Draw the weights a little too small, and each layer shrinks the signal by a fixed factor. After fifty layers, it's about 30 million times smaller: gone. <bookmark mark='b'/> A little too big, and it explodes, to about 10 million. <bookmark mark='c'/> Only one size keeps it steady, layer after layer. And gradients, flowing backwards, vanish or explode the same way.",
+   "zh": "训练开始之前，权重是随机的。可是，怎么个随机法？关键在于它们的分散程度：这些随机的初始权重，离0有多远。让一个信号穿过50层，盯住它的大小。<bookmark mark='a'/>如果抽出的权重稍微小了一点，每一层都会把信号缩小固定的倍数。穿过50层之后，它缩小了大约3000万倍：没了。<bookmark mark='b'/>如果稍微大了一点，它就会爆炸，涨到大约1000万。<bookmark mark='c'/>只有一种大小，能让它一层又一层地保持平稳。而梯度往回流的时候，也会以同样的方式消失或者爆炸。"
+  },
+  "c238e9f53390": {
+   "scene": "Init",
+   "en": "The right size follows from one line of probability. <bookmark mark='a'/> A unit adds up its n inputs, each times a weight. <bookmark mark='b'/> If the weights are independent with mean zero, the variances of the terms add: the sum's variance is n times the weights' variance times the inputs' typical square. <bookmark mark='c'/> For tanh units near zero, the output is about the input, so to keep the variance the same from layer to layer, the weights' variance should be one over n in. <bookmark mark='d'/> Going backwards, the gradient is summed over the units it feeds, through the transposed matrix: that asks for one over n out. <bookmark mark='e'/> Xavier Glorot and Yoshua Bengio, in 2010, took the compromise: two over the sum. Yann LeCun had recommended one over n in, for the forward pass, back in 1998.",
+   "zh": "合适的大小，可以从一行概率推出来。<bookmark mark='a'/>一个单元把它的n个输入各乘一个权重，再加起来。<bookmark mark='b'/>如果权重彼此独立、均值为0，各项的方差就可以相加：和的方差，等于n乘权重的方差，再乘输入的典型平方。<bookmark mark='c'/>对于在0附近的tanh单元，输出约等于输入，所以要让方差一层一层保持不变，权重的方差就应该是n入分之1。<bookmark mark='d'/>往回走时，梯度要在它所连到的单元上求和，经过的是转置矩阵：这要求n出分之1。<bookmark mark='e'/>2010年，泽维尔·格洛罗和约书亚·本吉奥取了个折中：两者之和分之2。杨立昆早在1998年就建议过n入分之1，那是为前向传播考虑的。"
+  },
+  "77af727bc1cb": {
+   "scene": "Init",
+   "en": "A ReLU changes the bookkeeping. <bookmark mark='a'/> Here is what the units of a middle layer receive, before the bend, in the steady network: a symmetric bell. <bookmark mark='b'/> The ReLU throws away the negative half, so the mean square of its output is exactly half the variance of its input. <bookmark mark='c'/> To make up for it, double the weights' variance: two over n. That's He initialization, from Kaiming He and colleagues in 2015, and it's the steady line of a minute ago.",
+   "zh": "ReLU改变了这本账。<bookmark mark='a'/>这是在那个平稳的网络里，中间一层的单元在弯折之前收到的东西：一个对称的钟形。<bookmark mark='b'/>ReLU扔掉了负的那一半，所以它输出的均方，正好是输入方差的一半。<bookmark mark='c'/>为了补回来，把权重的方差加倍：n分之2。这就是何恺明初始化，来自何恺明和同事们2015年的工作，也就是一分钟前那条平稳的线。"
+  },
+  "14598b82ac5a": {
+   "scene": "Init",
+   "en": "Here is the inside of a fifty-layer tanh network, as a landscape. Each ridge is the histogram of one layer's outputs, from the first layer at the front to the fiftieth at the back. <bookmark mark='a'/> With the old rule of thumb, weights uniform between plus and minus one over root n, the outputs shrink layer after layer, from a typical size of 0.46 to about ten to the minus 13: the ridges collapse into a spike at zero. <bookmark mark='b'/> With Glorot and Bengio's variance, one over n, they stay spread out, narrowing slowly, to 0.10 by the last layer. <bookmark mark='c'/> Make the weights too big, and the units saturate: the outputs pile up at minus one and plus one. Yet the gradient doesn't die: the gradient arriving at the first layer is 1,714 times the size of the one at the top. It explodes, and the next chapter explains why.",
+   "zh": "这是一个50层tanh网络的内部，画成一片地形。每一道山脊，是一层输出的直方图，第1层在最前面，第50层在最后面。<bookmark mark='a'/>按老的经验法则，权重在正负根号n分之1之间均匀取值，输出一层一层地缩小，典型大小从0.46缩到大约10的负13次方：山脊塌成了0处的一根尖刺。<bookmark mark='b'/>用格洛罗和本吉奥的方差，n分之1，它们一直保持舒展，只是慢慢变窄，到最后一层是0.10。<bookmark mark='c'/>把权重取得太大，单元就会饱和：输出堆积在负1和正1处。可是梯度并没有消失：到达第一层的梯度，是顶上那个的1714倍。它爆炸了，下一章会解释为什么。"
+  },
+  "2cba01ec4458": {
+   "scene": "Chaos",
+   "en": "Chapter ten. The edge of chaos.",
+   "zh": "第10章。混沌的边缘。"
+  },
+  "8f993fb19d6c": {
+   "scene": "Chaos",
+   "en": "Why is there one right size? In 2016 and 2017 Ben Poole, Sam Schoenholz, Surya Ganguli, Jascha Sohl-Dickstein and colleagues answered with physics: mean-field theory. <bookmark mark='a'/> Make the network very wide. Then each unit's weighted sum, over random weights, is a Gaussian, and a single number describes a whole layer: the variance of its sums, q. <bookmark mark='b'/> One layer maps q to the next: square the tanh, average over the Gaussian, scale by the weight variance, add the bias variance. <bookmark mark='c'/> Plot that map against the diagonal, and iterate it: the staircase converges to a fixed point, here q star equals 0.57. Lengths settle down within a few layers, whatever the input. The interesting question is what happens to two inputs.",
+   "zh": "为什么恰好有一个合适的大小？2016年和2017年，本·普尔、萨姆·舍恩霍尔茨、苏里亚·甘古利、亚沙·索尔-迪克斯坦和同事们用物理学回答了这个问题：平均场理论。<bookmark mark='a'/>让网络变得非常宽。这样，每个单元在随机权重上的加权和，就是一个高斯分布，一个数就能描述整整一层：它的和的方差，q。<bookmark mark='b'/>一层把q映射到下一层：把tanh平方，对高斯分布取平均，乘上权重的方差，再加上偏置的方差。<bookmark mark='c'/>把这个映射和对角线画在一起，然后反复迭代：阶梯收敛到一个不动点，这里q星等于0.57。不管输入是什么，长度在几层之内就稳定下来了。有意思的问题，是两个输入会怎样。"
+  },
+  "426c2bbc93a3": {
+   "scene": "Chaos",
+   "en": "Send two different inputs through, and follow their correlation, c, layer by layer. Identical inputs stay identical, so c equals one is always a fixed point. Whether it attracts or repels depends on the map's slope there, called chi one. <bookmark mark='a'/> With small weights, chi one is 0.76, less than one: the ordered phase. Every pair of inputs is pulled together, until the network gives every input the same output. <bookmark mark='b'/> With big weights, chi one is 1.21: the chaotic phase. Nearby inputs are pushed apart, to a correlation of 0.30, and the network scrambles everything it sees. <bookmark mark='c'/> In between, chi one equals one exactly: the edge of chaos, where correlations change slowly and information about the input survives the trip. After 60 layers, their correlation is only 0.91: the two inputs are still told apart. <bookmark mark='d'/> The dots are a real network of width a thousand, and the theory tracks it. And chi one is also the factor that scales the gradient, layer by layer, on the way back: below one it vanishes, above one it explodes, as you just saw.",
+   "zh": "送两个不同的输入进去，一层一层地跟踪它们的相关系数c。相同的输入始终相同，所以c等于1永远是一个不动点。它是吸引还是排斥，取决于映射在那里的斜率，叫作χ1。<bookmark mark='a'/>权重小的时候，χ1是0.76，小于1：这是有序相。每一对输入都被拉到一起，直到网络对每个输入都给出同样的输出。<bookmark mark='b'/>权重大的时候，χ1是1.21：这是混沌相。挨得很近的输入被推开，相关系数降到0.30，网络把它看到的一切都搅乱了。<bookmark mark='c'/>在两者之间，χ1恰好等于1：这就是混沌的边缘，相关系数变化得很慢，关于输入的信息能撑过整趟旅程。过了60层，它们的相关系数只有0.91：两个输入仍然分得清。<bookmark mark='d'/>这些点是一个宽度为1000的真实网络，理论和它吻合。而χ1，也正是梯度在回程中每一层被缩放的倍数：小于1就消失，大于1就爆炸，正如你刚才看到的。"
+  },
+  "7c7b10bfcd8d": {
+   "scene": "Chaos",
+   "en": "Here is the whole picture for tanh networks: chi one, for every spread of the weights and of the biases. Blue is order, pink is chaos, <bookmark mark='a'/> and the yellow line between them is the edge. <bookmark mark='b'/> Now look where it meets the bottom, where the biases are zero: at a weight variance of 1.00 over n. That's exactly Glorot's rule from the last chapter. <bookmark mark='c'/> For ReLU units the same calculation gives chi one equals sigma w squared over two, so the edge sits at two over n: He's rule. The initialization rules weren't just tidy bookkeeping. They put the network on the edge of chaos.",
+   "zh": "这是tanh网络的全景图：对权重和偏置的每一种分散程度，画出χ1。蓝色是有序，粉色是混沌，<bookmark mark='a'/>两者之间那条黄线就是边缘。<bookmark mark='b'/>看它在底部、也就是偏置为0的地方落在哪里：权重方差是n分之1.00。这正是上一章格洛罗的规则。<bookmark mark='c'/>对ReLU单元做同样的计算，得到χ1等于σw的平方除以2，所以边缘落在n分之2：何恺明的规则。这些初始化规则不只是整齐的记账。它们把网络放在了混沌的边缘上。"
+  },
+  "c63178193330": {
+   "scene": "Chaos",
+   "en": "How deep can a network be and still train? The theory gives a depth scale, xi c: how many layers a correlation survives before it's forgotten. It's infinite exactly at the edge. <bookmark mark='a'/> Schoenholz and colleagues found that networks train when they're shallower than about six depth scales. We tried it: tanh networks from five to a hundred layers deep, at twelve weight variances, each trained the same way on the same small task. <bookmark mark='b'/> Bright means it learned; dark means it stayed at chance. <bookmark mark='c'/> The bright region hugs the line: on 86 percent of the grid, the rule 'trainable exactly when the depth is below six depth scales' predicts our result. <bookmark mark='c2'/> At 70 layers, only weight variances near the edge still train: 1.8, 2.1; at 100, none does in 300 steps. <bookmark mark='d'/> Pushed further, the idea trained convolutional networks ten thousand layers deep in 2018, with nothing but a careful initialization. Part 12 returns to it, for transformers.",
+   "zh": "网络能有多深，还训练得动？理论给出一个深度尺度，ξc：一个相关性能撑过多少层才被遗忘。恰好在边缘上，它是无穷大。<bookmark mark='a'/>舍恩霍尔茨和同事们发现，网络只要比大约6个深度尺度浅，就能训练。我们试了试：从5层到100层深的tanh网络，取12种权重方差，每一个都在同一个小任务上用同样的方法训练。<bookmark mark='b'/>亮的表示学会了；暗的表示停在瞎猜的水平。<bookmark mark='c'/>亮的区域紧贴着那条线：在86%的格子上，“深度低于6个深度尺度就恰好能训练”这条规则，预测对了我们的结果。<bookmark mark='c2'/>在70层时，只有边缘附近的权重方差还训练得动：1.8, 2.1；到100层，在300步内一个也训练不动。<bookmark mark='d'/>再往前推，这个想法在2018年训练出了一万层深的卷积网络，靠的只是一个精心的初始化。第12部分会针对Transformer再回到这个问题。"
+  },
+  "b385dc26d09e": {
    "scene": "Residual",
-   "en": "Chapter four. Residual connections.",
-   "zh": "第4章。残差连接。"
+   "en": "Chapter eleven. The residual stream.",
+   "zh": "第11章。残差流。"
   },
-  "762c97abc172": {
+  "8f7485681e62": {
    "scene": "Residual",
-   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In 2015, Kaiming He and colleagues found a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
-   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年，何恺明和同事们找到了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分。<bookmark mark='w'/>跳跃连接这条路，把梯度原封不动地传回去，就像一根普通的导线，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
+   "en": "Good initialization gets a signal through at the start, but training can still go wrong in a deep stack. In December 2015, Kaiming He and colleagues published a fix so simple it's now everywhere. <bookmark mark='a'/> Instead of each layer replacing what came before, let it add to it. The layers become small corrections to a stream of numbers flowing straight through: the residual stream. <bookmark mark='b'/> By the chain rule, the derivative of each block is the identity plus a little extra. <bookmark mark='w'/> The skip path passes the gradient back unchanged, like a plain wire, so gradients always have a clear path back to the first layer. Every transformer in this series is built this way.",
+   "zh": "好的初始化，能让信号在一开始顺利通过，但在一叠很深的层里，训练还是可能出岔子。2015年12月，何恺明和同事们发表了一个修正办法，简单到如今无处不在。<bookmark mark='a'/>不要让每一层取代前面的结果，而是让它往上加一点。这样，每一层都变成一个小小的修正，作用在一股径直流过的数字流上：这就是残差流。<bookmark mark='b'/>按照链式法则，每个模块的导数，都是恒等映射再加上一点额外的部分。<bookmark mark='w'/>跳跃连接这条路，把梯度原封不动地传回去，就像一根普通的导线，所以梯度总有一条畅通的路，一直回到第一层。本系列的每一个Transformer，都是这样搭起来的。"
   },
-  "ab4a70cb7299": {
+  "cfa9e0787c24": {
    "scene": "Residual",
-   "en": "Here it is on the spirals, with forty layers. The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='a'/> The same forty layers with residual connections learn the spirals completely, within a few hundred steps. <bookmark mark='b'/> Add layer normalization, which rescales each layer's vector to a standard size. <bookmark mark='c'/> Take the vector's numbers, shift them so they average zero, <bookmark mark='d'/> then squash them so their spread is one. With that, training is steadier still. Residual streams and normalization: the two pieces of plumbing inside every modern model.",
-   "zh": "在那两条螺旋上试一试，网络有40层。普通的层叠，什么也学不会：一直停在抛硬币的水平。<bookmark mark='a'/>同样的40层，加上残差连接，几百步之内，就把螺旋完全学会了。<bookmark mark='b'/>再加上层归一化，它把每一层的向量重新缩放到一个标准的大小。<bookmark mark='c'/>取出向量里的这些数，把它们平移，让平均值变成0，<bookmark mark='d'/>再把它们压缩，让分散程度变成1。这样一来，训练就更平稳了。残差流和归一化：每一个现代模型内部，都少不了这两段管道。"
+   "en": "Here it is on the spirals, with forty layers of thirty-two units. <bookmark mark='a'/> The plain stack never learns anything: it's stuck at a coin flip. <bookmark mark='b'/> The same forty layers with residual connections learn the spirals completely, within 80 steps. Same width, same optimizer, same number of steps.",
+   "zh": "在那两条螺旋上试一试，网络有40层，每层32个单元。<bookmark mark='a'/>普通的层叠什么也学不会：一直停在抛硬币的水平。<bookmark mark='b'/>同样的40层，加上残差连接，在80步之内，就把螺旋完全学会了。同样的宽度，同样的优化器，同样的步数。"
   },
   "25da207cbb5f": {
    "scene": "Residual",
    "en": "Why does the plain stack never learn? Look inside both of them as they train: on top, what each one says about every point of the plane; below, how much gradient reaches each of its forty layers, on a log scale. <bookmark mark='a'/> At the start, the plain stack's gradients shrink layer by layer on the way down: the first layer gets more than a hundred trillion times less than the last. The residual stack's gradients are all about the same size, within a factor of 2, because each block adds to a stream the gradient flows straight back along. <bookmark mark='b'/> So as training runs, the residual stack's answer bends to follow the spirals, and its gradients shrink together, by a factor of a hundred thousand, as there is less and less left to fix. The plain stack's answer stays one flat colour, the same everywhere, and its gradients only fade further.",
-   "zh": "为什么普通的堆叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通堆叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过一百万亿倍。残差堆叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差堆叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通堆叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
+   "zh": "为什么普通的层叠永远学不会？在它们训练的时候，看看两者的内部：上面是每个网络对平面上每一点的判断；下面是有多少梯度到达它的40层中的每一层，用对数刻度。<bookmark mark='a'/>一开始，普通层叠的梯度在往下传的路上一层一层地缩小：第一层得到的梯度，比最后一层少了超过100万亿倍。残差层叠的梯度大小都差不多，相差不到2倍，因为每个块都是往一条流上做加法，梯度可以沿着这条流直接流回去。<bookmark mark='b'/>所以随着训练进行，残差层叠的判断弯过来贴合螺旋，它的梯度也一起缩小了10万倍，因为需要修正的东西越来越少。普通层叠的判断始终是一种平平的颜色，处处一样，它的梯度只会越来越弱。"
   },
-  "be2f784f7f37": {
+  "cf7c0de5d663": {
    "scene": "Residual",
-   "en": "Three small refinements turn this into the block inside today's language models. <bookmark mark='a'/> First, normalize what goes into each layer, not the stream itself: the layer sits on a branch, takes a normalized copy, and adds its answer back, so the stream stays a clean running sum. That's pre-norm. <bookmark mark='b'/> Second, RMSNorm: divide the vector by its typical size, the root mean square, so its length always comes out the same, and drop the mean and the shift. It's cheaper, and it works just as well. <bookmark mark='c'/> Third, a gated MLP. The MLP, or feed-forward network, is the layer's small two-step network: spread the vector wide, bend it, and bring it back. Gated means two projections of the input, two different weighted mixes. <bookmark mark='s'/> One is passed through SiLU, a smooth cousin of the ReLU; the other acts as a dimmer, multiplying it number by number. <bookmark mark='d'/> That's three matrices instead of two, so the hidden width shrinks from four times the model width to eight thirds, and the count of weights comes out the same. Noam Shazeer's paper tested it, and ended, famously, by attributing its success to divine benevolence. <bookmark mark='e'/> Llama, Qwen, DeepSeek and gpt-oss all use this block.",
-   "zh": "三个小改进，把它变成了今天语言模型里的那种块。<bookmark mark='a'/>第一，对进入每一层的东西做归一化，而不是对残差流本身：这一层放在一条支路上，拿到一份归一化过的副本，再把自己的答案加回去，这样残差流始终是一个干净的累加和。这叫作前置归一化。<bookmark mark='b'/>第二，RMSNorm：把向量除以它的典型大小，也就是均方根，这样它的长度总是一样的，同时去掉均值和平移。它更便宜，效果一样好。<bookmark mark='c'/>第三，带门控的MLP。MLP，也叫前馈网络，是这一层里那个两步的小网络：把向量铺宽，弯折一下，再收回来。带门控的意思是，对输入做两个投影，也就是两种不同的加权混合。<bookmark mark='s'/>一个经过SiLU，也就是ReLU的一个平滑表亲；另一个像调光器一样，和它逐个数相乘。<bookmark mark='d'/>这是三个矩阵而不是两个，所以隐藏层宽度从模型宽度的4倍缩到3分之8倍，权重总数正好一样。Noam Shazeer的论文测试了它，并且出了名地在结尾把它的成功归功于“神的恩典”。<bookmark mark='e'/>Llama、Qwen、DeepSeek和gpt-oss，用的都是这种块。"
+   "en": "There's another way to see what the stream does. <bookmark mark='a'/> The last layer is the first plus everything the blocks added. <bookmark mark='b'/> Its derivative is a product of identity-plus-a-little factors, <bookmark mark='c'/> and multiplying it out gives two to the L terms: one for every path through the network, from the path that skips every block to the one that goes through all of them. A residual network is a crowd of networks of every depth, sharing weights, and Andreas Veit and colleagues found that most of the gradient flows through the short ones. <bookmark mark='d'/> The idea had ancestors: the LSTM's constant error carousel in 1997, and the highway networks of Rupesh Srivastava, Klaus Greff and Juergen Schmidhuber, months before ResNet. ResNet won ImageNet with a hundred and fifty-two layers. And GPT-2 shrank each block's starting weights by one over the square root of the number of blocks, so the stream doesn't grow with depth.",
+   "zh": "还有一种方式来看这股流在做什么。<bookmark mark='a'/>最后一层，等于第一层加上所有块加进来的东西。<bookmark mark='b'/>它的导数，是一串“恒等再加一点”的因子的乘积，<bookmark mark='c'/>把它乘开，就得到2的L次方项：网络里的每一条路径各一项，从跳过所有块的那条，到穿过所有块的那条。残差网络是一大群深浅各异、共享权重的网络，安德烈亚斯·法伊特和同事们发现，大部分梯度走的是短的那些。<bookmark mark='d'/>这个想法有祖先：1997年LSTM的恒定误差传送带，以及鲁佩什·斯里瓦斯塔瓦、克劳斯·格雷夫和于尔根·施密德胡贝的高速公路网络，比ResNet早几个月。ResNet用152层赢下了ImageNet。而GPT-2把每个块的初始权重缩小到块数平方根分之1，这样残差流就不会随深度变大。"
   },
-  "c3c1de97e5db": {
+  "29531f5df103": {
+   "scene": "Norm",
+   "en": "Chapter twelve. Normalization.",
+   "zh": "第12章。归一化。"
+  },
+  "76c0c5e01d04": {
+   "scene": "Norm",
+   "en": "The second fix rescales the numbers inside the network as it trains. In 2015 Sergey Ioffe and Christian Szegedy introduced batch normalization. <bookmark mark='a'/> Take a batch of examples, and for each feature, subtract its average over the batch and divide by its spread; then let the network learn its own scale and shift. It let them train image networks much faster, though the reason they gave, reducing internal covariate shift, was later disputed: in 2018 a team at MIT argued it mostly makes the loss landscape smoother. <bookmark mark='b'/> But a batch norm makes each example depend on the others in its batch, and at test time it needs averages saved from training. In 2016 Jimmy Ba, Jamie Kiros and Geoffrey Hinton proposed layer normalization: the same arithmetic, across the features of a single example. Every transformer uses a version of that.",
+   "zh": "第二个修正办法，是在训练时重新缩放网络内部的数。2015年，谢尔盖·约费和克里斯蒂安·塞格迪提出了批归一化。<bookmark mark='a'/>取一批例子，对每个特征，减去它在这一批上的平均值，再除以它的分散程度；然后让网络自己学一个缩放和平移。它让图像网络训练得快了很多，不过他们给出的理由，也就是减少“内部协变量偏移”，后来受到了质疑：2018年，麻省理工学院的一个团队认为，它主要是让损失地形变得更平滑。<bookmark mark='b'/>可是批归一化让每个例子都依赖于同一批里的其他例子，而且测试时还需要从训练中保存下来的平均值。2016年，吉米·巴、杰米·基罗斯和杰弗里·辛顿提出了层归一化：同样的算术，在单个例子的各个特征上做。每一个Transformer用的都是它的某个版本。"
+  },
+  "8672089172e1": {
+   "scene": "Norm",
+   "en": "Here is what layer normalization does to one vector. <bookmark mark='a'/> Shift its numbers so they average zero, <bookmark mark='b'/> then squash them so their spread is one. <bookmark mark='c'/> In 2019 Biao Zhang and Rico Sennrich asked whether the shift is needed at all. Their RMSNorm only divides by the root mean square, the typical size of the numbers. Geometrically, it sends every vector, long or short, onto the same sphere, keeping only its direction. <bookmark mark='d'/> It's cheaper, works as well, and is what Llama, Qwen and DeepSeek use.",
+   "zh": "这是层归一化对一个向量做的事。<bookmark mark='a'/>把它的数平移，让平均值变成0，<bookmark mark='b'/>再把它们压缩，让分散程度变成1。<bookmark mark='c'/>2019年，张彪和里科·森里奇问：平移真的需要吗？他们的RMSNorm只除以均方根，也就是这些数的典型大小。从几何上看，它把每一个向量，不管长短，都送到同一个球面上，只保留它的方向。<bookmark mark='d'/>它更便宜，效果一样好，Llama、Qwen和DeepSeek用的都是它。"
+  },
+  "49cdaf19c26c": {
+   "scene": "Norm",
+   "en": "What does normalization do to the gradient? Take RMSNorm without its gain. <bookmark mark='a'/> Its derivative, by the quotient rule, is a constant times the identity minus the projection onto h's own direction. <bookmark mark='b'/> So stretching h changes nothing, and the gradient never points along h: the layer only cares about direction. LayerNorm's derivative also removes the all-ones direction, since shifting every number at once changes nothing either. <bookmark mark='c'/> Measured with autograd at d equals 16: RMSNorm's Jacobian has 15 equal singular values and 1 zero; LayerNorm's, 14 and 2, exactly as derived. <bookmark mark='d'/> And the constant in front is one over the vector's size: double h, and the gradient halves. Weights that grow large get proportionally small updates. The normalization stabilizes itself, and it interacts with weight decay in ways Part 11 takes up.",
+   "zh": "归一化对梯度做了什么？取不带增益的RMSNorm。<bookmark mark='a'/>用商的求导法则，它的导数是一个常数，乘上单位矩阵减去到h自身方向上的投影。<bookmark mark='b'/>所以拉长h什么也不会改变，梯度也永远不会指向h的方向：这一层只在乎方向。层归一化的导数，还去掉了全1的方向，因为把所有数一起平移，也什么都不会改变。<bookmark mark='c'/>在d等于16时用自动求导测一下：RMSNorm的雅可比矩阵有15个相等的奇异值和1个零；层归一化是14个和2个，和推导的完全一样。<bookmark mark='d'/>前面那个常数，是向量大小的倒数：h加倍，梯度减半。变大的权重，得到的更新相应变小。归一化会自己稳住自己，它和权重衰减之间的相互作用，第11部分会讲。"
+  },
+  "f508351f84a2": {
+   "scene": "Norm",
+   "en": "Where does the normalization go? <bookmark mark='a'/> The 2017 Transformer normalized after adding each block's output to the stream: post-norm. <bookmark mark='b'/> GPT-2, in 2019, moved it to the branch, before each block, leaving the stream itself as a clean running sum: pre-norm. In 2020 Ruibin Xiong and colleagues showed why it matters: with post-norm, the gradients at the start of training are uneven across the layers, so it needs a learning-rate warm-up. <bookmark mark='c'/> In our own 24-block model, the last block's starting gradient is 1.4 times the first block's with post-norm, and 0.8 times with pre-norm. <bookmark mark='d'/> Trained at the same learning rate with no warm-up, the pre-norm stack ends at 3.02 bits per character and the post-norm stack at 4.45: post-norm needs a gentler start. <bookmark mark='e'/> The story isn't over: OLMo 2, at the end of 2024, normalizes each block's output instead, and a 2025 paper from Kaiming He, Yann LeCun and colleagues replaces normalization with a scaled tanh.",
+   "zh": "归一化放在哪里？<bookmark mark='a'/>2017年的Transformer，是在把每个块的输出加到残差流上之后再归一化：后置归一化。<bookmark mark='b'/>2019年的GPT-2把它挪到了支路上，放在每个块之前，让残差流本身保持一个干净的累加和：前置归一化。2020年，Ruibin Xiong和同事们说明了这为什么重要：用后置归一化，训练开始时各层的梯度很不均匀，所以需要让学习率先预热。<bookmark mark='c'/>在我们自己的24块模型里，用后置归一化时，最后一块的初始梯度是第一块的1.4倍，用前置归一化时是0.8倍。<bookmark mark='d'/>用同样的学习率、不做预热来训练，前置归一化的层叠最后是每字符3.02比特，后置归一化的是4.45：后置归一化需要一个更温和的开头。<bookmark mark='e'/>故事还没完：2024年底的OLMo 2改为对每个块的输出做归一化；2025年何恺明、杨立昆和同事们的一篇论文，干脆用一个缩放过的tanh取代了归一化。"
+  },
+  "5340e4efd826": {
+   "scene": "Block",
+   "en": "Chapter thirteen. The modern block.",
+   "zh": "第13章。现代的块。"
+  },
+  "1b8708c23d2b": {
+   "scene": "Block",
+   "en": "Inside today's blocks, the bend itself has changed. <bookmark mark='a'/> The S-shaped sigmoid and tanh of the eighties and nineties flatten out at both ends, which helped gradients vanish. <bookmark mark='b'/> The ReLU doesn't, on the positive side, but its slope is exactly zero for every negative input, so a unit that stops firing stops learning. <bookmark mark='c'/> In 2016 Dan Hendrycks and Kevin Gimpel derived a smooth version from a coin flip: keep the input x with the probability that a standard Gaussian falls below it. <bookmark mark='d'/> Averaged over the coin, that's x times Phi of x, the GELU, used in BERT and GPT-2. <bookmark mark='e'/> Its cousin, x times the sigmoid of x, called SiLU or Swish, came from reinforcement learning and from an automated search in 2017. Both are smooth, both dip slightly below zero, and both pass a little gradient for negative inputs.",
+   "zh": "在今天的块里，弯折本身也变了。<bookmark mark='a'/>八九十年代的S形sigmoid和tanh，两端都是平的，这让梯度更容易消失。<bookmark mark='b'/>ReLU在正的一侧不会变平，但它对每个负输入的斜率都恰好是0，所以一个不再放电的单元，也就不再学习。<bookmark mark='c'/>2016年，丹·亨德里克斯和凯文·金佩尔从抛硬币推出了一个平滑的版本：以标准高斯分布落在输入x之下的概率，保留x。<bookmark mark='d'/>对硬币取平均，就是x乘Φ of x，也就是GELU，BERT和GPT-2用的就是它。<bookmark mark='e'/>它的表亲，x乘x的sigmoid，叫作SiLU或者Swish，2017年分别来自强化学习和一次自动搜索。两者都是平滑的，都会稍微低于0，对负输入也都会传回一点梯度。"
+  },
+  "1376f778c3f8": {
+   "scene": "Block",
+   "en": "The bigger change is the gate. <bookmark mark='a'/> A ReLU unit, as a surface over two inputs, is a fold: flat on one side, a ramp on the other. <bookmark mark='b'/> In 2016 Yann Dauphin and colleagues used gated units, which multiply one projection of the input by another. Here is the simplest: SiLU of one input, times the other. It's a saddle, a product: it can switch a feature on or off depending on something else. <bookmark mark='c'/> In 2020 Noam Shazeer tried variants inside the transformer's feed-forward layer, and SwiGLU won: SiLU of one projection, times a second projection, then a third matrix back down. His paper ends by attributing its success, as all else, to divine benevolence. <bookmark mark='d'/> Three matrices instead of two, so to keep the parameter count, the hidden width shrinks from four times the model width to eight thirds. <bookmark mark='e'/> In the published configurations: GPT-2's plain MLP is four times its width; Llama 2's gated one, 11,008, is eight thirds of 4,096 rounded up to a multiple of 256; later models go wider.",
+   "zh": "更大的变化是门控。<bookmark mark='a'/>一个ReLU单元，画成两个输入上的曲面，是一道折痕：一侧平，一侧是斜坡。<bookmark mark='b'/>2016年，扬·多芬和同事们用了门控单元，它把输入的一个投影乘上另一个投影。这里是最简单的一种：一个输入的SiLU，乘上另一个输入。它是一个马鞍面，一个乘积：它能根据另外一件事，打开或关掉一个特征。<bookmark mark='c'/>2020年，诺姆·沙泽尔在Transformer的前馈层里试了几种变体，SwiGLU胜出：一个投影的SiLU，乘上第二个投影，再用第三个矩阵投影回去。他的论文最后，把它的成功和其他一切一样，归功于“神的恩典”。<bookmark mark='d'/>三个矩阵而不是两个，所以为了保持参数数目不变，隐藏层宽度从模型宽度的4倍缩到3分之8倍。<bookmark mark='e'/>看公开的配置：GPT-2普通的MLP是它宽度的4倍；Llama 2的门控MLP是11008，也就是4096的3分之8，向上取到256的倍数；后来的模型更宽。"
+  },
+  "8c0146fa7968": {
+   "scene": "Block",
+   "en": "Now assemble the block. <bookmark mark='a'/> The residual stream runs straight up. <bookmark mark='b'/> A branch takes an RMS-normalized copy, runs attention, the subject of Part 13, and adds the result back. <bookmark mark='c'/> A second branch takes another normalized copy, runs the gated MLP, and adds that back. <bookmark mark='d'/> Stack it, here thirty-two times, and that's the body of Llama 3, and, with small changes, of Qwen, DeepSeek and the rest. <bookmark mark='e'/> Counting from Llama 3 8B's published configuration: each block has 41.9 million weights in attention and 176.2 million in the MLP, so 81 percent of the block is the gated MLP. Thirty-two blocks and the embeddings come to 8.03 billion: the eight billion of its name.",
+   "zh": "现在把块组装起来。<bookmark mark='a'/>残差流笔直向上。<bookmark mark='b'/>一条支路取一份经过RMS归一化的副本，做注意力运算，那是第13部分的主题，再把结果加回去。<bookmark mark='c'/>第二条支路再取一份归一化的副本，过一遍门控MLP，再加回去。<bookmark mark='d'/>把它叠起来，这里叠32次，就是Llama 3的主体；稍作改动，也就是Qwen、DeepSeek和其他模型的主体。<bookmark mark='e'/>按Llama 3 8B公开的配置来数：每个块的注意力有41.9百万个权重，MLP有176.2百万个，所以块里81%是门控MLP。32个块再加上嵌入，一共8.03十亿：正是它名字里的80亿。"
+  },
+  "82497bb64549": {
+   "scene": "Block",
+   "en": "Does each piece earn its place? We built the block up one piece at a time, as a character model on the thirty novels: 24 blocks deep, each version trained for 1,200 steps on the same data, from the same seed. <bookmark mark='a'/> With no residual connections, the 24-block stack barely learns: 4.46 bits. <bookmark mark='b'/> The residual stream alone brings it to 2.95. <bookmark mark='c'/> Normalizing after each block, post-norm, stalls at 4.45 with no warm-up; normalizing before it reaches 3.02 with LayerNorm and 3.01 with RMSNorm. <bookmark mark='c3'/> In a run this short, that's no better than the bare residual stream: what normalization buys is stability, which matters more as models grow. <bookmark mark='d'/> The full modern block ends best, at 2.88.",
+   "zh": "每一个部件都配得上它的位置吗？我们把块一个部件一个部件地搭起来，做成一个在30部小说上训练的字符模型：24个块深，每个版本都在同样的数据上、从同样的随机种子训练1200步。<bookmark mark='a'/>没有残差连接，24块的层叠几乎学不动：4.46比特。<bookmark mark='b'/>光是残差流，就把它带到了2.95。<bookmark mark='c'/>在每个块之后做归一化，也就是后置归一化，不做预热时卡在4.45；在块之前做归一化，用层归一化达到3.02，用RMSNorm达到3.01。<bookmark mark='c3'/>训练这么短，这并不比光秃秃的残差流更好：归一化换来的是稳定性，而模型越大，稳定性越重要。<bookmark mark='d'/>完整的现代块最后最好，2.88。"
+  },
+  "0d0957d4aa27": {
+   "scene": "KAN",
+   "en": "Chapter fourteen. Kolmogorov–Arnold networks.",
+   "zh": "第14章。柯尔莫哥洛夫–阿诺德网络。"
+  },
+  "e0a6af786a60": {
+   "scene": "KAN",
+   "en": "There's another way to build any function, and it's older than the perceptron. <bookmark mark='a'/> In 1900 David Hilbert asked, as the thirteenth of his famous problems, whether the solutions of a seventh-degree equation could be written using only functions of two variables. <bookmark mark='b'/> In 1957 Andrey Kolmogorov and his nineteen-year-old student Vladimir Arnold answered with something far stronger. <bookmark mark='c'/> Every continuous function of n variables on a cube is a sum of 2n plus one functions of one variable, each applied to a sum of n more functions of one variable. <bookmark mark='d'/> The only function of several variables you ever need is addition. <bookmark mark='e'/> Network researchers noticed it in the eighties, and argued: in 1989 Federico Girosi and Tomaso Poggio called it irrelevant, because the inner functions can be wildly irregular; in 1991 Vera Kurkova answered that smooth approximate versions work, with error bounds.",
+   "zh": "还有另一种方法能搭出任何函数，而且它比感知机还早。<bookmark mark='a'/>1900年，大卫·希尔伯特在他著名的问题里，第13个问的是：七次方程的解，能不能只用两个变量的函数写出来。<bookmark mark='b'/>1957年，安德烈·柯尔莫哥洛夫和他19岁的学生弗拉基米尔·阿诺德，给出了强得多的回答。<bookmark mark='c'/>立方体上n个变量的每一个连续函数，都是2n加1个一元函数之和，每个一元函数作用在另外n个一元函数的和上。<bookmark mark='d'/>你唯一需要的多元函数，就是加法。<bookmark mark='e'/>八十年代，研究网络的人注意到了它，并且争论起来：1989年，费德里科·吉罗西和托马索·波焦说它无关紧要，因为里面的函数可能极不规则；1991年，薇拉·库尔科娃回应说，光滑的近似版本是可行的，还带着误差界。"
+  },
+  "c2c22a6edf9d": {
+   "scene": "KAN",
+   "en": "In April 2024 Ziming Liu, Max Tegmark and colleagues turned the theorem into an architecture. <bookmark mark='a'/> An ordinary network puts a number on every edge and a fixed bend at every node. <bookmark mark='b'/> A Kolmogorov–Arnold network puts a learnable curve on every edge, a smooth spline on a grid of points, and only adds at the nodes. Unlike the theorem's version, the layers can be stacked as deep as you like. <bookmark mark='c'/> They reported that small KANs fit scientific formulas more accurately than much larger MLPs, that their error falls faster as they grow, and that you can read the learned curves and recover the formula.",
+   "zh": "2024年4月，Ziming Liu、马克斯·泰格马克和同事们把这个定理变成了一种架构。<bookmark mark='a'/>普通的网络在每条边上放一个数，在每个节点上放一个固定的弯折。<bookmark mark='b'/>柯尔莫哥洛夫–阿诺德网络在每条边上放一条可学习的曲线，也就是在一组格点上的光滑样条，节点上只做加法。和定理里的版本不同，这些层想叠多深就叠多深。<bookmark mark='c'/>他们报告说，小小的KAN拟合科学公式，比大得多的MLP更准，规模变大时误差下降得更快，而且你能读出学到的曲线，还原出公式。"
+  },
+  "9726b849c3c0": {
+   "scene": "KAN",
+   "en": "Let's try it, on the example from their paper: e to the sine of pi x, plus y squared. Here is a KAN with two inputs, five hidden nodes and one output: fifteen curves, all of them learned. <bookmark mark='a'/> Watch them as it trains. <bookmark mark='b'/> Some of the curves on x take the shape of a sine wave, and some on y of a parabola: the closest match a sine and a square with correlations of 1.00 and 0.99. Pieces of the formula, drawn as pictures. <bookmark mark='c'/> The KAN ends with a test error of 0.0166, 2 times smaller than the MLP's 0.0401, with about the same number of parameters.",
+   "zh": "我们来试一试，用他们论文里的例子：e的sin(πx)加y平方次方。这是一个KAN，两个输入，五个隐藏节点，一个输出：十五条曲线，全是学出来的。<bookmark mark='a'/>看着它们训练。<bookmark mark='b'/>有几条关于x的曲线变成了正弦波的样子，有几条关于y的曲线变成了抛物线：最接近的，和正弦、平方的相关系数分别是1.00和0.99。公式的一部分，画成了图。<bookmark mark='c'/>KAN最后的测试误差是0.0166，比MLP的0.0401小2倍，而参数数目差不多。"
+  },
+  "640668c93b42": {
+   "scene": "KAN",
+   "en": "Then came the debate. <bookmark mark='a'/> On this function, a smooth formula, KANs reach lower errors per parameter: the best KAN, at 0.00889, beats the best MLP, at 0.01445. That's the kind of task the paper chose. <bookmark mark='b'/> In July 2024 Runpeng Yu, Weihao Yu and Xinchao Wang compared the two fairly, at equal numbers of parameters and operations, on images, text, audio and tables. MLPs generally won. KANs won on symbolic formulas, and forgot more of an old task when taught a new one. <bookmark mark='c'/> The KAN authors' sequel that August leaned into science: finding formulas and conserved quantities. <bookmark mark='d'/> And inside today's language models, the published configurations still show gated MLPs. A theorem from 1957 found a niche, not a revolution.",
+   "zh": "接着就是争论。<bookmark mark='a'/>在这个函数上，一个光滑的公式，KAN每个参数换来的误差更低：最好的KAN是0.00889，胜过最好的MLP的0.01445。这正是那篇论文挑的那类任务。<bookmark mark='b'/>2024年7月，Runpeng Yu、Weihao Yu和Xinchao Wang公平地比较了两者，参数数目和运算量都相同，任务包括图像、文本、音频和表格。MLP总体上赢了。KAN在符号公式上赢了，而且在学新任务时，会忘掉更多旧任务。<bookmark mark='c'/>那年8月，KAN作者的续作转向了科学：寻找公式和守恒量。<bookmark mark='d'/>而在今天的语言模型内部，公开的配置显示，用的仍然是门控MLP。一个1957年的定理，找到的是一个小天地，而不是一场革命。"
+  },
+  "209fb4efec73": {
    "scene": "NeuralLM",
-   "en": "Chapter five. A neural language model.",
-   "zh": "第5章。神经语言模型。"
+   "en": "Chapter fifteen. A neural language model.",
+   "zh": "第15章。神经语言模型。"
   },
-  "b74ff3f81fc4": {
+  "7d92434e4290": {
    "scene": "NeuralLM",
-   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer. Hidden just means in the middle, neither input nor output. Its units are tanh units: tanh is a smooth S-shaped bend that squashes any number into the range from minus one to one. <bookmark mark='c'/> And out comes a score for every possible next character, turned into probabilities by part one's softmax. That's the design of Yoshua Bengio's neural language model, from 2003, here for characters instead of words.",
-   "zh": "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。取最后24个字符。<bookmark mark='a'/>每个字符都变成一个由32个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个隐藏层。隐藏，只是说它在中间，既不是输入，也不是输出。它的单元是tanh单元：tanh是一种平滑的S形弯折，能把任何数压进负1到1的范围里。<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。这就是约书亚·本吉奥2003年提出的神经语言模型的设计，只不过这里用的是字符，而不是单词。"
+   "en": "Now let's use a network for the task that runs through this whole series: guess the next character. In 2003 Yoshua Bengio, Rejean Ducharme, Pascal Vincent and Christian Jauvin built the first neural language model, for words. Here is its design, for characters. Take the last 24 characters. <bookmark mark='a'/> Each character becomes a vector of 32 numbers, looked up in a table that is itself learned. <bookmark mark='b'/> The vectors go through one hidden layer of tanh units. <bookmark mark='c'/> And out comes a score for every possible next character, turned into probabilities by Part 1's softmax. Every number in it is learned together, by backpropagation.",
+   "zh": "现在，我们用网络来做贯穿整个系列的那个任务：猜下一个字符。2003年，约书亚·本吉奥、雷让·迪沙尔姆、帕斯卡尔·文森特和克里斯蒂安·若万造出了第一个神经语言模型，针对的是单词。这里是它的设计，换成字符。取最后24个字符。<bookmark mark='a'/>每个字符都变成一个由32个数组成的向量，从一张表里查出来，而这张表本身也是学出来的。<bookmark mark='b'/>这些向量穿过一个由tanh单元组成的隐藏层。<bookmark mark='c'/>输出的是每一个可能的下一个字符的分数，再由第1部分的softmax变成概率。其中的每一个数，都靠反向传播一起学出来。"
   },
-  "d84e37ba0522": {
+  "b268f2a53a8f": {
    "scene": "NeuralLM",
-   "en": "Train it on part one's thirty novels, by gradient descent, with the cross-entropy of part one as the loss. <bookmark mark='a'/> The bits per character on the Maltese Falcon passage fall, and fall, <bookmark mark='b'/> to 2.23: far better than part one's counting, but not quite Kneser–Ney's 2.04. On this much computing, the best counting is a hard opponent.",
-   "zh": "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。<bookmark mark='a'/>在《马耳他之鹰》的测试段落上，每字符比特数一路下降，降了又降，<bookmark mark='b'/>降到2.23：比第1部分的计数模型好得多，但还不及Kneser–Ney的2.04。只用这么点算力，最好的计数方法仍是个难缠的对手。"
+   "en": "Train it on Part 1's thirty novels, by gradient descent, with Part 1's cross-entropy as the loss. Below the curve, what it writes at each moment of training, always from the same prompt and the same random draws. <bookmark mark='a'/> At first it types random symbols: 0 percent of the words it writes are real words. <bookmark mark='b'/> By step 1,000, 28 percent are; by the end, 70 percent, in the rhythm of English sentences, if not yet their sense. <bookmark mark='c'/> By the end it reaches 2.38 bits per character: within 0.05 of Part 1's best counting model, at 2.32, and short of Kneser–Ney's 2.04. With this much computing, the best counting is a hard opponent.",
+   "zh": "用梯度下降，在第1部分的30部小说上训练它，损失就用第1部分的交叉熵。曲线下面，是它在训练的每个时刻写出来的东西，总是用同一段开头、同一串随机数。<bookmark mark='a'/>一开始，它敲出的是随机的符号：它写的“单词”里，只有0%是真正的单词。<bookmark mark='b'/>到第1000步，有28%是；到最后，是70%，有了英语句子的节奏，虽然还没有它们的意思。<bookmark mark='c'/>到最后，它达到每字符2.38比特：和第1部分最好的计数模型，2.32，只差0.05，离Kneser–Ney的2.04还有距离。只用这么点算力，最好的计数方法仍是个难缠的对手。"
   },
-  "02a75afe1a4a": {
+  "90681b9ce853": {
    "scene": "NeuralLM",
-   "en": "Bengio's team found the same in 2003, and their best results came from combining the two: averaging the network's prediction with the counting model's. <bookmark mark='a'/> The weight is chosen on held-out text, never on the passage. <bookmark mark='b'/> Together, they reach 1.97 bits: better than either alone, because they make different mistakes.",
-   "zh": "2003年，本吉奥的团队也发现了同样的情况，而他们最好的结果，来自把两者结合起来：把网络的预测和计数模型的预测，按一个权重取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>两者合起来，达到1.97比特：比任何一个单独用都好，因为它们犯的错误不一样。"
+   "en": "Bengio's team found that their best results came from combining the network with a counting model: averaging the two predictions. <bookmark mark='a'/> The weight is chosen on held-out text, never on the passage. <bookmark mark='b'/> Together, they reach 1.99 bits: better than either alone, because they make different mistakes. On the passage, the network is the more confident of the two on 32 percent of the characters.",
+   "zh": "本吉奥的团队发现，他们最好的结果，来自把网络和一个计数模型结合起来：对两者的预测取平均。<bookmark mark='a'/>这个权重是在留出的文本上选定的，从不在测试段落上选。<bookmark mark='b'/>两者合起来，达到1.99比特：比任何一个单独用都好，因为它们犯的错误不一样。在测试段落上，有32%的字符，是网络比计数模型更有把握。"
   },
-  "c5495fe72675": {
+  "f6fbf1a01bc0": {
    "scene": "NeuralLM",
-   "en": "And the vectors the network scores each next character with, which nobody designed, have organized themselves. Seen along their two main directions, from part seven, <bookmark mark='a'/> characters that behave alike sit together: vowels near vowels, capitals near capitals, digits and punctuation in their own corners. It's part three's word vectors again, learned this time as a side effect of predicting.",
-   "zh": "还有网络给每个下一个字符打分时用的那些向量，没有人设计过它们，它们却自己组织了起来。沿着第7部分讲过的两个主方向来看，<bookmark mark='a'/>表现相似的字符，聚在一起：元音挨着元音，大写字母挨着大写字母，数字和标点各占一个角落。这又是第3部分的词向量，只不过这一次，是作为预测的副产品学出来的。"
+   "en": "And the vectors the network scores each next character with, which nobody designed, have organized themselves. Seen along their two main directions, from Part 7, <bookmark mark='a'/> characters that behave alike sit together: lowercase letters with lowercase letters, capitals with capitals, digits with digits, and punctuation in its own corner. It's Part 3's word vectors again, learned this time as a side effect of predicting.",
+   "zh": "还有网络给每个下一个字符打分时用的那些向量，没有人设计过它们，它们却自己组织了起来。沿着第7部分讲过的两个主方向来看，<bookmark mark='a'/>表现相似的字符，聚在一起：小写字母和小写字母在一起，大写字母和大写字母在一起，数字和数字在一起，标点占一个角落。这又是第3部分的词向量，只不过这一次，是作为预测的副产品学出来的。"
   },
-  "3d82aac2ba4a": {
+  "8708c6baae0f": {
    "scene": "NeuralLM",
-   "en": "On the scoreboard, two new rows: the first network, and the network with counting, the best of everything before GPT-2. <bookmark mark='a'/> But it's still far behind GPT-2. It sees only 24 characters, and one hidden layer has to do everything. The rest of the series is about closing that gap.",
-   "zh": "记分牌上，添了两行新的：第一个网络，以及加上计数的网络，它是GPT-2之前所有模型里最好的。<bookmark mark='a'/>但它离GPT-2还差得很远。它只看得到24个字符，而且所有的事，都得由一个隐藏层来做。本系列剩下的部分，讲的就是怎样缩小这个差距。"
+   "en": "On the scoreboard, two new rows: the first network, and the network with counting, the best machine on the board so far. <bookmark mark='a'/> It sees only 24 characters, and one hidden layer has to do everything. The large models of Part 1, still to be filled in on this board, show how far there is to go.",
+   "zh": "记分牌上，添了两行新的：第一个网络，以及加上计数的网络，它是目前记分牌上最好的机器。<bookmark mark='a'/>它只看得到24个字符，而且所有的事，都得由一个隐藏层来做。第1部分的大模型还没有填进这张记分牌，它们会显示还有多远的路要走。"
   },
-  "a53773f7afda": {
+  "430b6119ec61": {
    "scene": "NeuralLM",
-   "en": "Here's what it writes, starting from part five's prompt: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense.",
-   "zh": "这是它写出来的东西，接着第5部分的那段前文往下写：<bookmark mark='a'/>看起来像英语，也像一个个单词，但还说不通。"
+   "en": "Here's what it writes, from Part 5's prompt and three others: <bookmark mark='a'/> English-shaped, word-shaped, and not yet making sense.",
+   "zh": "这是它写出来的东西，接着第5部分的那段前文，还有另外三段前文往下写：<bookmark mark='a'/>看起来像英语，也像一个个单词，但还说不通。"
   },
-  "e4a985831eb9": {
+  "921d45fde6ba": {
    "scene": "Outro",
-   "en": "Let's take stock. A unit is a weighted sum and a bend, and enough of them in one layer can approximate any curve. Depth can fold space into exponentially many pieces, though random networks don't use that power. Weights must start at the right size, two over n for ReLUs, or signals vanish or explode. Residual connections let gradients through forty layers. And a small network, trained on our books, came close to the best counting model, and mixed with it, beat every counting model on the scoreboard.",
-   "zh": "我们来盘点一下。一个单元，就是一个加权和，再加一个弯折，一层里有足够多这样的单元，就能逼近任何曲线。深度能把空间折叠成指数级多的小块，尽管随机的网络并没有用上这份能力。权重必须从合适的大小起步，对ReLU来说是n分之2，否则信号就会消失或者爆炸。残差连接让梯度穿过了40层。最后，一个小小的网络，在我们的书上训练，已经逼近最好的计数模型；再和它混在一起，就打败了记分牌上所有的计数模型。"
+   "en": "Let's take stock. A unit is a weighted sum and a threshold, and the perceptron learns one from its mistakes, provably, whenever a line separates the data. One layer can't do XOR; two can, and backpropagation trains them, in one sweep backwards. One hidden layer can approximate any curve, and for smooth enough functions the number of units doesn't explode with the dimension. Depth folds space into exponentially many pieces. Weights must start on the edge of chaos, two over n for ReLUs, or signals vanish or explode, and residual streams and normalization keep gradients flowing through many layers. And a small network, trained on our books, came within 0.34 bits of the best counting model, and mixed with it, beat every counting model on the scoreboard.",
+   "zh": "我们来盘点一下。一个单元，就是一个加权和加一个阈值；只要有一条直线能分开数据，感知机就一定能从错误中把它学出来。一层做不了异或；两层可以，而反向传播往回扫一遍就能训练它们。一个隐藏层能逼近任何曲线，而对足够光滑的函数，所需单元的数目不会随维数爆炸。深度能把空间折成指数级多的小块。权重必须从混沌的边缘出发，对ReLU是n分之2，否则信号就会消失或爆炸；残差流和归一化，让梯度能流过很多层。而一个小小的网络，在我们的书上训练之后，和最好的计数模型只差0.34比特，和它混合之后，打败了记分牌上所有的计数模型。"
   },
-  "bafa27ae4755": {
+  "0df3f559bca0": {
    "scene": "Outro",
-   "en": "How to set the scale of weights and learning rates as networks grow is the subject of parts eleven and twelve. The residual stream is the backbone of the transformer in part thirteen, and what we read when we look inside models, in part thirty. And learned embeddings, of characters here, become embeddings of tokens, images and sounds.",
-   "zh": "网络变大时，权重和学习率的尺度该怎样设定，是第11部分和第12部分的主题。残差流是第13部分Transformer的主干，也是第30部分我们窥看模型内部时，所读取的东西。而学出来的嵌入，这里是字符的嵌入，将来会变成词元、图像和声音的嵌入。"
+   "en": "All of this comes back. Weight sharing over space and time gives the convolutional and recurrent networks of Part 10. How to set the scale of weights and learning rates as networks grow is the subject of Parts 11 and 12. The residual stream is the backbone of the transformer in Part 13, and what we read when we look inside models, in Part 30. Normalization comes back inside attention. The gated MLP, multiplied, becomes the experts of Part 16. And learned embeddings, of characters here, become embeddings of tokens, images and sounds.",
+   "zh": "这些都会再回来。在空间和时间上共享权重，就得到第10部分的卷积网络和循环网络。网络变大时，权重和学习率的尺度该怎么定，是第11和第12部分的主题。残差流是第13部分Transformer的主干，也是第30部分我们观察模型内部时读取的东西。归一化会在注意力内部再次出现。门控MLP，复制很多份，就成了第16部分的专家。而学到的嵌入，这里是字符的，后面会变成词元、图像和声音的嵌入。"
   },
-  "bdb3530d7051": {
+  "84bb2356228a": {
    "scene": "Outro",
-   "en": "Next time: the optimizers. Stochastic gradient descent, and why its noise helps; momentum, Adam and AdamW; the newer Muon; and the learning-rate schedules that large models are trained with. <bookmark mark='a'/> Part four's valley, revisited with everything we know now.",
-   "zh": "下一次：优化器。随机梯度下降，以及为什么它的噪声反而有帮助；动量、Adam和AdamW；更新的Muon；还有训练大模型时用的学习率调度。<bookmark mark='a'/>带着我们现在知道的一切，重访第4部分的那条山谷。"
+   "en": "Here are six problems to try, from the perceptron's learning rate to the Jacobian of RMSNorm. Pause here and work through them; full solutions are in this part's notes.",
+   "zh": "这里有六道题可以试一试，从感知机的学习率，到RMSNorm的雅可比矩阵。在这里暂停，把它们做一做；完整的解答在这一部分的笔记里。"
   },
-  "a727a81883b2": {
+  "421c3f529ce5": {
    "scene": "Outro",
-   "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in part eleven.",
-   "zh": "西蒙·普林斯的《理解深度学习》，是最清楚的一本现代教科书，而且可以免费阅读。感谢观看，第11部分见。"
+   "en": "Next time: seeing and remembering. A network that slides one small filter over an image, sharing its weights everywhere; 2012, when one of them won ImageNet by a wide margin; networks with loops that remember, the LSTM, and the first attention mechanism; and a character LSTM on our scoreboard.",
+   "zh": "下一次：看与记。一种网络，让一个小小的滤波器在图像上滑动，处处共享权重；2012年，其中一个以巨大的优势赢下了ImageNet；带回路、能记住东西的网络，LSTM，以及第一个注意力机制；还有一个字符LSTM，登上我们的记分牌。"
+  },
+  "3a5b521ff993": {
+   "scene": "Outro",
+   "en": "Simon Prince's Understanding Deep Learning is the clearest modern textbook, and free to read. Thanks for watching, and see you in Part 10.",
+   "zh": "西蒙·普林斯的《理解深度学习》是最清楚的现代教材，而且可以免费阅读。感谢收看，我们第10部分再见。"
   }
  },
  "title_en": "AI, Built: Part 9, Networks",
  "chapters_en": {
-  "Hook": "Two spirals",
-  "Universal": "1. One layer can do anything",
-  "Depth": "2. What depth adds",
-  "Signal": "3. Signals through fifty layers",
-  "Residual": "4. The residual stream",
-  "NeuralLM": "5. A neural language model",
-  "Outro": "Recap, and where this comes back"
+  "Hook": "How we got here",
+  "Neurons": "1. The first neurons",
+  "Perceptron": "2. The perceptron learns",
+  "XOR": "3. XOR, and the first winter",
+  "Backprop": "4. Backpropagation",
+  "Universal": "5. One layer can do anything",
+  "Barron": "6. Escaping the curse of dimensionality",
+  "Depth": "7. What depth adds",
+  "Revival": "8. The second winter, and the revival",
+  "Init": "9. Initialization, derived",
+  "Chaos": "10. The edge of chaos",
+  "Residual": "11. The residual stream",
+  "Norm": "12. Normalization",
+  "Block": "13. The modern block",
+  "KAN": "14. Kolmogorov-Arnold networks",
+  "NeuralLM": "15. A neural language model",
+  "Outro": "Recap, problems, and where this comes back"
  }
 }

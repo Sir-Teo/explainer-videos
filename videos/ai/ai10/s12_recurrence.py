@@ -225,15 +225,14 @@ class Recurrence(VoiceoverScene):
         tag = note(r"computed").to_corner(DL, buff=0.25)
         with self.voiceover(
             "Exploding gradients have a shape. <bookmark mark='a'/> Take the smallest recurrent network, one unit "
-            "with one weight w and one bias b, run it for fifty steps, and ask its last state to be 0.7. Here is "
-            "the loss over every w and b: dark where it is low, bright where it is high. Where the unit's "
-            "behaviour changes from settling high to settling low, the loss jumps: a cliff. "
-            "<bookmark mark='b'/> Gradient descent from a point near the edge walks a few steps, meets the cliff "
-            f"wall, where the gradient is {nr.max():,.0f}, and is thrown clean off the map. <bookmark mark='c'/> "
-            "Razvan Pascanu, Tomas Mikolov and Bengio proposed the fix in 2013: if the gradient is longer than a "
-            "threshold, shrink it to that length, keeping its direction. Clipped, the same descent stays on the "
-            f"map and ends at a loss of {g['loss_clip'][-1]:.4f}. Our recurrent networks in this part are trained "
-            "with clipping, and so are today's language models."
+            "with a weight w and a bias b, run it for fifty steps, and ask its last state to be 0.7. Here is the "
+            "loss over every w and b, bright where it is high. Where the unit switches from settling high to "
+            "settling low, the loss jumps: a cliff. <bookmark mark='b'/> Gradient descent from near the edge meets "
+            f"the cliff wall, where the gradient is {nr.max():,.0f}, and is thrown off the map. "
+            "<bookmark mark='c'/> The fix, from Razvan Pascanu, Tomas Mikolov and Bengio in 2013: if the gradient "
+            "is longer than a threshold, shrink it to that length. Clipped, the same descent ends at a loss of "
+            f"{g['loss_clip'][-1]:.4f}. Our recurrent networks are trained with clipping, and so are today's "
+            "language models."
         ) as vo:
             self.play(FadeIn(title), FadeIn(cite_), FadeIn(tag))
             vo.wait_until("a")
