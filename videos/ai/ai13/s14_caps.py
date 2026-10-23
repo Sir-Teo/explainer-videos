@@ -23,9 +23,9 @@ class Caps(VoiceoverScene):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
-    def plot(self, q, key, ylabel, lo, hi, center, ticks, fmt="{:.1f}", modes=("plain",)):
+    def plot(self, q, key, ylabel, lo, hi, center, ticks, fmt="{:.1f}", modes=("plain",), y_length=3.0):
         cs = np.asarray(q["cs"], float)
-        g = axes([1, cs[-1], 1], [lo, hi, (hi - lo) / 4], x_length=5.4, y_length=3.0,
+        g = axes([1, cs[-1], 1], [lo, hi, (hi - lo) / 4], x_length=5.4, y_length=y_length,
                  xlabel=r"$W_Q$ and $W_K$ grown by a factor $c$", ylabel=ylabel, xticks=list(range(1, int(cs[-1]) + 1)),
                  xfmt=lambda v: f"{int(v)}", yticks=ticks, yfmt=lambda v: fmt.format(v), center=center)
         lines = {m: VGroup(curve(g.ax, cs, np.clip(np.asarray(q[f"{key}_{m}"]), lo, hi), col, 3.5),
@@ -63,9 +63,9 @@ class Caps(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(eq), FadeIn(g1), FadeIn(g2), FadeIn(tag))
             vo.wait_until("a")
-            self.play(Indicate(eq[4], color=PLAIN))
+            self.play(Indicate(eq[4], color=PLAIN), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]), run_time=1.5)
             vo.wait_until("b")
-            self.play(Create(l1["plain"][0]), FadeIn(l1["plain"][1:]), run_time=1.5)
+            self.play(Indicate(g1, scale_factor=1.02))
             vo.wait_until("c")
             self.play(Create(l2["plain"][0]), FadeIn(l2["plain"][1:]), run_time=1.5)
             vo.wait_until("d")
@@ -89,11 +89,15 @@ class Caps(VoiceoverScene):
         step = ladder(self, rows, whys, keep=3, top=3.15, x=-2.2, buff=0.5, edge=6.9)
         ent = np.asarray(q["ent_norm"], float)
         eh = float(np.ceil(np.asarray(q["ent_plain"]).max() + 0.5))
-        g1, l1 = self.plot(q, "ent", r"attention entropy, \ bits", 0, eh, [-3.4, -2.0, 0], [0, eh], fmt="{:.0f}")
+        g1, l1 = self.plot(q, "ent", r"attention entropy, \ bits", 0, eh, [-3.4, -2.3, 0], [0, eh], fmt="{:.0f}",
+                           y_length=2.1)
         users = label(r"QK-norm: \ ViT-22B (2023), \ Qwen3, \ GLM-4.5, \ Gemma 3 \ (2025)", font_size=22,
                       color=NORMC).move_to([3.6, -1.4, 0])
         pt18 = label(r"Part 18 measures the runaway logits \\ in training, with and without it", font_size=20,
                      color=GREY_A).next_to(users, DOWN, buff=0.3)
+        b0_, bn_ = float(np.asarray(q["bits_plain"])[0]), float(np.asarray(q["bits_norm"])[0])
+        bolt = label(rf"bolted onto our trained model: \ ${bn_:.2f}$ bits \ instead of ${b0_:.2f}$", font_size=20,
+                     color=NORMC).next_to(pt18, DOWN, buff=0.3)
         flat = float(np.ptp(ent))
         b0, bn = float(np.asarray(q["bits_plain"])[0]), float(np.asarray(q["bits_norm"])[0])
         cost = (f" But bolted onto a model that was trained without it, it costs {bn - b0:.2f} bits a character, "
@@ -120,6 +124,8 @@ class Caps(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(g1), Create(l1["plain"][0]), FadeIn(l1["plain"][1:]))
             self.play(Create(l1["norm"][0]), FadeIn(l1["norm"][1:]), FadeIn(users), FadeIn(pt18))
+            if bn_ > b0_ + 0.05:
+                self.play(FadeIn(bolt))
         self.wait(0.3)
         self.clear_scene()
 
