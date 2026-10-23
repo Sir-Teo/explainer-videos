@@ -499,7 +499,7 @@ _DATA = {
         '两词元预测没有放进来：在第16章，它在我们的规模上没有带来收益，而且要额外的算力，会让比较不公平。8位算术也没有放进来：在CPU上，它只是模拟了那份节省。',
 
     'f"Watch them learn.':
-        "看它们学习。左边是每个模型在它从没训练过的文本上的损失；右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='a'/>一开始，两个都写出噪声，损失大约是{first['val']:.1f}奈特。<bookmark mark='b'/>让它们读吧。<bookmark mark='c'/>到最后，比一比它们写出的东西；曲线告诉我们，哪一个学得更快。",
+        "看它们学习。<bookmark mark='a'/>左边是每个模型在它从没训练过的文本上的损失；<bookmark mark='b'/>右边是每个模型在“The door opened, and”这几个词之后写出的东西，在同样的步数冻结，用同样的随机种子。<bookmark mark='c'/>一开始，两个都写出噪声，损失大约是{first['val']:.1f}奈特。<bookmark mark='d'/>让它们读吧；到最后，比一比它们写出的东西，曲线告诉我们，哪一个学得更快。",
 
     '"The scores.':
         "成绩。<bookmark mark='a'/>{verdict}<bookmark mark='b'/>{stab}",

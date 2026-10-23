@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai13.common import A, K, Q, V, curve, load, softmax_picture, softmax_stage
+from videos.ai.ai13.common import A, HIST, K, PART, Q, V, curve, load, softmax_picture, softmax_stage
 
 
 class Smoother(VoiceoverScene):
@@ -13,12 +13,12 @@ class Smoother(VoiceoverScene):
         self.card()
         self.smoother()
         self.formula()
+        self.definition()
         self.geometry()
-        self.scale()
 
     def card(self):
-        card = chapter_card(1, r"A weighted average", r"How do you guess a value from its neighbours?", part=13,
-                            lit=(2017,))
+        card = chapter_card(1, r"A weighted average", r"How do you guess a value from its neighbours?", part=PART,
+                            lit=(1964, 2017))
         with self.voiceover("Chapter one. Attention is a weighted average."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -172,6 +172,60 @@ class Smoother(VoiceoverScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def definition(self):
+        colors = {r"q": Q, r"k_i": K, r"k_j": K, r"v_i": V}
+        f = cmath(r"\mathrm{Attn}(", r"q", r")", r"=", r"\sum_i", r"\frac{e^{\,", r"q", r"\cdot", r"k_i",
+                  r"/\sqrt{d}}}{\sum_j e^{\,", r"q", r"\cdot", r"k_j", r"/\sqrt{d}}}", r"\,", r"v_i",
+                  colors=colors, font_size=40)
+        words = label(r"score the keys against the query, \\ \ softmax the scores, \ average the values",
+                      font_size=26, color=GREY_A)
+        card = definition_card(r"Attention", VGroup(f, words).arrange(DOWN, buff=0.35, aligned_edge=LEFT),
+                               color=A, width=8.6, font_size=28).move_to([0, 0.4, 0])
+        # the same weights, drawn: a query, five keys, their weights, the average
+        wv = np.array([0.08, 0.46, 0.21, 0.05, 0.20])
+        demo = VGroup(*[VGroup(Rectangle(width=0.42, height=max(1.5 * v, 0.02), stroke_width=0, fill_color=A,
+                                         fill_opacity=0.9), MathTex(rf"v_{i + 1}", font_size=24, color=V))
+                        for i, v in enumerate(wv)])
+        for b_ in demo:
+            b_[1].next_to(b_[0], DOWN, buff=0.1)
+        demo.arrange(RIGHT, buff=0.25, aligned_edge=DOWN)
+        demo_l = label(r"weights \ (illustrative)", font_size=20, color=GREY_B).next_to(demo, LEFT, buff=0.3)
+        demo_g = VGroup(demo, demo_l).move_to([0, -2.6, 0])
+        hist = history_card(2014, r"D.~Bahdanau, K.~Cho \& Y.~Bengio",
+                            r"a translation network looks back at the source sentence (Part 10); \ "
+                            r"in 2017 attention becomes the whole network", color=HIST, width=5.0)
+        hist.move_to([4.3, 0.9, 0])
+        quiz = pause_card(r"If every key is the same, \ what does attention return?", width=6.4)
+        quiz.move_to([-3.0, -2.45, 0])
+        ans = label(r"every weight is $1/n$: \ the plain average of the values", font_size=26, color=V)
+        ans.move_to([3.6, -2.45, 0])
+        with self.voiceover(
+            "Here is the definition we will use for the rest of this part. <bookmark mark='a'/> Attention takes a "
+            "query, a list of keys and a list of values. It scores each key against the query with a dot product, "
+            "divided by the square root of d, turns the scores into weights with a softmax, and returns the "
+            "weighted average of the values. <bookmark mark='b'/> The idea entered neural networks in 2014, when "
+            "Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio let a translation network look back at the words of "
+            "the sentence it was translating; you met it in Part 10. In 2017 it became the whole network. "
+            "<bookmark mark='c'/> A question before we go on: if every key is the same, what does attention "
+            "return? <bookmark mark='d'/> Every score is equal, so every weight is one over n, and the answer is "
+            "the plain average of the values. Attention can only weigh and blend what it is given."
+        ) as vo:
+            self.play(FadeIn(card, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b_[0], DOWN) for b_ in demo], lag_ratio=0.15), FadeIn(demo_l),
+                      FadeIn(VGroup(*[b_[1] for b_ in demo])))
+            self.play(Indicate(f, color=A, scale_factor=1.04))
+            vo.wait_until("b")
+            self.play(FadeOut(demo_g), card.animate.scale(0.82).move_to([-2.6, 0.9, 0]))
+            self.play(FadeIn(hist, shift=LEFT * 0.2))
+            vo.wait_until("c")
+            self.play(FadeIn(quiz, shift=UP * 0.2))
+            vo.wait_until("d")
+            self.play(FadeIn(ans, shift=LEFT * 0.2))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def geometry(self):
         plane = NumberPlane(x_range=[-3.2, 3.2, 1], y_range=[-3.2, 3.2, 1], x_length=6.2, y_length=6.2,
                             background_line_style={"stroke_color": GREY_D, "stroke_width": 1, "stroke_opacity": 0.5},
@@ -222,7 +276,8 @@ class Smoother(VoiceoverScene):
             "Here's the geometry. Every key is an arrow; so is the query. <bookmark mark='a'/> The score of a key is "
             "its dot product with the query: how long both are, times how much they point the same way. The softmax "
             "turns the scores into weights. <bookmark mark='b'/> Turn the query, and the weights flow from key to "
-            "key. A query is a direction to look in."
+            "key. A query is a direction to look in. Next, the same formula read another way: as a memory that "
+            "recalls what it stored."
         ) as vo:
             self.play(Create(plane), FadeIn(tag))
             self.play(LaggedStart(*[GrowArrow(a) for a in karrows], lag_ratio=0.15), FadeIn(klabs), run_time=1.5)
@@ -235,65 +290,4 @@ class Smoother(VoiceoverScene):
         self.wait(0.3)
         for m in (qarrow, qlab, wb):
             m.clear_updaters()
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def scale(self):
-        d = load("dotscale")
-        ds = [int(v) for v in d["ds"]]
-        raw, scl = np.asarray(d["raw_ent"]), np.asarray(d["scaled_ent"])
-        sd = np.asarray(d["sd"])
-        n = int(d["n"])
-        mx = float(d["max_ent"])
-        lx = np.log2(ds)
-        ax = Axes(x_range=[0.5, 9.5, 1], y_range=[0, 6.5, 1], x_length=6.2, y_length=4.0, tips=False,
-                  axis_config={"stroke_color": GREY_C, "include_ticks": True, "tick_size": 0.05}).move_to([-3.3, -0.5, 0])
-        xt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(math.log2(v), 0), DOWN, buff=0.1) for v in ds])
-        yt = VGroup(*[MathTex(str(v), font_size=22, color=GREY_B).next_to(ax.c2p(0.5, v), LEFT, buff=0.1) for v in (0, 2, 4, 6)])
-        xn = label(r"$d$, \ the numbers in each vector", font_size=24, color=GREY_A).next_to(xt, DOWN, buff=0.15)
-        yn = label(rf"how spread the weights are \ (entropy over ${n}$ keys, bits)", font_size=22, color=GREY_A)
-        yn.next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        top = DashedLine(ax.c2p(0.5, mx), ax.c2p(9.5, mx), color=GREY_B, stroke_width=1.5)
-        c_raw = VGroup(curve(ax, lx, raw, C.SURPRISE, 4), *[Dot(ax.c2p(a, b), radius=0.06, color=C.SURPRISE) for a, b in zip(lx, raw)])
-        c_scl = VGroup(curve(ax, lx, scl, Q, 4), *[Dot(ax.c2p(a, b), radius=0.06, color=Q) for a, b in zip(lx, scl)])
-        l_raw = label(r"$q \cdot k$", font_size=28, color=C.SURPRISE).next_to(ax.c2p(lx[-1], raw[-1]), UP, buff=0.2)
-        l_scl = label(r"$q \cdot k / \sqrt{d}$", font_size=28, color=Q).next_to(ax.c2p(lx[-1], scl[-1]), DOWN, buff=0.25)
-        # one draw at the largest d: the weights over the keys, raw and scaled
-        g = np.random.default_rng(5)
-        qv, kv = g.normal(size=ds[-1]), g.normal(size=(n, ds[-1]))
-        s = kv @ qv
-
-        def sm(z):
-            e = np.exp(z - z.max())
-            return e / e.sum()
-
-        def strip(w, color, y):
-            bw_ = 5.2 / n
-            return VGroup(*[Rectangle(width=bw_ * 0.8, height=max(1.5 * v / max(w.max(), 0.3), 0.005), stroke_width=0,
-                                      fill_color=color, fill_opacity=0.9).move_to([1.4 + (i + 0.5) * bw_, y + 0.75 * v / max(w.max(), 0.3), 0])
-                            for i, v in enumerate(w)])
-
-        s_raw, s_scl = strip(sm(s), C.SURPRISE, 0.6), strip(sm(s / math.sqrt(ds[-1])), Q, -2.0)
-        t_raw = label(rf"$d = {ds[-1]}$, \ no division: \ one key takes it all", font_size=22, color=C.SURPRISE)
-        t_raw.next_to(s_raw, UP, buff=0.15).set_x(4.0)
-        t_scl = label(r"divided by $\sqrt{d}$: \ spread out", font_size=22, color=Q).next_to(s_scl, UP, buff=0.15).set_x(4.0)
-        assert sm(s).max() > 0.5 > sm(s / math.sqrt(ds[-1])).max()
-        with self.voiceover(
-            "One detail in that formula: the division by the square root of d. A query and a key each have d "
-            "numbers, and a dot product of d random terms spreads out like the square root of d: "
-            f"here from {sd[0]:.1f} at d equals {ds[0]} to {sd[-1]:.0f} at {ds[-1]}. <bookmark mark='a'/> Feed scores "
-            "that spread into a softmax and it stops averaging: it picks one key and ignores the rest. Over "
-            f"{n} keys, the spread of the weights falls from {raw[0]:.1f} bits to {raw[-1]:.2f}. "
-            "<bookmark mark='b'/> Divide by the square root of d, and the scores keep a spread of one: the weights "
-            f"stay spread out, {scl.mean():.1f} bits at every size, and the network can still learn which keys "
-            "matter."
-        ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xn), FadeIn(yn), Create(top))
-            vo.wait_until("a")
-            self.play(Create(c_raw), FadeIn(l_raw), run_time=1.5)
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in s_raw], lag_ratio=0.01), FadeIn(t_raw))
-            vo.wait_until("b")
-            self.play(Create(c_scl), FadeIn(l_scl), run_time=1.5)
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in s_scl], lag_ratio=0.01), FadeIn(t_scl))
-        self.wait(0.3)
         self.clear_scene()

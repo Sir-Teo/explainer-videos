@@ -152,8 +152,8 @@ def compute_dotscale():
         out["scaled_jac"].append(j)
     out["max_ent"] = math.log2(n)
     # the Jacobian's size as the spread of the scores grows, on one grid (for the saturation picture)
-    sig = np.exp(np.linspace(np.log(0.1), np.log(30), 50))
-    qq, kk = g.normal(size=(trials, n)), None
+    sig = np.exp(np.linspace(np.log(0.1), np.log(300), 60))
+    qq = g.normal(size=(trials, n))
     out["sig"] = sig
     out["jac_by_sig"] = np.array([stats(qq * s_)[2] for s_ in sig])
     out["ent_by_sig"] = np.array([stats(qq * s_)[0] for s_ in sig])

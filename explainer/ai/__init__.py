@@ -124,6 +124,7 @@ TIMELINE = [
     (1959, r"Samuel's checkers"),
     (1960, r"ADALINE"),
     (1962, r"DPLL"),
+    (1964, r"kernel smoothers"),
     (1965, r"Moore's law"),
     (1966, r"ELIZA"),
     (1968, r"A* search"),

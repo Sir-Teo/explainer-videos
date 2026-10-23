@@ -78,14 +78,20 @@ class Anatomy(VoiceoverScene):
             "percent of "
             "the tokens, chosen with the most care."
         ) as vo:
-            self.play(FadeIn(top.boxes[0]), FadeIn(bot.boxes.copy().set_opacity(0.15)))
+            pipe = VGroup(top, bot, link)  # in the middle, larger, until the runs need the space below it
+            pipe.save_state()
+            pipe.scale(1.15).shift(DOWN * 1.9)
+            ghost = bot.boxes.copy().set_opacity(0.15)
+            self.play(FadeIn(top.boxes[0]), FadeIn(ghost))
             vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(b)) for a, b in zip(top.arrows, top.boxes[1:])],
                                   lag_ratio=0.5), run_time=3.0)
             vo.wait_until("b")
             self.play(Create(link), LaggedStart(*[FadeIn(b) for b in bot.boxes], lag_ratio=0.4),
                       LaggedStart(*[GrowArrow(a) for a in bot.arrows], lag_ratio=0.4), run_time=3.0)
+            self.remove(ghost)
             vo.wait_until("c")
+            self.play(Restore(pipe), run_time=1.0)
             self.play(FadeIn(src), FadeIn(rows[0][0]), LaggedStart(*[FadeIn(m) for m in rows[0][1]], lag_ratio=0.3))
             self.play(FadeIn(rows[1][0]), LaggedStart(*[FadeIn(m) for m in rows[1][1]], lag_ratio=0.3))
             vo.wait_until("d")
@@ -171,6 +177,16 @@ class Anatomy(VoiceoverScene):
         caveat = note(r"the final run only: \ not the experiments, the data, the people, or the cluster itself",
                       font_size=20).next_to(hours, DOWN, buff=0.25)
         src = cite(r"DeepSeek-AI (2024), \ Table 1; \ Llama Team (2024)", corner=DR, font_size=17)
+        # the two compute totals to scale
+        cbars = VGroup()
+        for k, (nm, v) in enumerate(((r"Llama 3.1", P["llama_6nd"]), (r"DeepSeek-V3", P["dsv3_6nd"]))):
+            y_ = 0.4 - 0.6 * k
+            r_ = Rectangle(width=7.4 * v / P["llama_6nd"], height=0.36, stroke_width=0, fill_color=C_COL,
+                           fill_opacity=0.8)
+            r_.move_to([-3.4 + r_.width / 2, y_, 0])
+            t_ = label(nm, font_size=21, color=GREY_A).next_to([-3.4, y_, 0], LEFT, buff=0.2)
+            v_ = label(rf"${sci(v, 2)}$ FLOP", font_size=20, color=C_COL).next_to(r_, RIGHT, buff=0.15)
+            cbars.add(VGroup(t_, r_, v_))
         with self.voiceover(
             "How big is such a run? Part 14 gave the rule: about six operations per parameter per token. "
             "<bookmark mark='a'/> For Llama 3.1, six times 405 billion times 15.6 trillion is "
@@ -187,8 +203,10 @@ class Anatomy(VoiceoverScene):
             self.play(FadeIn(src))
             vo.wait_until("a")
             step(1)
+            self.play(FadeIn(cbars[0][0]), GrowFromEdge(cbars[0][1], LEFT), FadeIn(cbars[0][2]))
             vo.wait_until("b")
             step(2)
+            self.play(FadeIn(cbars[1][0]), GrowFromEdge(cbars[1][1], LEFT), FadeIn(cbars[1][2]))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(h, shift=UP * 0.1) for h in hours[:3]], lag_ratio=0.5), run_time=2.5)
             vo.wait_until("d")

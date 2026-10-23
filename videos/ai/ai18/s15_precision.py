@@ -408,11 +408,11 @@ class Precision(VoiceoverScene):
         bt.align_to(blk, LEFT)
         # what a value is, in each format (the OCP MX spec; NVIDIA's NVFP4 paper)
         fm = VGroup(MathTex(r"x_i = 2^{k}\,e_i", font_size=30, color=PREC["fp8_tensor"]),
-                    note(rf"$2^k$: \ one $8$-bit power of two per block of ${M['block']}$", font_size=18)
+                    note(rf"$2^k$: \ one $8$-bit power of two per block of ${M['block']}$", font_size=21)
                     ).arrange(RIGHT, buff=0.3)
         fn = VGroup(MathTex(r"x_i = s\,s_b\,e_i", font_size=30, color=PREC["fp8_tile"]),
                     note(r"$s$: \ FP32, per tensor; \ $s_b$: \ E4M3, per block of $16$; \ $e_i$: \ E2M1",
-                         font_size=18)).arrange(RIGHT, buff=0.3)
+                         font_size=21)).arrange(RIGHT, buff=0.3)
         VGroup(fm, fn).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(bt, DOWN, buff=0.35).align_to(blk, LEFT)
         items = VGroup(
             label(rf"MXFP8, \ blocks of ${M['block']}$ (Blackwell): \ an ${M['params'] / 1e9:.0f}$B model on "
