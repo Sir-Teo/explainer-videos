@@ -202,9 +202,8 @@ class Scale(VoiceoverScene):
             f"<bookmark mark='c'/> How much the weights respond peaks when the scores spread by about "
             f"{sig[pk]:.0f}, and falls away on both sides. <bookmark mark='d'/> Scaled scores, with a spread of one, "
             f"respond at {j1:.2f}. Unscaled at d of {ds[-1]}, the response is {jr:.2f}, and it keeps falling as the "
-            "vectors grow. That is the reason Vaswani and colleagues gave in 2017 for the square root. Later work on "
-            "very wide networks, Greg Yang's mu P, argues for one over d once training has lined queries up with "
-            "their keys; we will meet runaway scores again in chapter thirteen."
+            "vectors grow. That is the reason Vaswani and colleagues gave in 2017. Greg Yang's mu P later argued for "
+            "one over d in very wide networks; runaway scores return in chapter thirteen."
         ) as vo:
             step(0)
             self.play(FadeIn(demo), FadeIn(demo_t))

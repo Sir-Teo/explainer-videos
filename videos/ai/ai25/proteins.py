@@ -198,7 +198,7 @@ def drmsd(Xp, Xt) -> float:
 # ---------------------------------------------------------------------------
 # The pair representation: completing a distance matrix
 # ---------------------------------------------------------------------------
-PAIR_N = 24
+PAIR_N = 20
 RELPOS = 8  # relative position, clipped to +-8: 17 one-hot bins
 
 
@@ -261,7 +261,7 @@ class PairModel(nn.Module):
     so it can't use what the other pairs know.  ``recycle``: the previous pass's pair features and distances come
     back in, as AlphaFold 2 recycles its outputs."""
 
-    def __init__(self, c=32, blocks=3, triangle=True, recycle=False):
+    def __init__(self, c=24, blocks=3, triangle=True, recycle=False):
         super().__init__()
         self.embed = nn.Linear(2 + 2 * RELPOS + 1, c)
         self.blocks = nn.ModuleList()
@@ -307,7 +307,7 @@ def n_params(m: nn.Module) -> int:
     return sum(p.numel() for p in m.parameters())
 
 
-def train_pair(kind: str, seed: int, steps=3000, batch=32, lr=1e-3, val=None, max_cycles=4):
+def train_pair(kind: str, seed: int, steps=2500, batch=16, lr=1e-3, val=None, max_cycles=4):
     torch.manual_seed(seed)
     rng = np.random.default_rng(3000 + seed)
     m = PairModel(triangle=kind != "pairwise", recycle=kind == "recycle",

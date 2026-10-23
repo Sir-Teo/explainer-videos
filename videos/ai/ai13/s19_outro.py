@@ -97,15 +97,14 @@ class Outro(VoiceoverScene):
         head = label(rf"Part {PART}, \ in eight pictures", font_size=40).to_edge(UP, buff=0.35)
         t = load("tf")
         with self.voiceover(
-            "Let's take stock. Attention is a weighted average: Nadaraya and Watson's smoother, with a kernel the "
-            "network learns, and it is a memory read, one step of a modern Hopfield network. Dividing by the square "
-            "root of d keeps its softmax from collapsing. Each head compares and moves along only a few directions, "
-            "the mask decides who sees whom, and a block's cost is twelve d squared weights plus a term that grows "
-            f"with the context. Our own transformer, built from these, reached {float(t['passage_bits']):.2f} bits a "
-            "character. Positions can be added, rotated, penalized or left out, and stretched past the training "
-            "length with care. Softmax needs somewhere to park attention, and sink logits and gates give it one. "
-            "And trained heads find algorithms of their own: copying, a step of gradient descent, programs, within "
-            "limits that only more steps of thought remove."
+            "Let's take stock. Attention is a weighted average, Nadaraya and Watson's smoother with a learned "
+            "kernel, and a memory read, one step of a modern Hopfield network. Dividing by the square root of d "
+            "keeps its softmax from collapsing. Heads compare and move along a few directions, the mask decides who "
+            "sees whom, and a block costs twelve d squared weights plus a term that grows with the context. Our "
+            f"transformer reached {float(t['passage_bits']):.2f} bits a character. Positions can be added, rotated, "
+            "penalized or left out, and stretched with care. Sink logits and gates give the softmax somewhere to "
+            "park, and trained heads find algorithms: copying, a step of gradient descent, programs, within limits "
+            "that only more steps of thought remove."
         ) as vo:
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15, scale=0.95) for t_ in tiles], lag_ratio=0.85),
@@ -125,11 +124,10 @@ class Outro(VoiceoverScene):
             (r"heads and circuits, \ taken apart", [30]),
         ], font_size=24)
         with self.voiceover(
-            "This comes back everywhere. Part 14 follows the models built on this block, from GPT-1 to the open "
-            "frontier. Part 15 is about the keys and values every past token leaves behind, and the fixed-size "
-            "memories that replace them; Part 16 about attending to only some of the past. Part 18 trains long "
-            "contexts and watches runaway logits, Part 19 makes attention fast and cheap to serve, Part 28 lets "
-            "models think past their fixed depth, and Part 30 takes heads and circuits apart in real models."
+            "This comes back everywhere: the models built on this block in Part 14; the memory of keys and values "
+            "in Part 15; attending to only some of the past in Part 16; long contexts and runaway logits in Part "
+            "18; fast serving in Part 19; thinking past a fixed depth in Part 28; and circuits in real models in "
+            "Part 30."
         ) as vo:
             self.play(FadeIn(card.head))
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in card.rows], lag_ratio=0.4),

@@ -110,12 +110,13 @@ class Masked(VoiceoverScene):
         tr = ValueTracker(0)
 
         sh = Scrub([digit_sheet(np.concatenate([HM[i], RC[i], orig.astype(np.uint8)]), 3, 6, size=0.95,
-                                gap=0.1).move_to([-2.4, -0.2, 0]) for i in range(n)], tr)
+                                gap=0.1).move_to([-1.3, -0.2, 0]) for i in range(n)], tr)
+        f0 = sh.frames[0]
         rl = VGroup(label(r"what it sees", font_size=20, color=GREY_A), label(r"its reconstruction", font_size=20,
                                                                               color=MAE_C),
                     label(r"the original", font_size=20, color=GREY_A))
         for k, r_ in enumerate(rl):
-            r_.move_to([-6.2, 0.9 - 1.05 * k, 0])
+            r_.next_to([f0.get_left()[0], f0.get_top()[1] - 0.06 - 0.475 - 1.05 * k, 0], LEFT, buff=0.2)
         runs, keys = m["runs"], m["keys"]["0.75"]
         S_ = runs[keys[0]]["steps"][-1]
         lmax = max(max(x for x in runs[k]["loss"] if np.isfinite(x)) for k in keys)
@@ -123,7 +124,7 @@ class Masked(VoiceoverScene):
                   ylabel=r"loss on hidden pixels", xticks=[0, S_], center=[4.6, 0.0, 0])
         lc = seed_curves(ax.ax, runs, keys, "loss", MAE_C)
         st = always_redraw(lambda: label(rf"step ${steps[int(np.clip(round(tr.get_value()), 0, n - 1))]}$", font_size=22,
-                                         color=GREY_A).move_to([-2.4, 2.5, 0]))
+                                         color=GREY_A).next_to(f0, UP, buff=0.25))
         tg = tag(r"computed: \ $75\%$ hidden, \ the same masks at every snapshot; \ three seeds")
         with self.voiceover(
             "Here is ours learning, on six test digits, with the same patches hidden at every snapshot. <bookmark "
