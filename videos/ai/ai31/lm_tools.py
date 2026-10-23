@@ -14,7 +14,6 @@ trained on Part 1's thirty novels).
 from __future__ import annotations
 
 import copy
-import json
 import math
 import os
 
@@ -36,7 +35,9 @@ def rng(seed: int) -> np.random.Generator:
 
 
 def _passage() -> str:
-    return (REPO_ROOT / ".cache" / "ai1" / "passage.txt").read_text()
+    from videos.ai.ai1 import compute as c1
+
+    return c1.text("passage")
 
 
 # ---------------------------------------------------------------------------
@@ -277,39 +278,33 @@ WEAK_CFG = dict(d=128, layers=2, heads=4, seq=256)
 
 def pretrain_weak(tokens: int = 2_000_000, batch: int = 16, lr: float = 3e-3, seed: int = 0) -> dict:
     """The weak supervisor's base: a 2-layer model pretrained on the same novels, as Part 27's distillation student
-    (2 million tokens)."""
+    (2 million tokens), checkpointed every 100 steps so a killed run resumes."""
     from explainer.lm import pocket
     from videos.ai.ai27 import post as P
 
     train, valid = N.token_arrays()
-    torch.manual_seed(seed)
     cfg = pocket.Config(vocab=N.tokenizer().get_vocab_size(), **WEAK_CFG)
-    model = pocket.PocketGPT(cfg)
-    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.1)
+    run = pocket.Run(model=cfg, lr=lr, batch=batch, tokens=tokens, seed=seed)
     data = pocket.TokenStream(train, valid, cfg.seq, seed=1)
-    steps = tokens // (batch * cfg.seq)
-    curve = []
-    model.train()
-    for step in range(steps):
-        for gr in opt.param_groups:
-            gr["lr"] = lr * min(1, (step + 1) / 50) * 0.5 * (1 + math.cos(math.pi * step / steps))
-        x, y = data.batch(batch)
-        loss = F.cross_entropy(model(x).flatten(0, 1), y.flatten())
-        opt.zero_grad()
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        opt.step()
-        if (step + 1) % 50 == 0:
-            curve.append((step + 1, float(loss)))
-    model.eval()
     OUT.mkdir(parents=True, exist_ok=True)
-    torch.save({"config": WEAK_CFG, "model": model.state_dict()}, OUT / "weak_base.pt")
-    return dict(params=int(sum(p.numel() for p in model.parameters())), tokens=tokens, steps=steps,
-                curve=np.array(curve), heldout=P.heldout_loss(model, valid))
+    res = pocket.train(run, data, threads=THREADS, verbose=True, ckpt=OUT / "weak_base.ckpt", ckpt_every=100)
+    model = res.pop("_model").eval()
+    res.pop("_opts")
+    torch.save({"config": WEAK_CFG, "model": model.state_dict()}, OUT / "weak_base.pt.tmp")
+    (OUT / "weak_base.pt.tmp").replace(OUT / "weak_base.pt")
+    (OUT / "weak_base.ckpt").unlink(missing_ok=True)
+    return dict(params=int(sum(p.numel() for p in model.parameters())), tokens=tokens, steps=res["steps"],
+                curve=np.array([c[:2] for c in res["curve"]]), heldout=P.heldout_loss(model, valid))
 
 
 def _load_weak():
+    """The weak supervisor's base model (pretrained first, resuming, if it isn't saved yet)."""
     from explainer.lm import pocket
+
+    if not (OUT / "weak_base.pt").exists():
+        from videos.ai.ai31.compute import CACHE
+
+        CACHE.save("weak", pretrain_weak())
 
     ck = torch.load(OUT / "weak_base.pt")
     m = pocket.PocketGPT(pocket.Config(vocab=N.tokenizer().get_vocab_size(), **ck["config"]))
@@ -318,15 +313,10 @@ def _load_weak():
 
 
 def _which_data():
-    """Part 27's which-book questions: read from its cache if present, else built the same way in this process
-    (the same seed, the same sentences; nothing is written to Part 27's cache)."""
-    p = REPO_ROOT / ".cache" / "ai27" / "data.json"
-    if p.exists() and (p.parent / "sft.pt").exists():  # Part 27's cache is complete once its SFT model is saved
-        d = json.loads(p.read_text())
-    else:
-        from videos.ai.ai27 import compute as c27
+    """Part 27's which-book questions, through its own compute module (so tools/make.py computes it first)."""
+    from videos.ai.ai27 import compute as c27
 
-        d = c27.compute_data()
+    d = c27.load("data")
     return d["which_train"], d["which_test"], d["titles"]
 
 
@@ -427,11 +417,12 @@ def _train_classifier(blocks, head, H, last, targets, steps, lr, seed, batch=32,
 
 
 def weak_to_strong(seeds: int = 5, steps: int = 300, lr_weak: float = 1e-3, lr_strong: float = 5e-4,
-                   strong_top: int = 1, conf: float = 0.5) -> dict:
+                   strong_top: int = 1, conf: float = 0.5, part=None) -> dict:
     """Per seed: a weak supervisor (the 2-layer model, fine-tuned whole on ground truth for half the training
     questions) labels the other half; the strong model (its last ``strong_top`` blocks and a new head) is fine-tuned
     on those labels (naively, and with the confidence loss), and, as the ceiling, on the true labels; all on equal
-    budgets.  PGR = (weak-to-strong - weak) / (ceiling - weak) on the held-out questions."""
+    budgets.  PGR = (weak-to-strong - weak) / (ceiling - weak) on the held-out questions.  ``part``: a Cache.partial
+    holding finished seeds (each seed is independent and seeded, so a killed run resumes with the same numbers)."""
     rows_tr, rows_te, titles = _which_data()
     ids_tr, y_tr = _encode_questions(rows_tr, titles)
     ids_te, y_te = _encode_questions(rows_te, titles)
@@ -456,7 +447,9 @@ def weak_to_strong(seeds: int = 5, steps: int = 300, lr_weak: float = 1e-3, lr_s
                strong_heldout=P.heldout_loss(strong, valid), weak_heldout=P.heldout_loss(weak_base, valid))
     res = {k: [] for k in ("weak", "w2s", "w2s_conf", "ceiling", "agree_wrong", "agree_wrong_conf")}
     curves = {k: [] for k in ("w2s", "w2s_conf", "ceiling")}
-    for sd in range(seeds):
+    def one(sd):
+        r = {k: None for k in res}
+        cv = {}
         perm = rng(1000 + sd).permutation(len(ids_tr))
         A, B = perm[: len(perm) // 2], perm[len(perm) // 2:]
         onehot = lambda y: F.one_hot(torch.as_tensor(y), C).float()  # noqa: E731
@@ -472,15 +465,15 @@ def weak_to_strong(seeds: int = 5, steps: int = 300, lr_weak: float = 1e-3, lr_s
                                 for k in range(0, len(B), 128)])
             weak_test = torch.cat([wrun(Hw_te[k:k + 128].float(), last_te[k:k + 128]).argmax(-1)
                                    for k in range(0, len(ids_te), 128)]).numpy()
-        res["weak"].append(wacc)
+        r["weak"] = wacc
         every = max(1, steps // 6)
         for name, tgt, c in (("ceiling", onehot(y_tr[B]), 0.0), ("w2s", soft_B, 0.0), ("w2s_conf", soft_B, conf)):
             sb = [copy.deepcopy(b) for b in strong.blocks[up:]]
             sh = Head(strong, C)
             acc, hist, srun = _train_classifier(sb, sh, H_tr[B], last_tr[B], tgt, steps, lr_strong, sd, conf=c,
                                                 evals=(H_te, last_te, y_te, every))
-            res[name].append(acc)
-            curves[name].append(hist)
+            r[name] = acc
+            cv[name] = [list(h) for h in hist]
             if name != "ceiling":
                 with torch.no_grad():
                     for b in sb:
@@ -489,9 +482,23 @@ def weak_to_strong(seeds: int = 5, steps: int = 300, lr_weak: float = 1e-3, lr_s
                                       for k in range(0, len(ids_te), 128)]).numpy()
                 wrong = weak_test != y_te
                 key = "agree_wrong" if name == "w2s" else "agree_wrong_conf"
-                res[key].append(float((pred[wrong] == weak_test[wrong]).mean()))
-        print(f"    seed {sd}: weak {res['weak'][-1]:.3f}  w2s {res['w2s'][-1]:.3f}  conf {res['w2s_conf'][-1]:.3f}  "
-              f"ceiling {res['ceiling'][-1]:.3f}", flush=True)
+                r[key] = float((pred[wrong] == weak_test[wrong]).mean())
+        print(f"    seed {sd}: weak {r['weak']:.3f}  w2s {r['w2s']:.3f}  conf {r['w2s_conf']:.3f}  "
+              f"ceiling {r['ceiling']:.3f}", flush=True)
+        return dict(res=r, curves=cv)
+
+    for sd in range(seeds):
+        if part is not None and str(sd) in part:
+            piece = part[str(sd)]
+        else:
+            piece = one(sd)
+            if part is not None:
+                part[str(sd)] = piece
+        for k in res:
+            res[k].append(piece["res"][k])
+        for k in curves:
+            curves[k].append(piece["curves"][k])
+
     for k, v in res.items():
         out[k] = np.array(v)
     w, s, c, ce = (np.array(res[k]) for k in ("weak", "w2s", "w2s_conf", "ceiling"))

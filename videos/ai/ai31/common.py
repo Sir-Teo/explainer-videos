@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import json
-
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from explainer.tts import REPO_ROOT
 
 from .compute import load  # noqa: F401
 
@@ -100,24 +97,23 @@ def wrap_data(text: str, chars: int = 46, font_size: int = 20, color=WHITE, max_
 
 
 # ---------------------------------------------------------------------------
-# The final scoreboard: every row the series has computed so far, read from each part's cache (never computed
-# here: a part whose cache is missing simply contributes no row yet)
+# The final scoreboard: every row the series has computed, read through each part's own compute module (so
+# tools/make.py computes those parts first); a part not yet computed contributes no row, and nothing is computed here
 # ---------------------------------------------------------------------------
-def _cache(part: str, name: str) -> dict | None:
-    p = REPO_ROOT / ".cache" / part / f"{name}.json"
-    if not p.exists():
-        return None
-    try:
-        return json.loads(p.read_text())
-    except (ValueError, OSError):
-        return None
+def _result(mod, name: str) -> dict | None:
+    path = mod.CACHE.path(name) if hasattr(mod, "CACHE") else mod.path(name)
+    return mod.load(name) if path.exists() else None
 
 
 def board_rows() -> tuple[list[dict], dict]:
     """The scoreboard's rows in the order Part 1 drew them, with the rows later parts added slotted in after the
     counting models.  Returns the rows and the index of named rows ('best', 'novels', 'human', 'top')."""
-    sb = _cache("ai1", "scoreboard")
-    raw = _cache("ai1", "raw")
+    from videos.ai.ai1 import compute as c1
+    from videos.ai.ai7 import compute as c7
+    from videos.ai.ai9 import compute as c9
+    from videos.ai.ai13 import compute as c13
+
+    sb, raw = _result(c1, "scoreboard"), _result(c1, "raw")
     if sb:
         rows = [dict(r) for r in sb["rows"]]
     else:
@@ -137,19 +133,21 @@ def board_rows() -> tuple[list[dict], dict]:
         rows.append(dict(key="human", label="people (Shannon 1951, letters only)", lo=0.6, hi=1.3, part=1,
                          kind="human"))
     later = []
-    kn = _cache("ai7", "kn") or _cache("ai9", "kn")  # Part 9 keeps a copy, computed with Part 7's code
+    kn = _result(c7, "kn")
     if kn:
         later.append(dict(key="kn", label=rf"Kneser--Ney, \ ${kn['best']}$ characters", bits=kn["best_bits"], part=7,
                           kind="count"))
-    nlm = _cache("ai9", "lm")
+    nlm = _result(c9, "lm")
     if nlm:
         later.append(dict(key="nlm", label=rf"a neural model, \ ${nlm['n_ctx']}$ characters", bits=nlm["passage_bits"],
                           part=9, kind="lm"))
-    tf = _cache("ai13", "tf")
+        later.append(dict(key="mix", label=r"the neural model $+$ Kneser--Ney", bits=nlm["mix_bits"], part=9,
+                          kind="lm"))
+    tf = _result(c13, "tf")
     if tf:
         later.append(dict(key="tf", label=rf"our transformer, \ ${tf['ctx']}$ characters", bits=tf["passage_bits"],
                           part=13, kind="lm"))
-    nb = _cache("ai31", "novels_bits")
+    nb = load("novels_bits")
     if nb:
         later.append(dict(key="novels", label=r"our model, \ trained on thirty novels", bits=nb["bpc"], part=31,
                           kind="lm"))

@@ -179,8 +179,10 @@ class Revival(VoiceoverScene):
             "shared the Turing Award. <bookmark mark='e'/> The rest of this part takes the fixes one at a time, with "
             "their mathematics: initialization, the edge of chaos, residual streams, and normalization."
         ) as vo:
-            self.play(FadeIn(head))
-            for k, mk in enumerate("abcd"):
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(Circumscribe(cards[0], color=C.GRADS))
+            for k, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
             vo.wait_until("e")

@@ -175,7 +175,7 @@ class Deception(VoiceoverScene):
     def awareness(self):
         def arrow_row(name, before, after, col, unit=r"\%"):
             return VGroup(label(name, font_size=22, color=GREY_A),
-                          MathTex(rf"{before}{unit} \;\to\; {after}{unit}", font_size=32, color=col)).arrange(RIGHT,
+                          MathTex(f"{before}" + unit + r" \;\to\; " + f"{after}" + unit, font_size=32, color=col)).arrange(RIGHT,
                                                                                                           buff=0.3)
 
         left = VGroup(label(r"anti-scheming training \ (OpenAI and Apollo, September 2025)", font_size=24),

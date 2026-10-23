@@ -102,14 +102,18 @@ labelled as such.
 Run from the repo root:
 
 ```
-python -m explainer.ai.novels             # the series' model: about 1.5 hours on 4 cores (cached; Part 27 uses it too)
-python -m videos.ai.ai31.compute          # every experiment
+python tools/make.py ai31                 # everything: what this part reads, its experiments, both languages
+python -m videos.ai.ai31.compute          # or step by step: every experiment (resumes after an interruption)
 python tools/build.py ai31                # English
 python tools/build.py ai31 --lang zh      # Chinese
 ```
 
-Part 27's which-book questions are read from its cache when that is complete, and otherwise rebuilt the same way
-(same seed) without touching it. `compute.py` holds the experiments; `sims.py` the simulations (Bradley–Terry and Elo, the biased judge, item
+The experiments read Part 1's counting models and scoreboard, the scoreboard rows of Parts 7, 9 and 13, the series'
+novels model (`python -m explainer.ai.novels`) and Part 27's which-book questions, each through that part's own
+`compute` module, so `make.py` computes them first. About 20 minutes of the experiments' own CPU time on 4 cores;
+the long items resume after a kill.
+
+`compute.py` holds the experiments; `sims.py` the simulations (Bradley–Terry and Elo, the biased judge, item
 response, the control game, the boat race and Q-learning); `lm_tools.py` the experiments on the series' model (bits
 on the passage, Shannon's game with token-path summation, extraction, weak-to-strong).
 

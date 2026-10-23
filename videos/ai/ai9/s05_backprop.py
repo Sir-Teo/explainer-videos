@@ -83,7 +83,6 @@ class Backprop(VoiceoverScene):
                 why(r"$z^l$ reaches the loss only \\ through $a^l$, \ then $z^{l+1}$"),
                 why(r"$z^l$ is linear in $W^l$ and $b^l$")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-3.0, buff=0.85, edge=6.9)
-        box = SurroundingRectangle(VGroup(rows[2], rows[3]), color=BWD, buff=0.15, corner_radius=0.08)
         same = label(r"the same matrices, transposed: \ the error flows backwards along the same wires", font_size=30,
                      color=BWD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
@@ -104,6 +103,7 @@ class Backprop(VoiceoverScene):
             vo.wait_until("c")
             step(3)
             vo.wait_until("d")
+            box = SurroundingRectangle(VGroup(rows[2], rows[3]), color=BWD, buff=0.15, corner_radius=0.08)
             self.play(Create(box), FadeIn(same))
         self.wait(0.3)
         self.clear_scene()

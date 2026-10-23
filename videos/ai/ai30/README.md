@@ -1,8 +1,7 @@
 # AI, Built — Part 30: Inside the Model
 
-The last part of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)).
-Reading what a model has learned, with Part 13's transformer as the patient. A hook, four chapters and the series'
-close:
+The penultimate part of a thirty-one-part series on how modern AI works and how it came to be (see [the series plan](../README.md)).
+Reading what a model has learned, with Part 13's transformer as the patient. A hook, four chapters and an outro:
 
 * **What is it thinking?** The 128 numbers the transformer carries per character after its second block, for a line of
   the passage: all busy, none meaningful; the same rewritten as sparse features.
@@ -21,7 +20,8 @@ close:
   which input characters switched each feature on); Anthropic's circuit tracing in Claude 3.5 Haiku (published).
 * **Reaching in.** Steering: adding a quotation-mark feature's direction while the model writes, at three strengths;
   chain-of-thought faithfulness (Chen et al., published).
-* **Recap**, the series map act by act, the scoreboard from Part 1 with every model built since, references.
+* **Recap** in eight pictures, Part 31's teaser (the series map and Part 1's scoreboard close the series there),
+  references.
 
 Run from the repo root:
 

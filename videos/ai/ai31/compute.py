@@ -4,7 +4,11 @@
     python -m videos.ai.ai31.compute arena judge     # specific items
     python -m videos.ai.ai31.compute --force control
 
-Results are cached in ``.cache/ai31/<name>.json`` (+ ``.npz``).  Three kinds of numbers:
+Results are cached in ``.cache/ai31/<name>.json`` (+ ``.npz``); ``python tools/make.py ai31`` computes the parts this
+one reads first (Part 1's counting models and scoreboard, Parts 7, 9 and 13's scoreboard rows, the novels model,
+Part 27's which-book questions).  Every random choice is seeded.  The long items resume after a kill: contamination
+(one piece per order), dpsgd (one per trained model), weak (the weak model's pretraining checkpoints every 100 steps;
+any item that needs it trains it first) and w2s (one piece per seed).  Three kinds of numbers:
 
 * computed on the series' own models: Part 1's counting models on the Falcon passage, and the series' 6.8-million-
   parameter model trained on thirty novels (``explainer/ai/novels.py``);
@@ -192,12 +196,13 @@ def compute_contamination(orders=(3, 4, 5, 6, 7), fracs=(0.0, 0.25, 0.5, 0.75, 1
     n_par = len(paras)
     order_leak = rng(1).permutation(n_par)  # paragraphs leak in a random order
     out = {"orders": list(orders), "fracs": list(fracs), "n_par": n_par}
-    clean, leaked_all = [], []
-    curves = {}
-    for k in orders:
+    # one piece per order (and one for the overlap test), saved as it finishes: a killed run resumes
+    part = CACHE.partial("contamination", dict(orders=list(orders), fracs=list(fracs), n_gram=n_gram))
+
+    def one_order(k):
         alpha = raw["rows"][k]["alpha"]
         m = c1.NGram(tr, k, K)
-        row = []
+        row, half = [], None
         for f in fracs:
             leak = np.sort(order_leak[:int(round(f * n_par))])
             if len(leak):
@@ -212,32 +217,48 @@ def compute_contamination(orders=(3, 4, 5, 6, 7), fracs=(0.0, 0.25, 0.5, 0.75, 1
             seen = float(bp[mask].sum() / n_p[mask].sum()) if mask.any() else float("nan")
             unseen = float(bp[~mask].sum() / n_p[~mask].sum()) if (~mask).any() else float("nan")
             row.append((float(b.mean()), seen, unseen))
-            if k == 7 and f == 0.5:
-                out["par_bpc_half"] = bp / np.maximum(n_p, 1)
-                out["leaked_half"] = mask
-        curves[k] = row
-        clean.append(row[0][0])
-        leaked_all.append(row[-1][0])
-    out["clean"], out["leaked"] = clean, leaked_all
+            if f == 0.5:
+                half = dict(par_bpc=(bp / np.maximum(n_p, 1)).tolist(), leaked=mask.tolist())
+        return dict(row=row, half=half)
+
+    clean, leaked_all = [], []
     for k in orders:
-        out[f"curve_{k}"] = np.array(curves[k])
+        if str(k) not in part:
+            part[str(k)] = one_order(k)
+        piece = part[str(k)]
+        out[f"curve_{k}"] = np.array(piece["row"], float)
+        clean.append(piece["row"][0][0])
+        leaked_all.append(piece["row"][-1][0])
+        if k == 7:
+            out["par_bpc_half"] = np.array(piece["half"]["par_bpc"])
+            out["leaked_half"] = np.array(piece["half"]["leaked"], bool)
+    out["clean"], out["leaked"] = clean, leaked_all
+
     # 13-gram overlap detection (GPT-3's test), each paragraph against the training text, clean and half-leaked
-    train_grams = np.unique(_word_ngrams(train, n_gram))
-    overlap_clean, overlap_half, checkable = [], [], []
-    leak_half = set(order_leak[:int(round(0.5 * n_par))].tolist())
-    half_grams = np.unique(np.concatenate([_word_ngrams(paras[i], n_gram) for i in leak_half] or [np.zeros(0)]))
-    for i, p in enumerate(paras):
-        gr = _word_ngrams(p, n_gram)
-        checkable.append(len(gr) > 0)
-        if len(gr) == 0:
-            overlap_clean.append(float("nan"))
-            overlap_half.append(float("nan"))
-            continue
-        a = np.isin(gr, train_grams)
-        overlap_clean.append(float(a.mean()))
-        overlap_half.append(float((a | np.isin(gr, half_grams)).mean()))
-    out.update(n_gram=n_gram, overlap_clean=np.array(overlap_clean), overlap_half=np.array(overlap_half),
-               checkable=np.array(checkable), n_checkable=int(np.sum(checkable)))
+    def overlap():
+        train_grams = np.unique(_word_ngrams(train, n_gram))
+        overlap_clean, overlap_half, checkable = [], [], []
+        leak_half = set(order_leak[:int(round(0.5 * n_par))].tolist())
+        half_grams = np.unique(np.concatenate([_word_ngrams(paras[i], n_gram) for i in leak_half] or [np.zeros(0)]))
+        for p in paras:
+            gr = _word_ngrams(p, n_gram)
+            checkable.append(len(gr) > 0)
+            if len(gr) == 0:
+                overlap_clean.append(None)
+                overlap_half.append(None)
+                continue
+            a = np.isin(gr, train_grams)
+            overlap_clean.append(float(a.mean()))
+            overlap_half.append(float((a | np.isin(gr, half_grams)).mean()))
+        return dict(clean=overlap_clean, half=overlap_half, checkable=checkable)
+
+    if "overlap" not in part:
+        part["overlap"] = overlap()
+    ov = part["overlap"]
+    nan = lambda v: [float("nan") if x is None else x for x in v]  # noqa: E731
+    overlap_clean = nan(ov["clean"])
+    out.update(n_gram=n_gram, overlap_clean=np.array(overlap_clean), overlap_half=np.array(nan(ov["half"])),
+               checkable=np.array(ov["checkable"], bool), n_checkable=int(np.sum(ov["checkable"])))
     flagged_clean = int(np.nansum(np.array(overlap_clean) > 0))
     out["flagged_clean"] = flagged_clean
     return out
@@ -679,21 +700,29 @@ def compute_dpsgd(reps=(0, 1, 4, 16), steps=1000, batch=2048, sigma=1.0, clip=1.
             prev = c
         return "".join(parts) + text[prev:]
 
-    plain = []
-    for k in reps:
-        net, held, n = _dp_train(plant(k), valid, private=False, steps=steps, batch=batch)
-        rank, expo, bits = _exposure(net)
-        plain.append(dict(reps=k, rank=rank, exposure=expo, bits=bits, held=held))
-    out["plain"] = plain
     k_dp = max(reps)
-    net, held, n = _dp_train(plant(k_dp), valid, private=True, steps=steps, batch=batch, sigma=sigma, clip=clip)
-    rank, expo, bits = _exposure(net)
+    texts = [plant(k) for k in reps] + [plant(k_dp)]  # drawn in this order, before any training
+    # one piece per trained model, saved as it finishes: a killed run resumes
+    part = CACHE.partial("dpsgd", dict(reps=list(reps), steps=steps, batch=batch, sigma=sigma, clip=clip))
+    plain = []
+    for k, t in zip(reps, texts):
+        if f"plain_{k}" not in part:
+            net, held, n = _dp_train(t, valid, private=False, steps=steps, batch=batch)
+            rank, expo, bits = _exposure(net)
+            part[f"plain_{k}"] = dict(reps=k, rank=rank, exposure=expo, bits=bits, held=held)
+        plain.append(part[f"plain_{k}"])
+    out["plain"] = plain
+    if "dp" not in part:
+        net, held, n = _dp_train(texts[-1], valid, private=True, steps=steps, batch=batch, sigma=sigma, clip=clip)
+        rank, expo, bits = _exposure(net)
+        part["dp"] = dict(rank=rank, exposure=expo, bits=bits, held=held, n=n, clipped=net.clipped)
+    rank, expo, bits, held, n = (part["dp"][k] for k in ("rank", "exposure", "bits", "held", "n"))
     eps = rdp_epsilon(batch / n, sigma, steps, delta)
     # the accountant against Abadi et al. (2016): q = 0.01, sigma = 4, 10,000 steps, delta = 1e-5 -> about 1.26
     check = rdp_epsilon(0.01, 4.0, 10_000, 1e-5)
     assert 0.8 < check < 1.6, check
     out["dp"] = dict(reps=k_dp, rank=rank, exposure=expo, bits=bits, held=held, eps=eps, q=batch / n,
-                     clipped=net.clipped)
+                     clipped=part["dp"]["clipped"])
     # the same secret, a model of letter frequencies alone (what knowing nothing scores)
     counts = np.bincount([DP_ALPHABET.index(c) for c in text], minlength=len(DP_ALPHABET)) + 1
     pr = counts / counts.sum()
@@ -729,10 +758,11 @@ def compute_weak():
     return T.pretrain_weak()
 
 
-def compute_w2s():
+def compute_w2s(seeds=5, steps=300, lr_weak=1e-3, lr_strong=5e-4, strong_top=1, conf=0.5):
     from videos.ai.ai31 import lm_tools as T
 
-    return T.weak_to_strong()
+    params = dict(seeds=seeds, steps=steps, lr_weak=lr_weak, lr_strong=lr_strong, strong_top=strong_top, conf=conf)
+    return T.weak_to_strong(**params, part=CACHE.partial("w2s", params))
 
 
 ITEMS = {

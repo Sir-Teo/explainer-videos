@@ -236,7 +236,7 @@ class Residual(VoiceoverScene):
             item([r"May 2015: \ highway networks", r"(Srivastava, Greff \& Schmidhuber)"], GREY_A),
             item([r"Dec 2015: \ ResNet, \ $152$ layers, \ wins ImageNet"], RES),
             item([r"2019: \ GPT-2 scales each block's", r"starting weights by $1/\sqrt{N}$"], GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 0.0, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.7, 0.0, 0])
         cite_ = cite(r"A.~Veit, M.~Wilber \& S.~Belongie, \textit{Residual Networks Behave Like Ensembles of Relatively "
                      r"Shallow Networks} (2016)", corner=DL)
         with self.voiceover(
@@ -252,8 +252,9 @@ class Residual(VoiceoverScene):
             "the stream doesn't grow with depth."
         ) as vo:
             self.play(FadeIn(cite_))
-            vo.wait_until("a")
             step(0)
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=RES, scale_factor=1.05))
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
@@ -262,7 +263,7 @@ class Residual(VoiceoverScene):
                       run_time=2.5)
             vo.wait_until("d")
             pic = VGroup(nodes, paths_, pl, tag)
-            self.play(FadeOut(VGroup(*rows, *whys)), pic.animate.scale(1.1).move_to([-3.3, 0.0, 0]), run_time=1.2)
+            self.play(FadeOut(VGroup(*rows, *whys)), pic.animate.scale(1.05).move_to([-3.75, 0.0, 0]), run_time=1.2)
             self.play(LaggedStart(*[FadeIn(h) for h in hist_], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
