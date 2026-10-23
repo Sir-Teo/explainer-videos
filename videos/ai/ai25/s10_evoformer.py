@@ -217,6 +217,8 @@ class Evoformer(VoiceoverScene):
                    rf"${par['triangle']:,}$ weights; \ three seeds".replace(",", "{,}"), font_size=18)
         tag.to_corner(DR, buff=0.15)
         mp, mt = np.mean(res["pairwise"]), np.mean(res["triangle"])
+        pw_txt = ("no better: it never looks at the other pairs, and it knows the gap along the chain only up to "
+                  "eight" if mp >= sep else "hardly better, because it never looks at the other pairs")
         verdict = (f"Triangle updates cut it to {mt:.1f}, {mp / mt:.1f} times smaller" if mt < mp else
                    f"Triangle updates don't help here: {mt:.1f}")
         vtxt = (f"and their guesses break the triangle inequality {viol['pairwise'] / max(viol['triangle'], 1e-9):.0f} "
@@ -228,8 +230,8 @@ class Evoformer(VoiceoverScene):
             "of them, a stand-in for what an alignment tells AlphaFold. <bookmark mark='a'/> Two models of the same "
             "size and the same training: one updates each pair on its own; the other with triangle updates. "
             f"<bookmark mark='b'/> Guessing each missing distance from how far apart the two residues are along the "
-            f"chain gives an error of {sep:.1f} ångströms. Updating each pair on its own gets {mp:.1f}: it can't do "
-            f"better, because it never looks at the other pairs. <bookmark mark='c'/> {verdict}, {vtxt}."
+            f"chain gives an error of {sep:.1f} ångströms. Updating each pair on its own gets {mp:.1f}, {pw_txt}. "
+            f"<bookmark mark='c'/> {verdict}, {vtxt}."
         ) as vo:
             self.play(FadeIn(imgs[0]), FadeIn(cl[0]), FadeIn(imgs[1]), FadeIn(cl[1]), FadeIn(tag))
             vo.wait_until("a")

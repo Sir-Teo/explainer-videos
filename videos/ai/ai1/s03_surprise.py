@@ -357,10 +357,10 @@ class Surprise(VoiceoverScene):
             f"bar, judged by a model that knows only the previous {k} letters."
         ) as vo:
             self.play(Write(rule))
+            self.play(LaggedStart(*[FadeIn(m) for m in letters], lag_ratio=0.02), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(src))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m) for m in letters], lag_ratio=0.02), run_time=1.5)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), FadeIn(leg), run_time=3)
         starts = np.array([i == 0 or sent[i - 1] == " " for i in range(len(sent))])
         ratio = float(bits[starts].mean() / bits[~starts].mean())

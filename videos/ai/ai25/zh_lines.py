@@ -520,8 +520,14 @@ ZH.update({
     'f"Does it work? A small test, computed here.':
         "它管用吗？这里计算一个小测试。随机的、像蛋白质一样的链，{p['n']}个残基；模型看到四分之一残基对的距离，带噪声，要把所有的都填出来，"
         "这代替了比对告诉AlphaFold的信息。<bookmark mark='a'/>两个同样大小、同样训练的模型：一个单独更新每一对；另一个用三角更新。"
-        "<bookmark mark='b'/>只根据两个残基在链上隔多远来猜缺失的距离，误差是{sep:.1f}埃。单独更新每一对得到{mp:.1f}：它没法做得更好，"
-        "因为它从不看别的残基对。<bookmark mark='c'/>{verdict}，{vtxt}。",
+        "<bookmark mark='b'/>只根据两个残基在链上隔多远来猜缺失的距离，误差是{sep:.1f}埃。单独更新每一对得到{mp:.1f}，{pw_txt}。"
+        "<bookmark mark='c'/>{verdict}，{vtxt}。",
+
+    'no better: it never looks at the other pairs, and it knows the gap':
+        '并没有更好：它从不看别的残基对，而且它只知道链上八以内的间隔',
+
+    'hardly better, because it never looks at the other pairs':
+        '几乎没有更好，因为它从不看别的残基对',
 
     "f'Triangle updates cut it to":
         '三角更新把它降到{mt:.1f}，小了{mp / mt:.1f}倍',
@@ -594,7 +600,8 @@ ZH.update({
         '而且跑四遍时，它胜过了不用循环训练的同一个网络',
 
     'f"though even with four passes it doesn\'t beat':
-        '不过即使跑四遍，它也没有胜过不用循环训练的同一个网络，{one:.2f}',
+        '不过即使跑四遍，它也没有胜过不用循环训练的同一个网络，{one:.2f}：我们的玩具送回去的只是它对残基对的猜测，回路里没有结构，'
+        '而在AlphaFold 2里，循环确实有帮助',
 
     'In July 2021 DeepMind published AlphaFold 2 with its code;':
         "2021年7月，DeepMind发表了AlphaFold 2，并公开了代码；同一个月，大卫·贝克的团队发表了RoseTTAFold，一个基于同样洞见的三轨网络。"

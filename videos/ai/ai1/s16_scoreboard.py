@@ -252,9 +252,9 @@ class Scoreboard(VoiceoverScene):
             "megabytes, 0.80 bits per character, mixing many predictors. <bookmark mark='d'/> Prediction is "
             "compression, and the predictor's size is part of the bill."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sizes_g))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in ours], lag_ratio=0.4), FadeIn(sizes_g), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in ours], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeOut(sizes_g), run_time=0.5)
             self.play(FadeIn(tab_h), LaggedStart(*[FadeIn(r) for r in tab], lag_ratio=0.4), FadeIn(src), run_time=2.5)
@@ -278,10 +278,9 @@ class Scoreboard(VoiceoverScene):
         filled = scoreboard(rows[:1] + future + rows[1:], row_h=0.5, font_size=24).move_to(DOWN * 0.2)
         head = label(r"Rows still to fill, with models we will build", font_size=32).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "And the board isn't finished. We'll build our own models and add their rows: <bookmark mark='a'/> "
-            "better counting in Part 7, <bookmark mark='b'/> a neural network in Part 9, <bookmark mark='c'/> a "
-            "network with memory in Part 10, <bookmark mark='d'/> and our own small transformer in Part 13, each "
-            "trained on these thirty books, and scored on this page."
+            "And the board isn't finished: <bookmark mark='a'/> better counting in Part 7, <bookmark mark='b'/> a "
+            "neural network in Part 9, <bookmark mark='c'/> a network with memory in Part 10, <bookmark mark='d'/> "
+            "and our own small transformer in Part 13, all trained on these books and scored on this page."
         ) as vo:
             self.play(FadeIn(head), FadeIn(filled.axis), FadeIn(filled.rows[0]), FadeIn(filled.rows[5]),
                       FadeIn(filled.rows[6]))

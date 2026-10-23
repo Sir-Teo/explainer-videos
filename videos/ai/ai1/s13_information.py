@@ -229,11 +229,10 @@ class Information(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(fit_l))
         with self.voiceover(
-            "A counting model can't produce a tail like that: anything outside its few letters of context is cut "
-            "off, and the dependence it models dies away exponentially, <bookmark mark='x'/> shrinking by the same "
-            "factor with every letter, plunging off the bottom of these axes. <bookmark mark='a'/> Real text keeps "
-            "paying back what you remember, at every distance. To guess well, a model needs a long memory, and a way "
-            "to find the parts of the past that matter: attention, in Part 13."
+            "A counting model can't produce that tail: beyond its few letters of context, its dependence dies away "
+            "exponentially, <bookmark mark='x'/> by the same factor every letter, straight off these axes. "
+            "<bookmark mark='a'/> Real text rewards memory at every distance. To guess well, a model needs a long "
+            "memory, and a way to find what matters in it: attention, in Part 13."
         ) as vo:
             self.play(FadeIn(side[:2]))
             vo.wait_until("x")

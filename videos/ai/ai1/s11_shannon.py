@@ -182,9 +182,8 @@ class Shannon1951(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(why_[0]))
         with self.voiceover(
-            "Later estimates landed in the same place: about 1.3 bits per letter, from a version of the game where "
-            "people bet on the next letter instead of guessing it. <bookmark mark='a'/> To guess like a person, a "
-            "machine has to know what a person knows. That's the bar."
+            "Later estimates, with people betting on the next letter, landed at about 1.3 bits. "
+            "<bookmark mark='a'/> To guess like a person, a machine has to know what a person knows."
         ) as vo:
             self.play(FadeIn(why_[1]))
             vo.wait_until("a")

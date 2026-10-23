@@ -139,33 +139,57 @@ class Budget(VoiceoverScene):
     def finetune(self):
         f = load("finetune")
         acc = f["acc"]
+        crow = load("compare")["rows"]
         names = [n for n in ORDER if n in acc] + ["scratch"]
         rows = {n: {"ft": [float(np.mean(acc[n])), float(np.min(acc[n])), float(np.max(acc[n]))]} for n in names}
         order = sorted([n for n in names if n != "scratch"], key=lambda n: -rows[n]["ft"][0]) + ["scratch"]
         COLOR["scratch"], NAME["scratch"] = RAND, r"from scratch"
-        lo = min(rows[n]["ft"][1] for n in order)
+        fewp = {n: crow[n]["few"][0] for n in order if n in crow}
+        lo = min([rows[n]["ft"][1] for n in order] + list(fewp.values()))
         vmin = float(np.floor((lo - 0.02) * 10) / 10)
         g = hbars(rows, "ft", order, vmin=vmin)
+        X = lambda v: -1.2 + 6.6 * (v - vmin) / (1.0 - vmin)  # noqa: E731  (hbars' default x0 and W)
+        ticks = VGroup()
+        for i, n in enumerate(order):
+            if n in fewp:
+                y = g[i].bar.get_y()
+                ticks.add(Line([X(fewp[n]), y - 0.16, 0], [X(fewp[n]), y + 0.16, 0], color=YELLOW, stroke_width=4))
         head = label(rf"Fine-tune the whole network \ from $10$ labels per digit", font_size=30).to_edge(UP, buff=0.3)
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ ${int(f['steps'])}$ updates, \ three draws "
-                    r"of the labels", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
+                    r"of the labels; \ yellow tick: \ the frozen network's probe from the same $100$ labels",
+                    font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
         sc = rows["scratch"]["ft"][0]
-        best = [n for n in order if n not in ("scratch", "supervised")][0]
-        mae, ij = rows["mae"]["ft"][0], rows["ijepa"]["ft"][0]
-        lin = {n: load("compare")["rows"][n]["few"][0] for n in ("mae", "ijepa") if n in load("compare")["rows"]}
-        mv = (f"The masked models gain the most from it: MAE goes from {pct(lin['mae'])} percent with a frozen "
-              f"network to {pct(mae)} fine-tuned, I-JEPA from {pct(lin['ijepa'])} to {pct(ij)}." if
-              mae - lin.get("mae", mae) > 0.05 else
-              f"Fine-tuning helps the masked models less than the literature would suggest: MAE ends at {pct(mae)} "
-              f"percent, I-JEPA at {pct(ij)}.")
         ssl = [n for n in order if n not in ("scratch", "supervised")]
+        best = ssl[0]
+        mae, ij = rows["mae"]["ft"][0], rows["ijepa"]["ft"][0]
+        gain = {n: rows[n]["ft"][0] - fewp[n] for n in ssl}
+        top3 = sorted(ssl, key=lambda n: -gain[n])[:3]
+        if "mae" in top3 and "ijepa" in top3:
+            mv = (f"The masked models gain the most from it: MAE goes from {pct(fewp['mae'])} percent with a frozen "
+                  f"network to {pct(mae)} fine-tuned, I-JEPA from {pct(fewp['ijepa'])} to {pct(ij)}.")
+        else:
+            mv = (f"Fine-tuning helps the masked models less than the literature would suggest: MAE ends at {pct(mae)} "
+                  f"percent, I-JEPA at {pct(ij)}.")
+        if mae < sc + 0.01:
+            mv2 = (f"But that only brings MAE back to where training from scratch gets, {pct(sc)} percent: its "
+                   "pre-training gave no head start.")
+        else:
+            mv2 = f"MAE ends {pct(mae - sc)} points above training from scratch."
+        bf = max(ssl, key=lambda n: fewp[n])
+        if gain[bf] < -0.005:
+            keep = (f"And for the best networks, the frozen probe was the better use of the hundred labels: "
+                    f"{SPOKEN.get(bf, bf)} scores {pct(fewp[bf])} percent frozen and {pct(rows[bf]['ft'][0])} "
+                    "fine-tuned. With so few labels, moving every weight can undo part of what was learned.")
+        else:
+            keep = (f"{SPOKEN.get(bf, bf)}, the best frozen network, goes from {pct(fewp[bf])} percent frozen to "
+                    f"{pct(rows[bf]['ft'][0])} fine-tuned.")
         n_up = sum(rows[n]["ft"][0] > sc for n in ssl)
         with self.voiceover(
             "A frozen network is one test. The other common one lets the whole network change, starting from what "
             "it learned, with the same hundred labels. <bookmark mark='a'/> Trained from scratch on a hundred "
             f"digits, our network reaches {pct(sc)} percent. <bookmark mark='b'/> Of the {len(ssl)} self-supervised "
             f"starts, {n_up} beat that; the best is {SPOKEN.get(best, best)}, at {pct(rows[best]['ft'][0])}. "
-            f"<bookmark mark='c'/> {mv}"
+            f"<bookmark mark='c'/> {mv} <bookmark mark='d'/> {mv2} <bookmark mark='e'/> {keep}"
         ) as vo:
             self.play(FadeIn(head), FadeIn(axl), FadeIn(g[-1]))
             vo.wait_until("a")
@@ -173,8 +197,13 @@ class Budget(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in g[:-1]], lag_ratio=0.12), run_time=3.0)
             vo.wait_until("c")
+            self.play(LaggedStart(*[Create(t) for t in ticks], lag_ratio=0.05), run_time=1.5)
             idx = [order.index(n) for n in ("mae", "ijepa") if n in order]
             self.play(*[Indicate(g[i], scale_factor=1.03) for i in idx])
+            vo.wait_until("d")
+            self.play(Indicate(g[-1], color=RAND, scale_factor=1.03))
+            vo.wait_until("e")
+            self.play(Indicate(g[order.index(bf)], color=COLOR[bf], scale_factor=1.03))
         self.wait(0.3)
         self.clear_scene()
 

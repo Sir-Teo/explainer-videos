@@ -66,12 +66,10 @@ class Probability(VoiceoverScene):
             x = g.x0 + (k + 0.5) * slot
             anims += [g.bars[i].animate.set_x(x), g.labels[i].animate.set_x(x)]
         top6 = ", ".join("space" if ALPHA27[i] == " " else ALPHA27[i] for i in order[:6])
-        tail4 = [ALPHA27[i] for i in order[-4:]]
         rarest = order[-1]
         with self.voiceover(
-            f"Sorted, the familiar order appears: {top6}. <bookmark mark='z'/> At the far end, "
-            f"{', '.join(tail4[:3])} and {tail4[3]}. The rarest, {ALPHA27[rarest]}, turns up about once in "
-            f"{round(1 / p[rarest], -2):,.0f} symbols."
+            f"Sorted, the familiar order appears: {top6}. <bookmark mark='z'/> The rarest, {ALPHA27[rarest]}, turns "
+            f"up about once in {round(1 / p[rarest], -2):,.0f} symbols."
         ) as vo:
             self.play(*anims, FadeOut(sp_val), FadeOut(e_val), run_time=2.0)
             vo.wait_until("z")
