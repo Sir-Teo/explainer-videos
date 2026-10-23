@@ -208,10 +208,10 @@ class LSTM(VoiceoverScene):
             t = MathTex("?" if i == T - 1 else str(seq[i]), font_size=30, color=col)
             boxes.add(VGroup(sq, t.move_to(sq)))
         boxes.arrange(RIGHT, buff=0.12).move_to(UP * 0.8)
-        mark = label(r"remember this", font_size=22, color=CELLC).next_to(boxes[0], UP, buff=0.2)
+        mark = label(r"remember this", font_size=22, color=CELLC).next_to(boxes[0], DOWN, buff=0.2)
         noise = Brace(VGroup(*boxes[1:T - 1]), UP, color=GREY_B)
         nl = label(r"$T - 2$ random distractors", font_size=22, color=GREY_B).next_to(noise, UP, buff=0.1)
-        q = label(r"now answer", font_size=22, color=LSTMC).next_to(boxes[-1], UP, buff=0.2)
+        q = label(r"now answer", font_size=22, color=LSTMC).next_to(boxes[-1], RIGHT, buff=0.2)
         ans = MathTex(str(seq[0]), font_size=40, color=LSTMC).next_to(boxes[-1], DOWN, buff=0.5)
         arr = Arrow(boxes[-1].get_bottom(), ans.get_top(), buff=0.06, color=LSTMC, stroke_width=2.5)
         facts = label(rf"one symbol of $8$ \ (chance: ${100 * m['chance']:.1f}\%$); \ $T = {', '.join(str(t) for t in m['T'])}$; "
@@ -351,7 +351,7 @@ class LSTM(VoiceoverScene):
                                               .replace(",", "{,}"), font_size=28).to_corner(UR, buff=0.5))
         leg = legend([(RNNC, r"RNN"), (LSTMC, r"LSTM")], font_size=24).to_corner(UR, buff=0.5).shift(DOWN * 0.8)
         first = label(r"step $1$: \ the symbol to remember", font_size=20, color=CELLC)
-        first.next_to(A.c2p(1, lo), UP, buff=0.1).shift(RIGHT * 1.1 + UP * 0.2)
+        first.move_to(A.c2p(1, lo + 1.5), aligned_edge=LEFT).shift(RIGHT * 0.15)  # clear of both curves
         tag = note(rf"computed: \ $T = {Tbig}$, \ seed $0$").to_corner(DR, buff=0.2)
         gap_r = logs_r[-1][-1] - logs_r[-1][0]
         gap_l = logs_l[-1][-1] - logs_l[-1][0]

@@ -262,7 +262,7 @@ class Adversarial(VoiceoverScene):
         clean = seed_band(A, xs, [c[:, 1] for c in cv], CNN)
         adv = seed_band(A, xs, [c[:, 2] for c in cv], ADV)
         leg = legend([(CNN, r"clean digits"), (ADV, rf"attacked, \ $\varepsilon = {t['eps']:g}$, one step")],
-                     font_size=22).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+                     font_size=22).next_to(ax, UP, buff=0.4).align_to(ax, LEFT)
         eg = list(t["eps_grid"])
         i = eg.index(t["eps"])
         std_f = float(np.mean(np.asarray(a["fgsm"]["lenet"])[:, i]))

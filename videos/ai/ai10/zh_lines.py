@@ -463,7 +463,7 @@ ZH = {
         "每字符{me:.2f}比特，比它上面的每一行都好，好了{best_above - me:.2f}比特。记忆是值得的。",
 
     'f"{me:.2f} bits per character, {me - best_above:.2f} behind':
-        "每字符{me:.2f}比特，比上面最好的一行差{me - best_above:.2f}：只训练了几分钟，LSTM还没追上一个用尽全部计数的模型。",
+        "每字符{me:.2f}比特，比上面最好的一行差{me - best_above:.2f}：以我们在这里负担得起的训练量，LSTM还没追上。",
 
     '"What has it learned to remember?':
         "它学会了记住什么？像卡帕西、贾斯廷·约翰逊和李飞飞在2015年做的那样，看单个的细胞。<bookmark mark='a'/>{v}<bookmark mark='b'/>要合上引号，它就得记住有一个引号是开着的，也许要记好几行。2017年，OpenAI的亚历克·拉德福德和同事在亚马逊评论上训练了一个更大的，找到了一个单独的细胞，它跟踪着评论是不是正面的。",

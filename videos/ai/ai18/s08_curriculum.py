@@ -52,6 +52,12 @@ class Curriculum(VoiceoverScene):
                      (FULL_C, r"warmup--stable--decay: \ flat, \ then a short cooldown"),
                      (KEPT, rf"a cooldown branched at step ${start}$")], font_size=18)
         lg.move_to([2.9, 0.2, 0])
+        # the schedules first, large; they move up when the losses come in
+        big = VGroup(g, lr_b, lr_f)
+        home = big.get_center()
+        lg_home = lg.get_center()
+        big.scale(1.25).move_to([0.3, 0.8, 0])
+        lg.move_to([0.6, -2.4, 0])
         b = R["branch"]
         gain = b["stable_val"] - b["val"]
         # does the loss fall faster in the main run's cooldown than over as many steps of its stable phase?
@@ -84,6 +90,7 @@ class Curriculum(VoiceoverScene):
             vo.wait_until("a")
             self.play(Create(lr_f), FadeIn(lg[1]))
             vo.wait_until("b")
+            self.play(big.animate.scale(1 / 1.25).move_to(home), lg.animate.move_to(lg_home))
             self.play(FadeIn(g2), FadeIn(tag))
             self.play(Create(loss_f), run_time=2.5)
             vo.wait_until("c")
@@ -112,10 +119,20 @@ class Curriculum(VoiceoverScene):
             col.add(label(rf"${a / 1e12:.0f}$--${b / 1e12:.1f}$T", font_size=18, color=GREY_A).next_to(col, DOWN,
                                                                                                     buff=0.1))
             bars.add(col)
-        bars.arrange(RIGHT, buff=0.35, aligned_edge=DOWN).move_to([-4.0, -0.6, 0])
+        bars.arrange(RIGHT, buff=0.35, aligned_edge=DOWN).move_to([-4.0, 0.1, 0])
         bl = label(r"SmolLM3's three stages", font_size=22, color=EDU).next_to(bars, UP, buff=0.25)
         key = legend([(GREY_B, r"web"), (cols[1], r"code"), (cols[2], r"maths")], font_size=18)
-        key.next_to(bars, DOWN, buff=0.55)
+        key.next_to(bars, DOWN, buff=0.35)
+        # where the best data goes: the cooldown at the end of the learning rate (schematic)
+        o_ = np.array([0.4, -0.6, 0])
+        flat = Line(o_ + UP * 1.8, o_ + UP * 1.8 + RIGHT * 3.6, color=GREY_B, stroke_width=4)
+        drop = Line(o_ + UP * 1.8 + RIGHT * 3.6, o_ + UP * 0.15 + RIGHT * 4.8, color=EDU, stroke_width=6)
+        base_ = Line(o_, o_ + RIGHT * 5.2, color=GREY_D, stroke_width=2)
+        lr_l = label(r"learning rate", font_size=20, color=GREY_B).next_to(flat, UP, buff=0.12).align_to(flat, LEFT)
+        best_ = label(r"the cooldown: \\ the best data goes here", font_size=21, color=EDU)
+        best_.move_to([4.8, 1.8, 0])
+        cool_sch = VGroup(base_, flat, drop, lr_l, best_, note(r"schematic", font_size=17).next_to(base_, DOWN,
+                                                                                                  buff=0.12))
         facts = VGroup(
             label(rf"Llama 3: \ the last ${L['anneal_tokens'] / 1e6:.0f}$M tokens at a learning rate falling to $0$, "
                   r"\\ the best sources upsampled, \ checkpoints averaged", font_size=21, color=GREY_A),
@@ -139,10 +156,13 @@ class Curriculum(VoiceoverScene):
             "data "
             "with small annealing runs from a checkpoint: nineteen microanneals to pick its maths."
         ) as vo:
-            self.play(FadeIn(bl), FadeIn(src), FadeIn(key))
+            self.play(FadeIn(src), Create(cool_sch[0]), Create(cool_sch[1]), FadeIn(cool_sch[3]), FadeIn(cool_sch[5]))
+            self.play(Create(cool_sch[2]), FadeIn(cool_sch[4]), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in bars], lag_ratio=0.4), run_time=2.0)
+            self.play(FadeIn(bl), FadeIn(key), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in bars], lag_ratio=0.4),
+                      run_time=2.0)
             vo.wait_until("b")
+            self.play(FadeOut(cool_sch))
             self.play(FadeIn(facts[0], shift=UP * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(facts[1], shift=UP * 0.1))
