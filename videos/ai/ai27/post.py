@@ -128,7 +128,7 @@ def sft(model, data: list[tuple[list[int], list[int]]], steps: int, lr: float = 
         loss.backward()
         torch.nn.utils.clip_grad_norm_(params, 1.0)
         opt.step()
-        curve.append((step, float(loss)))
+        curve.append((step, loss.item()))
         if eval_fn and eval_every and ((step + 1) % eval_every == 0 or step == steps - 1):
             model.eval()
             evals.append((step + 1, eval_fn(model)))

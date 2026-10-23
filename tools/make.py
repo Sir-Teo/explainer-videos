@@ -93,11 +93,12 @@ def run(cmd: list[str], log: Path, env: dict | None = None) -> None:
     with open(log, "a") as f:
         f.write(f"\n=== {time.strftime('%Y-%m-%d %H:%M:%S')}  {' '.join(cmd)}\n")
         f.flush()
-        p = subprocess.Popen(cmd, cwd=ROOT, env=env or os.environ.copy(), stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT, text=True)
+        # unbuffered, so progress shows as it happens rather than when a pipe's buffer fills
+        p = subprocess.Popen(cmd, cwd=ROOT, env={**(env or os.environ), "PYTHONUNBUFFERED": "1"},
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         for line in p.stdout:
             f.write(line)
-            if re.match(r"\s*(compute|done|cached|step|gen |resuming|  AlphaZero|Rendered|stitch|\[)", line):
+            if re.match(r"\s*(compute|done|cached|step|gen |resuming|  AlphaZero|Render|ok  |FAIL|Wrote|stitch|\[)", line):
                 print("    " + line.rstrip()[:150], flush=True)
         rc = p.wait()
     if rc:

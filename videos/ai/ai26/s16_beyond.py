@@ -231,11 +231,16 @@ class Beyond(VoiceoverScene):
                        ((r"rock", AGENT), (r"scissors", PENALTY), (r"paper", C.MODEL_Q))])
         for k_, ang in enumerate((90, 210, 330)):
             rps[k_].move_to(1.6 * np.array([np.cos(np.radians(ang)), np.sin(np.radians(ang)), 0]) + UP * 0.3)
-        beats = VGroup(*[CurvedArrow(rps[k_].get_center() + 0.45 * (rps[(k_ + 1) % 3].get_center() - rps[k_].get_center())
-                                     / np.linalg.norm(rps[(k_ + 1) % 3].get_center() - rps[k_].get_center()),
-                                     rps[(k_ + 1) % 3].get_center() - 0.55 * (rps[(k_ + 1) % 3].get_center()
-                                     - rps[k_].get_center()) / np.linalg.norm(rps[(k_ + 1) % 3].get_center()
-                                     - rps[k_].get_center()), angle=-0.5, color=GREY_B, stroke_width=3, tip_length=0.18)
+
+        def rim(m, d):
+            """Where the ray from m's centre along d leaves m's bounding box, plus a gap."""
+            d = d / np.linalg.norm(d)
+            t = min(m.width / 2 / max(abs(d[0]), 1e-6), m.height / 2 / max(abs(d[1]), 1e-6))
+            return m.get_center() + (t + 0.15) * d
+
+        beats = VGroup(*[CurvedArrow(rim(rps[k_], rps[(k_ + 1) % 3].get_center() - rps[k_].get_center()),
+                                     rim(rps[(k_ + 1) % 3], rps[k_].get_center() - rps[(k_ + 1) % 3].get_center()),
+                                     angle=-0.5, color=GREY_B, stroke_width=3, tip_length=0.18)
                          for k_ in range(3)])
         with self.voiceover(
             "In games with many strategies, plain self-play can go in circles, just like the current strategies in "
