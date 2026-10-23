@@ -732,8 +732,9 @@ ZH.update({
 ZH.update({
     # ------------------------------------------------------------------ Embeddings
     'f"How far should this scoreboard be trusted?':
-        "这张记分牌该信几分？它只是一个小网络、800次更新、十种数字。<bookmark mark='a'/>已知需要长时间训练的方法，DINO和掩码模型，"
-        "在这么短的预算下吃亏。<bookmark mark='b'/>在ImageNet的规模上，用视觉Transformer，名次就不一样了：DINO这一系在冻结特征上领先，"
+        "这张记分牌该信几分？它只是一个小网络、800次更新、十种数字。<bookmark mark='a'/>有些方法公开的配方要把数据过上几百遍，"
+        "比如DINO和掩码模型，在这么短的预算下可能会吃亏。<bookmark mark='b'/>在ImageNet的规模上，用视觉Transformer，名次就不一样了："
+        "在自监督方法里，DINO这一系在冻结特征上领先，"
         "掩码模型在微调之后表现很好。<bookmark mark='c'/>在这里，{len(ssl)}种方法中有{len(good)}种，在没有一个标签的情况下学到了足够多"
         "关于数字的东西，在每个数字只给10个标签时胜过了未训练的网络。",
 

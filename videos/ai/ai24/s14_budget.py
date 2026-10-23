@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai24.common import COLOR, NAME, PART, PIX, RAND, SPOKEN, SUP, axes, load, pct, take_away, take_away_in, place_labels
+from videos.ai.ai24.common import (COLOR, NAME, PART, PIX, RAND, SPOKEN, SUP, axes, load, pct, place_labels, tag,
+                                   take_away, take_away_in)
 
 ORDER = ["supervised", "simclr", "moco", "byol", "simsiam", "barlow", "vicreg", "dino", "matryoshka", "rotation", "mae",
          "beit", "ijepa", "random_cnn", "pixels"]
@@ -63,7 +64,7 @@ class Budget(VoiceoverScene):
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ whiskers: lowest and highest seed",
                     font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
         tg = tag(r"computed: \ the same network, \ " + rf"${int(c['steps'])}$ updates of ${int(c['batch'])}$ digits, "
-                 r"\ three seeds", corner=UR)
+                 r"\ three seeds", corner=UR).next_to(head, DOWN, buff=0.08)
         best = names[1]
         b, s_ = rows[best]["linear"][0], rows["supervised"]["linear"][0]
         worst = names[-3]
@@ -154,6 +155,8 @@ class Budget(VoiceoverScene):
             if n in fewp:
                 y = g[i].bar.get_y()
                 ticks.add(Line([X(fewp[n]), y - 0.16, 0], [X(fewp[n]), y + 0.16, 0], color=YELLOW, stroke_width=4))
+                if X(fewp[n]) + 0.05 > g[i].val.get_left()[0]:  # keep the value clear of the tick
+                    g[i].val.next_to([X(fewp[n]), y, 0], RIGHT, buff=0.12)
         head = label(rf"Fine-tune the whole network \ from $10$ labels per digit", font_size=30).to_edge(UP, buff=0.3)
         axl = label(rf"test accuracy, \% \ (axis from ${pct(vmin, 0)}$); \ ${int(f['steps'])}$ updates, \ three draws "
                     r"of the labels; \\ yellow tick: \ the frozen network's probe from the same $100$ labels",
@@ -313,19 +316,20 @@ class Budget(VoiceoverScene):
         good = [n for n in ssl if rows[n]["few"][0] > un + 0.01]
         pts = VGroup(
             label(r"one small network, \ 800 updates, \ ten kinds of digit", font_size=26),
-            label(r"methods that need long training \ (DINO, \ masked models) \ are at a disadvantage here",
+            label(r"methods whose recipes train far longer \ (DINO, \ masked models) \ may be at a disadvantage here",
                   font_size=26),
             label(r"at ImageNet scale, \ with vision transformers, \ the order differs: \\ DINOv2 and DINOv3 lead "
-                  r"frozen probes; \ masked models do well after fine-tuning", font_size=26),
+                  r"self-supervised frozen probes; \ masked models do well after fine-tuning", font_size=26),
             label(rf"here: \ ${len(good)}$ of ${len(ssl)}$ methods beat the untrained network \ with ten labels per "
                   r"digit", font_size=26, color=C.BITS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(UP * 0.2)
         head = label(r"How to read this scoreboard", font_size=34).to_edge(UP, buff=0.5)
         with self.voiceover(
             "How far should this scoreboard be trusted? It is one small network, eight hundred updates, ten kinds of "
-            "digit. <bookmark mark='a'/> Methods that are known to need long training, DINO and the masked models, "
-            "are at a disadvantage on a budget this short. <bookmark mark='b'/> At ImageNet scale, with vision "
-            "transformers, the order is different: the DINO line leads on frozen features, and masked models do well "
+            "digit. <bookmark mark='a'/> Methods whose published recipes train for hundreds of passes over the data, "
+            "DINO and the masked models, may be at a disadvantage on a budget this short. <bookmark mark='b'/> At ImageNet scale, with vision "
+            "transformers, the order is different: the DINO line leads the self-supervised methods on frozen features, and masked "
+            "models do well "
             f"once fine-tuned. <bookmark mark='c'/> Here, {len(good)} of the {len(ssl)} methods learned enough about "
             "digits, without a single label, to beat the untrained network when only ten labels per digit are given."
         ) as vo:

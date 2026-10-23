@@ -276,18 +276,21 @@ def place_labels(dots, labels, buff=0.05, bounds=(-6.9, 6.9, -3.8, 3.8)):
     placed = []
     for i, (d, lab) in enumerate(zip(dots, labels)):
         best = None
-        for dir_ in (UR, RIGHT, UL, DR, LEFT, DL, UP, DOWN):
-            lab.next_to(d, dir_, buff=buff)
-            inside = (lab.get_left()[0] > bounds[0] and lab.get_right()[0] < bounds[1]
-                      and lab.get_bottom()[1] > bounds[2] and lab.get_top()[1] < bounds[3])
-            clash = sum(_boxes_overlap(lab, o) for o in placed) + sum(
-                _boxes_overlap(lab, dd, pad=0.0) for j, dd in enumerate(dots) if j != i)
-            score = clash + (0 if inside else 10)
-            if best is None or score < best[0]:
-                best = (score, dir_)
-            if score == 0:
+        for b_ in (buff, buff + 0.22):
+            for dir_ in (UR, RIGHT, UL, DR, LEFT, DL, UP, DOWN):
+                lab.next_to(d, dir_, buff=b_)
+                inside = (lab.get_left()[0] > bounds[0] and lab.get_right()[0] < bounds[1]
+                          and lab.get_bottom()[1] > bounds[2] and lab.get_top()[1] < bounds[3])
+                clash = sum(_boxes_overlap(lab, o) for o in placed) + sum(
+                    _boxes_overlap(lab, dd, pad=0.0) for j, dd in enumerate(dots) if j != i)
+                score = clash + (0 if inside else 10) + (0.5 if b_ > buff else 0)
+                if best is None or score < best[0]:
+                    best = (score, dir_, b_)
+                if score == 0:
+                    break
+            if best[0] == 0:
                 break
-        lab.next_to(d, best[1], buff=buff)
+        lab.next_to(d, best[1], buff=best[2])
         placed.append(lab)
     return labels
 

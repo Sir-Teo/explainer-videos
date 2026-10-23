@@ -221,6 +221,7 @@ class Outro(VoiceoverScene):
                                                                                                     buff=0.5)
         l2 = label(r"equivariant: \ the answer turns with the input", font_size=22, color=C.BITS).next_to(eqv, LEFT,
                                                                                                        buff=0.5)
+        Group(imgs, inv, eqv, l1, l2).set_x(0)
         with self.voiceover(
             "Next time: symmetry. Our networks learned to ignore a turn of the page only because we showed them "
             "turned pages. Part 25 builds the symmetry into the network, so that its answer either stays the same "

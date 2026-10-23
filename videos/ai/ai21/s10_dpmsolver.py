@@ -111,10 +111,10 @@ class DPMSolver(VoiceoverScene):
         s = load("solvers")
         errs = np.array([r["err"] for k in DET for r in s[k]])
         lo, hi = math.floor(math.log10(max(errs.min(), 1e-4))), math.ceil(math.log10(errs.max()))
-        g = log_axes([math.log10(3), math.log10(130)], [lo, hi], x_length=6.4, y_length=4.4,
+        g = log_axes([math.log10(3), math.log10(130)], [lo, hi], x_length=7.0, y_length=4.8,
                      xlabel=r"network evaluations", ylabel=r"error at the end, \ against the exact solution",
                      xticks=[4, 8, 16, 32, 64, 128], yticks=[10.0 ** k for k in range(lo, hi + 1)],
-                     yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-3.0, -0.2, 0])
+                     yfmt=lambda v: f"10^{{{int(round(math.log10(v)))}}}", center=[-2.8, -0.2, 0])
         lines = VGroup(*[logcurve(g.ax, [r["nfe"] for r in s[k]], [max(r["err"], 10.0 ** lo) for r in s[k]],
                                   SOLVER_C[k], radius=0.04) for k in DET])
         lg = legend([(SOLVER_C[k], SOLVER_NAME[k]) for k in DET], font_size=19).move_to([4.6, 2.2, 0])
@@ -150,8 +150,9 @@ class DPMSolver(VoiceoverScene):
             f"than DDIM. <bookmark mark='c'/> {euler_note} <bookmark mark='d'/> {ddpm_note}"
         ) as vo:
             self.play(FadeIn(g), FadeIn(lg))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.25), run_time=3.0)
+            vo.wait_until("a")
+            self.play(*[Indicate(l_[0], color=SOLVER_C[k], scale_factor=1.0) for l_, k in zip(lines, DET)], run_time=1.5)
             vo.wait_until("b")
             self.play(Indicate(lines[DET.index(b8)][0], color=SOLVER_C[b8]))
             vo.wait_until("c")
@@ -168,7 +169,7 @@ class DPMSolver(VoiceoverScene):
         budget = 12
         panels = Group()
         for i, k in enumerate(kinds + ["ref"]):
-            pn = Panel(2.9, center=[-4.9 + 3.25 * i, 1.0, 0])
+            pn = Panel(3.2, center=[-5.025 + 3.35 * i, 1.2, 0])
             P = np.asarray(s["pic_ref"] if k == "ref" else s["pic_" + k + str(budget)])
             col = DATA if k == "ref" else SOLVER_C[k]
             nm = r"the exact solution" if k == "ref" else SOLVER_NAME[k]
@@ -186,12 +187,14 @@ class DPMSolver(VoiceoverScene):
                        for k in kinds],
                      label(rf"the network's own exact ODE: \ ${net_ref:.3f}$ from the data \ (floor ${fl:.3f}$)", font_size=20,
                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([0, -2.3, 0])
+        eb = {k: at(s[k], budget)["err"] for k in kinds}
+        bs, ws = SPOKEN[min(kinds, key=lambda k: eb[k])], SPOKEN[max(kinds, key=lambda k: eb[k])]
+        close_note = f"{bs}'s points are the closest to it, and {ws}'s are the furthest off."
         verdict = ("With our trained network in place of the exact denoiser, the ranking is the same, "
                    if same_order else "With our trained network in place of the exact denoiser, the ranking shifts, ")
-        ta_text = (r"Ten to thirty evaluations, \ with a solver that knows the equation; \ fewer needs distillation.")
         with self.voiceover(
-            f"Here are three of them after about {budget} evaluations, beside the exact solution: DDIM's points are "
-            "still blurred inwards, the second-order ones sharp. <bookmark mark='a'/> " + verdict
+            f"Here are three of them after about {budget} evaluations, beside the exact solution. {close_note} "
+            "<bookmark mark='a'/> " + verdict
             + f"and the network's own error sets a floor: solved exactly, its ODE lands {net_ref:.3f} from the data, "
             f"against {fl:.3f} for a fresh sample of the letters. <bookmark mark='b'/> Ten to thirty evaluations, then, "
             "with a solver that knows the equation. Fewer than that needs a different idea: chapter twelve."

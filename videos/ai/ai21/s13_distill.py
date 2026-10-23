@@ -136,7 +136,7 @@ class Distill(VoiceoverScene):
                 c2 = label(rf"step ${at[k]:,}$".replace(",", "{,}"), font_size=22, color=CD_C).move_to(cnt)
                 self.play(*pn.move(pts, snaps[k]), Transform(cnt, c2), run_time=0.7)
             vo.wait_until("e")
-            self.play(FadeIn(card, shift=UP * 0.2))
+            self.play(FadeOut(pl), FadeOut(tag), FadeIn(card, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()
 
@@ -163,7 +163,7 @@ class Distill(VoiceoverScene):
         pub = VGroup(history_card(2024, r"Yin et al.: \ DMD", r"one step: \ FID $2.62$ on ImageNet $64^2$; \ $20$ "
                                   r"images a second", color=HIST, width=4.4, font_size=17),
                      history_card(2024, r"Yin et al.: \ DMD2", r"plus a GAN loss on real images: \ FID $1.28$ (Part 20)",
-                                  color=HIST, width=4.4, font_size=17)).arrange(DOWN, buff=0.15).move_to([3.9, -1.9, 0])
+                                  color=HIST, width=4.4, font_size=17)).arrange(DOWN, buff=0.15).move_to([3.9, -2.25, 0])
         with self.voiceover(
             "A third way matches distributions rather than paths. Tianwei Yin and colleagues' distribution matching "
             "distillation trains a one-step generator so that, blurred to every noise level, its samples look like "
@@ -201,8 +201,20 @@ class Distill(VoiceoverScene):
         cols = {"t1": GREY_B, "prog": PROG_C, "cd": CD_C, "dmd": DMD_C, "t64": FM_C}
         names = {"t1": r"teacher, \ $1$ step", "prog": r"progressive", "cd": r"consistency", "dmd": r"DMD",
                  "t64": r"teacher, \ $64$ steps"}
-        ch = bars_chart([vals[k].mean() for k in keys], [cols[k] for k in keys], [names[k] for k in keys], height=3.2,
-                        bar_w=0.9, gap=0.7, spread=[(vals[k].min(), vals[k].max()) for k in keys], digits=3, font_size=20)
+        vm = 1.3 * max(float(vals[k].max()) for k in keys if k != "t1")  # the scale of the students
+        cap = lambda v: min(float(v), 0.96 * vm)  # noqa: E731
+        ch = bars_chart([cap(vals[k].mean()) for k in keys], [cols[k] for k in keys], [names[k] for k in keys], height=3.4,
+                        bar_w=0.9, gap=0.7, vmax=vm, spread=[(cap(vals[k].min()), cap(vals[k].max())) for k in keys],
+                        digits=3, font_size=20)
+        broken = vals["t1"].mean() > 0.96 * vm
+        if broken:  # the teacher's single step runs off the scale: a break in its bar, and its true value
+            b0 = ch.bars[0]
+            gap_ = Polygon(*[b0.get_left() + v for v in (UP * 0.55 + LEFT * 0.1, UP * 0.75 + RIGHT * 1.1,
+                                                         UP * 0.6 + RIGHT * 1.1, UP * 0.4 + LEFT * 0.1)],
+                           stroke_width=0, fill_color=BACKGROUND, fill_opacity=1)
+            ch.bars[0].add(gap_)
+            v0 = ch.vals[0]
+            ch.vals[0].become(MathTex(f"{vals['t1'].mean():.3f}", font_size=20, color=cols["t1"]).move_to(v0))
         ch.move_to([-2.2, -0.2, 0])
         head = label(rf"one step from noise \ (distance from the data; \ floor ${float(d['floor']):.3f}$; \ "
                      rf"${len(vals['cd'])}$ seeds)", font_size=24, color=GREY_A).to_edge(UP, buff=0.5)

@@ -172,32 +172,37 @@ class Schedules(VoiceoverScene):
         j = budgets.index(16) if 16 in budgets else 1
         names = {"ddim": r"DDIM", "heun": r"Heun", "dpmpp2m": r"DPM-Solver++(2M)"}
         cols = {"ddim": DDIM_C, "heun": HEUN_C, "dpmpp2m": DPMPP_C}
-        head = VGroup(label(r"at about $16$ evaluations:", font_size=22, color=GREY_A),
-                      *[label(SP_NAME[sp], font_size=22, color=GREY_A) for sp in sps])
-        xs = [-4.9, -1.9, 0.6, 3.1, 5.6]
+        head = VGroup(label(r"at about $16$ evaluations:", font_size=24, color=GREY_A),
+                      *[label(SP_NAME[sp], font_size=24, color=GREY_A) for sp in sps])
+        xs = [-4.8, -1.8, 0.7, 3.2, 5.7]
         for i, h in enumerate(head):
-            h.move_to([xs[i], 1.9, 0])
+            h.move_to([xs[i], 2.3, 0])
         rows = VGroup()
         best = {}
         for r, k in enumerate(kinds):
             errs = [float(s[f"err_{k}_{sp}"][j]) for sp in sps]
             best[k] = sps[int(np.argmin(errs))]
-            row = VGroup(label(names[k], font_size=24, color=cols[k]).move_to([xs[0], 1.1 - 0.75 * r, 0]))
+            y = 1.3 - 1.0 * r
+            row = VGroup(label(names[k], font_size=28, color=cols[k]).move_to([xs[0], y, 0]))
             for c, (sp, e) in enumerate(zip(sps, errs)):
-                m = MathTex(f"{e:.3f}", font_size=30, color=WHITE if sp == best[k] else GREY_B).move_to([xs[c + 1], 1.1 - 0.75 * r, 0])
+                m = MathTex(f"{e:.3f}", font_size=36, color=WHITE if sp == best[k] else GREY_B).move_to([xs[c + 1], y, 0])
                 row.add(m)
                 if sp == best[k]:
-                    row.add(SurroundingRectangle(m, color=cols[k], buff=0.1, corner_radius=0.06))
+                    row.add(SurroundingRectangle(m, color=cols[k], buff=0.12, corner_radius=0.06))
             rows.add(row)
-        note_ = label(r"the error at the end, \ against the exact solution of the ODE, \ same starting noise", font_size=20,
-                      color=GREY_A).next_to(rows, DOWN, buff=0.4)
+        note_ = label(r"the error at the end, \ against the exact solution of the ODE, \ same starting noise", font_size=22,
+                      color=GREY_A).next_to(rows, DOWN, buff=0.5)
         same = len(set(best.values())) == 1
         sp_ddim, sp_heun, sp_dpm = SP_SPOKEN[best["ddim"]], SP_SPOKEN[best["heun"]], SP_SPOKEN[best["dpmpp2m"]]
-        if same:
-            verdict = f"One spacing wins for all three: {sp_ddim}."
+        v1 = f"For DDIM, the best of the four spacings is {sp_ddim};"
+        if best["heun"] == best["ddim"]:
+            v2 = f"for Heun's method, the best is {sp_heun} too;"
         else:
-            verdict = (f"No spacing wins for every solver: for DDIM the best is {sp_ddim}, for Heun {sp_heun}, and for "
-                       f"DPM-Solver plus plus {sp_dpm}.")
+            v2 = f"for Heun's method, the best is {sp_heun};"
+        if same:
+            v3 = f"and for DPM-Solver plus plus, {sp_dpm} as well: one spacing wins for all three."
+        else:
+            v3 = f"and for DPM-Solver plus plus, {sp_dpm}: no spacing wins for every solver."
         edm_note = ("On image models EDM's spacing has become a standard; on our letters it is not always the best. "
                     "The spacing is a setting of the sampler, tuned like any other." if any(b != "edm" for b in best.values())
                     else "On image models EDM's spacing has become a standard, and on our letters it is the best too.")
@@ -206,12 +211,14 @@ class Schedules(VoiceoverScene):
         with self.voiceover(
             "The schedule also decides where a sampler puts its steps. Here are three samplers, with the exact "
             "denoiser, at the same budget of about sixteen network evaluations, on four spacings of the noise "
-            "levels. <bookmark mark='a'/> " + verdict + " <bookmark mark='b'/> " + edm_note
+            "levels. <bookmark mark='a'/> " + v1 + " <bookmark mark='b'/> " + v2 + " <bookmark mark='c'/> " + v3
+            + " <bookmark mark='d'/> " + edm_note
         ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*[r_[0] for r_ in rows])))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r_[1:])) for r_ in rows], lag_ratio=0.3), FadeIn(note_))
-            vo.wait_until("a")
-            vo.wait_until("b")
+            self.play(FadeIn(head), FadeIn(VGroup(*[r_[0] for r_ in rows])), FadeIn(note_))
+            for r_, mk in zip(rows, "abc"):
+                vo.wait_until(mk)
+                self.play(FadeIn(VGroup(*r_[1:]), shift=RIGHT * 0.1), run_time=0.8)
+            vo.wait_until("d")
             self.play(FadeIn(ta, shift=UP * 0.2))
         self.wait(0.3)
         self.clear_scene()

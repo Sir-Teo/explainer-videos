@@ -35,7 +35,7 @@ method the same starting network.
   SimCLR at five temperatures (0.05 … 1); how the softmax spreads its push over the negatives at low and high
   temperature (Wang & Liu 2021).
 * **6. Collapse.** Pause and predict; a network trained only to make the two views agree, its embedding on the
-  sphere collapsing to a point; the effective rank (Roy & Vetterli 2007; RankMe, Garrido et al. 2023); singular-value
+  sphere never leaving one point; the effective rank (Roy & Vetterli 2007; RankMe, Garrido et al. 2023); singular-value
   spectra (complete and dimensional collapse: Hua et al. 2021, Jing et al. 2022); the starved encoder; the four ways
   out.
 * **7. No negatives: BYOL and SimSiam.** BYOL (Grill et al. 2020); SimSiam (Chen & He 2021) with and without its
@@ -43,7 +43,7 @@ method the same starting network.
   SimSiam as alternating optimization; Tian, Chen & Ganguli (2021); BYOL without batch statistics (Richemond et al.
   2020); SimCLR, BYOL and SimSiam on the linear and ten-label probes.
 * **8. Decorrelate: Barlow Twins and VICReg.** Barlow's redundancy reduction (1961); Barlow Twins (Zbontar et al.
-  2021), its cross-correlation matrix replayed to the identity; VICReg (Bardes, Ponce & LeCun 2022) and VICReg without
+  2021), its cross-correlation matrix replayed as it moves toward the identity; VICReg (Bardes, Ponce & LeCun 2022) and VICReg without
   its variance term (collapse); the duality of the two families (Garrido et al. 2023); LeJEPA's SIGReg (Balestriero &
   LeCun 2025).
 * **9. Self-distillation: DINO.** DeepCluster and SwAV; DINO (Caron et al. 2021): student, momentum teacher,
@@ -93,11 +93,45 @@ item made of several runs saves each run as it finishes (`CACHE.partial`), so an
 each run takes two to four minutes. Each run's larger arrays (its test features, its replay snapshots) are in
 `.cache/ai24/runs/`, the seed-0 networks of the compared methods in `.cache/ai24/models/` (about 20 MB). MNIST is read
 through Part 10's downloader (`videos.ai.ai10.data`, checked against SHA-256); no other part's results are used.
-RESULTS_TIME
+The full computation (75 training runs of 800 steps, the fine-tuning and the InfoNCE critics) took 3.5 hours of wall time on one thread of a shared, busy Linux machine (load about 9), started with `OMP_NUM_THREADS=1 nice -n 15 python -m videos.ai.ai24.compute`, logging to `.cache/ai24/compute.log`; the cache is about 60 MB.
 
 ## Results on this machine
 
-RESULTS
+Every network is the same small CNN (159,584 parameters, 128-number representation $h$), trained for 800 steps of 128 images (1.7 passes over MNIST's 60,000 training digits) with AdamW; no labels except for the supervised row. Values are percent on the 10,000 test digits, mean over seeds with the lowest and highest in brackets (three seeds per method, two for ablations). Linear probe: a logistic regression on standardised $h$ with every training label. $k$-NN: 20 nearest neighbours by cosine, centred features. 10 labels per digit: the same probe trained on 100 labelled digits, five draws. Fine-tuned: the whole network trained from those 100 labels (300 steps, three draws).
+
+| method | linear probe | $k$-NN | 10 labels per digit | fine-tuned from 100 labels | effective rank of $h$ |
+|---|---|---|---|---|---|
+| supervised (labels) | 98.6 (98.5–98.6) | 98.3 (98.3–98.4) | 96.9 (96.8–97.0) | 92.0 (91.0–92.9) | 39.2 |
+| SimCLR (τ = 0.2) | 98.1 (98.0–98.2) | 96.9 (96.8–96.9) | 89.6 (89.2–90.0) | 86.4 (82.6–88.3) | 31.1 |
+| MoCo | 97.9 (97.7–98.0) | 96.6 (96.5–96.7) | 87.8 (87.3–88.6) | 86.1 (85.8–86.5) | 32.4 |
+| BYOL | 94.8 (93.6–95.6) | 92.8 (91.7–93.7) | 74.0 (70.2–77.0) | 85.1 (83.3–87.0) | 33.9 |
+| SimSiam | 97.3 (97.1–97.5) | 96.2 (96.2–96.3) | 86.3 (85.5–86.9) | 88.5 (85.5–90.4) | 29.9 |
+| Barlow Twins | 97.6 (97.5–97.6) | 96.3 (96.1–96.4) | 88.3 (87.6–88.6) | 86.6 (85.0–87.9) | 31.7 |
+| VICReg | 98.2 (98.1–98.4) | 97.1 (97.0–97.1) | 91.3 (91.0–91.6) | 87.3 (85.7–89.3) | 30.9 |
+| DINO | 94.9 (94.5–95.2) | 92.4 (91.8–93.3) | 74.5 (74.0–74.9) | 86.5 (85.4–88.5) | 34.9 |
+| SimCLR + Matryoshka | 97.9 (97.7–98.0) | 96.8 (96.7–96.8) | 88.7 (88.5–89.1) | 87.6 (85.8–89.8) | 32.7 |
+| rotation prediction | 94.3 (94.0–94.5) | 92.2 (91.7–92.9) | 74.2 (73.4–75.5) | 88.1 (87.5–88.7) | 35.5 |
+| MAE (75 % hidden) | 82.3 (81.5–82.8) | 80.3 (79.9–80.7) | 52.0 (51.8–52.3) | 82.3 (77.0–87.2) | 41.3 |
+| BEiT (64 tokens) | 79.9 (78.0–81.5) | 81.8 (81.5–82.0) | 50.1 (48.5–51.0) | 76.5 (72.6–79.3) | 51.9 |
+| I-JEPA | 88.4 (87.3–89.0) | 89.1 (88.8–89.5) | 60.8 (60.2–61.2) | 85.3 (84.8–86.2) | 48.0 |
+| untrained network | 84.6 (84.0–85.1) | 84.2 (83.4–85.6) | 54.8 (54.2–55.7) | 82.8 (78.8–86.2) | 37.8 |
+| raw pixels | 92.7 | 97.0 | 72.5 | – | 258.7 |
+
+(The fine-tuning column of the untrained row is the network trained from scratch on the 100 labels.)
+
+- **InfoNCE is a lower bound, capped at $\log N$** (Gaussian pairs in 20 dimensions, critic trained 1500 steps, two seeds): true $I = 2$ nats: 0.83, 1.59, 1.87 at $N$ = 8, 64, 512; true $I = 5$ nats: 1.51, 3.23, 4.24 at $N$ = 8, 64, 512; true $I = 10$ nats: 1.84, 3.99, 5.98 at $N$ = 8, 64, 512 ($\log 512 = 6.24$).
+- **Temperature** (SimCLR linear / 10 labels per digit): τ = 0.05: 98.0 / 89.1; τ = 0.1: 98.1 / 88.9; τ = 0.2: 98.1 / 89.6; τ = 0.5: 98.0 / 89.6; τ = 1.0: 97.7 / 87.5. Crops alone, without the photometric changes: 97.3 / 86.4. Probe on the projection head's output $z$ instead of $h$: 97.4.
+- **Collapse**: pull-together only ends with effective rank of $z$ 2.3 and linear probe 84.4 (untrained: 84.6); SimSiam without its stop-gradient 2.5 and 87.3; with it 24.4 and 97.3.
+- **VICReg without its variance term**: linear 80.0, $k$-NN 80.7 (with it: 98.2, 97.1).
+- **DINO's two collapses** (teacher entropy at the end, $\log 256 = 5.55$): with centring and sharpening 4.37, without centring 0.00, without sharpening 5.54; prototypes in use 182, 1.0, 256. Linear probe 94.9, 87.3, 91.7.
+- **MAE masking ratio** (linear probe): 50% hidden: 81.6, 75% hidden: 82.3, 90% hidden: 84.0.
+- **Matryoshka** ($k$-NN on the first $m$ numbers of $h$, Matryoshka / plain SimCLR): $m$ = 2: 55.0 / 29.9, $m$ = 4: 87.6 / 64.0, $m$ = 8: 95.5 / 91.5, $m$ = 16: 96.2 / 95.9, $m$ = 32: 96.4 / 96.7, $m$ = 64: 96.5 / 97.0, $m$ = 128: 96.5 / 97.1.
+- **Curation** (DINOv2's retrieval recipe on a pool of 14,000 digits with class shares from 36 % down to 1 %; curated pool 2,812): linear 97.8 raw, 98.0 curated; 10 labels per digit 88.3 and 89.8; on the rarest digit (8, 140 examples in the raw pool) $k$-NN goes from 93.7 to 96.1, while the three commonest change by at most 0.6 points.
+- **Top and bottom halves** (mutual 10-NN alignment of the two encoders on the same digits): 0.17 and 0.17 for two seeds, against 0.71 for two seeds of the same half and 0.17 for the raw pixels of the halves.
+- **Platonic check**: Spearman correlation between a method's linear probe and its mean alignment with the others: 0.66. Same recipe, two seeds, linear CKA: supervised 0.95, simclr 0.98, byol 0.92, dino 0.97, mae 0.73.
+- **Different losses, one representation**: linear CKA between SimCLR, MoCo, Barlow Twins and VICReg (seed 0 each) is at least 0.97 for every pair, as high as two seeds of SimCLR (0.98); MAE against those four: 0.24–0.29.
+- **Fine-tuning from 100 labels** (300 steps): from scratch 82.8. The networks with the best frozen ten-per-digit probes score lower once fine-tuned (supervised, SimCLR, MoCo, Barlow Twins, VICReg, Matryoshka); SimSiam gains (86.3 → 88.5), and the masked models gain most (MAE 52.0 → 82.3, I-JEPA 60.8 → 85.3), MAE only back to the from-scratch level.
+- **Raw pixels** are a strong $k$-NN baseline on MNIST (97.0 %, above every self-supervised method but VICReg); the ten-per-digit probe separates the methods far more (72.5 % for pixels, 91.3 % for VICReg).
 
 ## References
 
