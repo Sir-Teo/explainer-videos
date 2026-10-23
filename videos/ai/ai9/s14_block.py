@@ -126,18 +126,19 @@ class Block(VoiceoverScene, ThreeDScene):
         cnt.next_to(gl, DOWN, buff=0.35).align_to(glu, RIGHT)
         cntl = label(r"three matrices instead of two: \ width $\tfrac83 d$ instead of $4d$", font_size=22, color=C.BITS)
         cntl.next_to(cnt, DOWN, buff=0.12).align_to(glu, RIGHT)
-        tab = VGroup()
+        tab = VGroup(VGroup(label(r"model", font_size=18, color=GREY_B), label(r"$d$", font_size=18, color=GREY_B),
+                            label(r"MLP width", font_size=18, color=GREY_B), label(r"ratio", font_size=18, color=GREY_B)))
         for nm in ("GPT-2 (2019)", "Llama 2 7B (2023)", "Llama 3 8B (2024)", "Qwen3-8B (2025)"):
             r = rows[nm]
             tab.add(VGroup(label(nm, font_size=20, color=WHITE),
-                           label(rf"$d = {r['d']:,}$".replace(",", "{,}"), font_size=20, color=GREY_A),
-                           label(rf"MLP width ${r['f']:,}$".replace(",", "{,}") + (r" \ (gated)" if r["gated"] else ""),
+                           label(rf"${r['d']:,}$".replace(",", "{,}"), font_size=20, color=GREY_A),
+                           label(rf"${r['f']:,}$".replace(",", "{,}") + (r" \ gated" if r["gated"] else ""),
                                  font_size=20, color=GATE if r["gated"] else NEURON),
-                           label(rf"$= {r['ratio']:.2f}\,d$", font_size=20, color=C.BITS)))
-        lefts = [0.35, 2.55, 3.85]
+                           label(rf"${r['ratio']:.2f}\,d$", font_size=20, color=C.BITS)))
+        lefts = [0.3, 2.75, 3.85]
         for i, row in enumerate(tab):
             for j, m_ in enumerate(row):
-                m_.move_to([0, -1.1 - 0.42 * i, 0])
+                m_.move_to([0, -0.95 - 0.42 * i, 0])
                 if j < 3:
                     m_.align_to([lefts[j], 0, 0], LEFT)
                 else:
@@ -168,7 +169,7 @@ class Block(VoiceoverScene, ThreeDScene):
             self.play(Create(ax), FadeIn(glu), FadeIn(gl))
             vo.wait_until("a")
             self.play(FadeIn(s_relu), FadeIn(surf_l1))
-            self.begin_ambient_camera_rotation(rate=0.12)
+            self.begin_ambient_camera_rotation(rate=0.035)
             vo.wait_until("b")
             self.play(Transform(s_relu, s_gate), FadeOut(surf_l1), FadeIn(surf_l2), run_time=2.0)
             vo.wait_until("d")
@@ -222,13 +223,16 @@ class Block(VoiceoverScene, ThreeDScene):
         rep.next_to(brace, RIGHT, buff=0.15)
         M = 1e6
         tally = VGroup(
-            label(r"Llama 3 8B, \ one block:", font_size=26, color=WHITE),
-            label(rf"attention: \ ${r['attn'] / M:.1f}$ million", font_size=24, color=C.TRUE_P),
-            label(rf"SwiGLU MLP: \ ${r['mlp'] / M:.1f}$ million", font_size=24, color=GATE),
-            label(rf"two RMSNorm gains: \ ${2 * r['d']:,}$".replace(",", "{,}"), font_size=24, color=NORM),
-            label(rf"$\times\, {r['layers']}$ blocks, \ $+$ embeddings: \ ${r['total'] / 1e9:.2f}$ billion", font_size=24,
-                  color=C.BITS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.3, 0.4, 0])
+            label(r"Llama 3 8B, \ one block:", font_size=24, color=WHITE),
+            label(rf"attention: \ ${r['attn'] / M:.1f}$ million", font_size=22, color=C.TRUE_P),
+            label(rf"SwiGLU MLP: \ ${r['mlp'] / M:.1f}$ million", font_size=22, color=GATE),
+            label(rf"two RMSNorm gains: \ ${2 * r['d']:,}$".replace(",", "{,}"), font_size=22, color=NORM),
+            label(rf"$\times\, {r['layers']}$ blocks, \ $+$ embeddings:", font_size=22, color=C.BITS),
+            label(rf"${r['total'] / 1e9:.2f}$ billion", font_size=30, color=C.BITS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        tally.next_to(rep, RIGHT, buff=0.5).set_y(0.4)
+        if tally.get_right()[0] > 6.9:
+            tally.scale((6.9 - tally.get_left()[0]) / tally.width, about_edge=LEFT)
         src = note(r"computed from the published configuration").next_to(tally, DOWN, buff=0.25).align_to(tally, LEFT)
         mlp_share = r["mlp"] / (r["attn"] + r["mlp"])
         with self.voiceover(

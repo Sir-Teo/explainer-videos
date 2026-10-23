@@ -242,8 +242,10 @@ class Backprop(VoiceoverScene):
             "reading handwritten zip codes. Hidden layers could be trained. The next question: what can they "
             "represent?"
         ) as vo:
-            self.play(FadeIn(head))
-            for k, mk in enumerate("abcd"):
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(Circumscribe(cards[0], color=HIST))
+            for k, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
         self.wait(0.3)

@@ -216,11 +216,7 @@ class Residual(VoiceoverScene):
         Y = -2.75  # the diagram's baseline, below the derivation
         nodes = VGroup(*[Dot([x, Y, 0], radius=0.08, color=RES) for x in xs])
         paths_ = VGroup()
-        g = np.random.default_rng(0)
         for mask in range(8):
-            ys = [-1.9]
-            for k in range(3):
-                ys.append(-1.9 + (0.25 + 0.18 * mask) * (1 if (mask >> k) & 1 else 0))
             pts = [np.array([xs[0], Y, 0])]
             for k in range(3):
                 on = (mask >> k) & 1
@@ -230,7 +226,7 @@ class Residual(VoiceoverScene):
             paths_.add(VMobject(color=col, stroke_width=2.2, stroke_opacity=0.8).set_points_smoothly(pts))
         pl = label(r"$3$ blocks: \ $2^3 = 8$ paths, \ from no block to all three", font_size=24, color=GREY_A)
         pl.next_to(nodes, DOWN, buff=0.25)
-        tag = note(r"schematic").next_to(paths_, RIGHT, buff=0.3)
+        tag = note(r"schematic").next_to(paths_, UP, buff=0.1).align_to(paths_, LEFT)
         def item(lines, color):
             return VGroup(*[label(t_, font_size=26, color=color) for t_ in lines]).arrange(DOWN, aligned_edge=LEFT,
                                                                                             buff=0.08)
@@ -266,7 +262,7 @@ class Residual(VoiceoverScene):
                       run_time=2.5)
             vo.wait_until("d")
             pic = VGroup(nodes, paths_, pl, tag)
-            self.play(FadeOut(VGroup(*rows, *whys)), pic.animate.scale(1.15).move_to([-3.2, 0.0, 0]), run_time=1.2)
+            self.play(FadeOut(VGroup(*rows, *whys)), pic.animate.scale(1.1).move_to([-3.3, 0.0, 0]), run_time=1.2)
             self.play(LaggedStart(*[FadeIn(h) for h in hist_], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()

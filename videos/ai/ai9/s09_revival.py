@@ -96,8 +96,10 @@ class Revival(VoiceoverScene):
             "field, deep networks were hard to train and harder to analyse, and attention moved to kernels and "
             "graphical models. For networks, it was a second winter."
         ) as vo:
-            self.play(FadeIn(head))
-            for k, mk in enumerate("abcd"):
+            self.play(FadeIn(head), FadeIn(cards[0], shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(Circumscribe(cards[0], color=C.TRUE_P))
+            for k, mk in zip((1, 2, 3), "bcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
         self.wait(0.3)
