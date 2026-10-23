@@ -160,8 +160,9 @@ class Dynamics(VoiceoverScene):
             "in. StyleGAN trains with this penalty, R1."
         ) as vo:
             self.play(FadeIn(pl), FadeIn(th), FadeIn(ps), FadeIn(setup), FadeIn(cite_))
-            vo.wait_until("a")
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in fld], lag_ratio=0.01), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Indicate(fld, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(FadeIn(lg[0]))
             t1, d1, p1 = traced(self, pl, Ps[:n_out], SIM, 1)

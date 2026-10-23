@@ -118,6 +118,56 @@ digit models (`pixelcnn`, `vae`, `gan`, `wgan`, `flow`, three seeds each, a few 
 sampling included), `gan2d` (fifteen ring runs) and `cnf`. MNIST is read through Part 10's downloader
 (`videos.ai.ai10.data`, checked against SHA-256); no other part's results are used.
 
+## Results on this machine
+
+What `compute.py` produced for the published version (the narration is written from these numbers through
+f-strings, so a rerun that comes out differently says so in its own words). Means over seeds, ranges in brackets.
+
+**The plane.** Floors (each density's entropy): moons 1.758, ring 0.312, checkerboard 2.079 nats. Held-out NLL on
+the ring: autoregressive mixture model 0.33; RealNVP 0.68–0.80; energy model (Z summed on a grid) 0.61–1.67; VAE
+(importance-weighted bound) 2.52–2.55. Continuous flow on the moons: 1.846–1.863 trained with the exact trace,
+1.850–1.871 with one Rademacher probe; in 196 dimensions one probe is 67× faster than the exact trace, and the
+probes' measured variances match the formulas (random signs: 0.47× the Gaussian probes' variance). Posterior
+collapse in 2D: factorized decoder rate 2.17–2.44 nats, autoregressive decoder 0.000–0.001.
+
+**GANs on the ring** (five seeds each, same networks and generator steps): minimax loss 8, 8, 8, 8, 8 modes;
+non-saturating 8, 3, 8, 8, 1; WGAN-GP 8 in every seed, but only 64–70% of its samples within 3σ of a mode (82–88%
+for the non-saturating runs that did not collapse). The replay in chapter 5 is seed 4, the worst. Simultaneous
+gradient steps on xy spiral out by √(1 + η²) per step, 3.2× in 60 steps at η = 0.2 (asserted against the formula).
+
+**Precision and recall on the ring** (k = 3, 2,000 points): autoregressive 0.97 / 0.98; RealNVP 0.78–0.84 / 0.96;
+WGAN-GP 0.63–0.71 / 0.93–0.96; energy model 0.37–0.83 / 0.98–0.99; non-saturating GAN 0.07–0.84 / 0.88–0.99; VAE
+0.29–0.30 / 0.98–1.00. A single Gaussian with the ring's mean and covariance: Fréchet distance 0.002 (two samples of
+the ring itself: 0.004), precision 0.10.
+
+**Energy and memory.** Hopfield (196 neurons, cues with 10% of bits flipped): every random pattern comes back up to
+0.07 patterns per neuron, fewer than half from 0.15 on (theory: 0.138). Digits overlap far more: Hebb's rule
+recalls every digit only with up to two stored (the replay in chapter 11 therefore stores one), the softmax update
+(β = 8) every digit with up to four, and 30% of them with all ten. RBM with 16 hidden units, exact
+held-out log-likelihood after 4,800 updates: CD-1 −39.90, −39.94, −40.21; CD-10 −39.56, −39.58, −39.85; persistent
+CD −39.58, −39.58, −39.83 nats per digit. Langevin on two Gaussians (weights 0.2 / 0.8): plain chains end with
+49% in the heavy mode (they started with 49%), annealed chains with 76%.
+
+**Digits, one budget** (6 × 10¹² training FLOPs each, three seeds, 2,000 samples judged by a 98.86%-accurate
+classifier's 128 features; real digits score FID 1.05 against the test set):
+
+| model | parameters | steps | FID | precision | recall | bits per pixel |
+|---|---|---|---|---|---|---|
+| PixelCNN | 56,368 | 1,551 | 47.1 (46.7–47.9) | 0.51 | 0.83 | 0.857–0.859 (exact) |
+| VAE | 852,392 | 9,568 | 40.2 (36.4–42.6) | 0.82 | 0.55 | 1.02–1.05 (IWAE bound) |
+| GAN | 241,093 | 16,380 | 53.8 (39.3–75.2) | 0.75 | 0.40 | — |
+| WGAN-GP | 241,093 | 3,011 | 46.7 (45.0–49.3) | 0.52 | 0.70 | — |
+| RealNVP | 1,205,856 | 6,589 | 28.0 (27.4–28.7) | 0.77 | 0.84 | 1.13 (bound) |
+
+Sampling one digit: PixelCNN about 70–80 ms (196 passes), the others well under 0.1 ms. The GAN pair is 256 units
+wide: in a pilot at 512 units the budget bought only 5,133 generator steps and the samples stayed speckled (FID
+110–119), so the width was halved before the final runs (both GANs, to keep their comparison fair); the GANs train on
+the 16 grey levels themselves, not on dequantized pixels. β-VAE (quarter budget, two seeds): rate falls from 23.5
+nats (β = 0.25) to 0.0 (β = 8) while distortion rises from 142 to 248 nats. PixelVAE (half budget): plain, rate 1.3
+nats per digit (against 13–14 for the plain VAE) and 12.5% of decodes keep the source digit's class (chance is
+10%); with free bits of 1 nat per code number, 14.9 nats and 31.8%. VQ-VAE: 32 codes, perplexity 21.2, a 7 × 7 grid
+is 245 bits raw and 131 bits under the transformer prior; two-stage FID 67.4.
+
 ## References
 
 Books: I. Goodfellow, Y. Bengio & A. Courville, *Deep Learning* (2016), ch. 16–20; S. J. D. Prince, *Understanding Deep
