@@ -537,7 +537,7 @@ ZH.update({
 
     'f"Here is the training itself, replayed:':
         "这是训练过程本身的回放：两个模型对一条留出链的猜测，随着训练进行而变化。<bookmark mark='a'/>第0步，两个模型的猜测都没有什么"
-        "特别的。<bookmark mark='b'/>几百步之内，两个都学会了容易的部分：在链上挨得近的残基，在空间里也挨得近，也就是沿对角线的那条带。"
+        "特别的。<bookmark mark='b'/>几百步之内，两个都学会了容易的部分：在链上挨得近的残基，在空间里也挨得近，也就是沿对角线的那条深色带。"
         "<bookmark mark='c'/>剩下的部分，也就是链上相隔很远的残基又在哪里碰到一起，需要别的残基对；<bookmark mark='d'/>在下面的曲线上，"
         "{beat_txt}。",
 
@@ -939,6 +939,13 @@ ZH.update({
 
     "f'At rank six, {r6[1]} starts report zero error":
         '秩为六时，有{r6[1]}个起点报告误差为零，这会和定理矛盾：是数值上的假象',
+
+    'f"For three by three matrices the record, Julian Laderman\'s from 1976, is twenty-three multiplications, and':
+        '对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；我们在这个秩上的{n3_tries}个起点里，有{n3_ok}个找到了',
+
+    'f"For three by three matrices the record, Julian Laderman\'s from 1976, is twenty-three multiplications; from':
+        '对三乘三矩阵，纪录是朱利安·拉德曼1976年给出的二十三次乘法；在这个秩上从{n3_tries}个起点出发，在二十六上也一样多，我们的搜索'
+        '离零只差{tiny3}，却始终没有精确到零：矩阵一变大，精确的分解就成了大海里的针',
 
     "f'At rank seven, {r7[1]} of":
         '秩为七时，{r7[2]}个起点里有{r7[1]}个找到了：一个类似施特拉森的算法，它把随机矩阵乘对到小数点后{vdp}位',

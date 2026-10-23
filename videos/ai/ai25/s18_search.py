@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai25.common import (AUG, HIST, LEAN_C, PAIR_C, PART, PLAIN, PRED_C, SEARCH_C, STRUCT, SYM, TRUE_C,
-                                   load, matrix_image, node_box, take_away, words_num)
+                                   load, matrix_image, node_box, take_away, tiny_words, words_num)
 
 
 class Search(VoiceoverScene):
@@ -175,7 +175,12 @@ class Search(VoiceoverScene):
             col = SEARCH_C if s_ else PLAIN
             tab.add(label(rf"rank ${R}$: \ ${s_}$ of ${n_}$ reach zero error \ (best ${sci(best, 1)}$)",
                           font_size=22, color=col))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -2.0, 0])
+        n3a, n3b = mm["n3_r23"], mm["n3_r26"]
+        n3_tries = len(n3a["res"])
+        tab.add(label(rf"$3 \times 3$, \ rank $23$ \ (Laderman, 1976): \ ${n3a['success']}$ of ${n3_tries}$ \ "
+                      rf"(best ${sci(min(n3a['best'], n3b['best']), 1)}$, \ even at rank $26$)", font_size=22,
+                      color=SEARCH_C if n3a["success"] else GREY_B))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, -2.1, 0])
         ver = mm["n2_r7_verify"]
         vdp = int(np.floor(-np.log10(max(ver, 1e-300))))
         r6, r7, r8 = res
@@ -185,6 +190,16 @@ class Search(VoiceoverScene):
               "artefact")
         s7 = (f"At rank seven, {r7[1]} of {r7[2]} starts find one: a Strassen-like algorithm, which multiplies "
               f"random matrices correctly to {vdp} decimal places" if r7[1] else "At rank seven our search found none")
+        n3_ok = n3a["success"]
+        if n3_ok:
+            s3 = (f"For three by three matrices the record, Julian Laderman's from 1976, is twenty-three "
+                  f"multiplications, and {n3_ok} of our {n3_tries} starts at that rank found one")
+        else:
+            tiny3 = tiny_words(min(n3a["best"], n3b["best"]))
+            s3 = (f"For three by three matrices the record, Julian Laderman's from 1976, is twenty-three "
+                  f"multiplications; from {n3_tries} starts at that rank, and as many at twenty-six, our search got "
+                  f"within {tiny3} of zero but never exactly there: as the matrices grow, exact decompositions become "
+                  "needles in a haystack")
         tag = note(r"computed", font_size=20).to_corner(DR, buff=0.2)
         head = label(r"matrix multiplication as a tensor", font_size=30, color=SEARCH_C).to_edge(UP, buff=0.25)
         with self.voiceover(
@@ -194,7 +209,7 @@ class Search(VoiceoverScene):
             "algorithm with R multiplications. <bookmark mark='d'/> In 1969 Volker Strassen found seven for two by "
             "two matrices, not eight, and Shmuel Winograd proved two years later that seven is the minimum. "
             "<bookmark mark='e'/> We searched for these decompositions numerically, from thirty random starts at "
-            f"each rank. {s6}. {s7}."
+            f"each rank. {s6}. {s7}. <bookmark mark='f'/> {s3}."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abc"):
@@ -203,8 +218,10 @@ class Search(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(hist))
             vo.wait_until("e")
-            self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(t_) for t_ in tab[1:]], lag_ratio=0.4), FadeIn(tag),
+            self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(t_) for t_ in tab[1:4]], lag_ratio=0.4), FadeIn(tag),
                       run_time=2.5)
+            vo.wait_until("f")
+            self.play(FadeIn(tab[4]))
         self.wait(0.3)
         self.clear_scene()
 

@@ -111,13 +111,13 @@ def translate(text: str, video_dir: Path, scene: str) -> str:
     k = key(text)
     entry = _table(str(video_dir), LANG)["lines"].get(k)
     if entry and entry.get(LANG):
-        return entry[LANG]
+        return zh_numbers(entry[LANG]) if LANG == "zh" else entry[LANG]
     # not in the table (a line computed from data that came out differently on this machine): the part's templates
     tr = _templates(video_dir, LANG)
     if tr is not None:
         out = tr(" ".join(text.split()))
         if out is not None and BOOKMARK.findall(out) == BOOKMARK.findall(text):
-            return out
+            return zh_numbers(out)
     if COLLECT:
         with open(COLLECT, "a") as f:
             f.write(json.dumps({"key": k, "scene": scene, "en": " ".join(text.split())}, ensure_ascii=False) + "\n")
@@ -127,6 +127,24 @@ def translate(text: str, video_dir: Path, scene: str) -> str:
 
 
 BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
+_ZH_UNIT = re.compile(r"(\d+(?:\.\d+)?)\s*(百万|千万|十亿)")
+
+
+def zh_numbers(s: str) -> str:
+    """Chinese counts in 万 and 亿: a template keeps the English placeholder's format, so "6.4 million" arrives as
+    6.4百万; said as 640万 (and 724百万 as 7.24亿, 8.03十亿 as 80.3亿), with no more digits than it came with."""
+    def sub(m):
+        v, unit = m.group(1), m.group(2)
+        scale, out = {"百万": (2, "万"), "千万": (3, "万"), "十亿": (1, "亿")}[unit]
+        decimals = max(0, (len(v.split(".")[1]) if "." in v else 0) - scale)
+        x = float(v) * 10 ** scale
+        if out == "万" and x >= 10_000:
+            x, out, decimals = x / 10_000, "亿", min(2, decimals + 4)
+        text = f"{x:.{decimals}f}"
+        if "." in text:
+            text = text.rstrip("0").rstrip(".")
+        return text + out
+    return _ZH_UNIT.sub(sub, s)
 
 
 def _templates(video_dir: Path, lang: str):
