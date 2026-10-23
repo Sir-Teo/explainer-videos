@@ -209,6 +209,7 @@ class Materials(VoiceoverScene):
         for a_ in after:
             if a_.width > 5.8:
                 a_.width = 5.8
+        head = label(r"the pushback", font_size=34, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The claims drew pushback from chemists. <bookmark mark='a'/> In 2024 Anthony Cheetham and Ram Seshadri "
             "examined a random sample of GNoME's predictions and found scant evidence of compounds that were at "
@@ -220,6 +221,7 @@ class Materials(VoiceoverScene):
             "that propose crystals with chosen properties, <bookmark mark='d'/> but the lesson stuck: a predicted "
             "crystal is a hypothesis, and making it is the test."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.1))
             vo.wait_until("b")

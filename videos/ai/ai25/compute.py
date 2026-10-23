@@ -643,19 +643,27 @@ def compute_fold():
 
 
 PAIR_KINDS = ("pairwise", "triangle", "recycle")
+PAIR_SNAPS = (0, 100, 300, 700, 1500, 2500)
 
 
 def compute_pair():
     _threads()
     val = pr.pair_batch(np.random.default_rng(99), 200)
-    part = CACHE.partial("pair", dict(kinds=PAIR_KINDS, seeds=SEEDS, v=1, n=pr.PAIR_N))
+    part = CACHE.partial("pair", dict(kinds=PAIR_KINDS, seeds=SEEDS, v=2, n=pr.PAIR_N, snaps=PAIR_SNAPS))
+    ex = torch.from_numpy(val[0][3:4])
+
+    def snap(m_):
+        with torch.no_grad():
+            return m_(ex)[0].numpy().tolist()
+
     for kind in PAIR_KINDS:
         for s in SEEDS:
             key = f"{kind}_s{s}"
             if key in part:
                 continue
-            m, r = pr.train_pair(kind, s, val=val)
-            rec = dict(curve=r["curve"], secs=r["secs"], params=r["params"])
+            replay = s == 0 and kind != "recycle"
+            m, r = pr.train_pair(kind, s, val=val, snaps=PAIR_SNAPS if replay else (), snap_fn=snap if replay else None)
+            rec = dict(curve=r["curve"], secs=r["secs"], params=r["params"], frames=r["frames"])
             if kind == "recycle":
                 rec["by_cycle"] = [pr.pair_error(m, val, c) for c in range(1, 7)]
                 rec.update(rec["by_cycle"][3])
@@ -665,7 +673,7 @@ def compute_pair():
                 save_model(m, f"pair_{kind}")
             part[key] = rec
             log(f"pair {key}: hidden RMSE {rec['hidden']:.2f}, seen {rec['seen']:.2f}, violations {rec['viol']:.4f}")
-    out = dict(kinds=list(PAIR_KINDS), n=pr.PAIR_N)
+    out = dict(kinds=list(PAIR_KINDS), n=pr.PAIR_N, snaps=list(PAIR_SNAPS))
     for k in part.done:
         out[k] = part[k]
     inp, D, M = val

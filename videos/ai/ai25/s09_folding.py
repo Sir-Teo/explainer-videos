@@ -21,7 +21,7 @@ class Folding(VoiceoverScene):
         self.descent()
 
     def card(self):
-        card = chapter_card(8, r"The protein-folding problem", r"Can you read a shape from a sequence?", lit=(1961,),
+        card = chapter_card(8, r"The protein-folding problem", r"Can you read a shape from a sequence?", lit=(2011,),
                             part=PART)
         with self.voiceover("Chapter eight. The protein-folding problem."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
@@ -97,6 +97,7 @@ class Folding(VoiceoverScene):
         lev = label(r"Levinthal (1969): \ folding can't be a random search", font_size=26, color=PAIR_C)
         lev.next_to(rows, UP, buff=0.35).align_to(rows, LEFT)
         tag = note(r"illustrative arithmetic, \ after Levinthal", font_size=20).to_corner(DR, buff=0.25)
+        head = label(r"two facts", font_size=34, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Two facts frame the problem. <bookmark mark='a'/> In 1961 Christian Anfinsen unfolded an enzyme, "
             "ribonuclease, with urea; when he washed the urea out, the chain folded back by itself and worked again. "
@@ -108,6 +109,7 @@ class Folding(VoiceoverScene):
             "mark='e'/> Yet proteins fold in microseconds to seconds. Nature doesn't search blindly, and neither, it turned out, "
             "should a computer."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(anf, shift=UP * 0.1))
             vo.wait_until("b")

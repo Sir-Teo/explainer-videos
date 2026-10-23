@@ -188,6 +188,7 @@ class Proofs(VoiceoverScene):
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.6)
         cite_ = cite(r"Math Inc.\ (2025); \ Sothanaphan (2026); \ Feng et al.\ (2026)", corner=DR)
+        head = label(r"research mathematics", font_size=34, color=LEAN_C).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Beyond contests, the frontier is research mathematics. <bookmark mark='a'/> Translating informal "
             "mathematics into Lean, autoformalization, sped up sharply: in September 2025 the start-up Math Inc. "
@@ -200,7 +201,7 @@ class Proofs(VoiceoverScene):
             "formal proof proves exactly its statement, so a mistranslated statement proves the wrong thing; and, as "
             "mathematicians watching closely have said, the problems falling first are the easier ones."
         ) as vo:
-            self.play(FadeIn(cite_))
+            self.play(FadeIn(cite_), FadeIn(head))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.1))

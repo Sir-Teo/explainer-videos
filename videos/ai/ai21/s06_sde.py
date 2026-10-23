@@ -155,12 +155,14 @@ class SDE(VoiceoverScene):
         ode_ok = bool(np.all(ode_sw < 1.3 * floor + 0.01))
         sde_ok = bool(np.all(sde_sw < 1.3 * floor + 0.01))
         end_s, end_o = float(sde_sw[-1]), float(ode_sw[-1])
-        verdict = ("Both stay as close to the true marginals as fresh samples of them, at every time we measured."
-                   if ode_ok and sde_ok else
-                   (f"The ODE stays as close to the true marginals as fresh samples of them, all the way down; the SDE, "
-                    f"with a thousand random steps, drifts a little at the end, {end_s:.3f} against the ODE's "
-                    f"{end_o:.3f}: random steps need to be smaller." if ode_ok else
-                    f"Both stay near the true marginals; at the end the SDE is {end_s:.3f} away, the ODE {end_o:.3f}."))
+        if ode_ok and sde_ok:
+            verdict = "Both stay as close to the true marginals as fresh samples of them, at every time we measured."
+        elif ode_ok:
+            verdict = (f"The ODE stays as close to the true marginals as fresh samples of them, all the way down; the "
+                       f"SDE, with a thousand random steps, drifts a little at the end, {end_s:.3f} against the ODE's "
+                       f"{end_o:.3f}: random steps need to be smaller.")
+        else:
+            verdict = f"Both stay near the true marginals; at the end the SDE is {end_s:.3f} away, the ODE {end_o:.3f}."
         rt = float(s["roundtrip_err"])
         dec = max(1, int(math.floor(-math.log10(max(rt, 1e-300)))))
         stats = VGroup(label(rf"path length: \ SDE ${float(s['sde_len']):.1f}$, \ ODE ${float(s['ode_len']):.1f}$",

@@ -102,6 +102,7 @@ class AF3(VoiceoverScene):
             label(r"generative models can invent structure: \ trained also on AlphaFold-Multimer's predictions "
                   r"(cross-distillation)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
+        head = label(r"diffusion over coordinates \ (Part 21)", font_size=32, color=STRUCT).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Diffusion is Part 21's idea, applied to atoms. <bookmark mark='a'/> Add noise to a structure's "
             "coordinates, at every level from a whisper to pure noise, and train a network to remove it. Then start "
@@ -113,6 +114,7 @@ class AF3(VoiceoverScene):
             "can also invent structure where there is none, in floppy regions; AlphaFold 3 was trained on "
             "AlphaFold-Multimer's predictions too, which taught it to leave those regions as loose extended chains."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(sl), LaggedStart(*[FadeIn(s_) for s_ in strip], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("b")

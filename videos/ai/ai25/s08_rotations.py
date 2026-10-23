@@ -76,6 +76,7 @@ class Rotations(VoiceoverScene):
             label(r"EGNN (Satorras, Hoogeboom \& Welling 2021): \ invariant features, \ equivariant positions",
                   font_size=21, color=STRUCT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
+        head = label(r"an E(n)-equivariant graph network", font_size=30, color=STRUCT).to_edge(UP, buff=0.25)
         with self.voiceover(
             "How do you build that into a network? The simplest answer is the E(n)-equivariant graph network of "
             "Victor Garcia Satorras, Emiel Hoogeboom and Max Welling, in 2021. Each atom has features h and a "
@@ -88,6 +89,7 @@ class Rotations(VoiceoverScene):
             "Equivariance, line by line. <bookmark mark='e'/> SchNet, four years earlier, had used distances alone, "
             "for invariant energies."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 step(k)
