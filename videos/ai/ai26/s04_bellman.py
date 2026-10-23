@@ -86,7 +86,13 @@ class Bellman(VoiceoverScene):
         up = VGroup(*[Arrow(n.get_top() + UP * 0.05, s.get_bottom(), buff=0.25, stroke_width=1.5, color=VALUE,
                             max_tip_length_to_length_ratio=0.06).set_opacity(0.5) for n in nexts[::2]])
         cap = label(r"a backup diagram: \ values flow up from where you might land", font_size=26, color=GREY_A)
-        cap.to_edge(DOWN, buff=0.5)
+        cap.to_edge(UP, buff=0.3)
+        # the equation the tree draws, up from the first word
+        eq = MathTex(r"V^\pi(s) = \sum_a", r"\pi(a \mid s)", r"\sum_{s'}", r"P(s' \mid s, a)", r"\big[", r"r(s, a)",
+                     r"+ \gamma V^\pi(s')", r"\big]", font_size=34)
+        for k, c in ((1, AGENT), (3, ENV), (5, REWARD), (6, VALUE)):
+            eq[k].set_color(c)
+        eq.to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Draw it as a tree. At the top, the state s. <bookmark mark='a'/> The policy chooses among the "
             "actions, the small dots, with probabilities pi. <bookmark mark='b'/> Each action can lead to several "
@@ -96,7 +102,7 @@ class Bellman(VoiceoverScene):
             "Barto call these backup diagrams. Every algorithm in this part is a different way of doing that "
             "backup: exactly, or from samples, or inside a search tree."
         ) as vo:
-            self.play(FadeIn(s), FadeIn(sl))
+            self.play(FadeIn(s), FadeIn(sl), FadeIn(cap), FadeIn(eq))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(e) for e in edges1], lag_ratio=0.2), LaggedStart(*[FadeIn(a) for a in acts]),
                       FadeIn(lab[0]))
@@ -105,7 +111,7 @@ class Bellman(VoiceoverScene):
                       LaggedStart(*[FadeIn(n) for n in nexts], lag_ratio=0.05), FadeIn(lab[1]), FadeIn(lab[2]))
             vo.wait_until("c")
             self.play(FadeIn(vl))
-            self.play(LaggedStart(*[GrowArrow(u) for u in up], lag_ratio=0.1), FadeIn(cap))
+            self.play(LaggedStart(*[GrowArrow(u) for u in up], lag_ratio=0.1))
             self.play(Indicate(s, color=VALUE, scale_factor=1.3))
         self.wait(0.3)
         self.clear_scene()

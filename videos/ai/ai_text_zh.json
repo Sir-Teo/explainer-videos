@@ -7125,7 +7125,9 @@
     "Poole et al.\\ (2016); \\ Schoenholz et al.\\ (2017); \\ Pennington et al.\\ (2017); \\ Xiao et al.\\ (2018)": "普尔等（2016）；\\ 舍恩霍尔茨等（2017）；\\ 彭宁顿等（2017）；\\ Xiao等（2018）",
     "He et al., ResNet (2015); \\ Srivastava et al.\\ (2015); \\ Veit et al.\\ (2016); \\ Ioffe \\& Szegedy (2015); \\ Ba et al.\\ (2016); \\ Zhang \\& Sennrich (2019); \\ Xiong et al.\\ (2020)": "何恺明等，ResNet（2015）；\\ 斯里瓦斯塔瓦等（2015）；\\ 维特等（2016）；\\ 约费 \\& 塞格迪（2015）；\\ 巴等（2016）；\\ Zhang \\& 森里希（2019）；\\ Xiong等（2020）",
     "Hendrycks \\& Gimpel (2016); \\ Dauphin et al.\\ (2017); \\ Shazeer (2020); \\ Kolmogorov (1957); \\ Arnold (1957); \\ Liu et al., KAN (2024); \\ Yu et al.\\ (2024)": "亨德里克斯 \\& 金佩尔（2016）；\\ 多芬等（2017）；\\ 沙泽尔（2020）；\\ 柯尔莫哥洛夫（1957）；\\ 阿诺德（1957）；\\ Liu等，KAN（2024）；\\ Yu等（2024）",
-    "Bengio, Ducharme, Vincent \\& Jauvin, \\textit{A Neural Probabilistic Language Model} (2003)": "本吉奥、迪沙尔姆、文森特 \\& 若万，\\textit{A Neural Probabilistic Language Model}（2003）"
+    "Bengio, Ducharme, Vincent \\& Jauvin, \\textit{A Neural Probabilistic Language Model} (2003)": "本吉奥、迪沙尔姆、文森特 \\& 若万，\\textit{A Neural Probabilistic Language Model}（2003）",
+    "AlphaGo, \\ 2016: \\ deep networks inside Monte Carlo tree search": "AlphaGo，\\ 2016：\\ 把深度网络放进蒙特卡洛树搜索",
+    "learning rates: \\ adapters $2\\times 10^{-3}$, \\ every weight $5\\times 10^{-4}$": "学习率：\\ 适配器 $2\\times 10^{-3}$，\\ 全部权重 $5\\times 10^{-4}$"
   },
   "phrases": {
     "width": "宽度",

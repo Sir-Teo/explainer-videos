@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.ai import *  # noqa: F403
 from videos.ai.ai27.common import ADAPT, ASSIST, BASE, GOLD, PART, PENALTY, POLICY, REWARD, load
+from videos.ai.ai27.compute import LORA_LR, SFT_LR
 
 
 class LoRA(VoiceoverScene):
@@ -131,19 +132,42 @@ class LoRA(VoiceoverScene):
                 label(rf"${r['heldout'] - d['base_heldout']:+.3f}$", font_size=22).move_to([xs[3], y, 0])))
         tag = note(r"computed: \ the novels model, \ which-book task; \ forgetting = change in loss on novel text")
         tag.to_edge(DOWN, buff=0.35)
+
+        def sci(x):
+            e = int(np.floor(np.log10(x)))
+            return rf"{x / 10 ** e:g}\times 10^{{{e}}}"
+
+        lrs = label(rf"learning rates: \ adapters ${sci(LORA_LR)}$, \ every weight ${sci(SFT_LR)}$", font_size=18,
+                    color=GREY_B).move_to([3.6, -1.75, 0])
         full, r1 = runs[-1], runs[0]
         best = max(runs[:-1], key=lambda r: r["which"])
         forget_full = full["heldout"] - d["base_heldout"]
         forget_lora = min(r["heldout"] for r in runs[:-1]) - d["base_heldout"]
+        # the verdict follows the measurement: did the adapters forget less than full fine-tuning?
+        less = [r for r in runs[:-1] if r["heldout"] < full["heldout"]]
+        ratio = LORA_LR / SFT_LR
+        if len(less) == len(runs) - 1:
+            verdict = (f"every adapter forgot less than that, as little as {forget_lora:+.3f}. LoRA learns less, and "
+                       "forgets less: the title of a 2024 study that found the same at scale.")
+        elif less:
+            small = min(less, key=lambda r: r["heldout"])
+            verdict = (f"only the rank {small['rank']} adapter forgot less, {small['heldout'] - d['base_heldout']:+.3f}, "
+                       f"and it learned least. The larger adapters forgot more: they trained with steps {ratio:.0f} "
+                       "times larger, as adapters need, and bigger steps carry a model further from where it started. "
+                       "A 2024 study found that LoRA learns less and forgets less, at scale and at matched accuracy; at "
+                       "ours, only the smallest adapter did.")
+        else:
+            verdict = (f"every adapter forgot more, at least {forget_lora:+.3f}: they trained with steps {ratio:.0f} "
+                       "times larger, as adapters need. A 2024 study found that LoRA forgets less, at scale and at "
+                       "matched accuracy; at our scale, with this recipe, it didn't.")
         with self.voiceover(
             "Our own experiment: fine-tune the novels model on the which-book task with LoRA at ranks one, four "
             "and sixteen, and with every weight. <bookmark mark='a'/> Rank one trains "
             f"{r1['params']:,} numbers, {100 * r1['params'] / tot:.2g} percent of the model. "
             f"<bookmark mark='b'/> Full fine-tuning gets {100 * full['which']:.0f} percent of held-out sentences right; "
             f"the best adapter, rank {best['rank']}, {100 * best['which']:.0f} percent. <bookmark mark='c'/> And on "
-            f"ordinary novel text, full fine-tuning's loss is {forget_full:+.3f} nats from the base model's, the "
-            f"adapters' as little as {forget_lora:+.3f}. LoRA learns less, and forgets less: the title of a 2024 "
-            "study that found the same at scale."
+            f"ordinary novel text, full fine-tuning's loss is {forget_full:+.3f} nats from the base model's; "
+            "<bookmark mark='d'/> " + verdict
         ) as vo:
             self.play(FadeIn(g), Create(chance), FadeIn(cl), FadeIn(head), FadeIn(tag),
                       FadeIn(VGroup(*[r_[0] for r_ in rows])))
@@ -154,6 +178,10 @@ class LoRA(VoiceoverScene):
             self.play(FadeIn(VGroup(*[r_[3] for r_ in rows])))
             vo.wait_until("c")
             self.play(FadeIn(VGroup(*[r_[4] for r_ in rows])))
+            vo.wait_until("d")
+            # each adapter's forgetting against full fine-tuning's: less in green, more in red; and the step sizes
+            self.play(*[r_[4].animate.set_color(REWARD if r["heldout"] < full["heldout"] else PENALTY)
+                        for r_, r in zip(rows[:-1], runs[:-1])], FadeIn(lrs))
         self.wait(0.3)
         self.clear_scene()
 
