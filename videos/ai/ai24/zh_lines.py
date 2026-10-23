@@ -542,13 +542,13 @@ ZH.update({
 
     'f"So, does filling in teach what a digit is?':
         "那么，填空能教会网络什么是数字吗？<bookmark mark='a'/>{v}<bookmark mark='b'/>在大规模上也是同样的规律：MAE的线性探针落后于"
-        "对比式方法，只有在整个网络都被微调之后，它才大放异彩。像素目标让网络把力气花在精确的笔画上，而其中很多是分类器用不上的。"
+        "对比式方法，一旦微调它的各层，它就大放异彩。像素目标让网络把力气花在精确的笔画上，而其中很多是分类器用不上的。"
         "这就引出了第三条路：去预测，但不预测像素。",
 
     'f"Not on our network. Filling in pixels leaves a representation':
         "在我们的网络上不能。填像素留下的表示，线性探针只有{pct(ml)}%，甚至低于未训练网络的{pct(un)}%，远低于SimCLR的{pct(sl)}%；"
-        "预测编码得到{pct(bl)}%。为了画出笔画，那张小特征图的每个格子学的是它附近哪里有墨迹；在整张图上一平均，这些对“是哪个数字”"
-        "就说明不了多少了。",
+        "预测编码得到{pct(bl)}%。一个可能的原因是：为了画出笔画，那张小特征图的每个格子学的是它附近哪里有墨迹，在整张图上一平均，"
+        "这些对“是哪个数字”就说明不了多少了。",
 
     "f'Filling in pixels gives a representation {pct(sl - ml)} points behind SimCLR":
         '填像素得到的表示，在线性探针上比SimCLR落后{pct(sl - ml)}个百分点，用近邻法落后{pct(sk - mk)}个百分点。预测编码而不是像素，'

@@ -224,18 +224,19 @@ class Sets(VoiceoverScene):
         tag = note(r"computed: \ seed $0$, \ $1{,}000$ held-out sets, \ accuracy every $100$ steps", font_size=18)
         tag.to_corner(DR, buff=0.2)
         d80, a80, m80 = first("deepsets"), first("mlp_aug"), first("mlp")
-        ds_txt = (f"Deep Sets passes eighty percent after {d80:,} steps and ends at {fin['deepsets']:.0f} percent"
-                  if d80 is not None else f"Deep Sets ends at {fin['deepsets']:.0f} percent")
+        e_ds, e_ml, e_au = fin["deepsets"], fin["mlp"], fin["mlp_aug"]
+        ds_txt = (f"Deep Sets passes eighty percent after {d80:,} steps and ends at {e_ds:.0f} percent"
+                  if d80 is not None else f"Deep Sets never passes eighty percent; it ends at {e_ds:.0f} percent")
         if m80 is None:
-            mlp_txt = f"never gets to eighty percent; it ends at {fin['mlp']:.0f} percent"
+            mlp_txt = f"never gets to eighty percent; it ends at {e_ml:.0f} percent"
         else:
-            mlp_txt = f"passes eighty percent only at step {m80:,}, and ends at {fin['mlp']:.0f} percent"
+            mlp_txt = f"passes eighty percent only at step {m80:,}, and ends at {e_ml:.0f} percent"
         if a80 is None:
-            aug_txt = f"never gets to eighty percent either; it ends at {fin['mlp_aug']:.0f}"
+            aug_txt = f"never gets to eighty percent either; it ends at {e_au:.0f}"
         elif d80 is not None and a80 > d80:
-            aug_txt = f"gets there too, but later, at step {a80:,}, and ends at {fin['mlp_aug']:.0f}"
+            aug_txt = f"gets there too, but later, at step {a80:,}, and ends at {e_au:.0f}"
         else:
-            aug_txt = f"gets there at step {a80:,} and ends at {fin['mlp_aug']:.0f}"
+            aug_txt = f"gets there at step {a80:,} and ends at {e_au:.0f}"
         with self.voiceover(
             f"Before the full comparison, watch one training run of each, on {n} training sets, the held-out accuracy "
             f"checked every hundred steps. <bookmark mark='a'/> {ds_txt}. <bookmark mark='b'/> The plain MLP "
@@ -294,8 +295,12 @@ class Sets(VoiceoverScene):
         reach = [n for n, a in zip(sizes, a_au) if a >= target]
         reach_txt = (f"The MLP with reordered copies needs {reach[0]:,} sets to match that" if reach else
                      f"The MLP with reordered copies never matches that, even with {n_big:,} sets")
-        last = ("At the largest size the copies have nearly caught up" if a_ds[-1] - a_au[-1] < 0.03 else
-                "Even at the largest size Deep Sets stays ahead")
+        if a_ds[-1] - a_au[-1] >= 0.03:
+            last = "Even at the largest size Deep Sets stays ahead"
+        elif a_au[-1] - a_ds[-1] >= 0.005:
+            last = "At the largest size the copies have caught up and passed it"
+        else:
+            last = "At the largest size the copies have nearly caught up"
         reach_m = [n for n, a in zip(sizes, a_ml) if a >= target]
         mlp_vs = (f"and even with {n_big:,} sets it stays below what Deep Sets reached with {n0}" if not reach_m else
                   f"and it needs {reach_m[0]:,} sets to reach what Deep Sets did with {n0}")
@@ -305,7 +310,7 @@ class Sets(VoiceoverScene):
             f"time. <bookmark mark='b'/> The plain MLP is at {100 * a_ml[0]:.0f} percent, {mlp_vs}: it must "
             "learn, from examples, that sixteen factorial orderings are one thing. <bookmark mark='c'/> Showing it "
             f"reordered copies helps a lot: {100 * a_au[0]:.0f} percent at "
-            f"{n0} sets. {reach_txt}. {last}: {100 * a_ds[-1]:.0f} percent against {100 * a_au[-1]:.0f}. <bookmark "
+            f"{n0} sets. {reach_txt}. {last}: Deep Sets {100 * a_ds[-1]:.0f} percent, the copies {100 * a_au[-1]:.0f}. <bookmark "
             f"mark='d'/> But the copies teach the symmetry only approximately: reorder the same test set, and the "
             f"plain MLP changes its answer on {100 * f_ml:.0f} percent of sets, the one trained on copies on "
             f"{100 * f_au:.0f} percent, and Deep Sets on none."

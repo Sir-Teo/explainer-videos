@@ -85,9 +85,11 @@ class Typical(VoiceoverScene):
         s_lo, s_hi = float(-np.log2(pl.max())), float(-np.log2(pl.min()))
         rng = np.random.default_rng(6)  # one sample of the source, for the picture
         draw = "".join(ALPHA27[i] for i in rng.choice(27, size=96, p=pl / pl.sum()))
-        sample = VGroup(*[letter_row(draw[k:k + 48], font_size=26) for k in (0, 48)]).arrange(DOWN, buff=0.2)
+        sample = VGroup(*[letter_row(draw[k:k + 48], font_size=22) for k in (0, 48)]).arrange(DOWN, buff=0.2)
         sample_c = label(r"a text drawn this way", font_size=24, color=GREY_B)
-        sample_g = VGroup(sample, sample_c).arrange(DOWN, buff=0.3).move_to(ax.c2p(5.5, 0.55))
+        sample_g = VGroup(sample, sample_c).arrange(DOWN, buff=0.3).move_to(ax.c2p(5.8, 0.55))
+        if sample_g.get_left()[0] < ax.c2p(0.4, 0)[0]:
+            sample_g.shift(RIGHT * (ax.c2p(0.4, 0)[0] - sample_g.get_left()[0]))
         with self.voiceover(
             "Last chapter, whole bits wasted up to one per symbol, and long blocks were the cure. Here is why. "
             "<bookmark mark='a'/> Draw letters independently, with the books' frequencies, crude but exact to reason "

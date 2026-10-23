@@ -250,8 +250,8 @@ class Masked(VoiceoverScene):
         if ml < un - 0.005:
             v = (f"Not on our network. Filling in pixels leaves a representation at {pct(ml)} percent on the linear "
                  f"probe, below even the untrained network's {pct(un)}, and far below SimCLR's {pct(sl)}; predicting "
-                 f"codes gives {pct(bl)}. To paint strokes, each cell of the small map learned where ink goes near it; "
-                 "averaged over the map, that says little about which digit it is.")
+                 f"codes gives {pct(bl)}. A likely reason: to paint strokes, each cell of the small map learns where ink "
+                 "goes near it, and averaged over the map, that says little about which digit it is.")
         elif ml < sl - 0.005:
             v = (f"Filling in pixels gives a representation {pct(sl - ml)} points behind SimCLR on the linear probe, "
                  f"and {pct(sk - mk)} behind by nearest neighbours. Predicting codes instead of pixels gives "
@@ -265,8 +265,8 @@ class Masked(VoiceoverScene):
                        r"linear probe")
         with self.voiceover(
             f"So, does filling in teach what a digit is? <bookmark mark='a'/> {v} <bookmark mark='b'/> The same "
-            "pattern appears at scale: MAE's linear probes trail the contrastive methods, and it shines only once the "
-            "whole network is fine-tuned. A pixel target makes the network spend its effort on exact strokes, much "
+            "pattern appears at scale: MAE's linear probes trail the contrastive methods, and it shines once its "
+            "layers are fine-tuned. A pixel target makes the network spend its effort on exact strokes, much "
             "of which a classifier does not need. That suggests a third way: predict, but not pixels."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in tab], lag_ratio=0.3))

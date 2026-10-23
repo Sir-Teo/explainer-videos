@@ -95,15 +95,13 @@ class Weather(VoiceoverScene):
             "Machine learning came to this in the 2020s, trained on ERA5, ECMWF's reconstruction of the global "
             "weather since 1940. In 2023 Remi Lam and colleagues at Google DeepMind published GraphCast. <bookmark "
             "mark='a'/> The atmosphere is stored on a latitude–longitude grid, a million points with two hundred "
-            "and twenty-seven numbers each: wind, temperature, humidity and more, at thirty-seven heights. But such "
-            "a grid crowds its points near the poles, so GraphCast works on a mesh instead: <bookmark mark='b'/> an "
-            "icosahedron, refined six times, keeping the edges of every level, so that some edges are short and "
-            "some span continents, and a message can cross the planet in a few steps. Here is our own small "
-            "version, on a square. <bookmark mark='c'/> Encode the grid onto the mesh, pass messages sixteen times, "
-            "decode back to the grid: the next state, six hours on, from the last two. <bookmark mark='d'/> Trained "
-            "on thirty-nine years of ERA5 for four weeks on thirty-two TPUs, it makes a ten-day forecast in under a "
-            "minute, and beat ECMWF's flagship deterministic forecast on ninety percent of 1,380 verification "
-            "targets."
+            "and twenty-seven numbers each, at thirty-seven heights; but such a grid crowds its points near the "
+            "poles. So GraphCast works on a mesh: <bookmark mark='b'/> an icosahedron refined six times, keeping the "
+            "edges of every level, so that some edges span continents and a message can cross the planet in a few "
+            "steps. Here is our own small version, on a square. <bookmark mark='c'/> Encode the grid onto the mesh, "
+            "pass messages sixteen times, decode: the state six hours on, from the last two. <bookmark mark='d'/> "
+            "Trained on thirty-nine years of ERA5, it makes a ten-day forecast in under a minute, and beat ECMWF's "
+            "flagship deterministic forecast on ninety percent of 1,380 verification targets."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")
