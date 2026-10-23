@@ -53,31 +53,41 @@ def series_of(video: str) -> str:
     return video_dir(video).parent.name
 
 
-_IMPORT = re.compile(r"from videos\.(\w+)\.(\w+)(?:\.(\w+))? import (\([^)]*\)|[^\n]+)|import videos\.(\w+)\.(\w+)\.(\w+)")
+_ALIAS = re.compile(r"from videos\.\w+\.(\w+) import compute as (\w+)")
+_LOAD_ALIAS = re.compile(r"from videos\.\w+\.(\w+)\.compute import (?:[^\n]*\b)?load as (\w+)")
+_COMMON_LOAD = re.compile(r"from videos\.\w+\.(\w+)\.common import [^\n]*\bload\b")
 
 
-def depends_on(video: str) -> list[str]:
-    """The videos whose computed results this one reads (its compute module, its scenes, or ``load`` from its
-    ``common``), and "novels" if it uses the series' base model.  Importing another video's code (Part 2 borrows Part
-    26's Connect Four rules) isn't a dependency: Part 2 needn't wait for AlphaZero."""
+def depends_on(video: str) -> dict[str, set | None]:
+    """The videos whose computed results this one reads, each with the items it reads, and "novels" if it uses the
+    series' base model.  Results are read as ``cN.load("item")`` (``from videos.ai.aiN import compute as cN``) or
+    through ``load as ...`` from another video's compute; a ``load`` imported from another video's common, or its
+    Cache opened directly, means all of its items (None).  Borrowed code (Part 2 uses Part 26's Connect Four rules,
+    Part 10 Part 1's text helpers) is no dependency: every cache and helper computes what it lacks on first use, so
+    Part 10, which shows Part 7's Kneser-Ney row, needn't compute the rest of Part 7."""
     me = video_dir(video)
-    found = set()
+    found: dict[str, set | None] = {}
+
+    def add(name, items):
+        if name == video or not list(VIDEOS.glob(f"*/{name}/manifest.py")):
+            return
+        if name in found and found[name] is None:
+            return
+        found[name] = None if items is None else (found.get(name) or set()) | items
+
     for f in me.rglob("*.py"):
         src = f.read_text()
-        for series, name, mod, names, s2, n2, m2 in _IMPORT.findall(src):
-            series, name, mod = series or s2, name or n2, mod or m2
-            if name == video or not (VIDEOS / series / name / "manifest.py").exists():
-                continue
-            names = set(re.findall(r"\w+", names))
-            if (mod == "compute" or re.match(r"s\d\d_", mod or "") or (not mod and "compute" in names)
-                    or (mod == "common" and "load" in names)):
-                found.add(name)
+        for name, alias in _ALIAS.findall(src):
+            add(name, set(re.findall(rf"\b{alias}\.load\(\s*\"(\w+)\"", src)))
+        for name, alias in _LOAD_ALIAS.findall(src):
+            add(name, set(re.findall(rf"\b{alias}\(\s*\"(\w+)\"", src)))
+        for name in _COMMON_LOAD.findall(src):
+            add(name, None)
         for name in re.findall(r"Cache\(\"(\w+)\"\)", src):
-            if name != video:
-                found.add(name)
+            add(name, None)
         if re.search(r"explainer\.ai\.novels|from explainer\.ai import novels|explainer\.ai import .*\bnovels\b", src):
-            found.add("novels")
-    return sorted(found)
+            found["novels"] = None
+    return {k: v for k, v in sorted(found.items()) if v is None or v}
 
 
 def compute_modules(video: str) -> list[str]:
@@ -108,23 +118,35 @@ def run(cmd: list[str], log: Path, env: dict | None = None) -> None:
     print(f"    ok in {time.time() - t:.0f}s", flush=True)
 
 
-def compute(video: str, done: set) -> None:
+def compute(video: str, done: set, items: set | None = None) -> None:
+    """Compute a video's results (all of them, or just ``items`` when another video needs only those), the videos it
+    draws on first."""
     if video in done:
         return
-    done.add(video)
-    for dep in depends_on(video):
-        if dep == "novels":
-            if "novels" not in done:
-                done.add("novels")
-                print("== the series' novels model (Parts 14, 27, 31 build on it)")
-                run([sys.executable, "-m", "explainer.ai.novels"], LOGS / "novels.log")
-        else:
-            compute(dep, done)
-    mods = compute_modules(video)
-    if mods:
-        print(f"== {video}: computations")
-    for m in mods:
-        run([sys.executable, "-m", m], LOGS / f"{video}.compute.log")
+    if items is None:
+        done.add(video)
+        for dep, its in depends_on(video).items():
+            if dep == "novels":
+                if "novels" not in done:
+                    done.add("novels")
+                    print("== the series' novels model (Parts 14, 27, 31 build on it)")
+                    run([sys.executable, "-m", "explainer.ai.novels"], LOGS / "novels.log")
+            else:
+                compute(dep, done, its)
+        mods = compute_modules(video)
+        if mods:
+            print(f"== {video}: computations")
+        for m in mods:
+            run([sys.executable, "-m", m], LOGS / f"{video}.compute.log")
+    else:
+        # only what was asked for; each item computes whatever it loads on first use
+        key = f"{video}:" + ",".join(sorted(items))
+        if key in done:
+            return
+        done.add(key)
+        mod = f"{video_package(video)}.compute"
+        print(f"== {video}: {', '.join(sorted(items))} (for another part)")
+        run([sys.executable, "-m", mod, *sorted(items)], LOGS / f"{video}.compute.log")
 
 
 def tts_ready() -> str | None:

@@ -92,8 +92,12 @@ _loaded: dict = {}
 def load(name: str) -> dict:
     if name not in _loaded:
         p = path(name)
-        if not p.exists():
-            raise FileNotFoundError(f"{p} missing: run `python -m videos.ai.ai1.compute {name}`")
+        if not p.exists():  # compute on first use, like every other part's cache (another part may need just this)
+            if name not in ITEMS:
+                raise FileNotFoundError(f"{p} missing, and no compute item {name!r} for ai1")
+            DATA_DIR.mkdir(parents=True, exist_ok=True)
+            print(f"  computing ai1/{name} (first use) ...", flush=True)
+            _save(name, ITEMS[name]())
         _loaded[name] = json.loads(p.read_text())
         npz = p.with_suffix(".npz")
         if npz.exists():
