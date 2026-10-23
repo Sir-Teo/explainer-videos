@@ -63,14 +63,11 @@ class Frontier(VoiceoverScene):
         key.arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.5)
         kv = note(r"and every past key and value is kept: \ at $1$M tokens, \ a million of each, \ in every layer",
                   font_size=20).next_to(key, UP, buff=0.25)
-        r4, r128, r1m = ratio[0], ratio[2], ratio[3]
+        r4, r1m = ratio[0], ratio[3]
         with self.voiceover(
-            "Why so much effort? Chapter seven's arithmetic, for one token of a model as wide as DeepSeek-V3, "
-            f"{DSV3_D:,} numbers, with plain attention. <bookmark mark='a'/> At four thousand tokens of context, "
-            f"attention's term is {r4:.2f} of the weights' cost; at a hundred and twenty-eight thousand, "
-            f"{r128:.1f} times; at a million, {r1m:.0f} times. <bookmark mark='b'/> And every one of those million "
-            "past keys and values has to be kept, in every layer, to write the next token. Long contexts made "
-            "attention the expensive part, and each change on the next map is a way to pay less for it."
+            f"Why so much effort? Chapter seven's arithmetic, for a model as wide as DeepSeek-V3: "
+            f"<bookmark mark='a'/> at four thousand tokens, attention costs {r4:.2f} of the weights; at a million, "
+            f"{r1m:.0f} times as much. <bookmark mark='b'/> Long contexts made attention the expensive part."
         ) as vo:
             self.play(FadeIn(head), FadeIn(f), FadeIn(key))
             vo.wait_until("a")
@@ -107,17 +104,13 @@ class Frontier(VoiceoverScene):
         cite_ = note(r"each from its paper or model card").to_corner(DR, buff=0.15)
         with self.voiceover(
             "Every model in 2026 still computes this formula somewhere. What has changed is where, and how much. "
-            "<bookmark mark='a'/> Inside the softmax, the fixes of the last few chapters: sink logits in gpt-oss, "
-            "output gates in Qwen3-Next and Kimi K3, QK-norm in Qwen3 and Gemma 3, and in Llama 4, layers with no "
-            "positions at all. <bookmark mark='b'/> The keys and values every past token leaves behind have been "
-            "shrunk: grouped-query attention shares them between heads, and DeepSeek's multi-head latent attention "
-            "rebuilds them from a small latent vector, the low-rank idea of chapter four applied to memory. "
-            "<bookmark mark='c'/> Many models look at only part of the past: a sliding window in most layers, or a "
-            "learned choice of which keys matter. DeepSeek's sparse attention lets a small, fast indexer pick a few "
-            "thousand past tokens for each query, and DeepSeek-V4 compresses and selects to read a million tokens. "
-            "<bookmark mark='d'/> And some models replace most of their attention layers with a fixed-size memory "
-            "that is updated as they read: three such layers for every attention layer in Qwen3-Next and Qwen3.5, "
-            "Kimi Delta Attention in Kimi Linear and Kimi K3."
+            "<bookmark mark='a'/> Inside the softmax, the fixes of the last few chapters: sink logits, output gates, "
+            "QK-norm, and layers with no positions at all. <bookmark mark='b'/> The keys and values every past "
+            "token leaves behind have been shrunk: shared between heads, or rebuilt from a small latent vector, the "
+            "low-rank idea of chapter four applied to memory. <bookmark mark='c'/> Many models look at only part of "
+            "the past: a sliding window, or a small, fast indexer that picks a few thousand past tokens for each "
+            "query. <bookmark mark='d'/> And some replace most of their attention layers with a fixed-size memory "
+            "that is updated as they read: three such layers for every attention layer in Qwen3-Next and Qwen3.5."
         ) as vo:
             self.play(FadeIn(f))
             vo.wait_until("a")

@@ -52,7 +52,7 @@ class Problem(VoiceoverScene):
         src = cite(r"Deng et al.\ (2009); \ Oquab et al.\ (2023); \ Sim\'eoni et al.\ (2025)", corner=DR)
         with self.voiceover(
             "For thirty years, a network learned to see by being told. MNIST, the digits we use in this part, came "
-            "with sixty thousand labels; <bookmark mark='a'/> ImageNet with more than a million, typed in by people. "
+            "with sixty thousand labels; <bookmark mark='a'/> ImageNet with more than a million, each one checked by people. "
             "<bookmark mark='b'/> But pictures without labels are nearly free. DINOv2, in 2023, trained on a hundred "
             "and forty-two million unlabelled images; <bookmark mark='c'/> DINOv3, in 2025, on one point seven "
             "billion, chosen from a pool of about seventeen billion. <bookmark mark='d'/> Nobody will ever label "

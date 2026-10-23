@@ -13,6 +13,7 @@ class BYOL(VoiceoverScene):
         self.byol()
         self.simsiam()
         self.em()
+        self.meter()
         self.results()
 
     def card(self):
@@ -169,6 +170,45 @@ class BYOL(VoiceoverScene):
             step(3)
             vo.wait_until("d")
             self.play(FadeIn(note_, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def meter(self):
+        c = load("collapse")
+        s = load("simclr")
+        runs = dict(c["runs"])
+        runs.update(s["runs"])
+        groups = [("simclr", s["keys"]["0.2"], SIMCLR, r"SimCLR", 128), ("byol", c["keys"]["byol"], BYOL_C, r"BYOL", 64),
+                  ("simsiam", c["keys"]["simsiam"], SIMSIAM, r"SimSiam", 128),
+                  ("simsiam_nosg", c["keys"]["simsiam_nosg"], NAIVE, r"SimSiam, no stop-gradient", 128),
+                  ("naive", c["keys"]["naive"], "#FF9F9F", r"pull together only", 128)]
+        S_ = runs[groups[0][1][0]]["steps"][-1]
+        ax = axes([0, S_], [0, 1.2], x_length=7.0, y_length=4.0, xlabel=r"training step",
+                  ylabel=r"spread of $z \times \sqrt{d}$ \ ($1$: evenly spread)", xticks=[0, S_], yticks=[0, 0.5, 1.0],
+                  center=[-1.2, -0.3, 0])
+        cs = VGroup()
+        ends = {}
+        for name, ks, col, nm, d in groups:
+            cs.add(seed_curves(ax.ax, runs, ks, "zspread", col, fn=lambda y, d=d: np.asarray(y) * np.sqrt(d)))
+            ends[name] = float(np.mean([runs[k]["zspread"][-1] for k in ks])) * np.sqrt(d)
+        leg = VGroup(*[label(nm, font_size=20, color=col) for _, _, col, nm, _ in groups]).arrange(DOWN,
+                                                                                                aligned_edge=LEFT,
+                                                                                                buff=0.12)
+        leg.move_to([4.9, 0.2, 0])
+        tg = tag(r"computed: \ every seed of each method")
+        with self.voiceover(
+            "One meter for all of them: the spread of the embedding, scaled so that one means the vectors are spread "
+            "evenly over the sphere and zero means they have collapsed. <bookmark mark='a'/> SimCLR ends at "
+            f"{ends['simclr']:.2f}, BYOL at {ends['byol']:.2f}, SimSiam at {ends['simsiam']:.2f}. <bookmark mark='b'/> "
+            f"Without its stop-gradient, SimSiam ends at {ends['simsiam_nosg']:.2f}, and the network that only pulls "
+            f"together at {ends['naive']:.2f}."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(leg), FadeIn(tg))
+            vo.wait_until("a")
+            self.play(Create(cs[0]), Create(cs[1]), Create(cs[2]), run_time=2.0)
+            vo.wait_until("b")
+            self.play(Create(cs[3]), Create(cs[4]), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
 

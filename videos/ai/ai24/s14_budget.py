@@ -37,6 +37,7 @@ class Budget(VoiceoverScene):
         self.finetune()
         self.geometry()
         self.rank()
+        self.caveats()
 
     def card(self):
         card = chapter_card(13, r"Every method, one budget", r"Which way of learning without labels learned the most?",
@@ -269,5 +270,40 @@ class Budget(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(res))
             self.play(FadeIn(tk, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def caveats(self):
+        c = load("compare")
+        rows = c["rows"]
+        ssl = [n for n in ORDER if n not in ("supervised", "random_cnn", "pixels")]
+        un = rows["random_cnn"]["few"][0]
+        good = [n for n in ssl if rows[n]["few"][0] > un + 0.01]
+        pts = VGroup(
+            label(r"one small network, \ 800 updates, \ ten kinds of digit", font_size=26),
+            label(r"methods that need long training \ (DINO, \ masked models) \ are at a disadvantage here",
+                  font_size=26),
+            label(r"at ImageNet scale, \ with vision transformers, \ the order differs: \\ DINOv2 and DINOv3 lead "
+                  r"frozen probes; \ masked models do well after fine-tuning", font_size=26),
+            label(rf"here: \ ${len(good)}$ of ${len(ssl)}$ methods beat the untrained network \ with ten labels per "
+                  r"digit", font_size=26, color=C.BITS),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(UP * 0.2)
+        head = label(r"How to read this scoreboard", font_size=34).to_edge(UP, buff=0.5)
+        with self.voiceover(
+            "How far should this scoreboard be trusted? It is one small network, eight hundred updates, ten kinds of "
+            "digit. <bookmark mark='a'/> Methods that are known to need long training, DINO and the masked models, "
+            "are at a disadvantage on a budget this short. <bookmark mark='b'/> At ImageNet scale, with vision "
+            "transformers, the order is different: the DINO line leads on frozen features, and masked models do well "
+            f"once fine-tuned. <bookmark mark='c'/> Here, {len(good)} of the {len(ssl)} methods learned enough about "
+            "digits, without a single label, to beat the untrained network when only ten labels per digit are given."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(pts[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(pts[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(pts[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(pts[3]))
         self.wait(0.3)
         self.clear_scene()

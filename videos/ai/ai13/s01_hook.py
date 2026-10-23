@@ -120,17 +120,13 @@ class Hook(VoiceoverScene):
         head = label(r"How we got here", font_size=42).to_edge(UP, buff=0.3)
         tag = note(r"milestones evenly spaced, \ not to scale").to_corner(DR, buff=0.2)
         with self.voiceover(
-            "The idea is older than it looks. In 1964 two statisticians, Elizbar Nadaraya and Geoffrey Watson, "
-            "guessed a value by averaging its neighbours, weighted by how close they were. <bookmark mark='a'/> In "
-            "1982 John Hopfield built a network that recalls a whole memory from a fragment. <bookmark mark='b'/> "
-            "In 2014 a translation network learned where to look in the sentence it was translating, "
-            "<bookmark mark='c'/> and in 2017 a team at Google built a network of nothing but that looking: the "
-            "transformer. <bookmark mark='d'/> Then came better ways to give positions, <bookmark mark='e'/> the "
-            "discovery of heads that copy, and kernels fast enough for long texts; <bookmark mark='f'/> strange "
-            "heads that stare at the first token, and tricks to read far past the training length; "
-            "<bookmark mark='g'/> smaller memories of the past, <bookmark mark='h'/> attention that looks at only "
-            "some of it, and gates that let a head switch off; <bookmark mark='i'/> and in 2026, models that keep "
-            "full attention in only a quarter of their layers."
+            "The idea is older than it looks: in 1964, a weighted average of neighbours; <bookmark mark='a'/> in "
+            "1982, Hopfield's memory that recalls; <bookmark mark='b'/> in 2014, a translator that learned where to "
+            "look, <bookmark mark='c'/> and in 2017, a network of nothing but that looking. <bookmark mark='d'/> "
+            "Then better positions, <bookmark mark='e'/> heads that copy and fast kernels, <bookmark mark='f'/> "
+            "sinks and longer contexts, <bookmark mark='g'/> smaller memories, <bookmark mark='h'/> sparse and "
+            "gated attention, <bookmark mark='i'/> and in 2026, models with full attention in only a quarter of "
+            "their layers."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(tag), FadeIn(skel))
             self.play(FadeIn(marks[0], shift=UP * 0.2))
