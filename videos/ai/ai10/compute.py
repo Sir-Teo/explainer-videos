@@ -344,7 +344,7 @@ def train_mnist(model, seed: int, epochs: int, tag: str, X=None, Y=None, Xte=Non
             opt.step()
             step += 1
             if step % log_every == 0:
-                state["curve"].append([step, float(loss), float((logits.argmax(1) != y).float().mean())])
+                state["curve"].append([step, loss.item(), float((logits.argmax(1) != y).float().mean())])
             if step in snaps and snap_fn is not None:
                 state["snaps"][step] = snap_fn(step)
             if step % per_epoch == 0 or step == total:
@@ -1622,17 +1622,27 @@ def compute_charlstm():
     with torch.no_grad():
         lo, _ = model(torch.from_numpy(ps[:-1])[None])
         surprise = (-lo[0].log_softmax(-1).gather(1, torch.from_numpy(ps[1:])[:, None])[:, 0] / math.log(2)).numpy()
+    # where the surprise is: the first letter of a word, a letter inside a word, a capital
+    txt0 = texts["passage"]
+    prev = np.array([txt0[i] for i in range(len(txt0) - 1)])
+    nxt = np.array([txt0[i + 1] for i in range(len(txt0) - 1)])
+    is_alpha = np.vectorize(str.isalpha)
+    start = is_alpha(nxt) & np.isin(prev, [" ", "\n", '"'])
+    inside = is_alpha(nxt) & is_alpha(prev)
+    capital = np.vectorize(str.isupper)(nxt)
+    stats = dict(word_start_bits=float(surprise[start].mean()), word_inside_bits=float(surprise[inside].mean()),
+                 capital_bits=float(surprise[capital].mean()))
     # what single cells track: correlation of every cell state with "inside a quotation" over the passage
     c_, h_, f_ = model.trace(torch.from_numpy(ps))
     C = c_.numpy()
     txt = texts["passage"]
-    inside, q = np.zeros(len(txt)), 0
+    quoted, q = np.zeros(len(txt)), 0
     for i, ch in enumerate(txt):
         if ch == '"':
             q ^= 1
-        inside[i] = q
+        quoted[i] = q
     z = (C - C.mean(0)) / (C.std(0) + 1e-6)
-    corr = (z * ((inside - inside.mean()) / inside.std())[:, None]).mean(0)
+    corr = (z * ((quoted - quoted.mean()) / quoted.std())[:, None]).mean(0)
     qcell = int(np.argmax(np.abs(corr)))
     # a stretch of dialogue to show it on (a paragraph that opens a quotation)
     start = txt.find('"', 2000)
@@ -1650,7 +1660,7 @@ def compute_charlstm():
                 chars_seen=r["chars_seen"], train_chars=r["train_chars"], K=r["K"], seconds=r["seconds"],
                 clipped=r["clipped"], curve=np.asarray(r["curve"]),
                 evals=[[e[0], e[1], e[2] if e[2] is not None else float("nan")] for e in r["evals"]],
-                passage_bits=passage_bits, valid_bits=valid_bits, prompt=LSTM_PROMPT,
+                passage_bits=passage_bits, valid_bits=valid_bits, prompt=LSTM_PROMPT, **stats,
                 snaps=[[int(k), v] for k, v in sorted(r["snaps"].items(), key=lambda kv: int(kv[0]))],
                 surprise=surprise, quote_cell=qcell, quote_corr=float(corr[qcell]),
                 quote_corr_next=float(np.sort(np.abs(corr))[-2]), quote_text=txt[span],

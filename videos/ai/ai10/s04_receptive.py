@@ -222,7 +222,7 @@ class Receptive(VoiceoverScene):
             "block keep only the largest value, and move on by 2. Nudge a feature by a pixel inside its block and "
             "the pooled output doesn't change: a little invariance, Hubel and Wiesel's complex cell again. "
             "<bookmark mark='b'/> But a stride of 2 breaks the exact equivariance of the last chapter. "
-            f"<bookmark mark='c'/> We shifted the digit by one to four pixels before our first layer and its pooling. "
+            "<bookmark mark='c'/> We shifted the digit by one to four pixels before our first layer and its pooling. "
             + mid + " <bookmark mark='d'/> Real networks inherit this: in 2019 Aharon Azulay and Yair Weiss showed "
             "that shifting a photograph by a single pixel can change a modern network's answer, and Richard Zhang "
             "showed that blurring before each stride, as signal processing would, mostly fixes it."

@@ -311,16 +311,19 @@ class Block(VoiceoverScene, ThreeDScene):
             "from the same seed. <bookmark mark='a'/> " + first + "<bookmark mark='b'/> " + second +
             "<bookmark mark='c'/> " + norms + "<bookmark mark='c3'/> " + extra + "<bookmark mark='d'/> " + third
         ) as vo:
-            self.play(FadeIn(g), FadeIn(head), FadeIn(tag))
+            for r_ in rows:  # the six versions listed first, dimmed; each lights up with its curve
+                r_[0].set_opacity(0.3)
+            self.play(FadeIn(g), FadeIn(head), FadeIn(tag), LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.15))
             vo.wait_until("a")
-            self.play(Create(lines["plain"]), FadeIn(rows[0]), run_time=1.5)
+            self.play(Create(lines["plain"]), rows[0][0].animate.set_opacity(1), FadeIn(rows[0][1]), run_time=1.5)
             vo.wait_until("b")
-            self.play(Create(lines["residual"]), FadeIn(rows[1]), run_time=1.5)
+            self.play(Create(lines["residual"]), rows[1][0].animate.set_opacity(1), FadeIn(rows[1][1]), run_time=1.5)
             vo.wait_until("c")
             self.play(*[Create(lines[k]) for k in ("post_ln", "pre_ln", "pre_rms")],
-                      *[FadeIn(rows[i]) for i in (2, 3, 4)], run_time=2.0)
+                      *[rows[i][0].animate.set_opacity(1) for i in (2, 3, 4)], *[FadeIn(rows[i][1]) for i in (2, 3, 4)],
+                      run_time=2.0)
             vo.wait_until("d")
-            self.play(Create(lines["pre_rms_swiglu"]), FadeIn(rows[5]), run_time=1.5)
+            self.play(Create(lines["pre_rms_swiglu"]), rows[5][0].animate.set_opacity(1), FadeIn(rows[5][1]), run_time=1.5)
             self.play(Indicate(rows[kinds.index(best)], color=WHITE))
         self.wait(0.3)
         self.clear_scene()

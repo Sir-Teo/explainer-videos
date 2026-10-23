@@ -94,7 +94,7 @@ class Barron(VoiceoverScene):
             return curve(ax, xg, np.cos(np.outer(om[:n_], xg)).mean(0), C.BITS, 4)
 
         nl = VGroup(MathTex(r"n = ", font_size=30, color=C.BITS), Integer(5, font_size=30, color=C.BITS))
-        nl.arrange(RIGHT, buff=0.1).next_to(ax, DOWN, buff=0.08).align_to(ax, RIGHT)
+        nl.arrange(RIGHT, buff=0.1).move_to(ax.c2p(3.0, 0.8))
         dl = label(r"$d = 1$: \ the bump \ (dashed), \ random cosines, \ their average", font_size=22, color=GREY_A)
         dl.next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
         itag = note(r"illustrative: \ one random draw").next_to(ax, DOWN, buff=0.1).align_to(ax, LEFT)
