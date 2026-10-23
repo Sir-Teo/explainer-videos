@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (CHAIN, DIRECT, LEN, PART, POLICY, RIGHT_C, WRONG_C, heat, load, seeds_plot,
-                                   solution_chips)
+from videos.ai.ai28.common import (CHAIN, DIRECT, LEN, PART, POLICY, RIGHT_C, heat, load, seeds_plot)
 
 COST_C = {"plain": CHAIN, "gentle": C.BITS, "strong": DIRECT}
 
@@ -29,12 +28,12 @@ class Length(VoiceoverScene):
     def r1(self):
         hc = history_card(2025, r"DeepSeek-R1-Zero, \ during reinforcement learning",
                           r"its thinking grew longer throughout training, \ from hundreds of tokens to thousands, \ "
-                          r"though nothing rewarded length", width=8.2, color=LEN).move_to(UP * 1.7)
+                          r"though nothing rewarded length", width=8.2, color=LEN).move_to(UP * 2.0)
         aha = VGroup(label(r"an intermediate version, \ mid-solution:", font_size=22, color=GREY_A),
-                     label(r"``Wait, wait. Wait. That's an aha moment I can flag here.''", font_size=30, color=CHAIN))
-        aha.arrange(DOWN, buff=0.2).move_to(DOWN * 0.5)
-        meaning = label(r"re-checking, \ backtracking, \ trying again: \ learned because they paid", font_size=26,
-                        color=GREY_A).to_edge(DOWN, buff=0.7)
+                     label(r"``Wait, wait. Wait. That's an aha moment I can flag here.''", font_size=36, color=CHAIN))
+        aha.arrange(DOWN, buff=0.25).move_to(DOWN * 0.1)
+        meaning = label(r"re-checking, \ backtracking, \ trying again: \\ learned because they paid", font_size=30,
+                        color=GREY_A).move_to(DOWN * 1.9)
         cite_ = cite(r"DeepSeek-AI, \textit{DeepSeek-R1} (2025), \ Table 3")
         with self.voiceover(
             "When DeepSeek trained R1-Zero with reinforcement learning, something happened that nobody had asked for. "
@@ -268,6 +267,8 @@ class Length(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=2, buff=(0.3, 0.3)).move_to(DOWN * 0.1)
         kl = label(r"Kimi's length reward, \ within each group of answers: \ shorter right answers earn more",
                    font_size=20, color=GREY_A).to_edge(DOWN, buff=0.3)
+        head = label(r"controlling the length, \ in practice", font_size=32).to_edge(UP, buff=0.3)
+        cards.next_to(head, DOWN, buff=0.35)
         with self.voiceover(
             "The frontier recipes do the same, more carefully. <bookmark mark='a'/> Moonshot's Kimi k1.5 adds a length "
             "reward measured within each group: among right answers, shorter earns more. <bookmark mark='b'/> L1, from "
@@ -276,6 +277,7 @@ class Length(VoiceoverScene):
             "And the products expose the dial directly: a budget of thinking tokens, or an effort setting of low, "
             "medium or high."
         ) as vo:
+            self.play(FadeIn(head))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.15), *([FadeIn(kl)] if k == 0 else []))

@@ -5,8 +5,8 @@ import math
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import ADV, ENT, PART, POLICY, RATIO, RIGHT_C, WRONG_C, load, seeds_plot
-from videos.ai.ai28.s07_variants import COLS, NAMES, SAY
+from videos.ai.ai28.common import ENT, PART, POLICY, RIGHT_C, WRONG_C, load, seeds_plot
+from videos.ai.ai28.s07_variants import COLS, NAMES
 
 
 class Entropy(VoiceoverScene):

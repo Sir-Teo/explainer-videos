@@ -24,7 +24,6 @@ Items:
 
 from __future__ import annotations
 
-import copy
 import math
 
 import numpy as np
@@ -406,6 +405,8 @@ def compute_think_budget(nq=400, n=NMAX):
             m = sft_model()
         else:
             p = c.CACHE.dir / "think_rl_plain.pt"
+            if not p.exists():  # retrain the first plain run (seeded): it saves the checkpoint
+                rl_run(COSTS["plain"], 0, name="plain")
             m = model()
             m.load_state_dict(torch.load(p))
             m.eval()
@@ -518,14 +519,23 @@ def verifier_scores(v, data, kind):
     return np.array(out), per_step
 
 
+def verifier_train_data(n_train=1000, k_train=8):
+    """The verifiers' training solutions, sampled from the supervised model (seeded); the generator is returned too,
+    since the test solutions are drawn after them."""
+    import torch
+
+    c = _c()
+    m = sft_model()
+    gen = torch.Generator().manual_seed(91)
+    return m, gen, verifier_data(m, c.rng(92), gen, n_train, k_train)
+
+
 def compute_think_verify(n_train=1000, k_train=8, nq=300, k=64):
     import torch
 
     c = _c()
     c.threads(1)
-    m = sft_model()
-    gen = torch.Generator().manual_seed(91)
-    train = verifier_data(m, c.rng(92), gen, n_train, k_train)
+    m, gen, train = verifier_train_data(n_train, k_train)
     test = verifier_data(m, c.rng(93), gen, nq, k)
     scores = {}
     for kind in ("orm", "prm"):
@@ -586,8 +596,11 @@ def prm_model():
     import torch
 
     c = _c()
+    p = c.CACHE.dir / "think_prm.pt"
+    if not p.exists():  # retrain the process grader exactly as the think_verify item does (seeded)
+        torch.save(train_verifier(verifier_train_data()[2], "prm").state_dict(), p)
     v = model()
-    v.load_state_dict(torch.load(c.CACHE.dir / "think_prm.pt"))
+    v.load_state_dict(torch.load(p))
     return v.eval()
 
 

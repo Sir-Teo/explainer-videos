@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, PART, PASS, POLICY, PRM_C, RIGHT_C, SEARCH, WRONG_C, chip, load
+from videos.ai.ai28.common import PART, PRM_C, RIGHT_C, SEARCH, WRONG_C, chip, load
 
 
 def build_tree(levels, truth_steps):
@@ -54,7 +54,8 @@ class Search(VoiceoverScene):
                            MathTex(r"\longleftrightarrow", font_size=34, color=GREY_D).move_to([0, y, 0]),
                            label(b, font_size=26, color=WHITE).move_to([3.3, y, 0])))
         line = Line([0, 3.0, 0], [0, -2.6, 0], color=GREY_D, stroke_width=1).set_opacity(0)
-        diff = label(r"the difference: \ a game has a few moves, \ a chain of thought a vocabulary of them",
+        diff = label(r"the difference: \ a board offers at most a few hundred moves; \ a step of thought, \ a "
+                     r"vocabulary at every token",
                      font_size=24, color=C.SURPRISE).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Search is how Part 26's game players thought ahead, and the parts carry over almost one for one. "
@@ -62,8 +63,9 @@ class Search(VoiceoverScene):
             "<bookmark mark='b'/> AlphaZero's policy network, its sense of which moves are worth trying, becomes the "
             "language model's own probabilities for the next step. <bookmark mark='c'/> The value network, how good a "
             "position looks, becomes a process reward model. <bookmark mark='d'/> And winning or losing becomes the "
-            "checker. <bookmark mark='e'/> The difference is the size of the tree: a board offers a few legal moves, "
-            "a language model a whole vocabulary at every token."
+            "checker. <bookmark mark='e'/> The difference is the size of the tree: a board offers at most a few hundred "
+            "legal moves, a language model a whole vocabulary at every token, and a step of thought is many tokens "
+            "long."
         ) as vo:
             self.play(FadeIn(h), FadeIn(line))
             vo.wait_until("a")

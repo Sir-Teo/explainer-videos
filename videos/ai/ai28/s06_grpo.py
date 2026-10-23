@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import math
 
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (ADV, CHAIN, KLC, MONO, OLD, PART, POLICY, RATIO, REF, RIGHT_C, WRONG_C, load)
+from videos.ai.ai28.common import (ADV, CHAIN, KLC, MONO, OLD, PART, POLICY, RATIO, RIGHT_C, WRONG_C, load)
 
 
 def axes_box(x_range, y_range, w, h, center):

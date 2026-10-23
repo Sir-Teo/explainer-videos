@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, LEAN, PART, POLICY, SEARCH, WRONG_C
+from videos.ai.ai28.common import CHAIN, PART, POLICY, SEARCH, WRONG_C
 
 ARC_COLORS = ["#111111", "#1E93FF", "#F93C31", "#4FCC30", "#FFDC00", "#999999", "#E53AA3", "#FF851B", "#87D8F1",
               "#921231"]

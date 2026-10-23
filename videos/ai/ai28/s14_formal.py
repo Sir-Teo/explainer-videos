@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import CHAIN, LEAN, MONO, PART, POLICY, PRM_C, RIGHT_C, SEARCH, WRONG_C, node_box
+from videos.ai.ai28.common import CHAIN, LEAN, PART, POLICY, PRM_C, RIGHT_C, SEARCH, WRONG_C, node_box
 
 
 class Formal(VoiceoverScene):

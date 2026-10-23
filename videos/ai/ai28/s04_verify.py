@@ -3,8 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.ai import *  # noqa: F403
-from videos.ai.ai28.common import (CHAIN, DIRECT, ORM_C, PART, PASS, PRM_C, RIGHT_C, VOTE, WRONG_C, chip, load,
-                                   mark)
+from videos.ai.ai28.common import (ORM_C, PART, PASS, PRM_C, RIGHT_C, VOTE, WRONG_C, chip, load)
 
 
 class Verify(VoiceoverScene):
