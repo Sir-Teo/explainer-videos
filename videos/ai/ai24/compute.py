@@ -12,14 +12,14 @@ on a busy 4-core machine, all told; each run takes two to five minutes.
 
 The budget (ssl.py): every method trains the same encoder for ``STEPS`` updates of 256 encoder passes (128 digits in
 two views, or 256 in one), with the same optimizer, schedule and views; the same seed gives every method the same
-starting encoder.
+starting encoder. Every method, the masked ones included, trains the same three-layer convolutional network.
 
     views       augmented views of ten test digits (the full recipe and the crop alone)
     baselines   raw pixels, and untrained encoders (three seeds): what a representation has to beat
     infonce     the InfoNCE bound on correlated Gaussians whose mutual information is known: the estimate against
                 the batch size N, never above log N
     pretext     rotation prediction (Gidaris et al. 2018), three seeds; its replay; rotation accuracy by digit
-    supervised  the same encoder trained with the labels, three seeds; the transformer too, two seeds
+    supervised  the same encoder trained with the labels, three seeds
     simclr      SimCLR at five temperatures (0.2: three seeds; 0.05, 0.1, 0.5, 1: two each), and with crops only;
                 the main run's nearest neighbours replayed; truncated embeddings; how the softmax weighs negatives
     moco        MoCo (a queue of 4,096 keys, a momentum encoder), three seeds
@@ -28,10 +28,10 @@ starting encoder.
     collapse    the naive siamese net, SimSiam with and without the stop-gradient, BYOL: collapse measured
     redundancy  Barlow Twins (the cross-correlation matrix replayed), VICReg, VICReg without its variance term
     dino        DINO, and DINO without centering or without sharpening: the teacher's entropy and the KL to the student
-    mae         masked autoencoders on the transformer (75% masked, two seeds; 50% and 90%, one); reconstructions
-                replayed
-    beit        a BEiT-style model predicting the k-means codes of masked patches, two seeds
-    jepa        I-JEPA, two seeds, and SimCLR on the same transformer, two seeds
+    mae         a masked autoencoder on the same network (75% of 49 patches hidden, three seeds; 50% and 90%, one
+                each); reconstructions replayed
+    beit        a BEiT-style model predicting the k-means codes of hidden patches, three seeds
+    jepa        I-JEPA (predict the target encoder's map of hidden blocks), three seeds
     matryoshka  SimCLR with the Matryoshka loss on nested prefixes, three seeds: accuracy of truncated embeddings
     curation    an unbalanced unlabelled pool against one curated by retrieval (DINOv2's recipe), two seeds each
     halves      two encoders that each see only half of every digit, trained apart: does what they learn align?
@@ -202,16 +202,15 @@ def compute_baselines():
     log(f"pixels: {out['pixels']}")
     RUNS.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(RUNS / "pixels.npz", feat=fte[:2000].numpy().astype(np.float16))
-    for arch, seeds in (("cnn", SEEDS), ("vit", SEEDS[:2])):
-        rows = []
-        for s in seeds:
-            torch.manual_seed(s)
-            m = S.make("supervised", vit=arch == "vit")  # an untrained encoder (its head is never used)
-            res, feat = S.evaluate(m, extra_embed=False)
-            rows.append(res)
-            np.savez_compressed(RUNS / f"random_{arch}_s{s}.npz", feat=feat.numpy().astype(np.float16))
-            log(f"random {arch} seed {s}: linear {res['linear']:.4f} k-NN {res['knn']:.4f}")
-        out[f"random_{arch}"] = rows
+    rows = []
+    for s in SEEDS:
+        torch.manual_seed(s)
+        m = S.make("supervised")  # an untrained encoder (its head is never used)
+        res, feat = S.evaluate(m, extra_embed=False)
+        rows.append(res)
+        np.savez_compressed(RUNS / f"random_cnn_s{s}.npz", feat=feat.numpy().astype(np.float16))
+        log(f"untrained, seed {s}: linear {res['linear']:.4f} k-NN {res['knn']:.4f}")
+    out["random_cnn"] = rows
     return out
 
 
@@ -326,15 +325,11 @@ def compute_pretext():
 def compute_supervised():
     threads()
     part = CACHE.partial("supervised", {"steps": S.STEPS})
-    keys = {"cnn": [], "vit": []}
+    keys = {"cnn": []}
     for s in SEEDS:
         k = f"supervised_s{s}"
         run(part, k, "supervised", s, extra=z_extras)
         keys["cnn"].append(k)
-    for s in SEEDS[:2]:
-        k = f"supervised_vit_s{s}"
-        run(part, k, "supervised", s, kw={"vit": True})
-        keys["vit"].append(k)
     return {"runs": dict(part.done), "summary": {a: finals(part.done, ks) for a, ks in keys.items()}, "keys": keys}
 
 
@@ -365,8 +360,10 @@ def hardness(m, tau):
 def neighbours(m, queries, pool_n=2000, k=8):
     """The k nearest test digits (by the encoder's representation, cosine) of each query, from the first pool_n."""
     D = S.data()
-    f = F.normalize(S.features(m.enc, D["xte"][:pool_n]), dim=1)
-    q = F.normalize(S.features(m.enc, D["xte"][queries]), dim=1)
+    f = S.features(m.enc, D["xte"][:pool_n])
+    mu = f.mean(0, keepdim=True)
+    q = F.normalize(S.features(m.enc, D["xte"][queries]) - mu, dim=1)
+    f = F.normalize(f - mu, dim=1)
     s = q @ f.t()
     s[torch.arange(len(queries)), torch.as_tensor(queries)] = -2  # not the query itself
     return s.topk(k, dim=1).indices.numpy()
@@ -414,6 +411,10 @@ def compute_simclr():
     with np.load(RUNS / f"{main}.npz") as z:
         out["rec_nn"] = z["rec_nn"]
     out["pool_y"] = D["yte"][:2000].numpy()
+    out["pool"] = D["xte"][:2000].numpy()  # the test digits the neighbours are drawn from, for the screen
+    for tau in TAUS:  # how each temperature's softmax spreads its weight over the negatives (seed 0)
+        with np.load(RUNS / f"simclr_t{tau:g}_s0.npz") as z:
+            out[f"wsorted_{tau:g}"] = z["x_wsorted"]
     return out
 
 
@@ -600,15 +601,15 @@ def compute_mae():
         with torch.no_grad():
             pred, masked = m.reconstruct(x, g)
         m.train()
-        pat = S.patchify(x)
-        shown = torch.where(masked.unsqueeze(-1), torch.zeros_like(pat), pat)
-        filled = torch.where(masked.unsqueeze(-1), pred, pat)
-        return {"masked": u8(S.unpatchify(shown).squeeze(1).numpy()), "recon": u8(S.unpatchify(filled).squeeze(1).numpy()),
-                "raw": u8(S.unpatchify(pred).squeeze(1).numpy()), "mask": masked.numpy()}
+        pm = S.pixel_mask(masked)
+        shown = torch.where(pm, torch.zeros_like(x), x)
+        filled = torch.where(pm, pred, x)
+        return {"masked": u8(shown.squeeze(1).numpy()), "recon": u8(filled.squeeze(1).numpy()),
+                "raw": u8(pred.squeeze(1).numpy()), "mask": masked.numpy()}
 
     part = CACHE.partial("mae", {"steps": S.STEPS})
     keys = {"0.75": []}
-    for s in SEEDS[:2]:
+    for s in SEEDS:
         k = f"mae_r0.75_s{s}"
         run(part, k, "mae", s, kw={"ratio": 0.75}, record=record if s == 0 else None,
             record_at=replay_steps(S.STEPS) if s == 0 else None)
@@ -630,7 +631,7 @@ def compute_beit():
     cb = S.kmeans_codebook(K=64, n=max(2000, int(20000 * min(1.0, S.SCALE * 10))), seed=0)
     part = CACHE.partial("beit", {"steps": S.STEPS})
     keys = []
-    for s in SEEDS[:2]:
+    for s in SEEDS:
         k = f"beit_s{s}"
         run(part, k, "beit", s, kw={"codebook": cb})
         keys.append(k)
@@ -646,21 +647,15 @@ def compute_beit():
 def compute_jepa():
     threads()
     part = CACHE.partial("jepa", {"steps": S.STEPS})
-    keys = {"ijepa": [], "simclr_vit": []}
-    for s in SEEDS[:2]:
+    keys = {"ijepa": []}
+    for s in SEEDS:
         k = f"ijepa_s{s}"
         run(part, k, "ijepa", s)
         keys["ijepa"].append(k)
-    for s in SEEDS[:2]:
-        k = f"simclr_vit_s{s}"
-        run(part, k, "simclr", s, kw={"tau": MAIN_TAU, "vit": True})
-        keys["simclr_vit"].append(k)
-    # an example of I-JEPA's masks (context and four targets) for the screen
-    g = torch.Generator().manual_seed(4)
-    m = S.make("ijepa")
-    keep, tg = m.masks(g, 3)
+    g = torch.Generator().manual_seed(4)  # three examples of I-JEPA's targets, for the screen
+    ex = S.make("ijepa").masks(g, 3)
     return {"runs": dict(part.done), "keys": keys, "summary": {n: finals(part.done, v) for n, v in keys.items()},
-            "ex_keep": keep.numpy(), "ex_targets": torch.stack(tg, 1).numpy()}
+            "ex_targets": ex.numpy(), "grid": S.GRID}
 
 
 # ---------------------------------------------------------------------------
@@ -675,8 +670,8 @@ def compute_matryoshka():
         nums, arrs = z_extras(m, NESTED)
         D = S.data()
         z = F.normalize(S.features(m.embed, D["xte"][:2000], module=m), dim=1)
-        for k in (4, 128):  # neighbours of the queries with the first k numbers
-            zk = F.normalize(z[:, :k], dim=1)
+        for k in (4, 128):  # neighbours of the queries with the first k numbers (centred, as the k-NN vote)
+            zk = F.normalize(z[:, :k] - z[:, :k].mean(0, keepdim=True), dim=1)
             s = zk[QUERIES] @ zk.t()
             s[torch.arange(len(QUERIES)), torch.as_tensor(QUERIES)] = -2
             arrs[f"nn{k}"] = s.topk(8, dim=1).indices.numpy()
@@ -697,7 +692,7 @@ def compute_matryoshka():
     D = S.data()
     z = F.normalize(S.features(m.embed, D["xte"][:2000], module=m), dim=1)
     for k in (4, 128):
-        zk = F.normalize(z[:, :k], dim=1)
+        zk = F.normalize(z[:, :k] - z[:, :k].mean(0, keepdim=True), dim=1)
         s_ = zk[QUERIES] @ zk.t()
         s_[torch.arange(len(QUERIES)), torch.as_tensor(QUERIES)] = -2
         out[f"plain_nn{k}"] = s_.topk(8, dim=1).indices.numpy()
@@ -752,8 +747,10 @@ def compute_curation():
     pool = np.sort(np.concatenate(pool))
     seeds = np.concatenate([g.choice(np.flatnonzero((ytr == c) & ~used), 100, replace=False) for c in range(10)])
     enc = trained_simclr().enc
-    fp = F.normalize(S.features(enc, D["xtr"][torch.as_tensor(pool)]), dim=1)
-    fs = F.normalize(S.features(enc, D["xtr"][torch.as_tensor(seeds)]), dim=1)
+    fp = S.features(enc, D["xtr"][torch.as_tensor(pool)])
+    mu = fp.mean(0, keepdim=True)
+    fs = F.normalize(S.features(enc, D["xtr"][torch.as_tensor(seeds)]) - mu, dim=1)
+    fp = F.normalize(fp - mu, dim=1)
     nn_ = (fs @ fp.t()).topk(4, dim=1).indices
     curated = np.unique(pool[nn_.numpy().ravel()])
     out = {"pool": pool, "curated": curated, "pool_counts": np.bincount(ytr[pool], minlength=10),
@@ -764,13 +761,7 @@ def compute_curation():
     yte = D["yte"]
 
     def extra(m):
-        ftr, fte = S.features(m.enc, D["xtr"]), S.features(m.enc, D["xte"])
-        a, b = F.normalize(ftr, dim=1), F.normalize(fte, dim=1)
-        pred = []
-        for i in range(0, len(b), 1000):
-            s, j = (b[i:i + 1000] @ a.t()).topk(20, dim=1)
-            pred.append(torch.zeros(len(s), 10).scatter_add_(1, D["ytr"][j], (s / 0.07).exp()).argmax(1))
-        pred = torch.cat(pred)
+        pred = S.knn_pred(S.features(m.enc, D["xtr"]), D["ytr"], S.features(m.enc, D["xte"]))
         per = [float((pred[yte == c] == c).float().mean()) for c in range(10)]
         return {"knn_by_digit": per}, {}
 
@@ -841,11 +832,9 @@ TABLE = [  # (label key, item, run keys prefix, architecture)
     ("vicreg", "redundancy", "vicreg_s", "cnn"),
     ("dino", "dino", "dino_dino_s", "cnn"),
     ("matryoshka", "matryoshka", "matryoshka_s", "cnn"),
-    ("supervised_vit", "supervised", "supervised_vit_s", "vit"),
-    ("simclr_vit", "jepa", "simclr_vit_s", "vit"),
-    ("mae", "mae", "mae_r0.75_s", "vit"),
-    ("beit", "beit", "beit_s", "vit"),
-    ("ijepa", "jepa", "ijepa_s", "vit"),
+    ("mae", "mae", "mae_r0.75_s", "cnn"),
+    ("beit", "beit", "beit_s", "cnn"),
+    ("ijepa", "jepa", "ijepa_s", "cnn"),
 ]
 
 
@@ -859,11 +848,9 @@ def compute_compare():
         rows[name] = {"arch": arch, "keys": ks, **finals(d, ks), "secs": float(np.mean([d[k]["secs"] for k in ks])),
                       "params": int(d[ks[0]]["params"]), "curves": {k: {"steps": d[k]["steps"], "knn": d[k]["knn"]}
                                                                      for k in ks}}
-    for arch in ("cnn", "vit"):
-        r = base[f"random_{arch}"]
-        rows[f"random_{arch}"] = {"arch": arch, "linear": _mmm([x["linear"] for x in r]),
-                                  "knn": _mmm([x["knn"] for x in r]), "few": _mmm([np.mean(x["few"]) for x in r]),
-                                  "rank": _mmm([x["rank"] for x in r])}
+    r = base["random_cnn"]
+    rows["random_cnn"] = {"arch": "cnn", "linear": _mmm([x["linear"] for x in r]), "knn": _mmm([x["knn"] for x in r]),
+                          "few": _mmm([np.mean(x["few"]) for x in r]), "rank": _mmm([x["rank"] for x in r])}
     px = base["pixels"]
     rows["pixels"] = {"arch": "pixels", "linear": [px["linear"]] * 3, "knn": [px["knn"]] * 3,
                       "few": [float(np.mean(px["few"]))] * 3, "rank": [px["rank"]] * 3}

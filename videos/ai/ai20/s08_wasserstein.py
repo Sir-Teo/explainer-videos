@@ -45,14 +45,14 @@ class Wasserstein(VoiceoverScene):
         lab[1:].arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(pl, UP, buff=0.15)
         g = axes([-1, 1], [0, 1.1], x_length=6.0, y_length=3.6, xlabel=r"$\theta$", xticks=[-1, 0, 1],
                  yticks=[0, round(math.log(2), 2), 1], center=[2.6, 0.2, 0])
-        jsx = curve(g.ax, [-1, -0.001, 0.001, 1], [math.log(2), math.log(2), 0, math.log(2)], C.KL, 2)
-        jsx = VGroup(curve(g.ax, [-1, -0.02], [math.log(2)] * 2, C.KL, 2), curve(g.ax, [0.02, 1], [math.log(2)] * 2,
-                                                                                    C.KL, 2),
-                     Dot(g.ax.c2p(0, 0), radius=0.05, color=C.KL))
+        jsx = curve(g.ax, [-1, -0.001, 0.001, 1], [math.log(2), math.log(2), 0, math.log(2)], DISC, 2)
+        jsx = VGroup(curve(g.ax, [-1, -0.02], [math.log(2)] * 2, DISC, 2), curve(g.ax, [0.02, 1], [math.log(2)] * 2,
+                                                                                    DISC, 2),
+                     Dot(g.ax.c2p(0, 0), radius=0.05, color=DISC))
         wx = curve(g.ax, [-1, 0, 1], [1, 0, 1], WGAN_C, 2)
-        jd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.06, color=C.KL) for a, b in zip(th, js)])
+        jd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.06, color=DISC) for a, b in zip(th, js)])
         wd = VGroup(*[Dot(g.ax.c2p(a, b), radius=0.06, color=WGAN_C) for a, b in zip(th, w)])
-        lg = legend([(C.KL, r"Jensen--Shannon: \ exact $\log 2$; \ dots from a trained discriminator"),
+        lg = legend([(DISC, r"Jensen--Shannon: \ exact $\log 2$; \ dots from a trained discriminator"),
                      (WGAN_C, r"Wasserstein-1: \ exact $|\theta|$; \ dots from a trained critic")], font_size=18)
         lg.next_to(g, UP, buff=0.12).align_to(g, LEFT)
         k = int(np.argmin(np.abs(th - 0.5)))
@@ -272,6 +272,6 @@ class Wasserstein(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(rows[2]), FadeIn(t2), FadeIn(ch2[0]), FadeIn(ch2.names),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in ch2.bars], lag_ratio=0.3), FadeIn(ch2.vals))
-            self.play(FadeIn(tk))
+            self.play(FadeIn(tk), FadeOut(tg))  # the take-away sits where the note was
         self.wait(0.3)
         self.clear_scene()

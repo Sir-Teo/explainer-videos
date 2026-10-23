@@ -399,7 +399,7 @@
   "53d9fabc94a1": {
    "scene": "CharLSTM",
    "en": "Now the LSTM plays the series' game: guess the next character. <bookmark mark='a'/> Each character becomes a learned vector; one layer of 512 LSTM cells reads them in order; a softmax guesses the next. 1,280,103 weights in all. <bookmark mark='b'/> We train it as Andrej Karpathy's char-rnn did in 2015: cut the thirty novels into 64 long stretches, one reader on each, 128 characters per step, the memory carried on from step to step while the gradient is cut at each step's edge. <bookmark mark='c'/> It read 19.7 million characters, about 83 percent of the books, once, in 144 minutes on this computer.",
-   "zh": "现在让LSTM来玩本系列的游戏：猜下一个字符。<bookmark mark='a'/>每个字符变成一个学出来的向量；一层512个LSTM细胞按顺序读它们；一个softmax猜下一个。总共1280103个权重。<bookmark mark='b'/>我们照安德烈·卡帕西2015年的char-rnn那样训练它：把三十部小说切成64长段，每段一个读者，每步128个字符，记忆一步一步地带下去，而梯度在每一步的边上截断。<bookmark mark='c'/>它读了19.7百万个字符，大约是这些书的83%，只读一遍，在这台计算机上用了144分钟。"
+   "zh": "现在让LSTM来玩本系列的游戏：猜下一个字符。<bookmark mark='a'/>每个字符变成一个学出来的向量；一层512个LSTM细胞按顺序读它们；一个softmax猜下一个。总共1280103个权重。<bookmark mark='b'/>我们照安德烈·卡帕西2015年的char-rnn那样训练它：把三十部小说切成64个长段，每段一个读者，每步128个字符，记忆一步一步地带下去，而梯度在每一步的边上截断。<bookmark mark='c'/>它读了19.7百万个字符，大约是这些书的83%，只读一遍，在这台计算机上用了144分钟。"
   },
   "b7fde0b57293": {
    "scene": "CharLSTM",

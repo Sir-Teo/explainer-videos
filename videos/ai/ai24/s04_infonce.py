@@ -85,7 +85,7 @@ class InfoNCE(VoiceoverScene):
         back = label(r"Part 3 trained this on the books", font_size=22, color=GREY_B).to_corner(DR, buff=0.3)
         src = cite(r"Mikolov, Sutskever, Chen, Corrado \& Dean (2013)")
         with self.voiceover(
-            "Three years later, word2vec turned the trick into the most copied objective in the field. Take a word, "
+            "Three years later, word2vec made the trick simple enough for everyone. Take a word, "
             "dog, and a word that really appeared near it, barked. <bookmark mark='a'/> Push their vectors' score "
             "up. <bookmark mark='b'/> Then draw a handful of words at random, from the word frequencies raised to "
             "three quarters, and push their scores down. <bookmark mark='c'/> This is negative sampling, a "
