@@ -98,6 +98,7 @@ def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3, val=No
     gen = torch.Generator().manual_seed(500 + seed)
     m = SET_MODELS[kind]()
     opt = torch.optim.Adam(m.parameters(), lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, steps)  # so the last step is not a random moment
     Xt, yt = torch.from_numpy(X), torch.from_numpy(y).long()
     t0 = time.time()
     curve = []
@@ -116,6 +117,7 @@ def train_sets(kind: str, X, y, seed: int, steps=3000, batch=64, lr=1e-3, val=No
         opt.zero_grad()
         loss.backward()
         opt.step()
+        sched.step()
     m.eval()
     return m, dict(secs=time.time() - t0, params=n_params(m), curve=curve)
 

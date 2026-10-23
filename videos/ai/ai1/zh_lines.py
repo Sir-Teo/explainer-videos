@@ -446,19 +446,19 @@ ZH = {
 
 
     '"Look where they differ. <bookmark mark=\'a\'/> " + brand':
-        "看看它们在哪里不同。<bookmark mark='a'/>{brand}<bookmark mark='b'/>还有telephone：GPT-2为它付出{bd['telephone'][0]:.1f}比特，Qwen3只要{bd['telephone'][1]:.1f}比特，因为两段之前，一个电话铃响了。<bookmark mark='c'/>只给Qwen3看这一段，telephone就要花它{alone:.1f}比特。它记得：上一章的长尾巴，在这里派上了用场。",
+        "看看它们在哪里不同。<bookmark mark='a'/>{brand}<bookmark mark='b'/>再看“电话”这个词：GPT-2为它付出{bd['telephone'][0]:.1f}比特，Qwen3只要{bd['telephone'][1]:.1f}比特，因为两段之前，一个电话铃响了。<bookmark mark='c'/>只给Qwen3看这一段，“电话”这个词就要花它{alone:.1f}比特。它记得：上一章的长尾巴，在这里派上了用场。",
 
     'f"After Bull, GPT-2 doesn\'t expect Durham':
-        "在Bull之后，GPT-2没料到Durham，{bd['Durham'][0]:.1f}比特，也没料到tobacco，{bd['tobacco'][0]:.1f}比特。Qwen3料到了，{bd['Durham'][1]:.1f}和{bd['tobacco'][1]:.1f}：Bull Durham是一个真实的烟草品牌，它在训练中的某处学到了这一点。",
+        "在Bull之后，GPT-2没料到Durham，{bd['Durham'][0]:.1f}比特，也没料到“烟草”这个词，{bd['tobacco'][0]:.1f}比特。Qwen3都料到了，{bd['Durham'][1]:.1f}和{bd['tobacco'][1]:.1f}：Bull Durham是一个真实的烟草品牌，它在训练中的某处学到了这一点。",
 
     "f'After Bull, Durham costs GPT-2":
-        "在Bull之后，Durham花了GPT-2 {bd['Durham'][0]:.1f}比特，Qwen3 {bd['Durham'][1]:.1f}比特；tobacco，{bd['tobacco'][0]:.1f}和{bd['tobacco'][1]:.1f}。Bull Durham是一个真实的烟草品牌。",
+        "在Bull之后，Durham花了GPT-2 {bd['Durham'][0]:.1f}比特，Qwen3 {bd['Durham'][1]:.1f}比特；“烟草”这个词，分别是{bd['tobacco'][0]:.1f}和{bd['tobacco'][1]:.1f}。Bull Durham是一个真实的烟草品牌。",
 
     '"Facts work the same way.':
         "事实也是一样。问埃菲尔铁塔在哪座城市，<bookmark mark='a'/>问《傲慢与偏见》的作者是谁，<bookmark mark='b'/>或者问金的化学符号，知道答案的模型，在答案出现时花的比特要少得多。<bookmark mark='c'/>算术更难：{arith}",
 
     "f'the 2025 model gives four {100 * p4:.0f} percent":
-        '2025年的模型给four的是{100 * p4:.0f}%，给five的却有{100 * p5:.0f}%。',
+        "2025年的模型给“four”的是{100 * p4:.0f}%，给“five”的却有{100 * p5:.0f}%。",
 
     'f"So here\'s the ladder.':
         "所以，这就是阶梯。<bookmark mark='a'/>字母频率让你降到{H0:.1f}比特。拼写，也就是几个字母的上下文，降到{Hk:.1f}。<bookmark mark='b'/>再往下，模型就得学会词和语法，关于世界的事实，以及故事到目前为止发生了什么，<bookmark mark='c'/>一直降向人所需要的大约1比特。<bookmark mark='d'/>没有人告诉模型去学这些。把它推到那里的，只是一个数：它为每次猜测付出的比特。要预测文本，它就得为写出这些文本的世界建模。",

@@ -18,6 +18,7 @@ class Sets(VoiceoverScene):
         self.orders()
         self.theorem()
         self.architecture()
+        self.training()
         self.experiment()
 
     def card(self):
@@ -189,6 +190,68 @@ class Sets(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(rel))
         self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def training(self):
+        c = load("setcurves")
+        n = int(c["n"])
+        kinds = ("deepsets", "mlp_aug", "mlp")
+        cur = {k: np.asarray(c[k]) for k in kinds}
+        last = int(cur["deepsets"][-1, 0])
+        g = axes([0, last], [0, 1.0], x_length=7.2, y_length=4.2, xlabel=r"training step",
+                 ylabel=r"held-out accuracy", xticks=[0, 1000, 2000, 3000], yticks=[0.25, 0.5, 0.75, 1.0],
+                 xfmt=lambda v: f"{v:,.0f}".replace(",", "{,}"), center=[-2.2, -0.35, 0])
+        head = label(rf"one training run of each, \ on ${n}$ training sets", font_size=30).to_edge(UP, buff=0.4)
+        chance = DashedLine(g.ax.c2p(0, 0.25), g.ax.c2p(last, 0.25), color=GREY_D)
+        chl = label(r"chance", font_size=18, color=GREY_C).next_to(chance, UP, buff=0.05).align_to(chance, RIGHT)
+        lines = {k: curve(g.ax, cur[k][:, 0], cur[k][:, 1], KIND_COLOR[k], 3.5) for k in kinds}
+
+        def first(k, thr=0.8):
+            i = np.flatnonzero(cur[k][:, 1] >= thr)
+            return int(cur[k][i[0], 0]) if len(i) else None
+
+        fin = {k: 100 * float(cur[k][-1, 1]) for k in kinds}
+        side = VGroup()
+        for k, nm in zip(kinds, (KIND_NAME["deepsets"], r"MLP, \ reordered copies", KIND_NAME["mlp"])):
+            f80 = first(k)
+            row = VGroup(label(nm, font_size=22, color=KIND_COLOR[k]),
+                         label(rf"ends at ${fin[k]:.0f}\%$", font_size=22, color=GREY_A),
+                         label(rf"passes $80\%$ at step ${f80:,}$".replace(",", "{,}") if f80 is not None else
+                               r"never reaches $80\%$", font_size=20, color=GREY_B))
+            side.add(row.arrange(DOWN, aligned_edge=LEFT, buff=0.1))
+        side.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([4.6, -0.2, 0])
+        tag = note(r"computed: \ seed $0$, \ $1{,}000$ held-out sets, \ accuracy every $100$ steps", font_size=18)
+        tag.to_corner(DR, buff=0.2)
+        d80, a80, m80 = first("deepsets"), first("mlp_aug"), first("mlp")
+        ds_txt = (f"Deep Sets passes eighty percent after {d80:,} steps and ends at {fin['deepsets']:.0f} percent"
+                  if d80 is not None else f"Deep Sets ends at {fin['deepsets']:.0f} percent")
+        if m80 is None:
+            mlp_txt = f"never gets to eighty percent; it ends at {fin['mlp']:.0f} percent"
+        else:
+            mlp_txt = f"passes eighty percent only at step {m80:,}, and ends at {fin['mlp']:.0f} percent"
+        if a80 is None:
+            aug_txt = f"never gets to eighty percent either; it ends at {fin['mlp_aug']:.0f}"
+        elif d80 is not None and a80 > d80:
+            aug_txt = f"gets there too, but later, at step {a80:,}, and ends at {fin['mlp_aug']:.0f}"
+        else:
+            aug_txt = f"gets there at step {a80:,} and ends at {fin['mlp_aug']:.0f}"
+        with self.voiceover(
+            f"Before the full comparison, watch one training run of each, on {n} training sets, the held-out accuracy "
+            f"checked every hundred steps. <bookmark mark='a'/> {ds_txt}. <bookmark mark='b'/> The plain MLP "
+            f"{mlp_txt}. <bookmark mark='c'/> The MLP shown reordered copies {aug_txt}."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(g), Create(chance), FadeIn(chl), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(lines["deepsets"]), run_time=2.5)
+            self.play(FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(Create(lines["mlp"]), run_time=2.5)
+            self.play(FadeIn(side[2]))
+            vo.wait_until("c")
+            self.play(Create(lines["mlp_aug"]), run_time=2.5)
+            self.play(FadeIn(side[1]))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

@@ -106,6 +106,8 @@ class Outro(VoiceoverScene):
         tiles = Group()
         for pic, cap, col in out:
             box, c = tile_frame(cap, col)
+            if c.width > box.width - 0.25:  # a long caption stays inside its frame
+                c.scale_to_fit_width(box.width - 0.25)
             pic.move_to(box.get_center() + UP * 0.22)
             if pic.width > TW:
                 pic.width = TW
