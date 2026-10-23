@@ -665,18 +665,18 @@ per part. Expect one part per one or two long sessions.
 
 ## 5. Progress (updated as parts land)
 
-Length is `tools/lecture_length.py` (an estimate before a render, the measured length after).
+Length is `tools/lecture_length.py` (an estimate before a render, the measured silent build after).
 
 | Part | State | Length |
 |---|---|---|
 | 1 | existing; densify | 45 min |
-| 2 | new, drafting | — |
+| 2 | **complete**, English and Chinese | 53 min |
 | 3–8, 11–13, 15, 16, 19, 21–23, 29, 30 | existing, 8–25 min each; to expand | 8–25 min |
-| 9 | expanding | 13 min → 45–55 |
+| 9 | expanding (drafted: 17 chapters) | ≈ 54 min (est.) |
 | 10, 18, 20, 24, 25 | new; to write | — |
-| 31 | new, drafting (the finale; takes over Part 30's series recap and scoreboard) | — |
-| 14 | new, drafting | — |
-| 17 | new, drafting | — |
-| 26 | built in English (silent preview); AlphaZero to 80 generations; Chinese narration table complete | ≈ 62 min |
-| 27 | written; experiments run on the series' novels model; Chinese narration table complete | ≈ 55 min (est.) |
-| 28 | expanding | 18 min → 50–60 |
+| 14 | new, final QA (16 chapters) | ≈ 55 min (est.) |
+| 17 | **complete**, English and Chinese | 55 min |
+| 26 | built in English (silent preview); AlphaZero evaluations finishing; Chinese narration table complete | ≈ 62 min |
+| 27 | written; experiments wait for the novels model; Chinese narration table complete | ≈ 40 min (est.) |
+| 28 | expanding (drafted: 16 chapters) | ≈ 51 min (est.) |
+| 31 | new, drafted (16 chapters; the finale takes over Part 30's series recap and scoreboard) | ≈ 60 min (est.) |
